@@ -1,0 +1,2993 @@
+---
+name: dois
+status: verified
+---
+
+# DOIs
+
+> Conventions (markers, badges, footnotes): [Reading a spec](GLOSSARY.md#reading-a-spec).
+
+## Purpose
+
+A DOI (Digital Object Identifier, such as `10.1234/a7kx3m52`) is the
+persistent address a journal gives what it publishes, so that citations
+keep resolving through `https://doi.org/` wherever the work moves. The
+Journal Manager decides which kinds of item carry a DOI, gives the
+journal's DOI prefix (the "10.…" part a registration agency such as
+Crossref or DataCite hands out), and chooses when DOIs are made and in
+what format. The DOIs page then lists the journal's items with their
+DOIs and their registration status: a manager assigns missing DOIs,
+types or corrects one by hand, marks what was registered elsewhere, and,
+with a registration agency configured, exports or deposits the DOIs'
+metadata with that agency and follows each deposit to "Registered" or
+"Error". Readers see an item's DOI as a link on its page. An **item**
+below is anything that can carry a DOI: on a journal an article (one
+version of it), a galley, an issue and a peer review; on a press a
+monograph version and a file of a publication format; on a preprint
+server a preprint version and a galley. A **kind** is one of the boxes
+under "Items with DOIs" (Fields). <sup>a</sup>
+
+Issues and peer-review DOIs exist on a journal only. A press also offers
+DOIs for its chapters and publication formats; this spec describes those
+two boxes and, beyond when a format's DOI is made (Rule 5) and that a
+book's page shows it (Rule 43), nothing of the DOIs they give. The
+registration agencies come as plugins: a journal installs the "Crossref
+Manager Plugin" and the "DataCite Manager Plugin", a preprint server the
+"Crossref Manager Plugin", and a press none. Every agency plugin is
+disabled on a new journal and preprint server, the seeded ones included,
+so the "Registration" tab reads "No Registration Agency Enabled" until a
+manager enables one on Settings › Website › "Plugins" (Rule 34). On a
+press DOIs are made and tracked but never exported or deposited from the
+install. <sup>a</sup> <sup>q1</sup>
+
+## Actors & permissions
+
+**Manager-level roles** are those that open the Settings pages when
+their row allows it, as
+[→ settings access](U07-journal-identity-and-about-pages.md#settings-access)
+defines them (on a journal the Journal Manager, the Editor and the
+Production Editor; on a preprint server the Preprint Server Manager).
+The Site Administrator holds a manager role in every journal of the test
+installs. **DOIs are on** below means the "DOIs" box of Settings ›
+Distribution › "DOIs" › "Setup" is ticked with at least one kind ticked
+(Rule 1). <sup>b</sup>
+
+| Action | Who may, and when |
+|--------|--------------------|
+| **Change the DOI settings** (Settings › Distribution › "DOIs", side tabs "Setup" and "Registration") | • whoever opens the Settings pages ([→ settings access](U07-journal-identity-and-about-pages.md#settings-access)); nobody else <sup>b</sup> |
+| **Open the DOIs page** (side menu "DOIs") | • manager-level roles of the journal and the Site Administrator, while DOIs are on; a manager-level role whose "Permit changes to Settings" is unticked opens it too<br>• Section Editor, assistant-level roles, Author, Reviewer, Reader: no "DOIs" entry; the page's address answers the access-denied page<br>• while DOIs are off, every signed-in user who types the address gets the access-denied page reading "You cannot call this operation without DOIs enabled."<br>• signed out: the Login page <sup>b</sup> <sup>q2</sup> |
+| **Assign, type, clear, mark, export and deposit DOIs** | • whoever opens the DOIs page: every control on it is theirs; which controls show depends on the settings (Rules 14–30) <sup>b</sup> |
+| **See an item's DOI** | • any visitor who may open the item's public page (Rule 43) <sup>w</sup> |
+| **See the Crossmark button** {OJS} | • any visitor on a journal's article page, while Rule 42 holds <sup>t</sup> |
+
+## Fields & validation
+
+**Settings › Distribution › "DOIs" › "Setup"** (the tab "DOIs", side tab
+"Setup"). One form with "Save" at its foot. A refused save shows its
+messages under the boxes and in the form's footer, and a successful one
+"Saved" beside the button, as every Settings form does
+([Journal identity & about pages](U07-journal-identity-and-about-pages.md),
+Fields). While the "DOIs" box is unticked, every field below it is
+hidden, except the "Custom DOI Suffix Pattern" group while "Custom
+pattern" is the chosen format: its help and boxes stay on screen (on a
+journal also "Peer Review" with "Custom pattern not supported"), before
+and after a save and a reload. An unsaved change (a box ticked, a value
+typed) is kept while moving to the "Registration" side tab or another
+top tab and back, and is lost without a warning when the page is left,
+as on every Settings form
+([Journal identity & about pages](U07-journal-identity-and-about-pages.md),
+Rule 5). <sup>c</sup>
+
+| Field (UI label) | Required? | Rules |
+|------------------|-----------|-------|
+| **DOIs** | No | One box: "Allow Digital Object Identifiers (DOIs) to be assigned to work published in this journal." (a press "…to work published by this press.", a preprint server "…to assigned to works published on this server." ⚠ [OPS1](#ops1)). Ticked on a new journal (Rule 2). <sup>c</sup> <sup>y</sup> |
+| **Items with DOIs** | No | Help: "Select which items will be assigned a DOI. Most journals assign DOIs to articles, but you may wish to assign DOIs to all of the published items." (a press and a preprint server word it for their own items). Boxes: journal "Articles", "Issues", "Article galleys, such as a published PDF", "Peer Review"; press "Monographs", "Chapters", "Publication Formats", "Files"; preprint server "Preprints", "Preprint galleys, such as a published PDF". The first box is ticked on a new journal, the others not. While a registration agency is chosen, only the kinds that agency accepts are listed (Rule 35). Effect: Rule 4. <sup>c</sup> |
+| **DOI Prefix** | Yes, while "DOIs" is ticked | Help: "The DOI Prefix is assigned by a registration agency, such as Crossref or DataCite. Example: 10.xxxx" (both names are links). Empty on a new journal. "10." followed by four to seven digits and nothing else ("10.1234", "10.1234567"); anything else ("10.123", "11.1234", "10.1234/") is refused under the box with "This is not formatted correctly.". Empty while "DOIs" is ticked, it is refused with "A DOI prefix is required" (Rule 3). <sup>c</sup> <sup>q3</sup> |
+| **Automatic DOI Assignment** | Yes, one choice | Help: "When should a submission be assigned a DOI?". A list: "Upon reaching the copyediting stage" (a preprint server "Upon reaching the production stage"), "Upon publication", "Never". The first is selected on a new journal. Effect: Rule 5. <sup>c</sup> |
+| **DOI Format** | Yes, one choice | Help: "Select the format to use when the application generates a DOI." Radios: "Default - Automatically generates a unique eight-character suffix" (selected on a new journal), "None - Suffixes must be entered manually on the DOI management page and will not be generated automatically" (the words "DOI management page" link to the DOIs page), "Custom pattern - (not recommended)". Effect: Rule 6. <sup>c</sup> |
+| **Custom DOI Suffix Pattern** | Only with "Custom pattern" | A group shown only while "Custom pattern - (not recommended)" is selected. Its help opens "Enter a custom suffix pattern for each publication type." and lists the symbols the app offers (Rule 6c). One box per kind: journal "Submissions", "Article Galleys", "Issues", and under "Peer Review" the words "Custom pattern not supported" instead of a box; press "Submissions", "Chapters", "Publication Formats", "Files"; preprint server "Submissions", "Preprint Galleys". The box of a ticked kind left empty is refused with "A DOI suffix pattern is required." under that box; the box of an unticked kind may stay empty. After that refusal, unticking the kind leaves "Save" greyed out until something is typed in the flagged box (typing and then emptying it is enough); the save then passes. <sup>c</sup> <sup>q4</sup> |
+| **DOI Versioning** | Yes, one choice | Help (journal): "Assign a new DOI to each publication version? Most users will want to use the default option (no), as it was until now."; a preprint server's help ends "…the default option (yes) to ensure preprint versions are correctly assigned DOIs." Radios: "Yes, assign a unique DOI to every version of an article." and "No, all versions of an article should have the same DOI." ("…of a monograph/chapter…", "…of a preprint…"). "No" on a new journal and press, "Yes" on a new preprint server. Effect: Rules 11, 12. <sup>c</sup> |
+
+**Settings › Distribution › "DOIs" › "Registration"** (side tab
+"Registration"). One form with "Save", saved and refused as the Setup
+tab; an unsaved change (an agency picked, a box ticked, a value typed)
+is kept across a move to "Setup" or another top tab and lost on leaving
+the page, the same way. <sup>d</sup>
+
+| Field (UI label) | Required? | Rules |
+|------------------|-----------|-------|
+| **Registration Agency** | No | Help: "Please select the registration agency you would like to use when depositing DOIs." A list offering "None", then each enabled agency plugin's agency ("Crossref", "DataCite"). On a new journal, and after "None" is saved and the page reloaded, the list shows an empty box (no choice). Shown only while at least one agency plugin is enabled; otherwise the tab reads "No Registration Agency Enabled" and "DOIs can be automatically minted and deposited with a registration agency. To use this feature, locate and install a plugin from the appropriate registration agency." and holds no field but "Save", which answers "Saved" and changes nothing ⚠ [A21](#a21) (a press always, Purpose). Choosing an agency shows its block below (the next tables) without saving (Rule 35). <sup>d</sup> <sup>e</sup> |
+| **Automatic Deposit** | No | Shown once an agency is chosen. One box, "Enable automatic depositing", under the help "The DOI registration and metadata can be automatically deposited with the selected registration agency whenever an item with a DOI is published. Automatic deposit will happen at scheduled intervals and each DOI's registration status can be monitored from the DOI management page." Unticked on a new journal (Rule 41). <sup>d</sup> <sup>e</sup> |
+
+**The Crossref block** (Registration Agency "Crossref"), headed
+"Crossref Settings". On a journal missing a publisher or an ISSN it
+opens with the notice of Rule 37; then "The following items are
+required for a successful Crossref deposit.". <sup>e</sup>
+
+| Field (UI label) | Required? | Rules |
+|------------------|-----------|-------|
+| **Depositor name** | Yes (starred) | Help: "Name of the organization registering the DOIs. It is included with deposited metadata and used to record who submitted the deposit." Empty, refused with "This field is required."; longer than 60 characters, refused with "This may not be greater than 60 characters." <sup>e</sup> <sup>q5</sup> |
+| **Depositor email** | Yes (starred) | Help: "Email address of the individual responsible for registering content with Crossref. It is included with the deposited metadata and used when sending the deposit confirmation email." Empty, refused with "This field is required."; not an email address, refused with "This is not a valid email address."; longer than 90 characters, refused. <sup>e</sup> |
+| **Crossmark** {OJS} | No | One box: "Enable participation in Crossmark to allow readers to check the publication status of articles. Learn more." ("Learn more." links to Crossref's Crossmark documentation). Unticked on a new journal. Effect: Rule 42. A preprint server's block has no such box. <sup>e</sup> <sup>t</sup> |
+| **Update Policy DOI** {OJS} | Yes (starred) whenever shown | Help: "Journal's update policy DOI is required when a unique DOI is used for every version of an article." Shown while "DOI Versioning" is "Yes", and otherwise only while "Crossmark" is ticked (Rule 38). A value must read like a DOI ("10.1234/policy"); anything else is refused with "This is not formatted correctly.". <sup>e</sup> <sup>q6</sup> |
+| **Username**, **Password** | No | Under a paragraph beginning "If you would like to use this plugin to register Digital Object Identifiers (DOIs) directly with Crossref, you will need to add your Crossref account credentials…" and ending "…but you cannot register your DOIs with Crossref from OJS." ("…from OPS." on a preprint server). "Username" help: "The Crossref username that will be used to authenticate your deposits. If you are using a personal account, please see the advice above." (a preprint server "…If you are using a personal account, see the advise above." ⚠ [OPS3](#ops3)). "Password" is a hidden-text box. Up to 120 and 50 characters. <sup>e</sup> |
+| **Testing** | No | One box: "Use the Crossref test API (testing environment) for the DOI deposit. Please do not forget to remove this option in production." Unticked on a new journal. <sup>e</sup> |
+
+**The DataCite block** {OJS} (Registration Agency "DataCite"), headed
+"DataCite Settings", opening with "Please configure the DataCite export
+plugin before using it for the first time." and a paragraph on obtaining
+DataCite access. <sup>f</sup>
+
+| Field (UI label) | Required? | Rules |
+|------------------|-----------|-------|
+| **Username (symbol)**, **Password** | No | Plain and hidden-text boxes, up to 50 characters each. <sup>f</sup> |
+| **Testing** | No | One box: "Use the DataCite test system for DOI registration. Please do not forget to disable this for production." <sup>f</sup> |
+| **Test Username**, **Test Password** | No | Up to 50 characters each. <sup>f</sup> |
+| **Test DOI Prefix** | Only with "Testing" ticked | Empty while "Testing" is ticked, refused with "A test DOI prefix is required when using the test system for DOI registration." <sup>f</sup> <sup>q7</sup> |
+
+<a id="dois-page"></a>
+**The DOIs page** (side menu "DOIs"; heading "DOIs"). Tabs by kind
+(Rule 14), each holding one list whose header carries the list's title,
+a "Search" box, a "Bulk Actions" menu and, with an agency configured,
+"Deposit All"; a "Filters" column beside the list; the items; and page
+links under the list. <sup>g</sup>
+
+| Field (UI label) | Required? | Rules |
+|------------------|-----------|-------|
+| **Search** | — | Narrows the list to the phrase once Enter is pressed; typing alone changes nothing (Rule 21). A "Clear search phrase" button, shown once a phrase is set, empties it. <sup>o</sup> |
+| **Bulk Actions** | — | A menu: "Select All" / "Select None", "Expand all" / "Collapse all", then "Take action on {count} selected item(s)." over the actions of Rule 24. <sup>p</sup> |
+| **Deposit All** | — | A button, shown only with an agency configured (Rule 36). Rule 29. <sup>p</sup> |
+| **Filters** | — | Headed "Filters", with a round button showing only a "?" icon beside the heading that opens the "DOI Statuses" window (Rule 22); a screen reader announces it as "button" with no name ⚠ [A8](#a8). Groups: "Status" ("Needs DOI", "DOI Assigned"); "Registration" ("Unregistered", "Submitted", "Registered", "Has Error", "Needs Sync"); "Publication Status", on a press ("Published", "Unpublished") and on a preprint server ("Posted", "Unpublished"); on a journal's "Articles" tab an "Issues" box that suggests an issue once its year ("2025") or its full name from the start ("Vol. 1 No. 1") is typed ("Vol" or "1" suggests nothing); choosing one keeps that issue's articles. <sup>o</sup> <sup>q8</sup> |
+| **An item's row** | — | A tick box with no name for a screen reader [A8](#a8), the item's name as a link that opens its public page in a new tab (Rule 16), its number, a status badge (Rule 31) and an expand button. <sup>m</sup> |
+| **An item's expanded view** | — | The version's name, a table "Type", "DOIs", "Status", "Actions" with one row per DOI the item carries (Rule 17), "Edit" / "Save" (Rule 18), and with an agency configured the agency panel (Rule 30). <sup>m</sup> |
+| **A DOI box** | No | Greyed text until "Edit" is pressed. A DOI must begin with digits, a dot and more digits, then "/" (for example "10.1234/abc"), and may hold only letters, digits and `-._;()/`; it must be unused by any other item on the install (Rule 18). <sup>n</sup> <sup>q9</sup> |
+
+## Rules & state
+
+**Switching DOIs on**
+
+1. **DOIs on or off.** While the "DOIs" box is ticked and at least one
+   kind is ticked, managers' side menus carry "DOIs"
+   ([Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md),
+   its Rule 30 and Settings bullet 9) and the DOIs page opens. Unticking
+   the box, or every kind, and saving takes the entry away, and the page's
+   address then answers the access-denied page with "You cannot call this
+   operation without DOIs enabled." (Actors). DOIs already given are kept
+   (Rule 43). <sup>b</sup> <sup>c</sup>
+2. **A new journal arrives on, without a prefix.** Every new journal,
+   press and preprint server, the seeded ones included, starts with the
+   "DOIs" box ticked, the first kind ticked and no prefix. Its DOIs page
+   opens under the warning "DOIs cannot be assigned unless you provide
+   your assigned DOI prefix. Add DOI prefix."; the link opens Settings ›
+   Distribution › "DOIs". Without a prefix no DOI is made, automatically
+   or by "Assign DOIs", which the page does not offer (Rule 25); a DOI
+   typed by hand is still accepted (Rule 18). <sup>y</sup> <sup>g</sup> <sup>h</sup>
+3. **The Setup tab cannot be saved on without a prefix.** Every "Save"
+   with the "DOIs" box ticked and "DOI Prefix" empty is refused with "A
+   DOI prefix is required" under the box, whatever else changed. So a new
+   journal cannot save a Setup change with "DOIs" ticked before a prefix
+   is typed, and a journal that unticked "DOIs" cannot tick it again
+   without one, although it was created in that state ⚠ [A1](#a1).
+   Unticking "DOIs" and saving stores the other fields as they stand: a
+   "DOI Versioning" or "Automatic DOI Assignment" change refused a moment
+   before is kept and shows when the box is ticked again. Unticking the
+   box clears a shown prefix message at once. <sup>c</sup> <sup>q10</sup>
+4. **What each kind gives a DOI.** Ticking a kind makes its items
+   eligible (Rules 5–8) and adds their rows to the DOIs page (Rule 17);
+   unticking it keeps the DOIs its items already have, but the page stops
+   showing their rows and the page's actions leave them alone. <sup>c</sup> <sup>m</sup> <sup>q11</sup>
+
+   | Box | Items | Listed on |
+   |-----|-------|-----------|
+   | "Articles" ("Monographs", "Preprints") | each version of the work | the "Articles" tab ("Monographs", "Preprints") |
+   | "Article galleys, such as a published PDF" ("Preprint galleys…") {OJS OPS} | each galley of each version | the same tab, as rows of the work |
+   | "Peer Review" {OJS} | each completed review shown publicly (Rule 7) | the "Articles" tab |
+   | "Issues" {OJS} | each issue | the "Issues" tab |
+   | "Files" {OMP} | each file of each publication format | the "Monographs" tab ⚠ [OMP1](#omp1) |
+   | "Chapters", "Publication Formats" {OMP} | a press's chapters and formats | the "Monographs" tab (not described here) |
+
+<a id="doi-creation"></a>
+**Making DOIs**
+
+5. **When DOIs are made by themselves.** A DOI is made only for a
+   ticked kind, only while a prefix is set, and only for an item that has
+   none yet. "Automatic DOI Assignment" decides the moment:
+   <sup>h</sup> <sup>q12</sup>
+   - **"Upon reaching the copyediting stage"** (journal, press): when a
+     decision moves the submission into Copyediting or Production, its
+     current version and that version's galleys get their DOIs (on a
+     press, the files and, with "Publication Formats" ticked, the
+     publication formats). On a preprint server the choice reads "Upon
+     reaching the production stage" and acts at the preprint's final
+     "Submit".
+   - **"Upon publication"**: when the version is published (posted), or,
+     on a journal, when the article is scheduled into a future issue.
+   - Under either of the two, publishing a version also makes any DOI
+     still missing, so a galley added after the stage move gets its DOI
+     when the version is published
+     ([Galleys](U46-galleys.md), Side effects).
+   - **"Never"**: nothing is made by itself; "Assign DOIs" (Rule 25) or a
+     DOI typed by hand (Rule 18) gives one.
+6. **What a made DOI looks like.** The prefix, "/", then a suffix chosen
+   by "DOI Format": <sup>h</sup>
+   - **a. "Default"**: eight characters, lower-case letters and digits,
+     the last two always digits ("10.1234/a7kx3m52"); a different one
+     for every item.
+   - **b. "None"**: nothing is meant to be made; DOIs are typed by hand
+     on the DOIs page (Rule 18). Yet every automatic moment and "Assign
+     DOIs" still gives the item the prefix and a bare "/"
+     ("10.1234/") ⚠ [A2](#a2). <sup>q13</sup>
+   - **c. "Custom pattern"**: the box of the item's kind, with its
+     symbols replaced. A journal offers "%j" journal initials (Settings ›
+     Journal › "Masthead" "Journal initials", lower case), "%v" issue
+     volume, "%i" issue number, "%Y" issue year, "%a" article ID (the
+     number the Dashboard lists it under), "%g" galley ID, "%f" file ID,
+     "%p" page numbers and "%x" custom identifier (the item's Publisher
+     ID, [Identifiers](U44-identifiers.md)); a press "%p" press initials,
+     "%m" monograph ID, "%c" chapter ID, "%f" publication format ID, "%s"
+     file ID and "%x"; a preprint server shows the two examples
+     "%j.%a" (preprints) and "%j.%a.g%g" (galleys). An article whose
+     pattern uses "%v", "%i" or "%Y" gets no DOI until it is assigned to
+     an issue (Rule 25 for the message). Any other symbol with nothing to
+     fill it stays in the DOI as typed, and "Assign DOIs" reports
+     success: "%j.%p" on an article without "Pages" gives
+     "10.1234/jpk.%p", "k2.%x" on an item without a Publisher ID gives
+     "10.1234/k2.%x" ⚠ [A9](#a9). A peer review takes no pattern and is
+     treated as under "None" [A2](#a2). <sup>q14</sup>
+7. **Peer-review DOIs** {OJS}. With "Peer Review" ticked, a review gets a
+   DOI at the version's automatic moment (Rule 5) or by "Assign DOIs"
+   once the reviewer has submitted it and its "Public Visibility" box
+   ("Publicly Show Reviewer Comments") is ticked
+   ([Reviewer assignment & management](U27-reviewer-assignment-and-management.md),
+   Fields; the journal default in
+   [Review setup & review forms](U29-review-setup-and-review-forms.md),
+   Rule 4). The DOIs page lists it as "Peer Review {number}" under the
+   article's current version, the number being one the install gives
+   the review request ("Peer Review 186"), not a count of the article's
+   reviews. The row shows once the review counts as read: an editor
+   pressed "Mark as Complete" on it, or a decision sent the "Notify
+   Reviewers" email, after which the reviewer's row reads "Reviewer
+   Thanked". The review's DOI is made at the automatic moment even
+   before that. No reader page shows a review's DOI. <sup>j</sup> <sup>q15</sup>
+8. **Issue DOIs** {OJS}. With "Issues" ticked, publishing an issue
+   ("Publish Issue", [→ publishing an issue](U50-issues.md#publish-issue))
+   gives it a DOI when it has none, whatever "Automatic DOI Assignment"
+   says ⚠ [OJS1](#ojs1). Its scheduled articles are published at the
+   same moment; they already carry their DOIs from an earlier moment of
+   Rule 5 (the move to Copyediting, or the scheduling under "Upon
+   publication"), and under "Never" they get none. The issue's DOI is
+   otherwise given by "Assign DOIs" or by hand on the "Issues" tab. <sup>i</sup>
+9. **A DOI is unique on the install.** A DOI typed by hand is refused
+   when any item of any journal on the install already carries it
+   (Rule 18). Made DOIs are not checked this way. <sup>n</sup>
+10. **A version's DOI travels with it.** Making, typing or clearing a DOI
+    changes it on every page that shows it (Rule 43), and in the records
+    other features publish ([Search-engine metadata & analytics](U20-search-engine-metadata-and-analytics.md),
+    [OAI-PMH](U19-oai-pmh.md)). <sup>w</sup>
+
+<a id="version-dois"></a>
+**Versions**
+
+11. **"DOI Versioning" "No": one DOI for every version.** A new version
+    ("Create New Version",
+    [Publish, schedule & versions](U49-publish-schedule-and-versions.md))
+    starts with its source version's DOI, and its galleys with theirs.
+    Changing the DOI on the DOIs page changes it for every version. A
+    DOI given by "Assign DOIs" while a newer version is still
+    unpublished goes to the published version only (the one the DOIs
+    page shows, Rule 17): once the newer version is published, its page
+    shows no DOI while the older version's page shows it ⚠ [A10](#a10).
+    <sup>k</sup>
+12. **"DOI Versioning" "Yes": a DOI per major version.** A new version
+    made with "Major Revision" starts without a DOI, its galleys too, and
+    gets its own by Rules 5 and 25 (on publication at the latest, unless
+    "Never"). A version made with "Minor Revision" keeps its source's
+    DOI, its galleys too: a family of versions whose names differ only
+    after the dot ("Version of Record 2.0", "2.1") shares them. On a
+    preprint server the minor version's galleys start without a DOI
+    instead, read "Needs DOI" in the "View all" window and get new DOIs
+    on publication ⚠ [OPS4](#ops4). Changing a DOI on the DOIs page then
+    changes it for that family only; the others keep theirs.
+    While any journal of the install is set to "Yes", every journal's
+    OAI requests fail ([→ OAI-PMH, A22](U19-oai-pmh.md#a22)). <sup>k</sup> <sup>q16</sup>
+13. **Switching versioning later.** A change of "DOI Versioning" affects
+    versions made afterwards; versions made before keep what they have.
+    <sup>k</sup>
+
+<a id="doi-list"></a>
+**The DOIs page**
+
+14. **Tabs.** A journal's page has an "Articles" tab while "Articles",
+    galleys or "Peer Review" is ticked, and an "Issues" tab while "Issues"
+    is ticked; each opens with its own heading ("Articles", "Issues") and
+    a list titled "Article DOIs" / "Issue DOIs". A press has one tab,
+    "Monographs" ("Monograph DOIs"), and a preprint server one,
+    "Preprints" ("Preprint DOIs"), while any kind is ticked. <sup>g</sup>
+15. **Which works are listed.** On the "Articles" tab (journal) and
+    "Monographs" tab (press): every submission at Copyediting or
+    Production, and every one with a published version or already
+    carrying a DOI; a submission still at Submission or Review with no DOI
+    is not listed. On a preprint server every preprint is listed, an
+    unfinished draft nobody has submitted included (badge "Unpublished",
+    its row "Needs DOI") ⚠ [OPS5](#ops5). The "Issues" tab lists every
+    issue, published or not. The most recently submitted work comes
+    first. <sup>l</sup> <sup>q17</sup>
+16. **An item's row.** A work's name reads "{contributors} — {title}" of
+    its current version; an issue's is its name ("Vol. 1 No. 2 (2014)").
+    The link opens the public page in a new tab. The number is the
+    submission's ID (the issue's). The badge reads "Unpublished" while the
+    work's current version (the issue) is not published, and otherwise the
+    status of Rule 31. <sup>m</sup>
+17. **An item's expanded view.** The name of the version shown: the
+    current one, or, while a newer version is unpublished, the published
+    one, whose DOIs the view then lists and "Assign DOIs" fills
+    [A10](#a10). Then one row per DOI that version carries for the
+    ticked kinds, in this
+    order: the work ("Article", "Monograph", "Preprint"), each galley
+    under its label, each peer review ("Peer Review {number}"); an issue
+    has one row, "Issue"; a press's file rows read "{format name} / {file
+    name}". Each row shows its DOI (empty while it has none), its status
+    badge (Rule 31) and, while that status is "Error", a "View Error"
+    link (Rule 33 [A18](#a18)). <sup>m</sup>
+18. **Typing, changing and clearing a DOI by hand.** "Edit" makes the
+    boxes of the expanded view editable and turns into "Save". On "Save",
+    each changed box is stored on its own: a typed DOI on an item without
+    one becomes its DOI; a changed one replaces it (Rules 11, 12 for
+    versions); an emptied box removes the item's DOI and its row reads
+    "Needs DOI" again (an unpublished work's list badge stays
+    "Unpublished"). Success shows "DOI(s) successfully updated" at the
+    top right. A DOI need not begin with the journal's own prefix
+    ⚠ [A7](#a7). A value refused by the rules of the DOI box (Fields) or
+    by Rule 9 is not stored: the notice "Some DOI(s) could not be
+    updated" appears and the box returns to its old value, with no word
+    of the reason ⚠ [A3](#a3). A "Save" with some boxes refused and
+    others stored shows both "Some DOI(s) could not be updated" and
+    "DOI(s) successfully updated". Unchanged boxes send nothing, and
+    "Save" with no change just closes the editing. A box typed in and not
+    saved stays in editing across a tab switch or a collapse of the row,
+    and is lost without a question when the page is left. <sup>n</sup> <sup>q9</sup>
+19. **A deposited item cannot be edited.** While the item's status is
+    "Submitted" or "Registered", "Edit" is greyed out; "Mark DOIs
+    Unregistered" (Rule 27) makes it editable again. <sup>m</sup>
+20. **Other versions' DOIs.** With "DOI Versioning" "Yes" and more than
+    one version, the expanded view reads "There are {count} versions."
+    with a "View all" button; it opens the side window "DOIs for all
+    versions", one block per version, headed "{version} ({date
+    published})" or "{version} Unpublished" as a link to that version's
+    page, each with the table of Rule 17. Only each family's newest
+    version (Rule 12) gets a block, and {count} counts the blocks:
+    with 1.0, 2.0 and 2.1 it reads "There are 2 versions.". One "Edit" at
+    the foot of the window makes every block's boxes editable, and one
+    "Save" stores them. <sup>m</sup> <sup>q16</sup>
+21. **Search.** The phrase applies once Enter is pressed. Words match
+    the works' titles and contributors' names. A phrase beginning with
+    digits and a dot ("10.1234/a7k") is read as the start of a DOI, and
+    what it finds differs by app ⚠ [A11](#a11): on a journal, the
+    articles whose own DOI begins with it (a galley's DOI finds nothing);
+    on a press, the books with a file DOI beginning with it (the
+    monograph's own DOI finds nothing); on a preprint server nothing,
+    "10.1234/" included. A suffix without its prefix finds nothing.
+    <sup>o</sup> <sup>q18</sup>
+22. **Filters.** Choosing a filter narrows the list and marks it chosen;
+    choosing it again, or its "Clear filter: {name}", lifts it. Within
+    "Status" and within "Registration" one filter at a time applies.
+    "Needs DOI" keeps items missing a DOI for at least one ticked kind
+    (on a press only the monograph's own DOI counts, so a book missing
+    only its file DOI is not listed [OMP1](#omp1)), "DOI Assigned" items
+    carrying at least one. "Unregistered" keeps published items whose DOI
+    reads "Unregistered"; the other "Registration" filters keep items
+    with a DOI in that status. After "Unregistered" and then another
+    "Registration" filter, that filter's "Clear filter: {name}" leaves no
+    filter chosen, yet every unpublished work stays out of the list until
+    the page is reloaded ⚠ [A12](#a12). The info button beside
+    "Filters" opens the side window "DOI Statuses", a table "Status" /
+    "Description" with one line per status (Rule 31) and "DOI Assigned:
+    All items assigned a DOI.". <sup>o</sup> <sup>q8</sup>
+23. **Paging.** Thirty items per page; page links appear under the list
+    once there are more. <sup>g</sup>
+24. **"Bulk Actions".** "Select All" ticks every item of the page shown
+    ("Select None" unticks them); "Expand all" / "Collapse all" opens or
+    closes them. Its actions, in this order: "Export DOIs" (agency
+    configured), "Mark DOIs Registered", "Mark DOIs Unregistered", "Mark
+    DOIs Needs Sync", "Assign DOIs" (prefix set, Rule 25), "Deposit DOIs"
+    (agency configured). Each opens a window titled with its own name,
+    holding its question ("You are about to …{count} item(s)… Are you
+    sure…?"), a button of the same name and "Cancel". The action applies
+    to the ticked items; afterwards the list reloads and nothing stays
+    ticked. With nothing ticked, the window still opens ("…for 0
+    item(s)…"); its button closes it and nothing else happens, with no
+    message ⚠ [A13](#a13). <sup>p</sup> <sup>q19</sup>
+25. **"Assign DOIs".** Offered only while a prefix is set. For each
+    ticked item it makes every missing DOI of the current version for the
+    ticked kinds (an issue's own DOI on the "Issues" tab), in the format of
+    Rule 6, published or not; items that already carry them are left
+    alone. Success: "Items successfully assigned new DOIs". An item that
+    cannot get one leaves a window "DOI Updates Failed", reading "Some
+    DOI(s) could not be updated" over one line per failure, such as
+    "Could not create a DOI for the following submission: {title}. The
+    submission must be assigned to an issue before a DOI can be
+    generated."; the others still get theirs. <sup>p</sup> <sup>h</sup>
+26. **"Mark DOIs Registered".** Records every DOI of each ticked
+    published item as registered by hand ("Registered", with no agency).
+    When any ticked item is not published, nothing at all is marked and
+    the window "DOI Updates Failed" lists, per unpublished item, "Failed
+    to mark the DOI registered for {title}. The submission must be
+    published before the status can be updated." ("…The issue must be
+    published…" on the "Issues" tab). Success: "Items successfully marked
+    registered". <sup>p</sup>
+27. **"Mark DOIs Unregistered".** Sets every DOI of each ticked item,
+    published or not, back to "Unregistered". Success: "Items
+    successfully marked unregistered". <sup>p</sup>
+28. **"Mark DOIs Needs Sync".** Its window reads "You are about to mark
+    DOI metadata records for {count} item(s) as needing to be synced. The
+    Needs Sync status can only be applied to previously submitted DOIs.
+    Are you sure you want to mark these records as stale?" ("stale"
+    appears nowhere else on the page ⚠ [A14](#a14)). It sets "Needs
+    Sync" on each ticked published item whose DOI reads "Submitted" or
+    "Registered"; when any ticked item is not such, nothing is marked and
+    "DOI Updates Failed" lists "Failed to mark the DOI needs sync for
+    {title}. The DOI cannot be marked needs sync because they have not
+    yet been registered or submitted." Success: "Items successfully
+    marked needs sync". <sup>p</sup>
+29. **Export and deposit** (agency configured, Rule 36).
+    <sup>p</sup> <sup>r</sup>
+    - **"Export DOIs"** asks "You are about to export DOI metadata
+      records for {count} item(s) for {agency}. Are you sure you want to
+      export these records?". Confirmed, it is meant to download the
+      ticked items' metadata in the agency's format (one file; a journal
+      whose "Peer Review" kind the agency accepts gets a second file for
+      the reviews) and show "Items successfully exported". The install
+      checks that file against the agency's published format, which it
+      fetches from the agency's site; an install that cannot reach that
+      site downloads nothing and shows no message, as on the test
+      installs [A13](#a13). Any ticked item without a published DOI (an
+      unpublished work, a published work whose DOI was cleared, an
+      unpublished issue) makes the whole action fail the same silent way,
+      with nothing exported [A13](#a13). With DataCite, exporting a
+      published issue fails on the server and shows nothing
+      ⚠ [OJS2](#ojs2).
+    - **"Deposit DOIs"** asks "You are about to send DOI metadata records
+      for {count} item(s) to {agency}. Are you sure you want to deposit
+      these records?". Confirmed, it sends the ticked published items to
+      the agency in the background and sets their DOIs to "Submitted" at
+      once ("Items successfully submitted for deposit"). A ticked
+      published work that has no DOI gets the same notice, yet stays
+      "Needs DOI" and nothing is sent ⚠ [A15](#a15). A ticked unpublished
+      item makes the whole action fail: nothing is marked, the window
+      closes and no message says why [A13](#a13).
+    - **"Deposit All"** opens "Deposit all DOIs": "You are about to
+      schedule all outstanding DOI metadata records to be deposited with
+      {agency}. Only published items with a DOI will be deposited…",
+      with "Deposit all DOIs" and "Cancel". It sends every published
+      item whose DOI reads "Unregistered", "Error" or "Needs Sync" (on a
+      journal the published issues too), sets those to "Submitted" and
+      shows the same success notice. With nothing left to deposit it
+      still shows "Items successfully submitted for deposit" and changes
+      nothing.
+30. **The agency panel.** With an agency configured, an item's expanded
+    view ends with a box naming the agency, a sentence and buttons:
+    <sup>m</sup> <sup>q20</sup>
+
+    | The item | Sentence | Buttons |
+    |----------|----------|---------|
+    | not published | "This item cannot be deposited until it has been published." | none |
+    | published, "Unregistered", "Needs Sync" or "Error" | "The metadata for this item has not been submitted to {agency}.", for a "Needs Sync" item too, although it was deposited or registered before ⚠ [A16](#a16) | "Deposit DOI(s)", which opens "Deposit DOIs" for this item alone; "View Error" too while "Error" (Rule 33) |
+    | "Registered" through the agency | "The metadata for this item has been submitted to {agency}." | "View Record" once the agency's answer is stored (Rule 33 [A18](#a18)) |
+    | "Registered" by "Mark DOIs Registered" | "This item has been manually registered with a registration agency." | none |
+
+    A "Submitted" item reads "This item has been manually registered with
+    a registration agency." at once after its deposit, after a reload,
+    and still after the background deposit has run and failed
+    ⚠ [A4](#a4). While the item is being edited the buttons are greyed
+    out. <sup>q20</sup>
+
+**Statuses and deposits**
+
+31. **The statuses.** Each DOI has one; an item's badge shows its first
+    row's status (Rule 17) while that row carries a DOI. The "DOI Statuses" window words them:
+
+    | Badge | Meaning ("DOI Statuses") |
+    |-------|---------------------------|
+    | "Needs DOI" | "All items missing a DOI." (the row has no DOI) |
+    | "Unregistered" | "All items with a DOI that have been published but not yet deposited with a registration agency." |
+    | "Submitted" | "All items that have been submitted to a registration agency." |
+    | "Registered" | "All items that have been registered with a registration agency or manually marked as registered." |
+    | "Error" (the filter "Has Error") | "All items that have encountered an error in the registration process." |
+    | "Needs Sync" | "All items that have been republished since they were last deposited with a registration agency. They need to be resubmitted to the registration agency to update their metadata records." |
+
+    <sup>r</sup>
+32. **Statuses that change by themselves.** A DOI starts "Unregistered".
+    A deposit sets "Submitted" at once; the agency's answer to the
+    background deposit then sets "Registered" or "Error" (Rule 33).
+    Unpublishing a version whose DOIs read "Submitted" or "Registered", or
+    publishing it or a newer version sharing them, turns them to "Needs
+    Sync"; unpublished and published again, they stay "Needs Sync". With
+    "DOI Versioning" "Yes", publishing a new minor version marks the DOI
+    it shares "Needs Sync"; a new major version gets a DOI of its own
+    ("Unregistered") and the earlier versions' DOIs keep their status
+    ⚠ [A17](#a17). Unpublishing or publishing again an issue whose DOI
+    reads "Submitted" or "Registered" turns it to "Needs Sync" {OJS}.
+    <sup>r</sup> <sup>q21</sup>
+33. **A deposit that fails.** When the agency answers a deposit with an
+    error, the DOI reads "Error"; the row's "View Error" and the panel's
+    "View Error" open the window "Registration Error Message": "The
+    following error was returned by {agency} and contains details about
+    the cause of the error:" over the agency's message. A deposit that
+    cannot reach the agency never gets there: its background job fails,
+    is tried twice more and is dropped, and the DOI stays "Submitted"
+    with nothing on the DOIs page to show it ⚠ [A18](#a18). The test
+    installs reach no agency, so every deposit there stays "Submitted".
+    <sup>r</sup> <sup>q22</sup>
+
+<a id="agencies"></a>
+**Registration agencies**
+
+34. **Which agencies an install offers.** The Registration Agency list
+    offers an agency while its plugin is enabled on Settings › Website ›
+    "Plugins" › "Generic Plugins": "Crossref Manager Plugin" (journal,
+    preprint server), "DataCite Manager Plugin" (journal). Disabling the
+    chosen agency's plugin ("Are you sure you want to disable this
+    plugin?") drops the choice: the list shows an empty box (with no
+    agency plugin left, the tab reads "No Registration Agency Enabled"),
+    and enabling the plugin again does not bring the choice back. The
+    agency's saved fields and "Enable automatic depositing" stay stored
+    and show filled when the agency is chosen again; the Setup tab lists
+    every kind again, the ones the agency dropped (Rule 35) still
+    unticked. <sup>d</sup> <sup>a</sup> <sup>q1</sup>
+35. **Choosing an agency.** Picking an agency in the list shows its block
+    at once; "Save" stores the choice, "Automatic Deposit" and the block's
+    fields. Saving a new agency also unticks, without a word, any kind
+    that agency does not accept ⚠ [A6](#a6), and from then on the Setup
+    tab lists only the accepted kinds: <sup>d</sup>
+
+    | Agency | Accepts |
+    |--------|---------|
+    | Crossref, journal | "Articles", "Issues", "Peer Review" |
+    | DataCite, journal | "Articles", "Issues", "Article galleys, such as a published PDF" |
+    | Crossref, preprint server | "Preprints" |
+
+    When a kind the agency keeps comes after the dropped one (a journal
+    with "Articles", "Article galleys, such as a published PDF" and "Peer
+    Review" ticked choosing Crossref), every kind ends up unticked and the
+    DOIs page fails to show its list ⚠ [A19](#a19). A block field refused
+    after "Save" leaves the agency choice saved all the same
+    ⚠ [A5](#a5). <sup>d</sup> <sup>q5</sup>
+36. **When an agency counts as configured.** The DOIs page offers
+    "Export DOIs", "Deposit DOIs", "Deposit All" and the agency panel only
+    while the chosen agency is configured: <sup>s</sup>
+    - **Crossref, journal**: "Depositor name" and "Depositor email" saved,
+      a prefix set, and the journal's "Publisher" and an ISSN ("Online
+      ISSN" or "Print ISSN") saved on Settings › Journal › "Masthead"
+      ([Journal identity & about pages](U07-journal-identity-and-about-pages.md), Fields).
+    - **Crossref, preprint server**: the two depositor fields and a
+      prefix. "Preprints" is then the only kind the Setup tab lists, and
+      unticking it turns DOIs off (Rule 1).
+    - **DataCite**: as soon as it is chosen and saved (the Setup tab
+      keeps a prefix, and the block refuses "Testing" without a "Test DOI
+      Prefix").
+37. **Crossref's requirements notice** {OJS}. While the journal lacks a
+    publisher or an ISSN, the Crossref block opens with a warning headed
+    "Plugin requirements not met", listing "A journal publisher has not
+    been configured! You must add a publisher institution on the Journal
+    Settings Page." and "A journal ISSN has not been configured! You must
+    add an ISSN on the Journal Settings Page." (each "Journal Settings
+    Page" links to Settings › Journal). The notice does not stop "Save".
+    <sup>e</sup>
+38. **"Update Policy DOI"** {OJS}. Shown and required while "DOI
+    Versioning" is "Yes"; with "No", shown and required only while
+    "Crossmark" is ticked, and hidden (not required) otherwise. <sup>e</sup>
+39. **Publish warnings from Crossref** {OJS}. While Crossref is the
+    chosen agency, "Articles" is ticked and "Automatic DOI Assignment" is
+    not "Upon publication", the publish window's warning list ("The
+    following issues were found, but will not prevent publishing",
+    [Publish, schedule & versions](U49-publish-schedule-and-versions.md),
+    Rule 4) names what would stop a Crossref deposit: "Journal publisher
+    must be provided before submissions can be deposited with Crossref.",
+    "Either an online ISSN or print ISSN must be provided before
+    submissions can be deposited with Crossref." (listed twice
+    ⚠ [OJS3](#ojs3)), and 'The submission "{title}" is not associated
+    with a DOI and cannot be deposited with Crossref.' when the version
+    has no DOI. Publishing goes ahead.
+    <sup>u</sup> <sup>q23</sup>
+40. **Crossref's reference DOIs** {OJS}. With the Crossref plugin
+    enabled, the journal's deposited references are matched to DOIs on an
+    hourly schedule
+    ([Citations & references](U42-citations-and-references.md), Side
+    effects). <sup>d</sup>
+41. **"Automatic Deposit".** Ticked, the box promises deposits "at
+    scheduled intervals". A journal's install runs that deposit once a
+    day. A preprint server offers the box, but its install schedules no
+    deposit ⚠ [OPS2](#ops2). <sup>v</sup>
+
+<a id="crossmark"></a>
+42. **The Crossmark button** {OJS}. While the "Crossref Manager Plugin"
+    is enabled, its "Crossmark" box is saved ticked, and the version shown
+    carries its own DOI, the article's page shows the Crossmark button
+    (the Crossmark logo, alt text "Crossmark") as the last block of its
+    side column; pressing it opens Crossref's Crossmark window for the
+    DOI. Saving "None" as the Registration Agency does not remove the
+    button; only disabling the plugin or unticking "Crossmark" does. The
+    page is [Article landing page & reading](U13-article-landing-page-and-reading.md)'s.
+    <sup>t</sup> <sup>q24</sup>
+
+<a id="doi-line"></a>
+**What readers see**
+
+43. **The "DOI:" line.** The page of an article, a preprint or a book
+    shows the shown version's DOI as "https://doi.org/{DOI}", a link
+    ([Article landing page & reading](U13-article-landing-page-and-reading.md),
+    Fields). A version without a DOI of its own shows, with "DOI
+    Versioning" "Yes", the DOI of another version of its family
+    (Rule 12), and with "No", when it is an older version, the current
+    version's DOI; otherwise no line. The line follows the stored DOI:
+    it stays, on the page and in its head tags, after "DOIs" is unticked
+    or the kind unticked. The journal's OAI records
+    ([OAI-PMH](U19-oai-pmh.md)) carry no DOI while "DOIs" is unticked,
+    and carry it again once it is ticked, whatever the kinds. A book's
+    page also shows each publication format's DOI in that format's
+    details ("DOI:" and the link) {OMP}. An issue's page shows its DOI
+    the same way ([Issues](U50-issues.md), Fields). <sup>w</sup> <sup>q25</sup>
+
+**Older entry points**
+
+44. **The plugins' own pages.** Tools › "Import/Export" lists "Crossref
+    XML Export Plugin" and, on a journal, "DataCite Export/Registration
+    Plugin", whether or not the agency's manager plugin is enabled; their
+    pages (also reached through "Import/Export Data" on the plugin's own
+    row on Settings › Website › "Plugins") hold only the warning "DOI
+    management has moved. Please see the DOI management and DOI settings
+    pages.", whose two links open the DOIs page and Settings ›
+    Distribution › "DOIs" › "Setup". The page's heading is empty and the
+    browser tab reads only the journal's name ⚠ [A20](#a20). The DOIs
+    page is where DOIs are exported and deposited. <sup>x</sup> <sup>q26</sup>
+
+## Side effects
+
+- **Deposits leave the install.** "Deposit DOIs" and "Deposit All" send
+  the items' metadata to the chosen agency's deposit service from
+  background jobs, to its test service while "Testing" is ticked
+  (Settings bullet 10); "Automatic Deposit" is Rule 41. What a deposit
+  carries of the references is described under
+  [Citations & references](U42-citations-and-references.md), Side
+  effects. <sup>r</sup>
+- **Downloads.** "Export DOIs" is meant to save the metadata file(s) to
+  the manager's computer (Rule 29 [A13](#a13)). <sup>p</sup>
+- **Statuses change on other features' actions**: publishing and
+  unpublishing versions and issues (Rule 32). <sup>r</sup>
+- **Activity Log, no mail.** No DOI action sends an email or a
+  notification. "Assign DOIs" and a DOI typed on an item without one add
+  "Submission metadata updated" under the manager's name to the work's
+  Activity Log (for a press's file: "The metadata for file "{file}" was
+  edited by {username}."). On a preprint server ("DOI Versioning"
+  "Yes") every saved change or clearing adds the line too. Otherwise
+  changing or clearing a DOI, and the three Mark actions, log nothing.
+  <sup>r</sup>
+- **Head tags.** With the Crossmark button shown, the article page's
+  head also carries the version's DOI for the Crossmark widget
+  ([Search-engine metadata & analytics](U20-search-engine-metadata-and-analytics.md)
+  owns the head tags). <sup>t</sup>
+
+## Settings that modify behavior
+
+1. **"DOIs"** (Settings › Distribution › "DOIs" › "Setup"; ticked). Off:
+   no "DOIs" side-menu entry, the DOIs page refused, nothing made
+   (Rule 1). <sup>c</sup>
+
+2. **"Items with DOIs"** (same tab; the first box ticked). Each box adds
+   its items (Rule 4); none ticked works as off (Rule 1). "Issues"
+   adds the "Issues" tab {OJS}; "Peer Review" the review rows {OJS}. <sup>c</sup>
+
+3. **"DOI Prefix"** (same tab; empty). Set: DOIs are made (Rules 5, 25)
+   and "Assign DOIs" is offered; empty: the page's warning (Rule 2) and
+   the Setup tab refuses to save (Rule 3). <sup>c</sup>
+
+4. **"Automatic DOI Assignment"** (same tab; "Upon reaching the
+   copyediting stage", "…production stage" on a preprint server). "Upon
+   publication" and "Never" move or stop the automatic moment (Rule 5). <sup>h</sup>
+
+5. **"DOI Format"** (same tab; "Default"). "None" and "Custom pattern"
+   change what a made DOI looks like (Rule 6); "Custom pattern" shows the
+   pattern boxes (Fields). <sup>h</sup>
+
+6. **"DOI Versioning"** (same tab; "No" on a journal and press, "Yes" on
+   a preprint server). The other end changes what a new version starts
+   with (Rules 11, 12) and adds "View all" (Rule 20); "Yes" also shows
+   Crossref's "Update Policy DOI" {OJS} (Rule 38). <sup>k</sup>
+
+7. **"Registration Agency"** (Settings › Distribution › "DOIs" ›
+   "Registration"; no choice, the list showing an empty box). An agency: its block, the kinds it accepts
+   (Rule 35), and once configured the export and deposit controls
+   (Rules 29, 30, 36). <sup>d</sup>
+
+8. **"Automatic Deposit"** (same tab; unticked). Ticked: scheduled
+   deposits (Rule 41). <sup>v</sup>
+
+9. **"Crossmark"** {OJS} (the Crossref block; unticked). Ticked: the
+   article page's Crossmark button (Rule 42) and "Update Policy DOI"
+   (Rule 38). <sup>t</sup>
+
+10. **"Testing"** (the agency block; unticked). Ticked: deposits go to the
+    agency's test service; for DataCite a "Test DOI Prefix" is required
+    (Fields). <sup>e</sup> <sup>f</sup>
+
+11. **"Crossref Manager Plugin"**, **"DataCite Manager Plugin"**
+    (Settings › Website › "Plugins" › "Generic Plugins"; all disabled on
+    a new journal and preprint server, the seeded ones included).
+    Enabled: the agency is offered (Rule 34). *Plugins management* owns
+    the list. <sup>a</sup>
+
+12. **"Publicly Show Reviewer Comments"** {OJS} (a review's "Public
+    Visibility" box, its default on Settings › Workflow › Review;
+    unticked). Ticked: the review can carry a DOI (Rule 7).
+    [Review setup & review forms](U29-review-setup-and-review-forms.md)
+    owns the default. <sup>j</sup>
+
+13. **Journal "Publisher" and ISSNs** {OJS} (Settings › Journal ›
+    "Masthead"; empty). "Publisher" and either ISSN set: Crossref counts
+    as configured (Rule 36) and its notice goes (Rule 37). <sup>s</sup>
+
+## Cross-feature interactions
+
+- **[Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md)**:
+  the side menu's "DOIs" entry and its condition (Rule 1).
+- **[Journal identity & about pages](U07-journal-identity-and-about-pages.md#settings-access)**:
+  who opens Settings; the Distribution "DOIs" tab's place; the Masthead
+  "Publisher" and ISSN that Crossref needs (Rule 36).
+- **[Article landing page & reading](U13-article-landing-page-and-reading.md)**:
+  the page that shows the "DOI:" line (Rule 43) and the Crossmark button
+  (Rule 42); this spec owns which DOI shows and when the button shows.
+- **[Issues](U50-issues.md#publish-issue)**: publishing an issue makes its
+  DOI (Rule 8) and, for a DOI already submitted or registered, marks it
+  "Needs Sync" (Rule 32); the issue page's "DOI:" line.
+- **[Publish, schedule & versions](U49-publish-schedule-and-versions.md)**:
+  publishing makes DOIs (Rule 5) and changes statuses (Rule 32); new
+  versions keep or lose DOIs (Rules 11, 12); the publish window's
+  warning list carries Crossref's checks (Rule 39).
+- **[Galleys](U46-galleys.md)**: galley DOIs made at publication (Rule 5).
+- **[Identifiers](U44-identifiers.md)**: publisher IDs and URNs, a
+  separate feature; the "%x" pattern symbol reads the Publisher ID
+  (Rule 6c).
+- **[OAI-PMH](U19-oai-pmh.md)** and **[Search-engine metadata &
+  analytics](U20-search-engine-metadata-and-analytics.md)**: carry the
+  DOI in their records and head tags (the OAI records drop it while
+  "DOIs" is off, Rule 43); with "DOI Versioning" "Yes" the journal's OAI
+  fails ([→ A22](U19-oai-pmh.md#a22)).
+- **[Citations & references](U42-citations-and-references.md)**: what a
+  deposit carries of the references, and the Crossref plugin's hourly
+  reference-DOI matching (Rule 40).
+- **[Submission activity log & notes](U38-submission-activity-log-and-notes.md)**:
+  the Activity Log lines that "Assign DOIs" and a typed DOI add (Side
+  effects).
+- **[Reviewer assignment & management](U27-reviewer-assignment-and-management.md)**
+  and **[Review setup & review forms](U29-review-setup-and-review-forms.md)**:
+  a review's "Public Visibility" and "Mark as Complete" (Rule 7).
+- *Plugins management*, *Import & export* (no specs yet): the plugin
+  list that enables the agencies (Rule 34) and the Tools pages of
+  Rule 44.
+
+## Canonical scenarios
+
+Scenario 1 only reads, on the seeded journal with ready accounts; every
+other scenario runs on a scratch journal, press or preprint server with
+throwaway accounts. <sup>sc</sup>
+
+1. **Who opens the DOIs page, on a journal without a prefix**
+
+   Given: the Journal Manager, the Editor, a Section Editor, an Author
+   and a Reader, on the seeded journal as installed, with DOIs on, the
+   first kind ticked and no prefix.
+
+   - **The Journal Manager's DOIs page**: sign in as the Journal Manager
+     and open the side menu's "DOIs": the page is headed "DOIs" and opens
+     under the warning "DOIs cannot be assigned unless you provide your
+     assigned DOI prefix. Add DOI prefix."; its "Bulk Actions" menu
+     offers no "Assign DOIs" (Rules 2, 24).
+   - **"Add DOI prefix"**: press the warning's link: it opens Settings ›
+     Distribution › "DOIs", where the "DOIs" box is ticked, the first box
+     under "Items with DOIs" ("Articles", "Monographs", "Preprints") is
+     ticked and "DOI Prefix" is empty (Rule 2). Leave the tab without
+     saving.
+   - **The Editor** (journal, press): sign in as the Editor: the side
+     menu carries "DOIs", and the page opens with its "Bulk Actions" menu
+     and its "Filters" column (Actors row 2).
+   - **Section Editor, Author, Reader**: sign in as each in turn: the
+     side menu has no "DOIs", and the address the Journal Manager's
+     "DOIs" opened answers the access-denied page, "The current role does
+     not have access to this operation." (Actors row 2).
+   - **Signed out**: the same address shows the Login page (Actors
+     row 2).
+   - **Control**: signed in as the Journal Manager again, the same
+     address opens the DOIs page (Actors row 2). <sup>sc</sup>
+
+2. **Save a DOI prefix**
+
+   Given: a Journal Manager and an Editor whose role has "Permit changes
+   to Settings" unticked (journal, press), on a scratch journal at the
+   install defaults.
+
+   - **The "Setup" tab as it arrives**: open Settings › Distribution ›
+     "DOIs" (side tab "Setup"): the "DOIs" box is ticked and reads "Allow
+     Digital Object Identifiers (DOIs) to be assigned to work published
+     in this journal." ("…to work published by this press."; a preprint
+     server's reads otherwise [OPS1](#ops1)); "Items with DOIs" lists
+     "Articles", "Issues", "Article galleys, such as a published PDF" and
+     "Peer Review" (press: "Monographs", "Chapters", "Publication
+     Formats", "Files"; preprint server: "Preprints", "Preprint galleys,
+     such as a published PDF"), the first ticked and the others not; "DOI
+     Prefix" is empty; "Automatic DOI Assignment" shows "Upon reaching
+     the copyediting stage" ("Upon reaching the production stage" on a
+     preprint server) and also offers "Upon publication" and "Never";
+     "DOI Format" has "Default - Automatically generates a unique
+     eight-character suffix" selected; "DOI Versioning" has its "No"
+     radio selected ("Yes" on a preprint server) (Fields).
+   - **No prefix**: choose "Upon publication" in "Automatic DOI
+     Assignment" and press "Save": "A DOI prefix is required" shows under
+     "DOI Prefix" and nothing is saved (Rule 3; [A1](#a1)).
+   - **A malformed prefix**: type "10.123" in "DOI Prefix" and press
+     "Save": "This is not formatted correctly." shows under the box;
+     replace it with "10.1234/" and press "Save": the same message
+     (Fields).
+   - **Saved**: replace it with "10.1234" and press "Save": "Saved"
+     shows beside the button; reload: "DOI Prefix" holds "10.1234" and
+     "Automatic DOI Assignment" "Upon publication" (Fields; Rule 3).
+   - **The DOIs page**: open the side menu's "DOIs": the prefix warning
+     is gone, and "Bulk Actions" offers "Assign DOIs" (Rules 2, 25).
+   - **The Editor without Settings** (journal, press): sign in as the
+     Editor: the side menu carries "DOIs", and the page opens with "Bulk
+     Actions" and "Filters" (Actors row 2). A preprint server has no
+     manager-level role but the Preprint Server Manager.
+   - **Control**: before the prefix was saved, the DOIs page opened
+     under the prefix warning and "Bulk Actions" offered no "Assign DOIs"
+     (Rule 2). <sup>sc</sup>
+
+3. **The list: rows, search and filters**
+
+   Given: a Journal Manager, on a scratch journal with the prefix
+   "10.1234" and "Automatic DOI Assignment" "Upon publication", holding
+   "Axolotl limb memory" by Ada Lovelace, published (on a journal in the
+   published issue Vol. 1 No. 1 (2025)), and "Tardigrade desiccation" and
+   "Coral spawning" by Mary Anning, the first at Copyediting and the
+   second at the Submission stage (on a preprint server both submitted
+   and not posted).
+
+   - **The page**: open the side menu's "DOIs": the page is headed
+     "DOIs" and has one tab, "Articles" ("Monographs", "Preprints"), with
+     no "Issues" tab; its list is titled "Article DOIs" ("Monograph DOIs",
+     "Preprint DOIs"), its header carries "Search" and "Bulk Actions" and
+     no "Deposit All", and a "Filters" column stands beside it (Fields,
+     the DOIs page; Rule 14).
+   - **Which works are listed**: the list holds "Axolotl limb memory" and
+     "Tardigrade desiccation" and not "Coral spawning" (a preprint server
+     lists all three) (Rule 15).
+   - **A published work's row**: "Axolotl limb memory"'s row shows a tick
+     box, "{contributors} — Axolotl limb memory" as a link that opens the
+     article's public page in a new tab, the submission's number and the
+     badge "Unregistered". Expand it: the version's name over a table
+     "Type", "DOIs", "Status", "Actions", with one row, "Article"
+     ("Monograph", "Preprint"), holding a DOI that begins "10.1234/" and
+     reading "Unregistered", and "Edit" (Fields, an item's row and
+     expanded view; Rules 16, 17, 31).
+   - **An unpublished work's row**: "Tardigrade desiccation" reads
+     "Unpublished"; expanded, its "Article" row is empty and reads "Needs
+     DOI" (Rules 16, 17, 31).
+   - **Search**: type "Axolotl" in "Search": the list does not change;
+     press Enter: only "Axolotl limb memory" is listed, and a "Clear
+     search phrase" button shows. Press it: the box empties and the other
+     works are back. Type "Anning" and press Enter: only "Tardigrade
+     desiccation" is listed (on a preprint server also "Coral spawning")
+     (Fields, "Search"; Rule 21).
+   - **"Status" filters**: press "Needs DOI": "Axolotl limb memory" leaves
+     the list and the filter is marked chosen; press "DOI Assigned": it
+     takes the place of "Needs DOI", and only "Axolotl limb memory" is
+     listed; press "Clear filter: DOI Assigned": every work is back
+     (Rule 22).
+   - **"Registration" filters**: press "Unregistered": only "Axolotl limb
+     memory" is listed; press "Unregistered" again: the other works are
+     back (Rule 22).
+   - **"Publication Status"** (press, preprint server): press
+     "Unpublished": "Axolotl limb memory" leaves the list; press it again
+     and press "Published" ("Posted"): only "Axolotl limb memory" is
+     listed (Fields, "Filters").
+   - **The "Issues" box** {OJS}: type "2025" in "Issues": it suggests
+     "Vol. 1 No. 1 (2025)"; choose it: only "Axolotl limb memory" is
+     listed (Fields, "Filters").
+   - **Control**: on a journal and a press, "Coral spawning" was listed
+     under no search and no filter (Rule 15). <sup>sc</sup>
+
+4. **DOIs made at the move to Copyediting**
+
+   Given: a Journal Manager, on a scratch journal with the prefix
+   "10.1234" and the other DOI settings at the install defaults, holding
+   "Tardigrade desiccation" at the Submission stage; on a press "Files"
+   is ticked too and the book carries a publication format "PDF" with a
+   file; on a preprint server "Tardigrade desiccation" is an Author's
+   unfinished draft instead.
+
+   - **The decision**: open "Tardigrade desiccation"'s workflow and
+     record "Accept and Skip Review"
+     ([Editorial decision recording](U34-editorial-decision-recording.md)):
+     the submission moves to Copyediting. On a preprint server the Author
+     finishes the draft with the wizard's final "Submit"
+     ([Submission wizard](U21-submission-wizard.md)) (Rule 5).
+   - **The made DOI**: open "DOIs": "Tardigrade desiccation" is listed
+     with the badge "Unpublished"; expanded, its "Article" row
+     ("Monograph", "Preprint") holds "10.1234/" followed by eight
+     characters, lower-case letters and digits, the last two of them
+     digits, and reads "Unregistered" (Rules 5, 6a, 15, 16, 32).
+   - **A press's file** {OMP}: the book's expanded view also has a row
+     "PDF / {file name}" holding a DOI of the same shape, different from
+     the monograph's (Rules 4, 5, 6a, 17).
+   - **Control**: before the decision, the DOIs page did not list
+     "Tardigrade desiccation" (journal, press) (Rule 15). <sup>sc</sup>
+
+5. **DOIs made at publication, a galley's included**
+
+   Given: a Journal Manager, on a scratch journal with the prefix
+   "10.1234", "Automatic DOI Assignment" "Upon publication" and the
+   galley box ticked ("Article galleys, such as a published PDF",
+   "Preprint galleys, such as a published PDF"; a press keeps
+   "Monographs" alone), holding "Axolotl limb memory" and "Tardigrade
+   desiccation" unpublished in Production, each with a galley "PDF"
+   (journal, preprint server), and on a journal a published issue Vol. 1
+   No. 1 (2025).
+
+   - **Before publishing**: open "DOIs": both works read "Unpublished";
+     expanded, "Axolotl limb memory"'s "Article" row is empty and reads
+     "Needs DOI" (Rules 5, 17, 31).
+   - **Published**: publish "Axolotl limb memory", on a journal into
+     Vol. 1 No. 1 (2025), on a preprint server with "Post the preprint"
+     ([Publish, schedule & versions](U49-publish-schedule-and-versions.md)).
+   - **The made DOIs**: back on "DOIs", its badge reads "Unregistered";
+     expanded, the "Article" row and a "PDF" row (journal, preprint
+     server) each hold "10.1234/" followed by eight characters, the two
+     different, both "Unregistered" (Rules 5, 6a, 17, 31).
+   - **The reader's page**: signed out, open the published article's
+     page: it shows "DOI:" with "https://doi.org/{the "Article" row's
+     DOI}" as a link (Rule 43; Actors row 4).
+   - **Control**: "Tardigrade desiccation", not published, still reads
+     "Needs DOI" in its "Article" row (Rule 5). <sup>sc</sup>
+
+6. **"Never", then "Assign DOIs"; DOIs switched off**
+
+   Given: a Journal Manager, on a scratch journal with the prefix
+   "10.1234" and "Automatic DOI Assignment" "Never", holding "Axolotl limb
+   memory" and "Tardigrade desiccation", both published.
+
+   - **Published without a DOI**: open "DOIs": both read "Needs DOI";
+     signed out, "Axolotl limb memory"'s page shows no "DOI:" line
+     (Rules 5, 43).
+   - **"Assign DOIs"**: tick "Axolotl limb memory" and open "Bulk
+     Actions": it reads "Take action on 1 selected item(s)."; choose
+     "Assign DOIs": a window titled "Assign DOIs" asks about "1 item(s)",
+     with the buttons "Assign DOIs" and "Cancel"; press "Assign DOIs":
+     "Items successfully assigned new DOIs" shows, the list reloads with
+     nothing ticked, and the work's "Article" row holds "10.1234/"
+     followed by eight characters, "Unregistered" (Rules 6a, 24, 25).
+   - **One already carrying a DOI**: tick both works and run "Assign
+     DOIs" again: "Axolotl limb memory" keeps the same DOI and "Tardigrade
+     desiccation" gets one of its own (Rule 25).
+   - **The Activity Log**: "Axolotl limb memory"'s Activity Log has
+     gained "Submission metadata updated" under the Journal Manager's
+     name, and no email about the DOIs has reached the mail catcher (Side
+     effects).
+   - **The reader's page**: "Axolotl limb memory"'s page now shows "DOI:"
+     with "https://doi.org/{its DOI}" (Rules 10, 43).
+   - **DOIs switched off**: on Settings › Distribution › "DOIs" untick
+     "DOIs" and press "Save": the side menu no longer carries "DOIs", and
+     the DOIs page's address answers the access-denied page with "You
+     cannot call this operation without DOIs enabled."; "Axolotl limb
+     memory"'s page still shows its "DOI:" line (Rules 1, 43; Actors
+     row 2).
+   - **Every kind unticked**: tick "DOIs" again, untick every box under
+     "Items with DOIs" and press "Save": the side menu has no "DOIs", and
+     the address answers the same message (Rule 1; Settings bullet 2).
+   - **Control**: before "DOIs" was unticked, the side menu carried
+     "DOIs" and the page opened (Rule 1). <sup>sc</sup>
+
+7. **Type, change and clear a DOI by hand**
+
+   Given: a Journal Manager, on a scratch journal with the prefix
+   "10.1234", "Automatic DOI Assignment" "Never" and "DOI Format" "None",
+   holding "Axolotl limb memory" and "Tardigrade desiccation", both
+   published without a DOI.
+
+   - **The "None" format**: on Settings › Distribution › "DOIs" "DOI
+     Format" has "None - Suffixes must be entered manually on the DOI
+     management page and will not be generated automatically" selected;
+     its words "DOI management page" open the DOIs page (Fields; Rule 6b).
+   - **A typed DOI**: expand "Axolotl limb memory": the "Article" row's
+     DOI box is greyed; press "Edit": the box can be typed in and "Edit"
+     reads "Save". Type "10.1234/e2e-a1" and press "Save": "DOI(s)
+     successfully updated" shows at the top right, and the row holds
+     "10.1234/e2e-a1" and reads "Unregistered" (Fields, a DOI box;
+     Rules 18, 32).
+   - **The other side**: the work's page shows "DOI:" with
+     "https://doi.org/10.1234/e2e-a1", and its Activity Log has gained
+     "Submission metadata updated" (Rules 10, 43; Side effects).
+   - **Refused values**: expand "Tardigrade desiccation", press "Edit",
+     type "abc" and press "Save": "Some DOI(s) could not be updated"
+     shows and the box is empty again [A3](#a3); do the same with
+     "10.1234/a b", then with "10.1234/e2e-a1", the DOI "Axolotl limb
+     memory" carries: each is refused the same way, and the row still
+     reads "Needs DOI" (Fields, a DOI box; Rules 9, 18).
+   - **Changed**: on "Axolotl limb memory" press "Edit", replace the DOI
+     with "10.1234/e2e-a2" and press "Save": "DOI(s) successfully
+     updated"; the work's page now shows "https://doi.org/10.1234/e2e-a2"
+     (Rules 10, 18). A preprint server's Activity Log gains another
+     "Submission metadata updated"; a journal's and a press's gain none
+     (Side effects).
+   - **Cleared**: press "Edit", empty the box and press "Save": the row
+     reads "Needs DOI" again, and the work's page shows no "DOI:" line
+     (Rules 10, 18, 43).
+   - **Control**: on "Tardigrade desiccation" press "Edit", then "Save"
+     with nothing changed: the editing closes (Rule 18). <sup>sc</sup>
+
+8. **A custom suffix pattern**
+
+   Given: a Journal Manager, on a scratch journal whose "Journal initials"
+   are "JPK", with the prefix "10.1234" and "Automatic DOI Assignment"
+   "Never", holding "Axolotl limb memory", published; on a journal also a
+   published issue Vol. 1 No. 1 (2025), "Tardigrade desiccation"
+   published in it, and "Coral spawning" in Production, assigned to no
+   issue.
+
+   - **The pattern group**: open Settings › Distribution › "DOIs" and
+     choose "Custom pattern - (not recommended)": the group "Custom DOI
+     Suffix Pattern" appears, its help opening "Enter a custom suffix
+     pattern for each publication type.", with the boxes "Submissions",
+     "Article Galleys" and "Issues" and, under "Peer Review", the words
+     "Custom pattern not supported" (press: "Submissions", "Chapters",
+     "Publication Formats", "Files"; preprint server: "Submissions",
+     "Preprint Galleys") (Fields).
+   - **An empty box refused**: press "Save" with the boxes empty: "A DOI
+     suffix pattern is required." shows under "Submissions" (Fields).
+   - **Saved**: type "%j.%a" in "Submissions" (a press "%p.%m") and press
+     "Save": "Saved" (Fields).
+   - **The made DOI**: on "DOIs" tick "Axolotl limb memory" and run
+     "Assign DOIs": its "Article" row holds "10.1234/jpk.{its number}",
+     its number being the one its row shows (Rules 6c, 16, 25).
+   - **A pattern that needs an issue** {OJS}: replace the pattern with
+     "%j.v%vi%i.%a" and press "Save"; tick "Tardigrade desiccation" and
+     "Coral spawning" and run "Assign DOIs": a window "DOI Updates Failed"
+     reads "Some DOI(s) could not be updated" over "Could not create a
+     DOI for the following submission: Coral spawning. The submission must
+     be assigned to an issue before a DOI can be generated.", and
+     "Tardigrade desiccation" gets "10.1234/jpk.v1i1.{its number}"
+     (Rules 6c, 25).
+   - **Control**: before "Custom pattern" was chosen, the tab showed no
+     "Custom DOI Suffix Pattern" group (Fields). <sup>sc</sup>
+
+9. **Mark statuses by hand; "Needs Sync" after unpublishing**
+
+   Given: a Journal Manager, on a scratch journal with the prefix
+   "10.1234", holding "Axolotl limb memory", published with its DOI
+   ("Unregistered"), and "Tardigrade desiccation" in Production,
+   unpublished.
+
+   - **"Mark DOIs Registered" refused**: tick both, choose "Bulk Actions"
+     › "Mark DOIs Registered" and press the window's "Mark DOIs
+     Registered": a window "DOI Updates Failed" lists "Failed to mark the
+     DOI registered for Tardigrade desiccation. The submission must be
+     published before the status can be updated.", and "Axolotl limb
+     memory" still reads "Unregistered" (Rule 26).
+   - **Marked registered**: tick "Axolotl limb memory" alone and run
+     "Mark DOIs Registered": "Items successfully marked registered"; its
+     badge and its "Article" row read "Registered", and its "Edit" is
+     greyed out (Rules 19, 26).
+   - **Unpublished**: unpublish it
+     ([Publish, schedule & versions](U49-publish-schedule-and-versions.md),
+     Rule 9): on "DOIs" its badge reads "Unpublished" and its "Article"
+     row "Needs Sync", and "Edit" can be pressed again (Rules 16, 19, 32).
+   - **Published again**: publish it again: the row still reads "Needs
+     Sync" (Rule 32).
+   - **"Mark DOIs Unregistered"**: tick it and run "Mark DOIs
+     Unregistered": "Items successfully marked unregistered"; the row
+     reads "Unregistered" (Rule 27).
+   - **"Mark DOIs Needs Sync" refused**: tick it and choose "Mark DOIs
+     Needs Sync": the window reads "You are about to mark DOI metadata
+     records for 1 item(s) as needing to be synced. The Needs Sync status
+     can only be applied to previously submitted DOIs." [A14](#a14); press
+     its "Mark DOIs Needs Sync": "DOI Updates Failed" lists "Failed to
+     mark the DOI needs sync for Axolotl limb memory. The DOI cannot be
+     marked needs sync because they have not yet been registered or
+     submitted." (Rule 28).
+   - **Marked "Needs Sync"**: run "Mark DOIs Registered" on it, then
+     "Mark DOIs Needs Sync": "Items successfully marked needs sync"; the
+     row reads "Needs Sync" (Rule 28).
+   - **Control**: "Tardigrade desiccation" read "Unpublished" throughout
+     (Rule 16). <sup>sc</sup>
+
+10. **One DOI for every version ("DOI Versioning" "No")**
+
+    Given: a Journal Manager, on a scratch journal with the prefix
+    "10.1234" and "DOI Versioning" "No" (a preprint server set to "No"),
+    holding "Axolotl limb memory", published with its DOI.
+
+    - **A new version**: on the work's workflow press "Create New
+      Version"
+      ([Publish, schedule & versions](U49-publish-schedule-and-versions.md),
+      Rule 11): on "DOIs" the work's expanded view still shows the
+      published version and its DOI (Rule 17).
+    - **The new version published**: publish the new version: the
+      article's page shows the same "DOI:" line as before (Rules 11, 43).
+    - **Changed for every version**: on "DOIs" press "Edit", replace the
+      DOI with "10.1234/e2e-v1" and press "Save": the article's page and
+      the older version's page both show "https://doi.org/10.1234/e2e-v1"
+      (Rules 11, 43).
+    - **Control**: before the change, the older version's page showed
+      the first DOI (Rules 11, 43). <sup>sc</sup>
+
+11. **A DOI per major version ("DOI Versioning" "Yes")**
+
+    Given: a Journal Manager, on a scratch journal with the prefix
+    "10.1234" and "DOI Versioning" "Yes" (a preprint server's default),
+    holding "Axolotl limb memory", published with its DOI as version 1.0.
+
+    - **A major version**: on the work's workflow press "Create New
+      Version" and choose "Major Revision"
+      ([Publish, schedule & versions](U49-publish-schedule-and-versions.md),
+      Rule 11): on "DOIs" the expanded view reads "There are 2 versions."
+      with a "View all" button; press it: a side window "DOIs for all
+      versions" holds a block headed "{version} ({date published})" for
+      1.0, with its DOI, and one headed "{version} Unpublished" for the
+      new version, whose "Article" row has no DOI (Rules 12, 20).
+    - **The major version published**: close the window and publish the
+      new version, 2.0: in "View all" its "Article" row now holds a DOI of
+      its own, different from 1.0's; the article's page shows it, and
+      1.0's page keeps 1.0's DOI (Rules 12, 43).
+    - **A minor version**: press "Create New Version" and choose "Minor
+      Revision": the expanded view still reads "There are 2 versions.";
+      "View all" holds 1.0's block and the new minor version's, 2.1,
+      "Unpublished", whose "Article" row holds 2.0's DOI (Rules 12, 20).
+    - **One "Edit" for the window**: press "Edit" at the foot of the
+      window, replace the DOI in 2.1's block with "10.1234/e2e-v2" and
+      press "Save": 2.0's page shows "https://doi.org/10.1234/e2e-v2", and
+      1.0's page keeps its own DOI (Rules 12, 20, 43).
+    - **Control**: before the major version, the expanded view had no
+      "There are … versions." line and no "View all" (Rule 20).
+      <sup>sc</sup>
+
+12. **Choose a registration agency** {OJS OPS}
+
+    Given: a Journal Manager, on a scratch journal with the prefix
+    "10.1234", "Articles" and "Article galleys, such as a published PDF"
+    ticked ("Preprints" and "Preprint galleys, such as a published PDF"),
+    no agency plugin enabled, on a journal its "Publisher" and "Online
+    ISSN" saved on Settings › Journal › "Masthead", and "Axolotl limb
+    memory" published with a galley "PDF", both carrying DOIs.
+
+    - **No agency plugin**: open Settings › Distribution › "DOIs" ›
+      "Registration": it reads "No Registration Agency Enabled" and "DOIs
+      can be automatically minted and deposited with a registration
+      agency. To use this feature, locate and install a plugin from the
+      appropriate registration agency.", with no field but "Save"; press
+      it: "Saved" [A21](#a21) (Fields; Settings bullet 11).
+    - **The plugin enabled**: on Settings › Website › "Plugins" ›
+      "Generic Plugins" tick "Crossref Manager Plugin" (*Plugins
+      management*): the "Registration" tab now shows "Registration
+      Agency" with an empty box, its list offering "None" and "Crossref"
+      (Fields; Rule 34).
+    - **Crossref chosen**: choose "Crossref": the block "Crossref
+      Settings" shows at once, before any save, with "Depositor name" and
+      "Depositor email", and "Enable automatic depositing" shows unticked.
+      Type "Public Knowledge Project" in "Depositor name" and
+      "doi@mail.test" in "Depositor email" and press "Save": "Saved"
+      (Fields; Rule 35).
+    - **The "Setup" tab**: "Items with DOIs" now lists only "Articles",
+      "Issues" and "Peer Review" (a preprint server "Preprints"), with
+      "Articles" ("Preprints") ticked; the galley box is gone [A6](#a6)
+      (Rule 35).
+    - **The DOIs page**: "Axolotl limb memory"'s expanded view no longer
+      has the "PDF" row, and the list header carries "Deposit All"
+      (Rules 4, 36).
+    - **The plugin disabled**: on "Plugins" untick "Crossref Manager
+      Plugin" and confirm "Are you sure you want to disable this
+      plugin?": the "Registration" tab reads "No Registration Agency
+      Enabled", and the DOIs page has no "Deposit All" (Rules 34, 36).
+    - **The plugin enabled again**: tick it again: "Registration Agency"
+      shows an empty box; choose "Crossref": "Depositor name" and
+      "Depositor email" hold "Public Knowledge Project" and
+      "doi@mail.test". The "Setup" tab lists every kind again, the galley
+      box unticked (Rule 34).
+    - **Control**: before Crossref was saved, the "Setup" tab listed the
+      galley box ticked and the expanded view had the "PDF" row
+      (Rules 4, 35). <sup>sc</sup>
+
+13. **Deposit DOIs with Crossref** {OJS OPS}
+
+    Given: a Journal Manager, on a scratch journal with the prefix
+    "10.1234" and Crossref chosen and configured (its depositor fields
+    saved; on a journal its "Publisher" and "Online ISSN" saved), holding
+    three published works carrying DOIs, "Axolotl limb memory",
+    "Tardigrade desiccation" and "Coral spawning", all "Unregistered", and
+    "Moss regrowth" in Production, unpublished.
+
+    - **What the page offers**: open "DOIs": the list header carries
+      "Deposit All", and "Bulk Actions" lists "Export DOIs", "Mark DOIs
+      Registered", "Mark DOIs Unregistered", "Mark DOIs Needs Sync",
+      "Assign DOIs" and "Deposit DOIs", in that order (Rules 24, 36).
+    - **The agency panel**: expand "Moss regrowth": its view ends with a
+      box naming "Crossref" and reading "This item cannot be deposited
+      until it has been published.", with no button; expand "Axolotl limb
+      memory": "The metadata for this item has not been submitted to
+      Crossref.", with "Deposit DOI(s)" (Rule 30).
+    - **Registered by hand**: run "Mark DOIs Registered" on "Tardigrade
+      desiccation": its box reads "This item has been manually registered
+      with a registration agency.", with no button (Rule 30).
+    - **"Export DOIs" with an unpublished work**: tick "Axolotl limb
+      memory" and "Moss regrowth" and choose "Export DOIs": the window
+      asks "You are about to export DOI metadata records for 2 item(s)
+      for Crossref. Are you sure you want to export these records?";
+      press "Export DOIs": nothing downloads [A13](#a13) (Rule 29).
+    - **"Deposit DOIs" with an unpublished work**: tick the same two and
+      choose "Deposit DOIs": the window asks "You are about to send DOI
+      metadata records for 2 item(s) to Crossref. Are you sure you want to
+      deposit these records?"; press "Deposit DOIs": nothing is marked,
+      and "Axolotl limb memory" still reads "Unregistered" [A13](#a13)
+      (Rule 29).
+    - **"Deposit DOIs"**: tick "Axolotl limb memory" alone and run
+      "Deposit DOIs": "Items successfully submitted for deposit"; its
+      badge and its "Article" row read "Submitted" at once, and its
+      "Edit" is greyed out [A4](#a4) (Rules 19, 29, 32).
+    - **"Deposit All"**: press "Deposit All": the window "Deposit all
+      DOIs" reads "You are about to schedule all outstanding DOI metadata
+      records to be deposited with Crossref. Only published items with a
+      DOI will be deposited…", with "Deposit all DOIs" and "Cancel";
+      press "Deposit all DOIs": "Items successfully submitted for
+      deposit", and "Coral spawning" reads "Submitted" (Rule 29).
+    - **No mail**: no email about the deposits has reached the mail
+      catcher (Side effects).
+    - **Control**: after "Deposit All", "Tardigrade desiccation" still
+      reads "Registered" and "Moss regrowth" "Unpublished" (Rules 16,
+      29). <sup>sc</sup>
+
+14. **Crossref's requirements on a journal** {OJS}
+
+    Given: a Journal Manager, on a scratch journal with the prefix
+    "10.1234", "Automatic DOI Assignment" "Never", Crossref chosen with
+    its depositor fields saved, no "Publisher" and no ISSN, a published
+    issue Vol. 1 No. 1 (2025), and "Axolotl limb memory" in Production
+    without a DOI.
+
+    - **The notice**: open the "Registration" tab: the Crossref block
+      opens with a warning headed "Plugin requirements not met", listing
+      "A journal publisher has not been configured! You must add a
+      publisher institution on the Journal Settings Page." and "A journal
+      ISSN has not been configured! You must add an ISSN on the Journal
+      Settings Page."; press "Save": "Saved" (Rule 37).
+    - **Not configured**: on "DOIs" the header has no "Deposit All",
+      "Bulk Actions" offers neither "Export DOIs" nor "Deposit DOIs", and
+      the work's expanded view has no agency box (Rule 36).
+    - **The publish warnings**: on the work's workflow press "Schedule
+      For Publication" and go on to its confirmation window
+      ([Publish, schedule & versions](U49-publish-schedule-and-versions.md),
+      Rule 4): under "The following issues were found, but will not
+      prevent publishing" it lists "Journal publisher must be provided
+      before submissions can be deposited with Crossref.", "Either an
+      online ISSN or print ISSN must be provided before submissions can be
+      deposited with Crossref." [OJS3](#ojs3) and 'The submission "Axolotl
+      limb memory" is not associated with a DOI and cannot be deposited
+      with Crossref.'. Close it without publishing (Rule 39).
+    - **"Publisher" and an ISSN saved**: on Settings › Journal ›
+      "Masthead" type "Public Knowledge Project" in "Publisher" and
+      "1234-5679" in "Online ISSN" and press "Save": the Crossref block
+      opens without the notice, and "DOIs" offers "Deposit All", "Export
+      DOIs" and "Deposit DOIs" (Rules 36, 37; Settings bullet 13).
+    - **With a DOI**: run "Assign DOIs" on the work and go on to the
+      confirmation window again: the line 'The submission "Axolotl limb
+      memory" is not associated with a DOI…' is gone; publish it into
+      Vol. 1 No. 1 (2025): the work reads "Unregistered" on "DOIs"
+      (Rules 16, 31, 39).
+    - **Control**: before "Publisher" and "Online ISSN" were saved, the
+      DOIs page offered no "Deposit All" (Rule 36). <sup>sc</sup>
+
+15. **Crossmark and "Update Policy DOI"** {OJS}
+
+    Given: a Journal Manager, on a scratch journal with the prefix
+    "10.1234", "DOI Versioning" "No" and Crossref chosen with its
+    depositor fields saved, holding "Axolotl limb memory", published with
+    its DOI.
+
+    - **As it arrives**: on the "Registration" tab the Crossref block has
+      "Crossmark" unticked, reading "Enable participation in Crossmark to
+      allow readers to check the publication status of articles. Learn
+      more.", and no "Update Policy DOI" (Fields; Rule 38).
+    - **Versioning "Yes"**: on "Setup" choose "Yes, assign a unique DOI
+      to every version of an article." and press "Save": the Crossref
+      block now shows "Update Policy DOI", starred, with "Crossmark"
+      unticked. Choose "No, all versions of an article should have the
+      same DOI." and press "Save": the box is hidden again (Rule 38).
+    - **Crossmark ticked**: tick "Crossmark": "Update Policy DOI" shows,
+      starred. Type "policy" and press "Save": "This is not formatted
+      correctly." shows under the box; replace it with "10.1234/policy"
+      and press "Save": "Saved" (Fields; Rule 38).
+    - **The article's page**: signed out, open "Axolotl limb memory": its
+      side column ends with the Crossmark button, the Crossmark logo with
+      the alt text "Crossmark" (Rule 42).
+    - **"None" saved**: choose "None" as the Registration Agency and
+      press "Save": the article's page still shows the button (Rule 42).
+    - **The plugin disabled**: on Settings › Website › "Plugins" untick
+      "Crossref Manager Plugin" and confirm: the article's page no longer
+      shows the button (Rule 42).
+    - **Control**: before "Crossmark" was saved ticked, the article's page
+      had no Crossmark button (Rule 42). <sup>sc</sup>
+
+16. **DataCite** {OJS}
+
+    Given: a Journal Manager, on a scratch journal with the prefix
+    "10.1234" and "Articles" ticked, the "DataCite Manager Plugin" enabled
+    and no agency chosen, holding "Axolotl limb memory", published with
+    its DOI.
+
+    - **DataCite chosen**: on the "Registration" tab choose "DataCite" in
+      "Registration Agency": the block "DataCite Settings" opens with
+      "Please configure the DataCite export plugin before using it for the
+      first time." and holds "Username (symbol)", "Password", "Testing",
+      "Test Username", "Test Password" and "Test DOI Prefix" (Fields, the
+      DataCite block).
+    - **"Testing" without a test prefix**: tick "Testing" and press
+      "Save": "A test DOI prefix is required when using the test system
+      for DOI registration." [A5](#a5); type "10.5072" in "Test DOI
+      Prefix" and press "Save": "Saved" (Fields).
+    - **The "Setup" tab**: "Items with DOIs" lists "Articles", "Issues"
+      and "Article galleys, such as a published PDF", and no "Peer Review"
+      (Rule 35).
+    - **The DOIs page**: the header carries "Deposit All", "Bulk Actions"
+      offers "Export DOIs" and "Deposit DOIs", and "Axolotl limb memory"'s
+      expanded view ends with a box naming "DataCite" and reading "The
+      metadata for this item has not been submitted to DataCite.", with
+      "Deposit DOI(s)" (Rules 30, 36).
+    - **"Deposit DOI(s)"**: press it: the window "Deposit DOIs" asks "You
+      are about to send DOI metadata records for 1 item(s) to DataCite.
+      Are you sure you want to deposit these records?"; press "Deposit
+      DOIs": "Items successfully submitted for deposit", and the row reads
+      "Submitted" (Rules 29, 30).
+    - **Control**: before DataCite was saved, the DOIs page had no
+      "Deposit All" (Rule 36). <sup>sc</sup>
+
+17. **Peer-review DOIs** {OJS}
+
+    Given: a Journal Manager, on a scratch journal with the prefix
+    "10.1234", "Articles" and "Peer Review" ticked, the other DOI
+    settings at the install defaults, and "Publicly Show Reviewer
+    Comments" ticked as the default on Settings › Workflow › Review,
+    holding "Axolotl limb memory" and "Tardigrade desiccation" in
+    Review, each with one review the reviewer has submitted.
+
+    - **Accept with the reviewers notified**: on "Axolotl limb memory"
+      record "Accept Submission", sending its "Notify Reviewers" email
+      ([Editorial decision recording](U34-editorial-decision-recording.md)):
+      the reviewer's row reads "Reviewer Thanked". On "DOIs" the work's
+      expanded view has an "Article" row and, under the current version, a
+      "Peer Review {number}" row, each with a DOI of its own beginning
+      "10.1234/" and reading "Unregistered" (Rule 7).
+    - **Accept without the email**: on "Tardigrade desiccation" record
+      "Accept Submission" and skip its "Notify Reviewers" email: the
+      work's expanded view has the "Article" row only (Rule 7).
+    - **"Mark as Complete"**: open that review's "Read Review" and press
+      "Mark as Complete"
+      ([Reviewer assignment & management](U27-reviewer-assignment-and-management.md)):
+      the expanded view now has a "Peer Review {number}" row with its DOI
+      (Rule 7).
+    - **Control**: before either decision, the DOIs page listed neither
+      work (Rule 15). <sup>sc</sup>
+
+18. **Issue DOIs, and an article scheduled under "Upon publication"** {OJS}
+
+    Given: a Journal Manager, on a scratch journal with the prefix
+    "10.1234", "Articles" and "Issues" ticked and "Automatic DOI
+    Assignment" "Upon publication", holding an unpublished issue Vol. 1
+    No. 2 (2026) and "Axolotl limb memory" in Production, assigned to no
+    issue.
+
+    - **The "Issues" tab**: open "DOIs": it has the tabs "Articles" and
+      "Issues"; "Issues", headed "Issues" with the list "Issue DOIs",
+      lists "Vol. 1 No. 2 (2026)" with the badge "Unpublished"; expanded,
+      it has one row, "Issue", without a DOI (Rules 14, 15, 16, 17).
+    - **Scheduled into the issue**: schedule "Axolotl limb memory" into
+      Vol. 1 No. 2 (2026) without publishing it
+      ([Publish, schedule & versions](U49-publish-schedule-and-versions.md)):
+      on "Articles" its "Article" row now holds a DOI, "Unregistered"
+      (Rule 5).
+    - **"Publish Issue"**: publish the issue
+      ([→ publishing an issue](U50-issues.md#publish-issue)): on "Issues"
+      its "Issue" row holds "10.1234/" followed by eight characters,
+      "Unregistered"; on "Articles" the article keeps the DOI it had
+      (Rules 6a, 8).
+    - **The issue's page**: signed out, the issue's page shows "DOI:" with
+      "https://doi.org/{the issue's DOI}" (Rule 43).
+    - **Control**: before "Publish Issue", the issue's "Issue" row had no
+      DOI (Rule 8). <sup>sc</sup>
+
+19. **A press offers no registration agency** {OMP}
+
+    Given: a Press Manager, on a scratch press with the prefix "10.1234",
+    holding "Axolotl limb memory", published with its DOI.
+
+    - **The Plugins list**: Settings › Website › "Plugins" › "Generic
+      Plugins" lists neither "Crossref Manager Plugin" nor "DataCite
+      Manager Plugin" (Purpose; Rule 34).
+    - **The "Registration" tab**: it reads "No Registration Agency
+      Enabled", with no field but "Save"; press it: "Saved" [A21](#a21)
+      (Fields).
+    - **The DOIs page**: the list header has no "Deposit All"; "Bulk
+      Actions" offers "Mark DOIs Registered", "Mark DOIs Unregistered",
+      "Mark DOIs Needs Sync" and "Assign DOIs", and neither "Export DOIs"
+      nor "Deposit DOIs"; the book's expanded view ends without an agency
+      box (Purpose; Rules 24, 36).
+    - **Control**: run "Mark DOIs Registered" on the book: "Items
+      successfully marked registered", and its row reads "Registered"
+      (Rule 26). <sup>sc</sup>
+
+## Coverage
+
+Left out of the scenarios above, by reason:
+
+- **Budget** — variants:
+  - unticking "DOIs" and saving to store the other "Setup" changes, and the prefix message cleared by the untick (Rule 3; A1)
+  - a "Save" with one DOI box refused and another stored showing both notices, and a typed DOI kept across a tab switch and lost on leaving the page (Rule 18)
+  - the "Custom DOI Suffix Pattern" group left on screen with "DOIs" unticked, and "Save" greyed after a pattern refusal until the flagged box is typed in (Fields, "Setup")
+  - "Deposit All" with nothing left to deposit (Rule 29)
+  - paging past thirty items (Rule 23)
+  - the "DOI Statuses" window (Rules 22, 31)
+  - a book page's publication-format "DOI:" lines {OMP} (Rule 43)
+  - the agency plugins' Tools pages and their two links (Rule 44; A20)
+- **Nothing new to test**:
+  - the Site Administrator on the DOIs page: the Journal Manager's page of scenarios 1 and 3 (Actors row 2)
+  - a preprint server with Crossref chosen, "Preprints" unticked: DOIs off as in scenario 6 (Rules 1, 36)
+  - "Automatic Deposit" ticked: the scheduled deposit changes nothing a screen offers (Rule 41; Settings bullet 8)
+  - "Testing" ticked: deposits go to the agency's test service through the same screens; DataCite's "Test DOI Prefix" rides in scenario 16 (Fields; Settings bullet 10)
+- **Register carries it**:
+  - A2 (a made DOI under "None", and a peer review's under "Custom pattern", reading the prefix and a bare "/"; Rule 6b)
+  - A9 (a pattern symbol with nothing to fill it; Rule 6c)
+  - A7 (a typed DOI outside the journal's prefix; Rule 18)
+  - A10 ("Assign DOIs" under "No" while a newer version is unpublished; Rules 11, 17)
+  - OPS4 (a preprint server's minor version's galleys; Rule 12)
+  - A17 (a new major version leaving the earlier DOI's status; Rule 32)
+  - OPS5 (a preprint server listing unfinished drafts; Rule 15)
+  - A11 (searching by a DOI's start; Rule 21)
+  - A12 (clearing a "Registration" filter after "Unregistered"; Rule 22)
+  - A8 (the unnamed "DOI Statuses" button and row tick boxes; Fields, the DOIs page)
+  - A13 (a bulk action confirmed with nothing ticked, and the silent refusals scenario 13 passes; Rules 24, 29)
+  - A14 (the "Mark DOIs Needs Sync" question's "stale"; Rule 28; scenario 9 passes it)
+  - A19 (choosing an agency unticking every kind; Rule 35)
+  - A5 (a refused block field keeping the agency; Rule 35; scenario 16 passes it)
+  - OJS3 (the ISSN publish warning listed twice; Rule 39; scenario 14 passes it)
+  - OJS1 ("Never" not stopping an issue's DOI at "Publish Issue"; Rule 8)
+  - OJS2 (a DataCite issue export or deposit; Rule 29)
+  - A15 ("Deposit DOIs" on a published work without a DOI; Rule 29)
+  - A18 (a deposit that cannot reach the agency staying "Submitted"; Rule 33)
+  - A4 (a deposited item's agency panel; Rule 30; scenario 13 passes it)
+  - A16 (a "Needs Sync" item's agency panel; Rule 30)
+  - OPS2 ("Automatic Deposit" on a preprint server; Rule 41)
+  - OMP1 ("Files" alone listing nothing, and "Needs DOI" ignoring a missing file DOI; Rules 4, 22)
+  - OPS3 (a preprint server's "Username" help; Fields, the Crossref block)
+  - A21 (the server log's warning on a "Registration" tab "Save" without an agency; Fields, the Registration tab; scenarios 12 and 19 pass it)
+- **No seed**:
+  - the "Export DOIs" download and "Items successfully exported": the test installs cannot reach the agency's site (Rule 29; Side effects)
+  - a deposit the agency answers with an error: "Error", "View Error" and the "Registration Error Message" window (Rules 17, 33)
+  - a deposit the agency accepted: the panel's "Registered" through the agency and "View Record" (Rules 30, 33)
+- **Owned by another feature**:
+  - an unsaved change on the "Setup" or "Registration" tab lost on leaving the page (Fields; *Journal identity & about pages*, Rule 5)
+
+## Findings register
+
+Verdicts are the author's judgment (claude, 2026-09-26), unreviewed unless
+an entry notes otherwise; the team settles them on spec review.
+
+| ID | Finding (one line, symptom) | Bug? | Impact | Review |
+|----|-----------------------------|------|--------|--------|
+| [A2](#a2) | "None" (and every peer review) gets a DOI that is the prefix and a bare "/" | 🐞 | user-visible | — |
+| [A3](#a3) | A refused DOI edit says only "Some DOI(s) could not be updated" and gives no reason | 🐞 | minor | — |
+| [A4](#a4) | A deposited item reads "This item has been manually registered with a registration agency." | 🐞 | minor | — |
+| [A8](#a8) | The "DOI Statuses" button and the rows' tick boxes have no name for a screen reader | 🐞 | minor | — |
+| [A9](#a9) | A pattern symbol with nothing to fill it stays in the DOI | 🐞 | user-visible | — |
+| [A11](#a11) | Searching by a DOI's start finds a different set on each app, and nothing on a preprint server | 🐞 | user-visible | — |
+| [A12](#a12) | Clearing a "Registration" filter after "Unregistered" keeps unpublished works out of the list | 🐞 | minor | — |
+| [A13](#a13) | A refused or failed bulk action closes its window with no message | 🐞 | minor | — |
+| [A14](#a14) | The "Mark DOIs Needs Sync" question asks to mark the records "as stale" | 🐞 | minor | — |
+| [A15](#a15) | "Deposit DOIs" reports success for a work with no DOI, and nothing is sent | 🐞 | minor · crash: server | — |
+| [A17](#a17) | A new major version leaves the earlier version's deposited DOI as it was | 🐞 | minor | — |
+| [A18](#a18) | A deposit that cannot reach the agency reads "Submitted" for good | 🐞 | user-visible · crash: server | — |
+| [A19](#a19) | Choosing an agency can untick every kind and leave the DOIs page without its list | 🐞 | user-visible · crash: script | — |
+| [A20](#a20) | The agency plugins' Tools pages have an empty heading | 🐞 | minor | — |
+| [A21](#a21) | A "Save" on the Registration tab without an agency leaves a warning in the server log | 🐞 | invisible | — |
+| [OJS2](#ojs2) | With DataCite, a published issue cannot be exported or deposited: both fail on the server | 🐞 | user-visible · crash: server | — |
+| [OJS3](#ojs3) | The publish window lists the ISSN warning twice | 🐞 | minor | — |
+| [OMP1](#omp1) | A press's DOIs page ignores file DOIs when choosing which books to list | 🐞 | user-visible | — |
+| [OPS1](#ops1) | The "DOIs" box reads "…to assigned to works published on this server." | 🐞 | minor | — |
+| [OPS3](#ops3) | The Crossref "Username" help reads "…see the advise above." | 🐞 | minor | — |
+| [OPS4](#ops4) | A minor version's galleys start without a DOI and get new ones | 🐞 | user-visible | — |
+| [A1](#a1) | A new journal arrives in a DOI state its own Setup tab refuses to save | ❓ | minor | — |
+| [A5](#a5) | The Registration tab keeps a new agency even when its fields are refused | ❓ | minor | — |
+| [A6](#a6) | Choosing an agency silently unticks the kinds it does not accept | ❓ | minor | — |
+| [A7](#a7) | A DOI typed by hand need not begin with the journal's prefix | ❓ | minor | — |
+| [A10](#a10) | Under "DOI Versioning" "No", "Assign DOIs" while a newer version is unpublished gives the DOI to the published version only | ❓ | user-visible | — |
+| [A16](#a16) | A "Needs Sync" item's agency panel says its metadata "has not been submitted" | ❓ | minor | — |
+| [OJS1](#ojs1) | "Never" does not stop an issue's DOI at "Publish Issue" | ❓ | minor | — |
+| [OPS2](#ops2) | A preprint server offers "Automatic Deposit" but nothing runs it | ❓ | user-visible | — |
+| [OPS5](#ops5) | A preprint server's DOIs page lists drafts nobody has submitted | ❓ | minor | — |
+
+### All apps
+
+<a id="a1"></a>
+**A1 — A new journal arrives in a DOI state its own Setup tab refuses to save** · ❓ · minor.
+Every new journal, press and preprint server starts with "DOIs" ticked
+and no "DOI Prefix", but the Setup tab refuses every save in that state
+with "A DOI prefix is required". A manager cannot save a change to "DOI
+Versioning" or any other Setup field with "DOIs" ticked before typing a
+prefix (only by unticking "DOIs" and saving, Rule 3), and one who
+unticks "DOIs" cannot tick it again without one.
+Question: should a context without a prefix be allowed to keep DOIs on?
+Lean: yes; the DOIs page's own "Add DOI prefix" warning is written for
+exactly that state, so the save should accept it rather than the default
+avoid it.
+Basis: probe, 2026-09-26. <sup>f-a1</sup>
+
+<a id="a2"></a>
+**A2 — "None" (and every peer review) gets a DOI that is the prefix and a bare "/"** · 🐞 · user-visible.
+With "DOI Format" "None - Suffixes must be entered manually … and will
+not be generated automatically", a manager expects no DOI until one is
+typed. Instead every automatic moment and "Assign DOIs" gives the item
+"{prefix}/" with nothing after the slash, the same value for every item,
+which is then shown to readers and would be deposited. Peer reviews get
+the same bare value under "Custom pattern".
+Basis: probe, 2026-09-26. <sup>f-a2</sup>
+
+<a id="a3"></a>
+**A3 — A refused DOI edit says only "Some DOI(s) could not be updated" and gives no reason** · 🐞 · minor.
+A manager types a DOI already used elsewhere on the install, or one in a
+wrong shape, and presses "Save". The notice reads "Some DOI(s) could not
+be updated" and the box returns to its old value; the reason the install
+knows ("The given DOI suffix is already in use for another published
+item. Please enter a unique DOI suffix for each item.", "This is not
+formatted correctly.", "The DOI contains invalid characters.") is never
+shown, so the manager cannot tell what to fix.
+Basis: probe, 2026-09-26. <sup>f-a3</sup>
+
+<a id="a4"></a>
+**A4 — A deposited item reads "This item has been manually registered with a registration agency."** · 🐞 · minor.
+After "Deposit DOIs" (or the panel's "Deposit DOI(s)"), the item reads
+"Submitted" and its agency panel says "This item has been manually
+registered with a registration agency." at once, after a reload, and
+after its background deposit has run and failed. Expected: "The
+metadata for this item has been submitted to {agency}.", since nobody
+marked it registered.
+Basis: probe, 2026-09-26. <sup>f-a4</sup>
+
+<a id="a5"></a>
+**A5 — The Registration tab keeps a new agency even when its fields are refused** · ❓ · minor.
+A manager chooses an agency, fills its block with a value the install
+refuses, and presses "Save". The message appears under the field, yet
+the agency choice and "Automatic Deposit" are already saved, and any
+kind the agency does not accept already unticked.
+Question: should a refused block leave the tab's other fields unsaved?
+Lean: yes; one "Save" should store all or nothing.
+Basis: probe, 2026-09-26. <sup>f-a5</sup>
+
+<a id="a6"></a>
+**A6 — Choosing an agency silently unticks the kinds it does not accept** · ❓ · minor.
+A journal with "Articles" and "Article galleys, such as a published
+PDF" ticked chooses Crossref and saves; the galley kind is unticked and
+disappears from the Setup tab with no message, and the galley rows
+leave the DOIs page. When the dropped kind is not the last one ticked,
+every kind goes instead ([A19](#a19)).
+Question: should the tab warn before dropping a kind?
+Lean: keep the rule (the agency cannot register those items) but say so
+on "Save".
+Basis: probe, 2026-09-26. <sup>f-a6</sup>
+
+<a id="a7"></a>
+**A7 — A DOI typed by hand need not begin with the journal's prefix** · ❓ · minor.
+The DOIs page accepts "10.9999/x" on a journal whose prefix is
+"10.1234"; the journal's own prefix is never checked.
+Question: should a typed DOI have to start with the journal's prefix?
+Lean: no; journals carry DOIs registered under earlier prefixes or by
+other publishers, so accepting any DOI is intended.
+Basis: probe, 2026-09-26. <sup>f-a7</sup>
+
+<a id="a8"></a>
+**A8 — The "DOI Statuses" button and the rows' tick boxes have no name for a screen reader** · 🐞 · minor.
+The round button beside "Filters" on the DOIs page shows only a "?"
+icon, and no row's tick box has a label, so a screen reader announces
+"button" and "checkbox" with nothing more. A manager who cannot see the
+screen cannot find the status legend or tell which item a box ticks.
+Basis: probe, 2026-09-26. <sup>f-a8</sup>
+
+<a id="a9"></a>
+**A9 — A pattern symbol with nothing to fill it stays in the DOI** · 🐞 · user-visible.
+Under "Custom pattern" a manager expects a DOI built from the item's
+values, or a refusal when one is missing. Instead "Assign DOIs" on an
+item that lacks the symbol's value keeps the symbol and reports
+success: "%j.%p" on an article without "Pages" gives "10.1234/jpk.%p",
+and "k2.%x" on an item without a Publisher ID gives "10.1234/k2.%x"
+(filled, they give "10.1234/jpk.12-34" and "10.1234/k2.{Publisher
+ID}"). The row reads "Unregistered", and readers see that DOI.
+Basis: probe, 2026-09-26. <sup>f-a9</sup>
+
+<a id="a10"></a>
+**A10 — Under "DOI Versioning" "No", "Assign DOIs" while a newer version is unpublished gives the DOI to the published version only** · ❓ · user-visible.
+With "DOI Versioning" "No" and an article published without a DOI, a
+manager presses "Create New Version", then "Assign DOIs" for the
+article on the DOIs page, which lists "Version of Record 1.0". Once 1.1
+is published, its page shows no "DOI:" line, while the 1.0 page shows
+the DOI.
+Question: under "No", should a DOI assigned while a newer version is
+unpublished reach that version too?
+Lean: yes; "No, all versions of an article should have the same DOI."
+is what the manager chose.
+Basis: probe, 2026-09-26. <sup>f-a10</sup>
+
+<a id="a11"></a>
+**A11 — Searching by a DOI's start finds a different set on each app, and nothing on a preprint server** · 🐞 · user-visible.
+A phrase beginning with digits and a dot is meant to find the items
+whose DOI begins with it. On a journal it finds articles by their own
+DOI only (a galley's DOI finds nothing); on a press only books with a
+matching file DOI (the monograph's own DOI finds nothing, even typed
+whole); on a preprint server nothing at all, "10.1234/" included. A
+manager looking an item up by its DOI gets an empty or partial list and
+no hint why.
+Basis: probe, 2026-09-26. <sup>f-a11</sup>
+
+<a id="a12"></a>
+**A12 — Clearing a "Registration" filter after "Unregistered" keeps unpublished works out of the list** · 🐞 · minor.
+A manager presses "Unregistered", then "Registered", then "Clear filter:
+Registered". No filter reads chosen, yet every unpublished work stays
+out of the list until the page is reloaded, so the manager takes a
+partial list for the whole one.
+Basis: probe, 2026-09-26. <sup>f-a12</sup>
+
+<a id="a13"></a>
+**A13 — A refused or failed bulk action closes its window with no message** · 🐞 · minor.
+A manager confirms a bulk action; the window closes, the list reloads
+and nothing says the action failed, in three cases: any action
+confirmed with nothing ticked ("…for 0 item(s)…"); "Export DOIs" or
+"Deposit DOIs" with a ticked item that has no published DOI (nothing is
+exported or marked); and an "Export DOIs" whose file the install cannot
+build (nothing downloads). The install knows the reason ("No valid
+publication objects were included with the request.", "The requested
+resource was not found.", "One or more invalid publication objects were
+included with the request.", "An XML validation error occurred and the
+XML could not be exported.") and never shows it.
+Basis: probe, 2026-09-26. <sup>f-a13</sup>
+
+<a id="a14"></a>
+**A14 — The "Mark DOIs Needs Sync" question asks to mark the records "as stale"** · 🐞 · minor.
+The window ends "Are you sure you want to mark these records as
+stale?", while the action, the badge, the filter and the "DOI Statuses"
+window all say "Needs Sync"; "stale" appears nowhere else on the page,
+so the manager confirms a status the screen never names.
+Basis: probe, 2026-09-26. <sup>f-a14</sup>
+
+<a id="a15"></a>
+**A15 — "Deposit DOIs" reports success for a work with no DOI, and nothing is sent** · 🐞 · minor · crash: server.
+A manager ticks a published work that has no DOI and presses "Deposit
+DOIs". The notice reads "Items successfully submitted for deposit", but
+the row stays "Needs DOI" and the background deposit fails on the
+server, so nothing reaches the agency. "Export DOIs" refuses the same
+work ([A13](#a13)).
+Basis: probe, 2026-09-26. <sup>f-a15</sup>
+
+<a id="a16"></a>
+**A16 — A "Needs Sync" item's agency panel says its metadata "has not been submitted"** · ❓ · minor.
+A DOI reads "Needs Sync" only after it was deposited or registered, yet
+its panel reads "The metadata for this item has not been submitted to
+{agency}." with "Deposit DOI(s)", the same as for an item never
+deposited.
+Question: should a "Needs Sync" item's panel say that its record needs
+sending again rather than that nothing was submitted?
+Lean: yes, in the words of the "DOI Statuses" window ("They need to be
+resubmitted…").
+Basis: probe, 2026-09-26. <sup>f-a16</sup>
+
+<a id="a17"></a>
+**A17 — A new major version leaves the earlier version's deposited DOI as it was** · 🐞 · minor.
+With "DOI Versioning" "Yes", a work whose 1.0 DOI reads "Registered"
+gets a new major version, 2.0, which is published: 2.0 gets its own DOI
+("Unregistered") and 1.0's stays "Registered". Expected: 1.0's DOI
+turns "Needs Sync", so that its deposited record, which should now name
+the newer version, is sent again; as it is, nothing prompts the manager
+to do so.
+Basis: probe, 2026-09-26. <sup>f-a17</sup>
+
+<a id="a18"></a>
+**A18 — A deposit that cannot reach the agency reads "Submitted" for good** · 🐞 · user-visible · crash: server.
+After "Deposit DOIs" or "Deposit All" the DOI reads "Submitted". When
+the background deposit cannot connect to the agency, it fails on the
+server, is tried twice more and is dropped; the DOI stays "Submitted"
+(its panel saying "manually registered", [A4](#a4)), no "Error" badge
+or "View Error" appears, and nothing on the DOIs page tells the manager
+that the deposit never arrived or that it should be sent again.
+Basis: probe, 2026-09-26. <sup>f-a18</sup>
+
+<a id="a19"></a>
+**A19 — Choosing an agency can untick every kind and leave the DOIs page without its list** · 🐞 · user-visible · crash: script.
+A journal with "Articles", "Article galleys, such as a published PDF"
+and "Peer Review" ticked chooses Crossref and saves ("Saved"). Expected:
+only the galley kind goes ([A6](#a6)). Instead every box on the Setup
+tab then reads unticked, and the DOIs page shows its heading and an
+"Articles" tab with no list, search, filters or items: the page's
+script fails. The same happened under DataCite, "Peer Review" being
+dropped from between two kept kinds. With the dropped kind last
+(galleys beside "Articles" alone), only it goes.
+Basis: probe, 2026-09-26. <sup>f-a19</sup>
+
+<a id="a20"></a>
+**A20 — The agency plugins' Tools pages have an empty heading** · 🐞 · minor.
+Tools › "Import/Export" › "Crossref XML Export Plugin" (on a journal
+also "DataCite Export/Registration Plugin") opens a page whose heading
+is empty and whose browser tab reads only the journal's name; the
+notice is the page's only content. A screen reader announces an empty
+heading, and the tab does not say which page is open.
+Basis: probe, 2026-09-26. <sup>f-a20</sup>
+
+<a id="a21"></a>
+**A21 — A "Save" on the Registration tab without an agency leaves a warning in the server log** · 🐞 · invisible.
+On a journal or preprint server with no agency plugin enabled, and on
+every press, the "Registration" tab holds no field but "Save". Pressing
+it answers "Saved" and changes nothing, as expected, but each press
+also writes a warning to the install's server error log, because the
+save expects a "Registration Agency" choice the tab does not have.
+Nothing on screen shows it; the log gains a line per save.
+Basis: test run, 2026-09-26. <sup>f-a21</sup>
+
+### OJS
+
+<a id="ojs1"></a>
+**OJS1 — "Never" does not stop an issue's DOI at "Publish Issue"** · ❓ · minor.
+With "Automatic DOI Assignment" "Never" and "Issues" ticked, publishing
+an issue still gives it a DOI, while the articles scheduled in it get
+none.
+Question: should "Never" cover issues too?
+Lean: yes; the setting's help asks only about submissions, but a manager
+who chose "Never" expects no DOI to appear by itself.
+Basis: probe, 2026-09-26. <sup>f-ojs1</sup>
+
+<a id="ojs2"></a>
+**OJS2 — With DataCite, a published issue cannot be exported or deposited: both fail on the server** · 🐞 · user-visible · crash: server.
+On a journal with DataCite chosen, "Export DOIs" on a published issue
+("Issues" tab) closes its window and shows nothing: the export fails on
+the server. "Deposit All" marks the issue "Submitted", and its
+background deposit fails the same way, so the issue's DOI never reaches
+DataCite.
+Basis: probe, 2026-09-26. <sup>f-ojs2</sup>
+
+<a id="ojs3"></a>
+**OJS3 — The publish window lists the ISSN warning twice** · 🐞 · minor.
+While Crossref is chosen and the journal has neither ISSN, the publish
+window lists "Either an online ISSN or print ISSN must be provided
+before submissions can be deposited with Crossref." twice under "The
+following issues were found, but will not prevent publishing".
+Basis: probe, 2026-09-26. <sup>f-ojs3</sup>
+
+### OMP
+
+<a id="omp1"></a>
+**OMP1 — A press's DOIs page ignores file DOIs when choosing which books to list** · 🐞 · user-visible.
+A press ticks "Files" alone and saves: the side menu shows "DOIs" and
+the page opens on "Monographs", but the list reads "No items found.",
+so its files' DOIs can be neither seen nor assigned there. With
+"Monographs" also ticked the same books are listed with their file
+rows, but the "Needs DOI" filter still counts only the monograph's own
+DOI, so a book missing only its file DOI is not listed under it.
+Basis: probe, 2026-09-26. <sup>f-omp1</sup>
+
+### OPS
+
+<a id="ops1"></a>
+**OPS1 — The "DOIs" box reads "…to assigned to works published on this server."** · 🐞 · minor.
+The box's label on a preprint server reads "Allow Digital Object
+Identifiers (DOIs) to assigned to works published on this server.";
+"to be assigned" is meant.
+Basis: probe, 2026-09-26. <sup>f-ops1</sup>
+
+<a id="ops2"></a>
+**OPS2 — A preprint server offers "Automatic Deposit" but nothing runs it** · ❓ · user-visible.
+With Crossref chosen, the Registration tab offers "Enable automatic
+depositing" and promises deposits "at scheduled intervals", but a
+preprint server's install schedules no deposit, so a ticked box has
+nothing to act on and the preprints wait for a manual deposit.
+Question: should preprint servers deposit on a schedule, or not offer
+the box?
+Lean: deposit on a schedule, as a journal does.
+Basis: probe, 2026-09-26. <sup>f-ops2</sup>
+
+<a id="ops3"></a>
+**OPS3 — The Crossref "Username" help reads "…see the advise above."** · 🐞 · minor.
+On a preprint server the Crossref block's "Username" help reads "The
+Crossref username that will be used to authenticate your deposits. If
+you are using a personal account, see the advise above."; a journal's
+reads "…please see the advice above.".
+Basis: probe, 2026-09-26. <sup>f-ops3</sup>
+
+<a id="ops4"></a>
+**OPS4 — A minor version's galleys start without a DOI and get new ones** · 🐞 · user-visible.
+With "DOI Versioning" "Yes", a version made with "Minor Revision" keeps
+the preprint's DOI, but its galleys read "Needs DOI" in the "View all"
+window and get new DOIs on publication, instead of sharing their
+source's as a journal's and a press's minor versions do (Rule 12). A
+minor correction thus registers new galley DOIs.
+Basis: probe, 2026-09-26. <sup>f-ops4</sup>
+
+<a id="ops5"></a>
+**OPS5 — A preprint server's DOIs page lists drafts nobody has submitted** · ❓ · minor.
+On a preprint server an unfinished draft, one an Author started and
+never submitted, is listed on the DOIs page with the badge
+"Unpublished" and its row "Needs DOI". A journal and a press list no
+such draft.
+Question: should the DOIs page list a draft nobody has submitted?
+Lean: no; a manager has nothing to register for it, and the other apps
+leave drafts out.
+Basis: probe, 2026-09-26. <sup>f-ops5</sup>
+
+---
+
+<a id="footnotes"></a>
+## Footnotes — mechanism & evidence
+
+<a id="fn-a"></a>
+**a** — Scope: the FEATURE-MAP row marks a press's chapter and
+publication-format DOI rows (`DoiListPanelOMP.vue` `chapter`,
+`representation`; `omp/api/v1/_dois/BackendDoiController` chapter and
+format routes) out of scope; the `publication` and `file` rows are this
+spec's. Agency plugins in the checkouts (ojs `3162c105bf`, omp
+`72a01a026`, ops `e9f6f4f550`, lib/pkp `1ad4a14bb2`, ui-library
+`03d1cee2`): `ojs/plugins/generic/crossref`, `ojs/plugins/generic/datacite`,
+`ops/plugins/generic/crossref`; `omp/plugins/generic/` holds none (no class
+implementing `IDoiRegistrationAgency`). Live-probed 2026-09-26 (Purpose;
+Settings bullet 11), all three apps: on `publicknowledge` and on new
+scratch contexts the Plugins list shows "Crossref Manager Plugin" (and on
+a journal "DataCite Manager Plugin") unticked and the "Registration" tab
+reads "No Registration Agency Enabled"; a press lists no agency plugin
+and its DOIs page offers no export or deposit. An earlier read on
+2026-09-25 had found Crossref ticked on a scratch journal; it did not
+hold on this fleet. Every opening of the Plugins tab fires the Plugin
+Gallery's `plugin-gallery-grid/fetch-grid`, which answers 500 on the test
+installs (a known failure of the plugins screen, not of this feature).
+
+<a id="fn-q1"></a>
+**q1** — Live-probed 2026-09-26 (Purpose; Rule 34), OJS and OPS, the
+press as control: ticking "DataCite Manager Plugin" on a journal ("The
+plugin "DataCite Manager Plugin" has been enabled.") adds "DataCite" to
+the list; with both plugins on it offers "None", "DataCite", "Crossref".
+Choosing an agency and "Save" answered 200. Unticking the chosen agency's
+plugin asks "Are you sure you want to disable this plugin?"; after "OK"
+("The plugin "Crossref Manager Plugin" has been disabled.") the list shows
+an empty box with the other agency still enabled, or the tab reads "No
+Registration Agency Enabled" with none; ticking the plugin again leaves
+the box empty. The agency's saved fields and "Enable automatic
+depositing" stayed stored and showed filled when it was chosen again.
+
+<a id="fn-b"></a>
+**b** — `lib/pkp/pages/dois/PKPDoisHandler.php`: role assignment
+`ROLE_ID_MANAGER`, `ROLE_ID_SITE_ADMIN` for `index` (and a `management`
+op with no method); policies `ContextRequiredPolicy`, `DoisEnabledPolicy`
+(`enableDois` and a non-empty `enabledDoiTypes`, message
+`doi.authorization.enabledRequired`), then the role policy; no
+`permitSettings` check. Failure: `PKPPageRouter::handleAuthorizationFailure()`
+→ `user/authorizationDenied?message=…` (signed out: Login). App
+subclasses `ojs|omp|ops/pages/dois/DoisHandler.php` add no ops. The API
+routes behind the page (`api/v1/dois`, `api/v1/_dois`) take the same
+roles and `DoisEnabledPolicy`. The settings forms save through
+`PUT api/v1/contexts/{id}` and `PUT api/v1/contexts/{id}/registrationAgency`
+(`PKPContextController::editDoiRegistrationAgencyPlugin()`, manager or
+admin). Live-probed 2026-09-26 (Actors rows 1–5), all three apps: the
+Editor and the Production Editor open Settings › Distribution and the
+DOIs page (OPS: the manager only); `admin` sees "DOIs" and opens the page
+on scratch contexts and on `publicknowledge`; Section Editor, Copyeditor,
+Reviewer, Author and Reader (OPS: Moderator, Editorial Board Member,
+Author, Reader) get "The current role does not have access to this
+operation." at Settings › Distribution.
+
+<a id="fn-q2"></a>
+**q2** — Live-probed 2026-09-26 (Actors row 2), all three apps: (1) the
+Editor and the Production Editor with "Permit changes to Settings"
+unticked see "DOIs" in the side menu and get the full page ("Bulk
+Actions", filters); (2) Section Editor, assistant-level roles, Reviewer,
+Author and Reader have no "DOIs" entry, and the address lands on
+`user/authorizationDenied` with "The current role does not have access
+to this operation."; (3) with "DOIs" unticked and saved, the manager, the
+Editor, the Section Editor, the Copyeditor, the Reviewer, the Author, the
+Reader and `admin` all get "You cannot call this operation without DOIs
+enabled."; (4) signed out, the Login page.
+
+<a id="fn-c"></a>
+**c** — Forms: `lib/pkp/classes/components/forms/context/PKPDoiSetupSettingsForm.php`
+(groups `doiDefaultGroup`, `doiSettingsGroup` `showWhen enableDois`,
+`doiCustomSuffixGroup` `showWhen [doiSuffixType, customPattern]`, which
+does not test `enableDois`; fields `enableDois`, `doiPrefix`,
+`doiCreationTime`, `doiSuffixType`,
+`doiPublicationSuffixPattern` (label `manager.language.submissions`),
+`doiRepresentationSuffixPattern`, `doiVersioning`); app subclasses
+`classes/components/forms/context/DoiSetupSettingsForm.php` add
+`enabledDoiTypes` (OJS `publication`, `issue`, `representation`,
+`peerReview`; the `authorResponse` option commented out; OMP
+`publication`, `chapter`, `representation`, `file`; OPS `publication`,
+`representation`), filtered by the configured agency's `allowedBy`, and
+the pattern boxes (OJS `doiIssueSuffixPattern` and the
+`peerReviewCustomSuffixMessage` HTML field; OMP `doiChapterSuffixPattern`,
+`doiSubmissionFileSuffixPattern`). Vue: `DoiSetupSettingsForm.vue`
+(clears the `doiPrefix` error when `enableDois` changes). Validation:
+`lib/pkp/schemas/context.json` (`doiPrefix` `regex:/^10\.[0-9]{4,7}$/`,
+message `validator.regex` "This is not formatted correctly.");
+`PKPContextService::validate()` (`enableDois` and empty `doiPrefix` →
+`doi.manager.settings.doiPrefix.required`; empty publication /
+representation pattern under `customPattern` →
+`doi.manager.settings.doiSuffixPattern.required`); OJS and OMP
+`ContextService::validateContext()` for the issue, chapter and file
+patterns. Defaults (app `schemas/context.json`): `enableDois` true,
+`enabledDoiTypes` `["publication"]`, `doiCreationTime`
+`copyEditCreationTime`, `doiSuffixType` `default`, `doiVersioning` false
+(OPS true). Labels: app `locale/en/manager.po` over lib/pkp's
+(`manager.setup.enableDois.description`, `doi.manager.settings.*`); OPS
+`manager.setup.enableDois.description` "…to assigned to works…";
+`doi.manager.settings.doiCreationTime.copyedit` OPS "Upon reaching the
+production stage". The whole form posts every field (`Form.vue`
+`submitValues`). Live-probed 2026-09-26 (Fields, the Setup tab; Rules 1,
+4; Settings bullets 1–5), all three apps: labels, help texts, boxes and
+radios as quoted, each option saved and read back after a reload; a
+refused save shows the message under the box, the footer "Please correct
+one error. Go to DOI Prefix: … Jump to next error" and the page notice
+"The form was not saved because 1 error(s) were encountered. Please
+correct these errors and try again."; with "Custom pattern" selected,
+unticking "DOIs" (unsaved, and saved and reloaded) left the pattern
+group on screen with the typed pattern in its box; an unsaved change
+survived a move to "Registration" and to another top tab, and was gone
+after leaving the page, with no question asked. Unticking "DOIs", or
+every kind, and saving removed the side-menu entry; the reader page
+kept the DOI, and ticking "DOIs" again brought back the same DOIs.
+
+<a id="fn-y"></a>
+**y** — Live-probed 2026-09-24 (U08 claim check, all three apps): DOIs on
+by default on `publicknowledge` and every scratch context, the first kind
+ticked, no prefix; managers' side menus show "DOIs". Live-probed
+2026-09-23 (U08 claim check K4): after "DOIs" was unticked and saved,
+ticking it again and pressing "Save" answered 400 with "A DOI prefix is
+required" under the box and "The form was not saved because 1 error(s)
+were encountered…". The prefix warning: `templates/management/dois.tpl`
+(each app) `manager.dois.settings.prefixRequired`, shown when
+`enableDois` and no `doiPrefix`, link `management/settings/distribution#dois`.
+Live-probed 2026-09-26 (Rules 1, 2), all three apps: the arrival state
+again; the warning verbatim; "Add DOI prefix" lands on Settings ›
+Distribution with "DOIs" › "Setup" selected; an item published without a
+prefix reads "Needs DOI" and "Bulk Actions" offers no "Assign DOIs"; a
+DOI typed by hand without a prefix answered 200, reads "Unregistered"
+after a reload and shows on the reader page.
+
+<a id="fn-q3"></a>
+**q3** — Live-probed 2026-09-26 (Fields, "DOI Prefix"), all three apps:
+"10.123", "10.12345678", "11.1234" and "10.1234/" refused with "This is
+not formatted correctly." under the box; "10.1234" and "10.1234567"
+saved and read back after a reload; the help's "Crossref" and "DataCite"
+link to their sites. A prefix typed with surrounding spaces is saved
+without them.
+
+<a id="fn-q4"></a>
+**q4** — Live-probed 2026-09-26 (Fields, "Custom DOI Suffix Pattern"),
+all three apps: the group appears on selecting "Custom pattern"; the
+journal's help lists "%j Journal Initials … %x Custom Identifier", the
+press's "%p Press Initials … %x Custom Identifier", the server's "%j.%a
+Preprints", "%j.%a.g%g Galleys". "Submissions" empty with the first kind
+ticked: "A DOI suffix pattern is required." under "Submissions"; "Issues"
+(journal), "Files" (press), "Preprint galleys…" (server) ticked with
+their box empty: the same message under that box; the kind unticked with
+its box empty: saved. After the refusal, unticking the flagged kind left
+"Save" disabled until a character was typed in the flagged box and
+removed again; the save then passed.
+
+<a id="fn-d"></a>
+**d** — `lib/pkp/classes/components/forms/context/PKPDoiRegistrationSettingsForm.php`:
+agencies from the hook `DoiSettingsForm::setEnabledRegistrationAgencies`
+(registered only by enabled agency plugins); with more than the "None"
+option, the `registrationAgency` select and `automaticDoiDeposit`
+(`showWhen registrationAgency`), else the `noPluginsEnabled` HTML field;
+agency fields in the group `agencySpecificSettings`
+(`DoiRegistrationSettingsForm.vue` swaps them when the select changes).
+Save: `PKPContextController::editDoiRegistrationAgencyPlugin()` validates
+and saves the context fields first, then, for a newly chosen agency,
+`array_intersect()`s `enabledDoiTypes` with `getAllowedDoiTypes()` and
+saves that, then validates the agency fields
+(`RegistrationAgencySettings::validate()`) and answers 400 on errors. OMP
+`DoiSetupSettingsForm` calls `removeField(automaticDoiDeposit)` on a form
+that has none. Plugin disable: `CrossrefPlugin::setEnabled(false)` (and
+DataCite's) resets `registrationAgency`; the stored agency settings and
+`automaticDoiDeposit` are kept. The reference-DOI task:
+`CrossrefPlugin::registerSchedules()` (`CrossrefCitationDoiCheckTask`,
+hourly; described by the citations spec). Live-probed 2026-09-26
+(Fields, the Registration tab; Rules 34, 35), OJS and OPS, the press as
+control: the list shows no choice on a new context (value ""); choosing
+an agency sends no request and shows its block; "Save" answered "Saved"
+and the agency, "Enable automatic depositing" and the block's fields
+read back after a reload; "None" saved shows "None" until the reload,
+then the empty box; the tab without a plugin (all three apps) still has
+"Save", which answered 200 with nothing stored; an unsaved choice
+survived a move to "Setup" and back and was gone after leaving the
+page. The install's own task list (`lib/pkp/tools/scheduler.php list`,
+read only) shows `CrossrefCitationDoiCheckTask` hourly on the journal
+install, none on the press and preprint-server installs.
+
+<a id="fn-e"></a>
+**e** — `ojs/plugins/generic/crossref/classes/CrossrefSettings.php`:
+schema `required: depositorName, depositorEmail`; `depositorName` max 60,
+`depositorEmail` email max 90, `username` max 120, `password` max 50,
+`updatePolicyDoi` `regex:/^\d+(.\d+)+\//`, `crossmark`, `testMode`;
+fields in order: preamble (`_getPreambleText()`: the
+`plugins.importexport.common.missingRequirements` notice with
+`…error.publisherNotConfigured` / `…error.issnNotConfigured` when
+`publisherInstitution` / both ISSNs are empty, then
+`…settings.depositorIntro`), `depositorName`, `depositorEmail`,
+`crossmark`, `updatePolicyDoi` (`isRequired`; `showWhen crossmark` only
+when `doiVersioning` is off), `credentialsExplanation`, `username`,
+`password`, `testMode`. OPS `CrossrefSettings.php`: no `crossmark`, no
+`updatePolicyDoi`, no requirements notice. Live-probed 2026-09-26 (Fields, the Crossref
+block; Rules 37, 38), OJS and OPS: "Crossref Settings", the notice on a
+journal without publisher or ISSN (publisher only: only the ISSN line;
+an ISSN only: only the publisher line; both: none; each "Journal
+Settings Page" link opens Settings › Journal in a new tab; "Save" with
+the notice shown answered "Saved"); "Depositor name" empty: "This field
+is required.", 61 characters: "This may not be greater than 60
+characters."; "Depositor email" "not-an-email": "This is not a valid
+email address.", 91 characters refused; "Username" 121 and "Password"
+51 characters refused; "Crossmark" and its "Learn more." link on a
+journal only; "Testing" unticked on arrival. An empty required box is
+refused in the browser, a server refusal also shows the page notice.
+
+<a id="fn-q5"></a>
+**q5** — Live-probed 2026-09-26 (Rule 35; A5, A6), OJS and OPS, and
+DataCite on a journal: a 61-character "Depositor name", a valid email,
+"Enable automatic depositing" ticked and "Save" showed the message under
+the box and in the footer; after a reload the list read "Crossref",
+"Enable automatic depositing" was ticked, the depositor boxes were empty,
+and the Setup tab no longer listed the galley box. A refused DataCite
+save kept "DataCite" the same way.
+
+<a id="fn-q6"></a>
+**q6** — Live-probed 2026-09-26 (Fields, "Update Policy DOI"; Rule 38),
+OJS; a preprint server's block has no such box, with "No" or "Yes":
+with "DOI Versioning" "No" the box is hidden while "Crossmark" is
+unticked and shown as "Update Policy DOI *" once it is ticked; with
+"Yes" it shows with "Crossmark" unticked. Empty: "This field is
+required."; "policy": "This is not formatted correctly."; "10.1234/policy":
+"Saved", read back after a reload.
+
+<a id="fn-f"></a>
+**f** — `ojs/plugins/generic/datacite/classes/DataciteSettings.php`: no
+required fields; `username`, `password`, `testUsername`, `testPassword`,
+`testDOIPrefix` max 50; `addValidationChecks()` requires `testDOIPrefix`
+with `testMode` (`plugins.importexport.datacite.settings.form.testDOIPrefixRequired`);
+preamble `…datacite.settings.description` and `…datacite.intro`.
+`DatacitePlugin::isPluginConfigured()`: required props, then the prefix
+(or the test prefix under test mode). Live-probed 2026-09-26 (Fields,
+the DataCite block), OJS; no DataCite row on a press's or a preprint
+server's Plugins list: the heading, the two opening texts, "Username
+(symbol)" plain and "Password" hidden, "Test Username" plain and "Test
+Password" hidden, 51 characters in each refused with "This may not be
+greater than 50 characters." and 50 accepted; "Testing" with its text,
+unticked. The "Test DOI Prefix" box shows whether or not "Testing" is
+ticked.
+
+<a id="fn-q7"></a>
+**q7** — Live-probed 2026-09-26 (Fields, "Test DOI Prefix"; Settings
+bullet 10), OJS: "Testing" ticked with "Test DOI Prefix" empty: "A test
+DOI prefix is required when using the test system for DOI
+registration." and "Please correct one error."; "10.5072": "Saved", read
+back after a reload.
+
+<a id="fn-g"></a>
+**g** — `ojs|omp|ops/templates/management/dois.tpl` (heading
+`doi.manager.displayName`, tabs `submission-doi-management` label
+`article.articles` / `submission.list.monographs` / `common.publications`,
+OJS `issue-doi-management` `issue.issues`); `DoisHandler::getTemplateVariables()`
+(OJS: Articles tab when `publication`, `representation`, `peerReview` or
+`authorResponse` is enabled; Issues tab on `issue`; OMP and OPS: any
+kind). List panels: `lib/pkp/classes/components/listPanels/PKPDoiListPanel.php`
+(`count` 30, the "Status" and "Registration" filters), app
+`classes/components/listPanels/DoiListPanel.php` (OJS issue autosuggest
+`FieldSelectIssues` on the submissions list; OMP/OPS "Publication
+Status"), titles `doi.manager.submissionDois` ("Article DOIs", "Monograph
+DOIs", "Preprint DOIs") and `doi.manager.issueDois`. Vue:
+`components/Container/DoiPage{OJS,OMP,OPS}.vue`,
+`components/ListPanel/doi/DoiListPanel.vue` (+ `DoiListPanel{OJS,OMP,OPS}.vue`).
+Live-probed 2026-09-26 (Fields, the DOIs page; Rules 14, 23), all three
+apps: heading "DOIs"; tabs and list titles as stated ("Issues" alone
+gives only an "Issues" tab; galleys or "Peer Review" alone an "Articles"
+tab; a press with "Files" alone still shows "Monographs"); the header's
+"Search", "Bulk Actions" and, with an agency configured only, "Deposit
+All"; 30 items on the first page, "Previous 1 2 Next", the 31st on page 2.
+
+<a id="fn-o"></a>
+**o** — `DoiListPanel.vue` `<Search>` (`common.search`,
+`common.clearSearch`; the phrase is sent on Enter), filters sidebar
+(`common.filter` "Filters", `addFilter()`: `unregistered` also sets
+`doiStatus` unregistered and the published status; one value per
+param), `openStatusInfoModal()` →
+`DoiStatusInfoModal.vue` (`manager.dois.help.statuses.title`, rows
+needsDoi, doiAssigned, unregistered, submitted, registered, error, stale
+with their `.description`); the button holds only an icon. Search:
+`PKPSubmissionController` `searchPhrase` → `Collector::searchPhrase()`;
+`Doi::beginsWithDoiPrefixPattern()` (`/^\d+\./`) switches to
+`addFilterByAssociatedDoiIdsToQuery()` (`LIKE '{phrase}%'` over the
+enabled kinds' DOIs). Filters: `Collector::addHasDoisFilterToQuery()`,
+`addDoiStatusFilterToQuery()` (app copies). Live-probed 2026-09-26
+(Fields, "Search"; Rule 21), all three apps, two runs each: typing a
+phrase left the list as it was, Enter narrowed it; title words (first
+or middle) and a contributor's given or family name find the work;
+"Clear search phrase" appears once a phrase is set and empties the box
+and the list's filter.
+
+<a id="fn-q8"></a>
+**q8** — Live-probed 2026-09-26 (Fields, "Filters"; Rule 22), all three
+apps: each filter narrows the list, reads chosen and gains "Clear
+filter: {name}"; pressing it again lifts it; "Needs DOI" then "DOI
+Assigned" leaves only the second; "Unregistered" then "Registered" only
+the second; "DOI Assigned" with "Registered" combine. "Unregistered"
+keeps published works with an "Unregistered" DOI and drops unpublished
+ones. On a journal and a preprint server a work with its own DOI set and
+its galley's empty is under both "Needs DOI" and "DOI Assigned"; on a
+press a book with its own DOI and no file DOI is not under "Needs DOI"
+(two runs). The journal's "Issues" box suggested nothing for "Vol" or
+"1", "Vol. 1 No. 1 (2025)" for "2025" and "Vol. 1 No. 1", and choosing
+it kept that issue's articles; the box is absent on the "Issues" tab.
+The info button opens "DOI Statuses", a "Status" / "Description" table
+of seven lines ("DOI Assigned — All items assigned a DOI." after "Needs
+DOI"); the button has no label, `aria-label` or title.
+
+<a id="fn-p"></a>
+**p** — `DoiListPanel.vue`: `openBulkExport()`, `openBulkMarkRegistered()`,
+`openBulkMarkUnregistered()`, `openBulkMarkStale()`, `openBulkAssign()`
+(`canAssignDois`: prefix and a kind), `openBulkDeposit()`,
+`openBulkDepositAll()`; `openBulkActionDialog()` (title = label, the
+`…prompt` message, buttons label + `common.cancel`); `onBulkActionComplete()`
+reloads and clears `selected`; `failedDoiActions` → dialog
+`manager.dois.update.failedCreation` with `DoiFailedActionDialogBody.vue`;
+other errors → `ajaxError`, which showed no window on the drive. API:
+`lib/pkp/api/v1/dois/PKPDoiController.php` `assignSubmissionDois()`
+(no ids → `api.404.resourceNotFound`; no prefix → 403
+`api.dois.403.prefixRequired`), `markSubmissionsRegistered()` (valid =
+current publication published; else `DoiException::SUBMISSION_NOT_PUBLISHED`
+per item, nothing marked), `markSubmissionsUnregistered()` (any of the
+context's submissions), `markSubmissionsStale()` (published and
+`doiStatus` submitted/registered, else `INCORRECT_STALE_STATUS`),
+`exportSubmissions()` (`getExportableDOIsSubmissionIds()`, else
+`api.dois.400.invalidPubObjectIncluded`; a second temporary file for
+peer reviews when the agency and the context both allow `peerReview`),
+`depositSubmissions()` (published only; dispatches `DepositSubmission`,
+`markSubmitted()`), `depositAllDois()` → `Repository::depositAll()`
+(`DAO::getAllDepositableSubmissionIds()`: statuses unregistered, error,
+stale); OJS `api/v1/dois/DoiController.php` the issue twins
+(`ISSUE_NOT_PUBLISHED`). Empty selection: the ids array is empty →
+`api.dois.404.noPubObjectIncluded`. Live-probed 2026-09-26 (Rules 24–29),
+all three apps (export and deposit OJS Crossref and DataCite, OPS
+Crossref; the manager, the Editor and the Site Administrator alike):
+"Bulk Actions" and "Take action on {count} selected item(s)." as
+stated, the count following the ticks; every action's window with its
+question, its button and "Cancel"; "Cancel" sends nothing and keeps the
+ticks; after any confirmed action the list reloads with nothing ticked.
+"Assign DOIs" is missing from a context without a prefix; it gave the
+missing DOIs in the "Default" shape and left carried ones alone
+("Items successfully assigned new DOIs"), the unpublished issue's own
+DOI on the "Issues" tab included; a pattern needing an issue gave the
+"DOI Updates Failed" window while the other ticked work got its DOI.
+"Mark DOIs Registered", "Unregistered" and "Needs Sync" gave the success
+notices and the "DOI Updates Failed" lines as quoted, on the "Issues"
+tab too. "Deposit DOIs" set "Submitted" at once and after a reload;
+"Deposit All" set every published "Unregistered" and "Needs Sync" work,
+and the published issue, to "Submitted", leaving the rest. Every
+confirmed "Export DOIs" answered 400 "An XML validation error occurred
+and the XML could not be exported." with nothing downloaded: the
+install fetches the agency's schema
+(`https://www.crossref.org/schemas/crossref5.4.0.xsd`,
+`http://schema.datacite.org/meta/kernel-4/metadata.xsd`) through the
+test installs' dead proxy, so the file, the peer-review second file and
+"Items successfully exported" are code-read only.
+
+<a id="fn-q19"></a>
+**q19** — Live-probed 2026-09-26 (Rules 24, 26, 29; A13), all three
+apps: with nothing ticked each action's window opened reading "0
+item(s)"; its button sent the request, which answered 404 ("No valid
+publication objects were included with the request.", for "Assign DOIs"
+"The requested resource was not found."), and the window closed with no
+other window or notice (a watcher on the page saw none; OJS twice). One
+published and one unpublished item ticked: "Mark DOIs Registered"
+marked nothing and listed the unpublished one in "DOI Updates Failed";
+"Export DOIs" and "Deposit DOIs" answered 400 "One or more invalid
+publication objects were included with the request." and closed with
+no message, both items keeping their badges.
+
+<a id="fn-m"></a>
+**m** — `components/ListPanel/doi/DoiListItem.vue`: tick box, title link
+(`target="_blank"`), `{{ item.id }}`, the badge (`publicationStatusLabel`
+when unpublished, else `getDepositStatusString()` of
+`currentVersionDoiObjects[0]`), `Expander` ("Show more details about
+{id}"); expanded: `versionString`, `PkpTable` columns `common.type`,
+`manager.dois.title`, `common.status`, `grid.columns.actions`, rows
+`currentVersionDoiObjects`, `common.viewError` link on error; versions bar
+(`doi.manager.versions.countStatement`, `doi.manager.versions.view`) when
+`versions.length > 1` and `versionDois`; Edit/Save
+`:is-disabled="isDeposited(itemDepositStatus) || isSaving"`; the
+depositor panel (`manager.dois.registration.*`: `notPublishedDescription`,
+`notSubmittedDescription`, `submittedDescription`,
+`manuallyMarkedRegistered` when the DOI's `registrationAgency` is null;
+buttons `viewRecord` when deposited with a registered message,
+`depositDois` when published and not deposited, `viewError` on error with
+a message). `useDoi.js` (`isDeposited`: submitted, registered). Row
+building: `DoiListPanelOJS.vue` `addDoiObjects()` (`article.article`,
+galley label, `submission.peerReview.identified`,
+`submission.reviewRound.authorResponse.identified`, `issue.issue`),
+`DoiListPanelOMP.vue` (`submission.monograph`, chapters,
+`manager.dois.formatIdentifier.file`, "{format} / {file}"),
+`DoiListPanelOPS.vue` (`submission.publication` "Preprint", galleys).
+`DoiItemVersionModal.vue` (`doi.manager.versions.modalTitle`; header
+"{versionNumber} ({datePublished})" or `publication.status.unpublished`;
+one Edit/Save for the whole window).
+`DoiListPanel.getVersions()` keeps the newest minor per stage and major.
+Live-probed 2026-09-26 (Fields, an item's row and expanded view; Rules
+16, 17, 19, 20, 30), all three apps: the row's tick box, "Lovelace —
+Axolotl limb memory" as a link opening the version's public page in a
+new tab (for an unpublished work too, the manager seeing its preview),
+the submission ID, the badge, the expander "Show more details about
+{id}"; the expanded view "Version of Record 1.0" (a preprint "Author
+Original 1.0"; an unpublished first version "Unassigned version
+({date})") over "Type" / "DOIs" / "Status" / "Actions", rows "Article",
+"PDF", a press's "PDF / article.pdf", an issue's "Issue"; "Edit" greyed
+while "Registered" (three apps) and "Submitted" (journal), enabled again
+after "Mark DOIs Unregistered", and enabled while "Needs Sync". With a
+newer version created and unpublished the expanded view kept showing
+the published version.
+
+<a id="fn-n"></a>
+**n** — `DoiListItem.saveDois()`: only changed boxes; no DOI yet →
+`POST api/v1/dois` then `PUT api/v1/_dois/{publications|galleys|issues|
+peerReviews|…}/{id}` with `doiId`; emptied → `DELETE api/v1/dois/{id}`;
+changed → `PUT api/v1/dois/{id}` (with `pubObjectType`/`pubObjectId` when
+versioning); any failure → `manager.dois.update.partialFailure` warning
+and `updateMutableDois()` (the old values); success →
+`manager.dois.update.success`. Validation: `lib/pkp/schemas/doi.json`
+(`doi` `regex:/^\d+(.\d+)+\//`), `Repository::validate()`
+(`isDuplicate()` across all contexts →
+`doi.editor.doiSuffixCustomIdentifierNotUnique`; characters outside
+`[-._;()/A-Za-z0-9]` → `doi.editor.doiSuffixInvalidCharacters`); no check
+against the context's `doiPrefix`. Made DOIs (`mintAndStoreDoi()`) skip
+`validate()`. Live-probed 2026-09-26 (Rule 9), all three apps: a typed
+DOI carried by another journal's work, or by another work of the same
+journal, is refused; two published works of one context both carry the
+same made DOI under a pattern of fixed text.
+
+<a id="fn-q9"></a>
+**q9** — Live-probed 2026-09-26 (Fields, a DOI box; Rule 18; A3, A7),
+all three apps, the journal twice: "abc" and "10/x…" refused ("This is
+not formatted correctly." in the answer), "10.1234/a b" and "…<x>"
+refused ("The DOI contains invalid characters."), another journal's DOI
+and another work's DOI of the same journal refused ("The given DOI
+suffix is already in use for another published item. Please enter a
+unique DOI suffix for each item."); the screen showed only "Some DOI(s)
+could not be updated" and the old value, on the page and after a reload.
+"10.1234/…abc" and "10.9999/…abc" accepted with "DOI(s) successfully
+updated" top right. Emptying the box removed the DOI, the row reading
+"Needs DOI" (an unpublished work's badge staying "Unpublished"). One
+"Save" with one box refused and one accepted showed both notices. A box
+typed in and not saved stayed in editing across a tab switch (journal)
+and a collapse of the row, and the old value was back after leaving the
+page, with no question asked.
+
+<a id="fn-q10"></a>
+**q10** — Live-probed 2026-09-26 (Rule 3; A1), all three apps, twice:
+with no prefix, a "DOI Versioning" change and "Save" answered "A DOI
+prefix is required" under the box; unticking "DOIs" and "Save" then
+answered "Saved", and on ticking the box again the changed radio (and
+"Never", on a second context) showed after a reload; ticking "DOIs" and
+"Save" was refused again; unticking the box with the message shown
+cleared it at once.
+
+<a id="fn-q11"></a>
+**q11** — Live-probed 2026-09-26 (Rule 4), all three apps: galleys
+(journal, server) or "Files" (press) unticked and saved: the item's
+second row leaves the page, and the reader page keeps the work's DOI;
+"Mark DOIs Registered" marked the work's row "Registered"; the kind
+ticked again: its row returns with its old DOI, "Unregistered".
+
+<a id="fn-h"></a>
+**h** — Moments: `lib/pkp/classes/observers/listeners/AssignDOIs.php`
+(`DecisionAdded`, `copyEditCreationTime` and a new stage of Copyediting
+or Production → `Repo::submission()->createDois()`, the current
+publication), `VersionDois.php` (`PublicationPublished`, DOIs on and not
+`neverCreationTime` → `Repo::publication()->createDois()`), OPS
+`classes/observers/listeners/AssignDOIsOnSubmission.php`
+(`SubmissionSubmitted`, `copyEditCreationTime`). `createDois()` (each
+app's `classes/publication/Repository.php`): each enabled kind with an
+empty `doiId`; peer reviews from `getCompletedReviewAssignments()` that
+are publicly visible (`mintDoi()`); exceptions collected, never shown by
+the listeners. Minting: `lib/pkp/classes/doi/Repository.php`
+`mintAndStoreDoi()` (no prefix → `DoiException` "missingPrefix"),
+`generateDefaultSuffix()` → `DoiGenerator::encodeSuffix()` (Crockford
+base32 of a random number, lower case, plus a two-digit ISO 7064
+checksum, left-padded with "0" to eight characters); app `mint*Doi()`:
+`default` → that suffix, otherwise `generateSuffixPattern()`
+(`customPattern` → `PubIdPlugin::generateCustomPattern()`; `customId`
+("None") → the empty string, so the stored DOI is "{prefix}/");
+`mintDoi()` for reviews: `default` → suffix, anything else → empty.
+Issue-pattern check `PubIdPlugin::suffixHasIssuePattern()` (`%v`, `%i`,
+`%Y`) → `DoiException::PUBLICATION_MISSING_ISSUE` /
+`REPRESENTATION_MISSING_ISSUE`. Live-probed 2026-09-26 (Rules 5, 6a;
+Settings bullets 3–5), all three apps: every "Default" suffix seen
+(fifteen, e.g. `1v7kz926`, `m2g80720`, `texzf150`) was eight lower-case
+letters and digits ending in two digits, one per item; a kind left
+unticked got nothing at publish; without a prefix an Accept or a publish
+made nothing ("Needs DOI"); a DOI typed before the publish survived it.
+
+<a id="fn-q12"></a>
+**q12** — Live-probed 2026-09-26 (Rule 5), all three apps. "Upon
+reaching the copyediting stage": the Accept gave the article and its
+galley their DOIs (journal), the monograph, its publication format and
+the format's file theirs (press); a work whose DOI was cleared at
+Copyediting got a new one at "Send To Production"; a preprint and its
+galley got theirs at the Author's final "Submit". A work sent on before
+its galley existed got the galley's DOI at publication. "Upon
+publication": after the Accept the work read "Needs DOI", and the
+publish (a preprint's "Post") gave the work and its galleys, formats and
+files their DOIs; on a journal an article scheduled into a future issue
+("This will be published when Vol. 2 No. 1 (2026) is published…") had
+its DOI before "Publish Issue", seeded or scheduled on screen. "Never":
+the Accept and the publish left "Needs DOI" until "Assign DOIs".
+
+<a id="fn-q13"></a>
+**q13** — Live-probed 2026-09-26 (Rule 6b; A2), all three apps: under
+"None", "Assign DOIs" on two items gave both "10.1234/", publishing under
+"Upon publication" gave "10.1234/", and the reader page shows "DOI:
+https://doi.org/10.1234/".
+
+<a id="fn-q14"></a>
+**q14** — Live-probed 2026-09-26 (Rule 6c; A9), all three apps: on a
+scratch journal with "Journal initials" "JPK" and no abbreviation,
+"%j.v%vi%i.%a" on an accepted article with no issue: "Assign DOIs"
+showed "DOI Updates Failed" with the issue line; after "Assign To Future
+Issue and Schedule Only" › "Vol. 1 No. 2 (2014)", "Assign DOIs" gave
+`10.1234/jpk.v1i2.799`. "%j.%p" gave `jpk.12-34` with "Pages" "12-34"
+and `10.1234/jpk.%p` without, listed "Unregistered" (two runs). A press's
+"%p.%m" gave `jpk.619`, a server's "%j.%a" `jpk.491`. "k2.%x" gave
+`10.1234/k2.{Publisher ID}` with a Publisher ID typed on the Metadata page
+and `10.1234/k2.%x` without, with "Items successfully assigned new DOIs"
+(three apps). A peer review under "Custom pattern" got `10.1234/`,
+under "Default" an eight-character suffix.
+
+<a id="fn-j"></a>
+**j** — Rows: `Repo::publication()->getReviewDoiItemsGroupedByPublication()`
+(review assignments `filterByIsConfirmedByEditor(true)`,
+`filterByIsPubliclyVisible(true)` on the version's review rounds) →
+`reviewDoiItems` in the publication map; `DoiListPanelOJS.vue`
+`peerReview` rows, labelled "Peer Review {$identifier}" with the review
+assignment's ID. Minting: `createDois()` over completed, publicly
+visible assignments. Edit: `PUT api/v1/_dois/peerReviews/{id}` refuses a
+review that is not publicly visible (422
+`api.dois.reviews.422.cannotAssignDoi`). Author-response DOIs: the kind is
+commented out of `DoiSetupSettingsForm` (OJS), so they are never offered.
+Reader display: `lib/pkp/classes/components/OpenReviewComponent.php` is
+configured but mounted by no template. Live-probed 2026-09-26 (Settings
+bullet 12), OJS: Settings › Workflow › Review "Publicly Show Reviewer
+Comments" arrives unticked and each review's box follows it; the box is
+in the reviewer row's "More Actions" › "Edit" window, for the Journal
+Manager and the assigned Section Editor alike.
+
+<a id="fn-q15"></a>
+**q15** — Live-probed 2026-09-26 (Rule 7), OJS, two runs of each path:
+a submitted review with "Publicly Show Reviewer Comments" ticked got its
+DOI at the Accept, before any "Mark as Complete"; one with the box
+unticked got none at the Accept or by "Assign DOIs". An Accept that sent
+the "Notify Reviewers" email turned the reviewer row to "Reviewer
+Thanked" and listed "Peer Review 188" at once; with the email skipped
+the row appeared only after "Mark as Complete". The rows read "Peer
+Review 186" … "192" (the review assignments' IDs), under the work's
+current version. The published article's page (visitor) carries no
+review DOI.
+
+<a id="fn-i"></a>
+**i** — `ojs/classes/controllers/grid/issues/IssueGridHandler.php`
+`publishIssue()`: on the confirmed first publish
+`Repo::issue()->createDoi()` (enabled `issue` kind and no `doiId`; no
+`doiCreationTime` check), then `Repo::doi()->issueUpdated()` (stale) and
+each scheduled publication's `publish()`; `unpublishIssue()` →
+`issueUpdated()`. `ojs/classes/doi/Repository.php` `mintIssueDoi()`.
+Live-probed 2026-09-26 (Rule 8; OJS1), OJS: under "Never" and "Upon
+publication", "Publish Issue" › "OK" gave the issue a DOI
+(`10.1234/r7wqr642`), "Unregistered"; an issue DOI typed on the "Issues"
+tab before the publish was kept; a cleared issue DOI came back through
+"Assign DOIs"; under "Never" the article scheduled in the issue stayed
+"Needs DOI".
+
+<a id="fn-k"></a>
+**k** — `lib/pkp/classes/publication/Repository.php` `version()`: with
+`doiVersioning` and not `$isMinorVersion` the new publication's `doiId`
+is cleared; app `version()` overrides clear the galleys' (OJS, OPS),
+formats', files' and chapters' (OMP) the same way, except that OPS's
+clears the galleys' whenever `doiVersioning` is on, minor version or not.
+Editing with versioning: `PKPDoiController::edit()` / `delete()` with
+`pubObjectType`/`pubObjectId` act on `getMinorVersionsWithSameDoi()`
+(a new DOI record for that version family, the old one deleted when no
+longer used). "Major Revision" / "Minor Revision" are the Create New
+Version dialog's radios (the versions spec, Rule 12). Live-probed
+2026-09-26 (Rules 11, 13; Settings bullet 6), all three apps: under
+"No", a new version started with its source's DOI, its galleys, formats
+and files with theirs, and a change on the DOIs page changed both
+versions; "No" → "Yes" kept the earlier versions' shared DOI and the next
+major version started without; "Yes" → "No" gave the next version its
+source's DOI. A new journal and press arrive on "No", a preprint server
+on "Yes".
+
+<a id="fn-q16"></a>
+**q16** — Live-probed 2026-09-26 (Rules 12, 20; OPS4), all three apps:
+under "Yes" a major version started with no DOI on the work, its galley,
+format or file, and its publish made them (under "Never" none); a minor
+version kept the work's DOI and, on a journal and a press, its galley's,
+format's and file's, while on a preprint server its galley read "Needs
+DOI" in the "View all" window. Editing the newest block's work DOI in
+"View all" changed 2.0 and 2.1 and left 1.0. With 1.0 and an unpublished
+2.0 the view read "There are 2 versions."; with 1.0, 2.0 and 2.1 still
+"There are 2 versions.", the window holding "Version of Record 1.0
+({date})" and "Version of Record 2.1 Unpublished" (a preprint "Author
+Original …") as links opening in a new tab, and one "Edit" beside
+"Close". While a journal of the install was on "Yes", `publicknowledge`'s
+OAI answered a server error, and again 200 once it was set back to "No";
+the press and preprint-server installs answered 200.
+
+<a id="fn-l"></a>
+**l** — `onDoiPage` → `Collector::filterByOnDoiPage()`; app
+`addOnDoiPageFilterToQuery()`: OJS and OMP `stage_id` in Copyediting,
+Production, or a publication published or carrying a DOI (galley,
+review, chapter, format DOIs likewise); OPS `stage_id` Production or the
+same. `getQueryBuilder()` returns no rows when none of the enabled kinds
+is in the app's `getAllowedDoiTypes()` (OMP's list lacks `file`). Order:
+`Collector::$orderBy` default date submitted, descending. The issue list
+reads `api/v1/issues` with no filter. Live-probed 2026-09-26 (Rule 15):
+see q17; a journal's seeded scheduled article that carried a DOI was
+listed from the Submission stage and left the list once its DOI was
+cleared.
+
+<a id="fn-q17"></a>
+**q17** — Live-probed 2026-09-26 (Rule 15; OPS5), all three apps: on a
+journal and a press, works at Submission and Review with no DOI are not
+listed; Copyediting, Production and published works are; an unfinished
+draft is not. On a preprint server an unfinished draft is listed
+("Unpublished", its row "Needs DOI"), both a seeded one and one an
+Author started with "Begin Submission". The "Issues" tab lists a
+published and an unpublished issue. Newest submitted first; works
+submitted in the same second come in no fixed order.
+
+<a id="fn-q18"></a>
+**q18** — Live-probed 2026-09-26 (Rule 21; A11), all three apps, two runs
+each, read on the list and in the page's own list request: on a journal
+the article's DOI start ("10.1234/sj") finds the work and a galley's DOI
+start finds nothing; on a press the monograph's own DOI finds nothing,
+even whole, a file's DOI start finds the book, and "10.1234/" lists only
+books with a file DOI; on a preprint server nothing is found, "10.1234/"
+included; a suffix without its prefix finds nothing. Cause, in the code
+and consistent with the drive: each app's
+`Collector::addFilterByAssociatedDoiIdsToQuery()` builds the first
+enabled kind's branch on a query that also carries `whereRaw('1 = 0')`,
+so that branch never matches and only the union branches count (OJS
+galleys first, OMP publication first); OPS puts the `1 = 0` on the outer
+query, which empties every DOI search.
+
+<a id="fn-q20"></a>
+**q20** — Live-probed 2026-09-26 (Rule 30; A4, A16), OJS Crossref and
+DataCite, OPS Crossref; the press and a context without an agency show
+no panel: the box is headed "Crossref" / "DataCite"; an unpublished work
+reads "This item cannot be deposited until it has been published." with
+no button; a published "Unregistered" work "The metadata for this item
+has not been submitted to Crossref." ("…DataCite.") with "Deposit
+DOI(s)", which opens "Deposit DOIs" for that item alone; after "Mark
+DOIs Registered", "This item has been manually registered with a
+registration agency." with no button; a "Needs Sync" work (marked
+"Registered", then "Needs Sync") "…has not been submitted…" with
+"Deposit DOI(s)". After "Deposit DOI(s)" or "Deposit DOIs" the panel read
+"manually registered" at once, after a reload and after the background
+jobs had run and failed. "Deposit DOI(s)" is greyed while the row is
+being edited. The "Registered through the agency" row, "View Record"
+and "View Error" were not reachable (Rule 33).
+
+<a id="fn-r"></a>
+**r** — Statuses: `lib/pkp/classes/doi/Doi.php` (1 unregistered, 2
+submitted, 3 registered, 4 error, 5 stale; `getResolvingUrl()`
+`https://doi.org/` + the DOI); `DAO::markStale()` (only from submitted or
+registered), `markSubmitted()` (status only; `registrationAgency` left
+as it was); `Repository::markRegistered()` (`registrationAgency` null),
+`markUnregistered()`. Automatic "Needs Sync":
+`lib/pkp/classes/publication/Repository.php` `publish()` (versioning: a
+new major version is meant to mark all the submission's DOIs, the newest
+minor its publication's; no versioning: the current publication's) and
+`unpublish()`; OJS `Repository::issueUpdated()`. Deposit jobs:
+`lib/pkp/jobs/doi/DepositSubmission.php`, `DepositPeerReview.php`,
+`DepositContext.php`, OJS `jobs/doi/DepositIssue.php`; the agencies'
+`updateDepositStatus()` set registered or error with the stored message
+(`CrossrefExportPlugin`, `DataciteExportPlugin::depositXML()`). No mail
+or notification in `lib/pkp/classes/doi`, `api/v1/dois`, `api/v1/_dois`,
+`jobs/doi` or the agency plugins. The test installs' proxy is a
+dead port (seed facts), so every deposit request fails at connection.
+Live-probed 2026-09-26 (Rule 31; Side effects), all three apps: the
+"DOI Statuses" window's six status lines match the table verbatim, plus
+"DOI Assigned"; badges seen "Needs DOI", "Unregistered", "Submitted",
+"Registered", "Needs Sync", "Unpublished"; on one DataCite work whose
+"Article" row was emptied while its "PDF" row read "Submitted", the badge
+read "Unregistered" and "Deposit All" skipped it (seen once, so the rule
+states only the case with a DOI on the first row). No email reached the
+context's users (the mail catcher held none for the manager, the editor
+or the authors) and no notification was created. The work's Activity
+Log gained "Submission metadata updated" under the manager for "Assign
+DOIs" and a DOI typed on a work without one (a press's file: "The
+metadata for file "article.pdf" was edited by {username}."); on a
+preprint server every saved change or clearing logged it; on a journal
+and a press changing or clearing a DOI and the Mark actions logged
+nothing. "Deposit DOIs" and "Deposit All" queued a job per work (and per
+issue) whose attempts went to `https://api.crossref.org/v2/deposits`
+and `https://mds.datacite.org/metadata`.
+
+<a id="fn-q21"></a>
+**q21** — Live-probed 2026-09-26 (Rule 32; A17), all three apps: a
+"Registered" work unpublished (a preprint "Unpost") reads "Needs Sync"
+in its expanded row (the badge "Unpublished") and stays so when
+published again; a "Registered" work under "No" read "Registered" after
+"Create New Version" and "Needs Sync" once the new version was
+published; a "Submitted" work unpublished reads "Needs Sync"; an
+"Unregistered" work stays "Unregistered" through both. Under "Yes": a
+new minor version 1.1 of a "Registered" 1.0, published, turned the
+shared DOI "Needs Sync"; a new major version 2.0, published, got its own
+"Unregistered" DOI and 1.0's stayed "Registered" (one run per app). OJS
+issue: "Registered", "Unpublish Issue" ("Are you sure you want to
+unpublish this published issue?") → "Needs Sync", published again →
+"Needs Sync"; the untouched issue stayed "Unregistered". Cause for
+A17, in the code: `publish()` compares the version being published with
+itself when deciding whether it is a new major version.
+
+<a id="fn-q22"></a>
+**q22** — Live-probed 2026-09-26 (Rule 33; A18), OJS Crossref and
+DataCite, both with and without "Testing", OPS Crossref, deposits from
+"Deposit DOI(s)", "Deposit DOIs" and "Deposit All", the queue drained
+with the install's own worker three times: every job failed at
+connection ("cURL error 7: Failed to connect to …"), was retried twice
+and landed among the failed jobs; every deposited item still read
+"Submitted", with no "View Error" in the row or the panel. The
+"Registration Error Message" window was therefore not seen; its wording
+is code-read.
+
+<a id="fn-s"></a>
+**s** — `isPluginConfigured()`: OJS `CrossrefPlugin` (the schema's
+required props, `doiPrefix`, `publisherInstitution` and `onlineIssn` or
+`printIssn`), OPS `CrossrefPlugin` (required props, prefix, `publication`
+enabled), `DatacitePlugin` (required props, then the prefix or, in test
+mode, `testDOIPrefix`). `PKPDoisHandler::_getRegistrationAgencyInfo()`
+passes `isConfigured` to the list, which gates export, deposit, "Deposit
+All" and the panel (`isRegistrationPluginConfigured`). Live-probed
+2026-09-26 (Rule 36; Settings bullet 13), OJS and OPS, the press as
+control: Crossref on a journal offered nothing without publisher and
+ISSN, with the publisher only, or with "Online ISSN" only, and
+everything with the publisher and either ISSN; nothing while the
+depositor fields were unsaved. Crossref on a preprint server: nothing
+before the save, everything after; unticking "Preprints" there removed
+the side menu's "DOIs" and the page answered "You cannot call this
+operation without DOIs enabled.". DataCite: everything as soon as it was
+chosen and saved, and with "Testing" and a "Test DOI Prefix".
+
+<a id="fn-u"></a>
+**u** — OJS `CrossrefPlugin::validate()` on `Publication::validatePublishWarnings`:
+skipped unless Crossref is the chosen agency, `publication` is
+enabled and `doiCreationTime` is not `publicationCreationTime`; rules
+`publisherInstitution` required, `onlineIssn`/`printIssn`
+`required_without`, `doi` required, `issueId` in the context; messages
+`plugins.generic.crossref.publisherInstitution.required`,
+`…issn.requiredWithout`, `…doi.required`, `…issueId.invalid`.
+Live-probed 2026-09-26 (Rule 39): see q23; the list also shows while
+Crossref is chosen but not yet configured.
+
+<a id="fn-q23"></a>
+**q23** — Live-probed 2026-09-26 (Rule 39; OJS3), OJS, two processes and
+two journals: Crossref chosen (depositor fields saved, no publisher or
+ISSN), "Articles" ticked, under "Never" and "Upon reaching the
+copyediting stage": the "Schedule For Publication" window lists under
+"The following issues were found, but will not prevent publishing" the
+publisher line, the ISSN line twice, and 'The submission "{title}" is
+not associated with a DOI and cannot be deposited with Crossref.'; with
+a DOI assigned the last line goes; with publisher and ISSN saved only
+the DOI line shows. "Upon publication", "Articles" unticked, or no
+agency: no list. "Publish" goes ahead. A preprint server's "Post the
+preprint" window lists nothing.
+
+<a id="fn-v"></a>
+**v** — `lib/pkp/classes/task/DepositDois.php` (dispatches
+`DepositContext` per enabled context; `DepositContext` returns unless
+`automaticDoiDeposit`, then `Repo::doi()->depositAll()`, the items
+"Deposit All" sends); registered daily only in
+`ojs/classes/scheduler/Scheduler.php`; `omp` and `ops`
+`classes/scheduler/Scheduler.php` do not register it. Read 2026-09-26
+(Rule 41; OPS2) from each install's own task list
+(`lib/pkp/tools/scheduler.php list`, read only): the journal install
+lists `PKP\task\DepositDois` daily (`0 0 * * *`), the press and
+preprint-server installs none. The box saved ticked and read back after
+a reload (OJS, OPS). The test installs run no scheduled task
+(`task_runner = Off`), so what the task deposits was not seen.
+Live-probed 2026-09-26 (Rule 41): "Enable automatic depositing" with its
+help, saved ticked and read back after a reload on OJS and OPS.
+
+<a id="fn-t"></a>
+**t** — OJS `CrossrefPlugin`: hooks registered only while the plugin is
+enabled; `isCrossmarkEnabled()` = the `crossmark` setting and the
+requested publication's own `getDoi()`, with no check of the chosen
+agency; `setupCrossmarkButton()` loads
+`https://crossmark-cdn.crossref.org/widget/v2.0/widget.js` and the
+plugin's `public/build/crossref.js`; `displayCrossmarkButton()` on
+`Templates::Article::Details` renders `templates/crossmarkButton.blade`
+(`<section class="item crossmark">`,
+`resources/js/components/CrossrefCrossmarkButton.vue`: an
+`<a data-target="crossmark">` around the Crossmark logo, alt
+"Crossmark"); `addCrossmarkDoiMeta()` adds `DC.Identifier.DOI`.
+Live-probed 2026-09-25 (U13 claim check): with Crossref chosen and
+Crossmark ticked and saved, the article page gained `.item.crossmark` as
+the side column's last block; OPS's block has no Crossmark box.
+Live-probed 2026-09-26 (Side effects, head tags), OJS: with "Crossmark"
+ticked the current article's head carries two `DC.Identifier.DOI` tags
+with the same DOI (Dublin Core's and the Crossmark one) and the widget
+script; an older version's page one tag and the block; without
+Crossmark one tag, no widget, no block.
+
+<a id="fn-q24"></a>
+**q24** — Live-probed 2026-09-26 (Rule 42), OJS, two journals, signed
+out; the preprint server shows no button: with the plugin enabled,
+"Crossmark" saved ticked and a DOI, the side column ends with the
+Crossmark block (alt text "Crossmark"); pressing it opens Crossref's
+Crossmark window for that DOI in the page. No DOI: no button. A current
+version 1.1 without a DOI has no button, its older 1.0 with one has it.
+"None" saved as the Registration Agency: still shown; the plugin
+disabled: gone; the agency chosen again: back; "Crossmark" unticked and
+saved: gone.
+
+<a id="fn-w"></a>
+**w** — `ojs/pages/article/ArticleHandler.php`,
+`ops/pages/preprint/PreprintHandler.php`: `doiObject` = the shown
+publication's, else with versioning `Repo::publication()->getMinorVersionsDoi()`,
+else for a non-current version the current publication's;
+`omp/pages/catalog/CatalogBookHandler.php` the same for the monograph.
+`templates/frontend/objects/article_details.tpl` (and the OPS and OMP
+copies): `{if $doiObject}` → `doi.readerDisplayName` "DOI" + ":", the
+`resolvingUrl` as text and link; no check of `enableDois` or the kind.
+The OAI records test `enableDois`. The issue page: `issue_toc.tpl` (the
+issues spec). Live-probed 2026-09-26 (Actors row 4; Rule 10), all three
+apps: signed out and signed in, the page shows "DOI:
+https://doi.org/{DOI}" as a link; making, changing, clearing and
+retyping the work's DOI on the DOIs page changed, at the next read, the
+page's line, the head tags and the OAI records (the line and tags gone
+while empty).
+
+<a id="fn-q25"></a>
+**q25** — Live-probed 2026-09-26 (Rule 43), all three apps: under "No"
+an older version without its own DOI shows the current version's; under
+"Yes" a version without its own shows a minor sibling's, a major version
+with none shows no line, and before any DOI no line anywhere. With
+"DOIs" unticked the page and its head tags keep the DOI while the OAI
+ListRecords carry none; with only the work's kind unticked the OAI
+records carry it again. A book's page also shows each format's DOI in
+that format's details ("DOI:", then the link). The issue page shows
+"DOI: https://doi.org/{issue DOI}" (OJS).
+
+<a id="fn-x"></a>
+**x** — `ojs/classes/plugins/DOIPubIdExportPlugin.php` `display()` for
+the index renders the plugin's `templates/index.tpl`:
+`manager.dois.settings.relocated` with `url page="dois"` and
+`management/settings/distribution#dois`; the same template in
+`ops/plugins/generic/crossref/templates/index.tpl` and
+`ojs/plugins/generic/datacite/templates/index.tpl`.
+`ImportExportPlugin::getActions()` gives the Plugins row a link to
+`management/importexport/plugin/{name}`. The export plugins'
+`getSettingsFormClassName()` throw ("DOI settings no longer managed via
+plugin settings form."), which no link on the Plugins list opens.
+Live-probed 2026-09-26 (Rule 44): see q26.
+
+<a id="fn-q26"></a>
+**q26** — Live-probed 2026-09-26 (Rule 44; A20), all three apps: Tools ›
+"Import/Export" lists "Crossref XML Export Plugin" (journal, preprint
+server) and "DataCite Export/Registration Plugin" (journal) on
+`publicknowledge`, on a context without an agency, and with DataCite's
+manager plugin off; a press lists neither. Each page
+(`management/importexport/plugin/CrossrefExportPlugin`,
+`…/DataciteExportPlugin`) holds only the notice; "DOI management" opens
+the DOIs page, "DOI settings" Settings › Distribution › "DOIs" ›
+"Setup"; the page's level-one heading is empty and the browser title is
+the journal's name. The Plugins list has "Crossref XML Export Plugin"
+and "DataCite Export/Registration Plugin" rows of their own, each with
+"Import/Export Data" to the same page. The Editor reaches the page; the
+Section Editor and the Author get "The current role does not have access
+to this operation.".
+
+<a id="fn-sc"></a>
+**sc** — Scenario seeding. Scenario 1 reads `publicknowledge` as
+installed (DOIs on, the first kind ticked, no prefix, every agency
+plugin off: seed-facts), signed in as `manager.maya` (Journal Manager),
+`editor.diana` (Editor; OJS and OMP, OPS enrols no editor),
+`sectioneditor.ana` (Section Editor, Series Editor, Moderator),
+`author.alex` and `reader.rosa` (`docs/process/users.md`; passwords the
+username twice); no test changes a setting there. Every other scenario
+seeds its own scratch journal, press or preprint server through `POST
+scenarios/context` with throwaway `users[]` (password: the username
+twice): `manager` as the Journal Manager everywhere, `editor` with
+`roles: {editor: {permitSettings: false}}` in scenario 2 (OJS, OMP),
+`author` submitters named "Ada Lovelace" and "Mary Anning"
+(`givenName`, `familyName`) in scenario 3, an `author` for scenario 4's
+draft on OPS, and an `externalReviewer` in scenario 17. The DOI
+settings are the context keys of scenarios.md: `doiPrefix: '10.1234'`
+everywhere but scenario 2; `doiCreationTime` `publication` (scenarios
+3, 5, 18) or `never` (6, 7, 8, 14); `doiSuffixType: 'none'` (7);
+`enabledDoiTypes` with `representation` (5, 12), `file` (4, OMP),
+`peerReview` (17) or `issue` (18); `doiVersioning` `false` on OPS in
+scenario 10 and `true` in 11; `context.acronym: 'JPK'` in scenario 8.
+Scenarios 11 and 15 put a journal on "DOI Versioning" "Yes", which
+makes every OJS OAI request of the install fail while it lasts
+(seed-facts), so the OJS test of scenario 11 sets it back to "No" on
+screen before it ends. The agency: `plugins: {crossrefplugin |
+dataciteplugin: {enabled: true, settings: {depositorName,
+depositorEmail}}}` with `registrationAgency` (scenarios 13, 14, 15),
+the DataCite plugin enabled alone in scenario 16, none in 12 and 19;
+`publisherInstitution` and `onlineIssn` in scenarios 12 and 13 (OJS).
+Works through `POST scenarios/submission`: `decisions[]` for the
+Copyediting, Production and Review stages, `published: true`,
+`galleys[]` "PDF" (`article.pdf`, `preprint.pdf`), OMP's
+`publicationFormats[]` "PDF" with `file` (scenario 4), `submitted:
+false` for scenario 4's draft on OPS, `issue` into `issues[]` entries
+(published or not), and in scenario 17 `reviewRounds[].reviewers[]`
+`completed` with the context's `review.defaultReviewPublicVisibility`.
+The Activity Log and the mail catcher are read after each action.
+Queued deposits are never drained: their jobs fail at connection on
+the test installs (seed-facts), so no scenario reads a status after
+them. Scenarios 1–11 run on all three apps, 12 and 13 on OJS and OPS,
+14–18 on OJS, 19 on OMP. In the scenarios {its number} is the number
+the item's row shows, the submission's. Live-probed 2026-09-26: these
+keys seeded every scratch journal, press and preprint server of the
+check on all three apps.
+
+<a id="fn-f-a1"></a>
+**f-a1** — Live-probed 2026-09-23 (U08 claim check K4): the refusal after
+unticking and re-ticking; the created default from the context schema
+(`enableDois` default true, no `doiPrefix`) versus
+`PKPContextService::validate()`. Live-probed 2026-09-26, all three
+apps: the same, and the untick-and-save way round it (q10).
+
+<a id="fn-f-a2"></a>
+**f-a2** — `ojs|omp|ops/classes/doi/Repository.php` `generateSuffixPattern()`
+returns '' for `SUFFIX_MANUAL`; `mintAndStoreDoi()` stores
+"{prefix}/" without `validate()` (no duplicate check);
+`lib/pkp/classes/doi/Repository.php` `mintDoi()` (reviews) returns ''
+for every type but `default`. Neither `AssignDOIs`, `VersionDois` nor
+`assignSubmissionDois()` checks the suffix type. Live-probed 2026-09-26
+(q13, q14), all three apps and a journal's peer review.
+
+<a id="fn-f-a3"></a>
+**f-a3** — `DoiListItem.postUpdatedDoiError()` records only a failure
+flag; `postUpdatedDoiComplete()` emits `manager.dois.update.partialFailure`
+and restores the old values; the 400 body's messages are dropped.
+Live-probed 2026-09-26 (q9), all three apps.
+
+<a id="fn-f-a4"></a>
+**f-a4** — `DAO::markSubmitted()` sets only the status;
+`DoiListItem.vue` reads `itemRegistrationAgency === null` on a deposited
+(submitted or registered) item as "manually registered". Live-probed
+2026-09-26 (q20), OJS Crossref and DataCite, OPS Crossref: at once,
+after a reload, ten minutes later, and after the jobs had run and failed.
+
+<a id="fn-f-a5"></a>
+**f-a5** — `PKPContextController::editDoiRegistrationAgencyPlugin()`
+saves `registrationAgency` and `automaticDoiDeposit`, then prunes
+`enabledDoiTypes`, before validating the agency fields. Live-probed
+2026-09-26 (q5), OJS and OPS, and DataCite.
+
+<a id="fn-f-a6"></a>
+**f-a6** — The same method's `array_intersect()` of the enabled kinds
+with `getAllowedDoiTypes()` (OJS Crossref: publication, issue,
+peerReview; DataCite: publication, representation, issue; OPS Crossref:
+publication). Live-probed 2026-09-26 (q5), OJS and OPS: the galley kind
+unticked and gone from the Setup tab, the galley rows gone from the DOIs
+page ("Article … PDF Unregistered" before, "Article" alone after), no
+message; "Peer Review" dropped the same way under DataCite.
+
+<a id="fn-f-a7"></a>
+**f-a7** — `Repository::validate()` and `doi.json` check only the
+general DOI shape; the old key `doi.editor.missingPrefix` ("The DOI must
+begin with {$doiPrefix}.") is displayed nowhere. Live-probed 2026-09-26
+(q9), all three apps: "10.9999/…" accepted where the prefix is "10.1234".
+
+<a id="fn-f-a8"></a>
+**f-a8** — `DoiListPanel.vue` `.doiListPanel__statusInfoButton` holds
+only an icon, with no label, `aria-label` or title; the rows' tick boxes
+have no label. Live-probed 2026-09-26 (q8), all three apps: the page's
+accessibility tree reads `button` with only an image beside "Filters"
+and `checkbox` with no name on every row; the journal's "Issues" box is
+named "Issues".
+
+<a id="fn-f-a9"></a>
+**f-a9** — Live-probed 2026-09-26 (q14): "%p" on a journal (two runs),
+"%x" on all three apps; the "Assign DOIs" answer listed no failure
+(`{"failedDoiActions":[]}`), and a pattern of "%x" alone gave
+`10.1234/%x`.
+
+<a id="fn-f-a10"></a>
+**f-a10** — Live-probed 2026-09-26, OJS, two journals: the DOIs page
+listed "Version of Record 1.0" after "Create New Version"; after "Assign
+DOIs" and the publish of 1.1, the article page (1.1) had no "DOI:" line
+and the 1.0 page had it. Not driven on a press or a preprint server.
+Rule 17's half (the published version shown while a newer one is
+unpublished) was seen on all three apps.
+
+<a id="fn-f-a11"></a>
+**f-a11** — Live-probed 2026-09-26 (q18, which gives the cause), all
+three apps, two runs each.
+
+<a id="fn-f-a12"></a>
+**f-a12** — `addFilter()` sets the published status with `unregistered`
+and does not take it away when the "Registration" filter changes.
+Live-probed 2026-09-26 (q8), all three apps (the journal twice): after
+"Unregistered" then "Registered", the list request carried
+`doiStatus=3&status[]=3`; after "Clear filter: Registered" no filter
+read chosen and the request still carried `status[]=3` (the journal
+showed 4 of its 6 works) until a reload.
+
+<a id="fn-f-a13"></a>
+**f-a13** — Live-probed 2026-09-26 (q19; p), all three apps (export and
+deposit OJS Crossref and DataCite, OPS Crossref): empty selections
+answered 404 (`api.dois.404.noPubObjectIncluded`, for "Assign DOIs"
+`api.404.resourceNotFound`); an unpublished work beside a published one,
+a published work whose DOI was cleared, and the unpublished issue
+answered 400 `api.dois.400.invalidPubObjectIncluded`; exports answered
+400 "An XML validation error occurred and the XML could not be
+exported.". In each case the confirm window closed, no other window or
+notice appeared, and the list reloaded with nothing ticked.
+
+<a id="fn-f-a14"></a>
+**f-a14** — Live-probed 2026-09-26 (Rule 28), all three apps: the
+window text as quoted, with nothing ticked and with one item ticked.
+
+<a id="fn-f-a15"></a>
+**f-a15** — Live-probed 2026-09-26, OJS and OPS Crossref (DataCite the
+same notice for a work whose article DOI was emptied): "Deposit DOIs"
+answered 200 with the notice, the row stayed "Needs DOI", and the queued
+`PKP\jobs\doi\DepositSubmission` job failed with "invalid.job.payload"
+(`DepositSubmission.php`).
+
+<a id="fn-f-a16"></a>
+**f-a16** — `DoiListItem.vue` shows `notSubmittedDescription` and
+"Deposit DOI(s)" for any published item that is not submitted or
+registered, "Needs Sync" included. Live-probed 2026-09-26 (q20).
+
+<a id="fn-f-a17"></a>
+**f-a17** — Live-probed 2026-09-26 (q21, which gives the cause), all
+three apps, one run each.
+
+<a id="fn-f-a18"></a>
+**f-a18** — Live-probed 2026-09-26 (q22): `PKP\jobs\doi\DepositSubmission`
+failed with `GuzzleHttp\Exception\ConnectException` (three attempts),
+every deposit, OJS and OPS; the DOI status stayed 2 (submitted) and no
+error message was stored. Nothing on the DOIs page lists failed jobs.
+
+<a id="fn-f-a19"></a>
+**f-a19** — `editDoiRegistrationAgencyPlugin()`'s `array_intersect()`
+keeps the kept kinds' positions in the stored list of kinds (the
+DataCite journal's list had been seeded as publication, peerReview,
+representation), so the stored `enabledDoiTypes` reads
+`{"0":"publication","2":"peerReview"}` (read from the database, read
+only) instead of a list; the Setup form then ticks nothing and
+`DoiListPanel` fails with `TypeError: this.enabledDoiTypes.includes is
+not a function`. Live-probed 2026-09-26, OJS, three journals over two
+processes (Crossref and DataCite); controls with the dropped kind last,
+and DataCite with nothing to drop, kept the other kinds.
+
+<a id="fn-f-a20"></a>
+**f-a20** — Live-probed 2026-09-26 (q26), OJS (both plugins) and OPS
+(Crossref): the page's `h1` is empty (the accessibility tree reads
+`heading [level=1]` with no name).
+
+<a id="fn-f-a21"></a>
+**f-a21** — `PKPContextController::editDoiRegistrationAgencyPlugin()`
+reads `registrationAgency` from the request without checking it is
+there; the form without an agency plugin (the `noPluginsEnabled` field,
+footnote d) posts no such key, so PHP logs `Undefined array key
+"registrationAgency"`, the value reads as null and the request answers
+200 with nothing stored. Test run 2026-09-26, all three apps (scenario
+12's "No agency plugin" on OJS and OPS, scenario 19's "Registration"
+tab on OMP, in each app's green run): the screen showed "Saved" and the
+server log held the warning for that save. Live-probed 2026-09-26
+(Fields, the Registration tab, OJS): the same line at the tab's "Save".
+
+<a id="fn-f-ojs1"></a>
+**f-ojs1** — `IssueGridHandler::publishIssue()` calls
+`Repo::issue()->createDoi()` with no `doiCreationTime` check;
+`doi.manager.settings.doiCreationTime.description` "When should a
+submission be assigned a DOI?". Live-probed 2026-09-26 (see i): "Never",
+"Issues" ticked, "Publish Issue" › "OK" gave the issue a DOI; the article
+scheduled in it got none.
+
+<a id="fn-f-ojs2"></a>
+**f-ojs2** — Live-probed 2026-09-26, OJS with DataCite: `POST
+api/v1/dois/issues/export` answered 500 ("DataciteXmlFilter::createFundingReferencesNode():
+Argument #2 ($publication) must be of type APP\publication\Publication,
+null given"); after "Deposit All" the issue's deposit job failed with the
+same error. On a Crossref journal the issue export answers the 400 of
+A13 instead.
+
+<a id="fn-f-ojs3"></a>
+**f-ojs3** — Live-probed 2026-09-26 (q23), OJS, two processes and two
+journals.
+
+<a id="fn-f-omp1"></a>
+**f-omp1** — `omp/classes/submission/Collector.php`
+`getAllowedDoiTypes()` lists publication, chapter and representation, not
+`file`; `PKPSubmissionCollector::getQueryBuilder()` returns no rows for
+`onDoiPage` when the enabled kinds share nothing with that list, while
+`DoisHandler` shows the tab for any enabled kind and `DoisEnabledPolicy`
+admits the page. Live-probed
+2026-09-26 (q8), OMP: "Files" alone: "DOIs" in the side menu, the page on
+"Monographs" with "No items found." while a published book carries a
+file DOI, "Assign DOIs" offered with nothing to tick; with "Monographs"
+also ticked the books list with their "PDF / article.pdf" rows; a book
+with its own DOI and an empty file DOI is not under "Needs DOI" (two
+runs).
+
+<a id="fn-f-ops1"></a>
+**f-ops1** — `ops/locale/en/manager.po`
+`manager.setup.enableDois.description`. Live-probed 2026-09-26, OPS.
+
+<a id="fn-f-ops2"></a>
+**f-ops2** — `ops/classes/scheduler/Scheduler.php` registers only the
+usage-statistics loader beside the lib/pkp tasks; `DepositDois` is
+registered by OJS's scheduler alone; the OPS Registration form still
+offers `automaticDoiDeposit` (`PKPDoiRegistrationSettingsForm`).
+Live-probed 2026-09-26 (see v): the box and its help on OPS, saved and
+read back ticked; the preprint-server install's task list holds no
+deposit task.
+
+<a id="fn-f-ops3"></a>
+**f-ops3** — Live-probed 2026-09-26, OPS (both reads of the tab),
+against the journal's help.
+
+<a id="fn-f-ops4"></a>
+**f-ops4** — `ops/classes/publication/Repository.php` `version()` clears
+the new galleys' `doiId` whenever versioning is on; OJS's copy tests
+`!$isMinorVersion`. Live-probed 2026-09-26 (q16): the minor version's
+galley had no DOI in the database and read "Needs DOI" in "View all";
+the journal and the press kept theirs.
+
+<a id="fn-f-ops5"></a>
+**f-ops5** — See l for the listing rule. Live-probed 2026-09-26 (q17):
+a journal and a press listed no draft.
+
+## Reference — entry points & surfaces
+
+| Entry | Path | Atom |
+|-------|------|------|
+| DOIs "Setup" side tab | Settings › Distribution › "DOIs" › "Setup" (`management/settings/distribution#dois`) | AFFM-091 · SET-010 |
+| DOIs "Registration" side tab, agency blocks | Settings › Distribution › "DOIs" › "Registration" | AFFM-092 · PLUG-009 · PLUG-011 |
+| DOIs page | side menu "DOIs" (`{context}/dois`) | ROUTE-010 · ROUTE-036 · ROUTE-058 · ROUTE-075 · VUE-018 |
+| DOIs page tabs | "Articles" / "Issues" {OJS}, "Monographs", "Preprints" | AFFM-148 · AFFU-211 · AFFU-212 |
+| Prefix warning | top of the DOIs page | AFFU-210 |
+| Search, bulk menu, select and expand all | the list's header | AFFM-149 · AFFM-150 · AFFU-213 · AFFU-214 · AFFU-215 · AFFU-216 |
+| Export, mark, assign, deposit, "Deposit All" | "Bulk Actions", header button | AFFM-151 · AFFM-152 · AFFM-153 · AFFM-154 · AFFU-217 · AFFU-218 · AFFU-219 · AFFU-220 · AFFU-221 · AFFU-222 · AFFU-223 |
+| Filters and the "DOI Statuses" window | the "Filters" column | AFFM-155 · AFFM-156 · AFFU-224 · AFFU-225 · AFFU-226 · AFFU-227 · AFFU-228 · VUE-096 |
+| Paging | under the list | AFFU-229 |
+| Item row, expanded view, edit and save | an item | AFFM-157 · AFFM-158 · AFFU-230 · AFFU-231 · AFFU-232 · AFFU-233 · AFFU-234 · AFFU-236 |
+| "View all" versions window | an item's expanded view | AFFM-159 · AFFU-235 · AFFU-241 · AFFU-242 · VUE-095 |
+| Agency panel, "View Record", "Deposit DOI(s)", "View Error" | an item's expanded view | AFFM-160 · AFFU-237 · AFFU-238 · AFFU-239 · AFFU-240 · AFFU-243 |
+| Row kinds per app | the expanded table | AFFU-244 (OJS) · AFFU-246 (OPS); a press's monograph row rides the OMP delta whose chapter row is out of scope |
+| DOI management API | `api/v1/dois` (list, one, add, edit, delete, assign, export, deposit, mark, `depositAll`, export download) | API-016 · API-052 (OJS issues) |
+| DOI attach API | `api/v1/_dois/{publications,peerReviews,authorResponses}/{id}`, OJS `galleys`, `issues`, OPS `galleys`, OMP `submissionFiles` (chapter and format routes out of scope) | API-001 · API-050 · API-058 · API-063 |
+| Registration save | `PUT api/v1/contexts/{id}/registrationAgency` | (the contexts API, cited) |
+| Background deposits | queued jobs | JOB-008 · JOB-009 · JOB-010 · JOB-030 (OJS) |
+| Scheduled automatic deposit | daily task, OJS | JOB-045 |
+| Crossref reference-DOI check | hourly task in the Crossref plugin (the citations spec) | JOB-062 |
+| Crossmark button | journal article page, side column | AFFR-069 |
+| Tools pages of the agency plugins | Tools › "Import/Export" › "Crossref XML Export Plugin" / "DataCite Export/Registration Plugin" | PLUG-009 · PLUG-011 |
+
+## Reference — code anchors
+
+- Settings forms: `lib/pkp/classes/components/forms/context/PKPDoiSetupSettingsForm.php`, `PKPDoiRegistrationSettingsForm.php`; `ojs|omp|ops/classes/components/forms/context/DoiSetupSettingsForm.php`; `lib/ui-library/src/components/Form/context/DoiSetupSettingsForm.vue`, `DoiRegistrationSettingsForm.vue`; `lib/pkp/templates/management/distribution.tpl` (OPS `templates/management/distribution.tpl`)
+- Validation and save: `lib/pkp/classes/services/PKPContextService.php` (`validate()`), `ojs|omp/classes/services/ContextService.php` (`validateContext()`), `lib/pkp/api/v1/contexts/PKPContextController.php` (`editDoiRegistrationAgencyPlugin()`), `lib/pkp/schemas/context.json`, app `schemas/context.json`, `lib/pkp/classes/context/Context.php` (`SETTING_*`, `isDoiTypeEnabled()`, `getConfiguredDoiAgency()`)
+- DOIs page: `lib/pkp/pages/dois/PKPDoisHandler.php`, `ojs|omp|ops/pages/dois/DoisHandler.php`, `ojs|omp|ops/templates/management/dois.tpl`, `lib/pkp/classes/security/authorization/DoisEnabledPolicy.php`, `lib/pkp/classes/components/listPanels/PKPDoiListPanel.php`, app `classes/components/listPanels/DoiListPanel.php`
+- Vue: `lib/ui-library/src/components/Container/DoiPage{OJS,OMP,OPS}.vue`; `components/ListPanel/doi/` (`DoiListPanel.vue`, `DoiListPanel{OJS,OMP,OPS}.vue`, `DoiListItem.vue`, `DoiItemVersionModal.vue`, `DoiStatusInfoModal.vue`, `DoiFailedActionDialogBody.vue`, `DoiItemViewErrorDialogBody.vue`, `DoiItemViewRegisteredMessageDialogBody.vue`, `useDoi.js`); app `registry/uiLocaleKeysBackend.json`
+- API: `lib/pkp/api/v1/dois/PKPDoiController.php`, `ojs|omp/api/v1/dois/DoiController.php`, `lib/pkp/api/v1/_dois/PKPBackendDoiController.php`, `ojs|omp|ops/api/v1/_dois/BackendDoiController.php`; `lib/pkp/api/v1/submissions/PKPSubmissionController.php` (`onDoiPage`, `hasDois`, `doiStatus`)
+- Model: `lib/pkp/classes/doi/` (`Doi.php`, `Repository.php`, `DAO.php`, `Collector.php`, `DoiGenerator.php`, `RegistrationAgencySettings.php`, `exceptions/DoiException.php`), `ojs|omp|ops/classes/doi/Repository.php`, `DAO.php`; `lib/pkp/schemas/doi.json`; `lib/pkp/classes/submission/Collector.php` and app copies (`addOnDoiPageFilterToQuery()`, `addHasDoisFilterToQuery()`, `addDoiStatusFilterToQuery()`, `addFilterByAssociatedDoiIdsToQuery()`, `getAllowedDoiTypes()`)
+- Creation and versions: `lib/pkp/classes/observers/listeners/AssignDOIs.php`, `VersionDois.php`, `ops/classes/observers/listeners/AssignDOIsOnSubmission.php`; `lib/pkp/classes/publication/Repository.php` (`version()`, `publish()`, `unpublish()`, `getMinorVersionsDoi()`, `getReviewDoiItemsGroupedByPublication()`), app `classes/publication/Repository.php` (`createDois()`, `version()`), `ojs/classes/issue/Repository.php` (`createDoi()`), `ojs/classes/controllers/grid/issues/IssueGridHandler.php` (`publishIssue()`, `unpublishIssue()`), `ojs/classes/plugins/PubIdPlugin.php` (`generateCustomPattern()`, `suffixHasIssuePattern()`)
+- Jobs and tasks: `lib/pkp/jobs/doi/DepositSubmission.php`, `DepositPeerReview.php`, `DepositContext.php`, `ojs/jobs/doi/DepositIssue.php`, `lib/pkp/classes/task/DepositDois.php`, `ojs/classes/scheduler/Scheduler.php`
+- Agencies: `ojs/plugins/generic/crossref/` (`CrossrefPlugin.php`, `CrossrefExportPlugin.php`, `classes/CrossrefSettings.php`, `templates/crossmarkButton.blade`, `templates/index.tpl`, `resources/js/components/CrossrefCrossmarkButton.vue`, `CrossrefCitationDoiCheckTask.php`), `ops/plugins/generic/crossref/` (same names, no Crossmark), `ojs/plugins/generic/datacite/` (`DatacitePlugin.php`, `DataciteExportPlugin.php`, `classes/DataciteSettings.php`, `templates/index.tpl`); `ojs/classes/plugins/DOIPubIdExportPlugin.php`, `PubObjectsExportPlugin.php`; `lib/pkp/classes/plugins/IPKPDoiRegistrationAgency.php`
+- Reader: `ojs/pages/article/ArticleHandler.php`, `ops/pages/preprint/PreprintHandler.php`, `omp/pages/catalog/CatalogBookHandler.php`; `templates/frontend/objects/article_details.tpl` and the OPS and OMP counterparts

@@ -28,12 +28,6 @@ class ContextScenarioBuilder extends PKPContextScenarioBuilder
         return 'sections';
     }
 
-    /** The DOIs "Setup" passthroughs (U19), parity-driven on the journal. */
-    protected function doiSettingsBuilt(): bool
-    {
-        return true;
-    }
-
     protected function resolveStructureId(Context $context, string $identifier): ?int
     {
         return BootstrapSeeder::findSectionId($context, $identifier);

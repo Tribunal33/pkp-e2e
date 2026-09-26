@@ -295,7 +295,12 @@ behind a line; that scratch is deleted after review.
 - Outbound HTTP is dead: `[proxy]` points at `127.0.0.1:9`, so every
   server-side external call fails fast (ORCID, reCAPTCHA, DOI registration,
   update checks); Mailpit and other `127.0.0.1` traffic are unaffected. No
-  screen shows it. Maintainer ruling 2026-08-20; harness.md
+  screen shows it, except DOIs: a deposit ("Deposit DOIs", "Deposit All")
+  queues its job, the job fails at connection and the DOI stays
+  "Submitted", never "Error"; every "Export DOIs" answers 400 "An XML
+  validation error occurred and the XML could not be exported." because
+  the agency's XML schema is fetched through the same proxy (OJS Crossref
+  and DataCite, OPS Crossref, 2026-09-26, U45 claim check K5). Maintainer ruling 2026-08-20; harness.md
   "config.test.inc.php".
 - The public files directory is `public_files_dir = public`, relative to
   the app root as the config template requires (generated since
@@ -966,6 +971,21 @@ config-file settings.
   "Allow Digital Object Identifiers…" ticked, the first kind ticked
   ("Articles", "Monographs", "Preprints"), no prefix; managers' side menus
   show "DOIs". All three apps, 2026-09-24 (U08 claim check K2).
+- Every DOI registration-agency plugin is off on `publicknowledge` and on
+  every new journal and preprint server: Settings › Website › "Plugins"
+  lists "Crossref Manager Plugin" (on a journal also "DataCite Manager
+  Plugin") unticked, and Settings › Distribution › "DOIs" ›
+  "Registration" reads "No Registration Agency Enabled"; once a plugin is
+  ticked, the tab's "Registration Agency" list shows an empty box until one
+  is saved. A press has no agency plugin. A new journal and press arrive
+  on "DOI Versioning" "No", a new preprint server on "Yes" (its "Automatic
+  DOI Assignment" shown as "Upon reaching the production stage"), so every
+  saved DOI change on a server's DOIs page writes an Activity Log line. All
+  three apps, 2026-09-26 (U45 claim check K1, K2, K3, K4).
+- An "Accept Submission" whose "Notify Reviewers" email is sent marks every
+  completed review considered (the reviewer row reads "Reviewer Thanked",
+  "Read Review" gone); with the email skipped the review stays "Review
+  Submitted". OJS, 2026-09-26 (U45 claim check K2).
 - The journal's own Settings › Distribution › "Statistics" "Enable
   institutional statistics" box appears once the site's box is ticked and
   is unticked on `publicknowledge` and a scratch context; "Institutions"

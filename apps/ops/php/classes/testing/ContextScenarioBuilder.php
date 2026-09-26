@@ -53,6 +53,15 @@ class ContextScenarioBuilder extends PKPContextScenarioBuilder
         return BootstrapSeeder::addSection($context, $plan, $sequence);
     }
 
+    /**
+     * "Automatic DOI Assignment" names its first option "Upon reaching the
+     * production stage" on a preprint server (U45).
+     */
+    protected function doiStageCreationWord(): string
+    {
+        return 'production';
+    }
+
     protected function assertReviewSupported(string $key): void
     {
         throw new SpecException($key, "OPS has no review stage — {$key} cannot be seeded on this app");

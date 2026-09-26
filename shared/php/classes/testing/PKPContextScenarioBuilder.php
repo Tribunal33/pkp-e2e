@@ -145,19 +145,35 @@
  *   false "Disable". Only the journal and preprint server schemas carry
  *   it, so OMP answers 400. The key writes this row alone.
  * - enableDois (bool), doiPrefix (string or null), doiVersioning (bool),
- *   enabledDoiTypes (list), doiCreationTime (copyediting / publication /
- *   never) — Settings › Distribution › "DOIs" › "Setup" (U19;
- *   PKPDoiSetupSettingsForm and the app's DoiSetupSettingsForm): "DOIs"
- *   "Allow Digital Object Identifiers (DOIs) to be assigned to work
- *   published in this journal.", "Items with DOIs", "DOI Prefix",
- *   "Automatic DOI Assignment", "DOI Versioning". Built on the journal
- *   only for now (doiSettingsBuilt(); OMP and OPS answer 400). A new
- *   journal stores DOIs on with no prefix, so a request naming any of the
- *   keys with DOIs on must give doiPrefix, as the form's save refuses DOIs
- *   on without one; with enableDois false the other four are refused (the
- *   form hides them). Saved with the other form passthroughs, before the
- *   issues[] overlay and any submission, so a later publish mints the
- *   DOIs the settings call for.
+ *   enabledDoiTypes (list), doiCreationTime (copyediting (OPS production) /
+ *   publication / never), doiSuffixType (default / none / customPattern)
+ *   and the "Custom DOI Suffix Pattern" boxes (doiPublicationSuffixPattern,
+ *   doiRepresentationSuffixPattern, OJS doiIssueSuffixPattern, OMP
+ *   doiChapterSuffixPattern and doiSubmissionFileSuffixPattern) —
+ *   Settings › Distribution › "DOIs" › "Setup" (U19 on the journal, U45 on
+ *   the press and the preprint server, the format and patterns U45;
+ *   PKPDoiSetupSettingsForm and the app's DoiSetupSettingsForm, whose own
+ *   boxes and pattern fields decide what each app accepts). A new context
+ *   stores DOIs on with no prefix, so a request naming any of the keys
+ *   with DOIs on must give doiPrefix, as the form's save refuses DOIs on
+ *   without one; with enableDois false the others are refused (the form
+ *   hides them); a pattern needs doiSuffixType customPattern, and with it
+ *   every ticked kind that has a box needs its pattern (the save's
+ *   refusal). Saved with the other form passthroughs, before the issues[]
+ *   overlay and any submission, so a later publish mints the DOIs the
+ *   settings call for.
+ * - registrationAgency (the agency plugin's name) and automaticDoiDeposit
+ *   (bool) — Settings › Distribution › "DOIs" › "Registration" (U45), with
+ *   the agency block's fields from plugins.<agency>.settings: the tab's
+ *   "Save" through PKPContextController::editDoiRegistrationAgencyPlugin
+ *   itself (ApiCall), after the plugins and the settings forms. The agency
+ *   plugin must be enabled by the plugins key in the same request (every
+ *   agency plugin is off on a new context); a kind the agency does not
+ *   accept is refused (the save would untick it). OMP ships no agency: 400.
+ * - publisherInstitution, onlineIssn, printIssn (OJS) — Settings › Journal
+ *   › "Masthead", "Publisher", "Online ISSN", "Print ISSN" (U45; the
+ *   journal's MastheadForm), which Crossref's requirements read. Only the
+ *   journal's context schema has them: OMP and OPS answer 400.
  * - plugins {<lowercased plugin class name>: {enabled*, settings?}} — the
  *   Settings › Website › Plugins grid's enable / disable for that context
  *   (U12; PluginGridHandler::enable: the plugin's `enabled` setting for the
@@ -166,7 +182,10 @@
  *   Plugin::updateSetting, as its form's execute writes it). Site-wide plugins
  *   are refused (their state is global, D9); "site-wide" is asked as the
  *   context's grid asks it, so the Custom Block Manager, site-wide only
- *   outside a context, is enabled for the context (U09).
+ *   outside a context, is enabled for the context (U09). A registration
+ *   agency plugin (Crossref, DataCite) has no settings window: its
+ *   `settings` are the Registration tab's agency block and are saved by
+ *   registrationAgency's save, never written here (U45).
  * - announcementTypes[] {name*} and announcements[] {title*, descriptionShort?,
  *   description?, dateExpire?, type?} — the "Announcement Types" grid's Add
  *   window (AnnouncementTypeForm::execute: AnnouncementTypeDAO::insertObject)
@@ -337,8 +356,23 @@ abstract class PKPContextScenarioBuilder
      */
     public const ROLE_OPTIONS = ['recommendOnly', 'permitMetadataEdit', 'permitSettings', 'masthead'];
 
-    /** The DOIs "Setup" form's passthrough keys (U19), in the form's order. */
-    public const DOI_SETTINGS = ['enableDois', 'enabledDoiTypes', 'doiPrefix', 'doiCreationTime', 'doiVersioning'];
+    /**
+     * The "Custom DOI Suffix Pattern" boxes of the three apps (U45); each
+     * app accepts those its own Setup tab offers.
+     */
+    public const DOI_PATTERN_SETTINGS = ['doiPublicationSuffixPattern', 'doiRepresentationSuffixPattern', 'doiIssueSuffixPattern', 'doiChapterSuffixPattern', 'doiSubmissionFileSuffixPattern'];
+
+    /** An "Items with DOIs" kind → the pattern box the save requires for it under "Custom pattern" (U45). */
+    public const DOI_KIND_PATTERN = [
+        'publication' => 'doiPublicationSuffixPattern',
+        'representation' => 'doiRepresentationSuffixPattern',
+        'issue' => 'doiIssueSuffixPattern',
+        'chapter' => 'doiChapterSuffixPattern',
+        'file' => 'doiSubmissionFileSuffixPattern',
+    ];
+
+    /** The DOIs "Setup" form's passthrough keys (U19, U45), in the form's order. */
+    public const DOI_SETTINGS = ['enableDois', 'enabledDoiTypes', 'doiPrefix', 'doiCreationTime', 'doiSuffixType', ...self::DOI_PATTERN_SETTINGS, 'doiVersioning'];
 
     protected ContextFactory $contextFactory;
     protected UserSeeder $userSeeder;
@@ -417,16 +451,6 @@ abstract class PKPContextScenarioBuilder
     {
     }
 
-    /**
-     * Whether this app's overlay has built (and parity-driven) the DOI
-     * "Setup" passthroughs (U19: OJS only; OMP and OPS answer 400 until a
-     * DOI feature drives their forms).
-     */
-    protected function doiSettingsBuilt(): bool
-    {
-        return false;
-    }
-
     public function build(array $data): array
     {
         $root = new Spec($data);
@@ -462,6 +486,7 @@ abstract class PKPContextScenarioBuilder
         $this->formSettingsPlan = $intakeSettings['settings'];
         $reviewFormPlans = $this->parseReviewForms($root, $primaryLocale);
         $pluginPlans = $this->parsePlugins($root);
+        $doiRegistrationPlan = $this->parseDoiRegistration($root, $pluginPlans, $intakeSettings['settings']);
         $rolePlans = $this->parseRoleOptions($root);
         $customRolePlans = $this->parseCustomRoles(
             $root,
@@ -542,6 +567,13 @@ abstract class PKPContextScenarioBuilder
                 array_map(fn ($key) => "review.{$key}", array_keys($reviewSettings ?? []))
             );
             $context = $this->saveFormSettings($context, $formSettings, $specKeys);
+        }
+
+        // The DOIs "Registration" tab's "Save" (U45), after the plugins
+        // (the list offers only an enabled agency) and the "Setup" tab.
+        if ($doiRegistrationPlan !== null) {
+            $this->applyDoiRegistration($context, $doiRegistrationPlan);
+            $context = Application::getContextDAO()->getById($context->getId());
         }
 
         // The Roles tab's "Edit" › "OK" per role, before the components and
@@ -1821,12 +1853,17 @@ abstract class PKPContextScenarioBuilder
     }
 
     /**
-     * The optional DOI "Setup" passthroughs (U19) → settings rows, as
+     * The optional DOI "Setup" passthroughs (U19; OMP and OPS, the "DOI
+     * Format" radios and the suffix patterns U45) → settings rows, as
      * Settings › Distribution › "DOIs" › "Setup" saves them (PUT
      * contexts/{id}; the form posts its fields form-encoded and the save's
      * convertStringsToSchema turns them back into the schema's types). The
-     * form's suffix fields are not these keys'; they stay as the context
-     * has them (a new context stores the "default" suffix). Parse phase.
+     * boxes and pattern fields accepted are read from the app's own
+     * DoiSetupSettingsForm, so each app takes exactly what its tab offers.
+     * A key the request does not give stays as the new context stores it.
+     * The save's own refusals (the prefix, an empty pattern of a ticked
+     * kind) are checked here as well, before the context exists. Parse
+     * phase.
      *
      * @return array{settings: array, specKeys: array}
      */
@@ -1836,15 +1873,15 @@ abstract class PKPContextScenarioBuilder
         if ($given === []) {
             return ['settings' => [], 'specKeys' => []];
         }
-        if (!$this->doiSettingsBuilt()) {
-            throw new SpecException($given[0], "{$given[0]} (the DOIs \"Setup\" form) is built on a journal only so far; no parity drive covers this app's form yet");
-        }
         $settings = [];
+        // The app's own Setup tab (a registration agency narrows its boxes;
+        // a new context has none).
+        $form = new \APP\components\forms\context\DoiSetupSettingsForm('', [], Application::getContextDAO()->newDataObject());
 
         if ($root->has('enableDois')) {
             $value = $root->get('enableDois');
             if (!is_bool($value)) {
-                throw new SpecException('enableDois', 'enableDois must be a boolean (true: "Allow Digital Object Identifiers (DOIs) to be assigned to work published in this journal." ticked, false: unticked)');
+                throw new SpecException('enableDois', 'enableDois must be a boolean (true: the "DOIs" box "Allow Digital Object Identifiers (DOIs) to be assigned to …" ticked, false: unticked)');
             }
             $settings['enableDois'] = $value;
         }
@@ -1853,7 +1890,7 @@ abstract class PKPContextScenarioBuilder
                 throw new SpecException($key, "{$key} shows on the DOIs form only while \"DOIs\" is ticked: drop it or give enableDois: true");
             }
         } elseif (!$root->has('doiPrefix') || $root->get('doiPrefix') === null) {
-            throw new SpecException('doiPrefix', 'doiPrefix is required: a new journal stores DOIs allowed with no prefix, and the DOIs form refuses a save with DOIs allowed and the "DOI Prefix" box empty');
+            throw new SpecException('doiPrefix', 'doiPrefix is required: a new context stores DOIs allowed with no prefix, and the DOIs form refuses a save with DOIs allowed and the "DOI Prefix" box empty');
         }
 
         if ($root->has('doiPrefix')) {
@@ -1875,14 +1912,12 @@ abstract class PKPContextScenarioBuilder
         if ($root->has('doiVersioning')) {
             $value = $root->get('doiVersioning');
             if (!is_bool($value)) {
-                throw new SpecException('doiVersioning', 'doiVersioning must be a boolean (true "Yes, assign a unique DOI to every version of an article.", false "No, all versions of an article should have the same DOI.")');
+                throw new SpecException('doiVersioning', 'doiVersioning must be a boolean (true "Yes, assign a unique DOI to every version of …", false "No, all versions of … should have the same DOI.")');
             }
             $settings['doiVersioning'] = $value;
         }
         if ($root->has('enabledDoiTypes')) {
-            // "Items with DOIs": the app form's own boxes (a registration
-            // agency narrows them; a scratch context has none).
-            $form = new \APP\components\forms\context\DoiSetupSettingsForm('', [], Application::getContextDAO()->newDataObject());
+            // "Items with DOIs": the app form's own boxes.
             $offered = array_column($form->getField('enabledDoiTypes')->options, 'value');
             $expected = 'enabledDoiTypes must be a list of the "Items with DOIs" boxes this app\'s DOIs form offers: ' . implode(', ', $offered);
             $value = $root->get('enabledDoiTypes');
@@ -1900,19 +1935,220 @@ abstract class PKPContextScenarioBuilder
             $settings['enabledDoiTypes'] = $value;
         }
         if ($root->has('doiCreationTime')) {
+            // "Automatic DOI Assignment": the first option is named after
+            // the stage its label names (a preprint server "Upon reaching
+            // the production stage").
             $times = [
-                'copyediting' => Repo::doi()::CREATION_TIME_COPYEDIT,
+                $this->doiStageCreationWord() => Repo::doi()::CREATION_TIME_COPYEDIT,
                 'publication' => Repo::doi()::CREATION_TIME_PUBLICATION,
                 'never' => Repo::doi()::CREATION_TIME_NEVER,
             ];
             $value = $root->get('doiCreationTime');
             if (!is_string($value) || !array_key_exists($value, $times)) {
-                throw new SpecException('doiCreationTime', 'doiCreationTime must be one of: copyediting ("Upon reaching the copyediting stage"), publication ("Upon publication"), never ("Never")');
+                throw new SpecException('doiCreationTime', "doiCreationTime must be one of: {$this->doiStageCreationWord()} (\"Upon reaching the {$this->doiStageCreationWord()} stage\"), publication (\"Upon publication\"), never (\"Never\")");
             }
             $settings['doiCreationTime'] = $times[$value];
         }
+        if ($root->has('doiSuffixType')) {
+            // "DOI Format": the three radios, by the word of their label.
+            $types = [
+                'default' => Repo::doi()::SUFFIX_DEFAULT,
+                'none' => Repo::doi()::SUFFIX_MANUAL,
+                'customPattern' => Repo::doi()::SUFFIX_CUSTOM_PATTERN,
+            ];
+            $value = $root->get('doiSuffixType');
+            if (!is_string($value) || !array_key_exists($value, $types)) {
+                throw new SpecException('doiSuffixType', 'doiSuffixType must be one of: default ("Default - Automatically generates a unique eight-character suffix"), none ("None - Suffixes must be entered manually …"), customPattern ("Custom pattern - (not recommended)")');
+            }
+            $settings['doiSuffixType'] = $types[$value];
+        }
+        // "Custom DOI Suffix Pattern": the text boxes of the app's pattern
+        // group, shown only while "Custom pattern" is chosen.
+        $patternFields = [];
+        foreach ($form->fields as $field) {
+            if ($field instanceof \PKP\components\forms\FieldText && $field->groupId === 'doiCustomSuffixGroup') {
+                $patternFields[$field->name] = $field->label;
+            }
+        }
+        foreach (self::DOI_PATTERN_SETTINGS as $key) {
+            if (!$root->has($key)) {
+                continue;
+            }
+            if (!array_key_exists($key, $patternFields)) {
+                throw new SpecException($key, "{$key} is not a box of this app's \"Custom DOI Suffix Pattern\" group (it offers " . implode(', ', array_keys($patternFields)) . ')');
+            }
+            if (($settings['doiSuffixType'] ?? null) !== Repo::doi()::SUFFIX_CUSTOM_PATTERN) {
+                throw new SpecException($key, "{$key} shows on the DOIs form only while \"DOI Format\" is \"Custom pattern\": give doiSuffixType: 'customPattern' with it");
+            }
+            $value = $root->get($key);
+            if (!is_string($value) || trim($value) === '') {
+                throw new SpecException($key, "{$key} must be the pattern typed into the \"{$patternFields[$key]}\" box (a non-empty string of the symbols its help lists); an empty box is the key left out");
+            }
+            $settings[$key] = $value;
+        }
+        if (($settings['doiSuffixType'] ?? null) === Repo::doi()::SUFFIX_CUSTOM_PATTERN) {
+            // The save refuses an empty pattern box of a ticked kind ("A DOI
+            // suffix pattern is required."); a new context ticks the kinds of
+            // the schema default.
+            $schema = app()->get('schema')->get('context'); /** @var \stdClass $schema */
+            $kinds = $settings['enabledDoiTypes'] ?? (array) ($schema->properties->enabledDoiTypes->default ?? []);
+            foreach (self::DOI_KIND_PATTERN as $kind => $key) {
+                if (in_array($kind, $kinds, true) && array_key_exists($key, $patternFields) && !isset($settings[$key])) {
+                    throw new SpecException($key, "The settings form would refuse this: \"{$patternFields[$key]}\" is ticked under \"Items with DOIs\", so with \"Custom pattern\" its box needs a pattern (\"A DOI suffix pattern is required.\"): give {$key}");
+                }
+            }
+        }
 
         return ['settings' => $settings, 'specKeys' => array_combine(array_keys($settings), array_keys($settings))];
+    }
+
+    /**
+     * The word naming the first "Automatic DOI Assignment" option by the
+     * stage its label names: "Upon reaching the copyediting stage" on a
+     * journal and a press. OPS overrides it ("…the production stage").
+     */
+    protected function doiStageCreationWord(): string
+    {
+        return 'copyediting';
+    }
+
+    /**
+     * The DOIs "Registration" tab (U45): `registrationAgency` (the
+     * "Registration Agency" list's option value, the agency plugin's name,
+     * e.g. crossrefplugin) and `automaticDoiDeposit` (the "Enable automatic
+     * depositing" box), with the agency block's fields taken from
+     * `plugins.<agency>.settings` (the block's boxes are the plugin's
+     * settings, which no other window of the app edits). The list offers an
+     * agency only while its plugin is enabled, and every agency plugin is
+     * off on a new context, so the agency needs `plugins.<agency>.enabled:
+     * true` in the same request. The block's fields are checked here by the
+     * agency's own settings schema (its RegistrationAgencySettings), as the
+     * tab's "Save" checks them, and a kind the agency does not accept among
+     * the context's "Items with DOIs" is refused (the tab's "Save" unticks
+     * it; choose the agency on screen for that path). Parse phase: the
+     * agency's settings are taken out of its plugin plan, so the plugins
+     * key does not write them.
+     *
+     * @param array<int, array{key: string, plugin: Plugin, enabled: bool, settings: array}> $pluginPlans
+     *
+     * @return ?array{plugin: Plugin, automaticDoiDeposit: bool, fields: array}
+     */
+    protected function parseDoiRegistration(Spec $root, array &$pluginPlans, array $formSettings): ?array
+    {
+        if (!$root->has('registrationAgency')) {
+            if ($root->has('automaticDoiDeposit')) {
+                throw new SpecException('automaticDoiDeposit', 'automaticDoiDeposit ("Enable automatic depositing") shows on the Registration tab only once an agency is chosen: give registrationAgency with it');
+            }
+            foreach ($pluginPlans as $plan) {
+                if ($plan['plugin'] instanceof \APP\plugins\IDoiRegistrationAgency && $plan['settings'] !== []) {
+                    throw new SpecException("plugins.{$plan['key']}.settings", "plugins.{$plan['key']} is a registration agency: its fields are the Registration tab's agency block, saved with the agency chosen; give registrationAgency: '{$plan['plugin']->getName()}' with them");
+                }
+            }
+            return null;
+        }
+        $agencies = [];
+        foreach (PluginRegistry::loadAllPlugins() as $plugin) {
+            if ($plugin instanceof \APP\plugins\IDoiRegistrationAgency) {
+                $agencies[strtolower($plugin->getName())] = $plugin;
+            }
+        }
+        $name = $root->get('registrationAgency');
+        if ($agencies === []) {
+            throw new SpecException('registrationAgency', 'This app ships no registration agency plugin: its Registration tab reads "No Registration Agency Enabled" and offers no list');
+        }
+        if (!is_string($name) || !isset($agencies[strtolower($name)]) || $name !== $agencies[strtolower($name)]->getName()) {
+            throw new SpecException('registrationAgency', 'registrationAgency must be the "Registration Agency" option value of an agency plugin of this app: ' . implode(', ', array_map(fn (Plugin $p) => $p->getName(), $agencies)));
+        }
+        $agency = $agencies[strtolower($name)]; /** @var Plugin&\APP\plugins\IDoiRegistrationAgency $agency */
+        $planIndex = null;
+        foreach ($pluginPlans as $i => $plan) {
+            if (strtolower($plan['plugin']->getName()) === strtolower($name)) {
+                $planIndex = $i;
+            }
+        }
+        if ($planIndex === null || !$pluginPlans[$planIndex]['enabled']) {
+            throw new SpecException('registrationAgency', "The Registration Agency list offers {$name} only while its plugin is enabled, and a new context has it off: give plugins: {{$name}: {enabled: true}} with it");
+        }
+
+        $automatic = false;
+        if ($root->has('automaticDoiDeposit')) {
+            $automatic = $root->get('automaticDoiDeposit');
+            if (!is_bool($automatic)) {
+                throw new SpecException('automaticDoiDeposit', 'automaticDoiDeposit must be a boolean ("Enable automatic depositing" ticked or not)');
+            }
+        }
+
+        // The agency block's fields, by its settings schema; a field not
+        // given is posted as a new context shows it (empty, unticked).
+        $settingsObject = $agency->getSettingsObject();
+        $properties = (array) $settingsObject->getSchema()->properties;
+        $given = $pluginPlans[$planIndex]['settings'];
+        $pluginPlans[$planIndex]['settings'] = [];
+        $fields = [];
+        foreach ($given as $field => $value) {
+            $property = $properties[$field] ?? throw new SpecException("plugins.{$name}.settings.{$field}", "{$field} is not a field of the {$name} block of the Registration tab (its fields: " . implode(', ', array_keys($properties)) . ')');
+            if (($property->type ?? null) === 'boolean' ? !is_bool($value) : !is_string($value)) {
+                throw new SpecException("plugins.{$name}.settings.{$field}", "{$field} must be a " . (($property->type ?? null) === 'boolean' ? 'boolean (the box ticked or not)' : 'string (the box as typed)'));
+            }
+            $fields[$field] = $value;
+        }
+        $props = [];
+        foreach ($properties as $field => $property) {
+            $props[$field] = $fields[$field] ?? ((($property->type ?? null) === 'boolean') ? false : null);
+        }
+        $errors = $settingsObject->validate($props);
+        if ($errors !== []) {
+            $field = (string) array_key_first($errors);
+            throw new SpecException("plugins.{$name}.settings.{$field}", 'The Registration tab\'s "Save" would refuse this: ' . json_encode($errors));
+        }
+
+        // The tab's "Save" unticks the kinds the agency does not accept.
+        $schema = app()->get('schema')->get('context'); /** @var \stdClass $schema */
+        $kinds = $formSettings['enabledDoiTypes'] ?? (array) ($schema->properties->enabledDoiTypes->default ?? []);
+        $refused = array_diff($kinds, $agency->getAllowedDoiTypes());
+        if ($refused !== []) {
+            throw new SpecException('registrationAgency', "{$name} accepts only " . implode(', ', $agency->getAllowedDoiTypes()) . ' under "Items with DOIs", and the context would tick ' . implode(', ', $refused) . ' (enabledDoiTypes): the Registration tab\'s "Save" would untick it; seed the kinds the agency accepts, or choose the agency on screen');
+        }
+
+        return ['plugin' => $agency, 'automaticDoiDeposit' => $automatic, 'fields' => $fields];
+    }
+
+    /**
+     * The Registration tab's "Save" (U45): the tab's PUT
+     * contexts/{id}/registrationAgency through
+     * PKPContextController::editDoiRegistrationAgencyPlugin itself (ApiCall),
+     * the scratch context on the router as the tab's request has it: the
+     * context's registrationAgency and automaticDoiDeposit through
+     * PKPContextService::validate + ::edit, the kinds the agency does not
+     * accept unticked, then the agency block's fields validated by the
+     * agency's settings schema and written as plugin settings. The body is
+     * the tab's: every field of the block as it shows (the plugin's stored
+     * value) with the spec's values typed over it.
+     */
+    protected function applyDoiRegistration(Context $context, array $plan): void
+    {
+        $agency = $plan['plugin']; /** @var Plugin&\APP\plugins\IDoiRegistrationAgency $agency */
+        if (!$agency->getEnabled($context->getId())) {
+            throw new SpecException('registrationAgency', "{$agency->getName()} is not enabled for the context, so the Registration Agency list does not offer it");
+        }
+        $body = [
+            Context::SETTING_CONFIGURED_REGISTRATION_AGENCY => $agency->getName(),
+            Context::SETTING_DOI_AUTOMATIC_DEPOSIT => $plan['automaticDoiDeposit'],
+        ];
+        foreach ((array) $agency->getSettingsObject()->getSchema()->properties as $field => $property) {
+            $body[$field] = $plan['fields'][$field] ?? $agency->getSetting($context->getId(), $field) ?? ((($property->type ?? null) === 'boolean') ? false : '');
+        }
+        $restore = ContextFactory::forceRequestContext($context);
+        try {
+            $controller = ApiCall::controller(
+                \PKP\API\v1\contexts\PKPContextController::class,
+                [Application::ASSOC_TYPE_USER_ROLES => [Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER]]
+            );
+            $request = ApiCall::request(\Illuminate\Http\Request::class, 'PUT', $body, ['contextId' => $context->getId()], 'registrationAgency', 'The Registration tab\'s "Save" would be refused');
+            ApiCall::answer($controller->editDoiRegistrationAgencyPlugin($request), 'registrationAgency', 'The Registration tab\'s "Save" was refused');
+        } finally {
+            $restore();
+        }
     }
 
     /**
@@ -2266,6 +2502,30 @@ abstract class PKPContextScenarioBuilder
             }
             $settings['enableOai'] = $value;
             $specKeys['enableOai'] = 'enableOai';
+        }
+
+        // Settings › Journal › "Masthead", "Publisher" and the two ISSN
+        // boxes (U45; the OJS MastheadForm's publisherInstitution, onlineIssn,
+        // printIssn, which Crossref's requirements read). The form posts its
+        // whole body; each key writes its row alone. Only the journal's
+        // context schema carries them, so OMP and OPS answer 400. The
+        // schema's own rules (issn: the check digit too) are checked here,
+        // before the context exists.
+        foreach (['publisherInstitution' => 'Publisher', 'onlineIssn' => 'Online ISSN', 'printIssn' => 'Print ISSN'] as $key => $label) {
+            if (!$root->has($key)) {
+                continue;
+            }
+            $hasProperty($key) || throw new SpecException($key, "{$key} is not a setting of this app's context schema (the Masthead's \"{$label}\" box is a journal's)");
+            $value = $root->get($key);
+            if (!is_string($value) || trim($value) === '') {
+                throw new SpecException($key, "{$key} must be the \"{$label}\" box as typed, a non-empty string (an empty box is the key left out)");
+            }
+            $validator = \PKP\validation\ValidatorFactory::make([$key => $value], [$key => (array) ($schema->properties->{$key}->validation ?? [])]);
+            if ($validator->fails()) {
+                throw new SpecException($key, "The Masthead would refuse this: \"{$label}\" " . implode(' ', $validator->errors()->get($key)));
+            }
+            $settings[$key] = $value;
+            $specKeys[$key] = $key;
         }
 
         $doi = $this->parseDoiSettings($root);

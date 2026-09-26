@@ -6,7 +6,7 @@ confirmed dead (it stays here with its evidence) or ruled out of scope.
 
 Sources (removed from the tip 2026-08-25, reachable in git history): the six crosswalks in `.reports/phase0-feature-map/` (their UNASSIGNED
 lists, consistent with `synthesis.md` §4) + `RULINGS.md`'s probe-derived
-dead-code additions. **18 parked atoms** + **38 noted dead-code/defect
+dead-code additions. **18 parked atoms** + **39 noted dead-code/defect
 candidates attached to claimed atoms**. (PLUG-028 moved to FEATURE-MAP's
 Out-of-scope tail — see RULINGS.md. Two candidates that rested solely on
 scratched pre-reset evidence were dropped 2026-08-21 per the reset doctrine —
@@ -577,3 +577,25 @@ until their specs exist. Do not force-claim the defects themselves.
     2024-05-29 template sweep (`78ed38462`). Code-verified 2026-09-26
     (U60 spec author; checkouts omp `72a01a026`, lib/pkp `1ad4a14bb2`).
     Resolves: maintainer confirmation as dead code (removal candidate).
+39. **Unreachable DOI pieces** — attached to **U45** (API-001,
+    AFFU-244, ROUTE-010, PLUG-009, PLUG-011; claimed). Author-response
+    DOIs: the `authorResponse` kind is commented out of OJS
+    `DoiSetupSettingsForm`, so no journal can tick it, yet
+    `DoiListPanelOJS.vue` builds its rows, `_dois/authorResponses/{id}`
+    is routed, and the collectors join its table. `PKPDoisHandler`
+    role-assigns a `management` op with no method, and its `index()`
+    builds the Setup and Registration forms into the DOIs page's state,
+    which `dois.tpl` never mounts. The Crossref and DataCite export
+    plugins' `manage` settings path calls `getSettingsFormClassName()`,
+    which throws ("DOI settings no longer managed via plugin settings
+    form."); the Plugins list links those rows to the Tools page instead,
+    so nothing opens it. OMP `DoiSetupSettingsForm` removes an
+    `automaticDoiDeposit` field it never has. Legacy locale keys
+    (`doi.editor.*`, `doi.manager.settings.doiReassign*`,
+    `doi.manager.settings.doiAssignJournalWide*`,
+    `doi.manager.settings.doiSuffixLegacy`) are displayed nowhere.
+    Code-verified 2026-09-26 (U45 spec author; checkouts ojs
+    `3162c105bf`, omp `72a01a026`, ops `e9f6f4f550`, lib/pkp
+    `1ad4a14bb2`, ui-library `03d1cee2`). Resolves: maintainer
+    confirmation as dead code (removal candidates), author-response DOIs
+    as pre-release machinery.

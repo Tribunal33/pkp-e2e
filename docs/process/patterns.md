@@ -410,8 +410,9 @@ no cleanup fixture.
   search. Switch view first, or search globally.
 - **Paginated lists accumulate state across runs** on a long-lived DB. Never
   assert presence on an unscoped first page. Search by the test's tag first.
-  Seeded drafts carry no `dateSubmitted`, so they sort LAST in date-ordered
-  lists.
+  Seeded drafts and drafts started on screen both carry a submission date on
+  the current build (U45 claim check K3, 2026-09-26), so a date-ordered list
+  places them by that date, not last.
 - **Server-rendered TinyMCE values never reach the backing textarea.** There
   is deliberately no helper. Read the editor directly:
   `page.evaluate((id) => window.tinymce?.get(id)?.getContent(), fieldId)`.
@@ -600,3 +601,10 @@ support contact, and the validation email's sender is that contact, so a
 registration on the +90 server 500s until a manager sets it (Settings ›
 Contact); and the frontend has no `main` landmark, so `screen()` gives you
 the body there.
+A probe that needs a queued job's outcome (a DOI deposit) drains the queue
+with `php lib/pkp/tools/jobs.php work --stop-when-empty` under the test
+config, repeated until the job class is gone: a failed attempt is retried
+after five seconds and `--stop-when-empty` exits while it waits.
+`jobs.php run` stops at the first failing job of any feature, and either
+one runs other features' queued jobs on that fleet (U45 claim check K3,
+K5).

@@ -489,34 +489,128 @@ Keys:
   the key both write this row alone. A non-boolean is a 400; OMP answers
   400, a press has no such radio (U19 harness, 2026-09-26).
 - `enableDois`, `doiPrefix`, `doiVersioning`, `enabledDoiTypes`,
-  `doiCreationTime` (OJS only for now; U19): Settings › Distribution ›
-  "DOIs" › "Setup". `enableDois` (boolean) is the "DOIs" box "Allow
-  Digital Object Identifiers (DOIs) to be assigned to work published in
-  this journal."; `doiPrefix` the "DOI Prefix" box (`10.` then four to
-  seven digits; `null` is the emptied box); `enabledDoiTypes` the "Items
-  with DOIs" boxes, a list of `publication` ("Articles"), `issue`
-  ("Issues"), `representation` ("Article galleys, such as a published
-  PDF") and `peerReview` ("Peer Review"); `doiCreationTime` the
-  "Automatic DOI Assignment" list, `copyediting` ("Upon reaching the
-  copyediting stage"), `publication` ("Upon publication") or `never`;
-  `doiVersioning` (boolean) the "DOI Versioning" radios, `true` "Yes,
-  assign a unique DOI to every version of an article.", `false` "No, all
-  versions of an article should have the same DOI.". A new journal stores
-  DOIs on, "Articles" ticked, "Upon reaching the copyediting stage",
-  versioning "No" and no prefix, and the form refuses a save with DOIs on
-  and no prefix: so any of these keys with DOIs on needs `doiPrefix`
-  (400 otherwise), and with `enableDois: false` the other four are 400s
-  (the form hides them). The tab's "Save" posts every field, the suffix
-  patterns empty (`enableDois=true&enabledDoiTypes[]=publication&doiPrefix=10.1234&doiCreationTime=copyEditCreationTime&doiSuffixType=default&…&doiVersioning=true`),
-  which on a new journal writes exactly the rows the keys write. The
-  settings are saved before `issues[]` and before any submission, so an
-  article seeded `published` into such a journal carries a minted DOI
-  (`10.1234/` and an eight-character suffix, "Unregistered"). The row
-  "Per-version records" seeds `{doiPrefix: '10.1234', doiVersioning:
-  true}`; a later version then gets a DOI of its own when it is
-  published on screen. OMP and OPS answer 400 on every one of them until
-  a DOI feature drives their forms; the "Registration" tab
-  (`registrationAgency`) is not built (U19 harness, 2026-09-26).
+  `doiCreationTime`, `doiSuffixType` and the pattern keys (U19 on the
+  journal, U45 on the press and the preprint server, the format and
+  patterns U45 on all three): Settings › Distribution › "DOIs" ›
+  "Setup". `enableDois` (boolean) is the "DOIs" box "Allow Digital
+  Object Identifiers (DOIs) to be assigned to work published in this
+  journal." ("…published by this press.", "…to assigned to works
+  published on this server."); `doiPrefix` the "DOI Prefix" box (`10.`
+  then four to seven digits; `null` is the emptied box);
+  `enabledDoiTypes` the "Items with DOIs" boxes, each app's own: a
+  journal `publication` ("Articles"), `issue` ("Issues"),
+  `representation` ("Article galleys, such as a published PDF") and
+  `peerReview` ("Peer Review"); a press `publication` ("Monographs"),
+  `chapter` ("Chapters"), `representation` ("Publication Formats") and
+  `file` ("Files"); a preprint server `publication` ("Preprints") and
+  `representation` ("Preprint galleys, such as a published PDF"); another
+  app's value is a 400. `doiCreationTime` is the "Automatic DOI
+  Assignment" list: `copyediting` ("Upon reaching the copyediting
+  stage"; on a preprint server the word is `production`, "Upon reaching
+  the production stage", and `copyediting` is a 400 there),
+  `publication` ("Upon publication") or `never`. `doiVersioning`
+  (boolean) is the "DOI Versioning" radios, `true` "Yes, assign a unique
+  DOI to every version of an article." ("…of a monograph/chapter.",
+  "…of a preprint."), `false` "No, all versions of … should have the
+  same DOI.". `doiSuffixType` is the "DOI Format" radios: `default`
+  ("Default - Automatically generates a unique eight-character
+  suffix"), `none` ("None - Suffixes must be entered manually on the DOI
+  management page…", stored as `customId`) or `customPattern` ("Custom
+  pattern - (not recommended)"). The pattern keys are the boxes of the
+  "Custom DOI Suffix Pattern" group, each app's own, a non-empty string
+  as typed: `doiPublicationSuffixPattern` ("Submissions", every app),
+  `doiRepresentationSuffixPattern` ("Article Galleys", "Publication
+  Formats", "Preprint Galleys"), a journal's `doiIssueSuffixPattern`
+  ("Issues"), a press's `doiChapterSuffixPattern` ("Chapters") and
+  `doiSubmissionFileSuffixPattern` ("Files"); another app's box is a 400
+  naming this app's. The group shows only under "Custom pattern", so a
+  pattern needs `doiSuffixType: 'customPattern'` in the same request, and
+  with it every ticked kind that has a box needs its pattern (the save
+  refuses it empty with "A DOI suffix pattern is required."; a new
+  context ticks `publication` alone); the journal's "Peer Review" has no
+  box. A new context stores DOIs on, the first kind ticked, the first
+  "Automatic DOI Assignment" option, "Default", versioning "No" ("Yes"
+  on a preprint server) and no prefix, and the form refuses a save with
+  DOIs on and no prefix: so any of these keys with DOIs on needs
+  `doiPrefix` (400 otherwise), and with `enableDois: false` the others
+  are 400s (the form hides them). The tab's "Save" posts every field,
+  the pattern boxes empty unless typed
+  (`enableDois=true&enabledDoiTypes[]=publication&doiPrefix=10.1234&doiCreationTime=copyEditCreationTime&doiSuffixType=default&doiPublicationSuffixPattern=&…&doiVersioning=true`),
+  which on a new context writes exactly the rows the keys write (an
+  empty box stores no row). The settings are saved before `issues[]` and
+  before any submission, so an item seeded `published` into such a
+  context carries the DOI the settings make: under "Default" `10.1234/`
+  and an eight-character suffix, "Unregistered"; under "None" the bare
+  `10.1234/` (the made DOI the spec's A2 describes); under "Custom
+  pattern" the pattern's value (`%j.%a` gives `pk.{id}` on a context
+  seeded `context.acronym: 'PK'`, `%p.%m` on a press the same); under
+  "Never" none. A journal article whose pattern uses the issue's
+  symbols (`%j.v%vi%i.%a`) and is seeded `published` without an issue
+  carries no DOI, as by hand. The row "Per-version records" seeds
+  `{doiPrefix: '10.1234', doiVersioning: true}`; a later version then
+  gets a DOI of its own when it is published on screen. A journal left
+  with DOIs on and `doiVersioning: true` makes every OJS OAI list request
+  of the install answer 500 (U19's A22), which reds the OJS U19 suite on
+  that fleet: a probe or test that seeds it on a journal sets "DOI
+  Versioning" back to "No" on screen before it ends (U19 harness,
+  2026-09-26, journal; U45 harness, 2026-09-26, three apps).
+- `registrationAgency`, `automaticDoiDeposit` (OJS, OPS; U45): Settings
+  › Distribution › "DOIs" › "Registration". `registrationAgency` is the
+  "Registration Agency" list's option value, the agency plugin's name:
+  `crossrefplugin` ("Crossref", journal and preprint server) or
+  `dataciteplugin` ("DataCite", journal); anything else, the label
+  included, is a 400 naming this app's. The list offers an agency only
+  while its plugin is enabled, and every agency plugin is off on a new
+  journal and preprint server (the Plugins grid's "Crossref Manager
+  Plugin" and "DataCite Manager Plugin" rows unticked, no row at all),
+  so the key needs `plugins: {<agency>: {enabled: true}}` in the same
+  request (400 otherwise). `automaticDoiDeposit` (boolean, "Enable
+  automatic depositing") shows only once an agency is chosen, so it
+  needs `registrationAgency` (400 otherwise); without it the box is
+  unticked. The agency block's fields are the plugin's settings and ride
+  in `plugins.<agency>.settings`, each as the block shows it: Crossref
+  `depositorName` ("Depositor name") and `depositorEmail` ("Depositor
+  email"), both required by the tab's "Save" (a 400 without them, or
+  with an address it refuses), a journal's `crossmark` (boolean, the
+  "Crossmark" box) and `updatePolicyDoi` ("Update Policy DOI", shown
+  while "Crossmark" is ticked or "DOI Versioning" is "Yes"), `username`,
+  `password`, `testMode` (boolean, "Testing"); DataCite `username`
+  ("Username (symbol)"), `password`, `testMode`, `testUsername`,
+  `testPassword`, `testDOIPrefix`. A box is a string, a tick box a
+  boolean; a field the block lacks is a 400, and so is an agency's
+  `settings` without `registrationAgency` naming it (the plugin has no
+  settings window of its own). Saved as the tab's "Save" saves (PUT
+  `contexts/{id}/registrationAgency`, run through its controller): the
+  body carries every field of the block, those not given as the block
+  shows them (empty, unticked), so the context stores
+  `registrationAgency`, `automaticDoiDeposit` and one plugin row per
+  field (`password` `''`, `testMode` `0`, …), as by hand. A kind the
+  agency does not accept (Crossref on a journal: `publication`,
+  `issue`, `peerReview`; DataCite: `publication`, `issue`,
+  `representation`; Crossref on a preprint server: `publication`) among
+  `enabledDoiTypes`, or the new context's `publication` alone when the
+  key is not given, is a 400: the tab's "Save" would untick it without a
+  word, so that path is driven on screen. Saved after `plugins` and the
+  "Setup" keys. Parity fact: with `doiPrefix`, Crossref's two depositor
+  fields and, on a journal, `publisherInstitution` and an ISSN (below),
+  Crossref counts as configured, so the DOIs page offers "Deposit All"
+  and the block opens without "Plugin requirements not met"; without the
+  journal's publisher and ISSN it opens with that notice and the DOIs
+  page has no "Deposit All". The Registration tab's block and the kind
+  narrowing are the tab's, so disabling the agency's plugin (which sets
+  the agency back to "None") is driven on screen: `enabled: false` on
+  the plugins key does not run the plugin's own disable. OMP ships no
+  agency plugin: both keys are 400s there (its tab reads "No
+  Registration Agency Enabled") (U45 harness, 2026-09-26).
+- `publisherInstitution`, `onlineIssn`, `printIssn` (OJS only; U45):
+  Settings › Journal › "Masthead", the "Publisher", "Online ISSN" and
+  "Print ISSN" boxes, a non-empty string as typed (an empty box is the
+  key left out; an ISSN the box refuses, "This is not a valid ISSN.",
+  check digit included, is a 400). The Masthead's "Save" posts the whole
+  form; each key writes its row alone. Crossref reads them (the
+  requirements notice, "counts as configured", the publish warnings).
+  OMP and OPS answer 400: a press's and a preprint server's Masthead
+  have no such boxes (U45 harness, 2026-09-26).
 - `submitWithCategories` (boolean): the "Categories" radios of Settings ›
   Workflow › Submission › "Metadata", under "Should the submitting author
   be asked to select a category when they make a new submission?": `true`
@@ -777,6 +871,10 @@ Keys:
   matches the window's (a boolean would store the type `bool`). Unticked
   is the fresh state (no row). OMP and OPS answer 400 on the name (U19
   harness, 2026-09-26).
+  The registration agency plugins (`crossrefplugin`, `dataciteplugin`)
+  are off on every fresh journal and preprint server; their `settings`
+  are the DOIs "Registration" tab's agency block and go with
+  `registrationAgency` (above), never alone (U45 harness, 2026-09-26).
 - `themeOptions` (U13 harness, 2026-09-24, three apps): Settings ›
   Website › Appearance › "Theme", a map from an option of the context's
   theme (a scratch context always has the "Default Theme") to its value,
@@ -1550,6 +1648,10 @@ App-specific keys:
   Issue and Schedule Only"), not a published one; an article published at
   once into a future issue comes only from the workflow's "Assign To
   Future Issue and Publish Immediately" (U10 claim check K2, 2026-09-24).
+  Such a seeded scheduled article is stored at the Submission stage (with
+  a DOI when DOIs are on), where the workflow's own scheduling leaves it
+  in Production: the DOIs page lists it only through its DOI and drops it
+  once the DOI is cleared (U45 claim check K3, 2026-09-26).
   When "Publish Issue" publishes that issue later, the article keeps
   today as its own publication date, not the issue's "Date Published"
   (U51 claim check K1, 2026-09-25).
@@ -1777,10 +1879,7 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   "Notify All Authors", U30), `reviewerRecommendations[]` (Settings ›
   Workflow › Review "Reviewer Recommendations", U29), the remaining
   submission-intake settings (the checklist and the privacy statement,
-  U58), the DOI settings on a press and a preprint server (the journal's
-  are built, U19) and the DOIs "Registration" tab's
-  `registrationAgency`, ISSNs (the online ISSN
-  is typed on Masthead, U13), `licenseUrl` (copied
+  U58), `licenseUrl` (copied
   into a publication when it is published, so it must be set before a
   `published` seed; sync rr14, 2026-09-22), and an OJS issue's title or
   description (`issues[]` itself is built, U08, its cover too, U13).
