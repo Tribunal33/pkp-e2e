@@ -1662,12 +1662,61 @@ Implementation: `shared/php/api/v1/_test/PKPTestController.php` and the
 builders in `shared/php/classes/testing/` (`PKPBootstrapSeeder`,
 `PKPContextScenarioBuilder`, `PKPSubmissionScenarioBuilder`, `Spec`,
 `UserSeeder`, `ContextFactory`, `LibraryFileSeeder` (both `libraryFiles[]`
-keys), and `ApiCall`, which runs an app API
+keys), `SiteSettingsSeeder` (`POST site`, app-neutral, no subclass), and
+`ApiCall`, which runs an app API
 controller's own action on the JSON body a screen sends, for the keys
 that save through one). Each app subclasses them under
 `apps/<app>/php/api/v1/_test/` and `apps/<app>/php/classes/testing/`. The
 JavaScript client is `pkpApi` in `shared/playwright/support/api.js`
-(`bootstrapProbe`, `bootstrap`, `createContext`, `createSubmission`).
+(`bootstrapProbe`, `bootstrap`, `createContext`, `createSubmission`,
+`setSite`).
+
+## `POST site`
+
+Sets the site's own settings, the one record every context, worker and
+fleet shares, the way Administration › Site Settings saves them: the
+tab's "Save" sends `PUT index/api/v1/site`, whose request turns each empty
+string into null before the site service's own validate and edit, and a
+locale left null has its row deleted. The client is
+`pkpApi.setSite(spec)`. The body names at least one key (`{}` is a 400);
+any other key is a 400.
+
+- `title` (U60): "Site Setup" › "Settings" › "Site Name". A locale map
+  (`{en: "…", fr_CA: "…"}`) or a bare string for the site's primary
+  locale (`en`). The map is the whole field: a site locale it does not
+  name is emptied, as the tab's other language box left empty is (the
+  tab posts `title[en]=…&title[fr_CA]=` with the French box empty), and
+  `""` or null empties a locale. `title: ""` is the install state, no
+  `title` row at all, which the tab itself cannot return to: its "Save"
+  refuses an empty Site Name ("This field is required.", nothing sent),
+  while the service does not check the site's own required fields (U60
+  A4). A French-only map is stored for the same reason. Refusals (400):
+  a locale the site lacks (`title.de`), a number, a list, a non-string
+  locale value. The response is `{title: {locale: text}}`, `{}` when
+  empty.
+
+Facts a suite meets:
+
+- Every fleet starts with no Site Name, and every shipped suite reads
+  the site that way: the site's home page has an empty browser title and
+  an empty hidden heading, its header shows the application's logo (alt
+  "Open Journal Systems", "Open Monograph Press", "Open Preprint
+  Systems") linked to the site's home, and the Administration screens'
+  editorial header reads the application's name as plain text, their
+  browser tabs "Site Settings | Open Journal Systems". U19 asserts the
+  site-wide OAI "Repository Name" is empty, and the site's own emails
+  print the name where `{$siteTitle}` stands. With a name, all of these
+  show it (the editorial header as a link).
+- The site's address opens the only context while the install has one
+  (a freshly reset fleet has `publicknowledge` alone): a test that reads
+  the site's own home page seeds a scratch context first.
+- A test that sets `title` changes what every test reading a site page
+  sees, and the serial project runs up to four workers: it carries
+  `@solo` (harness.md "Project chain", as U08 S8 does) and puts back
+  `title: ""` in a `finally`, even when it fails midway. The request
+  reads the site row under the same lock as the context scenario's
+  `bulkEmails`, so the two never write each other's value out (four of
+  each at once over two servers, U60 harness).
 
 ## The base context has plain defaults
 

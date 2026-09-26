@@ -111,7 +111,9 @@ else has their username repeated twice (`editor.diana` becomes
 **Maxlength trap.** The login form's password input carries
 `maxlength="32"`, and the `sectioneditor.*` passwords are longer than that.
 `LoginPage.fillPassword()` removes the attribute before filling, so tests
-never hit the limit.
+never hit the limit. Profile › Password's three boxes carry the same
+`maxlength="32"`, and a scratch user's default password (the username
+twice) can be longer: fill them the same way (U60 claim check K1).
 
 ## Login flow internals
 

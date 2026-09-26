@@ -6,7 +6,7 @@ confirmed dead (it stays here with its evidence) or ruled out of scope.
 
 Sources (removed from the tip 2026-08-25, reachable in git history): the six crosswalks in `.reports/phase0-feature-map/` (their UNASSIGNED
 lists, consistent with `synthesis.md` §4) + `RULINGS.md`'s probe-derived
-dead-code additions. **18 parked atoms** + **37 noted dead-code/defect
+dead-code additions. **18 parked atoms** + **38 noted dead-code/defect
 candidates attached to claimed atoms**. (PLUG-028 moved to FEATURE-MAP's
 Out-of-scope tail — see RULINGS.md. Two candidates that rested solely on
 scratched pre-reset evidence were dropped 2026-08-21 per the reset doctrine —
@@ -567,3 +567,13 @@ until their specs exist. Do not force-claim the defects themselves.
     `187f0f40d`, ops `61cd158ce3`, lib/pkp `76a315591b`, ui-library
     `03d1cee2`). Resolves: maintainer confirmation as dead code (removal
     candidates).
+38. **OMP's legacy site-setup form template** — attached to **U60**
+    (AFFM-224; claimed; the Site settings spec's note f-omp1 names the
+    commit). `omp/templates/controllers/tab/settings/siteSetup/form/siteSetupForm.tpl`
+    posts to `tab.settings.AdminSettingsTabHandler`, which no longer
+    exists in OMP or lib/pkp; no handler or template includes the file,
+    and Administration › "Site Settings" › "Appearance" › "Setup" is the
+    Vue `PKPSiteAppearanceForm` on all three apps. Last touched in the
+    2024-05-29 template sweep (`78ed38462`). Code-verified 2026-09-26
+    (U60 spec author; checkouts omp `72a01a026`, lib/pkp `1ad4a14bb2`).
+    Resolves: maintainer confirmation as dead code (removal candidate).

@@ -245,6 +245,28 @@ behind a line; that scratch is deleted after review.
 - Site Settings › "Site Setup" › "Bulk Emails" has no journal ticked, and
   "Security" › "Minimum password length (characters)" reads 6, on all
   three test installs. Live-read 2026-09-25 (`.reports/U53/cc-K3.md`).
+- Site Settings › "Security" › "Enable rate limiting" is unticked, with
+  "Maximum attempts" 5 and "Lockout duration (seconds)" 300 stored, and
+  "Site Setup" › "Settings" › "Disable aggregated reviewer statistics" is
+  unticked. All three apps, 2026-09-26 (`.reports/U60/cc-K1.md`).
+- The site's principal contact ("Site Setup" › "Information") is the
+  application's name in both English and French, and `admin@mail.test` in
+  English only. All three apps, 2026-09-26 (`.reports/U60/cc-K2.md`).
+- Security audit logging is off: `[logs] log_audit` is commented out in
+  the test configuration, as in `config.TEMPLATE.inc.php`, so a site
+  "Security" save writes no audit line. All three apps, 2026-09-26
+  (`.reports/U60/cc-K4.md`).
+- `plugins/themes/` holds only `default`, so the site's "Theme" list offers
+  "Default Theme" alone; at the install state the tab shows Noto Sans and
+  `#1E6292` (OJS also "Include the current issue's table of contents"
+  ticked). The site's "Sidebar" offers "Language Toggle Block" alone,
+  unticked; the "Developed By" block is disabled on the site. All three
+  apps, 2026-09-26 (`.reports/U60/cc-K3.md`, `cc-K4.md`).
+- A removed site "Logo" has its file deleted (its address answers 404); a
+  removed "Site style sheet" stays at `public/site/styleSheet.css` (U60
+  A6), so after the U60 claim check each checkout holds a harmless sheet
+  there that no page links. All three apps, 2026-09-26
+  (`.reports/U60/cc-K3.md`, `cc-K4.md`).
 - A seeded submission carries files only where `files[]` (OJS, OMP:
   "Submission Files") or `reviewRounds[].files[]` (a round's "Files for
   Review") names them, a galley's file aside; OPS refuses both (400). A
@@ -340,9 +362,12 @@ behind a line; that scratch is deleted after review.
 - The compromised-password check is a site setting, off on every fleet
   (Administration › Site Settings › Security, "Check passwords against
   compromised password databases" unticked), so Profile › Password accepts
-  `password1234`; ticked, the tab refused `qwerty123456` on all three apps
-  even with outbound HTTP dead. Live-probed 2026-09-03/04, all three apps
-  (`.reports/U03/pG` P32; `.reports/U03/cc-K6.md` K6-1).
+  `password1234`; ticked, Profile › Password and the Register page refuse
+  `qwerty123456` with "This password has appeared in data leaks. Please
+  choose a different, strong password." The installs carry no local list
+  (`lib/pkp/registry/blacklistedPasswords.txt` is absent), so the ticked
+  check asks Have I Been Pwned online and needs the network. All three
+  apps, 2026-09-26 (`.reports/U60/cc-K1.md`).
 - PDF full text is not indexed, so a search on galley content finds nothing.
   The Search page. harness.md states it; U15 finding A11 says no galley
   text of any type reaches the index on any install (a product defect, not

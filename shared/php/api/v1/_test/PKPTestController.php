@@ -20,6 +20,7 @@
  * - POST bootstrap             — declarative base seed (warm calls no-op)
  * - POST scenarios/context     — scratch context
  * - POST scenarios/submission  — submission at a declared end-state
+ * - POST site                  — the site's own settings (SiteSettingsSeeder)
  *
  * Every mutating request runs under Mail::fake() (seeding-side email is
  * dropped; only test-action mail reaches Mailpit) and inside a DB
@@ -46,6 +47,7 @@ use PKP\security\Validation;
 use PKP\testing\PKPBootstrapSeeder;
 use PKP\testing\PKPContextScenarioBuilder;
 use PKP\testing\PKPSubmissionScenarioBuilder;
+use PKP\testing\SiteSettingsSeeder;
 use PKP\testing\SpecException;
 
 abstract class PKPTestController extends PKPBaseController
@@ -79,6 +81,7 @@ abstract class PKPTestController extends PKPBaseController
         Route::post('session', $this->session(...))->name('_test.session');
         Route::post('scenarios/context', $this->contextScenario(...))->name('_test.scenarios.context');
         Route::post('scenarios/submission', $this->submissionScenario(...))->name('_test.scenarios.submission');
+        Route::post('site', $this->siteSettings(...))->name('_test.site');
     }
 
     /**
@@ -182,6 +185,15 @@ abstract class PKPTestController extends PKPBaseController
                 return parent::send($view, $data, $callback);
             }
         });
+    }
+
+    /**
+     * The site's own settings, saved as Administration › Site Settings
+     * saves them (U60). App-neutral, so no app subclass.
+     */
+    public function siteSettings(Request $illuminateRequest): JsonResponse
+    {
+        return $this->runBuilder(fn () => (new SiteSettingsSeeder())->seed((array) $illuminateRequest->json()->all()));
     }
 
     /**

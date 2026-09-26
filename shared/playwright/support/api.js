@@ -80,6 +80,17 @@ class PkpApi {
         return this._post(`${API_BASE}/scenarios/submission`, spec);
     }
 
+    /**
+     * Set the site's own settings, as Administration › Site Settings saves
+     * them (scenarios.md "POST site"). Site-wide: serial project only, and
+     * the test puts back what it changed (`{title: ''}` is the install state).
+     *
+     * @param {object} spec {title}
+     */
+    async setSite(spec) {
+        return this._post(`${API_BASE}/site`, spec);
+    }
+
     async _post(url, data) {
         const response = await this.context.post(url, {
             data,
