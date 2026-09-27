@@ -16,17 +16,20 @@
  * not run"). Here all three passes always run, in order, whatever the
  * earlier ones returned; the exit is non-zero if any pass failed.
  *
- * Between pass 1 and pass 2 of a whole-suite run the fleet is reset
- * (reset.js) and bootstrapped again (the setup project), about 10 s. The
+ * A whole-suite run starts from a fresh install, as a CI shard does: the
+ * fleet is reset (reset.js) and bootstrapped (the setup project) before
+ * pass 1, about 8 s, so what filtered runs, probes and claim checks left
+ * since the last full run does not pile up. It is reset and bootstrapped
+ * again between pass 1 and pass 2 (CI does this one too). The
  * site-level @solo tests re-save every context of the install: after an app
  * pass the fleet holds hundreds, and U57 alone took 20.7 of the OPS solo
  * pass's 29.8 min; on a fresh install its three tests take about 1.5 min
  * (.reports/site-variant/feasibility.md). The serial and solo specs seed
  * what they need, so nothing depends on what the app pass left. A run
  * with a filter (file or folder names, --grep, --grep-invert, --last-failed,
- * --only-changed) keeps the database: filtered runs are the ones that share
+ * --only-changed) skips both resets and keeps the database: filtered runs are the ones that share
  * a fleet with another runner (a test author beside the harness agent), and
- * a reset would wipe that runner's seeds. --no-reset keeps it on a
+ * a reset would wipe that runner's seeds. --no-reset skips both on a
  * whole-suite run too. The app pass's database is gone afterwards; its
  * error contexts and traces stay in <out>/app.
  *
@@ -182,7 +185,7 @@ async function resetFleet(outRoot) {
             rest.push(arg);
         }
     }
-    const resetBeforeSerial = !callerArgs.includes('--no-reset') && !isFiltered(rest);
+    const resetFleetRun = !callerArgs.includes('--no-reset') && !isFiltered(rest);
 
     const passes = [
         {name: 'app', projects: ['shared', appName], deps: true},
@@ -192,7 +195,7 @@ async function resetFleet(outRoot) {
     const failed = [];
     let ranTests = 0;
     for (const [i, pass] of passes.entries()) {
-        if (pass.name === 'serial' && resetBeforeSerial) {
+        if (resetFleetRun && (pass.name === 'app' || pass.name === 'serial')) {
             const {ok, output, seconds} = await resetFleet(outRoot);
             if (interrupted) {
                 console.log(`test-app: ${appName}: interrupted, the remaining passes did not start`);
@@ -200,10 +203,10 @@ async function resetFleet(outRoot) {
             }
             if (!ok) {
                 process.stdout.write(output);
-                console.log(`test-app: ${appName}: the reset before the serial pass failed; the serial and solo passes did not start`);
+                console.log(`test-app: ${appName}: the reset before the ${pass.name} pass failed; it and the passes after it did not start`);
                 process.exit(1);
             }
-            console.log(`test-app: ${appName}: fleet reset and bootstrapped again before the serial pass (${seconds} s)`);
+            console.log(`test-app: ${appName}: fleet reset and bootstrapped before the ${pass.name} pass (${seconds} s)`);
         }
         const args = [
             ...pass.projects.map((p) => `--project=${p}`),

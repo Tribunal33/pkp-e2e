@@ -322,7 +322,7 @@ All commands run from the pkp-e2e root. `ojs` below stands for any of
 ```bash
 npx playwright install chromium      # one-time, installs Chromium
 npm run test:ojs -- --project=setup  # seed the test DB (cold ~1-3 min; warm <1s no-op)
-npm run test:ojs                     # full run for one fleet: the three passes (app, serial, solo)
+npm run test:ojs                     # full run for one fleet: reset, the three passes (app, serial, solo), reset before serial
 npm run test:ojs -- --project=ojs    # only the app project (name varies per app); a --project is one plain invocation
 npm run test:ojs -- --ui             # Playwright UI mode — best for iterating (one plain invocation)
 PWDEBUG=1 npm run test:ojs           # step-through
@@ -347,13 +347,15 @@ error contexts. A `test-app: pass n/3 (…)` line opens and closes each
 pass in the console. A `--project`, `--ui` or `--list` makes it one plain
 `playwright test` invocation, as before.
 
-A whole-suite run resets the fleet between the app pass and the serial
-pass (`reset.js`, then the setup project, quietly; one `test-app: … fleet
-reset` line), so a whole-suite run must not share its fleet with another
-runner. A run with a filter (file or folder names, `--grep`,
-`--grep-invert`, `--last-failed`, `--only-changed`) keeps the database,
+A whole-suite run resets the fleet before the app pass, so it starts
+from a fresh install as a CI shard does and what filtered runs, probes
+and claim checks left does not pile up, and again between the app pass
+and the serial pass (`reset.js`, then the setup project, quietly; one
+`test-app: … fleet reset` line each, about 8 s). So a whole-suite run
+must not share its fleet with another runner. A run with a filter (file or folder names, `--grep`,
+`--grep-invert`, `--last-failed`, `--only-changed`) skips both resets,
 because filtered runs are the ones that share a fleet (a test author
-beside the harness agent); `--no-reset` keeps it on a whole-suite run
+beside the harness agent); `--no-reset` skips them on a whole-suite run
 too. The app pass's database is gone after the run; its error contexts
 and traces stay in `<out>/app`.
 

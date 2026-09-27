@@ -641,6 +641,13 @@ trips.
   reaches. Also from the code only: `deleteReports()` passes a list
   inside a list to `withReportIds()` (no screen sends it). **Watch
   condition**: the upstream fix lands; then the class should vanish.
+  **Fix landed 2026-09-27** on pkp-lib `main` (`26ae6431b5`, separate
+  deletes for the comment's task and its reports' tasks); the OJS, OMP
+  and OPS `lib/pkp` pointers (`037ef44252`, `a9767b7f14`, `cdca81c767`)
+  do not carry it yet. Since the same day a whole-suite `test:<app>`
+  resets the fleet before the app pass, so local finals run on the
+  colliding numbering every time (H3RESET2: OPS S5 the only red of 379)
+  until the pointers move; then re-run `collide.js` and retire the entry.
   A second read in S5 red twice in the diagnosis runs: OJS line 738, the
   "Email" window still open 30 s after "Send Email" (its own entry, "Users & Roles \"Email\" dialog still open").
 
