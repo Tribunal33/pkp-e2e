@@ -685,6 +685,40 @@ function resultLines(panel) {
 }
 exports.resultLines = resultLines;
 
+/**
+ * Expect a users import's "Results" panel to say that every account of
+ * the file was imported, in one of the two forms the server's PHP decides
+ * (U63 T-ojs-3): the success sentence alone, or "Import/Export errors:"
+ * with the "…password could not be imported as is. … The user has been
+ * imported." line for each account of the file and no other line. On PHP
+ * 8.4 a file from an installation of this version gives the first; on an
+ * older PHP every bcrypt hash counts as "stored another way" and gives the
+ * second. Either way every account is imported.
+ *
+ * @param {import('@playwright/test').Locator} panel
+ * @param {{usernames: string[], successText: string, newPasswordLine: (username: string) => string}} expected
+ */
+async function expectEveryUserImported(panel, {usernames, successText, newPasswordLine}) {
+    const flat = (t) => (t || '').replace(/\s+/g, ' ').trim();
+    const everyLine = usernames.map((u) => flat(newPasswordLine(u))).sort();
+    await expect
+        .poll(
+            async () => {
+                const text = flat(await panel.innerText());
+                const lines = (await panel.getByRole('listitem').allInnerTexts()).map(flat).sort();
+                if (text === flat(successText) && lines.length === 0) return 'every user imported';
+                const heading = await panel.getByRole('heading', {name: 'Import/Export errors:', exact: true}).count();
+                if (heading === 1 && !text.includes(flat(successText)) && JSON.stringify(lines) === JSON.stringify(everyLine)) {
+                    return 'every user imported';
+                }
+                return {text, lines};
+            },
+            {timeout: T, message: 'every account of the file imported (success sentence, or a new-password line for each)'}
+        )
+        .toBe('every user imported');
+}
+exports.expectEveryUserImported = expectEveryUserImported;
+
 // ---------------------------------------------------------------------------
 // Users XML Plugin {OJS OMP}
 // ---------------------------------------------------------------------------

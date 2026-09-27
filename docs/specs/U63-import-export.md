@@ -336,7 +336,7 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
     |-------------|---------|
     | plain text, at least the site's minimum length (Settings bullet 8) | the account signs in with it |
     | plain text, shorter, or empty | the line "The imported user "{username}" has a plain password that is not valid. The user has not been imported."; the account is created all the same, and no password signs in to it ⚠ [A4](#a4) <sup>td13</sup> |
-    | stored the way this installation stores passwords | the account signs in with the original password |
+    | stored the way this installation stores passwords | the account signs in with the original password; on a server whose PHP is older than 8.4, the password counts as stored another way instead (the next row and the paragraph under the table) ⚠ [A16](#a16) |
     | stored another way, for a new account | a new password is made, the account must change it at its first sign-in, the "Journal Registration" email ("Press Registration" on a press) sends it to the account's address, and the line reads "The imported user "{username}" password could not be imported as is. A new password is been send to the user email. The user has been imported." |
 
     A user with no password in the file at all makes the whole file
@@ -364,11 +364,13 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
 28. **Moving roles between journals.** A file exported from one
     journal and imported into another journal of the same installation
     gives the same accounts, unchanged, the roles of the same names in
-    the second journal (Rule 23, second case), and sends no email. For
-    an account whose password was saved before the installation changed
-    how it stores passwords, and not signed in with since, the results
-    show the line of Rule 25's last row, though its password is
-    unchanged ([A15](#a15)). <sup>l</sup>
+    the second journal (Rule 23, second case), and sends no email. Some
+    accounts get the line of Rule 25's last row all the same, though
+    every password is unchanged ([A15](#a15)): with PHP 8.4 or later on the
+    server, for an account whose password was saved before the
+    installation changed how it stores passwords and not signed in with
+    since; with an older PHP, for every account whose password is stored
+    the way this installation stores passwords ([A16](#a16)). <sup>l</sup>
 
 **PubMed XML Export Plugin** {OJS}
 
@@ -851,7 +853,11 @@ journal to another) with throwaway accounts. <sup>sc</sup>
      "Upload File", choose that file and press "Import Users": the
      "Results" tab reads "The import completed successfully. Users with
      usernames and email addresses that are not already in use have been
-     imported, along with accompanying user groups." (Rules 22, 28).
+     imported, along with accompanying user groups."; on a server whose
+     PHP is older than 8.4 it reads instead "Import/Export errors:" with
+     the line of Rule 25's last row for each account of the file and no
+     other line ⚠ [A16](#a16). Either way every account of the file is
+     imported (Rules 22, 28).
    - **B's users**: B's Settings › Users & Roles › "Users" lists "moss"
      as Copyeditor and "fern" as Author; the roles' masthead choice and
      start dates are left unread ⚠ [A2](#a2) ⚠ [A3](#a3) (Rules 23,
@@ -1068,6 +1074,8 @@ Left out of the scenarios above, by reason:
   - A14 ("Export Users" with no row ticked; Rule 27)
   - A15 (an existing account given a password stored another way; Rules
     25, 28)
+  - A16 (a new account imported on a server whose PHP is older than 8.4;
+    Rule 25; scenario 6 marks the line for existing accounts)
   - OJS1 (the DOAJ list's issue window heading; Rule 36)
   - OJS2 (the "DOAJ Export Plugin" row kept on the Plugins list while
     "DOAJ Plugin" is off; Rule 3)
@@ -1120,6 +1128,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | A Native XML export with nothing ticked opens an empty results tab: the server fails | 🐞 | minor · crash: server | — |
 | [A13](#a13) | A users file the import cannot read ends in an empty "Results" tab: the server fails | 🐞 | minor · crash: server | — |
 | [A15](#a15) | For an existing account, the results say a new password was sent, but nothing is sent and nothing changes | 🐞 | minor | — |
+| [A16](#a16) | On a server whose PHP is older than 8.4, a users import treats every password stored the installation's own way as stored another way | 🐞 | user-visible | — |
 | [OJS1](#ojs1) | The DOAJ list's issue link opens the issue's window headed "DOI Plugin Settings" | 🐞 | minor | — |
 | [OJS2](#ojs2) | With "DOAJ Plugin" off, the Plugins list still offers "DOAJ Export Plugin" and its "Import/Export Data" | 🐞 | minor | — |
 | [OJS3](#ojs3) | Once "NLM Title Abbreviation" is saved empty, the PubMed file's journal title is empty | 🐞 | minor | — |
@@ -1272,6 +1281,24 @@ password is been send to the user email. The user has been imported.";
 no email goes out and the account's own password still signs in. The
 manager is told of a password change that never happened. {OJS OMP}
 Basis: probe. <sup>f-a15</sup>
+
+<a id="a16"></a>
+**A16 — Below PHP 8.4, every stored password counts as stored another way** · 🐞 · user-visible.
+A password in the file stored the way this installation stores
+passwords should keep working (Rule 25, third row). On a server whose
+PHP is older than 8.4, which the application still supports, it takes
+the last row instead: the "Results" tab reads "The imported user
+"{username}" password could not be imported as is. A new password is
+been send to the user email. The user has been imported." for every
+such account, even in a file exported from another journal of the same
+installation. A new account made from such a file is given a new
+password it must change at its first sign-in, sent by the "Journal
+Registration" email ("Press Registration" on a press); an existing
+account keeps its password and gets no email ([A15](#a15)). With PHP
+8.4 or later, only a password stored another way gets the line.
+{OJS OMP}
+Basis: test run, 2026-09-27 (the results line, OJS and OMP); code (what
+happens to the passwords). <sup>f-a16</sup>
 
 ### OJS
 
@@ -1690,10 +1717,14 @@ account `UserCreated` (`USER_REGISTER`, "User Created"; subject
 `emails.userRegister.subject` "Journal Registration" / OMP "Press
 Registration") to the account, sender the acting user, reply-to the
 context's `contactEmail` / `contactName`; otherwise the hash is kept.
+The check passes no cost, so it measures against PHP's default bcrypt
+cost, 12 from PHP 8.4 and 10 before, while the installation stores
+cost 12 (`Validation::encryptCredentials()`, pkp/pkp-lib#11933): below
+PHP 8.4 a hash stored the installation's way is flagged (A16).
 What an export writes for each account's password is not described
 here. Site minimum:
 `minPasswordLength`, 6 on a fresh install (Site settings, Rule 10).
-Live-probed 2026-09-27, OJS and OMP (Rules 23–25, 28; Actors row 4;
+Live-probed 2026-09-27, OJS and OMP on PHP 8.4 (Rules 23–25, 28; Actors row 4;
 Side effects bullet 2; Settings bullet 8): the three mismatch cases each
 gave the mismatch line and no account; an existing account kept its
 name and password and gained the file's role; role names match exactly
@@ -2283,7 +2314,23 @@ for any user, but only a new account is saved with the new password and
 sent `UserCreated`. Live-probed 2026-09-27, OJS and OMP (note l): an
 existing account given a cost-10 file password, and a seeded account
 moved before its first sign-in, got the line, no mail and kept their
-passwords.
+passwords. On PHP older than 8.4 (A16) the same code path keeps an
+existing account's password and sends it nothing; read from the code,
+not driven.
+
+<a id="fn-f-a16"></a>
+**f-a16** — Note l: `password_needs_rehash()` is called without a cost,
+so below PHP 8.4 it flags the cost-12 hashes the installation writes;
+the application requires PHP 8.2.0 or later
+(`PKPApplication::PHP_REQUIRED_VERSION`).
+Test run 2026-09-27, OJS and OMP on PHP 8.3 (scenario 6, both
+attempts): the "Results" tab read "Import/Export errors:" and the
+"…could not be imported as is. … The user has been imported." line for
+every account of the file moved from journal A to B (the Site
+Administrator, the manager, moss and fern, each signed in through the
+login form before the export) instead of the success sentence; the same
+scenario read the success sentence on PHP 8.4. The new account's new
+password and email are read from the code (note l), not driven.
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `ExportPublishedSubmissionsListGridCellProvider::getCellActions()`

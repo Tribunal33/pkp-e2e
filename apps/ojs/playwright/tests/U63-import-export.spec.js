@@ -65,6 +65,7 @@ const {
     resultLines,
     usersXmlFile,
     usersInFile,
+    expectEveryUserImported,
     md5,
     nativeWithIssue,
     nativeWithUnknownElement,
@@ -797,12 +798,20 @@ test.describe('Import & export', () => {
         const allFile = testInfo.outputPath('users-all-from-a.xml');
         fs.writeFileSync(allFile, all.text);
 
-        // B's import: the success sentence (Rules 22, 28).
+        // B's import: every account of the file imported (Rules 22, 28).
         const usersB = new UsersXmlPage(page, b);
         await usersB.goto();
         await usersB.upload(allFile);
         const results = await usersB.pressImport();
-        await expect(results).toHaveText(new RegExp(`^\\s*${USERS_IMPORTED.replace(/[.]/g, '\\.')}\\s*$`));
+        // Every account of the file imported, in either of the two forms
+        // the server's PHP decides (T-ojs-3): the success sentence, or the
+        // "…could not be imported as is. … The user has been imported." line
+        // for each account.
+        await expectEveryUserImported(results, {
+            usernames: inFile.map((u) => /** @type {string} */ (u.username)),
+            successText: USERS_IMPORTED,
+            newPasswordLine: NEW_PASSWORD_SENT,
+        });
 
         // B's users: moss Copyeditor, fern Author (Rules 23, 28); A2 and A3
         // left unread.
