@@ -462,20 +462,30 @@ function status() {
 // ---------------------------------------------------------------------------
 // SessionStart hook
 
-/** The nearest ancestor process named `claude` (the hook runs under it). */
-function claudePid() {
+/**
+ * The nearest ancestor process named `claude` (the hook runs under it) and
+ * its argv: `-p` without stream-json is a one-shot (the bot's title, tag
+ * and summary queries run `claude -p` in the slot), `--input-format
+ * stream-json` a bot session, anything else an interactive session.
+ */
+function claudeProc() {
     let pid = process.ppid;
-    for (let i = 0; i < 6 && pid > 1; i++) {
+    for (let i = 0; i < 8 && pid > 1; i++) {
         try {
             const comm = fs.readFileSync(`/proc/${pid}/comm`, 'utf8').trim();
-            if (comm === 'claude' || comm.startsWith('claude')) return pid;
+            if (comm === 'claude' || comm.startsWith('claude')) {
+                const argv = fs.readFileSync(`/proc/${pid}/cmdline`, 'utf8').split('\0').filter(Boolean);
+                const bot = argv.includes('stream-json');
+                const oneShot = !bot && (argv.includes('-p') || argv.includes('--print'));
+                return {pid, bot, oneShot};
+            }
             const stat = fs.readFileSync(`/proc/${pid}/stat`, 'utf8');
             pid = Number(stat.slice(stat.lastIndexOf(')') + 2).split(' ')[1]);
         } catch {
             break;
         }
     }
-    return process.ppid;
+    return {pid: null, bot: false, oneShot: false};
 }
 
 const RULES = [
@@ -495,6 +505,8 @@ function hook(input) {
     }
     const s = slotOfDir(cwd || process.cwd());
     if (!s) return null;
+    const proc = claudeProc();
+    if (proc.oneShot) return null; // the bot's one-shot queries: no context, no registration
     const reg = readRegistry();
     const entry = reg.slots[s.n];
     const cur = snapshot(s.dir);
@@ -504,17 +516,21 @@ function hook(input) {
     const ownedByThis = entry && entry.session === sessionId;
     if (!ownedByThis) {
         // A session the bot did not place here (a manual `claude` in the slot).
-        if (entry && liveEntry(entry) && !(entry.manualPid && entry.manualPid === claudePid())) {
+        if (entry && liveEntry(entry) && !(entry.manualPid && entry.manualPid === proc.pid)) {
             head.push(`[slot s${s.n} · WARNING: this slot is in use by ${entry.manualPid ? `a manual session (pid ${entry.manualPid})` : `bot thread ${short(entry.thread)}${entry.title ? ` "${entry.title}"` : ''}`}]`);
             body.push('Do not run tests, resets, checkouts or git operations here; tell the user and pick a free slot (`node bin/slot.js status`).');
         } else if (entry && entry.state === 'blocked') {
             head.push(`[slot s${s.n} · manual session · slot BLOCKED by thread ${short(entry.thread)} (${(entry.reasons || []).join('; ')})]`);
             body.push('That thread left unfinished work here. Do not discard it unless the user says so.');
+        } else if (proc.bot || !proc.pid) {
+            // A bot session the registry does not know (the bot runs unpatched,
+            // or its acquire failed): describe the slot, register nothing.
+            head.push(`[slot s${s.n} · session not registered by the bot]`);
         } else {
             withRegistry((r) => {
-                r.slots[s.n] = {state: 'live', manualPid: claudePid(), session: sessionId, since: now(), title: 'manual session'};
+                r.slots[s.n] = {state: 'live', manualPid: proc.pid, session: sessionId, since: now(), title: 'manual session'};
             });
-            head.push(`[slot s${s.n} · manual session registered (pid ${claudePid()})]`);
+            head.push(`[slot s${s.n} · manual session registered (pid ${proc.pid})]`);
         }
         body.push(...describeSnapshot(cur));
     } else {
