@@ -811,7 +811,7 @@ trips.
   U12, U13, U18, U28, U29, U35, U42, U54, U55; new U13 A11 🐞: keywords
   lose the typed order on every save); galley seeds carry `seq`.
   **Watch condition**: a position read on a list whose query has no
-  unique ORDER BY. **Sighted 2026-09-27** (U61 session's OPS final, Mac, reset database, auto workers): OPS U54 S3 "create a role" red at `RolesTab.openRowActions` because the new "Data editor" landed as the Roles list's first row, which carries no "Settings" arrow (U54 A1, A13); green alone (`.reports/U61/final-run-ops.log`, `alone-ops-U54S3.log`). The diagnosis is the next daily session's. Again 2026-09-27 (U52 session's OPS final, VM, reset database, auto workers), green alone (`.reports/U52/final-run-ops.log`, `alone-ops-U54S3-U14S5.log`).
+  unique ORDER BY. **Sighted 2026-09-27** (U61 session's OPS final, Mac, reset database, auto workers): OPS U54 S3 "create a role" red at `RolesTab.openRowActions` because the new "Data editor" landed as the Roles list's first row, which carries no "Settings" arrow (U54 A1, A13); green alone (`.reports/U61/final-run-ops.log`, `alone-ops-U54S3.log`). The diagnosis is the next daily session's. Again 2026-09-27 (U52 session's OPS final, VM, reset database, auto workers), green alone (`.reports/U52/final-run-ops.log`, `alone-ops-U54S3-U14S5.log`). Again 2026-09-27 (U63 session's OMP final, Mac, reset database, auto workers): OMP U54 S6 "remove a role", "Spare desk" the first row, green alone (`.reports/U63/final-run-omp.log`, `alone-omp-reds.log`).
 
 - **OPS U61 S4 "deleting the stored copies": the header read took the
   admin's unread-task count** (CI push run 36289097857 at `b57a99c`,
@@ -828,6 +828,13 @@ trips.
   `getByRole('menu').last()`, which can be the first row's menu still
   closing; S16 once in 95, the Review Details window showing "-" for both
   reviewer comments. **Watch condition**: a sighting in a final or on CI.
+
+- **OPS U39 S2 "the Publisher Library on the Settings tab": the row's "Edit" link
+  never shows** (`LibraryList.openStrip`, `LibraryPages.js:352`, 30 s on
+  the "Journal guide" row's controls). Sighted 2026-09-27 (U63 session's
+  OPS final, Mac, reset database, auto workers), green alone
+  (`.reports/U63/final-run-ops.log`, `alone-ops-reds.log`). **Watch
+  condition**: a second sighting; then read its trace.
 
 ## Companion branches — pkp-e2e branches waiting on app PRs
 

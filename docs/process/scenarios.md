@@ -304,6 +304,14 @@ Keys:
   sends: that is the state after an item saved while they were
   disabled, and it differs from "disabled after the item" only in the
   first message's row and email they would have had.
+  For a Users XML import test {OJS OMP}: the file's `<user>` needs
+  `<user_groups>`, `<masthead>` and `<date_registered>`, or the import
+  fails with a server error; the registration email goes out only for a
+  password the site must replace (`encryption` set, a cost-10 bcrypt or
+  an md5 hash). A `users[]` account keeps its cost-4 seed hash until it
+  first signs in on screen (seed-facts.md), so moving it to another context (U63 Rule 28) adds
+  the "new password" line and a move after one sign-in does not: seed
+  the state the case names (U63 claim check, 2026-09-27).
 - `orcid`: the state of the ORCID settings tab, saved through the same
   service the tab's form uses. The defaults below apply only when the
   `orcid` key is given at all; a context created without it arrives with

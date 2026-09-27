@@ -242,6 +242,13 @@ behind a line; that scratch is deleted after review.
   Publicknowledge, scratch contexts and journals made on Hosted Journals,
   all three apps, 2026-09-25 (`.reports/U53/cc-K1.md` K1-5, `cc-K2.md`,
   `cc-K3.md` K3-8).
+- Accounts a scenario seeds (`users[]`) store their password as a bcrypt
+  hash at cost 4 (the shared roster uses the app's own hash, patterns.md
+  "Sessions"); the first sign-in through the login form rehashes it at the
+  installation's cost. So a seeded account that never signed in on screen
+  counts as "stored another way" when a Users XML move takes it to
+  another context (the U63 Import & export spec, Rule 28). OJS and OMP,
+  2026-09-27 (U63 claim check K3, `.reports/U63/cc-K3.md` K3-8).
 - Site Settings › "Site Setup" › "Bulk Emails" has no journal ticked, and
   "Security" › "Minimum password length (characters)" reads 6, on all
   three test installs. Live-read 2026-09-25 (`.reports/U53/cc-K3.md`).
@@ -315,7 +322,16 @@ behind a line; that scratch is deleted after review.
   which reads "Loading" forever because its list request answers a server
   error (500) on every load of those pages, so each visit adds a crash to
   a probe's run record (all three apps, 2026-09-27, U62 claim check K1,
-  K3). Maintainer ruling 2026-08-20; harness.md "config.test.inc.php".
+  K3); and on OJS every PubMed XML export ("Export Articles", "Export
+  Issues") and every DOAJ "Export" with "Validate XML before the export
+  and registration." ticked, which answer 500 with a "Validation errors:"
+  page and no download because their schemas load files from the web
+  (unticked, the DOAJ file downloads; a missing ISSN is not the cause,
+  `issn` and `eissn` are optional), while a DOAJ "Register" and the daily
+  DOAJ task queue deposit jobs that fail at connection and leave the rows
+  "Submitted" (2026-09-27, U63 claim check K4, `.reports/U63/cc-K4.md`
+  K4-1, K4-5, K4-9). Maintainer ruling 2026-08-20; harness.md
+  "config.test.inc.php".
 - The public files directory is `public_files_dir = public`, relative to
   the app root as the config template requires (generated since
   2026-09-24; before, an absolute path). Pictures uploaded through a
@@ -853,6 +869,10 @@ config-file settings.
   journal a `published: true` article carries no galley, so its assigned
   editor still reads the "Assign a user to create galleys…" notice after
   publication. Production entry, OJS and OMP, 2026-09-19 (U33 ccK2).
+- A `published: true` seed sits at stage 6: its workflow shows it
+  published, and no "Stages" filter of a submission list matches it.
+  Native XML "Export" list, all three apps, 2026-09-27 (U63 claim check
+  K2, `.reports/U63/cc-K2.md` K2-8).
 - The Roles grid (Settings › Users & Roles › Roles) has one live box per
   stage column and row: one click saves the change and shows its notice,
   but the box keeps its old look until the page is reloaded (a second
@@ -1014,6 +1034,18 @@ config-file settings.
   DOI Assignment" shown as "Upon reaching the production stage"), so every
   saved DOI change on a server's DOIs page writes an Activity Log line. All
   three apps, 2026-09-26 (U45 claim check K1, K2, K3, K4).
+- {OJS} "DOAJ Plugin" arrives ticked under "Generic Plugins" on
+  `publicknowledge` and every scratch journal (it can be unticked), with
+  its API Key empty and automatic deposit off; "NLM Title Abbreviation" is
+  empty. Tools › "Import/Export" lists a journal's DOAJ Export, DataCite,
+  Crossref, Native XML, Users XML and PubMed tools; a press's Native XML,
+  Tab Delimited, Users XML and ONIX 3.0; a preprint server's Crossref and
+  Native XML. The order of the lines is not fixed: every tool sorts
+  equal, so the list follows the order the plugins register in, which
+  moves as plugin settings are written anywhere on the install (a full
+  suite run showed a new journal's order differ from a fresh install's).
+  Assert the set, never the order. All three apps, 2026-09-27 (U63 claim
+  check K1, K4; U63 OJS final, `.reports/U63/test-ojs-findings.md` T-ojs-2).
 - An "Accept Submission" whose "Notify Reviewers" email is sent marks every
   completed review considered (the reviewer row reads "Reviewer Thanked",
   "Read Review" gone); with the email skipped the review stays "Review

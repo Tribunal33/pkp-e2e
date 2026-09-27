@@ -6,7 +6,7 @@ confirmed dead (it stays here with its evidence) or ruled out of scope.
 
 Sources (removed from the tip 2026-08-25, reachable in git history): the six crosswalks in `.reports/phase0-feature-map/` (their UNASSIGNED
 lists, consistent with `synthesis.md` §4) + `RULINGS.md`'s probe-derived
-dead-code additions. **18 parked atoms** + **42 noted dead-code/defect
+dead-code additions. **18 parked atoms** + **43 noted dead-code/defect
 candidates attached to claimed atoms**. (PLUG-028 moved to FEATURE-MAP's
 Out-of-scope tail — see RULINGS.md. Two candidates that rested solely on
 scratched pre-reset evidence were dropped 2026-08-21 per the reset doctrine —
@@ -645,4 +645,28 @@ until their specs exist. Do not force-claim the defects themselves.
     `.maintainer`, `.homepage`, `.status`. Code-verified 2026-09-27
     (U62 spec author; checkouts ojs `3162c105bf`, omp `72a01a026`, ops
     `e9f6f4f550`, lib/pkp `1ad4a14bb`). Resolves: maintainer
+    confirmation as dead code (removal candidates).
+43. **Unmounted export grids** — attached to **U63** (GRID-073, GRID-074,
+    GRID-075, GRID-102, GRID-103, GRID-105; claimed). The OJS
+    `PubIdExportIssuesListGridHandler`, `PubIdExportRepresentationsListGridHandler`
+    and `PubIdExportSubmissionsListGridHandler`, and the OPS
+    `PubIdExportRepresentationsListGridHandler`,
+    `PubIdExportSubmissionsListGridHandler` and
+    `ExportPublishedSubmissionsListGridHandler`, are loaded by no template,
+    component or script in any checkout: the DOI agencies' Tools pages
+    now show only the "DOI management has moved" notice (the DOIs spec's
+    Rule 44), and OPS has no DOAJ page. The OJS
+    `ExportPublishedSubmissionsListGridHandler` and
+    `ExportPublishedPublicationsListGridHandler` stay live on the DOAJ
+    page. Locale keys the import/export pages display nowhere:
+    `plugins.importexport.users.import.sendNotify`, `.continueOnError`,
+    `.dataFile`, `.confirmUsers`, `.warning`, `.encryptionMismatch`,
+    `.usersWereImported`, `.errorsOccurred`,
+    `plugins.importexport.users.export.exportByRole`, `.exportAllUsers`
+    (the grid's own "Export All Users" is used instead),
+    `plugins.importexport.native.exportSubmissionsSelect`,
+    `plugins.importexport.pubmed.export`, `.export.articles`,
+    `.export.selectArticle`, `.export.issues`, `.export.selectIssue`. Code-verified 2026-09-27 (U63
+    spec author; checkouts ojs `3162c105bf`, omp `72a01a0263`, ops
+    `e9f6f4f550`, lib/pkp `1ad4a14bb2`). Resolves: maintainer
     confirmation as dead code (removal candidates).
