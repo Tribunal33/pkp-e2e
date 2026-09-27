@@ -403,9 +403,10 @@ U65, the book purchase route into U69. The `BOOK_*` notifications and the OPS
 journal-relay plugin are parked in UNASSIGNED (neither is a live OMP or OPS
 surface).
 
-Build order: U71 and U75 any time (their seeds exist). U72, then U73, then
-U69: the book page reads chapters and formats, so it is built after the
-seed keys they add. U74 last. Once U72 has added `chapters[]`, U45 gets a
+Build order: U71 and U75 any time (their seeds exist). The OMP book chain
+runs one row at a time, since each row reads what the one before seeds and
+most edit the same OMP submission builder: U70, U68, U72, U73, U69, U74.
+PROGRESS's row notes carry each row's dependencies and watch-outs. Once U72 has added `chapters[]`, U45 gets a
 revision for its chapter and format DOI rows.
 
 ### U71 — Internal Review stage {OMP}
