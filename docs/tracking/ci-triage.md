@@ -790,13 +790,17 @@ trips.
   one locale meet a unique violation on `email_templates_default_data`.
   An app race that a person meets only when two managers add the same
   language at once; for the suite, a flake source whenever parallel tests
-  seed French contexts. No spec holds it yet (U57 *Languages & locales*
-  is pending). Maintainer's call 2026-09-26: not a realistic problem for
+  seed French contexts. The spec holds it as U57 *Languages & locales*
+  A6 ([U57](../specs/U57-languages-and-locales.md#a6)). Maintainer's call 2026-09-26: not a realistic problem for
   a journal; handle it on the test side, and take it upstream only if it
   keeps firing with no reasonable test-side fix. **Watch condition**: a
   French-context seed or save red with that 500 on CI; then install French
   once at bootstrap, before the parallel project, so later French
-  contexts never race the first install.
+  contexts never race the first install. Sighted locally 2026-09-27 in
+  the U57 OPS test author's run (S5 and S7 ticking French in one second,
+  S7 500): every on-screen "Forms"/"Submissions" tick re-installs the
+  email data, so a bootstrap install alone would not cover it; U57's S5
+  and S7 run in one serial group in each app since.
 
 - **Order asserted on lists the app does not order** (settled
   2026-09-26 as one class: OPS U13 S1/S10 keywords, OMP U10 S5 masthead,

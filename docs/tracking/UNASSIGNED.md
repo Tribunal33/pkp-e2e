@@ -6,7 +6,7 @@ confirmed dead (it stays here with its evidence) or ruled out of scope.
 
 Sources (removed from the tip 2026-08-25, reachable in git history): the six crosswalks in `.reports/phase0-feature-map/` (their UNASSIGNED
 lists, consistent with `synthesis.md` §4) + `RULINGS.md`'s probe-derived
-dead-code additions. **18 parked atoms** + **43 noted dead-code/defect
+dead-code additions. **18 parked atoms** + **44 noted dead-code/defect
 candidates attached to claimed atoms**. (PLUG-028 moved to FEATURE-MAP's
 Out-of-scope tail — see RULINGS.md. Two candidates that rested solely on
 scratched pre-reset evidence were dropped 2026-08-21 per the reset doctrine —
@@ -670,3 +670,20 @@ until their specs exist. Do not force-claim the defects themselves.
     spec author; checkouts ojs `3162c105bf`, omp `72a01a0263`, ops
     `e9f6f4f550`, lib/pkp `1ad4a14bb2`). Resolves: maintainer
     confirmation as dead code (removal candidates).
+
+44. **The site "Languages" list's journal branch** — attached to **U57**
+    (AFFM-216, GRID-005; claimed; the Languages & locales spec's
+    Reference table documents the waiver). `AdminLanguageGridHandler`
+    adds the "UI" and "Forms" columns and makes "Primary locale" set a
+    journal's primary language when `_canManage()` holds (one journal on
+    the site, a journal in the request, a manager role), and
+    `LanguageGridRow` offers "Reload defaults" only with a journal in the
+    request. The list is mounted by `lib/pkp/templates/admin/settings.tpl`
+    alone, and `AdminHandler::authorize()` refuses every Administration
+    request made at a journal's address, so the request never has a
+    journal there: the columns, the journal-primary radio and the site
+    row's "Reload defaults" (AFFM-216) render nowhere, and the
+    `saveLanguageSetting` / `setContextPrimaryLocale` ops the grid
+    inherits are unreached from it. Code-verified 2026-09-27 (U57 spec
+    author; checkouts ojs `3162c105bf`, lib/pkp `1ad4a14bb2`). Resolves:
+    maintainer confirmation as dead code (removal candidate).

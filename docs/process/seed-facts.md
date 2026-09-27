@@ -175,8 +175,41 @@ behind a line; that scratch is deleted after review.
   K1-8, K2-6, `.reports/U56/ccK2`).
 - A journal created on Administration › Hosted Journals has the principal
   contact typed on the create form and no technical support contact; the
-  form requires "Languages" and "Primary locale", and "Country" is optional.
-  All three apps, 2026-09-23 (U07 claim check K2, `.reports/U07/ccK2`).
+  form requires "Languages" and "Primary locale"; "Country" carries no
+  Required mark, but "Save" without one is refused ("This is not a valid
+  string." / "This is not a valid country."). A journal created there is
+  not enabled, so its public pages send a signed-out visitor to the login
+  page. All three apps, 2026-09-23 (U07 claim check K2, `.reports/U07/ccK2`);
+  Country and enabling 2026-09-27 (U57 claim check K2,
+  `.reports/U57/ccK2/c-02a-create-no-country-H-*`).
+- A context created with French under "UI" (seeded or on Hosted Journals)
+  already holds the French default texts (privacy statement, For
+  Readers/Authors/Librarians, author guidelines, wizard help) and, on a
+  journal, French reviewer-recommendation names, although French is not a
+  "Forms" language; a context created with English alone has none until
+  French is ticked under "Forms". On a press and a server the French author
+  guidelines and checklist read "##default.contextSettings.authorGuidelines##"
+  and "##default.contextSettings.checklist##" (the server's privacy
+  statement too), on `publicknowledge` as well. Settings › Website › Setup;
+  `/fr_CA/about/submissions`. All three apps, 2026-09-27 (U57 claim check
+  K2).
+- On Settings › Website › Setup › "Languages" only the Site
+  Administrator's rows carry an arrow ("Reload defaults"); a manager,
+  editor or production editor sees no arrow. All three apps, 2026-09-27
+  (U57 claim check K2).
+- The site's "Install Locale" window offers 79 languages on OJS (including
+  "Unknown language (und)") and 69 on OMP and OPS; installed, every one but
+  English carries the "*". On the fleets one site-level language change
+  takes 5–15 s (every context is re-saved). Administration › Site Settings ›
+  Site Setup › Languages, three apps, 2026-09-27 (U57 claim check K1,
+  `.reports/U57/ccK1`).
+- `publicknowledge` has no block placed in its "Sidebar" on any app, so its
+  public pages show no Language block although French is a UI language.
+  Public home, three apps, 2026-09-27 (U57 claim check K3).
+- The reading-language choice is kept per browser: the session cookie
+  (`<APP>TESTSID`) lasts 30 days and carries the choice across signing out
+  and in; a fresh browser signing in as the same account reads the primary
+  language. Three apps, 2026-09-27 (U57 claim check K3).
 - The Citation Style Language plugin is off on a scratch context, so its
   article, book and preprint pages show no "How to Cite" until a manager
   enables it on Settings › Website › "Plugins". All three apps, 2026-09-23
