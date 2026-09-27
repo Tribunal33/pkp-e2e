@@ -154,9 +154,9 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
    Export Plugin" and "DataCite Export/Registration Plugin" only say
    that DOI management has moved ([DOIs](U45-dois.md), Rule 44; their
    empty heading is [DOIs A20](U45-dois.md#a20)). A press's "ONIX 3.0
-   Monograph Export Plugin" page is outside the scope of these specs. A
-   press's "Tab Delimited Content Import Plugin" works only from the
-   server's command line: its row on the Plugins list has no
+   Monograph Export Plugin" page belongs to *ONIX metadata & export*
+   {OMP}. A press's "Tab Delimited Content Import Plugin" works only
+   from the server's command line: its row on the Plugins list has no
    "Import/Export Data", yet the Tools list links its name, which opens
    a blank page ⚠ [OMP1](#omp1). <sup>v</sup> <sup>td4</sup>
 
@@ -1994,10 +1994,10 @@ filter showed "No Items" (OJS9).
 yet `display()` renders `$this->getTemplateResource('index.tpl')` and
 the plugin has no `templates/` directory. It is still in the
 `importexport` category, so `importexport.tpl` links it. The OMP
-ONIX 3.0 exporter (`plugins/importexport/onix30`) and the CSV importer
-are outside the campaign's scope (maintainer scope drop: OMP formats &
-ONIX, OMP-only exporters). The Crossref and DataCite pages: the DOIs
-spec, Rule 44 and its notes. Live-probed 2026-09-27 (Rule 6): the OJS
+ONIX 3.0 exporter (`plugins/importexport/onix30`) belongs to
+*ONIX metadata & export*; the CSV importer's Tools link is OMP1's. The
+Crossref and DataCite pages: the DOIs spec, Rule 44 and its notes.
+Live-probed 2026-09-27 (Rule 6): the OJS
 Crossref and DataCite pages and the OPS Crossref page read only "DOI
 management has moved. Please see the DOI management and DOI settings
 pages."; OMP's ONIX 3.0 page opens under its name; OMP's "Tab

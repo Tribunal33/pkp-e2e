@@ -30,7 +30,7 @@ preprint's workflow menu, and none of the screens in this file exist there.
 
 On a press, everything in this file describes the External Review stage. A
 press also offers a separate, earlier Internal Review stage [OMP1](#omp1).
-Its screens are documented separately. <sup>q</sup>
+Its screens belong to *Internal Review stage* {OMP}. <sup>q</sup>
 
 ## Actors & permissions
 
@@ -608,7 +608,7 @@ App-specific:
       scenario 1, and scenarios 2–12 run identically on the press
       [OMP1](#omp1).
     - **The workflow menu**: it also carries the separate "Internal Review"
-      stage entry, whose screens are documented separately.
+      stage entry, whose screens belong to *Internal Review stage*.
     - **Control**: the External Review screen is scenario 1's, with nothing
       added by the press's extra stage: the same panels, buttons and status
       box. <sup>s</sup>
@@ -687,7 +687,7 @@ Left out of the scenarios above, by reason:
   - round cancelled: the author and reviewer email steps (Side effects; *Editorial decision recording*)
   - the reviewer suggestions panel when suggestions are enabled (Settings; *Reviewer suggestions*, scenario 2)
   - the Reviewers panel's actions, the decision wizard, the participants and the file-manager mechanics (Cross-feature; *Reviewer assignment & management*, *Editorial decision recording*, *Stage participants*, *Submission files*)
-  - the press's separate, earlier Internal Review stage [OMP1](#omp1) (Purpose; the Internal Review stage's own spec)
+  - the press's separate, earlier Internal Review stage [OMP1](#omp1) (Purpose; *Internal Review stage* {OMP})
 
 ## Findings register
 
@@ -894,8 +894,8 @@ A press runs an additional Internal Review stage between Submission and
 External Review. It has the same round machinery, its own decision labels
 ("Send to External Review" closes an internal round), and its own revision
 file spaces. A monograph may also skip it entirely (scenario 13). The
-External Review stage this file documents is unchanged by its presence. The
-Internal Review stage's own screens are documented separately.
+External Review stage this file documents is unchanged by its presence. Its
+own screens belong to *Internal Review stage* {OMP}.
 Basis: code (the stage roster and decision list are press-specific by
 design); parity and the Internal Review menu entry observed live
 (2026-07-31). <sup>[f-omp1](#fn-omp1)</sup>
@@ -1595,8 +1595,8 @@ at `51f0c727` (run 35882950730).
 stage entry in the workflow menu labeled `workflow.review.internalReview`
 "Internal Review". The skip path (scenario 13) is the submission-stage
 decision `SKIP_INTERNAL_REVIEW`, labeled with the press's send-to-external
-wording. Internal-stage screens, decisions and divergences are outside this
-file's scope (campaign scope ruling). Live parity probe
+wording. Internal-stage screens, decisions and divergences belong to
+*Internal Review stage* {OMP}. Live parity probe
 2026-07-31: the External Review round matched the OJS record panel-for-panel
 and button-for-button, and the "Internal Review" menu entry rendered.
 

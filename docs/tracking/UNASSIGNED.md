@@ -6,13 +6,13 @@ confirmed dead (it stays here with its evidence) or ruled out of scope.
 
 Sources (removed from the tip 2026-08-25, reachable in git history): the six crosswalks in `.reports/phase0-feature-map/` (their UNASSIGNED
 lists, consistent with `synthesis.md` §4) + `RULINGS.md`'s probe-derived
-dead-code additions. **18 parked atoms** + **44 noted dead-code/defect
+dead-code additions. **29 parked atoms** + **45 noted dead-code/defect
 candidates attached to claimed atoms**. (PLUG-028 moved to FEATURE-MAP's
 Out-of-scope tail — see RULINGS.md. Two candidates that rested solely on
 scratched pre-reset evidence were dropped 2026-08-21 per the reset doctrine —
 if real, their specs' own probes will resurface them.)
 
-## Parked atoms (18)
+## Parked atoms (29)
 
 ### AFFW-701, AFFW-703, AFFW-704 — legacy author-dashboard round surfaces
 - What: the old author-dashboard templates' editor-message link, author
@@ -130,6 +130,29 @@ if real, their specs' own probes will resurface them.)
 - Why parked: no feature-visible behavior of its own.
 - Resolves: none needed — permanent infra atom.
 
+### NOTIF-056..065 — `NOTIFICATION_TYPE_BOOK_*` (books for review)
+- What: ten OJS notification types (book requested, created, updated,
+  deleted, mailed, settings saved, submission assigned, author assigned,
+  denied, removed) declared in OJS's `APP\notification\Notification` and
+  titled in its `NotificationManager` with
+  `plugins.generic.booksForReview.*` keys.
+- Why parked: leftovers of the old third-party "Books for Review" plugin.
+  OJS bundles no such plugin and nothing in the three apps raises these
+  types. They are not an OMP surface, although Phase 0 listed them among
+  the OMP drops. Moved here from FEATURE-MAP's out-of-scope list by the
+  2026-09-27 scope extension. Code-verified 2026-09-27 (checkout ojs
+  `3162c105bf`).
+- Resolves: maintainer confirmation as dead code (removal candidates).
+
+### PLUG-024 — OPS `preprintToJournal` (journal relay)
+- What: a plugin that relays a posted preprint into a journal submission.
+- Why parked: not an OPS surface. The atlas swept an untracked local folder
+  in the sweep's checkout. OPS main does not bundle the plugin: a
+  submodule of that name was committed by accident in 2024 and removed in
+  `e56f9e8a9f` ("Remove accidental submodule"). Moved here from FEATURE-MAP's
+  out-of-scope list by the 2026-09-27 scope extension.
+- Resolves: none needed; claim it only if OPS ever bundles it.
+
 ## Dead-code / defect candidates attached to claimed atoms (RULINGS + spec-time additions)
 
 These atoms ARE claimed in FEATURE-MAP; the notes below travel with them to
@@ -212,12 +235,13 @@ until their specs exist. Do not force-claim the defects themselves.
     the waiver). `ManageProofFilesGridHandler` is mounted only from
     `templates/controllers/grid/files/proof/manageProofFiles.tpl`, which
     only OMP's `PublicationFormatGridHandler` renders inside the
-    publication-format window (outside the campaign per FEATURE-MAP's U46
-    note); on a journal or preprint server no screen reaches it. The
+    publication-format window (U73, *Publication formats & proof terms*,
+    since the 2026-09-27 scope extension); on a journal or preprint server
+    no screen reaches it. The
     window's form, AFFW-612, is U36's atom and shares this verdict (the
     submission-files spec's Reference table, 2026-09-23).
-    Code-verified 2026-09-19 (checkouts as above). Resolves: out of scope on
-    OMP; dead on OJS and OPS pending maintainer confirmation.
+    Code-verified 2026-09-19 (checkouts as above). Resolves: on OMP, the
+    U73 spec; dead on OJS and OPS pending maintainer confirmation.
 13. **NOTIF-021..028 normal-level notices with no reader** — attached to
     **U34** (claimed; the decision-recording spec's register entry A5
     documents it). `EditorDecisionNotificationManager::updateNotification()`
@@ -274,10 +298,10 @@ until their specs exist. Do not force-claim the defects themselves.
     selection windows list no proof stage
     (`SubmissionFilesCategoryGridDataProvider::_getFileStagesByStageId()`),
     so on a journal or preprint server no screen opens it; OMP overrides
-    the op for its publication-format proof files (outside the campaign).
+    the op for its publication-format proof files (U73).
     Code-verified 2026-09-23 (U36 spec author; checkouts ojs `38781720df`,
-    lib/pkp `f8bacd765`, ui-library `5d138aa9`). Resolves: out of scope on
-    OMP; dead on OJS and OPS pending maintainer confirmation.
+    lib/pkp `f8bacd765`, ui-library `5d138aa9`). Resolves: on OMP, the
+    U73 spec; dead on OJS and OPS pending maintainer confirmation.
 18. **AFFW-594 revision-only wizard with nothing to revise, liveness
     unknown** — attached to **U36** (claimed; the submission-files spec's
     Reference table notes it). The message "There are no files for you to
@@ -626,7 +650,7 @@ until their specs exist. Do not force-claim the defects themselves.
     is `// FIXME` and no row links to it, so the payment "Details" window
     exists nowhere. `NOTIFICATION_TYPE_CONFIGURE_PAYMENT_METHOD` has its
     message and style in lib/pkp but nothing on a journal raises it (OMP
-    raises it from the publication-format sale, out of scope). OJS
+    raises it from the publication-format sale, U69's purchase path). OJS
     `UserHandler::payMembership()` is routed but no template links to it,
     and `OJSPaymentManager::createQueuedPayment()` marks the membership
     type deprecated (`error_log` + `assert(false)`), so the "Association
@@ -699,3 +723,15 @@ until their specs exist. Do not force-claim the defects themselves.
     inherits are unreached from it. Code-verified 2026-09-27 (U57 spec
     author; checkouts ojs `3162c105bf`, lib/pkp `1ad4a14bb2`). Resolves:
     maintainer confirmation as dead code (removal candidate).
+
+45. **Internal-review decisions no button offers, and a dead author-dashboard
+    branch** — attached to **U71** (OMP Internal Review, section H).
+    `ResubmitInternal` exists as a class but is not registered in
+    `APP\decision\Repository::getDecisionTypes()`;
+    `RecommendResubmitInternal` is registered, and the ui-library's
+    `useWorkflowDecisions.js` has handlers for both, but no internal-stage
+    control offers either (the stage has no Resubmit choice). OMP's
+    `AuthorDashboardHandler::_getNotificationRequestOptions()` has no caller
+    and no parent in lib/pkp; it is the only code that asks for NOTIF-020.
+    Code-verified 2026-09-27 (checkout omp `72a01a026`). Resolves: the U71
+    spec confirms by probe; then maintainer confirmation as dead code.

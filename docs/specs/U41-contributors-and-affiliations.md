@@ -339,8 +339,8 @@ screen, Rule 12): <sup>e</sup>
 - *Article landing page & reading* (no spec yet; the press counterpart is
   the OMP catalog's book page) owns the landing screen. The contributor
   block on it is described here (Rule 14) as this feature's reader
-  surface. A press's chapter-level author lists belong to the catalog
-  features.
+  surface. A press's chapter-level author lists belong to
+  *Chapters & work type* {OMP}.
 - **User profiles and the masthead** use a separate, plain-text
   affiliation field, not this feature's institution records. The two meet
   only when a new submission copies the submitting author's profile
@@ -1386,7 +1386,7 @@ author onto the new publication (id nulled, `publicationId` re-keyed;
 affiliations, contributor roles and CRediT roles re-persisted with the
 clone; `seq` preserved) and re-points `primaryContactId` at the clone of
 the old primary contact. OMP's override additionally re-links chapter
-authors (catalog territory); OJS/OPS overrides touch no author code.
+authors (*Chapters & work type*); OJS/OPS overrides touch no author code.
 Live-confirmed 2026-08-28 (OJS): the new version's copy edits
 independently and the "Primary Contact" badge rides onto the clone.
 
@@ -1893,7 +1893,7 @@ an affiliation (A1's footnote).
 Live-probed 2026-08-28 (scratch Edited Volume): the book page credited
 only "Vera Editorova (ed)" with role "Volume editor" while the catalog
 listing line kept the full contributor list. Work types and chapters
-are catalog territory; recorded here because the reader-facing
+belong to *Chapters & work type*; recorded here because the reader-facing
 contributor block is this spec's surface.
 
 <a id="fn-f-ops1"></a>

@@ -1826,11 +1826,13 @@ Basis: probe, 2026-09-26. <sup>f-ops5</sup>
 ## Footnotes — mechanism & evidence
 
 <a id="fn-a"></a>
-**a** — Scope: the FEATURE-MAP row marks a press's chapter and
-publication-format DOI rows (`DoiListPanelOMP.vue` `chapter`,
-`representation`; `omp/api/v1/_dois/BackendDoiController` chapter and
-format routes) out of scope; the `publication` and `file` rows are this
-spec's. Agency plugins in the checkouts (ojs `3162c105bf`, omp
+**a** — Scope: a press's chapter and publication-format DOI rows
+(`DoiListPanelOMP.vue` `chapter`, `representation`;
+`omp/api/v1/_dois/BackendDoiController` chapter and format routes) are left
+to a later revision of this spec, their objects owned by
+*Chapters & work type* and *Publication formats & proof terms*; the
+`publication` and `file` rows are this spec's. Agency plugins in the
+checkouts (ojs `3162c105bf`, omp
 `72a01a026`, ops `e9f6f4f550`, lib/pkp `1ad4a14bb2`, ui-library
 `03d1cee2`): `ojs/plugins/generic/crossref`, `ojs/plugins/generic/datacite`,
 `ops/plugins/generic/crossref`; `omp/plugins/generic/` holds none (no class
@@ -2969,9 +2971,9 @@ a journal and a press listed no draft.
 | Item row, expanded view, edit and save | an item | AFFM-157 · AFFM-158 · AFFU-230 · AFFU-231 · AFFU-232 · AFFU-233 · AFFU-234 · AFFU-236 |
 | "View all" versions window | an item's expanded view | AFFM-159 · AFFU-235 · AFFU-241 · AFFU-242 · VUE-095 |
 | Agency panel, "View Record", "Deposit DOI(s)", "View Error" | an item's expanded view | AFFM-160 · AFFU-237 · AFFU-238 · AFFU-239 · AFFU-240 · AFFU-243 |
-| Row kinds per app | the expanded table | AFFU-244 (OJS) · AFFU-246 (OPS); a press's monograph row rides the OMP delta whose chapter row is out of scope |
+| Row kinds per app | the expanded table | AFFU-244 (OJS) · AFFU-245 (OMP: its monograph row; the chapter and format rows are left to a later revision) · AFFU-246 (OPS) |
 | DOI management API | `api/v1/dois` (list, one, add, edit, delete, assign, export, deposit, mark, `depositAll`, export download) | API-016 · API-052 (OJS issues) |
-| DOI attach API | `api/v1/_dois/{publications,peerReviews,authorResponses}/{id}`, OJS `galleys`, `issues`, OPS `galleys`, OMP `submissionFiles` (chapter and format routes out of scope) | API-001 · API-050 · API-058 · API-063 |
+| DOI attach API | `api/v1/_dois/{publications,peerReviews,authorResponses}/{id}`, OJS `galleys`, `issues`, OPS `galleys`, OMP `submissionFiles` (chapter and format routes left to a later revision) | API-001 · API-050 · API-058 · API-063 |
 | Registration save | `PUT api/v1/contexts/{id}/registrationAgency` | (the contexts API, cited) |
 | Background deposits | queued jobs | JOB-008 · JOB-009 · JOB-010 · JOB-030 (OJS) |
 | Scheduled automatic deposit | daily task, OJS | JOB-045 |

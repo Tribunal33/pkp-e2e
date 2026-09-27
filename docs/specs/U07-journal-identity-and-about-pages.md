@@ -191,7 +191,7 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
    | Workflow | "Review" {OJS OMP} | [Review setup & review forms](U29-review-setup-and-review-forms.md) |
    | Workflow | "Publisher Library" ("Press Library" on a press, "Preprint Server Library" on a preprint server), "Tasks and Discussions" | *Submission & Publisher Libraries*, *Tasks & discussions* |
    | Distribution | "License" | [Publication metadata](U40-publication-metadata.md) |
-   | Distribution | "DOIs", "Search Indexing", "Statistics", "Payments" {OJS OMP}, "Access" {OJS OPS}, "Archiving" {OJS} | *DOIs*, *Search-engine metadata & analytics*, *Statistics — usage*, *Payments & APCs* (on a press the tab serves the sale of publication formats, which no spec describes), *Subscriptions & open access control*, *Archiving & preservation* |
+   | Distribution | "DOIs", "Search Indexing", "Statistics", "Payments" {OJS OMP}, "Access" {OJS OPS}, "Archiving" {OJS} | *DOIs*, *Search-engine metadata & analytics*, *Statistics — usage*, *Payments & APCs* (on a press the tab serves the sale of publication formats, *Monograph landing page* {OMP}), *Subscriptions & open access control*, *Archiving & preservation* |
    | Users & Roles | "Users", "Roles", "Site Access Options", "ORCID" | *Users management*, *Roles configuration* ("Roles" and "Site Access Options"), [ORCID integration](U04-orcid-integration.md) |
 
 3. **Pages outside the five.** The "Announcements", "Institutions" and

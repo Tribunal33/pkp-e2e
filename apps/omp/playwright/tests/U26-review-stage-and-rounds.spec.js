@@ -10,8 +10,8 @@
  * review minimum, OJS and OMP). Scenario 14 is
  * OPS-only. On a press the entry into External Review used throughout is the
  * Submission-stage "Send to External Review" decision (skip-internal,
- * OMP1); the Internal Review STAGE itself is out of scope by charter and no
- * test here touches its machinery.
+ * OMP1); the Internal Review STAGE itself belongs to the Internal Review
+ * stage feature (U71) and no test here touches its machinery.
  *
  * Not covered, by register ID (the spec's Coverage section is the record
  * of everything else left out): A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,

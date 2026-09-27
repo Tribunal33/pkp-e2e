@@ -344,8 +344,8 @@ App-specific:
    - **"Send to Internal Review"**: on the second monograph, press it and
      complete the wizard: the submission moves into the earlier Internal
      Review stage instead: the workflow menu shows "Internal Review" with
-     "Review Round 1"; the Internal Review stage itself is documented
-     separately (Rule 2) [OMP1](#omp1).
+     "Review Round 1"; the stage itself belongs to
+     *Internal Review stage* {OMP} (Rule 2) [OMP1](#omp1).
    - **Control**: after either move, the monograph's Submission stage shows
      its panels and no decision buttons (Rule 9).
 
@@ -524,7 +524,7 @@ A press's Submission stage offers two routes into review.
 Review Round 1. "Send to Internal Review" routes the submission into the
 earlier Internal Review stage. A journal has a single "Send for Review" route
 and no internal review stage. The Internal Review stage itself, and its own
-round machinery, are documented separately.
+round machinery, belong to *Internal Review stage* {OMP}.
 Basis: code inspection (the press's Submission-stage decision set is
 press-specific by design) + observed live (2026-08-02): both routes present
 and landing as described. <sup>[f-omp1](#fn-omp1)</sup>
@@ -787,7 +787,7 @@ apps.
 (note e): `SkipInternalReview` (primary, labeled "Send to External Review") and
 `SendInternalReview` ("Send to Internal Review") give the press its two review
 routes; `SendInternalReview` targets `WORKFLOW_STAGE_ID_INTERNAL_REVIEW`
-(the Internal Review stage, documented separately). Live-observed 2026-08-02:
+(*Internal Review stage* {OMP}). Live-observed 2026-08-02:
 "Send to External Review" opened External Review Round 1 with no internal
 round created; "Send to Internal Review" opened Internal Review Round 1.
 
@@ -857,7 +857,7 @@ roster submission — use scratch submissions so parallel tests are unaffected.
 |-------|------|------|
 | Submission stage (editorial view) | workflow → Submission stage menu entry | AFFW-286..289 |
 | Submission-stage decision buttons {OJS} | workflow Submission stage → action buttons | AFFW-290..295 |
-| Submission-stage decision buttons {OMP} | workflow Submission stage → action buttons | AFFW-296..301 (296..300 in scope; 301 Send to Internal Review routes to the OOS Internal Review stage) |
+| Submission-stage decision buttons {OMP} | workflow Submission stage → action buttons | AFFW-296..301 (296..300 in scope; 301 Send to Internal Review is cited from *Internal Review stage* {OMP}) |
 | Submission stage (author view) | My Submissions → View → Submission stage | AFFW-302, 303 |
 | Legacy author-dashboard files grid | author-dashboard tab (redirects to current workflow) | AFFW-706 · GRID-032 · GRID-033 |
 

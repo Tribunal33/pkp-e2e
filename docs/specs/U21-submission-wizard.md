@@ -1102,8 +1102,8 @@ intake filters by series. The wizard header states the type ("Submitting a
 Monograph."), "Change Submission Settings" offers the type and language, and
 an optional Series choice (default "None") sits in the For the Editors step.
 The Details step additionally lists the book's Chapters, and the Review step
-summarizes them. Chapter management itself is press tooling not detailed in
-this documentation set. Basis: code inspection; the press replaces the
+summarizes them. Chapter management itself belongs to
+*Chapters & work type* {OMP}. Basis: code inspection; the press replaces the
 section machinery by design. <sup>[fn-omp1](#fn-omp1)</sup>
 
 <a id="omp2"></a>
@@ -1392,8 +1392,8 @@ args), `PKPCitationsForm` when `citations` request/require, data sections
 required when their setting is `METADATA_REQUIRE`; `categoryIds` when
 `submitWithCategories` + categories exist) + `CommentsForTheEditors`
 (`submission.submit.coverNote` "Comments for the Editor"). OMP adds the
-chapters grid section to Details (`ChapterGridHandler`; chapter atoms are
-outside this documentation set's scope) and the `seriesId` radio in its
+chapters grid section to Details (`ChapterGridHandler`; chapter atoms belong
+to *Chapters & work type*) and the `seriesId` radio in its
 `ForTheEditors`. OPS replaces the files step with the galleys template
 section (`PreprintGalleyGridHandler` grid, AFFW-125) and splices License
 (`LicenseUrlForm`) and Relation (`RelationForm`, first field required) into
@@ -1545,8 +1545,9 @@ warning (AFFW-120); `review-reviewer-suggestions.tpl` (AFFW-121); field
 renderer `review-publication-field.tpl` with `common.noneProvided`
 (AFFW-122). OPS: `review-galleys.tpl` (`author.submit.noFiles` when empty,
 AFFW-126) + `review-license.tpl` (AFFW-127); the OPS relation panel and OMP
-chapters panel render on the same hook but their atoms sit outside this
-spec. Confirmation section: `ConfirmSubmission` form — one
+chapters panel render on the same hook; *Preprint relations* and
+*Chapters & work type* own their atoms. Confirmation section:
+`ConfirmSubmission` form — one
 `confirmCopyright` checkbox only when the context has a `copyrightNotice`
 (AFFW-092). Live-probed 2026-08-25 (scratch journal): an empty draft
 walked to Review on "Continue" alone; the "Checking your submission"

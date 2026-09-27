@@ -22,7 +22,7 @@ describes that page and the window its galleys are edited in. <sup>a</sup>
 
 A press installs no galleys: the side menu of a monograph's publication
 lists "Publication Formats" and no "Galleys". A press's publication
-formats are a different feature, outside this spec. <sup>a</sup>
+formats belong to *Publication formats & proof terms* {OMP}. <sup>a</sup>
 
 ## Actors & permissions
 

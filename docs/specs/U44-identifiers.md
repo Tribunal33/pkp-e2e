@@ -425,9 +425,10 @@ windows are the galley row's "Edit" on the Galleys page (a window headed
 - *[Submission activity log & notes](U38-submission-activity-log-and-notes.md)*:
   owns the Activity Log; this spec owns which identifier saves add a
   line to it (Side effects).
-- *Publication formats* {OMP} (no spec): owns the Publication Formats
-  page, "Format Approval" and a format's availability. This spec owns
-  the URN step of "Format Approval" (Rule 16a).
+- *Publication formats & proof terms* {OMP} (no spec yet): owns the
+  Publication Formats page, "Format Approval" and a format's
+  availability. This spec owns the URN step of "Format Approval"
+  (Rule 16a).
 
 ## Canonical scenarios
 

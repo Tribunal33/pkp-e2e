@@ -1,15 +1,15 @@
 # FEATURE-MAP — the campaign's unified feature list (Phase 0 deliverable)
 
-This file is the single home for the campaign's feature taxonomy: **70 features
-(U01–U70)** with every atlas atom assigned.
+This file is the single home for the campaign's feature taxonomy: **75 features
+(U01–U75)** with every atlas atom assigned.
 
 - **The atlas is the frozen Phase-0 inventory** (2026-07-28). It split the apps into these features and is not extended: a surface added upstream since then is noted in its feature's row here, or gets a new row (MAINTENANCE "Triage: where does a change land?").
 - **Atom count**: this map accounts for all **2,163** atoms:
-  **1,972 feature-assigned · 173 out of scope · 18 parked in UNASSIGNED.md** (13 at Phase-0 close; 5 U26-derived dead author-dashboard atoms parked later).
+  **2,066 feature-assigned · 68 out of scope · 29 parked in UNASSIGNED.md** (13 at Phase-0 close; 5 U26-derived dead author-dashboard atoms parked later; 11 parked by the 2026-09-27 scope extension, section H).
   The unclaimed count is the campaign's completeness metric.
 - **Atom IDs and modality conventions**: see `atlas/README.md`. IDs are dense per
   modality and never renumbered; ranges here (`AFFW-068..075`) are inclusive.
-- **Sources** (removed from the tip 2026-08-25, reachable in git history): `.reports/phase0-feature-map/synthesis.md` §1 (feature list and
+- **Sources** (removed from the tip 2026-08-25; they predate this repo and live in pkp-lib's history, commit `31f87969b7` on the `e2e_ng_2` branch, under `docs/product/.reports/phase0-feature-map/`): `.reports/phase0-feature-map/synthesis.md` §1 (feature list and
   order) as amended by `.reports/phase0-feature-map/RULINGS.md` (all D-leans
   accepted; Q1–Q5 as ruled; D2 superseded; U68–U70 added), atomized by the six
   crosswalk files in `.reports/phase0-feature-map/`.
@@ -17,6 +17,13 @@ This file is the single home for the campaign's feature taxonomy: **70 features
   section F: they get their own **section G — OMP catalog**, since they are
   OMP-specific features created by a scope extension, not part of the
   three-lens consensus taxonomy.
+- **U71–U75** (maintainer scope extension, 2026-09-27) get **section H — OMP
+  and OPS app-specific features** for the same reason. They bring in the
+  OMP and OPS clusters that were dropped when the campaign was OJS-only
+  (the 2026-07-02 scope ruling, carried over unchanged when all three apps
+  were adopted on 2026-07-26): OMP's Internal Review stage, chapters and
+  work type, publication formats, ONIX metadata, and OPS preprint
+  relations.
 - Apps badge is `{OJS OMP OPS}` unless shown.
 - **`Notes:` lines** carry cross-feature *riders*: where a mixed-payload atom is
   claimed by one feature but serves another, both features carry a one-line
@@ -92,7 +99,7 @@ Notes: the announcement web feed rides here (majority call recorded at U12/U18 i
 ### U13 — Article landing page & reading {OJS OPS}
 A reader lands on a published item, sees metadata/authors/versions/citation/license, and opens or downloads its files in the right viewer.
 Atoms: AFFR-046..050, 052..057, 059, 061..062, 066..068, 081..082 · ROUTE-033, 080 · PLUG-008, 017, 020, 022..023, 025..026
-Notes: OMP counterpart feature is **U69** (RULINGS: D2 superseded — one counterpart line, no absence paragraph). Forked-copy feature (RUNBOOK rule 7): OJS↔OPS surfaces are app-side copies — shared claims need cross-app probe evidence, chain check does not apply. Riders: AFFR-056's chart *display* is claimed here, its stats semantics are U64's; references display (AFFR-057) claimed here per rule 6 — U42 cites it; license display (AFFR-065) owned by U40; Crossmark (AFFR-069) owned by U45; AFFR-082's relation-notice portion is OOS (OPS preprint relations), marked at spec time; the OMP exposure of the shared landing atoms (AFFR-048, 052..057, 061, 066 · PLUG-008, 022) is covered by U69's rider.
+Notes: OMP counterpart feature is **U69** (RULINGS: D2 superseded — one counterpart line, no absence paragraph). Forked-copy feature (RUNBOOK rule 7): OJS↔OPS surfaces are app-side copies — shared claims need cross-app probe evidence, chain check does not apply. Riders: AFFR-056's chart *display* is claimed here, its stats semantics are U64's; references display (AFFR-057) claimed here per rule 6 — U42 cites it; license display (AFFR-065) owned by U40; Crossmark (AFFR-069) owned by U45; AFFR-082's relation-notice portion is cited by U75 (OPS preprint relations); the OMP exposure of the shared landing atoms (AFFR-048, 052..057, 061, 066 · PLUG-008, 022) is covered by U69's rider.
 
 ### U14 — Reader comments & moderation {OJS}
 Readers comment on published articles; moderators approve, hide, and handle reports.
@@ -150,12 +157,12 @@ Notes: ROUTE-007..008 and VUE-003 also serve the mySubmissions (U22) and reviewA
 ### U24 — Workflow screen & stage access {OJS OMP OPS}
 Any participant (author included) opens a submission's workflow and reaches the stages, tabs and tools their role allows; mechanism home for stage access.
 Atoms: AFFW-226..230, 233..234, 240..242, 244..247, 249..255, 259..274, 277..280, 282..284, 377..378, 454..456, 707 · ROUTE-005, 031, 034, 053..054, 072..073, 088 · VUE-012 · API-042
-Notes: API-042 (omnibus submissions/publications controller) is homed here; U21, U34, U40, U41 and U49 cite their endpoint clusters — riders both ways. ROUTE-072's added internalReview op is OOS (OMP Internal Review), marked at spec time.
+Notes: API-042 (omnibus submissions/publications controller) is homed here; U21, U34, U40, U41 and U49 cite their endpoint clusters — riders both ways. ROUTE-072's added internalReview op is cited by U71 (OMP Internal Review).
 
 ### U25 — Submission stage {OJS OMP OPS}
 The team screens a new submission and moves it onward (to review / skipped / declined) or removes it.
 Atoms: AFFW-286..300, 302..303, 706 · GRID-032..033
-Notes: OMP skip-internal routing (within AFFW-296..300) is in-scope parameterization; the Internal Review stage itself is OOS.
+Notes: OMP skip-internal routing (within AFFW-296..300) is in-scope parameterization; the Internal Review stage itself is U71's, including the "Send to Internal Review" button (AFFW-301) that S8 already drives.
 
 ### U26 — Review stage & rounds {OJS OMP}
 Editors run review rounds (round status, files, revisions, round decisions); authors follow and respond on the same screen.
@@ -253,13 +260,13 @@ Notes: issue pub-ids ride the same mechanism (AFFW-741, 751, AFFM-255) — rule 
 
 ### U45 — DOIs {OJS OMP OPS}
 Configure, assign, manage, register DOIs with an agency; track statuses and errors across object types.
-Atoms: AFFM-091..092, 148..160 · AFFU-210..244, 246 · AFFR-069 · ROUTE-010, 036, 058, 075 · VUE-018, 095..096 · API-001, 016, 050, 052, 058, 063 · SET-010 · JOB-008..010, 030, 045 · PLUG-009, 011
-Notes: registration-agency plugin settings owned here; Crossmark (AFFR-069) renders on U13's screen (rider). API-058's OMP chapter/publicationFormat DOI rows are OOS objects, marked at spec time; AFFU-245 (OOS) has its `publication` row covered as a U45 OMP-variant line, not a claim. Rider: JOB-062 (owned by U42) ships inside the Crossref plugin.
+Atoms: AFFM-091..092, 148..160 · AFFU-210..246 · AFFR-069 · ROUTE-010, 036, 058, 075 · VUE-018, 095..096 · API-001, 016, 050, 052, 058, 063 · SET-010 · JOB-008..010, 030, 045 · PLUG-009, 011
+Notes: registration-agency plugin settings owned here; Crossmark (AFFR-069) renders on U13's screen (rider). AFFU-245 (the OMP DOI list's row types) joined this row on 2026-09-27 (section H); the spec covers its `publication` row as an OMP-variant line, and its chapter and representation rows, with API-058's chapter/publicationFormat ops, are a revision to take once U72 adds `chapters[]` (the objects themselves are U72's and U73's). Rider: JOB-062 (owned by U42) ships inside the Crossref plugin.
 
 ### U46 — Galleys {OJS OPS}
 Editors attach, label and order the publishable files a reader will open.
 Atoms: AFFW-419, 524..531, 735..739, 752..753 · GRID-068, 101 · VUE-040 · SET-030, 042
-Notes: separate from U33 per D8; OMP's counterpart (publication formats) is out of scope. Forked-copy feature (RUNBOOK rule 7): OJS↔OPS surfaces are app-side copies — shared claims need cross-app probe evidence, chain check does not apply.
+Notes: separate from U33 per D8; OMP's counterpart (publication formats) is U73. Forked-copy feature (RUNBOOK rule 7): OJS↔OPS surfaces are app-side copies — shared claims need cross-app probe evidence, chain check does not apply.
 
 ### U47 — Media files {OJS OMP OPS}
 Manage image/media assets of a publication and link them into full-text displays.
@@ -273,7 +280,7 @@ Notes: AFFW-479 (FileManager send-to-text-editor row action) is the Body Text im
 ### U49 — Publish, schedule & versions {OJS OMP OPS}
 Editors publish/schedule/unschedule/unpublish and manage versions; OJS issue-assignment fields render here; OPS "Post the preprint" is the app variant.
 Atoms: AFFW-256, 383..384, 387..394, 422..424, 428, 435..453, 709..710 · GRID-062, 107 · VUE-084, 091 · API-057, 065 · MAIL-002, 031, 072..073 · NOTIF-035, 037, 050, 054 · JOB-050
-Notes: the publish modal owns issue-assignment fields (API-057; U52 cites its submissionPayment portion). API-065's `relate` portion is OOS (OPS preprint relations), marked at spec time. AFFW-424's OMP catalogEntry half is U70 spec-side variance (rider both ways). Riders: API-042's publish/versions cluster (owned by U24) cited here; NOTIF-038 (owned by U70) is mentionable here as a register note per synthesis.
+Notes: the publish modal owns issue-assignment fields (API-057; U52 cites its submissionPayment portion). API-065's `relate` portion is cited by U75 (OPS preprint relations). AFFW-424's OMP catalogEntry half is U70 spec-side variance (rider both ways). Riders: API-042's publish/versions cluster (owned by U24) cited here; NOTIF-038 (owned by U70) is mentionable here as a register note per synthesis.
 
 ## F. Communication, money & administration
 
@@ -290,7 +297,7 @@ Notes: publishing-mode/Access form (AFFM-096) and open-access notify (MAIL-061) 
 ### U52 — Payments & APCs {OJS}
 The journal charges fees through configured payment methods.
 Atoms: AFFW-231..232 · AFFM-094, 181..182 · AFFR-104 · ROUTE-045 · GRID-083 · API-005, 051 · MAIL-062, 075 · NOTIF-036, 047 · PLUG-041..042
-Notes: shared paymethod plugins claimed here (glossary "shared paymethod plugins only" note); pay-per-view access rides U51. Riders: ROUTE-046/052 payment ops (owned by U51) and API-057's submissionPayment portion (owned by U49) cited here.
+Notes: shared paymethod plugins claimed here (glossary "shared paymethod plugins only" note); pay-per-view access rides U51. OMP's book purchase is U69's (ROUTE-065) and its proof pricing U73's; AFFM-094's and MAIL-075's OMP direct-sales portions are cited there. Riders: ROUTE-046/052 payment ops (owned by U51) and API-057's submissionPayment portion (owned by U49) cited here.
 
 ### U53 — Users management {OJS OMP OPS}
 Managers/admins find user accounts and act on them: edit, email, disable, merge, remove.
@@ -343,8 +350,8 @@ Notes: rider — SET-052's allow_plugin_install/plugin_gallery_urls keys (owned 
 
 ### U63 — Import & export {OJS OMP OPS}
 Managers move content and users in/out as XML/CSV via Tools (native XML, users XML, PubMed, DOAJ, pub-id export lists).
-Atoms: AFFM-161..162, 164..168 · ROUTE-018 · GRID-052, 071, 073..076, 078, 102..103, 105 · VUE-019 · JOB-061 · PLUG-012, 032, 034..035
-Notes: DOAJ pair (PLUG-012 + JOB-061) included per synthesis. Riders: ROUTE-018's permissions/resetPermissions ops and AFFM-161's Permissions tab serve U40's reset tool.
+Atoms: AFFM-161..162, 164..168 · ROUTE-018 · GRID-052, 071, 073..076, 078, 102..103, 105 · VUE-019 · JOB-061 · PLUG-012, 031..032, 034..035
+Notes: DOAJ pair (PLUG-012 + JOB-061) included per synthesis. PLUG-031 (OMP's CSV import/export) joined on 2026-09-27 (section H); the spec's OMP1 already describes its Tools link. The ONIX export (PLUG-033, AFFM-169) is U74's. Riders: ROUTE-018's permissions/resetPermissions ops and AFFM-161's Permissions tab serve U40's reset tool.
 
 ### U64 — Statistics — usage {OJS OMP OPS}
 Editors see how content is read/downloaded, filter, download reports, serve COUNTER/SUSHI; the ETL pipeline feeds it.
@@ -353,8 +360,8 @@ Notes: shared filter/date-range/download mechanics homed here per D21; U65 links
 
 ### U65 — Statistics — editorial activity & reports {OJS OMP OPS}
 Editorial throughput views, user stats, monthly report email, report plugins.
-Atoms: AFFM-171 · AFFU-247..253, 269..270, 283 · VUE-024, 028, 080 · API-037, 040 · MAIL-048 · NOTIF-049, 051 · JOB-015..016, 055 · PLUG-044, 047..048
-Notes: riders — ROUTE-026's editorial/users ops (owned by U64) and API-047's report sub-op (owned by U53) cited here.
+Atoms: AFFM-171 · AFFU-247..253, 269..270, 283 · VUE-024, 028, 080 · API-037, 040 · MAIL-048 · NOTIF-049, 051 · JOB-015..016, 055 · PLUG-044, 046..048
+Notes: PLUG-046 (OMP's monograph report) joined on 2026-09-27 (section H), on the same report-plugin machinery. Riders — ROUTE-026's editorial/users ops (owned by U64) and API-047's report sub-op (owned by U53) cited here.
 
 ### U66 — Institutions {OJS OMP OPS}
 Managers maintain the institution list used by subscriptions and usage stats.
@@ -375,13 +382,56 @@ Notes: browse-by-category is a SHARED three-app surface owned by U16, not here (
 
 ### U69 — Monograph landing page {OMP}
 A reader lands on a monograph: landing incl. chapter/format display, download/purchase links, how-to-cite as displayed.
-Atoms: AFFR-051, 075..077 · ROUTE-055 · PLUG-018
-Notes: OMP counterpart of U13 (counterpart lines both ways). PLUG-018 + AFFR-051 (htmlMonographFile viewer) are IN scope here per the RULINGS clarification — the OMP analogue of U13's viewer plugins. Format/chapter AUTHORING stays out of scope. Rider: this feature covers the OMP exposure of the U13-claimed shared landing atoms (AFFR-048, 052..057, 061, 066 · PLUG-008, 022) — U13 asserts nothing about OMP. Rider: GRID-099 (owned by U68) serves this page's covers.
+Atoms: AFFR-051, 075..077 · ROUTE-055, 065 · PLUG-018
+Notes: OMP counterpart of U13 (counterpart lines both ways). PLUG-018 + AFFR-051 (htmlMonographFile viewer) are IN scope here per the RULINGS clarification — the OMP analogue of U13's viewer plugins. Format and chapter authoring are U72's and U73's; build this row after them (section H). ROUTE-065 (the payment callback) joined on 2026-09-27: the buy link, sign-in and the payment method's form are the reader's purchase path, with AFFM-094's and MAIL-075's OMP direct-sales portions cited from U52. Known blocker: every book file download answers 500 on main (incidentals.md, U69 row). Rider: this feature covers the OMP exposure of the U13-claimed shared landing atoms (AFFR-048, 052..057, 061, 066 · PLUG-008, 022) — U13 asserts nothing about OMP. Rider: GRID-099 (owned by U68) serves this page's covers.
 
 ### U70 — Catalog management {OMP}
 Press staff manage the catalog: add-to-catalog, featured/new-release flags and ordering, the per-submission Catalog Entry form.
 Atoms: AFFW-427 · AFFM-263..271 · ROUTE-062 · VUE-020, 101 · API-059 · NOTIF-038
 Notes: AFFM-263..271 and API-059's saveDisplayFlags/saveFeaturedOrder/addToCatalog ops named to U70 by RULINGS. Riders: AFFW-424's catalogEntry half (owned by U49) and API-061's catalogEntry component (owned by U40) are cited here as spec-side variance lines; NOTIF-038 is mentionable in U49 as a register note.
+
+## H. OMP and OPS app-specific features (maintainer scope extension, 2026-09-27)
+
+These rows take in the OMP and OPS clusters the campaign dropped while it was
+OJS-only. The drop dates from the 2026-07-02 scope ruling ("focus on OJS to
+keep specs and tests sharp") and was carried over word for word when all three
+apps were adopted on 2026-07-26; only the catalog came back at Phase 0 (section
+G). Each row has screens and rules no shipped spec claims (RUNBOOK multi-app
+rule 7). The clusters' smaller pieces fold into existing rows instead: chapter
+and format DOIs into U45, the OMP CSV tool into U63, the monograph report into
+U65, the book purchase route into U69. The `BOOK_*` notifications and the OPS
+journal-relay plugin are parked in UNASSIGNED (neither is a live OMP or OPS
+surface).
+
+Build order: U71 and U75 any time (their seeds exist). U72, then U73, then
+U69: the book page reads chapters and formats, so it is built after the
+seed keys they add. U74 last. Once U72 has added `chapters[]`, U45 gets a
+revision for its chapter and format DOI rows.
+
+### U71 — Internal Review stage {OMP}
+A press's editors run optional internal review rounds before External Review (panels, round decisions, recommendations); authors follow and revise there.
+Atoms: AFFW-248, 301, 304..322, 345..348 · MAIL-071 · NOTIF-015, 020, 030
+Notes: most machinery is shared with U26–U28 and U34 (OMP's internal decision types are thin subclasses that add the internal-round trait). The stage has rules of its own: cancelling the only internal round returns to Submission, there is no Resubmit choice, Accept goes straight to Copyediting, and Send to External Review marks the internal round accepted. Shipped specs already drive parts of it and are cited, not reclaimed: U25 S8 (AFFW-301's button), U27 S13 (AFFW-306's reviewer panel), U28 S15 (the internal reviewer's wizard), U31 S5, U34 S11 (the Send to Internal Review wizard with MAIL-071's template, Request Revisions and Send to External Review from an internal round), U35 Rule 5c (AFFW-309's participants panel), U22 S4. The spec may hand AFFW-301, 306, 309 and MAIL-071 to those owners (MAINTENANCE "Reorganising the feature map"). NOTIF-015 and NOTIF-020 are written but no screen reads them, like their siblings in UNASSIGNED items 14 and 13; NOTIF-030 is task-level (the header Tasks panel). Rider: ROUTE-072's internalReview op (owned by U24) is cited here. Dead-code candidates: UNASSIGNED item 45. Harness: internal rounds, internal decisions, recommend-only editors and the press's internal reviewers already seed.
+
+### U72 — Chapters & work type {OMP}
+An editor or author sets a book as a monograph or an edited volume and builds its chapter list: chapter authors, files, a chapter's own page, per-chapter publication dates.
+Atoms: AFFW-111, 123..124, 237..239, 275, 425, 433, 572, 772..777 · GRID-097 · VUE-031
+Notes: AFFW-433 (Marketing › "Publication Dates") is a chapter setting: its form holds only `enableChapterPublicationDates`. The chapter list is the legacy `ChapterGridHandler` inside a Vue shell. The reader side of chapters (chapter pages, chapter authors on the book page) is U69's; chapter DOIs are U45's (AFFU-245). Riders: U21 (the wizard's Chapters step and work-type choice, S14), U41 (the Chapter Author role; S10's edited volume), U20 (chapter pages' metadata tags), U40 (the default chapter license), U44 (the chapter Identifiers tab). Harness: needs a `chapters[]` seed key (work type already seeds).
+
+### U73 — Publication formats & proof terms {OMP}
+Press staff create the formats a book is read or sold in (digital, physical, remote), attach proof files and set their terms (open access, a price, not available), approve them and make them available, and fill each format's catalog data.
+Atoms: AFFW-276, 426, 573, 608, 754..759, 761, 765..771 · GRID-089, 091..092 · VUE-044 · SET-036, 040
+Notes: OMP counterpart of U46 (galleys). The format window is the legacy `PublicationFormatGridHandler` inside a Vue shell. Proof pricing (AFFW-770..771, the former "direct sales" cluster) is here; the reader's purchase path is U69's (ROUTE-065). The markets, sales-rights and representatives blocks inside a format's catalog tab (AFFW-766) are U74's. Riders: U44 (Format Approval's URN step, the format Identifiers tab), U19 (the OAI record per format), U47 (an HTML file in a format), U64 (usage per format), U38 (format log lines), U45 (format DOIs, AFFU-245). UNASSIGNED items 12 and 17 (the proof-file windows reachable only through a format) resolve here for OMP. Harness: `publicationFormats[]` needs the format code, physical and remote-URL formats, sales type and price, the approved and available flags, identification codes and dates; today every seeded format is open access, approved and available.
+
+### U74 — ONIX metadata & export {OMP}
+Press staff record the trade metadata that only the ONIX feed reads (audience, representatives, markets, sales rights) and export ONIX 3.0.
+Atoms: AFFW-257..258, 431..432, 434, 574, 760, 762..764 · GRID-090, 093..094 · VUE-045 · PLUG-033 · AFFM-169
+Notes: lowest priority of the extension; built after U73, whose format window hosts the markets and sales-rights blocks. Riders: the press's ONIX publisher fields are U07's; the Tools list the export opens from is U63's (AFFM-162), and U63's OMP2 (the ONIX reminder on the Native export page) is cited here.
+
+### U75 — Preprint relations {OPS}
+An author or moderator records whether a preprint has been published elsewhere, with the published version's DOI; readers see the notice and Crossref receives the relation.
+Atoms: AFFW-128, 385..386
+Notes: riders — the wizard's required "Relation status" question is U21's; API-065's `relate` op (owned by U49), AFFR-082's relation notice (owned by U13) and the Crossref relation (U45's plugin) are cited here. Lead for the spec, code-read only: the new workflow's Relation control submits its form to the plain publication endpoint, not to `relate`, so setting it on a published preprint may be refused. PLUG-024 (journal relay) is parked in UNASSIGNED: the atlas swept an untracked local folder, not an OPS plugin.
 
 ---
 
@@ -411,7 +461,7 @@ adjudicated in that critic pass.
 | AFFW-506 | U27 | Atom bundles two confirms; the majority mechanism (revert-consider) wins, the ORCID-deposit confirm is a U04 rider. |
 | AFFW-605 | U44 | The modal is the assign-public-identifiers mechanism (rule 8); U50 keeps a publish side-effect line. |
 | AFFW-606 | U50 | The notify-readers checkbox's consequence belongs to the issue publish flow. |
-| AFFW-608 | OOS (formats/ONIX) | The approve-format/proof confirm rides the dropped format object model on both readings (proof pricing = direct sales, equally OOS). |
+| AFFW-608 | U73 | The approve-format/proof confirm rides the format object model on both readings (proof pricing included). Phase 0 called it OOS; moved by the 2026-09-27 scope extension. |
 | AFFW-666..667 | U26 | Author read-review modal — same author-side line as AFFW-487. |
 | AFFW-698..700 | U05 | The legacy header Tasks grid is the in-app notification inbox, not U37's task manager. |
 | AFFW-712..734 | OOS (UI infrastructure) | ⚑ Orchestrator ruling 2026-07-27 (RULINGS): framework chrome with no feature of its own — exercised implicitly by every consuming feature's scenarios; supersedes the U36 reference-block claim, treated the same as PLUG-028. |
@@ -442,11 +492,11 @@ adjudicated in that critic pass.
 | AFFU-093..095 | U05 | The flagged fragile seam resolved to the semantics owner; U03 keeps the tab shell. |
 | AFFU-170..175 | U28 | Review-form elements as rendered in the wizard: surface ownership wins; U29 cross-links config→effect. |
 | AFFU-206 | U06 | Generic invitation-URL landing homed with the invitation mechanism; U28's one-click entry cites it. |
-| AFFU-245 | OOS (monographs/chapters) | The chapter row type rides the dropped object model; its `publication` row is a U45 OMP-variant line, not a claim. |
+| AFFU-245 | U45 | The DOI list's row types are DOI mechanism; the chapter and format objects behind them are U72's and U73's. Phase 0 called it OOS; moved by the 2026-09-27 scope extension. |
 | NOTIF-001..007 | U05 | Generic framework toasts have no single emitting feature; the notifications mechanism owns them. |
 | NOTIF-031 | U26 | Lives/clears with the round's revision upload; U34's decision keeps a side-effect line. |
 | NOTIF-034 | U33 | Production-era task per the app NotificationManager mapping; the U32 reading noted, not adopted. |
-| NOTIF-037 | U49 | The approval-gate prompt tracks the approve-submission mechanism; its OMP format surface is OOS. |
+| NOTIF-037 | U49 | The approval-gate prompt tracks the approve-submission mechanism; its OMP format surface is cited by U73. |
 | NOTIF-038 | U70 | RULINGS Q2 brings catalog management in scope (confirmed by RULINGS); U49 keeps the register-note caveat. |
 | NOTIF-051 | U65 | Reminder digest grouped with U65's report email; the U23 reading noted, not adopted. |
 
@@ -469,7 +519,7 @@ adjudicated in that critic pass.
 | AFFR-069 | U45 | Crossmark is registration-agency plugin behavior (plugin-owner rule); renders on U13's screen (rider). |
 | AFFR-078 | U17 | Archive-header homed with the OPS archive pages per Q4a; search/category portions cited by U15/U16. |
 | AFFR-081 | U13 | OPS listing summary — same seam and call as AFFR-046. |
-| AFFR-082 | U13 | Landing display claimed; the relation-notice portion is OOS (OPS preprint relations), marked at spec time. |
+| AFFR-082 | U13 | Landing display claimed; the relation-notice portion is cited by U75 (OPS preprint relations). |
 | AFFR-092 | U21 | The make-a-submission CTA's whole intent is the wizard entry route. |
 
 ### ROUTE (20)
@@ -492,8 +542,8 @@ adjudicated in that critic pass.
 | ROUTE-052 | U51 | Purchase/renewal ops are primary; U52 cites payMembership. |
 | ROUTE-059 | U18 | The generic gateway dispatcher's primary reachable consumer is the web-feed gateway. |
 | ROUTE-063 | U07 | Same settings-dispatcher seam as ROUTE-017. |
-| ROUTE-065 | OOS (direct sales) | The payment-plugin callback route rides the dropped sales flow; shared paymethod plugins stay U52's. |
-| ROUTE-072 | U24 | Workflow-access primary; the added internalReview op is OOS-marked at spec time. |
+| ROUTE-065 | U69 | The payment-plugin callback serves the book page's purchase path; shared paymethod plugins stay U52's. Phase 0 called it OOS; moved by the 2026-09-27 scope extension. |
+| ROUTE-072 | U24 | Workflow-access primary; the added internalReview op is cited by U71. |
 | ROUTE-076 | U18 | Same call as ROUTE-059. |
 | ROUTE-078 | U07 | Same settings-dispatcher seam as ROUTE-017. |
 
@@ -519,9 +569,9 @@ adjudicated in that critic pass.
 | API-032 | U30 | The dominant authorResponse cluster is D5's own-controller argument; U28/U26/U04 cite their ops. |
 | API-042 | U24 | Omnibus controller homed at the workflow mechanism owner; U21/U34/U40/U41/U49 cite their endpoint clusters (riders in each). |
 | API-057 | U49 | Issue-assignment publish-modal fields dominate; U52 cites submissionPayment. |
-| API-058 | U45 | The in-scope submissionFiles DOI row carries the claim; chapter/format rows OOS-marked at spec time. |
+| API-058 | U45 | The submissionFiles DOI row carries the claim; the chapter/format ops are a U45 revision once U72 adds `chapters[]`. |
 | API-061 | U40 | Metadata components are the majority; U70 cites the catalogEntry component. |
-| API-065 | U49 | Author-may-post re-registrations are the in-scope U49 variant; the relate portion OOS-marked at spec time. |
+| API-065 | U49 | Author-may-post re-registrations are the in-scope U49 variant; the relate portion is cited by U75. |
 | MAIL-025 | U23 | The digest enumerates workflow states, not tracked tasks; triage-dashboard owner. |
 | MAIL-043 | U27 | Send-side owner; U29 owns the clock configuration. |
 | MAIL-046 | U27 | Same clock/send split as MAIL-043. |
@@ -544,63 +594,15 @@ adjudicated in that critic pass.
 
 ## Out of scope
 
-The single home for out-of-scope atoms — **173 atoms**, grouped by cluster, each
+The single home for out-of-scope atoms — **68 atoms**, grouped by cluster, each
 with its authority. "Dropped, not parked": these need no Phase-1 follow-up. The
-claim check treats every ID below as accounted for. Mixed-payload atoms whose
-OOS *portion* rides a claimed atom (ROUTE-072's internalReview op, API-058's
-chapter/format rows, API-065's relate endpoint, AFFR-082's relation notice,
-AFFW-424's OMP half, AFFM-094's and MAIL-075's OMP direct-sales portions) are
-NOT listed here — the owning spec marks the portion at spec time.
+claim check treats every ID below as accounted for.
 
-### Scope drop — OMP Internal Review stage & `*_INTERNAL` decisions (29)
-
-the scope ruling names them explicitly. The submission-stage skip-internal routing stays
-in scope as a U25 parameterization.
-
-- AFFW-248, 301, 304..322, 345..348 (25)
-- MAIL-071
-- NOTIF-015, 020, 030
-
-### Scope drop — OMP monographs, chapters & work types (18)
-
-Object model OJS never exposes; chapter/work-type authoring stays dropped under
-the Q2 amendment (only catalog reader/management surfaces came in).
-
-- AFFW-111, 123..124, 237..239, 275, 425, 572, 772..777 (15)
-- GRID-097 · VUE-031 · AFFU-245
-
-### Scope drop — OMP publication formats & ONIX (25)
-
-- AFFW-276, 426, 573, 608, 754..769 (20)
-- GRID-092 · VUE-044 · SET-036, 040 · PLUG-033
-
-### Scope drop — OMP marketing & supply chain (13)
-
-- AFFW-257..258, 431..434, 574 (7)
-- GRID-089..091, 093..094 (5) · VUE-045
-
-### Scope drop — OMP direct sales / approved proofs (3)
-
-Shared paymethod plugins themselves stay claimed by U52 (glossary note).
-
-- AFFW-770..771 · ROUTE-065
-
-### Scope drop — OMP-only exporters (3)
-
-- AFFM-169 · PLUG-031, 046
-
-### Scope drop — `NOTIFICATION_TYPE_BOOK_*` (10)
-
-Explicit scope drop; no UI in any sweep.
-
-- NOTIF-056..065
-
-### Scope drop — OPS preprint relations & journal relay (4)
-
-Covered by the scope ruling's "OMP/OPS-only Vue managers unwired in WorkflowPageOJS"
-clause; API-065's relate portion rides its claimed atom (U49).
-
-- AFFW-128, 385..386 · PLUG-024
+The OMP and OPS clusters once listed here (105 atoms: OMP Internal Review,
+monographs and chapters, publication formats and ONIX, marketing and supply
+chain, direct sales, OMP-only exporters, `NOTIFICATION_TYPE_BOOK_*`, OPS
+preprint relations) left this list on 2026-09-27: section H's header says
+where each went.
 
 ### Q1 ruling — installer & upgrader (1)
 

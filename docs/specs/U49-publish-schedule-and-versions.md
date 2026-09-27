@@ -2191,8 +2191,8 @@ OPS workflow mounts no file manager.
 | Notices | Tasks / workflow banner | NOTIF-035, NOTIF-037, NOTIF-050, NOTIF-054 |
 | Daily scheduled-publications task (OMP-registered) | scheduler | JOB-050 |
 
-Scope notes: API-065's `relate` operation (preprint relations) is OUT OF
-SCOPE per the campaign scope ruling — only its author-inclusive
+Scope notes: API-065's `relate` operation is left to *Preprint relations*
+{OPS} — only its author-inclusive
 re-registrations of the publish/version routes are claimed here.
 API-057's `submissionPayment` component is cited by *Payments & APCs*
 (rider). AFFW-424's `catalogEntry` half and NOTIF-037's OMP

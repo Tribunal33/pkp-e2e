@@ -453,8 +453,8 @@ Top to bottom: <sup>j</sup>
     <sup>j</sup> <sup>q7</sup>
 
 A preprint server can also mark a preprint as published elsewhere, with a
-notice above the title; that notice belongs to preprint relations,
-outside this spec. <sup>a</sup>
+notice above the title; that notice belongs to *Preprint relations*
+{OPS}. <sup>a</sup>
 
 ## Side effects
 
@@ -1476,8 +1476,9 @@ Crossmark button, `CrossrefPlugin::displayCrossmarkButton()`). OPS's
 relation notice: `preprint_details.tpl`, `relationStatus ==
 PUBLICATION_RELATION_PUBLISHED`, texts `publication.relation.published`
 "This preprint has been published elsewhere." and
-`publication.relation.vorDoi` "DOI of the published preprint"; out of
-scope (preprint relations). OMP's book page is `pages/catalog/CatalogBookHandler`
+`publication.relation.vorDoi` "DOI of the published preprint";
+left to *Preprint relations*. OMP's book page is
+`pages/catalog/CatalogBookHandler`
 with `monograph_full.tpl`, the counterpart feature.
 Live-probed 2026-09-25 (Purpose), OJS and OPS: a published article's
 page was reached from an issue's table of contents, the home page, a
@@ -2522,7 +2523,7 @@ list laid over it. Live-probed 2026-09-25, note j, two runs.
 | "How to Cite" block, formats and downloads; its settings window | landing page; Settings › Website › "Plugins" | AFFR-066 · PLUG-008 |
 | Publication Facts panel and its settings window {OJS} | landing page side column; Settings › Website › "Plugins" | AFFR-067 · PLUG-023 |
 | "Most read articles by the same author(s)", "Similar Articles" {OJS} | under the article | AFFR-068 · PLUG-025 · PLUG-026 |
-| Preprint page top matter: label line, "Categories", inline "How to Cite" {OPS} (the relation notice out of scope) | preprint page | AFFR-082 |
+| Preprint page top matter: label line, "Categories", inline "How to Cite" {OPS} (the relation notice cited from *Preprint relations*) | preprint page | AFFR-082 |
 | Article page and galley access: view, download, and the legacy file and supplementary-file addresses that forward to download {OJS} | article addresses | ROUTE-033 |
 | Preprint page and galley access: view, download {OPS} | preprint addresses | ROUTE-080 |
 

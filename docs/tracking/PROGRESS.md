@@ -88,5 +88,10 @@ in_progress / done / parked.
 | U66 | Institutions | OJS OMP OPS |  | pending | |
 | U67 | Archiving & preservation | OJS |  | pending | |
 | U68 | Catalog browse | OMP |  | pending | |
-| U69 | Monograph landing page | OMP |  | pending | |
+| U69 | Monograph landing page | OMP |  | pending | Build after U72 and U73, whose seed keys it reads (FEATURE-MAP section H). |
 | U70 | Catalog management | OMP |  | pending | |
+| U71 | Internal Review stage | OMP |  | pending | Scope extension 2026-09-27 (FEATURE-MAP section H, which gives the build order). |
+| U72 | Chapters & work type | OMP |  | pending | Scope extension 2026-09-27; adds the `chapters[]` seed key; before U73 and U69. |
+| U73 | Publication formats & proof terms | OMP |  | pending | Scope extension 2026-09-27; after U72, before U69. |
+| U74 | ONIX metadata & export | OMP |  | pending | Scope extension 2026-09-27; last, after U73. |
+| U75 | Preprint relations | OPS |  | pending | Scope extension 2026-09-27. |

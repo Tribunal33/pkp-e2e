@@ -21,7 +21,7 @@ record changes still in effect.
 
 - `docs/tracking/PROGRESS.md`: one row per feature with its status, test
   counts and a short note; the banner names the mode.
-- `docs/tracking/FEATURE-MAP.md`: the 70 features and the screens and
+- `docs/tracking/FEATURE-MAP.md`: the 75 features and the screens and
   behaviors each one covers.
 - `docs/tracking/ci-triage.md`: known CI failures, flake classes and the
   companion branches waiting on developers' app PRs; check it before
