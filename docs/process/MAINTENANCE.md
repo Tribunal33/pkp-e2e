@@ -5,10 +5,17 @@ claude-threads) that acts as the PKP team's QA specialist for the e2e suite
 and talks to the team on Mattermost. It adds to the RUNBOOK loop, never
 replaces it, and is active when the PROGRESS banner says so.
 
-## The daily session
+The work is split between two scheduled sessions a weekday, each with its
+own list: the **upstream session** keeps the suite in step with what the
+team ships, the **housekeeping session** works the campaign's own backlog
+(incidentals, friction, flakes, stale artifacts). A session does its own
+list only; work it finds for the other one goes as a line into the
+tracking file the other one reads. A red `main` interrupts either.
 
-The VM runs one session a day, scheduled through claude-threads. The
-scheduled prompt only points here; this section is the day's order.
+## The upstream session (the daily session)
+
+The VM runs it every weekday at midday, scheduled through claude-threads.
+The scheduled prompt only points here; this section is the day's order.
 
 1. Read the PROGRESS banner, this file, `ci-triage.md`,
    `upstream-sync.md` and `upstream-sync-stable-3_5_0.md`; work from
@@ -36,21 +43,65 @@ developer's PR fails the suite".
 
 **The maintenance session never builds a new spec or suite.** Pending
 PROGRESS rows are built in feature sessions the maintainer launches, one
-feature per session, under the RUNBOOK loop. When the sync loop produced
-nothing to accommodate, the session folds `docs/tracking/friction.md`
-and deletes every row. A row earns a change only when a third feature
-would meet the same thing, the docs do not already say it (grep first) and
-it is not one screen's fact or general Playwright knowledge; what passes is
-a kit change or a clause on an existing entry, never a new section, and a
-harness key a row asks for is listed under scenarios.md "Field shapes not
-built yet", not built. Most rows earn nothing, and that is the expected
-outcome: a retry or a wrong first guess is the ordinary cost of driving a
-screen, and every clause added is a line every later agent reads. A row
-whose fact one closer read of the spec or the brief would have given, or
-whose fix the session that wrote it already made (a corrected brief, a new
-footnote), earns nothing either. When in doubt, delete. Then the session
-ends. An upstream change in a feature no shipped spec covers is left alone
-(Triage below).
+feature per session, under the RUNBOOK loop. Incidentals, friction and
+flake diagnosis are the housekeeping session's, not this one's. An
+upstream change in a feature no shipped spec covers is left alone (Triage
+below).
+
+## The housekeeping session
+
+The VM runs it every weekday at 07:00 Prague time, before the upstream
+session, scheduled through claude-threads. It works through the whole
+backlog each time, not a quota: what it cannot finish, the next morning's
+run picks up from the files.
+
+1. Read the PROGRESS banner, this file, `ci-triage.md`,
+   `docs/tracking/incidentals.md` and `docs/tracking/friction.md`; work
+   from files, never from memory of earlier sessions.
+2. Start on the right code and reset the databases ("Session hygiene").
+   Check the latest `e2e-tests.yml` run on each app's `main`: a red that
+   is new goes first ("Keep `main` green").
+3. **Incidentals.** Every row whose feature has a shipped spec (PROGRESS
+   `done`), oldest first; rows against pending features stay for their
+   spec author (RUNBOOK step 3). First grep the spec for each row: a
+   sighting the spec already states is deleted without a drive. The rest
+   are driven, grouped by feature, by fresh checkers rendered from
+   `briefs/claim-check.md` (the rows are the chunk; one or two checkers
+   at a time on the fleets). A row that reproduces goes into its spec
+   through a fold agent (`briefs/fold.md`): a register entry, or a
+   corrected claim with a dated footnote, the reader on the rewritten
+   spans and lint zero, as "Fix stale artifacts as you go" says; when it
+   changes a claim a test asserts, the test changes with it and that
+   suite runs green once. A row that does not reproduce is deleted; one
+   that stays unclear becomes that spec's ❓ entry with a lean. Every
+   worked row is deleted from `incidentals.md`.
+4. **Friction.** Fold `docs/tracking/friction.md` and delete every row. A
+   row earns a change only when a third feature would meet the same
+   thing, the docs do not already say it (grep first) and it is not one
+   screen's fact or general Playwright knowledge; what passes is a kit
+   change or a clause on an existing entry, never a new section, and a
+   harness key a row asks for is listed under scenarios.md "Field shapes
+   not built yet", not built. Most rows earn nothing, and that is the
+   expected outcome: a retry or a wrong first guess is the ordinary cost
+   of driving a screen, and every clause added is a line every later agent
+   reads. A row whose fact one closer read of the spec or the brief would
+   have given, or whose fix the session that wrote it already made (a
+   corrected brief, a new footnote), earns nothing either. When in doubt,
+   delete.
+5. **Flakes.** Diagnose the flake classes whose watch condition has
+   tripped ("Keep the flake rate down"); a flake that reds CI on the day
+   is the upstream session's interrupt, its diagnosis this session's.
+6. **Stale artifacts and the budget.** Fix what the day's work showed
+   stale, and refresh the shard timings when they drifted ("Keep the
+   budget measured").
+7. End pushed: commit and push to pkp-e2e `main`, and post a
+   one-paragraph summary to the channel: incidentals worked (deleted as
+   already stated, folded with the spec and IDs, not reproduced), what
+   is left, friction folded, flake classes diagnosed, artifacts fixed.
+
+The housekeeping session never runs the sync loop, the stable line or a
+companion, never builds a new spec or suite, and leaves the revision
+queue to the maintainer.
 
 ## Role & goals
 
@@ -506,8 +557,8 @@ the answer; the spec and the test are the record.
   when an app's three Playwright steps on a green `main` run drift more
   than two minutes apart, or a feature has added a spec's worth of tests,
   run `npm run shard-timings` and commit `shared/playwright/timings/`.
-- **Keep the flake rate down.** A flake class whose watch condition trips
-  gets a diagnostician rendered from `briefs/flake-diagnosis.md`, one or two
+- **Keep the flake rate down** (the housekeeping session's). A flake
+  class whose watch condition trips gets a diagnostician rendered from `briefs/flake-diagnosis.md`, one or two
   at a time, ranked by `bin/ci-flake-tally/run.sh` (CI's first-attempt
   reds) and the ci-triage sightings; the fix lands where the mechanism
   lives (the app's register, the harness, a shared page object, then the

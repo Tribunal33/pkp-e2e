@@ -2,8 +2,8 @@
 
 What cost a screen-driving agent calls, time or retries that a better
 brief, doc, kit, seed or fixture would have saved; that agent appends a row
-at the end of its task. The maintenance session folds the rows and deletes
-them under MAINTENANCE "The daily session".
+at the end of its task. The housekeeping session folds the rows and
+deletes them under MAINTENANCE "The housekeeping session".
 
 One line per entry, appended at the end, in this shape:
 
