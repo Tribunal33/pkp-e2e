@@ -212,6 +212,14 @@ jobs:
           # contexts of the first two, flaky first attempts included (2026-09-26).
           out=apps/$app/playwright/test-results
           npx playwright test -c configs/$app.config.js --retries=1 --shard=$shard --project=shared --project=$app --output=$out/app || rc=1
+          # Reset and bootstrap again before the serial pass (bin/test-app.js):
+          # the site-level @solo tests re-save every context of the install, and
+          # the app pass leaves hundreds. The setup project is one test, so it
+          # is not sharded.
+          if ! { node bin/with-app.js $app shared/playwright/reset.js \
+                 && npx playwright test -c configs/$app.config.js --retries=1 --project=setup --reporter=line --output=$out/setup; }; then
+            echo "::error::the reset before the serial pass failed"; rc=1
+          fi
           npx playwright test -c configs/$app.config.js --retries=1 --shard=$shard --project=$app-serial --no-deps --pass-with-no-tests --output=$out/serial || rc=1
           npx playwright test -c configs/$app.config.js --retries=1 --shard=$shard --project=$app-solo --no-deps --pass-with-no-tests --output=$out/solo || rc=1
           # A flaky test (red, then green on the retry) leaves its failed

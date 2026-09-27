@@ -187,7 +187,13 @@ Two facts worth knowing before you write a test:
   --project=<app>` (setup as their dependency), then
   `--project=<app>-serial --no-deps`, then `--project=<app>-solo
   --no-deps`, the last two `--pass-with-no-tests`. The order keeps the
-  chain's guarantee; a red in any pass fails the run.
+  chain's guarantee; a red in any pass fails the run. Between the app
+  pass and the serial pass the fleet is reset and bootstrapped again
+  (about 10 s): site-level `@solo` tests re-save every context of the
+  install, and on the hundreds an app pass leaves U57 took 20.7 of the
+  OPS solo pass's 29.8 min (`.reports/site-variant/feasibility.md`). So
+  serial and solo specs seed what they need and never read what the app
+  pass left.
 - **Animations are globally disabled** (`reducedMotion: 'reduce'` plus the
   `motion.js` CSS in every context). `trace: 'on-first-retry'` records nothing
   while retries are 0. Turn retries on when hunting a failure.
@@ -341,6 +347,16 @@ error contexts. A `test-app: pass n/3 (…)` line opens and closes each
 pass in the console. A `--project`, `--ui` or `--list` makes it one plain
 `playwright test` invocation, as before.
 
+A whole-suite run resets the fleet between the app pass and the serial
+pass (`reset.js`, then the setup project, quietly; one `test-app: … fleet
+reset` line), so a whole-suite run must not share its fleet with another
+runner. A run with a filter (file or folder names, `--grep`,
+`--grep-invert`, `--last-failed`, `--only-changed`) keeps the database,
+because filtered runs are the ones that share a fleet (a test author
+beside the harness agent); `--no-reset` keeps it on a whole-suite run
+too. The app pass's database is gone after the run; its error contexts
+and traces stay in `<out>/app`.
+
 A run longer than about four minutes outlives the prompt cache of the agent
 waiting on it, and whole-project runs are what `npm run test:final` is for.
 In a plain `npx playwright test` command, selecting a serial spec by path
@@ -390,7 +406,9 @@ processes before re-running.
   --project=<app>` (setup runs as their dependency), then `--project=<app>-serial
   --no-deps`, then `--project=<app>-solo --no-deps`, both sharded and
   `--pass-with-no-tests` (the passes `npm run test:<app>` runs locally,
-  "Running"). The shard count is set in `run-app.yml` alone,
+  "Running"). Between the first and the second, `reset.js` and the setup
+  project (unsharded) give the serial and solo passes a fresh install, as
+  locally. The shard count is set in `run-app.yml` alone,
   and the app hooks follow it since they call that workflow at `main`.
 - Each pass is split by time, not by count: the reporter
   `shared/playwright/timed-shards.js` packs the pass's tests longest-first

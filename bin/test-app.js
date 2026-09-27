@@ -16,6 +16,20 @@
  * not run"). Here all three passes always run, in order, whatever the
  * earlier ones returned; the exit is non-zero if any pass failed.
  *
+ * Between pass 1 and pass 2 of a whole-suite run the fleet is reset
+ * (reset.js) and bootstrapped again (the setup project), about 10 s. The
+ * site-level @solo tests re-save every context of the install: after an app
+ * pass the fleet holds hundreds, and U57 alone took 20.7 of the OPS solo
+ * pass's 29.8 min; on a fresh install its three tests take about 1.5 min
+ * (.reports/site-variant/feasibility.md). The serial and solo specs seed
+ * what they need, so nothing depends on what the app pass left. A run
+ * with a filter (file or folder names, --grep, --grep-invert, --last-failed,
+ * --only-changed) keeps the database: filtered runs are the ones that share
+ * a fleet with another runner (a test author beside the harness agent), and
+ * a reset would wipe that runner's seeds. --no-reset keeps it on a
+ * whole-suite run too. The app pass's database is gone afterwards; its
+ * error contexts and traces stay in <out>/app.
+ *
  * The caller's args (--reporter, --grep, --trace, --workers, file filters…)
  * go to every pass, so every pass takes --pass-with-no-tests; the run fails
  * when no pass ran a single test (a filter that matched nothing). Each pass
@@ -92,10 +106,65 @@ function playwright(args) {
 
 const hasFlag = (names) => callerArgs.some((a) => names.some((n) => a === n || a.startsWith(`${n}=`)));
 
+// Playwright options that take a separate value, so the value is not read as a file filter.
+const VALUE_OPTIONS = new Set([
+    '-c', '--config', '-g', '--grep', '--grep-invert', '-j', '--workers', '--reporter', '--output',
+    '--retries', '--timeout', '--global-timeout', '--repeat-each', '--max-failures', '--shard',
+    '--trace', '--project', '--tsconfig', '--update-snapshots', '-u',
+]);
+
+/** True when the caller narrows the run (file filters, grep, last failed, only changed). */
+function isFiltered(args) {
+    for (let i = 0; i < args.length; i++) {
+        const arg = args[i];
+        if (['-g', '--grep', '--grep-invert', '--last-failed', '--only-changed'].some((n) => arg === n || arg.startsWith(`${n}=`))) {
+            return true;
+        }
+        if (VALUE_OPTIONS.has(arg)) {
+            i++;
+        } else if (!arg.startsWith('-')) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/** Run a harness command quietly; resolves {code, output}. */
+function quiet(command, args) {
+    return new Promise((resolve) => {
+        const child = spawn(command, args, {cwd: REPO_ROOT, env: process.env, stdio: ['ignore', 'pipe', 'pipe']});
+        current = child;
+        let output = '';
+        child.stdout.on('data', (chunk) => (output += chunk));
+        child.stderr.on('data', (chunk) => (output += chunk));
+        child.on('close', (code, signal) => {
+            current = null;
+            resolve({code: signal ? 1 : code, output});
+        });
+    });
+}
+
+/**
+ * Reset the fleet and bootstrap it again. Quiet on success, so the setup
+ * project's closing "1 passed" does not land in pass 1's segment of the log
+ * (bin/test-final.js sums each segment's last tally).
+ */
+async function resetFleet(outRoot) {
+    const started = Date.now();
+    const reset = await quiet(process.execPath, [path.join('bin', 'with-app.js'), appName, 'shared/playwright/reset.js']);
+    if (reset.code !== 0) {
+        return {ok: false, output: reset.output};
+    }
+    const setup = await quiet(process.execPath, [
+        CLI, 'test', '-c', config, '--project=setup', '--reporter=line', `--output=${path.join(outRoot, 'setup')}`,
+    ]);
+    return {ok: setup.code === 0, output: reset.output + setup.output, seconds: Math.round((Date.now() - started) / 1000)};
+}
+
 (async () => {
     if (hasFlag(['--project', '--ui', '--ui-host', '--ui-port', '--list', '--help', '-h'])) {
         console.log(`test-app: ${appName}: one invocation — playwright test -c ${config} ${callerArgs.join(' ')}`);
-        const {code, signal} = await playwright(callerArgs);
+        const {code, signal} = await playwright(callerArgs.filter((a) => a !== '--no-reset'));
         process.exit(signal ? 1 : code ?? 1);
     }
 
@@ -109,10 +178,11 @@ const hasFlag = (names) => callerArgs.some((a) => names.some((n) => a === n || a
             outRoot = callerArgs[++i];
         } else if (arg.startsWith('--output=')) {
             outRoot = arg.slice('--output='.length);
-        } else if (arg !== '--no-deps' && arg !== '--pass-with-no-tests') {
+        } else if (arg !== '--no-deps' && arg !== '--pass-with-no-tests' && arg !== '--no-reset') {
             rest.push(arg);
         }
     }
+    const resetBeforeSerial = !callerArgs.includes('--no-reset') && !isFiltered(rest);
 
     const passes = [
         {name: 'app', projects: ['shared', appName], deps: true},
@@ -122,6 +192,19 @@ const hasFlag = (names) => callerArgs.some((a) => names.some((n) => a === n || a
     const failed = [];
     let ranTests = 0;
     for (const [i, pass] of passes.entries()) {
+        if (pass.name === 'serial' && resetBeforeSerial) {
+            const {ok, output, seconds} = await resetFleet(outRoot);
+            if (interrupted) {
+                console.log(`test-app: ${appName}: interrupted, the remaining passes did not start`);
+                process.exit(130);
+            }
+            if (!ok) {
+                process.stdout.write(output);
+                console.log(`test-app: ${appName}: the reset before the serial pass failed; the serial and solo passes did not start`);
+                process.exit(1);
+            }
+            console.log(`test-app: ${appName}: fleet reset and bootstrapped again before the serial pass (${seconds} s)`);
+        }
         const args = [
             ...pass.projects.map((p) => `--project=${p}`),
             ...(pass.deps && !callerArgs.includes('--no-deps') ? [] : ['--no-deps']),
