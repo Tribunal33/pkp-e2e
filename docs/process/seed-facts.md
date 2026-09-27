@@ -580,8 +580,10 @@ behind a line; that scratch is deleted after review.
 - A scratch context created without an `orcid` key has "Enable ORCID
   functionality" unticked and no ORCID block on Profile › Identity; one
   created with `orcid: {enabled: true}` has both (`scenarios.md`
-  `POST scenarios/context`). Settings › Website › Setup; Profile › Identity.
-  Live-probed 2026-09-04, all three apps (`.reports/U03/cc-K6.md` K6-2).
+  `POST scenarios/context`). The switch is on Settings › Users & Roles ›
+  "ORCID"; the block on Profile › Identity. Live-probed 2026-09-04, all
+  three apps (`.reports/U03/cc-K6.md` K6-2); the tab driven on OMP
+  2026-09-27 (U70 claim check K4, K4-8).
 - With `orcid: {enabled: true}` the "Add Reviewer Suggestion" window of the
   wizard's "Reviewer Suggestions" step gains an "ORCID iD" box that accepts
   only the full `https://orcid.org/…` form; a bare iD or a number is refused
@@ -1121,6 +1123,12 @@ config-file settings.
   preprint's workflow ("Error" / "The current role does not have access
   to this operation."). Workflow, OPS, 2026-09-24 (`.reports/U39/cc-K1.md`,
   `roles-eb-wf`).
+- {OMP} A Marketing and sales coordinator seeded through `participants[]`
+  on a book in Production cannot open the Production stage ("You don't
+  currently have access to that stage of the workflow.") and has no
+  "Catalog Entry" page; a drive that needs an assistant with Production
+  access uses a Layout Editor. OMP, 2026-09-27 (`.reports/U70/cc-K1.md`,
+  `r-notice-marketing-omp`).
 - The Roles list's stage columns are Submission, Review, Copyediting,
   Production on a journal; Submission, Internal Review, External Review,
   Copyediting, Production on a press; Production alone on a preprint
@@ -1245,7 +1253,10 @@ config-file settings.
 - On a fresh context the "Date & Time" formats (Settings › Website ›
   "Setup") are stored empty, so the tab and the pages use the
   configuration file's defaults ("2026-09-24", "2026-09-24 07:17 PM").
-  {OMP} "Cover Image Max Width" and "Height" are stored as 106 and 100.
+  {OMP} "Cover Image Max Width" and "Height" are stored as 106 and 100;
+  they are on Settings › Website › Appearance › "Advanced", and saving new
+  values remakes every existing cover's small copy (OMP, 2026-09-27, U70
+  claim check K5, K5-8).
   All three apps, 2026-09-24 (U10 claim check K4, `.reports/U10/ccK4/fresh-*`).
 - A visit to a context's `/fr_CA/…` address switches the visitor's session
   to French, so later addresses without a language segment render French;

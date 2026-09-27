@@ -13,8 +13,10 @@
  * on the publication (both optional — monographs need no series), and the
  * per-round `stage: internal|external` key on reviewRounds. `galleys` is
  * rejected: a press has publication formats, not galleys; `publicationFormats`
- * (U47) is their counterpart here. Of the publication-page keys (U13) only
- * `categories` is taken, the "Catalog Entry" page's "Categories" (U16).
+ * (U47) is their counterpart here. Of the publication-page keys (U13) the
+ * "Catalog Entry" page's `categories` (U16), `datePublished` (U17) and
+ * `urlPath` (U70) are taken. `featured[]` / `newRelease[]` (U70): the
+ * Catalog page's boxes, pressed after the publish.
  */
 
 namespace APP\testing;
@@ -323,10 +325,170 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
      */
     protected function assertPublicationPagesSupported(string $specKey): void
     {
-        if (in_array($specKey, ['categories', 'datePublished'], true)) {
+        if (in_array($specKey, ['categories', 'datePublished', 'urlPath'], true)) {
             return;
         }
-        throw new SpecException($specKey, "\"{$specKey}\" is not built for OMP yet: the press's publication pages (\"Catalog Entry\" and its siblings) have no parity check for it; only \"categories\" and \"datePublished\" are built");
+        throw new SpecException($specKey, "\"{$specKey}\" is not built for OMP yet: the press's publication pages (\"Catalog Entry\" and its siblings) have no parity check for it; only \"categories\", \"datePublished\" and \"urlPath\" are built");
+    }
+
+    /** The Catalog page's lists a flag lives in, by the place word of `featured[]` / `newRelease[]`. */
+    private const CATALOG_PLACES = ['catalog', 'category', 'series'];
+
+    /**
+     * `featured[]` and `newRelease[]` (U70): the Catalog page's "Featured"
+     * and "New release" boxes of this book, each entry one box pressed in
+     * a list, in the order given: `{in: 'catalog'}` with no filter,
+     * `{in: 'category', path}` with that category chosen under "Filters",
+     * `{in: 'series', path}` with that series chosen. A `featured[]` entry
+     * may add `position` (1 = first): "Order Features", the book moved to
+     * that place among the list's featured books, "Save Order". The page
+     * lists published books only, so both keys need `published: true`
+     * (and a publication date not after today); a category or series
+     * filter lists the book only once it is placed there, so the path must
+     * be among `categories` or be `series`. The page cannot hold a book in
+     * two categories' (or two series') lists of one kind (the box's lookup
+     * matches the kind alone, spec A4), so a second one is a 400, as is the
+     * same list twice. Parse phase: no writes.
+     */
+    protected function parsePublishOverlay(Context $context, Spec $root): array
+    {
+        $plan = ['featured' => [], 'newRelease' => []];
+        foreach (array_keys($plan) as $key) {
+            if (!$root->has($key)) {
+                continue;
+            }
+            if (!$root->get('published', false)) {
+                throw new SpecException($key, 'The Catalog page lists published books only: ' . $key . ' needs published: true');
+            }
+            $seen = [];
+            foreach ($root->childList($key) as $spec) {
+                $in = $spec->require('in');
+                if (!in_array($in, self::CATALOG_PLACES, true)) {
+                    throw new SpecException("{$spec->path}.in", 'in must be one of: ' . implode(', ', self::CATALOG_PLACES));
+                }
+                $assocType = Application::ASSOC_TYPE_PRESS;
+                $assocId = (int) $context->getId();
+                if ($in === 'catalog') {
+                    if ($spec->has('path')) {
+                        throw new SpecException("{$spec->path}.path", 'The whole catalog takes no path');
+                    }
+                } else {
+                    $path = $spec->require('path');
+                    if ($in === 'category') {
+                        $assocType = Application::ASSOC_TYPE_CATEGORY;
+                        if (!in_array($path, (array) $root->get('categories', []), true)) {
+                            throw new SpecException("{$spec->path}.path", "The \"{$path}\" filter lists the book only once it is in that category: name it in categories");
+                        }
+                        $category = Repo::category()->getCollector()->filterByContextIds([$context->getId()])->getMany()
+                            ->first(fn ($category) => $category->getPath() === $path);
+                        $assocId = $category ? (int) $category->getId() : throw new SpecException("{$spec->path}.path", "No category \"{$path}\" in \"{$context->getPath()}\"");
+                    } else {
+                        $assocType = Application::ASSOC_TYPE_SERIES;
+                        if ($path !== $root->get('series')) {
+                            throw new SpecException("{$spec->path}.path", "The \"{$path}\" filter lists the book only once it is in that series: give it as series");
+                        }
+                        $assocId = (int) BootstrapSeeder::findSeriesId($context, (string) $path);
+                    }
+                    if (isset($seen[$in])) {
+                        throw new SpecException($spec->path, "The Catalog page cannot keep one book in two {$in} lists of one kind: pressing the box in a second {$in} takes it out of the first (spec A4)");
+                    }
+                }
+                $seen[$in] = true;
+                $position = null;
+                if ($spec->has('position')) {
+                    if ($key !== 'featured') {
+                        throw new SpecException("{$spec->path}.position", '"Order Features" orders the featured books only');
+                    }
+                    $position = $spec->get('position');
+                    if (!is_int($position) || $position < 1) {
+                        throw new SpecException("{$spec->path}.position", 'position is a place among the list\'s featured books, a whole number from 1');
+                    }
+                }
+                $plan[$key][] = ['specPath' => $spec->path, 'assocType' => $assocType, 'assocId' => $assocId, 'position' => $position];
+            }
+        }
+        return $plan;
+    }
+
+    /**
+     * The Catalog page's boxes (U70), after the publish, acting as the
+     * press manager on the page: each press of a box is the item's own
+     * post, `saveDisplayFlags` with the book's stored featured and new
+     * release lists plus the pressed one (`seq: 1`, as the box posts it),
+     * through BackendSubmissionsController::saveDisplayFlags itself (which
+     * deletes and re-inserts the book's rows and resequences each list).
+     * A `position` is then "Order Features", the book moved, "Save Order":
+     * the panel numbers the list's featured books from 0 in the order the
+     * page shows them (the published books of that list, featured first by
+     * their stored order) and posts `saveFeaturedOrder`, through the
+     * controller's own action.
+     */
+    protected function afterPublish(Context $context, int $submissionId, array $overlayPlan): void
+    {
+        if (($overlayPlan['featured'] ?? []) === [] && ($overlayPlan['newRelease'] ?? []) === []) {
+            return;
+        }
+        $submission = Repo::submission()->get($submissionId);
+        if ((int) $submission->getData('status') !== \APP\submission\Submission::STATUS_PUBLISHED) {
+            throw new SpecException(($overlayPlan['featured'] ?? []) !== [] ? 'featured' : 'newRelease', 'The book was scheduled, not published (its "Date Published" lies after today), and the Catalog page lists published books only');
+        }
+        $featureDao = \PKP\db\DAORegistry::getDAO('FeatureDAO'); /** @var \APP\press\FeatureDAO $featureDao */
+        $newReleaseDao = \PKP\db\DAORegistry::getDAO('NewReleaseDAO'); /** @var \APP\press\NewReleaseDAO $newReleaseDao */
+        $controller = new \APP\API\v1\_submissions\BackendSubmissionsController();
+        $post = function (string $action, array $body, string $specPath) use ($controller): void {
+            $request = \PKP\testing\ApiCall::request(\Illuminate\Http\Request::class, 'POST', $body, [], $specPath, 'The Catalog page\'s post would be refused');
+            $response = $controller->$action($request);
+            if ($response->getStatusCode() >= 300) {
+                throw new SpecException($specPath, "The Catalog page's {$action} was refused (HTTP {$response->getStatusCode()}): " . json_encode($response->getData(true)));
+            }
+        };
+        foreach (['featured', 'newRelease'] as $key) {
+            foreach ($overlayPlan[$key] ?? [] as $place) {
+                $flags = [
+                    'featured' => $featureDao->getFeaturedAll($submissionId),
+                    'newRelease' => $newReleaseDao->getNewReleaseAll($submissionId),
+                ];
+                $flags[$key][] = ['assoc_type' => $place['assocType'], 'assoc_id' => $place['assocId'], 'seq' => 1];
+                $post('saveDisplayFlags', ['submissionId' => $submissionId] + $flags, $place['specPath']);
+                if ($place['position'] === null) {
+                    continue;
+                }
+                // The list as the page shows it (CatalogListPanel's
+                // getParams: published, featured first; one page of 30),
+                // then the featured ones in that order, as
+                // setItemOrderSequence collects them (a feature of the
+                // list's kind).
+                $collector = Repo::submission()->getCollector()
+                    ->filterByContextIds([$context->getId()])
+                    ->filterByStatus([\APP\submission\Submission::STATUS_PUBLISHED])
+                    ->orderByFeatured()
+                    ->limit(30);
+                if ($place['assocType'] === Application::ASSOC_TYPE_CATEGORY) {
+                    $collector->filterByCategoryIds([$place['assocId']]);
+                } elseif ($place['assocType'] === Application::ASSOC_TYPE_SERIES) {
+                    $collector->filterBySeriesIds([$place['assocId']]);
+                }
+                $ordered = [];
+                foreach ($collector->getIds() as $id) {
+                    foreach ($featureDao->getFeaturedAll((int) $id) as $feature) {
+                        if ($feature['assoc_type'] === $place['assocType']) {
+                            $ordered[] = (int) $id;
+                            break;
+                        }
+                    }
+                }
+                if ($place['position'] > count($ordered)) {
+                    throw new SpecException("{$place['specPath']}.position", 'The list has ' . count($ordered) . ' featured book(s): position ' . $place['position'] . ' is past its end');
+                }
+                $ordered = array_values(array_diff($ordered, [$submissionId]));
+                array_splice($ordered, $place['position'] - 1, 0, [$submissionId]);
+                $post('saveFeaturedOrder', [
+                    'assocType' => $place['assocType'],
+                    'assocId' => $place['assocId'],
+                    'featured' => array_map(fn (int $id, int $seq) => ['id' => $id, 'seq' => $seq], $ordered, array_keys($ordered)),
+                ], "{$place['specPath']}.position");
+            }
+        }
     }
 
     /**

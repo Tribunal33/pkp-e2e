@@ -6,7 +6,7 @@ confirmed dead (it stays here with its evidence) or ruled out of scope.
 
 Sources (removed from the tip 2026-08-25, reachable in git history): the six crosswalks in `.reports/phase0-feature-map/` (their UNASSIGNED
 lists, consistent with `synthesis.md` §4) + `RULINGS.md`'s probe-derived
-dead-code additions. **29 parked atoms** + **46 noted dead-code/defect
+dead-code additions. **29 parked atoms** + **47 noted dead-code/defect
 candidates attached to claimed atoms**. (PLUG-028 moved to FEATURE-MAP's
 Out-of-scope tail — see RULINGS.md. Two candidates that rested solely on
 scratched pre-reset evidence were dropped 2026-08-21 per the reset doctrine —
@@ -747,3 +747,19 @@ until their specs exist. Do not force-claim the defects themselves.
     spec author; checkout ops `e2111e3aae`, lib/pkp `17a1f01fed`).
     Resolves: maintainer ruling whether a bundled or documented screening
     plugin is expected; otherwise a liveness waiver.
+
+47. **Unreached catalog-management pieces** — attached to **U70** (ROUTE-062,
+    AFFM-266, NOTIF-038; claimed). OMP `pages/manageCatalog/index.php`
+    routes the op `homepage` to `ManageCatalogHandler`, which has no such
+    method and grants it to no role. The legacy filter form
+    `templates/controllers/grid/manageCatalog/form/catalogMonographsFilterForm.tpl`
+    has no grid handler left (`controllers/grid/manageCatalog` does not
+    exist). The string `submission.catalogEntry.add` ("Add Selected to
+    Catalog") is used nowhere; the "Add Entry" panel saves with "Save".
+    `ApproveSubmissionNotificationManager::getNotificationUrl()` builds a
+    `manageCatalog` link for the "Catalog Management" notice, but the only
+    display of that notice (`WorkflowNotificationDisplay.vue`) prints title
+    and text, and the record has no user, so no notification list shows
+    it. Code-verified 2026-09-27 (U70 spec author; checkout omp
+    `72a01a026`). Resolves: maintainer confirmation as dead code (removal
+    candidates).

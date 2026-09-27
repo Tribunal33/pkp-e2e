@@ -24,7 +24,8 @@
  *   machinery as the bootstrap seed's structure list (the FIRST declared
  *   entry renames the hook-created default, further entries are added), so
  *   scratch contexts can carry more than the one default section. Seeded
- *   before users[] so sub-editor assignments resolve.
+ *   before users[] so sub-editor assignments resolve. OMP's `series[]`
+ *   (U70) runs the "Add Series" window's own SeriesForm instead.
  * - context.supportedSubmissionLocales (U21) — the Languages settings grid's
  *   submission-locale toggles: sets supportedSubmissionLocales and keeps
  *   supportedSubmissionMetadataLocales / supportedAddedSubmissionLocales in
@@ -144,6 +145,11 @@
  *   boolean, default 1, which every new context stores): true "Enable",
  *   false "Disable". Only the journal and preprint server schemas carry
  *   it, so OMP answers 400. The key writes this row alone.
+ * - catalogSortOption (one of the radios' words, e.g. 'title-ASC') —
+ *   Settings › Website › Appearance › Setup, "Order of monographs" (U70;
+ *   the OMP AppearanceSetupForm's FieldOptions over
+ *   Repo::submission()->getSortSelectOptions()). Only the press schema
+ *   carries it: OJS and OPS answer 400. The key writes this row alone.
  * - enableDois (bool), doiPrefix (string or null), doiVersioning (bool),
  *   enabledDoiTypes (list), doiCreationTime (copyediting (OPS production) /
  *   publication / never), doiSuffixType (default / none / customPattern)
@@ -2523,6 +2529,26 @@ abstract class PKPContextScenarioBuilder
             }
             $settings['enableOai'] = $value;
             $specKeys['enableOai'] = 'enableOai';
+        }
+
+        if ($root->has('catalogSortOption')) {
+            // Settings › Website › Appearance › "Setup", the "Order of
+            // monographs" radios (U70; the OMP AppearanceSetupForm's
+            // FieldOptions of type radio over Repo::submission()->
+            // getSortSelectOptions(): "title-ASC" "Title (A-Z)" …
+            // "seriesPosition-DESC"). A new press has no row and no radio
+            // marked; the form offers no way back to none, so null is
+            // refused. The form posts its whole body; the key writes this
+            // row alone. Only the press schema carries it: OJS and OPS
+            // answer 400.
+            $hasProperty('catalogSortOption') || throw new SpecException('catalogSortOption', 'catalogSortOption is not a setting of this app\'s context schema (the "Order of monographs" radios exist on a press only)');
+            $value = $root->get('catalogSortOption');
+            $choices = array_keys(Repo::submission()->getSortSelectOptions());
+            if (!is_string($value) || !in_array($value, $choices, true)) {
+                throw new SpecException('catalogSortOption', 'catalogSortOption must be one of the "Order of monographs" radios: ' . implode(', ', $choices));
+            }
+            $settings['catalogSortOption'] = $value;
+            $specKeys['catalogSortOption'] = 'catalogSortOption';
         }
 
         // Settings › Journal › "Masthead", "Publisher" and the two ISSN

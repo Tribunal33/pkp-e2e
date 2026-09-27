@@ -112,8 +112,34 @@ Keys:
   requires "Journal initials" (`context.acronym`), which a scratch
   context has only when given (U19 harness, 2026-09-26, three apps).
 - `sections[]` (OJS, OPS): same shape as in the bootstrap payload. The first
-  entry renames the default section. OMP's context scenario does not accept
-  a `series[]` list yet and answers 400 on the key.
+  entry renames the default section.
+- `series[]` (OMP; OJS and OPS answer 400): each `{path, title?,
+  description?}` is Settings › Press › "Series" › "Add Series" with
+  "Title" and "Path" typed (and "Description" when given), "Save", run
+  through the window's own form, so the rows are the screen's: the
+  series row (order 0, not featured, not restricted, active, no image),
+  a `title` row, an empty `prefix`, `subtitle`, `description`,
+  `onlineIssn` and `printIssn` row, and the "Order of monographs" list
+  as it arrives, `sortOption` "title-ASC" ("Title (A-Z)"); no category
+  and no editor ticked. `title` is a string (the primary locale) or a
+  locale map over the press's form languages, default the path;
+  `description` the same, stored as the rich-text box stores typed text
+  (`<p>…</p>`). Refusals (400, before the press exists): a missing
+  path, a path with anything but letters, digits, `/`, `.`, `_` and `-`
+  ("The series path must consist of only letters and numbers."), longer
+  than the box's 32 characters, or named twice ("The series path
+  already exists. Please enter a unique path."), a title or
+  description locale the press's forms lack. Series are added in list
+  order before `categories[]` and `users[]`, whose `series` sub-editor
+  assignments name them by path, and the submission scenario's `series`
+  key places a book in one. Every seeded series is stored at order 0,
+  as one added through "Add Series" is, so until the Series tab's "Order"
+  is used the tab and the Catalog Entry "Series" list come in database
+  order (on Postgres an edited row, such as one made inactive, moves
+  last; U70 claim check K5, 2026-09-27); the Catalog page's "Filters" offers a "Series" group once one
+  exists; a series' public page is `catalog/series/{path}`. Without the
+  key a scratch press has no series (U70 harness, 2026-09-27, parity
+  ledger).
   An OJS entry's `hideTitle` (boolean) is the section form's "Omit the
   title of this section from issues' table of contents." ticked (`true`)
   or unticked, as its "Save" stores it (`hide_title` 1 / 0); without the
@@ -685,6 +711,20 @@ Keys:
   paging is the U16 spec's Rule 9. The seeded context's tab reads the
   number back ("Items per page" 3, "Page links" 10). The three apps alike
   (U16 harness, 2026-09-25).
+- `catalogSortOption` (OMP only; OJS and OPS answer 400): the "Order of
+  monographs" radios of Settings › Website › Appearance › "Setup", one
+  of `title-ASC` "Title (A-Z)", `title-DESC` "Title (Z-A)",
+  `datePublished-ASC` "Publication date (oldest first)",
+  `datePublished-DESC` "Publication date (newest first)",
+  `seriesPosition-ASC` "Series position (lowest first)",
+  `seriesPosition-DESC` "Series position (highest first)", saved as
+  that form saves (one form-encoded POST to `contexts/{id}`, PUT
+  override, `…&displayFeaturedBooks=false&displayNewReleases=false&catalogSortOption=title-ASC`;
+  stored as the word). The key writes this row alone. A new press has no
+  row and no radio marked (it lists by publication date, newest first);
+  the form offers no way back to none, so null and any other word are
+  400s. The tab reopens with the seeded radio marked (U70 harness,
+  2026-09-27).
 - `sidebar`: the "Sidebar" list of Settings › Website › Appearance ›
   "Setup", a list of block plugin names in the order the sidebar shows
   them, saved as that form saves (the same PUT; stored as a JSON list). The
@@ -1705,7 +1745,7 @@ Keys:
   categories, cover preview and alt text, URL Path) and in the rows,
   which equal the screen's, the Activity Log's one "metadata updated"
   line per page saved included. OMP takes `categories` (U16
-  harness, 2026-09-25) and `datePublished` (U17) alone: a press keeps its categories on the workflow's
+  harness, 2026-09-25), `datePublished` (U17) and `urlPath` (U70) alone: a press keeps its categories on the workflow's
   "Catalog Entry" page, whose "Categories" field is the same picker, and
   the seed saves it as that page's "Save" does (the same PUT to the
   publication; the page posts its whole form, `seriesId`,
@@ -1713,10 +1753,18 @@ Keys:
   rows equal the seed's, its one "metadata updated" line included), so
   the page reopens with one chip per category, a sub-category named by
   its line of parents ("Parity Top > Parity Child"), and "Date
-  Published" is saved in the same PUT. OMP answers 400 on every
-  other key of this list (the cover and URL Path on the same page, the
-  "Title & Abstract" and "Metadata" values), which no parity drive has
-  read there. On all three apps the placement is typed after the submit,
+  Published" is saved in the same PUT. OMP's `urlPath` is the same
+  page's "URL Path" box, saved in the same PUT (the page posts its
+  whole form, `…&updateType=new_version&summaryOfChanges[en]=&coverImage[en]=&urlPath=…`;
+  the stored version and its one "metadata updated" line equal the
+  seed's), and refused as the page refuses it: a path another book of
+  the press has is a 400 carrying the field's own "The URL path has
+  already been used and can not be used again.", the page's notice
+  "Go to URL Path: …" (U70 harness, 2026-09-27). A test of that
+  refusal seeds the first book with the path and types it on the
+  second. OMP answers 400 on every other key of this list (the cover on
+  the same page, the "Title & Abstract" and "Metadata" values), which no
+  parity drive has read there. On all three apps the placement is typed after the submit,
   so it is a category added after arrival, after the submit's editor
   assignment has run. Right after a seed of two books `published` with
   `categories`, the press's category page reads "0 Titles"; the U16
@@ -1767,6 +1815,38 @@ App-specific keys:
 - OMP: `series` (path) and `seriesPosition`, both optional; `workType`
   (`monograph`, the default, or `editedVolume`); and per review round
   `stage: internal | external` (default external).
+- OMP: `featured[]` and `newRelease[]` (U70), the Catalog page's
+  "Featured" and "New release" boxes of this book, pressed after the
+  publish by the press manager, one entry per press, in the order given
+  (`featured[]` first): `{in: 'catalog'}` with no filter, `{in:
+  'category', path}` with that category chosen under "Filters" ("Featured
+  in category"), `{in: 'series', path}` with that series chosen
+  ("Featured in series"). Each press is the box's own post
+  (`_submissions/saveDisplayFlags` with the book's stored lists plus the
+  new one at `seq` 1), run through the controller's action, which
+  rewrites the book's rows and renumbers the list from 1. A `featured[]`
+  entry may add `position` (1 = first): then "Order Features", the book
+  moved to that place among the list's featured books as the page lists
+  them, "Save Order" (`saveFeaturedOrder`, the list renumbered from 0).
+  Without `position` a newly featured book's place is not fixed, as with
+  a press of the box: first or second while the list was last renumbered
+  by a box press (the new row and the first one share `seq` 1), second or
+  third once a `position` or a "Save Order" has renumbered it from 0
+  (spec Rule 11; U70 claim check K3-8). A test that needs a fixed
+  featured order gives each book its `position` (seeded one after the
+  other: 1, then 1 or 2, …).
+  Refusals (400): either key without `published: true`, or on a book
+  whose "Date Published" lies after today (scheduled, off the list); an
+  unknown `in`; a `path` on `catalog`; a category `path` not among the
+  book's `categories`, a series `path` other than its `series` (the
+  filter lists the book only once it is placed there); two categories
+  or two series in one key (the box cannot hold that, spec A4); a
+  `position` on `newRelease[]`, below 1, or past the list's featured
+  books. The seeded rows, the Catalog page's boxes and order, the
+  public catalog's order and "New Releases" equal a by-hand run of the
+  same presses in the same order (U70 harness, 2026-09-27). To test
+  "flags kept" after an unpublish, seed the flags on a published book and
+  unpublish on screen.
 - OPS: `section` (abbrev or path; defaults to the server's first section).
   `reviewRounds` is rejected with a 400, because OPS has no review stage,
   and so is `reviewerSuggestions`, because OPS mounts no reviewer
@@ -2143,9 +2223,6 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   Submission › "Metadata", "Enable article number metadata"): the
   "Metadata" publication page offers "Article Number" only with it
   ticked; the submission key `articleNumber` does not read it (U13).
-- Context: OMP `series[]` (the context scenario answers 400 on it, so a
-  scratch press has no series and its Browse block none to list; added by
-  hand under Settings › Press › "Series", U29, U16 claim checks).
 - Section: `sections[].hideAuthor` (OJS), the section form's "Omit author
   names for section items from issues' table of contents."; it is ticked
   on screen (U13 claim check K5, 2026-09-25).

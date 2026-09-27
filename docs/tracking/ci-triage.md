@@ -565,6 +565,13 @@ trips.
   was not found within 30 s (`CustomContentPages.js:450`); green alone
   (`.reports/U64/final-run-ops.log`, `alone-ops-reds.log`). **Watch
   condition**: a second red at the same row wait.
+- **OMP U16 S8's "Browse" block marks no category** (OMP, once,
+  2026-09-27). In the U70 session's OMP final (reset database, auto
+  workers) the block on the "Science" category page listed no marked
+  entry where "Science" is expected (`U16-categories.spec.js:636`,
+  `markedNames()` `[]`); green alone in 11 s (`.reports/U70/final-run-omp.log`,
+  `alone-omp-U16S8.log`). **Watch condition**: a second red at the same
+  read.
 - **U18 feed download named `rss.xmp` on the Mac** (U18 S1, S3, S7, S8,
   all three apps; deterministic on the Mac, 2026-09-26). The RDF feed's
   download comes out as `rss.xmp` where `WebFeedPages.js` expects
