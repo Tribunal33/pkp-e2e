@@ -15,10 +15,10 @@
  *
  * Deliberately NOT covered (register IDs from the spec's Findings register;
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap): A5 🐞,
- * A16 ❓ (a galley's "Change File"; S11 never opens it), A4 🐞, A17 ❓ (the
+ * A16 ❓, A23 🐞 (a galley's "Change File"; S11 never opens it), A4 🐞, A17 ❓ (the
  * "History" tab's prior-versions box and downloads; S11 reads the tab's
  * opening only), A3 🐞 (the assistant roles' "History"; S11 reads as the
- * manager), A1, A2, A6–A15, A18–A22 (journal and press lists and windows
+ * manager), A2, A6–A15, A18–A22, A24 (journal and press lists and windows
  * a preprint server never shows). OPS1 ✅ is what S11 asserts. The spec's
  * Coverage section records everything else left out.
  *

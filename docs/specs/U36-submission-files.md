@@ -226,21 +226,34 @@ record what each role is offered once the list is on screen. <sup>b</sup>
    "Download" that fetches that version (Rule 13b). <sup>r</sup>
 <a id="cancel-restore"></a>
 9. **Cancelling a revision restores the file it replaced.** When the
-   upload in step 1 was a revision, "Cancel" closes the window and puts
-   back the previous file under its previous name. When the file had
-   been renamed through "Update File Details" since its last upload, by
-   anyone, the person revising it included, the previous file is not
-   put back:
-   "Cancel" leaves the window open with no message, and the list keeps
-   the new file under its new name ⚠ [A1](#a1). <sup>s</sup> <sup>d5</sup>
+   upload in step 1 was a revision, "Cancel", at any step, closes the
+   window and puts back the previous file under the name it had when the
+   wizard opened: a rename through "Update File Details" since its last
+   upload, by anyone, is kept. The file's "History"
+   (Rule 13a) keeps no line of the cancelled upload. Closing the window
+   with its header "Close" instead keeps the new file (Rule 6), and the
+   earlier version stays in "History" as a "Download" (Rule 8).
+   <sup>s</sup> <sup>d5</sup>
    - 9a. **A galley's "Change File"** {OJS OPS} is always a revision of
      the galley's current file. Step 1 shows the heading "Current file"
      and the upload box, and no component or file list. Nothing stands
      under "Current file" until a file is uploaded; then it names the
      new file ⚠ [A5](#a5). "Cancel" puts the galley's previous file
-     back. Closing the window with its header "Close" instead asks
+     back, and "History" in the galley's "More Information" keeps no
+     line of the cancelled upload. Closing the window with its header "Close" instead asks
      nothing, and the galley serves the new file from then on
      ⚠ [A16](#a16). <sup>d4</sup>
+   - 9b. **A second pick, then "Cancel".** A revision uploaded on step
+     1 can be swapped there for another file with the upload box's
+     "Change File" (Rule 5a). "Cancel" after such a swap, here or in a
+     galley's "Change File" {OJS OPS}, puts back the file as it was
+     before the wizard opened, not the file picked first ⚠ [A23](#a23).
+     <sup>s</sup>
+   - 9c. **One file revised in two windows.** When the same person has
+     the upload wizard open on the same file in two browser windows,
+     each with a revision uploaded, "Cancel" in each window closes it,
+     and once both are cancelled the file is as it was before either
+     opened ⚠ [A24](#a24). <sup>s</sup>
 <a id="file-details"></a>
 10. **"Update File Details".** The row menu's "Update File Details" opens
     a window titled "Edit a file" with the fields of step 2 (Fields) and
@@ -390,7 +403,8 @@ record what each role is offered once the list is on screen. <sup>b</sup>
 - **An upload, a revision, an edit, a note.** Each adds its rows to the
   file's "History" (Rule 13a). The submission's Activity Log also gains a
   line naming the file for each upload, revision, edit and delete, and
-  none for a note. A new file's upload reads there "Revision "{file
+  none for a note; a revision cancelled with "Cancel" leaves no line in
+  either (Rule 9). A new file's upload reads there "Revision "{file
   name}" was uploaded for file {number}." ⚠ [A22](#a22). That log is
   *Submission activity log & notes*'. <sup>y</sup> <sup>d20</sup>
 - **A deleted file.** "Removed file." appears; the file's dependent files
@@ -905,6 +919,8 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Budget** — variants:
+  - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
+  - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
   - a file over the upload limit refused in its row with "File is too big ({size}MiB). Max filesize: {limit}MiB." (Rule 17b)
   - a journal with two submission languages: one "Name the file" box per language behind language tabs, opening on the submission's own language (Fields; Settings bullet 5)
   - leaving the page while a file uploads in the "Files" panel, which asks nothing and keeps nothing (Rule 17a)
@@ -917,7 +933,6 @@ Left out of the scenarios above, by reason:
 - **Nothing new to test**:
   - the Author deleting their own file on "Revisions Uploaded" (Actors row 5): the "Delete" dialog and "Removed file." scenario 5 reads as the Journal Manager
 - **Register carries it**:
-  - A1 ("Cancel" after a revision of a renamed file leaving the window open and the new file in place; Rule 9)
   - A2 (the Author offered "Update File Details" on a file an editor uploaded, and refused; Actors row 3; scenario 7 marks it)
   - A3 ("History" keeps showing "Loading" for the assistant roles; Actors row 4; scenario 6 marks it)
   - A4 ("Show events from prior versions" changing nothing; Rule 13b)
@@ -939,6 +954,8 @@ Left out of the scenarios above, by reason:
   - A20 (the reviewer's "Review Files" search keeping every file; Rule 16)
   - A21 (a file of exactly the upload limit failing on the server; Rule 17b)
   - A22 (the Activity Log recording a new file's upload as a "Revision"; Side effects)
+  - A23 ("Cancel" after a second pick on step 1 leaving the first pick as the file; Rule 9b)
+  - A24 (one file revised in two windows: one "Cancel" doing nothing, the file keeping a cancelled upload; Rule 9c)
 - **Owned by another feature**:
   - a Production editor's lists: every stage's while not assigned, Copyediting and Production only once assigned (Actors preamble; *Workflow screen & stage access*, and *Stage participants*, whose A8 records the assigned case)
   - the Author's revision upload through "Upload revisions" (Actors row 2; *Review stage & rounds*, scenario 4)
@@ -957,7 +974,6 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Cancel" after revising a file that was renamed leaves the window open and the new file in place instead of restoring the old one | 🐞 | user-visible | — |
 | [A2](#a2) | The Author is offered "Update File Details" on every row and refused on files they did not upload | 🐞 | minor | — |
 | [A3](#a3) | "More Information"'s "History" tab keeps showing "Loading" for the Copyeditor, Layout Editor and the other assistant roles | 🐞 | minor | — |
 | [A4](#a4) | The "History" tab's "Show events from prior versions" box changes nothing | 🐞 | minor | — |
@@ -972,6 +988,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | In "Upload/Select Files", another stage's files refuse their "More Information", "Edit" and "Delete" | 🐞 | minor | — |
 | [A20](#a20) | The reviewer's "Review Files" search keeps every file | 🐞 | minor | — |
 | [A21](#a21) | A file of exactly the upload limit ends with "Invalid JSON response from server." instead of being refused | 🐞 | minor · crash: server | — |
+| [A23](#a23) | Revising a file, a second pick on step 1 and then "Cancel" leave the first pick as the file instead of the original | 🐞 | minor | — |
+| [A24](#a24) | One file revised in two windows: the first window's "Cancel" does nothing, and the file keeps the upload cancelled there | 🐞 | minor | — |
 | [A6](#a6) | Every file row's menu button is named "More Actions" alone, so a screen reader cannot tell the rows apart | ❓ | minor | — |
 | [A8](#a8) | The revise list names files only, so two files with the same name read the same | ❓ | minor | — |
 | [A13](#a13) | Deleting a file also deletes every copy made from it on other lists | ❓ | user-visible | — |
@@ -980,22 +998,9 @@ an entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | Note text not added is lost without a question when the window closes | ❓ | minor | — |
 | [A22](#a22) | The Activity Log records a new file's upload as a "Revision" | ❓ | minor | — |
 | [OPS1](#ops1) | A preprint server has no workflow file lists; its files are its galleys' files | ✅ | — | — |
+| [A1](#a1) | Retired: "Cancel" after revising a file that was renamed left the window open and the new file in place; it now restores the old file (Rule 9) | ✅ | retired | upstream change + claim check (claude), 2026-09-27 — fixed upstream |
 
 ### All apps
-
-<a id="a1"></a>
-**A1 — "Cancel" after a revision does not restore a file that was renamed** · 🐞 · user-visible.
-An editor who uploads a revision of a file in the upload wizard and then
-presses "Cancel" expects the window to close and the list to show the
-previous file again, as it does for a file nobody renamed. When the file
-had been renamed through "Update File Details" since its last upload, by
-anyone, the person revising it included, "Cancel" does nothing visible:
-the window stays open on "1. Upload File" with the new file shown and no message.
-Only the header "Close" leaves it, and the list then keeps the new file
-under its new name; the earlier version survives only as a "Download" in
-the file's "History".
-For a file someone other than the person revising it had renamed this is a regression, not a choice: "Cancel" restored it until the file-edit logging change of September 2026 (read from the code history).
-Since: 2026-09-04 (read from the code history) · Basis: probe. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — The Author is offered "Update File Details" on files they cannot edit** · 🐞 · minor.
@@ -1205,6 +1210,36 @@ Question: should the log word a first upload as an upload? Lean: yes;
 the file's "History" already does.
 Basis: probe. <sup>[f-a22](#fn-a22)</sup>
 
+<a id="a23"></a>
+**A23 — A second pick on step 1, then "Cancel", leaves the first pick as the file** · 🐞 · minor.
+Revising a file in the upload wizard, a person uploads a file on step 1,
+swaps it there for another with "Change File", then presses "Cancel".
+They expect the file as it was before the wizard opened (Rule 9b). The
+window closes, but the list shows the first pick's name, and the
+Activity Log & Notes window keeps its line "A file revision "{file
+name}" was uploaded for submission {number} by {username}." naming who
+cancelled, with a working "Download" behind its arrow; nothing says the
+original was not restored. The same happens in any galley's "Change
+File". A regression: "Cancel" restored the original until the September
+2026 change that made it restore a renamed file too ([A1](#a1)).
+Since: 2026-09-27 · Basis: probe. <sup>[f-a23](#fn-a23)</sup>
+
+<a id="a24"></a>
+**A24 — One file revised in two windows: one "Cancel" does nothing, and a cancelled upload stays** · 🐞 · minor.
+The same person opens the upload wizard on the same file in two browser
+windows: the first uploads a revision, the second then uploads another
+revision of the same file. Each "Cancel" is expected to close its window
+and, once both are cancelled, leave the file as it was before either
+opened. Instead, "Cancel" in the first window does nothing and shows no
+message, and the window stays open, whichever window is cancelled first.
+Either way the list ends up showing the first window's revision, and
+the Activity Log & Notes window and the file's "History" both keep its
+line "A file revision "{file name}" was uploaded…", with a working
+"Download" behind its arrow. A regression: both cancels restored
+the original until the September 2026 change that made "Cancel" restore
+a renamed file too ([A1](#a1)).
+Since: 2026-09-27 · Basis: probe. <sup>[f-a24](#fn-a24)</sup>
+
 ### OPS
 
 <a id="ops1"></a>
@@ -1216,6 +1251,11 @@ wizard's first step manages the galleys readers download. Its files are
 the galleys' files, reached through the "Galleys" page. Intended: the
 single-stage workflow has no copyediting or review files to list.
 Basis: probe. <sup>[f-ops1](#fn-ops1)</sup>
+
+### Retired
+
+<a id="a1"></a>
+**A1 — "Cancel" after a revision does not restore a file that was renamed** · ✅ · retired. Fixed upstream on 2026-09-27, verified that day on OJS and OMP: "Cancel" after a revision, at any step, puts back a file renamed by anyone since its last upload under the name it had when the wizard opened (Rule 9). <sup>[f-a1](#fn-a1)</sup>
 
 ---
 
@@ -1691,16 +1731,24 @@ the revision and the original upload, each "Download" behind its row's arrow
 fetching that version (OJS fileId 166 "article-rev.pdf" and 84 "article.pdf").
 
 <a id="fn-s"></a>
-**s** — `PKPManageFileApiHandler::cancelFileUpload()`: with `originalFile`
-it looks for a log entry on the submission file carrying the original
-uploader's username, the original name and file id
-(`findMatchedLogEntry()`); found, it restores `fileId`, `name` and
-`uploaderUserId`; in every accepted case it deletes the uploaded file. Not
-found, it answers `status:false` and restores nothing (A1).
-Since the file-edit logging change the matching entry is written under the new
-file (f-a1), and the match needs the pre-revision name, so a rename since the
-last upload by anyone defeats it (A1). Live-probed 2026-09-23 (Rules 7, 9):
-note d5.
+**s** — Since pkp/pkp-lib#13288 (issue #13286, merge `f38c4a4a10`,
+2026-09-27): `FileUploadWizardHandler::uploadFile()` keeps the replaced
+file's `fileId`, `name` and `uploaderUserId` in the session under
+`revisionUploadOriginalFile.<submissionFileId>`, one key per submission
+file, which every revision upload writes anew.
+`PKPManageFileApiHandler::cancelFileUpload()` accepts only the file the
+submission file currently points at and newest among its revisions,
+restores the revision just below it (`$revisions->get(1)`) with the stored
+name and uploader through `edit(…, log: false)`, deletes every log entry
+carrying the cancelled `fileId` (`deleteRevisionLogEntries()`), then the
+uploaded file, and removes the key; with no key, or for another file, it
+answers `status:false` and changes nothing. The `originalFile` the wizard
+still posts (note p) is no longer read. Before the change it restored the
+posted `originalFile` once `findMatchedLogEntry()` (removed) found a log
+entry with the original uploader's username, name and file id, which a
+rename since the last upload defeated (A1, f-a1). The one key per file and
+the restore to the revision just below are what A23 and A24 run into.
+Live-probed 2026-09-27 (Rules 7, 9): note d5.
 
 <a id="fn-aa"></a>
 **aa** — A pointer only: this spec makes no screen claim of its own about an
@@ -1708,15 +1756,22 @@ author's revision request; the review-stage spec states it with its own
 evidence.
 
 <a id="fn-d5"></a>
-**d5** — Live-probed 2026-09-23 (Rule 9; OJS and OMP): a file nobody had
-renamed came back under its name after "Cancel" at step 1 and at step 2
-(`cancel-file-upload` answered `status:true`), twice on OJS. Renamed first, by
-the uploader, by another editor, or revised by the one who renamed it:
-`cancel-file-upload` answered `status:false`, the window stayed open on "1.
-Upload File" with the greyed selects and the uploaded name and no message, and
-the header "Close" then left "article-rev.pdf" under the original number (A1).
-Choosing the file to revise showed its component, greyed. A fresh revision of
-the already-replaced file restored again.
+**d5** — Live-probed 2026-09-27 (Rule 9; OJS and OMP; the Journal
+Manager, an Editor, and a Section Editor, on the press a Series editor, as
+revisers): "article.pdf" revised and cancelled at steps 1, 2 and 3, with
+the file not renamed, renamed by the reviser, renamed by another editor
+and revised by the one who renamed it, renamed by a manager and revised by
+the Section Editor, and a revision of an already-replaced file
+("rev-c8.pdf" back): the previous file back under its previous name and
+number every time, at once and after a reload, `cancel-file-upload`
+answering `status:true`, and no line added to the file's "History" or to
+the Activity Log. Choosing the file to revise showed its component,
+greyed. The header "Close" after a revision (the browser's question at
+step 1, then "OK") left "rev-c9.pdf" under the original number, and
+"History" offered the earlier "article.pdf" as a "Download". On
+2026-09-23, before the fix, a rename by anyone since the last upload made
+`cancel-file-upload` answer `status:false`, the window staying open with
+no message (A1).
 
 <a id="fn-d4"></a>
 **d4** — Live-probed 2026-09-23 (Rule 9a; OJS and OPS): a galley's "Change
@@ -1727,7 +1782,12 @@ and after an earlier completed "Change File". Once a file was chosen the line
 read "replacement.pdf" with "Change File" (A5). Closed with the header "Close"
 after the upload, with no question, the Preview's galley download served
 "replacement.pdf"; "Cancel" at the same point served "article.pdf"
-("preprint.pdf") again (A16).
+("preprint.pdf") again (A16). Live-probed 2026-09-27 (Rule 9a; OJS and
+OPS; the manager and the Section Editor or Moderator): the same step 1
+and the same two outcomes; the cancelled upload (`status:true`) left no
+line in the galley's "History" or the Activity Log, while the one closed
+with "Close" left "A file revision "replacement.pdf" was uploaded…" in
+both.
 
 <a id="fn-t"></a>
 **t** — `SubmissionFilesMetadataForm` (name required,
@@ -2043,13 +2103,17 @@ plus the pre-revision name and file id). Working at `4ddab4b9cf`, broken at
 `shared/playwright/checks/sync/pkp-lib-12352/cancel-restore.js`). Last re-run
 2026-09-22 at ojs `38781720df` / pkp-lib `f8bacd7658` on a reset database:
 after "Cancel" the file list read fileId 2 `article-rev.pdf`,
-`cancel-file-upload` answered `status:false`. Fix PR pkp/pkp-lib#13288 open
-(head `35bb1839df`). The stable-3_5_0 line's backport logs under the original
+`cancel-file-upload` answered `status:false`. The stable-3_5_0 line's backport logs under the original
 file and restores (read 2026-09-21). Upstream's #13286 also records the
 renamer revising (the check's MODE=other) failing on 3.4 and 3.5. Live-probed
-2026-09-23 on OJS and OMP (note d5): a rename by anyone since the last upload,
-the uploader's included, defeats the restore, and the window stays open with
-no message.
+2026-09-23 on OJS and OMP: a rename by anyone since the last upload, the
+uploader's included, defeated the restore, and the window stayed open with no
+message. Fixed by pkp/pkp-lib#13288 (merge `f38c4a4a10`, 2026-09-27; note s),
+in ojs `72b85f4ba0` / lib/pkp `26ae6431b5`, omp `3cd59e9443` and ops
+`e2111e3aae` / lib/pkp `17a1f01fed`. Live-probed 2026-09-27 on OJS and OMP
+(note d5): every renamed-file case restored the previous file; the kept check
+restored it on both, in both of its modes. Retired 2026-09-27. The same change
+brought A23 and A24.
 
 <a id="fn-a2"></a>
 **f-a2** — Note d. Live-probed 2026-09-23 (d1; OJS and OMP): on "Submission
@@ -2198,6 +2262,59 @@ a fresh upload 182 logged "Revision "article.pdf" was uploaded for file 182.";
 every production upload the same; OPS's seeded galley file "Revision
 "preprint.pdf" was uploaded for file 6.".
 
+<a id="fn-a23"></a>
+**f-a23** — Introduced by pkp/pkp-lib#13288 (issue #13286, merge
+`f38c4a4a10`, 2026-09-27; note s): the second upload writes the session
+key anew with the first pick as "the original", and the cancel restores the
+revision just below the cancelled one, the first pick, ignoring the
+`originalFile` the wizard posts (fileId 1, "article.pdf"). The first pick
+is still a revision because the wizard's own request to delete it is
+refused (A14: the page script posts `id=`, not `submissionFileId=`), which
+was harmless before. Live-probed 2026-09-27 at ojs `72b85f4ba0`, omp
+`3cd59e9443`, ops `e2111e3aae`: as an Editor on "Submission Files" (OJS,
+OMP), "article.pdf" revised with "rev-one.pdf", then "rev-two.pdf" picked on
+step 1, then "Cancel" (`status:true`): the files API read fileId 2
+"rev-one.pdf" uploaded by the Editor instead of fileId 1 "article.pdf" by
+the Author, and Activity Log & Notes kept "A file revision "rev-one.pdf" was
+uploaded for submission 1 by …" with a "Download" answering 200; OPS's "PDF"
+galley read "rev-a.pdf" instead of "preprint.pdf". Live-probed 2026-09-27
+on a journal's galley "Change File" (OJS, `MODE=s1g`): before, fileId 7
+"article.pdf"; after "rev-a.pdf", then "rev-b.pdf", then "Cancel"
+(`status:true`), fileId 8 "rev-a.pdf", the first pick. Held on a freshly
+reset OJS the same day; with
+lib/pkp at `1ad4a14bb2`, before the change, on a reset database, the same
+steps restored fileId 1 "article.pdf". Kept check
+`shared/playwright/checks/sync/pkp-lib-13288/cancel-picks.js` (`MODE=s1`,
+`MODE=s1g` for a galley). Written up for the team in
+`docs/reports/2026-09-27-pkp-lib-13288.md` (Finding 1; a temporary report,
+deleted once addressed; git history keeps it).
+
+<a id="fn-a24"></a>
+**f-a24** — Introduced by pkp/pkp-lib#13288 (issue #13286, merge
+`f38c4a4a10`, 2026-09-27; note s): the second window's upload writes the one
+session key per file with the first window's upload as "the original".
+Cancelled first, the first window's cancel is refused because its upload is
+no longer the file's current one; cancelled second, it finds no key (the
+second window's cancel removed it). Either way it answers
+`{"status":false,"content":""}` and the page shows nothing. Live-probed
+2026-09-27 (OJS and OMP, one run each; the Journal Manager): window A
+uploaded "rev-A.pdf", window B then "rev-B.pdf"; "Cancel" in A answered
+`status:false` and A stayed open; a second press closed it without a
+request, the list reading "rev-B.pdf"; "Cancel" in B (`status:true`)
+closed B and the list read "rev-A.pdf", with its revision line and
+"Download" in the Activity Log and the file's "History". The reverse order
+on OJS (an Editor; "rev-a.pdf" then "rev-b.pdf"; B cancelled first,
+`status:true`, the list reading "rev-a.pdf"; then A, `status:false`, the
+window staying open) held on a freshly reset OJS the same day and left
+"rev-a.pdf" with its "A file revision "rev-a.pdf" was uploaded …" line and
+"Download". With lib/pkp at `1ad4a14bb2`, before the change, on a reset
+database, both cancels answered `status:true` and restored "article.pdf".
+Not driven on a galley or on a preprint server. Kept check
+`shared/playwright/checks/sync/pkp-lib-13288/cancel-picks.js` (`MODE=s2`).
+Written up for the team in `docs/reports/2026-09-27-pkp-lib-13288.md`
+(Finding 2; a temporary report, deleted once addressed; git history keeps
+it).
+
 <a id="fn-ops1"></a>
 **f-ops1** — Note a (the OPS workflow and wizard configs). Live-probed
 2026-09-23 (OPS): the manager's and the Moderator's workflow shows Production
@@ -2234,10 +2351,10 @@ live.
 
 - Vue file manager: `lib/ui-library/src/managers/FileManager/` (`FileManager.vue`, `fileManagerStore.js`, `useFileManagerConfig.js`, `useFileManagerActions.js`, `FileManagerCell*.vue`, `FileManagerActionButton.vue`, `modals/FileMetadataForm.vue`, `modals/useFileMetadataForm.js`); mounts in `lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfig{Editorial,Author}{OJS,OMP,OPS}.js`; `components/FileAttacher/FileAttacherWorkflowStage.vue` (the `*_SELECT` namespaces); `managers/ReviewerManager/useReviewDetailsForm.js` (`REVIEWER_ATTACHMENT_FILES`, read-only).
 - Submission wizard panel: `lib/ui-library/src/components/ListPanel/submissionFiles/` (`SubmissionFilesListPanel.vue`, `SubmissionFilesListItem.vue`, `SubmissionFilesEditModal.vue`, `SelectSubmissionFileListItem.vue`), `components/FileUploader/FileUploader.vue`; `lib/pkp/pages/submission/PKPSubmissionHandler.php` (`getFilesStep()`, `getSubmissionFilesListPanel()`), `lib/pkp/classes/components/forms/submission/PKPSubmissionFileForm.php`, `lib/pkp/templates/submission/review-files.tpl`; OPS `pages/submission/SubmissionHandler.php::getFilesStep()`.
-- Upload wizard: `lib/pkp/controllers/wizard/fileUpload/FileUploadWizardHandler.php`, `form/PKPSubmissionFilesUploadBaseForm.php`, `form/SubmissionFilesUploadForm.php`, `form/SubmissionFilesMetadataForm.php`; templates `lib/pkp/templates/controllers/wizard/fileUpload/{fileUploadWizard,form/fileUploadForm,form/submissionFileMetadataForm,form/fileSubmissionComplete}.tpl`, `controllers/fileUploadContainer.tpl`; JS `lib/pkp/js/controllers/wizard/{WizardHandler,fileUpload/FileUploadWizardHandler,fileUpload/form/FileUploadFormHandler}.js`, `js/controllers/UploaderHandler.js`.
-- File operations: `lib/pkp/controllers/api/file/PKPManageFileApiHandler.php` (`deleteFile`, `cancelFileUpload`, `findMatchedLogEntry`, `editMetadata`, `editMetadataTab`, `saveMetadata`) and each app's `controllers/api/file/ManageFileApiHandler.php` (OJS, OPS: identifiers ops only; OMP: also `editMetadata` for proof files and `getUpdateNotifications()` adding internal revisions); `lib/pkp/controllers/api/file/FileApiHandler.php`; link actions under `lib/pkp/controllers/api/file/linkAction/`.
+- Upload wizard: `lib/pkp/controllers/wizard/fileUpload/FileUploadWizardHandler.php` (`uploadFile`, `getOriginalFileSessionKey`), `form/PKPSubmissionFilesUploadBaseForm.php`, `form/SubmissionFilesUploadForm.php`, `form/SubmissionFilesMetadataForm.php`; templates `lib/pkp/templates/controllers/wizard/fileUpload/{fileUploadWizard,form/fileUploadForm,form/submissionFileMetadataForm,form/fileSubmissionComplete}.tpl`, `controllers/fileUploadContainer.tpl`; JS `lib/pkp/js/controllers/wizard/{WizardHandler,fileUpload/FileUploadWizardHandler,fileUpload/form/FileUploadFormHandler}.js`, `js/controllers/UploaderHandler.js`.
+- File operations: `lib/pkp/controllers/api/file/PKPManageFileApiHandler.php` (`deleteFile`, `cancelFileUpload`, `editMetadata`, `editMetadataTab`, `saveMetadata`) and each app's `controllers/api/file/ManageFileApiHandler.php` (OJS, OPS: identifiers ops only; OMP: also `editMetadata` for proof files and `getUpdateNotifications()` adding internal revisions); `lib/pkp/controllers/api/file/FileApiHandler.php`; link actions under `lib/pkp/controllers/api/file/linkAction/`.
 - More Information: `lib/pkp/controllers/informationCenter/{InformationCenterHandler,FileInformationCenterHandler}.php`, `form/{NewNoteForm,NewFileNoteForm}.php`; `lib/pkp/controllers/grid/eventLog/{SubmissionEventLogGridHandler,SubmissionFileEventLogGridHandler,EventLogGridRow,EventLogGridCellProvider}.php`; templates `lib/pkp/templates/controllers/informationCenter/*.tpl`, `controllers/grid/eventLog/eventLogGridFilter.tpl`.
 - Legacy grids: `lib/pkp/controllers/grid/files/` (`SubmissionFilesGridHandler`, `SelectableSubmissionFileListCategoryGridHandler`, `SubmissionFilesGridRow`, `FileNameGridColumn`, `dependent/`, `fileList/`, `review/ManageReviewFilesGridHandler`, `final/ManageFinalDraftFilesGridHandler`, `copyedit/ManageCopyeditFilesGridHandler`, `form/ManageSubmissionFilesForm`), `lib/pkp/templates/controllers/grid/files/*.tpl`.
-- Model, access and API: `lib/pkp/classes/submissionFile/Repository.php` (`add`, `edit`, `copy`, `delete`, `getAssignedFileStages`, `supportsDependentFiles`, `getRevisions`), `lib/pkp/classes/security/authorization/SubmissionFileAccessPolicy.php`, `internal/SubmissionFileStageAccessPolicy.php`, `lib/pkp/api/v1/submissions/PKPSubmissionFileController.php`, `lib/pkp/api/v1/temporaryFiles/PKPTemporaryFilesController.php`, `lib/pkp/schemas/submissionFile.json` (OMP overlay `schemas/submissionFile.json`, `chapterId`).
+- Model, access and API: `lib/pkp/classes/submissionFile/Repository.php` (`add`, `edit`, `copy`, `delete`, `deleteRevisionLogEntries`, `getAssignedFileStages`, `supportsDependentFiles`, `getRevisions`), `lib/pkp/classes/security/authorization/SubmissionFileAccessPolicy.php`, `internal/SubmissionFileStageAccessPolicy.php`, `lib/pkp/api/v1/submissions/PKPSubmissionFileController.php`, `lib/pkp/api/v1/temporaryFiles/PKPTemporaryFilesController.php`, `lib/pkp/schemas/submissionFile.json` (OMP overlay `schemas/submissionFile.json`, `chapterId`).
 - Components: `registry/genres.xml` per app, `lib/pkp/classes/submission/GenreDAO.php`, `lib/pkp/controllers/grid/settings/genre/`.
 - Galleys' entries: `lib/ui-library/src/managers/GalleyManager/useGalleyManager{Config,Actions}.js`.

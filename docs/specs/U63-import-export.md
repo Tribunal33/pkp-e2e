@@ -79,7 +79,7 @@ section. <sup>g</sup>
 | Tab (UI label) | What it holds |
 |----------------|---------------|
 | "Import Users" | the paragraph "Select an XML data file containing user information to import into this journal. See the journal help for details on the format of this file." (on a press: "…import into this press. See the press help for details on the format of this file.") and "Note that if the imported file contains any usernames or email addresses that already exist in the system, the user data for those users will not be imported and any new roles to be created will be assigned to the existing users."; the upload box headed "File"; the "Import Users" button <sup>k</sup> |
-| "Export Users" | the list titled "Current Users", with "Export All Users" and "Search" at its top right and the columns "Select", "Given Name", "Family Name", "Username", "Email"; under it "Export Users" <sup>m</sup> |
+| "Export Users" | the list titled "Current Users", with "Export All Users" and "Search" at its top right and the columns "Select", "Given Name", "Family Name", "Username" and a last column headed "Email" on some installs and "Email address" on others, with no setting behind the difference (the same split as the contributor form's email field, [Contributors & affiliations](U41-contributors-and-affiliations.md#a19)); under it "Export Users" <sup>m</sup> |
 | "Results" | added by each "Import Users" press (Rule 22), each with its own "Close"; reloading the page removes every "Results" tab <sup>k</sup> |
 
 The "Current Users" filter: "Search" at the list's top right shows it,
@@ -829,8 +829,9 @@ journal to another) with throwaway accounts. <sup>sc</sup>
    - **The "Export Users" tab**: on A's "Users XML Plugin" page press
      "Export Users": the list titled "Current Users", with "Export All
      Users" and "Search" at its top right and the columns "Select",
-     "Given Name", "Family Name", "Username" and "Email", lists "moss"
-     and "fern", with "Export Users" under it (Rule 26; Fields).
+     "Given Name", "Family Name", "Username" and "Email" ("Email
+     address" on some installs; Fields), lists "moss" and "fern", with
+     "Export Users" under it (Rule 26; Fields).
    - **The filter**: press "Search" at the list's top right: a text box,
      a list of the journal's roles reading "All Roles" and a "Search"
      button show. Type moss in the box and press the "Search" button:
@@ -1755,7 +1756,10 @@ sign-in the move read the plain success sentence.
 `RedirectConfirmationModal` (`grid.users.confirmExportAllUsers`) to
 `…/plugin/UserImportExportPlugin/exportAllUsers`; columns
 `user.givenName`, `user.familyName`, `user.username`, `user.email`
-"Email", plus the `common.select` column; `PagingFeature`;
+("Email" in lib/pkp `locale/en/user.po`, "Email address" in
+`locale/en/common.po`: the duplicate key U41's A19 records, so the
+install's locale-file order picks the header), plus the
+`common.select` column; `PagingFeature`;
 `loadData()` filters by context, `searchPhrase` and `userGroup`
 (`renderFilter()` also builds field and match lists the template
 `userGridFilter.tpl` never shows). The template's form posts `export`
@@ -1783,6 +1787,11 @@ window, twice, while a press 1.25 s after "Cancel" opened "Confirm":
 `setTimeout`, and `ModalRequest.finish()` then removes `$modal_`, by
 then the new window. A person pressing again a moment later is not
 affected.
+Test run 2026-09-27 (OJS, the VM's reset install; Fields; scenario
+6): the list's headers read "Select", "Given Name", "Family Name",
+"Username", "Email address", where the scenario's test, then asserting
+the literal "Email", went red; the test had been green with it at the
+feature's build, so that install's header read "Email".
 
 <a id="fn-n"></a>
 **n** — `ojs/plugins/importexport/pubmed/`: `templates/index.tpl` (tabs

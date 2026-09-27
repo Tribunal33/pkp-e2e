@@ -24,7 +24,7 @@
  * - A11 🐞: S9 chooses the component before "Save" in "Edit notes.md".
  * - A12 🐞: S4 and S7 read the zip's name as the submission's number, then
  *   hyphens, then "submission-files.zip", without fixing their count.
- * - A1, A4–A6, A8–A10, A13–A22, OPS1: not on these scenarios' paths.
+ * - A4–A6, A8–A10, A13–A24, OPS1: not on these scenarios' paths.
  *
  * Seeding: scenario endpoints only; publicknowledge and the seeded roster
  * are read-only (A1, A7). Every test seeds its own submission with a unique

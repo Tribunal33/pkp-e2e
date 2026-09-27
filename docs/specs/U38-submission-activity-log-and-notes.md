@@ -181,15 +181,18 @@ preprint server an Editorial Board Member). <sup>c</sup>
    - 6b. **A revision keeps its line.** Uploading a revision of a file
      adds the revision line to this log as well as to the file's own
      "History", with its own "Download". <sup>k</sup> <sup>td7</sup>
-   - 6c. **A cancelled revision** {OJS OMP}. A revision uploaded in the
-     upload wizard ("Upload", "Continue") and then cancelled with
-     "Cancel" on "2. Review Details" leaves the file list showing the
-     file as before. "History" still gains two lines under the person
-     who cancelled: "A file revision "{the cancelled file's name}" was
-     uploaded for submission {number} by {username}.", with an arrow,
-     and "A file revision "{the restored file's name}" …" for the
-     version the file went back to. "Download" on the cancelled file's
-     line opens a blank page ⚠ [A6](#a6). <sup>j</sup> <sup>td7</sup>
+   - 6c. **A cancelled revision leaves no line.** A revision uploaded
+     in the upload wizard and then cancelled with "Cancel", at any step,
+     leaves the file list as before
+     ([→ Submission files](U36-submission-files.md#cancel-restore)), and
+     neither this log nor the file's own "History" keeps a line of it,
+     its metadata line included. A galley's "Change File" {OJS OPS}
+     cancelled: the same. <sup>j</sup> <sup>td7</sup>
+     - When "History" was opened in a second browser window between
+       the upload and "Cancel" at step 1, that window still lists the
+       line "A file revision …", with its arrow, until reopened. Its
+       "Download" then leaves the workflow for a page reading
+       "404 Not Found". <sup>td7</sup>
 
 <a id="email-lines"></a>
 7. **Email lines.** Each email the workflow sends about the submission
@@ -497,7 +500,9 @@ footnote. <sup>s0</sup>
 Left out of the scenarios above, by reason:
 
 - **Budget** — variants:
-  - a preprint server's file lines, from a galley's file (Rule 6)
+  - a revision cancelled with "Cancel", leaving no line of it, metadata line included, on either "History" (Rule 6c)
+  - a preprint server's file lines, from a galley's file, and its "Change File" cancelled (Rules 6, 6c)
+  - a "History" open in a second window over a cancelled revision: the revision line stays until reopened, and its "Download" leads to a page reading "404 Not Found" (Rule 6c)
   - the author-editor's review-change line, with no "View changes", and the "Revert Decision" line reading "Anonymous Reviewer" under "User" (Rule 9)
   - text typed in "Add Note" and not added, then a switch to "History": the question, "Cancel" and "OK" (Rule 10d)
   - leaving the page with text typed: the browser's "Leave site?" (Rule 10d)
@@ -515,7 +520,6 @@ Left out of the scenarios above, by reason:
   - A2 (an empty note; Rule 10a)
   - A3 (closing the window with text typed once the submission has a note; Rule 10d)
   - A5 (the "Review complete" line naming its recipient; Rule 4c)
-  - A6 (a revision cancelled at "2. Review Details"; Rule 6c)
   - A7 (file lines read in French; Rule 8a)
   - A9 (the stray "Leave site?" after a close dropped the text; Rule 10d)
   - OMP1 (a publication format's lines; Rule 11)
@@ -540,12 +544,12 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | "Add Note" with an empty box posts an empty note | 🐞 | minor | — |
 | [A3](#a3) | Once the submission has a note, closing the window drops a note typed and not added, without asking | 🐞 | minor | — |
 | [A5](#a5) | The "Review complete" email line names the editor who received it under "User" | 🐞 | minor | — |
-| [A6](#a6) | A cancelled revision leaves two revision lines, and the first one's "Download" opens a blank page | 🐞 | minor · crash: server | — |
 | [A7](#a7) | Read in French, file lines print an empty file name | 🐞 | user-visible | — |
 | [A9](#a9) | After closing drops a typed note, the next page change asks "Leave site?" with nothing typed | 🐞 | minor | — |
 | [OMP1](#omp1) | A new or deleted publication format's line prints "{$formatName}" | 🐞 | minor | — |
 | [A4](#a4) | A Site Administrator whose journal roles are all assistant roles gets "Notes" alone | ❓ | latent | — |
 | [A8](#a8) | An "Open" review's assignment line reads "Anonymous Reviewer" for an editor who is also the author | ❓ | minor | — |
+| [A6](#a6) | Retired: a cancelled revision left two revision lines on "History", and the first one's "Download" opened a blank page; it now leaves no line (Rule 6c) | ✅ | retired | upstream change + claim check (claude), 2026-09-27 — fixed upstream |
 
 ### All apps
 
@@ -597,17 +601,6 @@ whose review it reports. A reader of the log takes the editor for the
 sender.
 Basis: probe. <sup>[f-a5](#fn-a5)</sup>
 
-<a id="a6"></a>
-**A6 — A cancelled revision leaves lines behind, and a broken "Download"** · 🐞 · minor · crash: server.
-After "Upload" of a revision, "Continue", then "Cancel" on "2. Review
-Details", the file list shows the file as before, but "History" has
-gained two revision lines under the person who cancelled: one for the
-cancelled file, with an arrow, and one for the restored file. A
-cancelled revision is expected to leave no line. "Download" on the
-first line opens a blank page: the app fails to fetch a version that no
-longer exists.
-Basis: probe. <sup>[f-a6](#fn-a6)</sup>
-
 <a id="a7"></a>
 **A7 — File lines lose the file name in another language** · 🐞 · user-visible.
 Read in French (Canada), the file lines written while the person acting
@@ -648,6 +641,11 @@ Creating a publication format adds the line "The publication format
 placeholder prints. The press's other publication format lines name the
 format.
 Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
+
+### Retired
+
+<a id="a6"></a>
+**A6 — A cancelled revision leaves lines behind, and a broken "Download"** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13288, 2026-09-27), verified 2026-09-27 on OJS and OMP, and on OPS through a galley's "Change File": a revision cancelled with "Cancel", at any step, leaves no line of it, metadata line included, on either "History", and no "Download" is left for the cancelled version (Rule 6c). <sup>[f-a6](#fn-a6)</sup>
 
 ---
 
@@ -933,7 +931,9 @@ submission {$submissionId} by {$username}.") on both. The log data carry
 the file's `name`, `fileId` and `submissionFileId` at that moment.
 `EventLogGridRow` builds "Download" with that `fileId` and the logged
 `filename`, and none when `Repo::submissionFile()->get()` finds no file,
-or when the file is a discussion's (`SUBMISSION_FILE_QUERY`) whose stage
+when that `fileId` is no longer one of the file's revisions
+(`Repo::submissionFile()->getRevisions()`, since pkp/pkp-lib#13288), or
+when the file is a discussion's (`SUBMISSION_FILE_QUERY`) whose stage
 cannot be resolved (its discussion deleted). Live-probed 2026-09-23 (the
 submission-files spec's note d20, all three apps): an upload logged
 "Revision "article.pdf" was uploaded for file 182." plus a "The metadata
@@ -942,12 +942,14 @@ for file "article.pdf" was edited by …" line; a revision "A file revision
 for file "Renamed manuscript" was edited by …"; a delete "A file
 "notes.md" was deleted for submission 387 by …". The tasks spec's note
 td18 (2026-09-23): one "Revision … was uploaded for file {number}." line
-per attached file under the writer's name, with "Download". A cancelled revision (Rule 6c): "Cancel" in "2. Review Details"
-puts the previous version back through `edit()`, which logs it as a
-revision, and the cancelled revision's entry stays; `EventLogGridRow`
-offers "Download" whenever the submission file exists, even when the
-version (`fileId`) the entry records is gone. Live-probed 2026-09-24
-(Rules 6, 6a–6c), OJS and OMP on "Submission Files", OPS on a galley's
+per attached file under the writer's name, with "Download". A cancelled
+revision (Rule 6c), since pkp/pkp-lib#13288 (merge `f38c4a4a10`,
+2026-09-27): `PKPManageFileApiHandler::cancelFileUpload()` puts the
+previous version back through `edit(…, log: false)`, which writes no
+entry, and `submissionFile\Repository::deleteRevisionLogEntries()`
+deletes every entry carrying the cancelled `fileId`, on the file and on
+the submission, before the cancelled file is deleted. Live-probed 2026-09-24
+(Rules 6, 6a, 6b), OJS and OMP on "Submission Files", OPS on a galley's
 file: an upload's two lines ("Revision "not-an-image.txt" was uploaded
 for file 10." and its metadata line); a copy through "Upload/Select
 Files", one line naming the copy's number ("… for file 11."); a
@@ -955,9 +957,14 @@ revision's line; a details save; a deletion. Earlier lines kept the name
 the file had then, and their "Download" fetched that version under that
 name. After the deletion the upload line lost its arrow, as did a
 discussion's file line once the discussion was deleted (all three apps).
-A revision cancelled at "2. Review Details" left the cancelled version's
-revision line with its arrow, and a second revision line naming the
-restored version (A6).
+Live-probed 2026-09-27 (Rules 6, 6a, 6c; after pkp/pkp-lib#13288), OJS
+and OMP on "Submission Files", OPS on a galley's file: the same four
+line shapes ("Revision "not-an-image.txt" was uploaded for file 30."
+(OMP "…for file 24.") and its metadata line; "A file revision "profile-image-400.png" was uploaded
+for submission 41 by …"; "The metadata for file "Renamed notes" was
+edited by …"; "A file "Renamed notes" was deleted for submission 41 by
+…"), the copy's single line and a discussion file's line; the cancelled
+revision: note td7.
 
 <a id="fn-k"></a>
 **k** — pkp/pkp-lib#12352 (issue #12347; commits `386635ebde`,
@@ -969,10 +976,9 @@ and never runs on the test installs. The regression read of the
 upstream sync (2026-09) saw the new lines render complete with working
 Download links. The same change's effect on "Cancel" after a revision is
 the submission-files spec's A1 (`PKPManageFileApiHandler::findMatchedLogEntry()`
-reads these entries). The cancelled-revision lines of Rule 6c (A6) were seen
-on the checkouts carrying this change; the submission-files spec's A1 is
-the same cancel path's effect on the file list. Live-probed 2026-09-24 (Rule 6b), OJS and OMP:
-note td7.
+read these entries until pkp/pkp-lib#13288 removed it). A cancelled
+revision: Rule 6c and note j. Live-probed 2026-09-24 and 2026-09-27
+(Rule 6b), OJS and OMP: note td7.
 
 <a id="fn-l"></a>
 **l** — `EventLogEntry::getTranslatedMessage(null, …)` translates the
@@ -1095,11 +1101,29 @@ line (OJS, OMP; OPS a galley's file) and a deleted discussion's file line
 a file renamed since downloaded under its old name "notes.md".
 
 <a id="fn-td7"></a>
-**td7** — Live-probed 2026-09-24 (Rules 6b, 6c), OJS and OMP:
+**td7** — Live-probed 2026-09-24 (Rule 6b), OJS and OMP:
 "Download" on a file's first upload line fetched the original PDF as
 "article.pdf", on the revision line the new PNG; the revision line was
-on this log and on the file's own "History", each with "Download". The
-cancelled revision: note j and f-a6.
+on this log and on the file's own "History", each with "Download".
+Live-probed 2026-09-27 (Rules 6b, 6c; after pkp/pkp-lib#13288), OJS and
+OMP (Journal Manager, Editor, Section Editor; on the press its Series
+editor), OPS on a galley's "Change File": the revision line again on both logs
+(OPS "Information Center: PDF"), each "Download" fetching the new file.
+A revision cancelled with "Cancel" at step 1, 2 or 3 (at step 3 after
+step 2's details were saved), of a file renamed
+or not, by the person who renamed it or another, and a second revision
+cancelled after a completed one, left the list as before and added no
+line to this log or to the file's "History", no metadata line either; `cancel-file-upload`
+answered `status:true` every time; a galley's "Change File" cancelled
+the same (OJS, OPS; Journal Manager and Section Editor, on OPS the
+Moderator). With this log opened in a second window after the upload
+and before the cancel, both at step 1, it listed "A file revision
+"rev-stale.pdf" was uploaded for submission 24 by …" with "Download"
+and no metadata line for "rev-stale.pdf";
+after "Cancel" in the first window, that "Download" left the workflow
+for a page reading "404 Not Found" (`download-file` answering 404:
+`FileApiHandler` refuses a `fileId` that is not a revision), and the
+log opened again no longer listed the line (OJS, OMP).
 
 <a id="fn-td8"></a>
 **td8** — Live-probed 2026-09-24 (Rule 7), all three apps: the window
@@ -1183,7 +1207,11 @@ Files", Journal Manager): the list showed the file as before the
 cancelled revision; "Download" on the cancelled version's line took the
 page to a blank page, the request `GET
 $$$call$$$/api/file/file-api/download-file` (that line's `fileId` and
-name) answering 500.
+name) answering 500. Fixed by pkp/pkp-lib#13288 (issue #13286, merge
+`f38c4a4a10`, 2026-09-27): the cancelled revision's entries are
+deleted, "Download" is offered only for a version that is still one of
+the file's revisions, and a stale download answers 404, no longer 500.
+Live-probed 2026-09-27, OJS and OMP, and OPS on a galley: note td7.
 
 <a id="fn-a7"></a>
 **f-a7** — Note l. Live-probed 2026-09-24, all three apps: the file lines

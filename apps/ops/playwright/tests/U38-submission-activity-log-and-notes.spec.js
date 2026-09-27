@@ -18,7 +18,7 @@
  *   has no note.
  * - A9 🐞: every page accepts the browser's leave-page question; no test
  *   asserts whether one appears.
- * - A1 🐞, A2 🐞, A5 🐞, A6 🐞, A7 🐞, A4 ❓, A8 ❓: no scenario reaches them
+ * - A1 🐞, A2 🐞, A5 🐞, A7 🐞, A4 ❓, A8 ❓: no scenario reaches them
  *   here.
  * - OMP1: another app's territory.
  *

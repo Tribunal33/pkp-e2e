@@ -18,7 +18,7 @@
  *   asserts whether one appears.
  * - A8 ❓: S4's "Open" half counts the two assignment lines and never reads
  *   whose name they carry.
- * - A1 🐞, A2 🐞, A5 🐞, A6 🐞, A7 🐞, OMP1 🐞, A4 ❓: no scenario reaches
+ * - A1 🐞, A2 🐞, A5 🐞, A7 🐞, OMP1 🐞, A4 ❓: no scenario reaches
  *   them here.
  *
  * Seeding: scenario endpoints only; publicknowledge and the seeded roster

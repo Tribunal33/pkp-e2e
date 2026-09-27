@@ -42,15 +42,18 @@ reach that screen at all belongs to the user-management feature (see
 On a press the "Journal Masthead" column reads "Press Masthead", and on a
 preprint server "Server Masthead". Button labels containing "OJS" carry the
 app's own acronym: a press shows "Create OMP account" and "Accept And
-Continue to OMP", a preprint server "Accept And Continue to OPS".
+Continue to OMP", a preprint server "Accept And Continue to OPS". The search
+step's miss, "The user does not have a role in this journal", reads "The
+user does not have a role in this press" on a press and "The user does not
+have a role in this server" on a preprint server. <sup>h</sup>
 
 Send wizard. The fields below are for a **new** invitee. For an existing
 user the personal fields show read-only.
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| "Search for a user by email address, username, or ORCID iD" | yes (to pass step 1) | Exact match on email, then username, then ORCID iD. A miss, even text that is no valid email address, advances to "Enter details" with "The user does not have a role in this journal". The typed text is discarded (the Email field arrives empty) and the address is validated there instead <sup>h</sup> |
-| Email / Given Name / Family Name / Affiliation | email only | Names are optional; helper text notes the invitee can change them. A name is entered in the journal's primary language. If the address gains an account before the invitation is accepted, what the recipient then sees was not verified live <sup>o</sup> |
+| "Search for a user by email address, username, or ORCID iD" | yes (to pass step 1) | Exact match on email, then username, then ORCID iD. A miss, even text that is no valid email address, advances to "Enter details" with "The user does not have a role in this journal". An email address with no account arrives typed into the Email field; other text is discarded (the Email field arrives empty) and the address is validated there instead <sup>h</sup> |
+| Email / Given Name / Family Name / Affiliation | email only | Names are optional; helper text notes the invitee can change them. On a journal with a second form language (Settings), a button named for it ("French") above the fields adds "Given Name in French" and "Family Name in French" boxes, and each name field counts its filled languages ("0/2 languages completed"). Only the name in the journal's primary language reaches the email (Side effects ⚠ [A10](#a10)). <sup>i</sup> If the address gains an account before the invitation is accepted, what the recipient then sees was not verified live <sup>o</sup> |
 | Role (per row, "Select a new role") | at least one row | Roles the person already holds, or already chosen in another row, are not offered. From the second row on, a row's fields lose their screen-reader names ⚠ [A8](#a8) <sup>i</sup> |
 | Start Date (per role row) | yes | A date in the past takes effect as "today" at acceptance (Rule 8) ⚠ [A8](#a8) |
 | End Date (per role row) | no | Cannot be entered when inviting. An added role row's END DATE cell shows "---" and holds no input. The column only displays dates on an existing member's current roles (Rule 13) <sup>i</sup> |
@@ -64,7 +67,7 @@ Accept wizard (new invitee):
 | Username | yes | Must not be taken <sup>o</sup> |
 | Password | yes | At least six characters, the minimum the field states on screen <sup>o</sup> |
 | Privacy consent ("Yes, I agree to have my data collected…") | yes | Unchecked blocks the step with "Please confirm that you have read and agree privacy statement". The label links to the journal's Privacy Statement <sup>o</sup> |
-| Given Name / Family Name / Country / Affiliation | given name, country | Collected on the "Enter details" step. Editable again from the review step via its Edit button <sup>k</sup> |
+| Given Name / Family Name / Country / Affiliation | given name, country | Collected on the "Enter details" step, which arrives holding the given and family name the manager entered. A name the manager entered only in another of the journal's form languages sits in that language's boxes, behind the button named for it ("French"), and Given Name arrives empty. Editable again from the review step via its Edit button <sup>k</sup> |
 
 ## Rules & state
 
@@ -162,7 +165,11 @@ Accept wizard (new invitee):
     pressed. <sup>i</sup>
 15. Wizard navigation (send side). "Back" returns one step, and returning to
     the search step clears everything entered. "Cancel" asks for confirmation
-    only when something was changed. The final button reads "Invite user to
+    only when something was changed: a "Cancel Invitation" dialog asks "Are
+    you sure want to cancel this invitation?" ⚠ [A7](#a7), and its "Cancel
+    Invite" returns to Users & Roles. Leaving the wizard any other way
+    (following a link, typing another address) asks nothing, and the
+    Invitations table gains no row. The final button reads "Invite user to
     the role", and a success dialog ("Invitation Sent") confirms. ⚠ [A5](#a5)
     That dialog promises updates about the recipient's decision. Its only
     button, "View All Users", returns the browser to Users & Roles. <sup>g</sup>
@@ -176,8 +183,15 @@ Accept wizard (new invitee):
   lists the roles offered (with dates and masthead visibility), the roles
   they already hold, and the accept and decline links. Subject and body are
   whatever the compose step showed at send time. ⚠ [A7](#a7) The email's
-  fixed copy carries small wording slips. It greets a new invitee by their
-  email address even when a name was entered. <sup>j</sup>
+  fixed copy carries small wording slips. It greets a new invitee by the
+  name entered on "Enter details" in the journal's primary language ("Dear
+  Nova Quill,", or the one name entered: "Dear Nova,"), and by their email
+  address ("Dear {email},") when no name was entered; an existing user is
+  greeted by the name on their account. ⚠ [A10](#a10) Two named newcomers
+  still get "Dear {email},": one whose name was entered only in another of
+  the journal's form languages, and, on a journal whose primary language is
+  not the site's, one invited by a manager whose screens are in the site's
+  primary language, even with the name entered in both. <sup>j</sup>
 - **On acceptance**: the account is created (new invitee) or the roles are
   added to the existing account. Masthead listings update per the chosen
   visibility.
@@ -198,7 +212,7 @@ Accept wizard (new invitee):
   Users. <sup>m</sup>
 - **Daily cleanup**: a scheduled task permanently removes expired invitations
   once a day. ⚠ [A2](#a2) It also removes invitations still being composed,
-  which never got a deadline. <sup>e</sup>
+  which never got a deadline. <sup>e</sup> <sup>t</sup>
 
 ## Settings that modify behavior
 
@@ -215,6 +229,11 @@ Accept wizard (new invitee):
 - **Invitation email template**: the stored template used to prefill the
   compose step is editable on the Emails settings screen. ⚠ [OPS1](#ops1) On
   a preprint server it has no row there, though sending still works. <sup>j</sup>
+- **"Forms"** languages (Settings › Website › "Setup" › "Languages"; default
+  the journal's primary language alone): each further language ticked adds
+  a button named for it above the name fields on "Enter details" in both
+  wizards, which opens the name boxes in that language (Fields). The email
+  greets by the name in the primary language only (Side effects). <sup>i</sup>
 
 ## Cross-feature interactions
 
@@ -233,6 +252,11 @@ Accept wizard (new invitee):
 - **Roles settings**: which roles exist to be offered, their levels, and the
   masthead concept belong to the roles-configuration feature. This wizard
   only uses them.
+- **Languages**: which languages a journal's forms offer, and the language
+  a manager's screens are in, are set as
+  [Languages & locales](U57-languages-and-locales.md#form-languages)
+  describes. This spec owns only the name boxes of its two wizards and the
+  email's greeting.
 
 ## Canonical scenarios
 
@@ -251,7 +275,8 @@ addresses and the tooling recipe are in the footnote. <sup>s</sup>
    - **Users & Roles**: press "Invite to a role".
    - **"Search User"**: enter an email address no account uses (the footnote
      names it) and continue: the wizard answers "The user does not have a
-     role in this journal" and moves to "Enter details".
+     role in this journal" and moves to "Enter details", the address
+     already in its Email field.
    - **"Enter details"**: fill in Given Name Nova and add a role row: pick
      the offered role (the footnote names it per app), set Start Date to
      today, and choose "Appear on the masthead" in the masthead select,
@@ -268,6 +293,8 @@ addresses and the tooling recipe are in the footnote. <sup>s</sup>
    - **The email's subject and body**: the subject is the marker typed on
      the compose step and the body the text that step showed at send time
      (Side effects).
+   - **The email's greeting**: it opens "Dear Nova,", the Given Name entered
+     on "Enter details" (Side effects).
    - **A second send to the same address**: press "Invite to a role" again,
      search the same address and walk the wizard the same way to "Invite
      user to the role": the wizard gives no hint that a pending invitation
@@ -292,7 +319,8 @@ addresses and the tooling recipe are in the footnote. <sup>s</sup>
      names them) and tick the privacy consent.
    - **The consent checkbox's label**: links to the journal's Privacy
      Statement page (Settings).
-   - **"Enter details"**: fill in Given Name Nova and Country Canada.
+   - **"Enter details"**: Given Name already reads Nova, the name the
+     Journal Manager entered; choose Country Canada.
    - **"Review & create account"**: check the summary; its Edit button
      reopens the details. Press "Accept And Continue to OJS": a dialog
      announces the new role.
@@ -477,14 +505,21 @@ Left out of the scenarios above, by reason:
   - a past start date taking effect as the acceptance day (Rule 8): a
     manager rarely backdates a start date, and the body names no screen
     where a role's start date is read back after acceptance
+  - a journal with a second form language: the name boxes in that language
+    on "Enter details" in both wizards, and the greeting by the name in the
+    primary language only (Fields; Settings "Forms"; Side effects): the
+    names are optional and nothing else on these screens changes, and
+    scenario 1 reads the greeting by name on a one-language journal
 - **Budget** — variants:
   - the template choice on the compose step (Actors row 7): the body states
     no outcome of the choice to read
   - "Back" to the search step clearing everything entered (Rule 15): the
     body names no screen where the cleared fields are read back
-  - "Cancel" asking for confirmation only when something changed (Rule 15):
-    the body names neither the confirmation's wording nor where a cancel
-    lands
+  - "Cancel" asking for confirmation only when something changed, its
+    "Cancel Invite" returning to Users & Roles (Rule 15): a way out of the
+    wizard that sends nothing
+  - leaving the send wizard by a link or a typed address, with no question
+    and no row added (Rule 15): a way out of the wizard that sends nothing
 - **Nothing new to test**:
   - a Site Administrator sending, editing, cancelling or proposing (Actors
     rows 1–5; scenarios 1, 5, 6 and 8's Journal Manager sees the same
@@ -503,8 +538,10 @@ Left out of the scenarios above, by reason:
     still active; Rule 14, Side effects)
   - A5 ("Invitation Sent" promising updates never delivered; Rule 15, Side
     effects)
-  - A7 (the email's wording slips, greeting a new invitee by address; Side
-    effects)
+  - A7 (the email's wording slips; Side effects)
+  - A10 (a newcomer named only in another form language, or invited on a
+    journal of another primary language than the site's by a manager
+    working in the site's, greeted "Dear {email},"; Side effects)
   - A8 (added role rows carrying no accessible field names)
 - **No seed**:
   - a pending invitation past its deadline, the link stopped and no role
@@ -539,8 +576,9 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A3](#a3) | The links of a replaced invitation (edited or re-sent) die with a bare not-found error | 🐞 | minor | — |
 | [A4](#a4) | Nobody is signed in after accepting; every recipient lands on the sign-in screen | 🐞 | user-visible | — |
 | [A5](#a5) | "Invitation Sent" promises decision updates that are never delivered | 🐞 | user-visible | — |
-| [A7](#a7) | Small wording and untranslated-text defects across the invitation screens and emails | 🐞 | minor | — |
+| [A7](#a7) | Small wording and untranslated-text defects across the invitation screens and emails | 🐞 | minor | upstream change + claim check (claude), 2026-09-27 — greeting item fixed upstream and dropped; two items added |
 | [A8](#a8) | Added role rows carry no accessible field names; a screen reader hears row 1's labels | 🐞 | user-visible | — |
+| [A10](#a10) | A newcomer named only in another form language, or invited on a journal whose primary language is not the site's by a manager working in the site's, is still greeted "Dear {email}," | 🐞 | minor | — |
 | [OMP1](#omp1) | Confirming a masthead change shows a raw email-template error on presses and preprint servers | 🐞 | user-visible | — |
 | [OPS1](#ops1) | The invitation email template has no row on the preprint server's Emails screen | 🐞 | user-visible | — |
 | [A1](#a1) | The send wizard's address is gated more widely than the screen that offers it | ❓ | latent | — |
@@ -606,17 +644,18 @@ Basis: probe, with a mail-delivery positive control. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a7"></a>
 **A7 — Small copy defects across these screens and emails** · 🐞 · minor.
-The invitation email greets a new invitee by their email address even when a
-name was entered, and offers roles "as a Author". The search step reads
-"Enter at least one details…" and "…invite to take a additional roles". The
-masthead confirmation reads "This will update whether this user appears on
-the journal masthead for the selected role." on a press and a preprint
-server too, under a column named "Press Masthead" or "Server Masthead". The
-"Invitation Unavailable" page closes with "Please contact the
-journal manager for further assistance." on presses and preprint servers as
-well. Raw untranslated tokens ("##common.help##",
-"##userAccess.management.options##") show on the management screens of all
-three apps.
+The invitation email offers roles "as a Author". The search step reads
+"Enter at least one details…" and "…invite to take a additional roles", and
+the send wizard's cancel confirmation asks "Are you sure want to cancel this
+invitation?". On OMP and OPS, the masthead confirmation reads "This will
+update whether this user appears on the journal masthead for the selected
+role." under a column named "Press Masthead" or "Server Masthead", and the
+"Invitation Unavailable" page closes with "Please contact the journal
+manager for further assistance.". "##common.help##" shows in the header of
+every management page; a screen reader hears
+"##userAccess.management.options##" for each Current Users row's menu button
+on Users & Roles and "##invitation.wizard.completeSteps##" for the list of
+steps in both wizards.
 Basis: probe + claim check. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
@@ -652,6 +691,19 @@ Basis: probe, all three apps. <sup>[f-a9](#fn-a9)</sup>
 > half is intended and is no longer part of the question. The removal
 > email's language did not take into account that the user is disabled; this
 > may be intended and may be patched in the future.
+
+<a id="a10"></a>
+**A10 — Some named newcomers are still greeted by their email address** · 🐞 · minor.
+A newcomer whose name the manager entered on "Enter details" should be
+greeted by it. Two are still greeted "Dear {email}," with no name on the
+email's "To" line. On a journal whose primary language is not the site's,
+a manager whose screens are in the site's primary language sends that
+greeting although the name was entered in both languages; the same manager
+working in the journal's primary language sends the name. A name entered
+only in another of the journal's form languages, the primary language's
+boxes left empty, is not used either. The invitation is delivered and works;
+only the greeting misses the name.
+Basis: probe. <sup>[f-a10](#fn-a10)</sup>
 
 ### OMP and OPS
 
@@ -807,7 +859,13 @@ only when `detectChanges`. Success dialog keys `userInvitation.modal.*`
 (message text — finding A5); its "View All Users" button navigates to
 `management/settings/access` (Users & Roles) — live-confirmed 2026-07-31 on
 all three apps by claim check (an earlier live probe the same day had read
-the pre-click wizard anchor, not the post-click page).
+the pre-click wizard anchor, not the post-click page). Claim check
+2026-09-27 (Rule 15), all three apps: "Cancel" on "Enter details" opened
+the "Cancel Invitation" dialog, "Are you sure want to cancel this
+invitation?" with the buttons "Cancel Invite" and "Go Back" (finding A7),
+and "Cancel Invite" returned to Users & Roles; leaving the wizard by
+opening another address raised no browser question, and the Invitations
+table held the same rows afterwards.
 
 <a id="fn-h"></a>
 **h** — `UserInvitationSearchFormStep.vue`: `GET users?searchPhrase=…&status=all`,
@@ -818,7 +876,11 @@ search criteria." (`invitation.searchForm.emptyError`). Live-checked
 2026-07-31 (claim check): a malformed miss (`notanemail`)
 advances to "Enter details" with the typed text discarded — the Email field
 arrives empty and errors "This field is required when user id is not
-present." on continue.
+present." on continue. Claim check 2026-09-27, all three apps: on every
+new-invitee send the searched address arrived typed into the Email field
+of "Enter details", while a miss that is no email address (`nobody<tag>`)
+still arrived empty; the miss read "The user does not have a role in this
+journal" on OJS, "…in this press" on OMP and "…in this server" on OPS.
 
 <a id="fn-i"></a>
 **i** — `UserInvitationUserGroupsTable.vue` +
@@ -848,7 +910,14 @@ opens under the heading "The user is currently disabled." with the same
 paragraph, no new-role row, "Add Another Role" and "Save And Continue"
 disabled; the Edit path shows the same (f-a6); the enabled control gets an
 empty new-role row and both buttons active. The current roles' masthead
-selects and "Remove Role" stay enabled on both paths (f-a9).
+selects and "Remove Role" stay enabled on both paths (f-a9). Claim check
+2026-09-27, all three apps, on a scratch journal with English (primary) and
+French (Canada) under "Forms": the send wizard's "Enter details" showed a
+"French" button above the name fields; pressed, it added "Given Name in
+French" and "Family Name in French", and each name field read "0/2
+languages completed", then "1/2 languages completed" once one language was
+filled. Sends with the French boxes only, with both languages and with
+English only were all delivered (their greetings: note j).
 
 <a id="fn-j"></a>
 **j** — Mailable `PKP\mail\mailables\UserRoleAssignmentInvitationNotify`
@@ -862,7 +931,22 @@ while OJS/OMP `Repository::map()` merge the base list; the template key is
 seeded in the OPS registry all the same, so sending works — finding OPS1.
 Chain check: no app subclasses any invitation class; the API shim
 `api/v1/invitations/index.php` is byte-identical in all three apps; no
-app-name branches exist in shared invitation code.
+app-name branches exist in shared invitation code. Greeting:
+`UserRoleAssignmentInvite::getMailableReceiver($locale)` copies the
+payload's `givenName` / `familyName` in `$locale` (the journal's primary
+language) onto the recipient since pkp/pkp-lib#13397 (`aa077419e3`,
+2026-09-26; issue pkp/pkp-lib#13376; OJS lib/pkp `26ae6431b5`, OMP and OPS
+`17a1f01fed`); before it the method tested two properties the class never
+had, so every newcomer was greeted by address. `setData()` of the mailable
+fills `{$recipientName}` with the recipient's full name, or the address
+when that is empty (finding A10). Claim check 2026-09-27, all three apps,
+emails read in the mail catcher: Given "Nova" and Family "Quill" → "Dear
+Nova Quill," and "Nova Quill" on the To line; given name only → "Dear
+Nova,"; family name only → "Dear Quill,"; no name → "Dear {address}," and
+no name on the To line; on an English journal with French under "Forms",
+both languages or English only → "Dear Nova Quill,", French only → the
+address; an existing member → "Dear Mira Member,". Every fixed line of the
+compose step's body reached the sent text.
 
 <a id="fn-k"></a>
 **k** — Accept wizard: `pages/acceptInvitation/AcceptInvitationPage.vue` +
@@ -879,7 +963,15 @@ ORCID off (its shipped state in the test contexts) or on. Step advance →
 `PUT invitations/{id}/key/{key}/refine`;
 final → `…/finalize`. Review-step Edit button renders only for new users
 (`AcceptInvitationReview.vue`). ORCID buttons: `AcceptInvitationVerifyOrcid.vue`;
-the wizard's primary button is hidden on that step.
+the wizard's primary button is hidden on that step. Claim check 2026-09-27,
+all three apps: the accept wizard's "Enter details" arrived with Given Name
+"Nova" and Family Name "Quill" as the manager had entered them (the
+Editorial Board Member invitees' "Hana" and "Ivo" alike); the invitee whose
+name was entered in the French boxes only met an empty "Given Name *
+Required" under a "French" button, each name field reading "1/2 languages
+completed"; with Given Name emptied and no country, "Save and continue"
+was refused and the step stayed; the review step's "Edit" reopened the
+details and "Save and continue" returned to the review.
 
 <a id="fn-l"></a>
 **l** — `UserRoleAssignmentReceiveController::authorize()` calls
@@ -991,6 +1083,13 @@ replacement changes the row to a second such role (Author on OJS,
 Copyeditor on OMP). Scenario 9 signs in as the seeded preprint server's
 ready Preprint Server Manager (`manager.maya`) and only browses.
 
+<a id="fn-t"></a>
+**t** — The daily cleanup has no screen: no page or API shows when it
+runs or what it removed, so what it does is known from code reading (note
+e). The claim checks of 2026-07-31 and 2026-09-27 left it undriven: running
+the scheduled task on the shared test installs would also remove the
+drafts other runs had open (finding A2).
+
 <a id="fn-a1"></a>
 **f-a1** — Role assignment vs screen gate: note b vs note a. The atlas route
 row records the same mismatch. Live check 2026-07-31, all three apps:
@@ -1061,8 +1160,8 @@ intention is met; on the second see [A9](#a9) and its review of 2026-09-18
 (the current roles' controls stay active by design). Retired 2026-09-18.
 
 <a id="fn-a7"></a>
-**f-a7** — Copy items, all observed on live probes 2026-07-31: email
-greeting by address and "as a Author" (invitation email); "journal masthead"
+**f-a7** — Copy items, all observed on live probes 2026-07-31: "as a
+Author" (invitation email; re-read 2026-09-27 on all three apps); "journal masthead"
 wording on OMP/OPS masthead dialogs (`user.masthead.update.message`, which
 neither app's `locale/en/user.po` overrides; re-read verbatim by the
 2026-09-13 OMP and OPS test runs beside the "Press Masthead" / "Server
@@ -1071,7 +1170,14 @@ one details…" / "…invite to take a additional roles"; raw locale keys
 `##common.help##` and `##userAccess.management.options##` on the management
 screens of all three apps; and (claim check 2026-07-31) the
 unavailable-page tail "Please contact the journal manager for further
-assistance." unsubstituted on OMP and OPS.
+assistance." unsubstituted on OMP and OPS. Added by the claim check of
+2026-09-27, all three apps: the send wizard's "Cancel Invitation" dialog
+"Are you sure want to cancel this invitation?" (note g); the list of steps
+in the send and accept wizards named "##invitation.wizard.completeSteps##"
+in the accessibility tree. Dropped 2026-09-27: the greeting of a new
+invitee by address, which pkp/pkp-lib#13397 (`aa077419e3`, 2026-09-26;
+issue pkp/pkp-lib#13376) replaced with the name entered (note j); the cases
+that fix leaves out are finding A10.
 
 <a id="fn-a8"></a>
 **f-a8** — Every added row in `UserInvitationUserGroupsTable.vue` renders
@@ -1108,6 +1214,32 @@ until then (f-a6). Intention: the issue's sentence quoted in f-a6 reads as if ev
 field were to be inactive; @beaug ruled on 2026-09-18 (Mattermost, the daily
 sync's thread) that "Remove Role" and the masthead select are to stay active
 for a disabled user, which leaves the email's wording as the open half.
+
+<a id="fn-a10"></a>
+**f-a10** — Cause (note j): `getMailableReceiver($locale)` copies the name
+in the journal's primary language only, and the mailable's `setData()`
+reads the recipient's full name with no language, so it takes the language
+of the sending request and falls back to the site's primary language. On a
+journal of another primary language than the site's, a manager whose
+screens are in the site's language hits the empty site-language name; a
+name only in a second form language is never copied. The issue
+(pkp/pkp-lib#13376) asks that a new user be greeted by the name typed, and
+by the address only when none is given; its fix, pkp/pkp-lib#13397
+(`aa077419e3`, 2026-09-26), leaves these cases out. Not a regression:
+before the fix every newcomer got the address. Driven 2026-09-27: on
+an English journal with French under "Forms", a name in the French boxes
+only → "Dear {address}," and no name on the To line (OJS, OMP and OPS). On
+an English site, a press whose primary language is French (Canada), with
+English and French under "Forms" and names entered in both ("Eve English"
+/ "Eva Anglais") → the address while the manager's screens were in English;
+the same press, another newcomer named in both, with the session switched
+to French before "Invite user to the role" → "Dear Fanny Francais,"; an
+English-primary press, English names → "Dear Anna Smith,". Driven on OMP and held on a freshly reset install, with an OJS
+control the same; OPS carries the same shared code (no subclass, note j)
+and was not driven. Kept check
+`shared/playwright/checks/sync/pkp-lib-13376/greeting.js`. Written up for
+the team in `docs/reports/2026-09-27-pkp-lib-13376.md` (a temporary report,
+deleted once acted on; git history keeps it).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Error observed on OMP and OPS (live probes 2026-07-31, two

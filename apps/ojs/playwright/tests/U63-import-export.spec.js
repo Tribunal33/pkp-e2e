@@ -739,7 +739,7 @@ test.describe('Import & export', () => {
         await users.openExportTab();
         await expect(users.gridTitle()).toHaveText('Current Users');
         await expect(users.headerLinks()).toHaveText([/^\s*Search\s*$/, /^\s*Export All Users\s*$/]);
-        await expect(users.columns()).toHaveText(['Select', 'Given Name', 'Family Name', 'Username', 'Email']);
+        await expect(users.columns()).toHaveText(['Select', 'Given Name', 'Family Name', 'Username', /^\s*Email( address)?\s*$/]); // "Email" or "Email address": the duplicate user.email key (U41 A19)
         await expect(users.row(mailOf(moss))).toHaveCount(1);
         await expect(users.row(mailOf(fern))).toHaveCount(1);
         await expect(users.exportUsersButton()).toBeVisible();
