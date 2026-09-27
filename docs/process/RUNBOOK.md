@@ -201,10 +201,9 @@ Test files cite these by number, so the numbers are stable.
   claude-threads (the Mattermost bot) is paused as idle after 10 silent
   minutes, and a background agent, a full suite or a CI run is silence to
   it. Whenever the next event is more than a few minutes away, arm a
-  keepalive (a Monitor that ticks every 6 minutes while agents or suites
-  run on the VM, every 4 minutes while a CI run is the only thing in
-  flight, since the platform's first idle warning comes within 5 minutes
-  then; re-armed at its 30-minute expiry) and post one line per tick: the
+  keepalive (a Monitor that ticks every 6 minutes, whatever is in flight:
+  the bot warns after 7 idle minutes and pauses after 10; re-armed at its
+  30-minute expiry) and post one line per tick: the
   gate that is running and what the files show, nothing else. The ticks
   double as the polling points for the finals and the CI run; the
   keepalive stops at the report, never earlier: a quiet tick is fine, a

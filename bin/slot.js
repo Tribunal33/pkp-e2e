@@ -491,7 +491,7 @@ function claudeProc() {
 const RULES = [
     'Working rules for parallel slots (harness.md "Slots"):',
     '- Work only inside this slot\'s clone. Other slots (/home/e2e/pkp-e2e*) belong to other sessions: never read, write, reset or kill anything there, and never pkill broadly (only processes whose command line names this slot\'s paths or ports).',
-    '- Every Playwright run takes the machine-wide test lock (shared with your own parallel runs, exclusive against other slots). A run can wait behind another slot, so start suites, finals, fleet-prep and any run that may queue with run_in_background, and keep the keepalive Monitor armed while anything is in flight (RUNBOOK "Keep the thread ticking"); never stop the Monitor while a run, agent or CI job is still going. `node shared/playwright/test-lock.js status` shows who holds it.',
+    '- Every Playwright run takes the machine-wide test lock (shared with your own parallel runs, exclusive against other slots). A run can wait behind another slot, so start suites, finals, fleet-prep and any run that may queue with run_in_background, and keep the keepalive Monitor armed while anything is in flight, one tick every 6 minutes (the bot warns after 7 idle minutes and pauses after 10; RUNBOOK "Keep the thread ticking"); never stop the Monitor while a run, agent or CI job is still going. `node shared/playwright/test-lock.js status` shows who holds it.',
     '- Finish by committing and pushing (RUNBOOK step 10 / MAINTENANCE): the bot frees this slot only when this clone is clean (nothing uncommitted, untracked, stashed or unpushed). Anything left behind blocks the slot and pings the owner.',
 ];
 
