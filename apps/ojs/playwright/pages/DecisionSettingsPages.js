@@ -15,11 +15,16 @@
  * - `PaymentsSetupPage` — Settings › Distribution › "Payments" ("Enable",
  *   "Currency", "Payment Plugins", the manual plugin's "Manual Payment
  *   Instructions", "Save") and the "Payments" page's "Payment Types" tab
- *   (`#paymentTypesForm`, "Article Processing Charge", a legacy AJAX form).
+ *   ("Article Processing Charge"), set in one call each; the screens'
+ *   locators are the shared `PaymentsPages.js` (U52).
  */
 const {expect} = require('@playwright/test');
 const {BasePage} = require('../../../../shared/playwright/pages/BasePage.js');
-const {waitForJQueryIdle} = require('../support/legacy.js');
+const {
+    PaymentSettingsTab,
+    JournalPaymentsPage,
+    PAYMENTS_TEXT,
+} = require('../../../../shared/playwright/pages/PaymentsPages.js');
 
 // Moved to the shared tree for U56 (Emails management); re-exported here
 // so the U34 suite's imports stay as they were.
@@ -42,44 +47,34 @@ exports.PaymentsSetupPage = class PaymentsSetupPage extends BasePage {
      * Settings › Distribution › Payments: enable payments in US Dollars
      * through the manual plugin with its instructions filled (an empty box
      * leaves the plugin unconfigured and no "Request Payment" page shows;
-     * seed-facts), and save.
+     * seed-facts), and save. The tab's locators are U52's
+     * (`PaymentSettingsTab`).
      */
     async enableManualPayments({instructions}) {
-        await this.page.goto(this.contextUrl(this.contextPath, '/management/settings/distribution'));
-        await this.page.locator('#payments-button').click();
-        const panel = this.page.getByRole('tabpanel', {name: 'Payments', exact: true});
-        const enable = panel.locator('input[name="paymentsEnabled"]');
-        await expect(enable).toBeVisible({timeout: 30_000});
-        await enable.check();
-        await panel.locator('select[name="currency"]').selectOption({label: 'US Dollar'});
-        await panel.locator('select[name="paymentPluginName"]').selectOption({label: 'Manual Fee Payment'});
-        const box = panel.locator('textarea[name="manualInstructions"]');
-        await expect(box).toBeVisible({timeout: 30_000});
-        await box.fill(instructions);
-        await panel.getByRole('button', {name: 'Save', exact: true}).first().click();
-        await expect(panel.locator('[role="status"]').filter({hasText: 'Saved'})).toBeVisible({timeout: 30_000});
+        const tab = new PaymentSettingsTab(this.page, this.contextPath);
+        await tab.goto();
+        await tab.enableBox().check();
+        await tab.currencySelect().selectOption({label: 'US Dollar'});
+        await tab.pluginSelect().selectOption({label: 'Manual Fee Payment'});
+        await expect(tab.instructionsBox()).toBeVisible({timeout: 30_000});
+        await tab.instructionsBox().fill(instructions);
+        await tab.save();
     }
 
-    /** The "Payments" page's "Payment Types" tab: set the "Article Processing Charge" and save. */
+    /**
+     * The "Payments" page's "Payment Types" tab: set the "Article Processing
+     * Charge", save, and read it back after a reload (U52's
+     * `JournalPaymentsPage` and `PaymentTypesTab`).
+     */
     async setPublicationFee(amount) {
-        await this.page.goto(this.contextUrl(this.contextPath, '/payments'));
-        await this.page.locator('a[name="paymentTypes"]').click();
-        const form = this.page.locator('#paymentTypesForm');
-        const fee = form.locator('input[name="publicationFee"]');
-        await expect(fee).toBeVisible({timeout: 30_000});
-        await waitForJQueryIdle(this.page);
-        await fee.fill(String(amount));
-        const saved = this.page.waitForResponse(
-            (r) => r.url().includes('savePaymentTypes') && r.request().method() === 'POST' && r.ok(),
-            {timeout: 30_000}
-        );
-        await form.getByRole('button', {name: 'Save', exact: true}).click();
-        await saved;
-        await waitForJQueryIdle(this.page);
-        await this.page.goto(this.contextUrl(this.contextPath, '/payments'));
-        await this.page.locator('a[name="paymentTypes"]').click();
-        await expect(this.page.locator('#paymentTypesForm input[name="publicationFee"]')).toHaveValue(String(amount), {
-            timeout: 30_000,
-        });
+        const payments = new JournalPaymentsPage(this.page, this.contextPath);
+        await payments.goto();
+        const types = await payments.showPaymentTypes();
+        await types.box(PAYMENTS_TEXT.apc).fill(String(amount));
+        const saved = await types.save();
+        expect(saved.ok()).toBe(true);
+        await payments.goto();
+        const reloaded = await payments.showPaymentTypes();
+        await expect(reloaded.box(PAYMENTS_TEXT.apc)).toHaveValue(String(amount), {timeout: 30_000});
     }
 };

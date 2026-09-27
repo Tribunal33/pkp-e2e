@@ -909,6 +909,22 @@ config-file settings.
   "Payments" page. Live-driven 2026-09-20, OJS and OMP
   (`.reports/U34/cc-K4.md`; `pay-mgr-settings-payments-reloaded`,
   `pay-mgr-payment-types-labels`, `omppay-mgr-payments-url`).
+- Payments (OJS, U52): "Save" on Settings › Distribution › "Payments"
+  posts `api/v1/_payments` (override PUT) and shows "Saved"; "Payment
+  Plugins" offers only "Paypal Fee Payment" and "Manual Fee Payment" and
+  "Currency" has no empty choice, so a journal with no currency exists
+  only until one is saved (the `payments` key without `currency` makes
+  one). Saving "Enable" unticked removes both "Institutions" and
+  "Payments" from the managers' side menu; the Subscription Manager's
+  side menu shows both while payments are enabled. The "Payments" page
+  opens by its address (`{journal}/payments`) for the manager-level roles
+  and the Subscription Manager whatever the payment settings, headed
+  "Subscriptions"; on a fresh journal "Payment Types" has every box empty
+  and "Only Restrict Access…" unticked, and "Payments" reads "No Items".
+  `{journal}/user/payMembership` creates a queued payment request before
+  it answers, even when it then fails: never open it on
+  `publicknowledge`. OJS and OMP, live-driven 2026-09-26/27
+  (`.reports/U52/cc-K1.md`, `cc-K2.md`, `cc-K3.md` seed-facts sections).
 - {OJS} On a fresh journal the "Payments" page's "Subscription Policies"
   tab has an empty contact, "Full expiry", its four lists at "Disabled"
   and every box unticked; the payment boxes are greyed with the "Note: To

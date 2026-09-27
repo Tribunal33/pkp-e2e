@@ -1040,6 +1040,10 @@ under the tag; every other refusal comes first and leaves nothing.
   set up" (the "Subscriptions" page, buying) is `{currency: 'USD',
   paymentPluginName: 'ManualPayment', manualInstructions: '…'}`: the
   manual method counts as set up only with instructions (seed-facts).
+  A submission's `published: true` is refused (400,
+  `publicationFeeStatus` "Publication Fee not paid…") on a journal whose
+  `payments` key set a `publicationFee` above 0: seed the published
+  article first, then set the APC (U52 claim check K2, 2026-09-27).
 - `subscriptionName`, `subscriptionEmail`, `subscriptionPhone`,
   `subscriptionMailingAddress` (strings), `subscriptionAdditionalInformation`
   (a string or a locale map, the rich text as stored, `<p>…</p>`),

@@ -619,7 +619,9 @@ trips.
   `docs/reports/2026-09-26-pkp-lib-usercomment-delete-tasks.md` (thread +
   DMs 2026-09-26); kept check `checks/U14/delete-tasks/collide.js`
   (fixed when `MODE=collide` leaves A's task). The tests are right and
-  stay as they are. `TasksPanel.openTask()` now fails in 10 s on a
+  stay as they are. Again 2026-09-27 (U52 session's finals, VM, reset
+  databases, auto workers): S5 red on all three apps, green alone on each
+  (`.reports/U52/alone-status.log`). `TasksPanel.openTask()` now fails in 10 s on a
   missing row instead of the 8-minute test timeout. Harness alternative,
   not applied (maintainer's call, like app-changes row 18): at cold
   bootstrap, insert and delete a block of placeholder reports through the
@@ -809,7 +811,7 @@ trips.
   U12, U13, U18, U28, U29, U35, U42, U54, U55; new U13 A11 🐞: keywords
   lose the typed order on every save); galley seeds carry `seq`.
   **Watch condition**: a position read on a list whose query has no
-  unique ORDER BY. **Sighted 2026-09-27** (U61 session's OPS final, Mac, reset database, auto workers): OPS U54 S3 "create a role" red at `RolesTab.openRowActions` because the new "Data editor" landed as the Roles list's first row, which carries no "Settings" arrow (U54 A1, A13); green alone (`.reports/U61/final-run-ops.log`, `alone-ops-U54S3.log`). The diagnosis is the next daily session's.
+  unique ORDER BY. **Sighted 2026-09-27** (U61 session's OPS final, Mac, reset database, auto workers): OPS U54 S3 "create a role" red at `RolesTab.openRowActions` because the new "Data editor" landed as the Roles list's first row, which carries no "Settings" arrow (U54 A1, A13); green alone (`.reports/U61/final-run-ops.log`, `alone-ops-U54S3.log`). The diagnosis is the next daily session's. Again 2026-09-27 (U52 session's OPS final, VM, reset database, auto workers), green alone (`.reports/U52/final-run-ops.log`, `alone-ops-U54S3-U14S5.log`).
 
 - **OMP U27 S9 and S16** (first sightings, the Escape sweep's runs
   2026-09-26, `.reports/flake-s26/esc/diagnosis.md`): S9 red 2 of 8 at

@@ -6,7 +6,7 @@ confirmed dead (it stays here with its evidence) or ruled out of scope.
 
 Sources (removed from the tip 2026-08-25, reachable in git history): the six crosswalks in `.reports/phase0-feature-map/` (their UNASSIGNED
 lists, consistent with `synthesis.md` §4) + `RULINGS.md`'s probe-derived
-dead-code additions. **18 parked atoms** + **39 noted dead-code/defect
+dead-code additions. **18 parked atoms** + **41 noted dead-code/defect
 candidates attached to claimed atoms**. (PLUG-028 moved to FEATURE-MAP's
 Out-of-scope tail — see RULINGS.md. Two candidates that rested solely on
 scratched pre-reset evidence were dropped 2026-08-21 per the reset doctrine —
@@ -608,3 +608,21 @@ until their specs exist. Do not force-claim the defects themselves.
     method. Code-verified 2026-09-26 (U61 spec author; checkouts ojs
     `3162c105bf`, lib/pkp `1ad4a14bb2`). Resolves: maintainer
     confirmation as dead code (removal candidate).
+41. **Unreached payment pieces** — attached to **U52** (AFFM-182,
+    NOTIF-036, ROUTE-052's `payMembership`; claimed). The "Payments" tab's
+    list (`PaymentsGridHandler`) role-assigns a `viewPayment` op whose body
+    is `// FIXME` and no row links to it, so the payment "Details" window
+    exists nowhere. `NOTIFICATION_TYPE_CONFIGURE_PAYMENT_METHOD` has its
+    message and style in lib/pkp but nothing on a journal raises it (OMP
+    raises it from the publication-format sale, out of scope). OJS
+    `UserHandler::payMembership()` is routed but no template links to it,
+    and `OJSPaymentManager::createQueuedPayment()` marks the membership
+    type deprecated (`error_log` + `assert(false)`), so the "Association
+    Membership" fee has no purchase path (the spec's A7); the locale keys
+    `payment.membership.buyMembership`, `.renewMembership`,
+    `payment.publication.payPublication`, `payment.payNow`,
+    `payment.alreadyPaid*` and `about.authorFees*` are displayed nowhere.
+    Code-verified 2026-09-26 (U52 spec author; checkouts ojs
+    `3162c105bf`, omp `72a01a026`, lib/pkp `1ad4a14bb2`). Resolves:
+    maintainer confirmation as dead code (removal candidates), or a
+    ruling to restore the membership purchase.
