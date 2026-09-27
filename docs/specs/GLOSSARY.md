@@ -138,6 +138,20 @@ touched.
   submission stays on its stage, the label reads "Declined", buttons flip to
   **Revert Decline** (+ Delete for managers), and it lists only under the
   dashboard's Declined view.
+- **Submission intake configuration** — the specs' name (no screen uses
+  it) for what a journal sets up on Settings › Workflow › "Submission" to
+  shape incoming work: whether it accepts submissions at all ("Disable
+  Submissions"), the texts authors read before and while submitting and
+  the copyright notice they accept ("Author Guidance"), which descriptive
+  fields the journal uses and the wizard asks for ("Metadata"), and the
+  components authors label their files with ("Components"); on a preprint
+  server also any "Author Screening" rules a plugin supplies. Its spec
+  also owns the reader's About › "Submissions" page.
+- **Component** — one of a journal's kinds of submission file ("Article
+  Text", "Data Set", "Image"…), kept in the list on Settings › Workflow ›
+  "Submission" › "Components"; every uploaded file is labelled with one,
+  and a component can be required for every submission. Cross-app names:
+  Part II (the default main component).
 - **Desk review** — informal name for pre-review screening on the Submission
   stage (the panel heading reads "Desk Review Tasks & Discussions"). What QA
   folk call "desk reject" is, on screen, Decline Submission while queued.

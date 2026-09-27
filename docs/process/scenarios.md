@@ -698,7 +698,11 @@ Keys:
   block needs `plugins: {announcementfeedplugin: {enabled: true}}` in the
   same request. The Web Feed block (`WebFeedBlockPlugin`) likewise needs
   `plugins: {webfeedplugin: {enabled: true}}` alongside, although the
-  plugin arrives enabled (U18 claim check K1, K3). Applies to the three apps alike; a fresh context has no
+  plugin arrives enabled (U18 claim check K1, K3). Not every disabled
+  block is refused: `makesubmissionblockplugin` is accepted with the plugin
+  still off and then renders nothing, so seed it with
+  `plugins: {makesubmissionblockplugin: {enabled: true}}` (U58 claim check
+  K1, 2026-09-27). Applies to the three apps alike; a fresh context has no
   block placed. Not a list of strings: a 400.
 - `roles`: a map from a role key (the keys of `users[].roles`, e.g.
   `sectionEditor`) to `{recommendOnly?, permitMetadataEdit?,

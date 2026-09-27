@@ -6,7 +6,7 @@ confirmed dead (it stays here with its evidence) or ruled out of scope.
 
 Sources (removed from the tip 2026-08-25, reachable in git history): the six crosswalks in `.reports/phase0-feature-map/` (their UNASSIGNED
 lists, consistent with `synthesis.md` §4) + `RULINGS.md`'s probe-derived
-dead-code additions. **29 parked atoms** + **45 noted dead-code/defect
+dead-code additions. **29 parked atoms** + **46 noted dead-code/defect
 candidates attached to claimed atoms**. (PLUG-028 moved to FEATURE-MAP's
 Out-of-scope tail — see RULINGS.md. Two candidates that rested solely on
 scratched pre-reset evidence were dropped 2026-08-21 per the reset doctrine —
@@ -735,3 +735,15 @@ until their specs exist. Do not force-claim the defects themselves.
     and no parent in lib/pkp; it is the only code that asks for NOTIF-020.
     Code-verified 2026-09-27 (checkout omp `72a01a026`). Resolves: the U71
     spec confirms by probe; then maintainer confirmation as dead code.
+
+46. **The OPS "Author Screening" tab on a standard install** — attached to
+    **U58** (AFFM-064; claimed; the Submission intake configuration
+    spec's Rule 21 and OPS2 document it as an install fact). OPS
+    `SettingsHandler::workflow()` adds the tab only when a plugin answers
+    the hook `Settings::Workflow::listScreeningPlugins` with rules, and no
+    plugin, class or template in the OPS checkout registers that hook, so
+    the tab renders on no install the application ships. A third-party
+    screening plugin would make it live. Code-verified 2026-09-27 (U58
+    spec author; checkout ops `e2111e3aae`, lib/pkp `17a1f01fed`).
+    Resolves: maintainer ruling whether a bundled or documented screening
+    plugin is expected; otherwise a liveness waiver.

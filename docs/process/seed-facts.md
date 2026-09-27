@@ -665,6 +665,16 @@ behind a line; that scratch is deleted after review.
   investigated); the Participants "Assign" form offers no Manager group on
   OJS or OMP. Workflow › Participants. Seen 2026-09-04 (`.reports/U05/pU`
   P36).
+- {OPS} Opening the "Make a new submission" start page (`/submission`) as
+  a user holding no Author or manager-level role enrols that user as
+  Author on the spot (Users & Roles lists "Author" dated that day); a
+  journal and a press do not. Never open it with roster accounts on OPS
+  `publicknowledge`: it changes their roles for every later reader of the
+  fleet until a reset. OPS, with OJS and OMP as controls, 2026-09-27 (U58
+  claim check K1, `.reports/U58/ccK1/ms-*`).
+- A seeded draft (`POST scenarios/submission` left unsubmitted) opens the
+  wizard on its first step, "1 Upload Files". All three apps, 2026-09-27
+  (U58 claim check K2, `.reports/U58/ccK2/ad-06-wizard-step0-*`).
 - A wizard submission started from a scratch context's start page needs a
   title, the checklist and privacy boxes, one file with a genre, and (on OJS
   and OPS, not OMP) an abstract before its final "Submit"; the wizard asks
@@ -1369,6 +1379,17 @@ config-file settings.
   Country: This field is required."); `context.country` seeds one (U19
   harness, 2026-09-26), else a test picks one on the tab first. 2026-09-25 (U18 claim check K1);
   2026-09-26, all three apps (U18 test run, T-ojs-1).
+- The default "Before you begin" and "Submission Checklist" texts of
+  Settings › Workflow › "Author Guidance" link to the context's
+  "Submissions" page by an absolute address through the port the context
+  was created on: `publicknowledge` through the fleet's base port, a
+  scratch context through the probe server's port. All three apps,
+  2026-09-27 (U58 claim check K2, `.reports/U58/ccK2/ag-*`).
+- {OMP} A new press, `publicknowledge` included, arrives with "Enable
+  type metadata" ticked at "Do not request the type from the author
+  during submission."; a journal and a server arrive with it unticked.
+  Settings › Workflow › "Metadata", 2026-09-27 (U58 claim check K2,
+  `.reports/U58/ccK2/me-*-01-metadata-*`).
 - {OJS} A new journal has "LOCKSS" and "CLOCKSS" unticked on Settings ›
   Distribution › "Archiving", and `{journal}/gateway/lockss|clockss` land
   on the home page; OMP and OPS answer "404 Not Found" there. 2026-09-26
