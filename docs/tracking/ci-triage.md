@@ -813,6 +813,15 @@ trips.
   **Watch condition**: a position read on a list whose query has no
   unique ORDER BY. **Sighted 2026-09-27** (U61 session's OPS final, Mac, reset database, auto workers): OPS U54 S3 "create a role" red at `RolesTab.openRowActions` because the new "Data editor" landed as the Roles list's first row, which carries no "Settings" arrow (U54 A1, A13); green alone (`.reports/U61/final-run-ops.log`, `alone-ops-U54S3.log`). The diagnosis is the next daily session's. Again 2026-09-27 (U52 session's OPS final, VM, reset database, auto workers), green alone (`.reports/U52/final-run-ops.log`, `alone-ops-U54S3-U14S5.log`).
 
+- **OPS U61 S4 "deleting the stored copies": the header read took the
+  admin's unread-task count** (CI push run 36289097857 at `b57a99c`,
+  2026-09-27, shard ops 3/3, red on the first attempt and the retry): the
+  before/after `look()` of the server's home page compared the header's
+  text, which ends with the user menu's task count ("admin 134" then
+  "admin 139"), raised by queued work finishing between the reads. Fixed
+  the same day in all three apps' U61 suites (the trailing count is left
+  out of the read; S4 green alone on each). **Watch condition**: a U61 S4
+  red on the header again.
 - **OMP U27 S9 and S16** (first sightings, the Escape sweep's runs
   2026-09-26, `.reports/flake-s26/esc/diagnosis.md`): S9 red 2 of 8 at
   HEAD under an animation-frame hold, lead: `openRowMenu()` returns

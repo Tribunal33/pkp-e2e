@@ -388,7 +388,9 @@ test.describe('system administration', () => {
                         return el ? getComputedStyle(el).getPropertyValue(property) : null;
                     };
                     return {
-                        header: text('header.pkp_structure_head'),
+                        // the user menu's unread-task count is left out: queued
+                        // work finishing between the two reads can raise it
+                        header: (text('header.pkp_structure_head') || '').replace(/ \d+$/, ''),
                         footer: text('.pkp_structure_footer_wrapper'),
                         headerColour: style('header.pkp_structure_head', 'background-color'),
                         navColour: style('.pkp_navigation_primary_wrapper', 'background-color'),
