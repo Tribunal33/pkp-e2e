@@ -350,7 +350,19 @@ trips.
   the OMP and OPS jobs of the same run passed, and the U04 push's run
   34768503126 an hour earlier was green on all three. No local
   counterpart. **Watch condition**: a second CI job lost to a refused
-  worker port; then read the job's server log step.
+  worker port; then read the job's server log step. **Second sighting
+  2026-09-27** (branch `reset-before-serial`, run 36319190019, OJS 3/3,
+  the only red of 9 jobs): U03 S2 in the app pass, 30 s into it; the
+  scenario API answered, then `page.goto` 5 s later got
+  `ERR_CONNECTION_REFUSED` at `127.0.0.1:8002`, and the retry 136 ms
+  later `ECONNREFUSED` on the scenario API. The other 168 tests of the
+  pass were green, later ones on 8002 included, so the server came back
+  (the restart wrapper in `php-server.js`). The server log could not be
+  read: every pass starts its servers with `: > <log>`, so the solo
+  pass's start emptied the app pass's `server-8002.log` (the artifact
+  holds 257 bytes from 12:43). **Next step**: keep the earlier passes'
+  server logs (append, or one folder per pass), then read the next
+  sighting's `[harness] php -S died` line.
 - **Participants menu still open after the impersonation return** (U01
   S7, OJS, once). In the fourth OJS final of the U05 revision session
   (2026-09-13, four workers, `.reports/U05/final-run-ojs-attempt4.log`)
