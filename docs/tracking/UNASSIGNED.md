@@ -6,7 +6,7 @@ confirmed dead (it stays here with its evidence) or ruled out of scope.
 
 Sources (removed from the tip 2026-08-25, reachable in git history): the six crosswalks in `.reports/phase0-feature-map/` (their UNASSIGNED
 lists, consistent with `synthesis.md` §4) + `RULINGS.md`'s probe-derived
-dead-code additions. **18 parked atoms** + **41 noted dead-code/defect
+dead-code additions. **18 parked atoms** + **42 noted dead-code/defect
 candidates attached to claimed atoms**. (PLUG-028 moved to FEATURE-MAP's
 Out-of-scope tail — see RULINGS.md. Two candidates that rested solely on
 scratched pre-reset evidence were dropped 2026-08-21 per the reset doctrine —
@@ -626,3 +626,23 @@ until their specs exist. Do not force-claim the defects themselves.
     `3162c105bf`, omp `72a01a026`, lib/pkp `1ad4a14bb2`). Resolves:
     maintainer confirmation as dead code (removal candidates), or a
     ruling to restore the membership purchase.
+42. **Unreachable plugin-management pieces** — attached to **U62**
+    (AFFM-047, AFFM-048, AFFM-049; claimed). `PluginHelper::isGalleryAllowed()`
+    always answers true (`getCapabilities()` sets `canSeeGallery` on every
+    install mode), so the `{if $canSeePluginGallery}` guards in
+    `website.tpl` and `contextSettings.tpl` never hide the Plugin Gallery;
+    `PluginHelper::isPluginInstallDisabled()` has no caller.
+    `PluginHelper::upgradePlugin()` throws with
+    `manager.plugins.uploadDisabled`, a key no locale defines, on a path
+    only a direct `saveUploadPlugin` request reaches (no screen offers
+    "Upgrade" while uploads are off). `uploadPluginForm.tpl` tests
+    `$function == 'install'`, a value the form never receives (the
+    action is `upload`; the visible symptom is the Plugins management
+    spec's A2). Locale keys displayed nowhere: `manager.plugins.delete`,
+    `.deleteDescription`, `.description`, `.pluginManagement`,
+    `.sitePlugin`, `.copyError`, `.fileSelectError`, `.action`,
+    `manager.plugins.pluginGallery.overview`, `.installation`,
+    `.maintainer`, `.homepage`, `.status`. Code-verified 2026-09-27
+    (U62 spec author; checkouts ojs `3162c105bf`, omp `72a01a026`, ops
+    `e9f6f4f550`, lib/pkp `1ad4a14bb`). Resolves: maintainer
+    confirmation as dead code (removal candidates).

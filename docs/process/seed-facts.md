@@ -310,8 +310,12 @@ behind a line; that scratch is deleted after review.
   and DataCite, OPS Crossref, 2026-09-26, U45 claim check K5); and
   Administration › System Information › "Check for updates", which
   answers a server error (500) with an empty page (all three apps,
-  2026-09-27, U61 claim check K1). Maintainer ruling 2026-08-20; harness.md
-  "config.test.inc.php".
+  2026-09-27, U61 claim check K1); and the "Plugin Gallery" tab (Settings ›
+  Website › "Plugins", Site Settings › "Plugins", the Settings Wizard),
+  which reads "Loading" forever because its list request answers a server
+  error (500) on every load of those pages, so each visit adds a crash to
+  a probe's run record (all three apps, 2026-09-27, U62 claim check K1,
+  K3). Maintainer ruling 2026-08-20; harness.md "config.test.inc.php".
 - The public files directory is `public_files_dir = public`, relative to
   the app root as the config template requires (generated since
   2026-09-24; before, an absolute path). Pictures uploaded through a
@@ -956,8 +960,10 @@ config-file settings.
   Log, all three apps, 2026-09-23 (`.reports/U38/cc-K1.md` K1-8). Such an
   administrator keeps the Settings Wizard, whose "Appearance" saves, while
   Settings › Website answers the access-denied page on a press and a
-  server and opens under an "Error" window on a journal. All three apps,
-  2026-09-24 (U10 claim check K5, `.reports/U10/ccK5/x-*`). With Reader
+  server and opens under an "Error" window on a journal (on OJS it opened
+  with no "Error" window, twice, on 2026-09-27: U62 claim check K1,
+  `n-02-website-typed-ojs`). All three apps, 2026-09-24 (U10 claim check
+  K5, `.reports/U10/ccK5/x-*`). With Reader
   left, Users & Roles opens by its address under the same "Error" window
   (the side menu's submissions count answers 401); on a press and a
   server only `…/management/access` opens it, `…/management/settings/access`
@@ -1283,3 +1289,15 @@ config-file settings.
   site's plugin settings are stored with context NULL, not 0; the install
   stores no row for either until a save. Three apps, 2026-09-26 (U18 claim
   check K3).
+- Settings › Website › "Plugins" › "Installed Plugins" shows its category
+  headings with no count, and "Gateway Plugins" reads "No Items" on every
+  scratch context and on the site's list; a scratch context's "Report
+  Plugins" rows {OJS OMP} and "Import/Export Plugins" rows arrive ticked
+  and cannot be unticked, and a CSV report's "Reports" link downloads the
+  file instead of opening a page. The test installs run
+  `allow_plugin_install = on`, which Administration › "View System
+  Information" shows as "1". On a freshly reset fleet (one context),
+  Administration › "Site Settings" shows "Site Setup" alone, with no
+  "Appearance", "Announcements" or "Plugins" tab, and OMP's
+  `publicknowledge` lists "Usage event" to the Site Administrator. All
+  three apps, 2026-09-27 (U62 claim check K1, K2, K3).
