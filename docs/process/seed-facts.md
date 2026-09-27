@@ -182,6 +182,11 @@ behind a line; that scratch is deleted after review.
   page. All three apps, 2026-09-23 (U07 claim check K2, `.reports/U07/ccK2`);
   Country and enabling 2026-09-27 (U57 claim check K2,
   `.reports/U57/ccK2/c-02a-create-no-country-H-*`).
+- {OJS OPS} A context not enabled publicly sends a signed-out visitor to
+  its Login page for any address, even one the app has no page for (such
+  as `catalog`); a context closed by "Users must be registered…" answers
+  such an address with the bare "404 Not Found". 2026-09-27 (U68 claim
+  check K1, `.reports/U68/ccK1/c-03-*`).
 - A context created with French under "UI" (seeded or on Hosted Journals)
   already holds the French default texts (privacy statement, For
   Readers/Authors/Librarians, author guidelines, wizard help) and, on a
@@ -338,7 +343,13 @@ behind a line; that scratch is deleted after review.
   Seeded published articles likewise reach the search index only when the
   queued jobs run: the Search page answers "No Results" for a seeded title
   until then. OJS, 2026-09-25 (U51 claim check K2, `sr-visitor-01-search`
-  vs `ro-visitor-19-search`).
+  vs `ro-visitor-19-search`). A category's page likewise lists a seeded
+  published item only after the queued jobs run: it reads "0 Items" ("0
+  Titles" on OMP) until `php lib/pkp/tools/jobs.php run` (app root, the
+  test config), while a press's catalog, series and "New Releases" pages
+  list the item at once. All three apps, 2026-09-27 (U68 claim check K4,
+  `.reports/U68/ccK4/seed-arts-before-jobs-omp`,
+  `ctl-02-category-arts-before-jobs-{ojs,ops}`).
 - Outbound HTTP is dead: `[proxy]` points at `127.0.0.1:9`, so every
   server-side external call fails fast (ORCID, reCAPTCHA, DOI registration,
   update checks); Mailpit and other `127.0.0.1` traffic are unaffected. No
@@ -701,9 +712,10 @@ behind a line; that scratch is deleted after review.
   Comments" off, "Reviewer Suggestion at Submission" off. Live-probed
   2026-09-04 (`.reports/U28/pA` P1) and 2026-09-05, OJS and OMP
   (`.reports/U29/pA1` P1, `pA2` P5).
-- A scratch press has no series: the context scenario accepts no
-  `series[]`, and Settings › Press › Series reads "No Items". Live-probed
-  2026-09-05, OMP (`.reports/U29/pC2` P21).
+- A scratch press has no series unless the context scenario's `series[]`
+  adds them (U70 harness, 2026-09-27); without it, Settings › Press ›
+  Series reads "No Items". Live-probed 2026-09-05, OMP (`.reports/U29/pC2`
+  P21).
 - Where a login lands: the site-level Login page lands every account on
   the site index; a journal's own Login page lands managers, editors and
   assistants on the editorial dashboard ("Assigned to me"), reviewers on
@@ -1053,9 +1065,10 @@ config-file settings.
 - A scratch press has no series and no category, so the Navigation tab's
   "Add item" offers no "Series" or "Category" type there;
   `publicknowledge` offers both. The context scenario seeds categories
-  through its `categories[]` key (U10 harness, 2026-09-24) and has no key
-  for series. OMP, 2026-09-23 (U08 claim check K1, K4-16; the key
-  corrected by the U16 harness, 2026-09-25).
+  through its `categories[]` key (U10 harness, 2026-09-24) and series
+  through its `series[]` key (U70 harness, 2026-09-27). OMP, 2026-09-23
+  (U08 claim check K1, K4-16; the key corrected by the U16 harness,
+  2026-09-25).
 - Installed navigation item titles read French on `fr_CA` pages only on a
   context whose "Forms" languages include French; `publicknowledge`
   (French under "UI" only) and a scratch context without
@@ -1183,11 +1196,24 @@ config-file settings.
   "Available"; a format created on screen arrives "Awaiting Approval" and
   "Not Available". Publication › Publication Formats, 2026-09-24 (U44
   claim check K4, `.reports/U44/ccK4/extra-available-after-omp`).
+- {OMP} A book's first "Publish" (Production, on a publication page such
+  as Catalog Entry; the stage view has no "Publish") confirms "…will be
+  assigned … "Version of Record 1.0"" and offers no stage to choose. A
+  book whose only published version is "Author Original" comes from
+  "Create New Version" › "Publication Stage" "Author Original (AO)", that
+  version's "Publish", and "Unpublish" on the Version of Record.
+  2026-09-27 (U68 claim check K2-3, `.reports/U68/ccK2/facts-omp.json`
+  "ao-screen").
 - {OMP} The catalog's series links ("Show Series") list only series that
-  hold a published book. A scratch press has no series (see above): one is
-  added on Settings › Press › Series › "Add Series", and a book goes into
-  it through `POST scenarios/submission` `series: <path>`. Catalog page,
-  2026-09-24 (U10 claim check K1-8, `.reports/U10/ccK1/68-series2-omp.json`).
+  hold a published book, a series whose only published version is
+  "Author Original" included, and show only while at least two series
+  hold one. A scratch press has no series (see above): one is
+  seeded through the context scenario's `series[]` or added on Settings ›
+  Press › Series › "Add Series", and a book goes into it through
+  `POST scenarios/submission` `series: <path>`. Catalog page,
+  2026-09-24 (U10 claim check K1-8, `.reports/U10/ccK1/68-series2-omp.json`);
+  the "Author Original" case and the two-series condition 2026-09-27 (U68
+  claim check K2-2, K4-7).
 - No routine task processes the usage log on a fleet, so every Statistics
   page, CSV download and item page's "Downloads" chart is empty unless a
   scenario seeds figures with `usage[]` (scenarios.md). The item page's
@@ -1367,9 +1393,12 @@ config-file settings.
 - {OMP} A series' public page (`catalog/series/{path}`) shows the series'
   cover image, but its heading and trail's last step are empty and its
   description and ISSNs are absent (U17 OMP9); its books come newest
-  first whatever "Order of monographs" says. A book's page shows the
-  series' full name and ISSNs under "Series" and links the series page.
-  2026-09-25 (U17 claim check K6).
+  first whatever "Order of monographs" says, after any books "Featured in
+  series", which keep their saved order. Its "New Releases" list shows
+  every new release in the series, whatever "Items per page" says. A
+  book's page shows the series' full name and ISSNs under "Series" and
+  links the series page. 2026-09-25 (U17 claim check K6); the featured
+  order and "New Releases" 2026-09-27 (U68 claim check K3).
 - {OJS} `publicknowledge`'s sections have ids 1 "Articles" and 2
   "Reviews" (the sections programming interface's list). 2026-09-25
   (U17 claim check K7).

@@ -20,7 +20,14 @@
  *   Path", "Save" with its "Saving"/"Saved" line, the form's refusals.
  * - PublicCatalog — what a visitor reads: the press's public catalog, "New
  *   Releases", a series' page and a book's page (titles in order, the
- *   series position above a title, the cover picture and its size).
+ *   series position above a title, the cover picture and its size); for
+ *   U68 "Catalog browse" also the home page's lists, the header's
+ *   "Catalog", the page heading, trail, count and empty-list lines, a
+ *   summary's parts and where its links lead, the rows the summaries stand
+ *   in, the page links, the catalog's "Series:" line, the sidebar's
+ *   "Browse" block and the Login page a closed press answers (DOM facts
+ *   from .reports/U68/screen-notes.md, 2026-09-27: the frontend has no main
+ *   landmark and a series' heading is empty, spec A3, so these read by CSS).
  * - publishFromWorkflow — the workflow's own "Publish" on an open
  *   publication page, confirmed in its "Schedule For Publication" window.
  *
@@ -70,6 +77,11 @@ function esc(text) {
 /** A whole-text matcher (trimmed). */
 function whole(text) {
     return new RegExp(`^\\s*${esc(text)}\\s*$`);
+}
+
+/** A trail's words as a whole-text matcher: `trailText('Home', 'Catalog')` reads "Home / Catalog". */
+function trailText(...steps) {
+    return new RegExp(`^\\s*${steps.map(esc).join('\\s*/\\s*')}\\s*$`);
 }
 
 /** The catalog list's own fetch (search, filter, "Cancel", a reload after "Add Entry"). */
@@ -650,8 +662,15 @@ class PublicCatalog extends BasePage {
         await expect(this.page.locator('.page_catalog_new_releases')).toBeVisible({timeout: T});
     }
 
-    async gotoSeries(path) {
-        await this.page.goto(this.contextUrl(this.contextPath, `/catalog/series/${path}`));
+    /** A page of the catalog past the first (`catalog/page/{n}`). */
+    async gotoCatalogPage(n) {
+        await this.page.goto(this.contextUrl(this.contextPath, `/catalog/page/${n}`));
+        await expect(this.page.locator('.page_catalog')).toBeVisible({timeout: T});
+    }
+
+    /** A series' page, or its page `n` (`catalog/series/{path}/{n}`). */
+    async gotoSeries(path, n = null) {
+        await this.page.goto(this.contextUrl(this.contextPath, `/catalog/series/${path}${n ? `/${n}` : ''}`));
         await expect(this.page.locator('.page_catalog_series')).toBeVisible({timeout: T});
     }
 
@@ -708,6 +727,259 @@ class PublicCatalog extends BasePage {
         return this.bookRoot().locator('.item.cover img');
     }
 
+    // --- U68 "Catalog browse": the reader pages ---------------------------------
+
+    /**
+     * Open an address of the press (`/catalog/page/2`, `/catalog/series/x`)
+     * without assuming which page answers (a closed press answers its Login
+     * page, an unknown series the catalog); waits for the public header.
+     */
+    async open(pathname = '') {
+        const response = await this.page.goto(this.contextUrl(this.contextPath, pathname));
+        await expect(this.page.locator('header.pkp_structure_head')).toBeVisible({timeout: T});
+        return response;
+    }
+
+    /** The press's home page. */
+    async gotoHome() {
+        await this.open('');
+    }
+
+    /** The header's "Catalog" (the primary menu's top-level link). */
+    headerCatalogLink() {
+        return this.page.locator('#navigationPrimary > li > a').filter({hasText: whole('Catalog')});
+    }
+
+    /**
+     * Press the header's "Catalog" and wait for the catalog page. Below 992
+     * pixels the theme folds the menu behind "Open Menu" (its CSS, settled
+     * at load), which is pressed first.
+     */
+    async pressHeaderCatalog() {
+        const toggle = this.page.locator('button.pkp_site_nav_toggle');
+        if (await toggle.isVisible()) {
+            await toggle.click();
+        }
+        await expect(this.headerCatalogLink()).toBeVisible({timeout: T});
+        await this.headerCatalogLink().click();
+        await expect(this.page.locator('.page_catalog')).toBeVisible({timeout: T});
+    }
+
+    /** Which reader page is up: the catalog, a series' page, "New Releases". */
+    catalogPageRoot() {
+        return this.page.locator('.page_catalog');
+    }
+
+    seriesPageRoot() {
+        return this.page.locator('.page_catalog_series');
+    }
+
+    newReleasesPageRoot() {
+        return this.page.locator('.page_catalog_new_releases');
+    }
+
+    /** The page's heading (`h1` of the page body; a series' page's is empty, spec A3). */
+    pageHeading() {
+        return this.page.locator('.pkp_structure_main .page > h1').first();
+    }
+
+    /** The trail (`nav.cmp_breadcrumbs`); read with `toHaveText(trailText(...))`. */
+    trail() {
+        return this.page.locator('.pkp_structure_main nav.cmp_breadcrumbs');
+    }
+
+    /** The heading and message standing in for an empty list ("All Books", "No titles…"). */
+    emptyHeading() {
+        return this.page.locator('.pkp_structure_main .page > h2');
+    }
+
+    emptyMessage() {
+        return this.page.locator('.pkp_structure_main .page > p');
+    }
+
+    /** Any message or notice drawn on the page (none on a redirect, spec Rule 2). */
+    messages() {
+        return this.page.locator('.pkp_notification:visible, .cmp_notification:visible, [role="alert"]:visible');
+    }
+
+    /** A list of summaries by its heading ("New Releases", "All Books", "Featured"). */
+    list(heading) {
+        return this.page.locator('.cmp_monographs_list').filter({has: this.page.locator('h2.title, h3.title').filter({hasText: whole(heading)})});
+    }
+
+    /** The one list of the catalog and "New Releases" pages (no heading). */
+    mainList() {
+        return this.page.locator('.pkp_structure_main .page > .cmp_monographs_list').first();
+    }
+
+    /** The titles of a list's summaries, top to bottom. */
+    listTitles(list) {
+        return list.locator('.obj_monograph_summary .title');
+    }
+
+    /** A summary's cover link, title link, author line and date. */
+    summaryCoverLink(title) {
+        return this.summary(title).locator('a.cover');
+    }
+
+    summaryTitleLink(title) {
+        return this.summary(title).locator('.title a');
+    }
+
+    summaryAuthor(title) {
+        return this.summary(title).locator('.author');
+    }
+
+    summaryDate(title) {
+        return this.summary(title).locator('.date');
+    }
+
+    /**
+     * A summary's parts in the order they stand on screen, top to bottom
+     * (`cover`, `seriesPosition`, `title`, `author`, `date`), read once its
+     * pictures have loaded.
+     */
+    async summaryPartsTopToBottom(title) {
+        const summary = this.summary(title).first();
+        let parts = null;
+        await expect
+            .poll(
+                async () => {
+                    parts = await summary.evaluate((s) => {
+                        if ([...s.querySelectorAll('img')].some((i) => !i.complete)) return null;
+                        const names = {cover: 'a.cover', seriesPosition: '.seriesPosition', title: '.title', author: '.author', date: '.date'};
+                        return Object.entries(names)
+                            .map(([name, sel]) => {
+                                const el = s.querySelector(sel);
+                                return el ? {name, y: el.getBoundingClientRect().top} : null;
+                            })
+                            .filter(Boolean)
+                            .sort((a, b) => a.y - b.y)
+                            .map((p) => p.name);
+                    });
+                    return parts !== null;
+                },
+                {timeout: T}
+            )
+            .toBe(true);
+        return parts;
+    }
+
+    /**
+     * A list's summaries grouped into the rows they stand in, top to bottom:
+     * each row a list of `{title, whole}`, `whole` when the summary is at
+     * least nine tenths of the list's width. Read once every picture in the
+     * list has loaded (a late picture moves the rows).
+     */
+    async layoutRows(list) {
+        let rows = null;
+        await expect
+            .poll(
+                async () => {
+                    rows = await list.evaluate((l) => {
+                        if ([...l.querySelectorAll('img')].some((i) => !i.complete)) return null;
+                        const width = l.getBoundingClientRect().width;
+                        const grouped = [];
+                        for (const s of l.querySelectorAll('.obj_monograph_summary')) {
+                            const box = s.getBoundingClientRect();
+                            const t = s.querySelector('.title');
+                            const item = {title: (t ? t.textContent : '').replace(/\s+/g, ' ').trim(), whole: box.width >= width * 0.9, y: Math.round(box.top)};
+                            const row = grouped.find((r) => Math.abs(r.y - item.y) <= 2);
+                            if (row) row.items.push(item);
+                            else grouped.push({y: item.y, items: [item]});
+                        }
+                        grouped.sort((a, b) => a.y - b.y);
+                        return grouped.map((r) => r.items.map(({title, whole}) => ({title, whole})));
+                    });
+                    return rows !== null;
+                },
+                {timeout: T}
+            )
+            .toBe(true);
+        return rows;
+    }
+
+    // --- page links ------------------------------------------------------------
+
+    pageLinks() {
+        return this.page.locator('.cmp_pagination');
+    }
+
+    previousLink() {
+        return this.pageLinks().locator('a.prev');
+    }
+
+    nextLink() {
+        return this.pageLinks().locator('a.next');
+    }
+
+    /** "{start}-{end} of {total}". */
+    pageSpan() {
+        return this.pageLinks().locator('.current');
+    }
+
+    // --- the catalog's "Series:" line -------------------------------------------
+
+    seriesNav() {
+        return this.page.locator('nav.pkp_series_nav_menu');
+    }
+
+    seriesNavLinks() {
+        return this.seriesNav().locator('li a');
+    }
+
+    seriesNavLink(name) {
+        return this.seriesNav().getByRole('link', {name, exact: true});
+    }
+
+    // --- the sidebar's "Browse" block -------------------------------------------
+
+    browseBlock() {
+        return this.page.locator('.pkp_structure_sidebar .block_browse');
+    }
+
+    /** The block's heading ("Browse"). */
+    browseBlockHeading() {
+        return this.browseBlock().locator(':scope > .title');
+    }
+
+    /**
+     * The block's lines, top to bottom, as read: a link's words ("New
+     * Releases") or a line's own words ("Categories", "Series"), without
+     * the links under it.
+     */
+    async browseBlockLines() {
+        const lines = this.browseBlock().locator('nav > ul > li');
+        await expect(this.browseBlock()).toBeVisible({timeout: T});
+        return lines.evaluateAll((lis) =>
+            lis.map((li) => {
+                const clone = li.cloneNode(true);
+                clone.querySelectorAll('ul').forEach((u) => u.remove());
+                return clone.textContent.replace(/\s+/g, ' ').trim();
+            })
+        );
+    }
+
+    browseNewReleasesLink() {
+        return this.browseBlock().locator('nav > ul > li > a').filter({hasText: whole('New Releases')});
+    }
+
+    /** The series links under the block's "Series" line. */
+    browseSeriesLinks() {
+        return this.browseBlock().locator('li[class^="series_"] > a');
+    }
+
+    browseSeriesLink(name) {
+        return this.browseSeriesLinks().filter({hasText: whole(name)});
+    }
+
+    // --- a closed press ------------------------------------------------------
+
+    /** The Login page's form (what a closed press answers a signed-out visitor). */
+    loginForm() {
+        return this.page.locator('form#login');
+    }
+
     /** A loaded picture's address and natural size (polls until it has loaded). */
     async picture(locator) {
         let info = null;
@@ -757,4 +1029,5 @@ module.exports = {
     CatalogEntryPage,
     PublicCatalog,
     publishFromWorkflow,
+    trailText,
 };

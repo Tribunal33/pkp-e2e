@@ -150,6 +150,11 @@
  *   the OMP AppearanceSetupForm's FieldOptions over
  *   Repo::submission()->getSortSelectOptions()). Only the press schema
  *   carries it: OJS and OPS answer 400. The key writes this row alone.
+ * - displayFeaturedBooks, displayNewReleases (bool) — Settings › Website ›
+ *   Appearance › Setup, the "Featured Books" and "New Releases" boxes
+ *   ("Display featured books on the home page", "Display new releases on
+ *   the home page"; U68, the OMP AppearanceSetupForm). Only the press
+ *   schema carries them: OJS and OPS answer 400. Each writes its row alone.
  * - enableDois (bool), doiPrefix (string or null), doiVersioning (bool),
  *   enabledDoiTypes (list), doiCreationTime (copyediting (OPS production) /
  *   publication / never), doiSuffixType (default / none / customPattern)
@@ -2549,6 +2554,28 @@ abstract class PKPContextScenarioBuilder
             }
             $settings['catalogSortOption'] = $value;
             $specKeys['catalogSortOption'] = 'catalogSortOption';
+        }
+
+        // Settings › Website › Appearance › "Setup", the "Featured Books"
+        // and "New Releases" boxes (U68; the OMP AppearanceSetupForm's
+        // single-option FieldOptions over the schema's nullable booleans,
+        // no default: a new press has no row, both boxes unticked). The
+        // form posts its whole body, each box as "true" / "false", which
+        // the save's convertStringsToSchema turns into the boolean (stored
+        // 1 / 0); the form offers no way back to no row, so null is
+        // refused. Each key writes its row alone. Only the press schema
+        // carries them: OJS and OPS answer 400.
+        foreach (['displayFeaturedBooks' => 'Featured Books', 'displayNewReleases' => 'New Releases'] as $key => $label) {
+            if (!$root->has($key)) {
+                continue;
+            }
+            $hasProperty($key) || throw new SpecException($key, "{$key} is not a setting of this app's context schema (the \"{$label}\" box exists on a press only)");
+            $value = $root->get($key);
+            if (!is_bool($value)) {
+                throw new SpecException($key, "{$key} must be a boolean (true: the \"{$label}\" box ticked, false: unticked)");
+            }
+            $settings[$key] = $value;
+            $specKeys[$key] = $key;
         }
 
         // Settings › Journal › "Masthead", "Publisher" and the two ISSN

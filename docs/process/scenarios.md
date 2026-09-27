@@ -725,6 +725,18 @@ Keys:
   the form offers no way back to none, so null and any other word are
   400s. The tab reopens with the seeded radio marked (U70 harness,
   2026-09-27).
+- `displayFeaturedBooks`, `displayNewReleases` (OMP only; OJS and OPS
+  answer 400): the "Featured Books" and "New Releases" boxes ("Display
+  featured books on the home page", "Display new releases on the home
+  page") of Settings › Website › Appearance › "Setup", each `true`
+  (ticked) or `false`, saved as that form saves (the same PUT, the boxes
+  posted as `displayFeaturedBooks=true&displayNewReleases=true`; stored
+  as `1` / `0`). Each key writes its row alone. A new press has no row
+  for either, both boxes unticked and no "Featured" or "New Releases"
+  list on its home page; ticked, the home page shows the list's heading.
+  The form has no way back to no row, so null and anything but a boolean
+  are 400s. The tab reopens with the seeded boxes (U68 harness,
+  2026-09-27).
 - `sidebar`: the "Sidebar" list of Settings › Website › Appearance ›
   "Setup", a list of block plugin names in the order the sidebar shows
   them, saved as that form saves (the same PUT; stored as a JSON list). The
@@ -940,6 +952,21 @@ Keys:
   are off on every fresh journal and preprint server; their `settings`
   are the DOIs "Registration" tab's agency block and go with
   `registrationAgency` (above), never alone (U45 harness, 2026-09-26).
+  The OMP "Browse Block" (`browseblockplugin`, enabled on every fresh
+  press) has a "Settings" window, group "Browse Possibilities", with
+  three boxes: "New releases" `browseNewReleases`, "Categories"
+  `browseCategories`, "Series" `browseSeries`. A fresh press carries all
+  three rows as `1` (type `bool`), all ticked. The window's "Save" posts
+  only the ticked boxes (`browseCategories=1`) and writes all three rows,
+  an unticked one as `0` (`bool`); seed them as booleans,
+  `settings: {browseNewReleases: false, browseSeries: false}`, which
+  writes the same `0` / `bool` rows (a string would store type
+  `string`), and the rows a seed leaves out keep the fresh `1`, which is
+  what the window stores for a ticked box. The window reopens with the
+  seeded boxes, and the placed block (`sidebar: ['browseblockplugin']`)
+  drops its "New Releases" link or its "Series" line. The key writes the
+  `enabled` row and the audit-log line too, which the window does not
+  (U68 harness, 2026-09-27).
 - `themeOptions` (U13 harness, 2026-09-24, three apps): Settings ›
   Website › Appearance › "Theme", a map from an option of the context's
   theme (a scratch context always has the "Default Theme") to its value,

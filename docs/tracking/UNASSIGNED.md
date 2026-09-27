@@ -6,7 +6,7 @@ confirmed dead (it stays here with its evidence) or ruled out of scope.
 
 Sources (removed from the tip 2026-08-25, reachable in git history): the six crosswalks in `.reports/phase0-feature-map/` (their UNASSIGNED
 lists, consistent with `synthesis.md` §4) + `RULINGS.md`'s probe-derived
-dead-code additions. **29 parked atoms** + **48 noted dead-code/defect
+dead-code additions. **29 parked atoms** + **49 noted dead-code/defect
 candidates attached to claimed atoms**. (PLUG-028 moved to FEATURE-MAP's
 Out-of-scope tail — see RULINGS.md. Two candidates that rested solely on
 scratched pre-reset evidence were dropped 2026-08-21 per the reset doctrine —
@@ -159,16 +159,10 @@ These atoms ARE claimed in FEATURE-MAP; the notes below travel with them to
 spec time as register material. Listed here so the candidates have one home
 until their specs exist. Do not force-claim the defects themselves.
 
-1. **catalogCategory.tpl unassigned variables** — attached to **U68**
-   (OMP-variant category page rows; seam with U16's shared category page).
-   The template reads `$featuredMonographIds` / `$newReleasesMonographs`,
-   never assigned by the shared handler that renders it
-   (probe-omp-catalog.md §7). Resolves: U68/U16 spec-time register entry;
-   probe confirms the display silently no-ops.
-2. **Dangling `results` op** — attached to **U68** (ROUTE-056, OMP
-   `pages/catalog/index.php`). The route map dispatches op `results` to a
-   method that exists nowhere in the handler chain (probe-omp-catalog.md §7).
-   Resolves: U68 spec-time register entry; dead-code candidate for removal.
+1. **catalogCategory.tpl unassigned variables** — resolved 2026-09-27: the Catalog browse spec's register
+   [A7](../specs/U68-catalog-browse.md#a7) carries it (Rule 14 there).
+2. **Dangling `results` op** — resolved 2026-09-27: the Catalog browse spec's register
+   [A9](../specs/U68-catalog-browse.md#a9) carries it.
 3. **SectionController `filterByTypeIds()` dispatch** — resolved 2026-09-25: the Sections spec's register
    [A4](../specs/U17-sections.md#a4) carries it.
 4. **Missing OMP dashboard series filter** — resolved 2026-09-25: the Submissions dashboard's
@@ -791,3 +785,14 @@ until their specs exist. Do not force-claim the defects themselves.
     check confirms no screen sends it; then maintainer confirmation as dead
     code (removal candidate), or a ruling that the dropdown should post to
     it (the U75 spec's register A1).
+
+49. **Unused monograph cover server** — attached to **U68** (GRID-099;
+    claimed). OMP `controllers/submission/CoverHandler.php` (ops `cover`,
+    `thumbnail`) is requested only by
+    `templates/controllers/monographList/coverImage.tpl`, which no
+    template, page or script includes since the catalog listing moved to
+    a grid in 2016 (omp `b3b90f358`); the public book summaries and the
+    book page print the cover's public file (`Publication::getLocalizedCoverImageThumbnailUrl()`).
+    The Catalog browse spec's Reference table records it. Code-verified
+    2026-09-27 (U68 spec author; checkout omp `72a01a026`). Resolves:
+    maintainer confirmation as dead code (removal candidates).
