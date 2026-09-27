@@ -99,7 +99,7 @@ orchestrator.
 | Product findings: bugs, divergences, open questions, API misbehavior the browser's own traffic showed, or a direct check of an API no screen calls (the Frame's one exception), with no security dimension | the spec's Findings register; nowhere else (not `app-changes.md`, not a PROGRESS note) |
 | A potential security concern | `../e2e_ng/security.md`, private and outside every repo; verified by one targeted probe before the session report; rules and entry shape in `briefs/security-verify.md`. The fact of routing is always stated; the content never appears in a spec, test, `.reports/` file, PROGRESS note or commit |
 | A finding against an unmerged PR | the developer; the spec describes `main` (MAINTENANCE "A developer's PR fails the suite") |
-| What a probe saw on another feature's screen | `docs/tracking/incidentals.md`, one line, written by the orchestrator from the fold log and the merge |
+| What a probe saw on another feature's screen | `docs/tracking/incidentals.md`, one line, written by the orchestrator from the fold log and the merge, only after grepping that feature's spec for it: a sighting the spec already states is dropped, one it contradicts names the rule or register ID it contradicts |
 | Process friction | `docs/tracking/friction.md`, one line, appended by the screen-driving agent itself |
 | Build blockers and any app-code change | `docs/tracking/app-changes.md`, orchestrator only |
 | Builder parity | `docs/tracking/parity-ledger.md` |
