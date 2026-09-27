@@ -1264,7 +1264,12 @@ Keys:
   decision" under the person's role in the Participants panel. Refusals
   follow the window: `recommendOnly: true` on a role below sub-editor level
   and `canChangeMetadata: false` on a manager-level role are 400s (U35
-  harness, 2026-09-22, three apps).
+  harness, 2026-09-22, three apps). Because the row skips the form's
+  notification step, the managers' header Tasks entry "A new monograph
+  (article) has been submitted to which an editor needs to be assigned."
+  stays up even with an editor seeded in; read the Tasks panel by the
+  driven submission's title, never by count (OMP and OJS, 2026-09-27, U71
+  claim check K6).
 - `published` (default false). Requires `submitted: true`.
 - `author`: `{orcid, orcidIsVerified}` on the submitter's contributor record.
   `orcidIsVerified: true` stores what ORCID's own sign-in leaves when the

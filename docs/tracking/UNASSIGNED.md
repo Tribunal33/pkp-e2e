@@ -733,7 +733,17 @@ until their specs exist. Do not force-claim the defects themselves.
     control offers either (the stage has no Resubmit choice). OMP's
     `AuthorDashboardHandler::_getNotificationRequestOptions()` has no caller
     and no parent in lib/pkp; it is the only code that asks for NOTIF-020.
-    Code-verified 2026-09-27 (checkout omp `72a01a026`). Resolves: the U71
+    Also unreached: `ReviewRound::REVIEW_ROUND_STATUS_SENT_TO_EXTERNAL`
+    and its sentence `editor.submission.roundStatus.sentToExternal` ("Sent
+    for external review."), which no code sets (OMP's `SendExternalReview`
+    sets `REVIEW_ROUND_STATUS_ACCEPTED`), and the `RESUBMIT_INTERNAL`
+    branch of `ReviewRound::determineStatus()`, which needs a decision no
+    control records (`ResubmitInternal::getDecision()` returns
+    `PENDING_REVISIONS_INTERNAL` besides). Whether the registered
+    `RecommendResubmitInternal` still records through a typed wizard
+    address is the U71 spec's note td-resubmit.
+    Code-verified 2026-09-27 (checkout omp `72a01a026`; the additions on omp
+    `3cd59e944`, lib/pkp `17a1f01fed`, U71 spec author). Resolves: the U71
     spec confirms by probe; then maintainer confirmation as dead code.
 
 46. **The OPS "Author Screening" tab on a standard install** — attached to

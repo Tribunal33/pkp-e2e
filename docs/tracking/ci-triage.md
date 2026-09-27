@@ -855,7 +855,7 @@ trips.
   U12, U13, U18, U28, U29, U35, U42, U54, U55; new U13 A11 🐞: keywords
   lose the typed order on every save); galley seeds carry `seq`.
   **Watch condition**: a position read on a list whose query has no
-  unique ORDER BY. **Sighted 2026-09-27** (U61 session's OPS final, Mac, reset database, auto workers): OPS U54 S3 "create a role" red at `RolesTab.openRowActions` because the new "Data editor" landed as the Roles list's first row, which carries no "Settings" arrow (U54 A1, A13); green alone (`.reports/U61/final-run-ops.log`, `alone-ops-U54S3.log`). The diagnosis is the next daily session's. Again 2026-09-27 (U52 session's OPS final, VM, reset database, auto workers), green alone (`.reports/U52/final-run-ops.log`, `alone-ops-U54S3-U14S5.log`). Again 2026-09-27 (U63 session's OMP final, Mac, reset database, auto workers): OMP U54 S6 "remove a role", "Spare desk" the first row, green alone (`.reports/U63/final-run-omp.log`, `alone-omp-reds.log`). Again 2026-09-27 (U58 session's OMP final, VM, reset database, auto workers): OMP U54 S3 "create a role", "Data editor" the first row, green alone (`.reports/U58/final-run-omp.log`, `alone-reds.log`).
+  unique ORDER BY. **Sighted 2026-09-27** (first in the U61 session's OPS final): OPS U54 S3 "create a role" red at `RolesTab.openRowActions` because the new "Data editor" landed as the Roles list's first row, which carries no "Settings" arrow (U54 A1, A13). The diagnosis is the next daily session's. Again 2026-09-27 (U63 session's OMP final, Mac, reset database, auto workers): OMP U54 S6 "remove a role", "Spare desk" the first row, green alone (`.reports/U63/final-run-omp.log`, `alone-omp-reds.log`). Again 2026-09-27 (U58 session's OMP final, VM, reset database, auto workers): OMP U54 S3 "create a role", "Data editor" the first row, green alone (`.reports/U58/final-run-omp.log`, `alone-reds.log`). Again 2026-09-27 (U71 session's OMP and OPS finals, VM slot s1, reset databases, auto workers): U54 S3 on both, "Data editor" the first row, green alone on both (`.reports/U71/final-run-omp.log`, `final-run-ops.log`, `alone-omp-U54S3-U14S5.log`, `alone-ops-U54S3-U14S5.log`).
 
 - **OPS U61 S4 "deleting the stored copies": the header read took the
   admin's unread-task count** (CI push run 36289097857 at `b57a99c`,
@@ -879,6 +879,17 @@ trips.
   OPS final, Mac, reset database, auto workers), green alone
   (`.reports/U63/final-run-ops.log`, `alone-ops-reds.log`). **Watch
   condition**: a second sighting; then read its trace.
+
+- **OJS U34 S2 "the composer": the template search's "searching" state
+  never seen** (`page.waitForSelector('.composer__templates__searching')`,
+  `U34-editorial-decision-recording.spec.js:540`, 30 s after the CC field
+  is cleared and "Sent to Review" typed into the template search). Lead:
+  the state is transient, so a search that answers before the wait
+  attaches leaves nothing to see. Sighted 2026-09-27 (U71 session's OJS
+  final, VM slot s1, reset database, auto workers), the only red of 574,
+  green alone (`.reports/U71/final-run-ojs.log`, `alone-ojs-U34S2.log`).
+  **Watch condition**: a second sighting; then key the wait to the
+  search's response instead of the transient class.
 
 ## Companion branches — pkp-e2e branches waiting on app PRs
 

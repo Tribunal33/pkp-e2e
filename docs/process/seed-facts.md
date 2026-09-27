@@ -1423,3 +1423,18 @@ config-file settings.
   "Appearance", "Announcements" or "Plugins" tab, and OMP's
   `publicknowledge` lists "Usage event" to the Site Administrator. All
   three apps, 2026-09-27 (U62 claim check K1, K2, K3).
+- A decision recorded on screen that opens a round (a new internal or
+  external round) leaves the seed response behind: that response lists
+  only the seeded rounds, so the new round's id is read from the
+  workflow's own `GET submissions/{id}` `reviewRounds[]`. OMP, 2026-09-27
+  (U71 claim check K3, `.reports/U71/ccK3/`).
+- A monograph seeded with an internal round (`reviewRounds[].stage:
+  'internal'`) whose only reviewer has declined, and a recommend-only
+  Series Editor in `participants[]`, reads "Awaiting recommendations from
+  editors." in the round's status box. OMP, 2026-09-27 (U71 claim check
+  K4, `walk-se-0`).
+- A task added from a template that is set to add itself (seeded
+  `taskTemplates[]` with `include: true`, or the template window's
+  auto-add box) is listed only to manager-level people; an assigned
+  Series Editor's panel reads "No Items", Internal Review included. OMP,
+  2026-09-27 (U71 claim check K4, `tmpl-se-t1-round1`).
