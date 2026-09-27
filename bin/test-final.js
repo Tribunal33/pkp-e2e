@@ -9,9 +9,11 @@
  *
  * Each app runs `npm run test:<app> -- --reporter=list --output
  * .reports/<feature>/pw-out-final-<app>`, with its console in
- * .reports/<feature>/final-run-<app>.log. PLAYWRIGHT_WORKERS is left to the
+ * .reports/<feature>/final-run-<app>.log. test:<app> is bin/test-app.js,
+ * the three passes CI runs (app, serial, solo; each writes its own
+ * pw-out-final-<app>/{app,serial,solo}). PLAYWRIGHT_WORKERS is left to the
  * environment (unset auto-detects, 8 on the VM). One summary line per app,
- * exit 1 if any suite fails.
+ * the passes' tallies summed, exit 1 if any suite fails.
  *
  * A server already answering on an app's base port would be adopted by the
  * run (reuseExistingServer) and keep logging elsewhere, so it is reported
@@ -100,13 +102,28 @@ function scenarioLine(feature, app) {
         (missing.length ? ` — without one: ${missing.map((n) => `S${n}`).join(', ')} (the suite header says why)` : '');
 }
 
-/** The list reporter's closing tally: "12 passed", "1 failed", "3 skipped", "2 flaky". */
+/**
+ * The list reporter's closing tallies ("12 passed", "1 failed", "3 skipped",
+ * "2 flaky", "5 did not run"), summed over the passes of bin/test-app.js:
+ * the output splits at its `test-app: pass n/3` lines and each segment
+ * counts its last tally (a pass that ran no test prints none).
+ */
 function tally(text) {
-    const pick = (word) => {
-        const matches = [...text.matchAll(new RegExp(`^\\s*(\\d+) ${word}`, 'gm'))];
+    const segments = text.split(/^test-app: pass \d+\/\d+ \([^)]*\): playwright /m);
+    const passes = Math.max(segments.length - 1, 1);
+    const pick = (segment, word) => {
+        const matches = [...segment.matchAll(new RegExp(`^\\s*(\\d+) ${word}\\b`, 'gm'))];
         return matches.length ? parseInt(matches[matches.length - 1][1], 10) : 0;
     };
-    return {passed: pick('passed'), failed: pick('failed'), flaky: pick('flaky'), skipped: pick('skipped')};
+    const sum = (word) => segments.reduce((total, segment) => total + pick(segment, word), 0);
+    return {
+        passes,
+        passed: sum('passed'),
+        failed: sum('failed'),
+        flaky: sum('flaky'),
+        skipped: sum('skipped'),
+        didNotRun: sum('did not run'),
+    };
 }
 
 (async () => {
@@ -149,7 +166,10 @@ function tally(text) {
         const code = result.status ?? 1;
         const line =
             `test-final: ${name}: ${code === 0 ? 'GREEN' : 'RED'} — ${counts.passed} passed, ${counts.failed} failed, ` +
-            `${counts.flaky} flaky, ${counts.skipped} skipped in ${seconds} s (exit ${code}, log ${path.relative(REPO_ROOT, logFile)})`;
+            `${counts.flaky} flaky, ${counts.skipped} skipped` +
+            (counts.didNotRun ? `, ${counts.didNotRun} did not run` : '') +
+            ` in ${counts.passes} pass${counts.passes === 1 ? '' : 'es'}, ${seconds} s ` +
+            `(exit ${code}, log ${path.relative(REPO_ROOT, logFile)})`;
         console.log(line);
         summary.push(line);
         console.log(scenarioLine(feature, name));

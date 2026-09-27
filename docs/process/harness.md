@@ -180,6 +180,14 @@ Two facts worth knowing before you write a test:
   A test that asserts "still nothing, until the jobs run" cannot share the
   queue with other tests' drains: it carries `@solo` in its title and runs
   alone in the solo project, last.
+  In one invocation a single red in `shared` or `<app>` would skip every
+  serial and solo test ("59 did not run"), so `npm run test:<app>`
+  (`bin/test-app.js`) runs the chain as the three passes CI runs, always
+  all three whatever the earlier ones returned: `--project=shared
+  --project=<app>` (setup as their dependency), then
+  `--project=<app>-serial --no-deps`, then `--project=<app>-solo
+  --no-deps`, the last two `--pass-with-no-tests`. The order keeps the
+  chain's guarantee; a red in any pass fails the run.
 - **Animations are globally disabled** (`reducedMotion: 'reduce'` plus the
   `motion.js` CSS in every context). `trace: 'on-first-retry'` records nothing
   while retries are 0. Turn retries on when hunting a failure.
@@ -308,9 +316,9 @@ All commands run from the pkp-e2e root. `ojs` below stands for any of
 ```bash
 npx playwright install chromium      # one-time, installs Chromium
 npm run test:ojs -- --project=setup  # seed the test DB (cold ~1-3 min; warm <1s no-op)
-npm run test:ojs                     # full run for one fleet
-npm run test:ojs -- --project=ojs    # only the app project (name varies per app)
-npm run test:ojs -- --ui             # Playwright UI mode — best for iterating
+npm run test:ojs                     # full run for one fleet: the three passes (app, serial, solo)
+npm run test:ojs -- --project=ojs    # only the app project (name varies per app); a --project is one plain invocation
+npm run test:ojs -- --ui             # Playwright UI mode — best for iterating (one plain invocation)
 PWDEBUG=1 npm run test:ojs           # step-through
 npm run reset:ojs                    # nuke the test DB and the app's data caches (forces cold bootstrap next run)
 npm run probe-servers -- --start|--status|--stop [--app ojs]   # detached probe servers at base+50 (and +90)
@@ -320,11 +328,26 @@ npx playwright test -c configs/ojs.config.js apps/ojs/playwright/tests/U03-user-
 npx playwright test -c configs/ojs.config.js --project=ojs-serial --no-deps apps/ojs/playwright/tests/serial/U05-notifications-center-and-email-preferences.spec.js   # one serial spec alone, on a warm install
 ```
 
+`npm run test:<app>` without a `--project` (`bin/test-app.js`) runs three
+Playwright passes, in order and always all three, and exits non-zero if
+any failed (Project chain above). The caller's args (`--reporter`,
+`--grep`, `--trace`, `--workers`, file filters) go to every pass, and
+every pass takes `--pass-with-no-tests`; a run in which no pass ran a
+test fails. Each pass writes its own output folder, `<out>/app`,
+`<out>/serial` and `<out>/solo`, where `<out>` is the caller's
+`--output` or `apps/<app>/playwright/test-results/`, because a run
+empties its output folder first and one folder lost the earlier passes'
+error contexts. A `test-app: pass n/3 (…)` line opens and closes each
+pass in the console. A `--project`, `--ui` or `--list` makes it one plain
+`playwright test` invocation, as before.
+
 A run longer than about four minutes outlives the prompt cache of the agent
 waiting on it, and whole-project runs are what `npm run test:final` is for.
-Selecting a serial spec by path alone runs its dependency projects
-(`setup`, `shared`, the app project) in full first; `--project=<app>-serial
---no-deps` on a warm install runs the spec alone. A suite id as the
+In a plain `npx playwright test` command, selecting a serial spec by path
+alone runs its dependency projects (`setup`, `shared`, the app project) in
+full first; `--project=<app>-serial --no-deps` on a warm install runs the
+spec alone, and its `@solo` tests need `--project=<app>-solo --no-deps`
+beside it, as a second command. A suite id as the
 filter (`U12`) also matches `tests/serial/U12-…` and so pulls in the
 whole chain: an app suite's regression run names `--project=<app>`; and
 `--no-deps` also drops the solo project's wait on the serial one, so a
@@ -366,7 +389,8 @@ processes before re-running.
   projects in full on every shard: `--shard=n/3 --project=shared
   --project=<app>` (setup runs as their dependency), then `--project=<app>-serial
   --no-deps`, then `--project=<app>-solo --no-deps`, both sharded and
-  `--pass-with-no-tests`. The shard count is set in `run-app.yml` alone,
+  `--pass-with-no-tests` (the passes `npm run test:<app>` runs locally,
+  "Running"). The shard count is set in `run-app.yml` alone,
   and the app hooks follow it since they call that workflow at `main`.
 - Each pass is split by time, not by count: the reporter
   `shared/playwright/timed-shards.js` packs the pass's tests longest-first
