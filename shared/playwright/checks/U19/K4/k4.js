@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U19 claim check, chunk K4: the site and the switches.
 // Spec: docs/specs/U19-oai-pmh.md — Rules 16–18 (362–387), Rule 24 (430–436, declared: the configuration file),
 // Side effects (437–448), Settings bullets 1 and 7–10 (449–454, 477–499), Cross-feature interactions (523–555),
@@ -41,7 +42,7 @@ const flat = (s, n = 1500) => (s == null ? s : String(s).replace(/\s+/g, ' ').tr
 const statePath = (app) => path.join(outDir(), `k4-state-${app.name}.json`);
 const REPO_ID = {ojs: 'ojs-test.localhost', omp: 'omp-test.localhost', ops: 'ops-test.localhost'};
 const KIND = {ojs: 'article', omp: 'publicationFormat', ops: 'preprint'};
-const psql = (app, sql) => { try { return execFileSync('psql', [`${app.name}_test`, '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim(); } catch (e) { return `psql error: ${flat(e.message, 200)}`; } };
+const psql = (app, sql) => { try { return execFileSync('psql', [`${dbName(app.name)}`, '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim(); } catch (e) { return `psql error: ${flat(e.message, 200)}`; } };
 
 // ---------------------------------------------------------------- the OAI answer, parsed (regex; the answers are regular)
 const g1 = (re, s) => { const r = String(s).match(re); return r ? r[1] : null; };

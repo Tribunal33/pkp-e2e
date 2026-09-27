@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U19 claim check, chunk K5: JATS, versions and DRIVER {OJS}.
 // Spec: docs/specs/U19-oai-pmh.md — Fields "The JATS record", "Enable OAI" and the "JATS Metadata Format" "Settings"
 // window (196–230); Rules 20–23 (395–429); Settings bullets 2–6 (455–476); register A10–A11 (740–757);
@@ -36,7 +37,7 @@ const statePath = (app) => path.join(outDir(), `k5-state-${app.name}.json`);
 const REPO = 'oai:ojs-test.localhost:article/';
 const YES = 'Yes, assign a unique DOI to every version of an article.';
 const NO = 'No, all versions of an article should have the same DOI.';
-const psql = (app, sql) => { try { return execFileSync('psql', [`${app.name}_test`, '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim(); } catch (e) { return `psql error: ${flat(e.message, 200)}`; } };
+const psql = (app, sql) => { try { return execFileSync('psql', [`${dbName(app.name)}`, '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim(); } catch (e) { return `psql error: ${flat(e.message, 200)}`; } };
 const g1 = (re, s) => { const r = String(s).match(re); return r ? r[1] : null; };
 
 // the OAI answer, parsed (regex; the answers are regular)

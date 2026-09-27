@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U19 claim check K5, second run of two one-run facts (OJS):
 //  1. A11: with "DRIVER" on, a fresh article published in no issue on D is unpublished on screen: the answer, the
 //     screen after it and after a reload, the publication's status, its tombstone and driver mark;
@@ -12,7 +13,7 @@ const T = 30_000;
 const REPO = 'oai:ojs-test.localhost:article/';
 const flat = (s, n = 1500) => (s == null ? s : String(s).replace(/\s+/g, ' ').trim().slice(0, n));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const q = (sql) => execFileSync('psql', ['ojs_test', '-At', '-c', sql], {encoding: 'utf8'}).trim();
+const q = (sql) => execFileSync('psql', [dbName('ojs'), '-At', '-c', sql], {encoding: 'utf8'}).trim();
 
 forEachApp(async (app) => {
     if (app.name !== 'ojs') return;

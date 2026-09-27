@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U45 claim check, chunk K5: export, deposit, the agency panel, statuses, the plugins' Tools pages.
 // Spec: docs/specs/U45-dois.md lines 369–432 (Rules 29–33), 526–542 (Rule 44; Side effects: deposits,
 // downloads), 547–551 (Side effects: head tags), 591–594 (Setting 10), register A4, the Coverage section.
@@ -51,7 +52,7 @@ forEachApp(async (app) => {
     const appRoot = path.resolve(REPO, app.root);
     const psql = (sql) => {
         try {
-            return execFileSync('psql', [`${app.name}_test`, '-At', '-F', '|', '-c', sql], {encoding: 'utf8', timeout: 20000}).trim().split('\n').filter(Boolean);
+            return execFileSync('psql', [`${dbName(app.name)}`, '-At', '-F', '|', '-c', sql], {encoding: 'utf8', timeout: 20000}).trim().split('\n').filter(Boolean);
         } catch (e) { return [`psql error: ${flat(e.message, 200)}`]; }
     };
     const galley = isOMP ? {publicationFormats: [{name: 'PDF', file: 'article.pdf'}]} : {galleys: [{label: 'PDF', file: isOPS ? 'preprint.pdf' : 'article.pdf'}]};

@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U37 claim check, chunk K6 — "Edit" and "Add Task Details", starting,
 // closing and reopening a task or discussion
 // (docs/specs/U37-tasks-and-discussions.md, Rules 15–17, register A6, A7,
@@ -34,7 +35,7 @@ const day = (n) => { const d = new Date(Date.now() + n * 86400000); return `${d.
 const rnd = () => Math.random().toString(36).slice(2, 6);
 const FIX = {ojs: 'notes.md', omp: 'notes.md', ops: 'not-an-image.txt'};
 const fixturePath = (app) => path.resolve(__dirname, `../../../../../apps/${app.name}/playwright/fixtures/files/${FIX[app.name]}`);
-const psql = (app, sql) => { try { return execSync(`psql ${app.name}_test -At -c "${sql.replace(/"/g, '\\"')}"`, {encoding: 'utf8'}).trim(); } catch (e) { return `psql failed: ${String(e.message).split('\n')[0]}`; } };
+const psql = (app, sql) => { try { return execSync(`psql ${dbName(app.name)} -At -c "${sql.replace(/"/g, '\\"')}"`, {encoding: 'utf8'}).trim(); } catch (e) { return `psql failed: ${String(e.message).split('\n')[0]}`; } };
 
 // ---------------------------------------------------------------------------
 // Seeding

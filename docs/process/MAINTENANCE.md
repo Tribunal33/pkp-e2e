@@ -457,11 +457,14 @@ the answer; the spec and the test are the record.
   fleet the session will touch, before any probing or test run (with
   `PKP_E2E_LINE=stable-3_5_0` in front for the stable line's fleets). Never
   attribute a finding to the app until it reproduces on a fresh reset.
-- **One full-suite run at a time on the VM, never two of the same app**,
-  even targeted ones: the cores cannot carry two suites, and Mailpit is one
-  shared instance whose recipient scoping is per app. Announce a full run
-  in the session's thread; `npm run test:final` runs the three suites one
-  after another. Run full suites at the auto-detected count, 8 on the
+- **Other sessions run beside this one, each in its own slot** (harness.md
+  "Slots"): work only inside this clone, and leave the other slots'
+  clones, fleets and processes alone. The machine's test lock lets one
+  slot's Playwright runs at a time; a run that waits for it says who holds
+  it, so start suites in the background under the keepalive (RUNBOOK
+  "Keep the thread ticking"). Within the session, one full-suite run at a
+  time: `npm run test:final` runs the three suites one after another. Run
+  full suites at the auto-detected count, 8 on the
   8-core VM (the measured knee, harness.md "Runtime model"; OPS 4.2 min
   there against 8.0 at four workers on the old 4-core VM), and pin
   `PLAYWRIGHT_WORKERS=4` only to reproduce a red at CI's setting.

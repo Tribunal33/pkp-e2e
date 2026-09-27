@@ -166,6 +166,10 @@ function refuseSoloBesideOthersWithoutDeps(appName, argv = process.argv.slice(2)
 
 function definePkpConfig({appName, appRoot, suiteDir, basePort}) {
     refuseSoloBesideOthersWithoutDeps(appName);
+    // One slot's runs at a time on this machine (test-lock.js); a no-op in
+    // workers, under test-app/test-final/fleet-prep (they hold it) and on CI.
+    require('./test-lock.js').acquire(`playwright ${process.argv.slice(2).join(' ')}`);
+    require('./mailpit.js').ensureMailpit();
     loadEnv(appRoot);
     // The suite (tests, POMs, runtime state) lives in the pkp-e2e repo;
     // appRoot is the app checkout the fleet serves and installs into.

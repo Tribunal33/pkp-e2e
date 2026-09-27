@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U19 claim check K5, follow-up (OJS): DRIVER ticked again on D on screen; D's set=driver answer (its list size and
 // resumption token, followed); the site-wide address and the driver set; the deleted records of DU (unpublished with
 // DRIVER on, a member) and DN (in no issue, unpublished with DRIVER on: A11) at both addresses; and a second read of
@@ -78,7 +79,7 @@ forEachApp(async (app) => {
         o.siteSets = {parts: ss.parts.length, own: sets};
         o.siteDriver = await walk(null, 'verb=ListIdentifiers&metadataPrefix=oai_dc&set=driver', mine);
         o.siteAllOwnD = (await walk(null, 'verb=ListIdentifiers&metadataPrefix=oai_dc', (h) => h.includes(`${S.t}d:`))).own;
-        o.dbTombs = require('child_process').execFileSync('psql', ['ojs_test', '-At', '-c', `select t.tombstone_id||':'||t.data_object_id||':'||coalesce(s.setting_name||'='||s.setting_value,'-') from data_object_tombstones t left join data_object_tombstone_settings s using (tombstone_id) where t.data_object_id in (${D.items.DU.id},${D.items.DN.id}) order by 1`], {encoding: 'utf8'}).trim();
+        o.dbTombs = require('child_process').execFileSync('psql', [dbName('ojs'), '-At', '-c', `select t.tombstone_id||':'||t.data_object_id||':'||coalesce(s.setting_name||'='||s.setting_value,'-') from data_object_tombstones t left join data_object_tombstone_settings s using (tombstone_id) where t.data_object_id in (${D.items.DU.id},${D.items.DN.id}) order by 1`], {encoding: 'utf8'}).trim();
         // second read of k5.js's one-run facts
         const Sj = S.S;
         const jr = async (rc, it) => { const p = await raw(rc, cu(Sj.path, `verb=GetRecord&metadataPrefix=jats&identifier=${encodeURIComponent(REPO + Sj.items[it].id)}`)); return {status: p.status, errors: p.errors, n: p.headers.length, emails: [...p.md.matchAll(/<email[^>]*>([^<]*)</g)].map((m) => m[1]).length}; };

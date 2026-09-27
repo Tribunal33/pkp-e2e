@@ -44,8 +44,11 @@ on:
         type: string
         default: main
 
+# A newer push to a branch cancels its older run, except on main: parallel
+# slots push there, and each push's own run is its gate (RUNBOOK step 10),
+# so every main commit gets its own group.
 concurrency:
-  group: e2e-${{ github.ref }}
+  group: e2e-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
   cancel-in-progress: true
 
 jobs:

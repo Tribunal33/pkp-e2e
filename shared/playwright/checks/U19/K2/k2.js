@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U19 claim check, chunk K2 — OAI-PMH lists, dates and refusals
 // (docs/specs/U19-oai-pmh.md: Fields "Errors" 231–248; Rules 3–9 261–326; Rules 13–15 344–361; register
 // A1–A4 649–687, OMP3 786–793, OPS1 808–817). Chunk plan: .reports/U19/claimcheck-chunks.md.
@@ -44,7 +45,7 @@ const KIND = {ojs: 'article', omp: 'publicationFormat', ops: 'preprint'};
 
 function psql(app, sql) {
     try {
-        return execFileSync('psql', [`${app}_test`, '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
+        return execFileSync('psql', [`${dbName(app)}`, '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
     } catch (e) {
         return `psql error: ${flat(e.message, 200)}`;
     }

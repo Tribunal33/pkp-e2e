@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // Kept check for pkp/pkp-lib#13317 (issue #13274), the runtime half: a new submission copies the
 // submitting user's profile affiliation into their contributor record verbatim, never as a ROR
 // link derived from an exact name match, and fills the submission locale from the user's
@@ -12,7 +13,7 @@ const {forEachApp, record, tag} = require('../../../probe');
 
 
 function psql(app, sql) {
-    return execFileSync('psql', ['-h', '127.0.0.1', '-U', 'e2e', `${app.name}_test`, '-Atqc', sql], {
+    return execFileSync('psql', ['-h', '127.0.0.1', '-U', 'e2e', `${dbName(app.name)}`, '-Atqc', sql], {
         env: {...process.env, PGPASSWORD: 'e2e'},
         encoding: 'utf8',
     }).trim();

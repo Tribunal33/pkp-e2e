@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U50 claim check, chunk K3 — what readers see and the settings behind it
 // (docs/specs/U50-issues.md body lines 122–142 the issue's page fields, 308–358 Rules 21–28,
 // 392–435 Settings bullets 1–6, 445–477 Cross-feature interactions, 478–539 Canonical preamble and Coverage).
@@ -51,7 +52,7 @@ const DENIED = /does not have access to this operation|Invalid issue requested|d
 
 function psql(sql) {
     try {
-        return execFileSync('psql', ['ojs_test', '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
+        return execFileSync('psql', [dbName('ojs'), '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
     } catch (e) {
         return `psql error: ${flat(e.message, 200)}`;
     }

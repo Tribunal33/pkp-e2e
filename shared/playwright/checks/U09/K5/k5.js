@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U09 claim check, chunk K5: formatted text and pictures, leaving the windows
 // unsaved, side effects. All three apps (the static page window on OJS and OMP).
 // Spec: docs/specs/U09-custom-pages-and-blocks.md lines 258–318 (Rules 28–30,
@@ -49,7 +50,7 @@ const T = 20_000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const flat = (t, n = 400) => String(t ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
 const REPO = path.resolve(__dirname, '../../../../..');
-const psql = (app, sql) => { try { return execSync(`PGPASSWORD=e2e psql -h 127.0.0.1 -U e2e ${app.name}_test -At -c "${sql.replace(/"/g, '\\"')}"`, {encoding: 'utf8'}).trim(); } catch (e) { return `psql failed: ${String(e.message).split('\n')[0]}`; } };
+const psql = (app, sql) => { try { return execSync(`PGPASSWORD=e2e psql -h 127.0.0.1 -U e2e ${dbName(app.name)} -At -c "${sql.replace(/"/g, '\\"')}"`, {encoding: 'utf8'}).trim(); } catch (e) { return `psql failed: ${String(e.message).split('\n')[0]}`; } };
 const imagesDir = (app, user) => path.join(REPO, 'checkouts', app.name, 'public', 'site', 'images', user);
 const md5 = (file) => require('crypto').createHash('md5').update(fs.readFileSync(file)).digest('hex');
 const listDir = (dir) => { try { return fs.readdirSync(dir).map((f) => ({name: f, kb: Math.ceil(fs.statSync(path.join(dir, f)).size / 1024), bytes: fs.statSync(path.join(dir, f)).size, md5: md5(path.join(dir, f))})); } catch { return []; } };

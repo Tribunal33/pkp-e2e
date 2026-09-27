@@ -32,6 +32,9 @@ const {APPS, REPO_ROOT, resolveApp} = require('./apps.js');
 const {phpServerStatus} = require('../shared/playwright/php-server.js');
 
 const USAGE = 'usage: node bin/test-final.js --feature <id> [--apps ojs,omp,ops] [--grep <pattern>]';
+// Every app's run under one hold of the machine's test lock
+// (shared/playwright/test-lock.js).
+require('../shared/playwright/test-lock.js').acquire(`test:final ${process.argv.slice(2).join(' ')}`);
 
 function parseArgs(argv) {
     const options = {feature: null, apps: Object.keys(APPS), grep: null};

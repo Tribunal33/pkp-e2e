@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U61 claim check, chunk K4: across the screens. Side effects (292–306), the
 // Settings preamble (310–312), Cross-feature interactions (355–382), the
 // Canonical preamble (386–389); footnotes j, o, q, u, w, sc. All three apps.
@@ -176,12 +177,12 @@ async function pressAdmin(page, app, name) {
     } finally { ACCEPT = false; }
     return where(page);
 }
-const userRows = (app, J) => sql(`${app.name}_test`, `select u.username, md5(u.password), u.email, u.disabled, u.must_change_password, u.date_last_login, (select string_agg(g.user_group_id::text || ':' || coalesce(g.date_end::text,''), ',' order by g.user_group_id) from user_user_groups g where g.user_id = u.user_id) from users u where u.username like '${J}%' order by 1`).split('\n');
+const userRows = (app, J) => sql(`${dbName(app.name)}`, `select u.username, md5(u.password), u.email, u.disabled, u.must_change_password, u.date_last_login, (select string_agg(g.user_group_id::text || ':' || coalesce(g.date_end::text,''), ',' order by g.user_group_id) from user_user_groups g where g.user_id = u.user_id) from users u where u.username like '${J}%' order by 1`).split('\n');
 const logCounts = (app) => {
-    const r = sql(`${app.name}_test`, 'select (select coalesce(max(notification_id),0) from notifications), (select coalesce(max(log_id),0) from event_log), (select coalesce(max(log_id),0) from email_log), (select count(*) from notifications), (select count(*) from event_log), (select count(*) from email_log)').split('|').map(Number);
+    const r = sql(`${dbName(app.name)}`, 'select (select coalesce(max(notification_id),0) from notifications), (select coalesce(max(log_id),0) from event_log), (select coalesce(max(log_id),0) from email_log), (select count(*) from notifications), (select count(*) from event_log), (select count(*) from email_log)').split('|').map(Number);
     return {maxNotification: r[0], maxEventLog: r[1], maxEmailLog: r[2], notifications: r[3], eventLog: r[4], emailLog: r[5]};
 };
-const sessions = (name) => Number(sql(`${name}_test`, 'select count(*) from sessions'));
+const sessions = (name) => Number(sql(`${dbName(name)}`, 'select count(*) from sessions'));
 forEachApp(async (app) => {
     const R = {app: app.name, started: new Date().toISOString()};
     const st = loadState(app);
@@ -336,7 +337,7 @@ forEachApp(async (app) => {
             await openList(page, app, 'jobs');
             await snap(page, 'jobs-after-putback');
             out.jobsTable = await readTable(page);
-            out.waitingTestJobs = sql(`${app.name}_test`, "select id || ':' || attempts from jobs where queue = 'queuedTestJob' order by id").split('\n').filter(Boolean);
+            out.waitingTestJobs = sql(`${dbName(app.name)}`, "select id || ':' || attempts from jobs where queue = 'queuedTestJob' order by id").split('\n').filter(Boolean);
             st.putBack = out.waitingTestJobs.map((x) => Number(x.split(':')[0]));
             saveState(app, st);
             // Expire User Sessions, last
@@ -380,7 +381,7 @@ forEachApp(async (app) => {
             const out = {};
             const old = new Set((st.F || []).map(Number));
             await signIn(page, 'admin'); await idle(page).catch(() => {});
-            out.failedBefore = sql(`${app.name}_test`, 'select id from failed_jobs order by id').split('\n').filter(Boolean).map(Number);
+            out.failedBefore = sql(`${dbName(app.name)}`, 'select id from failed_jobs order by id').split('\n').filter(Boolean).map(Number);
             out.worker = cli(app, ['lib/pkp/tools/jobs.php', 'run', '--test']);
             await openList(page, app, 'jobs');
             await snap(page, 'jobs-after-worker');
@@ -397,7 +398,7 @@ forEachApp(async (app) => {
                 await openList(page, app, 'failedJobs');
                 out.cleanup.push({id, resp: await pressRow(page, id, 'Delete')});
             }
-            out.after = sql(`${app.name}_test`, "select (select count(*) from failed_jobs) || ' failed, ' || (select count(*) from jobs where queue='queuedTestJob') || ' test jobs waiting'");
+            out.after = sql(`${dbName(app.name)}`, "select (select count(*) from failed_jobs) || ' failed, ' || (select count(*) from jobs where queue='queuedTestJob') || ' test jobs waiting'");
             return out;
         });
     } finally {

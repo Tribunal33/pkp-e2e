@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U19 claim check K2 — OJS only: OAI lists while a journal of the install has "DOI Versioning" on.
 // Found by k2.js (every ListRecords/ListIdentifiers/GetRecord at a K2 journal answered 500): the axis is
 // "a journal with DOIs and DOI Versioning on exists on the install" (yes / no). Drives both ends on screen:
@@ -17,7 +18,7 @@ const T = 30_000;
 const YES = 'Yes, assign a unique DOI to every version of an article.';
 const NO = 'No, all versions of an article should have the same DOI.';
 const log = (...a) => console.log('[k2v]', ...a);
-const psql = (sql) => execFileSync('psql', ['ojs_test', '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
+const psql = (sql) => execFileSync('psql', [dbName('ojs'), '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
 
 forEachApp(async (app) => {
     if (app.name !== 'ojs') return;

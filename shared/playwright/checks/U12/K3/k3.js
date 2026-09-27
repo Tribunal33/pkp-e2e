@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 /**
  * U12 claim check, chunk K3: the "Announcement Types" tab, the site's
  * Announcements tab and the deletion cascades. Every screen is recorded
@@ -47,7 +48,7 @@ const DENIED = /does not have access to this operation/i;
 const flat = (s, n = 400) => String(s || '').replace(/\s+/g, ' ').trim().slice(0, n);
 const ctxUrl = (app, ctxPath, p = '') => app.url(`/index.php/${ctxPath}${p}`);
 const dialog = (page) => page.locator('[role="dialog"]:visible').last();
-const psql = (app, sql) => { try { return execSync(`psql ${app.name}_test -At -c "${sql.replace(/"/g, '\\"')}"`, {encoding: 'utf8'}).trim(); } catch (e) { return `psql failed: ${String(e.message).split('\n')[0]}`; } };
+const psql = (app, sql) => { try { return execSync(`psql ${dbName(app.name)} -At -c "${sql.replace(/"/g, '\\"')}"`, {encoding: 'utf8'}).trim(); } catch (e) { return `psql failed: ${String(e.message).split('\n')[0]}`; } };
 const PNG = path.join(REPO, 'apps/ojs/playwright/fixtures/files/profile-image-400.png');
 const publicDir = (app, id) => path.join(REPO, 'checkouts', app.name, 'public', {ojs: 'journals', omp: 'presses', ops: 'contexts'}[app.name], String(id));
 const listDir = (dir) => { try { return execSync(`find ${dir} -type f | sed "s|${dir}/||"`, {encoding: 'utf8'}).trim().split('\n').filter(Boolean); } catch { return []; } };

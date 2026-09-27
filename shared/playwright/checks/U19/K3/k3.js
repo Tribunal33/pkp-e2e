@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U19 claim check, chunk K3: what a record shows.
 // Spec: docs/specs/U19-oai-pmh.md — Fields "The Dublin Core record" and "The MARC records" (148–195), Rules 11–12
 // (332–343), Rule 19 (388–394), Settings bullets 11–14 (500–522), register A6–A8 (696–727), A12 (758–765), OMP1
@@ -47,7 +48,7 @@ const log = (...a) => console.log(`[k3 +${Math.round((Date.now() - T0) / 1000)}s
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const flat = (s, n = 1500) => (s == null ? s : String(s).replace(/\s+/g, ' ').trim().slice(0, n));
 const statePath = (app) => path.join(outDir(), `k3-state-${app.name}.json`);
-const db = (app, sql) => { try { return execFileSync('psql', [`${app.name}_test`, '-Atc', sql]).toString().trim(); } catch (e) { return `ERR ${flat(e.message, 200)}`; } };
+const db = (app, sql) => { try { return execFileSync('psql', [`${dbName(app.name)}`, '-Atc', sql]).toString().trim(); } catch (e) { return `ERR ${flat(e.message, 200)}`; } };
 const REPO = path.resolve(__dirname, '../../../../..');
 
 // ---------------------------------------------------------------------------

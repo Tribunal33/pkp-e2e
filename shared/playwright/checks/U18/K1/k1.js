@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U18 claim check, chunk K1: the feed documents — channel, items, order, number, identifiers, language.
 // Spec: docs/specs/U18-web-feeds.md — Fields (44–84: the three feeds, the channel table, the item table),
 // Rules 2–10 (109–153), Settings 3–5 (237–249), Settings 9 (262–269), register A1 (361–369), A3 (378–386);
@@ -120,7 +121,7 @@ forEachApp(async (app) => {
     const feedUrl = (ctx, type, locale = '') => cu(ctx, `${locale ? '/' + locale : ''}/gateway/plugin/WebFeedGatewayPlugin/${type}`);
     const TABLE = isOJS ? 'journals' : isOMP ? 'presses' : 'servers';
     const IDCOL = isOJS ? 'journal_id' : isOMP ? 'press_id' : 'server_id';
-    const db = (sql) => { try { return execFileSync('psql', [`${app.name}_test`, '-AtF', '|', '-c', sql], {encoding: 'utf8'}).trim(); } catch (e) { return `db error: ${String(e.message).slice(0, 200)}`; } };
+    const db = (sql) => { try { return execFileSync('psql', [`${dbName(app.name)}`, '-AtF', '|', '-c', sql], {encoding: 'utf8'}).trim(); } catch (e) { return `db error: ${String(e.message).slice(0, 200)}`; } };
     const pluginRows = (ctxPath) => db(`select ps.setting_name, ps.setting_value, ps.setting_type from plugin_settings ps join ${TABLE} c on c.${IDCOL}=ps.context_id where c.path='${ctxPath}' and ps.plugin_name='webfeedplugin' order by 1`).split('\n');
 
     await app.api.bootstrapProbe(app.contextPath);

@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U55 claim check, chunk K2: the per-role restriction and what a send produces.
 // Spec docs/specs/U55-notify-users.md: Fields for "Restrict Bulk Emails" 58-65,
 // Rules 11-13 123-144, Side effects 145-175, Settings 176-190, Cross-feature
@@ -44,7 +45,7 @@ const VOC = {
 };
 
 function psql(app, q) {
-    try { return execFileSync('psql', ['-d', `${app.name}_test`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim(); } catch (e) { return `ERR ${flat(e.message, 200)}`; }
+    try { return execFileSync('psql', ['-d', `${dbName(app.name)}`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim(); } catch (e) { return `ERR ${flat(e.message, 200)}`; }
 }
 
 let CUR = 'init';

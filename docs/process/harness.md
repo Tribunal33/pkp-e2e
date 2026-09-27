@@ -145,6 +145,74 @@ Two facts worth knowing before you write a test:
 - All three apps use the same scenario endpoints and the same
   `publicknowledge` context path.
 
+## Slots (parallel sessions)
+
+Up to three sessions work on the VM at once, each in its own **slot**: a
+full clone of this repo with its own `checkouts/` (both lines), databases,
+Mailpit and API key. Only Postgres, the cores and `origin` are shared.
+
+| slot | clone | ports ojs/omp/ops (stable-3_5_0) | DBs | Mailpit (SMTP) | `TEST_API_KEY` |
+|---|---|---|---|---|---|
+| 0 | `/home/e2e/pkp-e2e` | 8000/8100/8200 (9000/9100/9200) | `<app>_test`, `<app>_test_3_5` | 8025 (1025), systemd | `playwright-test-key` |
+| 1 | `/home/e2e/pkp-e2e-s1` | 8300/8400/8500 (9300/9400/9500) | `<app>_test_s1`, `<app>_test_s1_3_5` | 8026 (1026) | `playwright-test-key-s1` |
+| 2 | `/home/e2e/pkp-e2e-s2` | 8600/8700/8800 (9600/9700/9800) | `<app>_test_s2`, `<app>_test_s2_3_5` | 8027 (1027) | `playwright-test-key-s2` |
+
+- **Identity.** `PKP_E2E_SLOT=<n>` in the clone's `.env` makes it slot n
+  (`resolveSlot()` in `bin/apps.js`): every port +n×300 (clear of the
+  line's +1000 and of the +0…+90 bands), DB suffix `_s<n>`, Mailpit
+  8025+n / SMTP 1025+n, the key suffix `-s<n>`. `fetch-apps` bakes them
+  into each checkout's `.env.playwright` and `config.test.inc.php`. Unset
+  is slot 0, CI's values. The per-slot key is a tripwire: a run that adopts
+  another slot's leftover server (`reuseExistingServer`) gets 401 on its
+  first seed instead of writing into another slot's database.
+- **Kept checks** name their database `dbName(app.name)` (`bin/apps.js`) or
+  the probe kit's `app.db`, never a literal `<app>_test`, which is slot 0's.
+- **Mailpit.** Slot 0's is the systemd service. Slot n's is started on
+  demand, detached, by any Playwright config load or probe that finds it
+  silent (`shared/playwright/mailpit.js`; its database is
+  `~/.local/state/mailpit/mailpit-s<n>.db`). The roster's addresses are
+  fixed, so two slots on one Mailpit would read each other's mail.
+- **The test lock.** Every Playwright run (the config takes it at load),
+  `test:<app>`, `test:final` and `fleet-prep` take one machine-wide lock
+  (`shared/playwright/test-lock.js`): shared among one slot's runs, so a
+  session's three test authors (RUNBOOK step 8) still run side by side,
+  and exclusive against other slots, because concurrent fleets on these
+  cores turn the suites flaky. A waiting run prints who holds it (`node
+  shared/playwright/test-lock.js status`). It is a kernel `flock` owned by
+  one small holder process per slot, released once the slot's last run
+  exits, a crash or a kill included. Probes (`bin/probe.js`, the probe
+  servers) take no lock. Off on CI, without `flock(1)` (macOS) and with
+  `PKP_E2E_LOCK=off`. A run can wait behind another slot's final, so a
+  session starts runs in the background with its keepalive armed (RUNBOOK
+  "Keep the thread ticking").
+- **The slot registry** (`bin/slot.js`; state in `~/.pkp-e2e-slots/`,
+  `slots.json` lists the clones, `registry.json` the holders). The bot
+  (claude-threads with a local patch, `~/.pkp-e2e-slots/claude-threads/`)
+  calls `acquire` when a thread starts or resumes and `release` when its
+  session pauses or ends. A new session takes the free slot used longest
+  ago. A pausing session's slot is freed only when its clone is clean:
+  nothing uncommitted, untracked, stashed or unpushed in this repo (the
+  app checkouts do not count). Otherwise it stays **blocked** for that
+  thread and the bot mentions the owner there; the slot frees when the
+  thread resumes and finishes, or with `node bin/slot.js free <n>`. A
+  resumed thread returns to its own slot, or, when another session holds
+  it, starts fresh in a free one with the thread's messages. `node
+  bin/slot.js status` shows all of it.
+- **The SessionStart hook** (`.claude/settings.json` → `bin/slot.js hook`)
+  tells every session its slot, ports and checkout state, and a resumed one
+  what moved since its pause. A manual `claude` started in a free slot
+  registers itself, so the bot does not place a thread on top of it.
+- **Feature claims.** `node bin/slot.js claim U<nn>` (RUNBOOK step 1)
+  refuses a feature another slot's session holds; a claim lapses when its
+  session's slot is freed.
+- **Cleanup is per slot.** Kill by this clone's paths or ports, never a
+  broad `pkill php` or `pkill chrome`.
+- **Provisioning a slot**: clone `origin` to `/home/e2e/pkp-e2e-s<n>`, write
+  `.env` with `PKP_E2E_SLOT=<n>` and the relative `<APP>_ROOT`s (`.env.example`),
+  `npm ci`, `npm run fetch-apps -- --reference /home/e2e/pkp-e2e` (borrows
+  slot 0's objects), the same with `--line stable-3_5_0`, `npm run mount`
+  for both lines, then add the clone to `~/.pkp-e2e-slots/slots.json`.
+
 ## Runtime model
 
 - **One `php -S` server per Playwright worker**, at `basePort +
@@ -382,7 +450,9 @@ server it finds there (`reuseExistingServer`).
 Long-lived DBs accumulate state that pollutes COUNT assertions and tag
 searches. After a reset, the first run can die on a webServer start race, so
 relaunch it. After a killed run, kill orphan chromium and php
-processes before re-running.
+processes before re-running: only this slot's, the php servers whose
+command line names this clone's path and the chromium under this run's
+node process, never a broad `pkill` ("Slots": other slots run beside it).
 
 ## CI
 

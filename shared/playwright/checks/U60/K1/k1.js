@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U60 claim check, chunk K1: Administration › "Site Settings" › "Site Setup" ›
 // "Settings" and "Security" (fields, Rules 6–12), Rule 22 (the saves behind the
 // tabs), Settings that modify behavior 1–6, register A1, A4, OPS1; all three apps.
@@ -53,7 +54,7 @@ const stateFile = (app) => path.join(outDir(), `k1-state-${app.name}.json`);
 const log = (...a) => console.log('[k1]', new Date().toISOString().slice(11, 19), ...a);
 const mailOf = (u) => `${u}@mail.test`;
 const pw2 = (u) => `${u}${u}`;
-const sql = (app, q) => execFileSync('psql', ['-d', `${app.name}_test`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim();
+const sql = (app, q) => execFileSync('psql', ['-d', `${dbName(app.name)}`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim();
 const siteRows = (app, names) => sql(app, `select setting_name, locale, setting_value from site_settings where setting_name in (${names.map((n) => `'${n}'`).join(',')}) order by 1, 2`).split('\n').filter(Boolean);
 const SITE_KEYS = ['title', 'disableSharedReviewerStatistics', 'minPasswordLength', 'passwordUncompromisedEnabled', 'rateLimitEnabled', 'rateLimitMaxAttempts', 'rateLimitDecaySeconds', 'contactEmail', 'contactName'];
 const siteDb = (app) => ({settings: siteRows(app, SITE_KEYS), site: sql(app, 'select redirect_context_id, min_password_length from site')});

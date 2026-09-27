@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U63 claim check, chunk K3: the "Users XML Plugin" {OJS OMP}: its tabs and fields, importing (results, which
 // accounts, roles, masthead and start date, passwords), the "Current Users" list and its filter, exporting users,
 // moving roles between journals, the "Journal Registration" email, and the site's minimum password length.
@@ -24,7 +25,7 @@ const PHASES = (process.env.PHASES || ALL.join(',')).split(',');
 const on = (p) => PHASES.includes(p);
 const log = (...a) => console.log('[k3]', new Date().toISOString().slice(11, 19), ...a);
 const statePath = (app) => path.join(outDir(), `k3-state-${app.name}.json`);
-const sql = (app, q) => { try { return execFileSync('psql', ['-d', `${app.name}_test`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim(); } catch (e) { return `ERR ${flat(e.message, 200)}`; } };
+const sql = (app, q) => { try { return execFileSync('psql', ['-d', `${dbName(app.name)}`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim(); } catch (e) { return `ERR ${flat(e.message, 200)}`; } };
 const bcrypt = (pw, cost) => execFileSync('php', ['-r', `echo password_hash(${JSON.stringify(pw)}, PASSWORD_BCRYPT${cost ? `, ["cost" => ${cost}]` : ''});`]).toString().trim();
 const md5 = (s) => require('crypto').createHash('md5').update(s).digest('hex');
 

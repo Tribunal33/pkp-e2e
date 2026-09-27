@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // Kept check for pkp/pkp-lib#13317 (issue #13274), the upgrade half. The fleets never upgrade, so
 // the rewritten I7135 migration is driven directly: eight submissions by one author give eight
 // author rows, `migrate-driver.php` plants the issue's eight legacy cases on them (comment
@@ -14,7 +15,7 @@ const IN_CACHE = 'https://ror.org/0cached12';
 const NOT_IN_CACHE = 'https://ror.org/0typo0099';
 
 function psql(app, sql) {
-    return execFileSync('psql', ['-h', '127.0.0.1', '-U', 'e2e', `${app.name}_test`, '-Atqc', sql], {
+    return execFileSync('psql', ['-h', '127.0.0.1', '-U', 'e2e', `${dbName(app.name)}`, '-Atqc', sql], {
         env: {...process.env, PGPASSWORD: 'e2e'}, encoding: 'utf8',
     }).trim();
 }

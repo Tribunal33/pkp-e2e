@@ -97,7 +97,7 @@ const raIdOf = (seed) => {
 };
 
 forEachApp(async (app) => {
-    dbName = `${app.name}_test`;
+    dbName = require('../../../../../bin/apps.js').dbName(app.name);
     await app.api.bootstrapProbe(app.contextPath);
     const A = tag('rr15a');
     const B = tag('rr15b');

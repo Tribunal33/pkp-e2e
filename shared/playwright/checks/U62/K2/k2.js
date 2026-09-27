@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U62 claim check, chunk K2: a plugin's links, upload, upgrade and delete.
 // Spec docs/specs/U62-plugins-management.md: Fields 66–79, Rules 13–21 (172–250), Side effects 294–296,
 // register A2, A3, A4, A5, A7; footnotes j, k, l, m, n, td8–td17, f-a2..f-a7.
@@ -54,7 +55,7 @@ forEachApp(async (app) => {
     const ourFolders = () => ['generic/u62k2test', 'generic/u62k2on'].filter((f) => fs.existsSync(path.join(pluginsDir(), f)));
     const versions = () => {
         try {
-            return execFileSync('psql', ['-h', '127.0.0.1', '-U', 'jarda', '-d', `${app.name}_test`, '-Atc', "select product, major||'.'||minor||'.'||revision||'.'||build, current from versions where product like 'u62k2%' order by 1,2"], {env: {...process.env, PGPASSWORD: 'jarda'}}).toString().trim().split('\n').filter(Boolean);
+            return execFileSync('psql', ['-h', '127.0.0.1', '-U', 'jarda', '-d', `${dbName(app.name)}`, '-Atc', "select product, major||'.'||minor||'.'||revision||'.'||build, current from versions where product like 'u62k2%' order by 1,2"], {env: {...process.env, PGPASSWORD: 'jarda'}}).toString().trim().split('\n').filter(Boolean);
         } catch (e) { return `psql failed: ${flat(e.message, 120)}`; }
     };
 

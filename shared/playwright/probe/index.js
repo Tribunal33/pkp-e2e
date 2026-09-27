@@ -22,7 +22,7 @@ const fs = require('fs');
 const path = require('path');
 const {chromium} = require('@playwright/test');
 const {request} = require('@playwright/test');
-const {APPS, REPO_ROOT, resolveApp} = require('../../../bin/apps.js');
+const {APPS, REPO_ROOT, resolveApp, resolveSlot} = require('../../../bin/apps.js');
 const {PkpApi} = require('../support/api.js');
 const {PkpMail} = require('../support/mail.js');
 const {waitForJQueryIdle} = require('../support/legacy.js');
@@ -109,7 +109,7 @@ function resolveProbeApp(name) {
     if (!testApiKey) {
         keySource = 'NO KEY (the _test API will answer 404/403)';
     }
-    const mailpitUrl = process.env.MAILPIT_URL || env.MAILPIT_URL || 'http://127.0.0.1:8025';
+    const mailpitUrl = process.env.MAILPIT_URL || env.MAILPIT_URL || resolveSlot().mailpitUrl;
     const configFile = env.PKP_CONFIG_FILE || path.join(app.root, 'config.test.inc.php');
     // The runner generates this one next to the default config on every
     // config load (config-factory.js); the kit only reads its location.
@@ -131,6 +131,9 @@ function resolveProbeApp(name) {
         testApiKey,
         keySource,
         mailpitUrl,
+        // The fleet's own database (slot and line aware): kept checks query
+        // it as `psql -d ${app.db}`, never a literal <app>_test.
+        db: app.db,
         contextPath: appContext.contextPath,
         appContext,
         /** Absolute URL on the probe server: url('/index.php/publicknowledge/user/register'). */
@@ -261,6 +264,7 @@ process.on('exit', flush);
  */
 async function withApp(name, fn) {
     const app = resolveProbeApp(name);
+    require('../mailpit.js').ensureMailpit();
     outDir();
     process.env.PKP_APP_NAME = app.name;
     process.env.PKP_APP_ROOT = app.root;

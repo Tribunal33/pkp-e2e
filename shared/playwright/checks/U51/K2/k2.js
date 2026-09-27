@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U51 claim check, chunk K2 — the publishing mode and what is restricted
 // (docs/specs/U51-subscriptions.md body lines 10–43, 69–80, 193–325, 553–564, Settings bullets 1–3, 5–6, 11, 14,
 // register A1, A5, A7, A14, OPS1). Chunk plan: .reports/U51/claimcheck-chunks.md.
@@ -51,7 +52,7 @@ const NOTIF_OA = 50331659; // Notification::NOTIFICATION_TYPE_OPEN_ACCESS (0x300
 
 function psql(sql) {
     try {
-        return execFileSync('psql', ['ojs_test', '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
+        return execFileSync('psql', [dbName('ojs'), '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
     } catch (e) {
         return `psql error: ${flat(e.message, 200)}`;
     }

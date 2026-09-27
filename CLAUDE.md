@@ -37,6 +37,13 @@ Operational facts:
   no suite or spec follows it. `PKP_E2E_LINE=stable-3_5_0` in front of a
   harness command selects it; `npm run fetch-apps -- --line stable-3_5_0`
   provisions it (harness.md "The stable line").
+- Up to three sessions run at once, each in its own **slot**: a full clone
+  of this repo (`/home/e2e/pkp-e2e`, `-s1`, `-s2`) with its own checkouts,
+  ports, DBs and Mailpit (`PKP_E2E_SLOT` in `.env`). The SessionStart hook
+  says which one you are in; work only there. Playwright runs share one
+  machine-wide test lock, so start long runs in the background. A slot is
+  freed only when the session leaves this clone committed and pushed.
+  `node bin/slot.js status`; harness.md "Slots".
 - CI: `.github/workflows/e2e.yml` (the matrix) and `run-app.yml` (reusable,
   also called by the app repos' thin hooks at run time). A broken `main`
   here breaks every app PR check, so keep `main` green.

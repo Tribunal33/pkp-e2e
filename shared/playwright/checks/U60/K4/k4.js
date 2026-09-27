@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U60 claim check, chunk K4: across the Site Settings screens. Side effects
 // (the audit log, the theme's caches, the site's public files, the server-log
 // warning of A3, no mail / notification / journal log), Settings that modify
@@ -49,7 +50,7 @@ const stateFile = (app) => path.join(outDir(), `k4-state-${app.name}.json`);
 const loadState = (app) => { try { return JSON.parse(fs.readFileSync(stateFile(app), 'utf8')); } catch { return {}; } };
 const saveState = (app, st) => fs.writeFileSync(stateFile(app), JSON.stringify(st, null, 2));
 const REPO = path.resolve(__dirname, '../../../../..');
-const sql = (app, q) => execFileSync('psql', ['-d', `${app.name}_test`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim();
+const sql = (app, q) => execFileSync('psql', ['-d', `${dbName(app.name)}`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim();
 const SITE_KEYS = ['title', 'minPasswordLength', 'baseColour', 'pageHeaderTitleImage', 'styleSheet', 'pageFooter', 'sidebar', 'themePluginPath', 'enableBulkEmails', 'contactName', 'contactEmail', 'about', 'privacyStatement'];
 const siteRows = (app) => sql(app, `select setting_name, locale, left(setting_value, 160) from site_settings where setting_name in (${SITE_KEYS.map((n) => `'${n}'`).join(',')}) order by 1, 2`).split('\n').filter(Boolean);
 const siteRow = (app) => sql(app, 'select redirect_context_id, min_password_length from site');

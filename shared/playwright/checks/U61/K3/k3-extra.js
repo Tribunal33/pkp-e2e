@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U61 claim check K3, extra legs: (1) a job a journal put on the queue shows
 // on the Jobs page next to the testing queue's (Rule 13 "whichever journal
 // or feature"); (2) the page a gone failed job's Details address opens,
@@ -7,7 +8,7 @@
 const {execFileSync} = require('child_process');
 const {forEachApp, launch, signIn, screen, shot, record, idle, tag} = require('../../../probe');
 
-const sql = (app, q) => execFileSync('psql', ['-d', `${app.name}_test`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim();
+const sql = (app, q) => execFileSync('psql', ['-d', `${dbName(app.name)}`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim();
 const flat = (s, n = 400) => String(s ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
 
 forEachApp(async (app) => {

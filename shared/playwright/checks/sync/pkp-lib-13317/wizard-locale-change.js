@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // Kept check for pkp/pkp-lib#13317 (issue #13274), from the 2026-09-12 regression read rr5: the
 // submission wizard's "Change" of the submission language after the draft started leaves the
 // submitter's copied affiliation (and given name) in the original language only, so the
@@ -21,7 +22,7 @@ const {forEachApp, launch, signIn, signOut, screen, shot, record, idle, tag, not
 const PLANT_ROR = process.env.PLANT_ROR !== '0';
 
 function psql(app, sql) {
-    return execFileSync('psql', ['-h', '127.0.0.1', '-U', 'e2e', `${app.name}_test`, '-Atqc', sql], {
+    return execFileSync('psql', ['-h', '127.0.0.1', '-U', 'e2e', `${dbName(app.name)}`, '-Atqc', sql], {
         env: {...process.env, PGPASSWORD: 'e2e'}, encoding: 'utf8',
     }).trim();
 }

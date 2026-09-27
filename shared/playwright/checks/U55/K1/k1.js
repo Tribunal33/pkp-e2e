@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U55 claim check, chunk K1: the "Notify" tab of Settings › Users & Roles as a
 // manager meets it, on all three apps.
 // Spec: docs/specs/U55-notify-users.md — Purpose and Actors (10–42), the "Notify"
@@ -52,7 +53,7 @@ const stateFile = (app) => path.join(outDir(), `k1-state-${app.name}.json`);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const T = 30_000;
 const flat = (s, n = 4000) => (s || '').replace(/\s+/g, ' ').trim().slice(0, n);
-const DB = (app) => `${app.name}_test`;
+const DB = (app) => `${dbName(app.name)}`;
 const sql = (app, q) => execFileSync('psql', ['-d', DB(app), '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim();
 
 // ---------------------------------------------------------------------------

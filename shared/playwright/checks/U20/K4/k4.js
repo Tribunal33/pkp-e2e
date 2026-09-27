@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U20 claim check, chunk K4: "Google Analytics Plugin", the three plugin rows, cross-feature, coverage.
 // Spec: docs/specs/U20-search-engine-metadata-and-analytics.md — Fields: the three plugin rows and the Google
 // Analytics window (74–98), Rules 18–23 (308–337), Settings 5–6 (376–382), register A2, A3, Cross-feature
@@ -47,7 +48,7 @@ forEachApp(async (app) => {
     const fact = (k, v) => { record('k4-facts', {[k]: v}, {merge: true}); log(`[${app.name} ${k}]`, JSON.stringify(v).slice(0, 3000)); };
     const strip = (u) => (u || '').replace(app.baseURL, '').replace(/^https?:\/\/127\.0\.0\.1:\d+/, '');
     const cu = (ctx, p = '') => app.url(`/index.php/${ctx}${p}`);
-    const db = (sql) => { try { return execFileSync('psql', [`${app.name}_test`, '-AtF', '|', '-c', sql], {encoding: 'utf8'}).trim(); } catch (e) { return `db error: ${String(e.message).slice(0, 200)}`; } };
+    const db = (sql) => { try { return execFileSync('psql', [`${dbName(app.name)}`, '-AtF', '|', '-c', sql], {encoding: 'utf8'}).trim(); } catch (e) { return `db error: ${String(e.message).slice(0, 200)}`; } };
     const gaDb = (ctxId) => db(`select context_id, setting_name, setting_value from plugin_settings where plugin_name='googleanalyticsplugin'${ctxId != null ? ` and context_id=${ctxId}` : ''} order by context_id, setting_name`);
     const itemPage = (ctx, id) => cu(ctx, isOJS ? `/article/view/${id}` : isOMP ? `/catalog/book/${id}` : `/preprint/view/${id}`);
     const listPage = (ctx) => cu(ctx, isOJS ? '/issue/archive' : isOMP ? '/catalog' : '/preprints');

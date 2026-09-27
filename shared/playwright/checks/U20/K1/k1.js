@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U20 claim check, chunk K1: the "Search Indexing" tab and what it writes into every page's head.
 // Spec: docs/specs/U20-search-engine-metadata-and-analytics.md — Purpose (10–36), Actors (37–55), Fields: the
 // "Search Indexing" tab (56–73), Rules 7–11 (232–261), Rule 24 (338–343), Side effects (344–359), Settings 1–2,
@@ -50,7 +51,7 @@ forEachApp(async (app) => {
     const cu = (ctx, p = '') => app.url(`/index.php/${ctx}${p}`);
     const TABLE = isOJS ? 'journals' : isOMP ? 'presses' : 'servers';
     const IDCOL = isOJS ? 'journal_id' : isOMP ? 'press_id' : 'server_id';
-    const db = (sql) => { try { return execFileSync('psql', [`${app.name}_test`, '-AtF', '|', '-c', sql], {encoding: 'utf8'}).trim(); } catch (e) { return `db error: ${String(e.message).slice(0, 200)}`; } };
+    const db = (sql) => { try { return execFileSync('psql', [`${dbName(app.name)}`, '-AtF', '|', '-c', sql], {encoding: 'utf8'}).trim(); } catch (e) { return `db error: ${String(e.message).slice(0, 200)}`; } };
     const itemPage = (ctx, id) => cu(ctx, isOJS ? `/article/view/${id}` : isOMP ? `/catalog/book/${id}` : `/preprint/view/${id}`);
     const listPage = (ctx) => cu(ctx, isOJS ? '/issue/archive' : isOMP ? '/catalog' : '/preprints');
 

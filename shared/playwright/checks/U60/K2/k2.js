@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U60 claim check, chunk K2: the Site Settings shell (Rules 1–3, Actors),
 // "Site Setup" › "Information" (Rules 4–5, 13–15) and "Bulk Emails" (Rule 16),
 // French (Rule 23, register A2); all three apps.
@@ -31,7 +32,7 @@ const flat = (s, n = 4000) => String(s ?? '').replace(/\s+/g, ' ').trim().slice(
 const rel = (u) => String(u || '').replace(/^https?:\/\/[^/]+/, '');
 const log = (...a) => console.log('[k2]', new Date().toISOString().slice(11, 19), ...a);
 const stateFile = (app) => path.join(outDir(), `k2-state-${app.name}.json`);
-const sql = (app, q) => execFileSync('psql', ['-d', `${app.name}_test`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim();
+const sql = (app, q) => execFileSync('psql', ['-d', `${dbName(app.name)}`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim();
 const INFO_KEYS = ['about', 'contactName', 'contactEmail', 'privacyStatement'];
 const siteRows = (app, names) => {
     const out = {};

@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U54 claim check, chunk K3: the role window and removing a role.
 // Spec: docs/specs/U54-roles-configuration.md, Fields (the role window, the
 // level table), Rules 12-21, Settings "Forms", register A3, A4, A6, A7, OPS2.
@@ -214,7 +215,7 @@ forEachApp(async (app) => {
     function dbRole(name, ctx = x) {
         try {
             const q = `select ug.role_id, ug.permit_self_registration, ug.permit_metadata_edit, ug.permit_settings, ug.masthead, coalesce((select string_agg(stage_id::text, ',' order by stage_id) from user_group_stage s where s.user_group_id = ug.user_group_id), '') from user_groups ug join ${CTX[0]} c on c.${CTX[1]} = ug.context_id join user_group_settings n on n.user_group_id = ug.user_group_id and n.setting_name = 'name' and n.locale = 'en' where c.path = '${ctx}' and n.setting_value = '${name}'`;
-            const [roleId, selfReg, metadata, settings, masthead, stages] = execFileSync('psql', ['-d', `${app.name}_test`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim().split('|');
+            const [roleId, selfReg, metadata, settings, masthead, stages] = execFileSync('psql', ['-d', `${dbName(app.name)}`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim().split('|');
             return {source: 'psql', roleId, selfReg, metadata, settings, masthead, stages};
         } catch (e) { return {source: 'psql', error: flat(e.message, 200)}; }
     }

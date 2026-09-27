@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U50 claim check, chunk K2 — issue galleys, publishing and its effects
 // (docs/specs/U50-issues.md body lines 243–307 Rules 14–20, 359–391 Side effects, 436–444 Settings bullets 7–8,
 // register A2 563–571 and A3 572–586). Chunk plan: .reports/U50/claimcheck-chunks.md.
@@ -51,7 +52,7 @@ const today = new Date().toISOString().slice(0, 10);
 
 function psql(sql) {
     try {
-        return execFileSync('psql', ['ojs_test', '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
+        return execFileSync('psql', [dbName('ojs'), '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
     } catch (e) {
         return `psql error: ${flat(e.message, 200)}`;
     }

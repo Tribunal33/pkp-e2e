@@ -84,6 +84,9 @@ function runLogged(label, command, args, logFile) {
 }
 
 const {feature, reset, apps} = parseArgs(process.argv.slice(2));
+// Resets and setup runs under one hold of the machine's test lock
+// (shared/playwright/test-lock.js).
+require('../shared/playwright/test-lock.js').acquire(`fleet-prep ${process.argv.slice(2).join(' ')}`);
 const reportDir = path.join(REPO_ROOT, '.reports', feature);
 fs.mkdirSync(reportDir, {recursive: true});
 const fleetFile = path.join(reportDir, 'fleet.json');

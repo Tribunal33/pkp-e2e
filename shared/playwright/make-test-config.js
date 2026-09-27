@@ -20,6 +20,7 @@
  *   TEST_PUBLIC_FILES_DIR public files dir, RELATIVE to the app root
  *                         (default `public`, the template's own value)
  *   TEST_LOCALES          installed_locales (default en,fr_CA)
+ *   TEST_SMTP_PORT        Mailpit's SMTP port (default 1025; a slot's own, harness.md "Slots")
  *   TEST_APP_KEY          app key (default: random per invocation)
  */
 const fs = require('fs');
@@ -91,7 +92,7 @@ const PATCHES = {
         default: 'smtp', // the template's sendmail binary does not exist on CI
         smtp: 'On',
         smtp_server: '127.0.0.1',
-        smtp_port: '1025', // Mailpit
+        smtp_port: process.env.TEST_SMTP_PORT || '1025', // Mailpit
     },
     oai: {
         repository_id: `"${dbName.replace(/_/g, '-')}.localhost"`,

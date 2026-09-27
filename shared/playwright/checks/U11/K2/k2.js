@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U11 claim check, chunk K2 — ordering ("Order" / "Save Order" / "Cancel",
 // a new highlight's position), scope (journal vs site), the site's
 // Highlights tab (Administration › Site Settings › Site Setup › Highlights)
@@ -363,7 +364,7 @@ const PNG = path.join(REPO, 'apps/ojs/playwright/fixtures/files/profile-image-40
 const listHighlightFiles = (app) => {
     try { return execSync(`find ${path.join(app.root, 'public')} -path '*highlights*' -type f`, {encoding: 'utf8'}).trim().split('\n').filter(Boolean).map((f) => path.relative(app.root, f)); } catch { return []; }
 };
-const psql = (app, sql) => { try { return execSync(`psql ${app.name}_test -At -c "${sql.replace(/"/g, '\\"')}"`, {encoding: 'utf8'}).trim(); } catch (e) { return `psql failed: ${String(e.message).split('\n')[0]}`; } };
+const psql = (app, sql) => { try { return execSync(`psql ${dbName(app.name)} -At -c "${sql.replace(/"/g, '\\"')}"`, {encoding: 'utf8'}).trim(); } catch (e) { return `psql failed: ${String(e.message).split('\n')[0]}`; } };
 const logLines = (app) => { try { return execSync(`cat ${path.join(REPO, 'checkouts/files', `${app.name}-test`, 'logs')}/*.log 2>/dev/null | wc -l`, {encoding: 'utf8'}).trim(); } catch { return '?'; } };
 
 async function openJournalHighlights(page, app, ctxPath) {

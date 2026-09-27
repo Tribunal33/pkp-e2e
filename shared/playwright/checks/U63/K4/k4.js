@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U63 claim check, chunk K4: the PubMed XML Export Plugin and the DOAJ Export Plugin {OJS}.
 // Spec: docs/specs/U63-import-export.md lines 86–114 (the PubMed and DOAJ fields), 288–358 (Rules 29–45),
 // 372–375 (Side effects "DOAJ statuses"), 382–396 (Settings bullets 2–6), 551–569 (A5, OJS1).
@@ -58,7 +59,7 @@ forEachApp(async (app) => {
     const env = {...process.env, PKP_CONFIG_FILE: path.join(appRoot, 'config.test.inc.php')};
     const psql = (sql) => {
         try {
-            return execFileSync('psql', ['-h', '127.0.0.1', `${app.name}_test`, '-At', '-F', '|', '-c', sql], {encoding: 'utf8', timeout: 20000}).trim().split('\n').filter(Boolean);
+            return execFileSync('psql', ['-h', '127.0.0.1', `${dbName(app.name)}`, '-At', '-F', '|', '-c', sql], {encoding: 'utf8', timeout: 20000}).trim().split('\n').filter(Boolean);
         } catch (e) { return [`psql error: ${flat(e.message, 200)}`]; }
     };
     const cli = (args, timeout = 300000) => {

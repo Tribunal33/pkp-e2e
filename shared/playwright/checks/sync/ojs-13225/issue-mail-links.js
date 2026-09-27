@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // Kept verification probe for pkp/pkp-lib#13225 (pkp/ojs#5811, ojs 2a94a0218c merged as a4af345eec: the issue-published
 // email's table of contents links every article and galley through the page router with the journal's path, and
 // `IssueEmailVariable::getIssueToc()` assigns `journal` for the templates, so the links resolve from the mail instead of
@@ -30,7 +31,7 @@ async function snap(page, name, extra = {}) {
 }
 
 function psql(sql) {
-    return execFileSync('psql', ['-h', '127.0.0.1', '-U', 'e2e', '-At', '-c', sql, 'ojs_test'],
+    return execFileSync('psql', ['-h', '127.0.0.1', '-U', 'e2e', '-At', '-c', sql, dbName('ojs')],
         {env: {...process.env, PGPASSWORD: 'e2e'}, encoding: 'utf8'}).trim();
 }
 

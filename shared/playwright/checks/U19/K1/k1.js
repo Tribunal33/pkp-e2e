@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U19 claim check, chunk K1: the protocol's face.
 // Spec: docs/specs/U19-oai-pmh.md — Purpose (10–29), Actors & permissions (30–49), Fields: the two addresses, the six
 // requests, the browser view, Identify, a record's header, the formats (50–147), Rules 1–2 (251–260), Rule 10 (327–331),
@@ -38,7 +39,7 @@ const log = (...a) => console.log(`[k1 +${Math.round((Date.now() - T0) / 1000)}s
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const flat = (s, n = 1500) => (s == null ? s : String(s).replace(/\s+/g, ' ').trim().slice(0, n));
 const statePath = (app) => path.join(outDir(), `k1-state-${app.name}.json`);
-const db = (app, sql) => { try { return execFileSync('psql', [`${app.name}_test`, '-Atc', sql]).toString().trim(); } catch (e) { return `ERR ${flat(e.message, 200)}`; } };
+const db = (app, sql) => { try { return execFileSync('psql', [`${dbName(app.name)}`, '-Atc', sql]).toString().trim(); } catch (e) { return `ERR ${flat(e.message, 200)}`; } };
 
 // ---------------------------------------------------------------------------
 // The raw XML as data (regex; the answers are small and regular)

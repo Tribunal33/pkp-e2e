@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U61 claim check, chunk K2: sessions, stored copies and routine tasks.
 // Rules 9–12 (163–199), Rules 21–23 (263–289), Settings bullets 5, 6, 8, 9
 // (332–352), register A2 and A5. Footnotes a, j, k, l, m, t, u, v, td3–td5,
@@ -187,7 +188,7 @@ async function signInAt(page, app, username, contextPath = 'index') {
     await page.waitForLoadState('load').catch(() => {});
     await bounded(idle(page).catch(() => {}));
 }
-const sessions = (app) => Number(sql(`${app.name}_test`, 'select count(*) from sessions'));
+const sessions = (app) => Number(sql(`${dbName(app.name)}`, 'select count(*) from sessions'));
 async function reportMail(app, processId, to = 'admin@mail.test') {
     const m = await app.mail.find({to, subject: processId, timeoutMs: 20_000});
     const full = await app.mail.fullMessage(m.ID);
@@ -308,7 +309,7 @@ forEachApp(async (app) => {
         // ── 178–184, 343–346 (store part), A2, A5: "Delete Data Caches" ─────────
         await phase('data', async () => {
             const out = {};
-            const pluginNames = sql(`${app.name}_test`, `select distinct lower(plugin_name) from plugin_settings where context_id = ${st.ctxId} order by 1`).split('\n').filter(Boolean);
+            const pluginNames = sql(`${dbName(app.name)}`, `select distinct lower(plugin_name) from plugin_settings where context_id = ${st.ctxId} order by 1`).split('\n').filter(Boolean);
             const cfgGallery = (fs.readFileSync(configFile(app), 'utf8').match(/^plugin_gallery_urls\s*=\s*'(.*)'/m) || [])[1];
             const galleryUrls = cfgGallery ? JSON.parse(cfgGallery) : ['https://pkp.sfu.ca/ojs/xml/plugins.xml'];
             const galleyId = app.name === 'ojs' && st.sub.galleys && st.sub.galleys[0] ? (st.sub.galleys[0].id || st.sub.galleys[0].galleyId) : null;

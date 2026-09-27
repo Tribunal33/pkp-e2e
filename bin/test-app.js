@@ -61,6 +61,9 @@ if (!appName || !APPS[appName]) {
     console.error(`test-app: ${appName ? `unknown app "${appName}"` : 'no app named'}\n${USAGE}`);
     process.exit(1);
 }
+// All three passes under one hold of the machine's test lock, so another
+// slot never runs between them (shared/playwright/test-lock.js).
+require('../shared/playwright/test-lock.js').acquire(`test:${appName} ${callerArgs.join(' ')}`);
 const config = `configs/${appName}.config.js`;
 
 // Ctrl-C reaches the running pass through the terminal's process group;

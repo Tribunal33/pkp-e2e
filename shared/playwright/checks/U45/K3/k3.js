@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U45 claim check, chunk K3: the DOIs page — list, item, editing, search, filters, bulk assign and mark.
 // Spec: docs/specs/U45-dois.md lines 115–130 (Fields: the DOIs page), 230–232 (Rule 9), 263–303 (Rules 14–19),
 // 312–368 (Rules 21–28), 545–546 (Side effects: nothing logged or mailed), register A3, A7, OMP1.
@@ -43,7 +44,7 @@ const stateFile = (app) => path.join(outDir(), `k3-state-${app.name}.json`);
 
 function psql(app, sql) {
     try {
-        return execFileSync('psql', [`${app.name}_test`, '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
+        return execFileSync('psql', [`${dbName(app.name)}`, '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
     } catch (e) {
         return `psql error: ${flat(e.message, 200)}`;
     }

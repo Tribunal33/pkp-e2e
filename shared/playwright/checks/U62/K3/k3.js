@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U62 claim check, chunk K3: the Plugin Gallery and what cuts across the screens.
 // Spec docs/specs/U62-plugins-management.md: gallery Fields 80-93, Rules 22-26
 // (251-288), Side effects 289-300, Settings preamble and bullets 1-2 (301-318),
@@ -28,7 +29,7 @@ const GALLERY = /plugin-gallery-grid\//;
 
 function psql(app, q) {
     try {
-        return execFileSync('psql', ['-d', `${app.name}_test`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim();
+        return execFileSync('psql', ['-d', `${dbName(app.name)}`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim();
     } catch (e) {
         return `ERR ${flat(e.message, 200)}`;
     }

@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U08 claim check K1, the second half of k1.js (same state file, same run):
 //   items    the item window on I: fields per type, refusals (td2), lengths,
 //            "Preview", saves; query parameters (td3)
@@ -576,7 +577,7 @@ module.exports = async function more({app, S, on, log, sleep, T, helpers: H}) {
     if (on('site')) {
         const {page, close} = await launch(app);
         const bd = watchDialogs(page);
-        const db = `${app.name}_test`;
+        const db = `${dbName(app.name)}`;
         const psql = (sql) => execFileSync('psql', ['-h', '127.0.0.1', '-U', 'e2e', db, '-Atc', sql], {env: {...process.env, PGPASSWORD: 'e2e'}}).toString().trim();
         const siteMenus = () => psql("select navigation_menu_id||'|'||title||'|'||coalesce(area_name,'<null>') from navigation_menus where coalesce(context_id,0)=0 order by 1");
         const puts = [];

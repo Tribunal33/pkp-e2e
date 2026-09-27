@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U54 claim check K1: the "Roles" list as a manager finds it (spec lines
 // 10-109, 150-181, 342-344, register A1), plus the Actors table's rows as
 // each permission level reaches them.
@@ -283,7 +284,7 @@ forEachApp(async (app) => {
             try {
                 const {execFileSync} = require('child_process');
                 const q = `select ug.user_group_id, ug.role_id, ug.permit_self_registration, ug.permit_metadata_edit, ug.permit_settings, (select setting_value from user_group_settings s where s.user_group_id=ug.user_group_id and s.setting_name='recommendOnly' limit 1) as rec, ug.masthead, (select setting_value from user_group_settings s where s.user_group_id=ug.user_group_id and s.setting_name='name' and s.locale='en' limit 1) from user_groups ug join ${isOjs ? 'journals' : isOmp ? 'presses' : 'servers'} c on c.${isOjs ? 'journal_id' : isOmp ? 'press_id' : 'server_id'}=ug.context_id where c.path='${S.A}' order by ug.user_group_id`;
-                fact('dbFlags', execFileSync('psql', ['-d', `${app.name}_test`, '-tA', '-c', q], {encoding: 'utf8'}).trim().split('\n'));
+                fact('dbFlags', execFileSync('psql', ['-d', `${dbName(app.name)}`, '-tA', '-c', q], {encoding: 'utf8'}).trim().split('\n'));
             } catch (e) { fact('dbFlags', String(e.message).slice(0, 300)); }
         });
 

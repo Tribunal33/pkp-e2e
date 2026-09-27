@@ -27,7 +27,11 @@ Every step ends in a file, and `.reports/<feature>/phase-status.md` gets one
 line per gate passed (`<gate> · <date> · <file>`), appended by the
 orchestrator.
 
-1. **Claim.** Set the feature's PROGRESS row to `in_progress`. Gate: the row.
+1. **Claim.** `node bin/slot.js claim U<nn>` first: other slots' sessions
+   may be picking from the same PROGRESS at the same time (harness.md
+   "Slots"), and a refusal means another session holds the feature, so
+   take the next pending row. Then set the row to `in_progress`. Gate: the
+   row.
 2. **Fleet prep.** `npm run fleet-prep -- --feature U<nn> [--reset]`.
    Gate: `.reports/<feature>/fleet.json`.
 3. **Draft.** A spec author writes `docs/specs/U<nn>-<feature>.md` per
@@ -203,7 +207,12 @@ Test files cite these by number, so the numbers are stable.
   then; re-armed at its 30-minute expiry) and post one line per tick: the
   gate that is running and what the files show, nothing else. The ticks
   double as the polling points for the finals and the CI run; the
-  keepalive stops at the report.
+  keepalive stops at the report, never earlier: a quiet tick is fine, a
+  stopped Monitor with work in flight is a paused session whose runs die
+  with it. A Playwright run can also wait behind another slot's run for
+  the machine's test lock (harness.md "Slots"), so suites, finals,
+  fleet-prep and any run that may queue go to the background under the
+  keepalive, never in a foreground command.
 
 ## Definition of done
 

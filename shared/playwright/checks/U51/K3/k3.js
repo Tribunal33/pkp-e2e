@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U51 claim check, chunk K3 — the reader's pages: the "Subscriptions" page, "My Subscriptions", the purchase
 // pages, the "Subscription" block, Rules 26–33, the manual method, Settings bullets 4, 12, 13, register A6,
 // A9–A13 (docs/specs/U51-subscriptions.md; chunk plan .reports/U51/claimcheck-chunks.md).
@@ -44,7 +45,7 @@ const statePath = (app) => path.join(outDir(), `k3-state-${app.name}.json`);
 
 function psql(sql) {
     try {
-        return execFileSync('psql', ['ojs_test', '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
+        return execFileSync('psql', [dbName('ojs'), '-At', '-F', '|', '-c', sql], {encoding: 'utf8'}).trim();
     } catch (e) {
         return `psql error: ${flat(e.message, 200)}`;
     }

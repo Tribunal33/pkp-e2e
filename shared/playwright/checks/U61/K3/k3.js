@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U61 claim check, chunk K3: Administration › "View Jobs" and "View Failed
 // Jobs", a failed job's "Details", "Try Again", "Delete", "Requeue All Failed
 // Jobs", the old-failed-jobs removal and the [queues] settings; all three apps.
@@ -34,7 +35,7 @@ const REPO = path.resolve(__dirname, '../../../../..');
 const flat = (s, n = 4000) => String(s ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
 const rel = (u) => String(u || '').replace(/^https?:\/\/[^/]+/, '');
 const log = (...a) => console.log('[k3]', new Date().toISOString().slice(11, 19), ...a);
-const sql = (app, q) => execFileSync('psql', ['-d', `${app.name}_test`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim();
+const sql = (app, q) => execFileSync('psql', ['-d', `${dbName(app.name)}`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim();
 const cli = (app, args) => {
     const env = {...process.env};
     for (const line of fs.readFileSync(path.resolve(REPO, app.root, '.env.playwright'), 'utf8').split('\n')) {

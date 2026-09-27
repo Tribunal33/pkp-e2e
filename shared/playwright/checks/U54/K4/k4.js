@@ -1,3 +1,4 @@
+const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's own test DB (harness.md "Slots")
 // U54 claim check, chunk K4: "Site Access Options" and what the role settings
 // change elsewhere. Spec docs/specs/U54-roles-configuration.md: Fields for the
 // tab 142-149, Rules 22-24 278-321, Side effects 322-339, Settings bullet 3
@@ -44,7 +45,7 @@ const VOC = {
 const CTXT = {ojs: ['journals', 'journal_id', 'journal_settings'], omp: ['presses', 'press_id', 'press_settings'], ops: ['servers', 'server_id', 'server_settings']};
 
 function psql(app, q) {
-    try { return execFileSync('psql', ['-d', `${app.name}_test`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim(); } catch (e) { return `ERR ${flat(e.message, 200)}`; }
+    try { return execFileSync('psql', ['-d', `${dbName(app.name)}`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim(); } catch (e) { return `ERR ${flat(e.message, 200)}`; }
 }
 
 // ---------------------------------------------------------------- seed
