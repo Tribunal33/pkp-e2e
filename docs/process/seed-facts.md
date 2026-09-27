@@ -1438,3 +1438,14 @@ config-file settings.
   auto-add box) is listed only to manager-level people; an assigned
   Series Editor's panel reads "No Items", Internal Review included. OMP,
   2026-09-27 (U71 claim check K4, `tmpl-se-t1-round1`).
+- {OPS} A preprint seeded through `POST scenarios/submission` (unposted,
+  posted or a `submitted: false` draft), a draft started on screen, and one
+  submitted through the wizard with "Relation status" left unanswered hold
+  no relation status at all, not "This preprint's relations have not been
+  entered.": the workflow's "Relations" shows none of its three choices
+  ticked, the wizard's Review panel reads "This preprint has not been
+  published elsewhere.", the "Post the preprint" window reads "This
+  preprint's relations have not been entered.", and the preprint page shows
+  no notice. A test that needs a status sets it through "Relations".
+  Workflow › "Relations", submission wizard › Review, OPS, 2026-09-27 (U75
+  claim check K1, K2).

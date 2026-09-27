@@ -6,7 +6,7 @@ confirmed dead (it stays here with its evidence) or ruled out of scope.
 
 Sources (removed from the tip 2026-08-25, reachable in git history): the six crosswalks in `.reports/phase0-feature-map/` (their UNASSIGNED
 lists, consistent with `synthesis.md` §4) + `RULINGS.md`'s probe-derived
-dead-code additions. **29 parked atoms** + **47 noted dead-code/defect
+dead-code additions. **29 parked atoms** + **48 noted dead-code/defect
 candidates attached to claimed atoms**. (PLUG-028 moved to FEATURE-MAP's
 Out-of-scope tail — see RULINGS.md. Two candidates that rested solely on
 scratched pre-reset evidence were dropped 2026-08-21 per the reset doctrine —
@@ -773,3 +773,21 @@ until their specs exist. Do not force-claim the defects themselves.
     it. Code-verified 2026-09-27 (U70 spec author; checkout omp
     `72a01a026`). Resolves: maintainer confirmation as dead code (removal
     candidates).
+48. **The OPS `relate` route and the legacy relation forms nobody renders** —
+    attached to **U75** (Preprint relations; API-065's `relate` operation,
+    atom claimed by U49, whose scope note leaves the operation to U75).
+    `PUT submissions/{id}/publications/{id}/relate` is called by no screen:
+    its only callers build a `RelationForm` aimed at it in
+    `APP\pages\workflow\WorkflowHandler::setupIndex()` and
+    `APP\pages\authorDashboard\AuthorDashboardHandler::setupTemplate()`,
+    and both pages now redirect to the dashboard
+    (`PKPWorkflowHandler::access()/index()`,
+    `PKPAuthorDashboardHandler::submission()`), which render no template
+    that reads those forms. The live "Relations" dropdown
+    (`WorkflowPublicationRelationDropdownOPS.vue`) and the wizard's
+    relation question post to the plain publication route instead.
+    Code-verified 2026-09-27 (U75 spec author; checkout ops `e2111e3aae`,
+    lib/pkp `17a1f01fed`, ui-library `03d1cee2`). Resolves: the U75 claim
+    check confirms no screen sends it; then maintainer confirmation as dead
+    code (removal candidate), or a ruling that the dropdown should post to
+    it (the U75 spec's register A1).
