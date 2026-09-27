@@ -52,6 +52,18 @@ if real, their specs' own probes will resurface them.)
 - Why parked: dead-code candidate — the post target does not exist.
 - Resolves: Phase-1 probe (does the page render/submit at all?); if dead, stays
   here as confirmed; if live, claim in U64.
+- Evidence (U64 spec author, code read 2026-09-27, omp `72a01a026`): no
+  template, handler, Vue component or JS file of OMP or its lib/pkp names
+  `statisticsSettingsForm.tpl`; its only reference is its own header
+  (unchanged since 2021-01-29). Its post target `tools/saveStatisticsSettings`
+  falls into `PKPToolsHandler::tools()`'s `default: assert(false)`, and the
+  file it includes, `core:statistics/defaultMetricTypeFormElements.tpl`, does
+  not exist in lib/pkp. The `management/statistics` op that
+  `pages/management/index.php` routes to `PKPToolsHandler` has no method and
+  no role assignment. The live statistics settings are the Vue tabs
+  Settings › Distribution › "Statistics" and Administration › Site Settings ›
+  "Statistics" (the usage statistics spec). Dead-code candidate; resolves on
+  maintainer confirmation.
 
 ### NOTIF-011 — NOTIFICATION_TYPE_PLUGIN_BASE
 - What: plugin-type base offset constant.

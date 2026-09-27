@@ -284,6 +284,10 @@ class BootstrapSeeder extends PKPBootstrapSeeder
                 }
                 $access = ['accessStatus' => $status === null ? null : $statuses[$status], 'openAccessDate' => $openAccessDate];
             }
+            // `usage[]` (U64, the context scenario only): reader visits of
+            // past days to the published issue's table of contents and its
+            // galleys' files (UsageStatsSeeder::parseIssueUsage).
+            $usage = $withCover ? UsageStatsSeeder::parseIssueUsage($spec, $published, count($galleys)) : [];
             $issues[] = [
                 'volume' => $whole('volume'),
                 'number' => (string) $number,
@@ -293,6 +297,7 @@ class BootstrapSeeder extends PKPBootstrapSeeder
                 'datePublished' => $datePublished,
                 'galleys' => $galleys,
                 'access' => $access,
+                'usage' => $usage,
             ];
         }
         return $issues;

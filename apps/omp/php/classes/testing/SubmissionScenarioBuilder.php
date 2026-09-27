@@ -86,7 +86,8 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
      * format" window's required "Name", a string (the submission's
      * language) or a locale map over the languages the box offers (the
      * press's submission metadata languages) that fills the submission's
-     * one; `file` a fixture basename, the format row's "Change File".
+     * one; `file` a fixture basename, the format row's "Change File";
+     * `genre` (U64, needs `file`) the upload wizard's component for it.
      *
      * @return array<int, array{path: string, name: array<string, string>, fixture: ?array}>
      */
@@ -119,10 +120,19 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
             if (trim((string) ($name[$submissionLocale] ?? '')) === '') {
                 throw new SpecException("{$spec->path}.name", "\"Name\" is required in the submission's language ({$submissionLocale})");
             }
+            // `genre` (U64): the upload wizard's component for the file, by
+            // the name its list shows ("Book Manuscript"), as galleys[].genre
+            // (U13); absent, the first the list offers ("Appendix", a
+            // supplementary component, whose downloads count as
+            // "Supplementary File" and not as the book's "File Views").
+            if ($spec->has('genre') && !$spec->has('file')) {
+                throw new SpecException("{$spec->path}.genre", 'genre is the component of the format\'s file: it needs file');
+            }
             $plans[] = [
                 'path' => $spec->path,
                 'name' => $name,
                 'fixture' => $spec->has('file') ? $this->resolveFixture((string) $spec->get('file'), "{$spec->path}.file") : null,
+                'genreId' => $spec->has('genre') ? $this->resolveUploadGenreId($context, $spec) : null,
             ];
         }
         return $plans;
@@ -177,7 +187,7 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
                         SubmissionFile::SUBMISSION_FILE_PROOF,
                         Application::ASSOC_TYPE_REPRESENTATION,
                         $formatId,
-                        $this->defaultGalleyGenreId($context)
+                        $plan['genreId'] ?? $this->defaultGalleyGenreId($context)
                     );
                     $terms = new ApprovedProofForm($submission, Application::getRepresentationDAO()->getById($formatId), $submissionFileId);
                     $terms->setData('salesType', 'openAccess');

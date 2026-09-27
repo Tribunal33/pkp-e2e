@@ -220,6 +220,19 @@ Keys:
   published as "Publish Issue" publishes it: "Subscription" with the
   open access date that many months from today (U51 harness,
   2026-09-25).
+  An entry's `usage[]` (U64, the context scenario alone) is readers'
+  visits of past days to the issue, for the "Issues" Statistics page and
+  its files: each entry `{daysAgo | date, views?, galleyDownloads?}`,
+  `views` the issue's table of contents and `galleyDownloads` a list
+  with one count per entry of the issue's `galleys[]`, in order, each a
+  download of that galley's file. The issue must be `published` (the
+  listener records visits to a published issue only). Built and refused
+  as the submission scenario's `usage[]` below, without the place keys.
+- `usage[]` (U64, the three apps): readers' visits of past days to the
+  context's home page, the "Journal" ("Press", "Server") Statistics
+  page's one row: each entry `{daysAgo | date, views}`. Built with the
+  OJS issues' visits, after everything but `bulkEmails`, and refused as
+  the submission scenario's `usage[]` below, without the place keys.
 - `users[]`: throwaway accounts. Each entry takes `username` and `roles`
   (both required; roles empty only beside `pastRoles`, below), `givenName`, `familyName`, `email`
   (default `<username>@mail.test`), `password` (default: the username
@@ -1529,7 +1542,10 @@ Keys:
   file's own "Awaiting Approval" stays (the reader does not need it).
   `name` is required, a string (the submission's language) or a locale
   map over the press's submission languages that fills the submission's
-  one; `file` is a fixture basename, as for `galleys[]` (`article.html`
+  one; `genre` (U64, needs `file`) is the upload's component by the name
+  its list shows, as `galleys[].genre` (`Book Manuscript`); without it
+  the first the list offers, "Appendix", a supplementary component;
+  `file` is a fixture basename, as for `galleys[]` (`article.html`
   names `figure.png`, so with `mediaFiles: [{file: 'figure.png'}]` and
   `published: true` the book page lists the format and its "HTML" link
   opens the file with the image resolved, "HTML Monograph File" being on
@@ -1576,6 +1592,75 @@ Keys:
   No key makes a second version: a test uses the header's "Create New
   Version", which copies the file and the box. OMP and OPS answer 400: a
   press and a preprint server have no "JATS XML" page.
+
+- `usage[]` (U64, the three apps): readers' visits of past days to the
+  published version, turned into the figures the Statistics pages
+  ("Articles", "Monographs", "Preprints"), their "Download Report" files
+  and the COUNTER tables read. Each entry is one day,
+  `{daysAgo | date, abstractViews?, fileViews?, jatsViews?, country?,
+  region?, city?}`:
+  - The day: exactly one of `daysAgo` (a whole number from 1; 1 is
+    yesterday, the last day of the pages' "Last 30 days") or `date`
+    (`YYYY-MM-DD`, before today, from 2001-01-01). Today is refused: a
+    day's visits become figures the next day. Days count from the
+    server's today (the fleets run PHP in UTC).
+  - The counts, each a whole number from 0 to 5000, one visit per count:
+    `abstractViews` (the work's page: the table's "Abstract Views", the
+    chart's "Abstracts", on a press "Catalog Entries"); `fileViews`, a list with one count per entry of
+    the same request's `galleys[]` (OJS, OPS) or `publicationFormats[]`
+    (OMP), in order, each a download of that entry's file; `jatsViews`
+    (OJS alone, a 400 elsewhere), the landing page's "JATS XML" link. An
+    entry names at least one visit. A file download is sorted as the
+    download handler sorts it: by the file's type into "PDF", "HTML" or
+    "Other" (a Word file counts as "Other" on the page), and a file of a
+    supplementary or non-document component ("Data Set", a press's
+    "Appendix") is a "Supplementary File" in "Download Files" and not in
+    the page's "File Views".
+  - The place, only while the context collects geographical data (the
+    site's `enableGeoUsageStats` under `POST site`, and the journal's own
+    level, which a scratch context leaves at the site's): `country` (a
+    two-letter code in capitals, `CA`), `region` (the subdivision part of
+    an ISO 3166-2 code, up to three letters or digits, `BC`) and `city`
+    (a name). A region needs the country, a city the region, and a part
+    deeper than the context collects is a 400, as the visit would not
+    record it. Without them the visits have no place. Two places on one
+    day are two entries.
+  - Refusals (400): `usage` without `published: true`, or on an OJS
+    version an unpublished issue schedules instead of publishing; a
+    `fileViews` count past the list's end, or above zero for a remote
+    galley or a format without file; `jatsViews` on a version whose JATS
+    XML is not public (`jats.makePublic: true`) or has no body; any other
+    key.
+  - How it is built: each visit is one line of the day's usage log in
+    the shape the usage event listener writes when a reader opens the
+    page or file (`LogUsageEvent`), then the app's own loader jobs run on
+    those lines at once (`UsageStatsLoader::getFileJobs`: robots and
+    double clicks dropped, unique visitors counted, the `metrics_*`
+    tables compiled, the file archived), then the monthly rebuild. The
+    visits land on the day's figures beside every other seed's: nothing
+    is replaced. The deliberate differences from a real day's log, the
+    visitor model and the monthly rebuild are the parity ledger's
+    (`PKPUsageStatsSeeder`).
+  - Facts a suite meets: every visit comes from a visitor of its own, so
+    a "Unique" column ("Download Geographic") and the COUNTER unique
+    counts equal the totals; a single reader driving the pages on screen
+    is one visitor, whose repeat views of one work count once as unique.
+    The Statistics pages show the figures on their next load; the
+    figures live in site-wide tables but belong to the context, so a
+    scratch context's pages show its seeds alone, and `publicknowledge`
+    (never seeded) shows none. The test installs have no location
+    database, so a visit driven on screen records no place: geographical
+    figures exist only through this key, and a test that seeds them sets
+    the site's level first (serial, `@solo`, `POST site` below). On OMP,
+    `publicationFormats[].file` without `genre` is an "Appendix" file,
+    whose downloads are "Supplementary File" ones: give `genre: 'Book
+    Manuscript'` for the book's "File Views". "Counter R5" offers no
+    month on a fleet as reset: COUNTER figures need `POST site`
+    `counterR5StartDate` and visits in whole past months after both that
+    day and the context's first publication date. The seed takes the site row
+    lock for its last step (as `bulkEmails` and `POST site` do), so
+    parallel seeds with `usage` finish one after another (U64 harness,
+    2026-09-27, three apps).
 
 - The version's display values (U13 harness, 2026-09-24, OJS and OPS
   driven), typed by the editor (`admin`) on the workflow's publication
@@ -1778,7 +1863,10 @@ Implementation: `shared/php/api/v1/_test/PKPTestController.php` and the
 builders in `shared/php/classes/testing/` (`PKPBootstrapSeeder`,
 `PKPContextScenarioBuilder`, `PKPSubmissionScenarioBuilder`, `Spec`,
 `UserSeeder`, `ContextFactory`, `LibraryFileSeeder` (both `libraryFiles[]`
-keys), `SiteSettingsSeeder` (`POST site`, app-neutral, no subclass), and
+keys), `SiteSettingsSeeder` (`POST site`, app-neutral, no subclass),
+`PKPUsageStatsSeeder` (every `usage[]` key; each app's
+`UsageStatsSeeder` adds its line fields, its work page and, on OJS, the
+issue and JATS visits), and
 `ApiCall`, which runs an app API
 controller's own action on the JSON body a screen sends, for the keys
 that save through one). Each app subclasses them under
@@ -1810,8 +1898,62 @@ any other key is a 400.
   a locale the site lacks (`title.de`), a number, a list, a non-string
   locale value. The response is `{title: {locale: text}}`, `{}` when
   empty.
-
-Facts a suite meets:
+- `enableGeoUsageStats`, `enableInstitutionUsageStats`,
+  `isSushiApiPublic` (U64): "Site Setup" › "Statistics": "Geographical
+  Statistics", the radio's value (`disabled` "Do not collect any
+  geographical data", `country`, `country+region`,
+  `country+region+city` "Collect the visitor's country, region and
+  city"); "Institutional Statistics" › "Enable institutional statistics"
+  (`true` ticked); "Public API" (`true` "Make the COUNTER SUSHI
+  statistics publicly available", `false` "Restrict access to the
+  COUNTER SUSHI statistics API to managers and admins"). The install
+  values are `disabled`, `false` and `true`. The tab's "Save" posts its
+  seven fields together (form-encoded, the boxes as `true`/`false`); the
+  key saves the named ones and leaves the others as stored, which is
+  what the tab posts for them. Anything else (another radio value, a
+  string for a boolean) is a 400. The response adds each named key with
+  its stored value. Parity-checked on the three apps (U64 harness,
+  2026-09-27): the rows equal the screen's, the tab reopens the same, and
+  the journal's Settings › Distribution › "Statistics" tab shows the same
+  fields.
+- `counterR5StartDate` (U64): no screen sets it. It is the site setting
+  the upgrade from 3.3 to 3.4 writes (its own day); a fresh install has
+  no row, and the app then counts from the day 3.4 was installed, the
+  fleet's reset day. A `YYYY-MM-DD` day from 2001-01-01 to today, or
+  `""` / null for no row (the install state). "Counter R5" and the SUSHI
+  API offer the whole months from the month after the later of this day
+  and the context's first publication date, up to last month. So on a
+  fleet as reset, every context shows "There are no COUNTER R5 usage
+  statistics available yet." and every "Download" is refused; with
+  `counterR5StartDate: '2026-05-01'` and a work published before it, the
+  "PR" window opens on 2026-06-01 to the end of last month and downloads
+  the figures of those months. A COUNTER figure therefore needs `usage[]`
+  visits in a whole past month after both dates. Refusals (400): an
+  impossible or badly shaped day (`2026-02-30`, `2026-05`), a number, a
+  day after today or before 2001-01-01. The response adds
+  `counterR5StartDate`, the stored day or null. Parity-checked on the
+  three apps (U64 harness, 2026-09-27) against the upgrade's own insert:
+  the same row, page, window and download.
+- `isSiteSushiPlatform`, `sushiPlatformID` (U64): "Site Setup" ›
+  "Statistics" › "Sushi Protocol": the "Platform" box ("Use the site as
+  the platform for all journals.", "…presses.", "…servers."; `true`
+  ticked) and the "Platform ID" text box (a string; `""` or null for
+  none, no row). The install values are `false` and null (an
+  `isSiteSushiPlatform` row `0`, no `sushiPlatformID` row). The tab posts
+  both fields on every "Save", the hidden "Platform ID" too, so naming
+  one sends the other's stored value beside it: `isSiteSushiPlatform:
+  false` alone keeps a stored ID, which the next tick shows, as the tab
+  does. The site service refuses (400, `specKey: sushiPlatformID`) what
+  the tab's "Save" refuses: "Platform" ticked with no ID ("A platform ID
+  must be required when the site will be identified as the SUSHI
+  platform."), and an ID other than 1–17 letters, digits, "_", "." and
+  "/" ("This is not formatted correctly."), ticked or not. A refused
+  request stores nothing, as a refused "Save" does. A non-boolean box or a non-string ID is a 400 too. The response
+  adds both keys, the ID null when absent. COUNTER reports name the site
+  as their platform only while the site has a `title`; without one they
+  keep the context's name. Parity-checked on the three apps (U64 harness,
+  2026-09-27): the rows, the tab as it reopens and a "PR" download equal
+  the screen's, both ways.
 
 - Every fleet starts with no Site Name, and every shipped suite reads
   the site that way: the site's home page has an empty browser title and
@@ -1829,7 +1971,22 @@ Facts a suite meets:
 - A test that sets `title` changes what every test reading a site page
   sees, and the serial project runs up to four workers: it carries
   `@solo` (harness.md "Project chain", as U08 S8 does) and puts back
-  `title: ""` in a `finally`, even when it fails midway. The request
+  `title: ""` in a `finally`, even when it fails midway. The same holds
+  for the "Statistics" keys: every context reads them (a geographical
+  level decides what every journal's Settings › Distribution ›
+  "Statistics" tab and "Download Report" window show, and `usage[]`
+  refuses a place without one; `isSushiApiPublic: false` closes every
+  journal's SUSHI address), so a test that sets one is `@solo` and puts
+  back `enableGeoUsageStats: 'disabled'`, `enableInstitutionUsageStats:
+  false`, `isSushiApiPublic: true` in a `finally`. So is a test that
+  sets `counterR5StartDate` (every context's "Counter R5" months follow
+  it): it puts back `counterR5StartDate: null`, no row. So is a test
+  that ticks "Platform" or types a "Platform ID", on screen or by key
+  (every context's COUNTER reports read them): it puts back
+  `isSiteSushiPlatform: false, sushiPlatformID: null` in one request,
+  by key rather than by the tab: a malformed ID left in the hidden box
+  refuses every later "Save" of that page (U64 A10), and a request never
+  meets that page state. The request
   reads the site row under the same lock as the context scenario's
   `bulkEmails`, so the two never write each other's value out (four of
   each at once over two servers, U60 harness).
@@ -1954,8 +2111,7 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   `completed` is the reviewer's submit, U34); `files[].list` (a file on
   a later list, "Draft Files", "Copyedited Files" or "Production Ready
   Files": `files[]` seeds "Submission Files" and a round's "Files for
-  Review" only, U36); `commentsForEditor`; `metrics` (OJS only: `views?`,
-  `downloads?`, `months?`).
+  Review" only, U36); `commentsForEditor`.
 - Submission: OJS `issue` without `published` (the Publication Settings
   issue assignment of an unpublished article; the key applies only with
   `published: true`, so an unpublished article in an issue, or one whose

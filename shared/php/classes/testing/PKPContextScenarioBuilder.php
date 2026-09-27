@@ -298,6 +298,10 @@
  *   keys included; stored as the roles' ids, ascending. Refused without
  *   bulkEmails true (the side tab shows no boxes then), empty, or with a
  *   key repeated. Applied after bulkEmails, last in the build.
+ * - usage[] {daysAgo | date, views} (U64): the context's home page visits
+ *   of past days, one visitor each, turned into figures by the app's own
+ *   usage statistics jobs (PKPUsageStatsSeeder), with the overlay's (OJS
+ *   issues[].usage[]), after everything but bulkEmails.
  * All settings passthroughs (review included) are validated and written in
  * ONE PKPContextService::validate + ::edit, exactly as the settings forms'
  * PUT contexts/{id} save is (PKPContextController::edit).
@@ -393,6 +397,13 @@ abstract class PKPContextScenarioBuilder
      * on a journal that requires subscriptions, U51).
      */
     protected array $formSettingsPlan = [];
+
+    /**
+     * The reader visits of the build in progress (U64): the context's own
+     * `usage[]`, and an app overlay's (OJS `issues[].usage[]`), loaded
+     * together at the end of the build. Set once the context exists.
+     */
+    protected ?PKPUsageStatsSeeder $usageSeeder = null;
 
     public function __construct()
     {
@@ -506,6 +517,8 @@ abstract class PKPContextScenarioBuilder
         $overlayPlan = $this->parseOverlay($root);
         $themeOptionsPlan = $this->parseThemeOptions($root);
         $bulkEmailsPlan = $this->parseBulkEmails($root, array_column($customRolePlans, 'key'));
+        // usage[] (U64): the context's home page visits of past days.
+        $usagePlans = PKPUsageStatsSeeder::parse($root, 'usage', ['views']);
         $root->assertConsumed();
 
         if (Application::getContextDAO()->getByPath((string) $contextData['path'])) {
@@ -534,6 +547,8 @@ abstract class PKPContextScenarioBuilder
                 DB::beginTransaction();
             }
         }
+
+        $this->usageSeeder = new \APP\testing\UsageStatsSeeder($context);
 
         if ($orcidSettings !== null) {
             // The same service call the ORCID settings tab's form save runs
@@ -661,6 +676,12 @@ abstract class PKPContextScenarioBuilder
         if ($themeOptionsPlan !== null) {
             $this->applyThemeOptions($context, $themeOptionsPlan);
         }
+
+        // Reader visits of past days (U64): the home page's, then the app
+        // overlay's (OJS issues), through the app's own usage statistics
+        // jobs (PKPUsageStatsSeeder).
+        $this->usageSeeder->addContextUsage($usagePlans);
+        $this->usageSeeder->load();
 
         // Site Settings › "Bulk Emails", then the Settings Wizard's
         // "Restrict Bulk Emails" (U55), last: the site row lock the first

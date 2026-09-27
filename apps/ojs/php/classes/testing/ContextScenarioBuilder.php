@@ -54,7 +54,8 @@ class ContextScenarioBuilder extends PKPContextScenarioBuilder
 
     /**
      * `issues[]` (U08): the bootstrap payload's issues list, same shape,
-     * plus `coverImage` (U13), `datePublished` and `galleys[]` (U50); the
+     * plus `coverImage` (U13), `datePublished`, `galleys[]` (U50) and
+     * `usage[]` (U64, UsageStatsSeeder::parseIssueUsage); the
      * galleys' "Language" is checked against the new journal's form
      * languages (primary first); `accessStatus` / `openAccessDate` (U51)
      * need the journal to require subscriptions. And the subscription keys
@@ -85,6 +86,14 @@ class ContextScenarioBuilder extends PKPContextScenarioBuilder
             $response = SubscriptionSeeder::execute($context, $overlayPlan['subscriptions']);
             $context = \APP\core\Application::getContextDAO()->getById($context->getId());
         }
-        return $response + ['issues' => BootstrapSeeder::addIssues($context, $overlayPlan['issues'] ?? [], asTheForm: true)];
+        $issues = BootstrapSeeder::addIssues($context, $overlayPlan['issues'] ?? [], asTheForm: true);
+        // Each issue's reader visits (U64), loaded with the context's own at
+        // the end of the build.
+        foreach ($overlayPlan['issues'] ?? [] as $i => $plan) {
+            if ($plan['usage'] !== []) {
+                $this->usageSeeder->addIssueUsage($plan['usage'], $issues[$i]['id'], array_column($issues[$i]['galleys'] ?? [], 'id'));
+            }
+        }
+        return $response + ['issues' => $issues];
     }
 }

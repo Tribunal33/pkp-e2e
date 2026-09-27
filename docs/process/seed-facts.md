@@ -1170,9 +1170,34 @@ config-file settings.
   added on Settings › Press › Series › "Add Series", and a book goes into
   it through `POST scenarios/submission` `series: <path>`. Catalog page,
   2026-09-24 (U10 claim check K1-8, `.reports/U10/ccK1/68-series2-omp.json`).
-- The usage-statistics chart never has data on a fleet (no log
-  processing): with a chart chosen, every item page shows an empty
-  "Downloads" chart. All three apps, 2026-09-24 (U10 claim check K1-6).
+- No routine task processes the usage log on a fleet, so every Statistics
+  page, CSV download and item page's "Downloads" chart is empty unless a
+  scenario seeds figures with `usage[]` (scenarios.md). The item page's
+  chart then counts only file views dated on or after the work's first
+  publication date, so a work seeded as published today charts 0; seed
+  `datePublished` before the visit days. All three apps, 2026-09-27 (U10
+  claim check K1-6; U64 claim check K1, `c-work-chart-*`).
+- "All dates" on Statistics › "Articles" ("Monographs", "Preprints")
+  starts at the context's first publication, so on a scratch context
+  whose works were published today it shows none of the seeded past
+  visits and its "Download Articles" file has no rows; "All dates" on
+  "Journal" and "Issues" starts at 2001-01-01 and shows them. All three
+  apps, 2026-09-27 (U64 claim check K3, `k3-<app>.json`).
+- Statistics › "Counter R5" shows "There are no COUNTER R5 usage
+  statistics available yet." on every context of a fleet in its install
+  month and the next (earliest possible date the first of the next month,
+  last possible date the last day of the previous month), and every
+  "Download" is refused "The start date must be before the end date."
+  All three apps, 2026-09-27 (U64 claim check K4, `td4-page-*`,
+  `td4-pr-download-*`).
+- Administration › Site Settings › "Statistics" at install: "Do not
+  collect any geographical data", "Enable institutional statistics"
+  unticked, "Only track monthly statistics", "Leave the log files in
+  place", "Make the COUNTER SUSHI statistics publicly available",
+  "Platform" unticked, no Platform ID; Settings › Distribution ›
+  "Statistics" of `publicknowledge` and of a scratch context holds
+  "Public API" alone, ticked. All three apps, 2026-09-27 (U64 claim
+  check K5, `01-site-tab-defaults-*`).
 - {OJS} Settings › Website › Appearance › "Theme" "Journal Content
   Organization" shows "Include the current issue's table of contents"
   alone ticked on `publicknowledge` (issues seeded, "Theme" never saved)

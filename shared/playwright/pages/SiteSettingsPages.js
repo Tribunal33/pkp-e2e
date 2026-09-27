@@ -13,7 +13,8 @@
  * - SiteSettingsPage — Administration › "Site Settings": the heading, the
  *   top tabs and each one's side tabs, the editorial header's site name,
  *   and one form object per side tab this feature owns (`settings`,
- *   `security`, `information`, `bulkEmails`, `theme`, `appearanceSetup`).
+ *   `security`, `information`, `bulkEmails`, `theme`, `appearanceSetup`),
+ *   plus U64's `statistics` ("Site Setup" › "Statistics", SiteStatisticsForm).
  * - SiteForm — the shared base of those forms (U07's SettingsForm: "Save",
  *   "Saved", the red reasons, the error line with "Jump to next error", the
  *   rich-text boxes), saving through the site's own request.
@@ -210,6 +211,50 @@ class SiteBulkEmailsForm extends SiteForm {
     }
 }
 
+/**
+ * "Site Setup" › "Statistics" (U64): "Data Collection", "Data Storage",
+ * "Sushi Protocol". Radios and boxes answer their labels; "Platform ID" is
+ * in the DOM only while "Platform" is ticked. Words that differ per app
+ * (the "Platform" box's "…for all journals." / "presses." / "servers.")
+ * are matched by their shared start.
+ */
+class SiteStatisticsForm extends SiteForm {
+    constructor(page) {
+        super(page, 'input[name="enableGeoUsageStats"]');
+        this.groupHeadings = this.form.locator('.pkpFormGroup__heading [id$="_label"]');
+        this.institutionalBox = this.form.getByRole('checkbox', {name: 'Enable institutional statistics', exact: true});
+        this.platformBox = this.form.getByRole('checkbox', {name: /^Use the site as the platform for all/});
+        this.platformId = this.form.locator('input[name="sushiPlatformID"]');
+        this.platformIdField = this.form.locator('.pkpFormField').filter({has: page.locator('input[name="sushiPlatformID"]')}).first();
+        this.platformIdError = this.platformIdField.locator('.pkpFieldError');
+        this.platformIdRequired = this.platformIdField.locator('.pkpFormFieldLabel__required');
+    }
+
+    /** A radio or box by its label. */
+    choice(label) {
+        return this.form.getByLabel(label, {exact: true});
+    }
+
+    /** The checked radio's label of a field (by its input name). */
+    async chosen(name) {
+        return this.form.locator(`input[name="${name}"]:checked`).evaluate((i) =>
+            (i.labels && i.labels[0] ? i.labels[0].textContent : '').replace(/\s+/g, ' ').trim()
+        );
+    }
+
+    /** The error summary's "Go to {label}: …" entry of a field. */
+    goToField(label) {
+        return this.errorSummary.getByRole('button', {name: new RegExp(`^Go to ${label}`)});
+    }
+
+    /** Press "Save" for a refusal by the server: its answer, once the reason shows under "Platform ID". */
+    async saveRefused(message) {
+        const response = await this.pressSave();
+        await expect(this.platformIdError).toHaveText(message, {timeout: T});
+        return response;
+    }
+}
+
 /** "Appearance" › "Theme" (U10's ThemeForm, saving to the site's theme request). */
 class SiteThemeForm extends ThemeForm {
     constructor(page) {
@@ -379,6 +424,15 @@ class SiteSettingsPage extends BasePage {
         return form;
     }
 
+    /** "Site Setup" › "Statistics" (U64), its form ready. */
+    async statistics() {
+        await this.open('Site Setup', 'Statistics');
+        const form = new SiteStatisticsForm(this.page);
+        await form.ready();
+        await expect(form.saveButton).toBeVisible({timeout: T});
+        return form;
+    }
+
     /** "Appearance" › "Theme", its form ready. */
     async theme() {
         await this.open('Appearance', 'Theme');
@@ -510,6 +564,7 @@ module.exports = {
     SiteSecurityForm,
     SiteInfoForm,
     SiteBulkEmailsForm,
+    SiteStatisticsForm,
     SiteThemeForm,
     SiteAppearanceSetupForm,
     SitePublicPage,

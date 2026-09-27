@@ -241,6 +241,14 @@
  *   before a publish. The OJS overlay (APP\testing\SubmissionScenarioBuilder)
  *   owns it; this core refuses the key and runs the overlay's step.
  *
+ * - usage[] (U64): reader visits of past days to the published version,
+ *   each entry {daysAgo | date, abstractViews?, fileViews?, jatsViews? (OJS),
+ *   country?, region?, city?}; fileViews counts one entry per galleys[]
+ *   (publicationFormats[] on OMP) entry, in order. Written as the usage
+ *   event listener's log lines and turned into figures by the app's own
+ *   usage statistics jobs, last in the build (PKPUsageStatsSeeder; the
+ *   app's UsageStatsSeeder owns the app's line fields and OJS jatsViews).
+ *
  * The workflow start stage comes from each app's submission schema default —
  * never hard-coded here (a hard-coded initial stage once made every seeded
  * OPS submission invisible; PRINCIPLES D5).
@@ -627,6 +635,13 @@ abstract class PKPSubmissionScenarioBuilder
         $publicationPagesPlan = $this->parsePublicationPages($context, $root, $locale, $submitted);
         $jatsPlan = $this->parseJats($context, $root, $submitted);
         $libraryFilePlans = LibraryFileSeeder::parse($root, false);
+        // usage[] (U64): reader visits of past days, after the galleys and
+        // formats it counts (one fileViews count per entry, in order).
+        $usageSeeder = new \APP\testing\UsageStatsSeeder($context);
+        $usagePlans = $usageSeeder->parseWorkUsage($root, $published, array_merge(
+            array_map(fn (array $plan) => $plan['path'] !== null, $galleyPlans),
+            array_map(fn (array $plan) => $plan['fixture'] !== null, $formatPlans)
+        ));
         if ($libraryFilePlans !== [] && !$submitted) {
             throw new SpecException('libraryFiles', 'A draft has no workflow and no "Library" button: libraryFiles needs submitted: true');
         }
@@ -645,7 +660,7 @@ abstract class PKPSubmissionScenarioBuilder
         // submission's context for the duration of the build.
         $restoreRouterContext = ContextFactory::forceRequestContext($context);
         try {
-            return $this->execute($root, $context, $locale, $tag, $submitter, $title, $abstract, $submitted, $published, $submissionProps, $publicationProps, $decisionTypes, $roundPlans, $publishOverlayPlan, $authorPlan, $participantPlans, $suggestionPlans, $commentPlans, $galleyPlans, $filePlans, $taskPlans, $libraryFilePlans, $citationsRaw, $dataCitationPlans, $mediaFilePlans, $formatPlans, $publicationPagesPlan, $jatsPlan);
+            return $this->execute($root, $context, $locale, $tag, $submitter, $title, $abstract, $submitted, $published, $submissionProps, $publicationProps, $decisionTypes, $roundPlans, $publishOverlayPlan, $authorPlan, $participantPlans, $suggestionPlans, $commentPlans, $galleyPlans, $filePlans, $taskPlans, $libraryFilePlans, $citationsRaw, $dataCitationPlans, $mediaFilePlans, $formatPlans, $publicationPagesPlan, $jatsPlan, $usageSeeder, $usagePlans);
         } finally {
             $restoreRouterContext();
         }
@@ -679,7 +694,9 @@ abstract class PKPSubmissionScenarioBuilder
         array $mediaFilePlans = [],
         array $formatPlans = [],
         ?array $publicationPagesPlan = null,
-        ?array $jatsPlan = null
+        ?array $jatsPlan = null,
+        ?PKPUsageStatsSeeder $usageSeeder = null,
+        array $usagePlans = []
     ): array {
         $request = Application::get()->getRequest();
         $seededSuggestions = [];
@@ -1046,6 +1063,14 @@ abstract class PKPSubmissionScenarioBuilder
         // "Save" by its creator on the submission as built.
         if ($taskPlans !== []) {
             $seededTasks = $this->seedTasks(Repo::submission()->get($submissionId), $taskPlans);
+        }
+
+        // Reader visits of past days (U64), last: the published version as
+        // built, its galleys' or formats' files, through the app's own
+        // usage statistics jobs (PKPUsageStatsSeeder).
+        if ($usagePlans !== []) {
+            $usageSeeder->addWorkUsage($usagePlans, Repo::submission()->get($submissionId), array_merge($seededGalleys, $seededFormats));
+            $usageSeeder->load();
         }
 
         // ---- Response.

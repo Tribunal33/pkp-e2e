@@ -83,9 +83,14 @@ class PkpApi {
     /**
      * Set the site's own settings, as Administration › Site Settings saves
      * them (scenarios.md "POST site"). Site-wide: serial project only, and
-     * the test puts back what it changed (`{title: ''}` is the install state).
+     * the test puts back what it changed (`{title: ''}` is the install state;
+     * the "Statistics" keys' install values are `enableGeoUsageStats:
+     * 'disabled'`, `enableInstitutionUsageStats: false`, `isSushiApiPublic:
+     * true`; `counterR5StartDate: null`, no row, is the install state;
+     * "Platform" and "Platform ID" go back with `isSiteSushiPlatform: false,
+     * sushiPlatformID: null`).
      *
-     * @param {object} spec {title}
+     * @param {object} spec {title?, enableGeoUsageStats?, enableInstitutionUsageStats?, isSushiApiPublic?, isSiteSushiPlatform?, sushiPlatformID?, counterR5StartDate?}
      */
     async setSite(spec) {
         return this._post(`${API_BASE}/site`, spec);
