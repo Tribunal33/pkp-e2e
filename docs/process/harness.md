@@ -174,7 +174,9 @@ Two facts worth knowing before you write a test:
   `tools/installTest.php` and seeds. The serial project runs after everything
   else and holds only globally-scanning specs and queue drains; it uses up to
   four workers, since its specs seed their own scratch contexts and
-  `runJobs()` waits until the shared queue is empty, reserved jobs included.
+  `runJobs()` waits until the shared queue is empty, reserved jobs included
+  (the U61 testing queue, `queuedTestJob`, which no drain runs, left out:
+  scenarios.md "POST scenarios/job").
   A test that asserts "still nothing, until the jobs run" cannot share the
   queue with other tests' drains: it carries `@solo` in its title and runs
   alone in the solo project, last.

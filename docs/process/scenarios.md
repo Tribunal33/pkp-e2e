@@ -13,8 +13,8 @@ variable of the PHP server. Without the variable the whole namespace answers
 404. With a wrong header it answers 403. See `harness.md` for the variable
 and for `bin/mount.js`, which copies the PHP code into the app checkouts.
 
-Every mutating request runs inside one database transaction and under a
-mail fake. A failed build rolls back, so it never leaves half-created
+Every mutating request but `scenarios/job` and `scenarios/task` (below)
+runs inside one database transaction and under a mail fake. A failed build rolls back, so it never leaves half-created
 state, with one exception seen: a `scenarios/context` request refused on
 `sidebar` (a 400) left its context behind on all three apps, path taken
 (U18 claim check K1, K3, 2026-09-26), so a retry takes a new path. Mail sent while seeding is dropped, but each mailable is still built
@@ -1493,8 +1493,10 @@ Keys:
   header's "Create New Version", which copies them (U47 Rule 9). A reader
   fact for the published side: the HTML galley plugin serves a reader who
   is not signed in a copy of the galley's page cached for 24 hours under
-  the galley's id, built at the first such view and dropped by nothing
-  but `reset:<app>` (not by a media change), which since 2026-09-24
+  the galley's id, built at the first such view and dropped only by
+  Administration › "Delete Data Caches" (rebuilt at the next signed-out
+  view; OJS, 2026-09-27, `.reports/U61/cc-K2.md`) or `reset:<app>` (not
+  by a media change); `reset:<app>` since 2026-09-24
   clears the app's Laravel store under `checkouts/<app>/cache/` (before
   that a new galley could inherit an old install's cached page with the
   images unresolved); a signed-in reader always gets a fresh page (U47
@@ -1819,6 +1821,88 @@ Facts a suite meets:
   reads the site row under the same lock as the context scenario's
   `bulkEmails`, so the two never write each other's value out (four of
   each at once over two servers, U60 harness).
+
+## `POST scenarios/job`
+
+One job of the test's own on Administration › "View Jobs" or "View Failed
+Jobs" (U61). The client is `pkpApi.createJob(spec)`. The job is lib/pkp's
+own queue smoke-test job, `PKP\jobs\testJobs\TestJobFailure`, which waits
+on its own queue, `queuedTestJob`, and fails for good on its one try. Its
+two states are the two steps of the app's own smoke test:
+
+- `state` (required): `'queued'` is `php lib/pkp/tools/jobs.php test
+  --only=failed`, the job dispatched and left waiting; `'failed'` is that
+  step, then `jobs.php run --test` for that one job: the app's queue
+  worker reserves it, runs it and fails it, and the app stores the failed
+  job. Any other value, or any other key, is a 400.
+
+The response is `{state, id, uuid, queue, connection, displayName}`. `id`
+is the number in the page's "ID" column: the waiting job's on Jobs, the
+failed job's on Failed Jobs, where the "Details" page's address ends in it
+(`index/admin/failedJobDetails/{id}`). The two pages then show the row the
+command line's job shows, cell for cell: "Job"
+`PKP\jobs\testJobs\TestJobFailure`, "Queue" `queuedTestJob`, "Attempts"
+`0` or "Connection" `database`, and the Details page's payload and error
+("Test failure job") the same (U61 harness, three apps).
+
+Facts a suite meets:
+
+- No drain runs the testing queue: the fleets' job runner is off,
+  `runJobs()` runs the default queue only, and `GET _test/jobs`, the count
+  `runJobs()` waits on, leaves `queuedTestJob` out. A waiting test job
+  (seeded, or put back by "Try Again" or "Requeue All Failed Jobs") stays
+  on the Jobs page for good and never holds up another suite's drain.
+- The Jobs and Failed Jobs pages list every job of the install (all
+  tests, all workers), 50 to a page in no set order. A test finds its row
+  by the returned `id`, never by position or by a total.
+- "Requeue All Failed Jobs" puts back every failed job of the fleet,
+  other suites' included (a deposit that failed on the dead proxy goes
+  back on the default queue, and a later `runJobs()` fails it again). A
+  test that presses it, or reads an empty Failed Jobs page, runs in the
+  serial project with `@solo`.
+- A key call does not wait for a runner and needs none: the builder runs
+  outside the seeding transaction and mail fake (the queue inserts a job
+  only after a transaction commits), and a failed build deletes its job.
+
+## `POST scenarios/task`
+
+One run of a routine ("scheduled") task that ends in error, with its log
+file and its report email (U61). The client is `pkpApi.runTask(spec)`.
+The task is lib/pkp's `PKP\task\UpdateIPGeoDB`, "Update DB-IP city lite
+database", registered in all three apps. It ends in error at its first
+step on every test install, because its download goes through the dead
+local proxy (`harness.md`), and it writes nothing but its log. The run is
+the one `php lib/pkp/tools/scheduler.php test
+--name='PKP\task\UpdateIPGeoDB'` makes.
+
+- `result` (required): `'error'`. Any other value, or any other key, is
+  a 400 (a run that ends well sends no email under the install default).
+
+The response is `{result, task, name, processId, logFile}`. Unlike every
+other key, the email is sent for real, so it reaches Mailpit: to and from
+the site's principal contact (`admin@mail.test`, named after the
+application, "Open Journal Systems"), subject
+"Update DB-IP city lite database - {processId} - Error", body "Your Open
+Journal Systems installation automatically executed and finished this task
+and you can download the log file here: {link}" (a press and a preprint
+server name their own application). The link is
+`…/index.php/index/en/admin/downloadScheduledTaskLogFile?file={logFile}`
+on the server the seed request went to (a suite's own worker server); the
+command line's run names the config's `base_url` there instead. Opened as
+`admin` it downloads the log file, four lines: the base URL, "Task process
+started.", the cURL error for the db-ip.com address, "Task process
+stopped." (U61 harness, three apps, equal to the command line's run).
+
+Facts a suite meets:
+
+- The report goes to the site's principal contact, the same address for
+  every test and fleet, so a test finds its email by the `processId` in
+  the subject (`mail.find({to: 'admin@mail.test', subject: processId})`),
+  never by recipient alone (PRINCIPLES A8).
+- The log files live in `{files_dir}/scheduledTaskLogs`, which
+  Administration › "Delete Task Logs" empties for every test at once: a
+  test that presses it runs in the serial project with `@solo`, which
+  runs alone, after every test that reads a log link.
 
 ## The base context has plain defaults
 

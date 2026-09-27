@@ -255,7 +255,10 @@ behind a line; that scratch is deleted after review.
 - Security audit logging is off: `[logs] log_audit` is commented out in
   the test configuration, as in `config.TEMPLATE.inc.php`, so a site
   "Security" save writes no audit line. All three apps, 2026-09-26
-  (`.reports/U60/cc-K4.md`).
+  (`.reports/U60/cc-K4.md`). Administration › System Information shows
+  no row for `log_audit`, nor for `password_timeout`, which the test
+  configuration also leaves commented out as the template does. All three
+  apps, 2026-09-27 (U61 claim check K4, `.reports/U61/cc-K4.md` K4-3).
 - `plugins/themes/` holds only `default`, so the site's "Theme" list offers
   "Default Theme" alone; at the install state the tab shows Noto Sans and
   `#1E6292` (OJS also "Include the current issue's table of contents"
@@ -288,6 +291,10 @@ behind a line; that scratch is deleted after review.
   runs until a test drains the queue. No screen switches it. Effects seen:
   a republished article stays "No Results" until the queue ran, 2026-09-02
   (U15 Side effects); review reminders cannot fire, 2026-08-02 (U27).
+  Administration › System Information, section "queues", shows an Off
+  line as an empty value and an On line as "1" (`job_runner` empty,
+  `job_runner_cross_request_lock` 1). All three apps, 2026-09-27 (U61
+  claim check K3, `.reports/U61/cc-K3.md` K3-5).
   Seeded published articles likewise reach the search index only when the
   queued jobs run: the Search page answers "No Results" for a seeded title
   until then. OJS, 2026-09-25 (U51 claim check K2, `sr-visitor-01-search`
@@ -300,7 +307,10 @@ behind a line; that scratch is deleted after review.
   "Submitted", never "Error"; every "Export DOIs" answers 400 "An XML
   validation error occurred and the XML could not be exported." because
   the agency's XML schema is fetched through the same proxy (OJS Crossref
-  and DataCite, OPS Crossref, 2026-09-26, U45 claim check K5). Maintainer ruling 2026-08-20; harness.md
+  and DataCite, OPS Crossref, 2026-09-26, U45 claim check K5); and
+  Administration › System Information › "Check for updates", which
+  answers a server error (500) with an empty page (all three apps,
+  2026-09-27, U61 claim check K1). Maintainer ruling 2026-08-20; harness.md
   "config.test.inc.php".
 - The public files directory is `public_files_dir = public`, relative to
   the app root as the config template requires (generated since

@@ -599,3 +599,12 @@ until their specs exist. Do not force-claim the defects themselves.
     `1ad4a14bb2`, ui-library `03d1cee2`). Resolves: maintainer
     confirmation as dead code (removal candidates), author-response DOIs
     as pre-release machinery.
+40. **Dangling Administration `saveSettings` op** — attached to **U61**
+    (ROUTE-003; claimed; the System administration spec's Reference
+    table lists the live ops). `lib/pkp/pages/admin/index.php` routes op
+    `saveSettings` to `AdminHandler`, which has no such method and does
+    not list it among its role assignments; no template or script links
+    it, and lib/pkp's history of `AdminHandler.php` never had the
+    method. Code-verified 2026-09-26 (U61 spec author; checkouts ojs
+    `3162c105bf`, lib/pkp `1ad4a14bb2`). Resolves: maintainer
+    confirmation as dead code (removal candidate).

@@ -21,10 +21,14 @@
  * - POST scenarios/context     — scratch context
  * - POST scenarios/submission  — submission at a declared end-state
  * - POST site                  — the site's own settings (SiteSettingsSeeder)
+ * - POST scenarios/job         — a queued or failed test job (JobScenarioBuilder)
+ * - POST scenarios/task        — a routine task run that ends in error, its
+ *                                report email sent for real (TaskRunScenarioBuilder)
+ * - GET  jobs                  — the queue's size a runJobs() drain waits on
  *
- * Every mutating request runs under Mail::fake() (seeding-side email is
- * dropped; only test-action mail reaches Mailpit) and inside a DB
- * transaction: a failed build rolls back rather than leaving half-created
+ * Every mutating request but scenarios/job and scenarios/task runs under
+ * Mail::fake() (seeding-side email is dropped; only test-action mail reaches
+ * Mailpit) and inside a DB transaction: a failed build rolls back rather than leaving half-created
  * state (design record 4). The acting user is the installer's admin, which is
  * why scratch contexts count admin among their managers (parity fact).
  */
@@ -44,11 +48,13 @@ use PKP\core\PKPRequest;
 use PKP\core\Registry;
 use PKP\security\authorization\PublicAccessPolicy;
 use PKP\security\Validation;
+use PKP\testing\JobScenarioBuilder;
 use PKP\testing\PKPBootstrapSeeder;
 use PKP\testing\PKPContextScenarioBuilder;
 use PKP\testing\PKPSubmissionScenarioBuilder;
 use PKP\testing\SiteSettingsSeeder;
 use PKP\testing\SpecException;
+use PKP\testing\TaskRunScenarioBuilder;
 
 abstract class PKPTestController extends PKPBaseController
 {
@@ -82,6 +88,8 @@ abstract class PKPTestController extends PKPBaseController
         Route::post('scenarios/context', $this->contextScenario(...))->name('_test.scenarios.context');
         Route::post('scenarios/submission', $this->submissionScenario(...))->name('_test.scenarios.submission');
         Route::post('site', $this->siteSettings(...))->name('_test.site');
+        Route::post('scenarios/job', $this->jobScenario(...))->name('_test.scenarios.job');
+        Route::post('scenarios/task', $this->taskScenario(...))->name('_test.scenarios.task');
     }
 
     /**
@@ -197,47 +205,81 @@ abstract class PKPTestController extends PKPBaseController
     }
 
     /**
+     * A job of the test's own on the Jobs or Failed Jobs page (U61). Outside
+     * the transaction (the database queue inserts after commit) and with no
+     * mail fake (the test job sends none).
+     */
+    public function jobScenario(Request $illuminateRequest): JsonResponse
+    {
+        return $this->runBuilder(fn () => (new JobScenarioBuilder())->build((array) $illuminateRequest->json()->all()), false, false);
+    }
+
+    /**
+     * A routine task run that ends in error (U61): its report email is the
+     * state, so it is sent for real; the task writes no database row.
+     */
+    public function taskScenario(Request $illuminateRequest): JsonResponse
+    {
+        return $this->runBuilder(fn () => (new TaskRunScenarioBuilder())->build((array) $illuminateRequest->json()->all()), false, false);
+    }
+
+    /**
      * GET jobs — the queue's size, reserved jobs included (the jobs tool's
      * "total" and "list" count unreserved jobs only). A serial test's drain
      * waits on this until the queue is empty, so a job another worker's
      * runner is still executing cannot be looked for before it lands.
+     * The testing queue is left out: the drain (`jobs.php run`) never runs
+     * it, and a U61 test job waits there for good (scenarios/job, or a
+     * failed one put back by "Try Again" or "Requeue All Failed Jobs").
      */
     public function jobs(): JsonResponse
     {
+        $drained = fn () => DB::table('jobs')->where('queue', '<>', JobScenarioBuilder::testingQueue());
         return response()->json([
             // Only jobs a drain would run now: a job released with a retry
             // delay (available_at in the future) is not waited for.
-            'queued' => DB::table('jobs')->whereNull('reserved_at')->where('available_at', '<=', time())->count(),
-            'reserved' => DB::table('jobs')->whereNotNull('reserved_at')->count(),
+            'queued' => $drained()->whereNull('reserved_at')->where('available_at', '<=', time())->count(),
+            'reserved' => $drained()->whereNotNull('reserved_at')->count(),
         ], 200);
     }
 
     /**
      * Shared builder harness: Mail::fake, admin as acting user, one DB
-     * transaction. SpecException → 400 with the dotted specKey; anything
-     * else → 500 with the exception summary.
+     * transaction (the job and task builders opt out of the fake and the
+     * transaction, and own their failure hygiene). SpecException → 400 with
+     * the dotted specKey; anything else → 500 with the exception summary.
      */
-    protected function runBuilder(callable $build): JsonResponse
+    protected function runBuilder(callable $build, bool $transaction = true, bool $fakeMail = true): JsonResponse
     {
-        $this->fakeMail();
+        if ($fakeMail) {
+            $this->fakeMail();
+        }
         $admin = Repo::user()->getByUsername('admin', true);
         if ($admin) {
             Registry::set('user', $admin);
         }
 
-        DB::beginTransaction();
+        if ($transaction) {
+            DB::beginTransaction();
+        }
         try {
             $result = $build();
-            DB::commit();
+            if ($transaction) {
+                DB::commit();
+            }
             return response()->json($result, 200);
         } catch (SpecException $e) {
-            DB::rollBack();
+            if ($transaction) {
+                DB::rollBack();
+            }
             return response()->json([
                 'error' => $e->getMessage(),
                 'specKey' => $e->specKey,
             ], 400);
         } catch (\Throwable $e) {
-            DB::rollBack();
+            if ($transaction) {
+                DB::rollBack();
+            }
             return response()->json([
                 'error' => get_class($e) . ': ' . $e->getMessage(),
                 'file' => basename($e->getFile()) . ':' . $e->getLine(),

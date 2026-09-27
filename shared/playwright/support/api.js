@@ -91,6 +91,29 @@ class PkpApi {
         return this._post(`${API_BASE}/site`, spec);
     }
 
+    /**
+     * A job of the test's own on Administration's Jobs or Failed Jobs page:
+     * lib/pkp's TestJobFailure on the testing queue, which no drain runs
+     * (scenarios.md "POST scenarios/job"). @returns {state, id, uuid, queue,
+     * connection, displayName}; `id` is the page's "ID".
+     *
+     * @param {{state: 'queued'|'failed'}} spec
+     */
+    async createJob(spec) {
+        return this._post(`${API_BASE}/scenarios/job`, spec);
+    }
+
+    /**
+     * A routine task run that ends in error, its report email sent to the
+     * site's principal contact (scenarios.md "POST scenarios/task").
+     * @returns {result, task, name, processId, logFile}
+     *
+     * @param {{result: 'error'}} spec
+     */
+    async runTask(spec) {
+        return this._post(`${API_BASE}/scenarios/task`, spec);
+    }
+
     async _post(url, data) {
         const response = await this.context.post(url, {
             data,
