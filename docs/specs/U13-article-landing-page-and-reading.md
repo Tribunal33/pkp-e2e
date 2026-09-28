@@ -608,7 +608,7 @@ notice above the title; that notice belongs to *Preprint relations*
 - **[Journal identity & about pages](U07-journal-identity-and-about-pages.md)**:
   the journal abbreviation some citation formats print; a journal closed
   to signed-out visitors.
-- *Monograph landing page* (no spec yet): the press's counterpart.
+- [Monograph landing page](U69-monograph-landing-page.md): the press's counterpart.
 - [DOIs](U45-dois.md): the DOI line and the Crossmark button.
 - [Sections](U17-sections.md), [Categories](U16-categories.md): the section pages and
   category pages that list articles.

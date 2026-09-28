@@ -536,6 +536,18 @@ Keys:
   context schema lacks (U48 harness, 2026-09-25), although their "Site
   Access Options" tab carries the same box under "View Monograph
   Content" and "View Preprint Content" (U48 claim check K2, 2026-09-25).
+- `restrictMonographAccess` (OMP only, boolean): the press's same box,
+  "View Monograph Content", "Users must be registered and log in to view
+  open access content.", saved as that form saves (stored as `1` /
+  `0`). As on a journal, the tab's "Save" posts all three boxes
+  (`restrictSiteAccess=false&restrictMonographAccess=true&disableUserReg=false`)
+  and so also writes the other two rows at their shown values; the key
+  writes this row alone. With it on, a signed-out visitor who presses a
+  free file's link on a published book lands on
+  `{press}/login?source=…catalog/view/…`, by screen and by seed alike;
+  the book's page itself stays open. A non-boolean is a 400; OJS and OPS
+  answer 400 (U69 harness, 2026-09-28). The preprint server's box ("View
+  Preprint Content") has no key.
 - `publishingMode` (OJS only): the "Publishing Mode" radio of Settings ›
   Distribution › "Access", one of `open` ("The journal will provide open
   access to its contents."), `subscription` ("The journal will require
@@ -1771,6 +1783,51 @@ Keys:
   in the submission's language, `submissionFileId`, null with no
   `file`). OJS and OPS answer 400: a journal and a preprint server have
   galleys (`galleys[]`).
+  Per format, also (U69 harness, 2026-09-28, driven equal on screen):
+  - `physical: true`: the "Edit" tab's "Physical format" box ticked (the
+    "Publication Format" list stays on "Digital (on physical carrier)
+    (DA)").
+  - `urlRemote` (a string): "This format will be available at a separate
+    website." ticked and "URL of remotely-hosted content" typed; the
+    format holds no file, so `file`, `genre` and `price` beside it are a
+    400. It is approved and made available like any other; the book's
+    page lists it as a link reading the format's name that opens the
+    address in a new tab, and the Publication Formats row reads "This
+    item is remotely hosted.". Nothing checks the address's form.
+  - `price` (needs `file`; a string as typed, `"25"`, or a whole
+    number): the file row's terms link, "Direct Sales" with "Price"
+    typed, "Save" (`salesType=directSales&price=25`), instead of "Open
+    Access". The window's own check refuses what it refuses ("10.5",
+    "-5": a 400 with "A valid price is required."); `"0"` is saved as
+    "Direct Sales" at 0, as on screen. The link then reads "Direct
+    Sales", the window reopens on it with the price, and on a press with
+    `payments` the book page's link reads "25 Purchase {format} (25
+    USD)" (the price as typed). The file's Activity Log gains the one
+    "fileEdited" line of that save, as by hand.
+  - The format window's "Metadata" tab, right after the format's "OK":
+    `identificationCodes[]` `{type, value}` ("Product Identification" ›
+    "Add Code": "ONIX Code Type" by the label its list shows, such as
+    `"ISBN-13 (15)"`, and "Code Value"); `publicationDates[]` `{role,
+    date, dateFormat?}` ("Add publication date": "Role" by its label,
+    such as `"Publication date (01)"`, "Date" as typed, "Date Format" by
+    its label as the list shows it, which carries no code (`"YYYYMMDD"`,
+    `"YYYYMMDD (H)"`, `"YYYY"`; `"YYYYMMDD (00)"` is a 400), left on the
+    preselected "YYYYMMDD (H)" without the key);
+    `metadata` `{productComposition, height?, width?, thickness?,
+    weight?}` (the tab's "Save": "Product Composition" by its label, such
+    as `"Single-component retail product (00)"`, required as on the tab;
+    the sizes typed in the preselected units, mm and gr; every other
+    field as the tab shows it: "Available (20)", "Yes, returnable, full
+    copies only (Y)", "Canada (CA)"). A type or role the window would not
+    offer (unknown, or already used by the format; "DOI (06)" while the
+    press assigns DOIs) is a 400 listing what it offers; a date whose
+    length does not fit its format is the window's refusal. The
+    preselected date format is the Hijri one: a seeded or typed date left
+    on it shows on the book page as "2024-03-05" with "Hijri Calendar"
+    under it. On a published book an approved, available format with
+    such data gets its details block ("Details about the available
+    publication format: {format}", the code, the date, "Physical
+    Dimensions" "130mm x 200mm").
 - `jats` (OJS): the current publication's "JATS XML" page, `{file?,
   makePublic?}` (at least one), used the way the page is used, acting as
   `admin`, after the media files and before a publish. `file` is a
@@ -1925,9 +1982,20 @@ Keys:
   already been used and can not be used again.", the page's notice
   "Go to URL Path: …" (U70 harness, 2026-09-27). A test of that
   refusal seeds the first book with the path and types it on the
-  second. OMP answers 400 on every other key of this list (the cover on
-  the same page, the "Title & Abstract" and "Metadata" values), which no
-  parity drive has read there. On all three apps the placement is typed after the submit,
+  second. OMP also takes `subtitle`, `plainLanguageSummary` and
+  `keywords` (U69 harness, 2026-09-28): the press's "Title & Abstract"
+  and "Metadata" pages are the journal's (the same lib/pkp forms and
+  PUT; the screen posts `prefix[en]=&title[en]=…&subtitle[en]=…&abstract[en]=…&plainLanguageSummary[en]=<p>…</p>`
+  and `keywords[en][0][name]=…&type[en]=`), and the stored values, the
+  keyword entries, the two "metadata updated" lines and the reopened
+  pages equal a by-hand save. "Plain Language Summary" is on the page
+  only with the press's `metadata.plainLanguageSummary` on, which the
+  key does not read, as on a journal. On the book's page the subtitle
+  follows the title after a colon, the keywords read "Keywords: alpha,
+  beta gamma" and the summary sits under "Plain Language Summary". OMP
+  answers 400 on every other key of this list (the cover on the
+  "Catalog Entry" page, `subjects`, `disciplines`,
+  `supportingAgencies`), which no parity drive has read there. On all three apps the placement is typed after the submit,
   so it is a category added after arrival, after the submit's editor
   assignment has run. Right after a seed of two books `published` with
   `categories`, the press's category page reads "0 Titles"; the U16
@@ -2038,7 +2106,9 @@ App-specific keys:
     the "Files" boxes ticked: `files.N` (a root `files[]` entry, such as
     one of `genre: 'Chapter Manuscript'`) or `publicationFormats.N` (that
     format's proof file); a file names one chapter at most, as the
-    window offers a held file to no other chapter.
+    window offers a held file to no other chapter. On the book page a
+    format file a chapter holds is listed under that chapter in the table
+    of contents and left out of the side column's formats.
   - The window's other boxes are posted as it posts them: every language
     box, an untyped one empty; "Date Published" and "License URL" empty
     where shown and not given. So a seeded chapter has the same rows as

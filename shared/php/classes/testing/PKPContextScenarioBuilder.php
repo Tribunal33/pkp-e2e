@@ -119,6 +119,9 @@
  *   Options" › "View Article Content", "Users must be registered and log in
  *   to view open access content." (U48; the OJS UserAccessForm's box). The
  *   journal's context schema alone carries it: OMP and OPS answer 400.
+ * - restrictMonographAccess (bool) — the press's same box under "View
+ *   Monograph Content" (U69; the OMP UserAccessForm's). The press's context
+ *   schema alone carries it: OJS and OPS answer 400.
  * - publishingMode (open / subscription / none) — Settings › Distribution ›
  *   "Access", "Publishing Mode" (U50; the OJS AccessForm's radio). Journal
  *   only: OMP and OPS answer 400. Saved before the issues[] overlay, so a
@@ -2212,7 +2215,8 @@ abstract class PKPContextScenarioBuilder
      * the preprint server only, `postedAcknowledgement` (U49); and the
      * Website › Content › Comments tab's `enablePublicComments` (U14); and
      * the Users & Roles › Site Access Options tab's `restrictSiteAccess`
-     * (U13) and the journal's `restrictArticleAccess` (U48); and the
+     * (U13), the journal's `restrictArticleAccess` (U48) and the press's
+     * `restrictMonographAccess` (U69); and the
      * journal's Distribution › "Access" `publishingMode` (U50); and the
      * Metadata screen's "Categories" radios `submitWithCategories` and the
      * Website › Setup › Lists tab's `itemsPerPage` (U16). Only keys
@@ -2426,6 +2430,22 @@ abstract class PKPContextScenarioBuilder
             }
             $settings['restrictArticleAccess'] = $value;
             $specKeys['restrictArticleAccess'] = 'restrictArticleAccess';
+        }
+        if ($root->has('restrictMonographAccess')) {
+            // The press's counterpart (U69): Settings › Users & Roles ›
+            // "Site Access Options", the "View Monograph Content" box "Users
+            // must be registered and log in to view open access content."
+            // (the OMP UserAccessForm's FieldOptions over the press schema's
+            // nullable boolean), saved as the form saves it (stored 1 / 0).
+            // Only the press's context schema carries it: OJS and OPS
+            // answer 400.
+            $hasProperty('restrictMonographAccess') || throw new SpecException('restrictMonographAccess', 'restrictMonographAccess is not a setting of this app\'s context schema (the "View Monograph Content" box exists on a press only)');
+            $value = $root->get('restrictMonographAccess');
+            if (!is_bool($value)) {
+                throw new SpecException('restrictMonographAccess', 'restrictMonographAccess must be a boolean (true: "Users must be registered and log in to view open access content." ticked, false: unticked)');
+            }
+            $settings['restrictMonographAccess'] = $value;
+            $specKeys['restrictMonographAccess'] = 'restrictMonographAccess';
         }
 
         if ($root->has('publishingMode')) {

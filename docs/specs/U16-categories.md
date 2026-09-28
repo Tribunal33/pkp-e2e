@@ -442,7 +442,7 @@ cannot be reached by heading ⚠ [OMP3](#omp3). <sup>h</sup>
   and "Series".
 - [Sections](U17-sections.md): a preprint server's top-level category links
   on its home page and "Archives" page.
-- *Monograph landing page* (no spec yet): the category links on a book's
+- [Monograph landing page](U69-monograph-landing-page.md): the category links on a book's
   page.
 
 ## Canonical scenarios

@@ -25,7 +25,7 @@ nothing readers get [A10](#a10). Each format also carries catalog data
 for the book trade (identification codes such as the ISBN, trade dates,
 product details),
 kept in its window's "Metadata" tab. What readers then see and buy on
-the book's page belongs to *Monograph landing page* (no spec yet); the
+the book's page belongs to [Monograph landing page](U69-monograph-landing-page.md); the
 trade blocks only the ONIX feed reads ("Sales Rights", "Market
 Territories", representatives) belong to *ONIX metadata & export* (no
 spec yet). <sup>a</sup>
@@ -438,7 +438,7 @@ delete this item? This action cannot be undone." and "OK" and "Cancel"
   that also reads "Approved" shows its catalog block (identification
   codes, dates, identifiers) there. A format's URL Path replaces its
   number in its files' addresses. The page, the purchase and the
-  downloads are *Monograph landing page*'s (no spec yet). <sup>p</sup> <sup>td28</sup>
+  downloads are [Monograph landing page](U69-monograph-landing-page.md)'s. <sup>p</sup> <sup>td28</sup>
 - **The files readers are offered.** An "Open Access" file is a link
   reading the format's name that opens the file's view page. A "Direct
   Sales" file's link reads "{price} Purchase {format} ({price}
@@ -517,7 +517,7 @@ delete this item? This action cannot be undone." and "OK" and "Cancel"
   "Files" list, which offers format files too.
 - *[Usage statistics](U64-usage-statistics.md)*: downloads of format
   files.
-- *Monograph landing page* (no spec yet): the book's page, its format
+- [Monograph landing page](U69-monograph-landing-page.md): the book's page, its format
   list, the downloads and the purchase of a "Direct Sales" file.
 - *ONIX metadata & export* (no spec yet): the "Sales Rights" and "Market
   Territories" lists of the "Metadata" tab, the representatives, and the
@@ -1687,7 +1687,7 @@ and the withdrawn availability log `…_UNPUBLISH` and `…_UNAVAILABLE`
 (notes k, l). Live-probed 2026-09-28: notes td20, td27.
 
 <a id="fn-p"></a>
-**p** — Reader side (Monograph landing page, no spec yet):
+**p** — Reader side ([Monograph landing page](U69-monograph-landing-page.md)):
 `pages/catalog/CatalogBookHandler.php` lists formats with
 `getIsAvailable()`, remote ones among them; the files offered are format
 files whose `directSalesPrice` is not null, in an available format

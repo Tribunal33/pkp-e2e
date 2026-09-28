@@ -336,7 +336,7 @@ wizard on Review ⚠ [A5](#a5). <sup>h</sup>
 - *[DOIs](U45-dois.md)*: the DOI settings, with the "Chapters" box
   whose effect on chapters is Settings bullet 4 here, and the DOIs page's
   chapter rows.
-- *Monograph landing page* (no spec yet): the book's table of contents,
+- [Monograph landing page](U69-monograph-landing-page.md): the book's table of contents,
   chapter pages, chapter authors, dates and license badges as readers see
   them.
 - *[Search engine metadata & analytics](U20-search-engine-metadata-and-analytics.md)*:
@@ -741,7 +741,7 @@ Left out of the scenarios above, by reason:
     metadata](U40-publication-metadata.md#edit-gate)*)
   - chapter pages, the table of contents, chapter credits and an Edited
     Volume's "(ed)" credits as readers see them (Rules 1, 6, 8, 10, 11;
-    *Monograph landing page*, no spec yet)
+    [Monograph landing page](U69-monograph-landing-page.md))
 
 ## Findings register
 

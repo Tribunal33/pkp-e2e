@@ -393,7 +393,7 @@ the series as links under it (Rule 12). <sup>h</sup>
 - [Issues](U50-issues.md#archive) and [Sections](U17-sections.md#archives):
   a journal's archive and a preprint server's "Archives", the
   counterparts of the catalog.
-- *Monograph landing page* (no spec yet): the book's page the summaries
+- [Monograph landing page](U69-monograph-landing-page.md): the book's page the summaries
   open, and the series link on it.
 
 ## Canonical scenarios

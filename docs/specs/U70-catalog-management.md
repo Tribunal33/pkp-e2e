@@ -372,7 +372,7 @@ bottom; "Save" at the foot. <sup>h</sup>
 - [Catalog browse](U68-catalog-browse.md): the public catalog, "New Releases",
   category and series pages that show the flags, order and covers set
   here.
-- *Monograph landing page* (no spec yet): the page "View Entry" opens and
+- [Monograph landing page](U69-monograph-landing-page.md): the page "View Entry" opens and
   the address a URL Path sets.
 - [Chapters & work type](U72-chapters-work-type.md),
   [Publication formats & proof terms](U73-publication-formats-proof-terms.md): the version's other pages

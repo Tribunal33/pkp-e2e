@@ -218,7 +218,10 @@ behind a line; that scratch is deleted after review.
 - The Citation Style Language plugin is off on a scratch context, so its
   article, book and preprint pages show no "How to Cite" until a manager
   enables it on Settings › Website › "Plugins". All three apps, 2026-09-23
-  (U07 claim check K2, `.reports/U07/ccK2/x03b-plugins-csl-<app>`).
+  (U07 claim check K2, `.reports/U07/ccK2/x03b-plugins-csl-<app>`). On OMP
+  it is off on `publicknowledge` too, so the seeded press's books show no
+  "How to Cite" either. OMP, 2026-09-28 (U69 claim check K5,
+  `k-09-seeded-book-*`).
 - The password reset email is sent by the site (the application's name,
   `admin@mail.test` on the test installs), never by the journal's principal
   contact. All three apps, 2026-09-23 (U07 claim check K2).
@@ -998,7 +1001,10 @@ config-file settings.
   Assignment" is hidden on the manager level, on Reader and on OPS's
   Reviewer (a read inside its 600 ms hide animation shows it greyed). All
   three apps, 2026-09-26 (U54 ccK1 `k1-12-after-copyeditor-edit`,
-  `facts.cmps`; ccK2; ccK3).
+  `facts.cmps`; ccK2; ccK3). Eight of a new press's 19 roles are at
+  "Assistant": Copyeditor, Designer, Funding coordinator, Indexer, Layout
+  Editor, Marketing and sales coordinator, Proofreader and Editorial Board
+  Member. OMP, 2026-09-28 (U69 claim check K1).
 - The manager role's Roles row ("Journal manager", "Press manager",
   "Preprint Server manager") has no "Edit"; every other role's stages are
   the "Stage Assignment" boxes of its "Edit" form, and a role's last
@@ -1018,7 +1024,12 @@ config-file settings.
   for one uploaded and given terms on screen alike, signed out or signed in
   (the log: `CatalogBookHandler::$publication must not be accessed before
   initialization`). OMP, 2026-09-28 (U73 claim check K3 K3-8 and K4; earlier
-  U54 claim check K4 K4-6, K1 K1-13).
+  U54 claim check K4 K4-6, K1 K1-13). A non-PDF, non-HTML file's own link
+  (`catalog/view/…`), and a PDF or HTML link on a press with "PDF.js PDF
+  Viewer" or "HTML Monograph File" unticked, answers 500 with an empty
+  page; an HTML file's view page shows, its images included. OMP,
+  2026-09-28 (U69 claim check K4, `r1-f-15-other-pressed`,
+  `r1-o-03-pdf-pressed`, `r1-o-05-html-pressed`).
 - A reviewer seeded `reviewRounds[].reviewers[].status: 'completed'` is a
   submitted review ("Review Submitted"), not an editor-confirmed one: the
   "Minimum Confirmed Reviews Required" count of Settings › Workflow › Review
@@ -1053,6 +1064,15 @@ config-file settings.
   it answers, even when it then fails: never open it on
   `publicknowledge`. OJS and OMP, live-driven 2026-09-26/27
   (`.reports/U52/cc-K1.md`, `cc-K2.md`, `cc-K3.md` seed-facts sections).
+- {OMP} A new press's Settings › Distribution › "Payments" shows "Enable"
+  alone ("Payments will be enabled for this press. Note that users will be
+  required to log in to make payments."); "Currency", "Payment Plugins"
+  and the method's boxes appear while it is ticked and hide again when the
+  press saves it unticked. OMP, 2026-09-28 (U69 claim check K1, K4 K4-10).
+- {OJS} A journal seeded `publishingMode: 'subscription'` with
+  `payments.purchaseArticleFee` shows its galley links as "Requires
+  Subscription or Fee {label} ({currency} {fee})". Article page,
+  2026-09-28 (U69 claim check K1).
 - {OJS} On a fresh journal the "Payments" page's "Subscription Policies"
   tab has an empty contact, "Full expiry", its four lists at "Disabled"
   and every box unticked; the payment boxes are greyed with the "Note: To
@@ -1270,11 +1290,33 @@ config-file settings.
   files, so a seed whose `files[]` sit at the submission stage gives it an
   empty list; a format file comes from "Change File" (the upload wizard).
   Publication › Publication Formats, 2026-09-24 (U44 claim check K1).
-- {OMP} A publication format shows on the book page (its details block,
-  identifiers included) only once its row reads "Approved" and
-  "Available"; a format created on screen arrives "Awaiting Approval" and
-  "Not Available". Publication › Publication Formats, 2026-09-24 (U44
-  claim check K4, `.reports/U44/ccK4/extra-available-after-omp`).
+- {OMP} A publication format's files and remote link show on the book page
+  while its row reads "Available", approved or not; its details block
+  (codes, dates, identifiers, "Physical Dimensions") only while it reads
+  "Approved" too. A format created on screen arrives "Awaiting Approval"
+  and "Not Available". Book page and Publication › Publication Formats,
+  2026-09-28 (U69 claim check K3, `s-a3-visitor-both-awaiting`,
+  `a-q1-visitor-revoked`; earlier U44 claim check K4).
+- {OMP} Every publication format, seeded or made on screen, stores the
+  same order number, and the Publication Formats page offers no "Order",
+  so the page and the book page list formats in the order the database
+  returns them: a format whose approval, availability or details are
+  saved can move to the end. Read an order after the last change, never
+  from creation. 2026-09-28 (U69 claim check K3 K3-4).
+- {OMP} A book version with no date (every version right after "Create
+  New Version") prints as today's date on the book page: the date line
+  reads "{today} — Updated on …" and a draft's outdated notice "published
+  on {today}". Book page, 2026-09-28 (U69 claim check K2 K2-6, K2-7).
+- {OMP} A book address with a URL Path that is not the shown version's
+  own answers 500: an old path, and a path saved on an unpublished new
+  version. Book page, 2026-09-28 (U69 claim check K2 K2-2).
+- {OMP} An older version's chapter page opens only on a press with "DOI
+  Versioning" "Yes" (`doiVersioning: true`); on a new press (the default
+  "No") it answers 500. Chapter page, 2026-09-28 (U69 claim check K3
+  K3-7, K5).
+- {OMP} A book seeded with the Press manager as `submitter` has no
+  contributor (its Contributors page reads "No items found."), so its
+  "How to Cite" opens with the title. 2026-09-28 (U69 claim check K5).
 - {OMP} A book's first "Publish" (Production, on a publication page such
   as Catalog Entry; the stage view has no "Publish") confirms "…will be
   assigned … "Version of Record 1.0"" and offers no stage to choose. A

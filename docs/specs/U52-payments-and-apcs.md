@@ -35,7 +35,7 @@ Types" and no list of payments; its accept decisions have no "Request
 Payment" page and its workflow no "Payments" menu. A press does show
 Settings › Distribution › "Payments" with the same form and the same two
 methods, which serve its direct sale of publication formats
-(*Monograph landing page* {OMP}, no spec yet); the tab itself behaves
+([Monograph landing page](U69-monograph-landing-page.md) {OMP}); the tab itself behaves
 as Fields and Rules 1 and 2 say, and arrives with "Manual Fee Payment"
 already chosen [OMP1](#omp1).
 OPS does not install payments at all: a preprint server's Settings ›

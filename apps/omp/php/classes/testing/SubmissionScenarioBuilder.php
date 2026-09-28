@@ -15,7 +15,10 @@
  * rejected: a press has publication formats, not galleys; `publicationFormats`
  * (U47) is their counterpart here. Of the publication-page keys (U13) the
  * "Catalog Entry" page's `categories` (U16), `datePublished` (U17) and
- * `urlPath` (U70) are taken. `featured[]` / `newRelease[]` (U70): the
+ * `urlPath` (U70) are taken, and (U69) the "Title & Abstract" page's
+ * `subtitle` and `plainLanguageSummary` and the "Metadata" page's
+ * `keywords`. A format (U69) may be `physical`, remote (`urlRemote`), sold
+ * (`price`) and carry the "Metadata" tab's catalog data. `featured[]` / `newRelease[]` (U70): the
  * Catalog page's boxes, pressed after the publish.
  * `enableChapterPublicationDates` and `chapters[]` (U72): the "Marketing" ›
  * "Publication Dates" choice and the Chapters page's chapters, built on the
@@ -137,14 +140,130 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
             if ($spec->has('genre') && !$spec->has('file')) {
                 throw new SpecException("{$spec->path}.genre", 'genre is the component of the format\'s file: it needs file');
             }
+            // `physical` (U69): the "Edit" tab's "Physical format" box.
+            $physical = $spec->get('physical', false);
+            if (!is_bool($physical)) {
+                throw new SpecException("{$spec->path}.physical", 'physical is the "Physical format" box: a boolean');
+            }
+            // `urlRemote` (U69): "This format will be available at a
+            // separate website." ticked and "URL of remotely-hosted
+            // content" typed. A remote format holds no files (its row
+            // offers no "Change File"), so it takes no file, genre or price.
+            $urlRemote = null;
+            if ($spec->has('urlRemote')) {
+                $urlRemote = $spec->get('urlRemote');
+                if (!is_string($urlRemote) || trim($urlRemote) === '') {
+                    throw new SpecException("{$spec->path}.urlRemote", 'urlRemote is the "URL of remotely-hosted content" box: a non-empty string');
+                }
+                foreach (['file', 'genre', 'price'] as $key) {
+                    if ($spec->has($key)) {
+                        throw new SpecException("{$spec->path}.{$key}", "{$key} does not apply to a remote format (urlRemote): its row offers no \"Change File\", so it holds no file");
+                    }
+                }
+            }
+            // `price` (U69): the file row's "Set Terms", "Direct Sales" with
+            // the price typed, instead of "Open Access". Checked by the
+            // window's own form at execute (ApprovedProofForm's pattern).
+            $price = null;
+            if ($spec->has('price')) {
+                $price = $spec->get('price');
+                if (is_int($price)) {
+                    $price = (string) $price;
+                }
+                if (!$spec->has('file')) {
+                    throw new SpecException("{$spec->path}.price", 'price is the "Direct Sales" terms of the format\'s file: it needs file');
+                }
+                if (!is_string($price) || trim($price) === '') {
+                    throw new SpecException("{$spec->path}.price", 'price is the "Price" box of "Set Terms for Downloading": a string as typed ("25", "25.00") or a whole number');
+                }
+            }
             $plans[] = [
                 'path' => $spec->path,
                 'name' => $name,
                 'fixture' => $spec->has('file') ? $this->resolveFixture((string) $spec->get('file'), "{$spec->path}.file") : null,
                 'genreId' => $spec->has('genre') ? $this->resolveUploadGenreId($context, $spec) : null,
-            ];
+                'physical' => $physical,
+                'urlRemote' => $urlRemote,
+                'price' => $price,
+            ] + $this->parseFormatCatalogData($context, $spec);
         }
         return $plans;
+    }
+
+    /**
+     * A format's catalog data (U69), the format window's "Metadata" tab:
+     * - `identificationCodes[]` {type*, value*}: "Product Identification" ›
+     *   "Add Code", "ONIX Code Type" by the label its list shows ("ISBN-13
+     *   (15)") and "Code Value"; the list offers each type once per format
+     *   and no "DOI (06)" while the press assigns DOIs;
+     * - `publicationDates[]` {role*, date*, dateFormat?}: "Publication
+     *   Dates" › "Add publication date", "Role" and "Date Format" by their
+     *   list labels ("Publication date (01)"; the format left on the one
+     *   the window preselects), "Date" as typed; each role once per format;
+     * - `metadata` {productComposition*, height?, width?, thickness?,
+     *   weight?}: the tab's fields and "Save", "Product Composition" by its
+     *   label (required by the tab), the sizes in the preselected units
+     *   (mm, gr), every other field as the tab shows it.
+     * The windows' own checks (a date's length for its format) run at
+     * execute. Parse phase: no writes.
+     *
+     * @return array{codes: array, dates: array, metadata: ?array}
+     */
+    private function parseFormatCatalogData(Context $context, Spec $spec): array
+    {
+        $onix = \PKP\db\DAORegistry::getDAO('ONIXCodelistItemDAO'); /** @var \APP\codelist\ONIXCodelistItemDAO $onix */
+        $resolve = function (string $list, mixed $label, string $specPath, string $box, array $exclude = []) use ($onix): string {
+            $offered = $onix->getCodes($list, $exclude);
+            $code = is_string($label) ? array_search($label, $offered, true) : false;
+            if ($code === false) {
+                throw new SpecException($specPath, "The \"{$box}\" list offers no " . json_encode($label) . ' here; it offers: ' . implode(', ', $offered));
+            }
+            return (string) $code;
+        };
+
+        $codes = [];
+        foreach ($spec->has('identificationCodes') ? $spec->childList('identificationCodes') : [] as $codeSpec) {
+            $exclude = array_column($codes, 'code');
+            if ($context->areDoisEnabled()) {
+                $exclude[] = '06';
+            }
+            $value = $codeSpec->require('value');
+            if (!is_string($value) || trim($value) === '') {
+                throw new SpecException("{$codeSpec->path}.value", 'value is the "Code Value" box: a non-empty string');
+            }
+            $codes[] = ['code' => $resolve('5', $codeSpec->require('type'), "{$codeSpec->path}.type", 'ONIX Code Type', $exclude), 'value' => $value, 'path' => $codeSpec->path];
+        }
+
+        $dates = [];
+        foreach ($spec->has('publicationDates') ? $spec->childList('publicationDates') : [] as $dateSpec) {
+            $date = $dateSpec->require('date');
+            if (!is_string($date) || trim($date) === '') {
+                throw new SpecException("{$dateSpec->path}.date", 'date is the "Date" box: a non-empty string, as typed (20240305)');
+            }
+            $dates[] = [
+                'role' => $resolve('163', $dateSpec->require('role'), "{$dateSpec->path}.role", 'Role', array_column($dates, 'role')),
+                // The window preselects the list's "20" on a new date.
+                'dateFormat' => $dateSpec->has('dateFormat') ? $resolve('55', $dateSpec->get('dateFormat'), "{$dateSpec->path}.dateFormat", 'Date Format') : '20',
+                'date' => $date,
+                'path' => $dateSpec->path,
+            ];
+        }
+
+        $metadata = null;
+        if (($metaSpec = $spec->child('metadata')) !== null) {
+            $metadata = ['productCompositionCode' => $resolve('2', $metaSpec->require('productComposition'), "{$metaSpec->path}.productComposition", 'Product Composition'), 'path' => $metaSpec->path];
+            foreach (['height', 'width', 'thickness', 'weight'] as $key) {
+                $value = $metaSpec->get($key, '');
+                if (is_int($value)) {
+                    $value = (string) $value;
+                }
+                if (!is_string($value)) {
+                    throw new SpecException("{$metaSpec->path}.{$key}", "{$key} is a free-text box of \"Physical Dimensions\": a string or a whole number");
+                }
+                $metadata[$key] = $value;
+            }
+        }
+        return ['codes' => $codes, 'dates' => $dates, 'metadata' => $metadata];
     }
 
     /**
@@ -160,6 +279,12 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
      *    "Set Terms", "Open Access", "Save": ApprovedProofForm::execute
      *    (salesType openAccess, directSalesPrice 0). The file's own
      *    "Awaiting Approval" is left as it is, as the reader chain leaves it;
+     *    With `price` the terms are "Direct Sales" and the price typed
+     *    (U69, the form's own checks via FormPost). A `urlRemote` format
+     *    is saved with "This format will be available at a separate
+     *    website." ticked and gets no file; `physical` ticks "Physical
+     *    format"; the catalog data is the "Metadata" tab's
+     *    (seedFormatCatalogData), right after the format's "OK";
      * 3. the format row's "Awaiting Approval" › "OK": the grid's own
      *    PublicationFormatGridHandler::setApproved (the public-identifier
      *    assignment, isApproved, the Activity Log line, the tombstone).
@@ -179,12 +304,16 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
                 $form = new PublicationFormatForm($submission, null, $publication);
                 $form->setData('name', $plan['name']);
                 $form->setData('entryKey', 'DA');
-                $form->setData('isPhysicalFormat', null);
+                $form->setData('isPhysicalFormat', $plan['physical'] ? 'on' : null);
                 $form->setData('isbn10', '');
                 $form->setData('isbn13', '');
-                $form->setData('remoteURL', '');
+                $form->setData('remoteURL', $plan['urlRemote'] ?? '');
                 $form->setData('urlPath', '');
                 $formatId = (int) $form->execute();
+
+                // The format's "Edit" › "Metadata" tab (U69): each code and
+                // date window's "OK", then the tab's "Save".
+                $this->seedFormatCatalogData($submission, $publication, $formatId, $plan);
 
                 $submissionFileId = null;
                 if ($plan['fixture'] !== null) {
@@ -199,9 +328,22 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
                         $plan['genreId'] ?? $this->defaultGalleyGenreId($context)
                     );
                     $terms = new ApprovedProofForm($submission, Application::getRepresentationDAO()->getById($formatId), $submissionFileId);
-                    $terms->setData('salesType', 'openAccess');
-                    $terms->setData('price', '');
-                    $terms->execute();
+                    if ($plan['price'] !== null) {
+                        // "Direct Sales" with the price typed (U69), the
+                        // window's own readInputData, price check and save.
+                        FormPost::run($terms, [
+                            'submissionFileId' => (string) $submissionFileId,
+                            'submissionId' => (string) $submissionId,
+                            'representationId' => (string) $formatId,
+                            'publicationId' => (string) $publication->getId(),
+                            'salesType' => 'directSales',
+                            'price' => $plan['price'],
+                        ], "{$plan['path']}.price", 'The "Set Terms for Downloading" window would refuse this');
+                    } else {
+                        $terms->setData('salesType', 'openAccess');
+                        $terms->setData('price', '');
+                        $terms->execute();
+                    }
                 }
 
                 // The "Format Approval" window as the link opens it, then its
@@ -225,6 +367,66 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
             return $seeded;
         } finally {
             Registry::set('user', $previousActingUser);
+        }
+    }
+
+    /**
+     * The format window's "Metadata" tab (U69), run as its windows post:
+     * each "Add Code" window's "OK" (IdentificationCodeForm), each "Add
+     * publication date" window's "OK" (PublicationDateForm), then the tab's
+     * "Save" (PublicationFormatMetadataForm) with every field it shows at
+     * its shown value, the given ones typed. The forms' own checks run
+     * (FormPost); the handlers' success toasts do not.
+     */
+    private function seedFormatCatalogData(\APP\submission\Submission $submission, \APP\publication\Publication $publication, int $formatId, array $plan): void
+    {
+        $ids = [
+            'submissionId' => (string) $submission->getId(),
+            'publicationId' => (string) $publication->getId(),
+            'representationId' => (string) $formatId,
+        ];
+        foreach ($plan['codes'] as $code) {
+            FormPost::run(
+                new \APP\controllers\grid\catalogEntry\form\IdentificationCodeForm($submission, $publication, null),
+                $ids + ['identificationCodeId' => '', 'value' => $code['value'], 'code' => $code['code']],
+                $code['path'],
+                'The code window would refuse this'
+            );
+        }
+        foreach ($plan['dates'] as $date) {
+            FormPost::run(
+                new \APP\controllers\grid\catalogEntry\form\PublicationDateForm($submission, $publication, null),
+                $ids + ['publicationDateId' => '', 'date' => $date['date'], 'dateFormat' => $date['dateFormat'], 'role' => $date['role']],
+                $date['path'],
+                'The publication date window would refuse this'
+            );
+        }
+        if ($plan['metadata'] !== null) {
+            $format = Application::getRepresentationDAO()->getById($formatId);
+            $meta = $plan['metadata'];
+            FormPost::run(
+                new \APP\controllers\grid\catalogEntry\form\PublicationFormatMetadataForm($submission, $publication, $format),
+                $ids + [
+                    'productCompositionCode' => $meta['productCompositionCode'],
+                    'productFormDetailCode' => '',
+                    'productAvailabilityCode' => '20',
+                    'imprint' => '',
+                    'frontMatter' => '',
+                    'backMatter' => '',
+                    'returnableIndicatorCode' => 'Y',
+                    'height' => $meta['height'],
+                    'heightUnitCode' => 'mm',
+                    'width' => $meta['width'],
+                    'widthUnitCode' => 'mm',
+                    'thickness' => $meta['thickness'],
+                    'thicknessUnitCode' => 'mm',
+                    'weight' => $meta['weight'],
+                    'weightUnitCode' => 'gr',
+                    'countryManufactureCode' => 'CA',
+                ],
+                $meta['path'],
+                'The format window\'s "Metadata" tab would refuse this'
+            );
         }
     }
 
@@ -326,17 +528,28 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
      * and URL Path on the "Catalog Entry" page; its "Categories" field is
      * parity-checked (U16: the page's "Save" is the same PUT to the
      * publication, the core's third page), so `categories` is accepted, and
-     * so is its "Date Published" box (U17, `datePublished`, the same PUT).
+     * so is its "Date Published" box (U17, `datePublished`, the same PUT),
+     * its "URL Path" (U70) and, on the shared lib/pkp pages, "Subtitle",
+     * "Plain Language Summary" and "Keywords" (U69, driven equal).
      * The rest have no parity drive on a press and are refused, never
      * dropped (PRINCIPLES D4).
      */
     protected function assertPublicationPagesSupported(string $specKey): void
     {
-        if (in_array($specKey, ['categories', 'datePublished', 'urlPath'], true)) {
+        if (in_array($specKey, self::OMP_PUBLICATION_PAGE_KEYS, true)) {
             return;
         }
-        throw new SpecException($specKey, "\"{$specKey}\" is not built for OMP yet: the press's publication pages (\"Catalog Entry\" and its siblings) have no parity check for it; only \"categories\", \"datePublished\" and \"urlPath\" are built");
+        throw new SpecException($specKey, "\"{$specKey}\" is not built for OMP yet: the press's publication pages (\"Catalog Entry\" and its siblings) have no parity check for it; only " . implode(', ', self::OMP_PUBLICATION_PAGE_KEYS) . ' are built');
     }
+
+    /**
+     * The publication-page keys a press takes: the "Catalog Entry" page's
+     * `categories` (U16), `datePublished` (U17), `urlPath` (U70), and
+     * (U69) the "Title & Abstract" page's `subtitle` and
+     * `plainLanguageSummary` and the "Metadata" page's `keywords`, the same
+     * lib/pkp pages and PUT as on a journal.
+     */
+    public const OMP_PUBLICATION_PAGE_KEYS = ['categories', 'datePublished', 'urlPath', 'subtitle', 'plainLanguageSummary', 'keywords'];
 
     /** The Catalog page's lists a flag lives in, by the place word of `featured[]` / `newRelease[]`. */
     private const CATALOG_PLACES = ['catalog', 'category', 'series'];

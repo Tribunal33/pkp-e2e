@@ -415,7 +415,7 @@ windows are the galley row's "Edit" on the Galleys page (a window headed
 - [Plugins management](U62-plugins-management.md): owns the Plugins page,
   enabling and disabling. This spec owns the "URN" plugin's settings window.
 - [Article landing page & reading](U13-article-landing-page-and-reading.md),
-  *Monograph landing page* (no spec yet): own the reader pages. This spec owns
+  [Monograph landing page](U69-monograph-landing-page.md): own the reader pages. This spec owns
   the URN blocks on them (Rule 21).
 - [DOIs](U45-dois.md): DOIs, their settings and their registration.
 - [Import & export](U63-import-export.md) reads both identifiers,

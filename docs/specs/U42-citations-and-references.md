@@ -493,7 +493,7 @@ edit." and each participant's assignment, described by
 - *[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*:
   creating the version that receives the copies of Rule 26.
 - [Article landing page & reading](U13-article-landing-page-and-reading.md) and
-  *Monograph landing page* (no spec yet): the published page whose
+  [Monograph landing page](U69-monograph-landing-page.md): the published page whose
   "References" block Rule 27 describes.
 - [DOIs](U45-dois.md), [Import & export](U63-import-export.md),
   [JATS & Body Text](U48-jats-and-body-text.md): the

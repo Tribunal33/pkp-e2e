@@ -206,6 +206,9 @@
  *   (U47). The OMP overlay (APP\testing\SubmissionScenarioBuilder) owns
  *   it; this core refuses the key and runs the overlay's two steps: the
  *   format with its file before a publish, and its availability after.
+ *   U69 added `physical`, `urlRemote` (a remote format), `price` ("Direct
+ *   Sales" terms of the file) and the "Metadata" tab's
+ *   `identificationCodes[]`, `publicationDates[]` and `metadata`.
  * - subtitle, plainLanguageSummary, keywords / subjects / disciplines /
  *   supportingAgencies, coverImage {file*, altText?}, categories (paths),
  *   urlPath, OJS articleNumber — the version's own display values (U13),
