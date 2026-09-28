@@ -220,11 +220,11 @@ Top to bottom: <sup>j</sup>
    <sup>f</sup> <sup>q2</sup>
 3. **Nothing published, no page.** While an article has no published
    version (a scheduled article included), its address answers the "404
-   Not Found" page to a visitor and to a Reader, and so does the own
-   address of any version that is not published, whether not yet or no
-   longer (Rule 7b). A number or URL Path that
-   matches no article of the journal answers the same page. <sup>f</sup>
-   <sup>q3</sup> <sup>g</sup>
+   Not Found" page to a visitor and a Reader. So does the own address
+   of a version not yet published (a new version's "Preview" opens it,
+   Rule 4) or no longer published (Rule 7b), and a number or URL Path
+   matching no article of the journal. <sup>f</sup> <sup>q3</sup>
+   <sup>g</sup>
 4. **The preview.** An unpublished version's page opens for those
    Actors row 2 names under the notice "This is a preview and has not
    been published. View submission". It looks as it will once published,
@@ -255,26 +255,27 @@ Top to bottom: <sup>j</sup>
    "References" heading is the exception (Rule 18).
    <sup>c</sup> <sup>q6</sup>
 7. **The date line.** Under "Published" ("Posted"): the first
-   version's page, its date; a later version's, "{first version's
-   date} — Updated on {this version's date}". The first date is read
-   from every version of the article, published or not, so it can be
-   the date of a version that readers cannot open.
+   version's page, its date; a later version's, "{first date} —
+   Updated on {its own date}". The first date is the earliest of the
+   article's versions, published or not (Rule 7b); while a version is
+   prepared, its creation day (Rule 7a).
    <sup>g</sup> <sup>q5</sup>
-   - 7a. **A version being prepared.** Creating a new version already
-     rewrites both pages' lines: "{creation day} — Updated on {this
-     version's date}"
+   - 7a. **A version being prepared.** Creating it rewrites every
+     published version's line: versions of 2026-09-01 and 2026-09-24,
+     then one created 2026-09-25, give "Published 2026-09-25 — Updated
+     on 2026-09-24" on the current page and "Published 2026-09-25 —
+     Updated on 2026-09-01" on the first's
      ([→ Publish, schedule & versions, A6](U49-publish-schedule-and-versions.md#a6)).
    - 7b. **An unpublished first version.** The first version goes
      offline while a later one stays published by "Unpublish"
      ("Unpost") on that version, or on a journal by the issue's "Remove"
      on an article whose second version was published with "Don't Assign
-     To An Issue" ([→ Issues, A18](U50-issues.md#a18)). The page still
-     opens its line with the unpublished version's date. With a first
-     version published on 2024-03-01 and a second on 2026-09-28, it
-     reads "Published 2024-03-01 — Updated on 2026-09-28" ("Posted
-     2024-03-03 — Updated on 2026-09-28" for a preprint first posted on
-     2024-03-03). Yet "Versions" lists only "2026-09-28 (Version of
-     Record 1.1)" ("2026-09-28 (Author Original 1.1)"), and the first
+     To An Issue" ([→ Issues, A18](U50-issues.md#a18)). With versions
+     published 2024-03-01 and 2026-09-28, the page reads "Published
+     2024-03-01 — Updated on 2026-09-28" ("Posted 2024-03-03 — Updated
+     on 2026-09-28" for a preprint first posted 2024-03-03). Yet
+     "Versions" lists only "2026-09-28 (Version of Record 1.1)"
+     ("2026-09-28 (Author Original 1.1)"), and the first
      version's own address answers the "404 Not Found" page
      ⚠ [A12](#a12). <sup>g</sup>
 8. **The "Versions" list.** Every published version, the newest first,
@@ -1831,8 +1832,9 @@ the ID." (OPS).
 **q3** — Live-probed 2026-09-25 (Rules 3, 4; A5; OPS1), OJS and OPS:
 signed out, as the Reader and as a Reviewer (OJS), an unpublished
 article's address, a scheduled one's (OJS), a draft third version's own
-address, an unknown number, an unknown URL Path and another journal's
-article number each answered "404 Not Found" (OMP control: an
+address (the one its "Preview" opened for the Journal Manager), an
+unknown number, an unknown URL Path and another journal's article
+number each answered "404 Not Found" (OMP control: an
 unpublished book's address alike). The Journal Manager's "Preview"
 opened the page under "This is a preview and has not been published.
 View submission", with no "Published" line and no "Versions" list;
@@ -1878,8 +1880,12 @@ Live-probed 2026-09-25 (Rules 7–9), OJS and OPS: one version read
 "Versions" listed "2026-09-24 (Version of Record 1.1)" then "2026-09-01
 (Version of Record 1.0)" ("Author Original …" on the server), the shown
 one plain, the current one linked to the plain address and the older to
-its own; a draft third version was not listed, but its creation changed
-both pages' date lines (the versions spec's A6). The label line read
+its own; a draft third version created 2026-09-25 was not listed, but
+the current page's line then read "Published 2026-09-25 — Updated on
+2026-09-24" and the older one's "Published 2026-09-25 — Updated on
+2026-09-01" ("Posted 2026-09-25 — Updated on 2026-09-25" and "Posted
+2026-09-25 — Updated on 2026-09-01" on the server; the versions spec's
+A6). The label line read
 "Preprint / 2026-09-25 (Author Original 1.1)" on the current page and
 "Preprint / 2026-09-01 (Author Original 1.0)" on the older one.
 Live-probed 2026-09-28 (Rules 3, 7, 7b, 8; A12), OJS and OPS, two runs
