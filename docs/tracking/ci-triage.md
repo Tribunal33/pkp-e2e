@@ -652,14 +652,26 @@ trips.
   eight workers, beside U14 S5, and in its second OMP final, the only red
   of 350; green alone on both (`.reports/U10/final-run-ojs-attempt1.log`,
   `final-run-omp-attempt2.log`, `alone-ojs-reds.log`, `alone-omp-reds-2.log`). Again 2026-09-25 (U13 session, VM): OMP, beside U14 S5 in the OMP final on a reset database, green alone (`.reports/U13/final-run-omp.log`, `alone-omp-reds.log`). 2026-09-25: red in the same guard run beside U30 S4, green alone (`.reports/sync/s25/guard/ojs-reds-alone.log`). Again 2026-09-25 (U51 session, Mac, reset database, auto workers): OJS, beside U14 S5 in the OJS final, green alone (`.reports/U51/final-run-ojs.log`, `alone-ojs-reds.log`). Again 2026-09-27 (U62 session, Mac, reset database, auto workers): OJS, beside U14 S5 in the OJS final, green alone (`.reports/U62/final-run-ojs.log`, `alone-ojs-reds.log`). **On CI 2026-09-27**: push run 36322740739 at `948868b`, OMP shard 3/3 red on both attempts at line 898 (the reloaded panel's empty-state "Upload File" never shows; the job failed on it), OMP at `3cd59e9443`; the diagnostic read above is still owed. Again 2026-09-27 (U75 session, VM, reset database, auto workers): OJS, the only red of 581 in the OJS final at the same line (the reloaded panel's "Upload File" never shows), green alone (`.reports/U75/final-run-ojs.log`, `alone-ojs-U36S9.log`).
-- **Users & Roles "Email" dialog still open after "Send Email"** (U14 S5,
-  OJS, once: 2026-09-17, the VM's first U14 final at four workers,
-  `.reports/U14/final-run-ojs-attempt1.log`). The send request answered
-  and the dialog was still counted 30 s later (the test's positive mail
-  control, `UsersPage.sendEmail`); green in the second final the same day
-  (255 of 255) and in the file's own runs. Watch condition: a second
-  sighting; then the error context says whether the form re-rendered
-  with a refusal or the close never ran. **Tripped 2026-09-26**: red twice at OJS line 738 in the U14 diagnostician's repeated runs at four workers (`.reports/flake-s26/u14/`); the error-context read (re-rendered with a refusal, or the close never ran) is the next diagnosis. Again 2026-09-27 (U62 session, Mac, reset databases, auto workers): in all three finals, green alone on each (`.reports/U62/final-run-{ojs,omp,ops}.log`, `alone-<app>-reds.log`).
+- **Users & Roles "Email" dialog still open after "Send Email"** (U14 S5
+  on OJS, OMP and OPS, local finals only; sightings 2026-09-17 to
+  2026-09-27, `.reports/flake-s26/u14/`, `.reports/workers-8core/invalid-concurrent/run-ojs-w8.log`;
+  no CI sighting: every CI red of S5 is the Tasks-row class below).
+  **Fixed 2026-09-28** (`.reports/flake-s28/u14s5-email/diagnosis.md`):
+  the control mail's Body was typed while TinyMCE was still fetching its
+  content style sheets, whose arrival loads the empty start content over
+  the text; the server refused the empty Body (200, `"status": false`,
+  an `alert()`), so the window never closed. The shared
+  `EmailUserWindow.expectOpen()` now waits for the open form's own editor
+  to be `initialized` and `sendAndExpectSent()` fails on a refused send;
+  OJS `UsersPage.sendEmail` and the OMP and OPS `sendControlEmail` use it.
+  Lever `PLAYWRIGHT_HOLD_URL`/`PLAYWRIGHT_HOLD_MS` on the two style sheets:
+  red 12 of 12 before, 0 of 12 after; the U14 file green `--repeat-each 5`
+  at eight workers (65 + 40 + 40), U53 app and `@solo` green once. Rule in
+  patterns.md "UI realities" (the TinyMCE entry). Thirteen Vue-form
+  TinyMCE fills of the same shape with no sighting are listed in the
+  diagnosis's section 3. **Watch condition**: a send refused with "the
+  send was refused" from `sendAndExpectSent()`, or one of the thirteen
+  red at its fill.
 - **Tasks dialog missing the report's task row: an app defect, not a
   race** (U14 S5, S12, S13 on OJS, OMP and OPS; 29 first-attempt reds on
   CI in five weeks, red in nearly every local final since 2026-09-17,

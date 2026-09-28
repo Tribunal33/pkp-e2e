@@ -63,6 +63,7 @@
 const {expect} = require('@playwright/test');
 const {BasePage} = require('../../../../shared/playwright/pages/BasePage.js');
 const {waitForJQueryIdle} = require('../../../../shared/playwright/support/legacy.js');
+const {EmailUserWindow} = require('../../../../shared/playwright/pages/UsersManagementPages.js');
 
 /** The comment box's placeholder (its only name). */
 const BOX_PLACEHOLDER = 'What do you think about this publication? Type your comments here.';
@@ -1010,25 +1011,17 @@ exports.UsersPage = class UsersPage extends BasePage {
 
     /**
      * The row's "Email": fill the subject and the body and press "Send
-     * Email", bounded by the send POST. The mail then reaches the mail
-     * catcher within seconds (the suite's positive control for a silence).
+     * Email", through the shared `EmailUserWindow` (the Body typed only
+     * once its editor is initialised; the send's answer read as accepted),
+     * then the window closed. The mail then reaches the mail catcher
+     * within seconds (the suite's positive control for a silence).
      */
     async sendEmail(username, {subject, body}) {
         await this.openRowMenu(username);
         await this.menuItem('Email').click();
-        const dialog = this.page.getByRole('dialog', {name: 'Email', exact: true});
-        await expect(dialog.getByRole('button', {name: 'Send Email', exact: true})).toBeVisible({timeout: 30_000});
-        await dialog.getByRole('textbox', {name: /^Subject/}).fill(subject);
-        const editor = dialog.frameLocator('iframe').first().locator('body');
-        await expect(editor).toBeVisible({timeout: 30_000});
-        await editor.fill(body);
-        const sent = this.page.waitForResponse(
-            (r) => r.url().includes('send-email') && r.request().method() === 'POST' && r.ok(),
-            {timeout: 30_000}
-        );
-        await dialog.getByRole('button', {name: 'Send Email', exact: true}).click();
-        await sent;
-        await expect(dialog).toHaveCount(0, {timeout: 30_000});
+        const emailWindow = new EmailUserWindow(this.page);
+        await emailWindow.compose({subject, body});
+        await emailWindow.sendAndExpectSent();
     }
 
     /** The row's "Remove User", confirmed with the "Remove" dialog's "OK". */

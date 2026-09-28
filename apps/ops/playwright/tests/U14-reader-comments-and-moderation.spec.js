@@ -71,6 +71,7 @@ const {
 } = require('../pages/ReaderCommentsPages.js');
 const {TasksPanel} = require('../../../../shared/playwright/pages/NotificationsPages.js');
 const {ProfilePage} = require('../../../../shared/playwright/pages/ProfilePage.js');
+const {EmailUserWindow} = require('../../../../shared/playwright/pages/UsersManagementPages.js');
 const {disableMotion} = require('../../../../shared/playwright/support/motion.js');
 
 const ALL_TABS = ['All', 'Approved', 'Hidden/Needs Approval', 'Reported'];
@@ -206,7 +207,7 @@ async function expectNoModeratorRows(tasks) {
 /**
  * The mailbox control (footnote s5): as the Preprint Server Manager, Users & Roles ›
  * the user's row › "Email", a subject the test controls, "Send Email";
- * the POST answers OK and the message lands in Mailpit.
+ * the send is accepted, the window closes and the message lands in Mailpit.
  */
 async function sendControlEmail(page, pkpMail, contextPath, {username, email, subject}) {
     await page.goto(`/index.php/${contextPath}/management/settings/access`);
@@ -215,20 +216,11 @@ async function sendControlEmail(page, pkpMail, contextPath, {username, email, su
     const row = table.locator('tr').filter({hasText: username}).first();
     await row.locator('button').last().click();
     await page.getByRole('menuitem', {name: 'Email', exact: true}).click();
-    const dialog = page.getByRole('dialog', {name: 'Email'});
-    await expect(dialog).toBeVisible({timeout: 30_000});
-    await dialog.getByRole('textbox', {name: /^Subject/}).fill(subject);
-    const body = dialog.frameLocator('iframe').first().locator('body');
-    await body.click();
-    await body.fill(`Control message ${subject}.`);
-    const sent = page.waitForResponse(
-        (r) => r.request().method() === 'POST' && /user-grid\/send-email/.test(r.url()),
-        {timeout: 30_000}
-    );
-    await dialog.getByRole('button', {name: 'Send Email', exact: true}).click();
-    const response = await sent;
-    expect(response.ok(), `the control email answered ${response.status()}`).toBe(true);
-    await expect(dialog).toBeHidden({timeout: 30_000});
+    // The shared window types Body only once its editor is initialised and
+    // reads the send's answer as accepted (flake-s28 u14s5-email).
+    const emailWindow = new EmailUserWindow(page);
+    await emailWindow.compose({subject, body: `Control message ${subject}.`});
+    await emailWindow.sendAndExpectSent();
     await pkpMail.find({to: email, subject, timeoutMs: 30_000});
 }
 

@@ -14,10 +14,20 @@
  * later: the U30 S4 race, `.reports/flake-s26/u30/diagnosis.md`). CPU
  * throttling does not open those windows, since it slows the test's own
  * in-page reads as much as the frames. Off unless set; never in CI.
+ *
+ * `PLAYWRIGHT_HOLD_URL=<regex>` with `PLAYWRIGHT_HOLD_MS=<ms>` is the third:
+ * every request whose URL matches the regex is held that long before it
+ * goes out, in every context, which is the "hold one request the
+ * hypothesis names" lever without editing a test (TinyMCE's content
+ * stylesheets for the legacy-editor race of U14 S5,
+ * `.reports/flake-s28/u14s5-email/diagnosis.md`). Off unless both are set;
+ * never in CI.
  */
 
 const rate = Number(process.env.PLAYWRIGHT_CPU_THROTTLE || 0);
 const rafHoldMs = Number(process.env.PLAYWRIGHT_RAF_HOLD_MS || 0);
+const holdUrl = process.env.PLAYWRIGHT_HOLD_URL ? new RegExp(process.env.PLAYWRIGHT_HOLD_URL) : null;
+const holdMs = Number(process.env.PLAYWRIGHT_HOLD_MS || 0);
 
 /**
  * Throttle the CPU of every page (and popup) a BrowserContext opens.
@@ -26,6 +36,12 @@ const rafHoldMs = Number(process.env.PLAYWRIGHT_RAF_HOLD_MS || 0);
  * @param {import('@playwright/test').BrowserContext} context
  */
 async function throttleCpu(context) {
+    if (holdUrl && holdMs > 0) {
+        await context.route(holdUrl, async (route) => {
+            await new Promise((resolve) => setTimeout(resolve, holdMs));
+            await route.continue().catch(() => {});
+        });
+    }
     if (rafHoldMs > 0) {
         await context.addInitScript((ms) => {
             const raf = window.requestAnimationFrame.bind(window);

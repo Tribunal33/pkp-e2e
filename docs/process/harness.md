@@ -372,7 +372,10 @@ to spot: seeding succeeds and the browser step dies.
   (2026-09-15). Never in CI or a final. The same file's second lever,
   `PLAYWRIGHT_RAF_HOLD_MS=<ms>`, defers every `requestAnimationFrame`
   callback, for a race that lives in the frame or two after a click,
-  which the throttle and `--trace on` both hide (U30 S4, 2026-09-26).
+  which the throttle and `--trace on` both hide (U30 S4, 2026-09-26). The
+  third, `PLAYWRIGHT_HOLD_URL=<regex>` with `PLAYWRIGHT_HOLD_MS=<ms>`, holds
+  every request whose address matches before it goes out: the "hold one
+  request" lever without editing a test (U14 S5, 2026-09-28).
 - `TEST_API_KEY`: enables and gates `/api/v1/_test/*`. The namespace answers
   404 unless the var is in the server's environment, and 403 unless the
   request's `X-Test-Key` header matches.

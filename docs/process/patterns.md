@@ -466,7 +466,15 @@ no cleanup fixture.
   typed earlier is wiped, or the save posts nothing for it); the shared
   `ReviewSettingsPages.typeRichText` and `ReviewerPages.typeInto` do it, and
   the legacy multilingual box's French twin opens only while the English box
-  is focused (the globe icon is decorative).
+  is focused (the globe icon is decorative). A legacy form's box too: its
+  editable body shows before the editor has fetched its content style
+  sheets, whose arrival loads the empty start content over what was typed,
+  and the form then refuses the empty field with a 200 whose JSON reads
+  `"status": false` and an `alert()` Playwright dismisses unseen. So wait
+  for the editor inside the open form to report `initialized`, and judge a
+  legacy send by that `status`, never by the 200 or a count on the window
+  (`EmailUserWindow.expectOpen()`, `sendAndExpectSent()`; U14 S5,
+  2026-09-28).
 
 - **Settings › Users & Roles › Users is a Vue table** (`<user-access-manager>`),
   not a legacy grid: each row has an ellipsis menu ("Edit", "Email", "Remove

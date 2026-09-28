@@ -276,14 +276,33 @@ exports.EmailUserWindow = class EmailUserWindow extends BasePage {
         this.cancelLink = this.form.getByRole('link', {name: 'Cancel', exact: true});
     }
 
-    /** The window is open and its Body editor is ready for typing. */
+    /**
+     * The window is open and its Body editor is ready for typing: this
+     * window's own editor (its textarea inside the open `#sendEmailForm`,
+     * never an earlier window's) reports `initialized`. The editor's body
+     * is visible and editable before that, while TinyMCE still fetches its
+     * content stylesheets; the initial (empty) content it then loads wipes
+     * anything typed, and the send is refused (flake-s28 u14s5-email).
+     */
     async expectOpen() {
         await expect(this.form).toBeVisible({timeout: T});
         await this.page.waitForFunction(
-            () => ((window.tinymce && window.tinymce.get()) || []).some((e) => /^message/.test(e.id) && e.initialized),
+            () => {
+                const form = document.querySelector('#sendEmailForm');
+                return ((window.tinymce && window.tinymce.get()) || []).some(
+                    (e) => /^message/.test(e.id) && e.initialized && !!form && form.contains(e.getElement())
+                );
+            },
             undefined,
             {timeout: T}
         );
+    }
+
+    /** Wait for the window to be ready, then fill Subject and type Body. */
+    async compose({subject, body}) {
+        await this.expectOpen();
+        await this.subject.fill(subject);
+        await this.typeBody(body);
     }
 
     async expectClosed() {
@@ -324,6 +343,21 @@ exports.EmailUserWindow = class EmailUserWindow extends BasePage {
             {timeout: T}
         );
         await this.sendButton.click();
+        return answer;
+    }
+
+    /**
+     * "Send Email" for a message the form accepts: the answer is read, not
+     * just awaited (a refusal answers 200 with `status: false` and an
+     * alert the browser dismisses, leaving the window open), then the
+     * window's close. Returns the response.
+     */
+    async sendAndExpectSent() {
+        const answer = await this.sendAndWait();
+        expect(answer.ok(), `the send answered ${answer.status()}`).toBe(true);
+        const json = await answer.json();
+        expect(json.status, `the send was refused: ${json.content}`).toBe(true);
+        await this.expectClosed();
         return answer;
     }
 
