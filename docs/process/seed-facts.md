@@ -796,9 +796,11 @@ behind a line; that scratch is deleted after review.
   the only stage; a Reviewer-level role saves with no stage, and a user who
   accepts an invitation to it (Users › Edit is the invitation wizard on
   this build; the email "You are invited to new roles"; "Accept And
-  Continue to OPS", which shows no confirmation) holds it. Settings › Users
-  & Roles. Live-driven 2026-09-05 (`.reports/U28/cc-K6.md` K6-1,
-  `cc-K6b.md`).
+  Continue to OPS", which opens the "You've been assigned a new role in
+  OPS" dialog, U06 Rule 8) holds it. Settings › Users & Roles.
+  Live-driven 2026-09-05 (`.reports/U28/cc-K6.md` K6-1, `cc-K6b.md`); the
+  dialog seen in six runs signed out and signed in, 2026-09-28 (U06 claim
+  check I28).
 - A roster reviewer named in `reviewRounds[].reviewers[]` on a scratch
   context is assigned but not enrolled there: absent from that context's
   Add Reviewer search and refused the wizard ("The current role does not

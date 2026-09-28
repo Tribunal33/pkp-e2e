@@ -368,9 +368,13 @@ record what each role is offered once the list is on screen. <sup>b</sup>
     link that downloads it), "Edit" and "Remove". <sup>k</sup>
     - 17a. **While a file uploads** its row shows its name, a progress bar
       and "Cancel upload" (a screen reader hears "Uploading {percent}%
-      complete"). "Cancel upload" removes the row at once without asking,
-      and nothing is kept. Leaving the page while a file uploads asks
-      nothing, and the file is not kept either. <sup>k</sup>
+      complete"). "Cancel upload" removes the row at once without asking.
+      Pressed while the file is still on its way, it keeps nothing. The
+      button stays until the server has answered, and pressed once the
+      whole file has been sent (its bar full, its name not yet a link) it
+      keeps the file: after a reload it is back on the panel ⚠ [A25](#a25).
+      Leaving the page while a file uploads asks nothing and keeps
+      nothing. <sup>k</sup>
     - 17b. **The upload limit.** A file larger than the install allows is
       refused in its row with "File is too big ({size}MiB). Max filesize:
       {limit}MiB.", for example "File is too big (101MiB). Max filesize:
@@ -956,6 +960,7 @@ Left out of the scenarios above, by reason:
   - A22 (the Activity Log recording a new file's upload as a "Revision"; Side effects)
   - A23 ("Cancel" after a second pick on step 1 leaving the first pick as the file; Rule 9b)
   - A24 (one file revised in two windows: one "Cancel" doing nothing, the file keeping a cancelled upload; Rule 9c)
+  - A25 ("Cancel upload" pressed after the whole file has been sent keeping the file; Rule 17a)
 - **Owned by another feature**:
   - a Production editor's lists: every stage's while not assigned, Copyediting and Production only once assigned (Actors preamble; *Workflow screen & stage access*, and *Stage participants*, whose A8 records the assigned case)
   - the Author's revision upload through "Upload revisions" (Actors row 2; *Review stage & rounds*, scenario 4)
@@ -990,6 +995,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A21](#a21) | A file of exactly the upload limit ends with "Invalid JSON response from server." instead of being refused | 🐞 | minor · crash: server | — |
 | [A23](#a23) | Revising a file, a second pick on step 1 and then "Cancel" leave the first pick as the file instead of the original | 🐞 | minor | — |
 | [A24](#a24) | One file revised in two windows: the first window's "Cancel" does nothing, and the file keeps the upload cancelled there | 🐞 | minor | — |
+| [A25](#a25) | "Cancel upload" pressed after the whole file has been sent removes the row, but the file is stored and back after a reload | 🐞 | user-visible | — |
 | [A6](#a6) | Every file row's menu button is named "More Actions" alone, so a screen reader cannot tell the rows apart | ❓ | minor | — |
 | [A8](#a8) | The revise list names files only, so two files with the same name read the same | ❓ | minor | — |
 | [A13](#a13) | Deleting a file also deletes every copy made from it on other lists | ❓ | user-visible | — |
@@ -1239,6 +1245,18 @@ line "A file revision "{file name}" was uploaded…", with a working
 the original until the September 2026 change that made "Cancel" restore
 a renamed file too ([A1](#a1)).
 Since: 2026-09-27 · Basis: probe. <sup>[f-a24](#fn-a24)</sup>
+
+<a id="a25"></a>
+**A25 — "Cancel upload" pressed after the whole file has been sent keeps the file** · 🐞 · user-visible.
+In the submission wizard's "Files" panel, the Author who presses "Cancel
+upload" expects the file to be dropped, and the row goes at once without
+a question. Pressed after the whole file has been sent but before the
+server has answered, only the row goes: the file is stored, is back on
+the panel with "Edit" and "Remove" after a reload, and, like any file
+there, goes in with the submission. Nothing says so when the row goes.
+On a slow connection, or with a server slow to answer, that window is
+long enough to press in.
+Basis: probe. <sup>[f-a25](#fn-a25)</sup>
 
 ### OPS
 
@@ -2314,6 +2332,29 @@ Not driven on a galley or on a preprint server. Kept check
 Written up for the team in `docs/reports/2026-09-27-pkp-lib-13288.md`
 (Finding 2; a temporary report, deleted once addressed; git history keeps
 it).
+
+<a id="fn-a25"></a>
+**f-a25** — Note k. The row's "Cancel upload" (`FileUploader.vue`
+`cancelUpload()`, Dropzone `removeFile()`) only aborts the browser's
+request and drops the row; nothing is sent to the server, and the row's id
+is Dropzone's, not a submission file id. `PKPSubmissionFileController::add()`
+runs once the server holds the whole request body and stores the file
+before it writes any output, so a request abandoned after its last byte is
+stored anyway. Live-probed 2026-09-28 (Rule 17a; OJS and OMP; a throwaway
+Author's draft on a scratch journal or press; "article.pdf", a 636-byte
+request): with the answer slowed to 64 bytes/s and the request leaving at
+once, "Cancel upload" pressed as the upload reached 636 of 636, the row
+reading "article.pdf" with its bar and "Cancel upload": the row went, and
+after a reload the panel listed "article.pdf" with "Edit", "Remove" and
+"What kind of file is this?" (OJS 3 of 3, OMP 2 of 2); with no throttle,
+pressed 40–50 ms after the upload started, the file was already stored
+(OJS 4 of 4). No request answered an error and no page error. Pressed while
+the request was still held back (the upload throttled to 64 bytes/s and
+kept so until after the reload), nothing was stored (OJS 10 of 10, OMP 6
+of 6). Under an emulated upload throttle the bar fills before the request
+has left the browser, so there a full bar does not mean the file was sent.
+Scenario 9 presses mid-upload; no test drives the window after the last
+byte.
 
 <a id="fn-ops1"></a>
 **f-ops1** — Note a (the OPS workflow and wizard configs). Live-probed
