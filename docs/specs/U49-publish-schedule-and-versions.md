@@ -68,15 +68,16 @@ on the way to publishing, when the version still needs its details
 | Revision Significance | Yes | Major Revision / Minor Revision. "Minor Revision" can be selected only when a version of the chosen stage already exists (Rule 12). |
 | Update Type | No | Select, "New Version" preselected. The other choices name the reason for the version (Correction, Erratum, Retraction, …). |
 | Summary of Changes (Amendment Notice) | No | Rich text, multilingual. The screen describes it as the public amendment notice, but no reader page shows it (Rule 13) ⚠ [A5](#a5). An "Insert Content" button on the submission-language box offers the change summaries authors saved with their review revisions (Rule 14). |
-| Issue Assignment | Yes | Radio. The choices offered depend on which issues the journal has (Rule 5): Don't Assign To An Issue · Assign To Future Issue and Publish Immediately · Assign To Future Issue and Schedule Only · Assign To Current/Back Issue. The panel opens with the saved choice preselected. With nothing saved, "Assign To Current/Back Issue" is preselected whenever the journal has a published or back issue. With only future issues nothing is preselected, and the first pick misfires ⚠ [OJS2](#ojs2). |
+| Issue Assignment | Yes | Radio. The choices offered depend on which issues the journal has (Rule 5): Don't Assign To An Issue · Assign To Future Issue and Publish Immediately · Assign To Future Issue and Schedule Only · Assign To Current/Back Issue. The panel opens with the saved choice preselected. With nothing saved, "Assign To Current/Back Issue" is preselected, with no issue chosen, whenever the journal has a published or back issue; a Confirm without an issue is refused with "This field is required." under the group. With only future issues nothing is preselected, and the first pick misfires ⚠ [OJS2](#ojs2). |
 | Issue | Yes, when the assignment names an issue | Select over the matching issues (future or published, per the chosen assignment). |
 | Associated review round | No | Select over the submission's review rounds. It arrives pre-filled with the round ("Round 1 — opened {date}") only on the version the round was opened for, the submission's original one, so an untouched publish there keeps the link. On a version created afterwards with "Create New Version" it arrives at "Select a review round", the round listed greyed and not choosable. A "Published Manuscript Under Review" version without a round is refused (Rule 7). |
 
 **Create New Version dialog** (all apps; Rule 11): "Which version should
 metadata be copied from?" (a select over the existing versions), Publication
-Stage (arrives preselected with the copied version's stage), and Revision
-Significance (same minor rule; "Minor Revision" preselected whenever the
-stage allows it), with Confirm/Cancel. An untouched Confirm therefore
+Stage (arrives preselected with the copied version's stage, and empty when
+that version has none), and Revision Significance (same minor rule; "Minor
+Revision" preselected whenever the stage allows it, empty with the stage),
+with Confirm/Cancel. An untouched Confirm on a staged version therefore
 answers everything (Rule 11). <sup>i</sup>
 
 **Publication Settings page {OJS} / Preprint Entry page {OPS}**: the
@@ -86,7 +87,7 @@ page, described in *Catalog management*. It saves onto the shown version.
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| Issue Assignment + Issue {OJS} | Yes | The same radio and select as the panel above. A choice saved here is remembered and arrives pre-checked when the panel opens. The exception is "Assign To Future Issue and Schedule Only" on a journal with no published issues, which comes back as the immediate-publish choice ⚠ [OJS2](#ojs2). |
+| Issue Assignment + Issue {OJS} | Yes | The same radio and select as the panel above. Every "Save" of the page stores the choice shown, whichever field the save was pressed for (Rule 3a), and a saved choice arrives pre-checked when the panel opens. The exception is "Assign To Future Issue and Schedule Only" on a journal with no published issues, which comes back as the immediate-publish choice ⚠ [OJS2](#ojs2). With nothing saved, the page arrives as the panel does. On a journal with a published issue that is "Assign To Current/Back Issue" with "Issue" empty, and every "Save", even one pressed for another field, is refused ("Please correct one error." / "Go to Issue: This field is required.") until an issue or "Don't Assign To An Issue" is chosen; a new version of an article published without an issue arrives the same way. On a journal whose only issues are future ones nothing is checked, and a save pressed for another field records "Don't Assign To An Issue" [OJS2](#ojs2). |
 | Section {OJS OPS} | Always has a value | Defaults to the submission's section. The select offers no empty choice, so it cannot be blanked. It carries no on-screen required mark; only Issue Assignment and Issue are marked "Required". |
 | Publication Date {OJS} / Date Posted {OPS} | No | Must be a date in the form YYYY-MM-DD ("The date must be in the format YYYY-MM-DD, such as 2019-01-01."). The description warns to leave it empty unless backdating, because the date is normally set by publishing (Rule 8). On a press or preprint server a FUTURE date entered here is what schedules the item (Rule 6). |
 | Update Type · Summary of Changes | No | As on the panel above. On a preprint server the summary box has no "Insert Content" button. |
@@ -124,17 +125,23 @@ page, described in *Catalog management*. It saves onto the shown version.
    Preview waits for Review to pass (Actors). <sup>k</sup>
 3. **The details panel opens only while details are missing {OJS}.**
    Pressing the journal's publish button opens "Review Publishing Details"
-   (Fields) if the version has no Publication Stage yet, no confirmed
-   issue choice, or has since been unpublished (Rule 9). Confirm saves
-   the choices and continues to the confirmation window. When a saved
-   issue choice and stage are already in place on a version never yet
+   (Fields) if the version has no Publication Stage yet, no saved issue
+   choice, or has since been unpublished (Rule 9). Confirm saves the
+   choices and continues to the confirmation window. When a saved issue
+   choice and stage are already in place on a version never yet
    published, the button skips the panel and opens the confirmation
-   window directly. The issue choice may have been saved on the
-   Publication Settings page. The stage comes from an earlier act such as a panel
-   save, the version dialog or a prior publish (the settings page itself
-   carries no stage field). The panel opens with the saved issue choice
+   window directly (Rule 3a). The panel opens with the saved issue choice
    preselected. With nothing saved, it uses the same default as the Fields
    table above. <sup>h</sup>
+3a. **What counts as saved {OJS}.** Any "Save" of the Publication
+   Settings page saves an issue choice, whatever field it was pressed
+   for, because the page always stores the Issue Assignment it shows. So
+   on a new version whose stage came from the version dialog, saving only
+   an Update Type is enough for the publish button to skip the panel. On
+   a journal with no issues the page stores no issue choice, and the
+   panel still opens after a save there. The stage comes from an earlier
+   act such as a panel save, the version dialog or a prior publish (the
+   settings page itself carries no stage field). <sup>h</sup>
 4. **The confirmation window.** The final window is titled "Schedule For
    Publication" on a journal and press, and "Post the preprint" on a
    preprint server. It shows, in order: an optional warning list ("The
@@ -165,7 +172,7 @@ page, described in *Catalog management*. It saves onto the shown version.
 
    | Choice | Outcome on confirm |
    |---|---|
-   | Don't Assign To An Issue | Published at once, no issue ("…published immediately without any issue association…") |
+   | Don't Assign To An Issue | Published at once, no issue ("…published immediately without any issue association…"). A newer version of an article already in an issue, published this way, stays listed in that issue ([Issues](U50-issues.md#a17)) |
    | Assign To Future Issue and Publish Immediately | Published at once as continuous publication, listed with its still-unpublished issue ("…published immediately as continuous publication even though it is assigned to {issue} which is not published yet…") |
    | Assign To Future Issue and Schedule Only | **Scheduled**. The window's text promises "…published when {issue} is published…" and its button reads "Schedule For Publication" |
    | Assign To Current/Back Issue | Published at once into the chosen issue ("…published immediately in {issue}…") |
@@ -265,9 +272,7 @@ page, described in *Catalog management*. It saves onto the shown version.
     published. On a stage-assigned source the dialog arrives pre-answered
     (Fields), so an untouched Confirm yields a minor version of the same
     stage: "Version of Record 1.1", not an unassigned one. The side menu
-    gains the version, named by its stage and number ("Version of Record
-    2.0"), or "Unassigned version ({date})" when no stage was chosen.
-    Readers keep getting the published version until the new one is
+    gains the version (Rule 11a). Readers keep getting the published version until the new one is
     published. Yet the reader page's date line changes at once: the
     unpublished draft's creation day appears as the public "Published"
     date ⚠ [A6](#a6). Nor can a reader reach the draft by address: on a
@@ -275,6 +280,12 @@ page, described in *Catalog management*. It saves onto the shown version.
     Found" page. A version address naming a number the article has no
     version under (a mistyped one) fails with a blank server error rather
     than that page ⚠ [OJS3](#ojs3). <sup>r</sup>
+11a. **How a version is named.** The side menu names a version by its
+    stage and number ("Version of Record 2.0"). It reads "Unassigned
+    version ({date})" instead only when the version copied from had no
+    stage and none was chosen: once the dialog's stage select arrives on
+    a stage, it offers no blank choice. Two unassigned versions made the
+    same day carry the same name ⚠ [A9](#a9). <sup>i</sup>
 12. **Version stages and numbering.** A journal and press know three
     stages: Author Original, Published Manuscript Under Review, Version of
     Record. A preprint server knows only Author Original. Numbering is per
@@ -301,7 +312,9 @@ page, described in *Catalog management*. It saves onto the shown version.
     so it has no such button. <sup>u</sup>
 15. **A journal with no issues {OJS}.** With not a single issue created,
     the publish flow shows no issue fields at all and publishes
-    immediately, without an issue. Scheduling is unreachable. <sup>m</sup>
+    immediately, without an issue. Scheduling is unreachable. With ORCID
+    on under the member API, that publish fails when a contributor holds
+    a verified iD ⚠ [OJS4](#ojs4). <sup>m</sup>
 16. **Send to Text Editor {OJS OMP}.** The action lives on the workflow's
     Production stage, in its "Production Ready Files" list. A file row's
     "More Actions" menu offers "Send to Text Editor" only on files the text
@@ -309,7 +322,8 @@ page, described in *Catalog management*. It saves onto the shown version.
     PDF row has no such action). It opens the same version dialog, titled
     "Send File to Text Editor", asking "To which version would you like to
     send this file?" ("Create New Version" first, then each existing
-    version). What happens to the file afterwards belongs to *JATS & Body
+    version by its side-menu name, Rule 11a), with none selected as it
+    opens. What happens to the file afterwards belongs to *JATS & Body
     Text* (no spec yet). <sup>v</sup>
 17. **The awaiting-approval notice.** While no version is published, a
     press's Production stage shows the banner "Awaiting approval." with
@@ -325,6 +339,10 @@ page, described in *Catalog management*. It saves onto the shown version.
 - **Email "Publication Published"**: sent when a version actually goes
   live (not on scheduling) to every user holding an Author-role assignment
   on the submission ("Your publication, {title}, … has been published.").
+  It comes from the journal itself: the journal's name as sender, at the
+  principal contact's address, never from the editor who acted, and the
+  same whether the version went live from its workflow or with its issue
+  ("Publish Issue").
   No journal, press or server setting turns it off. Each recipient can
   switch the email off in their own profile's notification settings; that
   does not switch off the task notice. A preprint server sends it too,
@@ -365,10 +383,12 @@ page, described in *Catalog management*. It saves onto the shown version.
   "{user} returned this submission to the workflow." <sup>ab</sup>
 - **Passed along to other features**: publishing marks DOIs for deposit or
   update (*DOIs*), deposits the work to verified contributors' ORCID
-  records (scheduled counts as published for this;
-  [ORCID integration](U04-orcid-integration.md)), refreshes the search
-  index, and on a press swaps the catalog availability records (*Catalog
-  management*). <sup>ac</sup>
+  records on a journal or preprint server (scheduled counts as published
+  for this; a press deposits nothing, see
+  [ORCID integration](U04-orcid-integration.md#omp1); on a journal, a
+  publish without an issue fails instead when such a contributor is
+  listed [OJS4](#ojs4)), refreshes the search index, and on a press swaps
+  the catalog availability records (*Catalog management*). <sup>ac</sup>
 
 ## Settings that modify behavior
 
@@ -419,11 +439,13 @@ page, described in *Catalog management*. It saves onto the shown version.
 
 ## Canonical scenarios
 
-Scenarios 1–10 and 16–18 run on the seeded journal with ready accounts
-and scratch submissions; scenarios 11–15 run on a scratch journal with
-throwaway accounts, because each needs its own issues, a future-dated
-item or its own email setting. A press and preprint server have no
-issues; their scheduling is the date route of scenarios 14 and 15. The
+Scenarios 1–4, 6–10 and 16–18 run on the seeded journal with ready
+accounts and scratch submissions; scenarios 5 and 11–15 run on a scratch
+journal with throwaway accounts: scenario 5 because a journal must have
+no issues for it and its Author changes an email setting, the others
+because each needs its own issues, a future-dated item or its own email
+setting. A press and preprint server have no issues; their scheduling is
+the date route of scenarios 14 and 15. The
 publish button and window are labelled per Rule 2; the mail catcher and
 each scenario's seeding are in its footnote.
 
@@ -460,10 +482,11 @@ each scenario's seeding are in its footnote.
      shows "The submission was published." and "{user} moved this
      submission to the Done stage." (Side effects).
    - **The Author's side**: the Author finds the "Publication Published"
-     email in the mail catcher (a preprint server's copy still says
-     "published", [OPS5](#ops5)) and the task notice "A new version of
-     your submission, "{title}", was published." under Tasks (Side
-     effects).
+     email in the mail catcher, its sender the journal's name at the
+     principal contact's address, not the Journal Manager (a preprint
+     server's copy still says "published", [OPS5](#ops5)), and the task
+     notice "A new version of your submission, "{title}", was published."
+     under Tasks (Side effects).
    - **Control**: before the Confirm, the reader page was not there and
      the Author's Tasks held no such notice (Rule 8; Side effects).
      <sup>s1</sup>
@@ -522,7 +545,7 @@ each scenario's seeding are in its footnote.
      and "Minor Revision" arrive preselected; Confirm unchanged: the menu
      gains "Version of Record 1.1" ("Author Original 1.1" on a preprint
      server), and its pages open with "Status: Unpublished" and the
-     copied content (Rule 11).
+     copied content (Rules 11, 11a).
    - **The reader page**: Reader: the page still serves the OLD version
      and its "Versions" list shows nothing new, though its date line
      already reads "Published {date} — Updated on {date}", with the
@@ -545,9 +568,12 @@ each scenario's seeding are in its footnote.
 
 5. **Publish the new version**
 
-   Given: Journal Manager, continuing scenario 4 on its unpublished
-   "Version of Record 1.1" ("Author Original 1.1" on a preprint server),
-   and the submitting Author.
+   Given: Journal Manager and the submitting Author, on a published
+   scratch submission to which "Create New Version" has added an
+   unpublished "Version of Record 1.1" ("Author Original 1.1" on a
+   preprint server), as in scenario 4; on a journal, the submission sits
+   on a scratch journal with no issues created, so the details saved
+   below leave the details panel to open (Rule 3a).
 
    - **"Insert Content"** {OJS OMP}: on the new version's entry page
      (Publication Settings; the press's Catalog Entry page) the Summary
@@ -562,8 +588,9 @@ each scenario's seeding are in its footnote.
      version of your submission, "Title", was published.": its "Do not
      send me an email for these types of notifications." box arrives
      unticked; tick it and save (Side effects).
-   - **Publish**: Journal Manager: press the publish button (a journal's
-     panel offers the saved issue choice pre-filled; Confirm); the window
+   - **Publish**: Journal Manager: press the publish button (a journal
+     opens "Review Publishing Details" with "Version of Record" and the
+     saved "Correction" in place and no issue fields; Confirm); the window
      names "Version of Record 1.1" ("Author Original 1.1"); Confirm: the
      head reads "Status: Published" ("Posted"); the reader
      page now serves the new version and its "Versions" list
@@ -708,8 +735,11 @@ each scenario's seeding are in its footnote.
     at least one published issue, with a scratch submission in
     Production and its submitting Author.
 
-    - **Publication Settings**: choose "Assign To Future Issue and
-      Schedule Only", pick the future issue in "Issue", and save
+    - **Publication Settings**: the page arrives on "Assign To
+      Current/Back Issue" with "Issue" empty; type "11-22" in "Pages" and
+      save: refused with "Please correct one error." and "This field is
+      required." (Fields). Choose "Assign To Future Issue and Schedule
+      Only", pick the future issue in "Issue", and save: "Saved"
       (Fields).
     - **"Schedule For Publication"**: press it: "Review Publishing
       Details" opens with the saved choice pre-checked; choose "Version
@@ -867,9 +897,9 @@ each scenario's seeding are in its footnote.
       Markdown row's "More Actions": it offers "Send to Text Editor";
       choose it: the dialog "Send File to Text Editor" asks "To which
       version would you like to send this file?", with "Create New
-      Version" first, then each existing version (Rule 16); press
-      "Cancel": the file stays where it is, and what a confirmed send
-      does with it belongs to *JATS & Body Text*.
+      Version" first, then each existing version, none selected
+      (Rule 16); press "Cancel": the file stays where it is, and what a
+      confirmed send does with it belongs to *JATS & Body Text*.
     - **Control**: the PDF row's "More Actions" offers no "Send to Text
       Editor" (Rule 16). A preprint server's workflow shows no
       "Production Ready Files" list, so it has no such action.
@@ -880,8 +910,12 @@ each scenario's seeding are in its footnote.
 Left out of the scenarios above, by reason:
 
 - **Budget** — states:
+  - the publish button skipping the details panel on a journal with
+    issues, after a Publication Settings save on a version that already
+    has its stage (Rules 3, 3a): scenario 5 runs on a journal with no
+    issues, where the panel opens
   - a version created from a stage-less source, named "Unassigned version
-    ({date})" (Rule 11): no scenario opens "Create New Version" before an
+    ({date})" (Rule 11a): no scenario opens "Create New Version" before an
     item's first publish, the one time its shown version has no stage
   - the workflow window's header Preview on a press submission still in
     review (Actors row 4): scenario 17 reads the press's publishing
@@ -895,6 +929,9 @@ Left out of the scenarios above, by reason:
     page scenario 10 saves
   - a journal's in-between states reading "Unpublished" (Rule 1): the
     readout scenario 2's panel save leaves
+  - a new version of an article published without an issue arriving on
+    "Assign To Current/Back Issue" with no issue (Fields): the same
+    arrival and refusal scenario 11's first save reads
   - versions never renumbered or deleted here (Rule 12): the menus
     scenario 6 reads offer no such act
   - a filled past date kept on publish (Fields; Rule 8): the kept-date
@@ -912,10 +949,16 @@ Left out of the scenarios above, by reason:
     Rules 2, 8)
   - A7 (the requirement-shaped stage sentence under the all-met line on
     a press or preprint server; Rule 4; scenario 1 passes it)
+  - A9 (same-day unassigned versions sharing one name; Rules 11a, 16)
   - OJS1 (a required plain language summary refusing the panel's Confirm
     with no message; Rule 4)
+  - OJS2's second half (where only future issues exist, a Publication
+    Settings save for another field recording "Don't Assign To An
+    Issue"; Fields)
   - OJS3 (a journal's version address naming a number the article has
     no version under answering a blank server error; Rule 11)
+  - OJS4 (a publish without an issue failing for a contributor with a
+    verified ORCID iD under the member API; Rule 15)
   - OPS1 (the scheduled preprint waiting forever; Rule 6; scenario 15
     marks it)
   - OPS3 (a screening plugin lifting the author block with no Post
@@ -978,8 +1021,9 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A5](#a5) | The published Summary of Changes appears on no reader page; the promised amendment notice never renders | 🐞 | user-visible | — |
 | [A6](#a6) | Merely creating an unpublished version rewrites the live reader page's date line | 🐞 | user-visible | — |
 | [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused with no message and publishing is unreachable | 🐞 | user-visible | — |
-| [OJS2](#ojs2) | On a journal with no published issues, a "Schedule Only" choice (the panel's first pick, or one saved on Publication Settings) is not honored: the flow publishes immediately | 🐞 | user-visible | — |
+| [OJS2](#ojs2) | On a journal with no published issues, the issue choice is not the one made: "Schedule Only" (the panel's first pick, or one saved on Publication Settings) publishes immediately, and a Publication Settings save for another field records "Don't Assign To An Issue" | 🐞 | user-visible | — |
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | user-visible | — |
+| [OJS4](#ojs4) | Publishing without an issue fails with "An unexpected error has occurred" when a contributor has a verified ORCID iD (member API), though the article goes live and its author is never emailed | 🐞 | user-visible · crash: server | — |
 | [OPS1](#ops1) | A preprint scheduled by a future date is never posted by anything | 🐞 | user-visible | — |
 | [OPS4](#ops4) | Every post, the first included, sends "New Version Posted Acknowledgement"; the first-post acknowledgement never goes out | 🐞 | user-visible | — |
 | [A1](#a1) | The new-version email announces itself to editors but goes to every stage-assigned user, the submitting author included | ❓ | user-visible | — |
@@ -987,6 +1031,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A3](#a3) | A published non-final version leaves the submission itself listed as unpublished, and a press's catalog page down | ❓ | user-visible | — |
 | [A4](#a4) | Switching the Publication Stage silently re-selects "Minor Revision", discarding the user's choice | ❓ | minor | — |
 | [A7](#a7) | The press's and preprint server's confirmation shows a requirement-shaped stage sentence under "All … requirements have been met" | ❓ | minor | — |
+| [A9](#a9) | Unassigned versions made the same day carry identical names in every version list | ❓ | minor | — |
 | [OMP1](#omp1) | The press's publish confirmation promises to make the entry public while a future date schedules it instead | ❓ | minor | — |
 | [OPS2](#ops2) | The posted acknowledgement is sent even when the post only scheduled the preprint | ❓ | minor | — |
 | [OPS3](#ops3) | An author granted posting by a plugin still finds no Post control on the workflow | ❓ | latent | — |
@@ -1101,6 +1146,18 @@ rather than "must be"? Lean: yes. A first-time publisher reads a
 contradiction. Since: 2026-08-29 · Basis: probe.
 <sup>[f-a7](#fn-a7)</sup>
 
+<a id="a9"></a>
+**A9 — Same-day unassigned versions share one name** · ❓ · minor.
+Every version created without a Publication Stage is named "Unassigned
+version ({date})", so two made the same day read identically in the side
+menu, in the version dialog's "Which version should metadata be copied
+from?" and in the "Send File to Text Editor" picker. An editor sending a
+file to one of them cannot tell which one it goes to, while versions
+with a stage are told apart by number ("Version of Record 1.1"). Seen on
+a journal and a press. Question: should an unassigned version carry a
+distinguishing number? Lean: yes; every other version name is unique.
+Basis: probe. <sup>[f-a9](#fn-a9)</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -1114,7 +1171,7 @@ press and preprint server publish without a summary. Since: 2026-08-28 ·
 Basis: probe. <sup>[f-ojs1](#fn-ojs1)</sup>
 
 <a id="ojs2"></a>
-**OJS2 — A "Schedule Only" choice is not honored where no issue is published** · 🐞 ·
+**OJS2 — Where no issue is published, the issue choice is not the one made** · 🐞 ·
 user-visible.
 On a journal with no published issues, where the only issue is a future
 one, the "Review Publishing Details" panel opens with no choice
@@ -1124,14 +1181,19 @@ publication ("…published immediately… Are you sure you want to publish
 this?", button "Publish") and confirming yields "Status: Published". The
 promised "…published when {issue} is published…" scheduling never
 happens. Saving the choice on the Publication Settings page beforehand
-fails the same way on that journal: the reloaded settings page and the
-panel both come back showing "Assign To Future Issue and Publish
-Immediately" checked, and an untouched Confirm offers immediate
-publication ("Publish" button). Only changing the radio to another choice
-and picking "Schedule Only" again before Confirm produces the correct
-scheduling window. With a published or back issue present, the first pick
-and a saved choice both behave correctly. The failure is deterministic,
-not a timing accident. Since: 2026-08-29 · Basis: probe.
+fails the same way on that journal: the settings page (at once after
+"Saved", and after a reload) and the panel all show "Assign To Future
+Issue and Publish Immediately" checked, and an untouched Confirm offers
+immediate publication ("Publish" button). Only changing the radio to
+another choice and picking "Schedule Only" again before Confirm produces
+the correct scheduling window. On the same journal, a save of Publication
+Settings pressed for another field (its Pages, say) before any issue
+choice records "Don't Assign To An Issue", a choice nobody made: the
+page, a reload and the panel then show it checked, and an untouched
+Confirm publishes the article at once with no issue. With a published or
+back issue present, the first pick and a saved choice both behave
+correctly. The failure is deterministic, not a timing accident. Since:
+2026-08-29 · Basis: probe.
 <sup>[f-ojs2](#fn-ojs2)</sup>
 
 <a id="ojs3"></a>
@@ -1147,6 +1209,23 @@ current version's own number and another article's, which also crashed
 then, were not read again. Since: 2026-08-29 · Basis: probe; the draft's
 address and the mistyped one re-read on a test run.
 <sup>[f-ojs3](#fn-ojs3)</sup>
+
+<a id="ojs4"></a>
+**OJS4 — Publishing without an issue fails for a contributor with a verified ORCID iD** · 🐞 · user-visible · crash: server.
+With ORCID on under the member API, publishing an article with no issue
+whose contributor holds a verified iD fails. After the confirmation
+window's "Publish" the window stays open, the page shows "An unexpected
+error has occurred. Please reload the page and try again.", and the head
+still reads "Status: Unpublished" with no controls. After a reload the
+version reads "Status: Published" and the article is live, yet nothing
+is sent to the contributor's ORCID record and the Author never receives
+"Publication Published". The same publish succeeds into an issue, under
+the public API, or with no verified iD; a press and a preprint server
+publish the same contributor normally. It was seen on a journal with no
+issues created (Rule 15); the failure comes from the missing issue, so
+"Don't Assign To An Issue" on a journal with issues is expected to fail
+the same way, a path not driven. Basis: probe.
+<sup>[f-ojs4](#fn-ojs4)</sup>
 
 ### OMP
 
@@ -1369,6 +1448,20 @@ The reopen after an unpublish, test run 2026-09-16 (OJS, scenario 10):
 with stage and issue choice both kept, the publish button opened the
 panel again (the unpublished status is `QUEUED`, outside the ready
 pair), the radio and issue pre-checked as fn-q's probe recorded.
+Live-probed 2026-09-28, two runs (scratch journals): the settings page
+posts its shown assignment and hidden status with every save
+(`useWorkflowPublicationFormIssue.js`). A new version of an article
+published into a back issue, made by an untouched version dialog
+(`status` 1), opened the panel on "Publish" (Stage "Version of Record
+(VoR)", "Minor Revision", "Assign To Current/Back Issue" and the issue
+pre-checked); the same version after a Publication Settings save of
+only Update Type "Correction" (write `assignment: 4`, `status: 6`)
+opened the confirmation window directly. A new version of an article
+published without an issue arrived in the panel on "Assign To
+Current/Back Issue" with no issue, and its Confirm was refused in place
+with "This field is required." under the group. On a journal with no
+issues the page's save carried no status (no Issue Assignment group);
+the OJS suite's scenario 5 opens the panel there after its details save.
 
 <a id="fn-i"></a>
 **i** — `useWorkflowVersionForm('createNewVersion')`: `versionSource`
@@ -1379,7 +1472,12 @@ pair), the radio and issue pre-checked as fn-q's probe recorded.
 copied version's stage ("Version of Record (VoR)" / OPS's sole "Author
 Original (AO)") and significance on "Minor Revision"; untouched Confirm
 produced "Version of Record 1.1" / "Author Original 1.1". The field was
-never observed empty on a stage-assigned source.
+never observed empty on a stage-assigned source. Live-probed 2026-09-28
+(OJS and OMP, two runs each): from a staged source the stage select
+offered no blank option, so no stage-less version could be made from it;
+from a never-staged, unpublished item the dialog arrived with Stage and
+Significance empty and untouched Confirms yielded "Unassigned version
+({date})" versions (fn-a9).
 
 <a id="fn-j"></a>
 **j** — OJS `IssueEntryForm` groups: placement (`sectionId`,
@@ -1395,6 +1493,19 @@ is posted…". Labels live-probed 2026-08-29: OJS "Publication Date"
 Published"; OPS "Date Posted" with description "The posted date will be
 set automatically when the preprint is posted. Do not enter a posted
 date unless you need to backdate it."
+Issue Assignment on the page live-probed 2026-09-28, two runs (scratch
+journal with a published back issue and a future issue; the Journal
+Manager and an assigned Section Editor alike): a Production article with
+no saved choice arrived on "Assign To Current/Back Issue" with "Issue"
+empty; "Save" with only "Pages" changed was refused in the page with no
+request sent, summary "Please correct one error. Go to Issue: This field
+is required. Jump to next error", field error "This field is required.";
+after "Don't Assign To An Issue" the save went through (write
+`assignment: 1`, `status: 6`) and read back the same after a reload. The
+same arrival and refusal on a new version of an article published
+without an issue. A journal with future issues only arrived with nothing
+checked (fn-ojs2); a journal with no issues showed no Issue Assignment
+group and saved.
 
 <a id="fn-k"></a>
 **k** — Button per `getPrimaryControlsRight`: OJS label
@@ -1633,10 +1744,14 @@ titled "Send File to Text Editor" and, on OJS, opened preselecting
 "Create New Version" when live-probed 2026-08-29; the test run of
 2026-09-16 (OJS, scenario 18) found the same picker (`select[name=
 "sendToVersion"]`, options "Create New Version" then "Unassigned version
-({date})") with an empty value on opening, one observation each way, so
-the OJS preselection is unsettled. The OMP dialog's picker rendered with no
-selection at all (live-probed 2026-08-29, confirmed visually) — hence
-the rule claims the option's position, not a preselection. The OPS
+({date})") with an empty value on opening. The OMP dialog's picker
+rendered with no selection at all (live-probed 2026-08-29, confirmed
+visually). Live-probed 2026-09-28 (OJS and OMP, two runs each, a
+published item and an unpublished one): the picker's value was empty on
+opening every time, which settles the earlier OJS preselection as the
+outlier; staged versions are listed by stage and number ("Version of
+Record 1.0", "Version of Record 1.1"), stage-less ones as "Unassigned
+version ({date})" (fn-a9). The OPS
 workflow mounts no file manager at all (live-probed 2026-08-29: the
 Production stage view's panels are Discussions and Participants only;
 zero FileManager components in the OPS workflow configs) — hence the
@@ -1687,7 +1802,15 @@ notification row gone within seconds). Notice text:
 `notification.type.publicationPublished`. The OPS send live-probed
 2026-08-29 (scratch server, recipient-scoped Mailpit): the author
 received subject "Publication Published" on a first post; wording
-evidence at fn-ops5.
+evidence at fn-ops5. Sender live-probed 2026-09-28, two runs (scratch
+contexts, principal contact "Pat Principal" with its own address, the
+acting manager "Mia Manager"): From "{context name}" <the principal
+contact's address> on OJS for an article released by Issues › Future
+Issues › "Publish Issue" (whose own "Just published: …" email came From
+the acting manager) and for one published from its workflow, and on OMP
+and OPS for a direct publish or post. By contrast the new-version email
+and OPS's "New Version Posted Acknowledgement" come From the principal
+contact's own name at the same address.
 
 <a id="fn-y"></a>
 **y** — `createNewPublicationVersionAndNotify()`: for every user
@@ -1754,6 +1877,16 @@ scheduled), `UpdateSubmissionInSearchIndex` (also on unpublish). OMP
 publication-format tombstones and refresh the approval notices; OJS
 reconciles article tombstones (OAI). DOI details: DOI versioning
 clears/keeps version DOIs per app rules — the DOI feature's story.
+ORCID deposit live-probed 2026-09-28, two runs (a contributor seeded
+with a verified iD and an access token, ORCID on; read from each
+install's jobs queue right after the publish, no screen shows it): under
+"Member Sandbox" OJS (into a back issue) and OPS queued
+`DepositOrcidSubmission`, which then failed at the test install's
+unreachable ORCID sandbox ("cURL error 7"); OMP queued none under
+"Member Sandbox" or "Public Sandbox", only `UpdateSubmissionSearchJob`
+(*ORCID integration* records the press's missing deposit as intended);
+OJS under "Public Sandbox" with no issue queued none. The issueless
+member-API publish on OJS is fn-ojs4's.
 
 <a id="fn-a1"></a>
 **f-a1** — Send loop over `Repo::user()->getCollector()
@@ -1898,6 +2031,17 @@ green at `51f0c727` (pkp/ojs#5444 run 35881450909, pkp/omp#2471 run
 35882950730, pkp/ops#1412 run 35883039899), OMP's and OPS's formerly red
 scenarios above and *Publication metadata*'s passing there.
 
+<a id="fn-a9"></a>
+**f-a9** — Live-probed 2026-09-28 (OJS and OMP, two runs each, scratch
+contexts): on an unpublished item that never had a stage, two versions
+were created with the dialog's Stage and Significance left as they
+arrived (empty); the "Send File to Text Editor" picker then listed
+"Create New Version" and three identical "Unassigned version
+(2026-09-28)", and the side menu and "Which version should metadata be
+copied from?" the same three names. Label:
+`publication.versionStage.unassignedVersion` with the creation date
+only (fn-s).
+
 <a id="fn-ojs1"></a>
 **f-ojs1** — Live 2026-08-28 (metadata spec, register A1): with
 "Require the author to provide a plain language summary…" on, the
@@ -1933,7 +2077,20 @@ panel both came back with "Assign To Future Issue and Publish
 Immediately" checked, and an untouched Confirm offered the
 continuous-publication window with a "Publish" button. On a journal
 with a published back issue the saved choice arrived pre-checked and
-confirmed into "Status: Scheduled" (fn-h).
+confirmed into "Status: Scheduled" (fn-h). Live-probed 2026-09-28, two
+runs (scratch journals): the Publication Settings save of "Schedule
+Only" and the future issue wrote `status: 6` on the future-issue-only
+journal (`status: 7` on one with a published back issue), and the page
+showed "Assign To Future Issue and Publish Immediately" checked right
+after "Saved", before any reload; an untouched Confirm read "…published
+immediately as continuous publication even though it is assigned to
+{issue} which is not published yet…" and published. On the same journal
+shape an article with no saved choice arrived with no radio checked; a
+save with only "Pages" changed read "Saved", wrote `assignment: 4` (the
+Current/Back choice the page does not offer there) and `status: 6`, and
+the page at once, a reload and the panel then showed "Don't Assign To
+An Issue" checked, the panel's untouched Confirm offering issueless
+publication.
 
 <a id="fn-ojs3"></a>
 **f-ojs3** — Live-probed 2026-08-29: `GET
@@ -1954,6 +2111,26 @@ Found" to a signed-out visitor; a nonexistent publication id typed into
 the same address still answered HTTP 500 with an empty body (one typed
 observation on the probe server, not driven by the suite). The current
 version's own id and another submission's were not re-read at that tip.
+
+<a id="fn-ojs4"></a>
+**f-ojs4** — Live-probed 2026-09-28, two runs and two debug runs, the
+same each time (scratch journal with no issues; ORCID on, "Member
+Sandbox"; a contributor seeded with a verified iD and an access token):
+panel with "Version of Record" › Confirm › "This will be published
+immediately without any issue association…" › "Publish": `POST
+…/api/v1/submissions/{id}/publications/{id}/publish` answered 500, "Call
+to a member function getData() on null" — the journal's ORCID work
+builder reads the issue's DOI with no issue
+(`classes/orcid/OrcidWork.php` `getAppDoiExternalIds`). After a reload
+the publication was published (status 3, dated that day); the jobs
+queue gained no `DepositOrcidSubmission`, and the Author's mailbox no
+"Publication Published". Controls, same runs: an article without an iD
+on the same journal published and emailed its author; the same kind of
+contributor published into a back issue on another scratch journal
+published normally and queued the deposit; under "Public Sandbox" with
+no issue the publish succeeded; OMP and OPS published such a
+contributor normally under "Member Sandbox" (fn-ac). The no-issue path
+on a journal with issues ("Don't Assign To An Issue") was not driven.
 
 <a id="fn-omp1"></a>
 **f-omp1** — OMP `PublishForm` shows the single confirmation string for
@@ -2025,7 +2202,10 @@ status "Posted". Read before any pick on the journal: the panel's
 preselected "Assign To Current/Back Issue" (fn-h). OMP: the Production
 stage view's "Awaiting approval." banner is read before the publish and
 the two notices after (fn-w). The log lines are under the workflow's
-"Activity Log & Notes → History"; the Done-stage line is fn-ab's.
+"Activity Log & Notes → History"; the Done-stage line is fn-ab's. The
+email's sender (the context's name, the principal contact's address) is
+fn-x's; a scratch context's principal contact is the `contactEmail` it
+was created with.
 
 <a id="fn-s2"></a>
 **s2 — scenario 2 seeding.** Decline a scratch submission (journal/press:
@@ -2051,8 +2231,12 @@ visitor and read for the "404 Not Found" page (fn-ojs3); the log line
 is fn-aa's.
 
 <a id="fn-s5"></a>
-**s5 — scenario 5 seeding.** Scenario 4's new version; the
-amendment-notice absence (A5) is asserted against the full page HTML,
+**s5 — scenario 5 seeding.** A published scratch submission and its
+new version made as in scenario 4 (an untouched version dialog); on OJS
+the scratch journal has no issues, because on a journal with issues the
+details save either skips the panel (the published version in an issue)
+or is refused for want of an issue (published without one; fn-h, fn-j).
+The amendment-notice absence (A5) is asserted against the full page HTML,
 not just the visible text. "Insert Content" is read on the entry page
 before the summary is typed (fn-u). The opt-out is Profile ›
 Notifications › "Submission Events", the row worded like the task
@@ -2104,6 +2288,8 @@ server only (fn-j).
 <a id="fn-s11"></a>
 **s11 — scenario 11 seeding.** Scratch journal with a future issue
 (Issues › Future Issues › Create Issue) AND a published back issue —
+the shape on which Publication Settings arrives on "Assign To
+Current/Back Issue" with no issue and refuses the first save (fn-j);
 on that shape the settings-first route works (live-probed 2026-08-29:
 the saved choice arrived pre-checked and confirmed into
 "Status: Scheduled") and a direct panel pick registers normally. The
@@ -2166,9 +2352,7 @@ header's included on OJS, is fn-d's.
 (scenarios.md), so both files are uploaded through the "Production Ready
 Files" list's own upload control; the suite supplies a small Markdown
 file and a PDF as fixtures (OJS already holds `article.pdf`, OMP
-neither). OMP's picker opens with no selection and OJS's preselection
-is unsettled (fn-v), so the scenario claims the
-option's position only. The preprint server's absence rests on fn-v: the
+neither). The picker opens with no selection in both apps (fn-v). The preprint server's absence rests on fn-v: the
 OPS workflow mounts no file manager.
 
 ## Reference — entry points & surfaces

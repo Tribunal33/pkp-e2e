@@ -1530,3 +1530,9 @@ config-file settings.
   no notice. A test that needs a status sets it through "Relations".
   Workflow › "Relations", submission wizard › Review, OPS, 2026-09-27 (U75
   claim check K1, K2).
+- The "Publication Published" email's From is the context's name with its
+  principal contact's address (a scratch context: "Scratch context {tag}"
+  and the `contactEmail` given, else admin@mail.test); the other workflow
+  emails (new version created, the posted acknowledgement) use the
+  principal contact's name. Mailpit, all three apps, 2026-09-28 (U49
+  claim check I28).
