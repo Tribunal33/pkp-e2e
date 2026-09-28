@@ -189,7 +189,12 @@ The apps move; the suite follows. The baselines live in
    filed), never a narrative. Then re-check the open
    ci-triage rows (known-red tests, open regressions by re-running their
    kept reproduction) and companion rows against the new tips and delete
-   the ones that are resolved. Commit. The baseline only advances when the
+   the ones that are resolved. A shared fix lands when it merges into
+   pkp-lib or ui-library `main`: the apps whose pointers lag will take it
+   in a later bump, so their re-run pins the submodule at that `main`
+   (checked out in the slot's checkout, then set back, or `-f
+   pkp_lib_ref=`/`-f ui_library_ref=` on CI) rather than waiting for the
+   bump (@jarda.kotesovec, 2026-09-28). Commit. The baseline only advances when the
    range is actually triaged; a partial review leaves it where it was and
    says so in the log.
 
