@@ -61,6 +61,8 @@ Contributor's ORCID iD field (add/edit contributor, Contributors list):
 | Unauthenticated iD | The iD as a link, the hollow ORCID icon, and the note "This ORCID has not been verified. Please remove this unverified ORCID and request verification from the user/author directly." plus "Delete" <sup>e</sup> |
 | Verified iD | The iD as a link with the solid ORCID icon, plus "Delete" (confirmation before removal) <sup>e</sup> |
 
+What the field shows in the French interface: Rule 17a.
+
 ## Rules & state
 
 1. **Per-journal switch.** ORCID is off until a Journal Manager enables it on
@@ -69,7 +71,8 @@ Contributor's ORCID iD field (add/edit contributor, Contributors list):
 2. **Site-wide switch (multi-journal installs).** On an install hosting more
    than one journal, the Site Administrator's Site Settings carry an "ORCID"
    tab that enables ORCID **for every journal at once** with one set of
-   credentials. On a single-journal install the tab is absent ⚠ [A9](#a9). <sup>b</sup>
+   credentials. On a single-journal install the tab is absent ⚠ [A9](#a9).
+   What the tab shows in the French interface: Rule 17. <sup>b</sup>
 3. Site-wide configuration overrides the journals. Each journal's tab then
    shows "Enable ORCID functionality" checked and locked, the API type and
    Client ID read-only, the secret masked, and a note ending "Contact your
@@ -181,6 +184,31 @@ Contributor's ORCID iD field (add/edit contributor, Contributors list):
 16. A preprint server's install additionally ships the retired ORCID Profile
     plugin from the time before the built-in integration [OPS3](#ops3). The
     built-in integration this spec describes is what runs everywhere.
+17. **The French interface: the settings tabs.** ⚠ [A11](#a11) In French,
+    the journal's tab on Settings → Users & Roles and the site's side tab
+    on Administration › Site Settings are both named "Plugiciel de profil
+    ORCID" ("ORCID Profile Plugin") where the English interface says
+    "ORCID". On the site's tab the box reads
+    "##orcid.manager.siteWide.enabled##" and its explanation
+    "##orcid.manager.siteWide.description##": raw codes, the text's
+    internal name between "##" marks, shown where a translation is
+    missing. The three fields the box reveals are in French
+    ("API ORCID", "Identifiant ORCID du client", "Clé secrète du client"),
+    and so is the journal's tab throughout. <sup>n</sup>
+
+    17a. **The French interface: the contributor's ORCID iD field.**
+    ⚠ [A12](#a12) On the contributor form opened from the workflow's
+    Contributors list, the field's label "Identifiant ORCID" and its help
+    text are French. Every other string the field shows is a raw code;
+    the buttons themselves work as in English (Rules 8, 8a): <sup>n</sup>
+
+    | Where | English | French |
+    |-------|---------|--------|
+    | The request button | "Request verification" | "##orcid.field.verification.request##" |
+    | Its question window: title, question | "Request ORCID verification", "Would you like to send an email to this author requesting they verify their ORCID?" | "##orcid.field.authorEmailModal.title##", "##orcid.field.authorEmailModal.message##", with "Oui" and "Non" |
+    | After the request, and after the form is reopened: the disabled button, the link | "ORCID Verification has been requested!", "Resend Verification Email" | "##orcid.field.verification.requested##", "##orcid.field.verification.resendRequest##" |
+    | An unauthenticated iD's note | "This ORCID has not been verified. Please remove this unverified ORCID and request verification from the user/author directly." | "##orcid.field.unverified.shouldRequest##", above the iD, "(non authentifié)" and "Supprimer" |
+    | "Delete"'s question window: title, question | "Delete ORCID", "Are you sure you want to remove this ORCID?" | "##orcid.field.deleteOrcidModal.title##", "##orcid.field.deleteOrcidModal.message##", with "Oui" and "Non" |
 
 ## Side effects
 
@@ -194,7 +222,11 @@ Contributor's ORCID iD field (add/edit contributor, Contributors list):
 - **On publication**: work deposits to every eligible contributor (Rule 11)
   and, on a journal, review deposits for the article's completed reviews
   (Rule 12). All of this runs in the background, with no notice on the
-  publishing screen. <sup>j</sup>
+  publishing screen. On a journal with the member API, publishing an
+  article without an issue fails when a contributor holds a verified iD:
+  the article goes live all the same, and nothing reaches the
+  contributor's ORCID record
+  ⚠ [→ Publish, schedule & versions OJS4](U49-publish-schedule-and-versions.md#ojs4). <sup>j</sup>
 - **On removing an iD** (own profile or a contributor's): the install asks
   ORCID to cancel the matching access token in the background. <sup>d</sup>
 - **ORCID request log**: traffic with ORCID is written to the application
@@ -232,7 +264,11 @@ Contributor's ORCID iD field (add/edit contributor, Contributors list):
   Emails settings screen (feature spec to come: *Emails management*). This
   spec owns the ORCID-specific gaps ⚠ [OPS2](#ops2) ⚠ [A7](#a7).
 - **Publishing**: publication is the deposit trigger (Rule 11). The publish
-  action itself belongs to the publishing feature of each app.
+  action itself belongs to
+  [Publish, schedule & versions](U49-publish-schedule-and-versions.md).
+- **Site settings**: the site-wide "ORCID" tab is one of the Site Settings
+  side tabs. Its "Save", and a change left unsaved, follow that page's
+  rules ([Site settings](U60-site-settings.md), Rule 4).
 
 ## Canonical scenarios
 
@@ -475,6 +511,8 @@ Left out of the scenarios above, by reason:
   - A6 (the toggle's label misdescribing when it fires; Rule 13)
   - OPS2 (the preprint server's Emails screen lacking the three ORCID rows; Rule 14)
   - OPS3 (the legacy ORCID Profile plugin on preprint servers; Rule 16)
+  - A11 (the French interface: both ORCID tabs named after the old plugin, the site switch in raw codes; Rule 17)
+  - A12 (the French interface: the contributor's ORCID iD field in raw codes; Rule 17a)
 - **No seed**:
   - the Site Administrator enabling ORCID site-wide (Actors row 2, Rule 2): Site Settings → ORCID is one setting shared by every test running at once, so it stays off
   - the journal tab locked read-only under the site-wide configuration (Rule 3): the same site-wide setting
@@ -499,11 +537,13 @@ Left out of the scenarios above, by reason:
   - the invitation wizard's "Verify ORCID iD" step, present only while ORCID is enabled (Rule 15; *User invitations*)
   - the reviewer-suggestion form's plain "ORCID iD" field (Rule 15; *Reviewer suggestions*)
   - the reviewer lists' verified and unauthenticated icons (Rule 15; *Reviewer assignment & management*)
+  - publishing without an issue failing for a contributor with a verified iD (Side effects; *Publish, schedule & versions*, its register entry OJS4)
+  - the site tab's "Save" and a change left unsaved (Cross-feature interactions; *Site settings*, Rule 4)
 
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-08-07; additions
-2026-08-29), unreviewed unless an entry notes otherwise; the team settles
+2026-08-29 and 2026-09-28), unreviewed unless an entry notes otherwise; the team settles
 them on spec review. The summary is sorted 🐞 → ❓ → ✅ and the entries below
 are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
@@ -514,6 +554,8 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 | [A4](#a4) | "What is ORCID?" beside the connect button opens the sign-in popup, not the page | 🐞 | user-visible | — |
 | [A5](#a5) | An Assistant's contributor-ORCID controls are refused by the server yet report success | 🐞 | user-visible | — |
 | [A8](#a8) | The verification-failure page says "journal manager" on presses and preprint servers | 🐞 | minor | — |
+| [A11](#a11) | In French, the site's ORCID switch shows raw codes, and both ORCID tabs are named "Plugiciel de profil ORCID" | 🐞 | minor | — |
+| [A12](#a12) | In French, the contributor's ORCID iD field shows raw codes for its button, questions and notes | 🐞 | user-visible | — |
 | [OPS2](#ops2) | The ORCID request emails have no rows on the preprint server's Emails screen | 🐞 | user-visible | — |
 | [A3](#a3) | An iD connected while registering lands on the account unverified | ❓ | minor | — |
 | [A6](#a6) | The author-email toggle's label misdescribes when it fires | ❓ | minor | — |
@@ -627,6 +669,29 @@ Lean: yes. The tab renders only when the install counts more than one
 journal.
 Basis: code. <sup>[f-a9](#fn-a9)</sup>
 
+<a id="a11"></a>
+**A11 — French: the site's ORCID switch is unlabelled, and both ORCID tabs carry the old plugin's name** · 🐞 · minor.
+A Site Administrator working in French expects the site's ORCID tab in
+French, as the journal's tab is. Instead the one box that turns ORCID on
+for every journal reads "##orcid.manager.siteWide.enabled##", with
+"##orcid.manager.siteWide.description##" as its explanation, so nothing
+on the tab says what the box does (Rule 17). Both ORCID tabs, the site's
+and the journal's, are named "Plugiciel de profil ORCID" ("ORCID Profile
+Plugin"), the name of the retired plugin (Rule 16), where the English
+interface says "ORCID".
+Basis: probe. <sup>[f-a11](#fn-a11)</sup>
+
+<a id="a12"></a>
+**A12 — French: the contributor's ORCID iD field shows raw codes** · 🐞 · user-visible.
+A Journal Manager working in French expects the contributor's ORCID iD
+field in French. Its label and help text are, but the request button,
+its question window, the requested state and its resend link, an
+unauthenticated iD's note and the "Supprimer" question all show raw
+codes (Rule 17a). The buttons still work: "Oui" sends the request or
+removes the iD. The manager cannot tell what the button does or what
+they are confirming.
+Basis: probe. <sup>[f-a12](#fn-a12)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -720,6 +785,20 @@ fields; enabling site-wide locks every journal's tab as described
 ("configured globally" text, masked secret); disabling it restores each
 journal's own editable values. The single-journal absence case was not
 exercised — every test install hosts several journals (finding A9).
+Live-probed 2026-09-28 (OJS, OMP, OPS; English and French; two runs
+each; Rule 2, Fields "Site-wide ORCID settings"): the side tab
+(`#orcidSiteSettings-button`) under "Site Setup", its box "Enable ORCID
+functionality site-wide" with the description "ORCID functionality can
+optionally be enabled and configured at a site level for all
+journals/presses/servers. …"; ticked, the three required fields (API
+default "Public"). "Save" ticked with both credentials empty is refused
+on the page ("This field is required." under each, "Please correct 2
+errors.", Save disabled) and sends no request; "Save" on the untouched,
+unticked tab answers "Saved" and stores `orcidEnabled=0`, the box still
+unticked after a reload. A tick left unsaved survives a trip to
+"Information" and back, and is dropped without a question on leaving the
+page (the Site settings spec's Rule 4). Site-level ORCID was never
+switched on (`orcidEnabled=0` before and after).
 
 <a id="fn-c"></a>
 **c** — Profile: `PKP\user\form\IdentityForm::fetch()` assigns
@@ -879,7 +958,14 @@ public-scope token instead dispatches `SendUpdateScopeMail` (JOB-020) →
 `depositReviewsForSubmission()` overridden empty); OMP false and
 `getOrcidWork()` null, with `FIXME: OMP cannot deposit submissions
 currently. Check can be removed once added` — finding OMP1. Author-verify
-deposits: `VerifyIdentityWithOrcid::depositOrcidItem()`.
+deposits: `VerifyIdentityWithOrcid::depositOrcidItem()`. Publishing
+without an issue (Side effects): live-probed 2026-09-28 by the Publish,
+schedule & versions check (OJS, "Member Sandbox", a contributor with a
+verified iD and token, a journal with no issues): the publish request
+failed on the server in the OJS work builder's issue read
+(`OrcidWork::getAppDoiExternalIds`), the publication was published after
+a reload, and no `DepositOrcidSubmission` was queued; the evidence and
+its controls are that spec's note f-ojs4.
 
 <a id="fn-k"></a>
 **k** — Listener `PKP\observers\listeners\SendAuthorOrcidEmail` on
@@ -925,6 +1011,31 @@ itself is the Emails-management feature's territory.
 (`UserDetailsForm`, shown only when enabled); reviewer suggestions:
 `ReviewerSuggestionsForm` adds plain `FieldText('orcidId')` when enabled;
 reviewer-list display: see note h.
+
+<a id="fn-n"></a>
+**n** — French interface (Rules 17, 17a): live-probed 2026-09-28 (OJS,
+OMP, OPS identical; two runs each, the interface switched to `fr_CA`
+under "UI" and "Forms"): Administration › Site Settings (French address
+`index/fr_CA/admin/settings`) › "Réglage du site" › "Plugiciel de profil
+ORCID" showed the group label "ORCID", the two raw codes, and once ticked
+"API ORCID" (default "Public"), "Identifiant ORCID du client", "Clé
+secrète du client", each "Obligatoire"; Settings › Users & Roles read
+"Utilisateurs-trices", "Rôles", "Options d'accès au site", "Plugiciel de
+profil ORCID", its form in French with no raw code ("Activer la
+fonctionnalité ORCID", "Ville", "Paramètres des courriels", "Journal des
+enregistrements ORCID"). On the workflow's Contributors › "Modifier",
+every code of the Rule 17a table; "Oui" posted the request
+(`orcid/requestAuthorVerification`, 200) and the removal
+(`orcid/deleteForAuthor`, 200), the field then showing the requested
+state or the raw request button again, the same after the form was
+reopened. English controls on the same scratch journal as in Rules 8
+and 8a, with the question windows titled "Request ORCID verification"
+and "Delete ORCID". Cause: lib/pkp's `locale/fr_CA/user.po`, shared by
+the three apps, translates `orcid.displayName` (both tab names) as
+"Plugiciel de profil ORCID" and has none of `orcid.manager.siteWide.*`
+nor any of the nine `orcid.field.*` messages `FieldOrcid.vue` asks for
+(the ninth, `.authorEmailModal.message.noAuthor`, is the added
+contributor's sentence of Rule 8, not driven in French).
 
 <a id="fn-s"></a>
 **s** — Scenario seeding: scratch journals/submissions via the scenario
@@ -1096,6 +1207,20 @@ LazyCollections"). Verified fully green on OJS in pkp/ojs Actions run
 `lib/pkp` (OMP `a1aefa3fe`, OPS `6bda92fb03`) and the apps' own e2e runs at
 those tips are green (pkp/omp run 33629780688, pkp/ops run 33629815586, both
 2026-09-02). Scenario 5 (suite S5) passes on all three apps again.
+
+<a id="fn-a11"></a>
+**f-a11** — Note n (the tabs, the raw codes, the locale cause). Seen
+identically on OJS, OMP and OPS in two runs, 2026-09-28; the English
+interface is the control (note b). The run records list a server error on
+every Site Settings load, from the Plugin Gallery's list
+([Plugins management A1](U62-plugins-management.md#a1)); the ORCID tab
+itself failed nothing, so the entry carries no crash word.
+
+<a id="fn-a12"></a>
+**f-a12** — Note n (every code, the two requests answering 200, the
+locale cause). Seen identically on OJS, OMP and OPS in two runs,
+2026-09-28, with no failure behind either request; the English field on
+the same journals is the control.
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp-main/classes/orcid/actions/SendSubmissionToOrcid`:
