@@ -18,7 +18,8 @@ cite it) and lists the article's galleys, the files a reader opens: a PDF
 opens in a reader page, a journal's HTML full text in a reader page of its
 own, anything else downloads. This spec describes that
 page, its addresses and versions, the galley readers, the "How to Cite"
-block and its settings, the extra blocks a journal can switch on, and the
+block and its settings, the extra blocks a journal can switch on, the
+open peer reviews a journal marks public (which the page never shows), and the
 short summary of an article that the listing pages print. On a preprint
 server the page is the preprint's page, and "Published" reads "Posted".
 <sup>a</sup>
@@ -220,9 +221,10 @@ Top to bottom: <sup>j</sup>
 3. **Nothing published, no page.** While an article has no published
    version (a scheduled article included), its address answers the "404
    Not Found" page to a visitor and to a Reader, and so does the own
-   address of any version not yet published. A number or URL Path that
+   address of any version that is not published, whether not yet or no
+   longer (Rule 7b). A number or URL Path that
    matches no article of the journal answers the same page. <sup>f</sup>
-   <sup>q3</sup>
+   <sup>q3</sup> <sup>g</sup>
 4. **The preview.** An unpublished version's page opens for those
    Actors row 2 names under the notice "This is a preview and has not
    been published. View submission". It looks as it will once published,
@@ -254,17 +256,33 @@ Top to bottom: <sup>j</sup>
    <sup>c</sup> <sup>q6</sup>
 7. **The date line.** Under "Published" ("Posted"): the first
    version's page, its date; a later version's, "{first version's
-   date} — Updated on {this version's date}". Creating a new version
-   already rewrites both: "{creation day} — Updated on {this version's
-   date}"
-   ([→ Publish, schedule & versions](U49-publish-schedule-and-versions.md#a6)).
+   date} — Updated on {this version's date}". The first date is read
+   from every version of the article, published or not, so it can be
+   the date of a version that readers cannot open.
    <sup>g</sup> <sup>q5</sup>
+   - 7a. **A version being prepared.** Creating a new version already
+     rewrites both pages' lines: "{creation day} — Updated on {this
+     version's date}"
+     ([→ Publish, schedule & versions, A6](U49-publish-schedule-and-versions.md#a6)).
+   - 7b. **An unpublished first version.** The first version goes
+     offline while a later one stays published by "Unpublish"
+     ("Unpost") on that version, or on a journal by the issue's "Remove"
+     on an article whose second version was published with "Don't Assign
+     To An Issue" ([→ Issues, A18](U50-issues.md#a18)). The page still
+     opens its line with the unpublished version's date. With a first
+     version published on 2024-03-01 and a second on 2026-09-28, it
+     reads "Published 2024-03-01 — Updated on 2026-09-28" ("Posted
+     2024-03-03 — Updated on 2026-09-28" for a preprint first posted on
+     2024-03-03). Yet "Versions" lists only "2026-09-28 (Version of
+     Record 1.1)" ("2026-09-28 (Author Original 1.1)"), and the first
+     version's own address answers the "404 Not Found" page
+     ⚠ [A12](#a12). <sup>g</sup>
 8. **The "Versions" list.** Every published version, the newest first,
    each as "{date} ({version name})": "2026-09-24 (Version of Record
    1.0)", on a preprint server "2026-09-24 (Author Original 1.0)". The
    version shown is plain text; the current version links to the
    article's address and each older one to its own address (Rule 2). A
-   version not yet published is not listed. On a French page the version
+   version not yet published, or unpublished since, is not listed. On a French page the version
    name reads "##publication.versionStage.display##" ⚠ [A1](#a1).
    <sup>g</sup> <sup>q5</sup>
 9. **The label line** {OPS}. Above the title, "Preprint / {date} ({version
@@ -451,6 +469,17 @@ Top to bottom: <sup>j</sup>
     every galley of the current version is shown, one with no file
     included, whose link answers the "404 Not Found" page ⚠ [A4](#a4).
     <sup>j</sup> <sup>q7</sup>
+23. **Open peer review** {OJS}. The page carries no reviews. An "Open"
+    review can be made public: "Publicly Show Reviewer Comments" ticked
+    in the reviewer row's "Edit" before "Mark as Complete", whose dialog
+    then adds "This review will be made publicly visible alongside the
+    article."
+    ([→ Reviewer assignment & management](U27-reviewer-assignment-and-management.md#read-review),
+    its Rule 14a). Once the article is published, its page shows neither
+    that review's comments, nor the reviewer's name, nor any review
+    heading, to a visitor, a Reader or the Journal Manager. The page reads
+    as for an article whose review was left private ⚠ [OJS12](#ojs12).
+    <sup>p</sup>
 
 A preprint server can also mark a preprint as published elsewhere, with a
 notice above the title; that notice belongs to *Preprint relations*
@@ -557,8 +586,16 @@ notice above the title; that notice belongs to *Preprint relations*
   (Rules 10 to 13).
 - **[Publish, schedule & versions](U49-publish-schedule-and-versions.md)**:
   publishing, scheduling, "Create New Version", the version names, and the
-  "URL Path" and "Cover Image" fields of the Publication Settings page;
-  its A6 and OJS3 are about this page.
+  "URL Path" and "Cover Image" fields of the Publication Settings page,
+  and "Unpublish" ("Unpost") (Rule 7b); its A6 and OJS3 are about this
+  page (Rules 7a, 2).
+- **[Issues](U50-issues.md)**: the issue's table of contents that lists
+  articles, and its "Remove", which can unpublish an article's first
+  version (its A18; Rule 7b).
+- **[Reviewer assignment & management](U27-reviewer-assignment-and-management.md)**:
+  "Publicly Show Reviewer Comments" and "Mark as Complete", whose
+  promise that a review will be shown with the article this page does
+  not keep (its Rule 14a; Rule 23).
 - **[Workflow screen & stage access](U24-workflow-screen-and-stage-access.md)**:
   the workflow header's "View" and "Preview", which open this page (its
   Rule 6).
@@ -571,16 +608,16 @@ notice above the title; that notice belongs to *Preprint relations*
   the journal abbreviation some citation formats print; a journal closed
   to signed-out visitors.
 - *Monograph landing page* (no spec yet): the press's counterpart.
-- *DOIs* (no spec yet): the DOI line and the Crossmark button.
-- *Issues*, *Sections*, *Categories* (no specs yet): the table of
-  contents, section pages and category pages that list articles.
-- *Subscriptions & open access control* (no spec yet): who may open a
+- [DOIs](U45-dois.md): the DOI line and the Crossmark button.
+- [Sections](U17-sections.md), [Categories](U16-categories.md): the section pages and
+  category pages that list articles.
+- [Subscriptions & open access control](U51-subscriptions.md): who may open a
   galley on a journal with subscriptions, and the journal's publishing
   mode.
-- *JATS & Body Text* (no spec yet): the "JATS XML" link.
-- *Statistics — usage* (no spec yet): the counts behind the chart and the
+- [JATS & Body Text](U48-jats-and-body-text.md): the "JATS XML" link.
+- [Statistics — usage](U64-usage-statistics.md): the counts behind the chart and the
   preprint summary.
-- *Plugins management* (no spec yet): the Plugins list where the plugins
+- [Plugins management](U62-plugins-management.md): the Plugins list where the plugins
   of Settings bullets 1 to 4 and 7 to 9 are switched.
 
 ## Canonical scenarios
@@ -1085,6 +1122,10 @@ Left out of the scenarios above, by reason:
     bullet 8)
   - OJS10 ("Recommend Similar Articles" on {OJS}; Rule 20b; Settings
     bullet 9)
+  - A12 (a first version unpublished while a later one stays
+    published, still dating the page; Rules 3, 7b, 8)
+  - OJS12 (an "Open" review marked public, absent from the published
+    article's page {OJS}; Rule 23)
 - **No seed**:
   - the "DOI:" line of a version with a DOI (Fields, the landing page;
     Rule 14)
@@ -1098,6 +1139,11 @@ Left out of the scenarios above, by reason:
     fails with a server error (Rule 2;
     [Publish, schedule & versions](U49-publish-schedule-and-versions.md#ojs3),
     its OJS3)
+  - a new version being prepared, rewriting the date line (Rule 7a;
+    [Publish, schedule & versions](U49-publish-schedule-and-versions.md#a6),
+    its A6)
+  - the issue's "Remove" unpublishing an article's first version {OJS}
+    (Rule 7b; [Issues](U50-issues.md#a18), its A18)
   - the empty "References" heading on a preprint page with no
     references (Rule 18;
     [Citations & references](U42-citations-and-references.md#a20), its
@@ -1114,8 +1160,8 @@ Left out of the scenarios above, by reason:
 
 ## Findings register
 
-Verdicts are the author's judgment (claude, 2026-09-24), unreviewed unless
-an entry notes otherwise; the team settles them on spec review.
+Verdicts are the author's judgment (claude, 2026-09-24; additions
+2026-09-28), unreviewed unless an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
@@ -1139,6 +1185,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS8](#ojs8) | An impossible Publication Facts "Start Date" is dropped with "Your changes have been saved." | 🐞 | minor | — |
 | [OJS9](#ojs9) | The Lens reader page's script fails on every XML galley | 🐞 | minor · crash: script | — |
 | [OJS10](#ojs10) | "Recommend Similar Articles" never lists anything | 🐞 | user-visible | — |
+| [OJS12](#ojs12) | A review marked "Publicly Show Reviewer Comments" never shows on the published article's page, though "Mark as Complete" says it will | 🐞 | user-visible | — |
 | [OPS1](#ops1) | Previewing a new version adds "This is an outdated version published on {the preview day}." | 🐞 | minor | — |
 | [OPS2](#ops2) | A preprint with a URL Path loses the galley or version part of its number address; its downloads answer "404 Not Found" | 🐞 | user-visible | — |
 | [OPS3](#ops3) | A galley's number address answers "404 Not Found" once the galley has a URL Path | 🐞 | minor | — |
@@ -1148,6 +1195,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OPS8](#ops8) | On a French page the PDF reader's browser tab reads "##article.pageTitle##" | 🐞 | minor | — |
 | [OPS9](#ops9) | A press on the middle of a preprint's cover in a list opens nothing | 🐞 | minor | — |
 | [A3](#a3) | An article with no downloads shows an empty chart instead of "Download data is not yet available." | ❓ | minor | — |
+| [A12](#a12) | Once the first version is unpublished, the page still opens its date line with that version's date | ❓ | minor | — |
 | [OJS11](#ojs11) | The IEEE citation shown first opens with the number "[1]" | ❓ | minor | — |
 | [OPS4](#ops4) | A preprint server has no HTML or XML reader: those galleys download | ✅ | — | — |
 
@@ -1261,6 +1309,22 @@ not choose. The keywords are typed as described in
 [Publication metadata](U40-publication-metadata.md), its Rule 7.
 Basis: probe, 2026-09-26. <sup>[f-a11](#fn-f-a11)</sup>
 
+<a id="a12"></a>
+**A12 — An unpublished first version still dates the article** · ❓ · minor.
+Once an article's first version is unpublished while a later one stays
+published, the page still opens its "Published" ("Posted") line with the
+unpublished version's date: "Published 2024-03-01 — Updated on
+2026-09-28". Yet "Versions" no longer lists that version and its own
+address answers the "404 Not Found" page. A reader is given a first
+publication date for a version they cannot find. The line takes its
+first date from every version, published or not, which is also why a
+draft rewrites it
+([→ Publish, schedule & versions, A6](U49-publish-schedule-and-versions.md#a6)).
+Question: should the line date the article from its published versions
+only? Lean: yes (🐞); "Versions" and the version's own address already
+treat the version as gone.
+Basis: probe, 2026-09-28. <sup>[f-a12](#fn-f-a12)</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -1371,6 +1435,17 @@ Question: should the citation shown first carry the number? Lean: no;
 the chosen format and the preprint page show none: the app hides the
 number everywhere else.
 Basis: test run, 2026-09-25. <sup>[f-ojs11](#fn-f-ojs11)</sup>
+
+<a id="ojs12"></a>
+**OJS12 — A review marked public never shows on the article's page** · 🐞 · user-visible.
+The Journal Manager ticks "Publicly Show Reviewer Comments" on an "Open"
+review and presses "Mark as Complete", whose dialog says "This review
+will be made publicly visible alongside the article." Once the article
+is published, its page shows no review: no comments, no reviewer's name,
+no review heading, for a visitor, a Reader or the Journal Manager. The
+editor is told the review goes public, and readers never see it. Either
+the page should show the review or the dialog should not promise it.
+Basis: probe, 2026-09-28. <sup>[f-ojs12](#fn-f-ojs12)</sup>
 
 ### OPS
 
@@ -1807,6 +1882,27 @@ its own; a draft third version was not listed, but its creation changed
 both pages' date lines (the versions spec's A6). The label line read
 "Preprint / 2026-09-25 (Author Original 1.1)" on the current page and
 "Preprint / 2026-09-01 (Author Original 1.0)" on the older one.
+Live-probed 2026-09-28 (Rules 3, 7, 7b, 8; A12), OJS and OPS, two runs
+on scratch contexts, signed out: a first version seeded published on
+2024-03-01 (OJS, in an issue) or 2024-03-03 (OJS and OPS), then a
+second created and published on 2026-09-28 (on OJS once with "Don't
+Assign To An Issue", once keeping the issue). Before, one version read
+"Published 2024-03-01" ("Posted 2024-03-03"); with both published the
+line read "Published 2024-03-01 — Updated on 2026-09-28" and "Versions"
+listed "2026-09-28 (Version of Record 1.1)" and "2024-03-01 (Version of
+Record 1.0)" ("Author Original …" on the server), the first version's
+own address answering 200 under the older-version notice. The first
+version was then unpublished, on OJS by the issue's "Table of Contents"
+› "Remove" (answered `status:true`) and by its own "Unpublish", on OPS
+by "Unpost" (200 each; the version's controls then read "Preview",
+"Publish" ("Post")). The unpublished publication kept its
+`datePublished` (the versions spec's Rule 9) and `firstPublication`
+still picked it: the line read "Published 2024-03-01 — Updated on
+2026-09-28" ("…2024-03-03…" for the article first published that day,
+OPS "Posted 2024-03-03 — Updated on 2026-09-28") at once and after a reload, "Versions" listed only
+"2026-09-28 (Version of Record 1.1)" ("Author Original 1.1"), and
+`article/view/{id}/version/{v1}` (`preprint/view/{id}/version/{v1}`)
+answered 404. No request failed.
 
 <a id="fn-q5"></a>
 **q5** — Live-probed 2026-09-25 (Rules 8, 9, 21; A1; OPS7), OJS and OPS,
@@ -2172,6 +2268,39 @@ journal's articles published in its current, published issue and
 categories and "Current Issue", listing both articles, and no "Latest
 Publications" section.
 
+<a id="fn-p"></a>
+**p** — Open peer review: `ArticleHandler::view()` builds an
+`OpenReviewComponent` and passes its locale keys, icons, constants and
+`openReviewConfig` to the page, but no OJS template mounts the
+open-review display, so the page never calls the `peerReviews` API.
+"Publicly Show Reviewer Comments" is the review assignment's public
+visibility; the journal's default comes from its review settings.
+Live-probed 2026-09-28 (Rule 23; OJS12), OJS, two runs, on a scratch
+journal whose review type is "Open" and whose public visibility
+default is off: two articles in review, each with one submitted Open
+review whose "For author and editor" comment carried a unique text. On
+the first the Journal Manager ticked the box in the reviewer row's
+"More Actions" › "Edit" (saved 200, ticked on reopen), then "Read
+Review" › "Mark as Complete": the dialog read "Mark this review as
+complete? This review will be made publicly visible alongside the
+article. You can still modify this review after marking it as
+complete. You will have the opportunity to thank the reviewer in the
+next step.", `…/reviewAssignments/{id}/consider` answered 200 and the
+row read "Complete". On the second the box stayed unticked and the
+dialog lacked the "publicly visible" sentence. Both were accepted and
+published with no issue (200). Each page, read signed out (also after a
+reload), as the journal's Reader and as the Journal Manager, read the
+title, the author, "Abstract", "Published 2026-09-28", "Versions
+2026-09-28 (Version of Record 1.0)" and "Section Articles", nothing
+else; neither review's text was in the page, its source or the
+journal's home page, and the page made no `/peerReviews` request. The
+source carries only the display's locale strings ("Full Review", "Cite
+this peer review report:", "Read Review", "Hide Review"). Controls: a
+posted preprint's page showed no review words and the server's workflow
+has no review stage; a press's book page seeded with a completed public
+Open review showed none either (the *Monograph landing page*'s
+surface). No request failed.
+
 <a id="fn-o"></a>
 **o** — Plugin defaults: `settings.xml` with `enabled` true in
 `plugins/generic/pdfJsViewer`, `htmlArticleGalley` and `lensGalley`,
@@ -2356,6 +2485,13 @@ publish on four runs, in the typed order on later ones. Probed
 scenario 1's line to "current, tide" on four runs of four; four plain
 "Save"s on Publication › Metadata kept "alpha, beta, gamma".
 
+<a id="fn-f-a12"></a>
+**f-a12** — Note g: `firstPublication` is the earliest `datePublished`
+among all of the submission's publications, whatever their status, and
+an unpublish keeps the date (the versions spec's Rule 9); the same pick
+is behind the versions spec's A6. Live-probed 2026-09-28, note g, OJS
+and OPS, two runs.
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `CitationStyleLanguagePlugin::getTemplateData()` passes
 `issueId` only when `ArticleHandler` has an issue;
@@ -2452,6 +2588,11 @@ citation had read the same without "[1]"; a separate drive the same
 day read "[1]" before the journal's primary IEEE citation and
 none before the preprint server's.
 
+<a id="fn-f-ojs12"></a>
+**f-ojs12** — Note p: the open-review display is prepared but never
+mounted on the article page. Live-probed 2026-09-28, note p, OJS, two
+runs, with an unticked review as the control.
+
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note f: `preprint_details.tpl` shows the outdated notice
 whenever the shown publication is not the current one, previews
@@ -2543,5 +2684,5 @@ list laid over it. Live-probed 2026-09-25, note j, two runs.
 - `plugins/generic/citationStyleLanguage/` (`CitationStyleLanguagePlugin.php`, `CitationStyleLanguageSettingsForm.php`, `pages/CitationStyleLanguageHandler.php`, `templates/citation-block.blade`, `templates/settings.tpl`, `js/articleCitation.js`) — OJS and OPS
 - `plugins/generic/pflPlugin/` (`PflPlugin.php`, `PflSettingsForm.php`, `templates/pfl.tpl`, `templates/settings.tpl`, `pfl/locale/`) — OJS
 - `plugins/generic/recommendByAuthor/` (`RecommendByAuthorPlugin.php`, `templates/articleFooter.tpl`) · `plugins/generic/recommendBySimilarity/` — OJS · `classes/search/SubmissionSearchResult.php` and `lib/pkp/classes/search/SubmissionSearchResult.php::newCollection()`
-- `lib/pkp/classes/components/OpenReviewComponent.php`: the article page prepares its configuration, but no template mounts the open-review display (dead-code note in UNASSIGNED, API-030)
+- `lib/pkp/classes/components/OpenReviewComponent.php` · `lib/pkp/api/v1/peerReviews/`: the article page prepares its configuration, but no template mounts the open-review display (Rule 23, OJS12; dead-code note in UNASSIGNED, API-030)
 - Locale: OJS `locale/en/locale.po` (`article.subject`, `article.abstract`, `article.return`, `common.publication`, `submissions.published`, `issue.issue`, `section.section`, `submission.articleNumber`), OPS `locale/en/locale.po` (`preprint.subject`, `common.publication`, `submissions.published`, `category.categories`, `submission.dates`, `submission.numberOfVersions`, `publication.galley.downloads`, `publication.relation.*`), `lib/pkp/locale/en/{submission,common,reader}.po`, `plugins/themes/default/locale/en/locale.po`, each plugin's `locale/en/locale.po`
