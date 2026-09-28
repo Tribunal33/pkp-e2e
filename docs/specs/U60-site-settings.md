@@ -49,7 +49,7 @@ with the line beside "Save" that Rule 4a quotes.
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
 | "Site Name" | yes, per language | Empty in the primary language: "This field is required." (Rules 6–7) <sup>d</sup> |
-| "Journal redirect" ("Press redirect", "Server redirect") | no | A list: a blank first choice, then each journal enabled publicly, by name. Description: "Requests to the main site will be redirected to this journal. This may be useful if the site is hosting only a single journal, for example." (both "journal"s read "press" on OMP and "server" on OPS). Shown only while at least one journal is enabled publicly; the hidden end is read from the code (Rule 8) <sup>e</sup> |
+| "Journal redirect" ("Press redirect", "Server redirect") | no | A list: a blank first choice, then each journal enabled publicly, under its name ⚠ [A12](#a12): the name in the page's language, or in the journal's primary language where it has none in that language. The journals come in no fixed order: neither by name nor in the order of Administration › "Hosted Journals" ([Hosted journals](U59-hosted-journals.md#site-order), Rule 13) ⚠ [A11](#a11). Description: "Requests to the main site will be redirected to this journal. This may be useful if the site is hosting only a single journal, for example." (both "journal"s read "press" on OMP and "server" on OPS). Shown only while at least one journal is enabled publicly; the hidden end is read from the code (Rule 8) <sup>e</sup> |
 | "Reviewer statistics" | no | One box, "Disable aggregated reviewer statistics", under the description "In a multi-context installation, reviewer statistics, such as the count of submitted reviews, can be displayed either individually for each context or aggregated collectively." (Rule 9) <sup>f</sup> |
 
 **"Site Setup" › "Security"**, in two groups:
@@ -112,7 +112,7 @@ with the line beside "Save" that Rule 4a quotes.
    | | "ORCID" | [ORCID integration](U04-orcid-integration.md) |
    | "Appearance" | "Theme", "Setup" | this spec (Rules 17–21) |
    | "Announcements" | "Settings", "Announcements", "Announcement Types" | [Announcements](U12-announcements.md) |
-   | "Plugins" | "Installed Plugins", "Plugin Gallery" | *Plugins management* |
+   | "Plugins" | "Installed Plugins", "Plugin Gallery" | [Plugins management](U62-plugins-management.md) |
 
    Each top tab, and each side tab of "Site Setup", has an address of its
    own, so a reload opens the same one again. The side tabs under
@@ -814,6 +814,8 @@ Left out of the scenarios above, by reason:
     harvesting address's "Repository Name" (Rule 7)
   - a second language's "Site Name" read on the site's pages in that
     language (Rule 5)
+  - the "Journal redirect" list on the French page, a journal with a
+    French name listed under it (Fields)
 - **Nothing new to test**:
   - every other signed-in account at the Site Settings address, which
     gets the access-denied page the Journal Manager of scenario 1 gets
@@ -837,6 +839,10 @@ Left out of the scenarios above, by reason:
     landing on the journal's home page; Rule 8)
   - A9 (a theme change in a browser that already opened the site;
     Rule 17b; scenario 8 passes it)
+  - A11 (the "Journal redirect" list's order, and its shifts after a
+    Hosted Journals save; Fields)
+  - A12 (an "&" in a journal's name in the "Journal redirect" list;
+    Fields)
   - OMP1 (the style sheet loaded nowhere on a press; Rule 21; scenario
     11 names it)
   - OPS1 (the "Reviewer statistics" box changing nothing on a preprint
@@ -875,6 +881,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | A removed "Site style sheet" stays at its address | 🐞 | minor | — |
 | [A7](#a7) | A reload on an "Appearance", "Announcements" or "Plugins" side tab opens "Site Setup" › "Settings" | 🐞 | minor | — |
 | [A8](#a8) | Under a "Journal redirect", the Site Administrator's sign-in lands on the journal's home page, not its Dashboard | 🐞 | minor | — |
+| [A11](#a11) | The "Journal redirect" list follows neither name nor the Hosted Journals order, and shifts after a save there | 🐞 | minor | — |
+| [A12](#a12) | An "&" in a journal's name reads "&amp;amp;" in the "Journal redirect" list | 🐞 | minor | — |
 | [OMP1](#omp1) | A press never loads the "Site style sheet" | 🐞 | user-visible | — |
 | [A1](#a1) | A fresh installation has no Site Name: the site's home page has an empty title | ❓ | user-visible | — |
 | [A5](#a5) | The site's "Theme" tab offers journal home-page fields that change nothing on the site | ❓ | minor | — |
@@ -984,6 +992,26 @@ yes, both the journals enabled publicly, since those decide whether the
 site's own pages can be reached; an install with one journal enabled
 publicly and one not would show the difference on screen.
 Basis: code. <sup>f-a10</sup>
+
+<a id="a11"></a>
+**A11 — The "Journal redirect" list has no order** · 🐞 · minor.
+The Site Administrator looking for a journal in "Journal redirect"
+expects the journals by name, or in the order of Administration ›
+"Hosted Journals", which "Bulk Emails" on the same page follows; the
+list follows neither. After a new order is kept there with "Order" and
+"Done", or a journal is enabled publicly in its "Edit" window, journals
+sit at other places in the list, still not in the new order. On a site
+with many journals, finding one means scanning the whole list.
+Basis: probe. <sup>f-a11</sup>
+
+<a id="a12"></a>
+**A12 — An "&" in a journal's name reads "&amp;amp;" in "Journal redirect"** · 🐞 · minor.
+A journal named "Alpha & Omega" is offered in "Journal redirect" as
+"Alpha &amp;amp; Omega", on the English and French pages alike, while
+"Bulk Emails" on the same page and Administration › "Hosted Journals"
+show "Alpha & Omega". The Site Administrator reads a name the journal
+does not have.
+Basis: probe. <sup>f-a12</sup>
 
 ### OMP
 
@@ -1145,6 +1173,18 @@ Live-probed 2026-09-26 (Fields "Journal redirect"; Rule 8; all three
 apps): the description read "journal", "press" and "server" in turn; a
 journal seeded not enabled publicly was absent from the list; td5 has the
 rest.
+Live-probed 2026-09-28 (Fields "Journal redirect"; all three apps, two
+runs, as `admin`, with four scratch journals whose name, path and
+creation orders all differ): the blank first choice was selected, and
+the options equalled the journals enabled publicly, each under its name
+and never its path. A scratch journal not enabled publicly was absent,
+offered once "Enable this journal to appear publicly on the site" was
+ticked and saved in its Hosted Journals "Edit" window, and gone again
+once unticked and saved. On the French page (`index/fr_CA/admin/settings`)
+the label read "Réacheminement vers la revue" / "Réacheminement de la
+presse" / "Réacheminement vers le serveur"; a journal with a French name
+was listed under it, the others under their English names (English
+being their primary language). The order: f-a11; the "&": f-a12.
 
 <a id="fn-f"></a>
 **f** — `PKPSiteConfigForm`: `disableSharedReviewerStatistics`
@@ -1670,6 +1710,39 @@ emptied (fn-m).
 `getCount() !== 1` over every context, and `PKPHandler::getTargetContext()`
 returns the only enabled context. No screen of the test installs reaches
 either state.
+
+<a id="fn-f-a11"></a>
+**f-a11** — `PKPSiteConfigForm` reads the journals through
+`app()->get('context')->getMany(['isEnabled' => true])`, whose query
+(`PKPContextQueryBuilder::getQuery()`) has no ORDER BY, while Hosted
+Journals (`ContextDAO::getAll()`, `ORDER BY seq`) and "Bulk Emails"
+(`getManySummary()`, `orderBy('c.seq')`) sort by the site's order; no
+app overrides the form. Live-probed 2026-09-28 (Fields "Journal
+redirect"; all three apps, two runs, the lists 514 to 644 journals long):
+scratch journals created as Zulu, Alpha & Omega, Mike were listed Mike,
+Zulu, Alpha (OJS, second run) or Zulu, Alpha, Mike (every other read).
+After Mike was dragged above Zulu under "Order" and "Done" pressed
+(Hosted Journals then reading Mike, Zulu, Alpha), the list still read
+Zulu, Alpha, Mike, and the three moved together to other places in it.
+After the Hosted Journals order was put back, it read Zulu, Mike, Alpha.
+A fourth journal, above the three in Hosted Journals, came after all
+three once enabled publicly in its "Edit" window. On every read the list
+matched the database's storage order of the enabled journals, and never
+name, id or the site's order; "Bulk Emails" matched the Hosted Journals
+order on every read. On the PostgreSQL test installs the storage order
+moves whenever a journal's row is written. Every load of Site Settings
+in the drive also saw the "Plugin Gallery" list fail with a server
+error, which this list does not cause
+([Plugins management](U62-plugins-management.md#a1), A1).
+
+<a id="fn-f-a12"></a>
+**f-a12** — `PKPSiteConfigForm` passes each journal's name through
+`htmlspecialchars()` into the option's label, which the page prints as
+text, so the name is escaped twice. Live-probed 2026-09-28 (Fields
+"Journal redirect"; all three apps, two runs, English and French pages):
+the option read `Alpha &amp; Omega …`, the only option whose text
+differed from its Hosted Journals name, while "Bulk Emails" read
+`Alpha & Omega …`; the drive of f-a11.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP's `TemplateManager::initialize()` has no

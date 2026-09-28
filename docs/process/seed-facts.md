@@ -1572,3 +1572,9 @@ config-file settings.
   DOIs on or off. So a count of Activity Log lines after a publish depends
   on the context's DOI setting. Activity Log, all three apps, 2026-09-28
   (U70 claim check I28).
+- The "Journal redirect" list of Site Settings › "Settings" follows the
+  database's storage order, neither name, id nor the Hosted Journals
+  order: on the PostgreSQL test install it shifts whenever a journal's row
+  is written (a Hosted Journals "Order" or "Edit" save), so a test finds a
+  journal there by name or id, never by position. All three apps,
+  2026-09-28 (U60 claim check I28).
