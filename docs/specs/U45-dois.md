@@ -388,18 +388,17 @@ links under the list. <sup>g</sup>
 24. **"Bulk Actions".** "Select All" ticks every item of the page shown
     ("Select None" unticks them); "Expand all" / "Collapse all" opens or
     closes them. Its actions, in this order: "Export DOIs" (agency
-    configured), "Mark DOIs Registered", "Mark DOIs Unregistered", "Mark
-    DOIs Needs Sync", "Assign DOIs" (prefix set, Rule 25), "Deposit DOIs"
-    (agency configured). Each opens a window titled with its own name,
-    holding its question ("You are about to …{count} item(s)… Are you
+    configured, Rule 36), "Mark DOIs Registered", "Mark DOIs Unregistered",
+    "Mark DOIs Needs Sync", "Assign DOIs" (prefix set, Rule 25), "Deposit
+    DOIs" (agency configured, Rule 36). Each opens a window titled with
+    its own name, holding its question ("You are about to …{count} item(s)… Are you
     sure…?"), a button of the same name and "Cancel". The action applies
     to the ticked items; afterwards the list reloads and nothing stays
     ticked. With nothing ticked, the window still opens ("…for 0
     item(s)…"); its button closes it and nothing else happens, with no
     message ⚠ [A13](#a13). The menu closes when its item opens the
-    window, except when the press on "Assign DOIs" is held a moment and
-    its window answered at once: then it stays open over the list
-    ⚠ [A22](#a22).
+    window, but stays open over the list after a held press on "Assign
+    DOIs" whose window is answered at once ⚠ [A22](#a22).
     <sup>p</sup> <sup>q19</sup>
 25. **"Assign DOIs".** Offered only while a prefix is set. For each
     ticked item it makes every missing DOI of the current version for the
@@ -1741,14 +1740,15 @@ Basis: test run, 2026-09-26. <sup>f-a21</sup>
 <a id="a22"></a>
 **A22 — After "Assign DOIs" answered at once, the "Bulk Actions" menu stays open over the list** · 🐞 · minor.
 A manager ticks an item, presses "Bulk Actions", holds the mouse button
-down on "Assign DOIs" for about a fifth of a second (an unhurried
-click), and presses the window's "Assign DOIs" at once. The window
-closes and "Items successfully assigned new DOIs" shows, but the menu
-is still open over the first rows of the list, with the keyboard focus
-back on its "Assign DOIs" item. A press on the first row's expand
-button lands on the menu instead. Expected: the menu closes when its
-item opens the window, as it does after a quick click on the item, or
-when the window is answered after a second and a half.
+on "Assign DOIs" for about a fifth of a second (an unhurried click),
+and presses the window's "Assign DOIs" at once. The window closes
+within half a second of the first press and "Items successfully
+assigned new DOIs" shows, but the menu is still open over the list's
+first rows, with the keyboard focus back on its "Assign DOIs" item. A
+press on the first row's expand button lands on the menu instead.
+Expected: the menu closes once the window opens, as after a press with
+no hold, or when the window closes 1.8 s after the press (other
+timings untried).
 Basis: probe, 2026-09-28. <sup>f-a22</sup>
 
 ### OJS
