@@ -579,6 +579,17 @@ trips.
   "elsewhere" DOI (`U75-preprint-relations.spec.js:287`); green alone in
   10.5 s (`.reports/U72/final-run-ops.log`, `alone-reds.log`).
   **Watch condition**: a second red at the same read.
+- **OJS U20 S8's Google Analytics "Settings" window answering "Error"**
+  (OJS, once on CI, 2026-09-28). On push run 36371844559 at `f8e211f`
+  (OJS shard 3/3) the plugin's "Settings" opened the "An unexpected error
+  has occurred." window on both attempts, so `#gaSettingsForm`'s
+  `googleAnalyticsSiteId` box never came (`GoogleAnalyticsWindow`,
+  `SearchEngineMetadataPages.js:522`); the job log carries no PHP error. App
+  commits identical to the green run 36369222355; green locally at
+  `f8e211f`, green on the shard's rerun (attempt 2), and the scheduled run
+  36374699873 on the same commit green on every job
+  (`.reports/U72/ci-36371844559/`). **Watch condition**: a second red at
+  the same window; then capture the server log of that request.
 - **OMP U16 S8's "Browse" block marks no category** (OMP, once,
   2026-09-27). In the U70 session's OMP final (reset database, auto
   workers) the block on the "Science" category page listed no marked
