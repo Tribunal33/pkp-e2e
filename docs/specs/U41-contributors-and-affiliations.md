@@ -66,7 +66,13 @@ error."**, or **"Please correct {n} errors."** when there are several, with
 a **"Jump to next error"** link until every error is fixed. After a refused
 save, Save stays disabled while any flagged field still carries its error.
 Editing a flagged field clears that field's message alone, and Save enables
-once no error is left. <sup>c</sup> <sup>n</sup>
+once no error is left. The server can also refuse a save the form itself
+let through. The same foot then counts and lists the server's reasons as
+"Go to {Field}: {message}" buttons, and the page shows "The form was not saved because {n}
+error(s) were encountered. Please correct these errors and try again." A
+reason that names a field the chosen contributor type does not show can
+never be cleared, so Save stays disabled until the panel is closed
+⚠ [A20](#a20). <sup>c</sup> <sup>n</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
@@ -303,6 +309,16 @@ screen, Rule 12): <sup>e</sup>
 - **The journal's contributor roles** (Rules 11–13) shape the form's
   Contributor Roles choices. A one-role journal shows no choice at all,
   and cannot save a contributor from the form (⚠ [A14](#a14)).
+- **A "Forms" language not ticked under "Metadata".** On the journal's
+  "Languages" tab (Settings › Website › "Setup"), a language can be
+  ticked under "Forms" in "Website Languages" without being ticked under
+  "Metadata" in "Submission Languages"
+  ([Languages & locales](U57-languages-and-locales.md#form-languages);
+  install default: the primary language alone in both). Such a language
+  adds no box to the contributor form, but the workflow's "Add
+  Contributor" then never saves ([A20](#a20)). Adding the language to
+  "Submission Languages" with "Submissions" ticked, which ticks
+  "Metadata" too, lets it save again.
 - **ORCID enablement** decides whether the form carries the ORCID iD
   field. The setting belongs to *[ORCID integration](U04-orcid-integration.md)*.
 - Nothing gates the rest. The Contributors entry, the affiliations field
@@ -333,6 +349,9 @@ screen, Rule 12): <sup>e</sup>
   registry lookup (<a id="ror-lookup"></a>the search-as-you-type against
   the public ROR registry, the suggestion rows and the install's record
   cache; Rule 16).
+- *[Languages & locales](U57-languages-and-locales.md)* owns the
+  journal's "Languages" tab. The one combination of its ticks that
+  changes this feature is under Settings that modify behavior.
 - *Institutions* (no spec yet): the manager-maintained institution list
   for subscriptions and statistics is a separate record set. Only the
   registry lookup above is shared.
@@ -750,6 +769,9 @@ Left out of the scenarios above, by reason:
     Fields)
   - A19 (the email field labeled "Email" or "Email address" by the
     install; Fields)
+  - A20 (the workflow's "Add Contributor" never saving on a journal
+    with a "Forms" language not ticked under "Metadata"; Fields;
+    Settings)
   - OPS2 (the Competing Interests label rendering raw on a preprint
     server; Fields)
 - **No seed**:
@@ -795,6 +817,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A3](#a3) | The publication-lists tick is honored only by a press's catalog listings; journal and preprint-server listings ignore it | 🐞 | user-visible | — |
 | [A5](#a5) | A registry pick the server cannot cache raises an error dialog, then saves and publishes with no name | 🐞 | user-visible | — |
 | [A14](#a14) | On a one-role journal no contributor can be saved from the form; every attempt errors, yet creates a role-less contributor | 🐞 | user-visible | — |
+| [A20](#a20) | On a journal with a "Forms" language not ticked under "Metadata", the workflow's "Add Contributor" never saves, refused on fields the form does not show | 🐞 | user-visible | — |
 | [A7](#a7) | The contributor form's error summary prints "Go to Affiliations: [object Object]" | 🐞 | minor | — |
 | [A9](#a9) | The landing page's affiliation ROR link has no accessible name | 🐞 | minor | — |
 | [A10](#a10) | The typed affiliation's per-language name boxes are announced wrongly by a screen reader | 🐞 | minor | — |
@@ -1044,6 +1067,33 @@ Lean: a wording call either way; the defect is that the install, not the
 product, decides.
 Since: 2023-02-16 (3½ years) · Basis: test run. <sup>f-a19</sup>
 
+<a id="a20"></a>
+**A20 — "Add Contributor" never saves while a "Forms" language is not ticked under "Metadata"** · 🐞 · user-visible.
+A journal can have a language ticked under "Forms" but not under
+"Metadata" (Settings that modify behavior). On such a journal the
+workflow's "Add Contributor" › "Save" is refused for every contributor
+type, whether a Journal Manager, an assigned Section Editor or, on a
+preprint server, the submitting author presses it. The panel stays open and the page shows "The form was
+not saved because {n} error(s) were encountered." The foot names fields
+of the other contributor types, each as "Go to {Field}: This language is
+not accepted.":
+
+- **Person**: "Please correct one error.", naming Organization Name.
+- **Organization or group**: "Please correct 3 errors.", naming Given
+  Name, Family Name and Preferred Public Name.
+- **Anonymous**: "Please correct 5 errors.", naming those three, "Bio
+  Statement (e.g., department and rank)" and Organization Name.
+
+None of those fields is on the form, so nothing can be corrected. No
+field shows a message, and the "Go to …" buttons and "Jump to next error"
+move to no field. Typing into a field that is shown clears nothing, and
+"Save" stays disabled. "Close" leaves with nothing saved. On the same
+journal the wizard's Contributors step and a row's "Edit" save normally.
+Workaround: add the language to "Submission Languages" with
+"Submissions" ticked, or add the contributor in the wizard before
+submitting.
+Since: 2025-11-11 (10½ months) · Basis: probe. <sup>f-a20</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1210,7 +1260,7 @@ Lists"). Server validation
 `api.submission.400.emptyContributorRoles` ("There have to be at least
 one assigned contributor role."); competing interests →
 `author.competingInterests.required` ("A competing interest statement
-is required."). Both are API-side guards with no observed screen path:
+is required."). Neither of these two guards has an observed screen path:
 live-probed 2026-08-28, the form's client-side required check refuses
 first — no request is sent — with "This field is required." under the
 field and "Please correct one error." / "Jump to next error" at the
@@ -1222,9 +1272,17 @@ message gone, Save stayed disabled for a ten-second read while the
 other three messages showed, and enabled once Email, Country and a role
 were filled too; the shared form footer disables Save while the form
 holds any field error (`FormFooter.vue`, `isLastPage &&
-Object.keys(errors).length`). ORCID writes via these endpoints
-are refused outright (`api.orcid.403.cannotUpdateAuthorOrcid`) — the
-ORCID flows run through their own endpoints (U04). Type switching:
+Object.keys(errors).length`). A server refusal of a request the form
+did send does reach the screen (live-probed 2026-09-28, Fields preamble,
+OJS/OMP/OPS, three runs): the add endpoint's 400 put each refused field
+in the foot as "Go to {Field}: {message}" with "Please correct {n}
+errors." and "Jump to next error", the page notice "The form was not
+saved because {n} error(s) were encountered. Please correct these errors
+and try again." showed, and Save stayed disabled; a refused field the
+chosen type hides is never cleared (A20, fn f-a20). ORCID writes via
+these endpoints are refused outright
+(`api.orcid.403.cannotUpdateAuthorOrcid`) — the ORCID flows run through
+their own endpoints (U04). Type switching:
 `removeIrrelevantContributorTypeData()` nulls the other type's fields
 at save time — except `rorId`, which it misses: a typed ROR ID survived
 a cross-type save as Person and reappeared intact on switching the
@@ -1875,6 +1933,45 @@ loads last supplies the string. The duplicate dates from the .po merge
 of 2023-02-16 (pkp-lib `4ad3d52ba2`, pkp/pkp-lib#8598). Not read on
 OJS or OPS. The test now reads the label as `/Email( address)?/`
 (`.reports/U41/test-omp-fix-green.log`).
+
+<a id="fn-f-a20"></a>
+**f-a20 — A20 evidence.** Live-probed 2026-09-28 (Fields preamble;
+Settings that modify behavior; A20), three runs on each of OJS, OMP
+and OPS, on a scratch context with `supportedFormLocales` [en, fr_CA]
+and `supportedSubmissionLocales` / `supportedSubmissionMetadataLocales`
+[en] (the contributor form showed no language button). As the Journal
+Manager, as the assigned Section Editor / Series editor / Moderator,
+and on OPS as the submitting author on their own preprint's workflow
+list: "Add Contributor" › Save posted `POST
+…/submissions/{id}/publications/{id}/contributors` and got 400, Person
+`{"organizationName":{"fr_CA":["This language is not accepted."]}}`,
+Organization the same for `givenName`, `familyName`,
+`preferredPublicName`, Anonymous for those three plus `biography` and
+`organizationName`. The request carried English values only. Read 1.5 s
+and 10 s after the press: panel open, foot and notice as quoted, Save
+disabled, "Saving" never shown. From runs 2 and 3: "Jump to next error"
+and the first "Go to …" left the focus on the foot's "Jump to next
+error" button; typing into Given Name, Organization Name or (Anonymous)
+Email and leaving it cleared nothing; "Close" closed the panel with no
+confirmation, and the list was unchanged on the page and after a
+reload. No response of 500 or more and no page error; the console
+logged only the 400. Mechanism:
+`PKPSubmissionController::removeIrrelevantContributorTypeData()` sets
+every unselected type's multilingual field that the request omits to
+null in each of the context's form locales
+(`getSupportedFormLocales()`);
+`PKP\author\Repository::validate()` then applies
+`ValidatorFactory::allowedLocales()` with the submission's
+`getPublicationLanguages()` over the context's
+`getSupportedSubmissionMetadataLocales()`, which refuses `fr_CA`. The
+wizard's step and a row's "Edit" post every field under `[en]`, empty
+ones included, so the nulling adds no `fr_CA` key: on the same context
+the author's wizard add and an "Edit" save (Country picked first, A16)
+answered 200 and listed the row after a reload. Control: a second
+context with `fr_CA` also a submission (hence metadata) language saved a
+Person and an Organization, listed after a reload. A language ticked
+under "Metadata" alone is accepted by that code; not driven. Introduced
+by pkp-lib `52d3a0f8e7` (2025-11-11, "Contributor Roles and Type").
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** OMP

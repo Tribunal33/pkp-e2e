@@ -6,7 +6,6 @@ when the spec absorbs it.
 
 | Feature | Screen | Seen | Date | Evidence |
 |---|---|---|---|---|
-| U41 Contributors & affiliations | "Add Contributor" window, OJS and OMP | On a context with French under "Forms" but not among the submission languages, "Save" is refused with no message and the window stays under "Saving" (the API answers 400 "This language is not accepted." for the organization name). | 2026-09-20 | U34 test runs T-ojs-4, T-omp-1; app-changes row 15 |
 | U01 Login & sessions | Workflow › Participants, a Production editor signed in, OJS and OMP | A Production editor is offered "Login As" on participants' rows; the panel's banner reads "Logout as {full name}" where U01 Rule 13 names the username. | 2026-09-22 | U35 claim check K1, K5 |
 | U21 Submission wizard | Final "Submit", OJS and OMP | An editor who submits in their editorial role gets "You have been assigned as an editor…" for their own submission, and every manager gets "A new submission needs an editor to be assigned" from the same submit; the "Submit As" preselection differs per app. The section editors are assigned automatically only on the install's first journal (bears on U21 A8). | 2026-09-22 | U35 claim check K4 (K4-12), K5 (K5-2) |
 | U05 Notifications center & email preferences | Header "Tasks" panel, all three apps | The "…needs to be assigned" task reaches the Journal/Press editors as well as the managers (U05 Rule 6's roster); a long Participants message shows cut at about 150 characters in the task. | 2026-09-22 | U35 claim check K2 (K2-9), K3 |
