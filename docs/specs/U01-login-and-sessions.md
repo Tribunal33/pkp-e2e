@@ -14,17 +14,20 @@ username (or email address) and a password, and is taken where their roles
 point. Signing out hands the browser back to the public site. A forgotten
 password is recovered through an emailed link. An account can be flagged so
 that its next sign-in forces a password change. Two supervised doors exist on
-top of the ordinary one. Administrators and journal managers can **log in
-as** another user, to see the site exactly as that user does and act on their
-behalf. And the site can be configured so that the Administration area asks
+top of the ordinary one. The Site Administrator and a journal's
+manager-level roles can **log in as** another user, to see the site exactly
+as that user does and act on their behalf. And the site can be configured so that the Administration area asks
 the Site Administrator to **confirm their password** again before it opens.
 This spec covers those flows, the session behavior behind them (staying
 signed in, expiry), and the screens they run on.
 
 ## Actors & permissions
 
-A user is "wholly within a manager's journals" when every role they hold
-anywhere on the site sits in journals that manager manages.
+The manager-level roles are Journal Manager, Editor and Production editor
+(a preprint server has only its manager); holding one of them in a journal
+is what "managing" it means here. A user is "wholly within a manager's
+journals" when every role they hold anywhere on the site sits in journals
+that manager manages.
 Who can reach the Users & Roles screen itself belongs to the users-management
 feature (see *Cross-feature interactions*).
 
@@ -34,8 +37,9 @@ feature (see *Cross-feature interactions*).
 | **Request a password reset** | • Anyone, signed out, through the "Forgot your password?" link on the Login page (Rules 7–8) <sup>e</sup> |
 | **Set a new password from the emailed link** | • The holder of the emailed link, while the link is valid (Rules 8–10) <sup>f</sup> |
 | **Complete a forced password change** | • The account holder, at their next sign-in, when their account is flagged to require it (Rule 11) <sup>g</sup> |
-| **Impersonate a user (Login As)** | • Site Administrator: any account except their own or another Site Administrator's (Rule 14)<br>• Journal Manager: accounts wholly within the journals they manage (Rule 14)<br>• Nobody else. No other role is offered the action anywhere. Even the action's address, captured by hand in a session that does offer it (Rule 14), answers them with the access-denied page: "The current role does not have access to this operation." (Rule 17) <sup>h</sup> |
-| **Return to their own account** | • The impersonator, through "Logout as {username}" in the user menu, or the same entry on the workflow Participants panel (Rule 15) <sup>j</sup> |
+| **Flag an account for a forced password change** | • Site Administrator: any account of a hosted journal, through "Add User" or "Edit User" in that journal's "Settings wizard" › "Users" (Rule 11a)<br>• Whoever creates a reviewer through "Create New Reviewer" {OJS OMP}: that new account only, flagged automatically (Rule 11a)<br>• Journal Manager: cannot flag an existing account. The journal's own Users & Roles offers no such control, and the wizard's address answers them with the access-denied page ⚠ [A5](#a5) <sup>g</sup> |
+| **Impersonate a user (Login As)** | • Site Administrator: any account except their own or another Site Administrator's (Rule 14)<br>• Journal Manager, Editor and Production editor: accounts wholly within the journals they manage (Rule 14)<br>• Nobody else. No role below manager level is offered the action anywhere. Even the action's address, captured by hand in a session that does offer it (Rule 14), answers them with the access-denied page: "The current role does not have access to this operation." (Rule 17) <sup>h</sup> |
+| **Return to their own account** | • The impersonator, through "Logout as {username}" in the user menu, or "Logout as {full name}" at the top of the workflow Participants panel (Rule 15) <sup>j</sup> |
 | **Pass the Confirm Access gate** | • Site Administrator. The gate exists only when the site's configuration requires re-authentication, and only the Administration area asks (Rule 16). Every other role is turned away from Administration by its ordinary role gate, never by this one <sup>k</sup> |
 | **See the access-denied page** | • Any signed-in user who reaches a screen their role does not allow (Rule 17). A signed-out visitor gets the Login page instead (Rule 4) <sup>l</sup> |
 
@@ -69,7 +73,9 @@ title ⚠ [A3](#a3):
 | "New password" | yes | At least the site minimum length, stated under the field: "The password must be at least {N} characters." When the site's compromised-password check is on, a known-breached password is refused (see *Settings*) <sup>f</sup> |
 | "Repeat new password" | yes | Must match |
 
-**Change Password form** (forced at sign-in; title "Change Password"):
+**Change Password form** (forced at sign-in; title "Change Password"). The
+browser tab reads "Change Password | {journal name}", but after a refused
+"OK" only the journal's name ⚠ [A11](#a11):
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
@@ -111,9 +117,12 @@ title ⚠ [A3](#a3):
    Nothing on it names the destination being held, though a few screens add
    an explanatory sentence above the form (a download that requires signing
    in, for example). Signing in continues to the address they originally
-   asked for. One address misbehaves: the address that ends at the word
-   "dashboard", with nothing after it, answers a blank server-error page
-   instead of the Login page ⚠ [A7](#a7). <sup>b</sup>
+   asked for. When that address is a screen their roles do not allow (a
+   Reader who had opened a journal's settings, say), the sign-in lands on
+   the access-denied page instead (Rule 17). One address misbehaves: the
+   address that ends at the word "dashboard", with nothing after it,
+   answers a blank server-error page instead of the Login page
+   ⚠ [A7](#a7). <sup>b</sup>
 5. **Staying signed in.** Closing the browser does not sign a user out.
    Ticked or not, the sign-in survives browser restarts, unless the
    installation is configured to end sessions at browser close. Unticked,
@@ -153,11 +162,20 @@ title ⚠ [A3](#a3):
     The page explains "You must choose a new password before you can log in
     to this site…". Completing the form signs the user in and lands them
     where an ordinary sign-in would (Rule 3; a reviewer, for instance, lands
-    on the Dashboard). Their other sessions end. No users screen offers the
-    flag itself ⚠ [A5](#a5). The one screen-driven path that sets it is the
-    review stage's "Create New Reviewer" {OJS OMP}, which flags the new
-    account automatically and emails it a generated password. That form
-    belongs to the reviewer-assignment feature. <sup>g</sup>
+    on the Dashboard). Their other sessions end at that moment; flagging
+    the account alone leaves them signed in. <sup>g</sup>
+11a. **Where the flag is set.** Administration › Hosted Journals, a
+    journal's row, the arrow at its start, "Settings wizard", then the tab
+    "Users" holds an older users list. Its "Add User" and "Edit User"
+    windows carry the box "Change Password" ("User must change password on
+    next log in."), and saving with it ticked flags the account; the
+    windows belong to [Users management](U53-users-management.md). On
+    "Edit User" the box always opens unticked, flagged account or not, and
+    saving it unticked clears the flag ⚠ [A10](#a10). The review stage's "Create New Reviewer" {OJS OMP} flags the account it
+    creates and emails it a generated password; that form belongs to the
+    reviewer-assignment feature. The page a row's "Edit" opens on a
+    journal's Settings › Users & Roles has no password control
+    [A5](#a5). <sup>g</sup>
 12. **Impersonation is total while it lasts.** After Login As, the browser
     session **is** the target user: their dashboard, their submissions, their
     name on everything done. The action sits behind a confirmation dialog
@@ -167,16 +185,18 @@ title ⚠ [A3](#a3):
     impersonator's own initials, muted, with the target's initials overlaid
     in a warning color. The user menu adds "You are currently logged in as
     {username}" with a "Logout as {username}" link. On a submission's
-    workflow screen, the Participants panel shows its own "Logout as
-    {username}" entry at the top of the list. In every one of these,
-    {username} is the **impersonated** account. The labels name the user
-    being worn, not the one who will be restored. <sup>j</sup>
+    workflow screen that shows the Participants panel, the panel's first
+    entry is a "Logout as {full name}" button. Both labels name the
+    **impersonated** account, the user being worn, not the one who will be
+    restored. An impersonated Author's view of a submission has no
+    Participants panel, so there the user menu is the only exit. <sup>j</sup>
 14. <a id="who-may-impersonate"></a> **Who may impersonate whom.** A Site
     Administrator may impersonate anyone except themselves and other Site
-    Administrators. A Journal Manager may impersonate a user wholly within
-    the journals they manage. A user who also holds roles in a journal the
-    manager does not manage is out of reach. Rows never offer the action on
-    the current user's own account. No screen offers a path to an
+    Administrators. A Journal Manager, Editor or Production editor may
+    impersonate a user wholly within the journals they manage (the terms
+    are defined above the Actors table). A user who also holds roles in a
+    journal the manager does not manage is out of reach. Rows never offer
+    the action on the current user's own account. No screen offers a path to an
     out-of-reach user, but the action's address can be built by hand: use
     Login As on a row that does offer it, copy the address the browser
     visited from its history (it ends in a number identifying that user),
@@ -188,9 +208,10 @@ title ⚠ [A3](#a3):
     outlived a server-side reset, say), the same address answers a blank
     server error instead of impersonating or turning the visitor away
     ⚠ [A8](#a8). <sup>h</sup>
-15. **Returning.** "Logout as {username}" (user menu or Participants panel)
-    restores the original account without asking for credentials and lands
-    home, or back on the same submission when used from a workflow screen.
+15. **Returning.** "Logout as", the user menu's "Logout as {username}" or
+    the Participants panel's "Logout as {full name}", restores the original
+    account without asking for credentials and lands home, or back on the
+    same submission when used from a workflow screen.
     Typing the plain sign-out address instead ends everything: the browser is
     signed out of both identities and lands on the Login page, not back in
     the original account. That address must be captured before
@@ -298,15 +319,16 @@ title ⚠ [A3](#a3):
 - **User profile.** A signed-in user changes their own password on the
   profile's Password tab (see *User profile*). This spec covers only the
   flows that block sign-in: the forced change and the emailed reset.
-- **Users management.** Disabling accounts (with the reason Rule 2 shows)
-  and the Users & Roles screen, where Login As is most prominently offered,
-  belong to *Users management*. This spec covers the Login As action itself
-  on every screen that offers it. No users screen currently exposes the flag
-  behind the forced password change ⚠ [A5](#a5) (Rule 11).
+- **Users management.** Disabling accounts (with the reason Rule 2 shows),
+  the Users & Roles screen, where Login As is most prominently offered, and
+  the Site Administrator's older users list, whose "Add User" and "Edit
+  User" windows carry the forced-change box (Rule 11a), belong to
+  [Users management](U53-users-management.md). This spec covers the Login
+  As action itself on every screen that offers it, and what the flag does.
 - **Stage participants / Reviewer assignment.** The Participants panel and
   the Reviewers table belong to their own features. This spec covers only
   their "Login As" / "Logout as" entries. The "Create New Reviewer" form that
-  flags its new account for a password change (Rule 11) belongs to the
+  flags its new account for a password change (Rule 11a) belongs to the
   reviewer-assignment feature.
 - **System administration.** The Administration area the Confirm Access gate
   protects, and the "Expire User Sessions" tool, belong to *System
@@ -466,8 +488,10 @@ tooling recipe are in the footnote. <sup>s</sup>
    - **Control**: signing in again with Changed1 is normal: the browser
      lands on the Dashboard with no "Change Password" form.
 
-   A preprint server has no review stage, so no screen there sets the
-   flag: no OPS analogue.
+   A preprint server has no review stage and so no "Create New Reviewer":
+   no OPS analogue. There the Site Administrator's "Add User" and "Edit
+   User" flag an account (Rule 11a); the "Add User" path, with its first sign-in, is scenario 7 of
+   [Users management](U53-users-management.md), on all three apps.
 
 7. **Administrator impersonates a user and returns**
 
@@ -512,9 +536,9 @@ tooling recipe are in the footnote. <sup>s</sup>
      Section Editor participant's row menu, choose "Login As", and
      confirm: the browser lands on the same submission as that
      participant, and the top of the Participants panel now offers "Logout
-     as {that participant}".
-   - **"Logout as {that participant}"**: press it to return to the
-     editor's view of the same submission.
+     as {the participant's full name}" (Rule 13).
+   - **"Logout as {the participant's full name}"**: press it to return to
+     the editor's view of the same submission.
    - **The Author's row**: impersonating the submission's Author instead
      lands on the author's own My Submissions view, which shows no
      Participants panel. The way back is then the user menu's "Logout as
@@ -540,20 +564,25 @@ tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Budget** — states:
+  - a forced change ending the account's other sessions, and flagging alone leaving them signed in (Rule 11): it needs the Site Administrator's "Edit User" (Rule 11a) on an account already signed in elsewhere
 - **Nothing new to test**:
   - a wrong or unknown username getting the same sentence (Rule 2; scenario 1's wrong password)
   - roles held only in other journals landing on the journal home page (Rule 3; scenario 1's Reader)
+  - a Production editor offered "Login As" (Actors row "Impersonate a user"; Rule 14): the same offer as scenario 8's Editor
+  - a held address the user's roles do not allow ending on the access-denied page after sign-in (Rule 4): the page scenario 4 reads (Rule 17)
 - **Register carries it**:
+  - A11 (the refused "Change Password" losing its name in the browser tab; Fields)
   - A7 (the address ending at the word "dashboard" answering a blank error; Rule 4)
-  - A5 (no users screen offering the forced-change flag; Rule 11)
+  - A5 (no journal-level users screen offering the forced-change flag; Rule 11a)
+  - A10 ("Edit User" hiding the flag and clearing it on saving; Rule 11a)
   - A8 (Login As from a stale session answering a blank error; Rule 14)
   - A4 (Login As still offered mid-impersonation; Rule 15)
 - **No seed**:
   - a disabled account refused, with or without a reason (Rule 2)
-  - the Site Administrator passing Confirm Access (Actors row 7): what is missing is a per-context way to set the re-authentication window; the configuration file's `password_timeout` is run-global
+  - the Site Administrator passing Confirm Access (Actors row "Pass the Confirm Access gate"): what is missing is a per-context way to set the re-authentication window; the configuration file's `password_timeout` is run-global
   - Confirm Access's window lapse, no replay, and the direct address going home (Rule 16): the same missing window setting
   - other Site Administrators never offered Login As (Rule 14): what is missing is a second site administrator
-  - a forced change ending the account's other sessions (Rule 11): what is missing is the flag set on an account that is already signed in elsewhere; no screen or key sets it (A5)
   - "Keep me logged in" extending past the idle limit (Rule 5, `remember_me_lifetime`)
   - the reset link expiring on the clock (Rule 8, `reset_seconds`)
   - a link whose username no longer exists landing on the lost-password page (Rule 10)
@@ -564,6 +593,7 @@ Left out of the scenarios above, by reason:
   - forced https for login or the site (Settings, `force_login_ssl`, `force_ssl`)
   - the idle session lifetime (Settings, `session_lifetime`)
 - **Owned by another feature**:
+  - the Site Administrator's "Add User" flagging a new account, whose first sign-in diverts to "Change Password" (Rule 11a; *[Users management](U53-users-management.md)*, scenario 7)
   - the "Expire User Sessions" tool ending every session (Rule 18; *System administration & jobs*)
   - an action taken while impersonating carrying the target's name, and its activity-log line "{impersonator} (acting as {target})" (Side effects): no action of this feature writes a log entry; the actions belong to the workflow stages and the log screen to *Submission activity log & notes*
   - spam checks on login and lost-password (Settings; *Registration & account validation*)
@@ -584,7 +614,9 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A4](#a4) | "Login As" is still offered mid-impersonation (Users & Roles and the Participants panel); a second use strands the operator, because "Logout as" restores the intermediate user, not their own account | 🐞 | latent | Jarda 2026-08-25 |
 | [A7](#a7) | Signed out, the address ending at the word "dashboard" answers a blank server error instead of the Login page | 🐞 | user-visible | Jarda 2026-08-25 |
 | [A8](#a8) | Login As answers a blank server error when the browser's session can no longer be fully resolved (e.g. it outlived a server-side reset) | 🐞 | minor | Jarda 2026-08-25 |
-| [A5](#a5) | No users screen offers the "must change password" flag, so a forced change cannot be required on an existing account | ❓ | user-visible | Jarda 2026-08-25 · to triage |
+| [A10](#a10) | "Edit User" always opens with "Change Password" unticked, and saving it clears a flag already set | 🐞 | minor | — |
+| [A11](#a11) | After a refused "OK" on the forced "Change Password" page, the browser tab loses the page's name | 🐞 | minor | — |
+| [A5](#a5) | No journal-level users screen offers the "must change password" box, so a Journal Manager cannot require a forced change on an existing account; only the Site Administrator's Hosted Journals list offers it | ❓ | user-visible | Jarda 2026-08-25 · to triage |
 | [A9](#a9) | The last-login date is recorded on every sign-in, but no users screen shows it, so a manager cannot see when an account last signed in | ❓ | minor | — |
 | [A6](#a6) | With rate limiting on, even the correct password is refused as "Invalid username/email or password" during the cool-down; the concealment is intended | ✅ | latent | Jarda 2026-08-25 |
 
@@ -658,18 +690,21 @@ Basis: observed on a running site + code inspection. <sup>[f-a4](#fn-a4)</sup>
 > "can log in as" property so every screen inherits the rule at once.
 
 <a id="a5"></a>
-**A5 — No screen sets the "must change password" flag** · ❓ · user-visible.
-The forced-change flow (Rule 11) is fully functional, but no current users
-screen offers the flag that triggers it. A user row's "Edit" opens an
-invite-style wizard with no such option. The only screen-driven path that
-flags an account is the review stage's "Create New Reviewer" {OJS OMP},
-which flags its newly created account automatically. So staff cannot require
-a password change on an existing account. In OJS 3.4 the users list's Edit
-User form offered exactly this checkbox on existing accounts. The capability
-was dropped when that form was replaced by the invitation wizard.
-Question: bring the capability back (and on which screen), or retire it
-deliberately? Lean: none recorded. The loss is verified fact; the
-restoration is a product call.
+**A5 — No journal-level screen sets the "must change password" flag** · ❓ · user-visible.
+The forced-change flow (Rule 11) is fully functional, but a journal's own
+users screen does not offer the flag that triggers it. On Settings › Users
+& Roles, a user row's "Edit" opens an invite-style page with no password
+control. Only the Site Administrator's older users list in Administration ›
+Hosted Journals offers the box, on "Add User" and "Edit User" (Rule 11a)
+[A10](#a10); the review stage's "Create New Reviewer" {OJS OMP} flags only
+the account it creates. So a Journal Manager cannot require a password
+change on an existing account; only the Site Administrator can. In OJS 3.4
+the journal's own users list's Edit User form offered exactly this
+checkbox on existing accounts. The capability left the journal's screen
+when that form was replaced by the invitation wizard.
+Question: bring the capability back to a journal's own users screen (and
+which one), or leave it to the Site Administrator deliberately? Lean: none
+recorded. The loss is verified fact; the restoration is a product call.
 Basis: observed on a running site + 3.4 code comparison.
 <sup>[f-a5](#fn-a5)</sup>
 
@@ -747,6 +782,31 @@ list, where a manager looks for an account; that screen belongs to *Users
 management*, so the ruling is that feature's.
 Since: 2026-09-13 · Basis: test run. <sup>[f-a9](#fn-a9)</sup>
 
+<a id="a10"></a>
+**A10 — "Edit User" hides the forced-change flag and clears it on saving** · 🐞 · minor.
+On the Site Administrator's "Edit User" (Rule 11a), the "Change Password"
+box should show whether the account is already flagged. It always opens
+unticked: ticked and saved with "OK", then reopened, before or after a
+reload, it reads unticked, while the account's next sign-in does divert to
+"Change Password". Pressing "OK" on a flagged account with nothing changed
+silently removes the flag: its next sign-in lands where an ordinary one
+would, with no "Change Password". So the administrator cannot see whether
+an account is flagged, and any later edit of it undoes the flag. The window
+has behaved this way since it arrived, but a box that never shows its
+stored value, so that saving it as it opened clears that value, reads as
+an oversight, not a design.
+Since: 2013-02-14 (13 years) · Basis: probe + commit. <sup>[f-a10](#fn-a10)</sup>
+
+<a id="a11"></a>
+**A11 — A refused "Change Password" loses its name in the browser tab** · 🐞 · minor.
+On the forced "Change Password" page the browser tab reads
+"Change Password | {journal name}". After "OK" is refused (a wrong
+current password), the page still reads "Change Password" with "Errors
+occurred processing this form: The current password you entered was
+incorrect.", but the tab reads only the journal's name. Same family as
+[A3](#a3).
+Basis: probe. <sup>[f-a11](#fn-a11)</sup>
+
 ---
 
 <a id="footnotes"></a>
@@ -798,7 +858,17 @@ landings, the signed-in bounce off Login and lost-password, and the
 interrupted visit — a held workflow address shows the plain Login page (no
 visible mention of the pending destination) and continues to that
 submission after sign-in. No screen shows the last-login date: test run
-2026-09-13, finding A9 (note f-a9).
+2026-09-13, finding A9 (note f-a9). Live-probed 2026-09-28 (OJS, OMP,
+OPS; two runs each; `reader.rosa` and a scratch Reader): the Reader
+signing in at the journal's own Login page, opened directly, lands on the
+journal's `index` page ("Journal of Public Knowledge", "Public Knowledge
+Press", "Public Knowledge Preprint Server"), also after a reload and right
+after a manager's sign-in in the same browser; at the site-level Login, on
+the site's `index`. A private address typed signed out
+(`publicknowledge/manageCatalog` on OMP, `…/management/settings/context`
+on OJS and OPS) gives the plain Login page with `source`, and the Reader's
+sign-in then lands on `user/authorizationDenied?message=user.authorization.roleBasedAccessDenied`
+(Rule 4's held address meeting Rule 17).
 
 <a id="fn-c"></a>
 **c** — Remember: `Validation::login(..., $remember)` → Laravel
@@ -866,11 +936,20 @@ form; saving leaves the user signed out and the new password works
 characters."). Browser-tab title defect on this form: finding A3.
 
 <a id="fn-g"></a>
-**g** — Flag: `user.mustChangePassword`. No current users screen exposes it
-(finding A5); the review stage's Create New Reviewer form
-(`CreateReviewerForm`) sets it on the account it creates and emails a
-generated password. `LoginHandler::signIn()` — a flagged user's successful
-credential check immediately logs the fresh session out again and redirects
+**g** — Flag: `user.mustChangePassword`. Set on screen by the Site
+Administrator's Hosted Journals wizard › "Users" (legacy `UserGridHandler`
+→ `PKP\controllers\grid\settings\user\form\UserDetailsForm`,
+`common/userDetails.tpl`, labels `grid.user.mustChangePassword` /
+`grid.user.mustChangePasswordDescription`; the wizard is an
+Administration page, so the role gate refuses a Journal Manager) and by
+the review stage's Create New Reviewer form (`CreateReviewerForm`), which
+sets it on the account it creates and emails a generated password; the
+journal's Users & Roles "Edit" page carries no password control (finding
+A5). Read in the code, not driven: the Users XML import
+(`UserXmlPKPUserFilter`) also flags the accounts it creates (a
+`must_change="true"` password, or a password hash it has to replace),
+never an existing account. `LoginHandler::signIn()` — a flagged user's
+successful credential check immediately logs the fresh session out again and redirects
 to `changePassword/{username}`; `PKP\user\form\LoginChangePasswordForm`
 (`user/loginChangePassword.tpl`, instructions
 `user.login.changePasswordInstructions`; checks: current password via
@@ -879,7 +958,33 @@ the flag, calls `Auth::logoutOtherDevices()`, signs the user in
 (`Validation::login`) and `sendHome()`s them. Live-probed 2026-07-31 (OJS;
 OMP byte-identical): the divert, the wrong-current-password error verbatim,
 sign-in on completion (a reviewer lands on their reviewer dashboard) and a
-normal next sign-in; the submit button is labeled "OK".
+normal next sign-in; the submit button is labeled "OK". Live-probed
+2026-09-28 (OJS, OMP, OPS; two runs each; scratch contexts, `admin`
+signed in; Rules 11, 11a): the wizard's "Users" tab offers "Search" and
+"Add User", its rows "Email", "Edit User", "Disable User", "Remove",
+"Login As", "Merge User". An account added with the box left ticked, and
+an existing account ticked on "Edit User" and saved with "OK", both divert
+at their next sign-in at the journal's Login page to
+`login/changePassword/{username}` ("Change Password", "You must choose a
+new password before you can log in to this site. Please enter your
+username and your current and new passwords below…"); a wrong current
+password answers "Errors occurred processing this form: The current
+password you entered was incorrect." at `login/savePassword#formErrors`;
+completing lands on the author's My Submissions, as does the next
+sign-in with the new password; an account added with the box unticked
+lands on My Submissions at once. "Cancel" after ticking closes the window
+with no question. Other sessions: the account signed in in a second
+browser before the flag stayed signed in after the flag alone (My
+Submissions), and its next page after the change was completed in a
+third browser was the Login page, where signing in again worked. The
+Users & Roles row's "Edit" (`management/settings/user/{id}`, "Invite user
+to take a role") shows no password control and no mention of one, opened
+by `admin` or by the scratch Journal Manager; the manager typing the
+wizard's address (`index/admin/wizard/{id}`) gets the site-level
+access-denied page. Every wizard load also answered a server error on the
+Plugin Gallery's list (`plugin-gallery-grid/fetch-grid`, 500), which is
+[Plugins management's A1](U62-plugins-management.md#a1); the users flow
+itself was unaffected.
 
 <a id="fn-h"></a>
 **h** — Ops `signInAsUser/{userId}` and `signOutAsUser`
@@ -900,7 +1005,17 @@ both the guards and the handler. Session switch:
 row for the administrator and the manager, absent on one's own row and —
 for the manager — on a Site Administrator's row; the cross-journal case
 hides the row action, and the typed address answers the denial page, whose
-back link is labeled "All Enrolled Users".
+back link is labeled "All Enrolled Users". The Manager role behind the
+policy and the reach test (`ROLE_ID_MANAGER`) is the one the Journal
+Manager, Editor (`editor.diana`, scenario 8's actor) and Production editor
+groups carry in OJS's and OMP's `registry/userGroups.xml`; OPS's registers
+only its manager with it.
+Live-probed 2026-09-28 (OJS, OMP; two runs each; scratch context): a
+Production editor participant is offered "Login As" on the Author's and
+the Section editor's Participants-panel rows (menu "Edit", "Notify",
+"Login As", "Remove"), the confirmation reads as in Rule 12, and OK
+impersonates; OPS seeds neither group, and its Preprint Server Manager and
+`admin` get the same.
 
 <a id="fn-i"></a>
 **i** — Offering surfaces and their guards, all confirming with
@@ -948,7 +1063,17 @@ author.alex" while the administrator impersonated author.alex); the
 Participants-panel entry shows the impersonated user's full name ("Logout
 as Ravi Section Editor"); no plain Logout entry exists alongside. Typing
 the plain sign-out address mid-impersonation ends the whole session — the
-browser lands signed out on the Login page (Rule 15).
+browser lands signed out on the Login page (Rule 15). Re-probed 2026-09-28
+(OJS, OMP, OPS; two runs each; a scratch Production editor and `admin`,
+on OPS the Preprint Server Manager and `admin`, on a scratch submission in
+Production): wearing the Section editor, the panel's first entry is the
+button "Logout as Sid Sectioned" (the full name) while the user menu reads
+"Logout as {username}"; wearing the Author, the browser lands on
+`dashboard/mySubmissions?workflowSubmissionId=…` (OPS on its Title &
+Abstract entry) with no Participants panel, the menu reading "You are
+currently logged in as {username}", "Logout as {username}", "Edit
+Profile", "Logout as {username}". Both exits return to the impersonator's
+view of the same submission, with a plain "Logout" in the menu again.
 
 <a id="fn-k"></a>
 **k** — Gate: `[security] password_timeout` (minutes; commented out/0 =
@@ -1129,16 +1254,25 @@ legacy rule.
 **f-a5** — Flag `user.mustChangePassword`. Live-probed 2026-07-31 (OJS,
 OMP): the users list row's "Edit" opens the invite-style wizard, which
 carries no password-related control; no other users-screen path offers
-one. The review stage's Create New Reviewer form (`CreateReviewerForm`)
+one (corrected below). The review stage's Create New Reviewer form (`CreateReviewerForm`)
 sets the flag on the account it creates and mails a generated password
-(driven live — scenario 6's seeding path). The legacy user-details form
-(`UserDetailsForm` + `userDetails.tpl`) still carries the checkbox, but no
-current screen links to it. 3.4 comparison (2026-08-25, review): in OJS
-3.4.0 the users grid's Edit User (`UserGridHandler::editUser` →
+(driven live — scenario 6's seeding path). 3.4 comparison (2026-08-25,
+review): in OJS 3.4.0 the users grid's Edit User (`UserGridHandler::editUser` →
 `UserDetailsForm` → `common/userDetails.tpl`) rendered the checkbox for
 EXISTING accounts — `readUserVars` includes `mustChangePassword`
 unconditionally and `execute` writes it for any user; the true-by-default
 initData applies to new accounts only — establishing the regression.
+Corrected 2026-09-28, after the 2026-08-25 review (live-probed OJS, OMP,
+OPS; two runs each; note g): the legacy user-details form
+(`UserDetailsForm` + `userDetails.tpl`) is still linked, from the Site
+Administrator's Hosted Journals wizard › "Users" grid, on "Add User" and
+"Edit User", and flags new and existing accounts. The entry's earlier
+wording ("no current users screen offers the flag … staff cannot require a
+password change on an existing account") was wrong for the Site
+Administrator; it now names the journal's own screen, which still has no
+control (opened by `admin` and by a Journal Manager), and the question
+narrowed with it. The reviewed loss stands for that screen, the one 3.4
+gave Journal Managers.
 
 <a id="fn-a6"></a>
 **f-a6** — Live-probed 2026-08-01 (OJS, scratch user, site setting
@@ -1192,6 +1326,34 @@ of the field outside its mocks, and Administration's index links no users
 list. The suites assert the row and the six headers and the date neither
 way.
 
+<a id="fn-a10"></a>
+**f-a10** — `PKP\controllers\grid\settings\user\form\UserDetailsForm`:
+`initData()` sets `mustChangePassword` (true) only for a new user and never
+loads the stored flag for an existing one, so `common/userDetails.tpl`
+renders the box unticked; `readInputData()` reads the box and `execute()`
+writes `setMustChangePassword()` from the posted value for every user.
+Unchanged since the users grid was ported from OMP (pkp-lib `cca31520cc`,
+2013-02-14; `git log -S` on the checkout). Live-probed 2026-09-28 (OJS,
+OMP, OPS; two runs each; `admin` on a scratch context's wizard › "Users"):
+"Edit User" on an unflagged account opens with the box unticked; ticked
+and saved with "OK" (the window closes), then reopened on the
+same page and again after a reload, it reads unticked, while the
+account's next sign-in diverts to "Change Password". A second account,
+flagged the same way, then opened with "Edit User" and saved with "OK"
+with nothing changed, signs in next straight to My Submissions with no
+"Change Password".
+
+<a id="fn-a11"></a>
+**f-a11** — Live-probed 2026-09-28 (OJS, OMP, OPS; two runs each; scratch
+contexts, accounts flagged through the Site Administrator's wizard): at
+`login/changePassword/{username}` the title reads "Change Password |
+{journal name}"; after "OK" with a wrong current password the page, at
+`login/savePassword#formErrors`, still carries the heading "Change
+Password" and the error, and the title reads only the journal's name
+(`LoginHandler::savePassword()` re-displays
+`user/loginChangePassword.tpl` without the page title the
+`changePassword` op sets).
+
 ## Reference — entry points & surfaces
 
 | Entry | Path | Atom |
@@ -1201,6 +1363,7 @@ way.
 | Lost password | `login/lostPassword` → POST `login/requestResetPassword` | AFFU-036..039 |
 | Emailed reset link | `login/resetPassword/{username}?confirm={hash}` → form POSTs `login/updateResetPassword` | AFFU-040..043 · MAIL-030 |
 | Forced password change | `login/changePassword[/{username}]` → POST `login/savePassword` | AFFU-044..048 |
+| Forced-change flag — hosted-journal users grid | Administration → Hosted Journals → journal → Users tab → "Add User" / "Edit User" | AFFM-209 |
 | Login As / return | `login/signInAsUser/{id}` · `login/signOutAsUser` | ROUTE-016 |
 | Login As — Users & Roles row | Settings → Users & Roles → user row menu | AFFM-105 |
 | Login As — Participants panel | workflow → Participants row action (+ "Logout as" entry) | AFFW-470, 473, 467 |
@@ -1221,5 +1384,5 @@ way.
 - `lib/pkp/classes/mail/mailables/PasswordResetRequested.php` (+ `mail/traits/PasswordResetUrl.php`)
 - Templates: `lib/pkp/templates/frontend/pages/userLogin.tpl`, `userLostPassword.tpl`; `lib/pkp/templates/user/userPasswordReset.tpl`, `loginChangePassword.tpl`, `confirmPassword.tpl`
 - UI library: `src/components/TopNavActions/TopNavActions.vue` · `src/composables/useUserAuth.js` · `src/managers/{UserAccessManager,ParticipantManager,ReviewerManager}/`
-- Legacy grid: `lib/pkp/controllers/grid/settings/user/UserGridRow.php`
+- Legacy grid: `lib/pkp/controllers/grid/settings/user/UserGridRow.php` · `form/UserDetailsForm.php` (the forced-change box, Rule 11a) · `lib/pkp/templates/common/userDetails.tpl`
 - App divergence points checked: none in `pages/login` or `pages/admin` (no app subclasses); `pages/user/UserHandler.php` in each app (no login-related overrides)

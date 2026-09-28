@@ -12,7 +12,7 @@
  * maxlength; the cap itself is unasserted), A2 (the pre-ticked "Keep me
  * logged in" box: S1 unticks it without asserting its arrival state), A3
  * (the reset form's browser-tab title; the page heading is asserted
- * instead), A4, A5 (S6 drives the one screen-driven path that sets the
+ * instead), A4, A5 (S6 drives a screen-driven path that sets the
  * forced-change flag, Create New Reviewer), A6, A7 (S2's control reads a
  * dashboard address that is not the bare "dashboard" one), A8.
  *

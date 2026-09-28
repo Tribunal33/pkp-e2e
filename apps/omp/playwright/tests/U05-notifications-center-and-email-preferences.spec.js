@@ -1198,14 +1198,15 @@ test.describe('notifications center & email preferences', () => {
         expect(link, 'the footer "unsubscribe" link').toBeTruthy();
         expect(link).toMatch(new RegExp(`/${press.path}/notification/unsubscribe\\?validate=[^&]+&id=\\d+$`));
 
-        // No task: the Series Editor's Tasks window gains no row for it
-        // (bounded by the email above; the window's own list is the read).
+        // No task: the Series Editor's Tasks window has no row for the
+        // submission at all (bounded by the email above; the window's own list is the read).
         const editorPage = await (await asUser(sectionEditor)).newPage();
         const editorTasks = new TasksPanel(editorPage);
         await gotoEditorial(editorPage, press.path);
         await editorTasks.open();
         await expect(editorTasks.grid()).toBeVisible();
         await expect(editorTasks.rows().or(editorTasks.noItems()).first()).toBeVisible();
+        await expect(editorTasks.row(title)).toHaveCount(0);
         await expect(editorTasks.rowsOpening(/reviewer has commented/i)).toHaveCount(0);
         await expect(editorTasks.rowsOpening(/review complete/i)).toHaveCount(0);
         await expect(editorTasks.rows().filter({hasText: reviewerName})).toHaveCount(0);

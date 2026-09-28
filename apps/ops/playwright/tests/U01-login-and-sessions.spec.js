@@ -474,10 +474,11 @@ test.describe('login & sessions (U1) — OPS', () => {
     });
 
     test('S6 {OJS OMP}: no OPS screen offers the Create New Reviewer path that sets the forced-change flag (absence)', async ({asUser, opsApi}) => {
-        // A preprint server has no review stage, so the one screen-driven
-        // path that flags an account for a forced password change (the
-        // review stage's "Create New Reviewer") does not exist — the flow
-        // itself is covered by the OJS and OMP suites.
+        // A preprint server has no review stage, so the review stage's
+        // "Create New Reviewer" path to the forced password change does not
+        // exist here (the Site Administrator's Hosted Journals "Users"
+        // screen can set the flag, Rule 11a); the flow itself is covered by
+        // the OJS and OMP suites.
         const tag = makeTag('u1s6');
         const manager = `m${tag}`;
         const author = `a${tag}`;

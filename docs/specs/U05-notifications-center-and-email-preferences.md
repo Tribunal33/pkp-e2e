@@ -44,7 +44,13 @@ choices and the Unsubscribe page.
 Notifications tab always act on that account, and no address opens another
 person's. "The addressee" of an email is the account the email was sent to;
 the Unsubscribe page acts on the addressee, whoever opens it. A "task" is
-one row in the Tasks panel.
+one row in the Tasks panel. A *manager-level role* is one of the roles
+whose permission level on Settings › Users & Roles › "Roles" is the
+Journal Manager's
+([→ manager-level roles](U07-journal-identity-and-about-pages.md#settings-access)):
+on a default journal the Journal Manager, the Editor and the Production
+Editor; on a press the Press Manager, the Press Editor and the Production
+Editor; on a preprint server the Preprint Server Manager alone. <sup>e</sup>
 
 | Action | Who may, and when |
 |--------|--------------------|
@@ -251,10 +257,10 @@ items" on an empty list). No text can be typed anywhere in the panel.
    | "A new announcement has been created." / "New announcement." | A Journal Manager posts an announcement (*Announcements*, spec not yet written) | every user with a role in the journal | no task | only when the announcement was posted with "Send an email about this to all registered users." ticked; link: yes |
    | "An issue has been published." {OJS} | A Journal Manager publishes an issue with "Send an email about this to all registered users." ticked in the "Publish Issue" dialog (*Issues*, spec not yet written) | every user with a role in the journal | no task | yes; link: yes |
    | "An issue has been made open access." {OJS} | the day an issue of a subscription journal becomes open access, if the journal's open-access notification is on (those screens are *Subscriptions & open access control*'s, spec not yet written). A scheduled task raises it (above); no screen starts it | every user with a role in the journal | no task | yes; link: yes |
-   | "A new article, "Title," has been submitted." | a new submission into a section whose form has an editor ticked under "Editorial Assignments" (Settings › Journal › "Sections", a section's "Edit"; the assignment itself is *[Submission wizard](U21-submission-wizard.md)*'s). On every journal but the install's first (its oldest; the seeded journal, on a test install) the tick is ignored and this event never happens: the submission raises the "needs an editor" row's event instead, as if nobody were ticked ⚠ [A11](#a11) <sup>e</sup> | nobody, by this row, on any journal but the install's first: the ticked editor gets neither task nor email, and every Journal Manager gets the "needs an editor" row's task and email exactly as for that row below (what the ticked editor gets on the install's first journal was never seen, [A11](#a11)) | none of this row's own. The Managers' task is the "needs an editor" row's and answers to that row's "Enable…" box, not this one's (Rule 5a, scenario 3); what this row's own boxes change was never seen, the event never having happened on a test install | none of this row's own; link: no. The Managers' email is the "needs an editor" row's, stopped only by that row's "Do not send me an email…" box ⚠ [A10](#a10) (scenario 4); nothing to the ticked editor |
+   | "A new article, "Title," has been submitted." | a new submission into a section whose form has an editor ticked under "Editorial Assignments" (Settings › Journal › "Sections", a section's "Edit"; the assignment itself is *[Submission wizard](U21-submission-wizard.md)*'s). On every journal but the install's first (its oldest; the seeded journal, on a test install) the tick is ignored and this event never happens: the submission raises the "needs an editor" row's event instead, as if nobody were ticked ⚠ [A11](#a11) <sup>e</sup> | nobody, by this row, on any journal but the install's first: the ticked editor gets neither task nor email, and the "needs an editor" row's task and email go to that row's recipients exactly as for that row below (what the ticked editor gets on the install's first journal was never seen, [A11](#a11)) | none of this row's own. That task is the "needs an editor" row's and answers to that row's "Enable…" box, not this one's (Rule 5a, scenario 3); what this row's own boxes change was never seen, the event never having happened on a test install | none of this row's own; link: no. That email is the "needs an editor" row's, stopped only by that row's "Do not send me an email…" box ⚠ [A10](#a10) (scenario 4); nothing to the ticked editor |
    | "A new version of your submission, "Title", was published." | a version goes live (*[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*) | every user holding an Author assignment on the submission | a task, the title inside its sentence and no title line under it (Rule 2b) | the "Publication Published" email; link: no ⚠ [A8](#a8) |
-   | "A new article has been submitted to which an editor needs to be assigned." | a new submission with nobody assigned automatically (*[Submission wizard](U21-submission-wizard.md)*) | every Journal Manager | a task | the "needs an editor" email, subject "A new submission needs an editor to be assigned: "{title}""; link: no ⚠ [A8](#a8); sent even with "Enable…" unticked ⚠ [A10](#a10) |
-   | "Discussion added." | a discussion is opened with the person as a participant, and every reply to it (*Tasks & discussions*, spec not yet written) | the discussion's participants, the person who wrote the message included | a task reading "{who opened it} started a discussion: {name}: {opening message}", for a reply the same sentence again ⚠ [A1](#a1) | the message, subject the discussion's name, its From line naming the person who wrote it; link: yes, in Rule 7a's "Reply to this comment…" sentence |
+   | "A new article has been submitted to which an editor needs to be assigned." | a new submission with nobody assigned automatically (*[Submission wizard](U21-submission-wizard.md)*) | every user holding a manager-level role in the journal (*Actors & permissions*), the Site Administrator included wherever enrolled in one; a Section Editor, a Copyeditor (on a preprint server an Editorial Board Member), an Author and a Reader get neither task nor email <sup>e</sup> | a task | the "needs an editor" email, subject "A new submission needs an editor to be assigned: "{title}""; link: no ⚠ [A8](#a8); sent even with "Enable…" unticked ⚠ [A10](#a10) |
+   | "Discussion added." | a discussion is opened with the person as a participant, and every reply to it (*[Tasks & discussions](U37-tasks-and-discussions.md)*) | the discussion's participants, the person who wrote the message included | a task reading "{who opened it} started a discussion: {name}: {opening message}", where an opening message of 198 characters or fewer shows whole and a longer one shows its first 199 characters followed by "..." (so one of exactly 199 shows whole, with "..." after it); for a reply the same sentence again ⚠ [A1](#a1) <sup>e</sup> | the whole message, however long, subject the discussion's name, its From line naming the person who wrote it; link: yes, in Rule 7a's "Reply to this comment…" sentence |
    | "Discussion activity." | nothing: no event raises it ⚠ [A1](#a1) | — | — | — |
    | "A reviewer has commented on "Title"." | a reviewer submits a review (*[Reviewer assignment & management](U27-reviewer-assignment-and-management.md)*) | only the Journal Managers and Section Editors assigned to that submission, in either role; a Journal Manager who is not assigned gets nothing | no task | the review-complete email, subject "Review complete: {reviewer} recommends {recommendation} for #{submission number} {authors} — "{title}"" ({submission number} and {authors} as in Rule 7a; {OMP} "recommends None", the press's review form offering no recommendation, a wording *[Reviewer's review](U28-reviewers-review.md#omp2)* records); link: yes, in Rule 7a's "This is an automated message…" sentence |
    | "Weekly email of outstanding tasks" | the monthly reminder of outstanding tasks that *[Submissions dashboard (editorial)](U23-submissions-dashboard.md)* describes (the "Weekly" mislabel is noted in Fields); listed on a preprint server too, where the email is never sent ⚠ [OPS1](#ops1). A scheduled task raises it (above); no screen starts it | Journal Managers and Section Editors with submissions waiting on them (which submissions count is *[Submissions dashboard (editorial)](U23-submissions-dashboard.md)*'s to say) | no task | yes; link: yes, in Rule 7a's "This is an automated message…" sentence |
@@ -331,23 +337,36 @@ items" on an empty list). No text can be typed anywhere in the panel.
      signed-out visitor is asked to sign in first and then lands there.
 9. **Toasts.** A toast is the application's generic short message: a white
    box with a coloured left edge at the top right of the editorial page.
-   When several arrive they stack, each new one under the last. It comes in
-   three looks: a success message with a green edge (after a save: "Your
-   changes have been saved." unless the screen has a more specific
-   sentence), a plain notice with a blue edge (for one, "The plugin
-   "Custom Block Manager" has been enabled." after ticking that plugin
-   under Settings › Website › "Plugins"), and a warning look for a refused
-   action or a server error (no screen in this spec produces one on
-   demand). Every toast has a "×" close control (named
-   "Close" for screen readers) and otherwise disappears by itself after a
-   few seconds, staying while the pointer rests on it. A form the server
-   rejected shows no toast: its errors appear inside the form under the
-   heading "Errors occurred processing this form" (the Profile page's
-   "Password" tab with a wrong current password, for one), and that notice
-   also removes itself, after about seven seconds. Some screens show the
-   success message inside the form instead of as a toast
-   (*[User profile](U03-user-profile.md)*'s Identity tab, for one); that
-   is the screen's choice, described by its spec. <sup>g</sup>
+   When several arrive they stack, each new one under the last. <sup>g</sup>
+   - 9a. **Three looks.** A success message has a green edge (after a
+     save: "Your changes have been saved." unless the screen has a more
+     specific sentence). A plain notice has a blue edge (for one, "The
+     plugin "Custom Block Manager" has been enabled." after ticking that
+     plugin under Settings › Website › "Plugins"). A warning, for a
+     refused action or a server error, has a pink edge: for one, "Please
+     ensure that you have filled out the message field and included
+     someone other than yourself in the discussion." after "Notify" is
+     pressed with "Message" empty in the "Notify" side panel (on a
+     submission's Participants panel, a person's "More Actions" ›
+     "Notify"; *[Stage participants](U35-stage-participants.md#notify)*).
+   - 9b. **Closing.** Every toast has a "×" close control (named "Close"
+     for screen readers). With no window open over the page, a press on
+     the "×" removes the toast, and a toast left alone disappears by
+     itself after a few seconds, staying while the pointer rests on it.
+     While the "Notify" side panel of 9a or the "Add a Component" window
+     of *[Submission intake configuration](U58-submission-intake-configuration.md#a13)*
+     is open over the page, a toast shows above it, but a press on its
+     "×" does nothing and the pointer resting on it does not keep it: it
+     leaves by itself about five seconds after it showed, and the window
+     stays open ⚠ [A14](#a14).
+   - 9c. **Messages that are not toasts.** A form the server rejected
+     shows no toast: its errors appear inside the form under the heading
+     "Errors occurred processing this form" (the Profile page's
+     "Password" tab with a wrong current password, for one), and that
+     notice also removes itself, after about seven seconds. Some screens
+     show the success message inside the form instead of as a toast
+     (*[User profile](U03-user-profile.md)*'s Identity tab, for one); that
+     is the screen's choice, described by its spec.
 
 ## Side effects
 
@@ -745,8 +764,10 @@ footnote says how) and judge both mailboxes only once they have run.
       records), ending "This is an automated message from {journal name}.
       You can unsubscribe from this email at any time." with "unsubscribe"
       as the link (Rules 6, 7a).
-    - **No task**: the Section Editor's Tasks window gains no row for it
-      (Rule 6).
+    - **No task**: the Section Editor's Tasks window holds no row for
+      this submission: the review raised none for them, and neither did
+      the submission itself, whose "needs an editor" task went to the
+      manager-level roles alone (Rule 6).
     - **Control**: once the Section Editor's email has arrived, the Journal
       Manager's mailbox holds no email with that subject: a Journal
       Manager who is not assigned gets nothing (Rule 6).
@@ -761,9 +782,12 @@ Left out of the scenarios above, by reason:
 
 - **Budget** — states:
   - the Tasks window paged beyond 25 rows, "1 - 25 of 26 items" and "Items per page:" (Rule 2b): 26 tasks to raise for one account
-  - the blue-edged notice toast (Rule 9): the one screen that produces it is a plugin switch under Settings › Website › "Plugins", a Journal Manager's occasional act, not an editor's, author's or reviewer's week
+  - the blue-edged notice toast (Rule 9a): the one screen that produces it is a plugin switch under Settings › Website › "Plugins", a Journal Manager's occasional act, not an editor's, author's or reviewer's week
+- **Budget** — variants:
+  - a discussion task whose opening message is longer than 198 characters, shown as its first 199 characters and "..." (Rule 6): scenario 5's messages are short
 - **Nothing new to test**:
   - a user with no role, or the Site Administrator, opening the Tasks panel (*Actors & permissions*): the same window scenario 1's Manager opens
+  - the Editor and the Production Editor getting the "needs an editor" task and email (Rule 6): the same task and email as the Journal Manager's in scenarios 1, 3 and 4
   - toasts never subject to a choice (Rule 1): no box governs them, so there is nothing to switch
   - the bell's hidden name "Tasks N" (Rule 2a): the badge scenario 1 reads
   - the email choice on an event whose email is optional for the sender (Rule 5b): the same box as scenario 4's
@@ -771,7 +795,7 @@ Left out of the scenarios above, by reason:
   - A3 (a Section Editor's bare name on the reader-side header; Rule 4)
   - OPS3 (a task's link landing on "A workflow stage was not specified."; Rule 2c; scenario 1 marks it)
   - A10 (the "needs an editor" email arriving with "Enable…" unticked; Rule 5a; scenario 3 marks it)
-  - A11 (the ticked editor told nothing, the Journal Managers told instead; Rule 6)
+  - A11 (the ticked editor told nothing, the manager-level roles told instead; Rule 6)
   - A8 (the "Publication Published" and "needs an editor" emails without a footer; Rule 6)
   - A1 (a reply worded like the opening; "Discussion activity." governing nothing; Rule 6)
   - OPS1 (two rows a preprint server never raises; Rule 6; scenario 11 names it)
@@ -783,19 +807,20 @@ Left out of the scenarios above, by reason:
   - A9 (the Unsubscribe page keeping the statistics box with the email off; *Settings*)
   - A12 (two tasks raised within one second listed in either order; Rule 2b; scenario 2's second submission comes a second after the first)
   - A13 (the Site Administrator's unread count hidden on the site's home page at a desktop width, and the narrow window meant to display it; Rule 4; scenario 7 marks it)
+  - A14 (a toast shown over an open window that its "×" cannot close and the pointer cannot hold; Rule 9b)
 - **No seed**:
   - the journal initials on the rows of an account with roles in several journals (Rules 2b, 2d)
   - each journal keeping its own set of choices (Rule 5d)
   - "Enable…" unticked stopping the announcement email (Rules 5a, 6): a scratch journal's announcements are off, and the switch is *Announcements*' (*Settings*)
   - the open-access email, the reminder email of outstanding tasks and the statistics report email with its spreadsheet (Rule 6): each raised by a scheduled task no screen starts
-  - the warning toast for a refused action or a server error (Rule 9): no screen in this spec produces one on demand
   - the API secret unset: every footer link opening "404 Not Found" (Rule 7d, *Settings*; A6): the configuration file is shared by every test
   - the editorial statistics email off, its row leaving the tab (*Settings*): no way yet to create a journal with the email off
   - the Tasks panel's rows per page from the configuration file (*Settings*)
 - **Owned by another feature**:
   - the site-level address forwarding a user with a role in one journal to that journal's "Identity" tab (Rule 5d; *User profile*, scenario 2)
-  - a form the server rejected: errors inside the form, no toast, gone after about seven seconds (Rule 9; *User profile*, scenario 8)
-  - the success message shown inside the form instead of as a toast (Rule 9; *User profile*, scenario 2)
+  - the warning toast for a refused action (Rule 9a; *Stage participants*, scenario 6, after "Notify" with "Message" empty)
+  - a form the server rejected: errors inside the form, no toast, gone after about seven seconds (Rule 9c; *User profile*, scenario 8)
+  - the success message shown inside the form instead of as a toast (Rule 9c; *User profile*, scenario 2)
   - the reviewer's "Review assignment updated." notice (Rule 6; *Reviewer assignment & management*)
   - every email in Rule 6 as an email, its trigger, recipients and text (*Side effects*; the raising feature each row names)
   - the announcement's and the issue's email box, the open-access notification and the announcements switch (*Settings*; *Announcements*, *Issues*, *Subscriptions & open access control*)
@@ -815,6 +840,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A1](#a1) | The "Discussion activity." row and its two boxes govern nothing; a reply to a discussion raises a task worded exactly like the opening one | 🐞 | minor | — |
 | [A2](#a2) | The Unsubscribe page silently switches back on emails the person had switched off before, because its boxes start ticked and an unticked box means "send" | 🐞 | latent | — |
 | [A3](#a3) | A Section Editor's name on the reader-side header carries no unread count, while a Journal Manager's or an Author's does | 🐞 | minor | — |
+| [A14](#a14) | While a window such as Participants › "Notify" is open, a toast above it cannot be closed with its "×" and does not stay under the pointer | 🐞 | minor | — |
 | [OPS2](#ops2) | The new-preprint row reads "A new preprint , "Title", has been submitted." with a space before the comma | 🐞 | minor | — |
 | [A4](#a4) | The site-level profile's Notifications tab offers choices that no event honours | ❓ | latent | — |
 | [A5](#a5) | A mail program's own "Unsubscribe" button, offered because of the emails' headers, is probably refused | ❓ | latent | — |
@@ -822,7 +848,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A7](#a7) | Deleting a task from the Tasks panel kills the Unsubscribe link in the email that announced it | ❓ | latent | — |
 | [A8](#a8) | The "needs an editor" and "Publication Published" emails have no Unsubscribe footer and no hidden headers, unlike the announcement, issue and discussion emails | ❓ | minor | — |
 | [A9](#a9) | The Unsubscribe page lists "Statistics report summary." on a journal whose statistics email is off | ❓ | minor | — |
-| [A11](#a11) | A Section Editor ticked under "Editorial Assignments" gets neither task nor email for a new submission; the Journal Managers get the "needs an editor" pair instead, and what the editor gets on the install's first journal was never seen | ❓ | user-visible | — |
+| [A11](#a11) | A Section Editor ticked under "Editorial Assignments" gets neither task nor email for a new submission; the manager-level roles get the "needs an editor" pair instead, and what the editor gets on the install's first journal was never seen | ❓ | user-visible | — |
 | [A12](#a12) | Two tasks raised within the same second are listed in either order in the Tasks window | ❓ | minor | — |
 | [A13](#a13) | On the site's own home page the Site Administrator's unread count is never displayed at a desktop width: the "Dashboard" entry carries it hidden and the name carries none | ❓ | minor | — |
 | [OPS1](#ops1) | A preprint server lists "A reviewer has commented on "Title"." and "Weekly email of outstanding tasks", two events it never raises | ❓ | minor | — |
@@ -927,7 +953,7 @@ Two notification emails carry no Unsubscribe footer and none of the hidden
 headers that let a mail program offer its own "Unsubscribe" button, while
 the announcement, issue and discussion emails carry both; the recipient
 cannot unsubscribe from either email itself. The first is the "needs an
-editor" email to Journal Managers, ending "This is an automated email from
+editor" email to the manager-level roles, ending "This is an automated email from
 {journal name}."; a Manager can still stop it from the Profile page's
 "Notifications" tab by ticking "Do not send me an email…" under its row,
 the only box that works for it (A10), and that was seen live. The second
@@ -973,14 +999,14 @@ A Journal Manager ticks a Section Editor under "Editorial Assignments" on
 a section's form (Settings › Journal › "Sections", "Edit") so that every
 new submission to that section goes to that editor. When an Author then
 submits to the section, the ticked editor's Tasks panel gains no row and
-their mailbox no email; instead every Journal Manager gets the "needs an
-editor" task and email (Rule 6, the row below this one's), as if nobody
-were ticked. Seen on OJS and OPS, on a scratch journal; not tried on a
+their mailbox no email; instead every user holding a manager-level role
+gets the "needs an editor" task and email (Rule 6, the row below this
+one's), as if nobody were ticked. Seen on OJS and OPS, on a scratch journal; not tried on a
 press, because a new press has no series and so no series form had an
 editor to tick. On the install's first journal (its oldest; the seeded
 journal on a test install) the assignment does happen, and there, read
-from the application, the Managers' task and email are replaced by an
-email from the "Editor Assigned" template to the ticked editor, with no
+from the application, the "needs an editor" task and email are replaced
+by an email from the "Editor Assigned" template to the ticked editor, with no
 task and no Unsubscribe link (*Stage participants*, spec not yet written,
 owns that email); its subject is not on this page, and neither that email
 nor the editor's empty Tasks panel was ever seen. What would settle that
@@ -1029,6 +1055,20 @@ number kept in the page but never displayed tells nobody anything, and the
 name there could carry the count as it does on a journal's home page.
 Basis: test run (the desktop-width read), code (the narrow layout).
 <sup>[f-a13](#fn-a13)</sup>
+
+<a id="a14"></a>
+**A14 — A toast over an open window cannot be closed** · 🐞 · minor.
+Every toast offers a "×", and with no window open a press on it removes
+the toast at once (Rule 9b). While a submission's "Notify" side panel is
+open, the warning toast that a refused "Notify" shows sits above the
+panel, but a press on its "×" does nothing and the pointer resting on it
+does not keep it: the toast leaves by itself about five seconds after it
+showed, and the panel stays open. The refusal notice of the "Add a
+Component" window behaves the same way, as
+*[Submission intake configuration](U58-submission-intake-configuration.md#a13)*
+records for that screen. The person can neither dismiss the message nor
+keep it on screen to read it.
+Basis: probe. <sup>[f-a14](#fn-a14)</sup>
 
 ### OPS
 
@@ -1298,7 +1338,32 @@ statistics emails were not driven: each comes from a scheduled task
 fleets run no scheduler; nothing on a screen sends them, so their footer
 sentences in Rule 7a come from the mailables' locale keys
 (`emails.footer.unsubscribe` for the statistics report, `.automated` for
-the reminder).
+the reminder). Live-probed 2026-09-28 on OJS, OMP and OPS (Rule 6: the
+"needs an editor" row's "Who is told"; the "Discussion added." row's
+task): `AssignEditors` picks its recipients with
+`filterByRoleIds([ROLE_ID_MANAGER])`. On scratch contexts a seeded
+submission (`submitted: true`, task only) and a wizard submission (task
+and email) raised the task for the "Journal manager", "Journal editor"
+and "Production editor" accounts (OMP "Press manager", "Press editor",
+"Production editor"; OPS the "Preprint Server manager") and for `admin`,
+enrolled as a manager, and the wizard's email "A new submission needs an
+editor to be assigned: "{title}"" reached the same accounts; the "Section
+editor" (OMP "Series editor", OPS "Moderator"), the "Copyeditor" (OPS
+"Editorial Board Member"), the Author and the Reader got neither. The
+OPS task reads "…a moderator needs to be assigned." while the email's
+subject says "an editor". The discussion task's message is
+`QueryNotificationManager::getNotificationMessage()`'s
+`Str::limit(PKPString::html2text($note), 200)`; html2text turns the
+message's paragraph into text with one leading line break, which counts
+against the 200. Opening messages of 150, 198, 199, 200, 201 and 300
+characters sent through Participants › "Notify" (predefined message
+"Discussion (Submission)", OPS "Discussion (Production)"), and one of
+300 through "Assign", showed 150 and 198 whole, 199 whole followed by
+"...", and 200 or more as their first 199 characters followed by "...";
+each discussion email carried the whole message. A 300-character string
+with no space in it ran past the window's right edge unmarked on one OJS
+run; a 150-character address with hyphens and slashes wrapped and showed
+whole on all three apps.
 
 <a id="fn-f"></a>
 **f** — Link: `PKPNotificationOperationManager::getUnsubscribeNotificationUrl()`
@@ -1387,11 +1452,20 @@ plugin "Custom Block Manager" has been enabled.", no page reload. A wrong
 current password on the "Password" tab gave no toast: the in-form
 `div.notifyFormError` with the bold "Errors occurred processing this form"
 and "The current password you entered was incorrect." removed itself 6.7 s
-after the press. No probed screen produced a `--warning` toast or a
-message across a full-page load (checked again 2026-09-04 on every
-screen this spec drives); the warning look is the same component with
-another class, traced in the code and not seen. Settling observation: an
-action the server refuses with a toast.
+after the press. No probed screen produced a message across a full-page
+load (checked again 2026-09-04 on every screen this spec drives).
+Live-probed 2026-09-28 on OJS, OMP and OPS (Rule 9a, the warning look;
+Rule 9b): on a scratch submission's Participants panel, a row's "More
+Actions" › "Notify" with "Message" empty and "Notify" pressed kept the
+side panel open and gave `.pkpNotification--warning` with a
+`rgb(208, 10, 108)` left border and the text
+`stageParticipants.notify.warning` "Please ensure that you have filled
+out the message field and included someone other than yourself in the
+discussion.", a toast on OPS too; the Profile › "Notifications" save
+toast's left border read `rgb(0, 178, 78)` again. The "×" removed a
+toast shown with no window open within 0.11–0.14 s (the save toast on
+all three apps; "Notification sent to users." after a sent "Notify" on
+OJS and OMP); over the open side panel it did not (A14).
 
 <a id="fn-h"></a>
 **h** — `RegistrationForm::execute()`: when a context is open and
@@ -1577,7 +1651,10 @@ The email is `ReviewCompleteNotifyEditors`, From "Site Admin
 message from {journal name} ( {home} ). You can unsubscribe ( {link} ) from
 this email at any time.", with the `List-Unsubscribe` headers; the Section
 Editor's Tasks window unchanged and the Manager's mailbox without it (note
-e). {OMP} "recommends None" in the subject.
+e). {OMP} "recommends None" in the subject. The Section Editor's window
+holds no row with the submission's title at all: the "needs an editor"
+task the seed raised went to the manager-level accounts alone
+(live-probed 2026-09-28, note e).
 
 <a id="fn-a1"></a>
 **f-a1** — `NOTIFICATION_TYPE_QUERY_ACTIVITY` (`0x1000022`) is defined, mapped
@@ -1752,6 +1829,26 @@ page has no `span.task_count` at all (`admin`, `manager.maya`). OMP's
 `head.less` is identical and OPS's differs only in link colours (files
 compared 2026-09-13); the narrow layout (a window under 992 px) was not
 driven on any app.
+
+<a id="fn-a14"></a>
+**f-a14** — While the "Notify" side panel is open, the page body,
+`.app__notifications` and the toast's close button compute
+`pointer-events: none`, and `elementFromPoint` at the "×"'s centre
+returns the window's own `div.flex.items-start`; so neither the press
+nor the container's `:hover` (note g) reaches the toast, and the 5 s
+expiry runs on. Live-probed 2026-09-28 on OJS, OMP and OPS, four runs
+each (Rule 9b): Participants › a row's "More Actions" › "Notify" with
+"Message" empty gave the warning toast over the open side panel; a mouse
+press at the "×"'s centre left it in place, the pointer resting on the
+"×" throughout, and the toast went by itself 5.1–5.3 s after it showed;
+Playwright's locator click timed out after 3 s ("… intercepts pointer
+events") with the same lifetime; the side panel was still open
+afterwards. Controls with no window open: the "×" removed the Profile ›
+"Notifications" save toast (all three apps) and "Notification sent to
+users." after a sent "Notify" (OJS, OMP; on OPS that notice can land in
+the Production entry's own "Notification" box instead, *Stage
+participants* OPS4) within 0.11–0.14 s. The "Add a Component" window's
+refused key shows the same (*Submission intake configuration* A13).
 
 <a id="fn-ops1"></a>
 **f-ops1** — OPS's `NotificationSettingsForm` and `NotificationManager` do not

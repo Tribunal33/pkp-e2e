@@ -614,8 +614,11 @@ behind a line; that scratch is deleted after review.
   profile image not re-driven). Profile › Public. Live-probed 2026-09-03/04,
   all three apps (`.reports/U03/pF` P27; `.reports/U03/cc-K5.md`).
 - `POST scenarios/submission` with `submitted: true` raises the "needs an
-  editor" task for every Manager of the context (the auto-enrolled `admin`
-  included) but sends no email (the scenario request runs under
+  editor" task for every manager-level member of the context (Journal
+  manager, Journal editor and Production editor; {OMP} Press manager, Press
+  editor, Production editor; {OPS} the Manager; the auto-enrolled `admin`
+  included; a Section Editor gets none; 2026-09-28, U05 claim check I28)
+  but sends no email (the scenario request runs under
   `Mail::fake()`); the submission wizard raises both, with the email sent
   inside the submit request itself. A probe or test that needs the email
   drives the wizard. Tasks window; Mailpit. Live-probed 2026-09-04, all
