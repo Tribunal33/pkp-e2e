@@ -34,8 +34,9 @@ there, not here.
 Manager**, **Section Editor**, and the assistant-level roles (**Copyeditor**,
 **Layout Editor**, **Proofreader**, **Funding Coordinator**, called "an
 assistant" below). Two scopes run through everything (Rule 3). Journal
-Managers and Site Administrators work **journal-wide**: they see every
-submission in the journal. Section Editors and assistants work
+Managers work **journal-wide**: they see every submission in the journal.
+A Site Administrator works journal-wide only while also holding Journal
+Manager in that journal. Section Editors and assistants work
 **assigned-only**: they see and search only the submissions they are
 assigned to through one of these roles. Holding Author or Reviewer alongside an
 editorial role changes nothing here, except for the conflict rows of
@@ -43,13 +44,13 @@ Rule 9a.
 
 | Action | Who may — and when |
 |--------|--------------------|
-| **Open the editorial dashboard** | • the editorial roles: from the sidebar's "Editor Dashboard" group or by its direct address<br>• any signed-in user with none of these roles who types the address: the access-denied page <sup>a</sup> |
-| **See a submission listed** | • Journal Manager, Site Administrator: every submission in the journal, in whichever views match its state<br>• Section Editor, assistants: only submissions they are assigned to (Rule 3) <sup>c</sup> |
-| **See the "Needs editor" view** | • Journal Manager, Site Administrator only {OJS OMP} <sup>b</sup> |
-| **See the "Declined" view** | • Journal Manager, Site Administrator only. Section Editors and assistants have no view that lists declined submissions ⚠ [A1](#a1) <sup>b</sup> |
+| **Open the editorial dashboard** | • the editorial roles: from the sidebar's "Editor Dashboard" group or by its direct address<br>• a Site Administrator whose only role in the journal is Reader: the address opens, but under an "Error" dialog and with nothing listed ⚠ [A9](#a9)<br>• any signed-in user with none of these roles who types the address: the access-denied page <sup>a</sup> |
+| **See a submission listed** | • Journal Manager, and a Site Administrator who also holds Journal Manager in the journal: every submission in the journal, in whichever views match its state<br>• Section Editor, assistants, and a Site Administrator whose editorial roles in the journal are only these: only submissions they are assigned to (Rule 3) <sup>c</sup> |
+| **See the "Needs editor" view** | • Journal Manager, and a Site Administrator who also holds Journal Manager in the journal, only {OJS OMP} <sup>b</sup> |
+| **See the "Declined" view** | • Journal Manager, and a Site Administrator who also holds Journal Manager in the journal, only. Section Editors and assistants have no view that lists declined submissions ⚠ [A1](#a1) <sup>b</sup> |
 | **Open a submission's workflow ("View")** | • every editorial role, on any row listed for them, except a conflict row (Rule 9a) or an incomplete submission's row (Rule 9c) <sup>l</sup> |
-| **Filter by "Assigned To Editor"** | • Journal Manager, Site Administrator: the field appears in their Filters panel only (Rule 8) <sup>i</sup> |
-| **Delete incomplete submissions in bulk** | • Journal Manager, Site Administrator: over any incomplete submission in the journal (Rule 12). Section Editors and assistants get no "More Actions" control here at all. Authors get it on their own list ([→ deleting drafts](U22-my-submissions.md)) <sup>m</sup> |
+| **Filter by "Assigned To Editor"** | • Journal Manager, Site Administrator: the field appears in their Filters panel only (Rule 8). A Site Administrator gets it whatever their role in the journal, also over an assigned-only or empty list [A9](#a9) <sup>i</sup> |
+| **Delete incomplete submissions in bulk** | • Journal Manager, and a Site Administrator who also holds Journal Manager in the journal: over any incomplete submission in the journal (Rule 12)<br>• a Site Administrator without Journal Manager there: still offered "More Actions", over the assigned-only or empty list they get [A9](#a9)<br>• Section Editors and assistants get no "More Actions" control here at all. Authors get it on their own list ([→ deleting drafts](U22-my-submissions.md)) <sup>m</sup> |
 | **Receive the monthly outstanding-tasks email** | • Journal Manager, Section Editor: active accounts with at least one outstanding item, unless they opted out {OJS OMP} (Side effects) <sup>n</sup> |
 
 ## Fields & validation
@@ -90,7 +91,7 @@ the account's roles, never on which dashboard page it opens from:
    |------|-------|:---:|:---:|:---:|
    | Assigned to me | submissions still in progress that the signed-in account is assigned to | ✓ | ✓ | ✓ |
    | Active submissions | every submission still awaiting an outcome, incomplete ones included | ✓ | ✓ | ✓ |
-   | Needs editor | active submissions with no editor assigned yet (Journal Manager / Site Administrator only) | ✓ | ✓ | — |
+   | Needs editor | active submissions with no editor assigned yet (journal-wide accounts only, Rule 3) | ✓ | ✓ | — |
    | All in submission stage | active submissions sitting on the Submission stage | ✓ | ✓ | — |
    | Needs reviews | submissions in review with fewer confirmed reviews than the journal requires | ✓ | ✓ | — |
    | Awaiting reviews | submissions in review with reviews still outstanding | ✓ | ✓ | — |
@@ -102,7 +103,7 @@ the account's roles, never on which dashboard page it opens from:
    | All in production stage | active submissions on the Production stage | ✓ | ✓ | ✓ |
    | Scheduled for publication | submissions scheduled but not yet published | ✓ | ✓ | ✓ |
    | Published | published submissions | ✓ | ✓ | ✓ |
-   | Declined | declined submissions (Journal Manager / Site Administrator only ⚠ [A1](#a1)) | ✓ | ✓ | ✓ |
+   | Declined | declined submissions (journal-wide accounts only, Rule 3 ⚠ [A1](#a1)) | ✓ | ✓ | ✓ |
 
    Every view honors the account's scope (Rule 3): "All in submission
    stage" for a Section Editor means *their* submissions on that stage.
@@ -110,9 +111,14 @@ the account's roles, never on which dashboard page it opens from:
    submissions" even for a Journal Manager, because it lists only
    submissions the account is itself assigned to. <sup>b</sup> <sup>c</sup>
 <a id="scope"></a>
-3. **Scope.** Journal Managers and Site Administrators see the whole
-   journal. Section Editors and assistants see only submissions where they
-   are listed as a participant through that editorial role. An assignment
+3. **Scope.** Journal Managers see the whole journal. A Site
+   Administrator does so only while also holding Journal Manager in that
+   journal; creating a journal makes its creator one. Section Editors and
+   assistants see only submissions where they are listed as a participant
+   through that editorial role. A Site Administrator whose editorial roles
+   in the journal are only Section Editor or assistant ones gets that same
+   assigned-only scope, with no "Needs editor" or "Declined" view. With
+   Reader as their only role there, the page lists nothing [A9](#a9). An assignment
    as Author or Reviewer does not surface a submission on *this* dashboard;
    it surfaces on My Submissions or the reviewer's list instead. The scope
    applies uniformly to views, search and counts. <sup>c</sup>
@@ -138,8 +144,14 @@ the account's roles, never on which dashboard page it opens from:
    it reads "Production" {OPS}. A sortable header cycles through three
    states as it is clicked: descending, ascending, then unsorted. The
    address follows for the first two; switching the sort off leaves the
-   old sort in the address ⚠ [A5](#a5). The list pages at 30 rows, with
-   pager controls underneath on any view holding more. Which page is
+   old sort in the address ⚠ [A5](#a5). The list pages at 30 rows. Under
+   it a line reads "Showing {first} to {last} of {total}": "Showing 1 to
+   30 of 31", on page 2 "Showing 31 to 31 of 31", on an empty view
+   "Showing 0 to 0 of 0". Beside that line, a view holding more than 30
+   rows has pager buttons: "Previous", the page numbers ("1", "2") and
+   "Next". "Previous" cannot be pressed on the first page, nor "Next" on
+   the last. A screen reader announces "Go to Previous"
+   and "Go to Page {n}", but plain "Next" ⚠ [A10](#a10). Which page is
    showing is never part of the address (Rule 4). An empty view shows a
    single "No Items" row.
    The author's and reviewer's lists reuse this table with their own
@@ -154,8 +166,8 @@ the account's roles, never on which dashboard page it opens from:
 <a id="search-view"></a>
 7. **Global search.** The sidebar's "Search submissions" box searches
    *everything the account can reach*, regardless of state: the whole
-   journal for a Journal Manager or Site Administrator, and their assigned
-   submissions for a Section Editor or assistant (the Rule 3 scope, so a
+   journal for a journal-wide account, and their assigned submissions for
+   an assigned-only one (the Rule 3 scope, so a
    submission they merely authored stays out of these results too; My
    Submissions finds it). It is the one place a Section Editor can still
    find a declined or published submission of theirs ⚠ [A1](#a1).
@@ -276,7 +288,8 @@ the account's roles, never on which dashboard page it opens from:
 <a id="bulk-delete"></a>
 12. **Bulk cleanup of incomplete submissions.** "More Actions" (the "…"
     button above the list) offers **"Delete Incomplete Submissions"**. On
-    this dashboard only Journal Managers and Site Administrators get it,
+    this dashboard only Journal Managers and Site Administrators get it (a
+    Site Administrator whatever their role in the journal [A9](#a9)),
     and it is grayed out while the current page of the list has no
     incomplete rows. Choosing it puts the list in selection mode: a
     checkbox appears on each incomplete row (only those), with
@@ -753,8 +766,11 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Budget** — variants:
+  - the "Showing {first} to {last} of {total}" line under the list, and "Previous" and "Next" that cannot be pressed at the ends of the pager (Rule 5)
 - **Nothing new to test**:
-  - Site Administrator, journal-wide like the Journal Manager (Actors row 2; the Journal Manager's views, scenario 2)
+  - Site Administrator holding Journal Manager in the journal, journal-wide like the Journal Manager (Actors row 2; the Journal Manager's views, scenario 2)
+  - a Site Administrator whose editorial roles in the journal are only Section Editor ones, assigned-only like the Section Editor (Rule 3; the Section Editor's views, scenario 2)
   - assistants, assigned-only like the Section Editor (Actors row 2; the Section Editor's views, scenario 2)
   - an assigned Section Editor getting the same popovers and buttons (Rule 10; the Journal Manager's, scenario 9)
 - **Register carries it**:
@@ -765,6 +781,8 @@ Left out of the scenarios above, by reason:
   - A6 (the overdue-review popover's wording)
   - A7 (declined and cancelled reviewers showing no indicator to a Section Editor or assistant)
   - A8 (the opt-out labelled "Weekly email of outstanding tasks")
+  - A9 (a Site Administrator without Journal Manager in the journal: the "Error" dialog and empty list with Reader only, the manager controls over an assigned-only list)
+  - A10 (the pager's "Next" announced as plain "Next")
   - OMP1 (no series filter on a press)
 - **No seed**:
   - "Reviews overdue" (Rule 2) and the "Review Request overdue by {days} days" popover (Rule 10): no seed backdates a request or a review deadline
@@ -794,11 +812,13 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A4](#a4) | The popover over an editor-cancelled review request blames the reviewer: "Reviewer cancelled review request" | 🐞 | minor | — |
 | [A5](#a5) | Switching a sort off leaves the old sort in the address, so display and address disagree until reload | 🐞 | minor | — |
 | [A6](#a6) | The overdue-review popover describes the missed review as a "response" and dates it with the review deadline | 🐞 | minor | — |
+| [A10](#a10) | The pager's "Next" is announced as plain "Next", while its neighbours read "Go to Previous" and "Go to Page {n}" | 🐞 | minor | — |
 | [A1](#a1) | Section Editors and assistants have no view listing declined (or published-and-gone) submissions; global search is their only way back | ❓ | user-visible | — |
 | [A2](#a2) | Editors are offered "Complete submission" on other people's incomplete submissions, landing them in the author's wizard | ❓ | minor | — |
 | [A3](#a3) | The author/reviewer conflict notice always says "as a Journal Manager", whoever is looking, on presses and preprint servers too | ❓ | minor | — |
 | [A7](#a7) | Declined and cancelled reviewers show no activity indicator at all to assigned Section Editors and assistants | ❓ | minor | — |
 | [A8](#a8) | The profile's opt-out for the monthly outstanding-tasks email is labelled "Weekly email of outstanding tasks" | ❓ | minor | — |
+| [A9](#a9) | A Site Administrator without Journal Manager in the journal is let in but listed by their journal role: with Reader only, an "Error" dialog over an empty list | ❓ | minor | — |
 | [OMP1](#omp1) | A press's filter panel never offers a series filter, however many series exist | ❓ | minor | — |
 
 ### All apps
@@ -806,8 +826,8 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 <a id="a1"></a>
 **A1 — No path back to finished submissions for assigned editors** · ❓ ·
 user-visible.
-The "Declined" view exists only for Journal Managers and Site
-Administrators. A Section Editor or assistant whose assigned submission is
+The "Declined" view exists only for journal-wide accounts (Rule 3). A
+Section Editor or assistant whose assigned submission is
 declined loses it from every view on their dashboard. The same happens with
 other finished outcomes their views do not cover. Their global search still
 finds it (Rule 7), but nothing tells them so.
@@ -898,6 +918,32 @@ task is deliberately registered to run monthly on the 1st, so the label
 reads like a leftover from an earlier cadence.
 Basis: probe + code. <sup>a8</sup>
 
+<a id="a9"></a>
+**A9 — A Site Administrator without Journal Manager is let in, then shown nothing** · ❓ · minor.
+The dashboard admits any Site Administrator but lists by their roles in
+the journal. With Reader as their only role there, the page opens under an
+"Error" dialog ("The current role does not have access to this
+operation.", "OK") over "Search Results (0)" and one "No Items" row, and
+the sidebar's "Editor Dashboard" group lists no views; every view's
+address, and one that opens a workflow panel, does the same, and no panel
+opens. With Section Editor left instead, "More Actions" and the "Assigned
+To Editor" filter stay over an assigned-only list (Rule 3). Expected: the
+journal's submissions, or the access-denied page any Reader gets here.
+Question: should the Site Administrator role count on this dashboard
+without Journal Manager in the journal? Lean: one of the two gates is
+wrong; the page and its controls admit the administrator while the lists
+refuse them.
+Basis: probe + code. <sup>a9</sup>
+
+<a id="a10"></a>
+**A10 — The pager's "Next" lacks its spoken label** · 🐞 · minor.
+Under a list of more than 30 rows, a screen reader announces the pager's
+buttons as "Go to Previous", "Go to Page 1", "Go to Page 2" and plain
+"Next". Expected: "Go to Next", like its neighbours. Every button
+works as labelled; only the announced name differs. Rationale for 🐞: each
+neighbouring button carries a spoken label and this one was left without.
+Basis: probe + code. <sup>a10</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -937,8 +983,15 @@ and the pkp-lib pins are identical — positive shared-code evidence for the
 client-side claims. Live-probed 2026-08-26 (author leg all three apps,
 reviewer leg OJS + OMP): an author-only or reviewer-only account typing
 the dashboard address gets the access-denied page — "The current role does
-not have access to this operation." — while a Site Administrator holding
-no role in the journal gets the full journal-wide dashboard.
+not have access to this operation." Live-probed 2026-09-28 (all three
+apps, two runs; Actors row 1, A9): a Site Administrator whose only role in
+the journal is Reader is let through the page gate (the site-wide
+administrator role satisfies `ROLE_ID_SITE_ADMIN`) but gets the dashboard
+under the "Error" dialog with "Search Results (0)" (fn-a9). A Site
+Administrator with no role at all in a journal cannot be reached on a test
+install: creating a journal enrols its creator as Journal Manager
+(`PKPContextService::add()`), and the screens never end a Site
+Administrator's last role in a journal.
 
 <a id="fn-b"></a>
 **b — the view roster.** `PKP\submission\Repository::getDashboardViews()`
@@ -999,7 +1052,16 @@ assigned one; a Section Editor who authored a submission with no editorial
 assignment found it in no editorial view and not via the editorial global
 search (OJS leg), while their "My Submissions as Author" group listed it;
 a manager's "Assigned to me" stood empty while "Active submissions"
-listed the whole journal.
+listed the whole journal. The roles read are the journal's own
+(`RoleDAO::getByUserId($userId, $contextId)`), so the site-wide
+administrator role never counts toward `canAccessUnassignedSubmission`:
+live-probed 2026-09-28 (all three apps, two runs), a Site Administrator
+left with only Section Editor (Series Editor, Moderator) in the journal,
+their Journal Manager role ended on screen and signed in afresh, got
+"Assigned to me (1)" and "Active submissions (1)" (the list from
+`_submissions/assigned`), no "Needs editor" and no "Declined" entry, and
+a global search returning only the assigned submission; the same journal
+before the role was ended showed "Active submissions (2)" and both entries.
 
 <a id="fn-d"></a>
 **d — the sidebar.** `PKPTemplateManager::setupBackendPage()`:
@@ -1028,7 +1090,10 @@ sidebar read "6 Declined" → "5 Declined" (OPS "8 Declined" → "7 Declined",
 heading "Declined (8)" → "Declined (7)") before any reload. A badge read
 inside the throttle window shows the old number for up to five seconds,
 which an earlier same-day observation ("4 Declined" beside "Declined (3)")
-had taken for a lag until reload.
+had taken for a lag until reload. With Reader as a Site Administrator's
+only journal role, `_submissions/viewsCount` answers 401 on every
+dashboard load, both in the session that ended their Journal Manager role
+and after a fresh sign-in (live-probed 2026-09-28, all three apps; fn-a9).
 
 <a id="fn-e"></a>
 **e — addresses.** URL query params: `currentViewId`, `searchPhrase`,
@@ -1063,7 +1128,16 @@ row; a 31-row view showed "Previous / 1 / 2 / Next" pager buttons while a
 "Incomplete" (OJS + OMP, live-probed 2026-08-26); OPS has no "Incomplete"
 label — an incomplete preprint's read "Production". Sort-cycle and paging address behavior: fn-a5 and
 the Rule 4 exceptions (paging XHR carries `offset`/`page` params; the URL
-never does).
+never does). The line under the list is `TablePagination.vue`
+(`common.showingXofX`), and the pager (`Pagination.vue`, nav label
+`common.pagination.label` = "View additional pages") renders only when
+there is more than one page, "Previous" disabled on page 1 and "Next" on
+the last. Live-probed 2026-09-28 (all three apps, two runs, 31 active
+submissions): "Showing 1 to 30 of 31", after "Next" "Showing 31 to 31 of
+31" with the one remaining row, and "Showing 0 to 0 of 0" on an empty
+view; "Next" and "Go to Page 2" fetched `offset=30`, "Previous" and "Go
+to Page 1" `offset=0`; the address stayed `?currentViewId=active`
+throughout and a reload returned to page 1 with 30 rows.
 
 <a id="fn-g"></a>
 **g — in-page search.** `DashboardControlSearch.vue`, label
@@ -1611,6 +1685,44 @@ notifications." checkboxes — the opt-out surface behind fn-n's blocked
 list. The schedule is `monthlyOn(1)` (fn-n). The {OJS OMP} scope follows
 the email's own; the label was observed on OJS — the OMP leg rests on the
 shared notification machinery, not separately probed.
+
+<a id="fn-a9"></a>
+**a9 — A9 evidence.** The page gate admits `ROLE_ID_SITE_ADMIN` (fn-a),
+and "More Actions" (`bulkDeleteIsAvailableForUser`, fn-m) and the
+"Assigned To Editor" field (`isManagerOrAdmin()`, fn-i) follow the
+site-wide administrator role, while the views and lists follow the
+journal's own roles (fn-c). Live-probed 2026-09-28 (all three apps, two
+runs each, the Site Administrator given a second journal role through the
+scenario tooling, their Journal Manager role then ended on their edit
+page): with Reader left, both in that session and after a fresh sign-in,
+`{journal}/dashboard/editorial` answered 200 and was rewritten to
+`?currentViewId=search`, `_submissions/viewsCount` and
+`_submissions/assigned` answered 401, one "Error" dialog read "The current
+role does not have access to this operation." with "OK", and behind it
+stood "Search Results (0)", one "No Items" row, "Showing 0 to 0 of 0",
+"Filters" (fields "Assigned To Editor", "Assigned to Moderator" on OPS,
+and "Days since last activity") and "More Actions" (a grayed "Delete
+Incomplete Submissions"); the sidebar's "Editor Dashboard" group had no
+entries and its "Search submissions" box was hidden. `?currentViewId=active`
+gave the same, and `?workflowSubmissionId={id}` answered `submissions/{id}`
+401 under the same dialog with no panel, for an assigned and an unassigned
+submission. With Section Editor (Series Editor, Moderator) left, every
+request answered 200, the lists were assigned-only (fn-c), and "More
+Actions" and the "Assigned To Editor" field stayed. Whether the bulk
+delete then reaches incomplete submissions the account cannot list was
+not driven. Control: the same journals before the role was ended,
+"Active submissions (2)", every request 200. No response of 500 or more
+and no page error in any run.
+
+<a id="fn-a10"></a>
+**a10 — A10 evidence.** The shared `Pagination.vue` gives "Previous" and
+each page number an `aria-label` from `common.pagination.goToPage` ("Go to
+{$page}") and gives "Next" none. Live-probed 2026-09-28 (all three apps,
+two runs, a 31-row "Active submissions"): the nav "View additional pages"
+held buttons named "Go to Previous", "Go to Page 1", "Go to Page 2"
+(`aria-current` on the page showing) and "Next"; a button named "Go to
+Next" matched nothing. The same component pages the backend's other
+tables.
 
 <a id="fn-omp1"></a>
 **omp1 — OMP1 evidence.** OMP's

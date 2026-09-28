@@ -1058,7 +1058,15 @@ config-file settings.
   Member) the workflow opens and "Activity Log" offers "Notes" alone; with
   Reader left the workflow answers "Error / The current role does not have
   access to this operation." over an empty page. Workflow and Activity
-  Log, all three apps, 2026-09-23 (`.reports/U38/cc-K1.md` K1-8). Such an
+  Log, all three apps, 2026-09-23 (`.reports/U38/cc-K1.md` K1-8). With
+  Reader left, the editorial dashboard (any view or
+  `workflowSubmissionId`) opens as "Search Results (0)" under the same
+  "Error" (`_submissions/viewsCount` and `_submissions/assigned` answer
+  401), and signing in at the journal lands on its home page; with Section
+  Editor (Series editor, Moderator) left, the dashboard is assigned-only
+  (no "Needs editor", no "Declined") but keeps "More Actions" and the
+  "Assigned To Editor" filter. All three apps, 2026-09-28 (U23 claim
+  check I28). Such an
   administrator keeps the Settings Wizard, whose "Appearance" saves, while
   Settings › Website answers the access-denied page on a press and a
   server and opens under an "Error" window on a journal (on OJS it opened
