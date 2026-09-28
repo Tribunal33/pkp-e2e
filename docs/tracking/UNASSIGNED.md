@@ -6,7 +6,7 @@ confirmed dead (it stays here with its evidence) or ruled out of scope.
 
 Sources (removed from the tip 2026-08-25, reachable in git history): the six crosswalks in `.reports/phase0-feature-map/` (their UNASSIGNED
 lists, consistent with `synthesis.md` §4) + `RULINGS.md`'s probe-derived
-dead-code additions. **29 parked atoms** + **49 noted dead-code/defect
+dead-code additions. **29 parked atoms** + **50 noted dead-code/defect
 candidates attached to claimed atoms**. (PLUG-028 moved to FEATURE-MAP's
 Out-of-scope tail — see RULINGS.md. Two candidates that rested solely on
 scratched pre-reset evidence were dropped 2026-08-21 per the reset doctrine —
@@ -796,3 +796,16 @@ until their specs exist. Do not force-claim the defects themselves.
     The Catalog browse spec's Reference table records it. Code-verified
     2026-09-27 (U68 spec author; checkout omp `72a01a026`). Resolves:
     maintainer confirmation as dead code (removal candidates).
+
+50. **Unused hosted-journals pieces** — attached to **U59** (GRID-004,
+    API-013; claimed; the Hosted journals spec's Reference table notes
+    them). `ContextGridHandler::__construct()` grants the op
+    `updateContext` to the site administrator, but the handler has no
+    such method (the journal form saves through the contexts API).
+    `PKPContextController`'s `DELETE contexts/{id}` is sent by no screen:
+    a row's "Remove" deletes through the grid's own `deleteContext` op.
+    Code-verified 2026-09-27 (U59 spec author; checkouts ojs
+    `72b85f4ba0`, omp `3cd59e944`, ops `e2111e3aae`, lib/pkp
+    `26ae6431b5` / `17a1f01fed`). Resolves: maintainer confirmation as
+    dead code (the op name) and a ruling that the delete request is an
+    intended API for outside clients.

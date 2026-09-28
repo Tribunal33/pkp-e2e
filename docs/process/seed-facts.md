@@ -435,9 +435,14 @@ behind a line; that scratch is deleted after review.
   the probe or worker server's port. A script that needs a page in another
   language opens `{journal}/<locale>/{path}`. Three apps, 2026-09-24 (U09
   claim check K1).
-- The fleets host hundreds of contexts (470 OJS, 246 OMP, 90 OPS on
-  2026-09-24), so no drive there reaches a one-journal site; a one-journal
-  end is a code read or a fresh install (U09 claim check K4).
+- A fleet reset with `fleet-prep --reset` holds `publicknowledge` alone
+  on each app, so until the first scratch journal is enabled publicly the
+  site's address, `index.php/index/index` and `index.php/index/en` open
+  `publicknowledge/en` for every visitor, the Site Administrator included,
+  and Hosted Journals has one row with "Order" hidden; each scratch
+  journal takes the next place in the site's order. A fleet used by
+  earlier runs without a reset holds hundreds of contexts. All three apps,
+  2026-09-28 (U59 claim check K3).
 - The compromised-password check is a site setting, off on every fleet
   (Administration › Site Settings › Security, "Check passwords against
   compromised password databases" unticked), so Profile › Password accepts

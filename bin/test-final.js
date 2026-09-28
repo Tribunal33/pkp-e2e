@@ -85,13 +85,16 @@ function specScenarios(feature) {
 
 /** Scenario numbers the app's suite files for the feature carry in their test titles. */
 function suiteScenarios(feature, app) {
-    const dir = path.join(REPO_ROOT, 'apps', app, 'playwright', 'tests');
-    if (!fs.existsSync(dir)) return [];
+    const base = path.join(REPO_ROOT, 'apps', app, 'playwright', 'tests');
     const found = new Set();
-    for (const f of fs.readdirSync(dir)) {
-        if (!f.startsWith(`${feature}-`) || !f.endsWith('.spec.js')) continue;
-        const text = fs.readFileSync(path.join(dir, f), 'utf8');
-        for (const m of text.matchAll(/test\s*\(\s*['"\`]S(\d+)\b/g)) found.add(parseInt(m[1], 10));
+    // A feature's suite may sit in tests/ or, when it changes site-wide state, in tests/serial/.
+    for (const dir of [base, path.join(base, 'serial')]) {
+        if (!fs.existsSync(dir)) continue;
+        for (const f of fs.readdirSync(dir)) {
+            if (!f.startsWith(`${feature}-`) || !f.endsWith('.spec.js')) continue;
+            const text = fs.readFileSync(path.join(dir, f), 'utf8');
+            for (const m of text.matchAll(/test\s*\(\s*['"\`]S(\d+)\b/g)) found.add(parseInt(m[1], 10));
+        }
     }
     return [...found].sort((a, b) => a - b);
 }
