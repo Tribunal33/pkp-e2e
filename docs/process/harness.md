@@ -369,7 +369,10 @@ to spot: seeding succeeds and the browser step dies.
   runs its main thread that many times slower (DevTools protocol, Chromium
   only). A short probe at 6 reproduces the main-thread jank a loaded CI
   runner shows; a long scenario at 2–4 only runs into its own timeouts
-  (2026-09-15). Never in CI or a final.
+  (2026-09-15). Never in CI or a final. The same file's second lever,
+  `PLAYWRIGHT_RAF_HOLD_MS=<ms>`, defers every `requestAnimationFrame`
+  callback, for a race that lives in the frame or two after a click,
+  which the throttle and `--trace on` both hide (U30 S4, 2026-09-26).
 - `TEST_API_KEY`: enables and gates `/api/v1/_test/*`. The namespace answers
   404 unless the var is in the server's environment, and 403 unless the
   request's `X-Test-Key` header matches.

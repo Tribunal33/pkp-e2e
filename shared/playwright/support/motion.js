@@ -39,6 +39,11 @@ const DISABLE_MOTION_CSS = `
 async function disableMotion(context) {
     await context.addInitScript((css) => {
         const inject = () => {
+            // An XML document (an OAI or feed address, XSLT-rendered or
+            // raw) has no <head>: nothing to style, and no page error.
+            if (!document.head) {
+                return;
+            }
             const style = document.createElement('style');
             style.setAttribute('data-pkp-test', 'disable-motion');
             style.textContent = css;

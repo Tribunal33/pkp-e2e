@@ -37,7 +37,13 @@ Each of these has bitten at least once.
 2. **Nested tab groups.** The top-level *Setup* tab and Appearance → Setup are
    different tabs. Reach the outer one via `#setup-button` (`.first()` on Administration ›
    Site Settings, where the inner tab carries the same id) and the inner one
-   via the visible-tab role. The sidebar ("Site Navigation") is a PrimeVue
+   via the visible-tab role. An address hash opens only its top tab, and a
+   reload reopens on the top tab the address holds, so a side tab is
+   pressed after its top tab (`#setup-button`, then `#settings-button` or
+   `#info-button`); a side tab's form is `[id="<tab>"] form`
+   (`[id="indexing"] form`), never a visible-tabpanel query, which also
+   matches the outer panel holding every side tab's form (U55, U59, U60
+   claim checks). The sidebar ("Site Navigation") is a PrimeVue
    panelmenu: every group's entries are in the DOM, the closed groups'
    regions `display:none`; only the open group header carries
    `aria-expanded`, the others carry none, so read a group by its header's
@@ -60,7 +66,9 @@ Each of these has bitten at least once.
    the second window's date. `fill()` on a jQuery UI date box changes only
    the visible text, not the field the form posts, so the date saves as
    empty: type it from the keyboard (select all, Delete, the date, Tab)
-   (U13 PFL settings, U50 Issues forms). A closed Vue side modal (and a legacy one closed
+   into the visible box, `[name="<field>-removed"]`, since the input
+   named `<field>` is the hidden one the form posts (lib/pkp
+   FormHandler; U13 PFL settings, U50 Issues forms, U72 chapters). A closed Vue side modal (and a legacy one closed
    by its own "Cancel", U32 ccK3) leaves a hidden shell in the DOM until the
    next navigation, so `getByRole` on the table behind it returns nothing
    until then; and a Vue form's "Save" is disabled after a refused save
@@ -129,7 +137,11 @@ Each of these has bitten at least once.
     with padding, so match a row by a name it contains, never a
     start-anchored one; the "No items" line is a `tbody.empty` that stays
     in the DOM, hidden, once a row exists, so a row count or a sibling read
-    skips it (U09, U13, U46).
+    skips it (U09, U13, U46). A grid's filter form (`form.filter`) is
+    hidden until the header's "Search" link is pressed and folds away
+    again after each search and redraw; the header links are reached by
+    their class (`a.pkp_linkaction_search`, `a.pkp_linkaction_exportAllUsers`),
+    which a grid-scoped `getByRole('link')` misses (U53, U54, U62, U63).
 11. **PkpButton accessible names include row context.** The Edit button in a
     mailables list is named `Edit Discussion (Production)`. Use a row-scoped
     regex.
@@ -144,9 +156,16 @@ Each of these has bitten at least once.
     "Saving" and "Saved" coexist for a beat as two `.pkpFormPage__status`
     spans, so filter by text, never a bare `toHaveText`. A successful Vue
     settings save shows only that inline status for about five seconds and
-    no page notice; a refusal shows the page bar "The form was not saved
-    because…", and its field errors carry class `pkpFieldError` (a
-    `[class*=error]` sweep misses them). One exception: Settings › Website
+    no page notice; a refusal raises the page notice "The form was not
+    saved because…" (or the 401/403 answer's error text), and its field
+    errors carry class `pkpFieldError` (a `[class*=error]` sweep misses
+    them). Page notices, these and a legacy window's save and refusal
+    alike, are toasts in `.app__notifications .pkpNotification`, top
+    right and outside every dialog: they stack downward, each expires
+    five seconds after it shows but none while the pointer rests on the
+    stack (ui-library `Page.vue`), and while shown they cover the controls
+    under them. A probe reads them in `screen().notices`, a test as
+    parallel lesson 2 says (U17, U55, U61, U62, U70, U72). One exception: Settings › Website
     › Content › "Comments" shows "Saving" and then reloads the whole
     Website Settings page onto Appearance › Theme, and "Saved" never
     appears; wait for the reload, not the status (U14 claim check K1,
@@ -421,6 +440,10 @@ no cleanup fixture.
   `SubmissionWizardPage.gotoStep()`/`expectStep()`
   (`apps/ojs/playwright/pages/SubmissionWizardPage.js`). The pattern handles
   expansion, end-anchored name matching and clicks swallowed by a re-render.
+  It reaches only a step already reached: an unreached pill does nothing
+  (on OPS a reload can drop the wizard back to "Upload Files" with the
+  later pills unreached), so a later step is reached by "Continue"
+  (`continueTo()`) (U17, U72, U75 claim checks).
 - **`useFetch` tunnels DELETE and PUT via POST + `X-Http-Method-Override`, and
   unauthorized API calls return 401**, not 403. Match `waitForResponse` method
   predicates and status assertions accordingly.
@@ -513,17 +536,21 @@ forEachApp(async (app) => {
 What each helper gives you: `launch(app)` is a 1280×900 Chromium with
 animations off and a response listener that records URL, method, status and
 size (never a body) of every `/api/` call and every status ≥ 400 into
-`run-<app>-<HHMMSS>.json`, one record per process (HHMMSS from its start),
+`run-<app>-<HHMMSS>.json`, one record per process (HHMMSS from its start,
+`-<pid>` added when another process of that second took the name),
 which also carries the browser's console errors and warnings and uncaught
-page errors (`console`, capped at 200) and every browser dialog
-(`dialogs`: type and message); `launch(app, {record: false})`
+page errors (`console`, capped at 200), every browser dialog
+(`dialogs`: type and message) and every page notice as it appears
+(`notices`, pitfall 14); a browser `fn` leaves open when it ends or
+throws is closed by `forEachApp`; `launch(app, {record: false})`
 keeps the record empty for a check that must leave nothing behind. `screen(page)` is the screen as data: the aria snapshot of
 the main region (the body when the page has no `main`) and of every open
 dialog, plus the verbatim `innerText` of header and main, because aria
 snapshots normalise punctuation, and `text.dialog`, the innerText of the
 last visible dialog (null when none is open), because the workflow page is
 itself a dialog over the dashboard and `text.main` reads the list behind
-it. `settled(page, locator)` waits, after `idle()`, until the locator's
+it, and `notices`, the page notices shown since the page's last
+`screen()`, which have expired by the time a settled read is taken. `settled(page, locator)` waits, after `idle()`, until the locator's
 text (an input's value) is non-empty and the same across two reads and
 returns it, for a Composer page, a legacy side window loaded by AJAX or a
 Vue side window built from a fetched publication, which fill after
@@ -601,10 +628,13 @@ support contact, and the validation email's sender is that contact, so a
 registration on the +90 server 500s until a manager sets it (Settings ›
 Contact); and the frontend has no `main` landmark, so `screen()` gives you
 the body there.
-A probe that needs a queued job's outcome (a DOI deposit) drains the queue
-with `php lib/pkp/tools/jobs.php work --stop-when-empty` under the test
-config, repeated until the job class is gone: a failed attempt is retried
-after five seconds and `--stop-when-empty` exits while it waits.
-`jobs.php run` stops at the first failing job of any feature, and either
-one runs other features' queued jobs on that fleet (U45 claim check K3,
-K5).
+A probe that needs a queued job's outcome (a DOI deposit, job-sent mail,
+the search index, a usage chain) calls `await drainJobs(app)`, never
+`support/jobs.js` `runJobs()`, which polls worker 0, down outside a run:
+it runs `php lib/pkp/tools/jobs.php work --stop-when-empty` under the
+fleet's test config and passes again while the probe server still counts
+a queued job six seconds on (a failed attempt is retried after five
+seconds and `--stop-when-empty` exits while it waits). `jobs.php run`
+stops at the first failing job of any feature and returns between two
+jobs of a chain; either one runs other features' queued jobs on that
+fleet (U45 claim check K3, K5; U51, U17, U55, U56, U64).

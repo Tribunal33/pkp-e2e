@@ -1409,8 +1409,7 @@ config-file settings.
   can move. 2026-09-25 (U17 claim check K2).
 - The reader's search, and a category's page on a press, list nothing a
   scenario published until the background jobs have run (`runJobs()` in
-  `support/jobs.js`; from a probe script set `PKP_CONFIG_FILE`,
-  `TEST_API_KEY` and `PLAYWRIGHT_BASE_PORT` to the probe server's).
+  `support/jobs.js`; from a probe script the kit's `drainJobs(app)`).
   2026-09-25 (U17 claim check K3).
 - {OMP} A series' public page (`catalog/series/{path}`) shows the series'
   cover image, but its heading and trail's last step are empty and its

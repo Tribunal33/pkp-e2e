@@ -20,10 +20,11 @@
  */
 const fs = require('fs');
 const path = require('path');
+const {execFileSync} = require('child_process');
 const {chromium} = require('@playwright/test');
 const {request} = require('@playwright/test');
 const {APPS, REPO_ROOT, resolveApp, resolveSlot} = require('../../../bin/apps.js');
-const {PkpApi} = require('../support/api.js');
+const {PkpApi, API_BASE} = require('../support/api.js');
 const {PkpMail} = require('../support/mail.js');
 const {waitForJQueryIdle} = require('../support/legacy.js');
 const {disableMotion} = require('../support/motion.js');
@@ -190,6 +191,10 @@ function runRecord(app) {
             responses: [],
             console: [],
             dialogs: [],
+            // Every page notice (the top-right toasts in
+            // `.app__notifications`) as it appears: they expire after 5 s,
+            // before a settled screen() can read them.
+            notices: [],
             warnings: [],
             // Every response of 500 or more and every uncaught page error:
             // the app failing, a finding on its own (GLOSSARY "crash").
@@ -204,11 +209,15 @@ function currentRecord() {
     return runs.get(process.env.PKP_APP_NAME) || null;
 }
 
+const runFiles = new Map(); // app name → this process's run-record file
+
 /**
  * Every process of an agent keeps its own files: the run record is
- * `run-<app>-<HHMMSS>.json` (HHMMSS from startedAt) and the locator rows
- * are appended to locators.md under a dated heading, so a script run in
- * phases, one process each, loses nothing from the earlier phases.
+ * `run-<app>-<HHMMSS>.json` (HHMMSS from startedAt; `-<pid>` added when
+ * another process of the same second wrote that name first) and the
+ * locator rows are appended to locators.md under a dated heading, so a
+ * script run in phases, one process each, loses nothing from the earlier
+ * phases.
  */
 function flush() {
     if (runs.size === 0 && locatorRows.length === 0) {
@@ -218,8 +227,15 @@ function flush() {
         const dir = outDir();
         for (const record of runs.values()) {
             record.endedAt = new Date().toISOString();
-            const stamp = record.startedAt.slice(11, 19).replace(/:/g, '');
-            const file = path.join(dir, `run-${record.app}-${stamp}.json`);
+            if (!runFiles.has(record.app)) {
+                const stamp = record.startedAt.slice(11, 19).replace(/:/g, '');
+                const taken = path.join(dir, `run-${record.app}-${stamp}.json`);
+                runFiles.set(
+                    record.app,
+                    fs.existsSync(taken) ? path.join(dir, `run-${record.app}-${stamp}-${process.pid}.json`) : taken,
+                );
+            }
+            const file = runFiles.get(record.app);
             fs.writeFileSync(file, JSON.stringify(record, null, 2));
             if (record.crashes.length > 0) {
                 const server = record.crashes.filter((c) => c.kind === 'server').length;
@@ -278,9 +294,15 @@ async function withApp(name, fn) {
     app.mail = new PkpMail({url: app.mailpitUrl});
     app.users = users;
     runRecord(app);
+    const openBefore = new Set(openBrowsers);
     try {
         return await fn(app);
     } finally {
+        // A browser `fn` launched and never closed (a throw before its
+        // `finally`, a `finally` that threw) would keep the process alive.
+        for (const close of [...openBrowsers].filter((c) => !openBefore.has(c))) {
+            await close();
+        }
         await app.api.dispose().catch(() => {});
         flush();
     }
@@ -314,13 +336,46 @@ async function forEachApp(fn) {
 // ---------------------------------------------------------------------------
 // Browser
 
+const openBrowsers = new Set(); // the close() of every launch() not closed yet
+const pageNotices = new WeakMap(); // page → notice texts screen() has not returned yet
+
+/**
+ * Init script: report each page notice (a toast in `.app__notifications`,
+ * the Vue pages' and the legacy forms' saves and refusals) once, as it
+ * appears, without its close button's words.
+ */
+function watchNotices() {
+    const seen = new WeakSet();
+    const report = (element) => {
+        if (seen.has(element) || !window.__probeNotice) {
+            return;
+        }
+        const closeButton = element.querySelector('.pkpNotification__closeButton');
+        let text = element.textContent || '';
+        if (closeButton) {
+            text = text.replace(closeButton.textContent || '', '');
+        }
+        text = text.replace(/\s+/g, ' ').trim();
+        if (text) {
+            seen.add(element);
+            window.__probeNotice(text);
+        }
+    };
+    new MutationObserver(() => {
+        document.querySelectorAll('.app__notifications .pkpNotification').forEach(report);
+    }).observe(document, {childList: true, subtree: true, characterData: true});
+}
+
 /**
  * A headless Chromium at 1280×900 with animations off, baseURL on the probe
  * server, and a response listener that records URL, method, status and size
  * (never a body) for `/api/` calls and every status ≥ 400 into the run
  * record. A status ≥ 500 and an uncaught page error also go into the
  * record's `crashes` list (kind `server` | `script`), counted on the
- * console when the process ends. Returns {browser, context, page, close}.
+ * console when the process ends; every page notice goes into its
+ * `notices` as it appears (screen() returns the page's new ones).
+ * Returns {browser, context, page, close}; a browser still open when
+ * withApp's `fn` ends is closed there.
  *
  * @param {object} app the bag from withApp
  * @param {{storageState?: object|string, headless?: boolean, record?: boolean}} [options]
@@ -340,6 +395,18 @@ async function launch(app, {storageState, headless = true, record: keepRecord = 
         storageState: storageState || {cookies: [], origins: []},
     });
     await disableMotion(context);
+    if (keepRecord) {
+        await context.exposeBinding('__probeNotice', ({page: source}, text) => {
+            const entry = {at: new Date().toISOString(), text: String(text).slice(0, 300), url: source ? source.url() : null};
+            if (record.notices.length < CONSOLE_CAP) {
+                record.notices.push(entry);
+            }
+            if (source) {
+                pageNotices.set(source, [...(pageNotices.get(source) || []), entry.text]);
+            }
+        });
+        await context.addInitScript(watchNotices);
+    }
     if (keepRecord) context.on('response', (response) => {
         const url = response.url();
         const status = response.status();
@@ -405,15 +472,13 @@ async function launch(app, {storageState, headless = true, record: keepRecord = 
         (dialog.type() === 'beforeunload' ? dialog.accept() : dialog.dismiss()).catch(() => {});
     });
     console.log(`[probe] ${app.name}: ${app.baseURL} (key from ${app.keySource})`);
-    return {
-        browser,
-        context,
-        page,
-        close: async () => {
-            await context.close().catch(() => {});
-            await browser.close().catch(() => {});
-        },
+    const close = async () => {
+        openBrowsers.delete(close);
+        await context.close().catch(() => {});
+        await browser.close().catch(() => {});
     };
+    openBrowsers.add(close);
+    return {browser, context, page, close};
 }
 
 /**
@@ -483,7 +548,9 @@ async function innerTextOf(locator) {
  * the dashboard, so `text.main` reads the list behind it.
  * The read is taken settled: it waits for jQuery and the network to go
  * quiet first (`idle`), so a panel or grid that renders after its own
- * request is on screen before it is recorded.
+ * request is on screen before it is recorded. `notices` lists the page
+ * notices shown on this page since its previous screen() (or launch), in
+ * order: a toast lives 5 s, so the settled read would miss it.
  *
  * @param {import('@playwright/test').Page} page
  */
@@ -514,7 +581,15 @@ async function screen(page) {
             main: await innerTextOf(hasMain ? main : page.locator('body')),
             dialog: lastDialog ? await innerTextOf(lastDialog) : null,
         },
+        notices: takeNotices(page),
     };
+}
+
+/** The notice texts shown on the page since the last call, oldest first. */
+function takeNotices(page) {
+    const texts = pageNotices.get(page) || [];
+    pageNotices.delete(page);
+    return texts;
 }
 
 /**
@@ -708,6 +783,58 @@ async function settled(page, locator, {timeout = 15_000} = {}) {
 }
 
 /**
+ * Drain the fleet's queued jobs from a probe (a DOI deposit, job-sent
+ * mail, a search-index or usage chain). Not `support/jobs.js` `runJobs()`,
+ * which is the serial project's and polls worker 0, down outside a run.
+ * Runs the app's own worker, `php lib/pkp/tools/jobs.php work
+ * --stop-when-empty` under the fleet's test config (a chain's next job is
+ * taken in the same pass, where `jobs.php run` returns between two), and
+ * passes again while the probe server's `_test/jobs` still counts queued
+ * or reserved jobs six seconds later (a failed attempt is back after five,
+ * and `--stop-when-empty` exits while it waits). It runs every feature's
+ * queued jobs on the fleet, and it never throws for a job that fails:
+ * the caller reads the outcome on screen or in Mailpit.
+ *
+ * @param {object} app the bag from withApp
+ * @param {{passes?: number, timeoutMs?: number}} [options] timeoutMs per pass
+ * @returns {Promise<{passes: number, counts: object|null, output: string}>}
+ *   `counts` is the last {queued, reserved}; `output` the worker's output
+ */
+async function drainJobs(app, {passes = 6, timeoutMs = 300_000} = {}) {
+    const work = () => {
+        try {
+            return execFileSync('php', ['lib/pkp/tools/jobs.php', 'work', '--stop-when-empty'], {
+                cwd: app.root,
+                env: {...process.env, PKP_CONFIG_FILE: app.configFile},
+                encoding: 'utf8',
+                timeout: timeoutMs,
+                maxBuffer: 16 * 1024 * 1024,
+            });
+        } catch (error) {
+            if (error && typeof error.stdout === 'string') {
+                return `${error.stdout}${error.stderr || ''}`;
+            }
+            throw error;
+        }
+    };
+    const counts = async () => {
+        const response = await app.api.context.get(`${API_BASE}/jobs`, {failOnStatusCode: false});
+        return response.ok() ? response.json() : null;
+    };
+    const output = [];
+    let last = null;
+    for (let pass = 1; pass <= passes; pass++) {
+        output.push(work());
+        await pause(6_000);
+        last = await counts();
+        if (last && last.queued === 0 && last.reserved === 0) {
+            return {passes: pass, counts: last, output: output.join('')};
+        }
+    }
+    return {passes, counts: last, output: output.join('')};
+}
+
+/**
  * A unique scratch tag: `<prefix><agent><random>`, a single lowercase
  * alphanumeric token of at most 32 characters (patterns.md "Tag
  * conventions"), so it works as a context path, a username and a search
@@ -741,6 +868,7 @@ module.exports = {
     note,
     idle,
     settled,
+    drainJobs,
     tag,
     outDir,
     users,
