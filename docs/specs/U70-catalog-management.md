@@ -294,11 +294,11 @@ bottom; "Save" at the foot. <sup>h</sup>
   Activity Log line "The submission was published.", the move to Done, and
   a DOI assigned on publication when the press assigns DOIs "Upon
   publication" and the book has none yet
-  ([DOIs](U45-dois.md#doi-creation), its Rule 5). That DOI adds a
-  "Submission metadata updated" line to the Activity Log beside "The
-  submission was published."; with DOIs off there is no such line.
-  Each new line's "User" is the one who pressed "Save". A press hands
-  nothing to ORCID. <sup>g</sup> <sup>td13</sup>
+  ([DOIs](U45-dois.md#doi-creation), its Rule 5). With only "Monographs"
+  ticked under "Items with DOIs", that DOI adds one "Submission metadata
+  updated" line beside "The submission was published."; with DOIs off,
+  none. Each new line's "User" is the one who pressed "Save". A press
+  hands nothing to ORCID. <sup>g</sup> <sup>td13</sup>
 - **"Catalog Entry" › "Save"**: one "Submission metadata updated" line in
   the Activity Log ([Activity log & notes](U38-submission-activity-log-and-notes.md#what-is-logged)).
   <sup>h</sup>

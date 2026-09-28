@@ -36,7 +36,7 @@ Manager**, **Section Editor**, and the assistant-level roles (**Copyeditor**,
 assistant" below). Two scopes run through everything (Rule 3). Journal
 Managers work **journal-wide**: they see every submission in the journal.
 A Site Administrator works journal-wide only while also holding Journal
-Manager in that journal. Section Editors and assistants work
+Manager there (otherwise, Rule 3). Section Editors and assistants work
 **assigned-only**: they see and search only the submissions they are
 assigned to through one of these roles. Holding Author or Reviewer alongside an
 editorial role changes nothing here, except for the conflict rows of
@@ -44,7 +44,7 @@ Rule 9a.
 
 | Action | Who may — and when |
 |--------|--------------------|
-| **Open the editorial dashboard** | • the editorial roles: from the sidebar's "Editor Dashboard" group or by its direct address<br>• a Site Administrator whose only role in the journal is Reader: the address opens, but under an "Error" dialog and with nothing listed ⚠ [A9](#a9)<br>• any signed-in user with none of these roles who types the address: the access-denied page <sup>a</sup> |
+| **Open the editorial dashboard** | • the editorial roles: from the sidebar's "Editor Dashboard" group or by its direct address<br>• a Site Administrator without Journal Manager in the journal: the address opens, scoped as Rule 3 says ⚠ [A9](#a9)<br>• any other signed-in user who types the address: the access-denied page <sup>a</sup> |
 | **See a submission listed** | • Journal Manager, and a Site Administrator who also holds Journal Manager in the journal: every submission in the journal, in whichever views match its state<br>• Section Editor, assistants, and a Site Administrator whose editorial roles in the journal are only these: only submissions they are assigned to (Rule 3) <sup>c</sup> |
 | **See the "Needs editor" view** | • Journal Manager, and a Site Administrator who also holds Journal Manager in the journal, only {OJS OMP} <sup>b</sup> |
 | **See the "Declined" view** | • Journal Manager, and a Site Administrator who also holds Journal Manager in the journal, only. Section Editors and assistants have no view that lists declined submissions ⚠ [A1](#a1) <sup>b</sup> |
@@ -112,13 +112,14 @@ the account's roles, never on which dashboard page it opens from:
    submissions the account is itself assigned to. <sup>b</sup> <sup>c</sup>
 <a id="scope"></a>
 3. **Scope.** Journal Managers see the whole journal. A Site
-   Administrator does so only while also holding Journal Manager in that
-   journal; creating a journal makes its creator one. Section Editors and
-   assistants see only submissions where they are listed as a participant
-   through that editorial role. A Site Administrator whose editorial roles
-   in the journal are only Section Editor or assistant ones gets that same
-   assigned-only scope, with no "Needs editor" or "Declined" view. With
-   Reader as their only role there, the page lists nothing [A9](#a9). An assignment
+   Administrator does so only while also holding Journal Manager there;
+   creating a journal makes its creator one, and one with no role there
+   cannot be arranged on a test install. Section Editors and assistants
+   see only submissions where they are listed as a participant through
+   that editorial role, and so does a Site Administrator whose editorial
+   roles there are only these, with no "Needs editor" or "Declined" view.
+   With Reader alone the page lists nothing; Author or Reviewer alone is
+   open [A9](#a9). An assignment
    as Author or Reviewer does not surface a submission on *this* dashboard;
    it surfaces on My Submissions or the reviewer's list instead. The scope
    applies uniformly to views, search and counts. <sup>c</sup>
@@ -928,7 +929,8 @@ operation.", "OK") over "Search Results (0)" and one "No Items" row, and
 the sidebar's "Editor Dashboard" group lists no views; every view's
 address, and one that opens a workflow panel, does the same, and no panel
 opens. With Section Editor left instead, "More Actions" and the "Assigned
-To Editor" filter stay over an assigned-only list (Rule 3). The same
+To Editor" filter stay over an assigned-only list (Rule 3). Author or
+Reviewer alone is untried. The same
 "Error" follows the Reader-only administrator onto every editorial page
 that carries the side menu, since it comes from the "Editor Dashboard"
 entry's count ([Reader comments & moderation
