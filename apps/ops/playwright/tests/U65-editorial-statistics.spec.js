@@ -67,6 +67,9 @@ const {
     expectAccessDenied,
     csvBlocks,
     asRecord,
+    emailHeadings,
+    byLabel,
+    userExportHeader,
     statisticsEmails,
     statisticsEmailCount,
 } = require('../../../../shared/playwright/pages/EditorialStatsPages.js');
@@ -292,7 +295,7 @@ test.describe('Statistics — editorial activity & reports', () => {
         let win = await users.openExport();
         await expect(win.group).toBeVisible();
         await expect(win.description).toBeVisible();
-        expect(await win.boxStates()).toEqual(ROLES.map((r) => [r, true]));
+        expect(await win.boxSet()).toEqual(byLabel(ROLES.map((r) => [r, true])));
         await expect(win.exportButton).toBeVisible();
         const viewport = page.viewportSize();
         const at = await win.position();
@@ -303,7 +306,7 @@ test.describe('Statistics — editorial activity & reports', () => {
         const all = await win.export();
         expect(all.name).toBe(`user-report-${TODAY}.csv`);
         expect(all.bom, 'the file starts with a byte-order mark').toBe(true);
-        expect(all.rows[0]).toEqual(USER_COLUMNS);
+        expect(userExportHeader(all.rows[0])).toEqual(userExportHeader(USER_COLUMNS));
         const lines = all.rows.slice(1).map((r) => asRecord(all.rows[0], r));
         expect(lines.map((l) => l['Email address']).sort()).toEqual(
             ['admin@mail.test', email(u.manager), email(u.se), email(u.nova), email(u.otto), email(u.cora)].sort()
@@ -318,21 +321,21 @@ test.describe('Statistics — editorial activity & reports', () => {
         // One role exported: the boxes as left (all ticked); "Author" alone
         // gives Nova and Otto, the role columns unchanged (Rules 16, 17).
         win = await users.openExport();
-        expect(await win.boxStates()).toEqual(ROLES.map((r) => [r, true]));
+        expect(await win.boxSet()).toEqual(byLabel(ROLES.map((r) => [r, true])));
         await win.tickOnly(['Author']);
         const authors = await win.export();
-        expect(authors.rows[0]).toEqual(USER_COLUMNS);
+        expect(userExportHeader(authors.rows[0])).toEqual(userExportHeader(USER_COLUMNS));
         expect(authors.rows.slice(1).map((r) => asRecord(authors.rows[0], r)['Email address']).sort()).toEqual([email(u.nova), email(u.otto)].sort());
 
         // No role exported: "Author" alone ticked, as last left; unticked,
         // the window still exports and the file holds the column names alone
         // (Rules 16, 17).
         win = await users.openExport();
-        expect(await win.boxStates()).toEqual(ROLES.map((r) => [r, r === 'Author']));
+        expect(await win.boxSet()).toEqual(byLabel(ROLES.map((r) => [r, r === 'Author'])));
         await win.tickOnly([]);
         const none = await win.export();
         expect(none.bom).toBe(true);
-        expect(none.rows).toEqual([USER_COLUMNS]);
+        expect(none.rows.map(userExportHeader)).toEqual([userExportHeader(USER_COLUMNS)]);
 
         // The Moderator: the same rows with the same counts (Actors
         // paragraph).
@@ -348,7 +351,7 @@ test.describe('Statistics — editorial activity & reports', () => {
         // (Rule 16).
         await users.reload();
         win = await users.openExport();
-        expect(await win.boxStates()).toEqual(ROLES.map((r) => [r, true]));
+        expect(await win.boxSet()).toEqual(byLabel(ROLES.map((r) => [r, true])));
         await win.close();
     });
 

@@ -83,9 +83,52 @@ async function readDownload(download) {
     return {name: download.suggestedFilename(), ...csvFile(fs.readFileSync(file))};
 }
 
-/** A row of a parsed spreadsheet as `{column: value}`, by the column line `columns`. */
+/**
+ * The email column's heading, whichever word the install gives it. lib/pkp
+ * defines the msgid `user.email` twice, "Email address" (common.po) and
+ * "Email" (user.po), and which one wins depends on the order an install
+ * loads the files (the VM fleets read "Email address", CI's fresh box
+ * "Email"; U63 S6 met it too). Every report column built from that key
+ * (the users export's, "(Author n)" and "(Editor n)", the review and
+ * subscriptions reports') reads either word. This maps exactly those two
+ * shapes onto "Email address…" and leaves every other heading as it is.
+ */
+function emailHeading(heading) {
+    return heading.replace(/^Email(?: address)?(?=$| \((?:Author|Editor) \d+\)$)/, 'Email address');
+}
+
+/** A heading line with its email column(s) read through `emailHeading()`. */
+function emailHeadings(columns) {
+    return columns.map(emailHeading);
+}
+
+/** `[[label, …]…]` sorted by label (a set compared as a list). */
+function byLabel(states) {
+    return [...states].sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
+}
+
+/** How many fixed columns the users export has before its role columns. */
+const USER_EXPORT_FIXED = 9;
+
+/**
+ * The users export's column line, comparable across installs: the nine
+ * fixed columns in their order (the email one read through
+ * `emailHeading()`), then the role columns sorted. The role columns follow
+ * the context's roles in database order (`PKP\user\Report` queries the
+ * user groups with no ORDER BY), so they are a set, their count exact.
+ * Pass the expected line through it too.
+ */
+function userExportHeader(columns) {
+    return [...emailHeadings(columns.slice(0, USER_EXPORT_FIXED)), ...columns.slice(USER_EXPORT_FIXED).sort()];
+}
+
+/**
+ * A row of a parsed spreadsheet as `{column: value}`, by the column line
+ * `columns`; the email column is keyed "Email address…" whichever word the
+ * file uses (`emailHeading()`).
+ */
 function asRecord(columns, row) {
-    return Object.fromEntries(columns.map((c, i) => [c, row[i] === undefined ? '' : row[i]]));
+    return Object.fromEntries(columns.map((c, i) => [emailHeading(c), row[i] === undefined ? '' : row[i]]));
 }
 
 // ---------------------------------------------------------------------------
@@ -500,6 +543,16 @@ class UserExportWindow extends BasePage {
         );
     }
 
+    /**
+     * The boxes as `[[label, ticked]…]`, sorted by label. The window lists
+     * the context's roles in the order the database returns them (the
+     * form's user-group query has no ORDER BY, so on Postgres an edited
+     * group moves last): compare them as a set, `byLabel()` on the expected.
+     */
+    async boxSet() {
+        return byLabel(await this.boxStates());
+    }
+
     /** A box by its role name. */
     box(label) {
         return this.dialog.getByRole('checkbox', {name: label, exact: true});
@@ -578,6 +631,20 @@ class EditorialReportsPage extends BasePage {
     async arrived() {
         await expect(this.heading).toBeVisible({timeout: T});
         await expect(this.line).toBeVisible({timeout: T});
+    }
+
+    /**
+     * The page lists exactly `names` as its report links: the count exact,
+     * the order not asserted. The links follow the installation's plugin
+     * list, whose order differs between installs at the same commits (CI's
+     * fresh box listed OJS's four in the reverse of the VM fleets'), as the
+     * Tools list does for U63.
+     */
+    async expectLinkSet(names) {
+        await expect(this.links).toHaveCount(names.length, {timeout: T});
+        await expect
+            .poll(async () => (await this.links.allInnerTexts()).map((t) => t.replace(/\s+/g, ' ').trim()).sort(), {timeout: T})
+            .toEqual([...names].sort());
     }
 
     /** A report's link by its name. */
@@ -689,6 +756,10 @@ module.exports = {
     csvFile,
     csvBlocks,
     asRecord,
+    emailHeading,
+    emailHeadings,
+    byLabel,
+    userExportHeader,
     statisticsEmails,
     statisticsEmailCount,
     emailLinks,

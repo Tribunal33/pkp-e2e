@@ -71,6 +71,9 @@ const {
     expectAccessDenied,
     csvBlocks,
     asRecord,
+    emailHeadings,
+    byLabel,
+    userExportHeader,
     statisticsEmails,
     statisticsEmailCount,
 } = require('../../../../shared/playwright/pages/EditorialStatsPages.js');
@@ -527,7 +530,7 @@ test.describe('Statistics — editorial activity & reports', () => {
             expect(Math.round(at.x + at.width), 'the window meets the right edge').toBeGreaterThanOrEqual(viewport.width - 2);
             await expect(win.group).toBeVisible();
             await expect(win.description).toBeVisible();
-            expect(await win.boxStates()).toEqual(PRESS_ROLES.map((r) => [r, true]));
+            expect(await win.boxSet()).toEqual(byLabel(PRESS_ROLES.map((r) => [r, true])));
             await expect(win.exportButton).toBeVisible();
             const order = await win.dialog.evaluate((d) => {
                 const text = d.textContent || '';
@@ -549,7 +552,7 @@ test.describe('Statistics — editorial activity & reports', () => {
             let file = await win.export();
             expect(file.name).toBe(`user-report-${TODAY}.csv`);
             expect(file.bom, 'the file starts with a byte-order mark').toBe(true);
-            expect(file.rows[0]).toEqual([...USER_COLUMNS, ...PRESS_ROLES]);
+            expect(userExportHeader(file.rows[0])).toEqual(userExportHeader([...USER_COLUMNS, ...PRESS_ROLES]));
             const everyone = [u.manager, u.se, u.nova, u.otto, u.cora].map(mailOf).concat('admin@mail.test');
             let lines = records(file.rows);
             expect(lines.map((l) => l['Email address']).sort()).toEqual([...everyone].sort());
@@ -564,10 +567,10 @@ test.describe('Statistics — editorial activity & reports', () => {
             // One role exported: the boxes as last left (all ticked); "Author"
             // alone gives Nova and Otto, the role columns unchanged (Rules 16, 17).
             win = await users.openExport();
-            expect(await win.boxStates()).toEqual(PRESS_ROLES.map((r) => [r, true]));
+            expect(await win.boxSet()).toEqual(byLabel(PRESS_ROLES.map((r) => [r, true])));
             await win.tickOnly(['Author']);
             file = await win.export();
-            expect(file.rows[0]).toEqual([...USER_COLUMNS, ...PRESS_ROLES]);
+            expect(userExportHeader(file.rows[0])).toEqual(userExportHeader([...USER_COLUMNS, ...PRESS_ROLES]));
             lines = records(file.rows);
             expect(lines.map((l) => l['Email address']).sort()).toEqual([mailOf(u.nova), mailOf(u.otto)].sort());
 
@@ -575,11 +578,11 @@ test.describe('Statistics — editorial activity & reports', () => {
             // nothing ticked the window still exports the column names alone
             // (Rules 16, 17).
             win = await users.openExport();
-            expect(await win.boxStates()).toEqual(PRESS_ROLES.map((r) => [r, r === 'Author']));
+            expect(await win.boxSet()).toEqual(byLabel(PRESS_ROLES.map((r) => [r, r === 'Author'])));
             await win.tickOnly([]);
             file = await win.export();
             expect(file.bom).toBe(true);
-            expect(file.rows).toEqual([[...USER_COLUMNS, ...PRESS_ROLES]]);
+            expect(file.rows.map(userExportHeader)).toEqual([userExportHeader([...USER_COLUMNS, ...PRESS_ROLES])]);
 
             // The Series Editor sees the same rows and counts (Actors paragraph).
             const sePage = await crash.page(asUser, u.se);
@@ -592,7 +595,7 @@ test.describe('Statistics — editorial activity & reports', () => {
             // (Rule 16).
             await users.reload();
             win = await users.openExport();
-            expect(await win.boxStates()).toEqual(PRESS_ROLES.map((r) => [r, true]));
+            expect(await win.boxSet()).toEqual(byLabel(PRESS_ROLES.map((r) => [r, true])));
             await win.close();
         });
     });
@@ -1050,7 +1053,7 @@ test.describe('Statistics — editorial activity & reports', () => {
             await reports.arrived();
             await expect(reports.heading).toHaveText('Reports');
             await expect(reports.line).toHaveText(REPORTS_LINE);
-            await expect(reports.links).toHaveText(REPORT_LINKS);
+            await reports.expectLinkSet(REPORT_LINKS);
             const address = page.url();
 
             // "Monograph Report": downloaded at once, the page as it was; the
@@ -1060,11 +1063,11 @@ test.describe('Statistics — editorial activity & reports', () => {
             expect(monographs.name).toBe(`monographs-JPK-${FILE_DAY}.csv`);
             await expect(page).toHaveURL(address);
             await expect(reports.heading).toHaveText('Reports');
-            await expect(reports.links).toHaveText(REPORT_LINKS);
+            await reports.expectLinkSet(REPORT_LINKS);
             expect(monographs.bom).toBe(true);
             const columns = monographs.rows[0];
-            expect(columns.slice(0, MONOGRAPH_COLUMNS.length)).toEqual(MONOGRAPH_COLUMNS);
-            expect(columns.slice(MONOGRAPH_COLUMNS.length, MONOGRAPH_COLUMNS.length + 16)).toEqual([...authorColumns(1), ...authorColumns(2)]);
+            expect(emailHeadings(columns).slice(0, MONOGRAPH_COLUMNS.length)).toEqual(MONOGRAPH_COLUMNS);
+            expect(emailHeadings(columns).slice(MONOGRAPH_COLUMNS.length, MONOGRAPH_COLUMNS.length + 16)).toEqual([...authorColumns(1), ...authorColumns(2)]);
             const books = records(monographs.rows);
             expect(books.map((b) => b.Title).sort()).toEqual(['Delta notes', 'Kelp draft', 'Marsh survey']);
 
@@ -1091,7 +1094,7 @@ test.describe('Statistics — editorial activity & reports', () => {
             const reviews = await reports.download('Review Report');
             expect(reviews.name).toBe(`reviews-${FILE_DAY}.csv`);
             expect(reviews.bom).toBe(true);
-            expect(reviews.rows[0]).toEqual(REVIEW_COLUMNS);
+            expect(emailHeadings(reviews.rows[0])).toEqual(REVIEW_COLUMNS);
             const assignments = records(reviews.rows);
             expect(assignments.map((a) => a['Submission Title'])).toEqual(['Delta notes', 'Marsh survey', 'Marsh survey']);
             expect(assignments.map((a) => a.Stage)).toEqual(['External Review', 'External Review', 'External Review']);
@@ -1126,7 +1129,7 @@ test.describe('Statistics — editorial activity & reports', () => {
             await plugins.list.openArrow('ReviewReportPlugin');
             const again = await downloadFromLink(page, plugins.list.rowLink('ReviewReportPlugin', 'Reports'));
             expect(again.name).toBe(`reviews-${FILE_DAY}.csv`);
-            expect(again.rows[0]).toEqual(REVIEW_COLUMNS);
+            expect(emailHeadings(again.rows[0])).toEqual(REVIEW_COLUMNS);
             expect(records(again.rows).map((a) => [a['Submission Title'], a.Reviewer, a.Declined]).sort()).toEqual(
                 assignments.map((a) => [a['Submission Title'], a.Reviewer, a.Declined]).sort()
             );

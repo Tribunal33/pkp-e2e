@@ -132,19 +132,25 @@ closed by the arrow at its top left, which a screen reader names
 "user-report-2026-09-28.csv"): a byte-order mark (the invisible first
 character that tells spreadsheet programs the text is UTF-8), a line of
 column names, then one line per account. The columns: "ID", "Given
-Name", "Family Name", "Email address", "Phone", "Country", "Mailing
+Name", "Family Name", the email column, "Phone", "Country", "Mailing
 Address", "Date registered", "Updated", then one column per role of the
 journal, named as the window's boxes, reading "Yes" where the account
 holds that role now and "No" where it does not. "Date registered" gives
 the date and time, as "2026-09-28 05:27:26"; "Phone", "Country",
 "Mailing Address" and "Updated" are empty where the account has nothing
-there. <sup>j</sup>
+there. The email column holds the account's email address and is
+headed "Email address" on some installs and "Email" on others, with no
+setting behind the difference (the same split as the contributor
+form's email field, [Contributors & affiliations](U41-contributors-and-affiliations.md#a19)).
+<sup>j</sup>
 
 **"Reports"** (Statistics › "Reports"; heading "Reports"), top to
 bottom: the line "The system generates reports that track the details
 associated with site usage and submissions over a given period of time.
 Reports are generated in CSV format which requires a spreadsheet
-application to view.", then one link per report, in this order: <sup>k</sup>
+application to view.", then one link per report the installation
+offers, in an order that differs from one installation to another,
+with no setting behind it: <sup>k</sup>
 
 | App | Links |
 |-----|-------|
@@ -154,7 +160,11 @@ application to view.", then one link per report, in this order: <sup>k</sup>
 
 **The report files.** Every file starts with a byte-order mark, then a
 line of column names, then one line per item. "COUNTER Reports" {OJS}
-opens a page instead (Rule 19). <sup>l</sup> <sup>m</sup> <sup>n</sup>
+opens a page instead (Rule 19). The email columns are headed as the
+users export's email column is: where that reads "Email", "Email
+address (Author n)" below reads "Email (Author n)", "Email address
+(Editor n)" reads "Email (Editor n)" and "Email address" reads
+"Email". <sup>l</sup> <sup>m</sup> <sup>n</sup>
 <sup>o</sup>
 
 | Report | File name | One line per | Columns, in order |
@@ -624,9 +634,10 @@ other suite's run. <sup>sc</sup>
    - **Every role exported**: press the window's "Export": the window
      closes and "user-report-{today's date as YYYY-MM-DD}.csv"
      downloads. The file starts with a byte-order mark, then the column
-     names "ID", "Given Name", "Family Name", "Email address", "Phone",
-     "Country", "Mailing Address", "Date registered", "Updated" and one
-     per role of the journal, named as the window's boxes, then one line
+     names "ID", "Given Name", "Family Name", "Email address" ("Email"
+     on some installs; Fields), "Phone", "Country", "Mailing Address",
+     "Date registered", "Updated" and one per role of the journal,
+     named as the window's boxes, then one line
      each for the Journal Manager, the Section Editor, Nova, Otto, Cora
      and the Site Administrator, and none for Pia or Quinn. Nova's line
      reads "Yes" under "Author" and "Reader" and "No" under every other
@@ -879,8 +890,8 @@ other suite's run. <sup>sc</sup>
      time. Reports are generated in CSV format which requires a
      spreadsheet application to view.", then the links "COUNTER
      Reports", "Review Report", "Articles Report" and "Subscriptions
-     Report" (on a press "Monograph Report" and "Review Report")
-     (Rule 18; Fields).
+     Report" (on a press "Monograph Report" and "Review Report"), in
+     whatever order the installation lists them (Rule 18; Fields).
    - **"Articles Report"** ("Monograph Report" on a press): press it:
      "articles-JPK-{today's date as YYYYMMDD}.csv"
      ("monographs-JPK-{today's date as YYYYMMDD}.csv") downloads at once
@@ -934,8 +945,9 @@ other suite's run. <sup>sc</sup>
      at once. It starts with a byte-order mark, then the line
      "Individual Subscriptions", then the individual column names of
      Fields, then Nell's line, with her email address under "Email
-     address" and an empty "Country"; then an empty line, the line
-     "Institutional Subscriptions", the institutional column names of
+     address" ("Email" on some installs; Fields) and an empty
+     "Country"; then an empty line, the line "Institutional
+     Subscriptions", the institutional column names of
      Fields, and the line of "Okapi Institute", reading "Okapi
      Institute" under "Institution Name" and "Canada" under "Country"
      (Rule 22; Fields).
@@ -1589,6 +1601,19 @@ with the boxes as last left after the arrow and after an export, all
 ticked after a reload; leaving with the window open asked nothing. The
 `users/report` address typed by a role refused "Users" answered 401
 (`user.authorization.roleBasedAccessDenied`) and downloaded nothing.
+The email column's heading, and every report's email column (notes l,
+m, n, o), is the one text `user.email`, which lib/pkp defines twice:
+"Email address" in `locale/en/common.po`, "Email" in
+`locale/en/user.po`; the install's order of loading the two files picks
+the heading, the duplicate key the contributor form's A19 records in
+*Contributors & affiliations* (`PKP\user\Report`,
+`ArticleReportPlugin`, `ReviewReportPlugin`,
+`SubscriptionReportPlugin`, OMP `plugins/reports/monographReport/Report.php`).
+Test run 2026-09-28 (Fields; scenarios 2, 7, 8): the local installs
+read "Email address" throughout; the CI installs read "Email" in the
+users export on all three apps, "Email (Author 1)" in OMP's
+"Monograph Report" and "Email" in the individual block of OJS's
+"Subscriptions Report", at the same commits.
 
 <a id="fn-k"></a>
 **k** — `PKPStatsHandler::reports()` sends an empty path or `reports` to
@@ -1597,10 +1622,13 @@ ticked after a reload; leaving with the window open asked nothing. The
 `manager.statistics.reports.description`, one link per
 `PluginRegistry::loadCategory('reports')` to `reports/report?pluginName=`)
 and `report` to `report()`, which redirects for an empty or unknown
-`pluginName` and otherwise calls the plugin's `display()`. `loadCategory('reports')` reads every installed report
-plugin from disk, sorted by sequence: OJS `plugins/reports/{articles,
-counter, reviewReport, subscriptions}`, OMP `{monographReport,
-reviewReport}`, OPS none (no `plugins/reports` folder).
+`pluginName` and otherwise calls the plugin's `display()`.
+`loadCategory('reports')` reads every installed report plugin from
+disk: OJS `plugins/reports/{articles, counter, reviewReport,
+subscriptions}`, OMP `{monographReport, reviewReport}`, OPS none (no
+`plugins/reports` folder). `reports()` hands them to the template in
+the order `loadCategory()` returns them, which nothing sorts, so
+installs at the same commits can list the links in different orders.
 `ReportPlugin::getActions()` gives each plugin's row the "Reports" link
 to the same address.
 Live-probed 2026-09-28 (Actors row 3; Fields; Rules 18, 19): the links
@@ -1610,7 +1638,10 @@ and not pressable; each link, and each row's "Reports" link on the
 Plugins tab, downloaded at once with the page unchanged; a preprint
 server's "Report Plugins" read "No Items". A report address naming no
 report landed on `{context}/stats/stats/reports`, "404 Not Found"
-(A8).
+(A8). Test run 2026-09-28 (Fields; scenario 7): the local installs
+listed the links in the Fields table's order; a CI install at the same
+commits listed "Subscriptions Report", "Articles Report", "Review
+Report", "COUNTER Reports".
 
 <a id="fn-l"></a>
 **l** — OJS `ArticleReportPlugin::display()`: file
