@@ -78,7 +78,7 @@ record what each role is offered once the list is on screen. <sup>b</sup>
 | **"Delete"** (row menu; Rule 4) | • The stage's team, on every list<br>• Author: on "Revisions Uploaded" only <sup>g</sup> |
 | **"Download All Files"** (under a list; Rule 3) | • The stage's team: under "Submission Files" and "Production Ready Files"<br>• Author: under "Submission Files"<br>• Every role, only while the list holds at least one file; the other lists never offer it <sup>h</sup> <sup>d1</sup> |
 | **Download a file** (its name in a list; Rule 3) | • Everyone the list shows the file to<br>• A reviewer: the files their review gives them (*[Reviewer's review](U28-reviewers-review.md#step-1)*), under a neutral name in an "Anonymous Reviewer/Anonymous Author" review, under the file's own name in an "Anonymous Reviewer/Disclosed Author" or "Open" one (Rule 3) <sup>i</sup> |
-| **"Send to Text Editor"** (row menu, for a Word, OpenDocument, RTF, LaTeX or Markdown file) | • Site Administrator; Journal Manager, Editor and Production editor (the manager-level roles), on every list<br>• Section Editor, Guest Editor {OJS}, the assistant roles, Author: never. The window it opens, "Send File to Text Editor", is *[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*' Rule 16; what the send does is *JATS & Body Text*'s <sup>j</sup> <sup>d10</sup> |
+| **"Send to Text Editor"** (row menu, on a Word file only, Rule 2) | • Site Administrator; Journal Manager, Editor and Production editor (the manager-level roles), on every list<br>• Section Editor, Guest Editor {OJS}, the assistant roles, Author: never. The window it opens, "Send File to Text Editor", is *[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*' Rule 16; what the send does is *JATS & Body Text*'s <sup>j</sup> <sup>d10</sup> |
 | **The submission wizard's "Files" panel** {OJS OMP} (add, choose the component, change it, remove; Rules 17–18) | • Whoever may open the draft's wizard (*[Submission wizard](U21-submission-wizard.md)*, its Actors), until the submission is submitted <sup>k</sup> |
 | **A galley's file** {OJS OPS} ("Change File" and "More Information" on the publication's "Galleys" page) | • Who is offered them is *Galleys*'. "Change File" opens this spec's upload wizard for that one file (Rule 9a), "More Information" this spec's window (Rule 13)<br>• A press's publication formats belong to *Publication formats & proof terms* {OMP} <sup>l</sup> |
 
@@ -131,8 +131,9 @@ record what each role is offered once the list is on screen. <sup>b</sup>
 2. **What a list offers.** Above the list sits "Upload" (Rules 5–7) or
    "Upload/Select Files" (Rule 15), depending on the list (Actors row 2).
    A row's "More Actions" menu offers, in this order, the entries the
-   reader may use: "Send to Text Editor" (for an importable file,
-   Actors), "Update File Details", "More Information" and "Delete". The
+   reader may use: "Send to Text Editor" (only on a Word file, one whose
+   name ends in ".docx"; Actors), "Update File Details", "More
+   Information" and "Delete". The
    menu button reads "More Actions" on every row, with no file name in
    it ⚠ [A6](#a6). <sup>m</sup> <sup>j</sup>
 <a id="download"></a>
@@ -578,8 +579,9 @@ tooling recipe are in the footnote. <sup>s0</sup>
 1. **Upload a new file** {OJS OMP}
 
    Given: Journal Manager, on the Submission stage of a submission whose
-   "Submission Files" list holds "article.pdf" as "Article Text", with a
-   Section Editor assigned to it.
+   "Submission Files" list holds "article.pdf" and the Word file
+   "article.docx", both as "Article Text", with a Section Editor assigned
+   to it.
 
    - **The window**: press "Upload" above "Submission Files": a window
      titled "Upload Submission File" opens on the steps "1. Upload File",
@@ -587,7 +589,8 @@ tooling recipe are in the footnote. <sup>s0</sup>
      "Cancel" link under them (Rule 5).
    - **Step 1 before a choice**: "If you are uploading a revision of an
      existing file, please indicate which file." opens on "This is not a
-     revision of an existing file" and lists "article.pdf"; "Article
+     revision of an existing file" and lists "article.pdf" and
+     "article.docx"; "Article
      Component" ("Submission Component" on a press) opens on "Select
      article component" ("Select component") and offers neither "Image"
      nor "HTML Stylesheet"; no upload box shows, and "Continue" is greyed
@@ -614,15 +617,19 @@ tooling recipe are in the footnote. <sup>s0</sup>
      Instrument" and "Final manuscript" with "Article Text" in the "Type"
      column, each with a number of its own under "No" and its "Date
      uploaded" (Rule 1).
+   - **The Journal Manager's row menus**: "More Actions" on
+     "article.docx" offers "Send to Text Editor", "Update File Details",
+     "More Information" and "Delete"; on "notes.md" the same entries
+     without "Send to Text Editor" (Rule 2; Actors row 8).
    - **The assigned Section Editor**: Section Editor: open the same
      submission at the Submission stage: "Upload" stands above
      "Submission Files" and opens "Upload Submission File" with the same
      components and the same files to revise as the Journal Manager's;
      each row's "More Actions" offers "Update File Details", "More
      Information" and "Delete" (Actors rows 2–5; Rule 5).
-   - **Control**: the Section Editor's "More Actions" on "notes.md"
+   - **Control**: the Section Editor's "More Actions" on "article.docx"
      offers no "Send to Text Editor", which the Journal Manager's menu
-     offers on the same row (scenario 4; Actors row 8).
+     offers on the same row (Actors row 8).
 
 2. **Leave the wizard before "Complete"** {OJS OMP}
 
@@ -688,14 +695,15 @@ tooling recipe are in the footnote. <sup>s0</sup>
 4. **Rename a file and download the list** {OJS OMP}
 
    Given: Journal Manager, on the Submission stage of a submission whose
-   "Submission Files" list holds "article.pdf" as "Article Text" and
-   "notes.md" as "Research Instrument" ("Prospectus" on a press), and a
-   second submission with no file.
+   "Submission Files" list holds "article.pdf" and the Word file
+   "article.docx", both as "Article Text", and "notes.md" as "Research
+   Instrument" ("Prospectus" on a press), and a second submission with
+   no file.
 
-   - **The row menu**: open "More Actions" on "notes.md": it offers, in
-     this order, "Send to Text Editor", "Update File Details", "More
-     Information" and "Delete"; on "article.pdf" the same entries without
-     "Send to Text Editor" (Rule 2; Actors row 8).
+   - **The row menu**: open "More Actions" on "article.docx": it offers,
+     in this order, "Send to Text Editor", "Update File Details", "More
+     Information" and "Delete"; on "notes.md" and on "article.pdf" the
+     same entries without "Send to Text Editor" (Rule 2; Actors row 8).
    - **"Update File Details"**: choose it on "article.pdf": a window
      titled "Edit a file" opens with "Name the file (e.g., Manuscript;
      Table 1)" holding "article.pdf", and "Save" and "Cancel" (Rule 10;
@@ -715,7 +723,7 @@ tooling recipe are in the footnote. <sup>s0</sup>
      "notes.md": it downloads as "notes.md" (Rule 3).
    - **"Download All Files"**: press it under "Submission Files": one zip
      file downloads, named after the submission's number and the list
-     [A12](#a12), holding the list's two files (Rule 3; Actors row 6).
+     [A12](#a12), holding the list's three files (Rule 3; Actors row 6).
    - **Control**: the second submission's "Submission Files" reads "No
      Items" and shows no "Download All Files" (Rules 1, 3).
 
@@ -1766,9 +1774,21 @@ downloaded one zip in place, "349--submission-files.zip", holding
 (`grid.action.updateFile`), `FILE_SEE_NOTES` (`grid.action.moreInformation`),
 `FILE_DELETE` (`grid.action.delete`, warnable). Send to Text Editor is
 granted to `ROLE_ID_SITE_ADMIN` and `ROLE_ID_MANAGER` on every workflow
-namespace and offered only when the name's extension is in
-`PANDOC_IMPORT_EXTENSIONS` (`docx`, `odt`, `rtf`, `tex`, `latex`, `md`,
-`markdown`); it opens `WorkflowVersionDialogBody` in `sendToTextEditor` mode
+namespace and offered only when the name's last extension, in lower
+case, is in `PANDOC_IMPORT_EXTENSIONS`. At the PR head `85384f34ca`
+(ui-library#979), before its merge, 2026-09-28, that list is
+`documentImportUtils.js` `IMPORT_EXTENSIONS`, the keys of
+`IMPORT_READERS`, which holds `docx` alone ("Scoped to DOCX for now",
+the other formats commented out); on `main` before the PR it was
+`docx`, `odt`, `rtf`, `tex`, `latex`, `md`, `markdown`. Driven at that
+head (Rule 2; Actors row 8), OJS and OMP, the
+Journal Manager or Press Manager: "notes.md" on "Submission Files"
+offered "Update File Details", "More Information" and "Delete"; a Word
+file offered "Send to Text Editor", "Update File Details", "More
+Information" and "Delete" (on OJS's "Production Ready Files", on OMP's
+"Submission Files"). The PR's author (@jarda.kotesovec, 2026-09-28, in
+the review thread) ruled it intended for now: "scope is focused
+intentionally to docx - with others possibly coming later". It opens `WorkflowVersionDialogBody` in `sendToTextEditor` mode
 titled `fileManager.sendFileToTextEditor`. The menu button's label is
 `common.moreActions` (`FileManagerCellMoreActions.vue`), with no file name.
 Live-probed 2026-09-23 (Rule 2; OJS and OMP): the entries in that order, and
@@ -1780,7 +1800,8 @@ Editor" first on "notes.md" and absent on "article.pdf" for the Site
 Administrator, the Journal Manager, the Editor and the Production editor,
 assigned or not, on "Submission Files", "Draft Files" and "Production Ready
 Files"; never offered to the Section Editor, Guest Editor, Funding
-coordinator, Copyeditor, Layout Editor, Proofreader or Author.
+coordinator, Copyeditor, Layout Editor, Proofreader or Author. Since
+pkp/ui-library#979 a Word file takes the place of "notes.md" (note j).
 
 <a id="fn-k"></a>
 **k** — `PKPSubmissionHandler::getSubmissionFilesListPanel()`: title
@@ -2379,8 +2400,8 @@ text shown in the author's step. The probe servers' PHP limit is 100M.
 <a id="fn-s0"></a>
 **s0** — Accounts: `users.md` (the seeded roster; `admin`/`admin`, everyone
 else their username twice; throwaway accounts the username twice). Files:
-`apps/<app>/playwright/fixtures/files/` (`article.pdf`, `notes.md`,
-`article.html` and `profile-image-400.png` on OJS and OMP; `preprint.pdf` on
+`apps/<app>/playwright/fixtures/files/` (`article.pdf`, `article.docx`,
+`notes.md`, `article.html` and `profile-image-400.png` on OJS and OMP; `preprint.pdf` on
 OPS). A scenario's starting files are seeded through the scenario API:
 `files[]` (OJS and OMP; OPS refuses it) puts files on "Submission Files" with
 their component (`genre`, default the first main-work component), uploader
@@ -2395,11 +2416,11 @@ on scratch contexts from `POST scenarios/context`; 11 on the seeded preprint
 server. The Journal Manager is `manager.maya`, the Section Editor
 `sectioneditor.ana` (assigned automatically), the Copyeditor
 `copyeditor.carla`, the Reviewer `reviewer.julia`, the Author `author.alex`.
-Recipes: 1 — `files: [{file: 'article.pdf'}]`, read as `manager.maya` then
-`sectioneditor.ana`. 2, 3 — the same seed as `manager.maya`; 3's file is the
+Recipes: 1 — `files: [{file: 'article.pdf'}, {file: 'article.docx'}]`, read as `manager.maya` then
+`sectioneditor.ana`. 2, 3 — `files: [{file: 'article.pdf'}]`, as `manager.maya`; 3's file is the
 submitter's, so nobody renamed it. 4 — `files: [{file: 'article.pdf'},
-{file: 'notes.md', genre: 'Research Instrument'}]` (`'Prospectus'` on the
-press) beside a seed with no `files`. 5 — `files: [{file: 'article.html'},
+{file: 'notes.md', genre: 'Research Instrument'}, {file: 'article.docx'}]`
+(`'Prospectus'` on the press) beside a seed with no `files`. 5 — `files: [{file: 'article.html'},
 {file: 'article.pdf'}]`; the Activity Log is the workflow header's "Activity
 Log" window. 6 — `decisions: ['skipExternalReview']`, `files: [{file:
 'article.pdf', note: 'Check figure 2.'}]` (the note's writer reads "admin
@@ -2773,7 +2794,7 @@ live.
 | "Upload/Select Files" button and window | above "Files for Review", "Draft Files", "Copyedited Files" | AFFW-475 · AFFW-609 · AFFW-610 · AFFW-611 · AFFW-614 · GRID-031 |
 | Per-row select box (a decision's file pickers, the composer's "Attach Files") | owned by *Editorial decision recording* | AFFW-477 · AFFW-145 |
 | Row menu: "Update File Details", "More Information", "Delete" and its dialog | a list row's "More Actions" | AFFW-480 · AFFW-481 · AFFW-482 · AFFW-483 |
-| Row menu: "Send to Text Editor" | a list row, importable file | AFFW-479 (rider; mechanism *JATS & Body Text*) |
+| Row menu: "Send to Text Editor" | a list row, Word file | AFFW-479 (rider; mechanism *JATS & Body Text*) |
 | "Edit a file" window (Vue form in a legacy modal) | row › "Update File Details" | AFFW-484 · VUE-053 · GRID-002 |
 | Upload wizard: tabs, buttons, step 1 form, revise and component selects, anonymizing link, upload widget, "Review Details", dependent files, "Add Another File" | "Upload" on a list; "Upload File" in a window; a galley's "Change File" | AFFW-586 · AFFW-587 · AFFW-588 · AFFW-589 · AFFW-590 · AFFW-591 · AFFW-592 · AFFW-593 · AFFW-595 · AFFW-596 · AFFW-485 · AFFW-597 · AFFW-598 · GRID-066 |
 | Revision-only wizard with no file to revise ("There are no files for you to revise at this time.") | only the pending-revisions notice's own upload link, which no current screen was found to render (UNASSIGNED) | AFFW-594 |

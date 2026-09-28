@@ -87,6 +87,9 @@ const PRODUCTION = ['sendExternalReview', 'accept', 'sendToProduction'];
 const REF_ALPHA = 'Alpha, A. (2020). First reference.';
 const REF_BETA = 'Beta, B. (2021). Second reference.';
 const FIXTURE_TITLE = 'A JATS fixture article';
+/** What article.docx (a heading, two paragraphs, a figure with its caption) imports as, and nothing else. */
+const IMPORTED_TEXT =
+    /^K3 Imported Heading K3 imported paragraph before the figure\.[\s\S]*K3 figure caption[\s\S]*K3 imported paragraph after the figure\.$/;
 const NOTIFY_SUBJECT = 'Discussion (Submission)';
 const FILES = path.join(__dirname, '..', 'fixtures', 'files');
 const fixture = (name) => path.join(FILES, name);
@@ -330,7 +333,7 @@ test.describe('JATS & Body Text', () => {
             submitter: AUTHOR,
             title: `Body text ${tag}`,
             citationsRaw: [REF_ALPHA, REF_BETA],
-            files: [{file: 'notes.md'}],
+            files: [{file: 'article.docx'}],
             decisions: PRODUCTION,
         });
         const {page, frame, body} = await pageAs(asUser, MANAGER, JOURNAL);
@@ -430,7 +433,7 @@ test.describe('JATS & Body Text', () => {
         // then the one version; that version, "Confirm" (Actors row 6).
         await frame.selectStage('Submission');
         const files = new FileList(page, frame, 'Submission Files');
-        await files.choose(files.row('notes.md'), 'Send to Text Editor');
+        await files.choose(files.row('article.docx'), 'Send to Text Editor');
         const send = new SendToTextEditorWindow(page);
         await send.expectOpen();
         await expect(send.dialog()).toContainText(TEXT.sendQuestion);
@@ -442,7 +445,7 @@ test.describe('JATS & Body Text', () => {
         await send.confirm();
 
         // The import: the version's "Body Text" opens, the box above the
-        // editor steps through its three steps, then goes (Rule 20).
+        // editor steps through its steps in order, then goes (Rule 20).
         await body.expectLoaded();
         await expect
             .poll(async () => {
@@ -461,10 +464,28 @@ test.describe('JATS & Body Text', () => {
         expect([...order].sort((a, b) => a - b), JSON.stringify(steps)).toEqual(order);
         await expect(body.importStatus()).toHaveCount(0);
 
-        // What arrives: the file's text first, then "First sentence.";
-        // "Unsaved Changes" shows (Rule 20a).
-        await expect.poll(() => body.editorText(), {timeout: 30_000}).toMatch(/^Notes\b[\s\S]*First sentence\./);
+        // What arrives: the Word file's heading, text and figure with its
+        // caption replace what the editor held: "First sentence.", its
+        // citation and the inserted figure are gone; "Unsaved Changes"
+        // shows (Rule 20a).
+        await expect
+            .poll(() => body.editorText(), {timeout: 30_000})
+            .toMatch(IMPORTED_TEXT);
+        expect(await body.editorText()).not.toContain('First sentence.');
+        await expect(body.figures()).toHaveCount(1);
+        await expect(body.citations()).toHaveCount(0);
         await expect(body.unsavedBadge()).toBeVisible();
+
+        // Control: after a reload without "Save" the saved text is back,
+        // with its citation and figure, and the import does not run again
+        // (Rules 20, 20a).
+        await body.reload();
+        await expect.poll(() => body.editorText(), {timeout: 30_000}).toContain('First sentence.');
+        await expect(body.citations()).toHaveCount(1);
+        await expect(body.figures()).toHaveCount(1);
+        await expect(body.unsavedBadge()).toBeHidden();
+        await expect(body.importStatus()).toHaveCount(0);
+        expect(await body.editorText()).not.toContain('K3');
 
         // A save, then a save with nothing changed: "Saved", and one more
         // History line naming "bodyText.json" and the manager (Rule 15;
@@ -484,14 +505,6 @@ test.describe('JATS & Body Text', () => {
         expect(`${all[0].user} | ${all[0].event}`).toBe(
             `Maya Manager | A file revision "bodyText.json" was uploaded for submission ${submission.submissionId} by ${MANAGER}.`
         );
-
-        // Control: after a reload the file's text stands once, before
-        // "First sentence.": the import does not run again (Rules 20, 20a).
-        await body.reload();
-        await expect.poll(() => body.editorText()).toMatch(/^Notes\b[\s\S]*First sentence\./);
-        const text = await body.editorText();
-        expect(text.split('A small Markdown file').length - 1).toBe(1);
-        await expect(body.importStatus()).toHaveCount(0);
     });
 
     test('S3: roles that may not edit the publication', async ({asUser, ojsApi}, testInfo) => {

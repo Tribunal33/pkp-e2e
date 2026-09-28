@@ -579,7 +579,8 @@ exports.BodyTextPage = class BodyTextPage extends BasePage {
     async insertFigure(file) {
         await this.focusEnd();
         await this.toolbarButton('Insert').click();
-        const item = this.toolbar().getByText('Insert figure', {exact: true});
+        // Named "Insert figure"; sciflow 0.1.1 shows only "Figure" on it.
+        const item = this.toolbar().getByRole('menuitem', {name: 'Insert figure', exact: true});
         await expect(item).toBeVisible({timeout: 30_000});
         const chooser = this.page.waitForEvent('filechooser', {timeout: 30_000});
         await item.click();

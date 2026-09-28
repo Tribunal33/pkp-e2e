@@ -17,16 +17,17 @@ Actors) may replace it with a file of their own and choose to publish it
 beside the galleys, as a
 **"JATS XML"** link on the article's page. The **"Body Text"** page is a
 built-in editor for the article's full text: an editor writes or imports
-the text (a Word, OpenDocument, RTF, LaTeX or Markdown file sent from a
-file list), places figures, headings and in-text citations to the
+the text (a Word file sent from a file list), places figures, headings
+and in-text citations to the
 version's references, and saves it with the version. Both pages sit under
 each version in the workflow's "Publication" group. <sup>a</sup>
+<sup>d20</sup>
 
 OMP and OPS do not install this feature: a press's and a preprint
 server's publication pages list no "JATS XML" and no "Body Text", their
 published pages carry no "JATS XML" link, and neither app ships the "JATS
-Template Plugin". A press's file lists still offer "Send to Text Editor",
-whose confirmed send leads nowhere ⚠ [OMP1](#omp1).
+Template Plugin". A press's file lists still offer "Send to Text Editor"
+on a Word file, whose confirmed send leads nowhere ⚠ [OMP1](#omp1).
 <sup>b</sup> <sup>d28</sup>
 
 ## Actors & permissions
@@ -51,7 +52,7 @@ and every assistant role). <sup>c</sup>
 | **"More Information"** on an uploaded JATS file (Rule 6) | • Everyone who opens the page and has Production access, once a file is uploaded, published versions included<br>• A role without Production access is offered the button, and the window opens reading "You don't currently have access to that stage of the workflow." <sup>c</sup> <sup>d1</sup> |
 | **"Make available with publication"** (Rule 9) | • Offered to everyone who opens the page, on every version, published ones included<br>• Saved for whoever may edit the publication; for anyone else "Confirm" is refused and the box keeps showing the unsaved state ⚠ [A1](#a1) <sup>c</sup> <sup>d2</sup> |
 | **Write in the "Body Text" editor and press "Save"** (Rules 14–16) | • Offered to everyone who opens the page, on every version, published ones included (Rule 21)<br>• Saved for whoever may edit the publication; for anyone else "Save" is refused ⚠ [A2](#a2) <sup>c</sup> <sup>d3</sup> |
-| **Send a file to the "Body Text" editor** ("Send to Text Editor" on a file row) | • Who is offered it is [Submission files](U36-submission-files.md#row-menu) (Site Administrator, Journal Manager, Editor, Production Editor); its window is [Publish, schedule & versions](U49-publish-schedule-and-versions.md) (its Rule 16). What arrives on "Body Text" is Rule 20 here <sup>c</sup> |
+| **Send a file to the "Body Text" editor** ("Send to Text Editor" on a Word file's row) | • Who is offered it, and on which files, is [Submission files](U36-submission-files.md#row-menu) (Site Administrator, Journal Manager, Editor, Production Editor); its window is [Publish, schedule & versions](U49-publish-schedule-and-versions.md) (its Rule 16). What arrives on "Body Text" is Rule 20 here <sup>c</sup> <sup>d20</sup> |
 | **Download the published JATS XML** (the article page's "JATS XML" link; Rules 10–12) | • Anyone who opens the article's page, signed out included, while the version's box is ticked and the version is published. On a journal that requires subscriptions this holds in a restricted issue too: a visitor its galleys refuse ([Subscriptions](U51-subscriptions.md), its Rule 12) still downloads the XML ⚠ [A22](#a22)<br>• With "Users must be registered and log in to view open access content." on, signed-in visitors only (Settings bullet 2)<br>• Before the version is published: those offered the workflow header's "Preview", and the submitting author by the link's address (Rule 11) <sup>e</sup> <sup>d13</sup> |
 | **Turn the "JATS Template Plugin" on or off** | • Journal Manager, Editor and Site Administrator: on Settings › Website › "Plugins", the plugin row's box (*Plugins management*; Settings bullet 1). Ticking it shows "The plugin "JATS Template Plugin" has been enabled."; unticking asks "Are you sure you want to disable this plugin?" with "OK" and "Cancel", then shows "The plugin "JATS Template Plugin" has been disabled."<br>• A Section Editor who opens Settings › Website reads "The current role does not have access to this operation." <sup>d29</sup> |
 
@@ -77,7 +78,7 @@ sit on the heading's right, left to right: <sup>a</sup> <sup>f</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| The editor's toolbar | — | Left to right: "Text style" ("Paragraph", "Heading 1", "Heading 2", "Heading 3", "Blockquote"), an "Insert" menu ("Insert figure", "Insert table", and "Insert equation", which is greyed), "Bold", "Italic", "Superscript", "Subscript", "Bullet list", "Ordered list", "Increase indent", "Decrease indent", "Align left", "Align center", "Align right", "Justify", "Undo", "Redo". All but "Text style" and "Insert" are greyed until the editor holds text and the cursor is in it: a click into an empty editor leaves them greyed. With the cursor in a table, a second toolbar, "Table", adds the commands for rows, columns, cells and header rows and columns, and "Delete table" <sup>d6</sup> |
+| The editor's toolbar | — | Left to right: "Text style" ("Paragraph", "Heading 1", "Heading 2", "Heading 3", "Blockquote"), an "Insert" menu ("Figure", "Table", and "Equation", which is greyed), "Bold", "Italic", "Superscript", "Subscript", "Bullet list", "Ordered list", "Increase indent", "Decrease indent", "Align left", "Align center", "Align right", "Justify", "Undo", "Redo". All but "Text style" and "Insert" are greyed until the editor holds text and the cursor is in it: a click into an empty editor leaves them greyed. With the cursor in a table, a second toolbar, "Table", adds the commands for rows, columns, cells and header rows and columns, and "Delete table" <sup>d6</sup> |
 | The editor | — | The text itself. Empty on a version whose Body Text was never saved (Rule 14) |
 | "Document Edit" panel: "Save" | — | Always offered; reads "Saved" for a moment after a save (Rule 15) |
 | "Document Edit" panel: "Unsaved Changes" | — | A badge beside "Save". It shows while the editor holds changes not yet saved, and also from the moment the page opens on a version whose Body Text was never saved [A14](#a14); "Save" hides it (Rules 14, 15) |
@@ -222,7 +223,7 @@ Nothing on either page is required, and neither page has a form-level
     Text. A version whose Body Text was never saved opens an empty editor
     with "Unsaved Changes" already showing ⚠ [A14](#a14). Nothing is saved
     until "Save" is pressed; on a version whose Body Text was never saved,
-    "Insert figure" first saves the text as it stands (Rule 22).
+    "Insert" › "Figure" first saves the text as it stands (Rule 22).
     <sup>g</sup> <sup>n</sup> <sup>d16</sup>
 15. **"Save" and "Unsaved Changes".** Any change in the editor shows the
     "Unsaved Changes" badge; undoing back to the saved text hides it
@@ -263,26 +264,29 @@ Nothing on either page is required, and neither page has a form-level
     "Uploading images…" when the file holds images. Then the box goes.
     The import runs once per send; reloading the page does not repeat it.
     <sup>p</sup> <sup>d20</sup>
-    - 20a. **What arrives.** The converted text is placed at the start of
-      the editor, before whatever it already holds, with the file's images
-      as figures. The import is not saved: the "Unsaved Changes" badge
-      shows until "Save". On a version whose Body Text was never saved, a
+    - 20a. **What arrives.** The converted text replaces whatever the
+      editor holds, with the file's images as figures; nothing asks
+      first. The import is not saved: the "Unsaved Changes" badge shows
+      until "Save", and reloading the page without "Save" brings back the
+      last saved text. So "Save" after an import discards the version's
+      earlier Body Text. On a version whose Body Text was never saved, a
       file with images also makes "Save" read "Saved" for a moment while
       the badge still shows [A14](#a14): uploading the images saved the
       empty text, not the import. <sup>d20</sup>
     - 20b. **A file that cannot be converted.** A file that is not what
       its name says (a text file named ".docx", for one) runs the box
       through "Downloading document…", "Loading converter…" and
-      "Converting…", then the box goes with no message. Nothing is
-      imported and the editor keeps its text ⚠ [A18](#a18). <sup>p</sup>
-      <sup>d20</sup>
+      "Converting…", then the box reads "Import failed" with the
+      converter's message and a "Dismiss" button. "Dismiss" closes the
+      box. Nothing is imported and the editor keeps its text.
+      <sup>p</sup> <sup>d20</sup>
 21. **A published version's Body Text stays editable.** The "Body Text"
     page of a published version offers the editor and "Save" as before,
     and a save by whoever may edit the publication is kept ⚠ [A3](#a3).
     <sup>c</sup> <sup>d21</sup>
 
 <a id="figures"></a>
-22. **Figures belong to the Body Text.** "Insert" › "Insert figure" asks
+22. **Figures belong to the Body Text.** "Insert" › "Figure" asks
     for an image, uploads it at once and places it in the text; an import
     places the file's images the same way. The figure stays in the text
     only once "Save" is pressed: reloading before that shows the text
@@ -445,9 +449,11 @@ passwords, mail catcher's address and tooling recipe are in the footnote. <sup>v
    Given: Journal Manager, on the seeded journal, with a scratch article
    in Production whose version lists the two references "Alpha, A.
    (2020). First reference." and "Beta, B. (2021). Second reference.",
-   whose "Submission Files" list holds the Markdown file "notes.md",
-   which begins with the heading "Notes", and whose Body Text was never
-   saved.
+   whose "Submission Files" list holds the Word file "article.docx"
+   (the heading "K3 Imported Heading", the paragraphs "K3 imported
+   paragraph before the figure." and "K3 imported paragraph after the
+   figure.", and between them an image captioned "K3 figure caption"),
+   and whose Body Text was never saved.
 
    - **The page**: open the article's workflow, then side menu
      "Publication" › the version › "Body Text": the page is headed
@@ -470,7 +476,7 @@ passwords, mail catcher's address and tooling recipe are in the footnote. <sup>v
      citation to it appears in the text and "Unsaved Changes" shows; in
      the list the first reference is highlighted and the second is not
      (Rules 15, 17).
-   - **A figure**: press "Insert" › "Insert figure" and choose
+   - **A figure**: press "Insert" › "Figure" and choose
      "figure.png": the image appears in the text at once (Rule 22).
    - **"Fullscreen"**: press "Fullscreen": the editor and its panel fill
      the browser window and the button reads "Exit fullscreen"; press
@@ -479,30 +485,34 @@ passwords, mail catcher's address and tooling recipe are in the footnote. <sup>v
    - **Saved and reloaded**: press "Save", then reload the browser page:
      the editor holds "First sentence.", the citation and the figure, and
      no "Unsaved Changes" shows (Rules 14, 15, 22).
+   - **A save with nothing changed**: press "Activity Log" in the
+     workflow header, count the "History" lines naming "bodyText.json"
+     and close the window. Press "Save" with nothing changed: the button
+     reads "Saved" for a moment, and "History" now holds one more line
+     naming "bodyText.json" and the Journal Manager (Rule 15; Side
+     effects).
    - **The "Media" page**: choose "Media" under the version: its list
      holds no "figure.png" (Rule 22).
    - **"Send to Text Editor"**: choose "Submission" in the side menu; on
-     the "notes.md" row of "Submission Files" press "More Actions" ›
+     the "article.docx" row of "Submission Files" press "More Actions" ›
      "Send to Text Editor": the window "Send File to Text Editor" asks
      "To which version would you like to send this file?". Choose the
      article's one existing version, listed after "Create New Version",
      and press "Confirm" (Actors row 6).
    - **The import**: the workflow opens the version's "Body Text", and a
      box above the editor reads "Importing document" with its current
-     step, "Downloading document…", "Loading converter…", then
-     "Converting…"; then the box goes (Rule 20).
-   - **What arrives**: the file's text, beginning with "Notes", stands at
-     the start of the editor, before "First sentence.", and "Unsaved
-     Changes" shows (Rule 20a).
-   - **A save, and a save with nothing changed**: press "Save": "Unsaved
-     Changes" goes. Press "Activity Log" in the workflow header, count
-     the "History" lines naming "bodyText.json" and close the window.
-     Press "Save" again with nothing changed: the button reads "Saved"
-     for a moment, and "History" now holds one more line naming
-     "bodyText.json" and the Journal Manager (Rule 15; Side effects).
-   - **Control**: reload the browser page: the editor holds the file's
-     text once, not twice, before "First sentence.": the import does not
-     run again (Rules 20, 20a). <sup>v</sup>
+     step, "Downloading document…", "Loading converter…", "Converting…",
+     then "Uploading images…"; then the box goes (Rule 20).
+   - **What arrives**: the editor holds only the file's content, in
+     order "K3 Imported Heading", "K3 imported paragraph before the
+     figure.", the figure captioned "K3 figure caption" and "K3 imported
+     paragraph after the figure."; nothing asked first. The earlier
+     text is gone: no "First sentence.", no citation, no "figure.png"
+     image. "Unsaved Changes" shows (Rules 20a, 22).
+   - **Control**: reload the browser page without pressing "Save": the
+     editor holds "First sentence.", the citation and the figure again,
+     none of the file's text, and no "Unsaved Changes" shows: the import
+     was not saved and does not run again (Rules 20, 20a). <sup>v</sup>
 
 3. **Roles that may not edit the publication**
 
@@ -702,7 +712,7 @@ Left out of the scenarios above, by reason:
     ticked: its "JATS XML" refused signed out and for a reader without a
     subscription, served to a subscriber
   - the guard for A20 (issue report `docs/issues/U47-A6-media-jats-upload-server-log-warning.md`): upload a JATS file on "JATS XML" and check the server log holds no PHP warning for the request.
-  - the guard for OMP1 (issue report `docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md`): on a press, a Press manager's "More Actions" on a Markdown file in "Production Ready Files" lists no "Send to Text Editor".
+  - the guard for OMP1 (issue report `docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md`): on a press, a Press manager's "More Actions" on a Word file in "Production Ready Files" lists no "Send to Text Editor".
   - the guard for A12 (issue report `docs/issues/U48-A12-published-jats-upload-delete-offered.md`): a published version's "JATS XML" page offers neither "Upload" nor "Delete" to an editor who may edit the publication.
   - the guard for A11 (issue report `docs/issues/U48-A11-jats-download-saves-refusal-json.md`): a Copyeditor's "Download" of the uploaded JATS file on "JATS XML" saves the XML.
   - the guard for A13 (issue report `docs/issues/U48-A13-jats-image-upload-breaks-page.md`): an image and an ISO-8859-1 JATS XML file uploaded on "JATS XML" are refused with a message, and the page still opens.
@@ -755,8 +765,6 @@ Left out of the scenarios above, by reason:
     text is lost; Rule 16)
   - A16 ("Cite" never enabled; Rule 17; scenario 2 passes it)
   - A17 (opening a section while another is open closing both; Rule 19)
-  - A18 (a sent file the converter cannot read, the box going with no
-    message; Rule 20b)
   - A20 (a warning in the server's log on each JATS "Upload"; Rule 3;
     scenario 1 uploads without reading the log)
   - OMP1 (a press's confirmed "Send to Text Editor" leading nowhere;
@@ -802,7 +810,6 @@ entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | Text typed in an article's Body Text is lost without a question on leaving the page | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A16](#a16) | "Body Text": the "Cite" button beside each reference is never enabled | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | On "Body Text", pressing a closed side section closes the open one and leaves the pressed one closed | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A18](#a18) | A file sent to the Body Text editor that cannot be converted ends the import with no message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | Each JATS "Upload" leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A22](#a22) | On a subscription journal, the article page's "JATS XML" gives the article's text to visitors its galleys refuse | 🐞 | high | issues (claude), 2026-10-05 — re-verified |
 | [OMP1](#omp1) | A press's editor is offered "Send to Text Editor" on a file, and confirming it imports nothing | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -812,6 +819,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | "Upload" on "JATS XML" accepts a text file or a PDF as the article's JATS XML | ❓ | minor | — |
 | [A19](#a19) | Signed in for the "JATS XML" download, the visitor is left on the Login page | ❓ | minor | — |
 | [A21](#a21) | Retired: in French the tick box, its two windows and labels of the "Body Text" panel show raw codes | ✅ | retired | Jarda 2026-10-08 · overturned |
+| [A18](#a18) | Retired: a file sent to the Body Text editor that could not be converted ended the import with no message; fixed in pkp/ui-library#979 before its merge | ✅ | retired | re-probe at the PR head (claude), 2026-10-12 — fixed before merge |
 
 ### All apps
 
@@ -1049,19 +1057,6 @@ with "References" open. It has been so since the side sections were
 added.
 Basis: probe, 2026-10-02. <sup>f-a17</sup>
 
-<a id="a18"></a>
-**A18 — A file sent to the Body Text editor that cannot be converted ends the import with no message** · 🐞 · low.
-Sending a file the converter cannot read (a text file named ".docx") to
-"Body Text" runs the "Importing document" box through "Converting…",
-then the box goes with no message: nothing is imported, and the editor
-stays as it was (empty on a version with no Body Text). The page should
-say the file could not be converted. The person editing is left guessing
-whether the import failed, is still running, or produced an empty
-document. The same silence follows any file the converter rejects;
-damaged or password-protected Word files are expected to be among them
-but were not tried.
-Basis: probe, 2026-10-02. <sup>f-a18</sup>
-
 <a id="a19"></a>
 **A19 — Signed in for the download, the visitor stays on the Login page** · ❓ · minor.
 With "Users must be registered and log in to view open access content."
@@ -1110,17 +1105,19 @@ Since: 2026-02-13 · Basis: probe, 2026-10-05. <sup>f-a22</sup>
 
 <a id="omp1"></a>
 **OMP1 — A press's editor is offered "Send to Text Editor" on a file, and confirming it imports nothing** · 🐞 · low.
-A press's file lists offer "Send to Text Editor" on a Word,
-OpenDocument, RTF, LaTeX or Markdown file, and its window asks "To which
-version would you like to send this file?". A press has no "Body Text"
-page, so after "Confirm" nothing opens and nothing is imported; with
-"Create New Version" chosen, a new version is created all the same. The
-action should not be offered on a press. The action is the journal's
-import of a file into the version's "Body Text" page, which works on OJS
-and stays there.
+A press's file lists offer "Send to Text Editor" on a Word file, and
+its window asks "To which version would you like to send this file?". A
+press has no "Body Text" page, so after "Confirm" nothing opens and
+nothing is imported; with "Create New Version" chosen, a new version is
+created all the same. The action should not be offered on a press. The
+action is the journal's import of a file into the version's "Body Text"
+page, which works on OJS and stays there.
 Basis: probe, 2026-10-02. <sup>f-omp1</sup>
 
 ### Retired
+
+<a id="a18"></a>
+**A18 — A file that cannot be converted fails with no message** · ✅ · retired. Fixed in pkp/ui-library#979 before its merge (at `85384f34ca`, 2026-09-28; again at `2ab08b9e74`, 2026-10-12): the box now reads "Import failed" with the converter's message and "Dismiss" (Rule 20b). <sup>f-a18</sup>
 
 <a id="a21"></a>
 **A21 — In French the tick box and the "Body Text" panel show raw codes** · ✅ · retired. Overturned by Jarda, 2026-10-08: a missing translation is no finding (TEMPLATE "Findings register"). <sup>f-a21</sup>
@@ -1135,7 +1132,10 @@ Code read 2026-09-25 at the checkouts' tips (ojs `71bb244152`, omp
 The body was live-probed on 2026-09-25 on OJS, with OMP and OPS read for
 the absence and the exclusivity controls (notes d1–d31, each naming the
 rules it settled); a claim still read only in the code says so where it
-is made.
+is made. The import (Rules 20–20b), the "Insert" menu's items and the
+file rows that offer "Send to Text Editor" were driven again at the PR
+head `85384f34ca` (ui-library#979), before its merge, 2026-09-28 (notes
+d6, d20, d28).
 
 <a id="fn-a"></a>
 **a** — Pages: `useWorkflowNavigationConfigOJS.js::getPublicationItemsEditorial()` pushes `jats` (`publication.jats` "JATS XML") after the settings-gated pages, outside the `permissions.canAccessProduction` block, and `bodyText` (`publication.bodyText` "Body Text") first inside it; `workflowConfigEditorialOJS.js` maps `jats` → `WorkflowPublicationJats` (props `canEdit: permissions.canEditPublication`, `submission`, `publication`) and `bodyText` → `WorkflowPublicationBodyText` (no `canEdit` prop). Both components are registered only in `WorkflowPageOJS.vue`. Heading "Publication: {page}" is U24 Rule 9. Live-probed 2026-08-28 (U40, note on its Rule 1): the OJS editorial list runs "… Funding, JATS XML, Body Text, Galleys, Media …"; live-probed 2026-09-24 (U42 claim check): the OJS "JATS XML" page generated a reference list and the "Body Text" side panel listed each reference under "References" with "Cite".
@@ -1165,7 +1165,7 @@ is made.
 **d5** — Live-probed 2026-09-25 (Fields, the line under the XML; Rule 3), OJS: after an upload the line read "Last Modification at 2026-09-25 01:46:26 by {the Journal Manager's username}", while the browser's clock read 03:46 (the server runs on UTC); "More Information" › "History" named the same person by full name, "Mira Manager".
 
 <a id="fn-d6"></a>
-**d6** — Live-probed 2026-09-25 (Fields, the toolbar), OJS, four runs: the controls left to right by their accessible names, as listed; no "Link", no separate "Blockquote" button, no "Insert footnote", no "Table" menu. With the cursor in a table the "Table" toolbar read "Insert table", "Add column before", "Add column after", "Delete column", "Add row above", "Add row below", "Delete row", "Merge cells", "Split cell", "Toggle header row", "Toggle header column", "Next cell", "Delete table". The editor package's English strings (`@sciflow/editor-core` `i18n/en.js`: `formatBar.*`, `cmd.*.label`) name more commands than the page enables (`ALL_OPTIONAL_FEATURES` plus `createFigureFeature` in `WorkflowPublicationBodyText.vue`). Test run 2026-09-25 (the greyed state), OJS: on a never-saved Body Text, right after a click into the empty editor the focus stood in the editor's editable area and every control but "Text style" and "Insert" was still greyed ("Bold" stayed disabled for 10 s); after one typed letter "Bold" was enabled, and a later click into the paragraph kept it so. The claim check read the same greyed state after the click.
+**d6** — Live-probed 2026-09-25 (Fields, the toolbar), OJS, four runs: the controls left to right by their accessible names, as listed; no "Link", no separate "Blockquote" button, no "Insert footnote", no "Table" menu. With the cursor in a table the "Table" toolbar read "Insert table", "Add column before", "Add column after", "Delete column", "Add row above", "Add row below", "Delete row", "Merge cells", "Split cell", "Toggle header row", "Toggle header column", "Next cell", "Delete table". The editor package's English strings (`@sciflow/editor-core` `i18n/en.js`: `formatBar.*`, `cmd.*.label`) name more commands than the page enables (`ALL_OPTIONAL_FEATURES` plus `createFigureFeature` in `WorkflowPublicationBodyText.vue`). Test run 2026-09-25 (the greyed state), OJS: on a never-saved Body Text, right after a click into the empty editor the focus stood in the editor's editable area and every control but "Text style" and "Insert" was still greyed ("Bold" stayed disabled for 10 s); after one typed letter "Bold" was enabled, and a later click into the paragraph kept it so. The claim check read the same greyed state after the click. At the PR head `85384f34ca` (ui-library#979), before its merge, 2026-09-28 (Fields, the toolbar; Rules 14, 22), OJS, the suite's run: the "Insert" menu's items show "Figure", "Table" and "Equation", their accessible names still "Insert figure", "Insert table" and "Insert equation" (the page's snapshot: `menuitem "Insert figure": Figure`).
 
 <a id="fn-e"></a>
 **e** — Public download: `PKPJatsController::getGroupRoutes()` registers `GET download` (`publicDownload`) with `[RedirectGuestToLogin, 'has.user']` middleware only when the context's `restrictArticleAccess` is set; `authorize()` for `publicDownload` adds only `SubmissionRequiredPolicy`, `SubmissionCompletePolicy`, `PublicationRequiredPolicy`, `PublicationIsSubmissionPolicy`. `publicDownload()`: 403 `api.403.unauthorized` unless `jatsPublicVisibility`; when the publication is not `STATUS_PUBLISHED`, 403 unless `Repo::submission()->canPreview($user, $submission)`; content from `Repo::jats()->getPublicJatsContent()` (`Cache::remember("jats-public-content-{publicationId}", 24 h)`; `clearPublicJatsCache()` runs on `addJatsFile()`, `delete()` and `setVisibility()` only); file name `($publication->urlPath ?? "submission-{bestId}-") . "publication-{id}"` + `-jats.xml`; `Cache-Control` `public, no-cache` when published, `private, no-store` otherwise, with an ETag. Link: OJS `ArticleHandler::view()` assigns `jatsDownloadUrl` (the API route `submissions/{id}/publications/{pid}/jats/download`) when `$publication->jatsPublicVisibility`; `templates/frontend/objects/article_details.tpl` renders `.item.jats` › `a.obj_galley_link.xml` "JATS XML" (`publication.jats.download`) right after the primary galleys list. The label of Settings bullet 2: OJS `UserAccessForm` field `restrictArticleAccess`, label `manager.setup.siteAccess.viewContent` "View Article Content", option `manager.setup.restrictArticleAccess`; tab `manager.siteAccessOptions.siteAccessOptions` "Site Access Options" (`lib/pkp/templates/management/access.tpl`).
@@ -1183,7 +1183,7 @@ is made.
 **f** — `WorkflowPublicationJats.vue`: `PkpHeader` › `h2` `publication.jats`; `CodeHighlighter` `language="xml"` for `jatsContent`; footer `publication.jats.autoCreatedMessage` "This JATS file is generated automatically by the submission metadata" when `isDefaultContent`, else `publication.jats.lastModified` "Last Modification at {$modificationDate} by {$username}" with `workingJatsProps.updatedAt` and `uploaderUserName`; hidden `FileUploader` (`submission.upload.percentComplete`) posting to the JATS API with `fileStage = SUBMISSION_FILE_JATS`; while loading, a spinner in place of the box. "Delete" carries `:disabled="isLoading"`, but a watch on it during "Delete JATS File" recorded no greyed state (live-probed 2026-09-25, one run), so the Fields table claims none.
 
 <a id="fn-g"></a>
-**g** — `WorkflowPublicationBodyText.vue`: `PandocConverter` above the editor; `sciflow-formatbar` and `sciflow-editor`; right `aside` labelled `publication.bodyText.documentPanel` "Document Edit" with "Save" (`common.save`, `form.saved` "Saved" for 1500 ms after a successful PUT), `Badge` `common.unsavedChanges` "Unsaved Changes" (`v-show="isDirty"`, dirty = the serialized document differs from the last saved one), "Fullscreen" / "Exit fullscreen" (`common.fullscreen` / `common.exitFullscreen`, `aria-pressed`; `useFullscreenFocusTrap` with `onEscape: exitFullscreen`); three `details` sections from `sidebarSections`: `references` (`submission.citations` "References", hint `publication.bodyText.references.dragHint`, `sciflow-reference-list`), `selected-element` (`publication.bodyText.selectedElement` "Selected Element", `sciflow-selection-editor`), `outline` (`publication.bodyText.outline` "Document Outline", `sciflow-outline levels="1-3"`); `openAccordionSection` starts at `references` and holds one key; `handleSelectionChange()` opens `selected-element` on a range or node selection. `navigationGuard` (registered through `workflowStore.setNavigationGuard`) returns `window.confirm(t('form.dataHasChanged'))` "The data on this form has changed. Do you wish to continue without saving?" when dirty and the target key differs from the active one; there is no `beforeunload` handler, and no drive saw the question (d17; A15). Editor empty-state strings: `referenceList.noReferences` "No references yet.", `selectionEditor.noElement`, `outline.noHeadings` "No headings yet.", `outline.insertCrossReference` "Insert ref", `referenceList.insertCitation` "Cite" (`@sciflow/editor-core` `i18n/en.js`).
+**g** — At the PR head `85384f34ca` (ui-library#979), before its merge, 2026-09-28: `WorkflowPublicationBodyText.vue` wraps `src/components/BodyTextEditor/BodyTextEditor.vue`, which now holds everything below but `navigationGuard`, with `BodyTextImportStatus.vue` above the editor (on `main` before the PR, `WorkflowPublicationBodyText.vue` held it all, with `PandocConverter` above the editor). `sciflow-formatbar` and `sciflow-editor`; right `aside` labelled `publication.bodyText.documentPanel` "Document Edit" with "Save" (`common.save`, `form.saved` "Saved" for 1500 ms after a successful PUT), `Badge` `common.unsavedChanges` "Unsaved Changes" (`v-show="isDirty"`, dirty = the serialized document differs from the last saved one), "Fullscreen" / "Exit fullscreen" (`common.fullscreen` / `common.exitFullscreen`, `aria-pressed`; `useFullscreenFocusTrap` with `onEscape: exitFullscreen`); three `details` sections from `sidebarSections`: `references` (`submission.citations` "References", hint `publication.bodyText.references.dragHint`, `sciflow-reference-list`), `selected-element` (`publication.bodyText.selectedElement` "Selected Element", `sciflow-selection-editor`), `outline` (`publication.bodyText.outline` "Document Outline", `sciflow-outline levels="1-3"`); `openAccordionSection` starts at `references` and holds one key; `handleSelectionChange()` opens `selected-element` on a range or node selection. `navigationGuard` (registered through `workflowStore.setNavigationGuard`) returns `window.confirm(t('form.dataHasChanged'))` "The data on this form has changed. Do you wish to continue without saving?" when dirty and the target key differs from the active one; there is no `beforeunload` handler, and no drive saw the question (d17; A15). Editor empty-state strings: `referenceList.noReferences` "No references yet.", `selectionEditor.noElement`, `outline.noHeadings` "No headings yet.", `outline.insertCrossReference` "Insert ref", `referenceList.insertCitation` "Cite" (`@sciflow/editor-core` `i18n/en.js`).
 
 <a id="fn-h"></a>
 **h** — `PKPJatsController::get()` → `Repo::jats()->getJatsFile()` → `new JatsFile()`: with no `SUBMISSION_FILE_JATS` file hung on the publication (`ASSOC_TYPE_PUBLICATION`), `createDefaultJatsContent()` builds the XML on every call through `APP\plugins\generic\jatsTemplate\classes\Article::convertSubmission()` (front from `ArticleFront::create()`: `journal-meta` with journal title, ISSNs, publisher; `article-meta` with `subj-group` for the section, `title-group`, `contrib-group` with affiliations and ORCID, `pub-date`/`issue` when an issue is assigned, `permissions`/`license`, `kwd-group`, `funding-group`, abstracts through `JatsHelper::htmlToJatsElement()`, which converts `<ul>`/`<ol>` to `<list list-type="bullet|order">`; back from `ArticleBack::create()`: `ref-list` with each citation as `mixed-citation` and each data citation as `element-citation publication-type="data"`, data-availability statements; open peer reviews as sub-articles via `PeerReview::create()`). A failure raises `UnableToCreateJATSContentException`, surfaced as `loadingContentError` `publication.jats.defaultContentCreationError` ("An error occured when trying to create the default JATS content. Please make sure that the JatsTemplate plugin is installed."), unreachable on a stock install because the class autoloads (note u). The version and the CRediT roles as pkp/jatsTemplate#123 writes them (issue pkp/pkp-lib#13464; merged 2026-10-09 as `c4de3aff`; driven that day on OJS at the PR head `0c1a212`, before its merge, and again on the merged `main`, on PKP's default dataset; `checks/sync/jatsTemplate-123/jats-versions.js`): `createArticleMeta()` puts an `article-version-alternatives` with three `article-version` elements in the JAV vocabulary of NISO RP-8-2026 (`vocab="jav"`, `vocab-identifier="http://www.niso.org/schemas/jav/1.0/"`): the overall status (`content-type="article-overall-status"`: "Unreviewed Article" for an Author's Original, "Article Under Review" for a Published Manuscript Under Review, "Formally Published, Stable Article" for a Version of Record), the stage (`article-lifecycle-stage`, with `article-version-type` "ao", "pmur" or "vor") and the number (`semantic-version-number`, in `designator`); a version without a stage gets none. Before it, one `article-version` held the number as its text, with the 2008 vocabulary on AO and VoR and none on PMUR. `createArticleContribGroup()` gives each CRediT `role` the English term in `vocab-term`, the degree as "lead", "equal" or "supporting" in `degree-contribution` and the role's name in the submission's language as its text; before it a French submission's role carried the French term in `vocab-term` and `##submission.submit.creditRoles.degrees.lead##` as its degree. All eleven files of the drive are valid against the JATS 1.2 DTD on both sides. A tag typed as text as pkp/jatsTemplate#124 keeps it (issue pkp/pkp-lib#13378; driven 2026-10-10 on OJS at the PR head `642946c`, before its merge, on PKP's default dataset; `checks/sync/jatsTemplate-124/typed-tags.js`, `differential.php`): the rich-text boxes store a typed "<" as `&lt;`, and `JatsHelper::htmlToJatsContent()` now decodes and re-escapes the stored HTML piece by piece, writing a "<" of the text as `&#60;`, so `convertEscapedTags()` meets only the stored HTML's own tags. Driven in the title, subtitle and their translations, the abstract, a contributor's biography and competing interests, the data availability statement and a reference; by the code the same call converts the funding statement, the summary of changes and an open review's text. Before it (since pkp/ojs#5813, 2026-09-21, for the abstract; since jatsTemplate `be30f06` for the titles) a typed "<i>species names</i>" came out as `<italic>`, and a typed "<br>" or "<p>" cut the abstract into paragraphs. A reference saved through the publication API with a tag as such (`<i>raw</i>`, stored unescaped) is markup on both sides.
@@ -1243,10 +1243,10 @@ is made.
 **d19** — Live-probed 2026-09-25 (Rules 18, 19; Fields, "Selected Element", "Document Outline"; A17), OJS, two runs and two reruns: "Fullscreen" filled the window and read "Exit fullscreen"; Escape or that button restored the page, the workflow staying open. Pressing "Document Outline" or "Selected Element" with "References" open left all three closed, and a second press opened it. A double-click selection opened "Selected Element" with no section open and closed an open section otherwise; a keyboard selection changed nothing. With one "Heading 1" in the text, "Document Outline" listed a button named after it, with no "Insert ref", on hover either; figures in the outline were not driven.
 
 <a id="fn-p"></a>
-**p** — `useWorkflowVersionForm.js` `goToBodyTextWithImport()` sets the query parameters `importFileUrl` and `importFileName` and navigates to `publication_{id}_bodyText`, after creating the version (POST `…/version`) or assigning a version stage (PUT) when chosen, or directly for an existing staged version. `PandocConverter.vue` watches them once per mount (`autoImportDone`) after the editor is ready: status box `role="status"` with `publication.bodyText.import.importing` "Importing document" and the stage label (`…downloading` "Downloading document…", `…loadingConverter` "Loading converter…", `…converting` "Converting…", `…uploadingImages` "Uploading images…"); pandoc-wasm (`js/build/pandoc.wasm`, self-hosted, loaded on first use) converts to HTML with `extract-media`; `rewriteImages()` uploads each extracted image through the page's figure upload; `emit('html-ready')` → `editorView.pasteHTML(html)` at the current selection; the parameters are cleared in `finally`. Failure: `publication.bodyText.import.failed` "Import failed", the error message, `common.dismiss` "Dismiss"; the drives never reached this box (live-probed 2026-09-25, d20): a file the converter cannot read ends with the box gone and no message (Rule 20b; A18). There is no import control of its own on the page.
+**p** — `useWorkflowVersionForm.js` `goToBodyTextWithImport()` sets the query parameters `importFileUrl` and `importFileName` and navigates to `publication_{id}_bodyText`, after creating the version (POST `…/version`) or assigning a version stage (PUT) when chosen, or directly for an existing staged version. Code read at the PR head `85384f34ca` (ui-library#979), before its merge, 2026-09-28: `WorkflowPublicationBodyText.vue` hands the two parameters to `BodyTextEditor.vue` as `importFile` and clears them on `import-finished`, so a reload does not import again. `useDocumentImport.js` `importDocument()` runs the stages `download`, `load` (only while pandoc-wasm is not yet loaded on the page), `convert` and `upload`, which `BodyTextImportStatus.vue` shows in a `role="status"` box: `publication.bodyText.import.importing` "Importing document" and the stage label (`…downloading` "Downloading document…", `…loadingConverter` "Loading converter…", `…converting` "Converting…", `…uploadingImages` "Uploading images…"). pandoc-wasm reads the file with the reader `IMPORT_READERS` names for its extension (`docx: 'docx+styles'`, the only entry; `documentImportUtils.js`) into a JSON AST with `extract-media`; `@sciflow/pandoc-ast` `parsePandocAST()` turns it into the editor's document; each image the document uses is uploaded as a dependent file of the Body Text (`useDependentFileUpload`, note q) and `rewriteMediaSrc()` points the figure at it; `stripHeader()` drops a leading header node. The `upload` stage is set for every file, images or not (code read only: no Word file without images was driven, Rule 20). `applyImportedDocument()` ("Import `props.importFile`, if any, replacing the current document.") sets the editor's `doc` to the converted document, which replaces what the editor held and marks it dirty (Rule 20a); on `main` before the PR, `PandocConverter.vue` converted to HTML and `editorView.pasteHTML(html)` inserted it at the current selection, before the existing text. The PR's author (@jarda.kotesovec, 2026-09-28, in the review thread) ruled the replace intended: "import should replace body text". Failure: an empty conversion or an untranslatable AST throws with pandoc's message (or `publication.bodyText.import.failed`), and the box reads `publication.bodyText.import.failed` "Import failed", the message and `common.dismiss` "Dismiss" (Rule 20b; d20). In the code and not seen on screen: `…importedWithWarnings` "Imported with warnings" with `…warnings` "{count} part(s) of the document need attention. Unconverted blocks are marked in the document.", and per image `…missingImage` "The image {path} could not be extracted from the document and was replaced by a placeholder." or `…uploadFailed` "The image {path} could not be uploaded ({error}) and was replaced by a placeholder.", the image then drawn as a crossed-out box (`MISSING_IMAGE_SRC`). There is no import control of its own on the page.
 
 <a id="fn-d20"></a>
-**d20** — Live-probed 2026-09-25 (Rules 20, 20a, 20b; A14, A18), OJS, two runs: "Send to Text Editor" on "notes.md" and on a Word file holding a heading, two paragraphs and an image › an existing version › "Confirm" opened that version's "Body Text" with the box's steps in order ("Uploading images…" for the Word file only); the heading, the text and the figure with its caption arrived, with "Unsaved Changes". After a reload without "Save" the text was gone and the import did not run again. "Create New Version" in the window created the version and opened its "Body Text" with the import. Into a saved "Saved first line K3" both files landed before it. Into a never-saved version the Word file made the button read "Saved" beside the badge (the Body Text was saved, then the image uploaded). A text file named ".docx" ran to "Converting…", then the box went with no message and no "Dismiss", and the editor kept its text.
+**d20** — At the PR head `85384f34ca` (ui-library#979), before its merge, 2026-09-28 (Purpose; Actors row 6; Rules 20, 20a, 20b; A18), OJS, on a scratch submission in Production: the "notes.md" row of "Submission Files" offered "Update File Details", "More Information" and "Delete" only, and a Word file's row on "Production Ready Files" (a heading, two paragraphs and a PNG figure captioned "K3 figure caption") offered "Send to Text Editor" first. Into a saved "Saved first line RR1", "Send to Text Editor" on the Word file › that version › "Confirm" ran "Importing document" through "Downloading document…", "Loading converter…", "Converting…" and "Uploading images…", then the box went; the editor held only "K3 Imported Heading", "K3 imported paragraph before the figure.", the figure with "K3 figure caption" and "K3 imported paragraph after the figure.", with "Unsaved Changes" and no question asked. A reload without "Save" brought back "Saved first line RR1" and did not import again. A second send into the same version, then "Save" and a reload, kept the figure. A text file named ".docx" ran "Downloading document…", "Loading converter…", "Converting…", then the box read "Import failed", "ERROR: couldn't unpack docx container: Did not find end of central directory signature" and "Dismiss"; "Dismiss" closed it and the editor kept its text. Earlier, live-probed 2026-09-25 (Rules 20, 20a; A14), OJS, two runs before pkp/ui-library#979: "Send to Text Editor" on "notes.md" and on a Word file holding a heading, two paragraphs and an image › an existing version › "Confirm" opened that version's "Body Text" with the box's steps in order ("Uploading images…" for the Word file only); the heading, the text and the figure with its caption arrived, with "Unsaved Changes". After a reload without "Save" the text was gone and the import did not run again. "Create New Version" in the window created the version and opened its "Body Text" with the import. Into a never-saved version the Word file made the button read "Saved" beside the badge (the Body Text was saved, then the image uploaded). Superseded by the PR: both files then landed before a saved "Saved first line K3", and the text file named ".docx" ran to "Converting…", then the box went with no message and no "Dismiss" (A18).
 
 <a id="fn-d21"></a>
 **d21** — Live-probed 2026-09-25 (Rule 21; A3), OJS: on a seed-published version (two runs) and on one published on screen, the Journal Manager's "After publication" saved on "Body Text" and survived a reload; the same version's "JATS XML" offered "Upload" (Rule 8).
@@ -1255,7 +1255,7 @@ is made.
 **q** — `createFigureFeature({imageUpload: {uploadFile: handleFigureUpload}})`; `handleFigureUpload()` calls `saveDocument()` first when the Body Text has no record yet, then posts the image to `submissions/{id}/files` with `fileStage = SUBMISSION_FILE_DEPENDENT`, `assocType = ASSOC_TYPE_SUBMISSION_FILE`, `assocId` = the Body Text file. The "Media" page lists `SUBMISSION_FILE_MEDIA` files hung on the publication (U47), so a dependent file of the Body Text is not among them. GET returns `dependentFiles` for the editor.
 
 <a id="fn-d22"></a>
-**d22** — Live-probed 2026-09-25 (Rule 22; A14), OJS, two runs: "Insert" › "Insert figure" opened an image-only chooser; "figure.png" uploaded at once and appeared in the text, with "Unsaved Changes". On a never-saved version the Body Text was saved first, then the image; after a reload without "Save", "Text before figure K3" was there and the figure was not. On a saved version a reload without "Save" lost both the figure and the text typed before it. The version's "Media" page read "No Items" after an inserted and after an imported figure.
+**d22** — Live-probed 2026-09-25 (Rule 22; A14), OJS, two runs: "Insert" › "Insert figure" (the item that reads "Figure" at the PR head, d6) opened an image-only chooser; "figure.png" uploaded at once and appeared in the text, with "Unsaved Changes". On a never-saved version the Body Text was saved first, then the image; after a reload without "Save", "Text before figure K3" was there and the figure was not. On a saved version a reload without "Save" lost both the figure and the text typed before it. The version's "Media" page read "No Items" after an inserted and after an imported figure.
 
 <a id="fn-r"></a>
 **r** — No reader-side or JATS code reads `SUBMISSION_FILE_BODY_TEXT`: the only users are `bodyText/Repository.php`, `PKPBodyTextController`, the file-stage lists (`SubmissionFile\Repository`, `PKPSubmissionFileController::getMany()` allowed stages, `PKPDashboardHandler` constants); `ArticleBody::create()` reads galleys only (note j); OJS `ArticleHandler` and `templates/frontend` carry nothing for it.
@@ -1285,7 +1285,7 @@ is made.
 **d31** — Live-probed 2026-09-25 (Settings bullet 3; Actors), OJS, two runs: Roles › "Layout Editor" › "Edit" lists "Permit submission metadata edit." unticked under "Role Options"; the assignment's "Edit Assignment" window carries "Permissions" with "Allow this person to make changes to the publication, such as the title, abstract, metadata and other publication details. …". A Layout Editor whose assignment carried it got "Upload", "More Information", "Delete", "Download" and working saves; at the default, "More Information", "Download" and refusals. Ticking the role's box and pressing "OK" made a default Layout Editor's save succeed; unticking it again took the permission from the Layout Editor whose assignment had carried it.
 
 <a id="fn-v"></a>
-**v** — Scenario seeding. Every article is a scratch submission from `POST scenarios/submission`, brought to Production with `decisions: ['sendExternalReview', 'accept', 'sendToProduction']` unless said otherwise; the published ones add `published: true`. Scenarios 2 to 6 run on `publicknowledge` as `manager.maya` (the Journal Manager), with `author.alex` as submitter; passwords as `docs/process/users.md` gives them. The mail catcher is Mailpit at `MAILPIT_URL` (default `http://127.0.0.1:8025`), scoped by recipient address. Scenarios 1, 7 and 8 run on their own scratch journal from `POST scenarios/context`, with throwaway `users[]` (password: the username twice): `manager` and `author` (the submitter), and `reader` in scenario 8. Scenario 1: `title: 'JATS scenario article'`, an `abstract` holding a `<ul>` with "First point" and "Second point", `citationsRaw` the two reference lines, `galleys: [{label: 'HTML', file: 'article.html'}]`; the upload is the fixture `article.xml` (a small JATS article titled "A JATS fixture article"). Scenario 2: `citationsRaw` the same two lines, `files: [{file: 'notes.md'}]` (the fixture opens with the Markdown heading "Notes"); "Insert figure" takes the fixture `figure.png`. Scenario 3: the Production article with `participants: [{username: 'layouteditor.leo', role: 'layoutEditor'}]` (`canChangeMetadata` left to the role, unticked at the install default) and `jats: {file: 'article.xml'}`; the Review article with `decisions: ['sendExternalReview']`, `participants: [{username: 'assistant.rita', role: 'funding'}]` and `jats: {file: 'article.xml'}`. Scenario 4: `galleys: [{label: 'PDF', file: 'article.pdf'}]` and no `jats` key; the visitor is a browser with no session. Scenario 5: `jats: {makePublic: true}`, unpublished; another Author `author.bea`, the Reader `reader.rosa`. Scenario 6: `jats: {file: 'article.xml', makePublic: true}`; the seed uploads as `admin`, so both lines read "by admin". Scenario 7: the context with `plugins: {jatstemplateplugin: {enabled: false}}`, the article with `jats: {makePublic: true}`; the control runs on `publicknowledge` as `manager.maya`. Scenario 8: the context with `restrictArticleAccess: true`, the article with `jats: {makePublic: true}`. Scenario 9: OMP and OPS `publicknowledge` as `manager.maya` (the Press Manager, the Preprint Server Manager), the submission `published: true`, on OMP after `decisions: ['skipExternalReview', 'sendToProduction']`, on OPS with none.
+**v** — Scenario seeding. Every article is a scratch submission from `POST scenarios/submission`, brought to Production with `decisions: ['sendExternalReview', 'accept', 'sendToProduction']` unless said otherwise; the published ones add `published: true`. Scenarios 2 to 6 run on `publicknowledge` as `manager.maya` (the Journal Manager), with `author.alex` as submitter; passwords as `docs/process/users.md` gives them. The mail catcher is Mailpit at `MAILPIT_URL` (default `http://127.0.0.1:8025`), scoped by recipient address. Scenarios 1, 7 and 8 run on their own scratch journal from `POST scenarios/context`, with throwaway `users[]` (password: the username twice): `manager` and `author` (the submitter), and `reader` in scenario 8. Scenario 1: `title: 'JATS scenario article'`, an `abstract` holding a `<ul>` with "First point" and "Second point", `citationsRaw` the two reference lines, `galleys: [{label: 'HTML', file: 'article.html'}]`; the upload is the fixture `article.xml` (a small JATS article titled "A JATS fixture article"). Scenario 2: `citationsRaw` the same two lines, `files: [{file: 'article.docx'}]` (the fixture is `shared/playwright/checks/U48/K3/k3-figure.docx` under a plain name: the heading, the two paragraphs and a PNG figure with its caption, as the given quotes them); "Insert" › "Figure" takes the fixture `figure.png`. Scenario 3: the Production article with `participants: [{username: 'layouteditor.leo', role: 'layoutEditor'}]` (`canChangeMetadata` left to the role, unticked at the install default) and `jats: {file: 'article.xml'}`; the Review article with `decisions: ['sendExternalReview']`, `participants: [{username: 'assistant.rita', role: 'funding'}]` and `jats: {file: 'article.xml'}`. Scenario 4: `galleys: [{label: 'PDF', file: 'article.pdf'}]` and no `jats` key; the visitor is a browser with no session. Scenario 5: `jats: {makePublic: true}`, unpublished; another Author `author.bea`, the Reader `reader.rosa`. Scenario 6: `jats: {file: 'article.xml', makePublic: true}`; the seed uploads as `admin`, so both lines read "by admin". Scenario 7: the context with `plugins: {jatstemplateplugin: {enabled: false}}`, the article with `jats: {makePublic: true}`; the control runs on `publicknowledge` as `manager.maya`. Scenario 8: the context with `restrictArticleAccess: true`, the article with `jats: {makePublic: true}`. Scenario 9: OMP and OPS `publicknowledge` as `manager.maya` (the Press Manager, the Preprint Server Manager), the submission `published: true`, on OMP after `decisions: ['skipExternalReview', 'sendToProduction']`, on OPS with none.
 
 <a id="fn-f-a1"></a>
 **f-a1** — Note c: the tick box's only guard is `loadingContentError == null`; `updateVisibility()` hits `PublicationWritePolicy`, which refuses a user whose assignment lacks `canChangeMetadata` (`api.submissions.403.userCantEdit`, answered 401); the box is not reset (note l). Probe: d2.
@@ -1339,7 +1339,7 @@ Issue report: [pkp-e2e#554](https://github.com/jardakotesovec/pkp-e2e/issues/554
 Issue report: [pkp-e2e#562](https://github.com/jardakotesovec/pkp-e2e/issues/562) ([docs/issues/U48-A13-jats-image-upload-breaks-page.md](../issues/U48-A13-jats-image-upload-breaks-page.md)).
 
 <a id="fn-f-a14"></a>
-**f-a14** — Note g: the badge is `v-show="isDirty"`, true on arrival at a never-saved version (the console then warns "TextSelection endpoint not pointing into a node with inline content (doc)"). The "Saved" during an import: `handleFigureUpload()` saves the document first when no Body Text record exists (note q), and the import uploads its images before it pastes the text (note p). Probe: d16, d20.
+**f-a14** — Note g: the badge is `v-show="isDirty"`, true on arrival at a never-saved version (the console then warns "TextSelection endpoint not pointing into a node with inline content (doc)"). The "Saved" during an import: `handleFigureUpload()` saves the document first when no Body Text record exists (note q), and the import uploads its images before it places the text (note p). Probe: d16, d20.
 Issue report: [pkp-e2e#571](https://github.com/jardakotesovec/pkp-e2e/issues/571) ([docs/issues/U48-A14-body-text-opens-with-unsaved-changes.md](../issues/U48-A14-body-text-opens-with-unsaved-changes.md)).
 Issue report: [pkp-e2e#572](https://github.com/jardakotesovec/pkp-e2e/issues/572) ([docs/issues/U48-A14-body-text-import-reads-saved-while-unsaved.md](../issues/U48-A14-body-text-import-reads-saved-while-unsaved.md)).
 
@@ -1356,7 +1356,7 @@ Issue report: [pkp-e2e#565](https://github.com/jardakotesovec/pkp-e2e/issues/565
 Issue report: [pkp-e2e#566](https://github.com/jardakotesovec/pkp-e2e/issues/566) ([docs/issues/U48-A17-body-text-side-section-needs-two-presses.md](../issues/U48-A17-body-text-side-section-needs-two-presses.md)).
 
 <a id="fn-f-a18"></a>
-**f-a18** — Note p: the box's failure state never showed; the import ended with no status. Probe: d20.
+**f-a18** — Note p: before pkp/ui-library#979 the box's failure state never showed and the import ended with no status (live-probed 2026-09-25); at the PR head `85384f34ca` (ui-library#979), before its merge, 2026-09-28, and at its head `2ab08b9e74`, 2026-10-12, the box read "Import failed" with the converter's message and "Dismiss". Probe: d20.
 Issue report: [pkp-e2e#574](https://github.com/jardakotesovec/pkp-e2e/issues/574) ([docs/issues/U48-A18-body-text-unconvertible-file-no-message.md](../issues/U48-A18-body-text-unconvertible-file-no-message.md)).
 
 <a id="fn-f-a19"></a>
@@ -1379,7 +1379,7 @@ Issue report: [pkp-e2e#923](https://github.com/jardakotesovec/pkp-e2e/issues/923
 Issue report: [pkp-e2e#553](https://github.com/jardakotesovec/pkp-e2e/issues/553) ([docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md](../issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md)).
 
 <a id="fn-d28"></a>
-**d28** — Live-probed 2026-09-25 (Purpose, absence; OMP1), OMP and OPS: a monograph's and a preprint's publication lists carry no "JATS XML" and no "Body Text"; the typed menu keys land on the stage page; the published book and preprint pages carry no "JATS" link; no installed plugin row mentions JATS. On OMP, "Send to Text Editor" on "notes.md" was offered to the Press Manager and the Press Editor, not to the Series Editor or the Author; its window asks "To which version would you like to send this file?". "Confirm" with the existing version closed the window and stayed on "Workflow: Submission" with nothing imported; with "Create New Version" the side menu gained a second "Unassigned version" entry.
+**d28** — Live-probed 2026-09-25 (Purpose, absence; OMP1), OMP and OPS: a monograph's and a preprint's publication lists carry no "JATS XML" and no "Body Text"; the typed menu keys land on the stage page; the published book and preprint pages carry no "JATS" link; no installed plugin row mentions JATS. On OMP, "Send to Text Editor" on "notes.md" was offered to the Press Manager and the Press Editor, not to the Series Editor or the Author; its window asks "To which version would you like to send this file?". "Confirm" with the existing version closed the window and stayed on "Workflow: Submission" with nothing imported; with "Create New Version" the side menu gained a second "Unassigned version" entry. At the PR head `85384f34ca` (ui-library#979), before its merge, 2026-09-28 (Purpose; OMP1), OMP, the Press Manager on a scratch press: the seeded "notes.md" on "Submission Files" offered "Update File Details", "More Information" and "Delete"; a Word file uploaded into that list offered "Send to Text Editor" first. The PR's author (@jarda.kotesovec, 2026-09-28, in the review thread) ruled the Word-only offer intended for now: "scope is focused intentionally to docx - with others possibly coming later".
 
 ## Reference — entry points & surfaces
 
@@ -1395,7 +1395,7 @@ Issue report: [pkp-e2e#553](https://github.com/jardakotesovec/pkp-e2e/issues/553
 | "Save" / "Saved", "Unsaved Changes", "Fullscreen" | "Body Text" › "Document Edit" | AFFW-412 · AFFW-414 · AFFW-413 |
 | "References", "Selected Element", "Document Outline" sections | "Body Text" › right panel | AFFW-417 |
 | Leave-with-unsaved-changes question (never shown, A15) | "Body Text", choosing another side-menu entry | AFFW-418 |
-| Import status box ("Importing document"; "Import failed" never reached); no control of its own | "Body Text", on arrival from "Send File to Text Editor" | AFFW-415 |
+| Import status box ("Importing document"; "Import failed" with "Dismiss"); no control of its own | "Body Text", on arrival from "Send File to Text Editor" | AFFW-415 |
 | "Send to Text Editor" row action (mounted by *Submission files*; the window by *Publish, schedule & versions*) | a file list row's "More Actions" | AFFW-479 |
 | "JATS XML" link on the article's page | `{journal}/article/view/{id}` (and the "Preview" page) | AFFR-060 |
 | Workflow JATS API: read, upload, delete, visibility, public download | `api/v1/submissions/{id}/publications/{pid}/jats[/visibility\|/download]` (OJS only) | API-025 |
@@ -1404,8 +1404,8 @@ Issue report: [pkp-e2e#553](https://github.com/jardakotesovec/pkp-e2e/issues/553
 
 ## Reference — code anchors
 
-- ui-library: `src/pages/workflow/components/publication/WorkflowPublicationJats.vue` · `WorkflowPublicationBodyText.vue` · `WorkflowPublicationBodyTextUtils.js` · `useFullscreenFocusTrap.js` · `src/components/PandocConverter/PandocConverter.vue` · `pandocLoader.js` · `src/pages/workflow/composables/useWorkflowNavigationConfig/useWorkflowNavigationConfigOJS.js` · `useWorkflowConfig/workflowConfigEditorialOJS.js` · `useWorkflowVersionForm.js` · `useWorkflowPermissions.js` · `src/managers/FileManager/useFileManagerConfig.js` · `useFileManagerActions.js` · `src/pages/workflow/WorkflowPageOJS.vue`
-- editor package: `@sciflow/editor-start` (bundle, `format-bar`, `reference-list`, `outline`, `selection-editor`) · `@sciflow/editor-core` `i18n/en.js`
+- ui-library: `src/pages/workflow/components/publication/WorkflowPublicationJats.vue` · `WorkflowPublicationBodyText.vue` · `src/components/BodyTextEditor/BodyTextEditor.vue` · `BodyTextImportStatus.vue` · `useDocumentImport.js` · `documentImportUtils.js` · `useDependentFileUpload.js` · `useBodyTextEditor.js` · `useFullscreenFocusTrap.js` (pkp/ui-library#979; on `main` before it: `WorkflowPublicationBodyTextUtils.js`, `src/components/PandocConverter/PandocConverter.vue`, `pandocLoader.js`) · `src/pages/workflow/composables/useWorkflowNavigationConfig/useWorkflowNavigationConfigOJS.js` · `useWorkflowConfig/workflowConfigEditorialOJS.js` · `useWorkflowVersionForm.js` · `useWorkflowPermissions.js` · `src/managers/FileManager/useFileManagerConfig.js` · `useFileManagerActions.js` · `src/pages/workflow/WorkflowPageOJS.vue`
+- editor package: `@sciflow/pandoc-ast` (`parsePandocAST`) · `@sciflow/editor-start` (bundle, `format-bar`, `reference-list`, `outline`, `selection-editor`) · `@sciflow/editor-core` `i18n/en.js`
 - lib/pkp API: `api/v1/jats/PKPJatsController.php` · `api/v1/bodyText/PKPBodyTextController.php`; OJS `api/v1/submissions/index.php` (mounts both)
 - lib/pkp classes: `classes/jats/Repository.php` · `JatsFile.php` · `exceptions/UnableToCreateJATSContentException.php` · `classes/bodyText/Repository.php` · `BodyTextFile.php` · `classes/publication/Repository.php::version()` · `classes/submissionFile/Repository.php` (`add()`, `edit()`, `delete()`, `versionSubmissionFile()`, `getWorkflowStageId()`) · `classes/submissionFile/SubmissionFile.php` (`SUBMISSION_FILE_JATS`, `SUBMISSION_FILE_BODY_TEXT`, `SUBMISSION_FILE_DEPENDENT`) · `classes/security/authorization/PublicationWritePolicy.php` · `internal/PublicationCanBeEditedPolicy.php` · `classes/submission/Repository.php::canEditPublication()`, `canPreview()` · `classes/services/PKPStatsPublicationService.php` · `schemas/publication.json` (`jatsPublicVisibility`)
 - lib/pkp legacy, unread by any screen: `pages/workflow/PKPWorkflowHandler.php::getJatsPanel()` · `classes/components/PublicationSectionJats.php` (OJS `WorkflowHandler` still builds its config)

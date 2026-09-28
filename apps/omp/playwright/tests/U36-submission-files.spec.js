@@ -190,11 +190,11 @@ test.describe('submission files', () => {
     test('S1: upload a new file', {tag: '@smoke'}, async ({asUser, ompApi, appContext}, testInfo) => {
         test.slow();
         const tag = makeTag('s1', testInfo);
-        const {submissionId} = await seed(ompApi, tag, {files: [{file: 'article.pdf'}]});
+        const {submissionId} = await seed(ompApi, tag, {files: [{file: 'article.pdf'}, {file: 'article.docx'}]});
 
         const {page, frame} = await openWorkflow(asUser, appContext, MANAGER, submissionId, {stage: 'submission'});
         const list = new FileList(page, frame, SUBMISSION_FILES);
-        await list.expectNames(['article.pdf']);
+        await list.expectNames(['article.pdf', 'article.docx']);
 
         // The window: title, the three steps, "Continue" and the "Cancel" link.
         await list.uploadButton().click();
@@ -205,12 +205,17 @@ test.describe('submission files', () => {
         await expect(wizard.cancelLink()).toBeVisible();
 
         // Step 1 before a choice: the revise list on "not a revision" listing
-        // article.pdf; the component list on its prompt, with no dependent
+        // article.pdf and article.docx; the component list on its prompt, with no dependent
         // component (a supplementary one is the positive control); no upload
         // box; "Continue" greyed out.
         await expect(wizard.dialog()).toContainText(REVISE_QUESTION);
         await expect(wizard.dialog()).toContainText(COMPONENT_LABEL);
-        await expect.poll(() => wizard.optionTexts(wizard.reviseSelect())).toEqual([NOT_A_REVISION, 'article.pdf']);
+        await expect
+            .poll(async () => {
+                const [first, ...files] = await wizard.optionTexts(wizard.reviseSelect());
+                return [first, ...files.sort()];
+            })
+            .toEqual([NOT_A_REVISION, 'article.docx', 'article.pdf']);
         expect(await wizard.selectedText(wizard.reviseSelect())).toBe(NOT_A_REVISION);
         const components = await wizard.optionTexts(wizard.componentSelect());
         expect(components[0]).toBe(SELECT_COMPONENT);
@@ -257,17 +262,19 @@ test.describe('submission files', () => {
         await wizard.complete();
 
         // The list: both new files, each with a number of its own and a date.
-        await list.expectNames(['article.pdf', 'notes.md', 'Final manuscript']);
+        await list.expectNames(['article.pdf', 'article.docx', 'notes.md', 'Final manuscript']);
         const notesRow = await list.expectRow('notes.md', {type: SUPPLEMENTARY});
         const finalRow = await list.expectRow('Final manuscript', {type: MAIN});
         const firstRow = await list.expectRow('article.pdf', {type: MAIN});
         const numbers = [await list.rowNumber(notesRow), await list.rowNumber(finalRow), await list.rowNumber(firstRow)];
         expect(new Set(numbers).size).toBe(3);
-        const revisable = ['article.pdf', 'notes.md', 'Final manuscript'];
+        const revisable = ['article.pdf', 'article.docx', 'notes.md', 'Final manuscript'];
 
-        // The control's other side: the Press Manager's menu on notes.md
-        // offers "Send to Text Editor".
-        expect(await list.menuEntries(notesRow)).toEqual(MANAGER_MENU_IMPORTABLE);
+        // The control's other side: the Press Manager's menu on article.docx
+        // offers "Send to Text Editor"; on notes.md, a Markdown file, it
+        // does not (only a Word file is offered it).
+        expect(await list.menuEntries(list.row('article.docx'))).toEqual(MANAGER_MENU_IMPORTABLE);
+        expect(await list.menuEntries(notesRow)).toEqual(EDITOR_MENU);
 
         // The assigned Section Editor: the same "Upload" and window, the same
         // components and files to revise, and the three entries on each row.
@@ -284,7 +291,7 @@ test.describe('submission files', () => {
             .toEqual([NOT_A_REVISION, ...revisable].sort());
         await seWizard.cancel({uploaded: false});
         for (const name of revisable) {
-            // Control: no "Send to Text Editor" on notes.md for the Section Editor.
+            // Control: no "Send to Text Editor" on article.docx for the Section Editor.
             expect(await seList.menuEntries(seList.row(name)), `the Section Editor's menu on ${name}`).toEqual(EDITOR_MENU);
         }
     });
@@ -435,16 +442,18 @@ test.describe('submission files', () => {
         test.slow();
         const tag = makeTag('s4', testInfo);
         const {submissionId} = await seed(ompApi, tag, {
-            files: [{file: 'article.pdf'}, {file: 'notes.md', genre: SUPPLEMENTARY}],
+            files: [{file: 'article.pdf'}, {file: 'notes.md', genre: SUPPLEMENTARY}, {file: 'article.docx'}],
         });
         const {submissionId: emptyId} = await seed(ompApi, `${tag}e`);
 
         const {page, frame} = await openWorkflow(asUser, appContext, MANAGER, submissionId, {stage: 'submission'});
         const list = new FileList(page, frame, SUBMISSION_FILES);
-        await list.expectNames(['article.pdf', 'notes.md']);
+        await list.expectNames(['article.pdf', 'notes.md', 'article.docx']);
 
-        // The row menu, in order; "Send to Text Editor" only on notes.md.
-        expect(await list.menuEntries(list.row('notes.md'))).toEqual(MANAGER_MENU_IMPORTABLE);
+        // The row menu, in order; "Send to Text Editor" only on the Word
+        // file, not on the Markdown or the PDF one.
+        expect(await list.menuEntries(list.row('article.docx'))).toEqual(MANAGER_MENU_IMPORTABLE);
+        expect(await list.menuEntries(list.row('notes.md'))).toEqual(EDITOR_MENU);
         expect(await list.menuEntries(list.row('article.pdf'))).toEqual(EDITOR_MENU);
 
         // "Update File Details": "Edit a file" with the name box, "Save" and "Cancel".
@@ -485,11 +494,11 @@ test.describe('submission files', () => {
         expect(notes.download.suggestedFilename()).toBe('notes.md');
 
         // "Download All Files": one zip named after the number and the list,
-        // holding the list's two files.
+        // holding the list's three files.
         await expect(list.downloadAllButton()).toBeVisible();
         const all = await list.downloadAll();
         expect(all.download.suggestedFilename()).toMatch(new RegExp(`^${submissionId}-+submission-files\\.zip$`));
-        expect((await zipEntryNames(all.download)).sort()).toEqual(['Manuscript.pdf', 'notes.md']);
+        expect((await zipEntryNames(all.download)).sort()).toEqual(['Manuscript.pdf', 'article.docx', 'notes.md']);
 
         // Control: the empty submission's list reads "No Items" and offers no
         // "Download All Files" (the button read the same way above).

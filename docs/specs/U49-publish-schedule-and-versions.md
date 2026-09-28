@@ -346,10 +346,10 @@ In French most of its headings and descriptions are raw codes
     a verified iD ⚠ [OJS4](#ojs4). <sup>m</sup>
 16. **Send to Text Editor {OJS OMP}.** The action lives on the workflow's
     Production stage, in its "Production Ready Files" list. A file row's
-    "More Actions" menu offers "Send to Text Editor" only on files the text
-    editor can import (Word, OpenDocument, RTF, LaTeX or Markdown files; a
-    PDF row has no such action). It opens the same version dialog, titled
-    "Send File to Text Editor", asking "To which version would you like to
+    "More Actions" menu offers "Send to Text Editor" only on a Word file,
+    one whose name ends in ".docx"; a Markdown or PDF row has no such
+    action. It opens the same version dialog, titled "Send File to Text
+    Editor", asking "To which version would you like to
     send this file?" ("Create New Version" first, then each existing
     version by its side-menu name, Rule 11a), with none selected as it
     opens. What happens to the file afterwards belongs to
@@ -926,20 +926,22 @@ each scenario's seeding are in its footnote.
       workflow window's header its own, separate Preview (Actors row 4).
       A preprint server installs no review stage. <sup>s17</sup>
 
-18. **"Send to Text Editor" only on importable files** {OJS OMP}
+18. **"Send to Text Editor" only on Word files** {OJS OMP}
 
     Given: Journal Manager, on the seeded journal, with a scratch
     submission in Production whose "Production Ready Files" list holds a
-    Markdown file, "notes.md", and a PDF, "article.pdf".
+    Word file, "article.docx", and a Markdown file, "notes.md".
 
-    - **The Markdown row**: on the workflow's Production stage, open the
-      Markdown row's "More Actions": it offers "Send to Text Editor";
-      choose it: the dialog "Send File to Text Editor" asks "To which
-      version would you like to send this file?", with "Create New
-      Version" first, then each existing version, none selected
+    - **The Word row**: on the workflow's Production stage, open the
+      Word row's "More Actions": it offers "Send to Text Editor",
+      "Update File Details", "More Information" and "Delete"; choose
+      "Send to Text Editor": the dialog "Send File to Text Editor" asks
+      "To which version would you like to send this file?", with "Create
+      New Version" first, then each existing version, none selected
       (Rule 16); press "Cancel": the file stays where it is, and what a
       confirmed send does with it belongs to *JATS & Body Text*.
-    - **Control**: the PDF row's "More Actions" offers no "Send to Text
+    - **Control**: the Markdown row's "More Actions" offers "Update File
+      Details", "More Information" and "Delete", and no "Send to Text
       Editor" (Rule 16). A preprint server's workflow shows no
       "Production Ready Files" list, so it has no such action.
       <sup>s18</sup>
@@ -1987,11 +1989,21 @@ the same "Summary of Changes (Amendment Notice)" field.
 the required `sendToVersion` select
 (`publication.sendToTextEditor.label`) whose first option is "Create New
 Version", then navigates to Body Text with the import parameters.
-Live-probed 2026-08-29 (OJS Production Ready Files): the row's "More
-Actions" menu offers "Send to Text Editor" only for pandoc-importable
-extensions (`useFileManagerConfig.js` `PANDOC_IMPORT_EXTENSIONS`: docx,
-odt, rtf, tex, latex, md, markdown — no action on a PDF); the dialog is
-titled "Send File to Text Editor" and, on OJS, opened preselecting
+At the PR head `85384f34ca` (ui-library#979), before its merge,
+2026-09-28 (Rule 16; scenario 18), OJS "Production Ready Files" and OMP
+"Submission Files": a Markdown row ("notes.md") offered "Update File
+Details", "More Information" and "Delete"; a Word row offered "Send to
+Text Editor", "Update File Details", "More Information" and "Delete".
+`useFileManagerConfig.js` now takes `PANDOC_IMPORT_EXTENSIONS` from
+`documentImportUtils.js` `IMPORT_EXTENSIONS`, the keys of
+`IMPORT_READERS`, which holds `docx` alone ("Scoped to DOCX for now",
+the other formats commented out); the file name's last extension is
+compared in lower case. The PR's author (@jarda.kotesovec, 2026-09-28,
+in the review thread) ruled it intended for now: "scope is focused
+intentionally to docx - with others possibly coming later". Before the
+PR (live-probed 2026-08-29, OJS Production Ready Files) the list was
+docx, odt, rtf, tex, latex, md and markdown, with no action on a PDF.
+The dialog is titled "Send File to Text Editor" and, on OJS, opened preselecting
 "Create New Version" when live-probed 2026-08-29; the test run of
 2026-09-16 (OJS, scenario 18) found the same picker (`select[name=
 "sendToVersion"]`, options "Create New Version" then "Unassigned version
@@ -2708,9 +2720,8 @@ header's included on OJS, is fn-d's.
 <a id="fn-s18"></a>
 **s18 — scenario 18 seeding.** Seeded submissions carry no files
 (scenarios.md), so both files are uploaded through the "Production Ready
-Files" list's own upload control; the suite supplies a small Markdown
-file and a PDF as fixtures (OJS already holds `article.pdf`, OMP
-neither). The picker opens with no selection in both apps (fn-v). The preprint server's absence rests on fn-v: the
+Files" list's own upload control; the suite supplies a small Word file
+(`article.docx`) and a Markdown file (`notes.md`) as fixtures. The picker opens with no selection in both apps (fn-v). The preprint server's absence rests on fn-v: the
 OPS workflow mounts no file manager.
 
 ## Reference — entry points & surfaces
