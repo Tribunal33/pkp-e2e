@@ -1093,12 +1093,12 @@ On a journal whose "Forms" languages are English and French, the
 "Custom Page" item window and the block window each open with an English
 and a French "Content" box. A manager expects to click into the English
 box and type. When the French box finishes loading after the English
-one, which is rare and happens on a busy computer or server, the
-window's own script fails, and a spinner labelled "Loading..." covers the
+one (rare, on a busy computer or server; every window once the French
+box's start-up is held back <sup>f-a20</sup>), the
+window's own script fails, and a "Loading..." spinner covers the
 English box and never goes away while the window is open: the box takes
 no click, and typing that has begun stops reaching it. Nothing says why.
-Expected: the spinner goes once the box is ready, as it does when the
-boxes load in the usual order.
+Expected: the spinner goes once the box is ready, as in the usual order.
 Basis: probe. <sup>f-a20</sup>
 
 ---
@@ -2004,17 +2004,18 @@ error on its 500 ms timer. The proposed fix: skip an editor whose
 carries no such handler. Live-probed 2026-09-28 (Fields; three apps),
 on a scratch journal in English and French with "Custom Block Manager"
 on, "Add Block" opened in a fresh browser each time, the French
-editor's set-up held 3 s by a script in the page: the English box was
+editor's set-up held 3 s by a page script: the English box was
 initialized with its throbber shown and busy, and a click on it was
 intercepted by the "Loading..." spinner, 12 of 12 windows (4 per app),
 each logging the error twice; with no hold, 0 of 12; with the hold and
-the fix applied in the page, 0 of 12. Test runs 2026-09-28 (scenario 6
-under the same hold, three apps): every run that got past setting up
+the fix in the page, 0 of 12. Test runs 2026-09-28 (scenario 6,
+three apps, the same hold, harness lever `PLAYWRIGHT_IFRAME_HOLD='-fr_CA-'`
+with `PLAYWRIGHT_IFRAME_HOLD_MS=3000`): every run that got past setting up
 the journal failed at the item window's English "Content" box: the
 click intercepted, or on OJS once the focus taken from the box, or on
 OPS once "Welc" left of "Welcome.". First seen
 unforced in a full OPS run on 2026-09-27, at the block window's English
-"Content": the spinner covered the box for about three minutes, until
+"Content": the spinner covered the box about three minutes, until
 the test gave up. The order that triggers it needs a busy browser
 (there, a full run on a loaded machine); without the hold the U09 file
 passed 35 of 35 runs per app. Not driven: the static page window, whose

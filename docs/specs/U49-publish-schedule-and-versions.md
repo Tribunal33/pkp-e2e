@@ -281,11 +281,11 @@ page, described in *Catalog management*. It saves onto the shown version.
     version under (a mistyped one) fails with a blank server error rather
     than that page ⚠ [OJS3](#ojs3). <sup>r</sup>
 11a. **How a version is named.** The side menu names a version by its
-    stage and number ("Version of Record 2.0"). It reads "Unassigned
-    version ({date})" instead only when the version copied from had no
-    stage and none was chosen: once the dialog's stage select arrives on
-    a stage, it offers no blank choice. Two unassigned versions made the
-    same day carry the same name ⚠ [A9](#a9). <sup>i</sup>
+    stage and number ("Version of Record 2.0"). A stage-less version
+    reads "Unassigned version ({date})": an item's first until given a
+    stage, or a copy of a stage-less version with none chosen (the
+    dialog's stage select arriving on a stage offers no blank choice).
+    Two made the same day share one name ⚠ [A9](#a9). <sup>i</sup>
 12. **Version stages and numbering.** A journal and press know three
     stages: Author Original, Published Manuscript Under Review, Version of
     Record. A preprint server knows only Author Original. Numbering is per
