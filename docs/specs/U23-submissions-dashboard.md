@@ -927,7 +927,11 @@ operation.", "OK") over "Search Results (0)" and one "No Items" row, and
 the sidebar's "Editor Dashboard" group lists no views; every view's
 address, and one that opens a workflow panel, does the same, and no panel
 opens. With Section Editor left instead, "More Actions" and the "Assigned
-To Editor" filter stay over an assigned-only list (Rule 3). Expected: the
+To Editor" filter stay over an assigned-only list (Rule 3). The same
+"Error" follows the Reader-only administrator onto every editorial page
+that carries the side menu, since it comes from the "Editor Dashboard"
+entry's count ([Reader comments & moderation
+A9](U14-reader-comments-and-moderation.md#a9)). Expected: the
 journal's submissions, or the access-denied page any Reader gets here.
 Question: should the Site Administrator role count on this dashboard
 without Journal Manager in the journal? Lean: one of the two gates is

@@ -1074,14 +1074,23 @@ config-file settings.
   check I28). Such an
   administrator keeps the Settings Wizard, whose "Appearance" saves, while
   Settings › Website answers the access-denied page on a press and a
-  server and opens under an "Error" window on a journal (on OJS it opened
-  with no "Error" window, twice, on 2026-09-27: U62 claim check K1,
+  server and opens under an "Error" window on a journal (with an assistant
+  role left rather than Reader, on OJS it opened with no "Error" window,
+  twice, on 2026-09-27: U62 claim check K1,
   `n-02-website-typed-ojs`). All three apps, 2026-09-24 (U10 claim check
   K5, `.reports/U10/ccK5/x-*`). With Reader
   left, Users & Roles opens by its address under the same "Error" window
   (the side menu's submissions count answers 401); on a press and a
   server only `…/management/access` opens it, `…/management/settings/access`
   is refused. All three apps, 2026-09-25 (`.reports/U53/cc-K1.md` K1-3).
+  With Reader left, every editorial page the account opens shows the side
+  menu and that "Error" on each load, from `_submissions/viewsCount` 401
+  alone: on a journal the Comments page, Settings › Journal, Website and
+  Users & Roles, Announcements, Statistics and Tools; on a press and a
+  server the dashboard, Statistics and Tools, while the settings pages and
+  the Comments page answer the access-denied page. The journal's Comments
+  page lists its rows and works after "OK". All three apps, 2026-09-28
+  (U14 claim check I28).
 - Every submission has Activity Log lines from its first save, so
   "History" never reads "No Items": a draft begun on the start page shows
   two "Submission metadata updated" lines, and a seeded submission with no

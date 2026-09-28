@@ -208,7 +208,9 @@ page. Every row below assumes the journal has public comments switched on
    against it and the moderators' tasks about it (Side effects). <sup>h</sup>
 10. **The Comments page.** Content › Comments in the editorial side menu,
     or its address (Rule 2b). The page is headed "Comments" and holds four
-    tabs over one table (Fields). <sup>i</sup>
+    tabs over one table (Fields). The browser tab reads the journal's
+    name alone, with no page name, whichever of the four tabs is chosen
+    and with a panel open ⚠ [A13](#a13). <sup>i</sup>
     - 10a. **The tabs.** "All" lists every comment of the journal;
       "Approved" the approved ones; "Hidden/Needs Approval" the pending and
       hidden ones; "Reported" every comment with at least one report,
@@ -278,19 +280,28 @@ page. Every row below assumes the journal has public comments switched on
     opens the Comments page with that comment's panel already open;
     pressing a report task opens the page with the comment panel and the
     report panel on top of it. <sup>l</sup>
-17. **A Site Administrator's reach.** On a journal, a Site Administrator
-    who holds no manager role in the journal (a Section Editor's role,
-    say) opens the Comments page, works its panels and changes the
-    "Comments" setting like a Journal Manager; with Reader as their only
-    journal role the page opens with its rows under an "Error" dialog
-    reading "The current role does not have access to this operation."
-    ⚠ [A9](#a9). On a press and on a preprint server the same person is
-    offered the Content › Comments entry in the side menu, but the entry
-    and the page's address answer the access-denied page ("The current
-    role does not have access to this operation.") ⚠ [OMP1](#omp1)
-    ⚠ [OPS1](#ops1), and so does Settings › Website; the Site
-    Administrator enrolled as a Press Manager or Preprint Server Manager
-    is a manager there and gets in. <sup>m</sup>
+17. **A Site Administrator's reach.** How far a Site Administrator who
+    holds no manager role in the journal gets depends on the app and on
+    the role they keep. <sup>m</sup>
+    - 17a. **On a journal, with another editorial role.** With a Section
+      Editor's role, say, they open the Comments page, work its panels and
+      change the "Comments" setting like a Journal Manager.
+    - 17b. **On a journal, with Reader as their only role.** The page opens
+      with its rows listed, under an "Error" dialog reading "The current
+      role does not have access to this operation." with "OK". The dialog
+      is the side menu's, not this page's: every editorial page shows it
+      to this account on each load ⚠ [A9](#a9). Once "OK" is pressed the
+      page works as a Journal Manager's: each tab lists its comments, the
+      row's "…" and the comment panel offer the same actions, and
+      "Approve Comment" approves (Rules 10 to 13). The next page load
+      brings the dialog back.
+    - 17c. **On a press and on a preprint server.** The same person is
+      offered the Content › Comments entry in the side menu, but the entry
+      and the page's address answer the access-denied page ("The current
+      role does not have access to this operation.") ⚠ [OMP1](#omp1)
+      ⚠ [OPS1](#ops1), and so does Settings › Website. The Site
+      Administrator enrolled as a Press Manager or Preprint Server Manager
+      is a manager there and gets in.
 18. **When the article or the account goes.** Deleting a submission (an
     article published straight from the Submission stage is unpublished,
     declined there and deleted: *[Submission
@@ -834,10 +845,11 @@ Left out of the scenarios above, by reason:
   - A6 (the unverified ORCID iD's dead link under a comment and in the comment panel; Rule 6b)
   - A7 (the comment's "…" button without a name for a screen reader; Rule 7)
   - A8 (closing the report panel clearing both numbers from the address; Rule 15; scenario 3 marks it)
-  - A9 (the Site Administrator with Reader as their only journal role, the "Error" dialog over the Comments page; Rule 17)
+  - A9 (the Site Administrator with Reader as their only journal role: the "Error" dialog over the Comments page, and the page working after "OK"; Rule 17b)
   - A11 {OMP OPS} (a comment's deletion taking the task of an unrelated report or comment that shares its number, in any press or preprint server of the site; Side effects)
   - A12 (moderating or reporting another journal's comment by requests made by hand; Actors rows 3 and 7)
-  - OMP1 and OPS1 (the Site Administrator holding no manager role: the Comments page open on a journal, refused on a press and a preprint server; Rule 17)
+  - A13 (the Comments page's browser tab without the page's name; Rule 10)
+  - OMP1 and OPS1 (the Site Administrator holding no manager role: the Comments page open on a journal, refused on a press and a preprint server; Rules 17a, 17c)
 - **Owned by another feature**:
   - the Tasks panel's own controls on a comment task, Mark Read and Delete (Cross-feature interactions; *Notifications center & email preferences*, scenario 2)
   - creating and publishing the new version scenario 11 needs (Cross-feature interactions; *Publish, schedule & versions*, scenarios 4 and 5)
@@ -861,6 +873,7 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A10](#a10) | A comment deleted with its submission or its writer's account leaves its moderation tasks behind, blank and dead | 🐞 | minor | — |
 | [A11](#a11) | On a press and a preprint server, deleting a comment also removes the task about an unrelated report or comment that shares its number, in any press or server of the site {OMP OPS} | 🐞 | minor | — |
 | [A12](#a12) | A Journal Manager of one journal can read, approve, hide and delete another journal's comments by requests made by hand, and any signed-in account can report them | 🐞 | latent | — |
+| [A13](#a13) | The Comments page's browser tab carries no page name, only the journal's | 🐞 | minor | — |
 | [A1](#a1) | A hidden comment reads to its writer exactly like one awaiting approval | ❓ | minor | — |
 | [A2](#a2) | Approving or hiding a comment leaves every moderator's "pending review" task in place | ❓ | minor | — |
 | [A3](#a3) | The report dialog neither refuses an empty reason with a message nor confirms a filed report, and the same person can report the same comment again | ❓ | minor | — |
@@ -868,7 +881,7 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A5](#a5) | The Comments tab's "Save" reloads the Website Settings page on Appearance › Theme instead of confirming in place | ❓ | minor | — |
 | [A7](#a7) | The comment's "…" button has no name for a screen reader | ❓ | minor | — |
 | [A8](#a8) | Closing the report panel wipes the open comment's number from the address too | ❓ | minor | — |
-| [A9](#a9) | A Site Administrator whose only journal role is Reader gets the Comments page under an "Error" dialog | ❓ | minor | — |
+| [A9](#a9) | A Site Administrator whose only journal role is Reader gets an "Error" dialog on every editorial page, the Comments page included | ❓ | minor | claim check (claude), 2026-09-28 — the dialog is the side menu's |
 | [OMP1](#omp1) | On a press, a Site Administrator holding no manager role is offered Content › Comments but the page answers the access-denied page | ❓ | minor | — |
 | [OPS1](#ops1) | On a preprint server, a Site Administrator holding no manager role is offered Content › Comments but the page answers the access-denied page | ❓ | minor | — |
 
@@ -967,17 +980,22 @@ shareable and briefly names nothing that is open. Basis: test run.
 <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — A Site Administrator with only a Reader role gets the Comments page under an error dialog** · ❓ · minor.
+**A9 — A Site Administrator with only a Reader role gets an error dialog on every editorial page** · ❓ · minor.
 On a journal, a Site Administrator whose only role in the journal is
-Reader opens the Comments page by its address with its rows listed, but
-an "Error" dialog reading "The current role does not have access to this
-operation." with "OK" covers it; Settings › Website shows the same dialog.
-A press and a preprint server refuse the page outright in that state.
-Expected the page either open or refused; observed both at once.
-Question: is the dialog this page's, or the editorial dashboard's, which
-such an account cannot open? Lean: the dashboard's, since it covers
-Settings › Website too; the same account on Settings › Journal would
-settle it. Basis: test run. <sup>f-a9</sup>
+Reader gets the Comments page with its rows listed under an "Error"
+dialog reading "The current role does not have access to this
+operation." with "OK", on each load; after "OK" the page works (Rule
+17b). The dialog is the side menu's, not this page's: the menu offers
+this account "Editor Dashboard" although the dashboard lists nothing for
+it, and every editorial page shows the dialog to this account, the
+dashboard, the settings pages, Announcements, Statistics and Tools
+included. A press and a preprint server show it on the editorial pages
+they open to the account. The full entry, its question and its lean are
+*[Submissions dashboard (editorial)](U23-submissions-dashboard.md#a9)*'s
+A9.
+Re-checked: claim check (claude), 2026-09-28 — this entry's question (the
+Comments page's dialog or the dashboard's) settled: the side menu's.
+Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — A comment deleted with its submission or its writer's account leaves its tasks behind** · 🐞 · minor.
@@ -1027,6 +1045,20 @@ other journal's comment untouched; observed each carried out.
 Moderation thus crosses the boundary between journals the rest of the
 application keeps.
 Basis: probe; code for deleting a report. <sup>f-a12</sup>
+
+<a id="a13"></a>
+**A13 — The Comments page's browser tab carries no page name** · 🐞 · minor.
+The browser tab of the Comments page reads the journal's name alone,
+whichever of the four tabs is chosen, with a panel open and after a
+reload, for a Journal Manager and an Editor, with public comments on or
+off. The side menu's other pages name themselves first: the settings
+pages, Users & Roles, Announcements, Institutions and Manage Emails read
+"{page heading} | {journal}" ("Website Settings | {journal}",
+"Announcements | {journal}"), the dashboard "Submissions | {journal}".
+Expected "Comments | {journal}"; observed "{journal}", so a moderator
+with several browser tabs open cannot tell which one holds the Comments
+page.
+Basis: probe. <sup>f-a13</sup>
 
 ### OMP
 
@@ -1343,7 +1375,10 @@ comments "Showing 1 to 25 of 36" and "Go to Page 2", page 2 kept across a
 visit to "Approved" and lost on a reload; the other journal's comment on
 no tab; at "Items per page" 5, five rows and "5 of 33". A Section Editor,
 an Assistant, an Author, a Reviewer and a Reader had no "Content" group
-and got the access-denied page at the address on the three apps.
+and got the access-denied page at the address on the three apps. The
+browser tab (Rule 10, A13): live-probed 2026-09-28 on the three apps,
+the context's name alone on every tab of the page; the mechanism and the
+controls are in footnote f-a13.
 
 <a id="fn-j"></a>
 **j — the comment panel, approve, hide, delete.** `UserCommentDetailModal.vue`:
@@ -1532,9 +1567,13 @@ Moderator) role kept: on the journal the dashboard, "Content ›
 Comments", the page and the "Comments" tab all worked and the setting was
 saved both ways; on the press and the server "Content › Comments" was
 offered and the entry, the page's address and Settings › Website all
-answered the access-denied page. With Reader as the only role: no
-dashboard and no side menu on any app (the login and "/submissions" land
-on the context's home page), the press and the server refused the
+answered the access-denied page. With Reader as the only role: signing
+in lands on the context's home page, but every editorial page the account
+opens carries the side menu ("Editor Dashboard", "Start A New
+Submission", "DOIs", "Settings", "Content", "Statistics", "Tools",
+"Administration"), and the dashboard's address opens "Search Results (0)"
+under the same dialog (A9; live-probed 2026-09-28 on the three apps, two
+runs, footnote f-a9); the press and the server refused the
 address, the journal opened the page with its rows under the "Error"
 dialog "The current role does not have access to this operation." /
 "OK", raised by the side menu's own submissions-count request answering
@@ -1838,9 +1877,33 @@ request (`_submissions/viewsCount`) answering 401 for an account with no
 dashboard access; the Comments page's own requests succeed. Live-probed
 2026-09-16 (footnote m's Reader-only state): the journal's page with its
 rows under the dialog, Settings › Website the same; the press and the
-server answering the access-denied page. Not driven: the same account on
-Settings › Journal, which would show whether the dialog is the
-dashboard's.
+server answering the access-denied page. Live-probed 2026-09-28 on scratch
+contexts of the three apps, two runs each, `admin` left with Reader
+alone (manager role ended on its own edit page, fresh sign-in) (Rule
+17b, A9): on the journal the dialog showed 1–2 s after each load of the
+Comments page, Settings › Journal, Website and Users & Roles,
+Announcements, Statistics › Articles, Tools and the dashboard ("Search
+Results (0)"), and not on the journal's home page; on each the only
+refused request was `GET _submissions/viewsCount` (401), the dashboard
+adding `_submissions/assigned` (401), while the Comments page's `GET
+comments` answered 200. On the press and the server the Comments page and
+the settings pages answered the access-denied page, and the dashboard,
+Statistics › Monographs / Preprints and Tools showed the same dialog from
+the same 401. After "OK" on the journal's Comments page the dialog stayed
+away until the next load; "Hidden/Needs Approval" listed the pending
+comment (`GET comments?isApproved=false` 200), the row's "…" offered
+"View Comment" and "Delete Comment", the panel "Approve Comment", "Delete
+Comment" and a grayed "Hide Comment", and "Approve Comment" (`POST
+comments/{id}/setApproval` 200) showed "The comment has been updated
+successfully." and closed the panel; the API's moderator routes admit a
+Site Administrator (footnote m). Control: `admin` still holding the
+manager role got no dialog and no 401 on the Comments page and Settings ›
+Journal and Website. Every load of Settings › Website, the control's
+included, answered the Plugin Gallery's server error, which is
+*[Plugins management](U62-plugins-management.md#a1)*'s A1 and not this
+entry's. The dashboard's side of the same dialog, and the question, are
+*[Submissions dashboard (editorial)](U23-submissions-dashboard.md#a9)*'s
+A9.
 
 <a id="fn-f-a10"></a>
 **f-a10 — A10.** `user_comments` rows go with their publication and their
@@ -1945,6 +2008,31 @@ an ordinary finding (reader comments are unreleased 3.6; stable-3_5_0 has
 none). Reported to the team on 2026-09-26 together with A11; A11's fix,
 pkp/pkp-lib `26ae6431b5`, changes only the notification deletion and
 leaves these by-number lookups as they are.
+
+<a id="fn-f-a13"></a>
+**f-a13 — A13.** `ManagementHandler::userComments()` assigns no
+`pageTitle`, while `announcements()`, which also moved out of settings
+under the same address prefix, assigns `manager.setup.announcements`, and
+`context()`, `website()`, `workflow()`, `distribution()`, `access()`,
+`institutions()` and `manageEmails()` assign their own; `layouts/backend.tpl`
+prints `{title|strip_tags value=$pageTitle}`, which with no title leaves
+the context's name alone (read at ojs lib/pkp `26ae6431b5`, omp and ops
+lib/pkp `17a1f01fed`). Live-probed 2026-09-28 on scratch contexts of the
+three apps, two runs each (Rule 10, A13): the tab read "{context name}"
+alone when the page was opened from Content › Comments and by its
+address, on each of the four tabs, with a comment panel open
+(`?commentId=N`) and after a reload on "#reported", for the Journal
+Manager and for the Editor (OJS, OMP; a preprint server has no second
+manager-level role), with the setting on and, by address, off ("No
+Items"). The controls read "Journal Settings" / "Setup" (OMP) / "Server
+Settings" (OPS), "Website Settings", "Workflow Settings", "Distribution
+Settings", "Users & Roles", "Announcements", "Institutions" and "Manage
+Emails", each followed by " | {context name}"; the dashboard "Submissions
+| {context name}"; the frontend's About page "About the Journal" /
+"About the Press" / "About the Server" | {context name}. Every load of
+Settings › Website answered the Plugin Gallery's server error,
+*[Plugins management](U62-plugins-management.md#a1)*'s A1, which is not
+this entry's.
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1.** Footnote m: `omp/pages/management/SettingsHandler::__construct()`
