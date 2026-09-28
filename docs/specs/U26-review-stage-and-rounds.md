@@ -138,12 +138,14 @@ and the reviewer forms to *Reviewer assignment & management*.
    dialog ("Current Review Files For Round {N}") opens listing the round's
    own review files with checkboxes. Ticking its box "Show files from all
    accessible workflow stages." adds the submission's other workflow files
-   to the list, a file still on the Submission stage among them. Ticking a
-   file adds it to the round, new files can be uploaded from the same
-   dialog, and no file is ever deleted here. Confirming reports "Review
-   files updated." Unticking a file, though, changes nothing the editor can
-   see: the panel lists it exactly as before,
-   and the dialog's checkboxes do not reliably mirror the panel
+   to the list, a file still on the Submission stage among them. An
+   earlier round's review files are not offered: on Round 2, ticking that
+   box adds the Submission-stage file, while Round 1's review file stays
+   out of the list. Ticking a file adds it to the round, new files can be
+   uploaded from the same dialog, and no file is ever deleted here.
+   Confirming reports "Review files updated." Unticking a file, though,
+   changes nothing the editor can see: the panel lists it exactly as
+   before, and the dialog's checkboxes do not reliably mirror the panel
    ⚠ [A7](#a7). <sup>h</sup>
 9. <a id="revisions"></a> **Revisions Uploaded.** Each round also carries the
    revised files uploaded in answer to a revision request, in the panel
@@ -290,7 +292,10 @@ and the reviewer forms to *Reviewer assignment & management*.
   line replaces the confirmed-review sentence ("All reviews are confirmed and
   a decision is needed.") alone; the round's own sentence still appears
   beneath it: "Awaiting responses from reviewers." while reviews are
-  underway, "New reviews have been submitted." once a review arrives.
+  underway, "New reviews have been submitted." once a review arrives. Once
+  the confirmed reviews reach the minimum, the box reads "Minimum number of
+  confirmed reviews required: {N}." with "Minimum required number of
+  reviews have been confirmed. A decision is needed." beneath it.
   <sup>r</sup>
 - **Reviewer suggestions enabled** (publication settings). Adds a reviewer
   suggestions panel to the stage. The panel belongs to *Reviewer
@@ -654,7 +659,6 @@ Left out of the scenarios above, by reason:
   - deleting the only revised file flipping the status back to "requested" (Rule 7): an author seldom deletes their only revised file; the task half of the path is A9
   - "New editorial recommendations have been submitted." with a second recommending editor pending (Rule 5): two recommending editors on one submission is not an ordinary week's set-up; scenario 11 walks the other two recommendation sentences with one
   - "Submission accepted." (Rule 5): after "Accept Submission" the submission sits on Copyediting and the box reads Rule 4's stage sentence (scenario 9), so an editor does not meet this sentence on this stage
-  - the box once the confirmed reviews reach the minimum (Settings): a second review submitted and confirmed on screen for one line, whose wording this page does not state
 - **Nothing new to test**:
   - Funding Coordinator, the one assistant-level group the stage's assignment dialog offers (Actors row 1; the same screen as the editorial roles of scenario 1)
   - editorial roles filing revisions through the "Revisions Uploaded" panel's own controls (Actors row 4; the panel of scenario 4)
@@ -685,6 +689,7 @@ Left out of the scenarios above, by reason:
   - the Discussions panel in both views (Rule 14; *Tasks & discussions*)
   - the My Submissions row "Revision requested" with "Submit revisions" (Side effects; *My Submissions*, scenario 4)
   - round cancelled: the author and reviewer email steps (Side effects; *Editorial decision recording*)
+  - the box once the confirmed reviews reach the minimum, "Minimum required number of reviews have been confirmed. A decision is needed." under the minimum line (Settings; *Review setup & review forms*, scenario 13)
   - the reviewer suggestions panel when suggestions are enabled (Settings; *Reviewer suggestions*, scenario 2)
   - the Reviewers panel's actions, the decision wizard, the participants and the file-manager mechanics (Cross-feature; *Reviewer assignment & management*, *Editorial decision recording*, *Stage participants*, *Submission files*)
   - the press's separate, earlier Internal Review stage [OMP1](#omp1) (Purpose; *Internal Review stage* {OMP})
@@ -1034,9 +1039,10 @@ drove Move to Review into a reviewerless round and an
 in-progress round and saw "Waiting for reviewers to be assigned." /
 "Awaiting responses from reviewers." instead — the stored returned-back
 status survives the reviewer scan only in the all-completed-and-confirmed
-state (note c), and reaching that state needs a UI-submitted,
-editor-confirmed review the scenario seeder cannot produce, so the
-sentence's positive appearance stays code-confirmed only. One dead status: `REVIEW_ROUND_STATUS_SENT_TO_EXTERNAL` ("Sent
+state (note c), and no drive has reached that state after a return from
+Copyediting (a seeded `completed` review counts once "Mark as Complete" is
+pressed on screen, note r), so the sentence's positive appearance stays
+code-confirmed only. One dead status: `REVIEW_ROUND_STATUS_SENT_TO_EXTERNAL` ("Sent
 for external review.") is set by no decision type in OJS or OMP (OMP's
 `SendExternalReview` sets the internal round to ACCEPTED instead), so its
 sentence never renders — invisible, recorded here only.
@@ -1155,7 +1161,15 @@ with the round's review file alone and the box "Show files from all
 accessible workflow stages." unticked; ticking the box reloaded the list
 with the Submission-stage file, whose checkbox was then ticked and
 confirmed with "Review files updated." (the Rule 8 wording was corrected on
-that observation).
+that observation). Claim check 2026-09-28 (OJS and OMP, two runs; Rule 8,
+Actors row "Choose the files under review"): on three Round 2s (built from
+two seeded rounds, through Request Revisions and a new round, and one
+driven by a Section Editor assigned to the stage) the dialog opened on "No
+Items", and ticking "Show files from all accessible workflow stages." added
+the Submission-stage `article.pdf` and never Round 1's review file
+`notes.md`; the Round 1 control added `article.pdf` beside the round's own
+`notes.md`. The assigned Section Editor got the Editor's dialog, upload
+included.
 
 <a id="fn-i"></a>
 **i** — Author upload button: `workflowConfigAuthorOJS.js` external-review
@@ -1358,10 +1372,24 @@ claim that the submitted sentence does not appear was corrected on that run.
 So the override suppresses only the confirmed sentence: the component's
 minimum branch drops the round's own sentence for the confirmed status
 alone (`REVIEW_ROUND_STATUS_REVIEWS_COMPLETED`) and otherwise prints the
-minimum line above it. The wording once the minimum is met remains
-unobserved live: crossing the threshold needs a UI-submitted,
-editor-confirmed review the scenario seeder cannot produce, so it was
-deferred by cost, not oversight (claim check 2026-07-31).
+minimum line above it. Once the round's confirmed reviews number at least
+the minimum (`useSubmission.js::checkMinimumConsideredReviews()`), a
+second branch prints the minimum line above
+`dashboard.minimumReviewsConfirmedDecisionNeeded` "Minimum required number
+of reviews have been confirmed. A decision is needed." in place of any
+reviewer-derived sentence (waiting, awaiting, new reviews, overdue, all
+confirmed); only the all-confirmed case was driven. Claim check 2026-09-28
+(OJS and OMP, two runs, minimum 2, every state read on the same page and
+after a reload): one review accepted read the minimum line plus "Awaiting
+responses from reviewers."; one or two reviews submitted, and two
+submitted with one confirmed, the minimum line plus "New reviews have been
+submitted."; the only review confirmed, the minimum line alone; two seeded
+`completed` reviews, each confirmed with "Mark as Complete" on screen, the
+minimum line plus "Minimum required number of reviews have been confirmed.
+A decision is needed.", on the editor's and the author's screen alike; a
+Section Editor assigned to the stage read the same box; the control
+journal or press at 0 read "New reviews have been submitted.", then "All
+reviews are confirmed and a decision is needed.", with no minimum line.
 
 <a id="fn-s"></a>
 **s** — Scenario seeding. The seeded journal or press is `publicknowledge`;
@@ -1444,7 +1472,8 @@ rendered by the legacy author dashboard's round-status notification path
 (`PKPNotificationManager::getNotificationMessage()`, which does pass the
 author flag but has no remaining surface — notes n, o). Probed 2026-07-31 —
 author and editor boxes character-identical at four states, viewed side by
-side.
+side. Claim check 2026-09-28 (OJS and OMP): with the minimum of confirmed
+reviews met, the author's box read the editor's two lines (note r).
 
 <a id="fn-a3"></a>
 **f-a3** — Both apps' observations (live probes 2026-07-31, OJS and OMP)
@@ -1501,7 +1530,11 @@ listed it; untick-and-confirm changed nothing visible there either.
 Mechanism per note h: deselection clears the `viewable` flag on
 the round's file link and never deletes; the panel renders the file
 regardless of that flag. Whether `viewable` gates the reviewer-side file
-list was not observed — the entry's open half.
+list was not observed — the entry's open half. Re-driven 2026-09-28 on OJS
+and OMP, two runs, on Round 1 and three Round 2s (note h): a file uploaded
+through the dialog's "Upload Review File" arrived unticked right after the
+upload wizard, again on reopening the dialog and again after a reload,
+while "OK" reported "Review files updated." and the panel listed the file.
 
 <a id="fn-a8"></a>
 **f-a8** — Claim check 2026-07-31, two independent drives: on a two-round
