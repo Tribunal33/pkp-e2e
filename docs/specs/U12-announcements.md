@@ -63,7 +63,7 @@ at the top of the panel shows the second language's boxes, labelled
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
 | "Title" | yes, in the primary language | One line of plain text, the widest box on the panel. Empty on save: "This field is required." (with two or more form languages, on an edit: "You must complete this field in {language}.", naming the primary language). Shown as the row's name in the list, as the heading of the announcement's page and of its summary, as the browser title of its page and as the subject of the email <sup>h</sup> <sup>i</sup> |
-| "Short Description" | no | Formatted text under the hint "A brief description to appear along with the announcement title.", with bold, italic, superscript, subscript, a link, a block quote, bulleted and numbered lists, an inserted image and a source-code view. Shown under the title in every summary (the Announcements page, the home page's first item) and in the email; on the announcement's own page only when "Announcement" is empty (Rule 10) <sup>h</sup> <sup>i</sup> |
+| "Short Description" | no | Formatted text under the hint "A brief description to appear along with the announcement title.", with bold, italic, superscript, subscript, a link, a block quote, bulleted and numbered lists, a picture and a source-code view. The picture button, "Insert/edit image", uploads and inserts a picture as every formatted text box with one does, the files it takes and refuses included ([→ pictures](U09-custom-pages-and-blocks.md#image-upload)). Shown under the title in every summary (the Announcements page, the home page's first item) and in the email; on the announcement's own page only when "Announcement" is empty (Rule 10) <sup>h</sup> <sup>i</sup> |
 | "Announcement" | no | Formatted text under the hint "The full text of the announcement.", the same controls as "Short Description" in a taller box. Shown on the announcement's own page alone (Rule 10) <sup>h</sup> |
 | "Image" | no | An upload box ("Upload File"; "Drop files here to upload") that takes image files only. Any other file is refused in the box, with "You can't upload files of this type." under its name and a "REMOVE FILE" link that clears it; until it is cleared the panel counts it as a form error ("Please correct one error.", "Save" and "Upload File" grayed out); a file over the server's upload limit is refused the same way with "File is too big ({size}MiB). Max filesize: {limit}MiB.". A chosen image shows a preview with an "Alternate text" box and "Remove"; on an edit, "Remove" clears the preview and offers "Restore Original", which brings the saved picture and its alternate text back. A GIF, JPEG or PNG whose file name ends in the matching lower-case extension (.gif, .jpg, .png) saves; a JPEG named ".jpeg" or any image with an upper-case extension is accepted in the box but refused on "Save" with "There was an error uploading this image." under "Image", and on an edit that refusal deletes the announcement ⚠ [A2](#a2). A saved image shows above the text on the announcement's page and beside the title in its summaries, with the alternate text as its description (Rule 15) <sup>j</sup> |
 | "Expiry Date" | no | A small plain-text box under the hint "The announcement will be displayed to readers until this date. Leave blank if the announcement should be displayed indefinitely.", typed as YYYY-MM-DD; any other shape is refused with "The date format is not valid. Enter each date in the format YYYY-MM-DD.". A past date is accepted. On "Edit Announcement" the box shows the saved date in the journal's short date format, which the save refuses unless that format is YYYY-MM-DD ⚠ [A3](#a3). What the date does: Rule 8 <sup>k</sup> |
@@ -155,7 +155,12 @@ discards the changes. <sup>g</sup>
    under the title on the Announcements page and the home page. It is
    public from that moment, on the Announcements page and, within the
    "Display on Homepage" count, on the home page; there is no draft state
-   and no publish step. <sup>c</sup> <sup>o</sup>
+   and no publish step. Closing the panel with its close control, or
+   leaving the page by typing another address, drops what was typed with
+   no warning, and "Add Announcement" opens an empty panel again; a
+   picture already inserted into one of its boxes stays stored all the
+   same (*[Custom pages & blocks](U09-custom-pages-and-blocks.md#image-upload)*
+   Rule 29a). <sup>c</sup> <sup>o</sup>
 6. **Editing.** "Edit" on a row opens the "Edit Announcement" panel with
    the row's values filled in, the image previewed and the expiry date
    printed (Fields "Expiry Date"). "Save" closes the panel and the row
@@ -426,6 +431,9 @@ discards the changes. <sup>g</sup>
   email's default text is Side effects'.
 - *Plugins management* owns enabling and disabling the "Announcement
   Feed Plugin" (Rule 18).
+- *[Custom pages & blocks](U09-custom-pages-and-blocks.md#image-upload)*
+  owns the picture button of "Short Description" and "Announcement"
+  (Fields; Rule 5).
 - *[Highlights](U11-highlights.md)* is the neighbouring tab under Setup;
   nothing is shared: a highlight is not an announcement and appears in no
   announcement list or feed.
@@ -836,6 +844,8 @@ Left out of the scenarios above, by reason:
     page (Rule 10): scenario 2 opens an expired and an unknown one
   - a file over the server's upload limit refused in the "Image" box
     (Fields): scenario 2 meets the same box's refusal with a text file
+  - "Add Announcement" closed, or left by address, with a title typed
+    and a picture inserted, and opening empty again (Rule 5)
 - **Nothing new to test**:
   - Editor and Production Editor on the settings tab and the
     Announcements page {OJS OMP} (Actors rows 1–2): the same tab, page
@@ -898,6 +908,10 @@ Left out of the scenarios above, by reason:
     *Navigation menus & site chrome*)
   - a deleted journal's announcements, images and types going with it
     (Side effects; *Hosted journals*)
+  - the picture button of "Short Description" and "Announcement": its
+    window, the files it takes and refuses, and the stored picture
+    (Fields; Rule 5; *[Custom pages & blocks](U09-custom-pages-and-blocks.md)*
+    scenario 5)
 
 ## Findings register
 
@@ -1445,6 +1459,23 @@ under "Forms" (the `supportedFormLocales` passthrough) the panel shows
 required." and a primary title emptied on an edit with "You must complete
 this field in English."; the site's window offers "French" and "English",
 the site's two languages.
+Live-probed 2026-09-28 (Fields "Short Description", "Announcement"), OJS,
+OMP and OPS, two runs each, as the manager and as `admin` working in a
+scratch journal: the same toolbar in both boxes; "Insert/edit image"
+opened "Insert/Edit Image" with the tabs "General" and "Upload"; a `.png`,
+a `.webp` and an upper-case `.PNG` were inserted and, once saved, showed
+on the public list (the short description's) and on the announcement's
+page (the full text's); a `.bmp` and a `.jpeg` were refused with "You can
+only upload the following types of files: gif, jpg, png, webp.", a text
+file named `.png` with "The image you uploaded is not valid." and a PNG
+named `.jpg` with the extension-mismatch message, each in a window with
+"OK" and nothing inserted (`POST …/api/v1/_uploadPublicFile` 400); the
+files were stored lower-cased under `public/site/images/{username}/`, a
+name `admin` had already used with a 32-character suffix, and a pasted
+picture as `mceclip0.png`; "Edit" read both boxes back with their pictures
+after a reload. *Custom pages & blocks* Rule 29, 29b and 29c hold here as
+stated there. The site's panel was not driven (switching the site's
+announcements on is shared state); it builds the same form.
 
 <a id="fn-i"></a>
 **i — where the texts print.** `frontend/objects/announcement_summary.tpl`:
@@ -1649,6 +1680,18 @@ and its posted date on the public page; "Edit Announcement" closed by
 and the reload showed the saved title, the row showing the unsaved one until
 then; "Call for papers" was public to a signed-out visitor and to the reader
 while its notification jobs still sat in the queue.
+Live-probed 2026-09-28 (Rule 5, closing "Add Announcement"), OJS, OMP and
+OPS, two runs each, on a scratch journal: with a title typed and a picture
+inserted into "Short Description", "Close" shut the panel with no browser
+or in-app dialog and the list unchanged, and "Add Announcement" reopened
+empty; with a title typed again, leaving by another address
+(`management/settings/website`, or a reload of the Announcements page)
+raised no "Leave site?" question; the picture's file stayed under
+`public/site/images/{username}/` (read in five of the six runs, the first
+OJS run recording no file list). The one server error of the drive, the
+Plugin Gallery's list on landing on Settings › Website, is
+*[Plugins management](U62-plugins-management.md#a1)* A1, not this
+feature's.
 
 <a id="fn-p"></a>
 **p — the Announcements page.** `AnnouncementHandler::index()` assigns
