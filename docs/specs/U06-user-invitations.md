@@ -144,8 +144,8 @@ Accept wizard (new invitee):
     with no search step. Inside its roles table, **removing** a current role
     or changing its masthead visibility takes effect at once, each behind its
     own confirmation, and the member is emailed either way (see *Side
-    effects*) ⚠ [OMP1](#omp1). A removed role stays listed: its row keeps its
-    place in the roles table with End Date set to today and "User Removed
+    effects*) ⚠ [OMP1](#omp1). A removed role's row stays in the roles
+    table, also after a reload, with End Date set to today and "User Removed
     From Role" where its Remove Role button was. That row keeps an active
     masthead select: changing it works as on a current role (the same
     confirmation, the change at once, the email) and decides whether the
@@ -186,9 +186,9 @@ Accept wizard (new invitee):
     listing the invitee's details) deactivates the emailed links immediately.
     The recipient then sees the "Invitation Unavailable" page (Rule 4). <sup>q</sup>
 17. Wizard navigation (accept side). The "Create OJS account", "Enter
-    details" and "Review & create account" steps also offer "Cancel". It
-    asks "Cancel Role Invitation Process?" ("Are you sure you want to
-    cancel? Canceling now will stop the role acceptance process, and you'll
+    details" and every recipient's "Review & create account" steps also
+    offer "Cancel". It asks "Cancel Role Invitation Process?" ("Are you
+    sure you want to cancel? Canceling now will stop the role acceptance process, and you'll
     need to restart from the invitation email to accept the role again. …")
     with "Cancel Invitation Process" and "Go Back". "Go Back" returns to the
     step. "Cancel Invitation Process" declines nothing:
@@ -196,9 +196,9 @@ Accept wizard (new invitee):
     - the manager's Invitations row still reads "Invited {date}";
     - the emailed link reopens the wizard at its first step.
 
-    Leaving the wizard by typing another address asks nothing and keeps
-    nothing: reopening the link shows the Username typed on "Create OJS
-    account" empty again. <sup>u</sup>
+    Leaving "Create OJS account" by typing another address asks nothing and
+    keeps nothing: the Username typed there is empty when the link reopens.
+    <sup>u</sup>
 
 ## Side effects
 

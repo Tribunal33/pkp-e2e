@@ -178,11 +178,12 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
      leaving discards the change, and the tab shows the saved value again.
      With only rich text typed, the reload asks nothing and the text is
      gone [A19](#a19).
-   - 2f. **Opening a tab.** Each tab reloads its own content when opened,
-     so a change saved on one tab is visible on another only after that
-     tab is opened again. A tab named in the address (its name after a
-     slash, for example "…/user/profile/contact") opens the page on that
-     tab; an unknown name opens Identity without comment.
+   - 2f. **Opening a tab.** Each tab reloads its content when opened, so
+     a change saved on one tab shows on another only once that tab is
+     reopened. The address "…/user/profile/" plus a tab's name (in tab
+     order "identity", "contact", "roles", "publicProfile",
+     "changePassword", "notificationSettings", "apiSettings") opens the
+     page on that tab; any other name opens Identity without comment.
 3. **Journal-level and site-level profile.** The page normally belongs to the
    journal it was opened in: the Roles tab leads with that journal (Rule 8),
    the ORCID block appears there, and the Notifications tab applies to it
