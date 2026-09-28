@@ -57,7 +57,8 @@ profile of Rule 3, one per language the site itself has), the primary
 language first; a second language's box sits in a small pop-up panel, named
 for that language, that opens when the first box is focused (clicked into,
 or reached with the Tab key). On a journal with one form language there is
-one box. A
+one box. Fields marked *rich text* are tall boxes with a formatting toolbar
+(bold, italic, link and the like) above them. A
 field the browser can check itself (a required box left empty, a malformed
 email address or web address) is refused before anything is sent, with the
 sentence directly under the box; the server's own sentences for those checks
@@ -78,11 +79,11 @@ never reach the screen. <sup>j</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| "Email" | yes | Must look like an email address, else "Please enter a valid email address." under the box and nothing is sent. Another account's address is refused by the server: "The selected email address is already in use by another user." appears as a message at the top right and as the text of the box's label, in place of the word "Email" (the asterisk stays), and none of the tab's other changes is saved. Changing it does not take effect on Save; it starts a confirmation (Rule 6). While a change is pending the box is read-only and a notice with a "Cancel" button sits above it <sup>d</sup> |
-| "Signature" (multilingual, rich text) | no | Free text; it ends the prefilled message of the editorial decision emails this user composes (see *Cross-feature interactions*) <sup>d</sup> |
+| "Email address" | yes | Must look like an email address, else "Please enter a valid email address." under the box and nothing is sent. Another account's address is refused by the server: "The selected email address is already in use by another user." appears as a message at the top right and as the box's label, in place of the label's own words (the asterisk stays), and none of the tab's other changes is saved. Changing it does not take effect on Save; it starts a confirmation (Rule 6). While a change is pending the box is read-only and a notice with a "Cancel" button sits above it <sup>d</sup> |
+| "Signature" (multilingual, rich text) | no | Free text; it ends the prefilled message of the editorial decision emails this user composes (see *Cross-feature interactions*). Text typed here with no other box changed is lost without a question when another tab is pressed (Rule 2c) [A19](#a19) <sup>d</sup> |
 | "Phone" | no | Up to 24 characters; longer input is cut there <sup>d</sup> |
 | "Affiliation" (multilingual) | no | Plain text. The value a new submission copies into its first contributor (Rule 7) and the affiliation the editorial masthead is built to show beside a team member's name <sup>d</sup> |
-| "Mailing Address" (rich text) | no | Free text, one box whatever the languages <sup>d</sup> |
+| "Mailing Address" (rich text) | no | Free text, one box whatever the languages. Unsaved text is lost unasked as with "Signature" [A19](#a19) <sup>d</sup> |
 | "Country" | yes | A dropdown of country names with a blank first entry; left blank: "This field is required." under the box, and nothing is sent. A newly created account may have no country yet, so the tab cannot be saved until one is chosen <sup>d</sup> |
 | "Working Languages" | no | One checkbox per site language, shown when the site has more than one language (Rule 7 says what a one-language site is expected to do); ticking a box changes nothing on screen <sup>d</sup> |
 
@@ -99,7 +100,7 @@ never reach the screen. <sup>j</sup>
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
 | "Profile Image" | no | An upload area ("Drag and drop a file here to begin upload", button "Upload File"); the file picker offers .jpg, .jpeg, .png and .gif, and nothing on screen names the accepted types. A .jpg or .png is shrunk and cropped to 150 × 150 pixels by the browser before sending. A file whose name ends in anything else is refused by the upload area itself, with "File extension error." and nothing sent; a file the server refuses is announced in the upload area and in a browser alert (Rule 9a). Once an image exists, a "Delete" button sits under it (Rule 9b) <sup>f</sup> |
-| "Bio Statement (e.g., department and rank)" (multilingual, rich text) | no | Free text; shown to readers on a published item's page (Rule 9d) <sup>f</sup> |
+| "Bio Statement (e.g., department and rank)" (multilingual, rich text) | no | Free text; shown to readers on a published item's page (Rule 9d). Text typed here with no other box changed is lost without a question when another tab is pressed (Rule 2c) [A19](#a19) <sup>f</sup> |
 | "Homepage URL" | no | Must be a full web address including "http://" or "https://", else "Please enter a valid URL." under the box and nothing is sent; that sentence stays after the corrected address is saved [A15](#a15). Up to 255 characters <sup>f</sup> |
 
 **Password tab** (instructions: "Enter your current and new passwords below to
@@ -139,33 +140,49 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
    screens lead here too: the registration completion page's "Edit My
    Profile" (opening Identity) and the emailed email-change links (opening
    Contact, Rule 6). <sup>a</sup>
-2. **Saving is per tab.** "Save" on a tab saves that tab only. On success
-   the tab stays open and "Your changes have been saved." appears. Where it
-   appears depends on the tab: on Contact, Roles, Public, Password and
-   Notifications as a dismissable message at the top right of the page,
-   outside the tab; on Identity inside the tab only, until the tab is next
-   opened; on API Key inside the tab, after "Create API Key" and after
-   "Delete" (Rule 12). The Contact tab's "Cancel" of a pending email change
-   answers inside the tab as well (Rule 6e). A check the browser makes
-   stops the save before anything is sent and puts its sentence directly
-   under the box (Fields above). A check the server makes comes back with
-   the tab re-rendered: the Password tab in an in-tab notice headed "Errors
-   occurred processing this form" (Rule 10a), the Contact tab as the
-   top-right message plus the box's label (Fields above). Whichever check
-   fails, nothing on the tab is saved. Pressing another tab while the open
-   tab holds changes that were never sent (typed and not yet saved, or
-   stopped by a browser check) first asks, in the browser's own dialog,
-   "The data on this form has changed. Do you wish to continue without
-   saving?": OK opens the other tab and those changes are lost; Cancel
-   keeps the tab as it is. After a save the server refused, the re-rendered
-   tab asks nothing: pressing another tab opens it at once, and the values
-   typed before that save are gone ⚠ [A17](#a17); only a change typed into
-   the tab after the refusal is asked about again. Each tab reloads
-   its own content when opened, so a change saved on one tab is visible on
-   another only after that tab is opened again. A tab named in the address
-   (its name after a slash, for example "…/user/profile/contact") opens the
-   page on that tab; an unknown name opens Identity without comment.
-   <sup>b</sup>
+2. **Saving is per tab.** <sup>b</sup>
+   - 2a. **Saving.** "Save" on a tab saves that tab only. On success the
+     tab stays open and "Your changes have been saved." appears. Where it
+     appears depends on the tab: on Contact, Roles, Public, Password and
+     Notifications as a dismissable message at the top right of the page,
+     outside the tab; on Identity inside the tab only, until the tab is
+     next opened; on API Key inside the tab, after "Create API Key" and
+     after "Delete" (Rule 12). The Contact tab's "Cancel" of a pending
+     email change answers inside the tab as well (Rule 6e).
+   - 2b. **Refusals.** A check the browser makes stops the save before
+     anything is sent and puts its sentence directly under the box (Fields
+     above). A check the server makes comes back with the tab re-rendered:
+     the Password tab in an in-tab notice headed "Errors occurred
+     processing this form" (Rule 10a), the Contact tab as the top-right
+     message plus the box's label (Fields above). Whichever check fails,
+     nothing on the tab is saved.
+   - 2c. **Another tab, with changes unsent.** Pressing another tab while
+     the open tab holds a change that was never sent (typed and not yet
+     saved, or stopped by a browser check) first asks, in the browser's own
+     dialog, "The data on this form has changed. Do you wish to continue
+     without saving?". OK opens the other tab, and every unsent change on
+     the tab is lost, rich text included. Cancel keeps the tab as it is,
+     every typed value still there. The one exception is text typed into
+     a rich-text box ("Signature" and "Mailing Address" on Contact, "Bio
+     Statement" on Public) with nothing else changed: it raises no
+     question, the other tab opens at once, and reopening the tab shows
+     the saved text instead ⚠ [A19](#a19).
+   - 2d. **Another tab, after a refused save.** After a save the server
+     refused, the re-rendered tab asks nothing: pressing another tab opens
+     it at once, and the values typed before that save are gone
+     ⚠ [A17](#a17). Only a change typed into the tab after the refusal is
+     asked about again.
+   - 2e. **Reloading the page.** Reloading the page while the open tab
+     holds an unsent change outside the rich-text boxes ("Phone", say) asks
+     the browser's own leave-page question, in the browser's wording;
+     leaving discards the change, and the tab shows the saved value again.
+     With only rich text typed, the reload asks nothing and the text is
+     gone [A19](#a19).
+   - 2f. **Opening a tab.** Each tab reloads its own content when opened,
+     so a change saved on one tab is visible on another only after that
+     tab is opened again. A tab named in the address (its name after a
+     slash, for example "…/user/profile/contact") opens the page on that
+     tab; an unknown name opens Identity without comment.
 3. **Journal-level and site-level profile.** The page normally belongs to the
    journal it was opened in: the Roles tab leads with that journal (Rule 8),
    the ORCID block appears there, and the Notifications tab applies to it
@@ -201,15 +218,15 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
    Initials" in capitals, after the next page load. Left blank, it shows the
    first letter of the given name followed by the first letter of the family
    name; with a given name only, that one letter. <sup>c</sup>
-6. **Changing the email address.** The Contact tab's "Email" is the only
-   profile field that does not change on Save. <sup>d</sup>
+6. **Changing the email address.** The Contact tab's "Email address" is the
+   only profile field that does not change on Save. <sup>d</sup>
    - 6a. **Request.** Saving the Contact tab with a different, valid, unused
      address saves the other Contact fields at once, but keeps the old
      address in force and records the new one as *pending*. From then on the
      tab shows "You have requested a change of your email to "{new address}".
      We have already sent you an email with directions on how to validate the
-     changed email." with a "Cancel" button, and the "Email" box is read-only.
-     The account's other signed-in sessions carry on unaffected.
+     changed email." with a "Cancel" button, and the "Email address" box is
+     read-only. The account's other signed-in sessions carry on unaffected.
    - 6b. **The email.** One message, subject "Confirm account contact email
      change request", is sent to the account's **current** address, not the
      new one ⚠ [A8](#a8); a later request goes to whichever address is
@@ -240,8 +257,8 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
      Invitation" discards the request and lands on the site-level
      profile's Contact tab.
    - 6e. **Cancel.** The tab's "Cancel" discards the pending request without
-     email: the notice disappears, "Email" becomes editable again showing
-     the old address, and the emailed links stop working. The only feedback
+     email: the notice disappears, "Email address" becomes editable again,
+     showing the old address, and the emailed links stop working. The only feedback
      is "Your changes have been saved.", shown inside the tab rather than at
      the top right.
    - 6f. **One at a time, three days.** While a request is pending no second
@@ -582,7 +599,7 @@ tooling recipe are in the footnote. <sup>s</sup>
    - **A tab named in the address**: copy the page's address from the
      browser's address bar. Open it with "/contact" added after "profile":
      the page opens on "Contact". Open it with "/nowhere" added instead: the
-     page opens on "Identity" without comment (Rule 2).
+     page opens on "Identity" without comment (Rule 2f).
    - **Signed out at the profile address**: sign out and open the copied
      address: the Login page appears, and signing in continues to the
      Profile page.
@@ -640,7 +657,7 @@ tooling recipe are in the footnote. <sup>s</sup>
      continue without saving?". Press Cancel: the "Contact" tab stays as it
      is, "555 0100" still typed. Press "Identity" again and OK: "Identity"
      opens, and reopening "Contact" shows "Phone" as it was before
-     (Rule 2).
+     (Rule 2c).
    - **A valid save**: choose "Canada" in "Country", set "Phone" to
      "555 0100" and "Affiliation" to "Contact Institute", and save: "Your
      changes have been saved." at the top right, and reopening the tab
@@ -650,14 +667,14 @@ tooling recipe are in the footnote. <sup>s</sup>
      reopening the tab shows it ticked, and the site is still shown in the
      same language as before (Rule 7).
    - **Another account's address**: type the other account's email address
-     into "Email", set "Phone" to "555 0199", and save: "The selected email
-     address is already in use by another user." appears at the top right
-     and as the text of the box's label.
+     into "Email address", set "Phone" to "555 0199", and save: "The
+     selected email address is already in use by another user." appears at
+     the top right and as the box's label.
    - **Another tab after the refused save**: press "Identity": it opens at
      once, with no question about unsaved changes [A17](#a17).
    - **Control**: press "Contact" again: the address is unchanged and
      "Phone" reads "555 0100"; the refused save saved none of the tab's
-     other changes (*Fields & validation*, "Email").
+     other changes (*Fields & validation*, "Email address").
 
 4. **Change the email address by confirming the emailed link**
 
@@ -665,11 +682,11 @@ tooling recipe are in the footnote. <sup>s</sup>
    the profile's "Contact" tab in the first, with a fresh throwaway address
    at hand. <sup>s</sup>
 
-   - **The request**: type the throwaway address into "Email" and save: the
-     tab now reads "You have requested a change of your email to "{new
-     address}". We have already sent you an email with directions on how to
-     validate the changed email." with a "Cancel" button, and the "Email"
-     box is read-only, still showing the old address.
+   - **The request**: type the throwaway address into "Email address" and
+     save: the tab now reads "You have requested a change of your email to
+     "{new address}". We have already sent you an email with directions on
+     how to validate the changed email." with a "Cancel" button, and the
+     "Email address" box is read-only, still showing the old address.
    - **The second browser**: in the second browser, signed in as the same
      account, press "Identity": the tab opens with the account's names; the
      session carries on unaffected (Rule 6a).
@@ -679,8 +696,8 @@ tooling recipe are in the footnote. <sup>s</sup>
      receives nothing [A8](#a8).
    - **The "confirm" link, signed in**: in the first browser, open the
      message's "confirm" link: the browser lands on the profile's "Contact"
-     tab with "Email" editable and showing the new address, and "Your
-     changes have been saved." at the top right (Rule 6c).
+     tab with "Email address" editable and showing the new address, and
+     "Your changes have been saved." at the top right (Rule 6c).
    - **No further email**: neither mailbox receives a further message
      (*Side effects*).
    - **Signing in with the new address**: sign out; on the Login page enter
@@ -698,7 +715,7 @@ tooling recipe are in the footnote. <sup>s</sup>
    - **"Cancel" on the tab**: request a change to the first throwaway
      address as in scenario 4, then press the tab's "Cancel": "Your changes
      have been saved." appears inside the tab, the notice disappears and
-     "Email" shows the old address, editable.
+     "Email address" shows the old address, editable.
    - **The cancelled message's "confirm" link**: still signed in, open the
      "confirm" link of the message that arrived: the "Invitation
      Unavailable" page.
@@ -868,7 +885,7 @@ tooling recipe are in the footnote. <sup>s</sup>
    - **A second key**: press "Create API Key" again: the new key differs
      from the deleted one (Rule 12b).
    - **Control**: throughout, no message appeared at the top right of the
-     page: the API Key tab answers inside the tab (Rule 2).
+     page: the API Key tab answers inside the tab (Rule 2a).
 
 10. **The Notifications tab is a form of paired boxes**
 
@@ -962,6 +979,7 @@ Left out of the scenarios above, by reason:
 - **Budget** — variants:
   - a tab named in the site-level address kept on the forward to a one-journal user's profile (Rule 3; scenario 2 opens the site-level address with no tab named, and scenario 1 reads a tab named in a journal's address)
   - no submission or activity-log entry written by this page (*Side effects*): the log is a submission's, and reading its silence needs a submission and a positive control for nothing this page does
+  - the browser's own leave-page question on reloading the page with an unsent "Phone" (Rule 2e; scenario 3 asks the same question of another tab)
 - **Nothing new to test**:
   - "reject" on a request made on the site-level profile itself (Rule 6d; the same "Decline Invitation" page and button as scenario 5's request made inside a journal)
   - "View Profile" in the menu under the username on the journal's public pages (Rule 1; scenario 1's "Edit Profile" opens the same page)
@@ -974,8 +992,9 @@ Left out of the scenarios above, by reason:
   - A12 (the Password tab's "Cancel" doing nothing; Rule 10c)
   - A14 (the site-level privacy link opening "404 Not Found"; Rule 14)
   - A15 (the refused homepage's sentence outliving the corrected save; Rule 9c; scenario 7 marks it)
-  - A17 (the values typed before a refused Contact save dropped on the next tab, unasked; Rule 2; scenario 3 marks it)
+  - A17 (the values typed before a refused Contact save dropped on the next tab, unasked; Rule 2d; scenario 3 marks it)
   - A18 ("confirm" and "reject" landing an account with roles in more than one journal on the site-level profile; Rules 6c and 6d)
+  - A19 (text typed only into "Signature", "Mailing Address" or "Bio Statement" lost unasked on the next tab or a reload; Rules 2c and 2e)
   - OPS2 (the "Change Email Address Invitation" template missing from a preprint server's list; *Side effects*)
   - A5 (the "role scheduled to begin" banner shown wherever the user has no role; Rule 13)
   - A6 (unticking a box ending a role a manager granted, without warning; Rule 8b)
@@ -1024,6 +1043,7 @@ unless its Basis line says otherwise.
 | [A15](#a15) | "Please enter a valid URL." stays under "Homepage URL" after the corrected address is saved, beside the saved message | 🐞 | minor | — |
 | [A17](#a17) | After a Contact save the server refused, the typed values are still on screen, but pressing another tab drops them at once, with no question asked | 🐞 | user-visible | — |
 | [A18](#a18) | "confirm" and "reject" land an account with roles in more than one journal on the site-level profile, outside the journal where it asked for the email change | 🐞 | minor | @jarda.kotesovec 2026-09-25 · risk accepted |
+| [A19](#a19) | Text typed only into "Signature", "Mailing Address" or "Bio Statement" is lost with no question when another tab is pressed or the page is reloaded | 🐞 | user-visible | — |
 | [OPS2](#ops2) | A preprint server sends the email-change message but its emails list has no "Change Email Address Invitation" row to edit | 🐞 | user-visible | — |
 | [A5](#a5) | The "role scheduled to begin" banner shows in any journal where the user has no role, even when the waiting role is elsewhere | ❓ | minor | — |
 | [A6](#a6) | A user can drop a Reader, Author or Reviewer role a manager gave them by unticking it; an Author is then locked out of My Submissions without warning | ❓ | user-visible | — |
@@ -1207,9 +1227,9 @@ Basis: probe, 2026-09-04. <sup>[f-a16](#fn-a16)</sup>
 When the server refuses a Contact save (for example with "The selected
 email address is already in use by another user."), the tab comes back with
 the typed values still in every box. Pressing another tab then opens it at
-once and those values are gone. The question every other unsaved change
-gets, "The data on this form has changed. Do you wish to continue without
-saving?", is not asked here (Rule 2), although it exists for exactly this
+once and those values are gone. The question the same change gets when no
+save has been tried, "The data on this form has changed. Do you wish to
+continue without saving?", is not asked here (Rule 2d), although it exists for exactly this
 case: the tab shows values that were never saved, and the re-rendered tab
 has simply stopped watching them. A defect, not a choice.
 Basis: probe, 2026-09-04 (claim check). <sup>[f-a17](#fn-a17)</sup>
@@ -1237,6 +1257,19 @@ Since: 2026-09-16 · Basis: probe, 2026-09-17 (OJS); 2026-09-18 (OMP, OPS). <sup
 > a separate issue if it is ever reconsidered. The "reject" link in the
 > shape mailed before the change, which ends in an error page, is not part
 > of this entry and stays tracked as an open regression.
+
+<a id="a19"></a>
+**A19 — Text typed only into a rich-text box is lost unasked** · 🐞 · user-visible.
+On the Profile page, text typed into "Signature" or "Mailing Address" on
+Contact, or into "Bio Statement" on Public, with no other box changed, does
+not count as a change. Pressing another tab opens it at once, with no "The
+data on this form has changed. Do you wish to continue without saving?";
+reopening the tab shows the saved text, and the typed text is gone. A
+reload of the page asks nothing either. Any other unsent change gets the
+question (Rule 2c), so a user who writes a signature or a biography and
+moves to another tab before "Save" loses it without warning, while a
+changed "Phone" beside it would have stopped them.
+Basis: probe, 2026-09-28. <sup>[f-a19](#fn-a19)</sup>
 
 ### OMP
 
@@ -1412,7 +1445,7 @@ left the browser. Country set to the blank entry, phone changed, Save: no
 has changed. Do you wish to continue without saving?" (Cancel kept the tab
 with the blank country and the typed phone; OK opened the other tab, and
 Contact reopened showed the saved country and phone). Another account's
-address typed into "Email", phone changed, Save: one POST to
+address typed into "Email address", phone changed, Save: one POST to
 `profile-tab/save-contact` (HTTP 200, the refusal inside the form JSON),
 the tab re-rendered with "The selected email address is already in use by
 another user." as the toast and the box's label and the typed values still
@@ -1421,7 +1454,21 @@ the other tab opened at once, and Contact reopened showed the account's own
 address and the saved phone. A phone typed into that re-rendered tab after
 the refusal raised the `confirm()` again (Cancel kept it, OK lost it), so
 the tab that comes back from a server refusal tracks changes from scratch,
-and a successful save's positive control still asked nothing.
+and a successful save's positive control still asked nothing. Live-probed
+2026-09-28, all three apps, two runs each on fresh scratch contexts, as a
+scratch author and a scratch section editor (Rules 2c and 2e; A19): an
+unsent "Phone" alone, an unsent "Homepage URL" alone, and "Signature" with
+"Phone" in either order each raised the same `confirm()` on pressing
+"Identity" (Cancel kept Contact with every typed value, "Signature"
+included; OK opened Identity and Contact reopened with both boxes as saved);
+text in "Signature", "Mailing Address" or "Bio Statement" alone raised
+nothing (note f-a19). Reloading the page with "Phone" typed and left raised
+the browser's `beforeunload` dialog (Playwright reports no message; the
+wording is the browser's), answered to leave, and Contact then showed the
+saved, empty phone; with only "Signature" typed the reload raised no dialog
+and the text was gone. Mechanism: `SiteHandler.pageUnloadHandler_` asks
+for any form that has raised `formChanged`. Leaving by a link to another
+page was not driven.
 
 <a id="fn-c"></a>
 **c** — `PKP\user\form\IdentityForm` (`user/identityForm.tpl`): username as
@@ -1511,6 +1558,12 @@ and family names, biography, affiliation (through
 `Repo::affiliation()->migrateUserAffiliation()`), country, email and URL,
 and never reads `orcid` or `orcidIsVerified` (re-read 2026-09-04; finding
 A16).
+Label: the box's label is `user.email`, which lib/pkp defines twice,
+"Email address" in `locale/en/common.po` and "Email" in
+`locale/en/user.po`; the screen shows the first. Live-probed 2026-09-28,
+all three apps, two runs, as `author.alex` (Fields Contact): the box is
+labelled "Email address" with the asterisk (accessible name `Email
+address*`); the refusal's label text was not driven that day.
 Signature in emails: `SenderEmailVariable` exposes the sender's
 `getSignature($locale)` as the sender-signature variable. Live-probed
 2026-09-03, all three apps (Rules 6–7; Fields Contact; Side effects): a
@@ -1922,7 +1975,18 @@ link is `index/about/privacy` (`target="_blank"`), which answers "404 Not
 Found" (A14); the site-level Identity tab showed one box per site language
 (two on the fleets, with the "(French)" popover) and no ORCID block; ticking
 French under "Forms" doubled the Identity, Contact and Public boxes on that
-journal only.
+journal only. Live-probed 2026-09-28, all three apps, two runs each (Rule
+14; Fields intro): holds for `author.alex`, `reader.rosa` and site-level
+`admin`: every tab carried exactly one "privacy statement" link with
+`target="_blank"`; on "API Key" and "Identity" it opened
+`publicknowledge/en/about/privacy` headed "Privacy Statement" in a new
+page, and on the site-level profile `index/en/about/privacy`, "404 Not
+Found" (A14). On the API Key tab the link's `href` attribute is the
+address wrapped in three tabs before it and a newline and two tabs after
+it (`apiProfileForm.tpl` writes the `{url …}` inside its `{capture}` on
+its own indented line; the other six templates keep it on one line); the
+browser strips them, and the link opens the same page as on the other
+tabs.
 
 <a id="fn-k"></a>
 **k** — No screen; read from the code (the 2026-09-04 claim check declared
@@ -2294,7 +2358,7 @@ sends back refused is rendered by `AjaxFormHandler` without it, so only
 typing into it sets the flag again (mechanism as in note b, not driven as
 such). Live-probed 2026-09-04 (claim check), twice on each of the three
 apps, the same runs note b cites. Another account's address typed into
-"Email", phone changed, Save: one POST to `profile-tab/save-contact` (HTTP
+"Email address", phone changed, Save: one POST to `profile-tab/save-contact` (HTTP
 200, the refusal inside the form JSON), the tab re-rendered with "The
 selected email address is already in use by another user." as the toast and
 the box's label and the typed values still in the boxes; "Roles" or
@@ -2370,6 +2434,27 @@ Invitation", and "Confirm Decline Invitation" POSTed
 `index/invitation/confirmDecline` 302 → GET
 `index/en/invitation/confirmDecline` 500, a blank page, the request still
 pending.
+
+<a id="fn-a19"></a>
+**f-a19** — `FormHandler.tinyMCEInitHandler_` (lib/pkp
+`js/controllers/form/FormHandler.js`): the editor's blur handler copies its
+text into the form's textarea with `save()` but never raises the form's
+`formChange`, so `formChangesTracked` stays false; `TabHandler.tabsBeforeActivate`
+then has nothing to ask about, and `SiteHandler.pageUnloadHandler_`, which
+asks only for a form that raised `formChanged`, has nothing either.
+Live-probed 2026-09-28, all three apps, two runs each on fresh scratch
+contexts, as a scratch author and (the "Signature" case) a scratch section
+editor: "Signature" typed and "Identity" pressed at once, "Signature" typed
+and then a click into "Phone" (the textarea then held `<p>Unsent signature
+c2</p>`), "Mailing Address" typed, and "Bio Statement" typed on Public each
+opened Identity with no dialog; the tab reopened showed the editor empty
+(read through `tinymce.get(id)`), as it was after a full reload. Controls
+in the same runs: "Phone" alone and "Homepage URL" alone raised the
+`confirm()`; "Signature" with "Phone" raised it, Cancel kept both typed
+values and OK lost both, after a reload too. Reloading with "Signature"
+alone raised no `beforeunload` dialog and the text was gone, while an
+unsent "Phone" raised one (note b). First sighted 2026-09-28 on the
+Contact tab from the editorial-decision claim check, three runs per app.
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp/registry/userGroups.xml`: `permitSelfRegistration="true"`
