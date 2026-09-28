@@ -1058,7 +1058,11 @@ config-file settings.
   `admin` in `users[]` with one more role, end the manager role on the
   admin's own Users & Roles › Edit page ("Remove Role"), and sign in
   again. With an assistant role left (Copyeditor; OPS Editorial Board
-  Member) the workflow opens and "Activity Log" offers "Notes" alone; with
+  Member) the workflow opens and "Activity Log" offers "Notes" alone (its
+  Publication pages read-only, Save and References "Add" disabled, and
+  "Change" of the submission language offered but its Confirm answering
+  401 with "An unexpected error has occurred…"; all three apps,
+  2026-09-28, U40 claim check I28); with
   Reader left the workflow answers "Error / The current role does not have
   access to this operation." over an empty page. Workflow and Activity
   Log, all three apps, 2026-09-23 (`.reports/U38/cc-K1.md` K1-8). With

@@ -44,8 +44,8 @@ is not restated here. <sup>a</sup> <sup>b</sup>
 |--------|--------------------|
 | **See the Title & Abstract, Metadata and Data pages** | • Journal Manager, Editor, Site Administrator: on any submission, assigned or not<br>• Section Editor, Guest Editor, assistant roles: while assigned to the submission's current stage. An assistant assigned to another stage sees the "Publication" entry with no pages beneath it (Rule 1)<br>• the submission's Author: on their own submission, in the author view <sup>a</sup> |
 | **See the Permissions & Disclosure page** | • the editorial roles above, when they have access to the Production stage (managers always). The page is absent from the author view in every app (Rule 1) <sup>a</sup> |
-| **Save changes on any of these pages** | • Journal Manager, Editor, Site Administrator: always, published versions included (Rule 8)<br>• Section Editor, Guest Editor, assistant roles: while their participant assignment carries the metadata-edit permission (Rule 2)<br>• Author: while their assignment carries the permission AND the version they are on is neither published nor scheduled (Rule 9). While another version is published, the Author saves on the unpublished one. A journal or press does not grant the permission by default; a preprint server does [OPS1](#ops1) <sup>b</sup> |
-| **Change the submission language** | • any editorial role who may edit the publication or publish it, while the submission has exactly one version and is not published (Rule 13). A journal article published into a not-yet-published issue is the exception ⚠ [OJS1](#ojs1). An assistant assigned to the current stage without the metadata-edit permission sees the pages read-only (Rule 10) with no "Change" button; the button appears once their assignment carries the permission. The Author is never offered it, in any app <sup>i</sup> |
+| **Save changes on any of these pages** | • Journal Manager, Editor: always, published versions included (Rule 8)<br>• Site Administrator: only through their roles in the journal. While holding the journal's manager role they save as a Journal Manager. One whose manager role was ended (Users & Roles › Edit, "Remove Role"), left with an assistant role, finds Save disabled on Title & Abstract, Metadata and Data (Rule 10) ⚠ [A18](#a18)<br>• Section Editor, Guest Editor, assistant roles: while their participant assignment carries the metadata-edit permission (Rule 2)<br>• Author: while their assignment carries the permission AND the version they are on is neither published nor scheduled (Rule 9). While another version is published, the Author saves on the unpublished one. A journal or press does not grant the permission by default; a preprint server does [OPS1](#ops1) <sup>b</sup> |
+| **Change the submission language** | • any editorial role who may edit the publication or publish it, while the submission has exactly one version and is not published (Rule 13). A journal article published into a not-yet-published issue is the exception ⚠ [OJS1](#ojs1). An assistant assigned to the current stage without the metadata-edit permission sees the pages read-only (Rule 10) with no "Change" button; the button appears once their assignment carries the permission. A Site Administrator left with only an assistant role in the journal (the row above) is offered it, and Confirm fails (Rule 13c) [A19](#a19). The Author is never offered it, in any app <sup>i</sup> |
 | **Set the journal's default copyright and license** | • Journal Manager (and a Site Administrator working in the journal): Settings › Distribution › License <sup>m</sup> |
 | **Reset every submission's permissions to the defaults** | • Journal Manager, Site Administrator: Tools › Permissions (Rule 14) <sup>k</sup> |
 | **Read the license, data availability and funding statement blocks** | • any reader: on a published item's landing page (Rule 15) <sup>l</sup> |
@@ -81,7 +81,7 @@ errors and try again." <sup>c</sup> <sup>d</sup>
 | **Title** | Yes | One-line rich text, multilingual. Required in the submission language once the submission has been submitted. Saving it empty is refused with "This field is required." |
 | **Subtitle** | No | One-line rich text, multilingual. |
 | **Abstract** | Journal/preprint server: yes unless the submission's section is set to "Do not require abstracts" [OMP2](#omp2) | Rich text, multilingual. When the section sets an abstract word count, the field shows "Word Count: {n}/{limit}". Over the limit, the counter gains a red error mark and Save is refused with "The abstract is too long. It should be {limit} words or less. It is currently {n} words long." An empty required abstract is refused with "This field is required." [A7](#a7). A press has no per-section abstract policy: the field is optional with no limit [OMP2](#omp2). |
-| **Plain Language Summary** | Only when the journal *requires* it | Rich text, multilingual, shown after Abstract. Present only when the journal has enabled plain language summaries (Settings that modify behavior). Shares the abstract's word limit. When the journal requires it, every OTHER Publication page's Save is refused for this field, and storing the summary here does not lift the refusal ⚠ [A1](#a1). |
+| **Plain Language Summary** | Only when the journal *requires* it | Rich text, multilingual, shown after Abstract. Present only when the journal has enabled plain language summaries (Settings that modify behavior). Shares the abstract's word limit. In the submission wizard a summary over that limit leaves the wizard stuck on "Saving" ([Submission wizard](U21-submission-wizard.md#a16)). When the journal requires it, every OTHER Publication page's Save is refused for this field, and storing the summary here does not lift the refusal ⚠ [A1](#a1). |
 
 **Metadata page**. Only the items the journal has enabled appear, in the
 settings screen's order. With none enabled the page reads "No metadata
@@ -111,8 +111,8 @@ it for a per-item value (Rule 11). <sup>g</sup>
 |------------------|-----------|-------|
 | **Copyright Holder** | No | Text, multilingual. Description: "Copyright will be assigned automatically to {holder} when this is published." ("… posted." on a preprint server), naming the journal's default holder (Rule 12). |
 | **Copyright Year** | No | A year (whole number). The description names the basis: the article's publication date, or, on a journal set to issue-based copyright, the issue's publication date. |
-| **License URL** | No | Must be a web address. Anything else is refused with "This is not a valid URL." Description: "The license will be set automatically to {license name} when this is published." ("… posted." on a preprint server). The name is the license's name for a Creative Commons choice, or the raw address for an "Other license URL". The description and the Override lock are present only when the journal has a default license. Otherwise the field is plain-editable with no description. On a preprint whose author chose a license while submitting, the field arrives filled and unlocked while the description still names the server's default ⚠ [OPS2](#ops2). |
-| **Default Chapter License URL** {OMP} | No | On an Edited Volume only: the license chapters inherit unless a chapter sets its own [OMP4](#omp4). |
+| **License URL** | No | Must be a web address. Anything else is refused with "This is not a valid URL." Description: "The license will be set automatically to {license name} when this is published." ("… posted." on a preprint server). The name is the license's name for a Creative Commons choice, or the raw address for an "Other license URL". The description and the Override lock are present only when the journal has a default license. Otherwise the field is plain-editable with no description. Once the field holds a license, it is unlocked while the description still names the journal's default: after an editor's override and Save, on the same page and after a reload ⚠ [A20](#a20), and on a preprint whose author chose a license while submitting ⚠ [OPS2](#ops2). |
+| **Default Chapter License URL** {OMP} | No | On an Edited Volume only: the license chapters inherit unless a chapter sets its own [OMP4](#omp4). With no license on the press or the volume it is plain-editable with no description. Once the press has a default license it arrives locked with "Override" and the sentence "The license will be set automatically to {license name} when this is published.", naming the volume's own License URL if one is saved, else the press's license; a License URL just saved on the volume is named only after the page is reloaded. After an override the sentence stays beside the saved address, as License URL's does [A20](#a20). |
 
 ## Rules & state
 
@@ -139,8 +139,9 @@ it for a per-item value (Rule 11). <sup>g</sup>
    <a id="edit-gate"></a>
 2. **May edit the publication: the one gate.** A person may save changes
    to a version's metadata when any of these holds:
-   - they hold the Journal Manager or Editor role, or are the Site
-     Administrator. No participant assignment is needed;
+   - they hold the Journal Manager or Editor role. No participant
+     assignment is needed. The Site Administrator counts only while
+     holding such a role in the journal [A18](#a18);
    - they are a participant on the submission whose assignment carries
      the metadata-edit permission. A new assignment starts from the
      role's setting "Permit submission metadata edit." (Settings ›
@@ -189,7 +190,7 @@ it for a per-item value (Rule 11). <sup>g</sup>
    every other Publication page refuses to save at all ⚠ [A1](#a1).
    <sup>d</sup>
 6. **The Metadata page mirrors the journal's metadata setup.** Each item
-   on Settings › Workflow › Metadata has an "Enable {item} metadata"
+   on Settings › Workflow › Submission › "Metadata" has an "Enable {item} metadata"
    switch. The Metadata page shows exactly the enabled items (Fields &
    validation), in the settings screen's order. The ask/require choice
    under each switch concerns the submission wizard only (see
@@ -319,7 +320,12 @@ it for a per-item value (Rule 11). <sup>g</sup>
       published meanwhile, or is the [OJS1](#ojs1) case) shows the toast
       "You can not change language of this submission because it already
       has more than one publication version or a published publication."
-      and leaves the panel open with its values. <sup>i</sup>
+      and leaves the panel open with its values. A Confirm from someone
+      the journal does not let change the language, though the button
+      was offered (Actors), fails instead: the toast "An unexpected error
+      has occurred. Please reload the page and try again." appears, the
+      panel stays open with its values, and the language is unchanged
+      ⚠ [A19](#a19). <sup>i</sup>
 14. **Reset permissions (Tools › Permissions).** The Tools page's
     "Permissions" tab shows "Reset Article Permissions" ("Reset Monograph
     Permissions" on a press, "Reset Preprint Permissions" on a preprint
@@ -391,7 +397,7 @@ it for a per-item value (Rule 11). <sup>g</sup>
 
 ## Settings that modify behavior
 
-- **Settings › Workflow › Metadata**: one section per item. This feature's
+- **Settings › Workflow › Submission › "Metadata"**: one section per item. This feature's
   items are Keywords, Subjects, Disciplines, Supporting Agencies,
   Coverage, Rights, Source, Type, Funding Statement, Data Availability
   Statement and Plain Language Summary. The screen also carries other
@@ -405,7 +411,11 @@ it for a per-item value (Rule 11). <sup>g</sup>
   ⚠ [A1](#a1). The same screen also holds "Publisher ID" in every app
   (per-app checkboxes enable it for publications and the app's other
   objects, which produces the Publisher ID field) and, journal only,
-  "Article Number". <sup>m</sup>
+  "Article Number". How the tab itself handles its boxes, their choices
+  and unsaved changes is
+  [Submission intake configuration](U58-submission-intake-configuration.md)'s
+  (its Rules 2 and 10): an item unticked and ticked again starts at "Do
+  not request …", whatever was saved. <sup>m</sup>
 - **Settings › Distribution › License**: "Copyright Holder" (Author /
   Journal / Custom copyright statement, with the "Copyright statement"
   text for the last, accepted even when left empty ⚠ [A12](#a12)),
@@ -529,7 +539,7 @@ catcher's address are in its footnote.
    Count" of 50, and a second scratch submission sits in a section set to
    "Do not require abstracts".
 
-   - **Nothing enabled**: on Settings › Workflow › Metadata untick every
+   - **Nothing enabled**: on Settings › Workflow › Submission › "Metadata" untick every
      "Enable … metadata" box and save: the submission's "Metadata" page
      now reads "No metadata fields are currently enabled." with no Save
      button (Rule 6).
@@ -782,7 +792,7 @@ catcher's address are in its footnote.
 
    Given: Journal Manager, on a scratch journal with a scratch submission.
 
-   - **The settings**: on Settings › Workflow › Metadata enable "Data
+   - **The settings**: on Settings › Workflow › Submission › "Metadata" enable "Data
      Availability Statement" and "Funding Statement": the submission's
      Publication area gains a "Data" entry (Rules 6, 16; Settings).
    - **The statements**: on "Data" type "Data are held by the authors." as
@@ -915,6 +925,12 @@ Left out of the scenarios above, by reason:
     Rule 13b)
   - A17 (the Author's Contributors page offering editing on a new version
     of a published item; Rule 9)
+  - A18 (a Site Administrator whose manager role was ended finding the
+    pages read-only; Actors row 3; Rule 2)
+  - A19 (that administrator's "Change" offered and its Confirm failing;
+    Actors row 4; Rule 13c)
+  - A20 (the license sentence beside an editor's override, License URL
+    and Default Chapter License URL; Fields)
   - OMP5 (the press's "License" link that leads nowhere with terms and no
     license; Rule 15; scenario 5 marks it)
 - **Owned by another feature**:
@@ -930,6 +946,9 @@ Left out of the scenarios above, by reason:
     references*)
   - the ask/require radio's effect on the wizard (Rule 6; Settings;
     *Submission wizard*)
+  - the Metadata tab's own boxes, choices and unsaved changes, an item
+    unticked and ticked again included (Settings; *Submission intake
+    configuration*, scenarios 3 and 5)
   - the sections' "Do not require abstracts" and "Word Count" settings
     screen (Settings; *Sections*)
   - the Roles' "Permit submission metadata edit." setting and the
@@ -945,7 +964,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-08-28; A16, A17 and the
-retirement of A4 2026-09-09; the retirement of A16 2026-09-14; A10 settled 2026-09-18; OJS2 and the retirement of A10 2026-09-21), unreviewed unless an entry notes otherwise;
+retirement of A4 2026-09-09; the retirement of A16 2026-09-14; A10 settled 2026-09-18; OJS2 and the retirement of A10 2026-09-21; A18–A20 2026-09-28), unreviewed unless an entry notes otherwise;
 the team settles them on spec review. The summary
 is sorted 🐞 → ❓ → ✅ and the entries below are the source; badges, Impact
 and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
@@ -956,6 +975,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A2](#a2) | Reset permissions stamps Copyright Year 1970 on unpublished items (journal on article-date basis; preprint server) | 🐞 | user-visible | — |
 | [A15](#a15) | The freshly opened language panel acts before its loading settles: stale guidance and prefill kept (journal), an empty required Title accepted (press), the old language's text stored as the new title (preprint server) | 🐞 | user-visible | — |
 | [A13](#a13) | Cancelling the reset-permissions confirm box leaves the button greyed until a reload | 🐞 | minor | — |
+| [A19](#a19) | A Site Administrator left with only an assistant role is offered "Change" (submission language), and Confirm fails with a message that names nothing | 🐞 | minor | — |
 | [OJS1](#ojs1) | An article published into a not-yet-published issue keeps "Change", and every language change on it is refused | 🐞 | minor | — |
 | [OMP5](#omp5) | With License Terms but no license, the book page shows a "License" link that leads nowhere | 🐞 | minor | — |
 | [A3](#a3) | Reset permissions rewrites every submission, unpublished and declined included, and logs one "metadata updated" line per version | ❓ | user-visible | — |
@@ -966,6 +986,8 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A11](#a11) | The automatic copyright holder carries the contributor's role: "Copyright (c) 2026 Alice Probe (Author)" on the reader's page | ❓ | minor | — |
 | [A12](#a12) | "Custom copyright statement" saves with an empty statement; items then publish with no holder | ❓ | minor | — |
 | [A14](#a14) | The language panel's Abstract is required but described as "recommended" | ❓ | minor | — |
+| [A18](#a18) | A Site Administrator whose manager role in the journal was ended finds Title & Abstract, Metadata and Data read-only, while the workflow header still offers publishing and "Change" | ❓ | minor | — |
+| [A20](#a20) | After an override, License URL (and a press's Default Chapter License URL) keeps the sentence naming the default beside the saved address | ❓ | minor | — |
 | [OJS2](#ojs2) | Whether a scheduled article's terms are offered as suggestions: Rule 7b names no scheduled source | ❓ | minor | — |
 | [OMP3](#omp3) | The press's reset-permissions wording is the older text | ❓ | minor | — |
 | [OPS2](#ops2) | A wizard-chosen license shows beside a sentence promising the server's default | ❓ | minor | — |
@@ -983,7 +1005,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 <a id="a1"></a>
 **A1 — Requiring a plain language summary blocks every other save** · 🐞 · user-visible.
-With Settings › Workflow › Metadata set to "Require the author to provide
+With Settings › Workflow › Submission › "Metadata" set to "Require the author to provide
 a plain language summary…", pressing Save on the Metadata, Data or
 Permissions & Disclosure page is refused with "Please correct one error.
 Go to plainLanguageSummary: This field is required. Jump to next error".
@@ -1167,6 +1189,58 @@ the permitted Author on the new version while another is published,
 press "Add Contributor", fill the required boxes, Save, then reload.
 Since: live-probed 2026-09-09 · Basis: probe. <sup>f-a17</sup>
 
+<a id="a18"></a>
+**A18 — A Site Administrator without a manager role cannot save** · ❓ · minor.
+A Site Administrator whose manager role in a journal was ended, leaving
+an assistant role (Copyeditor; Editorial Board Member on a preprint
+server), still opens a submission's workflow by its address, with the
+full editorial menu, and the workflow header offers "Change" and
+"Schedule For Publication" ("Publish" on a press, "Post" on a preprint
+server). Yet Title &
+Abstract, Metadata and Data show Save disabled, and nothing typed there
+is left after a reload. The References page's "Add" and "Delete all
+references" are disabled too, and the Data page offers no "Add Data
+Citation" (see *[Citations & references](U42-citations-and-references.md)*).
+With the manager role kept, the same administrator saves everywhere.
+Question: should being the Site Administrator let someone save here
+whatever their roles in the journal? Lean: no. The Site Administrator
+takes part in a journal's work through a journal role, and the pages
+follow that; the "Change" offered beside them does not (A19).
+Basis: probe. <sup>f-a18</sup>
+
+<a id="a19"></a>
+**A19 — "Change" is offered to the same administrator, and Confirm fails** · 🐞 · minor.
+The administrator of A18 is offered "Change" beside "Current Submission
+Language" and gets the full panel (Title and Abstract on a journal or
+preprint server, Title alone on a press). Confirm fails: the toast "An
+unexpected error has occurred. Please reload the page and try again."
+appears, the panel stays open with the typed values, and the submission
+language is unchanged. The screen should either not offer "Change" or
+carry the change out, and the message names no reason. By the app's
+code, an assistant whose assignment carries the metadata-edit
+permission, who is offered "Change" the same way (Actors), meets the
+same refusal; that was not tried.
+Settled by (the assistant half): as a Copyeditor whose assignment
+carries the permission, pick another language in the panel, fill the
+boxes and Confirm.
+Basis: probe. <sup>f-a19</sup>
+
+<a id="a20"></a>
+**A20 — The license sentence names the default beside an override** · ❓ · minor.
+On Permissions & Disclosure, after "Override" on License URL and another
+license saved, the field shows the saved address, unlocked, also after a
+reload. Yet the sentence beneath still reads "The license will be set
+automatically to {the journal's default license} when this is
+published." ("… posted." on a preprint server), in every app. On a
+press's Edited Volume, "Default Chapter License URL" keeps its sentence
+beside its own overriding address in the same way. The sentence is
+wrong, not the value. A preprint whose author chose a license in the
+submission wizard shows the same (OPS2).
+Question: should the sentence follow the stored value, or disappear
+once the field holds one? Lean: disappear, as for OPS2. It describes an
+automatic fill that will not happen.
+Basis: probe. <sup>f-a20</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -1224,9 +1298,9 @@ Basis: code. <sup>f-omp3</sup>
 <a id="omp4"></a>
 **OMP4 — Default Chapter License URL for edited volumes** · ✅ · user-visible.
 On an Edited Volume, the Permissions & Disclosure page adds "Default
-Chapter License URL", locked with an Override link describing the
-license it inherits (the volume's own License URL, else the press
-default). A Monograph has no such field. Chapters are a press-only
+Chapter License URL", locked with an Override link and a sentence naming
+the license it inherits (Fields & validation). A Monograph has no such
+field. Chapters are a press-only
 object.
 Since: live-probed 2026-08-28 · Basis: probe. <sup>f-omp4</sup>
 
@@ -1258,6 +1332,7 @@ unlocked (no Override). Yet the sentence beneath still reads "The
 license will be set automatically to {server default} when this is
 posted." Posting keeps the author's choice. The sentence is wrong, not
 the value.
+The same sentence stays beside an editor's override in every app (A20).
 Question: should the sentence follow the stored value, or disappear once
 the field is filled? Lean: disappear. It describes the automatic fill,
 which will not happen.
@@ -1377,8 +1452,9 @@ Role setting label `settings.roles.permitMetadataEdit` ("Permit
 submission metadata edit."). Site Administrator: server bypass explicit
 in `editPublication()`; on the client the mapped publication property,
 whose `canEditPublication()` has no site-admin clause (the old
-submission-level map had one), so an administrator with no journal role
-now reads false on screen — a code reading, see the limitation below.
+submission-level map had one), so an administrator without a
+manager-level role in the journal reads false on screen — seen live
+2026-09-28 (below).
 Live-probed 2026-08-28 on all three apps: the Assign Participant /
 "Edit Assignment" dialogs show the "Permissions" box labelled "Allow
 this person to make changes to the publication, such as the title,
@@ -1398,9 +1474,28 @@ role. At least one role must be assigned to the user."; the manager's
 "Remove User" ends in the generic "Error An unexpected error has
 occurred…" dialog). That administrator opened the workflow by URL, saw
 the full editorial nav including Permissions & Disclosure, and saved
-on all three apps. The pure no-role case rests on the server bypass in
-the code; settling observation: the same drive in a context where the
-administrator holds no role. Live-probed 2026-09-09 (Actors row "Save
+on all three apps. Live-probed 2026-09-28 (Actors row "Save changes",
+Rule 2, A18; OJS, OMP and OPS, scratch contexts, four runs, identical):
+`admin` seeded with an assistant role beside the manager role
+(Copyeditor; OPS Editorial Board Member) and not a participant; on
+Users & Roles › Edit, the manager row's "Remove Role" asked "Are you
+sure you want to remove this role? The user will lose access and
+permissions associated with it." and ended it (`PUT
+users/1/endRole/{id}` 200), the assistant role left. Signed in again
+and opening the submission's workflow by address: the full editorial
+nav, Permissions & Disclosure included; Title & Abstract, Metadata and
+Data had Save present and disabled, fields typeable, no request sent,
+the typed text on the page until a reload and gone after it;
+References had "Add" and "Delete all references" disabled and no "More
+Actions" on its rows; Data had no "Add Data Citation" ("No data
+citations have been added."). Permissions & Disclosure was listed but
+not opened (the same client flag). Control, `admin` in a second context
+with the manager role kept: every Save `PUT publications/{id}` 200,
+"Saved", kept after a reload; References "Add" 200. A truly role-less
+administrator stays out of reach from the screens (the last role's
+removal refuses as quoted above), and the server's own bypass for the
+Site Administrator was not exercised: no Save could be pressed.
+Live-probed 2026-09-09 (Actors row "Save
 changes", Rule 2; OJS, OMP and OPS, scratch contexts): the "Edit
 Assignment" string identical on all three; Roles › Author › "Permit
 submission metadata edit." unticked on the journal and press, ticked on
@@ -1467,7 +1562,11 @@ close (a read 15 s later had missed it). Leaving a Publication page with
 an unsaved edit, by opening "Metadata" or by another address, opened no
 browser dialog and no app prompt, in the editable and the read-only
 state alike (a dialog listener armed before each switch; the typed text
-gone on return).
+gone on return). Live-probed 2026-09-28 (Rule 10 on Permissions &
+Disclosure; all three apps, scratch manager): Copyright Holder
+overridden, "Unsaved Holder I28" typed, the side menu's "Title &
+Abstract" opened: no browser dialog, no app prompt; back on Permissions
+& Disclosure the field was locked and empty with "Override" again.
 
 <a id="fn-d"></a>
 **d — Title & Abstract.** `PKP\components\forms\publication\TitleAbstractForm`:
@@ -1650,8 +1749,21 @@ description and no Override. OPS wizard-created preprint (license "CC
 Attribution-ShareAlike 4.0" chosen): License URL filled and enabled, no
 Override, description still "The license will be set automatically to
 CC Attribution 4.0 when this is posted." (OPS2; the description is a
-fixed sentence — whether it also stays beside an editor's override on a
-journal was not read).
+fixed sentence). Live-probed 2026-09-28 (Fields "License URL" and
+"Default Chapter License URL", A20; OJS, OMP and OPS, scratch manager,
+three runs, identical): before any context license the field was
+editable with no description and no Override (OMP's chapter field the
+same); after "Author" and "CC Attribution 4.0" were saved on Settings ›
+Distribution › License (`PUT contexts/{id}` 200) the fields arrived
+locked with "Override", the holder sentence naming "Ava Author (Author)"
+and the license sentence "CC Attribution 4.0" (OPS "… posted."). License
+URL overridden, `https://creativecommons.org/licenses/by-nc/4.0` typed,
+Save (`PUT publications/{id}` 200, "Saved"): on the same page and after
+a reload the value kept, the input enabled, no Override, and the
+sentence still "The license will be set automatically to CC Attribution
+4.0 when this is published." (OPS "… posted.") — the sentence stays
+beside an editor's override in every app, not only beside the OPS
+wizard's choice.
 
 <a id="fn-h"></a>
 **h — publish-time fill.** `PKP\publication\Repository::publish()`:
@@ -1722,8 +1834,10 @@ chosen locale, description `…metadataDescription.{title,abstract}`; buttons
 `common.confirm`/`common.cancel`), repopulates the boxes from the
 publication's stored values on locale change (`setCustom`), PUTs to
 `…/changeLocale`, `window.location.reload()` on success. Server
-`PKPSubmissionController::changeLocale()` (roles MANAGER/SUB_EDITOR/
-ASSISTANT; publication-write policy): refuses with
+`PKPSubmissionController::changeLocale()` (roles MANAGER/SUB_EDITOR,
+the route group it shares with decisions and versions, at the pinned
+commits as at 2026-09-28 — an earlier reading here listed ASSISTANT too;
+publication-write policy): refuses with
 `api.submission.403.cantChangeSubmissionLanguage` when no locale, more
 than one publication, or the publication's status is `STATUS_PUBLISHED`
 — `STATUS_SCHEDULED` passes (A5); merges multilingual props, runs
@@ -1972,7 +2086,7 @@ use the issue's publication date." with "Use the issue's publication
 date" (selected on a fresh journal) / "Use the article's publication
 date", absent on OMP and OPS; "License Terms" rich text with "Enter
 public licensing terms you would like to display alongside published
-work."; Save. Settings › Workflow › Metadata: "Enable funding statement
+work."; Save. Settings › Workflow › Submission › "Metadata": "Enable funding statement
 metadata" / "Enable data availability statement metadata" boxes as
 quoted; the full section-heading roster (2026-08-28, scratch manager,
 OJS, in order): "Plain Language Summary, Keywords, Subjects,
@@ -1982,6 +2096,28 @@ Statement, Funders, Funder Grant ID validation, Data Availability
 Statement, Data Citations, Categories, Publisher ID, Article Number" —
 OMP identical minus Article Number, OPS the same shape: "Publisher ID"
 is present on all three apps, "Article Number" on OJS only.
+Live-probed 2026-09-28 (Settings bullet 1; OJS, OMP and OPS, scratch
+manager, Keywords seeded off and Subjects at "Ask", three runs,
+identical), matching *Submission intake configuration* Rules 2 and 10:
+a first tick of "Enable keyword metadata" selected "Do not request
+keywords from the author during submission."; an unticked item showed
+no choices; unticking and re-ticking "Enable keyword metadata" (saved
+at "Require…") and "Enable subject metadata" (at "Ask…") selected "Do
+not request …" for both before any Save, and Save (`PUT contexts/{id}`
+200) stored that, the reload reading it. An unsaved choice and two
+unsaved "Publisher ID" boxes survived a switch to the side tab "Disable
+Submissions" and back, with no question, and were dropped with no
+browser or app question when the page was left by the side menu's
+"Website", by a typed address (Settings › Distribution) or by a reload.
+The "Publisher ID" boxes read "Enable for Publications", "Enable for
+Galleys", "Enable for Issues", "Enable for Issue Galleys" (OJS);
+"Enable for Monographs", "Enable for Chapters", "Enable for Publication
+Formats", "Enable for Files" (OMP); "Enable for Preprints", "Enable for
+Galleys" (OPS). Each landing on Settings › Website from the side menu
+also answered a server error on the Plugin Gallery's list
+(`plugin-gallery-grid/fetch-grid`, 500), which is
+[Plugins management's A1](U62-plugins-management.md#a1); the Metadata
+tab itself was unaffected.
 
 <a id="fn-s1"></a>
 **s1 — scenario 1 seeding.** One scratch submission past the wizard (any
@@ -2461,6 +2597,51 @@ contributor save was attempted. The page belongs to
 the lean rests on its saves sharing the publication write gate of fn-b
 (a code reading), not on a drive.
 
+<a id="fn-f-a18"></a>
+**f-a18 — A18 evidence.** fn-b: the client's
+`canCurrentUserChangeMetadata` comes from
+`Repo::submission()->canEditPublication()`, which has no Site
+Administrator clause, while `PKPSubmissionController::editPublication()`
+skips that check for `ROLE_ID_SITE_ADMIN`; whether the rest of the
+write policy (`PublicationWritePolicy`, its `StageRolePolicy`) lets an
+unassigned administrator through was not read. Live-probed 2026-09-28
+on OJS, OMP and OPS (fn-b's drive, four runs): Save disabled on Title &
+Abstract, Metadata and Data, nothing kept after a reload; References
+"Add" and "Delete all references" disabled, no "More Actions"; Data
+without "Add Data Citation"; the header's "Change" and "Schedule For
+Publication" (OMP "Publish", OPS "Post") enabled, the latter not
+pressed. Control with the manager role kept: every save 200 and kept.
+
+<a id="fn-f-a19"></a>
+**f-a19 — A19 evidence.** The readout's "Change" follows
+`canPublish || canEditPublication` (fn-i); the route
+`PUT submissions/{id}/publications/{id}/changeLocale` admits
+`ROLE_ID_MANAGER` and `ROLE_ID_SUB_EDITOR` only (fn-i), so the request
+is refused before any rule of Rule 13c is read. Live-probed 2026-09-28
+on OJS, OMP and OPS (fn-b's administrator, runs 2–4): "Change" enabled
+on every Publication page; the panel's second language picked, Title
+(and on OJS and OPS Abstract) filled, Confirm: `PUT …/changeLocale` 401
+`{"error":"user.authorization.roleBasedAccessDenied","errorMessage":"The
+current role does not have access to this operation."}`, the toast "An
+unexpected error has occurred. Please reload the page and try again.",
+the panel open with its values; after a reload the readout still named
+the first language. On OJS and OPS the second run's Confirm with the
+Abstract left empty was refused in the browser ("This field is
+required.") with no request, as Rule 13b says. Control, the
+administrator with the manager role kept: 200, the panel closed, the
+language changed, on all three apps. The assistant half is a code
+reading of the route group; a permitted Copyeditor's Confirm was never
+driven (fn-i's 2026-08-28 Confirm was the manager's).
+
+<a id="fn-f-a20"></a>
+**f-a20 — A20 evidence.** fn-g: `PKPPublicationLicenseForm` builds the
+`licenseUrl` description from the context's `licenseUrl` whatever the
+publication stores (f-ops2); OMP's `chapterLicenseUrl` description
+reads the publication's own `licenseUrl`, else the context's, when the
+form is built, hence the change only after a reload (f-omp4).
+Live-probed 2026-09-28 on OJS, OMP and OPS (fn-g, f-omp4; three runs,
+identical).
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1 — OJS1 evidence.** An OJS submission whose publication is
 published into an unpublished issue carries the SUBMISSION status
@@ -2523,7 +2704,20 @@ is published."; an override to the CC BY-SA address survived Save and
 reload (enabled, no Override); after the volume's own License URL was
 overridden to CC BY-NC the chapter field's sentence read "The license
 will be set automatically to CC Attribution-NonCommercial 4.0 when this
-is published."
+is published." Live-probed 2026-09-28 (Fields "Default Chapter License
+URL", A20; scratch press, Edited Volume seeded, "Author" and "CC
+Attribution 4.0" saved on Settings › Distribution › License, three
+runs, identical): before the press license the field was editable with
+no description and no Override; after it, locked with "Override" and
+"The license will be set automatically to CC Attribution 4.0 when this
+is published."; "Override" unlocked it with the sentence unchanged;
+`https://example.org/chapter-license` typed and saved (`PUT
+publications/{id}` 200, "Saved"): on the same page and after a reload
+the value kept, the input enabled, no Override, the sentence still
+naming CC Attribution 4.0. With the volume's own License URL then saved
+as CC BY-NC, the chapter sentence still named "CC Attribution 4.0" on
+the same page and read "… CC Attribution-NonCommercial 4.0 when this is
+published." only after a reload, beside the stored chapter address.
 
 <a id="fn-f-omp5"></a>
 **f-omp5 — OMP5 evidence.** `monograph_full.tpl` prints
