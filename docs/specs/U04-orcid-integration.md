@@ -184,23 +184,23 @@ What the field shows in the French interface: Rule 17a.
 16. A preprint server's install additionally ships the retired ORCID Profile
     plugin from the time before the built-in integration [OPS3](#ops3). The
     built-in integration this spec describes is what runs everywhere.
-17. **The French interface: the settings tabs.** ⚠ [A11](#a11) In French,
-    the journal's tab on Settings → Users & Roles and the site's side tab
-    on Administration › Site Settings are both named "Plugiciel de profil
-    ORCID" ("ORCID Profile Plugin") where the English interface says
-    "ORCID". On the site's tab the box reads
-    "##orcid.manager.siteWide.enabled##" and its explanation
-    "##orcid.manager.siteWide.description##": raw codes, the text's
-    internal name between "##" marks, shown where a translation is
-    missing. The three fields the box reveals are in French
-    ("API ORCID", "Identifiant ORCID du client", "Clé secrète du client"),
-    and so is the journal's tab throughout. <sup>n</sup>
+17. **The French interface: the settings tabs.** ⚠ [A11](#a11) In French
+    ("français" or "French" in "Change Language", the one installed), the
+    journal's tab on Settings → Users & Roles and the site's side tab on
+    Administration › Site Settings are named "Plugiciel de profil ORCID"
+    ("ORCID Profile Plugin") instead of "ORCID". On the site's tab the box
+    reads "##orcid.manager.siteWide.enabled##" and its explanation
+    "##orcid.manager.siteWide.description##": raw codes, a text's
+    internal name between "##" marks where its translation is missing.
+    The three fields the box reveals are in French ("API ORCID",
+    "Identifiant ORCID du client", "Clé secrète du client"), as is the
+    journal's whole tab. <sup>n</sup>
 
     17a. **The French interface: the contributor's ORCID iD field.**
-    ⚠ [A12](#a12) On the contributor form opened from the workflow's
-    Contributors list, the field's label "Identifiant ORCID" and its help
-    text are French. Every other string the field shows is a raw code;
-    the buttons themselves work as in English (Rules 8, 8a): <sup>n</sup>
+    ⚠ [A12](#a12) On the contributor form of the workflow's Contributors
+    list, the field's label "Identifiant ORCID" and its help text are
+    French. Everything else it shows is a raw code; the buttons work as
+    in English (Rules 8, 8a): <sup>n</sup>
 
     | Where | English | French |
     |-------|---------|--------|
@@ -221,11 +221,11 @@ What the field shows in the French interface: Rule 17a.
   the record will be added on publication. <sup>f</sup>
 - **On publication**: work deposits to every eligible contributor (Rule 11)
   and, on a journal, review deposits for the article's completed reviews
-  (Rule 12). All of this runs in the background, with no notice on the
-  publishing screen. On a journal with the member API, publishing an
-  article without an issue fails when a contributor holds a verified iD:
-  the article goes live all the same, and nothing reaches the
-  contributor's ORCID record
+  (Rule 12). They run in the background, with no notice on the publishing
+  screen. Under the member API, publishing a journal article without an
+  issue fails with "An unexpected error has occurred…" for a contributor
+  with a verified iD: a reload shows the article live, and nothing
+  reaches their ORCID record
   ⚠ [→ Publish, schedule & versions OJS4](U49-publish-schedule-and-versions.md#ojs4). <sup>j</sup>
 - **On removing an iD** (own profile or a contributor's): the install asks
   ORCID to cancel the matching access token in the background. <sup>d</sup>
