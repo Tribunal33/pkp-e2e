@@ -70,6 +70,10 @@ of a static page and of a custom block is the application's
 formatted-text editor, a bar of buttons above a writing area, one box per
 form language (Settings bullet 4). Pictures: Rule 29; tags: Rule 4.
 <sup>j</sup> <sup>td28</sup>
+With two or more form languages, the first language's "Content" box
+(the English one, on a journal in English and French) of the "Custom
+Page" item window or of the block window can stay under a "Loading..."
+spinner and take no click ⚠ [A20](#a20). <sup>f-a20</sup>
 
 | Box | Buttons on its bar | "Insert Tag" offers |
 |-----|--------------------|---------------------|
@@ -447,9 +451,9 @@ row's "Edit" (headed "Edit"), with "Save" and "Cancel" at its foot:
    & theming* owns the list. <sup>h</sup>
 4. **"Forms"** column (Settings › Website › "Setup" › "Languages"; the
    primary language alone). Each language ticked adds that language's
-   boxes to "Title", "Content" and "Block Name" (Fields); a visitor reads
-   the texts of their language (Rules 3, 21). *Languages & locales* owns
-   it. <sup>d</sup> <sup>g</sup>
+   boxes to "Title", "Content" and "Block Name" (Fields) [A20](#a20); a
+   visitor reads the texts of their language (Rules 3, 21). *Languages &
+   locales* owns it. <sup>d</sup> <sup>g</sup>
 5. **The principal contact and the technical support contact** (Settings
    › Journal › "Contact"; on a new test journal the principal contact is
    set and the support contact empty). Their values are what the tags
@@ -851,6 +855,7 @@ Left out of the scenarios above, by reason:
   - A17 (a refused pasted or dropped picture kept in the text, embedded; Rule 29c)
   - A18 (a picture over the server's upload limit getting a server error, never the size message; Rule 29)
   - A19 (a change only in the static page window's "Content" lost without a question {OJS OMP}; Rule 30)
+  - A20 (the first language's "Content" box left under a "Loading..." spinner when the second language's box loads last; Fields)
 - **No seed**:
   - another picture allowance: only the installation's configuration file sets it (Settings bullet 7; Rule 29a)
 - **Owned by another feature**:
@@ -879,6 +884,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | A pasted picture the site refuses stays in the text, embedded, and is saved | 🐞 | minor | — |
 | [A18](#a18) | A picture over the upload limit gets a server error, never "Files larger than {size} can not be uploaded." | 🐞 | user-visible · crash: server | — |
 | [A19](#a19) | The static page window closes without a question after a change made only in "Content", and the text is lost | 🐞 | user-visible | — |
+| [A20](#a20) | With two form languages, the first language's "Content" box can stay under a "Loading..." spinner that never goes, taking no click | 🐞 | minor · crash: script | — |
 | [A2](#a2) | A deleted custom block would keep its place in the sidebar, so a later block of the same name appears unplaced | ❓ | minor | — |
 | [A5](#a5) | Pictures named ".jpeg" are refused while ".jpg" is accepted | ❓ | user-visible | — |
 | [A6](#a6) | A static page and a "Custom Page" item can take the same path, and the static page is then unreachable | ❓ | minor | — |
@@ -1080,6 +1086,20 @@ continue without saving?" when it is closed after a change to "Path" or
 "Title". A manager who has changed only "Content" and presses the back
 arrow gets no question: the window closes and the text is gone.
 Basis: probe. <sup>f-a19</sup>
+
+<a id="a20"></a>
+**A20 — The first language's "Content" box can stay under a "Loading..." spinner** · 🐞 · minor · crash: script.
+On a journal whose "Forms" languages are English and French, the
+"Custom Page" item window and the block window each open with an English
+and a French "Content" box. A manager expects to click into the English
+box and type. When the French box finishes loading after the English
+one, which is rare and happens on a busy computer or server, the
+window's own script fails, and a spinner labelled "Loading..." covers the
+English box and never goes away while the window is open: the box takes
+no click, and typing that has begun stops reaching it. Nothing says why.
+Expected: the spinner goes once the box is ready, as it does when the
+boxes load in the usual order.
+Basis: probe. <sup>f-a20</sup>
 
 ---
 
@@ -1962,6 +1982,45 @@ test installs' limits are 2 MB per file and 8 MB per request.
 **f-a19** — The window's unsaved-change tracking (note f) reacts to
 "Path" and "Title" and not to the "Content" editor; cause not traced
 further. Live-probed 2026-09-24 (OJS, OMP): td17.
+
+<a id="fn-f-a20"></a>
+**f-a20** — `Handler.js::initializeTinyMCE()` renders one TinyMCE 7.9.3
+editor per language box of a legacy form, the first form language
+first; `EditorManager.add()` makes each new editor the active one, so
+the last rendered is active. When the first editor's content style
+sheets are in before the later editor's iframe has run its set-up,
+`initEditor()` sets `initialized = true` and focuses the first editor;
+`setActive()` sends `deactivate` to the later one, and pkp's handler for
+it (`SiteHandler.js`, `tinyMCEObject.target.getContent().length`, there
+only to show a placeholder) reads an editor with no `serializer` yet:
+"Cannot read properties of undefined (reading 'serialize')". TinyMCE's
+event dispatch does not catch it, so the throw ends the first editor's
+start-up before `cancelProgress()`, and the progress timer shows the
+throbber (`.tox-throbber`, `aria-busy="true"`, the spinner's label
+"Loading...") for good; TinyMCE's focus handling then moves the focus to
+the throbber. `MultilingualInputHandler.isIncomplete_()` throws the same
+error on its 500 ms timer. The proposed fix: skip an editor whose
+`initialized` is false in both. The Vue forms' `FieldRichTextarea.vue`
+carries no such handler. Live-probed 2026-09-28 (Fields; three apps),
+on a scratch journal in English and French with "Custom Block Manager"
+on, "Add Block" opened in a fresh browser each time, the French
+editor's set-up held 3 s by a script in the page: the English box was
+initialized with its throbber shown and busy, and a click on it was
+intercepted by the "Loading..." spinner, 12 of 12 windows (4 per app),
+each logging the error twice; with no hold, 0 of 12; with the hold and
+the fix applied in the page, 0 of 12. Test runs 2026-09-28 (scenario 6
+under the same hold, three apps): every run that got past setting up
+the journal failed at the item window's English "Content" box: the
+click intercepted, or on OJS once the focus taken from the box, or on
+OPS once "Welc" left of "Welcome.". First seen
+unforced in a full OPS run on 2026-09-27, at the block window's English
+"Content": the spinner covered the box for about three minutes, until
+the test gave up. The order that triggers it needs a busy browser
+(there, a full run on a loaded machine); without the hold the U09 file
+passed 35 of 35 runs per app. Not driven: the static page window, whose
+language boxes are built the same way, and whether closing and
+reopening the window clears it. The suites take no workaround; a stuck
+box fails its test with a message naming it.
 
 ## Reference — entry points & surfaces
 

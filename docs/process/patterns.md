@@ -489,7 +489,12 @@ no cleanup fixture.
   for the editor inside the open form to report `initialized`, and judge a
   legacy send by that `status`, never by the 200 or a count on the window
   (`EmailUserWindow.expectOpen()`, `sendAndExpectSent()`; U14 S5,
-  2026-09-28).
+  2026-09-28). And `initialized` alone is no proof a legacy box takes
+  input: in a window with a second form language, a box can stay under
+  TinyMCE's "Loading..." throbber for good (an app defect, U09's
+  register), so a helper whose click, focus or read into a legacy box
+  fails checks the box's own `.tox-throbber` and fails naming the stuck
+  editor (`RichTextBox.failIfStuck()`; U09 S6, 2026-09-28).
 
 - **Settings › Users & Roles › Users is a Vue table** (`<user-access-manager>`),
   not a legacy grid: each row has an ellipsis menu ("Edit", "Email", "Remove

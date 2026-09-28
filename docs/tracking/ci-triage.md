@@ -841,14 +841,24 @@ trips.
   field). **Watch condition**: a red at the confirmation wait behind the
   settled panel.
 
-- **OPS U09 S6's custom page body missing "Welcome."** (OPS, once,
-  2026-09-25). The public page is server-rendered, so the saved text
-  lacked the words; not reproduced in 46 runs (CPU 6×, repeats).
-  Hardened 2026-09-26 (`.reports/flake-s26/fixC/diagnosis.md`): `RichTextBox.type()` waits for the editor's
-  focus and returns only when the editor holds the typed words.
-  **Watch condition**: a red at the typing step; then read its error
-  context. **Tripped 2026-09-27** (U75 session, VM, OPS final on a reset database, auto workers, beside U14 S5): red at the typing step, `CustomContentPages.js:151` `RichTextBox.type()` → `body().click()`; the error context shows TinyMCE's "Loading..." throbber (`.tox-throbber`, `aria-busy="true"`) intercepting every click until the 180 s test timeout, so the editor iframe was present but the editor never finished loading; green alone in 9.8 s (`.reports/U75/final-run-ops.log`, `alone-ops-U09S6-U14S5.log`). Next: wait for the throbber to leave before the click, and read why the editor stalls under load.
-
+- **U09 S6's formatted box stuck under TinyMCE's "Loading..." throbber:
+  an app defect, not a race** (OPS 2026-09-25, the box holding "Welc";
+  OPS 2026-09-27 on the VM, the custom block's English box, the click
+  intercepted until the 180 s timeout; the same code on OJS and OMP).
+  **Mechanism found 2026-09-28** (`.reports/flake-s28/u09s6-throbber/diagnosis.md`):
+  in a legacy window with a second form language, pkp's `deactivate`
+  handler (`SiteHandler.js`) calls `getContent()` on the French editor
+  before it has loaded; the error ends the English editor's start-up
+  after `initialized` and before the throbber is hidden, so the box never
+  takes input (U09's register, crash: script). Lever
+  `PLAYWRIGHT_IFRAME_HOLD='-fr_CA-'` with `PLAYWRIGHT_IFRAME_HOLD_MS=3000`:
+  stuck 12/12 on the probe servers, 0/12 with the handler guarded in the
+  page (the upstream fix's shape); S6 red 4/4 OJS, 4/4 OPS, 2/2 OMP under
+  it. No workaround (it would hide the defect): `RichTextBox` now fails
+  within 30 s naming the stuck editor; the U09 file `--repeat-each 5` at
+  eight workers green 35/35 per app. **Watch condition**: a red naming a
+  stuck editor is this defect (rerun); delete the entry when the handler
+  is guarded upstream.
 - **Two contexts adding French at the same moment: one save answers 500**
   (found 2026-09-26 by the C fixer, 5 of 42 concurrent French
   scratch-context seedings on OJS and OPS, `.reports/flake-s26/fixC/diagnosis.md`

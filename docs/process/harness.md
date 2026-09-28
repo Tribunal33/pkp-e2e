@@ -375,7 +375,11 @@ to spot: seeding succeeds and the browser step dies.
   which the throttle and `--trace on` both hide (U30 S4, 2026-09-26). The
   third, `PLAYWRIGHT_HOLD_URL=<regex>` with `PLAYWRIGHT_HOLD_MS=<ms>`, holds
   every request whose address matches before it goes out: the "hold one
-  request" lever without editing a test (U14 S5, 2026-09-28).
+  request" lever without editing a test (U14 S5, 2026-09-28). The fourth,
+  `PLAYWRIGHT_IFRAME_HOLD=<regex>` with `PLAYWRIGHT_IFRAME_HOLD_MS=<ms>`,
+  hands every "load" listener of an iframe whose id matches its event that
+  much later, so one TinyMCE editor finishes its set-up after the others
+  (`-fr_CA-` for a legacy form's second language; U09 S6, 2026-09-28).
 - `TEST_API_KEY`: enables and gates `/api/v1/_test/*`. The namespace answers
   404 unless the var is in the server's environment, and 403 unless the
   request's `X-Test-Key` header matches.

@@ -129,15 +129,65 @@ class RichTextBox extends BasePage {
         await this.ready();
         const frame = await this.frame();
         if (!(await frame.isVisible())) {
-            await this.scope.locator('iframe:visible').first().contentFrame().locator('body').click();
+            const first = this.scope.locator('iframe:visible').first();
+            const firstId = (await first.getAttribute('id', {timeout: T})).replace(/_ifr$/, '');
+            await new RichTextBox(this.page, this.page.locator(`textarea[id="${firstId}"]`), this.scope).clickBody();
             await expect(frame).toBeVisible({timeout: T});
+        }
+    }
+
+    /**
+     * Whether the editor is stuck: `initialized`, yet its "Loading..."
+     * throbber still covers the box. TinyMCE hides the throbber right after
+     * `initialized = true` in the same call, so a busy throbber after it
+     * means the rest of the editor's init threw (pkp's "deactivate" handler
+     * reading a later editor of the form that has not loaded yet,
+     * .reports/flake-s28/u09s6-throbber/diagnosis.md), and no click reaches
+     * the box again.
+     */
+    async stuck() {
+        const id = await this.id();
+        return this.page.evaluate((i) => {
+            const ed = window.tinymce && window.tinymce.get(i);
+            const box = ed && ed.getContainer();
+            const throbber = box && box.querySelector('.tox-throbber');
+            return !!(ed && ed.initialized && throbber && throbber.getAttribute('aria-busy') === 'true');
+        }, id);
+    }
+
+    /**
+     * Click into the writing area. A stuck editor (`stuck()`) fails the
+     * click, after its own timeout, with words that name it, instead of a
+     * click retried until the test's timeout (the U75 OPS final's red).
+     */
+    async clickBody() {
+        const body = await this.body();
+        try {
+            await body.click({timeout: T});
+        } catch (error) {
+            await this.failIfStuck();
+            throw error;
+        }
+    }
+
+    /** Throw, in words that name it, when the editor is stuck (`stuck()`). */
+    async failIfStuck() {
+        if (await this.stuck().catch(() => false)) {
+            throw new Error(`the "${await this.id()}" editor is stuck: initialized, but its init threw and its "Loading..." throbber covers the box for good (app defect, .reports/flake-s28/u09s6-throbber/diagnosis.md)`);
         }
     }
 
     /** Wait until the editor holds the keyboard focus, so keys pressed next reach it. */
     async expectFocused() {
         const id = await this.id();
-        await this.page.waitForFunction((i) => !!(window.tinymce && window.tinymce.get(i) && window.tinymce.get(i).hasFocus()), id, {timeout: T});
+        try {
+            await this.page.waitForFunction((i) => !!(window.tinymce && window.tinymce.get(i) && window.tinymce.get(i).hasFocus()), id, {timeout: T});
+        } catch (error) {
+            // A click that landed before a stuck editor's throbber showed:
+            // the throbber then takes the focus, and the keys with it.
+            await this.failIfStuck();
+            throw error;
+        }
     }
 
     /**
@@ -148,7 +198,7 @@ class RichTextBox extends BasePage {
      */
     async type(text) {
         await this.reveal();
-        await (await this.body()).click();
+        await this.clickBody();
         await this.expectFocused();
         await this.page.keyboard.press('Control+End');
         await this.page.keyboard.type(text);
@@ -156,16 +206,23 @@ class RichTextBox extends BasePage {
         // variable as its own piece), spaces as the editor keeps them.
         const words = text.split('{$')[0].trim();
         if (words) {
-            await expect
-                .poll(async () => ((await this.text()) || '').replace(/\u00a0/g, ' '), {timeout: T, message: `the editor holds "${words}"`})
-                .toContain(words);
+            try {
+                await expect
+                    .poll(async () => ((await this.text()) || '').replace(/\u00a0/g, ' '), {timeout: T, message: `the editor holds "${words}"`})
+                    .toContain(words);
+            } catch (error) {
+                // A stuck editor's throbber showing mid-typing takes the rest
+                // of the keys ("Welc").
+                await this.failIfStuck();
+                throw error;
+            }
         }
     }
 
     /** Replace the box's text by typing. */
     async replace(text) {
         await this.reveal();
-        await (await this.body()).click();
+        await this.clickBody();
         await this.page.keyboard.press(SELECT_ALL);
         await this.page.keyboard.press('Delete');
         if (text) await this.page.keyboard.type(text);

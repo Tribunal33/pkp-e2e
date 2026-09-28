@@ -22,12 +22,22 @@
  * stylesheets for the legacy-editor race of U14 S5,
  * `.reports/flake-s28/u14s5-email/diagnosis.md`). Off unless both are set;
  * never in CI.
+ *
+ * `PLAYWRIGHT_IFRAME_HOLD=<regex>` with `PLAYWRIGHT_IFRAME_HOLD_MS=<ms>` is
+ * the fourth: every "load" listener added to an iframe whose id matches is
+ * called that much later, so a TinyMCE editor whose iframe matches finishes
+ * its set-up after the editors around it (the U09 S6 throbber,
+ * `.reports/flake-s28/u09s6-throbber/diagnosis.md`: `-fr_CA-` holds the
+ * second form language's editor of a legacy form). Off unless both are
+ * set; never in CI.
  */
 
 const rate = Number(process.env.PLAYWRIGHT_CPU_THROTTLE || 0);
 const rafHoldMs = Number(process.env.PLAYWRIGHT_RAF_HOLD_MS || 0);
 const holdUrl = process.env.PLAYWRIGHT_HOLD_URL ? new RegExp(process.env.PLAYWRIGHT_HOLD_URL) : null;
 const holdMs = Number(process.env.PLAYWRIGHT_HOLD_MS || 0);
+const iframeHold = process.env.PLAYWRIGHT_IFRAME_HOLD || '';
+const iframeHoldMs = Number(process.env.PLAYWRIGHT_IFRAME_HOLD_MS || 0);
 
 /**
  * Throttle the CPU of every page (and popup) a BrowserContext opens.
@@ -41,6 +51,27 @@ async function throttleCpu(context) {
             await new Promise((resolve) => setTimeout(resolve, holdMs));
             await route.continue().catch(() => {});
         });
+    }
+    if (iframeHold && iframeHoldMs > 0) {
+        await context.addInitScript(({pattern, ms}) => {
+            const re = new RegExp(pattern);
+            const add = EventTarget.prototype.addEventListener;
+            EventTarget.prototype.addEventListener = function (type, fn, opts) {
+                if (type === 'load' && this instanceof HTMLIFrameElement && re.test(this.id || '') && typeof fn === 'function') {
+                    return add.call(this, type, function (event) {
+                        // Handed on later, the event has finished its dispatch
+                        // (an empty composedPath(), no currentTarget): a stand-in
+                        // that still names the iframe.
+                        const frame = this;
+                        const late = new Proxy(event, {
+                            get: (e, k) => (k === 'composedPath' ? () => [frame] : k === 'currentTarget' || k === 'target' ? frame : typeof e[k] === 'function' ? e[k].bind(e) : e[k]),
+                        });
+                        setTimeout(() => fn.call(frame, late), ms);
+                    }, opts);
+                }
+                return add.call(this, type, fn, opts);
+            };
+        }, {pattern: iframeHold, ms: iframeHoldMs});
     }
     if (rafHoldMs > 0) {
         await context.addInitScript((ms) => {
