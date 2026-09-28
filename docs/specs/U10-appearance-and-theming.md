@@ -61,8 +61,9 @@ language (Rule 3). <sup>c</sup>
 
 **The upload boxes.** "Logo", the thumbnail, "Homepage Image", "Favicon"
 and the style sheet are upload boxes: "Upload File", or a file dropped on
-"Drop files here to upload". A picture then shows as a small preview with an
-"Alternate text" box beside it and the guidance "Describe this image for
+"Drop files here to upload" (in the French interface: Rule 35a). A
+picture then shows as a small preview with an "Alternate text" box
+beside it and the guidance "Describe this image for
 visitors viewing the site in a text-only browser or with assistive
 devices. Example: "Our editor speaking at the PKP conference.""; a style
 sheet shows its file name. "Remove" empties the box. While a picture box
@@ -169,7 +170,8 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
    opened in; a second journal on the same site has its own set. <sup>c</sup>
 2. **Saving and leaving.** "Save" stores the fields of its own tab and
    nothing else, shows "Saved" beside the button, and the public pages
-   show the change from their next load. A change left unsaved behaves
+   show the change from their next load (for the header's colour in a
+   browser that opened them before, Rule 6a). A change left unsaved behaves
    as on every Settings page ([Journal identity & about pages](U07-journal-identity-and-about-pages.md),
    Rule 5): it waits in its box while the manager moves between the
    side tabs, and is gone without a question once the page is left, so
@@ -205,10 +207,24 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
    is set, takes the headings' font. <sup>l</sup> <sup>td11</sup>
 6. **"Colour".** After "Save", the header of every public page (the band
    holding the logo or the journal's name and the primary menu) takes the
-   chosen colour. With a light colour the header's text turns dark so it
-   stays readable. A code the colour box cannot read as a colour
-   ("red", "#12345") stays in the box but changes nothing: "Save" shows
-   "Saved" and keeps the colour chosen before. <sup>l</sup> <sup>td11</sup>
+   chosen colour on its next load; a browser that opened the journal's
+   pages before may show it late (Rule 6a). With a light colour the
+   header's text turns dark so it stays readable. A code the colour box
+   cannot read as a colour ("red", "#12345") stays in the box but changes
+   nothing: "Save" shows "Saved" and keeps the colour chosen before.
+   <sup>l</sup> <sup>td11</sup>
+
+6a. **A browser that opened the journal before.** After a "Colour" save,
+    a browser that never opened the journal's pages shows the new colour
+    at once. A browser that already opened them, a visitor's or the
+    manager's own, may keep the old colour on its next pages and after a
+    reload, for a while that grows with how long the old colour had stood
+    unchanged when that browser opened the pages ⚠ [A10](#a10). A browser
+    whose visit came right after the previous save shows the new colour
+    on its next load; one whose visit came three minutes after it still
+    shows the old colour a few seconds later, and the new one half a
+    minute later. <sup>l</sup>
+
 7. **The summary on the home page.** Ticked, the home page gains a
    section headed "About the Journal" ("About the Press", "About the
    Server") holding the "Journal Summary" text of Settings › Journal ›
@@ -416,7 +432,8 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
     list's order is the order of the role
     headings on the public "Editorial Masthead" and "Editorial History"
     pages ([Journal identity & about pages](U07-journal-identity-and-about-pages.md),
-    Rule 14a). The arrows' names for a screen reader: [A3](#a3).
+    Rule 14a). The arrows' names for a screen reader: [A3](#a3). The
+    list in the French interface: Rule 35b.
     <sup>u</sup> <sup>td30</sup>
 
 **Lists**
@@ -491,13 +508,42 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
 
 **Other languages of the interface**
 
-35. **French.** In the French interface the "Theme" tab shows raw codes in
-    place of some labels ⚠ [A6](#a6): on a journal the "Journal Content
-    Organization" field, its description and its three boxes; on a press
-    the only entry of the "Thème" list and every label, description and
-    choice of the default theme's fields, "Press Summary" included; on a
-    preprint server "Usage statistics display options" and its three
-    choices. <sup>td37</sup>
+35. **French: raw codes.** In the French interface some labels show as
+    raw codes, words between "##" marks ⚠ [A6](#a6):
+    - on a journal's "Theme": the "Journal Content Organization" field,
+      its description and its three boxes;
+    - on a press's "Theme": the only entry of the "Thème" list and every
+      label, description and choice of the default theme's fields,
+      "Press Summary" included;
+    - on a press's "Setup": the thumbnail's label and help, the "Browse
+      Block" box of "Sidebar", "Featured Books" and "New Releases" with
+      their boxes, and "Order of monographs" with its description and
+      its two "Series position" choices (the title and date choices are
+      in French);
+    - on a press's "Advanced": "Cover Image Max Width", "Cover Image Max
+      Height" and the note under each;
+    - on a preprint server's "Theme": "Usage statistics display options"
+      and its three choices.
+
+    A journal's and a preprint server's "Setup" and "Advanced" show no
+    raw code. <sup>td37</sup>
+
+35a. **French: the upload boxes.** In the French interface the drop area
+    of every upload box on "Setup" ("Logo", the thumbnail, "Homepage
+    Image") and "Advanced" (the style sheet, "Favicon") reads the English
+    "Drop files here to upload", beside the French button "Téléverser un
+    fichier" ⚠ [A12](#a12). <sup>td38</sup>
+
+35b. **French: "Entête".** In the French interface the side tab
+    "Editorial Masthead" reads "Entête", and the order list's description
+    reads "Définir l’ordre des rôles sur la page de l'équipe éditoriale de
+    la revue." ("the journal's editorial team page") on a press and a
+    preprint server too ⚠ [A11](#a11); the "Évaluateurs-trices" note
+    below it names no journal. On a preprint server the list names the
+    Moderator role "##default.groups.name.sectionEditor##", as the French
+    public masthead does
+    ([Journal identity & about pages](U07-journal-identity-and-about-pages.md#ops4)).
+    <sup>td38</sup>
 
 ## Side effects
 
@@ -519,7 +565,7 @@ that change them.
    plugin: Rule 4. <sup>k</sup>
 2. **"Typography"** (the same tab; "Noto Sans: …"). Another choice: Rule 5.
    <sup>e</sup>
-3. **"Colour"** (the same tab; "#1E6292"). Another colour: Rule 6.
+3. **"Colour"** (the same tab; "#1E6292"). Another colour: Rules 6, 6a.
    <sup>e</sup>
 4. **"Journal Summary"** (the same tab; unticked). Ticked: Rule 7.
    <sup>e</sup>
@@ -1063,10 +1109,13 @@ Left out of the scenarios above, by reason:
   - A3 (the ordering arrows' names for a screen reader; Rules 23, 28; scenario 4 marks it)
   - A4 ("Setup" refusing a save while a placed block's plugin is disabled; Rule 25; scenario 4 marks it)
   - A5 (the removed style sheet's file still opening at its address; Rule 26; scenario 1 marks it)
-  - A6 (the French interface's raw codes on the "Theme" tab; Rule 35)
+  - A6 (the French interface's raw codes on the "Theme" tab, and on a press's "Setup" and "Advanced"; Rule 35)
   - A7 (a file refused through "Upload File" locking the box and the tab's "Save"; Fields, the upload boxes)
   - A8 (the "3:05PM" time choice printed in lower case; Fields, "Date & Time")
   - A9 (an empty "Custom" under "Date (Short)" leaving the editorial dates without the date; Rule 33)
+  - A10 (a browser that opened the journal before keeping the old header colour after a "Colour" save; Rule 6a)
+  - A11 (the French "Entête" description naming a journal on a press and a preprint server; Rule 35b)
+  - A12 (the French upload boxes' drop area in English; Rule 35a)
   - OJS2 (a first issue created on a journal that never saved "Theme", the home page switching by itself {OJS}; Rule 10)
   - OJS3 (a published issue's articles absent from "Latest Publications", the list ordered by submission {OJS}; Rule 13)
   - OJS4 (the Settings Wizard showing another organization for a journal with no issue {OJS}; Rule 34; scenario 2 marks it)
@@ -1087,11 +1136,13 @@ Left out of the scenarios above, by reason:
   - "Items per page" on the listing pages (Rule 29; [Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md) scenario 10)
   - "Items per page" and "Page links" on the older editorial lists, and the "Users" list's own page length (Rules 29, 30; *Roles configuration*, *Users management*)
   - "Date & Time (Short)" on a submission file's notes and a library file's "Date uploaded" (Rule 31; [Submission files](U36-submission-files.md), [Submission & Publisher Libraries](U39-submission-and-publisher-libraries.md))
+  - the Moderator role's raw code in a preprint server's French "Entête" list {OPS} (Rule 35b; [Journal identity & about pages](U07-journal-identity-and-about-pages.md#ops4))
 
 ## Findings register
 
-Verdicts are the author's judgment (claude, 2026-09-24), unreviewed unless
-an entry notes otherwise; the team settles them on spec review.
+Verdicts are the author's judgment (claude, 2026-09-24; A10–A12
+2026-09-28), unreviewed unless an entry notes otherwise; the team settles
+them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
@@ -1099,14 +1150,17 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | A screen reader hears the up arrow on "Editorial Masthead" as "{role} Decrease position of {role}", and each "Sidebar" box's name carries both arrows' names | 🐞 | minor | — |
 | [A4](#a4) | "Setup" refuses every save while a placed block's plugin is disabled, though "Sidebar" no longer shows the block | 🐞 | user-visible | — |
 | [A5](#a5) | A removed style sheet stops loading on the pages, but its file stays public at its old address | 🐞 | latent | — |
-| [A6](#a6) | The French "Theme" tab shows raw codes in place of labels, on all three apps | 🐞 | minor | — |
+| [A6](#a6) | The French "Theme" tab shows raw codes in place of labels, on all three apps, and so do a press's "Setup" and "Advanced" | 🐞 | minor | — |
 | [A7](#a7) | After a file refused through "Upload File", the box's "Upload File" and the tab's "Save" stay disabled | 🐞 | user-visible | — |
 | [A8](#a8) | The "Time" choice shown as "3:05PM" prints in lower case ("7:17pm") | 🐞 | minor | — |
 | [A9](#a9) | An empty "Custom" saved under "Date (Short)" leaves editorial dates showing the time without the date | 🐞 | user-visible | — |
+| [A11](#a11) | On a press and a preprint server the French "Entête" description says it orders "la revue"'s (the journal's) masthead | 🐞 | minor | — |
+| [A12](#a12) | In the French interface every upload box's drop area reads the English "Drop files here to upload" | 🐞 | minor | — |
 | [OJS5](#ojs5) | With every "Journal Content Organization" box unticked, "Save" shows "Saved" and the home page keeps its default part | 🐞 | minor | — |
 | [OJS6](#ojs6) | The article titles under "Latest Publications" are headings of the section's own level | 🐞 | minor | — |
 | [OMP2](#omp2) | A press's category page shows only its first page of books, with no way to the rest | 🐞 | user-visible | — |
 | [A2](#a2) | A logo saved without alternate text leaves the header's home link without a name | ❓ | minor | — |
+| [A10](#a10) | A saved "Colour" does not reach a browser that has already opened the journal | ❓ | user-visible | — |
 | [OJS2](#ojs2) | A journal's home page switches from its recent articles to an empty current-issue section when the first issue is created | ❓ | user-visible | — |
 | [OJS3](#ojs3) | "Include recent most published articles" lists only articles outside a published issue, by submission date | ❓ | minor | — |
 | [OJS4](#ojs4) | The Settings Wizard shows the current issue's table of contents ticked for a journal with no issue, and a save there stores it | ❓ | minor | — |
@@ -1167,15 +1221,22 @@ shows it; it matters when the file held something meant to be withdrawn.
 Basis: probe. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — Raw codes on the French "Theme" tab** · 🐞 · minor.
+**A6 — Raw codes on the French appearance tabs** · 🐞 · minor.
 A manager working in French reads, in place of labels,
 "##manager.setup.journalContentOrganization##", its description and its
-three boxes on a journal; on a press the only entry of the "Thème" list
-("##plugins.themes.default.name##") and every label, description and
-choice of the default theme's fields ("##manager.setup.contextSummary##",
-typography, header image, colour, series listing, statistics); and
+three boxes on a journal's "Theme"; on a press's "Theme" the only entry
+of the "Thème" list ("##plugins.themes.default.name##") and every label,
+description and choice of the default theme's fields
+("##manager.setup.contextSummary##", typography, header image, colour,
+series listing, statistics); and
 "##plugins.themes.default.option.displayStats.label##" with its three
-choices on a preprint server. Basis: probe. <sup>f-a6</sup>
+choices on a preprint server's "Theme". A press shows them on "Setup"
+and "Advanced" too, on the fields Rule 35 lists: its thumbnail
+("##manager.setup.pressThumbnail##"), the "Browse Block" box
+("##plugins.block.browse.displayName##"), its catalog fields
+("##manager.setup.displayFeaturedBooks##", "##catalog.sortBy##") and its
+cover image sizes ("##manager.setup.coverThumbnailsMaxWidth##").
+Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — A refused file locks the upload box and the tab's "Save"** · 🐞 · user-visible.
@@ -1207,6 +1268,38 @@ its box, and the editorial dates print with no date (a file's note reads
 another "Date (Short)" does not bring the date back; the manager has to
 pick the group's ready choice and save again. Basis: probe.
 <sup>f-a9</sup>
+
+<a id="a10"></a>
+**A10 — A saved "Colour" does not reach a browser that has already opened the journal** · ❓ · user-visible.
+The manager saves a new "Colour" on "Theme" and sees "Saved". A browser
+that has already opened the journal's pages, a visitor's or the
+manager's own, keeps the old header colour on its next page and after a
+reload, while a browser that never opened the journal shows the new one.
+How long it keeps the old colour grows with how long that colour had
+stood unchanged before its visit, so a journal whose look has not changed
+for a long time gives its returning visitors the old colour the longest.
+The site's own pages behave the same
+([Site settings](U60-site-settings.md#a9)). Question: should a saved
+theme change reach every visitor on their next load? Lean: yes, a
+defect: the style sheet's address should change when the theme's
+settings do, or the browser should be told to check the sheet on every
+load. Basis: probe. <sup>f-a10</sup>
+
+<a id="a11"></a>
+**A11 — The French "Entête" tab names a journal on a press and a preprint server** · 🐞 · minor.
+The English description of the "Editorial Masthead" order list, "Define
+the order of masthead roles for public display.", names no kind of
+publication. In the French interface it reads "Définir l’ordre des rôles
+sur la page de l'équipe éditoriale de la revue." on all three apps, so a
+press or preprint server manager is told the list orders a journal's
+("la revue") editorial team page. Basis: probe. <sup>f-a11</sup>
+
+<a id="a12"></a>
+**A12 — The French upload boxes invite a drop in English** · 🐞 · minor.
+A manager working in French expects the upload boxes in French, as their
+button "Téléverser un fichier" is. The drop area of every upload box on
+"Setup" and "Advanced" reads "Drop files here to upload" in English, on
+all three apps. Basis: probe. <sup>f-a12</sup>
 
 ### OJS
 
@@ -1362,7 +1455,10 @@ Pressing the side menu's "Website" while Settings › Website is open
 loads nothing, so an unsaved change stays in its box. Mail catcher
 counts for every user of the scratch journal were 0 before and after
 seven to eleven saves, and the manager's Tasks panel held the same one
-task before and after.
+task before and after. Seen 2026-09-28 on all three apps: every load of
+Settings › Website answers the Plugin Gallery's server error
+([Plugins management](U62-plugins-management.md#a1)); the tabs this spec
+describes load and save regardless.
 
 <a id="fn-d"></a>
 **d — the upload boxes.** `PKP\components\forms\FieldUpload` and
@@ -1498,6 +1594,15 @@ before when the typed code is not one it can read (live-probed
 stylesheet is served by `PKP\controllers\page\PageHandler::css()`
 (`$$$call$$$/page/page/css?name=stylesheet`), cached per context as
 `cache/{contextId}-stylesheet-{hash}.css` and cleared on every theme save.
+The sheet keeps the same address whatever the settings, and is sent with
+`Last-Modified` (the time it was last compiled) and `Content-Length`
+only: no `Cache-Control`, `ETag` or `Expires`; a conditional request
+(`If-Modified-Since`) is answered with a full 200 (57–73 KB), never a
+304. A browser may therefore reuse its copy without asking, for a
+heuristic share of the copy's age (a tenth, in the browser driven). The
+fonts of "Typography" are set as variables of the same compiled sheet
+(code read), so they would lag the same way; not driven. Live-probed
+2026-09-28 (Rules 2, 6, 6a; A10; all three apps, two runs): note f-a10.
 
 <a id="fn-m"></a>
 **m — the home page.** OJS `APP\pages\index\IndexHandler::index()` with
@@ -1796,7 +1901,25 @@ OJS `locale/fr_CA` lacks `manager.setup.journalContentOrganization` and
 its description and option keys; OMP's `plugins/themes/default/locale/fr_CA/locale.po`
 holds one entry and the app's `manager.setup.contextSummary` is empty in
 French; OPS's theme locale has empty `displayStats` strings. Code read
-2026-09-24.
+2026-09-24. Live-probed 2026-09-28 (Rule 35; OMP, two runs, OJS and OPS
+the controls): a press's French "Setup" showed
+"##manager.setup.pressThumbnail##",
+"##manager.setup.pressThumbnail.description##",
+"##plugins.block.browse.displayName##" (with "Avancer la position de
+##plugins.block.browse.displayName##"),
+"##manager.setup.displayFeaturedBooks##",
+"##manager.setup.displayFeaturedBooks.label##",
+"##manager.setup.displayNewReleases##",
+"##manager.setup.displayNewReleases.label##", "##catalog.sortBy##",
+"##catalog.sortBy.catalogDescription##",
+"##catalog.sortBy.seriesPositionAsc##" and
+"##catalog.sortBy.seriesPositionDesc##", the other four order choices
+reading "Titres (A-Z)", "Titres (Z-A)", "Date de publication (du plus
+ancien)", "Date de publication (du plus récent)"; its "Advanced"
+"##manager.setup.coverThumbnailsMaxWidth##" and
+"##manager.setup.coverThumbnailsMaxHeight##", each over
+"##manager.setup.coverThumbnailsMaxWidthHeight.description##". A
+journal's and a server's "Setup" and "Advanced" showed none.
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-24 on all three apps ("Logo", "Favicon",
@@ -1819,6 +1942,52 @@ saved; the tab then showed "2026-09-24" marked under "Date (Short)" and
 "Custom" with "h:i A" under "Date & Time (Short)"; a library file's "Date
 uploaded" read "07:17 PM" (all three) and a file's note "admin admin
 07:17 PM" (OJS, OMP).
+
+<a id="fn-f-a10"></a>
+**f-a10** — Note l. Live-probed 2026-09-28 (Rules 2, 6, 6a; all three
+apps, two runs, identical), a scratch context each, `admin` saving
+"Colour" in one browser and a signed-out visitor in another. The sheet's
+address was the same before and after each save. First, a visitor
+whose first load compiled the sheet saw #1E6292; `admin` saved
+"#000080" ("Saved"); the visitor's reload about 1.5 s later asked the
+server again and showed rgb(0, 0, 128), as did its next page (About)
+and a browser that had never opened the context. Then, 180 s after that
+save, the visitor opened the home page (navy; the sheet's
+`Last-Modified` 185 s before its `Date`) and `admin` at once saved
+"#8B0000": the visitor's reload 2.8–2.9 s after its first load and its
+About page at 3.5–3.6 s took the sheet from the browser's cache with no
+request and stayed navy, while a browser that had never opened the
+context showed rgb(139, 0, 0); a reload 26.8–26.9 s after the first load
+asked the server and showed rgb(139, 0, 0). The span fits a tenth of the
+copy's age (185 s, about 18 s); by that rule a look unchanged for days
+lasts hours (not driven). The tab reopened on "#8B0000"; the header's
+links stayed white. The same caching on the site's pages: the Site
+settings spec's A9.
+
+<a id="fn-f-a11"></a>
+**f-a11** — lib/pkp `locale/fr_CA/manager.po`
+`manager.setup.editorialMasthead.order.description` is one shared text,
+with no press or server version in OMP's or OPS's locale. Live-probed
+2026-09-28 (Rule 35b; all three apps, two runs): the French "Entête"
+description read the same on a journal, a press and a server; the
+English "Define the order of masthead roles for public display." on all
+three. The list read "Rédacteur-trice", "Rédacteur-trice de rubrique",
+"Membre du comité éditorial" (OJS); "Rédacteur/Rédactrice en chef de la
+presse", "Rédacteur/Rédactrice en chef de la série", "Membre du comité
+éditorial" (OMP); "##default.groups.name.sectionEditor##", "Membre du
+comité éditorial" (OPS). A role moved up with its arrow and left
+unsaved was back in its old place after a reload, with no dialog.
+
+<a id="fn-f-a12"></a>
+**f-a12** — lib/pkp `FieldUpload` passes the text as
+`dropzoneDictDefaultMessage` (`form.dropzone.dictDefaultMessage`, French
+"Déposer des fichiers à téléverser ici."), while the drop-zone library
+reads `dictDefaultMessage`, so its own English default shows; code read
+2026-09-28, not traced further, and by that reading every language is
+affected (only French driven). Live-probed 2026-09-28 (Rule 35a; all
+three apps, two runs): "Logo", the thumbnail and "Homepage Image" on
+"Setup" and the style sheet and "Favicon" on "Advanced" each read "Drop
+files here to upload" beside "Téléverser un fichier".
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `journalContentOrganization` is added by OJS's
@@ -2187,6 +2356,15 @@ question.
 on OJS the organization field's five codes and nothing else; on OPS
 the statistics field's label and three choices; on OMP 23 codes, the
 field label "Thème" and its description translated. Note f-a6.
+Live-probed 2026-09-28 (Rule 35; all three apps, two runs): the "Theme"
+codes as before; a press's "Setup" and "Advanced" codes in note f-a6.
+
+<a id="fn-td38"></a>
+**td38** — Live-probed 2026-09-28 (Rules 35a, 35b; all three apps, two
+runs, English and French interface on scratch contexts): the upload
+boxes in note f-a12, the "Entête" tab in note f-a11. The preprint
+server's Moderator code also labels its arrows ("Avancer la position de
+##default.groups.name.sectionEditor##").
 
 ## Reference — entry points & surfaces
 
