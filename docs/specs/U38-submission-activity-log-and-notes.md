@@ -137,11 +137,11 @@ preprint server an Editorial Board Member). <sup>c</sup>
      "Revised Version Uploaded" email. The column is empty for the
      emails the journal sends by itself: the submission acknowledgement,
      "needs an editor", the editor assigned automatically at submission,
-     and the automatic review reminders (no screen has shown their line,
-     so this is read from the code: a test install never sends them). It
-     is empty as well for a discussion's emails and for the Participants
-     panel's "Notify" and "Assign" messages, although a person sent them
-     ⚠ [A1](#a1).
+     and the automatic review reminders (read from the code, not a
+     tester's check: test installs never send them, so no screen shows
+     their line). It is empty as well for a discussion's emails and for
+     the Participants panel's "Notify" and "Assign" messages, although a
+     person sent them ⚠ [A1](#a1).
      <sup>i</sup> <sup>td4</sup>
      - The "Review complete" email {OJS OMP} is also one the journal
        sends by itself, when a Reviewer submits a review, yet its line

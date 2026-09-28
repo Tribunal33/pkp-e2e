@@ -158,9 +158,9 @@ discards the changes. <sup>g</sup>
    and no publish step. Closing the panel with its close control, or
    leaving the page by typing another address, drops what was typed with
    no warning, and "Add Announcement" opens an empty panel again; a
-   picture already inserted into one of its boxes stays stored all the
-   same (*[Custom pages & blocks](U09-custom-pages-and-blocks.md#image-upload)*
-   Rule 29a). <sup>c</sup> <sup>o</sup>
+   picture already inserted into a box stays stored at its address
+   (*[Custom pages & blocks](U09-custom-pages-and-blocks.md#image-upload)*
+   Rules 29a, 29b). <sup>c</sup> <sup>o</sup>
 6. **Editing.** "Edit" on a row opens the "Edit Announcement" panel with
    the row's values filled in, the image previewed and the expiry date
    printed (Fields "Expiry Date"). "Save" closes the panel and the row

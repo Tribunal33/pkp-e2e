@@ -87,7 +87,7 @@ give no access to any screen in this spec. <sup>l</sup>
 |------------------|-----------|-------|
 | "For author and editor" | no | Rich text under "Review", shown when the assignment carries no review form. Nothing requires it: "Submit Review" with both boxes empty and no file under "Reviewer Files" ({OJS}: with a recommendation chosen) submits the review ⚠ [A7](#a7) |
 | "For editor" {OJS} / "For editor only" {OMP} | no | Rich text, same condition. Never required |
-| The review form's questions | per question, marked "*" | Shown instead of the two text boxes when the assignment carries a review form: the form's title and description, then each question as the form defines it (a text box, a checkbox group, a radio group or a drop-down). A required question left unanswered stops "Submit Review" only after its confirmation: the step stays, nothing is submitted, and the box "Please fill in required fields." / "Some required fields are not filled in. Please complete them before submitting your review." appears under the buttons ({OMP}: the first sentence prints as a raw key ⚠ [OMP3](#omp3)). On a form whose required questions include a one-line text answer, "This field is required." also appears under each unanswered required question, a radio group included; on a form whose only required question is a radio group, a press marks no question and a journal shows none in view ⚠ [A16](#a16). The page stays scrolled at the buttons, so a mark on a question higher up is out of sight until the reviewer scrolls up. "Save for Later" saves whether or not a required question is answered and shows "Your changes have been saved.". With such a one-line answer among the unanswered questions it also shows the box and the marks, as a refused submit does; {OJS} so does any review form saved while "Recommendation" reads "Choose One", with the mark under the list ⚠ [A14](#a14). A reload keeps what was saved and clears the box and the marks |
+| The review form's questions | per question, marked "*" | Shown instead of the two text boxes when the assignment carries a review form: the form's title and description, then each question as the form defines it (a text box, a checkbox group, a radio group or a drop-down). A required question left unanswered stops "Submit Review" only after its confirmation: the step stays, nothing is submitted, and the box "Please fill in required fields." / "Some required fields are not filled in. Please complete them before submitting your review." appears under the buttons ({OMP}: the first sentence prints as a raw key ⚠ [OMP3](#omp3)). On a form with a required "Single line text box" question (an item type), "This field is required." also appears under each unanswered required question, a radio group included; on a form whose only required question is a radio group, a press marks no question and a journal shows none in view ⚠ [A16](#a16). The page stays scrolled at the buttons, so a mark on a question higher up is out of sight until the reviewer scrolls up. "Save for Later" saves whether or not a required question is answered and shows "Your changes have been saved.". With that question unanswered it also shows the box and the marks, as a refused submit does; {OJS} so does any review form saved while "Recommendation" reads "Choose One", with the mark under the list ⚠ [A14](#a14). A reload keeps what was saved and clears the box and the marks |
 | "Reviewer Files" (the list under "Upload") | no | The reviewer's own attachments: "Upload File" opens the shared upload wizard (*Submission files*; here three steps, "1. Upload File", "2. Review Details" and "3. Confirm", with no file-type question), and each row offers "Edit" and "Delete". Once the review is submitted, "Upload File" and "Delete" are gone and "Edit" stays |
 | "Recommendation" {OJS} | yes, on submit | Drop-down preset to "Choose One" listing the journal's active recommendations (by default "Accept Submission", "Revisions Required", "Resubmit for Review", "Resubmit Elsewhere", "Decline Submission" and "See Comments"), in no fixed order [→ recommendation order](U29-review-setup-and-review-forms.md#a7). "Submit Review" with "Choose One" is asked for confirmation first; after "OK" the step stays and "This field is required." appears under the list. It is the only check a free-form submit meets (row 1). "Save for Later" keeps whatever is chosen. A press has no such field [OMP1](#omp1) |
 
@@ -1189,8 +1189,8 @@ Basis: probe (2026-09-05, both apps). <sup>[f-a13](#fn-a13)</sup>
 
 <a id="a14"></a>
 **A14 — "Save for Later" on a review form also reports missing required answers** · 🐞 · minor.
-On a review form whose unanswered required questions include a one-line
-text answer, "Save for Later" shows "Your changes have been saved." and,
+On a review form with a required "Single line text box" question left
+unanswered, "Save for Later" shows "Your changes have been saved." and,
 on the same screen, the box "Please fill in required fields." / "Some
 required fields are not filled in. …" under the buttons (on a press its
 first line a raw key, [OMP3](#omp3)) and "This field is required." under
@@ -1214,8 +1214,8 @@ Basis: probe (2026-09-28, both apps). <sup>[f-a15](#fn-a15)</sup>
 <a id="a16"></a>
 **A16 — A refused review-form submit marks the unanswered questions on one form and none on another** · ❓ · minor.
 After "Submit Review" and "OK" with a required question unanswered, a
-form whose required questions are a radio group and a one-line text
-answer shows "This field is required." under both, beside the box under
+form whose required questions are a radio group and a "Single line text
+box" shows "This field is required." under both, beside the box under
 the buttons. A form whose only required question is a radio group
 (scenario 8's) shows the box and marks nothing on a press; on a journal
 no mark shows in view, and the page above it has not been checked. A
@@ -2322,8 +2322,8 @@ sets `validator.cancelSubmit`, meant to skip the browser-side check for
 marks show anyway, the same as on a refused submit, and the save request
 still goes out. Live-probed 2026-09-28 on OJS and OMP, two runs each, a
 scratch journal and press with a form of a required radio group, an
-optional text box and a required one-line text answer (the input
-carrying the browser's `required` flag): on a fresh `?step=3` load, text
+optional text box and a required one-line text answer (item type
+"Single line text box", `textfield`; the input carrying the browser's `required` flag): on a fresh `?step=3` load, text
 typed into the optional box and "Save for Later" pressed with both
 required questions unanswered, the toast "Your changes have been saved."
 showed, the box (OMP: its raw first line, finding OMP3) showed under the

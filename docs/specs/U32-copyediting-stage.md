@@ -153,9 +153,9 @@ what the "Upload/Select Files" window lists, Rule 5). <sup>q</sup>
 5. **The "Upload/Select Files" window.** Pressing "Upload/Select Files" on
    "Draft Files" opens a window titled "Upload/Select Files"; on "Copyedited
    Files" the same window opens titled "Upload Review File" ⚠ [A2](#a2).
-   Pressing "OK" closes the window without any notice: the list simply
+   Pressing "OK" closes the window with no confirmation message: the list
    shows the rows it gained (Rules 5b, 5c), and the upload wizard's
-   "Complete" shows no notice either. The review round's file window, by
+   "Complete" shows none either. The review round's file window, by
    contrast, reports "Review files updated."
    ([→ Files for Review](U26-review-stage-and-rounds.md#review-files)).
    <sup>e</sup>
@@ -389,7 +389,8 @@ the footnote. <sup>s</sup>
    review ("External Review" on a press) that sits at Copyediting with no
    file in either list, and on the same submission a Journal Manager who
    is not assigned and a Section Editor whose participation is limited to
-   recommendations.
+   recommendations (on a journal not assigned through "Assign"; on a press
+   assigned through "Assign" after the acceptance).
 
    - **The Copyediting stage**: open the submission's workflow at its
      "Copyediting" entry: the stage bubble under the title reads
@@ -412,11 +413,9 @@ the footnote. <sup>s</sup>
      "Participants" panel; no "Send To Production", no "Move to Review",
      and no "Recommend Revisions", "Recommend Accept" or "Recommend
      Decline" control [A5](#a5) (Actors row 6). The notice box turns on
-     how they joined the submission (Actors row 2): on a journal, where
-     they were not assigned through "Assign", it reads "Assign a copyeditor
-     using the Assign link in the Participants list." as for the Editor; on
-     a press, where they were assigned through "Assign" after the
-     acceptance, none shows [A11](#a11).
+     how they joined the submission (Actors row 2): on a journal it reads
+     "Assign a copyeditor using the Assign link in the Participants list."
+     as for the Editor; on a press none shows [A11](#a11).
    - **Control**: no status box sits above "Draft Files": the notice box
      takes that slot while the submission is active here (Rule 2).
 
@@ -641,7 +640,7 @@ Left out of the scenarios above, by reason:
   - both lists back with their earlier files after a second acceptance, the newly ticked files joining "Draft Files" beside them (Rule 9b): accepting again a submission moved back to review is not an ordinary week's action; scenario 7 stops at the hidden "Copyediting" entry
   - "Stage Assignment" changed on the Roles form, Copyediting unticked for Copyeditor and ticked for Layout Editor (Settings bullet 1): a manager changes a role's stages rarely, not in an ordinary week
 - **Budget** — variants:
-  - no notice after the "Upload/Select Files" window's "OK" or the upload wizard's "Complete" (Rule 5): an absence the list's new row already answers; scenarios 4 and 5 press "OK" and read the row
+  - no confirmation message after the "Upload/Select Files" window's "OK" or the upload wizard's "Complete" (Rule 5): an absence the list's new row already answers; scenarios 4 and 5 press "OK" and read the row
 - **Nothing new to test**:
   - "Awaiting Copyedits." after "Assign" with the "Request Copyedit" message on a submission accepted without review or, on a press, from Internal Review (Rule 3a): the flip scenario 3 reads on a submission accepted from review
   - an assigned Section Editor, Guest Editor, Production editor or Site Administrator opening the stage (Actors preamble, rows 1, 6): the panels, notice and buttons scenario 1 reads as the Editor

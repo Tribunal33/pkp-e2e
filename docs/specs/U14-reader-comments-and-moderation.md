@@ -295,13 +295,13 @@ page. Every row below assumes the journal has public comments switched on
       row's "…" and the comment panel offer the same actions, and
       "Approve Comment" approves (Rules 10 to 13). The next page load
       brings the dialog back.
-    - 17c. **On a press and on a preprint server.** The same person is
-      offered the Content › Comments entry in the side menu, but the entry
-      and the page's address answer the access-denied page ("The current
-      role does not have access to this operation.") ⚠ [OMP1](#omp1)
-      ⚠ [OPS1](#ops1), and so does Settings › Website. The Site
-      Administrator enrolled as a Press Manager or Preprint Server Manager
-      is a manager there and gets in.
+    - 17c. **On a press and on a preprint server.** With a Section
+      Editor's role they are offered Content › Comments in the side menu,
+      but the entry, the page's address and Settings › Website answer the
+      access-denied page ⚠ [OMP1](#omp1) ⚠ [OPS1](#ops1). With Reader
+      alone, the address and Settings › Website answer that page too, with
+      no "Error" dialog. Enrolled as a Press Manager or Preprint Server
+      Manager, they get in.
 18. **When the article or the account goes.** Deleting a submission (an
     article published straight from the Submission stage is unpublished,
     declined there and deleted: *[Submission

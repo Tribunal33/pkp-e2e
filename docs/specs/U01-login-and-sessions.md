@@ -210,8 +210,8 @@ browser tab reads "Change Password | {journal name}", but after a refused
     ⚠ [A8](#a8). <sup>h</sup>
 15. **Returning.** "Logout as", the user menu's "Logout as {username}" or
     the Participants panel's "Logout as {full name}", restores the original
-    account without asking for credentials and lands home, or back on the
-    same submission when used from a workflow screen.
+    account without asking for credentials. Pressed on a workflow screen,
+    either control lands on that submission; elsewhere it lands home.
     Typing the plain sign-out address instead ends everything: the browser is
     signed out of both identities and lands on the Login page, not back in
     the original account. That address must be captured before

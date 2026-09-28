@@ -90,8 +90,8 @@ revision upload it can open is owned by *[Review stage & rounds](U26-review-stag
    dashboard. An account holding both an editorial role and Reviewer lands
    on the Dashboard. A Site Administrator lands by the roles they hold in
    this journal, like any other account: with only Author there, on My
-   Submissions; with only Reader, on the journal's home page. In
-   every case the author group stays one click away in the sidebar. The
+   Submissions; with only Reader, on the journal's home page. Whoever
+   holds Author keeps the author group one click away in the sidebar. The
    retired submission-list address from older versions forwards the same
    way. An old bookmarked author-dashboard link for a specific submission
    lands the submission's own author on My Submissions with that
@@ -343,7 +343,7 @@ footnote.
      to that submission alone, and the heading count follows, "Published
      (1)" (Rule 5).
    - **"Filters"**: press it: the panel offers the days-since-last-activity
-     filter and, only where the journal has them, the section {OJS OPS},
+     filter and, only as Rule 5 allows, the section {OJS OPS},
      categories and issue {OJS} filters (a press offers no series filter
      [OMP1](#omp1)); "Assigned To Editor" ("Assigned to Moderator" on a
      preprint server) is not among them (Rule 5).

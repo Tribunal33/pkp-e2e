@@ -137,12 +137,12 @@ and the reviewer forms to *Reviewer assignment & management*.
    given, in the panel headed "Files for Review". The panel's selection
    dialog ("Current Review Files For Round {N}") opens listing the round's
    own review files with checkboxes. Ticking its box "Show files from all
-   accessible workflow stages." adds the submission's other workflow files
-   to the list, a file still on the Submission stage among them. An
-   earlier round's review files are not offered: on Round 2, ticking that
-   box adds the Submission-stage file, while Round 1's review file stays
-   out of the list. Ticking a file adds it to the round, new files can be
-   uploaded from the same dialog, and no file is ever deleted here.
+   accessible workflow stages." adds the submission's other workflow files,
+   each under a row naming its stage, a file still on the Submission stage
+   under "Submission". An earlier round's review files are not offered: on
+   Round 2 the review stage's row holds only Round 2's own files (Rule 12).
+   Ticking a file adds it to the round, new files can be uploaded from the
+   same dialog, and no file is ever deleted here.
    Confirming reports "Review files updated." Unticking a file, though,
    changes nothing the editor can see: the panel lists it exactly as
    before, and the dialog's checkboxes do not reliably mirror the panel
@@ -1167,8 +1167,10 @@ two seeded rounds, through Request Revisions and a new round, and one
 driven by a Section Editor assigned to the stage) the dialog opened on "No
 Items", and ticking "Show files from all accessible workflow stages." added
 the Submission-stage `article.pdf` and never Round 1's review file
-`notes.md`; the Round 1 control added `article.pdf` beside the round's own
-`notes.md`. The assigned Section Editor got the Editor's dialog, upload
+`notes.md` (the list grouped under stage rows, `article.pdf` under
+"Submission", the review row holding only Round 2's upload; on OMP that
+row reads "External Review"); the Round 1 control added `article.pdf`
+beside the round's own `notes.md`. The assigned Section Editor got the Editor's dialog, upload
 included.
 
 <a id="fn-i"></a>

@@ -353,12 +353,13 @@ items" on an empty list). No text can be typed anywhere in the panel.
      for screen readers). With no window open over the page, a press on
      the "×" removes the toast, and a toast left alone disappears by
      itself after a few seconds, staying while the pointer rests on it.
-     While the "Notify" side panel of 9a or the "Add a Component" window
-     of *[Submission intake configuration](U58-submission-intake-configuration.md#a13)*
-     is open over the page, a toast shows above it, but a press on its
-     "×" does nothing and the pointer resting on it does not keep it: it
-     leaves by itself about five seconds after it showed, and the window
-     stays open ⚠ [A14](#a14).
+     Over an open window (the "Notify" side panel showing 9a's warning,
+     or the "Add a Component" window of
+     *[Submission intake configuration](U58-submission-intake-configuration.md#a13)*
+     after saving "Key" -survey), a press on the toast's "×" does nothing
+     and the pointer resting on it does not keep it: it leaves by itself
+     about five seconds after it showed, and the window stays open
+     ⚠ [A14](#a14).
    - 9c. **Messages that are not toasts.** A form the server rejected
      shows no toast: its errors appear inside the form under the heading
      "Errors occurred processing this form" (the Profile page's
@@ -1063,8 +1064,8 @@ the toast at once (Rule 9b). While a submission's "Notify" side panel is
 open, the warning toast that a refused "Notify" shows sits above the
 panel, but a press on its "×" does nothing and the pointer resting on it
 does not keep it: the toast leaves by itself about five seconds after it
-showed, and the panel stays open. The refusal notice of the "Add a
-Component" window behaves the same way, as
+showed, and the panel stays open. The "Add a Component" window's toast
+refusing "Key" -survey behaves the same way, as
 *[Submission intake configuration](U58-submission-intake-configuration.md#a13)*
 records for that screen. The person can neither dismiss the message nor
 keep it on screen to read it.
