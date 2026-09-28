@@ -281,6 +281,7 @@ trips.
   `55bc9d0`, the U32 push: OJS red on U28 S10 on both attempts, 1.7 min
   each, 254 passed and the 15 serial tests behind it did not run; OMP and
   OPS green). Read by the U33 session before its own push run 35474559640.
+  Again 2026-09-28 (U65 session, VM, reset databases, auto workers): OJS U28 S10 red in the OJS final, the only red of 600 (the serial and solo passes green), green alone in 45 s (`.reports/U65/final-run-ojs.log`, `alone-reds.log`).
 - **A page-level Escape closing the workflow panel behind a "More
   Actions" menu** (U30 S4, OJS; CI's second family, 15 first-attempt reds
   in five weeks; most local OJS finals at four workers since 2026-09-12;
@@ -688,7 +689,7 @@ trips.
   colliding numbering every time (H3RESET2: OPS S5 the only red of 379)
   until the pointers move; then re-run `collide.js` and retire the entry.
   A second read in S5 red twice in the diagnosis runs: OJS line 738, the
-  "Email" window still open 30 s after "Send Email" (its own entry, "Users & Roles \"Email\" dialog still open"). Again 2026-09-28 (U68 session, Mac, reset databases, auto workers): S5 red in the OMP and OPS finals, green alone on each (`.reports/U68/final-run-{omp,ops}.log`, `alone-reds.log`). Again 2026-09-28 (U72 session, Mac): OJS U14 S5 red in the OJS final at the report row count, green alone (`.reports/U72/final-run-ojs.log`, `alone-reds.log`).
+  "Email" window still open 30 s after "Send Email" (its own entry, "Users & Roles \"Email\" dialog still open"). Again 2026-09-28 (U68 session, Mac, reset databases, auto workers): S5 red in the OMP and OPS finals, green alone on each (`.reports/U68/final-run-{omp,ops}.log`, `alone-reds.log`). Again 2026-09-28 (U72 session, Mac): OJS U14 S5 red in the OJS final at the report row count, green alone (`.reports/U72/final-run-ojs.log`, `alone-reds.log`). Again 2026-09-28 (U65 session, VM, reset databases, auto workers): OMP U14 S5 red in the OMP final at the report row count, green alone (`.reports/U65/final-run-omp.log`, `alone-reds.log`).
 
 - **Review-forms reads under load** (U29 S4, S7, S9, OJS). S9's
   recommendation options were read before the step-3 tab's content

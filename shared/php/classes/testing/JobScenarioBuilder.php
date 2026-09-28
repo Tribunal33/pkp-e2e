@@ -112,23 +112,13 @@ class JobScenarioBuilder
             throw new \RuntimeException('The queue connection "' . $connection . '" is not the database queue');
         }
 
-        // DatabaseQueue::pop() without its oldest-first pick: the row locked
-        // and reserved by the queue's own marshalJob (attempts + 1).
-        $marshal = \Closure::bind(fn (string $q, DatabaseJobRecord $record) => $this->marshalJob($q, $record), $queue, DatabaseQueue::class);
-        $databaseJob = DB::transaction(function () use ($marshal, $queueName, $id) {
-            $record = DB::table('jobs')->where('id', $id)->whereNull('reserved_at')->lockForUpdate()->first();
-            if (!$record) {
-                throw new \RuntimeException("The test job {$id} was taken by another worker");
-            }
-            return $marshal($queueName, new DatabaseJobRecord((object) $record));
-        });
+        $databaseJob = self::reserve($queue, $queueName, $id);
+        if (!$databaseJob) {
+            throw new \RuntimeException("The test job {$id} was taken by another worker");
+        }
 
-        // PKPQueueProvider::runJobInQueue's worker set-up, then the step
-        // Worker::runNextJob takes for the popped job.
-        $worker = app()->get('queue.worker'); /** @var \Illuminate\Queue\Worker $worker */
-        $worker->setCache(app()->get('cache.store'));
         try {
-            $worker->process($connection, $databaseJob, app('pkpJobQueue')->getWorkerOptions());
+            self::process($connection, $databaseJob);
         } catch (\Exception $e) {
             // TestJobFailure::handle()'s own exception, rethrown by the
             // worker after it failed the job (runNextJob reports it).
@@ -145,6 +135,33 @@ class JobScenarioBuilder
             throw new \RuntimeException("The test job {$id} did not fail for good (" . ($failed ? 'still queued' : 'no failed_jobs row') . ')');
         }
         return (int) $failed->id;
+    }
+
+    /**
+     * DatabaseQueue::pop() without its oldest-first pick: the job row
+     * `$id` locked and reserved by the queue's own marshalJob (attempts
+     * + 1), or null when another worker has reserved or run it already.
+     */
+    public static function reserve(DatabaseQueue $queue, string $queueName, int $id): ?\Illuminate\Queue\Jobs\DatabaseJob
+    {
+        $marshal = \Closure::bind(fn (string $q, DatabaseJobRecord $record) => $this->marshalJob($q, $record), $queue, DatabaseQueue::class);
+        return DB::transaction(function () use ($marshal, $queueName, $id) {
+            $record = DB::table('jobs')->where('id', $id)->whereNull('reserved_at')->lockForUpdate()->first();
+            return $record ? $marshal($queueName, new DatabaseJobRecord((object) $record)) : null;
+        });
+    }
+
+    /**
+     * PKPQueueProvider::runJobInQueue's worker set-up, then the step
+     * Worker::runNextJob takes for a popped job: the worker fires it and,
+     * on an exception, releases or fails it as the job's tries allow, and
+     * rethrows.
+     */
+    public static function process(string $connection, \Illuminate\Contracts\Queue\Job $job): void
+    {
+        $worker = app()->get('queue.worker'); /** @var \Illuminate\Queue\Worker $worker */
+        $worker->setCache(app()->get('cache.store'));
+        $worker->process($connection, $job, app('pkpJobQueue')->getWorkerOptions());
     }
 
     /**

@@ -109,11 +109,15 @@ class PkpApi {
     }
 
     /**
-     * A routine task run that ends in error, its report email sent to the
-     * site's principal contact (scenarios.md "POST scenarios/task").
-     * @returns {result, task, name, processId, logFile}
+     * A routine task run (scenarios.md "POST scenarios/task"): UpdateIPGeoDB
+     * ending in error, its report email sent to the site's principal
+     * contact, @returns {result, task, name, processId, logFile}; or
+     * `task: 'statisticsReport'`, the monthly editorial statistics email
+     * for one context with its jobs run, @returns {task, name, context,
+     * contextId, dateStart, dateEnd, notified, mailed, jobs, processId,
+     * logFile}.
      *
-     * @param {{result: 'error'}} spec
+     * @param {{result: 'error'} | {task: 'statisticsReport', context: string}} spec
      */
     async runTask(spec) {
         return this._post(`${API_BASE}/scenarios/task`, spec);

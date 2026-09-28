@@ -822,3 +822,15 @@ until their specs exist. Do not force-claim the defects themselves.
     c and f record the reachable surface. Code-verified 2026-09-28 (U72
     spec author; checkout omp `72a01a026`, ui-library `03d1cee2`).
     Resolves: maintainer confirmation as dead code (removal candidates).
+52. **Unused user-counts request** — attached to **U65** (API-040;
+    claimed; the Statistics — editorial activity & reports spec's
+    Reference table notes it). `PKPStatsUserController`'s `GET
+    stats/users` is sent by no screen: Statistics › "Users" draws its
+    counts on the page (`PKPStatsHandler::users()` passes
+    `getRolesOverview()` to `templates/stats/users.tpl`), and neither
+    `StatsUsersPage.vue` nor any other ui-library component or template
+    requests it. Code-verified 2026-09-28 (U65 spec author; checkouts ojs
+    `72b85f4ba0`, omp `3cd59e944`, ops `e2111e3aae`, lib/pkp
+    `26ae6431b5` / `17a1f01fed`, ui-library `03d1cee2`). Resolves:
+    maintainer ruling that it is an intended API for outside clients, or
+    confirmation as dead code.

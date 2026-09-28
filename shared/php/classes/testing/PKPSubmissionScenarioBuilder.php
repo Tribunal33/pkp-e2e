@@ -252,6 +252,14 @@
  *   enableChapterPublicationDates and chapters[], U72), built on the
  *   version after the formats and JATS and before any publish.
  *
+ * - dateSubmitted "YYYY-MM-DD" (U65): the day the submission was
+ *   received, today or earlier (submitted seeds only). After the build,
+ *   its date_submitted, its decisions' date_decided and (unless
+ *   datePublished is given) its publications' date_published move back
+ *   by the same whole number of days (backdateSubmission, D9), so the
+ *   editorial statistics read it as received, decided and published
+ *   around that day.
+ *
  * - usage[] (U64): reader visits of past days to the published version,
  *   each entry {daysAgo | date, abstractViews?, fileViews?, jatsViews? (OJS),
  *   country?, region?, city?}; fileViews counts one entry per galleys[]
@@ -269,6 +277,7 @@ namespace PKP\testing;
 
 use APP\core\Application;
 use APP\facades\Repo;
+use Illuminate\Support\Facades\DB;
 use PKP\author\contributorRole\ContributorRole;
 use PKP\author\contributorRole\ContributorRoleIdentifier;
 use PKP\author\contributorRole\ContributorType;
@@ -690,6 +699,7 @@ abstract class PKPSubmissionScenarioBuilder
         if ($libraryFilePlans !== [] && !$submitted) {
             throw new SpecException('libraryFiles', 'A draft has no workflow and no "Library" button: libraryFiles needs submitted: true');
         }
+        $dateSubmitted = $this->parseDateSubmitted($root, $submitted);
         $root->assertConsumed();
 
         if ($published && !$submitted) {
@@ -705,7 +715,13 @@ abstract class PKPSubmissionScenarioBuilder
         // submission's context for the duration of the build.
         $restoreRouterContext = ContextFactory::forceRequestContext($context);
         try {
-            return $this->execute($root, $context, $locale, $tag, $submitter, $title, $abstract, $submitted, $published, $submissionProps, $publicationProps, $decisionTypes, $roundPlans, $publishOverlayPlan, $authorPlan, $participantPlans, $suggestionPlans, $commentPlans, $galleyPlans, $filePlans, $taskPlans, $libraryFilePlans, $citationsRaw, $dataCitationPlans, $mediaFilePlans, $formatPlans, $publicationPagesPlan, $jatsPlan, $usageSeeder, $usagePlans, $contributorPlans, $versionOverlayPlan);
+            $response = $this->execute($root, $context, $locale, $tag, $submitter, $title, $abstract, $submitted, $published, $submissionProps, $publicationProps, $decisionTypes, $roundPlans, $publishOverlayPlan, $authorPlan, $participantPlans, $suggestionPlans, $commentPlans, $galleyPlans, $filePlans, $taskPlans, $libraryFilePlans, $citationsRaw, $dataCitationPlans, $mediaFilePlans, $formatPlans, $publicationPagesPlan, $jatsPlan, $usageSeeder, $usagePlans, $contributorPlans, $versionOverlayPlan);
+            // dateSubmitted (U65), last: the whole build moved back to that
+            // day for the dates the editorial statistics read.
+            if ($dateSubmitted !== null) {
+                $response += $this->backdateSubmission((int) $response['submissionId'], $dateSubmitted, $root->has('datePublished'));
+            }
+            return $response;
         } finally {
             $restoreRouterContext();
         }
@@ -2801,6 +2817,79 @@ abstract class PKPSubmissionScenarioBuilder
             throw new SpecException("{$reviewerSpec->path}.dateCompleted", 'dateCompleted must not be after today');
         }
         return $value;
+    }
+
+    /**
+     * `dateSubmitted` "YYYY-MM-DD" (U65): the day the submission was
+     * received, today or earlier, for a submitted seed only (a draft has no
+     * submission date). Parse phase.
+     */
+    protected function parseDateSubmitted(Spec $root, bool $submitted): ?string
+    {
+        $value = $root->get('dateSubmitted');
+        if ($value === null) {
+            return null;
+        }
+        $parsed = is_string($value) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)
+            ? \DateTime::createFromFormat('!Y-m-d', $value)
+            : false;
+        if (!$parsed || $parsed->format('Y-m-d') !== $value) {
+            throw new SpecException('dateSubmitted', 'dateSubmitted must be a date written YYYY-MM-DD');
+        }
+        if ($value > \Carbon\Carbon::today()->toDateString()) {
+            throw new SpecException('dateSubmitted', 'dateSubmitted must not be after today');
+        }
+        if (!$submitted) {
+            throw new SpecException('dateSubmitted', 'A draft has no submission date: dateSubmitted needs a submitted seed (submitted: true, the default)');
+        }
+        return $value;
+    }
+
+    /**
+     * Move a submission the build has just made back to the given day (D9:
+     * no screen or service receives a submission on another day than
+     * today). The wizard's submit, the decisions and a publish run first,
+     * as for any seed; then the dates the editorial statistics count by
+     * (PKPStatsEditorialQueryBuilder: submissions.date_submitted,
+     * edit_decisions.date_decided, the first publication's
+     * publications.date_published) are shifted back by the same whole
+     * number of days, read back from what the app wrote, so each keeps its
+     * time of day and the build's own order and intervals: the submission
+     * reads as received on that day and decided (and published) moments
+     * later. A date given by `datePublished` is the seed's own and stays.
+     * Everything else keeps today's stamps (the last activity, the event
+     * log, review assignments, notifications, tasks). Written with the query
+     * builder, as no service edits a decision's date.
+     *
+     * @return array{dateSubmitted: string, daysShifted: int}
+     */
+    protected function backdateSubmission(int $submissionId, string $day, bool $keepDatePublished): array
+    {
+        $stored = (string) DB::table('submissions')->where('submission_id', $submissionId)->value('date_submitted');
+        $submittedAt = \Carbon\Carbon::parse($stored);
+        $days = (int) round($submittedAt->copy()->startOfDay()->diffInDays(\Carbon\Carbon::parse($day)->startOfDay(), false));
+        if ($days !== 0) {
+            $shift = fn (?string $value, string $format) => $value === null ? null : \Carbon\Carbon::parse($value)->addDays($days)->format($format);
+            DB::table('submissions')
+                ->where('submission_id', $submissionId)
+                ->update(['date_submitted' => $shift($stored, 'Y-m-d H:i:s')]);
+            foreach (DB::table('edit_decisions')->where('submission_id', $submissionId)->get(['edit_decision_id', 'date_decided']) as $row) {
+                DB::table('edit_decisions')
+                    ->where('edit_decision_id', $row->edit_decision_id)
+                    ->update(['date_decided' => $shift($row->date_decided, 'Y-m-d H:i:s')]);
+            }
+            if (!$keepDatePublished) {
+                foreach (DB::table('publications')->where('submission_id', $submissionId)->whereNotNull('date_published')->get(['publication_id', 'date_published']) as $row) {
+                    DB::table('publications')
+                        ->where('publication_id', $row->publication_id)
+                        ->update(['date_published' => $shift($row->date_published, 'Y-m-d')]);
+                }
+            }
+        }
+        return [
+            'dateSubmitted' => (string) DB::table('submissions')->where('submission_id', $submissionId)->value('date_submitted'),
+            'daysShifted' => $days,
+        ];
     }
 
     /**

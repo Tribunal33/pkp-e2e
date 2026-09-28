@@ -343,6 +343,30 @@ Keys:
   sends: that is the state after an item saved while they were
   disabled, and it differs from "disabled after the item" only in the
   first message's row and email they would have had.
+  `notifications` (U65) is the account's own Profile › "Notifications"
+  tab in this context, saved by the account: a map from a row's setting
+  name (the tab's field name: `notificationEditorialReport` is
+  "Statistics report summary.", `notificationEditorialReminder` "Weekly
+  email of outstanding tasks", `notificationNewQuery` "Discussion
+  added.", and so on; a 400 lists the app's names) to `{enabled?,
+  email?}`. `enabled: false` is "Enable these types of notifications."
+  unticked (a `blocked_notification` row); `email: false` is "Do not
+  send me an email for these types of notifications." ticked (a
+  `blocked_emailed_notification` row). A new account's tab has every
+  "Enable" ticked and every "Do not send…" unticked, and an absent half
+  keeps that. `{enabled: false, email: false}` is a 400: unticking
+  "Enable" disables the email box, which then posts nothing, so the tab
+  cannot save that pair. The save is the tab's own
+  (NotificationSettingsForm as the account in the context): it posts
+  every row the tab shows, so the rows equal a by-hand save. The tab
+  shows every setting but "Statistics report summary." on a context
+  with `editorialStatsEmail: false`, and there the save (the key's and
+  the tab's alike) stores that setting blocked for the account, since
+  nothing posts its box. The tab's "Saved" toast is not made. Seeded after the roles and before
+  `disabled`. With `notificationEditorialReport` `{enabled: false}` the
+  account gets neither the monthly email nor its Tasks entry; with
+  `{email: false}` it gets the Tasks entry alone (U65 harness,
+  2026-09-28, three apps).
   For a Users XML import test {OJS OMP}: the file's `<user>` needs
   `<user_groups>`, `<masthead>` and `<date_registered>`, or the import
   fails with a server error; the registration email goes out only for a
@@ -454,6 +478,20 @@ Keys:
   is not sent while the version notice still is (U49 scenario 15). A
   non-boolean is a 400; OJS and OMP answer 400 on the key, as on any key
   their context schema lacks.
+- `editorialStatsEmail` (boolean, three apps): the "Editorial statistics"
+  radio of Settings › Workflow › Emails, group "For Editors", `true`
+  "Send a monthly email to editors." (every new context stores `1`) or
+  `false` "Do not send the email to editors.", stored `1` / `0` as the
+  tab's "Save" stores it (a form-encoded PUT of the whole tab,
+  `…&editorialStatsEmail=false`; the key writes this row alone). At
+  `false` the radio reopens on "Do not send the email to editors.",
+  Profile › Notifications drops its "Statistics report summary." row
+  for every account of the context, and `scenarios/task`
+  `statisticsReport` (below) queues nothing for the context (`notified`
+  and `mailed` empty). A non-boolean is a 400. Naming
+  `users[].notifications.notificationEditorialReport` beside `false` is
+  a 400 before the context exists (the tab has no such row; U65
+  harness, 2026-09-28, three apps).
 - `enablePublicComments` (boolean): the "Enable Public Comments" box of
   Settings › Website › the "Content" tab › the "Comments" side tab, saved
   as that form saves (its whole request is `enablePublicComments=true`, a
@@ -1229,6 +1267,33 @@ Keys:
   wizard-resumable draft: no `dateSubmitted`, `submissionProgress` set, and
   the author keeps metadata editing rights. It appears in the author's
   Incomplete list.
+- `dateSubmitted` (`YYYY-MM-DD`, today or earlier; U65): the day the
+  submission was received. The build runs as without it; then the
+  three dates the editorial statistics count by move back by the same
+  whole number of days, read back from what the app wrote, each keeping
+  its time of day: the submission's date submitted, every seeded
+  decision's date, and (with `published: true`) the publication's date
+  published, unless `datePublished` is given, which stays as given. The
+  submission reads as received on that day and decided and published
+  moments later ("Days to First Editorial Decision" 0). Nothing else
+  moves: the last activity, the activity log, review assignments,
+  notifications and tasks keep today (D9: no screen receives a
+  submission on another day). The response adds `dateSubmitted` (the
+  stored date and time) and `daysShifted` (negative, 0 for today, which
+  leaves the rows as without the key). Refused (400): another format, a
+  day after today, `submitted: false` (a draft has no submission date).
+  On "Editorial Activity" a Custom Range around the day counts the seed
+  under "Submissions Received", its decline under "Submissions
+  Declined" and a publish under "Submissions Published", and the
+  monthly email (`scenarios/task` `statisticsReport`) counts a seed
+  dated in the previous month. The stored time is the build's, so a
+  seed dated on a range's last day sits after that day's midnight (U65
+  harness, 2026-09-28, three apps). For the statistics' decline rows:
+  the decision name `decline` is the Review stage's "Decline
+  Submission" even on a submission still at the Submission stage, so it
+  counts under "Submissions Declined (After Review)"; the Submission
+  stage's desk reject is `initialDecline` (OJS, OMP; a preprint server
+  has `decline` alone).
 - `decisions[]`: real decision names, resolved per app (`sendExternalReview`,
   `accept`, `requestRevisions`, …: the lowercased class name of the app's
   decision type). An unknown name fails with a 400 that lists the app's
@@ -1238,6 +1303,12 @@ Keys:
   (and OMP's `newInternalReviewRound`) creates its round but consumes no
   entry, so that round gets no reviewers, and every entry left after the
   decisions builds a further round of its own.
+  `cancelReviewRound`, like the screen, records no decision of its own and
+  removes the cancelled round's decisions. On OMP the chain
+  `sendInternalReview`, `acceptFromInternal`, `requestRevisions` answers
+  500 ("Call to a member function getId() on null", `Repository.php`),
+  where `sendExternalReview`, `requestRevisions` seeds (U65 claim check
+  K4; not yet traced).
 - `reviewRounds[]`, each with `files[]` (see `files[]` below) and
   `reviewers[]` of `{username, status, reviewForm, recommendation,
   comments}` where `status` is `invited`
@@ -1302,6 +1373,9 @@ Keys:
   driven submission's title, never by count (OMP and OJS, 2026-09-27, U71
   claim check K6).
 - `published` (default false). Requires `submitted: true`.
+  A published seed records no accepting decision, so it never counts
+  under "Editorial Activity"'s "Submissions Accepted", and after
+  "Unpublish" it stands at the Submission stage (U65 claim check K2).
 - `author`: `{orcid, orcidIsVerified}` on the submitter's contributor record.
   `orcidIsVerified: true` stores what ORCID's own sign-in leaves when the
   emailed link completes, the verified mark plus a live permission: a
@@ -2232,8 +2306,13 @@ Facts a suite meets:
 
 ## `POST scenarios/task`
 
-One run of a routine ("scheduled") task that ends in error, with its log
-file and its report email (U61). The client is `pkpApi.runTask(spec)`.
+One run of a routine ("scheduled") task. The client is
+`pkpApi.runTask(spec)`. `task` names it: `'updateIPGeoDB'` (the
+default, U61, the next paragraphs) or `'statisticsReport'` (U65, the
+monthly editorial statistics email, below); any other value is a 400.
+
+`updateIPGeoDB`: a run that ends in error, with its log file and its
+report email (U61).
 The task is lib/pkp's `PKP\task\UpdateIPGeoDB`, "Update DB-IP city lite
 database", registered in all three apps. It ends in error at its first
 step on every test install, because its download goes through the dead
@@ -2269,6 +2348,76 @@ Facts a suite meets:
   Administration › "Delete Task Logs" empties for every test at once: a
   test that presses it runs in the serial project with `@solo`, which
   runs alone, after every test that reads a log link.
+
+`statisticsReport` (U65): lib/pkp's `PKP\task\StatisticsReport`,
+"Editorial Report Notification", which the scheduler runs on the first
+of each month and no screen starts, for ONE context, with the jobs it
+queues run, so its emails reach Mailpit and its Tasks entries exist.
+
+- `context` (required): the context's path. Any other key (`result`
+  included) is a 400, as is an unknown path.
+
+The task's own run goes over every enabled context of the install
+(unchanged, so the recipients, the opt-outs and the date range are its
+own), with its one job batch captured instead of queued; the named
+context's jobs (StatisticsReportNotify, the Tasks entries, and
+StatisticsReportMail, the emails) are then queued as one real batch on
+the default queue and each is run by the app's queue worker, reserved by
+id, inside the request. The other contexts' jobs are dropped: no other
+context's editors are notified or emailed. A failed job fails the
+request (500) and its rows are removed. The response is `{task, name,
+context, contextId, dateStart, dateEnd, notified, mailed, jobs, batch,
+processId, logFile}`: `notified` and `mailed` the usernames the task
+chose for the Tasks entry and the email, sorted; `dateStart` and
+`dateEnd` the first days of the previous and of this month (the range
+the task passes to the figures).
+
+What a run leaves, equal to the command line's run narrowed to the
+context (`StatisticsReport::execute()` in a CommandLineTool, then `php
+lib/pkp/tools/jobs.php run`; U65 harness, 2026-09-28, three apps):
+
+- Recipients: every account of the context holding a manager-level or
+  Section Editor (Moderator) role, `admin` among them (every scratch
+  context enrols it as a manager), unless its Profile › Notifications
+  "Statistics report summary." says otherwise (`users[].notifications`
+  above): "Enable…" unticked gets nothing, "Do not send me an email…"
+  ticked the Tasks entry alone. Authors get nothing. At
+  `editorialStatsEmail: false` nobody (`jobs` 0). A disabled account
+  is listed in `notified` and `mailed` (the task picks it) but gets
+  neither, since both jobs skip it (U65 claim check K5, three apps).
+- The email, one per recipient, from the context's principal contact:
+  subject "Editorial activity for {Month}, {year}" (the previous month;
+  "Preprint Server activity for {Month}, {year}" on a preprint server),
+  the lines "New submissions this month: n", "Declined submissions this
+  month: n", "Accepted submissions this month: n" (blank on a preprint
+  server) and "Total submissions in the system: n", links to the
+  context's `stats/editorial` and `stats/publications`, an Unsubscribe
+  footer, and the attachment `editorial-report.csv`. Its links name the
+  server the request went to (the command line's name the config's
+  `base_url`, as for `updateIPGeoDB`). `admin@mail.test` receives one
+  per run of every test, so a test reads its own throwaway recipients.
+- Two `notifications` rows of type EDITORIAL_REPORT per emailed
+  recipient (the Tasks entry, level task, and the email's unsubscribe
+  row, level normal) and the Tasks row alone for a "Do not send me an
+  email…" recipient. The Tasks panel lists "This is a kind reminder for
+  you to check your publication's health through the editorial report."
+  with no submission title.
+- A finished `job_batches` row (2 jobs, 0 failed) and an empty queue.
+- Its command-line twin (`.reports/`-style `StatisticsReport::execute()`
+  then `php lib/pkp/tools/jobs.php run`) runs every job waiting on the
+  install's queue, not only the report's (U65 claim check K5).
+
+Facts a suite meets:
+
+- Seed the figures first: a submission counts in the email's month
+  only if dated there (`dateSubmitted` above, a day of the previous
+  month).
+- The run is scoped to its context and waits for no drain, so it may
+  run in a parallel test. It reads every context of the install, so it
+  takes longer as a fleet fills (0.45 s on a fleet of 19 journals).
+- A serial test's `runJobs()` drain running at the same moment can
+  reserve one of the run's jobs first; the request then waits for that
+  job to finish (at most 120 s), and the side effects are the same.
 
 ## The base context has plain defaults
 
@@ -2313,9 +2462,6 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   Publication Settings must save on a journal with a published issue, is
   assigned on screen; U44, U13, U16 claim checks).
 - Decision: `toAuthor`, `toReviewers`, `toEditor`.
-- User: `users[].notifications`, the Profile › Notifications pairs
-  (`{settingName: {enabled, email}}`); U35 S6 and S8, like U12 and U05, set
-  them on the person's own Notifications tab until it exists.
 - Context: an option to skip `admin`'s manager enrolment in the new context
   (every `createContext` enrols the site administrator as a manager; the
   "site admin with no manager role" state is reachable only through the

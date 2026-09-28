@@ -35,6 +35,11 @@
  * by the entry's own `key`: declareCustomRoles() registers the keys and
  * their levels before users[] is parsed, customRoleCreated() the new
  * role's id before users[] is seeded.
+ *
+ * U65: `notifications` {<setting name>: {enabled?, email?}} is the
+ * account's own Profile › "Notifications" › "Save" in the context
+ * (saveNotifications(): the app's NotificationSettingsForm through
+ * FormPost, acting as the account).
  */
 
 namespace PKP\testing;
@@ -44,6 +49,7 @@ use APP\facades\Repo;
 use Carbon\Carbon;
 use PKP\context\Context;
 use PKP\core\Core;
+use PKP\core\Registry;
 use PKP\userGroup\relationships\UserUserGroup;
 use PKP\orcid\OrcidManager;
 use PKP\db\DAORegistry;
@@ -158,6 +164,7 @@ class UserSeeder
         if (!is_bool($disabled)) {
             throw new SpecException("{$spec->path}.disabled", 'disabled must be a boolean (the account disabled on Users & Roles)');
         }
+        $notifications = $this->parseNotifications($spec);
         return [
             'specPath' => $spec->path,
             'username' => $username,
@@ -176,7 +183,126 @@ class UserSeeder
             'structureKey' => $structureKey,
             'orcid' => $orcid !== null ? (string) $orcid : null,
             'orcidIsVerified' => $orcidIsVerified,
+            'notifications' => $notifications,
         ];
+    }
+
+    /**
+     * `notifications` (U65): the account's Profile › "Notifications" tab
+     * in this context, a map from a row's setting name (the form's field
+     * name, e.g. `notificationEditorialReport` for "Statistics report
+     * summary.") to `{enabled?, email?}`: `enabled` the row's "Enable these
+     * types of notifications." box, `email` whether email goes out, i.e.
+     * false is "Do not send me an email for these types of notifications."
+     * ticked. A new account's tab has every "Enable" box ticked and every
+     * "Do not send me an email…" box unticked; an absent half keeps that.
+     * Unticking "Enable" disables the email box on the tab (its script's
+     * enable/disable pairs), which then posts nothing, so `{enabled: false,
+     * email: false}` is a state the tab cannot save: a 400. Which rows the
+     * tab shows depends on the context (Profile › Notifications leaves out
+     * "Statistics report summary." while the context's editorialStatsEmail
+     * is off), so that check is made at seed time. Parse phase: no writes.
+     *
+     * @return array<string, array{enabled: bool, email: bool}>
+     */
+    protected function parseNotifications(Spec $spec): array
+    {
+        $raw = $spec->get('notifications');
+        if ($raw === null) {
+            return [];
+        }
+        $map = (new \APP\notification\NotificationManager())->getNotificationSettingsMap();
+        $names = array_column($map, 'settingName');
+        $expected = 'notifications must be a map of Profile › Notifications setting name (' . implode(', ', $names) . ') to {enabled?, email?}';
+        if (!is_array($raw) || $raw === [] || array_is_list($raw)) {
+            throw new SpecException("{$spec->path}.notifications", $expected);
+        }
+        $plans = [];
+        foreach ($raw as $name => $pair) {
+            $name = (string) $name;
+            $path = "{$spec->path}.notifications.{$name}";
+            if (!in_array($name, $names, true)) {
+                throw new SpecException($path, "Unknown notification setting \"{$name}\". {$expected}");
+            }
+            if (!is_array($pair) || $pair === [] || array_is_list($pair)) {
+                throw new SpecException($path, "{$name} must be {enabled?, email?}, at least one of them");
+            }
+            foreach (array_keys($pair) as $key) {
+                if (!in_array($key, ['enabled', 'email'], true)) {
+                    throw new SpecException("{$path}.{$key}", "Unsupported spec key \"{$path}.{$key}\" (enabled: the \"Enable these types of notifications.\" box; email: false is \"Do not send me an email for these types of notifications.\" ticked)");
+                }
+                if (!is_bool($pair[$key])) {
+                    throw new SpecException("{$path}.{$key}", "{$key} must be a boolean");
+                }
+            }
+            $enabled = $pair['enabled'] ?? true;
+            $email = $pair['email'] ?? true;
+            if (!$enabled && !$email) {
+                throw new SpecException($path, 'The tab disables "Do not send me an email…" while "Enable these types of notifications." is unticked, so it cannot be saved ticked: give enabled: false alone');
+            }
+            $plans[$name] = ['enabled' => $enabled, 'email' => $email];
+        }
+        return $plans;
+    }
+
+    /**
+     * Profile › "Notifications" › "Save" as the account itself, in the
+     * context (ProfileTabHandler::saveNotificationSettings: the app's
+     * NotificationSettingsForm, its readInputData, validate and execute,
+     * through FormPost). The post is the tab as it shows for the account
+     * (the rows of getNotificationSettingCategories for the context, each
+     * box as its stored subscription rows tick it) with the plan's boxes
+     * changed, so the save rewrites both lists exactly as the tab's
+     * "Save" does, rows the tab does not show included (a row absent from
+     * the post is stored as blocked). Not run: the handler's "Saved" toast
+     * (a trivial notification) and the POST and CSRF checks.
+     *
+     * @param array<string, array{enabled: bool, email: bool}> $plans
+     */
+    protected function saveNotifications(Context $context, User $user, array $plans, string $specPath): void
+    {
+        $form = new \APP\notification\form\NotificationSettingsForm();
+        $map = (new \APP\notification\NotificationManager())->getNotificationSettingsMap();
+        $shown = [];
+        foreach ($form->getNotificationSettingCategories($context) as $category) {
+            foreach ($category['settings'] as $settingId) {
+                $shown[$settingId] = $map[$settingId];
+            }
+        }
+        $shownNames = array_column($shown, 'settingName');
+        foreach (array_keys($plans) as $name) {
+            if (!in_array($name, $shownNames, true)) {
+                throw new SpecException("{$specPath}.notifications.{$name}", "Profile › Notifications does not show the \"{$name}\" row in this context" . ($name === 'notificationEditorialReport' ? ' (its editorialStatsEmail is off)' : ''));
+            }
+        }
+
+        $dao = DAORegistry::getDAO('NotificationSubscriptionSettingsDAO'); /** @var \PKP\notification\NotificationSubscriptionSettingsDAO $dao */
+        $blocked = $dao->getNotificationSubscriptionSettings($dao::BLOCKED_NOTIFICATION_KEY, $user->getId(), $context->getId());
+        $noEmail = $dao->getNotificationSubscriptionSettings($dao::BLOCKED_EMAIL_NOTIFICATION_KEY, $user->getId(), $context->getId());
+        $vars = [];
+        foreach ($shown as $settingId => $setting) {
+            $plan = $plans[$setting['settingName']] ?? null;
+            $enabled = $plan['enabled'] ?? !in_array($settingId, $blocked);
+            $emailBoxTicked = $plan !== null ? !$plan['email'] : in_array($settingId, $noEmail);
+            if ($enabled) {
+                $vars[$setting['settingName']] = '1';
+                // The email box is posted only while its "Enable" box is
+                // ticked (the tab disables it otherwise).
+                if ($emailBoxTicked) {
+                    $vars[$setting['emailSettingName']] = '1';
+                }
+            }
+        }
+
+        $previousUser = Registry::get('user');
+        Registry::set('user', $user);
+        $restoreContext = ContextFactory::forceRequestContext($context);
+        try {
+            FormPost::run($form, $vars, "{$specPath}.notifications", 'Profile › Notifications would refuse this');
+        } finally {
+            $restoreContext();
+            Registry::set('user', $previousUser);
+        }
     }
 
     /**
@@ -440,6 +566,13 @@ class UserSeeder
                     $subEditorGroup->id
                 );
             }
+        }
+
+        // Profile › "Notifications" › "Save" by the account itself (U65),
+        // after its roles and before a disable (a disabled account cannot
+        // sign in to save it).
+        if (($plan['notifications'] ?? []) !== []) {
+            $this->saveNotifications($context, $user, $plan['notifications'], $plan['specPath']);
         }
 
         if ($plan['disabled'] ?? false) {

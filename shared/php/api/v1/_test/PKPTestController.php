@@ -22,8 +22,11 @@
  * - POST scenarios/submission  — submission at a declared end-state
  * - POST site                  — the site's own settings (SiteSettingsSeeder)
  * - POST scenarios/job         — a queued or failed test job (JobScenarioBuilder)
- * - POST scenarios/task        — a routine task run that ends in error, its
- *                                report email sent for real (TaskRunScenarioBuilder)
+ * - POST scenarios/task        — a routine task run (TaskRunScenarioBuilder):
+ *                                UpdateIPGeoDB ending in error, its report
+ *                                email sent for real (U61), or the monthly
+ *                                StatisticsReport for one context, its jobs
+ *                                run and its emails sent for real (U65)
  * - GET  jobs                  — the queue's size a runJobs() drain waits on
  *
  * Every mutating request but scenarios/job and scenarios/task runs under
@@ -215,8 +218,10 @@ abstract class PKPTestController extends PKPBaseController
     }
 
     /**
-     * A routine task run that ends in error (U61): its report email is the
-     * state, so it is sent for real; the task writes no database row.
+     * A routine task run (U61 UpdateIPGeoDB ending in error, U65 the
+     * monthly StatisticsReport for one context): its emails are the state,
+     * so they are sent for real, and the jobs it queues are inserted only
+     * outside a transaction, so none is used.
      */
     public function taskScenario(Request $illuminateRequest): JsonResponse
     {

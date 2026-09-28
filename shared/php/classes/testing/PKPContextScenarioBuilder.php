@@ -96,6 +96,11 @@
  *   Posted" (U49; OPS EmailSetupForm::FIELD_POSTED_ACK, read by
  *   SendPostedAcknowledgement and OPS mail\Repository). Only the OPS
  *   context schema carries the key, so OJS and OMP answer 400 on it.
+ * - editorialStatsEmail (bool) — Settings › Workflow › Emails "Editorial
+ *   statistics" (U65; PKPEmailSetupForm): true "Send a monthly email to
+ *   editors." (every new context's stored default), false "Do not send
+ *   the email to editors.". Read by the monthly StatisticsReport task
+ *   (scenarios/task `statisticsReport`) and Profile › Notifications.
  * - enablePublicComments (bool) — Settings › Website › Content › "Comments"
  *   tab's "Enable Public Comments" box (U14; ContentCommentsForm, a lib/pkp
  *   form the three apps share, so the key applies to all of them). Off on
@@ -520,6 +525,17 @@ abstract class PKPContextScenarioBuilder
             fn (Spec $spec) => $this->userSeeder->parse($spec, $this->structureKey()),
             $root->childList('users')
         );
+        // users[].notifications (U65): Profile › Notifications has no
+        // "Statistics report summary." row while editorialStatsEmail is
+        // off, refused here, before the context exists (D4); the seed
+        // checks every row against the tab again.
+        if (($this->formSettingsPlan['editorialStatsEmail'] ?? true) === false) {
+            foreach ($userPlans as $plan) {
+                if (isset($plan['notifications']['notificationEditorialReport'])) {
+                    throw new SpecException("{$plan['specPath']}.notifications.notificationEditorialReport", 'Profile › Notifications does not show "Statistics report summary." while editorialStatsEmail is false');
+                }
+            }
+        }
         $componentPlans = $this->parseComponents($root, $primaryLocale);
         $templatePlans = $this->parseTaskTemplates($root);
         $libraryFilePlans = LibraryFileSeeder::parse($root, true);
@@ -2334,6 +2350,27 @@ abstract class PKPContextScenarioBuilder
             }
             $settings['postedAcknowledgement'] = $value;
             $specKeys['postedAcknowledgement'] = 'postedAcknowledgement';
+        }
+
+        if ($root->has('editorialStatsEmail')) {
+            // The Emails tab's "Editorial statistics" radio, group "For
+            // Editors" (U65; PKPEmailSetupForm::addStatisticsReportField, a
+            // FieldOptions of type radio over the schema's boolean, default
+            // true, stored on every new context): true "Send a monthly email
+            // to editors.", false "Do not send the email to editors.". The
+            // form posts its whole body form-encoded, this radio as "true" /
+            // "false", which the save's convertStringsToSchema turns back
+            // into the boolean; the stored row is 1 / 0. The key writes this
+            // row alone. Read by the monthly StatisticsReport task and by
+            // Profile › Notifications ("Statistics report summary." shows
+            // only while it is on). Shared by the three apps.
+            $hasProperty('editorialStatsEmail') || throw new SpecException('editorialStatsEmail', 'editorialStatsEmail is not a setting of this app\'s context schema');
+            $value = $root->get('editorialStatsEmail');
+            if (!is_bool($value)) {
+                throw new SpecException('editorialStatsEmail', 'editorialStatsEmail must be a boolean (true "Send a monthly email to editors.", false "Do not send the email to editors.")');
+            }
+            $settings['editorialStatsEmail'] = $value;
+            $specKeys['editorialStatsEmail'] = 'editorialStatsEmail';
         }
 
         if ($root->has('enablePublicComments')) {
