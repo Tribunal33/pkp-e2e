@@ -1261,7 +1261,7 @@ and the address saved, and with "not entered" saved (td4).
 <a id="fn-f-a11"></a>
 **f-a11** — Note g: `openStep('{$step.id}')` is served as `openStep('')`
 in both `review-relation.tpl` and `review-license.tpl`, so neither
-"Edit" names a step; the Submission wizard spec's Rule 12 has every
+"Edit" names a step; the Submission wizard spec's Rule 12a has every
 panel's "Edit" jump back to its step. Live-probed 2026-09-27 on five
 runs over two drafts.
 

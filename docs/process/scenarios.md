@@ -1506,7 +1506,9 @@ Keys:
   each `{label, locale, file}` or `{label, locale, urlRemote}`, created the
   way the workflow's "Galleys" page creates them, after the decisions and
   before a publish (an editor builds the galleys, then publishes, so a
-  `published: true` seed carries them published). `label` is required (the
+  `published: true` seed carries them published); on OPS a
+  `submitted: false` draft takes them too, and opens with the galley on
+  "Upload Files" (U21 claim check I28, 2026-09-28). `label` is required (the
   "Create New Galley" window's own rule); `locale` defaults to the
   submission's locale and must be one the window's list offers (the
   context's submission locales); the window itself preselects the
