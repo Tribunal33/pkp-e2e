@@ -360,10 +360,11 @@ Nothing on either page is required, and neither page has a form-level
   "Preview" (Rule 11).
 - *[Submission activity log & notes](U38-submission-activity-log-and-notes.md)*:
   the "History" lines of Side effects.
-- *Article landing page & reading* (no spec yet): the article's page
-  that carries the "JATS XML" link (Rule 10).
-- *Plugins management*, *Statistics* (no specs yet): the plugin's switch
-  and the "JATS" column of Settings bullet 1.
+- [Article landing page & reading](U13-article-landing-page-and-reading.md):
+  the article's page that carries the "JATS XML" link (Rule 10).
+- [Plugins management](U62-plugins-management.md),
+  [Statistics](U64-usage-statistics.md): the plugin's switch and the "JATS"
+  column of Settings bullet 1.
 
 ## Canonical scenarios
 

@@ -24,9 +24,9 @@ This spec also owns the list machinery every backend submission list shares:
 the table, the search, the filter panel, the selection mode for deleting
 incomplete submissions, and the open-in-place workflow panel. The author's
 own list (*[My Submissions](U22-my-submissions.md)*) and the reviewer's
-assignment list (*Reviewer's review*, no spec yet) are separate features
-that use this machinery. Their rows, views and permissions are specified
-there, not here.
+assignment list ([Reviewer's review](U28-reviewers-review.md)) are separate
+features that use this machinery. Their rows, views and permissions are
+specified there, not here.
 
 ## Actors & permissions
 
@@ -78,7 +78,7 @@ the account's roles, never on which dashboard page it opens from:
    overdue" is colored to draw attention, whatever it counts, zero
    included; the other badges are plain {OJS OMP}. Accounts that also hold
    Reviewer or Author see that role's own sidebar group beside this one
-   (owned by *Reviewer's review*, no spec yet, and
+   (owned by [Reviewer's review](U28-reviewers-review.md) and
    *[My Submissions](U22-my-submissions.md)*), and "Start A New
    Submission" (owned by *[Submission wizard](U21-submission-wizard.md#ways-in)*).
    <sup>a</sup> <sup>d</sup>
@@ -209,8 +209,8 @@ the account's roles, never on which dashboard page it opens from:
      *[Submission wizard](U21-submission-wizard.md)*.
    - 9d. **Submission stage, no editor assigned** {OJS OMP}: an **"Assign
      Editor"** button that opens the "Assign Participant" window (the form
-     is owned by *Stage participants*, no spec yet). Once an editor is
-     assigned, the cell goes quiet. <sup>j</sup>
+     is owned by [Stage participants](U35-stage-participants.md)). Once an
+     editor is assigned, the cell goes quiet. <sup>j</sup>
    - 9e. **In review** {OJS OMP}: the review-round states, in the round's
      own vocabulary. See Rule 10 for the per-reviewer indicators that
      accompany most of them:
@@ -340,9 +340,10 @@ the account's roles, never on which dashboard page it opens from:
 ## Settings that modify behavior
 
 - **Reviews required** {OJS OMP}: the journal's required number of reviews
-  (configured in review setup; *Review setup & review forms*, no spec yet)
-  drives the "Needs reviews" view and the "Minimum required number of
-  reviews…" message (Rule 9e).
+  (configured in review setup;
+  [Review setup & review forms](U29-review-setup-and-review-forms.md)) drives
+  the "Needs reviews" view and the "Minimum required number of reviews…"
+  message (Rule 9e).
 - **Notification opt-out**: each editor can block the monthly
   outstanding-tasks email in their profile's notification settings. The
   control there is labelled "Weekly email of outstanding tasks", though the
@@ -358,8 +359,8 @@ the account's roles, never on which dashboard page it opens from:
   feature's table, search, filters and selection machinery. It owns its own
   views, columns and permissions. Landing precedence and the forward from
   the old address are specified there ("Landing").
-- *Reviewer's review* (no spec yet): the reviewer's assignment list is the
-  page's third face. It uses the same machinery with its own views and
+- [Reviewer's review](U28-reviewers-review.md): the reviewer's assignment list
+  is the page's third face. It uses the same machinery with its own views and
   columns.
 - *[Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#workflow-entry)*:
   owns everything behind "View". This spec owns only the open-in-place mechanism (Rule 11).
@@ -370,7 +371,7 @@ the account's roles, never on which dashboard page it opens from:
 - *[Submission wizard](U21-submission-wizard.md)*: creates the incomplete
   submissions this dashboard lists and cleans up. "Complete submission"
   re-enters it.
-- *Stage participants* (no spec yet): the "Assign Editor" window.
+- [Stage participants](U35-stage-participants.md): the "Assign Editor" window.
 
 ## Canonical scenarios
 

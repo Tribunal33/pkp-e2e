@@ -390,12 +390,13 @@ and the buttons "Yes" and "No" (Rule 6). <sup>k</sup> <sup>q7</sup>
   publishing, and "Create New Version", whose copies Rule 9 describes.
 - **[Submission activity log & notes](U38-submission-activity-log-and-notes.md)**:
   the Activity Log that holds the lines of Side effects.
-- **Submission intake configuration** (no spec yet): the "Components"
-  list whose boxes Settings bullets 1 to 3 describe.
-- **JATS & Body Text** (no spec yet): the "Body Text" page of a
+- **[Submission intake configuration](U58-submission-intake-configuration.md)**:
+  the "Components" list whose boxes Settings bullets 1 to 3 describe.
+- **[JATS & Body Text](U48-jats-and-body-text.md)**: the "Body Text" page of a
   journal's side menu, and the images added there.
-- **Article landing page & reading** (no spec yet): the reader's page
-  that shows an HTML galley, and the "HTML Article Galley" plugin.
+- **[Article landing page & reading](U13-article-landing-page-and-reading.md)**:
+  the reader's page that shows an HTML galley, and the "HTML Article Galley"
+  plugin.
 
 ## Canonical scenarios
 

@@ -718,14 +718,15 @@ sidebar, Settings bullet 13), headed "Subscription"; its lines are Rule
 - *[Notifications center & email preferences](U05-notifications-center-and-email-preferences.md)*:
   the "An issue has been made open access." preferences and the email's
   footer.
-- *Payments & APCs* (no spec yet): Settings › Distribution › "Payments",
-  the "Payment Types" and "Payments" tabs, the manual method's page and
-  email, and membership.
+- [Payments & APCs](U52-payments-and-apcs.md): Settings › Distribution ›
+  "Payments", the "Payment Types" and "Payments" tabs, the manual method's
+  page and email, and membership.
 - *Institutions* (no spec yet): the institutions and IP ranges an
   institutional subscription relies on.
-- *Roles configuration*, *Users management* (no specs yet): the "Site
-  Access Options" box, and giving someone the Subscription Manager role.
-- *OAI-PMH* (no spec yet): "Enable OAI" on the "Access" tab.
+- [Roles configuration](U54-roles-configuration.md),
+  [Users management](U53-users-management.md): the "Site Access Options" box,
+  and giving someone the Subscription Manager role.
+- [OAI-PMH](U19-oai-pmh.md): "Enable OAI" on the "Access" tab.
 - *Login & sessions*: the Login page the refusals of Rule 12 lead to, and
   where the Subscription Manager lands after signing in (Actors).
 

@@ -406,22 +406,22 @@ windows are the galley row's "Edit" on the Galleys page (a window headed
   owns the confirmation window and "Create New Version". This spec owns
   the URN note inside the window (Rule 17) and what a new version copies
   (Rule 19).
-- *Galleys* (no spec yet): owns the Galleys page and the galley window.
+- [Galleys](U46-galleys.md): owns the Galleys page and the galley window.
   This spec owns its "Identifiers" tab.
-- *Issues* (no spec yet): owns the Issues pages, the "Edit" issue
+- [Issues](U50-issues.md): owns the Issues pages, the "Edit" issue
   window, the issue galley form and "Publish Issue" with its email box.
   This spec owns the "Identifiers" tab, the issue galley's "Publisher
   ID" and the URN step of "Publish Issue" (Rules 15, 16).
-- *Plugins management* (no spec yet): owns the Plugins page, enabling
-  and disabling. This spec owns the "URN" plugin's settings window.
-- *Article landing page & reading*, *Monograph landing page* (no specs
-  yet): own the reader pages. This spec owns the URN blocks on them
-  (Rule 21).
-- *DOIs* (no spec yet): DOIs, their settings and their registration.
-- *Import & export* reads both identifiers, *Search-engine metadata &
-  analytics* the URN (Side effects); *JATS & Body Text* writes the
-  article's own numbers as its publisher IDs and reads neither (no
-  specs yet).
+- [Plugins management](U62-plugins-management.md): owns the Plugins page,
+  enabling and disabling. This spec owns the "URN" plugin's settings window.
+- [Article landing page & reading](U13-article-landing-page-and-reading.md),
+  *Monograph landing page* (no spec yet): own the reader pages. This spec owns
+  the URN blocks on them (Rule 21).
+- [DOIs](U45-dois.md): DOIs, their settings and their registration.
+- [Import & export](U63-import-export.md) reads both identifiers,
+  [Search-engine metadata & analytics](U20-search-engine-metadata-and-analytics.md)
+  the URN (Side effects); [JATS & Body Text](U48-jats-and-body-text.md) writes
+  the article's own numbers as its publisher IDs and reads neither.
 - *[Submission activity log & notes](U38-submission-activity-log-and-notes.md)*:
   owns the Activity Log; this spec owns which identifier saves add a
   line to it (Side effects).

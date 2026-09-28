@@ -185,8 +185,8 @@ the submission."): <sup>c</sup>
   configurable. When the registry service is unreachable, the check is
   skipped silently and the save goes through. <sup>d</sup>
 - The neighboring **"Funding Statement"** setting on the same screen governs
-  the free-text statement field, owned by *Publication metadata* (no spec
-  yet).
+  the free-text statement field, owned by
+  [Publication metadata](U40-publication-metadata.md).
 
 ## Cross-feature interactions
 
@@ -199,9 +199,10 @@ the submission."): <sup>c</sup>
 - *[Submission wizard](U21-submission-wizard.md)* owns the wizard shell
   (steps, Review, submit). This spec owns the Funders section it mounts
   (Rules 10–11).
-- *Article landing page & reading* (no spec yet; the press counterpart is
-  the OMP catalog's book page) owns the landing screen. The Funders block on
-  it is described here (Rule 9) as this feature's reader surface.
+- [Article landing page & reading](U13-article-landing-page-and-reading.md)
+  (the press counterpart is the OMP catalog's book page) owns the landing
+  screen. The Funders block on it is described here (Rule 9) as this feature's
+  reader surface.
 - *[Contributors & affiliations](U41-contributors-and-affiliations.md#ror-lookup)*
   is the home of the ROR registry lookup machinery the Funder field reuses.
 - The search machinery can filter submissions by funder. Any reader-facing

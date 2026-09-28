@@ -556,13 +556,16 @@ page reads "View {issue name}" ⚠ [A7](#a7). <sup>v</sup>
   the lines released, removed and unpublished articles leave.
 - *[Galleys](U46-galleys.md)*: an article's own galleys, which its
   summary lists; issue galleys are this spec's.
-- *Subscriptions & open access control* (no spec yet): "Publishing
+- [Subscriptions & open access control](U51-subscriptions.md): "Publishing
   Mode", "Delayed Open Access", what "Access status", "Open access date"
   and "Open Access" let readers open, and the open-access email.
-- *DOIs*, *Sections*, *Emails management*, *Statistics — usage*,
-  *Catalog management*, *Catalog browse* (no specs yet): issue DOIs, the
-  section form's title box, the "Issue Published Notify" template, issue
-  statistics, and a press's counterpart to issues.
+- [DOIs](U45-dois.md), [Sections](U17-sections.md),
+  [Emails management](U56-emails-management.md),
+  [Statistics — usage](U64-usage-statistics.md),
+  [Catalog management](U70-catalog-management.md),
+  [Catalog browse](U68-catalog-browse.md): issue DOIs, the section form's
+  title box, the "Issue Published Notify" template, issue statistics, and a
+  press's counterpart to issues.
 
 ## Canonical scenarios
 

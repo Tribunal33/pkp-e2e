@@ -25,9 +25,9 @@ A preprint server's screens say **Post**/**Unpost**/**Posted** where a
 journal's say Publish/Unpublish/Published, and its confirmation window is
 titled "Post the preprint". The press's per-submission "Catalog Entry"
 page and its catalog flags belong to
-*Catalog management* (no spec yet); this spec owns only the act of
+[Catalog management](U70-catalog-management.md); this spec owns only the act of
 publishing. A journal's issues themselves, meaning creating, ordering and
-publishing them, belong to *Issues* (no spec yet); this spec owns the
+publishing them, belong to [Issues](U50-issues.md); this spec owns the
 issue-assignment choices offered while publishing an article.
 
 ## Actors & permissions
@@ -188,7 +188,7 @@ page, described in *Catalog management*. It saves onto the shown version.
    before Confirm yields the promised scheduling window.
 
    A scheduled article goes live when its issue is published. Releasing
-   it is part of publishing the issue (see *Issues*, no spec yet), not a
+   it is part of publishing the issue (see [Issues](U50-issues.md)), not a
    clock. <sup>m</sup>
 6. **Scheduling on a press or preprint server is by date.** There is no
    issue step. Publish/Post with the entry page's date field empty ("Date
@@ -323,8 +323,8 @@ page, described in *Catalog management*. It saves onto the shown version.
     "Send File to Text Editor", asking "To which version would you like to
     send this file?" ("Create New Version" first, then each existing
     version by its side-menu name, Rule 11a), with none selected as it
-    opens. What happens to the file afterwards belongs to *JATS & Body
-    Text* (no spec yet). <sup>v</sup>
+    opens. What happens to the file afterwards belongs to
+    [JATS & Body Text](U48-jats-and-body-text.md). <sup>v</sup>
 17. **The awaiting-approval notice.** While no version is published, a
     press's Production stage shows the banner "Awaiting approval." with
     "The monograph will not be listed in the catalog until it has been
@@ -419,21 +419,21 @@ page, described in *Catalog management*. It saves onto the shown version.
   Submission-stage "Schedule For Publication" shortcut that lands here.
 - *[Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#stage-access)*:
   who opens the workflow screen and sees the Publication area at all.
-- *Issues* (no spec yet): issues themselves. Publishing an issue is what
+- [Issues](U50-issues.md): issues themselves. Publishing an issue is what
   releases articles scheduled into it (Rule 5), and unpublishing an issue
   sets its articles back to "Scheduled".
-- *Catalog management* (no spec yet): the press's Catalog Entry page,
-  add-to-catalog and catalog flags. Its catalog notice replaces the
+- [Catalog management](U70-catalog-management.md): the press's Catalog Entry
+  page, add-to-catalog and catalog flags. Its catalog notice replaces the
   awaiting-approval banner (Rule 17).
-- *JATS & Body Text* (no spec yet): the "Send to Text Editor" import that
-  this feature's version dialog opens (Rule 16).
+- [JATS & Body Text](U48-jats-and-body-text.md): the "Send to Text Editor"
+  import that this feature's version dialog opens (Rule 16).
 - [My Submissions](U22-my-submissions.md) /
   [Submissions dashboard](U23-submissions-dashboard.md): the list views a
   publish, schedule or unpublish moves a submission between.
 - [ORCID integration](U04-orcid-integration.md): the ORCID publishing
   requirements (Rule 7) and the on-publish deposit.
-- *Payments & APCs* (no spec yet): the publication fee whose unpaid state
-  blocks a journal's publishing (Rule 7).
+- [Payments & APCs](U52-payments-and-apcs.md): the publication fee whose
+  unpaid state blocks a journal's publishing (Rule 7).
 - [Submission wizard](U21-submission-wizard.md): the preprint server's
   post-submission texts that tell a submitter whether they can post.
 

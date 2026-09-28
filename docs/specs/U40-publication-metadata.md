@@ -453,9 +453,9 @@ it for a per-item value (Rule 11). <sup>g</sup>
   owns which roles reach the workflow screen, its stages and the Publication
   area ([→ the Publication tabs](U24-workflow-screen-and-stage-access.md#publication-tabs)).
   This spec's Actors rows start from that access.
-- *Stage participants* (no spec yet): owns the participant assignment and
-  its "Allow this person to make changes to the publication…" checkbox
-  that Rule 2 reads.
+- [Stage participants](U35-stage-participants.md): owns the participant
+  assignment and its "Allow this person to make changes to the publication…"
+  checkbox that Rule 2 reads.
 - *[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*:
   owns publishing,
   scheduling, unpublishing and versions, including the "Review Publishing
@@ -473,20 +473,22 @@ it for a per-item value (Rule 11). <sup>g</sup>
   the panel's issue-assignment radios race their own preselection, and
   changing them early ends in a server refusal whose raw technical
   message surfaces in a dialog.
-- *Issues* (no spec yet): owns issues and their publication date, which
+- [Issues](U50-issues.md): owns issues and their publication date, which
   Rule 12 reads on a journal set to the issue's date.
-- *[Funding](U43-funding.md)*, *Contributors & affiliations*, *Citations
-  & references*, *Galleys*, *Catalog management* (no specs yet except
-  Funding): sibling Publication-area pages that reuse the edit gate of
-  Rule 2 ([→ edit gate](#edit-gate)) and the published-version banners of
-  Rules 8–9. *Identifiers* has no Publication-area page at the pinned
-  commits: DOI management lives on the dashboard's "DOIs" page, and the
-  publisher ID on this feature's Metadata page.
-- *Import & export* (no spec yet): owns the Tools page and its tab bar.
+- *[Funding](U43-funding.md)*,
+  [Contributors & affiliations](U41-contributors-and-affiliations.md),
+  [Citations & references](U42-citations-and-references.md),
+  [Galleys](U46-galleys.md), [Catalog management](U70-catalog-management.md):
+  sibling Publication-area pages that reuse the edit gate of Rule 2
+  ([→ edit gate](#edit-gate)) and the published-version banners of Rules 8–9.
+  *Identifiers* has no Publication-area page at the pinned commits: DOI
+  management lives on the dashboard's "DOIs" page, and the publisher ID on
+  this feature's Metadata page.
+- [Import & export](U63-import-export.md): owns the Tools page and its tab bar.
   The Permissions tab's content is Rule 14.
-- *Article landing page & reading* (no spec yet; press counterpart
-  *Catalog book page*): owns the landing page. The License, Data
-  Availability Statement and Funding Statement blocks on it are described
+- [Article landing page & reading](U13-article-landing-page-and-reading.md)
+  (press counterpart *Catalog book page*): owns the landing page. The License,
+  Data Availability Statement and Funding Statement blocks on it are described
   here (Rule 15) as this feature's reader surface.
 
 ## Canonical scenarios

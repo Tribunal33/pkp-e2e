@@ -765,7 +765,8 @@ links under the list. <sup>g</sup>
 - **[Reviewer assignment & management](U27-reviewer-assignment-and-management.md)**
   and **[Review setup & review forms](U29-review-setup-and-review-forms.md)**:
   a review's "Public Visibility" and "Mark as Complete" (Rule 7).
-- *Plugins management*, *Import & export* (no specs yet): the plugin
+- [Plugins management](U62-plugins-management.md),
+  [Import & export](U63-import-export.md): the plugin
   list that enables the agencies (Rule 34) and the Tools pages of
   Rule 44.
 

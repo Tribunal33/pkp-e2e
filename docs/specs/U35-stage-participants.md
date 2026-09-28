@@ -505,12 +505,12 @@ two roles of one level. <sup>d</sup>
 - *[Notifications center](U05-notifications-center-and-email-preferences.md)*:
   the "Discussion added." and "needs an editor" rows, the discussion
   email's footer, and the opt-out box of Rule 12.
-- *Tasks & discussions* (no spec yet): the discussions a message opens and
-  the template screen that supplies the predefined messages.
-- *Roles configuration* (no spec yet): the stage sets and the two role
-  options of Settings.
-- *Submission activity log & notes* (no spec yet): the screen the log lines
-  land on.
+- [Tasks & discussions](U37-tasks-and-discussions.md): the discussions a
+  message opens and the template screen that supplies the predefined messages.
+- [Roles configuration](U54-roles-configuration.md): the stage sets and the
+  two role options of Settings.
+- [Submission activity log & notes](U38-submission-activity-log-and-notes.md):
+  the screen the log lines land on.
 
 ## Canonical scenarios
 

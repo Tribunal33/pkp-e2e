@@ -355,10 +355,10 @@ screen, Rule 12): <sup>e</sup>
 - *Institutions* (no spec yet): the manager-maintained institution list
   for subscriptions and statistics is a separate record set. Only the
   registry lookup above is shared.
-- *Article landing page & reading* (no spec yet; the press counterpart is
-  the OMP catalog's book page) owns the landing screen. The contributor
-  block on it is described here (Rule 14) as this feature's reader
-  surface. A press's chapter-level author lists belong to
+- [Article landing page & reading](U13-article-landing-page-and-reading.md)
+  (the press counterpart is the OMP catalog's book page) owns the landing
+  screen. The contributor block on it is described here (Rule 14) as this
+  feature's reader surface. A press's chapter-level author lists belong to
   *Chapters & work type* {OMP}.
 - **User profiles and the masthead** use a separate, plain-text
   affiliation field, not this feature's institution records. The two meet

@@ -364,14 +364,14 @@ bottom; "Save" at the foot. <sup>h</sup>
   the side menu's "Content" group that holds "Catalog".
 - [Activity log & notes](U38-submission-activity-log-and-notes.md#what-is-logged):
   the log lines of a publish and of a page save.
-- *Catalog browse* (no spec yet): the public catalog, "New Releases",
+- [Catalog browse](U68-catalog-browse.md): the public catalog, "New Releases",
   category and series pages that show the flags, order and covers set
   here.
 - *Monograph landing page* (no spec yet): the page "View Entry" opens and
   the address a URL Path sets.
-- *Chapters & work type*, *Publication formats & proof terms* (no specs
-  yet): the version's other pages and the "Marketing" group of the
-  workflow's side menu.
+- [Chapters & work type](U72-chapters-work-type.md),
+  *Publication formats & proof terms* (no spec yet): the version's other pages
+  and the "Marketing" group of the workflow's side menu.
 
 ## Canonical scenarios
 

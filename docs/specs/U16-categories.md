@@ -437,10 +437,10 @@ cannot be reached by heading ⚠ [OMP3](#omp3). <sup>h</sup>
   Entry" page.
 - **[Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md)**:
   the press's "Category" menu item type and the breadcrumb frame.
-- *Catalog browse* (no spec yet): a press's "New Releases" and featured
+- [Catalog browse](U68-catalog-browse.md): a press's "New Releases" and featured
   books on its category pages, and the "Browse" block's "New Releases"
   and "Series".
-- *Sections* (no spec yet): a preprint server's top-level category links
+- [Sections](U17-sections.md): a preprint server's top-level category links
   on its home page and "Archives" page.
 - *Monograph landing page* (no spec yet): the category links on a book's
   page.

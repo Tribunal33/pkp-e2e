@@ -492,9 +492,11 @@ edit." and each participant's assignment, described by
   Details" window that shows the Data Citations table (Rule 25).
 - *[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*:
   creating the version that receives the copies of Rule 26.
-- *Article landing page & reading* and *Monograph landing page* (no specs
-  yet): the published page whose "References" block Rule 27 describes.
-- *DOIs*, *Import & export*, *JATS & Body Text* (no specs yet): the
+- [Article landing page & reading](U13-article-landing-page-and-reading.md) and
+  *Monograph landing page* (no spec yet): the published page whose
+  "References" block Rule 27 describes.
+- [DOIs](U45-dois.md), [Import & export](U63-import-export.md),
+  [JATS & Body Text](U48-jats-and-body-text.md): the
   deposits, exports, generated JATS XML and Body Text editor that carry the
   lists outward (Side effects).
 - *[Funding](U43-funding.md)*: the sibling list on the next Publication

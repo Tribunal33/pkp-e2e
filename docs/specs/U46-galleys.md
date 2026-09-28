@@ -288,10 +288,10 @@ wish to delete this item? This action cannot be undone." and the buttons
   [A3](#a3) compare against.
 - **[Stage participants](U35-stage-participants.md)**: the assignment's
   "Permissions" box (Actors).
-- **Article landing page & reading** (no spec yet): the reader's article
-  page and the galley links on it (Side effects).
-- **DOIs** (no spec yet): galley DOIs.
-- **Issues** (no spec yet): an issue's own galleys, a different form on
+- **[Article landing page & reading](U13-article-landing-page-and-reading.md)**:
+  the reader's article page and the galley links on it (Side effects).
+- **[DOIs](U45-dois.md)**: galley DOIs.
+- **[Issues](U50-issues.md)**: an issue's own galleys, a different form on
   the Issues page.
 - **[Search](U15-search.md#a11)**: galley text is not searched.
 
