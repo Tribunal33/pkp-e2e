@@ -489,6 +489,7 @@ test.describe('emails management', () => {
             asked.push(d.type());
             await d.accept();
         });
+        // lint-ok: escape Rule 15 claims the key; "Edit Template" is the top layer and closes alone
         await mp.keyboard.press('Escape');
         await expect(manage.templateWindow()).toBeHidden();
         await expect(win).toBeVisible();
