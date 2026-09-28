@@ -1565,3 +1565,10 @@ config-file settings.
   emails (new version created, the posted acknowledgement) use the
   principal contact's name. Mailpit, all three apps, 2026-09-28 (U49
   claim check I28).
+- A publish writes "Submission metadata updated" in the publisher's name
+  only when it assigns a DOI (DOIs on, "Upon publication", none yet), from
+  the workflow and from a press's "Add Entry" alike; a journal's "Review
+  Publishing Details" › "Confirm" writes one more before the publish line,
+  DOIs on or off. So a count of Activity Log lines after a publish depends
+  on the context's DOI setting. Activity Log, all three apps, 2026-09-28
+  (U70 claim check I28).

@@ -293,7 +293,12 @@ bottom; "Save" at the foot. <sup>h</sup>
   an Author assignment on the book, the author's task notice, the
   Activity Log line "The submission was published.", the move to Done, and
   a DOI assigned on publication when the press assigns DOIs "Upon
-  publication". A press hands nothing to ORCID. <sup>g</sup> <sup>td13</sup>
+  publication" and the book has none yet
+  ([DOIs](U45-dois.md#doi-creation), its Rule 5). That DOI adds a
+  "Submission metadata updated" line to the Activity Log beside "The
+  submission was published."; with DOIs off there is no such line.
+  Each new line's "User" is the one who pressed "Save". A press hands
+  nothing to ORCID. <sup>g</sup> <sup>td13</sup>
 - **"Catalog Entry" › "Save"**: one "Submission metadata updated" line in
   the Activity Log ([Activity log & notes](U38-submission-activity-log-and-notes.md#what-is-logged)).
   <sup>h</sup>
@@ -731,6 +736,10 @@ Left out of the scenarios above, by reason:
     scenario 7)
   - "Add Entry" handing nothing to ORCID (Side effects bullet 2;
     *[ORCID integration](U04-orcid-integration.md)*)
+  - the DOI "Add Entry" › "Save" assigns on a press with DOIs "Upon
+    publication" (Side effects bullet 2; [DOIs](U45-dois.md), scenario
+    5), and the "Submission metadata updated" line it adds to the
+    Activity Log (*[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*)
   - the Catalog Entry page's "Categories" (Rule 13c;
     [Categories](U16-categories.md), scenario 3)
   - the Catalog Entry page's "Date Published", "Update Type" and
@@ -1183,6 +1192,17 @@ seconds and nothing marked, and a refused book chosen with an acceptable
 one left both unpublished; with the box unticked both books were added.
 With ORCID on and a verified contributor, the job queue held no ORCID
 deposit job before or after "Save".
+Live-probed 2026-09-28 (Side effects bullet 2), OMP, as a scratch
+press's Press manager, two runs, on a press with DOIs "Upon
+publication" ("Items with DOIs" publication only) and on one with DOIs
+off, "Add Entry" › "Save" and the workflow's "Publish" side by side: with
+DOIs on, both routes added "The submission was published.", "…moved
+this submission to the Done stage." and "Submission metadata updated"
+(a DOI `10.12345/…` assigned), all under the manager who pressed; with
+DOIs off, the first two only. The same after a reload of the Activity
+Log. `event_log` held `publication.event.published`, then the
+move-to-Done line, then `submission.event.general.metadataUpdated`; "Add
+Entry" sent only `PUT _submissions/addToCatalog`.
 
 <a id="fn-h"></a>
 **h** — OMP `CatalogEntryForm`: groups `publication.placement`
@@ -1399,7 +1419,8 @@ Features" then moved it.
 
 <a id="fn-td13"></a>
 **td13** — Live-probed 2026-09-27 (Fields, the "Add Entry" panel; Rule
-12; Side effects bullet 2): note g.
+12; Side effects bullet 2) and 2026-09-28 (Side effects bullet 2, the
+DOI's Activity Log line): note g.
 
 <a id="fn-td14"></a>
 **td14** — Live-probed 2026-09-27 (Rule 13g), OMP, as Press manager: "my
