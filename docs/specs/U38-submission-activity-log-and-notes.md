@@ -137,10 +137,11 @@ preprint server an Editorial Board Member). <sup>c</sup>
      "Revised Version Uploaded" email. The column is empty for the
      emails the journal sends by itself: the submission acknowledgement,
      "needs an editor", the editor assigned automatically at submission,
-     and the automatic review reminders (no screen has shown their line:
-     a test install never sends them). It is empty as well for a
-     discussion's emails and for the Participants panel's "Notify" and
-     "Assign" messages, although a person sent them ⚠ [A1](#a1).
+     and the automatic review reminders (no screen has shown their line,
+     so this is read from the code: a test install never sends them). It
+     is empty as well for a discussion's emails and for the Participants
+     panel's "Notify" and "Assign" messages, although a person sent them
+     ⚠ [A1](#a1).
      <sup>i</sup> <sup>td4</sup>
      - The "Review complete" email {OJS OMP} is also one the journal
        sends by itself, when a Reviewer submits a review, yet its line
@@ -276,6 +277,12 @@ preprint server an Editorial Board Member). <sup>c</sup>
         Do you wish to continue without saving?". "Cancel" keeps "Notes"
         and the text; "OK" opens "History", and the box is empty on the
         way back. This holds with notes or without.
+      - After "OK" on that switch, on a submission with no note, pressing
+        "Close" on "History" asks the same question again, although the
+        switch already discarded the text ⚠ [A10](#a10). "Cancel" keeps
+        the window on "History"; "OK" closes it, and the next page reload
+        asks nothing. Opening "Notes" again before "Close" ends this: the
+        window then closes without asking.
       - Closing the window ("Close", or Escape while the cursor is not
         in the box) asks the same question while the submission has no
         note: "Cancel" keeps the window and the text, "OK" closes it and
@@ -522,6 +529,7 @@ Left out of the scenarios above, by reason:
   - A5 (the "Review complete" line naming its recipient; Rule 4c)
   - A7 (file lines read in French; Rule 8a)
   - A9 (the stray "Leave site?" after a close dropped the text; Rule 10d)
+  - A10 ("Close" on "History" asking again after a switch discarded the text; Rule 10d)
   - OMP1 (a publication format's lines; Rule 11)
 - **No seed**:
   - a Site Administrator whose journal roles are all assistant roles: "Notes" alone, no "Delete" (Actors rows 1, 2, 4, 5; A4)
@@ -546,6 +554,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | The "Review complete" email line names the editor who received it under "User" | 🐞 | minor | — |
 | [A7](#a7) | Read in French, file lines print an empty file name | 🐞 | user-visible | — |
 | [A9](#a9) | After closing drops a typed note, the next page change asks "Leave site?" with nothing typed | 🐞 | minor | — |
+| [A10](#a10) | After a switch to "History" discarded a typed note, "Close" asks again whether to continue without saving | 🐞 | minor | — |
 | [OMP1](#omp1) | A new or deleted publication format's line prints "{$formatName}" | 🐞 | minor | — |
 | [A4](#a4) | A Site Administrator whose journal roles are all assistant roles gets "Notes" alone | ❓ | latent | — |
 | [A8](#a8) | An "Open" review's assignment line reads "Anonymous Reviewer" for an editor who is also the author | ❓ | minor | — |
@@ -630,6 +639,17 @@ typed on screen. After a close that asked and was answered "OK",
 leaving asks nothing. A file's window does the same
 ([→ Submission files' A18](U36-submission-files.md#a18)).
 Basis: probe. <sup>[f-a9](#fn-a9)</sup>
+
+<a id="a10"></a>
+**A10 — "Close" asks about a note the tab switch already discarded** · 🐞 · minor.
+On a submission with no note, with text typed in "Add Note", a switch to
+"History" asks whether to continue without saving, and "OK" discards the
+text. Pressing "Close" on "History" then asks the same question again,
+though nothing typed is left to lose. The question is expected only
+while typed text would be lost; once "Notes" is opened again, "Close"
+rightly asks nothing. A user asked twice cannot tell whether the text
+was kept.
+Basis: probe. <sup>[f-a10](#fn-a10)</sup>
 
 ### OMP
 
@@ -914,7 +934,15 @@ three more (OPS two and two). "View Email" read `From: "Eddie Editor"
 <address>` and `To: "Ava Author" <address>`; "CC:" and "BCC:" only on a
 decline email sent with both, addresses alone; the footer of the
 recipient's copy ("Reply to this comment at … or unsubscribe …") absent;
-the attached file not named.
+the attached file not named. Re-probed 2026-09-28 (Rule 4c), all three
+apps, two runs each, on scratch contexts: a named "User" on the decline
+email (a Journal Manager who was not a participant; OPS at Production),
+and, OJS and OMP, on the reviewer request, the reviewer's "Review
+accepted" and "Review complete" (the editor it went to, A5); an empty
+"User" on a discussion's email lines and on the wizard's acknowledgement,
+"A new submission needs an editor to be assigned" and "You have been
+assigned as an editor on a submission to {journal}" lines (OPS sends
+none of the last).
 
 <a id="fn-j"></a>
 **j** — `submissionFile\Repository::add()` logs
@@ -1153,7 +1181,11 @@ with notes, the text gone. Escape in the box did nothing. Going to
 another address with the box blurred raised the browser's page-leave
 question ("Leave site?"): staying kept the page, the window and the
 text, leaving left; the same with notes or without. Why closing depends
-on the notes: f-a3.
+on the notes: f-a3. Re-probed 2026-09-28 (Rule 10d), all three apps, two
+runs each, on a submission with no note: the switch asked once, "OK"
+opened "History" and the box was empty back on "Notes", and "Close" from
+there asked nothing; "Close" pressed on "History" straight after the
+switch asked again: f-a10.
 
 <a id="fn-s0"></a>
 **s0** — Accounts: `docs/process/users.md` (the seeded roster; `admin`/`admin`, every other account its username twice; throwaway accounts likewise). Where each scenario runs: 1–3 on the seeded journal, press or preprint server `publicknowledge`, each on a scratch submission from `POST scenarios/submission` with submitter `author.alex`; 4 on two scratch contexts from `POST scenarios/context`. On `publicknowledge` the Journal Manager is `manager.maya`, the Section Editor `sectioneditor.ana` (a Moderator on the preprint server), assigned automatically through the submission's section (`ART`, the press's series `monographs`, `PRE`), the Site Administrator `admin`, the Author `author.alex`. No seed key writes a submission's note or its "Login As", so every note and every step in a scenario's body is driven on screen. Recipes: 1 — no decisions; the Site Administrator's "Login As" is the Section Editor's Participants row's "Login As" (note h), left again through "Logout as {username}"; 2 — no decisions (OJS and OMP on the Submission stage, OPS on Production), the decline recorded on screen, since a seeded decision acts as `admin` (scenarios.md); 3 — `files: [{file: 'article.pdf'}]` (the submitter's file, uploaded through the wizard's "Files" panel before the submit), the revision with the fixture `notes.md`; OPS refuses `files`; 4 — a scratch context at the install's "Default Review Mode" ("Anonymous Reviewer/Anonymous Author", seed-facts) with a throwaway user holding `author` and `sectionEditor` and two throwaway `externalReviewer`s, the submission seeded with that user as `submitter` and in `participants[]` as `sectionEditor`, `decisions: ['sendExternalReview']` and `reviewRounds: [{reviewers: [{username: <the first>, status: 'accepted'}, {username: <the second>, status: 'declined'}]}]`; the "Open" part the same on a second scratch context created with `review: {defaultReviewMode: 'open'}`; the control's Journal Manager is `admin`, whom the tooling enrols as a manager of every context it creates (seed-facts "Users"). The reviewer's own file (Rule 9) is the reviewer's step-3 upload on screen; no seed key writes it. Live-probed 2026-09-24, OJS and OMP: the author-and-editor recipe reaches Rule 9's state.
@@ -1230,6 +1262,22 @@ the typed text on a submission with notes, the next page change raised
 the browser's page-leave question (a `beforeunload`); after a close that
 asked and was answered "OK" (no note), leaving raised none. A file's
 window, whose close never asks (f-a3), did the same.
+
+<a id="fn-a10"></a>
+**f-a10** — On "OK", `TabHandler::tabsBeforeActivate()` triggers
+`unregisterAllForms` (the page-leave tracking) but leaves the note form's
+`formChangesTracked` set. The window's tabs keep the content of the tab
+left (no `emptyLastTab`), so the close check, which asks the window's
+first form (f-a3), finds that note form still marked changed. Opening
+"Notes" again reloads the tab with a fresh form (note td2). Live-probed
+2026-09-28, all three apps, two runs each, the Journal Manager on a
+submission with no note: "Draft remark." typed, "History" pressed, the
+question answered "OK"; "Close" asked "The data on this form has changed.
+Do you wish to continue without saving?", "Cancel" kept the window on
+"History", "Close" again and "OK" closed it; the two reloads after it
+raised no page-leave question, and "Notes" read "There are no notes to
+display." before and after. Control: the same switch, then "Notes"
+opened again before "Close": no question.
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note o. Live-probed 2026-09-23 (the submission-files claim
