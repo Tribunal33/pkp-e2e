@@ -33,7 +33,7 @@ blocks ([Publication metadata](U40-publication-metadata.md)), "Funders"
 ([Identifiers](U44-identifiers.md)), a journal's comments blocks
 ([Reader comments & moderation](U14-reader-comments-and-moderation.md)),
 a journal's "JATS XML" link (*JATS & Body Text*) and a journal's
-Crossmark button (*DOIs*). A press's book page is a separate feature, *Monograph landing
+Crossmark button and "Cited by" block (*DOIs*). A press's book page is a separate feature, *Monograph landing
 page*. <sup>a</sup>
 
 ## Actors & permissions
@@ -108,6 +108,7 @@ The side column, top to bottom on a journal: <sup>c</sup>
 | **"License"** | — | Described in [Publication metadata](U40-publication-metadata.md), its Rule 15. |
 | **"How to Cite"** | — | Rule 15, at the foot of the column. On a preprint server it sits right after "Categories", above the statements. <sup>q6</sup> |
 | **Publication Facts** {OJS} | — | The panel of Rule 19, which never appears [OJS5](#ojs5). <sup>q6</sup> |
+| **"Cited by"** {OJS} | — | Described in [DOIs](U45-dois.md#cited-by), its Rule 42a; the column's last block, after the Crossmark button. |
 
 On a preprint server the side column runs: cover image, galley links,
 additional files, "Posted", "Versions", "Categories", "How to Cite", "Data
@@ -609,7 +610,7 @@ notice above the title; that notice belongs to *Preprint relations*
   the journal abbreviation some citation formats print; a journal closed
   to signed-out visitors.
 - [Monograph landing page](U69-monograph-landing-page.md): the press's counterpart.
-- [DOIs](U45-dois.md): the DOI line and the Crossmark button.
+- [DOIs](U45-dois.md): the DOI line, the Crossmark button and "Cited by".
 - [Sections](U17-sections.md), [Categories](U16-categories.md): the section pages and
   category pages that list articles.
 - [Subscriptions & open access control](U51-subscriptions.md): who may open a

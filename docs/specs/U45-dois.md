@@ -58,6 +58,7 @@ Distribution › "DOIs" › "Setup" is ticked with at least one kind ticked
 | **Assign, type, clear, mark, export and deposit DOIs** | • whoever opens the DOIs page: every control on it is theirs; which controls show depends on the settings (Rules 14–30) <sup>b</sup> |
 | **See an item's DOI** | • any visitor who may open the item's public page (Rule 43) <sup>w</sup> |
 | **See the Crossmark button** {OJS} | • any visitor on a journal's article page, while Rule 42 holds <sup>t</sup> |
+| **See "Cited by" and the citing articles** {OJS} | • any visitor on a journal's article page, while Rule 42a holds <sup>z</sup> |
 
 ## Fields & validation
 
@@ -108,8 +109,9 @@ required for a successful Crossref deposit.". <sup>e</sup>
 | **Depositor name** | Yes (starred) | Help: "Name of the organization registering the DOIs. It is included with deposited metadata and used to record who submitted the deposit." Empty, refused with "This field is required."; longer than 60 characters, refused with "This may not be greater than 60 characters." <sup>e</sup> <sup>q5</sup> |
 | **Depositor email** | Yes (starred) | Help: "Email address of the individual responsible for registering content with Crossref. It is included with the deposited metadata and used when sending the deposit confirmation email." Empty, refused with "This field is required."; not an email address, refused with "This is not a valid email address."; longer than 90 characters, refused. <sup>e</sup> |
 | **Crossmark** {OJS} | No | One box: "Enable participation in Crossmark to allow readers to check the publication status of articles. Learn more." ("Learn more." links to Crossref's Crossmark documentation). Unticked on a new journal. Effect: Rule 42. A preprint server's block has no such box. <sup>e</sup> <sup>t</sup> |
+| **Enable Cited-by** {OJS} | No | Below "Crossmark". One box: "Enable Crossref Cited-by to retrieve citations found in Crossref for an article." Unticked on a new journal. Saved ticked, it makes "Username" and "Password" required (their row). Effect: Rule 42a. A preprint server's block has no such box. <sup>z</sup> <sup>q27</sup> |
 | **Update Policy DOI** {OJS} | Yes (starred) whenever shown | Help: "Journal's update policy DOI is required when a unique DOI is used for every version of an article." Shown while "DOI Versioning" is "Yes", and otherwise only while "Crossmark" is ticked (Rule 38). A value must read like a DOI ("10.1234/policy"); anything else is refused with "This is not formatted correctly.". <sup>e</sup> <sup>q6</sup> |
-| **Username**, **Password** | No | Under a paragraph beginning "If you would like to use this plugin to register Digital Object Identifiers (DOIs) directly with Crossref, you will need to add your Crossref account credentials…" and ending "…but you cannot register your DOIs with Crossref from OJS." ("…from OPS." on a preprint server). "Username" help: "The Crossref username that will be used to authenticate your deposits. If you are using a personal account, please see the advice above." (a preprint server "…If you are using a personal account, see the advise above." ⚠ [OPS3](#ops3)). "Password" is a hidden-text box. Up to 120 and 50 characters. <sup>e</sup> |
+| **Username**, **Password** | No | Under a paragraph beginning "If you would like to use this plugin to register Digital Object Identifiers (DOIs) directly with Crossref, you will need to add your Crossref account credentials…" and ending "…but you cannot register your DOIs with Crossref from OJS." ("…from OPS." on a preprint server). "Username" help: "The Crossref username that will be used to authenticate your deposits. If you are using a personal account, please see the advice above." (a preprint server "…If you are using a personal account, see the advise above." ⚠ [OPS3](#ops3)). "Password" is a hidden-text box. Up to 120 and 50 characters. While "Enable Cited-by" is ticked {OJS}, an empty one is refused under its box with 'A username is required when the "Enable Cited-by" option is selected.' ('A password is required…'); the box itself stays ticked on the form. <sup>e</sup> <sup>z</sup> <sup>q27</sup> |
 | **Testing** | No | One box: "Use the Crossref test API (testing environment) for the DOI deposit. Please do not forget to remove this option in production." Unticked on a new journal. <sup>e</sup> |
 
 **The DataCite block** {OJS} (Registration Agency "DataCite"), headed
@@ -610,11 +612,38 @@ links under the list. <sup>g</sup>
     is enabled, its "Crossmark" box is saved ticked, and the version shown
     carries its own DOI, the article's page shows the Crossmark button
     (the Crossmark logo, alt text "Crossmark") as the last block of its
-    side column; pressing it opens Crossref's Crossmark window for the
+    side column, followed only by "Cited by" when Rule 42a shows it; pressing it opens Crossref's Crossmark window for the
     DOI. Saving "None" as the Registration Agency does not remove the
     button; only disabling the plugin or unticking "Crossmark" does. The
     page is [Article landing page & reading](U13-article-landing-page-and-reading.md)'s.
     <sup>t</sup> <sup>q24</sup>
+
+<a id="cited-by"></a>
+42a. **Cited by** {OJS}. While Crossref is the saved Registration
+    Agency, its "Enable Cited-by" box is saved ticked with a username and
+    a password, and at least one published version of the article carries
+    a DOI, the article's page shows a "Cited by" block in its side column
+    as its last block (after "Section" and the Crossmark button), whichever version is
+    shown: "This article has been cited **{n} times** according to
+    Crossref" and the link-styled button "View citing articles". The
+    count is Crossref's, for every DOI of the article's published
+    versions, a citing work counted once; it reads "--" until Crossref
+    has answered, and stays "--" when Crossref refuses or cannot be
+    reached. The button opens a window titled "Articles that cite this
+    article (Crossref)": "{n} citations", then one entry per citing work,
+    its title in bold, its authors, a source line (journal or
+    institution, year, "vol {v}({issue})", "no {issue}" without a volume,
+    "p{first page}", the parts separated by a dot) and "doi.org/{DOI}" as
+    a link opening in a new tab; "Copy Citation Details" puts one line per
+    work on the clipboard (title, authors, source parts and
+    `https://doi.org/{DOI}`, comma-separated) and reads "Copied" for two
+    seconds; "Close" closes the window. The list is fetched once per
+    page and kept for a day per article. The block is styled for the
+    default theme and its child themes only; other themes get it
+    unstyled. Unticking the box, or an article with no published DOI,
+    leaves no block. The page is
+    [Article landing page & reading](U13-article-landing-page-and-reading.md)'s.
+    <sup>z</sup> <sup>q27</sup>
 
 <a id="doi-line"></a>
 **What readers see**
@@ -852,6 +881,10 @@ differs. <sup>z1</sup>
 9. **"Crossmark"** {OJS} (the Crossref block; unticked). Ticked: the
    article page's Crossmark button (Rule 42) and "Update Policy DOI"
    (Rule 38). <sup>t</sup>
+
+9a. **"Enable Cited-by"** {OJS} (the Crossref block; unticked). Ticked
+   with the credentials: the article page's "Cited by" block (Rule 42a);
+   "Username" and "Password" become required (Fields). <sup>z</sup>
 
 10. **"Testing"** (the agency block; unticked). Ticked: deposits go to the
     agency's test service; for DataCite a "Test DOI Prefix" is required
@@ -3010,6 +3043,51 @@ version 1.1 without a DOI has no button, its older 1.0 with one has it.
 "None" saved as the Registration Agency: still shown; the plugin
 disabled: gone; the agency chosen again: back; "Crossmark" unticked and
 saved: gone.
+
+<a id="fn-z"></a>
+**z** — OJS `CrossrefPlugin` with crossref-ojs#108 (pkp/pkp-lib#13221,
+dev-team#316): `CrossrefCitedBy::isCitedByEnabled()` = the configured
+agency is `CrossrefPlugin`, its `citedBy` setting, and
+`hasCrossrefCredentials()` (username and password both non-empty);
+`setupCitedByComponents()` on `ArticleHandler::view` also needs any of
+the submission's published publications to have a DOI, then passes the
+submission id through `TemplateManager::setPiniaStoreData('crossrefCitedBy', …)`
+(pkp-lib#13292) and loads `public/build/crossref.js`, and
+`public/build/crossref.css` only when `isThemeActive('defaultthemeplugin')`
+(the theme or a parent). `displayCitedByComponent()` on
+`Templates::Article::Details`, registered after the Crossmark hook,
+renders `templates/citedBy.blade` (`<section class="item crossref-cited-by">`,
+`<crossref-cited-by-count>`, a `pkp-button` calling the store's
+`openCitedByModal()`). `CrossrefCitedByController`
+(`GET api/v1/crossref/citedBy/{submissionId}`, `PublicAccessPolicy`):
+404 for an unknown id or no published DOI, 403 while
+`isCitedByEnabled()` is false, else Crossref's `getForwardLinks` per
+unique DOI, merged by citing DOI, cached a day under
+`crossref-citedBy-{id}`; a failure answers 502 and is not cached (the
+log line masks `usr` and `pwd`). `classes/CrossrefSettings.php`:
+`citedBy` boolean, `required_if:citedBy,true` on `username` and
+`password`. Store `resources/js/components/CitedBy/useCrossrefCitedByStore.js`
+(ui-library#992 `usePkpPageData()`): `totalDisplay` "--" while loading
+or failed; `copyAllToClipboard()` joins each work's parts with
+`common.commaListSeparator`.
+
+<a id="fn-q27"></a>
+**q27** — Driven 2026-09-28 on OJS at the PR heads, before their merge
+(ojs `3c9d06844f`, lib/pkp `fec909fbfd`, lib/ui-library `67f0ea20`,
+crossref `0dd599a`; `shared/playwright/checks/sync/crossref-ojs-108/cited-by.js`),
+a scratch journal, signed out unless noted: the manager's
+`registrationAgency` save with "Enable Cited-by" and no credentials,
+with a username only, and with empty strings answered 400 with the
+username and password messages; on Settings › Distribution › DOIs ›
+Registration the box sits after "Crossmark", and "Save" ticked without
+credentials showed both messages under the boxes. With credentials: an
+article with a published DOI showed "Cited by" as the side column's last
+block, "--" after Crossref refused; one without a DOI no block and no
+request; an article with three planted cached citations "3 times", the
+window "3 citations" with the three entries, "Copy Citation Details"
+filled the clipboard and read "Copied". With "Crossmark" also ticked the
+Crossmark block came before "Cited by". Unticked: no block, and the
+endpoint answered 403.
 
 <a id="fn-w"></a>
 **w** — `ojs/pages/article/ArticleHandler.php`,
