@@ -396,7 +396,11 @@ links under the list. <sup>g</sup>
     to the ticked items; afterwards the list reloads and nothing stays
     ticked. With nothing ticked, the window still opens ("…for 0
     item(s)…"); its button closes it and nothing else happens, with no
-    message ⚠ [A13](#a13). <sup>p</sup> <sup>q19</sup>
+    message ⚠ [A13](#a13). The menu closes when its item opens the
+    window, except when the press on "Assign DOIs" is held a moment and
+    its window answered at once: then it stays open over the list
+    ⚠ [A22](#a22).
+    <sup>p</sup> <sup>q19</sup>
 25. **"Assign DOIs".** Offered only while a prefix is set. For each
     ticked item it makes every missing DOI of the current version for the
     ticked kinds (an issue's own DOI on the "Issues" tab), in the format of
@@ -1449,6 +1453,7 @@ Left out of the scenarios above, by reason:
   - A12 (clearing a "Registration" filter after "Unregistered"; Rule 22)
   - A8 (the unnamed "DOI Statuses" button and row tick boxes; Fields, the DOIs page)
   - A13 (a bulk action confirmed with nothing ticked, and the silent refusals scenario 13 passes; Rules 24, 29)
+  - A22 (the "Bulk Actions" menu left open over the list after "Assign DOIs"; Rule 24)
   - A14 (the "Mark DOIs Needs Sync" question's "stale"; Rule 28; scenario 9 passes it)
   - A19 (choosing an agency unticking every kind; Rule 35)
   - A5 (a refused block field keeping the agency; Rule 35; scenario 16 passes it)
@@ -1492,6 +1497,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | Choosing an agency can untick every kind and leave the DOIs page without its list | 🐞 | user-visible · crash: script | — |
 | [A20](#a20) | The agency plugins' Tools pages have an empty heading | 🐞 | minor | — |
 | [A21](#a21) | A "Save" on the Registration tab without an agency leaves a warning in the server log | 🐞 | invisible | — |
+| [A22](#a22) | After "Assign DOIs" answered at once, the "Bulk Actions" menu stays open over the list | 🐞 | minor | — |
 | [OJS2](#ojs2) | With DataCite, a published issue cannot be exported or deposited: both fail on the server | 🐞 | user-visible · crash: server | — |
 | [OJS3](#ojs3) | The publish window lists the ISSN warning twice | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's DOIs page ignores file DOIs when choosing which books to list | 🐞 | user-visible | — |
@@ -1730,6 +1736,19 @@ also writes a warning to the install's server error log, because the
 save expects a "Registration Agency" choice the tab does not have.
 Nothing on screen shows it; the log gains a line per save.
 Basis: test run, 2026-09-26. <sup>f-a21</sup>
+
+<a id="a22"></a>
+**A22 — After "Assign DOIs" answered at once, the "Bulk Actions" menu stays open over the list** · 🐞 · minor.
+A manager ticks an item, presses "Bulk Actions", holds the mouse button
+down on "Assign DOIs" for about a fifth of a second (an unhurried
+click), and presses the window's "Assign DOIs" at once. The window
+closes and "Items successfully assigned new DOIs" shows, but the menu
+is still open over the first rows of the list, with the keyboard focus
+back on its "Assign DOIs" item. A press on the first row's expand
+button lands on the menu instead. Expected: the menu closes when its
+item opens the window, as it does after a quick click on the item, or
+when the window is answered after a second and a half.
+Basis: probe, 2026-09-28. <sup>f-a22</sup>
 
 ### OJS
 
@@ -2892,6 +2911,31 @@ footnote d) posts no such key, so PHP logs `Undefined array key
 tab on OMP, in each app's green run): the screen showed "Saved" and the
 server log held the warning for that save. Live-probed 2026-09-26
 (Fields, the Registration tab, OJS): the same line at the tab's "Save".
+
+<a id="fn-f-a22"></a>
+**f-a22** — ui-library `Dropdown.vue` `closeOnBlur()` (the "Bulk
+Actions" menu of `DoiListPanel.vue`): 100 ms after the "Bulk Actions"
+button loses the focus it closes the menu if the focus has left it,
+otherwise it looks again once a second. The window
+(`openBulkActionDialog()` → `useModal().openDialog()`, reka-ui
+`DialogContent`) hands the focus back to the item that opened it when it
+closes; if that happens before the first once-a-second look, the focus
+is inside the menu again and every later look keeps it open (from the
+code, until the focus leaves the menu; a press elsewhere was not
+driven). Live-probed 2026-09-28, all three apps (scratch journal,
+prefix 10.1234, "Never", two published works, the journal's Journal
+Manager; four rounds on OJS and OMP, two on OPS): with the press on
+"Assign DOIs" held 200 ms and the window's button pressed at once (the
+window gone 320–450 ms after the press), the menu was open 2.5 s later
+in every round, the focus on its "Assign DOIs" item, and the point at
+the first row's "Show more details about {id}" belonged to the menu;
+with an instant press (window gone 130–390 ms after it) or the window
+answered after 1.5 s (1.8–2.0 s), the menu was closed in every round
+and the point was the row's own button. No server or script error.
+Only "Assign DOIs" was driven; the other actions open their windows
+through the same code. The suites wait, once the window is open, for the
+menu to close before answering it (`docs/tracking/app-changes.md` row
+21; app code unchanged).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `IssueGridHandler::publishIssue()` calls

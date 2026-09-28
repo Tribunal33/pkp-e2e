@@ -313,6 +313,9 @@ forEachApp(async (app) => {
         await bulkItem(label).click();
         const dlg = page.getByRole('dialog').filter({hasText: label}).last();
         await dlg.waitFor({timeout: 10000}).catch(() => {});
+        // The menu closes once the window holds the focus; answered before that, it stays open over the rows
+        // (DoisPage.chooseBulkAction, .reports/flake-s28/u45-expand/diagnosis.md).
+        await page.locator('.pkpDropdown__action:visible').first().waitFor({state: 'detached', timeout: 10000}).catch(() => {});
         await sleep(400);
         const before = {menu, dialog: await dialogText(), buttons: await dlg.getByRole('button').allInnerTexts().catch(() => [])};
         await snap(`${name}-confirm`);

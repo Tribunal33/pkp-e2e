@@ -814,12 +814,26 @@ class DoisPage extends BasePage {
         return this.page.getByRole('dialog').filter({has: this.page.getByRole('heading', {name: title, exact: true})}).last();
     }
 
-    /** Choose a "Bulk Actions" item; returns its window (open). */
+    /**
+     * Choose a "Bulk Actions" item; returns its window, open, with the menu
+     * closed behind it. The menu closes only on its button's blur
+     * (ui-library `Dropdown.vue` `closeOnBlur`): 100 ms after the press it
+     * closes if the focus has left the menu, otherwise it looks again once a
+     * second. When the press on the item outlasts those 100 ms (a loaded
+     * run), the focus is still on the item then; a window answered before
+     * the next look hands the focus back to the item on closing, and the
+     * menu stays open over the list's first rows for good, swallowing the
+     * next click on a row ("<li> from listPanel__header intercepts pointer
+     * events", `.reports/flake-s28/u45-expand/diagnosis.md`). While the
+     * window is open it holds the focus, so the menu's next look closes it:
+     * wait for that before anything answers the window.
+     */
     async chooseBulkAction(label) {
         await this.openBulkActions();
         await this.bulkItem(label).click();
         const dialog = this.dialog(label);
         await expect(dialog).toBeVisible({timeout: T});
+        await expect(this.bulkItems()).toHaveCount(0, {timeout: T});
         return dialog;
     }
 

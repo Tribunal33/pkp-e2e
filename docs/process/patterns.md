@@ -55,7 +55,14 @@ Each of these has bitten at least once.
    never a page-level Escape: focus enters the menu two animation frames
    after the click, and an Escape before that closes whatever encloses the
    menu, the workflow panel included (U01 S7, U30 S4; `npm run lint:suite`
-   flags page-level Escapes).
+   flags page-level Escapes). A ui-library `Dropdown` (`.pkpDropdown__content`,
+   the DOIs page's "Bulk Actions") closes only by a timer on its button's
+   blur (100 ms, then once a second), and a window one of its items opens
+   hands the focus back to that item when it closes: answered within that
+   second, the window leaves the menu open over the list for good. The page
+   object that chooses such an item waits for the menu's items to be gone
+   once the window is visible, before anything answers it
+   (`DoisPage.chooseBulkAction`; U45 S6/S8, 2026-09-28, app-changes row 21).
 4. **Side modals.** Scope via `[data-cy="active-modal"]`. When modals stack,
    filter by a distinctive inner element, never `.first()` or `.last()`.
    A legacy side window's content loads by AJAX after the dialog opens and

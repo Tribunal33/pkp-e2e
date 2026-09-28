@@ -552,13 +552,20 @@ trips.
   2026-09-20, the only red of 175 (`.reports/U33/final-run-ops.log`), and in the U34 session's the same day, the only red of 164 on a reset database at four workers (`.reports/U34/final-run-ops.log`; the 12 serial and solo tests green alone behind it), and in the U36 session's, 2026-09-23, beside U03 S5, red alone too (`.reports/U36/final-run-ops.log`, `alone-ops-U40S1.log`; serial and solo green alone), and in the U38 session's, 2026-09-24, beside U49 S6, red alone too (`.reports/U38/final-run-ops.log`; serial and solo green alone). **Watch condition**: a red
   of this read on CI or the VM; until then the OPS full green on a Mac
   push is CI's. Again 2026-09-24 in the U39 session's OPS final and red alone once more; serial 10 and solo 2 green alone (`.reports/U39/final-run-ops.log`, `alone-ops-U40S1-U49S6.log`). Again 2026-09-24 in the U44 session's OPS final on a reset database at auto workers, the only red of 215; serial and solo 13 green alone (`.reports/U44/final-run-ops.log`, `alone-ops-serial-solo.log`). Again 2026-09-25 in the U48 session's OPS final on a reset database at four workers, the only red of 243; serial and solo 13 green alone (`.reports/U48/final-run-ops.log`, `serial-solo-ops.log`). Again 2026-09-25 (U50 session): red in the OPS final and red alone, as before (`.reports/U50/final-run-ops.log`, `alone-ops-reds.log`). Again 2026-09-25 (U51 session): red in the OPS final and red alone, as before (`.reports/U51/final-run-ops.log`, `alone-ops-reds.log`). Again 2026-09-26 (U53 session, Mac, reset databases, auto workers): red in the OPS final beside U14 S5 and red alone, as before (`.reports/U53/final-run-ops.log`, `alone-ops-reds.log`). Again 2026-09-26 (U54 session, Mac, reset database, auto workers): red in the OPS final beside U14 S5 and red alone; serial and solo 17 green alone (`.reports/U54/final-run-ops.log`, `alone-ops-reds.log`, `alone-ops-serial-solo.log`). Again 2026-09-26 in the U55 session's OPS final on a reset database at auto workers, beside U14 S5 and the U18 `rss.xmp` class; serial 16 and solo 5 green alone (`.reports/U55/final-run-ops.log`, `alone-ops-{serial,solo}.log`). Again 2026-09-26 (U56 session, Mac, sync baselines, reset database): red in the OPS final and red alone; serial 15 and solo 8 green alone (`.reports/U56/final-run-ops.log`, `alone-ops-reds.log`). Again 2026-09-26 in the U60 session's OPS final (reset database, auto workers), beside the four U18 reds; serial 15 green alone (`.reports/U60/final-run-ops.log`, `alone-ops-serial.log`). Again 2026-09-27 (U61 session, Mac, reset database, auto workers): red in the OPS final beside the U18 four, U14 S5 and U54 S3; serial 21 and solo 21 green alone (`.reports/U61/final-run-ops.log`, `alone-ops-{serial,solo}.log`). Again 2026-09-27 (U62 session, Mac, reset database, auto workers): in the OPS final and red alone; serial 23 and solo 24 green alone (`.reports/U62/final-run-ops.log`, `alone-ops-reds.log`, `alone-ops-{serial,solo}.log`). Again 2026-09-28 (U68 session, Mac, reset database, auto workers): red in the OPS final, not re-run (`.reports/U68/final-run-ops.log`). Again 2026-09-28 (U72 session, Mac, reset database, auto workers), red in the OPS final (`.reports/U72/final-run-ops.log`).
-- **OJS U45 S6's DOI row expander blocked by the list header** (OJS,
-  once, 2026-09-27). In the U64 session's OJS final (reset database,
-  auto workers) the "Show more details about <id>" click in
-  `DoisPage.expand` retried until the 300 s timeout because an `<li>` of
-  the DOI list panel's header intercepted the pointer; green alone in
-  11 s (`.reports/U64/final-run-ojs.log`, `alone-ojs-reds2.log`).
-  **Watch condition**: a second red at the same click. **Tripped 2026-09-28** (U72 session, Mac, reset database, auto workers): OMP U45 S6 and S8 red in the OMP final at the same `DoisPage.expand` click (a `listPanel__header` `<li>` intercepting the pointer until the 240 s timeout), S8 red alone once more, then green alone twice, once with U72's builders unmounted and once mounted (`.reports/U72/final-run-omp.log`, `alone-reds.log`, `ab/`); OMP now too, so the class is the DOI list panel's, not OJS's.
+- **U45 S6/S8's DOI row expander blocked by the "Bulk Actions" menu**
+  (OJS 2026-09-27, OMP 2026-09-28, Mac finals; the `<li>` "from
+  `listPanel__header`" that intercepted the click is the menu's item).
+  **Fixed 2026-09-28** (`.reports/flake-s28/u45-expand/diagnosis.md`):
+  the ui-library `Dropdown` closes only by a blur timer, and a window
+  answered within a second of a press longer than 100 ms hands the focus
+  back to the still-open item, so the menu stays over the first rows (an
+  app defect, U45's register; app-changes row 21).
+  `DoisPage.chooseBulkAction` waits for the menu's items to be gone once
+  the window is visible (and the U45 K3 check script). A 200 ms press: red
+  10/10 on OJS and 10/10 on OMP before, 0/10 each after; U45
+  `--repeat-each 5` at eight workers green 80/80 OJS, 60/60 OMP, 65/65
+  OPS. Rule in patterns.md pitfall 3. **Watch condition**: a row click
+  intercepted by a menu item behind the wait.
 - **OPS U09 S4's Custom Block Manager row missing from the plugins grid**
   (OPS, once, 2026-09-27). In the U64 session's OPS final (reset
   database, auto workers) `tr.gridRow[id$="-row-customblockmanagerplugin"]`
