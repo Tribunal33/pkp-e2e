@@ -130,9 +130,19 @@ and "Save" is greyed out until the boxes are filled: <sup>g</sup>
    has a "Review" tab between "Submission" and "Publisher Library" (on a
    press "Press Library" [OMP2](#omp2)). Its side tabs are "Setup",
    "Reviewer Guidance", "Review Forms" and, on a journal, "Reviewer
-   Recommendations". Pressing a tab changes the page address, but a reload
-   lands on "Submission" › "Disable Submissions" whatever tab was open
-   ⚠ [A4](#a4). <sup>a</sup>
+   Recommendations". Pressing a tab or a side tab changes the page
+   address. <sup>a</sup>
+   - 1a. **A reload.** A reload after pressing "Review" alone keeps
+     "Review" › "Setup" open, and a reload keeps an open side tab of
+     "Submission"
+     ([→ Submission intake configuration](U58-submission-intake-configuration.md)).
+     A reload after pressing a side tab of "Review", "Setup" included,
+     lands on "Submission" › "Disable Submissions" instead; pressing
+     "Review" then shows the side tab that was open ⚠ [A4](#a4).
+   - 1b. **Coming back to "Review".** Pressing "Submission" and then
+     "Review" again shows the side tab that was last open under "Review",
+     but the address is back to the one "Review" alone gives, so a reload
+     opens "Review" › "Setup", not that side tab.
 
 2. **Saving "Setup" and "Reviewer Guidance".** "Save" writes the whole form
    at once. A successful save shows no page notice: "Saving" then "Saved"
@@ -461,6 +471,9 @@ read; the list below is what changes *these* screens.
 - **Submission files**: the upload window's "How to ensure all files are
   anonymized" link.
 - **Sections**: a journal section's default "Review Form".
+- **[Submission intake configuration](U58-submission-intake-configuration.md)**:
+  the "Submission" tab of the same Workflow Settings page, where a reload
+  on a "Review" side tab lands (Rule 1a).
 - **Emails management**: the two automated reminder templates, on the
   "Manage Emails" page.
 - **Submission activity log & notes**: the automatic-reminder row (no screen
@@ -824,6 +837,11 @@ Left out of the scenarios above, by reason:
     (Rules 12d, 14): scenario 6 builds one form and scenario 7's second row
     is a copy with the same title, so no scenario holds two forms it can
     tell apart
+- **Budget** — variants:
+  - a reload after pressing "Review" alone keeping "Review" › "Setup"
+    open (Rule 1a): every scenario that reloads opens "Review" again
+  - coming back to "Review" from "Submission" showing the side tab last
+    open, and a reload then opening "Setup" (Rule 1b)
 - **Nothing new to test**:
   - the Editor and the Site Administrator opening the screen (Actors row
     1): the same "Settings" group and offer scenario 1's Journal Manager
@@ -854,8 +872,8 @@ Left out of the scenarios above, by reason:
     scenario 7 marks it)
   - A3 (a deadline saved as 0 or empty presetting three and four weeks;
     Rule 7)
-  - A4 (a reload landing on "Submission" › "Disable Submissions" whatever
-    tab was open; Rule 1)
+  - A4 (a reload on a "Review" side tab landing on "Submission" ›
+    "Disable Submissions"; Rule 1a)
   - A5 (a text-type save dropping "Response Options" without the warning;
     Rule 14)
   - A6 (a deactivated recommendation reading "-" in the "Reviewer
@@ -873,6 +891,8 @@ Left out of the scenarios above, by reason:
     (Settings)
   - a second form language's switch and twin boxes (Rule 16; Settings)
 - **Owned by another feature**:
+  - a reload keeping an open side tab of "Submission" (Rule 1a;
+    *Submission intake configuration*, scenarios 3 and 5)
   - "Restrict File Access" on: the files only after accepting (Rule 5;
     *Reviewer's review*, scenario 9)
   - "One-click Reviewer Access" on: the sign-in-free link in the request
@@ -913,7 +933,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A9](#a9) | Once a form carried by an open request is deactivated, the reviewer row's "Edit" window shows "None / Free Form Review", and "OK" there detaches the form and lowers its "In Review" count | 🐞 | minor | — |
 | [A2](#a2) | A form in use can still be deactivated, although the activation confirmation promises it cannot | ❓ | minor | — |
 | [A3](#a3) | A deadline saved as 0 or left empty makes Add Reviewer preset three weeks for the response but four for the review | ❓ | minor | — |
-| [A4](#a4) | The address changes with the open tab, but a reload of Workflow Settings always lands on "Submission" › "Disable Submissions" | ❓ | minor | — |
+| [A4](#a4) | A reload on a "Review" side tab lands on "Submission" › "Disable Submissions", although the address names the side tab and a "Submission" side tab survives a reload | ❓ | minor | — |
 | [A6](#a6) | A recommendation deactivated after a reviewer chose it reads "-" in the "Reviewer Recommendation" section of the editor's "Read Review" window while the window's own "Recommendation:" line still names it | ❓ | user-visible | — |
 | [A7](#a7) | The "Reviewer Recommendations" table and the reviewer's list have no fixed order: a new entry is not always last, and an edited or ticked row sometimes stays put and sometimes drops to the bottom | ❓ | minor | — |
 | [A8](#a8) | A form whose only requests were declined reads 0 / 0 and offers "Edit" and "Delete" like a fresh one; deleting it drops it from the declined request | ❓ | minor | — |
@@ -955,13 +975,17 @@ be shown? Lean: refuse them with a message that the box must be at least
 1, since no reviewer can answer in zero weeks. Basis: probe. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A reload forgets the open tab** · ❓ · minor.
-Pressing "Review" and then a side tab changes the page address as if the
-tab were remembered, but a reload of that address lands on "Submission" ›
-"Disable Submissions": a manager who reloads after a save has to find the
-side tab again. Question: is the side tab meant to survive a reload? Lean:
-yes, and this is a defect, since the screen writes the address and then
-ignores it. Basis: probe. <sup>f-a4</sup>
+**A4 — A reload on a "Review" side tab lands on "Submission" › "Disable Submissions"** · ❓ · minor.
+Pressing a side tab of "Review" ("Setup", "Reviewer Guidance", "Review
+Forms" and, on a journal, "Reviewer Recommendations") changes the page
+address, as pressing a side tab of "Submission" does. A reload keeps a
+"Submission" side tab open, but a reload on a "Review" side tab lands on
+"Submission" › "Disable Submissions". The side tab is not lost: after the reload, pressing
+"Review" opens the side tab that was open. A manager who reloads after a
+save has to press "Review" again to get back to it. Question: is a
+"Review" side tab meant to survive a reload? Lean: yes, and this is a
+defect, since the address names the side tab and a "Submission" side tab
+comes back from the same kind of address. Basis: probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A type change drops the answer options silently** · 🐞 · minor.
@@ -1085,9 +1109,19 @@ Library", "Press Library", "Preprint Server Library"), the last tab
 heading, tab and side-tab names as quoted. The address: pressing "Review"
 writes `#review`, a side tab writes a one-part hash (`#reviewSetup`,
 `#reviewerGuidance`, …) that replaces it; a reload on `#reviewSetup` lands
-on "Submission" › "Disable Submissions" on both apps (finding A4), while a
-typed `#review/reviewSetup` opens "Review" › "Setup" directly. The tabs are
-`<tabs :track-history="true">` wrappers.
+on "Submission" › "Disable Submissions" on both apps (finding A4). A typed
+`#review/<sideTab>` (e.g. `#review/reviewerGuidance`) opens that side tab
+directly, but the address is rewritten to the one-part
+`#reviewerGuidance` on landing, so a reload of it falls back as well; a
+typed `#submission/metadata` is rewritten to `#metadata`, which a reload
+keeps. Pressing "Review" alone writes `#review`, which a reload keeps
+("Review" › "Setup"); pressing "Submission" and then "Review" again writes
+`#review` whatever side tab shows (Rule 1b). The tabs are
+`<tabs :track-history="true">` wrappers. Live-probed 2026-09-28 (Rules 1a,
+1b; A4) on OJS, OMP and OPS, two runs each, scratch contexts: the typed
+`#review/reviewerGuidance` and `#review/reviewForms` (OJS, OMP) and
+`#submission/metadata` and `#submission/components` (all three apps)
+behaved as described; `#review` and `#submission` survived a reload.
 
 <a id="fn-b"></a>
 **b** — OPS: `ops classes/core/Application.php::getApplicationStages()`
@@ -1542,6 +1576,9 @@ state; only a reload re-reads the saved values. Live-probed 2026-09-05 on
 "Setup" (a deadline and a slider) and "Reviewer Guidance" (a guideline
 text) on both apps: no dialog on the switch, values still present on
 return, saved values after the reload, no `beforeunload` prompt.
+Live-probed 2026-09-28 (Rule 2), OJS and OMP, two runs: "Default Response
+Deadline" changed from 4 to 9 and not saved, then a reload: no page-leave
+question, and "Setup" read 4 once "Review" was opened again.
 
 <a id="fn-s4"></a>
 **s4** — Scenario 4: `reviewGuidelines` and `competingInterests` saved
@@ -1673,12 +1710,32 @@ today + 28 in Add Reviewer.
 
 <a id="fn-f-a4"></a>
 **f-a4** — Footnote a: the side tabs' `<tabs :track-history="true">` writes
-a one-part hash that the page never reads back on load (only the
-`#review/reviewSetup` shape it does not write is honoured). Live-probed
-2026-09-05 on OJS and OMP, scratch contexts: reload on
-`…/workflow#reviewSetup` selected "Submission" and "Disable Submissions"
-with the hash still in the address. Candidate for `app-changes.md` if a
-suite needs the tab after a reload.
+a one-part hash, and both side-tab groups read it back on load: a
+"Submission" side tab's hash opens that side tab, and a "Review" side
+tab's hash selects that side tab inside "Review" (pressing "Review" after
+the reload shows it), but the top tabs do not open "Review" for it, so
+"Submission" › "Disable Submissions" shows. Live-probed 2026-09-05 on OJS
+and OMP, scratch contexts: reload on `…/workflow#reviewSetup` selected
+"Submission" and "Disable Submissions" with the hash still in the address.
+Live-probed 2026-09-28 (Rules 1a, 1b; A4), two runs per app, OJS and OMP
+with OPS as the control ("Submission" only), as a scratch Journal Manager
+on a scratch context: a reload on `#reviewSetup`,
+`#reviewerGuidance`, `#reviewForms` and (OJS) `#reviewerRecommendations`
+landed on "Submission" › "Disable Submissions" with the hash kept, and
+pressing "Review" then showed that side tab, address `#review`; a reload
+on each of the five "Submission" side tabs (`#disableSubmissions`,
+`#instructions`, `#metadata`, `#components`, `#contributorRoles`) and on
+`#library`, `#emails`, `#taskTemplates` kept the tab. "Review" ›
+"Reviewer Guidance" › "Setup" (`#reviewSetup`) fell back too; "Review" ›
+"Review Forms" › "Submission" › "Review" showed "Review Forms" with the
+address `#review`, and a reload opened "Review" › "Setup". The same at
+three more permission levels, reading "Metadata" (OPS: "Metadata" and
+"Components", kept) and "Reviewer Guidance" (fell back, then shown on
+pressing "Review"): a scratch Editor (OJS, OMP; OPS has no manager-level
+editor group), `admin` on the scratch context and `manager.maya` on
+`publicknowledge` (reload only, nothing saved). No page-leave question,
+no response of 400 or more, no console error. Candidate for
+`app-changes.md` if a suite needs the tab after a reload.
 
 <a id="fn-f-a5"></a>
 **f-a5** — Footnote f: `reviewFormElementForm.tpl` defines

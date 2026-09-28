@@ -86,8 +86,8 @@ test.describe('review setup & review forms (U29) — OPS absence', () => {
         await expectNoReviewTab(page);
 
         // ── The typed review address ────────────────────────────────────────
-        // The address the spec's side tabs write on a journal or press
-        // (`#review/reviewSetup`) opens the same screen on a preprint
+        // A typed two-part review address (`#review/reviewSetup`; the side
+        // tabs themselves write `#reviewSetup`) opens the same screen on a preprint
         // server: the hash is kept, "Submission" stays selected, and no
         // review side tab or its panel appears. Positive control, taken the
         // same way: the typed address answers 200 with the four tabs. (Leave
