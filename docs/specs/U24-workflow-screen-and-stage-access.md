@@ -81,7 +81,7 @@ role's stage set. The rows spell that out per capability.
 | **"Library"** (header) | • Everyone who can open the screen, the Author included. The library is *Submission & Publisher Libraries* <sup>f</sup> |
 | **"Return to Workflow"** (header, Rule 18) | • [Deciding editors](GLOSSARY.md#roles-and-access), while the submission rests in Done<br>• Assistant roles; Author: never <sup>m</sup> |
 | **"Return to Done"** (header, Rule 18) | • The same deciding editors, on the active stage, once the submission has been returned from Done and still has a published version<br>• Assistant roles; Author: never <sup>m</sup> |
-| **Confirm the "Delete" dialog** (Rule 19) | • Journal Manager; Editor; Site Administrator (holding Journal Manager in the journal; without it, see [A8](#a8)). An assigned Section Editor (a Moderator on a preprint server) is not offered the button. Which stage offers it, and when, is the stage feature's rule (*[Submission stage](U25-submission-stage.md#delete)*, *Review stage & rounds*, *Production stage*). Behind the dialog the system refuses the deletion for any other role <sup>n</sup> |
+| **Confirm the "Delete" dialog** (Rule 19) | • Journal Manager; Editor; Site Administrator (holding Journal Manager in the journal; without it, untried [A8](#a8)). An assigned Section Editor (a Moderator on a preprint server) is not offered the button. Which stage offers it, and when, is the stage feature's rule (*[Submission stage](U25-submission-stage.md#delete)*, *Review stage & rounds*, *Production stage*). Behind the dialog the system refuses the deletion for any other role <sup>n</sup> |
 | **Change the submission language / choose a version / create a version** (publication controls, Rules 9 and 17) | • Owned elsewhere: [→ change language](U40-publication-metadata.md), *[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*. A version is chosen by selecting its node in the side menu; the page itself offers no version switcher (Rule 17) |
 
 ## Fields & validation
@@ -116,8 +116,10 @@ from the menu belongs to its own feature.
      submission's workflow open at its usual landing entry (Rule 11). Two
      older shapes name a stage as well, and together they are the
      **stage-naming addresses**: the stage-numbered form
-     `…/workflow/index/<number>/<stage number>`, and the per-stage forms
-     that carry the stage in a word, `…/workflow/submission/<number>`,
+     `…/workflow/index/<number>/<stage number>` (1 Submission, 2 Internal
+     Review, 3 Review or External Review, 4 Copyediting, 5 Production),
+     and the per-stage forms that carry the stage in a word,
+     `…/workflow/submission/<number>`,
      `…/workflow/externalReview/<number>`, `…/workflow/editorial/<number>`
      (Copyediting) and `…/workflow/production/<number>`, plus
      `…/workflow/internalReview/<number>` on a press. They forward the same
@@ -149,12 +151,10 @@ from the menu belongs to its own feature.
      stage-naming addresses of 2a refuse ⚠ [A3](#a3). On a preprint server
      the Author opening their own draft this way gets the panel with an
      "Error" dialog on top ⚠ [OPS4](#ops4). <sup>b</sup>
-   - 2d. **Older addresses that do not forward.** An older address typed
-     with a number missing, or naming a stage the app does not have, never
-     opens the screen:
+   - 2d. **Older addresses that do not forward:**
      - the stage-numbered form with its stage number left off, or with a
-       number that names no stage (9, say): the access-denied page reading
-       "A workflow stage was not specified.", even for a Journal Manager;
+       number no app uses (9, say): the access-denied page "A workflow
+       stage was not specified." (tried as the Journal Manager only);
      - a stage-naming address with no submission number at all
        (`…/workflow/submission`, `…/workflow/externalReview`,
        `…/workflow/editorial`, `…/workflow/production`, `…/workflow/index`,
@@ -165,9 +165,8 @@ from the menu belongs to its own feature.
        a bare "404 Not Found" page. `…/workflow/internalReview` gives the
        same page typed without a number on a journal, and with or without
        one on a preprint server;
-     - on a preprint server, which has Production alone, the Submission,
-       Review and Copyediting forms (`…/workflow/submission/<number>`,
-       `…/workflow/externalReview/<number>`,
+     - on a preprint server, the Submission, Review and Copyediting forms
+       (`…/workflow/submission/<number>`, `…/workflow/externalReview/<number>`,
        `…/workflow/editorial/<number>`, `…/workflow/index/<number>/1`,
        `/3` and `/4`): the access-denied page "A workflow stage was not
        specified." for every role, the Journal Manager, the Moderator and
@@ -1266,19 +1265,20 @@ Basis: probe. <sup>[f-a7](#fn-a7)</sup>
 **A8 — A Site Administrator without Journal Manager opens every workflow, or none** · ❓ · latent.
 A journal enrols the Site Administrator who creates it as Journal Manager
 and keeps an account's last role, so a Site Administrator with no role
-at all in a journal does not occur. One whose Journal Manager role there
+in a journal does not occur. One whose Journal Manager role there
 has been ended gets two different answers at the dashboard's address
 (Rule 3). Left with Section Editor, they see only their own assignments
 listed, yet the address opens any submission's workflow, one nobody
 assigned them to included, with a manager's screen: "Activity Log", every
-publication page and "Create New Version". Left with Reader, the address
-opens no panel at all, only an "Error" dialog over an empty list
+publication page and "Create New Version"; whether it offers a working
+"Delete" (Rule 19) is untried. Left with Reader, the address opens no
+panel at all, only an "Error" dialog over an empty list
 ([→ Submissions dashboard](U23-submissions-dashboard.md#a9)). Expected:
 one answer, whichever role they keep.
 Question: should the Site Administrator role open a journal's workflows
 without Journal Manager there? Lean: yes; once any editorial role lets them
-in, the workflow already treats them as a manager, and the Reader case is
-the dashboard refusing before the panel can open.
+in, the workflow already treats them as a manager (so "Delete" too), and
+the Reader case is the dashboard refusing before the panel can open.
 Basis: probe, 2026-09-28. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
