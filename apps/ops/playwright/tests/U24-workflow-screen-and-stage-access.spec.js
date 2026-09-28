@@ -20,10 +20,10 @@
  * assert the spec's current OPS text — a declined preprint landing on
  * "Preprint: Title & Abstract" — and move with the spec if the ruling
  * flips), OPS4 ❓ (no author's draft is typed at any door), A1 ❓, A3 ❓,
- * A5 ❓ (S6 types the plain `workflow/access` address only, never a
+ * A5 🐞 (S6 types the plain `workflow/access` address only, never a
  * stage-naming one), A8 ❓ (the seeded `admin` holds a role everywhere),
  * A9 ❓ (S14 follows the dashboard and My Submissions addresses of the
- * deleted preprint, never an old-shape one), A2 ❓, A4 ❓, A6 ❓, A7 ❓
+ * deleted preprint, never an old-shape one), A2 ❓, A4 ❓, A6 🐞, A7 ❓
  * (journal and press states). The spec's Coverage section records
  * everything else left out.
  *

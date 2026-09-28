@@ -54,8 +54,10 @@ own and follow the same rule. On a preprint server the Moderator is assigned aut
 every preprint in their section, and the Editorial Board Member has no stage
 set at all, so no assistant role reaches the workflow there [OPS1](#ops1).
 **Manager-level roles** are Journal Manager and Editor. Wherever this spec
-names a Site Administrator it means one who holds a journal role on this
-install; a role-less administrator is unverified ⚠ [A8](#a8) (Rule 3).
+names a Site Administrator it means one who also holds Journal Manager in
+the journal, as every journal enrols the Site Administrator who creates it;
+one whose Journal Manager role there has been ended gets every workflow or
+none, depending on the role left ⚠ [A8](#a8) (Rule 3).
 **Editorial roles** are the manager-level roles plus Section Editor, Guest
 Editor and the assistant roles (Copyeditor, Layout Editor, Proofreader,
 Funding Coordinator). The **author's view** has fewer header tools and
@@ -79,7 +81,7 @@ role's stage set. The rows spell that out per capability.
 | **"Library"** (header) | • Everyone who can open the screen, the Author included. The library is *Submission & Publisher Libraries* <sup>f</sup> |
 | **"Return to Workflow"** (header, Rule 18) | • [Deciding editors](GLOSSARY.md#roles-and-access), while the submission rests in Done<br>• Assistant roles; Author: never <sup>m</sup> |
 | **"Return to Done"** (header, Rule 18) | • The same deciding editors, on the active stage, once the submission has been returned from Done and still has a published version<br>• Assistant roles; Author: never <sup>m</sup> |
-| **Confirm the "Delete" dialog** (Rule 19) | • Journal Manager; Editor; Site Administrator (who holds a journal role on this install; a role-less administrator is unverified, see [A8](#a8)). An assigned Section Editor (a Moderator on a preprint server) is not offered the button. Which stage offers it, and when, is the stage feature's rule (*[Submission stage](U25-submission-stage.md#delete)*, *Review stage & rounds*, *Production stage*). Behind the dialog the system refuses the deletion for any other role <sup>n</sup> |
+| **Confirm the "Delete" dialog** (Rule 19) | • Journal Manager; Editor; Site Administrator (holding Journal Manager in the journal; without it, see [A8](#a8)). An assigned Section Editor (a Moderator on a preprint server) is not offered the button. Which stage offers it, and when, is the stage feature's rule (*[Submission stage](U25-submission-stage.md#delete)*, *Review stage & rounds*, *Production stage*). Behind the dialog the system refuses the deletion for any other role <sup>n</sup> |
 | **Change the submission language / choose a version / create a version** (publication controls, Rules 9 and 17) | • Owned elsewhere: [→ change language](U40-publication-metadata.md), *[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*. A version is chosen by selecting its node in the side menu; the page itself offers no version switcher (Rule 17) |
 
 ## Fields & validation
@@ -105,7 +107,9 @@ from the menu belongs to its own feature.
    the editorial workflow address and the two stage-naming shapes (2a), and
    the old author-dashboard address (2b). All of them forward to the
    current screen rather than showing a page of their own; the current
-   address itself can be typed too (2c).
+   address itself can be typed too (2c). An older address typed without its
+   numbers, or naming a stage the app does not have, does not forward
+   (2d).
    - 2a. The **editorial workflow address**, `…/workflow/access/<number>`
      under the journal's own address, forwards an editorial role to the
      editorial dashboard, on its "Assigned to me" view, with that
@@ -117,14 +121,12 @@ from the menu belongs to its own feature.
      `…/workflow/externalReview/<number>`, `…/workflow/editorial/<number>`
      (Copyediting) and `…/workflow/production/<number>`, plus
      `…/workflow/internalReview/<number>` on a press. They forward the same
-     way. The stage named in such an address is checked, so a role without
-     access to that stage is refused, but it is not carried into the
-     screen: the workflow opens at its usual landing entry, not at the
-     named stage, even for a stage the submission has not reached
-     ⚠ [A1](#a1). The stage-numbered form typed with its stage number left
-     off, or with a number that names no stage (9, say), shows a blank page:
-     no message and no forward ⚠ [A5](#a5). These addresses admit editorial
-     roles only. An Author, a Reviewer or a Reader typing one is turned
+     way (on a preprint server only the Production forms do, 2d). The stage
+     named in such an address is checked, so a role without access to that
+     stage is refused, but it is not carried into the screen: the workflow
+     opens at its usual landing entry, not at the named stage, even for a
+     stage the submission has not reached ⚠ [A1](#a1). These addresses
+     admit editorial roles only. An Author, a Reviewer or a Reader typing one is turned
      away with the access-denied page reading "You don't currently have
      access to that stage of the workflow.". The stage-naming addresses
      (both shapes) additionally refuse an incomplete submission ("Workflow
@@ -147,6 +149,31 @@ from the menu belongs to its own feature.
      stage-naming addresses of 2a refuse ⚠ [A3](#a3). On a preprint server
      the Author opening their own draft this way gets the panel with an
      "Error" dialog on top ⚠ [OPS4](#ops4). <sup>b</sup>
+   - 2d. **Older addresses that do not forward.** An older address typed
+     with a number missing, or naming a stage the app does not have, never
+     opens the screen:
+     - the stage-numbered form with its stage number left off, or with a
+       number that names no stage (9, say): the access-denied page reading
+       "A workflow stage was not specified.", even for a Journal Manager;
+     - a stage-naming address with no submission number at all
+       (`…/workflow/submission`, `…/workflow/externalReview`,
+       `…/workflow/editorial`, `…/workflow/production`, `…/workflow/index`,
+       and `…/workflow/internalReview` on a press): an entirely blank page,
+       for the Journal Manager, Editor, Section Editor and Author alike
+       ⚠ [A5](#a5);
+     - the editorial workflow address with no number (`…/workflow/access`):
+       a bare "404 Not Found" page. `…/workflow/internalReview` gives the
+       same page typed without a number on a journal, and with or without
+       one on a preprint server;
+     - on a preprint server, which has Production alone, the Submission,
+       Review and Copyediting forms (`…/workflow/submission/<number>`,
+       `…/workflow/externalReview/<number>`,
+       `…/workflow/editorial/<number>`, `…/workflow/index/<number>/1`,
+       `/3` and `/4`): the access-denied page "A workflow stage was not
+       specified." for every role, the Journal Manager, the Moderator and
+       the Author alike [OPS1](#ops1). There only the Production forms
+       (`…/workflow/production/<number>`, `…/workflow/index/<number>/5`)
+       and the editorial workflow address forward. <sup>b</sup>
 3. **What a refused or missing submission shows.** The refusal depends on
    the door. The editorial dashboard's address refuses at the page: an
    Author, a Reviewer or a Reader who types it, whatever the submission,
@@ -165,10 +192,10 @@ from the menu belongs to its own feature.
    that is not theirs ("The current role does not have access to this
    operation.") or for their own submission once it has been deleted
    ("Invalid submission."). The older addresses of Rule 2a answer a deleted
-   submission differently (Rule 19). A Site Administrator who holds no role in the
-   journal has been seen refused at the dashboard's door with the same
-   access-denied page, once; whether the typed workflow addresses agree is
-   the open question [A8](#a8). <sup>c</sup>
+   submission differently (Rule 19). A Site Administrator whose only role
+   left in the journal is Reader gets no panel at all from the dashboard's
+   address, only the same "Error" dialog over an empty list; one left with
+   Section Editor gets the panel for any submission [A8](#a8). <sup>c</sup>
 4. **The header.** The panel's header shows, top to bottom: the submission
    number; the contributors' names, one underlined line, exactly as the
    list's row shows them; under it, the full title of the version being
@@ -231,19 +258,26 @@ from the menu belongs to its own feature.
    stripe together with its stage entry. A review stage with no round yet
    has no sub-entries and no fold control. A review stage that has rounds
    is unfolded when the panel opens, whether or not it is the active stage.
-   The stage entry itself ("Review"; "Internal Review" / "External Review"
-   on a press) can be selected too: its heading reads "Workflow: Review"
-   ("Workflow: Internal Review" / "Workflow: External Review" on a press),
-   the rounds fold away (and unfold when the entry is selected again), and the main column
-   shows review panels ("Revisions Uploaded", "Files for Review",
-   "Reviewers", …) under a "Status" box reading "The submission has been
-   advanced to the next round of review", with no decision buttons, even
-   while the only round is the active one ⚠ [A6](#a6). The panels there
-   belong to no round: "Files for Review" pools every round's files,
-   "Reviewers" lists nobody, and the sentence is a past round's. On a
-   review stage the submission has left, the entry's box reads the
-   "advanced … was accepted" sentence of Rule 15b instead.
-   <sup>g</sup>
+   - 8a. **The stage entry itself** ("Review"; "Internal Review" /
+     "External Review" on a press) can be selected too. Its heading reads
+     "Workflow: Review" ("Workflow: Internal Review" / "Workflow: External
+     Review" on a press), and the rounds fold away (and unfold when the
+     entry is selected again). In the editorial view the main column shows
+     review panels ("Revisions Uploaded", "Files for Review", "Reviewers",
+     …) under a "Status" box reading "The submission has been advanced to
+     the next round of review", with no decision buttons, even while the
+     only round is the active one ⚠ [A6](#a6). The panels there belong to
+     no round: "Files for Review" pools every round's files, "Reviewers"
+     lists nobody and its "Add Reviewer" window reads only "Invalid review
+     round.", and the sentence is a past round's. On a review stage the
+     submission has left, the entry's box reads the "advanced … was
+     accepted" sentence of Rule 15b instead.
+   - 8b. **The stage entry in the author's view** changes only the
+     heading. Pressed from a round, the heading reads "Workflow: Review"
+     ("Workflow: External Review" on a press) over the round's own "Round N
+     Status" box and panels, still on screen. Opened by an address that
+     names the entry (Rule 12), the heading stands over nothing at all
+     [A6](#a6). <sup>g</sup>
 <a id="publication-tabs"></a>
 9. **The side menu: the "Publication" group.** The second group is headed
    "Publication" ("Preprint" on a preprint server). It holds one node per
@@ -1039,6 +1073,13 @@ Left out of the scenarios above, by reason:
   - "Preview" with "Post" on a queued preprint's publication page for the
     Preprint Server Manager (Rule 17): scenario 10 opens it as the
     Moderator
+  - a preprint server turning away the older addresses for Submission,
+    Review and Copyediting with "A workflow stage was not specified."
+    (Rule 2d): no screen links there, so only a typed address reaches it
+  - the stage-numbered address with no or an unknown stage number
+    answering "A workflow stage was not specified.", and the editorial
+    workflow address with no number a bare "404 Not Found" (Rule 2d):
+    only a hand-typed address reaches them
 - **Nothing new to test**:
   - an unassigned Section Editor at the doors (Actors rows 1–2): refused
     as scenario 3's Copyeditor is for the submission nobody assigned them
@@ -1052,13 +1093,15 @@ Left out of the scenarios above, by reason:
     the dashboard address opens; Rules 2a, 2c; scenario 6 marks it)
   - A4 (a manager who also reviews the submission getting no stage
     panels and a header without contributors; Actors row 2, Rule 4)
-  - A5 (the stage-numbered address with no or an unknown stage number
-    showing a blank page; Rule 2a)
-  - A6 (the review stage's own entry folding the rounds and reading
-    "advanced to the next round of review"; Rule 8)
+  - A5 (a stage-naming address typed with no submission number showing
+    a blank page; Rule 2d)
+  - A6 (the review stage's own entry: a past round's status, an "Add
+    Reviewer" that fails, the round's page left on screen or nothing in
+    the author's view; Rules 8a, 8b)
   - A7 (no status box on "Submission" and "Copyediting" in Done for a
     submission published straight from the Submission stage; Rule 15)
-  - A8 (a Site Administrator holding no role in the journal at the doors;
+  - A8 (a Site Administrator without Journal Manager in the journal:
+    every workflow with Section Editor left, none with Reader left;
     Rule 3)
   - A9 (an old-shape address to a deleted submission showing a bare "404
     Not Found"; Rule 19)
@@ -1104,7 +1147,8 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A5](#a5) | A stage address with a missing or unknown stage number shows a blank page instead of a message or a forward | 🐞 | latent | — |
+| [A5](#a5) | A stage address typed without a submission number shows a blank page, the app failing, instead of a message or a forward | 🐞 | latent · crash: server | claim check (claude), 2026-09-28 — a missing or unknown stage number is now refused; the missing submission number fails |
+| [A6](#a6) | Selecting the "Review" entry itself opens a page that belongs to no round: a past round's status, an "Add Reviewer" that fails, the page's script failing | 🐞 | minor · crash: script | claim check (claude), 2026-09-28 — was ❓ |
 | [A9](#a9) | An old-shape workflow bookmark to a deleted submission shows a bare "404 Not Found" page instead of a message or a forward | 🐞 | minor | — |
 | [OMP3](#omp3) | A press keeps listing the "Identifiers" page, now empty, after the identifier plugin is turned off | 🐞 | minor | — |
 | [OPS3](#ops3) | A preprint server's draft is labelled "Production" in the header bubble, not "Incomplete" | 🐞 | minor | — |
@@ -1112,9 +1156,8 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A2](#a2) | An assigned assistant off the active stage sees the "Publication" heading with nothing under it | ❓ | minor | — |
 | [A3](#a3) | An incomplete submission's workflow opens by the dashboard address but is refused by the stage-naming address | ❓ | latent | — |
 | [A4](#a4) | A manager who also reviews a submission gets its workflow with every stage marked inaccessible | ❓ | latent | — |
-| [A6](#a6) | Selecting the "Review" entry itself reports "advanced to the next round of review" while the only round is the active one | ❓ | minor | — |
 | [A7](#a7) | A submission published straight from the Submission stage shows no status box on "Submission" or "Copyediting" while in Done | ❓ | minor | — |
-| [A8](#a8) | What a Site Administrator with no role in the journal gets at the workflow's doors is unverified | ❓ | latent | — |
+| [A8](#a8) | A Site Administrator without Journal Manager in the journal opens every submission's workflow with Section Editor left, and none with Reader left | ❓ | latent | claim check (claude), 2026-09-28 — narrowed: a role-less administrator does not occur |
 | [OMP2](#omp2) | A press lists the "Media" page without Production access; a journal and a preprint server require it | ❓ | minor | — |
 | [OPS2](#ops2) | A declined preprint's workflow lands on "Title & Abstract", not on the stage holding "Revert Decline" | ❓ | minor | — |
 | [OPS4](#ops4) | A preprint server's author opening their own draft's panel gets an "Error" dialog over an otherwise open panel | ❓ | minor | — |
@@ -1180,30 +1223,32 @@ panel with nothing in it.
 Basis: probe. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
-**A5 — A malformed stage address shows a blank page** · 🐞 · latent.
-Typing the stage-numbered address of Rule 2a without a stage number, or with
-a number that is not a stage, shows an entirely blank page: no message, no
-forward, no way on but retyping. Expected: the access-denied page, or the
-usual forward. Only a hand-typed or mangled address reaches it, but the
-blank page is a server error, not a refusal.
-Basis: probe. <sup>[f-a5](#fn-a5)</sup>
+**A5 — A stage address without a submission number shows a blank page** · 🐞 · latent · crash: server.
+Typing a stage-naming address with no submission number in it
+(`…/workflow/submission`, `…/workflow/index` and the others Rule 2d lists)
+shows an entirely blank page, whoever types it, the Author included: the
+app fails with a server error instead of answering. There is no message,
+no forward and no way on but retyping. Expected: the bare "404 Not Found"
+that the editorial workflow address gives when typed the same way, or the
+access-denied page. Only a hand-typed or truncated address reaches it.
+Basis: probe, 2026-09-28. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
-**A6 — The "Review" entry reads as a past round** · ❓ · minor.
+**A6 — The "Review" entry opens a broken page that belongs to no round** · 🐞 · minor · crash: script.
 Selecting the review stage's own entry ("Review"; "External Review" or
-"Internal Review" on a press) rather than a round beneath it shows a
-"Status" box reading "The submission has been advanced to the next round of
-review", followed by round-less review panels and no decision buttons, even
-on a submission whose only round is the active one. The sentence describes a
-round that is over; the round is not. The panels under it belong to no
-round: "Files for Review" pools every round's files and "Reviewers" lists
-nobody, while each round entry lists its own. The entry also folds the
-rounds away each time it is pressed.
-Question: should the stage entry show the current round (with its "Round N
-Status" and buttons), or only fold and unfold without becoming a
-selection? Lean: show the current round; a selection that shows a wrong
-status is worse than either.
-Basis: probe. <sup>[f-a6](#fn-a6)</sup>
+"Internal Review" on a press) instead of a round gives a page that belongs
+to no round. The editorial view reads "The submission has been advanced to
+the next round of review" while the only round is still active, and its
+"Add Reviewer" opens a window reading only "Invalid review round." (Rule
+8a). The author's view keeps the round's page under the new heading, or
+shows nothing (Rule 8b). Each opening also makes the page's script fail,
+with nothing on the page saying so: on a journal in both views, on a press
+in the author's view. Expected: the current round, with its "Round N
+Status" and buttons, or an entry that only folds and unfolds the rounds.
+Re-checked: claim check (claude), 2026-09-28 — was ❓ (which of the two
+the entry should do); a defect either way, since its "Add Reviewer" and the
+page's script fail.
+Basis: probe, 2026-09-28. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
 **A7 — Skipped stages show no status after a direct publish** · ❓ · minor.
@@ -1218,19 +1263,23 @@ Lean: "has not yet been initiated", as "Review" already says.
 Basis: probe. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
-**A8 — A Site Administrator with no journal role: unverified** · ❓ · latent.
-A Site Administrator who holds no role in a journal has been seen turned
-away at the editorial dashboard's door with "The current role does not
-have access to this operation.", once, on a journal. Whether the typed
-workflow addresses of Rule 2 agree, and what a press or preprint server
-does, is unverified: the test installs enrol the administrator as manager
-in every journal they create, so the role-less case cannot be arranged
-there.
-Question: is a role-less Site Administrator meant to reach a journal's
-workflow at all? Lean: no, and the doors agree in practice; the typed
-workflow addresses admit the administrator role but forward to the same
-dashboard, which refuses.
-Basis: judgment. <sup>[f-a8](#fn-a8)</sup>
+**A8 — A Site Administrator without Journal Manager opens every workflow, or none** · ❓ · latent.
+A journal enrols the Site Administrator who creates it as Journal Manager
+and keeps an account's last role, so a Site Administrator with no role
+at all in a journal does not occur. One whose Journal Manager role there
+has been ended gets two different answers at the dashboard's address
+(Rule 3). Left with Section Editor, they see only their own assignments
+listed, yet the address opens any submission's workflow, one nobody
+assigned them to included, with a manager's screen: "Activity Log", every
+publication page and "Create New Version". Left with Reader, the address
+opens no panel at all, only an "Error" dialog over an empty list
+([→ Submissions dashboard](U23-submissions-dashboard.md#a9)). Expected:
+one answer, whichever role they keep.
+Question: should the Site Administrator role open a journal's workflows
+without Journal Manager there? Lean: yes; once any editorial role lets them
+in, the workflow already treats them as a manager, and the Reader case is
+the dashboard refusing before the panel can open.
+Basis: probe, 2026-09-28. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
 **A9 — An old bookmark to a deleted submission shows a bare "404 Not Found"** · 🐞 · minor.
@@ -1286,7 +1335,9 @@ Basis: probe. <sup>[f-omp3](#fn-omp3)</sup>
 **OPS1 — One stage, no assistant access, and an author's view without a "Workflow" group** · ✅ · intended divergence.
 A preprint server's workflow has a single stage, Production, so its
 "Workflow" group lists that entry alone and the status box never says a
-stage has not been initiated. No assistant role reaches the workflow: the
+stage has not been initiated. The older addresses naming Submission, Review
+or Copyediting are turned away there with "A workflow stage was not
+specified." (Rule 2d). No assistant role reaches the workflow: the
 Editorial Board Member has no stage set, so its editorial dashboard is
 empty and a typed address gives the "Error" dialog of Rule 3, while the
 Moderator is assigned to every preprint in their section automatically. The
@@ -1350,10 +1401,10 @@ Basis: probe. <sup>[f-ops4](#fn-ops4)</sup>
 ## Footnotes — mechanism & evidence
 
 <a id="fn-a"></a>
-**a** — The screen is the Vue `WorkflowPage` (`lib/ui-library/src/pages/workflow/WorkflowPage.vue`, app variants `WorkflowPageOJS/OMP/OPS.vue` registered as `WorkflowPage` in each app's `js/load.js`), opened as a side modal by the dashboard store (`pages/dashboard/dashboardPageStore.js::openWorkflowModal()`; `queryParamsUrl.workflowSubmissionId`), which passes `pageInitConfig` including `dashboardPage` (`EDITORIAL_DASHBOARD` | `MY_SUBMISSIONS`). The dashboard page ops are role-gated in `PKPDashboardHandler::__construct()`: `editorial` for `ROLE_ID_SITE_ADMIN | MANAGER | SUB_EDITOR | ASSISTANT`, `mySubmissions` for `ROLE_ID_AUTHOR`, `reviewAssignments` for `ROLE_ID_REVIEWER`. The panel's own data comes from `GET api/v1/{context}/submissions/{id}` (`PKPSubmissionController::get()`), guarded by `SubmissionAccessPolicy`: Manager/Site Admin any submission; Sub-editor and Assistant only with an accessible stage (`UserAccessibleWorkflowStageRequiredPolicy`); Author only as author (`SubmissionAuthorPolicy`) or with a stage assignment; Reviewer only with a review assignment. Stage sets: `registry/userGroups.xml` per app (`stages=` attribute; OJS copyeditor `4`, layoutEditor/proofreader `5`, funding `1,3`, manager/editor/sectionEditor/guestEditor/author `1,3,4,5`; OMP adds stage `2`; OPS manager, sectionEditor "Moderator" and author `5`, reader and editorialBoardMember none). No app subclasses the dashboard store or the access policies (empty chains). Live-probed 2026-09-02 on OJS, OMP and OPS (`editor.diana`, `manager.maya`, `sectioneditor.ana`, `copyeditor.carla`, `assistant.rita` as Funding Coordinator, `layouteditor.leo`, `author.alex`, `reviewer.julia`, `reader.rosa`): the rows held as written; on OPS `assistant.rita` (Editorial Board Member) got an empty editorial dashboard and, on a typed address, the "Error" dialog of note c, and every seeded Moderator of section PRE appeared on each new preprint's Participants list without being assigned by hand. OPS enrols no Editor account, so its "Editor" rows were driven as the Journal Manager (`manager.maya`) with the Moderator as a second control. Site Administrator with no journal role: live-observed once, 2026-08-02 (the reviewer-management claim check, a journal): refused at the editorial dashboard with "The current role does not have access to this operation."; not reproducible on 2026-09-02 because the context scenario enrols `admin` as manager in every journal it creates and the seeded `admin` is a Journal Manager in every test journal (basis of A8). Roles screen live-probed 2026-09-02 (`manager.maya`, Settings › Users & Roles › "Roles", all three apps): column heads "Role Name | Permission level | Submission | Review | Copyediting | Production" (OMP inserts "Internal Review | External Review" for "Review"; OPS "Production" only); the Journal manager, Journal editor and Production editor rows (OMP and OPS the same three manager-level rows) carry no stage checkboxes at all; Section editor, Guest editor, Author and Translator every stage; Copyeditor Copyediting; Layout Editor, Proofreader, Designer and Indexer Production; Funding coordinator Submission and Review (OMP: both reviews); Marketing and sales coordinator Copyediting; OMP's Volume editor every stage and Chapter Author Copyediting and Production; OPS's Moderator and Author Production, Editorial Board Member none.
+**a** — The screen is the Vue `WorkflowPage` (`lib/ui-library/src/pages/workflow/WorkflowPage.vue`, app variants `WorkflowPageOJS/OMP/OPS.vue` registered as `WorkflowPage` in each app's `js/load.js`), opened as a side modal by the dashboard store (`pages/dashboard/dashboardPageStore.js::openWorkflowModal()`; `queryParamsUrl.workflowSubmissionId`), which passes `pageInitConfig` including `dashboardPage` (`EDITORIAL_DASHBOARD` | `MY_SUBMISSIONS`). The dashboard page ops are role-gated in `PKPDashboardHandler::__construct()`: `editorial` for `ROLE_ID_SITE_ADMIN | MANAGER | SUB_EDITOR | ASSISTANT`, `mySubmissions` for `ROLE_ID_AUTHOR`, `reviewAssignments` for `ROLE_ID_REVIEWER`. The panel's own data comes from `GET api/v1/{context}/submissions/{id}` (`PKPSubmissionController::get()`), guarded by `SubmissionAccessPolicy`: Manager/Site Admin any submission; Sub-editor and Assistant only with an accessible stage (`UserAccessibleWorkflowStageRequiredPolicy`); Author only as author (`SubmissionAuthorPolicy`) or with a stage assignment; Reviewer only with a review assignment. Stage sets: `registry/userGroups.xml` per app (`stages=` attribute; OJS copyeditor `4`, layoutEditor/proofreader `5`, funding `1,3`, manager/editor/sectionEditor/guestEditor/author `1,3,4,5`; OMP adds stage `2`; OPS manager, sectionEditor "Moderator" and author `5`, reader and editorialBoardMember none). No app subclasses the dashboard store or the access policies (empty chains). Live-probed 2026-09-02 on OJS, OMP and OPS (`editor.diana`, `manager.maya`, `sectioneditor.ana`, `copyeditor.carla`, `assistant.rita` as Funding Coordinator, `layouteditor.leo`, `author.alex`, `reviewer.julia`, `reader.rosa`): the rows held as written; on OPS `assistant.rita` (Editorial Board Member) got an empty editorial dashboard and, on a typed address, the "Error" dialog of note c, and every seeded Moderator of section PRE appeared on each new preprint's Participants list without being assigned by hand. OPS enrols no Editor account, so its "Editor" rows were driven as the Journal Manager (`manager.maya`) with the Moderator as a second control. Site Administrator with no journal role: live-observed once, 2026-08-02 (the reviewer-management claim check, a journal): refused at the editorial dashboard with "The current role does not have access to this operation."; not reproducible on 2026-09-02 because the context scenario enrols `admin` as manager in every journal it creates and the seeded `admin` is a Journal Manager in every test journal; the reachable states without that role were driven 2026-09-28 (note f-a8). Roles screen live-probed 2026-09-02 (`manager.maya`, Settings › Users & Roles › "Roles", all three apps): column heads "Role Name | Permission level | Submission | Review | Copyediting | Production" (OMP inserts "Internal Review | External Review" for "Review"; OPS "Production" only); the Journal manager, Journal editor and Production editor rows (OMP and OPS the same three manager-level rows) carry no stage checkboxes at all; Section editor, Guest editor, Author and Translator every stage; Copyeditor Copyediting; Layout Editor, Proofreader, Designer and Indexer Production; Funding coordinator Submission and Review (OMP: both reviews); Marketing and sales coordinator Copyediting; OMP's Volume editor every stage and Chapter Author Copyediting and Production; OPS's Moderator and Author Production, Editorial Board Member none.
 
 <a id="fn-b"></a>
-**b** — Typed addresses. `PKPWorkflowHandler` (`lib/pkp/pages/workflow/`): `access` (policies `SubmissionRequiredPolicy` + `UserAccessibleWorkflowStageRequiredPolicy(WORKFLOW_TYPE_EDITORIAL)`) and `index` (`SubmissionCompletePolicy` + `WorkflowStageAccessPolicy` with the stage from `identifyStageId()`: the `stageId` user var, else the op name via `WorkflowStageDAO::getIdFromPath()`, else `$args[1]`) both `redirectUrl` to `dashboard/editorial?workflowSubmissionId={id}`; no `workflowMenuKey` is appended (basis of A1), and the dashboard then adds `currentViewId=assigned-to-me` and the landing entry's key itself. The per-stage ops `submission`, `externalReview`, `editorial`, `production` (OMP adds `internalReview`; OPS's role map lists an `editorDecisionActions` op that no handler method implements) call `_redirectToIndex()` → `workflow/index/{id}/{stageId}` → the dashboard. Role assignment in each app's `WorkflowHandler::__construct()`: `SUB_EDITOR, MANAGER, SITE_ADMIN, ASSISTANT` (identical in OJS, OMP, OPS). Denial messages: role gate `user.authorization.roleBasedAccessDenied` "The current role does not have access to this operation."; stage gate `user.authorization.accessibleWorkflowStage` "You don't currently have access to that stage of the workflow."; incomplete `user.authorization.submission.incomplete.workflowAccessRestrict` "Workflow access for incomplete submission is restricted."; the editorial role on the author-dashboard address `user.authorization.submission.noAuthorRole`-shaped text "You do not currently have sufficient privileges to view the submission. Please edit your profile to ensure that you have been granted the appropriate roles under "Register As"." (the body quotes its first sentence). Author dashboard: `PKPAuthorDashboardHandler::submission()` (role `ROLE_ID_AUTHOR` only; `AuthorDashboardAccessPolicy` = `SubmissionAccessPolicy` + `UserAccessibleWorkflowStageRequiredPolicy(WORKFLOW_TYPE_AUTHOR)`) redirects to `dashboard/mySubmissions?workflowSubmissionId={id}`; OMP's subclass pre-assigns internal review rounds then calls the parent; OPS's subclass overrides only `setupTemplate()`/`identifyStageId()`, which the redirect never reaches. Live-probed 2026-09-02 (OJS, OMP, OPS): `workflow/access/{id}`, `workflow/index/{id}/{stage}` and the per-stage forms all forwarded an Editor / Journal Manager to `dashboard/editorial?workflowSubmissionId={id}` with the panel at its usual landing, a stage the submission had not reached and a press's `internalReview` form on a monograph without one accepted alike; Author, Reviewer and Reader (OPS: Reader) on `workflow/access` → `user/authorizationDenied?message=user.authorization.accessibleWorkflowStage`; the author-dashboard address forwarded `author.alex` to My Submissions with the panel open (OPS on "Preprint: Title & Abstract"), gave an Editor and a Journal Manager (OPS: a Moderator) the two-sentence privileges text, and a stranger Author the stage-access text. Drafts (`submitted: false`): the dashboard address and `workflow/access/{id}` opened the panel for `manager.maya` on all three apps (bubble "Incomplete"; OPS "Production"); `workflow/index/{id}/1` (OPS `/5`) → `…message=user.authorization.submission.incomplete.workflowAccessRestrict` (basis of A3, live on all three). OPS author's draft (`dashboard/mySubmissions?workflowSubmissionId={id}`): the panel opened on "Preprint: Title & Abstract" and the page's own form request (`GET …/submissions/{id}/publications/{pid}/_components/titleAbstract`) answered 401 with `user.authorization.submission.incomplete.workflowAccessRestrict`, raised as the "Error" dialog; on OJS and OMP the author's draft landed on the Submission stage, which makes no such request, and no dialog appeared (basis of OPS4).
+**b** — Typed addresses. `PKPWorkflowHandler` (`lib/pkp/pages/workflow/`): `access` (policies `SubmissionRequiredPolicy` + `UserAccessibleWorkflowStageRequiredPolicy(WORKFLOW_TYPE_EDITORIAL)`) and `index` (`SubmissionCompletePolicy` + `WorkflowStageAccessPolicy` with the stage from `identifyStageId()`: the `stageId` user var, else the op name via `WorkflowStageDAO::getIdFromPath()`, else `$args[1]`) both `redirectUrl` to `dashboard/editorial?workflowSubmissionId={id}`; no `workflowMenuKey` is appended (basis of A1), and the dashboard then adds `currentViewId=assigned-to-me` and the landing entry's key itself. The per-stage ops `submission`, `externalReview`, `editorial`, `production` (OMP adds `internalReview`; OPS's role map lists an `editorDecisionActions` op that no handler method implements) call `_redirectToIndex()` → `workflow/index/{id}/{stageId}` → the dashboard. Role assignment in each app's `WorkflowHandler::__construct()`: `SUB_EDITOR, MANAGER, SITE_ADMIN, ASSISTANT` (identical in OJS, OMP, OPS). Denial messages: role gate `user.authorization.roleBasedAccessDenied` "The current role does not have access to this operation."; stage gate `user.authorization.accessibleWorkflowStage` "You don't currently have access to that stage of the workflow."; incomplete `user.authorization.submission.incomplete.workflowAccessRestrict` "Workflow access for incomplete submission is restricted."; the editorial role on the author-dashboard address `user.authorization.submission.noAuthorRole`-shaped text "You do not currently have sufficient privileges to view the submission. Please edit your profile to ensure that you have been granted the appropriate roles under "Register As"." (the body quotes its first sentence). Author dashboard: `PKPAuthorDashboardHandler::submission()` (role `ROLE_ID_AUTHOR` only; `AuthorDashboardAccessPolicy` = `SubmissionAccessPolicy` + `UserAccessibleWorkflowStageRequiredPolicy(WORKFLOW_TYPE_AUTHOR)`) redirects to `dashboard/mySubmissions?workflowSubmissionId={id}`; OMP's subclass pre-assigns internal review rounds then calls the parent; OPS's subclass overrides only `setupTemplate()`/`identifyStageId()`, which the redirect never reaches. Live-probed 2026-09-02 (OJS, OMP, OPS): `workflow/access/{id}`, `workflow/index/{id}/{stage}` and the per-stage forms all forwarded an Editor / Journal Manager to `dashboard/editorial?workflowSubmissionId={id}` with the panel at its usual landing, a stage the submission had not reached and a press's `internalReview` form on a monograph without one accepted alike; Author, Reviewer and Reader (OPS: Reader) on `workflow/access` → `user/authorizationDenied?message=user.authorization.accessibleWorkflowStage`; the author-dashboard address forwarded `author.alex` to My Submissions with the panel open (OPS on "Preprint: Title & Abstract"), gave an Editor and a Journal Manager (OPS: a Moderator) the two-sentence privileges text, and a stranger Author the stage-access text. Drafts (`submitted: false`): the dashboard address and `workflow/access/{id}` opened the panel for `manager.maya` on all three apps (bubble "Incomplete"; OPS "Production"); `workflow/index/{id}/1` (OPS `/5`) → `…message=user.authorization.submission.incomplete.workflowAccessRestrict` (basis of A3, live on all three). OPS author's draft (`dashboard/mySubmissions?workflowSubmissionId={id}`): the panel opened on "Preprint: Title & Abstract" and the page's own form request (`GET …/submissions/{id}/publications/{pid}/_components/titleAbstract`) answered 401 with `user.authorization.submission.incomplete.workflowAccessRestrict`, raised as the "Error" dialog; on OJS and OMP the author's draft landed on the Submission stage, which makes no such request, and no dialog appeared (basis of OPS4). Re-driven 2026-09-28 (Rule 2d; OJS, OMP, OPS, scratch contexts, two runs each; a scratch Journal Manager, Editor, assigned Section Editor / Moderator and Author): `workflow/index/{id}` and `workflow/index/{id}/9` → 200 `user/authorizationDenied?message=user.authorization.workflowStageRequired` "A workflow stage was not specified." for the Journal Manager (`identifyStageId()` yields no valid stage and `WorkflowStageAccessPolicy`'s `WorkflowStageRequiredPolicy` refuses it; `/4`, OPS `/5`, forwarded as control); the per-stage ops and `index` with no id at all → HTTP 500 with an empty document for every role driven (note f-a5); `workflow/access` with no id and `workflow/internalReview` with no id on OJS and OPS → HTTP 404, body `h1` "404 Not Found" only. On OPS, `workflow/submission/{id}`, `externalReview/{id}`, `editorial/{id}` and `index/{id}/1`, `/3`, `/4` → the same `workflowStageRequired` page for the manager, the Moderator and the Author alike, because `WorkflowStageRequiredPolicy` accepts only `Application::getValidStages()`, which on OPS holds Production (and Done) alone (note p); `workflow/internalReview/{id}` → 404 "404 Not Found"; `production/{id}`, `index/{id}/5` and `access/{id}` forwarded the manager and the Moderator, and gave the Author the `accessibleWorkflowStage` page. The 2026-09-02 sentence above that the per-stage forms forwarded on OPS no longer holds for these three forms.
 
 <a id="fn-c"></a>
 **c** — A failed submission fetch surfaces through `useFetch` → `modalStore.openDialogNetworkError()`: title `common.error` "Error", message = the API's `errorMessage` field, one "OK" button, over the still-open side modal whose header holds only `submissionId`. Live-probed 2026-09-02 (OJS, OMP, OPS, the browser's own traffic): for an unassigned Section Editor (`sectioneditor.ravi`; OPS: a Moderator outside the preprint's section, `sectioneditor.omar`, and the Editorial Board Member `assistant.rita`) the panel's `GET api/v1/{context}/submissions/{id}` answered 401 `user.authorization.roleBasedAccessDenied` and the dialog read "The current role does not have access to this operation."; for a deleted submission it answered 404 `user.authorization.invalidSubmission`, "Invalid submission."; after "OK" the shell (number, empty heading, empty menu, "Close") stayed. `author.alex` and `reader.rosa` typing `dashboard/editorial?workflowSubmissionId={id}` were redirected to `user/authorizationDenied?message=user.authorization.roleBasedAccessDenied` by the page's role gate before any request. (The API answers 401 where 403 would be usual for a signed-in but refused user; the on-screen message is right.) Live-probed 2026-09-02: `author.alex` typing `dashboard/mySubmissions?workflowSubmissionId={id}` for another author's submission (OJS, OMP, OPS) got the shell with "Error" / "The current role does not have access to this operation." / "OK" over My Submissions (the fetch 401), and for his own preprint after its deletion (OPS) "Error" / "Invalid submission." / "OK"; `reviewer.julia` (the submission's own accepted reviewer) typing the editorial dashboard address got the role-based access-denied page like an Author; a never-existing id (99999) gave "Invalid submission." too.
@@ -1368,7 +1419,7 @@ Basis: probe. <sup>[f-ops4](#fn-ops4)</sup>
 **f** — `getHeaderItems()` in `workflowConfigEditorialOJS.js` / `OMP.js` / `OPS.js` (`lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/`): OJS only — `WorkflowPaymentDropdown` when `publicationSettings.submissionPaymentsEnabled` (OJS `DashboardHandler::setupIndex()` from `PaymentManager::publicationEnabled()`, which needs payments enabled, a configured payment plugin and a publication fee above zero); all three — `common.view` "View" when `status === STATUS_PUBLISHED`, `common.preview` "Preview" when not published and `stageId ∈ {EDITING, PRODUCTION}`, both → `redirectToPage(submission.urlPublished)`; `editor.activityLog` "Activity Log" when `permissions.canAccessEditorialHistory` (`useWorkflowPermissions.js`: `MANAGER | SITE_ADMIN | SUB_EDITOR` among the active stage's `currentUserAssignedRoles`); `editor.submissionLibrary` "Library" unconditionally; OMP only — `WorkflowWorkTypeOMP`; then the Return buttons via `isDecisionAvailable()` (note m). The author configs (`workflowConfigAuthorOJS/OMP/OPS.js::getHeaderItems()`) push "Library" only. The three editorial files are forked copies, so each app was driven separately. Live-probed 2026-09-02: per state — queued "Activity Log", "Library"; Review the same; Copyediting and queued Production add "Preview" first; scheduled (OJS) "Preview"; Done "View", "Activity Log", "Library", "Return to Workflow"; declined at Submission no View/Preview, a declined or queued preprint "Preview"; OMP inserts "Monograph" (a menu button with items "Edited Volume", "Monograph") after "Library". Per role on a Copyediting submission: Editor and assigned Section Editor / Moderator "Preview", "Activity Log", "Library"; assigned Copyeditor "Preview", "Library"; Author "Library". "View" and "Preview" opened `urlPublished` in the same tab, the preview page carrying "This is a preview and has not been published."; after "Return to Workflow" the header showed "Preview" (Production) or neither button (Submission) with the version still published (status queued, so the "View" condition fails). "Payments" (OJS scratch journal `u24b7`): absent with payments enabled, a fee of 50 and no manual-payment instructions; present, leftmost, once the instructions were saved; never in the author's header. Live-probed 2026-09-02 (OJS scratch journal `u24cc2`): the fee is set on the journal's own `…/payments` page, tab "Payment Types", section "Author Fees", field "Article Processing Charge"; with it at 0 the header read "Activity Log", "Library", at 50 "Payments", "Activity Log", "Library"; an assigned Copyeditor's header on the same journal read "Payments", "Library", so every editorial-view role gets the dropdown. "Preview" follows the stage, not the reader's access: a Layout Editor (stage set Production) on a Copyediting submission got "Preview", "Library" above the no-access box (OJS, OMP). "Activity Log" per role, all states including Done: Journal Manager, Editor, assigned Section Editor, Guest Editor and Moderator present; Copyeditor, Layout Editor, Proofreader, Funding Coordinator and Author absent; a manager assigned to the submission as Copyeditor (scratch user with both groups, OJS and OMP) got "Library" only, like the assistant.
 
 <a id="fn-g"></a>
-**g** — Menu: `useWorkflowNavigationConfigOJS.js::getWorkflowItems()` pushes `workflow_{stageId}` items for `SUBMISSION` (`manager.publication.submissionStage`), `EXTERNAL_REVIEW` (`manager.publication.reviewStage` "Review", with `getReviewItems()` children `workflow_{stageId}_{reviewRoundId}` labelled `workflow.reviewRoundN` "Review Round {$number}"), `EDITING` (`submission.copyediting`), `PRODUCTION` (`manager.publication.productionStage`); `colorStripe` when `activeStage.id === stageId` (round item: also `activeReviewRound.id === reviewRound.id`). `…OMP.js` pushes five (`INTERNAL_REVIEW` `workflow.review.internalReview`, `EXTERNAL_REVIEW` `workflow.review.externalReview` "External Review", each with rounds); `…OPS.js` pushes `PRODUCTION` only and pushes the `workflow` group only when `dashboardPage === EDITORIAL_DASHBOARD`. Heading: `getWorkflowTitle()` = `semicolon(manager.workflow)` + stage label ("Workflow: Submission"; the DOM carries two spaces after the colon, rendered as one); round title `submission.stage.externalReviewWithRound` / `internalReviewWithRound`. Expanded groups at open: OJS `workflow`, `publication`, `marketing`, `workflow_{EXTERNAL_REVIEW}`; OMP adds `workflow_{INTERNAL_REVIEW}`; OPS `workflow`, `publication` (`WorkflowPage{OJS,OMP,OPS}.vue::setExpandedKeys()`). The stage items are pushed unconditionally, so every stage is listed for every role (Rules 7, 13). Live-probed 2026-09-02 (OJS, OMP, OPS; seeds at every stage, two- and three-round seeds): labels, order, stripes and headings verbatim as Rules 7–8 state; a review stage without a round had no sub-entry and no `aria-expanded`; with rounds it was expanded at open on every seed; rounds listed in order with the current round striped together with its stage entry. The stage entry itself (`workflowMenuKey=workflow_3`, `workflow_2` on a press) is selectable: heading "Workflow: Review" / "Workflow: External Review", the group collapses on each press, and the main column showed the language line, a "Status" box "The submission has been advanced to the next round of review" and the round's panels without action buttons, on a one-round seed in Round 1 as on a two-round seed (basis of A6; the entry's key names no round, so the status component takes its past-round branch). Live-probed 2026-09-02: on a press the round-less "Internal Review" entry (a monograph sent straight to External Review) had no `aria-expanded`, no child item and no chevron, while "External Review" had all three; the author's view on a press listed the groups "Workflow" and "Publication" only, "Marketing" being pushed for the editorial dashboard alone (note q). On a review stage the submission had left (Copyediting after three rounds; Production after one), selecting the stage entry gave "Status" / "The submission advanced to the next review round, was accepted, and is currently in the {stage} stage." (note k).
+**g** — Menu: `useWorkflowNavigationConfigOJS.js::getWorkflowItems()` pushes `workflow_{stageId}` items for `SUBMISSION` (`manager.publication.submissionStage`), `EXTERNAL_REVIEW` (`manager.publication.reviewStage` "Review", with `getReviewItems()` children `workflow_{stageId}_{reviewRoundId}` labelled `workflow.reviewRoundN` "Review Round {$number}"), `EDITING` (`submission.copyediting`), `PRODUCTION` (`manager.publication.productionStage`); `colorStripe` when `activeStage.id === stageId` (round item: also `activeReviewRound.id === reviewRound.id`). `…OMP.js` pushes five (`INTERNAL_REVIEW` `workflow.review.internalReview`, `EXTERNAL_REVIEW` `workflow.review.externalReview` "External Review", each with rounds); `…OPS.js` pushes `PRODUCTION` only and pushes the `workflow` group only when `dashboardPage === EDITORIAL_DASHBOARD`. Heading: `getWorkflowTitle()` = `semicolon(manager.workflow)` + stage label ("Workflow: Submission"; the DOM carries two spaces after the colon, rendered as one); round title `submission.stage.externalReviewWithRound` / `internalReviewWithRound`. Expanded groups at open: OJS `workflow`, `publication`, `marketing`, `workflow_{EXTERNAL_REVIEW}`; OMP adds `workflow_{INTERNAL_REVIEW}`; OPS `workflow`, `publication` (`WorkflowPage{OJS,OMP,OPS}.vue::setExpandedKeys()`). The stage items are pushed unconditionally, so every stage is listed for every role (Rules 7, 13). Live-probed 2026-09-02 (OJS, OMP, OPS; seeds at every stage, two- and three-round seeds): labels, order, stripes and headings verbatim as Rules 7–8 state; a review stage without a round had no sub-entry and no `aria-expanded`; with rounds it was expanded at open on every seed; rounds listed in order with the current round striped together with its stage entry. The stage entry itself (`workflowMenuKey=workflow_3`, `workflow_2` on a press) is selectable: heading "Workflow: Review" / "Workflow: External Review", the group collapses on each press, and the main column showed the language line, a "Status" box "The submission has been advanced to the next round of review" and the round's panels without action buttons, on a one-round seed in Round 1 as on a two-round seed (basis of A6; the entry's key names no round, so the status component takes its past-round branch). Live-probed 2026-09-02: on a press the round-less "Internal Review" entry (a monograph sent straight to External Review) had no `aria-expanded`, no child item and no chevron, while "External Review" had all three; the author's view on a press listed the groups "Workflow" and "Publication" only, "Marketing" being pushed for the editorial dashboard alone (note q). On a review stage the submission had left (Copyediting after three rounds; Production after one), selecting the stage entry gave "Status" / "The submission advanced to the next review round, was accepted, and is currently in the {stage} stage." (note k). The stage entry's "Add Reviewer" window and its author's view (Rules 8a, 8b) were driven 2026-09-28: note f-a6.
 
 <a id="fn-h"></a>
 **h** — Publication group: `getMenuItems()` pushes `publication` (`submission.publication`: "Publication" OJS/OMP, "Preprint" OPS) when `dashboardPage ∈ {EDITORIAL_DASHBOARD, MY_SUBMISSIONS}`; `getPublicationVersionItems()` pushes `publication_{id}` per `submission.publications` entry (label `publication.versionString`) with `getPublicationItemsEditorial()` children when `EDITORIAL_DASHBOARD && permissions.canAccessPublication`, `getPublicationItemsAuthor()` children when `MY_SUBMISSIONS`, else nothing (basis of A2: the group is pushed, its `items` empty); then `publication_create_new_version` when `permissions.canPublish`. Page rosters (keys → labels): OJS editorial `titleAbstract` "Title & Abstract", `contributors`, `metadata` ("Metadata"), `citations` "References" if `publicationSettings.supportsCitations`, `dataAvailabilityAndCitation` "Data" if `supportsDataCitations || supportsDataAvailability`, `funding` if `supportsFunders`, `identifiers` if `identifiersEnabled`, `jats` "JATS XML", then under `permissions.canAccessProduction`: `bodyText`, `galleys`, `media`, `license` "Permissions & Disclosure", `issue` "Publication Settings". OMP editorial: `titleAbstract`, `contributors`, `chapters`, `metadata`, `publicationFormats`, `media` (ungated, basis of OMP2), `citations`/`dataAvailabilityAndCitation`/`funding`/`identifiers` as above, then gated `catalogEntry` "Catalog Entry", `license`. OPS editorial: as OJS minus `jats`/`bodyText`/`issue`, plus gated `preprintEntry` "Preprint entry". Author rosters: OJS `titleAbstract`, `contributors`, `metadata`, [`citations`], [`dataAvailabilityAndCitation`], [`funding`], `galleys`, `media`; OMP `titleAbstract`, `contributors`, `chapters`, `metadata`, `publicationFormats`, `media`, [`citations`], [`data`], [`funding`]; OPS = OJS + `discussions` ("Production Tasks & Discussions"). Settings flags come from `PKPDashboardHandler::index()` (`supportsCitations|supportsDataCitations|supportsDataAvailability|supportsFunders|identifiersEnabled` from the context's `citations`, `dataCitations`, `dataAvailability`, `funders` settings and the `pubIds` plugin registry). Live-probed 2026-09-02 (OJS, OMP, OPS): every roster above verbatim, in order, for the Journal Manager, Editor, Moderator, assigned Copyeditor (at Copyediting), assigned Funding Coordinator (in Review: OJS "…References", "Funding", "JATS XML"; OMP "…Publication Formats", "Media", "References", "Funding") and Author; version labels "Unassigned version (2026-09-02)" before publishing, "Version of Record 1.0" / "1.1" after (OPS "Author Original 1.0" / "1.1"); "Create New Version" last in the group for the Journal Manager and Editor, absent for the Moderator, the Copyeditor, the Funding Coordinator and the Author. Scratch-context defaults: references and funders on, data availability and data citations off, the URN plugin off; each option removed exactly its page when turned off; enabling URN with `enablePublicationURN` ticked added "Identifiers" (OJS, OMP); disabling it removed the page on OJS and left it on OMP, opening as "Publication: Identifiers" with an empty main column, in a fresh browser too (basis of OMP3; the flag that lists the page evidently stays set for the press, not traced further); OPS ships no `plugins/pubIds` directory. The empty "Publication" heading (A2): live on OJS and OMP for `copyeditor.carla` in Review and for the reviewing manager of note j — no node, no chevron, no `aria-expanded`, a press with the same address unchanged. Done: `Schema::getPropertyStages()`'s synthetic Done entry carries the union of the reader's assigned roles across the app stages, so `canAccessPublication` is true there for every assigned editorial role. Live-probed 2026-09-02 (OJS, OMP): a Layout Editor assigned to a submission resting in Done saw the version node with every page, "Body Text", "Galleys", "Media", "Permissions & Disclosure", "Publication Settings" included; a Funding Coordinator in Done saw "Title & Abstract", "Contributors", "Metadata", "References", "Funding", "JATS XML" (OMP "… Publication Formats", "Media", "References", "Funding") and no production page; the same two roles in Review and Copyediting saw the empty heading. Metadata options (OJS scratch `u24cc2`, Settings › Workflow › Submission › Metadata, labels "Enable references metadata", "Enable data availability statement metadata", "Enable data citation metadata", "Enable funder metadata"): "Enable data citation metadata" alone, or "Enable data availability statement metadata" alone, listed "Data" between "References" and "Funding"; both off removed it. URN plugin settings form (OJS and OMP scratch): section "Journal Content" ("Press Content"), "Please select the publishing objects that will have Uniform Resource Names (URN) assigned:", checkboxes "Issues", "Articles", "Galleys" ("Monographs", "Chapters", "Publication Formats", "Files"); "Articles" / "Monographs" (`enablePublicationURN`) is the one that lists the page, with "URN Prefix" and a namespace filled as the form requires.
@@ -1416,16 +1467,16 @@ Basis: probe. <sup>[f-ops4](#fn-ops4)</sup>
 **f-a4** — Note j: `Schema::getPropertyStages()` skips the global Manager/Site-admin fallback when `$this->reviewAssignments` contains an undeclined, uncancelled assignment for the current user, so `currentUserAssignedRoles` stays empty on every stage; `useWorkflowPermissions.js` then yields `accessibleStages: []`, `canAccessPublication: false` and `canAccessEditorialHistory: false` ("Library" only), while the page-level `SubmissionAccessPolicy` and `Repo::user()->getAccessibleWorkflowStages()` have no such exclusion, so the panel opens (200). Live-probed 2026-09-02 (OJS, OMP; scratch contexts `u24d8`, a user with the manager and reviewer roles accepted on one seed): as note j records; the missing contributors' line (the title rendered in that slot) was seen on both apps. Control, same day: the same user on a second seed where their review request had been declined got the full manager's screen ("Round 1 Status" / "All reviews are confirmed and a decision is needed.", decision buttons, "Participants" with "Assign"), so the undeclined assignment is the condition. OPS has no reviewer role.
 
 <a id="fn-a5"></a>
-**f-a5** — Live-probed 2026-09-02 (OJS, OMP, OPS, `editor.diana` / `manager.maya`): `{journal}/workflow/index/{id}` and `{journal}/workflow/index/{id}/9` both answered HTTP 500 with an empty document (no title, no text) and the browser stayed on the typed address; no API request was made. The server log names, for both, an uncaught error in `PKPWorkflowHandler::identifyStageId()` (`WorkflowStageDAO::getPathFromId()` called with `null`, and an assertion that the path is not null), raised during `authorize()` before any access policy answers.
+**f-a5** — What the entry covered changed with the app build. Live-probed 2026-09-02 (OJS, OMP, OPS, `editor.diana` / `manager.maya`): `{journal}/workflow/index/{id}` and `{journal}/workflow/index/{id}/9` both answered HTTP 500 with an empty document (no title, no text) and the browser stayed on the typed address; no API request was made. The server log named, for both, an uncaught error in `PKPWorkflowHandler::identifyStageId()` (`WorkflowStageDAO::getPathFromId()` called with `null`, and an assertion that the path is not null), raised during `authorize()` before any access policy answered. Live-probed 2026-09-28 (OJS, OMP, OPS, two runs each, a scratch Journal Manager): those two addresses now answer 200 with the access-denied page "A workflow stage was not specified." (Rule 2d, note b), and the blank page comes from the stage-naming addresses typed with no submission id: `workflow/submission`, `workflow/externalReview`, `workflow/editorial`, `workflow/production`, `workflow/index` (all three apps) and `workflow/internalReview` (OMP) each answered HTTP 500 with an empty `main`, for the scratch Journal Manager, Editor, Section Editor and Author on OJS and OMP and the Journal Manager, Moderator and Author on OPS, both runs; the server log names `Call to a member function getData() on null` in `SubmissionCompletePolicy::dataObjectEffect()` (`Repo::submission()->get()` of the missing id returns null and is not checked), the policy `PKPWorkflowHandler::authorize()` adds for every op but `access`. The same addresses with an id forwarded to the dashboard. `workflow/access` with no id answers 404 "404 Not Found" instead, through `SubmissionRequiredPolicy`.
 
 <a id="fn-a6"></a>
-**f-a6** — Note g: the review stage's own item (`workflow_{stageId}`, pushed by `getWorkflowItem()` with the rounds as children) is selectable like any entry, and `WorkflowSubmissionStatus.vue` then has no selected round, so it takes the past-round branch (`workflow.submissionInNextReviewRound`) while the stage config renders the round panels without action items. Live-probed 2026-09-02 (OJS, OMP): on a one-round seed in Round 1 and on a two-round seed in Round 2, selecting "Review" / "External Review" gave heading "Workflow: Review" / "Workflow: External Review", address `workflowMenuKey=workflow_3`, the language line, "Status" / "The submission has been advanced to the next round of review", the panels "Revisions Uploaded", "Files for Review", "Reviewers", … and no `workflow-action-items` region; each press folded or unfolded the rounds and kept the entry selected. Whose contents (2026-09-02, OJS three-round seed with a file uploaded into Round 1, and OMP): the stage entry requested `…/submissions/{id}/files?fileStages=15` and `…?fileStages=4` with no `reviewRoundIds`, where each round entry requests `…?fileStages=4&reviewRoundIds={round}`; so "Files for Review" on the stage entry listed the Round 1 file while "Review Round 3" listed "No Items", and "Reviewers" on the stage entry read "No Items" while every round listed "Julia Reviewer" / "Request Accepted".
+**f-a6** — Note g: the review stage's own item (`workflow_{stageId}`, pushed by `getWorkflowItem()` with the rounds as children) is selectable like any entry, and `WorkflowSubmissionStatus.vue` then has no selected round, so it takes the past-round branch (`workflow.submissionInNextReviewRound`) while the stage config renders the round panels without action items. Live-probed 2026-09-02 (OJS, OMP): on a one-round seed in Round 1 and on a two-round seed in Round 2, selecting "Review" / "External Review" gave heading "Workflow: Review" / "Workflow: External Review", address `workflowMenuKey=workflow_3`, the language line, "Status" / "The submission has been advanced to the next round of review", the panels "Revisions Uploaded", "Files for Review", "Reviewers", … and no `workflow-action-items` region; each press folded or unfolded the rounds and kept the entry selected. Whose contents (2026-09-02, OJS three-round seed with a file uploaded into Round 1, and OMP): the stage entry requested `…/submissions/{id}/files?fileStages=15` and `…?fileStages=4` with no `reviewRoundIds`, where each round entry requests `…?fileStages=4&reviewRoundIds={round}`; so "Files for Review" on the stage entry listed the Round 1 file while "Review Round 3" listed "No Items", and "Reviewers" on the stage entry read "No Items" while every round listed "Julia Reviewer" / "Request Accepted". Live-probed 2026-09-28 (Rules 8a, 8b; OJS, OMP, two runs each; scratch contexts, a submission in Review Round 1 with one reviewer invited; the Editor, an assigned Section Editor and the Author): on the stage entry "Add Reviewer" requested `…/grid/users/reviewer/reviewer-grid/show-reviewer-form?selectionType=1&submissionId={id}&stageId=3&reviewRoundId=undefined` (200) and the window "Add Reviewer" held only "Invalid review round."; under "Review Round 1" the same button opened the reviewer search. On OJS every opening of the entry logged console errors from the page's Vue error handler (not uncaught page errors): pressed from the round, two `TypeError: Cannot read properties of null (reading 'authorResponse')` (one `at … getColumns`), with the round's "Author Response" panel left listed; opened by `workflowMenuKey=workflow_3`, one `TypeError: Cannot read properties of null (reading 'publicationId')` and no "Author Response" panel; 5 of 5 visits per role and run; pressing the entry again on the same visit, and "Review Round 1" pressed or typed, logged nothing. OMP's "External Review" entry logged nothing in the editorial view. The Author (OJS "Review", OMP "External Review"): pressed from the round, the address took `workflowMenuKey=workflow_3` and the heading changed while "Round 1 Status" / "Awaiting responses from reviewers." and the round's panels stayed; typed with that key, the heading alone and an empty primary region; `TypeError: Cannot read properties of null (reading 'id') at Object.getPrimaryItems` once on the first press and twice per typed visit, on both apps. The rounds folded and unfolded on each press in the author's view as in the editorial view. The round-less key is the one the screen itself writes.
 
 <a id="fn-a7"></a>
 **f-a7** — Note k's branch analysis. Live-probed 2026-09-02 (OJS, OMP, `editor.diana`): the `published: true` seed with no decisions (stage Done, return stage Submission): "Submission" — no box, the stage's panels and, on OJS, "Schedule For Publication"; "Review" (OJS) / "Internal Review" and "External Review" (OMP) — "not yet been initiated"; "Copyediting" — no box, the copyediting panels, no buttons; "Production" — "Submission published.". The same walk on a seed that passed through Production showed "currently in the Production stage" on the earlier stages after a "Return to Workflow" and "Submission published." on "Production" in Done.
 
 <a id="fn-a8"></a>
-**f-a8** — The dashboard page gate (`PKPDashboardHandler::__construct()`, note a) lists `ROLE_ID_SITE_ADMIN` for `editorial`, but `PKPHandler`'s role check resolves roles per context, and a Site Administrator holding no group in the journal was refused there on 2026-08-02 (the reviewer-management claim check, OJS: "The current role does not have access to this operation."). `WorkflowHandler::__construct()` (note b) also lists `SITE_ADMIN`, and `SubmissionAccessPolicy` admits a Site Administrator to any submission, so the typed addresses may forward such an administrator to the very dashboard that refuses them; not observed. 2026-09-02: the scratch contexts made by the context scenario list `admin` as "Journal manager" / "Press manager" / "Preprint Server manager" (Settings > Users & Roles) on all three apps, and removing a seeded role is out of bounds for a probe, so the case could not be arranged; with the manager role, `admin` opened the dashboard, the dashboard address and `workflow/access/{id}` normally.
+**f-a8** — The dashboard page gate (`PKPDashboardHandler::__construct()`, note a) lists `ROLE_ID_SITE_ADMIN` for `editorial`, `WorkflowHandler::__construct()` (note b) lists `SITE_ADMIN`, and `SubmissionAccessPolicy` admits a Site Administrator to any submission, while the panel's `GET api/v1/{context}/submissions/{id}` and the list requests resolve roles per context. A Site Administrator with no role at all in a journal does not occur: `PKPContextService::add()` enrols the creating user in the journal's default manager group, and a journal keeps an account's last role. A refusal at the editorial dashboard was recorded on 2026-08-02 (the reviewer-management claim check, OJS: "The current role does not have access to this operation.") for an administrator believed role-less; on 2026-09-02 the case could not be arranged (the scratch contexts list `admin` as "Journal manager" / "Press manager" / "Preprint Server manager"). Live-probed 2026-09-28 (OJS, OMP, OPS, two runs each; scratch contexts in which `admin` was given a second role through the scenario tooling and their Journal Manager role then ended on their edit page, read after a fresh sign-in): with Reader left, `{journal}/dashboard/editorial?workflowSubmissionId={id}` for a submission `admin` was assigned to and for one they were not was rewritten to `?currentViewId=search`, `GET submissions/{id}`, `_submissions/viewsCount` and `_submissions/assigned` answered 401, one "Error" dialog read "The current role does not have access to this operation.", and no panel opened; with Section Editor left (Series editor on OMP, Moderator on OPS) and `admin` a participant on one of the two submissions, the same address opened the panel for both, the unassigned one included, every request 200: header "Activity Log", "Library" (OPS "Preview" first), the full editorial page roster and "Create New Version", while "Assigned to me (1)" listed only the assigned submission. The older addresses of Rule 2a were not typed in these states. Control: `admin` with the manager role opened the dashboard, the dashboard address and `workflow/access/{id}` normally (2026-09-02).
 
 <a id="fn-a9"></a>
 **f-a9** — `PKPWorkflowHandler::access()` and `index()` run `SubmissionRequiredPolicy` before any redirect; for an id that no longer exists the policy's failure is a 404 with no template. Live-probed 2026-09-02 (OJS, OMP, OPS, `manager.maya`, after confirming "Delete" on a declined seed): `workflow/access/{id}` → 302 to the `/en/` form → HTTP 404, page body exactly "404 Not Found" (`h1` "404 Not Found"), no journal chrome, no forward; the dashboard address for the same id gave the panel shell with "Error" / "Invalid submission." / "OK" (note c).

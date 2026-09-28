@@ -11,7 +11,7 @@
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap): A1 ❓,
  * A2 ❓ (S3 asserts only what Rule 9 states as built: the heading with no
  * node, pressing it changing nothing), A3 ❓ (S6 opens the draft by the
- * dashboard address only), A4 ❓, A5 🐞, A6 ❓ (S8 selects the "Review" entry
+ * dashboard address only), A4 ❓, A5 🐞, A6 🐞 (S8 selects the "Review" entry
  * on a stage the submission has left, Rule 15b; S2 never selects it while
  * the round is active), A7 ❓ (S8 reads "Production" alone on the seed
  * published from the Submission stage), A8 ❓, A9 🐞 (S14 follows the stale
