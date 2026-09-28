@@ -809,3 +809,16 @@ until their specs exist. Do not force-claim the defects themselves.
     `26ae6431b5` / `17a1f01fed`). Resolves: maintainer confirmation as
     dead code (the op name) and a ruling that the delete request is an
     intended API for outside clients.
+51. **Unreached chapter-grid pieces** — attached to **U72** (GRID-097;
+    claimed). OMP `ChapterGridHandler`'s constructor grants `addAuthor`,
+    `editAuthor`, `updateAuthor` and `deleteAuthor` to the author,
+    sub-editor, manager and assistant roles, but the class defines no
+    such methods (chapter authors are ticked in the chapter form); it
+    also grants `fetchGrid` and `fetchRow` to the reviewer role, yet no
+    reviewer screen mounts the chapter list. `WorkflowHandler` and
+    `AuthorDashboardHandler` still build a `chaptersGridUrl` page-state
+    value that no ui-library component reads (`ChapterManager.vue`
+    builds its own grid request). The Chapters & work type spec's notes
+    c and f record the reachable surface. Code-verified 2026-09-28 (U72
+    spec author; checkout omp `72a01a026`, ui-library `03d1cee2`).
+    Resolves: maintainer confirmation as dead code (removal candidates).

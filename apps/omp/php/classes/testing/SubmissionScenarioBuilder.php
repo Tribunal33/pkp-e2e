@@ -17,12 +17,16 @@
  * "Catalog Entry" page's `categories` (U16), `datePublished` (U17) and
  * `urlPath` (U70) are taken. `featured[]` / `newRelease[]` (U70): the
  * Catalog page's boxes, pressed after the publish.
+ * `enableChapterPublicationDates` and `chapters[]` (U72): the "Marketing" ›
+ * "Publication Dates" choice and the Chapters page's chapters, built on the
+ * version before any publish.
  */
 
 namespace APP\testing;
 
 use APP\controllers\grid\catalogEntry\form\PublicationFormatForm;
 use APP\controllers\grid\catalogEntry\PublicationFormatGridHandler;
+use APP\controllers\grid\users\chapter\form\ChapterForm;
 use APP\controllers\grid\files\proof\form\ApprovedProofForm;
 use APP\core\Application;
 use APP\facades\Repo;
@@ -33,6 +37,9 @@ use PKP\notification\Notification;
 use PKP\security\authorization\AuthorizationDecisionManager;
 use PKP\submissionFile\SubmissionFile;
 use PKP\user\User;
+use PKP\security\Role;
+use PKP\testing\ApiCall;
+use PKP\testing\FormPost;
 use PKP\testing\PKPSubmissionScenarioBuilder;
 use PKP\testing\Spec;
 use PKP\testing\SpecException;
@@ -488,6 +495,255 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
                     'featured' => array_map(fn (int $id, int $seq) => ['id' => $id, 'seq' => $seq], $ordered, array_keys($ordered)),
                 ], "{$place['specPath']}.position");
             }
+        }
+    }
+
+    /**
+     * `enableChapterPublicationDates` and `chapters[]` (U72). The first is
+     * the editorial view's "Marketing" › "Publication Dates" choice
+     * (`true` "Each chapter may have its own publication date.", `false`
+     * "All chapters will use the publication date of the monograph."), a
+     * workflow page, so it needs `submitted: true`. Each `chapters[]` entry
+     * is one "Add Chapter" window: `title*`, `subtitle`, `abstract` (a
+     * string or a locale map over the window's languages), `pages`,
+     * `datePublished` (`YYYY-MM-DD`; the box shows only with
+     * `enableChapterPublicationDates: true`), `licenseUrl` (the box shows
+     * on an Edited Volume only), `page` (the "Chapter Page" box), `authors`
+     * (the "Add Contributor" boxes: the submitter's username or a
+     * contributor's email, in the Contributors-list order the window lists
+     * them) and `files` (the "Files" boxes: `files.N` for a root `files[]`
+     * entry, `publicationFormats.N` for a format's proof file; one chapter
+     * at most per file, as the window offers a held file to no other
+     * chapter). Parse phase: no writes; the title rule is the form's own,
+     * judged at execute.
+     */
+    protected function parseVersionOverlay(Context $context, Spec $root, array $refs): array
+    {
+        $plan = ['enableChapterPublicationDates' => null, 'chapters' => []];
+        if ($root->has('enableChapterPublicationDates')) {
+            $value = $root->get('enableChapterPublicationDates');
+            if (!is_bool($value)) {
+                throw new SpecException('enableChapterPublicationDates', 'enableChapterPublicationDates is the "Publication Dates" choice: true ("Each chapter may have its own publication date.") or false ("All chapters will use the publication date of the monograph.")');
+            }
+            if (!$refs['submitted']) {
+                throw new SpecException('enableChapterPublicationDates', '"Marketing" › "Publication Dates" is on the workflow\'s editorial view, which a draft does not have: it needs submitted: true');
+            }
+            $plan['enableChapterPublicationDates'] = $value;
+        }
+        $editedVolume = $root->get('workType', 'monograph') === 'editedVolume';
+        $formLocales = array_keys($context->getSupportedFormLocaleNames());
+        $heldFiles = [];
+        foreach ($root->childList('chapters') as $spec) {
+            $localized = function (string $key, bool $required) use ($spec, $formLocales): ?array {
+                $value = $required ? $spec->require($key) : $spec->get($key);
+                if ($value === null) {
+                    return null;
+                }
+                if (is_string($value)) {
+                    return [null => $value];
+                }
+                if (!is_array($value) || array_is_list($value)) {
+                    throw new SpecException("{$spec->path}.{$key}", "{$key} is a string or a locale map");
+                }
+                foreach ($value as $locale => $text) {
+                    if (!in_array($locale, $formLocales, true)) {
+                        throw new SpecException("{$spec->path}.{$key}", "The chapter window has no \"{$locale}\" box: " . implode(', ', $formLocales));
+                    }
+                    if (!is_string($text)) {
+                        throw new SpecException("{$spec->path}.{$key}", "Each {$key} value is a string");
+                    }
+                }
+                return $value;
+            };
+            $chapter = [
+                'path' => $spec->path,
+                'title' => $localized('title', true),
+                'subtitle' => $localized('subtitle', false),
+                'abstract' => $localized('abstract', false),
+                'pages' => $spec->get('pages'),
+                'datePublished' => $spec->get('datePublished'),
+                'licenseUrl' => $spec->get('licenseUrl'),
+                'page' => $spec->get('page', false),
+                'authors' => $spec->get('authors', []),
+                'files' => [],
+            ];
+            foreach (['pages', 'licenseUrl'] as $key) {
+                if ($chapter[$key] !== null && !is_string($chapter[$key])) {
+                    throw new SpecException("{$spec->path}.{$key}", "{$key} is the box's text, a string");
+                }
+            }
+            if ($chapter['datePublished'] !== null) {
+                if ($plan['enableChapterPublicationDates'] !== true) {
+                    throw new SpecException("{$spec->path}.datePublished", 'The chapter window shows "Date Published" only while the book\'s "Publication Dates" reads "Each chapter may have its own publication date.": give enableChapterPublicationDates: true');
+                }
+                $date = $chapter['datePublished'];
+                if (!is_string($date) || !preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $date, $m) || !checkdate((int) $m[2], (int) $m[3], (int) $m[1])) {
+                    throw new SpecException("{$spec->path}.datePublished", 'datePublished is a calendar day written YYYY-MM-DD, as the date picker fills the box');
+                }
+            }
+            if ($chapter['licenseUrl'] !== null && !$editedVolume) {
+                throw new SpecException("{$spec->path}.licenseUrl", 'The chapter window shows "License URL" on an Edited Volume only: give workType: "editedVolume"');
+            }
+            if (!is_bool($chapter['page'])) {
+                throw new SpecException("{$spec->path}.page", 'page is the "Chapter Page" box, a boolean');
+            }
+            if (!is_array($chapter['authors']) || !array_is_list($chapter['authors']) || array_filter($chapter['authors'], fn ($a) => !is_string($a) || $a === '') !== []) {
+                throw new SpecException("{$spec->path}.authors", 'authors is a list of the submitter\'s username or contributors\' emails');
+            }
+            if (count(array_unique($chapter['authors'])) !== count($chapter['authors'])) {
+                throw new SpecException("{$spec->path}.authors", 'authors names a contributor twice; the window ticks each box once');
+            }
+            foreach ($chapter['authors'] as $i => $author) {
+                if ($author !== $refs['submitter'] && !in_array($author, $refs['contributorEmails'], true)) {
+                    throw new SpecException("{$spec->path}.authors.{$i}", "\"{$author}\" is neither the submitter ({$refs['submitter']}) nor the email of a contributors[] entry");
+                }
+            }
+            $files = $spec->get('files', []);
+            if (!is_array($files) || !array_is_list($files)) {
+                throw new SpecException("{$spec->path}.files", 'files is a list of "files.N" or "publicationFormats.N"');
+            }
+            foreach ($files as $i => $ref) {
+                if (!is_string($ref) || !preg_match('/^(files|publicationFormats)\.(\d+)$/', $ref, $m)) {
+                    throw new SpecException("{$spec->path}.files.{$i}", 'Each file is "files.N" (a root files[] entry) or "publicationFormats.N" (that format\'s proof file)');
+                }
+                $index = (int) $m[2];
+                $exists = $m[1] === 'files' ? $index < $refs['fileCount'] : ($refs['formatFiles'][$index] ?? false);
+                if (!$exists) {
+                    throw new SpecException("{$spec->path}.files.{$i}", "No file at \"{$ref}\" in this request" . ($m[1] === 'publicationFormats' ? ' (a format needs file)' : ''));
+                }
+                if (isset($heldFiles[$ref])) {
+                    throw new SpecException("{$spec->path}.files.{$i}", "\"{$ref}\" belongs to {$heldFiles[$ref]} already; the chapter window offers a file another chapter holds to no one");
+                }
+                $heldFiles[$ref] = $spec->path;
+                $chapter['files'][] = [$m[1], $index];
+            }
+            $plan['chapters'][] = $chapter;
+        }
+        if ($plan['enableChapterPublicationDates'] === null && $plan['chapters'] === []) {
+            return [];
+        }
+        return $plan;
+    }
+
+    /**
+     * Build `enableChapterPublicationDates` and `chapters[]` (U72), acting as
+     * the editor (admin), before any publish:
+     * 1. "Marketing" › "Publication Dates", the choice, "Save": the page's
+     *    PUT submissions/{id} (`enableChapterPublicationDates=true|false`)
+     *    through PKPSubmissionController::edit itself (ApiCall);
+     * 2. per chapter, the Chapters page's "Add Chapter", the boxes, "Save":
+     *    ChapterForm run as ChapterGridHandler::updateChapter runs it on
+     *    the window's POST (FormPost: readInputData, the form's title rule,
+     *    execute: the chapter at the list's end, its author links in the
+     *    order the ticked boxes are posted, its file links). Each
+     *    multilingual box carries every language the window offers, an
+     *    untyped one empty; "Date Published" and "License URL" are posted
+     *    only where the window shows them, empty unless given. Not run: the
+     *    handler's "Your changes have been saved." toast.
+     */
+    protected function seedVersionOverlay(Context $context, int $submissionId, array $plan, User $editor, array $built): array
+    {
+        $previousActingUser = Registry::get('user');
+        Registry::set('user', $editor);
+        try {
+            if ($plan['enableChapterPublicationDates'] !== null) {
+                $controller = ApiCall::controller(\APP\API\v1\submissions\SubmissionController::class, [
+                    Application::ASSOC_TYPE_SUBMISSION => Repo::submission()->get($submissionId),
+                    Application::ASSOC_TYPE_USER_ROLES => [Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER],
+                ]);
+                $request = ApiCall::request(
+                    \Illuminate\Http\Request::class,
+                    'PUT',
+                    ['enableChapterPublicationDates' => $plan['enableChapterPublicationDates'] ? 'true' : 'false'],
+                    ['submissionId' => $submissionId],
+                    'enableChapterPublicationDates',
+                    'The "Publication Dates" "Save" would be refused'
+                );
+                ApiCall::answer($controller->edit($request), 'enableChapterPublicationDates', 'The "Publication Dates" "Save" was refused');
+            }
+
+            $seeded = [];
+            foreach ($plan['chapters'] as $chapter) {
+                $submission = Repo::submission()->get($submissionId);
+                $publication = Repo::publication()->get((int) $submission->getData('currentPublicationId'));
+                $form = new ChapterForm($submission, $publication, null);
+                // The window's language boxes: the press's form languages (the
+                // page request's Locale::getSupportedFormLocales()).
+                $formLocales = array_keys($context->getSupportedFormLocaleNames());
+                $boxes = function (?array $value, bool $rich = false) use ($formLocales, $submission): array {
+                    $value ??= [];
+                    if (array_key_exists('', $value)) {
+                        $value = [$submission->getData('locale') => $value['']];
+                    }
+                    $posted = [];
+                    foreach ($formLocales as $locale) {
+                        $text = (string) ($value[$locale] ?? '');
+                        // The rich-text box posts typed text as a paragraph.
+                        $posted[$locale] = $rich && $text !== '' && !str_starts_with(ltrim($text), '<') ? "<p>{$text}</p>" : $text;
+                    }
+                    return $posted;
+                };
+
+                // The "Add Contributor" boxes: this version's contributors
+                // in their list order; the ticked ones are posted in it.
+                $authors = Repo::author()->getCollector()->filterByPublicationIds([$publication->getId()])->getMany();
+                $byEmail = [];
+                $windowOrder = [];
+                foreach ($authors as $author) {
+                    $windowOrder[] = (int) $author->getId();
+                    $byEmail[$author->getEmail()] ??= (int) $author->getId();
+                }
+                $ticked = [];
+                foreach ($chapter['authors'] as $i => $name) {
+                    $email = $name === $built['submitter']->getUsername() ? $built['submitter']->getEmail() : $name;
+                    if (!isset($byEmail[$email])) {
+                        throw new SpecException("{$chapter['path']}.authors.{$i}", "The version has no contributor \"{$name}\" (a submitter who does not submit as an Author has no entry)");
+                    }
+                    $ticked[] = $byEmail[$email];
+                }
+                $posted = array_values(array_filter($windowOrder, fn (int $id) => in_array($id, $ticked, true)));
+                if ($posted !== $ticked) {
+                    throw new SpecException("{$chapter['path']}.authors", 'The window lists the contributors in the Contributors-list order and saves the ticked ones in it: name them in that order (the chapter\'s "Order" is a screen action)');
+                }
+
+                $fileIds = [];
+                foreach ($chapter['files'] as [$list, $index]) {
+                    $fileIds[] = (string) ($list === 'files' ? $built['files'][$index]['submissionFileId'] : $built['publicationFormats'][$index]['submissionFileId']);
+                }
+
+                $vars = [
+                    'submissionId' => (string) $submissionId,
+                    'publicationId' => (string) $publication->getId(),
+                    'chapterId' => '',
+                    'title' => $boxes($chapter['title']),
+                    'subtitle' => $boxes($chapter['subtitle']),
+                    'abstract' => $boxes($chapter['abstract'], true),
+                    'pages' => (string) ($chapter['pages'] ?? ''),
+                ];
+                if ($submission->getEnableChapterPublicationDates()) {
+                    $vars['datePublished'] = (string) ($chapter['datePublished'] ?? '');
+                }
+                if ($submission->getData('workType') === \APP\submission\Submission::WORK_TYPE_EDITED_VOLUME) {
+                    $vars['licenseUrl'] = (string) ($chapter['licenseUrl'] ?? '');
+                }
+                if ($chapter['page']) {
+                    $vars['isPageEnabled'] = '1';
+                }
+                if ($ticked !== []) {
+                    $vars['authors'] = array_map('strval', $ticked);
+                }
+                if ($fileIds !== []) {
+                    $vars['files'] = $fileIds;
+                }
+                FormPost::run($form, $vars, $chapter['path'], 'The chapter window\'s "Save" would be refused');
+                $seeded[] = [
+                    'id' => (int) $form->getChapter()->getId(),
+                    'title' => (string) $form->getChapter()->getLocalizedTitle(),
+                ];
+            }
+            return $plan['chapters'] === [] ? [] : ['chapters' => $seeded];
+        } finally {
+            Registry::set('user', $previousActingUser);
         }
     }
 

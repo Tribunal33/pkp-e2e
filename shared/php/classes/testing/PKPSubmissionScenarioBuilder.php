@@ -241,6 +241,17 @@
  *   before a publish. The OJS overlay (APP\testing\SubmissionScenarioBuilder)
  *   owns it; this core refuses the key and runs the overlay's step.
  *
+ * - contributors[] {givenName*, familyName?, email*, country?} (U72): people
+ *   with no account on the version's Contributors list, each the wizard's
+ *   "Contributors" step "Add Contributor" › "Save" (a person, the "Author"
+ *   box of "Contributor Roles" ticked, "Country" default CA) as the
+ *   submitter before the submit: the panel's body through
+ *   PKPSubmissionController::addContributor itself (ApiCall), which
+ *   appends each after the list's last entry. The three apps alike.
+ * - The app's version keys (parseVersionOverlay / seedVersionOverlay, OMP's
+ *   enableChapterPublicationDates and chapters[], U72), built on the
+ *   version after the formats and JATS and before any publish.
+ *
  * - usage[] (U64): reader visits of past days to the published version,
  *   each entry {daysAgo | date, abstractViews?, fileViews?, jatsViews? (OJS),
  *   country?, region?, city?}; fileViews counts one entry per galleys[]
@@ -453,6 +464,32 @@ abstract class PKPSubmissionScenarioBuilder
         return [];
     }
 
+    /**
+     * Parse the app's keys built on the finished version before any publish
+     * (OMP: `enableChapterPublicationDates` and `chapters[]`, U72). $refs
+     * carries what they may point at: `submitted`, `submitter` (username),
+     * `contributorEmails`, `fileCount` (root `files[]` entries) and
+     * `formatFiles` (per `publicationFormats[]` entry, whether it has a
+     * file). Parse-phase: no writes. A key an app does not read stays
+     * unconsumed, so it is a 400 there.
+     */
+    protected function parseVersionOverlay(Context $context, Spec $root, array $refs): array
+    {
+        return [];
+    }
+
+    /**
+     * Build the parsed version keys, after the formats and JATS and before
+     * any publish (publishing fills chapter licenses and mints chapter
+     * DOIs). $built holds `files` (the root `files[]` entries as seeded,
+     * in order), `publicationFormats` (as seeded) and `submitter`. Returns
+     * the response fields it adds.
+     */
+    protected function seedVersionOverlay(Context $context, int $submissionId, array $plan, User $editor, array $built): array
+    {
+        return [];
+    }
+
     public function build(array $data): array
     {
         $root = new Spec($data);
@@ -635,6 +672,14 @@ abstract class PKPSubmissionScenarioBuilder
         $publicationPagesPlan = $this->parsePublicationPages($context, $root, $locale, $submitted);
         $jatsPlan = $this->parseJats($context, $root, $submitted);
         $libraryFilePlans = LibraryFileSeeder::parse($root, false);
+        $contributorPlans = $this->parseContributors($root);
+        $versionOverlayPlan = $this->parseVersionOverlay($context, $root, [
+            'submitted' => $submitted,
+            'submitter' => $submitterUsername,
+            'contributorEmails' => array_column($contributorPlans, 'email'),
+            'fileCount' => count($filePlans),
+            'formatFiles' => array_map(fn (array $plan) => $plan['fixture'] !== null, $formatPlans),
+        ]);
         // usage[] (U64): reader visits of past days, after the galleys and
         // formats it counts (one fileViews count per entry, in order).
         $usageSeeder = new \APP\testing\UsageStatsSeeder($context);
@@ -660,7 +705,7 @@ abstract class PKPSubmissionScenarioBuilder
         // submission's context for the duration of the build.
         $restoreRouterContext = ContextFactory::forceRequestContext($context);
         try {
-            return $this->execute($root, $context, $locale, $tag, $submitter, $title, $abstract, $submitted, $published, $submissionProps, $publicationProps, $decisionTypes, $roundPlans, $publishOverlayPlan, $authorPlan, $participantPlans, $suggestionPlans, $commentPlans, $galleyPlans, $filePlans, $taskPlans, $libraryFilePlans, $citationsRaw, $dataCitationPlans, $mediaFilePlans, $formatPlans, $publicationPagesPlan, $jatsPlan, $usageSeeder, $usagePlans);
+            return $this->execute($root, $context, $locale, $tag, $submitter, $title, $abstract, $submitted, $published, $submissionProps, $publicationProps, $decisionTypes, $roundPlans, $publishOverlayPlan, $authorPlan, $participantPlans, $suggestionPlans, $commentPlans, $galleyPlans, $filePlans, $taskPlans, $libraryFilePlans, $citationsRaw, $dataCitationPlans, $mediaFilePlans, $formatPlans, $publicationPagesPlan, $jatsPlan, $usageSeeder, $usagePlans, $contributorPlans, $versionOverlayPlan);
         } finally {
             $restoreRouterContext();
         }
@@ -696,7 +741,9 @@ abstract class PKPSubmissionScenarioBuilder
         ?array $publicationPagesPlan = null,
         ?array $jatsPlan = null,
         ?PKPUsageStatsSeeder $usageSeeder = null,
-        array $usagePlans = []
+        array $usagePlans = [],
+        array $contributorPlans = [],
+        array $versionOverlayPlan = []
     ): array {
         $request = Application::get()->getRequest();
         $seededSuggestions = [];
@@ -709,6 +756,8 @@ abstract class PKPSubmissionScenarioBuilder
         $seededMediaFiles = [];
         $seededFormats = [];
         $seededJats = null;
+        $seededContributors = [];
+        $versionOverlayResponse = [];
 
         // Create + (maybe) submit as the submitter — wizard parity.
         $previousActingUser = Registry::get('user');
@@ -783,6 +832,12 @@ abstract class PKPSubmissionScenarioBuilder
             // spot-check defect 1).
             $publication = Repo::publication()->get($publication->getId());
             Repo::publication()->edit($publication, $publicationEdits);
+
+            // The wizard's "Contributors" step: "Add Contributor" › "Save"
+            // per entry, in list order, as the submitter (U72).
+            if ($contributorPlans !== []) {
+                $seededContributors = $this->seedContributors($context, $submissionId, $contributorPlans, $submitAsUserGroup);
+            }
 
             // The wizard's "Reviewer Suggestions" step, while the submission
             // is still incomplete: the same ReviewerSuggestion::create() the
@@ -999,6 +1054,16 @@ abstract class PKPSubmissionScenarioBuilder
                 $seededJats = $this->seedJats($context, $submissionId, $jatsPlan, $editor);
             }
 
+            // The app's version keys (OMP chapters, U72), on the version as
+            // built, before a publish.
+            if ($versionOverlayPlan !== []) {
+                $versionOverlayResponse = $this->seedVersionOverlay($context, $submissionId, $versionOverlayPlan, $editor, [
+                    'files' => array_values(array_filter($seededFiles, fn (array $file) => $file['reviewRoundId'] === null)),
+                    'publicationFormats' => $seededFormats,
+                    'submitter' => $submitter,
+                ]);
+            }
+
             if ($published) {
                 $submission = Repo::submission()->get($submissionId);
                 $publication = Repo::publication()->get($submission->getData('currentPublicationId'));
@@ -1100,7 +1165,109 @@ abstract class PKPSubmissionScenarioBuilder
             'mediaFiles' => $seededMediaFiles,
             'publicationFormats' => $seededFormats,
             'jats' => $seededJats,
-        ];
+            'contributors' => $seededContributors,
+        ] + $versionOverlayResponse;
+    }
+
+    /**
+     * Read contributors[] (U72): each `{givenName*, familyName?, email*,
+     * country?}`, a person with no account on the version's Contributors
+     * list, added after the submitter's own entry. The values themselves
+     * are judged by the contributor API's own validation at execute (an
+     * invalid address or country is its 400). Parse-phase: no writes.
+     *
+     * @return array<int, array{path: string, givenName: string, familyName: ?string, email: string, country: string}>
+     */
+    protected function parseContributors(Spec $root): array
+    {
+        $plans = [];
+        foreach ($root->childList('contributors') as $spec) {
+            $text = function (string $key, bool $required) use ($spec): ?string {
+                $value = $required ? $spec->require($key) : $spec->get($key);
+                if ($value !== null && (!is_string($value) || trim($value) === '')) {
+                    throw new SpecException("{$spec->path}.{$key}", "{$key} is the contributor window's box as typed: a non-empty string");
+                }
+                return $value;
+            };
+            $plans[] = [
+                'path' => $spec->path,
+                'givenName' => $text('givenName', true),
+                'familyName' => $text('familyName', false),
+                'email' => $text('email', true),
+                // "Country" is required on the window; the default is the
+                // one the suites pick (ContributorPages "Canada").
+                'country' => $text('country', false) ?? 'CA',
+            ];
+        }
+        return $plans;
+    }
+
+    /**
+     * The wizard's "Contributors" step, "Add Contributor", a person with
+     * "Given Name", "Family Name", "Email", "Country" and the "Author" box
+     * of "Contributor Roles" ticked, "Save", as the submitter, before the
+     * submit: the panel's body (form-encoded on screen, its emptied boxes
+     * arriving as null) through PKPSubmissionController::addContributor
+     * itself (ApiCall: convertStringsToSchema, Repo::author()->validate,
+     * ->add, which appends it after the list's last entry). The panel's
+     * multilingual boxes carry every language it offers (the press's
+     * submission metadata languages and the submission's own), the typed
+     * value under the submission's.
+     *
+     * @return array<int, array{id: int, email: string}>
+     */
+    protected function seedContributors(Context $context, int $submissionId, array $plans, UserGroup $submitAsUserGroup): array
+    {
+        if (!class_exists(ContributorRole::class)) {
+            throw new SpecException('contributors', 'contributors is built for the contributor window of upstream main (contributor types and roles), which this line lacks');
+        }
+        $submission = Repo::submission()->get($submissionId);
+        $publicationId = (int) $submission->getData('currentPublicationId');
+        $submissionLocale = $submission->getData('locale');
+        $locales = array_keys($context->getSupportedSubmissionMetadataLocaleNames() + $submission->getPublicationLanguageNames());
+        $multilingual = fn (?string $value) => array_combine($locales, array_map(fn (string $locale) => $locale === $submissionLocale ? $value : null, $locales));
+        $authorRole = ContributorRole::query()
+            ->withContextId($context->getId())
+            ->withIdentifier(ContributorRoleIdentifier::AUTHOR->getName())
+            ->limit(1)
+            ->get()
+            ->first();
+        $seeded = [];
+        foreach ($plans as $plan) {
+            $controller = ApiCall::controller(
+                \APP\API\v1\submissions\SubmissionController::class,
+                [
+                    Application::ASSOC_TYPE_SUBMISSION => Repo::submission()->get($submissionId),
+                    Application::ASSOC_TYPE_USER_ROLES => [(int) $submitAsUserGroup->roleId],
+                ]
+            );
+            $request = ApiCall::request(
+                \Illuminate\Http\Request::class,
+                'POST',
+                [
+                    'contributorType' => ContributorType::PERSON->getName(),
+                    'givenName' => $multilingual($plan['givenName']),
+                    'familyName' => $multilingual($plan['familyName']),
+                    'preferredPublicName' => $multilingual(null),
+                    'organizationName' => $multilingual(null),
+                    'email' => $plan['email'],
+                    'country' => $plan['country'],
+                    'rorId' => null,
+                    'url' => null,
+                    'biography' => $multilingual(null),
+                    'affiliations' => null,
+                    'contributorRoles' => $authorRole ? [(string) $authorRole->id] : null,
+                    'creditRoles' => null,
+                    'includeInBrowse' => 'true',
+                ],
+                ['submissionId' => $submissionId, 'publicationId' => $publicationId],
+                $plan['path'],
+                'The contributor window\'s "Save" would be refused'
+            );
+            $answer = ApiCall::answer($controller->addContributor($request), $plan['path'], 'The contributor window\'s "Save" was refused');
+            $seeded[] = ['id' => (int) $answer['id'], 'email' => $plan['email']];
+        }
+        return $seeded;
     }
 
     /**

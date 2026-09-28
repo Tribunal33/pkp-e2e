@@ -5,7 +5,8 @@
  * OMP publication-page helpers the workflow frame's tests share: the
  * "Unpublish" dialog a press's "Title & Abstract" offers on a published
  * monograph (U49's dialog; U24 S8 drives it to watch the submission leave
- * Done by itself). The frame itself (header, menu, status box, the return
+ * Done by itself), and the "Permissions & Disclosure" license boxes typed
+ * and saved (U72 S8's given). The frame itself (header, menu, status box, the return
  * and delete dialogs) is the shared `WorkflowPage`.
  */
 const {expect} = require('@playwright/test');
@@ -40,4 +41,37 @@ async function unpublishFromWorkflow(page) {
     await expect(dialog).toHaveCount(0, {timeout: 30_000});
 }
 
-module.exports = {UNPUBLISH_QUESTION, unpublishFromWorkflow};
+/**
+ * On the open version's "Permissions & Disclosure" page, type the given
+ * boxes ("License URL", and on an Edited Volume "Default Chapter License
+ * URL") and press the form's "Save", bounded by the publication PUT (POST
+ * with the override header). The boxes must be open: on a press without a
+ * license they are; with one they arrive greyed out behind "Override"
+ * (seed-facts.md), which this helper does not press. Added for U72 S8,
+ * whose scratch press has no license and whose context scenario refuses
+ * `licenseUrl`.
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {{licenseUrl?: string, chapterLicenseUrl?: string}} fields
+ */
+async function saveLicenseFields(page, {licenseUrl, chapterLicenseUrl} = {}) {
+    const main = page.locator('[data-cy="workflow-primary-items"]');
+    const licenseBox = main.getByRole('textbox', {name: 'License URL', exact: true});
+    const chapterBox = main.getByRole('textbox', {name: 'Default Chapter License URL', exact: true});
+    await expect(licenseBox).toBeEditable({timeout: 30_000});
+    if (licenseUrl !== undefined) {
+        await licenseBox.fill(licenseUrl);
+    }
+    if (chapterLicenseUrl !== undefined) {
+        await chapterBox.fill(chapterLicenseUrl);
+    }
+    const saved = page.waitForResponse(
+        (r) => /\/publications\/\d+$/.test(new URL(r.url()).pathname) && r.request().method() === 'POST',
+        {timeout: 30_000}
+    );
+    await licenseBox.locator('xpath=ancestor::form[1]').getByRole('button', {name: 'Save', exact: true}).click();
+    const response = await saved;
+    expect(response.ok(), `the Permissions & Disclosure save answered ${response.status()}`).toBe(true);
+}
+
+module.exports = {UNPUBLISH_QUESTION, unpublishFromWorkflow, saveLicenseFields};

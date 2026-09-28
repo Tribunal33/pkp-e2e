@@ -1316,6 +1316,26 @@ Keys:
   verification" (the Contributors list itself shows no iD). A verified iD
   whose token the app has since dropped as expired, a state a deposit
   produces, has no key.
+- `contributors[]` (U72, the three apps): people with no account on the
+  version's Contributors list, each `{givenName, familyName?, email,
+  country?}`, added after the submitter's own entry in list order, the
+  way the wizard's "Contributors" step adds them: "Add Contributor", a
+  "Person" with "Given Name", "Family Name", "Email", "Country" (default
+  `CA`, "Canada") and "Contributor Roles" › "Author" ticked, "Save", as
+  the submitter, before the submit (the panel's body through the
+  contributors API's own add), so a draft carries them too. Every other
+  box is left as the window opens it: no affiliation, no bio, "Include
+  this contributor when identifying authors in lists of publications."
+  ticked. The names are strings under the submission's language. The
+  window's refusals are the seed's 400s (an invalid address or country
+  code, a missing given name or address). The list reads as a by-hand
+  one: "{given} {family}" (the given name alone without a family name),
+  the "Author" badge, "Set Primary Contact"; the rows (the contributor,
+  its settings, its role, its CRediT rows) equal the screen's, the
+  Activity Log unchanged (U72 harness, 2026-09-28, three apps driven).
+  The response lists `contributors` (`id`, `email`, in the order
+  seeded). An address is what `chapters[].authors` (OMP) names a
+  contributor by.
 - `reviewerSuggestions[]` (OJS, OMP): the entries of the wizard's "Reviewer
   Suggestions" step, each `{givenName, familyName, email, affiliation,
   suggestionReason}`, created the way the step's "Add Reviewer Suggestion"
@@ -1879,6 +1899,62 @@ App-specific keys:
   same presses in the same order (U70 harness, 2026-09-27). To test
   "flags kept" after an unpublish, seed the flags on a published book and
   unpublish on screen.
+- OMP: `enableChapterPublicationDates` and `chapters[]` (U72), built by
+  `admin` on the version after the publication formats and before a
+  publish (publishing fills chapter licenses and makes chapter DOIs, so
+  a `published: true` seed carries both, as a screen publish does).
+  - `enableChapterPublicationDates` is the editorial view's "Marketing" ›
+    "Publication Dates" choice saved: `true` "Each chapter may have its
+    own publication date.", `false` "All chapters will use the
+    publication date of the monograph." (the page's PUT to the
+    submission). It needs `submitted: true`. A new book stores no choice
+    and the page opens with neither option selected.
+  - Each `chapters[]` entry is one "Add Chapter" window on the Chapters
+    page, "Save", in list order, so the chapters are numbered in that
+    order: `title` (required), `subtitle` and `abstract` (a string under
+    the submission's language, or a locale map over the press's form
+    languages; typed abstract text is posted as a paragraph), `pages`,
+    `datePublished` (`YYYY-MM-DD`; the box shows only with
+    `enableChapterPublicationDates: true` in the same request),
+    `licenseUrl` (the box shows on `workType: 'editedVolume'` only),
+    `page` (the "Chapter Page" box, default unticked), `authors` and
+    `files`. `authors` are the "Add Contributor" boxes ticked: the
+    submitter's username (their own entry, which exists when they submit
+    as an Author) or a `contributors[]` address. The window lists the
+    contributors in their list order and saves the ticked ones in it, so
+    `authors` names them in that order (the submitter first); another
+    order is a 400, since only the page's "Order" makes it. `files` are
+    the "Files" boxes ticked: `files.N` (a root `files[]` entry, such as
+    one of `genre: 'Chapter Manuscript'`) or `publicationFormats.N` (that
+    format's proof file); a file names one chapter at most, as the
+    window offers a held file to no other chapter.
+  - The window's other boxes are posted as it posts them: every language
+    box, an untyped one empty; "Date Published" and "License URL" empty
+    where shown and not given. So a seeded chapter has the same rows as
+    a by-hand one (U72 harness, 2026-09-28, driven): its settings (an
+    empty box stores an empty row), its author links numbered from 0 in
+    the ticked order, its file links, and no Activity Log line, no email
+    and no Tasks entry. It reads the same on the Chapters page and in its
+    reopened window. After a publish the chapter with an empty "License
+    URL" carries the version's "Default Chapter License URL", itself
+    filled from the version's own license (the press's) when empty (a new
+    or scratch press has no license and the context scenario refuses
+    `licenseUrl`, so the license is saved on screen first, seed-facts.md), and
+    a chapter with "Chapter Page"
+    ticked on a press with chapter DOIs has its DOI and the note "(This
+    chapter will always be shown on its own page because it has a DOI.)".
+  - Refusals (400): a missing title; `datePublished` without
+    `enableChapterPublicationDates: true`, or not a calendar day;
+    `licenseUrl` on a Monograph; `enableChapterPublicationDates` on a
+    draft; an author that is neither the submitter nor a
+    `contributors[]` address, one named twice or out of list order; a
+    `files` entry past its list, a format without `file`, or a file
+    named by two chapters. OJS and OPS answer 400 on both keys.
+  - Facts: the window's "Files" list is ordered newest first by upload
+    time, and files seeded in one request share their upload second, so
+    their order among themselves in that list is not fixed; read the
+    boxes by file name. The response lists `chapters` (`id`, `title`, in
+    the order seeded), OMP only.
 - OPS: `section` (abbrev or path; defaults to the server's first section).
   `reviewRounds` is rejected with a 400, because OPS has no review stage,
   and so is `reviewerSuggestions`, because OPS mounts no reviewer
@@ -1965,7 +2041,8 @@ for a remote galley), `files[]` (`submissionFileId`, `file`,
 `fileStage`, `reviewRoundId`, null on "Submission Files", and `uploader`;
 the root entries in order, then each round's), `tasks[]` (`id`,
 `title`, `type`, `stage`, in the order seeded), `libraryFiles[]` (as
-the context's), `mediaFiles[]`, `publicationFormats[]` and `jats` (above). `stageId`
+the context's), `mediaFiles[]`, `publicationFormats[]`, `jats`,
+`contributors[]` and, on OMP with the key, `chapters[]` (above). `stageId`
 is the submission's stored stage after the build, not the stage the screen
 names: on OPS `published: true` leaves it at 6 (`WORKFLOW_STAGE_ID_DONE`,
 the posted state), while an unposted preprint reads the Production stage's
@@ -2215,9 +2292,7 @@ the list.
 
 These keys do not exist. They are ideas recorded from an earlier harness.
 
-- Submission: `contributors[]` (`givenName`, `familyName`, `email`, no
-  account: the second "Authors" box of the author-response request, U30);
-  `reviewRounds[].reviewers[].files[]` (a reviewer's uploaded file, the
+- Submission: `reviewRounds[].reviewers[].files[]` (a reviewer's uploaded file, the
   "Attach Review Files" source, U30; U38 uploads it on screen at the
   reviewer's step 3); `reviewRounds[].reviewers[].status:
   'cancelled'` (U30, the readiness question); `reviewRounds[].revisionsUploaded`

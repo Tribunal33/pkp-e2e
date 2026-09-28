@@ -717,6 +717,15 @@ behind a line; that scratch is deleted after review.
   Comments" off, "Reviewer Suggestion at Submission" off. Live-probed
   2026-09-04 (`.reports/U28/pA` P1) and 2026-09-05, OJS and OMP
   (`.reports/U29/pA1` P1, `pA2` P5).
+- {OMP} A new press (and a scratch press) has no license: Settings ›
+  Distribution › License opens on "Other license URL" with an empty box,
+  and `POST scenarios/context` refuses `licenseUrl`, so an Edited
+  Volume's chapter window shows no license sentence and a publish fills
+  no chapter license until the version's "License URL" (Permissions &
+  Disclosure) or the press's license is saved on screen. Once the press
+  has one, a version's "License URL" and "Default Chapter License URL"
+  open greyed out behind "Override". OMP, 2026-09-28 (U72 claim checks K2
+  `k2-040`, K3 `k3-002`, `k3-028`).
 - A scratch press has no series unless the context scenario's `series[]`
   adds them (U70 harness, 2026-09-27); without it, Settings › Press ›
   Series reads "No Items". Live-probed 2026-09-05, OMP (`.reports/U29/pC2`
@@ -922,6 +931,14 @@ config-file settings.
   they open the author view from My Submissions). Settings › Users & Roles
   › Roles; the Copyediting entry. OJS and OMP, 2026-09-19 (U32 ccK1,
   `mgr-roles-grid-*`, `s1-pe-workflow_4-*`, `s1-tr-workflow_4-author-address-*`).
+- {OMP} An assistant role opens the version's pages ("Publication" › the
+  version) only while the book is in a stage its role takes part in: on a
+  book in Copyediting the Layout Editor, Designer and Funding coordinator
+  see "Publication" with no version under it, and on a book in Production
+  the Copyeditor, Marketing and sales coordinator and Funding coordinator
+  do; a published book shows the pages to every assistant role. Workflow
+  side menu, OMP, 2026-09-28 (U72 claim check K1, `p-list-*`, `q-list-*`,
+  `b-list-*`).
 - A press's Internal Review entry shows no Participants panel until the
   stage is initiated; the other not-reached stages show it. OMP,
   2026-09-22 (U35 ccK1, `nr-s2-InternalReview-omp`).

@@ -393,13 +393,17 @@ function contributorRows(page) {
 
 /**
  * On the Contributors step, add a person contributor with the Author role
- * (the panel's own mechanics belong to Contributors & affiliations). Waits
+ * (the panel's own mechanics belong to Contributors & affiliations); the
+ * family name is typed when given (U72 S3). Waits
  * for the save and for the row to list.
  */
-async function addContributor(page, {givenName, email, country = 'Iceland'}) {
+async function addContributor(page, {givenName, familyName = null, email, country = 'Iceland'}) {
     await page.getByRole('button', {name: 'Add Contributor'}).click();
     const modal = page.locator('[data-cy="active-modal"]').last();
     await modal.getByRole('textbox', {name: /^Given Name/}).first().fill(givenName);
+    if (familyName) {
+        await modal.getByRole('textbox', {name: /^Family Name/}).first().fill(familyName);
+    }
     await modal.getByRole('textbox', {name: /^Email/}).fill(email);
     await modal.getByRole('combobox', {name: /^Country/}).selectOption({label: country});
     await modal.getByRole('checkbox', {name: 'Author', exact: true}).check();
