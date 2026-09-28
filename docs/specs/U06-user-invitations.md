@@ -104,12 +104,14 @@ Accept wizard (new invitee):
    ORCID is enabled for the journal and the recipient has no verified ORCID
    iD. The review step is always there. Opening the link alone never accepts
    the roles; the recipient always presses the accept button. <sup>k</sup>
-6. The recipient works signed out. The emailed link is the only credential the
-   accept wizard asks for. An existing user gets no password prompt and no
-   account fields. The link never signs anyone in either (Rule 9). If somebody
-   else is already signed in on that browser, the page refuses with
-   "Invitation not accepted. You're logged in as a different user." and a
-   "Logout" action that genuinely ends that session. <sup>l</sup>
+6. The recipient needs no sign-in: the emailed link is the only credential
+   the accept wizard asks for. An existing user gets no password prompt and
+   no account fields. The same link opened by the invitee while already
+   signed in as themselves opens the same review step. The link never signs
+   anyone in (Rule 9). If somebody else is already signed in on that
+   browser, the page refuses with "Invitation not accepted. You're logged in
+   as a different user." and a "Logout" action that genuinely ends that
+   session. <sup>l</sup>
 7. On the ORCID step the recipient either verifies their iD through the ORCID
    sign-in window ("Verify ORCID iD") or passes with "Skip ORCID
    verification". This step has no other Continue button. <sup>k</sup>
@@ -120,8 +122,11 @@ Accept wizard (new invitee):
    All Submissions" button leads out of the wizard (Rule 9). <sup>m</sup>
 9. A new invitee's account exists only from the moment they accept. They
    choose a username and password mid-wizard. ⚠ [A4](#a4) Accepting signs
-   nobody in. New invitees and existing users alike leave the closing dialog
-   for the sign-in screen and must sign in themselves. <sup>m</sup>
+   nobody in. A recipient who opened the link signed out, new invitee or
+   existing user alike, leaves the closing dialog for the sign-in screen and
+   must sign in themselves. An existing user who opened the link while
+   already signed in as themselves leaves it for the Dashboard, still
+   signed in. <sup>m</sup>
 10. Declining is deliberate. The emailed decline link opens a "Decline
     Invitation" confirmation page, and only pressing "Confirm Decline
     Invitation" declines. No roles are granted, and the browser moves to the
@@ -141,9 +146,13 @@ Accept wizard (new invitee):
     own confirmation, and the member is emailed either way (see *Side
     effects*) ⚠ [OMP1](#omp1). A removed role stays listed: its row keeps its
     place in the roles table with End Date set to today and "User Removed
-    From Role" where its Remove Role button was. **Adding** a role is only a
-    proposal. It takes effect when the member accepts the resulting
-    invitation. A member's last active role cannot be removed. Pressing its
+    From Role" where its Remove Role button was. That row keeps an active
+    masthead select: changing it works as on a current role (the same
+    confirmation, the change at once, the email) and decides whether the
+    member is listed under that role on the journal's "Editorial History"
+    page ([Journal identity & about pages](U07-journal-identity-and-about-pages.md)
+    Rule 16). **Adding** a role is only a proposal. It takes effect when the
+    member accepts the resulting invitation. A member's last active role cannot be removed. Pressing its
     Remove Role opens no confirmation: a "Remove Role" dialog answers "You
     cannot remove the role. At least one role must be assigned to the user."
     with a single "Close" button, and the role keeps its Remove Role button
@@ -176,13 +185,33 @@ Accept wizard (new invitee):
 16. Cancelling a pending invitation (from its row, behind a confirmation
     listing the invitee's details) deactivates the emailed links immediately.
     The recipient then sees the "Invitation Unavailable" page (Rule 4). <sup>q</sup>
+17. Wizard navigation (accept side). The "Create OJS account", "Enter
+    details" and "Review & create account" steps also offer "Cancel". It
+    asks "Cancel Role Invitation Process?" ("Are you sure you want to
+    cancel? Canceling now will stop the role acceptance process, and you'll
+    need to restart from the invitation email to accept the role again. …")
+    with "Cancel Invitation Process" and "Go Back". "Go Back" returns to the
+    step. "Cancel Invitation Process" declines nothing:
+    - a signed-out newcomer lands on the sign-in screen;
+    - the manager's Invitations row still reads "Invited {date}";
+    - the emailed link reopens the wizard at its first step.
+
+    Leaving the wizard by typing another address asks nothing and keeps
+    nothing: reopening the link shows the Username typed on "Create OJS
+    account" empty again. <sup>u</sup>
 
 ## Side effects
 
 - **On send**: one invitation email to the recipient, from the inviter. It
-  lists the roles offered (with dates and masthead visibility), the roles
-  they already hold, and the accept and decline links. Subject and body are
-  whatever the compose step showed at send time. ⚠ [A7](#a7) The email's
+  lists the roles offered under "Newly assigned roles" and the roles they
+  already hold under "Already assigned roles", then the accept and decline
+  links. Each role listed, held or offered, carries its start date
+  ("Starting from {date}") and a sentence that follows its masthead choice:
+  "Your name will appear in the {journal}'s masthead as a {role}." or "Your
+  name will not appear in {journal}'s masthead as a {role}." ⚠ [A11](#a11)
+  The email makes that promise also for roles the masthead does not list.
+  Subject and body are whatever the compose step showed at send time.
+  ⚠ [A7](#a7) The email's
   fixed copy carries small wording slips. It greets a new invitee by the
   name entered on "Enter details" in the journal's primary language ("Dear
   Nova Quill,", or the one name entered: "Dear Nova,"), and by their email
@@ -200,11 +229,12 @@ Accept wizard (new invitee):
   journal masthead visibility has been updated"). Only the masthead
   confirmation says so up front ("The user will be notified of this
   change."); the removal confirmation warns of the lost access and
-  permissions and says nothing of an email. ⚠ [OMP1](#omp1) On a press or
-  preprint server the masthead email fails with a raw error shown to the
-  manager, though the visibility change itself sticks. A disabled member is
-  emailed the same way, in words written for an active account
-  ⚠ [A9](#a9). <sup>r</sup>
+  permissions and says nothing of an email. A masthead change on a removed
+  role's row is emailed the same way, the role named with its start and end
+  dates. ⚠ [OMP1](#omp1) On a press or preprint server the masthead change
+  fails with a raw error shown to the manager and no email, though the
+  visibility change itself sticks. A disabled member is emailed the same
+  way, in words written for an active account ⚠ [A9](#a9). <sup>r</sup>
 - **No notice to the inviter**: nobody is emailed or notified when the
   recipient accepts or declines ⚠ [A5](#a5). The pending row simply
   disappears. From the manager's screens, an acceptance and a decline can be
@@ -252,6 +282,9 @@ Accept wizard (new invitee):
 - **Roles settings**: which roles exist to be offered, their levels, and the
   masthead concept belong to the roles-configuration feature. This wizard
   only uses them.
+- **Masthead pages**: the public "Editorial Masthead" and "Editorial
+  History" pages, which list members by the masthead choices made here,
+  belong to [Journal identity & about pages](U07-journal-identity-and-about-pages.md).
 - **Languages**: which languages a journal's forms offer, and the language
   a manager's screens are in, are set as
   [Languages & locales](U57-languages-and-locales.md#form-languages)
@@ -510,6 +543,10 @@ Left out of the scenarios above, by reason:
     primary language only (Fields; Settings "Forms"; Side effects): the
     names are optional and nothing else on these screens changes, and
     scenario 1 reads the greeting by name on a one-language journal
+  - an existing user who opens the accept link while already signed in as
+    themselves, reaching the Dashboard still signed in after accepting
+    (Rules 6, 9): scenario 3 walks the same review step and accept signed
+    out
 - **Budget** — variants:
   - the template choice on the compose step (Actors row 7): the body states
     no outcome of the choice to read
@@ -520,6 +557,15 @@ Left out of the scenarios above, by reason:
     wizard that sends nothing
   - leaving the send wizard by a link or a typed address, with no question
     and no row added (Rule 15): a way out of the wizard that sends nothing
+  - the accept wizard's "Cancel", its question and "Go Back", and "Cancel
+    Invitation Process" declining nothing (Rule 17): a way out of the
+    wizard that answers nothing
+  - leaving the accept wizard by a typed address, with no question and the
+    typed username not kept (Rule 17): a way out of the wizard that answers
+    nothing
+  - the masthead select of a removed role's row, its confirmation and its
+    email (Rule 13, Side effects): scenario 8 changes the same select on a
+    current row
 - **Nothing new to test**:
   - a Site Administrator sending, editing, cancelling or proposing (Actors
     rows 1–5; scenarios 1, 5, 6 and 8's Journal Manager sees the same
@@ -530,8 +576,9 @@ Left out of the scenarios above, by reason:
     Rules 3, 4, 12; scenario 6 marks it)
   - A2 (an invitation being composed, purged by the daily cleanup; Rule 1,
     Side effects)
-  - A4 (the link never signing anyone in, every recipient landing on the
-    sign-in screen; Rules 6, 9; scenarios 2 and 3 mark it)
+  - A4 (the link never signing anyone in, every recipient who opened it
+    signed out landing on the sign-in screen; Rules 6, 9; scenarios 2 and 3
+    mark it)
   - OMP1 (the masthead email failing with a raw error on presses and
     preprint servers; Side effects; scenario 8 marks it)
   - A9 (the role-removal email telling a disabled user their account is
@@ -543,6 +590,8 @@ Left out of the scenarios above, by reason:
     journal of another primary language than the site's by a manager
     working in the site's, greeted "Dear {email},"; Side effects)
   - A8 (added role rows carrying no accessible field names)
+  - A11 (the invitation email promising a masthead listing for roles the
+    masthead does not list; Side effects)
 - **No seed**:
   - a pending invitation past its deadline, the link stopped and no role
     granted (Rules 1, 2, 4): the test tooling cannot backdate a deadline
@@ -555,6 +604,9 @@ Left out of the scenarios above, by reason:
 - **Owned by another feature**:
   - the masthead listing updating per the chosen visibility after
     acceptance (Rule 8, Side effects; the masthead page: *Roles settings*)
+  - the "Editorial History" listing that a removed role's masthead choice
+    decides (Rule 13; *Journal identity & about pages*, whose scenario 8
+    reads the listing after "Remove Role")
   - editing the stored invitation email template on the Emails screen
     (Actors row 8; *Emails management*)
   - other invitation kinds landing through the invitation-link landing
@@ -574,12 +626,13 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A3](#a3) | The links of a replaced invitation (edited or re-sent) die with a bare not-found error | 🐞 | minor | — |
-| [A4](#a4) | Nobody is signed in after accepting; every recipient lands on the sign-in screen | 🐞 | user-visible | — |
+| [A4](#a4) | Nobody is signed in after accepting; every recipient who opened the link signed out lands on the sign-in screen | 🐞 | user-visible | claim check (claude), 2026-09-28 — narrowed to recipients who opened the link signed out |
 | [A5](#a5) | "Invitation Sent" promises decision updates that are never delivered | 🐞 | user-visible | — |
-| [A7](#a7) | Small wording and untranslated-text defects across the invitation screens and emails | 🐞 | minor | upstream change + claim check (claude), 2026-09-27 — greeting item fixed upstream and dropped; two items added |
+| [A7](#a7) | Small wording and untranslated-text defects across the invitation screens and emails | 🐞 | minor | claim check (claude), 2026-09-28 — one item added (the accept page's invisible steps button) |
 | [A8](#a8) | Added role rows carry no accessible field names; a screen reader hears row 1's labels | 🐞 | user-visible | — |
 | [A10](#a10) | A newcomer named only in another form language, or invited on a journal whose primary language is not the site's by a manager working in the site's, is still greeted "Dear {email}," | 🐞 | minor | — |
-| [OMP1](#omp1) | Confirming a masthead change shows a raw email-template error on presses and preprint servers | 🐞 | user-visible | — |
+| [A11](#a11) | The invitation email promises a masthead listing for roles the masthead does not list, such as Reader and Author | 🐞 | minor | — |
+| [OMP1](#omp1) | Confirming a masthead change fails with a raw email-template error on presses and preprint servers | 🐞 | user-visible · crash: server | claim check (claude), 2026-09-28 — crash word added; also on a removed role's row |
 | [OPS1](#ops1) | The invitation email template has no row on the preprint server's Emails screen | 🐞 | user-visible | — |
 | [A1](#a1) | The send wizard's address is gated more widely than the screen that offers it | ❓ | latent | — |
 | [A2](#a2) | Daily cleanup deletes invitations still being composed | ❓ | latent | — |
@@ -628,8 +681,10 @@ Basis: probe + claim check. <sup>[f-a3](#fn-a3)</sup>
 A newcomer who has just chosen a username and password and pressed "Accept And
 Continue to OJS" is not inside. The closing dialog's "View All Submissions"
 button lands on the sign-in screen, and they must type the credentials again.
-An existing user, whose link opened the wizard with no password prompt, ends
-on the same sign-in screen. The roles themselves are granted correctly.
+An existing user who opened the link signed out, with no password prompt,
+ends on the same sign-in screen. Only an existing user already signed in as
+themselves when opening the link reaches the Dashboard. The roles themselves
+are granted correctly.
 Basis: probe, all three apps. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
@@ -655,7 +710,9 @@ manager for further assistance.". "##common.help##" shows in the header of
 every management page; a screen reader hears
 "##userAccess.management.options##" for each Current Users row's menu button
 on Users & Roles and "##invitation.wizard.completeSteps##" for the list of
-steps in both wizards.
+steps in both wizards. On an existing user's one-step accept page, Tab
+stops on an invisible button with no accessible name, whose only text is
+the untranslated "{$current}/{$total} steps"; pressing it does nothing.
 Basis: probe + claim check. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
@@ -705,14 +762,28 @@ boxes left empty, is not used either. The invitation is delivered and works;
 only the greeting misses the name.
 Basis: probe. <sup>[f-a10](#fn-a10)</sup>
 
+<a id="a11"></a>
+**A11 — The invitation email promises masthead listings the masthead never gives** · 🐞 · minor.
+Every role in the invitation email, held or offered, set to "Appear on the
+masthead" carries "Your name will appear in the {journal}'s masthead as a
+{role}.", also for a role the journal's "Editorial Masthead" page does not
+list (which roles it lists: [Journal identity & about pages](U07-journal-identity-and-about-pages.md)
+Rule 14a). An existing Reader is told their name will appear on the
+masthead "as a Reader", and an invitee offered Author "as a Author"; on a
+default install the masthead lists neither role. The invitation itself
+works; only the promise is false.
+Basis: probe. <sup>[f-a11](#fn-a11)</sup>
+
 ### OMP and OPS
 
 <a id="omp1"></a>
-**OMP1 — Masthead change throws a raw email-template error** · 🐞 · user-visible.
-On a press or preprint server, confirming a masthead visibility change answers
-the manager with a raw error: "Email template USER_ROLE_MASTHEAD_UPDATE not
-found. The migration script I11800_AddUserRoleMastheadUpdateEmail needs to be
-run." The change itself sticks after a reload. The same error can interrupt
+**OMP1 — Masthead change throws a raw email-template error** · 🐞 · user-visible · crash: server.
+On a press or preprint server, confirming a masthead visibility change fails
+on the server: an "Error" dialog shows the manager the raw text "Email
+template USER_ROLE_MASTHEAD_UPDATE not found. The migration script
+I11800_AddUserRoleMastheadUpdateEmail needs to be run.", and the member gets
+no email. The change itself sticks after a reload, on a current role's row
+and on a removed role's row alike (Rule 13). The same error can interrupt
 an existing-user invitation mid-send on a press (it can be dismissed, and the
 invitation still delivers). On a journal the change applies cleanly and the
 member's notice is delivered. Fresh presses and preprint servers ship without
@@ -803,7 +874,19 @@ lose access and permissions associated with it." (`user.removeRole.message`,
 buttons "Remove Role" / "Cancel"), and after confirming (`endRole` 200) the
 row stayed listed with End Date set to that day and "User Removed From Role"
 in its last cell, the same on the wizard reopened from the user row (OJS,
-OPS). Basis: test run.
+OPS). Basis: test run. Claim check 2026-09-28, all three apps, six runs
+each (Rule 13): two scratch members holding Author and the section-level
+role (Section editor, Series editor on OMP, Moderator on OPS), one set to
+"Appear on the masthead" and one to "Does not appear on the masthead", had
+that role removed (`endRole` 200). The ended row read "{role} 2026-09-28
+2026-09-28 … User Removed From Role" with no "Remove Role", and its
+masthead select stayed enabled with both values, on the same page and after
+a reload. Choosing the other value opened "Confirm masthead visibility
+change"; "Confirm" saved it (shown on the page and after a reload; the
+request answering 200 on OJS, 500 on OMP and OPS, f-omp1). "Editorial
+History" listed the member set to appear right after the removal and not
+the other; after the change the two had swapped. "Editorial Masthead"
+listed neither, before or after.
 
 <a id="fn-d"></a>
 **d** — Statuses: `PKP\invitation\core\enums\InvitationStatus`
@@ -946,7 +1029,13 @@ Nova,"; family name only → "Dear Quill,"; no name → "Dear {address}," and
 no name on the To line; on an English journal with French under "Forms",
 both languages or English only → "Dear Nova Quill,", French only → the
 address; an existing member → "Dear Mira Member,". Every fixed line of the
-compose step's body reached the sent text.
+compose step's body reached the sent text. Claim check 2026-09-28, all three
+apps, six runs each: a Reader with "Appear on the masthead" invited to
+Author read "Already assigned roles" › "Reader" › "Starting from
+2026-09-28" › "Your name will appear in the {journal}'s masthead as a
+Reader.", then "Newly assigned roles" › "Author" › the same sentence "as a
+Author."; a Reader set to "Does not appear on the masthead" read "Your name
+will not appear in {journal}'s masthead as a Reader." (finding A11).
 
 <a id="fn-k"></a>
 **k** — Accept wizard: `pages/acceptInvitation/AcceptInvitationPage.vue` +
@@ -984,7 +1073,10 @@ Signed-in non-invitee → refusal (store dialog keys
 `user.logOut` — live-confirmed, the Logout button ends the session); new-user
 invitations require an anonymous session. Key-based API ops
 (`GET/PUT invitations/{id}/key/{key}/…`) are public routes with per-type
-authorization.
+authorization. Claim check 2026-09-28, all three apps, six runs each: an
+existing Author signed in as themselves opened their own accept link and
+met the same single "Review & create account" step as a signed-out one,
+with no password prompt; `finalize` answered 200.
 
 <a id="fn-m"></a>
 **m** — `UserRoleAssignmentReceiveController::finalize()`: creates the user
@@ -997,7 +1089,14 @@ the inviter (finding A5 — live-confirmed 2026-07-31 with a positive
 control); the store's closing dialog
 (`acceptInvitation.modal.*`, button "View All Submissions") redirects to the
 `submissions` page, which greets the signed-out recipient with the sign-in
-form.
+form. Claim check 2026-09-28, all three apps, six runs each: after "View
+All Submissions" the recipient who had opened the link signed out reached
+`login?source=…/submissions`; the one signed in as themselves reached
+`dashboard/editorial?currentViewId=assigned-to-me` ("Assigned to me"), the
+header holding their username and "Tasks". The closing dialog "You've been
+assigned a new role in OJS" (OMP, OPS: the app's acronym) opened within
+0.2–1.1 s of every press of "Accept And Continue to OJS" (72 presses,
+signed out, signed in as the invitee, and newcomers at 1280 and 380 px wide).
 
 <a id="fn-n"></a>
 **n** — Decline: `declineInvitation.tpl` (AFFU-123) — POST + CSRF to
@@ -1054,7 +1153,10 @@ dialog's copy `user.removeRole.message` carries no such sentence: test run
 2026-09-13, all three apps, the removal email delivered on each (the
 2026-07-31 sentence had been read on the masthead dialog alone).
 Masthead template key `USER_ROLE_MASTHEAD_UPDATE` — OMP/OPS seeding gap in
-f-omp1.
+f-omp1. Claim check 2026-09-28 (OJS): a masthead change on a removed
+Section editor row sent "Your journal masthead visibility has been updated"
+reading "… for the role Section editor (September 28, 2026 – September 28,
+2026) … New setting: Does not appear on the masthead" (note c).
 
 <a id="fn-s"></a>
 **s** — Scenario seeding: every scenario but 9 gets a scratch context per
@@ -1090,6 +1192,21 @@ e). The claim checks of 2026-07-31 and 2026-09-27 left it undriven: running
 the scheduled task on the shared test installs would also remove the
 drafts other runs had open (finding A2).
 
+<a id="fn-u"></a>
+**u** — Claim check 2026-09-28, all three apps, six runs each, ORCID off
+(Rule 17): "Cancel" stood beside the forward button on each of a
+newcomer's three steps and on an existing user's review step. On a
+newcomer's "Create OJS account" it opened "Cancel Role Invitation
+Process?", whose text goes on "If you're already a user, you'll be taken
+back to the dashboard. If not, you'll need to access the invitation email
+to start the process again."; "Go Back" returned to the step, and "Cancel
+Invitation Process" led to `login?source=…/submissions` with no
+invitations request made. The Invitations table still held the row, and
+the link reopened "Create OJS account". Before that, a username typed there
+and left for the journal's About page by address raised no browser
+question, and the reopened step's Username was empty. The existing user's
+"Cancel" was seen, not pressed; the ORCID step was not read.
+
 <a id="fn-a1"></a>
 **f-a1** — Role assignment vs screen gate: note b vs note a. The atlas route
 row records the same mismatch. Live check 2026-07-31, all three apps:
@@ -1122,7 +1239,9 @@ link the same way — same `byNotId` cleanup, not edit-specific.
 **f-a4** — `finalize()` registers no session (note m) while the store then
 redirects to `submissions`; the code's apparent existing-user auto-login
 never materializes either (note l). Live-confirmed 2026-07-31 on OJS, OMP and
-OPS, on both the accept and decline flows.
+OPS, on both the accept and decline flows. Claim check 2026-09-28, all
+three apps: an existing user who opened the link while signed in as
+themselves stays signed in and reaches the Dashboard (note m).
 
 <a id="fn-a5"></a>
 **f-a5** — Success-dialog copy: app locale key `userInvitation.modal.message`.
@@ -1177,7 +1296,17 @@ in the send and accept wizards named "##invitation.wizard.completeSteps##"
 in the accessibility tree. Dropped 2026-09-27: the greeting of a new
 invitee by address, which pkp/pkp-lib#13397 (`aa077419e3`, 2026-09-26;
 issue pkp/pkp-lib#13376) replaced with the name entered (note j); the cases
-that fix leaves out are finding A10.
+that fix leaves out are finding A10. Added by the claim check of
+2026-09-28, all three apps, runs 3 to 6: on an existing user's one-step
+accept page ("Review & create account", ORCID off) the stepper is collapsed
+and clipped to 1 px from the moment the page lands; inside it an
+`aria-hidden` block holds "1/1 steps" and a toggle button whose text is
+the untranslated `{$current}/{$total} steps`. Tab from the top reaches it
+fifth (after the two skip links, the journal name and the step button "1
+Review & create account"); it has no accessible name, a pointer press at
+its place lands on the step content, and Enter on it changed nothing.
+Present before and after "Accept And Continue". A newcomer's three-step
+wizard (1280 and 380 px) and the send wizard have no such text.
 
 <a id="fn-a8"></a>
 **f-a8** — Every added row in `UserInvitationUserGroupsTable.vue` renders
@@ -1241,6 +1370,21 @@ and was not driven. Kept check
 the team in `docs/reports/2026-09-27-pkp-lib-13376.md` (a temporary report,
 deleted once acted on; git history keeps it).
 
+<a id="fn-a11"></a>
+**f-a11** — `UserRoleAssignmentInvitationNotify::getUserUserGroupSection()`
+(note j) picks `emails.userRoleAssignmentInvitationNotify.userGroupSectionWillAppear`
+or `…WillNotAppear` from the member's own masthead flag on the offered or
+held role alone; it never reads the role's own masthead setting ("Consider
+role in masthead list"; code-read 2026-09-28, OJS lib/pkp). The install's `registry/userGroups.xml` sets `masthead="true"` only
+on the editor, section editor, external reviewer (OJS, OMP) and editorial
+board member groups. Claim check 2026-09-28, all three apps, six runs each
+(email text in note j): the scratch contexts' "Editorial Masthead" listed
+only the section-level role's heading (Section editor, Series editor,
+Moderator), never Reader, Author or Copyeditor, before and after the drive,
+including after two Authors had accepted Copyeditor with "Appear on the
+masthead" on OJS and OMP. An existing Author's email carried the same
+sentence for the held Author role.
+
 <a id="fn-omp1"></a>
 **f-omp1** — Error observed on OMP and OPS (live probes 2026-07-31, two
 independent sessions; re-read word for word by the 2026-09-13 OMP and OPS
@@ -1251,7 +1395,11 @@ Install-seed check 2026-07-31: only OJS's `registry/emailTemplates.xml` seeds
 `USER_ROLE_MASTHEAD_UPDATE`; the OMP and OPS registries carry no masthead
 template, and the `I11800_AddUserRoleMastheadUpdateEmail` migration adds it
 on upgraded installs only — omp_test/ops_test hold 0 such default rows vs 2
-in ojs_test, so fresh installs reproduce the error.
+in ojs_test, so fresh installs reproduce the error. Crash: the masthead
+request answers 500 (`users/{id}/masthead/{userUserGroupId}`). Claim check
+2026-09-28, OMP and OPS, six runs each: twice per run, on a removed role's
+row changed each way, the same 500 and "Error" dialog, the new value shown
+after a reload and no masthead email (note c).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Evidence in note j (OPS map override vs seeded template).
