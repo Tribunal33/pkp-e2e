@@ -1062,7 +1062,9 @@ config-file settings.
   Reader left, the editorial dashboard (any view or
   `workflowSubmissionId`) opens as "Search Results (0)" under the same
   "Error" (`_submissions/viewsCount` and `_submissions/assigned` answer
-  401), and signing in at the journal lands on its home page; with Section
+  401), and signing in at the journal lands on its home page (with Author
+  left, on My Submissions, which the retired `{ctx}/submissions` address
+  forwards to too; U22 claim check I28); with Section
   Editor (Series editor, Moderator) left, the dashboard is assigned-only
   (no "Needs editor", no "Declined") but keeps "More Actions" and the
   "Assigned To Editor" filter. All three apps, 2026-09-28 (U23 claim

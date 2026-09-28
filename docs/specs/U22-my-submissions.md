@@ -84,11 +84,13 @@ revision upload it can open is owned by *[Review stage & rounds](U26-review-stag
 3. <a id="landing"></a> **Landing.** An account whose only role in the journal is Author lands on
    My Submissions after signing in on the journal's own login page. On a
    multi-journal site, the site-wide login page leads to the site index
-   instead. The editorial roles (Journal Manager, Section Editor, Assistant,
-   Site Administrator) and the Reviewer role take precedence: an account
-   holding one of those lands on that role's list instead, meaning the
-   Dashboard or the reviewer dashboard. An account holding both an
-   editorial role and Reviewer lands on the Dashboard. In
+   instead. The editorial roles (Journal Manager, Section Editor, Assistant)
+   and the Reviewer role take precedence: an account holding one of those
+   lands on that role's list instead, meaning the Dashboard or the reviewer
+   dashboard. An account holding both an editorial role and Reviewer lands
+   on the Dashboard. A Site Administrator lands by the roles they hold in
+   this journal, like any other account: with only Author there, on My
+   Submissions; with only Reader, on the journal's home page. In
    every case the author group stays one click away in the sidebar. The
    retired submission-list address from older versions forwards the same
    way. An old bookmarked author-dashboard link for a specific submission
@@ -109,12 +111,20 @@ revision upload it can open is owned by *[Review stage & rounds](U26-review-stag
 5. **Search and filters.** The search box above the list finds the author's
    own submissions within the current view. The heading keeps the view's
    name and count. The "Filters" button opens the journal's filter panel,
-   which offers up to four filters: section {OJS OPS}, only when the journal
-   has more than one (a press offers no series filter here, however many
-   series it has ⚠ [OMP1](#omp1)); categories, only when any exist; issue
-   {OJS}, only when any exist; and days since last activity, always. The
-   editors' "Assigned To Editor" filter follows the account's roles, not the
-   page. An author-only account never sees it, but a Journal Manager or Site
+   which offers up to four filters:
+   - section {OJS OPS}, only when the journal has more than one section,
+     inactive sections and sections restricted to editors counted (see
+     *[Sections](U17-sections.md)*). The filter lists every section,
+     including those two kinds, and choosing one narrows the list to the
+     author's submissions in that section. A press offers no series filter
+     here, however many series it has ⚠ [OMP1](#omp1);
+   - categories, only when any exist;
+   - issue {OJS}, only when any exist;
+   - days since last activity, always.
+
+   The editors' "Assigned To Editor" filter ("Assigned to Moderator" on a
+   preprint server {OPS}) follows the account's roles, not the page. An
+   author-only account never sees it, but a Journal Manager or Site
    Administrator who also authors finds it on their own list too
    ⚠ [A4](#a4). Both controls are shared with *Submissions dashboard*.
    <sup>j</sup>
@@ -184,6 +194,11 @@ revision upload it can open is owned by *[Review stage & rounds](U26-review-stag
 10. **Counts stay current.** The sidebar view badges and the heading's total
     update in place, without a reload, after anything done from this screen
     that changes them, for example deleting drafts or submitting revisions.
+    A change someone else makes meanwhile, for example an editor removing a
+    copyedited file (Rule 7c), shows on the list only when the author
+    closes a workflow panel or reloads the page; until then the row keeps
+    its old reading. Pressing the sidebar entry of the view already open
+    does not refresh the list. <sup>e</sup>
 
 ## Side effects
 
@@ -330,7 +345,8 @@ footnote.
    - **"Filters"**: press it: the panel offers the days-since-last-activity
      filter and, only where the journal has them, the section {OJS OPS},
      categories and issue {OJS} filters (a press offers no series filter
-     [OMP1](#omp1)); "Assigned To Editor" is not among them (Rule 5).
+     [OMP1](#omp1)); "Assigned To Editor" ("Assigned to Moderator" on a
+     preprint server) is not among them (Rule 5).
    - **The author's mailbox**: no email has arrived through any of the
      above: the list sends nothing (Side effects).
    - **Control**: the other author's submission is listed under none of
@@ -409,9 +425,18 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Budget** — states:
+  - a change someone else makes showing on the list only after a workflow
+    panel closes or the page reloads, and not after pressing the open
+    view's sidebar entry (Rule 10)
+  - a Site Administrator holding only Author in the journal landing on My
+    Submissions, and one holding only Reader landing on the journal's home
+    page (Rule 3)
 - **Budget** — variants:
   - the list logging nothing (Side effects): the body names no screen where
     a log of the list's own use would be read; scenario 3 reads the mailbox
+  - the section filter counting and listing inactive sections and sections
+    restricted to editors (Rule 5)
 - **Nothing new to test**:
   - a Journal Manager who also authors seeing their authored submissions
     like any author (Actors preamble; scenario 1's Author sees the same
@@ -426,8 +451,8 @@ Left out of the scenarios above, by reason:
     Rule 7e)
   - A3 (nothing feeding "Scheduled for publication" on a press or preprint
     server; Rule 2; scenario 3 marks it)
-  - A4 (the editors' "Assigned To Editor" filter on a manager-author's own
-    list; Rule 5)
+  - A4 (the editors' assignment filter on the own list of a Journal Manager
+    or Site Administrator who also authors; Rule 5)
   - A5 (an old link to a draft opening the workflow panel the list never
     offers; Rule 3)
   - OMP1 (no series filter on a press; Rule 5; scenario 3 marks it)
@@ -465,7 +490,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A2](#a2) | A declined submission's row keeps showing the review progress counter | ❓ | minor | — |
 | [A3](#a3) | On a press or preprint server, nothing was found that feeds the "Scheduled for publication" view | ❓ | minor | — |
 | [OPS1](#ops1) | A preprint server author gets no "Incomplete submissions" view; drafts hide inside "Active submissions" labeled "Production" | ❓ | minor | — |
-| [A4](#a4) | A Journal Manager who also authors gets the editors' "Assigned To Editor" filter on their personal list | ❓ | minor | — |
+| [A4](#a4) | A Journal Manager or Site Administrator who also authors gets the editors' assignment filter on their personal list | ❓ | minor | — |
 | [A5](#a5) | An old author-dashboard link to a still-incomplete draft opens the draft's workflow panel, a screen the list never offers for a draft | ❓ | minor | — |
 | [OMP1](#omp1) | A press author cannot filter the list by series, even when the press has several | ❓ | minor | — |
 
@@ -513,7 +538,8 @@ Basis: probe. <sup>a3</sup>
 **A4 — Editors' filter on the manager-author's own list** · ❓ · minor.
 An account holding Journal Manager (or Site Administrator) alongside Author
 opens the Filters panel on their own My Submissions and finds the editors'
-"Assigned To Editor" filter there. An author-only account never does.
+"Assigned To Editor" filter there ("Assigned to Moderator" on a preprint
+server). An author-only account never does.
 Question: should the personal list suppress the editors' filter regardless
 of the account's other roles? Lean: intended and harmless. The filter
 follows the account's roles through shared code, and it discloses nothing a
@@ -597,7 +623,9 @@ label verbatim "My Submissions as Author"; heading "Active submissions
 (N)"; a signed-in reviewer-only or manager-only account typing the address
 gets the access-denied page, verbatim "The current role does not have
 access to this operation." (the reviewer control is inapplicable on OPS —
-the app has no reviewer role). A signed-out visitor typing the list's
+the app has no reviewer role). A Site Administrator whose only role in the
+journal is Reader, typing the address, gets the same page (2026-09-28, all
+three apps). A signed-out visitor typing the list's
 address is sent to the login page with the list carried as the return
 destination (probed 2026-08-26, OJS; the return trip after logging in was
 not probed).
@@ -625,9 +653,22 @@ submission — not the account that started it — sees it on their own list
 with "View" (probed 2026-08-26, OJS).
 
 <a id="fn-c"></a>
-**c — landing and forwards.** `PKPPageRouter::getHomeUrl()`: manager /
+**c — landing and forwards.** `PKPPageRouter::getHomeUrl()` reads only the
+account's active user groups in the current journal (`context_id` of the
+journal): none, or Reader alone → the journal's `index`; manager /
 sub-editor / assistant / admin → `dashboard/editorial`; else reviewer →
 `dashboard/reviewAssignments`; else author → `dashboard/mySubmissions`.
+The Site Administrator group belongs to the site, not the journal, so the
+admin branch never matches a site-level administrator; they land by their
+journal roles. Live-probed 2026-09-28 (all three apps, two runs; Rule 3):
+`admin` on a scratch journal with Journal Manager ended on its own Users &
+Roles › Edit page, then a fresh sign-in on the journal's login page — with
+Author left, `dashboard/mySubmissions?currentViewId=active`, "Active
+submissions (1)", listing the administrator's own submission and not
+another author's; with Reader left, the journal's `index`; the retired
+`{journal}/submissions` address forwards the same way in both cases.
+Control: with Journal Manager and Author, `dashboard/editorial` ("Assigned
+to me").
 Landing precedence live-probed 2026-08-26 with scratch combo accounts on
 every constructible app (OPS has no reviewer role): Author+Reviewer lands
 on the reviewer list, Author+Section Editor on the editorial dashboard,
@@ -693,6 +734,16 @@ the exact pre-View address. A draft row's Actions cell holds no button at
 all (probed 2026-08-26 on all three apps — the OMP draft rows and its
 submitted row's "View" verified live). The OPS panel opens on the preprint's publication
 tabs with no stage menu — the workflow feature's territory.
+Rule 10's changes made by someone else, live-probed 2026-09-28 (OJS and
+OMP, two runs, the assigned Section Editor uploading and then deleting a
+copyedited file in a second browser): with the author's "View" panel open
+during the delete, the row behind it still read "Copyedited Files
+Uploaded: 1"; the panel's "Close" refetched the list (`_submissions/assigned`
+and `viewsCount`) and the row read "…: 0" at 0.5 s, 2 s and 6 s. With
+the list open and no panel, the row kept "…: 1"; pressing the sidebar's
+"Active submissions" entry (the view already open) sent no request and the
+row stayed at 1 for 6 s; a reload showed 0. The editor's own list behaved
+the same.
 
 <a id="fn-f"></a>
 **f — the activity cell.**
@@ -710,7 +761,11 @@ revisions-requested or resubmit-for-review → Rule 7a; otherwise Rule 7b.
 2026-08-26, verbatim "Copyedited Files Uploaded: 0" (OJS and OMP); after
 an editor uploaded one file into the workflow's Copyedited files list, the
 same cell read verbatim "Copyedited Files Uploaded: 1" (OJS, 2026-08-26) —
-the count counts that list.
+the count counts that list. Re-driven 2026-09-28 (OJS and OMP, two runs):
+"…: 0", then "…: 1" after the assigned Section Editor (Series Editor on
+OMP) uploaded one file to "Copyedited Files", then "…: 0" after it was
+deleted (read after a reload); the editor's own dashboard row carries the
+same string.
 Production + `STATUS_SCHEDULED` + an issue label →
 `dashboard.toBePublishedInIssue` — probed, verbatim "To be published in
 issue Vol. 2 No. 1 (2015)"; the issue condition makes 7d OJS-only in
@@ -789,10 +844,21 @@ every dashboard page including My Submissions. Filter fields
 (`APP\components\forms\dashboard\SubmissionFilters`) are data-driven: the
 section list is skipped for a single-section journal, categories and
 issues {OJS} when none exist; days-since-activity always renders.
+`PKPSubmissionFilters::addSectionFields()` counts and lists every section
+of the journal, with no active or editor-only condition. Live-probed
+2026-09-28 (OJS and OPS, two runs, scratch journals): with three sections,
+"Active", "Inactive" (marked inactive) and "EdOnly" (restricted to
+editors), one author submission in each, the author's "Section" field
+listed all three, and applying any one narrowed the list to that section's
+submission, "Active submissions (1)", with the chip "Section: {title}";
+with one active section "Open" and one inactive "Shut", the field was
+offered with both, and "Shut" showed the author's submission there; with
+one section, only "Days since last activity". The Journal Manager's
+dashboard panel listed the same sections.
 Live-probed 2026-08-26: on the seeded journal the author's panel offered
 Section, Issues, Categories and "Days since last activity"; on a
 one-section journal with no categories or issues, only the activity
-slider. "Assigned To Editor" (manager/admin-only) appeared for an editor
+slider. "Assigned To Editor" ("Assigned to Moderator" on OPS; manager/admin-only) appeared for an editor
 on the editorial dashboard (positive control) and never for an author-only
 account — but it follows roles, not the page: a Manager+Author account's
 own My Submissions panel offers it (fn-a4). The press's missing series
@@ -939,8 +1005,14 @@ the personal author list included, for manager/admin accounts. Live-probed
 2026-08-26 (OJS, scratch journal): a Manager+Author account's My
 Submissions Filters panel offered "Assigned To Editor" alongside "Days
 since last activity"; author-only accounts never got the field (fn-j's
-positive and negative controls). Shared pkp-lib path — the same result is
-expected on OMP and OPS, not separately probed.
+positive and negative controls). Live-probed 2026-09-28 on all three apps
+(two runs, scratch journals): a Site Administrator holding only Author in
+the journal, Journal Manager ended, found the field on their own My
+Submissions beside "Days since last activity", labelled "Assigned To
+Editor" on OJS and OMP and "Assigned to Moderator" on OPS (the Journal
+Manager's dashboard panel carries the same OPS label); author-only accounts
+never got it. The Manager+Author combination itself was probed on OJS only;
+the gate is the same shared role check.
 
 <a id="fn-a5"></a>
 **a5 — A5 evidence.** The forward and the panel auto-open are fn-c's
@@ -958,7 +1030,10 @@ on OMP/OPS.
 author list. Live-probed 2026-08-26: on a press with two series the
 author's panel offered only Categories and "Days since last activity";
 positive controls the same day — a two-section journal and a two-section
-preprint server both listed the Section field.
+preprint server both listed the Section field. Re-driven 2026-09-28 (two
+runs) on a press with three series: the author's panel offered "Days since
+last activity" alone, and the Press Manager's dashboard panel "Assigned To
+Editor" and "Days since last activity", no series field either.
 
 <a id="fn-ops1"></a>
 **ops1 — OPS1 evidence.** OPS `APP\submission\Repository::mapDashboardViews()`
