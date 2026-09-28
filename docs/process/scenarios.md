@@ -2517,7 +2517,11 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   submissions carry no Copyediting files (`files[]` seeds "Submission
   Files" only), so a copyediting decision or list scenario
   uploads through the lists' own "Upload/Select Files" window or the
-  Submission stage's "Upload" first. U32 claim check, 2026-09-18/19.
+  Submission stage's "Upload" first. U32 claim check, 2026-09-18/19. On
+  OMP an Internal Review acceptance (`acceptFromInternal` seeded, or
+  "Accept Submission" on an internal round) shows none either; on either
+  path without it, an "Assign" with the "Request Copyedit" message still
+  brings "Awaiting Copyedits." (U32 claim check I28, 2026-09-28).
 - The Production notice ("Assign a user to create galleys using the Assign
   link in the Participants list." on OJS; "Awaiting approval." on OMP)
   shows for an assigned editor after `sendToProduction` on both the

@@ -1226,7 +1226,7 @@ Basis: probe. <sup>[f-omp10](#fn-omp10)</sup>
 **f-omp9** — Live-probed 2026-09-27 (Rule 19): `{press}/workflow/internalReview` with no id answered 500 and an empty page; so did `externalReview`, `submission`, `editorial` and `production` on a press, the same four on a journal and `submission` and `production` on a preprint server, 12 server errors in all (`GET /index.php/{context}/workflow/{op}`); `internalReview` on a journal or a preprint server answers "404 Not Found". The stage-numbered form of the same defect is the workflow-screen spec's A5.
 
 <a id="fn-omp10"></a>
-**f-omp10** — Note td-notice, with the code. The copyediting spec's Rule 3 grants the notice on "a submission that was accepted from review", which this path contradicts; its A6 records the same gap after "Accept and Skip Review". Live-probed 2026-09-27.
+**f-omp10** — Note td-notice, with the code. The copyediting spec's Rule 3 grants the notice after a journal's review round or a press's External Review, and its A6 covers this path and "Accept and Skip Review" (corrected 2026-09-28). Live-probed 2026-09-27.
 
 ## Reference — entry points & surfaces
 
