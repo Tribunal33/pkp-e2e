@@ -1416,6 +1416,9 @@ test.describe('Reviewer assignment & management (U27)', () => {
         await cancelModal
             .getByRole('button', {name: 'Cancel Reviewer', exact: true})
             .click();
+        await expect(
+            page.locator('.app__notifications .pkpNotification').filter({hasText: 'Reviewer cancelled.'})
+        ).toBeVisible({timeout: 30_000});
         await expect(canRow).toContainText('Request Cancelled', {
             timeout: 20_000,
         });

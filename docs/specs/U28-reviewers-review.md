@@ -87,7 +87,7 @@ give no access to any screen in this spec. <sup>l</sup>
 |------------------|-----------|-------|
 | "For author and editor" | no | Rich text under "Review", shown when the assignment carries no review form. Nothing requires it: "Submit Review" with both boxes empty and no file under "Reviewer Files" ({OJS}: with a recommendation chosen) submits the review ⚠ [A7](#a7) |
 | "For editor" {OJS} / "For editor only" {OMP} | no | Rich text, same condition. Never required |
-| The review form's questions | per question, marked "*" | Shown instead of the two text boxes when the assignment carries a review form: the form's title and description, then each question as the form defines it (a text box, a checkbox group, a radio group or a drop-down). A required question left unanswered stops "Submit Review" only after its confirmation: the step stays, no question is marked, and the box "Please fill in required fields." / "Some required fields are not filled in. Please complete them before submitting your review." appears under the buttons ({OMP}: the first sentence prints as a raw key ⚠ [OMP3](#omp3)). "Save for Later" saves whether or not a required question is answered, with "Your changes have been saved." as on a free-form review |
+| The review form's questions | per question, marked "*" | Shown instead of the two text boxes when the assignment carries a review form: the form's title and description, then each question as the form defines it (a text box, a checkbox group, a radio group or a drop-down). A required question left unanswered stops "Submit Review" only after its confirmation: the step stays, nothing is submitted, and the box "Please fill in required fields." / "Some required fields are not filled in. Please complete them before submitting your review." appears under the buttons ({OMP}: the first sentence prints as a raw key ⚠ [OMP3](#omp3)). On a form whose required questions include a one-line text answer, "This field is required." also appears under each unanswered required question, a radio group included; on a form whose only required question is a radio group, a press marks no question and a journal shows none in view ⚠ [A16](#a16). The page stays scrolled at the buttons, so a mark on a question higher up is out of sight until the reviewer scrolls up. "Save for Later" saves whether or not a required question is answered and shows "Your changes have been saved.". With such a one-line answer among the unanswered questions it also shows the box and the marks, as a refused submit does; {OJS} so does any review form saved while "Recommendation" reads "Choose One", with the mark under the list ⚠ [A14](#a14). A reload keeps what was saved and clears the box and the marks |
 | "Reviewer Files" (the list under "Upload") | no | The reviewer's own attachments: "Upload File" opens the shared upload wizard (*Submission files*; here three steps, "1. Upload File", "2. Review Details" and "3. Confirm", with no file-type question), and each row offers "Edit" and "Delete". Once the review is submitted, "Upload File" and "Delete" are gone and "Edit" stays |
 | "Recommendation" {OJS} | yes, on submit | Drop-down preset to "Choose One" listing the journal's active recommendations (by default "Accept Submission", "Revisions Required", "Resubmit for Review", "Resubmit Elsewhere", "Decline Submission" and "See Comments"), in no fixed order [→ recommendation order](U29-review-setup-and-review-forms.md#a7). "Submit Review" with "Choose One" is asked for confirmation first; after "OK" the step stays and "This field is required." appears under the list. It is the only check a free-form submit meets (row 1). "Save for Later" keeps whatever is chosen. A press has no such field [OMP1](#omp1) |
 
@@ -261,7 +261,10 @@ give no access to any screen in this spec. <sup>l</sup>
 <a id="save-submit"></a>
 13. **Saving and submitting.** "Save for Later" keeps everything typed,
     answered and chosen, shows "Your changes have been saved." and stays on
-    step 3; nothing reaches the editor. Text that is saved and later emptied
+    step 3; nothing reaches the editor. On a review form the same press can
+    also show the refusal's messages; Fields step 3 says when
+    ([A14](#a14)). Leaving the step without saving is Rule 18. Text that
+    is saved and later emptied
     is not emptied by a further save: the field shows blank, but the earlier
     text is what stays on record and what the editor reads ⚠ [A4](#a4).
     "Submit Review" asks "Are you sure you
@@ -360,6 +363,15 @@ give no access to any screen in this spec. <sup>l</sup>
     "Completed". A finished review on a submission that moves on keeps
     its "View" button, under "Completed" and later "Published". <sup>b</sup>
     <sup>c</sup>
+18. **Leaving step 3 unsaved.** A changed review-form answer is guarded.
+    Pressing another tab asks "The data on this form has changed. Do you
+    wish to continue without saving?": "Cancel" keeps step 3 with the
+    change; "OK" opens the tab, and back on step 3 the answer shows its
+    last saved value. Leaving the page through the address bar asks the
+    browser's own leave-page question, and leaving drops the change too.
+    Text typed into "For author and editor" or "For editor" {OJS} / "For
+    editor only" {OMP} is not guarded: either way out asks nothing, and
+    back on step 3 the typed text is gone ⚠ [A15](#a15). <sup>i</sup>
 
 ## Side effects
 
@@ -657,8 +669,8 @@ Accounts, passwords and the tooling recipe are in the footnote. <sup>s</sup>
    - **"Submit Review" on an empty step**: press it: "Are you sure you want
      to submit this review?" appears at once, with no field marked. Press
      "OK": {OJS} the step stays and "This field is required." shows under
-     "Recommendation"; reload the step, choose "Decline Submission", then
-     press "Submit Review" and "OK" again. {OMP} nothing intervenes. Either
+     "Recommendation"; choose "Decline Submission", then press "Submit
+     Review" and "OK" again. {OMP} nothing intervenes. Either
      way "4. Completion" opens and the Section Editor's mailbox holds
      "Review complete: …" for a review with nothing in it ⚠ [A7](#a7).
    - **"Upload File"**: on the second request's step 3 press "Upload File"
@@ -689,16 +701,22 @@ Accounts, passwords and the tooling recipe are in the footnote. <sup>s</sup>
      defines it.
    - **"Submit Review" with the required question unanswered**: ({OJS}:
      with "Accept Submission" chosen) press it and "OK" on the
-     confirmation: the step stays, the question is not marked, and the box
-     "Please fill in required fields." / "Some required fields are not
-     filled in. Please complete them before submitting your review."
-     appears under the buttons ({OMP}: the first line is the raw key
-     ⚠ [OMP3](#omp3)); nothing is submitted.
+     confirmation: the step stays and the box "Please fill in required
+     fields." / "Some required fields are not filled in. Please complete
+     them before submitting your review." appears under the buttons
+     ({OMP}: the first line is the raw key ⚠ [OMP3](#omp3)); nothing is
+     submitted. Whether "This field is required." shows under the radio
+     group is not judged here ⚠ [A16](#a16).
    - **"Save for Later"**: type "Two figures are unlabeled." into the text
      box, tick "Figures" in the checkbox group, pick "Biology" in the
      drop-down, leave the radio group unanswered and press "Save for
      Later": "Your changes have been saved." appears; after a reload the
      three answers are restored and the radio group is still unanswered.
+   - **Leaving with a change**: type "Three figures are unlabeled." into
+     the text box and press the "2. Guidelines" tab: the browser asks "The
+     data on this form has changed. Do you wish to continue without
+     saving?"; press "Cancel": step 3 stays, the text box holding "Three
+     figures are unlabeled.".
    - **The submit**: choose "Yes" in the radio group ({OJS}: with "Accept
      Submission" chosen), press "Submit Review" and "OK": step 4 opens.
    - **Control**: neither "For author and editor" nor "For editor" {OJS} /
@@ -959,6 +977,8 @@ Left out of the scenarios above, by reason:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Budget** — variants:
   - the competing-interests choice recorded by declining, and its badge on the declined row (Rule 8)
+  - "OK" on the review form's leave question, which opens the tab and drops the change (Rule 18)
+  - a changed review-form answer left through the address bar, which asks the browser's own leave-page question (Rule 18)
 - **Nothing new to test**:
   - a one-click link after a decline, dead the same way as after a submit (Rule 16, Side effects)
   - an empty Privacy Statement: step 1 without the consent box, one tick fewer (Fields, Settings)
@@ -975,6 +995,9 @@ Left out of the scenarios above, by reason:
   - A11 (the left-behind assignment's wizard still taking and submitting a review; Rule 17)
   - A12 (the reviewer's own round listed under "Previous Reviews" once a later round opened without them; Actors row 8, Rule 14)
   - A13 (the files sent for review never listed in the "Read Round {N} Review" window; Rule 14)
+  - A14 ("Save for Later" on a review form showing the refusal's messages beside "Your changes have been saved."; Fields step 3)
+  - A15 (unsaved free-form review text dropped without a warning on leaving step 3; Rule 18)
+  - A16 (a refused review-form submit marking the unanswered questions on one form and none on another; Fields step 3)
   - OMP2 (the press's review-complete email saying "recommends None"; Side effects)
   - OMP3 (the press's review-form refusal opening with a raw key; Fields)
   - OPS1 (a home-made reviewer role's list headed "undefined (0)" and stuck on "Loading"; Purpose)
@@ -1008,12 +1031,15 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A9](#a9) | A reminder, or a request on another submission, kills the reviewer's earlier one-click link, which then shows a bare "404 Not Found" | 🐞 | user-visible | — |
 | [A10](#a10) | A one-click link opened in a browser signed in as somebody else shows a blank page, never the intended message | 🐞 | user-visible | — |
 | [A12](#a12) | A reviewer's own round is listed under "Previous Reviews" once the submission moves past it | 🐞 | minor | — |
+| [A14](#a14) | "Save for Later" on a review form says "Your changes have been saved." and, on the same screen, "Please fill in required fields." | 🐞 | minor | — |
+| [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a review form's answers are guarded | 🐞 | minor | — |
 | [OMP2](#omp2) | {OMP} The review-complete email tells editors the reviewer "recommends None" | 🐞 | minor | — |
 | [OMP3](#omp3) | {OMP} A review form's "required fields" refusal opens with a raw locale key | 🐞 | minor | — |
 | [OPS1](#ops1) | {OPS} A home-made reviewer role opens a "My Assignments as Reviewer" list that never loads | 🐞 | minor | — |
 | [A3](#a3) | Declining a request sends the reviewer to the journal's public home page instead of their assignments | ❓ | minor | — |
 | [A11](#a11) | An assignment left behind under "Archived" still opens a wizard that takes and submits a full review | ❓ | minor | — |
 | [A13](#a13) | The "Read Round {N} Review" window never lists the files that were sent for review | ❓ | minor | — |
+| [A16](#a16) | A refused review-form submit marks the unanswered questions on one form and none on another | ❓ | minor | — |
 | [OMP1](#omp1) | A press's wizard collects no recommendation, and each review stage shows its own guidelines | ✅ | — | — |
 | [A8](#a8) | Retired: "Save for Later" with a required question open did save and confirm after all | ✅ | retired | — |
 | [OMP4](#omp4) | Retired: the press's "Previous Reviews" oddity is every app's (A12) | ✅ | retired | — |
@@ -1160,6 +1186,46 @@ Question: which reviewer is the block meant for? Lean: it does not show
 for a reviewer assigned again on the next round; one whose later-round
 request was declined, or who has none, may see it.
 Basis: probe (2026-09-05, both apps). <sup>[f-a13](#fn-a13)</sup>
+
+<a id="a14"></a>
+**A14 — "Save for Later" on a review form also reports missing required answers** · 🐞 · minor.
+On a review form whose unanswered required questions include a one-line
+text answer, "Save for Later" shows "Your changes have been saved." and,
+on the same screen, the box "Please fill in required fields." / "Some
+required fields are not filled in. …" under the buttons (on a press its
+first line a raw key, [OMP3](#omp3)) and "This field is required." under
+each unanswered required question, exactly as a refused submit does.
+{OJS} Any review form saved while "Recommendation" reads "Choose One"
+does the same, with the mark under the list. The save did go through: a reload shows what was typed and clears the messages.
+The reviewer is told in one breath that the review was saved and that
+it cannot be accepted as it is.
+Basis: probe (2026-09-28, both apps). <sup>[f-a14](#fn-a14)</sup>
+
+<a id="a15"></a>
+**A15 — An unsaved free-form review is dropped without a warning** · 🐞 · minor.
+A reviewer who types into "For author and editor" or "For editor" {OJS} /
+"For editor only" {OMP} and then presses another tab or leaves the page
+before "Save for Later" is asked nothing, and back on step 3 the text is
+gone. The same step asks "The data on this form has changed. Do you wish
+to continue without saving?" before dropping a changed review-form
+answer, so only the free-form review is left unprotected.
+Basis: probe (2026-09-28, both apps). <sup>[f-a15](#fn-a15)</sup>
+
+<a id="a16"></a>
+**A16 — A refused review-form submit marks the unanswered questions on one form and none on another** · ❓ · minor.
+After "Submit Review" and "OK" with a required question unanswered, a
+form whose required questions are a radio group and a one-line text
+answer shows "This field is required." under both, beside the box under
+the buttons. A form whose only required question is a radio group
+(scenario 8's) shows the box and marks nothing on a press; on a journal
+no mark shows in view, and the page above it has not been checked. A
+reviewer on the unmarked form must find the unanswered question alone.
+Question: should the refusal mark every unanswered required question,
+whatever the form? Lean: yes; the step's own script is written to mark
+each required group, so the unmarked form looks like a defect whose
+trigger (the form's make-up is the first suspect) is not yet known.
+Basis: probe (2026-09-04 and 2026-09-28, both apps); test run
+(2026-09-26, the press). <sup>[f-a16](#fn-a16)</sup>
 
 ### OMP
 
@@ -1427,7 +1493,13 @@ typed statement kept across toggles and shown to the editor; whether the
 statement box hides again when "I do not have any competing interests" is
 chosen back was not captured, so the body does not say. On the seeded
 journal the privacy statement is present and the policy and guidelines
-are empty.
+are empty. Live-probed 2026-09-28 on OJS and OMP, two runs (Rule 7,
+scenario 4): on step 1 of an unanswered request the file's name link
+carries no `target`, `rel` or `download` attribute; pressing it sent
+`record-download` and then `download-file` (`Content-Disposition:
+attachment`), the browser downloaded the file, and the address, the tab
+and step 1 with "Accept Review, Continue to Step #2" stayed as they were;
+step 3's link on an accepted request carries the same attributes.
 
 <a id="fn-f"></a>
 **f** — Accept: `PKPReviewerReviewStep1Form::execute()` records the CI
@@ -1574,17 +1646,28 @@ review, OJS kept the step with "This field is required." under
 "Recommendation" and submitted once one was chosen; a text-only and a
 file-only review submitted on both. With a one-question form: after "OK"
 the step stayed with the message box under the buttons and no field
-marked (OMP's first line the raw key, finding OMP3). "Save for Later" with
+marked in view (OMP's first line the raw key, finding OMP3; the marks on
+another form, finding A16). "Save for Later" with
 the question open showed nothing once per app on 2026-09-04 (the retired
 A8); live-probed 2026-09-05 on OJS and OMP, four saves on two assignments
 per app (a fresh `?step=3` load and the landing after "Continue to Step
 #3"): `POST reviewer/saveStep/{id}?step=3` answered 200 and "Your changes
 have been saved." showed each time, the question still unanswered after a
-reload. Not driven, so the body does not claim them: a "Save for Later"
-with "Choose One" selected after an earlier choice (only a chosen value
-was seen restored), and a second "Submit Review" on the page showing
-"This field is required." without a reload (the review went through after
-one, which is why scenario 7 reloads). Seen once per app and not settled:
+reload (what else such a save shows, finding A14). Not driven, so the
+body does not claim it: a "Save for Later" with "Choose One" selected
+after an earlier choice (only a chosen value was seen restored).
+Live-probed 2026-09-28 on OJS, two runs (Fields step 3 "Recommendation",
+Rule 13, scenario 7): a free-form review with "For author and editor"
+typed and "Choose One" left, "Submit Review" and "OK": the step stayed,
+"This field is required." under the list, in view in a 1280×900 window,
+no save request sent, the mark still there 3 s and 6 s later, the box
+under the buttons hidden; on that page, with no reload, a second "Submit
+Review" asked "Are you sure you want to submit this review?" again and
+was refused the same way; once a recommendation was chosen, "Submit
+Review" and "OK" opened step 4 on the same page. OMP, the same drive: no
+list, and step 4 opened. Live-probed 2026-09-28 on OJS and OMP, four
+runs (Rule 18): the leave question and the lost free-form text, footnote
+f-a15. Seen once per app and not settled:
 after "Cancel" on the confirmation, a second "Submit Review" press on the
 same page did nothing until the page was reloaded.
 
@@ -2230,6 +2313,65 @@ with her upload and no "Files For Review" heading; after the editor put
 a file on round 2 and granted it to her, the round-1 window still showed
 none. Settling observation: the window for a reviewer whose later-round
 assignment is declined or absent.
+
+<a id="fn-a14"></a>
+**f-a14** — `reviewStep3Required.js` (loaded only when the assignment has
+a review form) binds a click handler on `[name="saveFormButton"]` that
+sets `validator.cancelSubmit`, meant to skip the browser-side check for
+"Save for Later"; the box `#reviewStep3MessageBox` and the `label.error`
+marks show anyway, the same as on a refused submit, and the save request
+still goes out. Live-probed 2026-09-28 on OJS and OMP, two runs each, a
+scratch journal and press with a form of a required radio group, an
+optional text box and a required one-line text answer (the input
+carrying the browser's `required` flag): on a fresh `?step=3` load, text
+typed into the optional box and "Save for Later" pressed with both
+required questions unanswered, the toast "Your changes have been saved."
+showed, the box (OMP: its raw first line, finding OMP3) showed under the
+buttons and "This field is required." under the radio group and under
+the one-line box; `POST reviewer/saveStep/{id}?step=3` answered 200; the
+same right after a refused submit; after a reload the typed text was
+back, both questions still unanswered, the box and the marks gone. OJS,
+a form with the same three questions none required, "Recommendation" at
+"Choose One": the toast, the box and "This field is required." under
+"Recommendation"; OMP, the same form: the toast alone. Control, both
+apps: an empty free-form review saved (OJS: at "Choose One") showed the
+toast alone. With a form whose only required question is a radio group
+(footnote i), the 2026-09-05 saves recorded the toast and not the box;
+the retired A8 sighting of 2026-09-04 saw neither.
+
+<a id="fn-a15"></a>
+**f-a15** — The legacy form handler tracks unsaved changes only through
+the inputs' `change` events; the rich-text boxes of a free-form review
+send none, so their text never counts as changed. Live-probed 2026-09-28
+on OJS and OMP, four runs (two of the leave alone, two as the last step
+of a full pass): a changed answer in a review form's text box, then the
+"2. Guidelines" tab: the dialog "The data on this form has changed. Do you wish to continue
+without saving?"; "Cancel" kept step 3 with the text; "OK" opened step 2,
+and back on step 3 the box showed the last saved value; a change left
+through the address bar raised the browser's leave-page prompt, and the
+change was gone after it. Text typed into "For author and editor" with
+nothing saved before, then the tab or the address bar: no question
+either way, and back on step 3 the box was empty.
+
+<a id="fn-a16"></a>
+**f-a16** — `reviewStep3Required.js` adds one `required` rule to the first
+radio or checkbox of each `fieldset[aria-required="true"]` and places its
+message inside that fieldset, so each unanswered required group is meant
+to be marked. Live-probed 2026-09-28 on OJS and OMP, two runs each, the
+three-question form of footnote f-a14 ({OJS} "Accept Submission"
+chosen): after "Submit Review" and "OK" no save request went out, the
+box showed under the buttons, "This field is required." sat under the
+radio group's options and under the one-line box, and the page stayed
+scrolled at the buttons with the radio group's mark above the visible
+area on both apps and the one-line box's mark above it on OJS. The
+form of scenario 8 (its only required question a radio group): on
+2026-09-04 both apps showed the box and no mark in view; the OMP suite's
+scenario-8 test finds no "This field is required." anywhere on the page
+after the same refusal and ran green on 2026-09-26; OJS's page was not
+checked below the visible area. Settling observation: the same refusal
+on OJS with scenario 8's form, read over the whole page, and on both
+apps with a form of one required radio group plus one required one-line
+answer versus one without it.
 
 <a id="fn-omp1"></a>
 **f-omp1** — OMP `classes/core/Application.php::hasCustomizableReviewerRecommendation()`

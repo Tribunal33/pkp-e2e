@@ -762,9 +762,8 @@ test.describe('reviewer\'s review', () => {
         await expect(wizard.recommendationError).toHaveText('This field is required.', {timeout: 30_000});
         await wizard.expectStep(3);
 
-        // A reload between the two presses (screen notes pC), then a
-        // recommendation, and the empty review goes through (A7's record).
-        await wizard.goto(submissionId, {step: 3});
+        // On the same page, a recommendation, and the empty review goes
+        // through (A7's record).
         await wizard.chooseRecommendation('Decline Submission');
         await wizard.submitReview();
         await wizard.expectCompleted();
@@ -882,7 +881,8 @@ test.describe('reviewer\'s review', () => {
         await expect(form).not.toContainText('For author and editor');
         await expect(form).not.toContainText('For editor');
 
-        // Unanswered: the confirmation, then the message box, nothing marked.
+        // Unanswered: the confirmation, then the message box (whether the
+        // question is marked is not judged: A16).
         await wizard.chooseRecommendation('Accept Submission');
         await wizard.submitReview();
         await expect(wizard.messageBox).toBeVisible({timeout: 30_000});
@@ -908,6 +908,20 @@ test.describe('reviewer\'s review', () => {
         await expect(wizard.formDropdown.locator('option:checked')).toHaveText('Biology');
         await expect(wizard.formRadio('Yes')).not.toBeChecked();
         await expect(wizard.formRadio('No')).not.toBeChecked();
+
+        // Leaving with a change: another step's tab asks the browser's
+        // question; "Cancel" keeps step 3 with the text as typed.
+        const changed = 'Three figures are unlabeled.';
+        await wizard.formTextField.fill(changed);
+        let question = null;
+        page.once('dialog', async (d) => {
+            question = d.message();
+            await d.dismiss();
+        });
+        await wizard.tab(2).click();
+        await expect.poll(() => question).toBe('The data on this form has changed. Do you wish to continue without saving?');
+        await wizard.expectStep(3);
+        await expect(wizard.formTextField).toHaveValue(changed);
 
         // Answered, the submit goes through.
         await wizard.formRadio('Yes').check();

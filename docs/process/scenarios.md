@@ -1260,7 +1260,11 @@ Keys:
   list) and `comments` (the "For author and editor" text, default "Seeded
   review comments for {tag}.", stored as the paragraph TinyMCE posts). Both
   are a 400 on any other status, and `completed` refuses a review form with
-  required questions, as the wizard does. A third, `dateCompleted`
+  required questions, as the wizard does. On a context with
+  `review.competingInterests` set, a `completed` review records the "I do
+  not have any competing interests" answer, and Review Details shows "No
+  competing interests were disclosed." (U27 claim check I28,
+  2026-09-28); a declared statement has no key. A third, `dateCompleted`
   (`YYYY-MM-DD`, today or earlier; `completed` only, a 400 otherwise),
   backdates the submitted review: the wizard completes it today, then
   every date of the assignment (requested, notified, accepted, completed,

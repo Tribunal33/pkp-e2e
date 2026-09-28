@@ -1401,8 +1401,8 @@ test.describe('reviewer-assignment', () => {
         await expect(after.rows).toHaveCount(0);
         await after.tasks.close();
 
-        // After a response the same entry reads "Cancel Reviewer"; the row
-        // stays as "Request Cancelled" (with its hover text), the menu offers
+        // After a response the same entry reads "Cancel Reviewer" (the
+        // notice "Reviewer cancelled."); the row stays as "Request Cancelled" (with its hover text), the menu offers
         // "Reinstate Reviewer" in place of the first three entries, and the
         // mailbox holds the cancel notice.
         await clickRowAction(managerPage, acceptedRow, 'Cancel Reviewer');
@@ -1416,6 +1416,9 @@ test.describe('reviewer-assignment', () => {
         await expect(cancelModal.locator('form#cancelReviewForm')).toBeHidden({
             timeout: 30_000,
         });
+        await expect(
+            managerPage.locator('.app__notifications .pkpNotification').filter({hasText: 'Reviewer cancelled.'})
+        ).toBeVisible({timeout: 30_000});
         await waitForJQueryIdle(managerPage);
         await managerPage.reload();
         await workflow.expectOpen();

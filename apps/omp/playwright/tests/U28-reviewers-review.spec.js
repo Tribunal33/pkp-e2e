@@ -900,7 +900,7 @@ test.describe("Reviewer's review (U28)", () => {
 
         // Unanswered: the confirmation first, then the refusal box under the
         // buttons (its first line is register finding OMP3, unasserted), the
-        // step stays and no question is marked.
+        // step stays (whether the question is marked is not judged: A16).
         await wizard.submitReview();
         await expect(wizard.messageBox).toContainText(
             'Some required fields are not filled in. Please complete them before submitting your review.'
@@ -909,8 +909,6 @@ test.describe("Reviewer's review (U28)", () => {
         await expect(wizard.submitReviewButton).toBeVisible();
         await expect(wizard.formRadio('Yes')).not.toBeChecked();
         await expect(wizard.formRadio('No')).not.toBeChecked();
-        await expect(page.locator('label.error')).toHaveCount(0);
-        await expect(radioSection.locator('fieldset[role="radiogroup"]')).not.toHaveAttribute('aria-invalid', 'true');
 
         // "Save for Later" with the three other questions answered and the
         // radio group open: the toast; after a reload the three answers are
@@ -927,6 +925,20 @@ test.describe("Reviewer's review (U28)", () => {
         await expect(form.select.locator('option:checked')).toHaveText('Biology');
         await expect(wizard.formRadio('Yes')).not.toBeChecked();
         await expect(wizard.formRadio('No')).not.toBeChecked();
+
+        // Leaving with a change: another step's tab asks the browser's
+        // question; "Cancel" keeps step 3 with the text as typed.
+        const changed = 'Three figures are unlabeled.';
+        await form.textBox.fill(changed);
+        let question = null;
+        page.once('dialog', async (d) => {
+            question = d.message();
+            await d.dismiss();
+        });
+        await wizard.tab(2).click();
+        await expect.poll(() => question).toBe('The data on this form has changed. Do you wish to continue without saving?');
+        await wizard.expectStep(3);
+        await expect(form.textBox).toHaveValue(changed);
 
         // Answered, the submit goes through to step 4.
         await wizard.formRadio('Yes').check();

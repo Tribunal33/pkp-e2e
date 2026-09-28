@@ -40,7 +40,8 @@ the External Review stage each carry their own Reviewers panel with the same
 controls. The reviewer pool differs by stage: searching the Add Reviewer
 window offers the press's Internal Reviewers on the internal stage and its
 External Reviewers on the external stage [OMP1](#omp1). The window's opening,
-unsearched list does not yet apply that split ⚠ [OMP2](#omp2).
+unsearched list does not apply that split, and a reviewer of the other stage
+picked from it is added to the round all the same ⚠ [OMP2](#omp2).
 <sup>o</sup>
 
 ## Actors & permissions
@@ -79,8 +80,9 @@ list of completed reviews appears is owned by
 **Add Reviewer window** (title "Add Reviewer"; opened by the panel's "Add
 Reviewer" button). Its upper half is the reviewer search (Rules 5–8). Once a
 reviewer is chosen, the name and email address are shown with a "Change" link
-back to the search. The lower half holds the request form shared by all three
-add modes:
+back to the search. The window's "Cancel" closes it at once, even with a
+reviewer chosen: nothing asks and no reviewer is added.
+The lower half holds the request form shared by all three add modes:
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
@@ -124,7 +126,9 @@ while the review has not been submitted. Here, and only here, the "No Files
 Selected" warning reacts to the checkboxes, appearing and disappearing as
 boxes are ticked and unticked (Rule 11). Saving with the review due date
 before the response due date is refused under the same date rule as at add
-time ⚠ [A8](#a8). <sup>g</sup>
+time ⚠ [A8](#a8). Its "Cancel" closes the window at once, even with a due
+date changed: nothing asks, nothing is saved, and "Edit" opened again shows
+the old date. <sup>g</sup>
 
 **Send Review Reminder window** (row action "Send Reminder"; window title
 "Review Reminder"): the reviewer's name and address (read-only); a template
@@ -229,7 +233,8 @@ under the prompt "Record the response on behalf of the reviewer". Submit
 5. <a id="search"></a> **Finding a reviewer.** The Add Reviewer window opens
    on "Locate a Reviewer": a searchable list of every user holding a
    reviewer role for the stage. On a press the opening, unsearched list does
-   not yet honor the stage split ⚠ [OMP2](#omp2). Past 30 entries the list
+   not honor the stage split, and a reviewer of the other stage selected
+   from it is added ⚠ [OMP2](#omp2). Past 30 entries the list
    is paged behind a "View additional pages" bar. Each entry shows the name,
    affiliation and ORCID iD. The iD is a link showing the iD URL; an
    unauthenticated iD carries the suffix "(unauthenticated)" and an outline
@@ -237,11 +242,15 @@ under the prompt "Record the response on behalf of the reviewer". Submit
    entry also shows the count of completed reviews ("0" for a reviewer never
    assigned), a "{N} active" badge only while the reviewer has at least one
    active review (a never-assigned reviewer's entry carries none), "Reviewer
-   rating: {N}" stars, days since the last assignment ("{N} days ago" /
-   "Yesterday" / "Never assigned"), and reviewing interests. It expands to full
-   statistics, always shown: active reviews, "Reviews completed", "Review
-   requests declined", "Review requests cancelled", "Days since last review
-   assigned", "Average days to complete review". "Reviewing Interests",
+   rating: {N}" stars, days since the last assignment, and reviewing
+   interests. The days read "{N} days ago" from two days on, "Yesterday"
+   for one day and also for a reviewer assigned today ⚠ [A36](#a36), and
+   "Never assigned" for a reviewer never assigned. The entry expands to
+   full statistics, always shown: active reviews, "Reviews completed",
+   "Review requests declined", "Review requests cancelled", "Days since
+   last review assigned", "Average days to complete review". For a
+   reviewer never assigned, "Days since last review assigned" carries no
+   figure. "Reviewing Interests",
    "Editorial Notes" (when the viewer may read them) and "Biography" appear
    only when there is data; an empty section is omitted, not shown blank.
    <sup>c</sup>
@@ -330,8 +339,14 @@ under the prompt "Record the response on behalf of the reviewer". Submit
     request with no review yet is Rule 14c. The window
     shows the reviewer's name. It shows a
     guidance paragraph that still tells the editor they "may upload the file
-    below", though the window offers no upload control ⚠ [A22](#a22). It
-    shows the "Download Review Form" menu (Rule 15), and a summary block
+    below", though the window offers no upload control ⚠ [A22](#a22).
+    Where the journal has a competing-interests policy (Settings), a
+    "Competing Interests" block comes next: "No competing interests were
+    disclosed." when the reviewer kept "I do not have any competing
+    interests", or the statement the reviewer typed under "I may have
+    competing interests (Specify below)". Without a policy the block is
+    absent. The window then shows the "Download Review Form" menu (Rule
+    15), and a summary block
     with a dated line naming the most advanced step the assignment has
     reached (at the end of this rule) and {OJS} "Recommendation: {label}". It shows the "Reviewer
     Comments": the review form answers, or "For author and editor" and,
@@ -532,8 +547,9 @@ under the prompt "Record the response on behalf of the reviewer". Submit
     deletes the row outright. The notice reads "Reviewer removed." and
     nothing of the invitation remains on the round. Once it is answered, by
     the reviewer's accept or decline or by an editor submitting the review
-    for them (Rule 14d), the entry reads "Cancel Reviewer". The row then
-    stays, as "Request Cancelled", and only review managers keep seeing it
+    for them (Rule 14d), the entry reads "Cancel Reviewer". Cancelling
+    shows the notice "Reviewer cancelled.". The row then stays, as
+    "Request Cancelled", and only review managers keep seeing it
     ⚠ [A6](#a6). Both windows offer the notice email, each with its own
     template chooser and a skip box (Fields). <sup>k</sup>
 18. **Reinstate.** "Reinstate Reviewer" on a cancelled row restores the
@@ -665,11 +681,19 @@ under the prompt "Record the response on behalf of the reviewer". Submit
   for "{title}"…") ⚠ [A26](#a26). On a press that body ends "in
   {$journalName}." with the placeholder printed literally where the press's
   name belongs ⚠ [OMP3](#omp3). The reviewer's "Review pending." task is
-  removed. The action is logged. Nothing else is cleaned up: the reviewer's other
-  participations on the submission are untouched. <sup>k</sup>
+  removed. The action is logged. The reviewer also leaves the submission's
+  discussions: the "Details" of a discussion they were in no longer list
+  them, even when that leaves one participant. A reviewer with another open
+  request on the submission stays in them
+  ([→ leaving the submission leaves its items](U37-tasks-and-discussions.md#leaving)).
+  A place the reviewer holds on a stage's Participants panel stays.
+  <sup>k</sup>
 - **Reinstating / resending** → the respective email (unless skipped; the
   reinstate notice asks "Can you still review something for {journal}?")
-  and a log entry. <sup>k</sup>
+  and a line in the submission's activity log. The resend's line reads
+  "Resent the request to review in round {n} to {reviewer} for submission
+  {$submissionid}.", with that placeholder printed literally where the
+  submission's number belongs ⚠ [A37](#a37). <sup>k</sup>
 - **Logging a response** → the same emails and bookkeeping as the reviewer's
   own accept or decline (owned by the *Reviewer's review* feature).
   <sup>k</sup>
@@ -693,6 +717,11 @@ review forms* unless said otherwise. <sup>n</sup>
   as a placeholder rather than the live address, and each sent reminder
   mints a fresh keyed link of its own. <sup>h</sup>
 - **Public visibility default**: preselects the "Public Visibility" box.
+- **"Competing Interests"** (Settings › Workflow › Review; empty at
+  install): with a policy text there, the reviewer is asked about
+  competing interests, a declared one badges the row (Rule 2), and the
+  Review Details window shows a "Competing Interests" block (Rule 14a).
+  Empty, neither appears.
 - **Review forms**: populate the "Review Form" selects. A section's default
   form preselects it (section configuration is *Sections* territory).
 - **Reviewer suggestions enabled** (workflow settings): the Add Reviewer
@@ -724,7 +753,9 @@ review forms* unless said otherwise. <sup>n</sup>
   panel records a decision.
 - **ORCID integration**: the review deposit behind Rule 23.
 - **Tasks & discussions**: the reviewer's "Review pending." task cleanup on
-  unassignment. No discussion cleanup happens (Side effects).
+  unassignment. An unassigned or cancelled reviewer also leaves the
+  submission's discussions (Side effects); the rule is
+  [→ leaving the submission leaves its items](U37-tasks-and-discussions.md#leaving).
 
 ## Canonical scenarios
 
@@ -1017,7 +1048,8 @@ are in the footnote. <sup>s</sup>
       panel holds no "Review pending." for the submission.
     - **"Cancel Reviewer"**: Editor: on the accepted row the same menu entry
       reads "Cancel Reviewer". The window opens with its template chooser
-      above the notice. Press "Cancel Reviewer": the row stays as "Request
+      above the notice. Press "Cancel Reviewer": the notice reads "Reviewer
+      cancelled.", the row stays as "Request
       Cancelled" (hover: "The editor cancelled this review request."), its
       menu offers "Reinstate Reviewer" in place of "Review Details", "Edit"
       and the cancel entry, and the reviewer's mailbox holds "Your review
@@ -1205,6 +1237,8 @@ Left out of the scenarios above, by reason:
   - the ORCID iD link styles in the reviewer search (Rule 5): shown only on a journal with ORCID enabled and reviewers who linked an iD
   - narrowing the reviewer search with a "Filters" slider (Rule 6): a pool of a page or two is read whole, never narrowed
   - the "{N} active" badge on a reviewer with a review underway (Rule 5): read only when an editor weighs a busy reviewer against a free one, not on every add
+  - the "Competing Interests" block in the Review Details window, "No competing interests were disclosed." or the reviewer's statement, and the row's "Competing Interests" badge (Rules 2, 14a, Settings): met only on a journal that sets a "Competing Interests" policy, which the install leaves empty
+  - the reviewer's own file listed under "Reviewer Files", read-only, in the Review Details window (Rule 14a): reached through the reviewer's upload on their own screens, which scenario 9's reviewer skips; a check waits for the suite's next revision
 - **Budget** — variants:
   - the "Reviewing Interests" tag field of Create New Reviewer (Fields): filled only when an editor creates an account with interests to record
   - the chooser's refill on a pick (Fields): needs an alternate template a journal seldom adds
@@ -1213,6 +1247,7 @@ Left out of the scenarios above, by reason:
   - a file added through "Upload" in "Modify Review", kept and logged without a save (Rule 14b, Side effects): an editor attaches a file for a reviewer in a rare week
   - the unsaved-changes "Warning" on leaving "Modify Review" with something typed (Rule 14b): a close control
   - "View changes" opened to its "View Review" window (Side effects): scenario 16 reads the action, not the window behind it
+  - "Cancel" in the Add Reviewer window with a reviewer chosen, and in the "Edit Review" window with a due date changed, closing without a question (Fields): a close control
 - **Nothing new to test**:
   - the second ends of covered controls: an edit changing only the review type (Rule 12), the XML exports (Rule 15), a logged decline (Rule 20)
   - the press's Internal Review stage running scenarios 1–12 as External Review does (Purpose; scenario 13 covers what differs)
@@ -1228,7 +1263,7 @@ Left out of the scenarios above, by reason:
   - A7 (a "Request Sent" row without its "Response due:" line; Rule 2)
   - A2 (a "Request Resent" row's "Response due:" line showing the review deadline; Rule 2)
   - A1 (the ORCID entry offered in every state; Rule 23)
-  - OMP2 (the press's opening list ignoring the stage split; Rule 5)
+  - OMP2 (the press's opening list ignoring the stage split, and the other stage's reviewer added from it; Rule 5)
   - A22 (the window's guidance promising an upload control; Rule 14a)
   - A23 (the recommendation shown twice, under two labels; Rule 14a)
   - A21 (a rating star clicked too early not taking; Rule 14a)
@@ -1245,11 +1280,11 @@ Left out of the scenarios above, by reason:
   - OMP4 (a press's "Mark as Complete" enabled on a request with no review; Rule 14c)
   - OMP5 (a press accepting an empty "Save Changes" as the reviewer's review; Rule 14d)
   - OMP6 (the review-form block saying "this journal" on a press; Rule 14b)
+  - A36 (a reviewer assigned today reading "Yesterday" in the reviewer search; Rule 5)
+  - A37 (the resend's activity-log line printing "{$submissionid}"; Side effects)
 - **No seed**:
   - the automatic reminder emails from the principal contact at the configured day-offsets, with their "Reviewer Reminded" and log stamps (Rule 13, Side effects, Settings)
-  - the "Reviewer Files" the reviewer attached, read-only in the Review Details window (Rule 14a)
   - a section's default "Review Form" preselected in the Add Reviewer window (Rule 10, Settings): the seed sets no default review form on a section
-  - the "Competing Interests" badge on a journal with a competing-interests policy (Rule 2): the seed records no reviewer's competing-interests declaration
   - the reviewer role select when more than one reviewer group serves the stage (Fields): the seed creates no second reviewer group
   - "Show All {N} Authors" over the reviewer search (Rule 6): the seed builds no submission with more than four contributors
   - the "Same institution as author" badge (Rule 6): seeded accounts and contributors carry no affiliation
@@ -1263,6 +1298,7 @@ Left out of the scenarios above, by reason:
   - the invitation record behind the request (Side effects; *User invitations*)
   - adding a suggested reviewer, and the window opened from a suggestion (Side effects, Settings; *Reviewer suggestions*)
   - the one-click keyed link in request and reminder emails (Settings; *Reviewer's review*)
+  - an unassigned or cancelled reviewer leaving the submission's discussions (Side effects; *Tasks & discussions*, scenario 11)
 
 ## Findings register
 
@@ -1285,7 +1321,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A19](#a19) | The template chooser renders on every add, as a one-option select even with zero alternate templates | 🐞 | minor | — |
 | [A21](#a21) | A rating star clicked just after the Review Details window opens can silently revert unsaved | 🐞 | user-visible | @beaug 2026-08-29 · risk accepted |
 | [A22](#a22) | The Review Details guidance tells the editor to "upload the file below", but the window has no upload control | 🐞 | minor | @beaug 2026-08-29 · ticket to follow |
-| [OMP2](#omp2) | {OMP} The Add Reviewer window's opening list ignores the internal/external stage split; only searching filters by stage | 🐞 | user-visible | — |
+| [OMP2](#omp2) | {OMP} The Add Reviewer window's opening list ignores the internal/external stage split, and a reviewer of the other stage picked from it is added to the round; only searching filters by stage | 🐞 | user-visible | — |
 | [A26](#a26) | The unassign notice reaches the reviewer under the cancel notice's subject, "Your review for "{title}" has been cancelled" | 🐞 | minor | — |
 | [OMP3](#omp3) | {OMP} The unassign notice's body prints "{$journalName}" literally where the press's name belongs | 🐞 | minor | — |
 | [A30](#a30) | "Modify Review" is offered on a "Request Declined" row, and its "Save Changes" is refused with "This review not editable because it was declined." | 🐞 | minor | — |
@@ -1293,6 +1329,8 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OMP4](#omp4) | {OMP} "Mark as Complete" is enabled on a request with no review; confirming records a completed review nobody wrote and leaves the reviewer on a first step that offers nothing | 🐞 | user-visible | — |
 | [OMP6](#omp6) | {OMP} The Review Details windows introduce a review form with "The questions this journal asks reviewers to answer." on a press | 🐞 | minor | — |
 | [A32](#a32) | A Review Details window closed within a moment of opening, before its mark as viewed is saved, can leave the row "Review Submitted", and the dashboard's "View unread recommendation", until a page reload | 🐞 | minor | @blessie 2026-09-24 · risk accepted, not fixing |
+| [A36](#a36) | A reviewer assigned today reads "Yesterday" in the Add Reviewer list, while the entry's statistics give 0 days since the last assignment | 🐞 | minor | — |
+| [A37](#a37) | After "Resend Review Request" the activity log reads "…for submission {$submissionid}." with the placeholder printed | 🐞 | minor | — |
 | [A4](#a4) | Editorial Notes are one shared note per reviewer; editing them on one submission silently rewrites them everywhere | ❓ | user-visible | — |
 | [A6](#a6) | Declined and cancelled rows are silently hidden from assistant-level participants, so the same table shows different reviewers per role | ❓ | minor | — |
 | [A17](#a17) | The due-date pickers accept dates already past without any warning | ❓ | minor | — |
@@ -1541,10 +1579,11 @@ nothing at all: no error, no toast, no error page. The window simply stays
 open. But the assignment IS created. After a reload the reviewer sits at
 "Request Sent" with a full row menu, while the request email never goes out
 and reopening Add Reviewer shows the reviewer dimmed as already assigned.
-The editor is told nothing and the reviewer is never actually invited. In
-ordinary use the field can be empty at submit without the editor ever
-clearing it, because the prefill can still be loading when the editor
-submits.
+The editor is told nothing and the reviewer is never actually invited. The
+letter can also end up empty without the editor clearing it, though only at
+a speed no person reaches: a reviewer selected within about a fifth of a
+second of the window opening, before the letter's editor has loaded, leaves
+the letter empty, and it never fills afterwards.
 Basis: live probe (both apps, driven once per app; positive control: a
 normal add delivers the request mail). <sup>[f-a18](#fn-a18)</sup>
 
@@ -1726,6 +1765,26 @@ Since: pkp/ui-library#853 (`cab09538`, narrowed at `51f0c727`; merged
 > before it closes the window, as scenario 9 of the submissions dashboard
 > does.
 
+<a id="a36"></a>
+**A36 — A reviewer assigned today reads "Yesterday"** · 🐞 · minor.
+In the Add Reviewer list, a reviewer whose last request was sent today
+reads "Yesterday" where the days since the last assignment show, while the
+same entry expanded reads "0" for "Days since last review assigned". A
+reviewer assigned one day ago reads "Yesterday" too, so an editor cannot
+tell a reviewer invited this morning from one invited the day before. The
+entry should read the same interval its own statistics give.
+Basis: probe. <sup>[f-a36](#fn-a36)</sup>
+
+<a id="a37"></a>
+**A37 — The resend's activity-log line prints "{$submissionid}"** · 🐞 ·
+minor.
+After "Resend Review Request" on a declined row, the submission's activity
+log gains "Resent the request to review in round 1 to {reviewer} for
+submission {$submissionid}.", with the placeholder printed literally where
+the submission's number belongs. The lines of the same log about the
+assignment and the decline print the number.
+Basis: probe. <sup>[f-a37](#fn-a37)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1763,9 +1822,17 @@ On a press, the Add Reviewer window's opening list shows the reviewers of
 both stages: Internal and External Reviewers alike, on either stage. Only
 searching applies OMP1's per-stage split. A name from the other stage's
 group returns "No items found." while the stage's own reviewers are found.
-The server-rendered opening list omits the stage filter that its own request
-parameters carry.
-Basis: live probe (positive and negative controls on both stages).
+Picked from the opening list instead, a reviewer of the other stage is
+added all the same. On Internal Review, "Select Reviewer" and "Add
+Reviewer" on a person holding only External Reviewer show "{name} was
+assigned to review this submission and sent an email notification.", the
+row reads "Request Sent" on the internal round, also after a reload, and
+the person's own reviewer list offers the request with "Respond to
+request". The
+stage split an editor relies on when searching does not hold when they
+pick from the list.
+Basis: live probe (positive and negative controls on both stages; the add
+from the opening list driven on Internal Review).
 <sup>[f-omp2](#fn-omp2)</sup>
 
 <a id="omp3"></a>
@@ -2039,7 +2106,14 @@ active badge only while `item.reviewsActive` is non-zero (`v-if=
 badge, not a headline every entry shows; the earlier "0 active" reading
 never appears. Neither suite asserts the badge either way. The count
 filter's exclusion of never-assigned reviewers is finding A28 (note
-f-a28).
+f-a28). Driven 2026-09-28 (OJS and OMP, two runs each, browser and server
+at UTC, 06:04–06:29; entries read in another journal's window and in the
+assigning journal's own): a reviewer whose request was sent that morning
+read "Yesterday" collapsed and "0" under "Days since last review assigned"
+expanded (finding A36, note f-a36); one whose last review was backdated a
+day read "Yesterday" and 1; two days, "2 days ago" and 2; a reviewer never
+assigned "Never assigned", with no figure under "Days since last review
+assigned".
 
 <a id="fn-d"></a>
 **d** — Add form shell: `ReviewerForm` (defaults: review method from context
@@ -2082,7 +2156,11 @@ window's handler (`EditReviewFormHandler.js`); the Add window's handler
 zero-file round, and the Edit window showed/hid it reactively. Suggestion
 entry: `reviewerSuggestionId` prefills
 selection (search), or name/email/affiliation (create), or user (enroll) —
-`getReviewerForm()`; approval side effect note m.
+`getReviewerForm()`; approval side effect note m. Driven 2026-09-28 (OJS
+and OMP, two runs each, on a journal with an active review form and on
+one without): "Cancel" pressed with a reviewer selected closed the window
+with no browser or window dialog and no request sent; the same drive
+timed the request letter's fill (note f-a18).
 
 <a id="fn-e"></a>
 **e** — `CreateReviewerForm`: validators quoted in Fields (username unique +
@@ -2152,6 +2230,9 @@ pre-change dates — the mail was composed before the edit was applied
 from a post-edit re-fetch, pkp/pkp-lib#13162); the email type is offered
 neither on the profile's notification
 settings nor on the unsubscribe page its footer links to (finding A12).
+Driven 2026-09-28 (OJS and OMP, two runs each): "Cancel" in "Edit Review"
+with the review due date retyped closed the window with no dialog and no
+request; reopened after a reload, "Edit" showed the old date.
 
 <a id="fn-h"></a>
 **h** — Manual reminder: Vue guard statuses RESPONSE_OVERDUE/REVIEW_OVERDUE
@@ -2359,6 +2440,26 @@ not driven: an accepted, then reminded reviewer reads "Request Accepted:
 "Reviewer Reminded" line carries the latest date, because the review
 assignment has one `date_reminded` column, set by each reminder, manual
 or automatic (note l).
+Driven 2026-09-28 (OJS and OMP, two runs each; scratch contexts, one
+with a "Competing Interests" policy and an active review form, one with
+neither; the Editor and an assigned Section or Series Editor). Competing
+interests (Rule 14a): on the policy context an h2 "Competing Interests"
+sat under the reviewer's name and the guidance, over "No competing
+interests were disclosed." for a review submitted through the wizard
+with "I do not have any competing interests" kept and for a seeded
+`completed` review, and over the typed statement for a reviewer who chose
+"I may have competing interests (Specify below)", whose row also carried
+the Rule 2 badge; on the context without a policy no such block.
+Mechanism: `ReviewDetailsInfo.vue` `competingInterestsText`, shown only
+when the assignment's `competingInterestsDeclared` is set, falling back
+to `reviewer.submission.competingInterests.declaredNone`. "Reviewer
+Files": a file the reviewer uploaded on step 3 of their wizard was listed
+(number, name, date) on every read taken after the window's own files
+request (`…/files/review/{assignmentId}?fileStages=5`) had answered, 44
+of 44 openings; that request answered 0.17–0.72 s after the click, and
+"No Items" was read only before it. "Download Review Form": the same four
+entries on a free-form review, a form-based one, the declared-interests
+one and a seeded free-form one.
 
 <a id="fn-j"></a>
 **j** — `ThankReviewerForm` (template `thankReviewerForm.tpl`, AFFW-645):
@@ -2405,12 +2506,18 @@ Collector `alternateTo`); a pick re-fetches the body via AJAX op
 `fetchReviewerActionTemplateBody`, wired by the new JS handler
 `ReviewerActionFormHandler` (replacing `ReviewReminderFormHandler` — the
 once-stale committed `pkp.min.js` consequence is retired finding A20, note
-f-a20). The
-unassign path touches nothing else — no
-participant, task-assignment or discussion cleanup exists on this build
-(the clear-review hooks have zero listeners; the once-claimed drop from
-open editorial tasks and discussions was a stale carry-over from the
-retired `queries` implementation). Reinstate: `ReinstateReviewerForm`
+f-a20). Discussions: `updateClearReview()`
+calls `Repository::removeParticipantFromSubmissionTasks()` when the
+reviewer holds no other active assignment on the submission
+(pkp/pkp-lib#12359, 2026-02-19; *Tasks & discussions* note ac), which
+takes them off every discussion and task of the submission; stage
+assignments are untouched. Driven 2026-09-28 (OJS and OMP, two runs
+each): on a round with three reviewers, each sharing a review-stage
+discussion with the Editor, "Unassign Reviewer" on the invited one
+("Reviewer removed.") and "Cancel Reviewer" on an accepted one
+("Reviewer cancelled.", the row "Request Cancelled") left each of their
+discussions' "Details" listing the Editor alone, on the same page and
+after a reload; the untouched reviewer stayed on theirs. Reinstate: `ReinstateReviewerForm`
 (AFFW-651) clears the cancelled flags, mail `ReviewerReinstate` (MAIL-039,
 key REVIEW_REINSTATE), notice `notification.reinstatedReviewer`, log
 `log.review.reviewReinstated`. Resend: `ResendRequestReviewerForm`
@@ -2421,7 +2528,8 @@ sets
 `requestResent`, nulls `dateConfirmed`, sets both dates; mail
 `ReviewerResendRequest` (MAIL-040, key REVIEW_RESEND_REQUEST), notice
 `notification.reviewerResendRequest`; status REQUEST_RESEND until the next
-response. Log Response: side modal `WorkflowLogResponseModal.vue` (VUE-067,
+response; event log `log.review.reviewerResendRequest` (finding A37,
+note f-a37). Log Response: side modal `WorkflowLogResponseModal.vue` (VUE-067,
 AFFW-501/505) posting the log-response form (radio labels quoted in Fields
 from `editor.review.logResponse.form.*`) to the reviews API `confirmReview`
 op (API-032 rider) → `ReviewerAction::confirmReview` — acts only while
@@ -2531,7 +2639,8 @@ the shorter quote the spec once carried never appears.
 `numDaysBefore/AfterReviewResponseReminderDue`,
 `numDaysBefore/AfterReviewSubmitReminderDue`, `reviewerAccessKeysEnabled`,
 default public visibility, review forms + section default
-(`section.reviewFormId`), `reviewerSuggestionEnabled`.
+(`section.reviewFormId`), `reviewerSuggestionEnabled`, `competingInterests`
+(the "Competing Interests" policy text; empty at install, seed-facts.md).
 
 <a id="fn-o"></a>
 **o** — OMP parameterization: `APP\controllers\grid\users\reviewer\
@@ -2837,7 +2946,14 @@ survived save and reopen, and appeared in downstream mails (typed
 the visible field showing "10202026" while the hidden field silently kept
 the prior value, which was what the form submitted. The earlier
 "calendar picks only" reading was over-broad; the wrong-format half of the
-symptom stands.
+symptom stands. Re-driven 2026-09-28 (Edit window; OJS and OMP, two runs
+each; the Editor and an assigned Section or Series Editor): a date typed
+from the keyboard as YYYY-MM-DD saved, read back on the row ("Review due:
+{date}") and in "Edit" on the same page and after a reload, and reached
+the change notice ("*Submit Review By:* {date}"); typed as MM/DD/YYYY it
+showed "11122026" and kept the old date (the save answered 200, nothing
+sent). A date set with a script's `fill()` behaves like the wrong format,
+which is how an earlier "typed dates are not saved" reading arose.
 
 <a id="fn-a17"></a>
 **f-a17** — Live-probed 2026-08-02 (OJS + OMP): past response and review
@@ -2854,9 +2970,13 @@ no toast, no error page; after reload the panel showed the reviewer at
 zero request mails for the probe's tag (positive control: a normal add
 delivered "Invitation to review"). Mechanism lean: the assignment row is
 written before the mailable is composed; the empty body throws during mail
-composition, after the DB writes, outside any transaction. The
-ordinary-use route: the rich-text letter prefill races the form, so the
-field can be empty at submit without the editor ever clearing it.
+composition, after the DB writes, outside any transaction. The empty
+letter without a clearing (measured 2026-09-28, OJS and OMP, two runs
+each, with and without an active review form): "Select Reviewer" copies
+the template into the letter's TinyMCE client-side, and a press before
+that editor has initialised, 60–177 ms after the search box shows, leaves
+the letter empty for good; a press after it filled the letter 8 times of
+8 per app. No person presses that fast.
 
 <a id="fn-a19"></a>
 **f-a19** — Live-probed 2026-08-02 (claim check; OJS with two acting roles
@@ -3192,6 +3312,36 @@ line leaving is not new: `unconsiderReview` clears `dateConsidered`, which
 History did not show before. The question was put to the team on the
 change's review thread, 2026-09-24.
 
+<a id="fn-a36"></a>
+**f-a36** — Driven 2026-09-28 (OJS and OMP, two runs each; browser and
+server at UTC, drives 06:04–06:29 UTC, so no day boundary was near): a
+throwaway reviewer invited that morning on one scratch journal read "1
+active … 0 · Yesterday" collapsed and "0" under "Days since last review
+assigned" expanded, in the other journal's Add Reviewer window and in the
+assigning journal's own; a reviewer whose completed review was backdated
+one day read "Yesterday" and 1, one backdated two days "2 days ago" and
+2. The press's Internal Review opening list likewise showed every
+reviewer assigned that morning as "Yesterday". Mechanism:
+`SelectReviewerListItem.vue` `daysSinceLastAssignmentLabelCompiled`
+prints `reviewer.list.daysSinceLastAssignment` ("{$days} days ago") only
+for a figure above 1, and `reviewer.list.daySinceLastAssignment`
+("Yesterday") for any figure of 1 or less, 0 included; the figure is the
+whole days since `dateLastReviewAssignment`, floored at 0, so the hour
+does not matter.
+
+<a id="fn-a37"></a>
+**f-a37** — Driven 2026-09-28 (OJS and OMP, two runs each, as the Editor
+on a declined row): after the window's "Resend Review Request" the notice
+read "Request to reconsider the review assignment was sent.", the row
+"Request Resent · Response due: …", and the Activity Log's top line
+"Resent the request to review in round 1 to {reviewer} for submission
+{$submissionid}.", while the assignment and decline lines below it read
+the submission's number. Mechanism: the string
+`log.review.reviewerResendRequest` in lib/pkp `locale/en/submission.po`
+names `{$submissionid}`, while `ResendRequestReviewerForm::execute()`
+logs the parameter as `submissionId`, so the lower-case placeholder finds
+no value.
+
 <a id="fn-omp1"></a>
 **f-omp1** — Mechanism in notes b, i, o: recommendation roster passed only
 by `ojs-main DashboardHandler`; the authoritative per-app switch is
@@ -3215,7 +3365,17 @@ controls), as did the underlying reviewers listing queried per stage.
 Mechanism: the server-rendered panel builds its initial list without the
 review-stage filter that its own request parameters carry
 (`PKPSelectReviewerListPanel`); the search's refetch goes through the
-reviewers listing, which applies it.
+reviewers listing, which applies it. Driven 2026-09-28 (OMP, two runs;
+Internal Review, Round 1, as the Press Editor): the opening list showed a
+person holding only External Reviewer beside an Internal Reviewer; a
+search for him answered "No items found." while the Internal Reviewer
+was found; after a reopen, "Select Reviewer" on him in the opening list
+and "Add Reviewer" showed "{name} was assigned to review this submission
+and sent an email notification." under the heading "Internal Review
+(Round 1)", the add request answering 200 with `status: true`; his row
+read "Request Sent" on the same page and after a reload, and signed in as
+him, his list showed "Please accept or decline this request by …" with
+"Respond to request", the review page opening on "1. Request".
 
 <a id="fn-omp3"></a>
 **f-omp3** — Test run 2026-09-12 (scenario 11; the two messages read from
