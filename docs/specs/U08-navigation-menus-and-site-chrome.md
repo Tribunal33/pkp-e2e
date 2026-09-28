@@ -363,11 +363,11 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
     - 18a. **"Administration".** It opens the
       [Administration page](U61-system-administration.md#administration-page)
       in the language of the page it was pressed on. From a journal with
-      one interface language it opens instead in the language the
-      browser last chose on the site
-      ([Languages & locales](U57-languages-and-locales.md), Rule 18):
-      after a visit to a French page, in French, though the journal's
-      page is in English. <sup>e</sup>
+      one interface language its address carries none, so
+      [Languages & locales](U57-languages-and-locales.md) Rules 17a and
+      18 pick the language: French after the site's pages were opened at
+      a French address, though the journal's page is in English.
+      <sup>e</sup>
 19. **Where "Dashboard" leads.** <sup>e</sup> <sup>td13</sup>
     - 19a. **On a journal's pages.** For a user holding there a
       manager-level role, an assistant-level role, Reviewer or Author, or
@@ -478,14 +478,13 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
     - 26b. **An address with no page.** An address the journal has no
       page for answers a bare page headed "404 Not Found", with an empty
       browser tab title and no header, sidebar or footer, so nothing on
-      it leads back into the journal. A signed-out visitor gets it for:
-      <sup>td20</sup>
+      it leads back into the journal. A visitor gets it, signed in or
+      not, for: <sup>td20</sup>
       - a path the journal does not have, including one under its About
         pages;
       - an announcement's address while announcements are off;
-      - an article that does not exist {OJS}, signed in too;
-      - a preprint, or a preprint category, that does not exist {OPS},
-        signed in too.
+      - an article that does not exist {OJS};
+      - a preprint, or a preprint category, that does not exist {OPS}.
 
       A missing issue {OJS} or book {OMP} is answered otherwise: a
       signed-out visitor gets the Login page, and a signed-in user the
@@ -1181,7 +1180,7 @@ Left out of the scenarios above, by reason:
   - a branch dragged back to "Unassigned Menu Items", its items arriving as entries of their own (Rule 5b)
   - the Site Administrator holding Reader alone: "Dashboard" opening the journal's home page (Rule 19a)
   - "Dashboard" on the site's pages (Rule 19c)
-  - "Administration" pressed on a journal with one interface language, opening in the language the browser last chose on the site (Rule 18a)
+  - "Administration" pressed on a journal with one interface language after the site's pages opened in French, opening in French too (Rule 18a)
   - the notice area while an editorial page is left (Rule 31)
 - **Nothing new to test**:
   - the Editor and the Production Editor on the Navigation tab: the same tab and the same offer as the Journal Manager in scenarios 3 to 7 (Actors row 1)
@@ -2458,7 +2457,12 @@ frame; signed in, the access-denied page (empty heading, "Home / ") with
 specified." and the Language block. {OMP} `catalog/series/<unknown>`:
 the "Catalog" page with the full frame, signed in or out. A press's
 category addresses were not opened. The control: the scratch journal's
-home and About pages carried the Language block.
+home and About pages carried the Language block. Signed in, the path
+and announcement addresses were not opened: `PKPPageRouter::route()`
+throws the exception for an unknown page or operation before any
+authorization (code read 2026-09-28), and announcements off answer the
+bare page signed in or not ([Announcements](U12-announcements.md), Actors
+row 1, note e).
 
 <a id="fn-td15"></a>
 **td15** — Live-probed 2026-09-23 (Rule 27; A1; all three apps): the
