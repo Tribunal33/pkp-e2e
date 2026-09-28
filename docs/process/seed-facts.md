@@ -667,8 +667,13 @@ behind a line; that scratch is deleted after review.
   `ccK5`).
 - A public address the app refuses (an announcement with announcements
   off, a route with no handler) answers a bare "404 Not Found" page with
-  an empty browser title on all three apps. Live-probed 2026-09-17
-  (`.reports/U12/ccK4`).
+  an empty browser title on all three apps, with no header, sidebar or
+  footer. Live-probed 2026-09-17 (`.reports/U12/ccK4`). A missing issue
+  {OJS} or book {OMP} is not a 404: a visitor gets Login, a signed-in user
+  the access-denied page ("Invalid issue requested!", "An invalid
+  published submission was specified."); a missing series {OMP}
+  redirects to the Catalog page. All three apps, 2026-09-28 (U08 claim
+  check I28).
 - Every row of a user's Notifications settings starts with "Enable these
   types of notifications." ticked and "Do not send me an email for these
   types of notifications." unticked, the registration form's preset

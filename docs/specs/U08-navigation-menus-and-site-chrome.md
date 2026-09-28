@@ -37,7 +37,7 @@ account.
 |--------|--------------------|
 | **Open Settings › Website › "Setup" › "Navigation" and add, edit or delete the journal's menus and items** (Rules 1, 3–14) | • whoever opens the Settings pages; nobody else: every other role has no "Settings" in the side menu and gets the access-denied page at the Settings address <sup>b</sup> |
 | **Add, edit or delete the site's menus and items** (Administration › "Site Settings" › "Site Setup" › "Navigation", Rule 1b) | • the Site Administrator, while the site hosts two or more journals; with exactly one journal the side tab is not offered<br>• there, the menus can be removed and the items added, edited and removed, but "Add Menu" and a menu's "Edit" open no window, so a site menu cannot be added or edited (Rule 1b, [A4](#a4)) <sup>c</sup> |
-| **See the public header, the footer, breadcrumbs, page links and skip links** (Rules 15–24) | • any visitor, signed in or not, on any public page of a journal or of the site; a journal closed to signed-out visitors sends them to Login first ([Journal identity & about pages](U07-journal-identity-and-about-pages.md), Rule 22) <sup>d</sup> |
+| **See the public header, the footer, breadcrumbs, page links and skip links** (Rules 15–24) | • any visitor, signed in or not, on any public page of a journal or of the site but the bare "404 Not Found" (Rule 26b); a journal closed to signed-out visitors sends them to Login first ([Journal identity & about pages](U07-journal-identity-and-about-pages.md), Rule 22) <sup>d</sup> |
 | **Use the public user menu** (Rules 18–19) | • signed out: "Login", and "Register" while the journal accepts registrations<br>• signed in: the username, "Dashboard", "View Profile", "Logout"<br>• "Administration": the Site Administrator only<br>• where "Dashboard" leads depends on the role, Rule 19; a Section Editor is sent to the Profile page [A2](#a2) <sup>e</sup> |
 | **See and follow the "Edit" shortcut on a public page** (Rule 25) | • a signed-in user holding a manager-level role in that journal<br>• nobody else, a Site Administrator without a manager-level role in the journal included <sup>f</sup> |
 | **Use the editorial header** (Rules 27–28) | • any signed-in user on an editorial screen, whatever their roles, including a user with no role in that journal <sup>g</sup> |
@@ -319,9 +319,10 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
 
 **The public header**
 
-15. **Layout.** Every public page of a journal opens with the header: the
-    skip links (Rule 22), the journal's logo or name, the primary menu,
-    "Search" (Rule 17) and, at the top right, the user menu (Rule 18).
+15. **Layout.** Every public page of a journal but the bare "404 Not
+    Found" page (Rule 26b) opens with the header: the skip links (Rule
+    22), the journal's logo or name, the primary menu, "Search" (Rule 17)
+    and, at the top right, the user menu (Rule 18).
     <sup>d</sup> <sup>q</sup>
     - 15a. **Logo or name.** The header logo when one is set (*Appearance
       & theming*), otherwise the journal's name as text; either is a link
@@ -355,10 +356,18 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
     Rule 2) and "Login"; signed in, the user's username with a list
     under it: "Dashboard", "View Profile" (the Profile page,
     [User profile](U03-user-profile.md)), "Administration" (the Site
-    Administrator only; it opens the Administration page) and "Logout".
+    Administrator only) and "Logout".
     While impersonating, "Logout" reads "Logout as {username}" ([Login &
     sessions](U01-login-and-sessions.md), Rule 15). Pressing the username
     opens that list; it leads nowhere itself. <sup>e</sup>
+    - 18a. **"Administration".** It opens the
+      [Administration page](U61-system-administration.md#administration-page)
+      in the language of the page it was pressed on. From a journal with
+      one interface language it opens instead in the language the
+      browser last chose on the site
+      ([Languages & locales](U57-languages-and-locales.md), Rule 18):
+      after a visit to a French page, in French, though the journal's
+      page is in English. <sup>e</sup>
 19. **Where "Dashboard" leads.** <sup>e</sup> <sup>td13</sup>
     - 19a. **On a journal's pages.** For a user holding there a
       manager-level role, an assistant-level role, Reviewer or Author, or
@@ -379,7 +388,8 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
 
 **Footer and page furniture**
 
-20. **The footer.** Every public page ends with the footer: the "Page
+20. **The footer.** Every public page but the bare "404 Not Found" page
+    (Rule 26b) ends with the footer: the "Page
     Footer" text when the journal (or, on the site's pages, the site) has
     one (*Appearance & theming*), then the application's logo, a link to
     the page about the publishing software
@@ -388,7 +398,7 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
     about the publishing system, Platform and Workflow by OJS/PKP." ("…by
     OMP/PKP.", on a preprint server "More information about this system,
     Platform and Workflow by OPS/PKP."). Sidebar blocks sit beside the
-    content on every public page, message and access-denied pages
+    content on the same pages, message and access-denied pages
     included; which blocks, and where, is *Appearance & theming*'s.
     <sup>r</sup>
 21. **The "Developed By" block.** Once a manager enables the plugin
@@ -465,6 +475,25 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
       with an empty heading and an empty last breadcrumb step, then "The
       current role does not have access to this operation." and no link
       back ⚠ [A3](#a3). <sup>w</sup> <sup>td14</sup>
+    - 26b. **An address with no page.** An address the journal has no
+      page for answers a bare page headed "404 Not Found", with an empty
+      browser tab title and no header, sidebar or footer, so nothing on
+      it leads back into the journal. A signed-out visitor gets it for:
+      <sup>td20</sup>
+      - a path the journal does not have, including one under its About
+        pages;
+      - an announcement's address while announcements are off;
+      - an article that does not exist {OJS}, signed in too;
+      - a preprint, or a preprint category, that does not exist {OPS},
+        signed in too.
+
+      A missing issue {OJS} or book {OMP} is answered otherwise: a
+      signed-out visitor gets the Login page, and a signed-in user the
+      access-denied page (Rule 26a) reading "Invalid issue requested!"
+      ("An invalid published submission was specified.") in place of
+      "The current role does not have access to this operation.". A series that does not exist {OMP} opens the
+      "Catalog" page. Each of these pages has the full header, sidebar
+      and footer.
 
 **The editorial header and side menu**
 
@@ -502,9 +531,11 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
     it open ⚠ [A25](#a25). <sup>td19</sup>
 29. **The journals switcher.** A sitemap icon, named "Journals" ("Presses",
     "Servers") to screen readers, opens the list of journals the user may
-    switch to (Actors row 7), by name. A journal that carries the current
-    journal's name is left out of the list ⚠ [A21](#a21). <sup>g</sup>
-    <sup>td16</sup>
+    switch to (Actors row 7), in the site's order, the one set on
+    Administration › "Hosted Journals" › "Order"
+    ([→ site order](U59-hosted-journals.md#site-order)). A journal that
+    carries the current journal's name is left out of the list
+    ⚠ [A21](#a21). <sup>g</sup> <sup>td16</sup>
     - 29a. **Where it lands.** Choosing a journal opens, for most users,
       that journal's landing page for them
       ([→ landing](U22-my-submissions.md#landing)). The Site
@@ -533,12 +564,10 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
     | "Content" (a group: "Comments" while public comments are on; "Issues" {OJS}; "Catalog" {OMP}) | manager-level roles, Site Administrator | on a preprint server, public comments are on [OPS1](#ops1) | [Reader comments & moderation](U14-reader-comments-and-moderation.md), *Issues*, *Catalog management* |
     | "Statistics" (a group: "Articles" ("Monographs", "Preprints"), "Issues" {OJS}, "Journal" ("Press", "Server"), "Editorial Activity", "Users", "Counter R5", and "Reports" for manager-level roles and the Site Administrator) | manager-level roles, Section Editor, Site Administrator | — | *Statistics — usage*, *Statistics — editorial activity & reports* |
     | "Tools" | manager-level roles, Site Administrator | — | *Import & export* |
-    | "Administration" | Site Administrator | — | *Site settings* |
+    | "Administration" | Site Administrator | — | [System administration](U61-system-administration.md#administration-page) |
 
     The entry of the screen on show is highlighted, and a group holding
-    it is open. In the French interface two labels are raw codes: the
-    "Content" group's on a journal and a press, and the "DOIs" entry's
-    on a press and a preprint server ⚠ [A23](#a23).
+    it is open.
     - 30a. **A Site Administrator with Reader alone.** Once the Site
       Administrator's manager role in a journal has ended and they hold
       Reader alone there, each editorial page of that journal opens with
@@ -548,6 +577,12 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
       "Statistics", "Tools" and "Administration" ⚠ [A22](#a22). Where
       "Settings" then leads is
       [→ settings access](U07-journal-identity-and-about-pages.md#settings-access).
+    - 30b. **French.** In the French interface four of the side menu's
+      texts are raw codes ⚠ [A23](#a23):
+      - the "Content" group's label, on a journal and a press;
+      - the "DOIs" entry's label, on a press and a preprint server;
+      - the placeholder of the "Search submissions" box, on all three;
+      - the "Statistics" group's "Monographs" entry {OMP}.
 31. **Notices while a page is left.** The top-right area where notices
     appear ([Notifications center & email preferences](U05-notifications-center-and-email-preferences.md))
     shows nothing while an editorial page is being left for another.
@@ -678,6 +713,11 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
   that table names.
 - [Search](U15-search.md) owns the Search page the header's "Search"
   opens.
+- [Hosted journals](U59-hosted-journals.md#site-order) owns the site's
+  order of journals, which the journals switcher follows (Rule 29);
+  [System administration](U61-system-administration.md#administration-page)
+  owns the Administration page that the user menu's and the side menu's
+  "Administration" open (Rules 18a, 30).
 - [Tasks & discussions](U37-tasks-and-discussions.md) owns the French
   discussions panel's untranslated texts; the help icon's raw name in the
   headers is this spec's [A1](#a1).
@@ -685,7 +725,10 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
   its "Preview".
 - *Appearance & theming* owns the header logo, the "Page Footer", the
   theme and its areas, and the sidebar with its blocks.
-- *Languages & locales* owns the "UI" and "Forms" languages.
+- [Languages & locales](U57-languages-and-locales.md) owns the "UI" and
+  "Forms" languages and which language a page opens in, the
+  Administration page's from a journal with one interface language
+  included (Rule 18a).
 
 ## Canonical scenarios
 
@@ -1124,6 +1167,7 @@ Left out of the scenarios above, by reason:
 - **Budget** — states:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
+  - an address with no page: the bare "404 Not Found" with no header, sidebar or footer; a missing issue {OJS} or book {OMP} giving a visitor the Login page and a signed-in user the access-denied page; a missing series {OMP} opening the "Catalog" page (Rule 26b)
 - **Budget** — variants:
   - item titles per "Forms" language: a "UI"-only language showing the primary language's titles, a typed title replacing the installed one in its language only, and the installed title given back when a typed one is emptied (Rules 12, 12a)
   - a second "Forms" language adding a box per language to "Title", "URL" and "Query Parameters" (Settings bullet 13)
@@ -1137,6 +1181,7 @@ Left out of the scenarios above, by reason:
   - a branch dragged back to "Unassigned Menu Items", its items arriving as entries of their own (Rule 5b)
   - the Site Administrator holding Reader alone: "Dashboard" opening the journal's home page (Rule 19a)
   - "Dashboard" on the site's pages (Rule 19c)
+  - "Administration" pressed on a journal with one interface language, opening in the language the browser last chose on the site (Rule 18a)
   - the notice area while an editorial page is left (Rule 31)
 - **Nothing new to test**:
   - the Editor and the Production Editor on the Navigation tab: the same tab and the same offer as the Journal Manager in scenarios 3 to 7 (Actors row 1)
@@ -1160,7 +1205,7 @@ Left out of the scenarios above, by reason:
   - A18 (the item window asking on a close with nothing typed, holding the page while open, and closing without asking after a refused "Save"; Rule 11a; scenario 5 marks it)
   - A21 (two journals of the same name hiding each other in the switcher; Rule 29)
   - A22 (the Site Administrator holding Reader alone: the manager's side menu and an "Error" window; Rule 30a)
-  - A23 (raw codes as the side menu's "Content" and "DOIs" labels in the French interface; Rule 30)
+  - A23 (raw codes in the French side menu: the "Content" and "DOIs" labels, the "Search submissions" placeholder, a press's "Monographs" statistics entry; Rule 30b)
   - A24 (raw codes in the item window's "Query Parameters", the menu window's drag handles and a press's "New Releases" type in the French interface; Fields)
   - A25 (the initials menu left open by the Escape key; Rule 28)
   - OJS1 (no eye on "Subscriptions" and "My Subscriptions" {OJS}; Rule 7a)
@@ -1176,6 +1221,7 @@ Left out of the scenarios above, by reason:
   - every role without the Settings pages refused the Navigation tab (Actors row 1; [Journal identity & about pages](U07-journal-identity-and-about-pages.md) scenario 2)
   - the "Edit" shortcut shown to manager-level roles only (Actors row 5; Rule 25; [Journal identity & about pages](U07-journal-identity-and-about-pages.md) scenarios 1, 2 and 11)
   - "Permit changes to Settings" unticked: no "Settings" group, the "Edit" shortcut kept (Settings bullet 11; [Journal identity & about pages](U07-journal-identity-and-about-pages.md) scenario 11)
+  - the journals switcher following the site's order once it is changed with "Order" (Rule 29; [Hosted journals](U59-hosted-journals.md) scenario 5)
   - "Logout as {username}" while impersonating (Rules 18, 28; [Login & sessions](U01-login-and-sessions.md) scenario 7)
   - message pages: a password reset sent, registration closed, "Registration complete" (Rule 26; [Login & sessions](U01-login-and-sessions.md) scenario 4, [Registration & account validation](U02-registration-and-account-validation.md) scenarios 1 and 5)
   - "Enable announcements" ticked: the "Announcements" item and side-menu entry (Settings bullet 1; [Announcements](U12-announcements.md) scenario 1)
@@ -1211,7 +1257,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | The item window asks before closing even when nothing was typed, and so does leaving the page; right after a refused "Save" it closes without asking | 🐞 | minor | — |
 | [A21](#a21) | Two journals with the same name hide each other in the journals switcher | 🐞 | minor | — |
 | [A22](#a22) | A Site Administrator holding Reader alone gets the manager's side menu and an "Error" window on every page | 🐞 | minor | — |
-| [A23](#a23) | In French, the side menu's "Content" group {OJS OMP} and "DOIs" entry {OMP OPS} read raw codes | 🐞 | minor | — |
+| [A23](#a23) | In French, the side menu's "Content" group {OJS OMP}, "DOIs" entry {OMP OPS}, "Search submissions" box and a press's "Monographs" entry {OMP} read raw codes | 🐞 | minor | — |
 | [A24](#a24) | In French, the item window's "Query Parameters" box, the menu window's drag handles and a press's "New Releases" type read raw codes | 🐞 | minor | — |
 | [OJS1](#ojs1) | "Subscriptions" and "My Subscriptions" carry no eye icon, so their notices never show {OJS} | 🐞 | minor | — |
 | [OPS2](#ops2) | A preprint server's "Posting Mode" is not kept, so "Archives" never hides {OPS} | 🐞 | user-visible | — |
@@ -1438,12 +1484,24 @@ Basis: probe. <sup>f-a22</sup>
 
 <a id="a23"></a>
 **A23 — In French the side menu shows raw codes** · 🐞 · minor.
-With the interface in French, two side-menu labels are raw codes where
-a French word belongs: the "Content" group reads
-"##navigation.content##" on a journal and a press, and the "DOIs" entry
-reads "##doi.manager.displayName##" on a press and a preprint server (a
-journal's reads "DOIs"). A screen reader hears the same codes. A
-French-speaking manager has to guess what the group and the entry hold.
+With the interface in French, four of the side menu's texts are raw
+codes where French words belong:
+- the "Content" group reads "##navigation.content##" on a journal and a
+  press;
+- the "DOIs" entry reads "##doi.manager.displayName##" on a press and a
+  preprint server (a journal's reads "DOIs");
+- the "Search submissions" box at the top of "Editor Dashboard" shows
+  the placeholder "##editor.submission.searchGlobal##" on all three, and
+  a screen reader names its row "Résultats de recherche";
+- on a press, the "Statistics" group's "Monographs" entry reads
+  "##common.publications##", beside French "Presse" and "Activité
+  éditoriale" (a journal's reads "Articles", a preprint server's
+  "Prépublications").
+
+A screen reader hears the same codes. A French-speaking manager, Section
+Editor or Site Administrator has to guess what the group, the entries and
+the box are for. The statistics pages' own codes are recorded in
+[Usage statistics](U64-usage-statistics.md#a6).
 Basis: probe. <sup>f-a23</sup>
 
 <a id="a24"></a>
@@ -1632,6 +1690,17 @@ on the test installs, as its manager, and a user's last role cannot be
 removed, so an administrator with no role at all in a journal cannot be
 made on screen; the branch was driven with the administrator's manager
 role ended and Reader left (Rule 19a).
+Live-probed 2026-09-28, two runs (Rule 18a; Actors row 4; all three
+apps): "Administration" opened "Site Administration" (heading
+"Administration") for `admin` from a bilingual scratch journal, from
+`publicknowledge` and from the site's pages, its link carrying the
+page's language (`index/en/admin/index`, `index/fr_CA/admin/index`). On a
+scratch journal with English alone the link reads `index/admin/index`
+and forwards to `index/<language>/admin/index`, the language this browser
+last chose: after any French page it opened "Administration du site"
+although the journal's page read `lang="en"`, after an English page in
+English ([Languages & locales](U57-languages-and-locales.md) Rules 17a,
+18).
 
 <a id="fn-f"></a>
 **f** — `lib/pkp/templates/frontend/components/editLink.tpl`: rendered only
@@ -1682,7 +1751,9 @@ strip atop every side window. `SkipLink.vue`: buttons
 `navigation.skip.main` and `navigation.skip.nav`, targets `app-main` and
 `app-nav`. Context switcher: `PKPTemplateManager::setupBackendPage()` —
 site admins get `getManySummary([])` (every context), others
-`['userId' => …]`; the current context is filtered out; for a site admin
+`['userId' => …]`, both in the site's order
+(`PKPContextQueryBuilder::getManySummary()` orders by `seq`, the order
+Hosted Journals' "Order" saves); the current context is filtered out; for a site admin
 on page `dashboard`, `manageIssues`, `management`, `payment` or `stats` the
 link keeps page, op and args, otherwise it points at the other context's
 `submissions` page. The filter compares names, so every context whose
@@ -2362,6 +2433,33 @@ and no link but the breadcrumb's "Home"; the same for the Reader,
 Section Editor, Reviewer and an assistant, and at the site's
 Administration address. Signed out: the Login page.
 
+<a id="fn-td20"></a>
+**td20** — `PKPApplication` answers a `NotFoundHttpException` (a page
+or operation with no handler, `PKPHandler::index()`, a handler's missing
+object) with status 404 and the body `<h1>404 Not Found</h1>` alone, no
+template. A missing issue {OJS} or published book {OMP} fails
+`OjsIssueRequiredPolicy` / `OmpPublishedSubmissionRequiredPolicy`
+(`user.authorization.invalidIssue`,
+`user.authorization.invalidPublishedSubmission`), and
+`PKPPageRouter::handleAuthorizationFailure()` sends a signed-out visitor
+to Login and a signed-in user to `user/authorizationDenied` with that
+message; OMP `CatalogHandler::series()` redirects an unknown series path
+to `catalog`. Live-probed 2026-09-28, two runs (Rules 15, 20, 26b; all
+three apps), on a bilingual scratch journal with the Language block in
+its sidebar and on `publicknowledge`: signed out, `/en/nosuchpageu08`,
+`/en/about/nosuchop`, `announcement/view/999999` with announcements off,
+{OJS} `article/view/999999` and {OPS} `preprint/view/999999` and
+`preprints/category/nosuchu08` answered 404, an empty `<title>`, the
+heading "404 Not Found" and no header, sidebar or footer; the item
+addresses the same as the scratch journal's manager. `issue/view/999999`
+{OJS} and `catalog/book/999999` {OMP}: signed out, Login with the full
+frame; signed in, the access-denied page (empty heading, "Home / ") with
+"Invalid issue requested!" or "An invalid published submission was
+specified." and the Language block. {OMP} `catalog/series/<unknown>`:
+the "Catalog" page with the full frame, signed in or out. A press's
+category addresses were not opened. The control: the scratch journal's
+home and About pages carried the Language block.
+
 <a id="fn-td15"></a>
 **td15** — Live-probed 2026-09-23 (Rule 27; A1; all three apps): the
 header's left part, the "i" icon's documentation link in a new tab, its
@@ -2389,7 +2487,16 @@ Escape was not pressed; the claim rests on the shared component.
 
 <a id="fn-td16"></a>
 **td16** — Live-probed 2026-09-23 (Rule 29; A21; all three apps): the
-switcher as note g records.
+switcher as note g records. Live-probed 2026-09-28, two runs (Rule 29;
+all three apps): with a scratch journal "Zeta" created before "Alpha",
+Hosted Journals listed Zeta then Alpha, and `admin`'s switcher on a
+third journal's Settings page listed every other journal in exactly
+that table's order (628 entries on OJS, 507 on OMP, 501 on OPS), not
+alphabetically; an Author enrolled in all three was offered Zeta then
+Alpha. "Order", a drag and "Done" (`context-grid/save-sequence`, 200)
+put Alpha first in run 1 and Zeta first again in run 2, and the table,
+`admin`'s list and the Author's list followed each time. The
+screen-reader names read "Journals", "Presses", "Servers".
 
 <a id="fn-td17"></a>
 **td17** — Live-probed 2026-09-23 (Rule 30; all three apps): on the
@@ -2401,7 +2508,13 @@ it; "Editor Dashboard" opening on the box "Search submissions";
 off; the highlighted entry and the open group on Tools, Statistics,
 Settings › Website, Users & Roles, Announcements, the wizard and the
 Dashboard; nothing highlighted on the Profile page; no side menu on
-Administration.
+Administration. Live-probed 2026-09-28, two runs (Rule 30, the
+"Administration" row; all three apps): on a bilingual scratch journal's
+Settings › Journal, `admin`'s "Administration" (`index/<lang>/admin`)
+opened "Site Administration", headed "Administration", whose panels lead
+to "Hosted Journals", "Site Settings", "System Information", "Expire User
+Sessions" and the rest, in English and in French; the manager, Section
+Editor, Author, Reader and (OJS, OMP) Reviewer had no such entry.
 
 <a id="fn-td18"></a>
 **td18** — Seen 2026-09-23 (a submission-files claim check, OJS and
@@ -2655,6 +2768,20 @@ Website: the group's text and `aria-label` read
 `##navigation.content##` on OJS and OMP (OPS showed no "Content" group,
 public comments being off, OPS1); the DOIs entry's text and
 `aria-label` read `##doi.manager.displayName##` on OMP and OPS.
+`editor.submission.searchGlobal` (lib/pkp `editor.po`) has no `fr_CA`
+entry, and `common.publications` reads `msgstr ""` in OMP's
+`locale/fr_CA/locale.po` ("Articles" on OJS, "Prépublications" on OPS).
+Live-probed 2026-09-28, two runs, all three apps, on a scratch journal
+with English and French under "UI" and "Forms", as its manager, `admin`,
+Section Editor, Author, Reader and (OJS, OMP) Reviewer, each page read
+in `/en/` as the control, where no code showed: the two codes above held;
+"Editor Dashboard"'s search box showed the placeholder
+`##editor.submission.searchGlobal##` to the manager, `admin` and the
+Section Editor on all three apps, its row named "Résultats de recherche"
+("Search Results" in English); on OMP the "Statistiques" group's first
+entry read `##common.publications##` to the same three, the other
+entries in French. The Author's, Reader's and Reviewer's menus showed no
+code.
 
 <a id="fn-f-a24"></a>
 **f-a24** — `manager.navigationMenus.form.queryParams`, its
