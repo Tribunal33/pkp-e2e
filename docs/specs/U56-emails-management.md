@@ -209,6 +209,14 @@ The three fields hold one text per form language of the journal (Rule
    "orcidRequestUpdateScope" ⚠ [A2](#a2). A preprint server lists no
    ORCID email, no role-invitation email and no email-change email; the
    features that send them record those gaps. <sup>g</sup>
+
+   - 6a. **In French.** On a journal with French ticked under "UI", a
+     manager who picks French with "Change Language"
+     ([Languages & locales](U57-languages-and-locales.md#change-language))
+     reads the page as "Gérer les courriels", the same emails under their
+     French names and descriptions. Some emails show a code between hash
+     signs instead, and on a preprint server so do the Moderator's filter
+     buttons ⚠ [A11](#a11). <sup>g</sup>
 7. **Search.** Typing in the search box changes nothing until Enter is
    pressed; the list then keeps the rows whose name or description holds
    the typed text, letters in any case, the words together as typed
@@ -370,6 +378,10 @@ The three fields hold one text per form language of the journal (Rule
       of "This field is required.".
     - On a preprint server "Submission Accepted" opens with its French
       subject and body empty ("1/2 languages completed").
+    - On a press and a preprint server the French text of the submission
+      confirmation ("Submission Confirmation"; on a preprint server
+      "Submission Acknowledgement (Pending Moderation)") is a journal's,
+      speaking of "la revue" ⚠ [A10](#a10).
 
     The seeded journal has one form language, so its fields hold one text
     and the window has no language button. <sup>u</sup>
@@ -446,9 +458,10 @@ The three fields hold one text per form language of the journal (Rule
    expected to become a box whose address receives the error reports for
    undeliverable emails. <sup>e</sup>
 9. **The journal's form languages** (Settings › Website › Setup ›
-   Languages, the "Forms" column; *Languages & locales*; the seeded
-   journal has English alone). With more than one, templates hold one text
-   per language (Rule 20). <sup>u</sup>
+   Languages, the "Forms" column;
+   *[Languages & locales](U57-languages-and-locales.md#form-languages)*;
+   the seeded journal has English alone). With more than one, templates
+   hold one text per language (Rule 20). <sup>u</sup>
 10. **The rest of the configuration file's email section** (how mail
     leaves the server, the envelope sender, the rewriting of the "From"
     header for DMARC) changes how emails are delivered, never what either
@@ -490,8 +503,9 @@ The three fields hold one text per form language of the journal (Rule
 - **[Subscriptions](U51-subscriptions.md)**: the subscription and payment
   emails a journal lists (Rule 6), and the manual payment method whose
   email is missing (Rule 21).
-- **Languages & locales** (spec not yet written): the form languages of
-  Rule 20.
+- **[Languages & locales](U57-languages-and-locales.md)**: the form
+  languages of Rule 20, the interface language of Rule 6a, and why a
+  text the French translation lacks shows as a code (its Rule 21a).
 
 ## Canonical scenarios
 
@@ -833,6 +847,10 @@ Left out of the scenarios above, by reason:
     Rule 8; scenario 1 passes it)
   - A9 (an emptied French field of a default template coming back;
     Rule 20)
+  - A10 (a press's and a preprint server's French submission
+    confirmation speaking of "la revue"; Rule 20)
+  - A11 (codes in the list and the filters of the French "Manage
+    Emails"; Rule 6a)
   - OMP1 (the press's masthead email whose "Edit" leaves the page stuck;
     Rule 9)
   - OMP2 (a press's "Notify Primary Contact" with neither choice
@@ -886,6 +904,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | The three ORCID emails are listed under code names at the end of the list | 🐞 | minor | — |
 | [A4](#a4) | The "Add Template" window is titled "Edit Template" | 🐞 | minor | — |
 | [A5](#a5) | "Remove Template" names the template by its subject, not its name | 🐞 | minor | — |
+| [A10](#a10) | A press's and a preprint server's French submission confirmation speaks of "la revue" | 🐞 | minor | — |
+| [A11](#a11) | In French, "Manage Emails" shows codes instead of some emails' names and descriptions | 🐞 | minor | — |
 | [OMP1](#omp1) | On a press, "Edit" on the masthead email leaves the page stuck behind a spinner | 🐞 | user-visible | — |
 | [OMP2](#omp2) | On a press, "Notify Primary Contact" opens with neither choice selected | 🐞 | minor | — |
 | [OPS1](#ops1) | A preprint server's initials placeholder is described by a raw key | 🐞 | minor | — |
@@ -994,6 +1014,69 @@ Question: should an emptied language of a default template stay empty?
 Lean: yes, as it does on an added template; the manager is shown a
 successful save of a change that was not kept.
 Basis: probe, 2026-09-26. <sup>f-a9</sup>
+
+<a id="a10"></a>
+**A10 — The French submission confirmation speaks of "la revue" on a press and a server** · 🐞 · minor.
+On a press and a preprint server with French as a form language, the
+French body of the submission confirmation ("Submission Confirmation";
+on a preprint server "Submission Acknowledgement (Pending Moderation)")
+is a journal's text, word for word: "Nous vous remercions d'avoir soumis
+le manuscrit intitulé « {$submissionTitle} » à la revue
+{$contextName}.", "… en accédant au site Web de la revue :" and "Nous
+vous remercions d'avoir pensé à notre revue pour la publication de vos
+travaux.". A French-speaking author of a press or a server is thanked
+for choosing "notre revue". On a preprint server the French text also
+says nothing of the moderator the English body announces, and its French
+"Name" reads "Confirmation de soumission". In the French interface
+(Rule 6a) the list of a press and of a server describes this email as
+sent once a manuscript's submission "à la revue" is complete, and
+"Création de l'utilisateur-trice" as welcoming the new user "à la
+revue". A manager expects the press's or the server's own word, as the
+English text gives.
+Basis: probe, 2026-09-28. <sup>f-a10</sup>
+
+<a id="a11"></a>
+**A11 — Codes in the French "Manage Emails"** · 🐞 · minor.
+In the French interface (Rule 6a) the "Gérer les courriels" list shows
+some emails under a code between hash signs instead of a French name or
+description; rows named by a code head the list:
+- a journal, 6 rows: "##mailable.authorPublicationPublished.name##",
+  "##mailable.reviewCancel.name##",
+  "##mailable.reviewRound.requestAuthorResponse.name##",
+  "##mailable.userRoleMastheadUpdateNotify.name##" and
+  "##orcid.orcidRequestUpdateScope.name##", each described by a code
+  too, and "Changer l'adresse courriel d'invitation", described
+  "##mailable.changeProfileEmailInvitationNotify.description##";
+- a press, 12 rows: the journal's six, then
+  "##mailable.decision.sendInternalReview.notifyAuthor.name##",
+  "##mailable.publicationVersionNotify.name##" and
+  "##mailable.validateEmailContext.name##", each described by a code,
+  and three French names described by a code: "Notification sur les
+  rapports statistiques" ("##mailable.statisticsReportNotify.description##"),
+  "Soumission en attente de rédacteur-trice"
+  ("##mailable.submissionNeedsEditor.description##") and "Soumission
+  refusée avant évaluation"
+  ("##mailable.decision.initialDecline.notifyAuthor.description##");
+- a preprint server, 7 rows: "##mailable.postedAck.name##",
+  "##mailable.postedNewVersionAck.name##",
+  "##mailable.publicationVersionNotify.name##",
+  "##mailable.submissionAckCanPost.name##" and
+  "##mailable.validateEmailContext.name##", each described by a code,
+  and "Notification sur les rapports statistiques" and "Soumission
+  refusée avant évaluation", described by the same codes as on a press.
+  Under "Envoyé par" and "Envoyé à" the Moderator's filter button reads
+  "##default.groups.name.sectionEditor##", where a journal and a press
+  read "Rédacteur-trice".
+
+A screen reader hears the code in the row's button too ("Modifier
+##mailable.postedAck.name##"); on screen every row's button reads
+"Edit", in English. The English list shows no code. A French-speaking
+manager cannot tell what these emails are. The same Moderator code
+shows on other preprint server screens
+([Users management OPS1](U53-users-management.md#ops1),
+[Journal identity & about pages OPS4](U07-journal-identity-and-about-pages.md#ops4));
+the general question is [Languages & locales A4](U57-languages-and-locales.md#a4).
+Basis: probe, 2026-09-28. <sup>f-a11</sup>
 
 ### OMP
 
@@ -1251,6 +1334,11 @@ server's missing ORCID, invitation and email-change emails are
 [ORCID integration OPS2](U04-orcid-integration.md#ops2),
 [User invitations OPS1](U06-user-invitations.md#ops1) and
 [User profile OPS2](U03-user-profile.md#ops2).
+Live-probed 2026-09-28 (Rule 6a), all three apps, two runs, on scratch
+contexts with French under "UI" and "Forms": `/{context}/fr_CA/management/settings/manageEmails`
+headed "Gérer les courriels", the same 66, 56 and 17 rows under French
+names and descriptions, the ones of note f-a11 excepted; the English
+list of the same contexts showed no code.
 
 <a id="fn-h"></a>
 **h** — Live-probed 2026-09-26 (Rule 7), all three apps: "Change Email"
@@ -1428,7 +1516,11 @@ raised no dialog and stored nothing. Code: the side window closes through
 `currentTemplate` keeps the same object, so its watcher does not rebuild
 `currentTemplateForm`, which `updateCurrentTemplateForm()` has been
 changing with every keystroke; reopening the email refetches it and
-rebuilds the form.
+rebuilds the form. Live-probed 2026-09-28 with French fields, all three
+apps, two runs: on the one-template submission confirmation a changed
+French subject was gone after the back arrow and a changed French body
+after opening another page, the installed French text back at once and
+after a reload, with no question either time.
 
 <a id="fn-q"></a>
 **q** — Live-probed 2026-09-26 (Rule 16), all three apps: after the
@@ -1515,7 +1607,13 @@ Code: the form's `locales` are the
 journal's `getSupportedFormLocaleNames()`, the three fields
 `isMultilingual`; required checks are in the primary locale only (note
 n). The seeded journals' form languages are English alone
-(seed-facts).
+(seed-facts). Live-probed 2026-09-28 (Rules 18, 20; A10), all three
+apps, two runs, on the one-template submission confirmation of scratch
+contexts with French under "UI" and "Forms": the controls "Close",
+"French", "Insert Content" and "Save" and no other, the French twins
+labelled "French" ("French Name in French", "French Subject in French",
+"French Body in French" for a screen reader), and "2/2 languages
+completed" under each field.
 
 <a id="fn-v"></a>
 **v** — Live-probed 2026-09-26 (Rule 21; A7), OJS: on a scratch journal
@@ -1640,6 +1738,48 @@ the installed French subject ("Demande d'évaluation d'un article", OMP
 "Requête d'évaluation d'un manuscrit"); an added template's emptied
 French subject stayed empty on all three apps. OPS's "Submission
 Accepted" has no French text installed (note u).
+
+<a id="fn-f-a10"></a>
+**f-a10** — OPS `locale/fr_CA/emails.po` leaves `emails.submissionAck.body`
+empty and has no subject, and OMP has no French text of its own for it,
+so both take lib/pkp `locale/fr_CA/emails.po`'s journal text; OPS
+`locale/en/emails.po` has its own preprint server English body. OPS
+`locale/fr_CA/manager.po` leaves `mailable.submissionAck.name` and
+`.description` empty, so the French list shows lib/pkp's name
+("Confirmation de soumission") and journal description. Live-probed
+2026-09-28, all three apps, two runs, on scratch contexts with French
+under "UI" and "Forms": the French body read the three "revue"
+sentences word for word on OJS, OMP and OPS, the French subject
+"Accusé de réception de la soumission à {$contextName}" on all three;
+the English body read "a member of our editorial team will see it soon"
+(OMP) and "We have received your preprint, {$submissionTitle}, and a
+moderator will see it soon. Once the moderator has reviewed your
+submission, they will post your preprint or contact you." (OPS); the
+French list described the email "Ce courriel, lorsqu'activé, est envoyé
+automatiquement à un-e auteur-e quand le processus de soumission d'un
+manuscrit à la revue a été complété. …" on all three, where OPS's
+English list reads "This email is automatically sent to an author when
+they make a submission and a moderator must approve it.", and
+"Création de l'utilisateur-trice" "… pour lui souhaiter la bienvenue à
+la revue …".
+
+<a id="fn-f-a11"></a>
+**f-a11** — A text the language's translation lacks prints as
+`##key##` (*Languages & locales*, note p). The French files lack the
+keys the rows show: `mailable.reviewCancel.name`, for one, is in no
+`fr_CA` file; OPS `locale/fr_CA/manager.po` leaves
+`mailable.postedAck.name`, `mailable.submissionAckCanPost.name` and
+others empty, and OPS `locale/fr_CA/default.po` leaves
+`default.groups.name.sectionEditor` empty (OJS and OMP translate it).
+The row's button is `common.editItem` for screen readers beside a
+visible "Edit". Live-probed 2026-09-28, all three apps, two runs, on
+scratch contexts with French under "UI" and "Forms",
+`/{context}/fr_CA/management/settings/manageEmails`: the same rows
+each time, 6 of 66 (OJS), 12 of 56 (OMP), 7 of 17 (OPS), and on OPS
+the "Envoyé par" and "Envoyé à" button
+"##default.groups.name.sectionEditor##"; OJS and OMP read
+"Rédacteur-trice" there. The English list of the same contexts showed
+no code.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Live-probed 2026-09-26 on the seeded press and on a new
