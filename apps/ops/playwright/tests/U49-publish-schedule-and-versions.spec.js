@@ -419,13 +419,17 @@ test.describe('Publish, schedule & versions (U49)', () => {
         // "The Author's side": the "Publication Published" email
         // (recipient-scoped, A8, with the tag as content marker) and the
         // task notice naming the preprint under Tasks (its "was published"
-        // verb is OPS5's ❓ and is not asserted).
-        await pkpMail.find({
+        // verb is OPS5's ❓ and is not asserted), sent in the server's name
+        // from its principal contact's address (a scratch server's:
+        // admin@mail.test), not the manager.
+        const mail = await pkpMail.find({
             to: mailOf(`${tag}au`),
             subject: 'Publication Published',
             contains: tag,
             timeoutMs: 30_000,
         });
+        expect(mail.From.Name).toBe(`Scratch context ${tag}`);
+        expect(mail.From.Address).toBe('admin@mail.test');
         const tasks = await openTasksPanel(authorPage, {reload: true});
         await expect(tasks.getByText(title).first()).toBeVisible({timeout: 30_000});
         // The legacy grid keeps its "No Items" row in the DOM, hidden, once

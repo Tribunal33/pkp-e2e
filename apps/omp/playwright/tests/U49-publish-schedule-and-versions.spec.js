@@ -478,12 +478,16 @@ test.describe('Publish, schedule & versions (U49)', () => {
         await expectLogLine(managerPage, 'The submission was published.');
         await expectLogLine(managerPage, /moved this submission to the Done stage\./);
 
-        // The submitting author gets the "Publication Published" email …
-        await pkpMail.find({
+        // The submitting author gets the "Publication Published" email, sent
+        // in the press's name from its principal contact's address (a
+        // scratch press's: admin@mail.test), not the manager …
+        const mail = await pkpMail.find({
             to: `${tag}au@mail.test`,
             subject: 'Publication Published',
             contains: `Submission ${tag}`,
         });
+        expect(mail.From.Name).toBe(`Scratch context ${tag}`);
+        expect(mail.From.Address).toBe('admin@mail.test');
 
         // … and the "was published" task notice.
         const tasks = await openTasks(authorPage, tag, {author: true});
@@ -1402,8 +1406,8 @@ test.describe('Publish, schedule & versions (U49)', () => {
 
         // The Markdown row's "More Actions" offers "Send to Text Editor";
         // its dialog asks which version to send the file to, "Create New
-        // Version" first, then each existing version (Rule 16); Cancel
-        // leaves the file where it is.
+        // Version" first, then each existing version, none selected as it
+        // opens (Rule 16); Cancel leaves the file where it is.
         const mdItems = await openFileRowMenu(managerPage, 'notes.md');
         const send = mdItems.filter({hasText: 'Send to Text Editor'});
         await expect(send).toHaveCount(1);
@@ -1418,6 +1422,7 @@ test.describe('Publish, schedule & versions (U49)', () => {
             timeout: 30_000,
         });
         await expect(picker.locator('option')).toHaveCount(2);
+        await expect(picker).toHaveValue('');
         await dialog.getByRole('button', {name: 'Cancel', exact: true}).click();
         await expect(dialog).toHaveCount(0, {timeout: 30_000});
         await expect(fileRow(managerPage, 'notes.md')).toBeVisible();

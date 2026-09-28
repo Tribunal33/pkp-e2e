@@ -259,13 +259,17 @@ test.describe('publish, schedule & versions', () => {
         ).toBeVisible();
         await log.getByRole('button', {name: 'Close', exact: true}).first().click();
 
-        // The submitting author gets the "Publication Published" email …
+        // The submitting author gets the "Publication Published" email, sent
+        // in the journal's name from its principal contact's address (a
+        // scratch journal's: admin@mail.test), not the Journal Manager …
         const mail = await pkpMail.find({
             to: authorEmail,
             subject: 'Publication Published',
             contains: tag,
         });
         expect(mail.Subject).toBe('Publication Published');
+        expect(mail.From.Name).toBe(`Scratch context ${tag}`);
+        expect(mail.From.Address).toBe('admin@mail.test');
 
         // … and the "was published" task notice.
         await authorPage.goto(`/index.php/${tag}/dashboard/mySubmissions`);
@@ -1164,14 +1168,26 @@ test.describe('publish, schedule & versions', () => {
             title: 'Future issue 2099',
         });
 
-        // Choose "Assign To Future Issue and Schedule Only" plus the
-        // issue on the Publication Settings page and save.
+        // Publication Settings: the arrival and its refused first save,
+        // then "Assign To Future Issue and Schedule Only" plus the issue,
+        // saved.
         await pub.gotoWorkflow(submissionId);
         await pub.openEntry('Publication Settings');
         const scheduleOnlyOnPage = managerPage.getByRole('radio', {
             name: 'Assign To Future Issue and Schedule Only',
         });
         await expect(scheduleOnlyOnPage).toBeVisible({timeout: 30_000});
+        // The page arrives on "Assign To Current/Back Issue" with "Issue"
+        // empty, so a first save with only "Pages" typed is refused in the
+        // page: no publications write leaves the browser (Fields).
+        await expect(
+            managerPage.getByRole('radio', {name: 'Assign To Current/Back Issue'})
+        ).toBeChecked({timeout: 30_000});
+        await expect(managerPage.locator('select[name="issueId"]')).toHaveValue('');
+        await managerPage.getByLabel('Pages', {exact: true}).fill('11-22');
+        const sent = await pub.saveRefusedInPlace(pub.fieldError('This field is required.'));
+        expect(sent).toBe(0);
+        await expect(managerPage.getByText('Please correct one error.')).toBeVisible();
         // Content-verified save (the U40 S4 idiom): a late async publication
         // refresh can remount the form after the picks, so the save POSTs
         // the OLD assignment (200 + toast, stale DB) and the panel below
@@ -1554,7 +1570,8 @@ test.describe('publish, schedule & versions', () => {
 
         // The Markdown row's "More Actions" offers "Send to Text Editor";
         // its dialog asks which version, "Create New Version" first, then
-        // each existing version; "Cancel" leaves the file where it is.
+        // each existing version, none selected as it opens; "Cancel"
+        // leaves the file where it is.
         const mdItems = await pub.openProductionReadyFileMenu('notes.md');
         await expect(mdItems.filter({hasText: 'Send to Text Editor'})).toHaveCount(1);
         await managerPage.getByRole('menuitem', {name: 'Send to Text Editor', exact: true}).click();
@@ -1566,6 +1583,7 @@ test.describe('publish, schedule & versions', () => {
         await expect(picker.locator('option').first()).toHaveText('Create New Version');
         await expect(picker.locator('option')).toHaveCount(2);
         await expect(picker.locator('option').nth(1)).toHaveText(/^Unassigned version \(\d{4}-\d{2}-\d{2}\)$/);
+        await expect(picker).toHaveValue('');
         await expect(dialog.getByRole('button', {name: 'Confirm', exact: true})).toBeVisible();
         await dialog.getByRole('button', {name: 'Cancel', exact: true}).click();
         await expect(dialog).toBeHidden({timeout: 30_000});
