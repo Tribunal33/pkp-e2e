@@ -41,7 +41,7 @@ the app refuses both. <sup>v</sup>
 
 | Action | Who may, and when |
 |--------|--------------------|
-| **Open the "Users" list, search it and page through it** | • whoever opens Users & Roles (above) <sup>a</sup><br>• Site Administrator whose only role in a journal is Reader: only by typing the page's address, `{journal}/management/settings/access`. The page opens with the list (their own row, "Reader", its menu "Edit" and "Email") under an "Error" dialog, "The current role does not have access to this operation."; once "OK" closes it, the list, the tabs and the side menu's "Settings" and "Administration" work. On a press or preprint server that address answers the access-denied page, but the shorter `{journal}/management/access` opens the page the same way <sup>td1</sup><br>• every other role: no "Settings" in the side menu, and the address answers the access-denied page "The current role does not have access to this operation." (see *Journal identity & about pages*) |
+| **Open the "Users" list, search it and page through it** | • whoever opens Users & Roles (above), at the address the side menu's "Users & Roles" opens, `{journal}/management/settings/access`. Typed as the shorter `{journal}/management/access`, the page answers the manager-level roles with the access-denied page "The current role does not have access to this operation."; the Site Administrator opens it at either address <sup>a</sup><br>• Site Administrator whose only role in a journal is Reader: only by typing the page's address, `{journal}/management/settings/access`. The page opens with the list (their own row, "Reader", its menu "Edit" and "Email") under an "Error" dialog, "The current role does not have access to this operation."; once "OK" closes it, the list, the tabs and the side menu's "Settings" and "Administration" work. On a press or preprint server that address answers the access-denied page, but the shorter `{journal}/management/access` opens the page the same way <sup>td1</sup><br>• every other role: no "Settings" in the side menu, and the address answers the access-denied page "The current role does not have access to this operation." (see *Journal identity & about pages*) |
 | **"Edit"** (open the user's roles page) | • every manager, on every row, their own included (Rule 8) <sup>e</sup> |
 | **"Email"** | • every manager, on every row, their own included (Rule 9) <sup>f</sup> |
 | **"Disable User" / "Enable User"** | • Site Administrator: every row but their own (Rules 10–12)<br>• other managers: offered on every row but their own. It takes effect for a user whose current roles all sit in the manager's journals, a user whose role elsewhere has ended included; for anyone else, the Site Administrator included, it is refused (Rule 13) ⚠ [A1](#a1) <sup>g</sup> |
@@ -105,7 +105,7 @@ The Site Administrator's "Add User" (step 1) and "Edit User" windows
 | "Email" | yes | A valid address not used by another account ("The selected email address is already in use by another user.") <sup>td15</sup> |
 | "Password" and "Repeat password" | new accounts, unless "Generate Password" is ticked | At least the site's minimum length, six characters on a default install ("The password must be at least 6 characters."), and both the same ("The passwords do not match."). On "Edit User" both may stay empty: "Leave the password fields blank to keep the current password." <sup>l</sup> <sup>m</sup> |
 | "Generate Password" ("Generate random password for this user.") | no, new accounts only | Rule 23 <sup>l</sup> |
-| "Change Password" ("User must change password on next log in.") | no | Ticked when "Add User" opens (Rule 23) <sup>l</sup> |
+| "Change Password" ("User must change password on next log in.") | no | Ticked when "Add User" opens (Rule 23). On "Edit User" it always opens unticked, whatever the account's flag, and "OK" saves it as shown, so a flag already set is cleared; see *[Login & sessions](U01-login-and-sessions.md#a10)*, its finding A10 <sup>l</sup> <sup>m</sup> |
 | "Country" | no | <sup>l</sup> |
 | "Notify User" ("Send user a welcome email.") | no, new accounts only | Unticked by default; sends the welcome email (Side effects) <sup>l</sup> |
 | "More User Details" (a link that opens more fields) | no | "Homepage URL" (a valid address; anything else brings "Please enter a valid URL." under the box before anything is sent, so the window's other refusals wait for the next "OK"), "Phone", "Working Languages", "Reviewing interests", "Affiliation", "Bio Statement (e.g., department and rank)", "Mailing Address", "Signature" <sup>l</sup> |
@@ -330,7 +330,8 @@ The Site Administrator's "Add User" (step 1) and "Edit User" windows
 24. **"Edit User".** It opens "Edit User" on "User Details": the fields
     of the Fields section, the username as plain text, "Editorial Notes"
     for an account that holds a reviewer role, and the "User Roles" and
-    "Appear on Masthead" boxes with the user's current roles ticked. "OK"
+    "Appear on Masthead" boxes with the user's current roles ticked.
+    "Change Password" opens unticked (*Login & sessions*, its A10). "OK"
     saves, closes the window and shows "User edited." A role ticked here
     is granted at once and a role unticked ends at once, with no
     invitation and no email. The user's row, as the grid shows it after
@@ -398,9 +399,8 @@ The Site Administrator's "Add User" (step 1) and "Edit User" windows
   their emails (Rule 8).
 - **[Login & sessions](U01-login-and-sessions.md)**: "Login As" and who
   may use it; the Login page's refusal of a disabled account; the forced
-  password change the older grid's "Change Password" sets (Rule 23),
-  which is a users screen offering that flag, contrary to that spec's
-  finding A5.
+  password change the older grid's "Change Password" sets (Rule 23;
+  that spec's Rule 11a, and its findings A5 and A10).
 - **[Journal identity & about pages](U07-journal-identity-and-about-pages.md#settings-access)**:
   who opens the Settings pages, Users & Roles among them; the masthead
   pages after a disable or a removal.
@@ -748,6 +748,9 @@ Left out of the scenarios above, by reason:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
     "Username")
+  - the shorter address `{journal}/management/access` typed by a
+    manager-level role, which answers the access-denied page, where the
+    side menu's address opens the list (Actors row 1)
 - **Nothing new to test**:
   - the Editor, the Production Editor and a Site Administrator holding a
     manager role on the "Users" list, offered what the Journal Manager of
@@ -802,6 +805,9 @@ Left out of the scenarios above, by reason:
     sessions](U01-login-and-sessions.md)*, scenario 7)
   - "Login As" on the row of a user whose role in another journal has
     ended (Actors row 7; *Login & sessions*, its Rule 14)
+  - "Edit User" opening "Change Password" unticked and clearing a flag
+    already set (Fields "Change Password"; Rule 24; *Login & sessions*,
+    its A10)
   - a masthead change on a press or preprint server (Rule 8; A14;
     *User invitations*, its OMP1)
   - an unsaved "Site Access Options" change lost on leaving the page
@@ -1099,7 +1105,21 @@ changes to Settings" unticked had no "Settings" and got the access-denied
 page, as did the Section Editor, Reviewer, Copyeditor, an assistant role,
 Author and Reader. A changed "Site Access Options" choice survived a
 switch to "Users" and back, and was gone after the page was left, with no
-question asked.
+question asked. Live-probed 2026-09-28 (Actors row 1, the two
+addresses), all three apps, two runs each: the seeded journal's
+`manager.maya` and `editor.diana` (OJS, OMP; not enrolled on OPS) and a
+scratch journal's Journal Manager, Editor and Production Editor (OJS,
+OMP; its manager alone on OPS) got "Users & Roles" with "Current Users
+({n})" and no dialog at `{journal}/management/settings/access`, the
+address the side menu's "Users & Roles" carries, and at
+`{journal}/management/access` the access-denied page
+(`user/authorizationDenied?message=user.authorization.roleBasedAccessDenied`,
+"The current role does not have access to this operation.", only a
+"Home" breadcrumb). Each app's `SettingsHandler` grants the `access` op
+to `ROLE_ID_SITE_ADMIN` alone, so `admin` (holding the journal's manager role) opened the list at
+both addresses. `sectioneditor.ana`, `reader.rosa` and a scratch Section
+Editor got the access-denied page at both and had no "Users & Roles" in
+the side menu.
 
 <a id="fn-td1"></a>
 **td1** — Live-probed 2026-09-25 (Actors row 1), all three apps, on a
@@ -1411,6 +1431,12 @@ hidden; with 32 it read "Items per page: 10 25 50 75 100 …" with page
 links; OJS read 5 users as it read 2. From the grid, "Email", "Disable User", "Enable", "Remove" and "Merge User" had
 the outcomes of the Users & Roles list, the disable and enable windows
 headed "Disable User" and "Enable" with no "Current Roles" line.
+Live-probed 2026-09-28 (Rules 19, 24), all three apps, two runs each:
+every load of the Settings wizard also requested the Plugin Gallery's
+list (`GET …/$$$call$$$/grid/plugins/plugin-gallery-grid/fetch-grid`),
+which answered 500, the install having no connection to PKP
+([Plugins management](U62-plugins-management.md#a1), its A1); the
+"Users" tab worked normally.
 
 <a id="fn-td11"></a>
 **td11** — Live-probed 2026-09-25 (Rule 20; A10), all three apps, looking
@@ -1480,6 +1506,10 @@ URL", "OK" showed "Please enter a valid URL." under it and sent no
 request, and none of the taken username, taken email and short password
 refusals appeared; with the box emptied, the next "OK" sent one
 `…/user-grid/update-user` request and brought the three in one notice.
+Live-probed 2026-09-28 (Rule 21), all three apps, two runs each: a family
+name typed on "Edit User" and the window's "Close" pressed brought the
+same question; accepted, the window closed and the row, before and after
+a reload, kept the old family name.
 
 <a id="fn-td12"></a>
 **td12** — Live-probed 2026-09-25 (Rule 22), all three apps: "Step #2: Add
@@ -1527,7 +1557,19 @@ and "External Reviewer") ticked and locked on every account. "OK" showed
 unticked ended with today's end date and "User Removed From Role", with no
 email; every role unticked was refused. Both password boxes left empty
 kept the old password; a new password ended the user's open session and
-replaced the old one.
+replaced the old one. Live-probed 2026-09-28 (Rule 24; Fields "Change
+Password"), all three apps, two runs each, four saves per run (unchanged,
+"Reader" ticked, "Change Password" ticked, unchanged again): every "OK"
+closed the window and showed "User edited." as a toast at the top right
+0.9–1.7 s after the click, once the grid's `update-user` POST had
+answered 200; a reload removed it. The box (`mustChangePassword`, labelled
+"Change Password") opened unticked on an account never flagged; ticked
+and saved, it read unticked when reopened, before and after a reload,
+while the account's next sign-in went to `{journal}/login/changePassword/{username}`,
+headed "Change Password". "OK" pressed on it again with nothing changed
+cleared the flag: the next sign-in landed on My Submissions. This is the
+defect *Login & sessions* records as its A10 (`UserDetailsForm::initData()`
+sets the flag only for a new user, `execute()` writes the posted value).
 
 <a id="fn-b"></a>
 **b** — List: `UserAccessManager.vue` (heading `grid.user.currentUsers`
