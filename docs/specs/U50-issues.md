@@ -64,7 +64,7 @@ of the same name. An empty list reads "No Items". <sup>a</sup> <sup>g</sup>
 | "Order" | — | Above the "Back Issues" list only, once it holds two issues or more (Rule 20) |
 | "Issue" column | — | The issue's name (Rule 2), itself a link that opens the "Issue Management" window (Rule 5) |
 | "Published" column | — | "Back Issues" only: the issue's Date Published, in the journal's short date format |
-| "Items" column | — | How many articles the issue holds: those whose current version is scheduled into it or published in it (Rule 9) |
+| "Items" column | — | How many articles the issue holds: the articles its "Table of Contents" tab lists (Rule 9) |
 | Row actions | — | Shown after pressing the small arrow at the start of the row, left to right: "Edit" (Rule 5); "Preview" on an unpublished issue, "View" on a published one, each opening the issue's page in a new tab (Rules 21, 22); "Publish Issue" (Rule 16) or "Unpublish Issue" (Rule 18); "Current Issue" on a published issue that is not the current one (Rule 17); "Delete" (Rule 19) |
 
 <a id="issue-data"></a>
@@ -233,14 +233,21 @@ page reads "View {issue name}" ⚠ [A7](#a7). <sup>v</sup>
 <a id="issue-toc"></a>
 ### The table of contents
 
-9. **What the tab lists.** The articles whose current version is
-   scheduled into the issue or published in it, under their section, the
-   sections in the issue's section order and the articles in the issue's
-   article order (Rules 10, 10a). An article is placed here from its own
-   Publication pages (see
+9. **What the tab lists.** Every article with a version placed in the
+   issue whose current version (Rule 9a) is scheduled or published,
+   under its section: the sections in the issue's section order and the
+   articles in the issue's article order (Rules 10, 10a). An article is
+   placed here from its own Publication pages (see
    [Publish, schedule & versions](U49-publish-schedule-and-versions.md),
    its Rule 5); nothing on this tab adds one. An issue with no article
    reads "No Items". <sup>m</sup>
+9a. **The version the tab shows.** An article's current version is its
+   most recent published version, or its newest one when none is
+   published; the tab lists the article under that version's title and
+   section. So an article whose newer version was published with "Don't
+   Assign To An Issue" stays on the tab and in "Items", under the newer
+   version's title [A17](#a17). A version keeps its place in the issue
+   even once unpublished (Rule 12). <sup>m</sup> <sup>f-a17</sup>
 10. **"Order".** "Order" lets the articles be dragged into place within
     their section; "Done" keeps the new order, on the tab and on the
     issue's page, and "Cancel ordering" drops it. Until someone orders
@@ -257,8 +264,9 @@ page reads "View {issue name}" ⚠ [A7](#a7). <sup>v</sup>
 11. **"Submission".** Opens the article's workflow. <sup>m</sup>
 12. **"Remove".** Asks "Are you sure you wish to remove this article from
     the issue? The article will be available for scheduling in another
-    issue." under the title "Remove Article From Issue". "OK" takes the
-    article off the tab and unpublishes its version as the workflow's
+    issue." under the title "Remove Article From Issue". On an article
+    whose current version is in the issue, "OK" takes the article off
+    the tab and unpublishes that version as the workflow's
     "Unschedule" / "Unpublish" do (see
     [Publish, schedule & versions](U49-publish-schedule-and-versions.md),
     its Rule 9): a published article's page goes offline. If it was the
@@ -266,6 +274,15 @@ page reads "View {issue name}" ⚠ [A7](#a7). <sup>v</sup>
     The article's workflow then reads "Unscheduled", and its "Schedule
     For Publication" arrives on "Assign To Current/Back Issue" with the
     same issue chosen. <sup>n</sup> <sup>td8</sup>
+12a. **"Remove" after a newer version was published outside the issue.**
+    On an article whose current version was published with "Don't Assign
+    To An Issue" (Rule 9a), "OK" closes the window as usual, but the
+    article stays on the tab, in "Items" and on the issue's page. What
+    is unpublished instead is the earlier version that was in the issue:
+    its page answers "404 Not Found" and it leaves the "Versions" list on
+    the article's page. The article's page stays up as the newer version,
+    and its workflow still reads "Published" ⚠ [A18](#a18). <sup>n</sup>
+    <sup>f-a18</sup>
 13. **"Open Access".** On a subscription journal's subscription issue,
     ticking an article's box makes that article open access and unticking
     returns it to the issue's access; each click saves at once. What that
@@ -359,16 +376,26 @@ page reads "View {issue name}" ⚠ [A7](#a7). <sup>v</sup>
     row 2 it opens with the "Preview" notice at the top and lists the
     articles scheduled into the issue as well as those already published
     in it. For anyone else it is refused (Actors). <sup>d</sup> <sup>w</sup>
-23. **Which articles a published issue lists.** Only articles with a
-    version published in the issue: an article unpublished from its own
-    workflow drops out; one whose newer version is not yet published
-    stays, shown as its published version. Sections come in the journal's
-    section order, or in the issue's own where one was saved (Rule 10a),
-    each headed by its title unless the section omits it (Settings
-    bullet 4), and a section with no article to show is left out. How each article is shown, and which galleys its
-    summary carries, is
+23. **Which articles a published issue lists.** Every article with a
+    version placed in the issue whose current version (Rule 9a) is
+    published, shown as that version: an article unpublished from its
+    own workflow drops out; one whose newer version is not yet published
+    stays, shown as its published version; one whose newer version was
+    published outside the issue stays too (Rule 23a). Sections come in
+    the journal's section order, or in the issue's own where one was
+    saved (Rule 10a), each headed by its title unless the section omits
+    it (Settings bullet 4), and a section with no article to show is
+    left out. How each article is shown, and which galleys its summary
+    carries, is
     [Article landing page & reading](U13-article-landing-page-and-reading.md),
     its Rule 22. <sup>w</sup>
+23a. **An article whose newer version is outside the issue.** When an
+    article's newer version was published with "Don't Assign To An
+    Issue", the issue's page lists the article under that version's
+    title and section, and its link opens that version's page, whose
+    breadcrumb and "Issue" line name no issue ⚠ [A17](#a17). The article
+    stays listed even after "Remove" has taken the version that was in
+    the issue offline (Rule 12a). <sup>w</sup> <sup>f-a17</sup>
 24. **"Current".** The header's "Current" (and the journal's address
     followed by "issue" or "issue/current") opens the current issue's
     page. With no current issue it opens a page headed "No Current Issue"
@@ -1036,6 +1063,10 @@ Left out of the scenarios above, by reason:
   - A16 (another tab opening with no question after text typed only in
     "Description"; Fields, after the "Issue Data" table; scenario 2
     passes it)
+  - A17 (an article whose newer version was published with "Don't
+    Assign To An Issue" still listed in the issue; Rules 9a, 23a)
+  - A18 ("Remove" on such an article unpublishing its earlier version
+    and leaving it in the issue; Rule 12a)
 - **No seed**:
   - "Delayed Open Access" set to a number of months, and the "Access
     status" and "Open access date" "Publish Issue" then sets (Settings
@@ -1061,8 +1092,8 @@ Left out of the scenarios above, by reason:
 
 ## Findings register
 
-Verdicts are the author's judgment (claude, 2026-09-25), unreviewed unless an
-entry notes otherwise; the team settles them on spec review.
+Verdicts are the author's judgment (claude, 2026-09-25; A17, A18 2026-09-28),
+unreviewed unless an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
@@ -1078,6 +1109,8 @@ entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | "Archives" lists the issues in no set order until someone orders "Back Issues" | 🐞 | user-visible | — |
 | [A14](#a14) | A galley address that names no galley of the issue fails with an empty page | 🐞 | user-visible · crash: server | — |
 | [A16](#a16) | With only "Description" changed on "Issue Data", another tab opens without the unsaved-change question | 🐞 | minor | — |
+| [A17](#a17) | An article whose newer version was published with "Don't Assign To An Issue" stays listed in the issue, under the newer title, linking to a page that names no issue | 🐞 | user-visible | — |
+| [A18](#a18) | On such an article, "Remove" leaves it in the issue and unpublishes its earlier version, the one the issue published | 🐞 | user-visible | — |
 | [A3](#a3) | "Delete" takes an issue's published articles offline behind a generic confirmation | ❓ | user-visible | — |
 | [A7](#a7) | On "Archives", a cover with no alternate text is a link with no name | ❓ | minor | — |
 | [A9](#a9) | No section could be moved in the table of contents' "Order" | ❓ | minor | — |
@@ -1238,6 +1271,36 @@ question. A Journal Manager who has written only a description expects
 the same question before leaving the form. Basis: test run, 2026-09-25.
 <sup>f-a16</sup>
 
+<a id="a17"></a>
+**A17 — An article published outside the issue stays listed in it** · 🐞 · user-visible.
+A Journal Manager publishes a newer version of an issue's article with
+"Don't Assign To An Issue", after a window that says "This will be
+published immediately without any issue association.". The issue still
+lists the article, now under the newer version's title: on the issue's
+page (so, for the current issue, under "Current" and in the home page's
+"Current Issue"), on
+the "Table of Contents" tab, in "Items", and in the current-issue web
+feeds ([Web feeds](U18-web-feeds.md), its Rule 5). Its link opens the
+newer version's page, whose breadcrumb and "Issue" line name no issue, so
+a reader browsing the issue lands on an article that says it belongs to
+none. The issue should list the version that is in it, or drop the
+article. Basis: probe, 2026-09-28. <sup>f-a17</sup>
+
+<a id="a18"></a>
+**A18 — "Remove" unpublishes the older version and leaves the article in the issue** · 🐞 · user-visible.
+On an article of A17, the "Table of Contents" tab's "Remove" asks its
+usual question, and "OK" closes the window as if the article had been
+taken out. It has not: it stays on the tab, in "Items" and on the
+issue's page. What goes offline instead is the earlier version, the one
+the issue published: its page answers "404 Not Found" and the
+"Versions" list on the article's page no longer offers it, while the
+article's page and its workflow still read "Published". Readers lose the
+issue's own version of the article, and every link to that version
+breaks; nothing tells the Journal Manager that a version went offline.
+"Remove" should take
+the article out of the issue and leave its published versions alone, or
+refuse with a message. Basis: probe, 2026-09-28. <sup>f-a18</sup>
+
 ---
 
 <a id="footnotes"></a>
@@ -1269,7 +1332,7 @@ where it is made.
 **f** — `IssueGridHandler::publishIssue()`: when `sendIssueNotification` is posted and `publishingMode != PUBLISHING_MODE_NONE`, `NotificationSubscriptionSettingsDAO::getSubscribedUserIds()` picks every user with an active `user_user_groups` row in the journal (start ≤ now < end) not blocking `NOTIFICATION_TYPE_PUBLISHED_ISSUE` (`notificationPublishedIssue`), and separately those also not blocking its email (`emailNotificationPublishedIssue`); a `Bus::batch` of `jobs/notifications/IssuePublishedNotifyUsers` jobs (chunks of `NOTIFICATION_CHUNK_SIZE_LIMIT` / `Mailer::BULK_EMAIL_SIZE_LIMIT`) creates the notification for all of them and sends `IssuePublishedNotify` (`ISSUE_PUBLISH_NOTIFY`, "Issue Published Notify", `emails.issuePublishNotify.subject` "Just published: {$issueIdentification} of {$contextName}", body with `{$issueUrl}` and `{$issueToc}`) with the publishing user as sender to the second set only, footer from `setupUnsubscribeFooter()`. `notification.type.issuePublished` "An issue has been published."; `NotificationManager::getNotificationUrl()` points it at `issue/current`. U05 scenario 9 drove the email 2026-09-04 (subject "Just published: Vol. 1 No. 1 (2026): {title} of {journal name}", footer present, a Reader with "Enable…" unticked got none) after running the jobs. Live-probed 2026-09-25 (Actors row 5; Side effects bullets 1–2), OJS: after the queue ran the email reached every account with a role, the publisher and the Site Administrator included, from the publisher; not a Reader who unticked "Enable these types of notifications.", nor, on a second publish, one who ticked "Do not send me an email for these types of notifications."; right after "OK" none had arrived. The notification was recorded for every enrolled account but the one who unticked "Enable…", and nothing on screen listed it: the Tasks panels showed only tasks, and `notification` answered "404 Not Found".
 
 <a id="fn-g"></a>
-**g** — Grids: `FutureIssueGridHandler` (title `editor.issues.futureIssues`, action `addIssue` `grid.action.addIssue` "Create Issue", `loadData` unpublished, `ORDERBY_UNPUBLISHED_ISSUES` = year, volume, number ASC, no order feature); `BackIssueGridHandler` (title `editor.issues.backIssues`, extra column `published` `editor.issues.published` "Published" in `getLocalizedDateFormatShort()`, `OrderGridItemsFeature`). Columns from `IssueGridHandler::initialize()`: `identification` (`issue.issue` "Issue", the cell a link to `editIssue`), `numArticles` (`editor.issues.numArticles` "Items" = `Issue::getNumArticles()`, current publication scheduled or published). `IssueGridRow` actions in order: `edit` (`grid.action.edit`), `previewIssue`/`viewIssue` ("Preview"/"View"), `publish`/`unpublish`, `setCurrentIssue`, `delete`. U05 note s9 (2026-09-04): the row actions sit behind the row's expander arrow. `js/controllers/grid/issues/BackIssueGridHandler.js` refreshes on the global `issuePublished` event, `FutureIssueGridHandler.js` on `issueUnpublished`. Empty grid: `grid.noItems` "No Items". Live-probed 2026-09-25: "Order" above "Back Issues" was hidden with no issue or one and shown from two; the galley tab's likewise from two galleys; the table of contents' from one article.
+**g** — Grids: `FutureIssueGridHandler` (title `editor.issues.futureIssues`, action `addIssue` `grid.action.addIssue` "Create Issue", `loadData` unpublished, `ORDERBY_UNPUBLISHED_ISSUES` = year, volume, number ASC, no order feature); `BackIssueGridHandler` (title `editor.issues.backIssues`, extra column `published` `editor.issues.published` "Published" in `getLocalizedDateFormatShort()`, `OrderGridItemsFeature`). Columns from `IssueGridHandler::initialize()`: `identification` (`issue.issue` "Issue", the cell a link to `editIssue`), `numArticles` (`editor.issues.numArticles` "Items" = `Issue::getNumArticles()`: the submissions `filterByIssueIds()` keeps, as note m, whose current publication is scheduled or published). `IssueGridRow` actions in order: `edit` (`grid.action.edit`), `previewIssue`/`viewIssue` ("Preview"/"View"), `publish`/`unpublish`, `setCurrentIssue`, `delete`. U05 note s9 (2026-09-04): the row actions sit behind the row's expander arrow. `js/controllers/grid/issues/BackIssueGridHandler.js` refreshes on the global `issuePublished` event, `FutureIssueGridHandler.js` on `issueUnpublished`. Empty grid: `grid.noItems` "No Items". Live-probed 2026-09-25: "Order" above "Back Issues" was hidden with no issue or one and shown from two; the galley tab's likewise from two galleys; the table of contents' from one article.
 
 <a id="fn-h"></a>
 **h** — `APP\issue\Issue::getIssueIdentification()`: parts in `showVolume`, `showNumber`, `showYear`, `showTitle` order, `issue.vol` "Vol." / `issue.no` "No.", year bracketed when not first, a `:` appended before the title; the title for the given locale falling back to `getLocalizedTitle()`; an empty result forces volume, number and year. `getIssueSeries()` is the same without the title (the archive's second line). Live-probed 2026-09-25 (Rule 2): every combination named as stated in the lists, on the issue's page and in the email subject; a title given only in French showed in the English lists ("Vol. 5 No. 1 (2030): Numéro spécial K1"); "Archives" put "Special Issue" on one line and "Vol. 1 No. 2 (2014)" under it.
@@ -1287,10 +1350,10 @@ where it is made.
 **l** — `IssueForm::validate()`: a non-empty `datePublished` must be `Y-m-d` (`editor.issues.datePublished.invalid`; the date picker normalises input first, per the code's own comment); an empty one on a published issue adds `editor.issues.datePublished.requiredWhenPublished`. `execute()` stores null for an empty date on an unpublished issue.
 
 <a id="fn-m"></a>
-**m** — `controllers/grid/toc/TocGridHandler.php` (category grid, loaded by `issueToc.tpl`): `loadData()` = `Repo::submission()->getInSections()` (status published or scheduled, grouped by the current publication's `sectionId`) and `Repo::section()->getByIssueId()`; columns `title` (`article.title` "Title") and, under `publishingMode == SUBSCRIPTION && accessStatus == ISSUE_ACCESS_SUBSCRIPTION`, `access` (`reader.openAccess` "Open Access", `selectStatusCell.tpl`). `OrderCategoryGridItemsFeature(ORDER_CATEGORY_GRID_CATEGORIES_AND_ROWS)` (`grid.action.order` "Order", finish controls `common.done` "Done" / `grid.action.cancelOrdering` "Cancel ordering"). Section order: `setDataElementSequence()` → `upsertCustomSectionOrder(issueId, sectionId, seq)`; article order: `setDataElementInCategorySequence()` edits the current publication's `seq` and, when the target category differs, its `sectionId`. Unordered articles share `seq` 0 and `ORDERBY_SEQUENCE` has no tie-breaker. `TocGridRow` actions: `workflow` (`submission.submission` "Submission", `RedirectAction` to `dashboard/editorial?workflowSubmissionId={id}`) and `removeArticle` (note n).
+**m** — `controllers/grid/toc/TocGridHandler.php` (category grid, loaded by `issueToc.tpl`): `loadData()` = `Repo::submission()->getInSections()` (`filterByIssueIds()` keeps every submission with any publication carrying the issue's id, whatever that publication's status; then submission status published or scheduled, grouped by the current publication's `sectionId`; f-a17) and `Repo::section()->getByIssueId()`; columns `title` (`article.title` "Title") and, under `publishingMode == SUBSCRIPTION && accessStatus == ISSUE_ACCESS_SUBSCRIPTION`, `access` (`reader.openAccess` "Open Access", `selectStatusCell.tpl`). `OrderCategoryGridItemsFeature(ORDER_CATEGORY_GRID_CATEGORIES_AND_ROWS)` (`grid.action.order` "Order", finish controls `common.done` "Done" / `grid.action.cancelOrdering` "Cancel ordering"). Section order: `setDataElementSequence()` → `upsertCustomSectionOrder(issueId, sectionId, seq)`; article order: `setDataElementInCategorySequence()` edits the current publication's `seq` and, when the target category differs, its `sectionId`. Unordered articles share `seq` 0 and `ORDERBY_SEQUENCE` has no tie-breaker. `TocGridRow` actions: `workflow` (`submission.submission` "Submission", `RedirectAction` to `dashboard/editorial?workflowSubmissionId={id}`) and `removeArticle` (note n). Live-probed 2026-09-28 (Rules 9, 9a, 11): each row's arrow offered "Submission" and "Remove"; the newer version published outside the issue: f-a17.
 
 <a id="fn-n"></a>
-**n** — `TocGridHandler::removeArticle()`: `RemoteActionConfirmationModal` `editor.article.remove.confirm`, title `grid.action.removeArticle` "Remove Article From Issue", link label `editor.article.remove` "Remove"; for each publication of the submission in this issue with status scheduled or published: `Repo::publication()->unpublish()` (status `STATUS_QUEUED`, `issueId` kept) and `seq` cleared; the section's custom order row is deleted when it was the section's only article.
+**n** — `TocGridHandler::removeArticle()`: `RemoteActionConfirmationModal` `editor.article.remove.confirm`, title `grid.action.removeArticle` "Remove Article From Issue", link label `editor.article.remove` "Remove"; for each publication of the submission in this issue with status scheduled or published: `Repo::publication()->unpublish()` (status `STATUS_QUEUED`, `issueId` kept) and `seq` cleared; the section's custom order row is deleted when it was the section's only article. Only publications carrying this issue's id are touched, so on an article whose current publication has no issue the older one is unpublished and the row, read through note m's filter, stays. Live-probed 2026-09-28 (Rules 12, 12a): the window's title and question as Rule 12 quotes them; the outcome: f-a18.
 
 <a id="fn-o"></a>
 **o** — `TocGridCellProvider::getCellActions()` `access`: an `AjaxAction` to `setAccessStatus` toggling the current publication's `accessStatus` between `ARTICLE_ACCESS_OPEN` and `ARTICLE_ACCESS_ISSUE_DEFAULT` (its accessible label `manager.plugins.disable` "Disable"). Access tab: `IssueGridHandler::access()`/`updateAccess()`, `IssueAccessForm` + `issueAccessForm.tpl` (`editor.issues.accessStatus` "Access status", options `editor.issues.openAccess` "Open access" / `editor.issues.subscription` "Subscription", `editor.issues.accessDate` "Open access date"); the save is *Subscriptions & open access control*'s.
@@ -1317,7 +1380,7 @@ where it is made.
 **v** — `pages/issue/IssueHandler.php`: `index` → `current`; `current()` redirects to `issue/view/{bestId}` when `Repo::issue()->getCurrent()` returns one, else renders `frontend/pages/issue.tpl` without an issue (`current.noCurrentIssue` "No Current Issue", `current.noCurrentIssueDesc` "This journal has not published any issues.", `breadcrumbs_issue.tpl` with `common.homepageNavigationLabel` "Home" / `navigation.archives` "Archives"); `view()` renders the same template with `issue_toc.tpl`; `archive()` pages by the context's `itemsPerPage` (else the config default), throws 404 for an empty page past the first, and renders `issueArchive.tpl` (`archive.archives` "Archives", `archive.archivesPageNumber` "Archives - Page {$pageNumber}", `issue_summary.tpl`, `pagination.tpl`). `issue_summary.tpl`: cover link, `getLocalizedTitle()` when `getShowTitle()`, else `getIssueSeries()`, the series under a title, description. Live-probed 2026-09-25 (Rules 21, 24, 25), OJS: the issue's tab read "Vol. 1 No. 2 (2025) | {journal}"; `issue/view/73` (the ID) and its URL Path opened the page, `issue/view/2` (another issue's "Number", no ID of the journal) sent a signed-out visitor to Login; "No Current Issue"'s tab read "| {journal}"; with "Items per page" at 2, `issue/archive/2` was headed "Archives - Page 2" and `/3` answered "404 Not Found".
 
 <a id="fn-w"></a>
-**w** — `IssueHandler::setupIssueTemplate()` keeps a submission only when its current publication has a section and is `STATUS_PUBLISHED` (published issue) or scheduled/published (unpublished issue); sections from `Repo::section()->getByIssueId()` (`COALESCE(custom_section_orders.seq, sections.seq)`), a section's title null when `hideTitle`. `frontend/objects/issue_toc.tpl`: `editor.issues.preview` "Preview" warning when unpublished; cover with alt `getLocalizedCoverImageAltText()` or `issue.viewIssueIdentification` "View {$identification}"; description; pub-id plugins' lines; DOI line; `submissions.published` "Published" with `date_format:$dateFormatShort` (`includeIssuePublishDate` true); `issue.fullIssue` "Full Issue" with `galley_link.tpl` per galley; sections with `article_summary.tpl`. Live-probed 2026-09-25 (Rule 23), OJS: an article unpublished from its workflow left the page and the tab; one with a newer version left unpublished stayed, as its published version.
+**w** — `IssueHandler::setupIssueTemplate()` fetches with `filterByIssueIds()` (any publication carrying the issue's id, whatever its status; note m) and keeps a submission only when its current publication has a section and is `STATUS_PUBLISHED` (published issue) or scheduled/published (unpublished issue); sections from `Repo::section()->getByIssueId()` (`COALESCE(custom_section_orders.seq, sections.seq)`), a section's title null when `hideTitle`. `frontend/objects/issue_toc.tpl`: `editor.issues.preview` "Preview" warning when unpublished; cover with alt `getLocalizedCoverImageAltText()` or `issue.viewIssueIdentification` "View {$identification}"; description; pub-id plugins' lines; DOI line; `submissions.published` "Published" with `date_format:$dateFormatShort` (`includeIssuePublishDate` true); `issue.fullIssue` "Full Issue" with `galley_link.tpl` per galley; sections with `article_summary.tpl`. Live-probed 2026-09-25 (Rule 23), OJS: an article unpublished from its workflow left the page and the tab; one with a newer version left unpublished stayed, as its published version. Live-probed 2026-09-28 (Rules 23, 23a): the control of f-a17 held (a new version saved and unpublished left the issue's page, the article's page and the feeds on the first version); the newer version published outside the issue: f-a17.
 
 <a id="fn-x"></a>
 **x** — `galley_link.tpl` builds `issue/view/{issueBestId}/{galleyBestId}`; `IssueHandler::initialize()` redirects an unknown galley to `issue/view/{id}`; `view()` with a galley calls hook `IssueHandler::view::galley` and otherwise redirects to `issue/download/…`. `plugins/generic/pdfJsViewer/PdfJsViewerPlugin::issueCallback()` takes `application/pdf` galleys: `templates/display.tpl` header with the return link (`issue.return` "Return to Issue Details", screen-reader text), the title link (`getIssueIdentification()`), `common.download` "Download"; page title `article.pageTitle` "View of {$title}". Seed facts (2026-09-25): "PDF.JS PDF Viewer" arrives ticked on a new journal. `lensGalley` also hooks issue galleys (not ticked by default for issue use; not read further).
@@ -1441,6 +1504,12 @@ where it is made.
 
 <a id="fn-f-a16"></a>
 **f-a16** — Test run 2026-09-25 (Fields, after the "Issue Data" table; scenario 2), OJS: with An issue about tides. typed only in "Description" on a published issue's "Issue Data", pressing "Table of Contents" raised no browser question and the selected tab read "Table of Contents". A follow-up probe the same day on a scratch journal tried three ways (the tab pressed at once, 1.5 s after typing, after first clicking into "Volume"): no question in any, the tab moved each time. A typed "URL Path" raised the question in the same run, as a typed "Volume" had in note i's probe. The window's "Close" was not driven with a description-only change. Mechanism not read.
+
+<a id="fn-f-a17"></a>
+**f-a17** — Live-probed 2026-09-28 (Fields "Items"; Rules 9, 9a, 23, 23a), OJS, four runs, each on a scratch journal with the sections "Articles" and "Second Section" and the published, current issue "Vol. 1 No. 1 (2024)" holding three published articles. As the journal's Journal Manager, "Create New Version" on two of them, each new version retitled and saved; one was then published with "Don't Assign To An Issue" (the window read "…This will be published immediately without any issue association…", and its Publication Settings then showed "Don't Assign To An Issue" with no issue box), the other with the preselected "Assign To Current/Back Issue" and the issue. Signed out, the issue's page, "Current" (`issue/current`) and the home page's "Current Issue" listed the first article under its new title in "Articles", on the page and after a reload; its link `article/view/{id}` opened the new version's page, with the breadcrumb "Home / Archives / Articles" and an issue part reading only "Section Articles". "Back Issues" read "Items" 3 and the "Table of Contents" tab listed the new title. The article published into the issue was listed under its new title, with the breadcrumb and "Issue" line naming the issue. With the journal's web feed set to "Display items in current published issue." (two of the runs), the Atom, RSS 2.0 and RSS 1.0 items carried the new title and linked to `article/view/{id}`, while an article published with no issue at all was not listed. Code read 2026-09-28 (ojs `72b85f4ba0`): the issue's page, the tab and "Items" start from `APP\submission\Collector::filterByIssueIds()`, which keeps a submission when any of its publications carries the issue's id, whatever that publication's status; `IssueHandler::setupIssueTemplate()`, `Repository::getInSections()` and `Issue::getNumArticles()` then read only the current publication's status and section (notes g, m, w). The current-issue feed applies the same filter ([Web feeds](U18-web-feeds.md), its note f).
+
+<a id="fn-f-a18"></a>
+**f-a18** — Live-probed 2026-09-28 (Rule 12a), OJS, four runs, on the article of f-a17 published outside the issue: "Remove" showed Rule 12's window and question, and "OK" answered with success (`remove-article` 200, `{"status":true}`) and closed the window. The row stayed on the tab, on the same window and after it was reopened; "Items" stayed 3; the issue's page, and in the two feed runs the current-issue feeds, still listed the new title; the workflow read "Status: Published" with only "Unpublish". The first version was unpublished instead: its page `article/view/{id}/version/{firstVersionId}` answered "404 Not Found", the article's "Versions" list dropped "2024-03-01 (Version of Record 1.0)", and the article's page, still the new version, read "Published 2024-03-01 — Updated on 2026-09-28". No run recorded a server error or a script error. Mechanism: note n.
 
 ## Reference — entry points & surfaces
 

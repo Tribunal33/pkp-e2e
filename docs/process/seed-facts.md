@@ -1460,7 +1460,10 @@ config-file settings.
   once (RSS 2.0 fails while nothing is listed, U18 A1). A `sidebar:
   ['WebFeedBlockPlugin']` seed is refused unless the same request carries
   `plugins: {webfeedplugin: {enabled: true}}`. Settings › Website ›
-  "Plugins", all three apps, 2026-09-25 (U18 claim check K1, K2).
+  "Plugins", all three apps, 2026-09-25 (U18 claim check K1, K2). So a
+  drive that reads the current-issue feed seeds
+  `plugins.webfeedplugin.settings.displayItems: 'issue'` (U50 claim check
+  I28, 2026-09-28).
 - A scratch context created without `context.acronym` has no initials, so
   its first Settings › Journal › "Masthead" save is refused for "Journal
   initials" ("Press Initials", "Server initials" are required too), and
