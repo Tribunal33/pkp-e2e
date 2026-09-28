@@ -473,6 +473,13 @@ node process, never a broad `pkill` ("Slots": other slots run beside it).
   `gh workflow run e2e.yml --ref <branch> -f ojs_ref=<sha>`; a PR head on
   a contributor's fork needs `-f ojs_repo=<fork>/ojs` beside it, and a
   dispatch cancels the branch's in-flight push run (one concurrency group).
+  `-f pkp_lib_ref=` and `-f ui_library_ref=` (a full sha or
+  `pull/<n>/head`, fetched from pkp/pkp-lib and pkp/ui-library) pin every
+  app's `lib/pkp` and `lib/ui-library` before the installs, whatever the
+  app commit's pointers say: a PR review's merge result when an app PR
+  carries no submodule bump or an app has no PR of its own (the job
+  summary names the pinned commits). App repo checks never pin: their PRs
+  carry the submodule bumps (@jarda.kotesovec, 2026-09-28).
   `gh` works on this repo and, since 2026-09-12, on the pkp org.
 - `.github/workflows/run-app.yml` is the reusable job. Each app repo's
   `e2e-tests.yml` calls it on every push and PR with `app_ref` set to the

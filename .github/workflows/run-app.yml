@@ -53,6 +53,21 @@ on:
         required: false
         type: string
         default: ''
+      pkp_lib_ref:
+        description: >-
+          pin lib/pkp to this pkp/pkp-lib commit (a full sha or
+          pull/<n>/head) instead of the app commit's pointer: a PR review's
+          merge result when the app PR carries no submodule bump or has no
+          PR of its own. Empty: the pointer as committed.
+        required: false
+        type: string
+        default: ''
+      ui_library_ref:
+        description: >-
+          the same for lib/ui-library (pkp/ui-library)
+        required: false
+        type: string
+        default: ''
 
 jobs:
   e2e:
@@ -122,6 +137,28 @@ jobs:
           path: app
           submodules: recursive
           fetch-depth: 1
+
+      # A dispatch may pin the shared code to an open pkp-lib or ui-library
+      # PR (e2e.yml pkp_lib_ref / ui_library_ref), before the installs read
+      # composer.lock and package-lock.json.
+      - name: Pin the submodules
+        if: inputs.pkp_lib_ref != '' || inputs.ui_library_ref != ''
+        working-directory: app
+        env:
+          PKP_LIB_REF: ${{ inputs.pkp_lib_ref }}
+          UI_LIBRARY_REF: ${{ inputs.ui_library_ref }}
+        run: |
+          pin() {
+            [ -n "$3" ] || return 0
+            was=$(git -C "$1" rev-parse --short=10 HEAD)
+            git -C "$1" fetch --quiet --depth=1 "https://github.com/pkp/$2.git" "$3"
+            git -C "$1" checkout --quiet --detach FETCH_HEAD
+            git -C "$1" submodule update --quiet --init --recursive --depth=1
+            line="$1 pinned to pkp/$2 $3 = $(git -C "$1" rev-parse --short=10 HEAD) (pointer $was)"
+            echo "$line"; echo "- $line" >> "$GITHUB_STEP_SUMMARY"
+          }
+          pin lib/pkp pkp-lib "$PKP_LIB_REF"
+          pin lib/ui-library ui-library "$UI_LIBRARY_REF"
 
       - name: Set up PHP 8.3
         uses: shivammathur/setup-php@v2

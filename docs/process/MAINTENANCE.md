@@ -438,10 +438,12 @@ merge (first run: issue pkp/pkp-lib#13274, companion `13274`, 2026-09-12).
    retain-on-failure`) save a second reproduction.
 6. **CI at the PR refs from the companion.** Push the companion, then
    `gh workflow run e2e.yml --ref <companion> -f <app>_repo=<fork>/<app>
-   -f <app>_ref=<head sha>` for each app with a PR (harness.md "CI"); an
-   app without one runs at `main`, which checks the companion's tests at
-   its tip, while its run at the shared PR's head stays step 5's local
-   one (CI builds app refs, not submodule branches). Do not push
+   -f <app>_ref=<head sha>` for each app with a PR, plus `-f
+   pkp_lib_ref=pull/<n>/head` and `-f ui_library_ref=pull/<n>/head` for
+   the shared PRs (harness.md "CI"): every app then builds the shared PRs
+   whatever its pointers say, so an app PR without a submodule bump and
+   an app without a PR of its own (at `main`) both run the merge result.
+   Do not push
    the companion again while the dispatch runs: a push run and a dispatch
    share one concurrency group and the newer cancels the older. The app
    PR's own check picks the companion up by name on its next run.

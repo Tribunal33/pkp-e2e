@@ -43,6 +43,14 @@ on:
         description: OPS git ref (branch or sha)
         type: string
         default: main
+      pkp_lib_ref:
+        description: pin every app's lib/pkp to this pkp/pkp-lib commit (full sha or pull/<n>/head)
+        type: string
+        default: ''
+      ui_library_ref:
+        description: pin every app's lib/ui-library to this pkp/ui-library commit (full sha or pull/<n>/head)
+        type: string
+        default: ''
 
 # A newer push to a branch cancels its older run, except on main: parallel
 # slots push there, and each push's own run is its gate (RUNBOOK step 10),
@@ -61,6 +69,8 @@ jobs:
       app_repo: ${{ inputs.ojs_repo || 'pkp/ojs' }}
       app_ref: ${{ inputs.ojs_ref || 'main' }}
       e2e_ref: ${{ github.sha }}
+      pkp_lib_ref: ${{ inputs.pkp_lib_ref || '' }}
+      ui_library_ref: ${{ inputs.ui_library_ref || '' }}
   omp:
     # Like pkp's schedule.yml: the nightly runs only on the canonical repo.
     if: github.event_name != 'schedule' || github.repository == 'jardakotesovec/pkp-e2e'
@@ -70,6 +80,8 @@ jobs:
       app_repo: ${{ inputs.omp_repo || 'pkp/omp' }}
       app_ref: ${{ inputs.omp_ref || 'main' }}
       e2e_ref: ${{ github.sha }}
+      pkp_lib_ref: ${{ inputs.pkp_lib_ref || '' }}
+      ui_library_ref: ${{ inputs.ui_library_ref || '' }}
   ops:
     # Like pkp's schedule.yml: the nightly runs only on the canonical repo.
     if: github.event_name != 'schedule' || github.repository == 'jardakotesovec/pkp-e2e'
@@ -79,3 +91,5 @@ jobs:
       app_repo: ${{ inputs.ops_repo || 'pkp/ops' }}
       app_ref: ${{ inputs.ops_ref || 'main' }}
       e2e_ref: ${{ github.sha }}
+      pkp_lib_ref: ${{ inputs.pkp_lib_ref || '' }}
+      ui_library_ref: ${{ inputs.ui_library_ref || '' }}
