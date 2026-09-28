@@ -133,16 +133,17 @@ and "Save" is greyed out until the boxes are filled: <sup>g</sup>
    Recommendations". Pressing a tab or a side tab changes the page
    address. <sup>a</sup>
    - 1a. **A reload.** A reload after pressing "Review" alone keeps
-     "Review" › "Setup" open, and a reload keeps an open side tab of
-     "Submission"
-     ([→ Submission intake configuration](U58-submission-intake-configuration.md)).
+     "Review" › "Setup" open, and one after pressing a side tab of
+     "Submission" keeps it open
+     ([→ Submission intake configuration](U58-submission-intake-configuration.md)
+     owns that tab's reloads).
      A reload after pressing a side tab of "Review", "Setup" included,
      lands on "Submission" › "Disable Submissions" instead; pressing
      "Review" then shows the side tab that was open ⚠ [A4](#a4).
    - 1b. **Coming back to "Review".** Pressing "Submission" and then
-     "Review" again shows the side tab that was last open under "Review",
-     but the address is back to the one "Review" alone gives, so a reload
-     opens "Review" › "Setup", not that side tab.
+     "Review" again shows the side tab last open under "Review", but the
+     address is back to the one "Review" alone gives, so a reload opens
+     "Review" › "Setup".
 
 2. **Saving "Setup" and "Reviewer Guidance".** "Save" writes the whole form
    at once. A successful save shows no page notice: "Saving" then "Saved"
@@ -891,7 +892,7 @@ Left out of the scenarios above, by reason:
     (Settings)
   - a second form language's switch and twin boxes (Rule 16; Settings)
 - **Owned by another feature**:
-  - a reload keeping an open side tab of "Submission" (Rule 1a;
+  - a reload keeping a pressed side tab of "Submission" (Rule 1a;
     *Submission intake configuration*, scenarios 3 and 5)
   - "Restrict File Access" on: the files only after accepting (Rule 5;
     *Reviewer's review*, scenario 9)

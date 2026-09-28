@@ -217,13 +217,13 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
 6a. **A browser that opened the journal before.** After a "Colour" save,
     a browser that never opened the journal's pages shows the new colour
     at once. A browser that already opened them, a visitor's or the
-    manager's own, may keep the old colour on its next pages and after a
+    manager's own, may keep the old colour on its next pages and a plain
     reload, for a while that grows with how long the old colour had stood
-    unchanged when that browser opened the pages ⚠ [A10](#a10). A browser
-    whose visit came right after the previous save shows the new colour
-    on its next load; one whose visit came three minutes after it still
-    shows the old colour a few seconds later, and the new one half a
-    minute later. <sup>l</sup>
+    unchanged when that browser opened the pages ⚠ [A10](#a10). Opened
+    right after the previous save, its next load shows the new colour.
+    Opened three minutes after it, with the new colour saved at once: a
+    reload a few seconds after opening shows the old colour, one half a
+    minute after, the new. <sup>l</sup>
 
 7. **The summary on the home page.** Ticked, the home page gains a
    section headed "About the Journal" ("About the Press", "About the
@@ -1273,9 +1273,9 @@ pick the group's ready choice and save again. Basis: probe.
 **A10 — A saved "Colour" does not reach a browser that has already opened the journal** · ❓ · user-visible.
 The manager saves a new "Colour" on "Theme" and sees "Saved". A browser
 that has already opened the journal's pages, a visitor's or the
-manager's own, keeps the old header colour on its next page and after a
-reload, while a browser that never opened the journal shows the new one.
-How long it keeps the old colour grows with how long that colour had
+manager's own, keeps the old header colour on its next page and a
+plain reload, while a browser that never opened the journal shows the
+new one. How long it keeps the old colour grows with how long that colour had
 stood unchanged before its visit, so a journal whose look has not changed
 for a long time gives its returning visitors the old colour the longest.
 The site's own pages behave the same
