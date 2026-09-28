@@ -621,37 +621,21 @@ trips.
   green alone (`.reports/U36/alone-ops-U03S5.log`). Watch condition: a
   second sighting; then the error context says whether the save was
   never sent or answered before the wait was armed.
-- **"Cancel upload" on a throttled upload** (U36 S9, OJS and OMP:
-  2026-09-24, the U08 harness regression re-runs on the VM at auto
-  workers while three test authors ran suites on the same fleets,
-  `.reports/U08/harness/regression.log`). Red in the OJS suite run with
-  the new context builder and with the old one, green alone on both; on
-  OMP red once alone, then green twice. Lean: the 243-byte fixture
-  finishes uploading before "Cancel upload" is pressed. Watch condition:
-  a sighting in a final or on CI; then give the test a fixture large
-  enough to outlast the press. Tripped the same day: the U08 OJS final
-  on a reset database at auto workers, red beside U14 S5 on the same
-  read (the reloaded panel not empty), green alone
-  (`.reports/U08/final-run-ojs-attempt1.log`, `alone-ojs-reds.log`).
-  The lean did not hold: with the throttle slowed from 4 KB/s to 64
-  bytes/s the test went red 3 of 3 alone on OJS and 2 of 3 on OMP
-  (`.reports/U08/u36s9-fix-{ojs,omp}.log`; change reverted), so a slower
-  upload makes the file land more often, which points at "Cancel upload"
-  not stopping an upload already sent rather than at a fast fixture.
-  Next: a diagnostic read of the upload request and the file list
-  around the press before any test change (possibly a U36 finding).
-  Also red once in the OMP final at the merged tips of pkp-lib#13359
-  (2026-09-24, reset database, eight workers,
-  `.reports/pr13359/merge-omp.log`, error context kept beside it: the
-  reloaded panel still lists `article.pdf`); green alone right after.
-  Again 2026-09-24 in the PR review of pkp-lib#13263 (companion
-  `i13263`): OMP and OJS finals on reset databases at eight workers,
-  beside U14 S5 on both, green alone on both
-  (`.reports/i13263/final-run-{omp,ojs}.log`, `alone-{omp,ojs}-reds.log`).
-  Again 2026-09-24 in the U10 session's OJS final on a reset database at
-  eight workers, beside U14 S5, and in its second OMP final, the only red
-  of 350; green alone on both (`.reports/U10/final-run-ojs-attempt1.log`,
-  `final-run-omp-attempt2.log`, `alone-ojs-reds.log`, `alone-omp-reds-2.log`). Again 2026-09-25 (U13 session, VM): OMP, beside U14 S5 in the OMP final on a reset database, green alone (`.reports/U13/final-run-omp.log`, `alone-omp-reds.log`). 2026-09-25: red in the same guard run beside U30 S4, green alone (`.reports/sync/s25/guard/ojs-reds-alone.log`). Again 2026-09-25 (U51 session, Mac, reset database, auto workers): OJS, beside U14 S5 in the OJS final, green alone (`.reports/U51/final-run-ojs.log`, `alone-ojs-reds.log`). Again 2026-09-27 (U62 session, Mac, reset database, auto workers): OJS, beside U14 S5 in the OJS final, green alone (`.reports/U62/final-run-ojs.log`, `alone-ojs-reds.log`). **On CI 2026-09-27**: push run 36322740739 at `948868b`, OMP shard 3/3 red on both attempts at line 898 (the reloaded panel's empty-state "Upload File" never shows; the job failed on it), OMP at `3cd59e9443`; the diagnostic read above is still owed. Again 2026-09-27 (U75 session, VM, reset database, auto workers): OJS, the only red of 581 in the OJS final at the same line (the reloaded panel's "Upload File" never shows), green alone (`.reports/U75/final-run-ojs.log`, `alone-ojs-U36S9.log`).
+- **"Cancel upload" on a throttled upload** (U36 S9, OJS and OMP; local
+  finals from 2026-09-24, CI once on both attempts: push run 36322740739,
+  OMP shard 3/3; CI tally 6 flaky + 1 failed on OJS). **Fixed
+  2026-09-28** (`.reports/flake-s28/u36s9/diagnosis.md`): the test's own
+  race over an app defect. The app stores a file whose whole body reached
+  the server before the abort; the test lifted the throttle about 10 ms
+  after the press (releasing the held body ahead of the abort), and at
+  4 KB/s the 636-byte body was out in 0.3 s, which a press under load
+  missed. Now the body is held at 64 bytes/s (about 10 s) and the
+  throttle stays on through the reload and the empty-panel reads. Under
+  a 6× CPU throttle: red 9/10 OJS and 10/10 OMP before, 0/10 after; the
+  U36 file `--repeat-each 5` at eight workers 50/50 on each app. Rule in
+  patterns.md "Waiting strategy"; the defect underneath is U36's register
+  (a cancel pressed after the last byte keeps the file). **Watch
+  condition**: an S9 red at the reload read behind the held throttle.
 - **Users & Roles "Email" dialog still open after "Send Email"** (U14 S5
   on OJS, OMP and OPS, local finals only; sightings 2026-09-17 to
   2026-09-27, `.reports/flake-s26/u14/`, `.reports/workers-8core/invalid-concurrent/run-ojs-w8.log`;

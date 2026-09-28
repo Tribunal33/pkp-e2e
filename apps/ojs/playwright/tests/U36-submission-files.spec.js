@@ -836,7 +836,15 @@ test.describe('submission files', () => {
         expect(guidanceBox && panelBox && guidanceBox.x < panelBox.x, 'the guidance stands left of the panel').toBe(true);
 
         // "Cancel upload" on a throttled upload: the row goes at once, nothing
-        // asks, and a reload finds the panel empty.
+        // asks, and a reload finds the panel empty. At 64 bytes/s the browser
+        // holds the fixture's request body (about 640 bytes) for some ten
+        // seconds, so the press lands while the file is still on its way at any
+        // load; at 4 KB/s it was out in a fraction of a second and a late press
+        // found the file already at the server, which stores it. The throttle
+        // stays on until the reloaded panel is read: lifting it releases a held
+        // body at once, and a lift sent right after the press can reach the
+        // network stack before the abort does, so the server gets the whole
+        // file (.reports/flake-s28/u36s9/diagnosis.md).
         const asked = recordBrowserDialogs(page);
         const cdp = await page.context().newCDPSession(page);
         await cdp.send('Network.enable');
@@ -844,7 +852,7 @@ test.describe('submission files', () => {
             offline: false,
             latency: 20,
             downloadThroughput: -1,
-            uploadThroughput: 4 * 1024,
+            uploadThroughput: 64,
         });
         await panel.pick(panel.addFileButton(), fx('article.pdf'));
         const uploading = panel.row('article.pdf');
@@ -853,6 +861,11 @@ test.describe('submission files', () => {
         await expect(panel.cancelUploadButton(uploading)).toBeVisible();
         await panel.cancelUploadButton(uploading).click();
         await expect(panel.rows()).toHaveCount(0);
+        expect(asked.messages, 'nothing asks on "Cancel upload"').toEqual([]);
+        await page.reload();
+        await wizard.expectLoaded();
+        await expect(panel.emptyUploadButton()).toBeVisible({timeout: 30_000});
+        await expect(panel.rows()).toHaveCount(0);
         await cdp.send('Network.emulateNetworkConditions', {
             offline: false,
             latency: 0,
@@ -860,11 +873,6 @@ test.describe('submission files', () => {
             uploadThroughput: -1,
         });
         await cdp.detach();
-        expect(asked.messages, 'nothing asks on "Cancel upload"').toEqual([]);
-        await page.reload();
-        await wizard.expectLoaded();
-        await expect(panel.emptyUploadButton()).toBeVisible({timeout: 30_000});
-        await expect(panel.rows()).toHaveCount(0);
 
         // A finished file: the name link, "Edit", "Remove", and the question
         // with "Article Text" and "Other".

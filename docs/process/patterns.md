@@ -231,6 +231,14 @@ slide. Durations are 0.01ms rather than 0 because presence helpers wait on
   reaches 0. It is a no-op on Vue-only surfaces; prefer `waitForResponse`
   there. The symptom that points here: a spec passes at `--workers=1` but
   flakes at 2 with timeouts right after a legacy form save.
+- **A cancel read under a network throttle** (CDP
+  `Network.emulateNetworkConditions`): lifting the throttle releases every
+  held byte at once, ahead of the page's abort, so the throttle stays on
+  until the read that checks the cancel is done (after the reload), and it
+  holds the body for seconds, sized by the body (64 bytes/s for a fixture
+  under 1 KB), since a press under load misses a 0.3 s window. The page's
+  upload progress reaches 100% when the browser has taken the body, so it
+  is no clock for the wire (U36 S9, 2026-09-28).
 
 ## Parallel-load lessons
 
