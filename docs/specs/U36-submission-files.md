@@ -369,12 +369,12 @@ record what each role is offered once the list is on screen. <sup>b</sup>
     - 17a. **While a file uploads** its row shows its name, a progress bar
       and "Cancel upload" (a screen reader hears "Uploading {percent}%
       complete"). "Cancel upload" removes the row at once without asking.
-      Pressed while the file is still on its way, it keeps nothing. The
-      button stays until the server has answered, and pressed once the
-      whole file has been sent (its bar full, its name not yet a link) it
-      keeps the file: after a reload it is back on the panel ⚠ [A25](#a25).
-      Leaving the page while a file uploads asks nothing and keeps
-      nothing. <sup>k</sup>
+      Pressed while the file is on its way, it keeps nothing. The button
+      stays until the server answers; pressed once the whole file has been
+      sent (its bar full, its name not yet a link), it keeps the file, back
+      on the panel after a reload ⚠ [A25](#a25). Going to another address
+      mid-upload asks nothing; the reopened draft's panel lacks the file.
+      <sup>k</sup>
     - 17b. **The upload limit.** A file larger than the install allows is
       refused in its row with "File is too big ({size}MiB). Max filesize:
       {limit}MiB.", for example "File is too big (101MiB). Max filesize:
@@ -1251,11 +1251,11 @@ Since: 2026-09-27 · Basis: probe. <sup>[f-a24](#fn-a24)</sup>
 In the submission wizard's "Files" panel, the Author who presses "Cancel
 upload" expects the file to be dropped, and the row goes at once without
 a question. Pressed after the whole file has been sent but before the
-server has answered, only the row goes: the file is stored, is back on
-the panel with "Edit" and "Remove" after a reload, and, like any file
-there, goes in with the submission. Nothing says so when the row goes.
-On a slow connection, or with a server slow to answer, that window is
-long enough to press in.
+server's answer, only the row goes: the file is stored, is back on the
+panel with "Edit" and "Remove" after a reload, and, like any file there,
+goes in with the submission. Nothing says so when the row goes. An answer
+slowed by the link or the server holds that window open; so does limiting
+only the browser's download speed.
 Basis: probe. <sup>[f-a25](#fn-a25)</sup>
 
 ### OPS
