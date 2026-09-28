@@ -23,6 +23,7 @@
  */
 const path = require('path');
 const {expect} = require('../support/fixtures.js');
+const {waitForEditorReady, editorIdOf} = require('../../../../shared/playwright/support/richtext.js');
 const {waitForJQueryIdle} = require('../support/legacy.js');
 
 /** Default upload fixture (app-local). */
@@ -167,10 +168,11 @@ async function expectWizardOpen(page) {
  * the start screen has exactly one).
  */
 async function fillStartTitle(page, title) {
-    const body = page
-        .frameLocator('iframe.tox-edit-area__iframe')
-        .first()
-        .locator('body');
+    const iframe = page.locator('iframe.tox-edit-area__iframe').first();
+    // Typed before its editor is initialized, the title is wiped and never
+    // reaches the form (shared/playwright/support/richtext.js).
+    await waitForEditorReady(page, await editorIdOf(iframe));
+    const body = iframe.contentFrame().locator('body');
     await body.click();
     await body.fill(title);
     await expect(body).toContainText(title);
@@ -444,8 +446,15 @@ const CONTROLS = {
     moderatorNote: 'commentsForTheEditors-commentsForTheEditors-control',
 };
 
-/** Fill a wizard TinyMCE box by its control id (replaces its content). */
+/**
+ * Fill a wizard TinyMCE box by its control id (replaces its content), once
+ * its editor is initialized: every step's editors start with the page, and
+ * one typed into before its content stylesheets arrive puts the old value
+ * back and never tells the form, so no autosave or save carries the text
+ * (U21 S3, shared/playwright/support/richtext.js).
+ */
 async function fillRichText(page, controlId, text) {
+    await waitForEditorReady(page, controlId);
     const body = page.frameLocator(`#${controlId}_ifr`).locator('body');
     await body.click();
     await body.fill(text);

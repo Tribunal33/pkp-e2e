@@ -29,6 +29,7 @@
 const path = require('path');
 const {expect} = require('@playwright/test');
 const {BasePage} = require('../../../../shared/playwright/pages/BasePage.js');
+const {waitForEditorReady} = require('../../../../shared/playwright/support/richtext.js');
 
 /** Default upload fixture (app-local). */
 const FIXTURE_PDF = path.join(__dirname, '..', 'fixtures', 'files', 'article.pdf');
@@ -41,9 +42,14 @@ function endAnchored(name) {
 
 /**
  * Fill a TinyMCE rich-text field by its control id (the editor renders an
- * iframe `{controlId}_ifr` beside the hidden backing textarea).
+ * iframe `{controlId}_ifr` beside the hidden backing textarea), once its
+ * editor is initialized: text typed earlier is replaced by the field's old
+ * value when the editor's content stylesheets arrive and never reaches the
+ * form, so no autosave or save carries it (U21 S3,
+ * shared/playwright/support/richtext.js).
  */
 async function fillTinyMce(page, controlId, text) {
+    await waitForEditorReady(page, controlId);
     const body = page.frameLocator(`#${controlId}_ifr`).locator('body');
     await body.click();
     await body.fill(text);

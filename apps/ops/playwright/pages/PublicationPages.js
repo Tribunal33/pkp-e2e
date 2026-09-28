@@ -51,6 +51,7 @@
  */
 const {expect} = require('@playwright/test');
 const {waitForJQueryIdle} = require('../support/legacy.js');
+const {waitForEditorReady} = require('../../../../shared/playwright/support/richtext.js');
 
 /**
  * Open a submission's workflow panel straight by URL (editorial or author
@@ -139,8 +140,14 @@ exports.PublicationScreen = class PublicationScreen {
             .locator('body');
     }
 
-    /** Replace a rich-text field's content by typing into its editor body. */
+    /**
+     * Replace a rich-text field's content by typing into its editor body,
+     * once its editor is initialized (typed earlier, the text is replaced by
+     * the field's old value and never reaches the form:
+     * shared/playwright/support/richtext.js).
+     */
     async fillRichText(formId, name, locale, text) {
+        await waitForEditorReady(this.page, this.controlId(formId, name, locale));
         const body = this.richTextBody(formId, name, locale);
         await body.click();
         await body.press('ControlOrMeta+a');

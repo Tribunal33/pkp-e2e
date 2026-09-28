@@ -51,6 +51,7 @@
  * (`emptyMessage`) and a preview row's display cell (`previewValue`).
  */
 const {expect} = require('@playwright/test');
+const {waitForEditorReady} = require('../../../../shared/playwright/support/richtext.js');
 
 exports.ContributorsScreen = class ContributorsScreen {
     /**
@@ -304,8 +305,14 @@ exports.ContributorsScreen = class ContributorsScreen {
             .locator('body');
     }
 
-    /** Replace a rich-text field's content by typing into its editor body. */
+    /**
+     * Replace a rich-text field's content by typing into its editor body,
+     * once its editor is initialized (typed earlier, the text is replaced by
+     * the field's old value and never reaches the form:
+     * shared/playwright/support/richtext.js).
+     */
     async fillRichText(name, locale, text) {
+        await waitForEditorReady(this.page, this.controlId(name, locale));
         const body = this.richTextBody(name, locale);
         await body.click();
         await body.press('ControlOrMeta+a');

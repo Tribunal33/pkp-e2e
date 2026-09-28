@@ -204,16 +204,6 @@ trips.
   step still current and the button still offered), one of two reds in
   216. `SubmissionWizardPage.saveForLater()` presses once; the next
   step is the same `pressUntil()` shape behind it. Green alone in 14.1 s right after (`.reports/sync/s15-ojs-reds-alone2.log`) and in the traced third final (229 passed). **Baselines carry the merge since 2026-09-16** (sync: ojs `ae597ff9d9`, omp `0ec98a508`, ops `9ce633ee1d` with pkp-lib `b262d27b81` and ui-library `977e460c`, the per-call reduced-motion follow-up); `pressUntil()` stays as a content-verified bounded retry, which presses again only when a press was lost, so the watch condition above is live and a lost press shows as the retry firing.
-- **A wizard rich-text fill lost to a re-render under load** (U21 S3,
-  OPS, local). The Autosave bullet types "Autosave check" into the Title
-  box and reads it back; in the 2026-09-12 U21 revision's first OPS final
-  run, started while the OJS final was still running (two full suites at
-  eight workers each on 10 cores), the box read the seeded title again
-  for the whole 10 s wait, so the fill was overwritten by the form's own
-  re-render; green alone (1.1 min) and never seen with one suite running.
-  Finals now run one app at a time. **Watch condition**: a red with one
-  suite running or at CI's four workers; then anchor the fill on the
-  editor's settled state before typing.
 - **The Notify window's template body never landing in the editor under
   load** (U41 S3, OJS, once). `PublicationScreen.notifyParticipant()`
   (`apps/ojs/playwright/pages/PublicationMetadataPages.js`, U40's helper,
@@ -740,22 +730,24 @@ trips.
   mailable's list; S7 green alone on OJS (20.1 s) and OMP (22.3 s),
   `.reports/sync/s21-u34s7-{ojs-alone2,omp-alone1}.log`. **Watch
   condition**: the hardened save reds again.
-- **Submission wizard autosave not firing within its 100 s wait** (U21
-  S3, OMP, CI, once). In the same nightly run 35558115088 the OMP S3
-  ("save for later and resume from the emailed link") typed the title on
-  the Details step and waited 100 s for the wizard's own timed save
-  (`PUT /publications/{id}`) and for the footer's "Saving" flash; neither
-  came (`page.waitForResponse` and `page.waitForFunction` both at 100 s,
-  the error context showing the wizard still on Details); green on the
-  retry (flaky, 1.8 min), so the job passed. A different mechanism from
-  the OPS entry above (a fill lost to a re-render): here the timer's save
-  never left the page. **Watch condition**: a second sighting; then read
-  whether the autosave timer is paused while the title editor has focus.
-  **Second sighting 2026-09-24 on the Mac** (OPS, the U42 harness agent's
-  U21 regression run at load average 50–72 with probes and another suite's
-  agents on the fleets; green alone, `.reports/U42/harness/pw-ops-U21-S3.log`):
-  the watch condition has tripped, the read above is due in the next
-  maintenance session.
+- **A wizard rich-text fill lost before its editor has loaded** (U21 S3,
+  OMP on CI in nightly 35558115088 and push 36320351712, OPS on the Mac
+  2026-09-24; the former "wizard rich-text fill lost to a re-render" and
+  "autosave not firing within its 100 s wait" entries, one class).
+  **Fixed 2026-09-28** (`.reports/flake-s28/u21s3-autosave/diagnosis.md`):
+  the title was typed while TinyMCE was still fetching
+  `content_oneline.css`; on its arrival the box put the seeded title back
+  and only then bound its v-model, so the typed text passed the read-back,
+  vanished, and the autosave timer found nothing to save (nothing pauses
+  it on focus). `waitForEditorReady()` (new
+  `shared/playwright/support/richtext.js`) now guards the rich-text fills
+  of the three wizards' page objects and OPS `PublicationPages` and
+  `ContributorPages`. Lever `PLAYWRIGHT_HOLD_URL='content_oneline\.css'`,
+  4 s: red 12/12 before, 0/12 after; U21 `--repeat-each 5` at eight
+  workers 75/75 OJS, 80/80 OMP, 80/80 OPS; the 13 other caller files green
+  once. Unguarded fills of the same shape with no sighting (the reviewer
+  comment boxes, in-spec task-form fills) are listed in the diagnosis.
+  **Watch condition**: a rich-text value lost behind the ready wait.
 - **"Add Reviewer" search never rendered** (U28 S11, OJS, once). In
   the U42 session's OJS final on a reset database at auto workers on the
   Mac (2026-09-24, `.reports/U42/final-run-ojs.log`), "read an earlier

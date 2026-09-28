@@ -478,7 +478,11 @@ no cleanup fixture.
   Wait for the editor's `initialized` before selecting. `ReviewStagePages`'s
   `addReviewer` does this; the 450ms modal slide used to mask the problem.
   Any TinyMCE box in a Vue form must be `initialized` before typing (text
-  typed earlier is wiped, or the save posts nothing for it); the shared
+  typed earlier is wiped, or the save posts nothing for it), through
+  `waitForEditorReady(page, id)` (`shared/playwright/support/richtext.js`):
+  a read-back right after an early fill passes while the old value is
+  still to come back, and every wizard step's and hidden tab's editors
+  start with the page, not when shown (U21 S3, 2026-09-28); the shared
   `ReviewSettingsPages.typeRichText` and `ReviewerPages.typeInto` do it, and
   the legacy multilingual box's French twin opens only while the English box
   is focused (the globe icon is decorative). A legacy form's box too: its
