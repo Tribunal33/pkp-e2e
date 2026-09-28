@@ -348,7 +348,7 @@ wizard on Review ⚠ [A5](#a5). <sup>h</sup>
   publishing (Rule 12b) and "Create New Version" (Rule 15).
 - *[Submission files](U36-submission-files.md)*: the file lists and
   components the chapter "Files" list draws its files from.
-- *Publication formats & proof terms* (no spec yet): the proof files a
+- [Publication formats & proof terms](U73-publication-formats-proof-terms.md): the proof files a
   chapter can hold.
 
 ## Canonical scenarios

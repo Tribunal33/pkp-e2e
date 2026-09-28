@@ -370,7 +370,7 @@ bottom; "Save" at the foot. <sup>h</sup>
 - *Monograph landing page* (no spec yet): the page "View Entry" opens and
   the address a URL Path sets.
 - [Chapters & work type](U72-chapters-work-type.md),
-  *Publication formats & proof terms* (no spec yet): the version's other pages
+  [Publication formats & proof terms](U73-publication-formats-proof-terms.md): the version's other pages
   and the "Marketing" group of the workflow's side menu.
 
 ## Canonical scenarios

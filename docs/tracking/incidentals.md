@@ -6,7 +6,6 @@ when the spec absorbs it.
 
 | Feature | Screen | Seen | Date | Evidence |
 |---|---|---|---|---|
-| Out of scope: OMP publication formats & ONIX | Publication formats, the "Format Availability" window for an available format, OMP | The text reads "This format will unavailable to readers." (a missing "be"). | 2026-09-24 | U38 claim check K2 (`formats-unavailable-dialog`) |
 | U69 Monograph landing page | A published item's page, French interface, all three apps | The "Versions" line reads "24.09.2026 (##publication.versionStage.display##)"; a press's book page labels its date "##catalog.published##". | 2026-09-24 | U10 claim check K1 (K1-11) |
 | U69 Monograph landing page | Book page › a publication format's file that no viewer plugin takes, OMP | crash: server. With "HTML Monograph File" off, opening the book's HTML format file answered 500 on `/catalog/view/…` and showed a blank page (U47 OMP1); the failing read in `CatalogBookHandler` is not specific to HTML, so any format file no viewer plugin takes probably fails the same way (not driven). | 2026-09-24 | U47 claim check K2 (K2-4) |
 | U69 Monograph landing page | A seeded published book's "How to Cite", OMP | The citation starts with the book's title and names no author; a book with no references shows an empty "References" heading. | 2026-09-25 | U13 claim check K1, K3 |
