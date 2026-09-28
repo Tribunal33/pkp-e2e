@@ -1192,7 +1192,9 @@ config-file settings.
   Submissions" fails for every book ("The process failed … supports input
   classes.submission.Submission[] - array given"), validation ticked or
   not; the Native XML export carries each format's ONIX product instead
-  (2026-09-28, U73 claim check K5, K5-11, `o-09`, `o-10`). The order of the lines is not fixed: every tool sorts
+  (2026-09-28, U73 claim check K5, K5-11, `o-09`, `o-10`); with nothing
+  ticked its results tab opens empty and the server answers 500, validation
+  ticked or not (2026-09-28, U74 claim check K5, K5-1). The order of the lines is not fixed: every tool sorts
   equal, so the list follows the order the plugins register in, which
   moves as plugin settings are written anywhere on the install (a full
   suite run showed a new journal's order differ from a fresh install's).
@@ -1620,3 +1622,37 @@ config-file settings.
   is written (a Hosted Journals "Order" or "Edit" save), so a test finds a
   journal there by name or id, never by position. All three apps,
   2026-09-28 (U60 claim check I28).
+
+- {OMP} The Participants "Assign" window offers only the roles that take
+  part in the stage the book is in: at Production the Designer, Indexer,
+  Layout Editor and Proofreader beside the manager-level and author roles;
+  at the Submission stage the Funding coordinator. "Editorial Board
+  Member", an assistant-level role with no stage, is never offered; seeded
+  through `participants[]` it lists the book under "Assigned to me", and
+  opening the book gives the "Error" window "The current role does not
+  have access to this operation.". Workflow › Participants, OMP,
+  2026-09-28 (U74 claim check K1, `g-assign-window-bp|bs`, `e-03-ebm-open`).
+- {OMP} Marketing › "Representatives": a delete refused because a market
+  names the representative answers with a browser `alert()` and leaves the
+  "Delete" dialog open; a test accepts the alert and presses the dialog's
+  "Cancel", or the dialog's overlay blocks the next click on the list.
+  "Create New Version" copies each format's markets to the new version, so
+  a representative stays undeletable while any version's market names it.
+  OMP, 2026-09-28 (U74 claim check K2, K2-4, `D.markets.afterVersion`).
+- {OMP} A book's Native XML export (Tools › "Native XML Plugin" ›
+  "Export") fails with "The process failed. Check below for
+  errors/warnings." while any format of the book holds a sales-rights
+  entry or a market with no country or region (and, for sales rights,
+  "Rest of World?" unticked), or a market with a "Taxation Rate" other
+  than "Zero-rated (Z)" or a "Taxation Type" without one; a market's
+  "Edit" › "OK" stores "GST (Sales tax) (02)" unless the empty choice is
+  picked again. A check that needs the file seeds entries with a territory
+  and leaves the tax lists out. A press's export carries ONIX products
+  only while its four ONIX details are filled, so an import target press
+  is seeded with them too. OMP, 2026-09-28 (U74 claim check K3, K3-6; K4,
+  K4-3 to K4-5).
+- {OMP} The sales-rights and market windows' "Regions" lists offer "World
+  (WORLD)" and country subdivisions ("Alberta (CA-AB)", "England
+  (GB-ENG)"), but no ONIX supra-region such as "Eurozone (ECZ)"; the seed
+  key answers 400 naming what the list offers. A format's "Metadata" tab,
+  OMP, 2026-09-28 (U74 claim check K6).

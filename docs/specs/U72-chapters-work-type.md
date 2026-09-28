@@ -790,8 +790,8 @@ the type stays; "Save" on "Publication Dates" shows the passing notice
 "An unexpected error has occurred. Please reload the page and try
 again." and nothing is saved. After that refused "Save" the page keeps
 showing the new choice selected; only a reload shows that nothing
-changed. The "Marketing" › "Audience" page (*ONIX metadata & export*, no
-spec yet) is offered and refused the same way. Expected: controls these
+changed. The "Marketing" › "Audience" page ([ONIX metadata & export](U74-onix-metadata-export.md))
+is offered and refused the same way. Expected: controls these
 roles cannot use are not offered, or shown read-only.
 Basis: probe, with the cause read from the code. <sup>f-a2</sup>
 

@@ -154,7 +154,7 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
    Export Plugin" and "DataCite Export/Registration Plugin" only say
    that DOI management has moved ([DOIs](U45-dois.md), Rule 44; their
    empty heading is [DOIs A20](U45-dois.md#a20)). A press's "ONIX 3.0
-   Monograph Export Plugin" page belongs to *ONIX metadata & export*
+   Monograph Export Plugin" page belongs to [ONIX metadata & export](U74-onix-metadata-export.md)
    {OMP}. A press's "Tab Delimited Content Import Plugin" works only
    from the server's command line: its row on the Plugins list has no
    "Import/Export Data", yet the Tools list links its name, which opens
@@ -1995,7 +1995,7 @@ yet `display()` renders `$this->getTemplateResource('index.tpl')` and
 the plugin has no `templates/` directory. It is still in the
 `importexport` category, so `importexport.tpl` links it. The OMP
 ONIX 3.0 exporter (`plugins/importexport/onix30`) belongs to
-*ONIX metadata & export*; the CSV importer's Tools link is OMP1's. The
+[ONIX metadata & export](U74-onix-metadata-export.md); the CSV importer's Tools link is OMP1's. The
 Crossref and DataCite pages: the DOIs spec, Rule 44 and its notes.
 Live-probed 2026-09-27 (Rule 6): the OJS
 Crossref and DataCite pages and the OPS Crossref page read only "DOI

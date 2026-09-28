@@ -708,6 +708,21 @@ Keys:
   requirements notice, "counts as configured", the publish warnings).
   OMP and OPS answer 400: a press's and a preprint server's Masthead
   have no such boxes (U45 harness, 2026-09-26).
+- `publisher`, `location`, `codeType`, `codeValue` (OMP only; U74): the
+  press's ONIX details, Settings › Press › "Masthead", group "Publisher
+  Identity": "Press Publisher Name", "Geographical Location" and
+  "Publisher Code" each a non-empty string as typed (an empty box is the
+  key left out), "Publisher Code Type" by the label its list shows
+  (`"Proprietary (01)"`, stored as `01`; a label the list lacks is a 400
+  listing what it offers). Saved as the Masthead's "Save" saves them (the
+  context's edit), after `users[]`; the Masthead posts its whole form, the
+  keys write their own rows alone. A new press has none of the four; with
+  all four the ONIX tool's page (Tools › "ONIX 3.0 Monograph Export
+  Plugin") opens on its "Export" tab and its list, as after a by-hand
+  save (U74 harness, 2026-09-28, driven equal). OJS and OPS answer 400.
+  The Masthead cannot empty "Publisher Code Type" once saved (its list has
+  no empty choice), so a press missing only the code type is a seed with
+  the other three keys, never a by-hand state (U74 claim check K5, K5-5).
 - `submitWithCategories` (boolean): the "Categories" radios of Settings ›
   Workflow › Submission › "Metadata", under "Should the submitting author
   be asked to select a category when they make a new submission?": `true`
@@ -1828,6 +1843,37 @@ Keys:
     such data gets its details block ("Details about the available
     publication format: {format}", the code, the date, "Physical
     Dimensions" "130mm x 200mm").
+  - The same tab's two lists (U74, driven equal on screen), each entry
+    one window's "OK", built with the book's "Marketing" pages below
+    (after every format, before a publish), so a market can name the
+    book's representatives. The territory of either window is
+    `countriesIncluded`, `countriesExcluded`, `regionsIncluded`,
+    `regionsExcluded`, each a list of labels as the multiple-choice
+    lists show them (`"Canada (CA)"`, `"World (WORLD)"`), empty when
+    absent.
+    - `salesRights[]` `{type, restOfWorld?, territory}`: "Add Sales
+      Rights", "Sales Rights Type" by its label (required; each type
+      once per format, as the list offers it), "Rest of World?" ticked
+      with `true`. A second `restOfWorld: true` on a format is the
+      window's refusal (400, "There is already a ROW sales type defined
+      for this publication format.").
+    - `markets[]` `{date, price, dateFormat?, dateRole?, agent?,
+      supplier?, currency?, priceType?, taxRate?, taxType?, discount?,
+      territory}`: "Add Market". `date` and `price` are required and
+      stored as typed (nothing checks their form: `"abc"`, `"ten"`);
+      the lists by their labels, left where the window arrives without
+      the key: "Date Format" on "YYYYMMDD (H)" (the Hijri one; the
+      Gregorian is `"YYYYMMDD"`, code 00), "Role" on "Publication date
+      (01)", the currency on "Canadian Dollar (CAD)" (`currency: "US
+      Dollar (USD)"`), "Price Type", "Taxation Rate" and "Taxation Type"
+      on their empty choice (stored empty); `discount` as typed. `agent`
+      and `supplier` are the "Agent" and "Supplier" lists' choice: the
+      name of a `representatives[]` entry of that type in the same
+      request (another name, or one two entries share, is a 400); left
+      out, the empty choice (stored as 0).
+    The rows, the lists' texts ("Included: CA, Excluded: GB", "Agent
+    Ada, Supplier Sam", "25USD") and the log (none) equal a by-hand
+    build; the windows' "added" toasts are not mirrored.
 - `jats` (OJS): the current publication's "JATS XML" page, `{file?,
   makePublic?}` (at least one), used the way the page is used, acting as
   `admin`, after the media files and before a publish. `file` is a
@@ -2136,6 +2182,35 @@ App-specific keys:
     their order among themselves in that list is not fixed; read the
     boxes by file name. The response lists `chapters` (`id`, `title`, in
     the order seeded), OMP only.
+- OMP: `audience` and `representatives[]` (U74), the editorial view's
+  "Marketing" › "Audience" and "Representatives" pages, which belong to
+  the book, not to a version. Built by `admin` after the publication
+  formats, with the formats' `salesRights[]` and `markets[]` (above),
+  before a publish. Both need `submitted: true`. OJS and OPS answer 400.
+  - `audience` `{audience?, rangeQualifier?, rangeFrom?, rangeTo?,
+    rangeExact?}`, at least one: the page's lists "Audience", "Audience
+    Range Qualifier", "Audience Range (from)", "(to)", "(exact)", each by
+    the label it shows (`"Children (02)"`, `"US school grade range
+    (11)"`, `"Kindergarten (K)"`), then "Save": the page's PUT to the
+    submission with all five, an unchosen one empty (stored as no row).
+    A new book has none; the page reopens on the seeded choices.
+  - Each `representatives[]` entry `{type, role, name, idType?,
+    idValue?, phone?, email?, website?}` is "Add Representative", "OK":
+    `type` `'agent'` or `'supplier'` ("Representative Type"), `role` by
+    the label of that type's list (`"Exclusive sales agent (05)"`,
+    `"Distributor to end-customers (12)"`; the other type's roles are a
+    400), `name` required; `idType` by its label, the window's "GLN
+    (06)" when absent; `idValue`, `phone` as typed; `email` and
+    `website` ("Email Address", "Website") refused (400) when the box
+    would refuse them (not an address; a website not starting
+    `http://`, `https://` or `ftp://`). The page lists them under
+    "Agents" and "Suppliers" in request order. The response lists
+    `representatives` (`id`, `name`, `type`).
+  - Parity fact (U74 harness, 2026-09-28): the window arrives on
+    "Supplier" with both "Role" lists shown and the Agent one required,
+    so "OK" on a Supplier refuses "This field is required." until
+    "Agent" and then "Supplier" are chosen; a test adding a supplier on
+    screen chooses them in that order.
 - OPS: `section` (abbrev or path; defaults to the server's first section).
   `reviewRounds` is rejected with a 400, because OPS has no review stage,
   and so is `reviewerSuggestions`, because OPS mounts no reviewer

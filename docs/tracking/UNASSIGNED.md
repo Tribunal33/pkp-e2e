@@ -855,3 +855,25 @@ until their specs exist. Do not force-claim the defects themselves.
     author; checkout omp `3cd59e944`, lib/pkp `17a1f01fed`). Resolves:
     maintainer confirmation as dead code (removal candidates), and the
     A6 fix for the digital group.
+54. **Unreached ONIX pieces** — attached to **U74** (PLUG-033, GRID-090,
+    GRID-094, AFFW-431, AFFW-760; claimed). OMP
+    `PublicationFormat::hasNeededONIXFields()` and
+    `_checkRequiredFieldsAssigned()` (the "no markets / no codes /
+    file size required" pre-export check) are called by nothing.
+    `AudienceForm::$successMessage` (`monograph.audience.success` "The
+    audience details have been updated.") is set and never shown (the
+    Vue form shows "Saved"). `MarketForm::fetch()` assigns
+    `extentTypeCodes` (list 23) that `marketForm.tpl` never uses; the
+    template's price section passes `desc=`
+    `monograph.publicationFormat.pricingInformation`, a parameter the
+    section does not render and a key no locale file defines; the
+    server-side messages `grid.catalogEntry.priceRequired` and
+    `grid.catalogEntry.typeRequired` are keys no locale file defines,
+    behind checks the browser-side required check (price) or a list with
+    no empty choice (type) keeps from firing. `Onix30ExportPlugin::executeCLI()`
+    and `usage()` throw `BadMethodCallException`, so the tool has no
+    command-line use. The ONIX metadata & export spec's notes d, f, g
+    and i record the reachable surface. Code-verified 2026-09-28 (U74
+    spec author; checkout omp `3cd59e944`, lib/pkp `17a1f01fed`,
+    ui-library `03d1cee2`). Resolves: maintainer confirmation as dead
+    code (removal candidates), or the missing locale keys added.

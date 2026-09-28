@@ -27,8 +27,8 @@ product details),
 kept in its window's "Metadata" tab. What readers then see and buy on
 the book's page belongs to [Monograph landing page](U69-monograph-landing-page.md); the
 trade blocks only the ONIX feed reads ("Sales Rights", "Market
-Territories", representatives) belong to *ONIX metadata & export* (no
-spec yet). <sup>a</sup>
+Territories", representatives) belong to [ONIX metadata & export](U74-onix-metadata-export.md).
+<sup>a</sup>
 
 A journal and a preprint server do not install publication formats.
 Their publication's pages list "Galleys" and no "Publication Formats",
@@ -119,7 +119,7 @@ are marked with an asterisk: *", "OK" and "Cancel". <sup>e</sup> <sup>td9</sup>
 <a id="metadata-tab"></a>
 **The "Metadata" tab.** Top to bottom: the lists "Product
 Identification" (Rule 18), "Sales Rights" and "Market Territories"
-(*ONIX metadata & export*) and "Publication Dates" (Rule 19), each with
+([ONIX metadata & export](U74-onix-metadata-export.md)) and "Publication Dates" (Rule 19), each with
 its own add link and rows; then the fields below; then "Required fields
 are marked with an asterisk: *", "Cancel" and "Save". Switching to the
 "Edit" tab with a changed field asks "The data on this form has changed.
@@ -519,7 +519,7 @@ delete this item? This action cannot be undone." and "OK" and "Cancel"
   files.
 - [Monograph landing page](U69-monograph-landing-page.md): the book's page, its format
   list, the downloads and the purchase of a "Direct Sales" file.
-- *ONIX metadata & export* (no spec yet): the "Sales Rights" and "Market
+- [ONIX metadata & export](U74-onix-metadata-export.md): the "Sales Rights" and "Market
   Territories" lists of the "Metadata" tab, the representatives, and the
   ONIX feed that reads the catalog data.
 - *[Galleys](U46-galleys.md)*: the journal's and preprint server's
@@ -2215,7 +2215,7 @@ default"; in the shipped list 55, `00` is "YYYYMMDD" and `20` is
 a slip, not a choice.
 Live-probed 2026-09-28: note td14. The dedicated "ONIX 3.0 Monograph
 Export Plugin" export failed for every book, validation ticked or not
-(a finding for *ONIX metadata & export*), so the ONIX read was the one
+(a finding for [ONIX metadata & export](U74-onix-metadata-export.md)), so the ONIX read was the one
 inside the Native XML export.
 
 <a id="fn-f-a8"></a>
@@ -2344,7 +2344,7 @@ arrives the same way. Evidence: `.reports/U73/tomp/`.
 | "Select Files" | a format's row; component `grid.files.proof.ManageProofFilesGridHandler` | GRID-023 (claimed here for OMP) |
 | A format file's "Edit a file" tabs "Edit Metadata", "Identifiers" | a format file's arrow › "Edit" | AFFW-599 (claimed here for OMP) |
 | "Dependent Files" | an HTML or XML format file's arrow | AFFW-757 |
-| The "Metadata" tab: "Save", the four lists, the physical and digital groups | the format window | AFFW-765, AFFW-766 (the "Sales Rights" and "Market Territories" lists cited; *ONIX metadata & export*), AFFW-767, AFFW-768 (the digital group, unreachable, A6), AFFW-769 |
+| The "Metadata" tab: "Save", the four lists, the physical and digital groups | the format window | AFFW-765, AFFW-766 (the "Sales Rights" and "Market Territories" lists cited; [ONIX metadata & export](U74-onix-metadata-export.md)), AFFW-767, AFFW-768 (the digital group, unreachable, A6), AFFW-769 |
 | "Product Identification": the code window | the "Metadata" tab | AFFW-759, GRID-089 |
 | "Publication Dates": the date window | the "Metadata" tab | AFFW-761, GRID-091 |
 | A format's Activity Log name | the log lines (*Submission activity log & notes*) | SET-036 |

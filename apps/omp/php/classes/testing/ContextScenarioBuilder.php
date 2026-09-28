@@ -13,7 +13,9 @@
  * default series; user series assignments resolve by path). `series[]`
  * (U70): each entry {path*, title?, description?} is Settings › Press ›
  * "Series" › "Add Series" › "Save", run through the window's own
- * SeriesForm::execute.
+ * SeriesForm::execute. The press's ONIX details (U74) `publisher`,
+ * `location`, `codeType`, `codeValue`: Settings › Press › "Masthead", the
+ * "Publisher Identity" group, saved as the Masthead's "Save" saves them.
  */
 
 namespace APP\testing;
@@ -22,6 +24,7 @@ use APP\controllers\grid\settings\series\form\SeriesForm;
 use APP\core\Application;
 use APP\facades\Repo;
 use PKP\context\Context;
+use PKP\db\DAORegistry;
 use PKP\testing\ContextFactory;
 use PKP\testing\PaymentSettingsSeeder;
 use PKP\testing\PKPContextScenarioBuilder;
@@ -51,14 +54,64 @@ class ContextScenarioBuilder extends PKPContextScenarioBuilder
     protected function parseOverlay(Spec $root): array
     {
         $spec = $root->child('payments');
-        return ['payments' => $spec === null ? null : PaymentSettingsSeeder::parse($spec)];
+        return [
+            'payments' => $spec === null ? null : PaymentSettingsSeeder::parse($spec),
+            'onix' => $this->parseOnixDetails($root),
+        ];
     }
 
-    /** The "Payments" tab's "Save", after users[] as on a journal. */
+    /**
+     * The press's ONIX details (U74): Settings › Press › "Masthead", group
+     * "Publisher Identity" (the OMP MastheadForm's `onix` group):
+     * `publisher` ("Press Publisher Name"), `location` ("Geographical
+     * Location"), `codeValue` ("Publisher Code"), each a non-empty string
+     * as typed (an empty box is the key left out), and `codeType`
+     * ("Publisher Code Type") by the label its list shows ("Proprietary
+     * (01)"), stored as its code. Parse phase: no writes.
+     *
+     * @return array<string, string> setting name → value
+     */
+    private function parseOnixDetails(Spec $root): array
+    {
+        $boxes = ['publisher' => 'Press Publisher Name', 'location' => 'Geographical Location', 'codeValue' => 'Publisher Code'];
+        $settings = [];
+        foreach ($boxes as $key => $label) {
+            if (!$root->has($key)) {
+                continue;
+            }
+            $value = $root->get($key);
+            if (!is_string($value) || trim($value) === '') {
+                throw new SpecException($key, "{$key} is the Masthead's \"{$label}\" box as typed, a non-empty string (an empty box is the key left out)");
+            }
+            $settings[$key] = $value;
+        }
+        if ($root->has('codeType')) {
+            $label = $root->get('codeType');
+            $onix = DAORegistry::getDAO('ONIXCodelistItemDAO'); /** @var \APP\codelist\ONIXCodelistItemDAO $onix */
+            $offered = $onix->getCodes('44');
+            $code = is_string($label) ? array_search($label, $offered, true) : false;
+            if ($code === false) {
+                throw new SpecException('codeType', 'The Masthead\'s "Publisher Code Type" list offers no ' . json_encode($label) . '; it offers: ' . implode(', ', $offered));
+            }
+            $settings['codeType'] = (string) $code;
+        }
+        return $settings;
+    }
+
+    /**
+     * The "Payments" tab's "Save", after users[] as on a journal; then the
+     * Masthead's "Save" with the ONIX details (U74): the same PUT
+     * contexts/{id} validate and edit as the other settings passthroughs
+     * (saveFormSettings). The Masthead posts its whole form; the keys
+     * write their own rows alone.
+     */
     protected function executeOverlay(Context $context, array $overlayPlan): array
     {
         if ($overlayPlan['payments'] !== null) {
             PaymentSettingsSeeder::execute($context, $overlayPlan['payments']);
+        }
+        if ($overlayPlan['onix'] !== []) {
+            $this->saveFormSettings($context, $overlayPlan['onix'], array_combine(array_keys($overlayPlan['onix']), array_keys($overlayPlan['onix'])));
         }
         return [];
     }

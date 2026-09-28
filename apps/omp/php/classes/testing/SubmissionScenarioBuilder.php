@@ -22,12 +22,18 @@
  * Catalog page's boxes, pressed after the publish.
  * `enableChapterPublicationDates` and `chapters[]` (U72): the "Marketing" ›
  * "Publication Dates" choice and the Chapters page's chapters, built on the
- * version before any publish.
+ * version before any publish. `audience` and `representatives[]` (U74): the
+ * "Marketing" › "Audience" and "Representatives" pages, and per format its
+ * "Metadata" tab's `salesRights[]` and `markets[]`, built with them after
+ * the formats (a market names the book's representatives).
  */
 
 namespace APP\testing;
 
+use APP\controllers\grid\catalogEntry\form\MarketForm;
 use APP\controllers\grid\catalogEntry\form\PublicationFormatForm;
+use APP\controllers\grid\catalogEntry\form\RepresentativeForm;
+use APP\controllers\grid\catalogEntry\form\SalesRightsForm;
 use APP\controllers\grid\catalogEntry\PublicationFormatGridHandler;
 use APP\controllers\grid\users\chapter\form\ChapterForm;
 use APP\controllers\grid\files\proof\form\ApprovedProofForm;
@@ -49,6 +55,9 @@ use PKP\testing\SpecException;
 
 class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
 {
+    /** Per publicationFormats[] entry, its parsed salesRights[] and markets[] (U74), built in seedVersionOverlay. */
+    private array $formatTradePlans = [];
+
     /**
      * `workType` ('monograph' | 'editedVolume', default monograph) — the OMP
      * start form always posts a work type (the Monograph radio arrives
@@ -185,9 +194,145 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
                 'physical' => $physical,
                 'urlRemote' => $urlRemote,
                 'price' => $price,
-            ] + $this->parseFormatCatalogData($context, $spec);
+            ] + $this->parseFormatCatalogData($context, $spec) + $this->parseFormatTrade($spec);
         }
+        // The sales rights and markets are built with the Marketing pages
+        // (seedVersionOverlay), after the book's representatives, which a
+        // market names.
+        $this->formatTradePlans = array_map(fn (array $plan) => ['salesRights' => $plan['salesRights'], 'markets' => $plan['markets']], $plans);
         return $plans;
+    }
+
+    /**
+     * An ONIX list's code by the label the screen's list shows ("Canada
+     * (CA)"); a label the list does not offer (unknown, or excluded as the
+     * window excludes it) is a 400 listing what it offers.
+     */
+    private function onixCode(string $list, mixed $label, string $specPath, string $box, array $exclude = []): string
+    {
+        $onix = \PKP\db\DAORegistry::getDAO('ONIXCodelistItemDAO'); /** @var \APP\codelist\ONIXCodelistItemDAO $onix */
+        $offered = $onix->getCodes($list, $exclude);
+        $code = is_string($label) ? array_search($label, $offered, true) : false;
+        if ($code === false) {
+            throw new SpecException($specPath, "The \"{$box}\" list offers no " . json_encode($label) . ' here; it offers: ' . implode(', ', $offered));
+        }
+        return (string) $code;
+    }
+
+    /** An optional ONIX list's code by its label, or $default (the window's arrival choice, '' for its empty one) when the key is absent. */
+    private function optionalOnixCode(Spec $spec, string $key, string $list, string $box, string $default = ''): string
+    {
+        return $spec->has($key) ? $this->onixCode($list, $spec->get($key), "{$spec->path}.{$key}", $box) : $default;
+    }
+
+    /** An optional free-text box: a string, or a whole number, as typed ('' when absent). */
+    private function optionalText(Spec $spec, string $key, string $box): string
+    {
+        $value = $spec->get($key, '');
+        if (is_int($value) || is_float($value)) {
+            $value = (string) $value;
+        }
+        if (!is_string($value)) {
+            throw new SpecException("{$spec->path}.{$key}", "{$key} is the \"{$box}\" box: a string as typed");
+        }
+        return $value;
+    }
+
+    /**
+     * The countries and regions of a sales-rights or market window (U74):
+     * `countriesIncluded`, `countriesExcluded`, `regionsIncluded`,
+     * `regionsExcluded`, each a list of the labels its multiple-choice list
+     * shows ("Canada (CA)", "World (WORLD)"), posted as the codes.
+     *
+     * @return array<string, string[]> the window's field name → codes
+     */
+    private function parseTerritory(Spec $spec): array
+    {
+        $fields = [];
+        foreach (['countriesIncluded' => ['91', 'Countries: Included'], 'countriesExcluded' => ['91', 'Countries: Excluded'], 'regionsIncluded' => ['49', 'Regions: Included'], 'regionsExcluded' => ['49', 'Regions: Excluded']] as $key => [$list, $box]) {
+            $labels = $spec->get($key, []);
+            if (!is_array($labels) || !array_is_list($labels)) {
+                throw new SpecException("{$spec->path}.{$key}", "{$key} is the \"{$box}\" list: a list of the labels it shows");
+            }
+            if (count(array_unique($labels, SORT_REGULAR)) !== count($labels)) {
+                throw new SpecException("{$spec->path}.{$key}", "{$key} names an entry twice; the list chooses each once");
+            }
+            $fields[$key] = array_map(fn ($label, $i) => $this->onixCode($list, $label, "{$spec->path}.{$key}.{$i}", $box), $labels, array_keys($labels));
+        }
+        return $fields;
+    }
+
+    /**
+     * A format's trade data (U74), the "Metadata" tab's two lists:
+     * - `salesRights[]` {type*, restOfWorld?, countries and regions}:
+     *   "Add Sales Rights", "Sales Rights Type" by its label (each type
+     *   once per format, as the list offers it), "Rest of World?" ticked
+     *   with `true`, the territory lists (parseTerritory), "OK";
+     * - `markets[]` {date*, dateFormat?, dateRole?, agent?, supplier?,
+     *   countries and regions, price*, currency?, priceType?, taxRate?,
+     *   taxType?, discount?}: "Add Market", the lists by their labels,
+     *   left where the window arrives without the key ("YYYYMMDD (H)",
+     *   "Publication date (01)", "Canadian Dollar (CAD)", the others on
+     *   their empty choice), `agent` and `supplier` the name of one of the
+     *   book's representatives of that type (checked against
+     *   representatives[] in parseVersionOverlay), "OK".
+     * The windows' own checks (a second "Rest of World?", an empty "Date"
+     * or "Price") run at execute. Parse phase: no writes.
+     *
+     * @return array{salesRights: array, markets: array}
+     */
+    private function parseFormatTrade(Spec $spec): array
+    {
+        $salesRights = [];
+        foreach ($spec->childList('salesRights') as $rightsSpec) {
+            $restOfWorld = $rightsSpec->get('restOfWorld', false);
+            if (!is_bool($restOfWorld)) {
+                throw new SpecException("{$rightsSpec->path}.restOfWorld", 'restOfWorld is the "Rest of World?" box: a boolean');
+            }
+            $salesRights[] = [
+                'path' => $rightsSpec->path,
+                'type' => $this->onixCode('46', $rightsSpec->require('type'), "{$rightsSpec->path}.type", 'Sales Rights Type', array_column($salesRights, 'type')),
+                'restOfWorld' => $restOfWorld,
+            ] + $this->parseTerritory($rightsSpec);
+        }
+
+        $markets = [];
+        foreach ($spec->childList('markets') as $marketSpec) {
+            $typed = [];
+            foreach (['date' => 'Date', 'price' => 'Price'] as $key => $box) {
+                $value = $marketSpec->require($key);
+                if (is_int($value) || is_float($value)) {
+                    $value = (string) $value;
+                }
+                if (!is_string($value) || trim($value) === '') {
+                    throw new SpecException("{$marketSpec->path}.{$key}", "{$key} is the market window's required \"{$box}\" box: a non-empty string as typed");
+                }
+                $typed[$key] = $value;
+            }
+            $representatives = [];
+            foreach (['agent' => 'Agent', 'supplier' => 'Supplier'] as $key => $box) {
+                $name = $marketSpec->get($key);
+                if ($name !== null && (!is_string($name) || trim($name) === '')) {
+                    throw new SpecException("{$marketSpec->path}.{$key}", "{$key} is the \"{$box}\" list's choice: the name of one of the book's representatives[] of that type");
+                }
+                $representatives[$key] = $name;
+            }
+            $markets[] = [
+                'path' => $marketSpec->path,
+                'date' => $typed['date'],
+                'dateFormat' => $this->optionalOnixCode($marketSpec, 'dateFormat', '55', 'Date Format', '20'),
+                'dateRole' => $this->optionalOnixCode($marketSpec, 'dateRole', '163', 'Role', '01'),
+                'agent' => $representatives['agent'],
+                'supplier' => $representatives['supplier'],
+                'price' => $typed['price'],
+                'currencyCode' => $this->optionalOnixCode($marketSpec, 'currency', '96', 'Price', 'CAD'),
+                'priceTypeCode' => $this->optionalOnixCode($marketSpec, 'priceType', '58', 'Price Type'),
+                'taxRateCode' => $this->optionalOnixCode($marketSpec, 'taxRate', '62', 'Taxation Rate'),
+                'taxTypeCode' => $this->optionalOnixCode($marketSpec, 'taxType', '171', 'Taxation Type'),
+                'discount' => $this->optionalText($marketSpec, 'discount', 'Discount percentage, if applicable'),
+            ] + $this->parseTerritory($marketSpec);
+        }
+        return ['salesRights' => $salesRights, 'markets' => $markets];
     }
 
     /**
@@ -211,15 +356,7 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
      */
     private function parseFormatCatalogData(Context $context, Spec $spec): array
     {
-        $onix = \PKP\db\DAORegistry::getDAO('ONIXCodelistItemDAO'); /** @var \APP\codelist\ONIXCodelistItemDAO $onix */
-        $resolve = function (string $list, mixed $label, string $specPath, string $box, array $exclude = []) use ($onix): string {
-            $offered = $onix->getCodes($list, $exclude);
-            $code = is_string($label) ? array_search($label, $offered, true) : false;
-            if ($code === false) {
-                throw new SpecException($specPath, "The \"{$box}\" list offers no " . json_encode($label) . ' here; it offers: ' . implode(', ', $offered));
-            }
-            return (string) $code;
-        };
+        $resolve = fn (string $list, mixed $label, string $specPath, string $box, array $exclude = []): string => $this->onixCode($list, $label, $specPath, $box, $exclude);
 
         $codes = [];
         foreach ($spec->has('identificationCodes') ? $spec->childList('identificationCodes') : [] as $codeSpec) {
@@ -732,7 +869,7 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
      */
     protected function parseVersionOverlay(Context $context, Spec $root, array $refs): array
     {
-        $plan = ['enableChapterPublicationDates' => null, 'chapters' => []];
+        $plan = ['enableChapterPublicationDates' => null, 'chapters' => []] + $this->parseMarketing($root, $refs['submitted']);
         if ($root->has('enableChapterPublicationDates')) {
             $value = $root->get('enableChapterPublicationDates');
             if (!is_bool($value)) {
@@ -832,10 +969,108 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
             }
             $plan['chapters'][] = $chapter;
         }
-        if ($plan['enableChapterPublicationDates'] === null && $plan['chapters'] === []) {
+        if ($plan['enableChapterPublicationDates'] === null && $plan['chapters'] === [] && $plan['audience'] === null && $plan['representatives'] === [] && $plan['formatTrade'] === []) {
             return [];
         }
         return $plan;
+    }
+
+    /**
+     * The book's "Marketing" pages (U74), which belong to the book, not to
+     * a version:
+     * - `audience` {audience?, rangeQualifier?, rangeFrom?, rangeTo?,
+     *   rangeExact?}: "Marketing" › "Audience", each list by the label it
+     *   shows ("Children (02)", "US school grade range (11)",
+     *   "Kindergarten (K)"), at least one; "Save";
+     * - `representatives[]` {type*, role*, name*, idType?, idValue?,
+     *   phone?, email?, website?}: "Marketing" › "Representatives" ›
+     *   "Add Representative": `type` 'agent' or 'supplier' ("Representative
+     *   Type"), `role` by the label of that type's list, `idType` by its
+     *   label (the window arrives on "GLN (06)"), the boxes as typed; an
+     *   "Email Address" or "Website" the box refuses is a 400; "OK".
+     * Also checks each format's markets[] `agent` and `supplier` against
+     * them: the window lists the book's representatives of that type by
+     * name. Parse phase: no writes.
+     *
+     * @return array{audience: ?array, representatives: array, formatTrade: array}
+     */
+    private function parseMarketing(Spec $root, bool $submitted): array
+    {
+        $draftRefusal = fn (string $key) => new SpecException($key, "\"Marketing\" is on the workflow's editorial view, which a draft does not have: {$key} needs submitted: true");
+
+        $audience = null;
+        if (($spec = $root->child('audience')) !== null) {
+            if (!$submitted) {
+                throw $draftRefusal('audience');
+            }
+            $lists = [
+                'audience' => ['28', 'Audience'],
+                'audienceRangeQualifier' => ['30', 'Audience Range Qualifier'],
+                'audienceRangeFrom' => ['77', 'Audience Range (from)'],
+                'audienceRangeTo' => ['77', 'Audience Range (to)'],
+                'audienceRangeExact' => ['77', 'Audience Range (exact)'],
+            ];
+            $keys = ['audience' => 'audience', 'rangeQualifier' => 'audienceRangeQualifier', 'rangeFrom' => 'audienceRangeFrom', 'rangeTo' => 'audienceRangeTo', 'rangeExact' => 'audienceRangeExact'];
+            $audience = [];
+            foreach ($keys as $key => $field) {
+                // The page posts every list; one never chosen is posted empty.
+                $audience[$field] = $this->optionalOnixCode($spec, $key, $lists[$field][0], $lists[$field][1]);
+            }
+            if (array_filter($audience) === []) {
+                throw new SpecException('audience', 'audience names at least one of its lists: audience, rangeQualifier, rangeFrom, rangeTo, rangeExact');
+            }
+        }
+
+        $representatives = [];
+        foreach ($root->childList('representatives') as $spec) {
+            if (!$submitted) {
+                throw $draftRefusal('representatives');
+            }
+            $type = $spec->require('type');
+            if (!in_array($type, ['agent', 'supplier'], true)) {
+                throw new SpecException("{$spec->path}.type", 'type is the "Representative Type" radio: "agent" or "supplier"');
+            }
+            $name = $spec->require('name');
+            if (!is_string($name) || trim($name) === '') {
+                throw new SpecException("{$spec->path}.name", 'name is the required "Name" box: a non-empty string');
+            }
+            $entry = [
+                'path' => $spec->path,
+                'type' => $type,
+                'role' => $this->onixCode($type === 'agent' ? '69' : '93', $spec->require('role'), "{$spec->path}.role", 'Role'),
+                'name' => $name,
+                'idType' => $this->optionalOnixCode($spec, 'idType', '92', 'Representative ID Type (GLN is recommended)', '06'),
+                'idValue' => $this->optionalText($spec, 'idValue', 'Representative ID'),
+                'phone' => $this->optionalText($spec, 'phone', 'Phone'),
+                'email' => $this->optionalText($spec, 'email', 'Email Address'),
+                'website' => $this->optionalText($spec, 'website', 'Website'),
+            ];
+            if ($entry['email'] !== '' && filter_var($entry['email'], FILTER_VALIDATE_EMAIL) === false) {
+                throw new SpecException("{$spec->path}.email", 'The "Email Address" box refuses text that is not an email address');
+            }
+            if ($entry['website'] !== '' && !preg_match('~^(https?|ftp)://[^\s/?.#][^\s]*$~i', $entry['website'])) {
+                throw new SpecException("{$spec->path}.website", 'The "Website" box refuses text that is not a web address (http://, https:// or ftp://)');
+            }
+            $representatives[] = $entry;
+        }
+
+        foreach ($this->formatTradePlans as $trade) {
+            foreach ($trade['markets'] as $market) {
+                foreach (['agent', 'supplier'] as $type) {
+                    if ($market[$type] === null) {
+                        continue;
+                    }
+                    $named = array_filter($representatives, fn (array $r) => $r['type'] === $type && $r['name'] === $market[$type]);
+                    if (count($named) !== 1) {
+                        $offered = array_column(array_filter($representatives, fn (array $r) => $r['type'] === $type), 'name');
+                        throw new SpecException("{$market['path']}.{$type}", "The \"" . ucfirst($type) . '" list ' . (count($named) > 1 ? 'shows ' . json_encode($market[$type]) . ' twice; give the representatives distinct names' : 'offers no ' . json_encode($market[$type]) . '; it offers the book\'s representatives[] of that type: ' . json_encode(array_values($offered))));
+                    }
+                }
+            }
+        }
+        $formatTrade = array_filter($this->formatTradePlans, fn (array $trade) => $trade['salesRights'] !== [] || $trade['markets'] !== []);
+
+        return ['audience' => $audience, 'representatives' => $representatives, 'formatTrade' => $formatTrade];
     }
 
     /**
@@ -859,6 +1094,8 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
         $previousActingUser = Registry::get('user');
         Registry::set('user', $editor);
         try {
+            $response = $this->seedMarketing($submissionId, $plan, $built['publicationFormats']);
+
             if ($plan['enableChapterPublicationDates'] !== null) {
                 $controller = ApiCall::controller(\APP\API\v1\submissions\SubmissionController::class, [
                     Application::ASSOC_TYPE_SUBMISSION => Repo::submission()->get($submissionId),
@@ -954,10 +1191,109 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
                     'title' => (string) $form->getChapter()->getLocalizedTitle(),
                 ];
             }
-            return $plan['chapters'] === [] ? [] : ['chapters' => $seeded];
+            return $response + ($plan['chapters'] === [] ? [] : ['chapters' => $seeded]);
         } finally {
             Registry::set('user', $previousActingUser);
         }
+    }
+
+    /**
+     * Build the "Marketing" pages and the formats' trade lists (U74),
+     * acting as the editor (admin), after the formats and before any
+     * publish:
+     * 1. "Audience" › "Save": the page's PUT submissions/{id} with its five
+     *    lists, an unchosen one empty, through PKPSubmissionController::
+     *    edit itself (ApiCall);
+     * 2. per representative, "Add Representative", the window's fields,
+     *    "OK": RepresentativeForm as RepresentativesGridHandler::
+     *    updateRepresentative runs it (FormPost: its role check, execute);
+     * 3. per format, in the "Metadata" tab, each "Add Sales Rights" › "OK"
+     *    (SalesRightsForm: its one "Rest of World?" check) and each "Add
+     *    Market" › "OK" (MarketForm: "Date" and "Price" required), the
+     *    agent and supplier chosen by name among the book's
+     *    representatives as the window lists them.
+     * Not run: the handlers' "added" toasts.
+     *
+     * @param array<int, array{id: int}> $formats the seeded publicationFormats[], in order
+     */
+    private function seedMarketing(int $submissionId, array $plan, array $formats): array
+    {
+        if ($plan['audience'] !== null) {
+            $controller = ApiCall::controller(\APP\API\v1\submissions\SubmissionController::class, [
+                Application::ASSOC_TYPE_SUBMISSION => Repo::submission()->get($submissionId),
+                Application::ASSOC_TYPE_USER_ROLES => [Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER],
+            ]);
+            $request = ApiCall::request(\Illuminate\Http\Request::class, 'PUT', $plan['audience'], ['submissionId' => $submissionId], 'audience', 'The "Audience" "Save" would be refused');
+            ApiCall::answer($controller->edit($request), 'audience', 'The "Audience" "Save" was refused');
+        }
+
+        $seededRepresentatives = [];
+        foreach ($plan['representatives'] as $entry) {
+            $submission = Repo::submission()->get($submissionId);
+            $id = FormPost::run(new RepresentativeForm($submission, null), [
+                'representativeId' => '',
+                'isSupplier' => $entry['type'] === 'supplier' ? '1' : '0',
+                'agentRole' => $entry['type'] === 'agent' ? $entry['role'] : '',
+                'supplierRole' => $entry['type'] === 'supplier' ? $entry['role'] : '',
+                'name' => $entry['name'],
+                'representativeIdType' => $entry['idType'],
+                'representativeIdValue' => $entry['idValue'],
+                'phone' => $entry['phone'],
+                'email' => $entry['email'],
+                'url' => $entry['website'],
+            ], $entry['path'], 'The representative window would refuse this');
+            $seededRepresentatives[] = ['id' => (int) $id, 'name' => $entry['name'], 'type' => $entry['type']];
+        }
+
+        $representativeDao = \PKP\db\DAORegistry::getDAO('RepresentativeDAO'); /** @var \APP\monograph\RepresentativeDAO $representativeDao */
+        foreach ($plan['formatTrade'] as $index => $trade) {
+            $submission = Repo::submission()->get($submissionId);
+            $publication = Repo::publication()->get((int) $submission->getData('currentPublicationId'));
+            $ids = [
+                'submissionId' => (string) $submissionId,
+                'publicationId' => (string) $publication->getId(),
+                'representationId' => (string) $formats[$index]['id'],
+            ];
+            foreach ($trade['salesRights'] as $rights) {
+                $vars = $ids + ['salesRightsId' => '', 'type' => $rights['type']] + array_filter(array_intersect_key($rights, array_flip(['countriesIncluded', 'countriesExcluded', 'regionsIncluded', 'regionsExcluded'])));
+                if ($rights['restOfWorld']) {
+                    $vars['ROWSetting'] = 'on';
+                }
+                FormPost::run(new SalesRightsForm($submission, $publication, null), $vars, $rights['path'], 'The sales-rights window would refuse this');
+            }
+            $listed = [
+                'agent' => $this->representativeIdsByName($representativeDao->getAgentsByMonographId($submissionId)),
+                'supplier' => $this->representativeIdsByName($representativeDao->getSuppliersByMonographId($submissionId)),
+            ];
+            foreach ($trade['markets'] as $market) {
+                FormPost::run(new MarketForm($submission, $publication, null), $ids + [
+                    'marketId' => '',
+                    'date' => $market['date'],
+                    'dateFormat' => $market['dateFormat'],
+                    'dateRole' => $market['dateRole'],
+                    'agentId' => $market['agent'] === null ? '' : (string) $listed['agent'][$market['agent']],
+                    'supplierId' => $market['supplier'] === null ? '' : (string) $listed['supplier'][$market['supplier']],
+                    'price' => $market['price'],
+                    'currencyCode' => $market['currencyCode'],
+                    'priceTypeCode' => $market['priceTypeCode'],
+                    'taxRateCode' => $market['taxRateCode'],
+                    'taxTypeCode' => $market['taxTypeCode'],
+                    'discount' => $market['discount'],
+                ] + array_filter(array_intersect_key($market, array_flip(['countriesIncluded', 'countriesExcluded', 'regionsIncluded', 'regionsExcluded']))), $market['path'], 'The market window would refuse this');
+            }
+        }
+
+        return $plan['representatives'] === [] ? [] : ['representatives' => $seededRepresentatives];
+    }
+
+    /** The Agent or Supplier list of the market window: name → representative id. */
+    private function representativeIdsByName(\PKP\db\DAOResultFactory $result): array
+    {
+        $byName = [];
+        while ($representative = $result->next()) {
+            $byName[$representative->getName()] ??= (int) $representative->getId();
+        }
+        return $byName;
     }
 
     /**
