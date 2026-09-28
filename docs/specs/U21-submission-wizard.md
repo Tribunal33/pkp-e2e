@@ -403,16 +403,15 @@ All effects fire at the moment of submission (Rule 14) unless noted.
   who submitted in that role. A preprint server sends it to neither
   ⚠ [OPS10](#ops10). <sup>q</sup>
 - **Managers are told when nobody was assigned automatically.** If the
-  section's setup assigned no editor, every Journal Manager gets a task
-  notification ("A new article has been submitted to which an editor
-  needs to be assigned.", worded per app) and the "needs an editor"
-  email, unless they have unsubscribed from that email. Editors already
-  on the submission do not count: the alert still goes out when a
-  Section Editor is on the draft or the submitter chose an editorial
-  role, and an Editor who submitted in that role gets the email too
-  ⚠ [A17](#a17). The
-  email keeps its journal wording even on a preprint server
-  ⚠ [OPS6](#ops6). <sup>q</sup>
+  section's setup assigned no editor, every Journal Manager, Editor and
+  Production Editor gets a task notification ("A new article has been
+  submitted to which an editor needs to be assigned.", worded per app)
+  and the "needs an editor" email, unless they have unsubscribed from
+  that email. Editors already on the submission do not count: the alert
+  still goes out when a Section Editor is on the draft or the submitter
+  chose an editorial role, and reaches the submitting Editor too
+  ⚠ [A17](#a17). The email keeps its journal wording even on a preprint
+  server ⚠ [OPS6](#ops6). <sup>q</sup>
 - **Activity log.** A "submission submitted" entry always. A "copyright
   agreed" entry when the copyright box was ticked (Rule 14); that entry's
   text currently opens with a raw "{$filename}" placeholder ⚠ [A5](#a5).
@@ -1217,15 +1216,16 @@ Basis: probe. <sup>[fn-a15](#fn-a15)</sup>
 **A16 — A plain language summary over the word limit hangs the wizard on "Saving"** · 🐞 · user-visible · crash: script.
 In a section with a word limit, "Details" counts a too-long plain
 language summary ("Word Count: 20/10") but flags nothing, so the author
-expects it to be saved, or reported on "Review" as a too-long abstract
-is. Instead the save is refused, whether it comes from the timer or from
-"Continue". An "Error" dialog reads "An unexpected error has occurred.
-Please reload the page and try again." and never says which field is
-wrong, and the page's script fails a few seconds later. The footer shows
+expects it to be saved. Instead the save, by the timer or "Continue",
+is refused. An "Error" dialog reads "An unexpected error has occurred.
+Please reload the page and try again.", naming no field, and the page's
+script fails a few seconds later. The footer shows
 "Reconnecting", then "Saving" for good. "Review" shows the old summary
 ("None provided") under "Checking your submission", which never clears,
-so "Submit" stays disabled. Reloading loses the summary; sometimes an
-"Unsaved Changes" dialog offers it back first. An abstract over the same
+so "Submit" stays disabled. After a reload "Details" shows the summary
+empty. After a timer save, and on a preprint server after "Continue"
+too, an "Unsaved Changes" dialog (Rule 9a) opens first, and "No,
+discard" leaves it empty. An abstract over the same
 limit is saved and reported by the Review check instead (Rule 13).
 Basis: probe. <sup>[fn-a16](#fn-a16)</sup>
 
@@ -1233,9 +1233,9 @@ Basis: probe. <sup>[fn-a16](#fn-a16)</sup>
 **A17 — "Needs an editor" goes out for a submission that already has one** · ❓ · minor.
 When a submission arrives, the alert considers only the editors the
 section's setup assigns automatically. A submission with a Section Editor already on the draft, or one submitted
-by an Editor in that role, still sends every Journal Manager "A new
-submission needs an editor to be assigned: \"{title}\"", and the
-submitting Editor gets it about their own submission. The managers are
+by an Editor in that role, still sends every Journal Manager, Editor and
+Production Editor "A new submission needs an editor to be assigned:
+\"{title}\"", the submitting Editor included. The managers are
 asked to assign an editor that the submission's Participants list
 already shows.
 Question: should the alert count the editors already on the submission?
@@ -2211,7 +2211,9 @@ after "OK", "Saving" for good; one request in 20 s, no retry. "Review"
 listed "Plain Language Summary / None provided" under "Checking your
 submission", "Submit" disabled. On reload the summary was empty; an
 "Unsaved Changes" dialog came first after a timer save (OJS 3 of 3, OPS
-2 of 2) and after "Continue" on OPS (2 of 2) but not on OJS (0 of 3).
+2 of 2) and after "Continue" on OPS (2 of 2) but not on OJS (0 of 3);
+the drive answered it "No, discard unsaved changes" before reading
+"Details", and never pressed "Yes".
 Crash: the page error "Cannot read properties of undefined (reading
 'url')" about 4 s after the 400, in every over-limit drive (OJS 6 of 6,
 OPS 4 of 4). Control: a 10-word summary saved (200, "Last saved…"),
@@ -2220,7 +2222,11 @@ showed on "Review" and survived a reload.
 <a id="fn-a17"></a>
 **fn-a17** — A17. `AssignEditors` sends the needs-an-editor mail and task
 whenever `assignEditors()` assigned nobody itself; existing assignments
-are not consulted. Live-probed 2026-09-28, two runs per app on all
+are not consulted. It sends them to every user of the context's
+manager-level groups (`filterByRoleIds([ROLE_ID_MANAGER])`): the
+"Journal editor" and "Production editor" accounts get the task and the
+email as the "Journal manager" does, live-probed in *Notifications center
+& email preferences* (U05 note e). Live-probed 2026-09-28, two runs per app on all
 three: note q (a Section/Series Editor or Moderator on the draft, and
 the "Journal editor", "Press editor" or "Preprint Server manager"
 submitter, who received the email too).
