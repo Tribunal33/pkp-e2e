@@ -201,16 +201,16 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
    - The "Announcements" and "Comments" pages open from their own
      side-menu entries, shown while announcements or public comments are
      on, and do not ask for "Permit changes to Settings".
-   - The "Institutions" page gets a side-menu entry once two boxes
-     labelled "Enable institutional statistics" are both ticked: the
-     site's, on Administration › Site Settings › "Statistics", and the
-     journal's, on Settings › Distribution › "Statistics", which shows
-     only while the site's is ticked. Both are unticked on a fresh
-     install.
+   - The Journal Manager's and Site Administrator's side menus gain an
+     "Institutions" entry once both "Enable institutional statistics"
+     boxes are ticked: the site's (Administration › Site Settings ›
+     "Statistics") and the journal's (Settings › Distribution ›
+     "Statistics", shown only while the site's is ticked), both unticked
+     at install. Enabling payments {OJS} adds it too;
      [Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md)
-     Rule 30 lists every condition for the entry. The page opens by its
-     address either way. Like the Settings pages, it is refused to a
-     manager-level role without "Permit changes to Settings".
+     Rule 30 names every role shown it. The page opens by its address
+     either way. Like the Settings pages, it refuses a manager-level role
+     without "Permit changes to Settings".
 
    A user's "Edit" in the users list opens the invitation
    wizard described by [User invitations](U06-user-invitations.md). An

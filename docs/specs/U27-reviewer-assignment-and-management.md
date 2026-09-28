@@ -682,9 +682,9 @@ under the prompt "Record the response on behalf of the reviewer". Submit
   {$journalName}." with the placeholder printed literally where the press's
   name belongs ⚠ [OMP3](#omp3). The reviewer's "Review pending." task is
   removed. The action is logged. The reviewer also leaves the submission's
-  discussions: the "Details" of a discussion they were in no longer list
-  them, even when that leaves one participant. A reviewer with another open
-  request on the submission stays in them
+  discussions: their "Details" no longer list them, even when one
+  participant remains. A reviewer still holding an accepted request on
+  another round stays; which others count is open ⚠ [A38](#a38)
   ([→ leaving the submission leaves its items](U37-tasks-and-discussions.md#leaving)).
   A place the reviewer holds on a stage's Participants panel stays.
   <sup>k</sup>
@@ -1337,6 +1337,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A23](#a23) | {OJS} The Review Details window shows the recommendation twice, under two different labels | ❓ | minor | — |
 | [A28](#a28) | With the "Reviews completed" slider enabled, a name search for a reviewer never assigned answers "No items found." | ❓ | minor | — |
 | [A29](#a29) | On a request with no review, "Modify Review" still speaks of "the review submitted by {reviewer name}", and nothing says that "Save Changes" submits the review for the reviewer | ❓ | user-visible | — |
+| [A38](#a38) | Whether a request only sent, a completed review or {OMP} a request on the other review stage keeps a cancelled or unassigned reviewer in the submission's discussions is unsettled | ❓ | minor | — |
 | [OMP5](#omp5) | {OMP} "Save Changes" with nothing entered is accepted on an unanswered request and submits an empty review for the reviewer | ❓ | minor | — |
 | [OMP1](#omp1) | A press's review runs without reviewer recommendations, and with a per-stage reviewer pool (Internal vs External Reviewers) | ✅ | — | — |
 | [A24](#a24) | Retired: a modification save on a request with no review completes it because it submits the review on the reviewer's behalf, the behavior upstream designed (pkp/pkp-lib#13337); screens do reach it (Rule 14d) | ✅ | retired | upstream change + claim check (claude), 2026-09-17 — overturned by design |
@@ -1784,6 +1785,20 @@ submission {$submissionid}.", with the placeholder printed literally where
 the submission's number belongs. The lines of the same log about the
 assignment and the decline print the number.
 Basis: probe. <sup>[f-a37](#fn-a37)</sup>
+
+<a id="a38"></a>
+**A38 — Which other requests keep a removed reviewer in discussions** · ❓ ·
+minor.
+A reviewer whose request is cancelled or unassigned leaves the
+submission's discussions, and one still holding an accepted request on
+another round stays (Side effects, "Unassigning/cancelling"). Whether a
+request only sent, a submitted or completed review (a completed round 1
+review when the round 2 request is cancelled), or {OMP} a request on the
+other review stage keeps them there too has not been seen on screen.
+Question: which of the reviewer's other requests should keep them in the
+discussions? Lean: any request not declined or cancelled, a completed
+review included, since that reviewer may still be asked about it there.
+Basis: code. <sup>[f-a38](#fn-a38)</sup>
 
 ### OMP
 
@@ -3341,6 +3356,22 @@ the submission's number. Mechanism: the string
 names `{$submissionid}`, while `ResendRequestReviewerForm::execute()`
 logs the parameter as `submissionId`, so the lower-case placeholder finds
 no value.
+
+<a id="fn-a38"></a>
+**f-a38** — Driven: *Tasks & discussions* note td13 and its kept check
+`shared/playwright/checks/U37/K7/k7.js` (phase leave2, OJS and OMP): a
+reviewer with accepted requests on rounds 1 and 2 stayed in the discussion
+after the round 2 cancel and left after the round 1 cancel. Not driven: a
+request only sent, a submitted or completed review, a press's other review
+stage. Code-read 2026-09-28 (rewrite, no drive):
+`PKPReviewerGridHandler::updateClearReview()` calls
+`removeParticipantFromSubmissionTasks()` only when the review-assignment
+Collector with `filterByActive(true)` finds none for the reviewer on the
+submission; `isActive` keeps assignments neither declined nor cancelled
+that are on the submission's current stage, or completed while the
+submission is not published. On that reading a completed review keeps the
+reviewer until publication, a request only sent keeps them, and on a press
+a not-completed request on the other review stage does not.
 
 <a id="fn-omp1"></a>
 **f-omp1** — Mechanism in notes b, i, o: recommendation roster passed only
