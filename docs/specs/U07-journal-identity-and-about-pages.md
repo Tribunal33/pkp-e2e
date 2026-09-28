@@ -201,12 +201,16 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
    - The "Announcements" and "Comments" pages open from their own
      side-menu entries, shown while announcements or public comments are
      on, and do not ask for "Permit changes to Settings".
-   - The "Institutions" page has a side-menu entry only while
-     Administration › Site Settings › "Statistics" has "Enable
-     institutional statistics" ticked (unticked on a fresh install), and
-     opens by its address otherwise. Like the Settings pages, it is
-     refused to a manager-level role without "Permit changes to
-     Settings".
+   - The "Institutions" page gets a side-menu entry once two boxes
+     labelled "Enable institutional statistics" are both ticked: the
+     site's, on Administration › Site Settings › "Statistics", and the
+     journal's, on Settings › Distribution › "Statistics", which shows
+     only while the site's is ticked. Both are unticked on a fresh
+     install.
+     [Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md)
+     Rule 30 lists every condition for the entry. The page opens by its
+     address either way. Like the Settings pages, it is refused to a
+     manager-level role without "Permit changes to Settings".
 
    A user's "Edit" in the users list opens the invitation
    wizard described by [User invitations](U06-user-invitations.md). An
@@ -233,9 +237,11 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
      name their own application). <sup>l</sup>
 5. **Saving a tab.** "Save" stores the fields of its own tab and nothing
    else; another tab's unsaved changes are neither saved nor lost by it.
-   Changes typed and not saved stay in their boxes while the user moves to
-   another tab of the same page, and are gone without a warning once the
-   page is left. <sup>m</sup> <sup>td7</sup>
+   Changes typed and not saved stay in their boxes while the user moves
+   between the tabs of the same page, top tabs and side tabs alike. They
+   are gone without a warning once the page is reloaded or left, for
+   example through the side menu: the boxes then show the stored values.
+   <sup>m</sup> <sup>td7</sup>
 
 **Identity and contact**
 
@@ -311,7 +317,8 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
       "Moderator" and "Editorial Board Member" on a preprint server. The
       roles follow the order set under Settings › Website › "Appearance" ›
       "Editorial Masthead" (Settings bullet 4); each role's name is a
-      heading.
+      heading, in the language the visitor reads the site in
+      ⚠ [OPS4](#ops4).
     - 14b. **Who is listed.** Under its role heading, every user whose
       role has started and not ended and is set to "Appear on the
       masthead" for that role, ordered by family name. The setting is the
@@ -974,7 +981,7 @@ Left out of the scenarios above, by reason:
 
 - **Budget** — variants:
   - a second form language: its boxes behind the language button, and each public page in the visitor's language with the primary language's text where that box is empty (Fields; Rule 11; Settings bullet 12)
-  - unsaved changes kept while moving between the tabs of a page, and lost without a warning on leaving it (Rule 5)
+  - unsaved changes kept while moving between the tabs of a page, and lost without a warning on reloading or leaving it (Rule 5)
   - another order of the roles on Settings › Website › "Appearance" › "Editorial Masthead" (Rule 14a; Settings bullet 4)
   - the abbreviation, the "Publishing Details", "Sponsoring organization" and "Publisher Identity" saved and shown again on the tab (Fields; Rule 10)
   - a renamed "Journal initials" beside the journal's tasks for an account in two journals (Rule 7)
@@ -1000,6 +1007,7 @@ Left out of the scenarios above, by reason:
   - OMP1 (Settings › Press headed "Setup"; Rule 1; scenario 2 marks it)
   - OPS2 ("Sponsoring organization" used nowhere; Fields; Rule 10)
   - OPS3 (a preprint server's French privacy default arriving as a raw text key; Fields)
+  - OPS4 (a preprint server's French masthead heading its Moderators with a raw text key; Rule 14a)
 - **No seed**:
   - the newer-release notice on Settings › Journal (Rule 4b; Settings bullet 11): the test installs never reach the internet
   - the site's own "Privacy Statement" set (Rule 18; Settings bullet 10)
@@ -1009,7 +1017,7 @@ Left out of the scenarios above, by reason:
   - the "Journal Abbreviation" in the article's "How to Cite" (Fields; Rule 10; *Article landing page & reading*)
   - the "Journal Summary" in the site's list of journals and on the home page (Rule 8; *Hosted journals*, *Appearance & theming*)
   - the other tabs of the five Settings pages (Rule 2; the features its table names)
-  - the "Announcements", "Institutions" and "Comments" pages, and the users list's "Edit" (Rule 3; [Announcements](U12-announcements.md), *Institutions*, [Reader comments & moderation](U14-reader-comments-and-moderation.md) scenario 6, [User invitations](U06-user-invitations.md) scenario 8)
+  - the "Announcements", "Institutions" and "Comments" pages with their side-menu entries, and the users list's "Edit" (Rule 3; [Announcements](U12-announcements.md), *Institutions*, [Reader comments & moderation](U14-reader-comments-and-moderation.md) scenario 6, [User invitations](U06-user-invitations.md) scenario 8)
   - the error window of a masthead choice changed on a press or preprint server (Settings bullet 3; [User invitations](U06-user-invitations.md#omp1); scenario 8 passes it)
   - which email of a press or preprint server carries the new principal contact as its sender (Rule 9; Side effects: each email's own feature says when it is sent; [Publish, schedule & versions](U49-publish-schedule-and-versions.md))
   - the technical support contact as the sender of the account-validation email ([Registration & account validation](U02-registration-and-account-validation.md) scenario 7)
@@ -1031,6 +1039,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | Hosted Journals "Edit" refuses to save a journal whose "Country" was never set | 🐞 | user-visible | — |
 | [OMP2](#omp2) | The site-level page about the software says "This press uses Open Monograph Press" on a press site {OMP} | 🐞 | minor | — |
 | [OPS3](#ops3) | A preprint server's French "Privacy Statement" default is the raw text "##default.contextSettings.privacyStatement##" {OPS} | 🐞 | user-visible | — |
+| [OPS4](#ops4) | A preprint server's French "Editorial Masthead" heads the Moderators "##default.groups.name.sectionEditor##" {OPS} | 🐞 | user-visible | — |
 | [A2](#a2) | The "Edit" link of the About pages is shown to a manager-level role that cannot open the Settings pages | ❓ | minor | — |
 | [A3](#a3) | The "Contact" tab cannot be saved until a technical support contact is entered, and new journals have none | ❓ | minor | — |
 | [A5](#a5) | A member removed with "Remove User" reaches "Editorial History" only after an unrelated change; a member with a later start date is not listed | ❓ | minor | — |
@@ -1198,8 +1207,24 @@ When French is ticked under "Forms" on Settings › Website › "Setup" ›
 "Languages", or the server is created with French forms, the "Privacy
 Statement" tab's French box holds
 "##default.contextSettings.privacyStatement##" where a journal and a
-press get a French statement. Left as it is, that text is the server's
-French privacy statement. Basis: probe. <sup>f-ops3</sup>
+press get a French statement. Left as it is, that text is the whole
+body of the server's French "Privacy Statement" page, headed
+"Déclaration de confidentialité". Basis: probe. <sup>f-ops3</sup>
+
+<a id="ops4"></a>
+**OPS4 — The French masthead names the Moderators by a raw text key** · 🐞 · user-visible.
+A visitor reading a preprint server in French expects the role headings
+of "Editorial Masthead" (headed "Entête" in French) in French, as a
+journal gives them ("Rédacteur-trice", "Rédacteur-trice de rubrique")
+and a press ("Rédacteur/Rédactrice en chef de la presse",
+"Rédacteur/Rédactrice en chef de la série"). The server heads its
+Moderators "##default.groups.name.sectionEditor##", above "Membre du
+comité éditorial" for the Editorial Board Member. The order list under
+Settings › Website › "Appearance" › "Editorial Masthead" ("Entête" in
+French) names the role the same way. The server's French translation has
+no text for the role's name; the users list shows the same key
+([Users management](U53-users-management.md#ops1)). Basis: probe.
+<sup>f-ops4</sup>
 
 ---
 
@@ -1663,6 +1688,20 @@ statistics" unticked on each install); `management/settings/institutions`
 opened for the manager and answered the access-denied page to the Editor
 without the box. A user's "Edit" in the users list opened
 `management/settings/user/{id}` with the invitation wizard's first step.
+Live-probed 2026-09-28 (Rule 3, "Institutions"; all three apps, two runs;
+the Site Administrator and a Journal Manager of a scratch journal, the
+side menu read on the Dashboard): with the site's box ticked (set through
+the site API; its "Statistics" tab read ticked), Distribution ›
+"Statistics" offered the journal's box, unticked, beside "Public API",
+and no side menu showed "Institutions", the seeded journal's included;
+ticked and saved there ("Saved"), the entry showed on the same page, on
+the next load and for the other account; with the site's box unticked again,
+the journal's box was hidden and the entry gone; ticked again, both came
+back, the journal's box still ticked; the journal's box unticked and
+saved, the entry went at once. `management/settings/institutions` opened
+the "Institutions" page for both accounts at every step. Each load of
+Administration › Site Settings answered the Plugin Gallery's server error
+recorded by [Plugins management](U62-plugins-management.md#a1).
 
 <a id="fn-td5"></a>
 **td5** — Live-probed 2026-09-23 (Rule 1; A7; OJS in three runs, OMP and
@@ -1721,6 +1760,17 @@ typed again and the page left through the side menu's "Website", no
 browser or page dialog showed and the stored title was back. Text typed
 in "Privacy Statement" behaved the same across side and top tabs and was
 lost without a warning when another address was opened.
+Live-probed 2026-09-28 (Rule 5; all three apps, two runs; the seeded
+journal's Journal Manager, nothing saved): a title and a "Journal
+Summary" typed on "Masthead" stayed after "Contact" and back; a reload,
+and a trip out through the side menu's "Website" and back, each brought
+the stored values back with no browser or page dialog. Text typed in
+"Privacy Statement" stayed across the side tab "Information" (OPS
+"Languages") and the top tab "Appearance" and back, "Setup" reopening on
+"Privacy Statement", and was lost through the side menu's "Journal", with
+no dialog either. Each load of Settings › Website answered the Plugin
+Gallery's server error recorded by
+[Plugins management](U62-plugins-management.md#a1).
 
 <a id="fn-n"></a>
 **n** — Where identity shows. `frontend/components/headerHead.tpl` appends
@@ -2240,6 +2290,42 @@ a French text. OPS's `locale/fr_CA/default.po` carries
 `default.contextSettings.privacyStatement` with an empty text (OJS's and
 OMP's carry a French one), and an untranslated text is written as
 "##key##".
+Live-probed 2026-09-28 (OPS; OJS and OMP the control; two runs): on a
+scratch server with English forms, the Site Administrator ticked French
+under "Forms" on Setup › "Languages" (saved at once): the French box
+held `<p>##default.contextSettings.privacyStatement##</p>` on the same
+page, on the next load and after a reload, as on a server created with
+French forms. Signed out, `{server}/fr_CA/about/privacy` on the ticked
+server and on one created with French forms was headed "Déclaration de confidentialité" with that text as its whole
+body; a journal and a press showed their French text. Each "Forms" tick
+failed the page's script as
+[Languages & locales](U57-languages-and-locales.md#a5) records, and each
+load of Settings › Website answered the Plugin Gallery's server error of
+[Plugins management](U62-plugins-management.md#a1).
+
+<a id="fn-f-ops4"></a>
+**f-ops4** — Live-probed 2026-09-28 (Rule 14a; OPS; OJS and OMP the
+control; two runs): signed out, `publicknowledge/fr_CA/about/editorialMasthead`,
+headed "Entête", gave the role headings
+"##default.groups.name.sectionEditor##" and "Membre du comité éditorial"
+on OPS, "Rédacteur-trice" and "Rédacteur-trice de rubrique" on OJS, and
+"Rédacteur/Rédactrice en chef de la presse" and "Rédacteur/Rédactrice en
+chef de la série" on OMP; in English the same pages read "Moderator" and
+"Editorial Board Member", "Journal editor" and "Section editor", "Press
+editor" and "Series editor". The raw heading showed the same on two
+scratch servers created with French, each with one Moderator and one
+Editorial Board Member. As `manager.maya` in French, Website ›
+"Appearance" › "Entête" listed "##default.groups.name.sectionEditor##"
+with the buttons "Avancer la position de
+##default.groups.name.sectionEditor##" and "Reculer la position de …";
+OJS and OMP listed French names only. The manager role's key
+"##default.groups.name.manager##" showed on neither page, the manager
+role not being a masthead role. Mechanism: OPS's `locale/fr_CA/default.po`
+carries `default.groups.name.sectionEditor` with an empty text (OJS's
+reads "Rédacteur-trice de rubrique"), the cause of
+[Users management](U53-users-management.md#ops1) too. Each load
+of Settings › Website answered the Plugin Gallery's server error of
+[Plugins management](U62-plugins-management.md#a1).
 
 ## Reference — entry points & surfaces
 
