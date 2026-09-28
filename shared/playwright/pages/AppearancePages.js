@@ -500,9 +500,21 @@ class AppearanceSetupForm extends AppearanceForm {
 class MastheadForm extends AppearanceForm {
     constructor(page) {
         super(page, '[id^="appearanceMasthead-mastheadUserGroupIds"]');
-        this.roles = new OrderableList(page, this.form.locator('fieldset.pkpFormField--options').first());
-        this.description = this.form.locator('fieldset.pkpFormField--options').first().locator('.pkpFormField__description');
-        this.reviewersField = this.form.locator('.pkpFormField--html');
+        const field = (name) =>
+            this.form
+                .locator('fieldset.pkpFormField--options')
+                .filter({has: page.locator(`[id^="appearanceMasthead-${name}"]`)});
+        // "Enrollment-based Masthead" and its one box (pkp-lib#13370); the
+        // roles list and "Reviewers" show while the box is ticked.
+        this.enrollmentField = field('enableEnrollmentMasthead-');
+        this.enrollmentBox = this.enrollmentField.locator('input[type="checkbox"]');
+        const rolesField = field('mastheadUserGroupIds');
+        this.roles = new OrderableList(page, rolesField);
+        this.description = rolesField.locator('.pkpFormField__description');
+        // "Reviewers": its note and the "Enable listing of reviewers on the
+        // masthead" box; none on OPS, which has no review stages.
+        this.reviewersField = field('enableEnrollmentMastheadReviewers');
+        this.reviewersBox = this.reviewersField.locator('input[type="checkbox"]');
     }
 }
 

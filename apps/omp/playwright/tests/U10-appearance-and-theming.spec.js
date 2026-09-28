@@ -66,7 +66,7 @@ const SUMMARY = 'A journal for testing.';
 const ABOUT_PRESS = 'About the Press';
 const ALT_GUIDANCE =
     'Describe this image for visitors viewing the site in a text-only browser or with assistive devices. Example: "Our editor speaking at the PKP conference."';
-const REVIEWERS_NOTE = 'Reviewers will be displayed in a standardized format to maintain uniformity and ensure easy discoverability in this section.';
+const REVIEWERS_NOTE = 'Reviewers who completed a review in the previous calendar year will be credited in a standardized format to maintain uniformity and ensure easy discoverability in this section.';
 const MASTHEAD_INTRO = 'Define the order of masthead roles for public display.';
 const CONSIDER = 'Consider role in masthead list';
 const RED = 'rgb(255, 0, 0)';
@@ -770,8 +770,11 @@ test.describe('appearance & theming', () => {
 
         // The list as it opens: the three roles, each with a drag handle and
         // both arrows and no box, no Reviewer role; "Reviewers" and its note
-        // (Fields, "Editorial Masthead"; Rule 28).
+        // (Fields, "Editorial Masthead"; Rule 28). Above it the enrollment
+        // masthead box, ticked on a new press; the reviewers box unticked
+        // (pkp-lib#13370).
         let masthead = await openTab(website, 'appearance-masthead');
+        await expect(masthead.enrollmentBox).toBeChecked();
         await expect(masthead.description).toHaveText(MASTHEAD_INTRO);
         expect(await masthead.roles.read()).toEqual([
             {label: 'Press editor', checked: null},
@@ -783,7 +786,8 @@ test.describe('appearance & theming', () => {
         await expect(masthead.roles.rows().locator('button.orderer__down')).toHaveCount(3);
         await expect(masthead.reviewersField).toContainText('Reviewers');
         await expect(masthead.reviewersField).toContainText(REVIEWERS_NOTE);
-        await expect(masthead.reviewersField.locator('input, select, textarea, button')).toHaveCount(0);
+        await expect(masthead.reviewersBox).toHaveCount(1);
+        await expect(masthead.reviewersBox).not.toBeChecked();
 
         // A role ticked before the first save: "Production editor" at the
         // place of its permission level, above "Series editor" (Rule 28).

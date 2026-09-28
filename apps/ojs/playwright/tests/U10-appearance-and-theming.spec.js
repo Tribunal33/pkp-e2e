@@ -86,7 +86,7 @@ const WRONG_TYPE = "You can't upload files of this type.";
 const MASTHEAD_BOX = 'Consider role in masthead list';
 const MASTHEAD_DESCRIPTION = 'Define the order of masthead roles for public display.';
 const REVIEWERS_NOTE =
-    'Reviewers will be displayed in a standardized format to maintain uniformity and ensure easy discoverability in this section.';
+    'Reviewers who completed a review in the previous calendar year will be credited in a standardized format to maintain uniformity and ensure easy discoverability in this section.';
 const REQUIRED = 'This field is required.';
 const AT_LEAST_ONE = 'This must be at least 1.';
 const NOT_INTEGER = 'This is not a valid integer.';
@@ -782,9 +782,12 @@ test.describe('appearance & theming', () => {
 
         // The list as it opens: three roles, each with a handle and two arrows
         // and no box, no Reviewer role; below, "Reviewers" and its note
-        // (Fields, "Editorial Masthead"; Rule 28).
+        // (Fields, "Editorial Masthead"; Rule 28). Above it the enrollment
+        // masthead box, ticked on a new journal; the reviewers box unticked
+        // (pkp-lib#13370).
         await settings.goto();
         let masthead = await settings.open('appearance-masthead');
+        await expect(masthead.enrollmentBox).toBeChecked();
         await expect(masthead.description).toHaveText(whole(MASTHEAD_DESCRIPTION));
         expect(await masthead.roles.read()).toEqual([
             {label: EDITOR, checked: null},
@@ -799,6 +802,8 @@ test.describe('appearance & theming', () => {
         }
         await expect(masthead.reviewersField).toContainText('Reviewers');
         await expect(masthead.reviewersField).toContainText(REVIEWERS_NOTE);
+        await expect(masthead.reviewersBox).toHaveCount(1);
+        await expect(masthead.reviewersBox).not.toBeChecked();
 
         // Control: before the "Save" the masthead page's last role heading is
         // "Editorial Board Member" (Rule 28).

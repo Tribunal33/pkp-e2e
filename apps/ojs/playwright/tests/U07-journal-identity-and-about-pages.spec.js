@@ -871,8 +871,11 @@ test.describe('journal identity & about pages', () => {
         test.slow();
         const tag = makeTag('s9', testInfo);
         const zetaOrcid = 'https://orcid.org/0000-0002-1694-233X';
+        // The listing is the "Enable listing of reviewers on the masthead"
+        // box, unticked on a new context since pkp-lib#13370.
         await ojsApi.createContext({
             tag,
+            enableEnrollmentMastheadReviewers: true,
             users: [
                 account(tag, 'au', 'Ada', 'Author', ['author']),
                 account(tag, 'ze', 'Zoe', 'Zeta', ['externalReviewer'], {

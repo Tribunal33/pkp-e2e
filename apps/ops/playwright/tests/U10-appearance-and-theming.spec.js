@@ -74,7 +74,6 @@ const ABOUT_SERVER = 'About the Server';
 const LATEST = 'Latest preprints';
 const ALT_GUIDANCE =
     'Describe this image for visitors viewing the site in a text-only browser or with assistive devices. Example: "Our editor speaking at the PKP conference."';
-const REVIEWERS_NOTE = 'Reviewers will be displayed in a standardized format to maintain uniformity and ensure easy discoverability in this section.';
 const MASTHEAD_INTRO = 'Define the order of masthead roles for public display.';
 const RED = 'rgb(255, 0, 0)';
 const THEME_FIELDS = ['Theme', 'Typography', 'Colour', 'Server Summary', 'Header Background Image', 'Usage statistics display options'];
@@ -775,9 +774,12 @@ test.describe('appearance & theming', () => {
         await expect(roleHeadings).toHaveText(['Moderator', 'Editorial Board Member']);
 
         // The list as it opens: the two roles, each with a drag handle and
-        // both arrows and no box, no Reviewer role; "Reviewers" and its note
-        // (Fields, "Editorial Masthead"; Rule 28).
+        // both arrows and no box, no Reviewer role, and no "Reviewers" field
+        // (Fields, "Editorial Masthead"; Rule 28). Above it the enrollment
+        // masthead box, ticked on a new server (pkp-lib#13370, which also
+        // took "Reviewers" off a server, having no review stages).
         const masthead = await openTab(website, 'appearance-masthead');
+        await expect(masthead.enrollmentBox).toBeChecked();
         await expect(masthead.description).toHaveText(MASTHEAD_INTRO);
         expect(await masthead.roles.read()).toEqual([
             {label: 'Moderator', checked: null},
@@ -786,9 +788,8 @@ test.describe('appearance & theming', () => {
         await expect(masthead.roles.rows().locator('.orderer__dragDrop')).toHaveCount(2);
         await expect(masthead.roles.rows().locator('button.orderer__up')).toHaveCount(2);
         await expect(masthead.roles.rows().locator('button.orderer__down')).toHaveCount(2);
-        await expect(masthead.reviewersField).toContainText('Reviewers');
-        await expect(masthead.reviewersField).toContainText(REVIEWERS_NOTE);
-        await expect(masthead.reviewersField.locator('input, select, textarea, button')).toHaveCount(0);
+        await expect(masthead.reviewersField).toHaveCount(0);
+        await expect(masthead.form).not.toContainText('Reviewers');
 
         // Reordered: "Editorial Board Member" first, "Saved"; the visitor's
         // masthead and history head with it, the other following (Rule 28).

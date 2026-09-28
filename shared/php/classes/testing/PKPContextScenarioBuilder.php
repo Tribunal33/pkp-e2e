@@ -163,6 +163,15 @@
  *   ("Display featured books on the home page", "Display new releases on
  *   the home page"; U68, the OMP AppearanceSetupForm). Only the press
  *   schema carries them: OJS and OPS answer 400. Each writes its row alone.
+ * - enableEnrollmentMasthead, enableEnrollmentMastheadReviewers (bool) —
+ *   Settings › Website › Appearance › "Editorial Masthead", the "Present a
+ *   masthead based on user enrollments" and "Enable listing of reviewers
+ *   on the masthead" boxes (U07, U10; pkp-lib#13370,
+ *   PKPAppearanceMastheadForm, shared by the three apps). Every new
+ *   context stores the first on and has no row for the second, so "Peer
+ *   Reviewers in Previous Year" is off until it is ticked. OPS has no
+ *   reviewers box and answers 400 for the second key. Each writes its row
+ *   alone.
  * - enableDois (bool), doiPrefix (string or null), doiVersioning (bool),
  *   enabledDoiTypes (list), doiCreationTime (copyediting (OPS production) /
  *   publication / never), doiSuffixType (default / none / customPattern)
@@ -2613,6 +2622,34 @@ abstract class PKPContextScenarioBuilder
             }
             $settings['catalogSortOption'] = $value;
             $specKeys['catalogSortOption'] = 'catalogSortOption';
+        }
+
+        // Settings › Website › Appearance › "Editorial Masthead", the
+        // "Present a masthead based on user enrollments" and "Enable listing
+        // of reviewers on the masthead" boxes (pkp-lib#13370;
+        // PKPAppearanceMastheadForm's single-option FieldOptions over the
+        // schema's nullable booleans: the first defaults to true, which
+        // every new context stores, the second has no default, so a new
+        // context has no row and lists no reviewers). The form posts its
+        // whole body, each box as "true" / "false", turned into the boolean
+        // by the save's convertStringsToSchema (stored 1 / 0); null is
+        // refused as the form offers no way back to no row. Each key writes
+        // its row alone. The reviewers box is offered only by an app with
+        // review stages, so OPS answers 400 for it.
+        foreach (['enableEnrollmentMasthead' => 'Present a masthead based on user enrollments', 'enableEnrollmentMastheadReviewers' => 'Enable listing of reviewers on the masthead'] as $key => $label) {
+            if (!$root->has($key)) {
+                continue;
+            }
+            $hasProperty($key) || throw new SpecException($key, "{$key} is not a setting of this app's context schema");
+            if ($key === 'enableEnrollmentMastheadReviewers' && !count(Application::get()->getReviewStages())) {
+                throw new SpecException($key, "{$key} is not offered by this app's Editorial Masthead form (no review stages, so no \"{$label}\" box)");
+            }
+            $value = $root->get($key);
+            if (!is_bool($value)) {
+                throw new SpecException($key, "{$key} must be a boolean (true: the \"{$label}\" box ticked, false: unticked)");
+            }
+            $settings[$key] = $value;
+            $specKeys[$key] = $key;
         }
 
         // Settings › Website › Appearance › "Setup", the "Featured Books"
