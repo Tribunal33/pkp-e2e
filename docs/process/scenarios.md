@@ -1139,7 +1139,8 @@ Keys:
   seeds distinct titles it finds by search, or adds the newest by hand
   (U12 claim check K4, 2026-09-17).
 
-The subscription keys (OJS only; OMP and OPS answer 400 on each). Each
+The subscription keys (OJS only; OMP and OPS answer 400 on each, but
+for `payments`, which OMP takes too, below). Each
 is the save of the screen that makes the state, run through that
 screen's own code as `admin`, in this order after `users[]` and before
 `issues[]`: the two payment screens, "Subscription Policies", the
@@ -1174,6 +1175,15 @@ under the tag; every other refusal comes first and leaves nothing.
   `publicationFeeStatus` "Publication Fee not paid…") on a journal whose
   `payments` key set a `publicationFee` above 0: seed the published
   article first, then set the APC (U52 claim check K2, 2026-09-27).
+  OMP (U73) takes the same "Payments" tab fields `{enabled?, currency?,
+  paymentPluginName?, manualInstructions?}` and nothing else: a press
+  has no "Payment Types" page, so a fee key or `restrictOnlyPdf` is a
+  400 naming it. It is the same save (`PaymentSettingsSeeder`), as
+  `admin` after `users[]`; the rows, the reopened tab and the terms
+  window's "Price (USD)" equal a by-hand save (U73 harness, 2026-09-28).
+  A new press already stores `paymentPluginName` ManualPayment but no
+  `currency` and no `paymentsEnabled`. OPS answers 400: a preprint server's Distribution settings have no
+  "Payments" tab.
 - `subscriptionName`, `subscriptionEmail`, `subscriptionPhone`,
   `subscriptionMailingAddress` (strings), `subscriptionAdditionalInformation`
   (a string or a locale map, the rich text as stored, `<p>…</p>`),
@@ -1502,6 +1512,27 @@ Keys:
   files' uploader aside: a round file's uploader and its log rows name
   `admin`, where a screen upload names the editor. OPS answers 400 on
   both: a preprint server shows no workflow file list.
+  `list` (U73) names the root entry's list: `submission` ("Submission
+  Files", the default) or `productionReady`, the Production stage's
+  "Production Ready Files" › "Upload" (the wizard "Upload a Production
+  Ready File": the same steps, the file at the production-ready file
+  stage, no assoc). Its `uploader`
+  defaults to `admin` and must be offered that list's upload (the site
+  admin, a manager of the context, or a sub-editor or assistant in
+  `participants[]` whose role is assigned to Production; the submitter
+  as Author is a 400). The file is uploaded once the decisions have run,
+  before the galleys and formats, so the request needs `submitted: true`
+  and decisions that reach Production (`['skipExternalReview',
+  'sendToProduction']`); a draft is a 400 before anything is written,
+  and a submission short of Production a 400 once the decisions ran
+  (rolled back). An unknown word is a 400. The response's `files`
+  entries carry `list`. A chapter's `files.N` counts every root entry in
+  request order, whatever its list. The rows, log lines, notifications
+  and the list equal a by-hand upload by `admin` (U73 harness,
+  2026-09-28, OJS and OMP); on a press the format's "Select Files"
+  window lists the file under "Page Proofs". Since the seed uploads it
+  before the `publicationFormats[]` proof files, its id comes before
+  theirs.
 - `galleys[]` (OJS, OPS): galleys on the submission's current publication,
   each `{label, locale, file}` or `{label, locale, urlRemote}`, created the
   way the workflow's "Galleys" page creates them, after the decisions and
@@ -2454,10 +2485,10 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   (the author's "Upload" is refused on a round where revisions were not
   requested, U30); `reviewRounds[].reviewers[].status: 'complete'` (the
   editor-confirmed "Mark as Complete" state the minimum-reviews count needs;
-  `completed` is the reviewer's submit, U34); `files[].list` (a file on
-  a later list, "Draft Files", "Copyedited Files" or "Production Ready
-  Files": `files[]` seeds "Submission Files" and a round's "Files for
-  Review" only, U36); `commentsForEditor`.
+  `completed` is the reviewer's submit, U34); the remaining `files[].list`
+  words, "Draft Files" and "Copyedited Files" (Copyediting; `list`
+  seeds "Submission Files" and "Production Ready Files" only, U36, U73);
+  `commentsForEditor`.
 - Submission: OJS `issue` without `published` (the Publication Settings
   issue assignment of an unpublished article; the key applies only with
   `published: true`, so an unpublished article in an issue, or one whose
@@ -2515,7 +2546,7 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   never shows it, so a notice scenario seeds `accept`. The box is read by
   its level-3 "Notification" heading, not by a `notices` selector. Seeded
   submissions carry no Copyediting files (`files[]` seeds "Submission
-  Files" only), so a copyediting decision or list scenario
+  Files" and "Production Ready Files" only), so a copyediting decision or list scenario
   uploads through the lists' own "Upload/Select Files" window or the
   Submission stage's "Upload" first. U32 claim check, 2026-09-18/19. On
   OMP an Internal Review acceptance (`acceptFromInternal` seeded, or

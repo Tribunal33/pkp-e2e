@@ -336,7 +336,9 @@
  * - OJS subscription keys (U51, APP\testing\SubscriptionSeeder): payments,
  *   the "Subscription Policies" fields, institutions[], subscriptionTypes[]
  *   and subscriptions[], each the save of its screen, before issues[].
- *   OMP and OPS read no overlay, so the keys answer 400 there.
+ *   OMP reads `payments` alone (U73: the "Payments" tab's setup fields,
+ *   PaymentSettingsSeeder, no fees); OPS reads no overlay, so the keys
+ *   answer 400 there.
  */
 
 namespace PKP\testing;

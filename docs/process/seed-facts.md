@@ -943,7 +943,18 @@ config-file settings.
   the Copyeditor, Marketing and sales coordinator and Funding coordinator
   do; a published book shows the pages to every assistant role. Workflow
   side menu, OMP, 2026-09-28 (U72 claim check K1, `p-list-*`, `q-list-*`,
-  `b-list-*`).
+  `b-list-*`). Its "Publication Formats" page, though, holds only "You
+  don't currently have access to that stage of the workflow." for the
+  Copyeditor, Marketing and sales coordinator and Funding coordinator (on
+  a published book, and for the first two on a book in Copyediting too);
+  an assistant with Production access (Layout Editor, Designer, Indexer,
+  Proofreader) gets the list. OMP, 2026-09-28 (U73 claim check K1,
+  `o-b2-ce`, `o-b3-ce`).
+- {OMP} A new publication format's "Metadata" tab refuses "Save" with
+  "This field is required." under "Product Composition" until that list is
+  chosen; the "Add Code" window's "ONIX Code Type" list leaves out a code
+  type the format already holds. Publication › Publication Formats › a
+  format's "Edit", 2026-09-28 (U73 claim check K2).
 - A press's Internal Review entry shows no Participants panel until the
   stage is initiated; the other not-reached stages show it. OMP,
   2026-09-22 (U35 ccK1, `nr-s2-InternalReview-omp`).
@@ -996,9 +1007,13 @@ config-file settings.
   ccK1, `s1-mgr-assign-form-*`, `s2-mgr-assign-deciding-assign-form-*`).
   On OPS "Preprint Server manager" is offered at Production (2026-09-26,
   U54 ccK2 `k2-21-manager-workflow_*`).
-- On a press, a seeded publication format's file cannot be downloaded: its
-  file view page opens but `catalog/download/…` answers 500, signed out or
-  signed in. OMP, 2026-09-26 (U54 claim check K4, K4-6; K1 K1-13).
+- On a press, no publication format file can be downloaded: the book
+  page's link and the file's view page open (the view page logs "PDFJS is
+  not defined"), but `catalog/download/…` answers 500 for a seeded file and
+  for one uploaded and given terms on screen alike, signed out or signed in
+  (the log: `CatalogBookHandler::$publication must not be accessed before
+  initialization`). OMP, 2026-09-28 (U73 claim check K3 K3-8 and K4; earlier
+  U54 claim check K4 K4-6, K1 K1-13).
 - A reviewer seeded `reviewRounds[].reviewers[].status: 'completed'` is a
   submitted review ("Review Submitted"), not an editor-confirmed one: the
   "Minimum Confirmed Reviews Required" count of Settings › Workflow › Review
@@ -1148,7 +1163,11 @@ config-file settings.
   empty. Tools › "Import/Export" lists a journal's DOAJ Export, DataCite,
   Crossref, Native XML, Users XML and PubMed tools; a press's Native XML,
   Tab Delimited, Users XML and ONIX 3.0; a preprint server's Crossref and
-  Native XML. The order of the lines is not fixed: every tool sorts
+  Native XML. {OMP} "ONIX 3.0 Monograph Export Plugin" › "Export
+  Submissions" fails for every book ("The process failed … supports input
+  classes.submission.Submission[] - array given"), validation ticked or
+  not; the Native XML export carries each format's ONIX product instead
+  (2026-09-28, U73 claim check K5, K5-11, `o-09`, `o-10`). The order of the lines is not fixed: every tool sorts
   equal, so the list follows the order the plugins register in, which
   moves as plugin settings are written anywhere on the install (a full
   suite run showed a new journal's order differ from a fresh install's).
@@ -1216,6 +1235,11 @@ config-file settings.
   "Public Identifier Plugins" heading with no rows, and the key answers
   400. Settings › Website › "Plugins", all three apps, 2026-09-24 (U44
   claim check K2, `w-02-plugins-untouched-*`, `x-01-plugins-control-ops`).
+  {OMP} Its settings window refuses "Save" with "Files" alone or with
+  "Chapters" and "Files" ("Please choose the objects URNs should be
+  assigned to."), so a press with URNs for files only comes from the seed
+  key alone. Settings › Website › Plugins, 2026-09-28 (U73 claim check K4,
+  `s-05-F-urn-after-save*`).
 - A preprint server ships no "Dublin Core Indexing Plugin"; "Google Scholar
   Indexing Plugin" and, on a journal and a press, "Dublin Core Indexing
   Plugin" arrive ticked on `publicknowledge` and on every scratch context.

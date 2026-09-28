@@ -114,7 +114,7 @@
  *   the genre is the first the wizard's list offers (the context's first
  *   non-dependent genre, "Article Text"). `urlRemote` seeds the window's
  *   "Remotely hosted content" galley with no file (the wizard cancelled).
- * - files[] {file*, genre?, uploader?, note?} and reviewRounds[].files[]
+ * - files[] {file*, genre?, uploader?, note?, list?} and reviewRounds[].files[]
  *   {file*, genre?} — submission files (U36), OJS and OMP only (a preprint
  *   server shows no workflow file list, so OPS refuses both). A root entry
  *   is a file on the Submission stage's "Submission Files" list. Uploaded
@@ -132,7 +132,12 @@
  *   (PKPManageFileApiHandler::saveMetadata), as galleys[] runs them. `note`
  *   is the file's "More Information" › "Notes" › "Add Note", posted by the
  *   acting editor (admin): NewFileNoteForm::execute and the handler's own
- *   notePosted event-log row (FileInformationCenterHandler::_logEvent). A
+ *   notePosted event-log row (FileInformationCenterHandler::_logEvent).
+ *   `list: 'productionReady'` (U73) is the Production stage's
+ *   "Production Ready Files" › "Upload" instead: the same wizard
+ *   steps at SUBMISSION_FILE_PRODUCTION_READY, by the uploader (default
+ *   admin), once the decisions have run and brought the submission to
+ *   Production (a submission short of it is a 400). A
  *   round entry is the "Files for Review" list's "Upload/Select Files" ›
  *   "Upload Review File", acting as the editor, into the round before its
  *   reviewers are added, then that window's "OK" with the uploaded rows
@@ -318,6 +323,16 @@ abstract class PKPSubmissionScenarioBuilder
     /** Defaults of the two required boxes a reviewer suggestion may leave to the seed. */
     public const DEFAULT_SUGGESTION_AFFILIATION = 'Seeded affiliation for {tag}';
     public const DEFAULT_SUGGESTION_REASON = 'Seeded suggestion reason for {tag}.';
+
+    /**
+     * files[].list words → the workflow list a root file lands on (U73):
+     * "Submission Files" (the default) and the Production stage's
+     * "Production Ready Files".
+     */
+    public const FILE_LISTS = [
+        'submission' => ['fileStage' => SubmissionFile::SUBMISSION_FILE_SUBMISSION, 'stageId' => WORKFLOW_STAGE_ID_SUBMISSION],
+        'productionReady' => ['fileStage' => SubmissionFile::SUBMISSION_FILE_PRODUCTION_READY, 'stageId' => WORKFLOW_STAGE_ID_PRODUCTION],
+    ];
 
     /**
      * Read the app's section/series overlay keys off the root spec and return
@@ -929,7 +944,7 @@ abstract class PKPSubmissionScenarioBuilder
         // file's "More Information" › "Add Note", by the acting editor.
         $editor = $this->actingEditor();
         foreach ($filePlans as $i => $plan) {
-            if (!$plan['byWizard']) {
+            if (!$plan['byWizard'] && $plan['list'] === 'submission') {
                 $filePlans[$i]['submissionFileId'] = $this->uploadThroughWizard(
                     $context,
                     $submissionId,
@@ -943,16 +958,9 @@ abstract class PKPSubmissionScenarioBuilder
             }
         }
         foreach ($filePlans as $plan) {
-            if ($plan['note'] !== null) {
-                $this->addFileNote($plan['submissionFileId'], $plan['note'], $editor);
+            if ($plan['list'] === 'submission') {
+                $seededFiles[] = $this->finishRootFile($plan, $editor);
             }
-            $seededFiles[] = [
-                'submissionFileId' => $plan['submissionFileId'],
-                'file' => $plan['fixture']['file'],
-                'fileStage' => SubmissionFile::SUBMISSION_FILE_SUBMISSION,
-                'reviewRoundId' => null,
-                'uploader' => $plan['uploader']->getUsername(),
-            ];
         }
 
         // Decisions + review rounds, acting as the editor (admin).
@@ -1039,6 +1047,32 @@ abstract class PKPSubmissionScenarioBuilder
                 $roundIndex++;
             }
 
+            // A later stage's file list (U73: "Production Ready Files"),
+            // once the decisions have brought the submission to that
+            // stage: its "Upload" wizard, as the uploader, then each
+            // file's note, before the formats and galleys that may use it.
+            foreach ($filePlans as $i => $plan) {
+                if ($plan['list'] === 'submission') {
+                    continue;
+                }
+                $listStageId = self::FILE_LISTS[$plan['list']]['stageId'];
+                $stageId = (int) Repo::submission()->get($submissionId)->getData('stageId');
+                if ($stageId < $listStageId) {
+                    throw new SpecException("{$plan['specPath']}.list", "The \"{$plan['list']}\" list is on a stage the submission has not reached (stage {$stageId}); add the decisions that bring it there (e.g. \"sendToProduction\")");
+                }
+                $filePlans[$i]['submissionFileId'] = $this->uploadThroughWizard(
+                    $context,
+                    $submissionId,
+                    $plan['uploader'],
+                    $plan['fixture'],
+                    self::FILE_LISTS[$plan['list']]['fileStage'],
+                    null,
+                    null,
+                    $plan['genreId']
+                );
+                $seededFiles[] = $this->finishRootFile($filePlans[$i], $editor);
+            }
+
             // The publication pages' display values (U13), typed by the
             // editor before the galleys and the publish.
             if ($publicationPagesPlan !== null) {
@@ -1074,7 +1108,8 @@ abstract class PKPSubmissionScenarioBuilder
             // built, before a publish.
             if ($versionOverlayPlan !== []) {
                 $versionOverlayResponse = $this->seedVersionOverlay($context, $submissionId, $versionOverlayPlan, $editor, [
-                    'files' => array_values(array_filter($seededFiles, fn (array $file) => $file['reviewRoundId'] === null)),
+                    // The root files[] entries in request order, whatever list each is on.
+                    'files' => array_map(fn (array $plan) => ['submissionFileId' => $plan['submissionFileId'], 'file' => $plan['fixture']['file']], $filePlans),
                     'publicationFormats' => $seededFormats,
                     'submitter' => $submitter,
                 ]);
@@ -1960,6 +1995,27 @@ abstract class PKPSubmissionScenarioBuilder
     }
 
     /**
+     * A root files[] entry once uploaded: its note, if any (by the acting
+     * editor), and its response entry.
+     *
+     * @return array{submissionFileId: int, file: string, fileStage: int, reviewRoundId: null, uploader: string, list: string}
+     */
+    protected function finishRootFile(array $plan, User $editor): array
+    {
+        if ($plan['note'] !== null) {
+            $this->addFileNote($plan['submissionFileId'], $plan['note'], $editor);
+        }
+        return [
+            'submissionFileId' => $plan['submissionFileId'],
+            'file' => $plan['fixture']['file'],
+            'fileStage' => self::FILE_LISTS[$plan['list']]['fileStage'],
+            'reviewRoundId' => null,
+            'uploader' => $plan['uploader']->getUsername(),
+            'list' => $plan['list'],
+        ];
+    }
+
+    /**
      * "More Information" › "Notes" › "Add Note" on a file, acting as the
      * writer: FileInformationCenterHandler::saveNote's NewFileNoteForm::
      * execute (the note row, the textarea's text as typed) and its
@@ -1995,10 +2051,15 @@ abstract class PKPSubmissionScenarioBuilder
      * submitted, and must be someone the "Upload" is offered to there (the
      * site admin, a manager of the context, or a sub-editor or assistant
      * assigned in this request's participants[]). A note needs the
-     * workflow's "More Information", so a submitted submission.
+     * workflow's "More Information", so a submitted submission. `list`
+     * (U73) puts the file on a later stage's list instead
+     * (`productionReady`, the Production stage's "Production Ready Files"):
+     * its "Upload" by the uploader (default the acting editor, admin),
+     * who must be offered it there; the submission must be submitted, and
+     * the decisions must bring it to that stage (checked once they ran).
      *
      * @param array<int, array{user: User, userGroup: UserGroup}> $participantPlans
-     * @return array<int, array{fixture: array, genreId: int, uploader: User, byWizard: bool, note: ?string, submissionFileId: ?int}>
+     * @return array<int, array{fixture: array, genreId: int, uploader: User, byWizard: bool, list: string, specPath: string, note: ?string, submissionFileId: ?int}>
      */
     protected function parseFiles(Context $context, Spec $root, User $submitter, bool $submitted, array $participantPlans): array
     {
@@ -2010,13 +2071,42 @@ abstract class PKPSubmissionScenarioBuilder
         foreach ($root->childList('files') as $spec) {
             $fixture = $this->resolveFixture((string) $spec->require('file'), "{$spec->path}.file");
             $genreId = $this->resolveUploadGenreId($context, $spec);
-            $uploader = $submitter;
+            $list = $spec->get('list', 'submission');
+            if (!is_string($list) || !array_key_exists($list, self::FILE_LISTS)) {
+                throw new SpecException("{$spec->path}.list", 'list must be one of ' . implode(', ', array_map(fn ($l) => "\"{$l}\"", array_keys(self::FILE_LISTS))) . ' ("Submission Files", the default; "Production Ready Files")');
+            }
+            $uploader = $list === 'submission' ? $submitter : $this->actingEditor();
             if ($spec->has('uploader')) {
                 $username = (string) $spec->get('uploader');
                 $uploader = Repo::user()->getByUsername($username, true);
                 if (!$uploader) {
                     throw new SpecException("{$spec->path}.uploader", "Unknown uploader username \"{$username}\"");
                 }
+            }
+            if ($list !== 'submission') {
+                // A later stage's list exists on the workflow only: the
+                // Production stage's "Production Ready Files" › "Upload"
+                // (FileManager namespace PRODUCTION_READY_FILES; the wizard
+                // "Upload a Production Ready File"),
+                // offered to the site admin, a manager, and a sub-editor
+                // or assistant assigned on that stage.
+                if (!$submitted) {
+                    throw new SpecException("{$spec->path}.list", "A draft has no workflow, so no \"{$list}\" list: it needs submitted: true and decisions that reach its stage");
+                }
+                if (!$this->mayUploadOnWorkflow($context, $uploader, $participantPlans, self::FILE_LISTS[$list]['stageId'])) {
+                    throw new SpecException("{$spec->path}.uploader", "\"{$uploader->getUsername()}\" is offered no \"Upload\" on the \"{$list}\" list: the uploader must be the site admin, a manager of the context, or a sub-editor or assistant assigned on its stage in participants[]");
+                }
+                $plans[] = [
+                    'fixture' => $fixture,
+                    'genreId' => $genreId,
+                    'uploader' => $uploader,
+                    'byWizard' => false,
+                    'list' => $list,
+                    'specPath' => $spec->path,
+                    'note' => $this->parseFileNote($spec, $submitted),
+                    'submissionFileId' => null,
+                ];
+                continue;
             }
             $byWizard = $uploader->getId() === $submitter->getId();
             if (!$byWizard) {
@@ -2027,30 +2117,44 @@ abstract class PKPSubmissionScenarioBuilder
                     throw new SpecException("{$spec->path}.uploader", "\"{$uploader->getUsername()}\" is offered no \"Upload\" on \"Submission Files\": the uploader must be the submitter, the site admin, a manager of the context, or a sub-editor or assistant assigned in participants[]");
                 }
             }
-            $note = null;
-            if ($spec->has('note')) {
-                $note = $spec->get('note');
-                if (!is_string($note) || trim($note) === '') {
-                    throw new SpecException("{$spec->path}.note", 'note must be a non-empty string (the "Add Note" box\'s text)');
-                }
-                if (!$submitted) {
-                    throw new SpecException("{$spec->path}.note", 'A note is added in the workflow\'s "More Information" window, which a draft does not have');
-                }
-            }
             $plans[] = [
                 'fixture' => $fixture,
                 'genreId' => $genreId,
                 'uploader' => $uploader,
                 'byWizard' => $byWizard,
-                'note' => $note,
+                'list' => 'submission',
+                'specPath' => $spec->path,
+                'note' => $this->parseFileNote($spec, $submitted),
                 'submissionFileId' => null,
             ];
         }
         return $plans;
     }
 
-    /** Whether the workflow's "Submission Files" list offers this user "Upload". */
-    protected function mayUploadOnWorkflow(Context $context, User $user, array $participantPlans): bool
+    /** A files[] entry's `note`: the "Add Note" box's text, on the workflow only. */
+    protected function parseFileNote(Spec $spec, bool $submitted): ?string
+    {
+        if (!$spec->has('note')) {
+            return null;
+        }
+        $note = $spec->get('note');
+        if (!is_string($note) || trim($note) === '') {
+            throw new SpecException("{$spec->path}.note", 'note must be a non-empty string (the "Add Note" box\'s text)');
+        }
+        if (!$submitted) {
+            throw new SpecException("{$spec->path}.note", 'A note is added in the workflow\'s "More Information" window, which a draft does not have');
+        }
+        return $note;
+    }
+
+    /**
+     * Whether a workflow file list offers this user its upload: the site
+     * admin and a manager of the context always; else a participants[]
+     * entry in a manager, sub-editor or assistant role, which for a later
+     * stage's list ($stageId given) must also be a role assigned to that
+     * stage.
+     */
+    protected function mayUploadOnWorkflow(Context $context, User $user, array $participantPlans, ?int $stageId = null): bool
     {
         if ($user->hasRole([Role::ROLE_ID_SITE_ADMIN], \PKP\core\PKPApplication::SITE_CONTEXT_ID)
             || $user->hasRole([Role::ROLE_ID_MANAGER], $context->getId())) {
@@ -2058,7 +2162,8 @@ abstract class PKPSubmissionScenarioBuilder
         }
         foreach ($participantPlans as $plan) {
             if ($plan['user']->getId() === $user->getId()
-                && in_array((int) $plan['userGroup']->roleId, [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT], true)) {
+                && in_array((int) $plan['userGroup']->roleId, [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT], true)
+                && ($stageId === null || Repo::userGroup()->getAssignedStagesByUserGroupId((int) $context->getId(), (int) $plan['userGroup']->id)->contains($stageId))) {
                 return true;
             }
         }

@@ -14,10 +14,9 @@
  * handler code as `admin` (a manager of every scratch journal), in this
  * order:
  *  - `payments` {enabled?, currency?, paymentPluginName?,
- *    manualInstructions?} — Settings › Distribution › "Payments" › "Save":
- *    PUT _payments (PKPBackendPaymentsSettingsController::edit, the
- *    payment plugins' own settings hooks included) with the body the form
- *    sends; and its {publicationFee?, purchaseArticleFee?,
+ *    manualInstructions?} — Settings › Distribution › "Payments" › "Save"
+ *    (the shared PKP\testing\PaymentSettingsSeeder, which a press uses
+ *    too); and its {publicationFee?, purchaseArticleFee?,
  *    purchaseIssueFee?, membershipFee?, restrictOnlyPdf?} — the "Payments"
  *    page › "Payment Types" › "Save" (PaymentsHandler::savePaymentTypes,
  *    PaymentTypesForm on the POST).
@@ -43,7 +42,8 @@
  *    IndividualSubscriptionForm / InstitutionalSubscriptionForm on the
  *    POST, the email box unticked).
  * Each legacy form runs through FormPost, so its refusals are the seed's
- * 400s. Journal only: OMP and OPS read none of these keys (400).
+ * 400s. Journal only, but for the `payments` setup fields, which OMP reads
+ * too (U73); OPS reads none of these keys (400).
  */
 
 namespace APP\testing;
@@ -58,7 +58,6 @@ use APP\subscription\form\SubscriptionPolicyForm;
 use APP\subscription\Subscription;
 use APP\subscription\SubscriptionType;
 use Illuminate\Http\Request;
-use PKP\API\v1\_payments\PKPBackendPaymentsSettingsController;
 use PKP\API\v1\institutions\PKPInstitutionController;
 use PKP\context\Context;
 use PKP\core\Registry;
@@ -66,6 +65,7 @@ use PKP\db\DAORegistry;
 use PKP\testing\ApiCall;
 use PKP\testing\ContextFactory;
 use PKP\testing\FormPost;
+use PKP\testing\PaymentSettingsSeeder;
 use PKP\testing\Spec;
 use PKP\testing\SpecException;
 
@@ -250,22 +250,7 @@ class SubscriptionSeeder
         if ($spec === null) {
             return null;
         }
-        $setup = [];
-        $enabled = $spec->get('enabled', true);
-        if (!is_bool($enabled)) {
-            throw new SpecException('payments.enabled', 'payments.enabled must be a boolean (the "Enable" box)');
-        }
-        $setup['enabled'] = $enabled;
-        foreach (['currency', 'paymentPluginName', 'manualInstructions'] as $key) {
-            $value = $spec->get($key);
-            if ($value !== null && !is_string($value)) {
-                throw new SpecException("payments.{$key}", "payments.{$key} must be a string");
-            }
-            $setup[$key] = $value;
-        }
-        if ($setup['paymentPluginName'] !== null && !in_array($setup['paymentPluginName'], ['ManualPayment', 'PaypalPayment'], true)) {
-            throw new SpecException('payments.paymentPluginName', 'payments.paymentPluginName must be ManualPayment ("Manual Fee Payment") or PaypalPayment ("Paypal Fee Payment"), the "Payment Plugins" list');
-        }
+        $setup = PaymentSettingsSeeder::parse($spec);
         $types = [];
         foreach (self::FEES as $fee) {
             if ($spec->has($fee)) {
@@ -341,7 +326,7 @@ class SubscriptionSeeder
         $response = [];
         try {
             if ($plan['payments'] !== null) {
-                self::savePaymentSettings($fresh, $plan['payments']['setup']);
+                PaymentSettingsSeeder::save($fresh, $plan['payments']['setup']);
                 if ($plan['payments']['types'] !== []) {
                     ContextFactory::forceRequestContext($fresh());
                     self::savePaymentTypes($plan['payments']['types']);
@@ -373,31 +358,6 @@ class SubscriptionSeeder
             Registry::set('user', $previousActingUser);
         }
         return $response;
-    }
-
-    /**
-     * Distribution › "Payments" › "Save": the form sends every field it
-     * shows, each payment plugin's included, form-encoded (a box as
-     * "true" / "false"); the seed's values replace the shown ones.
-     */
-    protected static function savePaymentSettings(callable $fresh, array $setup): void
-    {
-        $context = $fresh();
-        $contextId = (int) $context->getId();
-        $pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO'); /** @var \PKP\plugins\PluginSettingsDAO $pluginSettingsDao */
-        $pluginSetting = fn (string $plugin, string $name) => $pluginSettingsDao->getSetting($contextId, $plugin, $name);
-        $body = [
-            'paymentsEnabled' => $setup['enabled'] ? 'true' : 'false',
-            'currency' => $setup['currency'] ?? (string) $context->getData('currency'),
-            'paymentPluginName' => $setup['paymentPluginName'] ?? (string) $context->getData('paymentPluginName'),
-            'manualInstructions' => $setup['manualInstructions'] ?? (string) $pluginSetting('manualpaymentplugin', 'manualInstructions'),
-            'testMode' => $pluginSetting('paypalpaymentplugin', 'testMode') ? 'true' : 'false',
-            'accountName' => (string) $pluginSetting('paypalpaymentplugin', 'accountName'),
-            'clientId' => (string) $pluginSetting('paypalpaymentplugin', 'clientId'),
-            'secret' => (string) $pluginSetting('paypalpaymentplugin', 'secret'),
-        ];
-        $request = ApiCall::request(Request::class, 'PUT', $body, [], 'payments', 'The "Payments" form would be refused');
-        ApiCall::answer(ApiCall::controller(PKPBackendPaymentsSettingsController::class)->edit($request), 'payments', 'The "Payments" form was refused');
     }
 
     /** "Payment Types" › "Save": PaymentTypesForm on the POST, the unnamed boxes as the tab shows them. */

@@ -234,8 +234,10 @@ until their specs exist. Do not force-claim the defects themselves.
     no screen reaches it. The
     window's form, AFFW-612, is U36's atom and shares this verdict (the
     submission-files spec's Reference table, 2026-09-23).
-    Code-verified 2026-09-19 (checkouts as above). Resolves: on OMP, the
-    U73 spec; dead on OJS and OPS pending maintainer confirmation.
+    Code-verified 2026-09-19 (checkouts as above). On OMP the U73 draft
+    claims it ("Select Files", its Rule 10 and Reference table,
+    2026-09-28). Resolves: dead on OJS and OPS pending maintainer
+    confirmation.
 13. **NOTIF-021..028 normal-level notices with no reader** — attached to
     **U34** (claimed; the decision-recording spec's register entry A5
     documents it). `EditorDecisionNotificationManager::updateNotification()`
@@ -294,8 +296,10 @@ until their specs exist. Do not force-claim the defects themselves.
     so on a journal or preprint server no screen opens it; OMP overrides
     the op for its publication-format proof files (U73).
     Code-verified 2026-09-23 (U36 spec author; checkouts ojs `38781720df`,
-    lib/pkp `f8bacd765`, ui-library `5d138aa9`). Resolves: on OMP, the
-    U73 spec; dead on OJS and OPS pending maintainer confirmation.
+    lib/pkp `f8bacd765`, ui-library `5d138aa9`). On OMP the U73 draft
+    claims it (a format file's "Edit a file", its Rule 11 and Reference
+    table, 2026-09-28). Resolves: dead on OJS and OPS pending maintainer
+    confirmation.
 18. **AFFW-594 revision-only wizard with nothing to revise, liveness
     unknown** — attached to **U36** (claimed; the submission-files spec's
     Reference table notes it). The message "There are no files for you to
@@ -643,8 +647,10 @@ until their specs exist. Do not force-claim the defects themselves.
     list (`PaymentsGridHandler`) role-assigns a `viewPayment` op whose body
     is `// FIXME` and no row links to it, so the payment "Details" window
     exists nowhere. `NOTIFICATION_TYPE_CONFIGURE_PAYMENT_METHOD` has its
-    message and style in lib/pkp but nothing on a journal raises it (OMP
-    raises it from the publication-format sale, U69's purchase path). OJS
+    message and style in lib/pkp but nothing on a journal raises it, nor
+    on a press: OMP's publication-format "Metadata" tab asks for it, yet no
+    code in any app creates it (U73 spec author, 2026-09-28, omp
+    `3cd59e944`; the U73 register's A9). OJS
     `UserHandler::payMembership()` is routed but no template links to it,
     and `OJSPaymentManager::createQueuedPayment()` marks the membership
     type deprecated (`error_log` + `assert(false)`), so the "Association
@@ -834,3 +840,18 @@ until their specs exist. Do not force-claim the defects themselves.
     `26ae6431b5` / `17a1f01fed`, ui-library `03d1cee2`). Resolves:
     maintainer ruling that it is an intended API for outside clients, or
     confirmation as dead code.
+53. **Unreached publication-format pieces** — attached to **U73**
+    (AFFW-765, AFFW-768; claimed). OMP `PublicationFormatMetadataForm`
+    keeps a `directSalesPrice` check and assigns `paymentConfigured` and
+    `currency` for fields the "Metadata" tab no longer renders (the price
+    moved to the file's terms window), and requests the
+    configure-payment notice nobody creates (item 41).
+    `digitalPublicationFormat.tpl` (AFFW-768, the "Digital Information"
+    group with its file-size override) is never rendered because
+    `editFormatMetadata()` leaves `$isPhysicalFormat` at its default
+    `true`; that one is a defect, the U73 register's A6, not dead code.
+    `SubmissionEventLogEntry::SUBMISSION_LOG_PUBLICATION_FORMAT_METADATA_UPDATE`
+    is defined and never written. Code-verified 2026-09-28 (U73 spec
+    author; checkout omp `3cd59e944`, lib/pkp `17a1f01fed`). Resolves:
+    maintainer confirmation as dead code (removal candidates), and the
+    A6 fix for the digital group.

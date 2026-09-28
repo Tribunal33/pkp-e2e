@@ -23,6 +23,7 @@ use APP\core\Application;
 use APP\facades\Repo;
 use PKP\context\Context;
 use PKP\testing\ContextFactory;
+use PKP\testing\PaymentSettingsSeeder;
 use PKP\testing\PKPContextScenarioBuilder;
 use PKP\testing\Spec;
 use PKP\testing\SpecException;
@@ -38,6 +39,28 @@ class ContextScenarioBuilder extends PKPContextScenarioBuilder
     protected function structureKey(): string
     {
         return 'series';
+    }
+
+    /**
+     * `payments` (U73): Settings › Distribution › "Payments" › "Save", the
+     * tab's setup fields {enabled?, currency?, paymentPluginName?,
+     * manualInstructions?} (PKP\testing\PaymentSettingsSeeder, as on a
+     * journal). A press has no "Payment Types" page, so the journal's fee
+     * keys are left unread and answer 400.
+     */
+    protected function parseOverlay(Spec $root): array
+    {
+        $spec = $root->child('payments');
+        return ['payments' => $spec === null ? null : PaymentSettingsSeeder::parse($spec)];
+    }
+
+    /** The "Payments" tab's "Save", after users[] as on a journal. */
+    protected function executeOverlay(Context $context, array $overlayPlan): array
+    {
+        if ($overlayPlan['payments'] !== null) {
+            PaymentSettingsSeeder::execute($context, $overlayPlan['payments']);
+        }
+        return [];
     }
 
     protected function resolveStructureId(Context $context, string $identifier): ?int

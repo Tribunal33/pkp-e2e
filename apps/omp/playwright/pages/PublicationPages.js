@@ -6,10 +6,11 @@
  * "Unpublish" dialog a press's "Title & Abstract" offers on a published
  * monograph (U49's dialog; U24 S8 drives it to watch the submission leave
  * Done by itself), and the "Permissions & Disclosure" license boxes typed
- * and saved (U72 S8's given). The frame itself (header, menu, status box, the return
+ * and saved (U72 S8's given), and "Create New Version" (U73 S9). The frame itself (header, menu, status box, the return
  * and delete dialogs) is the shared `WorkflowPage`.
  */
 const {expect} = require('@playwright/test');
+const {WorkflowPage} = require('../../../../shared/playwright/pages/WorkflowPage.js');
 
 /** The Unpublish dialog's verbatim question (U49 Rule 9). */
 const UNPUBLISH_QUESTION = "Are you sure you don't want this to be published?";
@@ -74,4 +75,31 @@ async function saveLicenseFields(page, {licenseUrl, chapterLicenseUrl} = {}) {
     expect(response.ok(), `the Permissions & Disclosure save answered ${response.status()}`).toBe(true);
 }
 
-module.exports = {UNPUBLISH_QUESTION, unpublishFromWorkflow, saveLicenseFields};
+/**
+ * The side menu's "Create New Version" on an open workflow, confirmed as
+ * it arrives (U49 Rule 11); resolves with the new publication's id once
+ * the version call has answered and the window has closed. Added for U73
+ * S9 (U72 S10 carries its own copy).
+ *
+ * @param {import('@playwright/test').Page} page
+ * @returns {Promise<number>}
+ */
+async function createNewVersion(page) {
+    const frame = new WorkflowPage(page, null);
+    const item = await frame.revealPublicationEntry('Create New Version');
+    await frame.expectVersionLoaded();
+    await item.click();
+    const dialog = page.getByRole('dialog', {name: 'Create New Version'});
+    await expect(dialog).toBeVisible({timeout: 30_000});
+    await expect(dialog.getByLabel('Publication Stage')).toBeVisible({timeout: 30_000});
+    const created = page.waitForResponse(
+        (r) => /\/publications\/\d+\/version/.test(r.url()) && r.request().method() === 'POST' && r.ok(),
+        {timeout: 30_000}
+    );
+    await dialog.getByRole('button', {name: 'Confirm', exact: true}).click();
+    const body = await (await created).json();
+    await expect(dialog).toHaveCount(0, {timeout: 30_000});
+    return body.id;
+}
+
+module.exports = {UNPUBLISH_QUESTION, unpublishFromWorkflow, saveLicenseFields, createNewVersion};
