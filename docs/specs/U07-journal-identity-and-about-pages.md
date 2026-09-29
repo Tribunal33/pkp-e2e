@@ -102,6 +102,10 @@ to bottom: <sup>g</sup>
 | "Journal Summary" ("Press Summary", "Server Summary"), in the group "Description" | no | Formatted text per language under "Offer a brief description of your journal to provide insight into its content and purpose.", with bold, italic, superscript, subscript and a link only. Empty by default. Where it shows: Rule 8 <sup>g</sup> |
 | "About the Journal" ("About the Press", "About the Server") | no | A tall formatted-text box per language under "Include any information about your journal which may be of interest to readers, authors or reviewers. …", with the same controls as "Editorial History". Empty by default. It is the whole body of the "About the Journal" page (Rule 13) <sup>g</sup> |
 
+A manager working in French sees a journal's tab in French throughout,
+and a press's or a preprint server's with raw text keys in place of some
+group headings, labels and help lines ⚠ [A12](#a12). <sup>g</sup>
+
 **The "Contact" tab** (Settings › Journal › "Contact"): <sup>h</sup>
 
 | Field (UI label) | Required? | Rules |
@@ -433,10 +437,15 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
     Journal › "Contact" from "Contact", and Settings › Website › "Setup" ›
     "Information" from an Information page. "Editorial Masthead" and
     "Privacy Statement" carry none. <sup>d</sup> <sup>td3</sup>
-22. **Journals closed to visitors.** A journal with "Users must be
-    registered and log in to view the journal site." ticked, or not
-    enabled by the Site Administrator, sends a signed-out visitor who opens
-    any About page to the Login page (Settings bullets 7 and 8). <sup>c</sup>
+22. **Journals closed to visitors.** A signed-out visitor who opens any
+    About page of a journal closed to visitors is sent to the Login page.
+    Where signing in there leads depends on how the journal is closed:
+    - "Users must be registered and log in to view the journal site."
+      ticked (Settings bullet 7): back to the About page asked for.
+    - Not enabled by the Site Administrator (Settings bullet 8): not back
+      to that page; a Journal Manager lands on the Dashboard and a Reader
+      on the journal's home page
+      ⚠ [→ Hosted journals A8](U59-hosted-journals.md#a8). <sup>c</sup>
 
 ## Side effects
 
@@ -511,7 +520,8 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
    press to appear publicly on the site", "Enable this preprint server to
    appear publicly on the site"; Administration › Hosted Journals, the
    journal's "Edit"; ticked on the seeded and every scratch journal).
-   Unticked: signed-out visitors are sent to Login (Rule 22). On a journal
+   Unticked: signed-out visitors are sent to Login, and signing in there
+   does not return them to the page they asked for (Rule 22). On a journal
    whose "Country" was never set the form refuses to save until one is
    picked ⚠ [A11](#a11). *Hosted journals* owns it. <sup>c</sup>
 9. **The site-wide privacy statement switch** (the installation's
@@ -1004,6 +1014,7 @@ Left out of the scenarios above, by reason:
   - A9 (the default "For Readers" text's "Privacy Statement" link opening the "Submissions" page; Fields)
   - A10 (a reviewer whose submitted review was cancelled still listed under "Peer Reviewers in Previous Year"; Rule 15)
   - A11 (Hosted Journals "Edit" refused on a journal whose "Country" was never set; Settings bullet 8)
+  - A12 (a press's and a preprint server's French Masthead tab showing raw text keys; Fields)
   - OMP1 (Settings › Press headed "Setup"; Rule 1; scenario 2 marks it)
   - OPS2 ("Sponsoring organization" used nowhere; Fields; Rule 10)
   - OPS3 (a preprint server's French privacy default arriving as a raw text key; Fields)
@@ -1022,8 +1033,8 @@ Left out of the scenarios above, by reason:
   - which email of a press or preprint server carries the new principal contact as its sender (Rule 9; Side effects: each email's own feature says when it is sent; [Publish, schedule & versions](U49-publish-schedule-and-versions.md))
   - the technical support contact as the sender of the account-validation email ([Registration & account validation](U02-registration-and-account-validation.md) scenario 7)
   - the consent boxes leaving the Register page, the submission wizard and the reviewer's first step once the privacy statement is emptied (Side effects; [Registration & account validation](U02-registration-and-account-validation.md) scenario 4, [Submission wizard](U21-submission-wizard.md), [Reviewer's review](U28-reviewers-review.md))
-  - "Users must be registered and log in to view the journal site." ticked, sending a signed-out visitor to Login from every About page (Settings bullet 7; Rule 22; *Roles configuration*)
-  - a journal not enabled, sending a signed-out visitor to Login (Settings bullet 8; Rule 22; *Hosted journals*)
+  - "Users must be registered and log in to view the journal site." ticked, sending a signed-out visitor to Login from every About page and back to it after signing in (Settings bullet 7; Rule 22; *Roles configuration*)
+  - a journal not enabled, sending a signed-out visitor to Login and, after signing in, not back to the page asked for (Settings bullet 8; Rule 22; [Hosted journals](U59-hosted-journals.md#a8))
 
 ## Findings register
 
@@ -1037,6 +1048,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Reloading a Settings side tab opens the page's first tab instead | 🐞 | minor | — |
 | [A9](#a9) | The default "For Readers" text's "Privacy Statement" link opens the "Submissions" page {OJS OMP} | 🐞 | minor | — |
 | [A11](#a11) | Hosted Journals "Edit" refuses to save a journal whose "Country" was never set | 🐞 | user-visible | — |
+| [A12](#a12) | A press's and a preprint server's French Masthead tab shows raw text keys in place of headings, labels and help lines {OMP OPS} | 🐞 | minor | — |
 | [OMP2](#omp2) | The site-level page about the software says "This press uses Open Monograph Press" on a press site {OMP} | 🐞 | minor | — |
 | [OPS3](#ops3) | A preprint server's French "Privacy Statement" default is the raw text "##default.contextSettings.privacyStatement##" {OPS} | 🐞 | user-visible | — |
 | [OPS4](#ops4) | A preprint server's French "Editorial Masthead" heads the Moderators "##default.groups.name.sectionEditor##" {OPS} | 🐞 | user-visible | — |
@@ -1163,6 +1175,30 @@ under "Country", a field neither form marks required; the Site
 Administrator cannot change anything there, for example untick "Enable
 this journal to appear publicly on the site", until a country is picked.
 *Hosted journals* owns the form. Basis: probe. <sup>f-a11</sup>
+
+<a id="a12"></a>
+**A12 — The French Masthead tab of a press or preprint server shows raw text keys** {OMP OPS} · 🐞 · minor.
+A manager working in French expects the "Bloc générique" tab (the
+"Masthead" tab) of Settings › Press (page heading "Configuration") or
+Settings › Server ("Paramètres du serveur") to read in French, as a
+journal's does. On a press:
+- the first two group headings read "##manager.setup.identity##" and
+  "##manager.settings.publisher.identity##";
+- the label of "Publisher Code Type" reads
+  "##manager.settings.publisherCodeType##", and four of its choices read
+  "GKD##monograph.publicationFormat.onixDeprecated##" (likewise "GRID",
+  "PND", "Proprietary") where English reads "GKD (Discontinued)";
+- the help line under "Pays" reads "##manager.setup.selectCountry##";
+- in "Description" the two labels read "##manager.setup.contextSummary##"
+  and "##manager.setup.contextAbout##", with the help lines
+  "##manager.setup.contextSummary.description##" and
+  "##manager.setup.contextAbout.description##".
+
+On a preprint server the last label of "Identité du serveur" reads
+"##manager.setup.sponsoringOrganization##", the help line under "Pays"
+"##manager.setup.selectCountry##" and the one under "Résumé du serveur"
+"##manager.setup.contextSummary.description##". The applications' French translations have no text for these keys.
+Basis: probe. <sup>f-a12</sup>
 
 ### OMP
 
@@ -1381,6 +1417,13 @@ signed-out visitor at "About the Journal", "Editorial Masthead",
 while the journal's manager still opened them. On a preprint server with
 the box ticked the Information addresses stayed "404 Not Found"; on one
 not enabled `information/readers` sent a signed-out visitor to Login.
+The return after sign-in (Rule 22): the sign-in gate goes through
+`Validation::redirectLogin()`, which keeps `login?source=…`, while the
+not-enabled gate redirects to `login` with no `source`, so
+`LoginHandler::_redirectAfterLogin()` sends a role holder to the
+dashboard and a Reader to the journal's `index`; live-probed 2026-09-29
+on all three apps, two runs each, as Hosted journals' note f-a8 records,
+and not driven again for this spec.
 
 <a id="fn-d"></a>
 **d** — `lib/pkp/templates/frontend/components/editLink.tpl` renders only
@@ -1555,6 +1598,14 @@ saved "ISNI (16)" stayed after a reload; OPS's "Sponsoring organization"
 saved and shown again. A journal made with Hosted Journals "Create
 Journal" has its initials (that form requires them) and no country unless
 one was chosen there (that form offers it as optional).
+Live-probed 2026-09-29 (Masthead tab in French at
+`…/fr_CA/management/settings/context`; all three apps, two runs; English
+the control): the raw keys A12 lists on OMP and OPS (note f-a12); OJS's
+tab French throughout; no raw key on any app in English. OMP's and OPS's `locale/fr_CA/manager.po` carry
+those keys (`manager.setup.identity`, `manager.setup.selectCountry`, …)
+with an empty text, and an untranslated text is written as "##key##".
+Each load of Settings › Website answered the Plugin Gallery's server
+error of [Plugins management](U62-plugins-management.md#a1).
 
 <a id="fn-aa"></a>
 **aa** — Live-probed 2026-09-23 (Masthead table; Rule 10; OJS, OPS): with
@@ -2256,6 +2307,16 @@ under "Country", the request answering 400; with a country picked the
 save went through. "Create Journal" lists "Country" without "Required".
 The form sends the empty "Country", which the server's `country` rule
 refuses (note f).
+
+<a id="fn-f-a12"></a>
+**f-a12** — Note g. Live-probed 2026-09-29 (all three apps, two runs): on
+a scratch press and server with French screens and forms and on
+`publicknowledge` with French screens, the keys listed above showed on the
+"Bloc générique" tab for the scratch manager, a second account with the
+Editor role (on OPS a second manager), `manager.maya` and `admin`; the
+"Publisher Code Type" list's four entries only inside the list. The contact tab
+("Coordonnées", "Personne-ressource") and the sections tab ("Rubriques",
+"Séries", "Série(s)") showed no raw key.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `locale/en/locale.po` `manager.setup` "Setup" (OJS

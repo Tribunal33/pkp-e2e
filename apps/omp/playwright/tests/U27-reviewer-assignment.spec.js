@@ -1065,9 +1065,9 @@ test.describe('Reviewer assignment & management (U27)', () => {
         ).toBeVisible();
         await expect(readModal.getByText(priv)).toBeVisible();
 
-        // Once the window has settled (openReadReview waited for the
-        // "Modify Review" button to enable — A21), a star click saves
-        // inline with its toast.
+        // A star click saves inline with its toast; rateReview re-checks
+        // the stars, since the window's "viewed" answer arriving after the
+        // save puts them back to "No rating" on screen (A21).
         await rateReview(page, readModal, 5);
 
         // Merely opening the window marked the review viewed (Rule 14a):

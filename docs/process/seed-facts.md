@@ -751,8 +751,11 @@ behind a line; that scratch is deleted after review.
   no chapter license until the version's "License URL" (Permissions &
   Disclosure) or the press's license is saved on screen. Once the press
   has one, a version's "License URL" and "Default Chapter License URL"
-  open greyed out behind "Override". OMP, 2026-09-28 (U72 claim checks K2
-  `k2-040`, K3 `k3-002`, `k3-028`).
+  open greyed out behind "Override"; on a press without one, the Edited
+  Volume's "Default Chapter License URL" does too once the version's own
+  "License URL" is saved (after a reload). OMP, 2026-09-28 (U72 claim
+  checks K2 `k2-040`, K3 `k3-002`, `k3-028`); 2026-09-29 (U40 claim check
+  I29).
 - A scratch press has no series unless the context scenario's `series[]`
   adds them (U70 harness, 2026-09-27); without it, Settings › Press ›
   Series reads "No Items". Live-probed 2026-09-05, OMP (`.reports/U29/pC2`

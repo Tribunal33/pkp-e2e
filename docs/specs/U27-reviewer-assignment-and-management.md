@@ -128,7 +128,14 @@ boxes are ticked and unticked (Rule 11). Saving with the review due date
 before the response due date is refused under the same date rule as at add
 time ⚠ [A8](#a8). Its "Cancel" closes the window at once, even with a due
 date changed: nothing asks, nothing is saved, and "Edit" opened again shows
-the old date. <sup>g</sup>
+the old date. Its top "Close" asks first after a change to the review due
+date, the "Review Type" or the "Public Visibility" box (no other control
+tried): "The data on this form has changed. Do you wish to continue
+without saving?". Answered "Cancel", the question leaves the window open
+with the change in place. Answered "OK", it closes the window and saves
+nothing: the row is unchanged, and "Edit" opened again, on the same page or
+after a reload, shows the old values. With nothing changed, "Close" closes
+at once. <sup>g</sup>
 
 **Send Review Reminder window** (row action "Send Reminder"; window title
 "Review Reminder"): the reviewer's name and address (read-only); a template
@@ -366,8 +373,10 @@ under the prompt "Record the response on behalf of the reviewer". Submit
     can leave the row at "Review Submitted" until the page is reloaded
     ⚠ [A32](#a32). Clicking a
     rating star saves immediately, with the toast "Reviewer rating saved",
-    and the rating persists across close and reopen. A click in the first
-    moments after the window opens can silently not take ⚠ [A21](#a21).
+    and the rating persists across close and reopen. A star pressed while
+    the window is still marking the review viewed is saved, toast
+    included, but the stars can then fall back to "No rating" until the
+    window is opened again ⚠ [A21](#a21).
     On a submitted review "Mark as Complete" is enabled; the two messages
     that keep it disabled belong to a request with no review (Rule 14c).
     Pressing it asks "Mark this review as complete?" with the text "You can
@@ -1232,6 +1241,7 @@ Left out of the scenarios above, by reason:
   - Review Details on that review naming the first thank and its date (Rule 14a): the same bullet
   - History ending at "Review Submitted" after "Revert Decision" on the thanked review, then, once it is marked complete again, listing the first "Reviewer Thanked" date followed by the new "Review Completed" (Rule 21): the same place in scenario 9
   - {OJS} the Review Details window opened from the dashboard's "View unread recommendation" showing the recommendation, as the row's window does (Rule 14a): likely a bullet in scenario 14
+  - the "Edit Review" window's top "Close" asking first after a change to the review due date, the "Review Type" or the "Public Visibility" box (no other control tried), the window kept open on "Cancel" and the change dropped on "OK", and closing at once with nothing changed (Fields): likely a bullet in scenario 6, which opens the row's "Edit"
 - **Budget** — states:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
   - the Review Details window on a request with no review: "Request Sent:", "Reviewer Reminded:", "Request Accepted:" or "Request Declined:", the empty blocks, and "Mark as Complete" disabled beside its recommendation message {OJS} or, with a review form, its incomplete-review message (Rule 14c): an editor opens the window to read a review, and on a request that has none only in a rare week
@@ -1271,7 +1281,7 @@ Left out of the scenarios above, by reason:
   - OMP2 (the press's opening list ignoring the stage split, and the other stage's reviewer added from it; Rule 5)
   - A22 (the window's guidance promising an upload control; Rule 14a)
   - A23 (the recommendation shown twice, under two labels; Rule 14a)
-  - A21 (a rating star clicked too early not taking; Rule 14a)
+  - A21 (a rating star pressed early saved while the open window can fall back to "No rating"; Rule 14a)
   - A12 (the change notice's unsubscribe page omitting the type; Side effects)
   - A15 (the reviewer's response erasing the "Reviewer Reminded" milestone; Rules 13, 21)
   - A26 (the unassign notice arriving under the cancel notice's subject; Side effects)
@@ -1323,7 +1333,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A16](#a16) | A due date typed in the wrong format looks accepted on screen, but the old value is silently submitted | 🐞 | user-visible | claim check (claude), 2026-08-02 — rescoped |
 | [A18](#a18) | Emptying the request letter makes the add fail silently, yet the assignment is created and the request email never goes out | 🐞 | user-visible | — |
 | [A19](#a19) | The template chooser renders on every add, as a one-option select even with zero alternate templates | 🐞 | minor | — |
-| [A21](#a21) | A rating star clicked just after the Review Details window opens can silently revert unsaved | 🐞 | user-visible | @beaug 2026-08-29 · risk accepted |
+| [A21](#a21) | A rating star pressed just after the Review Details window opens is saved, yet the open window can fall back to "No rating" | 🐞 | user-visible | @beaug 2026-08-29 · risk accepted |
 | [A22](#a22) | The Review Details guidance tells the editor to "upload the file below", but the window has no upload control | 🐞 | minor | @beaug 2026-08-29 · ticket to follow |
 | [OMP2](#omp2) | {OMP} The Add Reviewer window's opening list ignores the internal/external stage split, and a reviewer of the other stage picked from it is added to the round; only searching filters by stage | 🐞 | user-visible | — |
 | [A26](#a26) | The unassign notice reaches the reviewer under the cancel notice's subject, "Your review for "{title}" has been cancelled" | 🐞 | minor | — |
@@ -1625,19 +1635,19 @@ Since: 2026-08-26 (the rework's merge) · Basis: probe + code reading.
 > was itself retired the same day.
 
 <a id="a21"></a>
-**A21 — An early rating click can silently revert** · 🐞 · user-visible.
-The "Reviewer rating" stars are clickable the moment the Review Details
-window renders. A click landing in the first moments, before the window has
-finished loading the assignment, is reverted when the load completes: the
-star flashes selected, then falls back, and no rating is saved, with no
-message. A click after the window settles saves normally, with its toast.
-The window offers no reliable "settled" signal. The revert was reproduced
-even after the footer's "Modify Review" button enabled, because the on-open
-mark-viewed round-trip re-renders the rating control after that point (test
-authoring, 2026-08-29: the suite guards with an outcome-keyed re-click,
-never asserting the defect).
-Since: 2026-08-29 (the modify-reviews rework) · Basis: probe (observed in
-one open of four) + code reading. <sup>[f-a21](#fn-a21)</sup>
+**A21 — An early rating shows "No rating" after it is saved** · 🐞 ·
+user-visible.
+On the opening that marks a submitted review viewed (Rule 14a), the
+"Reviewer rating" stars can be pressed before that mark has been saved,
+even once "Modify Review" is enabled. A star pressed then is saved and
+"Reviewer rating saved" appears, but if the mark completes after the save,
+the stars fall back to "No rating", with no message. The editor sees the
+rating gone although it is stored: pressing "Cancel" and opening the
+window again shows the star selected. A star pressed after the mark has
+completed stays selected. The window offers no signal that the mark is
+done, and the gap widens on a slow connection or a busy server.
+Since: 2026-08-29 (the modify-reviews rework) · Basis: probe + code
+reading. <sup>[f-a21](#fn-a21)</sup>
 
 > **Reviewed — @beaug, 2026-08-29**: confirmed 🐞, risk accepted. Ruling: the
 > entry stands and no fix is planned; the impact is low, since a failed
@@ -2251,7 +2261,18 @@ neither on the profile's notification
 settings nor on the unsubscribe page its footer links to (finding A12).
 Driven 2026-09-28 (OJS and OMP, two runs each): "Cancel" in "Edit Review"
 with the review due date retyped closed the window with no dialog and no
-request; reopened after a reload, "Edit" showed the old date.
+request; reopened after a reload, "Edit" showed the old date. Driven
+2026-09-29 (OJS; OMP on both review stages; as the Journal Manager and as
+an assigned Section Editor, Series Editor on the press; two runs each),
+on accepted rows: the top "Close" raised the browser's own `confirm()`
+with `form.dataHasChanged` (lib/pkp `FormHandler`
+`containerCloseHandler()`) after a ticked
+"Publicly Show Reviewer Comments" box, a retyped review due date or
+another review type, never on an untouched form. Dismissed, the window
+stayed open with the change; accepted, it closed with no request, and the
+row, "Edit" reopened on the page and after a reload, and
+`review_assignments` (`is_review_publicly_visible`, the due date) kept the
+old values. "Cancel" with the box ticked asked nothing and sent nothing.
 
 <a id="fn-h"></a>
 **h** — Manual reminder: Vue guard statuses RESPONSE_OVERDUE/REVIEW_OVERDUE
@@ -3037,14 +3058,27 @@ overturned the same day: the absence is OPS's deliberate baseline.
 
 <a id="fn-a21"></a>
 **f-a21** — Live-probed 2026-08-29 (OJS): a star clicked immediately after
-the window opened flashed selected, then reverted with nothing saved, in
-one run of four; clicks after the window settled saved every time (toast
-"Reviewer rating saved", value persisted across close and reopen).
-Mechanism code-read the same day: `useReviewDetails` /
-`ReviewDetailsRating` render the rating radios (`name="quality"`) enabled
-before the assignment GET resolves; the load's completion re-initializes
-the rating widget from the fetched value, discarding a click that landed
-in the window.
+the window opened flashed selected, then reverted, in one run of four;
+that sighting was read as nothing saved, without reopening the window.
+Clicks after the window settled saved every time (toast "Reviewer rating
+saved", value persisted across close and reopen). Driven 2026-09-29 (OMP,
+two of two runs, a newly submitted review, as the Press Manager), with the
+answer to the on-open PUT `…/consider` held 4 s in the browser after the
+server had answered: "5 out of 5 stars" pressed after "Modify Review"
+enabled sent PUT `{quality}` (200), "Reviewer rating saved" showed and the
+five stars stayed selected until the held answer arrived, then the radios
+read "No rating"; "Cancel" and "Read Review" again showed 5 stars. Control
+without the hold (the mark answered before the save's own reload of the
+assignment): the five stars stayed. Mechanism, code-read at that
+day's tip (lib/ui-library): `useReviewDetails` runs
+`loadReviewAssignment().then(markViewedIfNew)`; `markViewedIfNew()` in
+`useReviewAssignment` acts only on a completed, not yet considered
+assignment and replaces `reviewAssignment` with the PUT's answer, which
+carries the quality from before the press; `ReviewDetailsRating.vue`
+watches the whole assignment and resets the radios to that quality. The
+suite's bounded re-press in the rating helper absorbs the flip and never
+asserts it. OJS runs the same lib/ui-library window; its 2026-08-29
+sighting is the same revert.
 
 <a id="fn-a22"></a>
 **f-a22** — `editor.review.readConfirmation` still carries the legacy

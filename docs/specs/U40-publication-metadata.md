@@ -112,7 +112,7 @@ it for a per-item value (Rule 11). <sup>g</sup>
 | **Copyright Holder** | No | Text, multilingual. Description: "Copyright will be assigned automatically to {holder} when this is published." ("… posted." on a preprint server), naming the journal's default holder (Rule 12). |
 | **Copyright Year** | No | A year (whole number). The description names the basis: the article's publication date, or, on a journal set to issue-based copyright, the issue's publication date. |
 | **License URL** | No | Must be a web address. Anything else is refused with "This is not a valid URL." Description: "The license will be set automatically to {license name} when this is published." ("… posted." on a preprint server). The name is the license's name for a Creative Commons choice, or the raw address for an "Other license URL". The description and the Override lock are present only when the journal has a default license. Otherwise the field is plain-editable with no description. Once the field holds a license, it is unlocked while the description still names the journal's default: after an editor's override and Save, on the same page and after a reload ⚠ [A20](#a20), and on a preprint whose author chose a license while submitting ⚠ [OPS2](#ops2). |
-| **Default Chapter License URL** {OMP} | No | On an Edited Volume only: the license chapters inherit unless a chapter sets its own [OMP4](#omp4). With no license on the press or the volume it is plain-editable with no description. Once the press has a default license it arrives locked with "Override" and the sentence "The license will be set automatically to {license name} when this is published.", naming the volume's own License URL if one is saved, else the press's license; a License URL just saved on the volume is named only after the page is reloaded. After an override the sentence stays beside the saved address, as License URL's does [A20](#a20). |
+| **Default Chapter License URL** {OMP} | No | On an Edited Volume only: the license chapters inherit unless a chapter sets its own [OMP4](#omp4). With no license on the press or the volume it is plain-editable with no description. Once the press has a default license or the volume's own License URL is saved, it arrives locked with "Override" and the sentence "The license will be set automatically to {license name} when this is published.", naming the volume's own License URL if one is saved, else the press's license (the license's name for a Creative Commons address, else the address itself). A change to the volume's License URL (set, changed or emptied) shows in this field only after the page is reloaded; until then the field keeps its lock and sentence as they were. After an override the sentence stays beside the saved address, as License URL's does [A20](#a20). <sup>f-omp4</sup> |
 
 ## Rules & state
 
@@ -908,6 +908,12 @@ Left out of the scenarios above, by reason:
     published, or in another journal, not offered (Rule 7b): likely a
     bullet in scenario 2's "Keywords", with a published submission
     added to its given
+  - on a press with no license, "Default Chapter License URL" plain-editable
+    until the volume's own License URL is saved, then, after a reload,
+    locked with "Override" and the sentence naming the volume's license,
+    the address itself for a non-Creative Commons one (Fields "Default
+    Chapter License URL"): likely a bullet in scenario 10, on a second
+    scratch press left unlicensed
 - **Budget** — variants:
   - a term added twice showing two chips until Save and one on the
     reopened page (Rule 7a)
@@ -2722,6 +2728,21 @@ naming CC Attribution 4.0. With the volume's own License URL then saved
 as CC BY-NC, the chapter sentence still named "CC Attribution 4.0" on
 the same page and read "… CC Attribution-NonCommercial 4.0 when this is
 published." only after a reload, beside the stored chapter address.
+Live-probed 2026-09-29 (Fields "Default Chapter License URL"; scratch
+press with no license, Edited Volume, manager, two runs, identical;
+`shared/playwright/checks/U40/I29/i29.js`): the volume's License URL
+saved as CC BY-NC 4.0 (`PUT publications/{id}` 200, "Saved") left the
+chapter field editable with no description on the same page; after a
+reload it was disabled with "Override" and "The license will be set
+automatically to CC Attribution-NonCommercial 4.0 when this is
+published."; with `https://example.org/volume-license` saved instead,
+the same page still named CC Attribution-NonCommercial 4.0 and after a
+reload "… to https://example.org/volume-license when this is
+published."; with the press's "CC Attribution 4.0" then saved (`PUT
+contexts/{id}` 200) and the volume back on CC BY-NC, it kept naming
+the volume's license; with the volume's License URL emptied it named
+"CC Attribution 4.0" after a reload, the same page still naming the
+volume's. No response of 400 or more, no page error.
 
 <a id="fn-f-omp5"></a>
 **f-omp5 — OMP5 evidence.** `monograph_full.tpl` prints

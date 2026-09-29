@@ -50,7 +50,7 @@ bottom:
 
 | Panel (UI label) | Its text | Buttons, and where described |
 |------------------|----------|------------------------------|
-| "Site Management" | "Add, edit or remove journals from this site and manage site-wide settings." (a press: "Add, edit or remove presses from this site and manage site-wide settings."; a preprint server: "Add, edit or remove preprint servers from this site and manage site-wide settings.") | "Hosted Journals" ("Hosted Presses" on a press, "Hosted Servers" on a preprint server; *Hosted journals*), "Site Settings" ([Site settings](U60-site-settings.md)) |
+| "Site Management" | "Add, edit or remove journals from this site and manage site-wide settings." (a press: "Add, edit or remove presses from this site and manage site-wide settings."; a preprint server: "Add, edit or remove preprint servers from this site and manage site-wide settings."); in French a press's and a preprint server's panel reads "##admin.siteManagement.description##" in place of this line ⚠ [A7](#a7) | "Hosted Journals" ("Hosted Presses" on a press, "Hosted Servers" on a preprint server; *Hosted journals*), "Site Settings" ([Site settings](U60-site-settings.md)) |
 | "System Information" | "View information about the version and configuration settings of the application and server." | "View System Information" (Rules 5–8) |
 | "Expire User Sessions" | "All users will be immediately logged out of the application, including you, and will need to login again." | "Expire User Sessions" (Rule 9) |
 | "Delete Caches" | "Delete cache files from the system. This should only be done in development environments." | "Delete Data Caches" (Rule 10), "Delete Template Cache" (Rule 11) |
@@ -658,6 +658,8 @@ Left out of the scenarios above, by reason:
   - A4 (a failed job with no stored data; Rules 16, 19)
   - A5 (stored copies of public pages switched on; Settings bullet 8)
   - A6 (a refused "Requeue All Failed Jobs"; Rule 19)
+  - A7 (the Administration page in French on a press and a preprint
+    server; Fields: Administration)
 - **No seed**:
   - "Check for updates" answered, up to date or with an update
     available, since the test installs never reach PKP's site (Rule 6)
@@ -694,6 +696,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | "Check for updates" shows an empty page when the installation cannot reach PKP's site | 🐞 | user-visible · crash: server | — |
 | [A4](#a4) | "Requeue All Failed Jobs" fails with the database's error text when no failed job has stored data | 🐞 | latent · crash: server | — |
 | [A6](#a6) | After a refused "Requeue All Failed Jobs" a loading circle keeps turning until the page is reloaded | 🐞 | minor · crash: server | — |
+| [A7](#a7) | A press's and a preprint server's French Administration page shows a raw code under "Gestion du site" | 🐞 | minor | — |
 | [A2](#a2) | The three deleting buttons return to Administration with no message, and "Delete Data Caches" asks nothing first | ❓ | minor | — |
 | [A3](#a3) | A failed job's "Delete" removes it for good without asking | ❓ | minor | — |
 | [A5](#a5) | Neither "Delete Caches" button empties the stored copies of public pages | ❓ | latent | — |
@@ -764,6 +767,18 @@ when the list was already emptied in another tab (Rule 19) and when the
 application fails as in [A4](#a4). The page looks busy when nothing is
 happening.
 Basis: probe. <sup>f-a6</sup>
+
+<a id="a7"></a>
+**A7 — A raw code under "Gestion du site" on a press's and a preprint server's French Administration page** · 🐞 · minor.
+A Site Administrator reading Administration in French expects the
+"Gestion du site" panel (English "Site Management") to say what it is
+for, as it does on a journal installation: "Ajouter, modifier ou supprimer
+des revues de ce site et gérer les paramètres de l'ensemble du site.". On
+a press and on a preprint server the line reads
+"##admin.siteManagement.description##" instead; the panel's buttons and
+the other five panels are in French. The French translations of both
+applications have no text for this line.
+Basis: probe. <sup>f-a7</sup>
 
 ### OMP
 
@@ -843,7 +858,9 @@ Monograph Press, … Open Preprint Systems); the trail
 (`nav.app__breadcrumbs`) "Administration / {page}" on System
 Information, Jobs, Failed Jobs, Failed Job Details (no "Failed Jobs"
 step), Hosted Journals and Site Settings, none on Administration; no
-side menu on any of these pages.
+side menu on any of these pages. Live-probed 2026-09-29 in French
+(`index/fr_CA/admin`, all three apps, two runs): every panel French but
+the "Gestion du site" line on OMP and OPS ([A7](#a7), note f-a7).
 
 <a id="fn-c"></a>
 **c** — The side menu's entry: `PKPTemplateManager` adds `menu['admin']`
@@ -1409,6 +1426,22 @@ loading circle was turning beside the button, the button pressable, the
 row and the old total kept. The same after A4's 500. On OJS, with page
 links under the table, a circle also turned in place of the page number.
 The request is `FailedJobsPage.vue`'s `requeueAll()` (note s).
+
+<a id="fn-f-a7"></a>
+**f-a7** — Live-probed 2026-09-29 (`index/fr_CA/admin` as `admin`, all
+three apps, two runs, the English page the control): on OMP and OPS the
+"Gestion du site" panel's line is "##admin.siteManagement.description##";
+on OJS it is "Ajouter, modifier ou supprimer des revues de ce site et
+gérer les paramètres de l'ensemble du site."; the buttons ("Presses
+hébergées" / "Serveurs hébergés", "Paramètres du site") and the other
+panels French on all three. The buttons "Presses/Revues/Serveurs
+hébergés", "Paramètres du site" and "Afficher les informations sur le
+système" opened their pages. Code read 2026-09-29: the key
+`admin.siteManagement.description` has an empty `msgstr` in OMP's and
+OPS's `locale/fr_CA/admin.po`. Opening "Paramètres du site" also
+answered 500 on the plugin gallery's list
+(`plugin-gallery-grid/fetch-grid`), on all three apps: the Plugins
+tab's known failure, not this page's.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `site.upgradeAvailable.admin` in each app's
