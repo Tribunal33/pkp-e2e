@@ -196,7 +196,7 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
 
 3. **Pages outside the five.** The "Announcements", "Institutions" and
    "Comments" pages are described by [Announcements](U12-announcements.md),
-   *Institutions* and [Reader comments & moderation](U14-reader-comments-and-moderation.md).
+   [Institutions](U66-institutions.md) and [Reader comments & moderation](U14-reader-comments-and-moderation.md).
    <sup>k</sup>
    - The "Announcements" and "Comments" pages open from their own
      side-menu entries, shown while announcements or public comments are
@@ -1017,7 +1017,7 @@ Left out of the scenarios above, by reason:
   - the "Journal Abbreviation" in the article's "How to Cite" (Fields; Rule 10; *Article landing page & reading*)
   - the "Journal Summary" in the site's list of journals and on the home page (Rule 8; *Hosted journals*, *Appearance & theming*)
   - the other tabs of the five Settings pages (Rule 2; the features its table names)
-  - the "Announcements", "Institutions" and "Comments" pages with their side-menu entries, and the users list's "Edit" (Rule 3; [Announcements](U12-announcements.md), *Institutions*, [Reader comments & moderation](U14-reader-comments-and-moderation.md) scenario 6, [User invitations](U06-user-invitations.md) scenario 8)
+  - the "Announcements", "Institutions" and "Comments" pages with their side-menu entries, and the users list's "Edit" (Rule 3; [Announcements](U12-announcements.md), [Institutions](U66-institutions.md), [Reader comments & moderation](U14-reader-comments-and-moderation.md) scenario 6, [User invitations](U06-user-invitations.md) scenario 8)
   - the error window of a masthead choice changed on a press or preprint server (Settings bullet 3; [User invitations](U06-user-invitations.md#omp1); scenario 8 passes it)
   - which email of a press or preprint server carries the new principal contact as its sender (Rule 9; Side effects: each email's own feature says when it is sent; [Publish, schedule & versions](U49-publish-schedule-and-versions.md))
   - the technical support contact as the sender of the account-validation email ([Registration & account validation](U02-registration-and-account-validation.md) scenario 7)

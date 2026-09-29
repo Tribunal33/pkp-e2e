@@ -330,6 +330,15 @@
  *   keys included; stored as the roles' ids, ascending. Refused without
  *   bulkEmails true (the side tab shows no boxes then), empty, or with a
  *   key repeated. Applied after bulkEmails, last in the build.
+ * - institutions[] {name*, ipRanges?, ror?} — Settings › "Institutions" ›
+ *   "Add Institution" › "Save" per entry (U51 on a journal, U66 on the
+ *   three apps; InstitutionSeeder: PKPInstitutionController::add through
+ *   ApiCall as `admin`). After users[], before the app overlay; the
+ *   response lists {id, name} as `institutions` when any is seeded.
+ * - enableInstitutionUsageStats (bool) — Settings › Distribution ›
+ *   "Statistics", "Institutional Statistics" › "Enable institutional
+ *   statistics" (U66; PKPContextStatisticsForm, shown only while the
+ *   site's own box is ticked). The key writes this row alone.
  * - usage[] {daysAgo | date, views} (U64): the context's home page visits
  *   of past days, one visitor each, turned into figures by the app's own
  *   usage statistics jobs (PKPUsageStatsSeeder), with the overlay's (OJS
@@ -350,8 +359,9 @@
  *   "Create Issue Galley" window (the grid's own IssueGalleyForm); its
  *   accessStatus / openAccessDate (U51) the issue's "Access" tab.
  * - OJS subscription keys (U51, APP\testing\SubscriptionSeeder): payments,
- *   the "Subscription Policies" fields, institutions[], subscriptionTypes[]
- *   and subscriptions[], each the save of its screen, before issues[].
+ *   the "Subscription Policies" fields, subscriptionTypes[] and
+ *   subscriptions[] (naming the core's institutions[]), each the save of
+ *   its screen, before issues[].
  *   OMP reads `payments` alone (U73: the "Payments" tab's setup fields,
  *   PaymentSettingsSeeder, no fees); OPS reads no overlay, so the keys
  *   answer 400 there.
@@ -438,6 +448,20 @@ abstract class PKPContextScenarioBuilder
      * together at the end of the build. Set once the context exists.
      */
     protected ?PKPUsageStatsSeeder $usageSeeder = null;
+
+    /**
+     * The `institutions[]` entries of the build in progress keyed by name
+     * (U66, InstitutionSeeder::parse), set before the overlay's parse phase
+     * so an app overlay can resolve a name (OJS: an institutional
+     * subscription's `institution`, U51).
+     */
+    protected array $institutionPlans = [];
+
+    /**
+     * Name → id of the institutions created, set before the overlay's
+     * execute phase (OJS subscriptions, U51).
+     */
+    protected array $institutionIds = [];
 
     public function __construct()
     {
@@ -559,6 +583,13 @@ abstract class PKPContextScenarioBuilder
         $libraryFilePlans = LibraryFileSeeder::parse($root, true);
         $announcementTypePlans = $this->parseAnnouncementTypes($root, $primaryLocale);
         $announcementPlans = $this->parseAnnouncements($root, $primaryLocale, $announcementTypePlans);
+        // institutions[] (U51 on a journal, U66 on every app), before the
+        // overlay, whose OJS subscriptions name them.
+        $this->institutionPlans = InstitutionSeeder::parse(
+            $root,
+            $primaryLocale,
+            array_values(array_unique(array_merge([$primaryLocale], (array) ($contextParams['supportedFormLocales'] ?? []))))
+        );
         $overlayPlan = $this->parseOverlay($root);
         $themeOptionsPlan = $this->parseThemeOptions($root);
         $bulkEmailsPlan = $this->parseBulkEmails($root, array_column($customRolePlans, 'key'));
@@ -698,6 +729,12 @@ abstract class PKPContextScenarioBuilder
             $users[] = ['id' => $user->getId(), 'username' => $user->getUsername()];
         }
 
+        // Settings › "Institutions" › "Add Institution" › "Save" per entry
+        // (U66), after users[] and before the overlay (OJS: an institutional
+        // subscription names one, U51).
+        $institutions = InstitutionSeeder::execute($context, $this->institutionPlans);
+        $this->institutionIds = array_column($institutions, 'id', 'name');
+
         // The app overlay (OJS issues[]), after users[] as in the bootstrap.
         $overlay = $this->executeOverlay($context, $overlayPlan);
 
@@ -747,7 +784,7 @@ abstract class PKPContextScenarioBuilder
             'libraryFiles' => $libraryFiles,
             'categories' => $categories,
             'customRoles' => $customRoles,
-        ] + $overlay;
+        ] + ($institutions !== [] ? ['institutions' => $institutions] : []) + $overlay;
     }
 
     /**
@@ -2406,6 +2443,26 @@ abstract class PKPContextScenarioBuilder
             }
             $settings['enablePublicComments'] = $value;
             $specKeys['enablePublicComments'] = 'enablePublicComments';
+        }
+
+        if ($root->has('enableInstitutionUsageStats')) {
+            // Settings › Distribution › "Statistics", "Institutional
+            // Statistics" › "Enable institutional statistics" (U66;
+            // PKPContextStatisticsForm: a checkbox FieldOptions over the
+            // schema's boolean, shown only while the site's own box is
+            // ticked, its value the context's row or else the site's). The
+            // form posts its fields form-encoded ("true" / "false" for this
+            // box), which the save's convertStringsToSchema turns back into
+            // the boolean; the stored row is 1 / 0. The tab's other fields
+            // (the geographical radio, "Public API") are not this key's;
+            // they stay as the context has them. Shared by the three apps.
+            $hasProperty('enableInstitutionUsageStats') || throw new SpecException('enableInstitutionUsageStats', 'enableInstitutionUsageStats is not a setting of this app\'s context schema');
+            $value = $root->get('enableInstitutionUsageStats');
+            if (!is_bool($value)) {
+                throw new SpecException('enableInstitutionUsageStats', 'enableInstitutionUsageStats must be a boolean (true: the "Enable institutional statistics" box ticked, false: unticked)');
+            }
+            $settings['enableInstitutionUsageStats'] = $value;
+            $specKeys['enableInstitutionUsageStats'] = 'enableInstitutionUsageStats';
         }
 
         if ($root->has('restrictSiteAccess')) {

@@ -117,7 +117,7 @@ Subscription"), top to bottom, then "Save". <sup>h</sup>
 | "Subscription type" | Yes | The journal's types of this tab's kind (individual or institutional), each as "{name} - {duration} - {cost} {currency}", hidden ones included (Rule 16a) |
 | "Status" | Yes | "Active", "Needs Information", "Needs Approval", "Awaiting Manual Payment", "Awaiting Online Payment", "Other, See Notes" (Rule 17) |
 | "Date": "Start date", "End date" | Unless the type is non-expiring | Date boxes with a date picker (Rule 19) |
-| "Institution" | Yes, institutional only | A list of the journal's institutions, kept on the *Institutions* page (Rule 19) |
+| "Institution" | Yes, institutional only | A list of the journal's institutions, kept on the [Institutions](U66-institutions.md) page (Rule 19) |
 | "Mailing address" | No | Institutional only |
 | "Domain" | No | Institutional only, under "If a domain is entered here, IP ranges are optional. Valid values are domain names (e.g. lib.sfu.ca)." (Rules 18, 19) |
 | "Membership" | When the type asks for it | Individual only (Rule 19) |
@@ -379,7 +379,7 @@ sidebar, Settings bullet 13), headed "Subscription"; its lines are Rule
 18. **A valid institutional subscription** follows the same status,
     format and date rules, and covers a visitor whose network address
     falls in one of the institution's IP ranges (kept on the
-    *Institutions* page). Nobody signs in for it. <sup>e</sup> <sup>td22</sup>
+    [Institutions](U66-institutions.md) page). Nobody signs in for it. <sup>e</sup> <sup>td22</sup>
 
     It also covers a visitor whose host name ends in the subscription's
     "Domain". <sup>q</sup>
@@ -620,7 +620,7 @@ sidebar, Settings bullet 13), headed "Subscription"; its lines are Rule
   article's "Open Access" box, sends nothing. <sup>n</sup>
 - **The manual method's email** ("Send notification of payment", Rule 30)
   is *Payments & APCs*'s.
-- **A new institution** is added to the journal's *Institutions* list by
+- **A new institution** is added to the journal's [Institutions](U66-institutions.md) list by
   every institutional purchase (Rule 29).
 - Nothing else sends email: creating, editing, renewing and deleting
   subscriptions and types, saving the policies and changing the
@@ -721,7 +721,7 @@ sidebar, Settings bullet 13), headed "Subscription"; its lines are Rule
 - [Payments & APCs](U52-payments-and-apcs.md): Settings › Distribution ›
   "Payments", the "Payment Types" and "Payments" tabs, the manual method's
   page and email, and membership.
-- *Institutions* (no spec yet): the institutions and IP ranges an
+- *[Institutions](U66-institutions.md)*: the institutions and IP ranges an
   institutional subscription relies on.
 - [Roles configuration](U54-roles-configuration.md),
   [Users management](U53-users-management.md): the "Site Access Options" box,
@@ -1555,7 +1555,7 @@ once, before anything is paid, and "My Subscriptions" no longer offers
 <a id="a11"></a>
 **A11 — Each institutional purchase adds an institution** · 🐞 · minor.
 Every "Continue" on "Purchase Institutional Subscription" adds a new
-institution to the journal's *Institutions* list under the typed name,
+institution to the journal's [Institutions](U66-institutions.md) list under the typed name,
 even when an institution of that name exists or the reader is changing an
 existing purchase, so the list fills with duplicates the manager must
 tidy by hand. Basis: probe, 2026-09-25. <sup>f-a11</sup>

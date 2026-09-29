@@ -557,7 +557,7 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
     | "Start A New Submission" | every role, a Reader's included | the journal accepts submissions | [Submission wizard](U21-submission-wizard.md#ways-in) |
     | "Announcements" | manager-level roles, Site Administrator | announcements are on | [Announcements](U12-announcements.md) |
     | "DOIs" | manager-level roles, Site Administrator | DOIs are enabled with at least one kind of item | *DOIs* |
-    | "Institutions" | manager-level roles, Site Administrator; {OJS} the Subscription Manager while payments are enabled | the site's and the journal's "Enable institutional statistics" are both ticked (Settings bullet 10), or {OJS} payments are enabled | *Institutions* |
+    | "Institutions" | manager-level roles, Site Administrator; {OJS} the Subscription Manager while payments are enabled | the site's and the journal's "Enable institutional statistics" are both ticked (Settings bullet 10), or {OJS} payments are enabled | [Institutions](U66-institutions.md) |
     | "Payments" {OJS} | manager-level roles, Site Administrator, Subscription Manager | payments are enabled | *Payments & APCs* |
     | "Settings" (a group: "Journal", "Website", "Workflow", "Distribution", "Users & Roles") | manager-level roles with "Permit changes to Settings", Site Administrator | — | [Journal identity & about pages](U07-journal-identity-and-about-pages.md#settings-access) |
     | "Content" (a group: "Comments" while public comments are on; "Issues" {OJS}; "Catalog" {OMP}) | manager-level roles, Site Administrator | on a preprint server, public comments are on [OPS1](#ops1) | [Reader comments & moderation](U14-reader-comments-and-moderation.md), *Issues*, *Catalog management* |
@@ -1230,7 +1230,7 @@ Left out of the scenarios above, by reason:
   - payments on {OJS}: the "Payments" and "Institutions" entries, then the "Subscriptions" and "My Subscriptions" items (Settings bullet 6; *Payments & APCs*)
   - "Disable Submissions" on: "Start A New Submission" leaving the side menu (Settings bullet 8; *Submission intake configuration*)
   - DOIs off, or on with no kind ticked: no "DOIs" entry (Settings bullet 9; *DOIs*)
-  - institutional statistics ticked on the site and the journal: the "Institutions" entry (Settings bullet 10; *Institutions*)
+  - institutional statistics ticked on the site and the journal: the "Institutions" entry (Settings bullet 10; [Institutions](U66-institutions.md))
   - a "Custom Page" item's page and its "Preview" (Fields; *Custom pages & blocks*)
   - a "Page Footer" and a header logo set (Settings bullet 17; Rules 15a, 20; *Appearance & theming*)
 

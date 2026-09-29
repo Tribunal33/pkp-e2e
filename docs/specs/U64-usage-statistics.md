@@ -478,7 +478,7 @@ bottom, then "Save": <sup>q</sup>
 29. **Institutional statistics** are collected for a journal only while
     the site's and the journal's "Enable institutional statistics" are
     both ticked; the journal's box shows once the site's is ticked. With
-    both ticked the side menu gains "Institutions" (*Institutions* owns
+    both ticked the side menu gains "Institutions" ([Institutions](U66-institutions.md) owns
     the list). <sup>t</sup>
 30. **Public API.** The journal's "Public API" box, unticked and saved,
     restricts that journal's SUSHI address (Rule 23). The site's "Public
@@ -566,7 +566,7 @@ bottom, then "Save": <sup>q</sup>
   owns the "Downloads" chart on an article's page, and
   [Appearance & theming](U10-appearance-and-theming.md) the option that
   shows it; the downloads it charts are Rule 1's file views. <sup>x</sup>
-- *Institutions* owns the institution list and its IP ranges that Rules
+- [Institutions](U66-institutions.md) owns the institution list and its IP ranges that Rules
   4, 22 and 29 use.
 - [JATS & body text](U48-jats-and-body-text.md) owns "JATS Template
   Plugin" and the "JATS XML" page (Settings bullet 10).
@@ -1200,7 +1200,7 @@ Left out of the scenarios above, by reason:
 - **Owned by another feature**:
   - the journal's "Enable institutional statistics" ticked, and the
     side menu's "Institutions" (Rule 29; Settings bullet 8;
-    *Institutions*)
+    [Institutions](U66-institutions.md))
 
 ## Findings register
 

@@ -91,8 +91,9 @@ class ContextScenarioBuilder extends PKPContextScenarioBuilder
      * languages (primary first); `accessStatus` / `openAccessDate` (U51)
      * need the journal to require subscriptions. And the subscription keys
      * (U51, SubscriptionSeeder): `payments`, the "Subscription Policies"
-     * passthroughs, `institutions[]`, `subscriptionTypes[]`,
-     * `subscriptions[]`.
+     * passthroughs, `subscriptionTypes[]`, `subscriptions[]`; a
+     * subscription's `institution` names an entry of the core's
+     * `institutions[]` (U66, PKP\testing\InstitutionSeeder).
      */
     protected function parseOverlay(Spec $root): array
     {
@@ -101,20 +102,21 @@ class ContextScenarioBuilder extends PKPContextScenarioBuilder
         $accessTab = ($this->formSettingsPlan['publishingMode'] ?? null) === \APP\journal\Journal::PUBLISHING_MODE_SUBSCRIPTION;
         return [
             'issues' => BootstrapSeeder::parseIssues($root, withCover: true, formLocales: $formLocales, accessTab: $accessTab),
-            'subscriptions' => SubscriptionSeeder::parse($root, $primaryLocale, array_merge(['admin'], array_column((array) $root->get('users', []), 'username'))),
+            'subscriptions' => SubscriptionSeeder::parse($root, $primaryLocale, array_merge(['admin'], array_column((array) $root->get('users', []), 'username')), array_keys($this->institutionPlans)),
         ];
     }
 
     /**
-     * The subscription screens first (settings, institutions, types, then
-     * subscriptions, after users[] so a subscriber exists), then the
-     * bootstrap's own issue path; the response lists what was created.
+     * The subscription screens first (settings, types, then subscriptions,
+     * after users[] so a subscriber exists and after the core's
+     * institutions[] so an institutional one finds its institution), then
+     * the bootstrap's own issue path; the response lists what was created.
      */
     protected function executeOverlay(Context $context, array $overlayPlan): array
     {
         $response = [];
         if (!empty($overlayPlan['subscriptions'])) {
-            $response = SubscriptionSeeder::execute($context, $overlayPlan['subscriptions']);
+            $response = SubscriptionSeeder::execute($context, $overlayPlan['subscriptions'], $this->institutionIds);
             $context = \APP\core\Application::getContextDAO()->getById($context->getId());
         }
         $issues = BootstrapSeeder::addIssues($context, $overlayPlan['issues'] ?? [], asTheForm: true);

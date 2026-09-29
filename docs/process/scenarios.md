@@ -504,6 +504,28 @@ Keys:
   press's or preprint server's landing page has none) and every
   moderator's side menu the Content › Comments entry. A non-boolean is a
   400 (U14 harness, 2026-09-16).
+- `enableInstitutionUsageStats` (boolean, three apps; U66): the "Enable
+  institutional statistics" box of Settings › Distribution › the
+  "Statistics" tab, "Institutional Statistics", saved as that tab saves
+  (a form-encoded POST override to `contexts/{id}` carrying the tab's
+  shown fields, `enableInstitutionUsageStats=true&isSushiApiPublic=true`
+  on a site with the install's "Statistics" values; stored `1` / `0`).
+  The key writes this row alone. The tab shows the box only while the
+  site's own box is ticked (`POST site` `enableInstitutionUsageStats`,
+  below), and the key does not ask for it: it stores what the tab would
+  have stored. Every new context already stores `0` (and
+  `isSushiApiPublic` `1`), so with the site's box ticked a context
+  without the key does not collect institutional statistics and its box
+  reopens unticked. The side menu's "Institutions" entry (Settings ›
+  "Institutions", the manager-level roles') shows only while both boxes
+  are ticked (on a journal, also while payments are enabled): seeded
+  `true` with the site's box ticked, the entry is there and the tab
+  reopens ticked; the site's box unticked, it is gone again whatever
+  the context stores. The site's box is site-wide, so a test that ticks
+  it is `@solo` and puts it back (`POST site` below). The Institutions
+  page itself opens by its address either way. A non-boolean is a 400
+  (U66 harness, 2026-09-28, three apps: the rows, the reopened tab and
+  the side menu equal a by-hand save, both ways).
 - `restrictSiteAccess` (boolean): the first box of Settings › Users &
   Roles › the "Site Access Options" tab, "Users must be registered and
   log in to view the journal site." ("…press site." on OMP, "…server
@@ -1186,20 +1208,44 @@ Keys:
   differed between OJS and OMP for one seed): a test that asserts order
   seeds distinct titles it finds by search, or adds the newest by hand
   (U12 claim check K4, 2026-09-17).
+- `institutions[]` (the three apps; U51 on a journal, U66 on a press
+  and a preprint server), each `{name, ipRanges?, ror?}`: Settings ›
+  "Institutions" › "Add Institution" › "Save" (the institutions API's
+  own add, as `admin`), one entry after the other in the order given,
+  after `users[]` and before the app's own keys (OJS: the subscription
+  keys below, whose institutional subscriptions name these entries).
+  `name` is typed into the primary language's "Name" box; with more
+  than one form language the others arrive empty and are stored as an
+  empty `name` row each, as the panel stores them. `ipRanges` is a
+  list, one line of the "IP ranges" box each (`127.0.0.1`,
+  `10.0.0.0/8`, `142.58.*.*`, `142.58.103.1 - 142.58.103.4`); `ror`
+  the "ROR" box, a full `https://ror.org/…` address. A range or ROR the
+  panel refuses is a 400 with its message ("Invalid IP range", "This is
+  not formatted correctly."), checked by the same validation before the
+  context exists, so it leaves nothing behind. Names are unique in a
+  seed (a subscription names its institution), though the panel itself
+  accepts a repeated name. The Institutions list has no set order:
+  seeded entries usually come in the order given, but an institution
+  edited on screen moves (usually last) on the next load, and a list can
+  open mid-sequence or reversed (U66 claim check K1 and K2, 2026-09-28,
+  three apps), so a test asserts the set of rows, not their order. The
+  response lists `institutions` (`id`, `name`) when any is
+  seeded. The rows, the list and the reopened "Edit Institution" panel
+  equal a by-hand add (U66 harness, 2026-09-28, three apps).
 
 The subscription keys (OJS only; OMP and OPS answer 400 on each, but
 for `payments`, which OMP takes too, below). Each
 is the save of the screen that makes the state, run through that
-screen's own code as `admin`, in this order after `users[]` and before
-`issues[]`: the two payment screens, "Subscription Policies", the
-institutions, the types, the subscriptions (U51 harness, 2026-09-25,
-driven against the screens with every row equal). A refusal that only
-the window itself can make (a malformed email or domain, a second
-subscription for one user, dates on a non-expiring type, a missing
-membership, an institution with neither IP range nor domain, an invalid
-currency or IP range) is a 400 with the window's own message, but it
-comes after the journal row exists, so the bare journal stays behind
-under the tag; every other refusal comes first and leaves nothing.
+screen's own code as `admin`, in this order after `users[]` and
+`institutions[]` and before `issues[]`: the two payment screens,
+"Subscription Policies", the types, the subscriptions (U51 harness,
+2026-09-25, driven against the screens with every row equal). A refusal
+that only the window itself can make (a malformed email or domain, a
+second subscription for one user, dates on a non-expiring type, a
+missing membership, an institution with neither IP range nor domain, an
+invalid currency) is a 400 with the window's own message, but it comes
+after the journal row exists, so the bare journal stays behind under
+the tag; every other refusal comes first and leaves nothing.
 
 - `payments`: `{enabled?, currency?, paymentPluginName?,
   manualInstructions?}` is Settings › Distribution › "Payments" ›
@@ -1250,14 +1296,6 @@ under the tag; every other refusal comes first and leaves nothing.
   "Mailing Address", but the keys can store one, so a script that later
   saves the tab on screen seeds or types all three (U51 claim check K1,
   2026-09-25).
-- `institutions[]`, each `{name, ipRanges?, ror?}`: Settings ›
-  "Institutions" › "Add Institution" › "Save" (the institutions API's
-  own add). `name` in the primary language; `ipRanges` a list, one line
-  of the "IP ranges" box each (`127.0.0.1`, `10.0.0.0/8`, `142.58.*.*`,
-  `142.58.103.1 - 142.58.103.4`); `ror` the "ROR" box. An invalid range
-  is the form's refusal ("Invalid IP range"). Names are unique in a seed,
-  since a subscription names its institution. The response lists
-  `institutions` (`id`, `name`).
 - `subscriptionTypes[]`, each `{name, cost, currency, duration?,
   format?, institutional?, membership?, hidden?, description?}`: the
   "Payments" page › "Subscription Types" › "Create New Subscription
@@ -1303,8 +1341,8 @@ name), `announcements` (id and title), `components` (`id`, `name`,
 `taskTemplates` (`id`, `title`, `stage`, `action`: `added` or `edited`),
 `libraryFiles` (`id`, `name`, `type`, `fileName`, `originalFileName`,
 `publicAccess`, in the order seeded), `categories` (see `categories[]`)
-and on OJS `issues` (see `issues[]`) and, when seeded, `institutions`,
-`subscriptionTypes` and `subscriptions`.
+and, when seeded, `institutions`; on OJS also `issues` (see `issues[]`)
+and, when seeded, `subscriptionTypes` and `subscriptions`.
 
 ## `POST scenarios/submission`
 
@@ -2385,7 +2423,8 @@ any other key is a 400.
   its stored value. Parity-checked on the three apps (U64 harness,
   2026-09-27): the rows equal the screen's, the tab reopens the same, and
   the journal's Settings › Distribution › "Statistics" tab shows the same
-  fields.
+  fields. A context's own "Enable institutional statistics" box is the
+  context scenario's `enableInstitutionUsageStats` (U66).
 - `counterR5StartDate` (U64): no screen sets it. It is the site setting
   the upgrade from 3.3 to 3.4 writes (its own day); a fresh install has
   no row, and the app then counts from the day 3.4 was installed, the

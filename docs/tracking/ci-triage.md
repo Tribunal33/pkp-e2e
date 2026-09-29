@@ -423,7 +423,13 @@ trips.
   workers on a reset database, `.reports/U41/final-run-ojs-attempt1.log`:
   U05 S6 to the 240 s timeout the same way, the one red of 235, the 13
   serial tests skipped behind it; the serial project green alone in
-  32.2 s, `.reports/U41/rerun-ojs-serial.log`).
+  32.2 s, `.reports/U41/rerun-ojs-serial.log`). **Seen again 2026-09-29** (U66 feature session, the second OJS
+  final on a reset database at the new lib/pkp `fab29cfeca`,
+  `.reports/U66/final-run-ojs-attempt2.log`: U05 S6 to the 240 s timeout
+  the same way, the one red of 612; green alone in the next minute,
+  `.reports/U66/alone-ojs-U05S6.log`, then red the same way in the third
+  final, `.reports/U66/final-run-ojs.log`, two of two at 8 workers: the
+  closed-tab settle is still owed).
 - **Submission wizard "Continue" not advancing under load** (U04 S10,
   OMP, once). The wizard's rail stayed on "2 Details" for the 20 s wait
   of `SubmissionWizardPages.continueTo()` after the Continue press in the

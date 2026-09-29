@@ -237,7 +237,10 @@ behind a line; that scratch is deleted after review.
   is an OJS journal whose payments are enabled: its managers' side menu
   shows "Institutions" before "Payments" whatever the statistics boxes
   (U08 Rule 30). OJS, 2026-09-25 (U51 claim check K3,
-  `by-35-mg-institutions`).
+  `by-35-mg-institutions`). The side menu's "Institutions" is also shown to an
+  Editor or Production Editor whose role lacks "Permit changes to
+  Settings", who is then refused the page. OJS and OMP, 2026-09-28 (U66
+  claim check K1).
 - "Consider role in masthead list" (Settings › Users & Roles › Roles › a
   role's "Edit") arrives ticked on Journal editor, Section editor, Reviewer
   and Editorial Board Member (OJS); Press editor, Series editor, External
@@ -1053,8 +1056,10 @@ config-file settings.
   Plugins" offers only "Paypal Fee Payment" and "Manual Fee Payment" and
   "Currency" has no empty choice, so a journal with no currency exists
   only until one is saved (the `payments` key without `currency` makes
-  one). Saving "Enable" unticked removes both "Institutions" and
-  "Payments" from the managers' side menu; the Subscription Manager's
+  one). Saving "Enable" unticked removes "Payments" from the managers'
+  side menu at once and "Institutions" on the next load (U52 A12; on a
+  press the tab adds neither, U66 claim check K1, 2026-09-28); the
+  Subscription Manager's
   side menu shows both while payments are enabled. The "Payments" page
   opens by its address (`{journal}/payments`) for the manager-level roles
   and the Subscription Manager whatever the payment settings, headed
@@ -1063,7 +1068,16 @@ config-file settings.
   `{journal}/user/payMembership` creates a queued payment request before
   it answers, even when it then fails: never open it on
   `publicknowledge`. OJS and OMP, live-driven 2026-09-26/27
-  (`.reports/U52/cc-K1.md`, `cc-K2.md`, `cc-K3.md` seed-facts sections).
+  (`.reports/U52/cc-K1.md`, `cc-K2.md`, `cc-K3.md` seed-facts sections). An OJS
+  Subscription Manager has no dashboard: `{journal}/submissions`
+  answers the access-denied page, and its side menu shows on
+  `{journal}/payments`. OJS, 2026-09-28 (U66 claim check K1,
+  `r2-m-off-P-sm-menu-ojs`).
+- {OMP OPS} Removing a press or preprint server that holds an
+  institution (Administration › "Hosted Presses" / "Hosted Servers")
+  fails and leaves it listed with no roles; such a scratch context is
+  unusable afterwards, so a test never removes one. OMP and OPS,
+  2026-09-28 (U66 claim check K1).
 - {OMP} A new press's Settings › Distribution › "Payments" shows "Enable"
   alone ("Payments will be enabled for this press. Note that users will be
   required to log in to make payments."); "Currency", "Payment Plugins"

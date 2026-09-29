@@ -352,7 +352,7 @@ screen, Rule 12): <sup>e</sup>
 - *[Languages & locales](U57-languages-and-locales.md)* owns the
   journal's "Languages" tab. The one combination of its ticks that
   changes this feature is under Settings that modify behavior.
-- *Institutions* (no spec yet): the manager-maintained institution list
+- *[Institutions](U66-institutions.md)*: the manager-maintained institution list
   for subscriptions and statistics is a separate record set. Only the
   registry lookup above is shared.
 - [Article landing page & reading](U13-article-landing-page-and-reading.md)

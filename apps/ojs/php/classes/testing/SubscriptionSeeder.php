@@ -26,9 +26,10 @@
  *    "Payments" page › "Subscription Policies" › "Save"
  *    (PaymentsHandler::saveSubscriptionPolicies, SubscriptionPolicyForm on
  *    the POST, the unnamed fields posted as the tab shows them).
- *  - `institutions[]` {name*, ror?, ipRanges?} — Settings › "Institutions"
- *    › "Add Institution" › "Save": POST institutions
- *    (PKPInstitutionController::add, ApiCall).
+ *  - `institutions[]` is the app-neutral PKP\testing\InstitutionSeeder,
+ *    which the context scenario core runs after users[] and before this
+ *    seeder (U66); a subscription names one of its entries and receives
+ *    the ids it created.
  *  - `subscriptionTypes[]` {name*, description?, cost*, currency*,
  *    duration?, format?, institutional?, membership?, hidden?} — "Payments"
  *    › "Subscription Types" › "Create New Subscription Type" › "Save"
@@ -57,12 +58,9 @@ use APP\subscription\form\PaymentTypesForm;
 use APP\subscription\form\SubscriptionPolicyForm;
 use APP\subscription\Subscription;
 use APP\subscription\SubscriptionType;
-use Illuminate\Http\Request;
-use PKP\API\v1\institutions\PKPInstitutionController;
 use PKP\context\Context;
 use PKP\core\Registry;
 use PKP\db\DAORegistry;
-use PKP\testing\ApiCall;
 use PKP\testing\ContextFactory;
 use PKP\testing\FormPost;
 use PKP\testing\PaymentSettingsSeeder;
@@ -105,38 +103,19 @@ class SubscriptionSeeder
     /**
      * Parse phase: every key, its shape and the references between the
      * lists (a subscription's type and institution by name, among this
-     * request's; its user among $members, the new journal's users: `admin`,
-     * its manager, and the users[] entries). No writes. Returns null when
-     * no key is given.
+     * request's: $institutionNames are the core's institutions[] entries;
+     * its user among $members, the new journal's users: `admin`, its
+     * manager, and the users[] entries). No writes. Returns null when no
+     * key is given.
      */
-    public static function parse(Spec $root, string $primaryLocale, array $members): ?array
+    public static function parse(Spec $root, string $primaryLocale, array $members, array $institutionNames): ?array
     {
         $plan = [
             'payments' => self::parsePayments($root),
             'policies' => self::parsePolicies($root, $primaryLocale),
-            'institutions' => [],
             'types' => [],
             'subscriptions' => [],
         ];
-
-        foreach ($root->childList('institutions') as $spec) {
-            $name = $spec->require('name');
-            if (!is_string($name) || trim($name) === '') {
-                throw new SpecException("{$spec->path}.name", 'name must be a non-empty string (the "Name" box)');
-            }
-            $ror = $spec->get('ror');
-            if ($ror !== null && !is_string($ror)) {
-                throw new SpecException("{$spec->path}.ror", 'ror must be a string (the "ROR" box)');
-            }
-            $ipRanges = $spec->get('ipRanges', []);
-            if (!is_array($ipRanges) || !array_is_list($ipRanges) || array_filter($ipRanges, fn ($r) => !is_string($r) || trim($r) === '') !== []) {
-                throw new SpecException("{$spec->path}.ipRanges", 'ipRanges must be a list of IP ranges, one per line of the "IP ranges" box (e.g. ["127.0.0.1", "10.0.0.0/8"])');
-            }
-            if (isset($plan['institutions'][$name])) {
-                throw new SpecException("{$spec->path}.name", "Two institutions named \"{$name}\": a subscription names its institution, so names are unique in a seed");
-            }
-            $plan['institutions'][$name] = ['name' => $name, 'ror' => $ror, 'ipRanges' => $ipRanges, 'path' => $spec->path];
-        }
 
         foreach ($root->childList('subscriptionTypes') as $spec) {
             $name = $spec->require('name');
@@ -226,7 +205,7 @@ class SubscriptionSeeder
             $institution = null;
             if ($institutional) {
                 $institution = $spec->get('institution');
-                if (!is_string($institution) || !isset($plan['institutions'][$institution])) {
+                if (!is_string($institution) || !in_array($institution, $institutionNames, true)) {
                     throw new SpecException("{$spec->path}.institution", 'institution must name an entry of institutions[] in this request');
                 }
             }
@@ -239,7 +218,7 @@ class SubscriptionSeeder
             ] + $dates + $texts;
         }
 
-        $empty = $plan['payments'] === null && $plan['policies'] === null && !$plan['institutions'] && !$plan['types'] && !$plan['subscriptions'];
+        $empty = $plan['payments'] === null && $plan['policies'] === null && !$plan['types'] && !$plan['subscriptions'];
         return $empty ? null : $plan;
     }
 
@@ -313,9 +292,10 @@ class SubscriptionSeeder
     /**
      * Execute phase, as `admin` with the router's context on the journal;
      * the context is read afresh before each save, as each screen's request
-     * reads it. Returns the response entries.
+     * reads it. $institutionIds maps the core's institutions[] names to the
+     * ids InstitutionSeeder created. Returns the response entries.
      */
-    public static function execute(Context $context, array $plan): array
+    public static function execute(Context $context, array $plan, array $institutionIds): array
     {
         $admin = Repo::user()->getByUsername('admin', true);
         $previousActingUser = Registry::get('user');
@@ -337,12 +317,6 @@ class SubscriptionSeeder
                 self::savePolicies($fresh(), $plan['policies']);
             }
             ContextFactory::forceRequestContext($fresh());
-
-            $institutionIds = [];
-            foreach ($plan['institutions'] as $name => $institution) {
-                $institutionIds[$name] = self::addInstitution($fresh(), $institution);
-                $response['institutions'][] = ['id' => $institutionIds[$name], 'name' => $name];
-            }
 
             $typeIds = [];
             foreach ($plan['types'] as $name => $type) {
@@ -402,25 +376,6 @@ class SubscriptionSeeder
             }
         }
         FormPost::run(new SubscriptionPolicyForm(), $vars, 'subscriptionEmail', 'The "Subscription Policies" tab would refuse this');
-    }
-
-    /** Settings › "Institutions" › "Add Institution" › "Save" (POST institutions). */
-    protected static function addInstitution(Context $context, array $institution): int
-    {
-        $name = [];
-        foreach ((array) $context->getSupportedFormLocales() as $locale) {
-            $name[$locale] = null;
-        }
-        $name[$context->getPrimaryLocale()] = $institution['name'];
-        $body = [
-            'name' => $name,
-            // An emptied box arrives as null (ConvertEmptyStringsToNull).
-            'ipRanges' => $institution['ipRanges'] ? implode(PHP_EOL, $institution['ipRanges']) : null,
-            'ror' => ($institution['ror'] ?? '') === '' ? null : $institution['ror'],
-        ];
-        $request = ApiCall::request(Request::class, 'POST', $body, [], $institution['path'], 'The "Add Institution" form would be refused');
-        $answer = ApiCall::answer(ApiCall::controller(PKPInstitutionController::class)->add($request), $institution['path'], 'The "Add Institution" form was refused');
-        return (int) $answer['id'];
     }
 
     /** "Create New Subscription Type" › "Save": SubscriptionTypeForm on the POST. */
