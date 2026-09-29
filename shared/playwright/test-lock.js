@@ -184,10 +184,17 @@ function hold(slot) {
         const pidRec = readJson(holderPidFile(slot));
         if (pidRec && pidRec.pid === process.pid) fs.rmSync(holderPidFile(slot), {force: true});
         flock.stdin.end();
+        // A flock(1) still WAITING ignores its stdin: kill it, or it lingers
+        // in the queue after we are gone.
+        try {
+            flock.kill('SIGTERM');
+        } catch {}
         process.exit(0);
     };
+    for (const sig of ['SIGTERM', 'SIGINT', 'SIGHUP']) process.on(sig, letGo);
     flock.on('exit', () => process.exit(1));
     flock.stdout.once('data', () => {
+        me.since = new Date().toISOString(); // held from now, not from when we started waiting
         publish();
         let empty = 0;
         setInterval(() => {
