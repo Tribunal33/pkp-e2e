@@ -31,7 +31,7 @@
  * - A4 🐞: S6 quotes the "Confirm" sentence as the spec gives it; what the
  *   sentence promises is the finding's claim, left unasserted.
  * - A6 ❓: S6 reads "Archive desk"'s refusal as the spec states it.
- * - A13 ❓: every row is found by name; S1 reads the order of a new press's
+ * - A13 🐞: every row is found by name; S1 reads the order of a new press's
  *   roles only.
  * - A8 🐞, A10 🐞, A7 ❓, A12 ❓: no scenario reaches them here.
  * - OMP1 🐞 (the French "External Review" heading): no scenario runs in

@@ -387,7 +387,14 @@ trips.
   is retried. U01 plus shared `--repeat-each 5` at eight workers 51 of 51
   per app. **Watch condition**: a `server-crash` annotation on CI; read its
   exit code and the request it names. Open for the maintainer: CI without
-  the JIT as an experiment.
+  the JIT as an experiment. First read with the new logs the same day: push run
+  36534260026 (`a110480`, OMP shard 3/3, the run's only red): worker 8103
+  died four times in 35 s (exit 139, a segfault, each on a request still
+  unanswered), and U20 S8's retry and U21 S8 were refused 0.6 s after the
+  last death, inside the restart loop's one-second gap; U21 S8 green on
+  its retry. None carried the annotation, since each started after the
+  death line was written; the watch now reads back 5 s before a test's
+  start (`LOOKBACK_MS`), checked on that log.
 - **Participants menu still open after the impersonation return** (U01
   S7, OJS, once). In the fourth OJS final of the U05 revision session
   (2026-09-13, four workers, `.reports/U05/final-run-ojs-attempt4.log`)

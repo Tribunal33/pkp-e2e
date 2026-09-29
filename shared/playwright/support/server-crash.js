@@ -28,6 +28,13 @@ const path = require('path');
 const SIGNALS = {134: 'SIGABRT', 135: 'SIGBUS', 137: 'SIGKILL, often the OOM killer', 139: 'SIGSEGV, segfault'};
 const DIED = /^\[harness\] php -S died (\S+ )?\(exit (\d+)\)/;
 const CONTEXT_LINES = 8;
+// A test that starts in the restart loop's one-second gap after a death
+// is refused at once; the death line predates it, so the watch also reads
+// back this far and keeps the deaths stamped within LOOKBACK_MS of its
+// start (CI run 36534260026, OMP: a retry and the next test, both refused
+// 0.6 s after a segfault, carried no annotation).
+const LOOKBACK_BYTES = 256 * 1024;
+const LOOKBACK_MS = 5_000;
 
 /** The worker server's log (config-factory.js names it by port). */
 function workerLogFile(suiteDir, port) {
@@ -103,13 +110,17 @@ function deathsIn(text) {
  * @param {import('@playwright/test').TestInfo} testInfo
  * @param {{file: string, offset: number, port: number}} watch
  */
-async function reportServerDeaths(testInfo, {file, offset, port}) {
-    const deaths = deathsIn(readSince(file, offset));
+async function reportServerDeaths(testInfo, {file, offset, port, startedAt = Date.now()}) {
+    const since = startedAt - LOOKBACK_MS;
+    const deaths = deathsIn(readSince(file, Math.max(0, offset - LOOKBACK_BYTES))).filter(
+        (death) => !death.at || Date.parse(death.at) >= since - 1_000,
+    );
     for (const death of deaths) {
         const signal = SIGNALS[death.exit] ? `, ${SIGNALS[death.exit]}` : '';
+        const when = death.at && Date.parse(death.at) < startedAt ? 'just before this test (a second-precision stamp)' : 'during this test';
         const description =
             `php -S on :${port} died${death.at ? ` at ${death.at}` : ''} (exit ${death.exit}${signal}) ` +
-            `during this test and was restarted; the request it was serving got no answer ` +
+            `${when} and was restarted; the request it was serving got no answer ` +
             `(${death.unanswered.length} accepted and unanswered)`;
         testInfo.annotations.push({type: 'server-crash', description});
         // eslint-disable-next-line no-console

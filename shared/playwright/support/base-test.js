@@ -63,9 +63,10 @@ const test = base.test.extend({
             const port = parseInt(process.env.PLAYWRIGHT_BASE_PORT || '8000', 10) + testInfo.parallelIndex;
             const file = workerLogFile(suiteDir, port);
             const offset = logOffset(file);
+            const startedAt = Date.now();
             await use();
             if (testInfo.status !== testInfo.expectedStatus) {
-                await reportServerDeaths(testInfo, {file, offset, port});
+                await reportServerDeaths(testInfo, {file, offset, port, startedAt});
             }
         },
         {auto: true},

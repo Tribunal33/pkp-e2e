@@ -168,8 +168,10 @@ level allows no stage ⚠ [A12](#a12). <sup>k</sup>
 2. **What is listed.** Every role of this journal, whatever its level,
    and nothing from other journals, in no fixed order ⚠ [A13](#a13). A
    new journal usually lists its roles in the order of [the roles
-   table](#default-roles) and a created role at the end, but its rows can
-   come in another order and a created role can be listed first. A role
+   table](#default-roles), but its rows can come in another order. A role
+   made with "Create New Role" is usually listed at the end, but it can
+   be listed first; how often depends on the installation, from rarely to
+   every time, and nothing the manager does changes it. A role
    whose window is saved with "OK" usually moves down the list: on a
    journal or a press to the end, on a preprint server below the roles the
    server was created with and above any created role. <sup>b</sup>
@@ -794,7 +796,7 @@ Left out of the scenarios above, by reason:
   - A12 ("Stage Assignment" hidden, or on screen with every box greyed;
     Fields, the role window)
   - A13 (a saved role moving down the list, a new journal's rows out of
-    the table's order, where created roles land, and a second page
+    the table's order, a role just made listed first, and a second page
     repeating or skipping a role; Rules 2, 4; scenario 1 passes it)
   - A14 (the "Users" tab opened without a reload after a rename; Side
     effects; scenario 4 passes it)
@@ -832,6 +834,9 @@ Left out of the scenarios above, by reason:
   - "Users must be registered and log in to view open access content."
     ticked on a journal (Rule 24; *[Subscriptions & open access
     control](U51-subscriptions.md)*, scenario 15)
+  - the dashboard of an account holding a role made at the "Reviewer"
+    level on a preprint server (OPS2; *[Reviewer's
+    review](U28-reviewers-review.md)*, scenario 17)
 
 ## Findings register
 
@@ -849,6 +854,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | After a filter entry is chosen the filters hide, and only the count line shows the list is filtered | 🐞 | minor | — |
 | [A10](#a10) | A role name of spaces is refused with a different notice while the page's script fails | 🐞 | minor · crash: script | — |
 | [A11](#a11) | "OK" in the window whose Settings box is greyed takes the Settings pages away from the role's holders | 🐞 | user-visible | — |
+| [A13](#a13) | The "Roles" list keeps no fixed order: a role just made can come first, without "Edit" or "Remove", a saved role moves down, and a paged list can show a role twice and another never | 🐞 | user-visible | test run (claude), 2026-09-29 — was ❓ |
 | [A14](#a14) | After a rename on the "Roles" tab, the "Users" tab shows the role's old name until a reload | 🐞 | minor | — |
 | [OMP1](#omp1) | In French a press's "Roles" list heads its External Review column with a code | 🐞 | minor | — |
 | [OPS1](#ops1) | "Users must be registered and log in to view open access content." is not kept on a preprint server | 🐞 | user-visible | — |
@@ -856,7 +862,6 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | A role anyone has ever held can never be removed | ❓ | minor | — |
 | [A7](#a7) | "Abbreviation" is required, and no screen but the role's own window shows it | ❓ | minor | — |
 | [A12](#a12) | "Stage Assignment" was seen both hidden and on screen with every box greyed in the same four window states | ❓ | minor | — |
-| [A13](#a13) | The "Roles" list keeps no fixed order: a saved role moves down, a new journal's rows can come out of the table's order, and a paged list can show a role twice and another never | ❓ | minor | — |
 | [OPS2](#ops2) | A preprint server offers the "Reviewer" level for a new role | ❓ | minor | — |
 
 ### All apps
@@ -865,10 +870,11 @@ an entry notes otherwise; the team settles them on spec review.
 **A1 — The first row of each page has no "Edit" or "Remove"** · 🐞 · user-visible.
 Every row of the "Roles" list has a "Settings" arrow that opens "Edit"
 and "Remove", except the first row of each page. On a new journal that is
-normally the manager role, whose options therefore cannot be changed; on
-a second page, with a filter chosen, or when a new journal lists its roles
-in another order ([A13](#a13)), the role that comes first there loses both
-actions instead, whatever it is. The manager expects every row to offer the
+normally the manager role, whose options therefore cannot be changed.
+On a second page, with a filter chosen, or when the list comes in another
+order (a role just made can come first, [A13](#a13)), the role that comes
+first there loses both actions instead, whatever it is; no other screen
+changes or removes a role. The manager expects every row to offer the
 same actions, or the manager role alone to be kept out on purpose.
 Basis: probe. <sup>f-a1</sup>
 
@@ -993,25 +999,31 @@ ended.
 Basis: probe. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — The "Roles" list keeps no fixed order** · ❓ · minor.
+**A13 — The "Roles" list keeps no fixed order** · 🐞 · user-visible.
 The list keeps no fixed order, on a journal, a press and a preprint
-server alike. Saving a role's window usually moves its row down the list
-(Rule 2), so the order a manager has learned changes after any "OK". A
-new journal's own roles do not always come in the order of the roles
-table either. Once, a new preprint server with nothing saved on it listed
-"Author", "Reader", "Editorial Board Member", "Preprint Server manager"
-and "Moderator": "Author" had no "Edit" or "Remove" ([A1](#a1)), and the
-manager row had both. Once, on a journal, two roles made with "Create New
-Role" were listed above "Journal manager", the first of them without
-"Edit" or "Remove". Every other time a new journal listed its roles in
-the table's order and created roles at the end. With the list on more
-than one page (Rule 4), each page takes its rows from the list in
-whatever order it has when that page opens, so the second page can
-repeat a role the first showed and leave another role off both.
-Question: should the list keep a fixed order, the installed roles first
-in the table's order and created roles after them? Lean: yes, since rows
-that move after a save, a first row that loses its actions, and pages
-that can skip a role read as broken.
+server alike. A role just made with "Create New Role" can be listed
+first, above "Journal manager": a Journal Manager who creates "Data
+editor", reloads the page and opens the "Roles" tab finds it as the
+first row, with no "Edit" or "Remove" ([A1](#a1)), so it can be neither
+changed nor removed, while "Journal manager" below it now offers both.
+How often this happens depends on the installation, not on anything the
+manager does: on one test installation, where the automated tests create
+a role at the same point each time, it came first every time; on
+another, about once in eighty new journals.
+Saving a role's window usually moves its row down the list (Rule 2), so
+the order a manager has learned changes after any "OK". A new journal's
+own roles do not always come in the order of the roles table either.
+Once, a new preprint server with nothing saved on it listed "Author",
+"Reader", "Editorial Board Member", "Preprint Server manager" and
+"Moderator": "Author" had no "Edit" or "Remove", and the manager row had
+both. With the list on more than one page (Rule 4), each page takes its
+rows from the list in whatever order it has when that page opens, so the
+second page can repeat a role the first showed and leave another role off
+both. Expected: a fixed order, the installed roles first in the table's
+order and created roles after them.
+Re-checked: test run (claude), 2026-09-29 — was ❓ (whether the list
+should keep a fixed order); a defect, since a role just made can land
+first and then cannot be edited or removed.
 Basis: probe; test run; code (the pages). <sup>f-a13</sup>
 
 <a id="a14"></a>
@@ -1054,9 +1066,14 @@ greyed out and nothing a reviewer does. With "Allow user
 self-registration" ticked, such a role adds a box to the server's
 Register page labelled "##user.reviewerPrompt.optin##", with "Reviewing
 interests" under it, where a journal and a press read "Yes, request the
-{role} role.".
+{role} role.". An account holding such a role, even beside "Author",
+lands after every sign-in on a reviewer page headed "undefined (0)" under
+an "Error" window, "The current role does not have access to this
+operation."; on a journal and a press such a role lands on "Action
+Required by me" ([Reviewer's review OPS1](U28-reviewers-review.md#ops1)).
 Question: should a preprint server offer the reviewer level at all?
-Lean: no, as its installed roles carry none.
+Lean: no, as its installed roles carry none and the server has no working
+page for the role's holders.
 Basis: probe. <sup>f-ops2</sup>
 
 <a id="ops3"></a>
@@ -1484,7 +1501,12 @@ with `submitted: true`, `decisions: ['skipExternalReview',
 'sendToProduction']`, `publicationFormats: [{name: 'PDF', file:
 'article.pdf'}]` and `published: true` (the format "Approved" and
 "Available", its file "Open Access"); the visitor starts on its book page,
-`catalog/book/{id}`. Live-probed 2026-09-26 (the
+`catalog/book/{id}`. Scenarios 3 to 6 run their steps through
+`replayWhenFirstRow()`: when the row a scenario opens is the list's first
+row, which has no "Settings" arrow ([A1](#a1), [A13](#a13)), the scenario
+starts again from its seeding on a new scratch journal, at most three
+times, each landing recorded as an app defect; a third landing, or a
+missing arrow on any other row, fails the test. Live-probed 2026-09-26 (the
 preamble; all three apps): a scratch context's throwaway manager signing
 in with the username twice; a context seeded with `restrictSiteAccess`
 sending a signed-out visitor from home and an item's page to Login, its
@@ -1585,7 +1607,11 @@ when `empty($rowId)`. Seen 2026-09-04 on all three apps (a reviewer-review
 probe): every row but the first had the "Settings" arrow. The first row
 being the manager role on a new journal is why the *Journal identity &
 about pages* spec reads its row as offering no "Edit". Other page and
-filter cases: [f](#fn-f). Live-probed 2026-09-26: [f](#fn-f).
+filter cases: [f](#fn-f). Live-probed 2026-09-26: [f](#fn-f). A role
+just made listed first (test runs 2026-09-28 and 2026-09-29):
+[f-a13](#fn-f-a13); nothing moves a first row down (no filter, page size
+or page link does, and a saved role only moves down), and the grid is the
+only place a role is edited or removed.
 
 <a id="fn-f-a2"></a>
 **f-a2** — Live-probed 2026-09-19 (the Production stage's claim check, all
@@ -1719,9 +1745,21 @@ screen: the server's five roles, inserted manager first, sat in storage
 order author, reader, Editorial Board Member, manager, moderator, the
 first two in space freed by earlier deleted rows. The next run's new
 server, its rows stored in insertion order, listed the table's order, as
-the OJS and OMP runs of the same day did. Settles it: a new context's
-list, and where created roles land, over several fresh contexts on an
-install where roles have been removed before.
+the OJS and OMP runs of the same day did. Where a new row is stored:
+each save is a new database connection, whose INSERT goes to a page
+PostgreSQL's free space map offers, and once contexts and roles have been
+removed and saved role windows rewritten, that is often an earlier page
+than the context's own rows. Test runs 2026-09-28 (Rule 2; OJS scenario
+3, six CI runs, each on a fresh database): the first attempt, at the same
+position in the run each time, listed the "Data editor" just made
+(Assistant, "Copyediting" ticked) as the first row with no "Settings"
+arrow, above the 18 installed roles, "Journal manager" among them now
+with its arrow; the retry on a new journal listed it last. Test run
+2026-09-29 (OJS scenario 3): with the journal's other rows rewritten
+after the new role's, it came first in 10 of 10 runs; without that, one
+new journal in about eighty listed its created role first on the local
+fleet. Scenarios 3 to 6 therefore start again on a new scratch journal
+when, and only when, the row they open comes first ([s](#fn-s)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Test run 2026-09-26 (Side effects; scenario 4; all three
@@ -1770,7 +1808,26 @@ Register page showed a box labelled "##user.reviewerPrompt.optin##" below
 the privacy and notification boxes, with "Reviewing interests" under it,
 where OJS and OMP read "Yes, request the {role} role." for their created
 Reviewer-level role; on OJS and OMP "Reviewer" opened only the review
-column(s).
+column(s). Live-probed 2026-09-29 (OPS2; all three apps, two runs, a
+created Reviewer-level role "I29 Referee" on a fresh scratch context): on
+OPS its only holder, and a holder of it beside Author, landed after every
+sign-in, and at `dashboard`, `dashboard/reviewAssignments` and
+`submissions`, on `dashboard/reviewAssignments` under the "Error" window
+over a list headed "undefined (0)" ("No Items", "Showing 0 to 0 of 0"),
+the side menu's "My Assignments as Reviewer" with no view under it; "OK"
+closed the window and "Filters" › "Apply Filters" raised it again. The
+list's `GET _submissions?…` answered 401 and the console logged
+`TypeError: Cannot read properties of undefined (reading 'id')` (script
+failure; no 500 and no uncaught page error). The Author's
+`dashboard/mySubmissions` opened cleanly from the side menu; typed
+`dashboard/editorial` gave the access-denied page. OPS's
+`APP\submission\Repository::mapDashboardViews()` offers no reviewer
+views, so the list falls back to the editorial request, which the role
+is refused; `PKPPageRouter::getHomeUrl()` sends a Reviewer-level holder
+with no manager, moderator or assistant role to the reviewer dashboard.
+On OJS and OMP the same created role, alone or beside Author, landed on
+"Action Required by me (0)" with the full reviewer side menu, as the
+installed reviewer roles do.
 
 <a id="fn-f-ops3"></a>
 **f-ops3** — OPS's `locale/fr_CA/locale.po` translates

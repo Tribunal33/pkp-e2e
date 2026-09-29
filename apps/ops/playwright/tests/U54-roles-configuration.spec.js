@@ -34,7 +34,7 @@
  * - A4 🐞: S6 quotes the "Confirm" sentence as the spec gives it; what the
  *   sentence promises is the finding's claim, left unasserted.
  * - A6 ❓: S6 reads "Archive desk"'s refusal as the spec states it.
- * - A13 ❓: every row is found by name; S1 reads a new server's five roles
+ * - A13 🐞: every row is found by name; S1 reads a new server's five roles
  *   as a set, their order left unasserted (a run listed "Author" first,
  *   finding T-ops-1); a role a test opens that lands first: A1 above.
  * - T-ops-2 (T-ojs-1 on OJS): S4 reads the "Users" tab after a reload; the

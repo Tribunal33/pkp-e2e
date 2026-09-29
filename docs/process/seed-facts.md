@@ -194,6 +194,12 @@ behind a line; that scratch is deleted after review.
   "Users must be registered…" sends the same addresses to
   `login?source=…` and back after sign-in. All three apps, 2026-09-29
   (U59 claim check I29, `shared/playwright/checks/U59/I29/`).
+- {OPS} An account holding a created "Reviewer"-level role (and no
+  manager, moderator or assistant role) lands after sign-in on a broken
+  reviewer dashboard ("undefined (0)" under an "Error" window, U54 OPS2);
+  a script dismisses that window with its "OK" before pressing anything,
+  and it comes back on every load. 2026-09-29 (U54 claim check I29,
+  `shared/playwright/checks/U54/I29/`).
 - A context created with French under "UI" (seeded or on Hosted Journals)
   already holds the French default texts (privacy statement, For
   Readers/Authors/Librarians, author guidelines, wizard help) and, on a
