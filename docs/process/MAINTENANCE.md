@@ -211,8 +211,9 @@ The apps move; the suite follows. The baselines live in
    `docs/process/REPORT.md`: impact in plain words first, then steps a
    person follows on a fresh install with expected and observed verbatim,
    the cause, a proposed fix, and the evidence last. The report is
-   posted into the session's thread as a file with the day's summary AND
-   sent as a direct message to @beaug and @jarda.kotesovec the same day;
+   posted into the session's thread as a file the same day, in a post that
+   tags @beaug and @jarda.kotesovec (no direct messages, maintainer
+   2026-09-29);
    the regression gets a row
    in `ci-triage.md` "Open regressions" linking the report, with its
    reproduction script kept under `shared/playwright/checks/sync/<pr>/`
@@ -220,12 +221,12 @@ The apps move; the suite follows. The baselines live in
    so the next sync re-runs it instead of re-deriving it. The report is
    deleted once the team has acted on it (RUNBOOK "What goes where"); the
    row and the register entry keep the pointer. Nothing unconfirmed
-   reaches the report or the DMs, because a false regression report costs
+   reaches the report or the tags, because a false regression report costs
    more than a missed one. If a shipped suite
    should have caught it, the missing check is a **Planned** item in the
    owning spec. Anything security-shaped follows RUNBOOK "What goes where":
    verify privately, on Mattermost say only THAT an observation was
-   routed, then ping the maintainer.
+   routed, in a thread post tagging @jarda.kotesovec and @beaug.
 6. **Advance the baseline.** Update `upstream-sync.md` with the new SHAs and
    a dated log entry: one line per change reviewed (commit, coverage
    verdict, regression verdict when an agent read it, what was touched or
@@ -311,7 +312,7 @@ command points it at the line; without it every command means `main`.
    (`docs/reports/<date>-<repo>-<pr>-stable-3_5_0.md`) and one sentence on
    whether `main` shows the same, driven on both. A regression `main`
    shows too is `main`'s finding first and takes the usual path there. A
-   stable-only one gets the DMs, the ci-triage "Open regressions" row with
+   stable-only one gets the tagged post, the ci-triage "Open regressions" row with
    `stable-3_5_0` in its Apps cell, and its kept script under
    `shared/playwright/checks/sync/<repo>-<pr>/` beside the `main` twin's
    when there is one. No register entry: the specs describe `main`.
@@ -474,7 +475,7 @@ merge (first run: issue pkp/pkp-lib#13274, companion `13274`, 2026-09-12).
    tables; see `checks/sync/pkp-lib-13317/`). Kept checks go under
    `shared/playwright/checks/sync/<repo>-<pr>/` on the companion, with the
    before-evidence recorded at the previous tip. A confirmed regression or
-   intention gap follows step 5's report and DMs; a behavior the issue
+   intention gap follows step 5's report and tags; a behavior the issue
    leaves open is a ❓ in the owning spec, posted in the thread, and the
    team's reply is recorded as the entry's verdict the same day.
 5. **Run the suites on CI at the PR refs.** Push the companion, then

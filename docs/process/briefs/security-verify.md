@@ -7,7 +7,7 @@
 {{fleet_json}}     .reports/{{feature}}/fleet.json
 {{agent}}          PROBE_AGENT, e.g. sec (scripts and outputs under .reports/{{feature}}/{{agent}}/)
 {{date}}           today's date, YYYY-MM-DD
-{{vm_or_local}}    "on the VM: send the direct Mattermost message the Frame names" or "on the maintainer's machine: send no Mattermost message"
+{{vm_or_local}}    "on the VM" or "on the maintainer's machine"; either way the probe sends no Mattermost message (the orchestrator tags the maintainers in the thread)
 {{frame}}          docs/process/briefs/frame.md, pasted verbatim
 Dispatch with the description "U<nn> security verification": bin/check-models.mjs knows the probe by it.
 -->
@@ -37,7 +37,7 @@ An unverified entry may leave `cause` and `fix` at their placeholders; the verif
 
 The file has two sections. **Open** holds the entries above. **Handled** holds one line per closed item (`SEC-id — disposition, date`, where the disposition is fixed, accepted or dismissed); the maintainer moves entries there on review. Handled lines are tombstones: check them before filing, and do not re-file a handled problem unless the behavior has demonstrably changed (then file a new Open entry naming the old id). If the file is absent, create it with the two headings. An absent file or an empty Open section means "no open concerns", not "never checked". At session end, after the verification pass, the file is left tidy: dismissed entries deleted, duplicates merged, every remaining Open entry distinct and `verified`, apart from one the probe could not settle.
 
-The repos are public, so such a finding's content never appears in a spec, test, `.reports/` file, PROGRESS note or commit message; the claim it would have supported is left out or kept generic until the fix ships. The fact of routing is never silent: a return or report says "one observation routed to the security file, verified" (or "dismissed") so the maintainer knows to look. On the VM the same file is written at the same path relative to the repo, and the session also sends a direct Mattermost message to @jarda.kotesovec and @beaug with the observation, so they see it without opening the VM; the content never appears in a channel post.
+The repos are public, so such a finding's content never appears in a spec, test, `.reports/` file, PROGRESS note or commit message; the claim it would have supported is left out or kept generic until the fix ships. The fact of routing is never silent: a return or report says "one observation routed to the security file, verified" (or "dismissed") so the maintainer knows to look. On the VM the same file is written at the same path relative to the repo, and the orchestrator says so in the session's thread in one post that tags @jarda.kotesovec and @beaug with the fact only ("one observation routed to the security file, verified"), never the content: they read it in `../e2e_ng/security.md` on the VM. No direct messages (maintainer, 2026-09-29).
 
 ## The probe
 
