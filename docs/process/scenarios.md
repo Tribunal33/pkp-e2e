@@ -2720,7 +2720,14 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   ticked; the submission key `articleNumber` does not read it (U13).
 - Section: `sections[].hideAuthor` (OJS), the section form's "Omit author
   names for section items from issues' table of contents."; it is ticked
-  on screen (U13 claim check K5, 2026-09-25).
+  on screen (U13 claim check K5, 2026-09-25); `sections[].isInactive` and
+  `sections[].editorRestricted`, the form's "Mark this section as
+  inactive…" and "Items can only be submitted by Editors and Section
+  Editors." boxes, ticked on screen (U22 claim check I28, 2026-09-28).
+- Submission: `contributors[].biography` and `contributors[].roles` (a
+  "Bio Statement", a role other than "Author"); set in the Contributors
+  window, which names a scratch submitter "{given} {family}" (U69 claim
+  check K5, 2026-09-28).
 - Galley of a dependent component: `galleys[].genre` refuses "Image" and
   "HTML Stylesheet" (400) as the galley upload wizard does not offer them,
   so no galley of either is seeded or uploaded (U13 claim check K2,

@@ -187,6 +187,13 @@ behind a line; that scratch is deleted after review.
   as `catalog`); a context closed by "Users must be registered…" answers
   such an address with the bare "404 Not Found". 2026-09-27 (U68 claim
   check K1, `.reports/U68/ccK1/c-03-*`).
+- A context not enabled publicly sends a signed-out visitor to
+  `{path}/login` with no `source`, so a sign-in there lands by role (a
+  manager on `dashboard/editorial`, a reader on `{path}/index`), and its
+  "Register" and "Home" load the Login page again; a context closed by
+  "Users must be registered…" sends the same addresses to
+  `login?source=…` and back after sign-in. All three apps, 2026-09-29
+  (U59 claim check I29, `shared/playwright/checks/U59/I29/`).
 - A context created with French under "UI" (seeded or on Hosted Journals)
   already holds the French default texts (privacy statement, For
   Readers/Authors/Librarians, author guidelines, wizard help) and, on a

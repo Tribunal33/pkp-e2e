@@ -339,7 +339,10 @@ over.
     `isVisible({timeout})` ignores its timeout (`npm run lint:suite`).
     A list the app does not order (no ORDER BY, or ties on a non-unique
     key) is compared as a set whatever the spec's wording, and a spec that
-    claims an order such a query does not give is a spec correction.
+    claims an order such a query does not give is a spec correction. That
+    holds for a second read of the same list too (a report downloaded twice,
+    an export against an earlier one): its ties move between two requests
+    on a busy database (U65 S7 OJS, five CI reds 2026-09-28).
 15. **A file chooser opened from the keyboard needs interception already on.**
     `page.waitForEvent('filechooser')` switches Playwright's chooser
     interception on without waiting for the browser, and switches it off again
@@ -348,6 +351,16 @@ over.
     (2026-09-24). Keep one `page.on('filechooser', () => {})` for the page's
     life, armed when the page object is built (`AppearancePages.js`
     `armFileChooser`), and make one round trip to the page before the key.
+16. **A computed style is settled only once the page's stylesheets are in.**
+    On a reader-facing page the theme's stylesheet is a PHP request
+    (`css?name=stylesheet`) fetched again on every page, and the scripts sit
+    in the footer, so the body is visible while that request is still out; a
+    `getComputedStyle` or position read then answers without the theme (a
+    marked link has no bar, an indented one no indent). `page.goto()` and
+    `reload()` wait for it; a link's `click()`, a heading assertion and
+    `toHaveURL` do not. A page-object reader of styles or geometry calls
+    `BasePage.stylesApplied()` (the `load` state) before it reads (OMP U16
+    S8, 10 of 10 red with the stylesheet held 3 s, 2026-09-29).
 
 ## Tag conventions
 
@@ -477,7 +490,8 @@ no cleanup fixture.
   uninitialized editor loses the body, and the save 500s on a null message.
   Wait for the editor's `initialized` before selecting. `ReviewStagePages`'s
   `addReviewer` does this; the 450ms modal slide used to mask the problem.
-  Any TinyMCE box in a Vue form must be `initialized` before typing (text
+  Any TinyMCE box, in a Vue form or a legacy one (the reviewer's step-3
+  comments, U27 S16 2026-09-29), must be `initialized` before typing (text
   typed earlier is wiped, or the save posts nothing for it), through
   `waitForEditorReady(page, id)` (`shared/playwright/support/richtext.js`):
   a read-back right after an early fill passes while the old value is
@@ -614,7 +628,11 @@ proved wrong, a wait that hangs. Kept claim-check scripts live in
 `require('../../../probe')`.
 `idle(page)` is `waitForJQueryIdle` plus a bounded network-quiet wait, so a
 Vue panel that fetches its own data on landing (a dashboard tab, a workflow
-step's discussions panel) is on screen before `screen()` reads; `tag(prefix)`
+step's discussions panel) is on screen before `screen()` reads, and after
+a press on a page already landed it waits out the requests the press
+started (a pager's debounced fetch, a Reviewer Files grid's, a save's
+"Refreshing data"), which Playwright's `networkidle`, fired once per page
+load, does not (U23, U26, U27 claim checks); `tag(prefix)`
 makes a scratch tag that follows the tag conventions above. `signIn` uses
 the roster password rule, so it works for scratch users too; `signIn(page,
 user, {contextPath})` goes through that journal's own login page (which

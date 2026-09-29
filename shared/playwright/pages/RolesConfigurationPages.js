@@ -77,6 +77,55 @@ async function settle(page) {
 /** Predicate for the grid's redraw request. */
 const isFetchGrid = (r) => r.url().includes('user-group-grid/fetch-grid');
 
+/**
+ * What `RolesTab.openRowActions()` throws when the role asked for is the
+ * first row of the Roles list: the row has no "Settings" arrow, so no
+ * "Edit" or "Remove" (register A1), and where a role lands is the
+ * database's storage order (A13), which no screen changes.
+ */
+class FirstRowError extends Error {
+    /** @param {string} role */
+    constructor(role) {
+        super(
+            `"${role}" is the first row of this page of the Roles list, which has no "Settings" arrow, so no "Edit" or "Remove" (register A1). The list keeps no fixed order (A13) and no filter or page size moves a first row down; the role landed first in this context's storage order.`
+        );
+        this.name = 'FirstRowError';
+        this.role = role;
+    }
+}
+
+/**
+ * Run a U54 scenario from its seeding, and run it again on a fresh scratch
+ * context when, and only when, a role it opens landed first in the Roles
+ * list (`FirstRowError`, register A1 met through A13's order), at most
+ * `attempts` times. Every attempt seeds its own context and asserts
+ * everything; each landing is kept as an `app-defect` annotation and a log
+ * line. Any other red, and the last attempt's, is thrown as it is.
+ * Mechanism: `.reports/flake-2026-09-29/u54s3/diagnosis.md` (a created
+ * role stored on an earlier heap page than its context's own rows).
+ *
+ * @template T
+ * @param {import('@playwright/test').TestInfo} testInfo
+ * @param {(attempt: number) => Promise<T>} body
+ * @param {{attempts?: number}} [options]
+ * @returns {Promise<T>}
+ */
+async function replayWhenFirstRow(testInfo, body, {attempts = 3} = {}) {
+    for (let n = 1; ; n++) {
+        try {
+            return await body(n);
+        } catch (error) {
+            if (!(error instanceof FirstRowError) || n >= attempts) {
+                throw error;
+            }
+            const description = `U54 A1 (A13's order), attempt ${n}: "${error.role}" was the first row of the Roles list, with no "Settings" arrow; the scenario runs again on a fresh context`;
+            testInfo.annotations.push({type: 'app-defect', description});
+            // eslint-disable-next-line no-console
+            console.log(`[U54 ${testInfo.title.split(':')[0]}] ${description}`);
+        }
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Settings › Users & Roles › "Roles"
 // ---------------------------------------------------------------------------
@@ -272,22 +321,31 @@ class RolesTab extends BasePage {
      *
      * The first row of each page has no arrow (register A1), and the list
      * has no fixed order (A13): it is the database's storage order, in which
-     * a new context's roles can land anywhere (U54 T-ops-1). The level and
-     * stage filters and every "Items per page" run the same unordered query
-     * with a narrower WHERE or an OFFSET, so they usually keep the rows'
-     * relative order, but not always: a row rewritten between two reads
-     * (a saved role, or space a parallel test's write reuses) can move, and
-     * a page can then repeat or skip a role (U54 Rule 4). A role that lands
-     * first fails here, naming A1, never skipped.
+     * a new context's roles, and a role created or seeded later, can land
+     * anywhere, first included (U54 T-ops-1; CI 2026-09-28,
+     * `.reports/flake-2026-09-29/u54s3/diagnosis.md`). The level and stage
+     * filters and every "Items per page" run the same unordered query with a
+     * narrower WHERE or an OFFSET, so they usually keep the rows' relative
+     * order, but not always: a row rewritten between two reads (a saved
+     * role, or space a parallel test's write reuses) can move, and a page can
+     * then repeat or skip a role (U54 Rule 4). No filter or page size moves a
+     * first row down, so a role that lands first throws `FirstRowError`
+     * (checked: the row has no arrow AND is the list's first row), which
+     * `replayWhenFirstRow()` answers with a fresh context; a missing arrow
+     * on any other row is a plain failure.
      */
     async openRowActions(name) {
         const row = this.row(name);
         await expect(row).toHaveCount(1, {timeout: T});
-        await expect(
-            row.locator('a.show_extras, a.hide_extras'),
-            `"${name}" is the first row of this page of the Roles list, which has no "Settings" arrow, so no "Edit" or "Remove" (register A1). The list keeps no fixed order (A13) and no filter or page size moves a first row down; the role landed first in this context's storage order.`
-        ).toHaveCount(1, {timeout: 5_000});
         const id = await row.getAttribute('id');
+        try {
+            await expect(this.arrow(name), `the "Settings" arrow of the "${name}" row`).toHaveCount(1, {timeout: 5_000});
+        } catch (error) {
+            if (id && id === (await this.rows().first().getAttribute('id'))) {
+                throw new FirstRowError(name);
+            }
+            throw error;
+        }
         const line = this.page.locator(`tr[id="${id}"] + tr`);
         const edit = line.getByRole('link', {name: 'Edit', exact: true});
         if (!(await edit.isVisible())) {
@@ -559,4 +617,4 @@ class SiteAccessTab extends BasePage {
     }
 }
 
-module.exports = {RolesTab, RoleWindow, RemoveRoleDialog, SiteAccessTab, settleRoles: settle};
+module.exports = {RolesTab, RoleWindow, RemoveRoleDialog, SiteAccessTab, FirstRowError, replayWhenFirstRow, settleRoles: settle};

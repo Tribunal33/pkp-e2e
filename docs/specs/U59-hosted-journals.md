@@ -194,10 +194,21 @@ wizard, the journal's primary language. <sup>c</sup> <sup>d</sup>
     the site's home page lists the journal (Rule 20). Unticked and
     saved: <sup>i</sup> <sup>td8</sup>
     - the site's home page leaves it out;
-    - a signed-out visitor who opens any of its pages lands on the Login
-      page
+    - a signed-out visitor who opens any of its pages (its home, About,
+      article and file pages; {OJS} an issue; {OMP} a book's version or
+      chapter) lands on its Login page
       ([Journal identity & about pages](U07-journal-identity-and-about-pages.md),
       Rule 22);
+    - signing in on that Login page does not lead on to the page asked
+      for, as signing in after other interrupted visits does
+      ([Login & sessions](U01-login-and-sessions.md), Rule 4). It leads
+      where signing in on a Login page opened directly does (Login &
+      sessions, Rule 3): a Journal Manager to the journal's Dashboard, a
+      Reader to the journal's home page ⚠ [A8](#a8) <sup>td8</sup>;
+    - on that Login page, "Register" (in the header and under the form)
+      and "Home" in the trail each load the Login page again, while
+      "Forgot your password?" opens "Reset Password": an account can be
+      reset there but not created ⚠ [A9](#a9) <sup>td8</sup>;
     - its published items leave the site-wide harvesting address
       ([OAI-PMH](U19-oai-pmh.md), Rule 16b);
     - its row stays on Hosted Journals, and its "Edit" and Settings
@@ -229,6 +240,15 @@ wizard, the journal's primary language. <sup>c</sup> <sup>d</sup>
     the journal with everything in it (Side effects); every address of
     the journal then answers "404 Not Found". Nothing brings it back.
     <sup>k</sup> <sup>td10</sup>
+
+    {OMP OPS} A press (preprint server) that holds an institution is not
+    removed: "OK" makes the app fail, the "Confirm" window stays open with
+    no message until its "Cancel" is pressed, and the row stays, also
+    after a reload. The press is left with no roles: its Settings pages
+    answer "The current role does not have access to this operation." even
+    to the Site Administrator, while its home page still opens for anyone
+    and its row's "Settings wizard" still opens. A second "Remove" fails
+    the same way ⚠ [A10](#a10). <sup>td10</sup>
 15. **The accounts stay.** Removing a journal deletes no account. Its
     users lose their roles in it and keep the rest. An account whose
     only roles were in the removed journal still signs in and lands on
@@ -325,8 +345,10 @@ wizard, the journal's primary language. <sup>c</sup> <sup>d</sup>
   deleted with it: its submissions and their files, {OJS} its issues and
   subscriptions, its sections or series, its roles and every user's
   roles in it, its components, announcements, highlights, navigation
-  menus, edited email templates, review forms, institutions, plugin
-  settings, its uploaded files, and its tasks in the Tasks panel.
+  menus, edited email templates, review forms, {OJS} institutions (a
+  press or preprint server that holds one is not removed at all, Rule 14,
+  [A10](#a10)), plugin settings, its uploaded files, and its tasks in the
+  Tasks panel.
   Accounts stay (Rule 15). Each published article or book reads as a
   deleted record at the site-wide harvesting address
   ([OAI-PMH](U19-oai-pmh.md), Rule 4b); a removed preprint server leaves
@@ -410,6 +432,12 @@ describe, and the ones below change what this spec's screens do.
 - [Registration & account validation](U02-registration-and-account-validation.md)
   owns the site-level Register page, whose list of journals follows the
   site's order (Rule 13).
+- [Login & sessions](U01-login-and-sessions.md) owns the Login page
+  and where a sign-in lands (its Rules 3–4); Rule 11 says what a journal
+  not enabled publicly changes there.
+- [Institutions](U66-institutions.md) owns a journal's institutions; its
+  [A8](U66-institutions.md#a8) records, from its side, the press that
+  cannot be removed while it holds one (Rule 14).
 
 ## Canonical scenarios
 
@@ -778,6 +806,11 @@ Left out of the scenarios above, by reason:
     scenario 2 marks it)
   - A7 (the page's script failing when the "Edit" or "Create Journal"
     window is closed right after it opens; Rule 8)
+  - A8 (signing in from the Login page of a journal not enabled
+    publicly not leading on to the page asked for; Rule 11)
+  - A9 ("Register" and "Home" reloading that Login page; Rule 11)
+  - A10 ({OMP OPS} "Remove" failing on a press or preprint server that
+    holds an institution; Rule 14)
   - OPS1 (the path "0" refused with a raw code on a preprint server;
     Fields)
 - **No seed**:
@@ -845,8 +878,11 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | After a path change on the Settings Wizard, its further saves and list actions fail until a reload | 🐞 | minor | — |
 | [A6](#a6) | "Jump to next error" never gets past the first refused field | 🐞 | minor | — |
 | [A7](#a7) | Closing the "Edit" or "Create Journal" window right after it opens makes the page's script fail | 🐞 | invisible · crash: script | — |
+| [A8](#a8) | Signing in from the Login page of a journal not enabled publicly does not lead on to the page the visitor asked for | 🐞 | minor | — |
+| [A10](#a10) | A press or preprint server that holds an institution cannot be removed and is left half deleted {OMP OPS} | 🐞 | user-visible · crash: server | — |
 | [OPS1](#ops1) | The path "0" is refused with a raw code on a preprint server | 🐞 | minor | — |
 | [A5](#a5) | A changed path leaves the default "For Readers" and "For Authors" texts linking to the old address {OJS OMP} | ❓ | minor | — |
+| [A9](#a9) | On the Login page of a journal not enabled publicly, "Register" and "Home" load the Login page again | ❓ | minor | — |
 
 ### All apps
 
@@ -925,6 +961,43 @@ a moment later the page's script fails: nothing on screen shows it or
 changes. A window left open longer closes without the failure. A person
 rarely closes that fast; an automated test does.
 Basis: test run. <sup>f-a7</sup>
+
+<a id="a8"></a>
+**A8 — A journal not enabled publicly forgets the page a visitor asked for** · 🐞 · minor.
+A signed-out visitor who opens an article, a file or the About page of a
+journal not enabled publicly (an author or editor following a link
+before the journal goes public, say) is sent to its Login page. After
+signing in they expect that page, as on a journal closed by "Users must
+be registered and log in to view the journal site.", where the sign-in
+leads straight back to it. Instead a Journal Manager lands on the
+Dashboard and a Reader on the journal's home page, and the page asked
+for has to be found again (Rule 11).
+Basis: probe. <sup>f-a8</sup>
+
+<a id="a9"></a>
+**A9 — "Register" and "Home" lead nowhere on the Login page of a journal not enabled publicly** · ❓ · minor.
+The Login page a signed-out visitor meets at a journal not enabled
+publicly offers "Register" in the header, "Register" under the form and
+"Home" in the trail. Each loads the same Login page again with no
+message, so a visitor who presses "Register" cannot tell why nothing
+happens; only "Forgot your password?" leads on (Rule 11).
+Question: should that Login page offer "Register" and "Home" at all?
+Lean: hide them; a journal not yet public takes no registrations, and a
+link that reloads the page it is on explains nothing.
+Basis: probe. <sup>f-a9</sup>
+
+<a id="a10"></a>
+**A10 — A press or preprint server that holds an institution cannot be removed** · 🐞 · user-visible · crash: server.
+{OMP OPS} The Site Administrator presses "Remove" and then "OK" on
+Hosted Presses (Hosted Servers) for a press that holds an institution
+and expects it deleted, as a journal with institutions and a press
+without one are. The app fails on the server instead: the "Confirm"
+window stays open with no message, the press stays listed, and it is
+left half deleted, with no roles and its Settings pages closed even to
+the Site Administrator (Rule 14). The Institutions spec's
+[A8](U66-institutions.md#a8) records the same failure from the
+institutions' side.
+Basis: probe. <sup>f-a10</sup>
 
 ### OPS
 
@@ -1330,6 +1403,25 @@ own Journal Manager still opened its home page. The item's site-wide
 harvesting record read `status="deleted"` while the box was unticked and
 came back with its original datestamp once it was ticked again, when the
 site's home page listed the journal again.
+Live-probed 2026-09-29 (Rule 11; A8, A9), three apps, two runs each, on
+a scratch context seeded not enabled, holding one published item with a
+file ({OJS} in a published issue), and a control context enabled with
+"Users must be registered and log in to view the journal site." ("…the
+press site.", "…the server site.") ticked. Signed out, the first's home,
+About, item and file pages, {OJS} the issue and {OMP} a version and a
+chapter each went to `{path}/login` with no `source`, the form's hidden
+`source` empty. Signing in there, its Journal Manager (from the item)
+landed on `dashboard/editorial?currentViewId=assigned-to-me`
+("Submissions | {journal}") and its Reader (from About and from the
+file) on `{path}/index`. The control's same addresses went to
+`login?source=%2Findex.php%2F{path}%2F…`, and the same sign-ins returned
+to the item, About and the file; on OMP the file then failed to show as
+the Monograph landing page spec's A9 records. On the first Login page
+"Register" (the header's and the form's) and the trail's "Home" loaded
+`{path}/login` again ("Login | {journal}") and "Forgot your password?"
+opened "Reset Password"; on the control's, "Register" opened "Register |
+{journal}" and "Home" the Login page with `source` set. The seeded
+journal's About opened signed out.
 
 <a id="fn-j"></a>
 **j** — `OrderGridItemsFeature` (over `OrderItemsFeature`): the grid
@@ -1394,6 +1486,26 @@ that was Author there and in another journal kept that role. The item's
 site-wide harvesting record read deleted on OJS and OMP; on OPS it
 answered "idDoesNotExist". The rest of Side effects' list rests on note
 k, since every address of the journal answers "404 Not Found".
+Live-probed 2026-09-29 (Rule 14; Side effects, removing; A10), three
+apps, two runs each and a third removal pair per app, on scratch contexts
+holding one institution and a control holding none. OJS: "OK" answered
+200, the row went at once and after a reload, the database kept no
+journal, institution or role of it, and its Settings, Institutions and
+Users & Roles addresses and its home page answered "404 Not Found". OMP
+and OPS: "OK" answered 500 on
+`POST index/$$$call$$$/grid/admin/context/context-grid/delete-context?rowId={id}`;
+the "Confirm" window stayed open with its question, no message, page
+notice or browser dialog; its "Cancel" closed it and the row stayed, on
+the page and after a reload. The database kept the press (server) and
+its institution with no user groups. As the Site Administrator its
+Settings › Press (Server), Institutions and Users & Roles addresses
+answered the access-denied page; its home page opened (200, its name as
+title) for the Site Administrator and signed out. Its row's "Settings
+wizard" opened "Settings Wizard" with its name in the form (the Plugin
+Gallery's list failing as the Plugins management spec's A1 records). A
+second "Remove" › "OK" answered 500 again, with the same open window and
+the row kept. The control without an institution was removed (200,
+"404 Not Found" afterwards).
 
 <a id="fn-l"></a>
 **l** — `AdminHandler::wizard()`: `$args[0]` must be digits and name an
@@ -1627,6 +1739,37 @@ scenario 3, OMP in scenarios 3 and 5, OPS in scenario 5).
 No other window close in those runs raised it, the "Edit" window's own
 close about a second after "Saved" and a "Create Journal" window closed
 after typing included. Nothing on screen differed.
+
+<a id="fn-f-a8"></a>
+**f-a8** — `PKPPageRouter::route()` sends a signed-out request for a
+context that is not enabled to `$request->redirect(null, 'login')`, with
+no `source`; only the `login` and `invitation` pages pass. The code is
+identical in the three checkouts. A journal requiring sign-in goes
+through `Validation::redirectLogin()` instead, which appends `source`
+(the Login & sessions spec's note b), and `LoginHandler::_redirectAfterLogin()`
+without a `source` sends a role holder to the dashboard and a Reader to
+the journal's `index`. The same missing return address was sighted on
+2026-09-25 and 2026-09-26 on the web feeds and the sitemap (the Web
+feeds spec's note td12, the Search engine metadata spec's note q8) and on
+2026-09-28 on the LOCKSS and CLOCKSS pages (the Archiving & preservation
+spec's note k) and on a book's pages (OMP). Live-probed 2026-09-29, three
+apps, two runs each: note td8.
+
+<a id="fn-f-a9"></a>
+**f-a9** — The Login page's "Register" links (`user/register`, the
+form's with an empty `source`) and the trail's "Home" (`index`) are page
+requests at the same context, so the gate of note f-a8 sends each back
+to `login`; "Forgot your password?" (`login/lostPassword`) passes because
+the `login` page is exempt. Live-probed 2026-09-29, three apps, two runs
+each: note td8.
+
+<a id="fn-f-a10"></a>
+**f-a10** — `PKPContextService::delete()` deletes the context's user
+groups and genres before its institutions; on OMP and OPS the
+institutions' delete fails (the Institutions spec's note f-a8 traces
+it), so the request dies after the roles are gone and before the context
+is. First seen 2026-09-28 (the Institutions spec's A8). Live-probed
+2026-09-29, three apps, two runs each: note td10.
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — `PKPContextService::validate()` adds

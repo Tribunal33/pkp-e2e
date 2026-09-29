@@ -54,6 +54,7 @@ const {SuggestedReviewersPanel, SUGGESTED_PANEL_HEADING} =
 const {LoginPage} = require('../../../../shared/playwright/pages/LoginPage.js');
 const {getPassword} = require('../../../../shared/playwright/data/users.js');
 const {waitForJQueryIdle} = require('../support/legacy.js');
+const {waitForEditorReady, editorIdOf} = require('../../../../shared/playwright/support/richtext.js');
 
 /** Default upload fixture (app-local). */
 const FIXTURE_PDF = path.join(__dirname, '..', 'fixtures', 'files', 'article.pdf');
@@ -918,18 +919,22 @@ exports.performReview = async function performReview(page, contextPath, submissi
     await expect(submitButton.filter({visible: true})).toBeVisible({timeout: 30_000});
     // Step 3's comment boxes are TinyMCE-backed: type through the editor
     // (click + key events) — a DOM-level fill() bypasses the editor model
-    // and the typed text never reaches the submitted textarea.
-    if (comments) {
-        const body = page
-            .frameLocator('iframe[id^="comments"]:not([id^="commentsPrivate"])')
-            .locator('body');
+    // and the typed text never reaches the submitted textarea. And only once
+    // the editor is `initialized`: its content style sheets arrive after the
+    // box is editable and load the empty start value over earlier keys
+    // (shared/playwright/support/richtext.js).
+    const typeComment = async (frameSelector, text) => {
+        const iframe = page.locator(frameSelector).first();
+        await waitForEditorReady(page, await editorIdOf(iframe));
+        const body = iframe.contentFrame().locator('body');
         await body.click();
-        await body.pressSequentially(comments);
+        await body.pressSequentially(text);
+    };
+    if (comments) {
+        await typeComment('iframe[id^="comments"]:not([id^="commentsPrivate"])', comments);
     }
     if (privateComments) {
-        const body = page.frameLocator('iframe[id^="commentsPrivate"]').locator('body');
-        await body.click();
-        await body.pressSequentially(privateComments);
+        await typeComment('iframe[id^="commentsPrivate"]', privateComments);
     }
     await page.locator('select[id="reviewerRecommendationId"]').selectOption({label: recommendation});
     await submitButton.click();

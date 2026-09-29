@@ -436,6 +436,7 @@ async function launch(app, {storageState, headless = true, record: keepRecord = 
                 .catch(() => {});
         }
     });
+    context.on('page', trackTraffic); // idle() waits out a press's requests
     const page = await context.newPage();
     // Console errors and warnings and uncaught page errors go into the run
     // record (capped); a script that needs every level attaches its own.
@@ -713,17 +714,72 @@ function note(text) {
     fs.appendFileSync(file, `${header}- ${agent}${app}: ${String(text).replace(/\s+/g, ' ').trim()}\n`);
 }
 
+// The page's requests in flight, for idle(). Playwright's 'networkidle' fires
+// once per document, so after a press on a page already landed it resolves at
+// once; these sets are what idle() waits out then.
+const pageTraffic = new WeakMap();
+
+function trackTraffic(page) {
+    let traffic = pageTraffic.get(page);
+    if (!traffic) {
+        traffic = {inflight: new Set(), last: 0};
+        const start = (req) => {
+            traffic.inflight.add(req);
+            traffic.last = Date.now();
+        };
+        const end = (req) => {
+            if (traffic.inflight.delete(req)) {
+                traffic.last = Date.now();
+            }
+        };
+        page.on('request', start);
+        page.on('requestfinished', end);
+        page.on('requestfailed', end);
+        // A request the previous document left unfinished never reports its
+        // end once the page has moved on, so a navigation drops it.
+        page.on('framenavigated', (frame) => {
+            if (frame !== page.mainFrame()) {
+                return;
+            }
+            for (const req of traffic.inflight) {
+                if (!req.isNavigationRequest()) {
+                    traffic.inflight.delete(req);
+                }
+            }
+        });
+        pageTraffic.set(page, traffic);
+    }
+    return traffic;
+}
+
 /**
  * Wait until jQuery has no in-flight requests (legacy grids, AjaxModals)
  * and the network has been quiet for half a second, which is when a Vue
  * panel that fetches its own data on landing (a dashboard tab, a workflow
- * step's discussions panel) is actually on screen. The quiet wait gives up
- * silently after five seconds, so a page that keeps polling cannot hang a
- * script.
+ * step's discussions panel) is actually on screen. After a press on a page
+ * already landed, it also waits out the requests the press started (a
+ * list's debounced fetch after a pager press, a file grid's own fetch, the
+ * workflow's refresh after a save): when one is out, or starts within
+ * 100 ms, it waits until the page has had none for half a second. Each
+ * quiet wait gives up silently after five seconds, so a page that keeps
+ * polling cannot hang a script.
  */
 async function idle(page) {
     await waitForJQueryIdle(page);
     await page.waitForLoadState('networkidle', {timeout: 5_000}).catch(() => {});
+    const traffic = trackTraffic(page);
+    const began = Date.now();
+    await pause(100);
+    if (traffic.inflight.size === 0 && traffic.last < began) {
+        return;
+    }
+    const deadline = began + 5_000;
+    while (Date.now() < deadline && !page.isClosed()) {
+        if (traffic.inflight.size === 0 && Date.now() - traffic.last >= 500) {
+            return;
+        }
+        await pause(100);
+    }
 }
 
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

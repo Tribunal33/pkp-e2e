@@ -40,6 +40,7 @@ const {LoginPage} = require('../../../../shared/playwright/pages/LoginPage.js');
 const {getPassword} = require('../../../../shared/playwright/data/users.js');
 const {topModal, walkDecisionWizard} = require('../pages/ReviewStagePages.js');
 const {reviewDetailsModal, markReviewComplete} = require('../pages/ReviewerAssignmentPages.js');
+const {waitForEditorReady, editorIdOf} = require('../../../../shared/playwright/support/richtext.js');
 
 const PK = 'publicknowledge';
 const ACCESS_DENIED = 'The current role does not have access to this operation.';
@@ -128,8 +129,12 @@ async function submitAcceptedReview(page, contextPath, submissionId, comment) {
     const toStep3 = page.getByRole('button', {name: 'Continue to Step #3'}).filter({visible: true});
     await expect(toStep3).toBeVisible({timeout: 30_000});
     await toStep3.click();
-    const commentsBody = page.frameLocator('iframe[id^="comments-"]').first().locator('body');
+    const commentsFrame = page.locator('iframe[id^="comments-"]').first();
+    const commentsBody = commentsFrame.contentFrame().locator('body');
     await expect(commentsBody).toBeVisible({timeout: 30_000});
+    // Type only once the editor is `initialized`: earlier text is wiped by
+    // its late content style sheets (shared/playwright/support/richtext.js).
+    await waitForEditorReady(page, await editorIdOf(commentsFrame));
     // Click in and blur after so TinyMCE syncs its backing textarea.
     await commentsBody.click();
     await commentsBody.fill(comment);

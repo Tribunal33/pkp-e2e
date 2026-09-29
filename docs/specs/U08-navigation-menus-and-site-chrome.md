@@ -493,6 +493,18 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
       "The current role does not have access to this operation.". A series that does not exist {OMP} opens the
       "Catalog" page. Each of these pages has the full header, sidebar
       and footer.
+    - 26c. **A journal's settings address at the site's level.** The
+      address of a journal's Settings › Journal, Settings › Website or
+      Institutions page with "index" in place of the journal's path (its
+      "Path" under Hosted Journals) points at the site, not at any journal.
+      Every signed-in user who opens it, the Site Administrator
+      included, gets the access-denied page (Rule 26a) reading "No
+      journal was found that matched your request." ("No press was
+      found that matched your request."; on a preprint server "No server
+      in context!" ⚠ [OPS4](#ops4)) in place of "The current role does
+      not have access to this operation.". A signed-out visitor gets the
+      site's Login page, and signing in there leads to the same page.
+      <sup>td21</sup>
 
 **The editorial header and side menu**
 
@@ -1182,6 +1194,7 @@ Left out of the scenarios above, by reason:
   - "Dashboard" on the site's pages (Rule 19c)
   - "Administration" pressed on a journal with one interface language after the site's pages opened in French, opening in French too (Rule 18a)
   - the notice area while an editorial page is left (Rule 31)
+  - a journal's settings address opened at the site's level: the access-denied page reading "No journal was found that matched your request." for every signed-in user, the site's Login page for a signed-out visitor (Rule 26c)
 - **Nothing new to test**:
   - the Editor and the Production Editor on the Navigation tab: the same tab and the same offer as the Journal Manager in scenarios 3 to 7 (Actors row 1)
 - **Register carries it**:
@@ -1210,6 +1223,7 @@ Left out of the scenarios above, by reason:
   - OJS1 (no eye on "Subscriptions" and "My Subscriptions" {OJS}; Rule 7a)
   - OPS2 ("Posting Mode" not kept, so "Archives" stays {OPS}; Settings bullet 2)
   - OPS3 (the French "Developed By" heading's raw code {OPS}; Rule 21)
+  - OPS4 ("No server in context!" on a settings address opened at the site's level {OPS}; Rule 26c)
 - **No seed**:
   - the site's only menu removed with "OK" (Rule 1b): no screen can give the site a menu back (A4), so the test install would stay without one
   - "Series" and "Category" items {OMP}: no key seeds a series or category on a scratch press (item types table)
@@ -1261,6 +1275,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS1](#ojs1) | "Subscriptions" and "My Subscriptions" carry no eye icon, so their notices never show {OJS} | 🐞 | minor | — |
 | [OPS2](#ops2) | A preprint server's "Posting Mode" is not kept, so "Archives" never hides {OPS} | 🐞 | user-visible | — |
 | [OPS3](#ops3) | On a preprint server's French pages the "Developed By" heading reads a raw code {OPS} | 🐞 | minor | — |
+| [OPS4](#ops4) | A server's settings address opened at the site's level reads "No server in context!" {OPS} | 🐞 | minor | — |
 | [A5](#a5) | The "About" item's notice promises a condition the header never applies | ❓ | minor | — |
 | [A8](#a8) | A menu can only be arranged with a mouse | ❓ | user-visible | — |
 | [A9](#a9) | Items saved three levels deep never show in the header | ❓ | latent | — |
@@ -1564,6 +1579,16 @@ On a preprint server's French pages a screen reader hears the "Developed
 By" block's heading as "##plugins.block.developedBy.blockTitle##"; a
 journal and a press read "Développé par".
 Basis: probe. <sup>f-ops3</sup>
+
+<a id="ops4"></a>
+**OPS4 — The site-level refusal reads "No server in context!"** · 🐞 · minor.
+A settings address opened at the site's level (Rule 26c) tells a
+journal's or press's user what went wrong:
+"No journal was found that matched your request." ("No press was found
+that matched your request."). On a preprint server the same page reads
+"No server in context!", wording that does not tell the user that the
+address names no server.
+Basis: probe. <sup>f-ops4</sup>
 
 ### Retired
 
@@ -2464,6 +2489,30 @@ authorization (code read 2026-09-28), and announcements off answer the
 bare page signed in or not ([Announcements](U12-announcements.md), Actors
 row 1, note e).
 
+<a id="fn-td21"></a>
+**td21** — `ContextPolicy` adds `ContextRequiredPolicy` with
+`user.authorization.noContext`; at the site's level (`index`) there is
+no context, so `PKPPageRouter::handleAuthorizationFailure()` sends a
+signed-in user to `user/authorizationDenied?message=user.authorization.noContext`
+and a signed-out visitor to the site's Login page with `source`. The
+English sentence is each app's `locale/en/locale.po`
+`user.authorization.noContext` (OJS "No journal was found that matched
+your request.", OMP "No press was found…", OPS "No server in
+context!"). Live-probed 2026-09-29, two runs (Rule 26c; OPS4; all
+three apps): `index/management/settings/institutions`, `…/context` and
+`…/website`, with and without `/en`, as `admin` and as `reader.rosa`
+(an account without the Site Administrator role): 302 to `index/en/…`,
+then 302 to the access-denied page with the site header, "Home /" with an empty last
+step, an empty heading and browser tab title (the test site has no
+name), the app's sentence and no link but the breadcrumb's "Home".
+Signed out: the site's Login page with
+`source=…/management/settings/…`; `admin` signing in there landed on
+the same access-denied page. The control: the same paths under a
+scratch journal's address opened "Institutions" and "Journal Settings"
+("Setup", "Server Settings") for `admin`, gave `reader.rosa` the
+access-denied page with "The current role does not have access to this
+operation." and a signed-out visitor that journal's Login page.
+
 <a id="fn-td15"></a>
 **td15** — Live-probed 2026-09-23 (Rule 27; A1; all three apps): the
 header's left part, the "i" icon's documentation link in a new tab, its
@@ -2832,6 +2881,12 @@ About".
 <a id="fn-f-ops3"></a>
 **f-ops3** — Note s. Live-probed 2026-09-23 (Rule 21), OPS, with OJS and
 OMP the control.
+
+<a id="fn-f-ops4"></a>
+**f-ops4** — Note td21. OPS `locale/en/locale.po`
+`user.authorization.noContext` reads "No server in context!"; it is the
+locale's own text, not a missing key. Live-probed 2026-09-29, two runs,
+OPS, with OJS and OMP the control.
 
 ## Reference — entry points & surfaces
 

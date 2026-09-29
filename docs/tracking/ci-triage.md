@@ -606,7 +606,18 @@ trips.
   alone with `--no-deps`, then green alone three times with
   `--repeat-each 3` (`.reports/U73/final-run-omp.log`, `alone-reds.log`,
   `alone-omp-U16S8-r3.log`); the read is taken right after the URL
-  assertion, so an unwaited read of the new page is the lead.
+  assertion, so an unwaited read of the new page is the lead. **Fixed
+  2026-09-29** (housekeeping, `.reports/flake-2026-09-29/u16s8/diagnosis.md`):
+  the test's own race. The mark is the theme's CSS on the server's
+  `li.current`, and the theme's stylesheet is a PHP request fetched on every
+  page while the body is already visible; the link's `click()` and the
+  `toHaveURL` do not wait for `load`, so `getComputedStyle` read no bar.
+  `BrowseBlock.markedNames()`, `look()` and `flatEntries()` now wait for
+  `BasePage.stylesApplied()` (the `load` state), which also covers the same
+  read in OJS and OPS U16. With the stylesheet held 3 s: red 10 of 10
+  before, 0 of 10 after; OMP U16 `--repeat-each 5` at eight workers green,
+  OJS and OPS U16 green once. Rule in patterns.md "Parallel-load lessons"
+  16. **Watch condition**: a `markedNames()` red after `stylesApplied()`.
 - **U18 feed download named `rss.xmp` on the Mac** (U18 S1, S3, S7, S8,
   all three apps; deterministic on the Mac, 2026-09-26). The RDF feed's
   download comes out as `rss.xmp` where `WebFeedPages.js` expects
@@ -898,7 +909,7 @@ trips.
   U12, U13, U18, U28, U29, U35, U42, U54, U55; new U13 A11 🐞: keywords
   lose the typed order on every save); galley seeds carry `seq`.
   **Watch condition**: a position read on a list whose query has no
-  unique ORDER BY. **Sighted 2026-09-27** (first in the U61 session's OPS final): OPS U54 S3 "create a role" red at `RolesTab.openRowActions` because the new "Data editor" landed as the Roles list's first row, which carries no "Settings" arrow (U54 A1, A13). The diagnosis is the next daily session's. Again 2026-09-27 (U63 session's OMP final, Mac, reset database, auto workers): OMP U54 S6 "remove a role", "Spare desk" the first row, green alone (`.reports/U63/final-run-omp.log`, `alone-omp-reds.log`). Again 2026-09-27 (U58 session's OMP final, VM, reset database, auto workers): OMP U54 S3 "create a role", "Data editor" the first row, green alone (`.reports/U58/final-run-omp.log`, `alone-reds.log`). Again 2026-09-27 (U71 session's OMP and OPS finals, VM slot s1, reset databases, auto workers): U54 S3 on both, "Data editor" the first row, green alone on both (`.reports/U71/final-run-omp.log`, `final-run-ops.log`, `alone-omp-U54S3-U14S5.log`, `alone-ops-U54S3-U14S5.log`). Again 2026-09-28 (U59 session's OPS final, VM, reset databases, auto workers): red, green alone (`.reports/U59/alone-reds.log`).
+  unique ORDER BY. **Sighted 2026-09-27** (first in the U61 session's OPS final): OPS U54 S3 "create a role" red at `RolesTab.openRowActions` because the new "Data editor" landed as the Roles list's first row, which carries no "Settings" arrow (U54 A1, A13). The diagnosis is the next daily session's. Again 2026-09-27 (U63 session's OMP final, Mac, reset database, auto workers): OMP U54 S6 "remove a role", "Spare desk" the first row, green alone (`.reports/U63/final-run-omp.log`, `alone-omp-reds.log`). Again 2026-09-27 (U58 session's OMP final, VM, reset database, auto workers): OMP U54 S3 "create a role", "Data editor" the first row, green alone (`.reports/U58/final-run-omp.log`, `alone-reds.log`). Again 2026-09-27 (U71 session's OMP and OPS finals, VM slot s1, reset databases, auto workers): U54 S3 on both, "Data editor" the first row, green alone on both (`.reports/U71/final-run-omp.log`, `final-run-ops.log`, `alone-omp-U54S3-U14S5.log`, `alone-ops-U54S3-U14S5.log`). Again 2026-09-28 (U59 session's OPS final, VM, reset databases, auto workers): red, green alone (`.reports/U59/alone-reds.log`). **Diagnosed 2026-09-29** (housekeeping, `.reports/flake-2026-09-29/u54s3/diagnosis.md`): an app defect, U54 A1 set off by A13. The grid keys each page's rows 0…n−1 and adds no "Edit"/"Remove" to row id 0, and PostgreSQL stores a new role wherever its free space map offers room, often before the context's own roles on a used database; CI's six OJS S3 first-attempt reds of 2026-09-28 were all shard 1/3. U54 S3–S6 now run through `replayWhenFirstRow()` (a fresh scratch context only when the role opened is the list's first row, at most three attempts, an `app-defect` annotation), app-changes row 22. With a storage lever: red 10 of 10 before, 0 of 10 after; the three U54 files `--repeat-each 5` at eight workers green (35 + 40 + 35). **Watch condition**: a U54 red naming `FirstRowError` with its three attempts spent. Sighted and fixed 2026-09-29 (housekeeping, `.reports/flake-2026-09-29/u65s7/diagnosis.md`): OJS U65 S7 "downloading the reports", red on the first attempt of five CI runs on 2026-09-28 (pkp-e2e 36461456234, 36483369298, 36489553910, 36462286731; ojs 36475766741), compared the second "Review Report" download with the first line for line; the report orders by submission title only, so "Marsh survey"'s two reviewer lines swapped between requests (spec Rule 21: "in no set order"). The test now compares the headers, the title sequence and the lines as a sorted set: under a row-rewrite lever red 10 of 10 before, 0 of 10 after; the OJS U65 file `--repeat-each 5` at eight workers 40 of 40.
 
 - **OPS U61 S4 "deleting the stored copies": the header read took the
   admin's unread-task count** (CI push run 36289097857 at `b57a99c`,
@@ -915,6 +926,21 @@ trips.
   `getByRole('menu').last()`, which can be the first row's menu still
   closing; S16 once in 95, the Review Details window showing "-" for both
   reviewer comments. **Watch condition**: a sighting in a final or on CI. First final sighting 2026-09-29 (U74 session, Mac, reset databases, auto workers): S9 red in the OMP final ("Modify Review" in the Review Details window not enabled in 20 s), green alone right after (`.reports/U74/final-run-omp.log`, `alone-omp-reds.log`); the watch condition is tripped, the trace read is the daily session's.
+  **Diagnosed 2026-09-29** (housekeeping, `.reports/flake-2026-09-29/u27s9/diagnosis.md`).
+  S16 fixed, the test's own race: the reviewer's step-3 comment boxes were
+  typed before TinyMCE was `initialized`, and the editors' late content
+  style sheets put the empty start value back, so the review went in with
+  no comments ("-" for both). OMP `completeReview()`/`openModifyReview()`
+  and the same-shape OMP `completeReviewAsReviewer`, OMP U23
+  `submitAcceptedReview` and OJS `performReview` now wait for the editor.
+  With the two style sheets held 4 s: red 11 of 12 before, 0 of 12 after;
+  OMP U27 `--repeat-each 5` at eight workers 95 of 95 twice, OJS U27 90 of
+  90, OMP U23 75 of 75, every other caller green once. S9's "Modify Review
+  not enabled" did not reproduce in 45 runs under four levers (the
+  `openRowMenu().last()` lead ruled out); `openReadReview()` now records
+  the Review Details window's two loads, so the next red names the pending
+  or failed one. **Watch condition**: an S9 red at "Modify Review"; read
+  the recorded loads, `error-context.md` and the worker's server log.
 
 - **OPS U39 S2 "the Publisher Library on the Settings tab": the row's "Edit" link
   never shows** (`LibraryList.openStrip`, `LibraryPages.js:352`, 30 s on

@@ -988,7 +988,16 @@ test.describe('Statistics — editorial activity & reports', () => {
         await plugins.list.openArrow(reviewPlugin.id);
         const again = await downloadFromLink(page, plugins.list.rowLink(reviewPlugin.id, 'Reports'));
         expect(again.name).toBe(`reviews-${COMPACT_TODAY}.csv`);
-        expect(again.rows).toEqual(reviews.rows);
+        // The same file: the same column names, the same lines, in the same
+        // title order, "Marsh survey"'s two in either order (Rule 21: the
+        // lines of one submission in no set order). The report sorts by title
+        // alone, so a tie comes back in the database plan's order, which can
+        // change between two downloads (CI, 2026-09-28: the two swapped).
+        expect(again.rows[0]).toEqual(reviews.rows[0]);
+        const titles = (file) => file.rows.slice(1).map((r) => asRecord(file.rows[0], r)['Submission Title']);
+        expect(titles(again)).toEqual(titles(reviews));
+        const lineSet = (file) => file.rows.slice(1).map((r) => JSON.stringify(r)).sort();
+        expect(lineSet(again)).toEqual(lineSet(reviews));
 
         // "Marsh survey"'s "URL" opens it (Rule 20c).
         await page.goto(marshLine['URL']);

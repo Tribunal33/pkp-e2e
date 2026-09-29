@@ -917,16 +917,23 @@ class BrowseBlock extends BasePage {
         });
     }
 
-    /** How a link is drawn: its colour and its left bar. */
+    /** How a link is drawn: its colour and its left bar (once the page's stylesheets are in). */
     async look(name) {
+        await this.stylesApplied();
         return this.link(name).evaluate((a) => {
             const s = getComputedStyle(a);
             return {color: s.color, barWidth: s.borderLeftWidth, barStyle: s.borderLeftStyle, barColor: s.borderLeftColor};
         });
     }
 
-    /** The names of the links drawn with a left bar (the marked ones). */
+    /**
+     * The names of the links drawn with a left bar (the marked ones). The
+     * mark is the theme's CSS on the server's `li.current`, so the read waits
+     * for the page's stylesheets first (`stylesApplied()`): read before the
+     * theme's stylesheet lands, no link has a bar and this returns `[]`.
+     */
     async markedNames() {
+        await this.stylesApplied();
         return this.links().evaluateAll((as) =>
             as
                 .filter((a) => {
@@ -957,9 +964,11 @@ class BrowseBlock extends BasePage {
     /**
      * {OMP} A press's category links as drawn, `[{name, x}]` top to bottom:
      * `x` the link's left edge in pixels, so a sub-category's indent is its
-     * `x` against a top-level one's.
+     * `x` against a top-level one's (the theme's CSS: read once the page's
+     * stylesheets are in).
      */
     async flatEntries(label = 'Categories') {
+        await this.stylesApplied();
         return this.submenuLinks(label).evaluateAll((as) =>
             as.map((a) => ({name: (a.textContent || '').replace(/\s+/g, ' ').trim(), x: Math.round(a.getBoundingClientRect().x)}))
         );

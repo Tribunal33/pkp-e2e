@@ -567,7 +567,9 @@ the answer; the spec and the test are the record.
 - **Keep the flake rate down** (the housekeeping session's). A flake
   class whose watch condition trips gets a diagnostician rendered from `briefs/flake-diagnosis.md`, one or two
   at a time, ranked by `bin/ci-flake-tally/run.sh` (CI's first-attempt
-  reds) and the ci-triage sightings; the fix lands where the mechanism
+  reds) and the ci-triage sightings, each of which names the failing
+  spec line from the log, since one test can red in two classes (U09,
+  U14, U45 diagnoses); the fix lands where the mechanism
   lives (the app's register, the harness, a shared page object, then the
   test), and a rule every later test must follow goes to `patterns.md`.
 - **Leave the revision queue to the maintainer.**

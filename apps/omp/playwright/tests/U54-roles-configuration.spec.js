@@ -12,8 +12,12 @@
  * Deliberately NOT covered (register IDs from the spec's Findings register;
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap; the
  * spec's Coverage section is the record of everything else left out):
- * - A1 🐞: every row a test opens is found by name and is never the first
- *   row; no test asserts which rows lack the arrow.
+ * - A1 🐞: every row a test opens is found by name; no test asserts which
+ *   rows lack the arrow. A role S3–S6 open can land first (A13's storage
+ *   order), where no screen offers its "Edit" or "Remove": the scenario
+ *   then runs again from its seeding on a fresh context
+ *   (`replayWhenFirstRow`, at most three attempts, an `app-defect`
+ *   annotation per landing; `.reports/flake-2026-09-29/u54s3/diagnosis.md`).
  * - A2 🐞: S1 reads the "Press manager" row's boxes as greyed only, never
  *   ticked or empty, and S2's stage filter never looks for it.
  * - A3 🐞: S5 saves "Managing editor"'s window and reads nothing of its
@@ -53,7 +57,7 @@ const {test, expect} = require('../support/fixtures.js');
 const {unordered} = require('../../../../shared/playwright/support/order.js');
 const {UsersListPage} = require('../../../../shared/playwright/pages/UsersManagementPages.js');
 const {TaskTemplatesTab} = require('../../../../shared/playwright/pages/TasksDiscussionsPages.js');
-const {RolesTab, SiteAccessTab} = require('../../../../shared/playwright/pages/RolesConfigurationPages.js');
+const {RolesTab, SiteAccessTab, replayWhenFirstRow} = require('../../../../shared/playwright/pages/RolesConfigurationPages.js');
 const {SendInvitationWizard} = require('../pages/UserInvitationPages.js');
 const {loginFormRegisterLink} = require('../pages/RegistrationPages.js');
 
@@ -331,7 +335,7 @@ test.describe('roles configuration', () => {
         await expect(win.roleBox(EBM)).toHaveCount(0);
     });
 
-    test('S3: create a role', async ({asUser, ompApi}, testInfo) => {
+    test('S3: create a role', async ({asUser, ompApi}, testInfo) => replayWhenFirstRow(testInfo, async () => {
         test.slow();
         const tag = makeTag(3, testInfo);
         const manager = managerEntry(tag);
@@ -478,9 +482,9 @@ test.describe('roles configuration', () => {
         await expect(win.nameBox()).toHaveValue('');
         await expect(win.abbrevBox()).toHaveValue('');
         await win.cancel();
-    });
+    }));
 
-    test('S4: rename a role', async ({asUser, ompApi}, testInfo) => {
+    test('S4: rename a role', async ({asUser, ompApi}, testInfo) => replayWhenFirstRow(testInfo, async () => {
         test.slow();
         const tag = makeTag(4, testInfo);
         const manager = managerEntry(tag);
@@ -529,9 +533,9 @@ test.describe('roles configuration', () => {
         const offered = await inviteRoleOptions(mp, tag, `invitee-${tag}@mail.test`);
         expect(offered).toContain('Advisory Board');
         expect(offered).not.toContain(EBM);
-    });
+    }));
 
-    test('S5: the Settings box of a manager\'s only Settings role', async ({asUser, ompApi}, testInfo) => {
+    test('S5: the Settings box of a manager\'s only Settings role', async ({asUser, ompApi}, testInfo) => replayWhenFirstRow(testInfo, async () => {
         test.slow();
         const tag = makeTag(5, testInfo);
         const manager = managerEntry(tag);
@@ -593,9 +597,9 @@ test.describe('roles configuration', () => {
         await expect(win.optionBox(OPT.settings)).toBeChecked();
         await expect(win.optionBox(OPT.settings)).toBeEnabled();
         await win.cancel();
-    });
+    }));
 
-    test('S6: remove a role', async ({asUser, ompApi}, testInfo) => {
+    test('S6: remove a role', async ({asUser, ompApi}, testInfo) => replayWhenFirstRow(testInfo, async () => {
         test.slow();
         const tag = makeTag(6, testInfo);
         const manager = managerEntry(tag);
@@ -663,7 +667,7 @@ test.describe('roles configuration', () => {
         for (const name of ['Data curator', 'Archive desk', 'Editorial Board Member']) {
             await expect(roles.row(name), name).toHaveCount(1);
         }
-    });
+    }));
 
     test('S7: require sign-in, then close registration', async ({asUser, ompApi, browser, baseURL}, testInfo) => {
         test.slow();

@@ -113,7 +113,10 @@ else has their username repeated twice (`editor.diana` becomes
 `LoginPage.fillPassword()` removes the attribute before filling, so tests
 never hit the limit. Profile › Password's three boxes carry the same
 `maxlength="32"`, and a scratch user's default password (the username
-twice) can be longer: fill them the same way (U60 claim check K1).
+twice) can be longer: fill them the same way (U60 claim check K1), as
+every other password box (the forced "Change Password" form's "Current
+password") and a Login page a script reaches by redirect and fills
+itself (U01, U69 claim checks).
 
 ## Login flow internals
 

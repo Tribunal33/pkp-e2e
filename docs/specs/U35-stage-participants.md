@@ -95,12 +95,10 @@ with an asterisk: *" closes the form, though no field carries an asterisk.
 
 **Roles offered by "Assign"**, install defaults: every role whose stage set
 includes the stage, no reviewer role ever (Rule 3). The list gives them by
-permission level, as the panel orders its rows (Rule 1): manager-level
-roles first, then Section and Guest Editors, then the assistant roles,
-then Author and the other author-level roles. Roles of one level come in
-no fixed order among themselves, and may show in another order the next
-time the window opens. Below, a semicolon separates two levels and a comma
-two roles of one level. <sup>d</sup>
+permission level, as the panel orders its rows (Rule 1). Roles of one
+level come in no fixed order among themselves, and may show in another
+order the next time the window opens. Below, a semicolon separates two
+levels and a comma two roles of one level. <sup>d</sup>
 
 | Stage | Journal | Press | Preprint server |
 |-------|---------|-------|-----------------|
@@ -125,7 +123,7 @@ two roles of one level. <sup>d</sup>
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
 | "Start Discussion" | — | A heading over the sentence "Begin a discussion between yourself and {name}." <sup>j</sup> |
-| "Choose a predefined message to use, or fill out the form below." | no | As on the "Assign" window (Rule 5) <sup>j</sup> |
+| "Choose a predefined message to use, or fill out the form below." | no | As on the "Assign" window (Rule 5), the blank entry chosen again included [A3](#a3); "Notify" from there: Rule 11b <sup>j</sup> |
 | "Message" | yes | Rich text. "Notify" with it empty keeps the window open, and a warning at the top right of the page reads "Please ensure that you have filled out the message field and included someone other than yourself in the discussion."; no discussion is added <sup>td11</sup> |
 | "Notify" | — | The window's only button; there is no "Cancel" <sup>j</sup> |
 
@@ -309,16 +307,28 @@ two roles of one level. <sup>d</sup>
     <sup>i</sup> <sup>td10</sup>
 <a id="notify"></a>
 11. **"Notify".** The row menu's "Notify" opens a side panel titled
-    "Notify" (Fields) addressed to that row's person. "Notify" with a
-    predefined message chosen and "Message" filled sends the message as
-    Side effects describe and closes the window, and a notice at the top
-    right of the page reads "Notification sent to users."
-    [OPS4](#ops4). With the list left on its
-    blank entry, "Notify" leaves the window open as filled; nothing is sent
-    and nothing on screen says why [A3](#a3). The window's close control
-    closes it at once, a typed message included: nothing is sent and
-    nothing asks first (unlike "Edit Assignment", Rule 8f).
-    <sup>j</sup> <sup>g</sup> <sup>td4</sup>
+    "Notify" (Fields) addressed to that row's person. <sup>j</sup>
+    - 11a. "Notify" with a predefined message chosen and "Message" filled
+      sends the message as Side effects describe and closes the window,
+      and a notice at the top right of the page reads "Notification sent
+      to users." [OPS4](#ops4). <sup>j</sup>
+    - 11b. With the list never touched, "Notify" leaves the window open
+      as filled; nothing is sent and nothing on screen says why
+      [A3](#a3). With the list set back to its blank entry after a
+      predefined message, "Notify" was never pressed ⚠ [A17](#a17).
+      <sup>g</sup> <sup>td4</sup>
+    - 11c. While the list "Choose a predefined message…" has not been
+      touched, the window's close control ("<") closes the window at
+      once, a typed message included. Once a predefined message has been
+      chosen, even if typed over or set back to the blank entry, the close
+      control asks first, as on "Edit Assignment" (Rule 8f): "Cancel" keeps
+      the window as filled, "OK" closes it. Nothing is sent either way.
+      <sup>j</sup>
+    - 11d. After a predefined message has been chosen, Escape asks
+      first as the close control does; its "OK" closes the "Notify"
+      window and leaves the workflow open. Reloading the page with a predefined message chosen
+      raises the browser's leave-page box; after the reload no discussion
+      is added and no email goes out. <sup>j</sup>
 <a id="auto-email"></a>
 12. **The automatic assignment email.** When a submission arrives, the
     editors on it are emailed: those already assigned, an editor submitting
@@ -396,8 +406,8 @@ two roles of one level. <sup>d</sup>
     [Production's](U33-production-stage.md#ojs1)).
   - The Activity Log gains "Notification sent to users." under the
     sender's name and, when the email went out, "An email has been sent:
-    {subject}" with a "View Email" link. A message typed with the list
-    left blank logs nothing, not even the assignment (Rule 5b).
+    {subject}" with a "View Email" link. An unsent message (Rule 5b) logs
+    nothing, not even the assignment.
     <sup>td7</sup>
 - **On "Edit" ("OK").** No email. The Activity Log gains the same
   "{name} ({username}) was assigned to this submission as a {role}." line
@@ -904,13 +914,14 @@ Left out of the scenarios above, by reason:
 
 - **Budget** — variants:
   - "Cancel" on "Edit Assignment" after a box was changed, and its close control asking first (Rule 8f): scenario 3 cancels only an unchanged window
-  - the "Notify" window's close control dropping a typed message without asking (Rule 11)
+  - the "Notify" window's close control, asking first or not (Rule 11c)
+  - Escape and a reload on the "Notify" window (Rule 11d)
   - "Assignments" counting open review requests and leaving out published submissions (Fields "Assign Participant")
   - "No changes can be made to this participant" for a recommending editor opening a manager-level row (Rule 8c)
 - **Register carries it**:
   - A1 (a Section Editor's or Guest Editor's "OK" on "Edit Assignment" saving nothing; Rule 8e)
   - A2 ("Remove" offered on the rows "Edit" is not, a Section Editor's own row and its "Error" window included; Actors row "Remove"; Rule 10)
-  - A3 (a message typed with the list left on its blank entry not sent, on "Assign" and "Notify"; Rules 5b, 11)
+  - A3 (a message typed with the list on its blank entry not sent, and the blank entry chosen again failing on the server; Rules 5b, 11b; Fields "Notify")
   - A4 ("OK" with nobody chosen, or with a person listed under the previous role, assigning nobody; Rule 6b)
   - A5 (the message's discussion listed as created by its recipient; Side effects; scenario 1 marks it)
   - A6 ("Assign Editor" giving no task of its own; Side effects; scenario 1 marks it)
@@ -923,6 +934,7 @@ Left out of the scenarios above, by reason:
   - A14 (the Activity Log's "User" column naming the participant; Side effects; scenario 1 marks it)
   - A15 (two footers on the Submission stage's "Assign Editor" email; Side effects; scenario 1 marks it)
   - A16 (the "Do not send me an email…" box on "Discussion added." ignored; Side effects)
+  - A17 ("Notify" after the list set back to blank; Rule 11b)
   - OJS1 (the automatic email naming "Send to Review"; Rule 12b; scenario 8 marks it)
   - OMP1 (no predefined message on a press's Internal Review; Rule 5c)
   - OPS2 ("Assign Editor" leaving "Message" as it was on a preprint server; Rule 5d)
@@ -970,6 +982,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | A Section Editor may "Remove" rows they may not "Edit": their own, manager-level ones, and a recommending editor another editor's | ❓ | minor | — |
 | [A8](#a8) | A Production editor assigned to a submission can open fewer of its stages than one who is not assigned | ❓ | minor | — |
 | [A13](#a13) | Whether an automatic assignment in a recommend-only role is recommend-only was never seen | ❓ | latent | — |
+| [A17](#a17) | "Notify" after the list is set back to blank was never pressed | ❓ | latent | — |
 | [OPS1](#ops1) | A preprint server offers its manager role in "Assign" | ✅ | — | — |
 
 ### All apps
@@ -1005,7 +1018,9 @@ as filled with no reason given, yet the person is assigned: the row
 appears once the page is opened again, and the Activity Log gets no line
 for it. On "Notify" the window stays open with no reason given. In both
 cases no email goes out and no discussion opens. Behind both buttons the
-request fails on the server, and nothing on screen says so.
+request fails on the server, and nothing on screen says so. In "Notify",
+choosing the blank entry again after a predefined message fails the same
+way, keeping the text and showing nothing wrong.
 Basis: probe. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
@@ -1147,6 +1162,15 @@ mailbox; only "Enable these types of notifications." unticked stops it,
 and the task with it.
 Basis: probe. <sup>[f-a16](#fn-a16)</sup>
 
+<a id="a17"></a>
+**A17 — "Notify" after the list is set back to blank was never seen** · ❓ · latent.
+With a predefined message chosen and the list then set back to its blank
+entry, "Notify" was never pressed: it may send the kept text, the earlier
+message, or nothing (Rule 11b).
+Question: does it act as with a list never touched? Lean: yes; the list
+reads blank either way.
+Basis: judgment. <sup>[f-a17](#fn-a17)</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -1247,7 +1271,7 @@ Basis: test run. <sup>[f-ops4](#fn-ops4)</sup>
 **i** — Remove: `useParticipantManagerActions.js::participantRemove()` opens a dialog titled `editor.submission.removeStageParticipant` "Remove Participant", message `editor.submission.removeStageParticipant.description`, actions `common.ok` (warnable) and `common.cancel`, style negative; "OK" posts `deleteParticipant` and opens the network-error dialog when the answer is not a success. `StageParticipantGridHandler::deleteParticipant()` checks the CSRF token and that the assignment belongs to the submission, deletes it, calls `Repo::editorialTask()->removeParticipantFromSubmissionTasks()` (which returns early for a user holding `ROLE_ID_MANAGER` or `ROLE_ID_SITE_ADMIN` in the context, the Editor and Production editor roles included, and otherwise deletes the user's `Participant` rows on every task and discussion of the submission), re-reads the editor-assignment notices and, for the Copyediting and Production stages, the stage notice types, and logs `SUBMISSION_LOG_REMOVE_PARTICIPANT` (`submission.event.participantRemoved`). The dashboard's "Needs editor" view and "Assign Editor" button read the submission's `editorAssigned` ([→ the activity cell](U23-submissions-dashboard.md#activity)). Live-probed 2026-09-22 (Rule 10; Side effects "On Remove"; all three apps): the dialog as described; the row gone from every stage, the person's other row kept; the removed Section Editor taken off the discussion, a removed Editor and Preprint Server manager kept on theirs; no email, no notice, the log line; the notice box unchanged after the Copyeditor or Layout Editor who had been sent a request was removed; the submission back under "Needs editor" with "Assign Editor" after its only Section Editor was removed, on a journal and a press, a preprint server having no such view.
 
 <a id="fn-j"></a>
-**j** — Notify: `useParticipantManagerActions.js::participantNotify()` opens op `viewNotify` with the row's `userId`, titled `submission.stageParticipants.notify` "Notify"; `templates/controllers/grid/users/stageParticipant/form/notify.tpl`: section `stageParticipants.notify.startDiscussion` "Start Discussion" with `stageParticipants.notify.startDiscussion.description` "Begin a discussion between yourself and {$userFullName}.", `stageParticipants.notify.chooseMessage`, `stageParticipants.notify.message` "Message" (required), `common.requiredField`, and `{fbvFormButtons … hideCancel=true submitText="submission.stageParticipants.notify"}`. `StageParticipantGridHandler::sendNotification()` validates (message and user required; the server's refusal text is `stageParticipants.notify.warning` "Please ensure that you have filled out the message field and included someone other than yourself in the discussion.", shown as a warning notice at the top right of the page), runs `execute()` and answers success with the `stageStatusUpdated` event. Live-probed 2026-09-22 (Fields "Notify"; Rule 11; all three apps): note td11; "Notify" with a predefined message and a typed message closing the window with "Notification sent to users."; the close control closing the window at once with a typed message in it, nothing asked and nothing sent. Test runs 2026-09-22 (Rule 11; scenario 6; all three apps): "Notification sent to users." at the top right of the page after "Notify", on a preprint server once in the Production entry's "Notification" box instead (OPS4).
+**j** — Notify: `useParticipantManagerActions.js::participantNotify()` opens op `viewNotify` with the row's `userId`, titled `submission.stageParticipants.notify` "Notify"; `templates/controllers/grid/users/stageParticipant/form/notify.tpl`: section `stageParticipants.notify.startDiscussion` "Start Discussion" with `stageParticipants.notify.startDiscussion.description` "Begin a discussion between yourself and {$userFullName}.", `stageParticipants.notify.chooseMessage`, `stageParticipants.notify.message` "Message" (required), `common.requiredField`, and `{fbvFormButtons … hideCancel=true submitText="submission.stageParticipants.notify"}`. `StageParticipantGridHandler::sendNotification()` validates (message and user required; the server's refusal text is `stageParticipants.notify.warning` "Please ensure that you have filled out the message field and included someone other than yourself in the discussion.", shown as a warning notice at the top right of the page), runs `execute()` and answers success with the `stageStatusUpdated` event. Live-probed 2026-09-22 (Fields "Notify"; Rule 11; all three apps): note td11; "Notify" with a predefined message and a typed message closing the window with "Notification sent to users."; the close control closing the window at once with only a typed message in it, nothing asked and nothing sent. Live-probed 2026-09-29 (Rule 11c, 11d; all three apps, two runs each, as Journal Manager, Section editor (Series editor, Moderator) and, on a journal and a press, Copyeditor): the close control asking after a predefined message was chosen, typed over or not, or chosen and set back to the blank entry; "Cancel" keeping the window as filled, "OK" closing it; the window closing at once untouched or with only a typed message, also after the box lost focus; Escape, with the focus on the list after a predefined message was chosen, asking the same and its "OK" closing the window only; a reload after a predefined message was chosen and typed over raising the browser's leave-page box with no text of the app's own; no discussion added (read after a reload too), no email. Control: a message sent through the same window reaching the recipient and opening a discussion. Code: `lib/pkp/js/controllers/form/FormHandler.js` marks the form changed on a `change` event of its inputs (the list) and asks through `confirm(form.dataHasChanged)` in `containerCloseHandler()`; typing in the rich-text box raises no such event; `SiteHandler` binds `beforeunload`. Test runs 2026-09-22 (Rule 11; scenario 6; all three apps): "Notification sent to users." at the top right of the page after "Notify", on a preprint server once in the Production entry's "Notification" box instead (OPS4).
 
 <a id="fn-k"></a>
 **k** — `StageParticipantGridHandler::saveParticipant()`, after `execute()`: for a `ROLE_ID_MANAGER` group it re-reads the per-stage editor-assignment notices; for every stage with a `ROLE_ID_MANAGER` or `ROLE_ID_SUB_EDITOR` assignment it deletes the submission's `NOTIFICATION_TYPE_EDITOR_ASSIGNMENT_REQUIRED` rows, every user's (the task `notification.type.editorAssignmentTask`: "A new article has been submitted to which an editor needs to be assigned.", "A new monograph…", on OPS "A new preprint has been submitted to which a moderator needs to be assigned."); it raises the trivial notice `notification.addedStageParticipant` "User added as a stage participant." for a new row, else `notification.editStageParticipant`; and it logs `SUBMISSION_LOG_ADD_PARTICIPANT` with `submission.event.participantAdded` "{$userFullName} ({$username}) was assigned to this submission as a {$userGroupName}." on both branches (A7), `userId` the signed-in user (the impersonator when impersonating), and the participant's name as the entry's `userFullName`, which `EventLogEntry::getUserFullName()` shows in the "User" column in preference to `userId` (A14; `deleteParticipant()` does the same). It answers `DAO::getDataChangedEvent()`, on which `components/Modal/AjaxModalWrapper.vue` triggers `notifyUser`, the page's fetch of pending notices. Live-probed 2026-09-22 (Side effects "On Assign", "On Edit"; Rules 6a, 8d; all three apps): note td1; the log line with the assigned person in its "User" column; the needs-an-editor task leaving the Tasks panel of every Journal Manager and every Editor on an editor assignment, and staying on a Funding coordinator's (a preprint server's: an Author's); the submission leaving "Needs editor" on a journal and a press.
@@ -1319,7 +1343,7 @@ Basis: test run. <sup>[f-ops4](#fn-ops4)</sup>
 **f-a2** — Live-probed 2026-09-22 (all three apps): note td10. `useParticipantManagerConfig.js::getItemActions()` pushes "Remove" on the "Assign" condition alone, while "Edit" also needs `canCurrentUserEditParticipant()` (note b); `StageParticipantGridHandler::deleteParticipant()` checks only the CSRF token and that the assignment belongs to the submission, with no counterpart of `Validation::canEditParticipant()`. What a recommending editor sees with no deciding editor assigned is *[Review stage & rounds](U26-review-stage-and-rounds.md#recommendations)*'.
 
 <a id="fn-a3"></a>
-**f-a3** — Live-probed 2026-09-22 (all three apps, two scratch journals each; a press's Internal Review too): note td4. With the list blank, `PKPStageParticipantNotifyForm::sendMessage()` runs `Template::withContextId()->find('')`, which the Postgres test database refuses ("invalid input syntax for type bigint"), so both requests answer a server error; on "Assign" the person is assigned all the same, and neither the log line nor a notice follows. Introduced with pkp/pkp-lib#12593 (lib/pkp `b3b882bec`, 2026-06-01). A MySQL install may read the empty id as no template and return early, and would then show "Notification sent to users." with nothing sent (not driven). The list's own wording (`stageParticipants.notify.chooseMessage` "Choose a predefined message to use, or fill out the form below.") presents the message box as an alternative to the list.
+**f-a3** — Live-probed 2026-09-22 (all three apps, two scratch journals each; a press's Internal Review too): note td4. With the list blank, `PKPStageParticipantNotifyForm::sendMessage()` runs `Template::withContextId()->find('')`, which the Postgres test database refuses ("invalid input syntax for type bigint"), so both requests answer a server error; on "Assign" the person is assigned all the same, and neither the log line nor a notice follows. Introduced with pkp/pkp-lib#12593 (lib/pkp `b3b882bec`, 2026-06-01). A MySQL install may read the empty id as no template and return early, and would then show "Notification sent to users." with nothing sent (not driven). The list's own wording (`stageParticipants.notify.chooseMessage` "Choose a predefined message to use, or fill out the form below.") presents the message box as an alternative to the list. Live-probed 2026-09-29 (Fields "Notify"; all three apps, two runs each, as Journal Manager): a predefined message chosen in "Notify" and the list set back to its blank entry, the text kept and nothing shown, while the request it posts (`StageParticipantGridHandler::fetchTemplateBody()` with an empty `template`) answered a server error with an empty body, the only one of each run. The handler runs `Template::with('userGroups')->withContextId()->find('')`, the same empty-id lookup as `sendMessage()`. The "Assign" window's list posts the same request (not driven).
 
 <a id="fn-a4"></a>
 **f-a4** — Live-probed 2026-09-22 (all three apps): note td5. `AddParticipantForm::validate()` returns `Repo::userGroup()->userInGroup($userId, $userGroupId) && Repo::userGroup()->get($userGroupId) && parent::validate()`: with no user, or with a user who does not hold the newly chosen role, the first test is false and `parent::validate()`, which would record the `userId` check's message, never runs; `saveParticipant()` answers the redrawn form with no error.
@@ -1359,6 +1383,9 @@ Basis: test run. <sup>[f-ops4](#fn-ops4)</sup>
 
 <a id="fn-a16"></a>
 **f-a16** — Live-probed 2026-09-22 (all three apps): note td7. The email is sent whenever the discussion's task-level notification is created, which follows "Enable these types of notifications." only (note g).
+
+<a id="fn-a17"></a>
+**f-a17** — Not driven. The 2026-09-29 probe (note j, A3's footnote) chose a predefined message in "Notify", set the list back to its blank entry and read the window (the list's value empty, "Message" as filled; `.reports/U35/ccI29/r2-cases-<app>.json`, `mgr-tplBack`), then only closed it; "Notify" was pressed only in the control with a predefined message chosen. The lean, from the code and not seen: the list then holds an empty value as when untouched, and `fetchTemplateBody()` (note f) only returns the text for the editor, so the form would post no template and `sendMessage()` take A3's path (note g). One press of "Notify" in that state, then the stage's discussions panel and the recipient's mailbox read, settles it. Rule 11b's untouched-list sentence rests on note td4.
 
 <a id="fn-ojs1"></a>
 **f-ojs1** — OJS `locale/en/emails.po` `emails.editorAssign.body`: "…please forward the submission to the review stage by selecting \"Send to Review\" and then assign reviewers by clicking \"Add Reviewer\"."; the decision's label is lib/pkp `editor.submission.decision.sendExternalReview` "Send for Review" (no OJS override). OMP's app body names "Send to Internal Review", OMP's `editor.submission.decision.sendInternalReview` label. Live-probed 2026-09-22 (journal and press): the received email and Settings › Workflow › Emails › "Editor Assigned (Auto)" say "Send to Review"; the Submission stage's button reads "Send for Review" for the Editor and the Section Editor; the press's email and button both read "Send to Internal Review".

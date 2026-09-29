@@ -19,6 +19,7 @@
 const {expect} = require('../support/fixtures.js');
 const {topModal} = require('./ReviewStagePages.js');
 const {waitForJQueryIdle} = require('../../../../shared/playwright/support/legacy.js');
+const {waitForEditorReady, editorIdOf} = require('../../../../shared/playwright/support/richtext.js');
 
 /** The Reviewers panel of a workflow modal. */
 function reviewerPanel(modal) {
@@ -265,11 +266,16 @@ async function completeReview(
     }
     await page.getByRole('button', {name: 'Continue to Step #3'}).click();
     const fillRichText = async (frameSelector, text) => {
-        const body = page
-            .frameLocator(frameSelector)
-            .first()
-            .locator('body');
+        const iframe = page.locator(frameSelector).first();
+        const body = iframe.contentFrame().locator('body');
         await expect(body).toBeVisible({timeout: 20_000});
+        // The box is editable before its editor has fetched its content
+        // style sheets, whose arrival loads the empty start value over
+        // what was typed: the read-back passes, the review is submitted
+        // without the comment, and "Review Details" shows "-" (patterns.md
+        // "UI realities", the TinyMCE entry; ci-triage "OMP U27 S9 and
+        // S16"). So type only once the editor reports `initialized`.
+        await waitForEditorReady(page, await editorIdOf(iframe));
         // Click in and blur after so TinyMCE syncs its backing textarea.
         await body.click();
         await body.fill(text);
@@ -324,15 +330,51 @@ function reviewDetailsModal(page) {
  * open — reviewer ROWS can only be asserted after the window closes.
  */
 async function openReadReview(page, modal, reviewerName) {
-    await reviewerRow(modal, reviewerName)
-        .getByRole('button', {name: 'Read Review'})
-        .click();
-    const readModal = reviewDetailsModal(page);
-    await expect(readModal).toBeVisible({timeout: 20_000});
-    await expect(
-        readModal.getByRole('button', {name: 'Modify Review', exact: true})
-    ).toBeEnabled({timeout: 20_000});
-    return readModal;
+    // "Modify Review" is enabled exactly when the window's two GETs
+    // (`reviewAssignments/{id}` and `…/{id}/review`) have both settled
+    // (ui-library ReviewDetailsModal.vue, `isLoadingReview`). A red here
+    // has never been reproduced (ci-triage "OMP U27 S9 and S16"), so the
+    // helper records those loads and a failed wait names them: pending,
+    // answered with a status, or failed.
+    const loads = new Map();
+    const isLoad = (request) =>
+        request.method() === 'GET' &&
+        /\/reviewAssignments\/\d+(\/review)?(\?|$)/.test(request.url());
+    const onRequest = (request) => {
+        if (isLoad(request)) loads.set(request, 'pending');
+    };
+    const onFinished = async (request) => {
+        if (!isLoad(request)) return;
+        const response = await request.response().catch(() => null);
+        loads.set(request, response ? String(response.status()) : 'no response');
+    };
+    const onFailed = (request) => {
+        if (isLoad(request)) loads.set(request, `failed (${request.failure()?.errorText})`);
+    };
+    page.on('request', onRequest);
+    page.on('requestfinished', onFinished);
+    page.on('requestfailed', onFailed);
+    try {
+        await reviewerRow(modal, reviewerName)
+            .getByRole('button', {name: 'Read Review'})
+            .click();
+        const readModal = reviewDetailsModal(page);
+        await expect(readModal).toBeVisible({timeout: 20_000});
+        await expect(
+            readModal.getByRole('button', {name: 'Modify Review', exact: true})
+        ).toBeEnabled({timeout: 20_000});
+        return readModal;
+    } catch (error) {
+        const seen = [...loads].map(
+            ([request, state]) => `GET ${new URL(request.url()).pathname}: ${state}`
+        );
+        error.message += `\nReview Details loads since "Read Review": ${seen.join('; ') || 'none'}`;
+        throw error;
+    } finally {
+        page.off('request', onRequest);
+        page.off('requestfinished', onFinished);
+        page.off('requestfailed', onFailed);
+    }
 }
 
 /**
@@ -343,12 +385,16 @@ async function openReadReview(page, modal, reviewerName) {
  */
 async function rateReview(page, readModal, stars) {
     const radio = readModal.getByRole('radio', {name: `${stars} out of 5 stars`});
-    // Under load the legacy window's form is still re-rendering when the
-    // click lands and the radio stays unchecked ("Clicking the checkbox did
-    // not change its state"; ci-triage "Review Details window's star-rating
-    // radio not registering the click under load"): wait for the window's
-    // jQuery to go idle, then press and re-check the radio's state in a
-    // bounded retry, at most three presses.
+    // The window marks the review viewed on opening (PUT `…/consider`,
+    // outside the loads "Modify Review" waits for), and its answer replaces
+    // the window's assignment, which resets the rating radios to the value
+    // it carries (ReviewDetailsRating.vue's watch). A press landing before
+    // that answer is handled flips back to "No rating" ("Clicking the
+    // checkbox did not change its state"; register A21, ci-triage "Review
+    // Details window's star-rating radio not registering the click under
+    // load"; .reports/flake-2026-09-29/u27s9/diagnosis.md H4). The app's
+    // own race, so: press and re-check the radio's state in a bounded
+    // retry, at most three presses.
     await waitForJQueryIdle(page);
     const saved = page.waitForResponse(
         (r) =>
@@ -419,11 +465,13 @@ async function openModifyReview(page, readModal, settledText) {
         .click();
     const editModal = page.getByRole('dialog', {name: /^Modify Review/});
     await expect(editModal).toBeVisible({timeout: 20_000});
-    const commentBody = editModal
-        .frameLocator('iframe.tox-edit-area__iframe')
-        .first()
-        .locator('body');
+    const commentFrame = editModal.locator('iframe.tox-edit-area__iframe').first();
+    const commentBody = commentFrame.contentFrame().locator('body');
     await expect(commentBody).toContainText(settledText, {timeout: 20_000});
+    // Callers type into the box: its editor must be `initialized` first,
+    // or its late content style sheets put the old text back over theirs
+    // (shared/playwright/support/richtext.js).
+    await waitForEditorReady(page, await editorIdOf(commentFrame));
     return {editModal, commentBody};
 }
 

@@ -19,6 +19,7 @@
 const {expect} = require('../support/fixtures.js');
 const {WorkflowPage: WorkflowFrame} = require('../../../../shared/playwright/pages/WorkflowPage.js');
 const {waitForJQueryIdle} = require('../../../../shared/playwright/support/legacy.js');
+const {waitForEditorReady, editorIdOf} = require('../../../../shared/playwright/support/richtext.js');
 
 /** Round status sentences (lib/pkp locale, editor wording — Rule 5). */
 const STATUS = {
@@ -303,11 +304,13 @@ async function completeReviewAsReviewer(page, contextPath, submissionId, comment
         await saveContinue.click();
     }
     await page.getByRole('button', {name: 'Continue to Step #3'}).click();
-    const commentsBody = page
-        .frameLocator('iframe[id^="comments"]')
-        .first()
-        .locator('body');
+    const commentsFrame = page.locator('iframe[id^="comments"]').first();
+    const commentsBody = commentsFrame.contentFrame().locator('body');
     await expect(commentsBody).toBeVisible({timeout: 20_000});
+    // Typed before the editor is `initialized`, the text is wiped by its
+    // late content style sheets and the review is submitted without it
+    // (shared/playwright/support/richtext.js).
+    await waitForEditorReady(page, await editorIdOf(commentsFrame));
     // Click into the rich-text body before typing and blur afterwards so
     // TinyMCE registers the change and syncs its backing textarea — a bare
     // fill() can be lost on submit.

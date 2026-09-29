@@ -61,7 +61,7 @@ the account's roles, never on which dashboard page it opens from:
 
 | Field (UI label) | Appears when | Rules |
 |------------------|--------------|-------|
-| Section {OJS OPS} | the journal has more than one section | tick one or more sections. A press never offers a series filter ⚠ [OMP1](#omp1) <sup>i</sup> |
+| Section {OJS OPS} | the journal has more than one section, inactive ones and those restricted to editors counted ([→ Sections](U17-sections.md#inactive)) | tick one or more sections. All are listed, the inactive and editor-only ones unmarked. Applying one narrows the view to its submissions. A press never offers a series filter ⚠ [OMP1](#omp1) <sup>i</sup> |
 | Assigned To Editor (labelled "Assigned to Moderator" on a preprint server {OPS}) | the account holds Journal Manager or Site Administrator | pick one or more people from a suggest list of the journal's Journal Managers and Section Editors. The list offers nothing until a name is typed <sup>i</sup> |
 | Categories | the journal has at least one category | pick one or more categories <sup>i</sup> |
 | Issues {OJS} | the journal has at least one issue | pick one or more issues <sup>i</sup> |
@@ -180,12 +180,22 @@ the account's roles, never on which dashboard page it opens from:
    alone, with a filter chip still active, stays on "Search Results".
    <sup>h</sup>
 <a id="filters"></a>
-8. **Filters.** The "Filters" button opens a side panel (title "Filters")
-   with the fields of the Fields table, "Clear Filters" and "Apply
-   Filters". Applying closes the panel, narrows the current view, and puts
-   one chip per active filter above the table, each with an X to drop just
-   that filter. Filters combine with the search phrase. Switching views
-   clears them. <sup>i</sup>
+8. **Filters.** The "Filters" button opens a side panel titled "Filters":
+   "Close" at its top, the Fields table's fields, and "Clear Filters" and
+   "Apply Filters" at its foot. <sup>i</sup>
+   - 8a. **Applying.** "Apply Filters" closes the panel, narrows the
+     current view, and puts one chip per active filter above the table,
+     each with an X to drop just that filter ⚠ [A11](#a11). Reopening
+     "Filters" shows the applied choices in their fields. Filters combine
+     with the search phrase. Switching views clears them.
+   - 8b. **Clearing and closing.** The panel's own "Clear Filters" only
+     empties its fields: the panel stays open, and the list keeps its
+     chips and count. "Apply Filters" then drops every filter; "Close"
+     keeps them, and the panel reopens showing them. The "Clear
+     Filters" beside the chips (Rule 6) drops every filter at once.
+   - 8c. **Unapplied changes.** Closing the panel without "Apply Filters"
+     drops the changes made in it without asking: the list stays as it
+     was and the panel reopens without them.
 <a id="activity"></a>
 9. **The Editorial Activity cell** tells the team what state the submission
    is in, and offers the next step where there is an obvious one. Exactly
@@ -770,6 +780,8 @@ Left out of the scenarios above, by reason:
 
 - **Budget** — variants:
   - the "Showing {first} to {last} of {total}" line under the list, and "Previous" and "Next" that cannot be pressed at the ends of the pager (Rule 5)
+  - the "Section" field with inactive or editor-only sections (Fields)
+  - the panel's own "Clear Filters", "Close" and unapplied changes (Rules 8b, 8c)
 - **Nothing new to test**:
   - Site Administrator holding Journal Manager in the journal, journal-wide like the Journal Manager (Actors row 2; the Journal Manager's views, scenario 2)
   - a Site Administrator whose editorial roles in the journal are only Section Editor ones, assigned-only like the Section Editor (Rule 3; the Section Editor's views, scenario 2)
@@ -821,6 +833,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A7](#a7) | Declined and cancelled reviewers show no activity indicator at all to assigned Section Editors and assistants | ❓ | minor | — |
 | [A8](#a8) | The profile's opt-out for the monthly outstanding-tasks email is labelled "Weekly email of outstanding tasks" | ❓ | minor | — |
 | [A9](#a9) | A Site Administrator without Journal Manager in the journal is let in but listed by their journal role: with Reader only, an "Error" dialog over an empty list | ❓ | minor | — |
+| [A11](#a11) | Two values chosen in one filter field: one chip or two? | ❓ | minor | — |
 | [OMP1](#omp1) | A press's filter panel never offers a series filter, however many series exist | ❓ | minor | — |
 
 ### All apps
@@ -950,6 +963,14 @@ buttons as "Go to Previous", "Go to Page 1", "Go to Page 2" and plain
 works as labelled; only the announced name differs. Rationale for 🐞: each
 neighbouring button carries a spoken label and this one was left without.
 Basis: probe + code. <sup>a10</sup>
+
+<a id="a11"></a>
+**A11 — One chip per field, or per value?** · ❓ · minor.
+Two values in one filter field were never applied: one chip or two,
+and what an X drops, is open.
+Question: one chip per value, each X dropping its own? Lean: yes; a chip
+names one value ("Section: Shut") and its X removes it.
+Basis: code. <sup>a11</sup>
 
 ### OMP
 
@@ -1184,7 +1205,8 @@ phrase while a filter chip stayed active kept the "Search Results" view
 <a id="fn-i"></a>
 **i — filters.** `PKPSubmissionFilters` (shared):
 `addSectionFields()` (skipped when the context has exactly one section;
-label `section.section`), `addAssignedTo()` (gated `isManagerOrAdmin()`,
+it counts and lists every section, with no active or editor-only
+condition; label `section.section`), `addAssignedTo()` (gated `isManagerOrAdmin()`,
 label `editor.submissions.assignedTo` = "Assigned To Editor"; suggest list
 from the users API restricted to manager+sub-editor role ids),
 `addCategories()` (when any exist), `addDaysSinceLastActivity()`
@@ -1213,6 +1235,29 @@ reviewer name returned nothing. OPS renders the field's label as
 "Assigned to Moderator" (both a two-section scratch server and the seeded
 server); a two-series press's panel offered no series or section field
 (OMP1, editorial-dashboard leg).
+Live-probed 2026-09-29 (Fields row "Section"; OJS and OPS, two runs on
+scratch journals, the Journal Manager and an assigned Section Editor or
+Moderator): one active section "Open" plus one inactive "Shut", and one
+section plus one restricted to editors ("Items can only be submitted by
+Editors and Section Editors."; OPS "Items can only be submitted by
+Managers and Moderators."), each offered "Section" listing both titles as
+plain checkboxes to both accounts; applying "Shut" narrowed "Active
+submissions (2)" to its one submission with the chip "Section: Shut";
+the default section alone offered no "Section" field. A two-series
+press offered none to the Press Manager or the Series Editor (OMP1).
+Live-probed 2026-09-29 (Rule 8; all three apps, two runs, the Journal
+Manager and an assigned Section Editor, Series Editor or Moderator, each
+read on the page and again after a reload): with "Section: Alpha" (OMP:
+"Categories: Cat One") applied, reopening "Filters" showed it ticked (OMP:
+a "Remove Cat One" chip in the field); the panel's "Clear Filters"
+unticked it, sent no request and left the list behind with its chip and
+narrowed count; "Close" then kept the chip, the count and the address
+parameter (`sectionIds` / `categoryIds`), and the panel reopened ticked;
+the panel's "Clear Filters" then "Apply Filters" restored the full view
+with no chip and a clean address; the chips row's "Clear Filters" did the
+same at once. A tick left unapplied, then "Close": no request, the list
+unchanged ("Active submissions (2)", no chip), no browser dialog, and the
+panel reopened empty; a reload read the same.
 
 <a id="fn-j"></a>
 **j — the activity cell.**
@@ -1730,6 +1775,12 @@ held buttons named "Go to Previous", "Go to Page 1", "Go to Page 2"
 (`aria-current` on the page showing) and "Next"; a button named "Go to
 Next" matched nothing. The same component pages the backend's other
 tables.
+
+<a id="fn-a11"></a>
+**a11 — A11 evidence.** `DashboardActiveFilters.vue` renders one chip per
+entry of `activeFiltersList` (keyed field label + value label), its X
+emitting `removeFilter(name, value)`. The 2026-09-29 probes (fn-i) applied
+one value per field only.
 
 <a id="fn-omp1"></a>
 **omp1 — OMP1 evidence.** OMP's

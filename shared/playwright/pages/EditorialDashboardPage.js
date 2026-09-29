@@ -170,9 +170,9 @@ exports.EditorialDashboardPage = class EditorialDashboardPage extends MySubmissi
         });
     }
 
-    /** The chips row's "Clear Filters" button (only exists while filters are
-     * active AND the Filters panel is closed — with the panel open the
-     * panel's own button matches too). */
+    /** The chips row's "Clear Filters" button (exists while filters are
+     * active; it stays behind an open Filters panel, whose own button then
+     * matches too, so press it with the panel closed; U23 I29 check). */
     clearFiltersButton() {
         return this.page.getByRole('button', {name: 'Clear Filters', exact: true});
     }

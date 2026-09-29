@@ -155,7 +155,10 @@ items" on an empty list). No text can be typed anywhere in the panel.
      ⚠ [A12](#a12). Each row shows the task's sentence and, under it, the
      title of the submission it is about when the task carries one: the
      "needs an editor" task does; the published-version task names the
-     title inside its sentence and shows nothing under it. An unread
+     title inside its sentence and shows nothing under it; the statistics
+     task ("This is a kind reminder for you to check your publication's
+     health through the editorial report.", Rule 6) is about no
+     submission and shows nothing under it. An unread
      row's sentence is bold; a read row's is in regular
      type, with no other marker. When the account holds roles in more than
      one journal, each row also shows the journal's initials (the "Journal
@@ -174,7 +177,11 @@ items" on an empty list). No text can be typed anywhere in the panel.
      author's name and the submission's title under it; {OPS} the browser
      lands instead on a reader-facing page whose whole text is "A workflow
      stage was not specified.", and the submission is not reached
-     ⚠ [OPS3](#ops3). The task is marked read either way.
+     ⚠ [OPS3](#ops3). The task is marked read either way. The statistics
+     task is the exception, on every application: pressing it marks it
+     read and opens the journal's Statistics › "Editorial Activity" page
+     ([Editorial statistics](U65-editorial-statistics.md#monthly-email)
+     Rule 27).
    - 2d. **The list is per account, not per journal.** It pools every
      journal's tasks, and the same window with the same rows opens from
      any journal's editorial pages and from the site-level Profile page
@@ -202,8 +209,9 @@ items" on an empty list). No text can be typed anywhere in the panel.
 5. **What the Notifications tab's boxes do.** <sup>d</sup>
    - 5a. **"Enable these types of notifications." unticked** means the
      event is not raised for this account in this journal: no task, and
-     no announcement or issue email. One email ignores the box: the "needs
-     an editor" email still arrives with "Enable…" unticked, and only its
+     no announcement, issue or statistics email. One email ignores the
+     box: the "needs an editor" email still arrives with "Enable…"
+     unticked, and only its
      "Do not send me an email…" box stops it ⚠ [A10](#a10). Nothing is
      stored for later; re-ticking the box brings back future events only.
    - 5b. **"Do not send me an email for these types of notifications."
@@ -249,8 +257,12 @@ items" on an empty list). No text can be typed anywhere in the panel.
    job the site runs on its own timer, which no screen and no action of a
    person starts (unlike scenario 9's issue email, which "Publish Issue"
    queues; "When emails arrive", Canonical scenarios). On the test
-   installs that timer does not run, so no scenario produces those three
-   emails. <sup>e</sup>
+   installs that timer does not run, so no scenario produces the
+   open-access email or the reminder email. The test tooling can start
+   the monthly statistics run for a single journal
+   ([Editorial statistics](U65-editorial-statistics.md#monthly-email)
+   scenario 3 does), and its email and task are the last row below.
+   <sup>e</sup>
 
    | Row (as on the tab) | Raised by (owner) | Who is told | In the application | Email (footer link?) |
    |---|---|---|---|---|
@@ -264,7 +276,7 @@ items" on an empty list). No text can be typed anywhere in the panel.
    | "Discussion activity." | nothing: no event raises it ⚠ [A1](#a1) | — | — | — |
    | "A reviewer has commented on "Title"." | a reviewer submits a review (*[Reviewer assignment & management](U27-reviewer-assignment-and-management.md)*) | only the Journal Managers and Section Editors assigned to that submission, in either role; a Journal Manager who is not assigned gets nothing | no task | the review-complete email, subject "Review complete: {reviewer} recommends {recommendation} for #{submission number} {authors} — "{title}"" ({submission number} and {authors} as in Rule 7a; {OMP} "recommends None", the press's review form offering no recommendation, a wording *[Reviewer's review](U28-reviewers-review.md#omp2)* records); link: yes, in Rule 7a's "This is an automated message…" sentence |
    | "Weekly email of outstanding tasks" | the monthly reminder of outstanding tasks that *[Submissions dashboard (editorial)](U23-submissions-dashboard.md)* describes (the "Weekly" mislabel is noted in Fields); listed on a preprint server too, where the email is never sent ⚠ [OPS1](#ops1). A scheduled task raises it (above); no screen starts it | Journal Managers and Section Editors with submissions waiting on them (which submissions count is *[Submissions dashboard (editorial)](U23-submissions-dashboard.md)*'s to say) | no task | yes; link: yes, in Rule 7a's "This is an automated message…" sentence |
-   | "Statistics report summary." | the monthly statistics email, sent while the journal's "Editorial statistics" choice is "Send a monthly email to editors." (Settings that modify behavior). A scheduled task raises it (above); no screen starts it | Journal Managers and Section Editors | no task | yes, with a spreadsheet attached; link: yes |
+   | "Statistics report summary." | the monthly statistics email that *[Editorial statistics](U65-editorial-statistics.md#monthly-email)* describes, sent while the journal's "Editorial statistics" choice is "Send a monthly email to editors." (Settings that modify behavior). A scheduled task raises it (above); no screen starts it | every user holding a manager-level role in the journal (*Actors & permissions*), the Site Administrator included wherever enrolled in one, every Section Editor and {OJS} every Guest Editor; an Author and a Reader get neither task nor email, and neither do {OJS OMP} a Reviewer, a Copyeditor or a Funding Coordinator, {OMP} a Volume Editor and {OPS} an Editorial Board Member <sup>e</sup> | a task reading "This is a kind reminder for you to check your publication's health through the editorial report.", with no title line under it (Rule 2b); pressing it opens Statistics › "Editorial Activity" (Rule 2c) | the statistics email, subject "Editorial activity for {month}, {year}" ("Preprint Server activity for {month}, {year}" on a preprint server), with the spreadsheet "editorial-report.csv" attached; link: yes |
 
    One email that a box on this tab does *not* govern is the reviewer's
    "Review assignment updated." notice; *[Reviewer assignment & management](U27-reviewer-assignment-and-management.md#a12)*
@@ -272,7 +284,7 @@ items" on an empty list). No text can be typed anywhere in the panel.
 7. **Notification emails and their footer.** <sup>f</sup>
    - 7a. An email marked "link: yes" in Rule 6 ends with a footer: a dash
      ("—") on a line of its own, then one of three sentences: "Unsubscribe from emails sent by
-     {journal name}." (announcements, issues and the statistics report, whose footer was not seen: a scheduled task, Rule 6) <sup>e</sup>, "This
+     {journal name}." (announcements, issues and the statistics report) <sup>e</sup>, "This
      is an automated message from {journal name}. You can unsubscribe from
      this email at any time." (the reminder, the review-complete email) and
      "Reply to this comment at #{submission number} {authors} or
@@ -309,8 +321,8 @@ items" on an empty list). No text can be typed anywhere in the panel.
      what an intact link opens once the addressee has deleted, from their
      own Tasks panel, the task that came with that email (Rule 7b; another
      participant deleting their own row changes nothing). The discussion
-     emails (Rule 6) are the ones whose event both raises a task and
-     carries the link, so they are the emails to try that on.
+     emails (Rule 6) are the ones to try that on: their link comes with
+     the task itself.
    - 8b. **What it shows.** The heading, sentence, boxes, "user profile"
      link and "Unsubscribe" button described in Fields. The sentence names
      the addressee's email address and the journal, whoever is signed in.
@@ -813,9 +825,8 @@ Left out of the scenarios above, by reason:
   - the journal initials on the rows of an account with roles in several journals (Rules 2b, 2d)
   - each journal keeping its own set of choices (Rule 5d)
   - "Enable…" unticked stopping the announcement email (Rules 5a, 6): a scratch journal's announcements are off, and the switch is *Announcements*' (*Settings*)
-  - the open-access email, the reminder email of outstanding tasks and the statistics report email with its spreadsheet (Rule 6): each raised by a scheduled task no screen starts
+  - the open-access email and the reminder email of outstanding tasks (Rule 6): each raised by a scheduled task no screen starts
   - the API secret unset: every footer link opening "404 Not Found" (Rule 7d, *Settings*; A6): the configuration file is shared by every test
-  - the editorial statistics email off, its row leaving the tab (*Settings*): no way yet to create a journal with the email off
   - the Tasks panel's rows per page from the configuration file (*Settings*)
 - **Owned by another feature**:
   - the site-level address forwarding a user with a role in one journal to that journal's "Identity" tab (Rule 5d; *User profile*, scenario 2)
@@ -823,6 +834,8 @@ Left out of the scenarios above, by reason:
   - a form the server rejected: errors inside the form, no toast, gone after about seven seconds (Rule 9c; *User profile*, scenario 8)
   - the success message shown inside the form instead of as a toast (Rule 9c; *User profile*, scenario 2)
   - the reviewer's "Review assignment updated." notice (Rule 6; *Reviewer assignment & management*)
+  - the monthly statistics email and its task: who gets them, "Enable…" unticked stopping both, and the task opening "Editorial Activity" (Rules 2b, 2c, 5a, 6; *[Editorial statistics](U65-editorial-statistics.md)*, scenario 3)
+  - the editorial statistics email off, its row leaving the tab and coming back when the email is on again (*Settings*; *[Editorial statistics](U65-editorial-statistics.md)*, scenario 4)
   - every email in Rule 6 as an email, its trigger, recipients and text (*Side effects*; the raising feature each row names)
   - the announcement's and the issue's email box, the open-access notification and the announcements switch (*Settings*; *Announcements*, *Issues*, *Subscriptions & open access control*)
   - decision tasks landing in the panel with no box to switch them off (*Cross-feature interactions*; *Review stage & rounds*)
@@ -837,7 +850,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A10](#a10) | Unticking "Enable…" under the "needs an editor" row stops the task but the email still arrives; only the email box stops it | 🐞 | user-visible | — |
-| [OPS3](#ops3) | On a preprint server, pressing a task in the Tasks panel lands on "A workflow stage was not specified." instead of the submission | 🐞 | user-visible | — |
+| [OPS3](#ops3) | On a preprint server, pressing a submission's task in the Tasks panel lands on "A workflow stage was not specified." instead of the submission | 🐞 | user-visible | — |
 | [A1](#a1) | The "Discussion activity." row and its two boxes govern nothing; a reply to a discussion raises a task worded exactly like the opening one | 🐞 | minor | — |
 | [A2](#a2) | The Unsubscribe page silently switches back on emails the person had switched off before, because its boxes start ticked and an unticked box means "send" | 🐞 | latent | — |
 | [A3](#a3) | A Section Editor's name on the reader-side header carries no unread count, while a Journal Manager's or an Author's does | 🐞 | minor | — |
@@ -936,12 +949,14 @@ Each Unsubscribe link is bound to the notification the email came with;
 when that notification is a task, it is a row in the Tasks panel. A person
 who deletes that row from the panel and later opens the email's link gets
 "404 Not Found" instead of the Unsubscribe page, with no hint why. In
-scope: the discussion emails (subject: the discussion's name), the one
-kind of email whose event both raises a task and carries the Unsubscribe
-link. Exempt, because their events raise no task and so nothing can be
-deleted: the announcement, issue and open-access emails, the "A reviewer
-has commented" email, the reminder of outstanding tasks and the
-statistics report. The "needs an editor" and "Publication Published"
+scope: the discussion emails (subject: the discussion's name), whose
+link comes with the task itself. Exempt, because their events raise no
+task and so nothing can be deleted: the announcement, issue and
+open-access emails, the "A reviewer has commented" email and the
+reminder of outstanding tasks. The statistics report raises a task too
+(Rule 6), but read from the application its link comes with a record of
+its own that no screen lists, not with the task; deleting that task was
+not tried. The "needs an editor" and "Publication Published"
 emails carry no Unsubscribe link at all (A8).
 Question: is the link meant to outlive the task? Lean: yes; the email is
 still in the inbox, so its link should still work.
@@ -1280,8 +1295,13 @@ outside `classes/notification/` (A1); reviewer comment
 `emails.footer.unsubscribe.automated`); reminder `jobs/email/EditorialReminder`
 (`NORMAL`, `EditorialReminder` mailable, automated footer; OPS does not
 schedule the task, per *Submissions dashboard* note n); statistics
-`task/StatisticsReport` (`$_roleIds` manager and sub-editor) →
-`StatisticsReportMail` (`NORMAL`, `StatisticsReportNotify`, footer, CSV
+`task/StatisticsReport` (`$_roleIds` manager and sub-editor, each list
+filtered by the blocked settings) → the job
+`jobs/notifications/StatisticsReportNotify` (`TASK`,
+`EditorialReportNotificationManager::notify()`, message
+`notification.type.editorialReport`, URL from `getNotificationUrl()`:
+the context's `stats/editorial`) and the job `StatisticsReportMail`
+(`NORMAL`, the mailable `StatisticsReportNotify`, footer, CSV
 attachment). Decision tasks (`EditorDecisionNotificationManager`) are not in
 the settings map. `TASK` = `NOTIFICATION_LEVEL_TASK` (listed in the Tasks
 grid); `NORMAL` notifications are fetched only by screens that pass
@@ -1333,13 +1353,42 @@ Assignments" still gave that editor no task and no email while every
 Manager got the needs-editor pair; the row now states only that, and the
 first-journal expectation (`NORMAL` level, so no task; `EditorAssigned`
 without the `Unsubscribe` trait, so no link) is A11's, read from the
-listener and mailable above (note f-a11). The open-access, reminder and
-statistics emails were not driven: each comes from a scheduled task
-(`OpenAccessNotification`, `EditorialReminder`, `StatisticsReport`) and the
-fleets run no scheduler; nothing on a screen sends them, so their footer
-sentences in Rule 7a come from the mailables' locale keys
-(`emails.footer.unsubscribe` for the statistics report, `.automated` for
-the reminder). Live-probed 2026-09-28 on OJS, OMP and OPS (Rule 6: the
+listener and mailable above (note f-a11). The open-access and
+reminder emails were not driven: each comes from a scheduled task
+(`OpenAccessNotification`, `EditorialReminder`) and the fleets run no
+scheduler; nothing on a screen sends them, so the reminder's footer
+sentence in Rule 7a comes from its mailable's locale key (`.automated`).
+Live-probed 2026-09-29 on OJS, OMP and OPS, two runs each (Rule 6's
+statistics row; Rules 2b, 2c, 5a, 7a): the `StatisticsReport` task
+started for one scratch context through the scenario API
+(`scenarios/task` `statisticsReport`, the context's `editorialStatsEmail`
+on), the context holding one submission received on the 15th of the
+previous month and one account per role. The "Journal manager",
+"Journal editor", "Production editor", "Section editor" and "Guest
+editor" accounts (OMP "Press manager", "Press editor", "Production
+editor", "Series editor"; OPS the "Preprint Server manager" and
+"Moderator") each got one email,
+subject "Editorial activity for August, 2026" (OPS "Preprint Server
+activity for August, 2026") with `editorial-report.csv` attached, the
+text part ending "—" then "Unsubscribe ( {link} ) from emails sent by
+{journal name} ( {link} ).", and the `List-Unsubscribe` headers; and one
+Tasks row, its sentence as in Rule 6 and an empty title cell; on OJS
+and OPS the task's own recipient list (`notified`, `mailed`) held those
+accounts and `admin` (enrolled as manager; its shared mailbox not read),
+OMP's run answering no list (below). Pressing
+it followed `mark-read?redirect=1` to `{context}/stats/editorial`,
+heading "Editorial Activity", the bell "1" before and none on the next
+page. The Author, Reader, Copyeditor, External Reviewer and Funding
+coordinator (OJS, OMP), the Volume editor (OMP) and the Editorial Board
+Member (OPS) got neither. A Section editor and a Production editor (OPS a
+second Preprint Server manager) who had unticked "Enable…" on
+"Statistics report summary." and saved got neither the email nor the
+task, and were left out of the recipient list. On OMP the scenario
+request got no answer in both runs: the `php -S` process died with
+"Segmentation fault" (exit 139, the PHP 8.3 OPcache crash of the test
+server's runtime, not an application path) after the Tasks job had run;
+the reserved mail job, released and run with `php lib/pkp/tools/jobs.php
+work --stop-when-empty`, sent the emails as above. Live-probed 2026-09-28 on OJS, OMP and OPS (Rule 6: the
 "needs an editor" row's "Who is told"; the "Discussion added." row's
 task): `AssignEditors` picks its recipients with
 `filterByRoleIds([ROLE_ID_MANAGER])`. On scratch contexts a seeded
@@ -1731,7 +1780,12 @@ Fixed on the fleets by `make-test-config.js`; not probeable there.
 `Notification::delete()`; `_validateUnsubscribeRequest()` answers 404 for a
 missing id. Live-probed 2026-09-04 on OJS, OMP and OPS with a discussion
 email: the task deleted from the panel, the footer link answered the bare
-"404 Not Found" page, signed in and signed out.
+"404 Not Found" page, signed in and signed out. The statistics report
+(read 2026-09-29, not driven): `StatisticsReportMail::handle()` creates a
+`NORMAL`-level `NOTIFICATION_TYPE_EDITORIAL_REPORT` row per recipient and
+passes it to `allowUnsubscribe()`, while the Tasks row is a separate
+`TASK`-level row from the job `jobs/notifications/StatisticsReportNotify`
+(note e); deleting the task would leave the link's row in place.
 
 <a id="fn-a8"></a>
 **f-a8** — `SubmissionNeedsEditor` and `AuthorPublicationPublished` extend
