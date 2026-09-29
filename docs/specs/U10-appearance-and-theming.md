@@ -187,8 +187,29 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
    Footer" and "Additional Content" of their own language; where it has
    none, the primary language's; where that has none either, another
    language's (an English visitor reads a French-only "Page Footer").
-   Dates print in the formats chosen for the visitor's language.
    <sup>y</sup> <sup>td9</sup>
+
+3a. **Dates in each language.** Dates print in the formats saved for the
+    visitor's language (the tab's "French" button shows the French
+    groups): a French "Date (Short)" of "24.09.2026" prints on the French
+    pages, and the English pages keep "2026-09-24". Until another French
+    "Date" is chosen and saved, French gets the installation's default
+    (Settings bullet 27) in French words: the French "Date" sits on its
+    first choice, "septembre 24, 2026" ⚠ [A13](#a13), and a press's
+    French pages (Rule 31) give a book's date as "mars 5, 2024" (English
+    "March 5, 2024"). Once "24 septembre 2026" is chosen and saved, they
+    read "5 mars 2024", and the English pages are unchanged. <sup>j</sup>
+    <sup>y</sup> <sup>td9</sup>
+
+3b. **A language offered to visitors but not in the forms.** Where
+    French is ticked under "UI" but not under "Forms" (Settings › Website
+    › "Setup" › "Languages"), "Date & Time" has no "French" button, and a
+    French visitor reads the installation's default formats whatever the
+    tab saves. On such a press, with "24 September 2026" saved under
+    "Date", the English book page reads "Published 5 March 2024" and the
+    French one "mars 5, 2024". Unlike the logo and "Page Footer" (Rule
+    3), the dates do not fall back to the primary language's choice.
+    <sup>y</sup> <sup>td9</sup>
 
 **The theme**
 
@@ -467,9 +488,9 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
       announcement ([Announcements](U12-announcements.md)), the dates in
       a preprint's summary {OPS}, and an article's date in the Search
       page's results {OJS}.
-    - "Date" {OMP}: a book's "Published" date on its page and its date
-      in the catalog's and the Search page's lists; the book's
-      "Versions" list uses "Date (Short)".
+    - "Date" {OMP}: a book's "Published" date on its page and on its
+      chapters' pages, and its date in the catalog's and the Search
+      page's lists; the book's "Versions" list uses "Date (Short)".
     - "Date & Time (Short)": the date and time of a submission file's
       notes and a library file's "Date uploaded".
 32. **The two combined choices follow the others.** On the tab, choosing
@@ -629,12 +650,15 @@ that change them.
     (Rule 14). *Subscriptions & open access control* owns it. <sup>o</sup>
 26. **"Forms"** (Settings › Website › "Setup" › "Languages"; the primary
     language alone on a new journal). Each language added: a value per
-    language on the per-language fields (Rule 3). *Languages & locales*
-    owns it. <sup>y</sup>
+    language on the per-language fields (Rule 3) and its own "Date &
+    Time" choices (Rule 3a); a language ticked under "UI" alone gets the
+    default formats (Rule 3b). *Languages & locales* owns it. <sup>y</sup>
 27. **The default formats** (the installation's configuration file; the
     choices marked in Fields). They are the formats of a journal that
-    never saved "Date & Time", and of a group saved with an empty
-    "Custom" (Rule 33). No screen changes them. <sup>j</sup>
+    never saved "Date & Time", of a language it never saved them in
+    (Rule 3a) or cannot save them in (Rule 3b), and of a group saved with
+    an empty "Custom" (Rule 33). They are one set for every language,
+    written in the visitor's words. No screen changes them. <sup>j</sup>
 
 ## Cross-feature interactions
 
@@ -1044,7 +1068,7 @@ passwords and the tooling recipe are in the footnote. <sup>sc</sup>
      "French", choose "24.09.2026" under the French "Date (Short)" and
      press "Save". The visitor reloads both pages: the announcement's
      posted date reads "24.09.2026" on the French one and "2026-09-24" on
-     the English one (Rule 3).
+     the English one (Rule 3a).
    - **Control**: before the first "Save", the foot of the English page
      held no footer text (Fields, "Setup": "Page Footer" empty on a new
      journal).
@@ -1099,6 +1123,10 @@ passwords and the tooling recipe are in the footnote. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a press's French pages giving a book's date in the default format before a French "Date" is saved, and in the saved one after, the English pages unchanged {OMP} (Rule 3a)
+  - French ticked under "UI" alone: "Date & Time" without a "French" button, and a press's French pages keeping the default format after an English "Date" is saved {OMP} (Rule 3b)
+  - a chapter's page printing the book's "Date" {OMP} (Rule 31)
 - **Nothing new to test**:
   - a role newly considered for the masthead on a preprint server, before and after the tab's first save {OPS} (Rule 28; Settings bullet 24)
   - the Editor and the Production Editor on the same tabs: the same fields and saves as the Journal Manager in scenarios 1 to 10 (Actors row 1)
@@ -1115,6 +1143,7 @@ Left out of the scenarios above, by reason:
   - A10 (a browser that opened the journal before keeping the old header colour after a "Colour" save; Rule 6a)
   - A11 (the French "Entête" description naming a journal on a press and a preprint server; Rule 35b)
   - A12 (the French upload boxes' drop area in English; Rule 35a)
+  - A13 (the default French date in the English word order {OMP}; Rule 3a)
   - OJS2 (a first issue created on a journal that never saved "Theme", the home page switching by itself {OJS}; Rule 10)
   - OJS3 (a published issue's articles absent from "Latest Publications", the list ordered by submission {OJS}; Rule 13)
   - OJS4 (the Settings Wizard showing another organization for a journal with no issue {OJS}; Rule 34; scenario 2 marks it)
@@ -1140,8 +1169,8 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-09-24; A10–A12
-2026-09-28), unreviewed unless an entry notes otherwise; the team settles
-them on spec review.
+2026-09-28; A13 2026-09-29), unreviewed unless an entry notes
+otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
@@ -1160,6 +1189,7 @@ them on spec review.
 | [OMP2](#omp2) | A press's category page shows only its first page of books, with no way to the rest | 🐞 | user-visible | — |
 | [A2](#a2) | A logo saved without alternate text leaves the header's home link without a name | ❓ | minor | — |
 | [A10](#a10) | A saved "Colour" does not reach a browser that has already opened the journal | ❓ | user-visible | — |
+| [A13](#a13) | Until a French "Date" is saved, a press's French pages write a book's date in the English order ("mars 5, 2024") | ❓ | minor | — |
 | [OJS2](#ojs2) | A journal's home page switches from its recent articles to an empty current-issue section when the first issue is created | ❓ | user-visible | — |
 | [OJS3](#ojs3) | "Include recent most published articles" lists only articles outside a published issue, by submission date | ❓ | minor | — |
 | [OJS4](#ojs4) | The Settings Wizard shows the current issue's table of contents ticked for a journal with no issue, and a save there stores it | ❓ | minor | — |
@@ -1299,6 +1329,20 @@ A manager working in French expects the upload boxes in French, as their
 button "Téléverser un fichier" is. The drop area of every upload box on
 "Setup" and "Advanced" reads "Drop files here to upload" in English, on
 all three apps. Basis: probe. <sup>f-a12</sup>
+
+<a id="a13"></a>
+**A13 — The default French date keeps the English word order** · ❓ · minor.
+A French visitor to a press whose managers never saved a French "Date"
+reads a book's date as "mars 5, 2024", and its "Mis(e) à jour" date the
+same way: French month names in the English order. The installation has
+one default pattern for every language, and "Date & Time" offers it to
+French already chosen, as "septembre 24, 2026"; where French is not under
+"Forms" (Rule 3b), no screen changes it at all. Question: should a
+language with no saved format get a default in its own order ("5 mars
+2024"), or should the tab say that its default is the English one? Lean:
+a default per language; French readers see an ungrammatical date on every
+book until a manager who knows the tab changes it. Basis: probe.
+<sup>f-a13</sup>
 
 ### OJS
 
@@ -1559,7 +1603,10 @@ preset's label and move the combined value when it equalled the old
 combination. An empty custom box saves `null` for that group and the
 getters fall back to the configuration file. Saved under "Date (Short)",
 the stored `datetimeFormatShort` is the time pattern alone (A9; why the
-combination drops the date was not traced).
+combination drops the date was not traced). The public pages print a
+pattern with `PKPTemplateManager::smartyDateFormat`, Carbon's
+`translatedFormat`, so the one default pattern is filled with the
+visitor's month names in its English order (A13, note f-a13).
 
 <a id="fn-k"></a>
 **k — the theme list.** `PKPThemeForm` fills the `themePluginPath`
@@ -1802,8 +1849,11 @@ with `getLocalizedData()`, which falls back to the primary locale and
 then to any locale holding a value (live-probed 2026-09-24 with a
 French-only footer), and the favicon with `getLocalizedFavicon()`. `PKPDateTimeForm`'s fields are
 multilingual, one choice per form locale, and `getLocalizedDateFormat…()`
-read the visitor's locale. A context without `supportedFormLocales` has
-the primary language alone under "Forms" (scenarios.md).
+read the visitor's locale; a locale with no saved value, including one
+outside the form locales, gets the configuration file's pattern, not the
+primary locale's (Rules 3a, 3b; note j). A context without
+`supportedFormLocales` has the primary language alone under "Forms"
+(scenarios.md).
 
 <a id="fn-z"></a>
 **z — the statistics chart.** `displayStats` is read by OJS
@@ -1988,6 +2038,24 @@ three apps, two runs): "Logo", the thumbnail and "Homepage Image" on
 "Setup" and the style sheet and "Favicon" on "Advanced" each read "Drop
 files here to upload" beside "Téléverser un fichier".
 
+<a id="fn-f-a13"></a>
+**f-a13** — Each app's configuration file has one `[general]`
+`date_format_long` "F j, Y" for every locale; `Context::getDateTimeFormats()`
+fills a locale with no saved value from it, and
+`PKPTemplateManager::smartyDateFormat` prints it with Carbon's
+`translatedFormat`, so the pattern gets the visitor's month names in its
+English order. Live-probed 2026-09-29 (Rules 3a, 3b; three apps, two
+runs each, OMP three): on scratch contexts with French under "UI" and
+"Forms", the French "Date" group arrived with "F j, Y" checked, labelled
+"septembre 29, 2026", on all three apps; on a press, a book published
+2024-03-05 with a second version published that day read "mars 5, 2024
+— Mis(e) à jour septembre 29, 2026" on the book's and the chapter's
+French pages, until "29 septembre 2026" was saved under French. With
+French under "UI" alone the tab had no French group. Every Settings ›
+Website load also answered the Plugin Gallery's list
+(`plugin-gallery-grid/fetch-grid`) with a 500, the test installs' known
+gallery failure, not behind this finding.
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `journalContentOrganization` is added by OJS's
 `DefaultThemePlugin` alone; OMP and OPS index handlers read no such
@@ -2140,7 +2208,21 @@ image, favicon and "Additional Content" showed to the French visitor;
 a French-only "Page Footer" ("Pied de page") showed to both, and with
 "English footer" added each language read its own; a French "Date
 (Short)" of "24.09.2026" printed "Publié 24.09.2026" on the French
-item page against "2026-09-24" in English.
+item page against "2026-09-24" in English. Live-probed 2026-09-29
+(Rules 3a, 3b; three apps, two runs each, OMP three; a signed-out
+visitor): on a context with French under "UI" and "Forms" the French
+"Date" arrived on "septembre 29, 2026"; a press's book published
+2024-03-05, with a second version published that day, read "mars 5,
+2024" on its French page and its chapter's page, and the French catalog
+gave it "septembre 29, 2026" (the second version's date); with "29
+septembre 2026" saved under French (the tab showed it after a reload)
+they read "5 mars 2024" and "29 septembre 2026", and the English pages
+still "March 5, 2024". A journal's and a server's French pages print no
+"Date" (Rule 31): "Publié 2024-03-05", "Diffusé-e 2024-03-05", unchanged
+by that save. On a context with French under "UI" alone the tab showed
+no language button and no French group; with "j F Y" saved in English
+the book read "Published 5 March 2024" in English and "mars 5, 2024" in
+French, on the book's and chapter's pages and in the catalog.
 
 <a id="fn-td10"></a>
 **td10** — Live-probed 2026-09-24 (Rule 4; all three apps): the "Theme"
@@ -2326,7 +2408,9 @@ preprint list showed "Previous" and "Next" alone at either number.
 "Published 24 September 2026" and the catalog "24 September 2026". A
 file's note and a library file's "Date uploaded" read "2026-09-24 07:17
 PM" before, "24.09.2026 07:17 PM" after, and "24.09.2026 19:17" once
-"15:05" was saved under "Time".
+"15:05" was saved under "Time". Live-probed 2026-09-29 (Rule 31; OMP,
+three runs): a chapter's page prints the book's "Date" as the book's
+page does.
 
 <a id="fn-td34"></a>
 **td34** — Live-probed 2026-09-24 (Rule 32; all three apps, two runs):

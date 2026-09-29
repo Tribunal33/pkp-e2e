@@ -260,7 +260,11 @@ record what each role is offered once the list is on screen. <sup>b</sup>
     "Save" and "Cancel". "Save" stores the changes and closes the window;
     the list shows the new name at once. It changes the file's details
     only: the file itself is replaced by revising it (Rule 8), and the
-    component is chosen once, at upload. <sup>t</sup> <sup>d11</sup>
+    component is chosen once, at upload. "Cancel" and the window's header
+    "Close" both close it at once without asking, even with the name
+    changed, and keep nothing: the list shows the old name, after a
+    reload too, and "Update File Details" reopens the window on it.
+    <sup>t</sup> <sup>d11</sup>
 <a id="dependent-files"></a>
 11. **Dependent files.** An HTML or XML file carries its own "Dependent
     Files" list (images, style sheets, media the page needs), shown under
@@ -924,6 +928,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the file's "History" keeping no line of the revision cancelled with "Cancel": one "A file revision "notes.md" …" line, not two (Rule 9): likely a bullet in scenario 3, which cancels a revision before the "History" it reads
+  - "Edit a file" closed with its header "Close" after the name is changed: no question, the list keeping the old name after a reload, and the window reopening on it (Rule 10): likely a bullet in scenario 4 before "The rename"
 - **Nothing new to test**:
   - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
   - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
@@ -1852,7 +1857,14 @@ refused with "This field is required." and the window stayed open. On an
 English and French journal the form showed the tabs "English" and "French
 (Canada)", one box at a time, opening on the submission's own language with
 "article.pdf" in its box (a French submission opened on "French (Canada)"); a
-one-language journal showed one box and no tabs.
+one-language journal showed one box and no tabs. Test run 2026-09-29 (Rule 10;
+OJS and OMP, two runs each, as the Journal / Press Manager on a "Submission
+Files" file): with the name changed and the box left, the header "Close"
+closed "Edit a file" at once, with no browser question and nothing sent; the
+list read "article.pdf" at once and after a reload, and "Update File Details"
+reopened on "article.pdf". "Cancel" with a changed name likewise raised no
+question and kept the old name (f-a18). A preprint server's workflow shows no
+file list and no "Update File Details".
 
 <a id="fn-u"></a>
 **u** — `Repository::supportsDependentFiles()`: mimetype `text/html`,

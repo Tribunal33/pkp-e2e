@@ -99,7 +99,7 @@ screen, Rule 12): <sup>e</sup>
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
 | **Role Identifier** | Yes | Drop-down of the built-in identifier codes (AUTHOR, EDITOR, CHAIR, REVIEWER, REVIEW_ASSISTANT, STATS_REVIEWER, REVIEWER_EXTERNAL, READER, TRANSLATOR, OTHER). The identifier is what the role means to the system, for example in exports. It is fixed after creation: on "Edit Role" the drop-down offers only the role's own identifier. |
-| **Role Name** | Yes (enforced for the primary language only) | Text, one box per journal language ("Fill name in all of the languages."). These are the words shown on contributor rows, forms and reader pages. Despite the guidance, a save with another language's box left empty is accepted without a word ⚠ [A13](#a13). |
+| **Role Name** | Yes (enforced for the primary language only) | Text, one box per language ticked under "Forms" on the journal's "Languages" tab, with the guidance "Fill name in all of the languages." The primary language's box shows when the window opens. Each other language's box ("Role Name in French") shows once that language's button ("French") at the top of the window is pressed. Under each box, "{count}/{total} languages completed" counts the filled boxes. These are the words shown on contributor rows, forms and reader pages; how a reader page falls back when a language's box is empty is Rule 15a. Despite the guidance, a save with another language's box left empty is accepted without a word ⚠ [A13](#a13). <sup>e</sup> |
 
 ## Rules & state
 
@@ -203,7 +203,9 @@ screen, Rule 12): <sup>e</sup>
     preprint server starts with two: "Author" (identifier AUTHOR) and
     "Translator" (identifier TRANSLATOR). A new press starts with four:
     those two plus "Chapter Author" (also identifier AUTHOR) and "Volume
-    editor" (identifier EDITOR). The submitting author's auto-created
+    editor" (identifier EDITOR). Each arrives named in the journal's
+    primary language only: its box for any other "Forms" language is
+    empty ⚠ [A21](#a21). The submitting author's auto-created
     contributor gets the journal's first AUTHOR-identifier role.
     <sup>e</sup>
 12. **The Contributor Roles screen.** Settings → Workflow → Submission →
@@ -211,7 +213,11 @@ screen, Rule 12): <sup>e</sup>
     Identifier"**, with **"Add Role"** above it and "Edit" / "Delete Role"
     behind each row's "…" menu. Add and edit use the panel described in
     Fields & validation. A successful save reports "Contributor role
-    saved". <sup>e</sup>
+    saved". In "Edit Role", the only way out besides "Save" is "Close"
+    at the top (no "Cancel"). It shuts the window at once, with no
+    question, saving nothing: reopened after a reload, the window shows
+    the stored names; reopened before, it still holds what was typed
+    ⚠ [A22](#a22). "Add Role" was not tried. <sup>e</sup>
 13. **Deleting a role.** "Delete Role" opens a type-to-confirm dialog:
     'Are you absolutely sure you want to delete "{identifier}" role?' Its
     warning lists the two preconditions: at least one AUTHOR role must
@@ -230,15 +236,18 @@ screen, Rule 12): <sup>e</sup>
     been successfully deleted.' <sup>e</sup>
 14. **What readers see on the landing page.** A published item's landing
     page is the article page on a journal, the catalog's book page on a
-    press, and the preprint's page on a preprint server. It credits every
+    press, and the preprint's page on a server. It credits every
     contributor in list order: name, affiliation names, contributor role
-    names, ORCID iD, and any CRediT roles. A registry-backed affiliation's
-    ROR mark links to its registry record, but assistive technology
-    cannot name that link ⚠ [A9](#a9). The ORCID iD shows a verified or
-    unauthenticated icon; see *[ORCID integration](U04-orcid-integration.md)*.
-    Contributors with a Bio Statement additionally get an **"Author
-    Biographies"** section ("Author Biography" for one). Above each
-    statement it shows "{name}, {affiliations}", or just the name with no
+    names (in the reader's language, Rule 15a), ORCID iD, and any CRediT
+    roles, each followed by its degree in parentheses ("Conceptualization
+    (Lead)"). On a journal's French article page the degree prints as a
+    raw code (presses and servers untried) ⚠ [A23](#a23). A
+    registry-backed affiliation's ROR mark links to its registry record,
+    but assistive technology cannot name that link ⚠ [A9](#a9). The ORCID
+    iD shows a verified or unauthenticated icon; see
+    *[ORCID integration](U04-orcid-integration.md)*. Contributors with a
+    Bio Statement get an **"Author Biographies"** section ("Author
+    Biography" for one). Above each statement it shows "{name}, {affiliations}", or the name with no
     comma for a contributor without an affiliation. On a press, a book
     with five or more contributors compacts the credits to a single
     flowed line of names joined by semicolons, without affiliations, ROR
@@ -252,6 +261,19 @@ screen, Rule 12): <sup>e</sup>
     Whether a listing omits unticked contributors is Rule 8's exception
     ([A3](#a3)). Whether a section hides author lines entirely is the
     section configuration's rule, not this feature's. <sup>h</sup>
+15a. **Role names in the reader's language.** On the landing page and
+    in the listings' author lines (an issue's table of contents, a
+    press's catalog, a preprint server's archive), each contributor role
+    is named in the language the reader is browsing in. A role whose
+    name is empty in that language (Fields, "Role Name") is named in the
+    journal's primary language instead. Every role arrives with its
+    French name empty ([A21](#a21)). So on a journal whose primary
+    language is English, a reader browsing in French sees "Author"
+    beside each contributor on the landing page and "{name} (Author)" in
+    the author lines. Once a Journal Manager saves "Auteur-e" as the
+    role's French name in its "Edit Role" window (Rule 12), the French
+    pages read "Auteur-e" and "{name} (Auteur-e)", and the English pages
+    still read "Author". <sup>h</sup>
 16. **Affiliation identities and the registry cache.** An affiliation is
     either registry-backed or typed by hand. A registry-backed one is
     identified by its ROR record, and its name is shown from the registry
@@ -737,6 +759,15 @@ Left out of the scenarios above, by reason:
   - a new contributor joining last before any "Save Order" is pressed,
     on a press and a preprint server, where the suites save an order
     before they read it (Rule 6): scenario 2's "Preview" and "Control"
+  - role names in the reader's language: a French reader's "Author" on
+    the landing page and in the listings' author lines, "Auteur-e" once
+    the role's French name is saved, the English pages unchanged
+    (Rule 15a)
+  - the "Edit Role" window's language button, the other language's box
+    shown once it is pressed, and "{count}/{total} languages completed"
+    under each box (Fields "Role Name")
+  - "Close" on "Edit Role" leaving at once, with no question, and a
+    reload showing nothing saved (Rule 12)
 - **Nothing new to test**:
   - Preferred Public Name (Fields): another text box on the form
     scenario 1 fills
@@ -776,6 +807,12 @@ Left out of the scenarios above, by reason:
   - A20 (the workflow's "Add Contributor" never saving on a journal
     with a "Forms" language not ticked under "Metadata"; Fields;
     Settings)
+  - A21 (contributor roles arriving named in the primary language
+    only; Rule 11)
+  - A22 (a role name closed without saving still showing when "Edit
+    Role" is reopened before a reload; Rule 12)
+  - A23 (a CRediT role's degree printing as a raw code on a French
+    landing page; Rule 14)
   - OPS2 (the Competing Interests label rendering raw on a preprint
     server; Fields)
 - **No seed**:
@@ -826,6 +863,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A9](#a9) | The landing page's affiliation ROR link has no accessible name | 🐞 | minor | — |
 | [A10](#a10) | The typed affiliation's per-language name boxes are announced wrongly by a screen reader | 🐞 | minor | — |
 | [A12](#a12) | The delete-role confirm button is labeled with a whole warning sentence instead of "Delete" | 🐞 | minor | — |
+| [A23](#a23) | On a French landing page a CRediT role's degree prints as a raw text code | 🐞 | minor | — |
 | [OPS2](#ops2) | The contributor form's Competing Interests label renders raw markup on a preprint server | 🐞 | minor | — |
 | [A2](#a2) | Deleting the primary contact silently leaves the publication with none | ❓ | user-visible | — |
 | [A16](#a16) | The auto-created contributor can arrive without a Country — every later edit is then refused until one is supplied | ❓ | user-visible | — |
@@ -837,6 +875,8 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A17](#a17) | The typed affiliation's "{count} of {total} languages" total may follow the publication's languages, not the journal's | ❓ | minor | — |
 | [A18](#a18) | An Anonymous contributor's Email and Country are marked "* Required" but save empty | ❓ | minor | — |
 | [A19](#a19) | The contributor form's email field is labeled "Email" on one install and "Email address" on another, and the error summary's "Go to …:" link follows the label | ❓ | minor | — |
+| [A21](#a21) | Contributor roles arrive named in the primary language only, so readers in another language see "Author" | ❓ | minor | — |
+| [A22](#a22) | A role name typed and closed without saving still shows when "Edit Role" is reopened before a reload | ❓ | minor | — |
 | [OMP1](#omp1) | A book with five or more contributors compacts to bare name-and-affiliation lines | ✅ | user-visible | — |
 | [OMP2](#omp2) | An Edited Volume's book page credits volume editors instead of the contributor list | ✅ | user-visible | — |
 | [OPS1](#ops1) | The submitting author edits their own unposted preprint's contributors | ✅ | user-visible | — |
@@ -1097,6 +1137,46 @@ Workaround: add the language to "Submission Languages" with
 "Submissions" ticked, or add the contributor in the wizard before
 submitting.
 Since: 2025-11-11 (10½ months) · Basis: probe. <sup>f-a20</sup>
+
+<a id="a21"></a>
+**A21 — Contributor roles arrive named in the primary language only** · ❓ · minor.
+A journal's contributor roles arrive named in its primary language
+alone: "Author" and "Translator", and on a press also "Chapter Author"
+and "Volume editor" (Rule 11). On a journal with French ticked under
+"Forms", each role's "Edit Role" window shows the French box empty,
+with "1/2 languages completed". A reader browsing in French therefore
+sees "Author" on every landing page and author line (Rule 15a) until a
+Journal Manager types each role's French name, although the
+application's own French translation has them ("Auteur-e",
+"Traducteur-trice", "Auteur du chapitre").
+Question: should the role names be filled from the application's own
+translations when the journal is created or a form language is added?
+Lean: yes. The window marks the name required in every language and
+counts the French one missing, yet nothing ever fills it.
+Basis: probe + code reading. <sup>f-a21</sup>
+
+<a id="a22"></a>
+**A22 — A role name closed without saving reappears in "Edit Role"** · ❓ · minor.
+In a role's "Edit Role" window, a French name typed and left with
+"Close" is not saved: the Contributor Roles list is unchanged, and after
+a reload the window's French box is empty. Reopened on the same page
+before any reload, though, the window shows the typed name and "2/2
+languages completed", as if it had been stored. A Journal Manager who
+reopens the window to check reads an unsaved name as saved.
+Question: should a reopened window show the stored values? Lean: yes.
+The window is where a manager checks what readers will see (Rule 15a).
+Basis: probe. <sup>f-a22</sup>
+
+<a id="a23"></a>
+**A23 — A CRediT role's degree prints as a raw code on a French landing page** · 🐞 · minor.
+On a French article page a contributor's CRediT role reads
+"Conceptualisation (##submission.submit.creditRoles.degrees.lead##)"
+where the English page reads "Conceptualization (Lead)": the role is
+translated, its degree is not. Seen on a journal. The degree words are
+missing from the French translation all three applications share, so a
+press's book page and a preprint server's page are expected to show the
+same.
+Basis: probe + code reading. <sup>f-a23</sup>
 
 ### OMP
 
@@ -1403,7 +1483,20 @@ Moderator) opening the settings URL directly lands on the
 authorization-denied page, "The current role does not have access to
 this operation."; a role-name save with the second language empty
 returned 200 with a null stored name (A13). `GET identifiers` returns
-the enum list the Add panel offers.
+the enum list the Add panel offers. The "Edit Role" window's language
+boxes, live-probed 2026-09-29 (Fields "Role Name"; Rules 11, 12; OJS,
+OMP and OPS, two full runs each plus a roles-only run; kept script
+`shared/playwright/checks/U10/I29/i29.js`, phase `roles`): on a scratch
+context with French under "UI" and "Forms", "Edit Role" on "Author"
+showed the English box ("Author") and a "French" button beside the word
+"English" at the top; the French box ("Role Name in French", empty) was
+hidden until "French" was pressed; "1/2 languages completed" stood under
+each box once both showed. On a scratch context with French under "UI" only, and on
+`publicknowledge` (read by `manager.maya`, nothing saved), the window had
+no language button and no French box. Saving "Auteur-e" as the French
+name answered 200 with "Contributor role saved", and the box still read
+"Auteur-e" after a reload. "Close" is the window's one control besides
+"Save" (A22).
 
 <a id="fn-f"></a>
 **f — delete, order, silence.** Delete dialog: title + confirm
@@ -1484,7 +1577,21 @@ authors block listed "Anonymous" with role "Author" as a normal
 entry — the word appearing exactly once on the page, with nothing
 marking it as a placeholder — and the issue table of contents and the
 search result line both printed "Alex Author (Author); Anonymous
-(Author)".
+(Author)". Role names by the reader's language (Rule 15a), live-probed
+2026-09-29 on OJS, OMP and OPS (two full runs each plus a roles-only
+run; kept script `shared/playwright/checks/U10/I29/i29.js`), signed out,
+on scratch contexts with French under "UI" (with and without "Forms")
+and on `publicknowledge`: the French article, book, chapter and preprint
+pages printed "Author" beside the contributor, and the French issue
+table of contents, catalog and archive lines "{name} (Author)"; once
+"Auteur-e" was saved as the French name, the same French reads showed
+"Auteur-e" and "{name} (Auteur-e)" and the English pages still
+"Author". The authors heading ("Authors", "Auteurs-es") is visible to
+screen readers only. Mechanism: `Author::getLocalizedContributorRoleNames()`
+takes each role's `getLocalizedData('name')`, whose locale precedence
+(`LocalizedData::getBestLocalizedData()`) passes over an empty
+visitor-locale value to the next locale holding one, on a
+one-language role its primary-locale name.
 
 <a id="fn-i"></a>
 **i — the wizard mount.** `PKPSubmissionHandler::getSteps()` pushes the
@@ -1976,6 +2083,47 @@ context with `fr_CA` also a submission (hence metadata) language saved a
 Person and an Organization, listed after a reload. A language ticked
 under "Metadata" alone is accepted by that code; not driven. Introduced
 by pkp-lib `52d3a0f8e7` (2025-11-11, "Contributor Roles and Type").
+
+<a id="fn-f-a21"></a>
+**f-a21 — A21 evidence.** Live-probed 2026-09-29 (OJS, OMP, OPS; two
+full runs each plus a roles-only run; kept script
+`shared/playwright/checks/U10/I29/i29.js`): on scratch contexts with
+French under "UI" and "Forms", every role's "Edit Role" window held an
+empty French box with "1/2 languages completed" ("Author" and
+"Translator"; on a press also "Chapter Author" and "Volume editor"); on
+scratch contexts with French under "UI" only, and on `publicknowledge`,
+the window had no French box; every French reader page read "Author"
+(fn h). Code reading: `PKPContextService::add()` names the default roles
+in the context's form locales at creation (`getSupportedFormLocales()`),
+which on a new context is the primary locale alone (the Hosted Journals
+window sets no form languages; not driven); nothing names them again
+when a form language is added. lib/pkp `locale/fr_CA/default.po` has
+`default.groups.name.author` "Auteur-e" and `.translator`
+"Traducteur-trice"; OMP `locale/fr_CA/default.po` has `.chapterAuthor`
+"Auteur du chapitre".
+
+<a id="fn-f-a22"></a>
+**f-a22 — A22 evidence.** Live-probed 2026-09-29 (OJS and OPS three
+runs; OMP three for the reopen, two for the reload; kept script `shared/playwright/checks/U10/I29/i29.js`,
+phase `roles`): "Edit Role" on "Author", "French" pressed, "Auteur-e"
+typed, "Close" pressed: the window closed, no browser dialog, the list
+unchanged; reopened at once, the French box read "Auteur-e" and both
+counts "2/2 languages completed"; after a reload and a reopen the French
+box was empty and the count "1/2 languages completed". No request of
+500 or more and no page error.
+
+<a id="fn-f-a23"></a>
+**f-a23 — A23 evidence.** Live-probed 2026-09-29 (OJS, two runs,
+signed out): a `publicknowledge` article whose first contributor holds
+the CRediT role "Conceptualization" at "Lead" read "Conceptualisation
+(##submission.submit.creditRoles.degrees.lead##)" at `fr_CA` and
+"Conceptualization (Lead)" at `en`. Code reading: lib/pkp
+`locale/en/submission.po` defines
+`submission.submit.creditRoles.degrees.lead` / `.equal` /
+`.supporting` ("Lead", "Equal", "Supporting"); lib/pkp
+`locale/fr_CA/` has none of the three, in all three apps' checkouts.
+Not read on a press or a preprint server: no French item read there
+carried a CRediT role.
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** OMP

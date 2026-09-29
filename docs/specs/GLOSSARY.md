@@ -369,9 +369,11 @@ The long form of the legend. Each spec's Conventions line carries the three symb
 - **Coverage.** The canonical scenarios are what the automated suites
   check: a scenario's bold leads name what it opens, its badge which apps
   run it. The Coverage section lists what they leave out and why: a
-  **Budget** item is a cut the team can ask to reverse; the other reasons
-  (nothing new to test, a register entry records it, no way to seed the
-  state yet, another feature owns it) are not cuts.
+  **Planned** item is coverage the spec owes and a later revision adds; a
+  **Rarely met** item is a state an editor, author or reviewer would not
+  meet in an ordinary week; the other reasons (nothing new to test, a
+  register entry records it, no way to seed the state yet, another
+  feature owns it) say why no test is owed.
 - **Placeholders.** A lowercase phrase in braces, {email} for one, stands for
   the value the screen fills in.
 - **Footnote marks** (`<sup>a</sup>`) point to evidence: code anchors, probe

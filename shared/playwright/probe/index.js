@@ -594,6 +594,66 @@ function takeNotices(page) {
 }
 
 /**
+ * Every raw locale key (`##key##`) left on the page, for a translated-page
+ * sweep: text nodes (`<option>` labels and screen-reader-only text
+ * included) and every attribute, plus the document title. One string per
+ * key and place, `"##key## @ <landmark> > <element> (<text|attribute>)"`,
+ * with ", hidden" when the element is not rendered; `[]` when there are
+ * none. `scope` (a CSS selector) narrows the read to the first match, and
+ * returns null when nothing matches. Read the raw text, never
+ * `screen().text`: innerText follows CSS `text-transform`, so an
+ * upper-cased heading reads like a code (U08 K1, U11 K1, U24 and U07 I29).
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {{scope?: string}} [options]
+ * @returns {Promise<string[]|null>}
+ */
+async function rawKeys(page, {scope} = {}) {
+    return page.evaluate((selector) => {
+        const root = selector ? document.querySelector(selector) : document.body;
+        if (!root) {
+            return null;
+        }
+        const re = /##[^#\s]+##/g;
+        const visible = (el) => !!(el && (el.offsetWidth || el.offsetHeight || el.getClientRects().length));
+        const name = (el) => `${el.tagName.toLowerCase()}${el.id ? `#${el.id}` : ''}${
+            typeof el.className === 'string' && el.className.trim() ? `.${el.className.trim().split(/\s+/).slice(0, 2).join('.')}` : ''
+        }`;
+        const where = (el) => {
+            const land = el.closest('nav[aria-label], [role="dialog"], header, main, aside, footer, [role="tabpanel"]');
+            const label = land && land.getAttribute('aria-label') ? `[${land.getAttribute('aria-label')}]` : '';
+            return `${land ? `${land.tagName.toLowerCase()}${land.id ? `#${land.id}` : ''}${label}` : 'body'} > ${name(el)}`;
+        };
+        const found = new Set();
+        const add = (text, el, how) => {
+            for (const key of String(text).match(re) || []) {
+                found.add(`${key} @ ${where(el)} (${how}${visible(el) ? '' : ', hidden'})`);
+            }
+        };
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+            const parent = node.parentElement;
+            if (parent && !['SCRIPT', 'STYLE', 'NOSCRIPT'].includes(parent.tagName)) {
+                add(node.nodeValue, parent, 'text');
+            }
+        }
+        for (const el of [root, ...root.querySelectorAll('*')]) {
+            for (const attr of el.attributes) {
+                if (!attr.name.startsWith('data-v-')) {
+                    add(attr.value, el, attr.name);
+                }
+            }
+        }
+        if (!selector) {
+            for (const key of document.title.match(re) || []) {
+                found.add(`${key} @ <title>`);
+            }
+        }
+        return [...found];
+    }, scope || null);
+}
+
+/**
  * Full-page screenshot as <name>.png in the output dir. Returns the path.
  *
  * @param {import('@playwright/test').Page} page
@@ -918,6 +978,7 @@ module.exports = {
     signIn,
     signOut,
     screen,
+    rawKeys,
     shot,
     record,
     loc,

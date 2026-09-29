@@ -1054,7 +1054,7 @@ test.describe('appearance & theming', () => {
         expect((await french.logoShown()).alt).toBe('Journal logo');
 
         // Dates per language: a French "Date (Short)" of "24.09.2026" prints
-        // on the French page only (Rule 3).
+        // on the French page only (Rule 3a).
         const dt = await settings.open('dateTime');
         await dt.showLanguage('French');
         await dt.choice('dateFormatShort', '24.09.2026', 'fr_CA').check();

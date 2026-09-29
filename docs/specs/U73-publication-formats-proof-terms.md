@@ -74,9 +74,13 @@ does a published version (Rule 16). <sup>c</sup>
 Publication Formats", one table headed "Publication Formats", with "Add
 publication format" above it for the managing roles. One row per format
 of the chosen version, and under each format one row per format file,
-the newest first. The formats' order is not fixed: a format saved from
-its "Edit" window moves to the end of the list ⚠ [A14](#a14), and the
-book's page lists the formats in the same order. A version with no
+the newest first. The formats' order is not fixed: a format saved with
+"OK" on its "Edit" tab moves to the end of the list, even with nothing
+changed, and one whose approval or availability changes may move too
+⚠ [A14](#a14). A format file's
+terms or approval do not move its format. The new order shows at once
+and after a reload, and the Author's list and the book's page list the
+formats in the same order. A version with no
 format reads "No Items"; a format with no files shows "No Items" under
 its row, and a remote format (Rule 5) "This item is remotely hosted."
 <sup>d</sup> <sup>td7</sup>
@@ -266,11 +270,13 @@ delete this item? This action cannot be undone." and "OK" and "Cancel"
 11. **A format file's own actions.** "More Information" opens the file's
     window of *[Submission files](U36-submission-files.md#more-information)*.
     "Edit" opens a window headed "Edit a file" with the tabs "Edit
-    Metadata" (the file's details,
-    [→ Submission files](U36-submission-files.md#file-details)) and,
-    while the press gives files identifiers (Settings bullets 2 and 3),
-    "Identifiers" (see [Identifiers](U44-identifiers.md)). "Delete" works
-    as on any file list
+    Metadata" (the file's details) and, while the press gives files
+    identifiers (Settings bullets 2 and 3), "Identifiers" (see
+    [Identifiers](U44-identifiers.md)). The window works as on any file
+    list ([→ Submission files](U36-submission-files.md#file-details)):
+    "Save" stores the details, and "Cancel" and the close arrow close
+    it at once, without asking, even with the name changed, and keep
+    nothing. "Delete" works as on any file list
     ([→ deleting](U36-submission-files.md#delete)). On an HTML or XML
     file, "Dependent Files" opens a window of that name holding the
     file's dependent-files list
@@ -956,6 +962,11 @@ tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a format file's "Edit a file" closed with its close arrow after the
+    name is changed: no question, the row keeping the old name after a
+    reload, and "Edit" reopening on it (Rule 11): likely a bullet in
+    scenario 4's "A format file's actions", which closes that window
 - **Nothing new to test**:
   - "Format Approval" with its URN box changed, whose close arrow asks
     before closing, on a press that assigns URNs to publication formats
@@ -983,8 +994,9 @@ Left out of the scenarios above, by reason:
     "A format file's "History"")
   - A13 (the Copyeditor, Marketing and sales coordinator and Funding
     coordinator offered the page without a list; Actors preamble)
-  - A14 (a format saved from "Edit" moves to the end of the list;
-    Fields, the page)
+  - A14 (a format saved from "Edit", or whose approval or availability
+    changes, moves in the list, and a file's terms or approval move
+    nothing; Fields, the page)
   - A15 (a book in the press's second language; Fields, the format
     window)
   - A16 (the "Metadata" tab's close arrow and "Cancel" drop a change;
@@ -1040,7 +1052,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | The "Format Availability" window reads "This format will unavailable to readers." | 🐞 | minor | — |
 | [A12](#a12) | Approving and revoking a format file write the same two "History" lines | 🐞 | minor | — |
 | [A13](#a13) | The side menu offers "Publication Formats" to a Copyeditor, Marketing and sales coordinator or Funding coordinator, and the page shows them no list | 🐞 | minor | — |
-| [A14](#a14) | A format saved from its "Edit" window moves to the end of the list | 🐞 | minor | — |
+| [A14](#a14) | A format moves in the list when it is saved from "Edit" or its approval or availability changes | 🐞 | minor | — |
 | [A15](#a15) | A book in the press's second language cannot get a format without a name in the primary language | 🐞 | minor | — |
 | [A19](#a19) | "Select Files" tells the user to tick an "Include checkbox" and press "Search", neither of which it has | 🐞 | minor | — |
 | [A20](#a20) | A "Direct Sales" price of 0 keeps the link on "Direct Sales" while readers get the file free | 🐞 | minor | — |
@@ -1204,15 +1216,21 @@ serves, or the page shows them the list without controls. A press's
 Basis: probe. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — A format saved from its "Edit" window moves to the end of the list** · 🐞 · minor.
+**A14 — A format moves in the list when it is saved from "Edit" or its approval or availability changes** · 🐞 · minor.
 The Publication Formats page lists a version's formats in the order
-they were added until one is edited: saved from its "Edit" window, the
-format moves to the end of the list, at once and after a reload, and
-the book's page lists the formats in the same new order. A press cannot
-keep its formats in the order it chose. Whether other changes (an
-approval, the availability, a file's terms) move a format too is not
-settled: the same series of such changes left two different orders in
-two runs. Expected: the formats keep the order they were added in.
+they were added until one of them changes. A format saved with "OK" on
+its "Edit" tab, even with nothing changed, moves to the end (the
+"Metadata" tab's "Save" untried).
+One whose approval is revoked moves too, mostly to the end, and one set
+"Not Available" mostly to the front; given back its approval or its
+availability, a format may move to the front, return to its first
+place or stay where it is. So a book whose formats were each approved
+and made available as they were added can already list them out of
+that order. A format file's terms and its "Approve Proof" move nothing.
+Each new order shows at once and after a reload, and the Author's list
+and the book's page follow it. A press cannot keep its formats in the
+order it chose, and readers see the order change on the book's page.
+Expected: the formats keep the order they were added in.
 Basis: probe. <sup>f-a14</sup>
 
 <a id="a15"></a>
@@ -1872,6 +1890,14 @@ offered "Edit", "Delete". A file row showed its number in the kind's
 icon, then its name, a link that downloaded the file under its own
 name; the file's arrow offered "More Information", "Edit", "Delete" on
 a PDF file, and "Dependent Files" as well on an HTML file.
+Live-probed 2026-09-29 (Rule 11), two runs, as the Press manager and an
+assigned Layout Editor on a book in Production, the format "FE PDF"'s
+file: "Edit" opened "Edit a file" on its one tab "Edit Metadata", the
+box "Name the file (e.g., Manuscript; Table 1)", "Cancel" and "Save".
+With the name changed, the header "Close" and "Cancel" each closed the
+window at once, with no browser question and no request sent; the row
+kept the old name at once and after a reload, and "Edit" reopened on
+it. "Save" stored the new name, read at once and after a reload.
 
 <a id="fn-td9"></a>
 **td9** — Live-probed 2026-09-28 (Fields, the format window; Rules 4a, 8), two
@@ -2261,13 +2287,24 @@ policy refuses a role without Production access. Live-probed
 <a id="fn-f-a14"></a>
 **f-a14** — Note d: every format is created with `seq` 0 and the list
 is ordered by `seq` alone, so the database decides the order (the test
-install runs PostgreSQL). Live-probed 2026-09-28: note td7. Unsettled:
-after the same series of approvals, availability changes and terms on
-six seeded formats, one run listed "Delta, Golf, Alpha, Bravo, Charlie,
-Echo" and the other "Alpha, Bravo, Charlie, Delta, Golf, Echo", on the
-page and on the book's page alike; saving one file's terms on a version
-of four formats and reading the order before and after, twice, would
-settle it.
+install runs PostgreSQL). Live-probed 2026-09-28: note td7. Live-probed
+2026-09-29 (Fields, the page; A14), two runs, as the Press manager, one
+published book per case with the formats Alpha, Bravo, Charlie and
+Delta, each holding article.pdf on "Open Access", "Approved" and
+"Available", the case acting on Bravo; the order read at once, after a
+reload and on the book's page. Bravo's "Edit" › "OK" with nothing
+changed: last, both runs. Approval revoked: last three times of four,
+once third ("Charlie, Delta, Bravo, Alpha" from "Bravo, Charlie, Delta,
+Alpha"). "Not Available": first three times of four, once last (the
+book's page then without Bravo). Approval given back: first once, back
+to second once; availability given back: still first once, back to
+second once. A file's terms saved unchanged and then set to "Direct
+Sales" at 10.00, a file's "Approve Proof", and two reloads with no
+action: no move. The three reads agreed every time, and the Author's
+list matched the manager's order in four reads. One book of sixteen
+listed "Bravo, Charlie, Delta, Alpha" before any action: the seeding
+approves each format and makes it available through the same windows.
+The two different six-format orders of 2026-09-28 fit such moves.
 
 <a id="fn-f-a15"></a>
 **f-a15** — Note e: the form requires the name in the book's language

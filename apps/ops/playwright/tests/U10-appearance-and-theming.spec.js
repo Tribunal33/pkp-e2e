@@ -991,7 +991,7 @@ test.describe('appearance & theming', () => {
         expect(shown.src).toMatch(/pageHeaderLogoImage_en\.png/);
 
         // Dates per language: the French "Date (Short)" on the French page
-        // alone (Rule 3).
+        // alone (Rule 3a).
         await english.goto();
         await expect(english.announcementDate).toHaveText(day.short);
         const dates = await openTab(website, 'dateTime');

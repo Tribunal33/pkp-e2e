@@ -1509,7 +1509,9 @@ Keys:
   Activity Log unchanged (U72 harness, 2026-09-28, three apps driven).
   The response lists `contributors` (`id`, `email`, in the order
   seeded). An address is what `chapters[].authors` (OMP) names a
-  contributor by.
+  `contributors[]` entry by; the submitter is named by username (the
+  submitter's email answers 400, "is neither the submitter (<username>)
+  nor the email of a contributors[] entry"; U10 claim check I29).
 - `reviewerSuggestions[]` (OJS, OMP): the entries of the wizard's "Reviewer
   Suggestions" step, each `{givenName, familyName, email, affiliation,
   suggestionReason}`, created the way the step's "Add Reviewer Suggestion"
@@ -2203,8 +2205,9 @@ App-specific keys:
   unpublish on screen.
 - OMP: `enableChapterPublicationDates` and `chapters[]` (U72), built by
   `admin` on the version after the publication formats and before a
-  publish (publishing fills chapter licenses and makes chapter DOIs, so
-  a `published: true` seed carries both, as a screen publish does).
+  publish (publishing fills chapter licenses and makes the DOIs of the
+  chapters with `page: true` on a press with chapter DOIs, so a
+  `published: true` seed carries both, as a screen publish does).
   - `enableChapterPublicationDates` is the editorial view's "Marketing" ›
     "Publication Dates" choice saved: `true` "Each chapter may have its
     own publication date.", `false` "All chapters will use the

@@ -104,7 +104,12 @@ Each of these has bitten at least once.
 
 5. **The side-modal outer wrapper reports `visibility: hidden`** while it
    opens, and permanently on some wrappers. Anchor `toBeVisible()` on inner
-   content, never on the wrapper.
+   content, never on the wrapper. The reverse holds inside `.-screenReader`,
+   the app's visually hidden class (clipped to 1px): Playwright calls it
+   visible, but a pointer click on it hangs its timeout (a refused Vue
+   form's "Go to {field}: …" buttons, the "Editorial Activity" page's
+   `h1`), so reach such a control by `focus()` and Enter, and click outside
+   on something shown (U59, U64, U66, U06 claim checks).
 6. **The workflow modal's rows disappear while a Vue dialog is stacked over
    them.** The underlying panel is unmounted or aria-hidden beneath the open
    dialog, so a reviewer row's state can only be asserted AFTER the dialog
@@ -485,9 +490,10 @@ no cleanup fixture.
   (`apps/ojs/playwright/pages/SubmissionWizardPage.js`). The pattern handles
   expansion, end-anchored name matching and clicks swallowed by a re-render.
   It reaches only a step already reached: an unreached pill does nothing
-  (on OPS a reload can drop the wizard back to "Upload Files" with the
-  later pills unreached), so a later step is reached by "Continue"
-  (`continueTo()`) (U17, U72, U75 claim checks).
+  (a draft never saved for later reopens, after a reload or a return, on
+  "Upload Files" with the later pills unreached, on all three apps), so a
+  later step is reached by "Continue" (`continueTo()`) (U17, U72, U75
+  claim checks; U42 claim check I29).
 - **`useFetch` tunnels DELETE and PUT via POST + `X-Http-Method-Override`, and
   unauthorized API calls return 401**, not 403. Match `waitForResponse` method
   predicates and status assertions accordingly.
@@ -624,7 +630,11 @@ return, so read them through `settled()` on the form's footer or an editor
 field, never straight after the click; and a preprint server heads these
 pages "Preprint: …" where a journal or press reads "Publication: …", so a
 heading wait keyed on "Publication" burns its timeout on OPS (U40 K1,
-2026-09-09). `record(name, data)` writes JSON and
+2026-09-09). `rawKeys(page, {scope})` lists every raw locale key
+(`##key##`) on a translated page, in text, `<option>`s and attributes,
+with where each sits and whether it is rendered; `screen().text` follows
+CSS `text-transform`, so an upper-cased heading there is no code (U07,
+U08, U11, U24 claim checks). `record(name, data)` writes JSON and
 `shot(page, name)` a PNG, both as `<name>-<app>` inside `forEachApp`, so a
 script on two apps never overwrites one app's snapshot with the other's;
 a script run in phases, one process each, writes its facts with

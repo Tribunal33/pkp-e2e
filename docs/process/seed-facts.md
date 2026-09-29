@@ -1339,13 +1339,16 @@ config-file settings.
   `a-q1-visitor-revoked`; earlier U44 claim check K4).
 - {OMP} Every publication format, seeded or made on screen, stores the
   same order number, and the Publication Formats page offers no "Order",
-  so the page and the book page list formats in the order the database
-  returns them: a format whose approval, availability or details are
-  saved, or whose DOI is changed on the DOIs page, can move, to the end
-  or the front. The DOIs page lists a book's format rows in that same
-  order. Read an order after the last change, never from creation.
-  2026-09-28 (U69 claim check K3 K3-4); 2026-09-29 (U45 claim check R1,
-  R1-4).
+  so the page, the Author's list and the book page list formats in the
+  order the database returns them. Saving a format's "Edit" (even
+  unchanged), revoking or giving its approval, changing its availability,
+  or changing its DOI on the DOIs page can move it to the end, the front
+  or between two others; a file's terms or its "Approve Proof" do not.
+  The DOIs page lists a book's format rows in that same order. A book
+  seeded with `publicationFormats[]` in order can already list them in
+  another order. Read the order on screen after the last change, never
+  from creation. 2026-09-28 (U69 claim check K3 K3-4); 2026-09-29 (U45
+  claim check R1, R1-4; U73 claim check I29).
 - {OMP} A book version with no date (every version right after "Create
   New Version") prints as today's date on the book page: the date line
   reads "{today} — Updated on …" and a draft's outdated notice "published
@@ -1461,6 +1464,11 @@ config-file settings.
   values remakes every existing cover's small copy (OMP, 2026-09-27, U70
   claim check K5, K5-8).
   All three apps, 2026-09-24 (U10 claim check K4, `.reports/U10/ccK4/fresh-*`).
+- A new context's contributor roles (and `publicknowledge`'s) are named
+  in the primary language only: with French under "Forms" the "Edit Role"
+  window's French box is empty ("1/2 languages completed"), without it
+  there is none, so a French page reads "Author". Three apps, 2026-09-29
+  (U10 claim check I29, `shared/playwright/checks/U10/I29/`).
 - A visit to a context's `/fr_CA/…` address switches the visitor's session
   to French, so later addresses without a language segment render French;
   the app forwards a bare address to `/en/…`. OJS and OPS, 2026-09-25 (U13

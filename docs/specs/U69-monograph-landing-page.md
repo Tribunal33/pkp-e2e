@@ -78,7 +78,7 @@ Proofreader and Editorial Board Member. <sup>c</sup>
 | **Read a published book's page and its chapter pages** (the current version, or an older one at its own address) | • anyone, signed in or not (Rules 1–4) <sup>c</sup> |
 | **Open an unpublished version's page** (the preview) | • the Press manager, Press editor, Production editor, Series editor and the assistant roles, whether or not they are assigned to the book, and the Site Administrator, under the preview notice, and its chapter pages too (Rule 5); the workflow's "Preview" opens it for those it is offered to ([Workflow screen & stage access](U24-workflow-screen-and-stage-access.md), its Rule 6)<br>• the book's Author, by typing the page's address<br>• anyone else gets the "404 Not Found" page (Rule 3): a visitor, a Reader, a Reviewer, and an Author, Volume editor, Chapter Author or Translator of the press who is not on the book<br>• a submission its author never finished answers "404 Not Found" to everyone, the Press manager, the Site Administrator and its own Author included <sup>c</sup> <sup>td5</sup> |
 | **Open a free file** ("Open Access" terms) | • anyone who may read the page (Rule 13); today only an HTML file opens [A9](#a9)<br>• on a press with "Users must be registered and log in to view open access content." ticked (Settings bullet 6): signed-in users only; a visitor who presses a free file's link gets the Login page first, and once signed in there the file's view page <sup>j</sup> <sup>td13</sup> |
-| **Buy a file for sale** ("Direct Sales" terms) | • a signed-in user, whatever the role (the press's own staff and the Site Administrator too), on a press whose payment method is set up and that has a currency (Rule 14)<br>• a visitor gets the Login page first, and once signed in there the press's home page [A18](#a18) <sup>k</sup> <sup>td14</sup> |
+| **Buy a file for sale** ("Direct Sales" terms) | • a signed-in user, whatever the role (the press's own staff and the Site Administrator too), on a press whose payment method is set up and that has a currency (Rule 14)<br>• a visitor gets the Login page first, and once signed in there not the payment page but the press's home page (a Reader) or the Dashboard (a Press manager) [A18](#a18) <sup>k</sup> <sup>td14</sup> |
 | **Receive the "Manual Payment Notification"** | • the press's principal contact, when a buyer presses "Send notification of payment" (Side effects) <sup>q</sup> |
 | **Show the citation in another format; download a citation** | • anyone who may read the page, while the "Citation Style Language" plugin is on (Rule 19)<br>• on a preview, the Press manager, Press editor, Production editor, the Site Administrator and a Series editor or assistant role assigned to the book; for the book's Author, and for a Series editor or assistant role not assigned to it, another format changes nothing and a download opens the "404 Not Found" page ⚠ [A21](#a21) <sup>m</sup> <sup>td18</sup> |
 | **Change the settings of "Settings that modify behavior"** | • whoever opens the Settings pages ([→ settings access](U07-journal-identity-and-about-pages.md#settings-access)), on Settings › Website › "Plugins" ([Plugins management](U62-plugins-management.md#plugin-links)), "Appearance" and Settings › Distribution › "Payments"; "Enable this press to appear publicly on the site" the Site Administrator <sup>r</sup> |
@@ -199,10 +199,14 @@ between them. <sup>f</sup>
 <sup>td21</sup>
 
 **The payment page.** A buyer's "Purchase" link leads to the payment page
-of the press's method, the one [Payments & APCs](U52-payments-and-apcs.md#manual-page)
-describes. With "Manual Fee Payment" it is headed "Manual Fee Payment",
-with "Title" the file's name and "Fee" the file's price with the press's
-currency code in brackets ("25.00 (USD)"). <sup>k</sup> <sup>td14</sup>
+of the press's method. With "Manual Fee Payment" it is headed "Manual
+Fee Payment" and reads, top to bottom: the press's "Manual Payment
+Instructions"; "Title" with the file's name and "Fee" with the file's
+price and the press's currency code in brackets ("25.00 (USD)"), both
+values in bold; then "Send notification of payment" as an underlined
+link, not a button. A journal's page puts the instructions under
+"Title" and "Fee" and shows the link as a button
+([Payments & APCs](U52-payments-and-apcs.md#manual-page)). <sup>k</sup> <sup>td14</sup>
 
 ## Rules & state
 
@@ -404,9 +408,12 @@ currency code in brackets ("25.00 (USD)"). <sup>k</sup> <sup>td14</sup>
       page.
 14. **Buying a file for sale.** A "Direct Sales" file's link, on a press
     whose payment method is set up (Settings bullet 9): <sup>k</sup> <sup>td14</sup>
-    - pressed by a visitor, leads to the Login page; once signed in
-      there, the buyer lands on the press's home page, not the payment
-      page ⚠ [A18](#a18);
+    - pressed by a visitor, leads to the Login page, which says nothing
+      of the purchase (only "Required fields are marked with an
+      asterisk: *" above the form). Once signed in there, the buyer does
+      not reach the payment page: a Reader lands on the press's home
+      page, a Press manager on the Dashboard's list headed "Assigned to
+      me" ⚠ [A18](#a18);
     - pressed by a signed-in user, whatever the role (the press's own
       staff and the Site Administrator too), opens the payment page at
       once. With "Manual Fee Payment", "Send notification of payment"
@@ -1049,6 +1056,12 @@ tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the Login page a file for sale leads a visitor to, saying nothing of
+    the purchase (Rule 14)
+  - the payment page's order, the press's instructions first, and
+    "Send notification of payment" as an underlined link (Fields, the
+    payment page)
 - **Nothing new to test**:
   - an unassigned Series editor or assistant role opening the preview
     (Actors row 2)
@@ -1167,7 +1180,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | Unticking payments "Enable" does not stop a press selling files | 🐞 | minor | — |
 | [A13](#a13) | Under a day-first date format a chapter page mixes up "Published" and "Forthcoming" | 🐞 | minor | — |
 | [A17](#a17) | An unpublished book's chapter page carries no preview notice | 🐞 | minor | — |
-| [A18](#a18) | A visitor who signs in to buy a file lands on the press's home page | 🐞 | minor | — |
+| [A18](#a18) | A visitor who signs in to buy a file never reaches the payment page | 🐞 | minor | — |
 | [A20](#a20) | A later version's chapter repeats its own date | 🐞 | minor | — |
 | [A11](#a11) | A buyer who pays by hand never gets the file | ❓ | user-visible | — |
 | [A2](#a2) | A book published only as an Author Original has no page | ❓ | minor | — |
@@ -1341,12 +1354,13 @@ book's page carries, and with a date saved the chapter page reads
 Basis: probe, 2026-09-28. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — A visitor who signs in to buy a file lands on the press's home page** · 🐞 · minor.
+**A18 — A visitor who signs in to buy a file never reaches the payment page** · 🐞 · minor.
 A visitor who presses a priced file's link gets the Login page; after
-signing in there, the press's home page opens instead of the payment
-page, and the buyer must find the book and press the link again. A free
-file's Login page returns to the file (Rule 13c).
-Basis: probe, 2026-09-28. <sup>f-a18</sup>
+signing in there, a Reader lands on the press's home page and a Press
+manager on the Dashboard's list headed "Assigned to me", instead of the
+payment page, and the buyer must find the book and press the link
+again. A free file's Login page returns to the file (Rule 13c).
+Basis: probe, 2026-09-29. <sup>f-a18</sup>
 
 <a id="a19"></a>
 **A19 — An older version's chapter page shows a server error page** · 🐞 · user-visible · crash: server.
@@ -1479,7 +1493,7 @@ Basis: probe, 2026-09-28. <sup>f-a22</sup>
 **k** — Fall-through of `CatalogBookHandler::download()` for a priced, unpaid file: no user → redirect to Login with `source` the file's `view` address; `OMPPaymentManager::isConfigured()` (the chosen plugin's `isConfigured()`, the manual plugin needing `manualInstructions`, PayPal `accountName`, and the context's `currency`) false → redirect to `catalog`; otherwise `createQueuedPayment(PAYMENT_TYPE_PURCHASE_FILE, …)` with `setRequestUrl()` `catalog/view/{submissionId}/{formatId}/{fileId}`, `queuePayment()` and the plugin's payment form. `paymentsEnabled` is read by no OMP code but the form's `showWhen`. Manual plugin (`plugins/paymethod/manual`): `paymentForm.tpl` ("Manual Fee Payment", "Title" `getPaymentName()` = the file's name, "Fee" `%.2f` with the currency code, `plugins.paymethod.manual.sendNotificationOfPayment`); `handle()` op `notify` sends `ManualPaymentNotify` and shows `message.tpl` with "Payment Notification", "Payment notification sent" and `common.continue` to the queued payment's request URL. `OMPPaymentManager::fulfillQueuedPayment()` writes the completed payment that `hasPaidPurchaseFile()` reads, reached from PayPal's return through `pages/payment/PaymentHandler::plugin()`; OMP has no `pages/payments`, and nothing in OMP completes a manual payment (Payments & APCs, its note b). The settings form: `PKPPaymentSettingsForm`. Live-probed 2026-09-28: see td14, td15. With "Paypal Fee Payment" and only "Account Name" saved ("Client ID" and "Secret" empty), a Reader's priced link opened a page with the tab "| {press name}", no heading and "A transaction error occurred. Please contact the press manager for details.", and the browser made no outside request; being sent on to PayPal, and a paid file opening free afterwards, need a live PayPal account a test install does not reach. The "Payments" tab on a new press showed "Enable" alone. The Press manager, a Series editor, a Copyeditor, a Reviewer, an Author, a Reader and the Site Administrator each got "Manual Fee Payment" from the priced link.
 
 <a id="fn-td14"></a>
-**td14** — Live-probed 2026-09-28 (Actors rows 4, 5; Rule 14; Fields, the payment page; A18): the link read "25 Purchase PDF (25 USD)" (price typed "25"). Signed out it led to Login, and signing in there as a Reader landed on the press's home page, for "PDF" and for a several-file format's priced file. The Reader's payment page: "Manual Fee Payment", the press's instructions, "Title" "article.pdf", "Fee" "25.00 (USD)"; "Send notification of payment" led to "Payment Notification", "Payment notification sent" and "Continue", and "Continue" to the payment page again. No "Payments" in the Press manager's menu; `{press}/payments` answered 404. A press with no currency: link "PDF", to the catalog; USD without instructions: "25 Purchase PDF (25 USD)", to the catalog.
+**td14** — Live-probed 2026-09-28 (Actors rows 4, 5; Rule 14; Fields, the payment page; A18): the link read "25 Purchase PDF (25 USD)" (price typed "25"). Signed out it led to Login, and signing in there as a Reader landed on the press's home page, for "PDF" and for a several-file format's priced file. The Reader's payment page: "Manual Fee Payment", the press's instructions, "Title" "article.pdf", "Fee" "25.00 (USD)"; "Send notification of payment" led to "Payment Notification", "Payment notification sent" and "Continue", and "Continue" to the payment page again. No "Payments" in the Press manager's menu; `{press}/payments` answered 404. A press with no currency: link "PDF", to the catalog; USD without instructions: "25 Purchase PDF (25 USD)", to the catalog. Live-probed 2026-09-29, two runs, a press with USD, "Manual Fee Payment" and instructions (Actors row 4; Rule 14; Fields, the payment page; A18): signed out, the link led to `login?source=http://…/catalog/view/{id}/{format}/{file}`, a Login page with only "Required fields are marked with an asterisk: *" above the form; signing in there as a Reader landed on `{press}/index`, as the Press manager on `dashboard/editorial`, headed "Assigned to me (0)", tab "Submissions"; the Reader, signed in, pressing the link again got the payment page at once. That page: "Home / Manual Fee Payment", "Manual Fee Payment", the instructions, then a borderless table with "Title" and "Fee" and their values in bold, then "Send notification of payment" as an underlined text link (`paymentForm.tpl`); a journal's page, same run, showed a bordered table with the labels in bold, the instructions under it and the link styled as a button, and its Login page read "Subscription or article purchase required to access item. …".
 
 <a id="fn-td15"></a>
 **td15** — Live-probed 2026-09-28 (Rule 14b; A12): "Enable" unticked and saved ("Saved"); after a reload the tab showed "Enable" alone; the Reader's and a visitor's link still read "25 Purchase PDF (25 USD)", and it still opened "Manual Fee Payment".
@@ -1654,7 +1668,7 @@ made on screen with "Create New Version".
 **f-a17** — `chapter.tpl` prints only `submission.outdatedVersion`; `submission.viewingPreview` is in `monograph_full.tpl` alone. Live-probed 2026-09-28 (td5): the chapter page read "… Volume K1 Unpublished Book Published March 5, 2024 How to Cite …" with no notice for every previewing role.
 
 <a id="fn-f-a18"></a>
-**f-a18** — Note k: `CatalogBookHandler::download()` sends a signed-out buyer to Login with `source` built by `$request->url()`, a full address, and `LoginHandler::signIn()` follows only a `source` starting with "/", so it lands on the press's index; a free file's Login (`Validation::redirectLogin()`) carries a path. Live-probed 2026-09-28 (td13, td14): the priced file's Login address carried `source=http%3A%2F%2F…`, the free file's `source=%2Findex.php%2F…`.
+**f-a18** — Note k: `CatalogBookHandler::download()` sends a signed-out buyer to Login with `source` built by `$request->url()`, a full address, and `LoginHandler::signIn()` follows only a `source` starting with "/", so `_redirectAfterLogin()` (its dashboard branch needs an empty `source`) falls back to `PKPPageRouter::getHomeUrl()`, the user's home by role: the press's index for a Reader, `dashboard/editorial` for a manager, sub-editor or assistant role, `dashboard/reviewAssignments` for a Reviewer, `dashboard/mySubmissions` for an Author (the last two untried); a free file's Login (`Validation::redirectLogin()`) carries a path. Live-probed 2026-09-28 (td13, td14): the priced file's Login address carried `source=http%3A%2F%2F…`, the free file's `source=%2Findex.php%2F…`. Live-probed 2026-09-29 (td14): the Press manager's sign-in went to `dashboard/editorial`.
 
 <a id="fn-f-a19"></a>
 **f-a19** — Note l. Live-probed 2026-09-28 (td17): 500 at `{press}/catalog/book/{id}/version/{id}/chapter/{n}`, typed, from the older version's table of contents and from "Versions", with the book named by number or URL Path, on every press left at "DOI Versioning" "No"; the same page opened on a press seeded with it "Yes".

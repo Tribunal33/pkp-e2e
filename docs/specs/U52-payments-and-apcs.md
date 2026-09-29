@@ -109,8 +109,12 @@ a small panel holding one choice, "Publication Fee", with the options
 "Waived", "Paid" and "Unpaid", and "Save" (Rules 13, 14). <sup>g</sup>
 
 <a id="manual-page"></a>
-**The manual method's payment page**, headed "Manual Fee Payment", top to
-bottom (Rule 9). <sup>h</sup> <sup>td6</sup>
+**The manual method's payment page** on a journal, headed "Manual Fee
+Payment", top to bottom (Rule 9). A press's payment page, which puts
+the instructions first and "Send notification of payment" as a plain
+link, is described in [Monograph landing
+page](U69-monograph-landing-page.md) (its Fields, "The payment page").
+<sup>h</sup> <sup>td6</sup> <sup>td16</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
@@ -241,9 +245,18 @@ bottom (Rule 9). <sup>h</sup> <sup>td6</sup>
 9. **The payment page.** The task's link, the email's link and the
    reader's purchase buttons all open the chosen method's page for that
    payment. It needs a signed-in user: a signed-out visitor gets the
-   Login page and, once signed in, the payment page. <sup>h</sup>
-   <sup>td6</sup>
-   - With "Manual Fee Payment" the page is the one Fields describes.
+   Login page and, on a journal, once signed in there, the payment page.
+   <sup>h</sup> <sup>td6</sup>
+   - On a press, a visitor who presses the "Purchase" link of a book
+     file for sale and signs in on the Login page it leads to does not
+     reach the payment page: a Reader lands on the press's home page, a
+     Press Manager on the Dashboard's "Assigned to me". The buyer finds
+     the book and presses the link again, which now opens the payment
+     page at once
+     ([Monograph landing page](U69-monograph-landing-page.md#a18), its
+     A18). <sup>td16</sup>
+   - With "Manual Fee Payment" a journal's page is the one Fields
+     describes.
    - With "Paypal Fee Payment" the page sends the payer on to PayPal to
      pay there. <sup>n</sup>
    - On the test installs, which reach no PayPal account, a PayPal
@@ -782,6 +795,9 @@ Left out of the scenarios above, by reason:
     and articles" set, and the "Purchase Article" price on locked galley
     links (Rule 7; Settings bullet 7; *[Subscriptions](U51-subscriptions.md)*,
     scenario 14)
+  - a press's payment page, and the Login page a priced file's link
+    leads to (Fields, the manual method's payment page; Rule 9;
+    *[Monograph landing page](U69-monograph-landing-page.md)*, scenario 4)
 
 ## Findings register
 
@@ -950,7 +966,9 @@ OJS, on scratch journals with throwaway accounts and read-only on
 the exclusivity controls (notes td1–td15, each naming the rules it
 settled, and the f-a notes); what cannot be seen on the test installs is
 named in note n. The suites' test runs of 2026-09-27 corrected Rules 1
-and 4 and scenarios 1, 2, 4 and 6 (notes d, td1, td3, s0, f-a12).
+and 4 and scenarios 1, 2, 4 and 6 (notes d, td1, td3, s0, f-a12). A
+re-probe of 2026-09-29 on OMP and OJS scoped Rule 9's sign-in and the
+manual page's layout to a journal (note td16).
 
 <a id="fn-a"></a>
 **a** — OJS `classes/payment/ojs/OJSPaymentManager.php` (extends lib/pkp `classes/payment/PaymentManager.php`): `isConfigured()` is `PaymentManager::isConfigured()` (a chosen plugin exists and its own `isConfigured($context)` holds) and `paymentsEnabled`; `publicationEnabled()` adds `publicationFee > 0`, `purchaseArticleEnabled()`, `purchaseIssueEnabled()` and `membershipEnabled()` their own fee `> 0`, `onlyPdfEnabled()` `restrictOnlyPdf`. The APC's three consumers: OJS `classes/decision/types/Accept.php` and `SkipExternalReview.php` `getSteps()` prepend `RequestPayment::getPaymentForm()` when `publicationEnabled()`; `pages/dashboard/DashboardHandler.php` sets `pageInitConfig.publicationSettings.submissionPaymentsEnabled` from `publicationEnabled()`, which `workflowConfigEditorialOJS.js::getHeaderItems()` reads; `classes/publication/Repository.php::validatePublish()` (note j). Live-probed 2026-09-02 (the workflow-screen spec's probe; Rule 5): the header's "Payments" absent with payments enabled, a fee of 50 and no instructions, present once the instructions were saved, absent again at a fee of 0. Live-probed 2026-09-20 (seed facts; Rule 5): with no instructions "Accept Submission" had no "Request Payment" page. Live-probed 2026-09-27 (Rule 5; note td2): the three consumers came and went together at every end of the rule.
@@ -1041,6 +1059,9 @@ and 4 and scenarios 1, 2, 4 and 6 (notes d, td1, td3, s0, f-a12).
 
 <a id="fn-td15"></a>
 **td15** — Live-probed 2026-09-27 (Fields, the list; Rule 17; A11): the columns "User", "Payment Type", "Amount", "Timestamp"; a fresh journal's list read "No Items" and "0 - 0 of 0 items", two records "1 - 2 of 2 items" (no longer list was reached); newest first, a waiver saved at 00:24:27 above a payment saved at 00:24:19, "Timestamp" reading "2026-09-27 00:24:19"; only the journal's own records; the Subscription Manager read the same rows. "Paid" saved by a Section Editor showed the submitting Author's name, "Waived" the saver's; "50 USD", a waiver "0", with no currency "50". Pressing a row sent nothing and opened nothing; there are no row controls and no search. After the Author on a "Paid" record was merged into another account, the list stayed on "Loading" (note f-a11).
+
+<a id="fn-td16"></a>
+**td16** — Live-probed 2026-09-29, two runs on each app (Fields, the manual page; Rule 9): on a scratch press selling in US dollars with "Manual Fee Payment", a book's link read "25 Purchase PDF (25 USD)"; pressed signed out it led to the Login page, whose text carried no reason. Signing in there as the press's Reader landed on the press's home page, as its Press Manager on the Dashboard ("Assigned to me (0)"), neither on the payment page; the Reader, back on the book's page, pressed the link and got "Manual Fee Payment" at once. That page, under "Home / Manual Fee Payment", read the instructions first, then "Title" and "Fee", then "Send notification of payment" as a plain link. Mechanism: OMP `CatalogBookHandler::download()` sends a visitor to Login with `source` the file's `catalog/view/…` address built by `$request->url()`, an absolute URL; lib/pkp `LoginHandler::signIn()`/`_redirectAfterLogin()` follows only a `source` starting with "/" and otherwise redirects home (`index` for a Reader, `dashboard/editorial` for a manager role). The OJS controls held: a subscription journal's "Requires Subscription or Fee PDF (USD 5)" and "Requires Subscription or Fee Full Issue (USD 7)", pressed signed out, led to Login with "Subscription or article purchase required to access item. …" (a relative `source`), and signing in there as a Reader opened "Manual Fee Payment" with "Purchase Article Fee" "5.00 (USD)" and "Purchase Issue Fee" "7.00 (USD)", laid out as Fields says.
 
 <a id="fn-f-a1"></a>
 **f-a1** — `paymentTypesForm.tpl` prints `manager.payment.readerFeesDescription` and `manager.payment.generalFeesDescription`; no page reads the fees (note e). The About listing of fees belonged to OJS 2 (its locale keys remain, unused). Live-probed 2026-09-27 (note td4): no page lists a fee, and the only amounts are the locked galley links'.
