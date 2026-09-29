@@ -1153,6 +1153,11 @@ seeded reader visits. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the date range list closed without choosing a range (the calendar
+    button pressed again, a click outside it, the focus leaving it), and
+    typed dates kept in the boxes while not applied (Fields "The date
+    range")
 - **Budget** — variants:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1163,10 +1168,6 @@ Left out of the scenarios above, by reason:
     (Rule 25a)
   - the "Issues" filter heading of a journal with no published issue
     {OJS} (Rule 11)
-  - the date range list closed without choosing a range (the calendar
-    button pressed again, a click outside it, the focus leaving it), and
-    typed dates kept in the boxes while not applied (Fields "The date
-    range")
 - **Nothing new to test**:
   - the Editor, the Production Editor, the Guest Editor {OJS} and the
     Site Administrator on the Statistics pages, which show them the

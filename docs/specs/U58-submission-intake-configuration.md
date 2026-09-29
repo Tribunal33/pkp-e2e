@@ -826,7 +826,7 @@ recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Planned**:
   - a reload opening "Disable Submissions" after another tab of the
     page and back (Rule 1b): scenario 3 reloads on a side tab it pressed
   - unsaved boxes and choices kept through another tab of the page and

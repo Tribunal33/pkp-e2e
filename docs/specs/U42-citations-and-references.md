@@ -864,6 +864,11 @@ The accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a References change carried to "Review" by the step rail, listed
+    there and submitted (Rule 16; A18 retired)
+  - a References change saved by the footer's "Back" to "Upload Files"
+    or by "Save for Later" (Rule 16)
 - **Budget** — states:
   - "Data Citations" at "Do not request data citation metadata from the
     author during submission.": the "Data" page without the wizard's
@@ -878,9 +883,6 @@ Left out of the scenarios above, by reason:
     expander in a new version (Rule 26)
   - typing dropped without a question on "Close" or on leaving the page
     (Fields & validation, last paragraph)
-  - a References change carried to "Review" by the step rail, or saved
-    by the footer's "Back" to "Upload Files" or by "Save for Later"
-    (Rule 16)
   - "Source Type" and "Type" in "Edit citation", which arrive with
     nothing chosen and have no empty entry (Fields & validation)
 - **Nothing new to test**:

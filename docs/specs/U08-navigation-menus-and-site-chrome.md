@@ -1175,6 +1175,8 @@ are in the footnote. <sup>y</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a journal's settings address opened at the site's level: the access-denied page reading "No journal was found that matched your request." for every signed-in user, the site's Login page for a signed-out visitor (Rule 26c)
 - **Budget** — states:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1195,7 +1197,6 @@ Left out of the scenarios above, by reason:
   - "Administration" pressed on a journal with one interface language after the site's pages opened in French, opening in French too (Rule 18a)
   - the initials menu read with the interface in French, every entry in French (Rule 28; scenario 2 reads it in English)
   - the notice area while an editorial page is left (Rule 31)
-  - a journal's settings address opened at the site's level: the access-denied page reading "No journal was found that matched your request." for every signed-in user, the site's Login page for a signed-out visitor (Rule 26c)
 - **Nothing new to test**:
   - the Editor and the Production Editor on the Navigation tab: the same tab and the same offer as the Journal Manager in scenarios 3 to 7 (Actors row 1)
 - **Register carries it**:

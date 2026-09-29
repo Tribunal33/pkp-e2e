@@ -1327,11 +1327,11 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - no leave-page question once the window has closed, by "Save", by "Warning" › "Yes" or untouched (Rule 11d; A22 retired)
   - the "Select submission stage" list of "Workflow Files" offering the stages up to Production and never Done (Rule 14a): likely a bullet in scenario 1's "A workflow file", read before "Submission" is chosen
+  - the browser's leave-page prompt while the window holds unsaved changes (Rule 11d)
 - **Budget** — states:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
-- **Budget** — variants:
-  - the browser's leave-page prompt while the window holds unsaved changes, and none once it has closed (Rule 11d)
 - **Nothing new to test**:
   - the Editor, the Production editor and the Site Administrator (Actors, "Manager-level"): the Journal Manager's offer, which the scenarios read as the Journal Manager
   - the Guest Editor {OJS} (Actors rows 1, 9; Rule 15c): the Section Editor's offer, which scenarios 1, 8 and 11 read
