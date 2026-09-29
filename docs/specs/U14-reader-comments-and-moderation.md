@@ -197,6 +197,8 @@ page. Every row below assumes the journal has public comments switched on
    nothing on the page confirms the report, the comment looks as before,
    and its menu offers "Report" again, so the same person can report the
    same comment a second time, which files a second report ⚠ [A3](#a3).
+   A report the server refuses closes the dialog the same way, with no
+   message ⚠ [A14](#a14).
    The report is visible only on the Comments page (Rule 15); the comment
    stays showing. The moderators are told (Side effects). <sup>g</sup>
 9. **Deleting one's own comment.** "Delete Comment" opens the dialog
@@ -868,6 +870,7 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A10](#a10) | A comment deleted with its submission or its writer's account leaves its moderation tasks behind, blank and dead | 🐞 | minor | — |
 | [A12](#a12) | A Journal Manager of one journal can read, approve, hide and delete another journal's comments by requests made by hand, and any signed-in account can report them | 🐞 | latent | — |
 | [A13](#a13) | The Comments page's browser tab carries no page name, only the journal's | 🐞 | minor | — |
+| [A14](#a14) | A report the server refuses closes the "Report Comment" window as a filed one would: no message, the reason lost | 🐞 | minor | — |
 | [A1](#a1) | A hidden comment reads to its writer exactly like one awaiting approval | ❓ | minor | — |
 | [A2](#a2) | Approving or hiding a comment leaves every moderator's "pending review" task in place | ❓ | minor | — |
 | [A3](#a3) | The report dialog neither refuses an empty reason with a message nor confirms a filed report, and the same person can report the same comment again | ❓ | minor | — |
@@ -1036,6 +1039,18 @@ Expected "Comments | {journal}"; observed "{journal}", so a moderator
 with several browser tabs open cannot tell which one holds the Comments
 page.
 Basis: probe. <sup>f-a13</sup>
+
+<a id="a14"></a>
+**A14 — A refused report closes like a filed one** · 🐞 · minor.
+A signed-in reader reports a comment ("…" › "Report", a reason typed,
+"Submit") and the server refuses the report. The "Report Comment" window
+closes within a second as after a filed report ([A3](#a3)): no "Error"
+window, the typed reason gone, the comment not marked as reported. A
+refused new comment and a refused "Delete Comment" each show an "Error"
+window. Expected an "Error" window naming the failure, the reason kept;
+observed silence, so the reader believes the report reached the
+moderators.
+Since: 2026-09-29 · Basis: probe. <sup>f-a14</sup>
 
 ### OMP
 
@@ -2021,6 +2036,27 @@ Emails", each followed by " | {context name}"; the dashboard "Submissions
 Settings › Website answered the Plugin Gallery's server error,
 *[Plugins management](U62-plugins-management.md#a1)*'s A1, which is not
 this entry's.
+
+<a id="fn-f-a14"></a>
+**f-a14 — A14.** `performCommentReport()` in ui-library
+`src/frontend/components/PkpComments/usePkpCommentsStore.js` calls
+`closeTopDialog()` after the report request whatever its outcome, and the
+dialog's "Submit" callback then calls `close()`. Since ui-library#992
+(`f4f61bfd`, merge `280f98c5`, pkp/dev-team#316, 2026-09-29) the frontend
+`usePkpFetch` opens `openDialogNetworkError` for a failed POST, on top of
+the report window, so `closeTopDialog()` closes that error window and
+`close()` the report window. Before it, the fetch threw on the missing
+`openModalNetworkError`, so the window stayed open and nothing was said
+either: the silence predates the change, which the team files as its own
+issue (thread, 2026-09-29). Live-probed 2026-09-29 at the PR heads (ojs
+`95ffb63be4`, lib/ui-library `f4f61bfd`, the merged trees) with the kept
+`checks/sync/ui-library-992/comment-errors.js`, the requests answered with
+a 500 in the browser (`.reports/sync/ce992/`): `r1` no window left,
+`w1` one "Error Probe refused this request." window with the comment text
+kept, `d1` one "Error An unexpected error has occurred. Please reload the
+page and try again." window (the delete path calls
+`openDialogNetworkError()` without the error, so the server's message is
+not shown). Report: `docs/reports/2026-09-29-ui-library-992.md`.
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1.** Footnote m: `omp/pages/management/SettingsHandler::__construct()`

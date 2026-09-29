@@ -1040,4 +1040,3 @@ verdict yet) · `ready` (pushed, green at the PR ref, developer told) ·
 
 | App PR | Branch | State | Since | Note (one line) |
 |--------|--------|-------|-------|-----------------|
-| ojs#5810 (+ pkp-lib#13292, ui-library#992, crossref-ojs#108, omp#2479, ops#1420; dev-team#316) | `i13221-main` | ready | 2026-09-29 | Crossref Cited-by: U45 Rule 42a, Fields, Settings 9a and U13's side column folded; tests untouched; kept checks `checks/sync/crossref-ojs-108/` and `checks/sync/ui-library-992/`. Round 2 (heads ojs `95ffb63be4`, ui-library `f4f61bfd`, crossref `9b10eb6`): the round-1 defect (dead button after a Crossref error) and the copied text's empty parts fixed; defect report `docs/reports/2026-09-29-ui-library-992.md` (a refused comment report closes silently). At the merge: rebase, OJS U13+U14+U45 once, fast-forward, delete this row and the report once acted on |
