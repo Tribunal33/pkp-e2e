@@ -1558,7 +1558,15 @@ config-file settings.
 - {OJS} A new journal has "LOCKSS" and "CLOCKSS" unticked on Settings ›
   Distribution › "Archiving", and `{journal}/gateway/lockss|clockss` land
   on the home page; OMP and OPS answer "404 Not Found" there. 2026-09-26
-  (U18 claim check K3).
+  (U18 claim check K3). The site's own `index.php/index/gateway/lockss|clockss`
+  answers "404 Not Found" on OMP and OPS too, and on OJS lists every enabled
+  journal with the box saved ticked. 2026-09-28 (U67 claim check K1,
+  `.reports/U67/ccK1/r{1,2}-s-0*`).
+- {OJS} A new journal's LOCKSS and CLOCKSS pages, once the box is saved
+  ticked, show five metadata rows: "Journal URL", "Title", "Language(s)",
+  "Publisher Email" (a scratch journal: `admin@mail.test`, the principal
+  contact) and "Rights" (the install's open-access sentence). 2026-09-28
+  (U67 claim check K2, `.reports/U67/ccK2/r{1,2}-m-00-new-lockss`).
 - The site's own "Web Feed Plugin" (Administration › "Site Settings" ›
   "Plugins") arrives unticked, the site's "Sidebar" offers only "Language
   Toggle Block", and the site's feed address answers "404 Not Found". The

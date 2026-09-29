@@ -585,6 +585,27 @@ Keys:
   without the list); the empty fields store no row, so the screen and
   the key both write this row alone. A non-boolean is a 400; OMP answers
   400, a press has no such radio (U19 harness, 2026-09-26).
+- `enableLockss`, `enableClockss` (OJS only; booleans): the two boxes of
+  Settings › Distribution › "Archiving" › the "LOCKSS and CLOCKSS" side
+  tab, "Enable LOCKSS to store and distribute journal content at
+  participating libraries via a LOCKSS Publisher Manifest page." (group
+  "LOCKSS") and the same sentence with "CLOCKSS" (group "CLOCKSS"),
+  saved as that tab's "Save" saves (one form-encoded POST to
+  `contexts/{id}` with the PUT override, both boxes in it:
+  `enableLockss=true&enableClockss=false`; stored as `1` / `0`). A new
+  journal has no row for either, which reads as unticked, so
+  `publicknowledge` and a scratch journal without the keys send
+  `gateway/lockss` and `gateway/clockss` to the journal's home page.
+  The screen's "Save" also writes the other box's row at `0`; each key
+  writes its row alone, and nothing reads an absent row differently from
+  `0`. Seeded `true`, the tab reopens with that box alone ticked and a
+  signed-out visitor reads "LOCKSS Publisher Manifest" (or "CLOCKSS
+  Publisher Manifest") at the address, the seeded `issues[]` listed
+  under "Archive of Published Issues: {year}", as by hand. A non-boolean
+  (`null` included) is a 400. Every app's context schema carries both
+  fields, but only a journal has the tab, so the OJS overlay reads them
+  and OMP and OPS answer 400 on either key, as on any key no builder
+  consumes (U67 harness, 2026-09-28).
 - `enableDois`, `doiPrefix`, `doiVersioning`, `enabledDoiTypes`,
   `doiCreationTime`, `doiSuffixType` and the pattern keys (U19 on the
   journal, U45 on the press and the preprint server, the format and

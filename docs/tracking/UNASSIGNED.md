@@ -877,3 +877,18 @@ until their specs exist. Do not force-claim the defects themselves.
     spec author; checkout omp `3cd59e944`, lib/pkp `17a1f01fed`,
     ui-library `03d1cee2`). Resolves: maintainer confirmation as dead
     code (removal candidates), or the missing locale keys added.
+55. **Unread archiving leftovers** — attached to **U67** (AFFM-098,
+    ROUTE-037; claimed). OJS `schemas/context.json` still defines
+    `lockssLicense` and `clockssLicense` with default texts
+    (`default.contextSettings.lockssLicense` / `…clockssLicense`), which
+    every new journal receives, but no form, handler or template reads
+    or writes them (their form descriptions were removed by ojs
+    `d8a46d1bcd`, 2026-03-18). `GatewayHandler::lockss()` / `clockss()`
+    assign a `showInfo` value no template reads. OPS
+    `pages/gateway/index.php` routes the `lockss` and `clockss` ops to a
+    `GatewayHandler` that has no such methods, so both addresses answer
+    "404 Not Found" (the same as OMP, whose `index.php` does not list
+    them). The Archiving & preservation spec's notes a, h and i record
+    the reachable surface. Code-verified 2026-09-28 (U67 spec author;
+    checkouts ojs `9d9f116f38`, ops `5da5bc48ad`, lib/pkp `fab29cfeca`).
+    Resolves: maintainer confirmation as dead code (removal candidates).

@@ -487,7 +487,7 @@ The tabs are themselves the settings other features read (Fields, Rules
 - **[Login & sessions](U01-login-and-sessions.md)** and
   **[Registration & account validation](U02-registration-and-account-validation.md)**:
   the pages the signed-out notice links to.
-- ***Archiving & preservation*** {OJS}: the journal's LOCKSS and CLOCKSS
+- **[Archiving & preservation](U67-archiving-preservation.md)** {OJS}: the journal's LOCKSS and CLOCKSS
   permission pages show a "Copyright" row while a copyright notice is
   set, filled with the License Terms rather than the notice ⚠ [OJS1](#ojs1).
 

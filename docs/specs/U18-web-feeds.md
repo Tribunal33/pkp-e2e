@@ -344,7 +344,7 @@ leave question; a window closed or left this way saves nothing either.
   9).
 - *Roles configuration* and *Hosted journals* own the two access settings
   of Rule 13.
-- *Archiving & preservation* {OJS} owns the LOCKSS and CLOCKSS pages
+- [Archiving & preservation](U67-archiving-preservation.md) {OJS} owns the LOCKSS and CLOCKSS pages
   under the same gateway address (Rule 15).
 - *Languages & locales* owns the interface languages a feed can be read
   in (Rule 10).
@@ -697,7 +697,7 @@ Left out of the scenarios above, by reason:
     "Sidebar" (Actors preamble; *[Journal identity & about
     pages](U07-journal-identity-and-about-pages.md)*, scenario 2)
   - {OJS} the LOCKSS and CLOCKSS pages under the gateway address (Rule
-    15a; *Archiving & preservation*)
+    15a; [Archiving & preservation](U67-archiving-preservation.md))
 
 ## Findings register
 
@@ -934,7 +934,7 @@ preprint servers made for the check; the `td` notes record what was seen.
 | Entry | Path | Atom |
 |-------|------|------|
 | The "Latest publications" box and its three links | the sidebar of the journal's public pages, once placed | AFFR-094 |
-| The three feeds and the gateway address {OJS} (the LOCKSS and CLOCKSS pages are *Archiving & preservation*'s) | {journal address}/gateway, …/gateway/plugin/WebFeedGatewayPlugin/{atom,rss2,rss} | ROUTE-037 |
+| The three feeds and the gateway address {OJS} (the LOCKSS and CLOCKSS pages are [Archiving & preservation](U67-archiving-preservation.md)'s) | {journal address}/gateway, …/gateway/plugin/WebFeedGatewayPlugin/{atom,rss2,rss} | ROUTE-037 |
 | The three feeds and the gateway address {OMP} | the same addresses on a press | ROUTE-059 |
 | The three feeds and the gateway address {OPS} | the same addresses on a preprint server | ROUTE-076 |
 | "Web Feed Plugin": its row, its "Settings" window, its discovery links | Settings › Website › "Plugins" › "Installed Plugins" › "Generic Plugins" | PLUG-030 |

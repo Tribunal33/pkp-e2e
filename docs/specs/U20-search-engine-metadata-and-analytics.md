@@ -432,7 +432,7 @@ in. <sup>i</sup> <sup>q14</sup>
   CLOCKSS pages {OJS} show it as their "Description" row while the
   matching box is ticked on Settings › Distribution › "Archiving" ›
   "LOCKSS and CLOCKSS"; unticked, their address opens the journal's home
-  page (*Archiving & preservation*). <sup>c</sup>
+  page ([Archiving & preservation](U67-archiving-preservation.md)). <sup>c</sup>
 
 ## Settings that modify behavior
 
@@ -532,7 +532,7 @@ in. <sup>i</sup> <sup>q14</sup>
   decide its current version (Rules 2, 12, 13); [Issues](U50-issues.md)
   owns issues and what they show (Rule 2a).
 - [Web feeds](U18-web-feeds.md), [Announcements](U12-announcements.md)
-  and *Archiving & preservation* reuse the "Description" (Side effects).
+  and [Archiving & preservation](U67-archiving-preservation.md) reuse the "Description" (Side effects).
 - [Search](U15-search.md) owns the Search page the sitemap lists; this
   spec's "Search Indexing" concerns outside search engines, not the
   journal's own search.
@@ -964,7 +964,7 @@ Left out of the scenarios above, by reason:
     *[Journal identity & about
     pages](U07-journal-identity-and-about-pages.md)*, Rule 5)
   - {OJS} the LOCKSS and CLOCKSS pages' "Description" row (Side effects;
-    *Archiving & preservation*)
+    [Archiving & preservation](U67-archiving-preservation.md))
 
 ## Findings register
 

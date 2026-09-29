@@ -153,6 +153,10 @@
  *   boolean, default 1, which every new context stores): true "Enable",
  *   false "Disable". Only the journal and preprint server schemas carry
  *   it, so OMP answers 400. The key writes this row alone.
+ * - enableLockss, enableClockss (bool) — Settings › Distribution ›
+ *   "Archiving" › "LOCKSS and CLOCKSS" (U67). Every app's schema carries
+ *   the two fields but only a journal has the form, so the OJS overlay
+ *   reads them (its parseIntakeSettings); OMP and OPS answer 400.
  * - catalogSortOption (one of the radios' words, e.g. 'title-ASC') —
  *   Settings › Website › Appearance › Setup, "Order of monographs" (U70;
  *   the OMP AppearanceSetupForm's FieldOptions over

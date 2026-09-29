@@ -12,7 +12,7 @@
  * @brief OJS scratch-journal scenario (a fresh journal gets its default
  * "Articles" section from the Context::add hook; user section assignments
  * resolve by abbrev; the issues[] overlay, U08; the subscription keys,
- * U51).
+ * U51; the LOCKSS and CLOCKSS boxes, U67).
  */
 
 namespace APP\testing;
@@ -20,6 +20,7 @@ namespace APP\testing;
 use PKP\context\Context;
 use PKP\testing\PKPContextScenarioBuilder;
 use PKP\testing\Spec;
+use PKP\testing\SpecException;
 
 class ContextScenarioBuilder extends PKPContextScenarioBuilder
 {
@@ -50,6 +51,36 @@ class ContextScenarioBuilder extends PKPContextScenarioBuilder
     protected function addStructure(Context $context, array $plan, int $sequence): int
     {
         return BootstrapSeeder::addSection($context, $plan, $sequence);
+    }
+
+    /**
+     * The shared passthroughs, plus the journal's Settings › Distribution ›
+     * "Archiving" › "LOCKSS and CLOCKSS" boxes (U67; ArchivingLockssForm, an
+     * OJS form over the lib/pkp context schema's nullable booleans
+     * `enableLockss` and `enableClockss`, no default: a new journal has no
+     * row, both boxes unticked). The form's "Save" is one PUT to
+     * `contexts/{id}` carrying both boxes, which PKPContextController::edit
+     * validates and saves through the context service, the call
+     * saveFormSettings makes. Each key writes its row alone. The schema
+     * carries both fields on every app, but only a journal has the form, so
+     * the keys are read here, in the OJS overlay: a press or preprint server
+     * leaves them unconsumed and answers 400 (D4, D5).
+     */
+    protected function parseIntakeSettings(Spec $root, string $primaryLocale): array
+    {
+        $parsed = parent::parseIntakeSettings($root, $primaryLocale);
+        foreach (['enableLockss' => 'LOCKSS', 'enableClockss' => 'CLOCKSS'] as $key => $label) {
+            if (!$root->has($key)) {
+                continue;
+            }
+            $value = $root->get($key);
+            if (!is_bool($value)) {
+                throw new SpecException($key, "{$key} must be a boolean (true: the \"{$label}\" box \"Enable {$label} to store and distribute journal content…\" ticked, false: unticked)");
+            }
+            $parsed['settings'][$key] = $value;
+            $parsed['specKeys'][$key] = $key;
+        }
+        return $parsed;
     }
 
     /**
