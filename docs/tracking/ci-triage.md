@@ -1000,21 +1000,6 @@ trips.
   **Watch condition**: a second sighting; then key the wait to the
   search's response instead of the transient class.
 
-- **OMP U19 S4 "Empty Shelf" lists `publicknowledge`'s deleted records
-  after U73** (order-dependent, deterministic once the state exists;
-  U69 harness, 2026-09-28). S4 expects `noRecordsMatch` from a fresh
-  press's `ListRecords`, but on OMP every press's address also lists the
-  install's first press's deleted records (`OAIDAO` tombstone branch:
-  `->when(isset($pressId), function ($query, $pressId)` receives `true`,
-  so it joins press 1; the U19 spec's A1 names this for OJS only). U73
-  S7/S9/S11 unapprove formats on `publicknowledge` and so leave
-  tombstones there (seen: four `publicknowledge` tombstones, two from a
-  12:36 run before the U69 session, two from the harness's U73
-  regression run); U19 run after U73 on the same database is red,
-  `pw-omp-U19.log`. Not a U69 builder effect: no U69 key unapproves a
-  format. Watch condition: an OMP final with U73 before U19; the
-  lasting fix belongs to U19 (its spec's 4b for OMP) or to U73's use of
-  `publicknowledge`, not to a retry. Again 2026-09-28 (U74 harness regression, Mac, used database after the U73 suite): S4 red, two tombstones in press 1's set (`.reports/U74/harness/harness-log.md`); green in the U74 OMP final on a reset database.
 
 - **Eight first sightings in one Mac final set** (U74 session, 2026-09-29,
   reset databases at auto workers, each green alone right after,

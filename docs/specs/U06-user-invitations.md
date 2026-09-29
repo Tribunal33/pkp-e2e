@@ -32,7 +32,7 @@ reach that screen at all belongs to the user-management feature (see
 | **Invite to a role** (open the send wizard) | • Site Administrator; Journal Manager: the "Invite to a role" button <sup>a</sup><br>• ⚠ [A1](#a1) No other role is offered the button. An Author or Reviewer who types the wizard's own address (the URL a manager reaches via "Invite to a role") is turned away. Who else the address lets through is an open question <sup>b</sup> |
 | **Edit a pending invitation** | • Site Administrator; Journal Manager: "Edit Invitation" on the invitation's row (Rule 12) <sup>a</sup> |
 | **Cancel a pending invitation** | • Site Administrator; Journal Manager: "Cancel Invite" on the invitation's row <sup>a</sup> |
-| **Propose roles for an existing member** | • Site Administrator; Journal Manager: the user row's Edit action opens the same wizard (Rule 13) <sup>c</sup> |
+| **Propose roles for an existing member** | • Site Administrator; Journal Manager: the user row's Edit action opens the same wizard (Rule 13), and so does "Invite to a role" once "Search User" finds them (Rule 13a) <sup>c</sup> |
 | **Accept or decline** | • The recipient: via the emailed links, while the invitation is pending. This works signed out, and no credentials are asked (Rules 6–7) <sup>f</sup> |
 | **Customize the invitation email for one send** | • Whoever is sending: the wizard's compose step (subject, body, template choice) <sup>g</sup> |
 | **Edit the stored invitation email template** | • Journal Manager: on the Emails settings screen, which belongs to the emails-management feature. ⚠ [OPS1](#ops1) On a preprint server the template has no row there <sup>j</sup> |
@@ -160,6 +160,16 @@ Accept wizard (new invitee):
     step stays inactive while no new role row exists. An empty row is enough
     to activate it; pressing it rejects the missing role fields with inline
     errors. <sup>c</sup> <sup>i</sup>
+13a. **The search path to an existing member.** "Invite to a role", with
+    the member found on "Search User", lists their current roles on "Enter
+    details" above the new-role row, each with a masthead select and
+    "Remove Role". Changing a held role's select opens "Confirm masthead
+    visibility change", as through the users list's Edit action. "Confirm"
+    applies the change at once, with the email of Rule 13 ⚠ [OMP1](#omp1),
+    and the change stays even if the invitation is never sent: Edit on the
+    member's row in the users list then shows the new choice. A sent invitation's email lists
+    that role under "Already assigned roles" with the new choice. "Cancel"
+    on the confirmation puts the select back and changes nothing. <sup>c</sup>
 14. A disabled user cannot be invited. Reaching one through the search step
     shows "The user is currently disabled." with instructions to enable them
     first, and no role row can be added. Reaching the same person through the
@@ -193,8 +203,16 @@ Accept wizard (new invitee):
     with "Cancel Invitation Process" and "Go Back". "Go Back" returns to the
     step. "Cancel Invitation Process" declines nothing:
     - a signed-out newcomer lands on the sign-in screen;
-    - the manager's Invitations row still reads "Invited {date}";
-    - the emailed link reopens the wizard at its first step.
+    - an existing user signed in as themselves stays signed in and lands on
+      their usual landing page (for an Author, My Submissions), as the
+      dialog promises ("If you're already a user, you'll be taken back to
+      the dashboard.");
+    - an existing user who opened the link signed out lands on the sign-in
+      screen instead, and signing in there opens the same landing page;
+    - the manager's Invitations row still reads "Invited {date}", and an
+      existing user's roles are unchanged;
+    - with ORCID off, the emailed link reopens "Create OJS account" (an
+      existing user's review step), and accepting there still works.
 
     Leaving "Create OJS account" by typing another address asks nothing and
     keeps nothing: the Username typed there is empty when the link reopens.
@@ -224,7 +242,8 @@ Accept wizard (new invitee):
 - **On acceptance**: the account is created (new invitee) or the roles are
   added to the existing account. Masthead listings update per the chosen
   visibility.
-- **On role removal or masthead change** (the user-row wizard, Rule 13): the
+- **On role removal or masthead change** (the user-row wizard, Rule 13; a
+  masthead change on the search path too, Rule 13a): the
   member is emailed at once ("You have been removed from a role" / "Your
   journal masthead visibility has been updated"). Only the masthead
   confirmation says so up front ("The user will be notified of this
@@ -538,6 +557,14 @@ Left out of the scenarios above, by reason:
   - scenario 2's "Enter details" bullet, Given Name already reading Nova
     (Fields): the OJS, OMP and OPS suites type the name instead of reading
     it back
+  - a held role's masthead select on the search path's "Enter details"
+    (Rule 13a): "Confirm" applying the change at once and keeping it when
+    the invitation is never sent, the sent email's "Already assigned roles"
+    reading the new choice, and "Cancel" putting the select back
+  - "Cancel Invitation Process" for an existing user (Rule 17): signed in,
+    landing on My Submissions still signed in; signed out, the sign-in
+    screen, then My Submissions after signing in; the link reopening the
+    review step (ORCID off), and accepting there still working
 - **Budget** — states:
   - a disabled user met on the search step and through the users list's Edit
     action, "The user is currently disabled." and the two inactive buttons
@@ -588,7 +615,8 @@ Left out of the scenarios above, by reason:
     signed out landing on the sign-in screen; Rules 6, 9; scenarios 2 and 3
     mark it)
   - OMP1 (the masthead email failing with a raw error on presses and
-    preprint servers; Side effects; scenario 8 marks it)
+    preprint servers, on the Edit path and the search path alike; Rules 13,
+    13a, Side effects; scenario 8 marks it)
   - A9 (the role-removal email telling a disabled user their account is
     still active; Rule 14, Side effects)
   - A5 ("Invitation Sent" promising updates never delivered; Rule 15, Side
@@ -640,7 +668,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A8](#a8) | Added role rows carry no accessible field names; a screen reader hears row 1's labels | 🐞 | user-visible | — |
 | [A10](#a10) | A newcomer named only in another form language, or invited on a journal whose primary language is not the site's by a manager working in the site's, is still greeted "Dear {email}," | 🐞 | minor | — |
 | [A11](#a11) | The invitation email promises a masthead listing for roles the masthead does not list, such as Reader and Author | 🐞 | minor | — |
-| [OMP1](#omp1) | Confirming a masthead change fails with a raw email-template error on presses and preprint servers | 🐞 | user-visible · crash: server | claim check (claude), 2026-09-28 — crash word added; also on a removed role's row |
+| [OMP1](#omp1) | Confirming a masthead change fails with a raw email-template error on presses and preprint servers | 🐞 | user-visible · crash: server | claim check (claude), 2026-09-29 — the invitation case placed on the send wizard's "Enter details", OMP and OPS; the send unaffected |
 | [OPS1](#ops1) | The invitation email template has no row on the preprint server's Emails screen | 🐞 | user-visible | — |
 | [A1](#a1) | The send wizard's address is gated more widely than the screen that offers it | ❓ | latent | — |
 | [A2](#a2) | Daily cleanup deletes invitations still being composed | ❓ | latent | — |
@@ -791,10 +819,11 @@ on the server: an "Error" dialog shows the manager the raw text "Email
 template USER_ROLE_MASTHEAD_UPDATE not found. The migration script
 I11800_AddUserRoleMastheadUpdateEmail needs to be run.", and the member gets
 no email. The change itself sticks after a reload, on a current role's row
-and on a removed role's row alike (Rule 13). The same error can interrupt
-an existing-user invitation mid-send on a press (it can be dismissed, and the
-invitation still delivers). On a journal the change applies cleanly and the
-member's notice is delivered. Fresh presses and preprint servers ship without
+and on a removed role's row alike (Rule 13). The same error appears in
+"Invite to a role" for an existing member when a held role's masthead select
+is changed on "Enter details" (Rule 13a); "OK" dismisses it, the change
+sticks, and the invitation then sends and delivers normally. On a journal
+the change applies cleanly and the member's notice is delivered. Fresh presses and preprint servers ship without
 the email template this notice needs, so any new install reproduces it.
 Basis: probe + install-seed check. <sup>[f-omp1](#fn-omp1)</sup>
 
@@ -894,7 +923,22 @@ change"; "Confirm" saved it (shown on the page and after a reload; the
 request answering 200 on OJS, 500 on OMP and OPS, f-omp1). "Editorial
 History" listed the member set to appear right after the removal and not
 the other; after the change the two had swapped. "Editorial Masthead"
-listed neither, before or after.
+listed neither, before or after. Claim check 2026-09-29, all three apps, two
+runs each (Rule 13a): "Invite to a role" with a scratch Author's email on
+"Search User" reached "Enter details" listing the held "Author" row (START
+DATE that day, END DATE "---", the select on "Appear on the masthead",
+"Remove Role") above the empty new-role row. Changing the held select opened
+"Confirm masthead visibility change" ("… The user will be notified of this
+change.", "Confirm" / "Cancel"); "Confirm" sent
+`PUT users/{id}/masthead/{userUserGroupId}` at once (200 and the masthead
+email on OJS; 500 on OMP and OPS, f-omp1). With a new role row filled and
+the wizard then left by typing the Users & Roles address, no browser
+question came, the Invitations table gained no row, and the member's Edit
+page read "Does not appear on the masthead". Sent instead, the invitation
+email's "Already assigned roles" read "Your name will not appear in
+{journal}'s masthead as a Author." "Cancel" on the confirmation put the
+select back to "Appear on the masthead" with no request and no email, and
+the Edit page still read "Appear on the masthead" after a reload.
 
 <a id="fn-d"></a>
 **d** — Statuses: `PKP\invitation\core\enums\InvitationStatus`
@@ -1212,8 +1256,22 @@ Invitation Process" led to `login?source=…/submissions` with no
 invitations request made. The Invitations table still held the row, and
 the link reopened "Create OJS account". Before that, a username typed there
 and left for the journal's About page by address raised no browser
-question, and the reopened step's Username was empty. The existing user's
-"Cancel" was seen, not pressed; the ORCID step was not read.
+question, and the reopened step's Username was empty. The ORCID step was
+not read. Claim check 2026-09-29, all three apps, two runs each, ORCID off:
+a scratch Author invited to a further role opened the link once signed out
+and once signed in as themselves. On the one "Review & create account"
+step, "Cancel" opened the same dialog, "Go Back" left no dialog, and
+"Cancel Invitation Process" made no invitations request and raised no
+browser question. Signed out, it led to `login?source=…/submissions`, the
+sign-in form, still signed out; signing in there reached
+`dashboard/mySubmissions?currentViewId=active` ("Active submissions (0)";
+tried on five of the six runs, OJS in the second only). Signed in, it led
+straight to that address, the header still holding the user's name. Either
+way the Invitations row still read "… Invited 2026-09-29", the user's row
+listed Author only, and the link reopened the review step with its accept
+button. Accepting from it, signed out, showed "You've been assigned a new
+role in OJS" (the app's acronym on OMP and OPS); the row left the
+Invitations table and the user's row listed Author and the offered role.
 
 <a id="fn-a1"></a>
 **f-a1** — Role assignment vs screen gate: note b vs note a. The atlas route
@@ -1408,6 +1466,21 @@ request answers 500 (`users/{id}/masthead/{userUserGroupId}`). Claim check
 2026-09-28, OMP and OPS, six runs each: twice per run, on a removed role's
 row changed each way, the same 500 and "Error" dialog, the new value shown
 after a reload and no masthead email (note c).
+Claim check 2026-09-29, OMP and OPS, two runs each (Rule 13a; OJS the
+control): on "Enter details" of "Invite to a role" for an existing Author,
+the held Author row's select changed to "Does not appear on the masthead"
+and confirmed sent the masthead request, which answered 500 with the same
+"Error" dialog; "OK" left "Enter details" with the select on the new value.
+With the offered role filled, "Save And Continue", the compose step and
+"Invite user to the role" went through to "Invitation Sent", every
+invitation request answering 200; the Invitations row read "Invited
+2026-09-29", and the invitation email arrived, its "Already assigned roles"
+reading "Your name will not appear in {press or server}'s masthead as a
+Author.", with no masthead email; the Edit page read "Does not appear on the
+masthead". The same send with the held select untouched made no masthead
+request and showed no error, its email reading "Your name will appear in the
+{press or server}'s masthead as a Author." On OJS the change answered 200
+with no dialog, and the masthead email arrived beside the invitation.
 
 <a id="fn-ops1"></a>
 **f-ops1** — Evidence in note j (OPS map override vs seeded template).

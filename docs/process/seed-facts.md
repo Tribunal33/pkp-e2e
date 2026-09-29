@@ -602,7 +602,12 @@ behind a line; that scratch is deleted after review.
   enabled unless `enabled: false`. Administration › "System Information"
   shows the install's OAI settings (`oai` 1, the repository identifier,
   `oai_max_records` 100), read-only. Live-probed 2026-09-26 (U19 claim
-  check K1, K2, K4).
+  check K1, K2, K4). A fresh fleet has no deleted OAI record in
+  `publicknowledge`; on OMP a `publicknowledge` format set "Not
+  Available" (U73 S7, S9, S11 do) leaves one in press 1, which every OMP
+  press's own list, GetRecord and "Earliest Datestamp" then show (U19 A1),
+  and unpublishing that book once none of its formats is available removes
+  it again (U19 claim check I29, 2026-09-29).
 - On a fleet used by earlier runs, `publicknowledge`'s "Engineering"
   category page lists items other runs published (OJS and OPS: 2 Items on
   2026-09-25), while the other seeded categories read "0 Items" ("0

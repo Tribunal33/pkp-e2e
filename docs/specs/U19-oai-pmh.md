@@ -298,11 +298,11 @@ message. <sup>m</sup>
      formats under new identifiers and leaves no deleted record for the
      old ones ⚠ [OMP7](#omp7). <sup>n</sup>
    - 4b. {OJS OMP} The address of every journal but the install's first
-     leaves out that journal's own deleted records ⚠ [A1](#a1); {OJS}
-     without a `set`, it lists the first journal's instead. The
-     site-wide address lists every journal's, but not a journal's that
-     `set` names. <sup>n</sup>
-     <sup>q8</sup>
+     (created first, whatever the Hosted Journals order: the seeded
+     journal) leaves out its own deleted records ⚠ [A1](#a1); without
+     a `set`, it lists the first journal's instead. The site-wide
+     address lists every journal's, but not a journal's that `set`
+     names. <sup>n</sup> <sup>q8</sup>
 5. **Datestamps.** On a journal a record's datestamp is its last change:
    the latest change to the article, its current version or its issue.
    On a press and a preprint server it stays at the time the item was
@@ -312,10 +312,10 @@ message. <sup>m</sup>
    deleted record's. A deleted record's datestamp is the moment it was
    deleted. <sup>e</sup> <sup>q9</sup>
 6. **Order.** A list gives a journal's records in the order of their
-   submission ID, lowest first (on a press, of the format number); the
-   site-wide address lists them journal by journal, then every
-   journal's deleted records together at the end. <sup>e</sup>
-   <sup>q9</sup>
+   submission ID, lowest first (on a press, of the format number).
+   {OMP} A press lists the first press's deleted records (Rule 4b)
+   before its own. The site-wide address lists the records journal by
+   journal, then every journal's deleted records together at the end. <sup>e</sup> <sup>q8</sup> <sup>q9</sup>
 7. **Sets.** ListSets names the journal as a set, its `setSpec` the
    journal's path and its `setName` the journal's name, then each of its
    sections: `setSpec` "{journal path}:{abbreviation}", `setName` the
@@ -390,9 +390,9 @@ message. <sup>m</sup>
     the format asked for, a deleted one included. A journal's address
     answers "No matching identifier in this repository" for another
     journal's article and for an identifier of no published article; the
-    site-wide address answers for any journal's. {OJS} A journal's
-    address also answers the install's first journal's deleted records
-    [A1](#a1). <sup>e</sup> <sup>q16</sup>
+    site-wide address answers for any journal's. {OJS OMP} A journal's
+    address also answers the first journal's deleted records (Rule 4b)
+    [A1](#a1). <sup>e</sup> <sup>q8</sup> <sup>q16</sup>
 16. **The site-wide address.** It answers as one repository for the
     whole site: "Repository Name" is the site's "Site Name"
     (Administration › Site Settings › "Settings"; empty on the test
@@ -421,7 +421,7 @@ message. <sup>m</sup>
       still lists them and, on a preprint server, the server's own
       address too. The journal's lists answer "No matching records in
       this repository" only when nothing deleted is left to show ({OJS}
-      never while the install's first journal has deleted records,
+      never while the first journal (Rule 4b) has deleted records,
       [A1](#a1)), and on a preprint server "Earliest Datestamp" becomes
       the oldest deleted record's. <sup>o</sup> <sup>q18</sup>
 18. **A journal closed to visitors.** On a journal whose "Site Access
@@ -429,10 +429,10 @@ message. <sup>m</sup>
     enabled publicly, a signed-out request to the journal's address is
     sent to the Login page. A signed-in browser is answered instead,
     whatever its role in the journal, even with none. On a journal not
-    enabled publicly its lists then hold none of its own records ("No
-    matching records in this repository"; {OJS} the install's first
-    journal's deleted records, [A1](#a1)), while Identify and ListSets
-    name it. <sup>b</sup> <sup>q1</sup>
+    enabled publicly its lists then hold none of its own records: they
+    answer "No matching records in this repository", or show the
+    first journal's deleted records in their place (Rule 4b)
+    [A1](#a1). Identify and ListSets name it. <sup>b</sup> <sup>q1</sup>
 19. **Languages.** A record carries every language its item has (Rule
     11). The language the request is read in (the address's language
     segment, such as `…/fr_CA/oai`) decides "Repository Name", the set
@@ -699,8 +699,8 @@ footnote. <sup>s</sup>
      the Dashboard lists the article under ("…:preprint/{ID}" on a
      preprint server); its "OAI Record Header" has a "setSpec" row
      "{journal path}:ART" ("…:PRE"; on a press, the press's path). On a
-     journal the list may also hold deleted records of the install's
-     first journal [A1](#a1) (Rules 3, 7d; the table "A record's
+     journal and a press the list may also hold the first journal's
+     deleted records [A1](#a1) (Rules 3, 4b, 7d; the table "A record's
      header").
    - **A press's records** {OMP}: the list holds two records for "Tidal
      Patterns", one per format, each identified as
@@ -779,8 +779,8 @@ footnote. <sup>s</sup>
    - **Before**: the visitor opens
      {journal address}/oai?verb=ListRecords&metadataPrefix=oai_dc
      ({journal address} being the address of the journal's home page):
-     it lists "Tidal Patterns", then "Coral Reefs" (Rule 6; on a
-     journal, beside deleted records of the install's first journal,
+     it lists "Tidal Patterns", then "Coral Reefs" (Rules 4b, 6; on a
+     journal and a press, beside the first journal's deleted records,
      [A1](#a1)). Note the "OAI Identifier" of "Tidal Patterns".
    - **Unpublished**: Journal Manager: open "Tidal Patterns" in its
      workflow and unpublish it, as [Publish, schedule &
@@ -809,10 +809,8 @@ footnote. <sup>s</sup>
 4. **Refused requests** {OJS OMP OPS}
 
    Given: a visitor, signed out, on a scratch journal "Sea Letters" where
-   the article "Tidal Patterns" is published; and {OMP OPS} a second
-   scratch press or preprint server, "Empty Shelf", with nothing
-   published ({OMP} the install's first press having no deleted record,
-   [A1](#a1)).
+   the article "Tidal Patterns" is published; and {OPS} a second
+   scratch preprint server, "Empty Shelf", with nothing published.
 
    Each refusal below shows "OAI Error(s)", "The request could not be
    completed due to the following error or errors.", the "Error Code"
@@ -841,13 +839,13 @@ footnote. <sup>s</sup>
      "badResumptionToken", "The requested resumptionToken is invalid or
      has expired"; with `&metadataPrefix=oai_dc` added: "badArgument",
      "metadataPrefix is an illegal parameter" (Rule 13).
-   - **Nothing to list** {OMP OPS}: at the address of "Empty Shelf",
+   - **Nothing to list** {OPS}: at the address of "Empty Shelf",
      `…/oai?verb=ListRecords&metadataPrefix=oai_dc` answers
      "noRecordsMatch", "No matching records in this repository"; its
      Identify's "Earliest Datestamp" reads the moment of the request
-     [A1](#a1) (Rule 3; Fields, "Identify"). An empty journal is not
-     read here: it lists any deleted records of the first journal (Rule
-     4b).
+     (Rule 3; Fields, "Identify"). An empty journal or press is not read
+     here: it lists any deleted records of the first journal, and
+     its "Earliest Datestamp" is the oldest of theirs [A1](#a1) (Rule 4b).
    - **Control**: after the refusals,
      {journal address}/oai?verb=Identify still shows "Request was of type
      Identify." and "Repository Name" "Sea Letters" (Rule 14).
@@ -1155,11 +1153,11 @@ Left out of the scenarios above, by reason:
     scenario 2's site-wide address
 - **Register carries it**:
   - A1 {OJS OMP} (a journal's own address leaving out its deleted
-    records and, on a journal, showing the install's first journal's in
-    their place, "Earliest Datestamp" and GetRecord included, so a
-    journal with nothing of its own never answers "No matching records
-    in this repository" while that journal has deleted records; the
-    site-wide `set` of one journal leaving them out; Rules 4b, 15, 17a;
+    records and showing the first journal's in their place,
+    "Earliest Datestamp" and GetRecord included, so an empty journal
+    never answers "No matching records in this repository" while the
+    first journal has deleted records; the site-wide
+    `set` of one journal leaving them out; Rules 4b, 6, 15, 17a, 18;
     scenarios 1, 3 and 4 pass it)
   - A2, A3, A20, OPS1 (the time of day ignored; an impossible date or
     time accepted; a section's set ignoring the dates for deleted
@@ -1219,7 +1217,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A journal's own OAI address leaves out its deleted records and shows the install's first journal's instead {OJS OMP} | 🐞 | user-visible | — |
+| [A1](#a1) | A journal's own OAI address leaves out its deleted records and shows the first journal's instead {OJS OMP} | 🐞 | user-visible | — |
 | [A2](#a2) | `from` and `until` ignore the time of day | 🐞 | minor | — |
 | [A3](#a3) | A date that is not in the calendar is accepted instead of refused | 🐞 | minor | — |
 | [A4](#a4) | The browser view's last page says "There are more results." and offers a "Resume" that fails | 🐞 | minor | — |
@@ -1261,19 +1259,20 @@ an entry notes otherwise; the team settles them on spec review.
 **A1 — A journal's own address leaves out its deleted records** {OJS OMP} · 🐞 · user-visible.
 A harvester of one journal's address expects an unpublished article to
 come back as a deleted record, so it can drop it. On every journal but
-the install's first, the record disappears instead: the lists leave it
+the first (Rule 4b), the record disappears instead: the lists leave it
 out and GetRecord answers "No matching identifier in this repository",
 so the harvester keeps showing the withdrawn article. Asked for that
 journal's set, the site-wide address leaves its deleted records out
-too, and the `driver` set never shows one (Rule 23a). {OJS} In their
-place the journal's lists and GetRecord show the first journal's
-deleted records, under that journal's identifiers, and its "Earliest
-Datestamp" is the oldest of them, even on a journal with nothing
-published. A press drops its own deleted records the same way, and one
-whose only book was unpublished gives the moment of the request as its
-"Earliest Datestamp"; that it shows the first press's instead is known
-from the code only. A preprint server is not affected.
-Since: 2021-07-14 · Basis: probe, 2026-09-26. <sup>f-a1</sup>
+too, and the `driver` set never shows one (Rule 23a). In place of its
+own, the journal's lists and GetRecord show the first journal's deleted
+records, under that journal's identifiers and set (a set the journal's
+ListSets does not name), and its "Earliest Datestamp" is the oldest of
+them, even on a journal with nothing published; a press lists them
+before its own records. Only while the first journal has no
+deleted record does an empty journal answer "No matching records in
+this repository" and give the moment of the request. A preprint server
+is not affected.
+Since: 2021-07-14 · Basis: probe, 2026-09-26; OMP 2026-09-29. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — `from` and `until` ignore the time of day** · 🐞 · minor.
@@ -1637,7 +1636,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 **m** — `OAI::error($code, $message)`: for `badVerb` and `badArgument` the `<request>` element carries no attributes; for the others it repeats the request's parameters. "Multiple values are not allowed for the {argument} parameter" is never reached: `OAIUtils::parseStr()` makes a repeated key an array, and `OAI::getParam()`, typed `?string`, throws a TypeError before `checkParams()` can refuse it (A16). Messages as in the table, from `OAI.php` and `OAIMetadataFormat_JATS.php`. `listSets()` answers `noSetHierarchy` "This repository does not support sets" when no set exists, which a site with a journal never meets. `listMetadataFormats()` answers `noMetadataFormats` "No metadata formats are available" when no format plugin is enabled, which cannot happen (the DC format cannot be disabled). Live-probed 2026-09-26 (Errors; Rules 2, 14), all three apps, 35 refusals each: notes q15, q16, f-a16.
 
 <a id="fn-n"></a>
-**n** — Deleted records (tombstones, `data_object_tombstones` with their set objects). OJS `ArticleTombstoneManager`: `reconcileTombstonesOnUnpublish()` (from `Repo::publication()->unpublish()`, `delete()` of a published publication, and `IssueGridHandler::deleteIssue()`) inserts the bare identifier's tombstone when no published version is left; `reconcileTombstonesOnPublish()` deletes it; `IssueGridHandler::unpublishIssue()` unpublishes and re-publishes each article into the now-unpublished issue (status scheduled), leaving the tombstone; `insertTombstonesByContext()` / `deleteTombstonesByContextId()` on `enabled` changes and before a context is deleted. OPS `Repository::updateStatus()` inserts a `PreprintTombstoneManager` tombstone when the submission leaves `STATUS_PUBLISHED` and deletes it when it returns. OMP `PublicationFormatTombstoneManager`: on `unpublish()` for each format of the version, on a format's "Format Availability" or approval change (`PublicationFormatGridHandler::setAvailable()` / `setApproved()`), deleted on publish. The tombstone query (note e) joins the context's set objects with `->when(isset($journalId), function ($query, $journalId) { … use ($journalId) … (int) $journalId })` in OJS and `->when(isset($pressId), function ($query, $pressId) …)` in OMP: Laravel passes the condition (`true`) as the closure's second argument, so the join asks for context 1 (A1); OPS writes `function ($query) use ($serverId)`. Without a context (site-wide) no join applies; with a `set`, the site-wide query takes the journal's filter and loses its deleted records the same way (A1). The site-wide union lists the tombstones after every context's live rows (Rule 6). A context removed under Hosted Journals leaves its tombstones on OJS and OMP and none on OPS (OPS4). On OMP and OPS, unpublishing, publishing again and saving a published version leave `submissions.last_modified` where it was (read in the database, A18). Live-probed 2026-09-26 (Rules 4, 4a, 4b, 16b; Side effects): notes q8, q17, f-ops4.
+**n** — Deleted records (tombstones, `data_object_tombstones` with their set objects). OJS `ArticleTombstoneManager`: `reconcileTombstonesOnUnpublish()` (from `Repo::publication()->unpublish()`, `delete()` of a published publication, and `IssueGridHandler::deleteIssue()`) inserts the bare identifier's tombstone when no published version is left; `reconcileTombstonesOnPublish()` deletes it; `IssueGridHandler::unpublishIssue()` unpublishes and re-publishes each article into the now-unpublished issue (status scheduled), leaving the tombstone; `insertTombstonesByContext()` / `deleteTombstonesByContextId()` on `enabled` changes and before a context is deleted. OPS `Repository::updateStatus()` inserts a `PreprintTombstoneManager` tombstone when the submission leaves `STATUS_PUBLISHED` and deletes it when it returns. OMP `PublicationFormatTombstoneManager`: on `unpublish()` for each format of the version, on a format's "Format Availability" or approval change (`PublicationFormatGridHandler::setAvailable()` / `setApproved()`), deleted on publish. The tombstone query (note e) joins the context's set objects with `->when(isset($journalId), function ($query, $journalId) { … use ($journalId) … (int) $journalId })` in OJS and `->when(isset($pressId), function ($query, $pressId) …)` in OMP: Laravel passes the condition (`true`) as the closure's second argument, so the join asks for context 1 (A1); OPS writes `function ($query) use ($serverId)`. Without a context (site-wide) no join applies; with a `set`, the site-wide query takes the journal's filter and loses its deleted records the same way (A1). The site-wide union lists the tombstones after every context's live rows (Rule 6); at an OMP press's own address the first press's tombstones, which carry its `press_id`, sort before the press's own rows (2026-09-29, note q8). A context removed under Hosted Journals leaves its tombstones on OJS and OMP and none on OPS (OPS4). On OMP and OPS, unpublishing, publishing again and saving a published version leave `submissions.last_modified` where it was (read in the database, A18). Live-probed 2026-09-26 (Rules 4, 4a, 4b, 16b; Side effects): notes q8, q17, f-ops4.
 
 <a id="fn-o"></a>
 **o** — OJS `classes/components/forms/context/AccessForm.php` and OPS's: `FieldOptions('enableOai', type radio, options true "Enable" (`common.enable`) / false "Disable" (`common.disable`))`, label `manager.setup.enableOai` "Enable OAI", description `manager.setup.enableOai.description` (the Open Archives Initiative link). `schemas/context.json` `enableOai` boolean, `default: 1`, so a new context gets the row; the tab posts `enableOai=true` untouched (scenarios.md, the `publishingMode` key). OMP has no `enableOai` in its schema or forms and no "Access" tab (U51 note b). Live-probed 2026-09-26 (the "Enable OAI" field; Actors row 3; Rules 17, 17a; Settings bullet 1), OJS and OPS, two runs: notes q6, q18.
@@ -1649,7 +1648,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 **r** — Versions (OJS). `OAIDAO::getRecordsRecordSetQuery()` treats journals with `doiVersioning = 1` and `enableDois = 1` (`Context::SETTING_DOI_VERSIONING`, `SETTING_ENABLE_DOIS`) apart: their records come from a second query over every published publication of stage `AO`, `PMUR` or `VoR` (`APP\publication\enums\VersionStage`), the latest minor per stage and major; `setOAIData()` gives the current publication the bare identifier and the others `/version/{stage}/{major}`, pointing the submission's `currentPublicationId` at the rendered version. `JournalOAI::versionToPublicationId()` resolves a versioned identifier. `ArticleTombstoneManager` tombstones and restores versioned identifiers as versions are unpublished and published. DOI tab: `PKPDoiSetupSettingsForm` `enableDois` ("Allow Digital Object Identifiers (DOIs) to be assigned to work published in this journal."), `doiVersioning` "DOI Versioning" with "Yes, assign a unique DOI to every version of an article." / "No, all versions of an article should have the same DOI." (a null setting shows "No" on OJS). Relation: `Repo::publication()->getVersionRelation()` (the immediately preceding published version; its DOI URL when versioning gives it a different DOI, else the `article/view/{id}/version/{publicationId}` URL, OJS and OPS only when the address is included; OMP `catalog/book/{id}/version/{publicationId}`). While any journal has both settings on, the per-version union makes the record query fail on the test database (A22), so Rules 20 and 20a rest on this reading: a second major version published on screen got its own DOI, and after its "Unpublish" the database held one tombstone, for `…/version/VoR/1` (Rule 20a); publishing it again removed that tombstone. A new journal stores `enableDois` 1, "Articles" ticked and no prefix. Live-probed 2026-09-26 (Rules 20, 20a, 20b; Settings bullet 6): note q20.
 
 <a id="fn-s"></a>
-**s** — Seeding for the scenarios. Each scenario runs on its own scratch contexts from `POST scenarios/context` (`docs/process/scenarios.md`), with throwaway `users[]` (password: the username twice, `docs/process/users.md`): an `author` (`givenName` "Ada", `familyName` "Author") who submits every item, and a `manager` (the Journal Manager, Press Manager or Preprint Server Manager) in scenarios 3, 7 and 9; scenario 6's Site Administrator is the installer's `admin`. The visitor is a signed-out browser context of its own; the suites read the raw XML through a request (`page.request`) in a fresh request context, following redirects, and open the rendered page only for the browser-view checks (scenario 1's "The browser view", the Login pages of scenario 6). Items come from `POST scenarios/submission` by the `author` with `published: true` and no `datePublished` (so every record's datestamp and "Date" are the day of the run, UTC by the suites' configuration); galleys are `galleys: [{label: 'PDF', file: 'article.pdf'}]` on OJS and `preprint.pdf` on OPS; a press's format is `publicationFormats: [{name: 'PDF', file: 'article.pdf'}]`. A first section's `abbrev` is given as a bare string (a locale map stores "Array", scenarios.md). The OAI requests are typed addresses; the unpublish, the second publish, "Enable OAI", the plugin ticks, the JATS window and the Hosted Journals window are the screens'. Scenario 1: context `name` "Sea Letters", `contactName` "Pat Contact", `contactEmail` "pat.contact@example.org", `sections: [{abbrev: 'ART', title: 'Articles'}]` (OPS `{abbrev: 'PRE', title: 'Preprints'}`), on OJS `issues: [{volume: 1, number: 2, year: 2026}]` (unpublished); "Tidal Patterns" (`abstract` "Tides follow the moon.", OJS and OPS `keywords: ['tides', 'moon']`, published with its galley; OMP `publicationFormats: [{name: 'PDF', file: 'article.pdf'}, {name: 'EPUB'}]`, and "Bare Book" published with no `publicationFormats`); "Draft Study" `submitted: true`, not published; on OJS "Future Tides" `published: true` with `issue` Vol. 1 No. 2 (2026), which schedules it; a second context with "Elsewhere" published. The "Repository Identifier" is the install's (`ojs-test.localhost`, `omp-test.localhost`, `ops-test.localhost`, `config.test.inc.php`). Scenario 2: contexts "Sea Letters" with "Tidal Patterns" and "Hill Notes" with "Mountain Air", each one-language; the site's languages and its empty "Site Name" are the test install's (seed-facts). Scenario 3: "Tidal Patterns", then "Coral Reefs", published (OMP each with the one format); the unpublish and the second publish by the `manager` on the workflow screen. Scenario 4: "Sea Letters" with "Tidal Patterns" published; on OMP and OPS a second context "Empty Shelf" with nothing. Scenario 5: OJS and OPS `sections: [{abbrev: 'ART', title: 'Articles'}, {abbrev: 'REV', title: 'Reviews'}]`, "Tidal Patterns" (`section: 'ART'`) seeded and published before "Hill Review" (`section: 'REV'`); OMP two books, no series; "today", "tomorrow" and "yesterday" are UTC dates. Scenario 6: "Sea Letters" with "Tidal Patterns"; "Hill Notes" with `restrictSiteAccess: true` and "Mountain Air". Scenario 7 (OJS, OPS): "Tidal Patterns" and "Coral Reefs" published; the `enableOai` key is not used, the tab is driven. Scenario 8 (OJS): `sections: [{abbrev: 'ART', title: 'Articles', identifyType: 'Research Article'}]`, `issues: [{volume: 1, number: 2, year: 2026, published: true}]`; "Tidal Patterns" with `subtitle` "A Study", the abstract, `disciplines: ['Marine Science']`, `subjects: ['Oceanography']`, `articleNumber: 'e0142'`, its galley and that `issue`; "Loose Notes" published with no `issue`. Scenario 9 (OJS): "Tidal Patterns" with its PDF galley and "Marked Tides" with `galleys: [{label: 'XML', file: 'article.xml'}]` (the JATS fixture as an XML galley), both in no issue; no `plugins` key, so "JATS Metadata Format" is off and "JATS Template Plugin" on, as on every new journal (seed-facts). Scenario 10 (OJS): "Paid Letters" with `publishingMode: 'subscription'`, `plugins: {oaimetadataformatplugin_jats: {enabled: true}, driverplugin: {enabled: true}}` ("DRIVER" by its class name, lowercased) and `issues: [{volume: 1, number: 1, year: 2026, published: true, accessStatus: 'open'}, {volume: 1, number: 2, year: 2026, published: true}]` (an issue published under subscriptions is "Subscription"); "Open Tides" into the first issue, "Closed Tides" and "Opened Tides" (`accessStatus: 'open'`) into the second, each with its galley; "Print Letters" with `publishingMode: 'none'` and "Paper Tides" published with its galley. `publicknowledge` is never read: it has no published item on a fresh fleet, and on a used fleet the suites publish into it and it holds deleted records on OJS and OPS, which every OJS journal's own lists show (A1), so no scenario asserts a journal's unfiltered list to be complete or empty. No scenario seeds `doiVersioning: true`: while any OJS journal has "DOI Versioning" on, every OJS OAI read fails (A22), and the three suites share one install. A context with more than one language answers its plain address with a redirect and the app remembers the last language a browser asked for, hence the fresh request context. The mail catcher is not read: nothing is emailed (Side effects). Live-probed 2026-09-26 (the preamble): every probe of this spec ran this way, all three apps; a signed-in staff browser reads a different `jats` answer from a harvester's (Actors), so the visitor stays signed out.
+**s** — Seeding for the scenarios. Each scenario runs on its own scratch contexts from `POST scenarios/context` (`docs/process/scenarios.md`), with throwaway `users[]` (password: the username twice, `docs/process/users.md`): an `author` (`givenName` "Ada", `familyName` "Author") who submits every item, and a `manager` (the Journal Manager, Press Manager or Preprint Server Manager) in scenarios 3, 7 and 9; scenario 6's Site Administrator is the installer's `admin`. The visitor is a signed-out browser context of its own; the suites read the raw XML through a request (`page.request`) in a fresh request context, following redirects, and open the rendered page only for the browser-view checks (scenario 1's "The browser view", the Login pages of scenario 6). Items come from `POST scenarios/submission` by the `author` with `published: true` and no `datePublished` (so every record's datestamp and "Date" are the day of the run, UTC by the suites' configuration); galleys are `galleys: [{label: 'PDF', file: 'article.pdf'}]` on OJS and `preprint.pdf` on OPS; a press's format is `publicationFormats: [{name: 'PDF', file: 'article.pdf'}]`. A first section's `abbrev` is given as a bare string (a locale map stores "Array", scenarios.md). The OAI requests are typed addresses; the unpublish, the second publish, "Enable OAI", the plugin ticks, the JATS window and the Hosted Journals window are the screens'. Scenario 1: context `name` "Sea Letters", `contactName` "Pat Contact", `contactEmail` "pat.contact@example.org", `sections: [{abbrev: 'ART', title: 'Articles'}]` (OPS `{abbrev: 'PRE', title: 'Preprints'}`), on OJS `issues: [{volume: 1, number: 2, year: 2026}]` (unpublished); "Tidal Patterns" (`abstract` "Tides follow the moon.", OJS and OPS `keywords: ['tides', 'moon']`, published with its galley; OMP `publicationFormats: [{name: 'PDF', file: 'article.pdf'}, {name: 'EPUB'}]`, and "Bare Book" published with no `publicationFormats`); "Draft Study" `submitted: true`, not published; on OJS "Future Tides" `published: true` with `issue` Vol. 1 No. 2 (2026), which schedules it; a second context with "Elsewhere" published. The "Repository Identifier" is the install's (`ojs-test.localhost`, `omp-test.localhost`, `ops-test.localhost`, `config.test.inc.php`). Scenario 2: contexts "Sea Letters" with "Tidal Patterns" and "Hill Notes" with "Mountain Air", each one-language; the site's languages and its empty "Site Name" are the test install's (seed-facts). Scenario 3: "Tidal Patterns", then "Coral Reefs", published (OMP each with the one format); the unpublish and the second publish by the `manager` on the workflow screen. Scenario 4: "Sea Letters" with "Tidal Patterns" published; on OPS a second context "Empty Shelf" with nothing. Scenario 5: OJS and OPS `sections: [{abbrev: 'ART', title: 'Articles'}, {abbrev: 'REV', title: 'Reviews'}]`, "Tidal Patterns" (`section: 'ART'`) seeded and published before "Hill Review" (`section: 'REV'`); OMP two books, no series; "today", "tomorrow" and "yesterday" are UTC dates. Scenario 6: "Sea Letters" with "Tidal Patterns"; "Hill Notes" with `restrictSiteAccess: true` and "Mountain Air". Scenario 7 (OJS, OPS): "Tidal Patterns" and "Coral Reefs" published; the `enableOai` key is not used, the tab is driven. Scenario 8 (OJS): `sections: [{abbrev: 'ART', title: 'Articles', identifyType: 'Research Article'}]`, `issues: [{volume: 1, number: 2, year: 2026, published: true}]`; "Tidal Patterns" with `subtitle` "A Study", the abstract, `disciplines: ['Marine Science']`, `subjects: ['Oceanography']`, `articleNumber: 'e0142'`, its galley and that `issue`; "Loose Notes" published with no `issue`. Scenario 9 (OJS): "Tidal Patterns" with its PDF galley and "Marked Tides" with `galleys: [{label: 'XML', file: 'article.xml'}]` (the JATS fixture as an XML galley), both in no issue; no `plugins` key, so "JATS Metadata Format" is off and "JATS Template Plugin" on, as on every new journal (seed-facts). Scenario 10 (OJS): "Paid Letters" with `publishingMode: 'subscription'`, `plugins: {oaimetadataformatplugin_jats: {enabled: true}, driverplugin: {enabled: true}}` ("DRIVER" by its class name, lowercased) and `issues: [{volume: 1, number: 1, year: 2026, published: true, accessStatus: 'open'}, {volume: 1, number: 2, year: 2026, published: true}]` (an issue published under subscriptions is "Subscription"); "Open Tides" into the first issue, "Closed Tides" and "Opened Tides" (`accessStatus: 'open'`) into the second, each with its galley; "Print Letters" with `publishingMode: 'none'` and "Paper Tides" published with its galley. `publicknowledge` is never read: it has no published item on a fresh fleet, and on a used fleet the suites publish into it and it holds deleted records on every app (on OMP a format set "Not Available" leaves one), which every OJS journal's and OMP press's own lists show (A1), so no scenario asserts a journal's unfiltered list to be complete or empty. No scenario seeds `doiVersioning: true`: while any OJS journal has "DOI Versioning" on, every OJS OAI read fails (A22), and the three suites share one install. A context with more than one language answers its plain address with a redirect and the app remembers the last language a browser asked for, hence the fresh request context. The mail catcher is not read: nothing is emailed (Side effects). Live-probed 2026-09-26 (the preamble): every probe of this spec ran this way, all three apps; a signed-in staff browser reads a different `jats` answer from a harvester's (Actors), so the visitor stays signed out.
 
 <a id="fn-t"></a>
 **t** — Configuration `[oai]` (`config.TEMPLATE.inc.php`): `oai = On` ("Enable OAI front-end to the site"), `repository_id` ("OAI Repository identifier. This setting forms part of OAI-PMH record IDs. Changing this setting may affect existing clients and is not recommended."), `oai_max_records = 100`. The installer (`lib/pkp/templates/install/install.tpl`, `InstallForm`) asks "Repository Identifier" under "OAI Settings", default `{application}.{server host}`. Off: OJS and OPS `OAIHandler::validate()` redirect to the context's (site's) `index`; OMP `authorize()` returns false → `handleAuthorizationFailure()` (Login signed out, else `user/authorizationDenied`). The test installs run with `oai = On`, `repository_id` `ojs-test.localhost` / `omp-test.localhost` / `ops-test.localhost`, `oai_max_records = 100`; PRINCIPLES D9 forbids editing the running configuration, and the validation-variant server (harness.md) flips no OAI key, so the interface's off end (Rule 24; Actors row 1's condition) is read from the code. Live-probed 2026-09-26 (Settings bullet 14; Rule 24's last sentence), all three apps: Administration › "System Information" lists the group "oai" with "oai" 1, "repository_id" and "oai_max_records" 100, read-only; no settings page of a context, nor Site Settings, Hosted Journals or the Administration index, carries an OAI switch.
@@ -1679,7 +1678,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 **q7** — Live-probed 2026-09-26 (Rules 3, 3a, 3b; OMP1), all three apps: a scratch journal listed its published articles, each with its current version's title, and not one in the workflow, one scheduled in an unpublished issue (OJS), a declined one or a second journal's; a newer unpublished version's title did not reach the record. A press listed one record per available format (two for a two-format book), none for a book published with no format; a preprint server listed its posted preprints only.
 
 <a id="fn-q8"></a>
-**q8** — Live-probed 2026-09-26 (Rules 4, 4a, 4b; A1), all three apps, two sweep runs: "Unpublish" ("Unpost") on the workflow screen, and on OJS "Unpublish Issue" and "Delete" of a published issue, left at the site-wide address a record with the same identifier, a deleted header, the datestamp of the action, its set and no metadata, with "This record has been deleted." on the page; published again ("Schedule For Publication", "Publish", "Post"), the record was back with the same identifier. After "Unpublish" the workflow offered no "Delete" on any app. At the scratch journal's (press's) own address the deleted record was missing and GetRecord answered "No matching identifier in this repository" (OJS, OMP); OPS listed it at the server's address. OJS journals' own lists carried the three deleted records of `publicknowledge`, the install's first journal, and GetRecord at a scratch journal answered one of them; with a `set` (the journal's path, a section's, `nosuchset`, `publicknowledge`) its lists left them out; OPS showed none of them. The site-wide `set={journal path}` left the journal's deleted records out on OJS and OMP and listed them on OPS. OMP's first press had no deleted record on the fleet, so a press showing it was not reached. A format set "Not Available" in "Format Availability" became a deleted record; unpublishing a two-format book made two.
+**q8** — Live-probed 2026-09-26 (Rules 4, 4a, 4b; A1), all three apps, two sweep runs: "Unpublish" ("Unpost") on the workflow screen, and on OJS "Unpublish Issue" and "Delete" of a published issue, left at the site-wide address a record with the same identifier, a deleted header, the datestamp of the action, its set and no metadata, with "This record has been deleted." on the page; published again ("Schedule For Publication", "Publish", "Post"), the record was back with the same identifier. After "Unpublish" the workflow offered no "Delete" on any app. At the scratch journal's (press's) own address the deleted record was missing and GetRecord answered "No matching identifier in this repository" (OJS, OMP); OPS listed it at the server's address. OJS journals' own lists carried the three deleted records of `publicknowledge`, the install's first journal, and GetRecord at a scratch journal answered one of them; with a `set` (the journal's path, a section's, `nosuchset`, `publicknowledge`) its lists left them out; OPS showed none of them. The site-wide `set={journal path}` left the journal's deleted records out on OJS and OMP and listed them on OPS. 2026-09-29 (Rules 4b, 6, 15; A1), OMP and OPS, two runs, `publicknowledge` restored after each: with the only format of a `publicknowledge` book set "Not Available", an empty scratch press listed that deleted record in ListRecords and ListIdentifiers (setSpec `publicknowledge`, "This record has been deleted." on the page), answered it by GetRecord and gave its datestamp as "Earliest Datestamp", while its ListSets named only itself; a press with one published book listed it before its own record; with `set` of the press it was left out, and the empty press answered "No matching records in this repository" and the moment of the request before the format was changed and after the book was unpublished. OPS, with a `publicknowledge` preprint unposted, answered "No matching records in this repository" at an empty scratch server and "No matching identifier in this repository" for the preprint's identifier. OJS, with no deleted record on the install, answered "No matching records in this repository" and the moment of the request at an empty scratch journal. A format set "Not Available" in "Format Availability" became a deleted record; unpublishing a two-format book made two.
 
 <a id="fn-q9"></a>
 **q9** — Live-probed 2026-09-26 (Rules 5, 6; A18), all three apps: a context lists by submission ID (OJS, OPS) or format number (OMP). OJS: an article's datestamp moved when its issue's "Number" was saved on "Issue Data", when "Prefix" was saved on its published version, and to the moment it was published again. OMP and OPS: the datestamp did not move after "Prefix" was saved on the published version, and an item published again came back with its first datestamp, older than its deleted record's (twice on each app). The site-wide ListIdentifiers, walked in full, listed the contexts one after another and every deleted record at the end (OJS 741 headers, the deleted ones at 728–740).
@@ -1721,7 +1720,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 **q21** — Live-probed 2026-09-26 (Rules 23, 23a; A11, A23, A24), OJS, two runs: "DRIVER" ticked on screen asked nothing and showed 'The plugin "DRIVER" has been enabled.'; ListSets added `driver` "Open Access DRIVERset". On an open journal an article with a galley and one with none were both members, each header naming "driver". On a subscription journal an article in an open issue and one marked "Open Access" in a subscription issue were members; one in a subscription issue, one past its open access date and one in no issue were not. "Users must be registered and log in to view open access content." (and the site box) ticked emptied the set; unticked, the members were back. `set=driver` said "There are more results." with "completeListSize" 5 for two members, and "Resume" returned the same two again. An article in no issue unpublished with the plugin on showed "Status: Unscheduled" and "Schedule For Publication", its page answered 404 signed out, and its deleted record carried no `driver` mark. No deleted record was listed in the set, and the site-wide address had no `driver` set.
 
 <a id="fn-f-a1"></a>
-**f-a1** — Live-probed 2026-09-26: note q8. "Earliest Datestamp": OJS scratch journals with and without published items all gave 2026-09-26T05:20:08Z, a deleted record of `publicknowledge`; OMP gave the moment of the request, for an empty press and for one whose only book was unpublished; OPS gave the deleted record's datestamp. Code: note n; the OJS closure dates from `88aaa6b49f` "pkp/pkp-lib#7129 Issue EntityDAO refactor" (2021-07-14), OMP's from the 2021 Laravel port (`79302a1bd`, 2021-06-15). The test installs' first context is `publicknowledge`.
+**f-a1** — Live-probed 2026-09-26 and, on OMP, 2026-09-29: note q8. "Earliest Datestamp": OJS scratch journals with and without published items all gave 2026-09-26T05:20:08Z, a deleted record of `publicknowledge`; OMP gave the moment of the request, for an empty press and for one whose only book was unpublished, while `publicknowledge` held no deleted record; with one, the empty press gave that record's datestamp (2026-09-29); OPS gave the deleted record's datestamp. Code: note n; the OJS closure dates from `88aaa6b49f` "pkp/pkp-lib#7129 Issue EntityDAO refactor" (2021-07-14), OMP's from the 2021 Laravel port (`79302a1bd`, 2021-06-15). The test installs' first context is `publicknowledge`.
 
 <a id="fn-f-a2"></a>
 **f-a2** — Live-probed 2026-09-26: note q11, the reads with a time. Code: note l.

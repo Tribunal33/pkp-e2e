@@ -8,7 +8,8 @@
  * publication format, "oai:{repository identifier}:publicationFormat/{n}",
  * Dublin Core the only format, the press its only set). The {OMP} bullets
  * ride inline: S1's two records of a book with two formats and none for a
- * book with no format (OMP1), S4's empty press answering "noRecordsMatch".
+ * book with no format (OMP1). S4's "Nothing to list" is {OPS}: a press's own
+ * address lists the first press's deleted records (A1, Rule 4b).
  * S7 has no press analogue (a press has no "Enable OAI", OMP2); S8–S10 are
  * {OJS}. The {OJS OPS} bullets (keywords, "Publisher", "Relation", a
  * section's set, an unknown set) are not run here.
@@ -456,12 +457,9 @@ test.describe('OAI-PMH', () => {
     test('S4: Refused requests', async ({ompApi, page, baseURL}, testInfo) => {
         test.slow();
         const tag = makeTag(4, testInfo);
-        const empty = `${tag}e`;
         await seedPress(ompApi, tag, {context: {name: 'Sea Letters'}});
         const tidal = await seedPublishedBook(ompApi, tag, 'Tidal Patterns');
-        await seedPress(ompApi, empty, {context: {name: 'Empty Shelf'}});
         const oai = new OaiRepository(String(baseURL), tag);
-        const emptyOai = new OaiRepository(String(baseURL), empty);
         const view = new OaiView(page);
         const repo = await repositoryIdentifierOf(oai);
         const tidalId = oaiIdentifier(repo, KIND, tidal.publicationFormats[0].id);
@@ -481,10 +479,9 @@ test.describe('OAI-PMH', () => {
             [tag, `verb=GetRecord&metadataPrefix=oai_dc&identifier=${encodeURIComponent(noSuchId)}`, 'idDoesNotExist', M.noIdentifier],
             [tag, 'verb=ListRecords&resumptionToken=abc', 'badResumptionToken', M.badToken],
             [tag, 'verb=ListRecords&resumptionToken=abc&metadataPrefix=oai_dc', 'badArgument', M.illegal('metadataPrefix')],
-            [empty, 'verb=ListRecords&metadataPrefix=oai_dc', 'noRecordsMatch', M.noRecords],
         ];
         for (const [path, query, code, message] of refusals) {
-            const what = `${path === empty ? 'Empty Shelf ' : ''}?${query}`;
+            const what = `?${query}`;
             expectRefusal(await new OaiRepository(String(baseURL), path).read(query), code, message, what);
             await view.open(path, query);
             await expect(view.errorHeading(), what).toBeVisible();
@@ -493,15 +490,6 @@ test.describe('OAI-PMH', () => {
             await expect(view.errorMessage(), what).toHaveText(message);
             await expect(view.requestType(), `${what}: no answer`).toHaveCount(0);
         }
-
-        // Nothing to list: the empty press's "Earliest Datestamp" is the
-        // moment of the request (Rule 3; Fields, "Identify"; A1).
-        const emptyIdentify = await emptyOai.identify();
-        expect(emptyIdentify.identify && emptyIdentify.identify.repositoryName).toBe('Empty Shelf');
-        const earliest = Date.parse(String(emptyIdentify.identify && emptyIdentify.identify.earliestDatestamp));
-        const answered = Date.parse(String(emptyIdentify.responseDate));
-        expect(Number.isNaN(earliest), 'Earliest Datestamp is a date').toBe(false);
-        expect(Math.abs(earliest - answered), 'Earliest Datestamp is the moment of the request').toBeLessThanOrEqual(2_000);
 
         // Control: Identify still answers (Rule 14).
         await view.open(tag, 'verb=Identify');
