@@ -20,13 +20,22 @@
  *
  * `php -S` logs every request to stderr, which Playwright would pipe into
  * the reporter output — the command redirects it to the log file instead.
- * The log is truncated when the shell starts, so a server kept alive across
- * runs (reuseExistingServer, or a probe server) keeps its old log open and
- * the file is only reset when a server actually (re)starts.
+ * The log is appended to, never truncated: every start writes a
+ * `[harness] php -S start` line and every death a dated `[harness] php -S
+ * died (exit N)` line, so one file holds every pass of a run in order. A
+ * CI shard starts its servers four times (the app pass, the setup before
+ * the serial pass, the serial and the solo pass), and a truncating start
+ * emptied the app pass's log before the artifact step, so a dropped answer
+ * there left no exit code to read (ci-triage "CI worker server refusing
+ * connections", flake u01s4 2026-09-29). A log over LOG_ROTATE_BYTES at a
+ * start is moved to `<name>-prev.log` first, so local logs stay bounded.
+ * A crash leaves an `Accepted` line with no status line after it: the
+ * request that took the process down (`server-crash.js` reads these).
  */
 const http = require('http');
 
 const RESTART_LIMIT = 20;
+const LOG_ROTATE_BYTES = 20 * 1024 * 1024;
 
 /**
  * The shell command (for `sh -c` or Playwright's webServer.command) that
@@ -37,7 +46,10 @@ const RESTART_LIMIT = 20;
  */
 function phpServerCommand({appRoot, port, logFile}) {
     const serve = `php -d max_execution_time=120 -S 127.0.0.1:${port} -t "${appRoot}" >> "${logFile}" 2>&1`;
-    return `: > "${logFile}"; n=0; until ${serve}; do s=$?; n=$((n+1)); [ "$n" -ge ${RESTART_LIMIT} ] && exit 1; echo "[harness] php -S died (exit $s); restart $n" >> "${logFile}"; sleep 1; done`;
+    const prevFile = logFile.replace(/(\.log)?$/, '-prev.log');
+    const rotate = `if [ -f "${logFile}" ] && [ "$(wc -c < "${logFile}")" -gt ${LOG_ROTATE_BYTES} ]; then mv -f "${logFile}" "${prevFile}"; fi`;
+    const stamp = '$(date -u +%Y-%m-%dT%H:%M:%SZ)';
+    return `${rotate}; echo "[harness] php -S start ${stamp} on 127.0.0.1:${port}" >> "${logFile}"; n=0; until ${serve}; do s=$?; n=$((n+1)); [ "$n" -ge ${RESTART_LIMIT} ] && exit 1; echo "[harness] php -S died ${stamp} (exit $s); restart $n" >> "${logFile}"; sleep 1; done`;
 }
 
 /**

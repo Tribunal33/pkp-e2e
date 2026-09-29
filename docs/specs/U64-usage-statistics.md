@@ -95,7 +95,12 @@ parameters." when there is none. <sup>h</sup>
 **The date range** (on every page above): the current range as text
 ("{first date} — {last date}", or "All dates") and a calendar button. The
 button opens a list of the page's preset ranges and, under "Custom Range",
-two boxes (placeholder "YYYY-MM-DD") joined by "—" and "Apply". <sup>c</sup>
+two boxes joined by "—" (an emptied box shows "YYYY-MM-DD") and "Apply".
+Besides choosing a preset (Rule 7) or a range "Apply" accepts, the list
+closes when the calendar button is pressed again, on a click anywhere
+outside it, or when the keyboard focus leaves it, the last two within
+about a second. Escape does nothing, with the focus on the button or in
+a box ⚠ [A12](#a12). <sup>c</sup>
 
 | Custom Range input | Result |
 |--------------------|--------|
@@ -110,6 +115,14 @@ A refused range leaves the page as it was, with the message under
 "Apply" until the next "Apply". Only "Apply" applies a Custom Range:
 Enter in a box does nothing (the list stays open, no message).
 <sup>c</sup>
+
+The two boxes hold the dates the page opened on ("{the day 31 days
+ago}", "{yesterday}") and keep them when a preset is chosen: after "Last
+90 days" or "All dates" they still show that first range, and "Apply"
+pressed without typing puts the page back on it ⚠ [A13](#a13). Dates
+typed and not applied stay in the boxes when the list is closed and
+opened again, while the page keeps its range; leaving the page with
+them asks no question. <sup>c</sup>
 
 <a id="download-window"></a>
 **The "Download" window** (opened by "Download Report", from the right),
@@ -296,8 +309,9 @@ bottom, then "Save": <sup>q</sup>
    days": from 31 days ago to yesterday. The calendar button (Fields) lists
    "Last 30 days", "Last 90 days", "Last 12 months" and "All dates";
    choosing one closes the list, and the chart and the table (back on its
-   first page) show the new range. Other pages that use the same control
-   offer their own presets. <sup>c</sup>
+   first page) show the new range. "Editorial Activity" (Rule 6) offers
+   its own presets; its list closes the same way (Fields), Escape doing
+   nothing. <sup>c</sup>
 8. **Custom Range.** Two dates typed and "Apply" set any range from
    2001-01-01 to yesterday; the refusals are the Fields table's. <sup>c</sup>
    - 8a. With one box left empty, "Apply" is refused with the earliest or
@@ -736,13 +750,14 @@ seeded reader visits. <sup>sc</sup>
      "All dates", "Total" 14, "Monthly" pressed and "Daily" greyed, and
      the chart runs by month from March 2024, the journal's first
      publication (Rules 9, 10).
-   - **A Custom Range**: open the list, type the date 50 days ago and
-     the date 40 days ago, each as YYYY-MM-DD, in the two boxes and press
-     "Apply": the list closes, the range reads "{the day 50 days ago} —
+   - **A Custom Range**: open the list, replace the dates in the two
+     boxes with the date 50 days ago and the date 40 days ago, each as
+     YYYY-MM-DD, and press "Apply": the list closes, the range reads "{the day 50 days ago} —
      {the day 40 days ago}", "Total" reads 4, and "Daily" and "Monthly"
      can both be pressed (Rules 8, 10).
-   - **Refused ranges**: open the list and, pressing "Apply" after each
-     pair, type 2026-9-1 and yesterday's date: "The date format is not
+   - **Refused ranges**: open the list and, replacing both boxes' dates
+     and pressing "Apply" after each pair, type 2026-9-1 and yesterday's
+     date: "The date format is not
      valid. Enter each date in the format YYYY-MM-DD."; 2026-02-30 and
      yesterday's date: "One of the dates entered does not exist."; the
      date 10 days ago and the date 20 days ago: "The start date must be
@@ -756,8 +771,8 @@ seeded reader visits. <sup>sc</sup>
      journal's row reads 5. Choose "Last 90 days": 9; "Last 12 months":
      9; "All dates": 10, the chart running by month from January 2001
      (Rules 9, 14).
-   - **Control**: on "Articles", type the date 50 days ago in the first
-     box of "Custom Range" and press Enter: the list stays open, no
+   - **Control**: on "Articles", replace the date in the first box of
+     "Custom Range" with the date 50 days ago and press Enter: the list stays open, no
      message shows and the range does not change (Fields). <sup>sc</sup>
 
 5. **Downloading the spreadsheets**
@@ -1148,6 +1163,10 @@ Left out of the scenarios above, by reason:
     (Rule 25a)
   - the "Issues" filter heading of a journal with no published issue
     {OJS} (Rule 11)
+  - the date range list closed without choosing a range (the calendar
+    button pressed again, a click outside it, the focus leaving it), and
+    typed dates kept in the boxes while not applied (Fields "The date
+    range")
 - **Nothing new to test**:
   - the Editor, the Production Editor, the Guest Editor {OJS} and the
     Site Administrator on the Statistics pages, which show them the
@@ -1172,6 +1191,9 @@ Left out of the scenarios above, by reason:
   - A10 (a malformed Platform ID behind an unticked "Platform"; Rule 26)
   - A11 (the comma-separated "counterReport.tsv"; Rule 20; scenario 8
     marks it)
+  - A12 (Escape on the date range list; Fields)
+  - A13 (the "Custom Range" boxes after a preset, and "Apply" on them;
+    Fields)
   - OJS1 (the Release 4 page beside "Counter R5"; Rule 25; scenario 12
     marks it)
   - OJS2 (one HTML galley view writing three visits; Rule 3a)
@@ -1224,6 +1246,8 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OMP3](#omp3) | A book's PDF or "Appendix" file fails to open, so its visit is never counted | 🐞 | user-visible · crash: both | — |
 | [A2](#a2) | Custom Range refuses an open-ended range | ❓ | minor | — |
 | [A9](#a9) | The downloaded spreadsheets carry no byte-order mark | ❓ | minor | — |
+| [A12](#a12) | The date range list does not close on Escape | ❓ | minor | — |
+| [A13](#a13) | After a preset, the "Custom Range" boxes still show the page's first range, and "Apply" on them undoes the preset | ❓ | minor | — |
 | [OJS1](#ojs1) | A journal still offers the retired COUNTER Release 4 reports beside "Counter R5" | ❓ | minor | — |
 | [OJS2](#ojs2) | One view of an HTML galley writes three visits to the day's log | ❓ | latent | — |
 | [OJS3](#ojs3) | The "Issues" search finds no issue by a bare volume or number | ❓ | minor | — |
@@ -1350,6 +1374,29 @@ quoted text, so a spreadsheet program opening it as tab-separated shows
 each line in one column. Expected: tab-separated values, as the name
 says and as COUNTER's tabular reports have them.
 Basis: probe, 2026-09-27. <sup>f-a11</sup>
+
+<a id="a12"></a>
+**A12 — The date range list does not close on Escape** · ❓ · minor.
+With the date range's list open, pressing Escape leaves it open, whether
+the focus is on the calendar button or in a "Custom Range" box; only the
+calendar button pressed again, a click outside the list or the focus
+leaving it closes it.
+Question: should Escape close the list? Lean: yes; Escape is the usual
+way out of a pop-up list for a keyboard user, and the calendar button
+does not tell a screen reader whether the list is open either.
+Basis: probe, 2026-09-29. <sup>f-a12</sup>
+
+<a id="a13"></a>
+**A13 — The Custom Range boxes do not follow the chosen range** · ❓ · minor.
+The "Custom Range" boxes hold the dates the page opened on and keep them
+after a preset is chosen: after "Last 90 days" or "All dates" they still
+show "{the day 31 days ago}" and "{yesterday}", and "Apply" pressed
+without typing puts the page back on that first range, undoing the
+preset.
+Question: should the boxes show the range the page shows? Lean: yes;
+fill them with the page's range (empty for "All dates"), so that "Apply"
+never changes the range unasked.
+Basis: probe, 2026-09-29. <sup>f-a13</sup>
 
 ### OJS
 
@@ -1529,7 +1576,29 @@ and reopening the list; Enter in a box sent nothing and left the list
 open; 2001-01-01 to yesterday was accepted (309 monthly points). After a
 day of visits made on screen the figures were unchanged and the range
 still ended yesterday. "Editorial Activity" offers "Last 90 days", "Year
-to date", "Last year" and "Last two years".
+to date", "Last year" and "Last two years". Live-probed 2026-09-29
+(Fields "The date range"; Rule 7; A12, A13), three apps, two runs, on
+"Articles", "Journal" and "Issues" {OJS} of scratch journals as the
+Journal Manager and the Section Editor (Series Editor, Moderator), and
+on "Editorial Activity" as the Journal Manager: Escape with the focus on
+"Change date range" or in the "From" box left the list open; the button
+again closed it from either place; a click on the page heading and
+Shift+Tab off the button closed it, from the button at once or within
+1.6 s, from a box after about a second; a preset closed it. The range
+text never changed. "Editorial Activity" behaved the same (Escape
+nothing, the button again and a click on a blank spot closing). The
+boxes held "2026-08-29" and "2026-09-28" on arrival
+("2026-06-30"–"2026-09-28" on "Editorial Activity") and kept them after
+"Last 90 days" (page "2026-06-30 — 2026-09-28") and "All dates"; "Apply"
+untouched then brought the page back to "2026-08-29 — 2026-09-28".
+2025-01-01 and 2025-02-01 typed, then the button pressed, left the
+range as it was and showed again on reopening; leaving the page with
+them raised no question or browser dialog, and Back reopened on "Last
+30 days" with the list closed; after "Last 12 months" a reload reopened
+on "Last 30 days". `DateRange.vue` has no key handler and closes the list
+only when the toggle loses focus (a 10 ms timer, or a 1 s poll while the
+focus is inside the list); its button carries no expanded state for
+assistive technology.
 
 <a id="fn-d"></a>
 **d** — `StatsPublicationsPage.vue` (extended by `StatsContextPage.vue`
@@ -2284,6 +2353,23 @@ page asks for `Accept: text/tab-separated-values` and names the file
 `counterReport.tsv` (fn-l); the answer is `text/csv` with
 `Content-Disposition: attachment; filename=user-report-2026-09-27.csv`,
 which the page ignores.
+
+<a id="fn-f-a12"></a>
+**f-a12** — fn-c (`DateRange.vue`: no key handler, the list closes on
+the toggle's blur). Live-probed 2026-09-29, three apps, two runs, both
+levels, every page with the control, "Editorial Activity" included: the
+list stayed open after Escape on the button and in a box. The accessible
+tree shows `button "Change date range"` with no expanded state.
+
+<a id="fn-f-a13"></a>
+**f-a13** — fn-c: `DateRange.vue` copies `dateStart`/`dateEnd` into the
+boxes (`localDateStart`, `localDateEnd`) once, in `mounted()`, and
+`selectOption()` never updates them. Live-probed 2026-09-29, three apps, two runs,
+the Journal Manager and the Section Editor on "Articles", "Journal" and
+"Issues" {OJS}: after "Last 90 days" the boxes read 2026-08-29 and
+2026-09-28 while the page read "2026-06-30 — 2026-09-28", and "Apply"
+untouched set "2026-08-29 — 2026-09-28"; after "All dates" the boxes
+read the same arrival dates.
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn-p. Live-probed 2026-09-27: td11; the side menu offers

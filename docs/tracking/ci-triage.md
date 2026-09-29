@@ -368,9 +368,26 @@ trips.
   (the restart wrapper in `php-server.js`). The server log could not be
   read: every pass starts its servers with `: > <log>`, so the solo
   pass's start emptied the app pass's `server-8002.log` (the artifact
-  holds 257 bytes from 12:43). **Next step**: keep the earlier passes'
-  server logs (append, or one folder per pass), then read the next
-  sighting's `[harness] php -S died` line.
+  holds 257 bytes from 12:43). **Diagnosed as a class 2026-09-29**
+  (housekeeping, `.reports/flake-2026-09-29/u01s4/diagnosis.md`): U01 S4
+  "recover a forgotten password" on all three apps (ojs 36322492229,
+  36459832328; pkp-e2e 36414422622 OPS, 36428321161 OMP), each a page
+  load with no answer (`ERR_EMPTY_RESPONSE`, a Chrome error page, a load
+  timeout) in the first test its server served, green on retry; U01 S1,
+  S5, S7 and U03 S1, S11 show the same on CI 2026-09-22..28. A worker
+  `php -S` dying, not the test: the known OPcache fault (app-changes row
+  18) on other classes, or the JIT CI's setup-php turns on
+  (`opcache.jit=1235`; off on the VM; CI PHP 8.3.35 against 8.3.33); 0 red
+  in 109 first-test runs here. An induced death gave CI's exact red 8 of 8.
+  Now the server logs are appended across a shard's passes with a dated
+  `[harness] php -S start`/`died (exit N)` line (`php-server.js`, rotated
+  over 20 MB), and a failed test whose server died meanwhile carries a
+  `server-crash` annotation, a stderr line and the log excerpt
+  (`support/server-crash.js`, the auto fixture `serverCrashWatch`); nothing
+  is retried. U01 plus shared `--repeat-each 5` at eight workers 51 of 51
+  per app. **Watch condition**: a `server-crash` annotation on CI; read its
+  exit code and the request it names. Open for the maintainer: CI without
+  the JIT as an experiment.
 - **Participants menu still open after the impersonation return** (U01
   S7, OJS, once). In the fourth OJS final of the U05 revision session
   (2026-09-13, four workers, `.reports/U05/final-run-ojs-attempt4.log`)

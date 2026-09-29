@@ -21,6 +21,9 @@
  *   has email validation and the ALTCHA spam check on (harness.md "The
  *   validation-variant server"). Navigate to it explicitly; nothing else
  *   (storageState, pkpApi) is redirected there.
+ * - serverCrashWatch (auto): a failed test whose worker `php -S` died while
+ *   it ran gets a `server-crash` annotation, the log lines around the death
+ *   attached and one stderr line (support/server-crash.js).
  */
 const path = require('path');
 const base = require('@playwright/test');
@@ -30,6 +33,7 @@ const {disableMotion} = require('./motion.js');
 const {throttleCpu} = require('./throttle.js');
 const {PkpApi} = require('./api.js');
 const {PkpMail} = require('./mail.js');
+const {workerLogFile, logOffset, reportServerDeaths} = require('./server-crash.js');
 
 const appRoot = process.env.PKP_APP_ROOT;
 if (!appRoot) {
@@ -53,6 +57,19 @@ const test = base.test.extend({
         const basePort = parseInt(process.env.PLAYWRIGHT_BASE_PORT || '8000', 10);
         await use(`http://127.0.0.1:${basePort + testInfo.parallelIndex}`);
     },
+
+    serverCrashWatch: [
+        async ({}, use, testInfo) => {
+            const port = parseInt(process.env.PLAYWRIGHT_BASE_PORT || '8000', 10) + testInfo.parallelIndex;
+            const file = workerLogFile(suiteDir, port);
+            const offset = logOffset(file);
+            await use();
+            if (testInfo.status !== testInfo.expectedStatus) {
+                await reportServerDeaths(testInfo, {file, offset, port});
+            }
+        },
+        {auto: true},
+    ],
 
     variants: async ({}, use) => {
         const basePort = parseInt(process.env.PLAYWRIGHT_BASE_PORT || '8000', 10);

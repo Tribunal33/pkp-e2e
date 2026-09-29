@@ -440,6 +440,12 @@ no cleanup fixture.
 - **A stray server on a worker port** is adopted by a Playwright run
   (`reuseExistingServer`) instead of it starting its own, so nothing else
   may listen on the worker band (`harness.md` "The fleets").
+- **A wait for an answer the server never sent.** A red with
+  `ERR_EMPTY_RESPONSE`, `ERR_CONNECTION_RESET`, a `chrome-error://` page or
+  `socket hang up` means the worker's `php -S` died under the test; read
+  its `server-crash` annotation or the `[harness] php -S died` line in
+  `.server-logs/` first, and never add a wait or a re-navigation for it
+  (U01 S4 on CI, 2026-09-29).
 
 ## UI realities learned the hard way
 
