@@ -109,10 +109,11 @@ function wait(runId, timeoutMin) {
             sleep(POLL_MS);
             continue;
         }
-        for (const job of run.jobs || []) {
+        const jobs = (run.jobs || []).filter((j) => j.conclusion !== 'skipped'); // apps left out by --apps
+        for (const job of jobs) {
             if (job.status === 'completed' && !seen.has(job.name)) {
                 seen.add(job.name);
-                console.log(`ci: ${job.name}: ${job.conclusion}  (${seen.size}/${run.jobs.length})`);
+                console.log(`ci: ${job.name}: ${job.conclusion}  (${seen.size}/${jobs.length})`);
             }
         }
         if (run.status === 'completed') return run;
@@ -157,8 +158,8 @@ function failures(runId) {
 
 function report(run, runId) {
     console.log(`ci: run ${runId} ${run.conclusion} — ${run.url}`);
-    const jobs = run.jobs || [];
-    const red = jobs.filter((j) => j.conclusion !== 'success' && j.conclusion !== 'skipped');
+    const jobs = (run.jobs || []).filter((j) => j.conclusion !== 'skipped');
+    const red = jobs.filter((j) => j.conclusion !== 'success');
     const perJob = failures(runId) || {};
     for (const job of jobs) {
         const f = perJob[job.name];
