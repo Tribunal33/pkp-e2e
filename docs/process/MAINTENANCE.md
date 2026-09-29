@@ -213,7 +213,9 @@ The apps move; the suite follows. The baselines live in
    the cause, a proposed fix, and the evidence last. The report is
    posted into the session's thread as a file the same day, in a post that
    tags @beaug and @jarda.kotesovec (no direct messages, maintainer
-   2026-09-29);
+   2026-09-29; the tag is the upstream session's alone: a PR check or
+   review posts its report in its own thread untagged, since whoever
+   asked follows up there);
    the regression gets a row
    in `ci-triage.md` "Open regressions" linking the report, with its
    reproduction script kept under `shared/playwright/checks/sync/<pr>/`
@@ -475,7 +477,7 @@ merge (first run: issue pkp/pkp-lib#13274, companion `13274`, 2026-09-12).
    tables; see `checks/sync/pkp-lib-13317/`). Kept checks go under
    `shared/playwright/checks/sync/<repo>-<pr>/` on the companion, with the
    before-evidence recorded at the previous tip. A confirmed regression or
-   intention gap follows step 5's report and tags; a behavior the issue
+   intention gap follows step 5's report, posted in this thread untagged (whoever asked follows up here); a behavior the issue
    leaves open is a ❓ in the owning spec, posted in the thread, and the
    team's reply is recorded as the entry's verdict the same day.
 5. **Run the suites on CI at the PR refs.** Push the companion, then
