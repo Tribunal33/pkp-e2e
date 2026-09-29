@@ -200,7 +200,7 @@ under the prompt "Record the response on behalf of the reviewer". Submit
    | "Request Sent" | Invitation out, no response, response not yet due | none. The "Response due: {date}" line is missing here, though the date is set ⚠ [A7](#a7) |
    | "Request Accepted" | Reviewer accepted, review not yet due | "Review due: {date}" |
    | "Overdue" (red) | No response and the response date passed | "Response due: {date}" |
-   | "Overdue" (red) | Accepted (or not) and the review date passed | "Review due: {date}" |
+   | "Overdue" (red) | Accepted and the review date passed | "Review due: {date}" |
    | "Request Declined" | Reviewer declined (hover: "The reviewer declined this review request.") | — |
    | "Request Resent" | Request re-sent after a decline, no response yet | "Response due: {date}", but the date shown is the review deadline ⚠ [A2](#a2) |
    | "Review Submitted" | Review in, no editor has opened it yet ([A10](#a10), retired: opening now marks it viewed); also after "Revert Decision" on a "Complete" row (Rule 16) | reviewer's recommendation {OJS} |
@@ -209,9 +209,10 @@ under the prompt "Record the response on behalf of the reviewer". Submit
    | "Reviewer Thanked" | Thank-you sent or recorded; also a second "Mark as Complete" on a reverted, previously thanked review (Rule 16) | reviewer's recommendation {OJS} |
    | "Request Cancelled" | Assignment cancelled (hover: "The editor cancelled this review request.") | — |
 
-   A "Competing Interests" badge is appended when the reviewer declared any.
-   That is possible only on a journal with a competing-interests policy;
-   without one, the reviewer wizard never asks and the badge cannot occur.
+   A "Competing Interests" badge is appended while the review carries a
+   declared interest, the reviewer's or one an editor entered (Rule 14b),
+   and stays once the policy that asked for it is emptied (Settings). An
+   answer of "I do not have any competing interests" shows none.
    On a press, no recommendation line ever shows, because a press's review
    collects none [OMP1](#omp1). <sup>b</sup>
 3. **What each status admits.** The row's offered actions follow the status.
@@ -347,16 +348,19 @@ under the prompt "Record the response on behalf of the reviewer". Submit
     shows the reviewer's name. It shows a
     guidance paragraph that still tells the editor they "may upload the file
     below", though the window offers no upload control ⚠ [A22](#a22).
-    Where the journal has a competing-interests policy (Settings), a
-    "Competing Interests" block comes next: "No competing interests were
-    disclosed." when the reviewer kept "I do not have any competing
-    interests", or the statement the reviewer typed under "I may have
-    competing interests (Specify below)". Without a policy the block is
-    absent. The window then shows the "Download Review Form" menu (Rule
-    15), and a summary block
-    with a dated line naming the most advanced step the assignment has
-    reached (at the end of this rule) and {OJS} "Recommendation: {label}". It shows the "Reviewer
-    Comments": the review form answers, or "For author and editor" and,
+    The window then shows the "Download Review Form" menu (Rule 15), and a
+    summary block with a dated line naming the most advanced step the
+    assignment has reached (at the end of this rule) and {OJS}
+    "Recommendation: {label}". Where the journal has a competing-interests
+    policy (Settings), or the review carries an answer given while it had
+    one, a "Competing Interests" group follows the summary block. Its
+    "Declaration" reads "I do not have any competing interests", or "I may
+    have competing interests" followed by "Competing Interests" and the
+    statement. Where nothing was answered, "Declaration" reads "-": on a
+    request not yet reviewed (Rule 14c), and on a review an editor
+    submitted without recording an answer (Rule 14d). Without a
+    policy and without an answer the group is absent. Next come the
+    "Reviewer Comments": the review form answers, or "For author and editor" and,
     separately, the editor-only comments, headed "For editor" {OJS} /
     "For editor only" {OMP}. It shows the
     "Reviewer Files" the reviewer attached, read-only. {OJS} It also shows a
@@ -404,9 +408,6 @@ under the prompt "Record the response on behalf of the reviewer". Submit
     - "Reviewer Reminded", once a reminder was sent (Rule 13).
     - "Request Sent".
 
-    So a submitted review reads "Review Submitted: …", a review marked
-    complete "Review Completed: …", a thanked one "Reviewer Thanked: …",
-    and one taken back with "Revert Decision" "Review Submitted: …" again.
     A reviewer who accepted and was then reminded (scenario 7's overdue
     review) reads "Request Accepted: …", because "Request Accepted" ranks
     above "Reviewer Reminded". After a second reminder a "Reviewer
@@ -424,8 +425,8 @@ under the prompt "Record the response on behalf of the reviewer". Submit
     second side window, "Modify Review", stacked over the first. That
     window names the submission, repeats "You are modifying a submitted
     review. All modifications will be recorded in the activity log." and
-    {OJS} shows a "Submitted recommendation:" line. Three things are
-    editable there:
+    {OJS} shows a "Submitted recommendation:" line. These are editable
+    there:
     - The "For author and editor" comment, under the note "If this is an
       open peer review, this comment will also appear publicly alongside
       the article.". When the assignment carries a review form, the form
@@ -443,6 +444,15 @@ under the prompt "Record the response on behalf of the reviewer". Submit
       lists it (Side effects).
     - {OJS} A required "Recommendation" select, preset to the submitted
       recommendation.
+    - The competing-interests answer, where the journal has a
+      competing-interests policy or the review already carries an answer:
+      a "Competing Interests" group, "Declaration" with the radios "I do
+      not have any competing interests" and "I may have competing
+      interests (Specify below)"; the second opens a "Competing Interests"
+      box for the statement. The reviewer's answer is preset. On a request
+      with no answer neither radio is ticked, and a save that leaves both
+      unticked records no answer. A saved change shows in the view window
+      at once and adds or removes the row's badge (Rule 2).
 
     The editor-only comment is editable nowhere. It stays display-only in
     both windows, in both apps. "Cancel" returns to the view window. With
@@ -467,21 +477,20 @@ under the prompt "Record the response on behalf of the reviewer". Submit
 14c. <a id="no-review-window"></a> **The window on a request with no
     review.** "Review Details" sits in the menu of every row that is not
     cancelled (Rule 3), so the window also opens on a request whose review
-    is not submitted: unanswered, accepted or declined. Opening it changes
-    nothing on the row. Where a submitted review shows "Review Submitted:
-    {date and time}", the dated line (Rule 14a) reads "Request Sent: {date
-    and time}" on an unanswered request, "Reviewer Reminded: {date and
-    time}" on an unanswered one that was sent a reminder, "Request
-    Accepted: {date and time}" on an accepted one and "Request Declined:
-    {date and time}" on a declined one. "For
-    author and editor" and the editor-only block each read "-", "Reviewer
-    Files" reads "No Items", {OJS} the "Reviewer Recommendation" group
-    reads "Recommendation -", and a review form's questions show
-    unanswered. The "Download Review Form" menu, the rating row and the
-    three footer buttons are all there, and a star saves with "Reviewer
-    rating saved" although nothing was reviewed. "Modify Review" is enabled
-    in each of these states (Rule 14d). "Mark as Complete" depends on the
-    app:
+    is not submitted: unanswered, accepted or declined. What it shows on a
+    "Request Resent" row is open ⚠ [A42](#a42). Opening it changes nothing
+    on the row. The dated line (Rule 14a) reads "Request Sent: …" on an
+    unanswered request, "Reviewer Reminded: …" once that request was sent a
+    reminder, "Request Accepted: …" on an accepted one and "Request
+    Declined: …" on a declined one. "For author and editor" and the
+    editor-only block each read "-", "Reviewer Files" reads "No Items",
+    {OJS} the "Reviewer Recommendation" group reads "Recommendation -", and
+    a review form's questions show unanswered. Where the "Competing
+    Interests" group shows (Rule 14a), its "Declaration" reads "-". The
+    "Download Review Form" menu, the rating row and the three footer
+    buttons are all there, and a star saves with "Reviewer rating saved"
+    although nothing was reviewed. "Modify Review" is enabled in each of
+    these states (Rule 14d). "Mark as Complete" depends on the app:
     - {OJS} It sits disabled beside "A recommendation is required before
       this review can be marked as complete." in all three states, because
       a review nobody submitted carries no recommendation.
@@ -510,9 +519,10 @@ under the prompt "Record the response on behalf of the reviewer". Submit
       under "Last modified by {user full name}", with what the editor
       entered.
     - The request counts as accepted on the reviewer's behalf, and an
-      acceptance the reviewer had already given keeps its date. That was
-      checked in the assignment's stored data only; on screen it would be
-      the "Request Accepted" line of the row's "History" (Rule 21). The
+      acceptance the reviewer had already given keeps its date. The row's
+      "History" (Rule 21) then lists "Request Accepted: {the moment of the
+      save}" on a request that was not answered, and the reviewer's own
+      acceptance date on an accepted one, above "Review Submitted". The
       reviewer is no longer asked to accept or decline: their list shows
       the review as submitted, and "View" opens it read-only on "4. Completion"
       ([→ after a submitted review](U28-reviewers-review.md#save-submit)).
@@ -523,9 +533,12 @@ under the prompt "Record the response on behalf of the reviewer". Submit
     on screen, with "This field is required." under the select and the
     summary "Please correct one error. Go to Recommendation: This field is
     required."; nothing is saved, and "Save Changes" stays disabled until
-    the select changes. A press requires nothing unless the request carries
-    a review form (Rule 14b): there the window can be saved as it opens,
-    submitting a review with no content ⚠ [OMP5](#omp5). A "Request
+    the select changes. On a press, a request without a review form (Rule
+    14b) requires nothing: the window can be saved as it opens,
+    submitting a review with no content ⚠ [OMP5](#omp5). A save that
+    records only the competing-interests answer (Rule 14b) submits the
+    review too: on a press with no content, on a journal once a
+    "Recommendation" is picked ⚠ [A40](#a40). A "Request
     Declined" row offers the button, the dialog and the window too, but
     the save is refused with "This review not editable because it was
     declined." ⚠ [A30](#a30); once the request is re-sent (Rule 19) it
@@ -666,19 +679,25 @@ under the prompt "Record the response on behalf of the reviewer". Submit
   (*Reviewer's review*). <sup>i</sup>
 - **Modifying a review** (Rule 14b) → each save leaves one attributed
   activity-log row per part it changed: "The following was modified in this
-  review: Comments." and, {OJS}, "…Reviewer Recommendation.", so a save
-  that changes both leaves two rows. Each ends 'Select "View changes" to
-  see a detailed summary of all modifications.'. The Comments row's
-  "Settings" arrow holds that one action, "View changes", which opens a
-  "View Review" window with "Updated Comments" over "Previous Comments":
-  the new text, then the old. A file added through the window's "Upload"
+  review: Comments.", {OJS} "…Reviewer Recommendation." and, for a
+  changed competing-interests answer, "…Reviewer Competing Interests.".
+  Each ends 'Select
+  "View changes" to see a detailed summary of all modifications.'. The
+  Comments row's "Settings" arrow holds that one action, "View changes",
+  which opens a "View Review" window with "Updated Comments" over
+  "Previous Comments": the new text, then the old. On a competing-interests
+  row it shows "Updated Competing Interests" over "Previous Competing
+  Interests", each "Competing Interests declared: YES" over "Competing
+  Interests: {statement}", even for an answer of "I do not have any
+  competing interests", whose statement is empty ⚠ [A39](#a39). A file added through the window's "Upload"
   is logged at once, saved or not, as 'Revision "{file}" was uploaded for
   file {N}.' under the editor's name. {OJS} Changing the recommendation on
   the reviewer's behalf runs through this window. <sup>i</sup>
 - **Submitting a review for the reviewer** (Rule 14d) → the same rows
-  under the editor's name ({OJS}: one for the comment, one for the
-  recommendation), and no "accepted" line for the reviewer. No acceptance
-  email goes to the assigned editors, and the reviewer is sent nothing.
+  under the editor's name (a comment and {OJS} a recommendation leave one
+  each; a save with no comment ⚠ [A41](#a41)), and no "accepted" line for
+  the reviewer. No acceptance email goes to the assigned editors, and the
+  reviewer is sent nothing.
   <sup>i</sup>
 - **Thanking** → the acknowledgement email (unless skipped) and the
   "Reviewer Thanked" date in History. <sup>j</sup>
@@ -726,11 +745,14 @@ review forms* unless said otherwise. <sup>n</sup>
   as a placeholder rather than the live address, and each sent reminder
   mints a fresh keyed link of its own. <sup>h</sup>
 - **Public visibility default**: preselects the "Public Visibility" box.
-- **"Competing Interests"** (Settings › Workflow › Review; empty at
-  install): with a policy text there, the reviewer is asked about
-  competing interests, a declared one badges the row (Rule 2), and the
-  Review Details window shows a "Competing Interests" block (Rule 14a).
-  Empty, neither appears.
+- **"Competing Interests"** (Settings › Workflow › Review, "Reviewer
+  Guidance"; empty at install): with a policy text there, the reviewer is
+  asked about competing interests, a declared one badges the row (Rule 2),
+  the Review Details window shows the answer (Rule 14a) and "Modify
+  Review" lets an editor change it (Rule 14b). Emptied, new reviewers are
+  not asked and a review never answered shows none of it; an answer given
+  while a policy was set keeps its badge and its group, and stays
+  editable.
 - **Review forms**: populate the "Review Form" selects. A section's default
   form preselects it (section configuration is *Sections* territory).
 - **Reviewer suggestions enabled** (workflow settings): the Add Reviewer
@@ -1241,6 +1263,8 @@ Left out of the scenarios above, by reason:
   - Review Details on that review naming the first thank and its date (Rule 14a): the same bullet
   - History ending at "Review Submitted" after "Revert Decision" on the thanked review, then, once it is marked complete again, listing the first "Reviewer Thanked" date followed by the new "Review Completed" (Rule 21): the same place in scenario 9
   - {OJS} the Review Details window opened from the dashboard's "View unread recommendation" showing the recommendation, as the row's window does (Rule 14a): likely a bullet in scenario 14
+  - the competing-interests answer in "Modify Review": preset to the reviewer's answer, changed to a statement and back to "I do not have any competing interests", the row's badge added and removed with it, and the "…Reviewer Competing Interests." row in the activity log (Rules 2, 14b, Side effects): needs a journal with a "Competing Interests" policy, which no scenario sets
+  - answers given under a "Competing Interests" policy kept after the policy is emptied: the badge and the group still shown, the answer still editable, and new reviewers no longer asked (Settings, Rule 2): the same journal, with its policy then emptied
   - the "Edit Review" window's top "Close" asking first after a change to the review due date, the "Review Type" or the "Public Visibility" box (no other control tried), the window kept open on "Cancel" and the change dropped on "OK", and closing at once with nothing changed (Fields): likely a bullet in scenario 6, which opens the row's "Edit"
 - **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
@@ -1253,7 +1277,7 @@ Left out of the scenarios above, by reason:
   - the ORCID iD link styles in the reviewer search (Rule 5): shown only on a journal with ORCID enabled and reviewers who linked an iD
   - narrowing the reviewer search with a "Filters" slider (Rule 6): a pool of a page or two is read whole, never narrowed
   - the "{N} active" badge on a reviewer with a review underway (Rule 5): read only when an editor weighs a busy reviewer against a free one, not on every add
-  - the "Competing Interests" block in the Review Details window, "No competing interests were disclosed." or the reviewer's statement, and the row's "Competing Interests" badge (Rules 2, 14a, Settings): met only on a journal that sets a "Competing Interests" policy, which the install leaves empty
+  - the "Competing Interests" group in the Review Details window ("Declaration": "I do not have any competing interests", "I may have competing interests" with the statement, or "-"), and the row's "Competing Interests" badge (Rules 2, 14a, 14c, Settings): met only on a journal that sets a "Competing Interests" policy, which the install leaves empty, or on reviews answered while one was set
 - **Nothing new to test**:
   - the "Reviewing Interests" tag field of Create New Reviewer (Fields): filled only when an editor creates an account with interests to record
   - the chooser's refill on a pick (Fields): needs an alternate template a journal seldom adds
@@ -1295,6 +1319,8 @@ Left out of the scenarios above, by reason:
   - OMP6 (the review-form block saying "this journal" on a press; Rule 14b)
   - A36 (a reviewer assigned today reading "Yesterday" in the reviewer search; Rule 5)
   - A37 (the resend's activity-log line printing "{$submissionid}"; Side effects)
+  - A39 ("View changes" reading "Competing Interests declared: YES" for an answer of no competing interests; Side effects)
+  - A40 (the competing-interests answer recorded alone on a request with no review, submitting the review; Rule 14d)
 - **No seed**:
   - the automatic reminder emails from the principal contact at the configured day-offsets, with their "Reviewer Reminded" and log stamps (Rule 13, Side effects, Settings)
   - a section's default "Review Form" preselected in the Add Reviewer window (Rule 10, Settings): the seed sets no default review form on a section
@@ -1351,6 +1377,10 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A28](#a28) | With the "Reviews completed" slider enabled, a name search for a reviewer never assigned answers "No items found." | ❓ | minor | — |
 | [A29](#a29) | On a request with no review, "Modify Review" still speaks of "the review submitted by {reviewer name}", and nothing says that "Save Changes" submits the review for the reviewer | ❓ | user-visible | — |
 | [A38](#a38) | Whether a request only sent, a completed review or {OMP} a request on the other review stage keeps a cancelled or unassigned reviewer in the submission's discussions is unsettled | ❓ | minor | — |
+| [A39](#a39) | "View changes" on a competing-interests change reads "Competing Interests declared: YES" for an answer of "I do not have any competing interests" | ❓ | minor | — |
+| [A40](#a40) | On a request with no review, "Save Changes" with only the competing-interests answer recorded submits the review for the reviewer, with no content on a press | ❓ | minor | — |
+| [A41](#a41) | Which activity-log rows a review submitted for the reviewer with no comment leaves is unsettled | ❓ | minor | — |
+| [A42](#a42) | What the Review Details window shows on a "Request Resent" row, its dated line included, is unsettled | ❓ | minor | — |
 | [OMP5](#omp5) | {OMP} "Save Changes" with nothing entered is accepted on an unanswered request and submits an empty review for the reviewer | ❓ | minor | — |
 | [OMP1](#omp1) | A press's review runs without reviewer recommendations, and with a per-stage reviewer pool (Internal vs External Reviewers) | ✅ | — | — |
 | [A24](#a24) | Retired: a modification save on a request with no review completes it because it submits the review on the reviewer's behalf, the behavior upstream designed (pkp/pkp-lib#13337); screens do reach it (Rule 14d) | ✅ | retired | upstream change + claim check (claude), 2026-09-17 — overturned by design |
@@ -1743,8 +1773,9 @@ Since: 2026-08-29 (the modify-reviews rework) · Basis: probe.
 <a id="a31"></a>
 **A31 — An assistant-level participant is offered a "Modify Review" they cannot save** · 🐞 · minor.
 A Funding Coordinator assigned to the stage gets the same Review Details
-window as a review manager, "Modify Review" enabled. The dialog and the
-edit window open and take their text; "Save Changes" then answers "Error" /
+window as a review manager, "Modify Review" enabled. The dialog opens, and
+the edit window opens with its fields, the competing-interests answer
+(Rule 14b) included, and takes entries; "Save Changes" then answers "Error" /
 "The current role does not have access to this operation." / "OK". Nothing
 is saved, the row is unchanged, and leaving asks the unsaved-changes
 warning (Rule 14b). The refusal is right and the offer is not: the button
@@ -1812,6 +1843,57 @@ Question: which of the reviewer's other requests should keep them in the
 discussions? Lean: any request not declined or cancelled, a completed
 review included, since that reviewer may still be asked about it there.
 Basis: code. <sup>[f-a38](#fn-a38)</sup>
+
+<a id="a39"></a>
+**A39 — "View changes" says an interest was declared when none was** · ❓ ·
+minor.
+On a "…Reviewer Competing Interests." row of the activity log, "View
+changes" opens "View Review" with "Updated Competing Interests" and
+"Previous Competing Interests", each reading "Competing Interests declared:
+YES" over "Competing Interests: {statement}" (Side effects). An answer of
+"I do not have any competing interests" reads "Competing Interests
+declared: YES" too, with an empty statement, so a change from no interests
+to a statement reads as one declared interest replacing another.
+Question: should that answer read as no declared interest? Lean: yes;
+"declared" here means "answered", and read as "declared an interest" it
+says the opposite of the reviewer's answer.
+Basis: probe. <sup>[f-a39](#fn-a39)</sup>
+
+<a id="a40"></a>
+**A40 — Recording a competing-interests answer submits the review** · ❓ ·
+minor.
+On an accepted or unanswered request, an editor who opens "Modify Review"
+only to record the reviewer's competing-interests answer (Rule 14b) submits
+the review with it (Rule 14d). On a press, ticking "I may have competing
+interests (Specify below)", typing the statement and pressing "Save
+Changes" turns the row "Review Submitted" with "Read Review" and the
+"Competing Interests" badge, "-" in both comment blocks, and the
+reviewer's request is closed. On a journal the save first asks for a
+"Recommendation" ("This field is required."), and then submits.
+Question: should a change to the answer alone leave the request open?
+Lean: yes; the editor changed the reviewer's declaration, not the
+review, and on a press this is a defect next to [OMP5](#omp5).
+Basis: probe. <sup>[f-a40](#fn-a40)</sup>
+
+<a id="a41"></a>
+**A41 — The log rows of a review submitted with no comment** · ❓ · minor.
+Which activity-log rows a save leaves when it submits the review for the
+reviewer with no comment typed (Rule 14d) has not been seen on screen:
+{OJS} a "Recommendation" alone, a press save with nothing entered
+([OMP5](#omp5)), or the competing-interests answer alone ([A40](#a40)).
+Question: should such a save leave a "…Comments." row? Lean: no; the log
+should name only what the editor entered.
+Basis: judgment. <sup>[f-a41](#fn-a41)</sup>
+
+<a id="a42"></a>
+**A42 — The Review Details window on a re-sent request** · ❓ · minor.
+The window opened from a "Request Resent" row's "Review Details" has not
+been seen on screen. The resend clears the decline, so its dated line
+(Rule 14a) would no longer read "Request Declined: …"; which step and date
+it names instead is unsettled.
+Question: what should the dated line read? Lean: "Request Sent: {the
+moment of the resend}", as the request is out again (Rule 19).
+Basis: code. <sup>[f-a42](#fn-a42)</sup>
 
 ### OMP
 
@@ -1907,7 +1989,8 @@ Submitted" with "Read Review", and the view window reads "Review Submitted:
 {the moment of the save}", "Last modified by {user full name}" and "-" in
 both comment blocks. The reviewer's request is closed by a review with no
 content. On a journal the required "Recommendation" happens to stop the
-same save (Rule 14d).
+same save (Rule 14d). A save that records only the competing-interests
+answer closes the request the same way ([A40](#a40)).
 Question: should a save with no content be refused where no review exists?
 Lean: yes. A press requires nothing unless a review form is attached, and
 the reviewer's own empty submit is already recorded as a defect
@@ -2072,9 +2155,20 @@ against the journal's recommendation roster passed only by the OJS dashboard
 passes none (note f-omp1). Live-probed 2026-08-02: all eleven statuses
 driven on OJS with titles, second lines, red "Overdue" styling and both
 hover tooltips as quoted (a five-state OMP spot-check matched; the two
-deviations are findings A7 and A2); the "Competing Interests" badge fired
-only on a journal with a competing-interests policy — without one the
-reviewer wizard never asks, so no declaration can exist (baseline control).
+deviations are findings A7 and A2). The "Competing Interests" badge
+renders from the assignment's `competingInterests` when it is non-empty
+(`useReviewerManagerConfig.js`). Driven 2026-09-29 (OJS and OMP, two runs
+each; contexts with a policy, without one, and with the policy emptied
+mid-run): it showed for the reviewer's statement and for one an editor
+entered in "Modify Review", not for "I do not have any competing
+interests" (through the wizard or seeded), went when an editor set the
+answer back to that, and stayed after the policy was emptied, where an
+editor's new statement on a review answered "I do not have…" added it.
+The same runs read the status table as quoted in Rule 2: an invited
+request whose response date (two days back) and review date (one day
+back) had both passed read "Overdue" / "Response due: {response date}",
+and an accepted one with a past review date "Overdue" / "Review due:
+{date}".
 
 <a id="fn-c"></a>
 **c** — Search surface: legacy form template `advancedSearchReviewerForm.tpl`
@@ -2452,7 +2546,8 @@ accepted" lines for the reviewers who accepted themselves and none for that
 reviewer. Mechanism: the acceptance email, its email-log entry and
 `SUBMISSION_LOG_REVIEW_ACCEPT` live in `ReviewerAction::confirmReview`,
 which `editReview` never calls. The kept acceptance date was read from the
-assignment's data, not from the row's "History".
+assignment's data that day, and on the row's "History" on 2026-09-29
+(below).
 The dated line (Rules 14a, 14c), since pkp/ui-library#987 with
 pkp/pkp-lib#13346 (issue pkp/pkp-lib#13263): driven 2026-09-24 on OJS
 at the PR head `26a5efcb74` (pkp-lib) / `ad0fdd33` (ui-library), before its merge, one scratch submission with one reviewer per
@@ -2481,17 +2576,7 @@ assignment has one `date_reminded` column, set by each reminder, manual
 or automatic (note l).
 Driven 2026-09-28 (OJS and OMP, two runs each; scratch contexts, one
 with a "Competing Interests" policy and an active review form, one with
-neither; the Editor and an assigned Section or Series Editor). Competing
-interests (Rule 14a): on the policy context an h2 "Competing Interests"
-sat under the reviewer's name and the guidance, over "No competing
-interests were disclosed." for a review submitted through the wizard
-with "I do not have any competing interests" kept and for a seeded
-`completed` review, and over the typed statement for a reviewer who chose
-"I may have competing interests (Specify below)", whose row also carried
-the Rule 2 badge; on the context without a policy no such block.
-Mechanism: `ReviewDetailsInfo.vue` `competingInterestsText`, shown only
-when the assignment's `competingInterestsDeclared` is set, falling back
-to `reviewer.submission.competingInterests.declaredNone`. "Reviewer
+neither; the Editor and an assigned Section or Series Editor). "Reviewer
 Files": a file the reviewer uploaded on step 3 of their wizard was listed
 (number, name, date) on every read taken after the window's own files
 request (`…/files/review/{assignmentId}?fileStages=5`) had answered, 44
@@ -2499,6 +2584,52 @@ of 44 openings; that request answered 0.17–0.72 s after the click, and
 "No Items" was read only before it. "Download Review Form": the same four
 entries on a free-form review, a form-based one, the declared-interests
 one and a seeded free-form one.
+Competing interests (Rules 2, 14a–14d, Settings), since ui-library
+`19802b78` (pkp/ui-library#993) with pkp-lib `c4303c66af`
+(pkp/pkp-lib#13394, issue pkp/pkp-lib#13282), which removed the
+"Competing Interests" block ("No competing interests were disclosed.")
+from `ReviewDetailsInfo.vue`: the answer is a form group of
+`useReviewDetailsForm.js` (`addCompetingInterestsFields`, radio
+`competingInterestOption`, rich text `competingInterests`), shown when
+`isCompetingInterestsRequested` (the page config's `publicationSettings`,
+`Context::isReviewCompetingInterestRequired()`) or the assignment's
+`competingInterestsDeclared` is set; display mode prints
+`editor.review.competingInterests.hasCompetingInterests` "I may have
+competing interests" and hides the radio of an unanswered assignment
+("Declaration" "-"). The PUT `…/review` carries `competingInterests` (""
+for no interests) only once a radio is ticked; pkp-lib `46ac5ea933`
+(pkp/pkp-lib#13388, issue pkp/pkp-lib#13291) refuses it with 422 when the
+context has no policy and the assignment no answer, and refuses
+`comments` on a review-form review; the window sends neither (read from
+its own traffic, 2026-09-29: `reviewFormResponses` and never `comments`
+on a form review, no `competingInterests` on a context without a
+policy). A change logs `SUBMISSION_LOG_REVIEW_REVIEWER_COMPETING_INTERESTS_MODIFIED`.
+Driven 2026-09-29 (OJS and OMP, two runs each; contexts with a policy,
+without one, and with the policy emptied on screen mid-run; the Editor,
+an assigned Section or Series Editor and an assigned Funding
+Coordinator, and from the dashboard popover): the group sat between the
+"Download Review Form" menu and "Reviewer Comments" (after the summary
+block), read "I do not have any competing interests" for a review
+answered so through the wizard and for a seeded `completed` one, "I may
+have competing interests" with the statement for a declared one, and
+"Declaration -" on an unanswered, an accepted and a declined request and
+on a review an editor submitted without an answer; "No competing
+interests were disclosed." showed in no window, and the context without a
+policy showed no group in either window. "Modify Review": the reviewer's
+answer preset, neither radio ticked on an unanswered request; a statement
+saved showed in the view window and badged the row on the same page and
+after a reload, and set back to "I do not have…" removed the badge; the
+log row "…Reviewer Competing Interests." attributed to the Editor or the
+Section Editor, its "View changes" as in finding A39; a radio change
+alone asked the unsaved-changes "Warning" on leaving, and on a complete,
+publicly shown review "Save changes to this review?". With the policy
+emptied (the box saved empty, "Saved"), new reviewers' step 1 offered no
+radios, reviews answered before kept their badge and group, and an
+editor's changes to them saved (200). The History of a review an editor
+submitted for the reviewer (Rule 14d), read on screen the same day:
+"Request Accepted: {save time}" on an unanswered and a re-sent request
+and on one carrying a required review form, the seeded acceptance time on
+two accepted ones.
 
 <a id="fn-j"></a>
 **j** — `ThankReviewerForm` (template `thankReviewerForm.tpl`, AFFW-645):
@@ -3077,7 +3208,12 @@ carries the quality from before the press; `ReviewDetailsRating.vue`
 watches the whole assignment and resets the radios to that quality. The
 suite's bounded re-press in the rating helper absorbs the flip and never
 asserts it. OJS runs the same lib/ui-library window; its 2026-08-29
-sighting is the same revert.
+sighting is the same revert. Not reproduced without a hold on 2026-09-29
+(OJS and OMP, two runs each): a star pressed 36–63 ms after the window
+showed, "Modify Review" still disabled, saved with its toast and stayed
+selected 2.5 s after the window settled and on reopening, four of four;
+the entry stands on the held-answer runs above until the maintainer's
+throttled repro.
 
 <a id="fn-a22"></a>
 **f-a22** — `editor.review.readConfirmation` still carries the legacy
@@ -3246,7 +3382,12 @@ the assignment, `…/consider` and GET `…/review` for manager, sub-editor,
 site admin and assistant roles, and PUT `…/review` (`editReview`) for the
 first three only; the view window's button reads no role. The same account
 saved a star ("Reviewer rating saved") and marked the review complete (row
-"Complete").
+"Complete"). Driven 2026-09-29 (OJS + OMP, two runs each, a context with a
+"Competing Interests" policy): the Funding Coordinator's view window showed
+the "Competing Interests" group with "Modify Review" enabled, the edit
+window offered the competing-interests radios, and "Save Changes" answered
+401 with the same "Error" dialog; "Cancel" asked the unsaved-changes
+warning and the row was unchanged.
 
 <a id="fn-a32"></a>
 **f-a32** — `useReviewDetails.js` used to reload the opener once the mark
@@ -3409,6 +3550,53 @@ that are on the submission's current stage, or completed while the
 submission is not published. On that reading a completed review keeps the
 reviewer until publication, a request only sent keeps them, and on a press
 a not-completed request on the other review stage does not.
+
+<a id="fn-a39"></a>
+**f-a39** — Driven 2026-09-29 (OJS + OMP, two runs each, the Editor, a
+context with a "Competing Interests" policy): a review answered "I do not
+have any competing interests" through the wizard, changed in "Modify
+Review" to a statement: "View changes" on the new log row showed Updated
+"Competing Interests declared: YES" / "Competing Interests: {statement}"
+over Previous "Competing Interests declared: YES" / "Competing Interests:"
+empty; set back to "I do not have…", Updated read "declared: YES" with an
+empty statement. Code-read the same day (lib/pkp):
+`ReviewAssignmentController` logs the new answer always with
+`submission.event.review.competingInterestsWithDeclaration` ("declared:
+YES") and the previous one by the stored `competingInterestsDeclared`
+flag, which records that the question was answered, not which answer;
+"Competing Interests declared: NO"
+(`…competingInterestsWithNoDeclaration`) prints only for a previous state
+never answered.
+
+<a id="fn-a40"></a>
+**f-a40** — Driven 2026-09-29 (a context with a "Competing Interests"
+policy, the Editor, an accepted request, two runs per app). OMP: only
+"I may have competing interests (Specify below)" ticked and a statement
+typed; the save sent `{"competingInterests": "<p>…</p>", "comments": ""}`
+and answered 200; the row read "Review Submitted" with "Read Review" and
+the "Competing Interests" badge, its menu without "Log Response", and
+History "Review Submitted: {save time}". OJS: the same entry sent no
+request, "This field is required." showed under the empty
+"Recommendation", and the row stayed "Request Accepted". The journal's
+save with a recommendation picked was not driven with the answer; it is
+the save of Rule 14d.
+
+<a id="fn-a41"></a>
+**f-a41** — Not driven. The saves whose rows were read (note i,
+2026-09-17) all entered a comment. The empty press save (note f-omp5) and
+the answer-only save (note f-a40) were not followed to the log, and the
+kept activity-log reads of 2026-09-29 mix several reviewers' saves on one
+submission, with rows that do not name the reviewer.
+
+<a id="fn-a42"></a>
+**f-a42** — Code-read, not driven, 2026-09-29: the resend
+(`ResendRequestReviewerForm`, note k) clears `declined` and nulls
+`dateConfirmed`, and the window's line takes the first non-empty entry of
+Rule 14a's order from its own fetch (note i); whether the resend stamps a
+new send date was not read. No read of the window (note i, 2026-09-17,
+2026-09-24 and 2026-09-29) took a re-sent request; the 2026-09-29 claim
+check saved "Modify Review" on one (Rule 14d) but kept no read of its
+window before the save.
 
 <a id="fn-omp1"></a>
 **f-omp1** — Mechanism in notes b, i, o: recommendation roster passed only

@@ -2,29 +2,42 @@ const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's
 // U63 claim check, chunk K3: the "Users XML Plugin" {OJS OMP}: its tabs and fields, importing (results, which
 // accounts, roles, masthead and start date, passwords), the "Current Users" list and its filter, exporting users,
 // moving roles between journals, the "Journal Registration" email, and the site's minimum password length.
-// Spec docs/specs/U63-import-export.md: 74–85, 235–287, 364–369, 403–407, 525–550; footnotes k, l, m, td13–td15,
-// f-a2–f-a4.
+// Spec docs/specs/U63-import-export.md (2026-09-29 numbering): Fields 77–90, Rules 21–28 (288–376), Side effects
+// 497–502, Settings bullet 8 (540–544), scenarios 5 and 6 (765–872); register A2–A4, A13–A16; footnotes k, l, m,
+// td13–td15, f-a2–f-a4, f-a13–f-a16.
 //
-//   PROBE_FEATURE=U63 PROBE_AGENT=ccK3 node bin/probe.js ojs|omp|ops shared/playwright/checks/U63/K3/k3.js
-//   PHASES=seed,ops,fields,list,import,again,logins,export,move,ended,minlen,badfiles,emails,leave (default all, in order;
-//   state in k3-state-<app>.json in the output folder, delete it for a fresh seed).
+//   PROBE_FEATURE=U63 PROBE_AGENT=ccK3 [K3RUN=r1] node bin/probe.js ojs|omp|ops shared/playwright/checks/U63/K3/k3.js
+//   PHASES=seed,ops,tools,fields,list,import,again,logins,export,move,ended,reviewer,dates,pw12,siteread,badfiles,emails,leave
+//   (the default, in order; state in k3-state-<app>[-<K3RUN>].json in the output folder, delete it for a fresh seed).
+//   K3RUN names one run: its own state (so a fresh seed), facts file k3-facts-<K3RUN> and snapshot prefix, so a
+//   phase is run twice (r1, r2) into one output folder.
+//   `minlen` is opt-in (PHASES=minlen): it sets the SITE-WIDE minimum password length to 10 for one import and puts
+//   back 6 in a finally, which breaks other agents' sign-ins on a shared fleet while it runs. `siteread` reads the
+//   same field without saving.
 //
 // Scratch contexts per app {OJS OMP}: A (source journal: one manager-level account per group, the accounts the
 // import matches against, 26 fillers so the list pages), B (import target). Every username carries the tag.
-// OPS gets only the read-only control (the tool is absent there). `minlen` sets the site's minimum password length
-// to 10 for one import and puts back 6 in a finally. No assertions: the script records, the reader judges.
+// OPS gets only the read-only control (the tool is absent there). No assertions: the script records, the reader judges.
+//
+// Added 2026-09-29 (upstream sync, pkp-lib 85f6b3c074 in #13390: the file's <masthead> and <date_start> are kept):
+// `reviewer` (a reviewer role's masthead choice on import and export), `dates` (a future <date_start> imported three
+// times, a past one twice as control, an empty <date_start>, a free-text one, an empty <date_end>, a future
+// <date_end> imported twice), `pw12` (a new account whose file password is a bcrypt at the installation's cost 12,
+// and the server's PHP version from Administration › System Information), `siteread`.
 const fs = require('fs');
 const path = require('path');
 const {execFileSync} = require('child_process');
 const {forEachApp, launch, signIn, signOut, record, loc, note, idle, tag, outDir, screen} = require('../../../probe');
 const G = require('../../U62/K1/grid');
-const {T, sleep, flat, rel, snap, tabStrips} = G;
+const {T, sleep, flat, rel, tabStrips} = G;
+const snap = (page, name, extra) => G.snap(page, RUN ? `${RUN}-${name}` : name, extra);
 
-const ALL = ['seed', 'ops', 'fields', 'list', 'import', 'again', 'logins', 'export', 'move', 'ended', 'minlen', 'badfiles', 'emails', 'leave'];
+const ALL = ['seed', 'ops', 'tools', 'fields', 'list', 'import', 'again', 'logins', 'export', 'move', 'ended', 'reviewer', 'dates', 'pw12', 'siteread', 'badfiles', 'emails', 'leave'];
+const RUN = process.env.K3RUN || ''; // every file this run writes carries it: two runs at once never upload each other's files
 const PHASES = (process.env.PHASES || ALL.join(',')).split(',');
 const on = (p) => PHASES.includes(p);
 const log = (...a) => console.log('[k3]', new Date().toISOString().slice(11, 19), ...a);
-const statePath = (app) => path.join(outDir(), `k3-state-${app.name}.json`);
+const statePath = (app) => path.join(outDir(), `k3-state-${app.name}${RUN ? `-${RUN}` : ''}.json`);
 const sql = (app, q) => { try { return execFileSync('psql', ['-d', `${dbName(app.name)}`, '-tA', '-F', '|', '-c', q], {encoding: 'utf8'}).trim(); } catch (e) { return `ERR ${flat(e.message, 200)}`; } };
 const bcrypt = (pw, cost) => execFileSync('php', ['-r', `echo password_hash(${JSON.stringify(pw)}, PASSWORD_BCRYPT${cost ? `, ["cost" => ${cost}]` : ''});`]).toString().trim();
 const md5 = (s) => require('crypto').createHash('md5').update(s).digest('hex');
@@ -49,7 +62,7 @@ forEachApp(async (app) => {
     const isOPS = app.name === 'ops';
     const S = fs.existsSync(statePath(app)) ? JSON.parse(fs.readFileSync(statePath(app), 'utf8')) : {};
     const save = () => fs.writeFileSync(statePath(app), JSON.stringify(S, null, 1));
-    const fact = (k, v) => { record('k3-facts', {[k]: v}, {merge: true}); log(`[${app.name} ${k}]`, JSON.stringify(v).slice(0, 2500)); };
+    const fact = (k, v) => { record(RUN ? `k3-facts-${RUN}` : 'k3-facts', {[k]: v}, {merge: true}); log(`[${app.name} ${k}]`, JSON.stringify(v).slice(0, 2500)); };
     const {page, close} = await launch(app);
     page.setDefaultTimeout(15_000);
     let dialogAnswer = 'dismiss';
@@ -244,6 +257,17 @@ forEachApp(async (app) => {
         });
         if (isOPS) return;
 
+        // ------------------------------------------------------------ tools: the Tools list of A as its manager (the tool is listed; which other tools the app has)
+        await sect('tools', async () => {
+            await as(`${t}am`, S.A);
+            await go(cu(S.A, '/management/tools'));
+            await page.locator('.pkp_page_importexport_plugins li').first().waitFor({timeout: 15_000}).catch(() => {});
+            const o = {list: await page.locator('.pkp_page_importexport_plugins li').allInnerTexts().catch(() => [])};
+            await snap(page, 'o-03-tools-A', o);
+            await out();
+            fact('tools', o);
+        });
+
         // ------------------------------------------------------------ fields: Fields table, Rule 21, the filter, per manager-level account; sweep
         await sect('fields', async () => {
             const o = {};
@@ -359,6 +383,9 @@ forEachApp(async (app) => {
             o.search.roleAndWord = await doSearch('roleandword', 'Hidalgo', SE);
             o.search.roleAndWordMiss = await doSearch('roleandwordmiss', 'Hidalgo', 'Reader');
             o.search.none = await doSearch('none', 'nomatchzzqq');
+            // scenario 6's filter steps: a role alone, then "All Roles" with the box cleared (the whole list again)
+            o.search.author = await doSearch('author', '', 'Author');
+            o.search.allRoles = await doSearch('allroles', '', 'All Roles');
             // the filter's role list, as offered
             o.roleOptions = (o.search.none.filterAfter || {}).selects;
             await out();
@@ -387,7 +414,7 @@ forEachApp(async (app) => {
                 userXml({given: 'K3mm3', family: 'Mm', email: e('ex2'), username: `${t}mm3`, pw: {plain: 'mismatch3'}, roles: [R('Author')]}),
                 userXml({given: 'Changed', family: 'Exr', email: e('exr'), username: `${t}exr`, pw: {plain: 'exrchanged1'}, roles: [R('Reader'), R('Author')]}),
             ];
-            const file = path.join(outDir(), `k3-users-main-${app.name}.xml`);
+            const file = path.join(outDir(), `k3-${RUN ? `${RUN}-` : ''}users-main-${app.name}.xml`);
             fs.writeFileSync(file, usersFile(users));
             o.before = {exs: sql(app, `select username, email, (select setting_value from user_settings where user_id=u.user_id and setting_name='givenName' and locale='en') from users u where username='${t}exs'`), exrB: uug(`${t}exr`, S.B)};
             await as(`${t}bm`, S.B);
@@ -396,7 +423,7 @@ forEachApp(async (app) => {
             await loc(page, 'Users XML Plugin: the "Results" tab', page.getByRole('tab', {name: /Results/}));
             await loc(page, 'Users XML Plugin › Results: the visible panel', page.locator('#importExportTabs .ui-tabs-panel:visible'));
             // a second press on the same page: a second "Results" tab (a clean file: one new user)
-            const file2 = path.join(outDir(), `k3-users-second-${app.name}.xml`);
+            const file2 = path.join(outDir(), `k3-${RUN ? `${RUN}-` : ''}users-second-${app.name}.xml`);
             fs.writeFileSync(file2, usersFile([userXml({given: 'K3n2', family: 'Two', email: e('n2'), username: `${t}n2`, pw: {plain: 'secondpw1'}, roles: [R('Reader')]})]));
             await page.getByRole('tab', {name: 'Import Users'}).first().click();
             await sleep(400);
@@ -477,7 +504,7 @@ forEachApp(async (app) => {
             const o = {};
             await as(`${t}bm`, S.B);
             await openPlugin(S.B);
-            const file = path.join(outDir(), `k3-users-again-${app.name}.xml`);
+            const file = path.join(outDir(), `k3-${RUN ? `${RUN}-` : ''}users-again-${app.name}.xml`);
             fs.writeFileSync(file, usersFile([userXml({given: 'K3n3', family: 'Three', email: `${t}n3@mail.test`, username: `${t}n3`, pw: {plain: 'thirdpw12'}, roles: [{ref: 'Reader'}]})]));
             o.first = await importFile(file, 'a-01-again-first');
             await page.getByRole('tab', {name: 'Import Users'}).first().click();
@@ -573,7 +600,7 @@ forEachApp(async (app) => {
             for (const k of ['ase', 'exs']) await grid().locator('tr.gridRow').filter({hasText: `${t}${k}`}).first().locator('input[type=checkbox]').check().catch(() => {});
             const dl = await download(() => page.locator('#exportXmlForm').getByRole('button', {name: 'Export Users'}).click());
             if (!dl.raw) { fact('move', {skipped: 'no ticked export', dl: {status: dl.status, none: dl.none}}); return; }
-            const file = path.join(outDir(), `k3-move-tmp-${app.name}.xml`);
+            const file = path.join(outDir(), `k3-${RUN ? `${RUN}-` : ''}move-tmp-${app.name}.xml`);
             fs.writeFileSync(file, dl.raw);
             o.file = parseUsers(dl.text);
             await out();
@@ -602,7 +629,7 @@ forEachApp(async (app) => {
         await sect('ended', async () => {
             const o = {};
             const e = (k) => `${t}${k}@mail.test`;
-            const file = path.join(outDir(), `k3-users-ended-${app.name}.xml`);
+            const file = path.join(outDir(), `k3-${RUN ? `${RUN}-` : ''}users-ended-${app.name}.xml`);
             fs.writeFileSync(file, usersFile([userXml({given: 'K3hist', family: 'Ended', email: e('hist'), username: `${t}hist`, pw: {plain: 'endedpw12'}, roles: [{ref: SE, start: '2019-01-01', masthead: true}, {ref: 'Reader'}], extra: ''}).replace('<user_group_ref>' + SE + '</user_group_ref>\n\t\t\t\t<date_start>2019-01-01</date_start>', '<user_group_ref>' + SE + '</user_group_ref>\n\t\t\t\t<date_start>2019-01-01</date_start>\n\t\t\t\t<date_end>2020-12-31</date_end>')]));
             o.fileHasEnd = fs.readFileSync(file, 'utf8').includes('<date_end>2020-12-31</date_end>');
             await as(`${t}bm`, S.B);
@@ -618,6 +645,172 @@ forEachApp(async (app) => {
             o.usersList = o.usersList.rows.filter((r) => r.join(' ').includes('hist'));
             await out();
             fact('ended', o);
+        });
+
+        // ------------------------------------------------------------ reviewer: a reviewer role's masthead choice (pkp-lib 85f6b3c074: reviewer roles still "appear")
+        await sect('reviewer', async () => {
+            const o = {};
+            const e = (k) => `${t}${k}@mail.test`;
+            const REV = isOMP ? ['External Reviewer', 'Internal Reviewer'] : ['Reviewer'];
+            const file = path.join(outDir(), `k3-${RUN ? `${RUN}-` : ''}users-reviewer-${app.name}.xml`);
+            fs.writeFileSync(file, usersFile([
+                userXml({given: 'K3nrv', family: 'Reviewer', email: e('nrv'), username: `${t}nrv`, pw: {plain: 'reviewpw1'}, roles: [...REV.map((ref) => ({ref, masthead: false})), {ref: SE, masthead: false}]}),
+                userXml({given: 'K3nrt', family: 'RevTrue', email: e('nrt'), username: `${t}nrt`, pw: {plain: 'reviewpw2'}, roles: REV.map((ref) => ({ref, masthead: true}))}),
+            ]));
+            await as(`${t}bm`, S.B);
+            await openPlugin(S.B);
+            o.import = await importFile(file, 'r-01-reviewer-import-results');
+            o.db = {nrv: uug(`${t}nrv`, S.B), nrt: uug(`${t}nrt`, S.B)};
+            for (const k of ['nrv', 'nrt']) {
+                const id = uid(`${t}${k}`);
+                if (!id) continue;
+                await go(cu(S.B, `/en/management/settings/user/${id}`));
+                await page.locator('main table tbody tr').first().waitFor({timeout: 15_000}).catch(() => {});
+                await idle(page).catch(() => {});
+                const s = await snap(page, `r-02-${k}-roles-page`);
+                o[`${k}RolesPage`] = flat(s.text && s.text.main, 1500);
+                o[`${k}Masthead`] = await page.locator('main table tbody tr').evaluateAll((trs) => trs.map((tr) => { const s = tr.querySelector('select'); return `${tr.innerText.split('\t')[0]}: ${s ? `select "${(s.options[s.selectedIndex] || {}).text}"` : `no control, reads "${(tr.innerText.split('\t')[3] || '').trim()}"`}`; })).catch(() => []);
+            }
+            // export nrv from B, ticked: what <masthead> the file writes for each role
+            await openPlugin(S.B); await openExportTab();
+            await grid().locator('a.pkp_linkaction_search').first().click().catch(() => {});
+            await grid().locator('form#userSearchForm input[name="search"]').fill(`${t}nrv`).catch(() => {});
+            await grid().locator('form#userSearchForm').getByRole('button', {name: 'Search'}).click().catch(() => {});
+            await idle(page).catch(() => {}); await sleep(800);
+            await grid().locator('tr.gridRow').filter({hasText: `${t}nrv`}).first().locator('input[type=checkbox]').check().catch(() => {});
+            const dl = await download(() => page.locator('#exportXmlForm').getByRole('button', {name: 'Export Users'}).click());
+            o.export = {status: dl.status, name: dl.name, saved: dl.saved, parsed: parseUsers(dl.text)};
+            await out();
+            fact('reviewer', o);
+        });
+
+        // ------------------------------------------------------------ dates: <date_start>/<date_end> as the file gives them (pkp-lib 85f6b3c074; sync rr13390 S1, S2)
+        await sect('dates', async () => {
+            const o = {};
+            const e = (k) => `${t}${k}@mail.test`;
+            const one = (k, given, roles) => userXml({given, family: k, email: e(k), username: `${t}${k}`, pw: {plain: `${k}pass12`}, roles});
+            const withDates = (xml, ref, start, end) => xml.replace(`<user_group_ref>${ref}</user_group_ref>\n`, `<user_group_ref>${ref}</user_group_ref>\n${start !== undefined ? `\t\t\t\t<date_start>${start}</date_start>\n` : ''}${end !== undefined ? `\t\t\t\t<date_end>${end}</date_end>\n` : ''}`);
+            const files = {
+                future: usersFile([withDates(one('fut', 'K3fut', [{ref: SE}]), SE, '2027-06-01 00:00:00')]),
+                past: usersFile([withDates(one('pst', 'K3pst', [{ref: SE}]), SE, '2020-01-01 00:00:00')]),
+                emptyStart: usersFile([withDates(one('est', 'K3est', [{ref: 'Reader'}]), 'Reader', ''), one('est2', 'K3est2', [{ref: 'Reader'}])]),
+                textStart: usersFile([withDates(one('tst', 'K3tst', [{ref: 'Reader'}]), 'Reader', 'soon')]),
+                emptyEnd: usersFile([withDates(one('eet', 'K3eet', [{ref: 'Reader'}]), 'Reader', undefined, '')]),
+                futureEnd: usersFile([withDates(one('fen', 'K3fen', [{ref: SE}]), SE, '2020-01-01 00:00:00', '2030-12-31 00:00:00')]),
+            };
+            const fp = (k) => path.join(outDir(), `k3-${RUN ? `${RUN}-` : ''}users-dates-${k}-${app.name}.xml`);
+            for (const [k, xml] of Object.entries(files)) fs.writeFileSync(fp(k), xml);
+            await as(`${t}bm`, S.B);
+            // the future start: uploaded and imported, "Import Users" pressed again, then the page reloaded and the file uploaded again
+            await openPlugin(S.B);
+            o.future = {first: await importFile(fp('future'), 'd-01-future-first')};
+            o.future.db1 = uug(`${t}fut`, S.B);
+            await page.getByRole('tab', {name: 'Import Users'}).first().click(); await sleep(400);
+            o.future.second = await importFile(null, 'd-02-future-second');
+            o.future.db2 = uug(`${t}fut`, S.B);
+            await openPlugin(S.B);
+            o.future.third = await importFile(fp('future'), 'd-03-future-third');
+            o.future.db3 = uug(`${t}fut`, S.B);
+            // the past start (control): imported twice
+            await openPlugin(S.B);
+            o.past = {first: await importFile(fp('past'), 'd-04-past-first')};
+            await openPlugin(S.B);
+            o.past.second = await importFile(fp('past'), 'd-05-past-second');
+            o.past.db = uug(`${t}pst`, S.B);
+            // the empty, free-text and empty-end files, one each
+            for (const k of ['emptyStart', 'textStart', 'emptyEnd']) {
+                await openPlugin(S.B);
+                o[k] = await importFile(fp(k), `d-06-${k}`);
+            }
+            o.emptyStart.db = {est: uid(`${t}est`) || null, estRoles: uug(`${t}est`, S.B), est2: uid(`${t}est2`) || null, est2Roles: uug(`${t}est2`, S.B), estDisabled: sql(app, `select disabled from users where username='${t}est'`)};
+            o.textStart.db = {tst: uid(`${t}tst`) || null, roles: uug(`${t}tst`, S.B)};
+            o.emptyEnd.db = {eet: uid(`${t}eet`) || null, roles: uug(`${t}eet`, S.B)};
+            // the future end: imported twice
+            await openPlugin(S.B);
+            o.futureEnd = {first: await importFile(fp('futureEnd'), 'd-07-futureend-first')};
+            await openPlugin(S.B);
+            o.futureEnd.second = await importFile(fp('futureEnd'), 'd-08-futureend-second');
+            o.futureEnd.db = uug(`${t}fen`, S.B);
+            // what the screens show: Users & Roles › Users, fut's roles page, the Masthead
+            const ul = await usersList(S.B, 'd-09-users-list-B');
+            o.usersList = ul.rows.filter((r) => /K3(fut|pst|est|tst|eet|fen)/.test(r.join(' ')));
+            const fut = uid(`${t}fut`);
+            if (fut) {
+                await go(cu(S.B, `/en/management/settings/user/${fut}`));
+                await page.locator('main table tbody tr').first().waitFor({timeout: 15_000}).catch(() => {});
+                await idle(page).catch(() => {});
+                o.futRolesPage = flat((await snap(page, 'd-10-fut-roles-page')).text.main, 1500);
+            }
+            const est = uid(`${t}est`);
+            if (est) {
+                await go(cu(S.B, `/en/management/settings/user/${est}`));
+                await idle(page).catch(() => {}); await sleep(800);
+                o.estRolesPage = flat((await snap(page, 'd-11-est-roles-page')).text.main, 800);
+            }
+            await go(cu(S.B, '/en/about/editorialMasthead'));
+            o.masthead = flat((await snap(page, 'd-12-masthead-B')).text.main || (await page.locator('body').innerText().catch(() => '')), 1500);
+            await out();
+            // can the empty-start account sign in (created without a role)?
+            o.estLogin = await tryLogin(`${t}est`, 'estpass12', S.B);
+            await out();
+            fact('dates', o);
+        });
+
+        // ------------------------------------------------------------ pw12: a new account given a bcrypt at the installation's cost (12); the server's PHP (A16)
+        await sect('pw12', async () => {
+            const o = {};
+            const e = (k) => `${t}${k}@mail.test`;
+            const pw = {n12: 'twelvepw1', n10: 'tencostpw1'};
+            const file = path.join(outDir(), `k3-${RUN ? `${RUN}-` : ''}users-pw12-${app.name}.xml`);
+            fs.writeFileSync(file, usersFile([
+                userXml({given: 'K3n12', family: 'Cost12', email: e('n12'), username: `${t}n12`, pw: {enc: 'sha1', hash: bcrypt(pw.n12, 12)}, roles: [{ref: 'Reader'}]}),
+                userXml({given: 'K3c10', family: 'Cost10', email: e('c10'), username: `${t}c10`, pw: {enc: 'sha1', hash: bcrypt(pw.n10, 10)}, roles: [{ref: 'Reader'}]}),
+            ]));
+            await as('admin', S.B);
+            await go('/index.php/index/en/admin/systemInfo');
+            const si = await snap(page, 'p-01-system-info');
+            o.php = flat(((si.text && si.text.main) || '').match(/PHP[^\n]{0,80}/g) ? ((si.text.main).match(/PHP[^\n]{0,80}/g) || []).slice(0, 4).join(' | ') : null, 400);
+            await as(`${t}bm`, S.B);
+            await openPlugin(S.B);
+            o.import = await importFile(file, 'p-02-pw12-import-results');
+            o.db = {n12: {mustChange: sql(app, `select must_change_password from users where username='${t}n12'`), roles: uug(`${t}n12`, S.B)}, c10: {mustChange: sql(app, `select must_change_password from users where username='${t}c10'`), roles: uug(`${t}c10`, S.B)}};
+            await out();
+            o.mail = {};
+            for (const k of ['n12', 'c10']) {
+                try {
+                    const m = await app.mail.find({to: e(k), timeoutMs: 15_000});
+                    const full = await app.mail.fullMessage(m.ID).catch(() => ({}));
+                    const pwm = ((full.Text || '').match(/Password:\s*(\S+)/i) || [])[1] || null;
+                    o.mail[k] = {subject: m.Subject, from: (m.From || {}).Address, replyTo: (full.ReplyTo || []).map((x) => x.Address), hasPassword: !!pwm};
+                    if (pwm) pw[`${k}Mailed`] = pwm;
+                } catch (err) { o.mail[k] = {none: flat(err.message, 120)}; }
+            }
+            o.logins = {};
+            for (const [k, u, p] of [['n12-original', `${t}n12`, pw.n12], ['n12-mailed', `${t}n12`, pw.n12Mailed || 'none'], ['c10-original', `${t}c10`, pw.n10]]) {
+                o.logins[k] = await tryLogin(u, p, S.B);
+                await snap(page, `p-03-login-${k}`, o.logins[k]);
+                await out();
+            }
+            fact('pw12', o);
+        });
+
+        // ------------------------------------------------------------ siteread: Settings bullet 8, read only (nothing saved)
+        await sect('siteread', async () => {
+            const o = {};
+            await as('admin', S.B);
+            await go(cu('index', '/en/admin/settings'));
+            await page.locator('#setup-button').first().click().catch(() => {});
+            await page.locator('#security-button').first().click().catch(() => {});
+            const panel = page.locator('[role="tabpanel"]#security').first();
+            await panel.locator('#siteSecurity-minPasswordLength-control').waitFor({timeout: T}).catch(() => {});
+            await idle(page).catch(() => {});
+            o.value = await panel.locator('#siteSecurity-minPasswordLength-control').inputValue().catch(() => null);
+            o.label = flat(await panel.locator('label[for="siteSecurity-minPasswordLength-control"]').innerText().catch(() => null), 120);
+            o.text = flat(await panel.innerText().catch(() => null), 800);
+            o.db = sql(app, 'select min_password_length from site');
+            await snap(page, 's-01-site-security-read', o);
+            await out();
+            fact('siteread', o);
         });
 
         // ------------------------------------------------------------ minlen: Settings bullet 8 (10 for one import, then 6 again)
@@ -651,7 +844,7 @@ forEachApp(async (app) => {
             try {
                 o.set10 = await setMin(10);
                 const e = (k) => `${t}${k}@mail.test`;
-                const file = path.join(outDir(), `k3-users-minlen-${app.name}.xml`);
+                const file = path.join(outDir(), `k3-${RUN ? `${RUN}-` : ''}users-minlen-${app.name}.xml`);
                 fs.writeFileSync(file, usersFile([
                     userXml({given: 'K3m8', family: 'Eight', email: e('m8'), username: `${t}m8`, pw: {plain: 'eightch1'}, roles: [{ref: 'Reader'}]}),
                     userXml({given: 'K3m9', family: 'Nine', email: e('m9'), username: `${t}m9`, pw: {plain: 'ninechar1'}, roles: [{ref: 'Reader'}]}),
@@ -687,7 +880,7 @@ forEachApp(async (app) => {
             };
             await as(`${t}bm`, S.B);
             for (const [k, xml] of Object.entries(files)) {
-                const file = path.join(outDir(), `k3-users-bad-${k}-${app.name}.${k === 'notxml' ? 'txt' : 'xml'}`);
+                const file = path.join(outDir(), `k3-${RUN ? `${RUN}-` : ''}users-bad-${k}-${app.name}.${k === 'notxml' ? 'txt' : 'xml'}`);
                 fs.writeFileSync(file, xml);
                 await openPlugin(S.B);
                 o[k] = await importFile(file, `b-${k}-results`);
@@ -729,7 +922,7 @@ forEachApp(async (app) => {
         // ------------------------------------------------------------ leave: a file up but not imported, then another tab, then away
         await sect('leave', async () => {
             const o = {};
-            const file = path.join(outDir(), `k3-users-leave-${app.name}.xml`);
+            const file = path.join(outDir(), `k3-${RUN ? `${RUN}-` : ''}users-leave-${app.name}.xml`);
             fs.writeFileSync(file, usersFile([userXml({given: 'K3lv', family: 'Leave', email: `${t}lv@mail.test`, username: `${t}lv`, pw: {plain: 'leavepw12'}, roles: [{ref: 'Reader'}]})]));
             await as(`${t}bm`, S.B);
             await openPlugin(S.B);

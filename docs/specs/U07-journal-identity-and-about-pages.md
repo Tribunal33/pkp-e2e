@@ -17,8 +17,9 @@ technical support contact) and its reader-facing texts on Settings ›
 Website › Setup (the "Information" texts for readers, authors and
 librarians, and the "Privacy Statement"). Readers consult the result on
 the public About pages: "About the Journal", "Editorial Masthead" (the
-current team, listed from the journal's roles, and last year's peer
-reviewers), "Editorial History" (past members), "Contact", "Privacy
+current team, listed from the journal's roles, or the journal's own
+editorial history text when it turns that list off, and last year's peer
+reviewers when it turns them on), "Editorial History" (past members), "Contact", "Privacy
 Statement", the three Information pages with their sidebar block, and the
 page about the publishing software. This spec is also the home of what the
 Settings pages share: who may open them, how they are reached, and which
@@ -51,8 +52,8 @@ other. Readers need no account. <sup>b</sup>
 | **Edit and save the "Masthead" and "Contact" tabs** (Settings › Journal) | • whoever opens the Settings pages (row 1); nobody else <sup>td2</sup> <sup>b</sup> |
 | **Edit and save the "Information" {OJS OMP} and "Privacy Statement" tabs** (Settings › Website › Setup) | • whoever opens the Settings pages (row 1); nobody else <sup>b</sup> |
 | **Read the About pages** ("About the Journal", "Editorial Masthead", "Editorial History", "Contact", "Privacy Statement", the Information pages {OJS OMP}, the page about the publishing software) | • any visitor, signed in or not (Rule 12), except on a journal that requires sign-in to view the site or is not enabled, where a signed-out visitor gets the Login page (Rule 22) <sup>c</sup> |
-| **See and follow the "Edit" link** on "About the Journal", "Editorial History", "Contact" and the Information pages (Rule 21) | • users holding a manager-level role in that journal, signed in; the link opens the Settings tab that holds the text ⚠ [A2](#a2)<br>• nobody else sees it, a Site Administrator without a manager role in the journal included <sup>d</sup> <sup>td3</sup> |
-| **Be listed on the "Editorial Masthead"** (Rules 14, 15) | • a user holding a role that the journal lists on the masthead, while the role has started and not ended, when the role is set to "Appear on the masthead" (Rule 14b)<br>• a reviewer who completed a review for the journal in the previous calendar year, under "Peer Reviewers in Previous Year" {OJS OMP}, with no choice of their own (Rule 15)<br>• a past member of a listed role, on "Editorial History" (Rule 16) <sup>e</sup> |
+| **See and follow the "Edit" link** on "About the Journal", "Editorial History", "Contact", the Information pages and, while it is not based on enrollments, "Editorial Masthead" (Rule 21) | • users holding a manager-level role in that journal, signed in; the link opens the Settings tab that holds the text ⚠ [A2](#a2)<br>• nobody else sees it, a Site Administrator without a manager role in the journal included <sup>d</sup> <sup>td3</sup> |
+| **Be listed on the "Editorial Masthead"** (Rules 14, 15) | • nobody while the masthead is not based on enrollments (Rule 14f); otherwise:<br>• a user holding a role that the journal lists on the masthead, while the role has started and not ended, when the role is set to "Appear on the masthead" (Rule 14b)<br>• a reviewer who completed a review for the journal in the previous calendar year, under "Peer Reviewers in Previous Year" {OJS OMP}, with no choice of their own, while the journal lists its reviewers (Rule 15)<br>• a past member of a listed role, on "Editorial History" (Rule 16) <sup>e</sup> |
 
 ## Fields & validation
 
@@ -310,8 +311,11 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
     managers (Rule 21) and the "About the Journal" text of the Masthead
     tab. With that text empty, the state of every new journal, the page
     shows the heading and nothing else. <sup>q</sup> <sup>td10</sup>
-14. **"Editorial Masthead".** The page, headed "Editorial Masthead", lists
-    the journal's current team by role. <sup>r</sup>
+14. **"Editorial Masthead".** The page is headed "Editorial Masthead".
+    While the masthead is based on enrollments (Settings bullet 4a, the
+    state of every new journal), it lists the journal's current team by
+    role, as 14a to 14e say; otherwise it shows what Rule 14f says.
+    <sup>r</sup>
     - 14a. **Which roles.** A role is listed when its "Consider role in
       masthead list" box is ticked (Settings bullet 2) and at least one of
       its members is listed; the Reviewer role never is (reviewers have
@@ -320,7 +324,7 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
       editor", "Series editor" and "Editorial Board Member" on a press,
       "Moderator" and "Editorial Board Member" on a preprint server. The
       roles follow the order set under Settings › Website › "Appearance" ›
-      "Editorial Masthead" (Settings bullet 4); each role's name is a
+      "Editorial Masthead" (Settings bullet 4b); each role's name is a
       heading, in the language the visitor reads the site in
       ⚠ [OPS4](#ops4).
     - 14b. **Who is listed.** Under its role heading, every user whose
@@ -341,18 +345,35 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
       Editorial History", its last two words a link to the "Editorial
       History" page, followed by a horizontal rule and the peer reviewers
       (Rule 15). The page carries no "Edit" link.
-    - 14e. **When the list changes.** Giving a role, ending one with
-      "Remove Role", changing a member's masthead choice and saving a
-      role's "Consider role in masthead list" show on the next load of the
-      masthead and of "Editorial History". "Remove User" takes the member
-      off the masthead on the next load, but onto "Editorial History" only
-      after the next of those changes in the journal; a member invited
-      with a later start date is not listed after accepting ⚠ [A5](#a5).
-      Once the account of a member listed on either page is disabled,
-      that page fails for every visitor with a blank server-error page
-      ⚠ [A4](#a4).
-      <sup>td12</sup>
-15. **"Peer Reviewers in Previous Year"** {OJS OMP}. Under the rule, the
+    - 14e. **When the list changes.** Each of these shows on the next
+      load of the masthead and of "Editorial History", with no other
+      change needed: <sup>td12</sup>
+      - giving a role, ending one with "Remove Role", changing a member's
+        masthead choice, and saving a role's "Consider role in masthead
+        list";
+      - "Remove User", which takes the member off the masthead and onto
+        "Editorial History";
+      - a start date reached: a member invited with a later start date is
+        not listed after accepting, and is listed from that date on;
+      - merging a listed member into another account ("Merge user",
+        [Users management](U53-users-management.md)): the kept account is
+        listed under the member's role and the merged account is gone.
+
+      Disabling a member's account ("Disable User") changes nothing: the
+      member stays listed on both pages, and under "Peer Reviewers in
+      Previous Year" when listed there (Rule 15). <sup>td12</sup>
+    - 14f. **A masthead not based on enrollments.** With "Present a
+      masthead based on user enrollments" unticked (Settings bullet 4a),
+      the page lists no roles, no peer reviewers, no "View Editorial
+      History" line and no rule. Under the heading come the "Edit" link
+      for managers (Rule 21) and the "Editorial History" text of Settings
+      › Journal › "Masthead"; with that text empty, the heading (and, for
+      managers, the link) stands alone. The "Editorial History" address
+      opens "Editorial Masthead" instead, for every visitor. Ticked again, both pages list as before,
+      in the saved role order. <sup>ad</sup>
+15. **"Peer Reviewers in Previous Year"** {OJS OMP}. While "Enable listing
+    of reviewers on the masthead" is ticked (Settings bullet 4c; unticked
+    on a new journal or press), under the rule come the
     heading "Peer Reviewers in Previous Year", the sentence "The editors
     express their appreciation of the reviewers for {year} listed below."
     with the previous calendar year, and the reviewers of the journal who
@@ -361,11 +382,12 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
     review counts when the reviewer submitted it in that year, even when
     the editor later pressed "Cancel Reviewer" on it (the row then reads
     "Request Cancelled") ⚠ [A10](#a10); on a press only reviews of the
-    external review count. With no such review the heading and sentence
-    are absent. A preprint server has no reviews, so its masthead never
-    shows the block.
+    external review count. With the box unticked, or with no such review,
+    the heading and sentence are absent. A preprint server has no reviews
+    and no such box, so its masthead never shows the block.
     <sup>s</sup> <sup>td13</sup>
-16. **"Editorial History".** The page is headed "Editorial History Page"
+16. **"Editorial History".** While the masthead is based on enrollments
+    (Rule 14f), the page is headed "Editorial History Page"
     ⚠ [A6](#a6) and opens with "This section lists past contributors.".
     It lists, by role as on the masthead, every member whose listed role
     has ended and was set to "Appear on the masthead": the years of each
@@ -427,16 +449,18 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
     ("…its presses and submissions to its presses.", "…its servers and
     submissions of preprints."). On a press it still opens "This press
     uses …" ⚠ [OMP2](#omp2). <sup>w</sup> <sup>td18</sup>
-21. **The "Edit" link.** "About the Journal", "Editorial History",
-    "Contact" and each Information page carry, under the heading, a link
-    "Edit" for the users of Actors row 5 (a screen reader hears "Edit"
-    followed by "Edit {page name}", "Edit Information" on the three
+21. **The "Edit" link.** "About the Journal", "Contact", each
+    Information page (under the heading) and "Editorial History" (below
+    the lists, Rule 16) carry a link "Edit" for the users of Actors row
+    5 (a screen reader hears "Edit" followed by "Edit {page name}", "Edit Information" on the three
     Information pages; on a press "Open a new page to edit this
     information" on every page). It opens, in the same window, Settings ›
-    Journal › "Masthead" from "About the Journal" and "Editorial History", Settings ›
-    Journal › "Contact" from "Contact", and Settings › Website › "Setup" ›
-    "Information" from an Information page. "Editorial Masthead" and
-    "Privacy Statement" carry none. <sup>d</sup> <sup>td3</sup>
+    Journal › "Masthead" from "About the Journal", "Editorial History" and
+    "Editorial Masthead", Settings › Journal › "Contact" from "Contact",
+    and Settings › Website › "Setup" › "Information" from an Information
+    page. "Editorial Masthead" carries one only while it is not based on
+    enrollments (Rule 14f); "Privacy Statement" carries none.
+    <sup>d</sup> <sup>td3</sup> <sup>ad</sup>
 22. **Journals closed to visitors.** A signed-out visitor who opens any
     About page of a journal closed to visitors is sent to the Login page.
     Where signing in there leads depends on how the journal is closed:
@@ -494,15 +518,40 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
    masthead choice of each role a user holds, made by the manager in the
    invitation, shown to the member on the invitation's review step, and
    changed later on the user's "Edit" page; *User invitations*). "Appear":
-   listed (Rule 14b). "Does not appear": left off the masthead and the
-   history page. On a press or preprint server a change made on the
+   listed (Rule 14b) while the masthead is based on enrollments (Rule
+   14f). "Does not appear": left off the masthead and the history page.
+   While the masthead is not based on enrollments and lists nobody, the
+   invitation still offers the choice, and its email and the email a
+   change on the "Edit" page sends still promise the listing; in the
+   invitation a Reviewer role is fixed to "Appear on the masthead" and
+   promised a listing while the journal lists no reviewers ⚠ [A13](#a13). On a press or preprint server a change made on the
    "Edit" page is saved behind an error window, which
    [User invitations](U06-user-invitations.md#omp1) records. <sup>e</sup>
-4. **"Editorial Masthead"** (Settings › Website › "Appearance" ›
-   "Editorial Masthead", an orderable list of the masthead roles; default
-   the order of the roles' permission levels). Another order changes the
-   order of the role headings on the masthead and the history page (Rule
-   14a). *Appearance & theming* owns the tab. <sup>r</sup>
+4. **The "Editorial Masthead" tab** (Settings › Website › "Appearance" ›
+   "Editorial Masthead"; [Appearance & theming](U10-appearance-and-theming.md)
+   owns the tab). Three groups, top to bottom: <sup>r</sup> <sup>ad</sup>
+   - 4a. **"Present a masthead based on user enrollments"** (the group
+     "Enrollment-based Masthead", under "If desired, a masthead can be
+     generated automatically based on user enrollments, including start
+     and end dates. See also Settings > Journal > Masthead." ("Settings >
+     Press > Masthead", "Settings > Server > Masthead"); ticked on every
+     new journal; unticked, by design, on a journal upgraded from a
+     release without it). Ticked: the masthead and history pages list
+     the team (Rules 14–16). Unticked:
+     Rule 14f; from the moment the box is unticked, before any save, the
+     other two groups leave the tab.
+   - 4b. **"Editorial Masthead"** (an orderable list of the masthead
+     roles under "Define the order of masthead roles for public
+     display."; default the order of the roles' permission levels).
+     Another order changes the order of the role headings on the
+     masthead and the history page (Rule 14a).
+   - 4c. **"Enable listing of reviewers on the masthead"** {OJS OMP} (the
+     group "Reviewers", under "Reviewers who completed a review in the
+     previous calendar year will be credited in a standardized format to
+     maintain uniformity and ensure easy discoverability in this
+     section."; unticked on every new journal and press). Ticked: "Peer
+     Reviewers in Previous Year" (Rule 15). Unticked: no reviewers on the
+     masthead. A preprint server's tab has no "Reviewers" group.
 5. **"Information Block"** {OJS OMP} (Settings › Website › "Plugins" ›
    "Installed Plugins"; enabled by default). Disabled: the block is gone
    from the sidebar and from the sidebar choices; the Information pages
@@ -552,6 +601,9 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
   made when a role is offered and changed later, and the removal of a
   role; this spec owns how the masthead and history pages list the result
   (Rules 14, 16).
+- [Users management](U53-users-management.md) owns "Disable User",
+  "Remove User" and "Merge user"; this spec owns what each changes on
+  the masthead and history pages (Rule 14e).
 - [Notifications center & email preferences](U05-notifications-center-and-email-preferences.md)
   owns the Tasks panel, where the journal initials show (Rule 7).
 - [User profile](U03-user-profile.md) owns the "Affiliation", "Preferred
@@ -565,7 +617,9 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
   items, the footer, the breadcrumb and the shared "Edit" link's look;
   this spec says where each About page's "Edit" link leads (Rule 21).
 - *Appearance & theming* owns the header logo, the home page's summary,
-  the "Sidebar" list and the "Editorial Masthead" order tab.
+  the "Sidebar" list and the "Editorial Masthead" tab with its three
+  groups; this spec owns what each changes on the masthead and history
+  pages (Settings bullet 4).
 - *Submission intake configuration* owns the "Submissions" About page and
   the "Disable Submissions" switch; this spec owns the notice it puts on
   the Settings pages (Rule 4a).
@@ -900,7 +954,8 @@ in the footnote. <sup>y</sup>
 
 9. **"Peer Reviewers in Previous Year"** {OJS OMP}
 
-   Given: a visitor, signed out, on a scratch journal whose Reviewers
+   Given: a visitor, signed out, on a scratch journal whose "Enable
+   listing of reviewers on the masthead" is ticked, whose Reviewers
    "Zeta", with the affiliation "Review University" and the verified ORCID
    iD "https://orcid.org/0000-0002-1694-233X", and "Beta" each submitted a
    review last calendar year, whose
@@ -989,10 +1044,16 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the masthead not based on enrollments, "Present a masthead based on user enrollments" unticked: the masthead showing under its heading only the "Editorial History" text (and a manager's "Edit" link), or nothing with that text empty, the "Editorial History" address opening the masthead, the other two groups leaving the tab, and, ticked again, both pages listing as before in the saved role order (Rule 14f; Rules 16, 21; Settings bullet 4a)
+  - "Enable listing of reviewers on the masthead" at its default: no "Peer Reviewers in Previous Year" although reviews were completed last year {OJS OMP} (Rule 15; Settings bullet 4c)
+  - a disabled member staying listed on both pages and under "Peer Reviewers in Previous Year" (Rule 14e; A4 retired)
+  - "Remove User" moving the member to "Editorial History" at the next load, and a member with a later start date listed from that date on (Rule 14e; A5 retired)
+  - "Merge user" of a listed member listing the kept account under the member's role (Rule 14e)
 - **Nothing new to test**:
   - a second form language: its boxes behind the language button, and each public page in the visitor's language with the primary language's text where that box is empty (Fields; Rule 11; Settings bullet 12)
   - unsaved changes kept while moving between the tabs of a page, and lost without a warning on reloading or leaving it (Rule 5)
-  - another order of the roles on Settings › Website › "Appearance" › "Editorial Masthead" (Rule 14a; Settings bullet 4)
+  - another order of the roles on Settings › Website › "Appearance" › "Editorial Masthead" (Rule 14a; Settings bullet 4b)
   - the abbreviation, the "Publishing Details", "Sponsoring organization" and "Publisher Identity" saved and shown again on the tab (Fields; Rule 10)
   - a renamed "Journal initials" beside the journal's tasks for an account in two journals (Rule 7)
   - the page about the publishing software reached from the site's own pages (Rule 20; OMP2)
@@ -1005,8 +1066,6 @@ Left out of the scenarios above, by reason:
   - A1 (a Site Administrator with no manager-level role in a press or preprint server refused every Settings page; Actors row 1)
   - A2 (the "Edit" link shown to a manager-level role without "Permit changes to Settings"; Actors row 5; scenario 11 marks it)
   - A3 (the "Contact" tab refused until a technical support contact is entered; Fields; scenario 4 marks it)
-  - A4 (a disabled member breaking "Editorial Masthead" and "Editorial History"; Rule 14e)
-  - A5 ("Remove User" reaching "Editorial History" only after another change, and a later start date not listed; Rule 14e)
   - A6 (the "Editorial History" page headed "Editorial History Page"; Rules 12, 16; scenario 1 marks it)
   - A7 (a Settings side tab lost on a reload; Rule 1)
   - A8 (the not-accepting notice staying on the open page after submissions are allowed again; Rule 4a; scenario 10 marks it)
@@ -1014,11 +1073,13 @@ Left out of the scenarios above, by reason:
   - A10 (a reviewer whose submitted review was cancelled still listed under "Peer Reviewers in Previous Year"; Rule 15)
   - A11 (Hosted Journals "Edit" refused on a journal whose "Country" was never set; Settings bullet 8)
   - A12 (a press's and a preprint server's French Masthead tab showing raw text keys; Fields)
+  - A13 (the invitation and the role-change email promising a masthead listing the journal does not show; Settings bullet 3)
   - OMP1 (Settings › Press headed "Setup"; Rule 1; scenario 2 marks it)
   - OPS2 ("Sponsoring organization" used nowhere; Fields; Rule 10)
   - OPS3 (a preprint server's French privacy default arriving as a raw text key; Fields)
   - OPS4 (a preprint server's French masthead heading its Moderators with a raw text key; Rule 14a)
 - **No seed**:
+  - a journal upgraded from a release without the "Enrollment-based Masthead" group, reading its box unticked (Settings bullet 4a): the test installs are never upgraded
   - the newer-release notice on Settings › Journal (Rule 4b; Settings bullet 11): the test installs never reach the internet
   - the site's own "Privacy Statement" set (Rule 18; Settings bullet 10)
   - the site-wide privacy statement switch on (Rule 18; Settings bullet 9): no screen changes it
@@ -1043,23 +1104,24 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | On a press or preprint server, a Site Administrator with no manager role there is offered "Settings" and refused every Settings page | 🐞 | user-visible | — |
-| [A4](#a4) | Once a listed member's account is disabled, "Editorial Masthead" (and "Editorial History" for a past member) fails for every visitor with a server error | 🐞 | user-visible · crash: server | — |
 | [A7](#a7) | Reloading a Settings side tab opens the page's first tab instead | 🐞 | minor | — |
 | [A9](#a9) | The default "For Readers" text's "Privacy Statement" link opens the "Submissions" page {OJS OMP} | 🐞 | minor | — |
 | [A11](#a11) | Hosted Journals "Edit" refuses to save a journal whose "Country" was never set | 🐞 | user-visible | — |
 | [A12](#a12) | A press's and a preprint server's French Masthead tab shows raw text keys in place of headings, labels and help lines {OMP OPS} | 🐞 | minor | — |
+| [A13](#a13) | With the masthead not based on enrollments, invitations and masthead changes still promise "Your name will appear in the {journal}'s masthead"; reviewers are promised it while the journal lists none | 🐞 | minor | — |
 | [OMP2](#omp2) | The site-level page about the software says "This press uses Open Monograph Press" on a press site {OMP} | 🐞 | minor | — |
 | [OPS3](#ops3) | A preprint server's French "Privacy Statement" default is the raw text "##default.contextSettings.privacyStatement##" {OPS} | 🐞 | user-visible | — |
 | [OPS4](#ops4) | A preprint server's French "Editorial Masthead" heads the Moderators "##default.groups.name.sectionEditor##" {OPS} | 🐞 | user-visible | — |
 | [A2](#a2) | The "Edit" link of the About pages is shown to a manager-level role that cannot open the Settings pages | ❓ | minor | — |
 | [A3](#a3) | The "Contact" tab cannot be saved until a technical support contact is entered, and new journals have none | ❓ | minor | — |
-| [A5](#a5) | A member removed with "Remove User" reaches "Editorial History" only after an unrelated change; a member with a later start date is not listed | ❓ | minor | — |
 | [A6](#a6) | The "Editorial History" page is headed "Editorial History Page" | ❓ | minor | — |
 | [A8](#a8) | The not-accepting notice stays on the Settings page after submissions are allowed again | ❓ | minor | — |
 | [A10](#a10) | A reviewer whose submitted review was later cancelled stays on "Peer Reviewers in Previous Year" {OJS OMP} | ❓ | minor | — |
 | [OMP1](#omp1) | The press's Settings › Press page is headed "Setup", not "Press Settings" {OMP} | ❓ | minor | — |
 | [OPS2](#ops2) | A preprint server's "Sponsoring organization" is saved and used nowhere {OPS} | ❓ | latent | — |
 | [OPS1](#ops1) | A preprint server has no "Information" tab, Information pages or Information block {OPS} | ✅ | minor | — |
+| [A4](#a4) | Retired: a disabled member made "Editorial Masthead" and "Editorial History" fail with a server error; the member now stays listed and both pages open (Rule 14e) | ✅ | retired | upstream change + claim check (claude), 2026-09-29 — fixed upstream |
+| [A5](#a5) | Retired: "Remove User" reached "Editorial History" only after an unrelated change, and a later start date was not known to list; both now show at the next load (Rule 14e) | ✅ | retired | upstream change + claim check (claude), 2026-09-29 — fixed upstream, settled |
 
 ### All apps
 
@@ -1094,35 +1156,6 @@ address" and cannot save until they invent one. Question: is a technical
 support contact meant to be mandatory? Lean: intended, since the
 account-validation email is sent from it and fails without it, but the
 creation form should then ask for it too. Basis: probe. <sup>f-a3</sup>
-
-<a id="a4"></a>
-**A4 — Disabling a listed member breaks the masthead** · 🐞 · user-visible · crash: server.
-A reader expects "Editorial Masthead" to list the current team. After a
-manager disables the account of a member listed there (Settings › Users
-& Roles › Users, the row's "Disable User"), the page fails for every
-visitor, signed in or not, with a blank server-error page; "Editorial
-History" fails the same way when the disabled account is a past member
-listed there. Both pages come back, without the disabled member, only
-after a role in the journal is next ended with "Remove Role", a masthead
-choice is changed or a role's "Consider role in masthead list" is saved.
-"Enable User" and "Remove User" do not bring them back, and an account
-enabled again stays off both pages until the next such change.
-Basis: probe. <sup>f-a4</sup>
-
-<a id="a5"></a>
-**A5 — Removed and future members wait for an unrelated change** · ❓ · minor.
-"Remove User" (Settings › Users & Roles › Users, the row's menu, then
-"Remove this user from this journal? This action will unenroll the user
-from all roles within this journal.", "press" and "server" on the other
-apps) ends every role the member holds. The member leaves "Editorial
-Masthead" on the next load but reaches "Editorial History" only after a
-role in the journal is next ended with "Remove Role", a masthead choice
-changes or a role's "Consider role in masthead list" is saved. A member
-invited with a later "Start Date" is not listed after accepting; whether
-they appear once that date comes, or only after such a change, has not
-been seen. Question: should both pages follow removals and start dates by
-themselves? Lean: yes. Basis: probe; the start date cannot be waited for
-on a test install. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — "Editorial History Page"** · ❓ · minor.
@@ -1161,7 +1194,8 @@ probe. <sup>f-a9</sup>
 The Reviewers panel offers "Cancel Reviewer" on a review already
 submitted, and the row then reads "Request Cancelled". A reviewer whose
 review submitted last year was cancelled this way stays listed under
-"Peer Reviewers in Previous Year". Question: should a cancelled request
+"Peer Reviewers in Previous Year" on a journal that lists its reviewers
+(Rule 15). Question: should a cancelled request
 count? Lean: no; the editor withdrew the request. Basis: probe. <sup>f-a10</sup>
 
 <a id="a11"></a>
@@ -1198,6 +1232,24 @@ On a preprint server the last label of "Identité du serveur" reads
 "##manager.setup.selectCountry##" and the one under "Résumé du serveur"
 "##manager.setup.contextSummary.description##". The applications' French translations have no text for these keys.
 Basis: probe. <sup>f-a12</sup>
+
+<a id="a13"></a>
+**A13 — Invitations and masthead changes promise a listing the masthead does not give** · 🐞 · minor.
+With "Present a masthead based on user enrollments" unticked (Settings
+bullet 4a; every upgraded journal until a manager ticks it), "Editorial
+Masthead" lists nobody (Rule 14f), yet "Invite to a role" (Settings ›
+Users & Roles) still offers
+"Appear on the masthead", its email still says "Your name will appear in
+the {journal}'s masthead as a Section editor.", and a masthead change on
+a user's "Edit" page still mails "New setting: Appear on the masthead".
+With "Enable listing of reviewers on the masthead" unticked, as on every
+new journal and press {OJS OMP}, the invitation fixes a Reviewer role to
+"Appear on the masthead" and its email says "… as a Reviewer." while no reviewers
+are listed. The invitations work; only the promise is false, and
+reviewers are promised the very listing that was made optional to
+protect them. The older promise for roles the masthead never lists:
+[User invitations A11](U06-user-invitations.md#a11).
+Since: 2026-09-28 · Basis: probe + code reading. <sup>f-a13</sup>
 
 ### OMP
 
@@ -1261,6 +1313,14 @@ no text for the role's name; the users list shows the same key
 ([Users management](U53-users-management.md#ops1)). Basis: probe.
 <sup>f-ops4</sup>
 
+### Retired
+
+<a id="a4"></a>
+**A4 — Disabling a listed member breaks the masthead** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13387, 2026-09-24), verified 2026-09-29 on OJS, OMP and OPS: a disabled member stays listed on "Editorial Masthead", "Editorial History" and "Peer Reviewers in Previous Year", and both pages open for every visitor (Rule 14e). <sup>f-a4</sup>
+
+<a id="a5"></a>
+**A5 — Removed and future members wait for an unrelated change** · ✅ · retired. Fixed upstream for "Remove User" (pkp/pkp-lib#13387, 2026-09-24) and settled for start dates, verified 2026-09-29 on OJS, OMP and OPS: a member removed with "Remove User" is on "Editorial History" at the next load, and a member with a later start date is listed from that date on, with no other change (Rule 14e). <sup>f-a5</sup>
+
 ---
 
 <a id="footnotes"></a>
@@ -1275,7 +1335,14 @@ in the three checkouts; `lib/pkp/locale/en/manager.po` differs on OMP by one
 unrelated DOI string. Labels are resolved app locale first, then lib/pkp.
 Every claim of the body was driven on the three test installs on
 2026-09-23, on the seeded journals and on scratch journals, presses and
-servers; each footnote says what its probe saw.
+servers; each footnote says what its probe saw. Rules 14–16 and 21, Settings
+bullets 2–4 and scenarios 7–9 and 12 were driven again on 2026-09-29 at ojs
+9d9f116f38, omp 480045c32 and ops 5da5bc48ad, all three at lib/pkp
+fab29cfeca (pkp/pkp-lib#13370, "Port masthead configuration improvements
+to main", 2026-09-28, which follows `e0c43a1227`, pkp/pkp-lib#13387, "Keep
+disabled users on the masthead, restore masthead cache clearing",
+2026-09-24), two runs per app; notes ad, td12, td13 and f-a13 say what
+they saw.
 
 <a id="fn-a"></a>
 **a** — Layout and class chain (RUNBOOK rule 8). Settings dispatcher:
@@ -1928,16 +1995,20 @@ History</a>", an `<hr>` and the reviewers (note s). No edit link. Caching:
 `MAX_EDITORIAL_MASTHEAD_CACHE_LIFETIME` ("1 year") per context and status;
 `forgetEditorialCache()` runs on `assignUserToGroup()`,
 `endAssignments()`, `deleteAssignmentsByUserId()`, the masthead-choice
-updates and user-group edits, and not on disabling a user. The cached
-list keeps a member disabled after it was built while the page's user
-lookup skips disabled accounts, so the page meets a missing user and
-fails (A4); a member removed with "Remove User" reaches the history's
-list only at the next of those events, and an assignment whose
-`date_start` lies ahead is not in the list built when it was made (A5).
-The order setting: `PKPAppearanceMastheadForm` field `mastheadUserGroupIds`
-(`common.editorialMasthead`, "Define the order of masthead roles for
-public display.", orderable, sorting only) plus a note on reviewers.
-Live-probed 2026-09-23 (Rules 14a, 14d; Settings bullet 4; all three
+updates and user-group edits. Since pkp/pkp-lib#13387 (`e0c43a1227`) the
+lists and the page's user lookup take disabled accounts too
+(`filterByStatus(STATUS_ALL)`, `Repo::user()->get($userId, true)`),
+"Remove User" (`UserGridHandler`) ends the roles through
+`endAssignments()` and "Merge user" (`Repo::user()->mergeUsers()`)
+deletes the merged account's through `deleteAssignmentsByUserId()`, both
+clearing the cache; the page re-checks each cached member's dates at
+every load (`UserUserGroup::withActive()` in `editorialMasthead()`).
+Before it, a disabled member in a cached list made the page fail (A4)
+and "Remove User" reached the history only at the next of those events
+(A5). The tab: `PKPAppearanceMastheadForm`, note ad; its order field
+`mastheadUserGroupIds` (`common.editorialMasthead`, "Define the order of
+masthead roles for public display.", orderable, sorting only).
+Live-probed 2026-09-23 (Rules 14a, 14d; Settings bullet 4b; all three
 apps): the heading, the breadcrumb "Home / Editorial Masthead", the title
 "Editorial Masthead | {journal}", one heading per role; the default roles
 listed as Rule 14a says; a role whose only member does not appear, and a
@@ -1963,25 +2034,85 @@ journals list "Journal editor" and "Section editor" (OJS), "Press editor"
 and "Series editor" (OMP), "Moderator" and "Editorial Board Member" (OPS).
 
 <a id="fn-td12"></a>
-**td12** — Live-probed 2026-09-23 (Rule 14e; A4, A5; all three apps, two
+**td12** — Live-probed 2026-09-23 (Rule 14e; all three apps, two
 drives): a reader invited to a Section editor role starting today and
 accepting, "Remove Role", a masthead choice changed on the "Edit" page and
-a role's box saved each showed on the next load of both pages; "Remove
-User" took the member off the masthead at once and onto "Editorial
-History" only after the next such change; a member invited with a Start
-Date 30 days ahead was not listed after accepting (the "Edit" page showed
-the later date and "---" for the end). The invitation offers no end date,
-and "Remove Role" and "Remove User" end a role on the day. A disabled
-member: note f-a4.
+a role's box saved each showed on the next load of both pages; a member
+invited with a Start Date 30 days ahead was not listed after accepting
+(the "Edit" page showed the later date and "---" for the end). The
+invitation offers no end date, and "Remove Role" and "Remove User" end a
+role on the day. Live-probed 2026-09-29 (Rule 14e; A4, A5 retired; all
+three apps, the kept-script rerun and two runs of its extension, each
+read signed out with no other change between the two reads): the same
+four changes showed at the next load; "Remove User" took the member off
+the masthead and onto "Editorial History" at the next load ("2026 –
+2026", a second member likewise); a Section editor and a past member
+disabled with "Disable User" stayed listed on both pages, which answered
+normally signed out, on reload and to the manager, and stayed listed after
+"Enable User"; a member invited to start on the same day a month later
+was absent after accepting and listed ("2026 –") once the role's start
+was moved to the day before in the database, the calendar's stand-in, on
+the next load and on reload; "Merge user" of a listed Section editor ("Mo
+Mergedaway", Moderator on a server) into an Author account ("Aya
+Author") listed Aya Author under "Section editor" ("Series editor",
+"Moderator") beside her "Author" entry at the next load and Mo Mergedaway
+nowhere. On OMP and OPS the masthead-choice step answered the "Error"
+window of note e.
+
+<a id="fn-ad"></a>
+**ad** — The masthead settings (pkp/pkp-lib#13370, `fab29cfeca`,
+2026-09-28). `lib/pkp/schemas/context.json`: `enableEnrollmentMasthead`
+(boolean, default true) and `enableEnrollmentMastheadReviewers` (boolean,
+no default), written on a new context and by no upgrade step of the three
+apps. `PKPAppearanceMastheadForm`: `enableEnrollmentMasthead`
+(`manager.setup.enableEnrollmentMasthead` "Enrollment-based Masthead",
+its `.description` in each app's `locale/en/manager.po`, the box
+`.enable`), then `mastheadUserGroupIds` and, only where the app has review
+stages (not OPS), `enableEnrollmentMastheadReviewers` (`user.role.reviewers`
+"Reviewers", `manager.setup.editorialMasthead.order.reviewers.description`,
+the box `manager.setup.enableEnrollmentMastheadReviewers.enable`), both
+`showWhen` the first. `AboutContextHandler::editorialMasthead()` with the
+first off displays `frontend/pages/editorialMastheadDisabled.tpl`: the
+heading, `editLink.tpl` to `management/settings/context#masthead`
+(`sectionTitleKey` `common.editorialMasthead`) and the context's
+`editorialHistory`; with it on, the reviewers are read only when the
+second is on (note s). `editorialHistory()` with the first off redirects
+to `editorialMasthead`. The issue states the intent: the enrollment box
+"unchecked on upgrade, preserving the behavior of … 3.4 and prior" and
+"checked by default for new journals"; the reviewers box "disabled by
+default on upgrade and on creating a new journal or press".
+Live-probed 2026-09-29 (Rules 14, 14f, 15, 16, 21; Settings bullet 4; all
+three apps, two runs each): a new scratch context stored the first box on
+and no reviewers setting, and its tab read the three groups (two on OPS)
+with the texts quoted in Settings bullet 4, the first box ticked, the
+reviewers box unticked. Unticking the first box hid the order list and
+"Reviewers" before any save, and after "Save" and a reload the tab held
+the first group alone. Then "Editorial Masthead" showed, as the manager,
+the heading, the "Edit" link (read to a screen reader "Edit Edit Editorial
+Masthead", on a press "Edit Open a new page to edit this information")
+opening Settings › Journal › "Masthead", and "Founded in 2001."; as a
+member and signed out the heading and "Founded in 2001."; on a journal
+with an empty "Editorial History" the heading alone (the "Edit" link for
+the manager); no list, no line, no rule. The "Editorial History" address
+answered with a redirect to "Editorial Masthead" for the manager, a
+member and a signed-out visitor. Ticked and saved again, both pages
+listed as before in the order saved earlier. A context with the two
+settings deleted in the database, as a context created before the change
+has them, read the same as the box unticked on both pages and on the tab;
+ticking and saving the box brought both lists back. Each load of
+Settings › Website answered the Plugin Gallery's server error of
+[Plugins management](U62-plugins-management.md#a1).
 
 <a id="fn-s"></a>
-**s** — `AboutContextHandler::editorialMasthead()` asks
+**s** — `AboutContextHandler::editorialMasthead()`, only while the
+context's `enableEnrollmentMastheadReviewers` is on (note ad), asks
 `Repo::reviewAssignment()->getExternalReviewerIdsByCompletedYear($contextId,
 date('Y') - 1)`: review assignments of the context's submissions with
 `stage_id` = external review (OJS's review stage; OMP's external review)
 and `date_completed` in that year (`DAO::getExternalReviewerIdsByCompletedYear()`),
 with no condition on a cancelled assignment, then the users collector
-(active accounts only) ordered by family name. Template:
+(every account, disabled ones included, `filterByStatus(STATUS_ALL)`)
+ordered by family name. Template:
 `common.editorialMasthead.peerReviewers` "Peer Reviewers in Previous
 Year", `common.editorialMasthead.peerReviewers.description` "The editors
 express their appreciation of the reviewers for {$year} listed below.",
@@ -2002,7 +2133,17 @@ the press, an internal review completed in 2025 were not listed. A listed
 reviewer whose submitted review then got "Cancel Reviewer" (row "Request
 Cancelled") stayed listed. The seeded journal and press, and a fresh
 scratch journal, showed neither heading nor sentence; the preprint
-servers' pages ended after the rule.
+servers' pages ended after the rule. Live-probed 2026-09-29 (Rule 15;
+Settings bullet 4c; OJS and OMP, OPS the control; two runs): on a new
+scratch journal and press with three reviews completed in 2025, the
+masthead showed no block while "Enable listing of reviewers on the
+masthead" was unticked, as it arrived; ticked and saved, the block read
+as above ("Bea Brown", "Cal Cancelled", "Yuri Young"), the press's
+internal review absent; unticked and saved again, the block was gone.
+"Consider role in masthead list" unticked on the Reviewer role left the
+block as it was; a listed reviewer disabled with "Disable User" stayed
+listed. The server's tab had no "Reviewers" group and its masthead ended
+after the rule.
 
 <a id="fn-t"></a>
 **t** — `editorialHistory.tpl`: page title `common.editorialHistory`
@@ -2201,7 +2342,9 @@ author's address. 6 — a `manager` and `sidebar: ['informationblockplugin']`.
 8 — a `manager`, three `sectionEditor`s (Able also `reader`), a `reader`
 and an `author`; the invitation, "Remove Role", the masthead choice and the
 role boxes are driven on screen (the invitation's email read in the mail
-catcher). 9 (OJS, OMP) — three `externalReviewer`s, Zeta with
+catcher). 9 (OJS, OMP) — the context with
+`enableEnrollmentMastheadReviewers: true` (a new context has the box
+unticked, note ad), three `externalReviewer`s, Zeta with
 `affiliation` and a verified `orcid`, and an `author`; a submission per
 reviewer with `decisions: ['sendExternalReview']` and
 `reviewRounds[].reviewers[]` at `status: 'completed'`, Zeta's and Beta's
@@ -2256,6 +2399,10 @@ role's box saved brought both back with the disabled member gone, and
 the member enabled again stayed off until the next such change. Server
 log: "Uncaught Error: Call to a member function getId() on null in
 …/lib/pkp/pages/about/AboutContextHandler.php:88". Mechanism: note r.
+Retired 2026-09-29: fixed by pkp/pkp-lib#13387 (`e0c43a1227`,
+2026-09-24; note r); three drives per app on the tips named at the head
+of these notes showed both pages answering normally with the disabled
+members listed (note td12).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-23 (all three apps): note td12. The
@@ -2263,7 +2410,11 @@ confirmation of "Remove User" reads "Remove this user from this journal?
 This action will unenroll the user from all roles within this journal."
 ("press", "server"). Note r: the cached lists are built with the dates as
 they are at build time, `forgetEditorialCache()` runs only on assignment
-and masthead-choice events, and the lifetime is one year.
+and masthead-choice events, and the lifetime is one year. Retired
+2026-09-29: "Remove User" now clears the lists (pkp/pkp-lib#13387,
+`e0c43a1227`, 2026-09-24; note r), and a later start date, once reached,
+lists the member at the next load (note td12). The confirmation of "Remove
+User" read the same that day on the three apps.
 
 <a id="fn-f-a6"></a>
 **f-a6** — `editorialHistory.tpl` heading key `common.editorialHistory.page`
@@ -2295,7 +2446,9 @@ in each app's `locale/en/default.po`, its links built from
 whose review was submitted with a 2025 completion date, then cancelled
 with "Cancel Reviewer" from the row's menu (row "Request Cancelled"),
 still listed between the other two reviewers. Note s: the list is chosen
-by completion date, with no condition on cancellation.
+by completion date, with no condition on cancellation. Held 2026-09-29
+(OJS, OMP, two runs) on a journal and a press with "Enable listing of
+reviewers on the masthead" ticked (note td13).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-23 (all three apps, two runs): on a
@@ -2316,6 +2469,51 @@ Editor role (on OPS a second manager), `manager.maya` and `admin`; the
 "Publisher Code Type" list's four entries only inside the list. The contact tab
 ("Coordonnées", "Personne-ressource") and the sections tab ("Rubriques",
 "Séries", "Série(s)") showed no raw key.
+
+<a id="fn-f-a13"></a>
+**f-a13** — pkp/pkp-lib#13370 (`fab29cfeca`, 2026-09-28; note ad) left
+every other reader of the masthead out: the invitation email
+(`UserRoleAssignmentInvitationNotify`, the line
+`emails.userRoleAssignmentInvitationNotify.userGroupSectionWillAppear`
+chosen from the role's masthead flag alone, as [User
+invitations](U06-user-invitations.md#fn-a11) note f-a11 describes), the
+masthead-change email (`UserRoleMastheadUpdateNotify::setData()`, sent by
+`PKPUserController::masthead()` whatever the settings) and the
+ui-library's `UserInvitationUserGroupsTable.vue`, which fixes a reviewer
+role to "Appear on the masthead" ("since they are always displayed");
+none reads `enableEnrollmentMasthead` or
+`enableEnrollmentMastheadReviewers`. The issue makes reviewer listing
+optional because it "may reveal information (such as past reviewers) that
+the journal does not wish to reveal". Live-probed 2026-09-29 (Settings
+bullet 3; OJS, one scratch journal per case): with the enrollment box
+unticked and saved, the masthead read its heading alone; "Invite to a
+role" for an existing Author offered "Journal Masthead: Appear on the
+masthead / Does not appear on the masthead" on the new "Section editor"
+row under the header "You are inviting a user to take a role in OJS along
+with appearing in the journal masthead", and the email read "Section
+editor … Starting from 2026-09-29 … Your name will appear in the Scratch
+context {tag}'s masthead as a Section editor."; on a Section editor's
+"Edit" page the held role set to "Does not appear on the masthead" and
+back, each confirmed through "Confirm masthead visibility change" ("This
+will update whether this user appears on the journal masthead for the
+selected role. The user will be notified of this change."), sent two
+emails "Your journal masthead visibility has been updated", the second
+ending "New setting: Appear on the masthead"; the masthead still read its
+heading alone. On a new journal (enrollment box ticked, reviewers box
+unticked) with a review completed on 2025-06-15, the masthead listed its
+Section editor and no "Peer Reviewers in Previous Year"; a Reader invited
+to "Reviewer" saw the row's masthead cell as the fixed text "Appear on the
+masthead", and the email read "Reviewer … Your name will appear in the
+Scratch context {tag}'s masthead as a Reviewer.". The same three emails
+and the same page on a freshly reset stable-3_5_0 OJS the same day
+(lib/pkp `8809a197de`, where the settings arrived 2026-09-24). OMP and OPS
+carry the same shared code (mailables, users API, invitation screens and
+page handler at lib/pkp `fab29cfeca`) and were not driven; OPS has no
+reviewer role. Kept check
+`shared/playwright/checks/sync/pkp-lib-13370/masthead-promises.js`.
+Written up for the team in `docs/reports/2026-09-29-pkp-lib-13370.md` (a
+temporary report, deleted once acted on; git history keeps it); issue
+pkp/pkp-lib#13370.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `locale/en/locale.po` `manager.setup` "Setup" (OJS

@@ -311,6 +311,13 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
     file under "Import" in order to continue."; each press adds another.
     A file that is up but not imported is dropped on leaving the page,
     as in Rule 8. <sup>k</sup>
+22c. **A role with an empty or unreadable date.** When a user's role
+    in the file has an empty start date, a start date that is not a
+    date (such as "soon"), or an empty end date, the import stops at
+    that user. The "Results" tab stays empty. The user's account is
+    created and signs in, but holds no role in the journal, and the
+    users listed after it in the file are not imported ⚠ [A18](#a18).
+    <sup>l</sup>
 23. <a id="users-matching"></a> **Which accounts.** Each user in the
     file is matched on username and email together:
     - neither is in use on the installation: a new account is created
@@ -323,21 +330,33 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
       the same existing user.". <sup>l</sup>
 24. **Roles.** Each role the file names for a user is given in this
     journal when the journal has a role of exactly that name; a name the
-    journal lacks is passed over silently, and a role the user already
-    holds is not given twice. The file's masthead choice for the role is
-    not kept: every imported role is set to "Appear on the masthead"
-    (the user's roles page), so a role the journal shows on "Editorial
-    Masthead" lists the person there ⚠ [A2](#a2).
-    The file's start date is not kept either: every imported role starts
-    on the day of the import ⚠ [A3](#a3). <sup>l</sup> <sup>td14</sup>
+    journal lacks is passed over silently. A role the file gives no end
+    date is not given twice while the user holds it. A role the file
+    starts on a later date, or ends on a later date, is added again at
+    every import of the file ⚠ [A17](#a17). <sup>l</sup>
+24a. **The masthead choice.** The file's masthead choice for each role
+    is kept. A role the file marks as not appearing reads "Does not
+    appear on the masthead" on the user's roles page ("Edit" on the
+    user's row of Settings › Users & Roles › "Users"), and "Editorial
+    Masthead" does not list the person for it. A reviewer role always
+    reads "Appear on the masthead", whatever the file says; the roles
+    page offers no choice for it. An export writes each role's own
+    choice, and a reviewer role's as appearing. <sup>l</sup>
+    <sup>td14</sup>
+24b. **The start date.** The file's start date for each role is kept:
+    "Start Date" on the "Users" list and on the user's roles page reads
+    it. A role the file gives no start date starts on the day of the
+    import. A role the file gives as ended is listed on "Editorial
+    History" with the file's years (such as "2019 – 2020"). <sup>l</sup>
+    <sup>td14</sup>
 25. **Passwords.** What happens to the password the file gives: <sup>l</sup>
 
     | In the file | Outcome |
     |-------------|---------|
     | plain text, at least the site's minimum length (Settings bullet 8) | the account signs in with it |
     | plain text, shorter, or empty | the line "The imported user "{username}" has a plain password that is not valid. The user has not been imported."; the account is created all the same, and no password signs in to it ⚠ [A4](#a4) <sup>td13</sup> |
-    | stored the way this installation stores passwords | the account signs in with the original password; on a server whose PHP is older than 8.4, the password counts as stored another way instead (the next row and the paragraph under the table) ⚠ [A16](#a16) |
-    | stored another way, for a new account | a new password is made, the account must change it at its first sign-in, the "Journal Registration" email ("Press Registration" on a press) sends it to the account's address, and the line reads "The imported user "{username}" password could not be imported as is. A new password is been send to the user email. The user has been imported." |
+    | a bcrypt hash at cost 12, the way this installation stores passwords | the account signs in with the original password; on a server whose PHP is older than 8.4, it counts as stored another way (the next row and the paragraph below) ⚠ [A16](#a16) |
+    | stored another way, for a new account | a new password is made, the account must change it at its first sign-in, the "Journal Registration" email ("Press Registration" on a press) sends it to the account's address, and the line reads "The imported user "{username}" password could not be imported as is. A new password is been send to the user email. The user has been imported."; on a server whose PHP is older than 8.4, a bcrypt hash at cost 10, that PHP's default, is kept instead, with no line and no email, and the account signs in with it ([A16](#a16)) |
 
     A user with no password in the file at all makes the whole file
     fail (Rule 22a). For an account that already exists (Rule 23, second
@@ -364,13 +383,14 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
 28. **Moving roles between journals.** A file exported from one
     journal and imported into another journal of the same installation
     gives the same accounts, unchanged, the roles of the same names in
-    the second journal (Rule 23, second case), and sends no email. Some
-    accounts get the line of Rule 25's last row all the same, though
-    every password is unchanged ([A15](#a15)): with PHP 8.4 or later on the
-    server, for an account whose password was saved before the
-    installation changed how it stores passwords and not signed in with
-    since; with an older PHP, for every account whose password is stored
-    the way this installation stores passwords ([A16](#a16)). <sup>l</sup>
+    the second journal (Rule 23, second case), with the first journal's
+    masthead choices and start dates (Rules 24a, 24b), and sends no
+    email. Some accounts get the line of Rule 25's last row all the
+    same, though every password is unchanged ([A15](#a15)): with PHP 8.4
+    or later on the server, for an account whose stored password is not
+    a bcrypt hash at cost 12, as with a throwaway account before its
+    first sign-in; with an older PHP, for every account whose stored
+    password is such a hash ([A16](#a16)). <sup>l</sup>
 
 **PubMed XML Export Plugin** {OJS}
 
@@ -494,7 +514,7 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
   sections and contributors (Rule 10), once more at each further press
   of "Import" or choice of an earlier results tab (Rule 9); on a press
   it can also add a series (Rule 12a). It sends no email. <sup>f</sup>
-- **A users import creates accounts and roles** (Rules 23–24) and sends
+- **A users import creates accounts and roles** (Rules 23–24b) and sends
   the "Journal Registration" email ("Press Registration" on a press)
   only for Rule 25's last case, from the importing manager, with the
   journal's principal contact as the address to reply to. The template
@@ -559,7 +579,7 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
 - **[Users management](U53-users-management.md)**: where imported
   accounts and roles show, and the "User Created" email (Rules 23–25).
 - **[Journal identity & about pages](U07-journal-identity-and-about-pages.md)**:
-  the masthead listing imported roles (Rule 24) and the press's ONIX
+  the masthead listing imported roles (Rule 24a) and the press's ONIX
   details (Rule 19).
 - **[Identifiers](U44-identifiers.md)** and
   **[Citations & references](U42-citations-and-references.md)**: what
@@ -823,8 +843,8 @@ journal to another) with throwaway accounts. <sup>sc</sup>
 
    Given: Journal Manager of two scratch journals A and B, A holding the
    throwaway accounts "moss", a Copyeditor, and "fern", an Author, which
-   hold no role in B and have each signed in once since they were
-   created.
+   hold no role in B; every account of A's list has signed in since it
+   was created.
 
    - **The "Export Users" tab**: on A's "Users XML Plugin" page press
      "Export Users": the list titled "Current Users", with "Export All
@@ -860,9 +880,7 @@ journal to another) with throwaway accounts. <sup>sc</sup>
      other line ⚠ [A16](#a16). Either way every account of the file is
      imported (Rules 22, 28).
    - **B's users**: B's Settings › Users & Roles › "Users" lists "moss"
-     as Copyeditor and "fern" as Author; the roles' masthead choice and
-     start dates are left unread ⚠ [A2](#a2) ⚠ [A3](#a3) (Rules 23,
-     28).
+     as Copyeditor and "fern" as Author (Rules 23, 28).
    - **moss signs in**: moss signs in to B with the password it had in
      A: the sign-in succeeds (Rule 23).
    - **Control**: the mail catcher holds no email to moss or fern from
@@ -1025,6 +1043,17 @@ journal to another) with throwaway accounts. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the roles' masthead choices and start dates carried from one
+    journal to another (Rules 24a, 24b, 28; A2 and A3 retired): in
+    scenario 6, moss's
+    Copyeditor role in A given a start date in the past and fern's
+    Author role set to "Does not appear on the masthead", both read on
+    B's roles pages and "Editorial Masthead" after the move
+  - a reviewer role imported as "Appear on the masthead" whatever the
+    file says (Rule 24a), a role the file gives no start date starting
+    on the day of the import, and a role the file gives as ended listed
+    on "Editorial History" with the file's years (Rule 24b)
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1055,8 +1084,6 @@ Left out of the scenarios above, by reason:
     scenario 1 (Actors row 1)
 - **Register carries it**:
   - A1 (an address naming a tool the installation lacks; Rule 5)
-  - A2 and A3 (imported roles' masthead choice and start dates; Rule
-    24; scenario 6 marks them)
   - A4 (a short or empty plain password; Rule 25)
   - A5 (the daily deposit taking other journals' "Needs Sync" articles;
     Rule 43)
@@ -1074,8 +1101,12 @@ Left out of the scenarios above, by reason:
   - A14 ("Export Users" with no row ticked; Rule 27)
   - A15 (an existing account given a password stored another way; Rules
     25, 28)
-  - A16 (a new account imported on a server whose PHP is older than 8.4;
-    Rule 25; scenario 6 marks the line for existing accounts)
+  - A16 (a new account imported on a server whose PHP is older than 8.4,
+    and a password stored that PHP's default way kept; Rule 25; scenario
+    6 marks the line for existing accounts)
+  - A17 (the same users file imported again with a role starting or
+    ending on a later date; Rule 24)
+  - A18 (a users file with an empty or unreadable role date; Rule 22c)
   - OJS1 (the DOAJ list's issue window heading; Rule 36)
   - OJS2 (the "DOAJ Export Plugin" row kept on the Plugins list while
     "DOAJ Plugin" is off; Rule 3)
@@ -1115,8 +1146,6 @@ unless an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | An address naming a tool the installation lacks prints the Import/Export list as raw code text | 🐞 | minor | — |
-| [A2](#a2) | Users files never keep the masthead choice: every imported role is set to appear on the masthead | 🐞 | user-visible | — |
-| [A3](#a3) | A users import starts every imported role today, whatever dates the file gives | 🐞 | minor | — |
 | [A4](#a4) | A users import says a user with a short or empty password "has not been imported", yet creates the account | 🐞 | minor | — |
 | [A5](#a5) | The daily DOAJ deposit of one journal also takes other journals' articles that read "Needs Sync" | 🐞 | latent | — |
 | [A6](#a6) | The Native XML "Import" tab's "Upload File" cannot be reached with the keyboard | 🐞 | minor | — |
@@ -1129,6 +1158,8 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | A users file the import cannot read ends in an empty "Results" tab: the server fails | 🐞 | minor · crash: server | — |
 | [A15](#a15) | For an existing account, the results say a new password was sent, but nothing is sent and nothing changes | 🐞 | minor | — |
 | [A16](#a16) | On a server whose PHP is older than 8.4, a users import treats every password stored the installation's own way as stored another way | 🐞 | user-visible | — |
+| [A17](#a17) | Importing the same users file again adds a role that starts or ends on a later date once more | 🐞 | minor | — |
+| [A18](#a18) | A users file with an empty or unreadable role date stops part-way: the server fails, the tab stays empty, the user gets no role | 🐞 | user-visible · crash: server | — |
 | [OJS1](#ojs1) | The DOAJ list's issue link opens the issue's window headed "DOI Plugin Settings" | 🐞 | minor | — |
 | [OJS2](#ojs2) | With "DOAJ Plugin" off, the Plugins list still offers "DOAJ Export Plugin" and its "Import/Export Data" | 🐞 | minor | — |
 | [OJS3](#ojs3) | Once "NLM Title Abbreviation" is saved empty, the PubMed file's journal title is empty | 🐞 | minor | — |
@@ -1142,6 +1173,8 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS8](#ojs8) | DOAJ "Register" checks nothing, "Validate XML before the export and registration." ticked or not | ❓ | minor | — |
 | [OMP2](#omp2) | A press's Native XML export reminds the manager to fill in the press's ONIX details | ✅ | minor | — |
 | [OMP3](#omp3) | A press's import creates a series the file names but the press lacks | ✅ | minor | — |
+| [A2](#a2) | Retired: a users import keeps each role's masthead choice, and an export writes it | ✅ | retired | upstream change + claim check (claude), 2026-09-29 — fixed upstream |
+| [A3](#a3) | Retired: a users import keeps each role's start date | ✅ | retired | upstream change + claim check (claude), 2026-09-29 — fixed upstream |
 
 ### All apps
 
@@ -1152,24 +1185,6 @@ bookmarked Crossref page opened on a press, should say there is no such
 page; instead the page shows the "Import/Export" list as a line of raw
 code text, with no heading, no menu and no way back.
 Basis: probe. <sup>f-a1</sup>
-
-<a id="a2"></a>
-**A2 — Users files never keep the masthead choice** · 🐞 · user-visible.
-A users file says, for each role, whether the person appears on the
-masthead; neither side keeps it. An export writes "appear" for every
-role, and an import sets every role it gives to "Appear on the
-masthead", so people who had chosen not to appear are listed on the
-journal's "Editorial Masthead" after a move. {OJS OMP}
-Since: 2025-06-10 · Basis: probe. <sup>f-a2</sup>
-
-<a id="a3"></a>
-**A3 — Every imported role starts today** · 🐞 · minor.
-A users file gives each role its start date; a users import should keep
-it. Instead every role it gives starts on the day of the import, so the
-journal's "Editorial History" and the users list lose how long people
-have held their roles. A role the file gives as ended (for example
-2019–2020) is listed on "Editorial History" as "2026 – 2020". {OJS OMP}
-Since: 2025-06-10 · Basis: probe. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — A refused password still creates the account** · 🐞 · minor.
@@ -1269,8 +1284,7 @@ Basis: probe. <sup>f-a13</sup>
 page: the server fails, no file downloads, and nothing says to tick a
 row. {OJS OMP}
 Question: should "Export Users" with nothing ticked say to tick a row?
-Lean: 🐞, as the Native tool's empty export (A12); seen once on each
-app, so the test run confirms it.
+Lean: 🐞, as the Native tool's empty export (A12).
 Basis: probe. <sup>f-a14</sup>
 
 <a id="a15"></a>
@@ -1297,8 +1311,34 @@ Registration" email ("Press Registration" on a press); an existing
 account keeps its password and gets no email ([A15](#a15)). With PHP
 8.4 or later, only a password stored another way gets the line.
 {OJS OMP}
-Basis: test run, 2026-09-27 (the results line, OJS and OMP); code (what
-happens to the passwords). <sup>f-a16</sup>
+Basis: test run, 2026-09-27 (the results line); probe, 2026-09-29
+(what happens to the passwords); OJS and OMP. <sup>f-a16</sup>
+
+<a id="a17"></a>
+**A17 — Importing a users file again gives a later-dated role again** · 🐞 · minor.
+A users file that gives a role a start date still to come (next year's
+Section Editor, say) should give the role once, however often the file
+is imported. Instead each import of the file, a second press of "Import
+Users" or the same file uploaded again, adds the role once more: each
+reads "The import completed successfully. …", and the user's roles page
+and the "Users" list then show "Section editor" ("Series editor" on a
+press) with the same start date two, then three times. A role the file
+gives an end date still to come is added again the same way, as it was
+already before the import began keeping start dates. {OJS OMP}
+Since: 2026-09-28 · Basis: probe. <sup>f-a17</sup>
+
+<a id="a18"></a>
+**A18 — An empty or unreadable role date stops a users import part-way** · 🐞 · user-visible · crash: server.
+A users file whose role has an empty start date, a start date that is
+not a date (such as "soon"), or an empty end date should be refused
+with the reason, or import the role without the date. Instead the
+server fails: the "Results" tab opens empty with nothing said, the
+user's account is created (it signs in) but holds no role in the
+journal, and the users after it in the file are not imported. The
+manager is left with a half-done import and no sign of it. The start
+dates fail since the import began keeping the file's start date; the
+empty end date failed before. {OJS OMP}
+Since: 2026-09-28 · Basis: probe. <sup>f-a18</sup>
 
 ### OJS
 
@@ -1404,6 +1444,14 @@ the file's title; a journal and a preprint server treat an unknown
 section as A9 says. The press's import is written to create the
 series.
 Basis: probe. <sup>f-omp3</sup>
+
+### Retired
+
+<a id="a2"></a>
+**A2 — Users files never keep the masthead choice** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13390), 2026-09-28; seen fixed 2026-09-29: an import keeps each role's masthead choice and an export writes it (Rule 24a). <sup>f-a2</sup>
+
+<a id="a3"></a>
+**A3 — Every imported role starts today** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13390), 2026-09-28; seen fixed 2026-09-29: an import keeps each role's start date (Rule 24b). <sup>f-a3</sup>
 
 ---
 
@@ -1700,12 +1748,21 @@ up is dropped on leaving the page, with no question.
 kept; neither → `Repo::user()->add()`; otherwise
 `plugins.importexport.user.error.usernameEmailMismatch`. Roles: each
 `user_user_group` whose `user_group_ref` is in a context group's
-localized `name` array; skipped when an active (or, for an ended entry,
-ended) row exists. `if ($userGroup->roleId = Role::ROLE_ID_REVIEWER)`
-is an assignment, always true, so `$masthead = true` for every group
-(A2); `$dateStart = $startDate ?? Core::getCurrentDate()` reads an
-undefined `$startDate`, so the parsed `$dateStart` is discarded (A3);
-both since lib/pkp `8fb142ad3` (pkp/pkp-lib#11479, 2025-06-10).
+localized `name` array, with the file's `<date_start>`, `<date_end>`
+and `<masthead>` (read at lib/pkp `fab29cfeca`, 2026-09-29). A reviewer
+group gets `$masthead = true` whatever the file says;
+`$dateStart ??= Core::getCurrentDate()` fills in a missing start date
+only. The role is skipped when, for an entry with no `<date_end>`, a
+`withActive()` row exists (started, not ended), or, for an entry with
+one, a `withEnded()` row exists; a row that starts later, or ends
+later, is neither, so it is inserted again (A17). An empty element is
+kept as `""` and free text goes to the date cast, so the insert throws
+(A18). The masthead and start-date handling is lib/pkp `85f6b3c074`
+(pkp/pkp-lib#13390, merged 2026-09-28); before it
+`if ($userGroup->roleId = Role::ROLE_ID_REVIEWER)` was an assignment
+that set every role to appear, and an undefined `$startDate` set every
+start to today (A2, A3, both since lib/pkp `8fb142ad3`,
+pkp/pkp-lib#11479, 2025-06-10).
 `importUserPasswordValidation()`: no `encryption` attribute → plain text,
 encrypted when `strlen` ≥ `Site::getMinPasswordLength()`, else
 `plugins.importexport.user.error.plainPasswordNotValid`, the account
@@ -1746,6 +1803,11 @@ keep an older stored password until their first sign-in: such an account, and
 an existing account given a cost-10 file password, got the row-4 line
 while keeping its password and receiving no mail (A15); after one
 sign-in the move read the plain success sentence.
+Live-probed again 2026-09-29, OJS and OMP on PHP 8.3.33, two runs each:
+Rules 22, 23, 25 (rows 1, 2 and 4) and 28 and Settings bullet 8 (read
+only, the site's minimum 6) as above, with the PHP 8.3 branch of row 3
+(note f-a16); Rules 24a and 24b: note td14; Rule 22c: note f-a18; the
+re-import of Rule 24: note f-a17.
 
 <a id="fn-m"></a>
 **m** — `ExportableUsersGridHandler` (lib/pkp
@@ -2152,18 +2214,28 @@ did not sign in ("Invalid username/email or password. Please try
 again."). More lengths: note l.
 
 <a id="fn-td14"></a>
-**td14** — Live-probed 2026-09-27, OJS and OMP: a new user given the
-Section Editor (Series Editor) role with `<masthead>false</masthead>`
-and `<date_start>2020-01-01</date_start>` was listed on "Editorial
-Masthead" as "2026 –"; the user's roles page showed the start date
-2026-09-27 and "Appear on the masthead", also for the Reader role,
-which the masthead does not list; exported again, the account read
-`<masthead>true</masthead>` and today's `date_start`.
+**td14** — Live-probed 2026-09-29, OJS and OMP, two runs each: a new
+user given the Section Editor (Series Editor) and Reader roles with
+`<masthead>false</masthead>` and `<date_start>2020-01-01</date_start>`
+read "Does not appear on the masthead" and 2020-01-01 for both on the
+roles page and under "Start Date" on the "Users" list, and was not on
+"Editorial Masthead"; exported again, both roles read
+`<masthead>false</masthead>`. A Reviewer (on a press also Internal and
+External Reviewer) role given `false` read "Appear on the masthead"
+with no control, and was exported `true`. A role given 2019 to 2020
+was listed on "Editorial History" as "Section editor 2019 – 2020"
+("Series editor" on a press). Roles without a start date started on
+the import day. Moved from journal A to B, a Section Editor not on A's
+masthead was written `false` and was not on B's; B's rows started at
+A's start time. Before lib/pkp `85f6b3c074` (live-probed 2026-09-27):
+every role read "Appear on the masthead" and started on the import day
+(A2, A3).
 
 <a id="fn-td15"></a>
 **td15** — Live-probed 2026-09-27, OJS and OMP, once each: with no row
 ticked, the request answered 500 and the browser showed a blank page;
-nothing downloaded (A14).
+nothing downloaded (A14). Live-probed again 2026-09-29, OJS and OMP,
+three times each: the same 500 and blank page.
 
 <a id="fn-td16"></a>
 **td16** — Live-probed 2026-09-27 (OJS): note n.
@@ -2219,7 +2291,11 @@ Since lib/pkp `8fb142ad3`, 2025-06-10. Live-probed 2026-09-27, OJS and
 OMP (note td14): an account stored as not appearing in journal A (A's
 masthead does not list it) was written `<masthead>true</masthead>` by
 both of A's exports, and after the import into B it is listed on B's
-"Editorial Masthead".
+"Editorial Masthead". Fixed by lib/pkp `85f6b3c074` (pkp/pkp-lib#13390,
+"Fix reviewer role check and start date in user import/export",
+merged 2026-09-28): both filters compare with `==`, and the export
+writes the role's own `masthead`, reviewer roles `true`. Seen fixed
+2026-09-29, OJS and OMP, two runs each (note td14).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `UserXmlPKPUserFilter::parseUser()`: `$dateStart =
@@ -2229,7 +2305,9 @@ $startDate ?? Core::getCurrentDate();` overwrites the parsed
 td14): Users & Roles › Users "Start Date" and the roles page read the
 import date; a role with `<date_start>2019-01-01</date_start>` and
 `<date_end>2020-12-31</date_end>` is listed on "Editorial History" as
-"2026 – 2020".
+"2026 – 2020". Fixed by lib/pkp `85f6b3c074` (pkp/pkp-lib#13390, merged
+2026-09-28), which reads `$dateStart ??= Core::getCurrentDate();`. Seen
+fixed 2026-09-29, OJS and OMP, two runs each (note td14).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `UserXmlPKPUserFilter::importUserPasswordValidation()` adds
@@ -2313,7 +2391,9 @@ each of the four files (the format check throws instead of reaching the
 **f-a14** — Live-probed 2026-09-27, OJS and OMP, once each (note m):
 `POST …/management/importexport/plugin/UserImportExportPlugin/export`
 with no `selectedUsers[]` answered 500; the address stayed on
-`…/export` with an empty page.
+`…/export` with an empty page. Live-probed again 2026-09-29, OJS and
+OMP, three times each (note td15): the same 500, empty page and no
+download.
 
 <a id="fn-f-a15"></a>
 **f-a15** — `importUserPasswordValidation()` (note l) replaces a hash
@@ -2337,8 +2417,61 @@ attempts): the "Results" tab read "Import/Export errors:" and the
 every account of the file moved from journal A to B (the Site
 Administrator, the manager, moss and fern, each signed in through the
 login form before the export) instead of the success sentence; the same
-scenario read the success sentence on PHP 8.4. The new account's new
-password and email are read from the code (note l), not driven.
+scenario read the success sentence on PHP 8.4. Live-probed 2026-09-29,
+OJS and OMP on PHP 8.3.33 (Administration › System Information "PHP
+version 8.3.33"), twice (Rule 25, rows 3 and 4): a new account given a
+cost-12 bcrypt got the row-4 line, had to change its password, got the
+"Journal Registration" / "Press Registration" email from the importing
+manager with the contact as reply-to, and its original password no
+longer signed in; a cost-10 bcrypt, PHP's default below 8.4, got no
+line and no mail and signed in with the original. Note l's cost-10
+row-4 line of 2026-09-27 is the PHP 8.4 branch.
+
+<a id="fn-f-a17"></a>
+**f-a17** — Note l. A regression of lib/pkp `85f6b3c074`
+(pkp/pkp-lib#13390, merged 2026-09-28), which began keeping the file's
+`<date_start>`: before it every role started on the import day, so a
+second import found it active and skipped it. The later end date half
+predates it (lib/pkp `8fb142ad3`, 2025-06-10). Live-probed 2026-09-29,
+OJS and OMP, two runs each, and by a separate read of that change the
+same day: a new user given "Section editor" ("Series editor") with
+`<date_start>2027-06-01 00:00:00</date_start>` and no end date, imported
+three times (a second press of "Import Users", then the file uploaded
+again), read the success sentence each time; the stored role rows went
+1, 2, 3, the "Users" list read "Section editor" and "2027-06-01" three
+times, and the roles page listed three rows. Control: `2020-01-01`
+imported twice left one row. A role given 2020-01-01 to 2030-12-31,
+imported twice, read the success sentence twice and left two stored
+rows; "Editorial Masthead" listed the person once, "2020 –", and the
+"Users" list showed no role or start date for that user (the users
+list's own reading, not this feature's). Seen on stable-3_5_0 too (the
+same patch). Written up for the team in
+`docs/reports/2026-09-29-pkp-lib-13390.md` (Finding 2; a temporary
+report, deleted once acted on).
+
+<a id="fn-f-a18"></a>
+**f-a18** — Note l. lib/pkp `85f6b3c074` (pkp/pkp-lib#13390, merged
+2026-09-28) began reading `<date_start>`: `$dateStartNode?->textContent`
+is `""` for an empty element and `??=` keeps it; before, the file's
+start date was never read, and an empty or free-text one imported like
+a missing one. `<date_end>` was read already (since lib/pkp
+`8fb142ad3`, 2025-06-10). Live-probed 2026-09-29, OJS and OMP, two runs
+each, and by a separate read of that change the same day: three files,
+a role with `<date_start></date_start>`, one with
+`<date_start>soon</date_start>`, one with `<date_end></date_end>`. For
+each, `GET …/management/importexport/plugin/UserImportExportPlugin/import?temporaryFileId=…`
+answered 500 and the "Results" tab (with "Close") stayed empty; the
+user's account was created, not disabled, with no role (its roles page
+listed none), and signed in; in the empty-start file the user after it
+was not created. Users before the failing one were not driven. Server
+log (the test installs run PostgreSQL): `SQLSTATE[22007] … invalid
+input syntax for type timestamp: ""` for the empty start and end dates,
+`Carbon\Exceptions\InvalidFormatException: Could not parse 'soon'` for
+the free text. Control: a file with no `<date_start>` element imported,
+the role starting on the import day. Seen on stable-3_5_0 too (the same
+patch). Written up for the team in
+`docs/reports/2026-09-29-pkp-lib-13390.md` (Finding 1; a temporary
+report, deleted once acted on).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `ExportPublishedSubmissionsListGridCellProvider::getCellActions()`

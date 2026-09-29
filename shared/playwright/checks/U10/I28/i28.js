@@ -212,6 +212,8 @@ forEachApp(async (app) => {
         }
     }
 
+    // The roles list only: the tab also holds the enrollment and reviewers boxes (pkp-lib#13370).
+    const roles = (f) => f.locator('fieldset.pkpFormField--options').filter({has: f.page().locator('[id^="appearanceMasthead-mastheadUserGroupIds"]')});
     // ---- U07-I28-5: the French "Entête" tab ------------------------------
     if (on('french')) {
         const {page, close} = await launch(app);
@@ -243,19 +245,19 @@ forEachApp(async (app) => {
                     // left once with a change unsaved: a role moved on Entête, then a reload
                     await page.locator('#appearance-masthead-button').first().click(); await idle(page);
                     const form2 = page.locator('[id="appearance-masthead"] form').first();
-                    const orderBefore = await form2.locator('label.pkpFormField--options__option').allInnerTexts();
+                    const orderBefore = await roles(form2).locator('label.pkpFormField--options__option').allInnerTexts();
                     const arrows = form2.locator('button').filter({hasText: /Avancer|Increase/});
                     fr.arrowCount = await arrows.count();
                     if (fr.arrowCount > 1) await arrows.nth(1).click();
                     await sleep(400);
-                    const orderMoved = await form2.locator('label.pkpFormField--options__option').allInnerTexts();
+                    const orderMoved = await roles(form2).locator('label.pkpFormField--options__option').allInnerTexts();
                     const dialogs = [];
                     const onDialog = async (d) => { dialogs.push({type: d.type(), message: d.message()}); await d.accept().catch(() => {}); };
                     page.on('dialog', onDialog);
                     await page.reload(); await idle(page);
                     await page.locator('#appearance-button').first().click().catch(() => {}); await idle(page);
                     await page.locator('#appearance-masthead-button').first().click(); await idle(page);
-                    const orderAfter = await page.locator('[id="appearance-masthead"] form').first().locator('label.pkpFormField--options__option').allInnerTexts();
+                    const orderAfter = await roles(page.locator('[id="appearance-masthead"] form').first()).locator('label.pkpFormField--options__option').allInnerTexts();
                     fr.leave = {orderBefore: orderBefore.map((x) => flat(x, 80)), orderMoved: orderMoved.map((x) => flat(x, 80)), orderAfter: orderAfter.map((x) => flat(x, 80)), dialogs};
                     await snap(page, 'f04-entete-fr-after-leave', fr.leave);
                     page.off('dialog', onDialog);

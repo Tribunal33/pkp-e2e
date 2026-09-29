@@ -898,7 +898,8 @@ Keys:
   on "Editorial Masthead" under the role's name, `false` leaves the role
   off it and off "Editorial History"; any role takes it (on a reviewer
   role it changes nothing: reviewers are listed by their completed
-  reviews). Install defaults: ticked on `editor`, `sectionEditor`,
+  reviews, and only while the context's `enableEnrollmentMastheadReviewers`
+  is `true`). Install defaults: ticked on `editor`, `sectionEditor`,
   `externalReviewer` and `editorialBoardMember` (OPS: `sectionEditor`,
   "Moderator", and `editorialBoardMember`). A role ticked or unticked on
   screen after the masthead was last read shows so on the next load, three
@@ -1429,9 +1430,11 @@ Keys:
   are a 400 on any other status, and `completed` refuses a review form with
   required questions, as the wizard does. On a context with
   `review.competingInterests` set, a `completed` review records the "I do
-  not have any competing interests" answer, and Review Details shows "No
-  competing interests were disclosed." (U27 claim check I28,
-  2026-09-28); a declared statement has no key. A third, `dateCompleted`
+  not have any competing interests" answer: Review Details reads
+  "Competing Interests" / "Declaration" / "I do not have any competing
+  interests" and "Modify Review" opens with that radio ticked (U27 claim
+  check Ks29, 2026-09-29, after ui-library#993); a declared statement has
+  no key (enter it through the reviewer's wizard or "Modify Review"). A third, `dateCompleted`
   (`YYYY-MM-DD`, today or earlier; `completed` only, a 400 otherwise),
   backdates the submitted review: the wizard completes it today, then
   every date of the assignment (requested, notified, accepted, completed,
@@ -1440,7 +1443,9 @@ Keys:
   submission, round, notifications and activity log keep today's dates
   (D9: no screen submits a review on another day). A review submitted
   last calendar year is what lists its reviewer under "Peer Reviewers in
-  Previous Year" on "Editorial Masthead" (OJS and OMP; on OMP only an
+  Previous Year" on "Editorial Masthead", while the context's
+  `enableEnrollmentMastheadReviewers` is `true` (a new context has no row,
+  so the block is off by default; the builder key) (OJS and OMP; on OMP only an
   external-review round counts), with the sentence naming that year
   (U07 harness, 2026-09-23). A seeded `accepted` assignment
   opens the wizard on step 1 (the on-screen accept lands on step 2). These

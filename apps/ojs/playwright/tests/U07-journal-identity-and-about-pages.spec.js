@@ -15,8 +15,6 @@
  * - A2 ❓: S11 reads the Editor's "Edit" links still shown, as the scenario
  *   states; nothing asserts where they lead for that role.
  * - A3 ❓: S4 reads the phone-alone save refused, as the scenario states.
- * - A4 🐞: no test disables a member (a disabled member breaks the pages).
- * - A5 ❓: no test uses "Remove User" or a later start date.
  * - A6 ❓: S1 reads the history page's heading "Editorial History Page",
  *   as the scenario states.
  * - A7 🐞: side tabs are opened by the address naming both tabs
@@ -25,6 +23,8 @@
  * - A9 🐞: S6 never follows a link of the default "For Readers" text.
  * - A10 ❓: S9 cancels no review.
  * - A11 🐞: no test edits a journal on Administration › Hosted Journals.
+ * - A13 🐞: no test invites to a role or changes a masthead choice while
+ *   the masthead is not based on enrollments.
  * - OMP1, OMP2, OPS1, OPS2, OPS3: other apps' territory.
  *
  * Seeding: scenario endpoints only. S1 and S2 read the seeded journal

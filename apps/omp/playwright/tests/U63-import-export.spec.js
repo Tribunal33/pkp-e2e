@@ -24,9 +24,7 @@
  *   unread.
  * - A10: S3 reads the stage filters' lists as the set they give; that the
  *   published monograph is in no stage is read only as its absence there.
- * - A2, A3: S6 leaves the imported roles' masthead choice and start dates
- *   unread.
- * - A1, A4–A7, A9, A11–A15: not on these scenarios' press paths.
+ * - A1, A4–A7, A9, A11–A18: not on these scenarios' press paths.
  *   OJS1–OJS9: the journal's.
  *
  * Seeding (footnote sc): S2 reads `publicknowledge` with the roster; every
@@ -738,8 +736,8 @@ test.describe('Import & export', () => {
             newPasswordLine: NEW_PASSWORD_SENT,
         });
 
-        // B's users: moss Copyeditor, fern Author (Rules 23, 28); A2 and A3
-        // left unread.
+        // B's users: moss Copyeditor, fern Author (Rules 23, 28); their
+        // masthead choice and start dates (Rules 24a, 24b) left unread.
         const listB = new UsersListPage(page, b);
         await listB.goto();
         expect(await listB.cellLines(listB.rolesCell(listB.row(mailOf(moss))))).toEqual(['Copyeditor']);

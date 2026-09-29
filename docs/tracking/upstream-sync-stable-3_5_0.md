@@ -10,10 +10,10 @@ and no CI follows this branch. `main`'s baselines are in
 
 | Repo | Last-read commit | Date | Read by |
 |------|------------------|------|---------|
-| ojs | `a3dc3b54ff` | 2026-09-25 | claude (daily maintenance session) |
-| omp | `f77b23709` | 2026-09-25 | claude (daily maintenance session) |
-| ops | `225e25475e` | 2026-09-25 | claude (daily maintenance session) |
-| pkp-lib | `479b38a09c` (ojs, omp, ops) | 2026-09-25 | claude (daily maintenance session); ui-library `1a7a4750` (ojs, omp, ops); ojs `plugins/generic/jatsTemplate` `26c6ca0aa2` |
+| ojs | `788c1c2e21` | 2026-09-29 | claude (daily maintenance session) |
+| omp | `4f90dadac0` | 2026-09-29 | claude (daily maintenance session) |
+| ops | `0bb1ca0f6e` | 2026-09-29 | claude (daily maintenance session) |
+| pkp-lib | `8809a197de` (ojs, omp, ops) | 2026-09-29 | claude (daily maintenance session); ui-library `1a7a4750` (ojs, omp, ops); ojs `plugins/generic/jatsTemplate` `26c6ca0aa2` |
 
 ## Read log
 
@@ -22,6 +22,15 @@ one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
 
+- **2026-09-29 — ojs `a3dc3b54ff..788c1c2e21` (2), omp `f77b23709..4f90dadac0` (2), ops `225e25475e..0bb1ca0f6e` (2), pkp-lib `479b38a09c..8809a197de` (6, all three apps), ui-library unchanged at `1a7a4750`, plugins unchanged. `main` first: synced today (four specs accommodated), then the line's range read in full. Listings in `.reports/sync-3_5/s29/range-*.txt`.**
+  - pkp-lib `stable-3_5_0` was rewritten under the baseline: `479b38a09c` is no longer on the branch; its content returns as `4768fb84f4` + `3cdaca6ecb` (#13370, `~main fab29cfeca`), and `git diff 479b38a09c 3cdaca6ecb` is empty, so rr17's read (2026-09-25) stands for them. The range is taken from the tree at `479b38a09c`.
+  - pkp-lib `7fb5cc6e63` + merge `69d8beabc3` (#10813, `=main 5ca591d18d`, read 2026-09-26: no regression) → carries over; the one caller `PKPStatsServiceTrait` is the same on the line.
+  - pkp-lib `d3216eed72` (#13387, `~main e0c43a1227`, read today by rr13390): the same substance plus code-style reformatting of `classes/user/Repository.php` and `UserGridHandler.php` and an unused import dropped from `UserDisableForm.php`; 3.5's `deleteAssignmentsByUserId()`, `endAssignments()` and `userOnMasthead()` match `main`'s except that 3.5's `endAssignments()` writes no audit entry (3.5 has no `AuditLog`), so the extra-audit-entry hunch is `main`-only → no regression; disabled members now stay listed (the intention).
+  - pkp-lib `8809a197de` (`=main 85f6b3c074`) → **3.5 shows today's `main` regression too**: the kept `checks/sync/pkp-lib-13390/import-dates.js` on a freshly reset line fleet (OJS and OMP, `.reports/sync-3_5/s29-13390/`): three rows after three imports of a future start date, 500 on an empty start date with the account created and no role, the controls as on `main`. The script adds `<show_title>` to the file's user group on the line (3.5's users schema wants it). One report (`docs/reports/2026-09-29-pkp-lib-13390.md`), the ci-triage row names the line.
+  - ojs `df6f6d312d` + merge `788c1c2e21`, omp `a243e66619` + `4f90dadac0`, ops `61e2295661` + `0bb1ca0f6e` (pointer bumps and their merges) → nothing of their own.
+  - Carried over from `main`: today's #13370 intention gap (U07 A13) is on the line too, since the 3.5 twin (2026-09-24): `checks/sync/pkp-lib-13370/masthead-promises.js` on the line's fresh OJS (`.reports/sync-3_5/s29-13370/`): the same three emails, the empty masthead page; one report. Open stable-line rows: #13181 and ojs#5827 not re-run (the new tip changes neither path).
+  - pkp-lib `stable-3_5_0` holds, past the pointers, the merge `cb54f12b89` of #13389 (the two commits above), the #13366 backport (`7199bda396`..`e7e8deed73`; `main`'s #13372 read today: no regression) and the #13376 backport `e4e720a7f6`; read when a pointer moves.
+  - Baselines advanced to the tips above.
 - **2026-09-27 (daily session, VM) — pulled; no range, baselines stay.** Tips unchanged: ojs `a3dc3b54ff`, omp `f77b23709`, ops `225e25475e`, lib/pkp `479b38a09c` on all three, ui-library `1a7a4750`. pkp-lib `stable-3_5_0` holds, past the pointers, `e4e720a7f6` (#13376 via #13382, the backport of `main`'s `aa077419e3`, read on `main` today: an intention gap, report `docs/reports/2026-09-27-pkp-lib-13376.md`) besides the #10813 and #13370 commits noted 2026-09-26; read when a pointer moves. Carried over from `main`: today's pkp-lib#13288 regression is not on the line (`git log --grep 13286` empty; 3.5 keeps the log-based restore, 2026-09-21). Open stable-line rows not re-run: no new tip.
 - **2026-09-26 (daily session, VM) — pulled; no range, baselines stay.** Tips unchanged since 2026-09-25: ojs `a3dc3b54ff`, omp `f77b23709`, ops `225e25475e`, lib/pkp `479b38a09c` on all three, ui-library `1a7a4750`. pkp-lib `stable-3_5_0` holds, past the pointers, the #10813 backport (`7fb5cc6e63` + merge `69d8beabc3`, `=main 5ca591d18d`, read on `main` today: no regression) and the #13370 branch commits behind yesterday's squash; read when a pointer moves. Carried over from `main`: today's regression pkp-lib#12798 is not on the line (`git log --grep 12798` empty). Open stable-line rows not re-run: no new tip.
 - **2026-09-25 — ojs `40bf69fd13..a3dc3b54ff` (4), omp `7f38b0441..f77b23709` (2), ops `9db7481e43..225e25475e` (2), pkp-lib `0714131c41..479b38a09c` (2, all three apps), ui-library unchanged, ojs `plugins/generic/jatsTemplate` `14f51fa667..26c6ca0aa2` (1). `main` first: synced and green today (a test fix only, no spec accommodated). Listings in `.reports/sync-3_5/s25/range-*.txt`. pkp-lib `stable-3_5_0` holds two more commits past the pointers (`7fb5cc6e63` + merge `69d8beabc3`, #10813 stats chart labels, the backport of `main`'s `5ca591d18d`, itself in no `main` pointer yet), read when a pointer moves.**

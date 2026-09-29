@@ -338,14 +338,8 @@ page. Every row below assumes the journal has public comments switched on
   panel on top (Rule 16). No email, no Notifications-tab row. <sup>l</sup>
 - **Deleting clears the tasks; approving and hiding do not.** Deleting a
   comment, by its writer or by a moderator, deletes every moderator's tasks
-  about that comment and about its reports; deleting a report deletes the
-  tasks about that report. {OMP OPS} On a press and a preprint server the
-  comment's deletion also takes unrelated tasks with it, in any press or
-  preprint server of the site: the "requires review" rows about the report
-  numbered like the deleted comment, and the "pending review" rows about a
-  comment numbered like one of its reports, leave every moderator's panel
-  (the numbers are the ones the Comments page writes into its address,
-  Rules 12 and 15) ⚠ [A11](#a11). A comment
+  about that comment and about its reports, and no other task [A11](#a11);
+  deleting a report deletes the tasks about that report. A comment
   that goes with its submission or with its writer's account leaves its
   tasks behind [A10](#a10) (Rule 18).
   Approving or hiding a comment leaves the
@@ -828,6 +822,8 @@ and a preprint server. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a comment's deletion leaving the tasks of a report numbered like it, and of a comment numbered like one of its reports, anywhere on the site (Side effects; A11, retired)
 - **Rarely met**:
   - an Editor whose role does not permit settings changes, refused the "Comments" tab and still opening the Comments page {OJS OMP} (Actors rows 5 and 6; a preprint server has no second manager-level role to untick): unticking "Permit changes to Settings" on a role is a setup few journals make, not a state an editor meets in an ordinary week
   - a Site Administrator holding no manager role in the journal, with no task row in their Tasks panel (Actors row 7): the state needs the Site Administrator's manager role ended on their own edit page, a setup no journal makes in an ordinary week
@@ -846,7 +842,6 @@ Left out of the scenarios above, by reason:
   - A7 (the comment's "…" button without a name for a screen reader; Rule 7)
   - A8 (closing the report panel clearing both numbers from the address; Rule 15; scenario 3 marks it)
   - A9 (the Site Administrator with Reader as their only journal role: the "Error" dialog over the Comments page, and the page working after "OK"; Rule 17b)
-  - A11 {OMP OPS} (a comment's deletion taking the task of an unrelated report or comment that shares its number, in any press or preprint server of the site; Side effects)
   - A12 (moderating or reporting another journal's comment by requests made by hand; Actors rows 3 and 7)
   - A13 (the Comments page's browser tab without the page's name; Rule 10)
   - OMP1 and OPS1 (the Site Administrator holding no manager role: the Comments page open on a journal, refused on a press and a preprint server; Rules 17a, 17c)
@@ -871,7 +866,6 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|------------------------------|------|--------|--------|
 | [A6](#a6) | The unverified ORCID iD under a comment and in the comment panel links to a broken address | 🐞 | minor | — |
 | [A10](#a10) | A comment deleted with its submission or its writer's account leaves its moderation tasks behind, blank and dead | 🐞 | minor | — |
-| [A11](#a11) | On a press and a preprint server, deleting a comment also removes the task about an unrelated report or comment that shares its number, in any press or server of the site {OMP OPS} | 🐞 | minor | — |
 | [A12](#a12) | A Journal Manager of one journal can read, approve, hide and delete another journal's comments by requests made by hand, and any signed-in account can report them | 🐞 | latent | — |
 | [A13](#a13) | The Comments page's browser tab carries no page name, only the journal's | 🐞 | minor | — |
 | [A1](#a1) | A hidden comment reads to its writer exactly like one awaiting approval | ❓ | minor | — |
@@ -884,6 +878,7 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A9](#a9) | A Site Administrator whose only journal role is Reader gets an "Error" dialog on every editorial page, the Comments page included | ❓ | minor | claim check (claude), 2026-09-28 — the dialog is the side menu's |
 | [OMP1](#omp1) | On a press, a Site Administrator holding no manager role is offered Content › Comments but the page answers the access-denied page | ❓ | minor | — |
 | [OPS1](#ops1) | On a preprint server, a Site Administrator holding no manager role is offered Content › Comments but the page answers the access-denied page | ❓ | minor | — |
+| [A11](#a11) | Retired: on a press and a preprint server, deleting a comment removed the task about an unrelated report or comment that shared its number; it now removes only its own tasks {OMP OPS} | ✅ | retired | upstream sync (claude), 2026-09-29 — fixed upstream |
 
 ### All apps
 
@@ -1010,24 +1005,6 @@ panel. Expected the rows to go with the comment, as they do when the
 comment is deleted on its own; observed they stay, blank and dead.
 Basis: test run. <sup>f-a10</sup>
 
-<a id="a11"></a>
-**A11 — Deleting a comment removes unrelated tasks that share its number** {OMP OPS} · 🐞 · minor.
-Comments and reports are numbered separately across the whole site, so a
-comment and a report can carry the same number. When a comment is
-deleted on a press or a preprint server, every moderator's "A report was
-submitted for a comment and requires review by a moderator." row about
-the report numbered like that comment leaves the Tasks panel too,
-whichever press or server the report belongs to; so does the "A comment
-has been submitted and is pending review by a moderator." row about a
-comment numbered like one of the deleted comment's reports. No message
-appears. The report stays on its "Reported" tab and in its comment's
-"Reports" table, but its moderators lose the task that told them it was
-filed. Expected a deletion to clear only the tasks about the deleted
-comment and its own reports, as it does on a journal (Side effects);
-observed on a press and a preprint server it also clears unrelated tasks
-that share a number.
-Since: 2026-03-04 (7 months) · Basis: probe. <sup>f-a11</sup>
-
 <a id="a12"></a>
 **A12 — Another journal's comments can be moderated and reported by requests made by hand** · 🐞 · latent.
 The application finds a comment by its number alone, whichever journal a
@@ -1086,6 +1063,11 @@ person opens the page. Expected the menu and the page to agree; observed
 the offer without the access.
 Question: as OMP1, for the preprint server. Lean: oversight, as OMP1.
 Basis: test run. <sup>f-ops1</sup>
+
+### Retired
+
+<a id="a11"></a>
+**A11 — Deleting a comment removes unrelated tasks that share its number** {OMP OPS} · ✅ · retired. Fixed upstream (pkp/pkp-lib#12401), on a journal since 2026-09-27 and on a press and a preprint server since 2026-09-29: comments and reports are numbered separately across the site, and deleting a comment used to take with it every moderator's task about the report numbered like the comment and about a comment numbered like one of its reports, in any press or server of the site; it now removes only the tasks about that comment and its own reports (Side effects). <sup>f-a11</sup>
 
 ---
 
@@ -1319,11 +1301,10 @@ effect) and `common.cancel`; DELETE `comments/{id}` allows the owner or a
 moderator (`Repository::isModerator()`: manager role in the context or
 site admin), deletes the row (reports cascade by foreign key) and the
 `notifications` rows of `ASSOC_TYPE_COMMENT` with the comment's id and of
-`ASSOC_TYPE_COMMENT_REPORT` with its reports' ids (OJS, lib/pkp
-`26ae6431b5`, pkp/pkp-lib#12401, 2026-09-27); on OMP and OPS (lib/pkp
-`17a1f01fed`) it deletes every row of either type whose id is the
-comment's or one of its reports', every type paired with every id, in any
-context (A11); the store filters the
+`ASSOC_TYPE_COMMENT_REPORT` with its reports' ids (pkp/pkp-lib
+`26ae6431b5`, #12401: OJS since 2026-09-27, OMP and OPS since their
+lib/pkp `fab29cfeca`, 2026-09-29; before it, every type was paired with
+every id in any context, A11); the store filters the
 comment out of the list without touching `commentsCountPerPublication`.
 Live-probed 2026-09-16 (Rule 9): the dialog's title, text (the comment in
 bold) and buttons as stated; "Cancel" kept the comment; "Delete" removed
@@ -1511,10 +1492,8 @@ characters plus "...") in the slot `task.tpl` prints under the message. URLs
 `…?reportId=R&commentId=N`, which the page's `onMounted` turns into the
 open panels. Deletion: `delete()` removes the comment's
 `ASSOC_TYPE_COMMENT` notifications and its reports'
-`ASSOC_TYPE_COMMENT_REPORT` ones on OJS (lib/pkp `26ae6431b5`); on OMP
-and OPS (lib/pkp `17a1f01fed`) the notifications of either type whose id
-is the comment's or one of its reports', every type paired with every id
-and in any context (footnote h, A11);
+`ASSOC_TYPE_COMMENT_REPORT` ones (lib/pkp `26ae6431b5` on the three
+apps since 2026-09-29; footnote h, A11);
 `deleteReport()` removes the `ASSOC_TYPE_COMMENT_REPORT` ones of its
 report; `setApproval()` removes none (A2). Re-driven 2026-09-27 on the
 three apps (Side effects, A2, A10): the moderator's deletion of a comment
@@ -1921,21 +1900,30 @@ page at "?reportId={r}&commentId=" with no panel; the rows stayed, marked
 read.
 
 <a id="fn-f-a11"></a>
-**f-a11 — A11.** On OMP and OPS (lib/pkp `17a1f01fed`),
-`UserCommentController::delete()` collects the comment's
-report ids, deletes the comment, then runs one
+**f-a11 — A11 (retired).** Fixed by pkp/pkp-lib `26ae6431b5` (#12401):
+OJS carried it from 2026-09-27, OMP and OPS from 2026-09-29, when their
+lib/pkp pointers moved to `fab29cfeca` (omp `480045c32`, ops
+`5da5bc48ad`). Re-driven 2026-09-29 on OMP and OPS, scratch contexts,
+with a comment of journal B numbered like one of journal A's two reports:
+A's Journal Manager's Tasks window held one "pending review" row and two
+"requires review" rows before B's Journal Manager deleted that comment,
+and the same three after, the row of the report sharing the number
+included, and A's "Reported" tab still listed the comment with both
+reports; the control, B deleting a comment whose number no report of A
+carried, left the three rows too. The same day, scenario 5 passed on OMP
+and OPS in full-suite runs, where it had failed on 2026-09-27. Before
+the fix, on OMP and OPS (lib/pkp `17a1f01fed`),
+`UserCommentController::delete()` collected the comment's
+report ids, deleted the comment, then ran one
 `Notification::whereIn('assoc_type', [ASSOC_TYPE_COMMENT, ASSOC_TYPE_COMMENT_REPORT])->whereIn('assoc_id', [commentId, …reportIds])->delete()`:
-every type is paired with every id and no context condition applies, so
-it also deletes (`ASSOC_TYPE_COMMENT_REPORT`, commentId), the tasks of
+every type was paired with every id and no context condition applied, so
+it also deleted (`ASSOC_TYPE_COMMENT_REPORT`, commentId), the tasks of
 the report whose id is the comment's, and (`ASSOC_TYPE_COMMENT`,
 reportId), the tasks of the comment whose id is one of the reports',
 across all contexts. `user_comments` and `user_comment_reports` are two
-id sequences that both start at 1 on a fresh install. OJS carries
-pkp/pkp-lib `26ae6431b5` (#12401, 2026-09-27), which splits the delete
-into (`ASSOC_TYPE_COMMENT`, commentId) and (`ASSOC_TYPE_COMMENT_REPORT`,
-reportIds); OMP and OPS (lib/pkp `17a1f01fed`) still run the single
-paired query and take the fix with their next lib/pkp pointer update, and
-the sync that sees it in all three retires the entry. The delete came with
+id sequences that both start at 1 on a fresh install. `26ae6431b5`
+splits the delete into (`ASSOC_TYPE_COMMENT`, commentId) and
+(`ASSOC_TYPE_COMMENT_REPORT`, reportIds). The paired delete came with
 pkp/pkp-lib#12401, lib/pkp `677b737d20` "Delete associated notifications
 when public comments or reports are deleted" (2026-03-04); before it a
 comment's deletion cleared no task at all. Live-probed 2026-09-26, OJS, OMP and

@@ -19,8 +19,6 @@
  * spec's Coverage section is the record of everything else left out):
  * - A1 🐞: no test signs the Site Administrator in.
  * - A3 ❓: S4 reads the phone-alone save refused, as the scenario states.
- * - A4 🐞: no test disables a member (a disabled member breaks the pages).
- * - A5 ❓: no test uses "Remove User" or a later start date.
  * - A6 ❓: S1 reads the history page's heading "Editorial History Page",
  *   as the scenario states.
  * - A7 🐞: side tabs are opened by the address naming both tabs
@@ -30,6 +28,8 @@
  * - OPS1 ✅: S12's subject, asserted as the spec states it.
  * - OPS2 ❓, OPS3 🐞: no scenario saves the sponsoring organization or
  *   adds French as a form language.
+ * - A13 🐞: no test invites to a role or changes a masthead choice while
+ *   the masthead is not based on enrollments.
  * - A2, A9, A10, A11, OMP1, OMP2: other apps' territory or no scenario
  *   here.
  * - U06's OMP1 🐞: S8's masthead choice answers with an error window on a

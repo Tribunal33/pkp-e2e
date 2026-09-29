@@ -23,7 +23,7 @@
  *   says; nothing reads whether the box holds it back.
  * - OJS9: S9 does not await DOAJ's answer; the queued deposit is never
  *   drained here.
- * - A1–A7, A9, A11–A15, OJS1–OJS3, OJS5–OJS7: not on these scenarios'
+ * - A1, A4–A7, A9, A11–A18, OJS1–OJS3, OJS5–OJS7: not on these scenarios'
  *   paths. OMP1–OMP3: the press's.
  *
  * Seeding (footnote sc): S2 reads `publicknowledge` with the roster; every
@@ -813,8 +813,8 @@ test.describe('Import & export', () => {
             newPasswordLine: NEW_PASSWORD_SENT,
         });
 
-        // B's users: moss Copyeditor, fern Author (Rules 23, 28); A2 and A3
-        // left unread.
+        // B's users: moss Copyeditor, fern Author (Rules 23, 28); their
+        // masthead choice and start dates (Rules 24a, 24b) left unread.
         const listB = new UsersListPage(page, b);
         await listB.goto();
         expect(await listB.cellLines(listB.rolesCell(listB.row(mailOf(moss))))).toEqual(['Copyeditor']);

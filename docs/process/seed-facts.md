@@ -1733,3 +1733,22 @@ config-file settings.
   (GB-ENG)"), but no ONIX supra-region such as "Eurozone (ECZ)"; the seed
   key answers 400 naming what the list offers. A format's "Metadata" tab,
   OMP, 2026-09-28 (U74 claim check K6).
+- Every new context, `publicknowledge` included, stores "Present a
+  masthead based on user enrollments" on and has no "Enable listing of
+  reviewers on the masthead" row, so the seeded journal and press show no
+  "Peer Reviewers in Previous Year"; a disabled account stays listed on
+  "Editorial Masthead" and "Editorial History". OJS OMP OPS, 2026-09-29
+  (U07 claim check K4; pkp-lib#13370, #13387).
+- The slot fleets on the VM serve the apps with PHP 8.3.33
+  (Administration › System Information "PHP version 8.3.33"; `php -S`),
+  the maintainer's Mac PHP 8.4. A Users XML import therefore takes the
+  U63 A16 branch on the VM: a file password stored as a bcrypt at the
+  installation's cost 12 is treated as stored another way (new password,
+  registration email), and a cost-10 bcrypt is kept. The VM's CLI `php`
+  is 8.3 too, so `password_hash()` without a cost writes cost 10. OJS and
+  OMP, 2026-09-29 (U63 claim check K3).
+- The "Editorial Masthead" tab's first save stores the reviewers box as
+  off (OJS, OMP; OPS has none). Until that first save, roles of one
+  permission level (OJS "Copyeditor" and "Editorial Board Member") come
+  in no fixed order on the tab: assert the order across levels only.
+  2026-09-29, three apps (U10 claim check K4).

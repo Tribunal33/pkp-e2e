@@ -27,21 +27,42 @@
 // RESEED=L,R recreates those contexts. State: .reports/U10/ccK4/k4-state-<app>.json.
 // Order matters inside "dates": d-custom leaves "Date & Time (Short)" on
 // "Custom" with the time alone (the finding), which d-time-g resets.
-// Run: PROBE_FEATURE=U10 PROBE_AGENT=ccK4 node bin/probe.js <app|all> shared/playwright/checks/U10/K4/k4.js
+// 2026-09-29 (s29, upstream sync pkp-lib#13370 / #13390): "Editorial Masthead"
+// gains "Enrollment-based Masthead" ("Present a masthead based on user
+// enrollments") and, on OJS/OMP, the "Enable listing of reviewers on the
+// masthead" box. Phases added:
+//   E  (seeded by the "enroll" phase itself, en + fr_CA, country and initials
+//      set) a member in each masthead role, a past member, an Editorial
+//      History text, [OJS/OMP] a reviewer with a review completed last year
+//   enroll   E: the tab as it opens (the two boxes, the list's rows and
+//            handles), the reviewers box ticked/unticked (same page, reload,
+//            public masthead), "Present a masthead…" unticked unsaved (side
+//            tab switch, reload), then saved (the list hidden, public
+//            masthead and editorialHistory address), ticked again; a role
+//            moved while the box is off; the Journal editor's save; a
+//            Section editor's typed address; {OJS} "Publishing Mode"
+//   mfr      E in the French interface: "Entête", the new boxes' labels
+// RUN=r1 suffixes facts, snapshots and the state file, so two runs keep their
+// own records; m-drag now drags inside the roles list only (the new boxes are
+// rows of the same class).
+// Run: PROBE_FEATURE=U10 PROBE_AGENT=ccK4s29 RUN=r1 PHASES=seed,fresh,masthead,enroll,mfr node bin/probe.js <app|all> shared/playwright/checks/U10/K4/k4.js
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
-const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, tag, outDir} =
+const {forEachApp, launch, signIn, signOut, screen, shot: shot0, record: rec0, loc, note, idle, tag, outDir} =
     require('../../../probe');
+const SFX = process.env.RUN ? `-${process.env.RUN}` : '';
+const record = (name, data, opts) => rec0(`${name}${SFX}`, data, opts);
+const shot = (p, name) => shot0(p, `${name}${SFX}`);
 
-const ALL = ['seed', 'fresh', 'masthead', 'advanced', 'lists', 'paging', 'cats', 'covers', 'dates'];
+const ALL = ['seed', 'fresh', 'masthead', 'enroll', 'mfr', 'advanced', 'lists', 'paging', 'cats', 'covers', 'dates'];
 const PHASES = process.env.PHASES ? process.env.PHASES.split(',') : ALL;
 const on = (p) => PHASES.includes(p);
 const T = 20_000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const flat = (t, n = 400) => String(t ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
 const log = (...a) => console.log('[k4]', new Date().toISOString().slice(11, 19), ...a);
-const stateFile = (app) => path.join(outDir(), `k4-state-${app.name}.json`);
+const stateFile = (app) => path.join(outDir(), `k4-state${SFX}-${app.name}.json`);
 const PINNED = '2026-09-24T15:05:00';   // the spec's example moment, the browser's clock (UTC on this VM)
 
 // ---- files -----------------------------------------------------------------
@@ -236,7 +257,7 @@ forEachApp(async (app) => {
         })).catch(() => []);
         const foot = (await form.locator('.pkpFormPage__footer, .pkpFormPage__errors, .pkpFormPage__status').allInnerTexts().catch(() => [])).map((x) => flat(x, 300)).filter(Boolean);
         const bodyErr = body && typeof body === 'object' && !body.id ? JSON.stringify(body).slice(0, 600) : null;
-        const pickKeys = ['itemsPerPage', 'numPageLinks', 'dateFormatLong', 'dateFormatShort', 'timeFormat', 'datetimeFormatLong', 'datetimeFormatShort', 'styleSheet', 'favicon', 'mastheadUserGroupIds', 'coverThumbnailsMaxWidth', 'coverThumbnailsMaxHeight'];
+        const pickKeys = ['itemsPerPage', 'numPageLinks', 'dateFormatLong', 'dateFormatShort', 'timeFormat', 'datetimeFormatLong', 'datetimeFormatShort', 'styleSheet', 'favicon', 'mastheadUserGroupIds', 'enableEnrollmentMasthead', 'enableEnrollmentMastheadReviewers', 'coverThumbnailsMaxWidth', 'coverThumbnailsMaxHeight'];
         const stored = body && body.id ? Object.fromEntries(pickKeys.filter((k) => k in body).map((k) => [k, body[k]])) : undefined;
         return {status: r ? r.status() : null, sent: !!r, saved, errors, foot, bodyErr, stored};
     };
@@ -303,12 +324,15 @@ forEachApp(async (app) => {
             return out;
         });
         const openRoleForm = async (ctx, roleName) => {
-            await page.goto(ctxUrl(st[ctx].path, '/management/settings/access'));
-            await idle(page);
-            await page.getByRole('tab', {name: 'Roles'}).click();
-            await idle(page);
-            await page.getByRole('row').filter({has: page.getByRole('link', {name: 'Settings'})}).first().waitFor({timeout: T});
             const row = page.getByRole('row', {name: new RegExp(`^Settings ${roleName} `)}).first();
+            // the Roles grid loads by AJAX and once (OPS, s29 r2) stayed empty: one more load before giving up
+            for (let attempt = 0; attempt < 2; attempt++) {
+                await page.goto(ctxUrl(st[ctx].path, '/management/settings/access'));
+                await idle(page);
+                await page.getByRole('tab', {name: 'Roles'}).click();
+                await idle(page);
+                if (await row.waitFor({timeout: T}).then(() => true).catch(() => false)) break;
+            }
             await row.getByRole('link', {name: 'Settings'}).click();
             await row.locator('xpath=following-sibling::tr[1]').getByRole('link', {name: 'Edit', exact: true}).click();
             const form = page.locator('#userGroupForm');
@@ -383,7 +407,7 @@ forEachApp(async (app) => {
                 const pubH = await (async () => { await vis.goto(ctxUrl(st.A.path, '/about/editorialHistory')); await idle(vis); await snap(vis, 'm03-public-history-before'); return readList(vis); })();
                 fact('m-fresh', {order0, aria, pubM, pubH});
                 await loc(page, 'Editorial Masthead: an up arrow by its text', pn.locator('button').filter({hasText: /^Increase position of /}));
-                await loc(page, 'Editorial Masthead: the Reviewers note', pn.getByText('Reviewers will be displayed in a standardized format'));
+                await loc(page, 'Editorial Masthead: the Reviewers note', pn.getByText('Reviewers who completed a review in the previous calendar year'));
             });
             // a role ticked for the masthead before the tab was ever saved (OJS/OMP Copyeditor, OPS Author)
             const late1 = isOps ? 'Author' : 'Copyeditor';
@@ -485,24 +509,21 @@ forEachApp(async (app) => {
                 const before = await mastheadOrder(pn);
                 // the arrows' own attributes, for the screen-reader names (A3)
                 const attrs = await pn.locator('button').evaluateAll((bs) => bs.slice(0, 2).map((b) => ({html: b.outerHTML.replace(/<svg[\s\S]*?<\/svg>/g, '<svg/>').replace(/\s+/g, ' ').slice(0, 400)})));
-                const rowHtml = await pn.locator('.pkpFormField--options__option, li, [draggable]').first().evaluate((e) => e.outerHTML.replace(/<svg[\s\S]*?<\/svg>/g, '<svg/>').replace(/\s+/g, ' ').slice(0, 900)).catch(() => null);
+                // the roles list's rows only: the two boxes above and below are rows of the same class
+                const rows = pn.locator('fieldset.pkpFormField--options').filter({has: page.locator('[id^="appearanceMasthead-mastheadUserGroupIds"]')}).locator('.pkpFormField--options__option');
+                const rowHtml = await rows.first().evaluate((e) => e.outerHTML.replace(/<svg[\s\S]*?<\/svg>/g, '<svg/>').replace(/\s+/g, ' ').slice(0, 900)).catch(() => null);
+                const handles = await rows.locator('.orderer__dragDrop').count();
+                const boxesInList = await rows.locator('input[type="checkbox"]').count();
                 // drag the last role's handle to the top of the list
-                const rows = pn.locator('.pkpFormField--options__option');
                 const n = await rows.count();
                 let dragged = null;
                 if (n >= 2) {
-                    const src = await rows.nth(n - 1).boundingBox();
-                    const dst = await rows.nth(0).boundingBox();
-                    await page.mouse.move(src.x + 20, src.y + src.height / 2);
-                    await page.mouse.down();
-                    await page.mouse.move(src.x + 20, src.y - 10, {steps: 5});
-                    await page.mouse.move(dst.x + 20, dst.y + 5, {steps: 12});
-                    await page.mouse.up();
+                    await rows.nth(n - 1).locator('.orderer__dragDrop').dragTo(rows.nth(0), {targetPosition: {x: 30, y: 3}}).catch(() => {});
                     await sleep(600);
                     dragged = await mastheadOrder(pn);
                 }
                 await snap(page, 'm15-after-drag');
-                fact('m-drag', {before, attrs, rowHtml, rows: n, dragged});
+                fact('m-drag', {before, attrs, rowHtml, rows: n, handles, boxesInList, dragged});
                 await page.reload(); await idle(page);
             });
             await step('m-sidebar-names', async () => {
@@ -511,6 +532,243 @@ forEachApp(async (app) => {
                 const aria = await f.ariaSnapshot().catch(() => null);
                 fact('m-sidebar-names', {aria: aria && aria.slice(0, 3000)});
             });
+        }
+
+        // ======================= enroll / mfr (s29: pkp-lib#13370, the two masthead boxes) =====
+        if (on('enroll') || on('mfr')) {
+            const LAST = new Date().getFullYear() - 1;
+            if (!st.E) {
+                const tE = `${st.t}e`;
+                const uE = (key, roles, given, family, extra = {}) => ({username: `${tE}${key}`, roles, givenName: given, familyName: family, ...extra});
+                const usersE = [uE('mgr', ['manager'], 'Elsa', 'Manager'), uE('au', ['author'], 'Aldo', 'Author')];
+                if (!isOps) usersE.push(uE('ed', ['editor'], 'Ezra', 'Editor'), uE('rv', ['externalReviewer'], 'Rhea', 'Reviewer'));
+                usersE.push(uE('se', ['sectionEditor'], 'Seth', 'Sectioneditor'), uE('eb', ['editorialBoardMember'], 'Emma', 'Boardmember'));
+                usersE.push(uE('px', ['reader'], 'Petra', 'Pastmember', {pastRoles: [{role: 'sectionEditor'}]}));
+                const resE = await app.api.createContext({tag: tE, context: {name: `U10 K4 E ${tE}`, acronym: 'K4E', country: 'CA', primaryLocale: 'en', supportedLocales: ['en', 'fr_CA'], supportedFormLocales: ['en', 'fr_CA']}, users: usersE});
+                let rev = null;
+                if (!isOps) {
+                    rev = await app.api.createSubmission({tag: `${tE}x`, context: tE, submitter: `${tE}au`, title: `K4 reviewed item ${tE}`, decisions: ['sendExternalReview'],
+                        reviewRounds: [{reviewers: [{username: `${tE}rv`, status: 'completed', dateCompleted: `${LAST}-05-10`}]}]}).catch((e) => ({error: String(e.message).slice(0, 300)}));
+                }
+                st.E = {path: tE, mgr: `${tE}mgr`, ed: isOps ? null : `${tE}ed`, se: `${tE}se`, contextId: resE && resE.contextId, rev: rev && (rev.submissionId || rev.error)};
+                saveState();
+                fact('seed-E', st.E);
+            }
+            const E = st.E;
+            const enrollBox = (pn) => pn.locator('input[name="enableEnrollmentMasthead"]');
+            const revBox = (pn) => pn.locator('input[name="enableEnrollmentMastheadReviewers"]');
+            const rolesField = (pn) => pn.locator('fieldset.pkpFormField--options').filter({has: page.locator('[id^="appearanceMasthead-mastheadUserGroupIds"]')});
+            const tabState = async (pn) => ({
+                enroll: await enrollBox(pn).count() ? await enrollBox(pn).isChecked() : 'absent',
+                enrollVisible: await enrollBox(pn).isVisible().catch(() => false),
+                reviewers: await revBox(pn).count() ? await revBox(pn).isChecked() : 'absent',
+                reviewersVisible: await revBox(pn).isVisible().catch(() => false),
+                rolesVisible: await rolesField(pn).isVisible().catch(() => false),
+                order: await mastheadOrder(pn),
+                fieldLabels: await pn.locator('fieldset.pkpFormField').evaluateAll((fs) => fs.filter((f) => f.getClientRects().length).map((f) => (f.querySelector('legend') || {}).innerText || '').map((x) => x.replace(/\s+/g, ' ').trim())),
+                text: flat(await pn.innerText().catch(() => ''), 1500),
+            });
+            const pubRead = async (name, p = vis, pth = '/about/editorialMasthead') => {
+                const chain = [];
+                const onResp = (r) => { if (r.request().isNavigationRequest() && r.frame() === p.mainFrame()) chain.push({status: r.status(), url: r.url().replace(/^https?:\/\/[^/]+/, '')}); };
+                p.on('response', onResp);
+                await p.goto(ctxUrl(E.path, pth)); await idle(p);
+                p.off('response', onResp);
+                const s = await snap(p, name);
+                const main = await p.evaluate(() => {
+                    const txt = (e) => (e ? e.innerText.replace(/\s+/g, ' ').trim() : null);
+                    const root = document.querySelector('.page_masthead') || document.querySelector('.pkp_structure_main') || document.body;
+                    return {h1: [...root.querySelectorAll('h1')].map(txt), h2: [...root.querySelectorAll('h2')].map(txt), text: txt(root).slice(0, 1500),
+                        links: [...root.querySelectorAll('a')].map((a) => ({text: txt(a), href: (a.getAttribute('href') || '').replace(/^https?:\/\/[^/]+/, '')})).slice(0, 20),
+                        about: [...document.querySelectorAll('.pkp_navigation_primary a, nav a')].map((a) => txt(a)).filter(Boolean).slice(0, 30)};
+                });
+                return {url: p.url().replace(/^https?:\/\/[^/]+/, ''), title: s && s.title, chain, ...main, list: await readList(p)};
+            };
+            const openE = async (locale = 'en') => {
+                await page.goto(ctxUrl(E.path, '/management/settings/website', locale));
+                await idle(page);
+                await page.locator('#appearance-button').first().click();
+                await idle(page); await sleep(400);
+                await page.locator('#appearance-masthead-button').first().click();
+                await idle(page); await sleep(700);
+                return panel('Editorial Masthead');
+            };
+
+            if (on('enroll')) {
+                await signIn(page, E.mgr, {contextPath: E.path}); await idle(page);
+                // the Editorial History text the disabled masthead page prints (Settings › Journal › Masthead)
+                await step('e-histtext', async () => {
+                    await page.goto(ctxUrl(E.path, '/management/settings/context')); await idle(page);
+                    await page.locator('#masthead-button').first().click().catch(() => {}); await idle(page);
+                    const ta = page.locator('textarea[id^="masthead-editorialHistory-control"]').first();
+                    const id = await ta.getAttribute('id');
+                    await page.waitForFunction((i) => !!(window.tinymce && window.tinymce.get(i) && window.tinymce.get(i).initialized), id, {timeout: T});
+                    await page.frameLocator(`[id="${id}_ifr"]`).locator('body').click();
+                    await page.keyboard.type('K4 history: founded in 2001.');
+                    await sleep(300);
+                    const w = page.waitForResponse((r) => /\/api\/v1\/contexts\/\d+/.test(r.url()) && r.request().method() !== 'GET', {timeout: T}).catch(() => null);
+                    await page.locator('form').filter({has: ta}).first().getByRole('button', {name: 'Save', exact: true}).click();
+                    const r = await w;
+                    const saved = await page.locator('[role="status"]:has-text("Saved")').first().waitFor({timeout: 8000}).then(() => true).catch(() => false);
+                    await snap(page, 'e00-history-text-saved');
+                    fact('e-histtext', {status: r ? r.status() : null, saved});
+                });
+                await step('e-fresh', async () => {
+                    const pn = await openE();
+                    await snap(page, 'e01-tab-fresh');
+                    const d = await formDump(pn);
+                    const tabs = (await page.getByRole('tab').allInnerTexts().catch(() => [])).map((x) => flat(x, 60));
+                    const rows = rolesField(pn).locator('.pkpFormField--options__option');
+                    const rowInfo = {rows: await rows.count(), handles: await rows.locator('.orderer__dragDrop').count(), up: await rows.locator('button.orderer__up').count(), down: await rows.locator('button.orderer__down').count(), boxes: await rows.locator('input').count()};
+                    const order = await mastheadOrder(pn);
+                    const aria = await pn.ariaSnapshot().catch(() => null);
+                    await loc(page, 'Editorial Masthead: "Present a masthead based on user enrollments"', pn.getByRole('checkbox', {name: 'Present a masthead based on user enrollments'}));
+                    await loc(page, 'Editorial Masthead: "Enable listing of reviewers on the masthead"', pn.getByRole('checkbox', {name: 'Enable listing of reviewers on the masthead'}));
+                    await loc(page, 'Editorial Masthead: the roles list rows', rows);
+                    await loc(page, 'Editorial Masthead: a row\'s drag handle', rows.locator('.orderer__dragDrop'));
+                    const pub = await pubRead('e02-pub-masthead-fresh');
+                    fact('e-fresh', {state: await tabState(pn), tabs, fields: d.fields.map((f) => ({label: f.label, description: f.description, inputs: f.inputs.map((i) => ({type: i.type, name: i.name, checked: i.checked, label: i.label}))})), rowInfo, order, aria, pub});
+                });
+                if (!isOps) await step('e-reviewers', async () => {
+                    let pn = await openE();
+                    await revBox(pn).check();
+                    const unsaved = await tabState(pn);
+                    const save = await saveForm(pn);
+                    const samePage = await tabState(pn);
+                    await snap(page, 'e03-reviewers-on-saved');
+                    pn = await openE();
+                    const reloaded = await tabState(pn);
+                    const pubOn = await pubRead('e04-pub-reviewers-on');
+                    await revBox(pn).uncheck();
+                    const save2 = await saveForm(pn);
+                    const samePage2 = await tabState(pn);
+                    pn = await openE();
+                    const reloaded2 = await tabState(pn);
+                    await snap(page, 'e05-reviewers-off-reloaded');
+                    const pubOff = await pubRead('e06-pub-reviewers-off');
+                    fact('e-reviewers', {unsaved, save, samePage, reloaded, pubOn, save2, samePage2, reloaded2, pubOff});
+                });
+                await step('e-enroll-unsaved', async () => {
+                    let pn = await openE();
+                    await enrollBox(pn).uncheck();
+                    await sleep(300);
+                    const unsaved = await tabState(pn);
+                    await snap(page, 'e07-enroll-off-unsaved');
+                    await page.locator('#advanced-button').first().click(); await idle(page); await sleep(400);
+                    await page.locator('#appearance-masthead-button').first().click(); await idle(page); await sleep(400);
+                    const afterSwitch = await tabState(panel('Editorial Masthead'));
+                    const n0 = dialogs.length;
+                    await page.reload(); await idle(page);
+                    await page.locator('#appearance-button').first().click(); await idle(page);
+                    await page.locator('#appearance-masthead-button').first().click(); await idle(page); await sleep(500);
+                    const afterReload = await tabState(panel('Editorial Masthead'));
+                    await snap(page, 'e08-enroll-after-leave');
+                    fact('e-enroll-unsaved', {unsaved, afterSwitch, afterReload, dialogs: dialogs.slice(n0)});
+                });
+                await step('e-enroll-off', async () => {
+                    let pn = await openE();
+                    await enrollBox(pn).uncheck();
+                    const save = await saveForm(pn);
+                    const samePage = await tabState(pn);
+                    await snap(page, 'e09-enroll-off-saved');
+                    pn = await openE();
+                    const reloaded = await tabState(pn);
+                    await snap(page, 'e10-enroll-off-reloaded');
+                    const pubM = await pubRead('e11-pub-masthead-off');
+                    const pubH = await pubRead('e12-pub-history-off', vis, '/about/editorialHistory');
+                    const pubAbout = await pubRead('e13-pub-about-off', vis, '/about');
+                    const mgrM = await pubRead('e14-mgr-masthead-off', page);
+                    // the manager's "Edit" link on the disabled page: where it lands
+                    let edit = null;
+                    const el = page.locator('.page_masthead a').filter({hasText: 'Edit'}).first();
+                    if (await el.count()) {
+                        await el.click(); await idle(page); await sleep(800);
+                        const selTab = await page.locator('[role="tab"][aria-selected="true"]').allInnerTexts().catch(() => []);
+                        const histBox = await page.locator('textarea[id^="masthead-editorialHistory-control"]').first().isVisible().catch(() => false);
+                        await snap(page, 'e14b-mgr-edit-link-landed');
+                        edit = {url: page.url().replace(/^https?:\/\/[^/]+/, ''), selectedTabs: selTab.map((x) => flat(x, 60)), historyBoxVisible: histBox};
+                    }
+                    fact('e-enroll-off', {save, samePage, reloaded, pubM, pubH, pubAbout: {about: pubAbout.about, links: pubAbout.links}, mgrM: {h1: mgrM.h1, links: mgrM.links, text: mgrM.text}, edit});
+                });
+                await step('e-move-while-off', async () => {
+                    // the box ticked (unsaved) shows the list; a role moved; the box unticked again; Save
+                    let pn = await openE();
+                    await enrollBox(pn).check(); await sleep(300);
+                    const shown = await tabState(pn);
+                    const second = shown.order[1];
+                    if (second) await pn.locator('button').filter({hasText: `Increase position of ${second}`}).first().click();
+                    await sleep(400);
+                    const moved = await tabState(pn);
+                    await enrollBox(pn).uncheck(); await sleep(300);
+                    const save = await saveForm(pn);
+                    pn = await openE();
+                    await enrollBox(pn).check(); await sleep(300);
+                    const reopened = await tabState(pn);
+                    await snap(page, 'e15-move-while-off-reopened');
+                    fact('e-move-while-off', {shown, second, moved, save, reopened});
+                });
+                await step('e-enroll-on', async () => {
+                    let pn = await openE();
+                    await enrollBox(pn).check(); await sleep(300);
+                    const save = await saveForm(pn);
+                    const samePage = await tabState(pn);
+                    pn = await openE();
+                    const reloaded = await tabState(pn);
+                    await snap(page, 'e16-enroll-on-reloaded');
+                    const pubM = await pubRead('e17-pub-masthead-on');
+                    const pubH = await pubRead('e18-pub-history-on', vis, '/about/editorialHistory');
+                    fact('e-enroll-on', {save, samePage, reloaded, pubM, pubH});
+                });
+                if (E.ed) await step('e-editor', async () => {
+                    await signIn(page, E.ed, {contextPath: E.path}); await idle(page);
+                    let pn = await openE();
+                    const before = await tabState(pn);
+                    await snap(page, 'e19-editor-tab');
+                    await revBox(pn).check();
+                    const save = await saveForm(pn);
+                    pn = await openE();
+                    const reloaded = await tabState(pn);
+                    await revBox(pn).uncheck();
+                    const save2 = await saveForm(pn);
+                    fact('e-editor', {before: {enroll: before.enroll, reviewers: before.reviewers, order: before.order}, save, reloaded: {reviewers: reloaded.reviewers}, save2});
+                });
+                await step('e-se-typed', async () => {
+                    await signIn(page, E.se, {contextPath: E.path}); await idle(page);
+                    const r = await page.goto(ctxUrl(E.path, '/management/settings/website')).catch(() => null);
+                    await idle(page);
+                    const s = await snap(page, 'e20-sectioneditor-typed');
+                    fact('e-se-typed', {status: r && r.status(), url: page.url().replace(/^https?:\/\/[^/]+/, ''), title: s && s.title, text: flat(s && s.text && (s.text.main || s.text.body || JSON.stringify(s.text)), 300), mastheadTab: await page.locator('#appearance-masthead-button').count()});
+                });
+                await step('e-pubmode', async () => {
+                    await signIn(page, E.mgr, {contextPath: E.path}); await idle(page);
+                    await page.goto(ctxUrl(E.path, '/management/settings/distribution')); await idle(page);
+                    const tabs = (await page.getByRole('tab').allInnerTexts().catch(() => [])).map((x) => flat(x, 60));
+                    await page.getByRole('tab', {name: 'Access', exact: true}).click().catch(() => {}); await idle(page); await sleep(500);
+                    const radios = page.locator('input[name="publishingMode"]');
+                    const modes = await radios.evaluateAll((els) => els.map((e) => ({value: e.value, checked: e.checked, label: (e.closest('label') || e.parentElement).innerText.replace(/\s+/g, ' ').trim()})));
+                    const legends = await page.locator('[role="tabpanel"]:visible fieldset legend, [role="tabpanel"]:visible .pkpFormFieldLabel').allInnerTexts().catch(() => []);
+                    await snap(page, 'e21-access-tab');
+                    fact('e-pubmode', {tabs, modes, legends: legends.map((x) => flat(x, 80))});
+                });
+            }
+            if (on('mfr')) {
+                await signIn(page, E.mgr, {contextPath: E.path}); await idle(page);
+                await step('f-entete', async () => {
+                    let pn = await openE('fr_CA');
+                    const tabLabel = flat(await page.locator('#appearance-masthead-button').first().innerText().catch(() => ''), 80);
+                    const d = await formDump(pn);
+                    const arrows = await pn.locator('button').evaluateAll((bs) => bs.slice(0, 4).map((b) => b.innerText.replace(/\s+/g, ' ').trim()));
+                    const state = await tabState(pn);
+                    await snap(page, 'f01-entete-fr');
+                    // the box unticked (unsaved): what the French tab keeps
+                    await enrollBox(pn).uncheck(); await sleep(300);
+                    const off = await tabState(pn);
+                    await snap(page, 'f02-entete-fr-box-off-unsaved');
+                    await page.reload(); await idle(page);
+                    fact('f-entete', {tabLabel, fields: d.fields.map((f) => ({label: f.label, description: f.description, inputs: f.inputs.map((i) => ({type: i.type, name: i.name, checked: i.checked, label: i.label}))})), arrows, order: state.order, off: {rolesVisible: off.rolesVisible, reviewersVisible: off.reviewersVisible}});
+                });
+            }
+            await signIn(page, st.A.mgr, {contextPath: st.A.path}).catch(() => {});
         }
 
         // ======================= advanced (td28, td29, A5, Rules 26–27, Settings 16–19) ==

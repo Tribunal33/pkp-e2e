@@ -119,12 +119,14 @@ On a press the three catalog fields come after "Sidebar", and the thumbnail
 comes after "Logo" on every app. <sup>f</sup>
 
 **"Editorial Masthead"** (Settings › Website › "Appearance" › "Editorial
-Masthead"). <sup>u</sup>
+Masthead"). The groups below, top to bottom; a preprint server has the
+first two. <sup>u</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| "Editorial Masthead" | — | Under "Define the order of masthead roles for public display.", a list of role names, each with a drag handle and up and down arrows and no box to tick. Which roles, and what the order does: Rule 28 <sup>u</sup> |
-| "Reviewers" | — | A note with no control: "Reviewers will be displayed in a standardized format to maintain uniformity and ensure easy discoverability in this section." It shows on a preprint server too <sup>u</sup> <sup>td5</sup> |
+| "Enrollment-based Masthead" | — | One box, "Present a masthead based on user enrollments", under "If desired, a masthead can be generated automatically based on user enrollments, including start and end dates. See also Settings > Journal > Masthead." ("…See also Settings > Press > Masthead." on a press, "…See also Settings > Server > Masthead." on a preprint server); ticked on a new journal. Unticking it takes the "Editorial Masthead" list and "Reviewers" off the tab at once, before any save; ticking it again brings them back. What the box does: Settings bullet 15a <sup>u</sup> <sup>td5</sup> |
+| "Editorial Masthead" | — | Shown while "Present a masthead based on user enrollments" is ticked. Under "Define the order of masthead roles for public display.", a list of role names, each with a drag handle and up and down arrows and no box to tick. Which roles, and what the order does: Rule 28 <sup>u</sup> |
+| "Reviewers" {OJS OMP} | — | Shown while "Present a masthead based on user enrollments" is ticked. One box, "Enable listing of reviewers on the masthead", under "Reviewers who completed a review in the previous calendar year will be credited in a standardized format to maintain uniformity and ensure easy discoverability in this section."; unticked on a new journal and press. What the box does: Settings bullet 15b. A preprint server's tab has no "Reviewers" group <sup>u</sup> <sup>td5</sup> |
 
 **"Advanced"** (Settings › Website › "Appearance" › "Advanced"). <sup>h</sup>
 
@@ -441,21 +443,34 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
 
 **The masthead order**
 
-28. **"Editorial Masthead".** The list holds every role of the journal
+28. **"Editorial Masthead".** While "Present a masthead based on user
+    enrollments" is ticked, the list holds every role of the journal
     whose "Consider role in masthead list" is ticked (Settings › Users &
     Roles › "Roles"; *Roles configuration*), the Reviewer role excepted:
     on a new journal "Journal editor", "Section editor" and "Editorial
     Board Member" ("Press editor", "Series editor" and "Editorial Board
     Member" on a press; "Moderator" and "Editorial Board Member" on a
     preprint server). Until the tab is first saved, the list follows the
-    roles' permission levels, a newly ticked role included; once it has
-    been saved, a role ticked later joins at the end. After "Save", the
-    list's order is the order of the role
-    headings on the public "Editorial Masthead" and "Editorial History"
-    pages ([Journal identity & about pages](U07-journal-identity-and-about-pages.md),
+    roles' permission levels, a newly ticked role included; roles of the
+    same level, such as a journal's "Copyeditor" and "Editorial Board
+    Member", stand in no fixed order among themselves ⚠ [A14](#a14).
+    Once the tab has been saved, a role ticked later joins at the end.
+    After "Save", the list's order is the order of the role headings on
+    the public "Editorial Masthead" and "Editorial History" pages
+    ([Journal identity & about pages](U07-journal-identity-and-about-pages.md),
     Rule 14a). The arrows' names for a screen reader: [A3](#a3). The
     list in the French interface: Rule 35b.
     <sup>u</sup> <sup>td30</sup>
+
+28a. **The list with the box unticked.** With "Present a masthead based
+    on user enrollments" unticked, the list is not on the tab and neither
+    public page lists roles
+    ([Journal identity & about pages](U07-journal-identity-and-about-pages.md),
+    Rule 14f). The saved order is kept: ticked again, the list shows in
+    that order, and once the tab is saved both pages list the roles in
+    that order again.
+    A role moved while the box is still ticked keeps its new place when
+    the box is then unticked and the tab saved. <sup>u</sup> <sup>td30</sup>
 
 **Lists**
 
@@ -559,9 +574,10 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
     "Editorial Masthead" reads "Entête", and the order list's description
     reads "Définir l’ordre des rôles sur la page de l'équipe éditoriale de
     la revue." ("the journal's editorial team page") on a press and a
-    preprint server too ⚠ [A11](#a11); the "Évaluateurs-trices" note
-    below it names no journal. On a preprint server the list names the
-    Moderator role "##default.groups.name.sectionEditor##", as the French
+    preprint server too ⚠ [A11](#a11). On a journal and a press the
+    "Évaluateurs-trices" group below it names no journal; a preprint
+    server's tab has no "Évaluateurs-trices". On a preprint server the
+    list names the Moderator role "##default.groups.name.sectionEditor##", as the French
     public masthead does
     ([Journal identity & about pages](U07-journal-identity-and-about-pages.md#ops4)).
     <sup>td38</sup>
@@ -616,6 +632,18 @@ that change them.
 15. **"Editorial Masthead"** (Settings › Website › "Appearance" ›
     "Editorial Masthead"; the roles' permission-level order). Another
     order: Rule 28. <sup>u</sup>
+    - 15a. **"Present a masthead based on user enrollments"** (the same
+      tab, group "Enrollment-based Masthead"; ticked on a new journal).
+      Unticked: the list and "Reviewers" leave the tab (Fields), and the
+      public masthead lists no roles (Rule 28a;
+      [Journal identity & about pages](U07-journal-identity-and-about-pages.md),
+      Settings bullet 4a and Rule 14f). <sup>u</sup>
+    - 15b. **"Enable listing of reviewers on the masthead"** {OJS OMP}
+      (the same tab, group "Reviewers"; unticked on a new journal and
+      press). Ticked: the public masthead lists "Peer Reviewers in
+      Previous Year"
+      ([Journal identity & about pages](U07-journal-identity-and-about-pages.md),
+      Settings bullet 4c and Rule 15). <sup>u</sup>
 16. **The style sheet** (Settings › Website › "Appearance" › "Advanced";
     none). Set: Rule 26. <sup>t</sup>
 17. **"Favicon"** (the same tab; none). Set: Rule 27. <sup>t</sup>
@@ -942,14 +970,18 @@ passwords and the tooling recipe are in the footnote. <sup>sc</sup>
    second browser.
 
    - **The list as it opens**: open Settings › Website › "Appearance" ›
-     "Editorial Masthead": under "Define the order of masthead roles for
-     public display." the list reads "Journal editor", "Section editor",
+     "Editorial Masthead": "Present a masthead based on user enrollments"
+     is ticked; under "Define the order of masthead roles for public
+     display." the list reads "Journal editor", "Section editor",
      "Editorial Board Member" ("Press editor", "Series editor", "Editorial
      Board Member"; "Moderator", "Editorial Board Member"), each row with
      a drag handle and up and down arrows and no box to tick, and no
-     Reviewer role; below it, "Reviewers" with the note "Reviewers will
-     be displayed in a standardized format to maintain uniformity and
-     ensure easy discoverability in this section." (Fields, "Editorial
+     Reviewer role. Below it, on a journal and a press, "Reviewers" with
+     the note "Reviewers who completed a review in the previous calendar
+     year will be credited in a standardized format to maintain
+     uniformity and ensure easy discoverability in this section." and the
+     box "Enable listing of reviewers on the masthead", unticked; on a
+     preprint server nothing follows the list (Fields, "Editorial
      Masthead"; Rule 28).
    - **A role ticked before the first save** {OJS OMP}: open Settings ›
      Users & Roles › "Roles", press "Edit" on the "Production editor"
@@ -1127,6 +1159,8 @@ Left out of the scenarios above, by reason:
   - a press's French pages giving a book's date in the default format before a French "Date" is saved, and in the saved one after, the English pages unchanged {OMP} (Rule 3a)
   - French ticked under "UI" alone: "Date & Time" without a "French" button, and a press's French pages keeping the default format after an English "Date" is saved {OMP} (Rule 3b)
   - a chapter's page printing the book's "Date" {OMP} (Rule 31)
+  - "Present a masthead based on user enrollments" unticked: the list and "Reviewers" leaving the tab before any save; saved, the box still unticked after a reload; ticked again and saved, the list back in its saved order, a role moved just before the box was unticked included (Fields, "Editorial Masthead"; Rule 28a; Settings bullet 15a)
+  - "Enable listing of reviewers on the masthead" ticked and saved, still ticked after a reload {OJS OMP} (Fields, "Editorial Masthead"; Settings bullet 15b)
 - **Nothing new to test**:
   - a role newly considered for the masthead on a preprint server, before and after the tab's first save {OPS} (Rule 28; Settings bullet 24)
   - the Editor and the Production Editor on the same tabs: the same fields and saves as the Journal Manager in scenarios 1 to 10 (Actors row 1)
@@ -1144,6 +1178,7 @@ Left out of the scenarios above, by reason:
   - A11 (the French "Entête" description naming a journal on a press and a preprint server; Rule 35b)
   - A12 (the French upload boxes' drop area in English; Rule 35a)
   - A13 (the default French date in the English word order {OMP}; Rule 3a)
+  - A14 (roles of the same level changing places on "Editorial Masthead" before its first save; Rule 28)
   - OJS2 (a first issue created on a journal that never saved "Theme", the home page switching by itself {OJS}; Rule 10)
   - OJS3 (a published issue's articles absent from "Latest Publications", the list ordered by submission {OJS}; Rule 13)
   - OJS4 (the Settings Wizard showing another organization for a journal with no issue {OJS}; Rule 34; scenario 2 marks it)
@@ -1165,11 +1200,12 @@ Left out of the scenarios above, by reason:
   - "Items per page" and "Page links" on the older editorial lists, and the "Users" list's own page length (Rules 29, 30; *Roles configuration*, *Users management*)
   - "Date & Time (Short)" on a submission file's notes and a library file's "Date uploaded" (Rule 31; [Submission files](U36-submission-files.md), [Submission & Publisher Libraries](U39-submission-and-publisher-libraries.md))
   - the Moderator role's raw code in a preprint server's French "Entête" list {OPS} (Rule 35b; [Journal identity & about pages](U07-journal-identity-and-about-pages.md#ops4))
+  - the public "Editorial Masthead" and "Editorial History" with "Present a masthead based on user enrollments" unticked, and "Peer Reviewers in Previous Year" with "Enable listing of reviewers on the masthead" ticked (Rule 28a; Settings bullets 15a, 15b; [Journal identity & about pages](U07-journal-identity-and-about-pages.md), Rules 14f and 15, scenario 9)
 
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-09-24; A10–A12
-2026-09-28; A13 2026-09-29), unreviewed unless an entry notes
+2026-09-28; A13, A14 2026-09-29), unreviewed unless an entry notes
 otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
@@ -1190,6 +1226,7 @@ otherwise; the team settles them on spec review.
 | [A2](#a2) | A logo saved without alternate text leaves the header's home link without a name | ❓ | minor | — |
 | [A10](#a10) | A saved "Colour" does not reach a browser that has already opened the journal | ❓ | user-visible | — |
 | [A13](#a13) | Until a French "Date" is saved, a press's French pages write a book's date in the English order ("mars 5, 2024") | ❓ | minor | — |
+| [A14](#a14) | Before "Editorial Masthead" is first saved, roles of the same level change places between openings of the tab | ❓ | minor | — |
 | [OJS2](#ojs2) | A journal's home page switches from its recent articles to an empty current-issue section when the first issue is created | ❓ | user-visible | — |
 | [OJS3](#ojs3) | "Include recent most published articles" lists only articles outside a published issue, by submission date | ❓ | minor | — |
 | [OJS4](#ojs4) | The Settings Wizard shows the current issue's table of contents ticked for a journal with no issue, and a save there stores it | ❓ | minor | — |
@@ -1343,6 +1380,19 @@ language with no saved format get a default in its own order ("5 mars
 a default per language; French readers see an ungrammatical date on every
 book until a manager who knows the tab changes it. Basis: probe.
 <sup>f-a13</sup>
+
+<a id="a14"></a>
+**A14 — Roles of one level change places before the masthead order is first saved** · ❓ · minor.
+Until "Editorial Masthead" is first saved, its list follows the roles'
+permission levels, and a manager expects it in the same order at every
+opening. Roles of the same level have no set order between them:
+"Copyeditor" stood above "Editorial Board Member" on one journal and
+below it on another, and on one journal the two changed places between
+two openings of the tab with nothing saved in between. A press kept
+"Copyeditor" above "Editorial Board Member" each time. Question: should
+the list have one order before its first save? Lean: yes, a minor
+defect; a list that reorders itself between visits reads as a change
+nobody made. Basis: probe. <sup>f-a14</sup>
 
 ### OJS
 
@@ -1779,15 +1829,27 @@ labels kept the theme's grey; the Dashboard and Settings › Website did
 not load it.
 
 <a id="fn-u"></a>
-**u — "Editorial Masthead".** `PKPAppearanceMastheadForm`:
-`mastheadUserGroupIds` (`FieldOptions`, `isOrderable`, `allowOnlySorting`,
-the value every listed id) and the `FieldHTML` `reviewer`
-(`user.role.reviewers`, `manager.setup.editorialMasthead.order.reviewers.description`),
-added on every app. `Repo::userGroup()->getSortedMastheadUserGroups()`:
+**u — "Editorial Masthead".** `PKPAppearanceMastheadForm` (reworked by
+pkp/pkp-lib#13370, lib/pkp `fab29cfeca`): `enableEnrollmentMasthead`
+(`FieldOptions`, one option), then `mastheadUserGroupIds` (`FieldOptions`,
+`isOrderable`, `allowOnlySorting`, the value every listed id,
+`showWhen: enableEnrollmentMasthead`), then, only when
+`Application::getReviewStages()` is non-empty (not OPS),
+`enableEnrollmentMastheadReviewers` (`FieldOptions`, one option,
+`showWhen: enableEnrollmentMasthead`), which replaces the former
+`FieldHTML` `reviewer` note. `schemas/context.json`:
+`enableEnrollmentMasthead` defaults to true, the reviewers key has no
+default (stored false on the tab's first save); the issue gives the
+enrollment box as unticked on an upgraded context, the reviewers box
+as off on upgrade and on a new context.
+`Repo::userGroup()->getSortedMastheadUserGroups()`:
 the context's groups with `masthead` true, the reviewer role excluded,
-ordered by role id, then by the saved order with unsaved groups last;
-with no saved order, the role-id order alone, so a newly ticked group
-takes its level's place. `registry/userGroups.xml` sets `masthead="true"`
+ordered by role id (`orderByRoleId()`, no second key, so groups of one
+role id come in database order: A14), then by the saved order with
+unsaved groups last; with no saved order, the role-id order alone, so a
+newly ticked group takes its level's place. A hidden list keeps its
+value, so a save with the enrollment box unticked still stores the
+list's order. `registry/userGroups.xml` sets `masthead="true"`
 on the editor, section editor, external reviewer and editorial board
 member groups (OJS, OMP) and on the section editor and editorial board
 member groups (OPS); OMP's internal reviewer group has none. The Journal
@@ -1920,7 +1982,10 @@ position of {block}"). Live-probed 2026-09-24 on all three apps: on
 "Editorial Masthead" (`allowOnlySorting`, no box) the up button
 `orderer__up`, whose own screen-reader text is "Increase position of
 {role}", sits inside `label.pkpFormField--options__option` and is
-announced "{role} Decrease position of {role}".
+announced "{role} Decrease position of {role}". Re-probed 2026-09-29 (all three apps, two
+runs): unchanged; the two masthead boxes carry their own names only
+("Present a masthead based on user enrollments", "Enable listing of
+reviewers on the masthead").
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note s: the stored value keeps the disabled block's name, the
@@ -2056,6 +2121,20 @@ Website load also answered the Plugin Gallery's list
 (`plugin-gallery-grid/fetch-grid`) with a 500, the test installs' known
 gallery failure, not behind this finding.
 
+<a id="fn-f-a14"></a>
+**f-a14** — `Repo::userGroup()->getSortedMastheadUserGroups()` orders by
+role id alone before the saved order (note u), so "Copyeditor" and
+"Editorial Board Member" (both the Assistant role id), and "Journal
+editor" and "Production editor" (both the Manager role id), come in
+whatever order the database returns. Live-probed 2026-09-29 (Rule 28;
+scratch journals and presses, "Copyeditor" ticked before the first
+save): on one journal "Copyeditor" read above "Editorial Board Member"
+at one opening and below it at the next, nothing saved between; on a
+second journal below at both openings, on a third above at both; the
+press above in all three runs. "Production editor" stood after
+"Journal editor" in every run. The same list feeds the public pages, so
+they follow the tab's order (code read, not driven).
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `journalContentOrganization` is added by OJS's
 `DefaultThemePlugin` alone; OMP and OPS index handlers read no such
@@ -2135,7 +2214,13 @@ and the typed address answered the access-denied page; signed out, the
 Login page. `admin` with the manager role ended on a scratch press or
 server got the access-denied page there; on a scratch journal the page
 loaded under the "Error" window, raised by a dashboard count request
-answering 401. Two runs.
+answering 401. Two runs. Re-probed 2026-09-29 ("Editorial Masthead"
+with its two boxes; all three apps, two runs): the scratch manager
+saved both boxes; the Journal editor (OJS) and Press editor (OMP)
+ticked "Enable listing of reviewers on the masthead", saw "Saved" and
+the box ticked after a reload, and unticked it again; the Section
+editor, Series editor and Moderator typing Settings › Website's address
+got the access-denied page.
 
 <a id="fn-td2"></a>
 **td2** — Live-probed 2026-09-24 (Actors row 2; Rule 34; all three apps,
@@ -2177,9 +2262,21 @@ saved. On the catalog "Order Features" › "Save Order" turned "Featured"
 from M1, M2 to M2, M1, while "New Releases" kept M1, M2.
 
 <a id="fn-td5"></a>
-**td5** — Live-probed 2026-09-24: a new preprint server's "Editorial
-Masthead" shows the "Reviewers" heading and note, as a journal's and a
-press's do.
+**td5** — Live-probed 2026-09-29 (Fields, "Editorial Masthead";
+Settings bullets 15a, 15b; all three apps, two runs, scratch contexts):
+a new context's tab opened with "Present a masthead based on user
+enrollments" ticked; a journal's and a press's with "Enable listing of
+reviewers on the masthead" unticked, their first save storing it off;
+a preprint server's tab held the first two groups only. Unticked, the
+list and "Reviewers" left the tab before any save and came back when
+ticked again; a side-tab switch kept the unsaved untick and a reload
+restored the saved box, with no dialog. The reviewers box ticked and
+saved (OJS, OMP) showed "Saved", stayed ticked after a reload and
+added "Peer Reviewers in Previous Year" to the visitor's masthead;
+unticked and saved, the block was gone. The only server errors were
+the Plugin Gallery's list request on each Settings › Website load
+(`plugin-gallery-grid/fetch-grid` 500, the test install has no
+internet), unrelated to these tabs.
 
 <a id="fn-td6"></a>
 **td6** — Live-probed 2026-09-24 (Fields, "Lists"; all three apps):
@@ -2382,7 +2479,18 @@ never saved sat second ("Journal editor", "Production editor", "Section
 editor", "Editorial Board Member"; a press the same with "Press
 editor"); "Layout Editor" ticked after a save sat last. A move left
 unsaved survived a side-tab switch and was gone after a reload. The
-arrows' names: note f-a3.
+arrows' names: note f-a3. Re-probed 2026-09-29 (Rules 28, 28a; all
+three apps, three runs): the same sets and places ("Layout Editor" on a
+journal and a press, "Reader" on a preprint server, last when ticked
+after a save; the preprint server's "Author" ticked before the first
+save last, at its level), the handle dragged the last role to the top,
+and the saved order headed both public pages. With the enrollment box
+unticked and saved: no list and no "Reviewers" on the tab, also after a
+reload; the masthead held its heading and the "Editorial History"
+text, and the history address opened the masthead. Ticked again and
+saved: the list and both pages in the saved order. A role moved up and
+the box then unticked and saved reopened, ticked again, in the moved
+order. Same-level roles: note f-a14.
 
 <a id="fn-td31"></a>
 **td31** — Live-probed 2026-09-24 (Rule 29; all three apps): at "Items
@@ -2447,7 +2555,13 @@ codes as before; a press's "Setup" and "Advanced" codes in note f-a6.
 runs, English and French interface on scratch contexts): the upload
 boxes in note f-a12, the "Entête" tab in note f-a11. The preprint
 server's Moderator code also labels its arrows ("Avancer la position de
-##default.groups.name.sectionEditor##").
+##default.groups.name.sectionEditor##"). Re-probed 2026-09-29 (Rule 35b;
+all three apps, two runs): as before; the "Évaluateurs-trices" group
+(OJS, OMP) now holds the reviewers box, and a preprint server's tab has
+no such group. The labels pkp/pkp-lib#13370 added (the enrollment group,
+its description and box, the reviewers box) read as raw codes in French
+and the "Évaluateurs-trices" note keeps its older wording, pending
+their translation.
 
 ## Reference — entry points & surfaces
 
