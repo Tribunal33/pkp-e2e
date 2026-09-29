@@ -652,12 +652,12 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - {OJS} "Display items in current published issue." on a journal with
     no published issue, its Atom and RSS 1.0 feeds holding no item (Rules
     5, 6): a journal lists its current issue before any issue is out only
     while it is being set up, not in an ordinary week
-- **Budget** — variants:
+- **Nothing new to test**:
   - a feed read in French, its titles, abstracts and term labels in
     French and its language code "fr-CA" (Rule 10)
   - the Site Administrator's "Web Feed Plugin" on the site's own pages:
@@ -668,7 +668,6 @@ Left out of the scenarios above, by reason:
   - {OJS} the current-issue feed after the issue's articles were ordered
     with "Order" on its "Table of Contents", listing each section's
     articles in that order (Rule 5a)
-- **Nothing new to test**:
   - the Editor, the Production Editor and the Site Administrator in the
     journal (Actors rows 3–5): the same "Sidebar", "Installed Plugins"
     row and settings window as scenarios 3 to 6's Journal Manager

@@ -830,7 +830,7 @@ footnote.
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - an unsaved tick on the settings tab kept across a tab switch and
     lost on leaving the page (Fields)
   - a type window left with an unsaved name blocking the page's tabs
@@ -846,7 +846,6 @@ Left out of the scenarios above, by reason:
     (Fields): scenario 2 meets the same box's refusal with a text file
   - "Add Announcement" closed, or left by address, with a title typed
     and a picture inserted, and opening empty again (Rule 5)
-- **Nothing new to test**:
   - Editor and Production Editor on the settings tab and the
     Announcements page {OJS OMP} (Actors rows 1–2): the same tab, page
     and panel scenarios 1 and 2's Journal Manager uses

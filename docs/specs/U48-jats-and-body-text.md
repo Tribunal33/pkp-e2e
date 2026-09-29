@@ -680,13 +680,12 @@ passwords, mail catcher's address and tooling recipe are in the footnote. <sup>v
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - a second "Upload" on a version that already has a file, which
     becomes a revision of that one file, listed in its "History"
     (Rule 4)
   - "Selected Element" opening on a mouse selection while no section is
     open, and a keyboard selection opening nothing (Rule 19)
-- **Nothing new to test**:
   - an assigned Section Editor, and the Editor, Production Editor and
     Site Administrator, offered what the Journal Manager of scenarios 1
     and 2 is (Actors rows 2–5)

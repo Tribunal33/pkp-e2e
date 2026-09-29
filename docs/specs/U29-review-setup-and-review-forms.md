@@ -832,18 +832,17 @@ recipe are in the footnote. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - ordering the forms and a form's items with "Order", "Done" and "Cancel
     ordering", and the editors' "Review Form" lists following the order
     (Rules 12d, 14): scenario 6 builds one form and scenario 7's second row
     is a copy with the same title, so no scenario holds two forms it can
     tell apart
-- **Budget** — variants:
+- **Nothing new to test**:
   - a reload after pressing "Review" alone keeping "Review" › "Setup"
     open (Rule 1a): every scenario that reloads opens "Review" again
   - coming back to "Review" from "Submission" showing the side tab last
     open, and a reload then opening "Setup" (Rule 1b)
-- **Nothing new to test**:
   - the Editor and the Site Administrator opening the screen (Actors row
     1): the same "Settings" group and offer scenario 1's Journal Manager
     uses

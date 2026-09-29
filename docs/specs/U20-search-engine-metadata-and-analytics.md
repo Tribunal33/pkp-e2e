@@ -889,7 +889,7 @@ the tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - "User Registration" set to "The Journal Manager will register all
     user accounts. …", which takes "Register" out of the sitemap
     (Settings bullet 10; Rule 3): a journal closes registration once,
@@ -898,7 +898,7 @@ Left out of the scenarios above, by reason:
     journal's contents online.", which takes "Current", "Archive" and
     the issue pages out of the sitemap (Settings bullet 13; Rule 2b): a
     journal that does not publish online is rare, and chooses so once
-- **Budget** — variants:
+- **Nothing new to test**:
   - {OPS} a preprint with a "URL Path", listed in the sitemap by its
     number (Rule 4)
   - a version's other languages in the Dublin Core tags, and "DC.Rights"
@@ -917,7 +917,6 @@ Left out of the scenarios above, by reason:
     with a change typed (Rule 20)
   - a box of spaces, or a value with no number in it, in "Account
     number" (Fields)
-- **Nothing new to test**:
   - the Editor and the Production Editor on the "Search Indexing" tab
     (Actors row 3): the same tab as scenario 5's Journal Manager
   - the Site Administrator's Google Analytics window from the Settings

@@ -643,12 +643,11 @@ Left out of the scenarios above, by reason:
     Tasks & Discussions" from the workflow menu and "Copyediting Tasks &
     Discussions" after a reload (Rule 10): the OJS and OMP suites read only
     the "Tasks & Discussions" ending and never reload
-- **Budget** — states:
+- **Rarely met**:
   - both lists back with their earlier files after a second acceptance, the newly ticked files joining "Draft Files" beside them (Rule 9b): accepting again a submission moved back to review is not an ordinary week's action; scenario 7 stops at the hidden "Copyediting" entry
   - "Stage Assignment" changed on the Roles form, Copyediting unticked for Copyeditor and ticked for Layout Editor (Settings bullet 1): a manager changes a role's stages rarely, not in an ordinary week
-- **Budget** — variants:
-  - no confirmation message after the "Upload/Select Files" window's "OK" or the upload wizard's "Complete" (Rule 5): an absence the list's new row already answers; scenarios 4 and 5 press "OK" and read the row
 - **Nothing new to test**:
+  - no confirmation message after the "Upload/Select Files" window's "OK" or the upload wizard's "Complete" (Rule 5): an absence the list's new row already answers; scenarios 4 and 5 press "OK" and read the row
   - "Awaiting Copyedits." after "Assign" with the "Request Copyedit" message on a submission accepted without review or, on a press, from Internal Review (Rule 3a): the flip scenario 3 reads on a submission accepted from review
   - an assigned Section Editor, Guest Editor, Production editor or Site Administrator opening the stage (Actors preamble, rows 1, 6): the panels, notice and buttons scenario 1 reads as the Editor
   - Marketing and sales coordinator assigned here (Actors row 1): the panels and lists scenario 4 reads as the Copyeditor

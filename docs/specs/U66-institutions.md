@@ -468,11 +468,11 @@ catcher's address and the tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - more than thirty institutions: thirty rows a page and the page
     controls "Previous", the page numbers and "Next" under the list
     (Rule 3)
-- **Budget** — variants:
+- **Nothing new to test**:
   - the ROR on a COUNTER report's "Institution_ID" line, "ROR:{ROR};"
     in front of the journal's own identifier (Side effects)
   - "Add Institution" closed by its close control, by Escape or by a
@@ -481,7 +481,6 @@ Left out of the scenarios above, by reason:
     "ROR")
   - "This field is required." on "Edit Institution" of a journal with
     one form language (Settings bullet 4)
-- **Nothing new to test**:
   - the Editor and Production Editor with "Permit changes to
     Settings", offered the Journal Manager's page (Actors row 2)
   - the Site Administrator working in the journal, offered the Journal

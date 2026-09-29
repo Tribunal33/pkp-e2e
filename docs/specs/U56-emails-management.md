@@ -821,11 +821,10 @@ accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - "Signature" emptied, so that the emails carrying it end with nothing
     (Settings bullet 1)
   - the search and a filter applied together (Rule 7)
-- **Nothing new to test**:
   - the Editor whose role has "Permit changes to Settings" ticked, and the
     Site Administrator: the same offer on both screens as the Journal
     Manager of every scenario (Actors & permissions, the opening

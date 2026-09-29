@@ -656,7 +656,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - scenario 4's first bullet read with no reload: the "Revisions Uploaded" panel listing the file as the closed upload window goes (Side effects, "Author uploads a revised file"): the OJS suite reloads the page before it reads the panel
-- **Budget** — states:
+- **Rarely met**:
   - "Returned back to review." once every review is confirmed, and the reviewer sentences until then (Rules 5–6, Cross-feature): sending a submission back from Copyediting is not an ordinary week's action, and the sentence needs every review confirmed after the return
   - deleting the only revised file flipping the status back to "requested" (Rule 7): an author seldom deletes their only revised file; the task half of the path is A9
   - "New editorial recommendations have been submitted." with a second recommending editor pending (Rule 5): two recommending editors on one submission is not an ordinary week's set-up; scenario 11 walks the other two recommendation sentences with one

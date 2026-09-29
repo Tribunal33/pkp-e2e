@@ -1339,7 +1339,7 @@ scheduled tasks and background jobs, and the tooling recipe. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
     Subscriptions" (Rules 17, 27)
@@ -1353,7 +1353,6 @@ Left out of the scenarios above, by reason:
     5; Rules 10, 12)
   - the purchase pages' addresses on a journal with no subscription
     type (Rule 32)
-- **Nothing new to test**:
   - the Editor, the Production Editor and the Site Administrator on the
     "Payments" page, offered what the Journal Manager of scenarios 4 to
     10 is (Actors row 1)

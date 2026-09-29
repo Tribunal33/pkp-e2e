@@ -793,12 +793,11 @@ footnote says how) and judge both mailboxes only once they have run.
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - the Tasks window paged beyond 25 rows, "1 - 25 of 26 items" and "Items per page:" (Rule 2b): 26 tasks to raise for one account
   - the blue-edged notice toast (Rule 9a): the one screen that produces it is a plugin switch under Settings › Website › "Plugins", a Journal Manager's occasional act, not an editor's, author's or reviewer's week
-- **Budget** — variants:
-  - a discussion task whose opening message is longer than 198 characters, shown as its first 199 characters and "..." (Rule 6): scenario 5's messages are short
 - **Nothing new to test**:
+  - a discussion task whose opening message is longer than 198 characters, shown as its first 199 characters and "..." (Rule 6): scenario 5's messages are short
   - a user with no role, or the Site Administrator, opening the Tasks panel (*Actors & permissions*): the same window scenario 1's Manager opens
   - the Editor and the Production Editor getting the "needs an editor" task and email (Rule 6): the same task and email as the Journal Manager's in scenarios 1, 3 and 4
   - toasts never subject to a choice (Rule 1): no box governs them, so there is nothing to switch

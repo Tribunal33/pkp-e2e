@@ -914,10 +914,9 @@ Left out of the scenarios above, by reason:
     the address itself for a non-Creative Commons one (Fields "Default
     Chapter License URL"): likely a bullet in scenario 10, on a second
     scratch press left unlicensed
-- **Budget** — variants:
+- **Nothing new to test**:
   - a term added twice showing two chips until Save and one on the
     reopened page (Rule 7a)
-- **Nothing new to test**:
   - a Section Editor or Guest Editor opening the pages while assigned to
     the current stage (Actors row 1): the pages scenario 12's Copyeditor
     opens and scenario 1's Journal Manager saves on

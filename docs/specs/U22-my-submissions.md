@@ -425,19 +425,18 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - a change someone else makes showing on the list only after a workflow
     panel closes or the page reloads, and not after pressing the open
     view's sidebar entry (Rule 10)
   - a Site Administrator holding only Author in the journal landing on My
     Submissions, and one holding only Reader landing on the journal's home
     page (Rule 3)
-- **Budget** — variants:
+- **Nothing new to test**:
   - the list logging nothing (Side effects): the body names no screen where
     a log of the list's own use would be read; scenario 3 reads the mailbox
   - the section filter counting and listing inactive sections and sections
     restricted to editors (Rule 5)
-- **Nothing new to test**:
   - a Journal Manager who also authors seeing their authored submissions
     like any author (Actors preamble; scenario 1's Author sees the same
     list)

@@ -54,7 +54,8 @@ orchestrator.
    the chunk reports directly; a fold agent folds the change list into the
    spec (`briefs/fold.md`). Gate: `claims.txt`, `fold-log.md`, lint zero,
    `claims.txt` regenerated.
-6. **Scenarios.** A fresh writer spends the Coverage table by class ("Budget"),
+6. **Scenarios.** A fresh writer spends the Coverage table by class ("What
+   the scenarios cover"),
    composes the canonical scenarios from the verified body, and turns the
    Coverage table into the "Left out" list after them
    (`briefs/scenario-writer.md`). Gate: scenarios in the spec, the
@@ -70,7 +71,7 @@ orchestrator.
 9. **Progress.** The orchestrator sets the frontmatter to `status: verified`
    (its one inline spec edit) and replaces the PROGRESS row: status, scenario
    count, tests per app, and a note in the fixed shape (tests per app ·
-   register counts · one headliner ID · budget cuts as states / variants · open
+   register counts · one headliner ID · rarely-met states left out · open
    blocker · low-confidence IDs). Gate: the row, lint zero after the flip.
 10. **Commit and push.** One commit in this repo, everything the campaign
     produced, pushed to `origin main` in the same step: the push's CI run
@@ -86,8 +87,8 @@ orchestrator.
     but the security probe ("Model discipline"; for the probe, add
     `(finished on <model>)` to its entry's `verified-by` line). Gate: the
     commit on `origin/main`.
-11. **Report.** What was built, the register highlights, each suite's summed
-    test time from its final-run log ("Budget"), anything low-confidence; if
+11. **Report.** What was built, the register highlights, anything
+    low-confidence; if
     anything was routed to the private file, the verification probe
     (`briefs/security-verify.md`) has run and the report gives counts only.
     Then stop; the next feature starts in a fresh session. Gate: `security ·
@@ -108,14 +109,9 @@ orchestrator.
 | Process learnings | this file, TEMPLATE, PRINCIPLES or a brief template, through maintainer review; never a spec |
 | Anything resolved | deleted; git keeps it. Tracking files hold what is open, and anything outside its canonical home is one sentence plus a link |
 
-## Budget
+## What the scenarios cover
 
-Per app about 700 tests and 25 minutes for the full suite on a fresh
-database; the measured sizes and times are in the PROGRESS banner, kept
-current by the maintenance session. CI runs each app as three shards of
-four workers (`run-app.yml`, since 2026-09-23), so the 25 minutes bind a
-shard: a suite that grows past the cap gets another shard there, never a
-cut. A feature's scenarios cover
+A feature's scenarios cover
 everything important and everything a user meets in ordinary use,
 whatever the count. The main and guard rows of the spec's classed
 Coverage table (TEMPLATE "Coverage") are always covered, so a complex
@@ -123,12 +119,13 @@ feature grows by itself and stays one spec. A state rides as a bullet in
 a scenario that passes through it or whose given already holds it; a
 state nothing passes through gets a scenario of its own when an editor,
 author or reviewer would meet it in an ordinary week of running the
-journal, and goes under the section's "Budget" bullet with that reason
-otherwise, never dropped silently, where the maintainer can pull it
-back. Variants ride or are left out. No count per feature sizes this:
-the bound is the suite's measured minutes, and each feature's report
-(step 11) states its suites' summed test time so growth is seen when it
-happens, not at the cap.
+journal, and goes under the section's "Rarely met" bullet otherwise,
+never dropped silently, where the maintainer can pull it back. A
+variant rides in a scenario already there or goes under "Nothing new to
+test": a test that would assert nothing a covered row does not is
+never written. Nothing is left out for size: no count per feature
+sizes this, and a suite's length never cuts a scenario, CI takes
+another shard instead (MAINTENANCE "Keep CI balanced").
 
 ## The multi-app rules
 
@@ -167,7 +164,7 @@ Test files cite these by number, so the numbers are stable.
    shared claim there needs probe evidence. OMP/OPS-only surfaces stay out of
    scope until the maintainer extends it. Size alone never splits a
    feature: a complex feature stays one spec and its scenario list
-   grows ("Budget").
+   grows ("What the scenarios cover").
 8. **Look in the class hierarchy first.** For a load-bearing lib/pkp class
    read each app's subclass chain: an empty subclass is positive evidence of
    shared behavior, an override is intended divergence, a missing override
@@ -220,7 +217,7 @@ Per feature: the spec is `verified` and lint-clean, all three apps are
 covered per the multi-app rules, each suite is green twice, the PROGRESS row
 is updated, everything is committed and pushed; team review of verdicts is never a gate.
 Campaign: the unclaimed atom count in FEATURE-MAP is zero, every PROGRESS row
-is `done` or `parked`, each app's suite is within the cap ("Budget").
+is `done` or `parked`.
 
 ## Resuming a feature mid-flight
 
@@ -253,10 +250,8 @@ rule change reopens, each citing the body; `S<n>` in "Runs in" where a
 scenario already covers the row, `planned` where none does, blank where
 the writer decides; under the table the plan for each gap (rides in
 `S<n>`, a scenario of its own, or no seed), the suite mismatches
-`lint-spec.mjs --tests` reports and the bullets a suite does not assert. The writer spends the table as "Budget"
-says. A spec whose "Left out" list was cut by count before that rule has
-no table: its "Budget" items are the rows, decided the same way, and its
-scenarios keep their shape.
+`lint-spec.mjs --tests` reports and the bullets a suite does not assert.
+The writer spends the table as "What the scenarios cover" says.
 
 1. **Claim, fleet prep and the sheet**: steps 1 and 2, then the sheet
    unless the queue already holds it.

@@ -1242,7 +1242,7 @@ Left out of the scenarios above, by reason:
   - History ending at "Review Submitted" after "Revert Decision" on the thanked review, then, once it is marked complete again, listing the first "Reviewer Thanked" date followed by the new "Review Completed" (Rule 21): the same place in scenario 9
   - {OJS} the Review Details window opened from the dashboard's "View unread recommendation" showing the recommendation, as the row's window does (Rule 14a): likely a bullet in scenario 14
   - the "Edit Review" window's top "Close" asking first after a change to the review due date, the "Review Type" or the "Public Visibility" box (no other control tried), the window kept open on "Cancel" and the change dropped on "OK", and closing at once with nothing changed (Fields): likely a bullet in scenario 6, which opens the row's "Edit"
-- **Budget** — states:
+- **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
   - the Review Details window on a request with no review: "Request Sent:", "Reviewer Reminded:", "Request Accepted:" or "Request Declined:", the empty blocks, and "Mark as Complete" disabled beside its recommendation message {OJS} or, with a review form, its incomplete-review message (Rule 14c): an editor opens the window to read a review, and on a request that has none only in a rare week
   - "Save changes to this review?" before modifying a complete review whose assignment has "Publicly Show Reviewer Comments" ticked, and the sentence the same box adds to "Mark this review as complete?" (Rules 14a, 14b): an editor completes or modifies a publicly shown review in a rare week
@@ -1254,7 +1254,7 @@ Left out of the scenarios above, by reason:
   - narrowing the reviewer search with a "Filters" slider (Rule 6): a pool of a page or two is read whole, never narrowed
   - the "{N} active" badge on a reviewer with a review underway (Rule 5): read only when an editor weighs a busy reviewer against a free one, not on every add
   - the "Competing Interests" block in the Review Details window, "No competing interests were disclosed." or the reviewer's statement, and the row's "Competing Interests" badge (Rules 2, 14a, Settings): met only on a journal that sets a "Competing Interests" policy, which the install leaves empty
-- **Budget** — variants:
+- **Nothing new to test**:
   - the "Reviewing Interests" tag field of Create New Reviewer (Fields): filled only when an editor creates an account with interests to record
   - the chooser's refill on a pick (Fields): needs an alternate template a journal seldom adds
   - the blank list sections omitted (Rule 5): seen only in an expanded entry
@@ -1263,7 +1263,6 @@ Left out of the scenarios above, by reason:
   - the unsaved-changes "Warning" on leaving "Modify Review" with something typed (Rule 14b): a close control
   - "View changes" opened to its "View Review" window (Side effects): scenario 16 reads the action, not the window behind it
   - "Cancel" in the Add Reviewer window with a reviewer chosen, and in the "Edit Review" window with a due date changed, closing without a question (Fields): a close control
-- **Nothing new to test**:
   - the second ends of covered controls: an edit changing only the review type (Rule 12), the XML exports (Rule 15), a logged decline (Rule 20)
   - the press's Internal Review stage running scenarios 1–12 as External Review does (Purpose; scenario 13 covers what differs)
 - **Register carries it**:

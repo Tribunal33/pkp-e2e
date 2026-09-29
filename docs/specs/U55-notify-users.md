@@ -415,7 +415,7 @@ the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - a member disabled, or whose role ended, after "Send Email" and before
     the background jobs run, getting nothing, and an address changed in
     between being the one used (Side effects bullet 2)
@@ -425,7 +425,6 @@ Left out of the scenarios above, by reason:
     bullet 4)
   - an unsaved tick under "Disable Roles" kept across the wizard's side
     tabs and dropped without a question on a reload (Rule 12)
-- **Nothing new to test**:
   - the Editor and the Production Editor whose roles have "Permit changes
     to Settings" ticked, offered the same tab and send as the Journal
     Manager of scenario 1 (Actors row 2)

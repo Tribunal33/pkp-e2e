@@ -924,7 +924,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the file's "History" keeping no line of the revision cancelled with "Cancel": one "A file revision "notes.md" …" line, not two (Rule 9): likely a bullet in scenario 3, which cancels a revision before the "History" it reads
-- **Budget** — variants:
+- **Nothing new to test**:
   - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
   - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
   - a file over the upload limit refused in its row with "File is too big ({size}MiB). Max filesize: {limit}MiB." (Rule 17b)
@@ -936,7 +936,6 @@ Left out of the scenarios above, by reason:
   - the "Dependent Files" list in an HTML galley's "Edit" window (Rule 11)
   - the "Dependent Files" list keeping only "More Information" on a galley whose version is published (Rule 11)
   - the "Search" control of an older file list narrowing it by name (Rule 16)
-- **Nothing new to test**:
   - the Author deleting their own file on "Revisions Uploaded" (Actors row 5): the "Delete" dialog and "Removed file." scenario 5 reads as the Journal Manager
 - **Register carries it**:
   - A2 (the Author offered "Update File Details" on a file an editor uploaded, and refused; Actors row 3; scenario 7 marks it)

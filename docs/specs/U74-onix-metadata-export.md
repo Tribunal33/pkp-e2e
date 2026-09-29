@@ -939,10 +939,10 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - a format that has used all nine sales-rights types, whose "Add
     Sales Rights" list is empty (Rule 10)
-- **Budget** — variants:
+- **Nothing new to test**:
   - the assigned Series editor saving "Audience", with the assignment's
     "Permissions" box ticked or not (Actors row 2)
   - several "Export Submissions Results" tabs, and a tab's "Close"
@@ -951,7 +951,6 @@ Left out of the scenarios above, by reason:
     Type" that cannot be emptied once saved (Settings bullet 1)
   - leaving the export page after a search or a changed validation box
     (Fields, the export page)
-- **Nothing new to test**:
   - the Press editor, Production editor and Site Administrator, offered
     what the Press manager is (Actors rows 1–5)
 - **Register carries it**:

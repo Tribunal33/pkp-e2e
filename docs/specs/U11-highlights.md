@@ -393,7 +393,7 @@ address are in its footnote.
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - a file over the server's upload limit refused in the "Image" box
     (Fields): the same box's refusal scenario 1 meets with a text file,
     with a file larger than the limit
@@ -403,7 +403,6 @@ Left out of the scenarios above, by reason:
     (Rule 9a)
   - a bold word in "Title" shown bold on the slide and in the "Delete
     Highlight" sentence (Fields "Title"; Rule 8)
-- **Nothing new to test**:
   - Editor and Production Editor on the Highlights tab {OJS OMP} (Actors
     row 1): the same tab and panel scenario 1's Journal Manager uses
   - the Site Administrator working in the journal (Actors row 1): the

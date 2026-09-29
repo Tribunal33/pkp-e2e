@@ -105,9 +105,9 @@ run picks up from the files.
 6. **Flakes.** Diagnose the flake classes whose watch condition has
    tripped ("Keep the flake rate down"); a flake that reds CI on the day
    is the upstream session's interrupt, its diagnosis this session's.
-7. **Stale artifacts and the budget.** Fix what the day's work showed
-   stale, and refresh the shard timings when they drifted ("Keep the
-   budget measured").
+7. **Stale artifacts and CI balance.** Fix what the day's work showed
+   stale, and refresh the shard timings when they drifted ("Keep CI
+   balanced").
 8. **Quiet mornings.** When steps 3 to 7 left nothing open:
    - **Drift sweep of one spec**, the one whose PROGRESS note carries the
      oldest "Swept" date (none counts as oldest). Its kept checks
@@ -523,10 +523,9 @@ merge (first run: issue pkp/pkp-lib#13274, companion `13274`, 2026-09-12).
 Someone asks whether a behavior is covered, or for a test to be added or
 changed. The spec answers first: the canonical scenarios' bold leads say
 which scenario checks it and their badges in which apps, and the Coverage
-section says why it has none. A request for an item under "Budget" is the
-expected path; a regression (a PR read, a CI failure, a user report) on a
-Budget item reverses the cut unasked, moving it to **Planned**, and one on
-a "Nothing new to test" item reclasses it the same way. To add or change a test, change or add its scenario
+section says why it has none. A request for an item under "Rarely met"
+or "Nothing new to test" moves it to **Planned**; so does a regression
+(a PR read, a CI failure, a user report) on one, unasked. To add or change a test, change or add its scenario
 first (through a writing agent, with the persona on the new text), then
 write the test from it, run it green, and update the PROGRESS test count;
 a request not written the same day is a **Planned** item in the spec.
@@ -605,12 +604,9 @@ the answer; the spec and the test are the record.
   plainly takes, with its assertions, or a **Planned** item.
   Maintenance never changes app code beyond what RUNBOOK step 10 allows,
   and never moves content routed to the private security file.
-- **Keep the budget measured.** After every full `test:final`, replace the
-  PROGRESS banner's suite line with each app's test count and run time
-  from the `final-run-<app>.log` summary lines, dated, so RUNBOOK
-  "Budget" rests on a number; CI runs each app as three shards
-  (`run-app.yml`), so when a shard's Playwright step approaches 25
-  minutes on CI, one more shard there is the next task, never a cut.
+- **Keep CI balanced.** CI runs each app as three shards (`run-app.yml`);
+  when a shard's Playwright step approaches 25 minutes on CI, one more
+  shard there is the next task, never a cut.
   The shards are balanced by recorded per-test time (harness.md "CI"):
   when an app's three Playwright steps on a green `main` run drift more
   than two minutes apart, or a feature has added a spec's worth of tests,

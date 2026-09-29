@@ -956,11 +956,10 @@ tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - "Format Approval" with its URN box changed, whose close arrow asks
     before closing, on a press that assigns URNs to publication formats
     (Rule 12a; Settings bullet 3)
-- **Nothing new to test**:
   - the Press editor, Production editor and Site Administrator, offered
     what the Press manager is (Actors rows 2–6; scenario 1)
 - **Register carries it**:

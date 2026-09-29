@@ -941,7 +941,7 @@ Left out of the scenarios above, by reason:
     page stays live (Rule 9a)
   - a journal's "Submission metadata updated" line from the panel's
     Confirm, read in scenario 1's Activity Log (Side effects)
-- **Budget** — states:
+- **Rarely met**:
   - the publish button skipping the details panel on a journal with
     issues, after a Publication Settings save on a version that already
     has its stage (Rules 3, 3b): scenario 5 runs on a journal with no

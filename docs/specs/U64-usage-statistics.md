@@ -1158,7 +1158,7 @@ Left out of the scenarios above, by reason:
     button pressed again, a click outside it, the focus leaving it), and
     typed dates kept in the boxes while not applied (Fields "The date
     range")
-- **Budget** — variants:
+- **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
   - a change left unsaved on either "Statistics" tab, dropped without a
@@ -1168,7 +1168,6 @@ Left out of the scenarios above, by reason:
     (Rule 25a)
   - the "Issues" filter heading of a journal with no published issue
     {OJS} (Rule 11)
-- **Nothing new to test**:
   - the Editor, the Production Editor, the Guest Editor {OJS} and the
     Site Administrator on the Statistics pages, which show them the
     Journal Manager's and the Section Editor's figures (Actors preamble

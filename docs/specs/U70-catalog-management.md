@@ -680,19 +680,18 @@ published. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - "Add Entry" › "Save" of a book whose "Date Published" lies in the
     future: the book is scheduled, stays off the list and is still
     suggested (Rule 12)
   - other cover sizes, and the small copies of the covers a press
     already holds remade when new sizes are saved (Settings bullet 4;
     Rule 13f)
-- **Budget** — variants:
+- **Nothing new to test**:
   - more than 30 published books: the page links under the list (Rule 1)
   - "Add Entry" finding a book by an author's name or by its number, and
     "Close" keeping the chosen books until the page is left (Fields, the
     "Add Entry" panel)
-- **Nothing new to test**:
   - the Press editor and the Production editor, offered the Catalog page
     and the Catalog Entry page the Press manager of scenarios 1 to 5 is
     (Actors rows 1–6)

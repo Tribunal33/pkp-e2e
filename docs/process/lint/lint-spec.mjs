@@ -114,12 +114,12 @@ function checkShape(doc, out) {
 // DRAFT table (| Who, state or setting | Class | Runs in | Why not |): every row carries a class and a
 // "Runs in" or a "Why not". FINAL shape (the "Left out" bullets alone; the scenarios carry what is
 // checked): every bullet opens with a reason word and ends at the colon, the items indented under it
-// one per line, the Budget bullet cuts states or variants only. A
+// one per line, the Rarely met bullet holds no main or guard row. A
 // verified spec carries the final shape and no `planned`; no date sits in the section; no scenario
 // leaves a typed value to the tester.
 const PLACEHOLDER_RE = /\btype (?:a|an|some|any) (?:sentence|title|line|word|text|name|description|number|value)\b/i;
 const CLASSES = ['main', 'guard', 'state', 'variant'];
-const REASONS = ['Planned', 'Budget', 'Nothing new to test', 'Register carries it', 'No seed', 'Owned by another feature'];
+const REASONS = ['Planned', 'Rarely met', 'Nothing new to test', 'Register carries it', 'No seed', 'Owned by another feature'];
 
 function checkCoverage(doc, out) {
     const covLine = doc.lines.findIndex((l, i) => !doc.skip[i] && /^##\s+Coverage\s*$/.test(l));
@@ -147,17 +147,15 @@ function checkCoverage(doc, out) {
             } else if (/^-\s+\*\*/.test(line)) {
                 shape = shape || 'final';
                 const word = ((line.match(/^-\s+\*\*([^*]+)\*\*/) || [])[1] || '').trim();
-                if (!REASONS.includes(word)) cov(i + 1, `a "Left out" bullet opens with "${excerpt(word, 30)}"; the reason words are ${REASONS.join(' · ')}`);
+                if (word === 'Budget') cov(i + 1, 'the "Budget" bullet is gone: its states go under "**Rarely met**:", its variants under "**Nothing new to test**:" (TEMPLATE "Coverage")');
+                else if (!REASONS.includes(word)) cov(i + 1, `a "Left out" bullet opens with "${excerpt(word, 30)}"; the reason words are ${REASONS.join(' · ')}`);
                 else {
-                    if (word === 'Budget') {
-                        if (!/^-\s+\*\*Budget\*\*\s+—\s+(states|variants):/i.test(line)) cov(i + 1, 'the Budget bullet opens "**Budget** — states:" or "**Budget** — variants:"');
-                        if (/\b(main|guards?)\s*:/i.test(line)) cov(i + 1, 'a main or guard row is never cut for budget (TEMPLATE "Coverage")');
-                    }
-                    if (/:\s*\S/.test(line.replace(/^-\s+\*\*[^*]+\*\*(\s+—\s+\w+)?/, ''))) cov(i + 1, 'a "Left out" bullet ends at the colon; its items are indented bullets under it, one per line (TEMPLATE "Coverage")');
+                    if (word === 'Rarely met' && /\b(main|guards?)\b/i.test(line)) cov(i + 1, 'a main or guard row is never left out (TEMPLATE "Coverage")');
+                    if (/:\s*\S/.test(line.replace(/^-\s+\*\*[^*]+\*\*/, ''))) cov(i + 1, 'a "Left out" bullet ends at the colon; its items are indented bullets under it, one per line (TEMPLATE "Coverage")');
                 }
             } else if (shape === 'final' && doc.front.status === 'verified' && /\bplanned\b/.test(line)) cov(i + 1, 'still reads planned in a verified spec');
             if (/\b20\d\d-\d\d-\d\d\b/.test(line)) cov(i + 1, 'a date in the Coverage section is evidence; it belongs in a footnote');
-            if (/\bout of tier\b/i.test(line)) cov(i + 1, '"out of tier" is campaign vocabulary; the reason word is Budget');
+            if (/\bout of tier\b/i.test(line)) cov(i + 1, '"out of tier" is campaign vocabulary; the reason word is Rarely met');
         }
         if (/^Canonical scenarios/.test(doc.h2[i]) && PLACEHOLDER_RE.test(line)) {
             cov(i + 1, `the tester is left to choose a value: ${excerpt(line.match(PLACEHOLDER_RE)[0], 40)} — name it`);
@@ -818,18 +816,19 @@ function selfTest() {
     // Coverage (TEMPLATE "Coverage"): the draft table passes as draft and fails as verified; the final
     // shape is the "Left out" bullets alone, with reason words, no guard cut, no date, no table
     const draftCov = GOOD.replace('## Findings register', '## Coverage\n\n| Who, state or setting | Class | Runs in | Why not |\n|---|---|---|---|\n| Editor (Actors row 1) | main | planned | |\n\n## Findings register');
-    const finalCov = GOOD.replace('## Findings register', '## Canonical scenarios\n\n1. **Record a decision**\n\n   Given: Editor, on an open round.\n\n   - **Control**: press "Record decision"; the decision is recorded.\n\n## Coverage\n\nLeft out of the scenarios above, by reason:\n\n- **Budget** — states:\n  - the closed round (Rule 2)\n- **Owned by another feature**:\n  - the catalog step (*Catalog management*)\n\n## Findings register');
+    const finalCov = GOOD.replace('## Findings register', '## Canonical scenarios\n\n1. **Record a decision**\n\n   Given: Editor, on an open round.\n\n   - **Control**: press "Record decision"; the decision is recorded.\n\n## Coverage\n\nLeft out of the scenarios above, by reason:\n\n- **Rarely met**:\n  - the closed round (Rule 2)\n- **Owned by another feature**:\n  - the catalog step (*Catalog management*)\n\n## Findings register');
     const covCases = [
         ['the draft table passes as draft', draftCov, false],
         ['the draft table fails as verified', draftCov.replace('status: draft', 'status: verified'), true],
         ['a draft row without a class', draftCov.replace('| main |', '| |'), true],
         ['the final shape passes as verified', finalCov.replace('status: draft', 'status: verified'), false],
         ['a table in the final shape', finalCov.replace('Left out of the scenarios above, by reason:', '| # | Scenario | Apps |\n|---|---|---|\n| 1 | Record a decision | OJS |'), true],
-        ['a Planned bullet passes as verified', finalCov.replace('status: draft', 'status: verified').replace('- **Budget** — states:', '- **Planned**:\n  - the reopened round (Rule 4)\n- **Budget** — states:'), false],
+        ['a Planned bullet passes as verified', finalCov.replace('status: draft', 'status: verified').replace('- **Rarely met**:', '- **Planned**:\n  - the reopened round (Rule 4)\n- **Rarely met**:'), false],
         ['a bullet without a reason word', finalCov.replace('**Owned by another feature**', '**Skipped**'), true],
-        ['the Budget bullet cutting a guard', finalCov.replace('— states:', '— guards:'), true],
+        ['the Rarely met bullet naming a guard', finalCov.replace('- **Rarely met**:', '- **Rarely met** — guards:'), true],
+        ['the retired Budget word', finalCov.replace('- **Rarely met**:', '- **Budget** — states:'), true],
         ['a date in the section', finalCov.replace('(Rule 2)', '(Rule 2), read once 2026-09-06'), true],
-        ['items joined on the reason line', finalCov.replace('— states:\n  - the closed round (Rule 2)', '— states: the closed round (Rule 2); the open round (Rule 3).'), true],
+        ['items joined on the reason line', finalCov.replace('**Rarely met**:\n  - the closed round (Rule 2)', '**Rarely met**: the closed round (Rule 2); the open round (Rule 3).'), true],
         ['an item after the colon of a plain reason', finalCov.replace('feature**:\n  - the catalog', 'feature**: the catalog'), true],
     ];
     for (const [name, text, wantHit] of covCases) {

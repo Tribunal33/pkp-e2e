@@ -506,7 +506,7 @@ footnote. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - a revision cancelled with "Cancel", leaving no line of it, metadata line included, on either "History" (Rule 6c)
   - a preprint server's file lines, from a galley's file, and its "Change File" cancelled (Rules 6, 6c)
   - a "History" open in a second window over a cancelled revision: the revision line stays until reopened, and its "Download" leads to a page reading "404 Not Found" (Rule 6c)
@@ -520,7 +520,6 @@ Left out of the scenarios above, by reason:
   - "Date (Short)" at another format (Settings bullet 1; Rule 2)
   - "Date & Time (Short)" at another format (Settings bullet 2; Rule 10)
   - a preprint server's Author, with no "Notifications" list, and the decline email listed on the editors' "History" only (Purpose)
-- **Nothing new to test**:
   - the Editor and the Production editor {OJS OMP}, and the Guest Editor {OJS} (Actors row 1): the Journal Manager's and the Section Editor's offer, which scenario 1 reads
 - **Register carries it**:
   - A1 (a discussion's, "Notify"'s and "Assign"'s email lines with an empty "User"; Rule 4c)

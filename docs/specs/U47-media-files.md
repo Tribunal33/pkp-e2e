@@ -798,15 +798,14 @@ mail catcher's address and tooling recipe. <sup>t</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - no component marked as a dependent file, where "Upload Media File"
     holds only "No media types are configured. Please contact the
     system administrator." and nothing can be added (Rule 2e; Settings
     bullet 1)
-- **Budget** — variants:
+- **Nothing new to test**:
   - any file accepted as any media type, such as a text file added as
     an "Image" (Rule 2f)
-- **Nothing new to test**:
   - the Editor and the Production Editor, offered what the Journal
     Manager of scenarios 1 to 3 is (Actors row 2)
   - a Site Administrator not assigned to the submission, offered what

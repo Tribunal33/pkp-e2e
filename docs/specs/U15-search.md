@@ -659,17 +659,16 @@ Common to every application:
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - "Items per page" changed on Settings › Website › Setup › Lists, the
     results per page following it (Rule 8, Settings): the Journal Manager
     sets it once when the journal is set up, not in an ordinary week
-- **Budget** — variants:
+- **Nothing new to test**:
   - keywords, subjects, section names and funders not searched by the box
     (Rule 3): no seeded article carries a keyword, subject or funder
   - a page number beyond the last page, "No Results" with the words kept
     (Rule 8): met only through a stale or edited address, never from the
     page's links
-- **Nothing new to test**:
   - on a journal that does not publish online, the other managerial and
     assistant-level roles getting the page (Actors row 1): scenario 9's
     Journal Manager sees the same page

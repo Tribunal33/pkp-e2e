@@ -817,11 +817,11 @@ the footnote. <sup>y</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - "Static Pages Plugin" unticked with pages stored: every page answering "404 Not Found" and the tab gone, then the pages back when it is ticked again {OJS OMP} (Settings bullet 1; Rule 15)
   - "Custom Block Manager" unticked with a block placed: the block leaving the public pages and "Sidebar", then back at its place when it is ticked again (Settings bullet 2; Rule 25)
   - a contact changed on Settings › Journal › "Contact": every page carrying its tag showing the new value (Rule 4; Settings bullet 5)
-- **Budget** — variants:
+- **Nothing new to test**:
   - the site's own custom page as the Site Administrator: its page inside the site's header and footer, its "Insert Tag" reading "No tags are available." and its "Preview" (Rule 8)
   - the site's own custom block as the Site Administrator, placed on the site's pages and never on a journal's (Rule 27)
   - "Users must be registered and log in to view the journal site." ticked: a signed-out visitor sent to Login from a custom page or a static page (Settings bullet 6)
@@ -833,7 +833,6 @@ Left out of the scenarios above, by reason:
   - the block window's close control and Escape asking after a "Block Name" change (Rule 30a)
   - the browser's "Leave site?" question when another address is opened with either window changed (Rule 30b)
   - a pasted or dropped picture stored as "mceclip{n}.png" (Rule 29c)
-- **Nothing new to test**:
   - the Editor and the Production Editor on the Settings pages: the same items, plugins, static pages, blocks and "Sidebar" as the Journal Manager in scenarios 1 to 7 (Actors rows 1, 5, 6, 7)
 - **Register carries it**:
   - A1 (a block listed and placed by a name made from its first "Block Name", never renamed; Rules 18a, 22; scenario 4 marks it)

@@ -1031,11 +1031,11 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
     bullet 11)
-- **Budget** — variants:
+- **Nothing new to test**:
   - a section's "Omit author names for section items from issues' table
     of contents." ticked {OJS}: the table of contents and "Current
     Issue" without the author line, the other lists with it (Settings
@@ -1064,7 +1064,6 @@ Left out of the scenarios above, by reason:
   - a later version published ("posted") on another day than the
     first, whose "APA" citation adds "(Original work published
     {year})"; scenario 3's two versions share a day (Rule 15)
-- **Nothing new to test**:
   - a signed-in Reader on a published article's page, the page the
     visitor of scenario 1 reads (Actors, opening paragraph; Actors
     row 1)

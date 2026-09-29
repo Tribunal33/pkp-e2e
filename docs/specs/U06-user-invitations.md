@@ -565,7 +565,7 @@ Left out of the scenarios above, by reason:
     landing on My Submissions still signed in; signed out, the sign-in
     screen, then My Submissions after signing in; the link reopening the
     review step (ORCID off), and accepting there still working
-- **Budget** — states:
+- **Rarely met**:
   - a disabled user met on the search step and through the users list's Edit
     action, "The user is currently disabled." and the two inactive buttons
     on both (Rule 14): a manager rarely sets out to invite a person they
@@ -582,7 +582,7 @@ Left out of the scenarios above, by reason:
     themselves, reaching the Dashboard still signed in after accepting
     (Rules 6, 9): scenario 3 walks the same review step and accept signed
     out
-- **Budget** — variants:
+- **Nothing new to test**:
   - the template choice on the compose step (Actors row 7): the body states
     no outcome of the choice to read
   - "Back" to the search step clearing everything entered (Rule 15): the
@@ -601,7 +601,6 @@ Left out of the scenarios above, by reason:
   - the masthead select of a removed role's row, its confirmation and its
     email (Rule 13, Side effects): scenario 8 changes the same select on a
     current row
-- **Nothing new to test**:
   - a Site Administrator sending, editing, cancelling or proposing (Actors
     rows 1–5; scenarios 1, 5, 6 and 8's Journal Manager sees the same
     screens)

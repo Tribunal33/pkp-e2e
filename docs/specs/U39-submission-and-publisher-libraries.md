@@ -549,11 +549,10 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - a recommending editor's "Notify Editors" page {OJS OMP}: its "Library Files", and the attached file's copy listed in the discussion the recommendation opens (Actors row 8; Rule 11c)
   - the "Request Author Response" page {OJS}: the Editor's and an assigned Section Editor's "Library Files" (Actors row 8; Rule 11a)
   - a journal with a second form language: a "Name" and a "Description" box per language (Fields)
-- **Nothing new to test**:
   - an assigned Section Editor, or Guest Editor {OJS}, in the "Submission Library" window: the Editor's offer, which scenario 1 reads (Actors rows 1–4)
 - **Register carries it**:
   - A1 (a Submission Library file's name pressed by an assigned Copyeditor or Layout Editor, and on a preprint server by the Moderator or the Author: "403 Forbidden"; Actors row 3; Rule 8b)

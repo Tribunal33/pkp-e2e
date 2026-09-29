@@ -748,7 +748,7 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - a second "Send To Production" bringing the earlier production ready files back beside the newly ticked ones (Rule 7b): sending a submission to production twice is not an ordinary week's action; scenario 4 stops at the hidden "Production" entry
   - "Stage Assignment" changed on the Roles screen, Production ticked for Copyeditor and unticked again (Settings bullet 1): a manager changes a role's stages rarely, not in an ordinary week
 - **Nothing new to test**:

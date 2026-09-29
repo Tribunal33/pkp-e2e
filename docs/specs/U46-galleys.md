@@ -584,13 +584,12 @@ accounts, passwords, mail catcher's address and tooling recipe. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - a new galley's place in the list, before and after a saved order
     (Rule 8d)
   - the unsaved-changes question on a switch to the "Identifiers" tab,
     which needs galley identifiers switched on (Rule 6a; Settings
     bullets 1 and 2)
-- **Nothing new to test**:
   - the Production Editor, Designer, Indexer and Proofreader, offered
     what the Layout Editor of scenario 4 is, and a Guest Editor with
     "Permissions" unticked, offered what the Section Editor of scenario

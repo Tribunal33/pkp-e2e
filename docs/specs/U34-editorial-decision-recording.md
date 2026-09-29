@@ -1113,9 +1113,8 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the "Notify Reviewers" letter edited before the decision is recorded: each reviewer's email still carries that reviewer's own name alone, never the other reviewers' names (Rule 4): likely a bullet in scenario 6, whose reviewers' mailboxes are read after the accept
-- **Budget** — variants:
-  - a "Signature" saved on the editor's profile, ending the letter in place of the editor's full name (Settings bullet 7; Rule 5)
 - **Nothing new to test**:
+  - a "Signature" saved on the editor's profile, ending the letter in place of the editor's full name (Settings bullet 7; Rule 5)
   - a Section Editor or Guest Editor assigned and deciding, a Production editor, or a Site Administrator recording a decision (Actors row 1): the wizard scenario 1 walks as the Editor
   - "Message" emptied (Fields; Rule 10): the banner and "This is not a valid string. This field is required." scenario 2 reads under "Subject:"
   - leaving the wizard through the breadcrumb's "Dashboard" (Rule 11): the unrecorded outcome scenario 6 reads after "Cancel Decision"

@@ -915,7 +915,7 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the "Notify" window's close control, asking first or not (Rule 11c)
   - Escape and a reload on the "Notify" window (Rule 11d)
-- **Budget** — variants:
+- **Nothing new to test**:
   - "Cancel" on "Edit Assignment" after a box was changed, and its close control asking first (Rule 8f): scenario 3 cancels only an unchanged window
   - "Assignments" counting open review requests and leaving out published submissions (Fields "Assign Participant")
   - "No changes can be made to this participant" for a recommending editor opening a manager-level row (Rule 8c)

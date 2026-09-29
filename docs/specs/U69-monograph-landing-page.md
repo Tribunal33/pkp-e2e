@@ -1049,7 +1049,7 @@ tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - an unassigned Series editor or assistant role opening the preview
     (Actors row 2)
   - "View submission" on a preview for the book's Author (the
@@ -1067,7 +1067,6 @@ Left out of the scenarios above, by reason:
   - "All time" and "Last 12 months" on a book with downloads older than
     twelve months (Rule 20a)
   - a book with no contributor cited from its title (Rule 19a)
-- **Nothing new to test**:
   - a signed-in Reader, or any other role, reading a published book's
     pages, which read as they do for a visitor (Actors row 1;
     scenarios 1, 2)

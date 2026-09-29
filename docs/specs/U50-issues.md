@@ -1025,13 +1025,12 @@ catcher's address, background-jobs command and tooling recipe. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
     there shows none (Rule 7; Fields, the issue's page)
   - an "Archives" page number past the last, answering "404 Not Found"
     (Rule 25)
-- **Nothing new to test**:
   - the Editor, the Production Editor and the Site Administrator,
     offered the "Issues" page the Journal Manager of scenarios 1 to 6
     is (Actors row 1)

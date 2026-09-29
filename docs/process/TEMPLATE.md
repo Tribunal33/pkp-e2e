@@ -88,8 +88,8 @@ reference for the reader:
 - The Conventions line is the one-line GLOSSARY pointer verbatim.
 - Coverage: in the draft table every row carries a class and a "Runs in"
   or a "Why not"; in the final shape (the "Left out" bullets alone) every
-  bullet opens with one of the reason words and the Budget bullet
-  cuts states or variants only; a `verified` spec carries the final shape
+  bullet opens with one of the reason words and the Rarely met bullet
+  holds no main or guard row; a `verified` spec carries the final shape
   and no `planned` row; no date sits in the section; and no scenario leaves a
   typed value to the tester ("type a sentence", "type a title").
 
@@ -437,10 +437,13 @@ status: draft | verified    # verified = the full RUNBOOK loop passed
      a state that needs a given of its own (a setting's non-default end,
      a submission in a stage the seed lacks, another signed-in role) gets
      a scenario when an editor, author or reviewer would meet it in an
-     ordinary week of running the journal, and goes under "Budget" with
-     that reason otherwise (RUNBOOK "Budget"). No count sizes this. A
-     variant is covered only when it rides inside a scenario already
-     there. A main or guard row is never left out.
+     ordinary week of running the journal, and goes under "Rarely met"
+     otherwise (RUNBOOK "What the scenarios cover"). A variant is covered
+     only when it rides inside a scenario already there, and is "Nothing
+     new to test" otherwise. A main or guard row is never left out. No
+     count and no suite size decide any of this: what matters is always
+     covered, and a test that would assert nothing a covered row does not
+     is never written.
 
      FINAL SHAPE: the "Left out" list alone, under this heading, placed
      after the canonical scenarios. What IS checked is the scenarios
@@ -453,21 +456,23 @@ status: draft | verified    # verified = the full RUNBOOK loop passed
        - **Planned**:
          - <coverage owed on a shipped spec that was not written on the
            spot, citing the body that states it: behavior an upstream sync
-           added, a coverage request, a Budget item a regression pulled
+           added, a coverage request, an item a regression pulled
            back, a register entry retired or ruled intended, a bullet a
            suite does not assert yet. The spec's one backlog: the housekeeping
            session spends every item together through RUNBOOK "Revising
            a shipped feature". A spec being written has none.>
-       - **Budget** — states:
-         - <a cut state row, the most valuable first>
-       - **Budget** — variants:
-         - <a cut variant row>
-         (never a main or guard row; never a row another feature's
-         scenario drives, which is Owned: Budget tells the reader that no
-         spec tests this)
+       - **Rarely met**:
+         - <a state an editor, author or reviewer would not meet in an
+           ordinary week, the most likely first; never a main or guard
+           row, never a row another feature's scenario drives (that is
+           Owned): Rarely met tells the reader that no spec tests it>
        - **Nothing new to test**:
-         - <a role or state with the same screen as a covered row, naming
-           the row it repeats; a role no screen offers anything>
+         - <a row a test would assert nothing new about: a role or state
+           with the same screen as a covered row, naming the row it
+           repeats; a role no screen offers anything; a variant no
+           scenario takes (a second role with the same offer, a close,
+           cancel or back control, a wording variant, a setting end that
+           only re-words a line)>
        - **Register carries it**:
          - <a path a 🐞 or ❓ entry records; never a test (PRINCIPLES M3);
            when the entry retires or is ruled intended, the item becomes
@@ -479,10 +484,11 @@ status: draft | verified    # verified = the full RUNBOOK loop passed
          - <the item, then the feature in italics, and the scenario number
            once that feature is shipped>
      Each item cites the body (a Rule, an Actors row, a register ID). No
-     evidence in this section: a probe date is a footnote. Budget is the
-     one bullet a reviewer argues with: an item there is reversed on
-     request (MAINTENANCE "Coverage requests"), and a regression on one
-     moves it to Planned unasked. -->
+     evidence in this section: a probe date is a footnote. Rarely met and
+     Nothing new to test are the bullets a reviewer argues with: an item
+     there moves to Planned on request (MAINTENANCE "Coverage requests"),
+     and unasked when a regression lands on it, since a regression shows
+     it mattered. -->
 
 | Who, state or setting | Class | Runs in | Why not |
 |-----------------------|-------|---------|---------|

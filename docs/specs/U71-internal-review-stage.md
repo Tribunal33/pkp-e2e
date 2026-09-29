@@ -821,7 +821,7 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - a round with a recommending editor assigned and no review under way,
     its box reading "Awaiting recommendations from editors." (Rule 14c)
   - the round "Move to Review" returns to with a recommending editor
@@ -830,7 +830,7 @@ Left out of the scenarios above, by reason:
   - two recommending editors: "New editorial recommendations have been
     submitted." while one is still to record, and the deciding editor's
     "Recommendation" box listing both, comma-separated (Rules 14b, 14c)
-- **Budget** — variants:
+- **Nothing new to test**:
   - the two internal letters listed on External Review's "Notifications"
     once the monograph gets there (Rule 15c; OMP3)
   - an open request the editor cancelled, which gives the Author no
@@ -842,7 +842,6 @@ Left out of the scenarios above, by reason:
     (Rule 6)
   - External Review's first round named "Review Round 1" after two
     internal rounds (Rule 2)
-- **Nothing new to test**:
   - an assigned Series Editor who decides, offered the Press Editor's
     buttons (Actors rows 1, 6; scenario 6 declines as one)
   - the Press Manager and the Site Administrator on the round, offered

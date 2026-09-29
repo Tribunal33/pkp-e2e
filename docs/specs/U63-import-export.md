@@ -1025,7 +1025,7 @@ journal to another) with throwaway accounts. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
   - "Import Users" pressed with no file up, and pressed again with the
@@ -1046,7 +1046,6 @@ Left out of the scenarios above, by reason:
     (Rule 4)
   - the "Export Issues" list's issue name, opening "Issue Management:
     {issue}" {OJS} (Fields)
-- **Nothing new to test**:
   - the Production Editor {OJS OMP}, offered the Editor's Tools page of
     scenario 1 (Actors row 1; Settings bullet 1)
   - the Editor with "Permit changes to Settings" ticked, the install

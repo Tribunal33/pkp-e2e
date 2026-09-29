@@ -781,9 +781,8 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the "Section" field with inactive or editor-only sections (Fields)
   - the panel's own "Clear Filters", "Close" and unapplied changes (Rules 8b, 8c)
-- **Budget** — variants:
-  - the "Showing {first} to {last} of {total}" line under the list, and "Previous" and "Next" that cannot be pressed at the ends of the pager (Rule 5)
 - **Nothing new to test**:
+  - the "Showing {first} to {last} of {total}" line under the list, and "Previous" and "Next" that cannot be pressed at the ends of the pager (Rule 5)
   - Site Administrator holding Journal Manager in the journal, journal-wide like the Journal Manager (Actors row 2; the Journal Manager's views, scenario 2)
   - a Site Administrator whose editorial roles in the journal are only Section Editor ones, assigned-only like the Section Editor (Rule 3; the Section Editor's views, scenario 2)
   - assistants, assigned-only like the Section Editor (Actors row 2; the Section Editor's views, scenario 2)

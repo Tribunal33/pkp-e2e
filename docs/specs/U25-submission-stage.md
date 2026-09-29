@@ -401,7 +401,7 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - the author's submission-status summary on a submission that has left
     the Submission stage (Rule 10): scenario 7 opens a submission still at
     the stage

@@ -802,7 +802,7 @@ journals with throwaway accounts. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - the minimum password length on the Register page, a password reset
     and an invitation's acceptance, as on Profile › Password (Rule 10)
   - the principal contact as the sender of the "Validate Your Account"
@@ -816,7 +816,6 @@ Left out of the scenarios above, by reason:
     language (Rule 5)
   - the "Journal redirect" list on the French page, a journal with a
     French name listed under it (Fields)
-- **Nothing new to test**:
   - every other signed-in account at the Site Settings address, which
     gets the access-denied page the Journal Manager of scenario 1 gets
     (Actors row 1)

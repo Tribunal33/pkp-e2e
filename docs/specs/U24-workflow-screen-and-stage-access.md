@@ -1062,7 +1062,7 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - the language line gone once a second version exists (Rule 17): a
     second version comes from "Create New Version"
   - a journal's second version beside a published one offering "Publish"

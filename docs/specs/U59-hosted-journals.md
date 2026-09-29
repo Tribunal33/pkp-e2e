@@ -776,17 +776,16 @@ journals runs alone. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - exactly one journal enabled publicly, where the site's address opens
     that journal instead of the list (Rule 19; Settings bullet 4): a
     site hosting one public journal is met before a second one is
     enabled, not in an ordinary week of running a journal
   - "Order" absent while the site has one journal (Rule 1): the same
     one-journal site
-- **Budget** — variants:
+- **Nothing new to test**:
   - the Settings Wizard's address with a number no journal has,
     answering "404 Not Found" (Rule 18)
-- **Nothing new to test**:
   - every other signed-in account at the Hosted Journals and Settings
     Wizard addresses, which gets the access-denied page the Journal
     Manager of scenario 1 gets (Actors row 1)

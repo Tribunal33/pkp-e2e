@@ -635,7 +635,7 @@ All Failed Jobs" or "Delete Task Logs", run alone. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - a refused "Try Again" or "Delete" on a failed job already taken off
     the list in another tab (Rule 17b)
   - the Jobs and Failed Jobs pages past 50 rows, with page links under
@@ -643,7 +643,6 @@ Left out of the scenarios above, by reason:
   - a value written in quotes in the configuration file, read without
     its quotes (Rule 7)
   - a section of the configuration table with no settings (Rule 7)
-- **Nothing new to test**:
   - every other account without the Site Administrator role at the
     Administration, System Information, Jobs and Failed Jobs addresses,
     which gets the Journal Manager's access-denied page of scenario 1

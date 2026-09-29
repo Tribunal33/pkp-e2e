@@ -828,7 +828,7 @@ and a preprint server. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - an Editor whose role does not permit settings changes, refused the "Comments" tab and still opening the Comments page {OJS OMP} (Actors rows 5 and 6; a preprint server has no second manager-level role to untick): unticking "Permit changes to Settings" on a role is a setup few journals make, not a state an editor meets in an ordinary week
   - a Site Administrator holding no manager role in the journal, with no task row in their Tasks panel (Actors row 7): the state needs the Site Administrator's manager role ended on their own edit page, a setup no journal makes in an ordinary week
 - **Nothing new to test**:

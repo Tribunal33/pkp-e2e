@@ -615,7 +615,7 @@ one at a time and put back what they changed. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - a tick made in the Settings Wizard's "Plugins" tab showing on the
     journal's own list, and the reverse (Rule 3)
   - a plugin's other own links: "Import/Export Data" opening the
@@ -624,7 +624,6 @@ Left out of the scenarios above, by reason:
   - a row with no link of its own, which has no arrow (Rule 13)
   - a package dropped on "Drag and drop a file here to begin upload"
     instead of chosen with "Upload File" (Fields)
-- **Nothing new to test**:
   - the Editor and the Production Editor {OJS OMP}, offered the Journal
     Manager's list and boxes of scenarios 1 and 2 (Actors rows 1, 3)
 - **Register carries it**:

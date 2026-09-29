@@ -1105,12 +1105,12 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
     through a list; no editor, author or reviewer meets it in running
     the journal
-- **Budget** — variants:
+- **Nothing new to test**:
   - {OJS} DOIs with a "DOI Prefix": the article's DOI in "Resource
     Identifier" and in `marcxml` field 024 (Settings bullet 6)
   - the journal's texts typed on Settings › Journal: "Publisher" and the
@@ -1147,7 +1147,6 @@ Left out of the scenarios above, by reason:
     "ED" in the set (Rule 7a)
   - {OJS} the "JATS Metadata Format" window's "Close" asking before it
     drops a change (Fields, the JATS window)
-- **Nothing new to test**:
   - a journal with more than one language, its plain address sent on to
     `{journal address}/en/oai` (Rule 19a): the same forwarding as
     scenario 2's site-wide address

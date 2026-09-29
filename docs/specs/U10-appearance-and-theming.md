@@ -1099,9 +1099,8 @@ passwords and the tooling recipe are in the footnote. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
-  - a role newly considered for the masthead on a preprint server, before and after the tab's first save {OPS} (Rule 28; Settings bullet 24)
 - **Nothing new to test**:
+  - a role newly considered for the masthead on a preprint server, before and after the tab's first save {OPS} (Rule 28; Settings bullet 24)
   - the Editor and the Production Editor on the same tabs: the same fields and saves as the Journal Manager in scenarios 1 to 10 (Actors row 1)
 - **Register carries it**:
   - A1 (a press's and a preprint server's homepage image without its description; Rule 18; scenario 3 marks it)

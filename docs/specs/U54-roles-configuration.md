@@ -765,13 +765,12 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
   - "Cancel" in the "Confirm" window of "Remove" (Rule 20)
   - a second language ticked under "Forms", giving "Role Name" and
     "Abbreviation" a box per language (Settings bullet 2)
-- **Nothing new to test**:
   - the Editor, the Production Editor and a Site Administrator holding a
     manager role, on both tabs, offered what the Journal Manager of
     scenarios 1 to 7 is (Actors paragraph)

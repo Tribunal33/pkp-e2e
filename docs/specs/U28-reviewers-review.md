@@ -975,13 +975,12 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the "Supporting Agencies" row in the "View All Submission Details" window: shown on a review type that discloses the authors, absent on an anonymous one (Rule 7): likely a bullet in scenario 9, which opens the window on an "Open" review
-- **Budget** — states:
+- **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
-- **Budget** — variants:
+- **Nothing new to test**:
   - the competing-interests choice recorded by declining, and its badge on the declined row (Rule 8)
   - "OK" on the review form's leave question, which opens the tab and drops the change (Rule 18)
   - a changed review-form answer left through the address bar, which asks the browser's own leave-page question (Rule 18)
-- **Nothing new to test**:
   - a one-click link after a decline, dead the same way as after a submit (Rule 16, Side effects)
   - an empty Privacy Statement: step 1 without the consent box, one tick fewer (Fields, Settings)
 - **Register carries it**:

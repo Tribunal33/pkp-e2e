@@ -571,7 +571,7 @@ tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - a forced change ending the account's other sessions, and flagging alone leaving them signed in (Rule 11): it needs the Site Administrator's "Edit User" (Rule 11a) on an account already signed in elsewhere
 - **Nothing new to test**:
   - a wrong or unknown username getting the same sentence (Rule 2; scenario 1's wrong password)

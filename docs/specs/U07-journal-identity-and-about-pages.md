@@ -989,7 +989,7 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - a second form language: its boxes behind the language button, and each public page in the visitor's language with the primary language's text where that box is empty (Fields; Rule 11; Settings bullet 12)
   - unsaved changes kept while moving between the tabs of a page, and lost without a warning on reloading or leaving it (Rule 5)
   - another order of the roles on Settings › Website › "Appearance" › "Editorial Masthead" (Rule 14a; Settings bullet 4)
@@ -998,7 +998,6 @@ Left out of the scenarios above, by reason:
   - the page about the publishing software reached from the site's own pages (Rule 20; OMP2)
   - "Publisher Code Type" kept once saved, its list offering no empty choice {OMP} (Fields)
   - an unknown address under the Settings pages answering "404 Not Found" (Rule 3)
-- **Nothing new to test**:
   - the Editor and the Production Editor opening and saving the tabs, the Journal Manager's offer in scenarios 2–6 (Actors rows 1–3; scenario 11's Production editor opens the pages)
   - a Site Administrator working in a journal, a manager-level role there like the Journal Manager (Actors row 1)
   - "Information Block" disabled on the Plugins list: the block leaves the sidebar, as when every text is emptied in scenario 6 (Settings bullet 5)

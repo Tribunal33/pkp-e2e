@@ -728,10 +728,10 @@ ready account. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - "Purchase Issue" set: the reader's "Purchase Issue Fee" payment page
     (Settings bullet 7; Fields, the manual method's payment page)
-- **Budget** — variants:
+- **Nothing new to test**:
   - a payment address naming no payment request, and its page "Payment"
     (Rule 9)
   - the Author deleting the fee task from the Tasks panel, after which the
@@ -741,7 +741,6 @@ Left out of the scenarios above, by reason:
     menu is reopened and dropped on leaving (Rule 13)
   - the "Payment Request" template edited, and the request's email
     carrying the edit (Settings bullet 9)
-- **Nothing new to test**:
   - the Editor, the Production Editor and the Site Administrator on
     Settings › Distribution › "Payments", offered what the Journal
     Manager of scenario 1 is (Actors row 1)

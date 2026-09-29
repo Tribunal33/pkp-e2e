@@ -938,16 +938,15 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the Review step after a language change asking for the new language's title, contributor names and typed institution names, the affiliation copied from the author's profile included, with "Submit" disabled until they are typed (Rule 11): likely bullets in scenario 5, which changes the language and reaches Review
-- **Budget** — states:
+- **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
   - a Section Editor already on the draft emailed at the submit (Side effects, "Editors already on the submission are emailed too"): a Journal Manager seldom adds an editor before the author has submitted
-- **Budget** — variants:
+- **Nothing new to test**:
   - old bookmarked wizard addresses forwarding to the current wizard (Rule 1): a bookmark from an earlier version is one few authors keep
   - editing the "#…" part of the address to open a step ahead, and a reload ignoring it (Rule 8): an author does not edit the address by hand
   - the "Disconnected" dialog when a save fails (Rule 10): a failed save is the dropped connection above
   - a change saved by a step change straight after typing (Rule 9): scenario 3 reads the timer's save, and the move's save is the same request
-- **Nothing new to test**:
   - Site Administrator opening any draft and offered "Cancel" (Actors rows 3–4; the Journal Manager's offer, scenario 4)
   - every other role, with no "Cancel" control to press (Actors row 4; the Section Editor's screen, scenario 4)
   - the closing screens shown to whoever may open the submission, the cancelled screen naming nothing (Actors row 5)

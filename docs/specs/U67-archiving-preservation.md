@@ -536,13 +536,12 @@ are in the footnote.
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - "Description" set on Settings › Distribution › "Search Indexing",
     its text in the "Description" row (Settings bullet 6; Rule 10)
   - the principal contact's "Email address" changed and saved on
     Settings › Journal › "Contact", the "Publisher Email" row following
     at the page's next load (Settings bullet 10; Rule 10)
-- **Nothing new to test**:
   - the Site Administrator working in the journal (Actors rows 1, 2):
     the same "Archiving" tab, boxes and "Save" as scenario 1's Journal
     Manager

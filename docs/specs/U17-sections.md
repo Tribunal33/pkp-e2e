@@ -888,7 +888,7 @@ are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - {OJS} "Omit author names for section items from issues' table of
     contents." ticked, the issue's table of contents without the section's
     author lines (Settings bullet 10): a manager sets it once when the
@@ -899,7 +899,7 @@ Left out of the scenarios above, by reason:
   - {OMP} a series' "Cover Image" saved, shown in the window and deleted
     (Fields, "Cover Image"): set once when the series is created, not in
     an ordinary week
-- **Budget** — variants:
+- **Nothing new to test**:
   - "Cancel" in the section window dropping a change without asking, and
     its "×" asking first (Fields, the section window)
   - while ordering, "Create Section" and "Order" doing nothing, and the
@@ -907,7 +907,6 @@ Left out of the scenarios above, by reason:
   - {OJS} the sections read through the programming interface, by a
     Journal Manager and by the roles it refuses, a page at a time (Actors
     row 6; Rule 17a): the apps' own screens never call it
-- **Nothing new to test**:
   - the Editor, the Production Editor and the Site Administrator on the
     same tab (Actors row 1): scenario 1's Journal Manager meets the same
     screen

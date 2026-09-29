@@ -988,7 +988,7 @@ other suite's run. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
     until the new version is published (Rules 4b, 20)
@@ -1001,7 +1001,6 @@ Left out of the scenarios above, by reason:
   - the export window closed by its arrow or by Escape (Rule 16)
   - leaving "Users" with the export window open and boxes changed
     (Rule 16)
-- **Nothing new to test**:
   - the Editor, Production Editor and Site Administrator on "Editorial
     Activity", "Users" and "Reports", the Guest Editor {OJS} on the
     first two, each seeing the Journal Manager's figures (Actors

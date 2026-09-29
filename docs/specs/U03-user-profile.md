@@ -977,11 +977,10 @@ tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - a tab named in the site-level address kept on the forward to a one-journal user's profile (Rule 3; scenario 2 opens the site-level address with no tab named, and scenario 1 reads a tab named in a journal's address)
   - no submission or activity-log entry written by this page (*Side effects*): the log is a submission's, and reading its silence needs a submission and a positive control for nothing this page does
   - the browser's own leave-page question on reloading the page with an unsent "Phone" (Rule 2e; scenario 3 asks the same question of another tab)
-- **Nothing new to test**:
   - "reject" on a request made on the site-level profile itself (Rule 6d; the same "Decline Invitation" page and button as scenario 5's request made inside a journal)
   - "View Profile" in the menu under the username on the journal's public pages (Rule 1; scenario 1's "Edit Profile" opens the same page)
 - **Register carries it**:

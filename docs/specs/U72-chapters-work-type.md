@@ -696,7 +696,7 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - two form languages on the press: one "Title", "Subtitle" and
     "Abstract" box per language, the book's language first, and a title
     typed only in the other language refused (Fields, Title)
@@ -711,7 +711,6 @@ Left out of the scenarios above, by reason:
     page)
   - "Order" above a single chapter that has an author, after a chapter
     window's "Save" (Fields, the chapter list; scenario 1 passes it)
-- **Nothing new to test**:
   - a Series editor whose assignment carries the metadata-edit
     permission, the Press editor, the Production editor and the Site
     Administrator, offered on an unpublished version what the Press

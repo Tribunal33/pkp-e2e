@@ -869,14 +869,14 @@ Left out of the scenarios above, by reason:
     there and submitted (Rule 16; A18 retired)
   - a References change saved by the footer's "Back" to "Upload Files"
     or by "Save for Later" (Rule 16)
-- **Budget** — states:
+- **Rarely met**:
   - "Data Citations" at "Do not request data citation metadata from the
     author during submission.": the "Data" page without the wizard's
     "Data" section (Settings bullet 3; Rules 18, 24)
   - "Data Citations" switched off with data citations stored: the list
     hidden on the "Data" page, in the wizard and in the Reviewer's
     window, and listed again once switched back on (Rule 18)
-- **Budget** — variants:
+- **Nothing new to test**:
   - "Reprocess" and "Reprocess all references", their confirmations,
     "OK" and "Cancel" (Rule 15)
   - a reference structured by hand keeping its DOI link, title and
@@ -885,7 +885,6 @@ Left out of the scenarios above, by reason:
     (Fields & validation, last paragraph)
   - "Source Type" and "Type" in "Edit citation", which arrive with
     nothing chosen and have no empty entry (Fields & validation)
-- **Nothing new to test**:
   - an assigned Section Editor whose assignment may edit the
     publication (Actors row 2): the page scenario 1's Journal Manager
     edits

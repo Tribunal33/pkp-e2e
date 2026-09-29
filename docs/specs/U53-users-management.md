@@ -744,14 +744,13 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — variants:
+- **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
     "Username")
   - the shorter address `{journal}/management/access` typed by a
     manager-level role, which answers the access-denied page, where the
     side menu's address opens the list (Actors row 1)
-- **Nothing new to test**:
   - the Editor, the Production Editor and a Site Administrator holding a
     manager role on the "Users" list, offered what the Journal Manager of
     scenarios 1 to 6 is (Actors row 1)

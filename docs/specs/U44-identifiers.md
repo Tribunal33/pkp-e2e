@@ -801,11 +801,11 @@ are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
     (Actors, opening paragraph; Actors row 2)
-- **Budget** — variants:
+- **Nothing new to test**:
   - "Use the pattern entered below…" with typed patterns, "%x" taking the
     item's publisher ID (Settings bullet 4; Rule 8)
   - "Galleys" ticked without "Articles": the confirmation window's table

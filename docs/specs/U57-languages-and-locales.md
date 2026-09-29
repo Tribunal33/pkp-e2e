@@ -881,18 +881,17 @@ as it stands. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
+- **Rarely met**:
   - the Site Administrator's "Reload defaults" on a journal's "Website
     Languages" row, which puts the default texts back over the
     journal's own (Actors row 5; Rule 13): offered to the Site
     Administrator alone, whom no editor, author or reviewer meets in an
     ordinary week
-- **Budget** — variants:
+- **Nothing new to test**:
   - a right-to-left language's pages running from right to left, which
     needs such a language installed on the site (Rule 21b)
   - "Change Language" chosen on Settings › Website with "Setup" pressed
     last, which reopens on "Setup" › "Languages" (Rule 20a)
-- **Nothing new to test**:
   - the Editor and the Production Editor while their role keeps "Permit
     changes to Settings", offered the same "Languages" tab as the
     Journal Manager of scenarios 4 to 7 (Actors row 4)
