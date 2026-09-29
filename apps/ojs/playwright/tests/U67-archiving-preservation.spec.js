@@ -27,8 +27,9 @@
  * journals, their paths the test's unique tag (plus a letter), with
  * throwaway accounts (the username twice as password). Issues come from
  * `issues[]` with `published: true` (published today, the year the entry
- * names), the saved boxes from `enableLockss` / `enableClockss` (S2–S4; S1
- * saves them on screen, which is its behaviour under test), the Masthead
+ * names), the saved boxes from `enableLockss` / `enableClockss` (S2–S4, and
+ * S1's control journal for the site lists; S1 saves its own journal's boxes
+ * on screen, which is its behaviour under test), the Masthead
  * values from `publisherInstitution` / `onlineIssn` / `printIssn`, French
  * from `context.supportedLocales`, the closed journals from
  * `restrictSiteAccess` and `context.enabled: false`.
@@ -129,6 +130,11 @@ test.describe('Archiving & preservation', () => {
             users: [user(manager, 'Mona', 'Manager', ['manager']), user(spare, 'Sam', 'Spare', ['reader'])],
             issues: [{volume: 1, number: 1, year: 2020, published: true}],
         });
+        // The site lists' control: a journal of this test with "CLOCKSS"
+        // saved ticked, so the CLOCKSS list's read never rests on another
+        // test's journal (a fresh CI shard has none).
+        const control = `${tag}c`;
+        await ojsApi.createContext({tag: control, context: {name: 'Tide Control'}, enableClockss: true});
         const mp = await actorPage(asUser, manager);
         const visitor = await newVisitor();
         const settings = new ArchivingSettings(mp, tag);
@@ -281,7 +287,7 @@ test.describe('Archiving & preservation', () => {
         await siteLockss.goto();
         await expect(siteLockss.journalLink(tag)).toHaveText(['Tide Records']);
         await siteClockss.goto();
-        await expect(siteClockss.links()).not.toHaveCount(0);
+        await expect(siteClockss.journalLink(control)).toHaveText(['Tide Control']);
         await expect(siteClockss.journalLink(tag)).toHaveCount(0);
         await siteLockss.goto();
         await siteLockss.journalLink(tag).click();
