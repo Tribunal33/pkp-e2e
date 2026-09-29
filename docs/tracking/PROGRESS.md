@@ -6,16 +6,17 @@ register, never here.
 
 **Mode: MAINTENANCE** (since 2026-08-29). The resident QA agent runs per
 `docs/process/MAINTENANCE.md`, two scheduled sessions (housekeeping
-daily at 07:00, upstream on weekdays at midday); the housekeeping session builds a pending
-row (one the upstream sync added) under the RUNBOOK loop, one at a time. Upstream baselines: `docs/tracking/upstream-sync.md`. CI
-failures, flake watch and
-companion branches: `docs/tracking/ci-triage.md`, checked first on any
-reported failure. Suite size (RUNBOOK "Budget"; the VM has 8 cores since 2026-09-23 and runs at 8 workers, the measured knee, harness.md "Runtime model"; full runs that day on reset databases, one app at a time, after the roster-rehash fix, `.reports/cold-start/`): OJS 560 tests · 14.3 min for the app project, serial 1.4 and solo 8.4 · OMP 483 · 11.0 min, serial 0.7, solo 7.2 · OPS 379 · 7.1 min, serial 0.7, solo 6.3 (daily session 2026-09-27, `npm run test:final` on reset databases, 8 workers, `.reports/s27/final-run-<app>.log`, 24.5 · 19.3 · 14.3 min per app with the resets); the only reds were U14 S5 on OMP and OPS (U14 A11, fixed upstream, not yet in their lib/pkp) and U63 S6 on OJS and OMP (the install's "Email address" header, test fixed the same day), all green alone. On CI's fresh box OJS took 27.8 min of tests (29.5 min job) on the nightly run 35683638739 (2026-09-22; 26.6 min on 2026-09-21, 24.8 on 2026-09-17), past the 25-minute line; sharded three ways in `run-app.yml` on 2026-09-23 (MAINTENANCE "Keep the budget measured": the line now binds a shard); the first sharded push run 35846423362 spent, per shard, OJS 7.6 · 9.2 · 12.9 min, OMP 6.8 · 7.0 · 10.1, OPS 3.1 · 4.6 · 3.2 in the Playwright step (jobs under 15 min), the third shard heaviest since Playwright's split cuts equal counts in file order. Since 2026-09-24 the shards are split by recorded per-test time (harness.md "CI"): run 35972634404 spent OJS 11.5 · 9.0 · 11.1, OMP 9.8 · 9.9 · 9.5, OPS 5.2 · 4.6 · 5.0 min in the three passes (was OJS 7.8 · 10.3 · 14.0, OMP 8.5 · 9.0 · 11.9 on run 35968923348), the rest of the spread being runner speed (OJS shard 2 ran every test about 15% faster).
+daily at 07:00, upstream on weekdays at midday); the housekeeping
+session builds a pending row (one the upstream sync added) under the
+RUNBOOK loop, one at a time. Upstream baselines:
+`docs/tracking/upstream-sync.md`. CI failures, flake watch and companion
+branches: `docs/tracking/ci-triage.md`, checked first on any reported
+failure.
 
 ## Features
 
 Rows in FEATURE-MAP order. Scenarios is the spec's canonical scenario
-count once it has them (RUNBOOK "Budget"); status is pending /
+count once it has them; status is pending /
 in_progress / done / parked.
 
 | Row | Feature | Apps | Scenarios | Status | Note |
