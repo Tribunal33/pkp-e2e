@@ -65,19 +65,26 @@ orchestrator.
    no other persona anywhere in the feature. Gate: `persona.md`, lint zero.
 8. **Tests.** One test author per app writes the suite and runs it green once
    (`briefs/test-author.md`); one fold agent folds the runs' findings, with
-   `Basis: test run` on new entries (`briefs/fold.md`); then
-   `npm run test:final -- --feature U<nn>` is the second green, re-run after
-   any fix. Gate: `test-<app>-green.log`, `final-run-<app>.log`.
+   `Basis: test run` on new entries (`briefs/fold.md`). The second green is
+   CI's, never a local whole-suite run (it takes the VM up to an hour and
+   holds the test lock every other slot waits on): commit the work on a
+   branch named `U<nn>` (no `/`, or CI skips it), push it, and run `node
+   bin/ci.js watch > .reports/<feature>/ci-run.log` in the background under
+   the keepalive; all three apps' full suites on fresh boxes, 20–35 min.
+   A red is fixed and pushed again (the newer push cancels the branch's
+   older run), then watched again. Gate: `test-<app>-green.log`,
+   `ci-run.log` ending green.
 9. **Progress.** The orchestrator sets the frontmatter to `status: verified`
    (its one inline spec edit) and replaces the PROGRESS row: status, scenario
    count, tests per app, and a note in the fixed shape (tests per app ·
    register counts · one headliner ID · rarely-met states left out · open
    blocker · low-confidence IDs). Gate: the row, lint zero after the flip.
-10. **Commit and push.** One commit in this repo, everything the campaign
-    produced, pushed to `origin main` in the same step: the push's CI run
-    is the fresh-box full run the local finals may not reach, and the app
-    repos' PR checks call this `main`, so unpushed work counts for
-    nothing. `.reports/` never (session scratch, gitignored, deletable
+10. **Commit and push.** The feature branch, with the PROGRESS row
+    committed on it, rebased onto `origin/main` and pushed there (`git push
+    origin U<nn>:main`), then the remote branch deleted: the branch's green
+    CI run was the full run, `main`'s own push run confirms it after the
+    merge, and the app repos' PR checks call this `main`, so unpushed work
+    counts for nothing. `.reports/` never (session scratch, gitignored, deletable
     after review; the kept checks under `shared/playwright/checks/` are
     the exception). App checkouts are read-only: pkp push URLs are
     disabled by construction, app changes go through maintainer-reviewed
@@ -207,9 +214,9 @@ Test files cite these by number, so the numbers are stable.
   keepalive stops at the report, never earlier: a quiet tick is fine, a
   stopped Monitor with work in flight is a paused session whose runs die
   with it. A Playwright run can also wait behind another slot's run for
-  the machine's test lock (harness.md "Slots"), so suites, finals,
-  fleet-prep and any run that may queue go to the background under the
-  keepalive, never in a foreground command.
+  the machine's test lock (harness.md "Slots"), so fleet-prep and any run
+  that may queue go to the background under the keepalive, never in a
+  foreground command; so does `node bin/ci.js`.
 
 ## Definition of done
 
@@ -274,7 +281,7 @@ The writer spends the table as "What the scenarios cover" says.
    "revision") extends the suite: a test per new scenario, an assertion
    per bullet added to a scenario already tested, every title opening
    `S<n>`, the header's "not covered" block cut to register IDs; then the
-   fold and `test:final` as step 8. Gate: the green logs,
+   fold and the CI run as step 8. Gate: the green logs, `ci-run.log`,
    `node docs/process/lint/lint-spec.mjs --tests <spec>` zero.
 5. **Progress, commit and push, report** as steps 9 to 11: the PROGRESS row in the
    fixed shape with the scenario count; the sheet deleted, with its queue

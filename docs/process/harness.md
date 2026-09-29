@@ -177,7 +177,10 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
   (`shared/playwright/test-lock.js`): shared among one slot's runs, so a
   session's three test authors (RUNBOOK step 8) still run side by side,
   and exclusive against other slots, because concurrent fleets on these
-  cores turn the suites flaky. A waiting run prints who holds it (`node
+  cores turn the suites flaky. Slots take turns in request order: a run
+  joins its slot's hold only while no other slot has a run that asked
+  earlier. Whole suites run on CI ("CI", `bin/ci.js`), so a hold lasts
+  minutes, not the hour one app's full local run takes. A waiting run prints who holds it (`node
   shared/playwright/test-lock.js status`). It is a kernel `flock` owned by
   one small holder process per slot, released once the slot's last run
   exits, a crash or a kill included. Probes (`bin/probe.js`, the probe
@@ -438,7 +441,9 @@ too. The app pass's database is gone after the run; its error contexts
 and traces stay in `<out>/app`.
 
 A run longer than about four minutes outlives the prompt cache of the agent
-waiting on it, and whole-project runs are what `npm run test:final` is for.
+waiting on it, and whole-suite runs are CI's (`node bin/ci.js`, "CI"): the
+VM's `npm run test:<app>` and `test:final` remain for work about the local
+runtime itself (MAINTENANCE "Session hygiene").
 In a plain `npx playwright test` command, selecting a serial spec by path
 alone runs its dependency projects (`setup`, `shared`, the app project) in
 full first; `--project=<app>-serial --no-deps` on a warm install runs the
@@ -471,8 +476,11 @@ node process, never a broad `pkill` ("Slots": other slots run beside it).
   `workflow_dispatch` form takes `ojs_ref`, `omp_ref` and `ops_ref`, so a
   branch of this repo can be run against a pinned app commit:
   `gh workflow run e2e.yml --ref <branch> -f ojs_ref=<sha>`; a PR head on
-  a contributor's fork needs `-f ojs_repo=<fork>/ojs` beside it, and a
-  dispatch cancels the branch's in-flight push run (one concurrency group).
+  a contributor's fork needs `-f ojs_repo=<fork>/ojs` beside it, and `-f
+  apps=ojs` runs only that app. Every dispatch is its own concurrency
+  group (two slots dispatch from the same commit); a push cancels only
+  the same branch's older push run, except on `main`, where every commit
+  runs.
   `-f pkp_lib_ref=` and `-f ui_library_ref=` (a full sha or
   `pull/<n>/head`, fetched from pkp/pkp-lib and pkp/ui-library) pin every
   app's `lib/pkp` and `lib/ui-library` before the installs, whatever the
@@ -481,6 +489,15 @@ node process, never a broad `pkill` ("Slots": other slots run beside it).
   summary names the pinned commits). App repo checks never pin: their PRs
   carry the submodule bumps (@jarda.kotesovec, 2026-09-28).
   `gh` works on this repo and, since 2026-09-12, on the pkp org.
+- **`node bin/ci.js` is how a session uses CI**, the home of every
+  whole-suite run: `watch` waits for the push run of `HEAD` (or `--sha`,
+  or a run id), `dispatch` starts `e2e.yml` from `--ref <branch>` with
+  `--<app>-ref`, `--<app>-repo`, `--pkp-lib-ref`, `--ui-library-ref` and
+  `--apps` and waits for it, `summary <run-id>` reports a finished one.
+  It prints a line as each job ends, then every failed and flaky test per
+  app from the job logs and the run's URL; exit 0 green, 1 red, 2 no run
+  or timed out (`--timeout <min>`, default 120). Run it in the background
+  under the keepalive. A branch name with `/` gets no push run.
 - `.github/workflows/run-app.yml` is the reusable job. Each app repo's
   `e2e-tests.yml` calls it on every push and PR with `app_ref` set to the
   commit under test; it runs this repo's `main` unless `e2e_ref` is given.

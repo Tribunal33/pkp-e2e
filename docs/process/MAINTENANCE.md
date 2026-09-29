@@ -385,7 +385,8 @@ section), which runs these same steps ahead of time. The work is the
 sync loop's critical triage, on one PR:
 
 1. **Reproduce at the PR ref** ("Start on the right code" below, merge-base
-   check first), on reset databases, running the failing suites. A pkp-lib
+   check first), on reset databases, running the failing spec files (whole
+   suites run on CI: `node bin/ci.js dispatch`, harness.md "CI"). A pkp-lib
    PR is fetched inside `lib/pkp` and its merge base checked against the
    app's `lib/pkp` pointer; a PR pair (pkp-lib plus app) is handled as
    one, on the app PR's ref. One run at the PR ref plus the diff plus the
@@ -476,29 +477,26 @@ merge (first run: issue pkp/pkp-lib#13274, companion `13274`, 2026-09-12).
    intention gap follows step 5's report and DMs; a behavior the issue
    leaves open is a ❓ in the owning spec, posted in the thread, and the
    team's reply is recorded as the entry's verdict the same day.
-5. **Run the suites.** The full suite of every app, each with the shared
-   PR in its submodule (step 2), on a reset database at the VM's
-   auto-detected workers, one app at a time. A red that an app without its
-   own PR shows is the PR's once the same spec files are green with the
-   submodule rebuilt at the PR's base on the same database; that app meets
-   it with its next pointer update, so it is a finding, never a companion
-   test edit. A red test gets a solo rerun at the PR ref and,
-   if it reds again, the same rerun at the app's tip on the same database
-   and on a
-   fresh one: red at both refs is a flake class (ci-triage), red only at
-   the PR ref is the PR's. Traces kept on failure (`--trace
-   retain-on-failure`) save a second reproduction.
-6. **CI at the PR refs from the companion.** Push the companion, then
-   `gh workflow run e2e.yml --ref <companion> -f <app>_repo=<fork>/<app>
-   -f <app>_ref=<head sha>` for each app with a PR, plus `-f
-   pkp_lib_ref=pull/<n>/head` and `-f ui_library_ref=pull/<n>/head` for
-   the shared PRs (harness.md "CI"): every app then builds the shared PRs
-   whatever its pointers say, so an app PR without a submodule bump and
-   an app without a PR of its own (at `main`) both run the merge result.
-   Do not push
-   the companion again while the dispatch runs: a push run and a dispatch
-   share one concurrency group and the newer cancels the older. The app
-   PR's own check picks the companion up by name on its next run.
+5. **Run the suites on CI at the PR refs.** Push the companion, then
+   `node bin/ci.js dispatch --ref <companion> --<app>-repo <fork>/<app>
+   --<app>-ref <head sha>` for each app with a PR, plus `--pkp-lib-ref
+   pull/<n>/head` and `--ui-library-ref pull/<n>/head` for the shared PRs,
+   and `--apps` naming the apps the change can reach (all three for a
+   shared PR). Every app then builds the shared PRs whatever its pointers
+   say, so an app PR without a submodule bump and an app without a PR of
+   its own (at `main`) both run the merge result. Run it in the background
+   under the keepalive; it prints each failed and flaky test per app. The
+   VM runs no whole suite for a review. The app PR's own check picks the
+   companion up by name on its next run.
+6. **Reds.** A red that an app without its own PR shows is the PR's once
+   the same spec files are green with the submodule rebuilt at the PR's
+   base on the same database; that app meets it with its next pointer
+   update, so it is a finding, never a companion test edit. A red test
+   gets a solo rerun on the VM at the PR ref and, if it reds again, the
+   same rerun at the app's tip on the same database and on a fresh one:
+   red at both refs is a flake class (ci-triage), red only at the PR ref
+   is the PR's. Traces kept on failure (`--trace retain-on-failure`) save
+   a second reproduction.
 7. **Record and report.** Companion row `ready` in ci-triage with what
    the merge session must do; a dated sync-log entry with one line per
    change, the run lines and the CI run ids, and "baselines not advanced"
@@ -510,10 +508,9 @@ merge (first run: issue pkp/pkp-lib#13274, companion `13274`, 2026-09-12).
    `npm run fetch-apps -- --update`, confirm the merge with `git
    range-diff <base>..<reviewed head> <new base>..<merged head>` (a rebase
    before the merge is fine when it reads all `=`; anything else is
-   re-read), rebase the companion onto `main`, run the touched suites
-   once on reset databases (one app at a time: three suites in parallel
-   on the VM produce load flakes), fast-forward, delete the row and the
-   remote branch. The baselines advance past the merge only when every
+   re-read), rebase the companion onto `main`, push it and `node
+   bin/ci.js watch` its run (the full suites, on CI), fast-forward on
+   green, delete the row and the remote branch. The baselines advance past the merge only when every
    tip commit up to it has been reviewed; when the tips carry unreviewed
    commits beside the PR, the log entry lists them and the next daily
    sync advances (the rule of sync loop step 6 holds here too).
@@ -566,10 +563,14 @@ the answer; the spec and the test are the record.
   "Slots"): work only inside this clone, and leave the other slots'
   clones, fleets and processes alone. The machine's test lock lets one
   slot's Playwright runs at a time; a run that waits for it says who holds
-  it, so start suites in the background under the keepalive (RUNBOOK
-  "Keep the thread ticking"). Within the session, one full-suite run at a
-  time: `npm run test:final` runs the three suites one after another. Run
-  full suites at the auto-detected count, 8 on the
+  it, so start runs in the background under the keepalive (RUNBOOK
+  "Keep the thread ticking"). **Whole suites run on CI** (`node
+  bin/ci.js`, harness.md "CI"), not on the VM: one takes the VM up to an
+  hour and holds the lock every other slot waits on. The VM runs spec
+  files, `--grep` selections, a red test alone, `fleet-prep` and probes.
+  A local whole-suite run is for work about the local runtime itself
+  (flake diagnosis under load, performance), announced in the thread; run
+  it at the auto-detected count, 8 on the
   8-core VM (the measured knee, harness.md "Runtime model"; OPS 4.2 min
   there against 8.0 at four workers on the old 4-core VM), and pin
   `PLAYWRIGHT_WORKERS=4` only to reproduce a red at CI's setting.

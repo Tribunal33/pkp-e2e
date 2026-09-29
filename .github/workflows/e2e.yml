@@ -51,18 +51,23 @@ on:
         description: pin every app's lib/ui-library to this pkp/ui-library commit (full sha or pull/<n>/head)
         type: string
         default: ''
+      apps:
+        description: the apps to run, comma-separated (a PR on one app need not run the other two)
+        type: string
+        default: 'ojs,omp,ops'
 
 # A newer push to a branch cancels its older run, except on main: parallel
 # slots push there, and each push's own run is its gate (RUNBOOK step 10),
-# so every main commit gets its own group.
+# so every main commit gets its own group. A dispatch is always its own
+# group: two slots' PR reviews dispatch from the same commit (bin/ci.js).
 concurrency:
-  group: e2e-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
+  group: e2e-${{ github.event_name == 'workflow_dispatch' && github.run_id || (github.ref == 'refs/heads/main' && github.sha || github.ref) }}
   cancel-in-progress: true
 
 jobs:
   ojs:
     # Like pkp's schedule.yml: the nightly runs only on the canonical repo.
-    if: github.event_name != 'schedule' || github.repository == 'jardakotesovec/pkp-e2e'
+    if: (github.event_name != 'schedule' || github.repository == 'jardakotesovec/pkp-e2e') && contains(format(',{0},', inputs.apps || 'ojs,omp,ops'), ',ojs,')
     uses: ./.github/workflows/run-app.yml
     with:
       app: ojs
@@ -73,7 +78,7 @@ jobs:
       ui_library_ref: ${{ inputs.ui_library_ref || '' }}
   omp:
     # Like pkp's schedule.yml: the nightly runs only on the canonical repo.
-    if: github.event_name != 'schedule' || github.repository == 'jardakotesovec/pkp-e2e'
+    if: (github.event_name != 'schedule' || github.repository == 'jardakotesovec/pkp-e2e') && contains(format(',{0},', inputs.apps || 'ojs,omp,ops'), ',omp,')
     uses: ./.github/workflows/run-app.yml
     with:
       app: omp
@@ -84,7 +89,7 @@ jobs:
       ui_library_ref: ${{ inputs.ui_library_ref || '' }}
   ops:
     # Like pkp's schedule.yml: the nightly runs only on the canonical repo.
-    if: github.event_name != 'schedule' || github.repository == 'jardakotesovec/pkp-e2e'
+    if: (github.event_name != 'schedule' || github.repository == 'jardakotesovec/pkp-e2e') && contains(format(',{0},', inputs.apps || 'ojs,omp,ops'), ',ops,')
     uses: ./.github/workflows/run-app.yml
     with:
       app: ops

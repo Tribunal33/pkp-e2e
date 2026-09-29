@@ -15,11 +15,16 @@
  *   node shared/playwright/test-lock.js status
  *   node shared/playwright/test-lock.js --hold <slot>   (internal: the holder)
  *
+ * Fair between slots: a run joins its slot's hold only while no other
+ * slot has a run that asked earlier, so a busy slot cannot keep the lock
+ * by starting run after run; slots take turns in request order.
+ *
  * Mechanics: one holder process per slot owns a kernel flock on
  * <home>/test-lock/machine.lock (via flock(1), whose child dies with the
  * holder's stdin pipe, so a killed holder can never leave the lock
- * behind). Every run registers its pid under slot-<n>/owners/; the holder
- * lets go once no registered owner is alive. Children inherit
+ * behind). Every run registers its pid under slot-<n>/owners/, queued
+ * until it may run, then active; the holder lets go once none of its
+ * slot's runs is active. Children inherit
  * PKP_E2E_LOCK_OWNER and never register again (Playwright workers load the
  * config too). Skipped on CI, where flock(1) is missing (macOS), and with
  * PKP_E2E_LOCK=off.
@@ -88,6 +93,20 @@ function liveOwners(slot) {
     return out;
 }
 
+const activeOwners = (slot) => liveOwners(slot).filter((o) => o.state !== 'queued');
+
+/** Does another slot have a queued run that asked before `since`? */
+function earlierWaiter(slot, since) {
+    let dirs = [];
+    try {
+        dirs = fs.readdirSync(LOCK_DIR).filter((d) => d.startsWith('slot-'));
+    } catch {}
+    return dirs.some((d) => {
+        const other = Number(d.slice(5));
+        return other !== slot && liveOwners(other).some((o) => o.state === 'queued' && o.since < since);
+    });
+}
+
 /** The slot's holder process record if it is alive (waiting or holding). */
 function slotHolder(slot) {
     const rec = readJson(holderPidFile(slot));
@@ -125,19 +144,30 @@ function acquire(label = process.argv.slice(1).join(' ')) {
     fs.mkdirSync(ownersDir(slot), {recursive: true});
     // Register BEFORE looking at the holder: a holder that is letting go
     // re-reads the owners after withdrawing, so it sees us (see hold()).
-    writeJsonAtomic(path.join(ownersDir(slot), `${process.pid}.json`), {
+    const ownerFile = path.join(ownersDir(slot), `${process.pid}.json`);
+    const me = {
         pid: process.pid,
         start: startTime(process.pid),
         cmd: label.replace(/\s+/g, ' ').slice(0, 200),
         since: new Date().toISOString(),
-    });
+        state: 'queued',
+    };
+    writeJsonAtomic(ownerFile, me);
     process.env.PKP_E2E_LOCK_OWNER = String(process.pid);
 
     // First report after 3 s: an uncontended acquire takes about a second.
     let lastReport = Date.now() - WAIT_REPORT_MS + 3000;
     for (;;) {
         const h = machineHolder();
-        if (h && h.slot === slot && alive(slotHolder(slot))) return;
+        if (h && h.slot === slot && alive(slotHolder(slot)) && !earlierWaiter(slot, me.since)) {
+            // Active BEFORE the second look: a holder letting go withdraws
+            // first and then counts active runs, so either it sees us, or we
+            // see it gone and queue again.
+            writeJsonAtomic(ownerFile, {...me, state: 'active'});
+            const again = machineHolder();
+            if (again && again.pid === h.pid && alive(slotHolder(slot))) return;
+            writeJsonAtomic(ownerFile, me);
+        }
         if (!slotHolder(slot)) spawnHolder(slot);
         if (Date.now() - lastReport >= WAIT_REPORT_MS) {
             const who = h ? describeHolder(h) : 'nobody yet (the lock is being taken)';
@@ -177,7 +207,7 @@ function hold(slot) {
         stdio: ['pipe', 'pipe', 'inherit'],
     });
     const me = {slot, pid: process.pid, start: startTime(process.pid), since: new Date().toISOString()};
-    const publish = () => writeJsonAtomic(HOLDER_FILE, {...me, owners: liveOwners(slot)});
+    const publish = () => writeJsonAtomic(HOLDER_FILE, {...me, owners: activeOwners(slot)});
     const letGo = () => {
         const cur = readJson(HOLDER_FILE);
         if (cur && cur.pid === process.pid) fs.rmSync(HOLDER_FILE, {force: true});
@@ -198,7 +228,7 @@ function hold(slot) {
         publish();
         let empty = 0;
         setInterval(() => {
-            if (liveOwners(slot).length) {
+            if (activeOwners(slot).length) {
                 empty = 0;
                 publish();
                 return;
@@ -207,7 +237,7 @@ function hold(slot) {
             // Withdraw first, then look again: a run that saw us holding had
             // registered before it looked, so it shows up here.
             fs.rmSync(HOLDER_FILE, {force: true});
-            if (liveOwners(slot).length) {
+            if (activeOwners(slot).length) {
                 empty = 0;
                 publish();
                 return;
@@ -230,9 +260,8 @@ function status() {
         slots = fs.readdirSync(LOCK_DIR).filter((d) => d.startsWith('slot-')).map((d) => Number(d.slice(5)));
     } catch {}
     for (const slot of slots.sort()) {
-        if (h && h.slot === slot) continue;
-        const owners = liveOwners(slot);
-        if (owners.length) console.log(`slot ${slot} waiting: ${owners.map((o) => `pid ${o.pid} ${o.cmd}`).join('; ')}`);
+        const queued = liveOwners(slot).filter((o) => o.state === 'queued' || !(h && h.slot === slot));
+        if (queued.length) console.log(`slot ${slot} waiting: ${queued.map((o) => `pid ${o.pid} ${o.cmd} (since ${o.since.slice(11, 16)})`).join('; ')}`);
     }
 }
 

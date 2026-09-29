@@ -32,8 +32,10 @@ Operational facts:
   `npm run fetch-apps` (pkp upstream `main`, with push URLs to pkp
   disabled). `npm run mount` copies the PHP overlays into them, with a guard
   against app-side edits; the checkouts are read-only and commits happen
-  only in this repo (RUNBOOK step 10). Suites run from here:
-  `npm run test:ojs|omp|ops`, `reset:<app>`.
+  only in this repo (RUNBOOK step 10). Spec files and `--grep` selections
+  run from here (`npx playwright test -c configs/<app>.config.js …`,
+  `reset:<app>`); **whole suites run on CI** (`node bin/ci.js watch` or
+  `dispatch`, harness.md "CI"), never on the VM by default.
 - A second set of checkouts on `stable-3_5_0` lives in
   `checkouts/stable-3_5_0/<app>` (ports 9000/9100/9200, DBs
   `<app>_test_3_5`), for regression reads and side-by-side drives only:
