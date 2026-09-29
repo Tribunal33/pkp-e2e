@@ -226,9 +226,9 @@ forEachApp(async (app) => {
         await anon('a1-C-planted', C.submissionId, '200 {items: 3 planted, itemsMax: 3}');
 
         // ---------- p1-p3: the pages ----------
-        await pageLeg('p1-A', A.submissionId, 'block "Cited by", count "--" after the 502, "View citing articles"; crossref.css (default theme)', {modal: true});
+        await pageLeg('p1-A', A.submissionId, 'block "Cited by", count "--" after the 502, "View citing articles"; crossref.css (default theme). From crossref-ojs 9b10eb6 / ui-library d458b2e1: no TypeError, no error dialog on load, the modal opens with the plugin error text instead of the count', {modal: true});
         await pageLeg('p2-B', B.submissionId, 'no block, no call to the endpoint');
-        await pageLeg('p3-C', C.submissionId, 'count 3; modal "3 citations", three entries, doi.org links; copy fills the clipboard', {modal: true, copy: true});
+        await pageLeg('p3-C', C.submissionId, 'count 3; modal "3 citations", three entries, doi.org links; copy fills the clipboard (from 9b10eb6: no empty parts, no ", ," for the author-less entry, no trailing ", " without a DOI)', {modal: true, copy: true});
         await loc(page, 'the Cited by block (article page side column)', page.locator('.crossref-cited-by'));
 
         // ---------- cm: Crossmark ticked too, the side column's order ----------
