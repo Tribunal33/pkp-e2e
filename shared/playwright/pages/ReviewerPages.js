@@ -334,8 +334,26 @@ exports.ReviewWizardPage = class ReviewWizardPage extends BasePage {
         return this.page.getByRole('tab', {name: new RegExp(`^${step}\\.`)});
     }
 
+    /**
+     * Wait until `step` is current AND its panel is on screen. The steps are
+     * jQuery UI remote tabs, re-fetched on every activation: the tab reads
+     * `aria-selected="true"` as soon as the fetch starts, while its panel is
+     * still empty (first load) or still shows the step's previous form (a
+     * re-activation, as after "Save and continue"), marked `aria-busy`
+     * with the tab `ui-tabs-loading` until the answer is in. A read or a
+     * press before that finds no privacy box (the accept is then refused
+     * in the page, "This field is required.") or hits the stale form, whose
+     * answer is lost with it (the next step never opens). The panel's form
+     * is live once its validator is attached, which marks it `novalidate`.
+     * (ci-triage flake watch, U28 S10; .reports/flake-2026-09-29/u28s10.)
+     */
     async expectStep(step) {
-        await expect(this.tab(step)).toHaveAttribute('aria-selected', 'true', {timeout: 30_000});
+        const tab = this.tab(step);
+        await expect(tab).toHaveAttribute('aria-selected', 'true', {timeout: 30_000});
+        await expect(tab).not.toHaveClass(/\bui-tabs-loading\b/, {timeout: 30_000});
+        const panel = this.page.locator(`[id="${await tab.getAttribute('aria-controls')}"]`);
+        await expect(panel).not.toHaveAttribute('aria-busy', 'true', {timeout: 30_000});
+        await expect(panel.locator('form.pkp_form:not([novalidate])')).toHaveCount(0, {timeout: 30_000});
     }
 
     async expectTabDisabled(step) {
@@ -452,24 +470,14 @@ exports.ReviewWizardPage = class ReviewWizardPage extends BasePage {
      * accept button; lands on step 2.
      */
     async accept({privacy = true} = {}) {
+        // Step 1's panel must be in before the privacy box is counted: read
+        // earlier, the count is 0, the box stays unticked and every press
+        // is refused in the page (ci-triage flake watch, U28 S10).
+        await this.expectStep(1);
         if (privacy && (await this.privacyBox.count())) {
             await this.privacyBox.check();
         }
-        // Content-verified bounded retry (ci-triage flake watch, U28 S10):
-        // under load the press is occasionally swallowed and step 2 never
-        // becomes current. Press, give the step a short window, and press
-        // once more while the accept button is still offered.
-        for (let attempt = 0; attempt < 3; attempt++) {
-            await this.acceptButton.click();
-            try {
-                await expect(this.tab(2)).toHaveAttribute('aria-selected', 'true', {timeout: 10_000});
-                return;
-            } catch (e) {
-                if (attempt === 2 || !(await this.acceptButton.isVisible())) {
-                    break;
-                }
-            }
-        }
+        await this.acceptButton.click();
         await this.expectStep(2);
     }
 

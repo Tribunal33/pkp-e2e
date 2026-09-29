@@ -282,6 +282,22 @@ trips.
   each, 254 passed and the 15 serial tests behind it did not run; OMP and
   OPS green). Read by the U33 session before its own push run 35474559640.
   Again 2026-09-28 (U65 session, VM, reset databases, auto workers): OJS U28 S10 red in the OJS final, the only red of 600 (the serial and solo passes green), green alone in 45 s (`.reports/U65/final-run-ojs.log`, `alone-reds.log`).
+  **Mechanism found and fixed 2026-09-29** (housekeeping,
+  `.reports/flake-2026-09-29/u28s10/diagnosis.md`, from three CI traces of
+  failed first attempts: ojs 36316939718, pkp-e2e 36381740615 and
+  36418555304): the test's own race in the shared page object. The
+  wizard's steps are jQuery UI tabs with remote panels, selected when the
+  fetch starts; `accept()` counted the privacy box while step 1 was still
+  empty, read 0, never ticked it, and every press was refused in the page
+  ("This field is required.", no request), so the press-again retry could
+  never help; one trace showed the other shape, "Continue to Step #3"
+  pressed on the old step-2 form during its re-fetch. `expectStep()` now
+  waits for the tab's loading and busy marks to clear and the form to
+  attach; `accept()` presses once after step 1 is shown. With step 1 held
+  3 s, or step 2's re-fetch and save held: red 10 of 10 before, 0 of 10
+  after, each; OJS U28 `--repeat-each 5` at eight workers 80 of 80, every
+  other wizard caller on OJS and OMP green once. Rule in patterns.md "UI
+  realities". **Watch condition**: a U28 S10 red after the fix.
 - **A page-level Escape closing the workflow panel behind a "More
   Actions" menu** (U30 S4, OJS; CI's second family, 15 first-attempt reds
   in five weeks; most local OJS finals at four workers since 2026-09-12;

@@ -460,6 +460,16 @@ no cleanup fixture.
   Seeded drafts and drafts started on screen both carry a submission date on
   the current build (U45 claim check K3, 2026-09-26), so a date-ordered list
   places them by that date, not last.
+- **A legacy jQuery UI tab is selected before its panel is on screen.**
+  The reviewer wizard's steps (and any other remote-panel tab set) set
+  `aria-selected="true"` when the panel's fetch starts; the panel is empty,
+  or still shows the previous form on a re-activation, marked
+  `aria-busy="true"` with the tab `ui-tabs-loading`, until the answer is
+  in. A "step N is current" wait also waits for those marks to clear
+  (`ReviewWizardPage.expectStep`), and nothing in the panel is counted,
+  read or pressed before: a count reads 0, a press on the stale form loses
+  its answer, and a "press again" retry covers neither (U28 S10,
+  2026-09-29).
 - **Server-rendered TinyMCE values never reach the backing textarea.** There
   is deliberately no helper. Read the editor directly:
   `page.evaluate((id) => window.tinymce?.get(id)?.getContent(), fieldId)`.

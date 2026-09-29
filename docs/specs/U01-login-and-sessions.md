@@ -51,7 +51,7 @@ feature (see *Cross-feature interactions*).
 |------------------|-----------|-------|
 | "Username or Email" | yes | Either the account's username or its email address |
 | "Password" | yes | The typing box stops accepting input at 32 characters, even though passwords may be longer ⚠ [A1](#a1). A "Forgot your password?" link sits under it <sup>a</sup> |
-| "Keep me logged in" | no | Keeps the sign-in alive for a fixed window from login, beyond the idle lifetime that otherwise ends it (Rule 5). The box arrives pre-ticked ⚠ [A2](#a2) |
+| "Keep me logged in" | no | Keeps the sign-in alive for a fixed window from login, beyond the idle lifetime that otherwise ends it (Rule 5). The box is ticked every time the form shows ⚠ [A2](#a2) |
 | Spam check | when configured | Appears only when the installation's configuration turns a check on for the login form. reCAPTCHA shows its widget. The ALTCHA check is invisible: nothing extra appears and signing in works as usual, but a browser without JavaScript is refused with "You must complete the validation check used to prevent spam submissions." (see *Settings*) <sup>a</sup> |
 | "Register" link | — | Shown beside the "Login" button while the journal accepts registrations. Disabling registration removes it (see *Settings*) <sup>a</sup> |
 
@@ -104,7 +104,14 @@ browser tab reads "Change Password | {journal name}", but after a refused
    field in. A disabled account with correct credentials gets a different
    answer: "Your account has been disabled. Please contact the administrator
    for more information." When staff recorded a reason, it reads "Your
-   account has been disabled for the following reason: {reason}". <sup>a</sup>
+   account has been disabled for the following reason: {reason}". With a
+   wrong password, a disabled account gets the generic sentence. After a
+   disabled account's refusal, the next sign-in in the same browser, by
+   any account and with the correct password, lands back on the Login
+   page with no message and "Username or Email" empty; the try after that
+   lands where Rule 3 says ⚠ [A12](#a12). Opening the Login page afresh in
+   between does not help. After a wrong-password or unknown-username
+   refusal, the next correct sign-in lands at once. <sup>a</sup>
 3. **Landing after sign-in.** An interrupted destination wins (Rule 4).
    Otherwise, a user holding a role beyond Reader **in the journal signed
    into** lands on that journal's Dashboard. A user with no such role there
@@ -578,6 +585,7 @@ Left out of the scenarios above, by reason:
   - A10 ("Edit User" hiding the flag and clearing it on saving; Rule 11a)
   - A8 (Login As from a stale session answering a blank error; Rule 14)
   - A4 (Login As still offered mid-impersonation; Rule 15)
+  - A12 (the next correct sign-in after a disabled account's refusal landing back on the Login page; Rule 2)
 - **No seed**:
   - a disabled account refused, with or without a reason (Rule 2)
   - the Site Administrator passing Confirm Access (Actors row "Pass the Confirm Access gate"): what is missing is a per-context way to set the re-authentication window; the configuration file's `password_timeout` is run-global
@@ -609,13 +617,14 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | The password boxes stop accepting input at 32 characters, so longer passwords cannot be typed | 🐞 | user-visible | Jarda 2026-08-25 |
-| [A2](#a2) | "Keep me logged in" arrives pre-ticked on every visit | 🐞 | minor | Jarda 2026-08-25 |
+| [A2](#a2) | "Keep me logged in" arrives ticked every time the Login form shows, even after a refused sign-in for which it was unticked | 🐞 | minor | Jarda 2026-08-25 |
 | [A3](#a3) | The set-a-new-password page's browser tab shows a raw internal code instead of a title | 🐞 | minor | Jarda 2026-08-25 |
 | [A4](#a4) | "Login As" is still offered mid-impersonation (Users & Roles and the Participants panel); a second use strands the operator, because "Logout as" restores the intermediate user, not their own account | 🐞 | latent | Jarda 2026-08-25 |
 | [A7](#a7) | Signed out, the address ending at the word "dashboard" answers a blank server error instead of the Login page | 🐞 | user-visible | Jarda 2026-08-25 |
 | [A8](#a8) | Login As answers a blank server error when the browser's session can no longer be fully resolved (e.g. it outlived a server-side reset) | 🐞 | minor | Jarda 2026-08-25 |
 | [A10](#a10) | "Edit User" always opens with "Change Password" unticked, and saving it clears a flag already set | 🐞 | minor | — |
 | [A11](#a11) | After a refused "OK" on the forced "Change Password" page, the browser tab loses the page's name | 🐞 | minor | — |
+| [A12](#a12) | After a disabled account is refused, the browser's next correct sign-in lands back on the Login page with no message; after that account's second refusal, the next correct one reads "Invalid username/email or password" | 🐞 | minor | — |
 | [A5](#a5) | No journal-level users screen offers the "must change password" box, so a Journal Manager cannot require a forced change on an existing account; only the Site Administrator's Hosted Journals list offers it | ❓ | user-visible | Jarda 2026-08-25 · to triage |
 | [A9](#a9) | The last-login date is recorded on every sign-in, but no users screen shows it, so a manager cannot see when an account last signed in | ❓ | minor | — |
 | [A6](#a6) | With rate limiting on, even the correct password is refused as "Invalid username/email or password" during the cool-down; the concealment is intended | ✅ | latent | Jarda 2026-08-25 |
@@ -639,7 +648,9 @@ Basis: code inspection + observed on a running site. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — "Keep me logged in" pre-ticked** · 🐞 · minor.
-The checkbox arrives already ticked on a fresh Login page. Every user
+The checkbox is ticked every time the Login form shows: on a fresh Login
+page, and on the form a refused sign-in shows again, even when the box
+was unticked for that attempt. Every user
 therefore gets a persistent multi-week session unless they notice and untick
 it, the opposite of the opt-in the label suggests.
 Basis: code inspection (a malformed template attribute renders the box
@@ -807,6 +818,24 @@ incorrect.", but the tab reads only the journal's name. Same family as
 [A3](#a3).
 Basis: probe. <sup>[f-a11](#fn-a11)</sup>
 
+<a id="a12"></a>
+**A12 — After a disabled account is refused, the next correct sign-in in that browser fails** · 🐞 · minor.
+In one browser, on a journal's Login page, each account with its correct
+password:
+1. A disabled account signs in: refused with its message (Rule 2).
+2. An enabled account signs in: back on the Login page with no message and
+   "Username or Email" empty, instead of landing where Rule 3 says.
+3. The disabled account again: the same refusal.
+4. The enabled account again: refused with "Invalid username/email or
+   password. Please try again."
+5. The enabled account again: it lands.
+
+Without step 3, step 4 lands. Steps 1 and 2 go the same on the site-level
+Login page. The user is given no reason and may well conclude that their
+own password is wrong. After a wrong-password or unknown-username refusal,
+the next correct sign-in lands at once.
+Basis: probe. <sup>[f-a12](#fn-a12)</sup>
+
 ---
 
 <a id="footnotes"></a>
@@ -836,7 +865,14 @@ live-probed 2026-07-31 on scratch contexts (OJS + OPS) and 2026-08-01
 (OMP scratch press): disabling registration removes the link from both
 pages, and the typed register address answers "This journal is currently
 not accepting user registrations." (app-localized journal/press/server
-wording) — all three apps observed.
+wording) — all three apps observed. Disabled accounts live-probed
+2026-09-29 (Rule 2; OJS, OMP, OPS; two runs each; scratch contexts; one
+Author disabled with no reason, another through Settings › Users & Roles
+› the row's "Disable User" with a typed reason): both messages verbatim
+on the journal's and the site-level Login pages, the refused form keeping
+the typed username; a disabled account's wrong password answers the
+generic `user.login.loginError`. The next sign-in in the same browser:
+finding A12 (note f-a12).
 
 <a id="fn-b"></a>
 **b** — Landing: `LoginHandler::_redirectAfterLogin()` — with a context and
@@ -1220,6 +1256,8 @@ checked="$remember">` — the attribute value is literal text, not a template
 substitution, so the `checked` attribute is always present and the browser
 renders the box ticked regardless of any prior choice. Live-confirmed
 2026-07-31: pre-ticked on a fresh Login page in OJS, OMP and OPS.
+Live-probed 2026-09-29 (OJS, OMP, OPS; two runs each): a sign-in refused
+with the box unticked shows the form again with it ticked.
 
 <a id="fn-a3"></a>
 **f-a3** — Live-probed 2026-07-31 (OJS) and 2026-08-01 (OPS; the form's
@@ -1277,13 +1315,12 @@ gave Journal Managers.
 <a id="fn-a6"></a>
 **f-a6** — Live-probed 2026-08-01 (OJS, scratch user, site setting
 temporarily enabled at 3 attempts / 300 s): attempts beyond the limit —
-including one with the correct password — answer `user.login. Introduced
-2026-02 by the site-security rate-limiting feature (upstream issue
-pkp/pkp-lib#12162); defaults 5 attempts / 300 s, keyed per username+IP
-(IPv6 /64), configurable in Site Settings → Security.loginError`
+including one with the correct password — answer `user.login.loginError`
 verbatim, with only a 2–5-second artificial delay
-(`RateLimitingService::applyRateLimitDelay()`) distinguishing them; the
-limit is keyed per username+address.
+(`RateLimitingService::applyRateLimitDelay()`) distinguishing them. The
+limit was introduced 2026-02 by the site-security rate-limiting feature
+(upstream issue pkp/pkp-lib#12162); defaults 5 attempts / 300 s, keyed
+per username+IP (IPv6 /64), configurable in Site Settings → Security.
 
 <a id="fn-a7"></a>
 **f-a7** — Live-probed 2026-08-01 (OJS, OMP, OPS — identical): signed out,
@@ -1353,6 +1390,31 @@ Password" and the error, and the title reads only the journal's name
 (`LoginHandler::savePassword()` re-displays
 `user/loginChangePassword.tpl` without the page title the
 `changePassword` op sets).
+
+<a id="fn-a12"></a>
+**f-a12** — Live-probed 2026-09-29 (Rule 2; OJS, OMP, OPS identical; two
+runs each, each on its own scratch context; one Author disabled with no
+reason through the seed key, another disabled with a typed reason through
+Settings › Users & Roles › the row's "Disable User"; enabled Authors and a
+Journal Manager): the enabled account's first sign-in after the refusal
+answers `login/signIn` 302 → `dashboard` 302 → `login?source=…dashboard`
+200 (site-level Login: → `index` 302 → `index/en/login?source=…index`),
+the Login page with no message, "Username or Email" empty, the header
+still offering "Register" and "Login"; the second try lands on the role's
+Dashboard (Author "Active submissions (0)", Journal Manager "Assigned to
+me (0)"), at the site-level Login on the site's home page. The same with
+"Keep me logged in" ticked or unticked on the disabled attempt, with or
+without a reason, and with the Login page opened afresh in between.
+Controls, in on the first try: after a wrong password, after an unknown
+username, after a disabled account's wrong password, and in a fresh
+browser; rate limiting was off (A6 is not what refuses). The second
+refusal: disabled refused → enabled bounced → disabled refused again →
+the enabled account's correct password answers `POST login/signIn` 200
+with `user.login.loginError`, its next try the Dashboard (six reads); a
+seventh, an OJS repeat on the same context, bounced that attempt to
+`login?source=…login%2FsignIn` with no message instead, the next try
+getting in. No server error and no page error in any run. Cause not
+traced.
 
 ## Reference — entry points & surfaces
 
