@@ -17,7 +17,7 @@
  * (S1 and S3 add every funder before ordering), A8 ❓ (S4 picks the "Do
  * not request…" level itself on the re-tick, asserting nothing about what
  * arrived preselected), A9 ❓, A10 ❓, A11 ❓, A12 ❓ (every name box is
- * left as it arrives or filled), A13 ✅ (retired), OPS1 (preprint-only,
+ * left as it arrives or filled), OPS1 (preprint-only,
  * in that tree). The spec's Coverage section records everything else
  * left out.
  *

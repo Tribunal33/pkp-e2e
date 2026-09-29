@@ -119,7 +119,7 @@ function checkShape(doc, out) {
 // leaves a typed value to the tester.
 const PLACEHOLDER_RE = /\btype (?:a|an|some|any) (?:sentence|title|line|word|text|name|description|number|value)\b/i;
 const CLASSES = ['main', 'guard', 'state', 'variant'];
-const REASONS = ['Budget', 'Nothing new to test', 'Register carries it', 'No seed', 'Owned by another feature'];
+const REASONS = ['Planned', 'Budget', 'Nothing new to test', 'Register carries it', 'No seed', 'Owned by another feature'];
 
 function checkCoverage(doc, out) {
     const covLine = doc.lines.findIndex((l, i) => !doc.skip[i] && /^##\s+Coverage\s*$/.test(l));
@@ -825,6 +825,7 @@ function selfTest() {
         ['a draft row without a class', draftCov.replace('| main |', '| |'), true],
         ['the final shape passes as verified', finalCov.replace('status: draft', 'status: verified'), false],
         ['a table in the final shape', finalCov.replace('Left out of the scenarios above, by reason:', '| # | Scenario | Apps |\n|---|---|---|\n| 1 | Record a decision | OJS |'), true],
+        ['a Planned bullet passes as verified', finalCov.replace('status: draft', 'status: verified').replace('- **Budget** — states:', '- **Planned**:\n  - the reopened round (Rule 4)\n- **Budget** — states:'), false],
         ['a bullet without a reason word', finalCov.replace('**Owned by another feature**', '**Skipped**'), true],
         ['the Budget bullet cutting a guard', finalCov.replace('— states:', '— guards:'), true],
         ['a date in the section', finalCov.replace('(Rule 2)', '(Rule 2), read once 2026-09-06'), true],

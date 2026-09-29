@@ -1111,6 +1111,8 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the "Notify Reviewers" letter edited before the decision is recorded: each reviewer's email still carries that reviewer's own name alone, never the other reviewers' names (Rule 4): likely a bullet in scenario 6, whose reviewers' mailboxes are read after the accept
 - **Budget** — variants:
   - a "Signature" saved on the editor's profile, ending the letter in place of the editor's full name (Settings bullet 7; Rule 5)
 - **Nothing new to test**:

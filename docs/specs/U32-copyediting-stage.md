@@ -636,6 +636,13 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - scenario 1's recommending Section Editor bullet, no notice box on a
+    press (A11; Actors row 2): no assertion in the OMP suite
+  - scenario 6's "Copyediting" entry bullet, the panel headed "Production
+    Tasks & Discussions" from the workflow menu and "Copyediting Tasks &
+    Discussions" after a reload (Rule 10): the OJS and OMP suites read only
+    the "Tasks & Discussions" ending and never reload
 - **Budget** — states:
   - both lists back with their earlier files after a second acceptance, the newly ticked files joining "Draft Files" beside them (Rule 9b): accepting again a submission moved back to review is not an ordinary week's action; scenario 7 stops at the hidden "Copyediting" entry
   - "Stage Assignment" changed on the Roles form, Copyediting unticked for Copyeditor and ticked for Layout Editor (Settings bullet 1): a manager changes a role's stages rarely, not in an ordinary week

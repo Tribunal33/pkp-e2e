@@ -18,7 +18,7 @@
  * - A2 🐞: no publisher ID is emptied on a galley's tab.
  * - A3 🐞: the Metadata page's "Publisher ID" is typed once, with a value
  *   no other preprint carries.
- * - A1, A4–A14: the URN's, which a preprint server does not have. OJS1–OJS3
+ * - A4–A14: the URN's, which a preprint server does not have. OJS1–OJS3
  *   and OMP1–OMP6: the journal's and the press's, in those trees.
  *
  * Seeding: scenario endpoints only; publicknowledge is never touched. Every

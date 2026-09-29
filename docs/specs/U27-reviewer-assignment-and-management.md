@@ -1225,10 +1225,16 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the Review Details dated line past "Review Submitted:": "Review Completed:" on a review marked complete, "Reviewer Thanked:" on a thanked one, "Review Submitted:" again after "Revert Decision" (Rule 14a): likely bullets in scenario 9, which walks these states on the row and reads "History" on the thanked one
+  - the reviewer's own file listed under "Reviewer Files", read-only, in the Review Details window (Rule 14a): reached through the reviewer's upload on their own screens, which scenario 9's reviewer skips
+  - the thanked review marked complete again after "Revert Decision" turning "Reviewer Thanked" at once, with "Revert Decision" alone and no second "Thank Reviewer" (Rule 16): likely a bullet in scenario 9, after its "Revert Decision"
+  - Review Details on that review naming the first thank and its date (Rule 14a): the same bullet
+  - History ending at "Review Submitted" after "Revert Decision" on the thanked review, then, once it is marked complete again, listing the first "Reviewer Thanked" date followed by the new "Review Completed" (Rule 21): the same place in scenario 9
+  - {OJS} the Review Details window opened from the dashboard's "View unread recommendation" showing the recommendation, as the row's window does (Rule 14a): likely a bullet in scenario 14
 - **Budget** — states:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
   - the Review Details window on a request with no review: "Request Sent:", "Reviewer Reminded:", "Request Accepted:" or "Request Declined:", the empty blocks, and "Mark as Complete" disabled beside its recommendation message {OJS} or, with a review form, its incomplete-review message (Rule 14c): an editor opens the window to read a review, and on a request that has none only in a rare week
-  - the Review Details dated line past "Review Submitted:": "Review Completed:" on a review marked complete, "Reviewer Thanked:" on a thanked one, "Review Submitted:" again after "Revert Decision" (Rule 14a): scenario 9 walks these states on the row and reads "History" on the thanked one; a check of the window's line waits for the suite's next revision
   - "Save changes to this review?" before modifying a complete review whose assignment has "Publicly Show Reviewer Comments" ticked, and the sentence the same box adds to "Mark this review as complete?" (Rules 14a, 14b): an editor completes or modifies a publicly shown review in a rare week
   - "Send Review To ORCID" with "Send this review to the reviewer's ORCID?" for a reviewer with an authenticated iD (Rules 3, 23): met only on a journal with ORCID enabled and a reviewer who linked an iD
   - the one-click placeholder in the editor's preview and a fresh keyed link per reminder (Settings, Rule 13): one-click access is off by default, and an editor with it on reads past the placeholder and never compares two reminders' links
@@ -1238,7 +1244,6 @@ Left out of the scenarios above, by reason:
   - narrowing the reviewer search with a "Filters" slider (Rule 6): a pool of a page or two is read whole, never narrowed
   - the "{N} active" badge on a reviewer with a review underway (Rule 5): read only when an editor weighs a busy reviewer against a free one, not on every add
   - the "Competing Interests" block in the Review Details window, "No competing interests were disclosed." or the reviewer's statement, and the row's "Competing Interests" badge (Rules 2, 14a, Settings): met only on a journal that sets a "Competing Interests" policy, which the install leaves empty
-  - the reviewer's own file listed under "Reviewer Files", read-only, in the Review Details window (Rule 14a): reached through the reviewer's upload on their own screens, which scenario 9's reviewer skips; a check waits for the suite's next revision
 - **Budget** — variants:
   - the "Reviewing Interests" tag field of Create New Reviewer (Fields): filled only when an editor creates an account with interests to record
   - the chooser's refill on a pick (Fields): needs an alternate template a journal seldom adds
@@ -1267,7 +1272,6 @@ Left out of the scenarios above, by reason:
   - A22 (the window's guidance promising an upload control; Rule 14a)
   - A23 (the recommendation shown twice, under two labels; Rule 14a)
   - A21 (a rating star clicked too early not taking; Rule 14a)
-  - A25 (the same window from the dashboard's review indicators, recommendation included; Rule 14a)
   - A12 (the change notice's unsubscribe page omitting the type; Side effects)
   - A15 (the reviewer's response erasing the "Reviewer Reminded" milestone; Rules 13, 21)
   - A26 (the unassign notice arriving under the cancel notice's subject; Side effects)

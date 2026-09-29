@@ -733,6 +733,10 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a new contributor joining last before any "Save Order" is pressed,
+    on a press and a preprint server, where the suites save an order
+    before they read it (Rule 6): scenario 2's "Preview" and "Control"
 - **Nothing new to test**:
   - Preferred Public Name (Fields): another text box on the form
     scenario 1 fills

@@ -10,8 +10,9 @@ gets in the way of that, the rule changes.
 
 This file and `docs/tracking/PROGRESS.md` are the source of truth; a session
 becomes correct by reading them, never by memory. A session is either a
-FEATURE session (one feature, then stop for the maintainer's review) or the
-MAINTENANCE session (`MAINTENANCE.md`, with this loop binding underneath);
+FEATURE session (one feature, then stop for the maintainer's review) or a
+MAINTENANCE session (`MAINTENANCE.md`, with this loop binding underneath:
+the housekeeping session builds pending rows and revisions through it);
 the PROGRESS banner says whether the resident agent is active. Paths are
 relative to the repo root; `../e2e_ng/` is the maintainer's private
 directory.
@@ -230,22 +231,35 @@ note names the last gate reached.
 
 ## Revising a shipped feature
 
-A spec shipped before a rule changed is brought up to it in a session of
-its own, launched by the maintainer like a feature session (the
-maintenance session never builds), one feature at a time, in queue
-order. The body stays verified, so there is no draft and no claim check.
-The queue is `docs/tracking/coverage-revision.md`, one row per spec still
-to revise; the spec's classed Coverage table, in TEMPLATE's draft shape,
-is `docs/tracking/coverage-revision/U<nn>.md`: `S<n>` in "Runs in" where
-a scenario already covers the row, `planned` where none does, blank
-where the writer decides, and under the table the plan for each gap
-(rides in `S<n>`, a scenario of its own, or no seed) and the suite
-mismatches `lint-spec.mjs --tests` reports. The writer spends the table
-as "Budget" says. A spec whose "Left out" list was cut by count before
-that rule has no table: its "Budget" items are the rows, decided the
-same way, and its scenarios keep their shape.
+A revision grows a shipped spec's scenarios and suites. The body stays
+verified, so there is no draft and no claim check. It starts in one of
+two ways:
 
-1. **Claim and fleet prep** as steps 1 and 2.
+- **Planned items.** The spec's "Left out" list holds a **Planned**
+  bullet (TEMPLATE "Coverage"): coverage owed on the spec that was not
+  written on the spot, from an upstream sync, a coverage request or any
+  other session. That bullet is the spec's one backlog. The housekeeping
+  session revises one such spec at a time, every Planned item in one pass.
+- **A rule change.** A new coverage or scenario rule leaves shipped specs
+  behind. The maintainer opens the queue `docs/tracking/coverage-revision.md`,
+  one row per spec, deleted when it empties, and launches each revision
+  like a feature session, one at a time, in queue order.
+
+Either way the revision works from one sheet,
+`docs/tracking/coverage-revision/U<nn>.md`, written before the writer
+starts and deleted when the revision closes: the spec's classed Coverage
+table in TEMPLATE's draft shape, one row per Planned item or per row the
+rule change reopens, each citing the body; `S<n>` in "Runs in" where a
+scenario already covers the row, `planned` where none does, blank where
+the writer decides; under the table the plan for each gap (rides in
+`S<n>`, a scenario of its own, or no seed), the suite mismatches
+`lint-spec.mjs --tests` reports and the bullets a suite does not assert. The writer spends the table as "Budget"
+says. A spec whose "Left out" list was cut by count before that rule has
+no table: its "Budget" items are the rows, decided the same way, and its
+scenarios keep their shape.
+
+1. **Claim, fleet prep and the sheet**: steps 1 and 2, then the sheet
+   unless the queue already holds it.
 2. **Scenarios.** A scenario writer (`briefs/scenario-writer.md`, situation
    "revision") spends the classed table by class: reshapes the existing
    scenarios into TEMPLATE's shape sentence for sentence, adds a bullet to
@@ -268,5 +282,5 @@ same way, and its scenarios keep their shape.
    fold and `test:final` as step 8. Gate: the green logs,
    `node docs/process/lint/lint-spec.mjs --tests <spec>` zero.
 5. **Progress, commit and push, report** as steps 9 to 11: the PROGRESS row in the
-   fixed shape with the scenario count; the feature's
-   file under `coverage-revision/` and its queue row deleted.
+   fixed shape with the scenario count; the sheet deleted, with its queue
+   row when it has one, and no Planned item left in the spec.

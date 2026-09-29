@@ -1124,6 +1124,9 @@ Left out of the scenarios above, by reason:
   - a role group's changed stage set changing access from the next open
     (Settings)
 - **Owned by another feature**:
+  - the "Select submission stage" list of a discussion's "Attach Workflow
+    Files" step ending with Production, never offering Done (Rule 18;
+    *Tasks & discussions*, scenario 1)
   - changing the submission language, choosing a version and creating
     one (Actors row 12; *Publication metadata*, *Publish, schedule &
     versions*)

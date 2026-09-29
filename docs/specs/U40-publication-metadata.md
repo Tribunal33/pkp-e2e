@@ -902,10 +902,12 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
-- **Budget** — states:
-  - a term offered on a second submission once the version carrying it
-    is published, with a term on an unpublished submission not offered
-    (Rule 7b)
+- **Planned**:
+  - term suggestions: a term on another submission's published version
+    offered below the typed text, and a term on a submission not
+    published, or in another journal, not offered (Rule 7b): likely a
+    bullet in scenario 2's "Keywords", with a published submission
+    added to its given
 - **Budget** — variants:
   - a term added twice showing two chips until Save and one on the
     reopened page (Rule 7a)

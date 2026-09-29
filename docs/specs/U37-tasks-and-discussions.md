@@ -1327,6 +1327,8 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the "Select submission stage" list of "Workflow Files" offering the stages up to Production and never Done (Rule 14a): likely a bullet in scenario 1's "A workflow file", read before "Submission" is chosen
 - **Budget** — states:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:

@@ -973,6 +973,8 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the "Supporting Agencies" row in the "View All Submission Details" window: shown on a review type that discloses the authors, absent on an anonymous one (Rule 7): likely a bullet in scenario 9, which opens the window on an "Open" review
 - **Budget** — states:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Budget** — variants:

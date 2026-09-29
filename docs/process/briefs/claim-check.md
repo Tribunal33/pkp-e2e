@@ -12,6 +12,7 @@
 {{concurrent_agents}}  the other checker(s) on the fleets at the same time and their chunks, or "none"
 {{report_path}}        .reports/{{feature}}/cc-{{chunk}}.md
 {{frame}}              docs/process/briefs/frame.md, pasted verbatim
+{{rerun}}              "none" (a build), or the outputs of the chunk's kept script re-run at the tips (an upstream sync or a drift sweep; a sweep also names the feature's suites)
 -->
 {{frame}}
 
@@ -28,6 +29,8 @@ Write your scripts under `shared/playwright/checks/{{feature}}/{{chunk}}/`, impo
 Read `.reports/{{feature}}/screen-notes.md` first and append what you learn with the kit's `note()`: per screen, the locators that worked, kit gotchas, premise corrections, dialogs that appear on the way out, waiting idioms. Grep the sibling `screen-locators.md` (the kit's locator tables, a file to grep, never to read whole) for a locator another agent found, and `shared/playwright/checks/` for an earlier feature's script on the same screen, grepped for the screen you are on rather than read whole. Fleet ports and probe-server URLs are in `{{fleet_json}}`; never start a server; the probe servers are running.
 
 Size: drive every checklist line even if it takes more calls than the chunk was cut for; do not stop at a count.
+
+Kept-script rerun: {{rerun}}. When outputs are named, start from them: judge each line against the snapshots the script recorded, and drive only the lines they do not settle; a script that no longer runs, or a screen that no longer matches its locators, is itself drift, so drive that part fresh and fix the script so the next run works. When suites are named (a drift sweep), also read each suite against the spec's scenarios: for every scenario bullet, the test that asserts it or none; a bullet no test asserts is a digest block with the scenario, the bullet and the suite.
 
 Report: `{{report_path}}`, in spec-section order (the fold needs that). Header: chunk, apps driven, the declared no-screen lines by spec line number, calls used. Then one entry per checklist line or tight group: spec line number(s), verdict (holds / wrong / imprecise / undetermined), the screen evidence (snapshot file name, locator), with the claim separated from incidental observations (an incidental DOM detail is not promotable), and for anything not "holds", and for everything the sweep found, a digest block in the shape of `docs/process/briefs/digest-block.md` (ID `{{chunk}}-<n>`). Facts only, no spec prose beyond the proposed line. End with the `seed-facts.md` correction for any premise that proved wrong.
 

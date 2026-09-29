@@ -41,12 +41,12 @@ The scheduled prompt only points here; this section is the day's order.
 A ping about a developer's failing PR during the day follows "A
 developer's PR fails the suite".
 
-**The maintenance session never builds a new spec or suite.** Pending
-PROGRESS rows are built in feature sessions the maintainer launches, one
-feature per session, under the RUNBOOK loop. Incidentals, friction and
-flake diagnosis are the housekeeping session's, not this one's. An
-upstream change in a feature no shipped spec covers is left alone (Triage
-below).
+**This session never builds.** An upstream change that brings a new
+feature gets its rows (Triage below) and the housekeeping session builds
+it; a shipped spec grows here only by the same-day bullet (sync loop
+step 4), anything more is a Planned item for the housekeeping session.
+Incidentals, friction and flake diagnosis are the housekeeping session's
+too.
 
 ## The housekeeping session
 
@@ -56,7 +56,8 @@ backlog each time, not a quota: what it cannot finish, the next morning's
 run picks up from the files.
 
 1. Read the PROGRESS banner, this file, `ci-triage.md`,
-   `docs/tracking/incidentals.md` and `docs/tracking/friction.md`; work
+   `docs/tracking/incidentals.md` and `docs/tracking/friction.md`
+   (`UNASSIGNED.md` on a quiet morning); work
    from files, never from memory of earlier sessions.
 2. Start on the right code and reset the databases ("Session hygiene").
    Check the latest `e2e-tests.yml` run on each app's `main`: a red that
@@ -75,7 +76,20 @@ run picks up from the files.
    suite runs green once. A row that does not reproduce is deleted; one
    that stays unclear becomes that spec's ❓ entry with a lean. Every
    worked row is deleted from `incidentals.md`.
-4. **Friction.** Fold `docs/tracking/friction.md` and delete every row. A
+4. **Builds and Planned coverage.** One piece of work a morning, the
+   first of these that exists:
+   - a build or revision left mid-way, resumed from its
+     `phase-status.md` (RUNBOOK "Resuming a feature mid-flight");
+   - a `pending` PROGRESS row, oldest first, built through the RUNBOOK
+     loop like any feature (the upstream sync adds these; a build is the
+     fullest coverage work there is, so it goes before a revision);
+   - a spec whose "Left out" list holds **Planned** items
+     (`grep -l '^- \*\*Planned\*\*' docs/specs/`), through RUNBOOK
+     "Revising a shipped feature": the session writes the sheet from all
+     its Planned items, then the same writer, reader, test authors, test
+     fold and finals as a build, so the scenarios stay one coherent set
+     and not a scenario per sync.
+5. **Friction.** Fold `docs/tracking/friction.md` and delete every row. A
    row earns a change only when a third feature would meet the same
    thing, the docs do not already say it (grep first) and it is not one
    screen's fact or general Playwright knowledge; what passes is a kit
@@ -88,20 +102,39 @@ run picks up from the files.
    have given, or whose fix the session that wrote it already made (a
    corrected brief, a new footnote), earns nothing either. When in doubt,
    delete.
-5. **Flakes.** Diagnose the flake classes whose watch condition has
+6. **Flakes.** Diagnose the flake classes whose watch condition has
    tripped ("Keep the flake rate down"); a flake that reds CI on the day
    is the upstream session's interrupt, its diagnosis this session's.
-6. **Stale artifacts and the budget.** Fix what the day's work showed
+7. **Stale artifacts and the budget.** Fix what the day's work showed
    stale, and refresh the shard timings when they drifted ("Keep the
    budget measured").
-7. End pushed: commit and push to pkp-e2e `main`, and post a
+8. **Quiet mornings.** When steps 3 to 7 left nothing open:
+   - **Drift sweep of one spec**, the one whose PROGRESS note carries the
+     oldest "Swept" date (none counts as oldest). Its kept checks
+     (`shared/playwright/checks/<feature>/`) run on reset databases at the
+     tips; one fresh checker (`briefs/claim-check.md`, `{{rerun}}` naming
+     the outputs and the suites) judges the snapshots against the spec
+     lines each chunk owns, drives what the checks no longer reach, and
+     reads each suite against the scenarios for a bullet no test asserts.
+     Drift folds as "Fix stale artifacts as you go" says, the tests with it; a bullet without its
+     assertion becomes a **Planned** item. The PROGRESS note ends with
+     "Swept <date>.", replacing the previous one.
+   - **One UNASSIGNED entry** (`docs/tracking/UNASSIGNED.md`), top
+     first: a checker drives it. Live behavior on a shipped spec's
+     screens folds into that spec (a claim with its footnote, the
+     coverage as a **Planned** item) and the entry goes; dead code keeps
+     its entry with the evidence; one that looks out of scope or like a
+     new feature goes to the maintainer.
+9. End pushed: commit and push to pkp-e2e `main`, and post a
    one-paragraph summary to the channel: incidentals worked (deleted as
    already stated, folded with the spec and IDs, not reproduced), what
-   is left, friction folded, flake classes diagnosed, artifacts fixed.
+   is left, the build or revision worked (feature, gate reached, and on
+   a finished revision the scenario numbers and tests added),
+   the spec swept and what drifted, the UNASSIGNED entry's outcome,
+   friction folded, flake classes diagnosed, artifacts fixed.
 
 The housekeeping session never runs the sync loop, the stable line or a
-companion, never builds a new spec or suite, and leaves the revision
-queue to the maintainer.
+companion, and leaves a revision queue to the maintainer.
 
 ## Role & goals
 
@@ -130,22 +163,32 @@ The apps move; the suite follows. The baselines live in
    still answers. To find which spec a commit touches, grep
    `docs/specs/` for the class and file names in the diff.
 3. **Triage every change** (next section). Each lands as one of: no impact,
-   accommodate in an existing spec and its tests, or not covered yet.
+   accommodate in an existing spec and its tests, or a new feature.
 4. **Accommodate.** Run the RUNBOOK loop on the changed slice, same gates,
    same `.reports/<feature>/phase-status.md`: the feature's kept checks
    for the chunks whose screens changed (`shared/playwright/checks/<feature>/`),
    one fresh checker who judges the snapshots against the spec lines each
    chunk owns and drives only what the checks did not cover
-   (`briefs/claim-check.md`), one fold agent (`briefs/fold.md`), one
+   (`briefs/claim-check.md`, `{{rerun}}` naming the outputs), one fold agent (`briefs/fold.md`), one
    persona read of the changed spans, register entries included, then the
    rewrite (step 7), lint, the touched suites green once (step 8), the
    PROGRESS note replaced (step 9); no merge agent. A change that
    contradicts a shipped claim is spec maintenance, never a test edit.
+   Behavior the change adds is classed and spent as TEMPLATE "Coverage"
+   says, the same day: a behavior that one scenario plainly takes (its
+   given already holds, one bullet) becomes that bullet and an assertion
+   in every suite the scenario's badge names; anything more (a scenario of
+   its own, bullets across several scenarios, a given to widen) becomes a
+   **Planned** item in the spec's "Left out" list, for the housekeeping
+   session; the rest takes its usual reason word.
    Behavior that contradicts the linked issue's stated intention is a
    finding: a register entry with the commit and the issue in its footnote.
    A register entry the change retires moves to the register's Retired
    block (TEMPLATE), and the suites' file headers are grepped for its ID,
    because a header that says "not covered, see A7" outlives A7 otherwise.
+   The behavior the app now shows is coverage owed: the entry's "Register
+   carries it" item goes, and the path becomes a bullet or a **Planned**
+   item as above, because a test never asserted it while it was a bug.
 5. **Hunt regressions.** Reviewing the diff IS a QA review of the team's
    recent work, and step 3's question ("does the suite care?") is not the
    same as "does this break something?". Ask the second question of every
@@ -179,8 +222,8 @@ The apps move; the suite follows. The baselines live in
    row and the register entry keep the pointer. Nothing unconfirmed
    reaches the report or the DMs, because a false regression report costs
    more than a missed one. If a shipped suite
-   should have caught it, that is a `friction.md` row or a pending-row
-   note. Anything security-shaped follows RUNBOOK "What goes where":
+   should have caught it, the missing check is a **Planned** item in the
+   owning spec. Anything security-shaped follows RUNBOOK "What goes where":
    verify privately, on Mattermost say only THAT an observation was
    routed, then ping the maintainer.
 6. **Advance the baseline.** Update `upstream-sync.md` with the new SHAs and
@@ -287,16 +330,19 @@ For every upstream change, and every coverage request from the team,
 decide deliberately. This decision is how the suite stays organised.
 
 - **Accommodate in place** (the default). The change reuses behavior a
-  shipped spec already owns with different parameters. Fold it into that
-  spec and its suites. This mirrors RUNBOOK multi-app rule 7: a difference
-  that reuses existing machinery stays where the machinery is specified.
-- **Not covered yet.** The change lands in territory no shipped spec
-  covers: a pending FEATURE-MAP row, or screens with rules of their own
-  that no row claims. Leave it alone; the feature session that builds that
-  row reads the app as it is then. A change to a pending feature's surface
-  that a shipped spec points at is the previous case, limited to the
-  pointer. The atlas is never extended (FEATURE-MAP's header says why);
-  a new surface is described in its FEATURE-MAP row when that is built.
+  shipped spec already owns with different parameters, or adds a control,
+  field or step to screens a shipped spec owns. Fold it into that spec and
+  its suites (sync loop step 4). This mirrors RUNBOOK multi-app rule 7: a
+  difference that reuses existing machinery stays where the machinery is
+  specified.
+- **A new feature.** The change brings screens with rules of their own
+  that no row claims (a new workflow, a new settings area, a new plugin).
+  Add a FEATURE-MAP row for it with the next U-number, the surface
+  described there, and a `pending` PROGRESS row, and name it in the day's
+  summary; the housekeeping session builds it (its step 4) and the sync
+  leaves it alone until then. A change to a pending feature's surface that a
+  shipped spec points at is the previous case, limited to the pointer.
+  The atlas is never extended (FEATURE-MAP's header says why).
 - **No impact.** An internal refactor with no spec-visible behavior change.
   The subclass-chain reasoning (RUNBOOK multi-app rule 8) plus a green suite
   run is the evidence. Note nothing.
@@ -326,7 +372,8 @@ affected rows and in the next Mattermost summary.
   it where RUNBOOK "What goes where" sends process learnings. A team
   reply that settles a register entry (confirmed, overturned, risk accepted,
   ticket to follow) is recorded in the spec as TEMPLATE "Findings register"
-  prescribes.
+  prescribes; an entry ruled intended states behavior the suites never
+  checked, so its path becomes a **Planned** item.
 
 ## A developer's PR fails the suite
 
@@ -416,9 +463,9 @@ merge (first run: issue pkp/pkp-lib#13274, companion `13274`, 2026-09-12).
    `main` before any edit. Accommodate in place as step 4 says: the spec
    spans the change contradicts, lint zero, the persona on a rewritten
    scenario; a footnote cites the drive "at the PR head `<sha>`, before
-   its merge". Tests change only when a shipped scenario's behavior
-   changes; a new behavior worth a scenario is a coverage change for that
-   spec's revision, noted in the sync log.
+   its merge". New behavior is spent as step 4 says, on the companion:
+   a bullet one scenario plainly takes, with its assertions, now;
+   anything more a **Planned** item.
 4. **Hunt regressions** as step 5: the regression reader
    (`briefs/regression-read.md`) on the app whose checkout holds the
    change, plus direct drives for what the fleets cannot reach (an upgrade
@@ -478,10 +525,11 @@ changed. The spec answers first: the canonical scenarios' bold leads say
 which scenario checks it and their badges in which apps, and the Coverage
 section says why it has none. A request for an item under "Budget" is the
 expected path; a regression (a PR read, a CI failure, a user report) on a
-Budget item reverses the cut unasked, and one on a "Nothing new to test"
-item reclasses it. To add or change a test, change or add its scenario
+Budget item reverses the cut unasked, moving it to **Planned**, and one on
+a "Nothing new to test" item reclasses it the same way. To add or change a test, change or add its scenario
 first (through a writing agent, with the persona on the new text), then
-write the test from it, run it green, and update the PROGRESS test count.
+write the test from it, run it green, and update the PROGRESS test count;
+a request not written the same day is a **Planned** item in the spec.
 A test with no scenario, or a scenario with no test in an app its badge
 names, is a defect either way: `node docs/process/lint/lint-spec.mjs
 --tests <spec>` reports both (the scenarios' badges against the suites'
@@ -552,6 +600,9 @@ the answer; the spec and the test are the record.
   holding the verbatim on-screen strings, the reader on the rewritten
   spans, lint zero, and the spec named in the report; a correction too
   large or uncertain to fold becomes that spec's ❓ entry with a lean.
+  A fold that adds behavior to a shipped spec's body, from any source,
+  spends its coverage as sync loop step 4 says: a bullet one scenario
+  plainly takes, with its assertions, or a **Planned** item.
   Maintenance never changes app code beyond what RUNBOOK step 10 allows,
   and never moves content routed to the private security file.
 - **Keep the budget measured.** After every full `test:final`, replace the
@@ -572,11 +623,12 @@ the answer; the spec and the test are the record.
   U14, U45 diagnoses); the fix lands where the mechanism
   lives (the app's register, the harness, a shared page object, then the
   test), and a rule every later test must follow goes to `patterns.md`.
-- **Leave the revision queue to the maintainer.**
-  `docs/tracking/coverage-revision.md` lists the shipped specs awaiting
-  RUNBOOK "Revising a shipped feature"; each is a session the maintainer
-  launches, never a daily task. A spec off the queue stays clean under
-  `lint-spec.mjs --tests`, run with the lint whenever its suites change.
+- **Leave a revision queue to the maintainer.**
+  `docs/tracking/coverage-revision.md`, when a rule change opens one,
+  lists the shipped specs awaiting RUNBOOK "Revising a shipped feature";
+  each is a session the maintainer launches, never a daily task. A spec
+  off the queue stays clean under `lint-spec.mjs --tests`, run with the
+  lint whenever its suites change.
 - **Delete what is resolved.** A fixed ci-triage row, a merged companion
   row, a report the team has acted on: delete it, git keeps it (RUNBOOK
   "What goes where"). Tracking files hold only what is open.

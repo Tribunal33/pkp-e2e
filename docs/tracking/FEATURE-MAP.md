@@ -3,7 +3,7 @@
 This file is the single home for the campaign's feature taxonomy: **75 features
 (U01–U75)** with every atlas atom assigned.
 
-- **The atlas is the frozen Phase-0 inventory** (2026-07-28). It split the apps into these features and is not extended: a surface added upstream since then is noted in its feature's row here, or gets a new row (MAINTENANCE "Triage: where does a change land?").
+- **The atlas is the frozen Phase-0 inventory** (2026-07-28). It split the apps into these features and is not extended: a surface added upstream since then is noted in the row of the feature whose screens it joins, and a new feature gets a new row with the next U-number and a `pending` PROGRESS row (MAINTENANCE "Triage: where does a change land?").
 - **Atom count**: this map accounts for all **2,163** atoms:
   **2,066 feature-assigned · 68 out of scope · 29 parked in UNASSIGNED.md** (13 at Phase-0 close; 5 U26-derived dead author-dashboard atoms parked later; 11 parked by the 2026-09-27 scope extension, section H).
   The unclaimed count is the campaign's completeness metric.

@@ -3,6 +3,8 @@
 Atlas atoms no feature claims, parked here so every atom has exactly one
 owner; the campaign is done when every entry is claimed by a spec,
 confirmed dead (it stays here with its evidence) or ruled out of scope.
+The housekeeping session works one entry a quiet morning, top first
+(MAINTENANCE "The housekeeping session").
 
 Sources (removed from the tip 2026-08-25, reachable in git history): the six crosswalks in `.reports/phase0-feature-map/` (their UNASSIGNED
 lists, consistent with `synthesis.md` §4) + `RULINGS.md`'s probe-derived

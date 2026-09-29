@@ -88,9 +88,9 @@ reference for the reader:
 - The Conventions line is the one-line GLOSSARY pointer verbatim.
 - Coverage: in the draft table every row carries a class and a "Runs in"
   or a "Why not"; in the final shape (the "Left out" bullets alone) every
-  bullet opens with one of the five reason words and the Budget bullet
+  bullet opens with one of the reason words and the Budget bullet
   cuts states or variants only; a `verified` spec carries the final shape
-  and no `planned`; no date sits in the section; and no scenario leaves a
+  and no `planned` row; no date sits in the section; and no scenario leaves a
   typed value to the tester ("type a sentence", "type a title").
 
 `node docs/process/lint/lint-spec.mjs --claims <spec>` prints the spec's
@@ -450,6 +450,14 @@ status: draft | verified    # verified = the full RUNBOOK loop passed
      this order, each opening with its reason word in bold and ending at
      the colon; the items are indented bullets under it, one per line, so
      a reviewer can point at one:
+       - **Planned**:
+         - <coverage owed on a shipped spec that was not written on the
+           spot, citing the body that states it: behavior an upstream sync
+           added, a coverage request, a Budget item a regression pulled
+           back, a register entry retired or ruled intended, a bullet a
+           suite does not assert yet. The spec's one backlog: the housekeeping
+           session spends every item together through RUNBOOK "Revising
+           a shipped feature". A spec being written has none.>
        - **Budget** — states:
          - <a cut state row, the most valuable first>
        - **Budget** — variants:
@@ -461,7 +469,9 @@ status: draft | verified    # verified = the full RUNBOOK loop passed
          - <a role or state with the same screen as a covered row, naming
            the row it repeats; a role no screen offers anything>
        - **Register carries it**:
-         - <a path a 🐞 or ❓ entry records; never a test (PRINCIPLES M3)>
+         - <a path a 🐞 or ❓ entry records; never a test (PRINCIPLES M3);
+           when the entry retires or is ruled intended, the item becomes
+           Planned>
        - **No seed**:
          - <a state the harness cannot build yet; this is the harness
            backlog>
@@ -472,7 +482,7 @@ status: draft | verified    # verified = the full RUNBOOK loop passed
      evidence in this section: a probe date is a footnote. Budget is the
      one bullet a reviewer argues with: an item there is reversed on
      request (MAINTENANCE "Coverage requests"), and a regression on one
-     reverses it unasked. -->
+     moves it to Planned unasked. -->
 
 | Who, state or setting | Class | Runs in | Why not |
 |-----------------------|-------|---------|---------|

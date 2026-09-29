@@ -530,6 +530,14 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - scenario 1's greeting bullet ("Dear Nova,"; Side effects): no
+    assertion in the OJS, OMP or OPS suite
+  - scenario 1's "Search User" bullet, the address already in the Email
+    field on "Enter details" (Fields): no assertion in the OJS or OMP suite
+  - scenario 2's "Enter details" bullet, Given Name already reading Nova
+    (Fields): the OJS, OMP and OPS suites type the name instead of reading
+    it back
 - **Budget** — states:
   - a disabled user met on the search step and through the users list's Edit
     action, "The user is currently disabled." and the two inactive buttons

@@ -1193,6 +1193,7 @@ Left out of the scenarios above, by reason:
   - the Site Administrator holding Reader alone: "Dashboard" opening the journal's home page (Rule 19a)
   - "Dashboard" on the site's pages (Rule 19c)
   - "Administration" pressed on a journal with one interface language after the site's pages opened in French, opening in French too (Rule 18a)
+  - the initials menu read with the interface in French, every entry in French (Rule 28; scenario 2 reads it in English)
   - the notice area while an editorial page is left (Rule 31)
   - a journal's settings address opened at the site's level: the access-denied page reading "No journal was found that matched your request." for every signed-in user, the site's Login page for a signed-out visitor (Rule 26c)
 - **Nothing new to test**:
