@@ -261,7 +261,7 @@ Notes: issue pub-ids ride the same mechanism (AFFW-741, 751, AFFM-255) — rule 
 ### U45 — DOIs {OJS OMP OPS}
 Configure, assign, manage, register DOIs with an agency; track statuses and errors across object types.
 Atoms: AFFM-091..092, 148..160 · AFFU-210..246 · AFFR-069 · ROUTE-010, 036, 058, 075 · VUE-018, 095..096 · API-001, 016, 050, 052, 058, 063 · SET-010 · JOB-008..010, 030, 045 · PLUG-009, 011
-Notes: registration-agency plugin settings owned here; Crossmark (AFFR-069) renders on U13's screen (rider). AFFU-245 (the OMP DOI list's row types) joined this row on 2026-09-27 (section H); the spec covers its `publication` row as an OMP-variant line, and its chapter and representation rows, with API-058's chapter/publicationFormat ops, are a revision to take once U72 adds `chapters[]` (the objects themselves are U72's and U73's). Rider: JOB-062 (owned by U42) ships inside the Crossref plugin.
+Notes: registration-agency plugin settings owned here; Crossmark (AFFR-069) renders on U13's screen (rider). AFFU-245 (the OMP DOI list's row types) joined this row on 2026-09-27 (section H); the spec covers its `publication` row as an OMP-variant line and, since the 2026-09-29 revision, its chapter and representation rows with API-058's chapter/publicationFormat ops (Rules 45–54) (the objects themselves are U72's and U73's). Rider: JOB-062 (owned by U42) ships inside the Crossref plugin.
 
 ### U46 — Galleys {OJS OPS}
 Editors attach, label and order the publishable files a reader will open.
@@ -406,8 +406,8 @@ surface).
 Build order: U71 and U75 any time (their seeds exist). The OMP book chain
 runs one row at a time, since each row reads what the one before seeds and
 most edit the same OMP submission builder: U70, U68, U72, U73, U69, U74.
-PROGRESS's row notes carry each row's dependencies and watch-outs. Once U72 has added `chapters[]`, U45 gets a
-revision for its chapter and format DOI rows.
+PROGRESS's row notes carry each row's dependencies and watch-outs. U45's chapter and format DOI rows
+were added by its 2026-09-29 revision.
 
 ### U71 — Internal Review stage {OMP}
 A press's editors run optional internal review rounds before External Review (panels, round decisions, recommendations); authors follow and revise there.
@@ -570,7 +570,7 @@ adjudicated in that critic pass.
 | API-032 | U30 | The dominant authorResponse cluster is D5's own-controller argument; U28/U26/U04 cite their ops. |
 | API-042 | U24 | Omnibus controller homed at the workflow mechanism owner; U21/U34/U40/U41/U49 cite their endpoint clusters (riders in each). |
 | API-057 | U49 | Issue-assignment publish-modal fields dominate; U52 cites submissionPayment. |
-| API-058 | U45 | The submissionFiles DOI row carries the claim; the chapter/format ops are a U45 revision once U72 adds `chapters[]`. |
+| API-058 | U45 | The submissionFiles, chapters and publicationFormats DOI ops (U45 Rules 45–54, revision 2026-09-29). |
 | API-061 | U40 | Metadata components are the majority; U70 cites the catalogEntry component. |
 | API-065 | U49 | Author-may-post re-registrations are the in-scope U49 variant; the relate portion is cited by U75. |
 | MAIL-025 | U23 | The digest enumerates workflow states, not tracked tasks; triage-dashboard owner. |

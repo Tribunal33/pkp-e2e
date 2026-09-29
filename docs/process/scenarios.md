@@ -1830,7 +1830,8 @@ Keys:
   first, "Appendix" on a new press, as for `galleys[]`), then the file
   row's "Set Terms", "Open Access", "Save"; then the format row's
   "Awaiting Approval" › "OK"; and, after the publish (at the end of the
-  build on an unpublished seed), its "Not Available" › "OK". So the format
+  build on an unpublished seed), its "Not Available" › "OK" (either
+  left unpressed with `approved: false` or `available: false`, below). So the format
   reads "Approved" and "Available", and its file "Open Access", while the
   file's own "Awaiting Approval" stays (the reader does not need it).
   `name` is required, a string (the submission's language) or a locale
@@ -1933,6 +1934,23 @@ Keys:
     The rows, the lists' texts ("Included: CA, Excluded: GB", "Agent
     Ada, Supplier Sam", "25USD") and the log (none) equal a by-hand
     build; the windows' "added" toasts are not mirrored.
+  - `approved: false` and `available: false` (U45 harness, 2026-09-29,
+    driven equal on screen): each a boolean, `true` by default; `false`
+    leaves that row link unpressed, so the format stays "Awaiting
+    Approval" (no "approved" Activity Log line, no public-identifier
+    "Assign" box) or "Not Available" (no "made available" line). The
+    two links are independent on the grid, so any pair is a state. On
+    an unpublished book a format pressed on one link only has an OAI
+    tombstone row (`data_object_tombstones`, as by hand), one pressed on
+    neither has none; the publish clears the version's tombstones, so on
+    a published seed only an available, unapproved format keeps one
+    (its "Not Available" › "OK" runs after the publish). On a published book (a
+    "Publication Formats" DOI press, "Upon publication") every format
+    gets its DOI whatever the pair, and the book page's "Downloads"
+    lists every available format, approved or not (an "Awaiting
+    Approval", available format is a download link there), while
+    "Details about the available publication format" and its "DOI:"
+    line show only an approved one.
 - `jats` (OJS): the current publication's "JATS XML" page, `{file?,
   makePublic?}` (at least one), used the way the page is used, acting as
   `admin`, after the media files and before a publish. `file` is a

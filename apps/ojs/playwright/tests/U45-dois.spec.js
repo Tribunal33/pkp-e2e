@@ -273,6 +273,9 @@ async function activityLines(page, tag, submissionId, event = METADATA_EVENT) {
     return lines;
 }
 
+/** The Activity Log lines written under the scratch journal's manager, "Mona Manager". */
+const byManager = (lines) => lines.filter((l) => l.user === 'Mona Manager');
+
 /**
  * The mail catcher's silence for `recipients`, bounded by a positive
  * control: a password reset for the journal's own manager, asked on the
@@ -563,6 +566,7 @@ test.describe('DOIs', () => {
         await dois.goto();
         await expect(dois.emptyLine()).toBeVisible();
         await expect(dois.row(tardigrade.submissionId)).toHaveCount(0);
+        const logBefore = await activityLines(page, tag, tardigrade.submissionId);
 
         // The decision: "Accept and Skip Review" (Rule 5).
         const workflow = new ReviewWorkflowPage(page, tag);
@@ -582,6 +586,12 @@ test.describe('DOIs', () => {
         await dois.expand(row, tardigrade.submissionId);
         await expect(dois.doiBox(row, ARTICLE)).toHaveValue(MADE);
         await expect(dois.doiBadge(row, ARTICLE)).toHaveText('Unregistered');
+
+        // The Activity Log: one more "Submission metadata updated", under the
+        // Journal Manager who recorded the decision (Side effects).
+        const logAfter = await activityLines(page, tag, tardigrade.submissionId);
+        expect(logAfter.length).toBe(logBefore.length + 1);
+        expect(byManager(logAfter).length).toBe(byManager(logBefore).length + 1);
     });
 
     test('S5: DOIs made at publication, a galley\'s included', async ({browser, baseURL, asUser, ojsApi}, testInfo) => {
@@ -612,6 +622,7 @@ test.describe('DOIs', () => {
 
         // Published into Vol. 1 No. 1 (2025).
         await assignIssue(page, tag, axolotl.submissionId, axolotl.publicationId, 'Assign To Current/Back Issue', ISSUE_1_OPTION);
+        const logBefore = await activityLines(page, tag, axolotl.submissionId);
         await openPublication(page, tag, axolotl.submissionId, axolotl.publicationId);
         await publishOpenVersion(page, tag, {issueOption: ISSUE_1_OPTION});
 
@@ -633,7 +644,39 @@ test.describe('DOIs', () => {
         await expectReaderDoi(reader, tag, axolotl.submissionId, articleDoi);
         await reader.context().close();
 
+        // The Activity Log: the publish added "Submission metadata updated",
+        // under the Journal Manager who published (Side effects). Every new
+        // line is hers, and there may be two: the "Review Publishing
+        // Details" panel's "Confirm", when it opens, saves the version
+        // before the publish and logs a line of its own (U49).
+        const logPublished = await activityLines(page, tag, axolotl.submissionId);
+        const gained = logPublished.length - logBefore.length;
+        expect(gained).toBeGreaterThanOrEqual(1);
+        expect(byManager(logPublished).length - byManager(logBefore).length).toBe(gained);
+
+        // A galley's DOI by hand: cleared, the "PDF" row reads "Needs DOI";
+        // typed, it holds the typed DOI; neither save adds an Activity Log
+        // line, the publish's line above being the positive control
+        // (Rule 18; Side effects).
+        const typedGalley = `${PREFIX}/e2e-g1-${tag}`;
+        await dois.goto();
+        await dois.expand(axRow, axolotl.submissionId);
+        await expect(dois.doiBox(axRow, 'PDF')).toHaveValue(galleyDoi);
+        await dois.startEditing(axRow);
+        await dois.doiBox(axRow, 'PDF').fill('');
+        expect(await dois.saveEditing(axRow)).toEqual([200]);
+        await expect(dois.doiBox(axRow, 'PDF')).toHaveValue('');
+        await expect(dois.doiBadge(axRow, 'PDF')).toHaveText('Needs DOI');
+        await expect(dois.doiBox(axRow, ARTICLE)).toHaveValue(articleDoi);
+        await dois.startEditing(axRow);
+        await dois.doiBox(axRow, 'PDF').fill(typedGalley);
+        await dois.saveEditing(axRow);
+        await dois.expectNotice(TEXT.updated);
+        await expect(dois.doiBox(axRow, 'PDF')).toHaveValue(typedGalley);
+        expect((await activityLines(page, tag, axolotl.submissionId)).length).toBe(logPublished.length);
+
         // Control: the unpublished work still reads "Needs DOI" (Rule 5).
+        await dois.goto();
         await dois.expand(taRow, tardigrade.submissionId);
         await expect(dois.doiBox(taRow, ARTICLE)).toHaveValue('');
         await expect(dois.doiBadge(taRow, ARTICLE)).toHaveText('Needs DOI');

@@ -521,7 +521,7 @@ test.describe('DOIs', () => {
         await expect(dois.rowLink(row)).toHaveText(new RegExp(`— ${TARDIGRADE}\\s*$`));
     });
 
-    test('S5: DOIs made at posting, a galley\'s included', async ({browser, baseURL, asUser, opsApi}, testInfo) => {
+    test('S5: DOIs made at posting, a galley\'s included', async ({browser, baseURL, asUser, opsApi, appContext}, testInfo) => {
         test.setTimeout(240_000);
         const tag = makeTag('s5', testInfo);
         const {manager, ada, mary} = await seedServer(opsApi, tag, {
@@ -547,6 +547,7 @@ test.describe('DOIs', () => {
         await expect(dois.doiBadge(axRow, PREPRINT)).toHaveText('Needs DOI');
 
         // Posted: "Post the preprint".
+        const logBefore = await activityLines(page, appContext, tag, axolotl.submissionId);
         await postSubmitted(page, tag, axolotl.submissionId);
 
         // The made DOIs: "Unregistered"; the "Preprint" and "PDF" rows each a
@@ -567,7 +568,17 @@ test.describe('DOIs', () => {
         await expectReaderDoi(reader, tag, axolotl.submissionId, preprintDoi);
         await reader.context().close();
 
+        // The Activity Log: the posting added "Submission metadata updated",
+        // every new line under the Preprint Server Manager who posted it
+        // (Side effects).
+        const logPosted = await activityLines(page, appContext, tag, axolotl.submissionId);
+        const byManager = (lines) => lines.filter((l) => l.user === 'Mona Manager').length;
+        const gained = logPosted.length - logBefore.length;
+        expect(gained).toBeGreaterThanOrEqual(1);
+        expect(byManager(logPosted) - byManager(logBefore)).toBe(gained);
+
         // Control: the unposted preprint still reads "Needs DOI" (Rule 5).
+        await dois.goto();
         await dois.expand(taRow, tardigrade.submissionId);
         await expect(dois.doiBox(taRow, PREPRINT)).toHaveValue('');
         await expect(dois.doiBadge(taRow, PREPRINT)).toHaveText('Needs DOI');

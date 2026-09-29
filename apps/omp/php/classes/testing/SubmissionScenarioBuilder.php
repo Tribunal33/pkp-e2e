@@ -58,6 +58,9 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
     /** Per publicationFormats[] entry, its parsed salesRights[] and markets[] (U74), built in seedVersionOverlay. */
     private array $formatTradePlans = [];
 
+    /** Per publicationFormats[] entry, whether its "Not Available" › "OK" runs (U45 `available`), read by makePublicationFormatsAvailable. */
+    private array $formatAvailablePlans = [];
+
     /**
      * `workType` ('monograph' | 'editedVolume', default monograph) — the OMP
      * start form always posts a work type (the Monograph radio arrives
@@ -108,7 +111,9 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
      * language) or a locale map over the languages the box offers (the
      * press's submission metadata languages) that fills the submission's
      * one; `file` a fixture basename, the format row's "Change File";
-     * `genre` (U64, needs `file`) the upload wizard's component for it.
+     * `genre` (U64, needs `file`) the upload wizard's component for it;
+     * `approved` / `available` (U45, booleans, default true) whether the
+     * row's "Awaiting Approval" / "Not Available" link is pressed.
      *
      * @return array<int, array{path: string, name: array<string, string>, fixture: ?array}>
      */
@@ -186,9 +191,23 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
                     throw new SpecException("{$spec->path}.price", 'price is the "Price" box of "Set Terms for Downloading": a string as typed ("25", "25.00") or a whole number');
                 }
             }
+            // `approved` and `available` (U45): each true by default, the
+            // format row's "Awaiting Approval" › "OK" and its "Not
+            // Available" › "OK"; false leaves that link unpressed, so the
+            // format stays "Awaiting Approval" or "Not Available". The two
+            // links are independent on the grid.
+            $states = [];
+            foreach (['approved' => 'Awaiting Approval', 'available' => 'Not Available'] as $key => $link) {
+                $states[$key] = $spec->get($key, true);
+                if (!is_bool($states[$key])) {
+                    throw new SpecException("{$spec->path}.{$key}", "{$key} is whether the format row's \"{$link}\" › \"OK\" is pressed: a boolean");
+                }
+            }
             $plans[] = [
                 'path' => $spec->path,
                 'name' => $name,
+                'approved' => $states['approved'],
+                'available' => $states['available'],
                 'fixture' => $spec->has('file') ? $this->resolveFixture((string) $spec->get('file'), "{$spec->path}.file") : null,
                 'genreId' => $spec->has('genre') ? $this->resolveUploadGenreId($context, $spec) : null,
                 'physical' => $physical,
@@ -200,6 +219,7 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
         // (seedVersionOverlay), after the book's representatives, which a
         // market names.
         $this->formatTradePlans = array_map(fn (array $plan) => ['salesRights' => $plan['salesRights'], 'markets' => $plan['markets']], $plans);
+        $this->formatAvailablePlans = array_map(fn (array $plan) => $plan['available'], $plans);
         return $plans;
     }
 
@@ -424,7 +444,8 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
      *    (seedFormatCatalogData), right after the format's "OK";
      * 3. the format row's "Awaiting Approval" › "OK": the grid's own
      *    PublicationFormatGridHandler::setApproved (the public-identifier
-     *    assignment, isApproved, the Activity Log line, the tombstone).
+     *    assignment, isApproved, the Activity Log line, the tombstone);
+     *    not pressed for a format seeded `approved: false` (U45).
      *
      * @return array<int, array{id: int, name: string, submissionFileId: ?int}>
      */
@@ -488,12 +509,15 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
                 // "Assign" box, ticked by default, where one is enabled).
                 // (The seeding request is an API call, whose template manager
                 // lacks the page's `currentContext`, which the plugins'
-                // window sections read.)
-                \APP\template\TemplateManager::getManager(Application::get()->getRequest())->assign('currentContext', $context);
-                $window = $this->runFormatGridAction($submission, $publication, $formatId, 'setApproved', ['newApprovedState' => '1'], $plan['path'], 'The format\'s "Awaiting Approval" window did not open');
-                $ticked = $this->tickedBoxes((string) $window->getContent());
-                $this->runFormatGridAction($submission, $publication, $formatId, 'setApproved', ['newApprovedState' => '1', 'confirmed' => '1'] + $ticked, $plan['path'], 'The format\'s "Awaiting Approval" › "OK" was refused');
-                $this->assertPubIdsAssigned($context, $formatId, $ticked, $plan['path']);
+                // window sections read.) Left unpressed with `approved:
+                // false` (U45): the row stays "Awaiting Approval".
+                if ($plan['approved']) {
+                    \APP\template\TemplateManager::getManager(Application::get()->getRequest())->assign('currentContext', $context);
+                    $window = $this->runFormatGridAction($submission, $publication, $formatId, 'setApproved', ['newApprovedState' => '1'], $plan['path'], 'The format\'s "Awaiting Approval" window did not open');
+                    $ticked = $this->tickedBoxes((string) $window->getContent());
+                    $this->runFormatGridAction($submission, $publication, $formatId, 'setApproved', ['newApprovedState' => '1', 'confirmed' => '1'] + $ticked, $plan['path'], 'The format\'s "Awaiting Approval" › "OK" was refused');
+                    $this->assertPubIdsAssigned($context, $formatId, $ticked, $plan['path']);
+                }
 
                 $seeded[] = [
                     'id' => $formatId,
@@ -571,7 +595,8 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
      * Each seeded format's "Not Available" › "OK", after the publish (or at
      * the end of an unpublished build): the grid's own
      * PublicationFormatGridHandler::setAvailable (isAvailable, the Activity
-     * Log line, the tombstone removed).
+     * Log line, the tombstone removed). A format seeded `available: false`
+     * (U45) is left "Not Available".
      */
     protected function makePublicationFormatsAvailable(Context $context, int $submissionId, array $seeded, User $editor): void
     {
@@ -580,6 +605,9 @@ class SubmissionScenarioBuilder extends PKPSubmissionScenarioBuilder
         try {
             $submission = Repo::submission()->get($submissionId);
             foreach ($seeded as $i => $format) {
+                if (!($this->formatAvailablePlans[$i] ?? true)) {
+                    continue;
+                }
                 $publication = Repo::publication()->get($submission->getData('currentPublicationId'));
                 $this->runFormatGridAction($submission, $publication, $format['id'], 'setAvailable', ['newAvailableState' => '1'], "publicationFormats.{$i}", 'The format\'s "Not Available" › "OK" was refused');
             }

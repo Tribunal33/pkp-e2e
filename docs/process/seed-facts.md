@@ -1341,8 +1341,11 @@ config-file settings.
   same order number, and the Publication Formats page offers no "Order",
   so the page and the book page list formats in the order the database
   returns them: a format whose approval, availability or details are
-  saved can move to the end. Read an order after the last change, never
-  from creation. 2026-09-28 (U69 claim check K3 K3-4).
+  saved, or whose DOI is changed on the DOIs page, can move, to the end
+  or the front. The DOIs page lists a book's format rows in that same
+  order. Read an order after the last change, never from creation.
+  2026-09-28 (U69 claim check K3 K3-4); 2026-09-29 (U45 claim check R1,
+  R1-4).
 - {OMP} A book version with no date (every version right after "Create
   New Version") prints as today's date on the book page: the date line
   reads "{today} — Updated on …" and a draft's outdated notice "published
@@ -1354,6 +1357,19 @@ config-file settings.
   Versioning" "Yes" (`doiVersioning: true`); on a new press (the default
   "No") it answers 500. Chapter page, 2026-09-28 (U69 claim check K3
   K3-7, K5).
+- {OMP} A chapter page's address uses the chapter number of the book's
+  first version in every version: `{press}/catalog/book/{id}/chapter/{n}`
+  and `…/version/{publicationId}/chapter/{n}`, `n` being the source
+  chapter's; the new version's own chapter number answers 404. Chapter
+  page, 2026-09-29 (U45 claim check R2).
+- {OMP} A chapter cannot be moved on the Chapters page (a drag under
+  "Order" changes nothing, U72 Rule 8a), so a version's chapters keep
+  the order they were added in. 2026-09-29 (U45 claim check R1).
+- {OJS} A seeded Production article published from the workflow opens
+  the "Review Publishing Details" panel first; its "Confirm" saves the
+  publication and adds a "Submission metadata updated" line to the
+  Activity Log of its own, so the publish adds two lines there, not one.
+  2026-09-29 (U45 test run, OJS S5).
 - {OMP} A book seeded with the Press manager as `submitter` has no
   contributor (its Contributors page reads "No items found."), so its
   "How to Cite" opens with the title. 2026-09-28 (U69 claim check K5).

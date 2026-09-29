@@ -23,14 +23,13 @@ metadata with that agency and follows each deposit to "Registered" or
 "Error". Readers see an item's DOI as a link on its page. An **item**
 below is anything that can carry a DOI: on a journal an article (one
 version of it), a galley, an issue and a peer review; on a press a
-monograph version and a file of a publication format; on a preprint
-server a preprint version and a galley. A **kind** is one of the boxes
-under "Items with DOIs" (Fields). <sup>a</sup>
+monograph version, a chapter, a publication format and a file of a
+publication format; on a preprint server a preprint version and a
+galley. A **kind** is one of the boxes under "Items with DOIs"
+(Fields). <sup>a</sup>
 
-Issues and peer-review DOIs exist on a journal only. A press also offers
-DOIs for its chapters and publication formats; this spec describes those
-two boxes and, beyond when a format's DOI is made (Rule 5) and that a
-book's page shows it (Rule 43), nothing of the DOIs they give. The
+Issues and peer-review DOIs exist on a journal only, chapter and
+publication-format DOIs on a press only (Rules 45–54). The
 registration agencies come as plugins: a journal installs the "Crossref
 Manager Plugin" and the "DataCite Manager Plugin", a preprint server the
 "Crossref Manager Plugin", and a press none. Every agency plugin is
@@ -139,7 +138,7 @@ links under the list. <sup>g</sup>
 | **Deposit All** | — | A button, shown only with an agency configured (Rule 36). Rule 29. <sup>p</sup> |
 | **Filters** | — | Headed "Filters", with a round button showing only a "?" icon beside the heading that opens the "DOI Statuses" window (Rule 22); a screen reader announces it as "button" with no name ⚠ [A8](#a8). Groups: "Status" ("Needs DOI", "DOI Assigned"); "Registration" ("Unregistered", "Submitted", "Registered", "Has Error", "Needs Sync"); "Publication Status", on a press ("Published", "Unpublished") and on a preprint server ("Posted", "Unpublished"); on a journal's "Articles" tab an "Issues" box that suggests an issue once its year ("2025") or its full name from the start ("Vol. 1 No. 1") is typed ("Vol" or "1" suggests nothing); choosing one keeps that issue's articles. <sup>o</sup> <sup>q8</sup> |
 | **An item's row** | — | A tick box with no name for a screen reader [A8](#a8), the item's name as a link that opens its public page in a new tab (Rule 16), its number, a status badge (Rule 31) and an expand button. <sup>m</sup> |
-| **An item's expanded view** | — | The version's name, a table "Type", "DOIs", "Status", "Actions" with one row per DOI the item carries (Rule 17), "Edit" / "Save" (Rule 18), and with an agency configured the agency panel (Rule 30). <sup>m</sup> |
+| **An item's expanded view** | — | The version's name, a table "Type", "DOIs", "Status", "Actions" with one row per DOI the item carries (Rule 17), "Edit" / "Save" (Rule 18), and with an agency configured the agency panel (Rule 30). On a press, under the table, the note of Rule 47 while a chapter cannot carry a DOI. <sup>m</sup> <sup>q29</sup> |
 | **A DOI box** | No | Greyed text until "Edit" is pressed. A DOI must begin with digits, a dot and more digits, then "/" (for example "10.1234/abc"), and may hold only letters, digits and `-._;()/`; it must be unused by any other item on the install (Rule 18). <sup>n</sup> <sup>q9</sup> |
 
 ## Rules & state
@@ -184,7 +183,8 @@ links under the list. <sup>g</sup>
    | "Peer Review" {OJS} | each completed review shown publicly (Rule 7) | the "Articles" tab |
    | "Issues" {OJS} | each issue | the "Issues" tab |
    | "Files" {OMP} | each file of each publication format | the "Monographs" tab ⚠ [OMP1](#omp1) |
-   | "Chapters", "Publication Formats" {OMP} | a press's chapters and formats | the "Monographs" tab (not described here) |
+   | "Chapters" {OMP} | each chapter of each version that has its own page (Rule 47) | the "Monographs" tab, as rows of the book (Rule 45) <sup>q28</sup> |
+   | "Publication Formats" {OMP} | each publication format of each version | the "Monographs" tab, as rows of the book (Rule 45) <sup>q28</sup> |
 
 <a id="doi-creation"></a>
 **Making DOIs**
@@ -196,8 +196,8 @@ links under the list. <sup>g</sup>
    - **"Upon reaching the copyediting stage"** (journal, press): when a
      decision moves the submission into Copyediting or Production, its
      current version and that version's galleys get their DOIs (on a
-     press, the files and, with "Publication Formats" ticked, the
-     publication formats). On a preprint server the choice reads "Upon
+     press, the files and, with their kinds ticked, the publication
+     formats and the chapters, Rule 48 <sup>q30</sup>). On a preprint server the choice reads "Upon
      reaching the production stage" and acts at the preprint's final
      "Submit".
    - **"Upon publication"**: when the version is published (posted), or,
@@ -326,7 +326,8 @@ links under the list. <sup>g</sup>
     order: the work ("Article", "Monograph", "Preprint"), each galley
     under its label, each peer review ("Peer Review {number}"); an issue
     has one row, "Issue"; a press's file rows read "{format name} / {file
-    name}". Each row shows its DOI (empty while it has none), its status
+    name}", and its chapter and format rows come between the work's and
+    the files' (Rule 45) <sup>q27</sup>. Each row shows its DOI (empty while it has none), its status
     badge (Rule 31) and, while that status is "Error", a "View Error"
     link (Rule 33 [A18](#a18)). <sup>m</sup>
 18. **Typing, changing and clearing a DOI by hand.** "Edit" makes the
@@ -364,16 +365,18 @@ links under the list. <sup>g</sup>
     digits and a dot ("10.1234/a7k") is read as the start of a DOI, and
     what it finds differs by app ⚠ [A11](#a11): on a journal, the
     articles whose own DOI begins with it (a galley's DOI finds nothing);
-    on a press, the books with a file DOI beginning with it (the
-    monograph's own DOI finds nothing); on a preprint server nothing,
+    on a press, the books with a chapter, format or file DOI beginning
+    with it, counting only the kinds ticked under "Items with DOIs"
+    <sup>q33</sup> (the monograph's own DOI finds nothing); on a
+    preprint server nothing,
     "10.1234/" included. A suffix without its prefix finds nothing.
     <sup>o</sup> <sup>q18</sup>
 22. **Filters.** Choosing a filter narrows the list and marks it chosen;
     choosing it again, or its "Clear filter: {name}", lifts it. Within
     "Status" and within "Registration" one filter at a time applies.
     "Needs DOI" keeps items missing a DOI for at least one ticked kind
-    (on a press only the monograph's own DOI counts, so a book missing
-    only its file DOI is not listed [OMP1](#omp1)), "DOI Assigned" items
+    (on a press the file DOIs never count, so a book missing only its
+    file DOI is not listed [OMP1](#omp1); chapters and formats: Rule 51), "DOI Assigned" items
     carrying at least one. "Unregistered" keeps published items whose DOI
     reads "Unregistered"; the other "Registration" filters keep items
     with a DOI in that status. After "Unregistered" and then another
@@ -628,7 +631,8 @@ links under the list. <sup>g</sup>
     ([OAI-PMH](U19-oai-pmh.md)) carry no DOI while "DOIs" is unticked,
     and carry it again once it is ticked, whatever the kinds. A book's
     page also shows each publication format's DOI in that format's
-    details ("DOI:" and the link) {OMP}. An issue's page shows its DOI
+    details ("DOI:" and the link) {OMP}; which chapter and format DOIs
+    readers see is Rule 54. An issue's page shows its DOI
     the same way ([Issues](U50-issues.md), Fields). <sup>w</sup> <sup>q25</sup>
 
 **Older entry points**
@@ -644,6 +648,116 @@ links under the list. <sup>g</sup>
     browser tab reads only the journal's name ⚠ [A20](#a20). The DOIs
     page is where DOIs are exported and deposited. <sup>x</sup> <sup>q26</sup>
 
+<a id="press-dois"></a>
+**A press's chapters and publication formats** {OMP}
+
+The chapters are those of the version's "Chapters" page
+([Chapters & work type](U72-chapters-work-type.md)), the formats those
+of its "Publication Formats" page
+([Publication formats & proof terms](U73-publication-formats-proof-terms.md)).
+The rules above hold for their DOIs as for any item; these add what
+differs. <sup>z1</sup>
+
+45. **Chapter and format rows.** In a book's expanded view (Rule 17)
+    the rows come in this order: "Monograph"; with "Chapters" ticked,
+    one row per chapter, named by the chapter's title, in the order of
+    the version's chapter list; with "Publication Formats" ticked, one
+    row per format, named "Format / {format name}" ("Format / PDF"), in
+    the order of the "Publication Formats" page; then the file rows.
+    Each row has its DOI box and status badge, and "Edit" / "Save"
+    treat it as any row (Rule 18): a DOI typed into an empty chapter or
+    format box becomes that chapter's or format's DOI. A DOI typed into
+    an empty file row is stored too, but the save reports "Some DOI(s)
+    could not be updated" and the box shows empty until the page is
+    reloaded ⚠ [OMP2](#omp2). <sup>z2</sup> <sup>q27</sup>
+46. **Either kind alone lists the books.** With "Chapters" or
+    "Publication Formats" ticked and "Monographs" not, the "Monographs"
+    tab lists the same books as Rule 15, each with only the ticked
+    kinds' rows, unlike "Files" alone [OMP1](#omp1). The book's badge
+    then reads its first row's status (Rule 31). <sup>z3</sup> <sup>q28</sup>
+47. **A chapter needs its own page.** Only a chapter whose "Chapter
+    Page" box is ticked, or that already has a DOI, can carry one
+    ([Chapters & work type](U72-chapters-work-type.md), its Rule 10). A
+    chapter without either keeps its row, but greyed, its badge reading
+    "Needs DOI" ⚠ [OMP3](#omp3): after "Edit" its box cannot be typed
+    in, and under the table the view reads
+    "Chapters without a landing page cannot have a DOI.". No automatic
+    moment and no "Assign DOIs" gives it a DOI, and "Assign DOIs" still
+    reports "Items successfully assigned new DOIs" when that chapter is
+    all the book lacks. <sup>z4</sup> <sup>q29</sup>
+48. **When chapter and format DOIs are made.** At Rule 5's moments,
+    with the kind ticked: <sup>z5</sup>
+    - **"Upon reaching the copyediting stage"**: the decision that moves
+      the book into Copyediting or Production gives its current
+      version's formats, and its chapters that have their page, their
+      DOIs. Publishing the version then gives a DOI to a chapter whose
+      page was ticked after that decision, and to a format added after
+      it. <sup>q30</sup>
+    - **"Upon publication"**: publishing the version gives them. A
+      chapter whose page is ticked after the version is published gets
+      no DOI by itself. <sup>z12</sup>
+    - Under any setting, "Assign DOIs" gives a DOI to every format and
+      every chapter with its page still missing one, published or not
+      (Rule 25). <sup>q30</sup>
+49. **Custom suffix patterns.** Under "Custom pattern" a chapter's DOI
+    follows the "Chapters" box and a format's the "Publication Formats"
+    box, with Rule 6c's symbols: "%c" the chapter ID, "%f" the
+    publication format ID, "%x" the chapter's or format's own Publisher
+    ID. A symbol with nothing to fill it, such as "%c" in the
+    "Publication Formats" box, stays in the DOI as typed [A9](#a9).
+    Under "None" a chapter and a format get the prefix and a bare "/",
+    as every item does [A2](#a2). <sup>z6</sup> <sup>q31</sup>
+50. **Versions.** Chapters and formats follow the version rules as
+    galleys do: under "DOI Versioning" "No" a new version's chapters
+    and formats start with their source's DOIs, and a DOI changed on
+    the DOIs page changes for every version (Rule 11); under "Yes" a
+    "Major Revision" version's chapters and formats start without, and
+    get their own by Rule 48; a "Minor Revision" version's keep their
+    source's, and a change in the "DOIs for all versions" window changes
+    that family only (Rules 12, 20). A chapter first added in a later
+    version gets a DOI of its own. <sup>z7</sup> <sup>q32</sup>
+51. **Filters on a press.** <sup>z8</sup> <sup>q33</sup>
+    - "Needs DOI" keeps a book missing the DOI of a ticked kind: its own,
+      a chapter that has its page, or a format. A chapter without its
+      page never counts, nor does a file [OMP1](#omp1).
+    - "DOI Assigned" keeps a book whose own, chapter or format DOI is
+      set, for the ticked kinds.
+    - The "Registration" filters keep a book whose own, chapter or format
+      DOI reads that status, whether or not that kind is ticked; a file
+      DOI never counts.
+52. **Marks and statuses.** "Mark DOIs Registered", "Mark DOIs
+    Unregistered" and "Mark DOIs Needs Sync" (Rules 26–28) set the
+    DOIs of the ticked book's chapters and formats with its own, for
+    the ticked kinds. Unpublishing a version whose chapter and format
+    DOIs read "Registered" turns them "Needs Sync" with the book's, and
+    they stay "Needs Sync" when it is published again; publishing a newer
+    version that shares them does the same (Rule 32). <sup>z9</sup> <sup>q34</sup>
+53. **Formats readers cannot get.** A format that is not available to
+    readers, or not approved, gets its DOI at the same moments and keeps
+    its row on the DOIs page; the book's page shows no DOI for it
+    (Rule 54). <sup>z10</sup> <sup>q35</sup>
+54. **What readers see of them.** <sup>z11</sup>
+    - In the book's table of contents each chapter shows a DOI line
+      ([Monograph landing page](U69-monograph-landing-page.md#book-page),
+      its Rule 10): the chapter's own DOI, or, without one, the DOI the
+      same chapter carries in another version of its family (Rule 12),
+      whatever "DOI Versioning" says. <sup>q36</sup>
+    - A chapter's own page shows its "DOI:" line
+      ([Monograph landing page](U69-monograph-landing-page.md#chapter-page)):
+      the chapter's own DOI; without one, under "DOI Versioning" "Yes",
+      its family's (Rule 12). Under "No" an older version's chapter
+      page is meant to show the current version's chapter DOI, but that
+      page answers a server error
+      ([→ Monograph landing page, A19](U69-monograph-landing-page.md#a19)).
+      <sup>q36</sup>
+    - A format's DOI shows in its details on the book's page (Rule 43)
+      while the format is approved and available to readers. An
+      available format that is not approved is still a download link
+      there, but has no details and no DOI. A format's DOI has no
+      fallback to another version's. <sup>q35</sup> <sup>q36</sup>
+    - As Rule 43 says for a book, these lines follow the stored DOI:
+      they stay after the kind is unticked. <sup>q36</sup>
+
 ## Side effects
 
 - **Deposits leave the install.** "Deposit DOIs" and "Deposit All" send
@@ -658,31 +772,39 @@ links under the list. <sup>g</sup>
 - **Statuses change on other features' actions**: publishing and
   unpublishing versions and issues (Rule 32). <sup>r</sup>
 - **Activity Log, no mail.** No DOI action sends an email or a
-  notification. "Assign DOIs" and a DOI typed on an item without one add
-  "Submission metadata updated" under the manager's name to the work's
-  Activity Log (for a press's file: "The metadata for file "{file}" was
-  edited by {username}."). On a preprint server ("DOI Versioning"
-  "Yes") every saved change or clearing adds the line too. Otherwise
-  changing or clearing a DOI, and the three Mark actions, log nothing.
-  <sup>r</sup>
-- **Activity Log, DOIs made by themselves.** The work's own DOI, made at
-  an automatic moment (Rule 5), adds one "Submission metadata updated" to
-  its Activity Log: <sup>r</sup>
-  - **Publishing under "Upon publication"**: under the user who
+  notification. <sup>r</sup> A DOI given to a work that had none adds
+  one "Submission metadata updated" to the work's Activity Log, under
+  the name of whoever acted: <sup>r</sup>
+  - **"Assign DOIs", or a DOI typed by hand**: under the manager's
+    name. For a press's file the line reads "The metadata for file
+    "{file}" was edited by {username}." <sup>r</sup>
+  - **A publish under "Upon publication"**: under the user who
     publishes, beside "The submission was published." ("…posted." on a
-    preprint server); on a press one line in all when the book's
-    chapters and publication formats get their DOIs with it.
+    preprint server). <sup>z13</sup>
   - **A decision under "Upon reaching the copyediting stage"** (journal,
-    press): under the user who records the decision moving the work into
-    Copyediting, beside the decision's line ("{name} skipped the review
-    stage and sent this submission to the copyediting stage." for
-    "Accept and Skip Review").
+    press): under the user who records the decision moving the work
+    into Copyediting, beside the decision's line ("{name} skipped the
+    review stage and sent this submission to the copyediting stage."
+    for "Accept and Skip Review"). On a press a file's DOI made by the
+    same decision adds the file's line as well. <sup>q37</sup>
 
-  A publish under "Never", with "DOIs" unticked, or of a work that
-  already has its DOI adds none; whether a galley (on a press, a chapter
-  or format) first given its DOI at that publish adds one is open
-  ⚠ [A23](#a23). On a journal, "Review Publishing Details" › "Confirm"
-  adds its own line, whatever the DOI settings
+  No line is added:
+  - by a publish under "Never", with "DOIs" unticked, or of a work that
+    already has its DOI; <sup>r</sup>
+  - on a press, for a chapter's or a format's DOI, whether it is made,
+    assigned, typed or cleared: a publish that makes them together with
+    the book's own DOI adds only the book's line, and "Assign DOIs" on a
+    book whose own DOI is already set adds none; <sup>q37</sup>
+  - on a journal, for a galley's DOI typed or cleared <sup>q37</sup>;
+    whether a journal's or a preprint server's galley given its DOI
+    alone at a publish adds one is open ⚠ [A23](#a23);
+  - on a journal and a press, for changing or clearing a DOI, and in
+    every app for the three Mark actions. On a preprint server ("DOI
+    Versioning" "Yes") every saved change or clearing of a DOI adds the
+    line. <sup>r</sup>
+
+  On a journal, "Review Publishing Details" › "Confirm" adds a line of
+  its own, whatever the DOI settings
   ([Publish, schedule & versions](U49-publish-schedule-and-versions.md),
   Side effects). <sup>r</sup>
 - **Head tags.** With the Crossmark button shown, the article page's
@@ -698,7 +820,9 @@ links under the list. <sup>g</sup>
 
 2. **"Items with DOIs"** (same tab; the first box ticked). Each box adds
    its items (Rule 4); none ticked works as off (Rule 1). "Issues"
-   adds the "Issues" tab {OJS}; "Peer Review" the review rows {OJS}. <sup>c</sup>
+   adds the "Issues" tab {OJS}; "Peer Review" the review rows {OJS};
+   "Chapters" and "Publication Formats" the book's chapter and format
+   rows {OMP} (Rules 45, 46). <sup>c</sup> <sup>q28</sup>
 
 3. **"DOI Prefix"** (same tab; empty). Set: DOIs are made (Rules 5, 25)
    and "Assign DOIs" is offered; empty: the page's warning (Rule 2) and
@@ -749,6 +873,14 @@ links under the list. <sup>g</sup>
     "Masthead"; empty). "Publisher" and either ISSN set: Crossref counts
     as configured (Rule 36) and its notice goes (Rule 37). <sup>s</sup>
 
+14. **"Chapter Page"** {OMP} (a chapter's box in its "Add Chapter" /
+    "Edit Chapter" window, "Show this chapter on its own page and link to
+    that page from the book's table of contents.";
+    [Chapters & work type](U72-chapters-work-type.md) owns it;
+    unticked for a new chapter). Ticked: the chapter can carry a DOI;
+    unticked, with no DOI yet, its row on the DOIs page is greyed and
+    nothing gives it one (Rule 47). <sup>z4</sup>
+
 ## Cross-feature interactions
 
 - **[Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md)**:
@@ -784,6 +916,16 @@ links under the list. <sup>g</sup>
 - **[Reviewer assignment & management](U27-reviewer-assignment-and-management.md)**
   and **[Review setup & review forms](U29-review-setup-and-review-forms.md)**:
   a review's "Public Visibility" and "Mark as Complete" (Rule 7).
+- **[Chapters & work type](U72-chapters-work-type.md)**: the chapters
+  and their "Chapter Page" box, which decides whether a chapter can carry
+  a DOI (Rule 47); that spec keeps the box ticked once the chapter has a
+  DOI.
+- **[Publication formats & proof terms](U73-publication-formats-proof-terms.md)**:
+  the formats whose DOIs Rules 45–53 describe, and their approval and
+  availability to readers (Rules 53, 54).
+- **[Monograph landing page](U69-monograph-landing-page.md)**: the book's
+  table of contents, chapter pages and format details that show the
+  chapter and format DOIs; this spec owns which DOI shows (Rule 54).
 - [Plugins management](U62-plugins-management.md),
   [Import & export](U63-import-export.md): the plugin
   list that enables the agencies (Rule 34) and the Tools pages of
@@ -922,10 +1064,12 @@ throwaway accounts. <sup>sc</sup>
 
    Given: a Journal Manager, on a scratch journal with the prefix
    "10.1234" and the other DOI settings at the install defaults, holding
-   "Tardigrade desiccation" at the Submission stage; on a press "Files"
-   is ticked too and the book carries a publication format "PDF" with a
-   file; on a preprint server "Tardigrade desiccation" is an Author's
-   unfinished draft instead.
+   "Tardigrade desiccation" at the Submission stage; on a press
+   "Chapters", "Publication Formats" and "Files" are ticked too and the
+   book carries two chapters, "Tides" with its "Chapter Page" ticked and
+   "Harbours" without, and a publication format "PDF" with a file; on a
+   preprint server "Tardigrade desiccation" is an Author's unfinished
+   draft instead.
 
    - **The decision**: open "Tardigrade desiccation"'s workflow and
      record "Accept and Skip Review"
@@ -941,6 +1085,29 @@ throwaway accounts. <sup>sc</sup>
    - **A press's file** {OMP}: the book's expanded view also has a row
      "PDF / {file name}" holding a DOI of the same shape, different from
      the monograph's (Rules 4, 5, 6a, 17).
+   - **The Activity Log** (journal, press): the work's Activity Log has
+     gained "Submission metadata updated" under the name of the Journal
+     Manager, who recorded the decision (Side effects).
+   - **A press's chapters and format** {OMP}: the book's expanded view
+     lists, in this order, "Monograph", "Tides", "Harbours", "Format /
+     PDF" and "PDF / {file name}". "Tides" and "Format / PDF" each hold a
+     DOI of the same shape and read "Unregistered". "Harbours" is greyed,
+     has no DOI and reads "Needs DOI" [OMP3](#omp3), and under the table
+     the view reads "Chapters without a landing page cannot have a
+     DOI.". Press "Edit": "Harbours"' box cannot be typed in; press
+     "Save": the editing closes (Rules 18, 45, 47, 48).
+   - **A page ticked and a format added after the move** {OMP}: tick
+     "Harbours"' "Chapter Page" in its "Edit Chapter" window on the
+     book's "Chapters" page
+     ([Chapters & work type](U72-chapters-work-type.md)) and save it, and
+     add a publication format named "EPUB" on the book's "Publication
+     Formats" page
+     ([Publication formats & proof terms](U73-publication-formats-proof-terms.md)).
+     On "DOIs" "Harbours" is no longer greyed, the note under the table
+     is gone, and "Harbours" and "Format / EPUB" have no DOI and read
+     "Needs DOI". Publish the book
+     ([Publish, schedule & versions](U49-publish-schedule-and-versions.md)):
+     both now hold a DOI (Rules 47, 48).
    - **Control**: before the decision, the DOIs page did not list
      "Tardigrade desiccation" (journal, press) (Rule 15). <sup>sc</sup>
 
@@ -949,11 +1116,14 @@ throwaway accounts. <sup>sc</sup>
    Given: a Journal Manager, on a scratch journal with the prefix
    "10.1234", "Automatic DOI Assignment" "Upon publication" and the
    galley box ticked ("Article galleys, such as a published PDF",
-   "Preprint galleys, such as a published PDF"; a press keeps
-   "Monographs" alone), holding "Axolotl limb memory" and "Tardigrade
-   desiccation" unpublished in Production, each with a galley "PDF"
-   (journal, preprint server), and on a journal a published issue Vol. 1
-   No. 1 (2025).
+   "Preprint galleys, such as a published PDF"; a press ticks "Chapters"
+   and "Publication Formats" instead), holding "Axolotl limb memory" and
+   "Tardigrade desiccation" unpublished in Production, each with a galley
+   "PDF" (journal, preprint server), on a press "Axolotl limb memory"
+   carrying two chapters, "Tides" with its "Chapter Page" ticked and
+   "Harbours" without, and two publication formats with a file each,
+   "PDF" approved and available to readers and "EPUB" available but not
+   approved, and on a journal a published issue Vol. 1 No. 1 (2025).
 
    - **Before publishing**: open "DOIs": both works read "Unpublished";
      expanded, "Axolotl limb memory"'s "Article" row is empty and reads
@@ -968,6 +1138,41 @@ throwaway accounts. <sup>sc</sup>
    - **The reader's page**: signed out, open the published article's
      page: it shows "DOI:" with "https://doi.org/{the "Article" row's
      DOI}" as a link (Rule 43; Actors row 4).
+   - **The Activity Log**: "Axolotl limb memory"'s Activity Log has
+     gained "Submission metadata updated" under the name of the Journal
+     Manager, who published it; on a press it is the only such line, the
+     chapters' and formats' DOIs adding none (Side effects).
+   - **A galley's DOI by hand** {OJS}: expand "Axolotl limb memory",
+     press "Edit", empty the "PDF" row's box and press "Save": the row
+     reads "Needs DOI". Press "Edit", type "10.1234/e2e-g1" in the same
+     box and press "Save": "DOI(s) successfully updated", and the row
+     holds "10.1234/e2e-g1". Neither save adds a line to the Activity Log
+     (Rule 18; Side effects).
+   - **A press's chapters and formats** {OMP}: the book's expanded view
+     has "Tides", "Harbours", "Format / PDF" and "Format / EPUB" rows.
+     "Tides" and both format rows each hold "10.1234/" followed by eight
+     characters and read "Unregistered"; "Harbours" is greyed and has no
+     DOI (Rules 47, 48, 53).
+   - **The book's page** {OMP}: signed out, open "Axolotl limb memory"'s
+     page. In its table of contents "Tides" shows a DOI line with the
+     DOI of its row on "DOIs". "PDF"'s details show "DOI:" with
+     "https://doi.org/{the "Format / PDF" row's DOI}". "EPUB" is listed
+     as a download link, with no details and no DOI. Press "Tides" in
+     the table of contents: its own page shows its "DOI:" line with the
+     same DOI (Rules 43, 53, 54).
+   - **"Harbours" without its page** {OMP}: on "DOIs" press "Needs DOI":
+     "Tardigrade desiccation" is listed and "Axolotl limb memory" is not;
+     press "Needs DOI" again to lift it (Rule 51). Tick "Axolotl limb
+     memory" and run "Assign DOIs": "Items successfully assigned new
+     DOIs", and "Harbours" still has no DOI; the Activity Log gains no
+     line (Rule 47; Side effects).
+   - **"Harbours" given its page after the publish** {OMP}: tick its
+     "Chapter Page" in its "Edit Chapter" window on the book's "Chapters"
+     page ([Chapters & work type](U72-chapters-work-type.md)) and save
+     it. Reload "DOIs": "Harbours" is no longer greyed and still has no
+     DOI, and "Needs DOI" now lists "Axolotl limb memory" (Rules 48, 51).
+     Run "Assign DOIs" on the book again: "Harbours" holds a DOI, and
+     the Activity Log gains no line (Rule 48; Side effects).
    - **Control**: "Tardigrade desiccation", not published, still reads
      "Needs DOI" in its "Article" row (Rule 5). <sup>sc</sup>
 
@@ -1013,7 +1218,9 @@ throwaway accounts. <sup>sc</sup>
    Given: a Journal Manager, on a scratch journal with the prefix
    "10.1234", "Automatic DOI Assignment" "Never" and "DOI Format" "None",
    holding "Axolotl limb memory" and "Tardigrade desiccation", both
-   published without a DOI.
+   published without a DOI; on a press "Chapters" and "Publication
+   Formats" are ticked too and "Axolotl limb memory" carries the chapter
+   "Tides", its "Chapter Page" ticked, and a publication format "PDF".
 
    - **The "None" format**: on Settings › Distribution › "DOIs" "DOI
      Format" has "None - Suffixes must be entered manually on the DOI
@@ -1026,13 +1233,13 @@ throwaway accounts. <sup>sc</sup>
      "10.1234/e2e-a1" and reads "Unregistered" (Fields, a DOI box;
      Rules 18, 32).
    - **The other side**: the work's page shows "DOI:" with
-     "https://doi.org/10.1234/e2e-a1", and its Activity Log has gained
+     "https://doi.org/10.1234/e2e-a1", and its Activity Log gained
      "Submission metadata updated" (Rules 10, 43; Side effects).
    - **Refused values**: expand "Tardigrade desiccation", press "Edit",
      type "abc" and press "Save": "Some DOI(s) could not be updated"
      shows and the box is empty again [A3](#a3); do the same with
      "10.1234/a b", then with "10.1234/e2e-a1", the DOI "Axolotl limb
-     memory" carries: each is refused the same way, and the row still
+     memory" carries: each is refused the same way; the row still
      reads "Needs DOI" (Fields, a DOI box; Rules 9, 18).
    - **Changed**: on "Axolotl limb memory" press "Edit", replace the DOI
      with "10.1234/e2e-a2" and press "Save": "DOI(s) successfully
@@ -1040,9 +1247,20 @@ throwaway accounts. <sup>sc</sup>
      (Rules 10, 18). A preprint server's Activity Log gains another
      "Submission metadata updated"; a journal's and a press's gain none
      (Side effects).
-   - **Cleared**: press "Edit", empty the box and press "Save": the row
-     reads "Needs DOI" again, and the work's page shows no "DOI:" line
-     (Rules 10, 18, 43).
+   - **A chapter's and a format's DOI** {OMP}: on "Axolotl limb memory"
+     press "Edit", type "10.1234/e2e-c1" in the "Tides" row and
+     "10.1234/e2e-f1" in the "Format / PDF" row and press "Save": "DOI(s)
+     successfully updated", and both rows hold their DOIs and read
+     "Unregistered" (Rules 18, 32, 45). Press "Edit", replace "Tides"'
+     DOI with "10.1234/e2e-c2", empty the "Format / PDF" box and press
+     "Save": "Tides" holds "10.1234/e2e-c2" and "Format / PDF" reads
+     "Needs DOI" (Rule 18). Press "Needs DOI": the list holds "Axolotl
+     limb memory", its own and chapter DOIs set; press it again to
+     lift it (Rule 51). The book's Activity Log gains no line from
+     these saves (Side effects).
+   - **Cleared**: press "Edit", empty "Axolotl limb memory"'s "Article"
+     box and press "Save": the row reads "Needs DOI"; the work's own
+     "DOI:" line goes, a chapter's stays (Rules 10, 18, 43, 54).
    - **Control**: on "Tardigrade desiccation" press "Edit", then "Save"
      with nothing changed: the editing closes (Rule 18). <sup>sc</sup>
 
@@ -1086,7 +1304,10 @@ throwaway accounts. <sup>sc</sup>
    Given: a Journal Manager, on a scratch journal with the prefix
    "10.1234", holding "Axolotl limb memory", published with its DOI
    ("Unregistered"), and "Tardigrade desiccation" in Production,
-   unpublished.
+   unpublished; on a press "Chapters" and "Publication Formats" are
+   ticked too and "Axolotl limb memory" carries the chapter "Tides", its
+   "Chapter Page" ticked, and a publication format "PDF", both with
+   their DOIs.
 
    - **"Mark DOIs Registered" refused**: tick both, choose "Bulk Actions"
      › "Mark DOIs Registered" and press the window's "Mark DOIs
@@ -1118,6 +1339,19 @@ throwaway accounts. <sup>sc</sup>
    - **Marked "Needs Sync"**: run "Mark DOIs Registered" on it, then
      "Mark DOIs Needs Sync": "Items successfully marked needs sync"; the
      row reads "Needs Sync" (Rule 28).
+   - **A press's chapter and format rows** {OMP}: after each step above,
+     the book's "Tides" and "Format / PDF" rows read what its "Monograph"
+     row reads: "Registered" after the first "Mark DOIs Registered",
+     "Needs Sync" after the unpublish and after the publish again,
+     "Unregistered" after "Mark DOIs Unregistered", and "Needs Sync" at
+     the end (Rule 52).
+   - **A newer version** {OMP}: run "Mark DOIs Registered" on "Axolotl
+     limb memory" again, then on its workflow press "Create New Version"
+     ([Publish, schedule & versions](U49-publish-schedule-and-versions.md),
+     Rule 11; "DOI Versioning" is "No", as on every new press): on "DOIs" the
+     book's "Monograph", "Tides" and "Format / PDF" rows still read
+     "Registered". Publish the new version: all three read "Needs Sync"
+     (Rules 32, 52).
    - **Control**: "Tardigrade desiccation" read "Unpublished" throughout
      (Rule 16). <sup>sc</sup>
 
@@ -1125,7 +1359,10 @@ throwaway accounts. <sup>sc</sup>
 
     Given: a Journal Manager, on a scratch journal with the prefix
     "10.1234" and "DOI Versioning" "No" (a preprint server set to "No"),
-    holding "Axolotl limb memory", published with its DOI.
+    holding "Axolotl limb memory", published with its DOI; on a press
+    "Chapters" and "Publication Formats" are ticked too and the book
+    carries the chapter "Tides", its "Chapter Page" ticked, and a
+    publication format "PDF", both with their DOIs.
 
     - **A new version**: on the work's workflow press "Create New
       Version"
@@ -1138,6 +1375,13 @@ throwaway accounts. <sup>sc</sup>
       DOI with "10.1234/e2e-v1" and press "Save": the article's page and
       the older version's page both show "https://doi.org/10.1234/e2e-v1"
       (Rules 11, 43).
+    - **A press's chapter and format** {OMP}: the expanded view, now
+      showing the new version, holds in its "Tides" and "Format / PDF"
+      rows the same DOIs as before the new version (Rule 50). Press
+      "Edit", replace "Tides"' DOI with "10.1234/e2e-c3" and press
+      "Save": the table of contents on the book's page and on the older
+      version's page both show "10.1234/e2e-c3" in "Tides"' DOI line
+      (Rules 50, 54).
     - **Control**: before the change, the older version's page showed
       the first DOI (Rules 11, 43). <sup>sc</sup>
 
@@ -1145,7 +1389,10 @@ throwaway accounts. <sup>sc</sup>
 
     Given: a Journal Manager, on a scratch journal with the prefix
     "10.1234" and "DOI Versioning" "Yes" (a preprint server's default),
-    holding "Axolotl limb memory", published with its DOI as version 1.0.
+    holding "Axolotl limb memory", published with its DOI as version 1.0;
+    on a press "Chapters" and "Publication Formats" are ticked too and
+    the book carries the chapter "Tides", its "Chapter Page" ticked, and
+    a publication format "PDF", both with their DOIs.
 
     - **A major version**: on the work's workflow press "Create New
       Version" and choose "Major Revision"
@@ -1167,6 +1414,14 @@ throwaway accounts. <sup>sc</sup>
       window, replace the DOI in 2.1's block with "10.1234/e2e-v2" and
       press "Save": 2.0's page shows "https://doi.org/10.1234/e2e-v2", and
       1.0's page keeps its own DOI (Rules 12, 20, 43).
+    - **A press's chapter and format** {OMP}: in "View all" 2.0's block
+      had "Tides" and "Format / PDF" rows without a DOI before 2.0 was
+      published, and after its publish DOIs of their own, different from
+      those rows in 1.0's block; 2.1's block holds the DOIs 2.0's block
+      showed. Press "Edit" at the foot of the window, replace "Tides"'
+      DOI in 2.1's block with "10.1234/e2e-c4" and press "Save": the
+      table of contents on 2.0's page shows "10.1234/e2e-c4" in "Tides"'
+      DOI line, and on 1.0's page "Tides" keeps 1.0's DOI (Rules 50, 54).
     - **Control**: before the major version, the expanded view had no
       "There are … versions." line and no "View all" (Rule 20).
       <sup>sc</sup>
@@ -1447,31 +1702,36 @@ throwaway accounts. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Planned**:
-  - the Activity Log line a DOI made by itself adds after the Copyediting decision and after a publish under "Upon publication", and none under "Never" (Side effects, DOIs made by themselves)
-- **Budget** — variants:
+- **Rarely met**:
+  - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
+- **Nothing new to test**:
+  - the Site Administrator on the DOIs page: the Journal Manager's page of scenarios 1 and 3 (Actors row 2)
+  - another manager-level press role or the Site Administrator on a book's chapter and format rows: the Press Manager's rows of scenarios 4, 5 and 7 (Actors rows 2–3)
+  - "DOI Assigned" on a press counting a book's chapter and format DOIs of the ticked kinds: the same filter scenario 3 presses (Rule 51)
+  - a chapter's and a format's DOI lines on the book's page kept after their kind is unticked: the same stored-DOI rule as the "DOI:" line scenario 6 reads after "DOIs" is unticked (Rules 43, 54)
+  - a preprint server with Crossref chosen, "Preprints" unticked: DOIs off as in scenario 6 (Rules 1, 36)
+  - "Automatic Deposit" ticked: the scheduled deposit changes nothing a screen offers (Rule 41; Settings bullet 8)
+  - "Testing" ticked: deposits go to the agency's test service through the same screens; DataCite's "Test DOI Prefix" rides in scenario 16 (Fields; Settings bullet 10)
   - unticking "DOIs" and saving to store the other "Setup" changes, and the prefix message cleared by the untick (Rule 3; A1)
   - a "Save" with one DOI box refused and another stored showing both notices, and a typed DOI kept across a tab switch and lost on leaving the page (Rule 18)
   - the "Custom DOI Suffix Pattern" group left on screen with "DOIs" unticked, and "Save" greyed after a pattern refusal until the flagged box is typed in (Fields, "Setup")
   - "Deposit All" with nothing left to deposit (Rule 29)
   - paging past thirty items (Rule 23)
   - the "DOI Statuses" window (Rules 22, 31)
-  - a book page's publication-format "DOI:" lines {OMP} (Rule 43)
   - the agency plugins' Tools pages and their two links (Rule 44; A20)
-- **Nothing new to test**:
-  - the Site Administrator on the DOIs page: the Journal Manager's page of scenarios 1 and 3 (Actors row 2)
-  - a preprint server with Crossref chosen, "Preprints" unticked: DOIs off as in scenario 6 (Rules 1, 36)
-  - "Automatic Deposit" ticked: the scheduled deposit changes nothing a screen offers (Rule 41; Settings bullet 8)
-  - "Testing" ticked: deposits go to the agency's test service through the same screens; DataCite's "Test DOI Prefix" rides in scenario 16 (Fields; Settings bullet 10)
+  - a chapter without a DOI of its own showing its family's in the book's table of contents and, under "DOI Versioning" "Yes", on its own page {OMP} (Rule 54)
+  - the "Registration" filters on a press counting chapter and format DOIs whether or not their kind is ticked, and never a file's (Rule 51)
+  - the "Custom pattern" "Chapters" and "Publication Formats" boxes and their "%c", "%f" and "%x" symbols {OMP} (Rule 49)
+  - a publish under "Never" adding no "Submission metadata updated": no DOI is made, as in the saves of scenarios 5 and 7 that add no line (Side effects)
 - **Register carries it**:
-  - A2 (a made DOI under "None", and a peer review's under "Custom pattern", reading the prefix and a bare "/"; Rule 6b)
-  - A9 (a pattern symbol with nothing to fill it; Rule 6c)
+  - A2 (a made DOI under "None", and a peer review's under "Custom pattern", reading the prefix and a bare "/", a press's chapters and formats included; Rules 6b, 49)
+  - A9 (a pattern symbol with nothing to fill it, such as "%c" in a press's "Publication Formats" box; Rules 6c, 49)
   - A7 (a typed DOI outside the journal's prefix; Rule 18)
   - A10 ("Assign DOIs" under "No" while a newer version is unpublished; Rules 11, 17)
   - OPS4 (a preprint server's minor version's galleys; Rule 12)
   - A17 (a new major version leaving the earlier DOI's status; Rule 32)
   - OPS5 (a preprint server listing unfinished drafts; Rule 15)
-  - A11 (searching by a DOI's start; Rule 21)
+  - A11 (searching by a DOI's start, on a press by a chapter's, format's or file's DOI while its kind is ticked; Rule 21)
   - A12 (clearing a "Registration" filter after "Unregistered"; Rule 22)
   - A8 (the unnamed "DOI Statuses" button and row tick boxes; Fields, the DOIs page)
   - A13 (a bulk action confirmed with nothing ticked, and the silent refusals scenario 13 passes; Rules 24, 29)
@@ -1488,15 +1748,18 @@ Left out of the scenarios above, by reason:
   - A16 (a "Needs Sync" item's agency panel; Rule 30)
   - OPS2 ("Automatic Deposit" on a preprint server; Rule 41)
   - OMP1 ("Files" alone listing nothing, and "Needs DOI" ignoring a missing file DOI; Rules 4, 22)
+  - OMP2 (a DOI typed into a book's empty file row reported as not updated, yet stored; Rule 45)
+  - OMP3 (a chapter that cannot carry a DOI reading "Needs DOI"; Rule 47; scenario 4 passes it)
   - OPS3 (a preprint server's "Username" help; Fields, the Crossref block)
   - A21 (the server log's warning on a "Registration" tab "Save" without an agency; Fields, the Registration tab; scenarios 12 and 19 pass it)
-  - A23 (a galley's DOI made alone at a publish; Side effects)
+  - A23 (a journal's or a preprint server's galley given its DOI alone at a publish; Side effects)
 - **No seed**:
   - the "Export DOIs" download and "Items successfully exported": the test installs cannot reach the agency's site (Rule 29; Side effects)
   - a deposit the agency answers with an error: "Error", "View Error" and the "Registration Error Message" window (Rules 17, 33)
   - a deposit the agency accepted: the panel's "Registered" through the agency and "View Record" (Rules 30, 33)
 - **Owned by another feature**:
   - an unsaved change on the "Setup" or "Registration" tab lost on leaving the page (Fields; *Journal identity & about pages*, Rule 5)
+  - an older version's chapter page under "DOI Versioning" "No", meant to show the current version's chapter DOI, answering a server error {OMP} (Rule 54; *Monograph landing page*, its A19)
 
 ## Findings register
 
@@ -1524,6 +1787,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS2](#ojs2) | With DataCite, a published issue cannot be exported or deposited: both fail on the server | 🐞 | user-visible · crash: server | — |
 | [OJS3](#ojs3) | The publish window lists the ISSN warning twice | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's DOIs page ignores file DOIs when choosing which books to list | 🐞 | user-visible | — |
+| [OMP2](#omp2) | A DOI typed into a book's empty file row fails on the server, yet is stored | 🐞 | minor · crash: server | — |
 | [OPS1](#ops1) | The "DOIs" box reads "…to assigned to works published on this server." | 🐞 | minor | — |
 | [OPS3](#ops3) | The Crossref "Username" help reads "…see the advise above." | 🐞 | minor | — |
 | [OPS4](#ops4) | A minor version's galleys start without a DOI and get new ones | 🐞 | user-visible | — |
@@ -1533,8 +1797,9 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | A DOI typed by hand need not begin with the journal's prefix | ❓ | minor | — |
 | [A10](#a10) | Under "DOI Versioning" "No", "Assign DOIs" while a newer version is unpublished gives the DOI to the published version only | ❓ | user-visible | — |
 | [A16](#a16) | A "Needs Sync" item's agency panel says its metadata "has not been submitted" | ❓ | minor | — |
-| [A23](#a23) | A galley's DOI made alone at a publish: its Activity Log line untried | ❓ | minor | — |
+| [A23](#a23) | A journal's or a preprint server's galley given its DOI alone at a publish: its Activity Log line untried | ❓ | minor | — |
 | [OJS1](#ojs1) | "Never" does not stop an issue's DOI at "Publish Issue" | ❓ | minor | — |
+| [OMP3](#omp3) | A chapter that cannot have a DOI reads "Needs DOI" | ❓ | minor | — |
 | [OPS2](#ops2) | A preprint server offers "Automatic Deposit" but nothing runs it | ❓ | user-visible | — |
 | [OPS5](#ops5) | A preprint server's DOIs page lists drafts nobody has submitted | ❓ | minor | — |
 
@@ -1653,8 +1918,8 @@ Basis: probe, 2026-09-26. <sup>f-a10</sup>
 A phrase beginning with digits and a dot is meant to find the items
 whose DOI begins with it. On a journal it finds articles by their own
 DOI only (a galley's DOI finds nothing); on a press only books with a
-matching file DOI (the monograph's own DOI finds nothing, even typed
-whole); on a preprint server nothing at all, "10.1234/" included. A
+matching chapter, format or file DOI (the monograph's own DOI finds
+nothing, even typed whole); on a preprint server nothing at all, "10.1234/" included. A
 manager looking an item up by its DOI gets an empty or partial list and
 no hint why.
 Basis: probe, 2026-09-26. <sup>f-a11</sup>
@@ -1776,13 +2041,14 @@ timings untried).
 Basis: probe, 2026-09-28. <sup>f-a22</sup>
 
 <a id="a23"></a>
-**A23 — A galley's DOI made alone at a publish: its Activity Log line untried** · ❓ · minor.
-A galley (a press's chapter or format) added after the work got its DOI
-gets its own at the publish (Rule 5).
-Question: does that publish add "Submission metadata updated"?
-Lean: no; chapter and format DOIs made with the book's add none of their
-own.
-Basis: judgment, 2026-09-29. <sup>r</sup>
+**A23 — A journal's or a preprint server's galley given its DOI alone at a publish: its Activity Log line untried** · ❓ · minor.
+On a journal or a preprint server, a galley added after the work got
+its DOI gets its own at the publish (Rule 5).
+Question: does that publish add "Submission metadata updated" (on a
+journal, besides the line "Confirm" adds)?
+Lean: no; a journal's galley DOI typed by hand adds none, and on a
+press a chapter's or format's DOI made alone at a publish adds none.
+Basis: judgment, 2026-09-29. <sup>r</sup> <sup>q37</sup>
 
 ### OJS
 
@@ -1821,9 +2087,37 @@ A press ticks "Files" alone and saves: the side menu shows "DOIs" and
 the page opens on "Monographs", but the list reads "No items found.",
 so its files' DOIs can be neither seen nor assigned there. With
 "Monographs" also ticked the same books are listed with their file
-rows, but the "Needs DOI" filter still counts only the monograph's own
-DOI, so a book missing only its file DOI is not listed under it.
+rows, but the "Needs DOI" filter still ignores the file DOIs, so a book
+missing only its file DOI is not listed under it.
 Basis: probe, 2026-09-26. <sup>f-omp1</sup>
+
+<a id="omp2"></a>
+**OMP2 — A DOI typed into a book's empty file row fails on the server, yet is stored** · 🐞 · minor · crash: server.
+A Press Manager expands a published book whose file row ("PDF /
+article.pdf") has no DOI, presses "Edit", types a DOI into that row's
+box and presses "Save". Expected: "DOI(s) successfully updated", as for
+a chapter or format row. Instead the save fails on the server: the
+notice reads "Some DOI(s) could not be updated" and the box is empty
+again, yet after a reload the row holds the typed DOI and reads
+"Unregistered", and "Mark DOIs Registered" marks it like any other.
+The manager is told the DOI was not saved when it was. "Assign DOIs"
+fills file rows without the failure. It broke in a 2025 code clean-up,
+so a regression, not a choice.
+Since: 2025-08-20 · Basis: probe, 2026-09-29. <sup>f-omp2</sup>
+
+<a id="omp3"></a>
+**OMP3 — A chapter that cannot have a DOI reads "Needs DOI"** · ❓ · minor.
+On a press's DOIs page a chapter whose "Chapter Page" box is unticked
+and that has no DOI keeps a greyed row whose badge reads "Needs DOI",
+just above "Chapters without a landing page cannot have a DOI.", and
+still after "Assign DOIs". The "Needs DOI" filter leaves the book out
+when that chapter is all it lacks (Rule 51), so the badge and the
+filter disagree.
+Question: should a chapter that cannot carry a DOI show a status that
+asks for one?
+Lean: no, a minor 🐞; the badge asks for a DOI the same view says the
+chapter cannot have.
+Basis: probe, 2026-09-29. <sup>f-omp3</sup>
 
 ### OPS
 
@@ -1879,12 +2173,12 @@ Basis: probe, 2026-09-26. <sup>f-ops5</sup>
 ## Footnotes — mechanism & evidence
 
 <a id="fn-a"></a>
-**a** — Scope: a press's chapter and publication-format DOI rows
-(`DoiListPanelOMP.vue` `chapter`, `representation`;
-`omp/api/v1/_dois/BackendDoiController` chapter and format routes) are left
-to a later revision of this spec, their objects owned by
-*Chapters & work type* and *Publication formats & proof terms*; the
-`publication` and `file` rows are this spec's. Agency plugins in the
+**a** — Scope: every row type of a press's DOI list
+(`DoiListPanelOMP.vue` `publication`, `chapter`, `representation`,
+`file`) and the `omp/api/v1/_dois/BackendDoiController` chapter and
+format ops are this spec's (Rules 45–54, notes z1–z13, added
+2026-09-29); the chapters and formats themselves are
+*Chapters & work type*'s and *Publication formats & proof terms*'s. Agency plugins in the
 checkouts (ojs `3162c105bf`, omp
 `72a01a026`, ops `e9f6f4f550`, lib/pkp `1ad4a14bb2`, ui-library
 `03d1cee2`): `ojs/plugins/generic/crossref`, `ojs/plugins/generic/datacite`,
@@ -2574,7 +2868,7 @@ and a press changing or clearing a DOI and the Mark actions logged
 nothing. "Deposit DOIs" and "Deposit All" queued a job per work (and per
 issue) whose attempts went to `https://api.crossref.org/v2/deposits`
 and `https://mds.datacite.org/metadata`.
-Live-probed 2026-09-29 (Side effects, DOIs made by themselves), two runs,
+Live-probed 2026-09-29 (Side effects, "Activity Log, no mail"), two runs,
 the Journal Manager "Mia Manager" on scratch contexts with the prefix
 "10.1234", an item in Production (a preprint submitted) published from
 its workflow (a journal through "Review Publishing Details" › "Confirm"
@@ -2774,6 +3068,371 @@ and "DataCite Export/Registration Plugin" rows of their own, each with
 Section Editor and the Author get "The current role does not have access
 to this operation.".
 
+<a id="fn-z1"></a>
+**z1** — Read 2026-09-29 in the checkouts omp `3cd59e944`, its lib/pkp
+`17a1f01fed`, ui-library `03d1cee2`. Rows:
+`components/ListPanel/doi/DoiListPanelOMP.vue` `addDoiObjects()` walks
+each publication of the book and pushes, each under its
+`enabledDoiTypes` guard, the `publication` row
+(`submission.monograph` "Monograph"), one `chapter` row per
+`publication.chapters` (label the chapter's localized title, `disabled`
+while `!chapter.isPageEnabled && !doiObject`), one `representation` row
+per `publication.publicationFormats`
+(`manager.dois.formatIdentifier.file` "Format / {$format}", OMP
+`locale/en/manager.po`) and the `file` rows. The data:
+`omp/classes/publication/maps/Schema.php` (each chapter's `_data` with
+its `doiObject`; each format's with its `doiObject` and its files);
+chapters from `ChapterDAO::getByPublicationId()` (`ORDER BY spc.seq`),
+formats from the publication's `publicationFormats`.
+
+<a id="fn-z2"></a>
+**z2** — `DoiListItem.saveDois()`: a box on a row without a DOI sends
+`POST api/v1/dois`, then the row's `updateWithNewDoiEndpoint`, `PUT
+api/v1/_dois/chapters/{chapterId}` or `PUT
+api/v1/_dois/publicationFormats/{publicationFormatId}` with the new
+`doiId`; a change or an emptied box goes to `PUT` / `DELETE
+api/v1/dois/{id}` as for any row (note n). OMP
+`api/v1/_dois/BackendDoiController`: `editChapter()` answers 404
+(`api.404.resourceNotFound`) for an unknown chapter, 403
+`api.dois.403.editItemDoiCantBeAssigned` ("A DOI cannot be assigned to
+this item.") for a chapter with neither its page nor a DOI, 403
+`api.dois.403.editItemOutOfContext` for another press's chapter, 404
+`api.dois.404.doiNotFound` for an unknown DOI record; then stores the
+`doiId` through `ChapterDAO::updateObject()`. `editPublicationFormat()`
+does the same for a format, without the not-found check for the format
+and without a page condition; it answers an empty 200. Both sit behind
+`PKPBackendDoiController`'s roles (manager, Site Administrator) and
+`DoisEnabledPolicy` (note b). OMP `api/v1/dois/DoiController`
+`getPubObjectHandler()` maps `chapter` to `ChapterDAO` and
+`representation` to `PublicationFormatDAO` for the versioned edit and
+delete.
+
+<a id="fn-q27"></a>
+**q27** — Live-probed 2026-09-29 (Rules 17, 45), OMP, two runs, the
+Press Manager on scratch presses with the four kinds ticked, a
+published book with "Tides" ("Chapter Page" ticked), "Harbours"
+(unticked), "PDF" (with a file) and "EPUB" (no file): the rows read
+"Monograph", "Tides", "Harbours", "Format / PDF", "Format / EPUB",
+"PDF / article.pdf", each with its DOI ("Harbours" empty) and its
+badge. "Format / PDF" emptied and saved: "DOI(s) successfully updated",
+"Needs DOI" at once and after a reload (`DELETE api/v1/dois/{id}`);
+"10.1234/fmt-pdf-…" typed and saved: the same notice, "Unregistered"
+(`POST api/v1/dois`, then `PUT api/v1/_dois/publicationFormats/{id}`);
+the same on "Tides" (`PUT …/_dois/chapters/{id}`); the book's badge
+stayed "Unregistered". At every read the format rows stood in the
+order the "Publication Formats" page showed at that moment, also after
+a change had moved a format there; a chapter cannot be moved on the
+"Chapters" page, so the chapter rows follow the order the chapters were
+added in. Control, OJS and OPS: the view holds "Article" or "Preprint"
+and "PDF" only.
+
+<a id="fn-z3"></a>
+**z3** — OMP `classes/submission/Collector.php`: `getAllowedDoiTypes()`
+lists `publication`, `chapter`, `representation` (not `file`, note
+f-omp1), so either new kind alone keeps the list's query alive;
+`addOnDoiPageFilterToQuery()` lists Copyediting and Production, a
+published publication, and a publication carrying a publication,
+chapter or format DOI for the ticked kinds. The badge: `useDoi.js`
+`itemDepositStatus`, the first row of the current version.
+
+<a id="fn-q28"></a>
+**q28** — Live-probed 2026-09-29 (Rules 4, 46; Settings bullet 2), OMP,
+two runs, OJS and OPS as controls. Setup kinds: OMP "Monographs",
+"Chapters", "Publication Formats", "Files"; OJS "Articles", "Issues",
+"Article galleys, such as a published PDF", "Peer Review"; OPS
+"Preprints", "Preprint galleys, such as a published PDF"; neither OJS
+nor OPS offers a chapter or format box, OMP no "Issues" or "Peer
+Review". On OJS "Issues" ticked adds the "Issues" tab and "Peer Review"
+the "Peer Review {n}" row of a review whose "Notify Reviewers" email
+was sent; unticked, both go. A press with a published book ("Tides"
+with its page, "PDF"), a book at Copyediting and one at Submission, the
+published book's own DOI marked "Registered": "Chapters" alone lists
+the published and the Copyediting book, not the Submission one, each
+view holding only "Tides"; the published book's badge reads
+"Unregistered" (its "Tides" row; "Registered" with "Monographs" alone),
+the Copyediting book's "Unpublished". "Publication Formats" alone: the
+same books with only "Format / PDF". "Files" alone: "No items found.".
+
+<a id="fn-z4"></a>
+**z4** — OMP `classes/monograph/Chapter.php` `isPageEnabled()` (the
+stored box, or a DOI); `createDois()` (OMP
+`classes/submission/Repository.php` and `classes/publication/Repository.php`)
+mints a chapter's DOI only when `isPageEnabled()` and skips the others
+without an exception, so "Assign DOIs" reports success
+(`manager.dois.notification.assignDoisSuccess`). The list:
+`DoiListItem.vue` and `DoiItemVersionModal.vue` give a `disabled` row
+the label class `labelDisabled` and disable its input while editing;
+`DoiListPanelOMP.containsDisabled()` sets `hasDisabled` with
+`manager.dois.disabledChaptersDescription` ("Chapters without a landing
+page cannot have a DOI.", OMP `locale/en/manager.po`), shown under the
+table while any chapter row of any version of the book is disabled.
+The box: `publication.chapter.landingPage` "Chapter Page" (OMP
+`locale/en/submission.po`); its behavior once a DOI exists is the
+chapters spec's.
+
+<a id="fn-q29"></a>
+**q29** — Live-probed 2026-09-29 (Rule 47; Fields, an item's expanded
+view; Settings bullet 14), OMP, two runs in each of two checks.
+"Harbours" (page unticked, no DOI): its label greyed (class
+`labelDisabled`), its box disabled after "Edit", its badge "Needs DOI"
+(OMP3), and "Chapters without a landing page cannot have a DOI." after
+the table, before "Edit". Its "Chapter Page" ticked in "Edit Chapter"
+and saved: on the reloaded DOIs page the label plain, the note gone,
+the box editable. Unticked again, then "Assign DOIs" for the book, every
+other row filled: "Items successfully assigned new DOIs", "Harbours"
+still "Needs DOI" and greyed, the note back. A DOI typed into
+"Harbours" while its page was ticked, then the box unticked and saved
+in "Edit Chapter": the window reopens ticked with "(This chapter will
+always be shown on its own page because it has a DOI.)" and the row
+stays plain with its DOI. "Add Chapter" and "Edit Chapter" ("Edit
+Metadata") both carry "Chapter Page", unticked in "Add Chapter".
+Control, OJS and OPS: no greyed row and no such note.
+
+<a id="fn-z5"></a>
+**z5** — The moments (note h): `AssignDOIs` (a decision into
+Copyediting or Production) → OMP `submission\Repository::createDois()`
+on the current publication; `VersionDois` (a publish) → OMP
+`publication\Repository::createDois()`; "Assign DOIs" →
+`PKPDoiController::assignSubmissionDois()` →
+`submission\Repository::createDois()`. Each mints a DOI for every format
+of the version without one (no approval or availability check) and for
+every chapter with `isPageEnabled()` and none. Live-probed 2026-09-26
+(q12): the Accept gave the press's publication format its DOI.
+
+<a id="fn-q30"></a>
+**q30** — Live-probed 2026-09-29 (Rules 5, 48), OMP, two runs.
+"Upon reaching the copyediting stage": "Accept and Skip Review",
+recorded by the Press Manager and by a Series Editor, gave "Monograph",
+"Tides" (page ticked) and every format, "Proof" (neither approved nor
+available) included, their DOIs, and "Harbours" (no page) none. With
+only "Monographs" and "Files" ticked the Accept gave the monograph and
+"PDF / article.pdf" theirs; "Chapters" and "Publication Formats" ticked
+afterwards showed "Tides" and "Format / PDF" "Needs DOI". A format
+"Print" added in Copyediting got its DOI from "Send To Production".
+"Harbours"' page ticked and a format "EPUB" added after that decision:
+both "Needs DOI" until the publish gave them theirs. "Assign DOIs": a
+chapter "Coda" added to a published book with its page got its DOI only
+from it; under "Never", on an unpublished book, it gave "Monograph",
+"Tides", "Format / PDF" and "Format / Proof" theirs and "Harbours" none;
+on the book whose kinds were ticked late it filled "Tides" and "Format /
+PDF".
+
+<a id="fn-z12"></a>
+**z12** — Live-probed 2026-09-28 (U72 claim check, its note td14), on
+two presses and a seeded publish: with "Chapters" ticked and "Upon
+publication", publishing gave a DOI only to "Tides", whose "Chapter
+Page" was ticked; "Harbours", unticked, got none, and ticking its box
+after the publish gave it none. Live-probed again 2026-09-29 (Rule 48),
+OMP, two runs: publishing gave "Monograph", "Tides" and "Format / PDF"
+their DOIs and "Harbours" none; "Harbours"' page ticked after the
+publish: still none after a reload, until "Assign DOIs" gave it one
+("Items successfully assigned new DOIs").
+
+<a id="fn-z6"></a>
+**z6** — OMP `classes/doi/Repository.php` `mintChapterDoi()`,
+`mintPublicationFormatDoi()`: `default` → the eight-character suffix;
+otherwise `generateSuffixPattern()` → `getPubIdSuffixPattern()`
+(`doiChapterSuffixPattern` for a `Chapter`,
+`doiRepresentationSuffixPattern` for a `Representation`) → OMP
+`classes/plugins/PubIdPlugin::generateCustomPattern()`: `%p` the press
+acronym lower-cased, `%x` the object's stored `publisher-id` (left as
+typed when it has none), `%m` the submission ID, `%c` only with a
+chapter, `%f` only with a representation, `%s` only with a file; `none`
+→ the empty suffix. An empty "Chapters" box with "Chapters" ticked is
+refused by OMP `ContextService::validateContext()`, an empty
+"Publication Formats" box with that kind ticked by
+`PKPContextService::validate()` ("A DOI suffix pattern is required.",
+Fields).
+
+<a id="fn-q31"></a>
+**q31** — Live-probed 2026-09-29 (Rule 49), OMP, two runs, press
+acronym "JPK". "Submissions" "%p.%m", "Chapters" "%p.%m.c%c",
+"Publication Formats" "%p.%m.f%f.%c", a book published: "Monograph"
+"10.1234/jpk.156", "Tides" "10.1234/jpk.156.c50", "Format / PDF"
+"10.1234/jpk.156.f109.%c"; the book page's "Tides" link ends
+"/chapter/50" and its PDF link "/catalog/view/156/109/107". "%x":
+"Chapters" "%p.c%c.%x", "Publication Formats" "%p.f%f.%x", a Publisher
+ID typed on "Tides" (Edit Chapter › "Identifiers"), "Assign DOIs" on an
+unpublished book: "Tides" "10.1234/jpk.c51.tpidb", "Shoals" (no
+Publisher ID) "10.1234/jpk.c52.%x", the two formats "…f110.%x" and
+"…f111.%x", with "Items successfully assigned new DOIs". The "Chapters"
+box emptied with the kind ticked: "A DOI suffix pattern is required."
+under it and "Please correct one error." in the footer. "None", a book
+published: "Monograph", "Tides" and "Format / PDF" all "10.1234/";
+control, OJS and OPS under "None": the work and its galley "10.1234/".
+
+<a id="fn-z7"></a>
+**z7** — OMP `classes/publication/Repository.php` `version()` clones
+each format, its files and each chapter onto the new version, clearing
+their `doiId` only with `doiVersioning` on a major version. The
+versioned edit and delete (note k) find a chapter's family through
+`ChapterDAO::getMinorVersionsWithSameDoi()` (same source chapter,
+version stage and major, same DOI) and a format's through
+`PublicationFormatDAO::getMinorVersionsWithSameDoi()` (same version
+stage and major, same DOI). Live-probed 2026-09-26 (note k): under "No" a
+new version's formats and files started with their source's DOIs, and
+under "Yes" a major version's started without; no chapter was in that
+probe.
+
+<a id="fn-q32"></a>
+**q32** — Live-probed 2026-09-29 (Rule 50), OMP, two runs. "No":
+"Create New Version" on a published book: the new version's "Tides"
+and "PDF" carry the source's DOIs before and after its publish, the DOIs
+page showing the published version until then; "Tides" and "Format /
+PDF" changed on the DOIs page: both versions' book pages show the new
+DOIs; "Coda", first added in the new version with its page, got a DOI
+of its own on its publish. "Yes": a "Major Revision" 2.0's "Tides" and
+"PDF" started without DOIs and got their own on its publish, as did
+"Coda", added in 2.0; a "Minor Revision" 2.1 kept 2.0's; in "View all"
+(blocks "Version of Record 1.0 ({date})" and "Version of Record 2.1
+Unpublished") › "Edit", 2.1's "Tides" changed › "Save": 2.0 and 2.1
+carry the new DOI, 1.0 keeps its own.
+
+<a id="fn-z8"></a>
+**z8** — OMP `classes/submission/Collector.php`:
+`addHasDoisFilterToQuery()` (`hasDois` false: the current publication's
+DOI missing while `publication` is ticked, or a chapter with the
+`isPageEnabled` setting 1 and no DOI while `chapter` is, or a format
+with no DOI while `representation` is; true: any of those set for its
+ticked kind); `addDoiStatusFilterToQuery()` joins the current
+publication's, its chapters' and its formats' DOIs with no check of the
+ticked kinds, and no file DOIs; `addFilterByAssociatedDoiIdsToQuery()`
+unions the chapter, format and file DOIs, the publication branch sitting
+on the `1 = 0` query (note q18).
+
+<a id="fn-q33"></a>
+**q33** — Live-probed 2026-09-29 (Rules 21, 22, 51; A11), OMP, two
+runs, OJS and OPS as controls. Six published books, each with "Tides"
+(page), "Harbours" (no page) and "PDF" with a file: A every DOI; B its
+own and "PDF"'s; C its own and "Tides"'; D its own, "Tides"' and
+"PDF"'s, no file DOI; E "Tides"' only; F its file's only. The four
+kinds ticked: "Needs DOI" B, C, E, F (not A, missing only "Harbours",
+nor D, missing only its file DOI); "DOI Assigned" A–E. "Chapters"
+unticked: "Needs DOI" C, E, F; "DOI Assigned" A–D. "Publication
+Formats" unticked: "Needs DOI" B, E, F; "DOI Assigned" A–E.
+"Registration": A's "Tides" alone marked "Registered" while "Chapters"
+was the only kind ticked; with the four kinds, A's own DOI
+"Unregistered", "Registered" lists A, still A only with "Chapters" or
+"Publication Formats" unticked; F, whose only DOI (its file's) was
+marked "Registered", is never listed; "Unregistered" lists A–E.
+Search, the four kinds ticked: the start of A's "Tides", "Format / PDF"
+or file DOI finds A only; E's chapter DOI whole finds E; a book's own
+DOI, whole or its start, finds nothing; "10.1234/" lists every book
+with a chapter, format or file DOI, F included. "Chapters" unticked:
+the start of A's "Tides" DOI finds "No items found." (formats and files
+unticked not driven; note o reads the search over the ticked kinds'
+DOIs). On a preprint server nothing, "10.1234/" and a preprint's own DOI
+whole included; on a journal an article's own DOI, its start or whole,
+finds it and a galley's start nothing. Control for Rule 22: on OJS and
+OPS a work with its own DOI and its galley DOI cleared is under "Needs
+DOI".
+
+<a id="fn-z9"></a>
+**z9** — `PKPDoiController::markSubmissionsRegistered()`,
+`markSubmissionsUnregistered()`, `markSubmissionsStale()` act on OMP
+`doi\Repository::getDoisForSubmission()`: the current publication's
+own, chapter and format DOIs for the ticked kinds, and its file DOIs
+while "Files" is ticked. `publication\Repository::publish()` and
+`unpublish()` mark `getDoisForPublication()` (or, for a new major
+version, `getDoisForSubmission()`) "Needs Sync", from "Submitted" or
+"Registered" only (`DAO::markStale()`).
+
+<a id="fn-q34"></a>
+**q34** — Live-probed 2026-09-29 (Rules 32, 52), OMP, two runs, the four
+kinds ticked: "Mark DOIs Registered", "Mark DOIs Needs Sync" and "Mark
+DOIs Unregistered" each set the book's own, "Tides", "Format / PDF" and
+file rows together ("Items successfully marked registered", "…needs
+sync", "…unregistered"). A second book with "Chapters" unticked, "Mark
+DOIs Registered", "Chapters" ticked again: its own, format and file rows
+"Registered", "Tides" "Unregistered". Marked "Registered", then
+"Unpublish": every row "Needs Sync", the badge "Unpublished";
+"Publish" again: every row still "Needs Sync". Under "No", a
+"Registered" book's new version: every row still "Registered" while it
+was unpublished, "Needs Sync" once it was published. No row read
+"Submitted": a press has no agency, and an unpublished book cannot be
+marked "Registered" (Rule 26).
+
+<a id="fn-z10"></a>
+**z10** — The DOI list and `createDois()` read
+`$publication->getData('publicationFormats')`, every format of the
+version; OMP `pages/catalog/CatalogBookHandler.php` passes the book page
+only the formats with `getIsAvailable()`.
+
+<a id="fn-q35"></a>
+**q35** — Live-probed 2026-09-29 (Rules 43, 53, 54), OMP, two runs,
+the book pages read signed out. An approved, available format's details
+end "DOI: https://doi.org/{DOI}" as a link (headed "Details about this
+monograph" while it is the only such format). "EPUB" made "Not
+Available" after the publish ("Format Availability" › "OK"): its row
+keeps its DOI and "Unregistered"; the book's page drops its details and
+its download. "PDF"'s approval revoked ("Approved" › "Format Approval"
+› "OK") and "EPUB" not available, then published: both got DOIs and
+keep their rows; the page shows no format details and no format DOI,
+and "PDF", still available, stays a download link. A format neither
+approved nor available got its DOI at the Accept and from "Assign
+DOIs" (q30).
+
+<a id="fn-z11"></a>
+**z11** — OMP `pages/catalog/CatalogBookHandler.php`: for the table of
+contents, a chapter without a DOI takes `ChapterDAO::getMinorVersionsDoi()`
+(the same source chapter in another publication of the same version
+stage and major), whatever `doiVersioning` says; for a chapter page, the
+chapter's own DOI, else with `doiVersioning` `getMinorVersionsDoi()`,
+else, on a version that is not the current one,
+`getCurrentPublicationChapterDoi()`, which passes an integer to
+`whereIn()` and fails (the landing page spec's note f-a19 saw the server
+error). A format's DOI has no fallback. Templates:
+`templates/frontend/objects/monograph_full.tpl` (a chapter's `div.doi`,
+"DOI" and the resolving link; a format's `sub_item pubid` block, the
+"DOI" heading and the link, available formats only),
+`templates/frontend/objects/chapter.tpl` (`item doi`); none tests
+`enableDois` or the kind.
+
+<a id="fn-q36"></a>
+**q36** — Live-probed 2026-09-29 (Rule 54), OMP, two runs, signed out:
+a book published as 1.0 with "Chapters" unticked ("Tides", page ticked,
+no DOI), then "Chapters" and "Publication Formats" ticked, a "Minor
+Revision" 1.1 published and 1.1's "Tides" DOI typed on the DOIs page.
+1.0's table of contents shows 1.1's "Tides" DOI under "No" and "Yes"
+alike; 1.1's "Tides" page shows its own; under "Yes" 1.0's "Tides" page
+shows 1.1's; under "No" 1.0's "Tides" page answers a blank server error
+(500 on `{press}/catalog/book/{id}/version/{1.0 id}/chapter/{n}`),
+while a 1.0 chapter that holds its own shared DOI opens with it. 1.0's
+"PDF", without a DOI, shows no details and does not borrow 1.1's.
+"Chapters" and "Publication Formats" unticked and saved: every table of
+contents line, chapter-page line and 1.1's format DOI stays, under both
+settings.
+
+<a id="fn-z13"></a>
+**z13** — Live-probed 2026-09-28 (U70 claim check I28, all three apps):
+a publish that assigned a DOI (DOIs on, "Upon publication", none yet)
+wrote "Submission metadata updated" in the publisher's name, from the
+workflow and from a press's "Add Entry" alike (seed-facts). Mechanism:
+`lib/pkp/classes/publication/Repository.php` `edit()` logs
+`submission.event.general.metadataUpdated` on every edit, and
+`createDois()` stores the work's own DOI through it; chapters and
+formats are stored through `ChapterDAO::updateObject()` and
+`PublicationFormatDAO::updateObject()`, which log nothing, as do the
+`_dois` chapter and format ops.
+
+<a id="fn-q37"></a>
+**q37** — Live-probed 2026-09-29 (Side effects, "Activity Log, no
+mail"), OMP, OJS as control, two runs. "Upon publication", a book
+without its DOI: its publish added one "Submission metadata updated"
+under the Press Manager, and under the Press Editor for his publish of
+a second book; a publish on a book whose DOI came earlier added none.
+"Upon reaching the copyediting stage": "Accept and Skip Review" logged
+it under whoever recorded it (the Press Manager, a Series Editor), with
+"The metadata for file "article.pdf" was edited by {username}." for the
+file DOI; the journal's Accept logged it under the manager; a preprint
+server offers no such decision ("Upon reaching the production stage",
+"Upon publication", "Never"). No new line after "Send To Production"
+and a publish that gave chapters and formats their DOIs, "Assign DOIs"
+on books whose own DOI was set, "Format / PDF" cleared then typed, or
+"Tides" cleared, typed and changed; "Assign DOIs" on a book without its
+own DOI logged one line. On a journal a galley's DOI cleared, then
+typed, logged nothing.
+
 <a id="fn-sc"></a>
 **sc** — Scenario seeding. Scenario 1 reads `publicknowledge` as
 installed (DOIs on, the first kind ticked, no prefix, every agency
@@ -2792,7 +3451,8 @@ draft on OPS, and an `externalReviewer` in scenario 17. The DOI
 settings are the context keys of scenarios.md: `doiPrefix: '10.1234'`
 everywhere but scenario 2; `doiCreationTime` `publication` (scenarios
 3, 5, 18) or `never` (6, 7, 8, 14); `doiSuffixType: 'none'` (7);
-`enabledDoiTypes` with `representation` (5, 12), `file` (4, OMP),
+`enabledDoiTypes` with `representation` (5, 12; on OMP also 4, 7, 9,
+10, 11), `chapter` (OMP: 4, 5, 7, 9, 10, 11), `file` (4, OMP),
 `peerReview` (17) or `issue` (18); `doiVersioning` `false` on OPS in
 scenario 10 and `true` in 11; `context.acronym: 'JPK'` in scenario 8.
 Scenarios 11 and 15 put a journal on "DOI Versioning" "Yes", which
@@ -2806,18 +3466,28 @@ the DataCite plugin enabled alone in scenario 16, none in 12 and 19;
 Works through `POST scenarios/submission`: `decisions[]` for the
 Copyediting, Production and Review stages, `published: true`,
 `galleys[]` "PDF" (`article.pdf`, `preprint.pdf`), OMP's
-`publicationFormats[]` "PDF" with `file` (scenario 4), `submitted:
-false` for scenario 4's draft on OPS, `issue` into `issues[]` entries
+`publicationFormats[]` "PDF" (with `file` in scenarios 4 and 5) and in
+scenario 5 "EPUB" with `file` and `approved: false`, OMP's `chapters[]`
+"Tides" with `page: true` (4, 5, 7, 9, 10, 11) and "Harbours" without
+(4, 5), `submitted: false` for scenario 4's draft on OPS, `issue` into `issues[]` entries
 (published or not), and in scenario 17 `reviewRounds[].reviewers[]`
 `completed` with the context's `review.defaultReviewPublicVisibility`.
-The Activity Log and the mail catcher are read after each action.
+The Activity Log and the mail catcher are read after each action; on a
+journal a publish through "Review Publishing Details" › "Confirm" adds
+one more "Submission metadata updated" whatever the DOI setting
+(seed-facts), so scenario 5 counts the line on a press only. A press's
+formats can change order after any save (seed-facts), so the row order
+is read in scenario 4 only, before "EPUB" is added. "Harbours"'
+"Chapter Page" (scenarios 4, 5) and scenario 4's "EPUB" are set on
+screen.
 Queued deposits are never drained: their jobs fail at connection on
 the test installs (seed-facts), so no scenario reads a status after
 them. Scenarios 1–11 run on all three apps, 12 and 13 on OJS and OPS,
 14–18 on OJS, 19 on OMP. In the scenarios {its number} is the number
 the item's row shows, the submission's. Live-probed 2026-09-26: these
 keys seeded every scratch journal, press and preprint server of the
-check on all three apps.
+check on all three apps; the chapter and format keys are the U72 and
+U45 harness passes' (scenarios.md, 2026-09-28 and 2026-09-29).
 
 <a id="fn-f-a1"></a>
 **f-a1** — Live-probed 2026-09-23 (U08 claim check K4): the refusal after
@@ -2893,7 +3563,9 @@ unpublished) was seen on all three apps.
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-26 (q18, which gives the cause), all
-three apps, two runs each.
+three apps, two runs each. Live-probed again 2026-09-29 (q33) on a press
+with chapter and format DOIs, and on a journal and a preprint server:
+the same.
 
 <a id="fn-f-a12"></a>
 **f-a12** — `addFilter()` sets the published status with `unregistered`
@@ -3027,7 +3699,34 @@ admits the page. Live-probed
 file DOI, "Assign DOIs" offered with nothing to tick; with "Monographs"
 also ticked the books list with their "PDF / article.pdf" rows; a book
 with its own DOI and an empty file DOI is not under "Needs DOI" (two
-runs).
+runs). Live-probed again 2026-09-29 (q28, q33), OMP, two runs: "Files"
+alone "No items found."; with the four kinds ticked a book missing only
+its file DOI is not under "Needs DOI".
+
+<a id="fn-f-omp2"></a>
+**f-omp2** — Live-probed 2026-09-29 (Rule 45), OMP, two runs: on a
+published book whose "PDF / article.pdf" row had no DOI, a DOI typed
+into that row and "Save" showed "Some DOI(s) could not be updated" and
+an empty box; after a reload the row held the typed DOI, "Unregistered",
+and "Mark DOIs Registered" then marked it "Registered". A chapter or
+format box typed the same way saved normally. The request, `POST
+api/v1/_dois/submissionFiles/{id}` with a `PUT` override, answered 500
+in both runs: OMP `api/v1/_dois/BackendDoiController::editSubmissionFile()`
+stores the `doiId`, then calls
+`GenreDAO::getByContextId()->toArrayAssociative()`, a method lib/pkp's
+`DAOResultFactory` does not have (it has `toArray()` and
+`toAssociativeArray()`): "Call to undefined method
+PKP\db\DAOResultFactory::toArrayAssociative()". The call read
+`toArray()` until OMP commit `4f3ca0fd1` ("pkp/pkp-lib#11682 Optimize
+the software", 2025-08-20). "Assign DOIs" fills file rows without that
+request.
+
+<a id="fn-f-omp3"></a>
+**f-omp3** — Live-probed 2026-09-29 (Rule 47), OMP, two runs: the
+greyed "Harbours" row read "Needs DOI" beside "Chapters without a
+landing page cannot have a DOI." on a book after its publish, under
+"Never" and after "Assign DOIs"; the "Needs DOI" filter left out a book
+missing only that chapter (q33; the filter's rule is note z8).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — `ops/locale/en/manager.po`
@@ -3073,9 +3772,9 @@ a journal and a press listed no draft.
 | Item row, expanded view, edit and save | an item | AFFM-157 · AFFM-158 · AFFU-230 · AFFU-231 · AFFU-232 · AFFU-233 · AFFU-234 · AFFU-236 |
 | "View all" versions window | an item's expanded view | AFFM-159 · AFFU-235 · AFFU-241 · AFFU-242 · VUE-095 |
 | Agency panel, "View Record", "Deposit DOI(s)", "View Error" | an item's expanded view | AFFM-160 · AFFU-237 · AFFU-238 · AFFU-239 · AFFU-240 · AFFU-243 |
-| Row kinds per app | the expanded table | AFFU-244 (OJS) · AFFU-245 (OMP: its monograph row; the chapter and format rows are left to a later revision) · AFFU-246 (OPS) |
+| Row kinds per app | the expanded table | AFFU-244 (OJS) · AFFU-245 (OMP: the monograph, chapter, format and file rows) · AFFU-246 (OPS) |
 | DOI management API | `api/v1/dois` (list, one, add, edit, delete, assign, export, deposit, mark, `depositAll`, export download) | API-016 · API-052 (OJS issues) |
-| DOI attach API | `api/v1/_dois/{publications,peerReviews,authorResponses}/{id}`, OJS `galleys`, `issues`, OPS `galleys`, OMP `submissionFiles` (chapter and format routes left to a later revision) | API-001 · API-050 · API-058 · API-063 |
+| DOI attach API | `api/v1/_dois/{publications,peerReviews,authorResponses}/{id}`, OJS `galleys`, `issues`, OPS `galleys`, OMP `chapters`, `publicationFormats`, `submissionFiles` | API-001 · API-050 · API-058 · API-063 |
 | Registration save | `PUT api/v1/contexts/{id}/registrationAgency` | (the contexts API, cited) |
 | Background deposits | queued jobs | JOB-008 · JOB-009 · JOB-010 · JOB-030 (OJS) |
 | Scheduled automatic deposit | daily task, OJS | JOB-045 |
@@ -3094,4 +3793,5 @@ a journal and a press listed no draft.
 - Creation and versions: `lib/pkp/classes/observers/listeners/AssignDOIs.php`, `VersionDois.php`, `ops/classes/observers/listeners/AssignDOIsOnSubmission.php`; `lib/pkp/classes/publication/Repository.php` (`version()`, `publish()`, `unpublish()`, `getMinorVersionsDoi()`, `getReviewDoiItemsGroupedByPublication()`), app `classes/publication/Repository.php` (`createDois()`, `version()`), `ojs/classes/issue/Repository.php` (`createDoi()`), `ojs/classes/controllers/grid/issues/IssueGridHandler.php` (`publishIssue()`, `unpublishIssue()`), `ojs/classes/plugins/PubIdPlugin.php` (`generateCustomPattern()`, `suffixHasIssuePattern()`)
 - Jobs and tasks: `lib/pkp/jobs/doi/DepositSubmission.php`, `DepositPeerReview.php`, `DepositContext.php`, `ojs/jobs/doi/DepositIssue.php`, `lib/pkp/classes/task/DepositDois.php`, `ojs/classes/scheduler/Scheduler.php`
 - Agencies: `ojs/plugins/generic/crossref/` (`CrossrefPlugin.php`, `CrossrefExportPlugin.php`, `classes/CrossrefSettings.php`, `templates/crossmarkButton.blade`, `templates/index.tpl`, `resources/js/components/CrossrefCrossmarkButton.vue`, `CrossrefCitationDoiCheckTask.php`), `ops/plugins/generic/crossref/` (same names, no Crossmark), `ojs/plugins/generic/datacite/` (`DatacitePlugin.php`, `DataciteExportPlugin.php`, `classes/DataciteSettings.php`, `templates/index.tpl`); `ojs/classes/plugins/DOIPubIdExportPlugin.php`, `PubObjectsExportPlugin.php`; `lib/pkp/classes/plugins/IPKPDoiRegistrationAgency.php`
-- Reader: `ojs/pages/article/ArticleHandler.php`, `ops/pages/preprint/PreprintHandler.php`, `omp/pages/catalog/CatalogBookHandler.php`; `templates/frontend/objects/article_details.tpl` and the OPS and OMP counterparts
+- Reader: `ojs/pages/article/ArticleHandler.php`, `ops/pages/preprint/PreprintHandler.php`, `omp/pages/catalog/CatalogBookHandler.php`; `templates/frontend/objects/article_details.tpl` and the OPS and OMP counterparts; OMP `templates/frontend/objects/monograph_full.tpl`, `chapter.tpl`
+- A press's chapters and formats: OMP `classes/doi/Repository.php` (`mintChapterDoi()`, `mintPublicationFormatDoi()`, `getDoisForSubmission()`, `getDoisForPublication()`), `classes/submission/Repository.php` and `classes/publication/Repository.php` (`createDois()`, `version()`), `classes/submission/Collector.php`, `classes/plugins/PubIdPlugin.php` (`generateCustomPattern()`), `classes/monograph/Chapter.php` (`isPageEnabled()`), `classes/monograph/ChapterDAO.php` and `classes/publicationFormat/PublicationFormatDAO.php` (`getMinorVersionsWithSameDoi()`, `getMinorVersionsDoi()`, `getCurrentPublicationChapterDoi()`), `classes/publication/maps/Schema.php`, `api/v1/_dois/BackendDoiController.php` (`editChapter()`, `editPublicationFormat()`), `api/v1/dois/DoiController.php`, `classes/services/ContextService.php` (`validateContext()`); ui-library `components/ListPanel/doi/DoiListPanelOMP.vue`

@@ -32,7 +32,16 @@
  *   "Deposit all DOIs"), "DOI Updates Failed", the "DOIs for all versions"
  *   side window and the top-right notices.
  * - The reader side: the "DOI:" line of a work's page and an issue's page,
- *   and the article page's Crossmark button.
+ *   a book page's format DOI rows, and the article page's Crossmark button.
+ *   A book's table of contents and a chapter's page are
+ *   `apps/omp/playwright/pages/MonographLandingPages.js`'s.
+ *
+ * A press's expanded view (Rules 45, 47) adds chapter rows (labelled by the
+ * chapter's title), format rows ("Format / {name}") and file rows ("{format}
+ * / {file}"), all read through `doiRow`/`doiBox`/`doiBadge`; a chapter
+ * without its page has its label greyed (`labelDisabled`), its box disabled
+ * after "Edit", and the view carries the note `chapterPageNote` after the
+ * table (U45 revision claim checks ccR1/ccR2, 2026-09-29).
  *
  * DOM shapes (U45 claim check, `.reports/U45/screen-notes.md`, ccK1–ccK5,
  * and while the OJS suite was built, 2026-09-26): a row is
@@ -106,6 +115,7 @@ const DOIS_TEXT = {
     markStaleQuestion: (count) =>
         `You are about to mark DOI metadata records for ${count} item(s) as needing to be synced. The Needs Sync status can only be applied to previously submitted DOIs.`,
     columns: ['Type', 'DOIs', 'Status', 'Actions'],
+    chapterPageNote: 'Chapters without a landing page cannot have a DOI.',
     disableQuestion: 'Are you sure you want to disable this plugin?',
 };
 exports.DOIS_TEXT = DOIS_TEXT;
@@ -730,6 +740,27 @@ class DoisPage extends BasePage {
         return this.doiRows(row).locator('td label').allInnerTexts().then((a) => a.map((s) => s.trim()));
     }
 
+    /** A DOI row's type label ("Monograph", a chapter's title, "Format / PDF", "PDF / article.pdf"). */
+    doiLabel(row, type) {
+        return this.doiRows(row).locator('td label', {hasText: whole(type)});
+    }
+
+    /**
+     * Expect a press's chapter row greyed (its label `labelDisabled`: the
+     * chapter has no page and no DOI, Rule 47) or plain.
+     */
+    async expectGreyed(row, type, greyed = true) {
+        const label = this.doiLabel(row, type);
+        await expect(label).toHaveCount(1, {timeout: T});
+        if (greyed) await expect(label).toHaveClass(/(^|\s)labelDisabled(\s|$)/);
+        else await expect(label).not.toHaveClass(/(^|\s)labelDisabled(\s|$)/);
+    }
+
+    /** A press's note under the expanded table, "Chapters without a landing page cannot have a DOI." (Rule 47). */
+    chapterPageNote(row) {
+        return this.expanded(row).getByText(DOIS_TEXT.chapterPageNote, {exact: true});
+    }
+
     /** A DOI box (the row's text box). */
     doiBox(row, type) {
         return this.doiRow(row, type).locator('input[type="text"]');
@@ -1005,6 +1036,22 @@ function readerDoiLink(page) {
     return readerDoiItem(page).locator('.value a');
 }
 exports.readerDoiLink = readerDoiLink;
+
+/**
+ * A book page's publication-format DOI links: each approved, available
+ * format's details block (`.item.publication_format`) carries its "DOI:"
+ * row as `.sub_item.pubid` (Rules 43, 54).
+ */
+function readerFormatDoiLinks(page) {
+    return page.locator('.item.publication_format .sub_item.pubid a');
+}
+exports.readerFormatDoiLinks = readerFormatDoiLinks;
+
+/** A format details block's "DOI:" row heading. */
+function readerFormatDoiLabel(block) {
+    return block.locator('.sub_item.pubid .label');
+}
+exports.readerFormatDoiLabel = readerFormatDoiLabel;
 
 /** An issue's page's "DOI:" line (`.pub_id.doi`). */
 function issueDoiLink(page) {
