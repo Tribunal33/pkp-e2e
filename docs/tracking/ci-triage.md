@@ -394,7 +394,14 @@ trips.
   last death, inside the restart loop's one-second gap; U21 S8 green on
   its retry. None carried the annotation, since each started after the
   death line was written; the watch now reads back 5 s before a test's
-  start (`LOOKBACK_MS`), checked on that log.
+  start (`LOOKBACK_MS`), checked on that log. First annotated sighting the
+  same day: push run 36554899964 (`6aaa2e2`, OJS shard 3/3, the run's only
+  red): worker 8000 segfaulted (exit 139) at 10:31:02 under U01 S7's
+  sign-out (`ERR_EMPTY_RESPONSE`), and the retry, 0.6 s into the restart
+  gap, was refused at the Login page, so S7 failed; the `server-crash`
+  annotation named both. `php -S` logs a request's path only once it is
+  answered, so the crashing request shows as a bare `Accepted` line: the
+  path comes from the test's own step in the error context.
 - **Participants menu still open after the impersonation return** (U01
   S7, OJS, once). In the fourth OJS final of the U05 revision session
   (2026-09-13, four workers, `.reports/U05/final-run-ojs-attempt4.log`)
