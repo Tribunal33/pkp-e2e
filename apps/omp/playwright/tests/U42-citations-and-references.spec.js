@@ -31,8 +31,8 @@
  *   accessible names.
  * - A16 🐞: S5 presses a structured row's expander by its current name
  *   and only with the mouse; the zero-size ones are never touched.
- * - A18 🐞: every References change is carried by "Continue", which saves
- *   the step at once; the step rail is used only to go back to a step.
+ * - A18 ✅ (retired 2026-09-29: every step change saves): every References
+ *   change is still carried by "Continue"; the step rail only goes back.
  * - A20 🐞: S3's control reads that the book with no references shows no
  *   reference text; nothing reads its "References" heading either way.
  * - A5, A8, A11, A12, A15: not on these scenarios' OMP paths.

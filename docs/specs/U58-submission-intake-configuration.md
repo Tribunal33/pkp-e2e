@@ -161,21 +161,35 @@ shows only while its text is not empty. <sup>j</sup>
 
 1. **Where it is.** The side menu's "Settings" › "Workflow" opens
    "Workflow Settings" on its first tab, "Submission", with the
-   "Disable Submissions" side tab open. Pressing a side tab shows it and
-   changes the page address; the "Submissions" page's "Edit" links open
-   "Author Guidance" directly (Rule 25). A reload keeps the side tab that
-   was open ("Disable Submissions", "Author Guidance", "Metadata",
-   "Components" and "Contributor Roles" alike). A reload on a side tab of
-   the page's "Review" tab lands on "Submission" › "Disable Submissions"
-   instead ([Review setup & review forms](U29-review-setup-and-review-forms.md#a4)).
+   "Disable Submissions" side tab open; for the "Submissions" page's
+   "Edit" links, see Rule 25. The page address follows what was last
+   pressed, and a reload opens what it names:
    <sup>a</sup>
+   - 1a. Pressing a side tab shows it and puts its name in the address.
+     A reload keeps that side tab ("Disable Submissions", "Author
+     Guidance", "Metadata", "Components" and "Contributor Roles" alike).
+     An address naming a side tab, typed or bookmarked, opens it too.
+   - 1b. After pressing another tab of the page ("Review"; on a preprint
+     server "Preprint Server Library") and then "Submission" again, the
+     side tab that was open shows again, but the address names only
+     "Submission": a reload then opens "Disable Submissions". Pressing a
+     side tab again makes the reload keep it (1a).
+   - 1c. A reload on a side tab of the page's "Review" tab lands on
+     "Submission" › "Disable Submissions" instead
+     ([Review setup & review forms](U29-review-setup-and-review-forms.md#a4)).
 2. **Saving a tab.** "Save" on "Disable Submissions", "Author Guidance"
    or "Metadata" stores that tab's fields alone; "Saving" and then "Saved"
-   show beside the button, with no page notice. Text typed and not saved
-   stays in its box while the user moves to another side tab, and is gone
-   without any warning once the page is left, as on every Settings page
-   ([Journal identity & about pages](U07-journal-identity-and-about-pages.md),
-   Rule 5). <sup>c</sup> <sup>d</sup>
+   show beside the button, with no page notice. <sup>c</sup> <sup>d</sup>
+   - 2a. A change not saved stays while the user moves to another side
+     tab and back: text typed, a box ticked or unticked, a choice made
+     (the "Publisher ID" boxes included). Boxes and choices on
+     "Metadata" and "Disable Submissions" also stay through another tab
+     of the page and back; typed text was not tried that way.
+   - 2b. Leaving the page or reloading it drops every unsaved change
+     without any warning: the tabs show the saved values again, as on
+     every Settings page
+     ([Journal identity & about pages](U07-journal-identity-and-about-pages.md),
+     Rule 5). <sup>c</sup>
 3. **Languages.** While the journal uses more than one language for its
    forms, each "Author Guidance" box and a component's "Name" take one
    text per language. The "Author Guidance" form has one language button
@@ -812,6 +826,12 @@ recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Budget** — variants:
+  - a reload opening "Disable Submissions" after another tab of the
+    page and back (Rule 1b): scenario 3 reloads on a side tab it pressed
+  - unsaved boxes and choices kept through another tab of the page and
+    back, and dropped on leaving (Rules 2a, 2b): scenario 3 checks typed
+    text through a side tab and a reload
 - **Nothing new to test**:
   - the Editor and the Production Editor while their role keeps "Permit
     changes to Settings" (Actors row 1): the same tabs as the Journal
@@ -1168,7 +1188,16 @@ the two lib/pkp revisions (diffed). The side-tab list was seen live on
 one each on OMP and OPS, read 2.5 s after the reload: a reload on
 `…/workflow#submission/<tab>` kept each of the five side tabs open; a
 reload on a side tab of "Review" (`#reviewerGuidance`, OJS and OMP) landed
-on "Submission" › "Disable Submissions".
+on "Submission" › "Disable Submissions". Live-probed 2026-09-29 (Rules 1a,
+1b), two runs on each app, the Journal Manager on all three and the
+Editor on a journal and a press: a pressed side tab writes the one-part
+`…/workflow#<tab>` (for example `#metadata`), which a reload keeps; a typed
+`#submission/<tab>` or `#<tab>` opens that side tab and is rewritten to
+`#<tab>` on landing; pressing "Review" (a preprint server's "Preprint
+Server Library") writes `#review` (`#library`), and pressing "Submission"
+writes `#submission`, which shows the side tab last open but reopens on
+"Disable Submissions" after a reload; a side tab pressed after that round
+trip (`#components`) survived the reload.
 
 <a id="fn-b"></a>
 **b** — Access: `ManagementHandler` assigns the settings ops to
@@ -1226,7 +1255,18 @@ while submissions are disabled (the Journal identity spec's claim check);
 2026-09-23, text typed on "Author Guidance" and on the press's and
 server's settings forms dropped on leaving the page with nothing asking
 (the Submission files claim check), as the Journal identity spec's note
-td7 records for every Settings page.
+td7 records for every Settings page. Live-probed 2026-09-29 (Rules 2a,
+2b), two runs on each app, the Journal Manager on all three and the
+Editor on a journal and a press (the Editor unticking and choosing back
+on values the manager had saved): on "Metadata", the Keywords and
+"Categories" choices changed, two "Publisher ID" boxes and "Enable
+coverage metadata" ticked, and on "Disable Submissions" its box ticked,
+nothing saved. Every change stayed through "Components" and back and
+through the page's second tab ("Review", "Preprint Server Library") and
+back; leaving by "Settings" › "Distribution" and returning, and a
+reload, showed the stored values, with no `beforeunload`, confirm or
+alert in any of the four ways out. "Save" then sent `PUT contexts/{id}`
+(200) and the values showed on the page and after a reload.
 
 <a id="fn-d"></a>
 **d** — "Author Guidance":

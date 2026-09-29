@@ -322,10 +322,9 @@ one-line description under its heading (Rule 6). <sup>m</sup>
       or "No". "No" returns to the window as it was; "Yes" closes it and
       discards the changes. The "Edit" window does the same. <sup>td2</sup>
     - 11d. Leaving the workflow page while the window holds unsaved
-      changes raises the browser's leave-page prompt. So does leaving
-      after the window was closed with "Warning" › "Yes", though nothing
-      is left unsaved ⚠ [A22](#a22); after an untouched window's close it
-      does not. <sup>td16</sup>
+      changes raises the browser's leave-page prompt. After the window
+      closes, whether by a successful "Save", by "Warning" › "Yes" or
+      untouched, leaving the page asks nothing. <sup>td16</sup>
 <a id="discussion-window"></a>
 12. **The discussion window.** An item's name opens a side window titled
     with the item's name, with its badge (Rule 2) and, for whoever may
@@ -863,7 +862,7 @@ and the tooling recipe are in the footnote. <sup>s</sup>
      saving?" with "Yes" and "No"; press "No": the window is as it was,
      "Name" still reading "Layout question"; press Escape: the same
      question; press "Yes": the window closes, and every group of the
-     panel still reads "No Items" (Rule 11c) [A22](#a22).
+     panel still reads "No Items" (Rule 11c).
    - **An untouched window**: press "Add", then "Cancel": the window closes
      at once, with no question (Rule 11c).
    - **Control**: press "Add", type "Layout question" in "Name" and "Is
@@ -1331,6 +1330,8 @@ Left out of the scenarios above, by reason:
   - the "Select submission stage" list of "Workflow Files" offering the stages up to Production and never Done (Rule 14a): likely a bullet in scenario 1's "A workflow file", read before "Submission" is chosen
 - **Budget** — states:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
+- **Budget** — variants:
+  - the browser's leave-page prompt while the window holds unsaved changes, and none once it has closed (Rule 11d)
 - **Nothing new to test**:
   - the Editor, the Production editor and the Site Administrator (Actors, "Manager-level"): the Journal Manager's offer, which the scenarios read as the Journal Manager
   - the Guest Editor {OJS} (Actors rows 1, 9; Rule 15c): the Section Editor's offer, which scenarios 1, 8 and 11 read
@@ -1349,7 +1350,6 @@ Left out of the scenarios above, by reason:
   - A19 (the role line under a manager-level participant, per viewer; Rule 7)
   - A20 (a discussion left with one participant, refused on "Edit"; Rule 7e; scenario 11 marks it)
   - A21 (the error list's "Go to undefined"; Rule 11a; scenarios 2 and 8 mark it)
-  - A22 (the leave-page prompt after a discarded window; Rule 11d; scenario 2 marks it)
   - A23 (the convert hint shown to people without "Edit"; Rule 12)
   - A24 and OPS2 ("Workflow Files" stages that show an assistant nothing, and a preprint server's empty "Production"; Rule 14a)
   - A25 and A28 (a converted task not begun, and its History's "Task created by"; Rules 15b, 18; scenario 5 marks them)
@@ -1390,7 +1390,6 @@ an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | A task due today already reads "Overdue" | 🐞 | minor | — |
 | [A17](#a17) | A closed task past its due date still reads "This task is overdue. Remind the task owner…" | 🐞 | minor | — |
 | [A21](#a21) | The error list read to a screen reader calls the message box "undefined" | 🐞 | minor | — |
-| [A22](#a22) | Leaving the page after a window was discarded still raises the leave-page prompt | 🐞 | minor | — |
 | [A24](#a24) | An assistant's "Workflow Files" offers stages that show nothing | 🐞 | minor | — |
 | [A25](#a25) | A discussion turned into a task reads "Begin Task Upon Saving" but is not begun | 🐞 | minor | — |
 | [A26](#a26) | After "No" in a row box's question, a screen reader hears the opposite state | 🐞 | minor | — |
@@ -1411,6 +1410,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A30](#a30) | A task whose owner leaves the submission is left with no owner, and nothing says so | ❓ | minor | — |
 | [OPS2](#ops2) | A preprint server offers a "Workflow Files" source that never holds a file | ❓ | minor | — |
 | [A11](#a11) | Retired: "Cancel" asks before discarding, like the close control | ✅ | retired | — |
+| [A22](#a22) | Retired: leaving the page after a discarded window asks nothing | ✅ | retired | — |
 
 ### All apps
 
@@ -1618,14 +1618,6 @@ This field is required.", in the "Add", "Edit" and template windows. A
 screen-reader user cannot tell which field is meant.
 Basis: probe. <sup>[f-a21](#fn-a21)</sup>
 
-<a id="a22"></a>
-**A22 — The leave-page prompt after a discarded window** · 🐞 · minor.
-After the "Add" or "Edit" window is closed with "Warning" › "Yes",
-nothing is left unsaved, yet the next reload of the workflow page, or
-the next move away from it, raises the browser's leave-page prompt.
-After an untouched window's close it does not.
-Basis: probe. <sup>[f-a22](#fn-a22)</sup>
-
 <a id="a23"></a>
 **A23 — The convert hint shows to people who cannot convert** · ❓ · minor.
 A discussion's window tells every participant "You can convert this into
@@ -1753,6 +1745,9 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 <a id="a11"></a>
 **A11 — "Cancel" loses typed text silently** · ✅ · retired. Overturned on screen 2026-09-23 (all three apps): "Cancel" on a changed window asks "Warning" like the close control and Escape (Rule 11c); the 2026-09-19 observation of a silent "Cancel" did not reproduce. <sup>[f-a11](#fn-a11)</sup>
 
+<a id="a22"></a>
+**A22 — The leave-page prompt after a discarded window** · ✅ · retired. Overturned on screen 2026-09-29 (all three apps): leaving the page after a window was closed with "Warning" › "Yes" asks nothing, as after a save or an untouched close (Rule 11d); the 2026-09-23 prompt came from test tooling reloading the page within a fraction of a second of the close. <sup>[f-a22](#fn-a22)</sup>
+
 ---
 
 <a id="footnotes"></a>
@@ -1810,7 +1805,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 **q** — `DiscussionManagerTemplates.vue` (hidden in display mode): `discussion.form.templatesLabel`, `Search` with `common.findTemplate` "Find Template", buttons `{submission.query.task|discussion.name} - {title}` (CSS `uppercase`), lines `discussion.template.taskDescription` / `discussion.template.discussionDescription`, disabled for discussion templates while a task is edited, `common.noItemsFound` "No items found." when empty. `useDiscussionManagerTemplates.js` fetches `editTaskTemplates?stageId=…&search=…` (`orderByPkDesc`). `setValuesFromTemplate()` calls `…/stages/{stageId}/tasks/fromTemplate/{templateId}` (`EditorialTaskController::fromTemplate()` → `Template::promote()`), then sets `title`, `taskInfoAdd`, `dateDue` (now + `dueInterval`), clears `taskInfoAssignee`, sets `description` from `notes[0].contents`; the participants `promote()` computes are returned but never set. On an existing item `onSelectTemplate()` asks `taskTemplate.apply` / `taskTemplate.applyConfirmation`. Placeholders: `EditorialTask::compileDescription()` renders the head note through `TemplateVariables` on save (sender = the note's writer, recipients = the other participants; authors blanked for a double-anonymous reviewer). The search request goes out when Enter is pressed, twice per Enter, not on typing; the clear control refetches the whole list. Live-probed 2026-09-23 (Rule 10; all three apps): the list newest first; "No items found." on a press's Internal Review; Enter narrowing by every word of a name or text, in any case, inside longer words; any search holding "task(s)" or "discussion(s)" failing (A4); a task template setting "Due Date" to today plus one week or three months with no owner; "Participants" unchanged (A5); "Apply Template" with "Yes" and "No", discussion templates greyed while a task is edited, task templates live while a discussion is edited; placeholders shown as typed and filled on "Save", in the first message and the email; a template added in Settings filling like an installed one; a preprint server's "Assign Editor" (OPS1).
 
 <a id="fn-r"></a>
-**r** — `handleFormSubmission()`: on success `setInitialState()`, `onDataChangedFn()` (panel refetch), `closeModal()`; no notify. Client-side required check `Form.vue` → `validator.required` "This field is required.", summary `form.errorSummaryOne` / `form.errorSummaryMany`. `useFormChanged(form, …, {warnOnClose: true})`: `beforeunload` handler while changed; a close callback registered with `SideModal` asks `common.warning` "Warning" / `form.dataHasChanged` with `common.yes` / `common.no`. The form's `@cancel` calls the same injected `closeModal`, so "Cancel" asks too (A11, retired). The `beforeunload` handler stays armed after a discard (A22); why was not traced. Live-probed 2026-09-23 (Rule 11; Rule 25b; all three apps): no "… errors detected!" line anywhere; the footer "Please correct one error." / "Please correct {n} errors." with "Jump to next error" and no request; the screen-reader list's "Go to undefined" (A21); "Cancel", the close control and Escape all asking on a changed "Add", "Edit" or template window, a "Find Template" search alone not counting, "No" keeping the typed text, "Yes" discarding it; an untouched window closing at once; a leave-page prompt after a typed name, and after a "Yes" discard (A22), none after an untouched close; after a successful save the runs disagreed (one saw a prompt on the next reload, one did not), so the spec states nothing there; a save closing the window with no notice. Test run 2026-09-23 (Rule 11a; scenario 2; all three apps): after the task was refused with nobody ticked, ticking two participants left "This field is required." under the owner list, and choosing an owner let "Save" send again; on OJS a press of "Save" before that waited on a `disabled` button for three minutes, the window showing "Please correct one error." with the owner's line only, the message under "Participants" gone.
+**r** — `handleFormSubmission()`: on success `setInitialState()`, `onDataChangedFn()` (panel refetch), `closeModal()`; no notify. Client-side required check `Form.vue` → `validator.required` "This field is required.", summary `form.errorSummaryOne` / `form.errorSummaryMany`. `useFormChanged(form, …, {warnOnClose: true})`: `beforeunload` handler while changed; a close callback registered with `SideModal` asks `common.warning` "Warning" / `form.dataHasChanged` with `common.yes` / `common.no`. The form's `@cancel` calls the same injected `closeModal`, so "Cancel" asks too (A11, retired). The `beforeunload` handler goes on the form's `onUnmounted`: with animations off, the closed form outlives its window by about 0.3–0.5 s and still counts as changed, so a reload issued in that gap asks (A22, retired); with the closing slide running, the window and the handler go together. Live-probed 2026-09-23 (Rule 11; Rule 25b; all three apps): no "… errors detected!" line anywhere; the footer "Please correct one error." / "Please correct {n} errors." with "Jump to next error" and no request; the screen-reader list's "Go to undefined" (A21); "Cancel", the close control and Escape all asking on a changed "Add", "Edit" or template window, a "Find Template" search alone not counting, "No" keeping the typed text, "Yes" discarding it; an untouched window closing at once; a leave-page prompt after a typed name, and after a "Yes" discard (A22, retired), none after an untouched close; a save closing the window with no notice. Live-probed 2026-09-29 (Rule 11d; A22; all three apps, two runs; the Journal Manager and a Section Editor): no prompt on a reload or a typed address 2 s or 15 s after a save or a discard; a prompt only for a reload issued within the gap above with animations disabled; with the closing slide running, none even at once (td16). Test run 2026-09-23 (Rule 11a; scenario 2; all three apps): after the task was refused with nobody ticked, ticking two participants left "This field is required." under the owner list, and choosing an owner let "Save" send again; on OJS a press of "Save" before that waited on a `disabled` button for three minutes, the window showing "Please correct one error." with the owner's line only, the message under "Participants" gone.
 
 <a id="fn-s"></a>
 **s** — Accounts: `users.md` (the seeded roster; `admin`/`admin`, everyone else their username twice; throwaway accounts the username twice). Where each scenario runs: 1–7, 10 and the first part of 11 on the seeded journal, press or preprint server `publicknowledge`, with scratch submissions from `POST scenarios/submission` (submitter `author.alex`); 8, 9 and the "Open" part of 11 on scratch contexts from `POST scenarios/context` with throwaway users. On `publicknowledge` the Journal Manager is `manager.maya`, the Section Editor `sectioneditor.ana` and the second Section Editor of 6 `sectioneditor.omar` (`sectioneditor.ravi` on the preprint server), both assigned automatically through the submission's section (`ART`, the press's series `monographs`, `PRE`), the Copyeditor `copyeditor.carla`, the Reviewers `reviewer.julia` and `reviewer.paul`, the Author `author.alex`. Stages: Production is `decisions: ['skipExternalReview', 'sendToProduction']` on OJS and OMP and the submitted seed itself on OPS; Copyediting (10) `decisions: ['skipExternalReview']` with `participants: [{username: 'copyeditor.carla', role: 'copyeditor'}]`; the review round (11) `decisions: ['sendExternalReview']` with `reviewRounds: [{reviewers: [{username: 'reviewer.julia', status: 'accepted'}, {username: 'reviewer.paul', status: 'accepted'}]}]`. An item a scenario's given names is seeded with `tasks[]`, which saves it as the "Add" window does, acting as its creator; its emails are faked, so a given item leaves nothing in a mailbox, and every step in a scenario's body is driven on screen. Recipes: 1 — `files: [{file: 'article.pdf'}]` on OJS and OMP (OPS refuses `files`), no tasks; 2, 3 — no tasks; 4 — `{title: 'Update the references', type: 'task', creator: 'manager.maya', participants: ['manager.maya', 'sectioneditor.ana'], owner: 'sectioneditor.ana', dateDue: <three days before today>}`, begun by the default `started`, a past `dateDue` being the key's one lifted rule; 5 — `{title: 'Cover image', creator: 'manager.maya', participants: ['manager.maya', 'sectioneditor.ana']}`; 6 — `{title: 'Proof corrections', creator: 'manager.maya', participants: ['manager.maya', 'sectioneditor.ana', 'author.alex'], message: 'Please send your corrections.'}`, whose seeded Tasks rows are the ones "Delete" takes back; 7 — `{title: 'Proof queries', creator: 'sectioneditor.ana', participants: ['sectioneditor.ana', 'author.alex']}` and `{title: 'Editorial notes', creator: 'manager.maya', participants: ['manager.maya', 'sectioneditor.ana']}`, read as `author.alex`, then `manager.maya`; 8 — a scratch context with throwaway `manager`, `sectionEditor` and `author` users and one submission at Production with the section editor in `participants[]` and `{title: 'Layout notes', creator: <the manager>, participants: [<the manager>, <the section editor>]}`, the templates at the install default; the Section Editor's refusal is the manager's Settings › Workflow address typed; 9 — a scratch context with the same three users; the box is ticked on screen first, then the submission is seeded, submitted with the section editor in `participants[]`, which runs the auto-add at the submit as the wizard's does; 10 — `{title: 'Copyedit the manuscript', type: 'task', creator: 'manager.maya', participants: ['manager.maya', 'copyeditor.carla'], owner: 'copyeditor.carla', dateDue: <fourteen days after today>, started: false}` and "Editorial notes" as in 7, read as `copyeditor.carla`, then `manager.maya`; 11 — the anonymous part on `publicknowledge`, whose "Default Review Mode" is "Anonymous Reviewer/Anonymous Author" (seed-facts); the "Open" part on a scratch journal or press created with `review: {defaultReviewMode: 'open'}` and throwaway `sectionEditor`, `author` and three `externalReviewer` users, seeded as `accepted`, `invited` and `declined`; "Cancel Reviewer" is driven on screen, since no seed key cancels a request. On a preprint server the roster has no `copyeditor.carla`, `layouteditor.leo` or `reviewer.julia`. A seeded `accepted` reviewer lands on step 1 of the review form, which has no panel; the panel shows from step 3. No seed key ages a first message, so the past-the-hour state (Rule 15c) has no seed. Live-probed 2026-09-23: `participants[]`, `tasks[]`, `taskTemplates[]` (with `include`, `roles`, `dueInterval`), `users[]` (with `disabled`), `reviewRounds[]` and `review.defaultReviewMode` each seeded what the screens then showed.
@@ -1912,7 +1907,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 **td15** — Live-probed 2026-09-23 (Rule 25a; all three apps): an untouched Production Stage reads, top to bottom, "Galleys Complete", "Ready for Production", "Assign Editor", "Discussion (Production)" on a journal; "Index Completed", "Index Requested", "Galleys Complete", "Ready for Production", "Assign Editor", "Discussion (Production)" on a press; "Assign Editor", "Discussion (Production)" on a preprint server.
 
 <a id="fn-td16"></a>
-**td16** — Live-probed 2026-09-23 (Rule 11d; A22; all three apps): a reload with a typed name raised the leave-page prompt; so did one after a "Warning" › "Yes" discard; none after an untouched "Cancel" or with no window opened. After a successful save one drive saw the prompt and another did not; the spec states nothing there.
+**td16** — Live-probed 2026-09-23 (Rule 11d; A22; all three apps): a reload with a typed name raised the leave-page prompt; none after an untouched "Cancel" or with no window opened; one after a "Warning" › "Yes" discard (A22, retired). Live-probed 2026-09-29 (Rule 11d; A22; all three apps, two runs; the Journal Manager and a Section Editor): a reload or a typed address 2 s after a typed name or a ticked participant raised the prompt, none with the window open and untouched; none 2 s or 15 s after a successful "Save" (a discussion on the Submission, Copyediting or Production stage, a task with owner and due date, an "Edit" rename) or after a "Warning" › "Yes" discard of the "Add", "Edit" or template window, nor after an untouched close; with the window's closing slide running, none even for a reload issued at once. A second reload never asked.
 
 <a id="fn-td17"></a>
 **td17** — Live-probed 2026-09-23 (Rule 4; all three apps): after a participant replied today the cell was a numbered list of two, "{username} ({roles}) posted a response on 2026-09-23" then "Discussion created by {username} ({roles}) on 2026-09-23"; with no reply, one line.
@@ -1987,7 +1982,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 **f-a21** — Note r: the message box field has no label, so the error summary's link reads `undefined`. Live-probed 2026-09-23 on all three apps, in the "Add", "Edit" and template windows.
 
 <a id="fn-a22"></a>
-**f-a22** — Note r. Live-probed 2026-09-23 on all three apps: the browser's `beforeunload` dialog on the next load after each "Warning" › "Yes", the "Edit" window's included (td16).
+**f-a22** — Note r. Live-probed 2026-09-23 on all three apps: the browser's `beforeunload` dialog on the next load after each "Warning" › "Yes", the "Edit" window's included (td16). Live-probed 2026-09-29 on all three apps, two runs: no dialog 2 s or 15 s after a "Warning" › "Yes" of the "Add", "Edit" or template window, nor at once with the closing slide running; with animations disabled a reload issued at once still met it, as did one right after the test tooling's settle wait (4 of 6), because the closed form's handler outlives its window by about 0.3 s (note r). The 2026-09-23 reloads were of that kind, so the entry is retired.
 
 <a id="fn-a23"></a>
 **f-a23** — Note t. Live-probed 2026-09-23 on all three apps: the hint with no "Edit" button for a participating Section Editor who did not create the item, a Copyeditor, the Author and a Reviewer (OJS, OMP).

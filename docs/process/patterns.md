@@ -648,7 +648,11 @@ step's discussions panel) is on screen before `screen()` reads, and after
 a press on a page already landed it waits out the requests the press
 started (a pager's debounced fetch, a Reviewer Files grid's, a save's
 "Refreshing data"), which Playwright's `networkidle`, fired once per page
-load, does not (U23, U26, U27 claim checks); `tag(prefix)`
+load, does not (U23, U26, U27 claim checks). It does not wait out a
+closed side window's page-leave handler: with animations off the closed
+form keeps it for about half a second, so a leave-page prompt read right
+after a close is real only if it is still there 2 s later (U37 I29
+withdrew A22 on that); `tag(prefix)`
 makes a scratch tag that follows the tag conventions above. `signIn` uses
 the roster password rule, so it works for scratch users too; `signIn(page,
 user, {contextPath})` goes through that journal's own login page (which

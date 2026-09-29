@@ -1279,10 +1279,13 @@ config-file settings.
   too, so the References page's progress box reads "Processing references
   - 0/{n}" and the page refreshes itself every 7 s while it shows (U42
   claim check K2, 2026-09-24).
-- In the submission wizard, "Continue" saves the step at once; moving by
-  the step rail sends nothing, the wizard's own autosave comes about a
-  minute later, and "Submit" does not wait for it (U42 claim check K4,
-  2026-09-24; U42 A18).
+- In the submission wizard every step change ("Continue", the step rail,
+  "Back") saves the step's changed forms within a second, before "Review"
+  lists them, and "Save for Later" saves first too; while the author stays
+  on a step, the autosave comes about a minute after the footer's "Last
+  saved" time, not after the typing; leaving by another address sends
+  nothing. All three apps, two runs (U42 claim check I29, 2026-09-29,
+  `shared/playwright/checks/U42/I29/`; U42 A18 retired).
 - The "URN" plugin is disabled on every fresh journal and press; `plugins:
   {urnpubidplugin: {enabled, settings}}` seeds it and its settings window's
   keys. A preprint server has no URN plugin: its Plugins grid shows the

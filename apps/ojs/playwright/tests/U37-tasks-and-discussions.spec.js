@@ -18,8 +18,8 @@
  *   press, never "Participants".
  * - A21 🐞: S2 and S8 read the field errors and the summary line, never the
  *   screen-reader list under it.
- * - A22 🐞: every page accepts the browser's leave-page prompt; no test
- *   asserts whether it appears.
+ * - A22 ✅ (retired 2026-09-29): every page still accepts the browser's
+ *   leave-page prompt; no test asserts whether it appears.
  * - A25 🐞, A28 🐞: S5 reads the converted task's row, owner, date and
  *   messages, never whether it is started or its History's first line.
  * - A26 🐞: S4, S5 and S9 read the state after "No" only after a reload.
@@ -49,9 +49,9 @@
  * "Reply to this comment at …" line), then by its text. Every absence is
  * read settled (the panel's three groups fetched, an exact list, a mail
  * read after a control) and paired with a positive control taken the same
- * way (M4, M6). A page that discarded or saved a window can raise the
- * browser's leave-page prompt on its next load (spec A22): every page
- * accepts it. S9's auto-add box is ticked on screen, then the submission is
+ * way (M4, M6). A move issued at once after a side window closes can
+ * still meet the closing form's leave-page handler (spec Rule 11d): every page
+ * accepts the prompt. S9's auto-add box is ticked on screen, then the submission is
  * seeded, as footnote s says; S11's "Cancel Reviewer" is the Reviewers
  * panel's own control. Waits are web-first (A5). Everything runs in the
  * parallel `ojs` project.
@@ -174,8 +174,8 @@ async function seedJournal(ojsApi, tag, accounts, extra = {}) {
 
 /**
  * A signed-in page for `username`. It accepts the browser's leave-page
- * prompt a discarded or saved window can leave armed (spec A22), so a
- * later navigation never hangs on it.
+ * prompt a move issued at once after a side window closes can still meet
+ * (spec Rule 11d), so a later navigation never hangs on it.
  */
 async function pageFor(asUser, username) {
     const page = await (await asUser(username)).newPage();

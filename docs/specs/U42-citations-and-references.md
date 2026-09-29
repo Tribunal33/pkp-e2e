@@ -289,13 +289,19 @@ typed. Nothing asks first. The one exception is an author row added in
     the box, one reference per line, in line order. Here, unlike Rule 5, a
     line repeated in the box stays a repeated reference.
     <sup>b</sup> <sup>k</sup> <sup>q14</sup>
-    - **When the step saves.** "Continue" saves at once. Otherwise the
-      wizard's autosave saves about a minute after typing stops
-      ([→ autosave](U21-submission-wizard.md#autosave)). Opening another
-      step from the step rail saves nothing, so a change carried to
-      "Review" that way can be lost on "Submit" ⚠ [A18](#a18). Leaving the
-      page before a save (another address, the dashboard) drops the typed
-      text without a question.
+    - **When the step saves.** Moving to another step saves the step at
+      once: "Continue", the step rail, or the footer's "Back" (from
+      "Details" to "Upload Files"). So a change carried to "Review" by
+      "Continue" or the step rail is listed there, and "Submit" › "Submit"
+      completes the submission with it. "Save for Later" also saves the
+      step before the "Saved for Later" screen shows.
+    - **Staying on the step, or leaving it.** While the author stays on
+      the step, the wizard's autosave saves about a minute after the time
+      the footer gives as "Last saved", not a minute after typing stops,
+      so a change typed late in that minute is saved within seconds
+      ([→ autosave](U21-submission-wizard.md#autosave)). Leaving the page
+      before a save (another address, the dashboard) drops the typed text
+      without a question.
     - **On "Review".** The "Review" step's "Details" section lists the
       references one per line under "References", or "None provided".
     - **Required and empty.** When the journal requires references and the
@@ -872,6 +878,9 @@ Left out of the scenarios above, by reason:
     expander in a new version (Rule 26)
   - typing dropped without a question on "Close" or on leaving the page
     (Fields & validation, last paragraph)
+  - a References change carried to "Review" by the step rail, or saved
+    by the footer's "Back" to "Upload Files" or by "Save for Later"
+    (Rule 16)
   - "Source Type" and "Type" in "Edit citation", which arrive with
     nothing chosen and have no empty entry (Fields & validation)
 - **Nothing new to test**:
@@ -911,8 +920,6 @@ Left out of the scenarios above, by reason:
   - A16 (the expander's name and keyboard, and the invisible "Collapse"
     buttons; Rules 4, 12)
   - A17 ("Edit" saving the text of another reference; Rule 6)
-  - A18 (a References change carried to "Review" by the step rail lost
-    on "Submit"; Rule 16)
   - A19 (the ordering arrows with no names for a screen reader; Rule 23;
     scenario 6 passes them)
   - A20 (the empty "References" heading on a book or a preprint page;
@@ -929,6 +936,8 @@ Left out of the scenarios above, by reason:
   - the lookup's requests to Crossref, OpenAlex and ORCID, their
     retries and the failed mark (Side effects bullet 2)
 - **Owned by another feature**:
+  - the wizard's autosave while the author stays on the step (Rule 16;
+    *Submission wizard*, scenario 3)
   - the Author of an unposted preprint, who gets every control on both
     pages (Actors row 2; *Publication metadata*'s edit gate, scenario 3)
   - a Section Editor or an Author typing the settings page's address
@@ -965,13 +974,13 @@ entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | The author boxes in "Edit citation" have no names for a screen reader | 🐞 | minor | — |
 | [A15](#a15) | A data citation's identifier can never be removed | 🐞 | minor | — |
 | [A16](#a16) | The row expander is always named "Collapse" and ignores the keyboard; rows with nothing to expand carry an invisible one | 🐞 | minor | — |
-| [A18](#a18) | A References change carried to "Review" by the step rail is lost on "Submit" | 🐞 | user-visible | — |
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | minor | — |
 | [A20](#a20) | A book or preprint with no references shows an empty "References" heading | 🐞 | minor | — |
 | [A5](#a5) | A reference whose lookup failed for good looks exactly like one still waiting | ❓ | minor | — |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
 | [A17](#a17) | "Edit" accepts a repeated reference that "Add" drops | ❓ | minor | — |
 | [A1](#a1) | A Site Administrator with no role in the journal is offered the References controls, but every change is refused | ✅ | retired | — |
+| [A18](#a18) | A References change carried to "Review" by the step rail is lost on "Submit" | ✅ | retired | — |
 | [OMP1](#omp1) | A book with no references shows an empty "References" heading | ✅ | retired | — |
 
 ### All apps
@@ -1137,18 +1146,6 @@ Question: should a repeated reference be refused or kept? Lean: one rule
 for all three paths; which one is the team's call.
 Basis: probe, 2026-09-24. <sup>f-a17</sup>
 
-<a id="a18"></a>
-**A18 — A References change carried to "Review" by the step rail is lost on "Submit"** · 🐞 · user-visible.
-Back on "Details" after a first "Continue", an author changes the
-References box and opens "Review" from the step rail. Nothing is saved at
-that move: "Review" still lists the old references, and on a journal or a
-press "Submit" › "Submit" completes the submission with them. The change is
-lost without a word. On a preprint server "Review" also showed the old list
-in most reads, but the submitted preprint kept the change. "Continue", or
-about a minute on "Review", saves the change in time (the wizard's
-[autosave](U21-submission-wizard.md#autosave)).
-Basis: probe, 2026-09-24. <sup>f-a18</sup>
-
 <a id="a19"></a>
 **A19 — The ordering arrows have no names** · 🐞 · minor.
 In ordering mode each row's up and down arrows on the Data Citations table
@@ -1168,6 +1165,9 @@ Basis: probe, 2026-09-24. <sup>f-a20</sup>
 
 <a id="a1"></a>
 **A1 — A Site Administrator with no journal role cannot change references** · ✅ · retired. Withdrawn 2026-09-24: a Site Administrator's last role in a journal cannot be removed ([User invitations](U06-user-invitations.md)), so the state has no way in, and the reachable neighbour, an administrator left with an unassigned assistant role, gets the read-only page (Actors row 2). <sup>f-a1</sup>
+
+<a id="a18"></a>
+**A18 — A References change carried to "Review" by the step rail is lost on "Submit"** · ✅ · retired. Overturned 2026-09-29: re-checked on all three apps, the step rail saves the step on the move, so the change is listed on "Review" and submitted with "Submit" › "Submit" (Rule 16). <sup>f-a18</sup>
 
 <a id="omp1"></a>
 **OMP1 — A book with no references shows an empty "References" heading** · ✅ · retired. Widened 2026-09-24: the preprint page shows the same empty heading, so the finding moved to [A20](#a20). <sup>f-omp1</sup>
@@ -1262,10 +1262,22 @@ two runs each: the "Details" step reads "Title * Required", "Keywords",
 "Chapters" after "Funders"); the box is labelled "References" at "Ask"
 and "References * Required" at "Require…"; the Review step lists "Data
 Citations" (titles only), "Data Availability Statement", "References" and
-"Funders" after the abstract. "Continue" saved the step at once; a move by
-the step rail to a step already reached sent nothing, and the autosave came
-about a minute after typing stopped. Text typed in the box and left by
-another address was gone on return, with no question.
+"Funders" after the abstract. "Continue" saved the step at once. Text
+typed in the box and left by another address was gone on return, with no
+question. Re-checked 2026-09-29 (Rule 16's saves), all three apps, two
+runs each: every step move ("Continue"; the step rail at once, after a
+1.5 s pause, after keyboard typing, and followed by a reload; the
+footer's "Back" on a "Details" step opened by a Review section's "Edit")
+sent the step's save (`PUT …/publications/{id}` with `citationsRaw`)
+0.25–0.75 s after the press, before the Review check (`PUT …/submit`, `_validateOnly`);
+"Review" listed the new lines, "Submit" › "Submit" completed, and the
+Journal Manager's "References" page listed only the new lines, as did the
+box and "Review" after a reload. "Save for Later" sent the same save
+before `PUT …/saveForLater` and the "Saved for Later" screen. Typed at
+once on arriving, the autosave came 57–60 s later; typed 40 s in, with
+the footer at "Last saved 39–42 seconds ago", it came 16–20 s after the
+typing. Leaving for My Submissions 1.5 s after a change again sent
+nothing and asked nothing.
 
 <a id="fn-c"></a>
 **c** — Settings. `PKPMetadataSettingsForm`: `FieldMetadataSetting`
@@ -2053,14 +2065,19 @@ was accepted (200), and the list showed "Beta trial 2021" twice, also after
 a reload.
 
 <a id="fn-f-a18"></a>
-**f-a18 — A18 evidence.** Note b and *Submission wizard* note i (the
-autosave timer). Live-probed 2026-09-24, two runs per app: on OJS and OMP
-the changed list never reached the submission (the Journal Manager's rows
-kept the old list; on OJS the late autosave answered 401 after the
-submission had completed); on OPS "Review" showed the old list in three of
-four reads, but both submissions carried the new one. Waiting about a
-minute on "Review" saved the change, and the list there then updated in
-place.
+**f-a18 — A18 evidence.** Recorded from a probe of 2026-09-24, two runs
+per app: on OJS and OMP the list changed on "Details" and carried to
+"Review" by the step rail never reached the submission, and on OPS
+"Review" showed the old list in three of four reads. Overturned by a
+re-check on 2026-09-29, on checkouts of 2026-09-28 (ojs `9d9f116f38`, omp
+`480045c32`, ops `5da5bc48ad`, lib/pkp `fab29cfeca`, ui-library
+`19802b78`): note b; in four forms of the rail move, two runs per app on
+all three apps, the move sent the step's save within 0.29–0.67 s,
+"Review" listed the new lines (on OPS in every read), and "Submit" ›
+"Submit" completed with them; no write followed in the 8 s after
+completion. The save on a step change is `SubmissionWizardPage.vue`'s
+`currentStepIndex` watcher calling `addAutosaves()`, code older than
+2026-09-24, so the re-check does not explain the earlier reading.
 
 <a id="fn-f-a19"></a>
 **f-a19 — A19 evidence.** Note m (`TableCellOrder`, icon-only buttons).
