@@ -665,6 +665,26 @@ links under the list. <sup>g</sup>
   "Yes") every saved change or clearing adds the line too. Otherwise
   changing or clearing a DOI, and the three Mark actions, log nothing.
   <sup>r</sup>
+- **Activity Log, DOIs made by themselves.** The work's own DOI, made at
+  an automatic moment (Rule 5), adds one "Submission metadata updated" to
+  its Activity Log: <sup>r</sup>
+  - **Publishing under "Upon publication"**: under the user who
+    publishes, beside "The submission was published." ("…posted." on a
+    preprint server); on a press one line in all when the book's
+    chapters and publication formats get their DOIs with it.
+  - **A decision under "Upon reaching the copyediting stage"** (journal,
+    press): under the user who records the decision moving the work into
+    Copyediting, beside the decision's line ("{name} skipped the review
+    stage and sent this submission to the copyediting stage." for
+    "Accept and Skip Review").
+
+  A publish under "Never", with "DOIs" unticked, or of a work that
+  already has its DOI adds none; whether a galley (on a press, a chapter
+  or format) first given its DOI at that publish adds one is open
+  ⚠ [A23](#a23). On a journal, "Review Publishing Details" › "Confirm"
+  adds its own line, whatever the DOI settings
+  ([Publish, schedule & versions](U49-publish-schedule-and-versions.md),
+  Side effects). <sup>r</sup>
 - **Head tags.** With the Crossmark button shown, the article page's
   head also carries the version's DOI for the Crossmark widget
   ([Search-engine metadata & analytics](U20-search-engine-metadata-and-analytics.md)
@@ -759,8 +779,8 @@ links under the list. <sup>g</sup>
   deposit carries of the references, and the Crossref plugin's hourly
   reference-DOI matching (Rule 40).
 - **[Submission activity log & notes](U38-submission-activity-log-and-notes.md)**:
-  the Activity Log lines that "Assign DOIs" and a typed DOI add (Side
-  effects).
+  the Activity Log lines that "Assign DOIs", a typed DOI and a DOI made
+  by itself add (Side effects).
 - **[Reviewer assignment & management](U27-reviewer-assignment-and-management.md)**
   and **[Review setup & review forms](U29-review-setup-and-review-forms.md)**:
   a review's "Public Visibility" and "Mark as Complete" (Rule 7).
@@ -1427,6 +1447,8 @@ throwaway accounts. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the Activity Log line a DOI made by itself adds after the Copyediting decision and after a publish under "Upon publication", and none under "Never" (Side effects, DOIs made by themselves)
 - **Budget** — variants:
   - unticking "DOIs" and saving to store the other "Setup" changes, and the prefix message cleared by the untick (Rule 3; A1)
   - a "Save" with one DOI box refused and another stored showing both notices, and a typed DOI kept across a tab switch and lost on leaving the page (Rule 18)
@@ -1468,6 +1490,7 @@ Left out of the scenarios above, by reason:
   - OMP1 ("Files" alone listing nothing, and "Needs DOI" ignoring a missing file DOI; Rules 4, 22)
   - OPS3 (a preprint server's "Username" help; Fields, the Crossref block)
   - A21 (the server log's warning on a "Registration" tab "Save" without an agency; Fields, the Registration tab; scenarios 12 and 19 pass it)
+  - A23 (a galley's DOI made alone at a publish; Side effects)
 - **No seed**:
   - the "Export DOIs" download and "Items successfully exported": the test installs cannot reach the agency's site (Rule 29; Side effects)
   - a deposit the agency answers with an error: "Error", "View Error" and the "Registration Error Message" window (Rules 17, 33)
@@ -1510,6 +1533,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | A DOI typed by hand need not begin with the journal's prefix | ❓ | minor | — |
 | [A10](#a10) | Under "DOI Versioning" "No", "Assign DOIs" while a newer version is unpublished gives the DOI to the published version only | ❓ | user-visible | — |
 | [A16](#a16) | A "Needs Sync" item's agency panel says its metadata "has not been submitted" | ❓ | minor | — |
+| [A23](#a23) | A galley's DOI made alone at a publish: its Activity Log line untried | ❓ | minor | — |
 | [OJS1](#ojs1) | "Never" does not stop an issue's DOI at "Publish Issue" | ❓ | minor | — |
 | [OPS2](#ops2) | A preprint server offers "Automatic Deposit" but nothing runs it | ❓ | user-visible | — |
 | [OPS5](#ops5) | A preprint server's DOIs page lists drafts nobody has submitted | ❓ | minor | — |
@@ -1750,6 +1774,15 @@ Expected: the menu closes once the window opens, as after a press with
 no hold, or when the window closes 1.8 s after the press (other
 timings untried).
 Basis: probe, 2026-09-28. <sup>f-a22</sup>
+
+<a id="a23"></a>
+**A23 — A galley's DOI made alone at a publish: its Activity Log line untried** · ❓ · minor.
+A galley (a press's chapter or format) added after the work got its DOI
+gets its own at the publish (Rule 5).
+Question: does that publish add "Submission metadata updated"?
+Lean: no; chapter and format DOIs made with the book's add none of their
+own.
+Basis: judgment, 2026-09-29. <sup>r</sup>
 
 ### OJS
 
@@ -2541,6 +2574,30 @@ and a press changing or clearing a DOI and the Mark actions logged
 nothing. "Deposit DOIs" and "Deposit All" queued a job per work (and per
 issue) whose attempts went to `https://api.crossref.org/v2/deposits`
 and `https://mds.datacite.org/metadata`.
+Live-probed 2026-09-29 (Side effects, DOIs made by themselves), two runs,
+the Journal Manager "Mia Manager" on scratch contexts with the prefix
+"10.1234", an item in Production (a preprint submitted) published from
+its workflow (a journal through "Review Publishing Details" › "Confirm"
+› "Publish"), History read right after and after a fresh load. "Upon
+publication", no DOI yet, all three apps: the publish made the DOI
+(`10.1234/…` in `dois` after, none before) and History gained "The
+submission was published." ("The submission was posted."), "Mia Manager
+moved this submission to the Done stage." and one "Submission metadata
+updated" under "Mia Manager"; on a press the same publish made the
+book's, one chapter's ("Chapter Page" ticked; the unticked chapter got
+none) and the format's DOI with that single line and no file or format
+line. The line follows the publish and Done lines in `event_log`; the
+History grid lists same-day rows in no fixed order. A DOI already made
+under "Upon reaching the copyediting stage" ("…production stage"),
+"Never", and "DOIs" unticked: no DOI line at publish, all three apps. On a journal every such publish also
+logged one "Submission metadata updated" at the panel's "Confirm",
+already present while the publish window was open (four contexts, DOIs
+on and off). OJS and OMP, "Upon reaching the copyediting stage": the
+manager recorded "Accept and Skip Review" (Notify Authors, Select Files,
+"Record Decision"); the DOI was made and History gained "Mia Manager
+skipped the review stage and sent this submission to the copyediting
+stage.", the decision email and one "Submission metadata updated" under
+"Mia Manager".
 
 <a id="fn-q21"></a>
 **q21** — Live-probed 2026-09-26 (Rule 32; A17), all three apps: a

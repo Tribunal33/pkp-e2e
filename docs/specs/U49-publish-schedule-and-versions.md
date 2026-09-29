@@ -135,13 +135,19 @@ page, described in *Catalog management*. It saves onto the shown version.
    table above. <sup>h</sup>
 3a. **What counts as saved {OJS}.** Any "Save" of the Publication
    Settings page saves an issue choice, whatever field it was pressed
-   for, because the page always stores the Issue Assignment it shows. So
-   on a new version whose stage came from the version dialog, saving only
-   an Update Type is enough for the publish button to skip the panel. On
+   for, because the page always stores the Issue Assignment it shows. On
    a journal with no issues the page stores no issue choice, and the
    panel still opens after a save there. The stage comes from an earlier
    act such as a panel save, the version dialog or a prior publish (the
    settings page itself carries no stage field). <sup>h</sup>
+3b. **A new version's first publish {OJS}.** A version made by an
+   untouched version dialog (Rule 11) has its stage, but the issue it
+   copied does not count as a saved choice. So its first press of the
+   publish button opens the panel, arriving with the copied stage,
+   "Minor Revision" and, for an article in an issue, "Assign To
+   Current/Back Issue" with that issue chosen. A save of its Publication
+   Settings page beforehand, even of only an Update Type, makes the
+   button skip the panel (Rule 3a). <sup>h</sup>
 4. **The confirmation window.** The final window is titled "Schedule For
    Publication" on a journal and press, and "Post the preprint" on a
    preprint server. It shows, in order: an optional warning list ("The
@@ -172,7 +178,7 @@ page, described in *Catalog management*. It saves onto the shown version.
 
    | Choice | Outcome on confirm |
    |---|---|
-   | Don't Assign To An Issue | Published at once, no issue ("…published immediately without any issue association…"). A newer version of an article already in an issue, published this way, stays listed in that issue ([Issues](U50-issues.md#a17)) |
+   | Don't Assign To An Issue | Published at once, no issue ("…published immediately without any issue association…"). A newer version of an article already in an issue, published this way, stays listed in that issue, on its page and in its current-issue web feeds, under the newer version's title ([Issues](U50-issues.md#a17)) |
    | Assign To Future Issue and Publish Immediately | Published at once as continuous publication, listed with its still-unpublished issue ("…published immediately as continuous publication even though it is assigned to {issue} which is not published yet…") |
    | Assign To Future Issue and Schedule Only | **Scheduled**. The window's text promises "…published when {issue} is published…" and its button reads "Schedule For Publication" |
    | Assign To Current/Back Issue | Published at once into the chosen issue ("…published immediately in {issue}…") |
@@ -248,12 +254,19 @@ page, described in *Catalog management*. It saves onto the shown version.
    you don't want this to be scheduled to be posted?" / "…don't want this
    to be posted?". Confirming sets the version back to Rule 1's
    unpublished readout: "Unscheduled" ("Unposted") on the version readers
-   would get, "Unpublished" on any other. The reader page goes down only
-   when no published version remains. Unpublishing a later version while
-   an earlier one is still published leaves the page live serving that
-   earlier version, with its "Versions" list one entry shorter. Everything
-   else is KEPT: the publication date, the issue choice {OJS}, the version
-   number, the filled copyright fields. <sup>q</sup>
+   would get, "Unpublished" on any other. Everything else is KEPT: the
+   publication date, the issue choice {OJS}, the version number, the
+   filled copyright fields. <sup>q</sup>
+9a. **Unpublishing one of several versions.** The reader page goes down
+   only when no published version remains. Unpublishing a later version
+   while an earlier one is published leaves the page live serving that
+   earlier version, its "Versions" list one entry shorter and headed by
+   it. The other way round, "Unpublish" ("Unpost") on an earlier version
+   while a later one is published sets only that version back: it reads
+   "Status: Unpublished" with "Preview" and "Publish" ("Post"), the later
+   version stays "Published" ("Posted"), and the reader page stays live as
+   the later version (see [Article landing page](U13-article-landing-page-and-reading.md),
+   its Rule 7b). <sup>q</sup>
 10. **Publishing again re-decides from what was kept.** Because the date
     and issue survive (Rule 9), a re-publish behaves like a first publish
     with those values. On a journal the "Review Publishing Details" panel
@@ -375,7 +388,14 @@ page, described in *Catalog management*. It saves onto the shown version.
   unpublished."; no unschedule wording exists). A preprint server words
   them with posted/unposted throughout, the scheduling lines included
   ("The submission was scheduled to be posted." / "A new version was
-  scheduled to be posted."). <sup>aa</sup>
+  scheduled to be posted."). Two more lines, both "Submission metadata
+  updated" under the acting user's name, can come with a publish. On a
+  journal, "Confirm" in "Review Publishing Details" adds one before the
+  publish line, whatever the DOI settings. A publish that makes the
+  work's DOI ("Upon publication" with none made yet; see
+  [DOIs](U45-dois.md#doi-creation)) adds one after it: a single line,
+  even when a press's chapters and formats get their DOIs with it.
+  <sup>aa</sup>
 - **Workflow closes on the final version.** Publishing a Version of Record
   (Author Original on a preprint server) also records the submission's
   workflow as finished. Unpublishing the last one reopens it. The activity
@@ -480,7 +500,8 @@ each scenario's seeding are in its footnote.
      "Status / Submission published." and the catalog notice (Rule 17).
    - **The Activity Log**: the workflow's Activity Log & Notes → History
      shows "The submission was published." and "{user} moved this
-     submission to the Done stage." (Side effects).
+     submission to the Done stage.", and on a journal also "Submission
+     metadata updated", which the panel's Confirm added (Side effects).
    - **The Author's side**: the Author finds the "Publication Published"
      email in the mail catcher, its sender the journal's name at the
      principal contact's address, not the Journal Manager (a preprint
@@ -519,11 +540,11 @@ each scenario's seeding are in its footnote.
    Given: Journal Manager, on scenario 1's published submission, and its
    submitting Author.
 
-   - **"Unpublish"**: the Publication area now offers "Unpublish"
+   - **"Unpublish"**: the Publication area offers "Unpublish"
      ("Unpost" on a preprint server); press it: the red dialog asks "Are
-     you sure you don't want this to be published?" ("…to be posted?" on
-     a preprint server); confirm: the head returns to "Status:
-     Unscheduled" ("Unposted"), and the reader page is gone (Rule 9).
+     you sure you don't want this to be published?" ("…to be posted?");
+     confirm: the head reads "Status: Unscheduled" ("Unposted"), and,
+     signed out, the reader page answers 404 Not Found (Rules 9, 9a).
    - **The Activity Log**: adds "The submission was unpublished." (worded
      with "unposted" on a preprint server) and "{user} returned this
      submission to the workflow." (Side effects).
@@ -601,9 +622,9 @@ each scenario's seeding are in its footnote.
      version of your submission, "{title}", was published." while no new
      "Publication Published" email arrives for them (Side effects).
    - **Unpublish the new version**: press "Unpublish" ("Unpost") on it
-     and confirm: the reader page stays live serving "Version of Record
-     1.0" ("Author Original 1.0"), its "Versions" list one entry shorter
-     (Rule 9).
+     and confirm: the reader page stays live, its "Versions" list reading
+     only "{date} (Version of Record 1.0)" ("Author Original 1.0")
+     (Rule 9a).
    - **Control**: scenario 1's Author, with the email left on, received
      both the email and the notice (Side effects). <sup>s5</sup>
 
@@ -909,10 +930,21 @@ each scenario's seeding are in its footnote.
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a new version of an article in an issue, made by an untouched
+    version dialog, opening "Review Publishing Details" on its first
+    publish with the copied stage, "Minor Revision" and that issue
+    chosen (Rule 3b)
+  - "Unpublish" ("Unpost") on the earlier of two published versions:
+    only it reads "Status: Unpublished" with "Preview" and "Publish"
+    ("Post"), the later one stays "Published" ("Posted") and the reader
+    page stays live (Rule 9a)
+  - a journal's "Submission metadata updated" line from the panel's
+    Confirm, read in scenario 1's Activity Log (Side effects)
 - **Budget** — states:
   - the publish button skipping the details panel on a journal with
     issues, after a Publication Settings save on a version that already
-    has its stage (Rules 3, 3a): scenario 5 runs on a journal with no
+    has its stage (Rules 3, 3b): scenario 5 runs on a journal with no
     issues, where the panel opens
   - a version created from a stage-less source, named "Unassigned version
     ({date})" (Rule 11a): no scenario opens "Create New Version" before an
@@ -993,6 +1025,11 @@ Left out of the scenarios above, by reason:
   - DOIs marked for deposit, the ORCID deposit, the search index and the
     press's catalog availability (Side effects; *DOIs*, *ORCID
     integration*, *Catalog management*)
+  - the "Submission metadata updated" line of a publish that makes the
+    work's DOI (Side effects; *DOIs*)
+  - a newer version published with "Don't Assign To An Issue" staying
+    listed on its issue's page and in the current-issue web feeds
+    (Rule 5; *Issues*, its A17)
   - the metadata pages and the edit locks published and scheduled states
     impose (Cross-feature interactions; *Publication metadata*)
   - the Submission stage's "Schedule For Publication" shortcut
@@ -1462,6 +1499,13 @@ Current/Back Issue" with no issue, and its Confirm was refused in place
 with "This field is required." under the group. On a journal with no
 issues the page's save carried no status (no Issue Assignment group);
 the OJS suite's scenario 5 opens the panel there after its details save.
+Live-probed 2026-09-29, two runs (Rule 3b; scratch journal, two
+articles published into Vol. 1 No. 1 (2025)): each version made by an
+untouched dialog was stored with the issue and `status` 1, and its
+first "Publish" opened the panel on "Version of Record (VoR)", "Minor
+Revision", "New Version", "Assign To Current/Back Issue" and "Vol. 1
+No. 1 (2025)"; both had been retitled first, and a Title & Abstract
+save stores no issue choice.
 
 <a id="fn-i"></a>
 **i** — `useWorkflowVersionForm('createNewVersion')`: `versionSource`
@@ -1580,7 +1624,15 @@ per Rule 5's table with the matching buttons (the schedule-only
 branch's "Schedule For Publication", the other three "Publish"); the
 zero-issue journal showed no issue fields at all and published
 issueless. Friction: the panel's description still says "…confirm the
-issue it belongs to…" on a zero-issue journal.
+issue it belongs to…" on a zero-issue journal. Live-probed 2026-09-29,
+two runs (Rule 5's "Don't Assign To An Issue" row; a journal showing
+the current issue's items in its feeds): the new version of an article
+of Vol. 1 No. 1 (2025), retitled and published this way, was stored
+with no issue, yet the issue's page (signed out, also at
+`/issue/current` and after a reload) and the Atom, RSS 2.0 and RSS 1.0
+feeds listed it under the new title, as they did a sibling version
+published into the issue; an article published with no issue was never
+in the feeds.
 
 <a id="fn-n"></a>
 **n** — OMP/OPS `setStatusOnPublish()`: future `datePublished` →
@@ -1681,7 +1733,18 @@ live-probed 2026-08-29 (OJS): unpublishing v1.1 while v1.0 stayed
 published left the v1.1 page reading "Status: Unpublished" and the
 article page live (HTTP 200) serving v1.0, its "Versions" list one
 entry shorter; the page went 404 only after the last published version
-was unpublished.
+was unpublished. The other direction live-probed 2026-09-29, two runs,
+all three apps (Rule 9a): with 1.0 (published March 2025) and 1.1 (made
+by an untouched dialog) both published, "Unpublish" ("Unpost") on 1.0
+set it to "Status: Unpublished" (on OPS too, not "Unposted") with
+"Preview" and "Publish" ("Post"), at once and after a reload; 1.1 stayed
+"Published" ("Posted") with "Unpublish" ("Unpost"), and the side menu
+kept both versions. Signed out, the page stayed live as 1.1, and 1.0's
+own address answered "404 Not Found" (the date line and "Versions" as
+Article landing page Rule 7b records). Pressing 1.0's publish button
+then (cancelled) opened the panel on OJS with 1.0's own "Major
+Revision" and its issue kept (Rule 10), and the window directly on OMP
+and OPS, naming "Version of Record 1.0" / "Author Original 1.0".
 
 <a id="fn-r"></a>
 **r** — `Repository::version()`: clone with `datePublished = null`,
@@ -1857,7 +1920,18 @@ new version was scheduled to be posted.") — the scheduled log line
 itself was not driven live. Unscheduling
 live-probed 2026-08-29 (OJS, single-version submission): the log
 gained "The submission was unpublished." — no unschedule-specific
-line exists in the wording family.
+line exists in the wording family. "Submission metadata updated"
+live-probed 2026-09-29, two runs, all three apps, a publish from
+Production on four scratch contexts each: DOIs on with a prefix and
+"Upon publication" and no DOI yet; a DOI already made at an earlier
+stage; "Never"; DOIs off. The journal's History gained one such line
+under the manager in all four, already present while the confirmation
+window was still open (the panel's Confirm saves the publication); a
+second one, after the publish and Done-stage lines in the event log,
+came only where the publish made the DOI (in all three apps; on the
+press one line for the book's, a chapter's and a format's DOIs). A
+press or server otherwise gained only the publish and Done-stage lines.
+The History grid does not keep same-day rows in event order.
 
 <a id="fn-ab"></a>
 **ab** — `ApplyDoneWorkflowStage` listener (publish and unpublish):
@@ -2202,7 +2276,9 @@ status "Posted". Read before any pick on the journal: the panel's
 preselected "Assign To Current/Back Issue" (fn-h). OMP: the Production
 stage view's "Awaiting approval." banner is read before the publish and
 the two notices after (fn-w). The log lines are under the workflow's
-"Activity Log & Notes → History"; the Done-stage line is fn-ab's. The
+"Activity Log & Notes → History"; the Done-stage line is fn-ab's, the
+journal's "Submission metadata updated" fn-aa's (no seeded context has
+a DOI prefix, so no DOI line joins them). The
 email's sender (the context's name, the principal contact's address) is
 fn-x's; a scratch context's principal contact is the `contactEmail` it
 was created with.

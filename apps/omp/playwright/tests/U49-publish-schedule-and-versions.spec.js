@@ -899,7 +899,7 @@ test.describe('Publish, schedule & versions (U49)', () => {
 
         // Unpublish the new version: the reader page stays live serving
         // "Version of Record 1.0", its "Versions" list one entry shorter
-        // (Rule 9).
+        // (Rule 9a).
         await openWorkflow(managerPage, tag, submissionId, {
             menuKey: `publication_${newPubId}_titleAbstract`,
         });

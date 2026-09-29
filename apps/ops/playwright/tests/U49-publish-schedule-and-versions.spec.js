@@ -788,7 +788,7 @@ test.describe('Publish, schedule & versions (U49)', () => {
 
         // "Unpublish the new version": "Unpost" on it and confirm: the
         // reader page stays live serving "Author Original 1.0", its
-        // "Versions" list one entry shorter (Rule 9).
+        // "Versions" list one entry shorter (Rule 9a).
         await unpostPreprint(managerPage);
         await gotoReaderPage(page, tag, submissionId);
         await expect(page.getByRole('heading', {name: title, exact: true})).toBeVisible({

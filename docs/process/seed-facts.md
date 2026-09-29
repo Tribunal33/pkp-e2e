@@ -1654,6 +1654,13 @@ config-file settings.
   DOIs on or off. So a count of Activity Log lines after a publish depends
   on the context's DOI setting. Activity Log, all three apps, 2026-09-28
   (U70 claim check I28).
+- A DOI made at a stage move writes "Submission metadata updated" too, in
+  the name of whoever recorded the decision ("Accept and Skip Review"
+  under "Upon reaching the copyediting stage"), so an item seeded with
+  `decisions[]` on a context with a prefix and that setting carries an
+  extra `admin` line; a press's publish that makes the book's, chapters'
+  and formats' DOIs together writes one line. Activity Log, OJS and OMP on
+  screen, OPS seeded, 2026-09-29 (U49 claim check I29).
 - The "Journal redirect" list of Site Settings › "Settings" follows the
   database's storage order, neither name, id nor the Hosted Journals
   order: on the PostgreSQL test install it shifts whenever a journal's row

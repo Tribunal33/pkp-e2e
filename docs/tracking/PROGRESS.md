@@ -5,8 +5,8 @@ One row per feature; the banner names the mode. Read it with
 register, never here.
 
 **Mode: MAINTENANCE** (since 2026-08-29). The resident QA agent runs per
-`docs/process/MAINTENANCE.md`, two sessions a weekday (housekeeping at
-07:00, upstream at midday); the housekeeping session builds a pending
+`docs/process/MAINTENANCE.md`, two scheduled sessions (housekeeping
+daily at 07:00, upstream on weekdays at midday); the housekeeping session builds a pending
 row (one the upstream sync added) under the RUNBOOK loop, one at a time. Upstream baselines: `docs/tracking/upstream-sync.md`. CI
 failures, flake watch and
 companion branches: `docs/tracking/ci-triage.md`, checked first on any

@@ -5,7 +5,7 @@ claude-threads) that acts as the PKP team's QA specialist for the e2e suite
 and talks to the team on Mattermost. It adds to the RUNBOOK loop, never
 replaces it, and is active when the PROGRESS banner says so.
 
-The work is split between two scheduled sessions a weekday, each with its
+The work is split between two scheduled sessions, each with its
 own list: the **upstream session** keeps the suite in step with what the
 team ships, the **housekeeping session** works the campaign's own backlog
 (incidentals, friction, flakes, stale artifacts). A session does its own
@@ -50,8 +50,8 @@ too.
 
 ## The housekeeping session
 
-The VM runs it every weekday at 07:00 Prague time, before the upstream
-session, scheduled through claude-threads. It works through the whole
+The VM runs it every day at 07:00 Prague time, before the upstream
+session on weekdays, scheduled through claude-threads. It works through the whole
 backlog each time, not a quota: what it cannot finish, the next morning's
 run picks up from the files.
 
