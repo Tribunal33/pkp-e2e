@@ -1,17 +1,12 @@
 # An Editor without "Permit changes to Settings" is offered "Institutions" and refused the page
 
-- **Severity** medium · **Effort** small · **Kind** intention gap
+- **Severity** medium
+- **Effort** small
+- **Kind** intention gap
 - **Introduced** `pkp/pkp-lib#10380` for `pkp/pkp-lib#5504` · [1330ac1283](https://github.com/pkp/pkp-lib/commit/1330ac128326a8ee735549bb33f22ee7c9f019e6) · 2024-11-18 · Alec Smecher (asmecher)
 - **Upstream** none found (2026-09-30)
-- **Tracked in** spec U66 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a1) · **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
-
-| Affects | main | 3.5 | 3.4 | 3.3 |
-|---|---|---|---|---|
-| OJS | yes | yes | no (code) | no (code) |
-| OMP | yes | yes | no (code) | n/a |
-| OPS | yes | yes | no (code) | n/a |
-
-3.4 and 3.3 have no "Permit changes to Settings"; OMP and OPS 3.3 have no Institutions page.
+- **Tracked in** spec U66 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a1)
+- **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
 
 ## Summary
 
@@ -48,6 +43,14 @@ Medium: a task the permission's design left to these roles fails for
 them, in a setup that is not the default, with a way round on screen; it
 would be low if the team rules that these roles should not have
 Institutions and only the menu entry is wrong.
+
+| Affects | main | 3.5 | 3.4 | 3.3 |
+|---|---|---|---|---|
+| OJS | yes | yes | no (code) | no (code) |
+| OMP | yes | yes | no (code) | n/a |
+| OPS | yes | yes | no (code) | n/a |
+
+3.4 and 3.3 have no "Permit changes to Settings"; OMP and OPS 3.3 have no Institutions page.
 
 ## Steps to reproduce
 

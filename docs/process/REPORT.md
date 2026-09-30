@@ -37,9 +37,10 @@ never dropped.
 ```markdown
 # <What breaks, in product words: who does what, and what goes wrong>
 
-- **Severity** critical | high | medium | low · **Effort** small | medium
-  | large · **Kind** regression | intention gap | defect[ · **Crash**
-  server | script | both]
+- **Severity** critical | high | medium | low
+- **Effort** small | medium | large
+- **Kind** regression | intention gap | defect
+[- **Crash** server | script | both]
 - **Introduced** `<repo>#<pr>` for `<repo>#<issue>` · [<sha>](<commit
   URL>) · <date> · <name> (<github handle>) | not traced; present since
   at least [<sha>](<commit URL>) (<date>)
@@ -47,9 +48,14 @@ never dropped.
   without a fix | fix in PR `<repo>#<n>`, not yet in main)[, covering
   <what it covers when that differs>]
 - **Tracked in** <spec Ux [An](<entry URL>), [Am](<entry URL>) |
-  ci-triage row | app-changes row n> · **Checked** <date>, each
-  branch's tip (the commits in Evidence)[ · Temporary: delete once
-  acted on]
+  ci-triage row | app-changes row n>[ · Temporary: delete once acted on]
+- **Checked** <date>, each branch's tip (the commits in Evidence)
+
+## Summary
+
+## Impact
+
+[**Lost**, **Who**, **Way round** bullets; the severity sentence]
 
 | Affects | main | 3.5 | 3.4 | 3.3 |
 |---|---|---|---|---|
@@ -59,10 +65,6 @@ never dropped.
 
 [One line under the table, only when a cell needs a word: "3.3 has no
 Institutions page; OJS 3.3 shows it on a subscription's IP ranges".]
-
-## Summary
-
-## Impact
 
 ## Steps to reproduce
 
@@ -79,7 +81,7 @@ class names, never "fails" without saying how. It is read in a list, so
 it stays around fifteen words.
 
 **The header.** Everything a reader filters and sorts by, readable in
-the file itself: the four bullets and the Affects table, in this order,
+the file itself: the bullets, one fact each, in this order,
 right under the title. The GitHub labels are derived from it ("As a
 GitHub issue"), so the report carries the same facts wherever it is
 read; a label changed on GitHub is copied back into the header.
@@ -93,10 +95,9 @@ read; a label changed on GitHub is copied back into the header.
 - **Crash**, only when the app itself failed: a request behind the action
   answered a server error (`server`), or the page's own script failed in
   the browser (`script`), or both.
-- **Introduced**, **Upstream**, **Affects**: below.
-- **Affects**: the table, and one line under it only when a cell needs
-  a word (a feature flag, the older screen that shows it).
-- **Tracked in** links each register entry (or names the tracking row)
+- **Introduced**, **Upstream**: below. The **Affects** table closes the
+  Impact section (below).
+- **Tracked in** links each register entry (or names the tracking row),
   and **Checked** dates the walks; the branch tips they ran on are
   listed in Evidence. A report under `docs/reports/` ends the bullet
   with "Temporary: delete once acted on"; an issue report does not.
@@ -131,8 +132,9 @@ may lack. A fix already on `main` means the finding is stale and gets
 no report. Nothing found says so, with the date of the search.
 
 **Affects.** Which apps on which versions show the fault, so the team
-can see what a fix must reach and what a backport would cover. The table
-has a row per app and a column per version, and every cell is answered:
+can see what a fix must reach and what a backport would cover: a table
+that closes the Impact section, after the severity sentence. It has a
+row per app and a column per version, and every cell is answered:
 
 - **yes** / **no**: the Steps were walked on that app and version, on a
   freshly reset install of the branch's tip, and the fault showed or did
@@ -381,7 +383,7 @@ stands, on pkp-e2e's tracker (`jardakotesovec/pkp-e2e`):
 - The title is the report's title. The labels are read off the header:
   `severity: <word>`, `effort: <word>`, the kind (`regression`,
   `intention gap` or `defect`) and `crash: server` or `crash: script`
-  (both for both) from the first bullet; one of `ojs`, `omp`, `ops` per
+  (both for both) from their bullets; one of `ojs`, `omp`, `ops` per
   app and one of `main`, `3.5`, `3.4`, `3.3` per version that has a
   **yes** or **yes (code)** in the Affects table; and `tracked upstream`
   when the Upstream bullet names a pkp issue or PR. They are a filter on
@@ -405,7 +407,7 @@ that are symptoms of the same fault are one finding, and their issue
 report names each symptom. An issue report always holds one finding.
 A regression report may hold several when one change causes them: the
 Summary names each in a sentence, a `## Finding n — <title>` block per
-finding holds its own first header bullet and Affects table, Impact,
+finding holds its own Severity, Effort, Kind and Crash bullets and Affects table, Impact,
 Steps, Cause and Proposed fix in that order, one shared Evidence section
 follows, and the header at the top carries the highest severity. Two
 findings with different fixes are two reports.
@@ -429,7 +431,8 @@ findings with different fixes are two reports.
   what the user expected; what it costs and whether there is a way
   round; the reach). Impact is three labelled bullets, **Lost**, **Who**
   and **Way round**, each one or two short sentences read at a glance,
-  then the severity sentence as its own paragraph; a detail not needed
+  then the severity sentence as its own paragraph, then the Affects
+  table; a detail not needed
   to judge the severity (a character count, which class reads a column)
   goes to the Cause or Evidence.
   The Cause is a paragraph per step of the argument, with the reach as a
