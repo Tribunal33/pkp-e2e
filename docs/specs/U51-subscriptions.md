@@ -1411,6 +1411,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U51-A18-additional-file-no-padlock.md`): an additional
     file of an article in a restricted issue showing the padlock, and one
     in an open issue its file icon
+  - the guard for A20 (issue report
+    `docs/issues/U51-A20-full-issue-fee-of-no-amount.md`): with only
+    "Association Membership" set, a signed-in reader without a
+    subscription pressing a "Full Issue" galley landing on the
+    "Subscriptions" page, as for an article galley, with no payment queued
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1519,7 +1524,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | "Delayed Open Access" shows an empty box until someone saves a value | 🐞 | minor | — |
 | [A18](#a18) | Additional files of an article in a restricted issue show no padlock, yet readers without access are refused | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A19](#a19) | A fee shows on the locked link while payments are off and nothing can be bought | 🐞 | minor | — |
-| [A20](#a20) | With only a membership fee, "Full Issue" asks the reader to pay an issue fee of no amount | 🐞 | user-visible | — |
+| [A20](#a20) | With only a membership fee set, a reader pressing "Full Issue" is asked to pay an issue fee of no amount | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A21](#a21) | The subscription window saves a start date after the end date | 🐞 | minor | — |
 | [A22](#a22) | Subscription lists searched by membership, reference number, notes, institution, domain or IP range show every subscription | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A23](#a23) | An open-access journal's "Subscriptions" page offers "Purchase New Subscription", which leads to the home page | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
@@ -1753,14 +1758,19 @@ presses one lands on the journal's home page. Basis: probe, 2026-09-25.
 <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — "Full Issue" asks for an issue fee of no amount** · 🐞 · user-visible.
-With "Association Membership" set and no "Purchase Issue" fee, a
-signed-in reader without a subscription or membership who presses a
-"Full Issue" galley gets the payment method's page for a "Purchase
-Issue Fee" with no amount (with the manual method: its instructions and
-"Send notification of payment"), where an article galley in the same
-case leads to the "Subscriptions" page. Basis: probe, 2026-09-25.
-<sup>f-a20</sup>
+**A20 — With only a membership fee set, a reader pressing "Full Issue" is asked to pay an issue fee of no amount** · 🐞 · medium.
+On a journal that sells subscriptions, sets an "Association
+Membership" fee and leaves "Purchase Issue" empty, a signed-in reader
+with no subscription or membership who presses a restricted "Full
+Issue" galley gets the payment page for a "Purchase Issue Fee" with no
+amount. An article galley in the same issue takes the same reader to
+the "Subscriptions" page, as it should, since the journal does not sell
+single issues.
+The reader is asked to pay for something the journal does not sell,
+and the page offers no way to what it does sell. With manual payment,
+"Send notification of payment" mails the journal's contact a notice of
+an issue purchase that costs 0, which no screen lets staff act on.
+Basis: probe, 2026-09-30. <sup>f-a20</sup>
 
 <a id="a21"></a>
 **A21 — A subscription can end before it starts** · 🐞 · minor.
@@ -2122,6 +2132,7 @@ Issue report: [pkp-e2e#52](https://github.com/jardakotesovec/pkp-e2e/issues/52) 
 
 <a id="fn-f-a20"></a>
 **f-a20** — `IssueHandler::userCanViewGalley()` enters its purchase branch on `purchaseIssueEnabled() || membershipEnabled()` and then queues a `PAYMENT_TYPE_PURCHASE_ISSUE` payment of the (empty) issue fee (note e); the article side leads to the "Subscriptions" page in the same case. Live-probed 2026-09-25 (td8), on two journals.
+Issue report: [docs/issues/U51-A20-full-issue-fee-of-no-amount.md](../issues/U51-A20-full-issue-fee-of-no-amount.md).
 
 <a id="fn-f-a21"></a>
 **f-a21** — `SubscriptionForm` checks each date's presence and range (note h) but not their order. Live-probed 2026-09-25 (td11): start 2026-12-01, end 2026-01-01, saved and listed so.
