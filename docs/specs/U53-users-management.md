@@ -2044,7 +2044,7 @@ after a reload, the row read the role and 2027-06-01 and the menu offered
 menu's guard `user.groups.find(g => g.dateEnd === null)` (note c) counts
 a role not yet begun, while `removeUser()` ends only roles active now and
 answers `grid.user.userNoRoles` when there are none.
-Issue report: [docs/issues/U53-A19-remove-user-role-not-yet-begun-kept.md](../issues/U53-A19-remove-user-role-not-yet-begun-kept.md).
+Issue report: [pkp-e2e#58](https://github.com/jardakotesovec/pkp-e2e/issues/58) ([docs/issues/U53-A19-remove-user-role-not-yet-begun-kept.md](../issues/U53-A19-remove-user-role-not-yet-begun-kept.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Live-probed 2026-09-30, OJS and OMP, two runs each, users

@@ -1,0 +1,66 @@
+--- a/lib/ui-library/src/managers/MediaFileManager/mediaFileManagerStore.js
++++ b/lib/ui-library/src/managers/MediaFileManager/mediaFileManagerStore.js
+@@ -17,7 +17,7 @@
+ 		const extender = useExtender();
+ 		const {localize} = useLocalize();
+ 
+-		const {submission, publication} = toRefs(props);
++		const {submission, publication, canEdit} = toRefs(props);
+ 
+ 		/**
+ 		 * Fetch genres from API
+@@ -167,7 +167,7 @@
+ 		}
+ 
+ 		const mediaFileConfig = computed(() =>
+-			mediaFileManagerConfig.getManagerConfig({submission}),
++			mediaFileManagerConfig.getManagerConfig({submission, canEdit}),
+ 		);
+ 
+ 		function getItemActions({mediaFile}) {
+--- a/lib/ui-library/src/managers/MediaFileManager/MediaFileManager.vue
++++ b/lib/ui-library/src/managers/MediaFileManager/MediaFileManager.vue
+@@ -98,6 +98,8 @@
+ const props = defineProps({
+ 	publication: {type: Object, required: true},
+ 	submission: {type: Object, required: true},
++	/** Whether the current user may edit the publication (publication.canCurrentUserChangeMetadata) */
++	canEdit: {type: Boolean, default: true},
+ });
+ 
+ const Components = {
+--- a/lib/ui-library/src/managers/MediaFileManager/useMediaFileManagerConfig.js
++++ b/lib/ui-library/src/managers/MediaFileManager/useMediaFileManagerConfig.js
+@@ -35,6 +35,15 @@
+ 		Actions.MEDIA_FILE_MANUALLY_LINK_IMAGE,
+ 		Actions.MEDIA_FILE_DELETE,
+ 	],
++	// Actions that change the publication's media. The API refuses them
++	// (PublicationWritePolicy) unless the user may edit the publication.
++	editActions: [
++		Actions.MEDIA_FILE_ADD,
++		Actions.MEDIA_FILE_BATCH_LINK_IMAGES,
++		Actions.MEDIA_FILE_EDIT_METADATA,
++		Actions.MEDIA_FILE_MANUALLY_LINK_IMAGE,
++		Actions.MEDIA_FILE_DELETE,
++	],
+ };
+ 
+ export function useMediaFileManagerConfig() {
+@@ -75,9 +84,15 @@
+ 		return columns;
+ 	}
+ 
+-	function getManagerConfig({submission}) {
++	function getManagerConfig({submission, canEdit}) {
+ 		const permittedActions = MediaFileManagerConfigurations.actions.filter(
+ 			(action) => {
++				if (
++					!canEdit?.value &&
++					MediaFileManagerConfigurations.editActions.includes(action)
++				) {
++					return false;
++				}
+ 				return MediaFileManagerConfigurations.permissions.some((perm) => {
+ 					return (
+ 						perm.actions.includes(action) &&
