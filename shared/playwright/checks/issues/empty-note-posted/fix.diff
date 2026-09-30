@@ -1,0 +1,10 @@
+--- a/lib/pkp/controllers/informationCenter/form/NewNoteForm.php
++++ b/lib/pkp/controllers/informationCenter/form/NewNoteForm.php
+@@ -30,6 +30,7 @@
+     {
+         parent::__construct('controllers/informationCenter/notes.tpl');
+ 
++        $this->addCheck(new \PKP\form\validation\FormValidator($this, 'newNote', 'required', 'validator.required'));
+         $this->addCheck(new \PKP\form\validation\FormValidatorPost($this));
+         $this->addCheck(new \PKP\form\validation\FormValidatorCSRF($this));
+     }

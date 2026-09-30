@@ -27,7 +27,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 | **In progress: issues session s3, 2026-09-30.** Done: OJS1, A4, OJS3, OMP5 (two reports), A6; open: A2, A5, A7, A8, A9, A10, A11, A13, A14, OMP1, OMP2, OMP4, OMP6 |
 | [U53](../specs/U53-users-management.md) | 15 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: A15, A14, A2, A19; open: A1, A4, A5, A6, A7, A9, A11, A12, A13, A16, A17, OPS1 |
 | [U47](../specs/U47-media-files.md) | 7 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: OMP1 (with U69 A9), A4 (with U36 A21), A1, A5 (with U66 A2), OMP2; open: A3, A6, A7 |
-| [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **In progress: issues session s3, 2026-09-30.** Done: A11, A21 (with U47 A4), A14, A25; in progress: A10 (with U38 A2); open: A2, A3, A4, A5, A7, A9, A12, A15, A19, A20 (A23, A24: open report pkp-lib-13288) |
+| [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **In progress: issues session s3, 2026-09-30.** Done: A11, A21 (with U47 A4), A14, A25, A10 (with U38 A2); open: A2, A3, A4, A5, A7, A9, A12, A15, A19, A20 (A23, A24: open report pkp-lib-13288) |
 | [U17](../specs/U17-sections.md) | 16 | 2 | 2 | **In progress: issues session s3, 2026-09-30** |
 | [U59](../specs/U59-hosted-journals.md) | 9 | 2 | 2 |  |
 | [U62](../specs/U62-plugins-management.md) | 8 | 2 | 2 |  |
@@ -71,7 +71,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U27](../specs/U27-reviewer-assignment-and-management.md) | 11 | 0 | 1 |  |
 | [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | **OMP1 done: issues session s3, 2026-09-30** (with U53 A14); the other entries are free for another session |
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
-| [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | **A2 only: issues session s3, 2026-09-30** (joins U36 A10); the other entries are free for another session |
+| [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | **A2 done: issues session s3, 2026-09-30** (with U36 A10); the other entries are free for another session |
 | [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 (2026-09-30); the other four open |
 | [U43](../specs/U43-funding.md) | 3 | 0 | 1 |  |
 | [U22](../specs/U22-my-submissions.md) | 1 | 0 | 1 |  |

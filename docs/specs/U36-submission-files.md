@@ -942,6 +942,10 @@ Left out of the scenarios above, by reason:
     wizard's "Cancel upload" pressed once the whole file has been sent,
     on a slowed answer, leaving no file after a reload and none on
     "Review"
+  - the guard for A10 (Rule 14; issue report
+    `docs/issues/U36-A10-empty-note-posted.md`): "Add Note" with the box
+    empty in a file's "More Information", refused with "This field is
+    required." and no new note
 - **Planned**:
   - the file's "History" keeping no line of the revision cancelled with "Cancel": one "A file revision "notes.md" …" line, not two (Rule 9): likely a bullet in scenario 3, which cancels a revision before the "History" it reads
   - "Edit a file" closed with its header "Close" after the name is changed: no question, the list keeping the old name after a reload, and the window reopening on it (Rule 10): likely a bullet in scenario 4 before "The rename"
@@ -967,7 +971,6 @@ Left out of the scenarios above, by reason:
   - A7 (the Author's "Upload" above "Revisions Uploaded" offered on a round that asks for no revisions; Actors row 2; scenario 7 marks it)
   - A8 (the revise list naming files by name alone; Fields)
   - A9 (step 1's hidden upload box read by a screen reader, its drop-downs unnamed; Fields)
-  - A10 (an empty note posted; Rule 14)
   - A12 (the "Download All Files" zip named with two hyphens; Rule 3; scenario 4 marks it)
   - A13 (deleting a file also deleting its copies on other lists; Rule 4)
   - A15 (step 2 reopened from step 3 offering "Complete" and showing "File Added" again; Rule 5b)
@@ -1004,7 +1007,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | A galley's "Change File" shows "Current file" with no file name under it | 🐞 | minor | — |
 | [A7](#a7) | The Author's "Upload" on "Revisions Uploaded" shows on every round and is refused before revisions are requested | 🐞 | minor | — |
 | [A9](#a9) | A screen reader reads step 1's hidden upload box, and the step's two drop-downs have no name | 🐞 | minor | — |
-| [A10](#a10) | "Add Note" with an empty box posts an empty note | 🐞 | minor | — |
+| [A10](#a10) | Pressing "Add Note" with nothing typed posts an empty note on a submission or a file | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A11](#a11) | An author pressing "Save" with no file component chosen in the submission wizard gets an unexpected error | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A12](#a12) | The "Download All Files" zip is named with two hyphens ("12--submission-files.zip") | 🐞 | minor | — |
 | [A14](#a14) | "Change File" in the upload window keeps the replaced file as an extra file | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1105,12 +1108,17 @@ reader: their labels are not tied to them.
 Basis: probe. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — "Add Note" posts an empty note** · 🐞 · minor.
-In "More Information" › "Notes", pressing "Add Note" with the box empty
-adds a note with no text (only its writer, its date and "Delete"), shows
-"Note posted." and adds "Posted new note." to "History". An empty note
-should be refused.
-Basis: probe. <sup>[f-a10](#fn-a10)</sup>
+**A10 — Pressing "Add Note" with nothing typed posts an empty note on a submission or a file** · 🐞 · low.
+Notes can be written in two places: the "Notes" tab of a submission's
+"Activity Log & Notes" window, and the "Notes" tab of a file's "More
+Information" window. In both, pressing "Add Note" with the box empty
+posts a note with no text. The page shows "Note posted.", the list
+gains a note with only the writer's name, the date and "Delete", and
+the window's "History" tab gains "Posted new note.". The writer
+expects to be told to type a note. A box holding only spaces posts the
+same empty note.
+Same fault: [Submission activity log & notes' A2](U38-submission-activity-log-and-notes.md#a2) (the submission's window).
+Basis: probe, 2026-09-30. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
 **A11 — An author pressing "Save" with no file component chosen in the submission wizard gets an unexpected error** · 🐞 · low · crash: server.
@@ -2256,6 +2264,7 @@ button "Choose File", while the screenshot showed no box.
 **f-a10** — Note v (`NewNoteForm` has no check on the text). Live-probed
 2026-09-23 (d14; all three apps): an empty note row "Mira Manager 2026-09-23
 11:57 AM · Delete", "Note posted.", and a "Posted new note." row in "History".
+Issue report: [docs/issues/U36-A10-empty-note-posted.md](../issues/U36-A10-empty-note-posted.md).
 
 <a id="fn-a11"></a>
 **f-a11** — Note k. Live-probed 2026-09-23 (OJS and OMP): "Other" › "Save"
