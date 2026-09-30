@@ -193,11 +193,22 @@ sentence is the severity and its reason: "High: every press's series
 pages lose their heading and description, silently, and the press has no
 way to restore them."
 
-**Steps to reproduce.** What a person does through the screens, from a
-fresh install, so that a developer can follow it without the campaign's
-tools. First the preconditions as a short list: the install (fresh,
-default languages), the roles and data that must exist, each written as
-what a person creates on screen, with the names the steps use later.
+**Steps to reproduce.** What a person does through the screens, starting
+from PKP's default test dataset, so that a developer can follow it on
+the install they already have. Every PKP test and development install
+loads that dataset ([pkp/datasets](https://github.com/pkp/datasets),
+`<app>/<branch>/pgsql`): one journal, press or server, its users (`admin`,
+`dbarnes` and the others, each password the username twice) and its
+submissions in every stage. `docs/process/dataset.md` lists them per
+app. First the preconditions as a short list: the dataset of the
+version ("the default dataset, OJS `main`"), then only what the steps
+need beyond it, each written as what a person creates on screen, with
+the names the steps use later. Use the dataset's own users, contexts and
+submissions wherever they serve, by username and by title ("sign in as
+`dbarnes`", "open "Signalling Theory Dividends"", with the ID when
+it helps), so the reader creates nothing they already have; create only
+what the dataset lacks (a setting it does not turn on, a role or a
+second context it does not hold), and say why when it is not obvious.
 Then numbered steps, one action each, using the names as they appear on
 screen in quotes ("Add discussion", "Save And Continue"), with the page's
 address where it helps. Then two paragraphs, **Expected** and
@@ -207,8 +218,9 @@ line when the app failed. A control (the neighbouring case that still
 works) is one sentence after Observed, when it sharpens the finding.
 
 The campaign's shortcuts are never steps: the harness builders, scenario
-keys, the seeded test accounts and the probe kit are not in the team's
-hands. The one exception is state that only an outside service creates
+keys, the campaign's own seeded accounts (users.md) and the probe kit are
+not in the team's hands; the default dataset is. The one exception is
+state that only an outside service creates
 (an ORCID authorization, a DOI registration agency's answer, a payment
 gateway's callback). That precondition may be SQL, given in full, which
 writes exactly what the integration's own code writes: the same tables,
@@ -223,8 +235,9 @@ section says so in a sentence and names what would reach it (a plugin
 calling the method, a setting no screen offers), and the Cause carries
 the code read.
 
-The steps are walked as written before the report goes out: on a freshly
-reset install, through the screens, with the names the report uses. A
+The steps are walked as written before the report goes out: on an
+install freshly reset to the version's default dataset, through the
+screens, with the names the report uses. A
 script that takes exactly those steps counts. Observed is what that walk
 saw. Where the walk differed from the text, Evidence says how.
 
@@ -410,6 +423,21 @@ findings with different fixes are two reports.
   in Summary, Impact or Observed.
 - Short. The Summary and Impact together fit on one screen; a report
   that runs long has evidence in its body.
+- Laid out for reading, not only for accuracy: a paragraph holds one
+  idea and runs about four lines at most, and a list of like things is a
+  list. The Summary is two or three short paragraphs (what happens and
+  what the user expected; what it costs and whether there is a way
+  round; the reach). Impact is three labelled bullets, **Lost**, **Who**
+  and **Way round**, each one or two short sentences read at a glance,
+  then the severity sentence as its own paragraph; a detail not needed
+  to judge the severity (a character count, which class reads a column)
+  goes to the Cause or Evidence.
+  The Cause is a paragraph per step of the argument, with the reach as a
+  bullet list. The Proposed fix leads with the recommendation (and its
+  diff), then **Alternatives** and **What goes with it** as bullets, and
+  ends with the effort sentence as its own paragraph. Steps are split
+  into labelled groups when they walk more than one path ("Adding:",
+  "Editing:").
 - An update after the report went out (another app received the change,
   the team ruled on part of it) is one dated paragraph under the header,
   and the sections, the header included, are edited to match; the

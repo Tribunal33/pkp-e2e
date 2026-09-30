@@ -5,6 +5,7 @@
   "scripts": {
     "fetch-apps": "node bin/fetch-apps.js",
     "fetch-old-lines": "node bin/fetch-old-lines.js",
+    "fetch-datasets": "node bin/fetch-datasets.js",
     "mount": "node bin/mount.js",
     "unmount": "node bin/unmount.js",
     "test:ojs": "node bin/test-app.js ojs",
@@ -15,6 +16,7 @@
     "reset:ops": "node bin/with-app.js ops shared/playwright/reset.js",
     "questions": "node bin/open-questions.mjs",
     "seed-facts": "node bin/seed-facts.js",
+    "dataset-facts": "node bin/dataset-facts.js",
     "probe-servers": "node bin/probe-servers.js",
     "fleet-prep": "node bin/fleet-prep.js",
     "test:final": "node bin/test-final.js",

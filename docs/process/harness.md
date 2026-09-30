@@ -8,7 +8,9 @@ into a checkout (see the README). Paths below are relative to the repo root.
 
 Related files: test-authoring rules are in `PRINCIPLES.md`, coding
 conventions and pitfalls in `patterns.md`, the seeding API and Mailpit rules
-in `scenarios.md`, and the seeded identities in `users.md`.
+in `scenarios.md`, and the seeded identities in `users.md`; PKP's default
+test dataset, which the dataset fleets load for issue reports, in
+`dataset.md`.
 
 ## The two playwright layers
 
@@ -195,6 +197,109 @@ No suite is meant to run on any of the three lines.
   PKP_E2E_LINE=stable-3_4_0 PROBE_FEATURE=issues-3_4 PROBE_AGENT=x node bin/probe.js all shared/playwright/checks/harness/lines/lines.js
   ```
 
+### Dataset fleets
+
+An issue report's steps start from PKP's default test dataset
+(<https://github.com/pkp/datasets>), which every PKP developer's install
+holds; the campaign's seed they do not have. A **dataset fleet** is an
+install loaded from that dataset, served beside the campaign fleet of the
+same checkout, so a kept walk drives exactly what the team's installs
+hold. `docs/process/dataset.md` lists what the dataset contains (users,
+roles, submissions), generated from the dumps. Opt-in: the suites, CI,
+`reset:<app>` without the flag and the campaign's fleets are unchanged.
+
+```bash
+npm run fetch-datasets [-- --update]                     # checkouts/datasets/: main + stable-3_5_0, pgsql only
+npm run fetch-datasets -- --line stable-3_4_0 [--line stable-3_3_0]   # add an old line's dumps (kept on later --update)
+npm run fleet-prep -- --feature issues --dataset --reset            # main: load, then the server; .reports/issues/fleet.json
+PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-3_5 --dataset --reset
+PROBE_FEATURE=issues PROBE_AGENT=ir1 node bin/probe.js all my-walk.js   # fleet.json says dataset: the script drives it
+npm run reset:ojs -- --dataset [n]                      # reload one app's dataset fleet (no server start)
+npm run probe-servers -- --status --dataset [n]          # its server; --start / --stop as for the probe servers
+npm run dataset-facts -- --write                         # regenerate dataset.md's tables from the dumps
+```
+
+- **The fetch.** A shallow (`--depth 1`), blobless, sparse clone of
+  pkp/datasets into the gitignored `checkouts/datasets/`, holding only
+  `tools/` and `<app>/<branch>/pgsql/`: 181 MB for `main` and
+  `stable-3_5_0` (each dump about 27 MB, `.git` 12 MB), 190 MB with 3.4
+  and 3.3 added (their dumps are under 1 MB). `--update` moves it to the
+  datasets' current `main` (pkp's CI regenerates the dumps, the `main`
+  one from the app tips) and prunes the old objects.
+- **What a dataset fleet is.** Dataset fleet `n` (1–9; `--dataset` alone
+  is 1) of an app on a slot and line has its own server at **base port +
+  60 + n** (8061 for OJS on `main`, 9061 on 3.5, +300 per slot), database
+  `<campaign db>_ds<n>` (`ojs_test_ds1`, `ojs_test_3_5_ds1`), files dir
+  `checkouts[/<line>]/files/<app>-test-ds<n>`, public dir
+  `<app root>/public-ds<n>` (relative in the config, since `php -S` serves
+  it), Laravel cache `cache/opcache-ds<n>` and config
+  `config.test.ds<n>.inc.php`. Only the checkout's code is shared with the
+  campaign fleet.
+- **The reset** (`shared/playwright/dataset.js`, about 3 s per app on
+  `main`): the config is the dataset's own `config.inc.php` with the
+  harness's keys patched in (`base_url`, `allowed_hosts`, a session
+  cookie of its own, the campaign's DB role and the fleet's DB name,
+  files and public dirs, the cache path, SMTP to this slot's Mailpit, the
+  dead-port `[proxy]`); everything else stays the team's (`job_runner`
+  and `task_runner` On, `enable_minified` Off, the dataset's `app_key`).
+  `database.sql` is a `pg_dump --clean` dump owned by `<app>-ci`: the
+  load leaves out the leading drops and the `OWNER TO` lines and runs the
+  rest in one transaction with `ON_ERROR_STOP`, so it lands whole or
+  stops naming the failing statement; the fleet's role owns everything.
+  `files/` and `public/` are copied over emptied dirs; the fleet's cache,
+  its compiled stylesheets (named after its base URL) and the legacy
+  `cache/fc-*.php` files are cleared. Then the schema: the loaded
+  `versions` row against the checkout's `dbscripts/xml/version.xml`; a
+  lagging dataset gets the app's own `php tools/upgrade.php upgrade`
+  (logged to `.reports/datasets/upgrade-<line>-<app>-ds<n>.log`, said in
+  the output), and the columns are compared with the campaign's fresh
+  install of the tip, a note naming any difference (a schema change
+  merged without a version bump). On 2026-09-30 every dataset (`main`,
+  3.5, 3.4, 3.3; OJS, OMP, OPS) matched its checkout: no upgrade.
+  `PKP_E2E_DATASET_BRANCH=stable-3_5_0` loads another branch's dataset
+  (pkp's own `loaddb.sh <branch>`), which exercised the upgrade: 3.5.0.5
+  to 3.6.0.0 on OJS `main` in 2 s.
+- **The kit on a dataset fleet.** `bin/probe.js` reads
+  `.reports/<PROBE_FEATURE>/fleet.json`: a dataset fleet's sets
+  `PKP_E2E_DATASET` (and `PKP_E2E_LINE`, which may be left out), so the
+  bag's `baseURL`, `port`, `configFile` and `db` (hence `sql()`) are the
+  dataset fleet's and `app.dataset` is its number (null on a campaign
+  fleet). `signIn(page, '<username>')` signs in a dataset user as it does
+  a roster one: the password rule is the same (the username twice,
+  `admin`/`admin`); proven as `dbarnes` and `admin` on the three apps of
+  all four lines. `app.variant()` throws (no validation server); the
+  runner's worker ports and the setup project are never involved, and
+  `app.users` is still the campaign roster, which the dataset does not
+  hold.
+- **The overlays on a dataset fleet.** The server runs with the
+  checkout's `TEST_API_KEY`, so on `main` and 3.5 the `_test` API
+  answers there too: `app.api.createContext({tag, users})` builds a
+  scratch context with its own manager beside `publicknowledge` (proven
+  on the three apps of both lines), and `drainJobs()` reads its queue.
+  The mounted files add an API namespace and builder classes; nothing
+  the screens show changes. Never call `app.api.bootstrap()` or a
+  scenario that names the roster (`manager.maya`, …) or the seed's
+  sections on a dataset fleet: the first writes the campaign seed into
+  the dataset, the others fail for want of it. 3.4 and 3.3 have no
+  `_test` API; `lineScratchContext()` and `lineUser()` work there as on
+  the campaign fleet.
+- **Two reporters.** A walk changes the dataset (a decision, a new user),
+  and the next walk's steps start from a freshly loaded one, so a walk
+  resets its fleet first (`fleet-prep --dataset n --reset`, about 10 s
+  for three apps; no test lock is taken, a load weighs what a probe
+  does). Reporters never share a fleet number: the first uses `issues`
+  (`--dataset 1`), a second `--feature issues-b --dataset 2`, and so on
+  up to 9 per slot and line, each with its own database and server; a
+  reset of fleet 1 never touches fleet 2. The dataset users' addresses
+  (`<username>@mailinator.com`) are the same in the three apps and every
+  fleet of the slot mails the one Mailpit, so a mailbox read filters by
+  recipient and time.
+- **Proof** (2026-09-30): `shared/playwright/checks/harness/dataset/dataset.js`
+  signs in as `dbarnes`, records the dashboard and one submission's
+  workflow, then `admin` on Administration (`scratch` as its argument
+  adds the `_test` scratch context); green on OJS, OMP and OPS on `main`,
+  3.5, 3.4 and 3.3, no crash recorded.
+
 Every fleet uses fixed port bands above its base port; nothing else may
 listen there:
 
@@ -202,6 +307,7 @@ listen there:
 |---|---|---|
 | +0 … +19 | the runner's workers, one `php -S` each | Playwright `webServer` |
 | +50 | the probe server (`patterns.md` "Probe kit") | `npm run probe-servers -- --start` |
+| +61 … +69 | dataset fleet 1 … 9 ("Dataset fleets") | `npm run fleet-prep -- --dataset n` |
 | +90 | the validation variant (below) | Playwright, or `probe-servers --start` when nothing answers |
 
 Test DBs are **PostgreSQL** locally. The harness code itself is

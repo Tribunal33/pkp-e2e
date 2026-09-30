@@ -30,11 +30,23 @@ const {spawn} = require('child_process');
 const {APPS, REPO_ROOT, resolveLine} = require('./apps.js');
 const {resolveProbeApp, PROBE_PORT_OFFSET} = require('../shared/playwright/probe/index.js');
 const {phpServerCommand, phpServerEnv, phpServerStatus} = require('../shared/playwright/php-server.js');
+const {parseDatasetFlag, DATASET_PORT_OFFSET} = require('../shared/playwright/dataset.js');
+
+// `--dataset [n]` (or PKP_E2E_DATASET=n): the dataset fleet's one server
+// (basePort + 60 + n, harness.md "Dataset fleets") instead of the probe and
+// validation pair.
+{
+    const {n, rest} = parseDatasetFlag(process.argv.slice(2));
+    if (n) {
+        process.env.PKP_E2E_DATASET = String(n);
+    }
+    process.argv = [...process.argv.slice(0, 2), ...rest];
+}
 
 // One pid dir per line (PKP_E2E_LINE), so both lines' probe servers stay up side by side.
 const LINE = resolveLine();
 const PID_DIR = path.join(REPO_ROOT, '.reports', LINE ? `servers-${LINE.name}` : 'servers');
-const USAGE = 'usage: node bin/probe-servers.js --start|--stop|--status [--app ojs|omp|ops]';
+const USAGE = 'usage: node bin/probe-servers.js --start|--stop|--status [--app ojs|omp|ops] [--dataset [n]]';
 
 function parseArgs(argv) {
     const options = {action: null, apps: Object.keys(APPS)};
@@ -61,7 +73,7 @@ function parseArgs(argv) {
     return options;
 }
 
-const pidFile = (name, kind) => path.join(PID_DIR, `probe-${name}${kind === 'validation' ? '-validation' : ''}.pid`);
+const pidFile = (name, kind) => path.join(PID_DIR, `probe-${name}${kind === 'probe' ? '' : `-${kind}`}.pid`);
 
 function readPid(name, kind) {
     try {
@@ -99,6 +111,17 @@ async function waitFor(check, timeoutMs, poll = 250) {
 /** The two servers --start manages for an app. */
 function servers(app) {
     const logDir = path.join(app.suiteDir, '.server-logs');
+    if (app.dataset) {
+        return [
+            {
+                kind: `ds${app.dataset}`,
+                port: app.port,
+                configFile: app.configFile,
+                logFile: path.join(logDir, `server-${app.port}-ds${app.dataset}.log`),
+                label: `dataset fleet ${app.dataset} (base ${app.basePort} + ${DATASET_PORT_OFFSET + app.dataset})`,
+            },
+        ];
+    }
     return [
         {
             kind: 'probe',
@@ -138,7 +161,8 @@ async function startOne(app, server) {
     if (!fs.existsSync(configFile)) {
         console.error(
             `probe-servers: ${app.name} ${kind}: config file not found: ${configFile}` +
-                (kind === 'validation' ? ' — run the setup project once (npm run fleet-prep) to generate it' : ''),
+                (kind === 'validation' ? ' — run the setup project once (npm run fleet-prep) to generate it' : '') +
+                (kind.startsWith('ds') ? ' — reset the dataset fleet first (npm run reset:<app> -- --dataset)' : ''),
         );
         return false;
     }

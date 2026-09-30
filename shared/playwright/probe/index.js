@@ -32,6 +32,7 @@ const {LoginPage} = require('../pages/LoginPage.js');
 const {readEnvFile} = require('../support/env.js');
 const users = require('../data/users.js');
 const {VALIDATION_PORT_OFFSET} = require('../config-factory.js');
+const {datasetNumber, datasetFleet} = require('../dataset.js');
 
 const PROBE_PORT_OFFSET = 50;
 const CONTEXT_TABLES = {
@@ -124,7 +125,12 @@ function resolveProbeApp(name) {
     const app = resolveApp(name);
     const env = readEnvFile(app.root);
     const basePort = parseInt(env.PLAYWRIGHT_BASE_PORT || String(app.basePort), 10);
-    const port = basePort + PROBE_PORT_OFFSET;
+    // A dataset fleet (PKP_E2E_DATASET=n; harness.md "Dataset fleets"): the
+    // install loaded from PKP's default test dataset, on its own port,
+    // config and database beside the campaign's.
+    const datasetN = datasetNumber();
+    const dataset = datasetN ? datasetFleet(name, datasetN) : null;
+    const port = dataset ? dataset.port : basePort + PROBE_PORT_OFFSET;
     if (port < basePort + WORKER_PORT_SPAN || port === basePort + VALIDATION_PORT_OFFSET) {
         throw new Error(`probe: port ${port} for ${name} collides with the runner's bands`);
     }
@@ -138,7 +144,7 @@ function resolveProbeApp(name) {
         keySource = 'NO KEY (the _test API will answer 404/403)';
     }
     const mailpitUrl = process.env.MAILPIT_URL || env.MAILPIT_URL || resolveSlot().mailpitUrl;
-    const configFile = env.PKP_CONFIG_FILE || path.join(app.root, 'config.test.inc.php');
+    const configFile = dataset ? dataset.configFile : env.PKP_CONFIG_FILE || path.join(app.root, 'config.test.inc.php');
     // The runner generates this one next to the default config on every
     // config load (config-factory.js); the kit only reads its location.
     const validationConfigFile = path.join(path.dirname(configFile), 'config.test.validation.inc.php');
@@ -155,6 +161,10 @@ function resolveProbeApp(name) {
         // False on the lines without the `_test` API (3.4, 3.3): no seed, no
         // app.api; lineScratchContext() and lineUser() stand in.
         testApi: !line || line.overlays !== 'install',
+        // The dataset fleet number (1–9) when this bag drives a dataset
+        // fleet, else null. Sign in as the dataset's users (docs/process/
+        // dataset.md): the password is the username twice, `admin`/`admin`.
+        dataset: datasetN,
         // The site's primary locale: `en`, `en_US` on 3.3.
         primaryLocale: line && line.locales ? line.locales.split(',')[0] : 'en',
         root: app.root,
@@ -170,7 +180,7 @@ function resolveProbeApp(name) {
         mailpitUrl,
         // The fleet's own database (slot and line aware): kept checks query
         // it as `psql -d ${app.db}`, never a literal <app>_test.
-        db: app.db,
+        db: dataset ? dataset.db : app.db,
         // The context's own tables, for sql(): the one name set that differs per app.
         contextTables: CONTEXT_TABLES[name],
         contextPath: appContext.contextPath,
@@ -182,6 +192,9 @@ function resolveProbeApp(name) {
          * 'validation' = basePort + 90: email validation and ALTCHA on.
          */
         variant: (kind) => {
+            if (dataset) {
+                throw new Error('probe: a dataset fleet has no variant servers (harness.md "Dataset fleets")');
+            }
             if (kind !== 'validation') {
                 throw new Error(`probe: unknown variant "${kind}" (only "validation")`);
             }
@@ -571,7 +584,7 @@ async function launch(app, {storageState, headless = true, record: keepRecord = 
  * signed out first (the login page would otherwise send it home silently).
  *
  * @param {import('@playwright/test').Page} page
- * @param {string} username a roster username (users.md) or a scratch user
+ * @param {string} username a roster username (users.md), a dataset user on a dataset fleet (dataset.md) or a scratch user
  * @param {{password?: string, origin?: string, contextPath?: string}} [options]
  */
 async function signIn(page, username, {password, origin = '', contextPath} = {}) {

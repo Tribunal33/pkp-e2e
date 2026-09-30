@@ -611,7 +611,11 @@ context table names (`{table, id, settings}`: `journals`, `journal_id`,
 `line` names the line the process drives (`PKP_E2E_LINE`); on 3.4 and 3.3
 `testApi` is false and `api` answers 404, and `lineScratchContext(app,
 page)` / `lineUser(app, {…})` build a scratch context with its manager
-instead (harness.md "The stable lines").
+instead (harness.md "The stable lines"). On a dataset fleet (PKP's
+default test dataset, `fleet-prep --dataset`; harness.md "Dataset
+fleets") `dataset` is the fleet's number, `baseURL` and `db` are its own,
+`signIn()` takes the dataset's usernames (`dataset.md`) and `variant()`
+throws.
 Everything per app travels in the bag, never in `process.env`, so one
 process holds all three apps. The exception is `PKP_APP_ROOT` and
 `PKP_SUITE_DIR`, which `withApp` exports for the app while `fn` runs

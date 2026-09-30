@@ -171,14 +171,15 @@ not a fix.
    checkouts included (`npm run fetch-apps -- --line stable-3_5_0
    --update`, then `PKP_E2E_LINE=stable-3_5_0 npm run mount`). Then
    `npm run fetch-old-lines`, which brings pkp's 3.4 and 3.3 branches
-   into the `main` checkouts as refs to read, and the fleets: `npm run
-   fleet-prep -- --feature issues --reset` for `main`, and
-   `PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-3_5
-   --reset` for 3.5. 3.4 and 3.3 are read in the code (REPORT.md
+   into the `main` checkouts as refs to read, and `npm run
+   fetch-datasets -- --update`, PKP's default test dataset, which every
+   report's steps start from (REPORT.md "Steps to reproduce",
+   `docs/process/dataset.md`). The walks run on dataset fleets, one per
+   reporter (step 6). 3.4 and 3.3 are read in the code (REPORT.md
    "Affects"); a walk there happens only when the team asks for a
    particular issue, on the `stable-3_4_0` or `stable-3_3_0` line
-   (harness.md "The stable lines"), provisioned and reset the same way
-   with that line's name.
+   (harness.md "The stable lines"), with that line's datasets fetched
+   (`npm run fetch-datasets -- --line <line>`).
 4. Take the specs: the top N rows of the queue, each claimed with `node
    bin/slot.js claim <U<nn>>` so that no parallel session takes it too.
    A spec left mid-way by an earlier session continues with the entries
@@ -193,8 +194,14 @@ not a fix.
    spec is claimed too. Every other entry is a unit of its own. A group
    is a guess the reporter confirms or splits.
 6. **Report each unit** through one agent rendered from
-   `briefs/issue-report.md`, one or two at a time on the fleets. The
-   agent returns an outcome per entry:
+   `briefs/issue-report.md`, one or two at a time, each on dataset fleets
+   of its own, since a walk changes the dataset (harness.md "Dataset
+   fleets"): before dispatch, `npm run fleet-prep -- --feature
+   issues-<agent> --dataset <n> --reset` for `main` and
+   `PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature
+   issues-<agent>-3_5 --dataset <n> --reset` for 3.5, a different `<n>`
+   (1–9) per agent running at the same time; the agent resets its own
+   fleets before each walk. The agent returns an outcome per entry:
    - `written` or `joined`: read the report against `REPORT.md` before
      accepting it. The header is complete and its severity and effort
      follow the definitions; every Affects cell is answered, `main`

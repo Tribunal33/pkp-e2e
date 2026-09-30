@@ -64,6 +64,10 @@ Read in this order:
    Then `patterns.md` (conventions and pitfalls), `scenarios.md` (seeding
    test data and asserting on email) and `users.md` (the seeded accounts).
 
+- `docs/process/dataset.md`: PKP's default test dataset (the install the
+  team has), per app: the context, every user with their roles and every
+  submission with its stage and people; an issue report's steps start
+  from it, walked on a dataset fleet (harness.md "Dataset fleets").
 - `docs/process/seed-facts.md`: what a fresh test install contains and how
   it is configured; check a probe premise against it before writing the
   question. Its generated part is kept true by `npm run seed-facts -- --check`.

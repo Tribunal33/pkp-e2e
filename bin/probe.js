@@ -37,6 +37,37 @@ try {
     process.exit(1);
 }
 
+// A dataset fleet (harness.md "Dataset fleets") is chosen by its feature
+// name: fleet-prep --dataset records `dataset` and `line` in
+// .reports/<PROBE_FEATURE>/fleet.json, and the script drives that fleet
+// (PKP_E2E_DATASET and, when unset, PKP_E2E_LINE follow it). A campaign
+// fleet's fleet.json carries no `dataset`: nothing changes for it.
+const fleetFile = path.join(REPO_ROOT, '.reports', process.env.PROBE_FEATURE, 'fleet.json');
+if (fs.existsSync(fleetFile)) {
+    let fleet = null;
+    try {
+        fleet = JSON.parse(fs.readFileSync(fleetFile, 'utf8'));
+    } catch {
+        // malformed: not a dataset fleet's
+    }
+    if (fleet && fleet.dataset) {
+        const shellLine = process.env.PKP_E2E_LINE || 'main';
+        if (process.env.PKP_E2E_LINE && shellLine !== fleet.line) {
+            console.error(`probe: ${path.relative(REPO_ROOT, fleetFile)} is a ${fleet.line} dataset fleet, but PKP_E2E_LINE=${shellLine}`);
+            process.exit(1);
+        }
+        if (process.env.PKP_E2E_DATASET && process.env.PKP_E2E_DATASET !== String(fleet.dataset)) {
+            console.error(`probe: ${path.relative(REPO_ROOT, fleetFile)} is dataset fleet ${fleet.dataset}, but PKP_E2E_DATASET=${process.env.PKP_E2E_DATASET}`);
+            process.exit(1);
+        }
+        process.env.PKP_E2E_DATASET = String(fleet.dataset);
+        if (fleet.line && fleet.line !== 'main') {
+            process.env.PKP_E2E_LINE = fleet.line;
+        }
+        console.log(`[probe] dataset fleet ${fleet.dataset} on ${fleet.line} (${path.relative(REPO_ROOT, fleetFile)})`);
+    }
+}
+
 const apps = target === 'all' ? Object.keys(APPS) : [target];
 for (const name of apps) {
     if (!APPS[name]) {

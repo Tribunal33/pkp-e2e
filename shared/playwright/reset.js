@@ -20,6 +20,25 @@ const {loadEnv} = require('./support/env.js');
 const appRoot = process.env.PKP_APP_ROOT || process.cwd();
 loadEnv(appRoot);
 
+// `reset:<app> -- --dataset [n]`: reload dataset fleet n from PKP's default
+// test dataset instead (dataset.js; harness.md "Dataset fleets"). The
+// campaign's install below is not touched. Only the flag selects it, never
+// PKP_E2E_DATASET, so a stray export cannot turn a suite's reset into one.
+{
+    const {parseDatasetFlag, resetDataset} = require('./dataset.js');
+    const {n} = parseDatasetFlag(process.argv.slice(2));
+    if (n) {
+        resetDataset(process.env.PKP_APP_NAME, n).then(
+            () => process.exit(0),
+            (error) => {
+                console.error(`reset: dataset: ${error.message}`);
+                process.exit(1);
+            },
+        );
+        return;
+    }
+}
+
 const configFile =
     process.env.PKP_CONFIG_FILE || path.join(appRoot, 'config.test.inc.php');
 if (!fs.existsSync(configFile)) {

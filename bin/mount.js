@@ -73,10 +73,13 @@ function ensureExcludes(appRoot, lines) {
         ? fs.readFileSync(excludeFile, 'utf8')
         : '';
     const block = [EXCLUDE_BEGIN, ...lines, EXCLUDE_END].join('\n');
-    const re = new RegExp(`${EXCLUDE_BEGIN}[\\s\\S]*?${EXCLUDE_END}`);
-    content = re.test(content)
-        ? content.replace(re, block)
-        : `${content.replace(/\n?$/, '\n')}${block}\n`;
+    // The markers hold regex metacharacters (the parentheses): escaped, so
+    // the block is replaced in place. Unescaped, it never matched and every
+    // mount appended another copy (138 in slot 0's OJS by 2026-09-30); all
+    // copies go, one block stays.
+    const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`\\n?${escape(EXCLUDE_BEGIN)}[\\s\\S]*?${escape(EXCLUDE_END)}\\n?`, 'g');
+    content = `${content.replace(re, '\n').replace(/\n*$/, '\n')}${block}\n`;
     fs.writeFileSync(excludeFile, content);
 }
 
@@ -130,6 +133,10 @@ function mount(appName) {
         ),
         '/.pkp-e2e-mount.json',
         '/config.test.inc.php',
+        // The validation variant's config and the dataset fleets' configs
+        // and public dirs (harness.md "Dataset fleets").
+        '/config.test.*.inc.php',
+        '/public-ds*/',
         '/.env.playwright',
     ]);
     console.log(`${appName}: mounted ${Object.keys(manifest).length} files into ${app.root}`);
