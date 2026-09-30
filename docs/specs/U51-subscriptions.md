@@ -1402,6 +1402,15 @@ Left out of the scenarios above, by reason:
     signed-in subscriber of a journal requiring subscriptions without
     payments set up seeing neither "Learn More" in the block nor "View
     Available Subscription Types" on "My Subscriptions"
+  - the guard for A14 (issue report
+    `docs/issues/U51-A14-restrict-only-pdf-html-galley-refused.md`): with
+    "Only Restrict Access to PDF…" ticked and no reader fee, a signed-out
+    visitor opening a restricted article's HTML galley and refused its
+    PDF, and `issue/download/{id}` without a galley still leading to Login
+  - the guard for A18 (issue report
+    `docs/issues/U51-A18-additional-file-no-padlock.md`): an additional
+    file of an article in a restricted issue showing the padlock, and one
+    in an open issue its file icon
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1504,11 +1513,11 @@ entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | Every institutional purchase adds another institution | 🐞 | minor | — |
 | [A12](#a12) | A signed-out visitor who opens a subscription purchase page's address gets an empty page, not Login | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A13](#a13) | The "Subscription" block reads "Expired: {today}" for a subscription awaiting payment | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A14](#a14) | "Only Restrict Access to PDF…" unlocks the look of non-PDF galleys that stay refused | 🐞 | user-visible | — |
+| [A14](#a14) | With "Only Restrict Access to PDF…" ticked and no reader fee, HTML galleys show no padlock but refuse readers | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A15](#a15) | Month and week counts read "1 Months" and "1 Weeks" | 🐞 | minor | — |
 | [A16](#a16) | Subscription Manager is refused the Institutions page the menu offers, so cannot add a subscribing institution | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A17](#a17) | "Delayed Open Access" shows an empty box until someone saves a value | 🐞 | minor | — |
-| [A18](#a18) | A restricted article's additional file shows no padlock, yet is refused | 🐞 | user-visible | — |
+| [A18](#a18) | Additional files of an article in a restricted issue show no padlock, yet readers without access are refused | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A19](#a19) | A fee shows on the locked link while payments are off and nothing can be bought | 🐞 | minor | — |
 | [A20](#a20) | With only a membership fee, "Full Issue" asks the reader to pay an issue fee of no amount | 🐞 | user-visible | — |
 | [A21](#a21) | The subscription window saves a start date after the end date | 🐞 | minor | — |
@@ -1670,14 +1679,25 @@ day as its start and end date, and the block reads the end date.
 Basis: probe, 2026-09-30. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — Non-PDF galleys look open and are refused** · 🐞 · user-visible.
-With "Only Restrict Access to PDF version of issues and articles" ticked,
-a restricted issue's non-PDF galleys (HTML, for one) show no padlock,
-but unless a "Purchase Article" (for a "Full Issue", "Purchase Issue")
-or "Association Membership" fee is set, a reader without a subscription
-who presses one is turned away exactly like a PDF (Rule 12). The box
-promises that only PDFs are restricted. Basis: probe, 2026-09-25.
-<sup>f-a14</sup>
+**A14 — With "Only Restrict Access to PDF…" ticked and no reader fee, HTML galleys show no padlock but refuse readers** · 🐞 · medium.
+A journal requires subscriptions, has payments set up, and its Journal
+Manager has ticked "Only Restrict Access to PDF version of issues and
+articles" under "Payment Types" but set no reader fee. On that journal,
+a restricted issue's HTML galleys show their file icon and no padlock.
+That holds on the article page and under "Full Issue", while the PDF
+beside them shows the padlock. Anyone without a subscription who presses
+the HTML is still turned away, exactly as for the PDF:
+- signed out, they land on the Login page with "Subscription required to
+  access item.";
+- signed in, they land on the "Subscriptions" page.
+The same goes for every galley that is not a PDF. A fee frees the
+non-PDF galleys at no charge while the PDF stays restricted:
+- "Association Membership" frees the article's and the issue's;
+- "Purchase Article" frees only the article's;
+- "Purchase Issue" frees only the "Full Issue" ones.
+A "Purchase Article" or "Purchase Issue" fee also puts the PDF on sale
+at that price.
+Basis: probe, 2026-09-30. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — "1 Months" and "1 Weeks"** · 🐞 · minor.
@@ -1708,12 +1728,21 @@ keeps it empty. Only a saved "Disabled" reads "Disabled". Basis: probe,
 2026-09-25. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — An additional file looks open and is refused** · 🐞 · user-visible.
-On a restricted article's page, a file under "Additional Files" keeps
-its file icon and shows no padlock, yet a reader without access who
-presses it is turned away as Rule 12 says, like the article's other
-galleys. A screen reader still hears "Requires Subscription" before its
-label. Basis: probe, 2026-09-25. <sup>f-a18</sup>
+**A18 — Additional files of an article in a restricted issue show no padlock, yet readers without access are refused** · 🐞 · low.
+On the page of an article in a restricted issue, the article's PDF shows
+a padlock, but an additional file listed below it (a data set, for one)
+keeps its file icon. Anyone without a subscription who presses the file
+is refused, just as for the PDF:
+- signed out, they land on the Login page with "Subscription required to
+  access item.";
+- signed in, they are sent on to the "Subscriptions" page, or, on a
+  journal whose payments are not set up, to the journal's home page.
+Screen-reader users already hear "Requires Subscription" before the
+file's name; only the padlock is missing. Nothing is lost, and the
+refusal is correct.
+The fix is the padlock rule for these links in OJS's default theme
+stylesheet, as the PDF button already has.
+Basis: probe, 2026-09-30. <sup>f-a18</sup>
 
 <a id="a19"></a>
 **A19 — A fee shows on the locked link while payments are off** · 🐞 · minor.
@@ -2073,6 +2102,7 @@ Issue report: [pkp-e2e#11](https://github.com/jardakotesovec/pkp-e2e/issues/11) 
 
 <a id="fn-f-a14"></a>
 **f-a14** — `galley_link.tpl` leaves a non-PDF galley unlocked under `$restrictOnlyPdf`; `ArticleHandler::userCanViewGalley()` lets a non-PDF galley through only inside the `purchaseArticleEnabled() || membershipEnabled()` branch, and `IssueHandler::userCanViewGalley()` inside `purchaseIssueEnabled() || membershipEnabled()` (note e). Live-probed 2026-09-25 (td23).
+Issue report: [docs/issues/U51-A14-restrict-only-pdf-html-galley-refused.md](../issues/U51-A14-restrict-only-pdf-html-galley-refused.md).
 
 <a id="fn-f-a15"></a>
 **f-a15** — `manager.subscriptionPolicies.xMonths` "{$x} Months" and `.xWeeks` "{$x} Weeks" (OJS `locale/en/manager.po`) serve every count from 1, in `AccessForm` and `SubscriptionPolicyForm`. Live-probed 2026-09-25 (td4, td14).
@@ -2086,6 +2116,7 @@ Issue report: [pkp-e2e#40](https://github.com/jardakotesovec/pkp-e2e/issues/40) 
 
 <a id="fn-f-a18"></a>
 **f-a18** — The article page lists the file under "Additional Files" through the supplementary link (`a.obj_galley_link_supplementary`), which keeps the file glyph where a restricted galley link gets the padlock; `ArticleHandler::download()` refuses it like any galley (note e). Live-probed 2026-09-25 (td6).
+Issue report: [docs/issues/U51-A18-additional-file-no-padlock.md](../issues/U51-A18-additional-file-no-padlock.md).
 
 <a id="fn-f-a19"></a>
 **f-a19** — `galley_link.tpl` prints `reader.purchasePrice` whenever a fee and a currency are passed; `article_details.tpl`, `article_summary.tpl` and `issue_toc.tpl` pass the journal's saved `purchaseArticleFee` / `purchaseIssueFee` without asking whether payments are configured, while the purchase itself needs `purchaseArticleEnabled()` / `purchaseIssueEnabled()` (note o). Live-probed 2026-09-25 (td6, td8).

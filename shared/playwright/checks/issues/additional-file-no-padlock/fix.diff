@@ -1,0 +1,11 @@
+--- a/plugins/themes/default/styles/objects/galley_link.less
++++ b/plugins/themes/default/styles/objects/galley_link.less
+@@ -58,4 +58,8 @@
+ 		left: 0;
+ 		text-align: left;
+ 	}
++
++	&.restricted:after {
++		content: @fa-var-lock;
++	}
+ }
