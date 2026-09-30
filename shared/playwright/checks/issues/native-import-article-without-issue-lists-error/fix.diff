@@ -1,0 +1,37 @@
+--- a/plugins/importexport/native/filter/NativeXmlPublicationFilter.php
++++ b/plugins/importexport/native/filter/NativeXmlPublicationFilter.php
+@@ -164,15 +164,14 @@
+         $context = $deployment->getContext();
+         $issue = $deployment->getIssue();
+ 
++        // An article in no issue has no issue_identification: native.xsd makes
++        // it optional and the export writes it only for an article assigned to
++        // an issue, so its absence is not a problem to report.
+         if (empty($issue)) {
+             $issueIdentificationNodes = $node->getElementsByTagName('issue_identification');
+ 
+-            if ($issueIdentificationNodes->length != 1) {
+-                $titleNodes = $node->getElementsByTagName('title');
+-                $deployment->addError(Application::ASSOC_TYPE_PUBLICATION, $publication->getId(), __('plugins.importexport.native.import.error.issueIdentificationMissing', ['articleTitle' => $titleNodes->item(0)->textContent]));
+-            } else {
+-                $issueIdentificationNode = $issueIdentificationNodes->item(0);
+-                $issue = $this->parseIssueIdentification($publication, $issueIdentificationNode);
++            if ($issueIdentificationNodes->length === 1) {
++                $issue = $this->parseIssueIdentification($publication, $issueIdentificationNodes->item(0));
+             }
+         }
+ 
+--- a/plugins/importexport/native/locale/en/locale.po
++++ b/plugins/importexport/native/locale/en/locale.po
+@@ -119,11 +119,6 @@
+ "\"{$issueIdentification}\".  This issue will not be modified, but articles "
+ "will be added."
+ 
+-msgid "plugins.importexport.native.import.error.issueIdentificationMissing"
+-msgstr ""
+-"The issue identification element is missing for the article "
+-"\"{$articleTitle}\"."
+-
+ msgid "plugins.importexport.native.import.error.publishedDateMissing"
+ msgstr ""
+ "The article \"{$articleTitle}\" is contained within an issue, but has no "
