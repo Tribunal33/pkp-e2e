@@ -1791,7 +1791,7 @@ migration `I11800_AddUserRoleMastheadUpdateEmail` installs it, so a
 fresh press has the email but not its template.
 `ManageEmailsPage::openMailable()` stops the spinner only in its success
 callback.
-Issue report: [docs/issues/U53-A14-masthead-change-error-emails-nobody.md](../issues/U53-A14-masthead-change-error-emails-nobody.md).
+Issue report: [pkp-e2e#12](https://github.com/jardakotesovec/pkp-e2e/issues/12) ([docs/issues/U53-A14-masthead-change-error-emails-nobody.md](../issues/U53-A14-masthead-change-error-emails-nobody.md)).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Live-probed 2026-09-26 on the seeded press and on a new
