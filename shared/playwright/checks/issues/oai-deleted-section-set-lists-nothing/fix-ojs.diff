@@ -1,0 +1,26 @@
+--- a/classes/oai/ojs/OAIDAO.php
++++ b/classes/oai/ojs/OAIDAO.php
+@@ -432,18 +432,14 @@
+                     $join->where('tsoj.assoc_type', '=', Application::ASSOC_TYPE_JOURNAL);
+                     $join->where('tsoj.assoc_id', '=', (int) $journalId);
+                 })->addSelect(['tsoj.assoc_id']);
+-            }, function ($query) {
+-                return $query->addSelect([DB::raw('NULL AS assoc_id')]);
+-            })
+-            ->when(isset($sectionId), function ($query) use ($sectionId) {
+-                return $query->join('data_object_tombstone_oai_set_objects AS tsos', function ($join) use ($sectionId) {
+-                    $join->on('tsos.tombstone_id', '=', 'dot.tombstone_id');
+-                    $join->where('tsos.assoc_type', '=', Application::ASSOC_TYPE_SECTION);
+-                    $join->where('tsos.assoc_id', '=', (int) $sectionId);
+-                })->addSelect(['tsos.assoc_id']);
+             }, function ($query) {
+                 return $query->addSelect([DB::raw('NULL AS assoc_id')]);
+             })
++            // A deleted record belongs to the set its tombstone stores (dot.set_spec,
++            // filtered below), which is also the set its header names. It is not
++            // matched by the live section's id: a section deleted or renamed since
++            // has none, and its set would list nothing.
++            ->addSelect([DB::raw('NULL AS assoc_id')])
+             // Extra columns to match the live-record branches for the UNION.
+             ->addSelect([
+                 DB::raw('NULL AS publication_id'),
