@@ -1,4 +1,4 @@
-# Presses and preprint servers cannot delete an institution, and removing one that holds one half deletes it
+# Presses and preprint servers cannot delete an institution, and removing a press or server that has one leaves it half deleted
 
 - **Severity** medium
 - **Effort** small
@@ -16,39 +16,41 @@
 
 ## Summary
 
-On a press and a preprint server, "Yes" on an institution's "Delete"
-opens a window titled "Error", and the institution stays listed, after
-a reload too.
+On a press or preprint server, clicking "Delete" on an institution and
+then "Yes" opens a window titled "Error". The institution stays listed,
+also after a reload.
 
-Removing such a press or preprint server under Administration ›
-"Hosted Presses" ("Hosted Servers") fails too: the "Confirm" window
-stays open with no message, and the press stays listed and public but
-half deleted, its roles gone, so even the Site Administrator is refused
-its Settings pages.
+Removing a press or server that has an institution, under
+Administration › "Hosted Presses" ("Hosted Servers"), fails too. The
+"Confirm" window stays open with no message. The press stays listed and
+public, but half deleted: its roles are gone, so even the Site
+Administrator is refused its Settings pages.
 
-Only presses and servers that have added an institution meet it; the
-side menu offers "Institutions" once institutional statistics are on
-for the site and the press, both off at install.
+This affects only presses and servers that have added an institution.
+"Institutions" is in the side menu only while institutional statistics
+are turned on for the site and for the press; both are off on a new
+install.
 
 ## Impact
 
-- **Lost.** An institution once added stays for good, and a press or
-  server that holds one cannot be removed: it is left public with
-  nobody able to manage it. On a press, its own OAI-PMH list and the
-  site's then give each published book twice, live and deleted.
-- **Who.** A Press Manager (a server's Manager) deleting an institution,
-  and the Site Administrator removing a press or server that holds one,
-  on every attempt.
-- **Way round.** On screen, only hiding the leftover press: its "Edit"
-  on "Hosted Presses" still saves, and unticking "Enable this press to
-  appear publicly on the site" hides it from signed-out visitors and its
-  live records from the OAI-PMH lists. Off screen, deleting its rows from the `institutions`
-  table lets "Remove" complete; no command-line tool deletes an
-  institution or a press.
+- **Lost.** An institution, once added, can never be deleted. A press
+  or server that has one cannot be removed: it is left public, and
+  nobody can manage it. On a press, its own OAI-PMH list and the site's
+  then list each published book twice, once live and once deleted.
+- **Who.** A Press Manager (on a server, its Manager) who deletes an
+  institution, and the Site Administrator who removes a press or server
+  that has one. It fails on every attempt.
+- **Way round.** In the app, the leftover press can only be hidden. Its
+  "Edit" on "Hosted Presses" still saves. Turning off "Enable this press
+  to appear publicly on the site" hides the press from signed-out
+  visitors, and its live records from the OAI-PMH lists. Outside the
+  app, deleting the press's rows from the `institutions` table lets
+  "Remove" complete; no command-line tool deletes an institution or a
+  press.
 
-Medium: only presses and servers that use institutions meet it, and
-the leftover press can at least be hidden; it would be high if
-institutions were in common use there.
+Medium: only presses and servers that use institutions are affected,
+and the leftover press can at least be hidden. It would be high if
+presses and servers commonly used institutions.
 
 ## Steps to reproduce
 
@@ -60,8 +62,8 @@ Preconditions:
   as `admin` (password `admin`), the site administrator, who is also a
   Press Manager of the dataset's press "Public Knowledge Press"
   (`publicknowledge`).
-- A second press that holds no institution, for the control in step 8
-  (the dataset has one press): Administration › "Hosted Presses" ›
+- A second press with no institution, for the control in step 8 (the
+  dataset has only one press): Administration › "Hosted Presses" ›
   "Create Press", "Press Name" "Empty Press", "Press Initials" "EP",
   "Principal Contact Name" "Empty Press", "Principal Contact Email"
   "emptypress@mailinator.com", "Country" "Canada", "Path" `emptypress`,
@@ -71,31 +73,31 @@ Steps:
 
 1. Open the press's Institutions page,
    `/index.php/publicknowledge/en/management/settings/institutions`
-   (the address works while the side menu hides "Institutions").
-2. Press "Add Institution", type "Campus Library" in "Name", press
+   (the address works even though the side menu hides "Institutions").
+2. Click "Add Institution", type "Campus Library" in "Name", click
    "Save". The row "Campus Library" is listed.
-3. On the row "Campus Library", press "Delete". The "Delete Institution"
+3. On the row "Campus Library", click "Delete". The "Delete Institution"
    dialog asks "Are you sure you want to continue and delete this
-   institution?". Press "Yes".
-4. Press "OK" on the window that opens, then reload the page.
+   institution?". Click "Yes".
+4. Click "OK" on the window that opens, then reload the page.
 5. Open Administration › "Hosted Presses". On the row "Public Knowledge
-   Press", open its actions and press "Remove"; the "Confirm" window asks
+   Press", open its actions and click "Remove"; the "Confirm" window asks
    "Are you sure you want to permanently delete Public Knowledge Press
-   and all of its contents?". Press "OK".
+   and all of its contents?". Click "OK".
 6. Reload "Hosted Presses".
 7. Open the press's Institutions page again (step 1's address), its
    Settings › "Users & Roles"
    (`/index.php/publicknowledge/en/management/settings/access`), its
    home page `/index.php/publicknowledge` and its OAI-PMH list,
    `/index.php/publicknowledge/oai?verb=ListIdentifiers&metadataPrefix=oai_dc`.
-8. On "Hosted Presses", press "Remove" › "OK" on "Empty Press".
+8. On "Hosted Presses", click "Remove" on "Empty Press", then "OK".
 
 **Expected.** Step 3: the dialog closes and "Campus Library" leaves the
-list. Step 5: the "Confirm" window closes and "Public Knowledge Press"
-leaves the list, its institution with it.
+list. Step 5: the "Confirm" window closes, "Public Knowledge Press"
+leaves the list, and its institution is deleted with it.
 
 **Observed.** Step 3: a window titled "Error" opens with one button,
-"OK". The request behind "Yes" answers 500:
+"OK". The request sent by "Yes" returns 500:
 
 ```
 POST /index.php/publicknowledge/api/v1/institutions/1   (X-Http-Method-Override: DELETE)   500
@@ -103,7 +105,7 @@ POST /index.php/publicknowledge/api/v1/institutions/1   (X-Http-Method-Override:
 
 Step 4: after "OK" and the reload, "Campus Library" is still listed.
 Step 5: the "Confirm" window stays open with no message; the request
-answers 500:
+returns 500:
 
 ```
 POST /index.php/index/$$$call$$$/grid/admin/context/context-grid/delete-context?rowId=1   500
@@ -117,10 +119,10 @@ LINE 1: select exists(select * from "institutional_subscriptions" wh...
 ```
 
 Step 6: "Public Knowledge Press" is still listed. Step 7: both settings
-pages answer "The current role does not have access to this
+pages show "The current role does not have access to this
 operation.", while the press's home page still opens with its catalog.
-On OMP the OAI-PMH list gives each of the dataset's two published
-books' formats twice, live and deleted:
+On OMP, the OAI-PMH list shows the formats of the dataset's two
+published books twice each, once live and once deleted:
 
 ```
 <header><identifier>oai:omp.localhost:publicationFormat/2</identifier>…
@@ -131,16 +133,16 @@ books' formats twice, live and deleted:
 
 Step 8: "Empty Press" leaves the list.
 
-Control: on OJS the same steps on "Journal of Public Knowledge"
-("Hosted Journals") remove the institution at step 3 and the journal at
-step 5.
+Control: on OJS, the same steps with "Journal of Public Knowledge" (on
+"Hosted Journals") delete the institution at step 3 and remove the
+journal at step 5.
 
 ## Cause
 
 `PKP\institution\DAO::delete()` (lib/pkp
-`classes/institution/DAO.php`, lines 174–186 on main) decides between a
-soft and a hard delete by asking whether an institutional subscription
-names the institution:
+`classes/institution/DAO.php`, lines 174–186 on main) chooses between a
+soft and a hard delete by checking whether an institutional
+subscription refers to the institution:
 
 ```php
 $shouldSoftDelete = DB::table('institutional_subscriptions')
@@ -148,35 +150,37 @@ $shouldSoftDelete = DB::table('institutional_subscriptions')
     ->exists();
 ```
 
-`institutional_subscriptions` is an OJS table (`OJSMigration`); OMP and
-OPS create no such table, so on a press and a preprint server the query
-throws and every delete of an institution fails.
+`institutional_subscriptions` is an OJS table (`OJSMigration`). OMP and
+OPS do not create it, so on a press or preprint server the query throws
+and every delete of an institution fails.
 
-The feature's own migrations guard the same table in `up()` with
-`Schema::hasTable('institutional_subscriptions')`
+The feature's own migrations already check for the table in `up()`,
+with `Schema::hasTable('institutional_subscriptions')`
 (`InstitutionsMigration::up()`, and
-`I6895_CreateNewInstitutionsTables::up()` in the 3.4 upgrade);
-`InstitutionsMigration::down()` drops the table's foreign key
-unguarded.
+`I6895_CreateNewInstitutionsTables::up()` in the 3.4 upgrade).
+`InstitutionsMigration::down()` drops the table's foreign key without
+that check.
 
 Reach, checked in the code:
 
-- `PKPInstitutionController::delete()` (`api/v1/institutions`), behind
-  the Institutions page's "Delete" › "Yes": fails (driven).
-- `PKPContextService::delete()`, behind "Hosted Presses" › "Remove",
+- `PKPInstitutionController::delete()` (`api/v1/institutions`), called
+  by the Institutions page's "Delete" › "Yes": fails (reproduced).
+- `PKPContextService::delete()`, called by "Hosted Presses" › "Remove",
   calls `Repo::institution()->deleteMany()` for the context's
-  institutions, which calls `DAO::delete()` per institution: fails
-  (driven).
+  institutions, which calls `DAO::delete()` for each one: fails
+  (reproduced).
   - The method runs without a transaction. Before it reaches the
-    institutions it has run the `Context::delete::before` hook (on OMP,
+    institutions, it runs the `Context::delete::before` hook (on OMP,
     `APP\services\ContextService::beforeDeleteContext()` writes a
     publication format tombstone for every published book and deletes
-    the genres) and deleted the context's announcement types, review
-    assignments, user groups, genres, announcements and highlights.
-  - Those are gone when it throws (user groups, genres and OMP's
-    tombstones checked in the database, the rest read from the code),
-    while the context row, its settings, its institutions, its sections
-    and submissions and everything else deleted after that point remain.
+    the genres). It then deletes the context's announcement types,
+    review assignments, user groups, genres, announcements and
+    highlights.
+  - These changes stay when the query throws (user groups, genres and
+    OMP's tombstones checked in the database, the rest read in the
+    code). The context row, its settings, institutions, sections and
+    submissions, and everything else due to be deleted after that
+    point, remain.
 - No other caller of `Repo::institution()->delete()` or `deleteMany()`
   exists in pkp-lib, OMP, OPS or their bundled plugins, and no other
   query in pkp-lib outside the migrations names an OJS-only table.
@@ -185,10 +189,10 @@ Reach, checked in the code:
 
 A proposal; not tried.
 
-Recommended: guard the query in the shared DAO the way
-`InstitutionsMigration::up()` already guards the same table, so that on
-an app without institutional subscriptions an institution is simply
-hard deleted, as OJS already does for one no subscription names; OJS's
+Recommended: guard the query in the shared DAO, as
+`InstitutionsMigration::up()` already guards the same table. On an app
+without institutional subscriptions, an institution is then simply hard
+deleted, as OJS already does when no subscription refers to it. OJS's
 behavior is unchanged:
 
 ```diff
@@ -213,28 +217,30 @@ behavior is unchanged:
 - Move the rule to OJS: an OJS institution DAO or repository that
   overrides `delete()`, bound through OJS's `Repo` facade, as OJS's
   `APP\user\Repository::mergeUsers()` handles its subscription tables.
-  Cleaner layering, since pkp-lib would no longer name an OJS table, but
-  a new class and a change in two repos for the same outcome; worth it
-  if the team wants pkp-lib free of app tables.
+  The layering is cleaner, since pkp-lib would no longer name an OJS
+  table, but it needs a new class and changes in two repos for the same
+  outcome. It is worth it if the team wants pkp-lib free of app tables.
 - Catch the failure in `PKPInstitutionController::delete()` and
   `PKPContextService::delete()`: a workaround at two callers that
   leaves the DAO wrong for any plugin that calls it.
 
 **What goes with it:**
 
-- No API or hook change: the delete answers 200 as it does on OJS, and
+- No API or hook change: the delete returns 200 as it does on OJS, and
   `Institution::delete::before` and `Institution::delete` fire as they
   do there.
-- Stored data: no repair migration. A half-deleted press was being
-  removed, and once the fix is in, "Remove" on it again completes:
-  `PKPContextService::delete()` re-runs over what is left, and on OMP
-  the before-delete hook replaces each format's tombstone (it deletes
-  the old one first), so none is doubled and the OAI-PMH lists give each
-  book once, deleted (driven, with the press's institutions deleted by
-  hand, which is what the fixed DAO does). A site that wants such a
-  press back needs its backup: its user groups and genres are gone.
+- Stored data: no repair migration is needed. A half-deleted press is
+  one a site administrator set out to remove, and with the fix,
+  "Remove" on it again completes. `PKPContextService::delete()` runs
+  again over what is left. On OMP, the before-delete hook replaces each
+  format's tombstone (it deletes the old one first), so none is doubled
+  and the OAI-PMH lists show each book once, as deleted. This was
+  reproduced with the press's institutions deleted by hand, which is
+  what the fixed DAO does. A site that wants such a press back needs its
+  backup: the press's user groups and genres are gone.
 - The same guard in `InstitutionsMigration::down()` would let the
-  migration be reversed on OMP and OPS; it runs only on a rollback.
+  migration be reversed on OMP and OPS; `down()` runs only on a
+  rollback.
 - Wrapping `PKPContextService::delete()` in a transaction would stop
   any later failure there from leaving a context half deleted; that is
   a separate hardening, not needed for this fix.
@@ -250,25 +256,25 @@ migration's `up()`, and a test.
 
 ## Evidence
 
-- Kept script, taking the Steps on the three apps (OJS as the control),
+- Kept script that runs the Steps on the three apps (OJS as the control),
   each on an install freshly loaded from PKP's default test dataset
   (pkp/datasets c0f9f10, the `main` and `stable-3_5_0` PostgreSQL
   dumps, no upgrade needed):
   [`shared/playwright/checks/issues/omp-ops-institution-delete-fails/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-ops-institution-delete-fails/walk.js),
   run with `PROBE_FEATURE=issues-rv1 PROBE_AGENT=rv1 node bin/probe.js all shared/playwright/checks/issues/omp-ops-institution-delete-fails/walk.js`
   (`PKP_E2E_LINE=stable-3_5_0` in front for 3.5). The control press
-  gets a generated name and path. Beside the screens it reads the
-  press's row, institutions, user groups, genres and OMP's tombstones
-  in the database.
-- Way round and re-run, on the install `walk.js` left on main (OMP and
-  OPS):
+  gets a generated name and path. Besides the screens, the script
+  checks the press's row, institutions, user groups, genres and OMP's
+  tombstones in the database.
+- Way round and second "Remove", on the main install as `walk.js` left
+  it (OMP and OPS):
   [`after.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-ops-institution-delete-fails/after.js)
-  unticks "Enable…" on the leftover press (the save answers 200), then
-  deletes its `institutions` rows by SQL and presses "Remove" again: the
-  press is removed, OMP keeps one tombstone per format and the
-  site-wide OAI-PMH list gives each book once, deleted. That the hidden
-  press is refused to signed-out visitors and harvesters is read from
-  the code (`PKPPageRouter` sends them to the login page; OMP's
+  turns off "Enable…" on the leftover press (the save returns 200),
+  deletes its `institutions` rows by SQL and clicks "Remove" again. The
+  press is removed, OMP keeps one tombstone per format, and the
+  site-wide OAI-PMH list shows each book once, as deleted. That
+  signed-out visitors and harvesters cannot reach the hidden press was
+  read in the code (`PKPPageRouter` sends them to the login page; OMP's
   `OAIDAO::getRecordsRecordSetQuery()` lists only enabled presses), not
   driven.
 - The server log line was read from the app's log for both requests;

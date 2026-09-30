@@ -560,17 +560,20 @@ an entry notes otherwise; the team settles them on spec review.
 
 <a id="a1"></a>
 **A1 — An Editor without "Permit changes to Settings" is offered "Institutions" and refused the page** · 🐞 · medium.
-A user whose manager-level role has "Permit changes to Settings"
-unticked is shown "Institutions" in the side menu, but pressing it opens
-"The current role does not have access to this operation.". The change
-that added the permission meant such roles to lose only the Settings
-pages and keep Institutions, as they keep Announcements.
-A new install and an upgrade from 3.4 tick the box on the Editor and
-Production Editor roles, so a journal or press meets this once a manager
-unticks it there. A role created at the manager level starts unticked,
-on a journal, press or preprint server; on a preprint server that is the
-only way. The entry shows while institutional statistics are on, and on
-a journal also while payments are enabled.
+Users whose role has "Permit changes to Settings" turned off see
+"Institutions" in the side menu, but clicking it shows "The current role
+does not have access to this operation.". They should be able to use the
+page: when the permission was added, the intent was that such roles lose
+only the Settings pages and keep Institutions, as they keep
+Announcements.
+"Permit changes to Settings" is on by default for the Editor and
+Production Editor roles, on a new install and after an upgrade from 3.4,
+so on a journal or press this happens only after a manager turns it off
+for one of them. A new role created at the manager level starts with it
+off, so its members run into this at once; on a preprint server that is
+the only way to run into it. "Institutions" is in the menu only while
+institutional statistics are turned on (on a journal, also while
+payments are turned on).
 Basis: probe, 2026-09-30. <sup>f-a1</sup>
 
 <a id="a2"></a>
@@ -657,17 +660,18 @@ journal and its institutions (Side effects). Basis: probe, 2026-09-30.
 
 <a id="a9"></a>
 **A9 — A long "IP ranges" line makes an institution's "Save" fail, adding duplicates or wiping its ranges** · 🐞 · medium · crash: server.
-A manager who types in "IP ranges" a range padded with extra spaces
-around "-" to more than 40 characters, and presses "Save" on "Add
-Institution" or "Edit Institution", meets a failure on the server: the
-panel stays open under "An unexpected error has occurred. Please reload
-the page and try again." and nothing says which line is at fault. Only
-such padding takes a valid range past 40 characters; a range written
-normally has at most 33.
-Yet each "Save" on "Add Institution" adds the institution without IP
-ranges, so every retry adds one more institution of the same name. A
-"Save" on "Edit Institution" keeps only the lines above the long one, so
-the institution loses the ranges it had.
+A manager types a range into "IP ranges" with extra spaces around "-",
+so that the line is longer than 40 characters, and clicks "Save" on
+"Add Institution" or "Edit Institution". The save fails on the server.
+The panel stays open with "An unexpected error has occurred. Please
+reload the page and try again.", and nothing says which line is at
+fault.
+Even so, each "Save" on "Add Institution" adds the institution, without
+IP ranges, so every retry adds another institution with the same name.
+A "Save" on "Edit Institution" keeps only the lines above the long one,
+so the institution loses the ranges it had.
+Only such extra spaces make a valid range longer than 40 characters; a
+range written normally has at most 33.
 Basis: probe, 2026-09-30. <sup>f-a9</sup>
 
 <a id="a10"></a>

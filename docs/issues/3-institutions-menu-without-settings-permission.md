@@ -15,35 +15,39 @@
 
 ## Summary
 
-A user whose manager-level role has "Permit changes to Settings"
-unticked is shown "Institutions" in the side menu, but pressing it opens
-"The current role does not have access to this operation.". The change
-that added the permission meant such roles to lose only the Settings
-pages and keep Institutions, as they keep Announcements.
+Users whose role has "Permit changes to Settings" turned off see
+"Institutions" in the side menu, but clicking it shows "The current role
+does not have access to this operation.". They should be able to use the
+page: when the permission was added, the intent was that such roles lose
+only the Settings pages and keep Institutions, as they keep
+Announcements.
 
-A new install and an upgrade from 3.4 tick the box on the Editor and
-Production Editor roles, so a journal or press meets this once a manager
-unticks it there. A role created at the manager level starts unticked,
-on a journal, press or preprint server; on a preprint server that is the
-only way. The entry shows while institutional statistics are on, and on
-a journal also while payments are enabled.
+"Permit changes to Settings" is on by default for the Editor and
+Production Editor roles, on a new install and after an upgrade from 3.4,
+so on a journal or press this happens only after a manager turns it off
+for one of them. A new role created at the manager level starts with it
+off, so its members run into this at once; on a preprint server that is
+the only way to run into it. "Institutions" is in the menu only while
+institutional statistics are turned on (on a journal, also while
+payments are turned on).
 
 ## Impact
 
-- **Lost.** The use of the Institutions page (adding, editing, deleting
-  institutions and their IP ranges) by these roles. No data is lost, and
-  the refusal is shown plainly.
-- **Who.** Every member of such a role, every time they press the
-  entry. Institutional statistics and payments are both off on a new
-  install, so the entry shows only where a manager turned one on.
+- **Lost.** These roles cannot use the Institutions page (adding,
+  editing and deleting institutions and their IP ranges). No data is
+  lost, and the refusal is shown plainly.
+- **Who.** Every member of such a role, every time they click
+  "Institutions". Institutional statistics and payments are both off on
+  a new install, so the entry shows only where a manager has turned one
+  of them on.
 - **Way round.** A manager whose role has the permission maintains the
-  list, or ticks the permission, which also opens every Settings page to
-  the role. Nothing gets worse with time.
+  list, or turns the permission on for the role, which also opens every
+  Settings page to it. Nothing gets worse with time.
 
-Medium: a task the permission's design left to these roles fails for
-them, in a setup that is not the default, with a way round on screen; it
-would be low if the team rules that these roles should not have
-Institutions and only the menu entry is wrong.
+Medium: the permission was designed to leave this task to these roles,
+and it fails for them. The setup is not the default, and there is a way
+round on screen. It would be low if the team rules that these roles
+should not have Institutions and only the menu entry is wrong.
 
 ## Steps to reproduce
 
@@ -51,16 +55,16 @@ Preconditions:
 
 - PKP's default test dataset for OJS, OMP or OPS `main` (or
   `stable-3_5_0`), with its journal, press or server `publicknowledge`.
-- Institutional statistics on, which the dataset leaves off and without
-  which the side menu offers no "Institutions":
+- Institutional statistics turned on. The dataset has them off, and
+  without them the side menu has no "Institutions":
   - as `admin`: Administration › "Site Settings" › "Statistics", tick
     "Enable institutional statistics", "Save";
   - as `rvaca` (the manager): Settings › "Distribution" › "Statistics",
     tick "Enable institutional statistics", "Save".
 - On a journal or press: as `rvaca`, Settings › "Users & Roles" ›
   "Roles", open the "Journal editor" ("Press editor") row's arrow,
-  "Edit", untick "Permit changes to Settings", "OK". `dbarnes` holds
-  that role.
+  "Edit", untick "Permit changes to Settings", "OK". `dbarnes` has that
+  role.
 
 Journal or press:
 
@@ -84,13 +88,14 @@ The current role does not have access to this operation.
 Control: `rvaca`'s side menu shows "Institutions" and "Settings", and
 "Institutions" opens the page with "Add Institution".
 
-Preprint server (its one manager role, "Preprint Server manager", cannot
-lose the permission, so the steps create a second one):
+Preprint server (the permission cannot be turned off for its only
+manager role, "Preprint Server manager", so the steps create a second
+one):
 
 1. As `rvaca`: Settings › "Users & Roles" › "Roles" › "Create New Role",
    "Permission level" "Manager", "Role Name" "Associate Manager",
-   "Abbreviation" "AM", "OK" ("Permit changes to Settings" arrives
-   unticked).
+   "Abbreviation" "AM", "OK" ("Permit changes to Settings" is unticked
+   from the start).
 2. "Users" › "Invite to a role", search `dbuskins@mailinator.com`,
    "Search User", role "Associate Manager" from today, "Save And
    Continue", "Invite user to the role".
@@ -110,30 +115,32 @@ the same as above.
 `CanAccessSettingsPolicy` to every `settings` operation except the
 `announcements` and `userComments` arguments. The Institutions page is
 the `settings` operation with the argument `institutions`
-(`ManagementHandler::institutions()`), so it asks for "Permit changes to
-Settings".
+(`ManagementHandler::institutions()`), so it requires "Permit changes
+to Settings".
 
-The side menu (`PKPTemplateManager::setupBackendPage()`,
-lines 1329–1336, while institutional statistics are on; OJS
-`TemplateManager::setupBackendPage()`, lines 206–216, while payments are
-enabled) offers "Institutions" to every manager-level role outside the
-"Settings" group, which is the only part of the menu that the
-permission hides.
+The side menu shows "Institutions" outside its "Settings" group, to
+every manager-level role. That group is the only part of the menu the
+permission hides. `PKPTemplateManager::setupBackendPage()` (lines
+1329–1336) adds the entry while institutional statistics are on, and
+OJS `TemplateManager::setupBackendPage()` (lines 206–216) while
+payments are enabled.
 
-The rule broken is the permission's own design. `pkp/pkp-lib#5504`
-states it: a role with "Permit changes to Settings" unticked "will have
-access to all other left menu items except 'Settings'", naming
-Announcements, DOIs, Statistics, Tools, Institutions and Payments.
+This breaks the permission's own design, as `pkp/pkp-lib#5504` states
+it: a role with "Permit changes to Settings" unticked "will have access
+to all other left menu items except 'Settings'", naming Announcements,
+DOIs, Statistics, Tools, Institutions and Payments.
 
-The change that implemented it, `pkp/pkp-lib#10380`, put the Institutions
-page behind the settings gate, because its address sits under
-`management/settings`. It exempted Announcements for that reason
-("moved out of settings without changing its URL") but not Institutions.
-Asked in the PR's review whether the institution API needed the check,
-its author answered on `pkp/pkp-lib#5504` that it is "used for
-production concerns outside of settings", and left the API open; the
-page was not exempted to match. `pkp/pkp-lib#11325` later exempted
-`userComments` the same way as Announcements.
+The change that implemented the permission, `pkp/pkp-lib#10380`, put
+the Institutions page behind the settings check, because the page's
+address is under `management/settings`. The same change exempted
+Announcements, whose address is there for the same reason ("moved out
+of settings without changing its URL"), but not Institutions.
+
+In the PR's review, a reviewer asked whether the institution API needed
+the check. The PR's author answered on `pkp/pkp-lib#5504` that the API
+is "used for production concerns outside of settings", and left it
+open, but the page was not exempted to match. `pkp/pkp-lib#11325` later
+exempted `userComments` the same way as Announcements.
 
 Reach:
 
@@ -174,9 +181,9 @@ API, and `PKPInstitutionController::getRouteGroupMiddleware()` admits
   `$hasSettingsAccess`, and in OJS's `TemplateManager::setupBackendPage()`,
   which cannot see that variable, compute the same test from the
   authorized user groups before adding the entry in the payments branch.
-  It takes Institutions from roles the permission was designed to leave
-  it to, and needs changes in two repos; the team would choose it only
-  if it now wants the institution list treated as a setting.
+  It takes Institutions away from roles the permission was designed to
+  leave it to, and needs changes in two repos. It fits only if the team
+  now wants the institution list treated as a setting.
 
 **What goes with it:**
 
@@ -184,8 +191,8 @@ API, and `PKPInstitutionController::getRouteGroupMiddleware()` admits
   overriding `authorize()`, so one pkp-lib change covers them. Nothing
   stored changes, and no API or hook changes.
 - Backport: on 3.5 the condition exempts `['announcements']` only and
-  there is no Comments page, so the change there is
-  `&& $request->getRequestedArgs() != ['institutions']` added to it.
+  there is no Comments page, so the change there adds
+  `&& $request->getRequestedArgs() != ['institutions']` to it.
 - Guard: an e2e scenario in U66 (a Planned item) that unticks the
   permission on the Journal editor role and has the editor open
   "Institutions" from the side menu and add an institution.
@@ -194,9 +201,9 @@ Small: one condition in one shared handler, and an e2e scenario.
 
 ## Evidence
 
-- Kept script, taking the Steps (journal and press) and the preprint
-  server steps through the screens on a fresh load of the default
-  dataset, with `rvaca` as control:
+- Kept script that runs the Steps (journal and press) and the preprint
+  server steps in the browser, on a fresh load of the default dataset,
+  with `rvaca` as control:
   [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js),
   run with
   `PROBE_FEATURE=issues-rv3 PROBE_AGENT=rv3 node bin/probe.js all shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js`
@@ -209,7 +216,7 @@ Small: one condition in one shared handler, and an e2e scenario.
   Observed above.
 - The setup, by code on main: `registry/userGroups.xml` of each app gives
   the manager, Editor and Production Editor groups `permitSettings="true"`
-  (the dataset holds the same); the 3.5.0 upgrade
+  (the dataset has the same); the 3.5.0 upgrade
   `I5504_UserGroupsSettings::up()` sets `permit_settings` to 1 on every
   `ROLE_ID_MANAGER` group; `UserGroupForm` gives a new role no value, so
   its box starts unticked (seen on screen on OPS). The site's and the
@@ -223,8 +230,8 @@ Small: one condition in one shared handler, and an e2e scenario.
 - 3.4, by code: pkp-lib `stable-3_4_0` at df13621c2d
   (`ManagementHandler::authorize()` adds `ContextAccessPolicy` only; no
   `CanAccessSettingsPolicy`, no `permitSettings` anywhere), OJS
-  `stable-3_4_0` at 9571d8fde7. Every manager-level role opens the page
-  the menu offers.
+  `stable-3_4_0` at 9571d8fde7. Every manager-level role can open the
+  page the menu offers.
 - 3.3, by code: pkp-lib `stable-3_3_0` at d446601ebe (no `permitSettings`;
   `ManagementHandler` has no `institutions` case), OJS `stable-3_3_0` at
   9fdb9bcf9a. OMP and OPS 3.3 have no institutions.

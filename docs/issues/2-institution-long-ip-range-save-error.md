@@ -16,35 +16,38 @@
 
 ## Summary
 
-A manager who types in "IP ranges" a range padded with extra spaces
-around "-" to more than 40 characters, and presses "Save" on "Add
-Institution" or "Edit Institution", meets a failure on the server: the
-panel stays open under "An unexpected error has occurred. Please reload
-the page and try again." and nothing says which line is at fault. Only
-such padding takes a valid range past 40 characters; a range written
-normally has at most 33.
+A manager types a range into "IP ranges" with extra spaces around "-",
+so that the line is longer than 40 characters, and clicks "Save" on
+"Add Institution" or "Edit Institution". The save fails on the server.
+The panel stays open with "An unexpected error has occurred. Please
+reload the page and try again.", and nothing says which line is at
+fault.
 
-Yet each "Save" on "Add Institution" adds the institution without IP
-ranges, so every retry adds one more institution of the same name. A
-"Save" on "Edit Institution" keeps only the lines above the long one, so
-the institution loses the ranges it had.
+Even so, each "Save" on "Add Institution" adds the institution, without
+IP ranges, so every retry adds another institution with the same name.
+A "Save" on "Edit Institution" keeps only the lines above the long one,
+so the institution loses the ranges it had.
+
+Only such extra spaces make a valid range longer than 40 characters; a
+range written normally has at most 33.
 
 ## Impact
 
-- **Lost.** An edited institution's IP ranges, which decide which
-  visitors an institutional subscription admits (OJS) and which visits
-  the usage statistics credit to it. "Add Institution" loses nothing but
-  adds an extra institution without ranges per failed "Save". Both show
-  only after a reload.
-- **Who.** A manager on the Institutions page, in any setup, entering a
-  range padded with extra spaces around "-", as a list pasted from a
-  spreadsheet or an aligned text file may carry.
+- **Lost.** An edited institution's IP ranges. They decide which
+  visitors an institutional subscription lets in (OJS), and which
+  visits the usage statistics count for the institution. "Add
+  Institution" loses nothing, but each failed "Save" adds an extra
+  institution without ranges. Neither shows until the page is reloaded.
+- **Who.** A manager on the Institutions page, in any setup, who enters
+  a range with extra spaces around "-". A list pasted from a
+  spreadsheet or an aligned text file may have such spaces.
 - **Way round.** Remove the extra spaces (nothing on screen points to
   them), delete the extra institutions, retype the lost ranges. Nothing
   gets worse with time.
 
-Medium: only a padded range triggers it, and the save says it failed;
-it would rise if padded range lists turned out to be common.
+Medium: only a range with extra spaces causes it, and the screen says
+that the save failed. It would be higher if range lists with such
+spaces turned out to be common.
 
 ## Steps to reproduce
 
@@ -55,8 +58,8 @@ Preconditions:
 - The database is PostgreSQL, or MySQL or MariaDB in strict mode; a
   non-strict MySQL or MariaDB saves the line cut to 40 characters
   instead (Cause).
-- Nothing else: `rvaca` is its Journal Manager (Press Manager, Preprint
-  Server Manager).
+- No other setup: `rvaca` is its Journal Manager (Press Manager,
+  Preprint Server Manager).
 
 Adding:
 1. Sign in as `rvaca`.
@@ -81,22 +84,24 @@ Editing an institution that has a range:
 12. Close the panel, reload the page, press "Edit" on "Campus Library" and
     read "IP ranges".
 
-**Expected:** step 6 saves the range (it is a valid range, and the help
-under the box writes a range with spaces around "-"), or refuses it with
-"Invalid IP range" under the box; either way the list holds one "Long
-Library". Step 11 saves both lines, or refuses and keeps `10.1.0.0/16`.
+**Expected:** step 6 saves the range, or refuses it with "Invalid IP
+range" under the box. It is a valid range, and the help text under the
+box shows a range written with spaces around "-". Either way the list
+has one "Long Library". Step 11 saves both lines, or refuses them and
+keeps `10.1.0.0/16`.
 
 **Observed:** steps 6 and 7 each leave the panel open with the notice "An
-unexpected error has occurred. Please reload the page and try again.", no
-message under any box and the list behind unchanged; each "Save" answered
-`POST /index.php/publicknowledge/api/v1/institutions` with 500. After the
-reload the list reads "Long Library" twice, and "Edit" on either shows "IP
-ranges" empty.
+unexpected error has occurred. Please reload the page and try again.".
+No message shows under any box, and the list behind the panel is
+unchanged. Each "Save" request,
+`POST /index.php/publicknowledge/api/v1/institutions`, returned 500.
+After the reload the list shows "Long Library" twice, and "Edit" on
+either one shows "IP ranges" empty.
 
-Step 10 saves. Step 11 shows the same notice (the save,
+Step 10 saves. Step 11 shows the same notice (the save request,
 `POST /index.php/publicknowledge/api/v1/institutions/3` with
-`X-Http-Method-Override: PUT`, answered 500); after the reload "Edit" on
-"Campus Library" shows "IP ranges" empty: `10.1.0.0/16` is gone. The
+`X-Http-Method-Override: PUT`, returned 500). After the reload, "Edit"
+on "Campus Library" shows "IP ranges" empty: `10.1.0.0/16` is gone. The
 server log, for each failed save:
 
 ```
@@ -114,43 +119,44 @@ trimmed at its ends only, in `institution_ip.ip_string`, a `VARCHAR(40)`
 (`classes/migration/install/InstitutionsMigration.php` line 64).
 
 The validation it relies on, `PKP\institution\Repository::validate()`
-(`classes/institution/Repository.php` lines 124–135), matches a range as
-`…((\s)*[-](\s)*…)`, any run of whitespace around "-", and sets no length,
-so a line it accepts can be longer than the column holds.
+(`classes/institution/Repository.php` lines 124–135), accepts any run of
+whitespace around "-" in a range (`…((\s)*[-](\s)*…)`) and sets no
+length limit, so a line it accepts can be too long for the column.
 
 `DAO::insert()` writes the `institutions` row and its settings
 (`parent::_insert()`) before `insertIPRanges()`; `DAO::update()` writes
 the row (`parent::_update()`), deletes every stored range
 (`deleteIPRanges()`), then inserts the new lines one by one.
 
-Neither runs in a transaction, so an add keeps the institution without
-ranges and an edit keeps the new name and only the lines before the long
-one.
+Neither runs in a transaction. A failed add therefore keeps the
+institution without ranges, and a failed edit keeps the new name and
+only the lines before the long one.
 
 Reach:
 
 - `PKPInstitutionController::add()` and `edit()`, the Institutions page's
-  two saves and the REST API's `POST` and `PUT` (driven).
-- OJS `UserInstitutionalSubscriptionForm::execute()`, a reader buying an
-  institutional subscription: it validates with its own copy of the same
-  pattern and calls `Repo::institution()->add()`, so the same line fails
-  there and leaves an institution without ranges and no subscription
-  (read in the code).
+  two saves and the REST API's `POST` and `PUT` (reproduced).
+- OJS `UserInstitutionalSubscriptionForm::execute()`, used when a reader
+  buys an institutional subscription. It validates with its own copy of
+  the same pattern and calls `Repo::institution()->add()`, so the same
+  line fails there too. It leaves an institution without ranges and no
+  subscription (read in the code).
 - Matching a visitor to an institution (`Collector::filterByIps()`) reads
   `ip_start` and `ip_end`. `ip_string` is what `DAO::fromRow()` reads
   back into every fetched institution (the "Edit" form, the API's
   `ipRanges`, the OJS subscription forms), and what the list's search
   matches. On PostgreSQL nothing stored is wrong beyond the extra
   institutions and the lost ranges.
-- On MySQL the outcome depends on the server's `sql_mode`:
-  `PKPContainer` sets no `strict` on the connection, so a strict server
-  (the default since MySQL 5.7 and MariaDB 10.2.4) fails the same way. A
-  non-strict one saves the line cut to 40 characters: `ip_start` and
-  `ip_end` come from the whole line, so matching is right, but "Edit"
-  and the API show the cut line (`142.58.103.1          -          142.58.`
-  for the Steps' line). The next "Save" of that institution is then
-  refused with "Invalid IP range", or, when the cut leaves a shorter valid
-  address, stores a different range (read in the code, not run).
+- On MySQL the outcome depends on the server's `sql_mode`.
+  `PKPContainer` does not set `strict` on the connection, so a strict
+  server (the default since MySQL 5.7 and MariaDB 10.2.4) fails the same
+  way. A non-strict one saves the line cut to 40 characters. `ip_start`
+  and `ip_end` come from the whole line, so matching is right, but
+  "Edit" and the API show the cut line
+  (`142.58.103.1          -          142.58.` for the Steps' line). The
+  next "Save" of that institution is then refused with "Invalid IP
+  range". Or, when the cut line still ends in a valid (shorter) address,
+  that save stores a different range (read in the code, not run).
 
 ## Proposed fix
 
@@ -164,26 +170,27 @@ atomic, both in `PKP\institution\DAO`.
 $ipRange = preg_replace('/\s+/', ' ', trim($ipRange));
 ```
 
-The validator allows whitespace only around "-", so this collapses exactly
-that, and the longest line it accepts becomes
-`255.255.255.255 - 255.255.255.255`, inside the column.
+The validator allows whitespace only around "-", so this collapses only
+that whitespace. The longest line the validator accepts is then
+`255.255.255.255 - 255.255.255.255`, which fits the column.
 
-And wrap the bodies of `DAO::insert()` and `DAO::update()` in
-`DB::transaction(function () { … })`, so any failed range insert leaves the
-institution as it was, as the newer multi-table writers do
-(`MediaFilesController`, `PKPEditTaskTemplateController`,
-`VariantGroup`).
+Also wrap the bodies of `DAO::insert()` and `DAO::update()` in
+`DB::transaction(function () { … })`, as the newer multi-table writers
+do (`MediaFilesController`, `PKPEditTaskTemplateController`,
+`VariantGroup`). A failed range insert then leaves the institution as
+it was.
 
-Why here: the DAO is the one writer of `institution_ip`, so the fix covers
-the Institutions page, the REST API and OJS's subscription purchase form at
-once, where a validation change would have to be made in both copies of
-the pattern. It keeps the intent of the pattern, which accepts a range
-written with or without spaces; only runs of spaces are stored as one.
+Why here: the DAO is the only writer of `institution_ip`, so the fix
+covers the Institutions page, the REST API and OJS's subscription
+purchase form at once. A validation change would have to be made in
+both copies of the pattern. The fix keeps the pattern's intent, which
+is to accept a range written with or without spaces; only a run of
+spaces is stored as a single space.
 
 **Alternatives:**
 
 - A length rule on `ipRanges` items in `Repository::validate()`: it
-  refuses a valid range and leaves OJS's copy of the pattern open.
+  refuses a valid range and leaves OJS's copy of the pattern unfixed.
 - Narrowing the pattern to one optional space: it refuses inputs that
   save today.
 - Widening `ip_string`: it needs an upgrade migration and still sets an
@@ -191,17 +198,18 @@ written with or without spaces; only runs of spaces are stored as one.
 
 **What goes with it:**
 
-- API: an API client sees a padded range read back with single spaces
-  (through `DAO::fromRow()`), the only change in behavior.
+- API: an API client reads a range with extra spaces back with single
+  spaces (through `DAO::fromRow()`). This is the only change in
+  behavior.
 - OJS purchase: `UserInstitutionalSubscriptionForm::execute()` inserts
   the subscription only after `Repo::institution()->add()` returns, so
   with the transaction a failed range insert leaves neither an
   institution nor a subscription. The purchase as a whole (institution,
-  subscription, queued payment) stays outside one transaction, which
-  this fault does not need.
-- No data repair: stored strings already fit, and the empty duplicates a
-  failed save left cannot be told apart from an institution added
-  without ranges.
+  subscription, queued payment) is still not one transaction; this
+  fault does not need it to be.
+- No data repair: stored strings already fit. The empty duplicates left
+  by failed saves cannot be told apart from institutions added without
+  ranges.
 - Backport: it applies as written to 3.5 and 3.4. On 3.3, OJS
   `InstitutionalSubscriptionDAO::_insertSubscriptionIPRanges()` stores
   `$curIPString` untrimmed, so the backport adds a new line normalizing
@@ -216,8 +224,8 @@ the code base already uses, and a unit test.
 
 ## Evidence
 
-- Kept script, taking the Steps and the 40-character control through the
-  screens on each app, on an install loaded from PKP's default test
+- Kept script that runs the Steps and the 40-character control in the
+  browser on each app, on an install loaded from PKP's default test
   dataset:
   [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/institution-long-ip-range-save-error/walk.js),
   run with
@@ -252,10 +260,10 @@ the code base already uses, and a unit test.
 - Introduced: `git blame` on the column, the pattern and the insert in
   pkp-lib main stops at bed0ee4c3b (PR `pkp/pkp-lib#8109` for `pkp/pkp-lib#6782`,
   Bozana Bokan),
-  which created the Institutions classes from OJS's subscription code;
-  in OJS, `git log -S` finds the pattern with its any-spaces range in
-  d76dc5eb75 (2005-02-19) and the 40-character `ip_string` with that
-  pattern in 5091b6949e (2009-05-20).
+  which created the Institutions classes from OJS's subscription code.
+  In OJS, `git log -S` finds the pattern, with its any-spaces range, in
+  d76dc5eb75 (2005-02-19), and the 40-character `ip_string` together
+  with that pattern in 5091b6949e (2009-05-20).
 - Upstream search 2026-09-30 in pkp/pkp-lib, pkp/ojs, pkp/omp, pkp/ops and
   pkp/ui-library (institution IP range, `ip_string`, `institution_ip`,
   "value too long", `insertIPRanges`): nothing about this fault;

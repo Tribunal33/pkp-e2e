@@ -15,39 +15,41 @@
 
 ## Summary
 
-A manager who changes an institution's "Name", an announcement's "Title"
-or a highlight's "Title" in its "Edit" panel and closes the panel without
-"Save" expects the change dropped, as a change to "IP ranges" or "URL"
-is.
+A manager changes an institution's "Name", an announcement's "Title" or
+a highlight's "Title" in its "Edit" panel, then closes the panel without
+clicking "Save". The manager expects the change to be dropped, as a
+change to "IP ranges" or "URL" is.
 
-Instead the row shows the abandoned text as if it were saved, "Edit"
-reopens with it, and the next "Save" of that item, made to change another
-box, stores it without a word; it then shows wherever the item does,
-public pages included.
+Instead, the row shows the abandoned text as if it were saved, and
+"Edit" reopens with it. The next "Save" of that item, made to change
+another box, stores the abandoned text without any warning. The text
+then shows wherever the item shows, public pages included.
 
 On `main` the same happens to a category's title, a contributor role's
-name and, on journals, a reviewer recommendation's title; a category's
-row keeps showing the saved title, so only the reopened box holds the
-abandoned one.
+name and, on journals, a reviewer recommendation's title. A category's
+row keeps showing the saved title; only its reopened "Title" box shows
+the abandoned one.
 
 ## Impact
 
 - **Lost.** The item's saved name or title, replaced by text the manager
-  threw away. It goes public on the Announcements page (the site's too,
-  on a site with several journals), the home page's highlights, category
-  pages and the contributor roles shown beside authors; an institution's name goes into the COUNTER
-  usage reports its librarians download and, on journals, its
-  institutional subscription.
-- **Who.** A manager who abandons a change to a name or title and edits
-  the same item again without reloading: a common sequence when an edit
-  is started, dropped, and something else fixed instead.
+  threw away. That text goes public on the Announcements page (also the
+  site's, on a site with several journals), the home page's highlights,
+  category pages and the contributor roles shown beside authors. An
+  institution's name goes into the COUNTER usage reports its librarians
+  download and, on journals, into its institutional subscription.
+- **Who.** A manager who abandons a change to a name or title, then
+  edits the same item again without reloading the page. This is a
+  common sequence: an edit is started, dropped, and something else is
+  fixed instead.
 - **Way round.** Reload the page after closing an edit panel, or retype
   the saved text before saving. Nothing gets worse with time.
 
-Medium: a wrong title can reach a public page with no warning, but only
-after an abandoned edit and a second save of the same item, and the
-reopened box shows the abandoned text before that save; it would rise if
-a panel were found that stores the abandoned text without a second edit.
+Medium: a wrong title can reach a public page with no warning. It takes
+an abandoned edit and a second save of the same item, though, and the
+reopened box shows the abandoned text before that save. It would be
+higher if a panel were found that stores the abandoned text without a
+second edit.
 
 ## Steps to reproduce
 
@@ -55,8 +57,8 @@ Preconditions:
 - PKP's default test dataset for `main` (OJS, OMP or OPS), freshly
   loaded. Its `publicknowledge` journal (press, preprint server) has no
   institutions and no highlights, and announcements are turned off.
-- Nothing else: `rvaca` is its Journal Manager (Press Manager, Preprint
-  Server Manager).
+- No other setup: `rvaca` is its Journal Manager (Press Manager,
+  Preprint Server Manager).
 
 Institutions:
 
@@ -109,25 +111,26 @@ reopens with it, and the saves of steps 7, 15 and 19 store only the box
 changed there ("Campus Library" with `10.2.0.0/16`; "Call for papers";
 "Open call").
 
-**Observed:** step 5's row reads "Campus Library Draft" and step 6's
-"Name" holds "Campus Library Draft".
+**Observed:** at step 5 the row reads "Campus Library Draft", and at
+step 6 "Name" shows "Campus Library Draft".
 
 After step 7 and the reload of step 8 the row reads "Campus Library
 Draft", and "Edit" shows "Campus Library Draft" with `10.2.0.0/16`: the
-abandoned name was stored. Step 9's row reads "Campus Library Draft Esc",
-step 10's "Campus Library Draft Esc Out"; after step 11's reload,
-"Campus Library Draft" again.
+abandoned name was stored. After step 9 the row reads "Campus Library
+Draft Esc", and after step 10 "Campus Library Draft Esc Out". After the
+reload of step 11 it reads "Campus Library Draft" again.
 
-Step 14's row reads "Call for papers Draft" and step 15 reopens with it;
-after step 16 the row and the public Announcements page read "Call for
-papers Draft". Step 18's row reads "Open call Draft" and step 19 reopens
-with it; after step 20 the row and "Title" read "Open call Draft".
+At step 14 the row reads "Call for papers Draft", and at step 15 "Edit"
+reopens with it. After step 16 the row and the public Announcements
+page read "Call for papers Draft". At step 18 the row reads "Open call
+Draft", and at step 19 "Edit" reopens with it. After step 20 the row
+and "Title" read "Open call Draft".
 
-No close asked anything, and every save answered 200.
+No close asked for confirmation, and every save returned 200.
 
-Control: after step 11, "IP ranges" changed to `10.3.0.0/16` and the
-panel closed with its close control leaves the row as it was, and "Edit"
-reopens with the saved `10.2.0.0/16`.
+Control: after step 11, changing "IP ranges" to `10.3.0.0/16` and
+closing the panel with its close control leaves the row as it was, and
+"Edit" reopens with the saved `10.2.0.0/16`.
 
 ## Cause
 
@@ -149,7 +152,7 @@ objects. `CategoryManager/categoryManagerStore.js` `getCategoryForm()`
 `ContributorRoleManager/useContributorRoleManagerFormAddRole.js`
 (`setValues({...contributorRole})`) and
 `ReviewerRecommendationManager/reviewerRecommendationManagerStore.js`
-`handleEdit()` (`setValues(item)`) all do.
+`handleEdit()` (`setValues(item)`) all pass a row in this way.
 
 The form then writes a change into that object instead of replacing it:
 `src/components/Form/Form.vue` `fieldChanged()`, line 522,
@@ -159,9 +162,10 @@ edits the row's own object.
 A row that prints the object (`localize(item.name)`,
 `localize(item.title)`, `localize(role.name)`) shows the unsaved text at
 once; the Categories row prints the API's `localizedTitle` string, so it
-does not. Closing the panel discards only the cloned form, never the row,
-and the next "Edit" fills the form from the same, changed, row object, so
-its "Save" posts the abandoned text with the rest.
+does not. Closing the panel discards only the cloned form, never the
+row. The next "Edit" fills the form from the same row object, which
+already holds the change, so its "Save" posts the abandoned text with
+the rest.
 
 A single-language value (`ipRanges`, rebuilt as a new string; `url`,
 `ror`) is replaced, not written into, which is why the Control keeps its
@@ -171,19 +175,19 @@ Reach:
 
 - Institutions `name`, Announcements `title`, `descriptionShort` and
   `description`, Highlights `title`, `description` and `urlText`: every
-  multilingual box of the three panels. On screen for the names and
-  titles; the descriptions and "Button Label" in the code.
+  multilingual box of the three panels. Seen on screen for the names and
+  titles; the descriptions and "Button Label" read in the code.
 - Administration › Site Settings mounts the same `announcements-list-panel`
   and `highlights-list-panel` (`AdminHandler`, `templates/admin/settings.tpl`),
-  for the site's announcements and its home page's highlights: in the
-  code, not walked, since those tabs show only on a site with two or
-  more journals and the dataset has one. The site's Highlights tab cannot
-  save any highlight on such a site today (U11
+  for the site's announcements and its home page's highlights. This was
+  read in the code, not reproduced: those tabs show only on a site with
+  two or more journals, and the dataset has one. The site's Highlights
+  tab cannot save any highlight on such a site today (U11
   [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U11-highlights.md#a5)),
-  so only its Announcements tab reaches the fault until that is fixed.
-- On screen on `main` (none of these managers exists on 3.5), each item
-  edited, its title or name changed, the panel closed with its close
-  control, reopened and saved unchanged:
+  so only its Announcements tab can show the fault until that is fixed.
+- Seen on screen on `main` (none of these managers exists on 3.5): each
+  item opened with "Edit", its title or name changed, the panel closed
+  with its close control, then reopened and saved unchanged:
   - Settings › Journal (Press, Server) › Categories, "Edit Category":
     the row keeps "Applied Science", the reopened "Title" reads "Applied
     Science Draft", and the save stores it; all three apps.
@@ -192,11 +196,12 @@ Reach:
     apps.
   - Settings › Workflow › Review › Reviewer Recommendations, "Edit
     Recommendation" (OJS; OMP and OPS do not offer it): the row reads
-    "Accept Submission Draft" and the save stores it. Its side modal
-    reloads the list on close only after a save, since ui-library
+    "Accept Submission Draft" and the save stores it. Since ui-library
     [1afd40a9](https://github.com/pkp/ui-library/commit/1afd40a911253ce98327bd1130b6f6f8f35168a4)
-    (`pkp/ui-library#853`, 2026-09-24); before it, the reload on every
-    close hid the fault there (from the code, not walked).
+    (`pkp/ui-library#853`, 2026-09-24), its side modal reloads the list
+    on close only after a save. Before that commit, the list reloaded on
+    every close, which hid the fault there (read in the code, not
+    reproduced).
 - Checked in the code and clean: Contributors and Reviewer Suggestions
   fill the form from a fresh copy fetched for the panel; `FormModal.vue`
   fills it from a fetch; Funders and the author's review response build
@@ -215,7 +220,7 @@ Reach:
 A proposal, not tried.
 
 Recommended: make `Form.vue`'s `fieldChanged()` replace a multilingual
-value instead of writing into it, and the same line in the two
+value instead of writing into it, and change the same line in the two
 overrides, `DateTimeForm.vue` and `ThemeForm.vue`:
 
 ```js
@@ -229,19 +234,21 @@ if (localeKey) {
 
 `Form.vue` is the one writer every affected panel shares: the three list
 panels and the Categories, Contributor Roles and Reviewer Recommendations
-managers all render it, whichever way they fill it. Fixed there, it
-covers all six and any later caller that hands the form a row's values.
-It follows `FieldFunder.vue` `updateFunderName()`, which replaces a
+managers all render it, whichever way they fill it. A fix there covers
+all six, and any later caller that hands the form a row's values. It
+follows `FieldFunder.vue` `updateFunderName()`, which replaces a
 funder's name object the same way (`{...currentValue.value.name,
-[locale]: value}`). The form still sees the change at once, since the field object itself is
-updated and emitted with `set`, as it is today for a single-language box.
+[locale]: value}`). The form still sees the change at once, since the
+field object itself is updated and emitted with `set`, as it is today
+for a single-language box.
 
 **Alternatives:**
 
 - Cloning at each caller: `field.value = cloneDeep(<row>[field.name])` in
   the three `openEditModal()` methods (`cloneDeep` is already imported
-  there) and a deep copy before the three managers' `setValues()`. Six
-  places, and the next caller that copies either pattern is exposed.
+  there) and a deep copy before the three managers' `setValues()`. That
+  is six places, and the next caller that copies either pattern still
+  has the fault.
 - `cloneDeep` inside `useForm`'s `setValue()`: it covers the managers but
   not the three list panels, which assign `field.value` themselves.
 - Fetching the item afresh on "Edit", as Contributors does: a request per
