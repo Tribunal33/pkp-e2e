@@ -25,7 +25,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U21](../specs/U21-submission-wizard.md) | 16 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | **In progress: workstation issues session (slot s1), 2026-09-30** |
-| [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 | **In progress: issues session s3, 2026-09-30.** Done: OJS1; in progress: A4; open: A2, A5, A6, A7, A8, A9, A10, A11, A13, A14, OJS3, OMP1, OMP2, OMP4, OMP5, OMP6 |
+| [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 | **In progress: issues session s3, 2026-09-30.** Done: OJS1, A4; open: A2, A5, A6, A7, A8, A9, A10, A11, A13, A14, OJS3, OMP1, OMP2, OMP4, OMP5, OMP6 |
 | [U53](../specs/U53-users-management.md) | 15 | 2 | 4 | **In progress: issues session s3, 2026-09-30** |
 | [U47](../specs/U47-media-files.md) | 7 | 2 | 4 | **In progress: issues session s3, 2026-09-30** |
 | [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **In progress: issues session s3, 2026-09-30** |
@@ -70,7 +70,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U30](../specs/U30-author-response-to-reviews.md) | 4 | 0 | 2 |  |
 | [U42](../specs/U42-citations-and-references.md) | 15 | 0 | 1 |  |
 | [U27](../specs/U27-reviewer-assignment-and-management.md) | 11 | 0 | 1 |  |
-| [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 |  |
+| [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | **OMP1 only: issues session s3, 2026-09-30** (joins U53 A14); the other entries are free for another session |
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
 | [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | **A2 only: issues session s3, 2026-09-30** (joins U36 A10); the other entries are free for another session |
 | [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 (2026-09-30); the other four open |
