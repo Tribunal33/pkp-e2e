@@ -1392,6 +1392,16 @@ Left out of the scenarios above, by reason:
     on "Purchase Individual Subscription" with a membership-requiring
     type and "Membership" empty showing "The selected subscription type
     requires membership information." and storing nothing
+  - the guard for A23 (issue report
+    `docs/issues/U51-A23-open-journal-offers-subscription-purchase.md`):
+    on an open-access journal with subscription types and payments set
+    up, the "Subscriptions" page's address leading home and the menu
+    offering no "Subscriptions" item
+  - the guard for A24 (issue report
+    `docs/issues/U51-A24-subscription-type-links-lead-home.md`): a
+    signed-in subscriber of a journal requiring subscriptions without
+    payments set up seeing neither "Learn More" in the block nor "View
+    Available Subscription Types" on "My Subscriptions"
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1503,8 +1513,8 @@ entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | With only a membership fee, "Full Issue" asks the reader to pay an issue fee of no amount | 🐞 | user-visible | — |
 | [A21](#a21) | The subscription window saves a start date after the end date | 🐞 | minor | — |
 | [A22](#a22) | Subscription lists searched by membership, reference number, notes, institution, domain or IP range show every subscription | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A23](#a23) | "Purchase New Subscription" on a journal that does not require subscriptions leads home | 🐞 | minor | — |
-| [A24](#a24) | "View Available Subscription Types" and "Learn More" lead home while payments are not set up | 🐞 | minor | — |
+| [A23](#a23) | An open-access journal's "Subscriptions" page offers "Purchase New Subscription", which leads to the home page | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A24](#a24) | On a subscription journal without payments set up, "Learn More" and "View Available Subscription Types" lead readers home | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A25](#a25) | "Purchase" beside an institutional subscription opens with "IP ranges" reading "Array", refused on "Continue" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A26](#a26) | The "Subscription" block reads "Expires: {date}" for an inactive subscription | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A27](#a27) | Subscribers get no expiry reminders: the reminder task stops with an error on every run | 🐞 | high · crash: server | issues (claude), 2026-09-30 — re-verified |
@@ -1743,21 +1753,36 @@ domain or address has to find the subscription by reading the list.
 Basis: probe, 2026-09-30. <sup>f-a22</sup>
 
 <a id="a23"></a>
-**A23 — "Purchase New Subscription" leads home on an open journal** · 🐞 · minor.
-On an open-access journal, or one not published online, that has
-subscription types and payments set up, the "Subscriptions" page lists
-the types and offers a signed-in reader "Purchase New Subscription";
-pressing it leads to the journal's home page with no message. Basis:
-probe, 2026-09-25. <sup>f-a23</sup>
+**A23 — An open-access journal's "Subscriptions" page offers "Purchase New Subscription", which leads to the home page** · 🐞 · low.
+On a journal that does not require subscriptions (open access, or not
+published online) but still has subscription types and payments set
+up, the "Subscriptions" page lists the types with their prices and
+offers a signed-in reader "Purchase New Subscription". Pressing it
+lands on the journal's home page with no message, because such a
+journal does not sell subscriptions.
+A journal gets here when it switches from subscriptions to open access
+(or stops publishing online) and keeps its types and payments, for
+example to take author fees. Readers reach
+the page by its address or by a "Subscriptions" menu item the journal
+placed; the default menus do not hold one. Signed-out readers see the
+types but no purchase link.
+Basis: probe, 2026-09-30. <sup>f-a23</sup>
 
 <a id="a24"></a>
-**A24 — Two links to the subscription offer lead home** · 🐞 · minor.
-While payments are not set up (the install default), "My
-Subscriptions" offers "View Available Subscription Types" under each
-kind of subscription, and the "Subscription" block offers "Learn More",
-but the "Subscriptions" page is closed then, so both lead to the
-journal's home page with no message. Basis: probe, 2026-09-25.
-<sup>f-a24</sup>
+**A24 — On a subscription journal without payments set up, "Learn More" and "View Available Subscription Types" lead readers home** · 🐞 · low.
+A journal that requires subscriptions but has no payment method set up
+still shows signed-in readers two links to its "Subscriptions" page:
+"Learn More" in the "Subscription" block, and "View Available
+Subscription Types" on "My Subscriptions". That page is closed while
+payments are not set up, so both links land on the journal's home page
+with no message.
+Payments are off on a new journal, so a journal that sells
+subscriptions by hand, without an online payment method, is in this
+state. Readers meet the links only when they are signed in and have no
+subscription, and only where the journal placed the "Subscription"
+block in its sidebar or the reader opens "My Subscriptions". Signed-out
+readers see neither link: the block asks them to log in.
+Basis: probe, 2026-09-30. <sup>f-a24</sup>
 
 <a id="a25"></a>
 **A25 — "Purchase" beside an institutional subscription opens with "IP ranges" reading "Array", refused on "Continue"** · 🐞 · low.
@@ -2077,9 +2102,11 @@ Issue report: [pkp-e2e#39](https://github.com/jardakotesovec/pkp-e2e/issues/39) 
 
 <a id="fn-f-a23"></a>
 **f-a23** — `AboutHandler::subscriptions()` checks only the payment setup (note f) and the template offers "Purchase New Subscription" to any signed-in visitor, while `UserHandler::purchaseSubscription()` redirects to the index outside `PUBLISHING_MODE_SUBSCRIPTION`. Live-probed 2026-09-25 (td27), on an open-access and a not-online journal.
+Issue report: [docs/issues/U51-A23-open-journal-offers-subscription-purchase.md](../issues/U51-A23-open-journal-offers-subscription-purchase.md).
 
 <a id="fn-f-a24"></a>
 **f-a24** — `userSubscriptions.tpl` and the block link to `about/subscriptions`, which redirects to the journal index while payments are not configured (note f). Live-probed 2026-09-25 (td20, td25).
+Issue report: [docs/issues/U51-A24-subscription-type-links-lead-home.md](../issues/U51-A24-subscription-type-links-lead-home.md).
 
 <a id="fn-f-a25"></a>
 **f-a25** — `UserInstitutionalSubscriptionForm::initData()` fills `ipRanges` with `$institution->getIPRanges()`, an array, which the text box prints as "Array"; the IP check then refuses it. Live-probed 2026-09-25 (td18).

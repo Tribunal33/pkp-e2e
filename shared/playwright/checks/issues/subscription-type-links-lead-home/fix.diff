@@ -1,0 +1,65 @@
+--- a/templates/frontend/pages/userSubscriptions.tpl
++++ b/templates/frontend/pages/userSubscriptions.tpl
+@@ -126,12 +126,6 @@
+ 						{translate key="user.subscriptions.purchaseNewSubscription"}
+ 					</a>
+ 				</p>
+-			{else}
+-				<p>
+-					<a href="{url page="about" op="subscriptions" anchor="subscriptionTypes"}">
+-						{translate key="user.subscriptions.viewSubscriptionTypes"}
+-					</a>
+-				</p>
+ 			{/if}
+ 		</div>
+ 	{/if}
+@@ -219,17 +213,13 @@
+ 					{/foreach}
+ 				</table>
+ 			{/if}
+-			<p>
+-				{if $paymentsEnabled}
++			{if $paymentsEnabled}
++				<p>
+ 					<a class="action" href="{url page="user" op="purchaseSubscription" path="institutional"}">
+ 						{translate key="user.subscriptions.purchaseNewSubscription"}
+ 					</a>
+-				{else}
+-					<a href="{url page="about" op="subscriptions" anchor="subscriptionTypes"}">
+-						{translate key="user.subscriptions.viewSubscriptionTypes"}
+-					</a>
+-				{/if}
+-			</p>
++				</p>
++			{/if}
+ 		</div>
+ 	{/if}
+ </div>
+--- a/plugins/blocks/subscription/SubscriptionBlockPlugin.php
++++ b/plugins/blocks/subscription/SubscriptionBlockPlugin.php
+@@ -99,11 +99,8 @@
+         }
+ 
+         $paymentManager = Application::get()->getPaymentManager($journal);
++        $templateMgr->assign('acceptSubscriptionPayments', $paymentManager->isConfigured());
+ 
+-        if (isset($individualSubscription) || isset($institutionalSubscription)) {
+-            $templateMgr->assign('acceptSubscriptionPayments', $paymentManager->isConfigured());
+-        }
+-
+         return parent::getContents($templateMgr, $request);
+     }
+ }
+--- a/plugins/blocks/subscription/templates/block.tpl
++++ b/plugins/blocks/subscription/templates/block.tpl
+@@ -49,7 +49,9 @@
+ 					<a href="{url page="user" op="subscriptions"}">{translate key="user.subscriptions.mySubscriptions"}</a>
+ 				{else}
+ 					{translate key="plugins.block.subscription.subscriptionRequired"}
+-					<a href="{url page="about" op="subscriptions"}">{translate key="plugins.block.subscription.subscriptionRequired.learnMore"}</a>
++					{if $acceptSubscriptionPayments}
++						<a href="{url page="about" op="subscriptions"}">{translate key="plugins.block.subscription.subscriptionRequired.learnMore"}</a>
++					{/if}
+ 				{/if}
+ 			</p>
+ 		{/if}
