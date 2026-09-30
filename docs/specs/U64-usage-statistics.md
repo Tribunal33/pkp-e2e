@@ -1243,7 +1243,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS4](#ojs4) | "Download Issues" holds at most 30 issues, although the page counts more | 🐞 | user-visible | — |
 | [OJS5](#ojs5) | "Journal Article Requests (IR_A1)" lists investigation rows its header leaves out | 🐞 | minor | — |
 | [OJS6](#ojs6) | The COUNTER Release 4 file names its report by a cut-off code path | 🐞 | minor | — |
-| [OMP3](#omp3) | A book's PDF or "Appendix" file fails to open, so its visit is never counted | 🐞 | user-visible · crash: both | — |
+| [OMP3](#omp3) | A book's PDF or "Appendix" file fails to open, so its visit is never counted | 🐞 | critical · crash: both | issues (claude), 2026-09-30 — re-verified |
 | [A2](#a2) | Custom Range refuses an open-ended range | ❓ | minor | — |
 | [A9](#a9) | The downloaded spreadsheets carry no byte-order mark | ❓ | minor | — |
 | [A12](#a12) | The date range list does not close on Escape | ❓ | minor | — |
@@ -1469,13 +1469,13 @@ views "Catalog Entries". A different parameter on the same machinery.
 Basis: probe, 2026-09-27. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
-**OMP3 — A book's PDF or "Appendix" file is never counted** · 🐞 · user-visible · crash: both.
+**OMP3 — A book's PDF or "Appendix" file is never counted** · 🐞 · critical · crash: both.
 On a press, a reader who opens a book's PDF from the book page gets a
 viewer that stays empty, and one who opens its "Appendix" file gets a
 blank page: the app fails, so no file view is recorded. An HTML file
 opens and is counted. The failure itself is [Search engine metadata &
 analytics' OMP6](U20-search-engine-metadata-and-analytics.md#omp6).
-Basis: probe, 2026-09-27. <sup>f-omp3</sup>
+Basis: probe, 2026-09-30. <sup>f-omp3</sup>
 
 ### OPS
 
@@ -2428,6 +2428,7 @@ its `catalog/download/{book}/{format}/{file}?inline=1` answering 500
 and the page's script failing with "PDFJS is not defined" and
 "UnexpectedResponseException". Neither wrote a line to the day's usage
 log; the HTML format wrote one. The same failure is U20's OMP6.
+Issue report: [docs/issues/U69-A9-omp-book-files-fail-to-open.md](../issues/U69-A9-omp-book-files-fail-to-open.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — fn-e (OPS `StatsHandler::addSectionFilters()`,

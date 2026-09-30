@@ -876,7 +876,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, unsaved, until a reload | 🐞 | user-visible | — |
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | invisible | — |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | minor | — |
-| [OMP1](#omp1) | With "HTML Monograph File" off, a book's HTML file opens as a blank page | 🐞 | user-visible · crash: server | — |
+| [OMP1](#omp1) | With "HTML Monograph File" off, a book's HTML file opens as a blank page | 🐞 | critical · crash: both | issues (claude), 2026-09-30 — re-verified |
 | [OMP2](#omp2) | On a press, a role that sees the list outside Production cannot download its files: the tab shows a refusal | 🐞 | user-visible | — |
 | [A2](#a2) | The "ID" column shows a pair's number for linked files and another kind of number for the rest | ❓ | minor | — |
 | [OJS1](#ojs1) | A reader who is not signed in sees a media change on an HTML galley up to a day late | ❓ | user-visible | — |
@@ -1015,13 +1015,13 @@ Basis: probe, 2026-09-24. <sup>f-ojs1</sup>
 
 ### OMP
 <a id="omp1"></a>
-**OMP1 — With "HTML Monograph File" off, a book's HTML file opens as a blank page** · 🐞 · user-visible · crash: server.
+**OMP1 — With "HTML Monograph File" off, a book's HTML file opens as a blank page** · 🐞 · critical · crash: both.
 With the plugin off, a reader who opens a book's HTML file from the
 book page gets a blank page: the server fails behind it, and the file
 is neither shown nor downloaded. A journal with "HTML Article Galley"
 off downloads the file instead. The reader gets neither the book's HTML
 nor a message.
-Basis: probe, 2026-09-24. <sup>f-omp1</sup>
+Basis: probe, 2026-09-30. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
 **OMP2 — Press roles outside Production cannot download the media files they see** · 🐞 · user-visible.
@@ -1821,6 +1821,7 @@ APP\pages\catalog\CatalogBookHandler::$publication must not be accessed
 before initialization", app log). The same path probably fails for any
 format file no viewer plugin takes; that was not driven. Control:
 plugin on, the page showed the image.
+Issue report: [docs/issues/U69-A9-omp-book-files-fail-to-open.md](../issues/U69-A9-omp-book-files-fail-to-open.md).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Test run 2026-09-25, OMP (scenario 8): the Funding

@@ -13,7 +13,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **In progress: issues session s1, 2026-09-30.** Open: all 15 (A14 in progress) |
 | [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 | **Claimed: issues session s1, 2026-09-30** |
 | [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **Claimed: issues session s1, 2026-09-30** |
-| [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 | **Claimed: issues session s1, 2026-09-30** (A15 with U13 A1); **A9 with U47 OMP1: issues session s3, 2026-09-30** |
+| [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 | **Claimed: issues session s1, 2026-09-30** (A15 with U13 A1); **A9 done: issues session s3, 2026-09-30** (with U47 OMP1) |
 | [U19](../specs/U19-oai-pmh.md) | 11 | 4 | 3 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
@@ -26,7 +26,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 | **In progress: issues session s3, 2026-09-30.** Done: OJS1, A4; open: A2, A5, A6, A7, A8, A9, A10, A11, A13, A14, OJS3, OMP1, OMP2, OMP4, OMP5, OMP6 |
 | [U53](../specs/U53-users-management.md) | 15 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: A15, A14; open: A1, A2, A4, A5, A6, A7, A9, A11, A12, A13, A16, A17, A19, OPS1 |
-| [U47](../specs/U47-media-files.md) | 7 | 2 | 4 | **In progress: issues session s3, 2026-09-30** |
+| [U47](../specs/U47-media-files.md) | 7 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: OMP1 (with U69 A9); in progress: A4 (with U36 A21); open: A1, A3, A5, A6, A7, OMP2 |
 | [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **In progress: issues session s3, 2026-09-30** |
 | [U17](../specs/U17-sections.md) | 16 | 2 | 2 | **In progress: issues session s3, 2026-09-30** |
 | [U59](../specs/U59-hosted-journals.md) | 9 | 2 | 2 |  |
@@ -38,12 +38,12 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 | A16 written with U63 A12 ([pkp-e2e#15](https://github.com/jardakotesovec/pkp-e2e/issues/15), 2026-09-30); the other entries are open |
 | [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | **OMP1 done: issues session s3, 2026-09-30** (with U53 A14); the other entries are free for another session |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 |  |
-| [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | **OMP3 only: issues session s3, 2026-09-30** (joins U47 OMP1); the other entries are free for another session |
+| [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | **OMP3 done: issues session s3, 2026-09-30** (with U69 A9); the other entries are free for another session |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 4 | 1 | 4 |  |
 | [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | **OPS2 only: workstation issues session (slot s1), 2026-09-30** (joins U51 OPS1); the other entries are free for another session |
 | [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 |  |
-| [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | **OMP6 only: issues session s3, 2026-09-30** (joins U47 OMP1); the other entries are free for another session |
+| [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | **OMP6 done: issues session s3, 2026-09-30** (with U69 A9); the other entries are free for another session |
 | [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 |  |
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 7 | 1 | 1 |  |
 | [U15](../specs/U15-search.md) | 13 | 0 | 6 | **OPS2 only: workstation issues session (slot s1), 2026-09-30** (joins U51 OPS1); the other entries are free for another session |
