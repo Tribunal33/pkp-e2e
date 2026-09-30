@@ -1505,7 +1505,7 @@ each state the scenarios start from was reached on a scratch context.
 
 <a id="fn-f-a10"></a>
 **f-a10** — fn g. A word as the id misses the route's `whereNumber('sectionId')`; `APIHandler` maps only a `NotFoundHttpException` to 404 `api.404.endpointNotFound`, and this route miss arrives as another exception, so it answers 500 with the exception's message (handler-wide by the code; no other interface was driven). At the site's address `getRequest()->getContext()` is null and `getMany()` calls `getId()` on it. Live-probed 2026-09-25, two runs: note g, one section and the site's address; OMP and OPS answered 404 at the same site address.
-Issue report (the site's address): [docs/issues/U17-A10-sections-site-address-server-error.md](../issues/U17-A10-sections-site-address-server-error.md).
+Issue report (the site's address): [pkp-e2e#69](https://github.com/jardakotesovec/pkp-e2e/issues/69) ([docs/issues/U17-A10-sections-site-address-server-error.md](../issues/U17-A10-sections-site-address-server-error.md)).
 Issue report (a section asked for by a word, with the API's other wrong statuses): [pkp-e2e#43](https://github.com/jardakotesovec/pkp-e2e/issues/43) ([docs/issues/U36-A21-upload-over-request-limit-server-error.md](../issues/U36-A21-upload-over-request-limit-server-error.md)).
 
 <a id="fn-f-omp1"></a>
