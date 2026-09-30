@@ -1886,8 +1886,8 @@ out. Were a value stored, `SubmissionFile::getBestId()` and
 `CatalogBookHandler` would put it in the file's download address on the
 book page in place of the file's number (the reason for the "12-34"
 refusal); nothing on screen can store one.
-Issue report: [docs/issues/U44-OMP5-press-file-publisher-id-not-kept.md](../issues/U44-OMP5-press-file-publisher-id-not-kept.md).
-Issue report (the box lost after a refusal): [docs/issues/U44-OMP5-press-file-publisher-id-box-gone-after-refusal.md](../issues/U44-OMP5-press-file-publisher-id-box-gone-after-refusal.md).
+Issue report: [pkp-e2e#45](https://github.com/jardakotesovec/pkp-e2e/issues/45) ([docs/issues/U44-OMP5-press-file-publisher-id-not-kept.md](../issues/U44-OMP5-press-file-publisher-id-not-kept.md)).
+Issue report (the box lost after a refusal): [pkp-e2e#46](https://github.com/jardakotesovec/pkp-e2e/issues/46) ([docs/issues/U44-OMP5-press-file-publisher-id-box-gone-after-refusal.md](../issues/U44-OMP5-press-file-publisher-id-box-gone-after-refusal.md)).
 
 <a id="fn-f-omp6"></a>
 **f-omp6** — Live-probed 2026-09-24 in two runs (note g): file
