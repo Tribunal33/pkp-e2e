@@ -1101,7 +1101,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Create Issue" arrives with "Title" ticked, and "Save" without a title is refused with only a passing notice; the "Title" box is not marked | 🐞 | user-visible | — |
 | [A2](#a2) | Unpublishing any issue leaves the journal with no current issue | 🐞 | user-visible | — |
-| [A4](#a4) | After a refused "Save", "Date Published" shows today's date, which the issue saved next does not get | 🐞 | minor | — |
+| [A4](#a4) | After a refused "Save", "Date Published" shows today's date, which the issue saved next does not get | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A "Volume" of 99999 leaves "Create Issue" open with nothing shown | 🐞 | minor · crash: server | — |
 | [A6](#a6) | "Year" accepts letters: "20a6" is saved as 20 without a message | 🐞 | user-visible | — |
 | [A8](#a8) | "Future Issues" lists "No. 10" before "No. 2" | 🐞 | minor | — |
@@ -1156,12 +1156,12 @@ published ones? Lean: warn with the existing text; a published issue is
 better unpublished first. Basis: probe, 2026-09-25. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — "Date Published" shows a date the issue never gets** · 🐞 · minor.
+**A4 — "Date Published" shows a date the issue never gets** · 🐞 · medium.
 After "Save" is refused on "Create Issue" or "Issue Data", the "Date
 Published" box shows today's date, though nobody typed it. The issue
 saved next has no Date Published, so the box showed a date the issue
-never got. The box should keep what was typed, empty included. Basis:
-probe, 2026-09-25. <sup>f-a4</sup>
+never got. The box should keep what was typed, empty included.
+Basis: probe, 2026-09-30. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A large "Volume" fails the save** · 🐞 · minor · crash: server.
@@ -1470,6 +1470,7 @@ where it is made.
 
 <a id="fn-f-a4"></a>
 **f-a4** — Live-probed 2026-09-25 (Fields "Date Published"; Rule 3), OJS: on "Create Issue" with the date box empty, the refused "Save" of A1 left "2026-09-25" in the box; after unticking "Title" and saving, the issue's "Issue Data" showed the date empty. On a published issue, after "Date Published is required when the issue is published." the box showed today again. Mechanism not read.
+Issue report: [pkp-e2e#53](https://github.com/jardakotesovec/pkp-e2e/issues/53) ([docs/issues/U51-A28-subscription-date-boxes-show-today-unsent.md](../issues/U51-A28-subscription-date-boxes-show-today-unsent.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-25 (td3), OJS: "Volume" 99999 with a valid "Year": `POST …/$$$call$$$/grid/issues/future-issue-grid/update-issue` answered 500, the window stayed open with no message and the list was unchanged. The schema stores `volume` in a `smallint` column (note i), whose limit is 32767, the likely cause; only 99999 was driven, and no server-log line was read.

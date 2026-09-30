@@ -10,7 +10,7 @@
   - 3.3: none (code; Smarty's own `date_format` leaves an empty date empty)
 - **Introduced** no pull request, for `pkp/pkp-lib#9303` · [22c03902e1](https://github.com/pkp/pkp-lib/commit/22c03902e1404e8c0bf8766d25d069fa6d9151d5) · 2024-09-06 · Alec Smecher (asmecher); on 3.4 the same change as [d6b045eb39](https://github.com/pkp/pkp-lib/commit/d6b045eb39e2a782bfc0150d8f1e8f4addabc879), pull request `pkp/pkp-lib#10352`, first released in 3.4.0-8
 - **Upstream** none found (2026-09-30)
-- **Tracked in** spec U51 [A28](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U51-subscriptions.md#a28)
+- **Tracked in** spec U51 [A28](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U51-subscriptions.md#a28); spec U50 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U50-issues.md#a4)
 - **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -25,13 +25,18 @@ message).
 The manager sees a filled box and a message saying it is empty. It
 happens for individual and institutional subscriptions alike.
 
+The issue window's "Date Published" does the same on "Create Issue":
+after a refused "Save" the empty box shows today's date, though nobody
+typed it, and the issue saved next gets no date.
+
 ## Impact
 
 - **Lost.** Time, and trust in the message. Nothing is stored that the
   manager did not enter.
 - **Who.** A journal manager or subscription manager adding or editing a
   subscription by hand, whenever a "Save" is pressed with a date box
-  empty.
+  empty; and a journal manager or editor creating an issue whose first
+  "Save" is refused.
 - **Way round.** Set the date again: pick it in the calendar that opens
   on the box, or type it in character by character. The next "Save"
   then succeeds. Nothing on screen suggests this, since the box already
@@ -39,7 +44,8 @@ happens for individual and institutional subscriptions alike.
 
 Medium: adding or editing a subscription fails with a message the screen
 contradicts, and the way round is not obvious, though it is on the same
-screen.
+screen. The issue window stores nothing wrong: an issue saved with no
+date gets the day it is published, as the box's help line says.
 
 ## Steps to reproduce
 
@@ -112,6 +118,26 @@ refused with "A subscription start date is required.", and "Start date"
 reads today's date after the first. Step 10 saves the subscription with
 today's start date.
 
+The issue window (the same walk):
+
+11. Open "Issues" (`/index.php/publicknowledge/en/manageIssues`), tab
+    "Future Issues", "Create Issue". Leave "Date Published" empty. Type
+    "9" in "Volume", "1" in "Number" and "2027" in "Year". Leave the
+    "Title" box empty, with "Title" ticked under it, as it is by default.
+    Press "Save".
+12. Type "Issue u51w10" in "Title" and press "Save".
+
+**Expected.** Step 11 is refused with "Title is required for the
+issue.", and "Date Published" stays empty. Step 12 creates the issue
+with no date, which it gets when it is published ("If left empty, the
+date will be set automatically when the issue is published.").
+
+**Observed.** Step 11 is refused with "Title is required for the
+issue.", and "Date Published" now reads today's date (`2026-09-30`).
+Step 12 closes the window and creates the issue. The form posted
+`datePublished=` empty, and the issue is stored with no publication
+date.
+
 ## Cause
 
 `PKPTemplateManager::smartyDateFormat()`
@@ -161,14 +187,15 @@ The reach:
 
 - Institutional subscriptions, and editing an existing subscription: the
   same, walked on `main` (steps 7–10).
-- OJS "Issues" › "Future Issues" › "Create Issue", "Date Published":
-  walked on `main` (volume 9, number 1, year 2027, "Title" ticked and
-  left empty). After a "Save" refused with "Title is required for
-  the issue." the empty box shows today's date. The next "Save" is
-  accepted and stores no date, as the box's help line promises for an
-  empty box ("If left empty, the date will be set automatically when
-  the issue is published."). The issue then takes the day it is
-  published, not the date the box showed.
+- The issue window's "Date Published" on "Create Issue": walked on
+  `main` (steps 11–12). `IssueForm::readInputData()` reads the empty box
+  as `''` too. `IssueForm::execute()` stores `null` for an unpublished
+  issue, so the issue then takes the day it is published, not the date
+  the box showed.
+- The same box on a published issue's "Issue Data": a "Save" with the
+  date emptied is refused by the server ("Date Published is required
+  when the issue is published."), the box then shows today's date, and
+  the next "Save" is refused again, as for a subscription: code.
 - OJS "Open Access Date" (the issue's "Access" tab) and the PFL
   plugin's settings have the same box: code.
 - The reviewer windows' "Response Due Date" and "Review Due Date" (OJS
@@ -258,17 +285,17 @@ Small: a few lines in one method, and a unit test.
   run on a fresh load of the default dataset:
   `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js ojs shared/playwright/checks/issues/subscription-date-boxes-show-today-unsent/walk.js [neighbour|reach]`
   (with `PKP_E2E_LINE=stable-3_5_0` in front for 3.5). Without an
-  argument it takes steps 1–6 and the control. `reach` takes steps 7–10,
-  switches payments on to read the side menu, and walks the issue
-  window. `neighbour` is the fix check. The script records the visible
-  boxes, the hidden fields and the posted dates at each "Save".
+  argument it takes steps 1–6 and the control. `reach` takes steps
+  7–12, after switching payments on to read the side menu. `neighbour`
+  is the fix check. The script records the visible boxes, the hidden
+  fields and the posted dates at each "Save".
 - The fix: `node bin/try-fix.js apply shared/playwright/checks/issues/subscription-date-boxes-show-today-unsent/fix.diff ojs`,
   the script with and without `neighbour`, then
   `node bin/try-fix.js revert ojs`.
 - Driven on PostgreSQL, on the default dataset from pkp/datasets 38ab955
   (2026-09-30): steps 1–6 on `main` and `stable-3_5_0`, with the same
-  result on both; steps 7–10 and the issue window on `main`. No request
-  failed and no page script failed.
+  result on both; steps 7–12 on `main`. No request failed and no page
+  script failed.
 - Tips:
   - `main`: OJS
     [bade233f73](https://github.com/pkp/ojs/commit/bade233f73f5a1ccfb7f29c48b8becdb278f1287)
@@ -287,7 +314,9 @@ Small: a few lines in one method, and a unit test.
     with pkp-lib
     [d446601ebe](https://github.com/pkp/pkp-lib/commit/d446601ebe764bffdbab8efe8d7aeb1e82db6072).
 - Code reads:
-  - 3.5: `smartyDateFormat()` and `textInput.tpl` are as on `main`.
+  - 3.5: `smartyDateFormat()` and `textInput.tpl` are as on `main`, and
+    so are the issue window's date box (`issueForm.tpl`) and
+    `IssueForm`'s reading and storing of `datePublished`.
   - 3.4: `smartyDateFormat()` is the same, registered as
     `[$this, 'smartyDateFormat']`. `textInput.tpl`, the subscription
     templates (`class="datepicker"`) and
@@ -311,5 +340,5 @@ Small: a few lines in one method, and a unit test.
   `$format` in the same method) and `pkp/pkp-lib#12984` (RSS dates
   localized by the same override) are other faults of the same method.
 - Unverified: the date boxes marked "code" under Cause, and a pasted
-  date. Not driven: steps 7–10 and the issue window on 3.5; MySQL (the
-  fault is in PHP and the browser, before any query).
+  date. Not driven: steps 7–12 on 3.5, read in the code instead; MySQL
+  (the fault is in PHP and the browser, before any query).
