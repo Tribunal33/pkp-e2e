@@ -1416,6 +1416,11 @@ Left out of the scenarios above, by reason:
     "Association Membership" set, a signed-in reader without a
     subscription pressing a "Full Issue" galley landing on the
     "Subscriptions" page, as for an article galley, with no payment queued
+  - the guard for A11 (issue report
+    `docs/issues/U51-A11-institutional-purchase-adds-duplicate-institution.md`):
+    an institutional purchase under an existing institution's name and
+    IP ranges leaving one row on "Institutions", and the manager's edit
+    of that row's ranges reaching the reader's subscription
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1515,7 +1520,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | Subscription expiry reminders run once a month, so most subscribers never get one | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
 | [A9](#a9) | Buying an individual subscription with "Membership" empty returns the same page with no reason given | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A10](#a10) | A reader who presses "Purchase" beside an active subscription loses access at once, before paying | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A11](#a11) | Every institutional purchase adds another institution | 🐞 | minor | — |
+| [A11](#a11) | Each institutional subscription a reader buys gets its own copy of the institution, which the manager's edits miss | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A12](#a12) | A signed-out visitor who opens a subscription purchase page's address gets an empty page, not Login | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A13](#a13) | The "Subscription" block reads "Expired: {today}" for a subscription awaiting payment | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A14](#a14) | With "Only Restrict Access to PDF…" ticked and no reader fee, HTML galleys show no padlock but refuse readers | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1650,12 +1655,20 @@ page warns that the current subscription ends.
 Basis: probe, 2026-09-30. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — Each institutional purchase adds an institution** · 🐞 · minor.
-Every "Continue" on "Purchase Institutional Subscription" adds a new
-institution to the journal's [Institutions](U66-institutions.md) list under the typed name,
-even when an institution of that name exists or the reader is changing an
-existing purchase, so the list fills with duplicates the manager must
-tidy by hand. Basis: probe, 2026-09-25. <sup>f-a11</sup>
+**A11 — Each institutional subscription a reader buys gets its own copy of the institution, which the manager's edits miss** · 🐞 · medium.
+A reader who buys an institutional subscription types the institution's
+name and IP ranges on "Purchase Institutional Subscription". Each time
+they press "Continue", the journal's "Institutions" list gets a new
+institution under that name. This happens even when the list already
+has one with the same name and ranges. It also happens when the reader
+presses "Purchase" beside a subscription they already hold.
+The subscription uses its own copy, not the institution the manager
+created. When the library's addresses change and the manager updates
+the ranges on their institution, nothing tells them that the bought
+subscription keeps the old ranges. Readers at the library's new
+addresses are refused, and the old addresses keep access. It works again
+only once the manager edits every row of that name.
+Basis: probe, 2026-09-30. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — A signed-out visitor who opens a subscription purchase page's address gets an empty page, not Login** · 🐞 · medium · crash: server.
@@ -2100,6 +2113,7 @@ Issue report: [pkp-e2e#36](https://github.com/jardakotesovec/pkp-e2e/issues/36) 
 
 <a id="fn-f-a11"></a>
 **f-a11** — `UserInstitutionalSubscriptionForm::execute()` calls `Repo::institution()->add()` for a new `Institution` on every save, then points the subscription at it. Live-probed 2026-09-25 (td17, td18): two "Tide University" rows after two purchases, a second "K3 Uni B" after "Purchase" on an existing one.
+Issue report: [docs/issues/U51-A11-institutional-purchase-adds-duplicate-institution.md](../issues/U51-A11-institutional-purchase-adds-duplicate-institution.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `UserHandler::purchaseSubscription()` has no sign-in check: with no user, `$user->getId()` is called on nothing (the individual path in `subscriptionExistsByUserForJournal()`, the institutional path in the form's constructor). The page router authorises page requests by default. Live-probed 2026-09-25 (td19): signed out, `GET {journal}/user/purchaseSubscription/individual` and `GET …/institutional` answered HTTP 500 with an empty body.

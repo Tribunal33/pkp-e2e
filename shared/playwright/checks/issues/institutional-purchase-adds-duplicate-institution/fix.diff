@@ -1,0 +1,59 @@
+--- a/classes/subscription/form/UserInstitutionalSubscriptionForm.php
++++ b/classes/subscription/form/UserInstitutionalSubscriptionForm.php
+@@ -215,13 +215,17 @@
+         $subscription->setInstitutionMailingAddress($this->getData('institutionMailingAddress'));
+         $subscription->setDomain($this->getData('domain'));
+ 
+-        $institution = Repo::institution()->newDataObject();
+-        $institution->setContextId($journalId);
+-        $institution->setName($this->getData('institutionName'), Locale::getLocale());
+         $ipRanges = $this->getData('ipRanges');
+         $ipRanges = explode("\r\n", trim($ipRanges));
+-        $institution->setIPRanges($ipRanges);
+-        $institutionId = Repo::institution()->add($institution);
++        // Use the journal's institution when one has this name and these IP ranges
++        $institutionId = $this->getMatchingInstitutionId($journalId, $this->getData('institutionName'), $ipRanges);
++        if (!$institutionId) {
++            $institution = Repo::institution()->newDataObject();
++            $institution->setContextId($journalId);
++            $institution->setName($this->getData('institutionName'), Locale::getLocale());
++            $institution->setIPRanges($ipRanges);
++            $institutionId = Repo::institution()->add($institution);
++        }
+         $subscription->setInstitutionId($institutionId);
+ 
+         if ($subscription->getId()) {
+@@ -236,5 +240,33 @@
+         $paymentForm = $paymentManager->getPaymentForm($queuedPayment);
+         $paymentForm->display($this->request);
+         parent::execute(...$functionArgs);
++    }
++
++    /**
++     * Get the ID of the journal's institution that has the given name, in any
++     * locale, and exactly the given IP ranges, so that a purchase does not add
++     * a copy of an institution the journal already has. The subscription's own
++     * institution is preferred. The name must match exactly, case included:
++     * searchPhrase() only narrows the query.
++     */
++    protected function getMatchingInstitutionId(int $journalId, string $name, array $ipRanges): ?int
++    {
++        $normalize = function (array $ranges): array {
++            $ranges = array_values(array_filter(array_map('trim', $ranges), 'strlen'));
++            sort($ranges);
++            return $ranges;
++        };
++        $name = trim($name);
++        $ipRanges = $normalize($ipRanges);
++        $matchingIds = Repo::institution()->getCollector()
++            ->filterByContextIds([$journalId])
++            ->searchPhrase($name)
++            ->getMany()
++            ->filter(fn (Institution $institution) => in_array($name, array_map('trim', (array) $institution->getName(null)), true)
++                && $normalize($institution->getIPRanges()) === $ipRanges)
++            ->keys()
++            ->collect();
++        $currentId = $this->subscription?->getInstitutionId();
++        return $matchingIds->contains($currentId) ? $currentId : $matchingIds->first();
+     }
+ }
