@@ -197,6 +197,31 @@ No suite is meant to run on any of the three lines.
   PKP_E2E_LINE=stable-3_4_0 PROBE_FEATURE=issues-3_4 PROBE_AGENT=x node bin/probe.js all shared/playwright/checks/harness/lines/lines.js
   ```
 
+### Trying a fix
+
+An issue report's recommended fix is tried before the report goes out
+(REPORT.md "Proposed fix"). `bin/try-fix.js` applies it to this slot's
+checkouts for the length of a walk and takes it out again:
+
+```bash
+node bin/try-fix.js apply shared/playwright/checks/issues/<slug>/fix.diff [ojs] [omp] [ops]
+node bin/try-fix.js revert [ojs] [omp] [ops]
+node bin/try-fix.js status
+```
+
+- The diff is relative to the app root with `a/` `b/` prefixes
+  (`a/lib/pkp/classes/…`), applied with GNU `patch` because `lib/pkp` and
+  `lib/ui-library` are submodules. A diff touching `lib/ui-library/` or
+  `js/` runs `npm run build` on apply and on revert (the line's Node).
+- A marker, `.pkp-e2e-fix.json` in the app root, records the diff and the
+  files' hashes before and after; `revert` checks both, and `mount` and
+  `fetch-apps` refuse to run while a marker is there.
+  `PKP_E2E_LINE=<line>` in front tries it on a stable line's checkouts.
+- Every fleet of the slot, campaign and dataset alike, serves the patched
+  code while it is applied: one fix at a time, and only while nothing
+  else in the slot needs the unpatched code. PHP is read fresh on each
+  request (`php -S`, no CLI opcache), so no server restart is needed.
+
 ### Dataset fleets
 
 An issue report's steps start from PKP's default test dataset

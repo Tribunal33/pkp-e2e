@@ -128,6 +128,7 @@ const run = (cwd, cmd, args, opts = {}) => {
 function fetchApp(name) {
     const dir = path.join(CHECKOUTS, name);
     console.log(`== ${name} → ${dir}`);
+    require('./try-fix.js').assertNoFix(dir, 'fetch-apps');
 
     const fresh = !fs.existsSync(path.join(dir, '.git'));
     if (fresh) {

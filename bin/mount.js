@@ -85,6 +85,7 @@ function ensureExcludes(appRoot, lines) {
 
 function mount(appName) {
     const app = resolveApp(appName);
+    require('./try-fix.js').assertNoFix(app.root, 'mount');
     // 3.3 keeps the class in Config.inc.php.
     const configDir = path.join(app.root, 'lib', 'pkp', 'classes', 'config');
     const configPhp = ['Config.php', 'Config.inc.php']

@@ -279,9 +279,21 @@ files and methods, a short diff when it is a few lines, and why it beats
 the alternatives; the alternatives in a sentence each, with why not;
 then what goes with it (data repair, backport, test). The last sentence
 is the effort and its reason: "Small: one line in the shared DAO, and a
-unit test." It is a proposal, and says so; the team decides. It says
-whether it was tried: a fix applied and checked against the steps says
-so in Evidence, otherwise "not tried". A fix the campaign already
+unit test." It is a proposal, and says so; the team decides.
+
+The recommended fix is tried, so the team gets a fix that is known to
+work rather than a guess. It is written as a diff against the app root
+(`shared/playwright/checks/issues/<slug>/fix.diff`, linked from the
+section, so the team can apply it as it stands), applied to the
+checkouts for the length of a walk (`bin/try-fix.js`, harness.md "Trying
+a fix"), and checked on `main` on every app it touches: the kept walk
+now shows the Steps' Expected, and a neighbour check shows the fix does
+not reach further than it should (the same action for a role that must
+stay refused, the path the fix must leave alone). The section says it
+was tried and what the check showed, in a sentence; Evidence gives the
+command. A fix that cannot be tried as written (a product decision
+first, a migration of stored data, a change too large to be a diff)
+says "not tried" and why. A fix the campaign already
 carries as a mounted overlay is named with the overlay's path and the
 note that it is removed when upstream picks one.
 

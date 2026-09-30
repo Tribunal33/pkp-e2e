@@ -203,14 +203,18 @@ not a fix.
    `PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature
    issues-<agent>-3_5 --dataset <n> --reset` for 3.5, a different `<n>`
    (1–9) per agent running at the same time; the agent resets its own
-   fleets before each walk. The agent returns an outcome per entry:
+   fleets before each walk. The fix trial (the brief's step 4a) patches
+   the slot's shared checkouts, so two reporters take turns there: the
+   second waits until `node bin/try-fix.js status` says clean. The agent returns an outcome per entry:
    - `written` or `joined`: read the report against `REPORT.md` before
      accepting it. The header is complete and its severity and effort
      follow the definitions; Affects answers every version, `main`
      and 3.5 walked (a 3.5 "(code)" says in Evidence why); the title and Summary carry the
      problem in product words, and a reader who stops there could rank
      it; the Steps go through the screens and were walked; the Cause is
-     the root; the Proposed fix answers the six questions; Introduced,
+     the root; the Proposed fix answers the six questions and was tried
+     (its `fix.diff` beside the kept script, the walk showing Expected
+     with it, a neighbour check), or says why not; Introduced,
      Affects and Upstream are filled; Evidence holds only what the team can open,
      with full links. Then two role reads, each a fresh agent rendered
      from `briefs/issue-read.md`, both at once: the **developer** read
