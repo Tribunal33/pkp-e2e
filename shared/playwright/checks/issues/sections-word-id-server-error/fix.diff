@@ -1,0 +1,37 @@
+--- a/lib/pkp/classes/core/PKPExceptionHandler.php
++++ b/lib/pkp/classes/core/PKPExceptionHandler.php
+@@ -21,6 +21,8 @@
+ use Illuminate\Http\Response;
+ use Illuminate\Support\Facades\Log;
+ use PKP\config\Config;
++use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
++use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+ use Throwable;
+ 
+ class PKPExceptionHandler implements ExceptionHandler
+@@ -66,6 +68,25 @@
+                     ->json($exception->errors(), $exception->status);
+             }
+ 
++            // An address under an interface that none of its routes matches (a word
++            // where a route wants a number, an unknown sub-path) as
++            // APIHandler::runRoutes() was written to answer it.
++            if ($exception instanceof NotFoundHttpException) {
++                return response()->json([
++                    'error' => __('api.404.endpointNotFound'),
++                ], Response::HTTP_NOT_FOUND);
++            }
++
++            // Any other HTTP exception (405 for a verb the address does not take, …)
++            // carries its status in getStatusCode(); getCode() is 0 for these.
++            if ($exception instanceof HttpExceptionInterface) {
++                return response()->json(
++                    ['error' => $exception->getMessage()],
++                    $exception->getStatusCode(),
++                    $exception->getHeaders()
++                );
++            }
++
+             return response()->json(
+                 [
+                     'error' => $exception->getMessage()
