@@ -1421,6 +1421,11 @@ Left out of the scenarios above, by reason:
     an institutional purchase under an existing institution's name and
     IP ranges leaving one row on "Institutions", and the manager's edit
     of that row's ranges reaching the reader's subscription
+  - the guard for A19 (issue report
+    `docs/issues/U51-A19-fee-shown-while-payments-off.md`): with a
+    "Purchase Article" and a "Purchase Issue" fee set and payments then
+    switched off, the locked galley links on the home, issue and article
+    pages reading "PDF" with no price
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1528,7 +1533,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | Subscription Manager is refused the Institutions page the menu offers, so cannot add a subscribing institution | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A17](#a17) | "Delayed Open Access" shows an empty box until someone saves a value | 🐞 | minor | — |
 | [A18](#a18) | Additional files of an article in a restricted issue show no padlock, yet readers without access are refused | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A19](#a19) | A fee shows on the locked link while payments are off and nothing can be bought | 🐞 | minor | — |
+| [A19](#a19) | Locked galleys keep showing an article or issue price after the journal switches payments off | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A20](#a20) | With only a membership fee set, a reader pressing "Full Issue" is asked to pay an issue fee of no amount | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A21](#a21) | The subscription window saves a start date after the end date | 🐞 | minor | — |
 | [A22](#a22) | Subscription lists searched by membership, reference number, notes, institution, domain or IP range show every subscription | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1763,12 +1768,22 @@ stylesheet, as the PDF button already has.
 Basis: probe, 2026-09-30. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — A fee shows on the locked link while payments are off** · 🐞 · minor.
-With "Purchase Article" or "Purchase Issue" saved and payments then
+**A19 — Locked galleys keep showing an article or issue price after the journal switches payments off** · 🐞 · low.
+With a "Purchase Article" or "Purchase Issue" fee set and payments then
 switched off, the locked links still show the fee, such as "(USD 5)"
 or "(USD 20)", but nothing can be bought: a signed-in reader who
-presses one lands on the journal's home page. Basis: probe, 2026-09-25.
-<sup>f-a19</sup>
+presses one lands on the journal's home page, as on any subscription
+journal with payments off, fee or none.
+The price shows on the article page and beside each article in the
+issue's table of contents. The "Full Issue" links show it too, both on
+the issue page and on the journal's home page. With payments off a
+reader cannot pay for anything on the site: buying a subscription
+online closes as well.
+It needs a subscription journal that set an article or issue fee while
+payments were on, then unticked "Payments will be enabled for this
+journal…". The fee amounts stay stored. The "Payments" page that holds
+them leaves the side menu when payments are switched off.
+Basis: probe, 2026-09-30. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — With only a membership fee set, a reader pressing "Full Issue" is asked to pay an issue fee of no amount** · 🐞 · medium.
@@ -2143,6 +2158,7 @@ Issue report: [pkp-e2e#52](https://github.com/jardakotesovec/pkp-e2e/issues/52) 
 
 <a id="fn-f-a19"></a>
 **f-a19** — `galley_link.tpl` prints `reader.purchasePrice` whenever a fee and a currency are passed; `article_details.tpl`, `article_summary.tpl` and `issue_toc.tpl` pass the journal's saved `purchaseArticleFee` / `purchaseIssueFee` without asking whether payments are configured, while the purchase itself needs `purchaseArticleEnabled()` / `purchaseIssueEnabled()` (note o). Live-probed 2026-09-25 (td6, td8).
+Issue report: [docs/issues/U51-A19-fee-shown-while-payments-off.md](../issues/U51-A19-fee-shown-while-payments-off.md).
 
 <a id="fn-f-a20"></a>
 **f-a20** — `IssueHandler::userCanViewGalley()` enters its purchase branch on `purchaseIssueEnabled() || membershipEnabled()` and then queues a `PAYMENT_TYPE_PURCHASE_ISSUE` payment of the (empty) issue fee (note e); the article side leads to the "Subscriptions" page in the same case. Live-probed 2026-09-25 (td8), on two journals.

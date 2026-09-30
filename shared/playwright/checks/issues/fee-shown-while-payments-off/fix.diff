@@ -1,0 +1,43 @@
+--- a/pages/issue/IssueHandler.php
++++ b/pages/issue/IssueHandler.php
+@@ -455,5 +455,8 @@
+         if ($paymentManager->purchaseArticleEnabled()) {
+             $templateMgr->assign('purchaseArticleEnabled', true);
+         }
++        if ($paymentManager->purchaseIssueEnabled()) {
++            $templateMgr->assign('purchaseIssueEnabled', true);
++        }
+     }
+ }
+--- a/templates/frontend/objects/galley_link.tpl
++++ b/templates/frontend/objects/galley_link.tpl
+@@ -15,6 +15,7 @@
+  * @uses $hasAccess bool Can this user access galleys for this context?
+  * @uses $restrictOnlyPdf bool Is access only restricted to PDF galleys?
+  * @uses $purchaseArticleEnabled bool Can this article be purchased?
++ * @uses $purchaseIssueEnabled bool Can this issue be purchased?
+  * @uses $currentJournal Journal The current journal context
+  * @uses $journalOverride Journal An optional argument to override the current
+  *       journal with a specific context
+@@ -35,10 +36,12 @@
+ {* Get path for URL *}
+ {if $parent instanceOf APP\issue\Issue}
+ 	{assign var="page" value="issue"}
++	{assign var="purchaseEnabled" value=$purchaseIssueEnabled}
+ 	{assign var="parentId" value=$parent->getBestIssueId()}
+ 	{assign var="path" value=$parentId|to_array:$galley->getBestGalleyId()}
+ {else}{* APP\submission\Submission *}
+ 	{assign var="page" value="article"}
++	{assign var="purchaseEnabled" value=$purchaseArticleEnabled}
+ 	{if $publication}
+ 		{if $publication->getId() !== $parent->getData('currentPublicationId')}
+ 			{* Get a versioned link if we have an older publication *}
+@@ -76,7 +79,7 @@
+ 
+ 	{$galley->getGalleyLabel()|escape}
+ 
+-	{if $restricted && $purchaseFee && $purchaseCurrency}
++	{if $restricted && $purchaseEnabled && $purchaseFee && $purchaseCurrency}
+ 		<span class="purchase_cost">
+ 			{translate key="reader.purchasePrice" price=$purchaseFee currency=$purchaseCurrency}
+ 		</span>
