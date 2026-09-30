@@ -2132,7 +2132,7 @@ Issue report: [pkp-e2e#52](https://github.com/jardakotesovec/pkp-e2e/issues/52) 
 
 <a id="fn-f-a20"></a>
 **f-a20** — `IssueHandler::userCanViewGalley()` enters its purchase branch on `purchaseIssueEnabled() || membershipEnabled()` and then queues a `PAYMENT_TYPE_PURCHASE_ISSUE` payment of the (empty) issue fee (note e); the article side leads to the "Subscriptions" page in the same case. Live-probed 2026-09-25 (td8), on two journals.
-Issue report: [docs/issues/U51-A20-full-issue-fee-of-no-amount.md](../issues/U51-A20-full-issue-fee-of-no-amount.md).
+Issue report: [pkp-e2e#55](https://github.com/jardakotesovec/pkp-e2e/issues/55) ([docs/issues/U51-A20-full-issue-fee-of-no-amount.md](../issues/U51-A20-full-issue-fee-of-no-amount.md)).
 
 <a id="fn-f-a21"></a>
 **f-a21** — `SubscriptionForm` checks each date's presence and range (note h) but not their order. Live-probed 2026-09-25 (td11): start 2026-12-01, end 2026-01-01, saved and listed so.
