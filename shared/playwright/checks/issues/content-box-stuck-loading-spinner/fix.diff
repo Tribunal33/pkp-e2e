@@ -1,0 +1,43 @@
+diff -ru a/lib/pkp/js/controllers/form/MultilingualInputHandler.js b/lib/pkp/js/controllers/form/MultilingualInputHandler.js
+--- a/lib/pkp/js/controllers/form/MultilingualInputHandler.js
++++ b/lib/pkp/js/controllers/form/MultilingualInputHandler.js
+@@ -167,13 +167,16 @@
+ 		// Track current values in the tinyMCE control
+ 		if (this.getHtmlElement().find('.richContent').length) {
+ 			$popover.find('textarea').each(function() {
+-				var id = $(this).attr('id'),
+-						tinymce;
++				// An editor still loading has no content to read yet: its
++				// textarea holds the value it will load.
++				var $textarea = $(this),
++						editor = tinyMCE.EditorManager.get(/** @type {string} */(
++								$textarea.attr('id'))),
++						content = editor && editor.initialized ?
++								editor.getContent() : $textarea.val();
+ 
+-				$inputs.push($(this));
+-				tinymce = tinyMCE.EditorManager.get(/** @type {string} */(
+-						$(this).attr('id')));
+-				if (tinymce.getContent()) {
++				$inputs.push($textarea);
++				if (content) {
+ 					valuesCount++;
+ 				}
+ 			});
+diff -ru a/lib/pkp/js/controllers/SiteHandler.js b/lib/pkp/js/controllers/SiteHandler.js
+--- a/lib/pkp/js/controllers/SiteHandler.js
++++ b/lib/pkp/js/controllers/SiteHandler.js
+@@ -310,6 +310,13 @@
+ 		});
+ 
+ 		tinyMCEObject.on('deactivate', function(tinyMCEObject) {
++			// An editor still loading has no content to read yet (TinyMCE makes
++			// each new editor the active one, so the first editor of a form to
++			// finish loading deactivates one that has not); its 'init' handler
++			// above sets the placeholder once it has loaded.
++			if (!tinyMCEObject.target.initialized) {
++				return;
++			}
+ 			// Show the placholder when the editor is deactivated
+ 			if (!tinyMCEObject.target.getContent().length) {
+ 				$('#mcePlaceholder-' + tinyMCEObject.id).show();
