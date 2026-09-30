@@ -1431,6 +1431,11 @@ Left out of the scenarios above, by reason:
     subscription window, on both tabs, refusing a "Start date" after the
     "End date" and storing nothing, and saving a subscription whose start
     and end are the same day
+  - the guard for A17 (issue report
+    `docs/issues/U51-A17-delayed-open-access-empty-box.md`): on a journal
+    that never saved it, "Delayed Open Access" on Settings › Distribution ›
+    "Access" reading "Disabled" at first look, and an untouched "Save"
+    keeping "Disabled" after a reload
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1536,7 +1541,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | With "Only Restrict Access to PDF…" ticked and no reader fee, HTML galleys show no padlock but refuse readers | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A15](#a15) | Month and week counts read "1 Months" and "1 Weeks" | 🐞 | minor | — |
 | [A16](#a16) | Subscription Manager is refused the Institutions page the menu offers, so cannot add a subscribing institution | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A17](#a17) | "Delayed Open Access" shows an empty box until someone saves a value | 🐞 | minor | — |
+| [A17](#a17) | A journal's "Delayed Open Access" shows an empty box instead of "Disabled" until a manager picks a value | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A18](#a18) | Additional files of an article in a restricted issue show no padlock, yet readers without access are refused | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A19](#a19) | Locked galleys keep showing an article or issue price after the journal switches payments off | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A20](#a20) | With only a membership fee set, a reader pressing "Full Issue" is asked to pay an issue fee of no amount | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1748,12 +1753,16 @@ has to add or change each institution for them.
 Basis: probe, 2026-09-30. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — "Delayed Open Access" arrives as an empty box** · 🐞 · minor.
-On a journal that has never saved it, "Delayed Open Access" on Settings
-› Distribution › "Access" shows an empty box instead of "Disabled",
-though the journal behaves as "Disabled"; "Save" with the box untouched
-keeps it empty. Only a saved "Disabled" reads "Disabled". Basis: probe,
-2026-09-25. <sup>f-a17</sup>
+**A17 — A journal's "Delayed Open Access" shows an empty box instead of "Disabled" until a manager picks a value** · 🐞 · low.
+On a journal that has never saved the "Delayed Open Access" setting,
+the list on Settings › Distribution › "Access" shows an empty box
+instead of "Disabled", though the journal publishes issues as
+"Disabled" does. Pressing "Save" with the box untouched keeps it empty.
+Every journal that turns on subscriptions sees the empty box until a
+manager saves a choice in it. Before the list moved to the "Access" tab
+in 2019, the "Subscription Policies" page showed "Disabled" in the same
+case (read in the code).
+Basis: probe, 2026-09-30. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — Additional files of an article in a restricted issue show no padlock, yet readers without access are refused** · 🐞 · low.
@@ -2167,6 +2176,7 @@ Issue report: [pkp-e2e#40](https://github.com/jardakotesovec/pkp-e2e/issues/40) 
 
 <a id="fn-f-a17"></a>
 **f-a17** — `AccessForm`'s select gives "Disabled" the value 0; a fresh journal stores no `delayedOpenAccessDuration`, which matches no option, so the box shows empty; `IssueGridHandler::publishIssue()` treats an empty value as disabled (note m). Live-probed 2026-09-25 (td4): the save posted `delayedOpenAccessDuration=` with the box untouched.
+Issue report: [docs/issues/U51-A17-delayed-open-access-empty-box.md](../issues/U51-A17-delayed-open-access-empty-box.md).
 
 <a id="fn-f-a18"></a>
 **f-a18** — The article page lists the file under "Additional Files" through the supplementary link (`a.obj_galley_link_supplementary`), which keeps the file glyph where a restricted galley link gets the padlock; `ArticleHandler::download()` refuses it like any galley (note e). Live-probed 2026-09-25 (td6).
