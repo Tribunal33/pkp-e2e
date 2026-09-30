@@ -1750,7 +1750,7 @@ $contextId)`, whose query excludes `s.submission_id <> $excludePubObjectId`:
 a publication number compared with submission numbers. A version's own
 row (and its siblings' copies, note c) is therefore counted unless its
 number equals the submission's. Live-probed 2026-09-24 (note q6): the refusal met every first version too, the submission and publication numbers differing on every new seed (537 and 551 on OJS, 512 and 524 on OMP).
-Issue report: [docs/issues/U44-A4-urn-resave-refused-already-in-use.md](../issues/U44-A4-urn-resave-refused-already-in-use.md).
+Issue report: [pkp-e2e#7](https://github.com/jardakotesovec/pkp-e2e/issues/7) ([docs/issues/U44-A4-urn-resave-refused-already-in-use.md](../issues/U44-A4-urn-resave-refused-already-in-use.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — OJS `Publication Repository::version()` clones each galley
