@@ -37,7 +37,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 |  |
 | [U48](../specs/U48-jats-and-body-text.md) | 16 | 1 | 7 |  |
 | [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 | **A16 only: issues session s1, 2026-09-30** (joined U63 A12, written); the other entries are free for another session |
-| [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 |  |
+| [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | **OMP1 only: issues session s3, 2026-09-30** (joins U53 A14); the other entries are free for another session |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 |  |
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 |  |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
@@ -54,7 +54,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U10](../specs/U10-appearance-and-theming.md) | 13 | 0 | 4 | **A4 only: issues session s1, 2026-09-30** (joins U09 A15); the other entries are free for another session |
 | [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 |  |
 | [U41](../specs/U41-contributors-and-affiliations.md) | 10 | 0 | 4 |  |
-| [U07](../specs/U07-journal-identity-and-about-pages.md) | 7 | 0 | 4 |  |
+| [U07](../specs/U07-journal-identity-and-about-pages.md) | 7 | 0 | 4 | **OPS4 only: issues session s3, 2026-09-30** (joins U53 OPS1); the other entries are free for another session |
 | [U73](../specs/U73-publication-formats-proof-terms.md) | 17 | 0 | 3 |  |
 | [U28](../specs/U28-reviewers-review.md) | 12 | 0 | 3 |  |
 | [U40](../specs/U40-publication-metadata.md) | 7 | 0 | 3 |  |
@@ -72,7 +72,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U27](../specs/U27-reviewer-assignment-and-management.md) | 11 | 0 | 1 |  |
 | [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 |  |
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
-| [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 |  |
+| [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | **A2 only: issues session s3, 2026-09-30** (joins U36 A10); the other entries are free for another session |
 | [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 (2026-09-30); the other four open |
 | [U43](../specs/U43-funding.md) | 3 | 0 | 1 |  |
 | [U22](../specs/U22-my-submissions.md) | 1 | 0 | 1 |  |
