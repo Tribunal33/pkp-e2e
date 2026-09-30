@@ -20,11 +20,11 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
-| [U51](../specs/U51-subscriptions.md) | 24 | 2 | 12 |  |
-| [U50](../specs/U50-issues.md) | 14 | 2 | 9 |  |
-| [U21](../specs/U21-submission-wizard.md) | 16 | 2 | 6 |  |
-| [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 |  |
-| [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 |  |
+| [U51](../specs/U51-subscriptions.md) | 24 | 2 | 12 | **In progress: workstation issues session (slot s1), 2026-09-30** |
+| [U50](../specs/U50-issues.md) | 14 | 2 | 9 | **In progress: workstation issues session (slot s1), 2026-09-30** |
+| [U21](../specs/U21-submission-wizard.md) | 16 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
+| [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
+| [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 |  |
 | [U53](../specs/U53-users-management.md) | 15 | 2 | 4 |  |
 | [U47](../specs/U47-media-files.md) | 7 | 2 | 4 |  |
