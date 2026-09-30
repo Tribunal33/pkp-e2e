@@ -864,7 +864,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | The French "Users" tab prints raw codes for its search label, the Invitations heading, button and columns, and the "Start Date" column | 🐞 | minor | — |
 | [A12](#a12) | The ORCID and disabled icons after a name have no name for a screen reader | 🐞 | minor | — |
 | [A13](#a13) | The "Merge user" window and the older grid show nothing under "Roles" for the Site Administrator | 🐞 | minor | — |
-| [A14](#a14) | A masthead change on the roles page of a press or preprint server ends in an "Error" dialog and emails nobody | 🐞 | user-visible · crash: server | — |
+| [A14](#a14) | On presses and preprint servers, a masthead change shows a raw error and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A15](#a15) | Merging a user recorded as a discussion's or task's creator stops halfway with no message, and the account still signs in | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | "Notify User" stays greyed out after "Generate Password" is unticked | 🐞 | minor | — |
 | [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | minor | — |
@@ -1007,15 +1007,26 @@ account holds.
 Basis: probe. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — A masthead change on a press or preprint server ends in an error** · 🐞 · user-visible · crash: server.
-On a press or preprint server, confirming a masthead change on the
-user's roles page (Rule 8) brings an "Error" dialog, "Email template
-USER_ROLE_MASTHEAD_UPDATE not found. The migration script
-I11800_AddUserRoleMastheadUpdateEmail needs to be run.": the app fails
-while sending the notice. The choice is kept after a reload, and the
-user gets no email. The page belongs to *User invitations*, whose
-[OMP1](U06-user-invitations.md#omp1) holds the full entry.
-Basis: probe. <sup>f-a14</sup>
+**A14 — On presses and preprint servers, a masthead change shows a raw error and emails nobody** · 🐞 · medium · crash: server.
+On a press or preprint server, a manager changes whether a member
+appears on the masthead, on that member's roles page. An "Error" dialog
+opens, naming a missing email template and a migration script. The app
+fails on the server while sending the member's notice: the new choice
+is saved, but the member is not emailed, and nothing on screen can send
+it.
+On a press, "Manage Emails" lists "User Role Masthead Visibility Update
+Notification", but its "Edit" greys the page behind a spinner that never
+ends, so the press cannot read or change that email. A preprint server
+does not list the email at all. A journal is not affected: OJS ships
+this email's template.
+The template is missing on every new installation of the current
+development code, and on every site upgraded to it from 3.4 or from a
+3.5 release before 3.5.0-4. Sites upgraded from 3.5.0-4 or later keep
+the template they already have. Unless it is fixed before the next
+release, every press and preprint server installed from that release,
+or upgraded to it from before 3.5.0-4, has the fault.
+Same fault: [User invitations' OMP1](U06-user-invitations.md#omp1) (the roles page and "Invite to a role") and [Emails management's OMP1](U56-emails-management.md#omp1).
+Basis: probe, 2026-09-30. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — Merging a user recorded as a discussion's or task's creator stops halfway with no message, and the account still signs in** · 🐞 · medium · crash: server.
@@ -1947,6 +1958,7 @@ answered 500 and the dialog quoted showed; after a reload the choice read
 "Your journal masthead visibility has been updated". Presses and preprint
 servers ship without the `USER_ROLE_MASTHEAD_UPDATE` template (*User
 invitations*, note f-omp1).
+Issue report: [docs/issues/U53-A14-masthead-change-error-emails-nobody.md](../issues/U53-A14-masthead-change-error-emails-nobody.md).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-25, all three apps, three times each:
