@@ -200,8 +200,10 @@ function query(fleet, sql, {db = fleet.db} = {}) {
  * Load database.sql through a filter: the dump is a `--clean` one (its first
  * statements drop what an existing database holds, which fail on an empty
  * one) and names its owner `<app>-ci`, a role no fleet has; both go, and
- * everything else runs in one transaction with ON_ERROR_STOP, so a load
- * either lands whole or fails naming the statement.
+ * so do the `\restrict` / `\unrestrict` meta-commands a current pg_dump
+ * writes, which a psql older than 17.6 / 16.10 refuses (macOS Homebrew's
+ * 17.5); everything else runs in one transaction with ON_ERROR_STOP, so a
+ * load either lands whole or fails naming the statement.
  */
 function loadDump(fleet, {host, username, password}) {
     const dump = path.join(fleet.source, 'database.sql');
@@ -219,6 +221,8 @@ function loadDump(fleet, {host, username, password}) {
             inCopy = true;
         } else if (!created && clean.test(line)) {
             counts.cleanDropped++;
+            continue;
+        } else if (/^\\(un)?restrict \S+$/.test(line)) {
             continue;
         } else if (/^ALTER .* OWNER TO .*;$/.test(line)) {
             counts.ownerDropped++;
