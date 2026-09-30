@@ -2029,7 +2029,7 @@ Issue report: [pkp-e2e#9](https://github.com/jardakotesovec/pkp-e2e/issues/9) ([
 
 <a id="fn-f-a9"></a>
 **f-a9** — `purchaseIndividualSubscription.tpl` has no `common/formErrors.tpl` include (the institutional page has one); `UserHandler::payPurchaseSubscription()` re-displays the form on a failed `validate()`. Live-probed 2026-09-25 (td16).
-Issue report: [docs/issues/U51-A9-individual-purchase-refused-silently.md](../issues/U51-A9-individual-purchase-refused-silently.md).
+Issue report: [pkp-e2e#47](https://github.com/jardakotesovec/pkp-e2e/issues/47) ([docs/issues/U51-A9-individual-purchase-refused-silently.md](../issues/U51-A9-individual-purchase-refused-silently.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — `userSubscriptions.tpl` offers `purchaseSubscription/{kind}/{id}` on an `ACTIVE` subscription; `UserIndividualSubscriptionForm::execute()` (and the institutional one) set the existing subscription's status to `AWAITING_MANUAL_PAYMENT` (or `_ONLINE_`) and both dates to today before any payment. Live-probed 2026-09-25 (td18), individual and institutional.
