@@ -2102,11 +2102,11 @@ Issue report: [pkp-e2e#39](https://github.com/jardakotesovec/pkp-e2e/issues/39) 
 
 <a id="fn-f-a23"></a>
 **f-a23** — `AboutHandler::subscriptions()` checks only the payment setup (note f) and the template offers "Purchase New Subscription" to any signed-in visitor, while `UserHandler::purchaseSubscription()` redirects to the index outside `PUBLISHING_MODE_SUBSCRIPTION`. Live-probed 2026-09-25 (td27), on an open-access and a not-online journal.
-Issue report: [docs/issues/U51-A23-open-journal-offers-subscription-purchase.md](../issues/U51-A23-open-journal-offers-subscription-purchase.md).
+Issue report: [pkp-e2e#49](https://github.com/jardakotesovec/pkp-e2e/issues/49) ([docs/issues/U51-A23-open-journal-offers-subscription-purchase.md](../issues/U51-A23-open-journal-offers-subscription-purchase.md)).
 
 <a id="fn-f-a24"></a>
 **f-a24** — `userSubscriptions.tpl` and the block link to `about/subscriptions`, which redirects to the journal index while payments are not configured (note f). Live-probed 2026-09-25 (td20, td25).
-Issue report: [docs/issues/U51-A24-subscription-type-links-lead-home.md](../issues/U51-A24-subscription-type-links-lead-home.md).
+Issue report: [pkp-e2e#50](https://github.com/jardakotesovec/pkp-e2e/issues/50) ([docs/issues/U51-A24-subscription-type-links-lead-home.md](../issues/U51-A24-subscription-type-links-lead-home.md)).
 
 <a id="fn-f-a25"></a>
 **f-a25** — `UserInstitutionalSubscriptionForm::initData()` fills `ipRanges` with `$institution->getIPRanges()`, an array, which the text box prints as "Array"; the IP check then refuses it. Live-probed 2026-09-25 (td18).
