@@ -37,8 +37,10 @@ Severity: critical | high | medium | low · Effort: small | medium | large
 · Regression | Intention gap | Defect · <OJS OMP OPS, the apps that show
 it>[ · crash: server | script | both]
 
-<App(s)> at <app tip> (lib/pkp <tip>); introduced by <repo>#<pr> (<sha>,
-<date>) | present since at least <sha>. stable-3_5_0: shows it too at
+Introduced: <repo>#<pr> for <repo>#<issue>, commit <sha> (<date>), by
+<name> (<github handle>) | not traced; present since at least <sha>
+
+<App(s)> at <app tip> (lib/pkp <tip>). stable-3_5_0: shows it too at
 <sha> | does not | not driven. Tracked in <ci-triage row | spec Ux
 register An | app-changes row n>. Temporary: delete once acted on.
 
@@ -66,6 +68,20 @@ recommended fix ("Effort" below), the kind, the apps that show it, and
 the crash word when the app itself failed (a request behind the action
 answered a server error, or the page's own script failed in the
 browser).
+
+**Introduced.** The change that brought the fault in, so the team can
+see who knows that code best and ask them first. It is traced from the
+line the Cause names, not from where the symptom shows: `git blame` on
+that line, then `git log -L` or blame at the parent when the blamed
+commit only moved or reformatted it, until the commit that made the line
+wrong. The commit leads to its PR and the issue the PR links (the GitHub
+API's `commits/<sha>/pulls` answers for a merged PR); a fault that needed
+a pkp-lib change and an app change names both. The person is the PR's
+author, or the commit's author when there is no PR, by name and GitHub
+handle. A fault older than the history that can be read, or spread over
+many changes, says "not traced" and the oldest commit known to show it.
+It names a starting point for the conversation, never blame: the line
+states the change and its author, and nothing about the author.
 
 **Summary.** The section the team reads most, so it is written last,
 once the Cause is settled and the report knows what the problem is
@@ -252,11 +268,13 @@ with three changes:
 - The title is the report's title. The labels line becomes the issue's
   labels: `severity: critical`, `severity: high`, `severity: medium` or
   `severity: low`; `effort: small`, `effort: medium` or `effort: large`;
-`regression`, `intention gap` or `defect`; one of
+  `regression`, `intention gap` or `defect`; one of
   `ojs`, `omp`, `ops` per app; and `crash: server` or `crash: script`
   (both for both). The line is not repeated in the body.
-- The body opens with the header paragraph, then Summary through
-  Proposed fix as written.
+- The body opens with the Introduced line, its PR, issue and commit as
+  links and the handle written without an `@`, so that filing does not
+  notify anyone (the team decides whom to ask); then the header
+  paragraph, then Summary through Proposed fix as written.
 - Evidence holds only what someone outside the session can open: the
   kept script as a link to its file on pkp-e2e `main`, the upstream
   commits, lines and PRs as links, and the spec's register entry as a
