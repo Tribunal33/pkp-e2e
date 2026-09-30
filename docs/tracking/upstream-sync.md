@@ -20,6 +20,25 @@ _Suspicions another session met and handed over, one line each; the
 upstream session works them (MAINTENANCE upstream session step 3) and
 deletes each once it is a report, a register entry or dismissed._
 
+- 2026-09-30 (issues session, U63 A8 revision): a Native XML file exported
+  from a 3.5 install cannot be imported into OJS, OMP or OPS `main` at all:
+  "The process failed", with `user_group_ref` and publication `version`
+  "not allowed" and `contributor_type` and publication `id` "required but
+  missing". Walked on all three apps (dataset fleets, 3.5 export imported
+  on main with `FILE=` in
+  `shared/playwright/checks/issues/native-import-other-context-resets-contributor-roles/walk.js`).
+  The upgrade path between releases; is the schema change intended?
+- 2026-09-30 (issues session, U63 A13): main's users XML schema refuses
+  the `<show_title>` a 3.5 users export writes in its user groups
+  (pkp-lib#11971), so users exported from 3.5 are refused on main. A
+  hand-made file validated against both schemas only; not imported through
+  the screens.
+- 2026-09-30 (issues session, U63 OMP1 revision): OMP `main`'s CSV
+  command-line import of the plugin's own `sample.csv` fails with a fatal
+  error, `Author::setUserGroupId()` gone since pkp-lib 52d3a0f8e7
+  (Contributor Roles, 2025-11-11), `CSVImportExportPlugin` line 220.
+  Whether it leaves a half-created submission was not checked.
+
 - 2026-09-30 (issues session, while proving the dataset fleets): the
   3.5 dataset (`pkp/datasets` `ojs/stable-3_5_0/pgsql`, 3.5.0.5) upgraded
   to OJS `main` with `php tools/upgrade.php upgrade` (3.6.0.0) does not
