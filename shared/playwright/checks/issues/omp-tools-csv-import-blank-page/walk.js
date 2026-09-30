@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/omp-tools-csv-import-blank-page.md
+// Issue report walk: docs/issues/U63-OMP1-omp-tools-csv-import-blank-page.md
 // (spec U63 register OMP1). Takes the report's Steps through the screens on
 // PKP's default test dataset (a dataset fleet, harness.md "Dataset fleets"),
 // on its own press `publicknowledge` and its manager `rvaca`. The kit builds

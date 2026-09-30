@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fix trial for docs/issues/omp-tools-csv-import-blank-page.md (U63 OMP1).
+# Fix trial for docs/issues/U63-OMP1-omp-tools-csv-import-blank-page.md (U63 OMP1).
 # Run under the slot's exclusive main-code lock:
 #   flock -x .reports/issues/main-code.lock bash shared/playwright/checks/issues/omp-tools-csv-import-blank-page/trial.sh
 # Applies fix.diff (it creates plugins/importexport/csv/templates/index.tpl)

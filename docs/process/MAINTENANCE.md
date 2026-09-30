@@ -265,10 +265,11 @@ not a fix.
    pkp-e2e `main` the reports, kept scripts, register edits, incidentals
    lines and the queue.
 10. **File**, unless the queue says filing is on hold. Every report in
-    `docs/issues/` without a number in its file name is filed as
-    `REPORT.md` "As a GitHub issue" says (`gh issue create -R
-    jardakotesovec/pkp-e2e`, creating a label the first time it is
-    used); the file is renamed to `<issue number>-<slug>.md` and the
+    `docs/issues/` that has no open or closed issue of the same title
+    (`gh issue list -R jardakotesovec/pkp-e2e --state all --json
+    number,title`) is filed as `REPORT.md` "As a GitHub issue" says
+    (`gh issue create -R jardakotesovec/pkp-e2e`, creating a label the
+    first time it is used); the file keeps its name (`<spec>-<entries>-<slug>.md`, from `briefs/issue-report.md` step 6), and the
     register footnotes take the issue's link. A filed report this
     session changed (a join, a label, a new fact) is brought up to date
     on GitHub (`gh issue edit` with the body and labels). Then commit

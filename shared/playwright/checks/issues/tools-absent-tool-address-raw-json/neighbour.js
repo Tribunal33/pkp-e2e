@@ -1,4 +1,4 @@
-// Neighbour check for docs/issues/tools-absent-tool-address-raw-json.md
+// Neighbour check for docs/issues/U63-A1-tools-absent-tool-address-raw-json.md
 // (spec U63 register A1), walked with fix.diff in and out (trial.sh).
 // The fix answers "not found" for an import/export or Tools address naming
 // nothing the installation has; it must not reach further:

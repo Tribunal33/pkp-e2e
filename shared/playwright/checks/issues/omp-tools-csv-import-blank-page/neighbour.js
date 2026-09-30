@@ -1,4 +1,4 @@
-// Neighbour check for docs/issues/omp-tools-csv-import-blank-page.md
+// Neighbour check for docs/issues/U63-OMP1-omp-tools-csv-import-blank-page.md
 // (spec U63 register OMP1), walked with fix.diff in and out (trial.sh).
 // The fix adds the plugin's missing page; it must not reach further:
 //   - `sberardo` (Series editor, not manager-level) types the tool page's

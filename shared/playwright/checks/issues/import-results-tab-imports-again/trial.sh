@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fix trial for docs/issues/import-results-tab-imports-again.md (U63 A7).
+# Fix trial for docs/issues/U63-A7-import-results-tab-imports-again.md (U63 A7).
 # Run under the slot's exclusive main-code lock:
 #   flock -x .reports/issues/main-code.lock bash shared/playwright/checks/issues/import-results-tab-imports-again/trial.sh
 # Applies fix.diff (lib/pkp/js/controllers/TabHandler.js) to OJS, OMP and OPS,

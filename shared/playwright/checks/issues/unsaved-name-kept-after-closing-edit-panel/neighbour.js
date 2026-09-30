@@ -1,5 +1,5 @@
 // Issue report neighbour check for the proposed fix
-// (docs/issues/4-unsaved-name-kept-after-closing-edit-panel.md, fix.diff):
+// (docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md, fix.diff):
 // an ordinary edit still saves. In each panel the fix touches (Institutions,
 // Announcements, Highlights, Categories, Contributor Roles, OJS Reviewer
 // Recommendations) the first item gets a new English and French name or

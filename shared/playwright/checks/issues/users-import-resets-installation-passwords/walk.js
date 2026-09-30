@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/users-import-resets-installation-passwords.md
+// Issue report walk: docs/issues/U63-A16-users-import-resets-installation-passwords.md
 // (spec U63 register A16). Takes the report's Steps through the screens on PKP's
 // default test dataset (a dataset fleet, harness.md "Dataset fleets"), on its own
 // context `publicknowledge`, as `admin`, on OJS and OMP (OPS has no Users XML Plugin).

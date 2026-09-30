@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fix trial for docs/issues/users-import-unreadable-file-empty-results.md (U63 A13).
+# Fix trial for docs/issues/U63-A13-users-import-unreadable-file-empty-results.md (U63 A13).
 # Run under the slot's exclusive main-code lock:
 #   flock -x .reports/issues/main-code.lock bash shared/playwright/checks/issues/users-import-unreadable-file-empty-results/trial.sh
 # Applies fix.diff (lib/pkp PKPUserImportExportPlugin::display(), case 'import') to OJS and OMP

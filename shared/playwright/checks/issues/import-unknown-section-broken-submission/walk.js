@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/import-unknown-section-broken-submission.md
+// Issue report walk: docs/issues/U63-A9-import-unknown-section-broken-submission.md
 // (spec U63 register A9). Takes the report's Steps through the screens on
 // PKP's default test dataset (a dataset fleet, harness.md "Dataset fleets"),
 // on its own context `publicknowledge`, as its own Journal Manager (Preprint

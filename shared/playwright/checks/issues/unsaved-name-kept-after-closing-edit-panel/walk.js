@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/4-unsaved-name-kept-after-closing-edit-panel.md
+// Issue report walk: docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md
 // (spec U66 register A2, U12 A11, U11 A4). Takes the report's Steps through
 // the screens on a dataset fleet (PKP's default test dataset, harness.md
 // "Dataset fleets"): signed in as the dataset's manager `rvaca` on

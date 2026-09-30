@@ -36,7 +36,7 @@ Which file passwords count as old-form depends on the server's PHP:
 - On PHP 8.2 and 8.3: every bcrypt hash that 3.5.0-2 and later write,
   so every existing account in a file exported from the same
   installation gets the line. That is a separate fault
-  ([users-import-resets-installation-passwords](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/users-import-resets-installation-passwords.md)).
+  ([users-import-resets-installation-passwords](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U63-A16-users-import-resets-installation-passwords.md)).
 
 ## Impact
 
@@ -148,7 +148,7 @@ Reach:
 - The other refusal lines of the same method,
   `plainPasswordNotValid` and `userHasNoPassword`, are added before the
   lookup too; that they do not stop the import is a separate finding
-  ([users-import-refused-password-creates-account](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/users-import-refused-password-creates-account.md)).
+  ([users-import-refused-password-creates-account](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U63-A4-users-import-refused-password-creates-account.md)).
 
 ## Proposed fix
 
@@ -188,7 +188,7 @@ driven.
   also skip the needless password generation for an existing one, but
   it drops the refusal of a short plain password for existing users,
   which the fix proposed in
-  [users-import-refused-password-creates-account](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/users-import-refused-password-creates-account.md)
+  [users-import-refused-password-creates-account](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U63-A4-users-import-refused-password-creates-account.md)
   relies on.
 - Add a line for an existing account saying its password was left as
   it was. The account's other fields are left unchanged without a word,
@@ -199,7 +199,7 @@ driven.
 - No REST API or hook changes. The results show one line fewer for
   existing and mismatched accounts.
 - This diff and the one proposed for
-  [users-import-refused-password-creates-account](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/users-import-refused-password-creates-account.md)
+  [users-import-refused-password-creates-account](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U63-A4-users-import-refused-password-creates-account.md)
   touch the same method; `patch --dry-run` applies each on top of the
   other.
 - Backport: the diff applies unchanged to pkp-lib `stable-3_5_0` and

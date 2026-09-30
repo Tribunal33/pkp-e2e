@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/users-import-refused-password-creates-account.md
+// Issue report walk: docs/issues/U63-A4-users-import-refused-password-creates-account.md
 // (spec U63 register A4). Takes the report's Steps through the screens on
 // PKP's default test dataset (a dataset fleet, harness.md "Dataset fleets"),
 // on its own context `publicknowledge`, its manager `rvaca` and its author

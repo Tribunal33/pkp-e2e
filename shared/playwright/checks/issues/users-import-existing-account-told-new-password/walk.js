@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/users-import-existing-account-told-new-password.md
+// Issue report walk: docs/issues/U63-A15-users-import-existing-account-told-new-password.md
 // (spec U63 register A15). Takes the report's Steps through the screens on PKP's default test
 // dataset (a dataset fleet, harness.md "Dataset fleets"), on its own context `publicknowledge`,
 // as `admin`, on OJS and OMP (OPS has no Users XML Plugin).

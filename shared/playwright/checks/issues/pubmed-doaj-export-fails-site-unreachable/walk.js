@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/pubmed-doaj-export-fails-site-unreachable.md
+// Issue report walk: docs/issues/U63-OJS4-OJS7-pubmed-doaj-export-fails-site-unreachable.md
 // (spec U63 register OJS4, OJS7). Takes the report's Steps through the
 // screens on PKP's default test dataset (a dataset fleet, harness.md
 // "Dataset fleets"), on its own journal `publicknowledge` and its manager

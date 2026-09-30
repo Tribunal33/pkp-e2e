@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/tools-absent-tool-address-raw-json.md
+// Issue report walk: docs/issues/U63-A1-tools-absent-tool-address-raw-json.md
 // (spec U63 register A1). Takes the report's Steps through the screens on
 // PKP's default test dataset (a dataset fleet, harness.md "Dataset fleets"),
 // on its own context `publicknowledge` and its manager `rvaca`. The kit

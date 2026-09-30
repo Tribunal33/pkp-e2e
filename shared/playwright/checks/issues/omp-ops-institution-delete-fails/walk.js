@@ -1,4 +1,4 @@
-// Issue report docs/issues/1-omp-ops-institution-delete-fails.md (U66 A3, A8):
+// Issue report docs/issues/U66-A3-A8-omp-ops-institution-delete-fails.md (U66 A3, A8):
 // the report's Steps to reproduce, walked through the screens on PKP's
 // default test dataset (a dataset fleet, harness.md "Dataset fleets"), as
 // the dataset's `admin`, on its own context `publicknowledge`.

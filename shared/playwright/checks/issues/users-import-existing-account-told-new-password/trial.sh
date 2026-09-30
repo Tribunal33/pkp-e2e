@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fix trial for docs/issues/users-import-existing-account-told-new-password.md (U63 A15).
+# Fix trial for docs/issues/U63-A15-users-import-existing-account-told-new-password.md (U63 A15).
 # Run under the slot's exclusive main-code lock:
 #   flock -x .reports/issues/main-code.lock bash shared/playwright/checks/issues/users-import-existing-account-told-new-password/trial.sh
 # Applies fix.diff (lib/pkp UserXmlPKPUserFilter: the "new password sent" line moves from

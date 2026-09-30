@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/3-institutions-menu-without-settings-permission.md
+// Issue report walk: docs/issues/U66-A1-institutions-menu-without-settings-permission.md
 // (spec U66 register A1). Takes the report's Steps through the screens on
 // PKP's default test dataset (a dataset fleet, harness.md "Dataset fleets"),
 // on its own context `publicknowledge` and its own users: `admin` (site

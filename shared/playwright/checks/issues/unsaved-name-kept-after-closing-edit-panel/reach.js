@@ -1,4 +1,4 @@
-// Issue report reach check: docs/issues/4-unsaved-name-kept-after-closing-edit-panel.md,
+// Issue report reach check: docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md,
 // Cause "Reach". The other edit panels that fill a form from a list row the
 // same way (useForm setValues(row)): Categories (Settings › Journal ›
 // Categories), Contributor Roles (Settings › Workflow › Submission ›

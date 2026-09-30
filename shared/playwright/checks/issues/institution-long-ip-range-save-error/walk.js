@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/2-institution-long-ip-range-save-error.md
+// Issue report walk: docs/issues/U66-A9-institution-long-ip-range-save-error.md
 // (spec U66 register A9). Takes the report's Steps through the screens on a
 // dataset fleet (PKP's default test dataset, harness.md "Dataset fleets"):
 // signed in as the dataset's manager `rvaca` on `publicknowledge`; the kit

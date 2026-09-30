@@ -1,4 +1,4 @@
-// Issue report docs/issues/1-omp-ops-institution-delete-fails.md: the fix's
+// Issue report docs/issues/U66-A3-A8-omp-ops-institution-delete-fails.md: the fix's
 // neighbour check on OJS, walked with fix.diff in and out. The fix must leave
 // OJS's rule alone: an institution an institutional subscription names is
 // kept (soft deleted) for that subscription, one no subscription names is

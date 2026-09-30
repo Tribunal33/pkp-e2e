@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/import-results-tab-imports-again.md
+// Issue report walk: docs/issues/U63-A7-import-results-tab-imports-again.md
 // (spec U63 register A7). Takes the report's Steps through the screens on
 // PKP's default test dataset (a dataset fleet, harness.md "Dataset fleets"),
 // on its own context `publicknowledge`, as its own manager `rvaca`, on OJS,

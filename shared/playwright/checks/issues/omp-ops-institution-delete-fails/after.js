@@ -1,4 +1,4 @@
-// Issue report docs/issues/1-omp-ops-institution-delete-fails.md (U66 A3, A8):
+// Issue report docs/issues/U66-A3-A8-omp-ops-institution-delete-fails.md (U66 A3, A8):
 // what a Site Administrator can still do with a press (server) that walk.js
 // left half deleted. Runs on the same dataset fleet right after walk.js, with
 // no reset, on OMP and OPS (OJS removed its journal).

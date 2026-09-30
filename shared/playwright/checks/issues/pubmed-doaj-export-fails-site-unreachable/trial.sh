@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fix trial for docs/issues/pubmed-doaj-export-fails-site-unreachable.md (U63 OJS4, OJS7).
+# Fix trial for docs/issues/U63-OJS4-OJS7-pubmed-doaj-export-fails-site-unreachable.md (U63 OJS4, OJS7).
 # Run under the slot's exclusive main-code lock:
 #   flock -x .reports/issues/main-code.lock bash shared/playwright/checks/issues/pubmed-doaj-export-fails-site-unreachable/trial.sh
 # Applies fix.diff to OJS, resets dataset fleet 3, walks the Steps with the

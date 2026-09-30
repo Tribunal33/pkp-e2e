@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fix trial for docs/issues/import-unknown-section-broken-submission.md (U63 A9).
+# Fix trial for docs/issues/U63-A9-import-unknown-section-broken-submission.md (U63 A9).
 # Run under the slot's exclusive main-code lock:
 #   flock -x .reports/issues/main-code.lock bash shared/playwright/checks/issues/import-unknown-section-broken-submission/trial.sh
 # Applies fix.diff to OJS and OPS, resets dataset fleet 1, walks the Steps

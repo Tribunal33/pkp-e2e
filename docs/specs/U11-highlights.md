@@ -395,7 +395,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the guard for A4 (Rule 6; issue report
-    `docs/issues/4-unsaved-name-kept-after-closing-edit-panel.md`): a
+    `docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md`): a
     changed title closed without "Save", then "Edit" and a "Save" of
     another box, the saved title kept on the row
 - **Nothing new to test**:
@@ -996,7 +996,7 @@ row and bold on the slide and in the "Delete Highlight" sentence.
 control: no dialog, the row reads "Changed but not saved", the panel
 reopened after a reload shows the old title; the panel's own list request
 still returns the saved title.
-Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/4-unsaved-name-kept-after-closing-edit-panel.md](../issues/4-unsaved-name-kept-after-closing-edit-panel.md)).
+Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md](../issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5 — A5 evidence.** At the 2026-09-16 tips (pkp-lib b262d27b81) every

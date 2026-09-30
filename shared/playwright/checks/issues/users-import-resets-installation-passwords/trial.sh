@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fix trial for docs/issues/users-import-resets-installation-passwords.md (U63 A16).
+# Fix trial for docs/issues/U63-A16-users-import-resets-installation-passwords.md (U63 A16).
 # Run under the slot's exclusive main-code lock:
 #   flock -x .reports/issues/main-code.lock bash shared/playwright/checks/issues/users-import-resets-installation-passwords/trial.sh
 # Applies fix.diff (lib/pkp UserXmlPKPUserFilter::importUserPasswordValidation() keeps any bcrypt hash)

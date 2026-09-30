@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fix trial for docs/issues/tools-absent-tool-address-raw-json.md (U63 A1).
+# Fix trial for docs/issues/U63-A1-tools-absent-tool-address-raw-json.md (U63 A1).
 # Run under the slot's exclusive main-code lock:
 #   flock -x .reports/issues/main-code.lock bash shared/playwright/checks/issues/tools-absent-tool-address-raw-json/trial.sh
 # Applies fix.diff (lib/pkp/pages/management/PKPToolsHandler.php) to OJS, OMP

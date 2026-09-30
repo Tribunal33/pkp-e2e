@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fix trial for docs/issues/users-import-refused-password-creates-account.md (U63 A4).
+# Fix trial for docs/issues/U63-A4-users-import-refused-password-creates-account.md (U63 A4).
 # Run under the slot's exclusive main-code lock:
 #   flock -x .reports/issues/main-code.lock bash shared/playwright/checks/issues/users-import-refused-password-creates-account/trial.sh
 # Applies fix.diff (lib/pkp UserXmlPKPUserFilter::parseUser() and importUserPasswordValidation()) to OJS and

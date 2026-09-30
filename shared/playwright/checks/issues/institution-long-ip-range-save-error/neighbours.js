@@ -1,4 +1,4 @@
-// Neighbour checks for fix.diff (docs/issues/2-institution-long-ip-range-save-error.md,
+// Neighbour checks for fix.diff (docs/issues/U66-A9-institution-long-ip-range-save-error.md,
 // spec U66 register A9): what the fix must leave alone, walked with the fix in and
 // out on a dataset fleet, signed in as the dataset's manager `rvaca`.
 //   - a range written normally saves and reads back as typed;
