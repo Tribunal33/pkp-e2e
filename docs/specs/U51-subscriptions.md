@@ -2158,7 +2158,7 @@ Issue report: [pkp-e2e#52](https://github.com/jardakotesovec/pkp-e2e/issues/52) 
 
 <a id="fn-f-a19"></a>
 **f-a19** — `galley_link.tpl` prints `reader.purchasePrice` whenever a fee and a currency are passed; `article_details.tpl`, `article_summary.tpl` and `issue_toc.tpl` pass the journal's saved `purchaseArticleFee` / `purchaseIssueFee` without asking whether payments are configured, while the purchase itself needs `purchaseArticleEnabled()` / `purchaseIssueEnabled()` (note o). Live-probed 2026-09-25 (td6, td8).
-Issue report: [docs/issues/U51-A19-fee-shown-while-payments-off.md](../issues/U51-A19-fee-shown-while-payments-off.md).
+Issue report: [pkp-e2e#57](https://github.com/jardakotesovec/pkp-e2e/issues/57) ([docs/issues/U51-A19-fee-shown-while-payments-off.md](../issues/U51-A19-fee-shown-while-payments-off.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — `IssueHandler::userCanViewGalley()` enters its purchase branch on `purchaseIssueEnabled() || membershipEnabled()` and then queues a `PAYMENT_TYPE_PURCHASE_ISSUE` payment of the (empty) issue fee (note e); the article side leads to the "Subscriptions" page in the same case. Live-probed 2026-09-25 (td8), on two journals.
