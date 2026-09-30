@@ -2151,7 +2151,7 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `manager.subscriptions.form.subscriptionContactRequired` (OJS `locale/en/manager.po`); the fields are `subscriptionName` and `subscriptionEmail` of `SubscriptionPolicyForm`. Live-probed 2026-09-25 (td28): the refusal verbatim at the window's top.
-Issue report: [docs/issues/U51-A4-subscription-notify-refusal-names-setup.md](../issues/U51-A4-subscription-notify-refusal-names-setup.md).
+Issue report: [pkp-e2e#65](https://github.com/jardakotesovec/pkp-e2e/issues/65) ([docs/issues/U51-A4-subscription-notify-refusal-names-setup.md](../issues/U51-A4-subscription-notify-refusal-names-setup.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `ArticleHandler::userCanViewGalley()` redirects a signed-in reader to `about/subscriptions` (note e), and `AboutHandler::subscriptions()` redirects to the journal index while payments are not configured (note f). Live-probed 2026-09-25 (td8): the home page, no notice.
