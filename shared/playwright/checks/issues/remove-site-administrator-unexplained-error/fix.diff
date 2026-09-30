@@ -1,0 +1,19 @@
+--- a/lib/ui-library/src/managers/UserAccessManager/useUserAccessManagerActions.js
++++ b/lib/ui-library/src/managers/UserAccessManager/useUserAccessManagerActions.js
+@@ -84,8 +84,14 @@
+ 							close();
+ 							finishedCallback();
+ 
+-							if (data.value.status !== true) {
+-								openDialogNetworkError();
++							// A request that failed outright leaves data empty; useFetch
++							// has already shown its error dialog then.
++							if (data.value && data.value.status !== true) {
++								// Show the handler's refusal (a JSONMessage's content)
++								// when it gives one, the general error otherwise.
++								openDialogNetworkError({
++									data: {errorMessage: data.value.content},
++								});
+ 							}
+ 						},
+ 					},

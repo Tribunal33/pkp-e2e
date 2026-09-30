@@ -771,6 +771,10 @@ Left out of the scenarios above, by reason:
     merging the editor who recorded a submission's recommendation into
     another account, the window closing, the merged account refused at
     sign-in and the discussion naming the chosen account as creator
+  - the guard for A2 (Rule 15; scenario 4 passes it; issue report
+    `docs/issues/U53-A2-remove-site-administrator-unexplained-error.md`):
+    a manager's "Remove User" on the Site Administrator's row showing the
+    server's refusal, not "An unexpected error has occurred"
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -789,8 +793,6 @@ Left out of the scenarios above, by reason:
   - A1 ("Disable User" and "Enable User" refused inside the window on the
     rows of users outside the manager's reach; Rule 13; scenario 4
     passes it)
-  - A2 ("Remove User" on the Site Administrator's row; Rule 15; scenario
-    4 passes it)
   - A3 (a user with no role left, still listed on the Users list, in the
     "Merge user" window and on the older grid; Rules 3, 16; scenario 5
     passes it)
@@ -855,7 +857,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Disable User" and "Enable User" are offered on rows the manager may not administer, and refused only inside the window | 🐞 | user-visible | — |
-| [A2](#a2) | "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred…" | 🐞 | user-visible | — |
+| [A2](#a2) | A manager's "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A4](#a4) | The search box's example names "Journal editor" on a press and a preprint server | 🐞 | minor | — |
 | [A5](#a5) | The row's "…" button is announced to screen readers as a raw code | 🐞 | minor | — |
 | [A6](#a6) | The disable window's "Current Roles : " line lists roles that have ended | 🐞 | minor | — |
@@ -891,14 +893,21 @@ offered.
 Basis: probe. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — Removing the Site Administrator fails with an unexplained error** · 🐞 · user-visible.
-A manager's list offers "Remove User" on the Site Administrator's row.
-"OK" in the "Remove" dialog brings an "Error" dialog, "An unexpected
-error has occurred. Please reload the page and try again.", and the
-administrator keeps every role. The manager expects the action to be
-absent, or a message saying why it cannot be done; reloading changes
-nothing.
-Basis: probe. <sup>f-a2</sup>
+**A2 — A manager's "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred"** · 🐞 · low.
+On Settings › Users & Roles, a journal manager's list offers "Remove User"
+on the Site Administrator's row. "OK" in the "Remove" dialog brings an
+"Error" dialog, "An unexpected error has occurred. Please reload the page
+and try again.", and the administrator keeps every role.
+A manager may not remove a Site Administrator, and the app refuses with
+its reason: "You do not have sufficient permissions to administer this
+user. In order to administer a user, you must either be site
+administrator, or administer all contexts that this user is enrolled
+in." The page drops that message and tells the manager to reload and try
+again, which changes nothing: after a reload the row still offers
+"Remove User" and fails the same way. The proposed fix makes the dialog
+show the refusal; whether the menu should still offer "Remove User" on
+that row is left to a separate product decision.
+Basis: probe, 2026-09-30. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — A removed user stays listed with no role** · ❓ · minor.
@@ -1872,6 +1881,7 @@ refuses unless `getAdministrationLevel()` is `FULL` (note n). Live-probed
 **f-a2** — Code read 2026-09-25: note td9. The remove guard is only
 `user.groups.find(g => g.dateEnd === null)` and not-own-row. Live-probed
 2026-09-25: note td9.
+Issue report: [docs/issues/U53-A2-remove-site-administrator-unexplained-error.md](../issues/U53-A2-remove-site-administrator-unexplained-error.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Seen 2026-09-23 (journal-identity claim check K4-3); a reviewer
