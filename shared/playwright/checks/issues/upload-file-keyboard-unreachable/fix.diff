@@ -1,0 +1,11 @@
+--- a/lib/pkp/templates/controllers/fileUploadContainer.tpl
++++ b/lib/pkp/templates/controllers/fileUploadContainer.tpl
+@@ -69,7 +69,7 @@
+ 		<div class="pkpUploaderError"></div>
+ 
+ 		{* Button to add/change file *}
+-		<button id="{$browseButton|escape}" class="pkp_uploader_button pkp_button" tabindex="-1">
++		<button id="{$browseButton|escape}" class="pkp_uploader_button pkp_button">
+ 			<span class="pkp_uploader_button_add">
+ 				{translate key=$stringAddFile}
+ 			</span>
