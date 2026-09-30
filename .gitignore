@@ -8,6 +8,7 @@ apps/*/playwright/.timings/
 docs/tracking/.reports/
 .reports/
 
-# Self-contained app checkouts + their files dirs (bin/fetch-apps.js) — never
-# committed.
+# Self-contained app checkouts + their files dirs (bin/fetch-apps.js), every
+# line's, and the old lines' runtimes (checkouts/runtimes/: Node releases, the
+# PHP shims; harness.md "The stable lines") — never committed.
 /checkouts/

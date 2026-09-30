@@ -608,6 +608,10 @@ key, `mail` the shared Mailpit, `baseURL` the probe server (base port + 50),
 (rows as lines, columns joined by `|`), and `contextTables` the per-app
 context table names (`{table, id, settings}`: `journals`, `journal_id`,
 `journal_settings` on OJS; presses and servers).
+`line` names the line the process drives (`PKP_E2E_LINE`); on 3.4 and 3.3
+`testApi` is false and `api` answers 404, and `lineScratchContext(app,
+page)` / `lineUser(app, {…})` build a scratch context with its manager
+instead (harness.md "The stable lines").
 Everything per app travels in the bag, never in `process.env`, so one
 process holds all three apps. The exception is `PKP_APP_ROOT` and
 `PKP_SUITE_DIR`, which `withApp` exports for the app while `fn` runs

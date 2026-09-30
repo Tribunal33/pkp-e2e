@@ -8,10 +8,13 @@
  *   node bin/fetch-apps.js [ojs] [omp] [ops] [--rebuild] [--update] [--line <line>] [--reference <clone>]
  *   (default: all apps, the `main` line)
  *
- * --line stable-3_5_0 (or PKP_E2E_LINE) provisions the same thing for a
- * stable branch beside the `main` checkouts (bin/apps.js LINES, harness.md
- * "The fleets"): checkouts/<line>/<app> on that branch, ports shifted, DBs
- * suffixed, its own files dirs. A slot clone (PKP_E2E_SLOT in .env,
+ * --line stable-3_5_0 | stable-3_4_0 | stable-3_3_0 (or PKP_E2E_LINE)
+ * provisions the same thing for a stable branch beside the `main` checkouts
+ * (bin/apps.js LINES, harness.md "The stable lines"); a line that names its
+ * own PHP runs composer on it, and one that names its own Node builds its JS
+ * on that release, downloaded once into checkouts/runtimes/. Each line gets
+ * checkouts/<line>/<app> on that branch, ports shifted, DBs suffixed, its
+ * own files dirs. A slot clone (PKP_E2E_SLOT in .env,
  * harness.md "Slots") gets its slot's ports, DB names, Mailpit and API key
  * baked into .env.playwright and config.test.inc.php the same way;
  * --reference <another pkp-e2e clone> borrows that clone's checkouts'
@@ -39,7 +42,7 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const {execFileSync, spawnSync} = require('child_process');
-const {APPS, REPO_ROOT, resolveLine, resolveSlot, dbName} = require('./apps.js');
+const {APPS, REPO_ROOT, RUNTIMES_DIR, resolveLine, resolveSlot, dbName} = require('./apps.js');
 
 const FORK_OWNER = 'jardakotesovec';
 const UPSTREAM_OWNER = 'pkp';
@@ -81,9 +84,41 @@ for (const name of names) {
     }
 }
 
-// The line's Config.php edit: the same line `main` carries.
-const CONFIG_FILE_BEFORE = "define('CONFIG_FILE', \\PKP\\core\\Core::getBaseDir() . '/config.inc.php');";
-const CONFIG_FILE_AFTER = "define('CONFIG_FILE', getenv('PKP_CONFIG_FILE') ?: \\PKP\\core\\Core::getBaseDir() . '/config.inc.php');";
+// The line's Config.php edit: the same line `main` carries. 3.4 has the
+// namespaced define `main` had; 3.3 keeps it in Config.inc.php, unnamespaced.
+const CONFIG_EDITS = [
+    {
+        file: 'Config.php',
+        before: "define('CONFIG_FILE', \\PKP\\core\\Core::getBaseDir() . '/config.inc.php');",
+        after: "define('CONFIG_FILE', getenv('PKP_CONFIG_FILE') ?: \\PKP\\core\\Core::getBaseDir() . '/config.inc.php');",
+    },
+    {
+        file: 'Config.inc.php',
+        before: "define('CONFIG_FILE', Core::getBaseDir() . DIRECTORY_SEPARATOR . 'config.inc.php');",
+        after: "define('CONFIG_FILE', getenv('PKP_CONFIG_FILE') ?: Core::getBaseDir() . DIRECTORY_SEPARATOR . 'config.inc.php');",
+    },
+];
+
+/**
+ * The line's Node for its JS build (LINES `node`), downloaded once from
+ * nodejs.org into checkouts/runtimes/. Returns the env for npm, or the
+ * caller's env when the line builds on the system Node.
+ */
+function buildEnv() {
+    if (!line || !line.node) {
+        return process.env;
+    }
+    const dist = `node-v${line.node}-linux-x64`;
+    const binDir = path.join(RUNTIMES_DIR, dist, 'bin');
+    if (!fs.existsSync(path.join(binDir, 'node'))) {
+        fs.mkdirSync(RUNTIMES_DIR, {recursive: true});
+        const tarball = path.join(RUNTIMES_DIR, `${dist}.tar.xz`);
+        run(RUNTIMES_DIR, 'curl', ['-fsSL', '-o', tarball, `https://nodejs.org/dist/v${line.node}/${dist}.tar.xz`]);
+        run(RUNTIMES_DIR, 'tar', ['-xJf', tarball]);
+        fs.rmSync(tarball, {force: true});
+    }
+    return {...process.env, PATH: `${binDir}${path.delimiter}${process.env.PATH}`};
+}
 
 const run = (cwd, cmd, args, opts = {}) => {
     console.log(`  $ ${cmd} ${args.join(' ')}`);
@@ -138,24 +173,27 @@ function fetchApp(name) {
         } catch { return ''; }
     };
     const uiBefore = fresh ? '' : uiRev();
-    const configPhp = path.join(dir, 'lib', 'pkp', 'classes', 'config', 'Config.php');
+    const configDir = path.join(dir, 'lib', 'pkp', 'classes', 'config');
+    const configEdit = () => CONFIG_EDITS.find((edit) => fs.existsSync(path.join(configDir, edit.file)));
     if (!fresh && update) {
-        if (line && fs.existsSync(configPhp)) {
+        if (line && configEdit()) {
             // Drop the line's Config.php edit so the pointer can move; re-applied below.
-            run(path.join(dir, 'lib', 'pkp'), 'git', ['checkout', '--', 'classes/config/Config.php']);
+            run(path.join(dir, 'lib', 'pkp'), 'git', ['checkout', '--', `classes/config/${configEdit().file}`]);
         }
         run(dir, 'git', ['fetch', 'upstream', BRANCH]);
         run(dir, 'git', ['checkout', '-B', BRANCH, 'FETCH_HEAD']);
     }
     run(dir, 'git', ['submodule', 'update', '--init', '--recursive']);
-    if (line && !fs.readFileSync(configPhp, 'utf8').includes('PKP_CONFIG_FILE')) {
-        const source = fs.readFileSync(configPhp, 'utf8');
-        if (!source.includes(CONFIG_FILE_BEFORE)) {
-            console.error(`  ${configPhp}: no CONFIG_FILE define in the expected shape — the harness cannot select its test config on this branch`);
+    const edit = configEdit();
+    const configPhp = edit && path.join(configDir, edit.file);
+    if (line && (!edit || !fs.readFileSync(configPhp, 'utf8').includes('PKP_CONFIG_FILE'))) {
+        const source = edit ? fs.readFileSync(configPhp, 'utf8') : '';
+        if (!edit || !source.includes(edit.before)) {
+            console.error(`  ${configPhp || configDir}: no CONFIG_FILE define in the expected shape — the harness cannot select its test config on this branch`);
             process.exit(1);
         }
-        fs.writeFileSync(configPhp, source.replace(CONFIG_FILE_BEFORE, CONFIG_FILE_AFTER));
-        console.log(`  lib/pkp on ${BRANCH} predates PKP_CONFIG_FILE: Config.php edited in the working tree`);
+        fs.writeFileSync(configPhp, source.replace(edit.before, edit.after));
+        console.log(`  lib/pkp on ${BRANCH} predates PKP_CONFIG_FILE: ${edit.file} edited in the working tree`);
     }
     const uiMoved = !fresh && update && uiRev() !== uiBefore;
     if (uiMoved) console.log('  lib/ui-library moved: the UI bundle will be rebuilt');
@@ -189,14 +227,15 @@ function fetchApp(name) {
         }
     }
 
-    // UI build.
+    // UI build, on the line's Node when LINES names one.
+    const env = buildEnv();
     if (rebuild || uiMoved || !fs.existsSync(path.join(dir, 'node_modules'))) {
-        run(dir, 'npm', ['ci']);
+        run(dir, 'npm', ['ci'], {env});
     } else {
         console.log('  npm ci: node_modules present, skipping (--rebuild forces)');
     }
     if (rebuild || uiMoved || !fs.existsSync(path.join(dir, 'js', 'build.js'))) {
-        run(dir, 'npm', ['run', 'build']);
+        run(dir, 'npm', ['run', 'build'], {env});
     } else {
         console.log('  UI build: js/build.js present, skipping (--rebuild forces; --update rebuilds when lib/ui-library moved)');
     }
@@ -248,6 +287,7 @@ function fetchApp(name) {
                 TEST_DB_USERNAME: dbUser,
                 TEST_DB_PASSWORD: process.env.TEST_DB_PASSWORD || dbUser,
                 TEST_FILES_DIR: filesDir,
+                ...(line && line.locales ? {TEST_LOCALES: line.locales} : {}),
             },
         });
         if (generated.status !== 0) {

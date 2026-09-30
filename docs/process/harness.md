@@ -87,43 +87,113 @@ an existing checkout to the current upstream `main` and rebuilds the UI
 bundle (`js/build.js`) when `lib/ui-library` moved; a bundle older than the
 submodule makes retired UI defects reappear (U43 A13, 2026-09-04).
 
-### The stable line
+### The stable lines
 
-A second set of checkouts on `stable-3_5_0` sits beside the `main` ones,
-for the daily regression hunt on that branch (MAINTENANCE "The stable
-line") and for driving 3.5 and `main` side by side. No suite is meant to
-run there.
+Three more sets of checkouts sit beside the `main` ones, one per stable
+branch. `stable-3_5_0` serves the daily regression hunt on that branch
+(MAINTENANCE "The stable line") and driving 3.5 and `main` side by side.
+`stable-3_4_0` and `stable-3_3_0` are an on-request tool, for when the
+maintainer asks to walk a particular issue on 3.4 or 3.3 ("walk this
+issue on 3.3"); no session drives them as a standing step, and an issue
+report's "Affects" for those versions is read from the code otherwise.
+No suite is meant to run on any of the three lines.
 
-| App | Checkout | Base port | Test DB |
-|---|---|---|---|
-| OJS | `checkouts/stable-3_5_0/ojs` | 9000 | `ojs_test_3_5` |
-| OMP | `checkouts/stable-3_5_0/omp` | 9100 | `omp_test_3_5` |
-| OPS | `checkouts/stable-3_5_0/ops` | 9200 | `ops_test_3_5` |
+| Line | Checkouts | Base ports ojs/omp/ops (slot 0) | Test DBs | PHP | Node (JS build) | Overlays |
+|---|---|---|---|---|---|---|
+| `stable-3_5_0` | `checkouts/stable-3_5_0/<app>` | 9000/9100/9200 | `<app>_test_3_5` | system `php` (8.3) | system (22) | the `main` set, guarded |
+| `stable-3_4_0` | `checkouts/stable-3_4_0/<app>` | 10000/10100/10200 | `<app>_test_3_4` | `/usr/bin/php8.2` | 16.20.2 | install and user tools only |
+| `stable-3_3_0` | `checkouts/stable-3_3_0/<app>` | 11000/11100/11200 | `<app>_test_3_3` | `/usr/bin/php8.2` | 12.22.12 | install and user tools only |
 
-- The registry is `LINES` in `bin/apps.js`. **`PKP_E2E_LINE=stable-3_5_0`
-  in front of any harness command points it at the line** (`mount`,
+- The registry is `LINES` in `bin/apps.js`. **`PKP_E2E_LINE=<line>` in
+  front of any harness command points it at the line** (`mount`,
   `reset:<app>`, `fleet-prep`, `probe-servers`, `bin/probe.js`, the
   Playwright configs); unset means `main`, and `.env` is not involved.
-  The port bands, the files dirs (`checkouts/stable-3_5_0/files/`) and the
-  probe servers' pid files (`.reports/servers-stable-3_5_0/`) are the
-  line's own, so both lines' servers stay up together. The server logs
-  share `apps/<app>/playwright/.server-logs/`, told apart by port.
-- `npm run fetch-apps -- --line stable-3_5_0 [--update]` provisions and
-  moves it, same remotes and push rules as `main`'s.
-- `stable-3_5_0` has no `PKP_CONFIG_FILE` support, so `fetch-apps` makes
-  that one-line change to `lib/pkp/classes/config/Config.php` in the
-  line's working tree (the same line `main` carries) and re-applies it
-  after every `--update`. `git status` in the line's `lib/pkp` shows that
-  one file modified; nothing else under the line's checkouts is edited.
-- The overlays are written for `main`. On the line the install, the
-  bootstrap seed and the context, user and submission scenarios work
-  (2026-09-17, all three apps); two seed steps for `main`-only features
-  are skipped there behind `method_exists` / `class_exists` (the task
-  templates in `ContextFactory`, the contributor type and roles in
+  The port bands (`main` +0, 3.5 +1000, 3.4 +2000, 3.3 +3000, each plus
+  the slot's n × 300), the files dirs (`checkouts/<line>/files/`) and the
+  probe servers' pid files (`.reports/servers-<line>/`) are the line's
+  own, so every line's servers stay up together. The server logs share
+  `apps/<app>/playwright/.server-logs/`, told apart by port.
+- `npm run fetch-apps -- --line <line> [--update]` provisions and moves a
+  line, same remotes and push rules as `main`'s: the app on the branch
+  tip of its `upstream`, its submodules (`lib/pkp`, `lib/ui-library`, the
+  plugins) at the pointers that tip records, as for `main`.
+- **Runtimes.** pkp tests 3.4 on PHP 8.1 and 8.2 and 3.3 on 7.3 to 8.2
+  (the branches' `.github/workflows/stable-3_*.yml`; 3.3's `docs/README.md`
+  says "PHP 7.3.x … 8.2.x"), neither on 8.3, so both run on PHP 8.2: the
+  sury packages `php8.2-{cli,common,bcmath,bz2,curl,gd,intl,mbstring,opcache,pgsql,readline,soap,xml,zip}`,
+  installed system-wide on the VM (2026-09-30); `/usr/bin/php` stays 8.3.
+  A line's `php` in LINES makes `resolveLine()` put
+  `checkouts/runtimes/shims/php8.2/` (a `php` symlink to the binary) first
+  on `PATH`, so every child the harness spawns runs on it: the `php -S`
+  servers, `installTest.php`, `jobs.php`, composer, the kit's
+  `lineUser()`. `PKP_E2E_PHP=php8.3` (a name or a path) tries another
+  PHP; a missing binary stops the command with a hint. The JS builds use
+  the Node release pkp's workflow for the branch names (16 for 3.4, 12
+  for 3.3), which `fetch-apps` downloads once from nodejs.org into
+  `checkouts/runtimes/node-v<version>-linux-x64/` and puts on `PATH` for
+  `npm ci` and `npm run build` only; the harness and Playwright stay on
+  the system Node. `checkouts/` is gitignored, runtimes included. A new
+  machine or slot without `php8.2` needs those packages (or a PHP 8.2
+  build at `checkouts/runtimes/php8.2/bin/php`, which the lookup takes
+  when there is no `php8.2` on `PATH`).
+- **`PKP_CONFIG_FILE`.** None of the three branches honours it, so
+  `fetch-apps` makes the one-line change `main` carries in the line's
+  working tree, re-applied after every `--update`: 3.5 and 3.4 in
+  `lib/pkp/classes/config/Config.php`, 3.3 in
+  `lib/pkp/classes/config/Config.inc.php` (unnamespaced `Core::`). `git
+  status` in the line's `lib/pkp` shows that one file modified; nothing
+  else under the line's checkouts is edited (docs/tracking/app-changes.md
+  row 14).
+- **3.5: the `main` overlays.** On the line the install, the bootstrap
+  seed and the context, user and submission scenarios work (2026-09-17,
+  all three apps); two seed steps for `main`-only features are skipped
+  there behind `method_exists` / `class_exists` (the task templates in
+  `ContextFactory`, the contributor type and roles in
   `PKPSubmissionScenarioBuilder`). A scenario key that reaches another
   `main`-only class answers 500 naming it.
+- **3.4 and 3.3: no `_test` API, no seed.** The overlays are written for
+  `main`'s Laravel-routed API, which 3.4 (Slim handlers) and 3.3
+  (`import()`, `.inc.php`, no `Repo`) do not have, so `mount` copies only
+  `shared/php-lines/<line>/tools/`: `installTest.php` (the `main` install
+  tool in the line's shape: a no-op on an installed database, a refusal
+  naming `reset:<app>` on a half-installed one where `main`'s drops the
+  tables, the same `admin`/`admin` account, locales `en` and `fr_CA` on
+  3.4, `en_US` and `fr_CA` on 3.3) and `lineUser.php`
+  (one user through the app's own classes, optionally with a role in a
+  context). The setup project (so `fleet-prep`) only installs there; the
+  install holds `admin` and nothing else, no `publicknowledge`, no
+  roster. In a probe script the bag says so (`app.testApi` false,
+  `app.primaryLocale`, `app.line`); `signIn()` drops the `/en` locale
+  segment the two lines' addresses do not have; `app.api` answers 404.
+  The kit stands in with two helpers: `lineScratchContext(app, page)` (the
+  page signed in as `admin`) creates an enabled journal, press or server
+  through `POST /api/v1/contexts` in the admin's session, the endpoint
+  Administration › Hosted Journals › Create posts, so the admin becomes
+  one of its managers as through the screens, then a manager of its own
+  through `lineUser()`; it returns the path and the manager's username
+  and password (the roster rule, the username twice). `lineUser(app,
+  {username, contextPath, role})` adds another user (`manager`,
+  `subeditor`, `assistant`, `author`, `reviewer`, `reader`). Anything more
+  (sections, submissions, a second language on the context) is driven
+  through the screens. Proven 2026-09-30 on the three apps of both lines
+  (install, reset, servers, admin sign-in, a scratch context, the
+  manager's sign-in): `shared/playwright/checks/harness/lines/lines.js`.
+- Known gaps on 3.4 and 3.3: no scenario keys, so every state a walk
+  needs beyond a context and its users is built through the screens; the
+  validation variant (+90) is served, but nothing was driven through it;
+  `drainJobs()` and the other kit calls that go through `app.api` do not
+  work; no mailbox checks were made (the SMTP settings are the generator's,
+  untested there).
 - `bin/line-range.js` lists a line's commits since a baseline with each
   one's relation to `main` (same patch, adapted backport, stable-only).
+- Provisioning and a walk, 3.4 shown (3.3 the same with its own names):
+
+  ```bash
+  npm run fetch-apps -- --line stable-3_4_0 [--update]
+  PKP_E2E_LINE=stable-3_4_0 npm run mount
+  PKP_E2E_LINE=stable-3_4_0 npm run fleet-prep -- --feature issues-3_4 --reset
+  PKP_E2E_LINE=stable-3_4_0 PROBE_FEATURE=issues-3_4 PROBE_AGENT=x node bin/probe.js all shared/playwright/checks/harness/lines/lines.js
+  ```
 
 Every fleet uses fixed port bands above its base port; nothing else may
 listen there:
@@ -148,18 +218,18 @@ Two facts worth knowing before you write a test:
 ## Slots (parallel sessions)
 
 Up to three sessions work on the VM at once, each in its own **slot**: a
-full clone of this repo with its own `checkouts/` (both lines), databases,
+full clone of this repo with its own `checkouts/` (every line), databases,
 Mailpit and API key. Only Postgres, the cores and `origin` are shared.
 
-| slot | clone | ports ojs/omp/ops (stable-3_5_0) | DBs | Mailpit (SMTP) | `TEST_API_KEY` |
+| slot | clone | ports ojs/omp/ops (the stable lines: +1000 3.5, +2000 3.4, +3000 3.3) | DBs (plus `_3_5`, `_3_4`, `_3_3`) | Mailpit (SMTP) | `TEST_API_KEY` |
 |---|---|---|---|---|---|
-| 0 | `/home/e2e/pkp-e2e` | 8000/8100/8200 (9000/9100/9200) | `<app>_test`, `<app>_test_3_5` | 8025 (1025), systemd | `playwright-test-key` |
-| 1 | `/home/e2e/pkp-e2e-s1` | 8300/8400/8500 (9300/9400/9500) | `<app>_test_s1`, `<app>_test_s1_3_5` | 8026 (1026) | `playwright-test-key-s1` |
-| 2 | `/home/e2e/pkp-e2e-s2` | 8600/8700/8800 (9600/9700/9800) | `<app>_test_s2`, `<app>_test_s2_3_5` | 8027 (1027) | `playwright-test-key-s2` |
+| 0 | `/home/e2e/pkp-e2e` | 8000/8100/8200 (9000…, 10000…, 11000…) | `<app>_test` | 8025 (1025), systemd | `playwright-test-key` |
+| 1 | `/home/e2e/pkp-e2e-s1` | 8300/8400/8500 (9300…, 10300…, 11300…) | `<app>_test_s1` | 8026 (1026) | `playwright-test-key-s1` |
+| 2 | `/home/e2e/pkp-e2e-s2` | 8600/8700/8800 (9600…, 10600…, 11600…) | `<app>_test_s2` | 8027 (1027) | `playwright-test-key-s2` |
 
 - **Identity.** `PKP_E2E_SLOT=<n>` in the clone's `.env` makes it slot n
   (`resolveSlot()` in `bin/apps.js`): every port +n×300 (clear of the
-  line's +1000 and of the +0…+90 bands), DB suffix `_s<n>`, Mailpit
+  lines' +1000, +2000, +3000 and of the +0…+90 bands), DB suffix `_s<n>`, Mailpit
   8025+n / SMTP 1025+n, the key suffix `-s<n>`. `fetch-apps` bakes them
   into each checkout's `.env.playwright` and `config.test.inc.php`. Unset
   is slot 0, CI's values. The per-slot key is a tripwire: a run that adopts
@@ -213,8 +283,9 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
 - **Provisioning a slot**: clone `origin` to `/home/e2e/pkp-e2e-s<n>`, write
   `.env` with `PKP_E2E_SLOT=<n>` and the relative `<APP>_ROOT`s (`.env.example`),
   `npm ci`, `npm run fetch-apps -- --reference /home/e2e/pkp-e2e` (borrows
-  slot 0's objects), the same with `--line stable-3_5_0`, `npm run mount`
-  for both lines, then add the clone to `~/.pkp-e2e-slots/slots.json`.
+  slot 0's objects), the same with `--line stable-3_5_0` (and
+  `stable-3_4_0`, `stable-3_3_0` when the slot needs them), `npm run mount`
+  for every line, then add the clone to `~/.pkp-e2e-slots/slots.json`.
 
 ## Runtime model
 

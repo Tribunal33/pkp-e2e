@@ -8,7 +8,10 @@
  *
  * Per app: copies apps/<app>/php/** to the app root, shared/php/** to
  * lib/pkp/ and apps/<app>/playwright/fixtures/files/** to
- * classes/testing/fixtures/, keeps the copies out of git via
+ * classes/testing/fixtures/ (a line whose LINES entry says
+ * `overlays: 'install'`, 3.4 and 3.3, gets shared/php-lines/<line>/** at the
+ * app root instead: the install tool and the user tool, harness.md "The
+ * stable lines"), keeps the copies out of git via
  * .git/info/exclude, and writes a
  * manifest (.pkp-e2e-mount.json) of what it wrote. Guard rails:
  *  - refuses to overwrite a mounted file that was hand-edited in the app
@@ -20,7 +23,7 @@
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
-const {REPO_ROOT, resolveApp, configuredApps} = require('./apps.js');
+const {REPO_ROOT, resolveApp, resolveLine, configuredApps} = require('./apps.js');
 
 const EXCLUDE_BEGIN = '# >>> pkp-e2e mount (managed block — do not edit)';
 const EXCLUDE_END = '# <<< pkp-e2e mount';
@@ -41,6 +44,12 @@ function overlayFiles(appName) {
             }
         }
     };
+    const line = resolveLine();
+    if (line && line.overlays === 'install') {
+        const linePhp = path.join(REPO_ROOT, 'shared', 'php-lines', line.name);
+        walk(linePhp, linePhp, '');
+        return pairs;
+    }
     const appPhp = path.join(REPO_ROOT, 'apps', appName, 'php');
     const sharedPhp = path.join(REPO_ROOT, 'shared', 'php');
     const fixtures = path.join(REPO_ROOT, 'apps', appName, 'playwright', 'fixtures', 'files');
@@ -73,9 +82,12 @@ function ensureExcludes(appRoot, lines) {
 
 function mount(appName) {
     const app = resolveApp(appName);
-    const configPhp = path.join(
-        app.root, 'lib', 'pkp', 'classes', 'config', 'Config.php');
-    if (!fs.readFileSync(configPhp, 'utf8').includes('PKP_CONFIG_FILE')) {
+    // 3.3 keeps the class in Config.inc.php.
+    const configDir = path.join(app.root, 'lib', 'pkp', 'classes', 'config');
+    const configPhp = ['Config.php', 'Config.inc.php']
+        .map((file) => path.join(configDir, file))
+        .find((file) => fs.existsSync(file));
+    if (!configPhp || !fs.readFileSync(configPhp, 'utf8').includes('PKP_CONFIG_FILE')) {
         console.error(
             `${appName}: lib/pkp/classes/config/Config.php does not honour the ` +
                 `PKP_CONFIG_FILE env var — the checkout is missing the minimal ` +

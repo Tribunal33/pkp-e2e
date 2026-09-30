@@ -45,7 +45,10 @@ Operational facts:
   `<app>_test_3_5`), for regression reads and side-by-side drives only:
   no suite or spec follows it. `PKP_E2E_LINE=stable-3_5_0` in front of a
   harness command selects it; `npm run fetch-apps -- --line stable-3_5_0`
-  provisions it (harness.md "The stable line").
+  provisions it (harness.md "The stable lines"). `stable-3_4_0` and
+  `stable-3_3_0` lines (ports 10000… / 11000…, PHP 8.2) exist the same
+  way for walking a particular issue there when the team asks; issue
+  reports otherwise read 3.4 and 3.3 in the code (REPORT.md "Affects").
 - Up to three sessions run at once, each in its own **slot**: a full clone
   of this repo (`/home/e2e/pkp-e2e`, `-s1`, `-s2`) with its own checkouts,
   ports, DBs and Mailpit (`PKP_E2E_SLOT` in `.env`). The SessionStart hook

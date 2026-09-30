@@ -23,7 +23,7 @@ const path = require('path');
 const {execFileSync} = require('child_process');
 const {chromium} = require('@playwright/test');
 const {request} = require('@playwright/test');
-const {APPS, REPO_ROOT, resolveApp, resolveSlot} = require('../../../bin/apps.js');
+const {APPS, REPO_ROOT, resolveApp, resolveLine, resolveSlot} = require('../../../bin/apps.js');
 const {PkpApi, API_BASE} = require('../support/api.js');
 const {PkpMail} = require('../support/mail.js');
 const {waitForJQueryIdle} = require('../support/legacy.js');
@@ -145,9 +145,18 @@ function resolveProbeApp(name) {
     // eslint-disable-next-line import/no-dynamic-require
     const appContext = require(path.join(app.suiteDir, 'support', 'app.context.js'));
     const baseURL = `http://127.0.0.1:${port}`;
+    const line = resolveLine();
     return {
         app: name,
         name,
+        // The line this process drives (PKP_E2E_LINE; harness.md "The stable
+        // lines"): 'main', 'stable-3_5_0', 'stable-3_4_0', 'stable-3_3_0'.
+        line: app.line,
+        // False on the lines without the `_test` API (3.4, 3.3): no seed, no
+        // app.api; lineScratchContext() and lineUser() stand in.
+        testApi: !line || line.overlays !== 'install',
+        // The site's primary locale: `en`, `en_US` on 3.3.
+        primaryLocale: line && line.locales ? line.locales.split(',')[0] : 'en',
         root: app.root,
         suiteDir: app.suiteDir,
         basePort,
@@ -568,11 +577,7 @@ async function launch(app, {storageState, headless = true, record: keepRecord = 
 async function signIn(page, username, {password, origin = '', contextPath} = {}) {
     const loginPage = new LoginPage(page);
     const open = async () => {
-        if (origin || contextPath) {
-            await page.goto(`${origin}/index.php/${contextPath || 'index'}/en/login`);
-        } else {
-            await loginPage.goto();
-        }
+        await page.goto(`${origin}/index.php/${contextPath || 'index'}${urlLocale()}/login`);
     };
     await open();
     if ((await loginPage.usernameInput.count()) === 0) {
@@ -580,6 +585,15 @@ async function signIn(page, username, {password, origin = '', contextPath} = {})
         await open();
     }
     await loginPage.signIn(username, password || users.getPassword(username));
+}
+
+/**
+ * The locale segment of a page address: `/en` from 3.5 on, none on 3.4 and
+ * 3.3, whose page addresses carry no locale (`/index.php/index/login`).
+ */
+function urlLocale() {
+    const line = resolveLine();
+    return line && line.overlays === 'install' ? '' : '/en';
 }
 
 /**
@@ -1037,6 +1051,97 @@ async function drainJobs(app, {passes = 6, timeoutMs = 300_000} = {}) {
     return {passes, counts: last, output: output.join('')};
 }
 
+// ---------------------------------------------------------------------------
+// The lines without the `_test` API (3.4, 3.3; harness.md "The stable lines")
+
+/**
+ * Create a user on a 3.4 or 3.3 install through the app's own classes
+ * (the line's tools/lineUser.php, mounted by `npm run mount`), optionally
+ * with a role in a context. The password defaults to the roster rule
+ * (users.getPassword: the username twice).
+ *
+ * @param {object} app the withApp bag
+ * @param {{username: string, password?: string, email?: string, givenName?: string, familyName?: string, contextPath?: string, role?: string}} options
+ *   role: manager (default with a contextPath) | subeditor | assistant | author | reviewer | reader
+ * @returns {{userId: number, contextId: number|null, userGroupId: number|null, username: string, password: string}}
+ */
+function lineUser(app, {username, password, email, givenName, familyName, contextPath, role} = {}) {
+    if (!username) {
+        throw new Error('probe: lineUser needs a username');
+    }
+    password = password || users.getPassword(username);
+    const args = [
+        path.join('tools', 'lineUser.php'),
+        '--username', username,
+        '--password', password,
+        '--email', email || `${username}@mail.test`,
+        ...(givenName ? ['--given', givenName] : []),
+        ...(familyName ? ['--family', familyName] : []),
+        ...(contextPath ? ['--context', contextPath, '--role', role || 'manager'] : []),
+    ];
+    const out = execFileSync('php', args, {
+        cwd: app.root,
+        encoding: 'utf8',
+        env: {...process.env, PKP_CONFIG_FILE: app.configFile},
+    });
+    const json = out.trim().split('\n').pop();
+    return {...JSON.parse(json), username, password};
+}
+
+/**
+ * A scratch journal / press / server on a 3.4 or 3.3 install, with a manager
+ * who can sign in: the context goes through `POST /api/v1/contexts` in the
+ * admin's session (what Administration › Hosted Journals › Create posts;
+ * the admin becomes one of its managers, as through the screens), the
+ * manager through lineUser(). `page` must be signed in as `admin`. The
+ * context is enabled and speaks the site's primary locale.
+ *
+ * @param {object} app the withApp bag
+ * @param {import('@playwright/test').Page} page signed in as admin
+ * @param {{path?: string, name?: string, manager?: string}} [options]
+ *   path defaults to a fresh tag('ctx'); manager (a username) to `<path>mgr`
+ * @returns {Promise<{contextId: number, path: string, name: string, manager: {username: string, password: string, userId: number}}>}
+ */
+async function lineScratchContext(app, page, {path: urlPath, name, manager} = {}) {
+    urlPath = urlPath || tag('ctx');
+    name = name || `Scratch ${urlPath}`;
+    const locale = app.primaryLocale;
+    await page.goto(`${app.baseURL}/index.php/index/admin`);
+    const csrfToken = await page.evaluate(() => {
+        const pkp = window.pkp || ((window.$ || {}).pkp);
+        return (pkp && pkp.currentUser && pkp.currentUser.csrfToken) || null;
+    });
+    if (!csrfToken) {
+        throw new Error('probe: lineScratchContext found no CSRF token on the admin page — is the page signed in as admin?');
+    }
+    const response = await page.request.post(`${app.baseURL}/index.php/index/api/v1/contexts`, {
+        headers: {'X-Csrf-Token': csrfToken},
+        data: {
+            name: {[locale]: name},
+            acronym: {[locale]: urlPath.slice(0, 8).toUpperCase()},
+            urlPath,
+            primaryLocale: locale,
+            supportedLocales: [locale],
+            contactName: 'Scratch Contact',
+            contactEmail: `${urlPath}@mail.test`,
+            enabled: true,
+        },
+    });
+    const body = await response.text();
+    if (!response.ok()) {
+        throw new Error(`probe: POST /api/v1/contexts answered ${response.status()}: ${body.slice(0, 500)}`);
+    }
+    const context = JSON.parse(body);
+    const username = manager || `${urlPath}mgr`.slice(0, 32);
+    const created = lineUser(app, {username, contextPath: urlPath, role: 'manager', givenName: 'Scratch', familyName: 'Manager'});
+    return {
+        contextId: context.id,
+        path: urlPath,
+        name,
+        manager: {username, password: created.password, userId: created.userId},
+    };
+}
+
 /**
  * A unique scratch tag: `<prefix><agent><random>`, a single lowercase
  * alphanumeric token of at most 32 characters (patterns.md "Tag
@@ -1075,6 +1180,8 @@ module.exports = {
     drainJobs,
     sql,
     tag,
+    lineUser,
+    lineScratchContext,
     outDir,
     outFile,
     users,

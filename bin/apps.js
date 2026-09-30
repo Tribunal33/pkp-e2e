@@ -22,13 +22,29 @@ const APPS = {
     ops: {basePort: 8200},
 };
 
-// A second set of checkouts on a stable branch, beside the `main` ones
-// (harness.md "The fleets"): checkouts/<line>/<app>, ports shifted, DBs
-// suffixed, so both lines stay up side by side. PKP_E2E_LINE selects one for
+// Further sets of checkouts on the stable branches, beside the `main` ones
+// (harness.md "The stable lines"): checkouts/<line>/<app>, ports shifted, DBs
+// suffixed, so every line stays up side by side. PKP_E2E_LINE selects one for
 // every script that resolves an app here; unset is `main`.
+//
+// `php` names the PHP a line runs on when it is not the system `php`: the
+// binary php<version> on PATH (/usr/bin/php8.2 from the sury packages), else
+// checkouts/runtimes/php<version>/bin/php. resolveLine() puts a shim dir
+// holding `php` for it first on PATH, so every child the harness spawns (the
+// php -S servers, installTest, jobs.php, composer) runs on it. `node` names
+// the Node release fetch-apps builds the line's JS with (downloaded once to
+// checkouts/runtimes/node-v<version>-linux-x64); the harness itself, Playwright
+// included, stays on the system Node. `overlays` says which PHP overlays
+// mount copies: 'main' (the full set, guarded for 3.5) or 'install' (only
+// tools/installTest.php from shared/php-lines/<line>/, harness.md "The stable
+// lines").
 const LINES = {
-    'stable-3_5_0': {branch: 'stable-3_5_0', portShift: 1000, dbSuffix: '_3_5'},
+    'stable-3_5_0': {branch: 'stable-3_5_0', portShift: 1000, dbSuffix: '_3_5', overlays: 'main'},
+    'stable-3_4_0': {branch: 'stable-3_4_0', portShift: 2000, dbSuffix: '_3_4', overlays: 'install', php: '8.2', node: '16.20.2'},
+    // 3.3 names its locales en_US-style (3.4 moved to `en`).
+    'stable-3_3_0': {branch: 'stable-3_3_0', portShift: 3000, dbSuffix: '_3_3', overlays: 'install', php: '8.2', node: '12.22.12', locales: 'en_US,fr_CA'},
 };
+const RUNTIMES_DIR = path.join(REPO_ROOT, 'checkouts', 'runtimes');
 
 // Parallel slots (harness.md "Slots"): slot n shifts every port by n × 300
 // (clear of the +1000 line shift and of the +0…+90 fleet bands), suffixes
@@ -61,7 +77,7 @@ function dbName(name, line = resolveLine()) {
     return `${name}_test${resolveSlot().dbSuffix}${line ? line.dbSuffix : ''}`;
 }
 
-/** @returns {{name: string, branch: string, portShift: number, dbSuffix: string}|null} */
+/** @returns {{name: string, branch: string, portShift: number, dbSuffix: string, overlays: string, php?: string, node?: string}|null} */
 function resolveLine(name = process.env.PKP_E2E_LINE) {
     if (!name || name === 'main') {
         return null;
@@ -70,7 +86,75 @@ function resolveLine(name = process.env.PKP_E2E_LINE) {
         console.error(`Unknown line "${name}" — one of: main, ${Object.keys(LINES).join(', ')}`);
         process.exit(1);
     }
-    return {name, ...LINES[name]};
+    const line = {name, ...LINES[name]};
+    if (line.php) {
+        usePhp(line);
+    }
+    return line;
+}
+
+/** Is `file` an executable file? */
+function executable(file) {
+    try {
+        fs.accessSync(file, fs.constants.X_OK);
+        return fs.statSync(file).isFile();
+    } catch {
+        return false;
+    }
+}
+
+/**
+ * The PHP binary a line runs on: PKP_E2E_PHP (a path or a name on PATH, for
+ * trying another version), else php<version> on PATH, else the user-space
+ * build under checkouts/runtimes/php<version>/bin/php. Null when none exists.
+ */
+function linePhpBinary(line) {
+    const wanted = process.env.PKP_E2E_PHP || `php${line.php}`;
+    if (wanted.includes('/')) {
+        return executable(path.resolve(wanted)) ? path.resolve(wanted) : null;
+    }
+    const shimDir = path.join(RUNTIMES_DIR, 'shims');
+    for (const dir of (process.env.PATH || '').split(path.delimiter)) {
+        if (dir && !dir.startsWith(shimDir) && executable(path.join(dir, wanted))) {
+            return path.join(dir, wanted);
+        }
+    }
+    const local = path.join(RUNTIMES_DIR, `php${line.php}`, 'bin', 'php');
+    return !process.env.PKP_E2E_PHP && executable(local) ? local : null;
+}
+
+/**
+ * Put a shim dir holding `php` → the line's PHP first on PATH (idempotent),
+ * so this process's children run on it. Exits with a hint when the line's
+ * PHP is not installed.
+ */
+function usePhp(line) {
+    const binary = linePhpBinary(line);
+    if (!binary) {
+        console.error(
+            `${line.name} runs on PHP ${line.php}, which is not installed: no php${line.php} on PATH and no ` +
+                `${path.relative(REPO_ROOT, path.join(RUNTIMES_DIR, `php${line.php}`, 'bin', 'php'))} ` +
+                `(harness.md "The stable lines"; PKP_E2E_PHP=<binary> tries another one)`,
+        );
+        process.exit(1);
+    }
+    const shimDir = path.join(RUNTIMES_DIR, 'shims', path.basename(binary) === 'php' ? `php-${line.name}` : path.basename(binary));
+    const shim = path.join(shimDir, 'php');
+    let current = null;
+    try {
+        current = fs.readlinkSync(shim);
+    } catch {
+        // absent
+    }
+    if (current !== binary) {
+        fs.mkdirSync(shimDir, {recursive: true});
+        const tmp = `${shim}.${process.pid}.tmp`;
+        fs.symlinkSync(binary, tmp);
+        fs.renameSync(tmp, shim);
+    }
+    const parts = (process.env.PATH || '').split(path.delimiter).filter((dir) => dir !== shimDir);
+    process.env.PATH = [shimDir, ...parts].join(path.delimiter);
+    process.env.PKP_E2E_LINE_PHP = binary;
 }
 
 /** @returns {{name: string, root: string, suiteDir: string, basePort: number, line: string, slot: number, db: string}} */
@@ -131,4 +215,4 @@ function configuredApps() {
     return Object.keys(APPS).filter((name) => !!process.env[`${name.toUpperCase()}_ROOT`]);
 }
 
-module.exports = {APPS, LINES, REPO_ROOT, SLOT_PORT_STEP, resolveApp, resolveLine, resolveSlot, dbName, configuredApps};
+module.exports = {APPS, LINES, REPO_ROOT, RUNTIMES_DIR, SLOT_PORT_STEP, resolveApp, resolveLine, resolveSlot, dbName, configuredApps};

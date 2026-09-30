@@ -16,9 +16,23 @@
 const path = require('path');
 const {execFileSync} = require('child_process');
 const {test: setup, expect} = require('../support/base-test.js');
+const {resolveLine} = require('../../../bin/apps.js');
 
 setup('bootstrap the test install', async ({pkpApi, appContext}) => {
     setup.setTimeout(300_000); // a cold install + seed takes 1–3 min
+
+    // A line without the `_test` API (3.4, 3.3: harness.md "The stable
+    // lines") gets the schema and the admin account only, no seed; the line's
+    // installTest.php is a no-op on an installed database.
+    const line = resolveLine();
+    if (line && line.overlays === 'install') {
+        execFileSync('php', [path.join('tools', 'installTest.php')], {
+            cwd: process.env.PKP_APP_ROOT || process.cwd(),
+            stdio: 'inherit',
+            env: process.env,
+        });
+        return;
+    }
 
     const probe = await pkpApi.bootstrapProbe(appContext.contextPath);
     if (probe.ok()) {
