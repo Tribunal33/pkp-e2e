@@ -1,0 +1,16 @@
+--- a/lib/pkp/classes/core/PKPRouter.php
++++ b/lib/pkp/classes/core/PKPRouter.php
+@@ -295,10 +295,11 @@
+      * 4) execution
+      * 5) client response
+      *
+-     * @param array{0:PKPHandler,1:string} $serviceEndpoint
++     * @param array{0:PKPHandler,1:string}|null $serviceEndpoint null when nothing serves
++     *  the request (a component no plugin has registered): answered 404 below
+      * @param bool $validate whether or not to execute the validation step.
+      */
+-    public function _authorizeInitializeAndCallRequest(callable|array $serviceEndpoint, PKPRequest $request, array $args, bool $validate = true): void
++    public function _authorizeInitializeAndCallRequest(callable|array|null $serviceEndpoint, PKPRequest $request, array $args, bool $validate = true): void
+     {
+         $dispatcher = $this->getDispatcher();
+ 
