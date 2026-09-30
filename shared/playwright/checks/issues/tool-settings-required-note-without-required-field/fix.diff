@@ -1,0 +1,21 @@
+diff --git a/plugins/generic/doaj/templates/settingsForm.tpl b/plugins/generic/doaj/templates/settingsForm.tpl
+--- a/plugins/generic/doaj/templates/settingsForm.tpl
++++ b/plugins/generic/doaj/templates/settingsForm.tpl
+@@ -28,6 +28,5 @@
+ 		{/fbvFormSection}
+ 	{/fbvFormArea}
+ 	{fbvFormButtons submitText="common.save"}
+-	<p><span class="formRequired">{translate key="common.requiredField"}</span></p>
+ </form>
+ </div>
+\ No newline at end of file
+diff --git a/plugins/importexport/pubmed/templates/settingsForm.tpl b/plugins/importexport/pubmed/templates/settingsForm.tpl
+--- a/plugins/importexport/pubmed/templates/settingsForm.tpl
++++ b/plugins/importexport/pubmed/templates/settingsForm.tpl
+@@ -24,6 +24,5 @@
+ 			{/fbvFormSection}
+ 		{/fbvFormArea}
+ 		{fbvFormButtons submitText="common.save"}
+-		<p><span class="formRequired">{translate key="common.requiredField"}</span></p>
+ 	</form>
+ </div>
