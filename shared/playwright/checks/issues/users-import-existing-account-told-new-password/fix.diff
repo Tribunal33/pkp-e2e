@@ -1,0 +1,20 @@
+--- a/lib/pkp/plugins/importexport/users/filter/UserXmlPKPUserFilter.php
++++ b/lib/pkp/plugins/importexport/users/filter/UserXmlPKPUserFilter.php
+@@ -294,6 +294,7 @@
+             // send USER_REGISTER e-mail only if it is a new inserted/registered user
+             // else, if the user already exists, its metadata will not be change (just groups will be re-assigned below)
+             if ($password) {
++                $this->addError(__('plugins.importexport.user.error.passwordHasBeenChanged', ['username' => $user->getUsername()]));
+                 $template = Repo::emailTemplate()->getByKey($context->getId(), UserCreated::getEmailTemplateKey());
+                 $sender = Application::get()->getRequest()->getUser();
+                 $mailable = new UserCreated($context, $password);
+@@ -493,8 +494,7 @@
+                 $userToImport->setPassword(Validation::encryptCredentials($userToImport->getUsername(), $password));
+ 
+                 $userToImport->setMustChangePassword(true);
+-
+-                $this->addError(__('plugins.importexport.user.error.passwordHasBeenChanged', ['username' => $userToImport->getUsername()]));
++                // parseUser() says so when it saves a new user with this password; an existing user keeps its own
+             } else {
+                 $userToImport->setPassword($passwordHash);
+             }
