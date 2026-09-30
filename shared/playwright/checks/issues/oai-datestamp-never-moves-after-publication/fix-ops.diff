@@ -1,0 +1,34 @@
+--- a/classes/oai/ops/OAIDAO.php
++++ b/classes/oai/ops/OAIDAO.php
+@@ -214,9 +214,14 @@
+         $serverId = array_shift($setIds);
+         $sectionId = array_shift($setIds);
+ 
++        // A record changes when its submission or the submission's current version does,
++        // as on OJS: an edit of the published version, a new version, publishing again.
++        // COALESCE because MySQL's GREATEST() is NULL when any argument is NULL.
++        $datestamp = 'GREATEST(a.last_modified, COALESCE(p.last_modified, a.last_modified))';
++
+         return DB::table('submissions AS a')
+             ->select([
+-                'a.last_modified AS last_modified',
++                DB::raw("{$datestamp} AS last_modified"),
+                 'a.submission_id AS submission_id',
+                 DB::raw('NULL AS tombstone_id'),
+                 DB::raw('NULL AS set_spec'),
+@@ -241,11 +246,11 @@
+             ->when(isset($sectionId), function ($query) use ($sectionId) {
+                 return $query->where('p.section_id', '=', $sectionId);
+             })
+-            ->when($from, function ($query, $from) {
+-                return $query->whereDate('a.last_modified', '>=', \DateTime::createFromFormat('U', $from));
++            ->when($from, function ($query, $from) use ($datestamp) {
++                return $query->whereDate(DB::raw($datestamp), '>=', \DateTime::createFromFormat('U', $from));
+             })
+-            ->when($until, function ($query, $until) {
+-                return $query->whereDate('a.last-modified', '<=', \DateTime::createFromFormat('U', $until));
++            ->when($until, function ($query, $until) use ($datestamp) {
++                return $query->whereDate(DB::raw($datestamp), '<=', \DateTime::createFromFormat('U', $until));
+             })
+             ->when($submissionId, function ($query, $submissionId) {
+                 return $query->where('a.submission_id', '=', $submissionId);
