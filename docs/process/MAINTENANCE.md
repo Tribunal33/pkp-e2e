@@ -204,8 +204,8 @@ not a fix.
    fleets before each walk. The agent returns an outcome per entry:
    - `written` or `joined`: read the report against `REPORT.md` before
      accepting it. The header is complete and its severity and effort
-     follow the definitions; every Affects cell is answered, `main`
-     and 3.5 walked (a 3.5 "(code)" cell says in Evidence why); the title and Summary carry the
+     follow the definitions; Affects answers every version, `main`
+     and 3.5 walked (a 3.5 "(code)" says in Evidence why); the title and Summary carry the
      problem in product words, and a reader who stops there could rank
      it; the Steps go through the screens and were walked; the Cause is
      the root; the Proposed fix answers the six questions; Introduced,

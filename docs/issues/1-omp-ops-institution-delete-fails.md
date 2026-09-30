@@ -4,6 +4,8 @@
 - **Effort** small
 - **Kind** defect
 - **Crash** server
+- **Affects** main OMP, OPS · 3.5 OMP, OPS · 3.4 OMP, OPS (code) · 3.3 none (no
+  Institutions page)
 - **Introduced** `pkp/pkp-lib#8109` for `pkp/pkp-lib#6782` · [bed0ee4c3b](https://github.com/pkp/pkp-lib/commit/bed0ee4c3bcde7cf48c9f70bdee9400b061a31c1) · 2022-07-23 · Bozana Bokan (bozana)
 - **Upstream** none found (2026-09-30)
 - **Tracked in** spec U66 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a3), [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a8)
@@ -49,12 +51,6 @@ destroys a press's roles, but only on a press or server that uses
 institutions, which the side menu offers only once institutional
 statistics are turned on; it would be high if institutions were in
 common use on presses and servers.
-
-| Affects | main | 3.5 | 3.4 | 3.3 |
-|---|---|---|---|---|
-| OJS | no | no | no (code) | n/a |
-| OMP | yes | yes | yes (code) | n/a |
-| OPS | yes | yes | yes (code) | n/a |
 
 ## Steps to reproduce
 

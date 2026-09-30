@@ -3,6 +3,9 @@
 - **Severity** medium
 - **Effort** small
 - **Kind** defect
+- **Affects** main OJS, OMP, OPS · 3.5 OJS, OMP, OPS · 3.4 OJS, OMP, OPS (code;
+  Highlights only with `[features] highlights`) · 3.3 OJS, OMP, OPS
+  (code; Announcements only)
 - **Introduced** `pkp/ui-library#88` for `pkp/pkp-lib#5865` · [d0ffc05ab4](https://github.com/pkp/ui-library/commit/d0ffc05ab4ae7f06e8d2ab82f30ffb8a5ea9a7a3) · 2020-05-13 · Nate Wright (NateWr); copied into Institutions by `pkp/ui-library#213` (Bozana Bokan, bozana) and into Highlights by `pkp/ui-library#288` (Nate Wright, NateWr)
 - **Upstream** none found (2026-09-30)
 - **Tracked in** specs U66 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a2), U12 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a11), U11 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U11-highlights.md#a4)
@@ -43,14 +46,6 @@ Medium: a wrong title can reach a public page silently, but only after
 an abandoned edit and a second save of the same item, and the text is in
 plain sight in the box; it would rise if a panel were found that stores
 the abandoned text without a second edit.
-
-| Affects | main | 3.5 | 3.4 | 3.3 |
-|---|---|---|---|---|
-| OJS | yes | yes | yes (code) | yes (code) |
-| OMP | yes | yes | yes (code) | yes (code) |
-| OPS | yes | yes | yes (code) | yes (code) |
-
-3.4 shows it on Highlights only where `[features] highlights` is on; 3.3 on Announcements only (no Institutions or Highlights there).
 
 ## Steps to reproduce
 

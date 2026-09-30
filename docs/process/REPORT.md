@@ -41,6 +41,9 @@ never dropped.
 - **Effort** small | medium | large
 - **Kind** regression | intention gap | defect
 [- **Crash** server | script | both]
+- **Affects** main <apps> · 3.5 <apps>[ (code)] · 3.4 <apps> (code) ·
+  3.3 <apps> (code); "none" for a version no app shows it on, a short
+  bracket when a word is needed ("none (no Institutions page)")
 - **Introduced** `<repo>#<pr>` for `<repo>#<issue>` · [<sha>](<commit
   URL>) · <date> · <name> (<github handle>) | not traced; present since
   at least [<sha>](<commit URL>) (<date>)
@@ -56,15 +59,6 @@ never dropped.
 ## Impact
 
 [**Lost**, **Who**, **Way round** bullets; the severity sentence]
-
-| Affects | main | 3.5 | 3.4 | 3.3 |
-|---|---|---|---|---|
-| OJS | yes | yes | no | n/a |
-| OMP | yes | yes (code) | … | … |
-| OPS | … | … | … | … |
-
-[One line under the table, only when a cell needs a word: "3.3 has no
-Institutions page; OJS 3.3 shows it on a subscription's IP ranges".]
 
 ## Steps to reproduce
 
@@ -95,8 +89,7 @@ read; a label changed on GitHub is copied back into the header.
 - **Crash**, only when the app itself failed: a request behind the action
   answered a server error (`server`), or the page's own script failed in
   the browser (`script`), or both.
-- **Introduced**, **Upstream**: below. The **Affects** table closes the
-  Impact section (below).
+- **Affects**, **Introduced**, **Upstream**: below.
 - **Tracked in** links each register entry (or names the tracking row),
   and **Checked** dates the walks; the branch tips they ran on are
   listed in Evidence. A report under `docs/reports/` ends the bullet
@@ -132,21 +125,21 @@ may lack. A fix already on `main` means the finding is stale and gets
 no report. Nothing found says so, with the date of the search.
 
 **Affects.** Which apps on which versions show the fault, so the team
-can see what a fix must reach and what a backport would cover: a table
-that closes the Impact section, after the severity sentence. It has a
-row per app and a column per version, and every cell is answered:
-
-- **yes** / **no**: the Steps were walked on that app and version, on a
-  freshly reset install of the branch's tip, and the fault showed or did
-  not;
-- **n/a**: the surface does not exist there;
-- **yes (code)** / **no (code)**: read in the code, not walked;
-- **not checked**, with the reason in Evidence.
+can see what a fix must reach and what a backport would cover: one
+header bullet, a clause per version (`main`, 3.5, 3.4, 3.3) naming the
+apps that show the fault there. An app a clause leaves out was checked
+and does not show it, or has no such surface; "none" says no app does.
+"(code)" marks a version read in the code rather than walked, and "not
+checked" a version not looked at, with the reason in Evidence. A short
+bracket gives the one word a clause needs ("none (no Institutions
+page)", "OJS (on a subscription's IP ranges)"); anything longer goes in
+Evidence. Walked means the Steps were taken on that app and version, on
+an install of the branch's tip freshly reset to its default dataset.
 
 `main` and 3.5 are walked: the kept script takes the same Steps on the
 `stable-3_5_0` install with `PKP_E2E_LINE=stable-3_5_0` in front, and
-only when the steps cannot be taken there does a 3.5 cell fall back to
-the code, with the reason in Evidence. 3.4 and 3.3 are read in the code
+only when the steps cannot be taken there does the 3.5 clause fall
+back to the code, with the reason in Evidence. 3.4 and 3.3 are read in the code
 by default, since a fix is not expected to be backported past the 3.5
 LTS: pkp's `stable-3_4_0` and `stable-3_3_0` branches, the app's, its
 pkp-lib's and its ui-library's, fetched from pkp (the app checkout's
@@ -159,11 +152,11 @@ whether it has the same fault (older versions often do that job in
 other classes, so a missing file answers nothing). When the team asks
 for a particular issue to be checked on 3.4 or 3.3, the Steps are walked
 there too, on that line's install (harness.md "The stable lines"), and
-the cells become **yes** or **no**; where the older screens make the
+its clause loses the "(code)"; where the older screens make the
 Steps differ, the Steps say so in a bracket and Evidence names the
 adaptation.
 
-The severity never rests on a "(code)" cell alone, and a walk and a code
+The severity never rests on a "(code)" clause alone, and a walk and a code
 read that disagree are settled before the report goes out.
 
 A branch's tip stands for its version, since that is where a fix would
@@ -385,7 +378,7 @@ stands, on pkp-e2e's tracker (`jardakotesovec/pkp-e2e`):
   `intention gap` or `defect`) and `crash: server` or `crash: script`
   (both for both) from their bullets; one of `ojs`, `omp`, `ops` per
   app and one of `main`, `3.5`, `3.4`, `3.3` per version that has a
-  **yes** or **yes (code)** in the Affects table; and `tracked upstream`
+  a clause naming it in the Affects bullet; and `tracked upstream`
   when the Upstream bullet names a pkp issue or PR. They are a filter on
   top of the header, never the only place a fact is written.
 - The body is the file below the title, header included, unchanged.
@@ -407,7 +400,7 @@ that are symptoms of the same fault are one finding, and their issue
 report names each symptom. An issue report always holds one finding.
 A regression report may hold several when one change causes them: the
 Summary names each in a sentence, a `## Finding n — <title>` block per
-finding holds its own Severity, Effort, Kind and Crash bullets and Affects table, Impact,
+finding holds its own Severity, Effort, Kind, Crash and Affects bullets, Impact,
 Steps, Cause and Proposed fix in that order, one shared Evidence section
 follows, and the header at the top carries the highest severity. Two
 findings with different fixes are two reports.
@@ -431,8 +424,7 @@ findings with different fixes are two reports.
   what the user expected; what it costs and whether there is a way
   round; the reach). Impact is three labelled bullets, **Lost**, **Who**
   and **Way round**, each one or two short sentences read at a glance,
-  then the severity sentence as its own paragraph, then the Affects
-  table; a detail not needed
+  then the severity sentence as its own paragraph; a detail not needed
   to judge the severity (a character count, which class reads a column)
   goes to the Cause or Evidence.
   The Cause is a paragraph per step of the argument, with the reach as a
