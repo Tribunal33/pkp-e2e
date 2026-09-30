@@ -2084,7 +2084,7 @@ Issue report: [pkp-e2e#8](https://github.com/jardakotesovec/pkp-e2e/issues/8) ([
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Live-probed 2026-09-23 by the Navigation menus claim check (its OPS2): "Saved" shown, the next load with neither choice marked, "Archives" still in the header; the Search claim check saw every role still reach the Search page. Live-probed 2026-09-25 (td1) on a scratch server: "OPS will not be used…" and "The server will provide open access…" each saved with "Saved" and came back unselected; with the second saved, the visitor and the Reader still saw "Archives", the preprint page and its PDF. OPS `schemas/context.json` has no `publishingMode`, so the context API drops the value (note b); OPS `OpsServerMustPublishPolicy` and the archive header still read it.
-Issue report: [docs/issues/U51-OPS1-posting-mode-not-kept.md](../issues/U51-OPS1-posting-mode-not-kept.md).
+Issue report: [pkp-e2e#42](https://github.com/jardakotesovec/pkp-e2e/issues/42) ([docs/issues/U51-OPS1-posting-mode-not-kept.md](../issues/U51-OPS1-posting-mode-not-kept.md)).
 
 ## Reference — entry points & surfaces
 

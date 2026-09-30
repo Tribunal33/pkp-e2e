@@ -2878,7 +2878,7 @@ stayed with "Issues" or "Catalog".
 carried no `publishingMode`, nothing was stored, the radios were
 unmarked on the next load and the header read "Announcements Archives
 About".
-Issue report: [docs/issues/U51-OPS1-posting-mode-not-kept.md](../issues/U51-OPS1-posting-mode-not-kept.md).
+Issue report: [pkp-e2e#42](https://github.com/jardakotesovec/pkp-e2e/issues/42) ([docs/issues/U51-OPS1-posting-mode-not-kept.md](../issues/U51-OPS1-posting-mode-not-kept.md)).
 
 <a id="fn-f-ops3"></a>
 **f-ops3** — Note s. Live-probed 2026-09-23 (Rule 21), OPS, with OJS and

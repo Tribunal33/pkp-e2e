@@ -1913,7 +1913,7 @@ a value that is never stored. Live-probed 2026-09-02: "Posting Mode" set to
 ("Saved"); after reload neither radio checked, the save response without
 the setting; every actor got the Search page and the archive box, no
 `##…##` text anywhere. The gated state was not reached.
-Issue report: [docs/issues/U51-OPS1-posting-mode-not-kept.md](../issues/U51-OPS1-posting-mode-not-kept.md) (the "Posting Mode" not kept, U51 OPS1; its Cause covers the missing sentence).
+Issue report: [pkp-e2e#42](https://github.com/jardakotesovec/pkp-e2e/issues/42) ([docs/issues/U51-OPS1-posting-mode-not-kept.md](../issues/U51-OPS1-posting-mode-not-kept.md)), the "Posting Mode" not kept, U51 OPS1; its Cause covers the missing sentence).
 
 <a id="fn-f-ops3"></a>
 **f-ops3** — fn-o: `$server` assigned, `$journal` filtered. Judgment from
