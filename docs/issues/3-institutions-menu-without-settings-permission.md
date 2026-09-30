@@ -3,8 +3,11 @@
 - **Severity** medium
 - **Effort** small
 - **Kind** intention gap
-- **Affects** main OJS, OMP, OPS · 3.5 OJS, OMP, OPS · 3.4 none (code; no "Permit
-  changes to Settings") · 3.3 none (code)
+- **Affects**
+  - main: OJS, OMP, OPS
+  - 3.5: OJS, OMP, OPS
+  - 3.4: none (code; no "Permit changes to Settings")
+  - 3.3: none (code)
 - **Introduced** `pkp/pkp-lib#10380` for `pkp/pkp-lib#5504` · [1330ac1283](https://github.com/pkp/pkp-lib/commit/1330ac128326a8ee735549bb33f22ee7c9f019e6) · 2024-11-18 · Alec Smecher (asmecher)
 - **Upstream** none found (2026-09-30)
 - **Tracked in** spec U66 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a1)

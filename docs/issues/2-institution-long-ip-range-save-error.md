@@ -4,8 +4,11 @@
 - **Effort** small
 - **Kind** defect
 - **Crash** server
-- **Affects** main OJS, OMP, OPS · 3.5 OJS, OMP, OPS · 3.4 OJS, OMP, OPS (code) ·
-  3.3 OJS (code; on an institutional subscription's "IP ranges")
+- **Affects**
+  - main: OJS, OMP, OPS
+  - 3.5: OJS, OMP, OPS
+  - 3.4: OJS, OMP, OPS (code)
+  - 3.3: OJS (code; on an institutional subscription's "IP ranges")
 - **Introduced** not traced; present since at least [5091b6949e](https://github.com/pkp/ojs/commit/5091b6949e1c9f6f50b62f5d41951d8506949995) (2009-05-20, OJS subscriptions), carried into pkp-lib by `pkp/pkp-lib#8109` for `pkp/pkp-lib#6782` · [bed0ee4c3b](https://github.com/pkp/pkp-lib/commit/bed0ee4c3bcde7cf48c9f70bdee9400b061a31c1) · Bozana Bokan (bozana)
 - **Upstream** none found (2026-09-30)
 - **Tracked in** spec U66 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a9)

@@ -41,9 +41,11 @@ never dropped.
 - **Effort** small | medium | large
 - **Kind** regression | intention gap | defect
 [- **Crash** server | script | both]
-- **Affects** main <apps> · 3.5 <apps>[ (code)] · 3.4 <apps> (code) ·
-  3.3 <apps> (code); "none" for a version no app shows it on, a short
-  bracket when a word is needed ("none (no Institutions page)")
+- **Affects**
+  - main: <apps>
+  - 3.5: <apps>[ (code)]
+  - 3.4: <apps> (code)
+  - 3.3: none (code; <the word it needs, e.g. no Institutions page>)
 - **Introduced** `<repo>#<pr>` for `<repo>#<issue>` · [<sha>](<commit
   URL>) · <date> · <name> (<github handle>) | not traced; present since
   at least [<sha>](<commit URL>) (<date>)
@@ -125,20 +127,20 @@ may lack. A fix already on `main` means the finding is stale and gets
 no report. Nothing found says so, with the date of the search.
 
 **Affects.** Which apps on which versions show the fault, so the team
-can see what a fix must reach and what a backport would cover: one
-header bullet, a clause per version (`main`, 3.5, 3.4, 3.3) naming the
-apps that show the fault there. An app a clause leaves out was checked
+can see what a fix must reach and what a backport would cover: a header
+bullet with a sub-item per version (`main`, 3.5, 3.4, 3.3) naming the
+apps that show the fault there. An app a sub-item leaves out was checked
 and does not show it, or has no such surface; "none" says no app does.
 "(code)" marks a version read in the code rather than walked, and "not
 checked" a version not looked at, with the reason in Evidence. A short
-bracket gives the one word a clause needs ("none (no Institutions
+bracket gives the one word a sub-item needs ("none (no Institutions
 page)", "OJS (on a subscription's IP ranges)"); anything longer goes in
 Evidence. Walked means the Steps were taken on that app and version, on
 an install of the branch's tip freshly reset to its default dataset.
 
 `main` and 3.5 are walked: the kept script takes the same Steps on the
 `stable-3_5_0` install with `PKP_E2E_LINE=stable-3_5_0` in front, and
-only when the steps cannot be taken there does the 3.5 clause fall
+only when the steps cannot be taken there does the 3.5 sub-item fall
 back to the code, with the reason in Evidence. 3.4 and 3.3 are read in the code
 by default, since a fix is not expected to be backported past the 3.5
 LTS: pkp's `stable-3_4_0` and `stable-3_3_0` branches, the app's, its
@@ -152,11 +154,11 @@ whether it has the same fault (older versions often do that job in
 other classes, so a missing file answers nothing). When the team asks
 for a particular issue to be checked on 3.4 or 3.3, the Steps are walked
 there too, on that line's install (harness.md "The stable lines"), and
-its clause loses the "(code)"; where the older screens make the
+its sub-item loses the "(code)"; where the older screens make the
 Steps differ, the Steps say so in a bracket and Evidence names the
 adaptation.
 
-The severity never rests on a "(code)" clause alone, and a walk and a code
+The severity never rests on a "(code)" sub-item alone, and a walk and a code
 read that disagree are settled before the report goes out.
 
 A branch's tip stands for its version, since that is where a fix would
@@ -378,7 +380,7 @@ stands, on pkp-e2e's tracker (`jardakotesovec/pkp-e2e`):
   `intention gap` or `defect`) and `crash: server` or `crash: script`
   (both for both) from their bullets; one of `ojs`, `omp`, `ops` per
   app and one of `main`, `3.5`, `3.4`, `3.3` per version that has a
-  a clause naming it in the Affects bullet; and `tracked upstream`
+  a sub-item naming it under the Affects bullet; and `tracked upstream`
   when the Upstream bullet names a pkp issue or PR. They are a filter on
   top of the header, never the only place a fact is written.
 - The body is the file below the title, header included, unchanged.
