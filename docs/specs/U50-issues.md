@@ -1030,6 +1030,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U50-A5-A6-issue-large-volume-lettered-year.md`): on
     "Create Issue", a "Volume" of 99999 and a "Year" of "20a6" each
     refused with a message beside the box, nothing saved
+  - the guard for A14 (issue report
+    `docs/issues/U50-A14-full-issue-wrong-galley-address-empty-page.md`):
+    a signed-out visitor at a "Full Issue" galley address that names no
+    galley of the issue landing on the issue's page
 - **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
@@ -1114,7 +1118,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 | [A11](#a11) | "Create Issue Galley" offers interface-only languages, then refuses them as if no language were chosen | 🐞 | user-visible | — |
 | [A12](#a12) | After "Delete" of their issue, offline articles still read "Published" in their workflow, and their history does not say they were unpublished | 🐞 | user-visible | — |
 | [A13](#a13) | "Archives" lists the issues in no set order until someone orders "Back Issues" | 🐞 | user-visible | — |
-| [A14](#a14) | A galley address that names no galley of the issue fails with an empty page | 🐞 | user-visible · crash: server | — |
+| [A14](#a14) | Visitors opening a deleted or mistyped "Full Issue" galley address get an empty page, not the issue | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | With only "Description" changed on "Issue Data", another tab opens without the unsaved-change question | 🐞 | minor | — |
 | [A17](#a17) | An article whose newer version was published with "Don't Assign To An Issue" stays listed in the issue, under the newer title, linking to a page that names no issue | 🐞 | user-visible | — |
 | [A18](#a18) | On such an article, "Remove" leaves it in the issue and unpublishes its earlier version, the one the issue published | 🐞 | user-visible | — |
@@ -1252,12 +1256,17 @@ On one journal "Archives" read 2024, 2026, 2025 where "Back Issues" read
 sees on "Back Issues". Basis: probe, 2026-09-25. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — A wrong galley address fails with an empty page** · 🐞 · user-visible · crash: server.
+**A14 — Visitors opening a deleted or mistyped "Full Issue" galley address get an empty page, not the issue** · 🐞 · low · crash: server.
 A "Full Issue" address that names no galley of the issue (a wrong
 number, a word, another issue's galley) is expected to open the issue's
 page. Instead the app fails on the server and the visitor gets an empty
-page, so a stale or mistyped galley link leads nowhere. Basis: probe,
-2026-09-25. <sup>f-a14</sup>
+page, so a stale or mistyped galley link leads nowhere.
+The server answers `500`, both for the galley's viewing address and for
+its download address. The code means to send the visitor to the issue's
+page instead. OJS 3.5 does that, because pkp fixed the line there under
+`pkp/pkp-lib#11245`. The fix never reached `main`, so the next release
+would bring the fault back unless the one-line fix is ported.
+Basis: probe, 2026-09-30. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — "Publish Issue" offers an email that never goes** · ❓ · user-visible.
@@ -1509,6 +1518,7 @@ Issue report: [pkp-e2e#68](https://github.com/jardakotesovec/pkp-e2e/issues/68) 
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-25 (td14; Rule 26), OJS, eight times over three runs: `issue/view/{id}/999`, `/{id}/nosuch`, `/{urlPath}/999` and another issue's galley each answered 500 with an empty title and body. Server log: "Uncaught TypeError: PKP\core\PKPRequest::redirect(): Argument #4 ($path) must be of type ?array, int given" in `IssueHandler.php`, the unknown-galley redirect of `initialize()` (note x). Code read: `stable-3_5_0` passes the path as a list; not driven there.
+Issue report: [docs/issues/U50-A14-full-issue-wrong-galley-address-empty-page.md](../issues/U50-A14-full-issue-wrong-galley-address-empty-page.md).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-25 (td16; Settings bullet 1), OJS, two journals: on a journal set to not publish online, "Publish Issue" arrived with the box ticked; "OK" published the issue, queued no job, and after the queue ran no email had arrived and no notification was recorded. `publishIssue()` skips both when `publishingMode == PUBLISHING_MODE_NONE` (note f); `assignPublicIdentifiersForm.tpl` shows the box ticked whatever the mode.
