@@ -831,6 +831,12 @@ Left out of the scenarios above, by reason:
     a file's name changed in "Edit Metadata" and left with "Yes", the
     row and the reopened window holding the saved name, and the next
     "Save" of another box keeping it
+  - the guard for OMP2 (Actors row 1; scenario 8 passes the link without
+    pressing it; issue report
+    `docs/issues/U47-OMP2-press-media-download-refused-outside-production.md`):
+    an assigned Copyeditor on a press monograph in Copyediting finding no
+    "Media" under the version, an editor on the same monograph still
+    finding it
 - **Rarely met**:
   - no component marked as a dependent file, where "Upload Media File"
     holds only "No media types are configured. Please contact the
@@ -856,9 +862,6 @@ Left out of the scenarios above, by reason:
     no media file reaches readers; Side effects)
   - OMP1 ("HTML Monograph File" off, a book's HTML file opening as a
     blank page; Settings bullet 6)
-  - OMP2 (a press role outside Production pressing a file name gets a
-    refusal instead of the file; Actors row 1; scenario 8 passes the
-    link without pressing it)
 - **Owned by another feature**:
   - "More Information"'s "History" tab kept on "Loading" for the
     assistant roles (Actors row 3; *[Submission
@@ -883,7 +886,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | invisible | — |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | minor | — |
 | [OMP1](#omp1) | With "HTML Monograph File" off, a book's HTML file opens as a blank page | 🐞 | critical · crash: both | issues (claude), 2026-09-30 — re-verified |
-| [OMP2](#omp2) | On a press, a role that sees the list outside Production cannot download its files: the tab shows a refusal | 🐞 | user-visible | — |
+| [OMP2](#omp2) | On a press, roles without Production access see "Media" file names that open a raw refusal, not the file | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A2](#a2) | The "ID" column shows a pair's number for linked files and another kind of number for the rest | ❓ | minor | — |
 | [OJS1](#ojs1) | A reader who is not signed in sees a media change on an HTML galley up to a day late | ❓ | user-visible | — |
 | [OPS1](#ops1) | A preprint server offers the "Media" page, but no reader page shows its files | ❓ | user-visible | — |
@@ -1039,31 +1042,19 @@ nor a message.
 Basis: probe, 2026-09-30. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — Press roles outside Production cannot download the media files they see** · 🐞 · user-visible.
-On a press, the Funding Coordinator on a monograph in External Review
-sees the "Media" list with each file name as a link, as the Author
-does. Pressing a name opens a new tab showing a line of raw text,
-{"status":false,"content":"The current role does not have access to
-this operation.",…}, and no file arrives. The page offers a download
-it then refuses. The Copyeditor and the Marketing and Sales Coordinator
-on a monograph in Copyediting get the same link, and by the code the
-same refusal.
-Basis: test run, 2026-09-25 (the Funding Coordinator); code (the
-Copyeditor and the Marketing and Sales Coordinator). <sup>f-omp2</sup>
-
-### OPS
-<a id="ops1"></a>
-**OPS1 — Media files reach no reader on a preprint server** · ❓ · user-visible.
-A preprint server offers the "Media" page with every action a journal
-has, but it installs nothing that shows an HTML galley as a page: the
-galley's link on the preprint's page downloads the HTML file, and the
-media files are shown nowhere.
-Question: should a preprint server show HTML galleys with their media
-files, or not offer the "Media" page? Lean: show them; the preprint's
-download address already accepts a media file (read in the code, used
-by no page), so the missing piece looks like an unfinished port rather
-than a choice.
-Basis: probe, 2026-09-24 (the download); code (the download address).
+**OMP2 — On a press, roles without Production access see "Media" file names that open a raw refusal, not the file** · 🐞 · low.
+On a press, three roles are offered the version's "Media" page, with
+each file name as a link: the Copyeditor and the Marketing and Sales
+Coordinator while a monograph is in Copyediting, and the Funding
+Coordinator while it is in Submission or review. Pressing a name opens a
+new tab that shows one line of raw text holding "The current role does
+not have access to this operation.", and no file arrives.
+These roles are not meant to download media files, which belong to the
+Production stage, so withholding the file is right. The fault is that
+the menu lists the page for them. The proposed fix stops listing "Media"
+for roles without Production access, as a journal and a preprint server
+already do.
+Basis: probe (the download); code (the download address), 2026-09-30.
 <sup>f-ops1</sup>
 
 ---
@@ -1859,6 +1850,7 @@ Coordinator's stages do not include Production (note b). The
 Copyeditor's and the Marketing and Sales Coordinator's link in
 Copyediting is the same address and was not pressed. The Author and every
 role with Production download normally (note q1).
+Issue report: [docs/issues/U47-OMP2-press-media-download-refused-outside-production.md](../issues/U47-OMP2-press-media-download-refused-outside-production.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Notes a and n: the OPS side menu lists "Media" for
