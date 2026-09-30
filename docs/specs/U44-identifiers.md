@@ -1845,7 +1845,7 @@ Issue report: [pkp-e2e#5](https://github.com/jardakotesovec/pkp-e2e/issues/5) ([
 closed the window and read back empty; no issue setting row held a
 publisher ID. OJS `schemas/issue.json` declares no
 `pub-id::publisher-id`, so the issue save drops it.
-Issue report: [docs/issues/U44-OJS3-issue-publisher-id-not-kept.md](../issues/U44-OJS3-issue-publisher-id-not-kept.md).
+Issue report: [pkp-e2e#44](https://github.com/jardakotesovec/pkp-e2e/issues/44) ([docs/issues/U44-OJS3-issue-publisher-id-not-kept.md](../issues/U44-OJS3-issue-publisher-id-not-kept.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `URNSettingsForm` `urnObjects` check: `enableIssueURN
