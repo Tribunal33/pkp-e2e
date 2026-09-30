@@ -2030,7 +2030,7 @@ Issue report: [pkp-e2e#11](https://github.com/jardakotesovec/pkp-e2e/issues/11) 
 
 <a id="fn-f-a16"></a>
 **f-a16** — OJS `TemplateManager` adds the side menu's "Institutions" (`management/settings/institutions`) in the same step as "Payments", for every role that gets "Payments", the Subscription Manager included; the Institutions page itself is a management page the role cannot open. Live-probed 2026-09-25 (td3), on three scratch journals, by the menu and by the address.
-Issue report: [docs/issues/U51-A16-subscription-manager-institutions-refused.md](../issues/U51-A16-subscription-manager-institutions-refused.md).
+Issue report: [pkp-e2e#40](https://github.com/jardakotesovec/pkp-e2e/issues/40) ([docs/issues/U51-A16-subscription-manager-institutions-refused.md](../issues/U51-A16-subscription-manager-institutions-refused.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — `AccessForm`'s select gives "Disabled" the value 0; a fresh journal stores no `delayedOpenAccessDuration`, which matches no option, so the box shows empty; `IssueGridHandler::publishIssue()` treats an empty value as disabled (note m). Live-probed 2026-09-25 (td4): the save posted `delayedOpenAccessDuration=` with the box untouched.
