@@ -1539,7 +1539,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | A signed-out visitor who opens a subscription purchase page's address gets an empty page, not Login | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A13](#a13) | The "Subscription" block reads "Expired: {today}" for a subscription awaiting payment | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A14](#a14) | With "Only Restrict Access to PDF…" ticked and no reader fee, HTML galleys show no padlock but refuse readers | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A15](#a15) | Month and week counts read "1 Months" and "1 Weeks" | 🐞 | minor | — |
+| [A15](#a15) | The journal's "Delayed Open Access" and expiry reminder lists offer "1 Months" and "1 Weeks" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | Subscription Manager is refused the Institutions page the menu offers, so cannot add a subscribing institution | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A17](#a17) | A journal's "Delayed Open Access" shows an empty box instead of "Disabled" until a manager picks a value | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A18](#a18) | Additional files of an article in a restricted issue show no padlock, yet readers without access are refused | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
@@ -1733,10 +1733,18 @@ at that price.
 Basis: probe, 2026-09-30. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — "1 Months" and "1 Weeks"** · 🐞 · minor.
+**A15 — The journal's "Delayed Open Access" and expiry reminder lists offer "1 Months" and "1 Weeks"** · 🐞 · low.
 The month and week lists of "Delayed Open Access" and "Subscription
 Expiry Reminders" read "1 Months" and "1 Weeks" for their first choice.
-Basis: probe, 2026-09-25. <sup>f-a15</sup>
+That is five lists: "Delayed Open Access" on Settings › Distribution ›
+"Access" (months), and the four reminder lists on the "Payments" page's
+"Subscription Policies" tab (before and after expiry, each in months and
+in weeks). Until 2017 the reminder lists offered a bare "1" followed by
+"month(s)", which read correctly.
+The choice still means one month or one week and saves as such. Other
+languages show the same fault: in French the week lists read "1
+semaines".
+Basis: probe, 2026-09-30. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — Subscription Manager is refused the Institutions page the menu offers, so cannot add a subscribing institution** · 🐞 · medium.
@@ -2169,6 +2177,7 @@ Issue report: [pkp-e2e#51](https://github.com/jardakotesovec/pkp-e2e/issues/51) 
 
 <a id="fn-f-a15"></a>
 **f-a15** — `manager.subscriptionPolicies.xMonths` "{$x} Months" and `.xWeeks` "{$x} Weeks" (OJS `locale/en/manager.po`) serve every count from 1, in `AccessForm` and `SubscriptionPolicyForm`. Live-probed 2026-09-25 (td4, td14).
+Issue report: [docs/issues/U51-A15-month-week-lists-read-1-months.md](../issues/U51-A15-month-week-lists-read-1-months.md).
 
 <a id="fn-f-a16"></a>
 **f-a16** — OJS `TemplateManager` adds the side menu's "Institutions" (`management/settings/institutions`) in the same step as "Payments", for every role that gets "Payments", the Subscription Manager included; the Institutions page itself is a management page the role cannot open. Live-probed 2026-09-25 (td3), on three scratch journals, by the menu and by the address.

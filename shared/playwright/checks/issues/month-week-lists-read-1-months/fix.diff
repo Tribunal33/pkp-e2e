@@ -1,0 +1,102 @@
+--- a/classes/components/forms/context/AccessForm.php
++++ b/classes/components/forms/context/AccessForm.php
+@@ -46,7 +46,7 @@
+         for ($i = SUBSCRIPTION_OPEN_ACCESS_DELAY_MIN; $i <= SUBSCRIPTION_OPEN_ACCESS_DELAY_MAX; $i++) {
+             $validDelayedOpenAccessDuration[] = [
+                 'value' => $i,
+-                'label' => __('manager.subscriptionPolicies.xMonths', ['x' => $i]),
++                'label' => __p('manager.subscriptionPolicies.xMonths', $i, ['x' => $i]),
+             ];
+         }
+ 
+--- a/classes/subscription/form/SubscriptionPolicyForm.php
++++ b/classes/subscription/form/SubscriptionPolicyForm.php
+@@ -52,22 +52,22 @@
+     {
+         $this->validNumMonthsBeforeExpiry = [0 => __('common.disabled')];
+         for ($i = SUBSCRIPTION_EXPIRY_REMINDER_BEFORE_MONTHS_MIN; $i <= SUBSCRIPTION_EXPIRY_REMINDER_BEFORE_MONTHS_MAX; $i++) {
+-            $this->validNumMonthsBeforeExpiry[$i] = __('manager.subscriptionPolicies.xMonths', ['x' => $i]);
++            $this->validNumMonthsBeforeExpiry[$i] = __p('manager.subscriptionPolicies.xMonths', $i, ['x' => $i]);
+         }
+ 
+         $this->validNumWeeksBeforeExpiry = [0 => __('common.disabled')];
+         for ($i = SUBSCRIPTION_EXPIRY_REMINDER_BEFORE_WEEKS_MIN; $i <= SUBSCRIPTION_EXPIRY_REMINDER_BEFORE_WEEKS_MAX; $i++) {
+-            $this->validNumWeeksBeforeExpiry[$i] = __('manager.subscriptionPolicies.xWeeks', ['x' => $i]);
++            $this->validNumWeeksBeforeExpiry[$i] = __p('manager.subscriptionPolicies.xWeeks', $i, ['x' => $i]);
+         }
+ 
+         $this->validNumMonthsAfterExpiry = [0 => __('common.disabled')];
+         for ($i = SUBSCRIPTION_EXPIRY_REMINDER_AFTER_MONTHS_MIN; $i <= SUBSCRIPTION_EXPIRY_REMINDER_AFTER_MONTHS_MAX; $i++) {
+-            $this->validNumMonthsAfterExpiry[$i] = __('manager.subscriptionPolicies.xMonths', ['x' => $i]);
++            $this->validNumMonthsAfterExpiry[$i] = __p('manager.subscriptionPolicies.xMonths', $i, ['x' => $i]);
+         }
+ 
+         $this->validNumWeeksAfterExpiry = [0 => __('common.disabled')];
+         for ($i = SUBSCRIPTION_EXPIRY_REMINDER_AFTER_WEEKS_MIN; $i <= SUBSCRIPTION_EXPIRY_REMINDER_AFTER_WEEKS_MAX; $i++) {
+-            $this->validNumWeeksAfterExpiry[$i] = __('manager.subscriptionPolicies.xWeeks', ['x' => $i]);
++            $this->validNumWeeksAfterExpiry[$i] = __p('manager.subscriptionPolicies.xWeeks', $i, ['x' => $i]);
+         }
+ 
+         parent::__construct('payments/subscriptionPolicyForm.tpl');
+--- a/lib/pkp/classes/i18n/translation/LocaleBundle.php
++++ b/lib/pkp/classes/i18n/translation/LocaleBundle.php
+@@ -140,11 +140,12 @@
+         $loader = function () use ($isSupported): Translator {
+             $translator = new Translator();
+             // Merge all the locale files into a single structure
+-            $firstPath = array_key_first($this->paths);
+-            foreach (array_keys($this->paths) as $path) {
+-                $translations = LocaleFile::loadArray($path, $isSupported);
++            $allTranslations = array_map(fn (string $path): array => LocaleFile::loadArray($path, $isSupported), array_keys($this->paths));
++            // The plural rule is read only with the first file, and not every file carries one: take the first rule found
++            $pluralForms = current(array_filter(array_column($allTranslations, 'plural-forms'))) ?: null;
++            foreach ($allTranslations as $index => $translations) {
+                 // Once the first locale file is added, ensures only messages are merged
+-                $translator->addTranslations($firstPath === $path ? $translations : ['messages' => $translations['messages']]);
++                $translator->addTranslations($index === 0 ? ['plural-forms' => $pluralForms] + $translations : ['messages' => $translations['messages']]);
+             }
+             return $translator;
+         };
+--- a/lib/pkp/classes/i18n/translation/Translator.php
++++ b/lib/pkp/classes/i18n/translation/Translator.php
+@@ -57,9 +57,19 @@
+     public function getPlural(string $original, int $value): ?string
+     {
+         $translation = $this->getTranslation(null, null, $original);
+-        $key = $this->getPluralIndex(null, $value, $translation === null);
++        if ($translation === null) {
++            return null;
++        }
++        $key = $this->getPluralIndex(null, $value, false);
++        if (($translation[$key] ?? '') !== '') {
++            return $translation[$key];
++        }
+ 
+-        return $translation[$key] ?? null;
++        // A locale that has not translated every plural form of the key yet (a key that
++        // became plural after it was translated) lacks the form or holds it empty: use its
++        // last translated form rather than a missing key or an empty label
++        $forms = array_filter($translation, fn (string $form): bool => $form !== '');
++        return $forms ? end($forms) : null;
+     }
+ 
+     /**
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -1069,10 +1069,14 @@
+ msgstr "Readers are denied access to recently published subscription content, but retain access to subscription content published prior to the subscription expiry date."
+ 
+ msgid "manager.subscriptionPolicies.xMonths"
+-msgstr "{$x} Months"
++msgid_plural "manager.subscriptionPolicies.xMonths"
++msgstr[0] "{$x} Month"
++msgstr[1] "{$x} Months"
+ 
+ msgid "manager.subscriptionPolicies.xWeeks"
+-msgstr "{$x} Weeks"
++msgid_plural "manager.subscriptionPolicies.xWeeks"
++msgstr[0] "{$x} Week"
++msgstr[1] "{$x} Weeks"
+ 
+ msgid "manager.subscriptionPolicies.expiryReminderAfterMonths"
+ msgstr "Notify subscribers by email after subscription expiry"
