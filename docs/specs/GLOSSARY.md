@@ -357,7 +357,9 @@ The long form of the legend. Each spec's Conventions line carries the three symb
 - **Findings register.** The spec's single home for everything that deviates
   or needs a decision: 🐞 a defect (the author's call) · ❓ needs a product
   ruling · ✅ an intended difference. **Impact** is one plain word
-  (user-visible / minor / invisible / latent). A finding in which the app
+  (user-visible / minor / invisible / latent), or, for a defect written
+  up for the team in `docs/issues/`, its **severity** (critical / high /
+  medium / low, defined in `docs/process/REPORT.md` "Severity"). A finding in which the app
   itself fails carries a **crash** word after the impact: *crash: server*
   when a request behind the action answers a server error, *crash: script*
   when the page's own code fails in the browser, *crash: both* for both;

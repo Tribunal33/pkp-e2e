@@ -7,15 +7,18 @@ not here. `docs/README.md` is the map of the documentation.
 - **Start every feature session with `docs/process/RUNBOOK.md`** (the loop,
   what goes where, model discipline) **and `docs/tracking/PROGRESS.md`**
   (live state and the mode banner). Never re-derive the process from memory.
-- **Maintenance sessions** (the resident QA agent) are two, each with its
-  own list in `docs/process/MAINTENANCE.md`: the **upstream session**
+- **Maintenance sessions** (the resident QA agent) are three, each with
+  its own list in `docs/process/MAINTENANCE.md`: the **upstream session**
   (the daily session) also reads `docs/tracking/upstream-sync.md`,
   `docs/tracking/ci-triage.md` and
   `docs/tracking/upstream-sync-stable-3_5_0.md` for the regression-only
   read of `stable-3_5_0`; the **housekeeping session** reads
   `docs/tracking/incidentals.md`, `docs/tracking/friction.md` and
-  `ci-triage.md`. Check ci-triage FIRST when a CI failure is
-  reported: one root cause often reds ojs, omp and ops as three messages.
+  `ci-triage.md`; the **issues session** ("start issues session, <n>
+  specs") reads `docs/tracking/issues-queue.md` and writes
+  `docs/issues/`. Check
+  ci-triage FIRST when a CI failure is reported: one root cause often reds
+  ojs, omp and ops as three messages.
   A PR or issue link shared with a request to check it before merging is
   a **PR review**: `docs/process/MAINTENANCE.md` "PR review", which
   produces a companion branch named like the app PR.

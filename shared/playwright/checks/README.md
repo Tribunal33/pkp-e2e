@@ -3,7 +3,9 @@
 One directory per feature, one per claim-check chunk inside it
 (`U05/K1/`, …); `sync/<pr>/` holds the reproductions of the regressions
 the maintenance sync confirmed (`docs/tracking/ci-triage.md` "Open
-regressions"), re-run each sync until the fix lands. These are the scripts the claim checkers wrote while
+regressions"), re-run each sync until the fix lands; `issues/<slug>/`
+holds the walk of each issue report in `docs/issues/`, deleted with the
+report. These are the scripts the claim checkers wrote while
 driving the spec's sentences against the running apps (`docs/process/briefs/claim-check.md`). They are not tests: no assertions, no runner, no
 fixtures. Each chunk has one entry script that seeds its own scratch
 context, signs in from the roster and records every screen with the probe

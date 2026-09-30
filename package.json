@@ -4,6 +4,7 @@
   "description": "Playwright e2e suites, seeding harness, specs and process docs for OJS/OMP/OPS. Runs against app checkouts named in .env; `npm run mount` copies the PHP overlays into them.",
   "scripts": {
     "fetch-apps": "node bin/fetch-apps.js",
+    "fetch-old-lines": "node bin/fetch-old-lines.js",
     "mount": "node bin/mount.js",
     "unmount": "node bin/unmount.js",
     "test:ojs": "node bin/test-app.js ojs",

@@ -105,7 +105,7 @@ orchestrator.
 
 | What | Where |
 |---|---|
-| Product findings: bugs, divergences, open questions, API misbehavior the browser's own traffic showed, or a direct check of an API no screen calls (the Frame's one exception), with no security dimension | the spec's Findings register; nowhere else (not `app-changes.md`, not a PROGRESS note) |
+| Product findings: bugs, divergences, open questions, API misbehavior the browser's own traffic showed, or a direct check of an API no screen calls (the Frame's one exception), with no security dimension | the spec's Findings register; nowhere else (not `app-changes.md`, not a PROGRESS note). A 🐞 entry added to a spec that is not in `docs/tracking/issues-queue.md` puts the spec back in, with the entry named, so the issues session writes it up |
 | A potential security concern | `../e2e_ng/security.md`, private and outside every repo; verified by one targeted probe before the session report; rules and entry shape in `briefs/security-verify.md`. The fact of routing is always stated (on the VM in a thread post tagging @jarda.kotesovec and @beaug, the fact only, in every session, a developer's PR check included: only they can read the private file; no direct messages); the content never appears in a spec, test, `.reports/` file, PROGRESS note, commit or Mattermost post |
 | A finding against an unmerged PR | the developer; the spec describes `main` (MAINTENANCE "A developer's PR fails the suite") |
 | What a probe saw on another feature's screen | `docs/tracking/incidentals.md`, one line, written by the orchestrator from the fold log and the merge, only after grepping that feature's spec for it: a sighting the spec already states is dropped, one it contradicts names the rule or register ID it contradicts; the line names the account and the state the read was taken in (signed in or out, a window open over it, what the seed held), and its evidence names the kept script under `shared/playwright/checks/` beside any `.reports/` path, which stays in the slot that wrote it (U08, U22, U28, U29, U60 claim checks) |
@@ -113,6 +113,7 @@ orchestrator.
 | Build blockers and any app-code change | `docs/tracking/app-changes.md`, orchestrator only |
 | Builder parity | `docs/tracking/parity-ledger.md` |
 | A write-up for the team | `docs/reports/`, in the shape of `REPORT.md` (severity, summary, impact, steps, cause, proposed fix, evidence last), deleted once acted on; the register footnote keeps the pointer |
+| A spec's defect written up for the team | `docs/issues/`, in the shape of `REPORT.md`, by the issues session (MAINTENANCE "The issues session"), filed as a GitHub issue on pkp-e2e and deleted when the issue closes; the register footnote keeps the pointer |
 | Process learnings | this file, TEMPLATE, PRINCIPLES or a brief template, through maintainer review; never a spec |
 | Anything resolved | deleted; git keeps it. Tracking files hold what is open, and anything outside its canonical home is one sentence plus a link |
 

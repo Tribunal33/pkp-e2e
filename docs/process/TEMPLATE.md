@@ -548,6 +548,12 @@ status: draft | verified    # verified = the full RUNBOOK loop passed
      <check> (claude), <date> — <outcome>` line; "Reviewed" is reserved
      for a human.
 
+     ISSUE REPORTS. A 🐞 entry written up in `docs/issues/` carries the
+     report's severity (critical / high / medium / low) in place of the
+     impact word, and, when it is the report's whole subject, the report's
+     title and Summary as its title and symptom (MAINTENANCE "The issues
+     session", step 7); the report is the source and the entry follows it.
+
      CRASHES. When the drive saw the app fail behind the finding (a request
      answering a server error, the page's script failing: the digest block's
      `Crash:` line, the probe kit's run record), the head carries the crash

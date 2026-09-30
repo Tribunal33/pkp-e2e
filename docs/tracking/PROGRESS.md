@@ -8,7 +8,9 @@ register, never here.
 `docs/process/MAINTENANCE.md`, two scheduled sessions (housekeeping
 daily at 07:00, upstream on weekdays at midday); the housekeeping
 session builds a pending row (one the upstream sync added) under the
-RUNBOOK loop, one at a time. Upstream baselines:
+RUNBOOK loop, one at a time. The issues session, started by hand
+("start issues session, <n> specs"), writes the specs' defects up for
+the team from `docs/tracking/issues-queue.md`. Upstream baselines:
 `docs/tracking/upstream-sync.md`. CI failures, flake watch and companion
 branches: `docs/tracking/ci-triage.md`, checked first on any reported
 failure.

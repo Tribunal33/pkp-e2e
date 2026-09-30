@@ -1,7 +1,8 @@
 # Brief templates
 
 One file per role of the RUNBOOK loop, one for the maintenance loop's
-regression reader (`regression-read.md`, MAINTENANCE step 5), one for a
+regression reader (`regression-read.md`, MAINTENANCE step 5), one for
+the issues session's reporter (`issue-report.md`), one for a
 flake class's diagnostician (`flake-diagnosis.md`, MAINTENANCE "Standing
 duties"), plus two
 shared blocks the templates point at or take as a slot (`frame.md`,
@@ -25,7 +26,8 @@ never writes a brief from scratch, and it never writes rules into one.
    carry each role's operating rules, under maintainer review; a missing
    rule is fixed in the template, never patched into a brief.
 4. Keep the verbatim blocks as they are: the Frame (`frame.md`, filled into
-   the frame slot of claim-check, harness, test-author and security-verify),
+   the frame slot of claim-check, harness, test-author, security-verify
+   and issue-report),
    the PROGRESS and app-changes sentence, "Commit nothing.", the friction
    sentence (`docs/tracking/friction.md`; only the templates for agents
    that drive screens carry it), the `checkouts/` sentence, and "Preserve

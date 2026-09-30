@@ -5,12 +5,14 @@ claude-threads) that acts as the PKP team's QA specialist for the e2e suite
 and talks to the team on Mattermost. It adds to the RUNBOOK loop, never
 replaces it, and is active when the PROGRESS banner says so.
 
-The work is split between two scheduled sessions, each with its
-own list: the **upstream session** keeps the suite in step with what the
-team ships, the **housekeeping session** works the campaign's own backlog
-(incidentals, friction, flakes, stale artifacts). A session does its own
-list only; work it finds for the other one goes as a line into the
-tracking file the other one reads. A red `main` interrupts either.
+The work is split between three sessions, each with its own list: the
+**upstream session** keeps the suite in step with what the team ships,
+the **housekeeping session** works the campaign's own backlog
+(incidentals, friction, flakes, stale artifacts), both scheduled, and
+the **issues session**, started on request, turns the specs' defects
+into reports the team can triage. A session does its own
+list only; work it finds for another goes as a line into the tracking
+file that session reads. A red `main` interrupts any of them.
 
 ## The upstream session (the daily session)
 
@@ -74,8 +76,12 @@ run picks up from the files.
    spans and lint zero, as "Fix stale artifacts as you go" says; when it
    changes a claim a test asserts, the test changes with it and that
    suite runs green once. A row that does not reproduce is deleted; one
-   that stays unclear becomes that spec's ❓ entry with a lean. Every
-   worked row is deleted from `incidentals.md`.
+   that stays unclear becomes that spec's ❓ entry with a lean. A row
+   from the issues session that says an entry no longer shows is driven
+   the same way: when it holds, the fold retires the entry (TEMPLATE
+   "Retired entries"); when the entry still shows, the row goes back to
+   the issues queue as that spec's open entry. Every worked row is
+   deleted from `incidentals.md`.
 4. **Builds and Planned coverage.** One piece of work a morning, the
    first of these that exists:
    - a build or revision left mid-way, resumed from its
@@ -136,6 +142,134 @@ run picks up from the files.
 The housekeeping session never runs the sync loop, the stable line or a
 companion, and leaves a revision queue to the maintainer.
 
+## The issues session
+
+The goal is an issue the team can act on: filtered by severity and
+effort to find the biggest problems, understood from its title and
+Summary, reproduced from its steps, and fixed from its cause and
+proposed fix. The session makes these from the findings the specs
+already hold, spec by spec, and every report is held to
+`docs/process/REPORT.md`.
+
+It runs on the VM and is not scheduled: it starts when someone asks for
+it on Mattermost with the number of specs to work, "start issues
+session, 2 specs" (no number means one). It takes the specs from the top
+of `docs/tracking/issues-queue.md` and works every 🐞 entry in their
+registers. The ❓ and ✅ entries stay out: a question needs a ruling,
+not a fix.
+
+1. Read the PROGRESS banner, this section, `REPORT.md` and the queue;
+   work from files, never from memory of earlier sessions.
+2. **Bring back what the team did on GitHub** since the last session
+   (`gh issue list -R jardakotesovec/pkp-e2e --state all --json
+   number,state,labels,updatedAt`, then the comments of each issue
+   updated since): a changed label into the report's labels line and
+   the register entry's head; a ruling in a comment into the report
+   and the entry's Reviewed blockquote (TEMPLATE); a closed issue as
+   "A report's life" below says.
+3. Start on the right code ("Session hygiene"), the stable-3_5_0
+   checkouts included (`npm run fetch-apps -- --line stable-3_5_0
+   --update`, then `PKP_E2E_LINE=stable-3_5_0 npm run mount`). Then
+   `npm run fetch-old-lines`, which brings pkp's 3.4 and 3.3 branches
+   into the `main` checkouts as refs to read, and the fleets: `npm run
+   fleet-prep -- --feature issues --reset` for `main`, and
+   `PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-3_5
+   --reset` for 3.5.
+4. Take the specs: the top N rows of the queue, each claimed with `node
+   bin/slot.js claim <U<nn>>` so that no parallel session takes it too.
+   A spec left mid-way by an earlier session continues with the entries
+   its row names.
+5. **Group the entries.** Read the spec's 🐞 entries and their footnotes.
+   Leave out an entry whose footnote points at an open report in
+   `docs/reports/` (a regression the upstream session is carrying) and a
+   one-line pointer to another spec's entry (worked there). Group those
+   that point at one fault (the same action failing on two screens, one
+   wrong value showing in several places), and follow an entry's link to
+   the same fault in another spec: that entry joins the unit, and its
+   spec is claimed too. Every other entry is a unit of its own. A group
+   is a guess the reporter confirms or splits.
+6. **Report each unit** through one agent rendered from
+   `briefs/issue-report.md`, one or two at a time on the fleets. The
+   agent returns an outcome per entry:
+   - `written` or `joined`: read the report against `REPORT.md` before
+     accepting it. The labels line is complete and its severity and
+     effort follow the definitions; the title and Summary carry the
+     problem in product words, and a reader who stops there could rank
+     it; the Steps go through the screens and were walked; the Cause is
+     the root; the Proposed fix answers the six questions; Introduced,
+     Affects and Upstream are filled; Evidence holds only what the team can open,
+     with full links. A gap goes back to the same agent (SendMessage),
+     once.
+   - `not reproduced` or `fixed upstream`: the entry is not retired
+     here. It gets a row in `docs/tracking/incidentals.md` in its shape,
+     "Seen" saying "A5 no longer shows on main" (or naming the upstream
+     fix) and "Evidence" the kept script, and the housekeeping session
+     confirms it and retires the entry through its fold, markers, suites
+     and coverage included.
+   - a routing to the private file: the entry is left as it is, and
+     RUNBOOK "What goes where" applies (the verification probe, the
+     fact-only post).
+7. **Bring the register in line with the report.** The session edits
+   the entries itself, since the text comes from a report it has just
+   accepted. For each entry the report covers:
+   - the head's impact word becomes the report's severity (critical,
+     high, medium or low) and its crash word follows the report's
+     labels line; the summary row follows the head, and its Review cell
+     reads `issues (claude), <date> — re-verified`;
+   - when the entry is the report's whole subject, its title becomes the
+     report's title and its symptom the report's Summary, word for word,
+     with any link the entry had to the same fault in another spec kept
+     after it; an entry that is one of several symptoms of a shared
+     cause keeps its own title and sentences, rewritten to agree with
+     the report;
+   - the Basis line takes today's date, and the footnote gains `Issue
+     report: docs/issues/<file>.md` (the GitHub link once filed);
+   - a guard the Proposed fix names as an e2e scenario becomes a
+     **Planned** item in the spec's "Left out" list.
+   A spec sentence outside the register that the report shows wrong (a
+   wider or narrower reach, another app) is not corrected here: it goes
+   as a line to `incidentals.md`, which the housekeeping session drives
+   and folds, tests included. The spec lints zero. From then on the
+   report is the source: a later change to its title, Summary or
+   severity is copied into the entry in the same commit.
+8. **The queue.** A spec whose every 🐞 entry has an outcome leaves the
+   queue; one left mid-way keeps its row, with the entries still open
+   named in it.
+9. **Push**, so that the reports' links resolve: commit and push to
+   pkp-e2e `main` the reports, kept scripts, register edits, incidentals
+   lines and the queue.
+10. **File**, unless the queue says filing is on hold. Every report in
+    `docs/issues/` without a number in its file name is filed as
+    `REPORT.md` "As a GitHub issue" says (`gh issue create -R
+    jardakotesovec/pkp-e2e`, creating a label the first time it is
+    used); the file is renamed to `<issue number>-<slug>.md` and the
+    register footnotes take the issue's link. A filed report this
+    session changed (a join, a label, a new fact) is brought up to date
+    on GitHub (`gh issue edit` with the body and labels). Then commit
+    and push again.
+11. Post a one-paragraph summary: the specs worked; each report with its
+    severity and effort, the critical and high first; the entries
+    joined, sent to housekeeping and routed; what is left.
+
+**A report's life.** It stays in `docs/issues/` while its issue is open.
+When the issue closes, the report and its kept script are deleted; git
+and the closed issue keep the history. The register entry follows the
+reason: fixed, the entry retires with the fixing PR as its reason; won't
+fix or risk accepted, the entry keeps its place and gains the Reviewed
+blockquote with the team's ruling; not a bug, the entry is overturned
+and retires (TEMPLATE "Retired entries"); a duplicate, the footnote
+points at the other issue. When the upstream session's sync retires an
+entry that has a report (sync loop step 4), it does the same: report
+and script deleted, the issue closed with a comment naming the change.
+
+**New defects join the queue.** A 🐞 entry added to a spec that is not
+in the queue (by a sync, a build or a housekeeping fold) puts the spec
+back in, in the place its counts give, with the new entry named; the
+session that adds the entry adds the row (RUNBOOK "What goes where").
+
+The issues session never builds, never syncs and never changes a spec
+beyond step 7.
+
 ## Role & goals
 
 You are QA for the Playwright e2e suite of OJS, OMP and OPS: the suite, the
@@ -186,6 +320,9 @@ The apps move; the suite follows. The baselines live in
    A register entry the change retires moves to the register's Retired
    block (TEMPLATE), and the suites' file headers are grepped for its ID,
    because a header that says "not covered, see A7" outlives A7 otherwise.
+   An entry with an issue report takes that report and its kept script
+   with it, and its issue, when filed, is closed with a comment naming
+   the change ("The issues session", "A report's life").
    The behavior the app now shows is coverage owed: the entry's "Register
    carries it" item goes, and the path becomes a bullet or a **Planned**
    item as above, because a test never asserted it while it was a bug.
