@@ -19,7 +19,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
-| [U51](../specs/U51-subscriptions.md) | 24 | 2 | 12 | **In progress: workstation issues session (slot s1), 2026-09-30.** Done: A8, A10, A12, A13+A26, A16, A22, A25, A27; in progress: A14, A18, OPS1 (with U08 OPS2, U15 OPS2) |
+| [U51](../specs/U51-subscriptions.md) | 24 | 2 | 12 | **In progress: workstation issues session (slot s1), 2026-09-30.** Done: A8, A10, A12, A13+A26, A16, A22, A25, A27, OPS1 (with U08 OPS2; U15 OPS2 is a ❓ the report names); in progress: A14, A18, A23, A24 |
 | [U50](../specs/U50-issues.md) | 14 | 2 | 9 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U21](../specs/U21-submission-wizard.md) | 16 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
@@ -41,12 +41,12 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | **OMP3 done: issues session s3, 2026-09-30** (with U69 A9); the other entries are free for another session |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 4 | 1 | 4 |  |
-| [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | **OPS2 only: workstation issues session (slot s1), 2026-09-30** (joins U51 OPS1); the other entries are free for another session |
+| [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | OPS2 done with U51 OPS1 (2026-09-30, workstation s1) |
 | [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 |  |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | **OMP6 done: issues session s3, 2026-09-30** (with U69 A9); the other entries are free for another session |
 | [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 |  |
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 7 | 1 | 1 |  |
-| [U15](../specs/U15-search.md) | 13 | 0 | 6 | **OPS2 only: workstation issues session (slot s1), 2026-09-30** (joins U51 OPS1); the other entries are free for another session |
+| [U15](../specs/U15-search.md) | 13 | 0 | 6 | OPS2 (❓, not queued work) is named in the U51 OPS1 report |
 | [U70](../specs/U70-catalog-management.md) | 13 | 0 | 5 |  |
 | [U12](../specs/U12-announcements.md) | 8 | 0 | 5 | A11 written with U66 A2 (2026-09-30); the other seven open |
 | [U04](../specs/U04-orcid-integration.md) | 7 | 0 | 5 |  |

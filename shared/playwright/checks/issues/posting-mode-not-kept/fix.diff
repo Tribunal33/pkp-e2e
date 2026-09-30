@@ -1,0 +1,28 @@
+--- a/schemas/context.json
++++ b/schemas/context.json
+@@ -86,6 +86,13 @@
+ 				"nullable"
+ 			]
+ 		},
++		"publishingMode": {
++			"type": "integer",
++			"validation": [
++				"nullable",
++				"in:0,2"
++			]
++		},
+ 		"sponsoringOrganization": {
+ 			"type": "string",
+ 			"validation": [
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -105,6 +105,9 @@
+ msgid "user.authorization.representationNotFound"
+ msgstr "The requested galley could not be found."
+ 
++msgid "user.authorization.serverDoesNotPublish"
++msgstr "This server does not post its content online."
++
+ msgid "user.noRoles.selectUsersWithoutRoles"
+ msgstr "Include users with no roles in this server."
+ 

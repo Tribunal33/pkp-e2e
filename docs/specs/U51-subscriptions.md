@@ -1382,6 +1382,11 @@ Left out of the scenarios above, by reason:
     from the side menu and adding an institution, which the institutional
     subscription window then offers (or, if the team hides the menu entry
     instead, the entry absent for that role)
+  - the guard for OPS1 (issue report
+    `docs/issues/U51-OPS1-posting-mode-not-kept.md`): on a preprint
+    server, each "Posting Mode" choice saved and still selected on the
+    next load, and with "OPS will not be used to post the server's
+    contents online." "Archives" gone from the header
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1499,7 +1504,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A26](#a26) | The "Subscription" block reads "Expires: {date}" for an inactive subscription | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A27](#a27) | Subscribers get no expiry reminders: the reminder task stops with an error on every run | 🐞 | high · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A28](#a28) | After a refused "Save", the date boxes show today's date, yet "Save" says the start date is missing | 🐞 | user-visible | — |
-| [OPS1](#ops1) | A preprint server's "Posting Mode" says "Saved" and keeps nothing {OPS} | 🐞 | user-visible | — |
+| [OPS1](#ops1) | A preprint server's "Posting Mode" says "Saved" but keeps nothing, and the server goes on posting | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A1](#a1) | "Publishing Mode" shows no choice on a new journal, which publishes as open access | ❓ | minor | — |
 | [A5](#a5) | Without payments set up, a signed-in reader pressing a locked galley lands on the home page with no word | ❓ | user-visible | — |
 | [A6](#a6) | With the manual method, a bought article or issue never opens | ❓ | user-visible | — |
@@ -1795,16 +1800,21 @@ without first typing another day. Basis: test run, 2026-09-25.
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — "Posting Mode" says "Saved" and keeps nothing** · 🐞 · user-visible.
+**OPS1 — A preprint server's "Posting Mode" says "Saved" but keeps nothing, and the server goes on posting** · 🐞 · medium.
 On a preprint server's Settings › Distribution › "Access", choosing
 either "Posting Mode" choice and pressing "Save" shows "Saved", but the
-next load of the tab shows neither selected, and the server goes on
-posting: the visitor and the Reader still see "Archives", the preprint
-page and its PDF ([Navigation menus & site
-chrome](U08-navigation-menus-and-site-chrome.md), its OPS2;
-[Search](U15-search.md), its OPS2). A manager who takes the server
-offline this way believes it is done. Basis: probe, 2026-09-25.
-<sup>f-ops1</sup>
+next load of the tab shows neither choice selected. A manager who
+chooses "OPS will not be used to post the server's contents online."
+expects the server's content to go offline. Instead, visitors and
+readers still get "Archives", the search box above the preprints list,
+the preprints list, every preprint page with its PDF, and the Search
+page.
+The proposal makes "Posting Mode" work as the tab promises: the choice
+is stored, and the server's pages close as they are already written to.
+`pkp/pkp-lib#8343` plans to implement the same mode but to take the
+choice off the screen. Storing the choice is needed for that plan too;
+whether the tab keeps offering it is the team's decision.
+Basis: probe, 2026-09-30. <sup>f-ops1</sup>
 
 ### Retired
 
@@ -2074,6 +2084,7 @@ Issue report: [pkp-e2e#8](https://github.com/jardakotesovec/pkp-e2e/issues/8) ([
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Live-probed 2026-09-23 by the Navigation menus claim check (its OPS2): "Saved" shown, the next load with neither choice marked, "Archives" still in the header; the Search claim check saw every role still reach the Search page. Live-probed 2026-09-25 (td1) on a scratch server: "OPS will not be used…" and "The server will provide open access…" each saved with "Saved" and came back unselected; with the second saved, the visitor and the Reader still saw "Archives", the preprint page and its PDF. OPS `schemas/context.json` has no `publishingMode`, so the context API drops the value (note b); OPS `OpsServerMustPublishPolicy` and the archive header still read it.
+Issue report: [docs/issues/U51-OPS1-posting-mode-not-kept.md](../issues/U51-OPS1-posting-mode-not-kept.md).
 
 ## Reference — entry points & surfaces
 
