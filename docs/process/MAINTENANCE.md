@@ -382,8 +382,9 @@ The apps move; the suite follows. The baselines live in
    the root cause, a proposed fix that addresses it with its effort,
    and the evidence last. The report is
    posted into the session's thread as a file the same day, in a post that
-   tags @beaug and @jarda.kotesovec (no direct messages, maintainer
-   2026-09-29; the tag is the upstream session's alone: a PR check or
+   tags @beaug alone, who watches over the regression reports (no
+   direct messages, maintainer 2026-09-29; one watcher per kind,
+   maintainer 2026-09-30; the tag is the upstream session's alone: a PR check or
    review posts its report in its own thread untagged, since whoever
    asked follows up there);
    the regression gets a row
@@ -398,7 +399,8 @@ The apps move; the suite follows. The baselines live in
    should have caught it, the missing check is a **Planned** item in the
    owning spec. Anything security-shaped follows RUNBOOK "What goes where":
    verify privately, on Mattermost say only THAT an observation was
-   routed, in a thread post tagging @jarda.kotesovec and @beaug.
+   routed, in a thread post tagging @jarda.kotesovec alone, who watches
+   over the security reports.
 6. **Advance the baseline.** Update `upstream-sync.md` with the new SHAs and
    a dated log entry: one line per change reviewed (commit, coverage
    verdict, regression verdict when an agent read it, what was touched or
