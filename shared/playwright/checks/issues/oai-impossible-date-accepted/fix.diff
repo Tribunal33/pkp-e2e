@@ -1,0 +1,43 @@
+--- a/lib/pkp/classes/oai/OAIUtils.php
++++ b/lib/pkp/classes/oai/OAIUtils.php
+@@ -18,6 +18,8 @@
+ 
+ namespace PKP\oai;
+ 
++use DateTime;
++use DateTimeZone;
+ use Transliterator;
+ 
+ class OAIUtils
+@@ -64,24 +66,22 @@
+      */
+     public static function UTCtoTimestamp($date, $requiredGranularity = null)
+     {
+-        // FIXME Has limited range (see http://php.net/strtotime)
+         if (preg_match("/^\d\d\d\d\-\d\d\-\d\d$/", $date)) {
+             // Match date
+-            $time = strtotime("{$date} UTC");
+-            return ($time != -1) ? $time : 'invalid';
+-        } elseif (preg_match("/^(\d\d\d\d\-\d\d\-\d\d)T(\d\d:\d\d:\d\d)Z$/", $date, $matches)) {
++            $format = 'Y-m-d';
++        } elseif (preg_match("/^(\d\d\d\d\-\d\d\-\d\d)T(\d\d:\d\d:\d\d)Z$/", $date)) {
+             // Match datetime
+-            // FIXME
+-            $date = "{$matches[1]} {$matches[2]}";
+             if ($requiredGranularity && $requiredGranularity != 'YYYY-MM-DDThh:mm:ssZ') {
+                 return 'invalid_granularity';
+-            } else {
+-                $time = strtotime("{$date} UTC");
+-                return ($time != -1) ? $time : 'invalid';
+             }
++            $format = 'Y-m-d\TH:i:s\Z';
+         } else {
+             return 'invalid';
+         }
++
++        // Refuse a date or time that is not in the calendar (2026-02-30, 25:00:00) instead of rolling it over
++        $time = DateTime::createFromFormat("!{$format}", $date, new DateTimeZone('UTC'));
++        return ($time && $time->format($format) === $date) ? $time->getTimestamp() : 'invalid';
+     }
+ 
+ 
