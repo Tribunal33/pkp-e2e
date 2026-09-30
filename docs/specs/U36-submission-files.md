@@ -2418,7 +2418,7 @@ of 6). Under an emulated upload throttle the bar fills before the request
 has left the browser, so there a full bar does not mean the file was sent.
 Scenario 9 presses mid-upload; no test drives the window after the last
 byte.
-Issue report: [docs/issues/U36-A25-cancel-upload-after-sent-keeps-file.md](../issues/U36-A25-cancel-upload-after-sent-keeps-file.md).
+Issue report: [pkp-e2e#66](https://github.com/jardakotesovec/pkp-e2e/issues/66) ([docs/issues/U36-A25-cancel-upload-after-sent-keeps-file.md](../issues/U36-A25-cancel-upload-after-sent-keeps-file.md)).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Note a (the OPS workflow and wizard configs). Live-probed
