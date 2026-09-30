@@ -2177,7 +2177,7 @@ Issue report: [pkp-e2e#51](https://github.com/jardakotesovec/pkp-e2e/issues/51) 
 
 <a id="fn-f-a15"></a>
 **f-a15** — `manager.subscriptionPolicies.xMonths` "{$x} Months" and `.xWeeks` "{$x} Weeks" (OJS `locale/en/manager.po`) serve every count from 1, in `AccessForm` and `SubscriptionPolicyForm`. Live-probed 2026-09-25 (td4, td14).
-Issue report: [docs/issues/U51-A15-month-week-lists-read-1-months.md](../issues/U51-A15-month-week-lists-read-1-months.md).
+Issue report: [pkp-e2e#63](https://github.com/jardakotesovec/pkp-e2e/issues/63) ([docs/issues/U51-A15-month-week-lists-read-1-months.md](../issues/U51-A15-month-week-lists-read-1-months.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — OJS `TemplateManager` adds the side menu's "Institutions" (`management/settings/institutions`) in the same step as "Payments", for every role that gets "Payments", the Subscription Manager included; the Institutions page itself is a management page the role cannot open. Live-probed 2026-09-25 (td3), on three scratch journals, by the menu and by the address.
