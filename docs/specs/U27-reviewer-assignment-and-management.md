@@ -1370,6 +1370,8 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A32](#a32) | A Review Details window closed within a moment of opening, before its mark as viewed is saved, can leave the row "Review Submitted", and the dashboard's "View unread recommendation", until a page reload | 🐞 | minor | @blessie 2026-09-24 · risk accepted, not fixing |
 | [A36](#a36) | A reviewer assigned today reads "Yesterday" in the Add Reviewer list, while the entry's statistics give 0 days since the last assignment | 🐞 | minor | — |
 | [A37](#a37) | After "Resend Review Request" the activity log reads "…for submission {$submissionid}." with the placeholder printed | 🐞 | minor | — |
+| [A39](#a39) | "View changes" on a competing-interests change reads "Competing Interests declared: YES" for an answer of "I do not have any competing interests" | 🐞 | minor | @beaug 2026-09-30 · confirmed |
+| [A40](#a40) | On a request with no review, "Save Changes" with only the competing-interests answer recorded submits the review for the reviewer, with no content on a press | 🐞 | minor | @beaug 2026-09-30 · confirmed on OMP |
 | [A4](#a4) | Editorial Notes are one shared note per reviewer; editing them on one submission silently rewrites them everywhere | ❓ | user-visible | — |
 | [A6](#a6) | Declined and cancelled rows are silently hidden from assistant-level participants, so the same table shows different reviewers per role | ❓ | minor | — |
 | [A17](#a17) | The due-date pickers accept dates already past without any warning | ❓ | minor | — |
@@ -1377,8 +1379,6 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A28](#a28) | With the "Reviews completed" slider enabled, a name search for a reviewer never assigned answers "No items found." | ❓ | minor | — |
 | [A29](#a29) | On a request with no review, "Modify Review" still speaks of "the review submitted by {reviewer name}", and nothing says that "Save Changes" submits the review for the reviewer | ❓ | user-visible | — |
 | [A38](#a38) | Whether a request only sent, a completed review or {OMP} a request on the other review stage keeps a cancelled or unassigned reviewer in the submission's discussions is unsettled | ❓ | minor | — |
-| [A39](#a39) | "View changes" on a competing-interests change reads "Competing Interests declared: YES" for an answer of "I do not have any competing interests" | ❓ | minor | — |
-| [A40](#a40) | On a request with no review, "Save Changes" with only the competing-interests answer recorded submits the review for the reviewer, with no content on a press | ❓ | minor | — |
 | [A41](#a41) | Which activity-log rows a review submitted for the reviewer with no comment leaves is unsettled | ❓ | minor | — |
 | [A42](#a42) | What the Review Details window shows on a "Request Resent" row, its dated line included, is unsettled | ❓ | minor | — |
 | [OMP5](#omp5) | {OMP} "Save Changes" with nothing entered is accepted on an unanswered request and submits an empty review for the reviewer | ❓ | minor | — |
@@ -1845,7 +1845,7 @@ review included, since that reviewer may still be asked about it there.
 Basis: code. <sup>[f-a38](#fn-a38)</sup>
 
 <a id="a39"></a>
-**A39 — "View changes" says an interest was declared when none was** · ❓ ·
+**A39 — "View changes" says an interest was declared when none was** · 🐞 ·
 minor.
 On a "…Reviewer Competing Interests." row of the activity log, "View
 changes" opens "View Review" with "Updated Competing Interests" and
@@ -1853,27 +1853,39 @@ changes" opens "View Review" with "Updated Competing Interests" and
 YES" over "Competing Interests: {statement}" (Side effects). An answer of
 "I do not have any competing interests" reads "Competing Interests
 declared: YES" too, with an empty statement, so a change from no interests
-to a statement reads as one declared interest replacing another.
-Question: should that answer read as no declared interest? Lean: yes;
-"declared" here means "answered", and read as "declared an interest" it
-says the opposite of the reviewer's answer.
-Basis: probe. <sup>[f-a39](#fn-a39)</sup>
+to a statement reads as one declared interest replacing another, and a
+change back reads as an interest still declared. Expected, "declared: NO"
+for that answer: "declared" read as "declared an interest" says the
+opposite of the reviewer's answer.
+Since: pkp/pkp-lib#13369 (issue pkp/pkp-lib#13291, 2026-09-23), on screen
+since pkp/ui-library#993 (issue pkp/pkp-lib#13282, 2026-09-29) · Basis:
+probe. <sup>[f-a39](#fn-a39)</sup>
+
+> **Reviewed — @beaug, 2026-09-30**: confirmed 🐞. Ruling: valid; checked
+> by hand in the activity log, which reads "Competing Interests Declared:
+> YES" whatever the answer is changed to.
 
 <a id="a40"></a>
-**A40 — Recording a competing-interests answer submits the review** · ❓ ·
+**A40 — Recording a competing-interests answer submits the review** · 🐞 ·
 minor.
 On an accepted or unanswered request, an editor who opens "Modify Review"
 only to record the reviewer's competing-interests answer (Rule 14b) submits
-the review with it (Rule 14d). On a press, ticking "I may have competing
-interests (Specify below)", typing the statement and pressing "Save
-Changes" turns the row "Review Submitted" with "Read Review" and the
+the review with it (Rule 14d). {OMP} On a press, ticking "I may have
+competing interests (Specify below)", typing the statement and pressing
+"Save Changes" turns the row "Review Submitted" with "Read Review" and the
 "Competing Interests" badge, "-" in both comment blocks, and the
-reviewer's request is closed. On a journal the save first asks for a
-"Recommendation" ("This field is required."), and then submits.
-Question: should a change to the answer alone leave the request open?
-Lean: yes; the editor changed the reviewer's declaration, not the
-review, and on a press this is a defect next to [OMP5](#omp5).
-Basis: probe. <sup>[f-a40](#fn-a40)</sup>
+reviewer's request is closed: nothing asks for a review first. {OJS} On a
+journal the save first asks for a "Recommendation" ("This field is
+required."), and then submits. Expected, a change to the answer alone to
+leave the request open; the editor changed the reviewer's declaration, not
+the review. Next to [OMP5](#omp5).
+Since: pkp/ui-library#993 with pkp/pkp-lib#13394 (issue
+pkp/pkp-lib#13282, 2026-09-29) · Basis: probe. <sup>[f-a40](#fn-a40)</sup>
+
+> **Reviewed — @beaug, 2026-09-30**: confirmed 🐞 on OMP. Ruling: a
+> valid defect of OMP; a press's "Modify Review" has no validation in place
+> of the journal's required "Recommendation", so the save submits
+> whatever was entered.
 
 <a id="a41"></a>
 **A41 — The log rows of a review submitted with no comment** · ❓ · minor.
