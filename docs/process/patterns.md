@@ -565,7 +565,11 @@ A script calls `forEachApp(fn)`; `fn` receives one app's bag: `{app,
 name, root, baseURL, port, api, mail, users, contextPath, url(path),
 variant('validation')}`. `api` is the `_test` client with that app's own
 key, `mail` the shared Mailpit, `baseURL` the probe server (base port + 50),
-`variant('validation')` the +90 server with email validation and ALTCHA on.
+`variant('validation')` the +90 server with email validation and ALTCHA on,
+`db` the fleet's database, which `sql(app, query)` queries through psql
+(rows as lines, columns joined by `|`), and `contextTables` the per-app
+context table names (`{table, id, settings}`: `journals`, `journal_id`,
+`journal_settings` on OJS; presses and servers).
 Everything per app travels in the bag, never in `process.env`, so one
 process holds all three apps. The exception is `PKP_APP_ROOT` and
 `PKP_SUITE_DIR`, which `withApp` exports for the app while `fn` runs
@@ -606,6 +610,9 @@ animations off and a response listener that records URL, method, status and
 size (never a body) of every `/api/` call and every status ≥ 400 into
 `run-<app>-<HHMMSS>.json`, one record per process (HHMMSS from its start,
 `-<pid>` added when another process of that second took the name),
+with `override` on a call the Vue forms tunnel as a POST (UI realities:
+a save's PUT is a POST with `X-Http-Method-Override`, so a listener keyed
+on PUT misses it, sync rr13370, rr13282),
 which also carries the browser's console errors and warnings and uncaught
 page errors (`console`, capped at 200), every browser dialog
 (`dialogs`: type and message) and every page notice as it appears
@@ -640,6 +647,9 @@ script on two apps never overwrites one app's snapshot with the other's;
 a script run in phases, one process each, writes its facts with
 `record(name, data, {merge: true})`, which folds the object into the
 file's earlier one instead of overwriting it (U07, U08, U38, sync);
+`outFile(name)` names a file the script writes itself (a state file, an
+export) the same way, and `PROBE_RUN=r1` puts the run in all three
+names (`<name>-r1-<app>`), so two runs at once keep apart (U07, U10, U63);
 `loc(page, description, locator)` a row in
 `locators.md` (selector, match count, visibility) for the test author,
 appended under a dated heading when the process exits, so several

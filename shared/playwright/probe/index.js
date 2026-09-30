@@ -34,6 +34,11 @@ const users = require('../data/users.js');
 const {VALIDATION_PORT_OFFSET} = require('../config-factory.js');
 
 const PROBE_PORT_OFFSET = 50;
+const CONTEXT_TABLES = {
+    ojs: {table: 'journals', id: 'journal_id', settings: 'journal_settings'},
+    omp: {table: 'presses', id: 'press_id', settings: 'press_settings'},
+    ops: {table: 'servers', id: 'server_id', settings: 'server_settings'},
+};
 const WORKER_PORT_SPAN = 20; // basePort + 0 … + 19 belong to the runner's workers
 
 // ---------------------------------------------------------------------------
@@ -70,12 +75,34 @@ function safeName(name) {
 /**
  * `<name>-<app>` inside withApp, so a script that runs on two apps never
  * overwrites one app's snapshot with the other's. Outside withApp (no app
- * in play) the name is returned unchanged.
+ * in play) the name is returned unchanged. With PROBE_RUN set (r1, r2) the
+ * run goes before the app, `<name>-<run>-<app>`, so two runs of one script
+ * started at once into one folder never share a file.
  */
 function appSuffixed(name) {
     const app = process.env.PKP_APP_NAME;
-    const base = safeName(name);
-    return app && !base.endsWith(`-${app}`) ? `${base}-${app}` : base;
+    const run = process.env.PROBE_RUN ? requireEnv('PROBE_RUN', 'a run id, e.g. PROBE_RUN=r1') : '';
+    let base = safeName(name);
+    if (app && base.endsWith(`-${app}`)) {
+        base = base.slice(0, -app.length - 1);
+    }
+    if (run && !base.endsWith(`-${run}`)) {
+        base = `${base}-${run}`;
+    }
+    return app ? `${base}-${app}` : base;
+}
+
+/**
+ * A path in the output folder for a file the script writes itself (a state
+ * file, a download, an upload): `outFile('users-main.xml')` is
+ * `<outDir>/users-main[-<PROBE_RUN>]-<app>.xml`, named as record() and
+ * shot() name theirs.
+ *
+ * @param {string} name a file name with its extension
+ */
+function outFile(name) {
+    const ext = path.extname(String(name));
+    return path.join(outDir(), `${appSuffixed(String(name).slice(0, String(name).length - ext.length))}${ext}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -135,6 +162,8 @@ function resolveProbeApp(name) {
         // The fleet's own database (slot and line aware): kept checks query
         // it as `psql -d ${app.db}`, never a literal <app>_test.
         db: app.db,
+        // The context's own tables, for sql(): the one name set that differs per app.
+        contextTables: CONTEXT_TABLES[name],
         contextPath: appContext.contextPath,
         appContext,
         /** Absolute URL on the probe server: url('/index.php/publicknowledge/user/register'). */
@@ -420,6 +449,12 @@ async function launch(app, {storageState, headless = true, record: keepRecord = 
             status,
             size: null,
         };
+        // The Vue forms send PUT and DELETE as a POST with this header
+        // (patterns.md "UI realities"): a listener keyed on PUT misses them.
+        const override = response.request().headers()['x-http-method-override'];
+        if (override) {
+            entry.override = override;
+        }
         record.responses.push(entry);
         if (status >= 500 && record.crashes.length < CONSOLE_CAP) {
             record.crashes.push({at: entry.at, kind: 'server', status, method: entry.method, url});
@@ -845,6 +880,21 @@ async function idle(page) {
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
+ * One SQL statement on the app's own fleet database (`app.db`, slot and
+ * line aware), through psql: the rows as text, one per line, columns
+ * joined by `|`, trimmed. It throws on an SQL error. The context tables
+ * differ per app; `app.contextTables` names them ({table, id, settings}:
+ * journals / journal_id / journal_settings on OJS, presses and servers on
+ * OMP and OPS).
+ *
+ * @param {object} app the bag from withApp (or resolveProbeApp)
+ * @param {string} query
+ */
+function sql(app, query) {
+    return execFileSync('psql', ['-X', '-d', app.db, '-tA', '-F', '|', '-c', query], {encoding: 'utf8'}).trim();
+}
+
+/**
  * Wait until a control has filled: `idle(page)`, then the locator visible
  * with a non-empty innerText (input value for a form control) that stays
  * the same across two reads 150 ms apart. Returns the text. For pages and
@@ -986,7 +1036,9 @@ module.exports = {
     idle,
     settled,
     drainJobs,
+    sql,
     tag,
     outDir,
+    outFile,
     users,
 };

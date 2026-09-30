@@ -499,7 +499,9 @@ class AppearanceSetupForm extends AppearanceForm {
 
 class MastheadForm extends AppearanceForm {
     constructor(page) {
-        super(page, '[id^="appearanceMasthead-mastheadUserGroupIds"]');
+        // Anchored on the enrollment box, the one field shown in both its
+        // states: the roles list leaves the form while it is unticked.
+        super(page, '[id^="appearanceMasthead-enableEnrollmentMasthead-"]');
         const field = (name) =>
             this.form
                 .locator('fieldset.pkpFormField--options')

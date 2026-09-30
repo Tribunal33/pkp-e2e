@@ -448,7 +448,9 @@ In a plain `npx playwright test` command, selecting a serial spec by path
 alone runs its dependency projects (`setup`, `shared`, the app project) in
 full first; `--project=<app>-serial --no-deps` on a warm install runs the
 spec alone, and its `@solo` tests need `--project=<app>-solo --no-deps`
-beside it, as a second command. A suite id as the
+beside it, as a second command; a serial file whose every test is `@solo`
+(U60, U64 and others) answers "No tests found", exit 1, in the serial
+command, so it runs in the solo command alone (U45 harness). A suite id as the
 filter (`U12`) also matches `tests/serial/U12-…` and so pulls in the
 whole chain: an app suite's regression run names `--project=<app>`; and
 `--no-deps` also drops the solo project's wait on the serial one, so a
