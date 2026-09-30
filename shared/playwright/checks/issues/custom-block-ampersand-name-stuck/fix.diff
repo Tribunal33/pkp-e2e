@@ -1,0 +1,15 @@
+--- a/plugins/generic/customBlockManager/controllers/grid/form/CustomBlockForm.php	2026-09-30 21:14:55.691605976 +0000
++++ b/plugins/generic/customBlockManager/controllers/grid/form/CustomBlockForm.php	2026-09-30 21:14:55.716517816 +0000
+@@ -102,8 +102,10 @@
+             // custom block manager plugin
+             $blocks = $this->customBlockManagerPlugin->getSetting($contextId, 'blocks') ?? [];
+ 
+-            $blockName = preg_replace('[^a-z0-9\-\_.]', '', Str::of($this->getData('blockTitle')[$locale])->lower()->kebab());
+-            if (in_array($blockName, $blocks)) {
++            // The name keeps only what the "Sidebar" setting accepts (alpha_dash):
++            // letters, marks, digits, "-" and "_"
++            $blockName = preg_replace('/[^\pL\pM\pN_-]/u', '', Str::of($this->getData('blockTitle')[$locale])->lower()->kebab());
++            if ($blockName === '' || in_array($blockName, $blocks)) {
+                 $blockName = uniqid($blockName);
+             }
+             $blocks[] = (string) $blockName;
