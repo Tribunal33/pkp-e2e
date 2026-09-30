@@ -1002,7 +1002,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | Step 2 reopened from step 3 offers "Complete" but shows "File Added" again instead of closing | 🐞 | minor | — |
 | [A19](#a19) | In "Upload/Select Files", another stage's files refuse their "More Information", "Edit" and "Delete" | 🐞 | minor | — |
 | [A20](#a20) | The reviewer's "Review Files" search keeps every file | 🐞 | minor | — |
-| [A21](#a21) | A file of exactly the upload limit ends with "Invalid JSON response from server." instead of being refused | 🐞 | minor · crash: server | — |
+| [A21](#a21) | A file over the server's request size limit fails with a server error and "The POST data is too large." | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A23](#a23) | Revising a file, a second pick on step 1 and then "Cancel" leave the first pick as the file instead of the original | 🐞 | minor | — |
 | [A24](#a24) | One file revised in two windows: the first window's "Cancel" does nothing, and the file keeps the upload cancelled there | 🐞 | minor | — |
 | [A25](#a25) | "Cancel upload" pressed after the whole file has been sent removes the row, but the file is stored and back after a reload | 🐞 | user-visible | — |
@@ -1211,14 +1211,30 @@ windows for a reviewer's request narrows the list.
 Basis: probe. <sup>[f-a20](#fn-a20)</sup>
 
 <a id="a21"></a>
-**A21 — A file of exactly the upload limit fails on the server** · 🐞 · minor · crash: server.
-In the submission wizard's "Files" panel a file larger than the limit is
-refused at once in its row. A file of exactly the limit (100 MiB on a
-server that allows 100 MiB) passes that check, starts uploading and ends
-with "Invalid JSON response from server." in its row: the app failed,
-and nothing is stored. It should be refused like a larger file, or
-stored.
-Basis: probe. <sup>[f-a21](#fn-a21)</sup>
+**A21 — A file over the server's request size limit fails with a server error and "The POST data is too large."** · 🐞 · medium · crash: server.
+An author adding a file in the submission wizard's "Files" panel, or an
+editor adding one in a publication's "Upload Media File" window, can
+choose a file larger than PHP's `post_max_size`, the largest request the
+server accepts. The app then fails on the server with a 500. The file's
+row in the Files panel, or its card in the media window, reads "The
+POST data is too large." in English whatever the site's language, and
+nothing is stored. On the media window, a file that is only over
+`upload_max_filesize` gets the app's own message with the limit instead
+("Files larger than 2MB can not be uploaded.", 2 MB being PHP's shipped
+`upload_max_filesize`).
+The refusal itself is not new: 3.4 and 3.3 also refused such a file
+without naming a limit, with "No file to be uploaded could be found
+with the request." but no server error. The server error and the
+framework's English message came with 3.5.
+On the media window every file over `post_max_size` does this (8 MB on
+PHP's shipped settings). In the submission wizard the panel refuses in
+the browser any file over `upload_max_filesize`, so the fault needs an
+install whose `post_max_size` is not larger than `upload_max_filesize`.
+There the panel accepts files the server cannot take. When the two
+limits are equal, even a file of exactly the panel's limit fails,
+because the request also carries the form's fields.
+Same fault: [Media files' A4](U47-media-files.md#a4) (the media window's file card).
+Basis: probe, 2026-09-30. <sup>[f-a21](#fn-a21)</sup>
 
 <a id="a22"></a>
 **A22 — The Activity Log records a new file as a "Revision"** · ❓ · minor.
@@ -2294,6 +2310,7 @@ POST to `…/api/v1/submissions/{id}/files` answered 500, the server log reading
 "POST Content-Length of 104857994 bytes exceeds the limit of 104857600 bytes":
 the form fields push the request past the limit the panel's size check
 compares against.
+Issue report: [docs/issues/U36-A21-upload-over-request-limit-server-error.md](../issues/U36-A21-upload-over-request-limit-server-error.md).
 
 <a id="fn-a22"></a>
 **f-a22** — Note y: `add()` logs `submission.event.fileRevised` on the

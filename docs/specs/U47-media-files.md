@@ -872,7 +872,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | Assigned roles without "Permissions" are offered every media action, and each fails: with an "Error" window, or with no message on "Save" | 🐞 | user-visible | — |
 | [A3](#a3) | The empty "Upload Media File" window lists a button "Drop files here to upload" for screen readers that nothing on screen shows | 🐞 | minor | — |
-| [A4](#a4) | A file over the upload limit fails with a server error; its card reads "Invalid JSON response from server." | 🐞 | minor · crash: server | — |
+| [A4](#a4) | A file over the request size limit fails with a server error; its card reads "The POST data is too large." | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, unsaved, until a reload | 🐞 | user-visible | — |
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | invisible | — |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | minor | — |
@@ -924,13 +924,16 @@ offered a control the page does not show.
 Basis: probe, 2026-09-24. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A file over the upload limit fails with a server error** · 🐞 · minor · crash: server.
-A file larger than the install accepts fails on the server: its card on
-"Upload Media File" reads "Invalid JSON response from server." instead
-of saying that the file is too large or how large a file may be. The
-user cannot tell why the upload failed. Smaller files on the same
-window upload normally.
-Basis: probe, 2026-09-24. <sup>f-a4</sup>
+**A4 — A file over the request size limit fails with a server error** · 🐞 · medium · crash: server.
+A file larger than the server takes in one request (PHP's
+`post_max_size`) fails on the server: its card on "Upload Media File"
+reads "The POST data is too large." instead of the app's own size
+message with the limit, and nothing is stored. The user learns that the
+file is too large, in English whatever the site's language, but not how
+large a file may be. Smaller files on the same window upload normally.
+The window checks no size in the browser below Dropzone's own 256 MiB.
+Same fault: [Submission files' A21](U36-submission-files.md#a21).
+Basis: probe, 2026-09-30. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A name left with "Yes" shows in the list, unsaved** · 🐞 · user-visible.
@@ -1751,6 +1754,7 @@ reading "POST Content-Length of 105906466 bytes exceeds the limit of
 `upload_max_filesize` (100 MB on the probe hosts); the card shows the
 client's failure to read the answer, not a message from
 `PKPTemporaryFilesController::uploadFile()` (note e).
+Issue report: [docs/issues/U36-A21-upload-over-request-limit-server-error.md](../issues/U36-A21-upload-over-request-limit-server-error.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Test run 2026-09-25, OJS (scenario 3): after "figure-1.png"
