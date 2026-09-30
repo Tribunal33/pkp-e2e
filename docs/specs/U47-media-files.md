@@ -1754,7 +1754,7 @@ reading "POST Content-Length of 105906466 bytes exceeds the limit of
 `upload_max_filesize` (100 MB on the probe hosts); the card shows the
 client's failure to read the answer, not a message from
 `PKPTemporaryFilesController::uploadFile()` (note e).
-Issue report: [docs/issues/U36-A21-upload-over-request-limit-server-error.md](../issues/U36-A21-upload-over-request-limit-server-error.md).
+Issue report: [pkp-e2e#43](https://github.com/jardakotesovec/pkp-e2e/issues/43) ([docs/issues/U36-A21-upload-over-request-limit-server-error.md](../issues/U36-A21-upload-over-request-limit-server-error.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Test run 2026-09-25, OJS (scenario 3): after "figure-1.png"
