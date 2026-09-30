@@ -1527,7 +1527,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A25](#a25) | "Purchase" beside an institutional subscription opens with "IP ranges" reading "Array", refused on "Continue" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A26](#a26) | The "Subscription" block reads "Expires: {date}" for an inactive subscription | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A27](#a27) | Subscribers get no expiry reminders: the reminder task stops with an error on every run | 🐞 | high · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A28](#a28) | After a refused "Save", the date boxes show today's date, yet "Save" says the start date is missing | 🐞 | user-visible | — |
+| [A28](#a28) | After a refused "Save", a subscription's empty date boxes show today's date, and "Save" says they are empty | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OPS1](#ops1) | A preprint server's "Posting Mode" says "Saved" but keeps nothing, and the server goes on posting | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A1](#a1) | "Publishing Mode" shows no choice on a new journal, which publishes as open access | ❓ | minor | — |
 | [A5](#a5) | Without payments set up, a signed-in reader pressing a locked galley lands on the home page with no word | ❓ | user-visible | — |
@@ -1852,17 +1852,16 @@ reminders. A journal needs no institutional subscription for it.
 Basis: probe, 2026-09-30. <sup>f-a27</sup>
 
 <a id="a28"></a>
-**A28 — A date box shows a date the window does not send** · 🐞 · user-visible.
-On "Individual Subscriptions" › "Create New Subscription", once a "Save"
-is refused while "Start date" and "End date" are empty, the window shows
-today's date in both boxes, but nothing is behind it: the next "Save" is
-refused with "A subscription start date is required." (and the end
-date's message for an untouched "End date"), beside any other refusal.
-Typing today's date into "Start date" changes nothing; only a different
-date is taken. A Journal Manager or Subscription Manager sees a filled
-box and a message saying it is empty, and cannot save a subscription starting today
-without first typing another day. Basis: test run, 2026-09-25.
-<sup>f-a28</sup>
+**A28 — After a refused "Save", a subscription's empty date boxes show today's date, and "Save" says they are empty** · 🐞 · medium.
+On the "Subscriptions" page, when a "Save" in "Create New Subscription"
+or "Edit Subscription" is refused while "Start date" or "End date" is
+empty, the window then shows today's date in that box. The date is only
+on screen: the form does not send it, so the next "Save" is refused
+again with "A subscription start date is required." (or the end date's
+message).
+The manager sees a filled box and a message saying it is empty. It
+happens for individual and institutional subscriptions alike.
+Basis: probe, 2026-09-30. <sup>f-a28</sup>
 
 ### OPS
 
@@ -2153,6 +2152,7 @@ Issue report: [pkp-e2e#8](https://github.com/jardakotesovec/pkp-e2e/issues/8) ([
 
 <a id="fn-f-a28"></a>
 **f-a28** — Test run 2026-09-25 (Rule 19; scenario 6). The four answers to "Save" were: "A user is required. A subscription start date is required. A subscription end date is required." (no user, no dates); then, Nova chosen, "A subscription start date is required." and "A subscription end date is required." again, the boxes now reading today's date; then, Sam chosen, today's date typed into "Start date" and next year's into "End date", "This user already has a subscription for this journal. A subscription start date is required."; then, Nova chosen, "A subscription start date is required.", the window staying open. A probe the same day read the fields after each step: from the first refusal on, the visible boxes held today's date while the values the window sends were empty; typing today's date left the sent start date empty, next year's end date was sent. The boxes are jQuery UI date pickers: lib/pkp `js/controllers/form/FormHandler.js` renames the visible box to `{name}-removed` and sends a hidden copy under the field's name (`templates/payments/individualSubscriptionForm.tpl`, `dateStart`/`dateEnd` with class `datepicker`).
+Issue report: [docs/issues/U51-A28-subscription-date-boxes-show-today-unsent.md](../issues/U51-A28-subscription-date-boxes-show-today-unsent.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Live-probed 2026-09-23 by the Navigation menus claim check (its OPS2): "Saved" shown, the next load with neither choice marked, "Archives" still in the header; the Search claim check saw every role still reach the Search page. Live-probed 2026-09-25 (td1) on a scratch server: "OPS will not be used…" and "The server will provide open access…" each saved with "Saved" and came back unselected; with the second saved, the visitor and the Reader still saw "Archives", the preprint page and its PDF. OPS `schemas/context.json` has no `publishingMode`, so the context API drops the value (note b); OPS `OpsServerMustPublishPolicy` and the archive header still read it.
