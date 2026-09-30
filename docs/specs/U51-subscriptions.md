@@ -1371,6 +1371,11 @@ Left out of the scenarios above, by reason:
     "Purchase Institutional Subscription" opened for an institutional
     subscription showing its institution's ranges one per line, and
     "Continue" accepted without changes
+  - the guard for A22 (issue report
+    `docs/issues/U51-A22-subscription-search-fields-narrow-nothing.md`):
+    each subscription list searched by "Reference Number" (and on the
+    institutional tab by "Institution name") listing only the matching
+    subscription
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1481,7 +1486,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | A fee shows on the locked link while payments are off and nothing can be bought | 🐞 | minor | — |
 | [A20](#a20) | With only a membership fee, "Full Issue" asks the reader to pay an issue fee of no amount | 🐞 | user-visible | — |
 | [A21](#a21) | The subscription window saves a start date after the end date | 🐞 | minor | — |
-| [A22](#a22) | Six of the subscription lists' search fields list every subscription whatever is typed | 🐞 | user-visible | — |
+| [A22](#a22) | Subscription lists searched by membership, reference number, notes, institution, domain or IP range show every subscription | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A23](#a23) | "Purchase New Subscription" on a journal that does not require subscriptions leads home | 🐞 | minor | — |
 | [A24](#a24) | "View Available Subscription Types" and "Learn More" lead home while payments are not set up | 🐞 | minor | — |
 | [A25](#a25) | "Purchase" beside an institutional subscription opens with "IP ranges" reading "Array", refused on "Continue" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
@@ -1698,14 +1703,16 @@ shows it with those dates; the other date checks of Rule 19 let it
 through. Basis: probe, 2026-09-25. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — Six search fields narrow nothing** · 🐞 · user-visible.
-On both subscription lists, "Search" by "Membership", "Reference Number"
-or "Notes" (and on the institutional tab by "Institution name",
+**A22 — Subscription lists searched by membership, reference number, notes, institution, domain or IP range show every subscription** · 🐞 · medium.
+On both subscription lists, "Search" by "Membership", "Reference
+Number" or "Notes" (and on the institutional tab by "Institution name",
 "Domain" or "IP ranges") lists every subscription whatever is typed,
 even text no subscription holds; only "Given Name", "Family Name",
-"Username" and "Email" narrow the list. A manager looking a subscriber
-up by reference number gets the whole list. Basis: probe, 2026-09-25.
-<sup>f-a22</sup>
+"Username" and "Email" narrow the list.
+Nothing says the search was ignored. A manager who has only a reference
+number, a membership number, a payment note or an institution's name,
+domain or address has to find the subscription by reading the list.
+Basis: probe, 2026-09-30. <sup>f-a22</sup>
 
 <a id="a23"></a>
 **A23 — "Purchase New Subscription" leads home on an open journal** · 🐞 · minor.
@@ -2031,6 +2038,7 @@ Issue report: [pkp-e2e#11](https://github.com/jardakotesovec/pkp-e2e/issues/11) 
 
 <a id="fn-f-a22"></a>
 **f-a22** — `SubscriptionDAO::applySearchFilters()` maps given name, family name, username and email to columns; the institutional fields have no mapping (`default => null`), so the filter is dropped. Membership, reference number and notes are mapped there, yet the screen returned the whole list for them too. Live-probed 2026-09-25 (td10), on two journals, "contains" and "is".
+Issue report: [docs/issues/U51-A22-subscription-search-fields-narrow-nothing.md](../issues/U51-A22-subscription-search-fields-narrow-nothing.md).
 
 <a id="fn-f-a23"></a>
 **f-a23** — `AboutHandler::subscriptions()` checks only the payment setup (note f) and the template offers "Purchase New Subscription" to any signed-in visitor, while `UserHandler::purchaseSubscription()` redirects to the index outside `PUBLISHING_MODE_SUBSCRIPTION`. Live-probed 2026-09-25 (td27), on an open-access and a not-online journal.
