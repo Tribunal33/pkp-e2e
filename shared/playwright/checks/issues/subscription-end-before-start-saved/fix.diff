@@ -1,0 +1,26 @@
+--- a/classes/subscription/form/SubscriptionForm.php
++++ b/classes/subscription/form/SubscriptionForm.php
+@@ -176,6 +176,11 @@
+                 $dateEndDay = date('d', strtotime($dateEnd));
+                 return ($dateEndDay >= 1 && $dateEndDay <= 31);
+             }));
++            // End date is not before the start date (a subscription may start and end on the same day)
++            $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'dateEnd', 'required', 'manager.subscriptions.form.dateEndBeforeStart', function ($dateEnd) {
++                $dateStart = strtotime((string) $this->getData('dateStart'));
++                return $dateStart === false || strtotime($dateEnd) >= $dateStart;
++            }));
+         } else {
+             // Is non-expiring; ensure that start/end dates weren't entered.
+             $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'dateStart', 'optional', 'manager.subscriptions.form.dateStartEmpty', function ($dateStart) {
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -1260,6 +1260,9 @@
+ msgid "manager.subscriptions.form.dateEndValid"
+ msgstr "Please select a valid subscription end date."
+ 
++msgid "manager.subscriptions.form.dateEndBeforeStart"
++msgstr "The subscription end date cannot be before its start date."
++
+ msgid "manager.subscriptions.form.userProfileInstructions"
+ msgstr "Note: All changes below are to user's system-wide profile."
+ 

@@ -1426,6 +1426,11 @@ Left out of the scenarios above, by reason:
     "Purchase Article" and a "Purchase Issue" fee set and payments then
     switched off, the locked galley links on the home, issue and article
     pages reading "PDF" with no price
+  - the guard for A21 (issue report
+    `docs/issues/U51-A21-subscription-end-before-start-saved.md`): the
+    subscription window, on both tabs, refusing a "Start date" after the
+    "End date" and storing nothing, and saving a subscription whose start
+    and end are the same day
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1535,7 +1540,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | Additional files of an article in a restricted issue show no padlock, yet readers without access are refused | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A19](#a19) | Locked galleys keep showing an article or issue price after the journal switches payments off | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A20](#a20) | With only a membership fee set, a reader pressing "Full Issue" is asked to pay an issue fee of no amount | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A21](#a21) | The subscription window saves a start date after the end date | 🐞 | minor | — |
+| [A21](#a21) | A subscription saved with its end date before its start date is listed "Active" but opens nothing | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A22](#a22) | Subscription lists searched by membership, reference number, notes, institution, domain or IP range show every subscription | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A23](#a23) | An open-access journal's "Subscriptions" page offers "Purchase New Subscription", which leads to the home page | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A24](#a24) | On a subscription journal without payments set up, "Learn More" and "View Available Subscription Types" lead readers home | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
@@ -1801,11 +1806,22 @@ an issue purchase that costs 0, which no screen lets staff act on.
 Basis: probe, 2026-09-30. <sup>f-a20</sup>
 
 <a id="a21"></a>
-**A21 — A subscription can end before it starts** · 🐞 · minor.
-The subscription window saves a subscription whose "Start date" is
-after its "End date" with "Your changes have been saved.", and the list
-shows it with those dates; the other date checks of Rule 19 let it
-through. Basis: probe, 2026-09-25. <sup>f-a21</sup>
+**A21 — A subscription saved with its end date before its start date is listed "Active" but opens nothing** · 🐞 · medium.
+On the "Subscriptions" page, the window that creates or edits a
+subscription saves it when its "End date" is before its "Start date",
+with "Your changes have been saved.". This is what happens when a
+manager types the wrong year into "End date" or swaps the two dates.
+The list then shows the subscription as "Active" with those dates. The
+same window already refuses a date left empty or more than ten years
+from today, but it never compares the two.
+The subscriber gets no access from it, and nobody is told. With the
+journal's subscription expiry setting at "Full expiry", which is how a
+journal starts, every restricted article and issue stays locked for
+them.
+It happens for individual and institutional subscriptions alike. Only a
+manager typing the dates can store such a subscription; a reader's own
+purchase and "Renew" set the dates themselves.
+Basis: probe, 2026-09-30. <sup>f-a21</sup>
 
 <a id="a22"></a>
 **A22 — Subscription lists searched by membership, reference number, notes, institution, domain or IP range show every subscription** · 🐞 · medium.
@@ -2166,6 +2182,7 @@ Issue report: [pkp-e2e#55](https://github.com/jardakotesovec/pkp-e2e/issues/55) 
 
 <a id="fn-f-a21"></a>
 **f-a21** — `SubscriptionForm` checks each date's presence and range (note h) but not their order. Live-probed 2026-09-25 (td11): start 2026-12-01, end 2026-01-01, saved and listed so.
+Issue report: [docs/issues/U51-A21-subscription-end-before-start-saved.md](../issues/U51-A21-subscription-end-before-start-saved.md).
 
 <a id="fn-f-a22"></a>
 **f-a22** — `SubscriptionDAO::applySearchFilters()` maps given name, family name, username and email to columns; the institutional fields have no mapping (`default => null`), so the filter is dropped. Membership, reference number and notes are mapped there, yet the screen returned the whole list for them too. Live-probed 2026-09-25 (td10), on two journals, "contains" and "is".
