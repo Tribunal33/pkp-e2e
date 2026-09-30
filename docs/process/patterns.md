@@ -154,6 +154,12 @@ Each of these has bitten at least once.
     again after each search and redraw; the header links are reached by
     their class (`a.pkp_linkaction_search`, `a.pkp_linkaction_exportAllUsers`),
     which a grid-scoped `getByRole('link')` misses (U53, U54, U62, U63).
+    A download link (`a.pkp_linkaction_downloadFile`) redraws its whole
+    grid two seconds after the press (the timer that re-enables the link
+    also fires a `fetch-grid`), closing every open strip and leaving links
+    at `href="#"` for a moment, so a page object that downloads returns
+    only once the grid has been replaced (`LibraryList.download()`; U39 S2
+    on CI, 2026-09-30).
 11. **PkpButton accessible names include row context.** The Edit button in a
     mailables list is named `Edit Discussion (Production)`. Use a row-scoped
     regex.
@@ -187,7 +193,13 @@ Each of these has bitten at least once.
     short common words. The wizard rail is the standing trap: a "wait until
     step X is current" idiom on `'Review'` also matches "Reviewer
     Suggestions" and silently stays there; anchor the end
-    (`SubmissionWizardPage`'s `endAnchored`) (U31, 2026-09-06).
+    (`SubmissionWizardPage`'s `endAnchored`) (U31, 2026-09-06). A
+    `hasText` row filter is the same trap, worst with a number: a row's
+    other cells carry digits the test does not control (the seed tag, a
+    date, another id), and CI's fresh installs hand out the same small ids
+    every push, so match a number through its own cell, exact
+    (`InternalReviewPages` `panelRowNumbered`; OMP U71 S3, 16 of 18 CI reds
+    on id 71 against a file named `revu71s3…`, 2026-09-30).
 16. **Legacy grid control links carry padding in their text.** A row's
     "Edit" link reads " Edit " to `hasText`, so an anchored regex
     (`filter({hasText: /^Edit$/})`) never matches. Read them by role and
@@ -226,15 +238,28 @@ slide. Durations are 0.01ms rather than 0 because presence helpers wait on
   `await expect(page.getByRole('heading', {name: 'Dashboard'})).toBeVisible()`.
 - **Auth-style redirects**: `page.waitForURL(url => !url.pathname.includes('/login'),
   {waitUntil: 'commit'})`. The default `'load'` is fragile under parallel load
-  because Vue dashboards fan out XHRs. `'commit'` fires on the URL change.
+  because Vue dashboards fan out XHRs. `'commit'` fires on the URL change. A tab
+  closed right after such a commit can hang Playwright's `close()` to the
+  test timeout (Chromium loses the close while its renderer has not taken
+  the page in, and skips its forced close under a debugger): close tabs
+  through `closeTab(page)` (`support/tabs.js`, DOMContentLoaded first; U05
+  S6 on CI, 2026-09-30).
 - **API-triggered updates**: arm `page.waitForResponse(...)` before the click
-  and await it after. Prefer this over toast assertions (parallel lesson 2).
+  and await it after. Prefer this over toast assertions (parallel lesson 2). It
+  ignores a request that fails, so a dead worker reads as a bare 30 s
+  timeout: a page object's wait also listens for its request failing and
+  names the URL and error at once (`ProfilePage` `waitForAnswer`, U03 S5
+  on CI, 2026-09-30).
 - **A form that fills a required field from its own fetch** refuses a
   submit pressed before the answer, in the page and silently ("This field
   is required.", no request); the page object that opens such a form
   returns it settled, the fetch's `waitForResponse` armed before the press
   and its value awaited (the OJS publish panel's "Issue Assignment",
-  `PublicationScreen.pressPublish()`; U13 S3).
+  `PublicationScreen.pressPublish()`; U13 S3). A panel that opens with
+  several fetches is settled only when the one the next action reads from
+  has landed, and a rich-text box a choice reveals gets `waitForEditorReady`
+  after that choice, before the first key (OMP U40 S6: the language panel
+  picked before its publication fetch kept the old title, 2026-09-30).
 - **Legacy jQuery flows** (AjaxModal saves, Smarty grid refreshes, tab-handler
   clicks): call `waitForJQueryIdle(page)`. It lives in
   `shared/playwright/support/legacy.js`; the OJS and OPS trees re-export it
@@ -242,7 +267,16 @@ slide. Durations are 0.01ms rather than 0 because presence helpers wait on
   `../support/legacy.js`. It waits until jQuery is absent or `jQuery.active`
   reaches 0. It is a no-op on Vue-only surfaces; prefer `waitForResponse`
   there. The symptom that points here: a spec passes at `--workers=1` but
-  flakes at 2 with timeouts right after a legacy form save.
+  flakes at 2 with timeouts right after a legacy form save. A legacy
+  window also keeps moving after it shows (a grid it loads itself, then a
+  jQuery `.show(250)` notice: the harness stops CSS motion, not jQuery's
+  timers), and a click's target is checked on the button-down only, so a
+  shift before the up loses the press without a sound: no request, the
+  button left focused. The page object that opens such a window returns it
+  settled, `waitForLegacyFormSettled(page, window)` (placeholders gone,
+  jQuery idle, nothing `:animated`, fonts loaded), and waits again after a
+  change that slides something in, a box press included
+  (`setEditReviewFile`; U31 S2/S4, U27 S6, U28 S4 on CI, 2026-09-30).
 - **A cancel read under a network throttle** (CDP
   `Network.emulateNetworkConditions`): lifting the throttle releases every
   held byte at once, ahead of the page's abort, so the throttle stays on
@@ -282,7 +316,11 @@ over.
    other worker's session of it.
 6. **Server-side outbound HTTP fails fast at the dead-port `[proxy]`**
    (the config contract in `harness.md`); a test never depends on the app
-   reaching an external service.
+   reaching an external service. The browser is not behind that proxy: a
+   press that opens or fetches a third-party address (ORCID's connect
+   window) stubs that host in its own context just before the press
+   (`support/orcid.js` `pressOrcidConnect`), and the test reads only the
+   address the app built (U04 S2 on CI, 2026-09-30).
 7. **Runners are invoked explicitly, in the serial project only.** A spec
    that needs a scheduled task invokes
    `php lib/pkp/tools/scheduler.php run`. One that needs a queued job's side
@@ -578,7 +616,10 @@ because `base-test.js` reads them: a suite page object is required inside
 
 The run record (`run-<app>-<HHMMSS>.json`) keeps every response of 400 or
 more and the console's errors; its `crashes` list is the subset that means
-the app itself failed (a response of 500 or more, an uncaught page error),
+the app itself failed (a response of 500 or more, an uncaught page error,
+a console error opening with a JavaScript error's name, which is a script
+failure Vue's error handler caught and logged, so no page error fires:
+`caught: true`, U28 I30),
 and the kit prints their count when the process ends. Each one is a
 finding in its own right, reported on the digest block's `Crash:` line
 even when the screen showed nothing.
@@ -614,7 +655,9 @@ with `override` on a call the Vue forms tunnel as a POST (UI realities:
 a save's PUT is a POST with `X-Http-Method-Override`, so a listener keyed
 on PUT misses it, sync rr13370, rr13282),
 which also carries the browser's console errors and warnings and uncaught
-page errors (`console`, capped at 200), every browser dialog
+page errors (`console`, 200 of each type, a warning whose first line is
+kept three times only counted in `consoleRepeats`: TinyMCE's deprecation
+warning at every editor mount filled one shared cap, U29 I30), every browser dialog
 (`dialogs`: type and message) and every page notice as it appears
 (`notices`, pitfall 14); a browser `fn` leaves open when it ends or
 throws is closed by `forEachApp`; `launch(app, {record: false})`

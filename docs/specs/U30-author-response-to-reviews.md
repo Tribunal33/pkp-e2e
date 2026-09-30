@@ -292,21 +292,30 @@ form.
 <a id="by-address"></a>
 14. **By address.** The request page's address is
     `{journal}/reviewResponse/requestAuthorResponse?stageId=3&reviewRoundId={round id}&submissionId={id}`
-    (3 is the review stage; the round id is the round's identifier, not
-    its number in the workflow menu, read from the address bar once
-    "Request Response" is pressed on that round). An editorial role who
-    may open the submission gets the page for any of its rounds; with a
-    round id no submission has, or another submission's, the access-denied
-    page reads "Invalid review round.". Every other role (a Section Editor or Guest
-    Editor not assigned to the submission, Funding Coordinator, Author,
-    Reviewer, Reader) gets the access-denied page "The current role does
-    not have access to this operation."; the review stage itself is not
-    shown. A page reached by a typed address (not through "Request
-    Response") has nowhere to return to: "Cancel" lands on a page reading
-    only "404 Not Found"; "Submit Request" sends the email all the same,
-    but the dialog's control reads "View Submission" and does nothing, and
-    Escape lands on the same "404 Not Found" page ⚠ [A4](#a4).
-    <sup>o</sup>
+    (3 is the review stage, External Review on a press; the round id is
+    the number after "workflow_3_" in the address bar with that round
+    chosen in the workflow menu). The Journal Manager, Editor, Site
+    Administrator and a Section or Guest Editor assigned to the submission
+    get the page for any of its rounds; with a round id no submission has,
+    or another submission's, the access-denied page reads "Invalid review
+    round.". Every other role gets the access-denied page "The current
+    role does not have access to this operation." and not the review
+    stage: an unassigned Section or Guest Editor; Author, Reviewer, Reader
+    and every assistant-level role, assigned or not. A page reached by a
+    typed address (not through "Request Response") has nowhere to return
+    to: "Cancel", and Escape on the sent dialog, land on a page reading
+    only "404 Not Found"; "Submit Request" still sends the email, but the
+    dialog's control reads "View Submission" and does nothing
+    ⚠ [A4](#a4). <sup>o</sup>
+
+<a id="french"></a>
+15. **In French.** With the interface in French, the table, the author's
+    card, both response windows and the request page show raw codes (the
+    text's internal name between hash signs, such as
+    "##submission.reviewRound.authorResponse##" where English reads
+    "Author Response") for most of their headings, status lines and
+    buttons, and the request email stays English; requesting, responding
+    and reading the response work as in English ⚠ [A9](#a9). <sup>f-a9</sup>
 
 ## Side effects
 
@@ -394,6 +403,8 @@ form.
   leaves only the request email's row "An email has been sent: Request For
   Author Response To Reviewer Feedback" (Side effects); the response's
   submit, edit and delete write nothing there.
+- **Languages & locales** owns why a text the French translation lacks
+  shows as a raw code (Rule 15).
 - **Article landing page & reading** owns the public display of open
   reviews and the response flagged in Side effects.
 
@@ -696,6 +707,8 @@ Left out of the scenarios above, by reason:
   - A5 (an emptied "Subject" or "Message" at "Submit Request")
   - A7 (revisions uploaded before responding)
   - A8 (a cancelled request beside a completed review)
+  - A9 (the table, the card, both windows and the request page with the
+    interface in French; Rule 15)
 - **No seed**:
   - "Notify All Authors" at its default, the copy to other contributors (needs a contributor with an email and no account)
   - "Notify All Authors" off (no scenario key)
@@ -716,6 +729,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | The request page opened by a typed address returns nowhere on "Cancel" and after sending | 🐞 | minor | — |
 | [A5](#a5) | An emptied "Subject" or "Message" is refused with "An unexpected error has occurred." | 🐞 | minor | — |
 | [A7](#a7) | The decision email's "Submit Author Response" leads nowhere once revisions are uploaded | 🐞 | user-visible | — |
+| [A9](#a9) | In French the "Author Response" table, the author's card, both windows and the request page show raw codes such as "##submission.reviewRound.authorResponse##" | 🐞 | minor | — |
 | [OMP1](#omp1) | A press author's decision email offers "Submit Author Response" that leads to nothing | 🐞 | user-visible | — |
 | [A2](#a2) | Nobody is told when the author's response arrives | ❓ | user-visible | — |
 | [A6](#a6) | Under a minimum, the request email says every review is in while one is still due | ❓ | minor | — |
@@ -814,6 +828,81 @@ request of such a round leave the cell at "Ready to invite author" and the
 request page with one reviewer block? Lean: yes; the app drops a cancelled
 request wherever it drops a declined one. Basis: code. <sup>f-a8</sup>
 
+<a id="a9"></a>
+**A9 — In French the Author Response screens show raw codes** · 🐞 · minor.
+With the interface in French (Canada), the Journal Manager and the Author
+read raw codes where French words belong on every screen of this feature:
+- **the "Author Response" table**: the heading, which is also the name a
+  screen reader gives the table, "##submission.reviewRound.authorResponse##";
+  the line under it
+  "##editor.submission.reviewRound.RequestAuthorResponse.description##";
+  the button "##editor.submission.reviewRound.RequestResponse##"; the
+  column heading "##editor.submission.reviewRound.responseStatus##"; on a
+  ready round the cell
+  "##editor.submission.reviewRound.authorResponse.readyToInvite##" (shown
+  with capitals, like the English cell) over
+  "##editor.submission.reviewRound.authorResponse.editorCanRequest##";
+  once a response exists the cell
+  "##editor.submission.reviewRound.responseWasSubmitted##", so the editor
+  no longer sees who submitted it, and a screen reader hears
+  "##common.moreActions##" as the name of each row's "…" button. "Awaiting
+  reviews" reads "En attente d'évaluations", the other column headings
+  "Auteur-e" and "Actions", and the row menu "Afficher" and "Supprimer";
+- **the editor's "View" window**: the title
+  "##submission.reviewRound.authorResponseToReviews##", the note
+  "##submission.reviewRound.authorResponse.noteForEditor##", the field
+  "##submission.reviewRound.authorResponse##" and the "Authors"
+  description "##submission.reviewRound.associatedAuthors.description##",
+  above French "Annuler" and "Enregistrer". The "Delete" dialog reads
+  French throughout ("Supprimer" / "Êtes-vous certain-e de vouloir
+  supprimer cet élément ? Cette opération est irréversible." / "OK" /
+  "Annuler");
+- **the author's card**: the heading
+  "##submission.reviewRound.authorResponse##", then
+  "##submission.reviewRound.respondToReviews##" with the button
+  "##submission.reviewRound.authorReviewResponse.submit##"; once a
+  response exists "##editor.submission.reviewRound.responseWasSubmitted##"
+  with the button
+  "##submission.reviewRound.authorReviewResponse.viewSubmittedResponse##";
+- **the author's window**: the title
+  "##submission.reviewRound.submitYourResponse##"; the intro
+  "##submission.reviewRound.authorResponse.note##", or, on re-reading a
+  submitted response, "##submission.reviewRound.authorResponse.authorCannotEdit##";
+  the field "##submission.reviewRound.authorResponse##"; the "Authors"
+  description "##submission.reviewRound.associatedAuthors.description##";
+  and the submit button
+  "##submission.reviewRound.authorReviewResponse.submit##". "Auteurs-es",
+  "* Obligatoire" and "Annuler" read French;
+- **the "Request Author Response" page**: the heading, repeated as the
+  breadcrumb's last item,
+  "##editor.submission.reviewRound.requestAuthorResponse##"; the line under
+  it "##editor.submission.reviewRound.aboutToRequestAuthorReviewResponse##";
+  "##emails.modifyEmailSharedWithUser##" (shown in capitals);
+  "##discussion.form.templatesLabel##" beside the French "Trouver un
+  modèle de courriel" box; and the button
+  "##editor.submission.reviewRound.authorReviewResponse.submitRequest##".
+  The sent dialog reads
+  "##editor.submission.reviewRound.authorReviewResponseRequestSent##" /
+  "##editor.submission.reviewRound.authorReviewResponseRequestSent.description##"
+  above French "Voir le résumé de la soumission".
+
+The email the page prefills and sends reads English, subject and body:
+the French translation has no text for the "Request Author Review
+Response" template. Expected: French throughout, as the rest of the stage
+reads. A French-speaking editor has to guess what the table, its button
+and the request page are for, and the author what the card and the window
+ask of them. Requesting, responding and reading still work: the response
+is saved, the card and the table read it at once and after a reload, and
+the cell after a request stays at its ready code as in English
+[A1](#a1). The English screens show none of these codes. The workflow
+screen's menu and heading around the stage are
+[→ Workflow screen & stage access A11](U24-workflow-screen-and-stage-access.md#a11)'s
+finding, the discussions panel on the same stage is
+[→ Tasks & discussions A15](U37-tasks-and-discussions.md#a15)'s, and why a
+missing French text shows as a code at all is the question
+[→ Languages & locales A4](U57-languages-and-locales.md#a4) asks.
+Basis: probe, 2026-09-30. <sup>f-a9</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -826,10 +915,10 @@ reads "Revisions have been requested." and shows "Revisions Uploaded" and
 the "Notifications" list, but no "Author Response" card and no window, so
 the author cannot do what the email asked. Neither review stage shows the
 editor's "Author Response" table, so no request can be sent from a screen;
-the "Request Author Response" page still opens by its address, sends the
-request email (its reviewer block reading "Recommendation:" with nothing
-after it, since a press collects none) and shows the sent dialog, and that
-email's button lands the author on the same empty stage. Since: 2026-07-31
+the "Request Author Response" page still opens by its address (Rule 14),
+sends the request email (its reviewer block reading "Recommendation:" with
+nothing after it, since a press collects none) and shows the sent dialog,
+and that email's button lands the author on the same empty stage. Since: 2026-07-31
 (seen on a press while the review stage was probed) · Basis: probe.
 <sup>f-omp1</sup>
 
@@ -915,6 +1004,9 @@ email's button lands the author on the same empty stage. Since: 2026-07-31
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note e: `getActiveReviewAssignments()` drops declined and cancelled assignments alike, and `ReviewerComments::setupReviewerCommentsVariable()` iterates the completed assignments only, so a cancelled request should count like a declined one on both the cell and the email. Not driven: the scenario API seeds no `cancelled` reviewer status. The settling read: on a round with one completed review and one accepted request, the editor takes the accepted reviewer's "…" › "Cancel Reviewer", then reads the cell (expected "Ready to invite author", "Request Response" enabled) and opens the request page (expected one reviewer block).
+
+<a id="fn-f-a9"></a>
+**f-a9** — Notes c, d, f, h, j and k name the keys. None of the keys quoted in A9 has an entry in lib/pkp's `locale/fr_CA/` (`submission.po`, `common.po`, `emails.po`), while `submission.dashboard.view.awaitingReviews` has one; `emails.reviewRound.requestAuthorResponse.subject` and `.body` exist in `locale/en/emails.po` only. Live-probed 2026-09-30 at ojs `7ce98ec09e`, omp `3b0ecf794c` (lib/pkp `3dc90c81a6`), two runs, each on a scratch journal and a scratch press with English and French (Canada) as interface languages, as their Journal Manager and the submitting Author, on a round awaiting reviews, a ready round and a round with revisions requested; every French read was paired with the same read in `/en/`, where the only code on screen was the header's help link (the workflow screen's, U24 A11). On the ready round the Journal Manager sent a request from the page reached through "Request Response"; the Author opened the window, typed and pressed "Annuler" (the window closed with no question and reopened with its submit button greyed), then typed, ticked themself and submitted: one saved response per run, the card reading the submitted code at once and after a reload; the Journal Manager then read the table, the row's menu, the "View" window (closed with "Annuler") and the "Delete" dialog ("Annuler", the row unchanged). The ready cell's capitals come from the same CSS as the English cell's (note d), the page's capitals from the heading's `uppercase` class (note f). The request page's language switch read "Passer à français" and was not pressed. Control: the press's External Review stage showed no table and no card in either language. No response of 500 or more and no script error.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note a for the missing components; note h for the shared `DecisionRequestRevisionsNotifyAuthor` and template. Seen 2026-07-31 on a press during the review-stage probes (recorded in the review stage spec's note a: no Author Response panel in either view, console clean, while the author still received the letter inviting a response). Re-observed 2026-09-06 on the current build: no table on `workflow_3_{round}` or `workflow_2_{round}`; the typed page renders, `POST …/requestResponse` 200, the email's anchor `…mySubmissions?workflowSubmissionId={id}&workflowMenuKey=workflow_3_{round}&reviewResponseAction=respond`; the Request Revisions wizard's "Notify Authors" message and the "Your submission has been reviewed and we encourage you to submit revisions" email carry the same anchor; the author lands on External Review with the headings "Round 1 Status", "Notifications", "Revisions Uploaded", "Review Tasks & Discussions", no "Author Response" and no window, console clean (own console listeners; the kit's `screen()` does not capture it).

@@ -154,9 +154,17 @@ the account's roles, never on which dashboard page it opens from:
    the last. A screen reader announces "Go to Previous"
    and "Go to Page {n}", but plain "Next" ⚠ [A10](#a10). Which page is
    showing is never part of the address (Rule 4). An empty view shows a
-   single "No Items" row.
+   single "No Items" row. Each time the list finishes loading (on
+   arrival, after a search or a sort), a screen reader hears "Loaded";
+   nothing of it shows on screen.
    The author's and reviewer's lists reuse this table with their own
    columns (theirs have no "Days"). <sup>f</sup>
+
+   With the interface in French, a few of the page's texts read raw codes
+   where French words belong: what a screen reader hears for the "…"
+   button above the list (Rule 12) and for "Loaded", an accepted
+   reviewer's indicator (Rule 10) and, on a press, the Filters panel's
+   "Assigned To Editor" field (Rule 8) ⚠ [A12](#a12).
 <a id="search"></a>
 6. **Search within a view.** The search box above the list ("Search
    submissions, ID, authors, keywords, etc.") narrows the *current view*.
@@ -240,15 +248,15 @@ the account's roles, never on which dashboard page it opens from:
        required number of reviews have been confirmed. A decision is
        needed." instead;
      - otherwise: the per-reviewer indicators alone.
-   - 9f. **In review, with recommending editors on board** {OJS OMP}: the
-     messaging shifts to the recommendation workflow. A deciding editor reads "Recommending Editors are
-     tasked to advise the next steps for this submission", then "An
-     editorial recommendation has been received" / "All editorial
+   - 9f. **In review, with recommending editors on board** {OJS OMP},
+     checked before 9e. Instead of 9e's "Assign Reviewers" and
+     all-confirmed lines, a deciding editor reads "Recommending Editors
+     are tasked to advise the next steps for this submission" ⚠ [A13](#a13),
+     then "An editorial recommendation has been received" / "All editorial
      recommendations have been received, and a decision is required." as
      recommendations land. A recommending editor who has recorded theirs
-     reads "Recommendation has been made by you." Recording one is owned
-     by the decision features
-     ([→ recommendations](U26-review-stage-and-rounds.md#recommendations)). <sup>j</sup>
+     reads "Recommendation has been made by you." ⚠ [A14](#a14)
+     ([→ recording one](U26-review-stage-and-rounds.md#recommendations)). <sup>j</sup>
    - 9g. **In copyediting** {OJS OMP}: "Copyedited Files Uploaded: {count}".
    - 9h. **Scheduled into an issue** {OJS}: "To be published in issue
      {issue}".
@@ -781,6 +789,7 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the "Section" field with inactive or editor-only sections (Fields)
   - the panel's own "Clear Filters", "Close" and unapplied changes (Rules 8b, 8c)
+  - the "Loaded" a screen reader hears once the list has loaded (Rule 5)
 - **Nothing new to test**:
   - the "Showing {first} to {last} of {total}" line under the list, and "Previous" and "Next" that cannot be pressed at the ends of the pager (Rule 5)
   - Site Administrator holding Journal Manager in the journal, journal-wide like the Journal Manager (Actors row 2; the Journal Manager's views, scenario 2)
@@ -793,10 +802,13 @@ Left out of the scenarios above, by reason:
   - A4 (an editor-cancelled request read as "Reviewer cancelled review request")
   - A5 (a switched-off sort left in the address)
   - A6 (the overdue-review popover's wording)
-  - A7 (declined and cancelled reviewers showing no indicator to a Section Editor or assistant)
+  - A7 (no indicator for declined and cancelled reviewers)
   - A8 (the opt-out labelled "Weekly email of outstanding tasks")
-  - A9 (a Site Administrator without Journal Manager in the journal: the "Error" dialog and empty list with Reader only, the manager controls over an assigned-only list)
+  - A9 (a Site Administrator without Journal Manager in the journal)
   - A10 (the pager's "Next" announced as plain "Next")
+  - A12 (raw codes in French; Rule 5)
+  - A13 (the recommending editors' line in French; Rule 9f)
+  - A14 (a recommending editor's row before recording; Rule 9f)
   - OMP1 (no series filter on a press)
 - **No seed**:
   - "Reviews overdue" (Rule 2) and the "Review Request overdue by {days} days" popover (Rule 10): no seed backdates a request or a review deadline
@@ -827,6 +839,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A5](#a5) | Switching a sort off leaves the old sort in the address, so display and address disagree until reload | 🐞 | minor | — |
 | [A6](#a6) | The overdue-review popover describes the missed review as a "response" and dates it with the review deadline | 🐞 | minor | — |
 | [A10](#a10) | The pager's "Next" is announced as plain "Next", while its neighbours read "Go to Previous" and "Go to Page {n}" | 🐞 | minor | — |
+| [A12](#a12) | In French a screen reader hears raw codes for the "…" button above the list and for "Loaded", and an accepted reviewer's indicator and a press's "Assigned To Editor" filter field show one | 🐞 | minor | — |
 | [A1](#a1) | Section Editors and assistants have no view listing declined (or published-and-gone) submissions; global search is their only way back | ❓ | user-visible | — |
 | [A2](#a2) | Editors are offered "Complete submission" on other people's incomplete submissions, landing them in the author's wizard | ❓ | minor | — |
 | [A3](#a3) | The author/reviewer conflict notice always says "as a Journal Manager", whoever is looking, on presses and preprint servers too | ❓ | minor | — |
@@ -834,6 +847,8 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A8](#a8) | The profile's opt-out for the monthly outstanding-tasks email is labelled "Weekly email of outstanding tasks" | ❓ | minor | — |
 | [A9](#a9) | A Site Administrator without Journal Manager in the journal is let in but listed by their journal role: with Reader only, an "Error" dialog over an empty list | ❓ | minor | — |
 | [A11](#a11) | Two values chosen in one filter field: one chip or two? | ❓ | minor | — |
+| [A13](#a13) | In French the recommending editors' line may read a raw code; never seen on screen | ❓ | minor | — |
+| [A14](#a14) | A recommending editor's row before recording; never seen on screen | ❓ | minor | — |
 | [OMP1](#omp1) | A press's filter panel never offers a series filter, however many series exist | ❓ | minor | — |
 
 ### All apps
@@ -971,6 +986,65 @@ and what an X drops, is open.
 Question: one chip per value, each X dropping its own? Lean: yes; a chip
 names one value ("Section: Shut") and its X removes it.
 Basis: code. <sup>a11</sup>
+
+<a id="a12"></a>
+**A12 — In French the dashboard shows raw codes** · 🐞 · minor.
+With the interface in French (Canada), a few of the dashboard's texts
+read raw codes where French words belong:
+- the "…" button above the list and the menu it opens are named
+  "##common.moreActions##" (English "More Actions"), which is what a
+  screen reader hears. Its entry and the selection mode read French:
+  "Supprimer les soumissions incomplètes", "Annuler", and the
+  confirmation window "Confirmez la suppression des soumissions
+  incomplètes". A Section Editor has no such button (Rule 12);
+- each time the list finishes loading (on arrival, after a search or a
+  sort), a screen reader hears "##common.loaded##" (English "Loaded"),
+  for the Journal Manager and the Section Editor alike;
+- a journal and a press: the indicator of a reviewer who has accepted
+  reads "##dashboard.reviewAssignment.statusAccepted.title##" in the
+  Editorial Activity cell, beside the days count, and as the headline of
+  the popover it opens (English "Ongoing review - request accepted"),
+  for the Journal Manager. The popover's sentence and buttons read French
+  ("L'évaluateur-trice a accepté la demande d'évaluation…", "Modifier la
+  date d'échéance", "Voir les détails", "Retirer l'évaluateur-trice"), and
+  a completed review reads French throughout ("Évaluation complétée le
+  {date}");
+- a press: the Filters panel's "Assigned To Editor" field is labelled
+  "##editor.submissions.assignedTo##"; the rest of the panel reads
+  French. A journal's reads "Assignée au,à la rédacteur-trice", a
+  preprint server's "Assigné au modérateur".
+
+A French-speaking editor cannot tell from the indicator where an accepted
+review stands, and a screen-reader user hears codes for the list's
+actions and its load notice. The English page shows none of these codes.
+The side menu's codes around the list, such as the "Search submissions"
+box's placeholder, are
+[Navigation menus & site chrome A23](U08-navigation-menus-and-site-chrome.md#a23)'s
+finding, the workflow panel's are
+[Workflow screen & stage access A11](U24-workflow-screen-and-stage-access.md#a11)'s,
+the Author's own list shows the same "…" code
+([→ My Submissions](U22-my-submissions.md)), and why a missing French
+text shows as a code at all is the question
+[Languages & locales A4](U57-languages-and-locales.md#a4) asks.
+Basis: probe + code. <sup>a12</sup>
+
+<a id="a13"></a>
+**A13 — The recommending editors' line may read a code in French** · ❓ · minor.
+With the interface in French, the line a deciding editor reads while
+recommending editors are still to advise (Rule 9f; English "Recommending
+Editors are tasked…") has no French text, so it likely shows a raw
+code, as an accepted reviewer's indicator does ([A12](#a12)). Unseen: no
+seed puts recommending editors on a round.
+Question: does the line read "##dashboard.recommendOnly.pendingRecommendations##"
+on a French dashboard? Lean: yes.
+Basis: code. <sup>a13</sup>
+
+<a id="a14"></a>
+**A14 — A recommending editor's row before they record** · ❓ · minor.
+Before a recommending editor records theirs, their row (Rule 9f) was
+never seen on screen.
+Question: does it read as Rule 9e? Lean: yes, per the code.
+Basis: code. <sup>a14</sup>
 
 ### OMP
 
@@ -1165,7 +1239,14 @@ submissions): "Showing 1 to 30 of 31", after "Next" "Showing 31 to 31 of
 31" with the one remaining row, and "Showing 0 to 0 of 0" on an empty
 view; "Next" and "Go to Page 2" fetched `offset=30`, "Previous" and "Go
 to Page 1" `offset=0`; the address stayed `?currentViewId=active`
-throughout and a reload returned to page 1 with 30 rows.
+throughout and a reload returned to page 1 with 30 rows. The load
+notice is `dashboardPageStore.js` calling `announce(t('common.loaded'))`
+into the page's `aria-live="polite"` region once a fetch completes.
+Live-probed 2026-09-30 (all three apps, two runs): the region held
+"Loaded" on arrival and after a search in English (Journal Manager), and
+its code (fn-a12) on arrival for the Journal Manager and the Section
+Editor and after a search or a sort in French; it was empty on later
+reads, and the page's visible text never held it.
 
 <a id="fn-g"></a>
 **g — in-page search.** `DashboardControlSearch.vue`, label
@@ -1276,8 +1357,13 @@ participant-assign side modal; review stages → round-status branches
 `PENDING_REVIEWERS`; the deciding-editor collapse to recommendation
 messaging applies only when `isCurrentUserDecidingEditor` — true only
 when the user is a deciding editor AND recommending editors are assigned
-(`submission/maps/Schema.php::getPropertyStages()`); recommend-only
-branches per `currentUserCanRecommendOnly` / `currentUserRecommendation`;
+(`submission/maps/Schema.php::getPropertyStages()`) — the collapse maps
+the reviewer-side round statuses (pending reviewers, pending / ready /
+completed / overdue reviews, returned to review) to
+`PENDING_RECOMMENDATIONS`, an alert with no indicators, ahead of the 9e
+branches (revision statuses unmapped); recommend-only
+branches per `currentUserCanRecommendOnly` / `currentUserRecommendation`
+(fn-a14);
 `WORKFLOW_STAGE_ID_EDITING` → `dashboard.copyEditedFilesUploaded`;
 Production + scheduled + issue label → `dashboard.toBePublishedInIssue`
 (the issue condition makes 9h OJS-only in practice); else empty. The
@@ -1781,6 +1867,50 @@ tables.
 entry of `activeFiltersList` (keyed field label + value label), its X
 emitting `removeFilter(name, value)`. The 2026-09-29 probes (fn-i) applied
 one value per field only.
+
+<a id="fn-a12"></a>
+**a12 — A12 evidence.** `common.moreActions` and `common.loaded` (lib/pkp
+`locale/en/common.po`) and `dashboard.reviewAssignment.statusAccepted.title`
+(`locale/en/submission.po`) have no entry in lib/pkp's `locale/fr_CA`;
+OMP's `locale/fr_CA/editor.po` carries `editor.submissions.assignedTo`
+with an empty text, where OJS's and OPS's are translated. Live-probed
+2026-09-30 at ojs `7ce98ec09e`, omp `3b0ecf794c`, ops `c8af945bb7`
+(lib/pkp `3dc90c81a6`), two runs, all three apps, on a scratch context
+with English and French (Canada) interface languages, as its Journal
+Manager and an assigned Section Editor; every French read was paired
+with the same read in `/en/`, where none of the codes showed. The
+"…" button's `aria-label` and its menu's name read the code; no row
+carries a menu button (a row's buttons are "Afficher", "Compléter la
+soumission" on the incomplete row, "Assigner un rédacteur-trice" on a
+Submission-stage row with no editor, and the review indicators); the
+bulk delete was driven to its French confirmation and cancelled. The
+Section Editor had no "…". The accepted-review code showed in the cell
+on every manager view listing a round-1 submission whose reviewer had
+accepted, and as the popover's headline (OJS and OMP); a completed
+review's cell and popover read French, the popover naming the
+recommendation on OJS only (Rule 10). OMP's Filters label read the code
+in both runs. No response of 500 or more and no page error. The
+indicator's French "Afficher plus de details" lacks the accent on
+"détails", a translation typo rather than a code.
+
+<a id="fn-a13"></a>
+**a13 — A13 evidence.** `useDashboardConfigEditorialActivity.js` shows
+`dashboard.recommendOnly.pendingRecommendations` on
+`REVIEW_ROUND_STATUS_PENDING_RECOMMENDATIONS`; the key has no `fr_CA`
+text in lib/pkp on any app (locale files read 2026-09-30). The state
+was not on screen in the 2026-09-30 French probe (fn-a12). It is settled
+by reading the French dashboard row of a round with a recommend-only
+editor assigned and every review confirmed ("Mark as Complete"), as its
+deciding editor.
+
+<a id="fn-a14"></a>
+**a14 — A14 evidence.** In `useDashboardConfigEditorialActivity.js`, a
+recommend-only editor without their own `currentUserRecommendation` has
+the recommendation round statuses mapped back to reviews-completed (every
+active review confirmed) or pending-reviews, so the 9e branches render
+(code read 2026-09-30). Not driven: no seed puts recommending editors on a
+round. It is settled by reading that editor's dashboard row on a round
+under review before they record a recommendation.
 
 <a id="fn-omp1"></a>
 **omp1 — OMP1 evidence.** OMP's

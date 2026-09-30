@@ -28,9 +28,12 @@ the journal's **manager-level roles** while their role has "Permit
 changes to Settings" ticked (on a journal or press the Journal Manager,
 the Editor and the Production Editor; on a preprint server the Preprint
 Server Manager), and the Site Administrator. Below, "a manager" is any of
-them. A user is **within a manager's reach** when every role the user
+them.
+
+<a id="reach"></a>
+A user is **within a manager's reach** when every role the user
 holds or has ever held anywhere on the site sits in a journal where that
-manager also holds a manager-level role; a role that has ended in another
+manager also holds a manager-level role; a role ended in another
 journal still puts the user out of reach. A Site Administrator's account
 is never within a manager's reach. The Site Administrator reaches every
 other account, with one exception below. <sup>n</sup>
@@ -45,8 +48,8 @@ the app refuses both. <sup>v</sup>
 | **"Edit"** (open the user's roles page) | • every manager, on every row, their own included (Rule 8) <sup>e</sup> |
 | **"Email"** | • every manager, on every row, their own included (Rule 9) <sup>f</sup> |
 | **"Disable User" / "Enable User"** | • Site Administrator: every row but their own (Rules 10–12)<br>• other managers: offered on every row but their own. It takes effect for a user whose current roles all sit in the manager's journals, a user whose role elsewhere has ended included; for anyone else, the Site Administrator included, it is refused (Rule 13) ⚠ [A1](#a1) <sup>g</sup> |
-| **"Remove User"** (from this journal) | • every manager, on the rows of users who hold a role in this journal, never on their own row (Rule 14). It works for users outside the manager's reach too, ending only this journal's roles, but fails on a Site Administrator's row ⚠ [A2](#a2) <sup>c</sup> |
-| **"Merge user"** | • Site Administrator: the rows of every account but their own<br>• other managers: only the rows of users within their reach, never their own (Rules 16–17) <sup>i</sup> |
+| **"Remove User"** (from this journal) | • every manager, on the rows that name a role under "Roles" (Rule 7), never on their own row (Rule 14). It works for users outside the manager's [reach](#reach) too, ending only this journal's roles, but fails on a Site Administrator's row ⚠ [A2](#a2) and on the row of a user whose only role has not yet begun ⚠ [A19](#a19) <sup>c</sup> |
+| **"Merge user"** | • Site Administrator: the rows of every account but their own<br>• other managers: the rows of users within their [reach](#reach), never their own (Rules 16–17) <sup>i</sup> |
 | **"Login As"** | • offered on the rows of users the signed-in manager may impersonate; the action itself and who may use it belong to [Login & sessions](U01-login-and-sessions.md#who-may-impersonate) <sup>o</sup> |
 | **Manage a journal's users from Administration** (the Settings wizard's "Users" tab: "Add User", "Edit User" and the other row actions) | • Site Administrator only (Rules 19–24) <sup>k</sup> |
 
@@ -60,8 +63,8 @@ account:
 | Search box, reading "Enter a user's name, role (e.g Journal editor), or affiliation" until something is typed | — | Runs on Enter (Rule 6). On a press and a preprint server the example names a role those apps do not have ⚠ [A4](#a4) <sup>p</sup> |
 | "Name" | — | The account's full name; an ORCID icon follows when the account carries an ORCID iD, verified or not, and a red crossed-out person icon when the account is disabled. To a screen reader both icons are unnamed images ⚠ [A12](#a12) <sup>b</sup> |
 | "Email" | — | The account's email address <sup>b</sup> |
-| "Roles" | — | Each role the user holds now in this journal, one per line; ended roles are not shown, and roles in other journals never are <sup>b</sup> |
-| "Start Date" | — | The date each of those roles began, on the role's line; empty for a role that carries no start date, such as the manager role a journal gives the Site Administrator when it is created (the user's roles page reads "---" there) <sup>b</sup> |
+| "Roles" | — | Each role the user has in this journal with no end date, one per line, a role whose start date is still to come included ⚠ [A18](#a18). A role with an end date is not shown, even while that date is still to come (Rule 3a), and roles in other journals never are <sup>b</sup> |
+| "Start Date" | — | The date each of those roles began or will begin, on the role's line; empty for a role that carries no start date, such as the manager role a journal gives the Site Administrator when it is created (the user's roles page reads "---" there) <sup>b</sup> |
 | "Affiliation" | — | The account's affiliation <sup>b</sup> |
 | The "…" button at the row's end | — | Opens the row's actions (Rule 7) ⚠ [A5](#a5) <sup>q</sup> |
 
@@ -135,6 +138,18 @@ The Site Administrator's "Add User" (step 1) and "Edit User" windows
    its menu no longer offers "Remove User" ⚠ [A3](#a3). "Remove User" is
    the only way to that state: the user's roles page never ends a user's
    last role (see *User invitations*, Rule 13). <sup>c</sup>
+3a. **A role with an end date still to come.** On a journal or a press an
+   import through Tools › "Users XML Plugin" (see [Import &
+   export](U63-import-export.md)) can give a role an end date that has not
+   yet come; a preprint server installs no such import, and its invitation
+   takes a start date only. Until that date the user holds the role, and
+   "Editorial Masthead" lists them under it. When it is their only role here,
+   their row reads as in Rule 3: nothing under "Roles" and "Start Date"
+   [A18](#a18), and no "Remove User" in the menu. On the user's roles page
+   the role shows its End Date and "User Removed From Role" where "Remove
+   Role" would be (see [User invitations](U06-user-invitations.md), Rule 13),
+   so neither screen can end the role before that date ⚠ [A20](#a20).
+   <sup>c</sup>
 4. **Order and count.** Rows run from the oldest account to the newest,
    so on a fresh install the Site Administrator comes first. The heading's
    number counts every account the list holds, or every match while a
@@ -152,7 +167,7 @@ The Site Administrator's "Add User" (step 1) and "Edit User" windows
      the given, family or preferred public name, the affiliation, the bio
      statement, the ORCID iD, the reviewing interests, or the name of one
      of the user's roles in any journal, an ended role included, although
-     the list shows only current ones. Two words that match two different
+     the list's "Roles" cell leaves ended roles out. Two words that match two different
      accounts find neither. <sup>p</sup>
    - 6c. When nothing matches, the heading reads "Current Users (0)",
      the list's only line reads "No Items", and the line under it
@@ -165,9 +180,9 @@ The Site Administrator's "Add User" (step 1) and "Edit User" windows
    | "Edit" | every row |
    | "Email" | every row |
    | "Login As" | rows of users the signed-in manager may impersonate, never their own (see *Login & sessions*) |
-   | "Remove User" | rows of users who hold a role in this journal now, never the signed-in user's own |
+   | "Remove User" | rows that name a role under "Roles" (Fields), never the signed-in user's own: a role not yet begun counts [A19](#a19), a role with an end date still to come does not [A20](#a20) |
    | "Disable User", or "Enable User" on a disabled account | every row but the signed-in user's own |
-   | "Merge user" | rows of users within the signed-in manager's reach, never their own |
+   | "Merge user" | rows of users within the signed-in manager's [reach](#reach), never their own |
 
 8. **"Edit".** It opens the user's roles page for this journal: the
    breadcrumb "Users & Roles / Invite user to take a role", an empty page
@@ -246,6 +261,12 @@ The Site Administrator's "Add User" (step 1) and "Edit User" windows
     a role in the journal. "OK" then brings an "Error" dialog, "An
     unexpected error has occurred. Please reload the page and try again.",
     and the administrator keeps every role [A2](#a2). <sup>td9</sup>
+15a. **A role not yet begun.** An invitation's START DATE may be a date
+    still to come; once the invitation is accepted, the role shows under
+    "Roles" with that date (Fields). When it is the user's only role here, the
+    row offers "Remove User", and "OK" in its dialog brings the same
+    "Error" dialog as Rule 15. The role stays, with its start date, and
+    the menu still offers "Remove User" after a reload [A19](#a19). <sup>c</sup>
 
 **Merging two accounts**
 
@@ -784,6 +805,13 @@ Left out of the scenarios above, by reason:
     Rule 23)
   - A17 (the grid's row still listing a role just ended on "Edit User";
     Rule 24; scenario 8 passes it)
+  - A18 (a role with an end date still to come left out of "Roles", a
+    role not yet begun listed with its start date; Fields "Roles", "Start
+    Date"; Rule 3a)
+  - A19 ("Remove User" on a user whose only role has not yet begun; Rule
+    15a)
+  - A20 (a role with an end date still to come that neither the list nor
+    the roles page can end; Rule 3a)
 - **No seed**:
   - a Site Administrator whose only role in the journal is Reader,
     opening the list by its address (Actors row 1; ending the
@@ -835,10 +863,13 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | Merging an account that opened a discussion fails partway with no message and leaves the account behind | 🐞 | user-visible · crash: server | — |
 | [A16](#a16) | "Notify User" stays greyed out after "Generate Password" is unticked | 🐞 | minor | — |
 | [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | minor | — |
+| [A19](#a19) | "Remove User" on a user whose only role has not yet begun ends in "An unexpected error has occurred…" | 🐞 | user-visible | — |
 | [OPS1](#ops1) | On a French preprint server the "Roles" column prints raw codes for two roles | 🐞 | minor | — |
 | [A3](#a3) | A user removed from the journal stays in the list with no role | ❓ | minor | — |
 | [A8](#a8) | "Remove User" tells the user nothing, where "Remove Role" emails them | ❓ | minor | — |
 | [A10](#a10) | The Site Administrator's older grid offers "Disable User" and "Remove" on the administrator's own row | ❓ | latent | — |
+| [A18](#a18) | "Roles" leaves out a role that ends on a future date, which "Editorial Masthead" lists, and shows a role that starts on a future date as if held | ❓ | minor | — |
+| [A20](#a20) | A user whose only role ends on a future date cannot be removed from the list or the roles page before that date | ❓ | user-visible | — |
 
 ### All apps
 
@@ -846,7 +877,7 @@ an entry notes otherwise; the team settles them on spec review.
 **A1 — Disabling offered where it is refused** · 🐞 · user-visible.
 A manager other than the Site Administrator sees "Disable User" (or
 "Enable User") on every row but their own, including the rows of users
-who also belong to a journal the manager does not manage and the Site
+with a current role in a journal the manager does not manage and the Site
 Administrator's. The menu hides "Login As" and "Merge user" on those
 rows, but pressing "Disable User" there opens the window and then
 refuses with "You do not have sufficient permissions to administer this
@@ -897,8 +928,8 @@ Basis: probe. <sup>f-a5</sup>
 **A6 — The disable window lists ended roles** · 🐞 · minor.
 The line under "Disable {full name}" reads "Current Roles : {roles}" with
 a space before the colon, and names every role the user ever held in the
-journal, ended ones included, although the list's "Roles" column shows
-only the current ones.
+journal, ended ones included, although the list's "Roles" column leaves
+ended roles out.
 Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
@@ -1012,6 +1043,45 @@ Only reloading the page shows "Reader" alone, and a reload made the
 moment the save ends can still list both. The Site Administrator is shown
 a role that has already ended as if it were current.
 Basis: test run, 2026-09-26. <sup>f-a17</sup>
+
+<a id="a18"></a>
+**A18 — "Roles" goes by the end date, not by whether the role is held today** · ❓ · minor.
+A manager reads the "Roles" and "Start Date" cells as the roles a user
+holds now. A role that ends on a future date is left out, although the
+user holds it and "Editorial Masthead" lists them under it; a user whose
+only role is such a role shows empty cells, like a removed user (Rule 3a).
+A role that starts on a future date is listed with that date, as if held,
+although "Editorial Masthead" does not list the user yet. The first case
+arises only on a journal or a press (a Users XML import); the second on
+every app (an invitation's start date).
+Question: should the list show the roles held today, or every role not
+yet ended? Lean: a bug for the role that ends later, since the user holds
+it; a role still to begin may stay listed if its row says it has not begun.
+Basis: probe. <sup>f-a18</sup>
+
+<a id="a19"></a>
+**A19 — Removing a user whose only role has not begun fails with an unexplained error** · 🐞 · user-visible.
+A user whose only role here starts on a future date is offered "Remove
+User". "OK" in the "Remove" dialog brings an "Error" dialog, "An
+unexpected error has occurred. Please reload the page and try again.";
+the role stays and the menu keeps offering "Remove User", after a reload
+too. The manager expects the role to end, or a message saying why it
+cannot; the same failure as [A2](#a2) on the Site Administrator's row.
+Basis: probe. <sup>f-a19</sup>
+
+<a id="a20"></a>
+**A20 — A role ending on a future date cannot be ended early** · ❓ · user-visible.
+On a journal or a press, a user whose only role here ends on a future
+date (a Users XML import) holds it and is listed on "Editorial Masthead",
+but their row offers no "Remove User", and their roles page shows the
+role with its End Date and "User Removed From Role" in place of "Remove
+Role". A manager who wants the person off the journal before that date
+finds no way to do it on either screen, and the roles page says the
+person was already removed.
+Question: should a role with a future end date count as current for
+"Remove User" and the roles page? Lean: yes, as "Editorial Masthead"
+already treats it.
+Basis: probe. <sup>f-a20</sup>
 
 ### OPS
 
@@ -1293,7 +1363,12 @@ Role"; the user's role in another journal stayed, and they still signed
 in; the mail catcher held nothing for them but a control email. On the
 roles page the last role's "Remove Role" answered "You cannot remove the
 role. At least one role must be assigned to the user." and the role
-stayed.
+stayed. Live-probed 2026-09-30 (Rules 3a, 7, 15a; Actors row 5), all
+three apps, two runs each, as a scratch journal's manager: "Remove User"
+was offered exactly on the rows whose "Roles" cell named a role, a role
+from 2027-06-01 with no end included, and not on a user whose only role
+ran 2020-01-01 – 2030-12-31 or 2027-06-01 – 2030-12-31 (OJS, OMP; notes
+f-a19, f-a20).
 
 <a id="fn-td9"></a>
 **td9** — Live-probed 2026-09-25 (Rule 15; A2), all three apps, as a
@@ -1591,6 +1666,25 @@ an empty "Start Date" (its roles page "---"). A disabled account and
 accounts whose roles here had all ended were listed, an account holding
 roles only in another journal was not; rows by account age, `admin` first;
 the heading counted 35, 27 and 21 on the seeded journal, press and server.
+Live-probed 2026-09-30 (Fields "Roles", "Start Date"; A18), all three
+apps, two runs each, on a scratch journal as its manager and as `admin`,
+on the same page and after a reload; the roles below are the Section
+editor role (OMP "Series editor", OPS "Moderator"). A role from today
+with no end read the role and today's date; one from 2020-01-01 with no
+end (OJS, OMP, Users XML import) read 2020-01-01. Roles 2020-01-01 –
+2030-12-31 and 2027-06-01 – 2030-12-31 (OJS, OMP, import) left both
+cells empty; beside a Reader role from 2020-01-01 the first read "Reader"
+alone with 2020-01-01. A role from 2027-06-01 with no end, by import (OJS,
+OMP) or by an accepted invitation's START DATE (all three), read the role
+and 2027-06-01, and on a user who also held Reader from today the two
+lines read "Reader" / the role and today's date / 2027-06-01. A role
+2020-01-01 – 2021-06-30 left both cells empty, and those users were
+listed and counted. A user given Author in a second context read only
+this journal's role. The list's `GET api/v1/users` carried every
+assignment with `dateStart` and `dateEnd`; the cells dropped each one
+with a `dateEnd` and none for its `dateStart`. `admin`'s manager line had
+an empty "Start Date", and its roles page read "---" under START DATE and
+END DATE.
 
 <a id="fn-d"></a>
 **d** — `UserAccessManagerStore` `countPerPage` 25; `TablePagination.vue`
@@ -1876,6 +1970,49 @@ role whose `date_end >= now` at one-second precision, while
 own second, so the refresh after "OK", or a reload within that second,
 still lists the ended role; the Users & Roles list's `withActive`
 compares with `>` and does not.
+
+<a id="fn-f-a18"></a>
+**f-a18** — Live-probed 2026-09-30, all three apps: the list as note b
+records. "Editorial Masthead" listed the user whose role ran 2020 – 2030
+under it, as "2020 –", and did not list the users whose role starts
+2027-06-01; "Editorial History" listed only the 2020 – 2021 role, as
+"2020 – 2021". Mechanism: note c (the cells keep the groups with no
+`dateEnd`). OPS has no route to a future end date: it installs no Users
+XML plugin, and the invitation takes a start date only. The invitation's
+START DATE box (`type="date"`, no min or max) accepted 2027-06-01; its
+email read "Starting from 2027-06-01", and the accept wizard's review
+listed the role with START DATE 2027-06-01 and END DATE "---".
+
+<a id="fn-f-a19"></a>
+**f-a19** — Live-probed 2026-09-30, all three apps, two runs each, as a
+scratch journal's manager, on a user whose only role started 2027-06-01
+(by an accepted invitation; on OJS and OMP also by a Users XML import):
+the "Remove" dialog as in Rule 14 (OMP "Remove this user from this press?
+… within this press.", OPS "…server? … within this server."); "OK" posted
+to `UserGridHandler::removeUser()`, which answered 200
+`{"status":false,"content":"This user does not have any roles."}`, and
+the page showed `common.unknownError` as in note td9. No response of 500
+or more and no page error. On the same page, after the Error's "OK" and
+after a reload, the row read the role and 2027-06-01 and the menu offered
+"Remove User"; the roles page listed the role with 2027-06-01, End Date
+"---" and "Remove Role"; the role's database row was unchanged. Code: the
+menu's guard `user.groups.find(g => g.dateEnd === null)` (note c) counts
+a role not yet begun, while `removeUser()` ends only roles active now and
+answers `grid.user.userNoRoles` when there are none.
+
+<a id="fn-f-a20"></a>
+**f-a20** — Live-probed 2026-09-30, OJS and OMP, two runs each, users
+given by a Users XML import a role 2020-01-01 – 2030-12-31 or 2027-06-01 –
+2030-12-31: the row menu read "Edit", "Email", "Login As", "Disable
+User", "Merge user", with no "Remove User" (a role from today and one
+from 2027-06-01, neither with an end, offered it). The roles page read
+"Section editor | 2020-01-01 | 2030-12-31 | … | User Removed From Role"
+(OMP "Series editor"); a user holding Reader from 2020-01-01 beside the
+2020 – 2030 role had "Remove Role" on Reader and "User Removed From Role"
+on the other. "Disable User" named the role under "Current Roles : " (a
+window that lists every role, A6). The Settings wizard's "Users" grid was
+not tried. Code: the menu's guard (note c); the roles page labels any
+role with an end date as removed.
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Seen 2026-09-04 (user-profile claim check K2), OPS French

@@ -144,15 +144,17 @@ forEachApp(async (app) => {
             dialog: flat(s.text && s.text.dialog, 300), main: flat(s.text && s.text.main, 500), list: await listState(), ...extra};
     }
     async function visit(name, p) {
+        const extra = {};
         begin();
         let status = null;
         try {
             const r = await page.goto(app.url(`${base}/${p}`));
             status = r ? r.status() : null;
+            if (r && r.status() >= 400) extra.bytes = (await r.body().catch(() => Buffer.from(''))).length;
         } catch (e) {
             status = `ERR ${flat(e.message, 100)}`;
         }
-        const out = await read(name, {typed: p, status});
+        const out = await read(name, {typed: p, status, ...extra});
         out.nav = await sideNav();
         return Object.assign(out, end());
     }
@@ -246,7 +248,50 @@ forEachApp(async (app) => {
                 inv.accepted = await read('ui-accept-after');
                 inv.acceptTraffic = end();
             }
+            if (m) {
+                // The link again, once accepted.
+                begin();
+                await page.goto(m[1].replace(/&amp;/g, '&'));
+                await idle(page).catch(() => {});
+                inv.linkAgain = Object.assign(await read('ui-accept-link-again'), end());
+            }
             fact('ui invite', inv);
+
+            // Users › a row's actions › "Edit": where it goes and whether it offers the created role;
+            // left with the role chosen and not saved.
+            await step('ui-edit', async () => {
+                const ed = {};
+                await signIn(page, `${t}m`, {contextPath: t});
+                await page.goto(app.url(`${base}/management/settings/access`));
+                const table = page.getByRole('table', {name: /^Current Users \(/});
+                await table.locator('tbody tr').first().waitFor({timeout: 30000});
+                await idle(page);
+                const row = table.locator('tbody tr').filter({hasText: `${t}rd`}).first();
+                await row.getByRole('button').last().click();
+                const menu = page.getByRole('menu').last();
+                await menu.waitFor({timeout: 8000}).catch(() => {});
+                ed.menuItems = await page.getByRole('menuitem').allInnerTexts().catch(() => []);
+                await page.getByRole('menuitem', {name: 'Edit', exact: true}).first().click();
+                await page.waitForURL(/management\/settings\/user\/|invitation/, {timeout: 15000}).catch(() => {});
+                await idle(page);
+                begin();
+                ed.page = await read('ui-edit-user');
+                const add = page.getByRole('button', {name: 'Add Another Role'});
+                ed.addCount = await add.count();
+                if (ed.addCount) {
+                    await add.first().click();
+                    const sel = page.getByLabel(/^Select a new role/).last();
+                    await sel.waitFor({timeout: 10000});
+                    ed.offered = await sel.locator('option').allInnerTexts();
+                    await sel.selectOption({label: 'I30 Made'}).catch((e) => cur.console.push(`select failed: ${flat(e.message, 80)}`));
+                    ed.chosen = await read('ui-edit-user-chosen');
+                }
+                await page.goto(app.url(`${base}/management/settings/access`)).catch((e) => cur.console.push(`leave failed: ${flat(e.message, 80)}`));
+                await idle(page).catch(() => {});
+                ed.left = Object.assign({final: short(page.url())}, end());
+                fact('ui edit user', ed);
+                await signOut(page).catch(() => {});
+            });
             await signOut(page).catch(() => {});
         });
     }
@@ -267,7 +312,10 @@ forEachApp(async (app) => {
         out.landingSite = Object.assign(await read(`${k}-landing-site`), end());
         const paths = [['dash', 'dashboard'], ['reviewAssignments', 'dashboard/reviewAssignments'], ['editorial', 'dashboard/editorial'],
             ['mySubmissions', 'dashboard/mySubmissions'], ['submissions', 'submissions']];
-        if (isOPS) paths.push(['wizard', `reviewer/submission/${sub.submissionId}`]);
+        if (isOPS) {
+            paths.push(['wizard', `reviewer/submission/${sub.submissionId}`]);
+            if (k === 'cr') paths.push(['wizardStep1', `reviewer/submission/${sub.submissionId}?step=1`], ['wizardNone', 'reviewer/submission/99999']);
+        }
         for (const [v, p] of paths) out[v] = await visit(`${k}-${v}`, p);
 
         // The list page, read settled and again 8 s later.
@@ -306,6 +354,22 @@ forEachApp(async (app) => {
             if (await errWin().count()) await errWin().getByRole('button', {name: 'OK', exact: true}).click({timeout: 5000}).catch(() => {});
             await sleep(600);
         }
+        // "Filters" left with the slider moved and not applied: its "Close".
+        if (out.sweep.filtersCount) {
+            begin();
+            await filters.first().click({timeout: 8000}).catch((e) => cur.console.push(`filters failed: ${flat(e.message, 80)}`));
+            const fw = page.getByRole('dialog', {name: 'Filters'});
+            await fw.getByRole('slider').first().focus().catch(() => {});
+            for (let i = 0; i < 5; i++) await page.keyboard.press('ArrowRight');
+            await sleep(500);
+            out.sweep.filtersChanged = Object.assign(await read(`${k}-filters-changed`), end());
+            begin();
+            await fw.getByRole('button', {name: 'Close', exact: true}).click({timeout: 8000}).catch((e) => cur.console.push(`close failed: ${flat(e.message, 80)}`));
+            await sleep(1500);
+            out.sweep.filtersClosed = Object.assign(await read(`${k}-filters-closed`), end());
+            if (await errWin().count()) await errWin().getByRole('button', {name: 'OK', exact: true}).click({timeout: 5000}).catch(() => {});
+            await sleep(600);
+        }
         // The in-page search box: a phrase and Enter.
         const search = page.locator('main').getByRole('searchbox').or(page.locator('main input[type="search"]')).first();
         if (await search.count()) {
@@ -331,6 +395,19 @@ forEachApp(async (app) => {
         begin();
         await page.reload().catch(() => {});
         out.sweep.reload = Object.assign(await read(`${k}-list-reload`), end());
+        // The sidebar's "Start A New Submission", pressed (nothing is submitted).
+        if (k === 'cr') {
+            if (await errWin().count()) await errWin().getByRole('button', {name: 'OK', exact: true}).click({timeout: 5000}).catch(() => {});
+            await sleep(600);
+            const start = page.locator('nav').getByRole('link', {name: 'Start A New Submission', exact: true});
+            out.sweep.startCount = await start.count();
+            if (out.sweep.startCount) {
+                begin();
+                await start.first().click({timeout: 8000}).catch((e) => cur.console.push(`start failed: ${flat(e.message, 80)}`));
+                await page.waitForLoadState('load').catch(() => {});
+                out.sweep.start = Object.assign(await read(`${k}-start-submission`), end());
+            }
+        }
         fact(`account ${k}`, out);
         await signOut(page).catch(() => {});
     }

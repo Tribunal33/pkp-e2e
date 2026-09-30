@@ -1252,6 +1252,14 @@ config-file settings.
   2026-09-23 (U08 claim check K3).
 - On Settings › Users & Roles › Users the installer's `admin` account reads
   "admin admin". All three apps, 2026-09-23 (U08 claim check K3).
+- A role with a future end date or a future start date is shown
+  differently by Settings › Users & Roles › "Users" and by "Editorial
+  Masthead": the list prints every role with no end date (future starts
+  included, with their date) and no role with an end date (future ends
+  included); the masthead lists the roles active today. A future start
+  comes from the invitation's START DATE (all three apps), a future end
+  only from a Users XML import (OJS, OMP). 2026-09-30 (U53 claim check
+  I30).
 - While the site has no "Site Name", Administration's editorial header shows
   the application's name ("Open Journal Systems", "Open Monograph Press",
   "Open Preprint Systems") where the site's name would stand. All three
@@ -1342,13 +1350,16 @@ config-file settings.
   so the page, the Author's list and the book page list formats in the
   order the database returns them. Saving a format's "Edit" (even
   unchanged), revoking or giving its approval, changing its availability,
-  or changing its DOI on the DOIs page can move it to the end, the front
-  or between two others; a file's terms or its "Approve Proof" do not.
+  or emptying its DOI on the DOIs page can move it to the end, the front
+  or between two others; changing a DOI to another value, the book's own
+  DOI, a file's terms or its "Approve Proof" moved nothing, and a DOI
+  typed back into the emptied box left the format where it was.
   The DOIs page lists a book's format rows in that same order. A book
   seeded with `publicationFormats[]` in order can already list them in
   another order. Read the order on screen after the last change, never
   from creation. 2026-09-28 (U69 claim check K3 K3-4); 2026-09-29 (U45
-  claim check R1, R1-4; U73 claim check I29).
+  claim check R1, R1-4; U73 claim check I29); 2026-09-30 (U73 claim
+  check I30).
 - {OMP} A book version with no date (every version right after "Create
   New Version") prints as today's date on the book page: the date line
   reads "{today} — Updated on …" and a draft's outdated notice "published

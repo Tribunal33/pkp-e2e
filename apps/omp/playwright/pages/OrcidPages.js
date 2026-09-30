@@ -32,6 +32,7 @@
  */
 const {expect} = require('@playwright/test');
 const {BasePage} = require('../../../../shared/playwright/pages/BasePage.js');
+const {pressOrcidConnect} = require('../../../../shared/playwright/support/orcid.js');
 
 exports.OrcidSettingsTab = class OrcidSettingsTab extends BasePage {
     /**
@@ -100,6 +101,18 @@ exports.ProfileIdentityPage = class ProfileIdentityPage extends BasePage {
     async goto() {
         await this.page.goto(this.contextUrl(this.contextPath, '/user/profile'));
         await expect(this.form).toBeVisible({timeout: 30_000});
+    }
+
+    /**
+     * Press the connect (or authorize) button and return the popup it opens.
+     * ORCID's site is answered locally in this page's context first
+     * (shared support/orcid.js): the popup event waits for the popup's first
+     * response, which otherwise comes from the real ORCID sandbox.
+     *
+     * @returns {Promise<import('@playwright/test').Page>}
+     */
+    async pressConnect() {
+        return pressOrcidConnect(this.page, this.connectButton);
     }
 };
 

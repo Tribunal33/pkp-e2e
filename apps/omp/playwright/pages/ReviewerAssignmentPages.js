@@ -18,7 +18,7 @@
  */
 const {expect} = require('../support/fixtures.js');
 const {topModal} = require('./ReviewStagePages.js');
-const {waitForJQueryIdle} = require('../../../../shared/playwright/support/legacy.js');
+const {waitForJQueryIdle, waitForLegacyFormSettled} = require('../../../../shared/playwright/support/legacy.js');
 const {waitForEditorReady, editorIdOf} = require('../../../../shared/playwright/support/richtext.js');
 
 /** The Reviewers panel of a workflow modal. */
@@ -133,6 +133,9 @@ async function awaitRequestFormReady(page, addModal) {
     await expect(
         addModal.locator('input[name="responseDueDate-removed"]')
     ).toBeAttached({timeout: 10_000});
+    // The footer's "Files To Be Reviewed" grid and its warning move the
+    // form's buttons until they have landed (a press between is lost).
+    await waitForLegacyFormSettled(page, addModal);
 }
 
 /**
@@ -163,6 +166,8 @@ async function openEditReview(page, row) {
     await menu.getByRole('menuitem', {name: 'Edit', exact: true}).click();
     const editModal = topModal(page);
     await expect(editModal.getByText('Review Type')).toBeVisible({timeout: 20_000});
+    // Its "Files To Be Reviewed" grid lands above "OK" after the form.
+    await waitForLegacyFormSettled(page, editModal);
     return editModal;
 }
 
@@ -174,15 +179,46 @@ async function openEditReview(page, row) {
  */
 async function grantFileToReviewer(page, row, fileName) {
     const editModal = await openEditReview(page, row);
-    const box = editModal
+    await expect(editReviewFileBox(editModal, fileName)).toBeVisible({timeout: 20_000});
+    await setEditReviewFile(editModal, fileName, true);
+    await editModal.getByRole('button', {name: 'OK', exact: true}).click();
+    await expect(editModal.getByText('Review Type')).toBeHidden({timeout: 20_000});
+}
+
+/**
+ * The "Files To Be Reviewed" checkbox of one file in an Edit window.
+ *
+ * @param {import('@playwright/test').Locator} editModal from openEditReview
+ * @param {string} fileName the listed file name
+ */
+function editReviewFileBox(editModal, fileName) {
+    return editModal
         .getByRole('row')
         .filter({hasText: fileName})
         .locator('input[type="checkbox"]')
         .first();
-    await expect(box).toBeVisible({timeout: 20_000});
-    await box.check();
-    await editModal.getByRole('button', {name: 'OK', exact: true}).click();
-    await expect(editModal.getByText('Review Type')).toBeHidden({timeout: 20_000});
+}
+
+/**
+ * Tick or untick one file in an Edit window's "Files To Be Reviewed" grid,
+ * and return once the window has stopped moving. Every change slides the
+ * "No Files Selected" warning, which sits above the grid, in or out over
+ * 250 ms (a jQuery animation the harness does not stop), and the grid
+ * itself lands after the form: a press while a box is still to move, or
+ * moving, loses its button-up and the box keeps its state ("Clicking the
+ * checkbox did not change its state", the box left focused; U27 S6, U28 S4,
+ * `.reports/flake-0930/u27s6/diagnosis.md`). So the press waits for the
+ * window to settle, and so does the next read or press after it.
+ *
+ * @param {import('@playwright/test').Locator} editModal from openEditReview
+ * @param {string} fileName the listed file name
+ * @param {boolean} checked the state wanted
+ */
+async function setEditReviewFile(editModal, fileName, checked) {
+    const page = editModal.page();
+    await waitForLegacyFormSettled(page, editModal);
+    await editReviewFileBox(editModal, fileName).setChecked(checked);
+    await waitForLegacyFormSettled(page, editModal);
 }
 
 /** Local-time ISO date (yyyy-mm-dd) — toISOString() would shift timezones. */
@@ -799,6 +835,8 @@ async function openThankReviewer(page, row) {
  * review due date is earlier than the response due date (screen notes pA).
  */
 async function saveEditReview(editModal) {
+    // A ticked or unticked file box slides the "No Files Selected" warning.
+    await waitForLegacyFormSettled(editModal.page(), editModal);
     await editModal.getByRole('button', {name: 'OK', exact: true}).click();
     await expect(editModal.getByText('Review Type')).toBeHidden({timeout: 20_000});
 }
@@ -919,6 +957,8 @@ module.exports = {
     addReviewerFromList,
     openEditReview,
     grantFileToReviewer,
+    editReviewFileBox,
+    setEditReviewFile,
     isoDate,
     daysFromNow,
     pickDate,

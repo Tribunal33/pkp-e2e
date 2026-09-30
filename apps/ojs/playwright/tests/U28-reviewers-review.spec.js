@@ -46,6 +46,7 @@ const {
     statusTitle,
     openEditReview,
     saveEditReview,
+    setEditReviewFile,
     pickDate,
     openActivityLog,
     closeSideWindow,
@@ -164,7 +165,7 @@ async function grantFilesToReviewer(page, workflow, reviewerText, fileNames) {
     await expect(row).toBeVisible({timeout: 30_000});
     const editModal = await openEditReview(page, row);
     for (const name of fileNames) {
-        await editModal.getByRole('row').filter({hasText: name}).getByRole('checkbox').check();
+        await setEditReviewFile(page, editModal, name, true);
     }
     await saveEditReview(page, editModal);
 }

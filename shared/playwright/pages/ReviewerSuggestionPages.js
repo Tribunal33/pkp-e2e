@@ -32,6 +32,7 @@
  * DOM shapes from the U31 claim-check snapshots (.reports/U31/cc*, 2026-09-06).
  */
 const {expect} = require('@playwright/test');
+const {waitForLegacyFormSettled} = require('../support/legacy.js');
 
 /** Escape a string for use inside a RegExp. */
 function escapeRegExp(text) {
@@ -307,10 +308,76 @@ exports.ReviewerSuggestionWindow = class ReviewerSuggestionWindow {
 
 exports.SUGGESTED_PANEL_HEADING = 'Reviewers Suggested by Author';
 
+/** The panel's list fetch, `GET …/submissions/{id}/reviewers/suggestions[?approved=false]`. */
+const SUGGESTIONS_LIST = /\/submissions\/\d+\/reviewers\/suggestions(\?|$)/;
+
+/**
+ * Follow the panel's list fetches on a page (once per page): which are out,
+ * and whether one has answered since the page last loaded.
+ *
+ * @param {import('@playwright/test').Page} page
+ */
+function trackSuggestionFetches(page) {
+    if (!page.__suggestionFetches) {
+        const state = {load: 0, answeredLoad: -1, pending: new Map()};
+        const isList = (request) => request.method() === 'GET' && SUGGESTIONS_LIST.test(request.url());
+        const done = (request) => {
+            if (state.pending.has(request)) {
+                const load = state.pending.get(request);
+                state.pending.delete(request);
+                if (load === state.load) {
+                    state.answeredLoad = load;
+                }
+            }
+        };
+        page.on('request', (request) => {
+            // A new document (not a same-document URL change) starts a new load.
+            // The old document's fetches are dropped: one cut off by the
+            // navigation does not always report back.
+            if (request.isNavigationRequest() && request.frame() === page.mainFrame()) {
+                state.load++;
+                state.pending.clear();
+            } else if (isList(request)) {
+                state.pending.set(request, state.load);
+            }
+        });
+        page.on('requestfinished', done);
+        page.on('requestfailed', (request) => state.pending.delete(request));
+        page.__suggestionFetches = state;
+    }
+    return page.__suggestionFetches;
+}
+
 exports.SuggestedReviewersPanel = class SuggestedReviewersPanel {
-    /** @param {import('@playwright/test').Page} page */
+    /**
+     * Build it before the page lands on the workflow: it follows the panel's
+     * list fetch from then on.
+     *
+     * @param {import('@playwright/test').Page} page
+     */
     constructor(page) {
         this.page = page;
+        this.fetches = trackSuggestionFetches(page);
+    }
+
+    /**
+     * The editorial view's panel renders only once its list fetch has
+     * answered, and only when the list is not empty
+     * (`ReviewerSuggestionManager.vue` `v-if`), so a read of it right after a
+     * landing waits for that answer first: under load it can take longer
+     * than a plain read's 10 s, and an absence read taken before it proves
+     * nothing. Call it right after a landing on an editorial view of a
+     * journal or press with the setting on; the author's view, a stage
+     * without the panel (OMP's internal review) and a context with the
+     * setting off make no such fetch.
+     */
+    async loaded() {
+        await expect
+            .poll(() => this.fetches.answeredLoad === this.fetches.load && this.fetches.pending.size === 0, {
+                timeout: 30_000,
+                message: 'the "Reviewers Suggested by Author" list fetch answers',
+            })
+            .toBe(true);
     }
 
     /**
@@ -391,7 +458,8 @@ exports.ReviewerRequestWindow = class ReviewerRequestWindow {
      * AJAX after the dialog opens, and every message editor it carries must
      * be initialized before anything is typed or submitted: patterns.md).
      * Pass `{form: false}` for the outer list window, whose "Add Reviewer"
-     * appears only once a reviewer is selected.
+     * appears only once a reviewer is selected. With the form, it also waits
+     * for the form to stop moving (`settled()`), so a later press lands.
      */
     async expectOpen({form = true} = {}) {
         await expect(this.dialog()).toBeVisible({timeout: 30_000});
@@ -399,6 +467,21 @@ exports.ReviewerRequestWindow = class ReviewerRequestWindow {
             await expect(this.addReviewerButton()).toBeVisible({timeout: 30_000});
         }
         await exports.waitForRequestEditors(this.page);
+        if (form) {
+            await this.settled();
+        }
+    }
+
+    /**
+     * The form's footer loads its "Files To Be Reviewed" grid by AJAX once
+     * the form's handler binds, above "Add Reviewer" and "Cancel", and
+     * slides the "No Files Selected" warning in over 250 ms when it lands:
+     * both push the buttons down, and a press whose button-up comes after
+     * the push is lost without a sound (no request, the button only
+     * focused). Wait until the window has stopped moving.
+     */
+    async settled() {
+        await waitForLegacyFormSettled(this.page, this.dialog());
     }
 
     /** The mode readouts. */
@@ -489,6 +572,7 @@ exports.ReviewerRequestWindow = class ReviewerRequestWindow {
 
     /** Press "Add Reviewer" and wait for the grid's answer (the window's fate is the caller's to read). */
     async submit() {
+        await this.settled();
         const answered = this.armSubmit();
         await this.addReviewerButton().click();
         return answered;
@@ -508,6 +592,7 @@ exports.ReviewerRequestWindow = class ReviewerRequestWindow {
      * stacked inner one is gone, so a visibility wait on it never ends).
      */
     async cancel() {
+        await this.settled();
         const before = await exports.ReviewerRequestWindow.all(this.page).count();
         await this.cancelControl().click();
         await expect(exports.ReviewerRequestWindow.all(this.page)).toHaveCount(Math.max(0, before - 1), {

@@ -53,7 +53,7 @@ const {SuggestedReviewersPanel, SUGGESTED_PANEL_HEADING} =
     require('../../../../shared/playwright/pages/ReviewerSuggestionPages.js');
 const {LoginPage} = require('../../../../shared/playwright/pages/LoginPage.js');
 const {getPassword} = require('../../../../shared/playwright/data/users.js');
-const {waitForJQueryIdle} = require('../support/legacy.js');
+const {waitForJQueryIdle, waitForLegacyFormSettled} = require('../support/legacy.js');
 const {waitForEditorReady, editorIdOf} = require('../../../../shared/playwright/support/richtext.js');
 
 /** Default upload fixture (app-local). */
@@ -867,6 +867,8 @@ exports.addReviewer = async function addReviewer(page, name, {method} = {}) {
     if (method) {
         await modal.getByRole('radio', {name: method, exact: true}).check();
     }
+    // The footer's file grid and its warning move the button until settled.
+    await waitForLegacyFormSettled(page, modal);
     await modal.getByRole('button', {name: 'Add Reviewer', exact: true}).click();
     await expect(modal).toHaveCount(0, {timeout: 30_000});
     await waitForJQueryIdle(page);
@@ -1154,6 +1156,9 @@ exports.selectReviewer = async function selectReviewer(page, modal, name, {actio
     }).toPass({timeout: 30_000});
     await expect(modal.locator('[id^="selectedReviewerName"]')).toHaveText(name);
     await waitForJQueryIdle(page);
+    // The request form's footer (its "Files To Be Reviewed" grid, the "No
+    // Files Selected" warning) has stopped moving the "Add Reviewer" button.
+    await waitForLegacyFormSettled(page, modal);
 };
 
 /**
@@ -1311,6 +1316,8 @@ exports.openEditReview = async function openEditReview(page, row) {
     await expect(modal.locator('input[name="isReviewPubliclyVisible"]')).toBeVisible({
         timeout: 30_000,
     });
+    // Its "Files To Be Reviewed" grid lands above "OK" after the form.
+    await waitForLegacyFormSettled(page, modal);
     return modal;
 };
 
@@ -1323,6 +1330,8 @@ exports.openEditReview = async function openEditReview(page, row) {
  * @param {import('@playwright/test').Locator} modal from openEditReview
  */
 exports.saveEditReview = async function saveEditReview(page, modal) {
+    // A ticked or unticked file box slides the "No Files Selected" warning.
+    await waitForLegacyFormSettled(page, modal);
     await modal.getByRole('button', {name: 'OK', exact: true}).click();
     await expect(modal.locator('form#editReviewForm')).toBeHidden({timeout: 30_000});
     await waitForJQueryIdle(page);
@@ -1336,6 +1345,28 @@ exports.saveEditReview = async function saveEditReview(page, modal) {
  */
 exports.editReviewFileCheckbox = function editReviewFileCheckbox(modal, name) {
     return modal.getByRole('row').filter({hasText: name}).locator('input[name="selectedFiles[]"]');
+};
+
+/**
+ * Tick or untick one file in the Edit Review window's "Files To Be
+ * Reviewed" grid, and return once the window has stopped moving. Every
+ * change slides the "No Files Selected" warning, which sits above the grid,
+ * in or out over 250 ms (a jQuery animation the harness does not stop), and
+ * the grid itself lands after the form: a press while a box is still to
+ * move, or moving, loses its button-up and the box keeps its state
+ * ("Clicking the checkbox did not change its state", the box left focused;
+ * U27 S6, `.reports/flake-0930/u27s6/diagnosis.md`). So the press waits for
+ * the window to settle, and so does the next read or press after it.
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {import('@playwright/test').Locator} modal from openEditReview
+ * @param {string} name the listed file name
+ * @param {boolean} checked the state wanted
+ */
+exports.setEditReviewFile = async function setEditReviewFile(page, modal, name, checked) {
+    await waitForLegacyFormSettled(page, modal);
+    await exports.editReviewFileCheckbox(modal, name).setChecked(checked);
+    await waitForLegacyFormSettled(page, modal);
 };
 
 /**
@@ -1708,3 +1739,4 @@ exports.reviewItemBlock = function reviewItemBlock(modal, question) {
 };
 
 module.exports.waitForJQueryIdle = waitForJQueryIdle;
+module.exports.waitForLegacyFormSettled = waitForLegacyFormSettled;

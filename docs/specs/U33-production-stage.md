@@ -114,14 +114,14 @@ the forms they open belong to the features Purpose names. <sup>q</sup>
    <sup>h</sup> <sup>t2</sup>
 <a id="notices"></a>
 3. **The notice box.** Above the file list, the box is a framed notice
-   with a heading and one paragraph. What it says differs by application:
+   with a heading, "Notification" on a journal, and one paragraph. What
+   it says differs by application:
    <sup>d</sup> <sup>f</sup>
    - 3a. **{OJS} "Assign a user to create galleys using the Assign link in
-     the Participants list."** under the heading "Notification", for an
-     assigned editor (Actors), while no discussion exists on this stage and
-     the newest version has no galley. The notice is the editor's own: a
-     Journal Manager who is not assigned to the submission sees the panels
-     with no notice.
+     the Participants list."** for an assigned editor (Actors), while no
+     discussion exists on this stage and the newest version has no galley.
+     The notice is the editor's own: a Journal Manager who is not assigned
+     to the submission sees the panels with no notice.
    - 3b. **{OJS} "Awaiting Galleys."** once a discussion exists on this
      stage (the "Assign" form's message opens one, whichever predefined
      message was chosen) and the newest version still has no galley. The
@@ -142,14 +142,18 @@ the forms they open belong to the features Purpose names. <sup>q</sup>
    - 3d. **{OMP} "Awaiting approval."** with the paragraph "The monograph
      will not be listed in the catalog until it has been published. To add
      this book to the catalog, click on the Publication tab.", shown to
-     every role that opens the Production entry, the Author included, from
-     the monograph's submission until it is first published; from then on
+     every role (Actors) from the monograph's arrival at Production until
+     it is first published, never before (Rules 7b, 12); from then on
      the box reads "Catalog Management" with "The monograph has been
      approved. Please visit Marketing and Publication to manage its catalog
      details, using the links just above.", and it stays so after
      "Unpublish", although the monograph is back at Production
      ⚠ [OMP2](#omp2). A press has no galley notices [OMP1](#omp1).
-     <sup>t3</sup>
+     With the interface in French the heading reads "En attente
+     d'approbation." or "Gestion du catalogue", but the paragraph under it
+     is a raw code, the text's internal name between hash signs, such as
+     "##notification.type.visitCatalog##" ⚠ [OMP3](#omp3).
+     <sup>t3</sup> <sup>[f-omp3](#fn-omp3)</sup>
    - 3e. **{OPS} No notice box ever** [OPS1](#ops1).
 <a id="production-ready-files"></a>
 4. **"Production Ready Files".** The list holds the files the Layout Editor
@@ -431,6 +435,9 @@ the forms they open belong to the features Purpose names. <sup>q</sup>
   boxes (Settings). <sup>q</sup>
 - **Catalog management**: the "Marketing and Publication" pages a press's
   "Catalog Management" notice points at (Rule 3d). <sup>q</sup>
+- **[Languages & locales](U57-languages-and-locales.md#a4)**: why a text
+  the French translation lacks shows as a raw code (Rule 3d, OMP3).
+  <sup>q</sup>
 
 ## Canonical scenarios
 
@@ -748,6 +755,10 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the press's notice box in French: the heading "En attente
+    d'approbation." on a monograph never published, "Gestion du
+    catalogue" once it is published (Rule 3d)
 - **Rarely met**:
   - a second "Send To Production" bringing the earlier production ready files back beside the newly ticked ones (Rule 7b): sending a submission to production twice is not an ordinary week's action; scenario 4 stops at the hidden "Production" entry
   - "Stage Assignment" changed on the Roles screen, Production ticked for Copyeditor and unticked again (Settings bullet 1): a manager changes a role's stages rarely, not in an ordinary week
@@ -760,6 +771,7 @@ Left out of the scenarios above, by reason:
   - a preprint server's single-stage workflow (Settings bullet 4): the workflow menu scenario 8 reads
 - **Register carries it**:
   - OMP2 (the press's notice still "Catalog Management" after "Unpublish"; Rule 3d)
+  - OMP3 (the press's notice paragraph a raw code in French; Rule 3d)
   - OJS2 (a published article with no galley still showing the galley notice; Rule 3c; scenario 1 marks it)
   - OJS1 (a discussion opened from the panel with no Layout Editor assigned flipping the notice to "Awaiting Galleys."; Rule 3b; scenario 3 marks the assignment half)
   - OPS3 ("Post the preprint" still offered while the preprint stands declined; Rule 6; scenario 9 marks it)
@@ -784,13 +796,14 @@ Left out of the scenarios above, by reason:
 
 ## Findings register
 
-Verdicts are the author's judgment (claude, 2026-09-19), unreviewed unless an
+Verdicts are the author's judgment (claude, 2026-09-19 and 2026-09-30), unreviewed unless an
 entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [OPS2](#ops2) | "Revert Decline" on a preprint says the submission is "now active in the submission stage", a stage the server has not got | 🐞 | minor | — |
 | [OMP2](#omp2) | "Unpublish" leaves a press's Production entry at "Catalog Management", telling everyone the monograph has been approved | 🐞 | minor | — |
+| [OMP3](#omp3) | In French the press's Production notice keeps its French heading, but its paragraph is a raw code | 🐞 | minor | — |
 | [A1](#a1) | A recommend-only editor is offered "Upload", "Schedule For Publication" and "Assign" on Production, and no decision or recommendation | ❓ | minor | — |
 | [A2](#a2) | The "You have been asked to review layouts" task is never cleared, not by "Galleys Complete" | ❓ | minor | — |
 | [A3](#a3) | "Move To Copyediting" raises no "Assign a copyeditor…" notice on the Copyediting stage it returns to | ❓ | minor | — |
@@ -900,8 +913,8 @@ A journal's Production entry carries per-editor galley notices ("Assign a
 user to create galleys…", "Awaiting Galleys."). A press carries none of
 them: instead every role that opens the entry, the Author included, reads
 "Awaiting approval." with "The monograph will not be listed in the catalog
-until it has been published…" from the monograph's submission until it is
-published, and "Catalog Management" with "The monograph has been
+until it has been published…" from the monograph's arrival at Production
+until published, and "Catalog Management" with "The monograph has been
 approved…" after. Intended: the press's notice family is about the
 catalog, not the galleys, and its publication formats belong to
 *Publication formats & proof terms* {OMP}.
@@ -917,6 +930,35 @@ monograph has been approved. Please visit Marketing and Publication to
 manage its catalog details, using the links just above." for every role,
 the Author included, and a second publish leaves it there.
 Basis: probe. <sup>[f-omp2](#fn-omp2)</sup>
+
+<a id="omp3"></a>
+**OMP3 — In French the press's Production notice is a heading over a raw code** · 🐞 · minor.
+With the interface in French (Canada), the notice box of Rule 3d keeps
+its French heading, but the paragraph under it is a raw code, the text's
+internal name between hash signs:
+- on a monograph never published, "En attente d'approbation." above
+  "##notification.type.formatNeedsApprovedSubmission##" (English "The
+  monograph will not be listed in the catalog until it has been
+  published. To add this book to the catalog, click on the Publication
+  tab.");
+- once it is published, "Gestion du catalogue" above
+  "##notification.type.visitCatalog##" (English "The monograph has been
+  approved. Please visit Marketing and Publication to manage its catalog
+  details, using the links just above.").
+
+Every role that sees the box reads it so, the Author included, and after
+"Unpublish" the box still reads "Gestion du catalogue" with the code, as
+[OMP2](#omp2) says it does in English. A French-speaking editor or author
+learns the monograph's state but not what to do about it. A journal's
+galley notice reads French ("Assigner un-e utilisateur-trice à la
+création des épreuves en utilisant le lien « Assigner » dans la liste
+des participants."). The workflow screen's own codes around the box are
+[Workflow screen & stage access, its A11](U24-workflow-screen-and-stage-access.md#a11),
+and why a missing French text shows as a code at all is
+[Languages & locales, its A4](U57-languages-and-locales.md#a4).
+Expected: a French paragraph under the French heading; the English
+screen shows no code.
+Basis: probe. <sup>[f-omp3](#fn-omp3)</sup>
 
 ### OPS
 
@@ -1094,6 +1136,33 @@ the `t` notes hold the drives of the draft's open questions.
 
 <a id="fn-omp2"></a>
 **f-omp2** — Note f: `PKPApproveSubmissionNotificationManager::updateNotification()` is meant to delete `NOTIFICATION_TYPE_VISIT_CATALOG` and recreate `FORMAT_NEEDS_APPROVED_SUBMISSION` when the current publication has no `datePublished`, and `omp/classes/publication/Repository.php` calls it on unpublish. Live-probed 2026-09-19 on OMP, two monographs (one published on screen, one by seed), one run each: after "Unpublish" (`POST …/publications/{id}/unpublish` 200) the assigned Series editor, the unassigned Press Manager and the author read "Catalog Management" / "The monograph has been approved. …" on the entry, five seconds later too, with the header back at "Production" and "Schedule For Publication" and "Move To Copyediting" offered; a second "Publish" left it at "Catalog Management". Why the unpublish path leaves the row was not traced.
+
+<a id="fn-omp3"></a>
+**f-omp3** — Note f. OMP `locale/fr_CA/locale.po` (omp checkout
+`3b0ecf794`, lib/pkp `3dc90c81a6`) translates the two titles,
+`notification.type.approveSubmissionTitle` "En attente d'approbation."
+and `notification.type.visitCatalogTitle` "Gestion du catalogue", and
+leaves `notification.type.formatNeedsApprovedSubmission` and
+`notification.type.visitCatalog` empty (`msgstr ""`). Live-probed
+2026-09-30 (U24's French claim check, chunk I30 FRb), two runs, each on
+a scratch press, journal and preprint server with English and French
+(Canada) as interface languages, every French read paired with the same
+read in English. On the press: the manager, the assigned Series editor
+and the Author on a monograph at Production never published, the manager
+and the Author on two published monographs (one of them sent to
+Production and published by the seed); every French read showed the
+heading and the code above, every English read Rule 3d's text. The
+second monograph unpublished in French (the window "Dépublier /
+Êtes-vous certain-e de ne pas vouloir que cela soit publié ? / Dépublier
+/ Annuler", confirmed) was back at Production and still read "Gestion du
+catalogue" with the code for the manager and the Author, on the same
+page and after a reload, and "Catalog Management" in English (OMP2).
+Controls: on the journal the assigned Section Editor read "Avis" with
+the French galley notice, the unassigned manager and the Author no box
+(Rule 3a); on the preprint server no box for anyone (Rule 3e). No
+response of 500 or more and no script error. Evidence:
+`.reports/U24/ccI30frb/prod-*`, kept script
+`shared/playwright/checks/U24/I30/frb.js`.
 
 <a id="fn-ops1"></a>
 **f-ops1** — Notes a, d and m: `workflowConfigEditorialOPS.js` mounts no `FileManager` at Production and `WorkflowNotificationDisplay.vue` returns `null` options on OPS; `PublicationConfig.galleys` mounts `GalleyManager`. Live-probed 2026-09-19 (notes m, t15): the entry with one table, "Production Tasks & Discussions", "Participants", no notice heading, for the manager and the assigned Moderator; the "Galleys" page under "Preprint" offering "Add galley"; the journal and press entries with "Production Ready Files" beside the discussions as the control.

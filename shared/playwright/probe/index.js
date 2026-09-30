@@ -209,6 +209,16 @@ const runs = new Map(); // app name → record
 const locatorRows = [];
 let locatorsFlushed = 0; // how many of locatorRows are already in locators.md
 const CONSOLE_CAP = 200;
+// A console error that opens with a JavaScript error's name: a script
+// failure caught and logged (Vue's error handler), not a message.
+const JS_ERROR = /^(?:Uncaught (?:\(in promise\) )?)?(?:TypeError|ReferenceError|RangeError|SyntaxError|URIError|EvalError|AggregateError)\b/;
+const consoleTallies = new WeakMap(); // run record → {types: {type: n}, lines: Map(warning line → n)}
+function consoleTally(record) {
+    if (!consoleTallies.has(record)) {
+        consoleTallies.set(record, {types: {}, lines: new Map()});
+    }
+    return consoleTallies.get(record);
+}
 
 function runRecord(app) {
     if (!runs.has(app.name)) {
@@ -225,8 +235,10 @@ function runRecord(app) {
             // before a settled screen() can read them.
             notices: [],
             warnings: [],
-            // Every response of 500 or more and every uncaught page error:
-            // the app failing, a finding on its own (GLOSSARY "crash").
+            // Every response of 500 or more, every uncaught page error and
+            // every console error naming a JavaScript error (`caught: true`,
+            // one Vue's error handler logged): the app failing, a finding
+            // on its own (GLOSSARY "crash").
             crashes: [],
         });
     }
@@ -399,8 +411,9 @@ function watchNotices() {
  * A headless Chromium at 1280×900 with animations off, baseURL on the probe
  * server, and a response listener that records URL, method, status and size
  * (never a body) for `/api/` calls and every status ≥ 400 into the run
- * record. A status ≥ 500 and an uncaught page error also go into the
- * record's `crashes` list (kind `server` | `script`), counted on the
+ * record. A status ≥ 500, an uncaught page error and a console error
+ * opening with a JavaScript error's name (a failure Vue caught and logged)
+ * also go into the record's `crashes` list (kind `server` | `script`), counted on the
  * console when the process ends; every page notice goes into its
  * `notices` as it appears (screen() returns the page's new ones).
  * Returns {browser, context, page, close}; a browser still open when
@@ -474,17 +487,41 @@ async function launch(app, {storageState, headless = true, record: keepRecord = 
     context.on('page', trackTraffic); // idle() waits out a press's requests
     const page = await context.newPage();
     // Console errors and warnings and uncaught page errors go into the run
-    // record (capped); a script that needs every level attaches its own.
+    // record, each type under its own cap, and a warning whose first line
+    // is already kept three times is only counted (`consoleRepeats`):
+    // TinyMCE's "fire" deprecation warning, logged at every editor mount,
+    // filled one shared cap within a minute and hid every later error (U29
+    // I30). A script that needs every level attaches its own listener.
     const logConsole = (type, text, url) => {
-        if (record.console.length >= CONSOLE_CAP) {
+        const tally = consoleTally(record);
+        if (type === 'warning') {
+            const line = String(text).split('\n')[0].slice(0, 200);
+            const seen = (tally.lines.get(line) || 0) + 1;
+            tally.lines.set(line, seen);
+            if (seen > 3) {
+                record.consoleRepeats = record.consoleRepeats || {};
+                record.consoleRepeats[line] = seen - 3;
+                return;
+            }
+        }
+        if ((tally.types[type] || 0) >= CONSOLE_CAP) {
             return;
         }
+        tally.types[type] = (tally.types[type] || 0) + 1;
         record.console.push({at: new Date().toISOString(), type, text: String(text).slice(0, 300), url});
     };
     if (keepRecord) page.on('console', (message) => {
         const type = message.type();
         if (type === 'error' || type === 'warning') {
-            logConsole(type, message.text(), (message.location() || {}).url || page.url());
+            const text = message.text();
+            logConsole(type, text, (message.location() || {}).url || page.url());
+            // Vue's error handler catches a component's script failure and
+            // logs it as a console error ("TypeError: …") instead of
+            // throwing, so no pageerror fires: it is a crash all the same
+            // (U28 I30, the OPS home-made reviewer list).
+            if (type === 'error' && JS_ERROR.test(text) && record.crashes.length < CONSOLE_CAP) {
+                record.crashes.push({at: new Date().toISOString(), kind: 'script', caught: true, text: String(text).split('\n')[0].slice(0, 300), url: page.url()});
+            }
         }
     });
     if (keepRecord) page.on('pageerror', (error) => {

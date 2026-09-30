@@ -411,7 +411,8 @@ test.describe('Internal Review stage (U71)', () => {
         await expect(pe.stage.panelRows('Files for Review')).toHaveCount(1, {timeout: 30_000});
         expect(await pe.stage.fileNumber('Files for Review', revFile)).toBe(externalNos[0]);
         await expect(pe.stage.panelRow('Files for Review', reviewFile)).toHaveCount(0);
-        await expect(pe.stage.panelRow('Files for Review', internalReviewNo)).toHaveCount(0);
+        await expect(pe.stage.panelRowNumbered('Files for Review', externalNos[0])).toHaveCount(1);
+        await expect(pe.stage.panelRowNumbered('Files for Review', internalReviewNo)).toHaveCount(0);
         await pe.stage.expectPanelEmpty('Revisions Uploaded');
     });
 

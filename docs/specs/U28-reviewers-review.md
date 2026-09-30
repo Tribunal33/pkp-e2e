@@ -31,10 +31,11 @@ preprint server. The list's address typed by any installed role shows the
 access-denied page; the wizard's address shows a bare "404 Not Found" page
 for every account (scenario 17). A Preprint Server Manager can still create
 a role at the "Reviewer" permission level, though the server has no
-review stage to give it, and invite a user to it; that user then sees a
-"My Assignments as Reviewer" group whose page stays on "Loading" under
-the heading "undefined (0)"
-⚠ [OPS1](#ops1). <sup>p</sup>
+review stage to give it, and invite a user to it. That user's sidebar
+then shows a "My Assignments as Reviewer" heading with no entries under
+it, and after signing in they land on the list's page, which is headed
+"undefined (0)", lists nothing, and opens an "Error" window over the
+empty table ⚠ [OPS1](#ops1). <sup>p</sup>
 
 On a press the wizard runs on both review stages. An Internal Reviewer's
 wizard shows the press's "Internal Review Guidelines" and an External
@@ -936,13 +937,16 @@ App-specific:
       among the installed roles (a journal lists "Reviewer", a press
       "Internal Reviewer" and "External Reviewer"); its "Create New Role"
       window still offers the "Reviewer" permission level, and choosing it
-      greys out "Production" under "Stage Assignment", while the role still
-      saves.
-    - **A home-made reviewer role**: a user holding such a role signs in:
-      the sidebar shows "My Assignments as Reviewer", the list's address
-      opens a page headed "undefined (0)" whose table stays on "Loading"
-      over "Showing 0 to 0 of 0", and the wizard's address still shows the
-      bare "404 Not Found" page ⚠ [OPS1](#ops1).
+      hides the "Stage Assignment" list with its "Production" box, while
+      the role still saves.
+    - **A home-made reviewer role**: a user holding such a role, alone or
+      beside Author, signs in on the server's login page and lands on the
+      list's page: the sidebar shows a "My Assignments as Reviewer" heading
+      with no entries under it, the page is headed "undefined (0)", its
+      table reads "No Items" over "Showing 0 to 0 of 0", and an "Error"
+      window reads "The current role does not have access to this
+      operation." with "OK". The wizard's address still shows the bare
+      "404 Not Found" page ⚠ [OPS1](#ops1).
     - **Control**: the "Editor Dashboard" group and its list open
       normally. <sup>p</sup>
 
@@ -975,6 +979,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the "Supporting Agencies" row in the "View All Submission Details" window: shown on a review type that discloses the authors, absent on an anonymous one (Rule 7): likely a bullet in scenario 9, which opens the window on an "Open" review
+  - {OPS} "Reviewer" chosen in "Create New Role" hiding the whole "Stage Assignment" list, not only greying out its "Production" box (scenario 17, "Roles")
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1001,7 +1006,7 @@ Left out of the scenarios above, by reason:
   - A16 (a refused review-form submit marking the unanswered questions on one form and none on another; Fields step 3)
   - OMP2 (the press's review-complete email saying "recommends None"; Side effects)
   - OMP3 (the press's review-form refusal opening with a raw key; Fields)
-  - OPS1 (a home-made reviewer role's list headed "undefined (0)" and stuck on "Loading"; Purpose)
+  - OPS1 (a home-made reviewer role landing on a page headed "undefined (0)" that lists nothing under an "Error" window; Purpose, scenario 17)
 - **No seed**:
   - "Attachments" in the "Read Round {N} Review" window, for an earlier round whose review carried a reviewer file (Rule 14)
   - {OJS} a journal's own reviewer recommendations lengthening step 3's "Recommendation" list (Fields, Settings)
@@ -1036,7 +1041,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a review form's answers are guarded | 🐞 | minor | — |
 | [OMP2](#omp2) | {OMP} The review-complete email tells editors the reviewer "recommends None" | 🐞 | minor | — |
 | [OMP3](#omp3) | {OMP} A review form's "required fields" refusal opens with a raw locale key | 🐞 | minor | — |
-| [OPS1](#ops1) | {OPS} A home-made reviewer role opens a "My Assignments as Reviewer" list that never loads | 🐞 | minor | — |
+| [OPS1](#ops1) | {OPS} A home-made reviewer role opens a "My Assignments as Reviewer" page headed "undefined (0)" under an "Error" window | 🐞 | minor · crash: script | claim check (claude), 2026-09-30 — "Loading" corrected to "No Items" under an "Error" window; the landing after sign-in and the page's console "TypeError" added |
 | [A3](#a3) | Declining a request sends the reviewer to the journal's public home page instead of their assignments | ❓ | minor | — |
 | [A11](#a11) | An assignment left behind under "Archived" still opens a wizard that takes and submits a full review | ❓ | minor | — |
 | [A13](#a13) | The "Read Round {N} Review" window never lists the files that were sent for review | ❓ | minor | — |
@@ -1267,14 +1272,21 @@ Basis: probe (2026-09-04). <sup>[f-omp3](#fn-omp3)</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — A home-made reviewer role on a preprint server opens a list that never loads** · 🐞 · minor.
+**OPS1 — A home-made reviewer role opens a "My Assignments as Reviewer" page headed "undefined (0)" under an "Error" window** · 🐞 · minor · crash: script.
 A Preprint Server Manager can create a role at the "Reviewer" permission
-level and invite a user to it. That user's sidebar then shows "My
-Assignments as Reviewer", and the list's address opens a page headed
-"undefined (0)" whose table stays on "Loading" over "Showing 0 to 0 of 0";
-nothing ever lists, and the wizard's address is still a bare "404 Not
-Found" page. Reached only through a role the install never creates.
-Basis: probe (2026-09-05). <sup>[f-ops1](#fn-ops1)</sup>
+level and invite a user to it. Whether that user holds the role alone or
+beside Author, signing in on the server's login page lands them on a
+page headed "undefined (0)". Its table reads "No Items" over "Showing 0
+to 0 of 0", under an "Error" window "The current role does not have
+access to this operation.", and every load logs a "TypeError" in the
+browser's console. "OK" leaves the empty page, and "Filters" › "Apply Filters" opens
+the window again. The sidebar's "My Assignments as Reviewer" heading has
+no entries and pressing it opens nothing; the wizard's address stays a
+bare "404 Not Found" page. A journal or press shows the
+same account an empty "Action Required by me (0)" list with no window.
+An Author still reaches their own submissions under "My Submissions as
+Author". Reached only through a role the install never creates.
+Basis: probe (2026-09-05, 2026-09-30). <sup>[f-ops1](#fn-ops1)</sup>
 
 ### Retired
 
@@ -1990,18 +2002,24 @@ installer's `admin`, an Editorial Board Member and a Reader; "Create New
 Role" lists the permission levels "Manager", "Moderator", "Assistant",
 "Author", "Reviewer", "Reader" (OJS and OMP offer "Reviewer" there too,
 the level of their installed reviewer groups), choosing "Reviewer"
-disables the one "Production" checkbox with the hint "You need to define a
-stage to assign to." and "OK" saved "Scratch Reviewer" · "Reviewer" as a
+hides the whole "Stage Assignment" block (`#userGroupStageContainer`,
+read settled 1.5 s after the choice, re-driven 2026-09-30 in three runs):
+its "Production" box is disabled and unticked and the hint "You need to
+define a stage to assign to." sits in the page, both hidden, while at
+"Manager", the level the window opens on, the block shows with
+"Production" greyed; "OK" saved "Scratch Reviewer" · "Reviewer" as a
 sixth row; Users › More Actions › "Edit" opened "Invite user to take a
 role" offering it, and the invitation's "Accept And Continue to OPS"
-showed no confirmation yet the role was held on the next sign-in (the
-revisited link reads "Invitation Unavailable"). That account's sidebar
-held "My Assignments as Reviewer" (href `#`, no views under it) and "My
-Submissions as Author"; `dashboard/reviewAssignments` answered HTTP 200
-with the heading "undefined (0)", the columns "ID Sort", "Submissions",
-"Editorial Activity", "Actions", one "Loading" row and "Showing 0 to 0 of
-0", its data request `GET api/v1/_submissions?…` answering 401 (OJS and
-OMP fetch `_submissions/reviewerAssignments` for this list); `dashboard/
+opens the dialog "You've been assigned a new role in OPS" ("View All
+Submissions") and the role is held on the next sign-in (the revisited
+link reads "Invitation Unavailable"; re-driven 2026-09-30). That account's
+sidebar held "My Assignments as Reviewer" (href `#`, no views under it)
+and "My Submissions as Author"; `dashboard/reviewAssignments` answered
+HTTP 200 with the heading "undefined (0)", the columns "ID Sort",
+"Submissions", "Editorial Activity", "Actions", "No Items" under an
+"Error" window (re-driven 2026-09-30, f-ops1) and "Showing 0 to 0 of 0",
+its data request `GET api/v1/_submissions?…` answering 401 (OJS and OMP
+fetch `_submissions/reviewerAssignments` for this list); `dashboard/
 editorial` sent it to the access-denied page and `reviewer/submission/2`
 stayed the bare 404. Live 2026-09-12 (the suite's run on the seeded
 server, scenario 17): the Roles grid carried a second stage column,
@@ -2010,10 +2028,11 @@ disabled and a "Done" box left enabled; Done joined every app's stage
 list on 2026-09-08 (pkp/pkp-lib#13109, ops `a72cacc1c5` / pkp-lib
 `b48c22ca06`; [→ Done](U24-workflow-screen-and-stage-access.md#done)) and
 the Roles screen was written for its absence, which upstream was fixing in
-pkp/pkp-lib#13312 (open that day). The scenario therefore reads "Production"
-greyed out and the role saved and does not count the stages; once the fix
+pkp/pkp-lib#13312 (open that day). The scenario therefore reads the "Production"
+box and the role saved and does not count the stages; once the fix
 lands, the list under "Reviewer" holds "Production" alone and the grid no
-"Done" column. The fix landed 2026-09-12 (pkp/pkp-lib#13312 "Use DONE stage only for auth checks" (lib/pkp `65901c4f7a` + `716419c770`, merge `0356122fdc`; ojs `0dbb274a45` / omp `ce63a5cd8` / ops `97d8a0d2e8`, merged 2026-09-12)): Done is out of
+"Done" column (read settled on 2026-09-30, the list under "Reviewer" is
+hidden altogether, above). The fix landed 2026-09-12 (pkp/pkp-lib#13312 "Use DONE stage only for auth checks" (lib/pkp `65901c4f7a` + `716419c770`, merge `0356122fdc`; ojs `0dbb274a45` / omp `ce63a5cd8` / ops `97d8a0d2e8`, merged 2026-09-12)): Done is out of
 every app's `getApplicationStages()` again and kept in
 `PKPApplication::getValidStages()` for the auth policy alone, so the grid
 (`UserGroupGridHandler`) and the role form's "Stage Assignment" boxes
@@ -2435,9 +2454,35 @@ its dashboard page requests `api/v1/_submissions` for the reviewer view,
 which refuses the role. Live-probed 2026-09-05 on a scratch OPS server:
 "Scratch Reviewer" · "Reviewer" saved with no stage; the invited user,
 after accepting, had the sidebar group, the list page at HTTP 200 with
-the heading "undefined (0)", one "Loading" row and "Showing 0 to 0 of 0",
-its data request answering 401, and the wizard address a bare 404. Not
-security-shaped: the page shows nothing and the request is refused.
+the heading "undefined (0)" and "Showing 0 to 0 of 0", its data request
+answering 401, and the wizard address a bare 404. Live-probed 2026-09-30
+on scratch OPS servers, three runs (kept script
+`shared/playwright/checks/U28/I30/i30.js`), for a seeded Reviewer-level
+role with no stage held alone and beside Author, and for an Author the
+manager invited on screen to a role created on screen: signing in on the
+server's login page, and typing `dashboard` or `submissions`, ends on
+`dashboard/reviewAssignments`; the table reads "No Items" (unchanged 8 s
+later, and after a reload) under the "Error" window "The current role
+does not have access to this operation." with "OK"; `GET
+api/v1/_submissions?offset=0&count=30&page=1&perPage=30` answers 401
+while `_submissions/viewsCount?assignedWithRoles[]=4096` answers 200;
+and each load logs "TypeError: Cannot read properties of undefined
+(reading 'id')" through `console.error` (Vue catches it, so no uncaught
+page error). "OK" closes the window and sends nothing. "Filters" opens its
+window ("Days since last activity", "Clear Filters", "Apply Filters");
+"Apply Filters" refetches, the list request answers 401 again, and the
+"Error" window reopens, with no TypeError on the refetch. The sidebar's
+"My Assignments as Reviewer" is a link to `#` that expands to no entries.
+Beside Author, "My Submissions as Author" and `dashboard/mySubmissions`
+("Active submissions (0)") work; `dashboard/editorial` shows the
+access-denied page. Controls, three runs each: on OJS and OMP the same
+shapes of account, and an installed External Reviewer, land on
+`dashboard/reviewAssignments?currentViewId=reviewer-action-required`,
+"Action Required by me (0)" with "No Items", its request
+`_submissions/reviewerAssignments?actionRequired=true…` answering 200,
+the sidebar listing the six views, "Apply Filters" refetching with 200,
+and no window and no console error. Not security-shaped: the page shows
+nothing and the request is refused.
 
 ## Reference — entry points & surfaces
 

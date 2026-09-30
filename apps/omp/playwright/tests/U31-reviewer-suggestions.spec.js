@@ -500,6 +500,7 @@ test.describe('reviewer-suggestions', () => {
         const panel = new SuggestedReviewersPanel(managerPage);
         await workflow.gotoEditorial(submissionId);
         await workflow.expectStageHeading('Submission');
+        await panel.loaded();
         await expect(panel.heading()).toBeVisible();
         const kayRow = panel.row(fullName(kay));
         await expect(kayRow).toBeVisible();
@@ -604,6 +605,7 @@ test.describe('reviewer-suggestions', () => {
         // Submission stage: all three listed, no action on any row.
         await workflow.gotoEditorial(submissionId, {menuKey: 'workflow_1'});
         await workflow.expectStageHeading('Submission');
+        await panel.loaded();
         await expect(panel.heading()).toBeVisible();
         await expect(panel.rows()).toHaveCount(3);
         for (const person of [kay, lee, nova]) {
@@ -618,6 +620,7 @@ test.describe('reviewer-suggestions', () => {
         // External Review: the same three, each with a "…" menu holding "Add Reviewer".
         await workflow.gotoEditorial(submissionId, {menuKey: key});
         await workflow.expectStageHeading(EXTERNAL_ROUND_1);
+        await panel.loaded();
         await expect(panel.rows()).toHaveCount(3);
         for (const name of names) {
             await expect(panel.moreActionsButton(name)).toBeVisible();
@@ -734,6 +737,7 @@ test.describe('reviewer-suggestions', () => {
         // Submission stage again: still all three, no action on any row.
         await workflow.gotoEditorial(submissionId, {menuKey: 'workflow_1'});
         await workflow.expectStageHeading('Submission');
+        await panel.loaded();
         await expect(panel.rows()).toHaveCount(3);
         for (const name of names) {
             await expect(panel.row(name)).toBeVisible();
@@ -746,6 +750,7 @@ test.describe('reviewer-suggestions', () => {
         // positive control), the Submission stage with no action either.
         await workflow.gotoEditorial(copyediting.submissionId, {menuKey: roundKey(copyediting)});
         await workflow.expectStageHeading(EXTERNAL_ROUND_1);
+        await panel.loaded();
         await expect(panel.heading()).toBeVisible();
         await expect(panel.rows()).toHaveCount(1);
         const kimRow = panel.row(fullName(kim));
@@ -756,6 +761,7 @@ test.describe('reviewer-suggestions', () => {
         await expect(kimRow.getByRole('button')).toHaveCount(0);
         await workflow.gotoEditorial(copyediting.submissionId, {menuKey: 'workflow_1'});
         await workflow.expectStageHeading('Submission');
+        await panel.loaded();
         await expect(panel.rows()).toHaveCount(1);
         await expect(panel.row(fullName(kim))).toBeVisible();
         await expect(panel.row(fullName(kim)).getByRole('button')).toHaveCount(0);
@@ -765,10 +771,12 @@ test.describe('reviewer-suggestions', () => {
         // Control: a monograph with no suggestion shows the panel on neither stage.
         await workflow.gotoEditorial(control.submissionId, {menuKey: 'workflow_1'});
         await workflow.expectStageHeading('Submission');
+        await panel.loaded();
         await expect(workflow.participantsHeading()).toBeVisible();
         await expect(panel.heading()).toHaveCount(0);
         await workflow.gotoEditorial(control.submissionId, {menuKey: roundKey(control)});
         await workflow.expectStageHeading(EXTERNAL_ROUND_1);
+        await panel.loaded();
         await expect(workflow.participantsHeading()).toBeVisible();
         await expect(panel.heading()).toHaveCount(0);
     });
@@ -900,6 +908,7 @@ test.describe('reviewer-suggestions', () => {
         await expect(ReviewerRequestWindow.all(page)).toHaveCount(0);
         await workflow.gotoEditorial(submissionId, {menuKey: key});
         await workflow.expectStageHeading(EXTERNAL_ROUND_1);
+        await panel.loaded();
         for (const person of [kay, pat, nova]) {
             await expect(reviewerRow(reviewers(), fullName(person))).toBeVisible();
         }
@@ -1003,11 +1012,13 @@ test.describe('reviewer-suggestions', () => {
         const managerPanel = new SuggestedReviewersPanel(managerPage);
         await managerWorkflow.gotoEditorial(submissionId, {menuKey: key});
         await managerWorkflow.expectStageHeading(EXTERNAL_ROUND_1);
+        await managerPanel.loaded();
         await expect(reviewerRow(managerWorkflow.dialog(), fullName(kay))).toBeVisible();
         await expect(managerPage.getByRole('dialog', {name: 'Error', exact: true})).toHaveCount(0);
         await expect(managerPanel.row(fullName(kay))).toHaveCount(0);
         await managerWorkflow.gotoEditorial(submissionId, {menuKey: 'workflow_1'});
         await managerWorkflow.expectStageHeading('Submission');
+        await managerPanel.loaded();
         await expect(managerPanel.heading()).toBeVisible();
         await expect(managerPanel.row(fullName(kay))).toBeVisible();
         await expect(managerPanel.row(fullName(nova))).toBeVisible();
@@ -1100,6 +1111,7 @@ test.describe('reviewer-suggestions', () => {
         await walkDecisionWizard(page);
         await workflow.gotoEditorial(submissionId);
         await workflow.expectStageHeading(EXTERNAL_ROUND_1);
+        await panel.loaded();
         await expect(panel.heading()).toBeVisible();
         await expect(panel.rows()).toHaveCount(1);
         await expect(panel.row(fullName(kay))).toBeVisible();
@@ -1130,6 +1142,7 @@ test.describe('reviewer-suggestions', () => {
         // so the missing panel is Internal Review's alone.
         await workflow.gotoEditorial(submissionId, {menuKey: 'workflow_1'});
         await workflow.expectStageHeading('Submission');
+        await panel.loaded();
         await expect(panel.heading()).toBeVisible();
         await expect(panel.rows()).toHaveCount(2);
         for (const person of [nova, kay]) {

@@ -105,7 +105,9 @@ item's help text.
 
 **Permissions & Disclosure page**. Each field arrives locked with the value
 the journal will apply automatically, and an **"Override"** link that unlocks
-it for a per-item value (Rule 11). <sup>g</sup>
+it for a per-item value (Rule 11). With the interface in French, a
+preprint server shows the Copyright Holder and Copyright Year
+descriptions as raw codes ⚠ [OPS3](#ops3). <sup>g</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
@@ -228,7 +230,8 @@ it for a per-item value (Rule 11). <sup>g</sup>
    the submission's other versions are not. The published version
    additionally shows the banner "This version has been published and
    can not be edited." ("This version has been posted and can not be
-   edited." on a preprint server). A version that is only scheduled
+   edited." on a preprint server, which shows a raw code in its place
+   when the interface is in French [OPS3](#ops3)). A version that is only scheduled
    shows no banner, just the disabled Save. An editor may still
    create a new version, and on it an Author whose assignment carries
    the permission finds Save offered and no banner, and that save is
@@ -942,6 +945,9 @@ Left out of the scenarios above, by reason:
     and Default Chapter License URL; Fields)
   - OMP5 (the press's "License" link that leads nowhere with terms and no
     license; Rule 15; scenario 5 marks it)
+  - OPS3 (a preprint server in French: the Author's "posted" banner and
+    the Copyright Holder and Copyright Year descriptions as raw codes;
+    Rule 9; Fields)
 - **Owned by another feature**:
   - an assistant assigned to another stage seeing "Publication" with no
     pages beneath it (Actors row 1; Rule 1; *Workflow screen & stage
@@ -973,7 +979,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-08-28; A16, A17 and the
-retirement of A4 2026-09-09; the retirement of A16 2026-09-14; A10 settled 2026-09-18; OJS2 and the retirement of A10 2026-09-21; A18–A20 2026-09-28), unreviewed unless an entry notes otherwise;
+retirement of A4 2026-09-09; the retirement of A16 2026-09-14; A10 settled 2026-09-18; OJS2 and the retirement of A10 2026-09-21; A18–A20 2026-09-28; OPS3 and the correction of A15's press face 2026-09-30), unreviewed unless an entry notes otherwise;
 the team settles them on spec review. The summary
 is sorted 🐞 → ❓ → ✅ and the entries below are the source; badges, Impact
 and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
@@ -982,11 +988,12 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | With Plain Language Summary required, no Publication page but Title & Abstract can be saved, even after the summary is stored, and a journal's pre-scheduling panel is refused silently | 🐞 | user-visible | — |
 | [A2](#a2) | Reset permissions stamps Copyright Year 1970 on unpublished items (journal on article-date basis; preprint server) | 🐞 | user-visible | — |
-| [A15](#a15) | The freshly opened language panel acts before its loading settles: stale guidance and prefill kept (journal), an empty required Title accepted (press), the old language's text stored as the new title (preprint server) | 🐞 | user-visible | — |
+| [A15](#a15) | The freshly opened language panel acts before its loading settles: stale guidance and prefill kept (journal), the old language's title stored as the new language's title (press and preprint server) | 🐞 | user-visible | — |
 | [A13](#a13) | Cancelling the reset-permissions confirm box leaves the button greyed until a reload | 🐞 | minor | — |
 | [A19](#a19) | A Site Administrator left with only an assistant role is offered "Change" (submission language), and Confirm fails with a message that names nothing | 🐞 | minor | — |
 | [OJS1](#ojs1) | An article published into a not-yet-published issue keeps "Change", and every language change on it is refused | 🐞 | minor | — |
 | [OMP5](#omp5) | With License Terms but no license, the book page shows a "License" link that leads nowhere | 🐞 | minor | — |
+| [OPS3](#ops3) | In French a preprint server shows the Author's "posted" banner and the Copyright Holder and Copyright Year descriptions as raw codes | 🐞 | minor | — |
 | [A3](#a3) | Reset permissions rewrites every submission, unpublished and declined included, and logs one "metadata updated" line per version | ❓ | user-visible | — |
 | [A17](#a17) | The Author's Contributors page offers "Add Contributor", "Edit", "Delete" and "Order" on a new version of a published item; whether a save there is kept is untried | ❓ | user-visible | — |
 | [A5](#a5) | A scheduled article may still offer and allow Change Submission Language (code reading; the state was not reached live) | ❓ | minor | — |
@@ -1170,18 +1177,20 @@ Since: live-probed 2026-08-28 · Basis: probe. <sup>f-a14</sup>
 **A15 — The language panel acts before its own loading settles** · 🐞 · user-visible.
 Working the "Change Submission Language For" panel right after it opens,
 an ordinarily fast click, catches it still loading in the background.
-Each app shows a different face. On a journal, the revealed Title and
-Abstract boxes keep the OLD language's guidance and prefill for the rest
-of that opening. On a press, Confirm on a freshly (re)opened panel is
-accepted with the required Title empty: the submission language changes
-anyway, and Title & Abstract afterwards counts "0/2 languages
-completed". On a preprint server, the new language's boxes open
-nondeterministically empty or holding the CURRENT language's text, and
-confirming the pre-filled state stores the old language's text as the
-new language's title. Once the panel has settled, prefill and refusal
-behave exactly as Rule 13b says, and the press's same Confirm is then
-refused.
-Since: live-observed 2026-08-28 · Basis: probe. <sup>f-a15</sup>
+On a journal, the Title and Abstract boxes revealed by the language
+pick keep the OLD language's guidance and prefill for the rest of that
+opening. On a press and on a preprint server, a language picked before
+the panel has finished loading leaves the current language's text in
+the new language's boxes, and Confirm stores it as the new language's
+title and changes the submission language. On a press the Title box
+loads after the pick and can look empty meanwhile: text typed or
+deleted then is lost, and after an early pick it fills with the current
+language's title. On a preprint server the boxes sometimes open empty
+instead. Once the panel has settled (its subtitle shows the item's
+title), prefill and refusal behave exactly as Rule 13b says: on a press
+with no title in the new language, the loaded Title box is empty, and
+Confirm is refused with "This field is required."
+Since: live-observed 2026-08-28 · Basis: probe; test run (the press, 2026-09-30). <sup>f-a15</sup>
 
 <a id="a17"></a>
 **A17 — The Author's Contributors page offers editing on a new version of a published item** · ❓ · user-visible.
@@ -1346,6 +1355,36 @@ Question: should the sentence follow the stored value, or disappear once
 the field is filled? Lean: disappear. It describes the automatic fill,
 which will not happen.
 Since: live-probed 2026-08-28 · Basis: probe. <sup>f-ops2</sup>
+
+<a id="ops3"></a>
+**OPS3 — In French the "posted" banner and two copyright descriptions are raw codes** · 🐞 · minor.
+With the interface in French (Canada), a preprint server shows raw codes
+where French words belong:
+- on every Preprint page of a posted version, the Author's banner reads
+  "##publication.editDisabled##" (English "This version has been posted
+  and can not be edited.");
+- on Permissions & Disclosure, before and after posting, the description
+  under "Titulaire du droit d'auteur" (Copyright Holder) reads
+  "##submission.copyrightHolder.description##" and the one under "Année
+  du copyright" (Copyright Year) reads
+  "##publication.copyrightYearBasis.submissionDescription##" (English
+  "Copyright will be assigned automatically to {holder} when this is
+  posted." and "The copyright year will be set automatically based on
+  the posted date.").
+
+A French-speaking Author is not told why the pages are locked, and an
+editor is not told which holder and year posting will fill in.
+Expected: French words, as a journal and a press show on the same
+screens (the Author's banner "Cette version a été publiée et ne peut
+pas être modifiée.", both descriptions in French), and as the editors'
+banner of Rule 8 reads in all three apps ("Attention: cette version a
+été publiée. Tout modification pourrait se répercuter sur le contenu
+publié."). The Preprint menu entries, page headings and status line
+around these codes are
+[Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s
+finding, and why a missing French text shows as a code at all is
+[Languages & locales](U57-languages-and-locales.md#a4)'.
+Basis: probe. <sup>f-ops3</sup>
 
 ### Retired
 
@@ -2511,10 +2550,10 @@ against stale or empty state. Observed live 2026-08-28 (pinned apps)
 while building the suites — Journal/Press/Preprint Server Manager, a
 Publication page › "Change": OJS — the boxes revealed by picking the new
 language kept the OLD language's guidance and prefill, permanently for
-that opening. OMP — Confirm pressed on a freshly (re)opened panel was
-accepted with the required Title EMPTY; the submission language changed
-and Title & Abstract afterwards showed "0/2 languages completed"
-(reproduced ~3 of 5 attempts under test timing). OPS — the new
+that opening. OMP — Confirm pressed on a freshly (re)opened panel, the
+Title box looking empty, was accepted and the submission language
+changed (reproduced ~3 of 5 attempts under test timing); the box was
+not empty (test run 2026-09-30 below). OPS — the new
 language's boxes opened nondeterministically empty or holding the
 CURRENT language's text, and confirming the pre-filled state stored the
 old language's text as the new language's title. Settled-state control:
@@ -2524,6 +2563,30 @@ prefill matched the stored values on all three apps (fn-i) — Rule 13b's
 settled-state claims stand and the suites assert them. The suites' timing
 workarounds are the campaign ledger's record
 (`docs/tracking/app-changes.md`, row 6; app code unchanged).
+Test run 2026-09-30 (OMP, Press Manager, Publication › Title & Abstract
+› "Change" opened a second time, "French (Canada)" picked at once; CI
+run 36529998661 and local runs with the publication fetch and the
+editor's style sheets held back): the form fetch
+(`_components/changeLanguageMetadata`) answers first and the
+publication fetch (`GET submissions/{id}/publications/{pid}`, which
+also renders the subtitle) later; a pick before it lands finds
+`publicationProps` empty, so `setCustom` sets nothing and the Title
+keeps the form's initial value, the current language's title
+(`ChangeSubmissionLanguageMetadataForm`). In 5 of 5 unheld runs the
+pick came 50–110 ms before the publication fetch landed, and the Title
+held the English title in 4 of them. The Title's TinyMCE editor,
+mounted by the pick, loads its content style sheets before it is
+initialized; keys pressed before that were lost and the box showed
+empty over the English title. The accepted Confirm's `changeLocale`
+request carried `locale=fr_CA&title=Submission …` (the English title),
+the publication read afterwards held it as `title.fr_CA`, and the page
+behind read "Current Submission Language: French (Canada)". With the
+panel settled (subtitle shown, editor initialized), the same pick left
+the Title empty and Confirm was refused with "This field is required."
+(5 of 5, the same fetches held back). Title & Abstract's "0/2 languages
+completed" on Title after the accepted Confirm showed while the
+publication held a title in both languages, so that counter is not a
+sign of an empty title.
 
 <a id="fn-f-a16"></a>
 **f-a16 — A16 evidence.** The change: pkp/pkp-lib#13109 "Author should
@@ -2778,6 +2841,33 @@ Permissions & Disclosure" showed License URL
 description "The license will be set automatically to CC Attribution
 4.0 when this is posted."; posting kept the BY-SA address (badge and
 sentence on the preprint page).
+
+<a id="fn-f-ops3"></a>
+**f-ops3 — OPS3 evidence.** OPS's own `locale/fr_CA/submission.po`
+carries `publication.editDisabled`,
+`submission.copyrightHolder.description` and
+`publication.copyrightYearBasis.submissionDescription` with an empty
+`msgstr`, overriding the French texts a journal and a press read, and
+the client prints the key in place of the text (U57 A4). Live-probed
+2026-09-30 (Rules 8, 9; Fields "Permissions & Disclosure"; OJS, OMP,
+OPS, two runs; scratch contexts with UI languages English and French
+(Canada); the context's manager and the Author; a submission in
+production, and the same content posted): the Author's "Titre et
+résumé", "Références", "##submission.funding##" and
+"##publication.media##" pages of the posted preprint under the
+`##publication.editDisabled##` banner, where English reads "This
+version has been posted and can not be edited." and a journal and a
+press "Cette version a été publiée et ne peut pas être modifiée.";
+"Autorisations et divulgation" before and after posting with the two
+description codes (English control "Copyright will be assigned
+automatically to {context} when this is posted." and "The copyright
+year will be set automatically based on the posted date."), no code on
+the same page of a journal or a press; the editors' banner "Attention:
+cette version a été publiée. Tout modification pourrait se répercuter
+sur le contenu publié." on all three apps. In French, leaving the page
+with an unsaved License URL asked nothing and the change was gone on
+return and after reload, on all three apps (Rule 10). No request
+failed and no script error was logged.
 
 ## Reference — entry points & surfaces
 

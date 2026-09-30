@@ -63,6 +63,7 @@ const {
     openEditReview,
     saveEditReview,
     editReviewFileCheckbox,
+    setEditReviewFile,
     createNewReviewRound,
     typeRichText,
     openActivityLog,
@@ -83,6 +84,7 @@ const {
     openModifyReview,
     cancelModifyReview,
     waitForJQueryIdle,
+    waitForLegacyFormSettled,
 } = require('../pages/ReviewStagePages.js');
 const {LoginPage} = require('../../../../shared/playwright/pages/LoginPage.js');
 
@@ -477,6 +479,8 @@ test.describe('reviewer-assignment', () => {
         const form = createModal.locator('form#createReviewerForm');
         await expect(form.locator('input[name="username"]')).toBeVisible({timeout: 30_000});
         await expect(form.locator('#reviewerFormFooter')).toBeVisible();
+        // Its file grid lands above "Add Reviewer" after the form: presses wait for it.
+        await waitForLegacyFormSettled(managerPage, createModal);
         const masthead = form.locator('input[name="masthead"]');
         await expect(masthead).toBeChecked();
         await expect(masthead).toBeDisabled();
@@ -614,7 +618,9 @@ test.describe('reviewer-assignment', () => {
         await expect(masthead).toBeDisabled();
 
         // An empty field is refused with "This field is required." above it;
-        // picking a name clears the message.
+        // picking a name clears the message (the press once the footer's
+        // file grid has landed above the button).
+        await waitForLegacyFormSettled(managerPage, enrollModal);
         await form.getByRole('button', {name: 'Add Reviewer', exact: true}).click();
         const required = form.getByText('This field is required.');
         await expect(required).toBeVisible({timeout: 30_000});
@@ -778,13 +784,15 @@ test.describe('reviewer-assignment', () => {
         await expect(boxOne).toBeVisible({timeout: 30_000});
         await expect(boxTwo).toBeVisible();
         const noFiles = editModal2.getByText('No Files Selected');
-        await boxOne.check();
-        await boxTwo.check();
+        // Each change slides the warning above the grid: the page object
+        // presses once the window has stopped moving.
+        await setEditReviewFile(managerPage, editModal2, fileOne.name, true);
+        await setEditReviewFile(managerPage, editModal2, fileTwo.name, true);
         await expect(noFiles).toBeHidden();
-        await boxOne.uncheck();
-        await boxTwo.uncheck();
+        await setEditReviewFile(managerPage, editModal2, fileOne.name, false);
+        await setEditReviewFile(managerPage, editModal2, fileTwo.name, false);
         await expect(noFiles).toBeVisible();
-        await boxOne.check();
+        await setEditReviewFile(managerPage, editModal2, fileOne.name, true);
         await expect(noFiles).toBeHidden();
         await saveEditReview(managerPage, editModal2);
 

@@ -47,8 +47,10 @@
  * - pressing a name posts, then points the page at the download and
  *   disables the link (`disabled`, `href="#"`) until a two-second timer
  *   re-enables it; a list redrawn before that makes the timer's callback
- *   throw (register A9), so `download()` returns only once the link is
- *   enabled again, the condition the timer ends on;
+ *   throw (register A9); the timer's callback then asks for the whole list
+ *   again, and its answer replaces the list (strips closed, name links
+ *   `href="#"` until their scripts run), so `download()` returns only once
+ *   that redraw is done;
  * - the "Add a file" / "Edit" form: `input[name^=libraryFileName]` per
  *   form language, `select[name=fileType]`, `textarea[name^=description]`,
  *   the plupload area (`.pkp_controller_fileUpload`, its button named
@@ -408,13 +410,30 @@ exports.LibraryList = class LibraryList extends BasePage {
     /**
      * Press a file's name and return the download it starts, with the
      * page's address before and after (Rule 8a: the page stays). Returns
-     * once the link is ready again (A9).
+     * once the list is settled again: the app's two-second timer re-enables
+     * the link (A9) and, in the same callback, asks for the whole list
+     * again (`enable-link-action` answers a "data changed" event, lib/pkp
+     * `PostAndRedirectRequest.finishCallback_`), whose answer replaces the
+     * list: every strip closed, every name link a new `href="#"` until its
+     * own script runs. A read or press on the list before that answer lands
+     * loses it to the redraw (an opened strip closes, an "Edit" click hangs
+     * on the detached link, a link's address reads "#"; u39s2-library-edit,
+     * `.reports/flake-0930/u39s2/diagnosis.md`), so this waits until the
+     * list it pressed in has been replaced, the redraw's request is done and
+     * the new name link carries its address.
      */
     async download(name) {
         const before = this.page.url();
-        const {download, newTab} = await captureDownload(this.page, () => this.nameLink(name).click());
-        await this.expectLinkReady(name);
-        return {download, newTab, before, after: this.page.url()};
+        const list = await this.root().elementHandle({timeout: 30_000});
+        try {
+            const {download, newTab} = await captureDownload(this.page, () => this.nameLink(name).click());
+            await this.page.waitForFunction((el) => !(/** @type {Element} */ (el).isConnected), list, {timeout: 30_000});
+            await waitForJQueryIdle(this.page);
+            await this.expectLinkReady(name);
+            return {download, newTab, before, after: this.page.url()};
+        } finally {
+            await list?.dispose();
+        }
     }
 };
 

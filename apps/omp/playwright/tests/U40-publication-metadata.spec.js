@@ -47,6 +47,7 @@
  */
 const {test, expect} = require('../support/fixtures.js');
 const {unpublishFromWorkflow: unpublishDialog} = require('../pages/PublicationPages.js');
+const {waitForEditorReady} = require('../../../../shared/playwright/support/richtext.js');
 const {WorkflowPage} = require('../../../../shared/playwright/pages/WorkflowPage.js');
 const {
     TasksPanel,
@@ -157,6 +158,37 @@ function languageReadout(page, language) {
 /** The readout's "Change" button (Rule 13a). */
 function changeButton(page) {
     return page.getByRole('button', {name: 'Change', exact: true});
+}
+
+/** The language panel's Title editor (TinyMCE id). */
+const LANGUAGE_PANEL_TITLE_EDITOR = 'changeSubmissionLanguageMetadata-title-control';
+
+/**
+ * Press "Change" and return the "Change Submission Language For" panel
+ * settled. The panel runs two fetches as it opens: its form
+ * (`changeLanguageMetadata`) and the publication, whose texts a language
+ * pick copies into the revealed boxes. A pick made before the publication
+ * lands keeps the current language's title in the Title box, and a
+ * Confirm then sends it as the new language's title (A15, app-changes
+ * row 6; the U40 S6 flake, 2026-09-30). So the open waits for both: the
+ * form's answer, and the panel's subtitle, which renders the
+ * publication's title from that same fetch (the OJS page object's
+ * `openChangeLanguagePanel` gate).
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {string} title the item's current title, the panel's subtitle
+ */
+async function openLanguagePanel(page, title) {
+    const formLoaded = page.waitForResponse(
+        (r) => r.url().includes('changeLanguageMetadata') && r.ok(),
+        {timeout: 30_000}
+    );
+    await changeButton(page).click();
+    const panel = page.getByRole('dialog', {name: /Change Submission Language/});
+    await expect(panel).toBeVisible({timeout: 30_000});
+    await expect(panel.getByText(title)).toBeVisible({timeout: 30_000});
+    await formLoaded;
+    return panel;
 }
 
 /**
@@ -1163,19 +1195,11 @@ test.describe('Publication metadata (U40)', () => {
         await expect(languageReadout(page, 'English')).toBeVisible();
         await expect(changeButton(page)).toBeVisible();
 
-        // Cancel closes the panel with nothing changed. Every open is
-        // bounded by the panel's own form fetch (changeLanguageMetadata):
-        // interacting with a still-loading panel can slip an empty Confirm
-        // past the required check (A15 — not asserted either way).
-        let formLoaded = page.waitForResponse(
-            (r) => r.url().includes('changeLanguageMetadata') && r.ok(),
-            {timeout: 30_000}
-        );
-        await changeButton(page).click();
-        const panel = page.getByRole('dialog', {name: /Change Submission Language/});
-        await expect(panel).toBeVisible({timeout: 30_000});
-        await expect(panel.getByText(`Submission ${tag}`)).toBeVisible();
-        await formLoaded;
+        // Cancel closes the panel with nothing changed. Every open waits
+        // for the panel's own loading (openLanguagePanel): a still-loading
+        // panel keeps the old language's title in the revealed box (A15 —
+        // not asserted either way).
+        const panel = await openLanguagePanel(page, `Submission ${tag}`);
         await expect(panel.getByRole('radio', {name: 'English'})).toBeChecked();
         await expect(panel.getByRole('radio', {name: 'French (Canada)'})).toBeVisible();
         await panel.getByRole('button', {name: 'Cancel', exact: true}).click();
@@ -1184,13 +1208,7 @@ test.describe('Publication metadata (U40)', () => {
 
         // Pick French: the warning appears with a required Title box and —
         // on a press — no Abstract box (Rule 13b's press leg).
-        formLoaded = page.waitForResponse(
-            (r) => r.url().includes('changeLanguageMetadata') && r.ok(),
-            {timeout: 30_000}
-        );
-        await changeButton(page).click();
-        await expect(panel).toBeVisible({timeout: 30_000});
-        await formLoaded;
+        await openLanguagePanel(page, `Submission ${tag}`);
         await panel.getByRole('radio', {name: 'French (Canada)'}).check();
         await expect(
             panel.getByText(/Before changing the submission language/)
@@ -1203,11 +1221,13 @@ test.describe('Publication metadata (U40)', () => {
             panel.locator('label.pkpFormFieldLabel').filter({hasText: /^Abstract/})
         ).toHaveCount(0);
 
-        // Confirm with the Title empty is refused in the browser. The box
-        // is cleared explicitly first — interacting with the editor also
-        // guarantees it is initialized before Confirm (clicked earlier, a
-        // Confirm can race the panel's async form load).
+        // Confirm with the Title empty is refused in the browser. The
+        // Title editor is mounted by the pick and loads its content style
+        // sheets before it is initialized; keys pressed before that are
+        // lost to the init, which writes the box's value back (patterns.md
+        // "UI realities"), so the box is cleared once it is ready.
         const titleBox = panel.frameLocator('iframe').first().locator('body');
+        await waitForEditorReady(page, LANGUAGE_PANEL_TITLE_EDITOR);
         await titleBox.click();
         await page.keyboard.press('ControlOrMeta+a');
         await page.keyboard.press('Delete');

@@ -203,17 +203,31 @@ itself enforces before submission is Rule 13.
    collapses correctly, and so does resizing an already open window down to
    phone width. A preprint server collapses correctly even on a phone-width
    load ⚠ [A10](#a10). <sup>h</sup>
-9. <a id="autosave"></a>**Autosave.** Moving to another step, by
-   "Continue" or from the step rail, saves the changes made on the step
-   being left at once, even straight after typing. While the author stays
-   on a step, the wizard saves on a timer instead, roughly a minute after
-   typing stops, not keystroke by keystroke. The footer flashes "Saving"
-   while a save runs and then ticks "Last saved {n} seconds ago". The
-   footer already shows a "Last saved" time on first arriving, before any
-   save has actually run ⚠ [A4](#a4). Leaving the wizard for another
-   address (My Submissions, say) before that minute is up sends nothing
-   and asks nothing: reopened, the draft shows the old text, with no
-   "Unsaved Changes" dialog ⚠ [A15](#a15). <sup>i</sup>
+9. <a id="autosave"></a>**Autosave.** The wizard saves the author's
+   changes by itself, never keystroke by keystroke:
+   - *Moving to another step*, by "Continue" or from the step rail, saves
+     the changes made on the step being left at once, even straight
+     after typing.
+   - *Staying on a step*, the wizard saves on a timer instead. A change
+     is saved once a minute has passed since the last save, the time the
+     footer gives as "Last saved" (counted from the page load while
+     nothing has been saved), not a minute after typing stops. Text typed
+     straight after opening the wizard is saved about a minute after the
+     opening; text typed 40 seconds after opening it, about 20 seconds
+     after the typing. Text typed once that minute has run out is saved
+     within a second of its first key, while it is still being typed, so
+     only its first letters go then and the rest a minute later
+     ⚠ [A18](#a18). A step with no change sends nothing.
+   - *The footer* flashes "Saving" while a save runs and then ticks "Last
+     saved {n} seconds ago". It already shows a "Last saved" time on
+     first arriving, before any save has actually run ⚠ [A4](#a4).
+   - *Leaving the wizard* for another address (My Submissions, say) sends
+     nothing and asks nothing. A change typed within a minute of the last
+     save is lost: reopened, the draft shows the old text, with no
+     "Unsaved Changes" dialog ⚠ [A15](#a15). A change typed after that
+     minute keeps only what the timer had already sent, often just its
+     first letters [A18](#a18).
+   <sup>i</sup>
 9a. **A lost connection.** The wizard notices a lost connection only
     when a save fails. The footer then switches to "Reconnecting", unsent
     changes are kept in the browser, and both "Save for Later" buttons
@@ -607,10 +621,11 @@ recipe are in the footnote. <sup>s</sup>
 
    Given: Author, on the "Details" step of their own draft.
 
-   - **Autosave**: type Autosave check in "Title" and stop: the footer,
-     which already reads "Last saved…" on arriving [A4](#a4), flashes
-     "Saving" roughly a minute after typing stops and then ticks "Last saved
-     {n} seconds ago".
+   - **Autosave**: straight after opening the wizard, type Autosave check
+     in "Title" and stop: the footer, which already reads "Last saved…" on
+     arriving [A4](#a4), flashes "Saving" about a minute after the wizard
+     opened, as it reaches "Last saved 1 minute ago", and then ticks "Last
+     saved {n} seconds ago".
    - **"Save for Later"**: press it: the "Saved for Later" screen shows a
      link back into the wizard, labeled with the draft's contributors and
      title, and the note "We have emailed a copy of this link to you at
@@ -938,6 +953,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the Review step after a language change asking for the new language's title, contributor names and typed institution names, the affiliation copied from the author's profile included, with "Submit" disabled until they are typed (Rule 11): likely bullets in scenario 5, which changes the language and reaches Review
+  - the timer's minute counted from the last save, not from the end of typing: scenario 3's "Saving" coming as the footer reaches "Last saved 1 minute ago", and a step with no change sending nothing (Rule 9): the suites move the page's clock on a minute after the typing, which cannot tell the two readings apart
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -960,9 +976,10 @@ Left out of the scenarios above, by reason:
   - A10 (the step rail at phone width)
   - A12 (the Emails screen showing no acknowledgement option after off is saved)
   - A14 (a Section Editor who is also an Author choosing "Section editor" in "Submit As")
-  - A15 (leaving the wizard before the autosave)
+  - A15 (leaving the wizard within a minute of the last save)
   - A16 (a plain language summary over the section's word limit)
   - A17 (the "needs an editor" alert with an editor already on the submission)
+  - A18 (a change typed more than a minute after the last save, saved cut after its first letters)
   - OMP2 (a second copy address on a press)
   - OMP3 (the order of the "Submit As" roles on a press)
   - OPS4 (a manager reading another author's completion screen)
@@ -997,7 +1014,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-08-25; additions
-2026-08-26, 2026-09-07 and 2026-09-28), unreviewed unless an entry notes otherwise; the team settles
+2026-08-26, 2026-09-07, 2026-09-28 and 2026-09-30), unreviewed unless an entry notes otherwise; the team settles
 them on spec review. The summary is sorted 🐞 → ❓ → ✅ and the entries below
 are the source; badges, Impact and Basis:
 [Reading a spec](GLOSSARY.md#reading-a-spec).
@@ -1013,6 +1030,7 @@ are the source; badges, Impact and Basis:
 | [A12](#a12) | After "Do not send an email." is saved, the Emails screen shows no Submission Confirmation option selected | 🐞 | minor | — |
 | [A14](#a14) | "Submit As" offers "Section editor" ("Series editor"), and "Begin Submission" refuses it | 🐞 | user-visible | — |
 | [A16](#a16) | A plain language summary over the section's word limit is refused on save with an unexplained error, and the wizard hangs on "Saving" with "Submit" disabled | 🐞 | user-visible · crash: script | — |
+| [A18](#a18) | A change typed more than a minute after the last save is saved cut after its first letters; the rest waits another minute | 🐞 | minor | — |
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | minor | — |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
 | [OPS3](#ops3) | A preprint author's own "Cancel" is silently refused; the draft survives with no message | 🐞 | user-visible | — |
@@ -1024,7 +1042,7 @@ are the source; badges, Impact and Basis:
 | [A2](#a2) | The save-for-later confirmation email goes to whoever pressed the button, not to the submitting author | ❓ | latent | — |
 | [A3](#a3) | The submissions-closed notice shown to would-be authors ends with an instruction meant for managers | ❓ | minor | — |
 | [A9](#a9) | Pressing "Begin Submission" silently enrolls a pure Section Editor as Author, and probably a pure Site Administrator too | ❓ | latent | — |
-| [A15](#a15) | Leaving the wizard before the autosave drops the change without a question | ❓ | minor | — |
+| [A15](#a15) | Leaving the wizard within a minute of the last save drops the change without a question | ❓ | minor | — |
 | [A17](#a17) | "Needs an editor" goes out for a submission that already has an editor on it | ❓ | minor | — |
 | [OPS2](#ops2) | A preprint server enrolls a roleless visitor as Author on merely opening the start screen | ❓ | latent | — |
 | [OPS4](#ops4) | The preprint completion screen thanks the viewer, not the submitter | ❓ | latent | — |
@@ -1199,14 +1217,16 @@ with no other role into an Author [A9](#a9).
 Basis: probe. <sup>[fn-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
-**A15 — Leaving the wizard drops a change made within the autosave minute** · ❓ · minor.
-An author who changes the Title on "Details" and, before the autosave
-minute is up, opens another address (My Submissions, a bookmark) is not
-asked whether to leave. Nothing is saved: reopened, the draft's header
+**A15 — Leaving the wizard drops a change made within a minute of the last save** · ❓ · minor.
+An author who changes the Title on "Details" and then opens another
+address (My Submissions, a bookmark) is not asked whether to leave.
+Nothing is saved when the change comes within a minute of the last save
+(the time the footer gives as "Last saved"): reopened, the draft's header
 and "Details" show the old title, also after a reload, and no "Unsaved
 Changes" dialog offers the change back. This holds on a first visit to
 "Details" and on a return from "Review". A step change would have saved
-it (Rule 9).
+it (Rule 9). A change typed after that minute is partly kept: the timer
+sends its first letters at once [A18](#a18).
 Question: should leaving the wizard with an unsaved change save it, or
 ask first? Lean: one or the other. A step change saves the text and a
 lost connection keeps it in the browser, so this is the one way out that
@@ -1243,6 +1263,21 @@ Question: should the alert count the editors already on the submission?
 Lean: yes. The email's own text says no editor is assigned, which is
 false here.
 Basis: probe. <sup>[fn-a17](#fn-a17)</sup>
+
+<a id="a18"></a>
+**A18 — A change typed more than a minute after the last save is saved cut after its first letters** · 🐞 · minor.
+An author who changes the Title on "Details" more than a minute after the
+last save (after opening the wizard, when nothing has been saved yet) has
+the timer save it while they are still typing. At an ordinary pace (a key
+every quarter second) the draft's Title is saved as its first letter or
+two, or empty (the box just cleared), and the rest is saved only a minute
+later. Leaving the wizard or reloading within that next minute keeps the
+cut Title: reopened, "Details"
+shows only the part sent, as little as its first two letters, with no
+question and no "Unsaved Changes" dialog. A Title that arrives within a
+second, pasted say, is usually saved whole. A step change saves the
+change as typed (Rule 9); the timer should too.
+Basis: probe. <sup>[fn-a18](#fn-a18)</sup>
 
 ### OMP
 
@@ -1675,8 +1710,12 @@ OJS page resized 1440→375 *without* reload collapses correctly; reloading
 at that width breaks it again — reproduced in both orders, twice.
 
 <a id="fn-i"></a>
-**i** — Autosave. `autosave` mixin: 500 ms job timer; when idle >60 s the
-started forms re-save; failed saves park in browser localStorage and flip
+**i** — Autosave. `autosave` mixin: a 500 ms job timer
+(`_runAutosaveJobs()`); once more than 60 s have passed since
+`lastSavedTimestamp` (set at page load, then to each successful save's
+queue time) it queues the forms changed since (`staleForms`,
+`SubmissionWizardPage.addAutosaves()`); an unchanged step sends nothing;
+failed saves park in browser localStorage and flip
 `isDisconnected` (footer `common.saving` / `common.reconnecting` /
 `common.lastSaved`, AFFW-094); reconnect retries back off 4 s → 30 s. Save
 buttons disable on `isDisconnected` (AFFW-078, 096); submit enablement
@@ -1690,7 +1729,14 @@ per-keystroke request; the footer flashed "Saving" for ~300 ms, then
 ("… 57 seconds ago" → "Last saved 1 minute ago"). On first arriving at a
 step the footer already read "Last saved 3 seconds ago" although no save
 request had been made in the session — the counter starts from page load
-(A4). Offline live-probed 2026-08-25 (network-level offline emulation, two
+(A4). Live-probed 2026-09-30 (Rule 9, A15, A18; three apps, two runs
+each): typed 2–6 s after the load, saved 51–58 s after typing (the ≈55 s
+above); typed 40 s in, 17–20 s after; typed 75 s in, within a second,
+mid-typing; a second change 20 s after a save, 37 s after typing (60.5 s
+after that save). The "Saving" came as the footer reached "Last saved 1
+minute ago". No request in 75 s on an unchanged "Upload Files" or in
+40–75 s on an unchanged "Details"; "Continue" and the rail sent the typed
+Title 0.1–0.5 s after the press. Offline live-probed 2026-08-25 (network-level offline emulation, two
 sittings): typing offline leaves the ticker counting until the queued save
 fails; the footer then flashes "Saving" and settles on "Reconnecting", both
 "Save for Later" buttons and (on Review) "Submit" carry `disabled`, while
@@ -2193,7 +2239,11 @@ No dialog opened and no request was sent on leaving. Reopened, the
 wizard's header and "Details" held the old title, the same after a
 reload, and no "Unsaved Changes" dialog appeared either time. Control
 the same runs: the rail back to "Upload Files" before leaving saved the
-change (note i).
+change (note i). Live-probed 2026-09-30, two runs per app on all three:
+the Title typed 2–7 s after the page load and My Submissions opened by
+address 1.5 s later; no request and no dialog on leaving, the seeded
+title on reopening and after a reload, no "Unsaved Changes" dialog.
+Typed 70 s after the load instead: note fn-a18.
 
 <a id="fn-a16"></a>
 **fn-a16** — A16. The save is the step's `PUT
@@ -2231,6 +2281,26 @@ email as the "Journal manager" does, live-probed in *Notifications center
 three: note q (a Section/Series Editor or Moderator on the draft, and
 the "Journal editor", "Press editor" or "Preprint Server manager"
 submitter, who received the email too).
+
+<a id="fn-a18"></a>
+**fn-a18** — A18. The job timer (note i) runs every 500 ms and, once
+more than 60 s have passed since `lastSavedTimestamp`, queues every form
+in `staleForms` with its values at that tick; a form changed after the
+minute is stale from its first input, so the next tick sends what the box
+holds then. Live-probed 2026-09-30, two runs per app on all three (a
+seeded draft per case, the Author): the Title typed at 250 ms a key from
+75 s after the load was saved 0.5–0.8 s after the first key carrying
+"A", "Au" or "" (OPS, one run: the emptied box), and whole 60.5 s later;
+after 75 s on "Upload Files", then "Details", the save 0.5–1.0 s after
+the first key carried "Auto", "Autosav", "Autosave check ra" or a title
+cut near its end (OJS one run whole), and a reload showed that title;
+typed 70 s after the load (0.2–0.4 s of typing) and My Submissions opened,
+nothing was sent on leaving and no dialog opened, and on reopening and
+reload "Details" read "Autosave check leavelate" and a longer cut (OMP),
+"Au" and "Autosave check lea" (OPS), the full title on OJS in both runs.
+OMP typed as fast in one run and was cut, so whole or cut follows where
+the typing falls against the 500 ms tick, not the app. No response of
+400 or more, no page error, no browser dialog.
 
 <a id="fn-omp1"></a>
 **fn-omp1** — OMP divergence points: `StartSubmission` (OMP) adds

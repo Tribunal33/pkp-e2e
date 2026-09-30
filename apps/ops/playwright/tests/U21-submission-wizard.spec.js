@@ -523,7 +523,7 @@ test.describe('Submission wizard (U21)', () => {
         await continueTo(page, STEPS.details);
 
         // Autosave: type the title and stop. The wizard saves on its own
-        // timer, roughly a minute on (Rule 9): the footer flashes "Saving"
+        // timer, a minute after the last save (Rule 9): the footer flashes "Saving"
         // and then ticks "Last saved {n} seconds ago". Both waits are bound
         // by the save the wizard itself sends; nothing is pressed.
         const saved = page.waitForResponse(

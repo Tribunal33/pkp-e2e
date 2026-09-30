@@ -68,6 +68,7 @@ const {ReviewerAssignmentsPage, ReviewWizardPage} = require('../../../../shared/
 const {SubmissionWizardPage} = require('../pages/SubmissionWizardPage.js');
 const {RegisterPage, RegistrationCompletePage} = require('../pages/RegistrationPages.js');
 const {getPassword} = require('../../../../shared/playwright/data/users.js');
+const {closeTab} = require('../../../../shared/playwright/support/tabs.js');
 
 const JOURNAL = 'publicknowledge';
 const NEEDS_EDITOR_TASK = 'A new article has been submitted to which an editor needs to be assigned.';
@@ -822,8 +823,11 @@ test.describe('notifications center & email preferences', () => {
             // The link afresh: signed in as the Manager again, the page shows
             // again with the Author's address; every box but "Discussion
             // added." unticked, "Unsubscribe": the success page.
+            // The sign-in returns at the dashboard's commit; the tab is closed
+            // through closeTab, which waits for the renderer to have the page
+            // (a close sent at the commit can be lost: support/tabs.js).
             await new LoginPage(otherTab).signIn(manager, getPassword(manager));
-            await otherTab.close();
+            await closeTab(otherTab);
             await unsubscribe.goto(link);
             await expect(unsubscribe.sentence()).toContainText(emailOf(author));
             const boxCount = await unsubscribe.boxes().count();

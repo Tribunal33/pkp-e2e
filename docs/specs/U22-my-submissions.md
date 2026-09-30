@@ -148,16 +148,19 @@ revision upload it can open is owned by *[Review stage & rounds](U26-review-stag
      Once delivered, the submission lists under "Revisions submitted". Its
      activity cell then shows the review progress counter (7b), not a
      "revisions submitted" message. <sup>g</sup>
-   - 7b. **Under review, nothing asked** {OJS OMP}: the cell shows a review
-     progress counter, "Review update {completed}/{total}", over the current
-     round's reviewers. When completed reviews of the *open* kind exist, it
-     also shows a "Reviewers assigned:" row of those reviewers' avatars. The
-     avatar's popover names the reviewer and the review type. Reviews that
-     are not open never show a reviewer here. The author learns identities
-     only where the review type discloses them
+   - 7b. **Under review, nothing asked** {OJS OMP}: the cell shows the
+     review progress counter, "Review update {completed}/{total}": the
+     current round's submitted reviews, marked complete by an editor or
+     not, over its reviewers minus declined and cancelled requests
+     ⚠ [A1](#a1). Each submitted *open* review adds its reviewer's avatar
+     to a "Reviewers assigned:" row; the avatar's popover names the
+     reviewer and the review type. Other review types never show a
+     reviewer here
      ([→ reading reviews as the author](U26-review-stage-and-rounds.md#author-read-review)).
-     ⚠ [A1](#a1) <sup>h</sup>
-   - 7c. **Copyediting** {OJS OMP}: "Copyedited Files Uploaded: {count}".
+     With the interface in French, the counter shows a raw code instead
+     of the counts ⚠ [A6](#a6). <sup>h</sup>
+   - 7c. **Copyediting** {OJS OMP}: "Copyedited Files Uploaded: {count}",
+     counting the workflow's "Copyedited Files" list, shown even at 0.
    - 7d. **Scheduled into an issue** {OJS}: "To be published in issue
      {issue}".
    - 7e. Otherwise the cell is empty. In particular it is empty while a new
@@ -165,15 +168,16 @@ revision upload it can open is owned by *[Review stage & rounds](U26-review-stag
      submission declined during review keeps showing the review counter in
      its row ⚠ [A2](#a2).
 8. **"View" opens the workflow in place.** The workflow opens as a panel
-   over the list. The page address records which submission is open, and
-   which of its panels, so the open state can be bookmarked or shared.
-   Closing the panel returns to the list at the exact address it left. What
-   the panel contains, the author's view of the shared workflow screen, is
-   [→ the workflow screen](U24-workflow-screen-and-stage-access.md#workflow-entry)
+   over the list. The page address records the open submission and the
+   selected entry of the workflow's left-hand menu (for example "Review"),
+   so the open state can be bookmarked or shared. Closing the panel
+   returns to the list at the exact address it left. The panel's contents
+   are [→ the workflow screen](U24-workflow-screen-and-stage-access.md#workflow-entry)
    and the stage features
    ([submission stage](U25-submission-stage.md#author-view),
    [review stage](U26-review-stage-and-rounds.md#author-view)). <sup>e</sup>
-9. **Deleting drafts.** "More Actions" (the "…" button above the list) offers
+9. **Deleting drafts.** "More Actions" (the "…" button above the list;
+   in French a screen reader hears a raw code as its name [A6](#a6)) offers
    **"Delete Incomplete Submissions"**. It is grayed out while the current
    page of the list has no draft rows. Choosing it puts the list in
    selection mode: a checkbox appears on each draft row (only drafts;
@@ -188,8 +192,8 @@ revision upload it can open is owned by *[Review stage & rounds](U26-review-stag
    or the filters also drops any selection. On a preprint server the same
    flow is offered end to end, but confirming always fails with an error
    dialog and the draft survives ⚠ [OPS2](#ops2). The selection behavior is
-   shared with the editorial list (*Submissions dashboard*). What this list
-   contributes is who gets it: every author, over their own drafts.
+   shared with the editorial list (*Submissions dashboard*); here every
+   author gets it, over their own drafts.
    <sup>i</sup>
 10. **Counts stay current.** The sidebar view badges and the heading's total
     update in place, without a reload, after anything done from this screen
@@ -454,6 +458,8 @@ Left out of the scenarios above, by reason:
     or Site Administrator who also authors; Rule 5)
   - A5 (an old link to a draft opening the workflow panel the list never
     offers; Rule 3)
+  - A6 (in French, the review counter and the "…" button's name reading
+    raw codes; Rules 7b, 9)
   - OMP1 (no series filter on a press; Rule 5; scenario 3 marks it)
 - **Owned by another feature**:
   - "Start A New Submission" beside the menu group (Rule 1; *Submission
@@ -485,6 +491,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [OPS2](#ops2) | A preprint server author is offered draft deletion, but confirming always fails with a permission error | 🐞 | user-visible | — |
+| [A6](#a6) | In French a submission under review reads a raw code in place of "Review update {completed}/{total}", and the "…" button above the list is named by a raw code | 🐞 | minor | — |
 | [A1](#a1) | The author sees the review progress count ("Review update 1/2") for their submission under review | ❓ | user-visible | — |
 | [A2](#a2) | A declined submission's row keeps showing the review progress counter | ❓ | minor | — |
 | [A3](#a3) | On a press or preprint server, nothing was found that feeds the "Scheduled for publication" view | ❓ | minor | — |
@@ -557,6 +564,28 @@ Question: should the forward refuse, or hand off to the wizard, for a
 submission that was never submitted? Lean: oversight, harmless. Only the
 draft's own author can reach it.
 Basis: probe. <sup>a5</sup>
+
+<a id="a6"></a>
+**A6 — In French the review counter and the "…" button show raw codes** · 🐞 · minor.
+With the interface in French (Canada), a submission under review reads
+"##dashboard.reviewUpdateCounts##" in its Editorial Activity cell {OJS
+OMP}, where English reads "Review update 1/1" or "Review update 0/1"
+(Rule 7b), so the author loses the completed and total review counts. On
+every app a screen reader hears the "…" button above the list (English
+"More Actions", Rule 9) as "##common.moreActions##". Expected: French
+words, as the rest of the list shows: the views ("Soumissions actives",
+"Révisions demandées", "Soumissions incomplètes", "Publiées",
+"Refusées"), the Stage bubbles ("Incomplète", "Rejetée"), "Révision
+requise" with "Soumettre les révisions", "Compléter la soumission" and
+"Afficher". The English list shows none of these codes. The header's help
+icon is [Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md#a1)'s
+finding, the workflow panel "Afficher" opens is
+[Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s,
+the editorial list's own codes are
+[Submissions dashboard](U23-submissions-dashboard.md#a12)'s, and why a
+missing French text shows as a code at all is
+[Languages & locales](U57-languages-and-locales.md#a4)'.
+Basis: probe. <sup>a6</sup>
 
 ### OMP
 
@@ -796,7 +825,10 @@ no internal-stage resubmit decision, so that combination cannot arise.
 `DashboardCellSubmissionActivityReviewsUpdate.vue`:
 `dashboard.reviewUpdateCounts` = "Review update
 {$reviewsCompletedCount}/{$reviewsTotalCount}", completed = completed
-statuses, total = active (declined/cancelled excluded).
+statuses (`useSubmission.js::CompletedReviewAssignmentStatuses`: received,
+viewed, complete, thanked, so a submitted review counts before an editor
+marks it complete; read 2026-09-30), total = active (declined/cancelled
+excluded).
 `DashboardCellSubmissionActivityReviewsOpen.vue`: renders only completed
 assignments whose `reviewMethod` is `SUBMISSION_REVIEW_METHOD_OPEN`,
 avatar popover = reviewer full name + review method. Live-probed
@@ -1021,6 +1053,25 @@ author-dashboard address for their draft landed on the list with the
 draft's workflow panel open (full stage menu and publication tabs); a
 different signed-in author got the authorization-denied page. Not probed
 on OMP/OPS.
+
+<a id="fn-a6"></a>
+**a6 — A6 evidence.** Live-probed 2026-09-30 (Rules 7b, 9; OJS, OMP, OPS,
+two runs; scratch contexts with UI languages English and French (Canada),
+each French read paired with the same read in English; the submitting
+Author at `/fr_CA/dashboard/mySubmissions`, on arrival and on every
+view): the rows in review round 1 with the reviewer accepted and with the
+review completed read `##dashboard.reviewUpdateCounts##` on OJS and OMP
+(English "Review update 0/1" and "Review update 1/1"), on "Soumissions
+actives" and on arrival; the list-level ellipsis button's accessible name
+(`aria-label`) read `##common.moreActions##` on all three apps (English
+"More Actions"). The page's only other code was the header's
+`##common.help##`, present in English too (U08 A1). A draft read
+"Incomplète" (OPS "Production") with "Compléter la soumission", a
+submission declined at the Submission stage "Rejetée", the columns "ID
+Trier / Soumissions / Étape / Activité éditoriale / Actions", the heading
+"Soumissions actives (6)". Neither `dashboard.reviewUpdateCounts` nor
+`common.moreActions` exists in pkp-lib's `fr_CA` locale files (U57 A4's
+fallback).
 
 <a id="fn-omp1"></a>
 **omp1 — OMP1 evidence.** OMP's filter form

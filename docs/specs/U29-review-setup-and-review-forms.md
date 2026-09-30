@@ -133,10 +133,11 @@ and "Save" is greyed out until the boxes are filled: <sup>g</sup>
    Recommendations". Pressing a tab or a side tab changes the page
    address. <sup>a</sup>
    - 1a. **A reload.** A reload after pressing "Review" alone keeps
-     "Review" › "Setup" open, and one after pressing a side tab of
-     "Submission" keeps it open
-     ([→ Submission intake configuration](U58-submission-intake-configuration.md)
-     owns that tab's reloads).
+     "Review" › "Setup" open. A reload right after pressing a side tab of
+     "Submission" keeps that side tab open; for a reload after another
+     tab and back, see
+     [→ Submission intake configuration](U58-submission-intake-configuration.md),
+     Rule 1b.
      A reload after pressing a side tab of "Review", "Setup" included,
      lands on "Submission" › "Disable Submissions" instead; pressing
      "Review" then shows the side tab that was open ⚠ [A4](#a4).
@@ -153,11 +154,12 @@ and "Save" is greyed out until the boxes are filled: <sup>g</sup>
    correct {n} errors.") and a button "Jump to next error" appear; a page
    notice reads "The form was not saved because 1 error(s) were
    encountered. Please correct these errors and try again."; "Save" is
-   greyed out; and nothing on the form is saved, not even the boxes that
-   passed. Switching side tabs with unsaved edits keeps
-   them, with no warning: back on the tab, the edited values are still
-   there. A reload drops them, with no warning either: the tab shows the
-   saved values again. Nothing here sends an email. <sup>d</sup>
+   greyed out ⚠ [A10](#a10); and nothing on the form is saved, not even
+   the boxes that passed. Unsaved edits stay, with no warning, through a
+   switch to another side tab and back and, on "Setup", through
+   "Submission" and back to "Review". A reload drops them, again with no
+   warning, and shows the saved values. Nothing here sends an
+   email. <sup>d</sup>
 
 <a id="review-mode"></a>
 3. **"Default Review Mode"** is what the editor's Add Reviewer window
@@ -386,11 +388,8 @@ and "Save" is greyed out until the boxes are filled: <sup>g</sup>
     Recommendation") or "Are you sure you want to deactivate the
     recommendation {title}" ("Deactivate Reviewer Recommendation"), with
     "Yes" / "No". Neither the table nor the reviewer's list has a fixed
-    order ⚠ [A7](#a7): a new entry usually shows last but not always, an
-    edited or ticked entry sometimes stays where it is and sometimes drops
-    to the bottom, and the same steps give either on different runs.
-    Adding, editing and the tick redraw the table with no notice.
-    <sup>g</sup>
+    order ⚠ [A7](#a7). Adding, editing and the tick redraw the table with
+    no notice. <sup>g</sup>
 
 18. **A recommendation in use** (chosen on at least one submitted review)
     has no "More Actions" menu: it can be neither edited nor deleted, only
@@ -398,12 +397,11 @@ and "Save" is greyed out until the boxes are filled: <sup>g</sup>
     table still prints it under the reviewer's status ("Review Submitted",
     or "Review Viewed" once an editor has opened the review), and the
     editor's "Read Review" window still lists "Recommendation: {title}" at
-    the top but prints "-" in its "Reviewer Recommendation" section;
-    reactivated, the section prints the title again ⚠ [A6](#a6). An entry
-    not in use offers "Edit" (the
-    same window, prefilled, "Edit Recommendation") and "Delete", which asks
-    "Are you sure you want to delete the recommendation {title}" (window
-    "Delete Recommendation"), "Yes" / "No". The six starting entries can be
+    the top but prints "-" in its "Reviewer Recommendation" section
+    ⚠ [A6](#a6). An entry not in use offers "Edit" (the same window,
+    prefilled, "Edit Recommendation") and "Delete", which asks "Are you
+    sure you want to delete the recommendation {title}" (window "Delete
+    Recommendation"), "Yes" / "No". The six starting entries can be
     edited and deleted like any other while not in use. <sup>g</sup>
 
 ## Side effects
@@ -832,6 +830,9 @@ recipe are in the footnote. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - an unsaved "Setup" edit staying through "Submission" and back to
+    "Review", and a reload then dropping it (Rule 2)
 - **Rarely met**:
   - ordering the forms and a form's items with "Order", "Done" and "Cancel
     ordering", and the editors' "Review Form" lists following the order
@@ -933,10 +934,11 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A9](#a9) | Once a form carried by an open request is deactivated, the reviewer row's "Edit" window shows "None / Free Form Review", and "OK" there detaches the form and lowers its "In Review" count | 🐞 | minor | — |
 | [A2](#a2) | A form in use can still be deactivated, although the activation confirmation promises it cannot | ❓ | minor | — |
 | [A3](#a3) | A deadline saved as 0 or left empty makes Add Reviewer preset three weeks for the response but four for the review | ❓ | minor | — |
-| [A4](#a4) | A reload on a "Review" side tab lands on "Submission" › "Disable Submissions", although the address names the side tab and a "Submission" side tab survives a reload | ❓ | minor | — |
+| [A4](#a4) | A reload on a "Review" side tab lands on "Submission" › "Disable Submissions", although the address names the side tab and a pressed "Submission" side tab survives a reload | ❓ | minor | — |
 | [A6](#a6) | A recommendation deactivated after a reviewer chose it reads "-" in the "Reviewer Recommendation" section of the editor's "Read Review" window while the window's own "Recommendation:" line still names it | ❓ | user-visible | — |
 | [A7](#a7) | The "Reviewer Recommendations" table and the reviewer's list have no fixed order: a new entry is not always last, and an edited or ticked row sometimes stays put and sometimes drops to the bottom | ❓ | minor | — |
 | [A8](#a8) | A form whose only requests were declined reads 0 / 0 and offers "Edit" and "Delete" like a fresh one; deleting it drops it from the declined request | ❓ | minor | — |
+| [A10](#a10) | After a refused "Setup" save, what gives back the greyed-out "Save" is not known | ❓ | minor | — |
 | [OMP1](#omp1) | A press has no "Reviewer Recommendations" tab | ✅ | — | — |
 | [OMP2](#omp2) | A press words five strings differently and has a guideline box per review stage | ✅ | — | — |
 
@@ -976,11 +978,10 @@ be shown? Lean: refuse them with a message that the box must be at least
 
 <a id="a4"></a>
 **A4 — A reload on a "Review" side tab lands on "Submission" › "Disable Submissions"** · ❓ · minor.
-Pressing a side tab of "Review" ("Setup", "Reviewer Guidance", "Review
-Forms" and, on a journal, "Reviewer Recommendations") changes the page
-address, as pressing a side tab of "Submission" does. A reload keeps a
-"Submission" side tab open, but a reload on a "Review" side tab lands on
-"Submission" › "Disable Submissions". The side tab is not lost: after the reload, pressing
+Pressing any side tab of "Review" changes the page address, as a side
+tab of "Submission" does. A reload right after pressing a "Submission"
+side tab keeps it open, but a reload right after pressing a "Review" side
+tab lands on "Submission" › "Disable Submissions". The side tab is not lost: after the reload, pressing
 "Review" opens the side tab that was open. A manager who reloads after a
 save has to press "Review" again to get back to it. Question: is a
 "Review" side tab meant to survive a reload? Lean: yes, and this is a
@@ -1038,6 +1039,13 @@ the request carries. "OK" with nothing changed detaches it: the
 reviewer's step 3 shows the free-text boxes instead of the questions and
 the form's "In Review" count drops by one. Expected: the window shows the
 carried form and "OK" leaves it alone. Basis: probe. <sup>f-a9</sup>
+
+<a id="a10"></a>
+**A10 — What gives "Save" back after a refused save** · ❓ · minor.
+After a refused save on "Setup", "Save" is greyed out, and what makes it
+pressable again was not tried. Question: should correcting every refused
+box give "Save" back? Lean: yes, as the "Reviewer Recommendations" window does.
+Basis: probe. <sup>d</sup>
 
 ### OMP
 
@@ -1254,7 +1262,12 @@ suggestion box added the wizard step "5 Reviewer Suggestions" before "6
 Review" on both apps; with the box on and no suggestion entered, nothing
 on the review stage or in Add Reviewer mentions suggestions (2026-09-06),
 and the editors' side with a suggestion entered was not driven here. When
-"Save" is re-enabled after a refusal was not driven.
+"Save" is re-enabled after a refusal was not driven. Live-probed
+2026-09-30 (Rule 2; OJS and OMP, two runs, a scratch Journal Manager, a
+scratch Editor and `admin` on scratch contexts): "Default Response
+Deadline" 4 typed over as 7 still read 7 after "Reviewer Guidance" and
+back and after "Submission" › "Review" (address `#review`, "Setup"
+shown), and a reload showed 4; no browser dialog at any step.
 
 <a id="fn-e"></a>
 **e** — `PKPReviewGuidanceForm`: `reviewGuidelines` and
@@ -1735,7 +1748,19 @@ pressing "Review"): a scratch Editor (OJS, OMP; OPS has no manager-level
 editor group), `admin` on the scratch context and `manager.maya` on
 `publicknowledge` (reload only, nothing saved). No page-leave question,
 no response of 400 or more, no console error. Candidate for
-`app-changes.md` if a suite needs the tab after a reload.
+`app-changes.md` if a suite needs the tab after a reload. Re-driven
+2026-09-30 (Rule 1a; A4), two runs, OJS, OMP and OPS, a scratch Journal
+Manager, a scratch Editor (OJS, OMP) and `admin` on scratch contexts:
+"Metadata" and "Contributor Roles" pressed, then a reload, kept the side
+tab; the same side tabs after "Review" (OPS "Preprint Server Library")
+and "Submission" again read `#submission` and reloaded onto "Disable
+Submissions", and pressing the side tab again made the reload keep it.
+Every "Review" side tab and Rule 1b behaved as before. A "Setup" save
+("Default Response Deadline", "Saved" beside the button) left
+`#reviewSetup` in the address and its reload fell back the same way,
+"Review" then showing "Setup" with the saved value; a "Metadata" save
+kept "Metadata" through the reload on all three apps. No response of 400
+or more, no console error, no browser dialog.
 
 <a id="fn-f-a5"></a>
 **f-a5** — Footnote f: `reviewFormElementForm.tpl` defines

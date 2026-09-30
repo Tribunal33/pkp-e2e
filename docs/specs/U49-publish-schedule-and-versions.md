@@ -78,12 +78,15 @@ Stage (arrives preselected with the copied version's stage, and empty when
 that version has none), and Revision Significance (same minor rule; "Minor
 Revision" preselected whenever the stage allows it, empty with the stage),
 with Confirm/Cancel. An untouched Confirm on a staged version therefore
-answers everything (Rule 11). <sup>i</sup>
+answers everything (Rule 11). In French only the dialog's title and
+buttons read French; its other texts are raw codes ⚠ [A10](#a10).
+<sup>i</sup>
 
 **Publication Settings page {OJS} / Preprint Entry page {OPS}**: the
 Publication area's entry page. A press's counterpart is the Catalog Entry
 page, described in *Catalog management*. It saves onto the shown version.
-<sup>j</sup>
+In French most of its headings and descriptions are raw codes
+[A10](#a10). <sup>j</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
@@ -982,6 +985,8 @@ Left out of the scenarios above, by reason:
   - A7 (the requirement-shaped stage sentence under the all-met line on
     a press or preprint server; Rule 4; scenario 1 passes it)
   - A9 (same-day unassigned versions sharing one name; Rules 11a, 16)
+  - A10 (in French the version dialog and the entry page reading raw
+    codes; Fields)
   - OJS1 (a required plain language summary refusing the panel's Confirm
     with no message; Rule 4)
   - OJS2's second half (where only future issues exist, a Publication
@@ -1057,6 +1062,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|------------------------------|------|--------|--------|
 | [A5](#a5) | The published Summary of Changes appears on no reader page; the promised amendment notice never renders | 🐞 | user-visible | — |
 | [A6](#a6) | Merely creating an unpublished version rewrites the live reader page's date line | 🐞 | user-visible | — |
+| [A10](#a10) | In French the "Create New Version" dialog and the Publication Settings / Preprint Entry page show raw codes; the versions to copy from cannot be told apart | 🐞 | minor | — |
 | [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused with no message and publishing is unreachable | 🐞 | user-visible | — |
 | [OJS2](#ojs2) | On a journal with no published issues, the issue choice is not the one made: "Schedule Only" (the panel's first pick, or one saved on Publication Settings) publishes immediately, and a Publication Settings save for another field records "Don't Assign To An Issue" | 🐞 | user-visible | — |
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | user-visible | — |
@@ -1194,6 +1200,66 @@ with a stage are told apart by number ("Version of Record 1.1"). Seen on
 a journal and a press. Question: should an unassigned version carry a
 distinguishing number? Lean: yes; every other version name is unique.
 Basis: probe. <sup>[f-a9](#fn-a9)</sup>
+
+<a id="a10"></a>
+**A10 — In French the version dialog and the entry page show raw codes** · 🐞 · minor.
+With the interface in French (Canada), the Journal Manager reads raw
+codes where French words belong:
+- every app, the "Create New Version" dialog: its title "Créer une
+  nouvelle version" and its buttons "Annuler" and "Confirmer" read
+  French, but its three labels and their descriptions read
+  "##publication.versionSource.create.label##",
+  "##publication.versionSource.create.description##",
+  "##publication.versionStage.label##",
+  "##publication.versionStage.description##",
+  "##publication.revisionSignificance.label##" and
+  "##publication.revisionSignificance.description##"; the stage list
+  offers "##publication.versionStage.authorOriginal## (AO)",
+  "##publication.versionStage.publishedManuscriptUnderReview## (PMUR)"
+  and "##publication.versionStage.versionOfRecord## (VoR)" (a preprint
+  server only the first), and the significance list
+  "##publication.revisionSignificance.major##" and
+  "##publication.revisionSignificance.minor##";
+- every app, the same dialog's list of versions to copy from: each
+  version with a stage reads "##publication.versionStage.display##" and
+  each without one "##publication.versionStage.unassignedVersion##", so
+  "Version of Record 1.0" and "Version of Record 1.1" (a preprint
+  server's "Author Original 1.0" and "1.1") cannot be told apart;
+  "Confirmer" still creates the version;
+- a journal's "Publication Settings" page and a preprint server's
+  "Preprint Entry" page: the group headings read
+  "##publication.placement##", "##publication.publicationTiming##",
+  "##publication.versionAndUpdates##", "##publication.display##" and
+  "##publication.access##"; the Section and Cover Image descriptions
+  read "##publication.section.description##" and
+  "##publication.coverImage.description##"; "Update Type" and its
+  description read "##publication.updateType.label##" and
+  "##publication.updateType.description##", and each of its twelve
+  choices reads its own code, from "##publication.updateType.addendum##"
+  to "##publication.updateType.withdrawal##", with
+  "##publication.updateType.newVersion##" preselected; "Summary of
+  Changes (Amendment Notice)" and its description read
+  "##submission.form.summaryOfChanges##" and
+  "##publication.summaryOfChanges.description##";
+- a journal's page also: "Publication Date" reads
+  "##publication.publicationDate##"; "Associated review round", its
+  description and its "Select a review round" placeholder read
+  "##publication.reviewRound.field.label##",
+  "##publication.reviewRound.field.description##" and
+  "##publication.reviewRound.field.placeholder##"; the Pages and URL
+  Path descriptions read "##publication.pages.description##" and
+  "##publication.publicationSettings.urlPath.description##";
+- a preprint server's page also: "Date Posted" reads
+  "##publication.datePublished##".
+
+The rest of the two entry pages reads French ("Rubrique" or "Série", the date
+description, "Enregistrer"), and the English screens show none of these
+codes. A French-speaking editor has to guess which version a new one
+copies and what each field is for. The pages' menu entry and heading
+are [Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s
+finding, and why a missing French text shows as a code at all is
+[Languages & locales](U57-languages-and-locales.md#a4)'.
+Since: 2026-09-30 · Basis: probe. <sup>[f-a10](#fn-a10)</sup>
 
 ### OJS
 
@@ -2115,6 +2181,40 @@ arrived (empty); the "Send File to Text Editor" picker then listed
 copied from?" the same three names. Label:
 `publication.versionStage.unassignedVersion` with the creation date
 only (fn-s).
+
+<a id="fn-a10"></a>
+**f-a10** — Live-probed 2026-09-30 (Fields: the version dialog and the
+entry page; OJS, OMP, OPS, two runs; scratch contexts with UI languages
+English and French (Canada), each read paired with the same read in
+English; the context's Journal Manager at `/fr_CA/dashboard/editorial`):
+the dialog opened on a published "Version of Record 1.0" (OPS "Author
+Original 1.0") and on a never-staged, unpublished item, read before and
+after an untouched "Confirmer". It made "Version of Record 1.1" (OPS
+"Author Original 1.1") from the first and a second stage-less version
+from the second, so the source list held two entries each reading the
+same code (`versionSource` options). Entry pages read on an unpublished
+production item and on a published one: OJS "Publication Settings" on a
+journal with no issues (no Issue Assignment group shown), OPS "Preprint
+Entry". English control: "Which version should metadata be copied
+from?", "Publication Stage", "Revision Significance", "Major Revision"
+/ "Minor Revision", "Placement", "Publication Timing", "Version and
+Updates", "Display", "Access", "Associated review round" with "Select
+a review round"; no code but the help icon's `##common.help##` (U08
+A1). Mechanism (read, not driven): the keys are missing from every
+app's `fr_CA` locale files (`publication.versionSource.*`,
+`publication.versionStage.*`, `publication.revisionSignificance.*`,
+`publication.placement`, `publication.section.description`,
+`publication.publicationTiming`, `publication.versionAndUpdates`,
+`publication.updateType.*`, `submission.form.summaryOfChanges`,
+`publication.summaryOfChanges.description`, `publication.display`,
+`publication.coverImage.description`, `publication.access`,
+`publication.publicationDate`, `publication.reviewRound.field.*`,
+`publication.pages.description`,
+`publication.publicationSettings.urlPath.description`) or present with
+an empty `msgstr` (OPS `publication.datePublished` in
+`locale/fr_CA/submission.po`), and the client prints the key in place
+of the text. No request failed and no
+script error was logged.
 
 <a id="fn-ojs1"></a>
 **f-ojs1** — Live 2026-08-28 (metadata spec, register A1): with

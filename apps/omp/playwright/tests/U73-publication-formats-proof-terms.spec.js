@@ -72,6 +72,7 @@ const {ChaptersPage} = require('../pages/ChapterPages.js');
 const {openProduction, PRODUCTION_READY_FILES} = require('../pages/ProductionStagePages.js');
 const {fileRow: stageFileRow} = require('../pages/CopyeditingStagePages.js');
 const {WorkflowPage} = require('../../../../shared/playwright/pages/WorkflowPage.js');
+const {closeTab} = require('../../../../shared/playwright/support/tabs.js');
 
 const PRESS = 'publicknowledge';
 const MANAGER = 'manager.maya';
@@ -680,7 +681,7 @@ test.describe('Publication formats & proof terms (U73)', () => {
         await expect(pf.rowLink(web, 'Select Files')).toHaveCount(0);
         const [tab] = await Promise.all([mgPage.waitForEvent('popup', {timeout: 30_000}), pf.remoteLink('Web').click()]);
         await tab.waitForURL('https://example.org/web-copy', {waitUntil: 'commit'});
-        await tab.close();
+        await closeTab(tab);
         // Visitor: the book's page lists no "Web" (its control, "PDF", listed).
         const reader = new BookFormats(page, PRESS);
         await reader.goto(book.submissionId);

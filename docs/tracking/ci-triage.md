@@ -98,6 +98,18 @@ trips.
   **Baselines carry `70b0892042` since 2026-09-16** (sync); the U40 OMP
   `blur()` stays (a harmless commit), app-changes row 9 (c) is closed on
   the tips, (a) and (b) stay open. Again 2026-09-25 (U50 session, Mac, reset database, auto workers): OMP U40 S6 red in the OMP final, green alone (`.reports/U50/final-run-omp.log`, `alone-omp-reds.log`). Again 2026-09-25 (U51 session, Mac, reset database, auto workers): OMP U40 S6 red in the OMP final, green alone (`.reports/U51/final-run-omp.log`, `alone-omp-reds.log`). Again 2026-09-28 (U72 harness step, Mac, used OMP database): OMP U40 S6 red in the U40 regression run, green alone (`.reports/U72/harness/harness-log.md`). Again 2026-09-28 (U69 session, Mac, reset database, auto workers): OMP U40 S6 red in the OMP final, green alone (`.reports/U69/final-run-omp.log`, `alone-reds.log`). Again 2026-09-29 (U74 session, Mac, reset databases, auto workers): OMP U40 S6 red in the OMP final ("This field is required." not shown in 10 s), green alone (`.reports/U74/final-run-omp.log`, `alone-omp-reds.log`).
+  **OMP U40 S6 diagnosed 2026-09-30** (housekeeping,
+  `.reports/flake-0930/u40s6/`; CI 36529998661 and about ten local reds
+  since 2026-09-20): not this class's remount. The second panel open waited
+  for the form only, so French was picked before the publication fetch
+  landed (A15's stale prefill), and the clear ran on a Title editor not yet
+  initialized; under load its style sheets queue behind that fetch on the
+  one-request `php -S`, the keys are lost and Confirm sends the English
+  title. The OMP test now gates each open on the subtitle and waits for the
+  editor (OJS and OPS already did): red 5 of 5 under a fetch-and-CSS hold
+  before, 5 of 5 green after; the OMP U40 file 50 of 50 at eight workers.
+  **Watch condition**: a U40 S6 red behind the new gates.
+
 - **Reviewer dashboard list under load** (U28 S1/S2, OMP; the roster
   reviewers' whole assignment list). **Fixed 2026-09-26** (`.reports/flake-s26/fixAD/diagnosis.md`):
   `ReviewerPages` `goto`/`selectView`/`expectSettled` wait for the view's
@@ -113,6 +125,20 @@ trips.
   final run and again alone 2026-09-07, green in two full runs earlier that
   day; OJS red in a local final run 2026-09-08 (U23 revision), the first
   time on a journal. **Watch condition**: reds on CI. Again 2026-09-29 (U74 session, Mac, reset databases, auto workers): OJS U31 S4 red in the OJS final beside S2, both at "Reviewers Suggested by Author" not visible in 10 s, not at the dialog; both green alone (`.reports/U74/final-run-ojs.log`, `alone-ojs-reds.log`).
+  **Diagnosed 2026-09-30** (housekeeping, `.reports/flake-0930/u31s2s4/`):
+  the four CI reds of 09-25..29 (OJS/OMP S2 and S4 at
+  `ReviewerSuggestionPages.js:484`) were lost presses, not a slow server:
+  the "Files To Be Reviewed" grid and the jQuery-animated "No Files
+  Selected" notice push "Add Reviewer" down ~114 px between the
+  button-down and the up, so no request goes (the CI server logs hold no
+  POST); the U74 Mac read was the suggestions panel drawn only after its
+  own fetch. Fixed in the page objects (`waitForLegacyFormSettled` in
+  `support/legacy.js`, used by `ReviewerRequestWindow` and 10 other call
+  sites on OJS and OMP; `SuggestedReviewersPanel.loaded()`): red 14 of 14
+  under a grid-hold lever before, 0 of 18 after; U31 45 of 45 and OJS U27
+  90 of 90 at eight workers. Rule in patterns.md "Legacy jQuery flows".
+  Left: U31's reads right after a submit still give the panel's refetch
+  10 s. **Watch condition**: a U31 red behind the settled window.
 - **U01 S8 hangs on a used database** (OJS and once OPS, local only so far). After a
   day's probes, checks and suite runs on one database, "S8: editor
   impersonates a participant from the Participants panel" hit its 4-minute
@@ -450,6 +476,18 @@ trips.
   it shows nothing; `.reports/U07/final-run-omp-attempt1-red.log`). Owed
   by the next maintenance session: a trace of the popup wait on a
   repeated run.
+  CI reds followed (ojs 36144112471 2026-09-25; pkp-e2e 36545452266 OPS
+  2026-09-29). **Diagnosed 2026-09-30** (housekeeping,
+  `.reports/flake-0930/u04s2/`): not load but the harness: the button's
+  `openORCID()` sends the browser straight to `sandbox.orcid.org` (a
+  status check, then the window), and the `popup` event waits for that
+  window's first response, so a slow ORCID ran the test out (the CI worker
+  server got no request after the press). S2 on all three apps now presses
+  through `pressOrcidConnect` (`support/orcid.js`), which stubs the ORCID
+  hosts in that context only: red 15 of 15 under a 70 s hold on the
+  sandbox before, 0 of 30 after; U04 120 of 120 at eight workers. Rule in
+  patterns.md parallel lesson 6. **Watch condition**: a U04 red at a press
+  that leaves the app.
 - **A page load hanging under desktop load** (U04 S6, OMP, once). `page.goto`
   to the scratch press's `/orcid/about` ran to the 60 s test timeout in the
   second U06 revision local final 2026-09-13 (load 15–19 on the Mac from
@@ -479,6 +517,20 @@ trips.
   `.reports/U66/alone-ojs-U05S6.log`, then red the same way in the third
   final, `.reports/U66/final-run-ojs.log`, two of two at 8 workers: the
   closed-tab settle is still owed).
+  **Diagnosed 2026-09-30** (housekeeping, `.reports/flake-0930/u05s6/`;
+  OJS U05 S6 red 2 of 2 in a U66 final 2026-09-29 and on CI ojs
+  35922632937): not the `goto` but `otherTab.close()` before it: the tab
+  is closed right after the sign-in's commit, the renderer has not taken
+  the page in, Chromium loses the close and skips its forced close under
+  the debugger, so `close()` waits out the 240 s timeout. Harness fix:
+  `closeTab(page)` (`support/tabs.js`, DOMContentLoaded first, a named
+  failure at 30 s), used in U05 S6 and the four popups closed right after
+  their commit (U08 on all three apps, OMP U73): red 7 of 8 under a 20×
+  CPU throttle on the closed tab before, 0 of 24 after; U05+U08 and
+  U04+U08+U73 245 of 245 at eight workers. Not this mechanism, unproven:
+  CI ojs 35978377116's Profile-heading read and OMP U04 S6's plain `goto`.
+  Rule in patterns.md "Auth-style redirects". **Watch condition**: a hung
+  `close()` behind `closeTab`, or a second red of either unexplained read.
 - **Submission wizard "Continue" not advancing under load** (U04 S10,
   OMP, once). The wizard's rail stayed on "2 Details" for the 20 s wait
   of `SubmissionWizardPages.continueTo()` after the Continue press in the
@@ -523,6 +575,20 @@ trips.
   green alone in 21 s on the same used database. **Watch condition**: a
   second incident; then wait for the grid's reload to settle (the
   `waitForJQueryIdle` helper) between the unticks and the re-tick. Again 2026-09-25 (U50 session, Mac): OJS U27 S6 in the OJS final on a reset database at auto workers ("Clicking the checkbox did not change its state"), green alone (`.reports/U50/final-run-ojs.log`, `alone-ojs-reds.log`).
+  **Diagnosed 2026-09-30** (housekeeping, `.reports/flake-0930/u27s6/`;
+  tripped by OJS 2026-09-25 and CI omp 36581354102 OMP U28 S4 at
+  `ReviewerAssignmentPages.js:183`): the U31 mechanism in the same window:
+  the "No Files Selected" notice slides in or out over 250 ms after the
+  grid loads and on every box change, moving the boxes ~114 px between the
+  button-down and the up (the CI error context: box focused, unticked, no
+  save). Today's `waitForLegacyFormSettled` in `openEditReview` closes the
+  CI shape; every file-box press now goes through `setEditReviewFile`
+  (OJS `ReviewStagePages`, OMP `ReviewerAssignmentPages`), which settles
+  before and after: red 6 of 6 under a grid-event lever before, 0 of 14
+  after; OJS U27+U28 170 of 170 and OMP U27 95 of 95 at eight workers. The
+  09-15 re-tick shape (a press after a box change) went red once in ~70
+  lever runs, covered by the same helper, unproven. **Watch condition**: a
+  box "did not change its state" behind the helper.
 - **Review Details window's star-rating radio not registering the click
   under load** (U27 S9, OMP, once). `ReviewerAssignmentPages.rateReview()`
   (`apps/omp/playwright/pages/ReviewerAssignmentPages.js:352`) `check()`s
@@ -691,6 +757,15 @@ trips.
   green alone (`.reports/U36/alone-ops-U03S5.log`). Watch condition: a
   second sighting; then the error context says whether the save was
   never sent or answered before the wait was armed.
+  **Diagnosed 2026-09-30** (housekeeping, `.reports/flake-0930/u03s5/`):
+  the CI red (ojs 36429431746) is the `php -S` worker segfault class
+  hitting the "Cancel" save in a pass's first minute, not a press race (0
+  of 30 red under press-side levers); `waitForResponse` ignores a failed
+  request, hence the bare timeout. `ProfilePage.waitForAnswer()` now fails
+  at once with the URL and `net::ERR_…` and says on timeout whether the
+  request left (6 methods, every ProfilePage caller). Moved under the
+  segfault class; the 2026-09-23 local OPS sighting stays unexplained.
+  **Watch condition**: a ProfilePage timeout whose request was answered.
 - **"Cancel upload" on a throttled upload** (U36 S9, OJS and OMP; local
   finals from 2026-09-24, CI once on both attempts: push run 36322740739,
   OMP shard 3/3; CI tally 6 flaky + 1 failed on OJS). **Fixed
@@ -995,8 +1070,16 @@ trips.
   never shows** (`LibraryList.openStrip`, `LibraryPages.js:352`, 30 s on
   the "Journal guide" row's controls). Sighted 2026-09-27 (U63 session's
   OPS final, Mac, reset database, auto workers), green alone
-  (`.reports/U63/final-run-ops.log`, `alone-ops-reds.log`). **Watch
-  condition**: a second sighting; then read its trace.
+  (`.reports/U63/final-run-ops.log`, `alone-ops-reds.log`). Tripped on CI
+  2026-09-29 on all three apps (pkp-e2e 36579748471 OMP `:352`,
+  36593351856 OPS `:393`, 36596209937 OJS `:360`). **Diagnosed 2026-09-30**
+  (housekeeping, `.reports/flake-0930/u39s2/`): the download link's
+  two-second timer also fires a `fetch-grid`, whose redraw closed the
+  strip the test had just opened (or left the link at `href="#"`);
+  `LibraryList.download()` now returns after the redraw (15 other call
+  sites get it): red 15 of 15 under a redraw-hold lever before, 15 of 15
+  green after; the U39 file 70 of 70 at eight workers. Rule in patterns.md
+  pitfall 10. **Watch condition**: a U39 red after a download.
 
 - **OJS U34 S2 "the composer": the template search's "searching" state
   never seen** (`page.waitForSelector('.composer__templates__searching')`,
@@ -1029,6 +1112,32 @@ trips.
   a server answer under eight workers after a long session on the Mac.
   **Watch condition**: a second sighting of any, or one on CI or the VM;
   then read its trace.
+
+- **OMP U71 S3's absence read matching a file number inside another row**
+  ("On to External Review, and back by 'Cancel Review Round'", spec
+  :414, the "Files for Review" row for the internal-review file counted 1,
+  expected 0). CI's top first-attempt flake from 2026-09-28 to 09-29: 18
+  reds, green on retry, on almost every pkp-e2e push and omp 36618354774.
+  Diagnosed 2026-09-30 (housekeeping, `.reports/flake-0930/u71s3/`):
+  order dependence, not timing: `panelRow(title, number)` was a `hasText`
+  substring filter, and the one row left (the revised file's copy, named
+  `revu71s3…`) carried the number's digits in its name; fresh CI installs
+  handed out id 71 in 16 of the 18 sightings. Fixed in
+  `InternalReviewPages.js` (`panelRowNumbered`, the number's own cell,
+  exact; `panelRow` refuses a bare number) with a positive control in S3;
+  red 9 of 10 under an id-steering lever before, 0 of 15 after, the U71
+  file 45 of 45 at eight workers. Rule in patterns.md pitfall 15.
+  **Watch condition**: a U71 red at a numbered row read.
+
+- **Two first sightings in one CI run** (U06 revision branch, run
+  36664968208, 2026-09-30, each green on its retry). OMP U03 S4 "change
+  the email address by confirming the emailed link"
+  (`U03-user-profile.spec.js:601`): after the link, `ProfilePage.expectOpen`
+  found the heading but no `form#contactForm` in 30 s. The attempt carries `server-crash.txt` (exit 139): the segfault class (U03 S5 diagnosis 2026-09-30). OPS U60 S11 "Site
+  style sheet" @solo (`serial/U60-site-settings.spec.js:797`): the site
+  page's stylesheet list held the theme's sheets but not the uploaded
+  site sheet. **Watch condition**: a second sighting of either; then read
+  its error context.
 
 ## Companion branches — pkp-e2e branches waiting on app PRs
 

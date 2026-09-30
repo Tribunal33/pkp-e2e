@@ -130,6 +130,75 @@ async function openUserNav(page) {
     await expect(userNav(page).getByRole('link', {name: 'Edit Profile', exact: true})).toBeVisible();
 }
 
+/**
+ * Arm a wait for the answer to the request `matches` picks, one the caller's
+ * next press sends, and resolve with its response. It fails with the
+ * request's fate instead of a bare timeout, so the error context tells the
+ * three reds apart: the request left and failed in the browser (fails at
+ * once with the network error: the worker's `php -S` died serving it, read
+ * the `server-crash` annotation; never retried), it left and got no answer
+ * in 30 s, or nothing matching left at all (the press sent nothing). CI
+ * pkp/ojs 36429431746, U03 S5 at the notice's "Cancel": a bare
+ * "waitForResponse: Timeout 30000ms" 12 s into the app pass
+ * (`.reports/flake-0930/u03s5/diagnosis.md`). The caller awaits the promise
+ * after its click; an early failure is held for it, never unhandled.
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {(request: import('@playwright/test').Request) => boolean} matches
+ * @param {string} what how the error names the request
+ * @returns {Promise<import('@playwright/test').Response>}
+ */
+function waitForAnswer(page, matches, what, timeout = 30_000) {
+    const armedAt = Date.now();
+    const sent = [];
+    let onRequest;
+    let onFailed;
+    let onClose;
+    let timer;
+    const answered = new Promise((resolve, reject) => {
+        onRequest = (request) => {
+            if (matches(request)) {
+                sent.push({url: request.url(), at: Date.now() - armedAt});
+                request.response().then((response) => response && resolve(response), () => {});
+            }
+        };
+        onFailed = (request) => {
+            if (matches(request)) {
+                const error = (request.failure() || {}).errorText || 'no answer';
+                reject(
+                    new Error(
+                        `The ${what} ${request.url()} failed in the browser after ${Date.now() - armedAt} ms: ${error}. ` +
+                            'The server sent no answer; when the worker server died serving it, the test carries a ' +
+                            'server-crash annotation (php -S exit 139). Not retried.'
+                    )
+                );
+            }
+        };
+        timer = setTimeout(() => {
+            reject(
+                new Error(
+                    sent.length
+                        ? `The ${what} was sent (${sent.map((s) => `${s.url} at +${s.at} ms`).join(', ')}) and not answered in ${timeout} ms.`
+                        : `No ${what} was sent in ${timeout} ms after the wait was armed: the press sent nothing.`
+                )
+            );
+        }, timeout);
+        onClose = () => reject(new Error(`The page closed while waiting for the ${what}.`));
+        page.on('request', onRequest);
+        page.on('requestfailed', onFailed);
+        page.on('close', onClose);
+    });
+    const out = answered.finally(() => {
+        clearTimeout(timer);
+        page.off('request', onRequest);
+        page.off('requestfailed', onFailed);
+        page.off('close', onClose);
+    });
+    out.catch(() => {});
+    return out;
+}
+
+exports.waitForAnswer = waitForAnswer;
 exports.TAB_ANCHORS = TAB_ANCHORS;
 exports.TAB_LABELS = TAB_LABELS;
 exports.SAVED_MESSAGE = SAVED_MESSAGE;
@@ -255,12 +324,12 @@ exports.ProfilePage = class ProfilePage extends BasePage {
         await waitForJQueryIdle(this.page);
     }
 
-    /** Arm a wait for the tab's save POST (any tab). */
+    /** Arm a wait for the tab's save POST (any tab); see `waitForAnswer()`. */
     waitForSave() {
-        return this.page.waitForResponse(
-            (response) =>
-                response.request().method() === 'POST' && /\/profile-tab\/save-/.test(response.url()),
-            {timeout: 30_000}
+        return waitForAnswer(
+            this.page,
+            (request) => request.method() === 'POST' && /\/profile-tab\/save-/.test(request.url()),
+            'profile save POST'
         );
     }
 
@@ -517,9 +586,7 @@ exports.ProfilePage = class ProfilePage extends BasePage {
         // The success path is a JavaScript redirect to `?uniq=…#publicProfile`:
         // a full page load, awaited as such (the current address may already
         // carry the anchor, so a URL wait would resolve too early).
-        const uploaded = this.page.waitForResponse((response) => /upload-profile-image/.test(response.url()), {
-            timeout: 30_000,
-        });
+        const uploaded = waitForAnswer(this.page, (request) => /upload-profile-image/.test(request.url()), 'profile image upload');
         const reloaded = this.page.waitForEvent('load', {timeout: 30_000});
         await this.imageFileInput().setInputFiles(filePath);
         await uploaded;
@@ -538,9 +605,7 @@ exports.ProfilePage = class ProfilePage extends BasePage {
 
     /** Press "Delete" under the image; the page reloads on the Public tab. */
     async deleteImage() {
-        const deleted = this.page.waitForResponse((response) => /delete-profile-image/.test(response.url()), {
-            timeout: 30_000,
-        });
+        const deleted = waitForAnswer(this.page, (request) => /delete-profile-image/.test(request.url()), 'profile image delete');
         const reloaded = this.page.waitForEvent('load', {timeout: 30_000});
         await this.deleteImageButton().click();
         await deleted;

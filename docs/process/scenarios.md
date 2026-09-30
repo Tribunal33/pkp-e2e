@@ -2726,6 +2726,11 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   Publication Settings must save on a journal with a published issue, is
   assigned on screen; U44, U13, U16 claim checks).
 - Decision: `toAuthor`, `toReviewers`, `toEditor`.
+- Users: a `roles[]` entry `{role, dateStart, dateEnd}` in `users[]` with a
+  future start or a current role's future end (`pastRoles` stops at
+  today); the state a Users XML import {OJS OMP} or an invitation's later
+  start date makes, which is how it is reached until then (U53 claim
+  check I30, 2026-09-30).
 - Context: an option to skip `admin`'s manager enrolment in the new context
   (every `createContext` enrols the site administrator as a manager; the
   "site admin with no manager role" state is reachable only through the

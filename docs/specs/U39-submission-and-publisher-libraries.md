@@ -165,16 +165,20 @@ added again. The same refusals apply. <sup>j</sup>
 <a id="download"></a>
 8. **Downloading.**
    - 8a. Pressing a file's name downloads the file; the page stays where
-     it was. Pressing "OK" in "Add a file" or "Edit" within two seconds of
-     such a download makes the page's script fail, with nothing shown on
-     screen ⚠ [A9](#a9). The downloaded file is named after the uploaded
-     file with a type code added before the extension: "-MAR" for
-     Marketing, "-PER" Permissions, "-REP" Reports, "-OTH" Other, "-CON"
-     Contracts on a press. A "contract.pdf" added as "Marketing" downloads as
-     "contract-MAR.pdf"; when the journal already holds a file of that
-     name, "-1", "-2" and so on follow the code ("contract-MAR-1.pdf").
-     The code is set when the file is uploaded or replaced, from the type
-     saved with it, and stays when "Edit" changes the type alone:
+     it was. Opening "Add a file" or "Edit" and pressing "OK" within two
+     seconds of such a download makes the page's script fail, with nothing
+     shown on screen ⚠ [A9](#a9). Two seconds after the press on the name
+     the whole list is drawn again: a strip with "Edit" and "Delete"
+     opened under a row in those two seconds closes by itself and needs
+     its arrow pressed again ⚠ [A12](#a12). The downloaded file is named
+     after the uploaded file with a type code added before the extension:
+     "-MAR" for Marketing, "-PER" Permissions, "-REP" Reports, "-OTH"
+     Other, "-CON" Contracts on a press. A "contract.pdf" added as
+     "Marketing" downloads as "contract-MAR.pdf"; when a file in any of
+     the journal's libraries already downloads under that name, "-1",
+     "-2" and so on follow the code ("contract-MAR-1.pdf"). The code
+     comes from the type saved with an upload or a replacement, and stays
+     when "Edit" changes the type alone:
      "codes.pdf" added as "Marketing", then replaced with "replacement.pdf"
      in an "Edit" that also changes "Type" to "Permissions", downloads as
      "replacement-PER.pdf". A file whose name holds its extension
@@ -565,6 +569,7 @@ Left out of the scenarios above, by reason:
   - A9 ("OK" within two seconds of a download; Rule 8a)
   - A10 (the "403 Forbidden" pages sent as ordinary pages; Rules 8b, 10b)
   - A11 (closing "Add a file" after an "OK" with no file; Rule 3b)
+  - A12 (a row's strip opened within two seconds of a download, closed by the list drawn again; Rule 8a)
 - **No seed**:
   - an edit or a delete sent through a submission's window for another submission's file, refused (Rule 7)
   - strict mode on: "Delete" in the Submission Library fails (Settings bullet 3; A5)
@@ -587,6 +592,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | With strict mode on, "Delete" in the Submission Library fails | 🐞 | latent | — |
 | [A9](#a9) | "OK" in "Add a file" or "Edit" within two seconds of a download makes the page's script fail | 🐞 | invisible · crash: script | — |
 | [A11](#a11) | After an "OK" without a file, closing "Add a file" drops what was typed without asking | 🐞 | minor | — |
+| [A12](#a12) | A row's "Edit"/"Delete" strip opened within two seconds of a download closes by itself when the list is drawn again | 🐞 | minor | — |
 | [A6](#a6) | Every workflow participant, the Author included, edits and deletes every file of the Submission Library, whoever added it | ❓ | minor | — |
 | [A7](#a7) | A manager-level role without "Permit changes to Settings" still changes the Publisher Library through "View Document Library" | ❓ | minor | — |
 | [A8](#a8) | A deleted Submission Library file's old download address shows an empty page | ❓ | minor | — |
@@ -630,18 +636,18 @@ Basis: probe. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
 **A4 — A name holding its extension earlier downloads cut** · 🐞 · minor.
-The downloaded name is built by cutting the uploaded name at the first
-place its extension appears, not at the extension itself. "pdf-guide.pdf"
-added as "Marketing" downloads as "pdf-guide.pd-MAR.pdf", and
-"notes-pdf-draft.pdf" as "notes-MAR.pdf". The file's content is intact;
-only its name is wrong.
+The uploaded name loses everything from the character before its
+extension's first appearance; a name starting with its extension loses
+only its last character. "notes-pdf-draft.pdf" added as "Marketing"
+downloads as "notes-MAR.pdf", and "pdf-guide.pdf" as
+"pdf-guide.pd-MAR.pdf". The name alone is wrong, not the content.
 Basis: probe. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
 **A5 — "Delete" fails in strict mode** · 🐞 · latent.
-On an install whose configuration turns strict mode on, pressing "OK" on
-a Submission Library file's "Delete" dialog fails instead of deleting the
-file. Default installs run with strict mode off and delete normally.
+With the configuration file's "strict" option On (Settings bullet 3),
+"OK" in a Submission Library file's "Delete" dialog ends in a server
+error, not a deletion. Default installs have it Off and delete normally.
 Basis: code. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
@@ -678,11 +684,11 @@ Basis: probe. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
 **A9 — Changing a list right after a download makes the page's script fail** · 🐞 · invisible · crash: script.
-Pressing a file's name starts the download and a two-second wait before
-the link is ready again. Pressing "OK" in "Add a file" or "Edit" inside
-those two seconds redraws the list, and when the wait ends the page's
-script fails because the link is gone. Nothing on screen changes. A
-person rarely acts that fast; an automated test does.
+Pressing a file's name downloads it and leaves the link unready for two
+seconds. Opening "Add a file" or "Edit" and pressing "OK" inside them
+redraws the list; when they end the script fails, the link being gone.
+Only the browser's console shows it: "There is no handler bound to this
+element!". Rare at a person's pace, common in tests.
 Basis: probe. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
@@ -706,6 +712,17 @@ the window at once and drops the typed name and the chosen type without
 asking. The user who gives up on the silent window loses their typing
 unwarned.
 Basis: probe. <sup>[f-a11](#fn-a11)</sup>
+
+<a id="a12"></a>
+**A12 — A strip opened right after a download closes by itself** · 🐞 · minor.
+Two seconds after a press on a file's name, when the link is ready
+again ([A9](#a9)), the whole library list is drawn again. On Settings ›
+Workflow › "Publisher Library", a Journal Manager who presses a file's
+name and then, within those two seconds, the arrow at the start of its
+row sees the strip with "Edit" and "Delete" open and then close by
+itself; the arrow has to be pressed a second time. Expected: the strip
+stays open until the person closes it.
+Basis: probe. <sup>[f-a12](#fn-a12)</sup>
 
 ### OMP
 
@@ -773,7 +790,7 @@ Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
 **q** — `lib/pkp/js/controllers/form/FormHandler.js`: a changed field sets `formChangesTracked`, and `containerCloseHandler()` then asks `confirm()` with `form.dataHasChanged` "The data on this form has changed. Do you wish to continue without saving?"; "Cancel" at the foot unregisters the form first. A submit that passes the browser's own checks clears `formChangesTracked` before the server answers, so after the silent refusal of an "OK" with no file (A2) the close button no longer asks (A11); a refusal by the browser's checks ("This field is required.") never reaches that point. Live-probed 2026-09-24 (Rule 3b; all three apps, both libraries): a fresh "Add a file" and an "Edit" with a change asked on "Close", "OK" closing the window with no row added; after "OK" with no file uploaded, "Close" asked nothing and no row was added (twice per app); "Cancel" asked nothing; leaving the page with "Add a file" filled in raised the browser's leave-page question.
 
 <a id="fn-s"></a>
-**s** — Accounts: `docs/process/users.md` (the seeded roster; `admin`/`admin`, every other account its username twice; throwaway accounts likewise). Where each scenario runs: 1 on the seeded journal, press or preprint server `publicknowledge`, on a scratch submission from `POST scenarios/submission` with submitter `author.alex` (section ART; series `monographs` on the press; section PRE on the preprint server); 2 to 5 on scratch contexts from `POST scenarios/context`, each with its own throwaway `users[]` and its submissions submitted by its throwaway `author`. A Publisher Library change on `publicknowledge` would reach every other suite's "Library Files" list, and a scenario that reads a downloaded name or deletes a file seeds a scratch context, since stored names collide across workers on `publicknowledge` (scenarios.md). On `publicknowledge` the Editor is `editor.diana` (OJS, OMP; a preprint server enrols no editor, so the Preprint Server Manager `manager.maya` takes the Editor's part there) and the Author `author.alex`. A library file named in a given is seeded through `libraryFiles[]` on the context (Publisher Library) or the submission (Submission Library), `{name, type}` with the fixture default; everything else in a scenario's body is done on screen. Uploads from the browser: `article.pdf` is the OJS and OMP fixture; OPS has `preprint.pdf`, so its suite uploads and seeds that and reads every name with "preprint" in place of "article" ("preprint-OTH.pdf", "preprint-PER.pdf"). `replacement.pdf` (scenario 2) is each app's own fixture, a one-page PDF distinct from `article.pdf` and `preprint.pdf`. After any download, a test waits until the file's name link is enabled again, which the app's two-second timer does, before pressing "OK" in "Add a file" or "Edit" (A9). Recipes: 1 — no decisions, no `libraryFiles`; the Control's "History" is *Submission activity log & notes*' window. 2 — a context with a throwaway `manager`; nothing else. 3 — a context with throwaway `manager`, `editor` (OJS, OMP), `sectionEditor` and `author`, and `libraryFiles: [{name: 'Journal guide', type: 'Other'}]`; the submission with the Section Editor in `participants[]` as `sectionEditor` (a Moderator on OPS). 4 — a context with throwaway `manager`, `editor` (OJS, OMP) and `author`, and `libraryFiles: [{name: 'Journal guide', type: 'Other'}]`; the decided submission with no decisions (OJS and OMP on the Submission stage, OPS on Production) and `libraryFiles: [{name: 'Author contract', type: 'Permissions'}, {name: 'Old contract', type: 'Reports'}]`, the second submission with `libraryFiles: [{name: 'Other submission file', type: 'Other'}]`; "Author contract" is the context's only Permissions file, so its stored name is `article-PER.pdf` (the response's `fileName`); the decline is recorded on screen and the Author's email read in the mail catcher, Mailpit at `http://127.0.0.1:8025` (scenarios.md). 5 {OJS OMP} — a context with throwaway `manager`, `editor`, `copyeditor` and `author`, and `libraryFiles: [{name: 'Journal guide', type: 'Other'}]`; the submission with `decisions: ['sendExternalReview', 'accept', 'sendToProduction']`, the Copyeditor in `participants[]` as `copyeditor`, and `libraryFiles: [{name: 'Editor contract', type: 'Permissions'}]`; the second context the same plus `roles: {copyeditor: {stages: {submission: true}}}` (the Copyeditor's "Stage Assignment" box "Submission" ticked, saved as the role's "Edit" window saves it; note d). Live-probed 2026-09-24: both `libraryFiles[]` keys seeded scratch journals and submissions on all three apps. Test run 2026-09-24: every suite green on its first run, OJS and OMP scenarios 1–5, OPS 1–4.
+**s** — Accounts: `docs/process/users.md` (the seeded roster; `admin`/`admin`, every other account its username twice; throwaway accounts likewise). Where each scenario runs: 1 on the seeded journal, press or preprint server `publicknowledge`, on a scratch submission from `POST scenarios/submission` with submitter `author.alex` (section ART; series `monographs` on the press; section PRE on the preprint server); 2 to 5 on scratch contexts from `POST scenarios/context`, each with its own throwaway `users[]` and its submissions submitted by its throwaway `author`. A Publisher Library change on `publicknowledge` would reach every other suite's "Library Files" list, and a scenario that reads a downloaded name or deletes a file seeds a scratch context, since stored names collide across workers on `publicknowledge` (scenarios.md). On `publicknowledge` the Editor is `editor.diana` (OJS, OMP; a preprint server enrols no editor, so the Preprint Server Manager `manager.maya` takes the Editor's part there) and the Author `author.alex`. A library file named in a given is seeded through `libraryFiles[]` on the context (Publisher Library) or the submission (Submission Library), `{name, type}` with the fixture default; everything else in a scenario's body is done on screen. Uploads from the browser: `article.pdf` is the OJS and OMP fixture; OPS has `preprint.pdf`, so its suite uploads and seeds that and reads every name with "preprint" in place of "article" ("preprint-OTH.pdf", "preprint-PER.pdf"). `replacement.pdf` (scenario 2) is each app's own fixture, a one-page PDF distinct from `article.pdf` and `preprint.pdf`. After any download, a test waits until the list it pressed in has been drawn again at the end of the app's two-second timer (the list replaced, its request done and the file's name link enabled again) before it reads or presses anything in that list (A9, A12). Recipes: 1 — no decisions, no `libraryFiles`; the Control's "History" is *Submission activity log & notes*' window. 2 — a context with a throwaway `manager`; nothing else. 3 — a context with throwaway `manager`, `editor` (OJS, OMP), `sectionEditor` and `author`, and `libraryFiles: [{name: 'Journal guide', type: 'Other'}]`; the submission with the Section Editor in `participants[]` as `sectionEditor` (a Moderator on OPS). 4 — a context with throwaway `manager`, `editor` (OJS, OMP) and `author`, and `libraryFiles: [{name: 'Journal guide', type: 'Other'}]`; the decided submission with no decisions (OJS and OMP on the Submission stage, OPS on Production) and `libraryFiles: [{name: 'Author contract', type: 'Permissions'}, {name: 'Old contract', type: 'Reports'}]`, the second submission with `libraryFiles: [{name: 'Other submission file', type: 'Other'}]`; "Author contract" is the context's only Permissions file, so its stored name is `article-PER.pdf` (the response's `fileName`); the decline is recorded on screen and the Author's email read in the mail catcher, Mailpit at `http://127.0.0.1:8025` (scenarios.md). 5 {OJS OMP} — a context with throwaway `manager`, `editor`, `copyeditor` and `author`, and `libraryFiles: [{name: 'Journal guide', type: 'Other'}]`; the submission with `decisions: ['sendExternalReview', 'accept', 'sendToProduction']`, the Copyeditor in `participants[]` as `copyeditor`, and `libraryFiles: [{name: 'Editor contract', type: 'Permissions'}]`; the second context the same plus `roles: {copyeditor: {stages: {submission: true}}}` (the Copyeditor's "Stage Assignment" box "Submission" ticked, saved as the role's "Edit" window saves it; note d). Live-probed 2026-09-24: both `libraryFiles[]` keys seeded scratch journals and submissions on all three apps. Test run 2026-09-24: every suite green on its first run, OJS and OMP scenarios 1–5, OPS 1–4.
 
 <a id="fn-td1"></a>
 **td1** — Live-probed 2026-09-24 (Rule 1b; OJS, OMP): an assigned Layout Editor on a submission at Copyediting, and an assigned Copyeditor on "Production" and on a submission in review, saw "You don't currently have access to that stage of the workflow." in place of the panels with "Preview" and "Library" in the header; the window was titled "Submission Library" and carried "Add a file" and "View Document Library", and "Layout note" added as "Other" listed. A preprint server has no assistant on the workflow.
@@ -846,6 +863,9 @@ Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
 
 <a id="fn-a11"></a>
 **f-a11** — Note q. Live-probed 2026-09-24 (all three apps, twice each): "No file" typed, "Other" chosen, "OK" with no upload, then the window's "Close": no question, the window gone, no row added.
+
+<a id="fn-a12"></a>
+**f-a12** — `lib/pkp/js/classes/linkAction/PostAndRedirectRequest.js`: the two-second `setTimeout` of note f-a9 calls `finishCallback_`, which in one task re-enables the link (`LinkActionHandler.enableLink()`) and then hands the `enable-link-action` answer to `handleJson()`; `FileApiHandler::enableLinkAction()` answers `DAO::getDataChangedEvent()` with no element id, so the event bubbles to the grid and `GridHandler.refreshGridHandler()` fetches the whole grid (`fetch-grid`); `replaceGridResponseHandler_()` replaces the grid element with the server's markup, in which every row's strip (`tr.row_controls`) is rendered hidden and every name link reads `href="#"` until its own script runs. Live-probed 2026-09-30 (Rule 8a; all three apps, the Settings tab, one run each, `.reports/flake-0930/u39s2/person-strip-{ojs,omp,ops}.json`): a throwaway manager on a scratch journal pressed "Journal guide", waited one second and pressed its arrow: "Edit" showed; about 2.1 s after the press on the name the page asked for the list again (`library-file-admin-grid/fetch-grid`), and three seconds after the arrow "Edit" was hidden and the arrow read closed (`show_extras`); no page error. Test run 2026-09-30 (the U39 files five times each, OJS 25/25, OMP 25/25, OPS 20/20, green): after every download the page object waited for the list it pressed in to be replaced, and each was, in the "Submission Library" window, in "View Document Library" and on the tab. No request failed on the path.
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp/classes/file/LibraryFileManager.php` overrides `getTypeSuffixMap()`, `getTypeTitleKeyMap()` and `getTypeNameMap()` to put `LibraryFile::LIBRARY_FILE_TYPE_CONTRACT` ("CON", `settings.libraryFiles.category.contracts` "Contracts") before the lib/pkp set; OJS's and OPS's `LibraryFileManager` are empty subclasses of `PKPLibraryFileManager` (positive chain evidence, RUNBOOK rule 8). The overrides use `array_merge()`, which renumbers integer keys, so a press stores its types as 0–4 (Contracts 0 … Other 4) instead of lib/pkp's 1–5; the numbering is consistent within OMP and nothing on screen shows it. Each override also merges into its own `static $map`, so a second call in the same request returns the four shared types again under 5–8; the lists read the first five numbers, which do not change. Live-probed 2026-09-24: note td8; the composer's "Library Files" labels a press's "Contracts" file right.

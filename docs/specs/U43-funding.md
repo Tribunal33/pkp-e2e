@@ -144,6 +144,16 @@ one error." and the Save button stays disabled until the field is corrected.
     the funders reach the reviewer's browser under no review type, and
     there is no screen or traffic on which an author-anonymous review type
     reads differently from an open one. <sup>h</sup>
+14. **Languages.** The workflow list and its panel follow the interface
+    language. In French, "Order" and "Save Order" ("Trier", "Enregistrer
+    l'ordre"), the row menu, the delete confirmation, the panel's "Add",
+    "Save" and "Close" buttons and the "Delete" under the chosen funder
+    read French, and a funder named through the French panel saves and is
+    listed at once and after a reload. The list's heading, explanation,
+    "Add Funder" button, column heading and empty-list line, and the
+    panel's title and field texts, read raw codes ⚠ [A14](#a14). The
+    Author's own list reads the same "Trier" and codes, grayed out where
+    they may not edit (Rule 8). <sup>i</sup>
 
 ## Side effects
 
@@ -410,6 +420,10 @@ and the mail catcher's address are in its footnote.
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the list in French: "Trier" / "Enregistrer l'ordre", the row menu
+    and the delete confirmation in French, and a funder saved through
+    the French panel listed at once and after a reload (Rule 14)
 - **Nothing new to test**:
   - grant validation on while the registry service is unreachable, the
     check skipped and the save going through (Settings): the save
@@ -430,6 +444,7 @@ Left out of the scenarios above, by reason:
   - A10 (the registry name shown everywhere on a connected install;
     Fields)
   - A12 (a save with only a non-primary language filled accepted; Fields)
+  - A14 (raw codes on the list and the panel in French; Rule 14)
 - **No seed**:
   - a hand-named funder's grants never checked against a grant registry
     (Fields): the checked case needs a server that reaches the registry,
@@ -461,7 +476,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-08-28; additions
-2026-08-29), unreviewed unless an entry notes otherwise; the team settles
+2026-08-29 and 2026-09-30), unreviewed unless an entry notes otherwise; the team settles
 them on spec review. The summary is sorted 🐞 → ❓ → ✅ and the entries below
 are the source; badges, Impact and Basis:
 [Reading a spec](GLOSSARY.md#reading-a-spec).
@@ -471,6 +486,7 @@ are the source; badges, Impact and Basis:
 | [A3](#a3) | A registry funder picked while the server cannot reach the registry errors and saves permanently nameless | 🐞 | user-visible | — |
 | [A4](#a4) | On a press or preprint server the wizard's funders table and Review step still read empty after a successful save | 🐞 | minor | — |
 | [A5](#a5) | Ordering arrows and the typed-name boxes are broken for assistive technology | 🐞 | minor | — |
+| [A14](#a14) | In French the funders list and the "Add Funder" / "Edit Funder" panel show raw codes for their headings, explanations and field labels | 🐞 | minor | — |
 | [A1](#a1) | "Require the author to add funder metadata" warns on the Review step without blocking the submission | ❓ | user-visible | — |
 | [A2](#a2) | Every publication version shows and edits the same funders list, though the screen presents funding per version | ❓ | minor | — |
 | [A6](#a6) | The typed-text suggestion looks like a registry match, so real funders get saved unlinked without anyone noticing | ❓ | user-visible | — |
@@ -624,6 +640,43 @@ the required marker come off? Lean: the marker is the defect. The
 any-one-language rule is what the save enforces and what the list renders
 from.
 Basis: probe. <sup>f-a12</sup>
+
+<a id="a14"></a>
+**A14 — In French the funders list and its panel show raw codes** · 🐞 · minor.
+With the interface in French (Canada), the funders list and the "Add
+Funder" / "Edit Funder" panel read raw codes where French words belong,
+on a journal, a press and a preprint server:
+- the list, the Author's too: the heading "Funders" reads
+  "##submission.funders##", as does the table's name for a screen reader; the explanation
+  "##submission.funders.description##"; the "Add Funder" button
+  "##submission.funders.action.addFunder##"; the "Funder Name" column
+  "##submission.funders.column.name##"; an empty list
+  "##submission.funders.emptyFunders##" instead of "No funders have been
+  added."; and a screen reader hears the "More Actions" column header and
+  each row's "…" button as "##common.moreActions##";
+- the panel: its title "##submission.funders.addFunder.title##" or
+  "##submission.funders.editFunder.title##"; the "Funder" field
+  "##submission.funders.funder##", its guidance
+  "##submission.funders.funder.description##" and the search box's label
+  "##submission.funders.funder.searchPhraseLabel##"; once the typed text
+  is picked, the name box "##submission.funders.funder.typeTranslationNameInLanguageLabel##"
+  instead of "Type the funder name in {language}"; "Funder Grants"
+  "##submission.funders.funder.grants.label.name##", also the grant
+  table's name for a screen reader, and its explanation
+  "##submission.funders.funder.grants.label.description##"; the grant
+  columns "##submission.funders.funder.grant.doi##",
+  "##submission.funders.funder.grant.number##" and
+  "##submission.funders.funder.grant.name##".
+
+Expected: French words, as the same screens' "Trier", row menu, delete
+confirmation and panel buttons show (Rule 14); in English none of these
+codes appears. A French-speaking manager or author has to guess what the
+panel's fields ask for, though a funder still saves. The side-menu entry
+"Funding" and the page heading are
+[Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s
+codes, and why a missing French text shows as a code at all is
+[Languages & locales](U57-languages-and-locales.md#a4)'.
+Basis: probe. <sup>f-a14</sup>
 
 ### OPS
 
@@ -836,6 +889,36 @@ on the anonymous assignment's publication payload, full on the open one)
 was made on a checkout that predates the move. Whether the publication's
 `fundingStatement` is withheld is *Publication metadata*'s field and is
 not verified here.
+
+<a id="fn-i"></a>
+**i — the French interface.** Live-probed 2026-09-30 (Rule 14; A14) at
+ojs `7ce98ec09e`, omp `3b0ecf794c`, ops `c8af945bb7` (lib/pkp
+`3dc90c81a6`), OJS, OMP and OPS, two runs, each on a scratch context
+with English and French (Canada) as interface languages, as its
+manager and as the submitting Author, on a submission queued at
+Production with an empty list, one with references and media, and a
+published one; every French read paired with the same read in English
+(no code on the funders surfaces there). French on screen: "Trier" /
+"Enregistrer l'ordre" (pressed), the row menu "Modifier" / "Supprimer",
+the delete dialog "Supprimer" / "Êtes-vous certain-e de vouloir
+supprimer cet élément ? Cette opération est irréversible." / "OK" /
+"Annuler" (read, then left), and in the panel "Fermer", "Supprimer"
+under the chosen funder, "* Obligatoire", "Aucun élément" for an empty
+grant table, "Ajouter", "Enregistrer". A funder typed in the French
+panel ("Fondation fri30a r1", typed text picked; the registry query was
+answered empty in the browser, as on the suites' installs) saved with
+the funders POST answering 200 and was listed right after the save and
+after a reload, on all three apps in both runs; its "Edit" panel read
+the same codes. The Author's list, with the funder on it, read the same
+codes on all three apps. No
+request failed, none answered ≥ 500, and no script error was logged.
+Not read in French: the wizard's Funders section and Review step, the
+panel's validation messages and the landing page's Funders block.
+Mechanism: none of the `submission.funders.*` keys has an entry in lib/pkp
+`locale/fr_CA/submission.po`, nor `common.moreActions` in
+`locale/fr_CA/common.po`; the client prints the key in place of the text.
+The frame's `##submission.funding##` (menu entry, page heading) is
+*Workflow screen & stage access*' A11.
 
 <a id="fn-s1"></a>
 **s1 — scenario 1 seeding.** One scratch submission (any stage before
@@ -1065,6 +1148,17 @@ Move funders to submission"), which points `funderManagerStore` at
 on 2026-09-03 `f88b7e6a` sits in OMP's and OPS's `lib/ui-library` (OMP
 `a1aefa3fe`, OPS `6bda92fb03`) and the apps' own e2e runs at those tips are
 green (pkp/omp run 33629780688, pkp/ops run 33629815586, both 2026-09-02).
+
+<a id="fn-f-a14"></a>
+**f-a14 — A14 evidence.** Live-probed 2026-09-30 (fn i's probe): every
+code listed in A14 read on all three apps in both runs, as the manager on the
+empty, the filled and the published submission, and in the "Add
+Funder" panel before and after the typed text was picked and in the
+"Edit Funder" panel; `##submission.funders##` also as the table's
+`aria-label`, `##common.moreActions##` as the screen-reader-only column
+header and as each row's "…" button name. The English control read
+"Funders", "Add Funder", "Funder Name", "No funders have been added."
+and the panel's English labels.
 
 <a id="fn-f-ops1"></a>
 **f-ops1 — OPS1 evidence.** Live-probed 2026-08-28: the OPS submitting

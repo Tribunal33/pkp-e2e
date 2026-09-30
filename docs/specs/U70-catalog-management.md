@@ -93,7 +93,10 @@ is left. <sup>g</sup>
 
 **The "Catalog Entry" page.** Workflow › "Publication" › the version ›
 "Catalog Entry", headed "Publication: Catalog Entry". Five groups, top to
-bottom; "Save" at the foot. <sup>h</sup>
+bottom; "Save" at the foot. In French the group headings, most of the
+descriptions and the "Update Type" and "Summary of Changes" fields show
+raw keys, text such as "##publication.placement##" in place of the words
+⚠ [A15](#a15). <sup>h</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
@@ -725,6 +728,8 @@ Left out of the scenarios above, by reason:
   - A12 (a "Filters" column left open while ordering; Rule 10a)
   - A13 (the last featured book's down arrow; Rule 10b)
   - A14 (the ordering arrows' names for a screen reader; Rule 10a)
+  - A15 (the Catalog Entry page in French; Fields, the "Catalog Entry"
+    page)
 - **Owned by another feature**:
   - an assistant with Production access who may not edit the
     publication: the Catalog Entry page with "Save" greyed out (Actors
@@ -772,6 +777,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | While ordering, an open "Filters" column stays and can leave the page with no "Save Order" or "Cancel" | 🐞 | minor | — |
 | [A13](#a13) | While ordering, the last book's down arrow silently costs an extra press | 🐞 | minor | — |
 | [A14](#a14) | Screen readers hear "Increase position of undefined" on the ordering arrows | 🐞 | minor | — |
+| [A15](#a15) | In French the Catalog Entry page shows raw keys for its group headings, descriptions and "Update Type" list | 🐞 | minor | — |
 | [A1](#a1) | A Series editor opens the Catalog page by its address, then every action on it is refused | ❓ | minor | — |
 
 ### All apps
@@ -935,6 +941,49 @@ position of undefined" and "Decrease position of undefined", so a
 screen-reader user cannot tell which book an arrow moves. Expected: the
 book's title in place of "undefined".
 Basis: probe, 2026-09-27. <sup>f-a14</sup>
+
+<a id="a15"></a>
+**A15 — The Catalog Entry page shows raw keys in French** · 🐞 · minor.
+With French as the interface language, the Catalog Entry page (listed
+under the version as "Catalogue", headed "Publication : Catalogue") reads
+raw keys where French words belong:
+- the five group headings: "##publication.placement##",
+  "##publication.publicationTiming##",
+  "##publication.versionAndUpdates##", "##publication.display##" and
+  "##publication.access##";
+- the descriptions under "Séries" ("##publication.series.description##"),
+  "Position dans cette série (ex: livre 2 ou Volume 2)"
+  ("##submission.submit.seriesPosition.description##"), "Date de
+  publication" ("##publication.datePublished.description##") and
+  "Illustration de couverture" ("##publication.coverImage.description##");
+- "Update Type": its label "##publication.updateType.label##", its
+  description "##publication.updateType.description##", and all twelve
+  kinds of its list: "##publication.updateType.addendum##",
+  "##publication.updateType.clarification##",
+  "##publication.updateType.correction##",
+  "##publication.updateType.corrigendum##",
+  "##publication.updateType.erratum##",
+  "##publication.updateType.expressionOfConcern##",
+  "##publication.updateType.newEdition##",
+  "##publication.updateType.newVersion##" (chosen at first),
+  "##publication.updateType.partialRetraction##",
+  "##publication.updateType.removal##",
+  "##publication.updateType.retraction##" and
+  "##publication.updateType.withdrawal##";
+- "Summary of Changes": its label "##submission.form.summaryOfChanges##"
+  and its description "##publication.summaryOfChanges.description##".
+
+The field labels, "URL Path"'s description, "Insert Content" ("Insérer le
+contenu") and "Save" ("Enregistrer") are French. A French-speaking Press manager fills the page
+without its group names or most of its guidance, and picks the kind of
+update from twelve keys. Expected: French throughout; the English page
+shows none of these keys. The keys of the workflow screen around the page
+are [Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s,
+why a missing French text shows as a key at all is
+[Languages & locales](U57-languages-and-locales.md#a4)', and a journal's
+"Publication Settings" and a preprint server's "Preprint entry" pages are
+recorded in [Publish, schedule & versions](U49-publish-schedule-and-versions.md#a10)'s A10.
+Basis: probe, 2026-09-30. <sup>f-a15</sup>
 
 ---
 
@@ -1576,6 +1625,22 @@ gave M3, M2, M1.
 <a id="fn-f-a14"></a>
 **f-a14** — Note k. Live-probed 2026-09-27, OMP: every arrow of every row,
 with and without a filter.
+
+<a id="fn-f-a15"></a>
+**f-a15** — Note h (the form's strings). Live-probed 2026-09-30, OMP, two
+runs, as a scratch press's Press manager with French (Canada) as the
+interface language, on a book in Production never published and on a
+published one: the keys quoted, as text on the page and in the "Update
+Type" list (listed there in the order quoted, by key); the version's menu
+entry "Catalogue", the heading "PUBLICATION : CATALOGUE" (capitals by the
+page's styling), the labels "Séries", "Position dans cette série (ex:
+livre 2 ou Volume 2)", "Date de publication", "Illustration de
+couverture", "Chemin d'accès URL" with "Un chemin d'accès optionnel
+utilisant l'URL au lieu de l'identifiant.", "Insérer le contenu" and
+"Enregistrer". The same page in English showed no key but the help icon's
+(the navigation spec's A1). The frame's keys on the same screen (the
+side menu's, the header's, the version names) are the workflow screen
+spec's A11 and the navigation spec's A23.
 
 ## Reference — entry points & surfaces
 

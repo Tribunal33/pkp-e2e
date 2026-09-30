@@ -56,6 +56,7 @@ const {
     EditorialChrome,
     NavigationTab,
 } = require('../../../../shared/playwright/pages/NavigationChromePages.js');
+const {closeTab} = require('../../../../shared/playwright/support/tabs.js');
 
 const T = 30_000;
 const SERVER = 'publicknowledge';
@@ -309,7 +310,7 @@ test.describe('navigation menus & site chrome', () => {
         const [guide] = await Promise.all([managerContext.waitForEvent('page'), ed.helpLink.click()]);
         await guide.waitForURL(LEARNING, {waitUntil: 'commit'});
         expect(guide.url()).toBe(LEARNING);
-        await guide.close();
+        await closeTab(guide);
         await ed.openUserMenu();
         const lines = await ed.userMenuItems();
         expect(lines.map((l) => l.text)).toEqual(['Change Language', 'English', 'français', 'Edit Profile', 'Logout']);

@@ -30,6 +30,14 @@
  * `.reports/flake-s28/u09s6-throbber/diagnosis.md`: `-fr_CA-` holds the
  * second form language's editor of a legacy form). Off unless both are
  * set; never in CI.
+ *
+ * `PLAYWRIGHT_LEVER=<module path>` is the fifth, for a lever the four above
+ * cannot place: the module's export, `async (context) => {}`, is called with
+ * every context the fixtures open (the `context` fixture and `asUser`), in
+ * every worker, so a diagnosis can hold a request until the test's next
+ * press (U39 S2's download) or hold a rich-text box's sheets without
+ * editing a test or patching modules (U31, U39, U40, 2026-09-30). Off
+ * unless set; never in CI.
  */
 
 const rate = Number(process.env.PLAYWRIGHT_CPU_THROTTLE || 0);
@@ -38,6 +46,7 @@ const holdUrl = process.env.PLAYWRIGHT_HOLD_URL ? new RegExp(process.env.PLAYWRI
 const holdMs = Number(process.env.PLAYWRIGHT_HOLD_MS || 0);
 const iframeHold = process.env.PLAYWRIGHT_IFRAME_HOLD || '';
 const iframeHoldMs = Number(process.env.PLAYWRIGHT_IFRAME_HOLD_MS || 0);
+const lever = process.env.PLAYWRIGHT_LEVER ? require(require('path').resolve(process.env.PLAYWRIGHT_LEVER)) : null;
 
 /**
  * Throttle the CPU of every page (and popup) a BrowserContext opens.
@@ -46,6 +55,9 @@ const iframeHoldMs = Number(process.env.PLAYWRIGHT_IFRAME_HOLD_MS || 0);
  * @param {import('@playwright/test').BrowserContext} context
  */
 async function throttleCpu(context) {
+    if (lever) {
+        await (typeof lever === 'function' ? lever : lever.default)(context);
+    }
     if (holdUrl && holdMs > 0) {
         await context.route(holdUrl, async (route) => {
             await new Promise((resolve) => setTimeout(resolve, holdMs));

@@ -74,12 +74,14 @@ does a published version (Rule 16). <sup>c</sup>
 Publication Formats", one table headed "Publication Formats", with "Add
 publication format" above it for the managing roles. One row per format
 of the chosen version, and under each format one row per format file,
-the newest first. The formats' order is not fixed: a format saved with
-"OK" on its "Edit" tab moves to the end of the list, even with nothing
-changed, and one whose approval or availability changes may move too
-⚠ [A14](#a14). A format file's
-terms or approval do not move its format. The new order shows at once
-and after a reload, and the Author's list and the book's page list the
+the newest first. The formats' order is not fixed: saving a format with
+"OK" on its "Edit" tab, even with nothing changed, or with "Save" on
+its "Metadata" tab, changing its approval or availability, or emptying
+its DOI on the DOIs page ([DOIs](U45-dois.md#press-dois)) can move it
+to the front, to the end or between two others, or leave it in place
+⚠ [A14](#a14). A format file's terms or approval do not move its
+format. The new order shows at once and after a reload, and the
+Author's list, the book's page and the DOIs page (its Rule 45) list the
 formats in the same order. A version with no
 format reads "No Items"; a format with no files shows "No Items" under
 its row, and a remote format (Rule 5) "This item is remotely hosted."
@@ -100,6 +102,12 @@ A format file's row:
 | **Name** | — | The file's number, with an icon for its kind of document, and its name, a link that downloads the file ([→ downloading](U36-submission-files.md#download)). For the managing roles an arrow before it opens "More Information", "Edit" and "Delete", and on an HTML or XML file also "Dependent Files" (Rule 11). <sup>h</sup> <sup>td8</sup> |
 | **Complete** | — | "Awaiting Approval" or "Approved", a link that opens "Approve Proof" or "Revoke Proof Approval" (Rule 13). <sup>h</sup> |
 | **Availability** | — | The file's terms, a link that opens "Set Terms for Downloading" (Rule 15): "Set Terms" until terms are saved, then "Open Access", "Direct Sales" or "Not Available". <sup>h</sup> |
+
+**In French.** With the interface in French (Canada), the page and the
+"Add publication format" window below read French, except the list's
+"Availability" column heading and four texts of the window, which show
+raw codes: the text's internal name between hash signs, such as
+"##grid.catalogEntry.availability##" ⚠ [A25](#a25). <sup>f-a25</sup>
 
 <a id="format-window"></a>
 **The format window.** "Add publication format" opens a window headed
@@ -994,9 +1002,10 @@ Left out of the scenarios above, by reason:
     "A format file's "History"")
   - A13 (the Copyeditor, Marketing and sales coordinator and Funding
     coordinator offered the page without a list; Actors preamble)
-  - A14 (a format saved from "Edit", or whose approval or availability
-    changes, moves in the list, and a file's terms or approval move
-    nothing; Fields, the page)
+  - A14 (a format saved from "Edit" or "Metadata", whose approval or
+    availability changes, or whose DOI is emptied on the DOIs page moves
+    in the list, and a file's terms or approval move nothing; Fields,
+    the page)
   - A15 (a book in the press's second language; Fields, the format
     window)
   - A16 (the "Metadata" tab's close arrow and "Cancel" drop a change;
@@ -1014,6 +1023,8 @@ Left out of the scenarios above, by reason:
     scenario 2 passes it)
   - A24 (a refused "URL Path" comes back as a notice on the next save;
     Rule 6; scenario 8 passes it)
+  - A25 (the French "Availability" column heading and four texts of
+    "Add publication format"; Fields, "In French")
 - **Owned by another feature**:
   - the "Identifiers" tabs and who is offered them (Actors row 7;
     *[Identifiers](U44-identifiers.md)*)
@@ -1052,12 +1063,13 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | The "Format Availability" window reads "This format will unavailable to readers." | 🐞 | minor | — |
 | [A12](#a12) | Approving and revoking a format file write the same two "History" lines | 🐞 | minor | — |
 | [A13](#a13) | The side menu offers "Publication Formats" to a Copyeditor, Marketing and sales coordinator or Funding coordinator, and the page shows them no list | 🐞 | minor | — |
-| [A14](#a14) | A format moves in the list when it is saved from "Edit" or its approval or availability changes | 🐞 | minor | — |
+| [A14](#a14) | A format moves in the list when it is saved from "Edit", its approval or availability changes, or its DOI is emptied on the DOIs page | 🐞 | minor | claim check (claude), 2026-09-30 — no fixed direction; emptying a DOI added |
 | [A15](#a15) | A book in the press's second language cannot get a format without a name in the primary language | 🐞 | minor | — |
 | [A19](#a19) | "Select Files" tells the user to tick an "Include checkbox" and press "Search", neither of which it has | 🐞 | minor | — |
 | [A20](#a20) | A "Direct Sales" price of 0 keeps the link on "Direct Sales" while readers get the file free | 🐞 | minor | — |
 | [A23](#a23) | A date of the wrong length is refused with no message in its window | 🐞 | minor | — |
 | [A24](#a24) | A refused "URL Path" comes back as a notice when the format is next saved, once per refusal | 🐞 | minor | — |
+| [A25](#a25) | In French the list's "Availability" column heading and four texts of "Add publication format" read raw codes | 🐞 | minor | — |
 | [A5](#a5) | "URL Path" accepts a number, or a path another format already uses, and a reader link then answers "404 Not Found" | ❓ | minor | — |
 | [A8](#a8) | The price box's two checks disagree: "10.5" is pressable and refused, "1,500.00" accepted but not pressable | ❓ | minor | — |
 | [A10](#a10) | "Approve Proof" says a file becomes ready to be published, but approval changes nothing readers get | ❓ | minor | — |
@@ -1216,20 +1228,23 @@ serves, or the page shows them the list without controls. A press's
 Basis: probe. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — A format moves in the list when it is saved from "Edit" or its approval or availability changes** · 🐞 · minor.
+**A14 — A format moves in the list when it is saved from "Edit", its approval or availability changes, or its DOI is emptied on the DOIs page** · 🐞 · minor.
 The Publication Formats page lists a version's formats in the order
-they were added until one of them changes. A format saved with "OK" on
-its "Edit" tab, even with nothing changed, moves to the end (the
-"Metadata" tab's "Save" untried).
-One whose approval is revoked moves too, mostly to the end, and one set
-"Not Available" mostly to the front; given back its approval or its
-availability, a format may move to the front, return to its first
-place or stay where it is. So a book whose formats were each approved
-and made available as they were added can already list them out of
-that order. A format file's terms and its "Approve Proof" move nothing.
-Each new order shows at once and after a reload, and the Author's list
-and the book's page follow it. A press cannot keep its formats in the
-order it chose, and readers see the order change on the book's page.
+they were added until one of them changes. Saving a format with "OK"
+on its "Edit" tab, even with nothing changed, revoking or giving back
+its approval, setting it "Not Available" or "Available", or emptying
+its DOI on the DOIs page and pressing "Save" can move it to the front,
+to the end or between two others, or leave it in place. No change
+moves it the same way every time: an unchanged "OK" has put a format
+first, left it in place and put it last. The "Metadata" tab's "Save"
+moved a format to the front once and left it in place once. Changing a
+format's DOI to another value, changing the book's own DOI, a format
+file's terms and its "Approve Proof" move nothing. So a book whose
+formats were each approved and made available as they were added can
+already list them out of that order. Each new order shows at once and
+after a reload, and the Author's list, the book's page and the DOIs
+page follow it. A press cannot keep its formats in the order it chose,
+and readers see the order change on the book's page.
 Expected: the formats keep the order they were added in.
 Basis: probe. <sup>f-a14</sup>
 
@@ -1340,6 +1355,35 @@ the page, about a path that was by then accepted. A refused date does
 the same ([A23](#a23)). Expected: the message shows only in the window,
 and a save that succeeds shows no error.
 Basis: test run. <sup>f-a24</sup>
+
+<a id="a25"></a>
+**A25 — In French the "Availability" heading and four texts of "Add publication format" read raw codes** · 🐞 · minor.
+With the interface in French (Canada), the Publication Formats page and its "Add
+publication format" window read French ("Formats de publication",
+"Ajouter un format de publication", "Nom", "Terminer", "Modifier le
+fichier", "Sélectionner les fichiers"; in the window "Détails du
+format", "Format de publication", "Format physique", "Chemin d'accès
+URL", "Annuler", "OK"), except for raw codes:
+- the list's "Availability" column heading reads
+  "##grid.catalogEntry.availability##" for the Press manager; the
+  Author's list, which has only "Name", shows no code;
+- in the window, the box "This format will be available at a separate
+  website" reads "##grid.catalogEntry.remotelyHostedContent##", the
+  heading "ISBN" "##grid.catalogEntry.isbn##", and the lines under the
+  two "ISBN" boxes "##grid.catalogEntry.isbn13.description##" and
+  "##grid.catalogEntry.isbn10.description##".
+
+A French-speaking Press manager cannot tell what the column holds, what
+the box does or which "ISBN" box takes which code. The English screen
+shows none of these codes. The five "Publication Format" kinds
+("Digital (on physical carrier) (DA)" …) read in English in both
+languages; they are the book trade's names, not codes. The workflow
+screen's own codes around the page are
+[Workflow screen & stage access, its A11](U24-workflow-screen-and-stage-access.md#a11),
+and why a missing French text shows as a code at all is
+[Languages & locales, its A4](U57-languages-and-locales.md#a4).
+Expected: French words, as the rest of the page shows.
+Basis: probe. <sup>f-a25</sup>
 
 ---
 
@@ -1461,7 +1505,8 @@ name is an `<a target="_blank">` to `urlRemote`. The status links:
 Rule 9). Format order: `PublicationFormatDAO::getByPublicationId()`
 orders by `seq`, which every format is created with as 0, so the
 database alone decides the order (A14). Live-probed 2026-09-28 (Fields,
-the page and the rows): notes td7, td8.
+the page and the rows): notes td7, td8. Live-probed 2026-09-30 (Fields,
+the page, the order and what moves it): note f-a14.
 
 <a id="fn-e"></a>
 **e** — `editFormat()` renders `templates/controllers/grid/catalogEntry/editFormat.tpl`:
@@ -2305,6 +2350,29 @@ list matched the manager's order in four reads. One book of sixteen
 listed "Bravo, Charlie, Delta, Alpha" before any action: the seeding
 approves each format and makes it available through the same windows.
 The two different six-format orders of 2026-09-28 fit such moves.
+Live-probed 2026-09-30 (Fields, the page; A14), two runs and a shorter
+third, as the Press manager on a press giving DOIs to monographs and
+publication formats, the same four-format book per case; the order read
+at once, after a reload, on the DOIs page's expanded view, on the
+book's page and as the Author. Bravo's "Edit" › "OK" with nothing
+changed: first three times in each run; in the third run first, then
+in place, then last. A changed name: first, both runs. "Metadata" ›
+"Save" after choosing "Product Composition": first once, in place once;
+a second "Save" unchanged: no move. Approval revoked: first four times
+of four; given back: no move. "Not Available": first twice, third once,
+last once; "Available" again: from third to last once, last kept once.
+Bravo's DOI emptied on the DOIs page (a `POST` with
+`X-Http-Method-Override: DELETE` to `/api/v1/dois/{id}`): first, all
+three runs. Typed back into the emptied box (`POST /api/v1/dois`, then
+`PUT /api/v1/_dois/publicationFormats/{id}`): stayed first. Changed to
+another value (`PUT /api/v1/dois/{id}` alone), the book's own DOI
+changed, and "Save" with nothing changed (no request): no move. A
+file's terms and "Approve Proof": no move. Every save on the DOIs page
+showed "DOI(s) successfully updated". The four reads agreed every time,
+and the rows' physical order in `publication_formats` matched them;
+every `seq` read 0, and a step that moved a format had rewritten its
+row. One book of thirty listed "Charlie, Delta, Alpha, Bravo" before
+any action.
 
 <a id="fn-f-a15"></a>
 **f-a15** — Note e: the form requires the name in the book's language
@@ -2365,6 +2433,27 @@ underscores and periods.", each with "Close". Each refused "OK" answered
 `general` notifications titled "Errors occurred processing this form",
 class `notifyFormError`, with that message. The refused date of A23
 arrives the same way. Evidence: `.reports/U73/tomp/`.
+
+<a id="fn-f-a25"></a>
+**f-a25** — Notes d, e. OMP `locale/fr_CA/locale.po` leaves
+`grid.catalogEntry.availability`, `grid.catalogEntry.remotelyHostedContent`,
+`grid.catalogEntry.isbn`, `grid.catalogEntry.isbn13.description` and
+`grid.catalogEntry.isbn10.description` empty (`msgstr ""`), and
+`grid.catalogEntry.remoteURL` ("URL of remotely-hosted content") too;
+that box shows only with the remote box ticked, which the probe did not
+do, and the window's hidden copy of its label held the code. The format's own "Edit" window uses the same form
+(`formatForm.tpl`) and was not read in French. The kinds come from the
+ONIX code lists, which ship under `locale/en` only. Code read on the omp
+checkout `3b0ecf794`. Live-probed 2026-09-30, two runs, on a scratch
+press with English and French (Canada) as interface languages, every
+French read paired with the same read in English: as the Press manager,
+the page of a book in Production with no format, of one holding the
+format "PDF" ("Complétée", "Disponible") and of the same book published,
+and "Add publication format" on the second; as the Author, the second
+and third pages. The French list's heading row read "Nom", "Terminer",
+"##grid.catalogEntry.availability##"; the window read the four codes in
+both runs; the English reads showed no code on the page or in the
+window beyond the help icon's (Navigation menus & site chrome).
 
 ## Reference — entry points & surfaces
 

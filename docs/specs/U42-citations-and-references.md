@@ -148,6 +148,10 @@ typed. Nothing asks first. The one exception is an author row added in
      is also headed "Structured References". An empty table reads "The
      citations list is empty, please add citations above." The title and
      the line are the same whether or not lookup is on.
+
+   With the interface in French, the "Add" box's help text, "Delete all
+   references", the table's texts and the windows the page opens read
+   raw codes where French words belong ⚠ [A21](#a21).
 4. **The row.** Each row shows the reference's text and a "More Actions"
    ("…") menu with **"Edit"** and **"Delete"** (with lookup on, also
    "Reprocess", Rule 15). References are listed in the order they were
@@ -925,6 +929,8 @@ Left out of the scenarios above, by reason:
     scenario 6 passes them)
   - A20 (the empty "References" heading on a book or a preprint page;
     Rule 27; scenario 3 passes it)
+  - A21 (the References page's texts and windows read raw codes in
+    French; Rule 3)
 - **No seed**:
   - a reference structured by the services: its identifier links,
     title, details and the "Wikidata" and "OpenAlex" badges (Rules 11,
@@ -977,6 +983,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | The row expander is always named "Collapse" and ignores the keyboard; rows with nothing to expand carry an invisible one | 🐞 | minor | — |
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | minor | — |
 | [A20](#a20) | A book or preprint with no references shows an empty "References" heading | 🐞 | minor | — |
+| [A21](#a21) | In French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | 🐞 | minor | — |
 | [A5](#a5) | A reference whose lookup failed for good looks exactly like one still waiting | ❓ | minor | — |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
 | [A17](#a17) | "Edit" accepts a repeated reference that "Add" drops | ❓ | minor | — |
@@ -1161,6 +1168,44 @@ references, as an article page does. On a press and on a preprint server
 every published item's page carries the "References" heading, with nothing
 under it when the item has none.
 Basis: probe, 2026-09-24. <sup>f-a20</sup>
+
+<a id="a21"></a>
+**A21 — In French the References page shows raw codes** · 🐞 · minor.
+With the interface in French (Canada), the side menu's "Références"
+entry, a journal's and a press's heading "Publication : Références",
+the "Add" box's label "Références" and "* Obligatoire", the "Ajouter"
+button and the row menu's "Modifier" and "Supprimer" read French, but
+the page's other texts read raw codes where French words belong, for the
+Journal Manager and the Author alike, on a journal, a press and a
+preprint server:
+- the "Add" box's help text reads
+  "##submission.citations.structured.description##", and the "Delete all
+  references" link "##submission.citations.structured.deleteAllLink##";
+- the "Structured References" table's title and column heading read
+  "##submission.citations.structured##", the line under the title
+  "##submission.citations.structured.descriptionTable##", the search box
+  and its placeholder "##submission.citations.structured.search.placeholder##",
+  and an empty table "##submission.citations.structured.emptyCitations##";
+- "Edit citation" is titled
+  "##submission.citations.structured.editModal.title##" and its box
+  labelled "##submission.citations.structured.label.rawCitation##", above
+  French "Enregistrer" and "Fermer";
+- "Delete all references" asks
+  "##submission.citations.structured.deleteAllDialog.title##" /
+  "##submission.citations.structured.deleteAllDialog.confirm##" above
+  "OK" and "Annuler", so a French-speaking Journal Manager confirms
+  emptying the list without being told what it does.
+
+A screen reader also hears "##common.moreActions##" as the name of each
+row's "…" menu and "##list.collapse##" for the row's invisible "Collapse"
+button ([A16](#a16)). Adding a reference still works: "Enregistré" shows
+and the new row stays after a reload. The English page shows none of
+these codes. The workflow screen's own codes, such as a preprint
+server's heading "##submission.publication## : Références", are
+[Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s
+finding, and why a missing French text shows as a code at all is the
+question [Languages & locales](U57-languages-and-locales.md#a4) asks.
+Basis: probe, 2026-09-30. <sup>f-a21</sup>
 
 ### Retired
 
@@ -2090,6 +2135,26 @@ unnamed buttons, each holding an image, per row in ordering mode.
 Live-probed 2026-09-24, OMP and OPS, two runs each: an item with no
 references showed the heading "References" over an empty block, with the
 References setting on and off; OJS showed no heading.
+
+<a id="fn-f-a21"></a>
+**f-a21 — A21 evidence.** None of lib/pkp's `submission.citations.structured*`
+keys (`locale/en/submission.po`) has an entry in
+`locale/fr_CA/submission.po`, and `list.collapse` and `common.moreActions`
+have none in `locale/fr_CA/common.po`. Live-probed 2026-09-30 at ojs
+`7ce98ec09e`, omp `3b0ecf794c`, ops `c8af945bb7` (lib/pkp `3dc90c81a6`),
+two runs, all three apps, metadata lookup off, on a scratch journal with
+English and French (Canada) interface languages, as its Journal Manager
+and as the submitting Author, on a production-stage submission with no
+references, with two, and published; every French read was paired with
+the same read in `/en/`, where the page showed none of the codes. The
+codes above showed in the text, placeholders and accessible names; two
+more sit only in attributes or hidden controls
+(`submission.citations.structured.expandAll`, and
+`submission.citations.structured.reprocessAllCitations` on the hidden
+"Reprocess all references" link). "Ajouter" with a typed reference
+showed "Enregistré" and the new row, listed again after a reload; "Edit
+citation" and the "Delete all references" dialog were closed with
+"Fermer" and "Annuler". No request failed and no script error showed.
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** Note p. Live-probed 2026-09-24: f-a20, where

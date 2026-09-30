@@ -91,6 +91,8 @@ const {
     awaitLetterEditorReady,
     awaitRequestFormReady,
     openEditReview,
+    saveEditReview,
+    setEditReviewFile,
     isoDate,
     daysFromNow,
     pickDate,
@@ -162,10 +164,13 @@ async function seedScratchPress(
     return {manager, author, seeded};
 }
 
-/** The "Edit Review" window's date pick + OK, resolving once it closes. */
+/**
+ * The "Edit Review" window's OK, resolving once it closes: the page
+ * object's, which presses once the window has stopped moving (a date pick's
+ * calendar or a file box's "No Files Selected" slide).
+ */
 async function saveEditWindow(editModal) {
-    await editModal.getByRole('button', {name: 'OK', exact: true}).click();
-    await expect(editModal.getByText('Review Type')).toBeHidden({timeout: 20_000});
+    await saveEditReview(editModal);
 }
 
 /**
@@ -732,8 +737,10 @@ test.describe('Reviewer assignment & management (U27)', () => {
         await pickDate(page, editModal, 'reviewDueDate', daysFromNow(35));
         const fileBoxes = editModal.locator('input[name="selectedFiles[]"]');
         await expect(fileBoxes).toHaveCount(2);
-        for (const box of await fileBoxes.all()) {
-            await box.check();
+        // Each tick slides the warning above the grid: the page object
+        // presses once the window has stopped moving.
+        for (const name of [fileA, fileB]) {
+            await setEditReviewFile(editModal, name, true);
         }
         await saveEditWindow(editModal);
 
@@ -759,16 +766,11 @@ test.describe('Reviewer assignment & management (U27)', () => {
         await expect(boxes).toHaveCount(2);
         const noFiles = editModal.getByText('No Files Selected');
         await expect(noFiles).toBeHidden();
-        for (const box of await boxes.all()) {
-            await box.uncheck();
+        for (const name of [fileA, fileB]) {
+            await setEditReviewFile(editModal, name, false);
         }
         await expect(noFiles).toBeVisible();
-        const firstBox = editModal
-            .getByRole('row')
-            .filter({hasText: fileA})
-            .locator('input[type="checkbox"]')
-            .first();
-        await firstBox.check();
+        await setEditReviewFile(editModal, fileA, true);
         await expect(noFiles).toBeHidden();
         await saveEditWindow(editModal);
 

@@ -87,7 +87,9 @@ sit on the heading's right, left to right: <sup>a</sup> <sup>f</sup>
 | "Document Outline" (a fold-out section) | — | The text's headings (levels 1 to 3), each a button bearing the heading's text; "No headings yet." when there are none (Rule 19) |
 
 Nothing on either page is required, and neither page has a form-level
-"Save" other than the Body Text's own.
+"Save" other than the Body Text's own. With the interface in French, the
+tick box, its two confirmation windows and some of the "Body Text"
+panel's labels show raw codes ⚠ [A21](#a21).
 
 ## Rules & state
 
@@ -724,6 +726,8 @@ Left out of the scenarios above, by reason:
     message; Rule 20b)
   - A20 (a warning in the server's log on each JATS "Upload"; Rule 3;
     scenario 1 uploads without reading the log)
+  - A21 (the tick box, its two windows and labels of the "Body Text"
+    panel read as raw codes in French; Fields)
   - OMP1 (a press's confirmed "Send to Text Editor" leading nowhere;
     Purpose)
 - **No seed**:
@@ -769,6 +773,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | Opening a "Body Text" side section while another is open closes both | 🐞 | minor | — |
 | [A18](#a18) | A sent file that cannot be converted fails with no message | 🐞 | minor | — |
 | [A20](#a20) | Each JATS "Upload" leaves a warning in the server's log | 🐞 | invisible | — |
+| [A21](#a21) | In French the tick box, its two windows and labels of the "Body Text" panel show raw codes | 🐞 | minor | — |
 | [OMP1](#omp1) | A press offers "Send to Text Editor", but has no "Body Text" page to send to | 🐞 | user-visible | — |
 | [A3](#a3) | A published version's Body Text stays editable | ❓ | minor | — |
 | [A4](#a4) | A new version starts with an empty Body Text, though its JATS file and media are copied | ❓ | user-visible | — |
@@ -973,11 +978,46 @@ Basis: probe, 2026-09-25. <sup>f-a19</sup>
 <a id="a20"></a>
 **A20 — Each JATS "Upload" leaves a warning in the server's log** · 🐞 · invisible.
 Every "Upload" on "JATS XML" writes a PHP warning ("foreach() argument
-must be of type array|object, string given") to the server's log. The
-upload succeeds and nothing on screen shows the warning. Adding a media
-file writes the same warning
+must be of type array|object, string given") to the server's log (note
+f-a20 names it), which no screen shows. The upload succeeds. Adding a
+media file does the same
 ([→ Media files A6](U47-media-files.md#a6)).
 Basis: test run, 2026-09-25. <sup>f-a20</sup>
+
+<a id="a21"></a>
+**A21 — In French the tick box and the "Body Text" panel show raw codes** · 🐞 · minor.
+With the interface in French (Canada), the two pages show raw codes where
+French words belong, on every version, published ones included:
+- "JATS XML": the box "Make available with publication" reads
+  "##publication.jats.makePublic##". Ticking it opens a window titled
+  "##publication.jats.enableVisibilityTitle##" whose only sentence is
+  "##publication.jats.enableVisibilityMessage##"; unticking it opens
+  "##publication.jats.disableVisibilityTitle##" with
+  "##publication.jats.disableVisibilityMessage##". Both windows offer
+  "Confirmer" and "Annuler", so a French-speaking editor makes the
+  article's JATS XML public, or withdraws it, from a window they cannot
+  read. "Confirmer" and "Annuler" work as in English (Rule 9).
+- "Body Text": the panel's heading "Document Edit" reads
+  "##publication.bodyText.documentPanel##", the hint under "References"
+  "##publication.bodyText.references.dragHint##", and the "Selected
+  Element" and "Document Outline" sections
+  "##publication.bodyText.selectedElement##" and
+  "##publication.bodyText.outline##". A screen reader hears the panel
+  and the editor named by the codes too
+  ("##publication.bodyText.documentPanel##",
+  "##publication.bodyText##").
+
+Expected: French words, as the rest of both pages shows ("XML JATS",
+"Téléverser", "Information détaillée", "Supprimer", "Télécharger", the
+line "Dernière modification le {date} par {username}", the delete window
+"Confirmer la suppression du XML JATS" with "Supprimer le fichier JATS";
+"Enregistrer", "Modifications non sauvegardées", "Plein écran",
+"Références"); the English screens show none of these codes. The side
+menu's "Body Text" entry and the "Publication: Body Text" heading are
+[Workflow screen & stage access A11](U24-workflow-screen-and-stage-access.md#a11)'s
+finding, and why a missing French text shows as a code at all is
+[Languages & locales](U57-languages-and-locales.md#a4)'.
+Basis: probe, 2026-09-30. <sup>f-a21</sup>
 
 ### OMP
 
@@ -1214,7 +1254,10 @@ is made.
 **f-a19** — Note e: `RedirectGuestToLogin` sends the visitor to `login?source=…/jats/download`; after `login/signIn` the browser follows to the download, whose attachment response leaves the tab on the Login page. Probe: d26.
 
 <a id="fn-f-a20"></a>
-**f-a20** — Test run 2026-09-25, OJS, scenario 1 in the green run and a rerun of scenarios 1, 3 and 6: the screen showed the upload as Rule 3 says (the toast, the uploaded XML, the line), and the worker servers' logs held "PHP Warning: foreach() argument must be of type array|object, string given in …/lib/pkp/classes/core/PKPBaseController.php on line 428" right before the upload's `POST …/submissions/{n}/publications/{m}/jats` (200), once per run and on no other request; no 5xx. A seeded `jats.file` (scenarios 3 and 6) logged none. Code: `PKPJatsController::add()` runs `convertStringsToSchema(SCHEMA_SUBMISSION_FILE, …)` on the upload's form fields, and a field the submission-file schema declares multilingual arrives as a plain string, which `convertStringsToSchema()` walks as a locale map. The same class as U47 A6 (note f-a6 there).
+**f-a20** — Test run 2026-09-25, OJS, scenario 1 in the green run and a rerun of scenarios 1, 3 and 6: the screen showed the upload as Rule 3 says (the toast, the uploaded XML, the line), and the worker servers' logs (`apps/ojs/playwright/.server-logs/server-<port>.log`, one per worker port; `docs/process/harness.md` "Server output") held "PHP Warning: foreach() argument must be of type array|object, string given in …/lib/pkp/classes/core/PKPBaseController.php on line 428" right before the upload's `POST …/submissions/{n}/publications/{m}/jats` (200), once per run and on no other request; no 5xx. A seeded `jats.file` (scenarios 3 and 6) logged none. Code: `PKPJatsController::add()` runs `convertStringsToSchema(SCHEMA_SUBMISSION_FILE, …)` on the upload's form fields, and a field the submission-file schema declares multilingual arrives as a plain string, which `convertStringsToSchema()` walks as a locale map. The same class as U47 A6 (note f-a6 there).
+
+<a id="fn-f-a21"></a>
+**f-a21** — Live-probed 2026-09-30 (A21; Rules 9, 16), OJS, two runs, each on its own scratch journal with English and French (Canada) as interface languages, as the Journal Manager, on a version in Production with no uploaded file, one with an uploaded file and two references, and a published one; every French read was paired with the same read in English, which showed no code on either page. Codes seen, as visible text: `publication.jats.makePublic`; in the windows (text and title) `publication.jats.enableVisibilityTitle`, `…enableVisibilityMessage`, `…disableVisibilityTitle`, `…disableVisibilityMessage`; on "Body Text" `publication.bodyText.documentPanel` (also the panel's `aria-label`), `…references.dragHint`, `…selectedElement`, `…outline`, and `publication.bodyText` in the editor's screen-reader-only `h2` (`WorkflowPublicationBodyText.vue`, `#sciflow-editor-heading`), not visible on screen. In French, ticking the box and pressing "Confirmer" kept it ticked right after and after a reload; "Annuler" in the untick window kept it ticked. Leaving "Body Text" for "Titre et résumé" with typed text asked nothing, and the text was gone on return and after a reload (Rule 16; A15). OMP and OPS list neither page in French either. No server error, page error or failed request on any drive. Cause: lib/pkp `locale/fr_CA/submission.po` (at `3dc90c81a6`) has no entry for these keys, nor for any other `publication.bodyText*` key, while it carries `publication.jats`, `…confirmDeleteFile*`, `…autoCreatedMessage` and `…lastModified`. Code read only, not driven: the article page's "JATS XML" link (`publication.jats.download`) and the Body Text import box's texts (`publication.bodyText.import.*`) have no French entry either.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note b and note p: OMP's navigation config has no `bodyText` item, so `navigateToMenu('publication_{id}_bodyText')` finds no entry after the version form's POST/PUT has run; the address keeps `importFileUrl` and `importFileName`. Probe: d28.

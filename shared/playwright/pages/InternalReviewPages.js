@@ -319,9 +319,24 @@ exports.InternalReviewStage = class InternalReviewStage extends BasePage {
         return this.panel(title).locator('tbody tr').filter({hasNotText: /^\s*No Items\s*$/});
     }
 
-    /** A panel's row carrying `text`. */
+    /**
+     * A panel's row carrying `text` (a substring of the whole row). A file
+     * number is refused here: as a substring it also matches the digits of
+     * another row's file name, date or number (`"71"` in `revu71s3….txt`,
+     * the U71 S3 flake, 2026-09-30), so a row by number is `panelRowNumbered`.
+     */
     panelRow(title, text) {
+        if (/^\s*\d+\s*$/.test(String(text))) {
+            throw new Error(`panelRow("${title}", "${text}"): a file number matches as a substring; use panelRowNumbered()`);
+        }
         return this.panel(title).getByRole('row').filter({hasText: text});
+    }
+
+    /** A file list's row whose "No" cell reads exactly `number` (the file's id; the name, date and type cells never equal it). */
+    panelRowNumbered(title, number) {
+        return this.panelRows(title).filter({
+            has: this.page.getByRole('cell', {name: String(number).trim(), exact: true}),
+        });
     }
 
     /** The panel reads "No Items" and holds no data row. */

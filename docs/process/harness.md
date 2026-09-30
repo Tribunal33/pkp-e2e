@@ -383,6 +383,11 @@ to spot: seeding succeeds and the browser step dies.
   hands every "load" listener of an iframe whose id matches its event that
   much later, so one TinyMCE editor finishes its set-up after the others
   (`-fr_CA-` for a legacy form's second language; U09 S6, 2026-09-28).
+  The fifth, `PLAYWRIGHT_LEVER=<module>`, calls that module's export
+  (`async (context) => {}`) with every context the fixtures open, in every
+  worker: a lever placed relative to the test's own actions (a request
+  held until the next press) without editing a test or patching modules
+  (U31, U39, U40 diagnoses, 2026-09-30).
 - `TEST_API_KEY`: enables and gates `/api/v1/_test/*`. The namespace answers
   404 unless the var is in the server's environment, and 403 unless the
   request's `X-Test-Key` header matches.

@@ -280,6 +280,25 @@ and the buttons "Yes" and "No" (Rule 6). <sup>k</sup> <sup>q7</sup>
     are the same whichever stage the submission is on; media files can
     be added while the article is still in Review, by whoever Actors
     offers them to. <sup>b</sup> <sup>q23</sup>
+11. **The page in French.** With the interface in French, parts of the
+    page and its windows read raw codes where French words belong
+    ⚠ [A7](#a7):
+    - on the page: the table's title and line, "Batch Link Media", "Add
+      Media File" and the "More Actions" column heading;
+    - in "Upload Media File": the title, the line and "Click to upload
+      files";
+    - in "Batch Link Media": every text but the file names and "Cancel";
+    - the row menu's "Manually Link Media", and every text of its window
+      but the file name and "Cancel";
+    - in "Edit Metadata": "Name of the file" and its help;
+    - in the delete dialog: the title and the text.
+
+    The other column headings, the row menu's other entries, the other
+    fields of "Edit Metadata" and the "Cancel" and "OK" buttons read
+    French. The side menu's "Media" and the page heading are the
+    workflow screen's
+    ([→ Workflow screen & stage access A11](U24-workflow-screen-and-stage-access.md#a11)).
+    <sup>f-a7</sup>
 
 ## Side effects
 
@@ -392,6 +411,8 @@ and the buttons "Yes" and "No" (Rule 6). <sup>k</sup> <sup>q7</sup>
   the Activity Log that holds the lines of Side effects.
 - **[Submission intake configuration](U58-submission-intake-configuration.md)**:
   the "Components" list whose boxes Settings bullets 1 to 3 describe.
+- **[Languages & locales](U57-languages-and-locales.md#a4)**: why a text
+  the French translation lacks shows as a raw code (Rule 11).
 - **[JATS & Body Text](U48-jats-and-body-text.md)**: the "Body Text" page of a
   journal's side menu, and the images added there.
 - **[Article landing page & reading](U13-article-landing-page-and-reading.md)**:
@@ -821,6 +842,8 @@ Left out of the scenarios above, by reason:
     the list until a reload; Rule 6a; scenario 3 reloads before
     reopening the window)
   - A6 (the warning each added file leaves in the server's log; Rule 2)
+  - A7 (raw codes on the page, its windows and the delete dialog with
+    the interface in French; Rule 11)
   - OJS1 (a reader who is not signed in sees a media change up to a day
     late; Side effects)
   - OPS1 (a preprint server's HTML galley link downloads the file, so
@@ -852,6 +875,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A file over the upload limit fails with a server error; its card reads "Invalid JSON response from server." | 🐞 | minor · crash: server | — |
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, unsaved, until a reload | 🐞 | user-visible | — |
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | invisible | — |
+| [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | minor | — |
 | [OMP1](#omp1) | With "HTML Monograph File" off, a book's HTML file opens as a blank page | 🐞 | user-visible · crash: server | — |
 | [OMP2](#omp2) | On a press, a role that sees the list outside Production cannot download its files: the tab shows a refusal | 🐞 | user-visible | — |
 | [A2](#a2) | The "ID" column shows a pair's number for linked files and another kind of number for the rest | ❓ | minor | — |
@@ -922,9 +946,59 @@ window). <sup>f-a5</sup>
 <a id="a6"></a>
 **A6 — Each media file added leaves a warning in the server's log** · 🐞 · invisible.
 Every file "Upload Files" adds writes a PHP warning ("foreach()
-argument must be of type array|object, string given") to the server's
-log. The file is added normally and nothing on screen shows it.
+argument must be of type array|object, string given") to the web
+server's error log. The file is added normally; no screen shows it.
 Basis: test run, 2026-09-25. <sup>f-a6</sup>
+
+<a id="a7"></a>
+**A7 — In French the "Media" page and its windows show raw codes** · 🐞 · minor.
+With the interface in French, the "Media" page and the windows it opens
+read raw codes where French words belong, on a journal, a press and a
+preprint server:
+- the page: the table's title "##publication.mediaFiles##", its line
+  "##publication.mediaFiles.description##" and the "More Actions" column
+  heading "##common.moreActions##", which the Author sees too; for those
+  who manage the media files, "Batch Link Media" and "Add Media File"
+  read "##publication.mediaFiles.batchLinkMedia##" and
+  "##publication.mediaFiles.add##";
+- "Upload Media File": the title "##publication.mediaFiles.upload##",
+  the line "##publication.mediaFiles.upload.description##" and the link
+  "##common.clickToUploadFiles##";
+- "Batch Link Media": the title
+  "##publication.mediaFiles.batchLinkMedia##", the line
+  "##publication.mediaFiles.batchLinkMedia.description##", the columns
+  "##publication.mediaFiles.selectedWebVersion##" and
+  "##publication.mediaFiles.linkHighResolutionVersion##", each row's
+  list (a screen reader names it
+  "##publication.mediaFiles.selectHighResolutionFor##"; unlinked, it
+  shows "##publication.mediaFiles.noHighResolutionFile##") and the button
+  "##publication.mediaFiles.linkMedia##";
+- "Manually Link Media": the row menu entry and the window's title
+  "##publication.mediaFiles.manuallyLinkMedia##", then the labels
+  "Selected File" "##common.selectedFile##" and "Select the media file
+  to link as its counterpart"
+  "##publication.mediaFiles.selectMediaFileToLink##" with the help
+  "##publication.mediaFiles.selectMediaFileToLink.description##", its
+  entry "##publication.mediaFiles.noHighResolutionFile##" and the button
+  "##publication.mediaFiles.linkMedia##";
+- "Edit Metadata": "Name of the file" reads
+  "##publication.mediaFiles.metadataName##", its help
+  "##publication.mediaFiles.metadataNameDescription##";
+- the delete dialog: the title "##publication.mediaFiles.delete##" and
+  the text "##publication.mediaFiles.confirmDelete##", above "OK" and
+  "Annuler".
+
+Expected: French words, as the rest of the page shows (the other column
+headings, the row menu's "Information détaillée", "Éditer les
+métadonnées" and "Supprimer le fichier", the other fields of "Éditer
+les métadonnées", "Annuler"); the English screen shows none of these
+codes. A French-speaking Production Editor has to guess what each
+button and window does, and the delete dialog does not name the file it
+deletes. The side menu's "Media" and the page heading are [Workflow
+screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s,
+and why a missing French text shows as a code at all is [Languages &
+locales](U57-languages-and-locales.md#a4)'.
+Basis: probe, 2026-09-30. <sup>f-a7</sup>
 
 ### OJS
 <a id="ojs1"></a>
@@ -1708,6 +1782,26 @@ each card's temporary-file answer as it came back
 multilingual property as a locale map, before
 `MediaFilesController::add()` wraps a string name into the
 submission's locale. The added file's name is right.
+
+<a id="fn-f-a7"></a>
+**f-a7** — Rule 11. Live-probed 2026-09-30 at ojs `7ce98ec09e`, omp
+`3b0ecf794`, ops `c8af945bb7` (lib/pkp `3dc90c81a6`, ui-library
+`280f98c5`), two runs per app, each on its own scratch journal, press or
+preprint server with English and French (Canada) as interface
+languages, as its Journal Manager and as the submitting Author, on a
+submission in Production with no media file, one holding a single
+web-resolution "Image" `figure.png`, and the same one published. On the
+second, in French and in English, every window was opened ("Add Media
+File", "Batch Link Media", the row menu's four entries, the delete
+dialog, cancelled). The codes were the same on the three apps, in both
+runs and on every state, the Author seeing the page's three; English
+showed none of them. The row's "…" button's accessible name also reads
+`##common.moreActions##`. None of the `publication.mediaFiles.*` keys
+(lib/pkp `locale/en/submission.po`) nor `common.moreActions`,
+`common.selectedFile` or `common.clickToUploadFiles` (`common.po`) has
+a `fr_CA` entry; the English `publication.mediaFiles.confirmDelete`
+carries the file name. The "More Information" window's History line
+with an empty file name is *Submission activity log & notes*' finding.
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — Note q29. `HtmlArticleGalleyPlugin`, the galley view: a

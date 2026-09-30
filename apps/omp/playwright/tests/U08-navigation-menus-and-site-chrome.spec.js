@@ -60,6 +60,7 @@ const {
     EditorialChrome,
     whole,
 } = require('../../../../shared/playwright/pages/NavigationChromePages.js');
+const {closeTab} = require('../../../../shared/playwright/support/tabs.js');
 
 const PRESS = 'publicknowledge';
 const PRESS_NAME = 'Public Knowledge Press';
@@ -315,7 +316,7 @@ test.describe('navigation menus & site chrome', () => {
             const popup = await popupPromise;
             await popup.waitForURL(HELP_URL, {waitUntil: 'commit'});
             expect(popup.url()).toBe(HELP_URL);
-            await popup.close();
+            await closeTab(popup);
             await ed.openUserMenu();
             expect(await ed.userMenuLines()).toEqual(['Change Language', 'English', 'français', 'Edit Profile', 'Logout']);
             await expect(ed.userMenuLink('English').locator('svg')).toHaveCount(1);

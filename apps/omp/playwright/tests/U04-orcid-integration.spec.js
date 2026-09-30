@@ -66,7 +66,8 @@ function makeTag(scenario, testInfo) {
 
 // Re-enabled 2026-08-26 (maintainer): the dead-port proxy + sandbox-only dummy
 // credentials stand — no real ORCID traffic is possible from these tests
-// (see header); S2's popup asserts the sandbox URL only, without driving it.
+// (see header); S2's popup asserts the sandbox URL only, without driving it,
+// and its browser-side requests to ORCID are stubbed (support/orcid.js).
 test.describe('ORCID integration', () => {
     test('S1: turning ORCID on adds the profile block; off removes it', {tag: '@smoke'}, async ({asUser, ompApi}, testInfo) => {
         const tag = makeTag('s1', testInfo);
@@ -121,13 +122,10 @@ test.describe('ORCID integration', () => {
         await profile.goto();
 
         // Pressing the button opens a small popup on an ORCID sandbox sign-in
-        // address (Public Sandbox config) while the profile stays put. On an
-        // offline install the popup may show a connection error — the test
-        // never drives past its address.
-        const [popup] = await Promise.all([
-            userPage.waitForEvent('popup'),
-            profile.connectButton.click(),
-        ]);
+        // address (Public Sandbox config) while the profile stays put. The
+        // test never drives past its address: ORCID's site is answered
+        // locally (pressConnect), so the popup does not wait on ORCID.
+        const popup = await profile.pressConnect();
         await expect
             .poll(() => popup.url(), {timeout: 15_000})
             .toMatch(/sandbox\.orcid\.org\/[^?]*\?.*client_id=/);
