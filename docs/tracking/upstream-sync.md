@@ -49,6 +49,7 @@ deletes each once it is a report, a register entry or dismissed._
   harness.md "Dataset fleets"). Possibly an upgrade migration gap for
   the two changes that added and removed those columns; OMP and OPS not
   checked.
+- 2026-09-30 (issues session, workstation, U19 A1 reporter on the 3.5 dataset fleet): OPS `stable-3_5_0` only: "Title & Abstract" on a preprint of a server created under Administration › Hosted Servers opens an "Error" window; the log has `TitleAbstractForm::__construct(): Argument #4 ($abstractWordLimit) must be of type int, null given` (`api/v1/submissions/SubmissionController.php:191`). `main` casts the value with `(int)`, so it looks fixed there and not backported; for the stable-3_5_0 read.
 
 ## Sync log
 
