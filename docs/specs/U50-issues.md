@@ -1480,11 +1480,11 @@ Issue report: [pkp-e2e#53](https://github.com/jardakotesovec/pkp-e2e/issues/53) 
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-25 (td3), OJS: "Volume" 99999 with a valid "Year": `POST …/$$$call$$$/grid/issues/future-issue-grid/update-issue` answered 500, the window stayed open with no message and the list was unchanged. The schema stores `volume` in a `smallint` column (note i), whose limit is 32767, the likely cause; only 99999 was driven, and no server-log line was read.
-Issue report: [docs/issues/U50-A5-A6-issue-large-volume-lettered-year.md](../issues/U50-A5-A6-issue-large-volume-lettered-year.md).
+Issue report: [pkp-e2e#68](https://github.com/jardakotesovec/pkp-e2e/issues/68) ([docs/issues/U50-A5-A6-issue-large-volume-lettered-year.md](../issues/U50-A5-A6-issue-large-volume-lettered-year.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-25 (td3), OJS: Volume 1, Number "2a", "Year" "20a6", "Title" unticked: saved without a message and listed as "Vol. 1 No. 2a (20)". `IssueForm` has no check on `year` beyond the box's `maxlength` 4; the stored integer keeps the leading digits (note i).
-Issue report: [docs/issues/U50-A5-A6-issue-large-volume-lettered-year.md](../issues/U50-A5-A6-issue-large-volume-lettered-year.md).
+Issue report: [pkp-e2e#68](https://github.com/jardakotesovec/pkp-e2e/issues/68) ([docs/issues/U50-A5-A6-issue-large-volume-lettered-year.md](../issues/U50-A5-A6-issue-large-volume-lettered-year.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-25 (Fields, the archive's issue summary), OJS, two runs: on "Archives" the cover of an issue with no alternate text carried `alt=""` while its page read "View Vol. 1 No. 2 (2025)"; an issue with "K3 cover alt" typed read that on both. `issue_summary.tpl` defaults the alt to `''`, where `issue_toc.tpl` defaults it to `issue.viewIssueIdentification` (note w).
