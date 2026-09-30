@@ -1,0 +1,47 @@
+--- a/lib/pkp/classes/oai/OAI.php
++++ b/lib/pkp/classes/oai/OAI.php
+@@ -78,7 +78,8 @@
+      */
+     public function execute(): void
+     {
+-        switch ($this->getParam('verb')) {
++        // A repeated verb is not a legal verb (OAI-PMH 2.0, badVerb)
++        switch ($this->isRepeatedParam('verb') ? null : $this->getParam('verb')) {
+             case 'GetRecord':
+                 $this->getRecord();
+                 break;
+@@ -750,6 +751,16 @@
+     }
+ 
+     /**
++     * Returns true if the requested parameter was given more than once.
++     * OAIUtils::parseStr() keeps every value of a repeated parameter in an
++     * array, which getParam() cannot return: check this before getParam().
++     */
++    public function isRepeatedParam(string $name): bool
++    {
++        return is_array($this->params[$name] ?? null);
++    }
++
++    /**
+      * Check request parameters.
+      * Outputs error response if an invalid parameter is found.
+      */
+@@ -764,7 +775,7 @@
+             if (!$this->paramExists($k)) {
+                 $this->error('badArgument', "Missing {$k} parameter");
+                 return false;
+-            } elseif (is_array($this->getParam($k))) {
++            } elseif ($this->isRepeatedParam($k)) {
+                 $this->error('badArgument', "Multiple values are not allowed for the {$k} parameter");
+                 return false;
+             }
+@@ -772,7 +783,7 @@
+ 
+         // Check for duplicate optional parameters
+         foreach ($optional as $k) {
+-            if ($this->paramExists($k) && is_array($this->getParam($k))) {
++            if ($this->isRepeatedParam($k)) {
+                 $this->error('badArgument', "Multiple values are not allowed for the {$k} parameter");
+                 return false;
+             }
