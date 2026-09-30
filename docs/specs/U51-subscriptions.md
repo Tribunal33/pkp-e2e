@@ -1956,7 +1956,7 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a8"></a>
 **f-a8** — pkp/pkp-lib#11683, OJS commit `b795decf26` (2025-08-13, "fix schedule task frequency") changed `SubscriptionExpiryReminder` from `daily()` to `monthlyOn(1)`; `sendJournalReminders()` still matches one end date per run (note n) and `executeActions()` still simulates the missing days of short months, which only a daily run needs. The pre-Laravel `registry/scheduledTasks.xml` read `<frequency day="1"/>` for this task. Live-probed 2026-09-25 (td29): the schedule list shows `0 0 1 * *`; the exact-day matching could not be seen, as the task fails first (f-a27).
-Issue report: [docs/issues/U51-A8-subscription-expiry-reminders-monthly.md](../issues/U51-A8-subscription-expiry-reminders-monthly.md).
+Issue report: [pkp-e2e#9](https://github.com/jardakotesovec/pkp-e2e/issues/9) ([docs/issues/U51-A8-subscription-expiry-reminders-monthly.md](../issues/U51-A8-subscription-expiry-reminders-monthly.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `purchaseIndividualSubscription.tpl` has no `common/formErrors.tpl` include (the institutional page has one); `UserHandler::payPurchaseSubscription()` re-displays the form on a failed `validate()`. Live-probed 2026-09-25 (td16).
@@ -2015,7 +2015,7 @@ Issue report: [pkp-e2e#6](https://github.com/jardakotesovec/pkp-e2e/issues/6) ([
 
 <a id="fn-f-a27"></a>
 **f-a27** — Live-probed 2026-09-25 (td29): the scheduled task `SubscriptionExpiryReminder`, run with no request, died with "Call to a member function getPrimaryLocale() on null" in `InstitutionalSubscriptionDAO::getInstitutionNameFetchParameters()` (the request's context is missing when the site's timer runs it); its task log holds "Task process started." and nothing after, twice.
-Issue report: [docs/issues/U51-A27-subscription-expiry-reminder-task-fails.md](../issues/U51-A27-subscription-expiry-reminder-task-fails.md).
+Issue report: [pkp-e2e#8](https://github.com/jardakotesovec/pkp-e2e/issues/8) ([docs/issues/U51-A27-subscription-expiry-reminder-task-fails.md](../issues/U51-A27-subscription-expiry-reminder-task-fails.md)).
 
 <a id="fn-f-a28"></a>
 **f-a28** — Test run 2026-09-25 (Rule 19; scenario 6). The four answers to "Save" were: "A user is required. A subscription start date is required. A subscription end date is required." (no user, no dates); then, Nova chosen, "A subscription start date is required." and "A subscription end date is required." again, the boxes now reading today's date; then, Sam chosen, today's date typed into "Start date" and next year's into "End date", "This user already has a subscription for this journal. A subscription start date is required."; then, Nova chosen, "A subscription start date is required.", the window staying open. A probe the same day read the fields after each step: from the first refusal on, the visible boxes held today's date while the values the window sends were empty; typing today's date left the sent start date empty, next year's end date was sent. The boxes are jQuery UI date pickers: lib/pkp `js/controllers/form/FormHandler.js` renames the visible box to `{name}-removed` and sends a hidden copy under the field's name (`templates/payments/individualSubscriptionForm.tpl`, `dateStart`/`dateEnd` with class `datepicker`).
