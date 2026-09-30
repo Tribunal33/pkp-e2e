@@ -111,7 +111,7 @@ No suite is meant to run on any of the three lines.
   `reset:<app>`, `fleet-prep`, `probe-servers`, `bin/probe.js`, the
   Playwright configs); unset means `main`, and `.env` is not involved.
   The port bands (`main` +0, 3.5 +1000, 3.4 +2000, 3.3 +3000, each plus
-  the slot's n × 300), the files dirs (`checkouts/<line>/files/`) and the
+  the slot's shift, "Slots"), the files dirs (`checkouts/<line>/files/`) and the
   probe servers' pid files (`.reports/servers-<line>/`) are the line's
   own, so every line's servers stay up together. The server logs share
   `apps/<app>/playwright/.server-logs/`, told apart by port.
@@ -253,7 +253,7 @@ npm run dataset-facts -- --write                         # regenerate dataset.md
   one from the app tips) and prunes the old objects.
 - **What a dataset fleet is.** Dataset fleet `n` (1–9; `--dataset` alone
   is 1) of an app on a slot and line has its own server at **base port +
-  60 + n** (8061 for OJS on `main`, 9061 on 3.5, +300 per slot), database
+  60 + n** (8061 for OJS on `main`, 9061 on 3.5, plus the slot's shift), database
   `<campaign db>_ds<n>` (`ojs_test_ds1`, `ojs_test_3_5_ds1`), files dir
   `checkouts[/<line>]/files/<app>-test-ds<n>`, public dir
   `<app root>/public-ds<n>` (relative in the config, since `php -S` serves
@@ -348,7 +348,7 @@ Two facts worth knowing before you write a test:
 
 ## Slots (parallel sessions)
 
-Up to three sessions work on the VM at once, each in its own **slot**: a
+Up to four sessions work on the VM at once, each in its own **slot**: a
 full clone of this repo with its own `checkouts/` (every line), databases,
 Mailpit and API key. Only Postgres, the cores and `origin` are shared.
 
@@ -357,10 +357,13 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
 | 0 | `/home/e2e/pkp-e2e` | 8000/8100/8200 (9000…, 10000…, 11000…) | `<app>_test` | 8025 (1025), systemd | `playwright-test-key` |
 | 1 | `/home/e2e/pkp-e2e-s1` | 8300/8400/8500 (9300…, 10300…, 11300…) | `<app>_test_s1` | 8026 (1026) | `playwright-test-key-s1` |
 | 2 | `/home/e2e/pkp-e2e-s2` | 8600/8700/8800 (9600…, 10600…, 11600…) | `<app>_test_s2` | 8027 (1027) | `playwright-test-key-s2` |
+| 3 | `/home/e2e/pkp-e2e-s3` | 12000/12100/12200 (13000…, 14000…, 15000…) | `<app>_test_s3` | 8028 (1028) | `playwright-test-key-s3` |
 
 - **Identity.** `PKP_E2E_SLOT=<n>` in the clone's `.env` makes it slot n
-  (`resolveSlot()` in `bin/apps.js`): every port +n×300 (clear of the
-  lines' +1000, +2000, +3000 and of the +0…+90 bands), DB suffix `_s<n>`, Mailpit
+  (`resolveSlot()` in `bin/apps.js`): every port shifted by
+  `slotPortShift(n)`, +n×300 for slots 0–2 and the same again 4000 higher
+  for slots 3–5 (clear of the lines' +1000, +2000, +3000 and of the
+  +0…+90 bands; `slot.js` keeps a literal copy), DB suffix `_s<n>`, Mailpit
   8025+n / SMTP 1025+n, the key suffix `-s<n>`. `fetch-apps` bakes them
   into each checkout's `.env.playwright` and `config.test.inc.php`. Unset
   is slot 0, CI's values. The per-slot key is a tripwire: a run that adopts

@@ -46,12 +46,16 @@ const LINES = {
 };
 const RUNTIMES_DIR = path.join(REPO_ROOT, 'checkouts', 'runtimes');
 
-// Parallel slots (harness.md "Slots"): slot n shifts every port by n × 300
-// (clear of the +1000 line shift and of the +0…+90 fleet bands), suffixes
-// the DBs with _s<n> and gets its own Mailpit (8025+n / SMTP 1025+n) and
-// TEST_API_KEY. Slot 0 is the unshifted default, so CI and a lone clone see
-// exactly the old values.
+// Parallel slots (harness.md "Slots"): slot n shifts every port (clear of the
+// lines' +1000…+3000 and of the +0…+90 fleet bands), suffixes the DBs with
+// _s<n> and gets its own Mailpit (8025+n / SMTP 1025+n) and TEST_API_KEY.
+// Three slots fit 300 apart below the +1000 line (8000…8899); slots 3–5 take
+// the same layout 4000 higher (12000…), above slot 0–2's 3.3 line (…11899).
+// Slot 0 is the unshifted default, so CI and a lone clone see exactly the
+// old values.
 const SLOT_PORT_STEP = 300;
+const SLOT_GROUP_STEP = 4000;
+const slotPortShift = (n) => (n % 3) * SLOT_PORT_STEP + Math.floor(n / 3) * SLOT_GROUP_STEP;
 
 /** @returns {{n: number, portShift: number, dbSuffix: string, mailpitUrl: string, smtpPort: number, apiKey: string}} */
 function resolveSlot() {
@@ -64,7 +68,7 @@ function resolveSlot() {
     }
     return {
         n,
-        portShift: n * SLOT_PORT_STEP,
+        portShift: slotPortShift(n),
         dbSuffix: n ? `_s${n}` : '',
         mailpitUrl: `http://127.0.0.1:${8025 + n}`,
         smtpPort: 1025 + n,
@@ -215,4 +219,4 @@ function configuredApps() {
     return Object.keys(APPS).filter((name) => !!process.env[`${name.toUpperCase()}_ROOT`]);
 }
 
-module.exports = {APPS, LINES, REPO_ROOT, RUNTIMES_DIR, SLOT_PORT_STEP, resolveApp, resolveLine, resolveSlot, dbName, configuredApps};
+module.exports = {APPS, LINES, REPO_ROOT, RUNTIMES_DIR, SLOT_PORT_STEP, slotPortShift, resolveApp, resolveLine, resolveSlot, dbName, configuredApps};

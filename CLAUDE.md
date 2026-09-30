@@ -49,8 +49,8 @@ Operational facts:
   `stable-3_3_0` lines (ports 10000… / 11000…, PHP 8.2) exist the same
   way for walking a particular issue there when the team asks; issue
   reports otherwise read 3.4 and 3.3 in the code (REPORT.md "Affects").
-- Up to three sessions run at once, each in its own **slot**: a full clone
-  of this repo (`/home/e2e/pkp-e2e`, `-s1`, `-s2`) with its own checkouts,
+- Up to four sessions run at once, each in its own **slot**: a full clone
+  of this repo (`/home/e2e/pkp-e2e`, `-s1`, `-s2`, `-s3`) with its own checkouts,
   ports, DBs and Mailpit (`PKP_E2E_SLOT` in `.env`). The SessionStart hook
   says which one you are in; work only there. Playwright runs share one
   machine-wide test lock, so start long runs in the background. A slot is

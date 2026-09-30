@@ -49,7 +49,7 @@ const THREAD_KEEP_MS = 30 * 24 * 3600 * 1000;
 
 // Ports as bin/apps.js derives them; kept literal so this file runs without a slot's .env.
 const BASE_PORTS = {ojs: 8000, omp: 8100, ops: 8200};
-const SLOT_PORT_STEP = 300;
+const slotPortShift = (n) => (n % 3) * 300 + Math.floor(n / 3) * 4000;
 const LINE_DIRS = [['main', ''], ['stable-3_5_0', 'stable-3_5_0']];
 
 const sleepSync = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
@@ -269,7 +269,7 @@ function describeSnapshot(snap) {
 }
 
 function portsLine(n) {
-    const shift = n * SLOT_PORT_STEP;
+    const shift = slotPortShift(n);
     const main = Object.entries(BASE_PORTS).map(([a, p]) => `${a} ${p + shift}`).join(' / ');
     const stable = Object.entries(BASE_PORTS).map(([a, p]) => `${a} ${p + shift + 1000}`).join(' / ');
     return `ports ${main} (stable-3_5_0: ${stable}); DBs <app>_test${n ? `_s${n}` : ''}; Mailpit 127.0.0.1:${8025 + n} (SMTP ${1025 + n})`;
