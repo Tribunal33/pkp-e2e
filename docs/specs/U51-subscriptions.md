@@ -1376,6 +1376,12 @@ Left out of the scenarios above, by reason:
     each subscription list searched by "Reference Number" (and on the
     institutional tab by "Institution name") listing only the matching
     subscription
+  - the guard for A16 (issue report
+    `docs/issues/U51-A16-subscription-manager-institutions-refused.md`):
+    a Subscription Manager, with payments enabled, opening "Institutions"
+    from the side menu and adding an institution, which the institutional
+    subscription window then offers (or, if the team hides the menu entry
+    instead, the entry absent for that role)
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1480,7 +1486,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | The "Subscription" block reads "Expired: {today}" for a subscription awaiting payment | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A14](#a14) | "Only Restrict Access to PDF…" unlocks the look of non-PDF galleys that stay refused | 🐞 | user-visible | — |
 | [A15](#a15) | Month and week counts read "1 Months" and "1 Weeks" | 🐞 | minor | — |
-| [A16](#a16) | The Subscription Manager is offered "Institutions" and refused it | 🐞 | user-visible | — |
+| [A16](#a16) | Subscription Manager is refused the Institutions page the menu offers, so cannot add a subscribing institution | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A17](#a17) | "Delayed Open Access" shows an empty box until someone saves a value | 🐞 | minor | — |
 | [A18](#a18) | A restricted article's additional file shows no padlock, yet is refused | 🐞 | user-visible | — |
 | [A19](#a19) | A fee shows on the locked link while payments are off and nothing can be bought | 🐞 | minor | — |
@@ -1652,14 +1658,18 @@ Expiry Reminders" read "1 Months" and "1 Weeks" for their first choice.
 Basis: probe, 2026-09-25. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — The Subscription Manager is offered "Institutions" and refused it** · 🐞 · user-visible.
+**A16 — Subscription Manager is refused the Institutions page the menu offers, so cannot add a subscribing institution** · 🐞 · medium.
 On the "Payments" page, while payments are enabled, the Subscription
 Manager's side menu offers "Institutions"; pressing it, or opening its
 address, shows "The current role does not have access to this
-operation.". The institutional subscription window needs an institution
-from that page, so a Subscription Manager cannot create the first
-institutional subscription alone. Basis: probe, 2026-09-25.
-<sup>f-a16</sup>
+operation.". The institutional subscription window offers only the
+institutions already on that page, so a Subscription Manager cannot
+subscribe an institution that is not on the list yet, and cannot change
+an institution's name or IP ranges.
+Subscriptions for institutions already on the list, and individual
+subscriptions, still work for the Subscription Manager. A journal manager
+has to add or change each institution for them.
+Basis: probe, 2026-09-30. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — "Delayed Open Access" arrives as an empty box** · 🐞 · minor.
@@ -2020,6 +2030,7 @@ Issue report: [pkp-e2e#11](https://github.com/jardakotesovec/pkp-e2e/issues/11) 
 
 <a id="fn-f-a16"></a>
 **f-a16** — OJS `TemplateManager` adds the side menu's "Institutions" (`management/settings/institutions`) in the same step as "Payments", for every role that gets "Payments", the Subscription Manager included; the Institutions page itself is a management page the role cannot open. Live-probed 2026-09-25 (td3), on three scratch journals, by the menu and by the address.
+Issue report: [docs/issues/U51-A16-subscription-manager-institutions-refused.md](../issues/U51-A16-subscription-manager-institutions-refused.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — `AccessForm`'s select gives "Disabled" the value 0; a fresh journal stores no `delayedOpenAccessDuration`, which matches no option, so the box shows empty; `IssueGridHandler::publishIssue()` treats an empty value as disabled (note m). Live-probed 2026-09-25 (td4): the save posted `delayedOpenAccessDuration=` with the box untouched.

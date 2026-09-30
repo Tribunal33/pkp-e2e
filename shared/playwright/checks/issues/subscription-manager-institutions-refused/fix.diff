@@ -1,0 +1,45 @@
+--- a/lib/pkp/api/v1/institutions/PKPInstitutionController.php
++++ b/lib/pkp/api/v1/institutions/PKPInstitutionController.php
+@@ -58,6 +58,7 @@
+             'has.context',
+             self::roleAuthorizer([
+                 Role::ROLE_ID_MANAGER,
++                Role::ROLE_ID_SUBSCRIPTION_MANAGER,
+             ]),
+         ];
+     }
+--- a/lib/pkp/pages/management/ManagementHandler.php
++++ b/lib/pkp/pages/management/ManagementHandler.php
+@@ -98,9 +98,9 @@
+     {
+         $this->addPolicy(new ContextAccessPolicy($request, $roleAssignments));
+         // The "settings" operation is off limits to managers who don't have access to settings,
+-        // EXCEPT for the "announcements" and "userComments" areas, which were moved out of settings without changing their URL.
++        // EXCEPT for the "announcements", "userComments" and "institutions" areas, which live outside settings under a settings URL.
+         $requestedArgs = $request->getRequestedArgs();
+-        if ($request->getRequestedOp() == 'settings' && $requestedArgs != ['announcements'] && $requestedArgs != ['userComments']) {
++        if ($request->getRequestedOp() == 'settings' && $requestedArgs != ['announcements'] && $requestedArgs != ['userComments'] && $requestedArgs != ['institutions']) {
+             $this->addPolicy(new CanAccessSettingsPolicy());
+         }
+         return parent::authorize($request, $args, $roleAssignments);
+--- a/pages/management/SettingsHandler.php
++++ b/pages/management/SettingsHandler.php
+@@ -63,6 +63,18 @@
+     }
+ 
+     /**
++     * @copydoc ManagementHandler::authorize()
++     */
++    public function authorize($request, &$args, $roleAssignments)
++    {
++        // The Subscription Manager keeps the institutions that institutional subscriptions are made for.
++        if ($request->getRequestedOp() === 'settings' && $request->getRequestedArgs() === ['institutions']) {
++            $roleAssignments[Role::ROLE_ID_SUBSCRIPTION_MANAGER] = ['settings'];
++        }
++        return parent::authorize($request, $args, $roleAssignments);
++    }
++
++    /**
+      * Add the workflow settings page
+      *
+      * @param array $args
