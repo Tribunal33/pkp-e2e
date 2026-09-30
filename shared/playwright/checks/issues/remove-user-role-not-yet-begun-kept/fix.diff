@@ -1,0 +1,94 @@
+--- a/lib/pkp/api/v1/users/PKPUserController.php
++++ b/lib/pkp/api/v1/users/PKPUserController.php
+@@ -324,12 +324,15 @@
+             ], Response::HTTP_NOT_FOUND);
+         }
+ 
+-        // Ensure user has role
++        // Ensure user has role, active or not yet begun
+         // Will not appear if role has ended or if user never had role to begin with
+         $userGroupId = $request->route('userGroupId');
+-        $userUserGroups = Repo::userGroup()->userUserGroups($userId); /** @var LazyCollection<UserGroup> $userUserGroups */
+-        $userGroup = $userUserGroups->first(fn (UserGroup $userGroup) => $userGroup->id === (int) $userGroupId); /** @var UserGroup $userGroup */
+-        if (!$userGroup) {
++        $hasRole = UserUserGroup::query()
++            ->withUserId((int) $userId)
++            ->withUserGroupIds([(int) $userGroupId])
++            ->withNotEnded()
++            ->exists();
++        if (!$hasRole) {
+             return response()->json([
+                 'error' => __('api.404.resourceNotFound')
+             ], Response::HTTP_NOT_FOUND);
+--- a/lib/pkp/classes/userGroup/relationships/UserUserGroup.php
++++ b/lib/pkp/classes/userGroup/relationships/UserUserGroup.php
+@@ -88,6 +88,19 @@
+             ->where('user_user_groups.date_end', '<=', $currentDateTime);
+     }
+ 
++    /**
++     * Assignments not ended: those active now and those not yet begun.
++     */
++    public function scopeWithNotEnded(Builder $query): Builder
++    {
++        $currentDateTime = Core::getCurrentDate();
++        return $query->where(
++            fn (Builder $query) =>
++            $query->whereNull('user_user_groups.date_end')
++                ->orWhere('user_user_groups.date_end', '>', $currentDateTime)
++        );
++    }
++
+     public function scopeWithContextId(Builder $query, ?int $contextId): Builder
+     {
+         return $query->whereHas('userGroup', function (Builder $subQuery) use ($contextId) {
+--- a/lib/pkp/classes/userGroup/Repository.php
++++ b/lib/pkp/classes/userGroup/Repository.php
+@@ -397,14 +397,17 @@
+         $dateEnd = Core::getCurrentDate();
+         $query = UserUserGroup::query()
+             ->withContextId($contextId)
+-            ->withUserId($userId)
+-            ->withActive();
++            ->withUserId($userId);
+ 
+         if ($userGroupId) {
+             $query->withUserGroupIds([$userGroupId]);
+         }
+ 
+-        $query->update(['date_end' => $dateEnd]);
++        // An assignment not yet begun (a role invitation's later start date)
++        // has taken no effect: withdraw it, so that it never begins.
++        (clone $query)->withActiveInFuture()->delete();
++
++        $query->withActive()->update(['date_end' => $dateEnd]);
+ 
+         AuditLog::log(AuditEvent::USER_ROLE_REMOVED, LogLevel::NOTICE, [
+             'targetUserId' => $userId,
+--- a/lib/pkp/controllers/grid/settings/user/UserGridHandler.php
++++ b/lib/pkp/controllers/grid/settings/user/UserGridHandler.php
+@@ -564,19 +564,21 @@
+             return new JSONMessage(false, __('grid.user.cannotAdminister'));
+         }
+ 
+-        // Check if this user has any active user group assignments for this context.
++        // Check if this user has any user group assignments for this context
++        // that have not ended: active ones and ones not yet begun.
+         $activeUserGroupCount = UserGroup::query()
+             ->withContextIds($context->getId())
+             ->whereHas('userUserGroups', function ($query) use ($userId) {
+                 $query->withUserId($userId)
+-                    ->withActive();
++                    ->withNotEnded();
+             })
+             ->count();
+ 
+         if (!$activeUserGroupCount) {
+             return new JSONMessage(false, __('grid.user.userNoRoles'));
+         } else {
+-            // End all active user group assignments for this context.
++            // End all active user group assignments for this context,
++            // and withdraw those not yet begun.
+             Repo::userGroup()->endAssignments($context->getId(), (int) $userId);
+ 
+             AuditLog::log(AuditEvent::USER_CONTEXT_REMOVED, LogLevel::NOTICE, [

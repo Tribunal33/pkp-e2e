@@ -870,7 +870,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | Merging a user recorded as a discussion's or task's creator stops halfway with no message, and the account still signs in | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | "Notify User" stays greyed out after "Generate Password" is unticked | 🐞 | minor | — |
 | [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | minor | — |
-| [A19](#a19) | "Remove User" on a user whose only role has not yet begun ends in "An unexpected error has occurred…" | 🐞 | user-visible | — |
+| [A19](#a19) | A manager cannot end a role that starts on a future date: "Remove User" fails or leaves it in place | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OPS1](#ops1) | On a French preprint server the "Roles" column prints raw codes for two roles | 🐞 | minor | — |
 | [A3](#a3) | A user removed from the journal stays in the list with no role | ❓ | minor | — |
 | [A8](#a8) | "Remove User" tells the user nothing, where "Remove Role" emails them | ❓ | minor | — |
@@ -1095,14 +1095,21 @@ it; a role still to begin may stay listed if its row says it has not begun.
 Basis: probe. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — Removing a user whose only role has not begun fails with an unexplained error** · 🐞 · user-visible.
-A user whose only role here starts on a future date is offered "Remove
-User". "OK" in the "Remove" dialog brings an "Error" dialog, "An
-unexpected error has occurred. Please reload the page and try again.";
-the role stays and the menu keeps offering "Remove User", after a reload
-too. The manager expects the role to end, or a message saying why it
-cannot; the same failure as [A2](#a2) on the Site Administrator's row.
-Basis: probe. <sup>f-a19</sup>
+**A19 — A manager cannot end a role that starts on a future date: "Remove User" fails or leaves it in place** · 🐞 · medium.
+A manager can invite someone to a role that starts on a later date. On
+Settings › Users & Roles, the list then shows the role with that start
+date, and the row offers "Remove User". When the role is the user's only
+one here, "OK" in the "Remove" dialog brings an "Error" dialog, "An
+unexpected error has occurred. Please reload the page and try again.",
+and the role stays. When the user also holds current roles, "OK" ends
+those without a message and keeps the future role, so the user "removed"
+from the journal still takes up that role on its start date.
+The roles page cannot end it either. When the future role is the
+user's only role, "Remove Role" answers "You cannot remove the role. At
+least one role must be assigned to the user." When the user holds other
+roles too, "Remove Role" on the future role ends in "Error" / "The
+requested resource was not found."
+Basis: probe, 2026-09-30. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — A role ending on a future date cannot be ended early** · ❓ · user-visible.
@@ -2037,6 +2044,7 @@ after a reload, the row read the role and 2027-06-01 and the menu offered
 menu's guard `user.groups.find(g => g.dateEnd === null)` (note c) counts
 a role not yet begun, while `removeUser()` ends only roles active now and
 answers `grid.user.userNoRoles` when there are none.
+Issue report: [docs/issues/U53-A19-remove-user-role-not-yet-begun-kept.md](../issues/U53-A19-remove-user-role-not-yet-begun-kept.md).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Live-probed 2026-09-30, OJS and OMP, two runs each, users
