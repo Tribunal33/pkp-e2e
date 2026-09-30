@@ -1763,3 +1763,14 @@ config-file settings.
   permission level (OJS "Copyeditor" and "Editorial Board Member") come
   in no fixed order on the tab: assert the order across levels only.
   2026-09-29, three apps (U10 claim check K4).
+- A scratch context whose first-stage "Discussion (…)" template has
+  "Auto-add at stage" on gives every seeded submission an item of that
+  name, "Created by: system"; a Participants "Notify" or "Assign" with
+  the same template adds a second row of the same name, so locate a
+  row by its creator as well as its name. 2026-09-30, three apps (U37
+  claim check Ks30).
+- A draft seeded with a second `author` in `participants[]` may have
+  its comments-box discussion credited to that Author at submit (OMP
+  once in two runs, OJS never): seed only the submitter as Author when
+  a drive needs the submitter under "Created by:". 2026-09-30 (U37
+  claim check Ks30).

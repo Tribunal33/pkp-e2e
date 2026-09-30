@@ -1054,6 +1054,10 @@ Left out of the scenarios above, by reason:
     file says (Rule 24a), a role the file gives no start date starting
     on the day of the import, and a role the file gives as ended listed
     on "Editorial History" with the file's years (Rule 24b)
+  - a submission's plain language summary, data availability statement
+    and funding statement carried from one journal to another (Rule 20):
+    in scenario 4, "Okapi field notes" given all three in A, each read
+    on B's copy after the import
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)

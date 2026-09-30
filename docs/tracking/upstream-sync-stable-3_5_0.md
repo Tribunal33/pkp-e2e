@@ -10,10 +10,10 @@ and no CI follows this branch. `main`'s baselines are in
 
 | Repo | Last-read commit | Date | Read by |
 |------|------------------|------|---------|
-| ojs | `788c1c2e21` | 2026-09-29 | claude (daily maintenance session) |
+| ojs | `040e916378` | 2026-09-30 | claude (daily maintenance session) |
 | omp | `4f90dadac0` | 2026-09-29 | claude (daily maintenance session) |
 | ops | `0bb1ca0f6e` | 2026-09-29 | claude (daily maintenance session) |
-| pkp-lib | `8809a197de` (ojs, omp, ops) | 2026-09-29 | claude (daily maintenance session); ui-library `1a7a4750` (ojs, omp, ops); ojs `plugins/generic/jatsTemplate` `26c6ca0aa2` |
+| pkp-lib | `8809a197de` (ojs, omp, ops) | 2026-09-29 | claude (daily maintenance session); ui-library `1a7a4750` (ojs, omp, ops); ojs `plugins/generic/jatsTemplate` `5d4ea3db73` (2026-09-30) |
 
 ## Read log
 
@@ -22,6 +22,11 @@ one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
 
+- **2026-09-30 (daily session, VM) — ojs `788c1c2e21..040e916378` (2), ojs `plugins/generic/jatsTemplate` `26c6ca0aa2..5d4ea3db73` (1); omp, ops, lib/pkp (`8809a197de`) and ui-library (`1a7a4750`) unchanged. `main` first: synced today, then the line's range read in full.**
+  - ojs `d950e31e2a` + merge `040e916378` (pkp/ojs#5863, jatsTemplate#122 `5d4ea3db73`, the pkp/pkp-lib#12414 fix of the #5827 title cut) → the tree PR-reviewed 2026-09-29 (round 2), merged unchanged: **the ojs#5827 regression is fixed**. The kept `checks/sync/ojs-5827/titles.js` on a freshly reset line OJS (`.reports/sync-3_5/s30-5827/`): S2's article-title, subtitle and translated title whole with `&lt;`; S1 still turns the title's tag names into markup (the #5813 mechanism, its own row). ci-triage row and `docs/reports/2026-09-25-ojs-5827-stable-3_5_0.md` deleted.
+  - Carried over from `main`: today's `main` range brought no regression (pkp-lib#13377 and #13409, not on the line: `git log --grep '#13277\|#13345'` empty in the line's lib/pkp). Open stable-line rows (#13390, #13370, #13181) not re-run: lib/pkp did not move.
+  - pkp-lib `stable-3_5_0` still holds, past the pointers, the #13389 merge `cb54f12b89`, the #13366 backport and the #13376 backport `e4e720a7f6` (noted 2026-09-29); read when a pointer moves.
+  - Baselines advanced: ojs `040e916378`, jatsTemplate `5d4ea3db73`.
 - **2026-09-29 — PR review, pkp/pkp-lib#12414 round 2 (the S2 fix of 2026-09-25): jatsTemplate#122 (kaitlinnewson `12414-3_5_0`, head `5d4ea3db73`, base `7ce1a0fb4e`, one commit on the reviewed `26c6ca0aa2`) + ojs#5863 (submodule-only, head `d950e31e2a` on base `a3dc3b54ff`, an ancestor of the line tip `788c1c2e21`). Not merged; baselines not advanced.**
   - The fix is the report's proposal: `PKPString::stripUnsafeHtml($html)` first in `JatsHelper::htmlToJatsElement()`, as `main`'s `htmlToJatsContent()`; plus a PHPUnit `JatsHelperTest`.
   - Kept `checks/sync/ojs-5827/titles.js` (`RR16_ONLY=s2`) on a freshly reset line OJS, same database: at `26c6ca0aa2` `Effects at p` / `Cohorts of n` / `Effets à p` (held); at `5d4ea3db73` all four titles whole with `&lt;` → **fixed**. S1 half at both refs: identical title-group (the #5813 mechanism unchanged, as expected). `.reports/sync-3_5/s29-12414/`.

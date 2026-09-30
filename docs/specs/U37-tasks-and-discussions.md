@@ -408,17 +408,23 @@ one-line description under its heading (Rule 6). <sup>m</sup>
       shows "You can only edit your own discussion message." or "This
       discussion message can only be edited within 1 hour of creation."
       under the message box, with the notice of Rule 11a; a press and a
-      preprint server show a raw key instead ⚠ [A7](#a7). <sup>v</sup>
-      <sup>td8</sup>
+      preprint server show a raw key instead ⚠ [A7](#a7). A discussion a
+      Participants message opened is the exception: the Author or
+      assistant it was sent to did not write its first message, yet saves
+      at any time, and their first "Save" adds a message instead of
+      rewriting it (15e, [A9](#a9)). <sup>v</sup> <sup>td8</sup>
     - 15d. An Author who attached an uploaded file to the first message
       cannot save an edit of it: the refusal names no field ⚠ [A8](#a8).
       <sup>v</sup> <sup>td9</sup>
-    - 15e. The discussions other features open (Rule 21) have a first
-      message the edit does not recognize as such. The message box holds
-      that message, and "Save" adds the box's text as a further message
-      instead of replacing it, credited to the person the row names under
-      "Created by:", whoever pressed "Save"; the History records nothing
-      ⚠ [A9](#a9). <sup>v</sup> <sup>td10</sup>
+    - 15e. A discussion a Participants message opened ("Notify" or
+      "Assign", Rule 21) has a first message the edit does not recognize
+      as such. The message box holds that message, and the first "Save",
+      even one that changes only the name or the participants, adds the
+      box's text as a further message instead of replacing it, credited
+      to the person the row names under "Created by:", whoever pressed
+      "Save". Each later "Save" rewrites that added message. The History
+      records nothing ⚠ [A9](#a9). The other items of Rule 21 are edited
+      as 15a says. <sup>v</sup> <sup>td10</sup>
 <a id="start"></a>
 16. **Starting a task.** A task is started by "Begin Task Upon Saving"
     (Rule 9), by ticking its "Started" box in the row, which first asks
@@ -527,8 +533,8 @@ one-line description under its heading (Rule 6). <sup>m</sup>
       manager-level people see it until someone adds participants through
       "Edit" (on a discussion at least two: one alone is refused, Rule
       8a); its first message is "Message from system". <sup>td19</sup>
-    - The first three send their own emails. Their first message is not
-      the one "Edit" rewrites ([A9](#a9)).
+    - The first three send their own emails. The Participants message's
+      first message is not the one "Edit" rewrites ([A9](#a9)).
 <a id="disabled-participants"></a>
 22. **A disabled account stays named.** When a participant's account is
     disabled, the items keep showing them: in "Created by" and "Task
@@ -1330,6 +1336,7 @@ Left out of the scenarios above, by reason:
   - no leave-page question once the window has closed, by "Save", by "Warning" › "Yes" or untouched (Rule 11d; A22 retired)
   - the "Select submission stage" list of "Workflow Files" offering the stages up to Production and never Done (Rule 14a): likely a bullet in scenario 1's "A workflow file", read before "Submission" is chosen
   - the browser's leave-page prompt while the window holds unsaved changes (Rule 11d)
+  - an edit of the comments-box discussion, by the submitting Author within the hour and by the Journal Manager, and of the recommendation discussion, each replacing the first message in place (Rules 15a, 15c, 21; A9 no longer covers them)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1341,7 +1348,7 @@ Left out of the scenarios above, by reason:
   - A4 (a "Find Template" search holding "discussion" or "task" ending in an "Error" window; Rule 10a)
   - A6 and A7 (a task owner's refused edit, and the raw key a press and a preprint server show for it; Rule 15c; scenario 10 marks A6)
   - A8 (an Author's edit of a first message carrying an upload; Rule 15d)
-  - A9 (an edit of a discussion another screen opened; Rule 15e)
+  - A9 (an edit of a discussion a Participants message opened, and the Author or assistant it was sent to saving it at any time; Rules 15c, 15e)
   - A13 (a closed task that cannot be reopened; Rule 17c; scenario 4 marks it)
   - A15 (the panel in French; Rule 24)
   - A16 (a task due today reading "Overdue"; Rule 2d)
@@ -1385,7 +1392,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | A task's owner who did not write its first message is offered "Edit" and refused on "Save" | 🐞 | user-visible | — |
 | [A7](#a7) | On a press and a preprint server the edit refusals show a raw key | 🐞 | minor | — |
 | [A8](#a8) | An Author cannot save an edit of a discussion whose first message has an uploaded file, and the refusal names no field | 🐞 | user-visible | — |
-| [A9](#a9) | Editing a discussion another screen opened adds the edited text as a second message, under the name of the person the row gives as its creator | 🐞 | user-visible | — |
+| [A9](#a9) | Editing a discussion a Participants message opened adds a second message, under the name of the person it was sent to | 🐞 | user-visible | — |
 | [A10](#a10) | A past "Due Date" is refused with "Start date should be greater than or equal to today" | 🐞 | minor | — |
 | [A16](#a16) | A task due today already reads "Overdue" | 🐞 | minor | — |
 | [A17](#a17) | A closed task past its due date still reads "This task is overdue. Remind the task owner…" | 🐞 | minor | — |
@@ -1487,22 +1494,27 @@ window stays open with the notice "The form was not saved because 1
 error(s) were encountered. Please correct these errors and try again."
 and "Please correct one error.", but no field shows an error, and "Save"
 stays greyed for the rest of that window, even after the file's
-"Remove". Only pressing the file's "Remove" first, in a fresh "Edit"
-window, lets the save through, and that takes the file off the message.
+"Remove". A screen reader hears the error list's only entry as "Go to
+submissionFileIds: ##validator.prohibited##". Only pressing the file's
+"Remove" first, in a fresh "Edit" window, lets the save through, and
+that takes the file off the message.
 A Copyeditor with an upload of their own, and the Journal Manager, save
 the same edit.
 Basis: probe. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
-**A9 — Editing another screen's discussion adds a second message** · 🐞 · user-visible.
-A discussion opened by a Participants message, by the submission
-wizard's comments box or by a recommendation shows its first message in
-"Edit". "Save" does not replace that message: the discussion window then
+**A9 — Editing a Participants message's discussion adds a second message** · 🐞 · user-visible.
+A discussion opened by a Participants "Notify" or "Assign" shows its
+first message in "Edit". The first "Save", even one that only renames
+the item, does not replace that message: the discussion window then
 shows the original first message and, after it, a second message with
-the edited text, headed with the name the row gives as "Created by:"
-(the person the Participants message went to, the submitting Author,
-the recommending editor), whoever pressed "Save". The History records
-nothing, so the text reads as written by someone who never wrote it.
+the box's text, headed with the name the row gives as "Created by:"
+(the person the message went to), whoever pressed "Save". Later saves
+rewrite that second message. The History records nothing, so the text
+reads as written by someone who never wrote it. An Author or assistant
+role the message went to saves this way at any time, though Rule 15c
+holds everyone else in those roles to their own first message and its
+first hour.
 Basis: probe. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
@@ -1832,7 +1844,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 **z** — `discussionDelete()`: dialog `common.delete` / `common.confirmDelete`, `common.ok` (warnable) and `common.cancel`; DELETE `submissions/{id}/tasks/{taskId}`. `EditorialTask::booted()` `deleted` removes the task's notes and its `Notification` rows (`withAssoc(ASSOC_TYPE_QUERY, id)`, the header Tasks rows); participants go with the task's foreign key. The note removal is a query delete, which does not fire `Note::booted()`'s file clean-up, so the attached files' records stay in the database. Live-probed 2026-09-23 (Rule 19; all three apps): "Delete" in red text, the dialog as quoted, "OK" in red and "Cancel"; "Cancel" sending nothing; "OK" removing the row at once and after a reload, and the item's Tasks rows from the Section Editor's and the Author's panels; nobody mailed; a download link to one of its files, kept from before, answering "The current role does not have access to this operation.".
 
 <a id="fn-aa"></a>
-**aa** — Participants messages: `PKPStageParticipantNotifyForm::sendMessage()` (`EditorialTask::create`, `Participant::create`, `Note::create` without `isHeadnote`). Comments box: `Submission\Repository::submit()` → `Repo::editorialTask()->addCommentsForEditorsQuery()` → `addQuery()` (title `submission.submit.coverNote`: OJS "Comments for the Editor", OMP "Cover Note to Editor", OPS "Comments for the Moderator"; participants = stage assignments with `MANAGER, SUB_EDITOR, ASSISTANT, AUTHOR` on the submission's stage; `createdBy` = the first Author assignment's user, else the request user; `Note::create` without `isHeadnote`; its own notification and plain `Mailable`). Recommendation: `IsRecommendation::addRecommendationQuery()` → `addQuery()`. Auto-add: `Repository::autoCreateFromTemplates()` → `Template::promote($submission, false)` (no participants, `createdBy` null, head note `userId` null → "Message from system" in `DiscussionMessages::getNoteCreatedBy()`), no log entry, no notification. None of the three `addQuery`/notify paths writes an event-log entry, so their "Activity" is empty. Live-probed 2026-09-23 (Rule 21; all three apps, the recommendation OJS and OMP): "Notify" and "Assign" making a discussion named after the template, "Created by: {recipient}", sender and recipient its participants, its own email; the comments box making "Comments for the Editor" / "Cover Note to Editor" / "Comments for the Moderator" with every assignee of the stage (not an unassigned Journal Manager) as participants, all of them mailed, the Author included; "Editor Recommendation" with the deciding editor alone as participant, no row for the recommender, and a manager's "Save" refused with the two texts until the recommender is ticked; the auto-added discussion seen by manager-level people only, one added participant refused, two saved; every one of these items with an empty "Activity" and a History reading "No Items" (A18).
+**aa** — Participants messages: `PKPStageParticipantNotifyForm::sendMessage()` (`EditorialTask::create`, `Participant::create`, `Note::create` without `isHeadnote`). Comments box: `Submission\Repository::submit()` → `Repo::editorialTask()->addCommentsForEditorsQuery()` → `addQuery()` (title `submission.submit.coverNote`: OJS "Comments for the Editor", OMP "Cover Note to Editor", OPS "Comments for the Moderator"; participants = stage assignments with `MANAGER, SUB_EDITOR, ASSISTANT, AUTHOR` on the submission's stage; `createdBy` = the first Author assignment's user, else the request user; `Note::create` with `isHeadnote => true` since pkp/pkp-lib#13409, `3dc90c81a6`, 2026-09-29, before which the flag was missing (f-a9); its own notification and plain `Mailable`). Recommendation: `IsRecommendation::addRecommendationQuery()` → `addQuery()`, so its first note is flagged too. Auto-add: `Repository::autoCreateFromTemplates()` → `Template::promote($submission, false)` (no participants, `createdBy` null, head note `userId` null → "Message from system" in `DiscussionMessages::getNoteCreatedBy()`), no log entry, no notification. None of the three `addQuery`/notify paths writes an event-log entry, so their "Activity" is empty. Live-probed 2026-09-23 (Rule 21; all three apps, the recommendation OJS and OMP): "Notify" and "Assign" making a discussion named after the template, "Created by: {recipient}", sender and recipient its participants, its own email; the comments box making "Comments for the Editor" / "Cover Note to Editor" / "Comments for the Moderator" with every assignee of the stage (not an unassigned Journal Manager) as participants, all of them mailed, the Author included; "Editor Recommendation" with the deciding editor alone as participant, no row for the recommender, and a manager's "Save" refused with the two texts until the recommender is ticked; the auto-added discussion seen by manager-level people only, one added participant refused, two saved; every one of these items with an empty "Activity" and a History reading "No Items" (A18).
 
 <a id="fn-ab"></a>
 **ab** — pkp/pkp-lib#13334 (`360badeef5`, 2026-09-16): `getTasks()`, `fromTemplate()`, `getTaskData()` and `recordParticipantsAction()` load users with `filterByStatus(UserCollector::STATUS_ALL)`, so a disabled participant or creator still resolves to a name in the list, the item, the edit form's merged options and the History. Not offered anew: `getParticipants()` uses `Repo::user()->get($id)` (disabled excluded, the `null` filtered out). Not notified: `notifyParticipants()` loads recipients with the collector's default (active) status. Live-probed 2026-09-23 (Rule 22; all three apps): a disabled Section Editor (Moderator) still named on her rows, in the window, ticked in "Edit" (kept ticked by a rename-only "Save") and in the History; not offered in "Add"; no email and no Tasks row for a reply while disabled, both again once enabled.
@@ -1883,13 +1895,13 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 **td7** — Live-probed 2026-09-23 (Rule 10e; all three apps): a template added under Copyediting Stage filled "Name" and the message box with its own text, and saved.
 
 <a id="fn-td8"></a>
-**td8** — Live-probed 2026-09-23 (Rule 15c; A6, A7; all three apps): the Copyeditor owning the Journal Manager's task (a preprint server: the Author) changed only "Due Date" and was refused with "You can only edit your own discussion message." under the message box (a raw key on a press and a preprint server), the notice of Rule 11a and "Please correct one error."; the row kept its date.
+**td8** — Live-probed 2026-09-23 (Rule 15c; A6, A7; all three apps): the Copyeditor owning the Journal Manager's task (a preprint server: the Author) changed only "Due Date" and was refused with "You can only edit your own discussion message." under the message box (a raw key on a press and a preprint server), the notice of Rule 11a and "Please correct one error."; the row kept its date. Live-probed 2026-09-30 (sync pkp/pkp-lib#13409; Rule 15c; A6, A7, A12; all three apps, two runs): on the comments-box discussion the submitting Author's "Save" within the hour replaced the comment in place (one message, their name, the original minute); past the hour (its message moved back two hours in the database) the Author's rename, and a "Save" with nothing changed, were refused with the one-hour text (a raw key on a press and a preprint server), the notice and "Please correct one error.", and the Journal Manager's rename saved; turned into a task owned by the Funding Coordinator (journal, press), the owner's due-date change was refused with the own-message text (a raw key on a press), and with the Author as owner the same change saved. The recommendation discussion meets none of these limits: its creator is the recommending Section Editor, whom 15c does not bind. The Author or assistant a "Notify" went to saving past the hour: td10.
 
 <a id="fn-td9"></a>
-**td9** — Live-probed 2026-09-23 (Rule 15d; A8; all three apps): the Author's rename of a discussion whose first message carries an upload refused with no field marked; "Save" greyed for the rest of the window, even after "Remove"; in a fresh window "Remove" first let the rename through.
+**td9** — Live-probed 2026-09-23 (Rule 15d; A8; all three apps): the Author's rename of a discussion whose first message carries an upload refused with no field marked; "Save" greyed for the rest of the window, even after "Remove"; in a fresh window "Remove" first let the rename through. Live-probed 2026-09-30 (sync pkp/pkp-lib#13409; Rule 15d; A8; all three apps, two runs): on the comments-box discussion the Author's upload attached through "Edit" saved ("notes.md uploaded by {Author}" in "Activity" and the History), and the next rename was refused with the notice and "Please correct one error.", no field marked, "Save" greyed; the error list's screen-reader text read "Go to submissionFileIds: ##validator.prohibited##", the answer a 422 on `submissionFileIds`.
 
 <a id="fn-td10"></a>
-**td10** — Live-probed 2026-09-23 (Rule 15e; A9; all three apps): a "Notify" discussion's "Edit" held "First text"; with "Second text" typed, "Save" closed the window and the discussion window showed "Message from {sender} … First text" then "Message from {recipient} … Second text"; the History read "No Items" before and after.
+**td10** — Live-probed 2026-09-23 (Rule 15e; A9; all three apps): a "Notify" discussion's "Edit" held "First text"; with "Second text" typed, "Save" closed the window and the discussion window showed "Message from {sender} … First text" then "Message from {recipient} … Second text"; the History read "No Items" before and after. Re-probed 2026-09-30 after pkp/pkp-lib#13409 (Rules 15c, 15e, 21; A9; all three apps, two runs, the recommendation on OJS and OMP): a Journal Manager's "Save" on a "Notify" discussion changing only "Name" added a copy of the first message under the recipient Section Editor's name, and the next "Save" with a new text rewrote that copy, two messages in all; the Author and the Funding Coordinator (journal, press) a "Notify" went to, its first message moved back two hours in the database, saved "Edit" from their own row, the window then showing the manager's message at its old time and a second message under the recipient's name at the time of the save, and a second "Save" rewrote it; the History read "No Items" throughout. The comments-box, recommendation and auto-added discussions, and an auto-added task, kept one message after an edit, its text replaced under the original heading and minute.
 
 <a id="fn-td11"></a>
 **td11** — Live-probed 2026-09-23 (Fields "Name" and "Due Date"; A10; all three apps): 256 characters refused under "Name" with "This may not be greater than 255 characters.", 255 saved; yesterday typed into "Due Date" accepted by the box and refused under it with "Start date should be greater than or equal to today"; an empty "Due Date" on a task "This field is required.".
@@ -1943,7 +1955,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 **f-a8** — `useDiscussionManagerForm` seeds `selectedFiles` with the head note's files tagged `FileAttacherWorkflowStage`, so `saveWorkItem()` sends their ids as `submissionFileIds`; `EditTask` makes `submissionFileIds` `prohibitedIf` the user is not manager/admin or an assigned sub-editor or assistant, and a non-empty value then fails validation. Live-probed 2026-09-23 (all three apps): the answer is 422 on `submissionFileIds` "##validator.prohibited##", heard only in the error list's screen-reader text "Go to submissionFileIds: ##validator.prohibited##"; "Jump to next error" moves focus to itself; the Copyeditor's and the manager's same edit answered 200 (td9).
 
 <a id="fn-a9"></a>
-**f-a9** — The three paths of note aa create their first `Note` without `isHeadnote`. `editTask()` reads the head note as `null` (its later `$headnote->id` reads a property of null, a warning); `EditorialTask::saveHeadnote()` finds no flagged note and saves a new one with the edited text; the window heads it with the item's `createdBy`. Live-probed 2026-09-23 (all three apps, the recommendation OJS and OMP): the "Notify", comments-box and recommendation discussions each gaining a second message under the recipient's, the Author's or the recommender's username after another person's "Save" (td10).
+**f-a9** — The Participants message path of note aa (`PKPStageParticipantNotifyForm::sendMessage()`) creates its first `Note` without `isHeadnote`; `addQuery()` (the comments box and the recommendation) has flagged it since pkp/pkp-lib#13409 (`3dc90c81a6`, 2026-09-29, issue pkp/pkp-lib#13345), and the auto-added item was never affected. On the Participants path `editTask()` reads the head note as `null` (its later `$headnote->id` reads a property of null, a warning); `EditorialTask::saveHeadnote()` finds no flagged note and saves a new flagged one with the edited text, which later saves update; the window heads it with the item's `createdBy`. With no head note the `EditTask` `description` closure passes (note v), so the recipient's save is held neither to the message's writer nor to the hour. Live-probed 2026-09-23, before that change (all three apps, the recommendation OJS and OMP): the "Notify", comments-box and recommendation discussions each gaining a second message under the recipient's, the Author's or the recommender's username after another person's "Save". Re-probed 2026-09-30: the Participants path alone, a name-only "Save" adding the copy and the next one rewriting it, and the recipient Author's and Funding Coordinator's saves past the hour (td10).
 
 <a id="fn-a10"></a>
 **f-a10** — `EditTask::messages()` maps `dateDue.after_or_equal` to `validation.after_or_equal` "Start date should be greater than or equal to today" (lib/pkp `locale/en/validation.po`). The date field's `min: 'today'` greys earlier days in the picker; typed, it reaches the server (td11, live-probed 2026-09-23).
@@ -1952,7 +1964,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 **f-a11** — Live 2026-09-19 on all three apps (Production stage's claim check): "Cancel" in the discussions "Add" window closed it with the typed content lost and no prompt. The close control's question: note r. Live-probed 2026-09-23 in three separate drives on all three apps: "Cancel" on a changed window asks "Warning" (td2); the silent close did not reproduce, so the entry is retired.
 
 <a id="fn-a12"></a>
-**f-a12** — Note v: the one-hour closure applies to every user without `MANAGER`/`SUB_EDITOR` in the context (Author, assistant roles, Reviewer) and runs whenever `description` is posted, which the form always does. `NoteAccessPolicy` (write) states the same rule ("Other users can only edit their own headnotes within 1 hour of creation"), so the hour itself is intended (pkp/pkp-lib#12278). Live-probed 2026-09-23 (all three apps): with a scratch item's first message moved back two hours in the database (no seed key does this), the Author's rename and added participant and the Copyeditor's rename were refused, the Journal Manager's and a Section Editor's saved.
+**f-a12** — Note v: the one-hour closure applies to every user without `MANAGER`/`SUB_EDITOR` in the context (Author, assistant roles, Reviewer) and runs whenever `description` is posted, which the form always does. `NoteAccessPolicy` (write) states the same rule ("Other users can only edit their own headnotes within 1 hour of creation"), so the hour itself is intended (pkp/pkp-lib#12278). Live-probed 2026-09-23 (all three apps): with a scratch item's first message moved back two hours in the database (no seed key does this), the Author's rename and added participant and the Copyeditor's rename were refused, the Journal Manager's and a Section Editor's saved. Since pkp/pkp-lib#13409 the hour binds the submitting Author's edit of the comments-box discussion too (td8); the Author or assistant a Participants message went to is not bound (f-a9).
 
 <a id="fn-a13"></a>
 **f-a13** — Note x: `discussionSetClosed()` and both disabled boxes block a closed task on purpose; `task.reopenThisTask` / `task.confirmReopenTask` are defined and only reachable through the disabled box's confirm props. Live-probed 2026-09-23 (all three apps): the boxes greyed for the Journal Manager, the owner, the Site Administrator and an Author participant; a press on the row's box asking nothing; a closed discussion reopening with one press and "Yes".
