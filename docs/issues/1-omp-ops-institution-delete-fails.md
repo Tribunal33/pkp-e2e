@@ -264,7 +264,7 @@ migration's own check, and a test.
   of lib/pkp, OMP, OPS and OJS for callers and for other OJS-only table
   names outside migrations.
 - Introduced: `git blame` on the query's lines in lib/pkp gives
-  bed0ee4c3b ("pkp/pkp-lib#6782 Introduce Institutions"); the line above
+  bed0ee4c3b (`pkp/pkp-lib#6782 Introduce Institutions`); the line above
   it was only reworded in 98b335d0c0 ("Formatting and typehinting");
   GitHub's `commits/<sha>/pulls` gives PR `pkp/pkp-lib#8109` ("usage
   stats improvements", merged 2022-07-23).

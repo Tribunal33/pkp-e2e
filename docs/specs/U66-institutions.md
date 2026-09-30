@@ -470,21 +470,21 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the guard for A1 (Actors rows 1–2; issue report
-    `docs/issues/institutions-menu-without-settings-permission.md`): a
+    `docs/issues/3-institutions-menu-without-settings-permission.md`): a
     member of a manager-level role without "Permit changes to Settings",
     on all three apps, offered "Institutions" in the side menu and
     reaching the page from it
   - the guard for A2 (Rule 6; issue report
-    `docs/issues/unsaved-name-kept-after-closing-edit-panel.md`): a
+    `docs/issues/4-unsaved-name-kept-after-closing-edit-panel.md`): a
     changed "Name" closed without "Save", then "Edit" and a "Save" of
     another box, the saved name kept on the row and in the list
   - the guard for A3 and A8 (Rule 7b, Side effects; issue report
-    `docs/issues/omp-ops-institution-delete-fails.md`): "Delete" ›
+    `docs/issues/1-omp-ops-institution-delete-fails.md`): "Delete" ›
     "Yes" removing an institution on a press and a preprint server, and
     "Remove" on "Hosted Presses" ("Hosted Servers") removing one that
     holds an institution
   - the guard for A9 (Fields "IP ranges"; issue report
-    `docs/issues/institution-long-ip-range-save-error.md`): a valid
+    `docs/issues/2-institution-long-ip-range-save-error.md`): a valid
     range longer than 40 characters on "Add Institution" and on "Edit
     Institution", saved once or refused, the ranges already stored kept
 - **Rarely met**:
@@ -1156,7 +1156,7 @@ level and the setting, never `permitSettings`; note b: the page's
 `CanAccessSettingsPolicy` does. The Editor and Production Editor groups
 carry `permitSettings` and can lose it (Settings bullet 3); OPS offers no
 manager-level group that can. Live-probed 2026-09-28: q1.
-Issue report: [docs/issues/institutions-menu-without-settings-permission.md](../issues/institutions-menu-without-settings-permission.md).
+Issue report: [pkp-e2e#3](https://github.com/jardakotesovec/pkp-e2e/issues/3) ([docs/issues/3-institutions-menu-without-settings-permission.md](../issues/3-institutions-menu-without-settings-permission.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2 — A2 evidence.** `InstitutionsListPanel.vue::openEditModal()`
@@ -1168,7 +1168,7 @@ cloned form only. `ipRanges` is a new string and `ror` a plain value, so
 only the name leaks, into the row and into the next opening of the panel,
 which fills from the same object. The same pattern is on screen in *Highlights* A4 and
 *Announcements* A11. Live-probed 2026-09-28: q4.
-Issue report: [docs/issues/unsaved-name-kept-after-closing-edit-panel.md](../issues/unsaved-name-kept-after-closing-edit-panel.md).
+Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/4-unsaved-name-kept-after-closing-edit-panel.md](../issues/4-unsaved-name-kept-after-closing-edit-panel.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3 — A3 evidence.** `PKP\institution\DAO::delete()` asks
@@ -1182,7 +1182,7 @@ callback's `ajaxErrorCallback` opens the "Error" window. The check dates
 from `bed0ee4c3b` "pkp/pkp-lib#6782 Introduce Institutions" (2021-06-15)
 and survives `630730ae13` (2026-08-28). The same method serves a
 journal's deletion (note h; q11). Live-probed 2026-09-28: q5.
-Issue report: [docs/issues/omp-ops-institution-delete-fails.md](../issues/omp-ops-institution-delete-fails.md).
+Issue report: [pkp-e2e#1](https://github.com/jardakotesovec/pkp-e2e/issues/1) ([docs/issues/1-omp-ops-institution-delete-fails.md](../issues/1-omp-ops-institution-delete-fails.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4 — A4 evidence.** `DAO::delete()` hard-deletes an institution no
@@ -1235,7 +1235,7 @@ afterwards the press row and its institution remain and its user groups
 and genres are gone (the control context with no institution: all gone);
 as `admin`, the press's Settings › Users & Roles and Institutions pages
 answer the access-denied page, and its public home page opens.
-Issue report: [docs/issues/omp-ops-institution-delete-fails.md](../issues/omp-ops-institution-delete-fails.md).
+Issue report: [pkp-e2e#1](https://github.com/jardakotesovec/pkp-e2e/issues/1) ([docs/issues/1-omp-ops-institution-delete-fails.md](../issues/1-omp-ops-institution-delete-fails.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9 — A9 evidence.** `institution_ip.ip_string` holds 40 characters
@@ -1247,7 +1247,7 @@ each: the 45-character line answered 500 on `POST {context}/api/v1/institutions`
 on every "Save"; after two presses and a reload the list read "Long
 Library" twice, and "Edit" showed "IP ranges" empty; a 40-character line
 answered 200, a 41-character one 500.
-Issue report: [docs/issues/institution-long-ip-range-save-error.md](../issues/institution-long-ip-range-save-error.md).
+Issue report: [pkp-e2e#2](https://github.com/jardakotesovec/pkp-e2e/issues/2) ([docs/issues/2-institution-long-ip-range-save-error.md](../issues/2-institution-long-ip-range-save-error.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10 — A10 evidence.** Note e: the collector sets no order, so the

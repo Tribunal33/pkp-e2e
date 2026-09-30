@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/unsaved-name-kept-after-closing-edit-panel.md
+// Issue report walk: docs/issues/4-unsaved-name-kept-after-closing-edit-panel.md
 // (spec U66 register A2, U12 A11, U11 A4). Takes the report's Steps through
 // the screens as the manager of a scratch journal, press or preprint server
 // the kit creates (tag u66ir4, one per run and app, with its manager

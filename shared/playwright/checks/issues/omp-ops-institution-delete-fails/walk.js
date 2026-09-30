@@ -1,4 +1,4 @@
-// Issue report docs/issues/omp-ops-institution-delete-fails.md (U66 A3, A8):
+// Issue report docs/issues/1-omp-ops-institution-delete-fails.md (U66 A3, A8):
 // the report's Steps to reproduce, walked through the screens as `admin`.
 //
 // The kit builds only two scratch contexts per app, tagged u66ir1: "Test

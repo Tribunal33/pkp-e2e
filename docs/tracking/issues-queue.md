@@ -9,7 +9,8 @@ its open entries in the Note. A spec gains a row again when a new 🐞
 entry lands in it (MAINTENANCE "The issues session").
 
 **Filing: on hold** until the maintainer has reviewed the pilot's (U66)
-reports; the maintainer deletes this line to start filing.
+reports, filed on request 2026-09-30 as pkp-e2e#1–#4 for that review;
+the maintainer deletes this line to start filing.
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|

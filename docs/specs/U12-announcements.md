@@ -832,7 +832,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the guard for A11 (Rule 6; issue report
-    `docs/issues/unsaved-name-kept-after-closing-edit-panel.md`): a
+    `docs/issues/4-unsaved-name-kept-after-closing-edit-panel.md`): a
     changed "Title" closed without "Save", then "Edit" and a "Save" of
     another box, the saved title kept on the row and the public
     Announcements page
@@ -1978,7 +1978,7 @@ place (*Highlights* A4). Live-probed 2026-09-17 (A11), OJS, OMP and OPS: the
 rows read "Call for papers UNSAVED", "… ESC" and "… OUTSIDE" after the three
 closes, no browser or in-app dialog, "Call for papers" after the reload and
 on the public page.
-Issue report: [docs/issues/unsaved-name-kept-after-closing-edit-panel.md](../issues/unsaved-name-kept-after-closing-edit-panel.md).
+Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/4-unsaved-name-kept-after-closing-edit-panel.md](../issues/4-unsaved-name-kept-after-closing-edit-panel.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12 — A12 evidence.** Note j's code read (`Announcement::delete()`

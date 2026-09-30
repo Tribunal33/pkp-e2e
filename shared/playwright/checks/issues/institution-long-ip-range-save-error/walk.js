@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/institution-long-ip-range-save-error.md
+// Issue report walk: docs/issues/2-institution-long-ip-range-save-error.md
 // (spec U66 register A9). Takes the report's Steps through the screens as
 // the manager of a scratch journal, press or preprint server the kit
 // creates (tag u66ir2, one per run and app, with its manager account);

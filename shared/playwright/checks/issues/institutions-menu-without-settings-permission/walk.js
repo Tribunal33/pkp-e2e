@@ -1,4 +1,4 @@
-// Issue report walk: docs/issues/institutions-menu-without-settings-permission.md
+// Issue report walk: docs/issues/3-institutions-menu-without-settings-permission.md
 // (spec U66 register A1). Takes the report's Steps through the screens. The
 // kit creates a scratch journal, press or preprint server (tag u66ir3, one
 // per run and app) with its accounts: a manager, and on a journal and a press
