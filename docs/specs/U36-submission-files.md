@@ -2264,7 +2264,7 @@ button "Choose File", while the screenshot showed no box.
 **f-a10** — Note v (`NewNoteForm` has no check on the text). Live-probed
 2026-09-23 (d14; all three apps): an empty note row "Mira Manager 2026-09-23
 11:57 AM · Delete", "Note posted.", and a "Posted new note." row in "History".
-Issue report: [docs/issues/U36-A10-empty-note-posted.md](../issues/U36-A10-empty-note-posted.md).
+Issue report: [pkp-e2e#67](https://github.com/jardakotesovec/pkp-e2e/issues/67) ([docs/issues/U36-A10-empty-note-posted.md](../issues/U36-A10-empty-note-posted.md)).
 
 <a id="fn-a11"></a>
 **f-a11** — Note k. Live-probed 2026-09-23 (OJS and OMP): "Other" › "Save"
