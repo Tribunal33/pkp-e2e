@@ -2339,7 +2339,7 @@ POST to `…/api/v1/submissions/{id}/files` answered 500, the server log reading
 "POST Content-Length of 104857994 bytes exceeds the limit of 104857600 bytes":
 the form fields push the request past the limit the panel's size check
 compares against.
-Issue report (the panel's limit): [docs/issues/U36-A21-files-panel-limit-ignores-request-limit.md](../issues/U36-A21-files-panel-limit-ignores-request-limit.md).
+Issue report (the panel's limit): [pkp-e2e#70](https://github.com/jardakotesovec/pkp-e2e/issues/70) ([docs/issues/U36-A21-files-panel-limit-ignores-request-limit.md](../issues/U36-A21-files-panel-limit-ignores-request-limit.md)).
 Issue report (the server error): [pkp-e2e#43](https://github.com/jardakotesovec/pkp-e2e/issues/43) ([docs/issues/U36-A21-upload-over-request-limit-server-error.md](../issues/U36-A21-upload-over-request-limit-server-error.md)).
 
 <a id="fn-a22"></a>
