@@ -1054,7 +1054,22 @@ Production stage, so withholding the file is right. The fault is that
 the menu lists the page for them. The proposed fix stops listing "Media"
 for roles without Production access, as a journal and a preprint server
 already do.
-Basis: probe (the download); code (the download address), 2026-09-30.
+Basis: probe, 2026-09-30 (the Copyeditor); code (the Funding and the
+Marketing and Sales Coordinator). <sup>f-omp2</sup>
+
+### OPS
+<a id="ops1"></a>
+**OPS1 — Media files reach no reader on a preprint server** · ❓ · user-visible.
+A preprint server offers the "Media" page with every action a journal
+has, but it installs nothing that shows an HTML galley as a page: the
+galley's link on the preprint's page downloads the HTML file, and the
+media files are shown nowhere.
+Question: should a preprint server show HTML galleys with their media
+files, or not offer the "Media" page? Lean: show them; the preprint's
+download address already accepts a media file (read in the code, used
+by no page), so the missing piece looks like an unfinished port rather
+than a choice.
+Basis: probe, 2026-09-24 (the download); code (the download address).
 <sup>f-ops1</sup>
 
 ---
@@ -1850,7 +1865,7 @@ Coordinator's stages do not include Production (note b). The
 Copyeditor's and the Marketing and Sales Coordinator's link in
 Copyediting is the same address and was not pressed. The Author and every
 role with Production download normally (note q1).
-Issue report: [docs/issues/U47-OMP2-press-media-download-refused-outside-production.md](../issues/U47-OMP2-press-media-download-refused-outside-production.md).
+Issue report: [pkp-e2e#61](https://github.com/jardakotesovec/pkp-e2e/issues/61) ([docs/issues/U47-OMP2-press-media-download-refused-outside-production.md](../issues/U47-OMP2-press-media-download-refused-outside-production.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Notes a and n: the OPS side menu lists "Media" for
