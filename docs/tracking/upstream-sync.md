@@ -14,6 +14,23 @@ The `stable-3_5_0` branch, read for regressions only, has its own file:
 | ops | `c8af945bb7` | 2026-09-30 | claude (daily maintenance session) |
 | pkp-lib | `3dc90c81a6` (ojs, omp, ops) | 2026-09-30 | claude (daily maintenance session); ui-library `280f98c5` (ojs, omp, ops); ojs `plugins/generic/crossref` `46a4d469bf`, ops `plugins/generic/crossref` `b6b94dd5de`, ojs `plugins/generic/jatsTemplate` `dfcb4ee60b` (2026-09-30), ojs `plugins/generic/googleScholar` `4cae9952f9` (2026-09-25) |
 
+## Leads
+
+_Suspicions another session met and handed over, one line each; the
+upstream session works them (MAINTENANCE upstream session step 3) and
+deletes each once it is a report, a register entry or dismissed._
+
+- 2026-09-30 (issues session, while proving the dataset fleets): the
+  3.5 dataset (`pkp/datasets` `ojs/stable-3_5_0/pgsql`, 3.5.0.5) upgraded
+  to OJS `main` with `php tools/upgrade.php upgrade` (3.6.0.0) does not
+  give a fresh `main` install's schema: `review_assignments.competing_interests_declared`
+  is missing and `edit_tasks.status` is left over. Reproduce with
+  `PKP_E2E_DATASET_BRANCH=stable-3_5_0 npm run fleet-prep -- --feature
+  <f> --dataset <n> --reset` (the reset prints the column comparison;
+  harness.md "Dataset fleets"). Possibly an upgrade migration gap for
+  the two changes that added and removed those columns; OMP and OPS not
+  checked.
+
 ## Sync log
 
 _Newest first; one entry per sync: the date and the range per repo, then

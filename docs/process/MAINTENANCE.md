@@ -24,7 +24,9 @@ The scheduled prompt only points here; this section is the day's order.
    files, never from memory of earlier sessions.
 2. Start on the right code and reset the databases ("Session hygiene").
 3. Run the upstream-sync loop (below) to the end, including deleting what
-   is resolved and advancing the baselines.
+   is resolved and advancing the baselines, and work the "Leads" that
+   other sessions handed over in `upstream-sync.md` (each becomes a
+   report, a register entry or is dismissed, and its line is deleted).
 4. Check the latest `e2e-tests.yml` run on each app's `main` (harness.md
    "CI") and triage anything red against `ci-triage.md` before calling it
    new. A daily check also catches a red nobody has reported yet.
