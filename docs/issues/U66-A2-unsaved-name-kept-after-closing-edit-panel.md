@@ -10,7 +10,7 @@
   - 3.3: OJS, OMP, OPS (code; Announcements only)
 - **Introduced** `pkp/ui-library#88` for `pkp/pkp-lib#5865` · [d0ffc05ab4](https://github.com/pkp/ui-library/commit/d0ffc05ab4ae7f06e8d2ab82f30ffb8a5ea9a7a3) · 2020-05-13 · Nate Wright (NateWr)
 - **Upstream** none found (2026-09-30)
-- **Tracked in** specs U66 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a2), U12 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a11), U11 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U11-highlights.md#a4)
+- **Tracked in** specs U66 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a2), U12 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a11), U11 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U11-highlights.md#a4), U47 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a5)
 - **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -25,10 +25,18 @@ Instead, the row shows the abandoned text as if it were saved, and
 another box, stores the abandoned text without any warning. The text
 then shows wherever the item shows, public pages included.
 
-On `main` the same happens to a category's title, a contributor role's
-name and, on journals, a reviewer recommendation's title. A category's
-row keeps showing the saved title; only its reopened "Title" box shows
-the abandoned one.
+On 3.5 only institutions, announcements and highlights break;
+highlights need no setting there or on `main`. On `main` the same also
+happens to a category's title, a contributor role's name, on journals a
+reviewer recommendation's title, and a media file's "Name of the file"
+in "Edit Metadata" on a publication's "Media" page. There it happens even after
+the editor answers "Yes" to "Do you wish to continue without saving?".
+A category's row keeps showing the saved title, but its reopened
+"Title" box shows the abandoned one, and the next "Save" stores it.
+
+Every one of these windows goes wrong in the same shared form
+component, so one change there fixes them all, the media window
+included (tried).
 
 ## Impact
 
@@ -37,11 +45,16 @@ the abandoned one.
   site's, on a site with several journals), the home page's highlights,
   category pages and the contributor roles shown beside authors. An
   institution's name goes into the COUNTER usage reports its librarians
-  download and, on journals, into its institutional subscription.
-- **Who.** A manager who abandons a change to a name or title, then
-  edits the same item again without reloading the page. This is a
-  common sequence: an edit is started, dropped, and something else is
-  fixed instead.
+  download and, on journals, into its institutional subscription. On a
+  journal or a press, an HTML galley finds its images by the media
+  file's "Name of the file", so a web-resolution image saved under an
+  abandoned name drops out of the readers' HTML page; a preprint server
+  has no HTML galley plugin, and a high-resolution original is never
+  shown there (read in the code, not walked).
+- **Who.** A manager, or an editor on the "Media" page, who abandons a
+  change to a name or title, then edits the same item again without
+  reloading the page. This is a common sequence: an edit is started,
+  dropped, and something else is fixed instead.
 - **Way round.** Reload the page after closing an edit panel, or retype
   the saved text before saving. Nothing gets worse with time.
 
@@ -59,6 +72,14 @@ Preconditions:
   institutions and no highlights, and announcements are turned off.
 - No other setup: `rvaca` is its Journal Manager (Press Manager,
   Preprint Server Manager).
+- For "Media files" only: a PNG image named `figure.png`, and a
+  submission in Production: OJS submission 5, "Genetic transformation
+  of forest trees"; OMP submission 4, "How Canadians Communicate:
+  Contexts of Canadian Popular Culture"; OPS submission 1, "The
+  influence of lactation on the quantity and quality of cashmere
+  production". These steps were walked as `dbarnes`, the editor
+  assigned to the OJS and OMP submissions; on OPS he is not assigned
+  and opens it as the server's Preprint Server Manager.
 
 Institutions:
 
@@ -105,11 +126,30 @@ Highlights:
     `https://example.org/call2` and press "Save".
 20. Reload the page, read the row, press "Edit" and read "Title".
 
+Media files (`main` only):
+
+21. Sign in as `dbarnes`, open the submission and go to "Publication" ›
+    "Media" ("Preprint" › "Media" on a preprint server).
+22. Press "Add Media File", choose `figure.png` with the file picker,
+    choose "Image" and "Web resolution" on its card, and press "Upload
+    Files".
+23. On the "figure.png" row, open "More Actions" › "Edit Metadata" and
+    replace "Name of the file" with "figure-1.png".
+24. Press "Cancel", then "Yes" in the "Warning" dialog. Read the row.
+25. Open "Edit Metadata" on the row again and read "Name of the file".
+26. Type "Figure 1" in "Caption" and press "Save".
+27. Reload the page and read the row.
+28. Open "Edit Metadata", replace "Name of the file" with "figure-2.png",
+    close the window with its close control, then press "Yes". Read the
+    row.
+29. Reload the page and read the row.
+
 **Expected:** closing a panel without "Save" drops what was typed: the
-rows of steps 5, 9, 10, 14 and 18 keep the saved name or title, "Edit"
-reopens with it, and the saves of steps 7, 15 and 19 store only the box
-changed there ("Campus Library" with `10.2.0.0/16`; "Call for papers";
-"Open call").
+rows of steps 5, 9, 10, 14, 18, 24 and 28 keep the saved name or title,
+"Edit" ("Edit Metadata") reopens with it, and the saves of steps 7, 15,
+19 and 26 store only the box changed there ("Campus Library" with
+`10.2.0.0/16`; "Call for papers"; "Open call"; "figure.png" with the
+caption "Figure 1").
 
 **Observed:** at step 5 the row reads "Campus Library Draft", and at
 step 6 "Name" shows "Campus Library Draft".
@@ -126,11 +166,29 @@ page read "Call for papers Draft". At step 18 the row reads "Open call
 Draft", and at step 19 "Edit" reopens with it. After step 20 the row
 and "Title" read "Open call Draft".
 
-No close asked for confirmation, and every save returned 200.
+No close of steps 5 to 18 asked for confirmation, and every save
+returned 200.
+
+On the "Media" page, step 24 first shows the "Warning" dialog: "The data
+on this form has changed. Do you wish to continue without saving?".
+After "Yes" the row reads "figure-1.png", and no request is sent. At
+step 25 "Name of the file" reads "figure-1.png". The "Save" of step 26
+sends the abandoned name with the caption and answers 200 (OJS):
+
+```
+PUT /index.php/publicknowledge/api/v1/submissions/5/publications/6/mediaFiles/46
+name[en]=figure-1.png&name[fr_CA]=&caption=Figure 1&credit=&copyrightOwner=&terms=
+```
+
+After the reload of step 27 the row reads "figure-1.png": the abandoned
+name was stored. At step 28 the row reads "figure-2.png", and after the
+reload of step 29 "figure-1.png" again.
 
 Control: after step 11, changing "IP ranges" to `10.3.0.0/16` and
 closing the panel with its close control leaves the row as it was, and
-"Edit" reopens with the saved `10.2.0.0/16`.
+"Edit" reopens with the saved `10.2.0.0/16`. On the "Media" page, a
+"Caption" changed alone to "Figure 2" and left with "Cancel" › "Yes"
+reopens as "Figure 1".
 
 ## Cause
 
@@ -152,7 +210,12 @@ objects. `CategoryManager/categoryManagerStore.js` `getCategoryForm()`
 `ContributorRoleManager/useContributorRoleManagerFormAddRole.js`
 (`setValues({...contributorRole})`) and
 `ReviewerRecommendationManager/reviewerRecommendationManagerStore.js`
-`handleEdit()` (`setValues(item)`) all pass a row in this way.
+`handleEdit()` (`setValues(item)`) all pass a row in this way. The
+"Media" page's "Edit Metadata" builds its form with `useForm` as well:
+`MediaFileManager/useMediaFileManagerMetadataFormModal.js` gives the
+"Name of the file" field the list row's own object
+(`addFieldText('name', {…, value: mediaFile.name, isMultilingual:
+true})`).
 
 The form then writes a change into that object instead of replacing it:
 `src/components/Form/Form.vue` `fieldChanged()`, line 522,
@@ -165,7 +228,11 @@ once; the Categories row prints the API's `localizedTitle` string, so it
 does not. Closing the panel discards only the cloned form, never the
 row. The next "Edit" fills the form from the same row object, which
 already holds the change, so its "Save" posts the abandoned text with
-the rest.
+the rest. On the "Media" page, "Yes" in the "Warning" dialog also
+discards only the form: the row's name object keeps what was typed.
+Since ui-library 1afd40a9 (`pkp/ui-library#853`) the "Media" list is
+fetched again only after a save; before it, every close reloaded the
+list and hid the fault there (read in the code).
 
 A single-language value (`ipRanges`, rebuilt as a new string; `url`,
 `ror`) is replaced, not written into, which is why the Control keeps its
@@ -202,6 +269,16 @@ Reach:
     on close only after a save. Before that commit, the list reloaded on
     every close, which hid the fault there (read in the code, not
     reproduced).
+- Seen on screen, all three apps: a media file's "Name of the file" in
+  "Edit Metadata" (Steps 21 to 29). The row prints
+  `localize(mediaFile.name)` (`MediaFileManagerCellName.vue`). Read in
+  the code, the same holds for the multilingual boxes of a
+  supplementary file's "Edit Metadata" ("Description", "Creator (or
+  owner) of file", "Publisher", "Source", "Subject", "Contributor or
+  sponsoring agency"): no row shows them, so nothing changes on screen,
+  but the next "Save" stores the abandoned text. An image's "Caption",
+  "Credit", "Copyright Owner" and "Permission Terms" are single-language
+  and keep their saved value (the Control).
 - Checked in the code and clean: Contributors and Reviewer Suggestions
   fill the form from a fresh copy fetched for the panel; `FormModal.vue`
   fills it from a fetch; Funders and the author's review response build
@@ -219,11 +296,12 @@ Reach:
 
 A proposal, tried on `main` on all three apps
 ([fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/fix.diff)):
-with it, the Steps and the Categories, Contributor Roles and Reviewer
-Recommendations checks show the Expected: the abandoned text is dropped
-on close and the next "Save" stores the saved one. Ordinary edits in
-those six panels and in a settings form still save, in English and
-French.
+with it, the Steps (the "Media" page's included) and the Categories,
+Contributor Roles and Reviewer Recommendations checks show the Expected:
+the abandoned text is dropped on close and the next "Save" stores the
+saved one. Ordinary edits in those seven windows and in a settings form
+still save, in English and French; the "Warning" still asks before an
+unsaved "Edit Metadata" closes.
 
 Recommended: make `Form.vue`'s `fieldChanged()` replace a multilingual
 value instead of writing into it, and change the same line in the two
@@ -247,9 +325,10 @@ first try, without it, froze Settings › Website › Setup › Announcements
 on "Save".
 
 `Form.vue` is the one writer every affected panel shares: the three list
-panels and the Categories, Contributor Roles and Reviewer Recommendations
-managers all render it, whichever way they fill it. A fix there covers
-all six, and any later caller that hands the form a row's values. It
+panels, the Categories, Contributor Roles and Reviewer Recommendations
+managers and the "Media" page's "Edit Metadata" all render it, whichever
+way they fill it. A fix there covers all seven, and any later caller
+that hands the form a row's values. It
 follows `FieldFunder.vue` `updateFunderName()`, which replaces a
 funder's name object the same way (`{...currentValue.value.name,
 [locale]: value}`). The form still sees the change at once, since the
@@ -260,11 +339,14 @@ for a single-language box.
 
 - Cloning at each caller: `field.value = cloneDeep(<row>[field.name])` in
   the three `openEditModal()` methods (`cloneDeep` is already imported
-  there) and a deep copy before the three managers' `setValues()`. That
-  is six places, and the next caller that copies either pattern still
+  there), a deep copy before the three managers' `setValues()`, and a
+  deep copy of the whole media file (every multilingual value it passes,
+  the supplementary file's included) in the media "Edit Metadata"
+  window. That is seven places, and the next caller that copies either pattern still
   has the fault.
 - `cloneDeep` inside `useForm`'s `setValue()`: it covers the managers but
-  not the three list panels, which assign `field.value` themselves.
+  not the three list panels, which assign `field.value` themselves, nor
+  the media window, which passes the value to `addFieldText()`.
 - Fetching the item afresh on "Edit", as Contributors does: a request per
   opening for the same result.
 
@@ -277,13 +359,13 @@ for a single-language box.
   has the same watcher), applies as written to 3.5 and 3.4, and to 3.3's
   `Form.vue` (line 404) for Announcements; each app then takes the
   ui-library update and rebuilds its scripts. Tried on `main` only.
-- Guard: an e2e scenario in U66, U12 and U11 (a Planned item each) that
-  changes the name or title, closes the panel, and checks the row and
-  the reopened box, and a Storybook play test on one list panel if the
+- Guard: an e2e scenario in U66, U12, U11 and U47 (a Planned item each)
+  that changes the name or title, closes the panel, and checks the row
+  and the reopened box, and a Storybook play test on one list panel if the
   team wants it in ui-library.
 
-Small: a few lines in the shared form and the same in its two overrides,
-in one repo.
+Small: one shared change of a few lines in the form, and the same in its
+two overrides, in one repo; it covers all seven windows.
 
 ## Evidence
 
@@ -299,6 +381,10 @@ in one repo.
     an ordinary edit with a new English and French name or title in each
     of those six panels and in Masthead's acronym, then "Save" and a
     reload: the same command with `neighbour.js`.
+  - [media.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/media.js),
+    the "Media files" Steps (21 to 29) and their Control, then an
+    ordinary rename saved with "Save" and read before and after a
+    reload: the same command with `media.js`.
 - The fix, tried on `main` with
   `node bin/try-fix.js apply shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/fix.diff ojs omp ops`
   (it rebuilds each app's scripts; `node bin/try-fix.js revert ojs omp ops`
@@ -309,6 +395,9 @@ in one repo.
     Contributor Roles and Reviewer Recommendations;
   - neighbour.js stored every new value, English and French, with the fix
     and without it.
+  - with the fix, media.js showed the Expected on all three apps; its
+    ordinary rename ("figure-3.png") showed in the row at once and after
+    a reload, and was stored, with the fix and without it.
   - Not driven with the fix: the date and time formats form
     (`DateTimeForm.vue`) and the theme options form (`ThemeForm.vue`).
 - Walked 2026-09-30 on PostgreSQL, each install freshly loaded from
@@ -320,7 +409,16 @@ in one repo.
     3dc90c81a6, lib/ui-library 280f98c5);
   - stable-3_5_0: OJS 040e916378, OMP 4f90dadac0, OPS 0bb1ca0f6e (lib/pkp
     8809a197de, lib/ui-library 1a7a4750).
+  - The "Media files" Steps were walked later the same day, each
+    install freshly loaded from pkp/datasets
+    [38ab955](https://github.com/pkp/datasets/commit/38ab95511dd060c2ea185cb11eb5eedfb2a99e40)
+    (2026-09-30), with OJS on a newer tip (bade233f73, lib/pkp
+    2e377d27fc); OMP, OPS and ui-library as above.
   - The fault is in the browser, so the database does not bear on it.
+- The "Media" page on 3.5, 3.4 and 3.3, by code: `stable-3_5_0`'s
+  ui-library (1a7a4750) has no `src/managers/MediaFileManager/` and its
+  pkp-lib (a9c76aed62) no media files API; the page came with
+  ui-library 3f97137c (2026-05-06), after the 3.5 branch point.
 - 3.4, by code:
   - ui-library `stable-3_4_0` at ee684b34: the three `openEditModal()`
     methods assign `field.value = <row>[field.name]`, and `Form.vue`
@@ -350,7 +448,13 @@ in one repo.
     `pkp/ui-library#288`, Nate Wright), b8a7af79 (Reviewer
     Recommendations), b35c06bc (Categories) and b628fd2b (Contributor
     Roles). The PRs from the GitHub API's `commits/<sha>/pulls`.
+  - The media "Edit Metadata" window: `value: mediaFile.name` since
+    [3f97137c](https://github.com/pkp/ui-library/commit/3f97137cef11b99042ee8bcc96ff0dfe5dcf84e4)
+    (`pkp/ui-library#794` for `pkp/pkp-lib#12262`, 2026-05-06, Blesilda
+    Biazon), which `git blame` shows.
 - Upstream search 2026-09-30 in pkp/pkp-lib, pkp/ojs, pkp/omp, pkp/ops and
   pkp/ui-library (unsaved title or name after closing, changes without
-  saving, `fieldChanged`, `openEditModal`, `cloneDeep`): nothing about
-  this fault.
+  saving, `fieldChanged`, `openEditModal`, `cloneDeep`), and again for the
+  "Media" page (media file name without saving, media metadata name,
+  `MediaFileManager`; `pkp/pkp-lib#12262` and its QA comments read):
+  nothing about this fault.

@@ -825,6 +825,12 @@ Left out of the scenarios above, by reason:
     an assigned Layout Editor without "Permissions" shown the "Media"
     list without its write actions, and an editor still offered every
     action
+  - the guard for A5 (Rule 6a; scenario 3 reloads before reopening the
+    window; issue report
+    `docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md`):
+    a file's name changed in "Edit Metadata" and left with "Yes", the
+    row and the reopened window holding the saved name, and the next
+    "Save" of another box keeping it
 - **Rarely met**:
   - no component marked as a dependent file, where "Upload Media File"
     holds only "No media types are configured. Please contact the
@@ -841,9 +847,6 @@ Left out of the scenarios above, by reason:
   - A3 (the "Drop files here to upload" button only a screen reader
     finds; Fields, the upload window; scenario 1 passes it)
   - A4 (a file over the upload limit failing on its card; Rule 2c)
-  - A5 (a name typed in "Edit Metadata" and left with "Yes" showing in
-    the list until a reload; Rule 6a; scenario 3 reloads before
-    reopening the window)
   - A6 (the warning each added file leaves in the server's log; Rule 2)
   - A7 (raw codes on the page, its windows and the delete dialog with
     the interface in French; Rule 11)
@@ -876,7 +879,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | A Layout Editor, or anyone without "Permissions", is offered every "Media" action, and the server refuses each change | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A3](#a3) | The empty "Upload Media File" window lists a button "Drop files here to upload" for screen readers that nothing on screen shows | 🐞 | minor | — |
 | [A4](#a4) | A file over the request size limit fails with a server error; its card reads "The POST data is too large." | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, unsaved, until a reload | 🐞 | user-visible | — |
+| [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, unsaved, until a reload | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | invisible | — |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | minor | — |
 | [OMP1](#omp1) | With "HTML Monograph File" off, a book's HTML file opens as a blank page | 🐞 | critical · crash: both | issues (claude), 2026-09-30 — re-verified |
@@ -944,15 +947,16 @@ Same fault: [Submission files' A21](U36-submission-files.md#a21).
 Basis: probe, 2026-09-30. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A name left with "Yes" shows in the list, unsaved** · 🐞 · user-visible.
+**A5 — A name left with "Yes" shows in the list, unsaved** · 🐞 · medium.
 A user types a new "Name of the file" in "Edit Metadata", then leaves
 the window with "Close" or "Cancel" and "Yes" in the "Warning" dialog
 ("continue without saving"). Nothing is saved, yet the file's row in
 the list shows the typed name, and "Edit Metadata" opened again arrives
-holding it. Only a reload of the page shows the saved name again. The
-user is led to believe the rename was kept.
-Basis: test run, 2026-09-25 (OJS); code (OMP and OPS, the same
-window). <sup>f-a5</sup>
+holding it. The next "Save" in that window, made only to set another
+box such as "Caption", stores the abandoned name. Until then only a
+reload of the page shows the saved name again. The same fault as
+[Institutions' A2](U66-institutions.md#a2).
+Basis: probe, 2026-09-30 (OJS, OMP and OPS). <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — Each media file added leaves a warning in the server's log** · 🐞 · invisible.
@@ -1780,6 +1784,7 @@ file's own multilingual name object (`value: mediaFile.name`), so
 typing edits the list's copy in place, and "Yes" does not re-read the
 list. The window is the shared ui-library `MediaFileManager`, the same
 commit in the three apps; OMP and OPS were not driven for it.
+Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md](../issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Test run 2026-09-25, OJS, OMP and OPS: the worker servers'
