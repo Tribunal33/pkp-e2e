@@ -820,6 +820,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-OMP5-press-file-publisher-id-box-gone-after-refusal.md`):
     a format file's Publisher ID saved and read back on the reopened tab,
     and a refused value leaving the box on the tab with the value
+  - the guard for A6 (Rule 10; scenario 4 passes it; issue report
+    `docs/issues/U44-A6-urn-check-number-wrong-digit.md`): "Add Check
+    Number" on `urn:nbn:de:0000-abc` giving `urn:nbn:de:0000-abc2`, and
+    "Assign" ending in the digit the tab preview's rule gives
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -837,8 +841,6 @@ Left out of the scenarios above, by reason:
     Rule 14; scenario 5 passes it)
   - A5 (a new version copying the galleys' publisher IDs, then refusing
     their saves; Rule 19)
-  - A6 (the check digit of "Add Check Number" and "Assign" differing
-    from the app's own; Rule 10; scenario 4 passes it)
   - A12 (a URN differing from another only in case accepted; Rule 11)
   - A8, A10 and A11 (the settings window's raw text code, written-out
     angle brackets and failing page script; Fields, the URN plugin's
@@ -885,7 +887,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | A publisher ID saved on a galley's, chapter's or format's tab can never be removed | 🐞 | minor | — |
 | [A4](#a4) | Editors saving an article's or book's own URN again are told it is "already in use" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A new version's galleys keep the old publisher ID, and their tab then refuses every save | 🐞 | minor | — |
-| [A6](#a6) | "Add Check Number" and "Assign" compute a different check digit from the one the app appends itself | 🐞 | user-visible | — |
+| [A6](#a6) | "Add Check Number" and "Assign" end URNs with the wrong check digit | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A7](#a7) | The tab's assign box reads "Assign the URN to this galley" with the URN left out | 🐞 | minor | — |
 | [A8](#a8) | A suffix pattern of spaces is refused with a raw text code | 🐞 | minor | — |
 | [A9](#a9) | "Assign" is offered on the "Identifiers" page to a role that cannot save it | 🐞 | minor | — |
@@ -967,16 +969,25 @@ value is kept ([A2](#a2)).
 Basis: probe, 2026-09-24. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — Two different check digits for the same URN** · 🐞 · user-visible.
-With "Check Number" ticked, the digit that "Add Check Number" appends,
-and the one "Assign" appends on the article's page, are worked out from
-the suffix alone. The URNs the app builds itself from a pattern on the
-tabs and in "Publish Issue" get their digit from the whole URN, prefix
-included, which is how national libraries check it. With the prefix
-`urn:nbn:de:0000-` and the suffix `abc`, "Add Check Number" appends
-"0" where the whole-URN rule gives "2", so the URN handed to the
-library does not validate.
-Basis: probe, 2026-09-24. <sup>f-a6</sup>
+**A6 — "Add Check Number" and "Assign" end URNs with the wrong check digit** · 🐞 · medium.
+With "Check Number" ticked in the URN plugin, an editor who presses
+"Add Check Number" or "Assign" gets a URN whose last digit is worked
+out by the wrong rule. The buttons compute it from the part after the
+plugin's "URN Prefix" setting only. The check digit covers the whole
+URN, prefix included, and the server computes it that way for the URNs
+it builds itself, such as a galley's or a chapter's. For
+`urn:nbn:de:0000-abc` (prefix `urn:nbn:de:0000-`), "Add Check Number"
+appends "0", while the URN's check digit is "2".
+Nothing warns the editor: the URN saves as it stands, and the
+published article's or book's page shows it. The two rules give the
+same digit about one time in ten, so about nine in ten URNs set
+through these buttons end in a digit that fails the check. The way
+round is to work out the digit elsewhere and type it by hand.
+This affects "Add Check Number" on the "Identifiers" page of an article
+or book and on the "Identifiers" tab of a galley, issue, chapter,
+publication format or file. It also affects "Assign" on the
+"Identifiers" page when URN suffixes come from a pattern.
+Basis: probe, 2026-09-30. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — The assign box leaves the URN out** · 🐞 · minor.
@@ -1784,6 +1795,7 @@ server-built URN except `customId`) computes over the whole URN, per the
 algorithm its comment cites. Both run the same conversion table; for
 `urn:nbn:de:0000-abc` the suffix-only digit is 0 and the whole-URN
 digit 2 (worked with both routines, 2026-09-24). Live-probed 2026-09-24 (note q8).
+Issue report: [docs/issues/U44-A6-urn-check-number-wrong-digit.md](../issues/U44-A6-urn-check-number-wrong-digit.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `urnSuffixEdit.tpl` includes `urnAssignCheckBox.tpl` with
