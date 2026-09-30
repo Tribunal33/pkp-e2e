@@ -160,7 +160,13 @@ Reach:
 
 ## Proposed fix
 
-A proposal, not tried.
+A proposal, tried on `main` as [fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/institution-long-ip-range-save-error/fix.diff): the padded line
+saves and reads back as `142.58.103.1 - 142.58.103.4`, the list holds one
+"Long Library", and "Campus Library" keeps `10.1.0.0/16` beside the new
+line. A normal range still saves as typed and an invalid line is still
+refused with "Invalid IP range". That a failed save now leaves nothing
+half written rests on the code: no other failure can be caused from the
+screens.
 
 Recommended: normalize the whitespace in the writer, and make the write
 atomic, both in `PKP\institution\DAO`.
@@ -198,8 +204,9 @@ spaces is stored as a single space.
 
 **What goes with it:**
 
-- API: an API client reads a range with extra spaces back with single
-  spaces (through `DAO::fromRow()`). This is the only change in
+- API: an API client, like the "Edit" form, reads a range with extra
+  spaces back with single spaces (through `DAO::fromRow()`); the tried
+  fix showed it on the 40-character line. This is the only change in
   behavior.
 - OJS purchase: `UserInstitutionalSubscriptionForm::execute()` inserts
   the subscription only after `Repo::institution()->add()` returns, so
@@ -230,6 +237,13 @@ the code base already uses, and a unit test.
   [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/institution-long-ip-range-save-error/walk.js),
   run with
   `PROBE_FEATURE=issues PROBE_AGENT=walk node bin/probe.js all shared/playwright/checks/issues/institution-long-ip-range-save-error/walk.js`.
+- The fix, tried 2026-09-30 on the `main` tips below:
+  `node bin/try-fix.js apply shared/playwright/checks/issues/institution-long-ip-range-save-error/fix.diff ojs omp ops`,
+  then walk.js and
+  [neighbours.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/institution-long-ip-range-save-error/neighbours.js)
+  (a normal range, an invalid line) with the same command, then
+  `node bin/try-fix.js revert ojs omp ops`. neighbours.js showed the
+  same with the fix out.
 - Walked 2026-09-30 on PostgreSQL, each install freshly loaded from
   pkp/datasets
   [c0f9f10](https://github.com/pkp/datasets/commit/c0f9f10d529f7dcd018c1a61d7084c16044f0162)

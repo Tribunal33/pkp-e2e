@@ -1,0 +1,53 @@
+--- a/lib/pkp/classes/institution/DAO.php
++++ b/lib/pkp/classes/institution/DAO.php
+@@ -145,11 +145,14 @@
+             $ipRanges = $institution->getData('ipRanges');
+             unset($institution->_data['ipRanges']);
+         }
+-        $institutionId = parent::_insert($institution);
+-        if (isset($ipRanges)) {
+-            $this->insertIPRanges($institutionId, $ipRanges);
+-        }
+-        return $institutionId;
++        // One transaction, so a failed range insert leaves no institution behind
++        return DB::transaction(function () use ($institution, &$ipRanges) {
++            $institutionId = parent::_insert($institution);
++            if (isset($ipRanges)) {
++                $this->insertIPRanges($institutionId, $ipRanges);
++            }
++            return $institutionId;
++        });
+     }
+ 
+     /**
+@@ -161,11 +164,14 @@
+             $ipRanges = $institution->getData('ipRanges');
+             unset($institution->_data['ipRanges']);
+         }
+-        parent::_update($institution);
+-        if (isset($ipRanges)) {
+-            $this->deleteIPRanges($institution->getId());
+-            $this->insertIPRanges($institution->getId(), $ipRanges);
+-        }
++        // One transaction, so a failed range insert leaves the institution as it was
++        DB::transaction(function () use ($institution, &$ipRanges) {
++            parent::_update($institution);
++            if (isset($ipRanges)) {
++                $this->deleteIPRanges($institution->getId());
++                $this->insertIPRanges($institution->getId(), $ipRanges);
++            }
++        });
+     }
+ 
+     /**
+@@ -197,7 +203,9 @@
+             $ipStart = null;
+             $ipEnd = null;
+ 
+-            $ipRange = trim($ipRange);
++            // The validator allows any run of whitespace around "-"; store it as one space
++            // so the longest valid line (33 characters) fits ip_string (VARCHAR(40))
++            $ipRange = preg_replace('/\s+/', ' ', trim($ipRange));
+             // Parse and check single IP string
+             if (strpos($ipRange, Institution::IP_RANGE_RANGE) === false) {
+                 // Check for wildcards in IP
