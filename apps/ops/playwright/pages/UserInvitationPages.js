@@ -204,6 +204,16 @@ exports.SendInvitationWizard = class SendInvitationWizard extends BasePage {
         this.errorDialog = page
             .getByRole('dialog')
             .filter({has: page.getByRole('heading', {name: 'Error', exact: true})});
+        // Rule 14: the disabled-user warning, a heading over its instructions
+        // (on the search path and on the users list's Edit path alike).
+        this.disabledUserHeading = page.getByRole('heading', {name: 'The user is currently disabled.'});
+        this.disabledUserInstructions = page.getByText(
+            'You cannot assign them a role while they are disabled. Please enable the user first to invite them to a role.'
+        );
+        // The read-only details block's first field (existing user): "Email address", or "Email" where a fresh install resolves the twice-defined key `user.email` from user.po.
+        this.emailAddressHeading = page.getByRole('heading', {name: /^Email( address)?$/});
+        // The "Invitation Sent" dialog's one button (Rule 15).
+        this.viewAllUsersButton = this.sentDialog.getByRole('button', {name: 'View All Users'});
     }
 
     /** A step heading ("STEP 1 - Enter details", the compose step's, ...). */
@@ -279,9 +289,93 @@ exports.SendInvitationWizard = class SendInvitationWizard extends BasePage {
         return row.getByRole('combobox');
     }
 
+    /**
+     * The option a current-role row's masthead select shows chosen, by its
+     * label ("Does not appear on the masthead").
+     */
+    mastheadChoice(row) {
+        return this.mastheadSelect(row).locator('option:checked');
+    }
+
     /** The "Remove Role" button of a current-role row. */
     removeRoleButton(row) {
         return row.getByRole('button', {name: 'Remove Role'});
+    }
+
+    /**
+     * The masthead select of the i-th NEW role row (0-based): the row's last
+     * combobox (its first is the role select). It carries no accessible name
+     * from the second row on (register A8), so it is found by position.
+     *
+     * @param {number} i
+     */
+    newRoleMastheadSelect(i) {
+        return this.newRoleRows.nth(i).getByRole('combobox').last();
+    }
+
+    /**
+     * Resolve once `upper` sits above `lower` on the page (both visible),
+     * read settled through their boxes: "above the new-role row", "above
+     * their details" (Rules 13a, 14).
+     *
+     * @param {import('@playwright/test').Locator} upper
+     * @param {import('@playwright/test').Locator} lower
+     */
+    async expectAbove(upper, lower) {
+        await expect(upper).toBeVisible();
+        await expect(lower).toBeVisible();
+        await expect
+            .poll(async () => {
+                const a = await upper.boundingBox();
+                const b = await lower.boundingBox();
+                return !!a && !!b && a.y + a.height <= b.y;
+            })
+            .toBe(true);
+    }
+
+    /**
+     * Change a current-role row's masthead select and wait for "Confirm
+     * masthead visibility change" (Rules 13, 13a).
+     *
+     * @param {import('@playwright/test').Locator} row a `currentRoleRow()`
+     * @param {string} label 'Appear on the masthead' | 'Does not appear on the masthead'
+     */
+    async chooseMasthead(row, label) {
+        await this.mastheadSelect(row).selectOption({label});
+        await expect(this.mastheadDialog).toBeVisible();
+    }
+
+    /** "Cancel" on the open masthead confirmation; resolves once it is gone. */
+    async cancelMastheadChange() {
+        await this.mastheadDialog.getByRole('button', {name: 'Cancel', exact: true}).click();
+        await expect(this.mastheadDialog).toBeHidden();
+    }
+
+    /**
+     * "Confirm" on the open masthead confirmation; resolves with the save's
+     * status once the confirmation is gone and, when the save failed, the
+     * app's "Error" dialog dismissed with "OK" (register OMP1 on a preprint
+     * server: dismissed, never asserted). The rows behind an open dialog are
+     * aria-hidden, so nothing is read before it closes.
+     */
+    async confirmMastheadChange() {
+        const saved = this.page.waitForResponse((r) => r.url().includes('/masthead/'));
+        await this.mastheadDialog.getByRole('button', {name: 'Confirm', exact: true}).click();
+        const status = (await saved).status();
+        await expect(this.mastheadDialog).toBeHidden();
+        if (status >= 400) {
+            await this.dismissErrorDialog();
+        }
+        return status;
+    }
+
+    /**
+     * Press "View All Users" on the "Invitation Sent" dialog and wait for
+     * the browser to reach Users & Roles (Rule 15).
+     */
+    async pressViewAllUsers() {
+        await this.viewAllUsersButton.click();
+        await this.page.waitForURL(/\/management\/settings\/access/, {waitUntil: 'commit'});
     }
 
     /** The inline "This field is required." errors inside a row. */
@@ -375,6 +469,19 @@ exports.AcceptInvitationWizard = class AcceptInvitationWizard extends BasePage {
         this.refusalDialog = page
             .getByRole('dialog')
             .filter({hasText: "Invitation not accepted. You're logged in as a different user."});
+        // "Enter details" (new invitee): the name the manager entered arrives here.
+        this.givenNameInput = page.getByLabel(/^Given Name/).first();
+        // Rule 17: the steps' "Cancel" and its question.
+        this.cancelButton = page.getByRole('button', {name: 'Cancel', exact: true});
+        this.cancelDialog = page.getByRole('dialog', {name: 'Cancel Role Invitation Process?'});
+        this.cancelProcessButton = this.cancelDialog.getByRole('button', {name: 'Cancel Invitation Process'});
+        this.goBackButton = this.cancelDialog.getByRole('button', {name: 'Go Back'});
+    }
+
+    /** Press the step's "Cancel"; resolves once "Cancel Role Invitation Process?" is open. */
+    async openCancelDialog() {
+        await this.cancelButton.click();
+        await expect(this.cancelDialog).toBeVisible();
     }
 
     /**
@@ -425,7 +532,7 @@ exports.AcceptInvitationWizard = class AcceptInvitationWizard extends BasePage {
 
     /** "Enter details" step for a new invitee. */
     async fillDetails({givenName, country}) {
-        await this.page.getByLabel(/^Given Name/).first().fill(givenName);
+        await this.givenNameInput.fill(givenName);
         await this.page.getByLabel('Country of affiliation').selectOption({label: country});
         await this.saveAndContinueButton.click();
     }

@@ -86,6 +86,21 @@ class UsersAccessPage {
         await settled;
     }
 
+    /** The status an invitations row reads on the day of sending ("Invited {date}", Rule 11). */
+    invitedOn(date = today()) {
+        return `Invited ${date}`;
+    }
+
+    /**
+     * Filter the users list to one member and open their row's "Edit": the
+     * wizard in editUser mode, landed on its details step.
+     */
+    async openUserEdit(rowText) {
+        await this.searchUsers(rowText);
+        await this.userRowAction(rowText, 'Edit');
+        await expect(this.page.getByRole('heading', {name: /Enter details/})).toBeVisible({timeout: 30_000});
+    }
+
     /** A Current Users row identified by unique text (seeded given name = tag). */
     userRow(text) {
         return this.usersTable.getByRole('row').filter({hasText: text});
@@ -140,6 +155,42 @@ class SendInvitationWizard {
         this.errorDialog = page
             .locator('[data-cy="dialog"]')
             .filter({has: page.getByRole('heading', {name: 'Error', exact: true})});
+        /** "Enter details"'s Email field (a new invitee; read-only text for a member). */
+        this.emailField = page.getByRole('textbox', {name: /^Email/});
+        /** Rule 14's warning heading and the instruction under it. */
+        this.disabledWarning = page.getByRole('heading', {name: 'The user is currently disabled.'});
+        this.disabledInstructions = page.getByText(
+            'You cannot assign them a role while they are disabled. Please enable the user first to invite them to a role.',
+        );
+        /** The read-only details block's first heading ("Email address", or "Email" where a fresh install resolves the twice-defined key `user.email` from user.po). */
+        this.detailsEmailHeading = page.getByRole('heading', {name: /^Email( address)?$/});
+        this.saveAndContinueButton = this.footerButton('Save And Continue');
+    }
+
+    /** Wait out the modal store's close window (patterns.md pitfall 4) before reopening a dialog. */
+    async pastModalCloseWindow() {
+        await this.page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 500)));
+    }
+
+    /**
+     * Collect every masthead request the page sends from now on
+     * (`users/{id}/masthead/{userUserGroupId}`, a PUT tunnelled as POST).
+     * Returns the live array of their URLs.
+     */
+    trackMastheadRequests() {
+        const urls = [];
+        this.page.on('request', (r) => {
+            if (/\/users\/\d+\/masthead\//.test(r.url())) urls.push(r.url());
+        });
+        return urls;
+    }
+
+    /** True once `first` sits before `second` in the document (both present). */
+    async precedes(first, second) {
+        const a = await first.first().elementHandle();
+        const b = await second.first().elementHandle();
+        if (!a || !b) return false;
+        return a.evaluate((x, y) => !!(x.compareDocumentPosition(y) & Node.DOCUMENT_POSITION_FOLLOWING), b);
     }
 
     footerButton(name) {
@@ -226,6 +277,69 @@ class SendInvitationWizard {
         return row.locator('.pkpFieldError__message');
     }
 
+    /**
+     * "Cancel" on the open masthead confirmation (Rule 13a): the dialog
+     * closes; the modal store's close window is waited out.
+     */
+    async cancelMasthead() {
+        await this.mastheadDialog.getByRole('button', {name: 'Cancel', exact: true}).click();
+        await expect(this.mastheadDialog).toBeHidden();
+        await this.pastModalCloseWindow();
+    }
+
+    /**
+     * "Confirm" on the open masthead confirmation, waiting for the masthead
+     * request's answer. When the answer is a refusal, the app's "Error"
+     * dialog that follows it (OMP1) is dismissed with OK; nothing about it is
+     * asserted. Returns the answer's status.
+     */
+    async confirmMastheadAndSettle() {
+        const answered = this.page.waitForResponse((r) => /\/users\/\d+\/masthead\//.test(r.url()));
+        await this.mastheadDialog.getByRole('button', {name: 'Confirm', exact: true}).click();
+        const response = await answered;
+        await expect(this.mastheadDialog).toBeHidden();
+        if (!response.ok()) {
+            await expect(this.errorDialog).toBeVisible();
+            await this.errorDialog.getByRole('button', {name: 'OK', exact: true}).click();
+            await expect(this.errorDialog).toBeHidden();
+        }
+        await this.pastModalCloseWindow();
+        return response.status();
+    }
+
+    /**
+     * Choose a value in a current role's masthead select (`'true'` appear,
+     * `'false'` not) and wait for the confirmation to open.
+     */
+    async pickMasthead(roleName, value) {
+        await this.mastheadSelect(roleName).selectOption(value);
+        await expect(this.mastheadDialog).toBeVisible();
+    }
+
+    /** A new-role row's role select, masthead select and start date box. */
+    rowRoleSelect(row) {
+        return row.locator('select[name="userGroupId"]');
+    }
+
+    rowMastheadSelect(row) {
+        return row.locator('select[name="masthead"]');
+    }
+
+    /** Fill one new-role row already on screen. masthead: null for a reviewer role (fixed text). */
+    async fillRow(row, {role, startDate = today(), masthead = 'Appear on the masthead'}) {
+        await this.rowRoleSelect(row).selectOption({label: role});
+        await row.locator('input[name="dateStart"]').fill(startDate);
+        if (masthead !== null) {
+            await this.rowMastheadSelect(row).selectOption({label: masthead});
+        }
+    }
+
+    /** Press "View All Users" in the "Invitation Sent" dialog and wait for Users & Roles. */
+    async viewAllUsers() {
+        await this.sentDialog.getByRole('button', {name: 'View All Users'}).click();
+        await this.page.waitForURL(/\/management\/settings\/access/, {waitUntil: 'commit'});
+    }
+
     /** Step 1 — enter a search term and advance ("Search User" is the step's own next button). */
     async searchFor(term) {
         await this.searchField.fill(term);
@@ -260,12 +374,7 @@ class SendInvitationWizard {
             await this.addRoleButton.click();
             await expect(rows).toHaveCount(before + 1);
         }
-        const row = rows.last();
-        await row.locator('select[name="userGroupId"]').selectOption({label: role});
-        await row.locator('input[name="dateStart"]').fill(startDate);
-        if (masthead !== null) {
-            await row.locator('select[name="masthead"]').selectOption({label: masthead});
-        }
+        await this.fillRow(rows.last(), {role, startDate, masthead});
     }
 
     async saveAndContinue() {
@@ -313,6 +422,37 @@ class AcceptInvitationWizard {
         this.passwordDescription = page.getByText(/It should be at least \d+ characters long/);
         /** The inline error a refused password shows under the field. */
         this.passwordError = page.locator('.pkpFieldError__message').filter({hasText: /password/i});
+        /** Rule 17's question behind the footer's "Cancel". */
+        this.cancelDialog = page.getByRole('dialog').filter({hasText: 'Cancel Role Invitation Process?'});
+        this.cancelProcessButton = this.cancelDialog.getByRole('button', {name: 'Cancel Invitation Process', exact: true});
+        this.goBackButton = this.cancelDialog.getByRole('button', {name: 'Go Back', exact: true});
+    }
+
+    /** Press the footer's "Cancel" and wait for "Cancel Role Invitation Process?" (Rule 17). */
+    async openCancelDialog() {
+        await this.footerButton('Cancel').click();
+        await expect(this.cancelDialog).toBeVisible();
+    }
+
+    /** "Go Back": the question closes; the modal store's close window is waited out before any reopening. */
+    async goBack() {
+        await this.goBackButton.click();
+        await expect(this.cancelDialog).toBeHidden();
+        await this.page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 500)));
+    }
+
+    /** "Cancel Invitation Process", waiting for the browser to leave the accept page. */
+    async cancelProcess() {
+        const left = this.page.waitForURL((url) => !/\/invitation\//.test(url.pathname), {waitUntil: 'commit', timeout: 30_000});
+        await this.cancelProcessButton.click();
+        await left;
+    }
+
+    /** The closing dialog's "View All Submissions" (Rule 8), waiting for the browser to leave the accept page. */
+    async viewAllSubmissions() {
+        const left = this.page.waitForURL((url) => !/\/invitation\//.test(url.pathname), {waitUntil: 'commit', timeout: 30_000});
+        await this.acceptedDialog.getByRole('button', {name: 'View All Submissions'}).click();
+        await left;
     }
 
     footerButton(name) {

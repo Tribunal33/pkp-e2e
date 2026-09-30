@@ -65,6 +65,17 @@ exports.UsersRolesPage = class UsersRolesPage extends BasePage {
         await row.getByRole('button', {name: /management.options/i}).click();
         await this.page.getByRole('menuitem', {name: itemLabel}).click();
     }
+
+    /**
+     * Edit on a user's row in the Current Users list: the wizard in editUser
+     * mode, on its "Enter details" step with no search step (Rule 13).
+     *
+     * @param {string} email
+     */
+    async editUser(email) {
+        await this.rowAction(this.userRow(email), /^Edit$/);
+        await expect(this.page.getByRole('heading', {name: /STEP 1 - Enter details/})).toBeVisible();
+    }
 };
 
 exports.SendInvitationWizard = class SendInvitationWizard extends BasePage {
@@ -88,6 +99,17 @@ exports.SendInvitationWizard = class SendInvitationWizard extends BasePage {
         // Rule 13's immediate-action dialogs on an existing member's roles table.
         this.mastheadDialog = page.getByRole('dialog', {name: 'Confirm masthead visibility change'});
         this.removeRoleDialog = page.getByRole('dialog', {name: 'Remove Role'});
+        // "Search User"'s two answers (Fields, Rule 13a).
+        this.missNotice = page.getByText('The user does not have a role in this journal');
+        this.existingNotice = page.getByText('The user already exists in the journal');
+        // Rule 14: the disabled-user warning (a heading) and its instructions,
+        // on the search path and on the users list's Edit path alike.
+        this.disabledWarning = page.getByRole('heading', {name: 'The user is currently disabled.'});
+        this.disabledInstructions = page.getByText(
+            'You cannot assign them a role while they are disabled. Please enable the user first to invite them to a role.'
+        );
+        // Every new-role row's role select (none on a disabled user's step).
+        this.newRoleSelects = page.getByLabel(/^Select a new role/);
     }
 
     stepHeading(name) {
@@ -170,6 +192,49 @@ exports.SendInvitationWizard = class SendInvitationWizard extends BasePage {
         return row.getByRole('button', {name: 'Remove Role'});
     }
 
+    /**
+     * The roles table's body rows, held and new alike (the header row
+     * carries column headers, no cells).
+     */
+    roleRows() {
+        return this.page.locator('main').getByRole('row').filter({has: this.page.getByRole('cell')});
+    }
+
+    /**
+     * A new-role row's masthead select (the row's last combobox; a Reviewer
+     * row has none, only the fixed text "Appear on the masthead").
+     */
+    newRoleMastheadSelect(row) {
+        return row.getByRole('combobox').filter({hasText: 'Does not appear on the masthead'});
+    }
+
+    /**
+     * Pick a held role's masthead value and wait for its confirmation
+     * (Rule 13, 13a) without answering it.
+     *
+     * @param {import('@playwright/test').Locator} row a current-role row
+     * @param {string} label "Appear on the masthead" / "Does not appear on the masthead"
+     */
+    async pickMasthead(row, label) {
+        await this.mastheadSelect(row).selectOption({label});
+        await expect(this.mastheadDialog).toBeVisible();
+    }
+
+    /**
+     * `upper` sits above `lower` on the page, read once both are shown
+     * (polled: the step may still be laying out).
+     */
+    async expectAbove(upper, lower) {
+        await expect(upper).toBeVisible();
+        await expect(lower).toBeVisible();
+        await expect
+            .poll(async () => {
+                const [a, b] = [await upper.boundingBox(), await lower.boundingBox()];
+                return Boolean(a && b && a.y + a.height <= b.y);
+            })
+            .toBe(true);
+    }
+
     /** The newest new-role row (the one carrying "Select a new role"). */
     newRoleRow() {
         return this.page
@@ -236,12 +301,14 @@ exports.SendInvitationWizard = class SendInvitationWizard extends BasePage {
     }
 
     /**
-     * Dismiss the success dialog. Its only button, "View All Users", is not
-     * asserted on beyond dismissal (Rule 15 / register A5) — callers navigate
-     * to Users & Roles themselves.
+     * The success dialog's only button, "View All Users": the browser
+     * returns to Users & Roles (Rule 15; the dialog's promise of updates is
+     * register A5, not asserted).
      */
     async dismissSentDialog() {
         await this.sentDialog.getByRole('button', {name: 'View All Users'}).click();
+        await expect(this.page).toHaveURL(/\/management\/settings\/access(?:[?#]|$)/);
+        await expect(this.page.getByRole('heading', {name: 'Users & Roles'})).toBeVisible();
     }
 };
 
@@ -266,6 +333,15 @@ exports.AcceptInvitationWizard = class AcceptInvitationWizard extends BasePage {
         this.privacyStatementLink = page.getByRole('link', {name: 'Privacy Statement'});
         // The steps rail, found by the review step every recipient gets.
         this.stepsList = page.locator('main').getByRole('list').filter({hasText: 'Review & create account'});
+        // "Enter details" (new invitees): the name the manager entered arrives here.
+        this.givenNameInput = page.getByLabel(/^Given Name/).first();
+        // Rule 17: "Cancel" beside the forward button, its question and answers.
+        this.cancelButton = page.getByRole('button', {name: 'Cancel', exact: true});
+        this.cancelDialog = page.getByRole('dialog').filter({hasText: 'Cancel Role Invitation Process?'});
+        this.cancelProcessButton = this.cancelDialog.getByRole('button', {name: 'Cancel Invitation Process'});
+        this.goBackButton = this.cancelDialog.getByRole('button', {name: 'Go Back'});
+        // The closing dialog's way out (Rules 8, 9).
+        this.viewAllSubmissionsButton = this.acceptedDialog.getByRole('button', {name: 'View All Submissions'});
     }
 
     stepHeading(name) {
@@ -315,6 +391,22 @@ exports.AcceptInvitationWizard = class AcceptInvitationWizard extends BasePage {
         await this.passwordInput.fill(password);
         await this.privacyCheckbox.check();
         await this.saveAndContinueButton.click();
+    }
+
+    async expectOnDetailsStep() {
+        await expect(this.stepHeading(/Enter details/)).toBeVisible();
+    }
+
+    /** "Cancel" → the "Cancel Role Invitation Process?" question (Rule 17). */
+    async openCancelDialog() {
+        await this.cancelButton.click();
+        await expect(this.cancelDialog).toBeVisible();
+    }
+
+    /** "Cancel" → "Cancel Invitation Process"; the caller reads the landing (Rule 17). */
+    async cancelProcess() {
+        await this.openCancelDialog();
+        await this.cancelProcessButton.click();
     }
 
     /** "Enter details" step (new invitees). */

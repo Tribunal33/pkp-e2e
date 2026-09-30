@@ -3,22 +3,14 @@
  * @file playwright/tests/U06-user-invitations.spec.js
  *
  * User invitations — OPS suite, one test per canonical scenario the spec runs
- * on OPS (scenarios 1–8 and 10 in OPS vocabulary — preprint server, Preprint
- * Server Manager, Moderator as the offered role, "Create OPS account" /
- * "Accept And Continue to OPS" — plus the OPS-only scenario 9).
+ * on OPS (scenarios 1–8, 10 and 11 in OPS vocabulary — preprint server,
+ * Preprint Server Manager, Moderator as the offered role, "Create OPS
+ * account" / "Accept And Continue to OPS" — plus the OPS-only scenario 9).
  * Spec: docs/specs/U06-user-invitations.md
  *
- * Deliberately NOT covered (register IDs from the spec's Findings register —
- * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap): A1 ❓,
- * A2 ❓, A3 🐞, A4 🐞, A5 🐞, A7 🐞, A8 🐞, A9 ❓, OMP1 🐞. Where a test
- * passes through one (S2/S3/S8 sign in afresh after accepting, S6 reads a
- * replaced link as "not opening the flow", S8 dismisses whatever the masthead
- * confirmation answers with and reads the change itself, and reads the
- * masthead confirmation's notification sentence, not its "journal" wording)
- * it asserts the effect the spec states and leaves the finding's own claim
- * unasserted either way. OPS1 🐞 is S9's subject: the absence is
- * asserted with a positive control, the defect's cause is not. The spec's
- * Coverage section records everything else left out.
+ * Deliberately NOT covered (register IDs; the spec's Coverage section is the
+ * record of the rest): A1, A2, A3, A4, A5, A7, A8, A9, A10, A11, OMP1.
+ * OPS1 is S9's subject, asserted as an absence with a positive control.
  *
  * Every test but S9 seeds its own scratch preprint server (publicknowledge
  * and the seeded roster stay untouched; S9 only browses); Mailpit assertions
@@ -29,6 +21,8 @@
  */
 const {test, expect} = require('../support/fixtures.js');
 const {LoginPage} = require('../../../../shared/playwright/pages/LoginPage.js');
+const {MySubmissionsPage} = require('../pages/MySubmissionsPage.js');
+const {EditorialDashboardPage} = require('../pages/EditorialDashboardPage.js');
 const {
     UsersRolesPage,
     SendInvitationWizard,
@@ -96,6 +90,8 @@ async function sendInvitation(managerPage, path, {search, role = ROLE, subject, 
         }
     }
     const detailsText = await wizard.readDetailsStep();
+    // The new role row's masthead select starts blank (Fields).
+    await expect(wizard.newRoleMastheadSelect(0)).toHaveValue('');
     await wizard.fillNewRoleRow(0, {role, dateStart: today(), masthead: MASTHEAD_SHOW});
     await wizard.saveAndContinueButton.click();
     await wizard.setSubject(subject);
@@ -154,16 +150,21 @@ test.describe('user invitations', () => {
         const {path, manager} = await seedServer(pkpApi, tag);
 
         const managerPage = await (await asUser(manager)).newPage();
+        // "Search User" → "Enter details" with the address already in Email;
+        // the new role row's masthead select starts blank (both asserted in
+        // sendInvitation). The Reviewer half of the "Enter details" bullet
+        // has no OPS run: a preprint server's role select offers no
+        // reviewer role (users.md; findings T-ops-1).
         const first = await sendInvitation(managerPage, path, {search: recipient, givenName: 'Nova', subject});
 
-        // Back on Users & Roles the Invitations table shows the pending row
-        // as "Invited {date}".
+        // "View All Users": the browser returns to Users & Roles, where the
+        // Invitations table shows the row as "Invited {date}" (Rule 15).
         const users = new UsersRolesPage(managerPage, path);
-        await users.goto();
+        await first.wizard.pressViewAllUsers();
         await expect(users.invitationsCountHeading(1)).toBeVisible();
         const row = users.invitationRow(recipient);
         await expect(row).toBeVisible();
-        await expect(row).toContainText('Invited');
+        await expect(row).toContainText(`Invited ${today()}`);
         await expect(row).toContainText(ROLE);
 
         // The recipient's mailbox holds the invitation, sent from the Preprint
@@ -175,6 +176,10 @@ test.describe('user invitations', () => {
         expect(links.text).toContain(ROLE);
         expect(links.text).toContain(`Starting from ${today()}`);
         expect(links.text).toMatch(new RegExp(`masthead as an? ${ROLE}`));
+
+        // The greeting opens "Dear Nova,", the Given Name entered on "Enter
+        // details" (Side effects).
+        expect(links.text).toContain('Dear Nova,');
 
         // The subject is the marker typed on the compose step and the body the
         // text that step showed at send time (its variables substituted).
@@ -239,6 +244,10 @@ test.describe('user invitations', () => {
         await expect(wizard.privacyStatementLink).toHaveAttribute('href', new RegExp(`/${path}/about/privacy$`));
 
         await wizard.createAccount({username, password});
+        // "Enter details": Given Name already reads Nova, the name the
+        // manager entered (Fields, accept wizard).
+        await expect(page.getByRole('heading', {name: /Enter details/})).toBeVisible();
+        await expect(wizard.givenNameInput).toHaveValue('Nova');
         await wizard.fillDetails({givenName: 'Nova', country: 'Canada'});
 
         // Review & create account: the summary shows the chosen username and
@@ -274,32 +283,145 @@ test.describe('user invitations', () => {
         const tag = makeTag('s3', testInfo);
         const member = `ex${tag}`;
         const memberEmail = `${member}@mail.test`;
+        const disabled = `dis${tag}`;
+        const disabledEmail = `${disabled}@mail.test`;
         const subject = `Invitation${tag}`;
-        const {path, manager} = await seedServer(pkpApi, tag, [{username: member, roles: ['author']}]);
+        // The member's Author role is seeded "Appear on the masthead" (the
+        // `masthead` key omitted); the second Author's account is disabled.
+        const {path, manager} = await seedServer(pkpApi, tag, [
+            {username: member, roles: ['author']},
+            {username: disabled, roles: ['author'], disabled: true},
+        ]);
 
-        // Manager invites the member, found by exact email; the wizard
-        // confirms the user exists and shows their details read-only.
         const managerPage = await (await asUser(manager)).newPage();
         const users = new UsersRolesPage(managerPage, path);
+        const sendWizard = new SendInvitationWizard(managerPage);
+
+        // The disabled user on "Search User": "The user is currently
+        // disabled." with the instructions to enable them first; no role row
+        // can be added ("Add Another Role" and "Save And Continue" shown but
+        // inactive, no new-role row); the Author role they hold is listed
+        // with an active masthead select and an active "Remove Role", left
+        // unpressed (Rule 14).
         await users.goto();
         await users.inviteToRoleButton.click();
-        const sendWizard = new SendInvitationWizard(managerPage);
+        await sendWizard.expectSearchStep();
+        await sendWizard.searchAndContinue(disabledEmail);
+        await expect(sendWizard.disabledUserHeading).toBeVisible();
+        await expect(sendWizard.disabledUserInstructions).toBeVisible();
+        await expect(sendWizard.addAnotherRoleButton).toBeVisible();
+        await expect(sendWizard.addAnotherRoleButton).toBeDisabled();
+        await expect(sendWizard.saveAndContinueButton).toBeVisible();
+        await expect(sendWizard.saveAndContinueButton).toBeDisabled();
+        const disabledAuthorRow = sendWizard.currentRoleRow('Author');
+        await expect(sendWizard.mastheadSelect(disabledAuthorRow)).toBeEnabled();
+        await expect(sendWizard.removeRoleButton(disabledAuthorRow)).toBeEnabled();
+        await expect(sendWizard.newRoleRows).toHaveCount(0);
+
+        // Edit on the disabled user's row, Users & Roles reached by typing
+        // its address: the same warning above their details and current
+        // roles, the same two inactive buttons, the Author row again with an
+        // active masthead select and "Remove Role", left unpressed (Rule 14).
+        await users.goto();
+        await users.openUserEdit(disabledEmail);
+        await expect(sendWizard.stepHeading(/Enter details/)).toBeVisible();
+        await sendWizard.expectAbove(sendWizard.disabledUserHeading, sendWizard.emailAddressHeading);
+        await sendWizard.expectAbove(sendWizard.disabledUserHeading, disabledAuthorRow);
+        await expect(sendWizard.disabledUserInstructions).toBeVisible();
+        await expect(managerPage.getByText(disabledEmail)).toBeVisible();
+        await expect(sendWizard.addAnotherRoleButton).toBeDisabled();
+        await expect(sendWizard.saveAndContinueButton).toBeDisabled();
+        await expect(sendWizard.mastheadSelect(disabledAuthorRow)).toBeEnabled();
+        await expect(sendWizard.removeRoleButton(disabledAuthorRow)).toBeEnabled();
+        await expect(sendWizard.newRoleRows).toHaveCount(0);
+
+        // "Search User" for the enabled member: the wizard confirms the user
+        // exists and shows their details read-only, without the disabled
+        // warning (the control for the two reads above).
+        await users.goto();
+        await users.inviteToRoleButton.click();
         await sendWizard.expectSearchStep();
         await sendWizard.searchAndContinue(memberEmail);
         await expect(sendWizard.userFoundMessage).toBeVisible();
         await expect(managerPage.getByText(memberEmail)).toBeVisible();
         // Read-only: no editable personal fields for an existing user.
+        await expect(sendWizard.emailAddressHeading).toBeVisible();
         await expect(managerPage.getByLabel(/^Given Name/)).toHaveCount(0);
-        await sendWizard.fillNewRoleRow(0, {role: ROLE, dateStart: today(), masthead: MASTHEAD_SHOW});
-        await sendWizard.saveAndContinueButton.click();
-        await sendWizard.setSubject(subject);
-        await sendWizard.sendAndAwaitConfirmation();
+        await expect(sendWizard.emailField).toHaveCount(0);
+        await expect(sendWizard.disabledUserHeading).toHaveCount(0);
+
+        // The held Author row on "Enter details": listed above the new-role
+        // row, with a masthead select (on "Appear on the masthead") and
+        // "Remove Role" (Rule 13a).
+        const authorRow = sendWizard.currentRoleRow('Author');
+        await expect(sendWizard.newRoleRows).toHaveCount(1);
+        await sendWizard.expectAbove(authorRow, sendWizard.newRoleRows.first());
+        await expect(sendWizard.mastheadSelect(authorRow)).toHaveValue('true');
+        await expect(sendWizard.mastheadChoice(authorRow)).toHaveText(MASTHEAD_SHOW);
+        await expect(sendWizard.removeRoleButton(authorRow)).toBeVisible();
+
+        // The page's own masthead saves, counted to bound "nothing changed".
+        const mastheadSaves = [];
+        managerPage.on('request', (r) => {
+            if (r.url().includes('/masthead/')) {
+                mastheadSaves.push(r.url());
+            }
+        });
+
+        // "Cancel" on the confirmation: the select is back on "Appear on the
+        // masthead" and nothing changed: no save was sent (Rule 13a). The
+        // "Confirm" below, sending one, is the control.
+        await sendWizard.chooseMasthead(authorRow, MASTHEAD_HIDE);
+        await sendWizard.cancelMastheadChange();
+        await expect(sendWizard.mastheadSelect(authorRow)).toHaveValue('true');
+        await expect(sendWizard.mastheadChoice(authorRow)).toHaveText(MASTHEAD_SHOW);
+        expect(mastheadSaves).toHaveLength(0);
+
+        // "Confirm": the change applies at once (one save sent, the select on
+        // the new choice). On a preprint server the save answers with an
+        // error dialog (register OMP1): dismissed, never asserted; the
+        // masthead email is read on OJS only (fn-s).
+        await sendWizard.chooseMasthead(authorRow, MASTHEAD_HIDE);
+        await sendWizard.confirmMastheadChange();
+        expect(mastheadSaves).toHaveLength(1);
+        await expect(sendWizard.mastheadSelect(authorRow)).toHaveValue('false');
+
+        // Leaving without sending, by typing the Users & Roles address: no
+        // question is asked and the Invitations table gains no row (Rule 15);
+        // Edit on the member's row shows "Does not appear on the masthead" on
+        // the Author row: the change stays though nothing was sent (Rule 13a).
+        const leaveDialogs = [];
+        const onDialog = (dialog) => {
+            leaveDialogs.push(dialog.type());
+            dialog.accept().catch(() => {});
+        };
+        managerPage.on('dialog', onDialog);
+        await users.goto();
+        managerPage.off('dialog', onDialog);
+        expect(leaveDialogs).toEqual([]);
+        await expect(users.invitationsCountHeading(0)).toBeVisible();
+        await expect(users.userRow(memberEmail)).toBeVisible();
+        await expect(users.invitationRow(memberEmail)).toHaveCount(0);
+        await users.openUserEdit(memberEmail);
+        await expect(sendWizard.stepHeading(/Enter details/)).toBeVisible();
+        await expect(sendWizard.mastheadSelect(authorRow)).toHaveValue('false');
+        await expect(sendWizard.mastheadChoice(authorRow)).toHaveText(MASTHEAD_HIDE);
+
+        // "Enter details" and the compose step: back on Users & Roles, the
+        // same search, one new role row, sent.
+        await sendInvitation(managerPage, path, {search: memberEmail, existing: true, subject});
 
         // The recipient's mailbox: the email lists the offered role and, as a
-        // role already held, Author (Side effects).
+        // role already held, Author, whose line carries the sentence of the
+        // choice confirmed above (Rule 13a, Side effects).
         const links = await invitationLinks(pkpMail, {to: memberEmail, contains: subject});
-        expect(links.text).toMatch(/Already assigned roles.*Author/);
-        expect(links.text).toMatch(new RegExp(`Newly assigned roles.*${ROLE}`));
+        const held = links.text.match(/Already assigned roles(.*)Newly assigned roles(.*)$/);
+        expect(held, 'the email lists held roles before the offered ones').not.toBeNull();
+        const [, heldPart, newPart] = /** @type {RegExpMatchArray} */ (held);
+        expect(heldPart).toContain('Author');
+        expect(heldPart).toMatch(/Your name will not appear in .+'s masthead as an? Author\./);
+        expect(newPart).toContain(ROLE);
+        expect(newPart).toMatch(new RegExp(`Your name will appear in .+'s masthead as an? ${ROLE}\\.`));
 
         // Recipient (signed out): the review step opens directly — no
         // password prompt, no account fields (Rule 6; ORCID off per Rule 5).
@@ -315,16 +437,16 @@ test.describe('user invitations', () => {
         // still reads "Invited {date}" (Rule 5).
         await users.goto();
         await expect(users.invitationsCountHeading(1)).toBeVisible();
-        await expect(users.invitationRow(memberEmail)).toContainText('Invited');
+        await expect(users.invitationRow(memberEmail)).toContainText(`Invited ${today()}`);
 
         await wizard.acceptAndAwaitConfirmation();
 
         // Spec behavior around A4 (not asserted): signing in the usual way works.
         await signInFresh(page, member, member + member);
 
-        // The manager sees the member under Current Users with both roles.
-        // Control: the invitation's row is gone (Rule 11), where it still
-        // stood before the accept button was pressed.
+        // The manager sees the member under Current Users with Author and
+        // the offered role. Control: the invitation's row is gone (Rule 11),
+        // where it still stood before the accept button was pressed.
         await users.goto();
         await expect(users.invitationsCountHeading(0)).toBeVisible();
         await expect(users.invitationRow(memberEmail)).toHaveCount(0);
@@ -355,7 +477,7 @@ test.describe('user invitations', () => {
         const users = new UsersRolesPage(managerPage, path);
         await users.goto();
         await expect(users.invitationsCountHeading(1)).toBeVisible();
-        await expect(users.invitationRow(recipient)).toContainText('Invited');
+        await expect(users.invitationRow(recipient)).toContainText(`Invited ${today()}`);
 
         await decline.confirmButton.click();
         // The browser moves to the sign-in page (Rule 10).
@@ -748,5 +870,111 @@ test.describe('user invitations', () => {
         await expect(wizard.stepPill('Verify ORCID iD')).toHaveCount(0);
         await expect(page.getByText('Verify ORCID iD')).toHaveCount(0);
         await expect(wizard.acceptButton).toBeVisible();
+    });
+
+    test('S11: an existing user cancels the accept wizard, and the invitation waits', async ({page, asUser, pkpApi, pkpMail}, testInfo) => {
+        test.slow();
+        const tag = makeTag('s11', testInfo);
+        const member = `ex${tag}`;
+        const memberEmail = `${member}@mail.test`;
+        const subject = `Invitation${tag}`;
+        // ORCID off: the context omits the `orcid` key (fn-s).
+        const {path, manager} = await seedServer(pkpApi, tag, [{username: member, roles: ['author']}]);
+
+        // The pending invitation to Moderator, sent as in scenario 3
+        // ("Search User", one new role row).
+        const managerPage = await (await asUser(manager)).newPage();
+        await sendInvitation(managerPage, path, {search: memberEmail, existing: true, subject});
+        const links = await invitationLinks(pkpMail, {to: memberEmail, contains: subject});
+        const users = new UsersRolesPage(managerPage, path);
+
+        // The user's own browser, signed out (the fixture page: no default
+        // user in this file).
+        const userPage = page;
+        const wizard = new AcceptInvitationWizard(userPage);
+        const mySubmissions = new MySubmissionsPage(userPage, path);
+
+        // The accept link, signed out: the wizard opens on "Review &
+        // create account", with no "Verify ORCID iD" step (Rule 5; the
+        // rail's own review pill is the control).
+        await wizard.open(links.acceptUrl);
+        await expect(wizard.reviewHeading).toBeVisible();
+        await expect(wizard.stepPill('Review & create account')).toBeVisible();
+        await expect(wizard.stepPill('Verify ORCID iD')).toHaveCount(0);
+        await expect(userPage.getByText('Verify ORCID iD')).toHaveCount(0);
+
+        // "Cancel" and "Go Back": the question, its two buttons; "Go Back"
+        // returns to the review step (Rule 17).
+        await wizard.openCancelDialog();
+        await expect(wizard.cancelDialog).toContainText(
+            /Are you sure you want to cancel\? Canceling now will stop the role acceptance process, and you['’]ll need to restart from the invitation email to accept the role again\./
+        );
+        await expect(wizard.cancelDialog.getByRole('button')).toHaveText(['Cancel Invitation Process', 'Go Back']);
+        await wizard.goBackButton.click();
+        await expect(wizard.cancelDialog).toBeHidden();
+        await expect(wizard.reviewHeading).toBeVisible();
+        await expect(wizard.acceptButton).toBeVisible();
+
+        // "Cancel Invitation Process", signed out: the sign-in screen;
+        // signing in there opens My Submissions (Rule 17).
+        await wizard.openCancelDialog();
+        await wizard.cancelProcessButton.click();
+        await userPage.waitForURL(/\/login/, {waitUntil: 'commit'});
+        const login = new LoginPage(userPage);
+        await login.expectForm();
+        await login.signIn(member, member + member);
+        await expect(userPage).toHaveURL(/\/dashboard\/mySubmissions/);
+        await mySubmissions.expectViewHeading('Active submissions');
+
+        // The manager's Users & Roles: the row still reads "Invited
+        // {date}", and Edit on the user's row shows Author alone in the
+        // roles table: the cancel declined nothing and changed no role
+        // (Rule 17).
+        await users.goto();
+        await expect(users.invitationsCountHeading(1)).toBeVisible();
+        await expect(users.invitationRow(memberEmail)).toContainText(`Invited ${today()}`);
+        await users.openUserEdit(memberEmail);
+        const sendWizard = new SendInvitationWizard(managerPage);
+        await expect(sendWizard.stepHeading(/Enter details/)).toBeVisible();
+        await expect(sendWizard.removeRoleButton(sendWizard.currentRoleRow('Author'))).toBeVisible();
+        await expect(sendWizard.currentRoleRow(ROLE)).toHaveCount(0);
+
+        // The accept link, signed in as the user: the same review step
+        // (Rules 6, 17).
+        await wizard.open(links.acceptUrl);
+        await expect(wizard.reviewHeading).toBeVisible();
+        await expect(wizard.acceptButton).toBeVisible();
+        await expect(userPage.getByText(ROLE)).toBeVisible();
+        await expect(wizard.usernameInput).toHaveCount(0);
+        await expect(wizard.passwordInput).toHaveCount(0);
+
+        // "Cancel Invitation Process", signed in: My Submissions opens,
+        // the user still signed in (the private list rendered, not the
+        // sign-in form) (Rule 17).
+        await wizard.openCancelDialog();
+        await wizard.cancelProcessButton.click();
+        await userPage.waitForURL(/\/dashboard\/mySubmissions/, {waitUntil: 'commit'});
+        await mySubmissions.expectViewHeading('Active submissions');
+        await expect(login.form).toHaveCount(0);
+
+        // Control: the link once more, still signed in; accept, then the
+        // dialog's "View All Submissions": the Dashboard's "Assigned to
+        // me" opens, the user still signed in (Rule 9); on the manager's
+        // Users & Roles the row is gone while Edit on the user's row
+        // shows Author and the offered role (Rules 8, 11).
+        await wizard.open(links.acceptUrl);
+        await expect(wizard.reviewHeading).toBeVisible();
+        await wizard.acceptAndAwaitConfirmation();
+        await wizard.acceptedDialog.getByRole('button', {name: 'View All Submissions'}).click();
+        await new EditorialDashboardPage(userPage, path).expectLanded();
+        await expect(login.form).toHaveCount(0);
+
+        await users.goto();
+        await expect(users.invitationsCountHeading(0)).toBeVisible();
+        await expect(users.invitationRow(memberEmail)).toHaveCount(0);
+        await users.openUserEdit(memberEmail);
+        await expect(sendWizard.stepHeading(/Enter details/)).toBeVisible();
+        await expect(sendWizard.removeRoleButton(sendWizard.currentRoleRow('Author'))).toBeVisible();
+        await expect(sendWizard.removeRoleButton(sendWizard.currentRoleRow(ROLE))).toBeVisible();
     });
 });
