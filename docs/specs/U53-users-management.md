@@ -765,6 +765,12 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A15 (Rule 17; issue report
+    `docs/issues/U53-A15-merge-account-opened-discussion-fails.md`):
+    merging the editor who recorded a submission's recommendation into
+    another account, the window closing, the merged account refused at
+    sign-in and the discussion naming the chosen account as creator
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -800,7 +806,6 @@ Left out of the scenarios above, by reason:
     "Name")
   - A13 (the Site Administrator's empty "Roles" cell in the "Merge user"
     window and on the older grid; Fields)
-  - A15 (merging an account that opened a discussion; Rule 17)
   - A16 ("Generate Password" unticked again, "Notify User" left locked;
     Rule 23)
   - A17 (the grid's row still listing a role just ended on "Edit User";
@@ -860,7 +865,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | The ORCID and disabled icons after a name have no name for a screen reader | 🐞 | minor | — |
 | [A13](#a13) | The "Merge user" window and the older grid show nothing under "Roles" for the Site Administrator | 🐞 | minor | — |
 | [A14](#a14) | A masthead change on the roles page of a press or preprint server ends in an "Error" dialog and emails nobody | 🐞 | user-visible · crash: server | — |
-| [A15](#a15) | Merging an account that opened a discussion fails partway with no message and leaves the account behind | 🐞 | user-visible · crash: server | — |
+| [A15](#a15) | Merging a user recorded as a discussion's or task's creator stops halfway with no message, and the account still signs in | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | "Notify User" stays greyed out after "Generate Password" is unticked | 🐞 | minor | — |
 | [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | minor | — |
 | [A19](#a19) | "Remove User" on a user whose only role has not yet begun ends in "An unexpected error has occurred…" | 🐞 | user-visible | — |
@@ -1013,17 +1018,27 @@ user gets no email. The page belongs to *User invitations*, whose
 Basis: probe. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — Merging an account that opened a discussion fails partway** · 🐞 · user-visible · crash: server.
-A manager merges an account that once opened a discussion on a
-submission. After "OK" in the "Confirm" dialog nothing seems to happen:
-the dialog and the "Merge user" window stay open and no message appears,
-because the app failed partway through the merge. Behind them the roles
-and the submission's participant place have moved to the chosen account,
-but the merged account is not deleted: it remains with no role, still
-signs in with its old username and password, and the discussion still
-names it as its creator. Merging an account that only takes part in
-someone else's discussion works.
-Basis: probe. <sup>f-a15</sup>
+**A15 — Merging a user recorded as a discussion's or task's creator stops halfway with no message, and the account still signs in** · 🐞 · medium · crash: server.
+A manager merges one user account (the merged account) into another (the
+chosen account). The app fails on the server partway through. After "OK"
+in the "Confirm" dialog nothing seems to happen: the dialog and the
+"Merge user" window stay open, and no message appears.
+By then the merge has already handed the merged account's roles,
+submission assignments and messages to the chosen account. But the
+merged account is not deleted. It no longer appears under "Users &
+Roles", yet it still signs in with its username and password, and its
+discussions still name it as their creator. After a reload the merge
+looks done.
+This happens whenever the merged account is recorded as the creator or
+starter of a discussion or task on any submission. That covers anyone
+who opened a discussion or added a task, and any editor who recorded a
+recommendation, which opens a discussion in the editor's name. It also
+covers any participant who was sent a message with the Participants
+list's "Notify", which records the recipient as the creator. Merging an
+account that only takes part in someone else's discussion works. No
+release is affected: the fault is only on `main`, which is not yet
+released.
+Basis: probe, 2026-09-30. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — "Notify User" stays locked after "Generate Password" is unticked** · 🐞 · minor.
@@ -1945,6 +1960,7 @@ ticked, signed in with its old password (landing on the journal's home
 page), and the discussion read "Created by: {old username}". An account
 that was only a participant in someone else's discussion merged cleanly:
 200, deleted, its sign-in refused.
+Issue report: [docs/issues/U53-A15-merge-account-opened-discussion-fails.md](../issues/U53-A15-merge-account-opened-discussion-fails.md).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Live-probed 2026-09-25, all three apps: after "Generate

@@ -1,0 +1,29 @@
+--- a/lib/pkp/classes/editorialTask/Repository.php
++++ b/lib/pkp/classes/editorialTask/Repository.php
+@@ -241,6 +241,16 @@
+         }
+     }
+ 
++    /**
++     * Transfer the tasks and discussions a user created or started to another
++     * user, when their accounts are merged (UserRepository::mergeUsers())
++     */
++    public function transfer(int $oldUserId, int $newUserId): void
++    {
++        EditorialTask::where('created_by', $oldUserId)->update(['created_by' => $newUserId]);
++        EditorialTask::where('started_by', $oldUserId)->update(['started_by' => $newUserId]);
++    }
++
+     public function removeParticipantFromSubmissionTasks(int $submissionId, int $userId, int $contextId): void
+     {
+         $user = Repo::user()->get($userId);
+--- a/lib/pkp/classes/user/Repository.php
++++ b/lib/pkp/classes/user/Repository.php
+@@ -343,6 +343,7 @@
+         }
+ 
+         Repo::note()->transfer($oldUserId, $newUserId);
++        Repo::editorialTask()->transfer($oldUserId, $newUserId);
+ 
+         Repo::decision()->dao->reassignDecisions($oldUserId, $newUserId);
+ 
