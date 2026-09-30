@@ -937,6 +937,11 @@ Left out of the scenarios above, by reason:
     revision, the file keeping its original version and not the
     discarded pick; on an OJS galley, "Cancel" after the first pick
     leaving the galley without a file and no error
+  - the guard for A25 (Rule 17a; issue report
+    `docs/issues/U36-A25-cancel-upload-after-sent-keeps-file.md`): the
+    wizard's "Cancel upload" pressed once the whole file has been sent,
+    on a slowed answer, leaving no file after a reload and none on
+    "Review"
 - **Planned**:
   - the file's "History" keeping no line of the revision cancelled with "Cancel": one "A file revision "notes.md" …" line, not two (Rule 9): likely a bullet in scenario 3, which cancels a revision before the "History" it reads
   - "Edit a file" closed with its header "Close" after the name is changed: no question, the list keeping the old name after a reload, and the window reopening on it (Rule 10): likely a bullet in scenario 4 before "The rename"
@@ -975,7 +980,6 @@ Left out of the scenarios above, by reason:
   - A22 (the Activity Log recording a new file's upload as a "Revision"; Side effects)
   - A23 ("Cancel" after a second pick on step 1 leaving the first pick as the file; Rule 9b)
   - A24 (one file revised in two windows: one "Cancel" doing nothing, the file keeping a cancelled upload; Rule 9c)
-  - A25 ("Cancel upload" pressed after the whole file has been sent keeping the file; Rule 17a)
 - **Owned by another feature**:
   - a Production editor's lists: every stage's while not assigned, Copyediting and Production only once assigned (Actors preamble; *Workflow screen & stage access*, and *Stage participants*, whose A8 records the assigned case)
   - the Author's revision upload through "Upload revisions" (Actors row 2; *Review stage & rounds*, scenario 4)
@@ -1010,7 +1014,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A21](#a21) | A file over the server's request size limit fails with a server error and "The POST data is too large." | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A23](#a23) | Revising a file, a second pick on step 1 and then "Cancel" leave the first pick as the file instead of the original | 🐞 | minor | — |
 | [A24](#a24) | One file revised in two windows: the first window's "Cancel" does nothing, and the file keeps the upload cancelled there | 🐞 | minor | — |
-| [A25](#a25) | "Cancel upload" pressed after the whole file has been sent removes the row, but the file is stored and back after a reload | 🐞 | user-visible | — |
+| [A25](#a25) | An author's "Cancel upload" pressed after the whole file has been sent keeps the file in the submission | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A6](#a6) | Every file row's menu button is named "More Actions" alone, so a screen reader cannot tell the rows apart | ❓ | minor | — |
 | [A8](#a8) | The revise list names files only, so two files with the same name read the same | ❓ | minor | — |
 | [A13](#a13) | Deleting a file also deletes every copy made from it on other lists | ❓ | user-visible | — |
@@ -1292,16 +1296,20 @@ a renamed file too ([A1](#a1)).
 Since: 2026-09-27 · Basis: probe. <sup>[f-a24](#fn-a24)</sup>
 
 <a id="a25"></a>
-**A25 — "Cancel upload" pressed after the whole file has been sent keeps the file** · 🐞 · user-visible.
-In the submission wizard's "Files" panel, the Author who presses "Cancel
-upload" expects the file to be dropped, and the row goes at once without
-a question. Pressed after the whole file has been sent but before the
-server's answer, only the row goes: the file is stored, is back on the
-panel with "Edit" and "Remove" after a reload, and, like any file there,
-goes in with the submission. Nothing says so when the row goes. An answer
-slowed by the link or the server holds that window open; so does limiting
-only the browser's download speed.
-Basis: probe. <sup>[f-a25](#fn-a25)</sup>
+**A25 — An author's "Cancel upload" pressed after the whole file has been sent keeps the file in the submission** · 🐞 · medium.
+In the submission wizard's "Upload Files" step, an author who presses
+"Cancel upload" on a file expects the file to be dropped, and its row
+goes at once without a question. If the author presses it after the
+whole file has been sent but before the server has answered, only the
+row goes: the server has already stored the file, and the file goes in
+with the submission. Nothing says so.
+That gap lasts while a slow connection or a busy server holds the
+answer back, with the bar full and "Cancel upload" still offered.
+The file shows again only once the draft is reloaded or reopened, and
+after "Submit" the author can no longer remove it. When the editor
+sends the submission for review, the file is offered to the reviewers
+ticked. A preprint server's wizard has no such panel.
+Basis: probe, 2026-09-30. <sup>[f-a25](#fn-a25)</sup>
 
 ### OPS
 
@@ -2410,6 +2418,7 @@ of 6). Under an emulated upload throttle the bar fills before the request
 has left the browser, so there a full bar does not mean the file was sent.
 Scenario 9 presses mid-upload; no test drives the window after the last
 byte.
+Issue report: [docs/issues/U36-A25-cancel-upload-after-sent-keeps-file.md](../issues/U36-A25-cancel-upload-after-sent-keeps-file.md).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Note a (the OPS workflow and wizard configs). Live-probed

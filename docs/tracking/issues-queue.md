@@ -27,7 +27,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 | **In progress: issues session s3, 2026-09-30.** Done: OJS1, A4, OJS3, OMP5 (two reports), A6; open: A2, A5, A7, A8, A9, A10, A11, A13, A14, OMP1, OMP2, OMP4, OMP6 |
 | [U53](../specs/U53-users-management.md) | 15 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: A15, A14, A2, A19; open: A1, A4, A5, A6, A7, A9, A11, A12, A13, A16, A17, OPS1 |
 | [U47](../specs/U47-media-files.md) | 7 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: OMP1 (with U69 A9), A4 (with U36 A21), A1, A5 (with U66 A2), OMP2; open: A3, A6, A7 |
-| [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **In progress: issues session s3, 2026-09-30.** Done: A11, A21 (with U47 A4), A14; in progress: A10 (with U38 A2), A25; open: A2, A3, A4, A5, A7, A9, A12, A15, A19, A20 (A23, A24: open report pkp-lib-13288) |
+| [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **In progress: issues session s3, 2026-09-30.** Done: A11, A21 (with U47 A4), A14, A25; in progress: A10 (with U38 A2); open: A2, A3, A4, A5, A7, A9, A12, A15, A19, A20 (A23, A24: open report pkp-lib-13288) |
 | [U17](../specs/U17-sections.md) | 16 | 2 | 2 | **In progress: issues session s3, 2026-09-30** |
 | [U59](../specs/U59-hosted-journals.md) | 9 | 2 | 2 |  |
 | [U62](../specs/U62-plugins-management.md) | 8 | 2 | 2 |  |
