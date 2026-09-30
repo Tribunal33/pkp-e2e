@@ -1,0 +1,14 @@
+--- a/lib/pkp/plugins/importexport/users/filter/UserXmlPKPUserFilter.php
++++ b/lib/pkp/plugins/importexport/users/filter/UserXmlPKPUserFilter.php
+@@ -488,7 +488,10 @@
+                 $this->addError(__('plugins.importexport.user.error.plainPasswordNotValid', ['username' => $userToImport->getUsername()]));
+             }
+         } else {
+-            if (password_needs_rehash($passwordHash, PASSWORD_BCRYPT)) {
++            // Keep any bcrypt hash, whatever its cost: it still verifies, and sign-in raises its cost to
++            // Validation::encryptCredentials()'s (PKPUserProvider::rehashPasswordIfRequired()). Only a hash
++            // of another algorithm, which this installation cannot verify, is replaced.
++            if (password_get_info($passwordHash)['algo'] !== PASSWORD_BCRYPT) {
+                 $password = Validation::generatePassword();
+                 $userToImport->setPassword(Validation::encryptCredentials($userToImport->getUsername(), $password));
+ 
