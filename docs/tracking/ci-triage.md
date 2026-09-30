@@ -857,6 +857,25 @@ trips.
   inheritance-cache bug php-src GH-20469 (fixed in 8.4.23+), the first
   category page in a process that loaded `APP\publication\Publication`
   first; this OJS case may be the same bug, unproven.
+  **Diagnosed 2026-09-30** (housekeeping, `.reports/flake-0930/segv/`;
+  report `docs/reports/2026-09-30-php-gh20469-segfaults.md`): GH-20469 is
+  confirmed for two class families on all three apps
+  (`APP\submission\Submission`, `APP\publication\Publication`): a process
+  dies on the first request that reaches the PKP parent first once an
+  earlier request came in through the APP class (`getDAO(): DAO` typed
+  returns); OPcache off removes it, JIT does not matter. It explains the
+  11–13 OMP crashes the U16/U65 suites absorb in every 8.3.35 run (none on
+  the PHP 8.4.26 branch run 36692593423) and one of the ten annotated CI
+  deaths (36554816184 OMP :8103, U65 S4); the other nine show no
+  parent-first request in 4,254 traced requests and did not reproduce
+  (open: consistent with a CI-only fault, unproven). Proposed pkp-lib
+  workaround (two `class_exists()` preloads in `lib/pkp/includes/bootstrap.php`,
+  the 14a478bc53 precedent) proven through `auto_prepend_file`: class
+  pairs 15 of 6,090 crashing to 0, OMP category and statistics pages 5 of
+  5 to 0. Harness proposals not applied (diagnosis §6): a request-start
+  log line, core dumps with a gdb backtrace on CI, the runner's CPU in the
+  log, a no-JIT arm. **Watch condition**: an annotated death not in the
+  two families; then take the proposals.
 - **Manage Emails template window gone before its "Saved" read** (U34 S7,
   OJS and OMP, CI). The nightly pkp-e2e run 35558115088 (2026-09-21, `main`
   at `735bb76`, the same tree and the same app tips as the green push run
@@ -1129,15 +1148,18 @@ trips.
   file 45 of 45 at eight workers. Rule in patterns.md pitfall 15.
   **Watch condition**: a U71 red at a numbered row read.
 
-- **Two first sightings in one CI run** (U06 revision branch, run
-  36664968208, 2026-09-30, each green on its retry). OMP U03 S4 "change
+- **First sightings in CI runs of 2026-09-30** (U06 revision branch run
+  36664968208 and the housekeeping branch, each green on its retry). OMP U03 S4 "change
   the email address by confirming the emailed link"
   (`U03-user-profile.spec.js:601`): after the link, `ProfilePage.expectOpen`
   found the heading but no `form#contactForm` in 30 s. The attempt carries `server-crash.txt` (exit 139): the segfault class (U03 S5 diagnosis 2026-09-30). OPS U60 S11 "Site
   style sheet" @solo (`serial/U60-site-settings.spec.js:797`): the site
   page's stylesheet list held the theme's sheets but not the uploaded
-  site sheet. **Watch condition**: a second sighting of either; then read
-  its error context.
+  site sheet. And OJS U12 S6 "the site's announcements" @solo in the
+  housekeeping branch run 36698118029 (`AnnouncementsPages.js:783`, the
+  save's POST not seen in 30 s; unlike the entry above, a CI run with the
+  solo project alone). **Watch condition**: a second sighting of any;
+  then read its error context and the worker's server log.
 
 ## Companion branches — pkp-e2e branches waiting on app PRs
 
