@@ -11,7 +11,7 @@
   - 3.3: none (code; the same 400)
 - **Introduced** `pkp/pkp-lib#9176` for `pkp/pkp-lib#7698` · [71e79e31e3](https://github.com/pkp/pkp-lib/commit/71e79e31e3d5c827e4bfa2443bbe81e5ec4c1dba) · 2023-10-13 · Touhidur Rahman (touhidurabir)
 - **Upstream** none found (2026-09-30)
-- **Tracked in** spec U36 [A21](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U36-submission-files.md#a21), spec U47 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a4)
+- **Tracked in** spec U36 [A21](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U36-submission-files.md#a21), spec U47 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a4), spec U09 [A18](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a18) (its request-limit case: a picture over `post_max_size`)
 - **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -185,8 +185,10 @@ Reach:
   uploads), email attachments (`fileAttachers/Upload`), and the
   rich-text editor's picture upload (`_uploadPublicFile`). Spec U09
   [A18](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a18)
-  saw this 500 on that picture upload; A18's other symptoms are a
-  separate bug. Code only.
+  saw this 500 on that picture upload for a picture over `post_max_size`.
+  A picture over `upload_max_filesize` but under `post_max_size` fails
+  for another cause, reported separately
+  ([U09-A18-picture-over-upload-limit-server-error.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U09-A18-picture-over-upload-limit-server-error.md)).
 - Any other HTTP exception that reaches the renderer (a wrong method, a
   missing route) answers 500 instead of its own status. Code only, not
   driven.
