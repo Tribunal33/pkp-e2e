@@ -25,11 +25,11 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U21](../specs/U21-submission-wizard.md) | 16 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | **In progress: workstation issues session (slot s1), 2026-09-30** |
-| [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 |  |
-| [U53](../specs/U53-users-management.md) | 15 | 2 | 4 |  |
-| [U47](../specs/U47-media-files.md) | 7 | 2 | 4 |  |
-| [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 |  |
-| [U17](../specs/U17-sections.md) | 16 | 2 | 2 |  |
+| [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 | **In progress: issues session s3, 2026-09-30** |
+| [U53](../specs/U53-users-management.md) | 15 | 2 | 4 | **In progress: issues session s3, 2026-09-30** |
+| [U47](../specs/U47-media-files.md) | 7 | 2 | 4 | **In progress: issues session s3, 2026-09-30** |
+| [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **In progress: issues session s3, 2026-09-30** |
+| [U17](../specs/U17-sections.md) | 16 | 2 | 2 | **In progress: issues session s3, 2026-09-30** |
 | [U59](../specs/U59-hosted-journals.md) | 9 | 2 | 2 |  |
 | [U62](../specs/U62-plugins-management.md) | 8 | 2 | 2 |  |
 | [U71](../specs/U71-internal-review-stage.md) | 6 | 2 | 2 |  |
