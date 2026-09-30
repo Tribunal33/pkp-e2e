@@ -1795,7 +1795,7 @@ server-built URN except `customId`) computes over the whole URN, per the
 algorithm its comment cites. Both run the same conversion table; for
 `urn:nbn:de:0000-abc` the suffix-only digit is 0 and the whole-URN
 digit 2 (worked with both routines, 2026-09-24). Live-probed 2026-09-24 (note q8).
-Issue report: [docs/issues/U44-A6-urn-check-number-wrong-digit.md](../issues/U44-A6-urn-check-number-wrong-digit.md).
+Issue report: [pkp-e2e#54](https://github.com/jardakotesovec/pkp-e2e/issues/54) ([docs/issues/U44-A6-urn-check-number-wrong-digit.md](../issues/U44-A6-urn-check-number-wrong-digit.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `urnSuffixEdit.tpl` includes `urnAssignCheckBox.tpl` with
