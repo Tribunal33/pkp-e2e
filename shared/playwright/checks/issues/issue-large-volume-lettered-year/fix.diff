@@ -1,0 +1,25 @@
+--- a/controllers/grid/issues/form/IssueForm.php
++++ b/controllers/grid/issues/form/IssueForm.php
+@@ -34,6 +34,9 @@
+ 
+ class IssueForm extends Form
+ {
++    /** The largest volume or year the issues table can store (SMALLINT) */
++    public const MAX_SMALLINT = 32767;
++
+     /** @var Issue current issue */
+     public $issue;
+ 
+@@ -48,6 +51,12 @@
+ 
+         $form = $this;
+         $this->addCheck(new \PKP\form\validation\FormValidatorRegExp($this, 'volume', 'optional', 'editor.issues.volumeRequired', '/^[0-9]+$/i'));
++        $this->addCheck(new \PKP\form\validation\FormValidatorRegExp($this, 'year', 'optional', 'editor.issues.yearRequired', '/^[0-9]+$/'));
++        foreach (['volume', 'year'] as $field) {
++            $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, $field, 'optional', 'validator.max.numeric', function ($value) {
++                return !ctype_digit((string) $value) || (int) $value <= self::MAX_SMALLINT;
++            }, [], false, ['max' => self::MAX_SMALLINT]));
++        }
+         $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'showVolume', 'optional', 'editor.issues.volumeRequired', function ($showVolume) use ($form) {
+             return !$showVolume || $form->getData('volume') ? true : false;
+         }));
