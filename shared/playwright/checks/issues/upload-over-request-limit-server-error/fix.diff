@@ -1,27 +1,6 @@
-diff -ru a/lib/pkp/classes/core/PKPApplication.php b/lib/pkp/classes/core/PKPApplication.php
---- a/lib/pkp/classes/core/PKPApplication.php	2026-09-30 21:07:50.295883246 +0000
-+++ b/lib/pkp/classes/core/PKPApplication.php	2026-09-30 21:07:50.336375749 +0000
-@@ -761,7 +761,15 @@
- }
- 
- define('REALLY_BIG_NUMBER', 10000);
--define('UPLOAD_MAX_FILESIZE', trim(ini_get('upload_max_filesize')));
-+// The largest file one upload request can carry: PHP's upload_max_filesize,
-+// or post_max_size when that is smaller (the request also carries the form)
-+define('UPLOAD_MAX_FILESIZE', (function (): string {
-+    $fileMax = trim(ini_get('upload_max_filesize'));
-+    $postMax = trim(ini_get('post_max_size'));
-+    return ini_parse_quantity($postMax) > 0 && ini_parse_quantity($postMax) < ini_parse_quantity($fileMax)
-+        ? $postMax
-+        : $fileMax;
-+})());
- 
- define('WORKFLOW_STAGE_ID_PUBLISHED', 0); // FIXME? See bug #6463.
- define('WORKFLOW_STAGE_ID_SUBMISSION', 1);
-diff -ru a/lib/pkp/classes/core/PKPExceptionHandler.php b/lib/pkp/classes/core/PKPExceptionHandler.php
---- a/lib/pkp/classes/core/PKPExceptionHandler.php	2026-09-30 21:07:50.295763164 +0000
-+++ b/lib/pkp/classes/core/PKPExceptionHandler.php	2026-09-30 21:07:50.336054022 +0000
-@@ -18,9 +18,11 @@
+--- a/lib/pkp/classes/core/PKPExceptionHandler.php
++++ b/lib/pkp/classes/core/PKPExceptionHandler.php
+@@ -18,9 +18,12 @@
  
  use APP\core\Application;
  use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -30,10 +9,11 @@ diff -ru a/lib/pkp/classes/core/PKPExceptionHandler.php b/lib/pkp/classes/core/P
  use Illuminate\Support\Facades\Log;
  use PKP\config\Config;
 +use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
++use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  use Throwable;
  
  class PKPExceptionHandler implements ExceptionHandler
-@@ -66,13 +68,23 @@
+@@ -66,6 +69,32 @@
                      ->json($exception->errors(), $exception->status);
              }
  
@@ -45,18 +25,24 @@ diff -ru a/lib/pkp/classes/core/PKPExceptionHandler.php b/lib/pkp/classes/core/P
 +                ], $exception->getStatusCode());
 +            }
 +
++            // An address that none of the API's routes matches: answer it as
++            // APIHandler::runRoutes() and APIRouter::route() do, in the app's words
++            if ($exception instanceof NotFoundHttpException) {
++                return response()->json([
++                    'error' => __('api.404.endpointNotFound'),
++                ], Response::HTTP_NOT_FOUND);
++            }
++
++            // Any other HTTP exception keeps its own status and headers
++            // (a 405 its Allow header); getCode() is 0 for these
++            if ($exception instanceof HttpExceptionInterface) {
++                return response()->json(
++                    ['error' => $exception->getMessage()],
++                    $exception->getStatusCode(),
++                    $exception->getHeaders()
++                );
++            }
++
              return response()->json(
                  [
                      'error' => $exception->getMessage()
-                 ],
--                in_array($exception->getCode(), array_keys(Response::$statusTexts))
--                    ? $exception->getCode()
--                    : Response::HTTP_INTERNAL_SERVER_ERROR
-+                $exception instanceof HttpExceptionInterface
-+                    ? $exception->getStatusCode()
-+                    : (in_array($exception->getCode(), array_keys(Response::$statusTexts))
-+                        ? $exception->getCode()
-+                        : Response::HTTP_INTERNAL_SERVER_ERROR)
-             );
-         }
- 

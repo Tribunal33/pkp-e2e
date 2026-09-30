@@ -881,7 +881,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A Layout Editor, or anyone without "Permissions", is offered every "Media" action, and the server refuses each change | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A3](#a3) | The empty "Upload Media File" window lists a button "Drop files here to upload" for screen readers that nothing on screen shows | 🐞 | minor | — |
-| [A4](#a4) | A file over the request size limit fails with a server error; its card reads "The POST data is too large." | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A4](#a4) | A file over the request size limit fails with a server error; its card reads "The POST data is too large." | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, unsaved, until a reload | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | invisible | — |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | minor | — |
@@ -938,7 +938,7 @@ offered a control the page does not show.
 Basis: probe, 2026-09-24. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A file over the request size limit fails with a server error** · 🐞 · medium · crash: server.
+**A4 — A file over the request size limit fails with a server error** · 🐞 · low · crash: server.
 A file larger than the server takes in one request (PHP's
 `post_max_size`) fails on the server: its card on "Upload Media File"
 reads "The POST data is too large." instead of the app's own size

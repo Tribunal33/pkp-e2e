@@ -1,4 +1,6 @@
 // Issue report walk: docs/issues/U36-A21-upload-over-request-limit-server-error.md
+// (the server error) and, PART=panel, docs/issues/U36-A21-files-panel-limit-ignores-request-limit.md
+// (the Files panel's limit)
 // (spec U36 register A21, U47 A4). Takes the report's Steps through the
 // screens on PKP's default test dataset (a dataset fleet, harness.md "Dataset
 // fleets"), on its own context `publicknowledge`, as its own users. The kit
@@ -34,7 +36,9 @@
 // shipped limits (U 2M, P 8M), with the fix in and out: F1 (exactly U) is
 // stored, M2 (over U, under P) keeps its 400 "Files larger than 2MB can not be
 // uploaded.", F2 is refused in the browser as before.
-// Fix trial:    node bin/try-fix.js apply shared/playwright/checks/issues/upload-over-request-limit-server-error/fix.diff ojs omp ops
+// Fix trial:    both reports' fix.diff were tried together, as one diff:
+//               cat shared/playwright/checks/issues/{upload-over-request-limit-server-error,files-panel-limit-ignores-request-limit}/fix.diff > /tmp/a21-both.diff
+//               node bin/try-fix.js apply /tmp/a21-both.diff ojs omp ops
 //               (reset, the runs above with PROBE_RUN=fixeq / fixstock), then node bin/try-fix.js revert ojs omp ops
 // Step 2 of the panel steps ("Start A New Submission") is taken by opening its
 // address, /index.php/publicknowledge/en/submission.

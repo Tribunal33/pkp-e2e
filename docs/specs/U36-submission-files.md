@@ -1014,7 +1014,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | Step 2 reopened from step 3 offers "Complete" but shows "File Added" again instead of closing | 🐞 | minor | — |
 | [A19](#a19) | In "Upload/Select Files", another stage's files refuse their "More Information", "Edit" and "Delete" | 🐞 | minor | — |
 | [A20](#a20) | The reviewer's "Review Files" search keeps every file | 🐞 | minor | — |
-| [A21](#a21) | A file over the server's request size limit fails with a server error and "The POST data is too large." | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A21](#a21) | The submission wizard's Files panel accepts files larger than the server can take, then fails | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A23](#a23) | Revising a file, a second pick on step 1 and then "Cancel" leave the first pick as the file instead of the original | 🐞 | minor | — |
 | [A24](#a24) | One file revised in two windows: the first window's "Cancel" does nothing, and the file keeps the upload cancelled there | 🐞 | minor | — |
 | [A25](#a25) | An author's "Cancel upload" pressed after the whole file has been sent keeps the file in the submission | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1238,29 +1238,25 @@ windows for a reviewer's request narrows the list.
 Basis: probe. <sup>[f-a20](#fn-a20)</sup>
 
 <a id="a21"></a>
-**A21 — A file over the server's request size limit fails with a server error and "The POST data is too large."** · 🐞 · medium · crash: server.
-An author adding a file in the submission wizard's "Files" panel, or an
-editor adding one in a publication's "Upload Media File" window, can
-choose a file larger than PHP's `post_max_size`, the largest request the
-server accepts. The app then fails on the server with a 500. The file's
-row in the Files panel, or its card in the media window, reads "The
-POST data is too large." in English whatever the site's language, and
-nothing is stored. On the media window, a file that is only over
-`upload_max_filesize` gets the app's own message with the limit instead
-("Files larger than 2MB can not be uploaded.", 2 MB being PHP's shipped
-`upload_max_filesize`).
-The refusal itself is not new: 3.4 and 3.3 also refused such a file
-without naming a limit, with "No file to be uploaded could be found
-with the request." but no server error. The server error and the
-framework's English message came with 3.5.
-On the media window every file over `post_max_size` does this (8 MB on
-PHP's shipped settings). In the submission wizard the panel refuses in
-the browser any file over `upload_max_filesize`, so the fault needs an
-install whose `post_max_size` is not larger than `upload_max_filesize`.
-There the panel accepts files the server cannot take. When the two
-limits are equal, even a file of exactly the panel's limit fails,
-because the request also carries the form's fields.
-Same fault: [Media files' A4](U47-media-files.md#a4) (the media window's file card).
+**A21 — The submission wizard's Files panel accepts files larger than the server can take, then fails** · 🐞 · medium.
+The submission wizard's "Files" panel refuses in the browser any file
+over PHP's `upload_max_filesize` ("File is too big (9MiB). Max filesize:
+8MiB."). The server also refuses any request over `post_max_size`, and a
+request carries the file and the form's fields. On an install whose
+`post_max_size` is no larger than `upload_max_filesize`, the panel
+therefore lets through files the server cannot take. Every file between
+the two limits fails after it is sent, and when the limits are equal,
+a file of exactly the panel's limit fails too.
+The author is refused with a message that names no limit: on 3.5 and
+`main` a server error, "The POST data is too large." ([a separate
+report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U36-A21-upload-over-request-limit-server-error.md)),
+and on 3.4 and 3.3 "No file to be uploaded could be found with the
+request.". The author has been told a larger size is allowed and cannot
+tell which size will pass.
+PHP ships with `upload_max_filesize` 2M and `post_max_size` 8M, where
+this does not happen. An install lands in it when an administrator
+raises `upload_max_filesize` without raising `post_max_size` above it.
+The server error such a file ends in, which the media window meets too ([Media files' A4](U47-media-files.md#a4)), is a separate fault with its own report.
 Basis: probe, 2026-09-30. <sup>[f-a21](#fn-a21)</sup>
 
 <a id="a22"></a>
@@ -2343,7 +2339,8 @@ POST to `…/api/v1/submissions/{id}/files` answered 500, the server log reading
 "POST Content-Length of 104857994 bytes exceeds the limit of 104857600 bytes":
 the form fields push the request past the limit the panel's size check
 compares against.
-Issue report: [pkp-e2e#43](https://github.com/jardakotesovec/pkp-e2e/issues/43) ([docs/issues/U36-A21-upload-over-request-limit-server-error.md](../issues/U36-A21-upload-over-request-limit-server-error.md)).
+Issue report (the panel's limit): [docs/issues/U36-A21-files-panel-limit-ignores-request-limit.md](../issues/U36-A21-files-panel-limit-ignores-request-limit.md).
+Issue report (the server error): [pkp-e2e#43](https://github.com/jardakotesovec/pkp-e2e/issues/43) ([docs/issues/U36-A21-upload-over-request-limit-server-error.md](../issues/U36-A21-upload-over-request-limit-server-error.md)).
 
 <a id="fn-a22"></a>
 **f-a22** — Note y: `add()` logs `submission.event.fileRevised` on the
