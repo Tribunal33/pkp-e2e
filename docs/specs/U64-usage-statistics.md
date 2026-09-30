@@ -2428,7 +2428,7 @@ its `catalog/download/{book}/{format}/{file}?inline=1` answering 500
 and the page's script failing with "PDFJS is not defined" and
 "UnexpectedResponseException". Neither wrote a line to the day's usage
 log; the HTML format wrote one. The same failure is U20's OMP6.
-Issue report: [docs/issues/U69-A9-omp-book-files-fail-to-open.md](../issues/U69-A9-omp-book-files-fail-to-open.md).
+Issue report: [pkp-e2e#38](https://github.com/jardakotesovec/pkp-e2e/issues/38) ([docs/issues/U69-A9-omp-book-files-fail-to-open.md](../issues/U69-A9-omp-book-files-fail-to-open.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — fn-e (OPS `StatsHandler::addSectionFilters()`,
