@@ -2182,7 +2182,7 @@ Issue report: [pkp-e2e#55](https://github.com/jardakotesovec/pkp-e2e/issues/55) 
 
 <a id="fn-f-a21"></a>
 **f-a21** — `SubscriptionForm` checks each date's presence and range (note h) but not their order. Live-probed 2026-09-25 (td11): start 2026-12-01, end 2026-01-01, saved and listed so.
-Issue report: [docs/issues/U51-A21-subscription-end-before-start-saved.md](../issues/U51-A21-subscription-end-before-start-saved.md).
+Issue report: [pkp-e2e#60](https://github.com/jardakotesovec/pkp-e2e/issues/60) ([docs/issues/U51-A21-subscription-end-before-start-saved.md](../issues/U51-A21-subscription-end-before-start-saved.md)).
 
 <a id="fn-f-a22"></a>
 **f-a22** — `SubscriptionDAO::applySearchFilters()` maps given name, family name, username and email to columns; the institutional fields have no mapping (`default => null`), so the filter is dropped. Membership, reference number and notes are mapped there, yet the screen returned the whole list for them too. Live-probed 2026-09-25 (td10), on two journals, "contains" and "is".
