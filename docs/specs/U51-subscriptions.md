@@ -2102,7 +2102,7 @@ Issue report: [pkp-e2e#11](https://github.com/jardakotesovec/pkp-e2e/issues/11) 
 
 <a id="fn-f-a14"></a>
 **f-a14** — `galley_link.tpl` leaves a non-PDF galley unlocked under `$restrictOnlyPdf`; `ArticleHandler::userCanViewGalley()` lets a non-PDF galley through only inside the `purchaseArticleEnabled() || membershipEnabled()` branch, and `IssueHandler::userCanViewGalley()` inside `purchaseIssueEnabled() || membershipEnabled()` (note e). Live-probed 2026-09-25 (td23).
-Issue report: [docs/issues/U51-A14-restrict-only-pdf-html-galley-refused.md](../issues/U51-A14-restrict-only-pdf-html-galley-refused.md).
+Issue report: [pkp-e2e#51](https://github.com/jardakotesovec/pkp-e2e/issues/51) ([docs/issues/U51-A14-restrict-only-pdf-html-galley-refused.md](../issues/U51-A14-restrict-only-pdf-html-galley-refused.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — `manager.subscriptionPolicies.xMonths` "{$x} Months" and `.xWeeks` "{$x} Weeks" (OJS `locale/en/manager.po`) serve every count from 1, in `AccessForm` and `SubscriptionPolicyForm`. Live-probed 2026-09-25 (td4, td14).
@@ -2116,7 +2116,7 @@ Issue report: [pkp-e2e#40](https://github.com/jardakotesovec/pkp-e2e/issues/40) 
 
 <a id="fn-f-a18"></a>
 **f-a18** — The article page lists the file under "Additional Files" through the supplementary link (`a.obj_galley_link_supplementary`), which keeps the file glyph where a restricted galley link gets the padlock; `ArticleHandler::download()` refuses it like any galley (note e). Live-probed 2026-09-25 (td6).
-Issue report: [docs/issues/U51-A18-additional-file-no-padlock.md](../issues/U51-A18-additional-file-no-padlock.md).
+Issue report: [pkp-e2e#52](https://github.com/jardakotesovec/pkp-e2e/issues/52) ([docs/issues/U51-A18-additional-file-no-padlock.md](../issues/U51-A18-additional-file-no-padlock.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19** — `galley_link.tpl` prints `reader.purchasePrice` whenever a fee and a currency are passed; `article_details.tpl`, `article_summary.tpl` and `issue_toc.tpl` pass the journal's saved `purchaseArticleFee` / `purchaseIssueFee` without asking whether payments are configured, while the purchase itself needs `purchaseArticleEnabled()` / `purchaseIssueEnabled()` (note o). Live-probed 2026-09-25 (td6, td8).
