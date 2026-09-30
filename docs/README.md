@@ -53,8 +53,8 @@ Read in this order:
    template for each subagent role plus the shared Frame (`frame.md`) and
    digest block (`digest-block.md`); the orchestrator fills the slots.
 2. `docs/process/TEMPLATE.md`: how a spec is written, section by section;
-   `docs/process/REPORT.md`: how a regression or defect report handed to
-   the team is written.
+   `docs/process/REPORT.md`: how a regression or defect report, or a
+   GitHub issue, handed to the team is written, and the severity and effort scales.
 3. `docs/process/PRINCIPLES.md`: the rules every test follows.
 4. `docs/process/harness.md`: how the Playwright harness is laid out and run.
    Then `patterns.md` (conventions and pitfalls), `scenarios.md` (seeding

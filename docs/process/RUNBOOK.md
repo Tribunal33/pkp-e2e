@@ -112,7 +112,7 @@ orchestrator.
 | Process friction | `docs/tracking/friction.md`, one line, appended by the screen-driving agent itself |
 | Build blockers and any app-code change | `docs/tracking/app-changes.md`, orchestrator only |
 | Builder parity | `docs/tracking/parity-ledger.md` |
-| A write-up for the team | `docs/reports/`, in the shape of `REPORT.md` (impact, steps, cause, proposed fix, evidence last), deleted once acted on; the register footnote keeps the pointer |
+| A write-up for the team | `docs/reports/`, in the shape of `REPORT.md` (severity, summary, impact, steps, cause, proposed fix, evidence last), deleted once acted on; the register footnote keeps the pointer |
 | Process learnings | this file, TEMPLATE, PRINCIPLES or a brief template, through maintainer review; never a spec |
 | Anything resolved | deleted; git keeps it. Tracking files hold what is open, and anything outside its canonical home is one sentence plus a link |
 

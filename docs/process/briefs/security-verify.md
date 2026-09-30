@@ -25,7 +25,7 @@ Any agent may write the file; the quarantine is about where content goes, not wh
 ## SEC-YYYYMMDD-<slug> — one-line problem statement
 status: unverified | verified YYYY-MM-DD
 where: <app(s) · screen · role>
-impact: <one or two sentences for someone who runs a journal: who can see or do what they should not, what that reaches, and the severity in one word>
+impact: <one or two sentences for someone who runs a journal: who can see or do what they should not, what that reaches, and the severity word from `docs/process/REPORT.md` "Severity">
 steps: <the preconditions in one line (fresh install, the roles and data a person creates), then numbered steps with the names as they appear on screen; where only a request shows it, that one request and its response>
 observed: <what was actually seen, on-screen strings verbatim>
 cause: <the class and method, and why, when traced; otherwise "not traced">

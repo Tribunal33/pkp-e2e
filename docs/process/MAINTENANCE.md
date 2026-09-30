@@ -208,9 +208,11 @@ The apps move; the suite follows. The baselines live in
    databases before it is a finding. A confirmed regression, and a
    finding that contradicts the linked issue's stated intention, gets a
    report under `docs/reports/<date>-<repo>-<pr>.md` in the shape of
-   `docs/process/REPORT.md`: impact in plain words first, then steps a
-   person follows on a fresh install with expected and observed verbatim,
-   the cause, a proposed fix, and the evidence last. The report is
+   `docs/process/REPORT.md`: the severity and a Summary that carries the
+   problem, impact in plain words, then steps a person follows through
+   the screens on a fresh install with expected and observed verbatim,
+   the root cause, a proposed fix that addresses it with its effort,
+   and the evidence last. The report is
    posted into the session's thread as a file the same day, in a post that
    tags @beaug and @jarda.kotesovec (no direct messages, maintainer
    2026-09-29; the tag is the upstream session's alone: a PR check or
