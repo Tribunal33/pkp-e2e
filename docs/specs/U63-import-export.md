@@ -1066,6 +1066,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U63-A4-users-import-refused-password-creates-account.md`):
     a users file with a plain password shorter than the site's minimum,
     the user named in the results and no account created
+  - the guard for A6 (Rule 8; issue report
+    `docs/issues/U63-A6-upload-file-keyboard-unreachable.md`): on the
+    Native XML "Import" tab, Tab from the tab's name reaching "Upload
+    File", and Enter there opening the computer's file picker
   - the guard for A7 (Rule 9; issue report
     `docs/issues/U63-A7-import-results-tab-imports-again.md`): a file
     imported, then the "Import" tab and the "Import Results" tab chosen
@@ -1229,8 +1233,8 @@ unless an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | Opening the address of a tool the installation lacks shows the tool list as raw JSON | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A4](#a4) | A users import says a user with a short or empty password "has not been imported", yet creates the account | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A5](#a5) | The daily DOAJ deposit of one journal also takes other journals' articles that read "Needs Sync" | 🐞 | latent | — |
-| [A6](#a6) | The Native XML "Import" tab's "Upload File" cannot be reached with the keyboard | 🐞 | minor | — |
+| [A5](#a5) | One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
+| [A6](#a6) | Keyboard users cannot choose a file in Native XML import, authors' revision uploads and other legacy upload forms | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
 | [A7](#a7) | Going back to an earlier Native XML "Import Results" tab imports the file again, duplicating submissions and published articles | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | Importing a file the app itself exported lists "Errors occured:" under the success text, and into another context makes every contributor an "Author" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A9](#a9) | Native XML import of an article whose section the journal lacks leaves a broken submission and empties the export list | 🐞 | medium · crash: both | issues (claude), 2026-09-30 — re-verified |
@@ -1244,7 +1248,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | A users file with an empty or unreadable role date stops part-way: the server fails, the tab stays empty, the user gets no role | 🐞 | user-visible · crash: server | — |
 | [OJS1](#ojs1) | Pressing an issue in the DOAJ Articles list opens its window headed "DOI Plugin Settings" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [OJS2](#ojs2) | With "DOAJ Plugin" switched off, the Plugins list still offers the DOAJ tool, whose link shows raw JSON | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [OJS3](#ojs3) | Once "NLM Title Abbreviation" is saved empty, the PubMed file's journal title is empty | 🐞 | minor | — |
+| [OJS3](#ojs3) | PubMed files carry an empty journal title once a manager saves "NLM Title Abbreviation" empty | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OJS4](#ojs4) | Where NLM's site cannot be reached, every PubMed export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [OJS5](#ojs5) | The PubMed and DOAJ Settings forms' "Cancel" keeps the change for the next "Save", and both say fields are required when none is | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OJS6](#ojs6) | On PostgreSQL, the DOAJ Articles list's title and author search is case-sensitive | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
@@ -1291,22 +1295,40 @@ the import takes those without the length check. {OJS OMP}
 Since: 2018-04-30 · Basis: probe, 2026-09-30. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — The daily DOAJ deposit reaches into other journals** · 🐞 · latent.
-The daily deposit of Rule 43 should send DOAJ the articles of the one
-journal whose API key it uses. Its selection of articles that read
-"Needs Sync" ignores the journal, the article's published state and
-its versions, so on an installation where several journals use DOAJ,
-one journal's daily run also sends every other journal's "Needs Sync"
-articles under its own key. {OJS}
-Since: 2025-10-07 · Basis: code. <sup>f-a5</sup>
+**A5 — One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own** · 🐞 · high.
+On an installation that hosts several journals, the daily automatic
+DOAJ deposit of a journal also takes the articles of other journals
+whose DOAJ status reads "Needs Sync". It sends them to DOAJ with its
+own API key and as its own articles: under its own journal name and
+ISSNs, with a link built on its own address, where the article does not
+exist and the site shows "not found". The article's own journal sent
+nothing, yet its DOAJ list now reads "Submitted".
+Nobody is told, and the article's journal has no setting that prevents
+it. Where the article already has a DOAJ record, the run first asks
+DOAJ to delete that record, with the depositing journal's key.
+An article reads "Needs Sync" once it has been deposited to DOAJ (or
+marked as deposited) and its current version is then unpublished,
+published again or replaced by a newly published version. {OJS}
+Since: 2025-10-07 · Basis: probe, 2026-09-30. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — "Upload File" is out of the keyboard's reach** · 🐞 · minor.
+**A6 — Keyboard users cannot choose a file in Native XML import, authors' revision uploads and other legacy upload forms** · 🐞 · high.
 On the Native XML Plugin's "Import" tab, the Tab key should stop on
-"Upload File"; it skips the button and the box and goes straight to
-"Import", so a manager who works without a mouse cannot choose a file
+"Upload File". Instead it skips the button and the box and goes straight
+to "Import", so a manager who works without a mouse cannot choose a file
 to import.
-Basis: probe. <sup>f-a6</sup>
+The same happens in every legacy upload form, the ones built on the
+shared "Drag and drop a file here to begin upload" box. These include
+the "Upload File" window that a submission's workflow file lists open,
+where an author uploads revisions and editors upload files at every
+stage. They also include the Users XML import, plugin upload, library
+files, issue cover images and galleys, series cover images and profile
+images. The author's "Start A New Submission" wizard uses a newer upload
+control, which the keyboard reaches.
+Keyboard users have no way round: only a mouse click or a dropped file
+chooses one. The keyboard reached the button until a 2018 library
+upgrade, first released in 3.1.2.
+Since: 2018-10-22 · Basis: probe, 2026-09-30. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — Going back to an earlier Native XML "Import Results" tab imports the file again, duplicating submissions and published articles** · 🐞 · high.
@@ -1532,11 +1554,19 @@ release has it yet.
 Since: 2025-10-04 · Basis: probe, 2026-09-30. <sup>f-ojs2</sup>
 
 <a id="ojs3"></a>
-**OJS3 — An empty NLM title empties the PubMed file's journal title** · 🐞 · minor.
-Clearing "NLM Title Abbreviation" and pressing "Save" should bring back
-the journal's name in the PubMed file, as before the box was first
-saved; instead every later file's journal title is empty.
-Basis: probe. <sup>f-ojs3</sup>
+**OJS3 — PubMed files carry an empty journal title once a manager saves "NLM Title Abbreviation" empty** · 🐞 · medium.
+A journal manager opens the PubMed XML Export Plugin and presses "Save" on
+its "Settings" tab while "NLM Title Abbreviation" is empty. That happens
+when they clear an abbreviation, or when they press "Save" on a first visit
+without typing anything, since the box starts empty. From then on, every
+PubMed file the journal exports has an empty journal title. Before that
+save, the file carries the journal's full name, and the manager would
+expect the same while the box is empty.
+The save says "Your changes have been saved.", and the box looks as it did
+before, so nothing tells the manager that the title is gone. NLM requires
+the journal title in every file PubMed receives. Typing an abbreviation, or
+the journal's name, into the box and saving again brings it back.
+Since: 2025-06-04 (3.5, first released in 3.5.0-1; main 2025-06-24) · Basis: probe, 2026-09-30. <sup>f-ojs3</sup>
 
 <a id="ojs4"></a>
 **OJS4 — PubMed exports depend on NLM's site** · 🐞 · medium · crash: server.
@@ -2536,19 +2566,35 @@ Issue report: [docs/issues/U63-A4-users-import-refused-password-creates-account.
 inside a `when()` on the whole query, so the SQL reads `… AND
 s.context_id = ? AND p.status = 3 … AND pss.setting_value IS NULL OR
 pss.setting_value = 'stale'`: the second branch has none of the other
-conditions. Since ojs `2868948ee8` (pkp/pkp-lib#11589, 2025-10-07).
-The publications path (`getAllDepositablePublications()`) was not
-traced. Seen once on a running install, 2026-09-27, with the daily
-task run by hand: journal X (key saved, box ticked) sent its own "Not
-Deposited" article and journal A's "Needs Sync" article, though A's box
-was unticked; A's DOAJ list then showed that article "Submitted", and
-the failed deposit job for it carried X's key. Not repeated, so the
-entry stays on the code.
+conditions. Since ojs `2868948ee8` (pkp/ojs#5125 for
+pkp/pkp-lib#11589, 2025-10-07). `APP\publication\DAO::getExportable()`
+(`getAllDepositablePublications()`, journals with DOI versioning) has
+the same line, since ojs `b10a6cb667` (pkp/ojs#4985, merged
+2025-10-04); read in the code. Seen once on a running install,
+2026-09-27, with the daily task run by hand: journal X (key saved, box
+ticked) sent its own "Not Deposited" article and journal A's "Needs
+Sync" article, though A's box was unticked; A's DOAJ list then showed
+that article "Submitted", and the failed deposit job for it carried X's
+key. Walked 2026-09-30, OJS main: a new journal with a key and the box
+ticked; `publicknowledge`'s submission 17 marked registered, unpublished
+and published again ("Needs Sync"); the task run with
+`php lib/pkp/tools/scheduler.php test`: submission 17 read "Submitted"
+and one `DOAJRegister` job was queued in the new journal's name, its
+link on the new journal's path (404). On stable-3_5_0 the task queued
+nothing.
+Issue report: [docs/issues/U63-A5-doaj-daily-deposit-takes-other-journals-articles.md](../issues/U63-A5-doaj-daily-deposit-takes-other-journals-articles.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-27, three apps (note e): the "Upload
 File" button carries `tabindex="-1"`, and Tab from the tab strip lands
-first on "Import".
+first on "Import". The attribute is in the shared
+`templates/controllers/fileUploadContainer.tpl`; since pkp-lib
+`3342372300` (plupload 2.1.9 to 2.3.6, 2018-10-22) plupload also takes
+its hidden file input out of the tab order, so nothing in the box takes
+the focus. Walked 2026-09-30, main and stable-3_5_0, three apps, and on
+OJS main the upload window from an author's "Revisions Uploaded" and an
+editor's "Draft Files": Tab from "Article Component" lands on "Cancel".
+Issue report: [docs/issues/U63-A6-upload-file-keyboard-unreachable.md](../issues/U63-A6-upload-file-keyboard-unreachable.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — The results tab's content is loaded by its tab's own
@@ -2716,7 +2762,11 @@ Issue report: [docs/issues/U63-OJS2-doaj-tool-listed-when-doaj-plugin-off.md](..
 **f-ojs3** — Note n (`??` keeps a saved empty string). Live-probed
 2026-09-27: the file text on the export page read
 `<JournalTitle></JournalTitle>` after the box was saved empty (the box
-empty after a reload).
+empty after a reload). Walked 2026-09-30, main and stable-3_5_0: a first
+"Save" with the box untouched empties the title too. Since ojs
+`1e556c9455` (pkp/ojs#4955, main, 2025-06-24) and `c1d5f94e79`
+(pkp/ojs#4918, stable-3_5_0, 2025-06-04).
+Issue report: [docs/issues/U63-OJS3-pubmed-empty-nlm-title-empty-journal-title.md](../issues/U63-OJS3-pubmed-empty-nlm-title-empty-journal-title.md).
 
 <a id="fn-f-ojs4"></a>
 **f-ojs4** — Note n. Live-probed 2026-09-27: `POST
