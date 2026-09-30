@@ -11,7 +11,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U63](../specs/U63-import-export.md) | 24 | 7 | 4 | **In progress: issues session s1, 2026-09-30.** Done: A1, A4, A7, A8 (split in two), A9, A10, A11, A12, A13, A15, A16, OJS2, OJS4+OJS7, OJS6, OJS9, OMP1; OJS1, OJS5 (split in two); in progress: A5, A6; open: OJS3 (A17, A18: open report pkp-lib-13390) |
-| [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Claimed: issues session s1, 2026-09-30** (next after U63) |
+| [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **In progress: issues session s1, 2026-09-30.** Open: all 15 (A14 in progress) |
 | [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 | **Claimed: issues session s1, 2026-09-30** |
 | [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **Claimed: issues session s1, 2026-09-30** |
 | [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 | **Claimed: issues session s1, 2026-09-30** (A15 with U13 A1) |
