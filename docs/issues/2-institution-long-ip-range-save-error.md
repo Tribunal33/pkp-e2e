@@ -20,29 +20,32 @@ characters, such as one with many spaces around "-", and presses "Save"
 on "Add Institution" or "Edit Institution" meets a failure on the server:
 the panel stays open under "An unexpected error has occurred. Please
 reload the page and try again." and nothing says which line is at fault.
+
 Yet each "Save" on "Add Institution" adds the institution without IP
 ranges, and a "Save" on "Edit Institution" keeps only the lines above the
 long one, so the institution loses the ranges it had. The same range saves
-once the extra spaces are removed. Every journal, press and preprint
-server since institutions were introduced, and journals' institutional
-subscriptions before that.
+once the extra spaces are removed.
+
+Every journal, press and preprint server since institutions were
+introduced, and journals' institutional subscriptions before that.
 
 ## Impact
 
-What is lost: on "Edit Institution", the institution's existing IP ranges,
-which decide which visitors an institutional subscription admits (OJS) and
-which visits the usage statistics credit to the institution; on "Add
-Institution", one extra institution without ranges per "Save" pressed. The
-manager is told only that an unexpected error occurred; the duplicates and
-the lost ranges show only after a reload, on "Edit". Who meets it: a
-journal, press or server manager on the Institutions page, in any setup,
-when a line runs past 40 characters, which a valid range reaches only with
-nine or more extra spaces around "-" (the longest range written with single
-spaces is 33 characters), as a list pasted from a spreadsheet or an aligned
-text file may carry. Way round: remove the spaces, delete the duplicate
-rows, retype the lost ranges; nothing gets worse with time. Medium: the
-save fails only on a narrow input and says it failed, though the
-duplicates and the lost ranges it leaves are silent; it would rise if
+- **Lost.** On "Edit Institution", the institution's existing IP ranges,
+  which decide which visitors an institutional subscription admits (OJS)
+  and which visits the usage statistics credit to the institution; on
+  "Add Institution", one extra institution without ranges per "Save". The
+  manager is told only that an unexpected error occurred; the duplicates
+  and the lost ranges show only after a reload, on "Edit".
+- **Who.** A journal, press or server manager on the Institutions page,
+  in any setup, when a line runs past 40 characters: a range padded with
+  extra spaces around "-", as a list pasted from a spreadsheet or an
+  aligned text file may carry.
+- **Way round.** Remove the spaces, delete the duplicate rows, retype the
+  lost ranges. Nothing gets worse with time.
+
+Medium: the save fails only on a narrow input and says it failed, though
+the duplicates and the lost ranges it leaves are silent; it would rise if
 padded range lists turned out to be common.
 
 ## Steps to reproduce
@@ -103,25 +106,32 @@ saves and reads back as typed.
 `PKP\institution\DAO::insertIPRanges()` (lib/pkp
 `classes/institution/DAO.php`, the insert at line 243) stores each line,
 trimmed at its ends only, in `institution_ip.ip_string`, a `VARCHAR(40)`
-(`classes/migration/install/InstitutionsMigration.php` line 64). The
-validation it relies on, `PKP\institution\Repository::validate()`
+(`classes/migration/install/InstitutionsMigration.php` line 64).
+
+The validation it relies on, `PKP\institution\Repository::validate()`
 (`classes/institution/Repository.php` lines 124–135), matches a range as
 `…((\s)*[-](\s)*…)`, any run of whitespace around "-", and sets no length.
+The longest range written with single spaces is 33 characters, so a
+valid range runs past 40 only with eight or more extra spaces around "-".
+
 So a line the validator accepts can be longer than the column holds, and
-the insert fails. The rule broken: what validation accepts, the writer
-must be able to store. PostgreSQL raises SQLSTATE 22001 and the request
-answers 500.
+the insert fails: PostgreSQL raises SQLSTATE 22001 and the request
+answers 500. The rule broken: what validation accepts, the writer must
+be able to store.
 
 The failure lands in the middle of a write that is not atomic, which is
 what turns a refused value into lost or duplicated data. `DAO::insert()`
 writes the `institutions` row and its settings (`parent::_insert()`)
 before `insertIPRanges()`; `DAO::update()` writes the row
 (`parent::_update()`), deletes every stored range (`deleteIPRanges()`),
-then inserts the new lines one by one. Neither runs in a transaction, so
-an add keeps the institution without ranges and an edit keeps the new name
-and only the lines before the long one.
+then inserts the new lines one by one.
+
+Neither runs in a transaction, so an add keeps the institution without
+ranges and an edit keeps the new name and only the lines before the long
+one.
 
 Reach:
+
 - `PKPInstitutionController::add()` and `edit()`, the Institutions page's
   two saves and the REST API's `POST` and `PUT`: on screen, all three apps,
   main and 3.5.
@@ -142,8 +152,10 @@ Reach:
 
 ## Proposed fix
 
-A proposal, not tried. Normalize the whitespace in the writer, and make the
-write atomic, both in `PKP\institution\DAO`:
+A proposal, not tried.
+
+Recommended: normalize the whitespace in the writer, and make the write
+atomic, both in `PKP\institution\DAO`.
 
 ```php
 // DAO::insertIPRanges(), in place of `$ipRange = trim($ipRange);`
@@ -152,8 +164,9 @@ $ipRange = preg_replace('/\s+/', ' ', trim($ipRange));
 
 The validator allows whitespace only around "-", so this collapses exactly
 that, and the longest line it accepts becomes
-`255.255.255.255 - 255.255.255.255`, 33 characters, inside the column. And
-wrap the bodies of `DAO::insert()` and `DAO::update()` in
+`255.255.255.255 - 255.255.255.255`, 33 characters, inside the column.
+
+And wrap the bodies of `DAO::insert()` and `DAO::update()` in
 `DB::transaction(function () { … })`, so any failed range insert leaves the
 institution as it was, as the newer multi-table writers do
 (`MediaFilesController`, `PKPEditTaskTemplateController`,
@@ -165,22 +178,32 @@ once, where a validation change would have to be made in both copies of
 the pattern. It keeps the intent of the pattern, which accepts a range
 written with or without spaces; only runs of spaces are stored as one.
 
-Alternatives: a length rule on `ipRanges` items in `Repository::validate()`
-refuses a valid range and leaves OJS's copy of the pattern open; narrowing
-the pattern to one optional space refuses inputs that save today; widening
-`ip_string` needs an upgrade migration and still sets an arbitrary limit.
+**Alternatives:**
 
-What goes with it: an API client sees a padded range read back with single
-spaces, the only change in behavior. No data repair: stored strings already
-fit, and the empty duplicates a failed save left cannot be told apart from
-an institution added without ranges. It applies as written to 3.5 and 3.4;
-a 3.3 backport needs the same line in OJS
-`InstitutionalSubscriptionDAO::_insertSubscriptionIPRanges()` and a
-transaction around `insertObject()` and `updateObject()`. Guard: a pkp-lib
-unit test that adds and edits an institution with a range padded past 40
-characters and reads it back, and the e2e scenario in U66 (a Planned
-item). Small: a few lines in one shared DAO, following the transaction
-pattern the code base already uses, and a unit test.
+- A length rule on `ipRanges` items in `Repository::validate()`: it
+  refuses a valid range and leaves OJS's copy of the pattern open.
+- Narrowing the pattern to one optional space: it refuses inputs that
+  save today.
+- Widening `ip_string`: it needs an upgrade migration and still sets an
+  arbitrary limit.
+
+**What goes with it:**
+
+- API: an API client sees a padded range read back with single spaces,
+  the only change in behavior.
+- No data repair: stored strings already fit, and the empty duplicates a
+  failed save left cannot be told apart from an institution added
+  without ranges.
+- Backport: it applies as written to 3.5 and 3.4; a 3.3 backport needs
+  the same line in OJS
+  `InstitutionalSubscriptionDAO::_insertSubscriptionIPRanges()` and a
+  transaction around `insertObject()` and `updateObject()`.
+- Guard: a pkp-lib unit test that adds and edits an institution with a
+  range padded past 40 characters and reads it back, and the e2e
+  scenario in U66 (a Planned item).
+
+Small: a few lines in one shared DAO, following the transaction pattern
+the code base already uses, and a unit test.
 
 ## Evidence
 
@@ -189,29 +212,32 @@ pattern the code base already uses, and a unit test.
   [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/institution-long-ip-range-save-error/walk.js),
   run with
   `PROBE_FEATURE=issues PROBE_AGENT=ir2 node bin/probe.js all shared/playwright/checks/issues/institution-long-ip-range-save-error/walk.js`
-  (stable-3_5_0: `PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35` in front). The
-  harness builds a new journal, press or preprint server and its manager
-  account; everything else is created on screen. The walk types the
-  Institutions page's address instead of opening it from the side menu.
+  (stable-3_5_0: `PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35` in front).
+  - The harness builds a new journal, press or preprint server and its
+    manager account; everything else is created on screen.
+  - The walk types the Institutions page's address instead of opening it
+    from the side menu.
 - Walked 2026-09-30 on PostgreSQL: main OJS 7ce98ec09e, OMP 3b0ecf794c, OPS
   c8af945bb7 (lib/pkp 3dc90c81a6); stable-3_5_0 OJS 040e916378, OMP
   4f90dadac, OPS 0bb1ca0f6e (lib/pkp 8809a197de). All six showed the
   Observed above, three 500s each; the log line is from the app's error
   log. MySQL not checked.
-- 3.4, by code: pkp-lib `stable-3_4_0` at df13621c2d
-  (`InstitutionsMigration.php` `ip_string` 40, `Repository::validate()` the
-  same pattern, `DAO::insert()`, `update()` and `insertIPRanges()` the same
-  order with no transaction, `PKPInstitutionHandler::convertIpToArray()`),
-  OJS `stable-3_4_0` at 9571d8fde7 (`UserInstitutionalSubscriptionForm`,
-  the same pattern).
-- 3.3, by code: OJS `stable-3_3_0` at 9fdb9bcf9a
-  (`classes/migration/OJSMigration.inc.php`
-  `institutional_subscription_ip.ip_string` 40;
-  `InstitutionalSubscriptionForm` validates with the same pattern;
-  `InstitutionalSubscriptionDAO::insertObject()` writes the subscription
-  before `_insertSubscriptionIPRanges()`, and `updateObject()` deletes the
-  ranges before inserting them, with no transaction). OMP and OPS 3.3 have
-  no institutions.
+- 3.4, by code:
+  - pkp-lib `stable-3_4_0` at df13621c2d: `InstitutionsMigration.php`
+    `ip_string` 40, `Repository::validate()` the same pattern,
+    `DAO::insert()`, `update()` and `insertIPRanges()` the same order
+    with no transaction, `PKPInstitutionHandler::convertIpToArray()`.
+  - OJS `stable-3_4_0` at 9571d8fde7: `UserInstitutionalSubscriptionForm`,
+    the same pattern.
+- 3.3, by code: OJS `stable-3_3_0` at 9fdb9bcf9a. OMP and OPS 3.3 have no
+  institutions.
+  - `classes/migration/OJSMigration.inc.php`
+    `institutional_subscription_ip.ip_string` 40.
+  - `InstitutionalSubscriptionForm` validates with the same pattern.
+  - `InstitutionalSubscriptionDAO::insertObject()` writes the
+    subscription before `_insertSubscriptionIPRanges()`, and
+    `updateObject()` deletes the ranges before inserting them, with no
+    transaction.
 - Introduced: `git blame` on the column, the pattern and the insert in
   pkp-lib main stops at bed0ee4c3b, which created the Institutions classes
   from OJS's subscription code; in OJS, `git log -S` finds the pattern with

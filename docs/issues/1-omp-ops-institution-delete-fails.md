@@ -15,36 +15,34 @@
 
 On a press and a preprint server, "Yes" on an institution's "Delete"
 fails on the server: a window titled "Error" opens, and the institution
-stays listed, after a reload too. Removing such a press or preprint
-server under Administration › "Hosted Presses" ("Hosted Servers") fails
-on the server as well: the "Confirm" window stays open with no message,
-the press stays listed, and it is left half deleted, its roles gone, so
-even the Site Administrator is refused its Settings pages while its
-public site stays up. Nothing on screen gets round either, so an
-institution once added, a mistyped one included, stays for good, and so
-does the press that holds it, on every OMP and OPS version with the
-Institutions page (3.4, 3.5 and main); journals are not affected.
+stays listed, after a reload too.
+
+Removing such a press or preprint server under Administration › "Hosted
+Presses" ("Hosted Servers") fails on the server as well: the "Confirm"
+window stays open with no message, the press stays listed, and it is
+left half deleted, its roles gone, so even the Site Administrator is
+refused its Settings pages while its public site stays up.
+
+Nothing on screen gets round either, so an institution once added, a
+mistyped one included, stays for good, and so does the press that holds
+it, on every OMP and OPS version with the Institutions page (3.4, 3.5
+and main); journals are not affected.
 
 ## Impact
 
-What is lost: a Press Manager (a preprint server's Manager) can never
-remove an institution, and a Site Administrator can never remove a press
-or server that holds one. The failed removal is not undone: the press's
-user groups (every user's role in it) and genres are already deleted
-when the request fails, and so, as read from the code, are its review
-assignments, announcements and highlights. The press stays on the public
-site with nobody able to manage it, the Site Administrator included, and
-its roles cannot be restored from any screen. The institution delete
-says only "Error"; the removal says nothing at all.
-
-Who meets it: only a press or server that uses institutions. The side
-menu offers "Institutions" only while institutional statistics are
-enabled for the site and for the press, and both are off at install;
-every press or server that has added an institution meets both
-failures, on every attempt.
-
-Way round: none on screen. The institution can be renamed but not
-removed, and the press cannot be removed while it holds one.
+- **Lost.** No institution can be removed, nor a press or server that
+  holds one; the delete says only "Error", the removal nothing at all.
+  The failed removal is not undone: every user's role in the press is
+  gone, and it stays on the public site with nobody able to manage it,
+  the Site Administrator included.
+- **Who.** A Press Manager (a preprint server's Manager) and the Site
+  Administrator, on every press or server that has added an
+  institution, on every attempt. The side menu offers "Institutions"
+  only while institutional statistics are enabled for the site and for
+  the press, both off at install.
+- **Way round.** None on screen. The institution can be renamed but not
+  removed, the press cannot be removed while it holds one, and no screen
+  restores its roles.
 
 Medium: two administrative tasks fail with no way round and one of them
 destroys a press's roles, but only on a press or server that uses
@@ -134,10 +132,13 @@ $shouldSoftDelete = DB::table('institutional_subscriptions')
 
 `institutional_subscriptions` is an OJS table (`OJSMigration`); OMP and
 OPS create no such table, so on a press and a preprint server the query
-throws and every delete of an institution fails. The rule it encodes,
-that an institution a subscription names is kept (soft deleted) for
-that subscription, is OJS's own, but it sits unguarded in the shared
-DAO. It came with the Institutions feature itself (`pkp/pkp-lib#6782`,
+throws and every delete of an institution fails.
+
+The rule it encodes, that an institution a subscription names is kept
+(soft deleted) for that subscription, is OJS's own, but it sits
+unguarded in the shared DAO.
+
+It came with the Institutions feature itself (`pkp/pkp-lib#6782`,
 PR `pkp/pkp-lib#8109`), whose own migration touches the same table only
 behind `Schema::hasTable('institutional_subscriptions')`
 (`InstitutionsMigration`, and `I6895_CreateNewInstitutionsTables` in the
@@ -152,18 +153,19 @@ Reach, checked in the code:
 - `PKPContextService::delete()`, behind "Hosted Presses" › "Remove",
   calls `Repo::institution()->deleteMany()` for the context's
   institutions, which calls `DAO::delete()` per institution: fails
-  (driven). The method runs without a transaction. Before it reaches the
-  institutions it has run the `Context::delete::before` hook (on OMP,
-  `APP\services\ContextService::beforeDeleteContext()` writes a
-  publication format tombstone for every published book and deletes the
-  genres) and deleted the context's announcement types, review
-  assignments, user groups, genres, announcements and highlights; those
-  are gone when it throws (user groups and genres checked in the
-  database, the rest read from the code), while the context row, its
-  settings, its institutions, its sections and submissions and
-  everything else deleted after that point remain. A context with no
-  institution never calls `DAO::delete()` and is removed (driven, the
-  control).
+  (driven).
+  - The method runs without a transaction. Before it reaches the
+    institutions it has run the `Context::delete::before` hook (on OMP,
+    `APP\services\ContextService::beforeDeleteContext()` writes a
+    publication format tombstone for every published book and deletes
+    the genres) and deleted the context's announcement types, review
+    assignments, user groups, genres, announcements and highlights.
+  - Those are gone when it throws (user groups and genres checked in the
+    database, the rest read from the code), while the context row, its
+    settings, its institutions, its sections and submissions and
+    everything else deleted after that point remain.
+  - A context with no institution never calls `DAO::delete()` and is
+    removed (driven, the control).
 - No other caller of `Repo::institution()->delete()` or `deleteMany()`
   exists in pkp-lib, OMP, OPS or their bundled plugins, and no other
   query in pkp-lib outside the migrations names an OJS-only table.
@@ -202,7 +204,7 @@ and the context removal both reach the database only through this
 method, it follows the precedent the feature's own migrations set for
 the same table, and OJS's behavior is unchanged.
 
-Alternatives:
+**Alternatives:**
 
 - Move the rule to OJS: an OJS institution DAO or repository that
   overrides `delete()`, bound through OJS's `Repo` facade, as OJS's
@@ -214,19 +216,19 @@ Alternatives:
   `PKPContextService::delete()`: a workaround at two callers that
   leaves the DAO wrong for any plugin that calls it.
 
-What goes with it:
+**What goes with it:**
 
 - No API or hook change: the delete answers 200 as it does on OJS, and
   `Institution::delete::before` and `Institution::delete` fire as they
   do there.
 - Stored data: a press or server already left half deleted can be
-  removed again with "Remove" once the fix is in: `PKPContextService::delete()`
-  re-runs over what is left and completes (read from the code; on OMP
-  the before-delete hook writes its tombstones a second time). No
-  migration is needed.
-  Wrapping `PKPContextService::delete()` in a transaction would stop any
-  later failure there from leaving a context half deleted; that is a
-  separate hardening, not needed for this fix.
+  removed again with "Remove" once the fix is in:
+  `PKPContextService::delete()` re-runs over what is left and completes
+  (read from the code; on OMP the before-delete hook writes its
+  tombstones a second time). No migration is needed.
+- Wrapping `PKPContextService::delete()` in a transaction would stop
+  any later failure there from leaving a context half deleted; that is
+  a separate hardening, not needed for this fix.
 - Backport: the same lines are in `stable-3_5_0` and `stable-3_4_0` of
   pkp-lib, so the diff applies as written.
 - Guard: a test in pkp-lib's institution tests, run under OMP or OPS,
@@ -244,27 +246,30 @@ migration's own check, and a test.
   [`shared/playwright/checks/issues/omp-ops-institution-delete-fails/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-ops-institution-delete-fails/walk.js),
   run with `PROBE_FEATURE=issues PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/omp-ops-institution-delete-fails/walk.js`
   (prefix `PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35` for 3.5), on
-  PostgreSQL. The two presses (servers, journals) were created by the
-  test harness with the site administrator enrolled as their manager, as
-  "Create Press" does, under generated names and paths instead of "Test
-  Press" and `testpress`; every other step went through the screens as
-  written. The walk matched the text; on 3.5 each step showed the same
-  as on main, OMP and OPS failing and OJS passing.
+  PostgreSQL.
+  - The two presses (servers, journals) were created by the test harness
+    with the site administrator enrolled as their manager, as "Create
+    Press" does, under generated names and paths instead of "Test Press"
+    and `testpress`; every other step went through the screens as
+    written.
+  - The walk matched the text; on 3.5 each step showed the same as on
+    main, OMP and OPS failing and OJS passing.
 - The server log line was read from the app's log for both requests;
   both stacks pass through `classes/institution/DAO.php` line 179, the
   removal's through `PKPContextService.php` line 716
   (`Repo::institution()->deleteMany()`).
 - main walked at OJS 7ce98ec09e, OMP 3b0ecf794c, OPS c8af945bb7 (lib/pkp
   3dc90c81a6).
-- Code read on main (lib/pkp 3dc90c81a6): `classes/institution/DAO.php`
-  `delete()`, `classes/institution/Repository.php` `delete()` and
-  `deleteMany()`, `classes/services/PKPContextService.php` `delete()`,
-  `api/v1/institutions/PKPInstitutionController.php` `delete()`,
-  `classes/migration/install/InstitutionsMigration.php`; OJS
-  `classes/migration/install/OJSMigration.php` (the table), OJS
-  `classes/user/Repository.php` (the app-subclass precedent); a search
-  of lib/pkp, OMP, OPS and OJS for callers and for other OJS-only table
-  names outside migrations.
+- Code read on main (lib/pkp 3dc90c81a6):
+  - `classes/institution/DAO.php` `delete()`,
+    `classes/institution/Repository.php` `delete()` and `deleteMany()`,
+    `classes/services/PKPContextService.php` `delete()`,
+    `api/v1/institutions/PKPInstitutionController.php` `delete()`,
+    `classes/migration/install/InstitutionsMigration.php`;
+  - OJS `classes/migration/install/OJSMigration.php` (the table), OJS
+    `classes/user/Repository.php` (the app-subclass precedent);
+  - a search of lib/pkp, OMP, OPS and OJS for callers and for other
+    OJS-only table names outside migrations.
 - Introduced: `git blame` on the query's lines in lib/pkp gives
   bed0ee4c3b (`pkp/pkp-lib#6782 Introduce Institutions`); the line above
   it was only reworded in 98b335d0c0 ("Formatting and typehinting");
@@ -283,15 +288,16 @@ migration's own check, and a test.
   institutions list, and OJS 3.3 keeps an institution's name and ranges
   on the subscription itself.
 - Upstream search, 2026-09-30, pkp/pkp-lib, pkp/omp, pkp/ops and
-  pkp/ui-library, issues and PRs: "institutional_subscriptions",
-  "delete institution", "institution soft delete", "cannot delete
-  institution", "delete press institution", "delete context
-  institution", "institution DAO delete", "hosted press remove error",
-  "institution". Nothing on this fault: `pkp/pkp-lib#8851` and its OMP
-  and OPS PRs fix other institution and statistics code, and
-  `pkp/pkp-lib#12391` (a context removal failing on foreign keys in
-  installs upgraded from 3.3, closed as a duplicate) is another cause of
-  the same "Remove" failure.
+  pkp/ui-library, issues and PRs:
+  - searched for "institutional_subscriptions", "delete institution",
+    "institution soft delete", "cannot delete institution", "delete
+    press institution", "delete context institution", "institution DAO
+    delete", "hosted press remove error", "institution";
+  - nothing on this fault: `pkp/pkp-lib#8851` and its OMP and OPS PRs
+    fix other institution and statistics code, and `pkp/pkp-lib#12391`
+    (a context removal failing on foreign keys in installs upgraded from
+    3.3, closed as a duplicate) is another cause of the same "Remove"
+    failure.
 - Not driven: MySQL; a press whose institution usage statistics are
   collected (the delete fails before any statistics code runs); a press
   with published books, so the tombstones a failed removal writes on OMP

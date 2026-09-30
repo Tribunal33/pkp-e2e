@@ -22,26 +22,32 @@ role created at the manager level, which arrives unticked) is shown
 "Institutions" in the side menu, but pressing it opens "The current role
 does not have access to this operation.". The change that added the
 permission meant these roles to lose only the Settings pages and keep
-Institutions, as they keep Announcements. Such a user cannot maintain the
-institution list, and a manager with the permission has to do it for
-them. Every app since 3.5.
+Institutions, as they keep Announcements.
+
+Such a user cannot maintain the institution list, and a manager with the
+permission has to do it for them.
+
+Every app since 3.5.
 
 ## Impact
 
-What is lost: the use of the Institutions page (adding, editing, deleting
-institutions and their IP ranges) by the roles a journal restricted from
-Settings only; no data is lost, and the refusal is shown plainly. Who
-meets it: an Editor or Production Editor on a journal or press whose
-manager unticked "Permit changes to Settings" for that role, and a member
-of any role created at the manager level on any of the three apps, which
-starts unticked; always, once institutional statistics are on (or, on a
-journal, payments are enabled), because the side menu offers the entry.
-Way round: a manager whose role has the permission maintains the list, or
-ticks the permission, which also opens every Settings page to the role.
-Nothing gets worse with time. Medium: a task the permission's design left
-to these roles fails for them, in a setup that is not the default, with a
-way round on screen; it would be low if the team rules that these roles
-should not have Institutions and only the menu entry is wrong.
+- **Lost.** The use of the Institutions page (adding, editing, deleting
+  institutions and their IP ranges) by the roles a journal restricted
+  from Settings only. No data is lost, and the refusal is shown plainly.
+- **Who.** An Editor or Production Editor whose manager unticked "Permit
+  changes to Settings" for that role, on a journal or press, and a
+  member of any role created at the manager level, which starts
+  unticked, on any of the three apps. Always, once institutional
+  statistics are on (or, on a journal, payments are enabled), because
+  the side menu offers the entry.
+- **Way round.** A manager whose role has the permission maintains the
+  list, or ticks the permission, which also opens every Settings page to
+  the role. Nothing gets worse with time.
+
+Medium: a task the permission's design left to these roles fails for
+them, in a setup that is not the default, with a way round on screen; it
+would be low if the team rules that these roles should not have
+Institutions and only the menu entry is wrong.
 
 ## Steps to reproduce
 
@@ -57,6 +63,8 @@ Preconditions:
 - As Maya: Settings › "Users & Roles" › "Roles", open the "Journal editor"
   ("Press editor") row's arrow, "Edit", untick "Permit changes to
   Settings", "OK".
+
+Journal or press:
 
 1. Sign in as Eddie.
 2. Look at the side menu.
@@ -79,6 +87,8 @@ The current role does not have access to this operation.
 Control: Maya's side menu shows "Institutions" and "Settings", and
 "Institutions" opens the page with "Add Institution".
 
+Preprint server:
+
 On a preprint server, whose one manager role cannot lose the permission,
 the same shows for a role created at the manager level: as Maya, Settings
 › "Users & Roles" › "Roles" › "Create New Role", "Permission level"
@@ -97,7 +107,9 @@ signs in and presses "Institutions": the same refusal.
 `announcements` and `userComments` arguments. The Institutions page is
 the `settings` operation with the argument `institutions`
 (`ManagementHandler::institutions()`), so it asks for "Permit changes to
-Settings". The side menu (`PKPTemplateManager::setupBackendPage()`,
+Settings".
+
+The side menu (`PKPTemplateManager::setupBackendPage()`,
 lines 1329–1336; OJS `TemplateManager::setupBackendPage()`, lines
 206–216, while payments are enabled) offers "Institutions" to every
 manager-level role outside the "Settings" group, which is the only part
@@ -106,8 +118,9 @@ of the menu that `$hasSettingsAccess` hides.
 The rule broken is the permission's own design. `pkp/pkp-lib#5504`
 states it: a role with "Permit changes to Settings" unticked "will have
 access to all other left menu items except 'Settings'", naming
-Announcements, DOIs, Statistics, Tools, Institutions and Payments. The
-change that implemented it, `pkp/pkp-lib#10380`, put the Institutions
+Announcements, DOIs, Statistics, Tools, Institutions and Payments.
+
+The change that implemented it, `pkp/pkp-lib#10380`, put the Institutions
 page behind the settings gate, because its address sits under
 `management/settings`. It exempted Announcements for that same reason
 ("moved out of settings without changing its URL") but not Institutions,
@@ -116,6 +129,7 @@ the settings area. `pkp/pkp-lib#11325` later exempted `userComments` the
 same way.
 
 Reach:
+
 - The side menu's entries outside the "Settings" group that point at a
   `management/settings/…` address are `announcements`, `userComments` and
   `institutions` (checked in the code of the three apps); only
@@ -129,9 +143,10 @@ Reach:
 
 ## Proposed fix
 
-A proposal, not tried. Exempt `institutions` in
-`ManagementHandler::authorize()`, as Announcements and the Comments page
-already are:
+A proposal, not tried.
+
+Recommended: exempt `institutions` in `ManagementHandler::authorize()`,
+as Announcements and the Comments page already are:
 
 ```php
 // The "settings" operation is off limits to managers who don't have access to settings,
@@ -147,25 +162,34 @@ Why here: the handler is where the settings gate and its exemptions
 live, and the exemption list is the code base's own pattern for pages
 that sit outside the Settings menu under a settings address
 (`pkp/pkp-lib#10380` for Announcements, `pkp/pkp-lib#11325` for the
-Comments page). It keeps the intent of `pkp/pkp-lib#5504`, which kept
-Institutions for these roles, and it makes the page agree with the side
-menu of both `PKPTemplateManager` and OJS's `TemplateManager` without
-touching either.
+Comments page).
 
-Alternative: hide the entry from these roles instead, by moving the
-`institutions` block of `PKPTemplateManager::setupBackendPage()` under
-`$hasSettingsAccess` and adding the same test to OJS's payments branch.
-It removes the dead end but takes Institutions from roles the permission
-was designed to leave it to, and needs changes in two repos; the team
-would choose it only if it now wants the institution list treated as a
-setting.
+It keeps the intent of `pkp/pkp-lib#5504`, which kept Institutions for
+these roles, and it makes the page agree with the side menu of both
+`PKPTemplateManager` and OJS's `TemplateManager` without touching
+either.
 
-What goes with it: the three apps share the handler, so one pkp-lib
-change covers them; nothing stored changes and no API or hook changes.
-It applies to 3.5 as written, where the exemption list holds
-`announcements` alone. Guard: an e2e scenario in U66 (a Planned item)
-that unticks the permission on the Journal editor role and has the
-editor open "Institutions" from the side menu and add an institution.
+**Alternatives:**
+
+- Hide the entry from these roles instead, by moving the `institutions`
+  block of `PKPTemplateManager::setupBackendPage()` under
+  `$hasSettingsAccess` and adding the same test to OJS's payments
+  branch. It removes the dead end but takes Institutions from roles the
+  permission was designed to leave it to, and needs changes in two
+  repos; the team would choose it only if it now wants the institution
+  list treated as a setting.
+
+**What goes with it:**
+
+- One change: the three apps share the handler, so one pkp-lib change
+  covers them.
+- Nothing stored changes, and no API or hook changes.
+- Backport: it applies to 3.5 as written, where the exemption list holds
+  `announcements` alone.
+- Guard: an e2e scenario in U66 (a Planned item) that unticks the
+  permission on the Journal editor role and has the editor open
+  "Institutions" from the side menu and add an institution.
+
 Small: one condition in one shared handler, following the exemption
 already there, and an e2e scenario.
 
@@ -176,24 +200,27 @@ already there, and an e2e scenario.
   [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js),
   run with
   `PROBE_FEATURE=issues PROBE_AGENT=ir3 node bin/probe.js all shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js`
-  (stable-3_5_0: `PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35` in front). The
-  harness builds a new journal, press or preprint server with its accounts
-  (the manager, and the editor or, on OPS, an Author); the statistics
-  boxes, the unticked permission, the new role, the invitation and its
-  acceptance are done on screen. The editor's side menu is read on the
-  context's `submissions` page; the walk puts the site's box back
-  afterwards.
+  (stable-3_5_0: `PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35` in front).
+  - The harness builds a new journal, press or preprint server with its
+    accounts (the manager, and the editor or, on OPS, an Author); the
+    statistics boxes, the unticked permission, the new role, the
+    invitation and its acceptance are done on screen.
+  - The editor's side menu is read on the context's `submissions` page;
+    the walk puts the site's box back afterwards.
 - Walked 2026-09-30 on PostgreSQL: main OJS 7ce98ec09e, OMP 3b0ecf794c,
   OPS c8af945bb7 (lib/pkp 3dc90c81a6); stable-3_5_0 OJS 040e916378, OMP
   4f90dadac, OPS 0bb1ca0f6e (lib/pkp 8809a197de). All six showed the
-  Observed above; on 3.5 the side menus read "Editor Dashboard", "Issues"
-  ("Catalog" on OMP, "My Submissions as Author" on OPS), "DOIs",
-  "Institutions", "Statistics", "Tools", with no "Settings". Settings ›
-  Website, typed as the same user, gave the same refusal on every app. The
-  only server error in the walks is the Plugin Gallery's
-  `plugin-gallery-grid/fetch-grid` 500 on Administration › Site Settings,
-  a separate known fault of the test installs, which reach no outside
-  site. The database does not bear on this fault.
+  Observed above.
+  - On 3.5 the side menus read "Editor Dashboard", "Issues" ("Catalog" on
+    OMP, "My Submissions as Author" on OPS), "DOIs", "Institutions",
+    "Statistics", "Tools", with no "Settings".
+  - Settings › Website, typed as the same user, gave the same refusal on
+    every app.
+  - The only server error in the walks is the Plugin Gallery's
+    `plugin-gallery-grid/fetch-grid` 500 on Administration › Site
+    Settings, a separate known fault of the test installs, which reach no
+    outside site.
+  - The database does not bear on this fault.
 - 3.4, by code: pkp-lib `stable-3_4_0` at df13621c2d
   (`ManagementHandler::authorize()` adds `ContextAccessPolicy` only; no
   `CanAccessSettingsPolicy`, no `permitSettings` anywhere), OJS
@@ -206,10 +233,11 @@ already there, and an e2e scenario.
   block of `PKPTemplateManager::setupBackendPage()` in pkp-lib main stops at
   1330ac1283, which added the gate, the Announcements exemption and the
   menu's `$hasSettingsAccess`; the `institutions` menu block is older
-  (2021, Bozana Bokan) and was not changed. The intent is quoted from the
-  "Update" at the top of `pkp/pkp-lib#5504`, and the review discussion from
-  that issue's comment of 2024-10-23. The `userComments` exemption:
-  commit 1346f74dd0, `pkp/pkp-lib#11325`.
+  (2021, Bozana Bokan) and was not changed.
+  - The intent is quoted from the "Update" at the top of
+    `pkp/pkp-lib#5504`, and the review discussion from that issue's
+    comment of 2024-10-23.
+  - The `userComments` exemption: commit 1346f74dd0, `pkp/pkp-lib#11325`.
 - Upstream search 2026-09-30 in pkp/pkp-lib, pkp/ojs, pkp/omp, pkp/ops and
   pkp/ui-library (institutions with settings, access, permit settings,
   menu, editor, "does not have access", `authorizationDenied`;
