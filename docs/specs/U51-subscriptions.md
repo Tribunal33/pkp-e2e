@@ -1436,6 +1436,10 @@ Left out of the scenarios above, by reason:
     that never saved it, "Delayed Open Access" on Settings › Distribution ›
     "Access" reading "Disabled" at first look, and an untouched "Save"
     keeping "Disabled" after a reload
+  - the guard for A15 (issue report
+    `docs/issues/U51-A15-month-week-lists-read-1-months.md`): the first
+    entries of "Delayed Open Access" and the "Subscription Expiry
+    Reminders" lists reading "1 Month" and "1 Week"
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
