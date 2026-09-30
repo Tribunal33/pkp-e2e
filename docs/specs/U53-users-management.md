@@ -1881,7 +1881,7 @@ refuses unless `getAdministrationLevel()` is `FULL` (note n). Live-probed
 **f-a2** — Code read 2026-09-25: note td9. The remove guard is only
 `user.groups.find(g => g.dateEnd === null)` and not-own-row. Live-probed
 2026-09-25: note td9.
-Issue report: [docs/issues/U53-A2-remove-site-administrator-unexplained-error.md](../issues/U53-A2-remove-site-administrator-unexplained-error.md).
+Issue report: [pkp-e2e#48](https://github.com/jardakotesovec/pkp-e2e/issues/48) ([docs/issues/U53-A2-remove-site-administrator-unexplained-error.md](../issues/U53-A2-remove-site-administrator-unexplained-error.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Seen 2026-09-23 (journal-identity claim check K4-3); a reviewer
