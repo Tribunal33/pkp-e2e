@@ -48,7 +48,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 7 | 1 | 1 |  |
 | [U15](../specs/U15-search.md) | 13 | 0 | 6 | OPS2 (❓, not queued work) is named in the U51 OPS1 report |
 | [U70](../specs/U70-catalog-management.md) | 13 | 0 | 5 |  |
-| [U12](../specs/U12-announcements.md) | 8 | 0 | 5 | A11 written with U66 A2 (2026-09-30); the other seven open |
+| [U12](../specs/U12-announcements.md) | 8 | 0 | 5 | A11 written with U66 A2 (2026-09-30); A15 joined to U19 A15 by the workstation session (2026-10-01); the other six open |
 | [U04](../specs/U04-orcid-integration.md) | 7 | 0 | 5 |  |
 | [U10](../specs/U10-appearance-and-theming.md) | 13 | 0 | 4 | A4 written with U09 A15 (issues session s1, 2026-09-30); the other entries are free for another session |
 | [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 | A19 written with U09 A19 (issues session s1, 2026-09-30); the other entries are free for another session |
