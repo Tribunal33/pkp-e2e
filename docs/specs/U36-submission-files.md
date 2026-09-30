@@ -2273,7 +2273,7 @@ A8 saw it from "Copyedited Files" to "Draft Files".
 `status:false` "The current user is not authorized to access the specified
 submission file." (HTTP 200); after "Complete" the list held "change-first.pdf
 … Research Instrument" beside the renamed second file.
-Issue report: [docs/issues/U36-A14-change-file-keeps-first-upload.md](../issues/U36-A14-change-file-keeps-first-upload.md).
+Issue report: [pkp-e2e#64](https://github.com/jardakotesovec/pkp-e2e/issues/64) ([docs/issues/U36-A14-change-file-keeps-first-upload.md](../issues/U36-A14-change-file-keeps-first-upload.md)).
 
 <a id="fn-a15"></a>
 **f-a15** — Note n. Live-probed 2026-09-23 (OJS twice, OMP once): "2. Review
