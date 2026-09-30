@@ -1,0 +1,43 @@
+--- a/lib/ui-library/src/components/Form/Form.vue
++++ b/lib/ui-library/src/components/Form/Form.vue
+@@ -519,7 +519,13 @@
+ 			const newFields = this.fields.map((field) => {
+ 				if (field.name === name) {
+ 					if (localeKey) {
+-						field[prop][localeKey] = value;
++						// Replace the object rather than write into it: it may be a
++						// list row's own value. Only on a real change, since a field
++						// that watches its value (FieldRichTextarea) re-emits it for
++						// every new object.
++						if (field[prop]?.[localeKey] !== value) {
++							field[prop] = {...field[prop], [localeKey]: value};
++						}
+ 					} else {
+ 						field[prop] = value;
+ 					}
+--- a/lib/ui-library/src/components/Form/context/DateTimeForm.vue
++++ b/lib/ui-library/src/components/Form/context/DateTimeForm.vue
+@@ -54,7 +54,9 @@
+ 				if (field.name === name) {
+ 					this.fieldBeforeSetEvent.name = name;
+ 					this.fieldBeforeSetEvent.value = field[prop][localeKey];
+-					field[prop][localeKey] = value;
++					if (field[prop]?.[localeKey] !== value) {
++						field[prop] = {...field[prop], [localeKey]: value};
++					}
+ 				}
+ 
+ 				return field;
+--- a/lib/ui-library/src/components/Form/context/ThemeForm.vue
++++ b/lib/ui-library/src/components/Form/context/ThemeForm.vue
+@@ -18,7 +18,9 @@
+ 				let newFields = this.fields.map((field) => {
+ 					if (field.name === name) {
+ 						if (localeKey) {
+-							field[prop][localeKey] = value;
++							if (field[prop]?.[localeKey] !== value) {
++								field[prop] = {...field[prop], [localeKey]: value};
++							}
+ 						} else {
+ 							field[prop] = value;
+ 						}

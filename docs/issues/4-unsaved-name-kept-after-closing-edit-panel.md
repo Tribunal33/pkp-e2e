@@ -217,7 +217,13 @@ Reach:
 
 ## Proposed fix
 
-A proposal, not tried.
+A proposal, tried on `main` on all three apps
+([fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/fix.diff)):
+with it, the Steps and the Categories, Contributor Roles and Reviewer
+Recommendations checks show the Expected: the abandoned text is dropped
+on close and the next "Save" stores the saved one. Ordinary edits in
+those six panels and in a settings form still save, in English and
+French.
 
 Recommended: make `Form.vue`'s `fieldChanged()` replace a multilingual
 value instead of writing into it, and change the same line in the two
@@ -226,11 +232,19 @@ overrides, `DateTimeForm.vue` and `ThemeForm.vue`:
 ```js
 // src/components/Form/Form.vue, fieldChanged()
 if (localeKey) {
-	field[prop] = {...field[prop], [localeKey]: value};
+	if (field[prop]?.[localeKey] !== value) {
+		field[prop] = {...field[prop], [localeKey]: value};
+	}
 } else {
 	field[prop] = value;
 }
 ```
+
+The check for a real change is needed. `FieldRichTextarea` watches its
+value and emits it again whenever the value is a new object, so without
+the check each emit makes another new object and the page freezes; the
+first try, without it, froze Settings › Website › Setup › Announcements
+on "Save".
 
 `Form.vue` is the one writer every affected panel shares: the three list
 panels and the Categories, Contributor Roles and Reviewer Recommendations
@@ -259,16 +273,17 @@ for a single-language box.
 - No caller relies on the write reaching the original object (every form
   reads its values back through the emitted `set`); no REST API or hook
   changes.
-- Backport: the same line applies as written to 3.5 and 3.4, and to
-  3.3's `Form.vue` (line 404) for Announcements; each app then takes the
-  ui-library update and rebuilds its scripts.
+- Backport: the same change, check included (3.5's `FieldRichTextarea`
+  has the same watcher), applies as written to 3.5 and 3.4, and to 3.3's
+  `Form.vue` (line 404) for Announcements; each app then takes the
+  ui-library update and rebuilds its scripts. Tried on `main` only.
 - Guard: an e2e scenario in U66, U12 and U11 (a Planned item each) that
   changes the name or title, closes the panel, and checks the row and
   the reopened box, and a Storybook play test on one list panel if the
   team wants it in ui-library.
 
-Small: one line in the shared form and the same in its two overrides, in
-one repo.
+Small: a few lines in the shared form and the same in its two overrides,
+in one repo.
 
 ## Evidence
 
@@ -280,6 +295,22 @@ one repo.
   - [reach.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/reach.js),
     the Categories, Contributor Roles and Reviewer Recommendations checks
     of the Reach, `main` only: the same command with `reach.js`.
+  - [neighbour.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/neighbour.js),
+    an ordinary edit with a new English and French name or title in each
+    of those six panels and in Masthead's acronym, then "Save" and a
+    reload: the same command with `neighbour.js`.
+- The fix, tried on `main` with
+  `node bin/try-fix.js apply shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/fix.diff ojs omp ops`
+  (it rebuilds each app's scripts; `node bin/try-fix.js revert ojs omp ops`
+  takes it out), then the three scripts above on a freshly loaded install:
+  - with the fix, walk.js showed the Expected on all three apps (the rows,
+    the reopened boxes and the stored values all "Campus Library", "Call
+    for papers", "Open call"), and reach.js the same for Categories,
+    Contributor Roles and Reviewer Recommendations;
+  - neighbour.js stored every new value, English and French, with the fix
+    and without it.
+  - Not driven with the fix: the date and time formats form
+    (`DateTimeForm.vue`) and the theme options form (`ThemeForm.vue`).
 - Walked 2026-09-30 on PostgreSQL, each install freshly loaded from
   pkp/datasets
   [c0f9f10](https://github.com/pkp/datasets/commit/c0f9f10d529f7dcd018c1a61d7084c16044f0162)
