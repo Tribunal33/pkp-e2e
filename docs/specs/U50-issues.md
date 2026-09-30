@@ -1518,7 +1518,7 @@ Issue report: [pkp-e2e#68](https://github.com/jardakotesovec/pkp-e2e/issues/68) 
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-25 (td14; Rule 26), OJS, eight times over three runs: `issue/view/{id}/999`, `/{id}/nosuch`, `/{urlPath}/999` and another issue's galley each answered 500 with an empty title and body. Server log: "Uncaught TypeError: PKP\core\PKPRequest::redirect(): Argument #4 ($path) must be of type ?array, int given" in `IssueHandler.php`, the unknown-galley redirect of `initialize()` (note x). Code read: `stable-3_5_0` passes the path as a list; not driven there.
-Issue report: [docs/issues/U50-A14-full-issue-wrong-galley-address-empty-page.md](../issues/U50-A14-full-issue-wrong-galley-address-empty-page.md).
+Issue report: [pkp-e2e#71](https://github.com/jardakotesovec/pkp-e2e/issues/71) ([docs/issues/U50-A14-full-issue-wrong-galley-address-empty-page.md](../issues/U50-A14-full-issue-wrong-galley-address-empty-page.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-25 (td16; Settings bullet 1), OJS, two journals: on a journal set to not publish online, "Publish Issue" arrived with the box ticked; "OK" published the issue, queued no job, and after the queue ran no email had arrived and no notification was recorded. `publishIssue()` skips both when `publishingMode == PUBLISHING_MODE_NONE` (note f); `assignPublicIdentifiersForm.tpl` shows the box ticked whatever the mode.
