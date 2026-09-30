@@ -1345,6 +1345,16 @@ Left out of the scenarios above, by reason:
     a signed-out visitor at "Purchase Individual Subscription"'s address,
     on a journal that requires subscriptions and takes payments, lands on
     Login, and after signing in on "Purchase Individual Subscription"
+  - the guard for A27 (issue report
+    `docs/issues/U51-A27-subscription-expiry-reminder-task-fails.md`):
+    a journal requiring subscriptions with "1 Months" set before expiry
+    and one individual subscription ending a calendar month from the run,
+    the reminder task run as the scheduler runs it finishing and the
+    subscriber receiving "Notice of Subscription Expiry"
+  - the guard for A8 (issue report
+    `docs/issues/U51-A8-subscription-expiry-reminders-monthly.md`):
+    the reminder task listed as a daily task by the scheduler, and a run
+    reaching subscriptions ending on several different days of the month
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1441,7 +1451,7 @@ entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A4](#a4) | The email-box refusal sends the manager to "the journal Setup" for fields that are on "Subscription Policies" | 🐞 | minor | — |
 | [A7](#a7) | The issue's table of contents locks galleys the reader can open | 🐞 | minor | — |
-| [A8](#a8) | Expiry reminders run once a month and reach only subscriptions ending on matching days | 🐞 | user-visible | — |
+| [A8](#a8) | Subscription expiry reminders run once a month, so most subscribers never get one | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
 | [A9](#a9) | The individual purchase page refuses a missing membership without saying so | 🐞 | user-visible | — |
 | [A10](#a10) | "Purchase" on an active subscription, saved, takes the reader's access away at once | 🐞 | user-visible | — |
 | [A11](#a11) | Every institutional purchase adds another institution | 🐞 | minor | — |
@@ -1460,7 +1470,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A24](#a24) | "View Available Subscription Types" and "Learn More" lead home while payments are not set up | 🐞 | minor | — |
 | [A25](#a25) | "Purchase" on an active institutional subscription arrives with "IP ranges" reading "Array" | 🐞 | minor | — |
 | [A26](#a26) | The "Subscription" block reads "Expires: {date}" for an inactive subscription | 🐞 | user-visible | — |
-| [A27](#a27) | The expiry-reminder task stops with an error and sends nothing | 🐞 | user-visible · crash: server | — |
+| [A27](#a27) | Subscribers get no expiry reminders: the reminder task stops with an error on every run | 🐞 | high · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A28](#a28) | After a refused "Save", the date boxes show today's date, yet "Save" says the start date is missing | 🐞 | user-visible | — |
 | [OPS1](#ops1) | A preprint server's "Posting Mode" says "Saved" and keeps nothing {OPS} | 🐞 | user-visible | — |
 | [A1](#a1) | "Publishing Mode" shows no choice on a new journal, which publishes as open access | ❓ | minor | — |
@@ -1527,17 +1537,22 @@ padlock and the "Requires Subscription" wording, then open the galley
 when they press it. Basis: probe, 2026-09-25. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — Expiry reminders reach almost nobody** · 🐞 · user-visible.
+**A8 — Subscription expiry reminders run once a month, so most subscribers never get one** · 🐞 · high.
 "Subscription Expiry Reminders" promise an email a set number of months
 or weeks before and after each subscription's end. The task that sends
-them runs on the first day of each month only, and each run looks for
-subscriptions ending on exactly one day (the run's day moved by the
-chosen interval), so a subscription whose end date falls on any other
-day of the month gets none. The task was written for a
-daily run; it has run monthly since 2025-08-13 (a regression, not a
-choice). Today the task fails before sending anything ([A27](#a27));
-this is what remains once that is fixed. Since: 2025-08-13 · Basis:
-commit. <sup>f-a8</sup>
+them is scheduled for the first day of each month only. Each run matches
+one end date per reminder period: the run's own day, moved by the
+months or weeks chosen.
+So with "1 Months" before expiry, only subscriptions ending on the 1st
+of a month, or on one of the few month-end days the task adds on the
+1st, get the notice. Every other subscriber gets none, loses access
+without warning and misses the prompt to renew, and nobody is told.
+On 3.3 this is what journals live with today. On the later versions the
+task currently stops with an error before it sends anything
+("Subscribers get no expiry reminders: the reminder task stops with an
+error on every run"); once that is fixed, this decides who gets a
+notice.
+Since: 2025-08-13 · Basis: probe, 2026-09-30. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — The individual purchase page refuses without saying why** · 🐞 · user-visible.
@@ -1702,13 +1717,21 @@ table reads "Inactive" for it; the reader's galleys are refused. Basis:
 probe, 2026-09-25. <sup>f-a26</sup>
 
 <a id="a27"></a>
-**A27 — The expiry-reminder task fails and sends nothing** · 🐞 · user-visible · crash: server.
-Run as the site's timer runs it, the scheduled task that sends the
-"Subscription Expiry Reminders" stops with an error as soon as a
-journal requiring subscriptions has a reminder list set on
-"Subscription Policies", and no reminder goes out, on its day or any
-other. Subscribers get no warning before their access ends, whatever
-the tab promises. Basis: probe, 2026-09-25. <sup>f-a27</sup>
+**A27 — Subscribers get no expiry reminders: the reminder task stops with an error on every run** · 🐞 · high · crash: server.
+The scheduled task that sends the "Subscription Expiry Reminders" stops
+with an error on the server as soon as one journal on the site requires
+subscriptions and has any of its four reminder periods set on
+"Subscription Policies". No reminder goes out, for that journal or any
+other, in the monthly run or a run started by hand.
+Readers lose access at the end of their subscription with no warning,
+and the renewals the reminders were meant to prompt are missed. Nothing
+on screen tells the journal. The only way round is by hand: finding the
+expiring subscriptions and writing to each subscriber.
+It happens with the site's scheduler run from cron, and with the
+built-in web task runner on PostgreSQL. On MySQL, a web-runner run
+started from a journal's page still sends the individual subscribers'
+reminders. A journal needs no institutional subscription for it.
+Basis: probe, 2026-09-30. <sup>f-a27</sup>
 
 <a id="a28"></a>
 **A28 — A date box shows a date the window does not send** · 🐞 · user-visible.
@@ -1933,6 +1956,7 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a8"></a>
 **f-a8** — pkp/pkp-lib#11683, OJS commit `b795decf26` (2025-08-13, "fix schedule task frequency") changed `SubscriptionExpiryReminder` from `daily()` to `monthlyOn(1)`; `sendJournalReminders()` still matches one end date per run (note n) and `executeActions()` still simulates the missing days of short months, which only a daily run needs. The pre-Laravel `registry/scheduledTasks.xml` read `<frequency day="1"/>` for this task. Live-probed 2026-09-25 (td29): the schedule list shows `0 0 1 * *`; the exact-day matching could not be seen, as the task fails first (f-a27).
+Issue report: [docs/issues/U51-A8-subscription-expiry-reminders-monthly.md](../issues/U51-A8-subscription-expiry-reminders-monthly.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `purchaseIndividualSubscription.tpl` has no `common/formErrors.tpl` include (the institutional page has one); `UserHandler::payPurchaseSubscription()` re-displays the form on a failed `validate()`. Live-probed 2026-09-25 (td16).
@@ -1945,7 +1969,7 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `UserHandler::purchaseSubscription()` has no sign-in check: with no user, `$user->getId()` is called on nothing (the individual path in `subscriptionExistsByUserForJournal()`, the institutional path in the form's constructor). The page router authorises page requests by default. Live-probed 2026-09-25 (td19): signed out, `GET {journal}/user/purchaseSubscription/individual` and `GET …/institutional` answered HTTP 500 with an empty body.
-Issue report: [docs/issues/U51-A12-signed-out-purchase-subscription-server-error.md](../issues/U51-A12-signed-out-purchase-subscription-server-error.md).
+Issue report: [pkp-e2e#6](https://github.com/jardakotesovec/pkp-e2e/issues/6) ([docs/issues/U51-A12-signed-out-purchase-subscription-server-error.md](../issues/U51-A12-signed-out-purchase-subscription-server-error.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — `block.tpl` gates the awaiting lines on `$paymentsEnabled && $acceptSubscriptionPayments`; `SubscriptionBlockPlugin` assigns only `acceptSubscriptionPayments`, so the awaiting lines show only where the page itself assigns `paymentsEnabled` ("My Subscriptions"). A manual purchase stores `dateEnd` as today at midnight (note f), which `Subscription::isExpired()` reads as passed. Live-probed 2026-09-25 (td20).
@@ -1991,6 +2015,7 @@ Issue report: [docs/issues/U51-A12-signed-out-purchase-subscription-server-error
 
 <a id="fn-f-a27"></a>
 **f-a27** — Live-probed 2026-09-25 (td29): the scheduled task `SubscriptionExpiryReminder`, run with no request, died with "Call to a member function getPrimaryLocale() on null" in `InstitutionalSubscriptionDAO::getInstitutionNameFetchParameters()` (the request's context is missing when the site's timer runs it); its task log holds "Task process started." and nothing after, twice.
+Issue report: [docs/issues/U51-A27-subscription-expiry-reminder-task-fails.md](../issues/U51-A27-subscription-expiry-reminder-task-fails.md).
 
 <a id="fn-f-a28"></a>
 **f-a28** — Test run 2026-09-25 (Rule 19; scenario 6). The four answers to "Save" were: "A user is required. A subscription start date is required. A subscription end date is required." (no user, no dates); then, Nova chosen, "A subscription start date is required." and "A subscription end date is required." again, the boxes now reading today's date; then, Sam chosen, today's date typed into "Start date" and next year's into "End date", "This user already has a subscription for this journal. A subscription start date is required."; then, Nova chosen, "A subscription start date is required.", the window staying open. A probe the same day read the fields after each step: from the first refusal on, the visible boxes held today's date while the values the window sends were empty; typing today's date left the sent start date empty, next year's end date was sent. The boxes are jQuery UI date pickers: lib/pkp `js/controllers/form/FormHandler.js` renames the visible box to `{name}-removed` and sends a hidden copy under the field's name (`templates/payments/individualSubscriptionForm.tpl`, `dateStart`/`dateEnd` with class `datepicker`).
