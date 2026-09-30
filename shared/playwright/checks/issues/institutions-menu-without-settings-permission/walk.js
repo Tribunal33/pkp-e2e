@@ -1,17 +1,29 @@
 // Issue report walk: docs/issues/3-institutions-menu-without-settings-permission.md
-// (spec U66 register A1). Takes the report's Steps through the screens. The
-// kit creates a scratch journal, press or preprint server (tag u66ir3, one
-// per run and app) with its accounts: a manager, and on a journal and a press
-// a Journal editor / Press editor, on a preprint server an Author. Everything
-// else is done on screen: the site's and the context's "Enable institutional
-// statistics", the editor role's "Permit changes to Settings" unticked
-// (journal, press), and on a preprint server a new manager-level role created
-// on Roles, offered to the Author by "Invite to a role" and accepted from the
-// emailed link. Records every screen with screen().
+// (spec U66 register A1). Takes the report's Steps through the screens on
+// PKP's default test dataset (a dataset fleet, harness.md "Dataset fleets"),
+// on its own context `publicknowledge` and its own users: `admin` (site
+// administrator), `rvaca` (the manager), `dbarnes` (Journal editor / Press
+// editor) and, on a preprint server, `dbuskins` (Moderator).
 //
-// Run:
-//   PROBE_FEATURE=issues PROBE_AGENT=ir3 node bin/probe.js all shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js
-//   stable-3_5_0: PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 in front of the same command.
+// The kit builds nothing. Everything goes through the screens:
+//   precondition: as admin, Administration › Site Settings › Statistics,
+//      "Enable institutional statistics", "Save"; as rvaca, Settings ›
+//      Distribution › Statistics, the same box, "Save"
+//   journal, press: as rvaca, Roles › "Journal editor" / "Press editor" ›
+//      "Edit", untick "Permit changes to Settings", "OK"
+//   preprint server: as rvaca, Roles › "Create New Role" (Manager level,
+//      "Associate Manager <tag>", "AM"), Users › "Invite to a role" for
+//      dbuskins@mailinator.com, and dbuskins accepts from the emailed link
+//   control: rvaca's side menu, "Institutions" pressed
+//   steps: dbarnes (dbuskins on OPS) signs in, the side menu is read,
+//      "Institutions" pressed; then Settings › Website by its address
+// Records every screen with screen().
+//
+// Reset first:  npm run fleet-prep -- --feature issues-rv3 --dataset 3 --reset
+// Run (main):   PROBE_FEATURE=issues-rv3 PROBE_AGENT=rv3 node bin/probe.js all shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js
+// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-rv3-3_5 --dataset 3 --reset
+//               PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-rv3-3_5 PROBE_AGENT=rv3 node bin/probe.js all shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js
+// Facts: .reports/<feature>/rv3/facts[-<run>]-<app>.json
 const {forEachApp, launch, signIn, signOut, screen, shot, record, idle, tag, drainJobs} = require('../../../probe');
 
 const T = 20_000;
@@ -23,15 +35,11 @@ forEachApp(async (app) => {
     const ops = app.name === 'ops';
     const facts = {};
     const fact = (k, v) => { facts[k] = v; console.log(`[${app.name}] ${k}: ${JSON.stringify(v).slice(0, 700)}`); };
-    const t = tag('u66ir3');
-    const second = ops ? 'mo' : 'ed';
-    const ctx = await app.api.createContext({tag: t, users: [
-        {username: `${t}mg`, roles: ['manager'], givenName: 'Maya', familyName: 'Manager'},
-        ops ? {username: `${t}mo`, roles: ['author'], givenName: 'Mo', familyName: 'Member'}
-            : {username: `${t}ed`, roles: ['editor'], givenName: 'Eddie', familyName: 'Editor'},
-    ]});
-    const path = ctx.path || t;
-    fact('context', path);
+    if (!app.dataset) throw new Error('walk.js runs on a dataset fleet only (fleet-prep --dataset n)');
+    const t = tag('u66');
+    const path = app.contextPath; // publicknowledge
+    const second = ops ? 'dbuskins' : 'dbarnes';
+    fact('fleet', {line: app.line, dataset: app.dataset, context: path, tag: t});
     const cu = (p) => app.url(`/index.php/${path}/en${p}`);
     const {page, close} = await launch(app);
     let n = 0;
@@ -75,7 +83,7 @@ forEachApp(async (app) => {
             h1: await page.locator('main h1, h1').first().innerText().catch(() => null),
             addInstitution: await page.getByRole('button', {name: 'Add Institution', exact: true}).count(),
         });
-        if (label.endsWith('editor') || label.endsWith('member')) await shot(page, `${label}-institutions-pressed`);
+        if (label !== 'rvaca') await shot(page, `${label}-institutions-pressed`);
     }
     async function statsBox(url, label) {
         await page.goto(url);
@@ -85,6 +93,7 @@ forEachApp(async (app) => {
         const panel = page.locator('#statistics');
         await panel.getByRole('button', {name: 'Save', exact: true}).waitFor({timeout: T});
         await idle(page); await pause(400);
+        const tabs = await page.locator('[role="tab"]').evaluateAll((es) => es.map((e) => e.textContent.replace(/\s+/g, ' ').trim()).filter(Boolean)).catch(() => []);
         const box = panel.getByLabel('Enable institutional statistics', {exact: true});
         const was = await box.isChecked();
         if (!was) {
@@ -93,12 +102,11 @@ forEachApp(async (app) => {
             await panel.getByRole('button', {name: 'Save', exact: true}).click();
             const r = await w;
             const saved = await page.locator('[role="status"]').filter({hasText: 'Saved'}).first().waitFor({timeout: 8000}).then(() => true).catch(() => false);
-            fact(`${label} statistics box ticked`, {status: r ? r.status() : null, saved});
+            fact(`${label} statistics box ticked`, {tabs, status: r ? r.status() : null, saved});
         } else {
-            fact(`${label} statistics box already ticked`, true);
+            fact(`${label} statistics box already ticked`, {tabs});
         }
         await snap(`${label}-statistics`);
-        return was;
     }
     async function rolesTab() {
         await page.goto(cu('/management/settings/access'));
@@ -107,13 +115,12 @@ forEachApp(async (app) => {
         await page.locator('#roleGridContainer tr.gridRow').first().waitFor({timeout: T});
         await idle(page);
     }
-    let siteWas = true;
     try {
-        // Site Administrator: the site's box.
+        // Precondition: the site's box, as the Site Administrator.
         await signIn(page, 'admin');
-        siteWas = await statsBox(app.url('/index.php/index/en/admin/settings'), 'site');
-        // Manager: the context's box.
-        await signIn(page, `${t}mg`, {contextPath: path});
+        await statsBox(app.url('/index.php/index/en/admin/settings'), 'site');
+        // Precondition: the context's box, as the manager.
+        await signIn(page, 'rvaca', {contextPath: path});
         await statsBox(cu('/management/settings/distribution'), 'context');
         await rolesTab();
         if (!ops) {
@@ -134,6 +141,7 @@ forEachApp(async (app) => {
             await idle(page); await pause(600);
         } else {
             // A new role at the manager level.
+            const roleName = `Associate Manager ${t}`;
             await page.locator('#roleGridContainer').getByRole('link', {name: 'Create New Role'}).click();
             const form = page.locator('form#userGroupForm');
             await form.waitFor({state: 'visible', timeout: T});
@@ -141,7 +149,7 @@ forEachApp(async (app) => {
             const levels = await form.locator('select[name="roleId"] option').evaluateAll((os) => os.map((o) => ({v: o.value, t: o.textContent.trim()})));
             await form.locator('select[name="roleId"]').selectOption('16');
             await pause(600);
-            await form.locator('input[name="name[en]"]').fill('Associate Manager');
+            await form.locator('input[name="name[en]"]').fill(roleName);
             await form.locator('input[name="abbrev[en]"]').fill('AM');
             const box = form.locator('input[name="permitSettings"]');
             fact('new role window', {levels, permitSettings: (await box.count()) ? {checked: await box.isChecked(), disabled: await box.isDisabled()} : 'absent'});
@@ -149,16 +157,16 @@ forEachApp(async (app) => {
             await form.getByRole('button', {name: 'OK', exact: true}).click();
             await form.waitFor({state: 'detached', timeout: T}).catch(() => {});
             await idle(page); await pause(600);
-            // Invite the Author to it.
+            // Invite dbuskins to it.
             await page.goto(cu('/management/settings/access'));
             await idle(page);
             await page.getByRole('button', {name: 'Invite to a role'}).click();
-            await page.getByLabel(/Search for a user by email address/).fill(`${t}mo@mail.test`);
+            await page.getByLabel(/Search for a user by email address/).fill('dbuskins@mailinator.com');
             await page.getByRole('button', {name: 'Search User', exact: true}).click();
             const newRow = page.getByRole('row').filter({hasText: 'Select a new role'}).first();
             await newRow.waitFor({timeout: T});
             await idle(page);
-            await newRow.getByRole('combobox').first().selectOption({label: 'Associate Manager'});
+            await newRow.getByRole('combobox').first().selectOption({label: roleName});
             await newRow.getByRole('textbox').fill(today());
             await newRow.getByRole('combobox').last().selectOption({index: 1});
             await snap('invite-details');
@@ -168,28 +176,30 @@ forEachApp(async (app) => {
             await page.getByRole('button', {name: 'Invite user to the role'}).click();
             await page.getByRole('dialog').filter({hasText: 'Invitation Sent'}).waitFor({timeout: T});
             await snap('invitation-sent');
-            let msg = await app.mail.find({to: `${t}mo@mail.test`, timeoutMs: 10_000}).catch(() => null);
-            if (!msg) { await drainJobs(app); msg = await app.mail.find({to: `${t}mo@mail.test`}); }
+            // The dataset runs its jobs on web requests; drainJobs only if the mail is late.
+            let msg = await app.mail.find({to: 'dbuskins@mailinator.com', contains: t, timeoutMs: 15_000}).catch(() => null);
+            if (!msg) { await drainJobs(app); msg = await app.mail.find({to: 'dbuskins@mailinator.com', contains: t}); fact('mail needed drainJobs', true); }
             const full = await app.mail.fullMessage(msg.ID);
             const accept = app.mail.extractLink(full.HTML, 'Accept Invitation');
             fact('invitation email', {subject: full.Subject, accept: accept && accept.replace(/key=[^&]+/, 'key=…')});
-            // Mo, signed out, accepts from the emailed link.
+            // dbuskins, signed out, accepts from the emailed link.
             await signOut(page);
             await page.goto(accept.replace(/^https?:\/\/[^/]+/, app.baseURL));
             await idle(page);
             const acceptBtn = page.getByRole('button', {name: /^Accept And Continue to/});
             await acceptBtn.waitFor({timeout: T});
             await snap('accept-review');
+            fact('accept button', await acceptBtn.innerText());
             await acceptBtn.click();
             await page.getByRole('dialog').filter({hasText: /assigned a new role/}).waitFor({timeout: T});
             await snap('accepted');
         }
         // Control: the manager.
-        await signIn(page, `${t}mg`, {contextPath: path});
-        await menuAndPress('manager');
+        await signIn(page, 'rvaca', {contextPath: path});
+        await menuAndPress('rvaca');
         // The steps: the role without the permission.
-        await signIn(page, `${t}${second}`, {contextPath: path});
-        await menuAndPress(ops ? 'member' : 'editor');
+        await signIn(page, second, {contextPath: path});
+        await menuAndPress(second);
         // The Settings pages refuse the same user (the rule the entry should follow).
         await page.goto(cu('/management/settings/website'));
         await idle(page);
@@ -201,7 +211,6 @@ forEachApp(async (app) => {
         await shot(page, 'ERROR').catch(() => {});
         throw err;
     } finally {
-        if (!siteWas) fact('site box put back', await app.api.setSite({enableInstitutionUsageStats: false}).then(() => 'unticked').catch((e) => e.message));
         record('facts', facts);
         await close();
     }

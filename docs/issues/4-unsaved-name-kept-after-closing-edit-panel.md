@@ -52,74 +52,83 @@ the abandoned text without a second edit.
 ## Steps to reproduce
 
 Preconditions:
-- A fresh install with its default languages, holding one journal (press,
-  preprint server).
-- A user with the Journal Manager role (Press Manager, Server Manager) of
-  it, signed in.
+- PKP's default test dataset for `main` (OJS, OMP or OPS), freshly
+  loaded. Its `publicknowledge` journal (press, preprint server) has no
+  institutions and no highlights, and announcements are turned off.
+- Nothing else: `rvaca` is its Journal Manager (Press Manager, Preprint
+  Server Manager).
 
 Institutions:
-1. Open the journal's Institutions page,
-   `<journal>/management/settings/institutions` (Settings › "Institutions"
-   in the side menu once institutional statistics are enabled).
-2. Press "Add Institution", type "Campus Library" in "Name" and
+
+1. Sign in as `rvaca`.
+2. Open the Institutions page by its address,
+   `/index.php/publicknowledge/en/management/settings/institutions`.
+   The side menu lists "Institutions" only once institutional statistics
+   are enabled, which the dataset leaves off; the page opens either way.
+3. Press "Add Institution", type "Campus Library" in "Name" and
    `10.1.0.0/16` in "IP ranges", and press "Save".
-3. Press "Edit" on "Campus Library" and add " Draft" at the end of "Name".
-4. Close the panel with its close control, without "Save". Read the row.
-5. Press "Edit" on the row and read "Name".
-6. Change "IP ranges" to `10.2.0.0/16` and press "Save".
-7. Reload the page. Read the row, press "Edit" and read "Name" and "IP
+4. Press "Edit" on "Campus Library" and add " Draft" at the end of "Name".
+5. Close the panel with its close control, without "Save". Read the row.
+6. Press "Edit" on the row and read "Name".
+7. Change "IP ranges" to `10.2.0.0/16` and press "Save".
+8. Reload the page. Read the row, press "Edit" and read "Name" and "IP
    ranges"; close the panel.
-8. Press "Edit", add " Esc" to "Name" and press Escape. Read the row.
-9. Press "Edit", add " Out" to "Name" and click on the page outside the
-   panel. Read the row.
-10. Reload the page. Read the row.
+9. Press "Edit", add " Esc" to "Name" and press Escape. Read the row.
+10. Press "Edit", add " Out" to "Name" and click on the page outside the
+    panel. Read the row.
+11. Reload the page. Read the row.
 
 Announcements:
 
-11. Settings › Website › Setup › Announcements: tick "Enable
+12. Settings › Website › Setup › Announcements: tick "Enable
     announcements" and press "Save".
-12. Open Announcements (`<journal>/management/settings/announcements`),
+13. Open Announcements
+    (`/index.php/publicknowledge/en/management/settings/announcements`),
     press "Add Announcement", type "Call for papers" in "Title" and press
     "Save".
-13. Press "Edit" on "Call for papers", add " Draft" to "Title" and close
+14. Press "Edit" on "Call for papers", add " Draft" to "Title" and close
     the panel with its close control. Read the row.
-14. Press "Edit" on the row, read "Title", type "Deadline in May." in
+15. Press "Edit" on the row, read "Title", type "Deadline in May." in
     "Short Description" and press "Save".
-15. Reload the page and read the row; open the journal's public
-    Announcements page.
+16. Reload the page and read the row; open the public Announcements page,
+    `/index.php/publicknowledge/en/announcement`.
 
 Highlights:
 
-16. Settings › Website › Setup › Highlights: press "Add Highlight", type
+17. Settings › Website › Setup › Highlights: press "Add Highlight", type
     "Open call" in "Title", `https://example.org/call` in "URL" and "Read
     more" in "Button Label", and press "Save".
-17. Press "Edit" on "Open call", add " Draft" to "Title" and close the
+18. Press "Edit" on "Open call", add " Draft" to "Title" and close the
     panel with its close control. Read the row.
-18. Press "Edit" on the row, read "Title", change "URL" to
+19. Press "Edit" on the row, read "Title", change "URL" to
     `https://example.org/call2` and press "Save".
-19. Reload the page, read the row, press "Edit" and read "Title".
+20. Reload the page, read the row, press "Edit" and read "Title".
 
 **Expected:** closing a panel without "Save" drops what was typed: the
-rows of steps 4, 8, 9, 13 and 17 keep the saved name or title, "Edit"
-reopens with it, and the saves of steps 6, 14 and 18 store only the box
+rows of steps 5, 9, 10, 14 and 18 keep the saved name or title, "Edit"
+reopens with it, and the saves of steps 7, 15 and 19 store only the box
 changed there ("Campus Library" with `10.2.0.0/16`; "Call for papers";
 "Open call").
 
-**Observed:** step 4's row reads "Campus Library Draft" and step 5's
-"Name" holds "Campus Library Draft". After step 6 and the reload of step
-7 the row reads "Campus Library Draft", and "Edit" shows "Campus Library
-Draft" with `10.2.0.0/16`: the abandoned name was stored. Step 8's row
-reads "Campus Library Draft Esc", step 9's "Campus Library Draft Esc
-Out"; after step 10's reload, "Campus Library Draft" again. Step 13's row
-reads "Call for papers Draft" and step 14 reopens with it; after step 15
-the row and the public Announcements page read "Call for papers Draft".
-Step 17's row reads "Open call Draft" and step 18 reopens with it; after
-step 19 the row and "Title" read "Open call Draft". No close asked
-anything, and every save answered 200.
+**Observed:** step 5's row reads "Campus Library Draft" and step 6's
+"Name" holds "Campus Library Draft".
 
-Control: "IP ranges" changed to `10.3.0.0/16` and the panel closed the
-same way leaves the row as it was, and "Edit" reopens with the saved
-`10.2.0.0/16`.
+After step 7 and the reload of step 8 the row reads "Campus Library
+Draft", and "Edit" shows "Campus Library Draft" with `10.2.0.0/16`: the
+abandoned name was stored. Step 9's row reads "Campus Library Draft Esc",
+step 10's "Campus Library Draft Esc Out"; after step 11's reload,
+"Campus Library Draft" again.
+
+Step 14's row reads "Call for papers Draft" and step 15 reopens with it;
+after step 16 the row and the public Announcements page read "Call for
+papers Draft". Step 18's row reads "Open call Draft" and step 19 reopens
+with it; after step 20 the row and "Title" read "Open call Draft".
+
+No close asked anything, and every save answered 200.
+
+Control: after step 11, "IP ranges" changed to `10.3.0.0/16` and the
+panel closed the same way leaves the row as it was, and "Edit" reopens
+with the saved `10.2.0.0/16`.
 
 ## Cause
 
@@ -229,24 +238,36 @@ one repo, following the pattern the newer form code already uses.
 
 ## Evidence
 
-- Kept script, taking the Steps and the control through the screens on
-  each app:
+- Kept script, taking the Steps and the Control through the screens on
+  each app, on an install loaded from PKP's default test dataset (a
+  dataset fleet):
   [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/walk.js),
-  run with
-  `PROBE_FEATURE=issues PROBE_AGENT=ir4 node bin/probe.js all shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/walk.js`
-  (stable-3_5_0: `PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35` in front).
-  - The harness builds a new journal, press or preprint server and its
-    manager account; everything else is created on screen.
-  - The walk types the Institutions page's address instead of opening it
-    from the side menu; the Control is its step 11, so its Announcements
-    and Highlights steps are numbered one higher than here, and it reads
-    the public Announcements page by its address.
+  run after a fresh load with
+  `npm run fleet-prep -- --feature issues --dataset --reset` and
+  `PROBE_FEATURE=issues PROBE_AGENT=walk node bin/probe.js all shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/walk.js`
+  (stable-3_5_0: `PKP_E2E_LINE=stable-3_5_0` in front of both, with
+  `--feature issues-3_5`, and `PROBE_FEATURE=issues-3_5 PROBE_RUN=r35` on
+  the walk).
+  - It signs in as the dataset's `rvaca` on `publicknowledge` and builds
+    nothing itself: the institution, the announcement and the highlight
+    are created on screen, and announcements are turned on on screen.
+  - The Steps were walked as written, the Control after step 11.
   - The home page's highlight was not opened.
-- Walked 2026-09-30 on PostgreSQL: main OJS 7ce98ec09e, OMP 3b0ecf794c,
-  OPS c8af945bb7 (lib/pkp 3dc90c81a6, lib/ui-library 280f98c5);
-  stable-3_5_0 OJS 040e916378, OMP 4f90dadac, OPS 0bb1ca0f6e (lib/pkp
-  8809a197de, lib/ui-library 1a7a4750). All six showed the Observed above.
-  The fault is in the browser, so the database does not bear on it.
+  - The only server error in each walk was the plugin gallery's list on
+    Settings › Website (`plugin-gallery-grid/fetch-grid`, 500), which the
+    test installs cannot fetch without network access; it is not this
+    fault.
+- Walked 2026-09-30 on PostgreSQL, each install freshly loaded from
+  pkp/datasets
+  [c0f9f10](https://github.com/pkp/datasets/commit/c0f9f10d529f7dcd018c1a61d7084c16044f0162)
+  (2026-09-30), `<app>/main/pgsql` and `<app>/stable-3_5_0/pgsql`, no
+  upgrade needed:
+  - main: OJS 7ce98ec09e, OMP 3b0ecf794c, OPS c8af945bb7 (lib/pkp
+    3dc90c81a6, lib/ui-library 280f98c5);
+  - stable-3_5_0: OJS 040e916378, OMP 4f90dadac0, OPS 0bb1ca0f6e (lib/pkp
+    8809a197de, lib/ui-library 1a7a4750).
+  - All six showed the Observed above. The fault is in the browser, so
+    the database does not bear on it.
 - 3.4, by code:
   - ui-library `stable-3_4_0` at ee684b34: the three `openEditModal()`
     methods assign `field.value = <row>[field.name]`, and `Form.vue`

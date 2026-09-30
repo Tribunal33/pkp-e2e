@@ -51,51 +51,56 @@ padded range lists turned out to be common.
 ## Steps to reproduce
 
 Preconditions:
-- A fresh install with its default languages, holding one journal (press,
-  preprint server).
-- A user with the Journal Manager role (Press Manager, Server Manager) of
-  it, signed in.
+- PKP's default test dataset for `main` (OJS, OMP or OPS), freshly
+  loaded. Its `publicknowledge` journal (press, preprint server) has no
+  institutions.
+- Nothing else: `rvaca` is its Journal Manager (Press Manager, Preprint
+  Server Manager).
 
 Adding:
-1. Open the journal's Institutions page,
-   `<journal>/management/settings/institutions` (Settings › "Institutions"
-   in the side menu once institutional statistics are enabled).
-2. Press "Add Institution".
-3. In "Name" type "Long Library".
-4. In "IP ranges" type `142.58.103.1          -          142.58.103.4`
+1. Sign in as `rvaca`.
+2. Open the Institutions page by its address,
+   `/index.php/publicknowledge/en/management/settings/institutions`.
+   The side menu lists "Institutions" only once institutional statistics
+   are enabled, which the dataset leaves off; the page opens either way.
+3. Press "Add Institution".
+4. In "Name" type "Long Library".
+5. In "IP ranges" type `142.58.103.1          -          142.58.103.4`
    (ten spaces either side of "-", 45 characters).
-5. Press "Save".
-6. Press "Save" again.
-7. Close the panel and reload the page.
-8. Press "Edit" on each "Long Library" row and read "IP ranges".
+6. Press "Save".
+7. Press "Save" again.
+8. Close the panel and reload the page.
+9. Press "Edit" on each "Long Library" row and read "IP ranges".
 
 Editing an institution that has a range:
 
-9. Press "Add Institution", type "Campus Library" in "Name" and
-   `10.1.0.0/16` in "IP ranges", and press "Save".
-10. Press "Edit" on "Campus Library", put the line of step 4 on a new first
+10. Press "Add Institution", type "Campus Library" in "Name" and
+    `10.1.0.0/16` in "IP ranges", and press "Save".
+11. Press "Edit" on "Campus Library", put the line of step 5 on a new first
     line above `10.1.0.0/16`, and press "Save".
-11. Close the panel, reload the page, press "Edit" on "Campus Library" and
+12. Close the panel, reload the page, press "Edit" on "Campus Library" and
     read "IP ranges".
 
-**Expected:** step 5 saves the range (it is a valid range, and the help
+**Expected:** step 6 saves the range (it is a valid range, and the help
 under the box writes a range with spaces around "-"), or refuses it with
 "Invalid IP range" under the box; either way the list holds one "Long
-Library". Step 10 saves both lines, or refuses and keeps `10.1.0.0/16`.
+Library". Step 11 saves both lines, or refuses and keeps `10.1.0.0/16`.
 
-**Observed:** steps 5 and 6 each leave the panel open with the notice "An
+**Observed:** steps 6 and 7 each leave the panel open with the notice "An
 unexpected error has occurred. Please reload the page and try again.", no
 message under any box and the list behind unchanged; each "Save" answered
-`POST /index.php/<journal>/api/v1/institutions` with 500. After the reload
-the list reads "Long Library" twice, and "Edit" on either shows "IP ranges"
-empty. Step 10 shows the same notice (the save,
-`POST /index.php/<journal>/api/v1/institutions/<id>` with
+`POST /index.php/publicknowledge/api/v1/institutions` with 500. After the
+reload the list reads "Long Library" twice, and "Edit" on either shows "IP
+ranges" empty.
+
+Step 10 saves. Step 11 shows the same notice (the save,
+`POST /index.php/publicknowledge/api/v1/institutions/3` with
 `X-Http-Method-Override: PUT`, answered 500); after the reload "Edit" on
 "Campus Library" shows "IP ranges" empty: `10.1.0.0/16` is gone. The
 server log, for each failed save:
 
 ```
-production.ERROR: SQLSTATE[22001]: String data, right truncated: 7 ERROR:  value too long for type character varying(40) (Connection: pgsql, …, SQL: insert into "institution_ip" ("institution_id", "ip_string", "ip_start", "ip_end") values (2, 142.58.103.1          -          142.58.103.4, 2386192129, 2386192132))
+production.ERROR: SQLSTATE[22001]: String data, right truncated: 7 ERROR:  value too long for type character varying(40) (Connection: pgsql, …, SQL: insert into "institution_ip" ("institution_id", "ip_string", "ip_start", "ip_end") values (1, 142.58.103.1          -          142.58.103.4, 2386192129, 2386192132))
 ```
 
 A line of exactly 40 characters (`142.58.103.1       -        142.58.103.4`)
@@ -208,20 +213,32 @@ the code base already uses, and a unit test.
 ## Evidence
 
 - Kept script, taking the Steps and the 40-character control through the
-  screens on each app:
+  screens on each app, on an install loaded from PKP's default test
+  dataset (a dataset fleet):
   [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/institution-long-ip-range-save-error/walk.js),
-  run with
-  `PROBE_FEATURE=issues PROBE_AGENT=ir2 node bin/probe.js all shared/playwright/checks/issues/institution-long-ip-range-save-error/walk.js`
-  (stable-3_5_0: `PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35` in front).
-  - The harness builds a new journal, press or preprint server and its
-    manager account; everything else is created on screen.
-  - The walk types the Institutions page's address instead of opening it
-    from the side menu.
-- Walked 2026-09-30 on PostgreSQL: main OJS 7ce98ec09e, OMP 3b0ecf794c, OPS
-  c8af945bb7 (lib/pkp 3dc90c81a6); stable-3_5_0 OJS 040e916378, OMP
-  4f90dadac, OPS 0bb1ca0f6e (lib/pkp 8809a197de). All six showed the
-  Observed above, three 500s each; the log line is from the app's error
-  log. MySQL not checked.
+  run after a fresh load with
+  `npm run fleet-prep -- --feature issues --dataset --reset` and
+  `PROBE_FEATURE=issues PROBE_AGENT=walk node bin/probe.js all shared/playwright/checks/issues/institution-long-ip-range-save-error/walk.js`
+  (stable-3_5_0: `PKP_E2E_LINE=stable-3_5_0` in front of both, with
+  `--feature issues-3_5`, and `PROBE_FEATURE=issues-3_5 PROBE_RUN=r35` on
+  the walk).
+  - It signs in as the dataset's `rvaca` on `publicknowledge` and builds
+    nothing itself: the three institutions ("Long Library", "Campus
+    Library", "Forty Library") are created on screen.
+  - The Steps were walked as written; the walk also read the stored rows
+    after the control (evidence only, not a step).
+- Walked 2026-09-30 on PostgreSQL, each install freshly loaded from
+  pkp/datasets
+  [c0f9f10](https://github.com/pkp/datasets/commit/c0f9f10d529f7dcd018c1a61d7084c16044f0162)
+  (2026-09-30), `<app>/main/pgsql` and `<app>/stable-3_5_0/pgsql`, no
+  upgrade needed:
+  - main: OJS 7ce98ec09e, OMP 3b0ecf794c, OPS c8af945bb7 (lib/pkp
+    3dc90c81a6);
+  - stable-3_5_0: OJS 040e916378, OMP 4f90dadac0, OPS 0bb1ca0f6e (lib/pkp
+    8809a197de).
+  - All six showed the Observed above, three 500s each and no script
+    error; the log line is from the app's error log (institution 1, the
+    first "Long Library"). MySQL not checked.
 - 3.4, by code:
   - pkp-lib `stable-3_4_0` at df13621c2d: `InstitutionsMigration.php`
     `ip_string` 40, `Repository::validate()` the same pattern,

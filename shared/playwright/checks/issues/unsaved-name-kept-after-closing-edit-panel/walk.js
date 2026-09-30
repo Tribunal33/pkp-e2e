@@ -1,14 +1,19 @@
 // Issue report walk: docs/issues/4-unsaved-name-kept-after-closing-edit-panel.md
 // (spec U66 register A2, U12 A11, U11 A4). Takes the report's Steps through
-// the screens as the manager of a scratch journal, press or preprint server
-// the kit creates (tag u66ir4, one per run and app, with its manager
-// account); everything else is created on screen. Records every screen with
-// screen().
+// the screens on a dataset fleet (PKP's default test dataset, harness.md
+// "Dataset fleets"): signed in as the dataset's manager `rvaca` on
+// `publicknowledge`; the kit builds nothing, the institution, the
+// announcement and the highlight are created on screen. Fact labels carry
+// the report's step numbers; the Control runs after step 11. Records every
+// screen with screen(). Reset the fleet before each walk: the walk adds
+// items and turns announcements on.
 //
-// Run:
-//   PROBE_FEATURE=issues PROBE_AGENT=ir4 node bin/probe.js all shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/walk.js
-//   stable-3_5_0: PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 in front of the same command.
-const {forEachApp, launch, signIn, screen, shot, record, idle, tag} = require('../../../probe');
+// Run (main, then stable-3_5_0):
+//   npm run fleet-prep -- --feature issues --dataset --reset
+//   PROBE_FEATURE=issues PROBE_AGENT=walk node bin/probe.js all shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/walk.js
+//   PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-3_5 --dataset --reset
+//   PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-3_5 PROBE_AGENT=walk node bin/probe.js all shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/walk.js
+const {forEachApp, launch, signIn, screen, shot, record, idle} = require('../../../probe');
 
 const T = 20_000;
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -17,9 +22,8 @@ const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 forEachApp(async (app) => {
     const facts = {};
     const fact = (k, v) => { facts[k] = v; console.log(`[${app.name}] ${k}: ${JSON.stringify(v).slice(0, 600)}`); };
-    const t = tag('u66ir4');
-    const ctx = await app.api.createContext({tag: t, users: [{username: `${t}mg`, roles: ['manager']}]});
-    const path = ctx.path || t;
+    if (!app.dataset) throw new Error('walk.js drives a dataset fleet (fleet-prep --dataset); this fleet is the campaign\'s');
+    const path = app.contextPath; // publicknowledge
     fact('context', path);
     const {page, close} = await launch(app);
     let n = 0;
@@ -149,75 +153,76 @@ forEachApp(async (app) => {
     const HTITLE = '#highlight-title-control-en_ifr';
 
     try {
-        await signIn(page, `${t}mg`);
+        // 1
+        await signIn(page, 'rvaca');
 
         // ===== Institutions
-        // 1
+        // 2
         await iLand();
         await snap('inst-page');
-        // 2
+        // 3
         await iPanel().getByRole('button', {name: 'Add Institution', exact: true}).click();
         let d = iDlg('Add Institution');
         await d.getByRole('button', {name: 'Save', exact: true}).waitFor({timeout: T});
         await d.locator('input[name="name-en"]').fill('Campus Library');
         await d.locator('textarea[name="ipRanges"]').fill('10.1.0.0/16');
-        fact('2 add save', await pressSave(d, iSaveRe));
-        fact('2 rows', await iRows());
-        // 3
+        fact('3 add save', await pressSave(d, iSaveRe));
+        fact('3 rows', await iRows());
+        // 4
         d = await iOpenEdit('Campus Library');
         await appendTo(d.locator('input[name="name-en"]'), ' Draft');
         await snap('inst-edit-name-typed');
-        // 4
-        fact('4 closed by Close', await closePanel(d, 'control'));
+        // 5
+        fact('5 closed by Close', await closePanel(d, 'control'));
         await snap('inst-after-close');
         await shot(page, 'inst-after-close');
-        fact('4 rows', await iRows());
-        // 5
+        fact('5 rows', await iRows());
+        // 6
         d = await iOpenEdit('Campus Library Draft').catch(() => null);
         if (!d) {
-            fact('5 no row named Campus Library Draft', await iRows());
+            fact('6 no row named Campus Library Draft', await iRows());
             d = await iOpenEdit('Campus Library');
         }
-        fact('5 reopened', await iRead(d));
+        fact('6 reopened', await iRead(d));
         await snap('inst-reopened');
-        // 6
-        await d.locator('textarea[name="ipRanges"]').fill('10.2.0.0/16');
-        fact('6 save', await pressSave(d, iSaveRe));
-        fact('6 rows', await iRows());
         // 7
+        await d.locator('textarea[name="ipRanges"]').fill('10.2.0.0/16');
+        fact('7 save', await pressSave(d, iSaveRe));
+        fact('7 rows', await iRows());
+        // 8
         await page.reload(); await idle(page); await iPanel().first().waitFor({timeout: T}); await idle(page);
         let rows = await iRows();
-        fact('7 rows after reload', rows);
+        fact('8 rows after reload', rows);
         d = await iOpenEdit(rows[0]);
-        fact('7 stored', await iRead(d));
+        fact('8 stored', await iRead(d));
         await snap('inst-stored-after-reload');
         await shot(page, 'inst-stored-after-reload');
         await closePanel(d, 'control');
-        // 8
+        // 9
         const saved = rows[0];
         d = await iOpenEdit(saved);
         await appendTo(d.locator('input[name="name-en"]'), ' Esc');
-        fact('8 closed by Escape', await closePanel(d, 'escape'));
-        fact('8 rows', await iRows());
+        fact('9 closed by Escape', await closePanel(d, 'escape'));
+        fact('9 rows', await iRows());
         await snap('inst-after-escape');
-        // 9
+        // 10
         rows = await iRows();
         d = await iOpenEdit(rows[0]);
-        fact('9 reopened name', (await iRead(d)).name);
+        fact('10 reopened name', (await iRead(d)).name);
         await appendTo(d.locator('input[name="name-en"]'), ' Out');
-        fact('9 closed by click outside', await closePanel(d, 'outside'));
-        fact('9 rows', await iRows());
+        fact('10 closed by click outside', await closePanel(d, 'outside'));
+        fact('10 rows', await iRows());
         await snap('inst-after-outside');
-        // 10
+        // 11
         await page.reload(); await idle(page); await iPanel().first().waitFor({timeout: T}); await idle(page);
-        fact('10 rows after reload', await iRows());
-        // 11 control
+        fact('11 rows after reload', await iRows());
+        // Control (after step 11)
         d = await iOpenEdit(saved);
         await d.locator('textarea[name="ipRanges"]').fill('10.3.0.0/16');
         await closePanel(d, 'control');
-        fact('11 rows', await iRows());
+        fact('control rows', await iRows());
         d = await iOpenEdit(saved);
-        fact('11 reopened', await iRead(d));
+        fact('control reopened', await iRead(d));
         await closePanel(d, 'control');
 
         // ===== Announcements

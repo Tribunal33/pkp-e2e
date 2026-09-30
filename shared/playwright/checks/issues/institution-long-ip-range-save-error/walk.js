@@ -1,13 +1,17 @@
 // Issue report walk: docs/issues/2-institution-long-ip-range-save-error.md
-// (spec U66 register A9). Takes the report's Steps through the screens as
-// the manager of a scratch journal, press or preprint server the kit
-// creates (tag u66ir2, one per run and app, with its manager account);
-// everything else is created on screen. Records every screen with screen().
+// (spec U66 register A9). Takes the report's Steps through the screens on a
+// dataset fleet (PKP's default test dataset, harness.md "Dataset fleets"):
+// signed in as the dataset's manager `rvaca` on `publicknowledge`; the kit
+// builds nothing, every institution is created on screen. Records every
+// screen with screen(). Reset the fleet before each walk: the walk adds
+// institutions to the dataset.
 //
-// Run:
-//   PROBE_FEATURE=issues PROBE_AGENT=ir2 node bin/probe.js all shared/playwright/checks/issues/institution-long-ip-range-save-error/walk.js
-//   stable-3_5_0: PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 in front of the same command.
-const {forEachApp, launch, signIn, screen, shot, record, idle, tag, sql} = require('../../../probe');
+// Run (main, then stable-3_5_0):
+//   npm run fleet-prep -- --feature issues --dataset --reset
+//   PROBE_FEATURE=issues PROBE_AGENT=walk node bin/probe.js all shared/playwright/checks/issues/institution-long-ip-range-save-error/walk.js
+//   PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-3_5 --dataset --reset
+//   PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-3_5 PROBE_AGENT=walk node bin/probe.js all shared/playwright/checks/issues/institution-long-ip-range-save-error/walk.js
+const {forEachApp, launch, signIn, screen, shot, record, idle, sql} = require('../../../probe');
 
 const T = 20_000;
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -20,9 +24,8 @@ const WITHHELD = '[not recorded]';
 forEachApp(async (app) => {
     const facts = {long: LONG.length, forty: FORTY.length};
     const fact = (k, v) => { facts[k] = v; console.log(`[${app.name}] ${k}: ${JSON.stringify(v).slice(0, 600)}`); };
-    const t = tag('u66ir2');
-    const ctx = await app.api.createContext({tag: t, users: [{username: `${t}mg`, roles: ['manager']}]});
-    const path = ctx.path || t;
+    if (!app.dataset) throw new Error('walk.js drives a dataset fleet (fleet-prep --dataset); this fleet is the campaign\'s');
+    const path = app.contextPath; // publicknowledge
     fact('context', path);
     const {page, close} = await launch(app);
     let n = 0;
@@ -75,39 +78,41 @@ forEachApp(async (app) => {
         return {d, v};
     }
     try {
-        await signIn(page, `${t}mg`);
         // 1
+        await signIn(page, 'rvaca');
+        // 2: by address; the side menu's link, when there is one, is recorded
         await land();
         await snap('page');
+        fact('side menu Institutions links', await page.getByRole('link', {name: 'Institutions', exact: true}).count());
         fact('rows at start', await rows());
-        // 2-4
+        // 3-5
         await panel().getByRole('button', {name: 'Add Institution', exact: true}).click();
         let d = dlg('Add Institution');
         await d.getByRole('button', {name: 'Save', exact: true}).waitFor({timeout: T});
         await d.locator('input[name="name-en"]').fill('Long Library');
         await d.locator('textarea[name="ipRanges"]').fill(LONG);
         await snap('add-filled');
-        // 5
-        fact('step 5 save', await save(d));
+        // 6
+        fact('step 6 save', await save(d));
         await snap('after-save-1');
-        fact('step 5 rows behind', await rows());
-        // 6: the "Error" window closed first, then Save again
+        fact('step 6 rows behind', await rows());
+        // 7: the "Error" window closed first, then Save again
         if (await page.getByRole('dialog', {name: 'Error'}).isVisible().catch(() => false)) {
             await page.getByRole('dialog', {name: 'Error'}).getByRole('button').first().click().catch(() => {});
             await pause(800);
         }
         if (await d.isVisible().catch(() => false)) {
-            fact('step 6 save', await save(d));
+            fact('step 7 save', await save(d));
             await snap('after-save-2');
-            fact('step 6 rows behind', await rows());
+            fact('step 7 rows behind', await rows());
         }
-        // 7
+        // 8
         await closeDialogs();
         await page.reload(); await idle(page); await panel().first().waitFor({timeout: T}); await idle(page);
         await snap('after-reload');
         const after = await rows();
-        fact('step 7 rows after reload', after);
-        // 8
+        fact('step 8 rows after reload', after);
+        // 9
         const longCount = after.filter((r) => r === 'Long Library').length;
         const longRanges = [];
         for (let i = 0; i < longCount; i++) {
@@ -116,28 +121,28 @@ forEachApp(async (app) => {
             await snap(`long-edit-${i + 1}`);
             await e.getByRole('button', {name: 'Close', exact: true}).first().click(); await pause(800);
         }
-        fact('step 8 IP ranges per Long Library row', longRanges);
-        // 9
+        fact('step 9 IP ranges per Long Library row', longRanges);
+        // 10
         await panel().getByRole('button', {name: 'Add Institution', exact: true}).click();
         d = dlg('Add Institution');
         await d.getByRole('button', {name: 'Save', exact: true}).waitFor({timeout: T});
         await d.locator('input[name="name-en"]').fill('Campus Library');
         await d.locator('textarea[name="ipRanges"]').fill('10.1.0.0/16');
-        fact('step 9 save', await save(d));
+        fact('step 10 save', await save(d));
         await snap('campus-added');
-        // 10
+        // 11
         let e = (await readEdit('Campus Library')).d;
-        fact('step 10 IP ranges before', await e.locator('textarea[name="ipRanges"]').inputValue());
+        fact('step 11 IP ranges before', await e.locator('textarea[name="ipRanges"]').inputValue());
         await e.locator('textarea[name="ipRanges"]').fill(`${LONG}\n10.1.0.0/16`);
         await snap('campus-edit-filled');
-        fact('step 10 save', await save(e));
+        fact('step 11 save', await save(e));
         await snap('campus-after-save');
-        // 11
+        // 12
         await closeDialogs();
         await page.reload(); await idle(page); await panel().first().waitFor({timeout: T}); await idle(page);
-        fact('step 11 rows after reload', await rows());
+        fact('step 12 rows after reload', await rows());
         const r11 = await readEdit('Campus Library');
-        fact('step 11 Campus Library IP ranges', r11.v);
+        fact('step 12 Campus Library IP ranges', r11.v);
         await snap('campus-edit-after-reload');
         await shot(page, 'campus-edit-after-reload');
         await r11.d.getByRole('button', {name: 'Close', exact: true}).first().click(); await pause(800);

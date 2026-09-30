@@ -1,31 +1,42 @@
 // Issue report docs/issues/1-omp-ops-institution-delete-fails.md (U66 A3, A8):
-// the report's Steps to reproduce, walked through the screens as `admin`.
+// the report's Steps to reproduce, walked through the screens on PKP's
+// default test dataset (a dataset fleet, harness.md "Dataset fleets"), as
+// the dataset's `admin`, on its own context `publicknowledge`.
 //
-// The kit builds only two scratch contexts per app, tagged u66ir1: "Test
-// Press <tag>" and "Empty Press <tag>" (journal / server on OJS / OPS),
-// each with the site administrator enrolled as its manager, as creating one
-// on Administration › Hosted Presses does. Everything else goes through
-// the screens:
-//   1. the context's Institutions page by its address
+// The kit builds nothing. Everything goes through the screens:
+//   precondition: Administration › Hosted … › "Create Press" (Journal /
+//      Server): "Empty Press <tag>", Country Canada, path <tag>, English
+//      (the control; "Country" is refused empty, U59 A1)
+//   1. publicknowledge's Institutions page by its address
 //   2. "Add Institution", Name "Campus Library", "Save"
 //   3. row "Campus Library" › "Delete" › "Yes"
 //   4. "OK" on the window that opens, reload
-//   5. Administration › Hosted … › "Test Press" › "Remove" › "OK"
+//   5. Administration › Hosted … › the dataset's context › "Remove" › "OK"
 //   6. reload Hosted …
-//   7. the Institutions page again, and Settings › Users & Roles › Roles
-//   8. control: "Remove" › "OK" on "Empty Press"
+//   7. the Institutions page again, Settings › Users & Roles, the home page
+//   8. control: "Remove" › "OK" on "Empty Press <tag>"
+// Besides the screens it reads the database (the context row, its
+// institutions, user groups and genres, and OMP's publication format
+// tombstones) and the context's OAI-PMH ListIdentifiers, before step 5 and
+// after step 7, as a harvester would request it.
 // OJS is the control app (a journal): the same steps succeed there.
 //
-// Run (main):  PROBE_FEATURE=issues PROBE_AGENT=ir1 node bin/probe.js all shared/playwright/checks/issues/omp-ops-institution-delete-fails/walk.js
-// Run (3.5):   PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues PROBE_AGENT=ir1 node bin/probe.js all shared/playwright/checks/issues/omp-ops-institution-delete-fails/walk.js
-// Facts: .reports/issues/ir1/facts[-<run>]-<app>.json
+// Reset first:  npm run fleet-prep -- --feature issues-rv1 --dataset 1 --reset
+// Run (main):   PROBE_FEATURE=issues-rv1 PROBE_AGENT=rv1 node bin/probe.js all shared/playwright/checks/issues/omp-ops-institution-delete-fails/walk.js
+// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-rv1-3_5 --dataset 1 --reset
+//               PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-rv1-3_5 PROBE_AGENT=rv1 node bin/probe.js all shared/playwright/checks/issues/omp-ops-institution-delete-fails/walk.js
+// Facts: .reports/<feature>/rv1/facts[-<run>]-<app>.json
 const {forEachApp, launch, signIn, screen, shot, record, idle, tag, sql} = require('../../../probe');
 
 const T = 20_000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const flat = (s, n = 600) => (s == null ? s : String(s).replace(/\s+/g, ' ').trim().slice(0, n));
 const rel = (u) => String(u || '').replace(/^https?:\/\/[^/]+/, '');
-const NOUN = {ojs: ['Journal', 'Hosted Journals'], omp: ['Press', 'Hosted Presses'], ops: ['Server', 'Hosted Servers']};
+const LABELS = {
+    ojs: {noun: 'Journal', hosted: 'Hosted Journals', table: 'Journals', create: 'Create Journal'},
+    omp: {noun: 'Press', hosted: 'Hosted Presses', table: 'Presses', create: 'Create Press'},
+    ops: {noun: 'Server', hosted: 'Hosted Servers', table: 'Servers', create: 'Create Server'},
+};
 
 // A server error's own text (a raw database or PHP message) is never kept
 // in a file here; only whether one was shown.
@@ -64,39 +75,70 @@ const visibleDialogs = (page) => page.evaluate(() => [...document.querySelectorA
     .map((d) => d.innerText.replace(/\s+/g, ' ').trim().slice(0, 300))).catch(() => []);
 
 forEachApp(async (app) => {
-    const [noun, hostedNoun] = NOUN[app.name];
-    const t = tag('u66ir1');
-    const A = `${t}a`;
-    const Z = `${t}z`;
-    const nameA = `Test ${noun} ${t}`;
-    const nameZ = `Empty ${noun} ${t}`;
+    const {HostedJournalsPage} = require('../../../pages/HostedJournalsPages.js');
+    const L = LABELS[app.name];
+    const ctx = app.contextPath; // publicknowledge
+    const t = tag('u66');
+    const nameZ = `Empty ${L.noun} ${t}`;
     const {table, id} = app.contextTables;
-    const facts = {app: app.name, tag: t, contexts: {}};
+    const facts = {app: app.name, line: app.line || 'main', dataset: app.dataset, tag: t, contexts: {}};
     const fact = (k, v) => {
         facts[k] = scrub(v);
         console.log(`[fact] ${app.name} ${k}: ${flat(JSON.stringify(facts[k]), 900)}`);
     };
-    for (const [k, path, name] of [['A', A, nameA], ['Z', Z, nameZ]]) {
-        const r = await app.api.createContext({tag: path, context: {name}});
-        facts.contexts[k] = {path, name, id: r.contextId};
-    }
-    const instUrl = app.url(`/index.php/${A}/en/management/settings/institutions`);
+    if (!app.dataset) throw new Error('walk.js runs on a dataset fleet only (fleet-prep --dataset)');
+    const ctxId = (path) => sql(app, `select ${id} from ${table} where path='${path}'`);
+    facts.contexts.A = {path: ctx, id: ctxId(ctx)};
+    const instUrl = app.url(`/index.php/${ctx}/en/management/settings/institutions`);
     const hostedUrl = app.url('/index.php/index/en/admin/contexts');
     const dbState = (cid) => ({
         contextRow: sql(app, `select count(*) from ${table} where ${id}=${cid}`),
         institutions: sql(app, `select count(*) from institutions where context_id=${cid}`),
         userGroups: sql(app, `select count(*) from user_groups where context_id=${cid}`),
+        genres: sql(app, `select count(*) from genres where context_id=${cid}`),
+        submissions: sql(app, `select count(*) from submissions where context_id=${cid}`),
+        tombstones: sql(app, 'select count(*) from data_object_tombstones'),
     });
+    // The raw OAI-PMH answer (the browser's own request context, as a harvester reads it;
+    // page.goto would hand back the page the XSL stylesheet draws).
+    const oai = async (page, name) => {
+        const r = await page.request.get(app.url(`/index.php/${ctx}/oai?verb=ListIdentifiers&metadataPrefix=oai_dc`));
+        const body = (await r.text()).replace(/\s+/g, ' ');
+        const heads = [...body.matchAll(/<header( status="deleted")?>\s*<identifier>([^<]*)<\/identifier>/g)].map((m) => `${m[1] ? 'deleted ' : ''}${m[2]}`);
+        const res = {status: r.status(), headers: heads, error: (body.match(/<error[^>]*>[^<]*/) || [null])[0]};
+        record(name, res);
+        return res;
+    };
 
     const {page, close} = await launch(app);
     try {
         await signIn(page, 'admin');
+        const hosted = new HostedJournalsPage(page, L);
+
+        // Precondition: the control context, created on screen.
+        await page.goto(hostedUrl);
+        await hosted.expectOpen();
+        const win = await hosted.openCreate();
+        await win.type(win.title('en'), nameZ);
+        await win.type(win.initials('en'), 'EP');
+        await win.type(win.contactName, nameZ);
+        await win.type(win.contactEmail, `${t}@mailinator.com`);
+        await win.country.selectOption({label: 'Canada'});
+        await win.type(win.path, t);
+        if (await win.languageBox('en').count()) {
+            await win.setBox(win.languageBox('en'), true);
+            await win.setBox(win.primaryChoice('en'), true);
+        }
+        const created = await win.pressSave();
+        await page.waitForURL(/\/admin\/wizard\/\d+/, {timeout: T}).catch(() => {});
+        facts.contexts.Z = {path: t, name: nameZ, id: ctxId(t)};
+        fact('0 create control', {status: created.status(), url: rel(page.url()), id: facts.contexts.Z.id});
 
         // 1
         await page.goto(instUrl);
         await idle(page);
         const s1 = await snap(page, 's1-institutions');
-        fact('1 institutions page', {snap: s1.name, h1: flat(await page.locator('main h1').first().innerText().catch(() => null), 80), rows: await rowTexts(page)});
+        fact('1 institutions page', {snap: s1.name, h1: flat(await page.locator('main h1').first().innerText().catch(() => null), 80), rows: await rowTexts(page), db: dbState(facts.contexts.A.id)});
 
         // 2
         await page.getByRole('button', {name: 'Add Institution'}).click();
@@ -139,62 +181,63 @@ forEachApp(async (app) => {
         const s4 = await snap(page, 's4-reloaded');
         fact('4 ok and reload', {okShown, dialogsAfterOk: dlg4, snap: s4.name, rows: await rowTexts(page), db: dbState(facts.contexts.A.id)});
 
+        fact('oai before removal', await oai(page, 'oai-before'));
+
         // 5, 6, 8
-        const rowOf = (name) => page.locator('tr.gridRow').filter({hasText: name}).first();
-        const remove = async (k, name) => {
+        const remove = async (k) => {
+            const path = facts.contexts[k].path;
             await page.goto(hostedUrl);
-            await idle(page);
-            const r = rowOf(name);
-            await r.waitFor({timeout: T});
+            await hosted.expectOpen();
+            const name = await hosted.rowName(path);
             const before = await snap(page, `s5-${k}-hosted-before`);
-            const ex = r.locator('a.show_extras');
-            if (await ex.count()) { await ex.click(); await sleep(400); }
-            await r.locator('xpath=following-sibling::tr[1]').getByRole('link', {name: 'Remove', exact: true}).click();
-            const conf = page.locator('[role="dialog"]:visible, [data-cy="dialog"]:visible').last();
+            const controls = await hosted.rowControls(path);
+            await controls.getByRole('link', {name: 'Remove', exact: true}).click();
+            const conf = page.getByRole('dialog', {name: 'Confirm', exact: true});
             await conf.waitFor({timeout: T});
             await sleep(300);
             const confText = flat(await conf.innerText().catch(() => null), 300);
             const ww = watch(page);
             await conf.getByRole('button', {name: 'OK', exact: true}).click();
-            await sleep(4000);
+            await page.waitForResponse((r) => /delete-context/.test(r.url()), {timeout: 120_000}).catch(() => {});
+            await sleep(2000);
             await idle(page);
             ww.stop();
             const after = await snap(page, `s5-${k}-after-ok`);
-            const res = {hostedTitle: flat(await page.locator('h1').first().innerText().catch(() => null), 80), beforeSnap: before.name, confirmText: confText, requests: ww.seen,
-                afterSnap: after.name, dialogsAfter: await visibleDialogs(page), notices: after.notices, rowSamePage: await rowOf(name).count()};
+            const res = {rowName: name, beforeSnap: before.name, confirmText: confText, requests: ww.seen,
+                afterSnap: after.name, dialogsAfter: await visibleDialogs(page), notices: after.notices, rowSamePage: await hosted.row(path).count()};
             await page.goto(hostedUrl);
             await idle(page);
             const re = await snap(page, `s6-${k}-hosted-reloaded`);
             res.reloadSnap = re.name;
-            res.rowAfterReload = await rowOf(name).count();
+            res.rowAfterReload = await hosted.row(path).count();
             res.db = dbState(facts.contexts[k].id);
             return res;
         };
-        fact('5-6 remove Test', await remove('A', nameA));
+        fact('5-6 remove dataset context', await remove('A'));
 
         // 7
         await page.goto(instUrl);
         await idle(page);
         const s7 = await snap(page, 's7-institutions-after');
         const t7 = `${s7.text.main || ''} ${s7.text.dialog || ''}`;
-        await page.goto(app.url(`/index.php/${A}/en/management/settings/access`));
-        await idle(page);
-        await page.locator('#roles-button').first().click({timeout: 5000}).catch(() => {});
+        await page.goto(app.url(`/index.php/${ctx}/en/management/settings/access`));
         await idle(page);
         await sleep(800);
         const s7b = await snap(page, 's7-access-after');
         const t7b = `${s7b.text.main || ''} ${s7b.text.dialog || ''}`;
-        await page.goto(app.url(`/index.php/${A}`));
+        await page.goto(app.url(`/index.php/${ctx}`));
         await idle(page);
         const s7c = await snap(page, 's7-home-after');
-        fact('7 after failed removal', {
-            institutions: {snap: s7.name, denied: (t7.match(/[^.]*does not have access to this operation\./) || [null])[0]},
-            access: {snap: s7b.name, denied: (t7b.match(/[^.]*does not have access to this operation\./) || [null])[0], text: flat(s7b.text.main, 300)},
-            home: {snap: s7c.name, url: rel(page.url()), title: s7c.title},
+        const denied = (s) => (s.match(/[^.]*does not have access to this operation\./) || [null])[0];
+        fact('7 after removal', {
+            institutions: {snap: s7.name, url: rel(s7.url), denied: denied(t7)},
+            access: {snap: s7b.name, url: rel(s7b.url), denied: denied(t7b), text: flat(s7b.text.main, 300)},
+            home: {snap: s7c.name, url: rel(page.url()), title: s7c.title, text: flat(s7c.text.main, 300)},
         });
+        fact('oai after removal', await oai(page, 'oai-after'));
 
         // 8
-        fact('8 remove Empty (control)', await remove('Z', nameZ));
+        fact('8 remove control', await remove('Z'));
     } finally {
         record('facts', facts);
         await close();

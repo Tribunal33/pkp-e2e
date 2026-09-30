@@ -52,52 +52,61 @@ Institutions and only the menu entry is wrong.
 ## Steps to reproduce
 
 Preconditions:
-- A fresh install with its default languages, holding one journal (press).
-- Users of the journal: "Maya Manager" with the Journal Manager (Press
-  Manager) role, and "Eddie Editor" with the Journal editor (Press editor)
-  role only.
-- As the Site Administrator: Administration › "Site Settings" ›
-  "Statistics", tick "Enable institutional statistics", "Save".
-- As Maya: Settings › "Distribution" › "Statistics", tick "Enable
-  institutional statistics", "Save".
-- As Maya: Settings › "Users & Roles" › "Roles", open the "Journal editor"
-  ("Press editor") row's arrow, "Edit", untick "Permit changes to
-  Settings", "OK".
+
+- PKP's default test dataset for OJS, OMP or OPS `main` (or
+  `stable-3_5_0`), with its journal, press or server `publicknowledge`.
+- Institutional statistics on, which the dataset leaves off and without
+  which the side menu offers no "Institutions":
+  - as `admin`: Administration › "Site Settings" › "Statistics", tick
+    "Enable institutional statistics", "Save";
+  - as `rvaca` (the manager): Settings › "Distribution" › "Statistics",
+    tick "Enable institutional statistics", "Save".
+- On a journal or press: as `rvaca`, Settings › "Users & Roles" ›
+  "Roles", open the "Journal editor" ("Press editor") row's arrow,
+  "Edit", untick "Permit changes to Settings", "OK". `dbarnes` holds
+  that role.
 
 Journal or press:
 
-1. Sign in as Eddie.
+1. Sign in as `dbarnes`.
 2. Look at the side menu.
 3. Press "Institutions".
 
 **Expected:** "Institutions" opens the Institutions page, the list with
-"Add Institution", as it does for Maya: the permission's issue lists
+"Add Institution", as it does for `rvaca`: the permission's issue lists
 Institutions among the side menu items a role without it keeps.
 
 **Observed:** the side menu reads "Editor Dashboard", "Start A New
 Submission", "DOIs", "Institutions", "Content", "Statistics", "Tools" (no
 "Settings"). "Institutions" opens
-`<journal>/user/authorizationDenied?message=user.authorization.roleBasedAccessDenied`,
+`/index.php/publicknowledge/en/user/authorizationDenied?message=user.authorization.roleBasedAccessDenied`,
 a page reading:
 
 ```
 The current role does not have access to this operation.
 ```
 
-Control: Maya's side menu shows "Institutions" and "Settings", and
+Control: `rvaca`'s side menu shows "Institutions" and "Settings", and
 "Institutions" opens the page with "Add Institution".
 
-Preprint server:
+Preprint server (its one manager role, "Preprint Server manager", cannot
+lose the permission, so the steps create a second one):
 
-On a preprint server, whose one manager role cannot lose the permission,
-the same shows for a role created at the manager level: as Maya, Settings
-› "Users & Roles" › "Roles" › "Create New Role", "Permission level"
-"Manager", "Role Name" "Associate Manager", "Abbreviation" "AM", "OK" ("Permit
-changes to Settings" arrives unticked); "Users" › "Invite to a role",
-search an existing user's email, "Search User", role "Associate Manager"
-from today, "Save And Continue", "Invite user to the role"; that user opens
-the email's "Accept Invitation" link, presses "Accept And Continue to OPS",
-signs in and presses "Institutions": the same refusal.
+1. As `rvaca`: Settings › "Users & Roles" › "Roles" › "Create New Role",
+   "Permission level" "Manager", "Role Name" "Associate Manager",
+   "Abbreviation" "AM", "OK" ("Permit changes to Settings" arrives
+   unticked).
+2. "Users" › "Invite to a role", search `dbuskins@mailinator.com`,
+   "Search User", role "Associate Manager" from today, "Save And
+   Continue", "Invite user to the role".
+3. Signed out, open the "Accept Invitation" link of the email to
+   `dbuskins@mailinator.com` and press "Accept And Continue to OPS".
+4. Sign in as `dbuskins` and press "Institutions" in the side menu.
+
+**Observed:** the side menu reads "Editor Dashboard", "Start A New
+Submission", "DOIs", "Institutions", "Statistics", "Tools" (no
+"Settings"), and "Institutions" opens the same refusal. The control is
+the same as above.
 
 ## Cause
 
@@ -196,30 +205,34 @@ already there, and an e2e scenario.
 ## Evidence
 
 - Kept script, taking the Steps (journal and press) and the preprint
-  server paragraph through the screens, with the manager as control:
+  server steps through the screens, with `rvaca` as control:
   [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js),
-  run with
-  `PROBE_FEATURE=issues PROBE_AGENT=ir3 node bin/probe.js all shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js`
-  (stable-3_5_0: `PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35` in front).
-  - The harness builds a new journal, press or preprint server with its
-    accounts (the manager, and the editor or, on OPS, an Author); the
-    statistics boxes, the unticked permission, the new role, the
-    invitation and its acceptance are done on screen.
-  - The editor's side menu is read on the context's `submissions` page;
-    the walk puts the site's box back afterwards.
-- Walked 2026-09-30 on PostgreSQL: main OJS 7ce98ec09e, OMP 3b0ecf794c,
-  OPS c8af945bb7 (lib/pkp 3dc90c81a6); stable-3_5_0 OJS 040e916378, OMP
-  4f90dadac, OPS 0bb1ca0f6e (lib/pkp 8809a197de). All six showed the
-  Observed above.
+  run on an install freshly loaded from the default dataset with
+  `npm run fleet-prep -- --feature issues-rv3 --dataset 3 --reset`, then
+  `PROBE_FEATURE=issues-rv3 PROBE_AGENT=rv3 node bin/probe.js all shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js`
+  (stable-3_5_0: `PKP_E2E_LINE=stable-3_5_0` in front of both, feature
+  `issues-rv3-3_5`, and `PROBE_RUN=r35` in front of the run).
+  - The harness builds nothing: the statistics boxes, the unticked
+    permission, the new role, the invitation and its acceptance are done
+    on screen, as the Steps say, by the dataset's own users.
+  - The walk's new role was named "Associate Manager" plus a run tag
+    (`u66rv3…`), so its invitation email could be told apart from
+    others; the side menu is read on the context's `submissions` page.
+- Walked 2026-09-30 on PostgreSQL, each install loaded from PKP's default
+  test dataset at pkp/datasets c0f9f10 (2026-09-30), `<app>/main/pgsql`
+  and `<app>/stable-3_5_0/pgsql`, whose versions matched the code (no
+  upgrade): main OJS 7ce98ec09e, OMP 3b0ecf794c, OPS c8af945bb7 (lib/pkp
+  3dc90c81a6); stable-3_5_0 OJS 040e916378, OMP 4f90dadac, OPS 0bb1ca0f6e
+  (lib/pkp 8809a197de). All six showed the Observed above.
+  - In the dataset, the site's and the context's "Enable institutional
+    statistics" are off, OJS payments are off, and every manager-level
+    role has "Permit changes to Settings" ticked.
   - On 3.5 the side menus read "Editor Dashboard", "Issues" ("Catalog" on
-    OMP, "My Submissions as Author" on OPS), "DOIs", "Institutions",
-    "Statistics", "Tools", with no "Settings".
+    OMP, nothing on OPS), "DOIs", "Institutions", "Statistics", "Tools",
+    with no "Settings".
   - Settings › Website, typed as the same user, gave the same refusal on
     every app.
-  - The only server error in the walks is the Plugin Gallery's
-    `plugin-gallery-grid/fetch-grid` 500 on Administration › Site
-    Settings, a separate known fault of the test installs, which reach no
-    outside site.
+  - No request answered an error and no page script failed in the walks.
   - The database does not bear on this fault.
 - 3.4, by code: pkp-lib `stable-3_4_0` at df13621c2d
   (`ManagementHandler::authorize()` adds `ContextAccessPolicy` only; no
@@ -245,5 +258,7 @@ already there, and an e2e scenario.
   "Access to Settings"): nothing about this fault; `pkp/pkp-lib#11515`
   (the Production editor role's stages) is another fault, and
   `pkp/ui-library#197` built the Institutions page.
-- Not driven: the OPS preprint server path on OJS and OMP (the same code);
-  the page's actions for these roles after the proposed fix (not tried).
+- Not driven: the preprint server steps on OJS and OMP (the same code);
+  the Production editor role, which carries the same box on the same
+  code path; the page's actions for these roles after the proposed fix
+  (not tried).
