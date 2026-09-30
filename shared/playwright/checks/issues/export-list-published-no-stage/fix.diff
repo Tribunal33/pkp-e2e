@@ -1,0 +1,20 @@
+--- a/lib/pkp/classes/components/listPanels/PKPSubmissionsListPanel.php
++++ b/lib/pkp/classes/components/listPanels/PKPSubmissionsListPanel.php
+@@ -119,7 +119,16 @@
+             ],
+             [
+                 'heading' => __('settings.roles.stages'),
+-                'filters' => $this->getWorkflowStages(),
++                'filters' => [
++                    ...$this->getWorkflowStages(),
++                    // A submission with a published version of record rests in Done,
++                    // which the dashboard presents as "Published" (pkp/pkp-lib#12799).
++                    [
++                        'param' => 'stageIds',
++                        'value' => WORKFLOW_STAGE_ID_DONE,
++                        'title' => __('submission.stage.published'),
++                    ],
++                ],
+             ],
+             [
+                 'heading' => __('submission.list.activity'),
