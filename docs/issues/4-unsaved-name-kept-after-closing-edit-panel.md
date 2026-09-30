@@ -1,31 +1,17 @@
 # A name or title abandoned in an "Edit" panel stays on the row, and the next "Save" stores it
 
-Severity: medium · Effort: small · Defect · OJS OMP OPS · main 3.5 3.4 3.3
+- **Severity** medium · **Effort** small · **Kind** defect
+- **Introduced** `pkp/ui-library#88` for `pkp/pkp-lib#5865` · [d0ffc05ab4](https://github.com/pkp/ui-library/commit/d0ffc05ab4ae7f06e8d2ab82f30ffb8a5ea9a7a3) · 2020-05-13 · Nate Wright (NateWr); copied into Institutions by `pkp/ui-library#213` (Bozana Bokan, bozana) and into Highlights by `pkp/ui-library#288` (Nate Wright, NateWr)
+- **Upstream** none found (2026-09-30)
+- **Tracked in** specs U66 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a2), U12 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a11), U11 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U11-highlights.md#a4) · **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
 
-Introduced: `pkp/ui-library#88` for `pkp/pkp-lib#5865`, commit
-[d0ffc05ab4](https://github.com/pkp/ui-library/commit/d0ffc05ab4ae7f06e8d2ab82f30ffb8a5ea9a7a3)
-(2020-05-13), by Nate Wright (NateWr), whose Announcements list first
-handed a row's own title object to the edit form; the form's in-place
-write dates from
-[7496b3c2c4](https://github.com/pkp/ui-library/commit/7496b3c2c4b7872373bc2f2fef0e572bb8301059)
-(2018-10-23, `pkp/pkp-lib#3594`, the first forms). The same hand-off was
-copied into Institutions by `pkp/ui-library#213` (Bozana Bokan, bozana)
-and into Highlights by `pkp/ui-library#288` (Nate Wright, NateWr).
+| Affects | main | 3.5 | 3.4 | 3.3 |
+|---|---|---|---|---|
+| OJS | yes | yes | yes (code) | yes (code) |
+| OMP | yes | yes | yes (code) | yes (code) |
+| OPS | yes | yes | yes (code) | yes (code) |
 
-Affects: main OJS OMP OPS (driven) · 3.5 OJS OMP OPS (driven) · 3.4 OJS
-OMP OPS (by code; Highlights only where `[features] highlights` is on) ·
-3.3 OJS OMP OPS (by code, Announcements only; Institutions and Highlights
-n/a)
-
-Upstream: none found (2026-09-30)
-
-OJS at 7ce98ec09e, OMP at 3b0ecf794c, OPS at c8af945bb7 (lib/pkp
-3dc90c81a6, lib/ui-library 280f98c5). Tracked in spec U66 register
-[A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a2),
-spec U12 register
-[A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a11)
-and spec U11 register
-[A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U11-highlights.md#a4).
+3.4 shows it on Highlights only where `[features] highlights` is on; 3.3 on Announcements only (no Institutions or Highlights there).
 
 ## Summary
 

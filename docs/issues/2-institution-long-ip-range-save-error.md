@@ -1,27 +1,17 @@
 # A long "IP ranges" line makes an institution's "Save" fail, adding duplicates or wiping its ranges
 
-Severity: medium · Effort: small · Defect · OJS OMP OPS · main 3.5 3.4 3.3
-· crash: server
+- **Severity** medium · **Effort** small · **Kind** defect · **Crash** server
+- **Introduced** not traced; present since at least [5091b6949e](https://github.com/pkp/ojs/commit/5091b6949e1c9f6f50b62f5d41951d8506949995) (2009-05-20, OJS subscriptions), carried into pkp-lib by `pkp/pkp-lib#8109` for `pkp/pkp-lib#6782` · [bed0ee4c3b](https://github.com/pkp/pkp-lib/commit/bed0ee4c3bcde7cf48c9f70bdee9400b061a31c1) · Bozana Bokan (bozana)
+- **Upstream** none found (2026-09-30)
+- **Tracked in** spec U66 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a9) · **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
 
-Introduced: not traced; present since at least pkp/ojs commit
-[5091b6949e](https://github.com/pkp/ojs/commit/5091b6949e1c9f6f50b62f5d41951d8506949995)
-(2009-05-20, "Subscriptions overhaul", by michael), which stored an
-institutional subscription's IP ranges in a 40-character `ip_string` beside
-a range pattern that allows any number of spaces around "-". Carried into
-the shared Institutions by `pkp/pkp-lib#8109` for `pkp/pkp-lib#6782`,
-commit
-[bed0ee4c3b](https://github.com/pkp/pkp-lib/commit/bed0ee4c3bcde7cf48c9f70bdee9400b061a31c1)
-(2021-06-15), by Bozana Bokan (bozana).
+| Affects | main | 3.5 | 3.4 | 3.3 |
+|---|---|---|---|---|
+| OJS | yes | yes | yes (code) | yes (code) |
+| OMP | yes | yes | yes (code) | n/a |
+| OPS | yes | yes | yes (code) | n/a |
 
-Affects: main OJS OMP OPS (driven) · 3.5 OJS OMP OPS (driven) · 3.4 OJS
-OMP OPS (by code) · 3.3 OJS (by code, on an institutional subscription's
-"IP ranges"; there is no Institutions page), OMP OPS n/a
-
-Upstream: none found (2026-09-30)
-
-OJS at 7ce98ec09e, OMP at 3b0ecf794c, OPS at c8af945bb7 (lib/pkp
-3dc90c81a6). Tracked in spec U66 register
-[A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a9).
+3.3 has no Institutions page; OJS 3.3 shows it on an institutional subscription's "IP ranges".
 
 ## Summary
 

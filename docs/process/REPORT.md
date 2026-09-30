@@ -37,27 +37,28 @@ never dropped.
 ```markdown
 # <What breaks, in product words: who does what, and what goes wrong>
 
-Severity: critical | high | medium | low · Effort: small | medium | large
-· Regression | Intention gap | Defect · <OJS OMP OPS, the apps that show
-it> · <main 3.5 3.4 3.3, the versions that show it>[ · crash: server |
-script | both][ · tracked upstream]
+- **Severity** critical | high | medium | low · **Effort** small | medium
+  | large · **Kind** regression | intention gap | defect[ · **Crash**
+  server | script | both]
+- **Introduced** `<repo>#<pr>` for `<repo>#<issue>` · [<sha>](<commit
+  URL>) · <date> · <name> (<github handle>) | not traced; present since
+  at least [<sha>](<commit URL>) (<date>)
+- **Upstream** none found (<date>) | `<repo>#<n>` (open | closed
+  without a fix | fix in PR `<repo>#<n>`, not yet in main)[, covering
+  <what it covers when that differs>]
+- **Tracked in** <spec Ux [An](<entry URL>), [Am](<entry URL>) |
+  ci-triage row | app-changes row n> · **Checked** <date>, each
+  branch's tip (the commits in Evidence)[ · Temporary: delete once
+  acted on]
 
-Introduced: `<repo>#<pr>` for `<repo>#<issue>`, commit <sha> (<date>),
-by <name> (<github handle>) | not traced; present since at least <sha>
+| Affects | main | 3.5 | 3.4 | 3.3 |
+|---|---|---|---|---|
+| OJS | yes | yes | no | n/a |
+| OMP | yes | yes (code) | … | … |
+| OPS | … | … | … | … |
 
-Affects: main <apps> (driven) · 3.5 <apps> (driven | by code) · 3.4
-<apps> (by code) · 3.3 <apps> (by code); an app or version that does not
-show it says "does not", "n/a" (the surface is not there) or "not
-checked"
-
-Upstream: `<repo>#<n>` (open | closed without a fix | fix in PR
-`<repo>#<n>`, not yet in main)[, covering <what it covers when that
-differs>] | none found (<date>)
-
-<App(s)> at <app tip> (lib/pkp <tip>). Tracked
-in <ci-triage row | spec Ux register An, Am | app-changes row n>.
-Temporary: delete once acted on. (An issue report leaves the Temporary
-clause out, and its "Tracked in" links each register entry.)
+[One line under the table, only when a cell needs a word: "3.3 has no
+Institutions page; OJS 3.3 shows it on a subscription's IP ranges".]
 
 ## Summary
 
@@ -77,17 +78,28 @@ from its neighbours: who, on which screen, what goes wrong. No cause, no
 class names, never "fails" without saying how. It is read in a list, so
 it stays around fifteen words.
 
-**The labels line.** The words are the issue's labels ("As a GitHub
-issue"), in this order: the severity ("Severity" below), the effort of the
-recommended fix ("Effort" below), the kind, the apps and the versions
-that show it (on any version and any app, the detail is in Affects), and
-the crash word when the app itself failed (a request behind the action
-answered a server error, or the page's own script failed in the
-browser), and `tracked upstream` when the Upstream line names a pkp
-issue or PR. The kind is **Regression** when it worked before and a change
-broke it (Introduced names that change), **Intention gap** when a fix
-misses what its issue asked for, and **Defect** otherwise: it never
-worked, or its start cannot be traced.
+**The header.** Everything a reader filters and sorts by, readable in
+the file itself: the four bullets and the Affects table, in this order,
+right under the title. The GitHub labels are derived from it ("As a
+GitHub issue"), so the report carries the same facts wherever it is
+read; a label changed on GitHub is copied back into the header.
+
+- **Severity**, **Effort**: the words defined below ("Severity",
+  "Effort").
+- **Kind**: **regression** when it worked before and a change broke it
+  (Introduced names that change), **intention gap** when a fix misses
+  what its issue asked for, and **defect** otherwise: it never worked, or
+  its start cannot be traced.
+- **Crash**, only when the app itself failed: a request behind the action
+  answered a server error (`server`), or the page's own script failed in
+  the browser (`script`), or both.
+- **Introduced**, **Upstream**, **Affects**: below.
+- **Affects**: the table, and one line under it only when a cell needs
+  a word (a feature flag, the older screen that shows it).
+- **Tracked in** links each register entry (or names the tracking row)
+  and **Checked** dates the walks; the branch tips they ran on are
+  listed in Evidence. A report under `docs/reports/` ends the bullet
+  with "Temporary: delete once acted on"; an issue report does not.
 
 **Introduced.** The change that brought the fault in, so the team can
 see who knows that code best and ask them first. It is traced from the
@@ -100,8 +112,10 @@ a pkp-lib change and an app change names both. The person is the PR's
 author, or the commit's author when there is no PR, by name and GitHub
 handle. A fault older than the history that can be read, or spread over
 many changes, says "not traced" and the oldest commit known to show it.
-It names a starting point for the conversation, never blame: the line
-states the change and its author, and nothing about the author.
+It names a starting point for the conversation, never blame: the bullet
+states the change and its author, and nothing about the author. The
+detail of the trace (blame steps, moves, the PR's discussion) goes in
+Evidence, so the bullet stays one line or two.
 
 **Upstream.** Whether pkp already tracks the fault, so the team sees
 at once that a report adds to a known problem rather than a new one.
@@ -109,7 +123,7 @@ Search pkp/pkp-lib first, where most of the shared code lives, then the
 app's own repo and pkp/ui-library: by the words a user would use for the
 symptom, then by the class or method the Cause names. A pkp issue about
 the same fault, open or closed without a fix, or a PR that fixes it but
-has not reached `main`, goes on the line, with a clause when it covers
+has not reached `main`, goes in the bullet, with a clause when it covers
 less or more than this report (another app, one symptom of several).
 The report is written as usual either way: it re-verifies the fault on
 today's code and adds the steps, cause and fix analysis the pkp issue
@@ -117,31 +131,44 @@ may lack. A fix already on `main` means the finding is stale and gets
 no report. Nothing found says so, with the date of the search.
 
 **Affects.** Which apps on which versions show the fault, so the team
-can see what a fix must reach and what a backport would cover. Every app
-on every version gets an answer: shows it, does not, n/a when the
-surface does not exist there, or not checked. Each answer says what it
-rests on.
+can see what a fix must reach and what a backport would cover. The table
+has a row per app and a column per version, and every cell is answered:
 
-- **main** is driven: the Steps are walked on every app that has the
-  surface.
-- **3.5** is driven on the stable-3_5_0 install when the steps can be
-  walked there, otherwise read in the code.
-- **3.4 and 3.3** are read in the code of pkp's `stable-3_4_0` and
-  `stable-3_3_0` branches, the app's, its pkp-lib's and its
-  ui-library's, fetched from pkp (the app checkout's `upstream` remote,
-  the `origin` of `lib/pkp` and `lib/ui-library`) and read
-  with `git show <branch>:<path>`, never checked out. For a fault with
-  an Introduced commit, the question is whether that change, or its
-  backport (found by the PR or issue number in the branch's log), is on
-  the branch. For an older fault, find the code that does the same job
-  on that branch and judge whether it has the same fault. Older versions
-  often do that job in other classes, so a missing file answers nothing.
+- **yes** / **no**: the Steps were walked on that app and version, on a
+  freshly reset install of the branch's tip, and the fault showed or did
+  not;
+- **n/a**: the surface does not exist there;
+- **yes (code)** / **no (code)**: read in the code, not walked;
+- **not checked**, with the reason in Evidence.
+
+`main` and 3.5 are walked: the kept script takes the same Steps on the
+`stable-3_5_0` install with `PKP_E2E_LINE=stable-3_5_0` in front, and
+only when the steps cannot be taken there does a 3.5 cell fall back to
+the code, with the reason in Evidence. 3.4 and 3.3 are read in the code
+by default, since a fix is not expected to be backported past the 3.5
+LTS: pkp's `stable-3_4_0` and `stable-3_3_0` branches, the app's, its
+pkp-lib's and its ui-library's, fetched from pkp (the app checkout's
+`upstream` remote, the `origin` of `lib/pkp` and `lib/ui-library`) and
+read with `git show <branch>:<path>`. For a fault with an Introduced
+commit, the question is whether that change, or its backport (found by
+the PR or issue number in the branch's log), is on the branch; for an
+older fault, find the code that does the same job there and judge
+whether it has the same fault (older versions often do that job in
+other classes, so a missing file answers nothing). When the team asks
+for a particular issue to be checked on 3.4 or 3.3, the Steps are walked
+there too, on that line's install (harness.md "The stable lines"), and
+the cells become **yes** or **no**; where the older screens make the
+Steps differ, the Steps say so in a bracket and Evidence names the
+adaptation.
+
+The severity never rests on a "(code)" cell alone, and a walk and a code
+read that disagree are settled before the report goes out.
 
 A branch's tip stands for its version, since that is where a fix would
-land. Evidence says what each code read looked at, and names the
-database the walk ran on (the test installs run PostgreSQL); a fault
-that could depend on the database (a column length, a strict type, a
-query's ordering) says "MySQL not checked".
+land. Evidence lists each line's tips, says what each code read looked
+at, and names the database the walks ran on (the test installs run
+PostgreSQL); a fault that could depend on the database (a column length,
+a strict type, a query's ordering) says "MySQL not checked".
 
 **Summary.** The section the team reads most, so it is written last,
 once the Cause is settled and the report knows what the problem is
@@ -338,14 +365,15 @@ that is not wastes the time the label was meant to save.
 An issue report under `docs/issues/` is written to be filed as it
 stands, on pkp-e2e's tracker (`jardakotesovec/pkp-e2e`):
 
-- The title is the report's title, and the labels line becomes the
-  issue's labels: `severity: critical`, `severity: high`, `severity:
-  medium` or `severity: low`; `effort: small`, `effort: medium` or
-  `effort: large`; `regression`, `intention gap` or `defect`; one of
-  `ojs`, `omp`, `ops` per app; one of `main`, `3.5`, `3.4`, `3.3` per
-  version; `crash: server` or `crash: script` (both for both); and
-  `tracked upstream`.
-- The body is the file from the Introduced line to the end, unchanged.
+- The title is the report's title. The labels are read off the header:
+  `severity: <word>`, `effort: <word>`, the kind (`regression`,
+  `intention gap` or `defect`) and `crash: server` or `crash: script`
+  (both for both) from the first bullet; one of `ojs`, `omp`, `ops` per
+  app and one of `main`, `3.5`, `3.4`, `3.3` per version that has a
+  **yes** or **yes (code)** in the Affects table; and `tracked upstream`
+  when the Upstream bullet names a pkp issue or PR. They are a filter on
+  top of the header, never the only place a fact is written.
+- The body is the file below the title, header included, unchanged.
   So every link in it is a full address that works on GitHub: a pkp
   commit as its URL (`https://github.com/pkp/pkp-lib/commit/<sha>`),
   and pkp-e2e's own files as
@@ -364,10 +392,10 @@ that are symptoms of the same fault are one finding, and their issue
 report names each symptom. An issue report always holds one finding.
 A regression report may hold several when one change causes them: the
 Summary names each in a sentence, a `## Finding n — <title>` block per
-finding holds its own labels line, Impact, Steps, Cause and Proposed fix
-in that order, one shared Evidence section follows, and the labels line
-at the top carries the highest severity. Two findings with different
-fixes are two reports.
+finding holds its own first header bullet and Affects table, Impact,
+Steps, Cause and Proposed fix in that order, one shared Evidence section
+follows, and the header at the top carries the highest severity. Two
+findings with different fixes are two reports.
 
 ## Writing rules
 
@@ -383,6 +411,6 @@ fixes are two reports.
 - Short. The Summary and Impact together fit on one screen; a report
   that runs long has evidence in its body.
 - An update after the report went out (another app received the change,
-  the team ruled on part of it) is one dated paragraph under the header
-  paragraph, and the sections, the labels line included, are edited to
-  match; the report always reads as current.
+  the team ruled on part of it) is one dated paragraph under the header,
+  and the sections, the header included, are edited to match; the
+  report always reads as current.

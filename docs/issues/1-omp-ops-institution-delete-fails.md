@@ -1,15 +1,15 @@
 # Presses and preprint servers cannot delete an institution, and removing one that holds one half deletes it
 
-Severity: medium · Effort: small · Defect · OMP OPS · main 3.5 3.4 · crash: server
+- **Severity** medium · **Effort** small · **Kind** defect · **Crash** server
+- **Introduced** `pkp/pkp-lib#8109` for `pkp/pkp-lib#6782` · [bed0ee4c3b](https://github.com/pkp/pkp-lib/commit/bed0ee4c3bcde7cf48c9f70bdee9400b061a31c1) · 2022-07-23 · Bozana Bokan (bozana)
+- **Upstream** none found (2026-09-30)
+- **Tracked in** spec U66 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a3), [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a8) · **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
 
-Introduced: `pkp/pkp-lib#8109` for `pkp/pkp-lib#6782`, commit [bed0ee4c3b](https://github.com/pkp/pkp-lib/commit/bed0ee4c3bcde7cf48c9f70bdee9400b061a31c1) (written 2021-06-15, merged 2022-07-23), by Bozana Bokan (bozana)
-
-Affects: main OMP OPS (driven), OJS does not (driven) · 3.5 OMP OPS (driven), OJS does not (driven) · 3.4 OMP OPS (by code), OJS does not (by code) · 3.3 n/a (no institutions list in any of the three apps)
-
-Upstream: none found (2026-09-30)
-
-OMP at 3b0ecf794c, OPS at c8af945bb7 (lib/pkp 3dc90c81a6), OJS at 7ce98ec09e as the control. Tracked
-in spec U66 Institutions, register [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a3) and [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a8).
+| Affects | main | 3.5 | 3.4 | 3.3 |
+|---|---|---|---|---|
+| OJS | no | no | no (code) | n/a |
+| OMP | yes | yes | yes (code) | n/a |
+| OPS | yes | yes | yes (code) | n/a |
 
 ## Summary
 
@@ -254,6 +254,8 @@ migration's own check, and a test.
   both stacks pass through `classes/institution/DAO.php` line 179, the
   removal's through `PKPContextService.php` line 716
   (`Repo::institution()->deleteMany()`).
+- main walked at OJS 7ce98ec09e, OMP 3b0ecf794c, OPS c8af945bb7 (lib/pkp
+  3dc90c81a6).
 - Code read on main (lib/pkp 3dc90c81a6): `classes/institution/DAO.php`
   `delete()`, `classes/institution/Repository.php` `delete()` and
   `deleteMany()`, `classes/services/PKPContextService.php` `delete()`,

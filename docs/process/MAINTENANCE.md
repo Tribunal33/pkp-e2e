@@ -163,8 +163,8 @@ not a fix.
 2. **Bring back what the team did on GitHub** since the last session
    (`gh issue list -R jardakotesovec/pkp-e2e --state all --json
    number,state,labels,updatedAt`, then the comments of each issue
-   updated since): a changed label into the report's labels line and
-   the register entry's head; a ruling in a comment into the report
+   updated since): a changed label into the report's header and the
+   register entry's head; a ruling in a comment into the report
    and the entry's Reviewed blockquote (TEMPLATE); a closed issue as
    "A report's life" below says.
 3. Start on the right code ("Session hygiene"), the stable-3_5_0
@@ -174,7 +174,11 @@ not a fix.
    into the `main` checkouts as refs to read, and the fleets: `npm run
    fleet-prep -- --feature issues --reset` for `main`, and
    `PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-3_5
-   --reset` for 3.5.
+   --reset` for 3.5. 3.4 and 3.3 are read in the code (REPORT.md
+   "Affects"); a walk there happens only when the team asks for a
+   particular issue, on the `stable-3_4_0` or `stable-3_3_0` line
+   (harness.md "The stable lines"), provisioned and reset the same way
+   with that line's name.
 4. Take the specs: the top N rows of the queue, each claimed with `node
    bin/slot.js claim <U<nn>>` so that no parallel session takes it too.
    A spec left mid-way by an earlier session continues with the entries
@@ -192,8 +196,9 @@ not a fix.
    `briefs/issue-report.md`, one or two at a time on the fleets. The
    agent returns an outcome per entry:
    - `written` or `joined`: read the report against `REPORT.md` before
-     accepting it. The labels line is complete and its severity and
-     effort follow the definitions; the title and Summary carry the
+     accepting it. The header is complete and its severity and effort
+     follow the definitions; every Affects cell is answered, `main`
+     and 3.5 walked (a 3.5 "(code)" cell says in Evidence why); the title and Summary carry the
      problem in product words, and a reader who stops there could rank
      it; the Steps go through the screens and were walked; the Cause is
      the root; the Proposed fix answers the six questions; Introduced,
@@ -214,7 +219,7 @@ not a fix.
    accepted. For each entry the report covers:
    - the head's impact word becomes the report's severity (critical,
      high, medium or low) and its crash word follows the report's
-     labels line; the summary row follows the head, and its Review cell
+     header; the summary row follows the head, and its Review cell
      reads `issues (claude), <date> — re-verified`;
    - when the entry is the report's whole subject, its title becomes the
      report's title and its symptom the report's Summary, word for word,
