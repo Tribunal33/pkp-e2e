@@ -1,0 +1,23 @@
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ b/plugins/importexport/csv/templates/index.tpl	2026-09-30 00:00:00.000000000 +0000
+@@ -0,0 +1,20 @@
++{**
++ * plugins/importexport/csv/templates/index.tpl
++ *
++ * Copyright (c) 2014-2026 Simon Fraser University
++ * Copyright (c) 2003-2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * The plugin's page on Tools: it runs from the command line only.
++ *}
++{extends file="layouts/backend.tpl"}
++
++{block name="page"}
++	<h1 class="app__pageHeading">
++		{$pageTitle|escape}
++	</h1>
++
++	<div class="app__contentPanel">
++		{translate key="plugins.importexport.csv.cliOnly"}
++	</div>
++{/block}
