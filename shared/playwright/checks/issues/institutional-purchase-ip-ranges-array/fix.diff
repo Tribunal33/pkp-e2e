@@ -1,0 +1,12 @@
+--- a/classes/subscription/form/UserInstitutionalSubscriptionForm.php
++++ b/classes/subscription/form/UserInstitutionalSubscriptionForm.php
+@@ -107,7 +107,8 @@
+                 'institutionName' => $institution->getLocalizedName(),
+                 'institutionMailingAddress' => $subscription->getInstitutionMailingAddress(),
+                 'domain' => $subscription->getDomain(),
+-                'ipRanges' => $institution->getIPRanges()
++                // The form's box holds one IP range per line (readInputData() splits it again)
++                'ipRanges' => implode("\r\n", $institution->getIPRanges())
+             ];
+         }
+     }

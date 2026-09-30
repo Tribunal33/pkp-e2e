@@ -1,0 +1,56 @@
+--- a/pages/user/UserHandler.php
++++ b/pages/user/UserHandler.php
+@@ -159,11 +159,13 @@
+                 $request->redirect(null, 'index');
+             }
+ 
+-            // Ensure subscription can be updated
++            // Ensure subscription can be updated: only a purchase still awaiting
++            // payment. Saving the form sets the subscription to awaiting payment
++            // with today's dates, so an active one would lose its access at once;
++            // an active subscription is extended with "Renew" (payRenewSubscription).
+             $subscription = $subscriptionDao->getById($subscriptionId);
+             $subscriptionStatus = $subscription->getStatus();
+             $validStatus = [
+-                Subscription::SUBSCRIPTION_STATUS_ACTIVE,
+                 Subscription::SUBSCRIPTION_STATUS_AWAITING_ONLINE_PAYMENT,
+                 Subscription::SUBSCRIPTION_STATUS_AWAITING_MANUAL_PAYMENT
+             ];
+@@ -243,11 +245,13 @@
+                 $request->redirect(null, 'index');
+             }
+ 
+-            // Ensure subscription can be updated
++            // Ensure subscription can be updated: only a purchase still awaiting
++            // payment. Saving the form sets the subscription to awaiting payment
++            // with today's dates, so an active one would lose its access at once;
++            // an active subscription is extended with "Renew" (payRenewSubscription).
+             $subscription = $subscriptionDao->getById($subscriptionId);
+             $subscriptionStatus = $subscription->getStatus();
+             $validStatus = [
+-                Subscription::SUBSCRIPTION_STATUS_ACTIVE,
+                 Subscription::SUBSCRIPTION_STATUS_AWAITING_ONLINE_PAYMENT,
+                 Subscription::SUBSCRIPTION_STATUS_AWAITING_MANUAL_PAYMENT
+             ];
+--- a/templates/frontend/pages/userSubscriptions.tpl
++++ b/templates/frontend/pages/userSubscriptions.tpl
+@@ -112,9 +112,6 @@
+ 											{translate key="user.subscriptions.renew"}
+ 										</a>
+ 									{/if}
+-									<a class="cmp_button" href="{url op="purchaseSubscription" path="individual"|to_array:$userIndividualSubscription->getId()}">
+-										{translate key="user.subscriptions.purchase"}
+-									</a>
+ 								{/if}
+ 							</td>
+ 						{/if}
+@@ -209,9 +206,6 @@
+ 												{translate key="user.subscriptions.renew"}
+ 											</a>
+ 										{/if}
+-										<a class="cmp_button" href="{url op="purchaseSubscription" path="institutional"|to_array:$userInstitutionalSubscription->getId()}">
+-											{translate key="user.subscriptions.purchase"}
+-										</a>
+ 									{/if}
+ 								</td>
+ 							{/if}
