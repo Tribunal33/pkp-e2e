@@ -1811,7 +1811,7 @@ tab; the issue tab reloads `#identifiersTab` (note f).
 ? $this->_issueGalley->getId() : null, true)`, which passes the `null`
 of a new galley to `IssueGalleyDAO::pubIdExists(…, int $excludeGalleyId,
 …)`: a `TypeError`, answered as a server error. Live-probed 2026-09-24 (note q11): the save answered a server error (500) on `…/grid/issue-galleys/issue-galley-grid/update?issueId=…&issueGalleyId=`.
-Issue report: [docs/issues/U44-OJS1-new-issue-galley-publisher-id-save-error.md](../issues/U44-OJS1-new-issue-galley-publisher-id-save-error.md).
+Issue report: [pkp-e2e#5](https://github.com/jardakotesovec/pkp-e2e/issues/5) ([docs/issues/U44-OJS1-new-issue-galley-publisher-id-save-error.md](../issues/U44-OJS1-new-issue-galley-publisher-id-save-error.md)).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — `ArticleFront` (note i). Live-probed 2026-09-24 (note q24).
