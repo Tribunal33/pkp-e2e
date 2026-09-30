@@ -1992,7 +1992,7 @@ Issue report: [pkp-e2e#9](https://github.com/jardakotesovec/pkp-e2e/issues/9) ([
 
 <a id="fn-f-a10"></a>
 **f-a10** — `userSubscriptions.tpl` offers `purchaseSubscription/{kind}/{id}` on an `ACTIVE` subscription; `UserIndividualSubscriptionForm::execute()` (and the institutional one) set the existing subscription's status to `AWAITING_MANUAL_PAYMENT` (or `_ONLINE_`) and both dates to today before any payment. Live-probed 2026-09-25 (td18), individual and institutional.
-Issue report: [docs/issues/U51-A10-purchase-active-subscription-takes-access-away.md](../issues/U51-A10-purchase-active-subscription-takes-access-away.md).
+Issue report: [pkp-e2e#36](https://github.com/jardakotesovec/pkp-e2e/issues/36) ([docs/issues/U51-A10-purchase-active-subscription-takes-access-away.md](../issues/U51-A10-purchase-active-subscription-takes-access-away.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — `UserInstitutionalSubscriptionForm::execute()` calls `Repo::institution()->add()` for a new `Institution` on every save, then points the subscription at it. Live-probed 2026-09-25 (td17, td18): two "Tide University" rows after two purchases, a second "K3 Uni B" after "Purchase" on an existing one.
@@ -2040,7 +2040,7 @@ Issue report: [pkp-e2e#11](https://github.com/jardakotesovec/pkp-e2e/issues/11) 
 
 <a id="fn-f-a25"></a>
 **f-a25** — `UserInstitutionalSubscriptionForm::initData()` fills `ipRanges` with `$institution->getIPRanges()`, an array, which the text box prints as "Array"; the IP check then refuses it. Live-probed 2026-09-25 (td18).
-Issue report: [docs/issues/U51-A25-institutional-purchase-ip-ranges-array.md](../issues/U51-A25-institutional-purchase-ip-ranges-array.md).
+Issue report: [pkp-e2e#37](https://github.com/jardakotesovec/pkp-e2e/issues/37) ([docs/issues/U51-A25-institutional-purchase-ip-ranges-array.md](../issues/U51-A25-institutional-purchase-ip-ranges-array.md)).
 
 <a id="fn-f-a26"></a>
 **f-a26** — `block.tpl` has lines only for the two awaiting statuses (note f-a13); any other status falls through to the date lines (`isNonExpiring()`, `isExpired()`, else "Expires: {date}"). Live-probed 2026-09-25 (td20): "Needs Approval", "Needs Information" and "Other, See Notes" read "Expires: 2027-09-25" in the block while "My Subscriptions" read "Inactive" and the PDF led to the "Subscriptions" page.
