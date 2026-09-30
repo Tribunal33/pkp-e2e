@@ -1,0 +1,16 @@
+--- a/classes/oai/ojs/OAIDAO.php
++++ b/classes/oai/ojs/OAIDAO.php
+@@ -452,8 +452,11 @@
+                 DB::raw('NULL AS version_stage'),
+             ])
+             ->when(isset($set), function ($query) use ($set) {
+-                return $query->where('dot.set_spec', '=', $set)
+-                    ->orWhere('dot.set_spec', 'like', $set . ':%');
++                // Grouped, so that `from`, `until` and the record id below apply to both.
++                return $query->where(function ($query) use ($set) {
++                    $query->where('dot.set_spec', '=', $set)
++                        ->orWhere('dot.set_spec', 'like', $set . ':%');
++                });
+             })
+             ->when($from, function ($query, $from) {
+                 return $query->whereDate('dot.date_deleted', '>=', DateTime::createFromFormat('U', $from));
