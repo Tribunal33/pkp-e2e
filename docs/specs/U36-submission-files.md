@@ -931,6 +931,12 @@ Left out of the scenarios above, by reason:
     `docs/issues/U36-A11-save-without-component-server-error.md`): "Save"
     in "Edit {file name}" with no component chosen refused with "Missing
     or invalid component!", then the same file saved with a component
+  - the guard for A14 (Rule 5a; issue report
+    `docs/issues/U36-A14-change-file-keeps-first-upload.md`): "Change
+    File" on step 1, then "Complete", leaving one new file; on a
+    revision, the file keeping its original version and not the
+    discarded pick; on an OJS galley, "Cancel" after the first pick
+    leaving the galley without a file and no error
 - **Planned**:
   - the file's "History" keeping no line of the revision cancelled with "Cancel": one "A file revision "notes.md" …" line, not two (Rule 9): likely a bullet in scenario 3, which cancels a revision before the "History" it reads
   - "Edit a file" closed with its header "Close" after the name is changed: no question, the list keeping the old name after a reload, and the window reopening on it (Rule 10): likely a bullet in scenario 4 before "The rename"
@@ -959,7 +965,6 @@ Left out of the scenarios above, by reason:
   - A10 (an empty note posted; Rule 14)
   - A12 (the "Download All Files" zip named with two hyphens; Rule 3; scenario 4 marks it)
   - A13 (deleting a file also deleting its copies on other lists; Rule 4)
-  - A14 ("Change File" in step 1 keeping the first upload as a file of its own; Rule 5a)
   - A15 (step 2 reopened from step 3 offering "Complete" and showing "File Added" again; Rule 5b)
   - A16 (a galley's "Change File" closed with "Close" keeping the new file; Rule 9a)
   - A17 (the page's script failing after two "History" downloads and closing the window; Rule 13b)
@@ -998,7 +1003,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | "Add Note" with an empty box posts an empty note | 🐞 | minor | — |
 | [A11](#a11) | An author pressing "Save" with no file component chosen in the submission wizard gets an unexpected error | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A12](#a12) | The "Download All Files" zip is named with two hyphens ("12--submission-files.zip") | 🐞 | minor | — |
-| [A14](#a14) | "Change File" in step 1 keeps the first upload on the list as a file of its own | 🐞 | user-visible | — |
+| [A14](#a14) | "Change File" in the upload window keeps the replaced file as an extra file | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A15](#a15) | Step 2 reopened from step 3 offers "Complete" but shows "File Added" again instead of closing | 🐞 | minor | — |
 | [A19](#a19) | In "Upload/Select Files", another stage's files refuse their "More Information", "Edit" and "Delete" | 🐞 | minor | — |
 | [A20](#a20) | The reviewer's "Review Files" search keeps every file | 🐞 | minor | — |
@@ -1140,13 +1145,23 @@ nothing of the link.
 Basis: probe. <sup>[f-a13](#fn-a13)</sup>
 
 <a id="a14"></a>
-**A14 — "Change File" in step 1 keeps the first upload** · 🐞 · user-visible.
+**A14 — "Change File" in the upload window keeps the replaced file as an extra file** · 🐞 · medium.
 In step 1 of the upload wizard, "Change File" should replace the file
 just uploaded. It uploads the new one, but the first stays: after
-"Complete" the list holds both, the first under its uploaded name and
-the step-1 component. The app refuses the screen's request to delete the
-first file, even for a Journal Manager, and nothing on screen says so.
-Basis: probe. <sup>[f-a14](#fn-a14)</sup>
+"Complete" the list holds both, the first under its own name and the
+component chosen in step 1. When "Change File" is pressed, the window
+asks the server to delete the first file; the server refuses, for every
+role, and nothing on screen says so.
+On a file list the kept file looks like any other, and whatever happens
+next to that list includes it. On "Submission Files", "Send for Review"
+offers it ticked for copying to the review files, and a reviewer
+assigned there gets every review file unless the editor unticks it.
+Deleting the row removes it.
+Two cases leave a copy no list shows. Swapping picks while revising a
+file stores the first pick as one of the file's earlier versions. On a
+galley's first file, the galley serves the second pick, and the first
+stays stored on the server without being offered to anyone.
+Basis: probe, 2026-09-30. <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
 **A15 — Step 2 reopened from step 3 offers "Complete" but does not close** · 🐞 · minor.
@@ -2258,6 +2273,7 @@ A8 saw it from "Copyedited Files" to "Draft Files".
 `status:false` "The current user is not authorized to access the specified
 submission file." (HTTP 200); after "Complete" the list held "change-first.pdf
 … Research Instrument" beside the renamed second file.
+Issue report: [docs/issues/U36-A14-change-file-keeps-first-upload.md](../issues/U36-A14-change-file-keeps-first-upload.md).
 
 <a id="fn-a15"></a>
 **f-a15** — Note n. Live-probed 2026-09-23 (OJS twice, OMP once): "2. Review

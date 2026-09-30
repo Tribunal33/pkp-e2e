@@ -1,0 +1,43 @@
+--- a/lib/pkp/controllers/api/file/PKPManageFileApiHandler.php
++++ b/lib/pkp/controllers/api/file/PKPManageFileApiHandler.php
+@@ -146,8 +146,16 @@
+         // The cancelled upload should never became part of the file's history
+         Repo::submissionFile()->deleteRevisionLogEntries($submissionFile, $fileIdToCancel);
+ 
+-        // Remove uploaded file
+-        app()->get('file')->delete($fileIdToCancel);
++        if ($previousRevision) {
++            // Remove uploaded file
++            app()->get('file')->delete($fileIdToCancel);
++        } else {
++            // A first upload: delete the submission file itself, so that whatever points at it
++            // (a journal galley, dependent files, notes) is cleared before its file is removed,
++            // then the log lines that deletion wrote.
++            Repo::submissionFile()->delete($submissionFile);
++            Repo::submissionFile()->deleteRevisionLogEntries($submissionFile, $fileIdToCancel);
++        }
+ 
+         $this->setupTemplate($request);
+         return \PKP\db\DAO::getDataChangedEvent();
+--- a/lib/pkp/js/controllers/wizard/fileUpload/FileUploadWizardHandler.js
++++ b/lib/pkp/js/controllers/wizard/fileUpload/FileUploadWizardHandler.js
+@@ -353,6 +353,8 @@
+ 			return;
+ 		}
+ 
++		// Undo the replaced upload as "Cancel" does: a new file is removed,
++		// a revision gives back the file it replaced.
+ 		// There's no error handling done for the response because we don't
+ 		// really have an elegant way to handle or display a failed deletion
+ 		for (i in file) {
+@@ -360,7 +362,9 @@
+ 				return;
+ 			}
+ 			file[i].storedData.csrfToken = this.csrfToken_;
+-			$.post(this.deleteUrl_, file[i].storedData);
++			// Authorization policy expects to find the submissionFileId param
++			file[i].storedData.submissionFileId = file[i].storedData.id;
++			$.post(this.cancelUrl_, file[i].storedData);
+ 		}
+ 	};
+ 
