@@ -185,7 +185,11 @@ not a fix.
 4. Take the specs: the top N rows of the queue, each claimed with `node
    bin/slot.js claim <U<nn>>` so that no parallel session takes it too.
    A spec left mid-way by an earlier session continues with the entries
-   its row names.
+   its row names. The session marks each taken row in the queue's Note
+   ("**In progress: issues session s<n>, <date>**", or "**<entries>
+   only: …**" for a spec joined through one entry) and pushes at once,
+   so parallel sessions see it; it keeps the Note's done and open
+   entries current as reports land.
 5. **Group the entries.** Read the spec's 🐞 entries and their footnotes.
    Leave out an entry whose footnote points at an open report in
    `docs/reports/` (a regression the upstream session is carrying) and a
