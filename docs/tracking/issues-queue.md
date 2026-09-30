@@ -8,10 +8,6 @@ the queue when every 🐞 entry has an outcome; a spec left mid-way names
 its open entries in the Note. A spec gains a row again when a new 🐞
 entry lands in it (MAINTENANCE "The issues session").
 
-**Filing: on hold** until the maintainer has reviewed the pilot's (U66)
-reports, filed on request 2026-09-30 as pkp-e2e#1–#4 for that review;
-the maintainer deletes this line to start filing.
-
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U63](../specs/U63-import-export.md) | 24 | 7 | 4 |  |
