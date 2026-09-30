@@ -2223,7 +2223,7 @@ button "Choose File", while the screenshot showed no box.
 with no radio chosen showed the message with the panel still open; the save, a
 POST to `…/api/v1/submissions/{id}/files/{fileId}?stageId=1` with a PUT
 override, answered 500.
-Issue report: [docs/issues/U36-A11-save-without-component-server-error.md](../issues/U36-A11-save-without-component-server-error.md).
+Issue report: [pkp-e2e#41](https://github.com/jardakotesovec/pkp-e2e/issues/41) ([docs/issues/U36-A11-save-without-component-server-error.md](../issues/U36-A11-save-without-component-server-error.md)).
 
 <a id="fn-a12"></a>
 **f-a12** — Note h (`Str::kebab()`). Live-probed 2026-09-23: note d19.
