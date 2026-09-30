@@ -1387,6 +1387,11 @@ Left out of the scenarios above, by reason:
     server, each "Posting Mode" choice saved and still selected on the
     next load, and with "OPS will not be used to post the server's
     contents online." "Archives" gone from the header
+  - the guard for A9 (issue report
+    `docs/issues/U51-A9-individual-purchase-refused-silently.md`): "Save"
+    on "Purchase Individual Subscription" with a membership-requiring
+    type and "Membership" empty showing "The selected subscription type
+    requires membership information." and storing nothing
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1484,7 +1489,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | The email-box refusal sends the manager to "the journal Setup" for fields that are on "Subscription Policies" | 🐞 | minor | — |
 | [A7](#a7) | The issue's table of contents locks galleys the reader can open | 🐞 | minor | — |
 | [A8](#a8) | Subscription expiry reminders run once a month, so most subscribers never get one | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
-| [A9](#a9) | The individual purchase page refuses a missing membership without saying so | 🐞 | user-visible | — |
+| [A9](#a9) | Buying an individual subscription with "Membership" empty returns the same page with no reason given | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A10](#a10) | A reader who presses "Purchase" beside an active subscription loses access at once, before paying | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A11](#a11) | Every institutional purchase adds another institution | 🐞 | minor | — |
 | [A12](#a12) | A signed-out visitor who opens a subscription purchase page's address gets an empty page, not Login | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
@@ -1587,12 +1592,20 @@ notice.
 Since: 2025-08-13 · Basis: probe, 2026-09-30. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The individual purchase page refuses without saying why** · 🐞 · user-visible.
+**A9 — Buying an individual subscription with "Membership" empty returns the same page with no reason given** · 🐞 · medium.
 On "Purchase Individual Subscription", choosing a type that asks for
 membership and pressing "Save" with "Membership" empty shows the same
 page again, with no message and nothing marked, and no subscription is
 created. The institutional purchase page shows its refusals at the top;
-this page has no place for them. Basis: probe, 2026-09-25. <sup>f-a9</sup>
+this page has no place for them.
+In practice the missing membership is the refusal readers meet. The
+page's only other refusal, "Please select a valid subscription type.",
+comes only from a page left open while the journal withdrew the type,
+or from a crafted request; it is silent too.
+Nothing on the page says that the type needs membership information, so
+a reader who does not think of filling "Membership" cannot buy the
+subscription, and the journal is not told of the lost sale.
+Basis: probe, 2026-09-30. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — A reader who presses "Purchase" beside an active subscription loses access at once, before paying** · 🐞 · medium.
@@ -2016,6 +2029,7 @@ Issue report: [pkp-e2e#9](https://github.com/jardakotesovec/pkp-e2e/issues/9) ([
 
 <a id="fn-f-a9"></a>
 **f-a9** — `purchaseIndividualSubscription.tpl` has no `common/formErrors.tpl` include (the institutional page has one); `UserHandler::payPurchaseSubscription()` re-displays the form on a failed `validate()`. Live-probed 2026-09-25 (td16).
+Issue report: [docs/issues/U51-A9-individual-purchase-refused-silently.md](../issues/U51-A9-individual-purchase-refused-silently.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — `userSubscriptions.tpl` offers `purchaseSubscription/{kind}/{id}` on an `ACTIVE` subscription; `UserIndividualSubscriptionForm::execute()` (and the institutional one) set the existing subscription's status to `AWAITING_MANUAL_PAYMENT` (or `_ONLINE_`) and both dates to today before any payment. Live-probed 2026-09-25 (td18), individual and institutional.
