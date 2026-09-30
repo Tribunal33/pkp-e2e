@@ -393,6 +393,11 @@ address are in its footnote.
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A4 (Rule 6; issue report
+    `docs/issues/unsaved-name-kept-after-closing-edit-panel.md`): a
+    changed title closed without "Save", then "Edit" and a "Save" of
+    another box, the saved title kept on the row
 - **Nothing new to test**:
   - a file over the server's upload limit refused in the "Image" box
     (Fields): the same box's refusal scenario 1 meets with a text file,
@@ -453,7 +458,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | "Cancel" in ordering mode leaves the rows where the arrows moved them; only a reload shows the saved order | 🐞 | minor | — |
 | [A3](#a3) | The list prints a formatted title's tags as text, while the slide and the delete dialog show the formatting | 🐞 | minor | — |
-| [A4](#a4) | "Edit Highlight" closed without "Save" leaves the row showing the unsaved title until the tab is reloaded | 🐞 | minor | — |
+| [A4](#a4) | "Edit Highlight" closed without "Save" leaves the unsaved title on the row, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | The site's Highlights tab cannot save, order or list: "Save" does nothing, "Save Order" shows an error dialog, so no site highlight exists | 🐞 | user-visible | — |
 | [A7](#a7) | In the French interface a press's and a server's carousel arrows read raw keys, and the fourth top tab of Settings › Website reads "##navigation.content##" | 🐞 | minor | claim check (claude), 2026-09-24 — narrowed: the tab, the list's heading and the carousel's heading now read "En vedette" |
 | [A2](#a2) | "URL" accepts any text although its hint asks for a full web address, so a slide's button can point nowhere | ❓ | user-visible | — |
@@ -492,12 +497,14 @@ row prints the tags as text: a title saved with one bold word reads
 `<b>Bold title one</b>` in its row. Basis: probe. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — "Edit Highlight" closed without "Save" leaves the unsaved title on the row** · 🐞 · minor.
+**A4 — "Edit Highlight" closed without "Save" leaves the unsaved title on the row, and the next "Save" stores it** · 🐞 · medium.
 A manager who changes the title in "Edit Highlight" and closes the panel
-with its close control expects the row to show the saved title. Instead
-the row shows the unsaved title until the tab is reloaded, while the
-highlight itself and the slide keep the saved one. The manager cannot tell
-from the screen that nothing was saved. Basis: probe. <sup>f-a4</sup>
+with its close control expects the change dropped. Instead the row shows
+the unsaved title, "Edit" reopens the panel with it, and the next "Save"
+of the highlight, made to change another box, stores it as the
+highlight's title. Only a reload before editing again puts the saved
+title back. The same as [Announcements A11](U12-announcements.md#a11)
+and [Institutions A2](U66-institutions.md#a2). Basis: probe, 2026-09-30. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — The site's Highlights tab cannot save, order or list** · 🐞 · user-visible.
@@ -989,6 +996,7 @@ row and bold on the slide and in the "Delete Highlight" sentence.
 control: no dialog, the row reads "Changed but not saved", the panel
 reopened after a reload shows the old title; the panel's own list request
 still returns the saved title.
+Issue report: [docs/issues/unsaved-name-kept-after-closing-edit-panel.md](../issues/unsaved-name-kept-after-closing-edit-panel.md).
 
 <a id="fn-f-a5"></a>
 **f-a5 — A5 evidence.** At the 2026-09-16 tips (pkp-lib b262d27b81) every

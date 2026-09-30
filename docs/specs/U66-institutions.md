@@ -468,6 +468,25 @@ catcher's address and the tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A1 (Actors rows 1–2; issue report
+    `docs/issues/institutions-menu-without-settings-permission.md`): a
+    member of a manager-level role without "Permit changes to Settings",
+    on all three apps, offered "Institutions" in the side menu and
+    reaching the page from it
+  - the guard for A2 (Rule 6; issue report
+    `docs/issues/unsaved-name-kept-after-closing-edit-panel.md`): a
+    changed "Name" closed without "Save", then "Edit" and a "Save" of
+    another box, the saved name kept on the row and in the list
+  - the guard for A3 and A8 (Rule 7b, Side effects; issue report
+    `docs/issues/omp-ops-institution-delete-fails.md`): "Delete" ›
+    "Yes" removing an institution on a press and a preprint server, and
+    "Remove" on "Hosted Presses" ("Hosted Servers") removing one that
+    holds an institution
+  - the guard for A9 (Fields "IP ranges"; issue report
+    `docs/issues/institution-long-ip-range-save-error.md`): a valid
+    range longer than 40 characters on "Add Institution" and on "Edit
+    Institution", saved once or refused, the ranges already stored kept
 - **Rarely met**:
   - more than thirty institutions: thirty rows a page and the page
     controls "Previous", the page numbers and "Next" under the list
@@ -525,11 +544,11 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Institutions" is offered in the side menu to a manager-level role the page refuses | 🐞 | user-visible | — |
-| [A2](#a2) | A name change dropped by closing "Edit Institution" stays on screen and is stored by the next "Save" | 🐞 | user-visible | — |
-| [A3](#a3) | On a press and a preprint server no institution can be deleted | 🐞 | user-visible · crash: server | — |
-| [A8](#a8) | A press or preprint server that holds an institution cannot be removed and is left half deleted | 🐞 | user-visible · crash: server | — |
-| [A9](#a9) | An "IP ranges" line longer than 40 characters makes "Save" fail, yet each "Save" creates the institution | 🐞 | user-visible · crash: server | — |
+| [A1](#a1) | An Editor without "Permit changes to Settings" is offered "Institutions" and refused the page | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A2](#a2) | A name change dropped by closing "Edit Institution" stays on screen and is stored by the next "Save" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A3](#a3) | On a press and a preprint server no institution can be deleted | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A8](#a8) | A press or preprint server that holds an institution cannot be removed and is left half deleted | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A9](#a9) | A long "IP ranges" line makes an institution's "Save" fail, adding duplicates or wiping its ranges | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A4](#a4) | Deleting an institution deletes the usage figures credited to it | ❓ | latent | — |
 | [A5](#a5) | The "ROR" box asks for an ID and refuses one | ❓ | minor | — |
 | [A6](#a6) | On a journal, a Site Administrator with no manager role is shown the page under an "Error" window and refused every change | ❓ | minor | — |
@@ -540,35 +559,40 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — "Institutions" is offered in the side menu to a manager-level role the page refuses** · 🐞 · user-visible.
-On a journal and a press, an Editor or Production Editor whose role has
-"Permit changes to Settings" unticked has no "Settings" in the side menu
-but is shown "Institutions" whenever the Journal Manager is; pressing it
-opens "The current role does not have access to this operation.". The
-entry should follow the page's rule, as "Settings" does. A preprint
-server's manager role cannot lose the permission, so it does not arise
-there. Basis: probe, 2026-09-28. <sup>f-a1</sup>
+**A1 — An Editor without "Permit changes to Settings" is offered "Institutions" and refused the page** · 🐞 · medium.
+On a journal, press or preprint server that collects institutional
+statistics, a user whose manager-level role has "Permit changes to
+Settings" unticked (a Journal or Press editor or Production editor, or a
+role created at the manager level, which arrives unticked) is shown
+"Institutions" in the side menu, but pressing it opens "The current role
+does not have access to this operation.". The change that added the
+permission meant these roles to lose only the Settings pages and keep
+Institutions, as they keep Announcements. Such a user cannot maintain the
+institution list, and a manager with the permission has to do it for
+them. Every app since 3.5.
+Basis: probe, 2026-09-30. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — A name change dropped by closing "Edit Institution" stays on screen and is stored by the next "Save"** · 🐞 · user-visible.
+**A2 — A name change dropped by closing "Edit Institution" stays on screen and is stored by the next "Save"** · 🐞 · medium.
 A manager who changes "Name" on "Edit Institution" and closes the panel
 by its close control, by Escape or by a click outside it expects the
 change dropped, as a change to "IP ranges" is. Instead the row shows the
 new, unsaved name, and "Edit" on the row reopens the panel with it in
 "Name"; a "Save" there, made to change another box, stores the name the
 manager had abandoned. Only a reload before reopening puts the saved
-name back. The same as [Announcements A11](U12-announcements.md#a11).
-Basis: probe, 2026-09-28. <sup>f-a2</sup>
+name back. The same as [Announcements A11](U12-announcements.md#a11)
+and [Highlights A4](U11-highlights.md#a4).
+Basis: probe, 2026-09-30. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — On a press and a preprint server no institution can be deleted** · 🐞 · user-visible · crash: server.
+**A3 — On a press and a preprint server no institution can be deleted** · 🐞 · medium · crash: server.
 A Press Manager or a preprint server's Manager who presses "Delete" on a
 row and "Yes" expects the institution to go. The app fails on the server
 instead: a window titled "Error" opens, and after "OK" the institution is
 still listed, after a reload too. A press or preprint server can never
 remove an institution, a mistyped one included. On a journal the same
 "Yes" removes it (Rule 7).
-Since: 2021-06-15 (the list's first version), a date read from the code's history · Basis: probe, 2026-09-28. <sup>f-a3</sup>
+Since: 2021-06-15 (the list's first version), a date read from the code's history · Basis: probe, 2026-09-30. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — Deleting an institution deletes the usage figures credited to it** · ❓ · latent.
@@ -617,7 +641,7 @@ Lean: intended as built, since the subscription and statistics matching compare 
 Basis: probe, 2026-09-28. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — A press or preprint server that holds an institution cannot be removed and is left half deleted** · 🐞 · user-visible · crash: server.
+**A8 — A press or preprint server that holds an institution cannot be removed and is left half deleted** · 🐞 · medium · crash: server.
 A Site Administrator who presses "Remove" and then "OK" on
 Administration › "Hosted Presses" ("Hosted Servers" for a preprint
 server) for a press that holds an institution expects it deleted, as a
@@ -627,20 +651,23 @@ reload. The press is left half deleted: every Settings page of it, the
 Institutions page included, now answers "The current role does not have
 access to this operation." even to the Site Administrator, while its
 public home page still opens. On a journal the same "Remove" deletes the
-journal and its institutions (Side effects). Basis: probe, 2026-09-28.
+journal and its institutions (Side effects). Basis: probe, 2026-09-30.
 <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — An "IP ranges" line longer than 40 characters makes "Save" fail, yet each "Save" creates the institution** · 🐞 · user-visible · crash: server.
-A manager who types in "IP ranges" a line longer than 40 characters,
-such as "142.58.103.1", ten spaces, "-", ten spaces and "142.58.103.4",
-and presses "Save" on "Add Institution" expects the line saved or
-refused with "Invalid IP range". The app fails on the server: the panel
-stays open under "An unexpected error has occurred. Please reload the
-page and try again." and the list does not change, and each further
-"Save" does the same. After a reload the list holds the institution once
-per "Save", each with "IP ranges" empty. A line of 40 characters saves.
-Basis: probe, 2026-09-28. <sup>f-a9</sup>
+**A9 — A long "IP ranges" line makes an institution's "Save" fail, adding duplicates or wiping its ranges** · 🐞 · medium · crash: server.
+A manager who types in "IP ranges" a valid range longer than 40
+characters, such as one with many spaces around "-", and presses "Save"
+on "Add Institution" or "Edit Institution" meets a failure on the server:
+the panel stays open under "An unexpected error has occurred. Please
+reload the page and try again." and nothing says which line is at fault.
+Yet each "Save" on "Add Institution" adds the institution without IP
+ranges, and a "Save" on "Edit Institution" keeps only the lines above the
+long one, so the institution loses the ranges it had. The same range saves
+once the extra spaces are removed. Every journal, press and preprint
+server since institutions were introduced, and journals' institutional
+subscriptions before that.
+Basis: probe, 2026-09-30. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — The Institutions list has no set order** · ❓ · minor.
@@ -1129,6 +1156,7 @@ level and the setting, never `permitSettings`; note b: the page's
 `CanAccessSettingsPolicy` does. The Editor and Production Editor groups
 carry `permitSettings` and can lose it (Settings bullet 3); OPS offers no
 manager-level group that can. Live-probed 2026-09-28: q1.
+Issue report: [docs/issues/institutions-menu-without-settings-permission.md](../issues/institutions-menu-without-settings-permission.md).
 
 <a id="fn-f-a2"></a>
 **f-a2 — A2 evidence.** `InstitutionsListPanel.vue::openEditModal()`
@@ -1140,6 +1168,7 @@ cloned form only. `ipRanges` is a new string and `ror` a plain value, so
 only the name leaks, into the row and into the next opening of the panel,
 which fills from the same object. The same pattern is on screen in *Highlights* A4 and
 *Announcements* A11. Live-probed 2026-09-28: q4.
+Issue report: [docs/issues/unsaved-name-kept-after-closing-edit-panel.md](../issues/unsaved-name-kept-after-closing-edit-panel.md).
 
 <a id="fn-f-a3"></a>
 **f-a3 — A3 evidence.** `PKP\institution\DAO::delete()` asks
@@ -1153,6 +1182,7 @@ callback's `ajaxErrorCallback` opens the "Error" window. The check dates
 from `bed0ee4c3b` "pkp/pkp-lib#6782 Introduce Institutions" (2021-06-15)
 and survives `630730ae13` (2026-08-28). The same method serves a
 journal's deletion (note h; q11). Live-probed 2026-09-28: q5.
+Issue report: [docs/issues/omp-ops-institution-delete-fails.md](../issues/omp-ops-institution-delete-fails.md).
 
 <a id="fn-f-a4"></a>
 **f-a4 — A4 evidence.** `DAO::delete()` hard-deletes an institution no
@@ -1205,6 +1235,7 @@ afterwards the press row and its institution remain and its user groups
 and genres are gone (the control context with no institution: all gone);
 as `admin`, the press's Settings › Users & Roles and Institutions pages
 answer the access-denied page, and its public home page opens.
+Issue report: [docs/issues/omp-ops-institution-delete-fails.md](../issues/omp-ops-institution-delete-fails.md).
 
 <a id="fn-f-a9"></a>
 **f-a9 — A9 evidence.** `institution_ip.ip_string` holds 40 characters
@@ -1216,6 +1247,7 @@ each: the 45-character line answered 500 on `POST {context}/api/v1/institutions`
 on every "Save"; after two presses and a reload the list read "Long
 Library" twice, and "Edit" showed "IP ranges" empty; a 40-character line
 answered 200, a 41-character one 500.
+Issue report: [docs/issues/institution-long-ip-range-save-error.md](../issues/institution-long-ip-range-save-error.md).
 
 <a id="fn-f-a10"></a>
 **f-a10 — A10 evidence.** Note e: the collector sets no order, so the

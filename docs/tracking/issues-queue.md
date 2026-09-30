@@ -13,7 +13,6 @@ reports; the maintainer deletes this line to start filing.
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U66](../specs/U66-institutions.md) | 5 | 3 | 5 | pilot |
 | [U63](../specs/U63-import-export.md) | 24 | 7 | 4 |  |
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 |  |
 | [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 |  |
@@ -53,7 +52,7 @@ reports; the maintainer deletes this line to start filing.
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 7 | 1 | 1 |  |
 | [U15](../specs/U15-search.md) | 13 | 0 | 6 |  |
 | [U70](../specs/U70-catalog-management.md) | 13 | 0 | 5 |  |
-| [U12](../specs/U12-announcements.md) | 8 | 0 | 5 |  |
+| [U12](../specs/U12-announcements.md) | 8 | 0 | 5 | A11 written with U66 A2 (2026-09-30); the other seven open |
 | [U04](../specs/U04-orcid-integration.md) | 7 | 0 | 5 |  |
 | [U10](../specs/U10-appearance-and-theming.md) | 13 | 0 | 4 |  |
 | [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 |  |
@@ -77,7 +76,7 @@ reports; the maintainer deletes this line to start filing.
 | [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 |  |
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
 | [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 |  |
-| [U11](../specs/U11-highlights.md) | 5 | 0 | 1 |  |
+| [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 (2026-09-30); the other four open |
 | [U43](../specs/U43-funding.md) | 3 | 0 | 1 |  |
 | [U22](../specs/U22-my-submissions.md) | 1 | 0 | 1 |  |
 | [U14](../specs/U14-reader-comments-and-moderation.md) | 5 | 0 | 0 |  |

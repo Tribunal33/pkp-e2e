@@ -830,6 +830,12 @@ footnote.
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A11 (Rule 6; issue report
+    `docs/issues/unsaved-name-kept-after-closing-edit-panel.md`): a
+    changed "Title" closed without "Save", then "Edit" and a "Save" of
+    another box, the saved title kept on the row and the public
+    Announcements page
 - **Nothing new to test**:
   - an unsaved tick on the settings tab kept across a tab switch and
     lost on leaving the page (Fields)
@@ -924,7 +930,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | "Edit Announcement" prints the expiry date in the journal's short date format, which the save refuses unless that format is YYYY-MM-DD | 🐞 | user-visible | — |
 | [A7](#a7) | "Limit feed to {n} most recent announcements." keeps the first {n} the unlimited feed lists, not the most recent {OJS} | 🐞 | minor | — |
 | [A9](#a9) | "Send an email about this to all registered users." is offered on "Edit Announcement" and does nothing there | 🐞 | minor | — |
-| [A11](#a11) | "Edit Announcement" closed without saving leaves the unsaved title on the row until a reload | 🐞 | minor | — |
+| [A11](#a11) | An unsaved title stays on the row after the panel is closed, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A12](#a12) | A deleted announcement's image file, and the file a refused or replaced image had, stay in the public files | 🐞 | minor | — |
 | [A13](#a13) | An edited announcement type keeps its old name in the table until a reload; the row's refresh fails with a server error | 🐞 | user-visible | — |
 | [A14](#a14) | The announcement email's "Visit our website…" sentence stays English on a French press or preprint server {OMP OPS} | 🐞 | minor | — |
@@ -1027,12 +1033,16 @@ application carries that sentence. Question: should the empty page say
 so? Lean: yes; an empty page reads as broken. Basis: probe. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — An unsaved title stays on the row after the panel is closed** · 🐞 · minor.
+**A11 — An unsaved title stays on the row after the panel is closed, and the next "Save" stores it** · 🐞 · medium.
 A manager who changes "Title" on "Edit Announcement" and closes the panel
-by its close control, by Escape or by a click outside it expects the row
-to keep the saved title. The row shows the new, unsaved title until the
-page is reloaded; the announcement itself is unchanged. The same as
-*[Highlights](U11-highlights.md#a4)* A4. Basis: probe. <sup>f-a11</sup>
+by its close control, by Escape or by a click outside it expects the
+change dropped. Instead the row shows the new, unsaved title, "Edit"
+reopens the panel with it in "Title", and the next "Save" of the
+announcement, made to change another box, stores it; the public
+Announcements page then shows it. Only a reload before editing again
+puts the saved title back. The same as
+[Institutions A2](U66-institutions.md#a2) and
+*[Highlights](U11-highlights.md#a4)* A4. Basis: probe, 2026-09-30. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — A deleted announcement's image file is left behind** · 🐞 · minor.
@@ -1968,6 +1978,7 @@ place (*Highlights* A4). Live-probed 2026-09-17 (A11), OJS, OMP and OPS: the
 rows read "Call for papers UNSAVED", "… ESC" and "… OUTSIDE" after the three
 closes, no browser or in-app dialog, "Call for papers" after the reload and
 on the public page.
+Issue report: [docs/issues/unsaved-name-kept-after-closing-edit-panel.md](../issues/unsaved-name-kept-after-closing-edit-panel.md).
 
 <a id="fn-f-a12"></a>
 **f-a12 — A12 evidence.** Note j's code read (`Announcement::delete()`
