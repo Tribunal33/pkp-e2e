@@ -1,0 +1,17 @@
+--- a/classes/plugins/PubObjectsExportGenericPlugin.php
++++ b/classes/plugins/PubObjectsExportGenericPlugin.php
+@@ -44,6 +44,14 @@
+             return true;
+         }
+ 
++        // Switched off in this context: register nothing, so the export plugin
++        // stays off the Tools list and the Plugins list alike. Without a context
++        // (command line, scheduled tasks) it is registered as before.
++        $contextId = $mainContextId ?? Application::get()->getRequest()->getContext()?->getId();
++        if ($contextId !== null && !$this->getEnabled($contextId)) {
++            return true;
++        }
++
+         $this->setExportPlugin();
+ 
+         $context = Application::get()->getRequest()->getContext();
