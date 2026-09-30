@@ -35,13 +35,8 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U18](../specs/U18-web-feeds.md) | 5 | 2 | 2 |  |
 | [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 |  |
 | [U48](../specs/U48-jats-and-body-text.md) | 16 | 1 | 7 |  |
-<<<<<<< HEAD
-| [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 | **A16 only: issues session s1, 2026-09-30** (joined U63 A12, written); the other entries are free for another session |
-| [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | **OMP1 done: issues session s3, 2026-09-30** (with U53 A14); the other entries are free for another session |
-=======
 | [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 | A16 written with U63 A12 ([pkp-e2e#15](https://github.com/jardakotesovec/pkp-e2e/issues/15), 2026-09-30); the other entries are open |
-| [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | **OMP1 only: issues session s3, 2026-09-30** (joins U53 A14); the other entries are free for another session |
->>>>>>> d4838c8 (Issues session 2026-09-30 (s1), U63 filed: its 23 issue reports are pkp-e2e#13–#35; the U63 and U74 register footnotes take the issue links; U63 leaves the issues queue (every 🐞 entry has an outcome; A17 and A18 stay with the open report docs/reports/2026-09-29-pkp-lib-13390.md), U74's row names A16 as written with U63 A12.)
+| [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | **OMP1 done: issues session s3, 2026-09-30** (with U53 A14); the other entries are free for another session |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 |  |
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | **OMP3 only: issues session s3, 2026-09-30** (joins U47 OMP1); the other entries are free for another session |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
