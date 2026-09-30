@@ -1355,6 +1355,12 @@ Left out of the scenarios above, by reason:
     `docs/issues/U51-A8-subscription-expiry-reminders-monthly.md`):
     the reminder task listed as a daily task by the scheduler, and a run
     reaching subscriptions ending on several different days of the month
+  - the guard for A13 and A26 (issue report
+    `docs/issues/U51-A13-A26-subscription-block-inactive-reads-dates.md`):
+    the "Subscription" block placed in the sidebar, read after a manual
+    purchase ("Awaiting Manual Payment") and for a subscription set to
+    "Needs Approval" with its end date ahead, each reading its status
+    rather than an "Expired" or "Expires" date
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1456,7 +1462,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | "Purchase" on an active subscription, saved, takes the reader's access away at once | 🐞 | user-visible | — |
 | [A11](#a11) | Every institutional purchase adds another institution | 🐞 | minor | — |
 | [A12](#a12) | A signed-out visitor who opens a subscription purchase page's address gets an empty page, not Login | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A13](#a13) | The "Subscription" block reads "Expired: {today}" for a subscription awaiting payment | 🐞 | minor | — |
+| [A13](#a13) | The "Subscription" block reads "Expired: {today}" for a subscription awaiting payment | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A14](#a14) | "Only Restrict Access to PDF…" unlocks the look of non-PDF galleys that stay refused | 🐞 | user-visible | — |
 | [A15](#a15) | Month and week counts read "1 Months" and "1 Weeks" | 🐞 | minor | — |
 | [A16](#a16) | The Subscription Manager is offered "Institutions" and refused it | 🐞 | user-visible | — |
@@ -1469,7 +1475,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A23](#a23) | "Purchase New Subscription" on a journal that does not require subscriptions leads home | 🐞 | minor | — |
 | [A24](#a24) | "View Available Subscription Types" and "Learn More" lead home while payments are not set up | 🐞 | minor | — |
 | [A25](#a25) | "Purchase" on an active institutional subscription arrives with "IP ranges" reading "Array" | 🐞 | minor | — |
-| [A26](#a26) | The "Subscription" block reads "Expires: {date}" for an inactive subscription | 🐞 | user-visible | — |
+| [A26](#a26) | The "Subscription" block reads "Expires: {date}" for an inactive subscription | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A27](#a27) | Subscribers get no expiry reminders: the reminder task stops with an error on every run | 🐞 | high · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A28](#a28) | After a refused "Save", the date boxes show today's date, yet "Save" says the start date is missing | 🐞 | user-visible | — |
 | [OPS1](#ops1) | A preprint server's "Posting Mode" says "Saved" and keeps nothing {OPS} | 🐞 | user-visible | — |
@@ -1597,12 +1603,14 @@ lead to the home page.
 Basis: probe, 2026-09-30. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — The block reads "Expired" for a subscription awaiting payment** · 🐞 · minor.
+**A13 — The block reads "Expired" for a subscription awaiting payment** · 🐞 · low.
 A reader who has just bought a subscription with the manual method sees,
 in the "Subscription" block on the home page and the article pages, the
-type's name and "Expired: {today}" (for a non-expiring type,
+type's name and "Expired: {purchase date}" (for a non-expiring type,
 "Non-expiring"), where "My Subscriptions", and the block on that page,
-read "Awaiting Manual Payment". Basis: probe, 2026-09-25. <sup>f-a13</sup>
+read "Awaiting Manual Payment": the purchase is stored with the purchase
+day as its start and end date, and the block reads the end date.
+Basis: probe, 2026-09-30. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — Non-PDF galleys look open and are refused** · 🐞 · user-visible.
@@ -1709,12 +1717,13 @@ sets the subscription to "Awaiting Manual Payment" with today's dates
 ([A10](#a10)). Basis: probe, 2026-09-25. <sup>f-a25</sup>
 
 <a id="a26"></a>
-**A26 — The block shows an inactive subscription as running** · 🐞 · user-visible.
+**A26 — The block shows an inactive subscription as running** · 🐞 · low.
 A subscription set to "Needs Approval", "Needs Information" or "Other,
-See Notes" shows in the "Subscription" block as the type's name and
-"Expires: {date}" on every page, "My Subscriptions" included, whose own
-table reads "Inactive" for it; the reader's galleys are refused. Basis:
-probe, 2026-09-25. <sup>f-a26</sup>
+See Notes" with its end date ahead shows in the "Subscription" block as
+the type's name and "Expires: {end date}" on every page, "My
+Subscriptions" included, whose own table reads "Inactive" for it; the
+reader's galleys are refused.
+Basis: probe, 2026-09-30. <sup>f-a26</sup>
 
 <a id="a27"></a>
 **A27 — Subscribers get no expiry reminders: the reminder task stops with an error on every run** · 🐞 · high · crash: server.
@@ -1973,6 +1982,7 @@ Issue report: [pkp-e2e#6](https://github.com/jardakotesovec/pkp-e2e/issues/6) ([
 
 <a id="fn-f-a13"></a>
 **f-a13** — `block.tpl` gates the awaiting lines on `$paymentsEnabled && $acceptSubscriptionPayments`; `SubscriptionBlockPlugin` assigns only `acceptSubscriptionPayments`, so the awaiting lines show only where the page itself assigns `paymentsEnabled` ("My Subscriptions"). A manual purchase stores `dateEnd` as today at midnight (note f), which `Subscription::isExpired()` reads as passed. Live-probed 2026-09-25 (td20).
+Issue report: [docs/issues/U51-A13-A26-subscription-block-inactive-reads-dates.md](../issues/U51-A13-A26-subscription-block-inactive-reads-dates.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — `galley_link.tpl` leaves a non-PDF galley unlocked under `$restrictOnlyPdf`; `ArticleHandler::userCanViewGalley()` lets a non-PDF galley through only inside the `purchaseArticleEnabled() || membershipEnabled()` branch, and `IssueHandler::userCanViewGalley()` inside `purchaseIssueEnabled() || membershipEnabled()` (note e). Live-probed 2026-09-25 (td23).
@@ -2012,6 +2022,7 @@ Issue report: [pkp-e2e#6](https://github.com/jardakotesovec/pkp-e2e/issues/6) ([
 
 <a id="fn-f-a26"></a>
 **f-a26** — `block.tpl` has lines only for the two awaiting statuses (note f-a13); any other status falls through to the date lines (`isNonExpiring()`, `isExpired()`, else "Expires: {date}"). Live-probed 2026-09-25 (td20): "Needs Approval", "Needs Information" and "Other, See Notes" read "Expires: 2027-09-25" in the block while "My Subscriptions" read "Inactive" and the PDF led to the "Subscriptions" page.
+Issue report: [docs/issues/U51-A13-A26-subscription-block-inactive-reads-dates.md](../issues/U51-A13-A26-subscription-block-inactive-reads-dates.md).
 
 <a id="fn-f-a27"></a>
 **f-a27** — Live-probed 2026-09-25 (td29): the scheduled task `SubscriptionExpiryReminder`, run with no request, died with "Call to a member function getPrimaryLocale() on null" in `InstitutionalSubscriptionDAO::getInstitutionNameFetchParameters()` (the request's context is missing when the site's timer runs it); its task log holds "Task process started." and nothing after, twice.
