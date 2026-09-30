@@ -811,6 +811,10 @@ Left out of the scenarios above, by reason:
     article's and a book's URN saved twice on "Identifiers", a new
     version's inherited URN saved unchanged, and another submission's URN
     still refused
+  - the guard for OJS3 (Rule 15; issue report
+    `docs/issues/U44-OJS3-issue-publisher-id-not-kept.md`): an issue's
+    Publisher ID saved on its "Identifiers" tab, read back on reopening,
+    and the same value refused on a second issue
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -821,7 +825,6 @@ Left out of the scenarios above, by reason:
   - "Galleys" ticked without "Articles": the confirmation window's table
     with galley rows only (Rule 17)
 - **Register carries it**:
-  - OJS3 (an issue's Publisher ID never kept; Rule 15)
   - A2 (a publisher ID emptied on a tab coming back; Rule 5)
   - OMP5 (a press file's Publisher ID never kept; Rule 6)
   - A13 ("Add Check Number" on an empty tab suffix writing "NaN";
@@ -887,7 +890,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | "Add Check Number" on a tab writes "NaN" into an empty suffix box | 🐞 | minor | — |
 | [A14](#a14) | After "Clear", a galley's or chapter's tab still shows the removed URN | 🐞 | minor | — |
 | [OJS1](#ojs1) | Adding an issue galley with a Publisher ID hangs on "Save" and adds nothing | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [OJS3](#ojs3) | An issue's Publisher ID is never kept | 🐞 | user-visible | — |
+| [OJS3](#ojs3) | An issue's Publisher ID, typed on its "Identifiers" tab, is silently dropped on "Save" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OMP1](#omp1) | A press cannot save URN settings with only "Chapters" or "Files" ticked | 🐞 | minor | — |
 | [OMP2](#omp2) | The book page labels a format's URN with a code and does not link it | 🐞 | minor | — |
 | [OMP4](#omp4) | A press's confirmation window shows the URN table where a journal shows one sentence | 🐞 | minor | — |
@@ -1071,13 +1074,19 @@ exports carry; the article's number can stay when none is typed.
 Basis: probe, 2026-09-24. <sup>f-ojs2</sup>
 
 <a id="ojs3"></a>
-**OJS3 — An issue's Publisher ID is never kept** · 🐞 · user-visible.
+**OJS3 — An issue's Publisher ID, typed on its "Identifiers" tab, is silently dropped on "Save"** · 🐞 · medium.
 A manager who types a Publisher ID on an issue's "Identifiers" tab and
-presses "Save" sees the window close as a success, but the box is
-empty when the tab is reopened, and the value shows nowhere. Digits
-and "/" are still refused with the tab's message. "Enable for Issues"
-offers a field that keeps nothing.
-Basis: probe, 2026-09-24. <sup>f-ojs3</sup>
+presses "Save" sees the window close as if the value were saved. When
+the tab is reopened the box is empty, and the value appears nowhere
+else. The tab's own format check still works: a value made only of
+digits, or one containing "/", is refused with its message.
+No message says the value was dropped, and no other screen stores an
+issue's Publisher ID. Some journals build issue DOIs from a custom
+suffix pattern containing "%x" (Custom Identifier). There the issue is
+given a DOI with a literal "%x" where the Publisher ID should be. Only
+journals that have ticked "Enable for Issues" under Publisher ID, which
+is off by default, meet any of this.
+Basis: probe, 2026-09-30. <sup>f-ojs3</sup>
 
 ### OMP
 
@@ -1836,6 +1845,7 @@ Issue report: [pkp-e2e#5](https://github.com/jardakotesovec/pkp-e2e/issues/5) ([
 closed the window and read back empty; no issue setting row held a
 publisher ID. OJS `schemas/issue.json` declares no
 `pub-id::publisher-id`, so the issue save drops it.
+Issue report: [docs/issues/U44-OJS3-issue-publisher-id-not-kept.md](../issues/U44-OJS3-issue-publisher-id-not-kept.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `URNSettingsForm` `urnObjects` check: `enableIssueURN
