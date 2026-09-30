@@ -21,9 +21,9 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U51](../specs/U51-subscriptions.md) | 24 | 2 | 12 | **In progress: workstation issues session (slot s1), 2026-09-30.** Done: A4, A8, A9, A10, A11, A12, A13+A26, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A27, A28, OPS1 (with U08 OPS2; U15 OPS2 is a ❓ the report names); in progress: A7 |
 | [U50](../specs/U50-issues.md) | 14 | 2 | 9 | **In progress: workstation issues session (slot s1), 2026-09-30.** Done: A4 (joined U51 A28, pkp-e2e#53); open: A1, A2, A5, A6, A8, A10, A11, A12, A13, A14, A16, A17, A18 |
-| [U21](../specs/U21-submission-wizard.md) | 16 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30.** Done: A4 (joined U51 A28, pkp-e2e#53); open: A1, A2, A5, A6, A8, A10, A11, A12, A13, A14, A16, A17, A18 |
-| [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30.** Done: A4 (joined U51 A28, pkp-e2e#53); open: A1, A2, A5, A6, A8, A10, A11, A12, A13, A14, A16, A17, A18 |
-| [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | **In progress: workstation issues session (slot s1), 2026-09-30.** Done: A4 (joined U51 A28, pkp-e2e#53); open: A1, A2, A5, A6, A8, A10, A11, A12, A13, A14, A16, A17, A18 |
+| [U21](../specs/U21-submission-wizard.md) | 16 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
+| [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
+| [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 | **In progress: issues session s3, 2026-09-30.** Done: OJS1, A4, OJS3, OMP5 (two reports), A6; open: A2, A5, A7, A8, A9, A10, A11, A13, A14, OMP1, OMP2, OMP4, OMP6 |
 | [U53](../specs/U53-users-management.md) | 15 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: A15, A14, A2, A19; open: A1, A4, A5, A6, A7, A9, A11, A12, A13, A16, A17, OPS1 |
 | [U47](../specs/U47-media-files.md) | 7 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: OMP1 (with U69 A9), A4 (with U36 A21), A1, A5 (with U66 A2), OMP2; open: A3, A6, A7 |
