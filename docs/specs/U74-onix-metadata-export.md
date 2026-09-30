@@ -2303,7 +2303,7 @@ runs: notes td15 and td16.
 **f-a16** — Note j. Live-probed 2026-09-28 (A16), two runs: note td21;
 the server answered 500 to both requests, and nothing else in those
 runs did.
-Issue report: [docs/issues/U63-A12-export-nothing-ticked-empty-results-tab.md](../issues/U63-A12-export-nothing-ticked-empty-results-tab.md).
+Issue report: [pkp-e2e#15](https://github.com/jardakotesovec/pkp-e2e/issues/15) ([docs/issues/U63-A12-export-nothing-ticked-empty-results-tab.md](../issues/U63-A12-export-nothing-ticked-empty-results-tab.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Note k: the tax statement carries `TaxRatePercent` only for
