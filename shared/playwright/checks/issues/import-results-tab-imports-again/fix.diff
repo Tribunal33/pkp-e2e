@@ -1,0 +1,38 @@
+--- a/lib/pkp/js/controllers/TabHandler.js	2026-09-30 17:12:29.409808604 +0000
++++ b/lib/pkp/js/controllers/TabHandler.js	2026-09-30 17:12:29.425880269 +0000
+@@ -221,6 +221,11 @@
+ 	 */
+ 	$.pkp.controllers.TabHandler.prototype.tabsLoad =
+ 			function(tabsElement, event, ui) {
++
++		// A tab added by addTab now holds its result: see tabsBeforeLoad.
++		if (ui.tab.data('pkpLoadOnce')) {
++			ui.tab.data('pkpLoaded', true);
++		}
+ 		return true;
+ 	};
+ 
+@@ -236,6 +241,15 @@
+ 	$.pkp.controllers.TabHandler.prototype.tabsBeforeLoad =
+ 			function(tabsElement, event, ui) {
+ 
++		// A tab added by addTab shows the result of the action that added
++		// it (an import, an export). jQuery UI loads a remote tab again each
++		// time it is chosen, which would run that action again, so keep the
++		// content it loaded the first time. (jQuery UI 1.10 removed the
++		// tabs' "cache" option that used to do this.)
++		if (ui.tab.data('pkpLoaded')) {
++			return false;
++		}
++
+ 		// We must unbind global events before the new tab content is loaded.
+ 		// This reaches out to the tab content element and unbinds any events
+ 		// attached to that element or any embedded handlers before it gets
+@@ -293,6 +307,7 @@
+ 						.text(pkp.localeKeys['common.close'])
+ 						.attr('href', '#'),
+ 				$liElement = $('<li/>')
++						.data('pkpLoadOnce', true)
+ 						.append($anchorElement)
+ 						.append($closeSpanElement);
+ 
