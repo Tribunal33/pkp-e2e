@@ -51,11 +51,11 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U12](../specs/U12-announcements.md) | 8 | 0 | 5 | A11 written with U66 A2 (2026-09-30); the other seven open |
 | [U04](../specs/U04-orcid-integration.md) | 7 | 0 | 5 |  |
 | [U10](../specs/U10-appearance-and-theming.md) | 13 | 0 | 4 | A4 written with U09 A15 (issues session s1, 2026-09-30); the other entries are free for another session |
-| [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 |  |
+| [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 | **A19 only: issues session s1, 2026-09-30** (joins U09 A19); the other entries are free for another session |
 | [U41](../specs/U41-contributors-and-affiliations.md) | 10 | 0 | 4 |  |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 7 | 0 | 4 | **OPS4 only: issues session s3, 2026-09-30** (joins U53 OPS1); the other entries are free for another session |
 | [U73](../specs/U73-publication-formats-proof-terms.md) | 17 | 0 | 3 |  |
-| [U28](../specs/U28-reviewers-review.md) | 12 | 0 | 3 |  |
+| [U28](../specs/U28-reviewers-review.md) | 12 | 0 | 3 | **A15 only: issues session s1, 2026-09-30** (joins U09 A19); the other entries are free for another session |
 | [U40](../specs/U40-publication-metadata.md) | 7 | 0 | 3 |  |
 | [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 |  |
 | [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 |  |
