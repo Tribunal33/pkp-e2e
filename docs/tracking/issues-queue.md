@@ -41,12 +41,12 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | **OMP3 only: issues session s3, 2026-09-30** (joins U47 OMP1); the other entries are free for another session |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 4 | 1 | 4 |  |
-| [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 |  |
+| [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | **OPS2 only: workstation issues session (slot s1), 2026-09-30** (joins U51 OPS1); the other entries are free for another session |
 | [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 |  |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | **OMP6 only: issues session s3, 2026-09-30** (joins U47 OMP1); the other entries are free for another session |
 | [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 |  |
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 7 | 1 | 1 |  |
-| [U15](../specs/U15-search.md) | 13 | 0 | 6 |  |
+| [U15](../specs/U15-search.md) | 13 | 0 | 6 | **OPS2 only: workstation issues session (slot s1), 2026-09-30** (joins U51 OPS1); the other entries are free for another session |
 | [U70](../specs/U70-catalog-management.md) | 13 | 0 | 5 |  |
 | [U12](../specs/U12-announcements.md) | 8 | 0 | 5 | A11 written with U66 A2 (2026-09-30); the other seven open |
 | [U04](../specs/U04-orcid-integration.md) | 7 | 0 | 5 |  |
