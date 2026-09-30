@@ -2176,7 +2176,7 @@ Issue report: [pkp-e2e#40](https://github.com/jardakotesovec/pkp-e2e/issues/40) 
 
 <a id="fn-f-a17"></a>
 **f-a17** — `AccessForm`'s select gives "Disabled" the value 0; a fresh journal stores no `delayedOpenAccessDuration`, which matches no option, so the box shows empty; `IssueGridHandler::publishIssue()` treats an empty value as disabled (note m). Live-probed 2026-09-25 (td4): the save posted `delayedOpenAccessDuration=` with the box untouched.
-Issue report: [docs/issues/U51-A17-delayed-open-access-empty-box.md](../issues/U51-A17-delayed-open-access-empty-box.md).
+Issue report: [pkp-e2e#62](https://github.com/jardakotesovec/pkp-e2e/issues/62) ([docs/issues/U51-A17-delayed-open-access-empty-box.md](../issues/U51-A17-delayed-open-access-empty-box.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — The article page lists the file under "Additional Files" through the supplementary link (`a.obj_galley_link_supplementary`), which keeps the file glyph where a restricted galley link gets the padlock; `ArticleHandler::download()` refuses it like any galley (note e). Live-probed 2026-09-25 (td6).
