@@ -187,7 +187,13 @@ Reach, checked in the code:
 
 ## Proposed fix
 
-A proposal; not tried.
+A proposal, tried on main:
+[`fix.diff`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-ops-institution-delete-fails/fix.diff)
+applied to OJS, OMP and OPS. With it, the Steps show Expected on OMP and
+OPS: "Campus Library" is deleted, and the press or server that held it
+is removed. On OJS, an institution a subscription refers to is still
+kept for that subscription and one no subscription refers to is still
+deleted outright, as without the fix.
 
 Recommended: guard the query in the shared DAO, as
 `InstitutionsMigration::up()` already guards the same table. On an app
@@ -238,8 +244,8 @@ behavior is unchanged:
   reproduced with the press's institutions deleted by hand, which is
   what the fixed DAO does. A site that wants such a press back needs its
   backup: the press's user groups and genres are gone.
-- The same guard in `InstitutionsMigration::down()` would let the
-  migration be reversed on OMP and OPS; `down()` runs only on a
+- `fix.diff` also guards `InstitutionsMigration::down()`, so the
+  migration can be reversed on OMP and OPS; `down()` runs only on a
   rollback.
 - Wrapping `PKPContextService::delete()` in a transaction would stop
   any later failure there from leaving a context half deleted; that is
@@ -266,6 +272,16 @@ migration's `up()`, and a test.
   gets a generated name and path. Besides the screens, the script
   checks the press's row, institutions, user groups, genres and OMP's
   tombstones in the database.
+- The fix, tried with `node bin/try-fix.js apply shared/playwright/checks/issues/omp-ops-institution-delete-fails/fix.diff ojs omp ops`,
+  then `walk.js` as above on a freshly loaded install, and
+  [`neighbour.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-ops-institution-delete-fails/neighbour.js)
+  on OJS with the fix in and out (`PROBE_FEATURE=issues-rv1 PROBE_AGENT=rv1 node bin/probe.js ojs shared/playwright/checks/issues/omp-ops-institution-delete-fails/neighbour.js`):
+  it creates an institutional subscription for "Campus Library" through
+  the screens and deletes that institution and one no subscription
+  refers to. Both runs gave the same result: the subscribed institution
+  is soft deleted and still named on the subscription, the other one's
+  row is gone. `down()` was not run. Reverted with
+  `node bin/try-fix.js revert ojs omp ops`.
 - Way round and second "Remove", on the main install as `walk.js` left
   it (OMP and OPS):
   [`after.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-ops-institution-delete-fails/after.js)

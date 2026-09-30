@@ -1,0 +1,44 @@
+--- a/lib/pkp/classes/institution/DAO.php
++++ b/lib/pkp/classes/institution/DAO.php
+@@ -21,6 +21,7 @@
+ use Illuminate\Support\Collection;
+ use Illuminate\Support\Facades\App;
+ use Illuminate\Support\Facades\DB;
++use Illuminate\Support\Facades\Schema;
+ use Illuminate\Support\LazyCollection;
+ use PKP\core\EntityDAO;
+ use PKP\core\interfaces\CollectorInterface;
+@@ -173,10 +174,12 @@
+      */
+     public function delete(Institution $institution): void
+     {
+-        // If the reference in the table institutional_subscriptions exists, soft delete the institution
+-        $shouldSoftDelete = DB::table('institutional_subscriptions')
+-            ->where('institution_id', '=', $institution->getId())
+-            ->exists();
++        // Keep (soft delete) an institution an OJS institutional subscription names;
++        // OMP and OPS have no such table.
++        $shouldSoftDelete = Schema::hasTable('institutional_subscriptions')
++            && DB::table('institutional_subscriptions')
++                ->where('institution_id', '=', $institution->getId())
++                ->exists();
+         if ($shouldSoftDelete) {
+             $this->_softDelete($institution);
+         } else {
+--- a/lib/pkp/classes/migration/install/InstitutionsMigration.php
++++ b/lib/pkp/classes/migration/install/InstitutionsMigration.php
+@@ -83,9 +83,11 @@
+      */
+     public function down(): void
+     {
+-        Schema::table('institutional_subscriptions', function (Blueprint $table) {
+-            $table->dropForeign('institution_id');
+-        });
++        if (Schema::hasTable('institutional_subscriptions')) {
++            Schema::table('institutional_subscriptions', function (Blueprint $table) {
++                $table->dropForeign('institution_id');
++            });
++        }
+         Schema::drop('institution_settings');
+         Schema::drop('institution_ip');
+         Schema::drop('institutions');
