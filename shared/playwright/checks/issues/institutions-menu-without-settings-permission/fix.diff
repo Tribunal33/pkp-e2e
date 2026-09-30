@@ -1,0 +1,14 @@
+--- a/lib/pkp/pages/management/ManagementHandler.php
++++ b/lib/pkp/pages/management/ManagementHandler.php
+@@ -98,9 +98,9 @@
+     {
+         $this->addPolicy(new ContextAccessPolicy($request, $roleAssignments));
+         // The "settings" operation is off limits to managers who don't have access to settings,
+-        // EXCEPT for the "announcements" and "userComments" areas, which were moved out of settings without changing their URL.
++        // EXCEPT for the "announcements", "userComments" and "institutions" areas, which live outside settings under a settings URL.
+         $requestedArgs = $request->getRequestedArgs();
+-        if ($request->getRequestedOp() == 'settings' && $requestedArgs != ['announcements'] && $requestedArgs != ['userComments']) {
++        if ($request->getRequestedOp() == 'settings' && $requestedArgs != ['announcements'] && $requestedArgs != ['userComments'] && $requestedArgs != ['institutions']) {
+             $this->addPolicy(new CanAccessSettingsPolicy());
+         }
+         return parent::authorize($request, $args, $roleAssignments);

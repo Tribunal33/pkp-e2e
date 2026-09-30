@@ -156,7 +156,7 @@ Reach:
 
 ## Proposed fix
 
-A proposal, not tried.
+A proposal, tried on `main` ([fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/institutions-menu-without-settings-permission/fix.diff)).
 
 Recommended: exempt `institutions` in `ManagementHandler::authorize()`,
 as Announcements and the Comments page already are:
@@ -173,6 +173,12 @@ The exemption alone gives a working page: `ManagementHandler::institutions()`
 builds a list and a form that read and write through the institutions
 API, and `PKPInstitutionController::getRouteGroupMiddleware()` admits
 `ROLE_ID_MANAGER` with no `CanAccessSettingsPolicy`.
+
+Tried on all three apps: with it, `dbarnes` (journal, press) and
+`dbuskins` in the new role (server) open "Institutions" from the side
+menu and "Add Institution" saves, while the same users are still refused
+Settings › Website and `sberardo`, whose role is below manager level, is
+still refused the Institutions page's address, as without it.
 
 **Alternatives:**
 
@@ -207,7 +213,15 @@ Small: one condition in one shared handler, and an e2e scenario.
   [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js),
   run with
   `PROBE_FEATURE=issues-rv3 PROBE_AGENT=rv3 node bin/probe.js all shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js`
-  (on 3.5 with `PKP_E2E_LINE=stable-3_5_0` in front).
+  (on 3.5 with `PKP_E2E_LINE=stable-3_5_0` in front). Where the page
+  opens it adds an institution; it ends with the neighbour check (the
+  same user types Settings › Website's address, `sberardo` the
+  Institutions page's).
+- The fix, tried 2026-09-30 on the main tips below: `node bin/try-fix.js
+  apply shared/playwright/checks/issues/institutions-menu-without-settings-permission/fix.diff ojs omp ops`,
+  the dataset reloaded, the same `probe.js` command, then `node
+  bin/try-fix.js revert ojs omp ops`. The neighbour check was also walked
+  without the fix, with the same refusals.
 - Walked 2026-09-30 on PostgreSQL, each install loaded from pkp/datasets
   c0f9f10 (2026-09-30), `<app>/main/pgsql` and
   `<app>/stable-3_5_0/pgsql`: main OJS 7ce98ec09e, OMP 3b0ecf794c, OPS
@@ -250,4 +264,4 @@ Small: one condition in one shared handler, and an e2e scenario.
   nothing about this fault.
 - Not driven: the preprint server steps on OJS and OMP (the same code);
   the Production editor role, which carries the same box on the same
-  code path; the proposed fix.
+  code path; the fix on 3.5.

@@ -16,8 +16,17 @@
 //      dbuskins@mailinator.com, and dbuskins accepts from the emailed link
 //   control: rvaca's side menu, "Institutions" pressed
 //   steps: dbarnes (dbuskins on OPS) signs in, the side menu is read,
-//      "Institutions" pressed; then Settings › Website by its address
+//      "Institutions" pressed; where the page opens, "Add Institution",
+//      Name "Campus Library <tag>", "Save", and the row is read
+//   neighbour check: the same user types Settings › Website's address; the
+//      dataset's `sberardo` (Section editor / Series editor / Moderator, not
+//      manager-level) types the Institutions page's address. Both must stay
+//      refused with or without fix.diff.
 // Records every screen with screen().
+//
+// Trying the fix (REPORT.md "Proposed fix", harness.md "Trying a fix"):
+//   node bin/try-fix.js apply shared/playwright/checks/issues/institutions-menu-without-settings-permission/fix.diff ojs omp ops
+//   reset, run as below with PROBE_RUN=fix, then: node bin/try-fix.js revert ojs omp ops
 //
 // Reset first:  npm run fleet-prep -- --feature issues-rv3 --dataset 3 --reset
 // Run (main):   PROBE_FEATURE=issues-rv3 PROBE_AGENT=rv3 node bin/probe.js all shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js
@@ -84,6 +93,23 @@ forEachApp(async (app) => {
             addInstitution: await page.getByRole('button', {name: 'Add Institution', exact: true}).count(),
         });
         if (label !== 'rvaca') await shot(page, `${label}-institutions-pressed`);
+        if (label === 'rvaca' || DENIED.test(txt)) return;
+        // The page opened: "Add Institution", a name, "Save".
+        const name = `Campus Library ${t}`;
+        await page.getByRole('button', {name: 'Add Institution', exact: true}).click();
+        const add = page.getByRole('dialog').filter({hasText: 'Add Institution'});
+        await add.getByRole('button', {name: 'Save'}).waitFor({timeout: T});
+        await idle(page);
+        await add.getByLabel('Name', {exact: false}).first().fill(name);
+        const w = page.waitForResponse((r) => /api\/v1\/institutions/.test(r.url()) && r.request().method() === 'POST', {timeout: T}).catch(() => null);
+        await add.getByRole('button', {name: 'Save'}).click();
+        const r = await w;
+        await add.waitFor({state: 'hidden', timeout: T}).catch(() => {});
+        await idle(page); await pause(600);
+        const rows = (await page.locator('main .listPanel__item').allInnerTexts().catch(() => [])).map((x) => x.replace(/\s+/g, ' ').trim().slice(0, 120));
+        await snap(`${label}-institution-added`);
+        await shot(page, `${label}-institution-added`);
+        fact(`${label} Add Institution saved`, {status: r ? r.status() : null, rowShown: rows.some((x) => x.includes(name)), rows});
     }
     async function statsBox(url, label) {
         await page.goto(url);
@@ -205,6 +231,12 @@ forEachApp(async (app) => {
         await idle(page);
         const sw = await snap(`${second}-settings-website`);
         fact(`${second} Settings › Website by address`, {denied: DENIED.test(`${sw.text.main || ''}`)});
+        // Neighbour check: a role below manager level types the Institutions page's address.
+        await signIn(page, 'sberardo', {contextPath: path});
+        await page.goto(cu('/management/settings/institutions'));
+        await idle(page);
+        const sb = await snap('sberardo-institutions-by-address');
+        fact('sberardo Institutions by address', {url: page.url().replace(/^https?:\/\/[^/]+/, ''), denied: DENIED.test(`${sb.text.main || ''}`), addInstitution: await page.getByRole('button', {name: 'Add Institution', exact: true}).count()});
     } catch (err) {
         fact('ERROR', String(err.stack || err).slice(0, 1200));
         await snap('ERROR').catch(() => {});
