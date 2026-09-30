@@ -1440,6 +1440,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U51-A15-month-week-lists-read-1-months.md`): the first
     entries of "Delayed Open Access" and the "Subscription Expiry
     Reminders" lists reading "1 Month" and "1 Week"
+  - the guard for A4 (issue report
+    `docs/issues/U51-A4-subscription-notify-refusal-names-setup.md`): with
+    no subscription contact set, a subscription saved with the email box
+    ticked refused with a message naming the "Subscription Policies" tab
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1534,7 +1538,7 @@ entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A4](#a4) | The email-box refusal sends the manager to "the journal Setup" for fields that are on "Subscription Policies" | 🐞 | minor | — |
+| [A4](#a4) | Subscription window's email refusal sends the manager to "the journal Setup", not "Subscription Policies" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A7](#a7) | The issue's table of contents locks galleys the reader can open | 🐞 | minor | — |
 | [A8](#a8) | Subscription expiry reminders run once a month, so most subscribers never get one | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
 | [A9](#a9) | Buying an individual subscription with "Membership" empty returns the same page with no reason given | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1577,14 +1581,20 @@ access to its contents." selected? Lean: yes; the tab should show what
 the journal does. Basis: probe, 2026-09-25. <sup>f-a1</sup>
 
 <a id="a4"></a>
-**A4 — The notify refusal points to the wrong screen** · 🐞 · minor.
-Saving a subscription with "Send the user an email with their username
-and subscription details." ticked while the subscription contact is
-missing is refused with "In order to send the user a notification email,
-the subscription contact name and email address must be specified in the
-journal Setup.". The fields are on the "Payments" page's "Subscription
-Policies" tab; no "Setup" screen holds them. Basis: probe, 2026-09-25.
-<sup>f-a4</sup>
+**A4 — Subscription window's email refusal sends the manager to "the journal Setup", not "Subscription Policies"** · 🐞 · low.
+On the "Subscriptions" page, a manager saves a subscription with "Send
+the user an email with their username and subscription details." ticked,
+on a journal with no subscription contact. The save is refused with "In
+order to send the user a notification email, the subscription contact
+name and email address must be specified in the journal Setup.".
+The fields it means are "Name" and "Email" under the heading
+"Subscription Manager", on the same page's "Subscription Policies" tab.
+No setup screen holds them: the "Setup" tab under Settings › Website is
+about the website. The message was right until 2006, when the fields
+moved there from the "Journal Setup" of OJS 2.
+The subscription saves, and the email goes out, once the manager finds
+the tab and fills the contact in.
+Basis: probe, 2026-09-30. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A locked galley leads home without a word** · ❓ · user-visible.
@@ -2141,6 +2151,7 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `manager.subscriptions.form.subscriptionContactRequired` (OJS `locale/en/manager.po`); the fields are `subscriptionName` and `subscriptionEmail` of `SubscriptionPolicyForm`. Live-probed 2026-09-25 (td28): the refusal verbatim at the window's top.
+Issue report: [docs/issues/U51-A4-subscription-notify-refusal-names-setup.md](../issues/U51-A4-subscription-notify-refusal-names-setup.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `ArticleHandler::userCanViewGalley()` redirects a signed-in reader to `about/subscriptions` (note e), and `AboutHandler::subscriptions()` redirects to the journal index while payments are not configured (note f). Live-probed 2026-09-25 (td8): the home page, no notice.
