@@ -1,0 +1,16 @@
+--- a/classes/oai/ops/ServerOAI.php
++++ b/classes/oai/ops/ServerOAI.php
+@@ -69,11 +69,10 @@
+     public function identifierToPreprintId(string $identifier): false|int
+     {
+         $prefix = 'oai:' . $this->config->repositoryId . ':' . 'preprint/';
+-        if (strstr($identifier, $prefix)) {
+-            return (int) str_replace($prefix, '', $identifier);
+-        } else {
++        if (!str_starts_with($identifier, $prefix) || !preg_match('#^(\d+)\z#', substr($identifier, strlen($prefix)), $matches)) {
+             return false;
+         }
++        return (int) $matches[1];
+     }
+ 
+     /**
