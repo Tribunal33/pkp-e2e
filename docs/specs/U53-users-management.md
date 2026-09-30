@@ -1960,7 +1960,7 @@ ticked, signed in with its old password (landing on the journal's home
 page), and the discussion read "Created by: {old username}". An account
 that was only a participant in someone else's discussion merged cleanly:
 200, deleted, its sign-in refused.
-Issue report: [docs/issues/U53-A15-merge-account-opened-discussion-fails.md](../issues/U53-A15-merge-account-opened-discussion-fails.md).
+Issue report: [pkp-e2e#10](https://github.com/jardakotesovec/pkp-e2e/issues/10) ([docs/issues/U53-A15-merge-account-opened-discussion-fails.md](../issues/U53-A15-merge-account-opened-discussion-fails.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Live-probed 2026-09-25, all three apps: after "Generate
