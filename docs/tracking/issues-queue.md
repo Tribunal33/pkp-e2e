@@ -15,11 +15,11 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 |  |
 | [U45](../specs/U45-dois.md) | 23 | 5 | 8 |  |
 | [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 |  |
-| [U19](../specs/U19-oai-pmh.md) | 11 | 4 | 3 |  |
-| [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 |  |
-| [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 |  |
-| [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 |  |
-| [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 |  |
+| [U19](../specs/U19-oai-pmh.md) | 11 | 4 | 3 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
+| [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
+| [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
+| [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
+| [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U51](../specs/U51-subscriptions.md) | 24 | 2 | 12 |  |
 | [U50](../specs/U50-issues.md) | 14 | 2 | 9 |  |
 | [U21](../specs/U21-submission-wizard.md) | 16 | 2 | 6 |  |
