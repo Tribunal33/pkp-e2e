@@ -927,6 +927,11 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A11 (Rule 18; scenario 9 marks it; issue report
+    `docs/issues/U36-A11-save-without-component-server-error.md`): "Save"
+    in "Edit {file name}" with no component chosen refused with "Missing
+    or invalid component!", then the same file saved with a component
+- **Planned**:
   - the file's "History" keeping no line of the revision cancelled with "Cancel": one "A file revision "notes.md" …" line, not two (Rule 9): likely a bullet in scenario 3, which cancels a revision before the "History" it reads
   - "Edit a file" closed with its header "Close" after the name is changed: no question, the list keeping the old name after a reload, and the window reopening on it (Rule 10): likely a bullet in scenario 4 before "The rename"
 - **Nothing new to test**:
@@ -952,7 +957,6 @@ Left out of the scenarios above, by reason:
   - A8 (the revise list naming files by name alone; Fields)
   - A9 (step 1's hidden upload box read by a screen reader, its drop-downs unnamed; Fields)
   - A10 (an empty note posted; Rule 14)
-  - A11 ("Save" in "Edit {file name}" with no component chosen failing; Rule 18; scenario 9 marks it)
   - A12 (the "Download All Files" zip named with two hyphens; Rule 3; scenario 4 marks it)
   - A13 (deleting a file also deleting its copies on other lists; Rule 4)
   - A14 ("Change File" in step 1 keeping the first upload as a file of its own; Rule 5a)
@@ -992,7 +996,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | The Author's "Upload" on "Revisions Uploaded" shows on every round and is refused before revisions are requested | 🐞 | minor | — |
 | [A9](#a9) | A screen reader reads step 1's hidden upload box, and the step's two drop-downs have no name | 🐞 | minor | — |
 | [A10](#a10) | "Add Note" with an empty box posts an empty note | 🐞 | minor | — |
-| [A11](#a11) | "Save" in the submission wizard's "Edit {file name}" with no component chosen fails with "An unexpected error has occurred." | 🐞 | minor · crash: server | — |
+| [A11](#a11) | An author pressing "Save" with no file component chosen in the submission wizard gets an unexpected error | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A12](#a12) | The "Download All Files" zip is named with two hyphens ("12--submission-files.zip") | 🐞 | minor | — |
 | [A14](#a14) | "Change File" in step 1 keeps the first upload on the list as a file of its own | 🐞 | user-visible | — |
 | [A15](#a15) | Step 2 reopened from step 3 offers "Complete" but shows "File Added" again instead of closing | 🐞 | minor | — |
@@ -1100,14 +1104,18 @@ should be refused.
 Basis: probe. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
-**A11 — "Save" in "Edit {file name}" with no component chosen fails** · 🐞 · minor · crash: server.
-In the submission wizard's "Files" panel, "Other" or a row's "Edit"
-opens "Edit {file name}". Pressing "Save" there without choosing a
-component makes the app fail: "An unexpected error has occurred. Please
-reload the page and try again." appears, the panel stays open and
-nothing is saved. Expected: a message asking for a component, or no
-save until one is chosen.
-Basis: probe. <sup>[f-a11](#fn-a11)</sup>
+**A11 — An author pressing "Save" with no file component chosen in the submission wizard gets an unexpected error** · 🐞 · low · crash: server.
+In the submission wizard's "Upload Files" step, each uploaded file's row
+asks "What kind of file is this?" and offers the main component as a
+link, and "Other". "Other" and the file's "Edit" open a side panel,
+"Edit {file name}", with every component as a radio button. Pressing "Save" there without choosing a component makes the app
+fail on the server: "An unexpected error has occurred. Please reload the
+page and try again." appears, the panel stays open and nothing is saved.
+The author expects to be told to choose a component.
+Only the submission wizard has this panel. The editorial workflow's
+file "Edit" opens a different form with no component choice, and a
+preprint server's "Upload Files" step lists galleys instead.
+Basis: probe, 2026-09-30. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
 **A12 — The "Download All Files" zip's name has two hyphens** · 🐞 · minor.
@@ -2215,6 +2223,7 @@ button "Choose File", while the screenshot showed no box.
 with no radio chosen showed the message with the panel still open; the save, a
 POST to `…/api/v1/submissions/{id}/files/{fileId}?stageId=1` with a PUT
 override, answered 500.
+Issue report: [docs/issues/U36-A11-save-without-component-server-error.md](../issues/U36-A11-save-without-component-server-error.md).
 
 <a id="fn-a12"></a>
 **f-a12** — Note h (`Str::kebab()`). Live-probed 2026-09-23: note d19.
