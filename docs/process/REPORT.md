@@ -171,8 +171,9 @@ a strict type, a query's ordering) says "MySQL not checked".
 once the Cause is settled and the report knows what the problem is
 rather than how it first showed. Two to four sentences: who does what,
 and what happens instead of what they expect, in screen words; what that
-costs them and whether they can get round it; and the reach (the apps,
-the setups, since when). When the app itself fails, the first sentence
+costs them and whether they can get round it; and the reach the header
+cannot say (the setup or setting it needs; the apps and versions are the
+Affects bullet's). When the app itself fails, the first sentence
 says so and on which side. No paths, request names, commit shas or
 hedges ("may", "seems to"): a doubt goes to Evidence. The test: a reader
 who stops here can place the finding on the severity scale and say
@@ -420,6 +421,17 @@ findings with different fixes are two reports.
   in Summary, Impact or Observed.
 - Short. The Summary and Impact together fit on one screen; a report
   that runs long has evidence in its body.
+- No redundancy, and nothing that does not help. Every sentence tells a
+  QA or developer who is learning about the problem, and wants to fix
+  it, something new and useful: how to see it, what it breaks, why, and
+  how to fix and check the fix. A fact is said once, in the section
+  that owns it: the header's (apps, versions, severity, crash, who
+  introduced it) are not repeated below it ("on all three apps", "since
+  3.4"), and a sentence that restates, previews or sums up is cut.
+  Evidence holds what the team needs to rerun and check (the script and
+  the one command that runs it, what each code read looked at, what was
+  not driven, what stays unverified), not the story of the walk and not
+  the harness's own setup (fleet resets, run tags).
 - Laid out for reading, not only for accuracy: a paragraph holds one
   idea and runs about four lines at most, and a list of like things is a
   list. The Summary is two or three short paragraphs (what happens and

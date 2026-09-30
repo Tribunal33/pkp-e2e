@@ -560,16 +560,17 @@ an entry notes otherwise; the team settles them on spec review.
 
 <a id="a1"></a>
 **A1 — An Editor without "Permit changes to Settings" is offered "Institutions" and refused the page** · 🐞 · medium.
-On a journal, press or preprint server that collects institutional
-statistics, a user whose manager-level role has "Permit changes to
-Settings" unticked (a Journal or Press editor or Production editor, or a
-role created at the manager level, which arrives unticked) is shown
-"Institutions" in the side menu, but pressing it opens "The current role
-does not have access to this operation.". The change that added the
-permission meant these roles to lose only the Settings pages and keep
-Institutions, as they keep Announcements. Such a user cannot maintain the
-institution list, and a manager with the permission has to do it for
-them. Every app since 3.5.
+A user whose manager-level role has "Permit changes to Settings"
+unticked is shown "Institutions" in the side menu, but pressing it opens
+"The current role does not have access to this operation.". The change
+that added the permission meant such roles to lose only the Settings
+pages and keep Institutions, as they keep Announcements.
+A new install and an upgrade from 3.4 tick the box on the Editor and
+Production Editor roles, so a journal or press meets this once a manager
+unticks it there. A role created at the manager level starts unticked,
+on a journal, press or preprint server; on a preprint server that is the
+only way. The entry shows while institutional statistics are on, and on
+a journal also while payments are enabled.
 Basis: probe, 2026-09-30. <sup>f-a1</sup>
 
 <a id="a2"></a>
@@ -656,17 +657,17 @@ journal and its institutions (Side effects). Basis: probe, 2026-09-30.
 
 <a id="a9"></a>
 **A9 — A long "IP ranges" line makes an institution's "Save" fail, adding duplicates or wiping its ranges** · 🐞 · medium · crash: server.
-A manager who types in "IP ranges" a valid range longer than 40
-characters, such as one with many spaces around "-", and presses "Save"
-on "Add Institution" or "Edit Institution" meets a failure on the server:
-the panel stays open under "An unexpected error has occurred. Please
-reload the page and try again." and nothing says which line is at fault.
+A manager who types in "IP ranges" a range padded with extra spaces
+around "-" to more than 40 characters, and presses "Save" on "Add
+Institution" or "Edit Institution", meets a failure on the server: the
+panel stays open under "An unexpected error has occurred. Please reload
+the page and try again." and nothing says which line is at fault. Only
+such padding takes a valid range past 40 characters; a range written
+normally has at most 33.
 Yet each "Save" on "Add Institution" adds the institution without IP
-ranges, and a "Save" on "Edit Institution" keeps only the lines above the
-long one, so the institution loses the ranges it had. The same range saves
-once the extra spaces are removed. Every journal, press and preprint
-server since institutions were introduced, and journals' institutional
-subscriptions before that.
+ranges, so every retry adds one more institution of the same name. A
+"Save" on "Edit Institution" keeps only the lines above the long one, so
+the institution loses the ranges it had.
 Basis: probe, 2026-09-30. <sup>f-a9</sup>
 
 <a id="a10"></a>

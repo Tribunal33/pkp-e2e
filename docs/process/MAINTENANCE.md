@@ -210,8 +210,16 @@ not a fix.
      it; the Steps go through the screens and were walked; the Cause is
      the root; the Proposed fix answers the six questions; Introduced,
      Affects and Upstream are filled; Evidence holds only what the team can open,
-     with full links. A gap goes back to the same agent (SendMessage),
-     once.
+     with full links. Then two role reads, each a fresh agent rendered
+     from `briefs/issue-read.md`, both at once: the **developer** read
+     (could a PKP developer reproduce it on a dataset install, fix it
+     from the Cause and Proposed fix checked against the code, and which
+     sentences told them nothing) and the **triage** read (from the
+     title, header, Summary and Impact alone, could a lead place it and
+     do the labels fit the words). A gap from the session's own reading
+     and the reads' blockers and quoted cuts go back to the same
+     reporter (SendMessage) together, once; the session weighs each and
+     passes on only what it agrees with.
    - `not reproduced` or `fixed upstream`: the entry is not retired
      here. It gets a row in `docs/tracking/incidentals.md` in its shape,
      "Seen" saying "A5 no longer shows on main" (or naming the upstream
