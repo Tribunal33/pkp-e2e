@@ -1,0 +1,43 @@
+--- a/classes/publication/DAO.php
++++ b/classes/publication/DAO.php
+@@ -121,8 +121,8 @@
+             ->when($ids !== null, fn (Builder $q) => $q->whereIn('p.publication_id', $ids))
+             ->whereNull('p2.publication_id')
+             ->when($pubIdType != null, fn (Builder $q) => $q->where('pspidt.setting_name', '=', "pub-id::{$pubIdType}")->whereNotNull('pspidt.setting_value'))
+-            ->when($title != null, fn (Builder $q) => $q->where('pst.setting_name', '=', 'title')->where('pst.setting_value', 'LIKE', "%{$title}%"))
+-            ->when($author != null, fn (Builder $q) => $q->whereRaw("CONCAT(COALESCE(asgs.setting_value, ''), ' ', COALESCE(asfs.setting_value, '')) LIKE ?", ["%{$author}%"]))
++            ->when($title != null, fn (Builder $q) => $q->where('pst.setting_name', '=', 'title')->whereRaw('LOWER(pst.setting_value) LIKE LOWER(?)', ["%{$title}%"]))
++            ->when($author != null, fn (Builder $q) => $q->whereRaw("LOWER(CONCAT(COALESCE(asgs.setting_value, ''), ' ', COALESCE(asfs.setting_value, ''))) LIKE LOWER(?)", ["%{$author}%"]))
+             ->when($issueId != null, fn (Builder $q) => $q->where('p.issue_id', '=', $issueId))
+             ->when(
+                 $settingName,
+--- a/classes/submission/DAO.php
++++ b/classes/submission/DAO.php
+@@ -80,8 +80,8 @@
+             ->where('p.status', '=', Publication::STATUS_PUBLISHED)
+             ->when($ids !== null, fn (Builder $q) => $q->whereIn('s.submission_id', $ids))
+             ->when($pubIdType != null, fn (Builder $q) => $q->where('pspidt.setting_name', '=', "pub-id::{$pubIdType}")->whereNotNull('pspidt.setting_value'))
+-            ->when($title != null, fn (Builder $q) => $q->where('pst.setting_name', '=', 'title')->where('pst.setting_value', 'LIKE', "%{$title}%"))
+-            ->when($author != null, fn (Builder $q) => $q->whereRaw("CONCAT(COALESCE(asgs.setting_value, ''), ' ', COALESCE(asfs.setting_value, '')) LIKE ?", ["%{$author}%"]))
++            ->when($title != null, fn (Builder $q) => $q->where('pst.setting_name', '=', 'title')->whereRaw('LOWER(pst.setting_value) LIKE LOWER(?)', ["%{$title}%"]))
++            ->when($author != null, fn (Builder $q) => $q->whereRaw("LOWER(CONCAT(COALESCE(asgs.setting_value, ''), ' ', COALESCE(asfs.setting_value, ''))) LIKE LOWER(?)", ["%{$author}%"]))
+             ->when($issueId != null, fn (Builder $q) => $q->where('p.issue_id', '=', $issueId))
+             ->when(
+                 $settingName,
+--- a/lib/pkp/classes/galley/DAO.php
++++ b/lib/pkp/classes/galley/DAO.php
+@@ -285,12 +285,12 @@
+                 $title != null,
+                 fn (Builder $q) =>
+                 $q->where('pst.setting_name', '=', 'title')
+-                    ->where('pst.setting_value', 'LIKE', "%{$title}%")
++                    ->whereRaw('LOWER(pst.setting_value) LIKE LOWER(?)', ["%{$title}%"])
+             )
+             ->when(
+                 $author != null,
+                 fn (Builder $q) =>
+-                $q->whereRaw("CONCAT(COALESCE(asgs.setting_value, ''), ' ', COALESCE(asfs.setting_value, '')) LIKE ?", ["%{$author}%"])
++                $q->whereRaw("LOWER(CONCAT(COALESCE(asgs.setting_value, ''), ' ', COALESCE(asfs.setting_value, ''))) LIKE LOWER(?)", ["%{$author}%"])
+             )
+             ->when(
+                 $pubIdSettingName,
