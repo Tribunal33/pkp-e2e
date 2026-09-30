@@ -1,0 +1,23 @@
+--- a/plugins/metadata/dc11/filter/Dc11SchemaArticleAdapter.php
++++ b/plugins/metadata/dc11/filter/Dc11SchemaArticleAdapter.php
+@@ -139,11 +139,16 @@
+             $driverType,
+             MetadataDescription::METADATA_DESCRIPTION_UNKNOWN_LOCALE
+         );
+-        $types = $section->getIdentifyType(null);
+-        $types = array_merge_recursive(
+-            empty($types) ? [Locale::getLocale() => __('metadata.pkp.peerReviewed')] : $types,
+-            (array) $publication->getData('type')
++        // The section's own words where they were typed; a section saved with
++        // the box empty stores an empty string per language, which counts as none.
++        $types = array_filter(
++            (array) $section->getIdentifyType(null),
++            fn ($type) => trim((string) $type) !== ''
+         );
++        if (empty($types) && $section->getMetaReviewed()) {
++            $types = [Locale::getLocale() => __('metadata.pkp.peerReviewed')];
++        }
++        $types = array_merge_recursive($types, (array) $publication->getData('type'));
+         $this->addLocalizedElements($dc11Description, 'dc:type', $types);
+         $driverVersion = 'info:eu-repo/semantics/publishedVersion';
+         $dc11Description->addStatement(
