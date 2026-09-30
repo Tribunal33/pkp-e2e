@@ -2113,7 +2113,7 @@ Issue report: [pkp-e2e#36](https://github.com/jardakotesovec/pkp-e2e/issues/36) 
 
 <a id="fn-f-a11"></a>
 **f-a11** — `UserInstitutionalSubscriptionForm::execute()` calls `Repo::institution()->add()` for a new `Institution` on every save, then points the subscription at it. Live-probed 2026-09-25 (td17, td18): two "Tide University" rows after two purchases, a second "K3 Uni B" after "Purchase" on an existing one.
-Issue report: [docs/issues/U51-A11-institutional-purchase-adds-duplicate-institution.md](../issues/U51-A11-institutional-purchase-adds-duplicate-institution.md).
+Issue report: [pkp-e2e#56](https://github.com/jardakotesovec/pkp-e2e/issues/56) ([docs/issues/U51-A11-institutional-purchase-adds-duplicate-institution.md](../issues/U51-A11-institutional-purchase-adds-duplicate-institution.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `UserHandler::purchaseSubscription()` has no sign-in check: with no user, `$user->getId()` is called on nothing (the individual path in `subscriptionExistsByUserForJournal()`, the institutional path in the form's constructor). The page router authorises page requests by default. Live-probed 2026-09-25 (td19): signed out, `GET {journal}/user/purchaseSubscription/individual` and `GET …/institutional` answered HTTP 500 with an empty body.
