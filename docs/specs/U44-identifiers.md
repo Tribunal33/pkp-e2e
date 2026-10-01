@@ -849,6 +849,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-A8-urn-suffix-pattern-refusal-text-code.md`): a
     suffix pattern box of spaces saved and refused with the box's own
     message
+  - the guard for A11 (Fields, the URN plugin's settings window; issue
+    report `docs/issues/U44-A11-urn-settings-pattern-script-error.md`):
+    the pattern choice selected and every box ticked and unticked with no
+    page error, and the window reopened with the choice saved
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -862,9 +866,8 @@ Left out of the scenarios above, by reason:
   - A13 ("Add Check Number" on an empty tab suffix writing "NaN";
     Rule 12)
   - A12 (a URN differing from another only in case accepted; Rule 11)
-  - A10 and A11 (the settings window's written-out angle brackets and
-    failing page script; Fields, the URN plugin's settings window;
-    scenario 2 passes A10)
+  - A10 (the settings window's written-out angle brackets; Fields, the
+    URN plugin's settings window; scenario 2 passes it)
   - OMP6 (a press file's default URN without the format number; Rule 8)
 - **No seed**:
   - an issue galley's "Publisher ID" on an existing issue galley, its
@@ -912,7 +915,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | URN settings: a suffix pattern of only spaces is refused with a raw text code instead of a message | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | A Layout Editor, or anyone who may not edit the version, is offered the URN's "Assign" and "Clear" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | The URN prefix refusal shows "&amp;lt;NID&amp;gt;" under the box and in the notice | 🐞 | minor | — |
-| [A11](#a11) | The URN settings window raises a page error on every tick while the pattern choice is selected | 🐞 | invisible · crash: script | — |
+| [A11](#a11) | URN settings: while "Use the pattern entered below…" is selected, each click on a box raises a script error | 🐞 | low · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | "Add Check Number" on a tab writes "NaN" into an empty suffix box | 🐞 | minor | — |
 | [A14](#a14) | After "Clear" on a galley's, chapter's, format's or file's "Identifiers" tab, the removed URN stays shown | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS1](#ojs1) | Adding an issue galley with a Publisher ID hangs on "Save" and adds nothing | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
@@ -1083,13 +1086,19 @@ codes.
 Basis: probe, 2026-09-24. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The URN settings window's script fails under the pattern choice** · 🐞 · invisible · crash: script.
-While "Use the pattern entered below…" is selected, every tick of a
-kind box, of "Check Number" or of a suffix choice raises an error in
-the page, seen only in the browser's console: the window's own script
-fails. The pattern boxes still turn on and off as they should, and the
-save works.
-Basis: probe, 2026-09-24. <sup>f-a11</sup>
+**A11 — URN settings: while "Use the pattern entered below…" is selected, each click on a box raises a script error** · 🐞 · low · crash: script.
+In the URN plugin's settings window, the window's own script fails in
+the browser while "Use the pattern entered below to generate URN
+suffixes…" is selected. Choosing that option, and every tick or untick
+of a content box ("Issues", "Articles", …) or of "Check Number" after
+it, raises an error that only the browser's console shows. Opening the
+window again once that option is saved raises one more. The script
+reads the result of a name match before checking that the match
+succeeded, and "Check Number" never matches.
+Nothing visible is wrong: the pattern boxes open and grey out as they
+should, and "Save" works. OPS is not affected because it has no URN
+plugin.
+Basis: probe, 2026-10-01. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — A URN that differs only in case counts as new** · ❓ · minor.
@@ -1897,6 +1906,7 @@ management/settings/website#plugins on choosing the pattern radio, on
 each kind tick and on "Check Number" (11 on OJS, 21 on OMP in one run
 each), none under the default choice. The window's clicks are handled
 by `URNSettingsFormHandler.js` (note b).
+Issue report: [docs/issues/U44-A11-urn-settings-pattern-script-error.md](../issues/U44-A11-urn-settings-pattern-script-error.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-24 (note q18), OJS and OMP:
