@@ -2532,7 +2532,7 @@ a signed-out visitor's fail with a server error, the log reading
 ($userRoles) must be of type array, null given`. `articleCitation.js`
 swallows the failed fetch. On OPS a posted preprint's formats and
 downloads work for every role. Live-probed 2026-09-25, note q11.
-Issue report: [docs/issues/U13-OJS1-citation-formats-fail-outside-published-issue.md](../issues/U13-OJS1-citation-formats-fail-outside-published-issue.md).
+Issue report: [pkp-e2e#205](https://github.com/jardakotesovec/pkp-e2e/issues/205) ([docs/issues/U13-OJS1-citation-formats-fail-outside-published-issue.md](../issues/U13-OJS1-citation-formats-fail-outside-published-issue.md)).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — `PflSettingsForm::fetch()` assigns `fundingPluginPresent`
