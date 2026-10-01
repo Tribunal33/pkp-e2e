@@ -16,7 +16,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U63](../specs/U63-import-export.md) | 28 | 9 | 7 | **Taken: issues session, workstation s0, 2026-10-01**; done: A9, A5, A20, A13, A21, A7, A4, A15, A16, A1, A19, A12 (with U74 A16), OMP1, OJS4, OJS7, A8 (two reports; its country line to incidentals); out (open report docs/reports/2026-10-01-pkp-lib-13414.md): A23; A17, A18 retired by the upstream session; open: A6, A10, A11, OJS1, OJS2, OJS3, OJS5, OJS6, OJS9, OJS10, OMP4 |
+| [U63](../specs/U63-import-export.md) | 28 | 9 | 7 | **Taken: issues session, workstation s0, 2026-10-01**; done: A9, A5, A20, A13, A21, A7, A4, A15, A16, A1, A19, A12 (with U74 A16), OMP1, OJS4, OJS7, A8 (two reports; its country line to incidentals), A10; out (open report docs/reports/2026-10-01-pkp-lib-13414.md): A23; A17, A18 retired by the upstream session; open: A6, A11, OJS1, OJS2, OJS3, OJS5, OJS6, OJS9, OJS10, OMP4 |
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s1, 2026-10-01** |
 | [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **Taken: issues session, VM s3, 2026-10-01**; done: OJS2, A19, A18, A2, A9, OMP1, A11, OPS4, A15, OMP2, A17, A12, A4, A3, A13, A8, A20, OJS3, A21 |
 | [U19](../specs/U19-oai-pmh.md) | 26 | 5 | 6 |  |

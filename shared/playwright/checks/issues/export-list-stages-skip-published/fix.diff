@@ -1,0 +1,21 @@
+--- a/lib/pkp/classes/components/listPanels/PKPSubmissionsListPanel.php
++++ b/lib/pkp/classes/components/listPanels/PKPSubmissionsListPanel.php
+@@ -119,7 +119,17 @@
+             ],
+             [
+                 'heading' => __('settings.roles.stages'),
+-                'filters' => $this->getWorkflowStages(),
++                // The editorial stages, then the stages outside the workflow,
++                // such as Done, which holds the published submissions that
++                // have not been sent back to the workflow
++                'filters' => array_merge(
++                    $this->getWorkflowStages(),
++                    array_map(fn (int $stageId) => [
++                        'param' => 'stageIds',
++                        'value' => $stageId,
++                        'title' => __(Application::getWorkflowStageName($stageId)),
++                    ], Application::getNonWorkflowStages())
++                ),
+             ],
+             [
+                 'heading' => __('submission.list.activity'),

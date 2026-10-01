@@ -1169,6 +1169,9 @@ Left out of the scenarios above, by reason:
     occured:" {OJS}; and a submission with a contributor in a role
     other than "Author" imported into a second journal, press or
     server, that role read on the copy's "Contributors"
+  - the guard A10's issue report names, once fixed: a published
+    submission found under the export list's "Done" filter, then sent
+    back to the workflow and found under that stage instead
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1276,7 +1279,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Going back to a Native XML "Import Results" tab imports the file again, duplicating every item | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | Importing a file the app itself exported lists "Errors occured:" under the success text | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | Native XML import of an article in a missing section shows nothing and leaves an unopenable submission | 🐞 | medium · crash: both | issues (claude), 2026-10-01 — re-verified |
-| [A10](#a10) | A published submission matches none of the export list's "Stages" filters | 🐞 | minor | — |
+| [A10](#a10) | Native XML export list: no "Stages" filter finds published submissions | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Past one page, the export list's "Select All" never turns into "Select None", and ticks on other pages are not exported | 🐞 | minor | — |
 | [A12](#a12) | A Native XML export with nothing ticked opens an empty results tab: the server fails | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | Importing a users file with a format error leaves an empty "Results" tab instead of the reasons | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1403,12 +1406,21 @@ another journal. {OJS OPS}
 Basis: probe, 2026-10-01. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — Published submissions match no stage filter** · 🐞 · minor.
-The export list's "Stages" filters should find a published submission
-under the stage it was published from; pressing any stage, "Production"
-included, leaves it out, so a manager cannot narrow the list to
-published work by stage.
-Basis: probe. <sup>f-a10</sup>
+**A10 — Native XML export list: no "Stages" filter finds published submissions** · 🐞 · low.
+A manager opens the Native XML Plugin's export list and presses
+"Filters" to narrow it by stage. Published submissions now move to a
+stage of their own, "Done", and the "Stages" group has no button for it.
+So no stage lists them: "Production" lists only the work still in
+production, and with every stage pressed the published submissions are
+still missing, apart from any an editor has sent back to the workflow.
+Before, "Production" listed them. Nothing is lost: the unfiltered list
+still holds every submission, and the search box finds a published one
+by its title. But a manager can no longer list the published work on its
+own. The PubMed export on a journal and the ONIX 3.0 export on a press
+use the same list and filters. Only `main` has the Done stage, so no
+released version shows this yet. It reaches every site with the next
+release, whose upgrade moves the published submissions into Done.
+Basis: probe, 2026-10-01. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — The export list's selection stops at the page** · 🐞 · minor.
@@ -2722,6 +2734,7 @@ Issue report: [docs/issues/U63-A9-unknown-section-import-broken-submission.md](.
 Submission, Review and Production pressed the published submission was
 absent, and present once cleared; on OPS "Production" listed three
 submissions, not the published one.
+Issue report: [docs/issues/U63-A10-export-list-stages-skip-published.md](../issues/U63-A10-export-list-stages-skip-published.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — `ImportExportPage.vue::toggleSelectAll()` selects the
