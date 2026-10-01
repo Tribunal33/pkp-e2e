@@ -2734,7 +2734,7 @@ Live-probed 2026-09-25, note q12, both apps.
 **f-a10** — Note m: the link pattern stops at spaces and square or
 angle brackets, not at a parenthesis. Live-probed 2026-09-25, note m,
 both apps.
-Issue report: [docs/issues/U13-A10-reference-link-takes-closing-parenthesis.md](../issues/U13-A10-reference-link-takes-closing-parenthesis.md).
+Issue report: [pkp-e2e#243](https://github.com/jardakotesovec/pkp-e2e/issues/243) ([docs/issues/U13-A10-reference-link-takes-closing-parenthesis.md](../issues/U13-A10-reference-link-takes-closing-parenthesis.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Note c: `PKP\publication\DAO::fromRow()` reads the keyword
