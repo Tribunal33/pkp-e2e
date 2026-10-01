@@ -1993,7 +1993,7 @@ Issue report: [pkp-e2e#313](https://github.com/jardakotesovec/pkp-e2e/issues/313
 
 <a id="fn-f-a10"></a>
 **f-a10** — Live-probed 2026-09-26: note q5, step 5. Code: note h (`error()` then `exit()` inside `toXml()`, which `listRecords()` calls while building the answer).
-Issue report: [docs/issues/U19-A10-oai-jats-list-refused-for-one-subscription-article.md](../issues/U19-A10-oai-jats-list-refused-for-one-subscription-article.md).
+Issue report: [pkp-e2e#335](https://github.com/jardakotesovec/pkp-e2e/issues/335) ([docs/issues/U19-A10-oai-jats-list-refused-for-one-subscription-article.md](../issues/U19-A10-oai-jats-list-refused-for-one-subscription-article.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-26, OJS, two runs: note q21, the last step. The unpublish request answered 200, the publication became unpublished and its tombstone carried no `driver` setting; the server log recorded "Plugin APP\plugins\generic\driver\DRIVERPlugin failed to handle the hook ArticleTombstoneManager::insertArticleTombstone" with the `Repository::get()` TypeError, which `Hook::call` catches. Code: note i.
