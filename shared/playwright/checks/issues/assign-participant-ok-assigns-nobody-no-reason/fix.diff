@@ -1,0 +1,30 @@
+--- a/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
+@@ -400,7 +400,9 @@
+ 
+             return \PKP\db\DAO::getDataChangedEvent($userGroupId);
+         } else {
+-            return new JSONMessage(true, $form->fetch($request));
++            // Refused: keep the form as the user left it; the form's errors
++            // reach them as a notification (see sendNotification()).
++            return new JSONMessage(false);
+         }
+     }
+ 
+--- a/lib/pkp/controllers/grid/users/stageParticipant/form/AddParticipantForm.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/form/AddParticipantForm.php
+@@ -251,7 +251,13 @@
+         $userGroupId = (int) $this->getData('userGroupId');
+         $userId = (int) $this->getData('userId');
+ 
+-        return Repo::userGroup()->userInGroup($userId, $userGroupId) && Repo::userGroup()->get($userGroupId) && parent::validate($callHooks);
++        // Record why nobody can be assigned, then let the parent run its checks:
++        // it notifies the user of every recorded error.
++        if (!$userId || !Repo::userGroup()->get($userGroupId) || !Repo::userGroup()->userInGroup($userId, $userGroupId)) {
++            $this->addError('userId', __('editor.submission.addStageParticipant.form.userRequired'));
++        }
++
++        return parent::validate($callHooks);
+     }
+ 
+     /**

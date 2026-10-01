@@ -913,6 +913,10 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A4 (issue report
+    `docs/issues/U35-A4-assign-participant-ok-assigns-nobody-no-reason.md`):
+    "OK" on "Assign Participant" with nobody chosen, the notice read and
+    the window's role, person and message kept
   - the guard for OPS4 (issue report
     `docs/issues/U35-OPS4-participant-notice-lands-in-stage-box.md`):
     on a preprint server "Notification sent to users." at the top right
@@ -1022,7 +1026,7 @@ entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A Section Editor's "OK" on a participant's "Edit Assignment" saves nothing and shows the form again | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A message typed in "Assign" or "Notify" with no predefined message chosen is not sent | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A4](#a4) | "OK" on "Assign Participant" with nobody chosen, or with a person from the previous role's list, assigns nobody and gives no reason | 🐞 | minor | — |
+| [A4](#a4) | "OK" on "Assign Participant" with nobody chosen, or with a person from the previous role's list, assigns nobody and gives no reason | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | A message sent from "Notify" or "Assign" opens a discussion listed as created by its recipient | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | "Assign Editor" gives the new editor no task, unlike the other request messages | 🐞 | minor | — |
 | [A7](#a7) | "Edit" is logged as a new assignment | 🐞 | minor | — |
@@ -1092,13 +1096,22 @@ blank entry after a predefined message was chosen fails there too.
 Basis: probe, 2026-10-01. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
-**A4 — "OK" on "Assign" can do nothing, without a reason** · 🐞 · minor.
-"OK" on "Assign Participant" is expected to assign the person chosen, or
-to say that a person is needed. It shows the form again, reset to the
-first role and its people, with no message, and assigns nobody, both when
-nobody is chosen and when the person chosen was listed under the previous
-role (another role chosen without "Search", Rule 3).
-Basis: probe. <sup>[f-a4](#fn-a4)</sup>
+**A4 — "OK" on "Assign Participant" with nobody chosen, or with a person from the previous role's list, assigns nobody and gives no reason** · 🐞 · medium.
+In the "Assign Participant" window, an editor who presses "OK" with
+nobody chosen in the list of people expects to be told that a person is
+needed. Instead the window shows its form again, emptied: the role list
+is back on its first role with that role's people, and a predefined
+message chosen and a message typed for the participant are gone. There
+is no message, and nobody is assigned.
+"OK" gives the same result in a second case, with a person chosen. The
+role list does not reload the list of people until "Search" is pressed,
+and nothing in the window says so. An editor who chooses a person and
+then another role still sees the earlier role's people with that person
+chosen, and "OK" assigns nobody, because the person does not hold the
+role now chosen.
+Nothing is stored wrong. The window staying open, where it closes after
+an assignment, is the only sign that nobody was assigned.
+Basis: probe, 2026-10-01. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
 **A5 — A message sent from "Notify" or "Assign" opens a discussion listed as created by its recipient** · 🐞 · low.
@@ -1506,6 +1519,7 @@ Issue report: [pkp-e2e#307](https://github.com/jardakotesovec/pkp-e2e/issues/307
 
 <a id="fn-a4"></a>
 **f-a4** — Live-probed 2026-09-22 (all three apps): note td5. `AddParticipantForm::validate()` returns `Repo::userGroup()->userInGroup($userId, $userGroupId) && Repo::userGroup()->get($userGroupId) && parent::validate()`: with no user, or with a user who does not hold the newly chosen role, the first test is false and `parent::validate()`, which would record the `userId` check's message, never runs; `saveParticipant()` answers the redrawn form with no error.
+Issue report: [docs/issues/U35-A4-assign-participant-ok-assigns-nobody-no-reason.md](../issues/U35-A4-assign-participant-ok-assigns-nobody-no-reason.md).
 
 <a id="fn-a5"></a>
 **f-a5** — `PKPStageParticipantNotifyForm::sendMessage()` creates the discussion with `'createdBy' => $user->getId()`, `$user` being the recipient, while the head note's `userId` and the task's sender are the signed-in user. Live-probed 2026-09-18 (Copyediting stage, OJS and OMP): the "Request Copyedit" discussion listed as "Discussion Request Copyedit Created by: {Copyeditor}"; live-probed 2026-09-19 (all three apps, the "Notify" window): the discussion reading "Created by: {the recipient}". Live-probed 2026-09-22 (all three apps, from "Assign" and "Notify"): the panel row "Discussion {name} Created by: {the recipient's username}", the discussion's first entry "Message from {the sender's username}", the recipient's task naming the sender.
