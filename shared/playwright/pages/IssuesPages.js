@@ -802,7 +802,11 @@ class IssueWindow extends LegacyIdentifiersWindow {
 
     // --- "Issue Data" ----------------------------------------------------------
 
-    /** Open "Issue Data": its form. */
+    /**
+     * Open "Issue Data": its form. A save the server accepts closes the
+     * whole "Issue Management" window, so a later tab means reopening it
+     * (issues w30, 2026-10-01).
+     */
     async openData() {
         const panel = await this.openTab('Issue Data');
         const form = new IssueForm(this.page, panel.locator('form#issueForm'));
@@ -871,7 +875,11 @@ class IssueWindow extends LegacyIdentifiersWindow {
 
     // --- "Access" --------------------------------------------------------------
 
-    /** Open "Access": its form. */
+    /**
+     * Open "Access": its form. Its accepted "Save" closes the whole "Issue
+     * Management" window, as "Issue Data"'s does: reopen it for another tab
+     * (issues w7, w12, 2026-09-30).
+     */
     async openAccess() {
         const panel = await this.openTab('Access');
         return panel.locator('form#issueAccessForm');

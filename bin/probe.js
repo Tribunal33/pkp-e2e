@@ -5,7 +5,7 @@
  * Run a probe script (docs/process/patterns.md "Probe kit") against one app
  * or all three:
  *
- *   PROBE_FEATURE=U03 PROBE_AGENT=g1 node bin/probe.js <ojs|omp|ops|all> <script> [args…]
+ *   PROBE_FEATURE=U03 PROBE_AGENT=g1 node bin/probe.js <ojs|omp|ops|ojs,omp|all> <script> [args…]
  *
  * The script is loaded once. It calls the kit's `forEachApp(fn)`, which
  * runs `fn` for every app named here (`all` = ojs, omp, ops; narrow further
@@ -17,11 +17,12 @@
  */
 const path = require('path');
 const fs = require('fs');
-const {APPS, REPO_ROOT} = require('./apps.js');
+const {APPS, REPO_ROOT, resolveApp} = require('./apps.js');
+const {MARKER} = require('./try-fix.js');
 const {requireEnv} = require('../shared/playwright/probe/index.js');
 
 const USAGE =
-    'usage: PROBE_FEATURE=<spec id> PROBE_AGENT=<agent id> node bin/probe.js <ojs|omp|ops|all> <script> [args…]';
+    'usage: PROBE_FEATURE=<spec id> PROBE_AGENT=<agent id> node bin/probe.js <ojs|omp|ops|ojs,omp|all> <script> [args…]';
 
 const [target, script, ...rest] = process.argv.slice(2);
 if (!target || !script) {
@@ -68,11 +69,24 @@ if (fs.existsSync(fleetFile)) {
     }
 }
 
-const apps = target === 'all' ? Object.keys(APPS) : [target];
+const apps = target === 'all' ? Object.keys(APPS) : target.split(',').filter(Boolean);
 for (const name of apps) {
     if (!APPS[name]) {
-        console.error(`probe: unknown app "${name}" — one of ${Object.keys(APPS).join(', ')}, or all`);
+        console.error(`probe: unknown app "${name}" — one of ${Object.keys(APPS).join(', ')}, a comma list of them, or all`);
         process.exit(1);
+    }
+}
+// A fix tried with bin/try-fix.js is served by every fleet of the slot: say
+// so, so a walk knows which code it drove (harness.md "Trying a fix").
+for (const name of apps) {
+    try {
+        const marker = path.join(resolveApp(name).root, MARKER);
+        if (fs.existsSync(marker)) {
+            const rec = JSON.parse(fs.readFileSync(marker, 'utf8'));
+            console.log(`[probe] ${name}: fix applied, ${path.relative(REPO_ROOT, rec.diff)} (${rec.appliedAt})`);
+        }
+    } catch {
+        // no checkout configured: the kit says so when the app is driven
     }
 }
 process.env.PROBE_APPS = apps.join(',');

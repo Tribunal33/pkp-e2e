@@ -183,7 +183,11 @@ Each of these has bitten at least once.
     five seconds after it shows but none while the pointer rests on the
     stack (ui-library `Page.vue`), and while shown they cover the controls
     under them. A probe reads them in `screen().notices`, a test as
-    parallel lesson 2 says (U17, U55, U61, U62, U70, U72). One exception: Settings › Website
+    parallel lesson 2 says (U17, U55, U61, U62, U70, U72). A legacy
+    modal form refused by its own validation shows its page notice late,
+    with the next action or when the window closes, never while the
+    redrawn form is open: read the refusal in the form (a field's error,
+    the in-form `.notifyFormError`) (U35, U44 issue walks). One exception: Settings › Website
     › Content › "Comments" shows "Saving" and then reloads the whole
     Website Settings page onto Appearance › Theme, and "Saved" never
     appears; wait for the reload, not the status (U14 claim check K1,
@@ -622,15 +626,18 @@ process holds all three apps. The exception is `PKP_APP_ROOT` and
 because `base-test.js` reads them: a suite page object is required inside
 `fn`, never at the top of the script (U21 tops, 2026-09-07).
 
-The run record (`run-<app>-<HHMMSS>.json`) keeps every response of 400 or
-more and the console's errors; its `crashes` list is the subset that means
+The run record (`run-<app>-<HHMMSS>.json`) keeps every `/api/` and legacy
+`$$$call$$$` request (a legacy save answers 200 even when it refuses),
+every response of 400 or more and the console's errors; its `crashes` list is the subset that means
 the app itself failed (a response of 500 or more, an uncaught page error,
 a console error opening with a JavaScript error's name, which is a script
 failure Vue's error handler caught and logged, so no page error fires:
 `caught: true`, U28 I30),
 and the kit prints their count when the process ends. Each one is a
 finding in its own right, reported on the digest block's `Crash:` line
-even when the screen showed nothing.
+even when the screen showed nothing, except one the kit tags `known`: a
+failure every visit gives on the test installs (the Plugin Gallery list
+behind the dead `[proxy]`, seed-facts "Install defaults"), counted apart.
 
 ```js
 const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, tag} =
@@ -656,7 +663,7 @@ forEachApp(async (app) => {
 
 What each helper gives you: `launch(app)` is a 1280×900 Chromium with
 animations off and a response listener that records URL, method, status and
-size (never a body) of every `/api/` call and every status ≥ 400 into
+size (never a body) of every `/api/` and `$$$call$$$` call and every status ≥ 400 into
 `run-<app>-<HHMMSS>.json`, one record per process (HHMMSS from its start,
 `-<pid>` added when another process of that second took the name),
 with `override` on a call the Vue forms tunnel as a POST (UI realities:
@@ -758,6 +765,11 @@ race first, with nothing), and settled by the response's
 download answers 200 with JSON); a re-download after a change is also
 read in a fresh `launch(app)`, because the browser revalidates by ETag and
 keeps the earlier file name (U13, U47, U48 claim checks).
+An XML answer that names an XSL stylesheet (OAI-PMH) reaches
+`response.text()` and `page.content()` as the HTML Chromium rendered from
+it: read the raw XML with `page.request.get(page.url())` in the same
+context, beside the `goto()` that records the status (U19, U57, U66
+issue walks).
 A probe run that outlasts the Bash tool's 600 s cap runs detached, `nohup
 node bin/probe.js omp k3.js > k3-omp.log 2>&1 & echo $! > k3-omp.pid`, and
 the wait polls that pid (`while kill -0 $(cat k3-omp.pid) 2>/dev/null; do

@@ -2726,6 +2726,10 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   Publication Settings must save on a journal with a published issue, is
   assigned on screen; U44, U13, U16 claim checks).
 - Decision: `toAuthor`, `toReviewers`, `toEditor`.
+- Submission: `tasks[].ageMinutes` (a seeded discussion or task whose
+  headnote is older than the one-hour edit window, pkp/pkp-lib#12278; a
+  walk past the window waits it out in wall time, sync rr13345,
+  2026-09-30).
 - Users: a `roles[]` entry `{role, dateStart, dateEnd}` in `users[]` with a
   future start or a current role's future end (`pastRoles` stops at
   today); the state a Users XML import {OJS OMP} or an invitation's later

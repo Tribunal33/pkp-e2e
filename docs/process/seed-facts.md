@@ -1123,7 +1123,12 @@ config-file settings.
   `publication_<publicationId>_contributors` (the publication's id, not the
   submission's; a key with the submission id lands on the workflow), so a
   script opens it through the side menu's "Contributors" entry. Live-driven
-  2026-09-20, all three apps (`.reports/U34/cc-K2.md`).
+  2026-09-20, all three apps (`.reports/U34/cc-K2.md`). Every publication
+  page's key carries that id on `main` (`publication_<id>_titleAbstract`,
+  `_galleys`, `_jats`) and none on `stable-3_5_0`
+  (`publication_titleAbstract`); a key the line does not know opens the
+  stage view, so the side menu's link serves both lines (U19, U21, U36,
+  U47 issue walks, 2026-09-30).
 - A Section Editor (OJS, OMP) or Moderator (OPS) gets 401 on
   `GET emailTemplates?searchPhrase=` from the decision wizard's "Find
   Template" (the search box answers an "Error" window). Live-driven

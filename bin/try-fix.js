@@ -6,8 +6,8 @@
  * (REPORT.md "Proposed fix": a fix applied and checked against the steps):
  *
  *   node bin/try-fix.js apply <fix.diff> [ojs] [omp] [ops]
- *   node bin/try-fix.js revert [ojs] [omp] [ops]
- *   node bin/try-fix.js status
+ *   node bin/try-fix.js revert [<fix.diff>] [ojs] [omp] [ops]
+ *   node bin/try-fix.js status          (exits 1 while any app holds a fix)
  *
  * (default apps: every app with <APP>_ROOT set; PKP_E2E_LINE selects a
  * stable line's checkouts, as for every harness command).
@@ -25,7 +25,10 @@
  * and `revert` restores the files exactly (checked against the recorded
  * hashes). Every fleet of the slot serves the patched code while it is
  * applied, so apply a fix only when no other run in this slot needs the
- * unpatched code, and one fix at a time.
+ * unpatched code, and one fix at a time. `apply` refuses before touching
+ * anything when any named app already holds a fix; `revert` given the diff
+ * refuses a marker another diff wrote, so a chained revert never takes out
+ * another reporter's fix.
  */
 const path = require('path');
 const fs = require('fs');
@@ -73,12 +76,17 @@ function apply(diffPath, apps) {
     if (!files.length) {
         throw new Error(`${diffPath}: no file paths found (a unified diff relative to the app root is expected)`);
     }
+    // Every app is checked before any is patched, so a refusal leaves none half done.
+    for (const name of apps) {
+        const marker = path.join(resolveApp(name).root, MARKER);
+        if (fs.existsSync(marker)) {
+            const rec = JSON.parse(fs.readFileSync(marker, 'utf8'));
+            throw new Error(`${name}: a fix is already applied (${rec.diff}, ${rec.appliedAt}); nothing was applied`);
+        }
+    }
     for (const name of apps) {
         const app = resolveApp(name);
         const marker = path.join(app.root, MARKER);
-        if (fs.existsSync(marker)) {
-            throw new Error(`${name}: a fix is already applied (${marker}); revert it first`);
-        }
         const before = Object.fromEntries(files.map((f) => [f, sha(path.join(app.root, f))]));
         // Dry run first, so a diff that does not fit leaves nothing half applied.
         execFileSync('patch', ['-p1', '--dry-run', '--forward', '-s', '-d', app.root, '-i', diffAbs], {stdio: 'inherit'});
@@ -92,7 +100,22 @@ function apply(diffPath, apps) {
     }
 }
 
-function revert(apps) {
+/** Remove the empty file a reversed creation leaves (BSD patch does without -E) and its emptied dirs. */
+function removeCreated(root, file) {
+    const abs = path.join(root, file);
+    if (fs.existsSync(abs) && fs.statSync(abs).size === 0) {
+        fs.unlinkSync(abs);
+    }
+    for (let dir = path.dirname(abs); dir.startsWith(root + path.sep); dir = path.dirname(dir)) {
+        if (!fs.existsSync(dir) || fs.readdirSync(dir).length > 0) {
+            break;
+        }
+        fs.rmdirSync(dir);
+    }
+}
+
+function revert(apps, diffPath = null) {
+    const diffAbs = diffPath ? path.resolve(diffPath) : null;
     for (const name of apps) {
         const app = resolveApp(name);
         const marker = path.join(app.root, MARKER);
@@ -101,12 +124,20 @@ function revert(apps) {
             continue;
         }
         const rec = JSON.parse(fs.readFileSync(marker, 'utf8'));
+        if (diffAbs && rec.diff !== diffAbs) {
+            throw new Error(`${name}: the fix applied is ${rec.diff} (${rec.appliedAt}), not ${diffPath}; left in place`);
+        }
         for (const f of rec.files) {
             if (sha(path.join(app.root, f)) !== rec.after[f]) {
                 throw new Error(`${name}: ${f} changed since the fix was applied; restore it by hand (git checkout in its repo) and delete ${marker}`);
             }
         }
         execFileSync('patch', ['-p1', '-R', '-s', '--no-backup-if-mismatch', '-d', app.root, '-i', rec.diff], {stdio: 'inherit'});
+        for (const f of rec.files) {
+            if (rec.before[f] === null) {
+                removeCreated(app.root, f);
+            }
+        }
         for (const f of rec.files) {
             if (sha(path.join(app.root, f)) !== rec.before[f]) {
                 throw new Error(`${name}: ${f} does not match its state before the fix; check it by hand`);
@@ -121,16 +152,19 @@ function revert(apps) {
 }
 
 function status(apps) {
+    let patched = 0;
     for (const name of apps) {
         const app = resolveApp(name);
         const marker = path.join(app.root, MARKER);
         if (fs.existsSync(marker)) {
             const rec = JSON.parse(fs.readFileSync(marker, 'utf8'));
             console.log(`${name}${app.line ? ` (${app.line})` : ''}: ${rec.diff} applied ${rec.appliedAt}`);
+            patched++;
         } else {
             console.log(`${name}${app.line ? ` (${app.line})` : ''}: clean`);
         }
     }
+    return patched === 0;
 }
 
 /** Throws when a fix is applied in the app's checkout (for mount and fetch-apps). */
@@ -152,11 +186,15 @@ if (require.main === module) {
             const [diff, ...apps] = rest;
             apply(diff, apps.length ? apps : configuredApps());
         } else if (cmd === 'revert') {
-            revert(rest.length ? rest : configuredApps());
+            // A first argument that is a file is the diff whose marker alone may be reverted.
+            const diff = rest[0] && fs.existsSync(rest[0]) && fs.statSync(rest[0]).isFile() ? rest.shift() : null;
+            revert(rest.length ? rest : configuredApps(), diff);
         } else if (cmd === 'status') {
-            status(rest.length ? rest : configuredApps());
+            if (!status(rest.length ? rest : configuredApps())) {
+                process.exitCode = 1;
+            }
         } else {
-            console.error('usage: node bin/try-fix.js apply <fix.diff> [apps…] | revert [apps…] | status [apps…]');
+            console.error('usage: node bin/try-fix.js apply <fix.diff> [apps…] | revert [<fix.diff>] [apps…] | status [apps…]');
             process.exit(2);
         }
     } catch (e) {

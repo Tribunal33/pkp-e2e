@@ -32,6 +32,7 @@ const {patchIni} = require('./ini.js');
 const DATASETS_DIR = path.join(REPO_ROOT, 'checkouts', 'datasets');
 const DATASET_PORT_OFFSET = 60; // + n: clear of the workers (+0…+19), the probe (+50) and the validation variant (+90)
 const PRODUCTS = {ojs: 'ojs2', omp: 'omp', ops: 'ops'};
+const PUBLIC_CONTEXT_DIRS = {ojs: 'journals', omp: 'presses', ops: 'contexts'}; // Application::getFileDirectories()['context']
 
 /** The dataset fleet number PKP_E2E_DATASET selects (1–9), or null for the campaign fleet. */
 function datasetNumber(value = process.env.PKP_E2E_DATASET) {
@@ -416,6 +417,13 @@ async function resetDataset(name, n, {log = console.log} = {}) {
 
     copyInto(path.join(fleet.source, 'files'), fleet.filesDir);
     copyInto(path.join(fleet.source, 'public'), path.join(fleet.root, fleet.publicDir));
+    // The dump's public/ holds only index.html: make the subdirectories the
+    // installer creates (PKPInstall::createDirectories(), `site` plus the
+    // app's context dir), or every upload into them answers 500 "The public
+    // files directory was not found" (issues u09a18, 2026-09-30).
+    for (const dir of ['site', PUBLIC_CONTEXT_DIRS[fleet.name]]) {
+        fs.mkdirSync(path.join(fleet.root, fleet.publicDir, dir), {recursive: true});
+    }
     log(`dataset: files → ${path.relative(REPO_ROOT, fleet.filesDir)}, public → ${path.relative(REPO_ROOT, path.join(fleet.root, fleet.publicDir))}`);
 
     // Caches: this fleet's own Laravel store, the stylesheets compiled for its

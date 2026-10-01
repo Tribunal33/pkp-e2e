@@ -193,7 +193,11 @@ not a fix.
 5. **Group the entries.** Read the spec's 🐞 entries and their footnotes.
    Leave out an entry whose footnote points at an open report in
    `docs/reports/` (a regression the upstream session is carrying) and a
-   one-line pointer to another spec's entry (worked there). Group those
+   one-line pointer to another spec's entry (worked there); an entry whose
+   locale keys, class or symptom a report in `docs/issues/` or an
+   `incidentals.md` line already covers or rules on goes to its reporter
+   with that pointer ("check against <report>"), so the unit starts
+   there (U13 A1, U47 A7). Group those
    that point at one fault (the same action failing on two screens, one
    wrong value showing in several places), and follow an entry's link to
    the same fault in another spec: that entry joins the unit, and its

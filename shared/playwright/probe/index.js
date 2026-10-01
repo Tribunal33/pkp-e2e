@@ -233,6 +233,15 @@ let locatorsFlushed = 0; // how many of locatorRows are already in locators.md
 const CONSOLE_CAP = 200;
 // A console error that opens with a JavaScript error's name: a script
 // failure caught and logged (Vue's error handler), not a message.
+// A legacy handler request ($$$call$$$, as typed or percent-encoded): its saves
+// answer 200 even when refused, so the record keeps it like an /api/ call.
+const LEGACY_CALL = /\$\$\$call\$\$\$|%24%24%24call%24%24%24/;
+// Server errors the test installs give on every visit, not findings: the
+// dead [proxy] (seed-facts.md "Install defaults"). A crash matching one is
+// kept with `known` and left out of the "each is a finding" count.
+const KNOWN_ENVIRONMENT = [
+    {url: /plugin-gallery-grid\/fetch-grid/, known: 'the Plugin Gallery list behind the dead [proxy] (seed-facts.md "Install defaults")'},
+];
 const JS_ERROR = /^(?:Uncaught (?:\(in promise\) )?)?(?:TypeError|ReferenceError|RangeError|SyntaxError|URIError|EvalError|AggregateError)\b/;
 const consoleTallies = new WeakMap(); // run record → {types: {type: n}, lines: Map(warning line → n)}
 function consoleTally(record) {
@@ -300,14 +309,19 @@ function flush() {
             }
             const file = runFiles.get(record.app);
             fs.writeFileSync(file, JSON.stringify(record, null, 2));
-            if (record.crashes.length > 0) {
-                const server = record.crashes.filter((c) => c.kind === 'server').length;
-                const script = record.crashes.length - server;
+            const findings = record.crashes.filter((c) => !c.known);
+            const known = record.crashes.length - findings.length;
+            if (findings.length > 0) {
+                const server = findings.filter((c) => c.kind === 'server').length;
+                const script = findings.length - server;
                 console.error(
-                    `[probe] ${record.app}: the app failed ${record.crashes.length} time(s) during this run ` +
+                    `[probe] ${record.app}: the app failed ${findings.length} time(s) during this run ` +
                         `(${server} server error(s), ${script} page script error(s)); each is a finding — ` +
                         `see "crashes" in ${path.basename(file)}`,
                 );
+            }
+            if (known > 0) {
+                console.error(`[probe] ${record.app}: ${known} known test-install failure(s), not findings ("known" in "crashes")`);
             }
         }
         // flush() runs at the end of withApp and again on exit: append only
@@ -432,7 +446,7 @@ function watchNotices() {
 /**
  * A headless Chromium at 1280×900 with animations off, baseURL on the probe
  * server, and a response listener that records URL, method, status and size
- * (never a body) for `/api/` calls and every status ≥ 400 into the run
+ * (never a body) for `/api/` and `$$$call$$$` calls and every status ≥ 400 into the run
  * record. A status ≥ 500, an uncaught page error and a console error
  * opening with a JavaScript error's name (a failure Vue caught and logged)
  * also go into the record's `crashes` list (kind `server` | `script`), counted on the
@@ -474,7 +488,7 @@ async function launch(app, {storageState, headless = true, record: keepRecord = 
     if (keepRecord) context.on('response', (response) => {
         const url = response.url();
         const status = response.status();
-        if (!url.includes('/api/') && status < 400) {
+        if (!url.includes('/api/') && !LEGACY_CALL.test(url) && status < 400) {
             return;
         }
         const entry = {
@@ -492,7 +506,8 @@ async function launch(app, {storageState, headless = true, record: keepRecord = 
         }
         record.responses.push(entry);
         if (status >= 500 && record.crashes.length < CONSOLE_CAP) {
-            record.crashes.push({at: entry.at, kind: 'server', status, method: entry.method, url});
+            const env = KNOWN_ENVIRONMENT.find((k) => k.url.test(url));
+            record.crashes.push({at: entry.at, kind: 'server', status, method: entry.method, url, ...(env ? {known: env.known} : {})});
         }
         const length = response.headers()['content-length'];
         if (length !== undefined) {

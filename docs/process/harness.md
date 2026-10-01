@@ -205,22 +205,41 @@ checkouts for the length of a walk and takes it out again:
 
 ```bash
 node bin/try-fix.js apply shared/playwright/checks/issues/<slug>/fix.diff [ojs] [omp] [ops]
-node bin/try-fix.js revert [ojs] [omp] [ops]
-node bin/try-fix.js status
+node bin/try-fix.js revert shared/playwright/checks/issues/<slug>/fix.diff [ojs] [omp] [ops]
+node bin/try-fix.js status                      # exits 1 while any app holds a fix
 ```
 
 - The diff is relative to the app root with `a/` `b/` prefixes
   (`a/lib/pkp/classes/…`), applied with GNU `patch` because `lib/pkp` and
   `lib/ui-library` are submodules. A diff touching `lib/ui-library/` or
   `js/` runs `npm run build` on apply and on revert (the line's Node).
+  `apply` applies the one diff whole to every app named, so a fix whose
+  files differ per app (an app's own classes, a plugin one app does not
+  ship) is one `fix-<app>.diff` per app root, each applied to its app
+  alone. Write a diff from the committed files (`git show HEAD:<path>`
+  copies, never the working tree, where another reporter's fix may be
+  applied) with `diff -u --label a/<path> --label b/<path>`, whose
+  headers carry no timestamps.
 - A marker, `.pkp-e2e-fix.json` in the app root, records the diff and the
-  files' hashes before and after; `revert` checks both, and `mount` and
-  `fetch-apps` refuse to run while a marker is there.
+  files' hashes before and after; `revert` checks both and removes a
+  file the diff created, and `mount` and `fetch-apps` refuse to run while
+  a marker is there. `apply` refuses before patching any app when one of
+  them holds a fix; `revert` given the diff reverts only that diff's
+  marker (without it, whatever is applied), so a chained revert never
+  takes out another reporter's fix; `status` exits 1 while a fix is
+  applied, so `status && …` gates a chain, and `bin/probe.js` names an
+  applied fix when it starts.
   `PKP_E2E_LINE=<line>` in front tries it on a stable line's checkouts.
 - Every fleet of the slot, campaign and dataset alike, serves the patched
   code while it is applied: one fix at a time, and only while nothing
   else in the slot needs the unpatched code. PHP is read fresh on each
   request (`php -S`, no CLI opcache), so no server restart is needed.
+  A fix to install-time data (a `registry/` file: email or task
+  templates) does not show on a loaded dataset: replay its install step
+  under the fleet's `PKP_CONFIG_FILE` (`lib/pkp/tools/installEmailTemplate.php`)
+  or read it on a context created after the apply; a migration's fix
+  shows on an older dataset loaded with `PKP_E2E_DATASET_BRANCH`, which
+  runs the upgrade ("Dataset fleets", the reset).
 
 ### Dataset fleets
 
@@ -271,7 +290,9 @@ npm run dataset-facts -- --write                         # regenerate dataset.md
   load leaves out the leading drops and the `OWNER TO` lines and runs the
   rest in one transaction with `ON_ERROR_STOP`, so it lands whole or
   stops naming the failing statement; the fleet's role owns everything.
-  `files/` and `public/` are copied over emptied dirs; the fleet's cache,
+  `files/` and `public/` are copied over emptied dirs, with the public
+  subdirectories the installer makes (`site`, the context dir) added,
+  since the dump's `public/` holds only `index.html`; the fleet's cache,
   its compiled stylesheets (named after its base URL) and the legacy
   `cache/fc-*.php` files are cleared. Then the schema: the loaded
   `versions` row against the checkout's `dbscripts/xml/version.xml`; a
@@ -439,9 +460,12 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
   the env var explicitly.
 - **Server output** goes to
   `apps/<app>/playwright/.server-logs/server-<port>.log` (request log plus
-  PHP warnings); the probe servers' is `server-<port>-probe.log` beside it.
+  PHP warnings); the probe servers' is `server-<port>-probe.log` beside it,
+  a dataset fleet's `server-<port>-ds<n>.log`.
   Look there when debugging server-side errors (a 500 a probe's traffic
-  shows). A server
+  shows); it carries only the request line of a 500 (`[500]: POST …`),
+  whose exception sits in the app's own log under the fleet's files dir,
+  `logs/app-<date>.log` (`checkouts/files/<app>-test[-ds<n>]/` on `main`). A server
   adopted through `reuseExistingServer` (a stray one on a worker port)
   keeps logging wherever it was started.
 - **Project chain**: `setup → {shared, <app>} → <app>-serial → <app>-solo`.
@@ -574,7 +598,10 @@ to spot: seeding succeeds and the browser step dies.
   fleet's probe, validation or worker servers (2026-09-26)
 - `PLAYWRIGHT_CPU_THROTTLE`: opt-in race amplifier for flake hunting
   (`shared/playwright/support/throttle.js`): every page of every context
-  runs its main thread that many times slower (DevTools protocol, Chromium
+  the fixtures open (`page`'s and `asUser()`'s; like every lever below,
+  never a test's own `browser.newContext()`, so a fresh-login context
+  is out of reach, U03 and U05 diagnoses) runs its main thread that many
+  times slower (DevTools protocol, Chromium
   only). A short probe at 6 reproduces the main-thread jank a loaded CI
   runner shows; a long scenario at 2–4 only runs into its own timeouts
   (2026-09-15). Never in CI or a final. The same file's second lever,

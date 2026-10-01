@@ -26,7 +26,11 @@ what the team's installs hold (harness.md "Dataset fleets").
   editors, moderators), and each author account owns one submission.
 - Name a submission by its ID and title ("open submission 7,
   'Developing efficacy beliefs in the classroom'"), and the context by its
-  path, `publicknowledge` in all three apps.
+  path, `publicknowledge` in all three apps. "(2 versions)" in the tables
+  may mean an unpublished latest version beside the published one (OJS
+  submission 1's 1.1), and the workflow opens on the latest: a step on the
+  published version picks it in the Publication menu ("All Versions" on
+  3.5) (U13, U19, U44 issue walks).
 - Name screens and buttons, not the fleet's addresses: the team's install
   runs on its own host and port. A path after `index.php/` is fine
   (`/index.php/publicknowledge/en/dashboard/editorial`).
