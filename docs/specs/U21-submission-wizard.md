@@ -1055,7 +1055,7 @@ are the source; badges, Impact and Basis:
 | [A14](#a14) | "Submit As" offers "Section editor" ("Series editor"), and "Begin Submission" refuses it | 🐞 | user-visible | — |
 | [A16](#a16) | A plain language summary over the section's word limit is refused on save with an unexplained error, and the wizard hangs on "Saving" with "Submit" disabled | 🐞 | user-visible · crash: script | — |
 | [A18](#a18) | A change typed more than a minute after the last save is saved cut after its first letters; the rest waits another minute | 🐞 | minor | — |
-| [A19](#a19) | After any save the server refuses, the submission wizard hangs on "Saving" until reloaded | 🐞 | user-visible · crash: script | — |
+| [A19](#a19) | After the server refuses one save, the submission wizard hangs on "Saving" and the author cannot submit | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | minor | — |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
@@ -1307,17 +1307,22 @@ change as typed (Rule 9); the timer should too.
 Basis: probe. <sup>[fn-a18](#fn-a18)</sup>
 
 <a id="a19"></a>
-**A19 — After any save the server refuses, the submission wizard hangs on "Saving" until reloaded** · 🐞 · user-visible · crash: script.
+**A19 — After the server refuses one save, the submission wizard hangs on "Saving" and the author cannot submit** · 🐞 · medium · crash: script.
 When the server refuses one of a step's saves, whatever the field, the
 wizard shows its "Error" dialog, and about four seconds later the page's
 own script fails in the browser. From then on the footer reads "Saving",
 nothing more is sent, both "Save for Later" buttons and "Submit" stay
-disabled, and "Review" never gets past "Checking your submission". The
-author's only way on is a reload, which loses the refused change.
-A lost connection or a server failure is retried and recovers (Rule 9a);
-only a refusal hangs (Rule 9c). What the server refuses is [A16](#a16),
-[A20](#a20) and, on a preprint server,
-[→ Preprint relations A7](U75-preprint-relations.md#a7).
+disabled, and "Review" never gets past "Checking your submission".
+The author's only way on is to reload the page. The reload drops the
+refused change. Anything typed after it is offered back in an "Unsaved
+Changes" dialog, and "Yes" saves it. A lost connection or a server
+failure is retried and recovers; only a refusal hangs.
+Today the server refuses a wizard save in three cases: the plain
+language summary is required and still empty; the plain language
+summary is longer than the section's word limit; on a preprint server,
+"DOI of the published preprint" is typed without its web address.
+([A20](#a20), [A16](#a16),
+[→ Preprint relations A7](U75-preprint-relations.md#a7).)
 Basis: probe, 2026-10-01. <sup>[fn-a19](#fn-a19)</sup>
 
 <a id="a20"></a>
@@ -2403,6 +2408,7 @@ the Title read as before. Controls the same runs (Rule 9a): a 500 from
 the route and an aborted request on the same save gave "Reconnecting",
 a retry 4.1–4.7 s later answering 200, "Last saved 4 seconds ago", the
 buttons enabled, and the Title kept after a reload.
+Issue report: [docs/issues/U21-A19-wizard-refused-save-hangs-saving.md](../issues/U21-A19-wizard-refused-save-hangs-saving.md).
 
 <a id="fn-a20"></a>
 **fn-a20** — A20. pkp-lib `PKPPublication\Repository::validate()`

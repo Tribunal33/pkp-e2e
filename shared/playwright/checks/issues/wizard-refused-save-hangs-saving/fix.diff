@@ -1,0 +1,52 @@
+--- a/lib/ui-library/src/mixins/autosave.js
++++ b/lib/ui-library/src/mixins/autosave.js
+@@ -217,7 +217,14 @@
+ 				return;
+ 			}
+ 			setTimeout(() => {
+-				this._sendAutosave(this._getNextAutosave(), {
++				const payload = this._getNextAutosave();
++				if (!payload) {
++					// Nothing is waiting to be sent
++					connectionTimerInterval = 4000;
++					this.isDisconnected = false;
++					return;
++				}
++				this._sendAutosave(payload, {
+ 					success: (r) => {
+ 						connectionTimerInterval = 4000;
+ 						this.isDisconnected = false;
+--- a/lib/ui-library/src/components/Container/SubmissionWizardPage.vue
++++ b/lib/ui-library/src/components/Container/SubmissionWizardPage.vue
+@@ -359,17 +359,22 @@
+ 				return;
+ 			}
+ 
+-			if (xhr.status !== 403) {
+-				let autosaves = this.getLocalStorage(this.autosavesKey);
+-				if (autosaves.length) {
+-					this.setLocalStorage(
+-						this.autosavesKey,
+-						autosaves.filter((payload) => payload.id !== autosave.id),
+-					);
+-				}
++			if (xhr.status === 403) {
++				this.isDisconnected = true;
++				this.ajaxErrorCallback({});
++				return;
+ 			}
+ 
+-			this.isDisconnected = true;
++			// The server refused the save. Sending it again would be refused
++			// again, so drop it and stay connected: the next change is saved.
++			let autosaves = this.getLocalStorage(this.autosavesKey);
++			if (autosaves?.length) {
++				this.setLocalStorage(
++					this.autosavesKey,
++					autosaves.filter((payload) => payload.id !== autosave.id),
++				);
++			}
++			this.isDisconnected = false;
+ 			this.ajaxErrorCallback({});
+ 		},
+ 
