@@ -1988,7 +1988,7 @@ submitted" beside the copyright entry rendered verbatim "{$filename}
 ({username}) agreed to the copyright terms for submission." — the
 `{$filename}` token literal (A5). The copyright box must be re-ticked on
 every fresh visit to Review (test-authoring note).
-Issue report: [docs/issues/U21-A5-copyright-agreed-line-raw-placeholder.md](../issues/U21-A5-copyright-agreed-line-raw-placeholder.md).
+Issue report: [pkp-e2e#177](https://github.com/jardakotesovec/pkp-e2e/issues/177) ([docs/issues/U21-A5-copyright-agreed-line-raw-placeholder.md](../issues/U21-A5-copyright-agreed-line-raw-placeholder.md)).
 
 <a id="fn-n"></a>
 **n** — Complete/terminal screens. `complete.tpl` (OJS/OMP, AFFW-129):
