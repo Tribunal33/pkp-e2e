@@ -1,0 +1,11 @@
+--- a/classes/payment/omp/OMPPaymentManager.php
++++ b/classes/payment/omp/OMPPaymentManager.php
+@@ -43,7 +43,7 @@
+      */
+     public function isConfigured()
+     {
+-        return parent::isConfigured() && $this->_context && $this->_context->getData('currency');
++        return parent::isConfigured() && $this->_context && $this->_context->getData('paymentsEnabled') && $this->_context->getData('currency');
+     }
+ 
+     /**

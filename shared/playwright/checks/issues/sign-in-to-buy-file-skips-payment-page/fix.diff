@@ -1,0 +1,11 @@
+--- a/pages/catalog/CatalogBookHandler.php
++++ b/pages/catalog/CatalogBookHandler.php
+@@ -542,7 +542,7 @@
+ 
+         // Users that are not logged in need to register/login first.
+         if (!$user) {
+-            return $request->redirect(null, 'login', null, null, ['source' => $request->url(null, null, null, [$monographId, $representationId, $bestFileId])]);
++            Validation::redirectLogin();
+         }
+ 
+         // They're logged in but need to pay to view.

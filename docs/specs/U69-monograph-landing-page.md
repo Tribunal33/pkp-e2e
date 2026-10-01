@@ -1057,6 +1057,14 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A18 (issue report
+    `docs/issues/U69-A18-sign-in-to-buy-file-skips-payment-page.md`): a
+    visitor who signs in from a priced file's link landing on the
+    payment page
+  - the guard for A12 (issue report
+    `docs/issues/U69-A12-payments-enable-unticked-press-still-sells.md`):
+    a press with payments "Enable" unticked opening no payment page
+    for a priced file
   - the guard for A6 (issue report
     `docs/issues/U69-A6-contents-repeat-book-authors.md`): a one-author book's
     table of contents showing no author line under its chapters, and a
@@ -1225,10 +1233,10 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | A book's table of contents repeats the book's authors under every chapter | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | A priced file's link shows its price twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | On a press, the return arrow of a book's HTML view page is announced as the code "##monograph.return##" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A12](#a12) | Unticking payments "Enable" does not stop a press selling files | 🐞 | minor | — |
+| [A12](#a12) | A press that unticks "Enable" on its Payments tab still sells its priced files | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | Under a day-first date format a chapter page mixes up "Published" and "Forthcoming" | 🐞 | minor | — |
 | [A17](#a17) | An unpublished book's chapter page carries no preview notice | 🐞 | minor | — |
-| [A18](#a18) | A visitor who signs in to buy a file never reaches the payment page | 🐞 | minor | — |
+| [A18](#a18) | A visitor who signs in or registers to buy a book file lands on their home page, not the payment page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | A later version's chapter repeats its own date | 🐞 | minor | — |
 | [A11](#a11) | A buyer who pays by hand never gets the file | ❓ | user-visible | — |
 | [A2](#a2) | A book published only as an Author Original has no page | ❓ | minor | — |
@@ -1380,11 +1388,20 @@ method's own description says the manager records receipt.
 Basis: probe, 2026-09-28. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — Unticking payments "Enable" does not stop a press selling files** · 🐞 · minor.
-A press that unticks "Enable" on its "Payments" tab, keeping its currency
-and method, still shows priced files with "Purchase" and still takes
-buyers to the payment page. The box reads as the switch for payments.
-Basis: probe, 2026-09-28. <sup>f-a12</sup>
+**A12 — A press that unticks "Enable" on its Payments tab still sells its priced files** · 🐞 · low.
+A press that sells book files unticks "Enable" on Settings ›
+Distribution › "Payments" and saves, expecting payments to stop. The
+tab then hides the currency and the payment method, as if payments
+were off. A signed-in reader who opens a priced file's link still gets
+the payment page with the fee and the press's payment instructions.
+The press is not told that the box changed nothing. A buyer is treated
+exactly as before the box was unticked, so nobody pays without getting
+what a buyer got before. To stop selling, the press must change each
+priced file's terms.
+The fault shows on a press that has a currency, a payment method and a
+file set to "Direct Sales". On a journal the same box does turn
+payments off.
+Basis: probe, 2026-10-01. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — Under a day-first date format a chapter page mixes up "Published" and "Forthcoming"** · 🐞 · minor.
@@ -1447,13 +1464,21 @@ book's page carries, and with a date saved the chapter page reads
 Basis: probe, 2026-09-28. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — A visitor who signs in to buy a file never reaches the payment page** · 🐞 · minor.
-A visitor who presses a priced file's link gets the Login page; after
-signing in there, a Reader lands on the press's home page and a Press
-manager on the Dashboard's list headed "Assigned to me", instead of the
-payment page, and the buyer must find the book and press the link
-again. A free file's Login page returns to the file (Rule 13c).
-Basis: probe, 2026-09-29. <sup>f-a18</sup>
+**A18 — A visitor who signs in or registers to buy a book file lands on their home page, not the payment page** · 🐞 · low.
+A visitor who follows the link of a book file for sale gets the Login
+page. After signing in there they expect the payment page for that
+file. They land where an ordinary sign-in would take them: the press's
+home page, "My Submissions" or the Dashboard, by role. A newcomer who
+chooses "Register" on that Login page, fills the form and sends it
+lands on "Registration complete", signed in.
+The Login page and the page they land on say nothing of the purchase.
+The buyer, now signed in, must find the book again and follow the
+file's link a second time, which opens the payment page at once.
+The fault shows on a press that sells files: a currency and a payment
+method under Settings › Distribution › "Payments", and a file set to
+"Direct Sales".
+A free file's Login page returns to the file (Rule 13c).
+Basis: probe, 2026-10-01. <sup>f-a18</sup>
 
 <a id="a19"></a>
 **A19 — An older version's chapter page of a book shows a blank server error page to every reader** · 🐞 · medium · crash: server.
@@ -1766,6 +1791,7 @@ Issue report: [pkp-e2e#288](https://github.com/jardakotesovec/pkp-e2e/issues/288
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note k: `paymentsEnabled` is read only by the form's `showWhen`; `OMPPaymentManager::isConfigured()` ignores it, where OJS's payment paths check it. Live-probed 2026-09-28 (td15).
+Issue report: [docs/issues/U69-A12-payments-enable-unticked-press-still-sells.md](../issues/U69-A12-payments-enable-unticked-press-still-sells.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Note l: `chapter.tpl` compares `date_format:$dateFormatShort` strings, where `monograph_full.tpl` compares `Y-m-d` (pkp-lib#10169 fixed only the book page). Live-probed 2026-09-28 (td16): both directions.
@@ -1787,6 +1813,7 @@ Issue report: [pkp-e2e#284](https://github.com/jardakotesovec/pkp-e2e/issues/284
 
 <a id="fn-f-a18"></a>
 **f-a18** — Note k: `CatalogBookHandler::download()` sends a signed-out buyer to Login with `source` built by `$request->url()`, a full address, and `LoginHandler::signIn()` follows only a `source` starting with "/", so `_redirectAfterLogin()` (its dashboard branch needs an empty `source`) falls back to `PKPPageRouter::getHomeUrl()`, the user's home by role: the press's index for a Reader, `dashboard/editorial` for a manager, sub-editor or assistant role, `dashboard/reviewAssignments` for a Reviewer, `dashboard/mySubmissions` for an Author (the last two untried); a free file's Login (`Validation::redirectLogin()`) carries a path. Live-probed 2026-09-28 (td13, td14): the priced file's Login address carried `source=http%3A%2F%2F…`, the free file's `source=%2Findex.php%2F…`. Live-probed 2026-09-29 (td14): the Press manager's sign-in went to `dashboard/editorial`.
+Issue report: [docs/issues/U69-A18-sign-in-to-buy-file-skips-payment-page.md](../issues/U69-A18-sign-in-to-buy-file-skips-payment-page.md).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Note l. Live-probed 2026-09-28 (td17): 500 at `{press}/catalog/book/{id}/version/{id}/chapter/{n}`, typed, from the older version's table of contents and from "Versions", with the book named by number or URL Path, on every press left at "DOI Versioning" "No"; the same page opened on a press seeded with it "Yes".
