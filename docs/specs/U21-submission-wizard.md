@@ -974,6 +974,10 @@ Left out of the scenarios above, by reason:
     submitter in their own manager or editor role receiving the
     confirmation, and with "Do not send an email." the "Submission
     complete" screen not promising one
+  - the guard for A14 (issue report
+    `docs/issues/U21-A14-submit-as-section-editor-refused.md`): a Section
+    Editor who also holds Author offered only the roles "Begin Submission"
+    accepts in "Submit As", and beginning a submission as Author
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1048,7 +1052,7 @@ are the source; badges, Impact and Basis:
 | [A8](#a8) | Editors set to be assigned automatically by a section are never assigned on a second journal | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A10](#a10) | A wizard loaded at phone width keeps its uncollapsed step rail and the page scrolls sideways (journal & press) | 🐞 | minor | — |
 | [A12](#a12) | After "Do not send an email." is saved, the Emails screen shows no Submission Confirmation option selected | 🐞 | minor | — |
-| [A14](#a14) | "Submit As" offers "Section editor" ("Series editor"), and "Begin Submission" refuses it | 🐞 | user-visible | — |
+| [A14](#a14) | Section Editors who are also Authors are offered "Section editor" in "Submit As", then refused | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | Submission wizard refuses a plain language summary over the word limit, then hangs on "Saving" | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [A18](#a18) | A change typed more than a minute after the last save is saved cut after its first letters; the rest waits another minute | 🐞 | minor | — |
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | minor | — |
@@ -1231,17 +1235,21 @@ Since: 2026-09-12 · Basis: probe. <sup>[fn-a13](#fn-a13)</sup>
 > post-submission language change.
 
 <a id="a14"></a>
-**A14 — "Submit As" offers "Section editor", and "Begin Submission" refuses it** · 🐞 · user-visible.
-A user who is both a Section Editor and an Author gets "Submit As" with
-"Author" and "Section editor" ("Series editor" on a press). Choosing
-"Section editor" and pressing "Begin Submission" keeps them on the form
-with "You are not allowed to submit in this user role." under "Submit
-As", and no submission is created. Only "Author" can be used, so the form
-offers a choice it will not accept. On a press the refused role is
-sometimes the one already selected [OMP3](#omp3). A preprint server does
-not offer its Moderator role at all. The same gap turns a Section Editor
-with no other role into an Author [A9](#a9).
-Basis: probe. <sup>[fn-a14](#fn-a14)</sup>
+**A14 — Section Editors who are also Authors are offered "Section editor" in "Submit As", then refused** · 🐞 · medium.
+A Section Editor who is also an Author opens "Make a Submission" and finds
+"Submit As" offering "Section editor" ("Series editor" on a press) and
+"Author". With "Section editor" chosen, "Begin Submission" leaves them on
+the form with "You are not allowed to submit in this user role." under
+"Submit As", and no submission is made.
+The list has no fixed order and the form selects whichever role comes
+first. On PKP's test dataset that is "Section editor", so an editor who
+leaves the role as it is gets refused. Choosing "Author" gets them
+through, and the form keeps what they typed.
+Every other role that has access to the submission stage but is neither a
+manager nor an author role is offered and refused the same way. On a
+journal's default roles that is also "Guest editor" and "Funding
+coordinator"; on a press's, "Funding coordinator".
+Basis: probe, 2026-10-01. <sup>[fn-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
 **A15 — Leaving the wizard drops a change made within a minute of the last save** · ❓ · minor.
@@ -2261,6 +2269,7 @@ Submission" left the start form in place with the error under "Submit
 As", and no draft was created; "Author" picked, the same user submitted
 normally. OPS control: a Moderator + Author got no "Submit As" and
 submitted as Author.
+Issue report: [docs/issues/U21-A14-submit-as-section-editor-refused.md](../issues/U21-A14-submit-as-section-editor-refused.md).
 
 <a id="fn-a15"></a>
 **fn-a15** — A15. Live-probed 2026-09-28, two runs per app on all three:
