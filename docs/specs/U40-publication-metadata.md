@@ -2357,7 +2357,7 @@ Continue answered 400 and the dialog "Error An unexpected error has
 occurred. Please reload the page and try again." appeared while the
 rail moved to Contributors; with the summary filled, Details saved and
 the Review step flagged the lost Title "This field is required."
-Issue report: [docs/issues/U21-A20-plain-summary-required-refuses-other-saves.md](../issues/U21-A20-plain-summary-required-refuses-other-saves.md).
+Issue report: [pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323) ([docs/issues/U21-A20-plain-summary-required-refuses-other-saves.md](../issues/U21-A20-plain-summary-required-refuses-other-saves.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2 — A2 evidence.** `Repo::submission()->resetPermissions()` calls

@@ -1680,7 +1680,7 @@ OMP defines the one (`notAllowed.description`) its handler uses
 same day: the author's radio offered only the open sections; a Journal
 Manager was additionally offered the editor-restricted one; the deactivated
 section was offered to no one.
-OPS7 issue report: [docs/issues/U21-OPS7-preprint-not-allowed-page-raw-key.md](../issues/U21-OPS7-preprint-not-allowed-page-raw-key.md).
+OPS7 issue report: [pkp-e2e#332](https://github.com/jardakotesovec/pkp-e2e/issues/332) ([docs/issues/U21-OPS7-preprint-not-allowed-page-raw-key.md](../issues/U21-OPS7-preprint-not-allowed-page-raw-key.md)).
 
 <a id="fn-d"></a>
 **d** — Start form. Shared `PKP\components\forms\submission\StartSubmission`
@@ -1837,7 +1837,7 @@ viewport, step buttons laid out past the right edge); OMP fails the same
 way at 375px; OPS collapses correctly at 375px (scrollWidth 558). The same
 OJS page resized 1440→375 *without* reload collapses correctly; reloading
 at that width breaks it again — reproduced in both orders, twice.
-A10 issue report: [docs/issues/U21-A10-phone-wizard-step-rail-not-collapsed.md](../issues/U21-A10-phone-wizard-step-rail-not-collapsed.md).
+A10 issue report: [pkp-e2e#316](https://github.com/jardakotesovec/pkp-e2e/issues/316) ([docs/issues/U21-A10-phone-wizard-step-rail-not-collapsed.md](../issues/U21-A10-phone-wizard-step-rail-not-collapsed.md)).
 
 <a id="fn-i"></a>
 **i** — Autosave. `autosave` mixin: a 500 ms job timer
@@ -1895,7 +1895,7 @@ followed. The rail back to "Upload Files" saved the same way. The
 2026-08-25 observation in note f (no write on "Continue") was a step with
 nothing changed. An untouched step sent its timer save 58.7–59.7 s after
 typing stopped. Leaving: note fn-a15.
-A4 issue report: [docs/issues/U21-A4-wizard-footer-claims-save-on-load.md](../issues/U21-A4-wizard-footer-claims-save-on-load.md).
+A4 issue report: [pkp-e2e#324](https://github.com/jardakotesovec/pkp-e2e/issues/324) ([docs/issues/U21-A4-wizard-footer-claims-save-on-load.md](../issues/U21-A4-wizard-footer-claims-save-on-load.md)).
 
 <a id="fn-j"></a>
 **j** — Save for later. `SubmissionWizardPage.saveForLater()` flushes
@@ -2044,8 +2044,8 @@ submitted" beside the copyright entry rendered verbatim "{$filename}
 ({username}) agreed to the copyright terms for submission." — the
 `{$filename}` token literal (A5). The copyright box must be re-ticked on
 every fresh visit to Review (test-authoring note).
-A6 issue report: [docs/issues/U21-A6-double-submit-empty-problems-banner.md](../issues/U21-A6-double-submit-empty-problems-banner.md).
-A5 issue report: [docs/issues/U21-A5-copyright-agreed-log-raw-placeholder.md](../issues/U21-A5-copyright-agreed-log-raw-placeholder.md).
+A6 issue report: [pkp-e2e#326](https://github.com/jardakotesovec/pkp-e2e/issues/326) ([docs/issues/U21-A6-double-submit-empty-problems-banner.md](../issues/U21-A6-double-submit-empty-problems-banner.md)).
+A5 issue report: [pkp-e2e#325](https://github.com/jardakotesovec/pkp-e2e/issues/325) ([docs/issues/U21-A5-copyright-agreed-log-raw-placeholder.md](../issues/U21-A5-copyright-agreed-log-raw-placeholder.md)).
 
 <a id="fn-n"></a>
 **n** — Complete/terminal screens. `complete.tpl` (OJS/OMP, AFFW-129):
@@ -2101,7 +2101,7 @@ another draft succeeded through the same flow. Mechanism: OPS drafts sit
 on the Production stage, so the author never holds the *submission-stage*
 author assignment `canCurrentUserDelete()` demands — the footer's
 `$canCancelSubmission` check does not mirror it.
-OPS3 issue report: [docs/issues/U21-OPS3-author-cancel-draft-does-nothing.md](../issues/U21-OPS3-author-cancel-draft-does-nothing.md).
+OPS3 issue report: [pkp-e2e#331](https://github.com/jardakotesovec/pkp-e2e/issues/331) ([docs/issues/U21-OPS3-author-cancel-draft-does-nothing.md](../issues/U21-OPS3-author-cancel-draft-does-nothing.md)).
 
 <a id="fn-p"></a>
 **p** — Section closed mid-draft. `PKPSubmissionHandler::showWizard()`
@@ -2242,9 +2242,9 @@ confirmation for your records." (A7); the same user type submitting as
 "Author" got "Thank you for your submission to {journal}". On OPS the
 "Preprint Server manager" submitter got only the needs-an-editor email
 (the can-post case, OPS5).
-A7 issue reports: [docs/issues/U21-A7-completion-screen-claims-unsent-confirmation.md](../issues/U21-A7-completion-screen-claims-unsent-confirmation.md) (the screen's claim) and [docs/issues/U21-A7-OPS5-editorial-submitter-no-acknowledgement.md](../issues/U21-A7-OPS5-editorial-submitter-no-acknowledgement.md) (the editorial-role submitter, with OPS5).
-OPS5 issue report: [docs/issues/U21-A7-OPS5-editorial-submitter-no-acknowledgement.md](../issues/U21-A7-OPS5-editorial-submitter-no-acknowledgement.md).
-A8 issue report: [docs/issues/U21-A8-section-editors-not-assigned-second-journal.md](../issues/U21-A8-section-editors-not-assigned-second-journal.md).
+A7 issue reports: [pkp-e2e#328](https://github.com/jardakotesovec/pkp-e2e/issues/328) ([docs/issues/U21-A7-completion-screen-claims-unsent-confirmation.md](../issues/U21-A7-completion-screen-claims-unsent-confirmation.md)) (the screen's claim) and [pkp-e2e#327](https://github.com/jardakotesovec/pkp-e2e/issues/327) ([docs/issues/U21-A7-OPS5-editorial-submitter-no-acknowledgement.md](../issues/U21-A7-OPS5-editorial-submitter-no-acknowledgement.md)) (the editorial-role submitter, with OPS5).
+OPS5 issue report: [pkp-e2e#327](https://github.com/jardakotesovec/pkp-e2e/issues/327) ([docs/issues/U21-A7-OPS5-editorial-submitter-no-acknowledgement.md](../issues/U21-A7-OPS5-editorial-submitter-no-acknowledgement.md)).
+A8 issue report: [pkp-e2e#329](https://github.com/jardakotesovec/pkp-e2e/issues/329) ([docs/issues/U21-A8-section-editors-not-assigned-second-journal.md](../issues/U21-A8-section-editors-not-assigned-second-journal.md)).
 
 <a id="fn-r"></a>
 **r** — Schema. The submission record itself is defined in the shared
@@ -2321,7 +2321,7 @@ Workflow → Emails reopened after saving "Do not send an email." listed
 only." and "Do not send an email." all unchecked, and the acknowledgement
 stayed off. The form is the shared lib/pkp Emails settings form, so OMP
 and OPS are expected to match; not reopened there.
-Issue report: [docs/issues/U21-A12-emails-confirmation-off-shows-unselected.md](../issues/U21-A12-emails-confirmation-off-shows-unselected.md).
+Issue report: [pkp-e2e#318](https://github.com/jardakotesovec/pkp-e2e/issues/318) ([docs/issues/U21-A12-emails-confirmation-off-shows-unselected.md](../issues/U21-A12-emails-confirmation-off-shows-unselected.md)).
 
 <a id="fn-a13"></a>
 **fn-a13** — Language change and the copied contributor. The wizard's
@@ -2368,7 +2368,7 @@ Submission" left the start form in place with the error under "Submit
 As", and no draft was created; "Author" picked, the same user submitted
 normally. OPS control: a Moderator + Author got no "Submit As" and
 submitted as Author.
-Issue report: [docs/issues/U21-A14-section-editor-submit-as-refused.md](../issues/U21-A14-section-editor-submit-as-refused.md).
+Issue report: [pkp-e2e#319](https://github.com/jardakotesovec/pkp-e2e/issues/319) ([docs/issues/U21-A14-section-editor-submit-as-refused.md](../issues/U21-A14-section-editor-submit-as-refused.md)).
 
 <a id="fn-a15"></a>
 **fn-a15** — A15. Live-probed 2026-09-28, two runs per app on all three:
@@ -2410,7 +2410,7 @@ Crash: the page error "Cannot read properties of undefined (reading
 'url')" about 4 s after the 400, in every over-limit drive (OJS 6 of 6,
 OPS 4 of 4). Control: a 10-word summary saved (200, "Last saved…"),
 showed on "Review" and survived a reload.
-Issue report: [docs/issues/U21-A16-plain-summary-over-word-limit-refused.md](../issues/U21-A16-plain-summary-over-word-limit-refused.md).
+Issue report: [pkp-e2e#320](https://github.com/jardakotesovec/pkp-e2e/issues/320) ([docs/issues/U21-A16-plain-summary-over-word-limit-refused.md](../issues/U21-A16-plain-summary-over-word-limit-refused.md)).
 
 <a id="fn-a17"></a>
 **fn-a17** — A17. `AssignEditors` sends the needs-an-editor mail and task
@@ -2443,7 +2443,7 @@ reload "Details" read "Autosave check leavelate" and a longer cut (OMP),
 OMP typed as fast in one run and was cut, so whole or cut follows where
 the typing falls against the 500 ms tick, not the app. No response of
 400 or more, no page error, no browser dialog.
-Issue report: [docs/issues/U21-A18-wizard-saves-late-typing-cut.md](../issues/U21-A18-wizard-saves-late-typing-cut.md).
+Issue report: [pkp-e2e#321](https://github.com/jardakotesovec/pkp-e2e/issues/321) ([docs/issues/U21-A18-wizard-saves-late-typing-cut.md](../issues/U21-A18-wizard-saves-late-typing-cut.md)).
 
 <a id="fn-a19"></a>
 **fn-a19** — Rules 9b and 9c, A19. ui-library `SubmissionWizardPage.vue`
@@ -2476,7 +2476,7 @@ the Title read as before. Controls the same runs (Rule 9a): a 500 from
 the route and an aborted request on the same save gave "Reconnecting",
 a retry 4.1–4.7 s later answering 200, "Last saved 4 seconds ago", the
 buttons enabled, and the Title kept after a reload.
-Issue report: [docs/issues/U21-A19-wizard-refused-save-hangs-saving.md](../issues/U21-A19-wizard-refused-save-hangs-saving.md).
+Issue report: [pkp-e2e#322](https://github.com/jardakotesovec/pkp-e2e/issues/322) ([docs/issues/U21-A19-wizard-refused-save-hangs-saving.md](../issues/U21-A19-wizard-refused-save-hangs-saving.md)).
 
 <a id="fn-a20"></a>
 **fn-a20** — A20. pkp-lib `PKPPublication\Repository::validate()`
@@ -2501,7 +2501,7 @@ nothing stored. OPS, an answer ticked after the hang, offered by
 error again; ticked again on "For Readers" after a plain reload: the
 same. Controls, the summary at ask: the same drives answered 200 and
 the text read back after a reload.
-Issue report: [docs/issues/U21-A20-plain-summary-required-refuses-other-saves.md](../issues/U21-A20-plain-summary-required-refuses-other-saves.md).
+Issue report: [pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323) ([docs/issues/U21-A20-plain-summary-required-refuses-other-saves.md](../issues/U21-A20-plain-summary-required-refuses-other-saves.md)).
 
 <a id="fn-omp1"></a>
 **fn-omp1** — OMP divergence points: `StartSubmission` (OMP) adds
@@ -2530,7 +2530,7 @@ building the scenario tooling, through the settings form's own validation:
 address." and accepted on OJS and OPS; the box's help text read "Separate
 multiple email addresses with a comma. Example:
 one@example.com,two@example.com" on all three apps.
-Issue report: [docs/issues/U21-OMP2-press-refuses-notify-anyone-list.md](../issues/U21-OMP2-press-refuses-notify-anyone-list.md).
+Issue report: [pkp-e2e#330](https://github.com/jardakotesovec/pkp-e2e/issues/330) ([docs/issues/U21-OMP2-press-refuses-notify-anyone-list.md](../issues/U21-OMP2-press-refuses-notify-anyone-list.md)).
 
 <a id="fn-omp3"></a>
 **fn-omp3** — OMP3. `getSubmitUserGroups()` (note c) reads the user's
@@ -2596,7 +2596,7 @@ a function" followed; the "2. Review Details" step stayed blank and its
 "Continue" could not be pressed. The "Files" list then held the new label with no
 file, also after a reload. Controls: a draft's first galley, and a
 second added in the same visit, completed with no page error.
-Issue report: [docs/issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md](../issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md).
+Issue report: [pkp-e2e#333](https://github.com/jardakotesovec/pkp-e2e/issues/333) ([docs/issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md](../issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md)).
 
 <a id="fn-ops9"></a>
 **fn-ops9** — OPS9. Review panel `review-galleys.tpl` (note l).
@@ -2606,7 +2606,7 @@ the visit showed on "Review" as "PDF Preprint Text"; after a reload,
 "Submit" enabled while "Upload Files" still listed the galley. The same
 text showed on the first "Review" of all 14 drafts built with a galley
 by the scenario tooling, each of which passed the check.
-Issue report: [docs/issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md](../issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md).
+Issue report: [pkp-e2e#333](https://github.com/jardakotesovec/pkp-e2e/issues/333) ([docs/issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md](../issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md)).
 
 <a id="fn-ops10"></a>
 **fn-ops10** — OPS10. Mechanism and the 2026-09-28 drive: note q (the
