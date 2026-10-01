@@ -913,6 +913,10 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A6 (issue report
+    `docs/issues/U35-A6-assign-editor-message-gives-no-task.md`):
+    "Assign" with "Assign Editor", the new editor's Tasks panel holding
+    "You have been assigned as an editor to the submission…"
   - the guard for A7 (issue report
     `docs/issues/U35-A7-edit-assignment-logged-as-assignment.md`):
     an "Edit Assignment" save logged as a change, and an untouched "OK"
@@ -1036,7 +1040,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | A message typed in "Assign" or "Notify" with no predefined message chosen is not sent | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | "OK" on "Assign Participant" with nobody chosen, or with a person from the previous role's list, assigns nobody and gives no reason | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | A message sent from "Notify" or "Assign" opens a discussion listed as created by its recipient | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A6](#a6) | "Assign Editor" gives the new editor no task, unlike the other request messages | 🐞 | minor | — |
+| [A6](#a6) | The "Assign Editor" message gives the new editor no "You have been assigned as an editor" task | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | Changing a participant's assignment with "Edit" adds a "was assigned to this submission" line to the Activity Log | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | In "Assign Participant", the "Permissions" box stays ticked after the editor chooses another role | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A message template added in Settings is listed but fills nothing and cannot be sent | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1142,14 +1146,23 @@ The Copyediting stage's instance of this is that spec's
 Basis: probe, 2026-10-01. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
-**A6 — "Assign Editor" gives no task** · 🐞 · minor.
-"Request Copyedit", "Ready for Production" and "Index Requested" each put a
-task of their own in the recipient's Tasks panel ("You have been asked to
-review copyedits…"). "Assign Editor" is expected to do the same with "You
-have been assigned as an editor to the submission "{title}"."; the new
-editor gets the email and the discussion task only, from the Submission,
-Review and Production stages alike.
-Basis: probe. <sup>[f-a6](#fn-a6)</sup>
+**A6 — The "Assign Editor" message gives the new editor no "You have been assigned as an editor" task** · 🐞 · low.
+When an editor assigns a participant, or messages one with "Notify",
+and chooses the predefined message "Assign Editor", the person it is
+sent to gets no task for the assignment. Their Tasks panel is expected
+to gain "You have been assigned as an editor to the submission
+"{title}"."; it gains only the discussion row, "{sender} started a
+discussion: Assign Editor: {message}".
+Only that row is missing: the person is assigned, and the email and the
+discussion arrive. The other request messages still give a task beside
+their discussion row; "Request Copyedit", for one, gives "You have been
+asked to review copyedits for "{title}".".
+It was seen on the Submission stage of a journal and a press and on the
+Production stage of a preprint server, the only stage a preprint server
+offers the message on. The Review and Production stages of a journal or
+press have the same fault by the code. On a 3.5 preprint server the
+message is listed as "Editor Assigned".
+Basis: probe, 2026-10-01. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
 **A7 — Changing a participant's assignment with "Edit" adds a "was assigned to this submission" line to the Activity Log** · 🐞 · low.
@@ -1545,6 +1558,7 @@ Issue report: [pkp-e2e#343](https://github.com/jardakotesovec/pkp-e2e/issues/343
 
 <a id="fn-a6"></a>
 **f-a6** — Live-probed 2026-09-22 (all three apps): note td6. `sendMessage()`'s `switch ($templateKey)` raises `NOTIFICATION_TYPE_EDITOR_ASSIGN` (`notification.type.editorAssign` "You have been assigned as an editor to the submission "{$title}".") only for the key `EDITOR_ASSIGN`; the installed "Assign Editor" templates carry `EDITOR_ASSIGN_SUBMISSION`, `EDITOR_ASSIGN_REVIEW` and `EDITOR_ASSIGN_PRODUCTION` (`registry/taskTemplates.xml`, keys made mandatory by pkp/pkp-lib#12593, ojs `4157f8331c`, 2026-08-07), so they fall to the default branch, which only logs. No other code raises that task.
+Issue report: [docs/issues/U35-A6-assign-editor-message-gives-no-task.md](../issues/U35-A6-assign-editor-message-gives-no-task.md).
 
 <a id="fn-a7"></a>
 **f-a7** — Live-probed 2026-09-22 (all three apps): note td8. Note k: `saveParticipant()` logs `SUBMISSION_LOG_ADD_PARTICIPANT` with `submission.event.participantAdded` on the edit branch as well, where only the trivial notice distinguishes the two.
