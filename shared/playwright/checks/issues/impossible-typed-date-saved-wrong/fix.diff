@@ -1,0 +1,93 @@
+--- a/lib/pkp/js/controllers/form/FormHandler.js
++++ b/lib/pkp/js/controllers/form/FormHandler.js
+@@ -73,8 +73,29 @@
+ 			});
+ 
+ 			$this.prop('name', $this.prop('name') + '-removed');
++
++			// A date picked in the calendar is checked at once, so that a
++			// message about the text typed before it does not stay.
++			$this.change(function() {
++				$(this).valid();
++			});
+ 		});
+ 
++		// Refuse a date field whose text was changed to something the
++		// datepicker cannot read: the hidden field would otherwise post
++		// the last date it could read.
++		if (!$.validator.methods.pkpDatepicker) {
++			$.validator.addMethod('pkpDatepicker', function(value, element) {
++				return this.optional(element) ||
++						value === element.defaultValue ||
++						$.pkp.controllers.form.FormHandler
++								.parseDatepickerValue_($(element)) !== null;
++			}, function() {
++				return $.validator.messages.date;
++			});
++			$.validator.addClassRules('datepicker', {pkpDatepicker: true});
++		}
++
+ 
+ 		// Set the redirect-to URL for the cancel button (if there is one).
+ 		if (options.cancelRedirectUrl) {
+@@ -405,6 +426,33 @@
+ 	// Private Methods
+ 	//
+ 	/**
++	 * Read a datepicker field's text the way the datepicker itself does
++	 * when a key is pressed: in its own format, with its own names.
++	 *
++	 * @private
++	 *
++	 * @param {jQueryObject} $field The visible datepicker field.
++	 * @return {Date} The date, or null when the text is not one.
++	 */
++	$.pkp.controllers.form.FormHandler.parseDatepickerValue_ =
++			function($field) {
++		try {
++			return $.datepicker.parseDate(
++					$field.datepicker('option', 'dateFormat'),
++					$field.prop('value'), {
++						shortYearCutoff: $field.datepicker('option', 'shortYearCutoff'),
++						dayNamesShort: $field.datepicker('option', 'dayNamesShort'),
++						dayNames: $field.datepicker('option', 'dayNames'),
++						monthNamesShort: $field.datepicker('option', 'monthNamesShort'),
++						monthNames: $field.datepicker('option', 'monthNames')
++					});
++		} catch (e) {
++			return null;
++		}
++	};
++
++
++	/**
+ 	 * Internal callback called after form validation to handle form
+ 	 * submission.
+ 	 *
+@@ -434,10 +482,23 @@
+ 			return;
+ 		}
+ 
+-		// For datepicker controls, ensure that empty values are respected.
++		// For datepicker controls, post what the visible field holds: an
++		// empty value, the date it was rendered with when its text is
++		// unchanged, or the date typed (the pkpDatepicker rule has checked it).
+ 		$(formElement).find('.datepicker').each(function() {
+-			if ($(this).prop('value') === '') {
+-				$('#' + $(this).prop('id') + '-altField').prop('value', '');
++			var $this = $(this), date,
++					$altField = $('#' + $this.prop('id') + '-altField');
++			if ($this.prop('value') === '') {
++				$altField.prop('value', '');
++			} else if ($this.prop('value') === $this.prop('defaultValue')) {
++				$altField.prop('value', $altField.prop('defaultValue'));
++			} else {
++				date = $.pkp.controllers.form.FormHandler
++						.parseDatepickerValue_($this);
++				if (date !== null) {
++					$altField.prop('value',
++							$.datepicker.formatDate('yy-mm-dd', date));
++				}
+ 			}
+ 		});
+ 

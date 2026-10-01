@@ -1106,6 +1106,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-A1-french-version-name-raw-key.md`): a page shown
     in French naming each version with its numbers and no
     "##publication.versionStage.display##"
+  - the guard for OJS8 (Fields, the settings window; issue report
+    `docs/issues/U13-OJS8-impossible-typed-date-saved-wrong.md`):
+    a date that does not exist typed into the "Publication Facts Label
+    plugin" "Start Date" refused with a message, nothing saved {OJS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1257,7 +1261,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OJS5](#ojs5) | With the Publication Facts Label plugin on, no article page shows the "Publication Facts" panel | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS6](#ojs6) | The PDF reader's return arrow is announced "Return to Issue Details" but opens the article | 🐞 | minor | — |
 | [OJS7](#ojs7) | A refused "OK" in the Publication Facts Label settings shows the saved values again, dropping every change just made | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OJS8](#ojs8) | An impossible Publication Facts "Start Date" is dropped with "Your changes have been saved." | 🐞 | minor | — |
+| [OJS8](#ojs8) | A typed date that does not exist is saved as another date, or not at all, with no message | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS9](#ojs9) | Readers opening an XML galley in the Lens reader see its TeX formulas as blanks | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [OJS10](#ojs10) | With "Recommend Similar Articles" on, article pages never show "Similar Articles" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS12](#ojs12) | A review marked "Publicly Show Reviewer Comments" never shows on the published article's page | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1527,12 +1531,21 @@ the index's server cannot be reached.
 Basis: probe, 2026-10-01. <sup>[f-ojs7](#fn-f-ojs7)</sup>
 
 <a id="ojs8"></a>
-**OJS8 — An impossible "Start Date" is dropped with a success message** · 🐞 · minor.
-In the Publication Facts settings an impossible "Start Date" such as
-"2026-99-99" is not refused: "OK" shows "Your changes have been saved.",
-but no start date is stored and the box is empty when the window
-reopens. The manager believes a date is set.
-Basis: probe, 2026-09-25. <sup>[f-ojs8](#fn-f-ojs8)</sup>
+**OJS8 — A typed date that does not exist is saved as another date, or not at all, with no message** · 🐞 · medium.
+An editor or manager types a date that does not exist into a date box
+and presses "OK": "2030-02-30" as a review's "Review Due Date", or
+"2026-99-99" as the "Start Date" in the Publication Facts Label
+settings. The window closes as after any save, with no message, but
+what is stored is another date ("2030-02-03"), the date that was there
+before, or no date. They expect the date to be refused.
+For a review, the reviewer is emailed the wrong due date and the
+reminders follow it. A date picked in the calendar, or a real date
+typed, is saved correctly.
+It was seen in a review's "Edit" window and in the Publication Facts
+Label settings. By the code it is the same in every window whose date
+box opens a calendar: adding a reviewer, an issue's data and access, a
+subscription, a book chapter. A preprint server has no such window.
+Basis: probe, 2026-10-01. <sup>[f-ojs8](#fn-f-ojs8)</sup>
 
 <a id="ojs9"></a>
 **OJS9 — Readers opening an XML galley in the Lens reader see its TeX formulas as blanks** · 🐞 · medium · crash: script.
@@ -2739,6 +2752,7 @@ Issue report: [pkp-e2e#227](https://github.com/jardakotesovec/pkp-e2e/issues/227
 stores, filled only as keys are typed; with "2026-99-99" the save
 stored an empty start date and no refusal from the `strtotime()` check
 (note k) appeared. Live-probed 2026-09-25, note q15.
+Issue report: [docs/issues/U13-OJS8-impossible-typed-date-saved-wrong.md](../issues/U13-OJS8-impossible-typed-date-saved-wrong.md).
 
 <a id="fn-f-ojs9"></a>
 **f-ojs9** — Note e: `lensGalley`'s `display.tpl` loads MathJax 3.2.2,
