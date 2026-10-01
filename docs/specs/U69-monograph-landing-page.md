@@ -1662,7 +1662,7 @@ made on screen with "Create New Version".
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note g: the uninitialized typed property `CatalogBookHandler::$publication` when `version/{id}` matches no publication of the submission; the log reads "Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization" (`CatalogBookHandler.php` line 122). The typed property dates from omp `29fa88508` (2025-03-20). Live-probed 2026-09-28 (td6): 500 for every id tried and every role.
-Issue report: [docs/issues/U69-A3-version-address-no-version-server-error.md](../issues/U69-A3-version-address-no-version-server-error.md).
+Issue report: [pkp-e2e#285](https://github.com/jardakotesovec/pkp-e2e/issues/285) ([docs/issues/U69-A3-version-address-no-version-server-error.md](../issues/U69-A3-version-address-no-version-server-error.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `monograph_full.tpl` prints `submission.viewingPreview` for any unpublished publication and `submission.outdatedVersion` for any publication that is not the current one, with that publication's empty `datePublished`, which prints as today (note h). Live-probed 2026-09-28 (td7).

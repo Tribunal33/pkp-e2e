@@ -2287,7 +2287,7 @@ Found" to a signed-out visitor; a nonexistent publication id typed into
 the same address still answered HTTP 500 with an empty body (one typed
 observation on the probe server, not driven by the suite). The current
 version's own id and another submission's were not re-read at that tip.
-Issue report: [docs/issues/U69-A3-version-address-no-version-server-error.md](../issues/U69-A3-version-address-no-version-server-error.md).
+Issue report: [pkp-e2e#285](https://github.com/jardakotesovec/pkp-e2e/issues/285) ([docs/issues/U69-A3-version-address-no-version-server-error.md](../issues/U69-A3-version-address-no-version-server-error.md)).
 
 <a id="fn-ojs4"></a>
 **f-ojs4** — Live-probed 2026-09-28, two runs and two debug runs, the
