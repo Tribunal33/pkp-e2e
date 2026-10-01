@@ -1,0 +1,60 @@
+--- a/lib/ui-library/src/managers/UserAccessManager/UserAccessManagerStore.js
++++ b/lib/ui-library/src/managers/UserAccessManager/UserAccessManagerStore.js
+@@ -3,7 +3,7 @@
+ import {useAnnouncer} from '@/composables/useAnnouncer';
+ import {useLocalize} from '@/composables/useLocalize';
+ import {useFetchPaginated} from '@/composables/useFetchPaginated';
+-import {ref, watch, computed} from 'vue';
++import {ref, watch, computed, onUnmounted} from 'vue';
+ import {useUserAccessManagerActions} from './useUserAccessManagerActions';
+ import {useUserAccessManagerConfig} from './useUserAccessManagerConfig';
+ import {useExtender} from '@/composables/useExtender';
+@@ -64,6 +64,18 @@
+ 		const {triggerDataChange} = useDataChangedProvider(() => fetchUserList());
+ 
+ 		/**
++		 * The Roles tab's grid announces a role created, edited or removed
++		 * (UserGroupGridHandler's global event); the list shows role names.
++		 */
++		function onUserGroupUpdated() {
++			fetchUserList();
++		}
++		pkp?.eventBus?.$on('userGroupUpdated', onUserGroupUpdated);
++		onUnmounted(() => {
++			pkp?.eventBus?.$off('userGroupUpdated', onUserGroupUpdated);
++		});
++
++		/**
+ 		 * Config
+ 		 */
+ 		const userAccessManagerConfig = extender.addFns(
+--- a/lib/ui-library/src/managers/UserInvitationManager/UserInvitationManagerStore.js
++++ b/lib/ui-library/src/managers/UserInvitationManager/UserInvitationManagerStore.js
+@@ -6,7 +6,7 @@
+ import {useFetch} from '@/composables/useFetch';
+ import {useModal} from '@/composables/useModal';
+ import {useDate} from '@/composables/useDate';
+-import {ref, watch} from 'vue';
++import {ref, watch, onUnmounted} from 'vue';
+ import UserInvitationManagerCancelInvitationDialogBody from './UserInvitationManagerCancelInvitationDialogBody.vue';
+ 
+ export const useUserInvitationManagerStore = defineComponentStore(
+@@ -59,6 +59,18 @@
+ 		);
+ 
+ 		/**
++		 * The Roles tab's grid announces a role created, edited or removed
++		 * (UserGroupGridHandler's global event); the list shows role names.
++		 */
++		function onUserGroupUpdated() {
++			fetchInvitations();
++		}
++		pkp?.eventBus?.$on('userGroupUpdated', onUserGroupUpdated);
++		onUnmounted(() => {
++			pkp?.eventBus?.$off('userGroupUpdated', onUserGroupUpdated);
++		});
++
++		/**
+ 		 * get all invited user groups
+ 		 * @param {Array} userGroups
+ 		 * @returns

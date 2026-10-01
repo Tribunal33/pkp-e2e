@@ -780,6 +780,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U54-A2-A3-manager-role-stages-differ-until-saved.md`):
     the manager-level roles' rows showing every stage before any save,
     and "OK" with nothing changed leaving their stages as they were
+  - the guard for A14 (issue report
+    `docs/issues/U54-A14-users-tab-keeps-old-role-name.md`): a role renamed
+    on the "Roles" tab showing its new name on the "Users" tab, and in
+    "Invitations", without a reload
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -869,7 +873,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | A role name of only spaces breaks the role window, and saving again shows a page of raw code | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [A11](#a11) | "OK" in the window whose Settings box is greyed takes the Settings pages away from the role's holders | 🐞 | user-visible | — |
 | [A13](#a13) | The "Roles" list keeps no fixed order: a role just made can come first, without "Edit" or "Remove", a saved role moves down, and a paged list can show a role twice and another never | 🐞 | user-visible | test run (claude), 2026-09-29 — was ❓ |
-| [A14](#a14) | After a rename on the "Roles" tab, the "Users" tab shows the role's old name until a reload | 🐞 | minor | — |
+| [A14](#a14) | After renaming a role, the Users tab keeps showing its old name until the page is reloaded | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [OMP1](#omp1) | In French a press's "Roles" list heads its External Review column with a code | 🐞 | minor | — |
 | [OPS1](#ops1) | "Users must be registered and log in to view open access content." is not kept on a preprint server | 🐞 | user-visible | — |
 | [OPS3](#ops3) | In French a preprint server's Moderator level reads "Éditeur-trice de série" (Series Editor) | 🐞 | minor | — |
@@ -1045,14 +1049,17 @@ first and then cannot be edited or removed.
 Basis: probe; test run; code (the pages). <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — The "Users" tab keeps a renamed role's old name** · 🐞 · minor.
-After a role is renamed in its "Edit" window, the "Roles" tab reads "Your
-changes have been saved." and lists the new name, but the "Users" tab of
-the same page, opened without a reload, still shows the old name in its
-members' rows under "Roles": Quinn Ashdown's row reads "Editorial Board Member"
-after the role became "Advisory Board". Only a reload of the page shows
-the new name. The manager sees a role name the journal no longer has.
-Basis: test run. <sup>f-a14</sup>
+**A14 — After renaming a role, the Users tab keeps showing its old name until the page is reloaded** · 🐞 · low.
+A manager renames a role in its "Edit" window on Settings › Users &
+Roles › "Roles". The tab says "Your changes have been saved." and lists
+the new name. But the "Users" tab of the same page, opened without a
+reload, still shows the old name in the "Roles" cell of every member of
+that role. The "Invitations" list at the top of the "Users" tab keeps the
+old name for a pending invitation to the role in the same way.
+The rename is saved, and a reload of the page shows the new name in both
+lists. Until then the manager sees a role name the journal no longer
+has, and may think the rename did not take.
+Basis: probe, 2026-10-01. <sup>f-a14</sup>
 
 ### OMP
 
@@ -1793,6 +1800,7 @@ saved.", an "Advisory Board" row and no "Editorial Board Member" row; the
 Board Member" in Quinn Ashdown's "Roles" cell throughout ten seconds of
 reads; after a reload the cell read "Advisory Board". The suites read the
 tab after a reload.
+Issue report: [docs/issues/U54-A14-users-tab-keeps-old-role-name.md](../issues/U54-A14-users-tab-keeps-old-role-name.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP's `locale/fr_CA/submission.po` leaves
