@@ -162,8 +162,8 @@ items" on an empty list). No text can be typed anywhere in the panel.
      row's sentence is bold; a read row's is in regular
      type, with no other marker. When the account holds roles in more than
      one journal, each row also shows the journal's initials (the "Journal
-     initials" typed on the Create Journal form; "Press Initials" on a
-     press, "Server initials" on a preprint server) between the sentence
+     Initials" typed on the Create Journal form; "Press Initials" on a
+     press, "Server Initials" on a preprint server) between the sentence
      and the title (Rule 2d). With no task at all the list reads "No Items".
      Beyond 25 rows the list is paged: the line under the table then reads
      "1 - 25 of 26 items" with page numbers and ">" and ">>" after it, and
@@ -1186,8 +1186,8 @@ below-grid actions `grid.action.markNew` "Mark New", `grid.action.markRead`
 `SelectableItemsFeature` (row boxes) and `PagingFeature` (page size from
 `[interface] items_per_page`, 25 by default). The row template
 `controllers/grid/tasks/task.tpl` prints the message, the context acronym
-(the Create Journal form's "Journal initials" / "Press Initials" /
-"Server initials" field, `acronym`; not the OJS form's "Journal
+(the Create Journal form's "Journal Initials" / "Press Initials" /
+"Server Initials" field, `acronym`; not the OJS form's "Journal
 Abbreviation") when `$isMultiContext` (the user has more than one
 available context) and
 the submission title when the notification has one
@@ -1229,7 +1229,11 @@ updated only by the grid's own actions, so a task raised while a page is
 open gives no badge until the next load (Rule 2a; six samples on each app
 on 2026-09-04, none with a badge before a reload). `markRead`, `markNew`
 and `deleteNotifications` write no event-log row (traced in the handlers;
-not observed on a screen, so the body does not claim it).
+not observed on a screen, so the body does not claim it). The
+initials field reads "Journal Initials" and "Server Initials" since
+pkp/ojs#5608 and pkp/ops#1315, seen 2026-10-01 at the PR heads
+`b5504f9f74` (OJS) and `8c4a7b7597` (OPS), before their merge ("Journal
+initials", "Server initials" until then).
 
 <a id="fn-c"></a>
 **c** — `PKPNavigationMenuService::setNMIDisplayTitles()` (`NMI_TYPE_USER_DASHBOARD`,

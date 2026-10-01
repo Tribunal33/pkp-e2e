@@ -100,7 +100,8 @@ is left. <sup>g</sup>
 
 **The "Catalog Entry" page.** Workflow › "Publication" › the version ›
 "Catalog Entry", headed "Publication: Catalog Entry". Five groups, top to
-bottom; "Save" at the foot. In French the group headings, most of the
+bottom, and a sixth, "Identity", once the book has been published;
+"Save" at the foot. In French the group headings, most of the
 descriptions and the "Update Type" and "Summary of Changes" fields show
 raw keys, text such as "##publication.placement##" in place of the words
 ⚠ [A15](#a15). <sup>h</sup>
@@ -114,6 +115,7 @@ raw keys, text such as "##publication.placement##" in place of the words
 | **Version and Updates** · "Update Type", "Summary of Changes (Amendment Notice)" | No | "Update Type" offers 12 kinds, "New Version" chosen at first. As on a journal's "Publication Settings" page, but without its "Associated review round"; "Insert Content" included (Rule 13e). |
 | **Display** · "Cover Image" | No | "Upload an image to represent this publication." An upload box ("Upload File", or drop a file on it); once an image is in, a preview, an "Alternate text" box and "Remove". After "Remove", until "Save", the box shows "Upload File" and "Restore Original". One image per language the book's metadata is kept in. |
 | **Access** · "URL Path" | No | "An optional path to use in the URL instead of the ID." Letters and digits, with single ".", "-" or "_" between them; the refusals are Rule 13g. |
+| **Identity** · "Press Identity" | Nothing to fill in | Shown only once the book has been published; a book never published has no such group. It reads "This metadata was recorded at the time of publication and will not change if the publisher updates its identity settings. To correct it, use the CLI batch tool.", then a list of what the press's settings held when the book was published, each line only where there was a value: "Press Name:", "Press Initials:", "Publisher:", "Publisher Location:", "Publisher Code Type:" (the type as Settings › Press › "Masthead" lists it, such as "Proprietary (01)") and "Publisher Code:". Renaming the press afterwards leaves the list as it was. "Save" below it saves the other groups as before. <sup>h</sup> |
 
 ## Rules & state
 
@@ -604,10 +606,11 @@ published. <sup>s</sup>
    - **The page**: the Press manager opens "Content" › "Catalog",
      presses "Harbour Currents"' "View Submission", and in its workflow
      chooses "Publication" › the version › "Catalog Entry": the page is
-     headed "Publication: Catalog Entry", with the groups "Placement",
-     "Publication Timing", "Version and Updates", "Display" and
-     "Access", top to bottom, and "Save" at the foot. The "Series"
-     list's first choice is empty (Fields, the "Catalog Entry" page).
+     headed "Publication: Catalog Entry", with the six groups of a
+     published book, "Placement", "Publication Timing", "Version and
+     Updates", "Display", "Access" and "Identity", top to bottom, and
+     "Save" at the foot. The "Series" list's first choice is empty
+     (Fields, the "Catalog Entry" page).
    - **Series and position saved**: choose "History" in "Series", type
      Book 2 in "Series Position" and press "Save": "Saving", then
      "Saved", shows beside the button. Reload: the page shows "History"
@@ -744,6 +747,11 @@ Left out of the scenarios above, by reason:
     page in French (Canada) shows no `##` code
   - a scheduled book's Production stage shows the "Catalog
     Management" notice, not "Awaiting approval." (Rule 14)
+  - the "Identity" group's content on a published book, "Press
+    Identity" with its sentence and the list of what was recorded; no
+    "Identity" group on a book never published; and the list unchanged
+    after the press is renamed (Fields, the "Catalog Entry" page;
+    scenario 5 reads the group's heading only)
 - **Rarely met**:
   - "Add Entry" › "Save" of a book whose "Date Published" lies in the
     future: the book is scheduled, stays off the list and is still
@@ -1452,6 +1460,21 @@ turned an existing 106×71 small copy into 30×20 with no Catalog Entry
 save. Each Website settings load answered the plugin gallery's known
 server error (the plugins spec's A1). One "Save" added one "Submission
 metadata updated" line to the Activity Log.
+The "Identity" group (pkp/pkp-lib#7527, with pkp/omp#2372): group
+`publication.identity` "Identity", a read-only `FieldHTML` `pressIdentity`
+(`publication.pressIdentity` "Press Identity", description
+`publication.identityAtPublication.description`), added only when the
+publication carries the values recorded at "Publish"; the field is not
+sent by "Save". Seen 2026-10-01 at the PR head `efaed78423` (OMP, with
+lib/pkp `88b58c10b2`), before its merge, as Press manager: a published
+book's page ended with "Identity" after "Access", "Press Identity"
+listing Press Name, Press Initials, Publisher, Publisher Location,
+Publisher Code Type "Proprietary (01)" and Publisher Code; a book never
+published had no such group and saved; a book published and then
+unpublished kept the group and saved, the request carrying the other
+groups' fields alone; scenario 5 ran green with the six groups. The
+notes dated 2026-09-27 (this one, a, td3) name the five groups the page
+had then.
 
 <a id="fn-td4"></a>
 **td4** — Live-probed 2026-09-27 (Rule 1), OMP, two runs, as Press

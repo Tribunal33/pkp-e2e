@@ -56,8 +56,8 @@ wizard, the journal's primary language. <sup>c</sup> <sup>d</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| "Journal title" ("Press Name", "Server title") | yes, per language | Plain text. Empty in the primary language: "This field is required." |
-| "Journal initials" ("Press Initials", "Server initials") | yes, per language | A short box. Empty in the primary language: "This field is required." |
+| "Journal Title" ("Press Name", "Server Title") | yes, per language | Plain text. Empty in the primary language: "This field is required." |
+| "Journal Initials" ("Press Initials", "Server Initials") | yes, per language | A short box. Empty in the primary language: "This field is required." |
 | "Journal Abbreviation" {OJS}; "Server Abbreviation" {OPS} | no, per language | Plain text. A press has no such field |
 | "Principal Contact Name" | yes | Plain text. Empty: "This field is required." |
 | "Principal Contact Email address" | yes | An email address: "This is not a valid email address."; empty: "This field is required." |
@@ -171,7 +171,7 @@ wizard, the journal's primary language. <sup>c</sup> <sup>d</sup>
    "Journal" tab and the journal's own Settings show and save the same
    values. A save in one shows in the others the next time they open:
    <sup>g</sup> <sup>td6</sup>
-   - "Journal title", "Journal initials", "Journal Abbreviation" and
+   - "Journal Title", "Journal Initials", "Journal Abbreviation" and
      "Country" are the fields of the same names on Settings › Journal ›
      "Masthead", and "Journal description" is the "Journal Summary"
      there;
@@ -500,21 +500,21 @@ journals runs alone. <sup>s</sup>
    - **The "Country" list**: open the "Country" list without choosing:
      it names 249 countries, "Czechia" followed by "Côte d'Ivoire", and
      "Åland Islands" last (Fields).
-   - **Closed unsaved**: type Draft Journal in "Journal title" ("Press
-     Name", "Server title") and close the window: nothing is asked. Press
+   - **Closed unsaved**: type Draft Journal in "Journal Title" ("Press
+     Name", "Server Title") and close the window: nothing is asked. Press
      "Create Journal" again: the window opens empty (Rule 3).
    - **Refused empty**: press "Save": "This field is required." shows
-     under "Journal title", "Journal initials" ("Press Initials", "Server
-     initials"), "Principal Contact Name", "Principal Contact Email
+     under "Journal Title", "Journal Initials" ("Press Initials", "Server
+     Initials"), "Principal Contact Name", "Principal Contact Email
      address", "Path", "Languages" and "Primary locale"; beside "Save"
      stand the line "Please correct 7 errors." and the link "Jump to next
      error" ⚠ [A6](#a6); "Save" is disabled (Fields; Rule 4).
    - **The email address refused**: type Harbour Review in the English
-     "Journal title" and HR in the English "Journal initials": the
+     "Journal Title" and HR in the English "Journal Initials": the
      messages under those two boxes go, while those under "Principal
      Contact Name", "Principal Contact Email address", "Path" and
      "Languages" stand and "Save" stays disabled. Type Revue du Port in
-     the French "Journal title" and RP in the French "Journal initials",
+     the French "Journal Title" and RP in the French "Journal Initials",
      Ana Pereira in "Principal Contact Name" and x in "Principal Contact
      Email address", choose "Canada" under "Country", type harbourreview
      in "Path", tick English and French under "Languages" and choose
@@ -534,7 +534,7 @@ journals runs alone. <sup>s</sup>
      in use by another server.") (Fields; Rule 4).
    - **The site's language still required**: type harbourreview in
      "Path", choose French under "Primary locale", clear the English
-     "Journal title" and "Journal initials", and press "Save": "This field
+     "Journal Title" and "Journal Initials", and press "Save": "This field
      is required." shows under both English boxes, although "Primary
      locale" is French and the French boxes are filled (Fields).
    - **"Primary locale" refused**: type Harbour Review and HR in the
@@ -546,7 +546,7 @@ journals runs alone. <sup>s</sup>
      again under "Languages", leave "Enable this journal to appear
      publicly on the site" unticked and press "Save": the browser leaves
      Hosted Journals for the page headed "Settings Wizard", whose
-     "Journal" tab reads Harbour Review in "Journal title" and offers the
+     "Journal" tab reads Harbour Review in "Journal Title" and offers the
      English boxes alone, with no French ones (Rules 3, 5, 17).
    - **The new row**: open Administration › "Hosted Journals": the last
      row reads Harbour Review under "Name" and harbourreview under "Path"
@@ -573,8 +573,8 @@ journals runs alone. <sup>s</sup>
      home page, its address carrying harbourreview: the Login page opens
      (Rules 5, 11).
    - **Enabled on "Create Journal"**: back on Hosted Journals, press
-     "Create Journal", type Harbour Notes in the English "Journal title",
-     HN in the English "Journal initials", Ana Pereira in "Principal
+     "Create Journal", type Harbour Notes in the English "Journal Title",
+     HN in the English "Journal Initials", Ana Pereira in "Principal
      Contact Name" and ana.pereira@mail.test in "Principal Contact Email
      address", choose "Canada" under "Country", type harbournotes in
      "Path", tick English under "Languages", choose English under
@@ -595,21 +595,21 @@ journals runs alone. <sup>s</sup>
    - **The "Edit" window**: open Administration › "Hosted Journals",
      press the arrow at the start of Sea Letters' row and choose "Edit":
      a window headed "Edit" holds the journal form filled in with the
-     journal's values, Sea Letters in "Journal title" ("Press Name",
-     "Server title") and SL in "Journal initials" ("Press Initials",
-     "Server initials"), with neither "Languages" nor "Primary locale"
+     journal's values, Sea Letters in "Journal Title" ("Press Name",
+     "Server Title") and SL in "Journal Initials" ("Press Initials",
+     "Server Initials"), with neither "Languages" nor "Primary locale"
      (Rule 8).
-   - **Saved**: type Sea Letters Quarterly in "Journal title", Lena Ortiz
+   - **Saved**: type Sea Letters Quarterly in "Journal Title", Lena Ortiz
      in "Principal Contact Name" and Letters from the coast. in "Journal
      description", and press "Save": "Saved" shows beside the button, and
      the window closes by itself a moment later. Reload the page: the row
      reads Sea Letters Quarterly under "Name" ⚠ [A2](#a2) (Rule 8).
    - **The wizard's "Journal" tab**: choose "Settings wizard" on the
-     row: on "Journal Settings" › "Journal", "Journal title" reads Sea
+     row: on "Journal Settings" › "Journal", "Journal Title" reads Sea
      Letters Quarterly, "Principal Contact Name" Lena Ortiz and "Journal
      description" Letters from the coast. (Rule 9).
    - **The Journal Manager's Settings**: the Journal Manager opens
-     Settings › Journal › "Masthead": "Journal title" reads Sea Letters
+     Settings › Journal › "Masthead": "Journal Title" reads Sea Letters
      Quarterly and "Journal Summary" Letters from the coast. On "Contact",
      the "Principal Contact" "Name" reads Lena Ortiz (Rule 9; Actors row
      4).
@@ -623,8 +623,8 @@ journals runs alone. <sup>s</sup>
      its address carrying sealettersq: it opens. The same address
      carrying sealetters answers "404 Not Found" (Rule 10).
    - **Control**: open "Edit" again, type Unsaved Title in "Journal
-     title" and press "Close": nothing is asked. Open "Edit" again:
-     "Journal title" reads Sea Letters Quarterly (Rule 8). <sup>s</sup>
+     Title" and press "Close": nothing is asked. Open "Edit" again:
+     "Journal Title" reads Sea Letters Quarterly (Rule 8). <sup>s</sup>
 
 4. **The site's list of journals, and a journal taken off it**
 
@@ -753,16 +753,16 @@ journals runs alone. <sup>s</sup>
      Indexing" and "Restrict Bulk Emails"; "Plugins", with "Installed
      Plugins" and "Plugin Gallery"; and "Users" (Rule 16).
    - **The "Journal" tab**: "Journal Settings" › "Journal" holds the
-     journal form, Bay Letters in "Journal title" ("Press Name", "Server
-     title"). Type BLQ in "Journal initials" ("Press Initials", "Server
-     initials") and press "Save": "Saved" shows beside the button, and
+     journal form, Bay Letters in "Journal Title" ("Press Name", "Server
+     Title"). Type BLQ in "Journal Initials" ("Press Initials", "Server
+     Initials") and press "Save": "Saved" shows beside the button, and
      the page stays (Rule 17).
    - **A change not saved**: type Mara Voss in "Principal Contact Name",
      open "Users", then "Journal Settings" › "Journal" again: "Principal
      Contact Name" still reads Mara Voss. Press "Hosted Journals" in the
      trail: nothing is asked. Open Bay Letters' "Settings wizard" again:
      "Principal Contact Name" no longer reads Mara Voss, and "Journal
-     initials" reads BLQ (Rule 17).
+     Initials" reads BLQ (Rule 17).
    - **The addresses**: open "Search Indexing": the page's address ends
      "#indexing"; reload the page: "Search Indexing" opens again. Open
      "Users": the address ends "#users"; reload: "Users" opens again.
@@ -770,7 +770,7 @@ journals runs alone. <sup>s</sup>
      again. Press "Installed Plugins" and reload: "Journal Settings" ›
      "Journal" opens (Rule 18).
    - **Control**: open Cape Letters' "Settings wizard": "Journal
-     initials" reads CL, the save having changed Bay Letters alone (Rule
+     Initials" reads CL, the save having changed Bay Letters alone (Rule
      16). <sup>s</sup>
 
 ## Coverage
@@ -1164,9 +1164,9 @@ to that address with the new id. The window is an `AjaxModal` titled
 `admin.contexts.create` ("Create Journal" / "Create Press" / "Create
 Server", each app's `locale/en/admin.po`) with `closeOnFormSuccessId`
 `context`. Fields: `PKPContextForm::__construct()` adds `name`
-(`manager.setup.contextTitle`: "Journal title", "Press Name", "Server
-title"), `acronym` (`manager.setup.contextInitials`: "Journal initials",
-"Press Initials", "Server initials"; `isRequired`), `contactName` and
+(`manager.setup.contextTitle`: "Journal Title", "Press Name", "Server
+Title"), `acronym` (`manager.setup.contextInitials`: "Journal Initials",
+"Press Initials", "Server Initials"; `isRequired`), `contactName` and
 `contactEmail` (`manager.setup.principalContact` "Principal Contact" + a
 space + `common.name` "Name" / `user.email` "Email address"; both
 `isRequired`), `country` (`FieldSelect`, `common.country`, description
@@ -1230,6 +1230,12 @@ both messages (2026-09-27, U57 claim check K2); "Edit" refused with
 required." until the initials were typed, then with the two country
 messages (2026-09-26, U20 claim check K1).
 Live-probed 2026-09-27 (Fields; Rule 4): note td3.
+The title and initials labels read "Journal Title" / "Journal Initials"
+and "Server Title" / "Server Initials" since pkp/ojs#5608 and
+pkp/ops#1315, seen 2026-10-01 at the PR heads `b5504f9f74` (OJS) and
+`8c4a7b7597` (OPS), before their merge; the sightings above and the
+notes dated earlier quote them as they read then ("Journal title",
+"Journal initials", "Server title", "Server initials").
 
 <a id="fn-td3"></a>
 **td3** — Live-probed 2026-09-27 (Fields; Rules 3–4), three apps, the

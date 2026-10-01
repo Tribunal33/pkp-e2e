@@ -62,7 +62,7 @@ stores that tab's fields alone (Rule 5). A save the form itself refuses
 sends nothing: "This field is required." appears under each empty required
 box, and beside "Save" the footer reads "Please correct one error." (or
 "Please correct {n} errors.") with, under it, one link per flagged box
-("Go to Journal initials: This field is required.", "Go to Country: This
+("Go to Journal Initials: This field is required.", "Go to Country: This
 field is required.") and then a "Jump to next error" button. "Save" stays
 grayed out until every flagged box has been changed. <sup>f</sup>
 <sup>td4</sup>
@@ -79,7 +79,7 @@ from their next load. <sup>f</sup> <sup>td4</sup>
 Fields marked "per language" take a text in each language the journal
 uses for forms. With a second form language, each such field shows the
 primary language's box with "1/2 languages completed" under it; the other
-language's boxes ("Journal title in French", "Affiliation in French")
+language's boxes ("Journal Title in French", "Affiliation in French")
 appear only after pressing that language's button ("French") at the top
 of the tab, and are hidden again on every return to the tab. Only
 the primary language's box of a required field must be filled (Rule 11).
@@ -91,8 +91,8 @@ to bottom: <sup>g</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| "Journal title" (press "Press Name", preprint server "Server title"), in the group "Journal Identity" ("Press Identity", "Preprint Server Identity") | yes, in the primary language | One line of plain text, per language. Shown to readers as the journal's name (Rule 7) <sup>g</sup> |
-| "Journal initials" ("Press Initials", "Server initials") | yes, in the primary language | A short box, per language. Where it shows: Rule 7 <sup>g</sup> |
+| "Journal Title" (press "Press Name", preprint server "Server Title"), in the group "Journal Identity" ("Press Identity", "Preprint Server Identity") | yes, in the primary language | One line of plain text, per language. Shown to readers as the journal's name (Rule 7) <sup>g</sup> |
+| "Journal Initials" ("Press Initials", "Server Initials") | yes, in the primary language | A short box, per language. Where it shows: Rule 7 <sup>g</sup> |
 | "Journal Abbreviation" {OJS}; "Server Abbreviation" {OPS} | no | Plain text, per language. Shown to readers in one place: it replaces the journal's name in the article's (preprint's) "How to Cite" in the citation formats that abbreviate, ACS, AMA, IEEE and Vancouver on a journal, AMA on a preprint server (Rule 10). A press has no such field <sup>g</sup> <sup>aa</sup> |
 | "Sponsoring organization" {OPS} | no | Plain text, saved and shown again on the tab and used nowhere else ⚠ [OPS2](#ops2) <sup>g</sup> |
 | "Press Publisher Name", "Geographical Location", "Publisher Code Type", "Publisher Code" {OMP}, in the group "Publisher Identity" under "These fields are required to publish valid ONIX metadata." | no | Three text boxes and one list of publisher-code types. "Publisher Code Type" is blank on a new press, but its list offers only the 41 code types ("ARK (35)" … "Proprietary (Discontinued)") and no empty choice, so once a type is saved it can be changed and not removed. Shown on no reader page (Rule 10) <sup>g</sup> |
@@ -254,12 +254,12 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
    journal the Settings page was opened in; a second journal on the same
    site has its own set, and the site has its own privacy statement (Rule
    18). <sup>a</sup>
-7. **The journal's name.** The "Journal title" is the name readers see:
+7. **The journal's name.** The "Journal Title" is the name readers see:
    in the header of every public page of the journal when no header logo
    is set (*Appearance & theming*), after the page name in the browser
    title of every public page but the home page ("About the Journal |
    {journal title}"), and in the site's list of journals. The "Journal
-   initials" show beside each task of the journal in the Tasks panel of
+   Initials" show beside each task of the journal in the Tasks panel of
    an account with roles in more than one journal
    ([Notifications center & email preferences](U05-notifications-center-and-email-preferences.md),
    Rule 2b); a manager of this journal alone sees no initials there. A
@@ -727,20 +727,20 @@ in the footnote. <sup>y</sup>
 
 3. **Save the "Masthead" tab**
 
-   Given: Journal Manager, on a scratch journal with no "Journal initials",
+   Given: Journal Manager, on a scratch journal with no "Journal Initials",
    no "Country" and no header logo.
 
    - **Required boxes left empty**: open Settings › Journal › "Masthead",
-     empty "Journal title" ("Press Name", "Server title") and press
-     "Save": "This field is required." appears under "Journal title",
-     "Journal initials" ("Press Initials", "Server initials") and
+     empty "Journal Title" ("Press Name", "Server Title") and press
+     "Save": "This field is required." appears under "Journal Title",
+     "Journal Initials" ("Press Initials", "Server Initials") and
      "Country"; beside "Save" the footer reads "Please correct 3 errors."
-     with one "Go to" link per box, among them "Go to Journal initials:
+     with one "Go to" link per box, among them "Go to Journal Initials:
      This field is required." and "Go to Country: This field is
      required.", then a "Jump to next error" button; "Save" is grayed out
      (Fields).
    - **The boxes filled**: type "Probe Journal of Identity" in "Journal
-     title" and "PJI" in "Journal initials": "Save" stays grayed out;
+     Title" and "PJI" in "Journal Initials": "Save" stays grayed out;
      choose "Canada" in "Country": "Save" is live again (Fields).
    - **The texts**: type "Our journal publishes probe articles." in "About
      the Journal" ("About the Press", "About the Server") and "Founded in
@@ -1060,7 +1060,7 @@ Left out of the scenarios above, by reason:
   - unsaved changes kept while moving between the tabs of a page, and lost without a warning on reloading or leaving it (Rule 5)
   - another order of the roles on Settings › Website › "Appearance" › "Editorial Masthead" (Rule 14a; Settings bullet 4b)
   - the abbreviation, the "Publishing Details", "Sponsoring organization" and "Publisher Identity" saved and shown again on the tab (Fields; Rule 10)
-  - a renamed "Journal initials" beside the journal's tasks for an account in two journals (Rule 7)
+  - a renamed "Journal Initials" beside the journal's tasks for an account in two journals (Rule 7)
   - "Publisher Code Type" kept once saved, its list offering no empty choice {OMP} (Fields)
   - an unknown address under the Settings pages answering "404 Not Found" (Rule 3)
   - the Editor and the Production Editor opening and saving the tabs, the Journal Manager's offer in scenarios 2–6 (Actors rows 1–3; scenario 11's Production editor opens the pages)
@@ -1691,11 +1691,15 @@ its description, `manager.settings.publisher` "Press Publisher Name",
 from `ONIXCodelistItemDAO`), `manager.settings.publisherCode` "Publisher
 Code"; OPS `manager.setup.serverAbbreviation` "Server Abbreviation",
 `manager.setup.sponsoringOrganization` "Sponsoring organization". Labels
-per app: OJS "Journal Identity", "Journal title", "Journal initials",
+per app: OJS "Journal Identity", "Journal Title", "Journal Initials",
 "Journal Summary", "About the Journal"; OMP "Press Identity", "Press Name",
 "Press Initials", "Press Summary", "About the Press"; OPS "Preprint Server
-Identity", "Server title", "Server initials", "Server Summary", "About the
-Server". The seeded journals carry title and initials (`JPK`, `PKP`,
+Identity", "Server Title", "Server Initials", "Server Summary", "About the
+Server". The second word of the title and initials labels is capitalised
+by pkp/ojs#5608 and pkp/ops#1315, seen 2026-10-01 at the PR heads
+`b5504f9f74` (OJS) and `8c4a7b7597` (OPS), before their merge (scenario 3
+ran green there on both); the notes dated earlier quote the labels as
+they read then ("Journal initials", "Server initials"). The seeded journals carry title and initials (`JPK`, `PKP`,
 `PKPS`) and no country, summary or about text; a scratch journal from
 `POST scenarios/context` carries the title, initials only when given, the
 contact "Site Admin" / `admin@mail.test`, and no country

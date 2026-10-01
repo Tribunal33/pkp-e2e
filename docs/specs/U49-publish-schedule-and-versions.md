@@ -95,6 +95,7 @@ In French most of its headings and descriptions are raw codes
 | Publication Date {OJS} / Date Posted {OPS} | No | Must be a date in the form YYYY-MM-DD ("The date must be in the format YYYY-MM-DD, such as 2019-01-01."). The description warns to leave it empty unless backdating, because the date is normally set by publishing (Rule 8). On a press or preprint server a FUTURE date entered here is what schedules the item (Rule 6). |
 | Update Type · Summary of Changes | No | As on the panel above. On a preprint server the summary box has no "Insert Content" button. |
 | Cover Image · Pages {OJS} · URL Path | No | Display extras of the published item. |
+| "Identity" group: "Journal Identity" {OJS} / "Server Identity" {OPS} | Nothing to fill in | The last group of the page, shown only on a version that has been published; an article or preprint not yet published has no such group. It reads "This metadata was recorded at the time of publication and will not change if the publisher updates its identity settings. To correct it, use the CLI batch tool.", then a list of what the journal's settings held when the version was published, each line only where there was a value. On a journal: "Journal Title:", "Journal Abbreviation:" (the journal's initials where it had no abbreviation), "Online ISSN:", "Print ISSN:", "Publisher:" and "Publisher Location:". On a preprint server: "Server Title:", "Server Abbreviation:" (or the initials) and "Publisher Location:". Renaming the journal afterwards leaves the list as it was. A minor version not yet published shows the list of the version before it. "Save" saves the other groups as before. <sup>j</sup> |
 
 ## Rules & state
 
@@ -991,6 +992,13 @@ Left out of the scenarios above, by reason:
     preprint's first post emailing its contributors "Preprint Posted
     Acknowledgement", a later version "New Version Posted Acknowledgement",
     each ending in the server's signature rather than a raw "{$signature}"
+  - the "Identity" group on the Publication Settings page of a
+    published article ("Journal Identity") and the Preprint Entry page
+    of a posted preprint ("Server Identity") with its sentence and
+    list; no such group before the first publish; the list unchanged
+    after the journal is renamed; and a minor version showing the
+    earlier version's list before it is published (Fields, the
+    Publication Settings page)
 - **Rarely met**:
   - the publish button skipping the details panel on a journal with
     issues, after a Publication Settings save on a version that already
@@ -1701,6 +1709,29 @@ same arrival and refusal on a new version of an article published
 without an issue. A journal with future issues only arrived with nothing
 checked (fn-ojs2); a journal with no issues showed no Issue Assignment
 group and saved.
+The "Identity" group (pkp/pkp-lib#7527, with pkp/ojs#5608 and
+pkp/ops#1315): `IssueEntryForm::addStampedIdentityField()` adds the group
+`publication.identity` "Identity" with a read-only `FieldHTML`
+(`publication.journalIdentity` "Journal Identity", OPS
+`publication.serverIdentity` "Server Identity"; description
+`publication.identityAtPublication.description`) when the publication
+carries the values recorded at publication; the lines are the Masthead
+labels `manager.setup.contextTitle`, `manager.setup.journalAbbreviation`
+(OPS `manager.setup.serverAbbreviation`), `manager.setup.onlineIssn`,
+`manager.setup.printIssn`, `manager.setup.publisher` and
+`manager.setup.publisherLocation`, each followed by a colon; OPS lists
+the title, the abbreviation and the location only. The field is not sent
+by "Save". Seen 2026-10-01 at the PR heads `b5504f9f74` (OJS) and
+`8c4a7b7597` (OPS), with lib/pkp `88b58c10b2`, before their merge: on a
+published article of a journal renamed after the publish, the groups
+"Placement", "Issue Assignment", "Publication Timing", "Version and
+Updates", "Display", "Access", "Identity", the last reading "Journal
+Identity", the sentence, "Journal Title: Old Name Journal", "Journal
+Abbreviation: ONJ", "Print ISSN: 0378-5955", "Publisher: Old Publisher"
+(no Online ISSN or location line, none recorded); "Save" answered as
+before; an unpublished article had no "Identity" group, an unpublished
+minor version had it; OPS's Preprint Entry page the same with "Server
+Identity".
 
 <a id="fn-k"></a>
 **k** — Button per `getPrimaryControlsRight`: OJS label

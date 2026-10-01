@@ -221,7 +221,7 @@ links under the list. <sup>g</sup>
      ("10.1234/") ⚠ [A2](#a2). <sup>q13</sup>
    - **c. "Custom pattern"**: the box of the item's kind, with its
      symbols replaced. A journal offers "%j" journal initials (Settings ›
-     Journal › "Masthead" "Journal initials", lower case), "%v" issue
+     Journal › "Masthead" "Journal Initials", put in lower case), "%v" issue
      volume, "%i" issue number, "%Y" issue year, "%a" article ID (the
      number the Dashboard lists it under), "%g" galley ID, "%f" file ID,
      "%p" page numbers and "%x" custom identifier (the item's Publisher
@@ -1315,7 +1315,7 @@ throwaway accounts. <sup>sc</sup>
 
 8. **A custom suffix pattern**
 
-   Given: a Journal Manager, on a scratch journal whose "Journal initials"
+   Given: a Journal Manager, on a scratch journal whose "Journal Initials"
    are "JPK", with the prefix "10.1234" and "Automatic DOI Assignment"
    "Never", holding "Axolotl limb memory", published; on a journal also a
    published issue Vol. 1 No. 1 (2025), "Tardigrade desiccation"
@@ -2992,7 +2992,9 @@ and `10.1234/jpk.%p` without, listed "Unregistered" (two runs). A press's
 `10.1234/k2.{Publisher ID}` with a Publisher ID typed on the Metadata page
 and `10.1234/k2.%x` without, with "Items successfully assigned new DOIs"
 (three apps). A peer review under "Custom pattern" got `10.1234/`,
-under "Default" an eight-character suffix.
+under "Default" an eight-character suffix. The Masthead label reads
+"Journal Initials" since pkp/ojs#5608, seen 2026-10-01 at the PR head
+`b5504f9f74`, before its merge ("Journal initials" when this was driven).
 
 <a id="fn-j"></a>
 **j** — Rows: `Repo::publication()->getReviewDoiItemsGroupedByPublication()`
