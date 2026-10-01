@@ -2269,7 +2269,7 @@ Submission" left the start form in place with the error under "Submit
 As", and no draft was created; "Author" picked, the same user submitted
 normally. OPS control: a Moderator + Author got no "Submit As" and
 submitted as Author.
-Issue report: [docs/issues/U21-A14-submit-as-section-editor-refused.md](../issues/U21-A14-submit-as-section-editor-refused.md).
+Issue report: [pkp-e2e#159](https://github.com/jardakotesovec/pkp-e2e/issues/159) ([docs/issues/U21-A14-submit-as-section-editor-refused.md](../issues/U21-A14-submit-as-section-editor-refused.md)).
 
 <a id="fn-a15"></a>
 **fn-a15** — A15. Live-probed 2026-09-28, two runs per app on all three:
