@@ -1,0 +1,12 @@
+--- a/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
+@@ -266,6 +266,9 @@ abstract class PKPStageParticipantNotifyForm extends Form
+         // remove the INDEX_ and LAYOUT_ tasks if a user has sent the appropriate _COMPLETE email
+ 
+         switch ($templateKey) {
++            case 'EDITOR_ASSIGN_SUBMISSION':
++            case 'EDITOR_ASSIGN_REVIEW':
++            case 'EDITOR_ASSIGN_PRODUCTION':
+             case 'EDITOR_ASSIGN':
+                 $this->_addAssignmentTaskNotification($request, Notification::NOTIFICATION_TYPE_EDITOR_ASSIGN, $user->getId(), $submission->getId());
+                 !$logRepository ?: $logRepository->logMailable(SubmissionEmailLogEventType::EDITOR_ASSIGN, $mailable, $submission);
