@@ -1,0 +1,112 @@
+--- a/plugins/generic/driver/DRIVERDAO.php	2026-10-01 02:10:45
++++ b/plugins/generic/driver/DRIVERDAO.php	2026-10-01 02:10:45
+@@ -14,8 +14,13 @@
+ 
+ namespace APP\plugins\generic\driver;
+ 
++use APP\issue\Issue;
++use APP\journal\Journal;
+ use APP\oai\ojs\JournalOAI;
+ use APP\oai\ojs\OAIDAO;
++use APP\submission\Submission;
++use Illuminate\Database\Query\Builder;
++use Illuminate\Support\Facades\DB;
+ use PKP\oai\OAIIdentifier;
+ use PKP\oai\OAIRecord;
+ 
+@@ -38,6 +43,10 @@
+     /**
+      * Return set of OAI records or identifiers matching specified parameters.
+      *
++     * The set is selected in the query, so that the total and the offset count
++     * the set's own records: OAI::listRecords() moves the offset on by the
++     * number of records returned and compares it with the total.
++     *
+      * @param array $setIds Objects ids that specify an OAI set, in this case only journal ID.
+      * @param string $funcName Row conversion method: 'returnRecordFromRow' or 'returnIdentifierFromRow'.
+      *
+@@ -54,16 +63,64 @@
+     ): array {
+         $records = [];
+ 
+-        $query = $this->getRecordsRecordSetQuery($setIds, $from, $until, null);
++        $query = $this->getDRIVERRecordsQuery($setIds, $from, $until);
+         $total = $query->getCountForPagination();
+         $results = $query->offset($offset)->limit($limit)->get();
+ 
+         foreach ($results as $row) {
+-            $record = $this->$funcName((array) $row);
+-            if (in_array('driver', $record->sets)) {
+-                $records[] = $record;
+-            }
++            $records[] = $this->$funcName((array) $row);
+         }
+         return $records;
+     }
++
++    /**
++     * The OAI records of the DRIVER set: the rule of DRIVERPlugin::isDRIVERRecord()
++     * applied to the rows of OAIDAO::getRecordsRecordSetQuery().
++     */
++    public function getDRIVERRecordsQuery(array $setIds, ?int $from, ?int $until): Builder
++    {
++        $journalSetting = fn (string $name, callable $value) => fn (Builder $q) => $value(
++            $q->from('journal_settings AS js')
++                ->whereColumn('js.journal_id', 'r.journal_id')
++                ->where('js.setting_name', '=', $name)
++        );
++        $issueAccess = fn (array $statuses) => fn (Builder $q) => $q->from('issues AS di')
++            ->whereColumn('di.issue_id', 'r.issue_id')
++            ->whereIn('di.access_status', $statuses);
++
++        return DB::query()
++            ->fromSub($this->getRecordsRecordSetQuery($setIds, $from, $until, null), 'r')
++            ->where(fn (Builder $q) => $q
++                // A deleted record: its tombstone was marked when the article was withdrawn.
++                ->whereExists(fn (Builder $q) => $q->from('data_object_tombstone_settings AS dts')
++                    ->whereColumn('dts.tombstone_id', 'r.tombstone_id')
++                    ->where('dts.setting_name', '=', 'driver')
++                    ->where('dts.setting_value', '=', '1'))
++                // A live record: anyone may read the article, and it has a galley.
++                ->orWhere(fn (Builder $q) => $q
++                    ->whereNull('r.tombstone_id')
++                    ->whereExists(fn (Builder $q) => $q->from('publication_galleys AS dg')
++                        ->whereColumn('dg.publication_id', 'r.publication_id'))
++                    ->whereNotExists($journalSetting('restrictSiteAccess', fn ($q) => $q->where('js.setting_value', '=', '1')))
++                    ->whereNotExists($journalSetting('restrictArticleAccess', fn ($q) => $q->where('js.setting_value', '=', '1')))
++                    ->where(fn (Builder $q) => $q
++                        // an open access journal (no publishing mode stored reads as open)
++                        ->whereNotExists($journalSetting('publishingMode', fn ($q) => $q->where('js.setting_value', '<>', (string) Journal::PUBLISHING_MODE_OPEN)))
++                        // a subscription journal: an open issue, or an article marked open outside a subscription issue
++                        ->orWhere(fn (Builder $q) => $q
++                            ->whereExists($journalSetting('publishingMode', fn ($q) => $q->where('js.setting_value', '=', (string) Journal::PUBLISHING_MODE_SUBSCRIPTION)))
++                            ->where(fn (Builder $q) => $q
++                                ->whereExists($issueAccess([0, Issue::ISSUE_ACCESS_OPEN]))
++                                ->orWhere(fn (Builder $q) => $q
++                                    ->where(fn (Builder $q) => $q
++                                        ->whereNull('r.issue_id')
++                                        ->orWhereExists($issueAccess([Issue::ISSUE_ACCESS_SUBSCRIPTION])))
++                                    ->whereExists(fn (Builder $q) => $q->from('publications AS dp')
++                                        ->whereColumn('dp.publication_id', 'r.publication_id')
++                                        ->where('dp.access_status', '=', Submission::ARTICLE_ACCESS_OPEN))))))))
++            ->orderBy('r.journal_id')
++            ->orderBy('r.submission_id')
++            ->orderBy('r.publication_id')
++            ->orderBy('r.tombstone_id');
++    }
+ }
+--- a/plugins/generic/driver/DRIVERPlugin.php	2026-10-01 02:29:23
++++ b/plugins/generic/driver/DRIVERPlugin.php	2026-10-01 02:29:24
+@@ -162,7 +162,11 @@
+ 
+             $journal = $journalDao->getById($row['journal_id']);
+             $submission = Repo::submission()->get($row['submission_id']);
+-            $publication = $submission->getCurrentPublication();
++            // A journal with DOI versioning has a record per version: read the version the
++            // record stands for, as OAIDAO::setOAIData() and DRIVERDAO's query do.
++            $publication = !empty($row['publication_id'])
++                ? Repo::publication()->get((int) $row['publication_id'])
++                : $submission->getCurrentPublication();
+             $issueId = $publication->getData('issueId');
+             $issue = $issueId ? Repo::issue()->get($issueId) : null;
+ 
