@@ -1,7 +1,7 @@
 # On a preprint server, choosing the predefined message "Assign Editor" leaves "Message" unfilled
 
 - **Severity** low
-- **Effort** small
+- **Effort** medium
 - **Kind** regression
 - **Crash** server
 - **Affects**
@@ -204,43 +204,56 @@ Reach:
 
 ## Proposed fix
 
-Point the registry row at the text OPS has, the one 3.5 used for this
-message, and let `fetchTemplateBody()` answer an empty text for a
-template without a description. Two diffs:
-[fix-ops.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/preprint-assign-editor-message-not-filled/fix-ops.diff)
-(OPS: both changes) and
-[fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/preprint-assign-editor-message-not-filled/fix.diff)
-(the pkp-lib change alone).
+Give OPS the text its registry row already names, and let
+`fetchTemplateBody()` answer an empty text for a template without a
+description.
 
-OPS, `registry/taskTemplates.xml`:
+OPS, `locale/*/emails.po`: a new `emails.editorAssignProduction.body`,
+a copy of that locale's `emails.editorAssign.body` that closes with
+`{$signature}` instead of `{$contextSignature}`. The registry row stays
+as it is. This change is the OPS part of the fix proposed in
+[U35-A15-assign-editor-email-two-footers.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U35-A15-assign-editor-email-two-footers.md),
+whose
+[fix-ops.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/assign-editor-email-two-footers/fix-ops.diff)
+adds the key to the seven OPS locales that have a text for
+`emails.editorAssign.body`.
 
-```diff
--	<template title="mailable.editorAssignedManual.name" description="emails.editorAssignProduction.body" key="EDITOR_ASSIGN_PRODUCTION" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
-+	<template title="mailable.editorAssignedManual.name" description="emails.editorAssign.body" key="EDITOR_ASSIGN_PRODUCTION" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
-```
-
-pkp-lib, `StageParticipantGridHandler::fetchTemplateBody()`:
+pkp-lib, `StageParticipantGridHandler::fetchTemplateBody()`
+([fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/preprint-assign-editor-message-not-filled/fix.diff)):
 
 ```diff
 -                    'body' => Mail::compileParams($template->getLocalizedData('description'), $mailable->getData()),
 +                    'body' => Mail::compileParams($template->getLocalizedData('description') ?? '', $mailable->getData()),
 ```
 
-The first change is the fix. The second covers the servers already
-installed from `main`, whose stored description stays empty, and any
-template without a description: the choice then empties "Message"
-instead of failing. On a journal or a press the second change shows
-only once the fault of U35-A10 is fixed too (Cause, reach).
+A text of its own is what OJS and OMP have for this row: their
+`emails.editorAssignProduction.body` ends with `{$signature}`, the
+sender's signature. OPS's `emails.editorAssign.body` ends with
+`{$contextSignature}`, which closes the letter with "This is an
+automated message from…"; it is the text of the automated assignment
+email. The locale files are part of the change because
+`installTaskTemplates()` stores an empty text for a language that lacks
+the key.
 
-Tried on `main`. With the pkp-lib change alone, "Assign Editor" on the
-preprint server answers 200 and leaves "Message" empty. A registry
-change does not reach a server already installed, so
-`Repository::installTaskTemplates()` was then run again for it. After
-that, steps 4, 5 and 8 fill the letter, step 9 shows both notices, the
-email "Assign Editor" arrives and the discussion is listed. "Discussion
-(Production)" still fills "Please enter your message.", and the
-journal's and the press's letters are the same with and without the
-fix.
+The pkp-lib change covers the servers already created on `main`, whose
+stored description stays empty, and any template without a description:
+the choice then empties "Message" instead of failing. On a journal or a
+press it shows only once the fault of U35-A10 is fixed too (Cause,
+reach).
+
+What was tried, on `main`:
+
+- The pkp-lib change, by this report: "Assign Editor" on the preprint
+  server answers 200 and leaves "Message" empty.
+- The new locale key, by the U35-A15 report and not by this one: after
+  `installTaskTemplates()` was run again for the server, the letter
+  fills and ends with the sender's name.
+- The registry variant under Alternatives, by this report, with
+  `installTaskTemplates()` run again: steps 4, 5 and 8 fill the letter,
+  step 9 shows both notices, the email "Assign Editor" arrives and the
+  discussion is listed. "Discussion (Production)" still fills "Please
+  enter your message.", and the journal's and the press's letters are
+  the same with and without it.
 
 Not proposed here: an error shown when the request fails. The window's
 script has no failure handler, so any other failure of this request
@@ -248,9 +261,12 @@ stays silent after the fix.
 
 **Alternatives**
 
-- Add `emails.editorAssignProduction.body` to OPS's locale files: works,
-  but it duplicates `emails.editorAssign.body` and needs translating
-  again in every language.
+- Point the registry row at `emails.editorAssign.body`, the text 3.5
+  used for this message
+  ([fix-ops.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/preprint-assign-editor-message-not-filled/fix-ops.diff),
+  with the pkp-lib change): one line, and the letter comes back, but
+  with the "This is an automated message from…" closing, the fault the
+  U35-A15 report describes.
 - Make `installTaskTemplates()` refuse or log a registry key with no
   translation instead of storing an empty text: it would have caught
   this at install. Worth adding; it does not fix the row.
@@ -269,13 +285,14 @@ stays silent after the fix.
   default template, a manager's edits included, in each language it is
   given.
 - French: `emails.editorAssign.body` has no `fr_CA` translation in OPS,
-  so the French description stays empty and the English letter is shown.
-  3.5 does the same.
+  so no French copy is made, the French description stays empty and the
+  English letter is shown. 3.5 does the same.
 - A test: on a freshly installed preprint server, each predefined
   message of the Production stage fills "Message". The e2e scenario is a
   Planned item of spec U35.
 
-Small: one registry line in OPS and one line in pkp-lib.
+Medium: a generated text in seven OPS locale files and one line in
+pkp-lib, two repos.
 
 ## Evidence
 
@@ -287,7 +304,9 @@ Small: one registry line in OPS and one line in pkp-lib.
   `PROBE_FEATURE=issues-r7 PROBE_AGENT=r7 node bin/probe.js all shared/playwright/checks/issues/preprint-assign-editor-message-not-filled/walk.js`,
   with `PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-r7-3_5`
   in front for 3.5.
-- The fix was tried in this order:
+- The pkp-lib change and the registry variant (Alternatives) were tried
+  in this order; the new locale key was tried by the U35-A15 report,
+  whose Evidence gives its commands:
   1. `node bin/try-fix.js apply shared/playwright/checks/issues/preprint-assign-editor-message-not-filled/fix-ops.diff ops`,
      and the same with `fix.diff` for `ojs omp`.
   2. `walk.js` on OPS with `STEPS=notify` in front: the pkp-lib change

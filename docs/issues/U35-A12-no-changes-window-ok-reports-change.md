@@ -28,9 +28,9 @@ and only the notice misleads. "Cancel" closes the window without it.
 
 The same "OK" also adds a line to the submission's activity log, but
 every "Edit Assignment" save does that, a real one included: it is a
-separate fault (spec U35 A7) and is not counted here. The proposed fix
-is one condition in the window's template that disables "OK" when there
-is nothing to change.
+separate fault ("Edit" is logged as a new assignment) and is not counted
+here. The proposed fix is one condition in the window's template that
+disables "OK" when there is nothing to change.
 
 ## Impact
 
