@@ -1,0 +1,25 @@
+--- a/pages/catalog/CatalogBookHandler.php
++++ b/pages/catalog/CatalogBookHandler.php
+@@ -213,6 +213,11 @@
+             'firstPublication' => $firstPublication,
+             'currentPublication' => $submission->getCurrentPublication(),
+             'authorString' => $this->publication->getAuthorString(),
++            // The book's authors as Chapter::getAuthorNamesAsString() writes a chapter's,
++            // so that the table of contents can tell a chapter by the book's authors
++            'authorNamesString' => collect($this->publication->getData('authors'))
++                ->map(fn ($author) => $author->getFullName())
++                ->implode(', '),
+         ]);
+ 
+         // Provide the publication formats to the template
+--- a/templates/frontend/objects/monograph_full.tpl
++++ b/templates/frontend/objects/monograph_full.tpl
+@@ -185,7 +185,7 @@
+ 									</a>
+ 								{/if}
+ 								{assign var=chapterAuthors value=$chapter->getAuthorNamesAsString()}
+-								{if $authorString != $chapterAuthors}
++								{if $authorNamesString != $chapterAuthors}
+ 									<div class="authors">
+ 										{$chapterAuthors|escape}
+ 									</div>

@@ -1057,6 +1057,10 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A6 (issue report
+    `docs/issues/U69-A6-contents-repeat-book-authors.md`): a one-author book's
+    table of contents showing no author line under its chapters, and a
+    chapter by other authors keeping its line
   - the guard for A1 (issue report
     `docs/issues/U69-A1-unknown-book-address-asks-sign-in.md`): a book address
     that names no book answering "404 Not Found", signed out and
@@ -1218,7 +1222,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | A version address that names no version fails with a server error | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | A new version's preview also calls itself outdated, dated today | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | An older version's browser tab names the current version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A6](#a6) | The table of contents repeats the book's authors under every chapter | 🐞 | minor | — |
+| [A6](#a6) | A book's table of contents repeats the book's authors under every chapter | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | A priced file's link shows its price twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | On a press, the return arrow of a book's HTML view page is announced as the code "##monograph.return##" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | Unticking payments "Enable" does not stop a press selling files | 🐞 | minor | — |
@@ -1298,12 +1302,21 @@ was published under a different title.
 Basis: probe, 2026-10-01. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — The table of contents repeats the book's authors under every chapter** · 🐞 · minor.
-A chapter's author line is meant to be left out when the chapter's
-authors are the book's. It is shown under every chapter that has
-authors: a single-author book lists that author under each of its
-chapters.
-Basis: probe, 2026-09-28. <sup>f-a6</sup>
+**A6 — A book's table of contents repeats the book's authors under every chapter** · 🐞 · low.
+A book's page names the book's authors at the top, and its table of
+contents is meant to show a chapter's author line only when the
+chapter's authors differ from the book's. The chapter's author line is
+shown also where the chapter's authors are the book's: a book by one
+author lists that author again under each of its chapters, and a book by
+several authors lists them all again under a chapter credited to all of
+them.
+The names shown are correct; the repeated lines only add noise to the
+table of contents.
+On `main` no setting avoids it. On 3.5 and earlier the lines are left
+out once the "Author" role's "Show role title in contributor list" box
+(Settings › Users & Roles › Roles) is unticked; it is ticked on a new
+press.
+Basis: probe, 2026-10-01. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — A priced file's link shows its price twice** · 🐞 · low.
@@ -1729,6 +1742,7 @@ Issue report: [pkp-e2e#226](https://github.com/jardakotesovec/pkp-e2e/issues/226
 
 <a id="fn-f-a6"></a>
 **f-a6** — Note i: `$authorString` carries the role names in brackets, the chapter's string does not; since the credits gained role names the check never matches. Live-probed 2026-09-28 (td10).
+Issue report: [docs/issues/U69-A6-contents-repeat-book-authors.md](../issues/U69-A6-contents-repeat-book-authors.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `downloadLink.tpl` prints `{$downloadFile->getDirectSalesPrice()}` before `payment.directSales.purchase`, which carries the amount again. Seen 2026-09-28 (U73 claim check K3). Live-probed 2026-09-28: a price typed "25" reads "25 Purchase PDF (25 USD)", so the number shows as typed.
