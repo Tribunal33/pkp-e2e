@@ -1,0 +1,18 @@
+--- a/plugins/importexport/native/filter/NativeXmlPublicationFilter.php
++++ b/plugins/importexport/native/filter/NativeXmlPublicationFilter.php
+@@ -167,12 +167,9 @@
+         if (empty($issue)) {
+             $issueIdentificationNodes = $node->getElementsByTagName('issue_identification');
+ 
+-            if ($issueIdentificationNodes->length != 1) {
+-                $titleNodes = $node->getElementsByTagName('title');
+-                $deployment->addError(Application::ASSOC_TYPE_PUBLICATION, $publication->getId(), __('plugins.importexport.native.import.error.issueIdentificationMissing', ['articleTitle' => $titleNodes->item(0)->textContent]));
+-            } else {
+-                $issueIdentificationNode = $issueIdentificationNodes->item(0);
+-                $issue = $this->parseIssueIdentification($publication, $issueIdentificationNode);
++            // The element is optional: an article that is not assigned to an issue has none to name.
++            if ($issueIdentificationNodes->length === 1) {
++                $issue = $this->parseIssueIdentification($publication, $issueIdentificationNodes->item(0));
+             }
+         }
+ 

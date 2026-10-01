@@ -1164,6 +1164,11 @@ Left out of the scenarios above, by reason:
   - the guard OMP1's issue report names, once fixed: every link in a
     press's Tools list opening a page headed with the tool's name,
     "Tab Delimited Content Import Plugin" included {OMP}
+  - the guards A8's two issue reports name, once fixed: an article in
+    no issue exported and imported, its results tab without "Errors
+    occured:" {OJS}; and a submission with a contributor in a role
+    other than "Author" imported into a second journal, press or
+    server, that role read on the copy's "Contributors"
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1269,7 +1274,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | The Native XML "Import" tab's "Upload File" cannot be reached with the keyboard | 🐞 | minor | — |
 | [A7](#a7) | Going back to a Native XML "Import Results" tab imports the file again, duplicating every item | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
-| [A8](#a8) | Importing a file the app itself exported lists "Errors occured:" under the success text | 🐞 | minor | — |
+| [A8](#a8) | Importing a file the app itself exported lists "Errors occured:" under the success text | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | Native XML import of an article in a missing section shows nothing and leaves an unopenable submission | 🐞 | medium · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A published submission matches none of the export list's "Stages" filters | 🐞 | minor | — |
 | [A11](#a11) | Past one page, the export list's "Select All" never turns into "Select None", and ticks on other pages are not exported | 🐞 | minor | — |
@@ -1366,14 +1371,19 @@ another set. Removing the copies is manual work, one copy at a time.
 Basis: probe, 2026-10-01. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — A clean round trip reports errors** · 🐞 · minor.
-Importing a file the app itself exported, unchanged, should read as a
-plain success; the success text is followed by "Errors occured:" with a
-line for each contributor exported without a country or a contributor
-role and, on a journal, for each article in no issue. The items are
-imported all the same, so the manager cannot tell these lines from
-real failures.
-Basis: probe. <sup>f-a8</sup>
+**A8 — A clean round trip reports errors** · 🐞 · medium.
+Importing a file the app itself exported should read as a plain success.
+On a journal, the success text is followed by "Errors occured:" and "The
+issue identification element is missing for the article …" for each
+article in no issue, though the article is imported correctly. Imported
+into another journal, press or server, the file also gives every
+contributor "The author '{name}' does not have any contributor role.
+Defaults to AUTHOR.", and each one does become an "Author": a book's
+"Volume editor" and "Chapter Author" roles and a "Translator" are lost,
+and come back only by editing each contributor. A contributor exported
+without a country gets a line too. The manager cannot tell these lines
+from real failures.
+Basis: probe, 2026-10-01. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — Native XML import of an article in a missing section shows nothing and leaves an unopenable submission** · 🐞 · medium · crash: both.
@@ -2691,6 +2701,8 @@ Issue report: [docs/issues/U63-A7-returning-to-import-results-imports-again.md](
 submission and a published one with two versions, exported and
 re-imported unchanged. The lines come from the native filters'
 `addError()` calls, which do not stop the import.
+Issue report: [docs/issues/U63-A8-native-import-article-without-issue-lists-error.md](../issues/U63-A8-native-import-article-without-issue-lists-error.md).
+Issue report: [docs/issues/U63-A8-native-import-other-context-resets-contributor-roles.md](../issues/U63-A8-native-import-other-context-resets-contributor-roles.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — OJS `NativeXmlPublicationFilter` adds `unknownSection` and
