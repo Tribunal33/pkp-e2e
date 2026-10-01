@@ -1752,7 +1752,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 
 <a id="fn-f-a1"></a>
 **f-a1** — Live-probed 2026-09-26 and, on OMP, 2026-09-29: note q8. "Earliest Datestamp": OJS scratch journals with and without published items all gave 2026-09-26T05:20:08Z, a deleted record of `publicknowledge`; OMP gave the moment of the request, for an empty press and for one whose only book was unpublished, while `publicknowledge` held no deleted record; with one, the empty press gave that record's datestamp (2026-09-29); OPS gave the deleted record's datestamp. Code: note n; the OJS closure dates from `88aaa6b49f` "pkp/pkp-lib#7129 Issue EntityDAO refactor" (2021-07-14), OMP's from the 2021 Laravel port (`79302a1bd`, 2021-06-15). The test installs' first context is `publicknowledge`.
-Issue report: [docs/issues/U19-A1-oai-own-address-loses-deleted-records.md](../issues/U19-A1-oai-own-address-loses-deleted-records.md).
+Issue report: [pkp-e2e#254](https://github.com/jardakotesovec/pkp-e2e/issues/254) ([docs/issues/U19-A1-oai-own-address-loses-deleted-records.md](../issues/U19-A1-oai-own-address-loses-deleted-records.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Live-probed 2026-09-26: note q11, the reads with a time. Code: note l.
