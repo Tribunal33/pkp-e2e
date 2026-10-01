@@ -1056,7 +1056,7 @@ are the source; badges, Impact and Basis:
 | [A6](#a6) | Submitting a draft again from a second tab shows a problems banner with nothing to fix | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | On every journal, press or server but the install's first, a section's configured editors are never assigned | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A10](#a10) | A wizard loaded at phone width keeps its uncollapsed step rail and the page scrolls sideways (journal & press) | 🐞 | minor | — |
+| [A10](#a10) | Submission wizard opened in a narrow window can keep its full row of steps, running past the window's edge | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | After "Do not send an email." is saved, the Emails settings show no Submission Confirmation option selected | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | A section editor who is also an author is offered "Submit As: Section editor", and "Begin Submission" refuses it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | In the submission wizard, a plain language summary over the word limit is refused with an unexplained "Error" | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
@@ -1209,14 +1209,18 @@ Basis: probe + code inspection (Section Editor); code inspection only
 (Site Administrator). <sup>[fn-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — At phone width the step rail never collapses on a fresh load** · 🐞 · minor.
-Opening a wizard in a phone-sized window on a journal or press renders the
-full uncollapsed step rail and pushes the page into sideways scrolling. The
-"{n}/{total} steps" collapse never engages. The same window resized down
-after loading collapses correctly, as does a moderately narrow window from
-the start. A preprint server collapses correctly even on a phone-width load.
-Every step stays reachable by scrolling, hence minor. Basis: probe
-(repeatable both orders, three apps compared). <sup>[h](#fn-h)</sup>
+**A10 — Submission wizard opened in a narrow window can keep its full row of steps, running past the window's edge** · 🐞 · low.
+When the submission wizard is opened or reloaded in a window too narrow for
+its row of five steps, the row should shrink to "1/5 steps" with a "Show
+all steps" button. Often it does not: the full row stays and runs past the
+right edge, and the page scrolls sideways. On a journal or press this
+happens on every load at phone width; the row needs a window about 1070
+pixels wide, and some loads at tablet and small-laptop widths keep it too.
+The steps still work, reached by scrolling sideways. Reloading brings the
+fault back. A preprint server escapes on `main` only because its first step
+finishes loading a moment after the page, and that late change makes the
+wizard check the width again.
+Basis: probe, 2026-10-01. <sup>[h](#fn-h)</sup>
 
 <a id="a12"></a>
 **A12 — After "Do not send an email." is saved, the Emails settings show no Submission Confirmation option selected** · 🐞 · low.
@@ -1823,6 +1827,7 @@ viewport, step buttons laid out past the right edge); OMP fails the same
 way at 375px; OPS collapses correctly at 375px (scrollWidth 558). The same
 OJS page resized 1440→375 *without* reload collapses correctly; reloading
 at that width breaks it again — reproduced in both orders, twice.
+A10 issue report: [docs/issues/U21-A10-phone-wizard-step-rail-not-collapsed.md](../issues/U21-A10-phone-wizard-step-rail-not-collapsed.md).
 
 <a id="fn-i"></a>
 **i** — Autosave. `autosave` mixin: a 500 ms job timer

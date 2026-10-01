@@ -1,0 +1,25 @@
+--- a/lib/ui-library/src/components/Steps/Steps.vue
++++ b/lib/ui-library/src/components/Steps/Steps.vue
+@@ -209,15 +209,19 @@
+ 
+ 		/**
+ 		 * Toggle collapsed view when there is not enough width
+-		 * for the steps to fit
++		 * for the steps to fit. The child steps register while this
++		 * component mounts, so their buttons render on the next tick:
++		 * measure then, not now.
+ 		 */
+-		this.maybeToggleCollapsedView();
+ 		elementResizeEvent(this.$el, debounce(this.maybeToggleCollapsedView, 100));
+ 
+ 		/**
+ 		 * Set the progress line
+ 		 */
+-		this.$nextTick(() => this.setStartedLine());
++		this.$nextTick(() => {
++			this.maybeToggleCollapsedView();
++			this.setStartedLine();
++		});
+ 	},
+ 	methods: {
+ 		/**
