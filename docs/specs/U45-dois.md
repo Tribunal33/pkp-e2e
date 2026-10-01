@@ -3725,7 +3725,7 @@ only) instead of a list; the Setup form then ticks nothing and
 not a function`. Live-probed 2026-09-26, OJS, three journals over two
 processes (Crossref and DataCite); controls with the dropped kind last,
 and DataCite with nothing to drop, kept the other kinds.
-Issue report: [docs/issues/U45-A19-agency-choice-unticks-every-doi-kind.md](../issues/U45-A19-agency-choice-unticks-every-doi-kind.md).
+Issue report: [pkp-e2e#206](https://github.com/jardakotesovec/pkp-e2e/issues/206) ([docs/issues/U45-A19-agency-choice-unticks-every-doi-kind.md](../issues/U45-A19-agency-choice-unticks-every-doi-kind.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Live-probed 2026-09-26 (q26), OJS (both plugins) and OPS
