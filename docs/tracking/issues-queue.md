@@ -18,7 +18,7 @@ and the hourly routine starts one only when none is running
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 | **Taken: issues session, workstation s0, 2026-10-02**; A1, A7 written; A4, A6 open |
-| [U51](../specs/U51-subscriptions.md) | 25 | 2 | 12 | **Taken: issues session, VM s2, 2026-10-01**; A12 done with U52 A9 (pkp-e2e#358); OPS1 done (with U08 OPS2) |
+| [U51](../specs/U51-subscriptions.md) | 25 | 2 | 12 | **Taken: issues session, VM s2, 2026-10-01**; A12 done with U52 A9 (pkp-e2e#358); OPS1 done (pkp-e2e#380, with U08 OPS2) |
 | [U50](../specs/U50-issues.md) | 14 | 2 | 9 | A14 done with U69 A16 (pkp-e2e#284) |
 | [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 |  |
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | A1: open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md |
@@ -39,7 +39,7 @@ and the hourly routine starts one only when none is running
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | A16 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet; the report calls the window's box "Title" where the screen says "Name", and its Reach names "Applied Science" where reach.js uses "Social Sciences" on OPS |
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | OMP3 done with U69 A9 (pkp-e2e#282) |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
-| [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | OPS2 done with U51 OPS1 (docs/issues/U51-OPS1-posting-mode-says-saved-keeps-nothing.md) |
+| [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | OPS2 done with U51 OPS1 (pkp-e2e#380) |
 | [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 |  |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OPS1 done with U13 OPS2, OPS3 (docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md); OMP6 done with U69 A9 (pkp-e2e#282) |
 | [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 |  |
