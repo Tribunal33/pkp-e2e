@@ -1109,7 +1109,7 @@ manual page's layout to a journal (note td16).
 
 <a id="fn-f-a1"></a>
 **f-a1** — `paymentTypesForm.tpl` prints `manager.payment.readerFeesDescription` and `manager.payment.generalFeesDescription`; no page reads the fees (note e). The About listing of fees belonged to OJS 2 (its locale keys remain, unused). Live-probed 2026-09-27 (note td4): no page lists a fee, and the only amounts are the locked galley links'.
-Issue report: [docs/issues/U52-A1-payment-types-promise-fees-on-about.md](../issues/U52-A1-payment-types-promise-fees-on-about.md).
+Issue report: [pkp-e2e#355](https://github.com/jardakotesovec/pkp-e2e/issues/355) ([docs/issues/U52-A1-payment-types-promise-fees-on-about.md](../issues/U52-A1-payment-types-promise-fees-on-about.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — The menu's save fulfils a queued payment it creates itself, so the requested one and its task stay (note i). Live-probed 2026-09-27 (note td10): after "Paid" and after "Waived" the task opened the manual page with the request's "50.00 (USD)", and its notification reached the principal contact.
@@ -1120,7 +1120,7 @@ Issue report: [pkp-e2e#353](https://github.com/jardakotesovec/pkp-e2e/issues/353
 
 <a id="fn-f-a4"></a>
 **f-a4** — `paymentTypesForm.tpl` ends with `common.requiredField` though no element carries `required`. Live-probed 2026-09-27 (note td3): the line's asterisk is the only one in the form, and the empty tab saves.
-Issue report: [docs/issues/U52-A4-payment-types-required-note-no-required-field.md](../issues/U52-A4-payment-types-required-note-no-required-field.md).
+Issue report: [pkp-e2e#356](https://github.com/jardakotesovec/pkp-e2e/issues/356) ([docs/issues/U52-A4-payment-types-required-note-no-required-field.md](../issues/U52-A4-payment-types-required-note-no-required-field.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `PKPBackendPaymentsSettingsController::edit()` validates `currency` only when sent and the rule skips an empty value; no set-up check reads it; `RequestPaymentDecisionForm` builds `publicationFee . ' ' . currency`; `paymentForm.tpl` drops the code `{if $itemCurrencyCode}`. A new journal has no `currency` row, and the `FieldSelect` offers no empty option. Live-probed 2026-09-27 (notes td1, td2): "Request publication fee (50 )", the manual page's "Fee 50.00" and the list's "50" on a journal set up with no currency; the list's first choice "UAE Dirham" and no blank one.
