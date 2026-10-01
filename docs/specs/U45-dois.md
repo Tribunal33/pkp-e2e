@@ -1773,6 +1773,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U45-A8-doi-page-controls-unnamed.md`): the button beside
     "Filters" found by its role and the name "DOI Statuses", and a row's
     tick box by its role and the item's name
+  - the guard for A20 (Rule 44; issue report
+    `docs/issues/U45-A20-doi-agency-tool-page-empty-heading.md`): the
+    agency plugins' Tools pages carrying the plugin's name in their
+    heading and browser tab, under the "Tools" breadcrumb {OJS OPS}
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1852,7 +1856,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | With "DOI Versioning" "Yes", publishing a new major version leaves the earlier version's DOI "Registered" instead of "Needs Sync" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A DOI deposit that cannot connect to Crossref or DataCite reads "Submitted" for good, with no error | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | Saving a DOI registration agency can untick every DOI kind and leave the DOIs page blank | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
-| [A20](#a20) | The agency plugins' Tools pages have an empty heading | 🐞 | minor | — |
+| [A20](#a20) | The Crossref and DataCite pages under Tools open with an empty heading and an unnamed browser tab | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | A "Save" on the Registration tab without an agency leaves a warning in the server log | 🐞 | invisible | — |
 | [A22](#a22) | After "Assign DOIs" answered at once, the "Bulk Actions" menu stays open over the list | 🐞 | minor | — |
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -2156,13 +2160,23 @@ here).
 Basis: probe, 2026-10-01. <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — The agency plugins' Tools pages have an empty heading** · 🐞 · minor.
-Tools › "Import/Export" › "Crossref XML Export Plugin" (on a journal
-also "DataCite Export/Registration Plugin") opens a page whose heading
-is empty and whose browser tab reads only the journal's name; the
-notice is the page's only content. A screen reader announces an empty
-heading, and the tab does not say which page is open.
-Basis: probe, 2026-09-26. <sup>f-a20</sup>
+**A20 — The Crossref and DataCite pages under Tools open with an empty heading and an unnamed browser tab** · 🐞 · low.
+On a journal or preprint server, Tools › "Import/Export" › "Crossref XML
+Export Plugin" opens a page whose heading is empty and whose browser tab
+reads only the journal's name. The page also lacks the "Tools" / page
+name breadcrumb the other tool pages show above their heading. A journal
+has a second such page, "DataCite Export/Registration Plugin". The page
+is a signpost that was kept on purpose: its only content is the notice
+"DOI management has moved.", whose two links work. So no task fails, but
+the page has no name anywhere. That fails WCAG 2.4.2 Page Titled (level
+A), and the empty level-one heading fails 2.4.6 Headings and Labels
+(level AA). Only these two pages are affected: a journal's and a
+preprint server's other Import/Export tool pages have their heading, tab
+title and breadcrumb. The links are listed with or without a
+registration agency chosen. A press has no such tools. The pages already
+print a heading and only the name is missing from it, so the report
+proposes to name them rather than to remove them.
+Basis: probe, 2026-10-01. <sup>f-a20</sup>
 
 <a id="a21"></a>
 **A21 — A "Save" on the Registration tab without an agency leaves a warning in the server log** · 🐞 · invisible.
@@ -3851,6 +3865,7 @@ Issue report: [pkp-e2e#206](https://github.com/jardakotesovec/pkp-e2e/issues/206
 **f-a20** — Live-probed 2026-09-26 (q26), OJS (both plugins) and OPS
 (Crossref): the page's `h1` is empty (the accessibility tree reads
 `heading [level=1]` with no name).
+Issue report: [docs/issues/U45-A20-doi-agency-tool-page-empty-heading.md](../issues/U45-A20-doi-agency-tool-page-empty-heading.md).
 
 <a id="fn-f-a21"></a>
 **f-a21** — `PKPContextController::editDoiRegistrationAgencyPlugin()`

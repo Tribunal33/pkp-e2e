@@ -1,0 +1,20 @@
+--- a/classes/plugins/DOIPubIdExportPlugin.php
++++ b/classes/plugins/DOIPubIdExportPlugin.php
+@@ -22,6 +22,7 @@
+ use APP\submission\Submission;
+ use APP\template\TemplateManager;
+ use PKP\galley\Galley;
++use PKP\plugins\ImportExportPlugin;
+ 
+ // Configuration errors.
+ define('DOI_EXPORT_CONFIG_ERROR_DOIPREFIX', 0x01);
+@@ -39,6 +40,9 @@
+         switch (array_shift($args)) {
+             case 'index':
+             case '':
++                // The page's heading and breadcrumbs. PubObjectsExportPlugin::display() is
++                // skipped on purpose: its index case builds the retired settings form.
++                ImportExportPlugin::display($args, $request);
+                 $templateMgr = TemplateManager::getManager($request);
+                 $templateMgr->display($this->getTemplateResource('index.tpl'));
+                 break;
