@@ -1960,7 +1960,7 @@ Issue report: [pkp-e2e#312](https://github.com/jardakotesovec/pkp-e2e/issues/312
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-26: an article in no issue read "{journal}; " and, with "Pages" "15-20", "{journal}; ; 15-20"; a press record "{press}; ". Code: note f (`'; ' . $issue?->getIssueIdentification()` with a null issue; OMP appends "; " unconditionally).
-Issue report: [docs/issues/U19-A8-oai-dc-source-keeps-empty-part.md](../issues/U19-A8-oai-dc-source-keeps-empty-part.md).
+Issue report: [pkp-e2e#313](https://github.com/jardakotesovec/pkp-e2e/issues/313) ([docs/issues/U19-A8-oai-dc-source-keeps-empty-part.md](../issues/U19-A8-oai-dc-source-keeps-empty-part.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-26, OJS, two runs: with "OJS will not be used to publish the journal's contents online." chosen, ListRecords listed the article; its Dublin Core record had no address under "Resource Identifier" or "Relation"; both MARC records kept 856 with the article page; that page sent a signed-out visitor to Login and showed a signed-in Reader "This journal does not publish its content online." (`user/authorizationDenied?message=user.authorization.journalDoesNotPublish`). The question and lean are judgment. Code: notes f, g; `OjsJournalMustPublishPolicy` is not added to the OAI handler.
