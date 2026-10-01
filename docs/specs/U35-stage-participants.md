@@ -913,6 +913,14 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A7 (issue report
+    `docs/issues/U35-A7-edit-assignment-logged-as-assignment.md`):
+    an "Edit Assignment" save logged as a change, and an untouched "OK"
+    adding no line
+  - the guard for A14 (issue report
+    `docs/issues/U35-A14-activity-log-names-participant-not-editor.md`):
+    the Activity Log's "User" column naming the acting editor on the
+    "was assigned" and "was removed" lines
   - the guard for A4 (issue report
     `docs/issues/U35-A4-assign-participant-ok-assigns-nobody-no-reason.md`):
     "OK" on "Assign Participant" with nobody chosen, the notice read and
@@ -1029,12 +1037,12 @@ entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | "OK" on "Assign Participant" with nobody chosen, or with a person from the previous role's list, assigns nobody and gives no reason | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | A message sent from "Notify" or "Assign" opens a discussion listed as created by its recipient | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | "Assign Editor" gives the new editor no task, unlike the other request messages | 🐞 | minor | — |
-| [A7](#a7) | "Edit" is logged as a new assignment | 🐞 | minor | — |
+| [A7](#a7) | Changing a participant's assignment with "Edit" adds a "was assigned to this submission" line to the Activity Log | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | In "Assign Participant", the "Permissions" box stays ticked after the editor chooses another role | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A message template added in Settings is listed but fills nothing and cannot be sent | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | No warning opens when an editor assigns, as a participant, a person who reviews the submission anonymously | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | "OK" on the "No changes can be made to this participant" window reports "The stage assignment has been changed." | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A14](#a14) | The Activity Log's "User" column names the participant, not the editor who assigned, changed or removed them | 🐞 | minor | — |
+| [A14](#a14) | The Activity Log's "User" column names the participant who was assigned or removed, not the editor who did it | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | The Submission stage's "Assign Editor" message ends "This is an automated message from…" instead of the editor's signature | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | A message sent with "Notify" is emailed to a participant who opted out of emails for new discussions | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS1](#ojs1) | A journal's "Editor Assigned" email tells the editor to select "Send to Review"; the button reads "Send for Review" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1144,12 +1152,18 @@ Review and Production stages alike.
 Basis: probe. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
-**A7 — An edit is logged as an assignment** · 🐞 · minor.
-Changing an assignment's boxes through "Edit" adds "{name} ({username}) was
-assigned to this submission as a {role}." to the Activity Log, the line a
-new assignment writes, so the log shows an assignment that did not happen
-and not the change that did.
-Basis: probe. <sup>[f-a7](#fn-a7)</sup>
+**A7 — Changing a participant's assignment with "Edit" adds a "was assigned to this submission" line to the Activity Log** · 🐞 · low.
+An editor opens "Edit" on a participant's row of the workflow's
+Participants panel to change "Permissions" (whether the person may edit
+the publication's details) or "Assignment privileges" (whether an editor
+may only recommend a decision). After "OK", the submission's Activity
+Log gains "{name} ({username}) was assigned to this submission as a
+{role}.", the line a new assignment writes, where a line saying the
+assignment was changed is expected. "OK" with no box touched adds the
+same line.
+The log shows an assignment that did not happen and holds no record of
+the change that did. The edit itself is saved.
+Basis: probe, 2026-10-01. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
 **A8 — Assigning a Production editor narrows the stages they can open** · ❓ · minor.
@@ -1252,14 +1266,18 @@ it.
 Basis: code. <sup>[f-a13](#fn-a13)</sup>
 
 <a id="a14"></a>
-**A14 — The Activity Log names the participant, not the editor** · 🐞 · minor.
-On the "{name} ({username}) was assigned to this submission as a {role}."
-and "{name} ({username}) was removed from this submission as a {role}."
-lines, the Activity Log's "User" column is expected to name the editor who
-acted. It names the participant, so the log never says who assigned,
-changed or removed them. The "Notification sent to users." lines do name
-the sender.
-Basis: probe. <sup>[f-a14](#fn-a14)</sup>
+**A14 — The Activity Log's "User" column names the participant who was assigned or removed, not the editor who did it** · 🐞 · medium.
+When an editor assigns a participant to a submission or removes one, the
+submission's Activity Log gains a line such as "Minoti Inoue (minoue)
+was assigned to this submission as a Section editor."; changing an
+assignment writes the same "was assigned" line. The "User" column of
+that line is expected to name the editor who did it, as it does on the
+log's other lines. It names the participant.
+The log therefore never shows who assigned, changed or removed a
+participant, and no other screen does.
+No setting is involved: every such line of every submission reads this
+way, the lines written before today included.
+Basis: probe, 2026-10-01. <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
 **A15 — The Submission stage's "Assign Editor" message ends "This is an automated message from…" instead of the editor's signature** · 🐞 · low.
@@ -1530,6 +1548,7 @@ Issue report: [pkp-e2e#343](https://github.com/jardakotesovec/pkp-e2e/issues/343
 
 <a id="fn-a7"></a>
 **f-a7** — Live-probed 2026-09-22 (all three apps): note td8. Note k: `saveParticipant()` logs `SUBMISSION_LOG_ADD_PARTICIPANT` with `submission.event.participantAdded` on the edit branch as well, where only the trivial notice distinguishes the two.
+Issue report: [docs/issues/U35-A7-edit-assignment-logged-as-assignment.md](../issues/U35-A7-edit-assignment-logged-as-assignment.md).
 
 <a id="fn-a8"></a>
 **f-a8** — Live-probed 2026-09-22 (journal and press): an unassigned Production editor opening every stage of a submission with "Assign" and every row's "Edit"; the same role assigned to a submission opening Copyediting and Production, and the Submission and Review entries (a press's Internal Review too) showing "You don't currently have access to that stage of the workflow.". Code, not traced further: an assigned user's stages come from their assignments' roles, and the fallback that gives a manager-level user every stage applies only to a user with no assignment on the submission (`submission/maps/Schema::getPropertyStages()`, note p).
@@ -1556,6 +1575,7 @@ Issue report: [pkp-e2e#345](https://github.com/jardakotesovec/pkp-e2e/issues/345
 
 <a id="fn-a14"></a>
 **f-a14** — Live-probed 2026-09-22 (all three apps): the "User" column of "… was assigned …" lines naming the assigned person when a Journal Manager or a Section Editor assigned them, of the lines "Edit" writes naming the edited person, and of "… was removed …" lines naming the removed person; "Notification sent to users." lines naming the sender. Cause: note k.
+Issue report: [docs/issues/U35-A14-activity-log-names-participant-not-editor.md](../issues/U35-A14-activity-log-names-participant-not-editor.md).
 
 <a id="fn-a15"></a>
 **f-a15** — Live-probed 2026-09-22 (journal and press): the Submission stage's "Assign Editor" email ending "— This is an automated message from {journal name}." and then the discussion footer; the Review and Production letters, and the other messages, with the footer alone. The first closing is part of the template's own text, which the discussion email then adds its footer to (note g).

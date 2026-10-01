@@ -1,0 +1,103 @@
+--- a/lib/pkp/classes/log/event/PKPSubmissionEventLogEntry.php
++++ b/lib/pkp/classes/log/event/PKPSubmissionEventLogEntry.php
+@@ -30,6 +30,8 @@
+ 
+     public const SUBMISSION_LOG_COPYRIGHT_AGREED = 268435465; // 0x10000009
+ 
++    public const SUBMISSION_LOG_EDIT_PARTICIPANT = 268435466; // 0x1000000A
++
+     public const SUBMISSION_LOG_EDITOR_DECISION = 805306371; // 0x30000003
+     public const SUBMISSION_LOG_EDITOR_RECOMMENDATION = 805306372; // 0x30000004
+     public const SUBMISSION_LOG_DECISION_EMAIL_SENT = 805306375; // 0x30000007
+--- a/lib/pkp/controllers/grid/users/stageParticipant/form/AddParticipantForm.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/form/AddParticipantForm.php
+@@ -268,6 +268,7 @@
+         $isChangePermitMetadataAllowed = $this->_isChangePermitMetadataAllowed($userGroup, $userId);
+         $recommendOnly = (bool) $this->getData('recommendOnly');
+         $canChangeMetadata = $userGroup->roleId == Role::ROLE_ID_MANAGER ? true : (bool) $this->getData('canChangeMetadata');
++        $isChanged = false;
+ 
+         // sanity check
+         if (UserGroupStage::withStageId($this->getStageId())->withUserGroupId($userGroup->id)->get()->isNotEmpty()) {
+@@ -277,9 +278,11 @@
+ 
+                 if ($stageAssignment && ($isChangeRecommendOnlyAllowed || $isChangePermitMetadataAllowed)) {
+                     if ($isChangeRecommendOnlyAllowed) {
++                        $isChanged = (bool) $stageAssignment->recommendOnly !== $recommendOnly;
+                         $stageAssignment->recommendOnly = $recommendOnly;
+                     }
+                     if ($isChangePermitMetadataAllowed) {
++                        $isChanged = $isChanged || (bool) $stageAssignment->canChangeMetadata !== $canChangeMetadata;
+                         $stageAssignment->canChangeMetadata = $canChangeMetadata;
+                     }
+                     $stageAssignment->save();
+@@ -294,11 +297,12 @@
+                         $recommendOnly,
+                         $canChangeMetadata
+                     );
++                $isChanged = true;
+             }
+         }
+ 
+         parent::execute(...$functionParams);
+-        return [$userGroup->id, $userId, $stageAssignment->id];
++        return [$userGroup->id, $userId, $stageAssignment->id, $isChanged];
+     }
+ 
+     /**
+--- a/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
+@@ -340,7 +340,7 @@
+                 return new JSONMessage(true, $form->fetch($request));
+             }
+ 
+-            [$userGroupId, $userId, $stageAssignmentId] = $form->execute();
++            [$userGroupId, $userId, $stageAssignmentId, $isChanged] = $form->execute();
+ 
+             $notificationMgr = new NotificationManager();
+ 
+@@ -374,22 +374,28 @@
+ 
+             // Create trivial notification.
+             $user = $request->getUser();
+-            if ($stageAssignmentId != $assignmentId) { // New assignment added
++            $isNewAssignment = $stageAssignmentId != $assignmentId;
++            if ($isNewAssignment) {
+                 $notificationMgr->createTrivialNotification($user->getId(), Notification::NOTIFICATION_TYPE_SUCCESS, ['contents' => __('notification.addedStageParticipant')]);
+             } else {
+                 $notificationMgr->createTrivialNotification($user->getId(), Notification::NOTIFICATION_TYPE_SUCCESS, ['contents' => __('notification.editStageParticipant')]);
+             }
+ 
+ 
+-            // Log addition.
++            // Log the addition, or the change to an existing assignment; an edit that changed nothing is not logged.
++            if (!$isChanged) {
++                return \PKP\db\DAO::getDataChangedEvent($userGroupId);
++            }
+             $assignedUser = Repo::user()->get($userId, true);
+             $eventLog = Repo::eventLog()->newDataObject([
+                 'assocType' => PKPApplication::ASSOC_TYPE_SUBMISSION,
+                 'assocId' => $submission->getId(),
+-                'eventType' => PKPSubmissionEventLogEntry::SUBMISSION_LOG_ADD_PARTICIPANT,
++                'eventType' => $isNewAssignment
++                    ? PKPSubmissionEventLogEntry::SUBMISSION_LOG_ADD_PARTICIPANT
++                    : PKPSubmissionEventLogEntry::SUBMISSION_LOG_EDIT_PARTICIPANT,
+                 'userId' => Validation::loggedInAs() ?? $user->getId(),
+                 'impersonatedUserId' => Validation::loggedInAs() ? $user->getId() : null,
+-                'message' => 'submission.event.participantAdded',
++                'message' => $isNewAssignment ? 'submission.event.participantAdded' : 'submission.event.participantEdited',
+                 'isTranslated' => false,
+                 'dateLogged' => Core::getCurrentDate(),
+                 'userFullName' => $assignedUser->getFullNames(),
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -867,6 +867,9 @@
+ msgid "submission.event.participantRemoved"
+ msgstr "{$userFullName} ({$username}) was removed from this submission as a {$userGroupName}."
+ 
++msgid "submission.event.participantEdited"
++msgstr "The assignment of {$userFullName} ({$username}) to this submission as a {$userGroupName} was changed."
++
+ msgid "submission.event.backToEventLog"
+ msgstr "Back to Event Log"
+ 
