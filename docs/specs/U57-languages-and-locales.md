@@ -881,6 +881,15 @@ as it stands. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A3 (Rule 19; issue report
+    `docs/issues/U57-A3-language-block-lands-on-site-home.md`): the
+    block placed, a language chosen on a page other than the home page,
+    and that page reopening in the chosen language
+  - the guard for A7 (Rule 8; issue report
+    `docs/issues/U57-A7-create-context-one-language-script-error.md`): a
+    journal created on a one-language site, with no script failure on
+    the form
 - **Rarely met**:
   - the Site Administrator's "Reload defaults" on a journal's "Website
     Languages" row, which puts the default texts back over the
@@ -954,11 +963,11 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | Any change on the site's "Languages" list unticks every journal's submission languages that the site has not enabled | 🐞 | user-visible | — |
-| [A3](#a3) | On a site served on a port of its own, the "Language" block's links land on the site's home page | 🐞 | minor | — |
-| [A5](#a5) | Ticking "Forms" makes the Settings page's script fail five times | 🐞 | invisible · crash: script | — |
+| [A1](#a1) | Any change to the site's languages silently unticks each journal's submission languages the site has not enabled | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A3](#a3) | On a site with a port in its address, the sidebar "Language" block loses the page being read | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A5](#a5) | A newly ticked "Forms" language's "Date & Time" fields show no choices until a reload, with console errors | 🐞 | low · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [A6](#a6) | Two managers adding the same form language at the same moment: one tick silently fails on the server | 🐞 | latent · crash: server | Jarda 2026-09-26 · risk accepted |
-| [A7](#a7) | On a one-language site, each field typed on "Create Journal" makes the page's script fail | 🐞 | invisible · crash: script | — |
+| [A7](#a7) | On a one-language site, each field filled on "Create Journal" makes the page's script fail | 🐞 | low · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | A press's and a server's French "Author Guidelines" and checklist are internal names {OMP OPS} | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A2](#a2) | "Reload defaults" is offered to the Site Administrator alone | ❓ | minor | — |
 | [A4](#a4) | A text missing from a translation shows as its internal name, not in the primary language | ❓ | user-visible | — |
@@ -972,19 +981,26 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — A site-level language change strips journals' submission languages** · 🐞 · user-visible.
-A journal can accept submissions in any language of the world ("Add/Remove
-Languages", Rule 14), including one the site has not enabled, such as
-German on a site with English and French. When the Site Administrator then
-installs, enables, disables or removes any language on the site's
-"Languages" list, every such language loses its "Submissions" and
-"Metadata" ticks on every journal: its row stays on "Submission Languages"
-with both boxes empty (a "Default" radio included), "Make a Submission"
-stops offering it, and no one is told. The Journal Manager expects the
-site's interface languages and the journal's submission languages to be
-independent, as the two lists say.
+**A1 — Any change to the site's languages silently unticks each journal's submission languages the site has not enabled** · 🐞 · medium.
+A journal can add any language on the full list of languages as a
+submission language, through "Add/Remove Languages" on its Settings ›
+Website › "Setup" › "Languages" tab, including one the site has not
+enabled, such as German on a site with English and French. When the Site
+Administrator then installs, enables, disables or removes any language on
+the site's "Languages" list, each journal's submission languages that the
+site has not enabled lose their "Submissions" and "Metadata" ticks on
+that tab. The rows stay, with both boxes empty, "Make a Submission" stops
+offering those languages, and no one is told. The Journal Manager expects
+the site's interface languages and the journal's submission languages to
+be independent, as the tab's two separate lists say.
+Authors cannot start a submission in that language until a manager
+notices and ticks the boxes again. Submissions that already hold text in
+that language still show it and can still edit it; a submission without
+any text in that language yet no longer offers boxes for it.
+It needs a journal that takes a submission language the site has not
+enabled.
 Since: 2024-03-21 (submission languages made independent of the site's) ·
-Basis: probe. <sup>[f-a1](#fn-a1)</sup>
+Basis: probe, 2026-09-30. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — "Reload defaults" is for the Site Administrator only** · ❓ · minor.
@@ -997,17 +1013,26 @@ the action overwrites texts in bulk.
 Basis: probe. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
-**A3 — The "Language" block loses the page on a site with a port** · 🐞 · minor.
+**A3 — On a site with a port in its address, the sidebar "Language" block loses the page being read** · 🐞 · low.
 On a site whose address carries a port number, such as
 `http://example.org:8080`, choosing a language in the sidebar "Language"
-block does not reopen the page the visitor was on: it lands on the site's
-home page in the chosen language, and the visitor has to find the page
-again (the journal's pages are then in that language). The same happens
-with the block placed in the site's sidebar: a language chosen on the
-site's Login page lands on the site's home. A site on the usual
-web ports is not affected; "Change Language" on the editorial screens is
-not affected.
-Basis: probe. <sup>[f-a3](#fn-a3)</sup>
+block does not reopen the page the visitor was on. It opens the site's
+home page in the chosen language. On a site with one journal, the site's
+home forwards to that journal, so the visitor ends on the journal's home
+page. Either way, the visitor has to find their page again.
+The same happens with the block placed in the site's sidebar: a language
+chosen on the site's login page opens the site's home. "Change Language"
+in the user menu of the editorial screens is not affected.
+A port in the address is confirmed on screen. Reading the code, the same
+happens on a site where the web server's own name for the site differs
+from the address the visitor used, but only when `allowed_hosts` is
+empty or lists that name; this was not tried on screen. 3.4 and 3.3 are
+not affected, because their block sends back only the page's path. The
+fix for `pkp/pkp-lib#11339` meant to stop exactly this landing on the
+home page, and it missed this case. The fix touches the block in three
+app repositories; a one-file router change in pkp-lib would be smaller
+but less exact.
+Basis: probe, 2026-09-30. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
 **A4 — Missing translations show internal names** · ❓ · user-visible.
@@ -1023,13 +1048,18 @@ translators find gaps, but a reader cannot act on them.
 Basis: probe. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
-**A5 — Ticking "Forms" breaks the page's script** · 🐞 · invisible · crash: script.
-Each tick of a "Forms" box on Settings › Website saves and shows nothing
-wrong, but the page's script fails five times ("Cannot read properties of
-undefined (reading 'filter')") while it hands the new language to the
-page's other forms. Nothing on screen shows the failure; the same tick in
-the Settings wizard does not fail.
-Basis: probe. <sup>[f-a5](#fn-a5)</sup>
+**A5 — A newly ticked "Forms" language's "Date & Time" fields show no choices until a reload, with console errors** · 🐞 · low · crash: script.
+When a manager ticks a language's "Forms" box under Settings › Website ›
+"Setup" › "Languages", the tick saves. But on the "Date & Time" tab that
+language's five fields show only their titles, with no format to choose
+and no "Custom" box, until the page is reloaded. The page throws five
+errors in the browser's console as the language is added. A "Save" on
+"Date & Time" before the reload succeeds and throws three more.
+The manager cannot set the new language's date and time formats until
+they reload the page; after a reload the choices are there.
+It happens whenever a language is ticked under "Forms" on that page and
+was not a form language when the page was loaded.
+Basis: probe, 2026-09-30. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
 **A6 — Adding the same form language twice at once fails** · 🐞 · latent · crash: server.
@@ -1047,14 +1077,15 @@ Basis: probe. <sup>[f-a6](#fn-a6)</sup>
 > reasonable test-side fix.
 
 <a id="a7"></a>
-**A7 — On a one-language site, "Create Journal" breaks the page's script** · 🐞 · invisible · crash: script.
-When the site has one language, Administration › "Hosted Journals" ›
-"Create Journal" ("Create Press", "Create Server") asks no languages, and
-each change to one of its fields (the name, the initials, the contact,
-the path, the country) makes the page's script fail once. Nothing shows
-on screen and "Save" creates the journal; on a site with two languages the
-same form does not fail.
-Basis: probe. <sup>[f-a7](#fn-a7)</sup>
+**A7 — On a one-language site, each field filled on "Create Journal" makes the page's script fail** · 🐞 · low · crash: script.
+When the site has one language, the form on Administration › "Hosted
+Journals" › "Create Journal" ("Create Press", "Create Server") has no
+"Languages" or "Primary locale" field, and each change to one of its fields
+(the name, the initials, the contact, the path, the country) makes the
+page's script fail.
+Nothing shows on screen and "Save" creates the journal; on a site with
+two languages the same form does not fail.
+Basis: probe, 2026-09-30. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
 **A8 — A press's and a server's French author guidelines are internal names** · 🐞 · low.
@@ -1226,24 +1257,28 @@ OJS, OMP and OPS unless its note names fewer apps.
 
 <a id="fn-a1"></a>
 **f-a1** — `AdminLanguageGridHandler::_updateContextLocaleSettings()`, run by `saveInstallLocale()`, `uninstallLocale()` and `_updateLocaleSupportState()`, intersects each journal's `supportedSubmissionLocales` and `supportedSubmissionMetadataLocales` with the site's supported list; `supportedAddedSubmissionLocales` and `supportedDefaultSubmissionLocale` are left alone, so the row stays with both boxes empty. The metadata list joined the intersection in pkp/pkp-lib `7781b8a799` "Make submission language selection and metadata forms independent from website language settings" (2024-03-21), the change that let "Add/Remove Languages" offer every language. Live-probed 2026-09-27: German, not installed on the site, added through "Add/Remove Languages" and ticked under "Submissions": "Make a Submission" asked "Submission Language" with "German", "English"; after the site installed Spanish, German's row stayed with both boxes empty and the start page asked no language; the same after a removal, a disable and an enable; with German made the "Default" first, it kept the "Default" with both boxes empty. What a new submission then gets as its language was seen once and not settled.
+Issue report: [pkp-e2e#168](https://github.com/jardakotesovec/pkp-e2e/issues/168) ([docs/issues/U57-A1-site-language-change-unticks-submission-languages.md](../issues/U57-A1-site-language-change-unticks-submission-languages.md)).
 
 <a id="fn-a2"></a>
 **f-a2** — `LanguageGridRow::initialize()` guards both row actions with `Validation::isSiteAdmin()`, unchanged since pkp/pkp-lib `2ac16d58aa` (2020-07-10) at least; `ManageLanguageGridHandler` role-assigns `reloadLocale` to `ROLE_ID_MANAGER` as well, so the restriction is the link's alone (code only; the request was not sent as a manager). Code read 2026-09-27. Live-probed 2026-09-27: note k.
 
 <a id="fn-a3"></a>
 **f-a3** — Seen 2026-09-24 (U09 claim check K1, three apps: from a custom page and from "About the Journal" the links landed on `index.php/index/<locale>`) and 2026-09-25 (U18 claim check K1: "français" linked to the host without the port and landed on `/index.php/index/fr_CA`; back on the journal the pages were French). Live-probed 2026-09-27 (three apps): the links carry `source=127.0.0.1/index.php/…` without the port; chosen from About, from a search result and, with the block in the site's sidebar, from the site's Login page, "français" landed on `/index.php/index/fr_CA`. Cause, read from the code: the block builds `source` from `SERVER_NAME` and the request address, which carry no port, so `PKPPageRouter::_setLocale()` cannot strip the installation's base address (with its port) from it and falls back to `/index/{code}`; "Change Language" passes the full page address and is not affected. The test installs serve on their own ports; a site on the usual ports was not driven.
+Issue report: [pkp-e2e#171](https://github.com/jardakotesovec/pkp-e2e/issues/171) ([docs/issues/U57-A3-language-block-lands-on-site-home.md](../issues/U57-A3-language-block-lands-on-site-home.md)).
 
 <a id="fn-a4"></a>
 **f-a4** — `Locale::translate()` (note p). The `##…##` form of a missing text is PKP's long-standing one. Seen: [Tasks & discussions](U37-tasks-and-discussions.md#a15), [Users management](U53-users-management.md#a11), [Site settings](U60-site-settings.md#a2), all in the French interface; live-probed 2026-09-27 (note p).
 
 <a id="fn-a5"></a>
 **f-a5** — Seen 2026-09-24 (U09 claim check K1, K1-6, three apps): each tick saved and five errors "TypeError: Cannot read properties of undefined (reading 'filter') at Proxy.isInputSelected" were logged. Live-probed 2026-09-27 (three apps): five per tick on Settings › Website, also for a tick without "UI" and a re-tick; none for the same tick in the Settings wizard. Test runs 2026-09-27 (OPS): five per tick again, logged while the "Privacy Statement" tab of Rule 10b showed its empty French box. The cause is in note i.
+Issue report: [pkp-e2e#189](https://github.com/jardakotesovec/pkp-e2e/issues/189) ([docs/issues/U57-A5-form-language-tick-date-time-script-errors.md](../issues/U57-A5-form-language-tick-date-time-script-errors.md)).
 
 <a id="fn-a6"></a>
 **f-a6** — Seen 2026-09-26 on OJS and OPS: 5 of 42 journals created at the same moment with French as a form language (the test tooling's path, which is the "Forms" tick's) answered a server error. Live-probed 2026-09-27: two scratch journals, one Journal Manager each, the second browser on the install's second server process, both "Forms" boxes pressed together, four rounds per pair, three pairs: one side's `POST …/grid/settings/languages/manage-language-grid/save-language-setting?rowId=fr_CA&setting=supportedFormLocales&value=1` answered 500 in 5 of 12 rounds on OJS, 9 of 12 on OMP and 7 of 12 on OPS; that side showed no notice and no alert, its box unticked, still unticked after a reload; the other side saved. `Locale::installLocale()` → `installEmailTemplateLocaleData()` deletes and re-inserts the site-wide default email rows of the language outside a transaction, so two at once meet the unique key of `email_templates_default_data`. The same call runs on "Install Locale", the "Submissions" tick of Rule 15a and "Reload defaults". Seen again 2026-09-27 in an OPS test run, on the "Submissions" tick: two scratch servers ticked French (Canada) under "Submissions" a second apart; one's `POST …/grid/settings/languages/submission-language-grid/save-language-setting?rowId=fr_CA&setting=supportedSubmissionLocales&value=1` answered 500 (`duplicate key value violates unique constraint "email_templates_default_data_unique"`), the other's 200. Each tick installs the language's default email texts again, whether or not the site already carries them, so a language installed once beforehand does not prevent it.
 
 <a id="fn-a7"></a>
 **f-a7** — Live-probed 2026-09-27, two runs, three apps: with French disabled on the site (English the one language), each field change on the Hosted Journals create form logged "TypeError: Cannot read properties of undefined (reading 'includes') at Proxy.submitValues" once, six per filled form, none on opening it or on "Save"; the same form on the two-language site logged none. The form then has no language fields (note g); the failing code was not traced further.
+Issue report: [pkp-e2e#172](https://github.com/jardakotesovec/pkp-e2e/issues/172) ([docs/issues/U57-A7-create-context-one-language-script-error.md](../issues/U57-A7-create-context-one-language-script-error.md)).
 
 <a id="fn-a8"></a>
 **f-a8** — `omp/locale/fr_CA/default.po` and `ops/locale/fr_CA/default.po` carry `default.contextSettings.authorGuidelines` and `default.contextSettings.checklist` with empty texts, which `Locale::translate()` answers as the internal name (note p); `ojs/locale/fr_CA/default.po` has both. Code read 2026-09-27. Live-probed 2026-09-27 (OMP, OPS; OJS the control): after a French "Forms" tick and on a press or server created with French under "UI", the French "Author Guidelines" and checklist boxes held the internal names, and `…/fr_CA/about/submissions` showed them, on the seeded press and server too.
