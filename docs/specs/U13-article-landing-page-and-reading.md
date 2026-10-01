@@ -2637,7 +2637,7 @@ home page while it shows the current issue); elsewhere every galley of
 the current publication is linked, one with no file too, whose
 `download` finds no `submissionFileId` and answers
 `NotFoundHttpException`. Live-probed 2026-09-25, note q7.
-Issue report: [docs/issues/U13-A4-listing-offers-galley-without-file.md](../issues/U13-A4-listing-offers-galley-without-file.md).
+Issue report: [pkp-e2e#235](https://github.com/jardakotesovec/pkp-e2e/issues/235) ([docs/issues/U13-A4-listing-offers-galley-without-file.md](../issues/U13-A4-listing-offers-galley-without-file.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Note f: the notice's link is always
