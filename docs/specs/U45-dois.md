@@ -3784,7 +3784,7 @@ registered, "Needs Sync" included. Live-probed 2026-09-26 (q20).
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-26 (q21, which gives the cause), all
 three apps, one run each.
-Issue report: [docs/issues/U45-A17-major-version-earlier-doi-stays-registered.md](../issues/U45-A17-major-version-earlier-doi-stays-registered.md).
+Issue report: [pkp-e2e#229](https://github.com/jardakotesovec/pkp-e2e/issues/229) ([docs/issues/U45-A17-major-version-earlier-doi-stays-registered.md](../issues/U45-A17-major-version-earlier-doi-stays-registered.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-26 (q22): `PKP\jobs\doi\DepositSubmission`
