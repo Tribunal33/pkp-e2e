@@ -3897,7 +3897,7 @@ footnote d) posts no such key, so PHP logs `Undefined array key
 tab on OMP, in each app's green run): the screen showed "Saved" and the
 server log held the warning for that save. Live-probed 2026-09-26
 (Fields, the Registration tab, OJS): the same line at the tab's "Save".
-Issue report: [docs/issues/U45-A21-registration-save-without-agency-logs-warning.md](../issues/U45-A21-registration-save-without-agency-logs-warning.md).
+Issue report: [pkp-e2e#245](https://github.com/jardakotesovec/pkp-e2e/issues/245) ([docs/issues/U45-A21-registration-save-without-agency-logs-warning.md](../issues/U45-A21-registration-save-without-agency-logs-warning.md)).
 
 <a id="fn-f-a22"></a>
 **f-a22** — ui-library `Dropdown.vue` `closeOnBlur()` (the "Bulk
