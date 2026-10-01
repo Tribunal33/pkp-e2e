@@ -19,7 +19,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s1, 2026-10-01** |
 | [U19](../specs/U19-oai-pmh.md) | 26 | 5 | 6 | **Taken: issues session, VM s2, 2026-10-01**; done: OPS1, OMP4, A1, A18, A22, A16, A17 |
 | [U21](../specs/U21-submission-wizard.md) | 19 | 4 | 8 | **Taken: issues session, workstation s0, 2026-10-01** |
-| [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 | **Taken: issues session, VM s0, 2026-10-01**; done: A9 (two reports, pkp-e2e#282 with U20 OMP6, U64 OMP3, U47 OMP1, and pkp-e2e#283), A16 (pkp-e2e#284, with U50 A14), A3 (pkp-e2e#285, with U49 OJS3), A19 (pkp-e2e#286), A10 (pkp-e2e#288), A7, A8 (pkp-e2e#289), A15 (pkp-e2e#291), A1 (pkp-e2e#292), A6 (pkp-e2e#293), A12 and A18 (pkp-e2e#294 and pkp-e2e#295); A4 done with U13 OPS1 (pkp-e2e#209); A5 done with U13 A6 (pkp-e2e#226) |
+| [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 | **Taken: issues session, VM s0, 2026-10-01**; done: A9 (two reports, pkp-e2e#282 with U20 OMP6, U64 OMP3, U47 OMP1, and pkp-e2e#283), A16 (pkp-e2e#284, with U50 A14), A3 (pkp-e2e#285, with U49 OJS3), A19 (pkp-e2e#286), A10 (pkp-e2e#288), A7, A8 (pkp-e2e#289), A15 (pkp-e2e#291), A1 (pkp-e2e#292), A6 (pkp-e2e#293), A12 and A18 (pkp-e2e#294 and pkp-e2e#295), A13, A17 and A20 (pkp-e2e#296 and pkp-e2e#297 and pkp-e2e#298); A4 done with U13 OPS1 (pkp-e2e#209); A5 done with U13 A6 (pkp-e2e#226) |
 | [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 |  |
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 |  |
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 |  |

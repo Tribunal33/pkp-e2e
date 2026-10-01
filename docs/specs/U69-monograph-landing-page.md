@@ -1832,7 +1832,7 @@ Issue report: [pkp-e2e#294](https://github.com/jardakotesovec/pkp-e2e/issues/294
 
 <a id="fn-f-a13"></a>
 **f-a13** — Note l: `chapter.tpl` compares `date_format:$dateFormatShort` strings, where `monograph_full.tpl` compares `Y-m-d` (pkp-lib#10169 fixed only the book page). Live-probed 2026-09-28 (td16): both directions.
-Issue report: [docs/issues/U69-A13-chapter-page-forthcoming-under-other-date-format.md](../issues/U69-A13-chapter-page-forthcoming-under-other-date-format.md).
+Issue report: [pkp-e2e#296](https://github.com/jardakotesovec/pkp-e2e/issues/296) ([docs/issues/U69-A13-chapter-page-forthcoming-under-other-date-format.md](../issues/U69-A13-chapter-page-forthcoming-under-other-date-format.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note m: `getCitation()` sets the CSL `original-date` from `$submission->getOriginalPublication()` whenever its date differs from the shown version's, for a chapter as for the book, and the APA style prints it as "Original work published {year}". Live-probed 2026-09-28 (td18).
@@ -1848,7 +1848,7 @@ Issue report: [pkp-e2e#284](https://github.com/jardakotesovec/pkp-e2e/issues/284
 
 <a id="fn-f-a17"></a>
 **f-a17** — `chapter.tpl` prints only `submission.outdatedVersion`; `submission.viewingPreview` is in `monograph_full.tpl` alone. Live-probed 2026-09-28 (td5): the chapter page read "… Volume K1 Unpublished Book Published March 5, 2024 How to Cite …" with no notice for every previewing role.
-Issue report: [docs/issues/U69-A17-unpublished-book-chapter-page-no-preview-notice.md](../issues/U69-A17-unpublished-book-chapter-page-no-preview-notice.md).
+Issue report: [pkp-e2e#297](https://github.com/jardakotesovec/pkp-e2e/issues/297) ([docs/issues/U69-A17-unpublished-book-chapter-page-no-preview-notice.md](../issues/U69-A17-unpublished-book-chapter-page-no-preview-notice.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Note k: `CatalogBookHandler::download()` sends a signed-out buyer to Login with `source` built by `$request->url()`, a full address, and `LoginHandler::signIn()` follows only a `source` starting with "/", so `_redirectAfterLogin()` (its dashboard branch needs an empty `source`) falls back to `PKPPageRouter::getHomeUrl()`, the user's home by role: the press's index for a Reader, `dashboard/editorial` for a manager, sub-editor or assistant role, `dashboard/reviewAssignments` for a Reviewer, `dashboard/mySubmissions` for an Author (the last two untried); a free file's Login (`Validation::redirectLogin()`) carries a path. Live-probed 2026-09-28 (td13, td14): the priced file's Login address carried `source=http%3A%2F%2F…`, the free file's `source=%2Findex.php%2F…`. Live-probed 2026-09-29 (td14): the Press manager's sign-in went to `dashboard/editorial`.
@@ -1860,7 +1860,7 @@ Issue report: [pkp-e2e#286](https://github.com/jardakotesovec/pkp-e2e/issues/286
 
 <a id="fn-f-a20"></a>
 **f-a20** — Note l: a new version copies each chapter with its `datePublished`, and the first date is the source chapter's. Live-probed 2026-09-28 (td17).
-Issue report: [docs/issues/U69-A20-later-version-chapter-repeats-date.md](../issues/U69-A20-later-version-chapter-repeats-date.md).
+Issue report: [pkp-e2e#298](https://github.com/jardakotesovec/pkp-e2e/issues/298) ([docs/issues/U69-A20-later-version-chapter-repeats-date.md](../issues/U69-A20-later-version-chapter-repeats-date.md)).
 
 <a id="fn-f-a21"></a>
 **f-a21** — Note m: `CitationStyleLanguageHandler::setupRequest()` lets an unpublished submission through only for managers, the Site Administrator and assigned sub-editors or assistants, while the block itself shows to everyone `canPreview()` admits. Live-probed 2026-09-28 (td18).
