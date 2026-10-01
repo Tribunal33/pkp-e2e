@@ -799,6 +799,11 @@ Left out of the scenarios above, by reason:
   - the guard for A8 (issue report
     `docs/issues/U54-A8-roles-stage-boxes-no-name.md`): each stage box of
     the "Roles" list carrying an accessible name with its role and stage
+  - the guard for OPS1 (issue report
+    `docs/issues/U54-OPS1-open-content-login-box-not-kept.md`): on a
+    preprint server, "Users must be registered and log in to view open
+    access content." staying ticked after a reload, and a signed-out
+    visitor's "PDF" leading to the Login page
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -890,7 +895,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | On PostgreSQL a saved role jumps to the end of the Roles list, and pages can repeat or skip roles | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A14](#a14) | After renaming a role, the Users tab keeps showing its old name until the page is reloaded | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [OMP1](#omp1) | In French a press's "Roles" list heads its External Review column with a code | 🐞 | minor | — |
-| [OPS1](#ops1) | "Users must be registered and log in to view open access content." is not kept on a preprint server | 🐞 | user-visible | — |
+| [OPS1](#ops1) | A preprint server's "log in to view open access content" box says "Saved", is not kept, and visitors still download preprints | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OPS3](#ops3) | In French a preprint server's Moderator level reads "Éditeur-trice de série" (Series Editor) | 🐞 | minor | — |
 | [A6](#a6) | A role anyone has ever held can never be removed | ❓ | minor | — |
 | [A7](#a7) | "Abbreviation" is required, and no screen but the role's own window shows it | ❓ | minor | — |
@@ -1091,13 +1096,20 @@ Basis: probe. <sup>f-omp1</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — The open access sign-in box is not kept on a preprint server** · 🐞 · user-visible.
+**OPS1 — A preprint server's "log in to view open access content" box says "Saved", is not kept, and visitors still download preprints** · 🐞 · medium.
 A preprint server's "Site Access Options" tab offers "Users must be
 registered and log in to view open access content." under "View Preprint
 Content". Ticked and saved, the tab says "Saved", but opened again the
 box is unticked, and signed-out visitors still open every posted
 preprint's files. A journal and a press keep the box and apply it.
-Basis: probe. <sup>f-ops1</sup>
+Two things are broken. The server never stores the choice, and no code
+on a preprint server checks it, so a stored value would change nothing
+either.
+The proposed fix makes the box work as it does on a journal and a press:
+the choice is stored, and a signed-out visitor who opens a preprint's
+file is sent to the Login page. Removing the box instead would leave a
+preprint server with no way to ask readers to register before they read.
+Basis: probe, 2026-10-01. <sup>f-ops1</sup>
 
 <a id="ops2"></a>
 **OPS2 — The "Reviewer" level on a preprint server** · ❓ · minor.
@@ -1843,6 +1855,7 @@ all three apps): on OPS the box ticked and saved read "Saved" and was
 unticked after a reload, the context held no `restrictPreprintAccess`
 value, and a signed-out visitor opened and downloaded a posted preprint's
 "PDF" galley; on OJS and OMP the box was kept and applied ([t](#fn-t)).
+Issue report: [docs/issues/U54-OPS1-open-content-login-box-not-kept.md](../issues/U54-OPS1-open-content-login-box-not-kept.md).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — `Application::getRoleNames(true)` is lib/pkp's, not
