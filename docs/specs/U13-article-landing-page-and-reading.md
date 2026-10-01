@@ -1136,6 +1136,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-A10-reference-link-takes-closing-parenthesis.md`):
     a reference whose address is closed by a parenthesis, "(https://doi.org/…).",
     linked without the ")"
+  - the guard for A8 (Rule 15b; issue report
+    `docs/issues/U13-A8-ris-download-dates-percent-signs.md`): the
+    "Endnote/Zotero/Mendeley (RIS)" download's "PY" and "Y2" lines with
+    no "%"
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1276,7 +1280,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A5](#a5) | An author previewing their unpublished article, book or preprint gets "access denied" from "View submission" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | An older version's browser tab reads the current version's title | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | "ABNT" citation runs a preprint's title into the server's name and prints the date as "30 Sept.2026" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A8](#a8) | The RIS file writes its dates with a stray "%" | 🐞 | minor | — |
+| [A8](#a8) | "Endnote/Zotero/Mendeley (RIS)" citation download writes its dates with "%" signs ("PY  - %2026/%09/%30") | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | With no additional format ticked, "More Citation Formats" opens nothing and hides the downloads | 🐞 | minor | — |
 | [A10](#a10) | A reference's web address written in parentheses becomes a link that includes the closing ")" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Keywords are listed in no fixed order: the order typed is not kept | 🐞 | minor | — |
@@ -1426,12 +1430,19 @@ format. The other ten formats, the two citation downloads and a press's
 Basis: probe, 2026-10-01. <sup>[f-a7](#fn-f-a7)</sup>
 
 <a id="a8"></a>
-**A8 — The RIS file's dates carry a stray "%"** · 🐞 · minor.
-The "Endnote/Zotero/Mendeley (RIS)" file writes its dates with a "%"
-before the year, the month and the day ("PY  - %2026/%09/%01",
-"Y2  - %2026/%09/%25"), which reference managers read as malformed
-dates.
-Basis: probe, 2026-09-25. <sup>[f-a8](#fn-f-a8)</sup>
+**A8 — "Endnote/Zotero/Mendeley (RIS)" citation download writes its dates with "%" signs ("PY  - %2026/%09/%30")** · 🐞 · low.
+On a journal, a preprint server and a press, the
+"Endnote/Zotero/Mendeley (RIS)" file a reader downloads from the "How to
+Cite" block writes its dates with a "%" before the year, the month and
+the day. An article's and a preprint's file reads
+"PY  - %2026/%09/%30" and "Y2  - %2026/%10/%01", and a book's
+"PY  - %2026". The reader expects "2026/09/30" and "2026".
+The file's publication date and access date are therefore not in the
+form the RIS format asks for. The "BibTeX" download of the same page
+carries the year correctly.
+It needs the "Citation Style Language" plugin turned on. Every RIS
+download is affected, whatever the item.
+Basis: probe, 2026-10-01. <sup>[f-a8](#fn-f-a8)</sup>
 
 <a id="a9"></a>
 **A9 — "More Citation Formats" can open nothing** · 🐞 · minor.
@@ -2724,6 +2735,7 @@ Issue report: [pkp-e2e#241](https://github.com/jardakotesovec/pkp-e2e/issues/241
 **f-a8** — Note h: `ris.blade`'s `PY` and `Y2` lines (the version's
 date and the day of access) pass strftime patterns to
 `Carbon::format()`. Live-probed 2026-09-25, note q11, both apps.
+Issue report: [docs/issues/U13-A8-ris-download-dates-percent-signs.md](../issues/U13-A8-ris-download-dates-percent-signs.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — With no format ticked, the list holds only the downloads and
