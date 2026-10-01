@@ -1,4 +1,4 @@
-# Text typed only into a rich-text box is lost unasked: static pages, profile, reviews
+# Text typed only into a rich-text box is lost unasked: static pages, profile, reviews, issues
 
 - **Severity** medium
 - **Effort** small
@@ -9,9 +9,9 @@
   - 3.4: OJS, OMP, OPS (code)
   - 3.3: OJS, OMP, OPS (code)
 - **Introduced** not traced; present since at least [ea8d4cda2f](https://github.com/pkp/pkp-lib/commit/ea8d4cda2f959149b9f5471f858f4defef931355) (2012-07-24)
-- **Upstream** none found (2026-09-30)
-- **Tracked in** U09 [A19](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a19), U03 [A19](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U03-user-profile.md#a19), U28 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U28-reviewers-review.md#a15)
-- **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
+- **Upstream** none found (2026-10-01)
+- **Tracked in** U09 [A19](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a19), U03 [A19](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U03-user-profile.md#a19), U28 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U28-reviewers-review.md#a15), U50 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U50-issues.md#a16)
+- **Checked** 2026-09-30 (the issue steps 2026-10-01), each branch's tip (the commits in Evidence)
 
 ## Summary
 
@@ -30,26 +30,32 @@ change to any plain box gets, never comes, and the typed text is lost:
 - A reviewer who types into "For author and editor" on step 3 and then
   presses another step's tab is asked nothing, and back on step 3 the
   text is gone, while a changed review-form answer gets the question.
+- On an issue's "Issue Data" tab, a change to "URL Path" makes another
+  tab ask the question first. A journal manager who has written only a
+  "Description" gets no question when pressing another tab or the
+  window's "Close": the tab opens or the window closes at once, and the
+  description is gone.
 
 Leaving the page loses the text the same way: a reload, or a link to
 another page, goes ahead with no question, where a changed plain box
 raises the browser's own "Leave site?" question.
 
-All three share one cause: the legacy rich-text box never tells its
+All four share one cause: the legacy rich-text box never tells its
 form that it changed. One small change in the shared form code fixes all
 of them. The free-form review is the default review: a new journal or
 press has no review forms, and the editor's choice when assigning a
 reviewer starts at "None / Free Form Review". OPS meets it on the
-profile only, since it has no Static Pages plugin and no reviewers.
+profile only, since it has no Static Pages plugin, no reviewers and no
+issues.
 
 ## Impact
 
 - **Lost:** everything typed into the box since it was last saved: a
   static page's text, a signature or biography, a reviewer's written
-  review. Nothing already saved is touched.
+  review, an issue's description. Nothing already saved is touched.
 - **Who:** every signed-in user on their own profile; every reviewer
   writing a review with no review form, the default; managers writing
-  static pages. Moving to another tab, page or window before saving is
+  static pages or describing an issue. Moving to another tab, page or window before saving is
   ordinary use.
 - **Way round:** save before moving on ("Save", or "Save for Later" on
   the review).
@@ -64,10 +70,12 @@ Preconditions:
 
 - PKP's default test dataset, `main` (the same on `stable-3_5_0`).
   Static page and review steps: OJS or OMP; profile steps: any of the
-  three apps.
+  three apps; issue steps: OJS.
 - In the dataset "Static Pages Plugin" is installed but unticked, so
   steps 3 and 4 turn it on, and the journal or press has no static page,
   so step 5 adds one.
+- The dataset's unpublished issue "Vol. 2 No. 1 (2015)" is listed under
+  "Future Issues" and has no description.
 
 Static page window (OJS, OMP):
 
@@ -114,7 +122,22 @@ Development"):
 18. Type "u09a19 review text" into "For author and editor".
 19. Press the tab "2. Guidelines", then "3. Download & Review".
 
-**Expected.** Steps 8, 13, 14 and 19 ask, before closing the window or
+Issue Data (OJS):
+
+20. Sign in as `dbarnes`. Open "Issues"
+    (`/index.php/publicknowledge/manageIssues`), tab "Future Issues".
+21. On the row "Vol. 2 No. 1 (2015)" open its actions (the arrow) and
+    press "Edit". The window "Issue Management: Vol. 2 No. 1 (2015)"
+    opens on "Table of Contents".
+22. Press the tab "Issue Data".
+23. Click into "Description" and type "u50w30 description". Touch
+    nothing else.
+24. Press the tab "Table of Contents", then "Issue Data" again.
+25. Type "u50w30 description" into "Description" again, and press the
+    window's "Close".
+26. Press "Edit" on "Vol. 2 No. 1 (2015)" again, then "Issue Data".
+
+**Expected.** Steps 8, 13, 14, 19, 24 and 25 ask, before closing the window or
 opening the tab:
 
 ```
@@ -131,11 +154,15 @@ empty; in step 14 the same with "Bio Statement". In step 19 "2.
 Guidelines" opens at once, and back on step 3 "For author and editor"
 is empty. Step 10 reloads the page and step 15 opens the home page, with
 no question, and "Signature" is empty when the profile is opened again.
+In step 24 "Table of Contents" opens at once, and back on "Issue Data"
+"Description" is empty; step 25 closes the window at once, and in step
+26 "Description" is empty.
 
 Controls: with "Title" changed instead of "Content", step 8 asks the
 question and a reload raises "Leave site?". With a number typed into
 "Phone" alone, step 13 asks the question and the link in step 15 raises
-"Leave site?". In both "Cancel" keeps the text.
+"Leave site?". With "u50w30" typed into "URL Path" alone, step 24's
+tab press asks the question. In each "Cancel" keeps the text.
 
 ## Cause
 
@@ -156,7 +183,9 @@ The three questions read that state:
   forms in the open tab and asks when one handler's `formChangesTracked`
   is set
   ([js/controllers/TabHandler.js, lines 126–150](https://github.com/pkp/pkp-lib/blob/2e377d27fc38dc0706d0a60678cd690a295e7b12/js/controllers/TabHandler.js#L126-L150)).
-  The reviewer's steps use it too, through `ReviewerTabHandler`.
+  The reviewer's steps use it too, through `ReviewerTabHandler`, and so
+  does the "Issue Management" window's tab set
+  (`templates/controllers/grid/issues/issue.tpl` in OJS).
 - Leaving the page: `SiteHandler` registers a form as unsaved when it
   receives `formChanged`
   ([js/controllers/SiteHandler.js, lines 58–60](https://github.com/pkp/pkp-lib/blob/2e377d27fc38dc0706d0a60678cd690a295e7b12/js/controllers/SiteHandler.js#L58-L60)),
@@ -188,12 +217,14 @@ Reach (the same fault wherever a legacy form holds a rich-text box):
   Contact form (code).
 - The reviewer's step 3: "For author and editor" (on screen, OJS and
   OMP) and the box for the editor alone (code).
+- The issue window's "Description" on "Issue Data" (on screen, OJS, an
+  existing issue's "Edit"), and the same form in "Create Issue" (code).
 - The other legacy windows with a rich-text box (code): the "Custom
   Page" item's "Content" (Navigation), the custom block's "Content",
   "Notify" on a submission's participants, the reviewer email windows
   (thank, remind, cancel, reinstate, unassign, resend, the reviewer's own
   decline message), the user's email and details windows, review forms
-  and their items, sections (OJS), issues (OJS) and the subscription,
+  and their items, sections (OJS) and the subscription,
   subscription type and subscription policy windows (OJS).
 
 ## Proposed fix
@@ -250,6 +281,9 @@ Tried on `main`, OJS, OMP and OPS, with the fix applied to pkp-lib:
   the question, on all three apps.
 - The "2. Guidelines" tab press after "For author and editor" alone
   asked the question, on OJS and OMP.
+- On an issue's "Issue Data", the "Table of Contents" tab press and the
+  window's "Close" after a change only in "Description" each asked the
+  question, and "Cancel" kept the text (OJS).
 
 A neighbour check gave the same result with the fix in and out:
 
@@ -263,6 +297,11 @@ A neighbour check gave the same result with the fix in and out:
   the saved "Signature".
 - On an untouched review step 3, pressing "2. Guidelines" opened it at
   once.
+- On an issue's untouched "Issue Data", pressing "Table of Contents"
+  opened it at once. A "Description" typed and saved closed the window
+  with "Your changes have been saved." and no question. Reopened with the
+  saved description and left untouched, "Issue Data" let "Table of
+  Contents" open and the window close at once.
 
 **Alternatives:**
 
@@ -287,9 +326,9 @@ A neighbour check gave the same result with the fix in and out:
   (at a two-line offset on 3.4 and 3.3). Those branches ship TinyMCE 5
   (3.4) and 4 (3.3); that the four events behave there as in TinyMCE 7
   is read, not run.
-- Test: e2e checks in U09, U03 and U28 for a change made only in a
-  rich-text box: the static page window's back arrow, a profile tab and
-  a review step tab.
+- Test: e2e checks in U09, U03, U28 and U50 for a change made only in a
+  rich-text box: the static page window's back arrow, a profile tab, a
+  review step tab and the issue window's tabs.
 
 Small: four lines in the shared form handler, following the pattern the
 Vue forms use, with the e2e checks as its test.
@@ -303,13 +342,20 @@ Vue forms use, with the e2e checks as its test.
   (pkp/datasets 38ab955, 2026-09-30, PostgreSQL; the fault is in the
   browser and does not touch the database). Run:
   `node bin/probe.js all shared/playwright/checks/issues/static-page-content-change-lost-unasked/walk.js [neighbour]`.
+- Kept script for the issue steps 20–26 and their control:
+  [shared/playwright/checks/issues/static-page-content-change-lost-unasked/issue-data.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/static-page-content-change-lost-unasked/issue-data.js),
+  as `dbarnes` on OJS, from a freshly loaded default dataset (the same
+  dump). Run:
+  `node bin/probe.js ojs shared/playwright/checks/issues/static-page-content-change-lost-unasked/issue-data.js [neighbour]`.
+  Steps 20–26 were walked as written on `main` and `stable-3_5_0`.
 - The fix was tried with
   `node bin/try-fix.js apply shared/playwright/checks/issues/static-page-content-change-lost-unasked/fix.diff ojs omp ops`,
   then reverted. The dataset's configuration has `enable_minified = Off`,
   so the patched source file was served; `js/pkp.min.js` was not
   rebuilt. The static page part of the fix trial used an "Add Static
   Page" window with text typed only into "Content". Step 15 was not
-  walked with the fix.
+  walked with the fix. The issue steps' trial applied the same diff to
+  OJS alone (`… fix.diff ojs`).
 - Tips walked: `main` OJS
   [bade233f73](https://github.com/pkp/ojs/commit/bade233f73f5a1ccfb7f29c48b8becdb278f1287)
   (pkp-lib
@@ -350,7 +396,11 @@ Vue forms use, with the e2e checks as its test.
   `editStaticPageForm.tpl`, `templates/user/contactForm.tpl`
   ("Signature"), `templates/user/publicProfileForm.tpl` ("Bio
   Statement") and `templates/reviewer/review/step3.tpl` (`comments`,
-  `commentsPrivate`) render those boxes `rich=true` in legacy forms. App
+  `commentsPrivate`) render those boxes `rich=true` in legacy forms, and
+  OJS's `templates/controllers/grid/issues/form/issueForm.tpl` renders
+  "Description" `rich=true` in a `FileUploadFormHandler` form while
+  `templates/controllers/grid/issues/issue.tpl` binds `TabHandler` to the
+  window's tabs, as on `main` and `stable-3_5_0`. App
   tips read: OJS `stable-3_4_0`
   [9571d8fde7](https://github.com/pkp/ojs/commit/9571d8fde7093214dd24929ea6e17546483cf833),
   `stable-3_3_0`
@@ -387,10 +437,16 @@ Vue forms use, with the e2e checks as its test.
   "unsaved changes rich text", "static page content lost",
   `tinyMCEInitHandler`, `formChangesTracked`. The nearest,
   `pkp/pkp-lib#13177`, is about the Vue publication forms' multilingual
-  editor not resetting between windows, a different fault.
+  editor not resetting between windows, a different fault. Searched again
+  2026-10-01, pkp/pkp-lib, pkp/ojs and pkp/ui-library: "issue description
+  unsaved", "issue data unsaved", "issue description without saving",
+  "form has changed" with tinymce, "without saving" with rich text,
+  "unsaved changes warning tinymce", `tinyMCEInitHandler`, tinymce with
+  `formChange`: nothing new.
 - Not driven: the static page and review steps on OPS, which has no
   Static Pages plugin and no reviewers; "Mailing Address" and the
   reviewer's box for the editor alone (the same forms as "Signature" and
   "For author and editor"); leaving the review by a link; Escape with the
-  cursor in an editor; the other windows of the Cause's reach, with or
-  without the fix.
+  cursor in an editor; on the issue window, "Create Issue", the
+  "Description" boxes of languages other than English and a reload; the
+  other windows of the Cause's reach, with or without the fix.

@@ -1148,7 +1148,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 | [A12](#a12) | After "Delete" of a published issue, its offline articles still read "Published" in the workflow | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A13](#a13) | "Archives" lists a journal's issues in no set order until someone saves an order on "Back Issues" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A14](#a14) | Visitors opening a deleted or mistyped "Full Issue" galley address get an empty page, not the issue | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A16](#a16) | With only "Description" changed on "Issue Data", another tab opens without the unsaved-change question | 🐞 | minor | — |
+| [A16](#a16) | With only "Description" changed on "Issue Data", another tab opens without the unsaved-change question | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A17](#a17) | An article whose newer version was published with "Don't Assign To An Issue" stays listed in the issue, under the newer title, linking to a page that names no issue | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A18](#a18) | On such an article, "Remove" leaves it in the issue and unpublishes its earlier version, the one the issue published | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A3](#a3) | "Delete" takes an issue's published articles offline behind a generic confirmation | ❓ | user-visible | — |
@@ -1344,14 +1344,14 @@ hide it; the email would link to pages readers cannot open. Basis:
 probe, 2026-09-25. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — A description alone raises no unsaved-change question** · 🐞 · minor.
+**A16 — A description alone raises no unsaved-change question** · 🐞 · medium.
 On "Issue Data", a change typed in a text box such as "Volume" or "URL
 Path" makes another tab ask "The data on this form has changed. Do you
 wish to continue without saving?" before it opens. Text typed only in
 "Description" does not: pressing another tab opens it at once, with no
 question. A Journal Manager who has written only a description expects
-the same question before leaving the form. Basis: test run, 2026-09-25.
-<sup>f-a16</sup>
+the same question before leaving the form.
+Basis: probe, 2026-09-30. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — An article published outside the issue stays listed in it** · 🐞 · medium.
@@ -1598,6 +1598,7 @@ Issue report: [pkp-e2e#71](https://github.com/jardakotesovec/pkp-e2e/issues/71) 
 
 <a id="fn-f-a16"></a>
 **f-a16** — Test run 2026-09-25 (Fields, after the "Issue Data" table; scenario 2), OJS: with An issue about tides. typed only in "Description" on a published issue's "Issue Data", pressing "Table of Contents" raised no browser question and the selected tab read "Table of Contents". A follow-up probe the same day on a scratch journal tried three ways (the tab pressed at once, 1.5 s after typing, after first clicking into "Volume"): no question in any, the tab moved each time. A typed "URL Path" raised the question in the same run, as a typed "Volume" had in note i's probe. The window's "Close" was not driven with a description-only change. Mechanism not read.
+Issue report: [docs/issues/U09-A19-static-page-content-change-lost-unasked.md](../issues/U09-A19-static-page-content-change-lost-unasked.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-28 (Fields "Items"; Rules 9, 9a, 23, 23a), OJS, four runs, each on a scratch journal with the sections "Articles" and "Second Section" and the published, current issue "Vol. 1 No. 1 (2024)" holding three published articles. As the journal's Journal Manager, "Create New Version" on two of them, each new version retitled and saved; one was then published with "Don't Assign To An Issue" (the window read "…This will be published immediately without any issue association…", and its Publication Settings then showed "Don't Assign To An Issue" with no issue box), the other with the preselected "Assign To Current/Back Issue" and the issue. Signed out, the issue's page, "Current" (`issue/current`) and the home page's "Current Issue" listed the first article under its new title in "Articles", on the page and after a reload; its link `article/view/{id}` opened the new version's page, with the breadcrumb "Home / Archives / Articles" and an issue part reading only "Section Articles". "Back Issues" read "Items" 3 and the "Table of Contents" tab listed the new title. The article published into the issue was listed under its new title, with the breadcrumb and "Issue" line naming the issue. With the journal's web feed set to "Display items in current published issue." (two of the runs), the Atom, RSS 2.0 and RSS 1.0 items carried the new title and linked to `article/view/{id}`, while an article published with no issue at all was not listed. Code read 2026-09-28 (ojs `72b85f4ba0`): the issue's page, the tab and "Items" start from `APP\submission\Collector::filterByIssueIds()`, which keeps a submission when any of its publications carries the issue's id, whatever that publication's status; `IssueHandler::setupIssueTemplate()`, `Repository::getInSections()` and `Issue::getNumArticles()` then read only the current publication's status and section (notes g, m, w). The current-issue feed applies the same filter ([Web feeds](U18-web-feeds.md), its note f).
