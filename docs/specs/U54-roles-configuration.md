@@ -1800,7 +1800,7 @@ saved.", an "Advisory Board" row and no "Editorial Board Member" row; the
 Board Member" in Quinn Ashdown's "Roles" cell throughout ten seconds of
 reads; after a reload the cell read "Advisory Board". The suites read the
 tab after a reload.
-Issue report: [docs/issues/U54-A14-users-tab-keeps-old-role-name.md](../issues/U54-A14-users-tab-keeps-old-role-name.md).
+Issue report: [pkp-e2e#185](https://github.com/jardakotesovec/pkp-e2e/issues/185) ([docs/issues/U54-A14-users-tab-keeps-old-role-name.md](../issues/U54-A14-users-tab-keeps-old-role-name.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP's `locale/fr_CA/submission.po` leaves
