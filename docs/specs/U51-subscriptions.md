@@ -618,6 +618,10 @@ sidebar, Settings bullet 13), headed "Subscription"; its lines are Rule
   issue has been made open access.", which nothing on screen lists. An
   issue opened by switching its "Access status" to "Open access", or an
   article's "Open Access" box, sends nothing. <sup>n</sup>
+
+  Each of those users gets one copy, except when the issue opens on 1
+  May, 1 July, 1 October or 1 December, or on 1 March in most years:
+  then each gets two ⚠ [A29](#a29).
 - **The manual method's email** ("Send notification of payment", Rule 30)
   is *Payments & APCs*'s.
 - **A new institution** is added to the journal's [Institutions](U66-institutions.md) list by
@@ -1229,13 +1233,14 @@ scheduled tasks and background jobs, and the tooling recipe. <sup>s0</sup>
       (Settings bullet 11).
     - **The open-access email**: run the site's scheduled tasks, then its
       background jobs: the mail catcher holds for the Reader, and for the
-      Journal Manager, an email from the journal's principal contact with
+      Journal Manager, one email from the journal's principal contact with
       the subject "Free to read: Vol. 1 No. 1 (2026) of {journal name} is
       now open access", whose body holds the issue's name as a link to its
       page and which ends with the unsubscribe footer of [Notifications
       center & email
       preferences](U05-notifications-center-and-email-preferences.md)
-      (Side effects).
+      (Side effects). Run on one of the days [A29](#a29) names, the mail
+      catcher holds two for each of them.
     - **Control**: no email names "Vol. 1 No. 2 (2026)" or "Vol. 1 No. 3
       (2026)": an issue switched to "Open access" and an article's "Open
       Access" box send nothing (Side effects). <sup>s0</sup>
@@ -1511,6 +1516,8 @@ Left out of the scenarios above, by reason:
     Information" or "Other, See Notes"; Rule 33)
   - A28 (a date box showing today's date after a refused "Save", which
     the window does not send; Rule 19; scenario 6 passes it)
+  - A29 (the open-access email sent twice on the first day of some
+    months; Side effects; scenario 12 passes it)
   - OPS1 (a preprint server's "Posting Mode" not kept; Purpose;
     scenario 16 passes it)
 - **No seed**:
@@ -1566,6 +1573,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A26](#a26) | The "Subscription" block reads "Expires: {date}" for an inactive subscription | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A27](#a27) | Subscribers get no expiry reminders: the reminder task stops with an error on every run | 🐞 | high · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A28](#a28) | After a refused "Save", a subscription's empty date boxes show today's date, and "Save" says they are empty | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A29](#a29) | Readers get the open-access email twice when an issue opens on the 1st of some months | 🐞 | minor | — |
 | [OPS1](#ops1) | A preprint server's "Posting Mode" says "Saved" but keeps nothing, and the server goes on posting | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A1](#a1) | "Publishing Mode" shows no choice on a new journal, which publishes as open access | ❓ | minor | — |
 | [A5](#a5) | Without payments set up, a signed-in reader pressing a locked galley lands on the home page with no word | ❓ | user-visible | — |
@@ -1960,6 +1968,18 @@ The manager sees a filled box and a message saying it is empty. It
 happens for individual and institutional subscriptions alike.
 Basis: probe, 2026-09-30. <sup>f-a28</sup>
 
+<a id="a29"></a>
+**A29 — Readers get the open-access email twice when an issue opens on the 1st of some months** · 🐞 · minor.
+With "Registered readers will have the option of receiving the table of
+contents by email when an issue becomes open access." ticked on
+"Subscription Policies", every user of the journal who keeps "An issue
+has been made open access." on should get one "Free to read: {issue
+name} of {journal name} is now open access" email on the day an issue's
+"Open access date" comes. When that day is 1 May, 1 July, 1 October or
+1 December, each of them gets the same email twice; on 1 March this
+happens in every year but the one after a leap year.
+Since: 2006-04-18 · Basis: test run, 2026-10-01. <sup>f-a29</sup>
+
 ### OPS
 
 <a id="ops1"></a>
@@ -2258,6 +2278,9 @@ Issue report: [pkp-e2e#8](https://github.com/jardakotesovec/pkp-e2e/issues/8) ([
 <a id="fn-f-a28"></a>
 **f-a28** — Test run 2026-09-25 (Rule 19; scenario 6). The four answers to "Save" were: "A user is required. A subscription start date is required. A subscription end date is required." (no user, no dates); then, Nova chosen, "A subscription start date is required." and "A subscription end date is required." again, the boxes now reading today's date; then, Sam chosen, today's date typed into "Start date" and next year's into "End date", "This user already has a subscription for this journal. A subscription start date is required."; then, Nova chosen, "A subscription start date is required.", the window staying open. A probe the same day read the fields after each step: from the first refusal on, the visible boxes held today's date while the values the window sends were empty; typing today's date left the sent start date empty, next year's end date was sent. The boxes are jQuery UI date pickers: lib/pkp `js/controllers/form/FormHandler.js` renames the visible box to `{name}-removed` and sends a hidden copy under the field's name (`templates/payments/individualSubscriptionForm.tpl`, `dateStart`/`dateEnd` with class `datepicker`).
 Issue report: [pkp-e2e#53](https://github.com/jardakotesovec/pkp-e2e/issues/53) ([docs/issues/U51-A28-subscription-date-boxes-show-today-unsent.md](../issues/U51-A28-subscription-date-boxes-show-today-unsent.md)).
+
+<a id="fn-f-a29"></a>
+**f-a29** — Test run 2026-10-01 (Side effects; scenario 12), OJS main (ojs `bade233f73`, lib/pkp `2e377d27fc`): after the scheduled task `APP\tasks\OpenAccessNotification` ran once and the jobs ran, the mail catcher held two emails "Free to read: Vol. 1 No. 1 (2026) of {journal} is now open access" for the Reader and two for the Journal Manager (one expected). Seen on the VM on a reset database and on every OJS CI run of 2026-10-01; the same check passed on every run of 2026-09-30. Mechanism (code read): `executeActions()` calls `sendNotifications()` for today, then, on the 1st of a month whose previous month is in `$shortMonths = [2,4,6,9,11]`, again for a simulated 31st of that month, and on 1 March for a simulated 30 February and, unless `date('L', mktime(0, 0, 0, 0, 0, $year))` (which reads the previous year) says leap, 29 February. `sendNotifications()` matches `strtotime($openAccessDate) == mktime(0, 0, 0, $month, $day, $year)`; PHP's `mktime()` rolls 31 April, June, September and November over to the 1st of the next month, 29 February of a common year and 30 February of a leap year to 1 March, so an issue opening today matches twice and gets two `OpenAccessMailUsers` batches. In the year after a leap year the 29th is skipped and 30 February falls on 2 March, so 1 March sends once. Only 1 October was driven; the other days are read in the code and checked against PHP's date arithmetic. The simulation dates from the task's first version (OJS `b33af3e5a5`, 2006-04-18, then with the list `2,4,6,8,10,12`); the task runs daily (`classes/scheduler/Scheduler.php`, `daily()`).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Live-probed 2026-09-23 by the Navigation menus claim check (its OPS2): "Saved" shown, the next load with neither choice marked, "Archives" still in the header; the Search claim check saw every role still reach the Search page. Live-probed 2026-09-25 (td1) on a scratch server: "OPS will not be used…" and "The server will provide open access…" each saved with "Saved" and came back unselected; with the second saved, the visitor and the Reader still saw "Archives", the preprint page and its PDF. OPS `schemas/context.json` has no `publishingMode`, so the context API drops the value (note b); OPS `OpsServerMustPublishPolicy` and the archive header still read it.
