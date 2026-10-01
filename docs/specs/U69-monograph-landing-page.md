@@ -1717,7 +1717,7 @@ Issue report (the view page's script error "PDFJS is not defined", low): [pkp-e2
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note f: `monograph.return` is defined in no locale file of OMP, lib/pkp or the plugin. Live-probed 2026-09-28 (td21).
-Issue report: [docs/issues/U69-A10-html-view-page-return-arrow-raw-key.md](../issues/U69-A10-html-view-page-return-arrow-raw-key.md).
+Issue report: [pkp-e2e#288](https://github.com/jardakotesovec/pkp-e2e/issues/288) ([docs/issues/U69-A10-html-view-page-return-arrow-raw-key.md](../issues/U69-A10-html-view-page-return-arrow-raw-key.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Note k. The manual plugin's own description reads "The manager will manually record receipt of a user's payment (outside of this software)."; nothing in OMP calls `fulfillQueuedPayment()` for a manual payment. The OMP purchase path dates from the early direct-sales work, and the missing record may be long-standing, hence ❓. Live-probed 2026-09-28 (td14): "Continue" led back to the payment page and the Reader's link stayed priced; the Press manager's menu has no "Payments", and `{press}/payments` and `{press}/management/settings/payments` answered 404, where OJS's `{journal}/payments` opens its payment lists and OPS has none.
