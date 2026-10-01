@@ -1855,7 +1855,7 @@ all three apps): on OPS the box ticked and saved read "Saved" and was
 unticked after a reload, the context held no `restrictPreprintAccess`
 value, and a signed-out visitor opened and downloaded a posted preprint's
 "PDF" galley; on OJS and OMP the box was kept and applied ([t](#fn-t)).
-Issue report: [docs/issues/U54-OPS1-open-content-login-box-not-kept.md](../issues/U54-OPS1-open-content-login-box-not-kept.md).
+Issue report: [pkp-e2e#194](https://github.com/jardakotesovec/pkp-e2e/issues/194) ([docs/issues/U54-OPS1-open-content-login-box-not-kept.md](../issues/U54-OPS1-open-content-login-box-not-kept.md)).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — `Application::getRoleNames(true)` is lib/pkp's, not
