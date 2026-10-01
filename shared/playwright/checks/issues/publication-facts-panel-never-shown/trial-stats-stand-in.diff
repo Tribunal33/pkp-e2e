@@ -1,0 +1,42 @@
+--- a/plugins/generic/pflPlugin/PflPlugin.php
++++ b/plugins/generic/pflPlugin/PflPlugin.php
+@@ -72,7 +72,7 @@
+             ->join('sections AS sec', 'p.section_id', '=', 'sec.section_id')
+             ->where('s.context_id', $journalId)
+             ->where('sec.meta_reviewed', 1)
+-            ->where('s.status', STATUS_PUBLISHED)
++            ->where('s.status', PKPSubmission::STATUS_PUBLISHED)
+             ->when($dateStart, fn($q) => $q->where('s.date_submitted', '>=', strtotime($dateStart)))
+             ->get()->first();
+         return $row->submission_count;
+@@ -403,9 +403,9 @@
+                 'issn' => $journal->getSetting('onlineIssn') ?? $journal->getSetting('printIssn'),
+             ];
+ 
+-            $client = Application::get()->getHttpClient();
+-            $response = $client->request('GET', 'https://pkp.sfu.ca/ojs/pflStatistics.json', ['query' => $queryParams]);
+-            return json_decode($response->getBody(), true);
++            // TRIAL ONLY (not part of the fix): the test install has no outbound access, so the
++            // answer https://pkp.sfu.ca/ojs/pflStatistics.json gave on 2026-10-01 stands in for the request.
++            return json_decode('{"pflNumAcceptedClass": 33, "pflReviewerCountClass": 2.4, "pflCompetingInterestsPercentClass": 11, "pflDataAvailabilityPercentClass": 16, "pflNumHaveFundersClass": 32, "pflDaysToPublicationClass": 145}', true);
+         });
+     }
+ 
+@@ -449,7 +449,7 @@
+             [
+                 'inline' => false,
+                 'contexts' => ['frontend'],
+-                'priority' => STYLE_SEQUENCE_LAST
++                'priority' => TemplateManager::STYLE_SEQUENCE_LAST
+             ]
+         );
+ 
+@@ -496,7 +496,7 @@
+             [
+                 'contexts' => 'frontend',
+                 'inline' => true,
+-                'priority' => STYLE_SEQUENCE_LAST,
++                'priority' => TemplateManager::STYLE_SEQUENCE_LAST,
+             ]
+         );
+     }
