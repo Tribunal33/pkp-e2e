@@ -1895,7 +1895,7 @@ Issue report: [pkp-e2e#281](https://github.com/jardakotesovec/pkp-e2e/issues/281
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — Live-probed 2026-09-26: note q10, the OMP part. Code: note j.
-Issue report: [docs/issues/U19-OMP3-oai-unknown-set-lists-other-records.md](../issues/U19-OMP3-oai-unknown-set-lists-other-records.md).
+Issue report: [pkp-e2e#299](https://github.com/jardakotesovec/pkp-e2e/issues/299) ([docs/issues/U19-OMP3-oai-unknown-set-lists-other-records.md](../issues/U19-OMP3-oai-unknown-set-lists-other-records.md)).
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — Live-probed 2026-09-26: a book published with its abstract saved empty on "Title & Abstract" made the press's ListRecords, its GetRecord and the site-wide `set={press}` list answer 500, while the site-wide first page (without the book) and ListIdentifiers answered; the server log: `Dc11SchemaPublicationFormatAdapter::addLocalizedElements(): Argument #3 ($localizedValues) must be of type array, null given`. The book was unpublished again at once. Code: note f (`Dc11SchemaPublicationFormatAdapter::addLocalizedElements(…, array $localizedValues)` receives `$publication->getData('abstract')`, null when never set; OMP's "Title & Abstract" does not require the abstract).
