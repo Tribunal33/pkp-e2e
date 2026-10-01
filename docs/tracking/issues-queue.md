@@ -43,7 +43,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 | [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 |  |
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 9 | 1 | 8 |  |
 | [U48](../specs/U48-jats-and-body-text.md) | 17 | 1 | 7 |  |
-| [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 |  |
+| [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 | **A16 taken: issues session, workstation s0, 2026-10-01** (with U63 A12) |
 | [U28](../specs/U28-reviewers-review.md) | 14 | 1 | 5 |  |
 | [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 |  |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | A16 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet; the report calls the window's box "Title" where the screen says "Name", and its Reach names "Applied Science" where reach.js uses "Social Sciences" on OPS |
