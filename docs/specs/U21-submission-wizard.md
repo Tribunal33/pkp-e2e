@@ -2441,7 +2441,7 @@ building the scenario tooling, through the settings form's own validation:
 address." and accepted on OJS and OPS; the box's help text read "Separate
 multiple email addresses with a comma. Example:
 one@example.com,two@example.com" on all three apps.
-Issue report: [docs/issues/U21-OMP2-press-notify-anyone-list-refused.md](../issues/U21-OMP2-press-notify-anyone-list-refused.md).
+Issue report: [pkp-e2e#181](https://github.com/jardakotesovec/pkp-e2e/issues/181) ([docs/issues/U21-OMP2-press-notify-anyone-list-refused.md](../issues/U21-OMP2-press-notify-anyone-list-refused.md)).
 
 <a id="fn-omp3"></a>
 **fn-omp3** — OMP3. `getSubmitUserGroups()` (note c) reads the user's
