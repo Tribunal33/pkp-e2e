@@ -1176,6 +1176,9 @@ Left out of the scenarios above, by reason:
     more than one page, submissions ticked on two pages and "Select
     All" pressed on a page: the file holds every ticked submission,
     and the button turns into "Select None"
+  - the guard A6's issue report names, once fixed, on this feature's
+    screen: on the Native XML "Import" tab, Tab stops on "Upload
+    File" and Enter opens the file picker
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1279,7 +1282,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | An address naming a tool the installation lacks prints the Import/Export list as raw code text | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | A users import says a user with a short or empty password "has not been imported", yet creates the account | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
-| [A6](#a6) | The Native XML "Import" tab's "Upload File" cannot be reached with the keyboard | 🐞 | minor | — |
+| [A6](#a6) | "Upload File" cannot be reached with the keyboard: no revision, galley or import upload without a mouse | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | Going back to a Native XML "Import Results" tab imports the file again, duplicating every item | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | Importing a file the app itself exported lists "Errors occured:" under the success text | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | Native XML import of an article in a missing section shows nothing and leaves an unopenable submission | 🐞 | medium · crash: both | issues (claude), 2026-10-01 — re-verified |
@@ -1355,12 +1358,21 @@ version. {OJS}
 Since: 2025-10-07 · Basis: probe, 2026-10-01. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — "Upload File" is out of the keyboard's reach** · 🐞 · minor.
-On the Native XML Plugin's "Import" tab, the Tab key should stop on
-"Upload File"; it skips the button and the box and goes straight to
-"Import", so a manager who works without a mouse cannot choose a file
-to import.
-Basis: probe. <sup>f-a6</sup>
+**A6 — "Upload File" cannot be reached with the keyboard: no revision, galley or import upload without a mouse** · 🐞 · high.
+Someone who works with the keyboard alone cannot choose a file in the
+upload window that the editorial workflow opens. In the window, Tab
+skips "Upload File" and the "Drag and drop a file here to begin upload"
+box. It goes from the component list straight to "Cancel", and no number
+of Tab or Shift+Tab presses ever stops on "Upload File". The Native XML
+Plugin's "Import" tab has the same box and the same fault: Tab goes
+straight to "Import". Without a mouse the file picker cannot be opened,
+and dropping a file needs a mouse too. So an author cannot upload a
+revision, and an editor cannot upload a production-ready file or a
+galley's file. On a preprint server, a moderator cannot add a galley's
+file. Imports cannot be started either. New submissions are not
+affected: the submission form's "Add File" can be reached and works from
+the keyboard.
+Basis: probe, 2026-10-01. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — Going back to a Native XML "Import Results" tab imports the file again, duplicating every item** · 🐞 · high.
@@ -2709,6 +2721,7 @@ Issue report: [docs/issues/U63-A5-doaj-deposit-takes-other-journals-articles.md]
 **f-a6** — Live-probed 2026-09-27, three apps (note e): the "Upload
 File" button carries `tabindex="-1"`, and Tab from the tab strip lands
 first on "Import".
+Issue report: [docs/issues/U63-A6-upload-file-out-of-keyboard-reach.md](../issues/U63-A6-upload-file-out-of-keyboard-reach.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — The results tab's content is loaded by its tab's own
