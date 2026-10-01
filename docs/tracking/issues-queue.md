@@ -22,7 +22,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 | [U45](../specs/U45-dois.md) | 23 | 5 | 8 |  |
 | [U19](../specs/U19-oai-pmh.md) | 26 | 5 | 6 |  |
 | [U21](../specs/U21-submission-wizard.md) | 19 | 4 | 8 |  |
-| [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 |  |
+| [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 | **A4, A5 taken: issues session, VM s1, 2026-10-01** (with U13 OPS1, A6) |
 | [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 |  |
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 |  |
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 |  |
