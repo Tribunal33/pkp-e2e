@@ -754,8 +754,9 @@ Basis: code + probe. <sup>[f-a1](#fn-a1)</sup>
 The daily cleanup that purges expired invitations also deletes every
 invitation still being composed, because drafts never carry a deadline. A
 manager who happens to be mid-wizard when the daily run fires loses the draft,
-and the wizard's next step fails. Such drafts pile up routinely: one pass
-through the edit wizard left three behind, invisible anywhere in the UI.
+and the wizard's next step fails. Such drafts are routine: a wizard left
+before its send leaves one behind, and so does a pass that goes Back to
+Search for another person, invisible anywhere in the UI.
 Question: is same-day draft deletion intended housekeeping?
 Lean: the cleanup is intended, and the mid-wizard window is an accepted-loss
 edge case.
@@ -1363,9 +1364,14 @@ levels is again recorded in the maintainer's private security file.
 **f-a2** — `scopeExpired()` includes `orWhereNull('expiry_date')` (note e);
 `setExpiryDate()` only runs inside `invite()`, so drafts (`INITIALIZED`) always
 have NULL expiry and match the delete. Drafts are invisible in the UI (listing
-scope, note p), so the loss surfaces only as a failed wizard step. Live: one
-edit-mode session created three draft invitations, only the last sent
-(live probe 2026-07-31); the cleanup run itself was not exercised.
+scope, note p), so the loss surfaces only as a failed wizard step. Live:
+before pkp/pkp-lib#13127 every edit on the wizard's later steps started a
+fresh draft (one edit-mode session left three, live probe 2026-07-31); at
+the PR head `47eb5915` (ui-library#989), before its merge, one pass made one
+invitation, and a pass that went Back to Search for a newcomer left the
+first person's draft behind (all three apps, 2026-10-01,
+`checks/sync/ui-library-989/invite-race.js`). The cleanup run itself was not
+exercised.
 
 <a id="fn-a3"></a>
 **f-a3** — Replacement path in note q: the old PENDING row is deleted by

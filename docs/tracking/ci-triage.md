@@ -1170,3 +1170,4 @@ verdict yet) · `ready` (pushed, green at the PR ref, developer told) ·
 
 | App PR | Branch | State | Since | Note (one line) |
 |--------|--------|-------|-------|-----------------|
+| ojs#5882 + ui-library#989 (pkp-lib#13127) | `i13127_main` | investigating | 2026-10-01 | invitation id reset only on invitee change; drives green at the PR head on all three apps; CI dispatch pending |
