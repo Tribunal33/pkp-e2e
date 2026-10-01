@@ -1769,6 +1769,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U45-A13-bulk-action-refusal-no-message.md`): "Deposit
     DOIs" with an unpublished work among the ticked ones shows the "Error"
     window with the server's reason
+  - the guard for A8 (Fields, the DOIs page; issue report
+    `docs/issues/U45-A8-doi-page-controls-unnamed.md`): the button beside
+    "Filters" found by its role and the name "DOI Statuses", and a row's
+    tick box by its role and the item's name
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1838,7 +1842,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | "None" (and every peer review) gets a DOI that is the prefix and a bare "/" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A DOI refused on the DOIs page gets only "Some DOI(s) could not be updated", never the reason | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | After "Deposit DOIs", the item's agency box says it "has been manually registered", though nobody marked it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A8](#a8) | The "DOI Statuses" button and the rows' tick boxes have no name for a screen reader | 🐞 | minor | — |
+| [A8](#a8) | On the DOIs page, a screen reader announces the "DOI Statuses" button and every row's tick box without a name | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | A pattern symbol with nothing to fill it stays in the DOI | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Searching the DOIs page by a DOI misses some DOIs on each app, and fails on a preprint server | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | On the DOIs page, clearing a "Registration" filter chosen after "Unregistered" leaves only published works listed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1962,12 +1966,16 @@ other publishers, so accepting any DOI is intended.
 Basis: probe, 2026-09-26. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — The "DOI Statuses" button and the rows' tick boxes have no name for a screen reader** · 🐞 · minor.
+**A8 — On the DOIs page, a screen reader announces the "DOI Statuses" button and every row's tick box without a name** · 🐞 · low.
 The round button beside "Filters" on the DOIs page shows only a "?"
 icon, and no row's tick box has a label, so a screen reader announces
 "button" and "checkbox" with nothing more. A manager who cannot see the
-screen cannot find the status legend or tell which item a box ticks.
-Basis: probe, 2026-09-26. <sup>f-a8</sup>
+screen cannot tell that the button opens the "DOI Statuses" legend, or
+which item a box ticks, except by reading on to the item's name, which
+comes right after its box. Both controls work from the keyboard, and the
+other controls of the page have names. The DOIs page is there once DOIs
+are turned on for the journal, press or preprint server.
+Basis: probe, 2026-10-01. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — A pattern symbol with nothing to fill it stays in the DOI** · 🐞 · high.
@@ -3751,6 +3759,7 @@ have no label. Live-probed 2026-09-26 (q8), all three apps: the page's
 accessibility tree reads `button` with only an image beside "Filters"
 and `checkbox` with no name on every row; the journal's "Issues" box is
 named "Issues".
+Issue report: [docs/issues/U45-A8-doi-page-controls-unnamed.md](../issues/U45-A8-doi-page-controls-unnamed.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-26 (q14): "%p" on a journal (two runs),

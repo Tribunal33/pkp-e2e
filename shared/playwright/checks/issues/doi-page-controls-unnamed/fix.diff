@@ -1,0 +1,22 @@
+--- a/lib/ui-library/src/components/ListPanel/doi/DoiListItem.vue
++++ b/lib/ui-library/src/components/ListPanel/doi/DoiListItem.vue
+@@ -15,6 +15,7 @@
+ 						@click="toggleSelected"
+ 					/>
+ 				</div>
++				<span class="-screenReader">{{ item.title }}</span>
+ 			</label>
+ 
+ 			<!-- Item overview -->
+--- a/lib/ui-library/src/components/ListPanel/doi/DoiListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/doi/DoiListPanel.vue
+@@ -134,6 +134,9 @@
+ 								@click="openStatusInfoModal"
+ 							>
+ 								<Icon icon="AnonymousReview" class="mt-1 h-4 w-4" />
++								<span class="-screenReader">
++									{{ t('manager.dois.help.statuses.title') }}
++								</span>
+ 							</button>
+ 						</template>
+ 					</PkpHeader>
