@@ -1320,7 +1320,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS9](#ojs9) | A DOAJ deposit that cannot connect to DOAJ leaves the article "Submitted" for good, with no error | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS10](#ojs10) | A journal manager's "Export Issues" list shows the issues in no set order | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP1](#omp1) | Pressing "Tab Delimited Content Import Plugin" on a press's Tools page opens a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [OMP4](#omp4) | Run from the command line, a press's "Tab Delimited Content Import Plugin" stops with a fatal error and leaves an empty submission | 🐞 | minor · crash: server | — |
+| [OMP4](#omp4) | A press's command-line CSV import stops with a fatal error, imports nothing and leaves an empty submission | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | "Export Users" with no row ticked ends on a blank page: the server fails | ❓ | minor · crash: server | — |
 | [A22](#a22) | "Export Users" leaves out an account whose only role starts on a later date | ❓ | minor | — |
 | [OJS8](#ojs8) | DOAJ "Register" checks nothing, "Validate XML before the export and registration." ticked or not | ❓ | minor | — |
@@ -1752,14 +1752,17 @@ series.
 Basis: probe. <sup>f-omp3</sup>
 
 <a id="omp4"></a>
-**OMP4 — The command-line import of tab delimited content stops with a fatal error** · 🐞 · minor · crash: server.
-Run from the server's command line as its own usage text says, with the
-sample file the tool ships, "Tab Delimited Content Import Plugin"
-should add the file's monograph to the press. Instead it prints nothing
-and ends with a fatal error at the first row's author. The press is
-left with a new submission that has no title and no author, and nothing
-of the file is imported. The command line is the tool's only way in
-(OMP1), so a press cannot use the tool at all.
+**OMP4 — A press's command-line CSV import stops with a fatal error, imports nothing and leaves an empty submission** · 🐞 · medium · crash: server.
+A press loads monographs in bulk with "Tab Delimited Content Import
+Plugin", which runs only from the server's command line. With the
+plugin's own sample file, the tool stops with a PHP fatal error at the
+first author, before any import message. No monograph is imported, and
+the rows after that one are never read. Each run also leaves a new
+submission with no title, no author and no file. It sits at the top of
+the editors' "Active submissions" as "Incomplete". A press manager can
+delete it, and the monographs can be entered another way. Only the
+development line has the fault; no release does. Every file fails at its
+first row that names an author.
 Since: 2025-11-20 · Basis: probe, 2026-10-01. <sup>f-omp4</sup>
 
 ### Retired
@@ -3162,6 +3165,7 @@ submission to one: queued, in the submission stage, never completed,
 its one version with no title and no author, and no file. Kept script:
 `shared/playwright/checks/sync/omp-csv-cli/csv-cli.js`. No upstream
 issue found (pkp/pkp-lib#10116 is an older one about other fields).
+Issue report: [docs/issues/U63-OMP4-command-line-csv-import-empty-submission.md](../issues/U63-OMP4-command-line-csv-import-empty-submission.md).
 
 ## Reference — entry points & surfaces
 

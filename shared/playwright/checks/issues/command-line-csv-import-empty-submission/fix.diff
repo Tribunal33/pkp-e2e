@@ -1,0 +1,47 @@
+--- a/plugins/importexport/csv/CSVImportExportPlugin.php
++++ b/plugins/importexport/csv/CSVImportExportPlugin.php
+@@ -21,14 +21,15 @@
+ use APP\publicationFormat\PublicationFormatDAO;
+ use APP\submission\Submission;
+ use APP\template\TemplateManager;
++use PKP\author\contributorRole\ContributorRole;
++use PKP\author\contributorRole\ContributorRoleIdentifier;
++use PKP\author\contributorRole\ContributorType;
+ use PKP\db\DAORegistry;
+ use PKP\file\FileManager;
+ use PKP\plugins\ImportExportPlugin;
+-use PKP\security\Role;
+ use PKP\submission\GenreDAO;
+ use PKP\submission\PKPSubmission;
+ use PKP\submissionFile\SubmissionFile;
+-use PKP\userGroup\UserGroup;
+ 
+ class CSVImportExportPlugin extends ImportExportPlugin
+ {
+@@ -163,12 +164,11 @@
+                 continue;
+             }
+ 
+-            $authorGroup = UserGroup::withContextIds([$press->getId()])
+-                ->withRoleIds([Role::ROLE_ID_AUTHOR])
+-                ->isDefault(true)
+-                ->get()
++            $authorRole = ContributorRole::query()
++                ->withContextId($press->getId())
++                ->withIdentifier(ContributorRoleIdentifier::AUTHOR->getName())
+                 ->first();
+-            if (!$authorGroup) {
++            if (!$authorRole) {
+                 echo __('plugins.importexport.csv.noAuthorGroup', ['press' => $pressPath]) . "\n";
+                 continue;
+             }
+@@ -217,7 +217,8 @@
+                 $author = Repo::author()->newDataObject();
+                 $author->setData('publicationId', $publicationId);
+                 $author->setSubmissionId($submissionId);
+-                $author->setUserGroupId($authorGroup->id);
++                $author->setData('contributorType', ContributorType::PERSON->getName());
++                $author->setContributorRoles([$authorRole]);
+                 $author->setGivenName($givenName, $locale);
+                 $author->setFamilyName($familyName, $locale);
+                 $author->setEmail($emailAddress);

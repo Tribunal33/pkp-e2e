@@ -16,7 +16,6 @@ VM marks also count the VM's issues sessions: at most two run at once
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U63](../specs/U63-import-export.md) | 28 | 9 | 7 | **Taken: issues session, workstation s0, 2026-10-01**; done: A9, A5, A20, A13, A21, A7, A4, A15, A16, A1, A19, A12 (with U74 A16), OMP1, OJS4, OJS7, A8 (two reports; its country line to incidentals), A10, A11, A6, OJS10 (U50 A13 not joined: another cause), OJS9, OJS2, OJS3, OJS5, OJS6, OJS1; out (open report docs/reports/2026-10-01-pkp-lib-13414.md): A23; A17, A18 retired by the upstream session; open: OMP4 |
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s1, 2026-10-01** |
 | [U19](../specs/U19-oai-pmh.md) | 26 | 5 | 6 | **Taken: issues session, VM s2, 2026-10-01**; done: OPS1, OMP4, A1 |
 | [U21](../specs/U21-submission-wizard.md) | 19 | 4 | 8 |  |
@@ -41,7 +40,6 @@ VM marks also count the VM's issues sessions: at most two run at once
 | [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 |  |
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 9 | 1 | 8 |  |
 | [U48](../specs/U48-jats-and-body-text.md) | 17 | 1 | 7 |  |
-| [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 | **A16 taken: issues session, workstation s0, 2026-10-01** (with U63 A12); done: A16 |
 | [U28](../specs/U28-reviewers-review.md) | 14 | 1 | 5 |  |
 | [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 |  |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | A16 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet; the report calls the window's box "Title" where the screen says "Name", and its Reach names "Applied Science" where reach.js uses "Social Sciences" on OPS |
@@ -53,6 +51,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 | [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 |  |
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 8 | 1 | 1 |  |
 | [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 |  |
+| [U74](../specs/U74-onix-metadata-export.md) | 16 | 0 | 6 | A16 done with U63 A12 (docs/issues/U63-A12-native-export-nothing-ticked-empty-tab.md) |
 | [U15](../specs/U15-search.md) | 13 | 0 | 6 |  |
 | [U04](../specs/U04-orcid-integration.md) | 8 | 0 | 6 |  |
 | [U70](../specs/U70-catalog-management.md) | 14 | 0 | 5 |  |
@@ -87,3 +86,4 @@ VM marks also count the VM's issues sessions: at most two run at once
 | [U55](../specs/U55-notify-users.md) | 4 | 0 | 0 |  |
 | [U33](../specs/U33-production-stage.md) | 3 | 0 | 0 |  |
 | [U67](../specs/U67-archiving-preservation.md) | 3 | 0 | 0 |  |
+| [U63](../specs/U63-import-export.md) | 1 | 0 | 0 | A23: open report docs/reports/2026-10-01-pkp-lib-13414.md (the rest of U63 written up by the issues session, workstation s0, 2026-10-01) |
