@@ -18,7 +18,7 @@ and the hourly routine starts one only when none is running
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s0, 2026-10-01**; done: A14, A1, A4, A13, A18, A7, A15, A12 |
-| [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 | **Taken: issues session, VM s1, 2026-10-01**; done: A10 |
+| [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 | **Taken: issues session, VM s1, 2026-10-01**; done: A10 (pkp-e2e#352) |
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 |  |
 | [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 |  |
 | [U51](../specs/U51-subscriptions.md) | 25 | 2 | 12 |  |
