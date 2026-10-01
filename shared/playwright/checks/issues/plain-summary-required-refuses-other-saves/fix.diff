@@ -1,0 +1,51 @@
+--- a/lib/pkp/classes/publication/Repository.php
++++ b/lib/pkp/classes/publication/Repository.php
+@@ -160,10 +160,20 @@
+             $this->getErrorMessageOverrides(),
+         );
+ 
++        $requiredProps = $this->schemaService->getRequiredProps($this->dao->schema);
++
++        // A plain language summary the context requires is required like the schema's
++        // required props once the submission has been submitted: an edit is refused when
++        // it empties the summary, not when it leaves the summary out. While the submission
++        // is in progress, Submission\Repository::validateSubmit() requires it at submission.
++        if ($context->getData('plainLanguageSummary') === Context::METADATA_REQUIRE && !$submission->getData('submissionProgress')) {
++            $requiredProps[] = 'plainLanguageSummary';
++        }
++
+         ValidatorFactory::required(
+             $validator,
+             $publication,
+-            $this->schemaService->getRequiredProps($this->dao->schema),
++            $requiredProps,
+             $this->schemaService->getMultilingualProps($this->dao->schema),
+             $allowedLocales,
+             $primaryLocale
+@@ -225,15 +235,6 @@
+                 }
+             });
+         }
+-
+-        // validate the requirement of Plain language summary
+-        $validator->after(function ($validator) use ($props, $context, $primaryLocale) {
+-            if ($context->getData('plainLanguageSummary') === Context::METADATA_REQUIRE) {
+-                if (empty($props['plainLanguageSummary']) || !isset($props['plainLanguageSummary'][$primaryLocale])) {
+-                    $validator->errors()->add('plainLanguageSummary.' . $primaryLocale, __('validator.required'));
+-                }
+-            }
+-        });
+ 
+         // If a new file has been uploaded, check that the temporary file exists and
+         // the current user owns it
+--- a/lib/pkp/classes/validation/ValidatorFactory.php
++++ b/lib/pkp/classes/validation/ValidatorFactory.php
+@@ -198,7 +198,7 @@
+                 // required in the primary locale
+                 if (in_array($requiredProp, $multilingualProps)) {
+                     if (is_null($object)) {
+-                        if (self::isEmpty($props[$requiredProp]) || self::isEmpty($props[$requiredProp][$primaryLocale])) {
++                        if (self::isEmpty($props[$requiredProp] ?? null) || self::isEmpty($props[$requiredProp][$primaryLocale] ?? null)) {
+                             $validator->errors()->add($requiredProp . '.' . $primaryLocale, __('validator.required'));
+                         }
+                     } else {

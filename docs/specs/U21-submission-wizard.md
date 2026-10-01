@@ -973,6 +973,7 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a journal that requires the plain language summary: the start page's title, a "Details" save before the summary is typed and the "References" box all saved, and "Submit" disabled until the summary is typed (A20; the guard its issue report names)
   - the Review step after a language change asking for the new language's title, contributor names and typed institution names, the affiliation copied from the author's profile included, with "Submit" disabled until they are typed (Rule 11): likely bullets in scenario 5, which changes the language and reaches Review
   - the timer's minute counted from the last save, not from the end of typing: scenario 3's "Saving" coming as the footer reaches "Last saved 1 minute ago", and a step with no change sending nothing (Rule 9): the suites move the page's clock on a minute after the typing, which cannot tell the two readings apart
 - **Rarely met**:
@@ -1055,7 +1056,7 @@ are the source; badges, Impact and Basis:
 | [A16](#a16) | A plain language summary over the section's word limit is refused on save with an unexplained error, and the wizard hangs on "Saving" with "Submit" disabled | 🐞 | user-visible · crash: script | — |
 | [A18](#a18) | A change typed more than a minute after the last save is saved cut after its first letters; the rest waits another minute | 🐞 | minor | — |
 | [A19](#a19) | After any save the server refuses, the submission wizard hangs on "Saving" until reloaded | 🐞 | user-visible · crash: script | — |
-| [A20](#a20) | Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang | 🐞 | user-visible · crash: script | — |
+| [A20](#a20) | Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | minor | — |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
 | [OPS3](#ops3) | A preprint author's own "Cancel" is silently refused; the draft survives with no message | 🐞 | user-visible | — |
@@ -1320,10 +1321,11 @@ only a refusal hangs (Rule 9c). What the server refuses is [A16](#a16),
 Basis: probe, 2026-10-01. <sup>[fn-a19](#fn-a19)</sup>
 
 <a id="a20"></a>
-**A20 — Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang** · 🐞 · user-visible · crash: script.
+**A20 — Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang** · 🐞 · high · crash: script.
 With Settings › Workflow › Submission › "Metadata" set to require the
-plain language summary, the server refuses these wizard saves, and the
-wizard hangs [A19](#a19):
+plain language summary, the title typed on the start page is lost
+without any message, and the server refuses these wizard saves, after
+which the wizard hangs [A19](#a19):
 - On "Details", a change saved while the summary's box is still empty
   (a new Title, say). Once the summary is typed, the "Details" save
   goes through, but text typed in the step's "References" box is
@@ -1336,8 +1338,11 @@ wizard hangs [A19](#a19):
   Changes" offers after a reload (Rule 9c), so it cannot be saved while
   the setting is on.
 
-With the summary only asked for, the same saves go through and the text
-survives a reload. The same requirement refuses the Publication pages'
+An author who types the title again, the abstract and the summary on
+"Details" before its first save, and leaves "References" empty, can
+still submit, but without references and, on a preprint server,
+without a relation status. With the summary only asked for, the same
+saves go through and the text survives a reload. The same requirement refuses the Publication pages'
 saves after submission
 ([→ Publication metadata A1](U40-publication-metadata.md#a1)).
 Basis: probe, 2026-10-01. <sup>[fn-a20](#fn-a20)</sup>
@@ -2422,6 +2427,7 @@ nothing stored. OPS, an answer ticked after the hang, offered by
 error again; ticked again on "For Readers" after a plain reload: the
 same. Controls, the summary at ask: the same drives answered 200 and
 the text read back after a reload.
+Issue report: [docs/issues/U21-A20-plain-summary-required-refuses-other-saves.md](../issues/U21-A20-plain-summary-required-refuses-other-saves.md).
 
 <a id="fn-omp1"></a>
 **fn-omp1** — OMP divergence points: `StartSubmission` (OMP) adds

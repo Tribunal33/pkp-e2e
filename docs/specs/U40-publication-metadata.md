@@ -906,6 +906,11 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a journal that requires the plain language summary: the
+    Metadata and Permissions & Disclosure pages saved after the summary
+    is stored, the journal's "Review Publishing Details" Confirm
+    reaching scheduling, and an emptied summary on Title & Abstract
+    still refused (A1; the guard its issue report names)
   - term suggestions: a term on another submission's published version
     offered below the typed text, and a term on a submission not
     published, or in another journal, not offered (Rule 7b): likely a
@@ -986,7 +991,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | With Plain Language Summary required, no Publication page but Title & Abstract can be saved, even after the summary is stored, and a journal's pre-scheduling panel is refused silently | 🐞 | user-visible | — |
+| [A1](#a1) | With Plain Language Summary required, no Publication page but Title & Abstract can be saved, even after the summary is stored, and a journal's pre-scheduling panel is refused silently | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | Reset permissions stamps Copyright Year 1970 on unpublished items (journal on article-date basis; preprint server) | 🐞 | user-visible | — |
 | [A15](#a15) | The freshly opened language panel acts before its loading settles: stale guidance and prefill kept (journal), the old language's title stored as the new language's title (press and preprint server) | 🐞 | user-visible | — |
 | [A13](#a13) | Cancelling the reset-permissions confirm box leaves the button greyed until a reload | 🐞 | minor | — |
@@ -1020,9 +1025,9 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 ### All apps
 
 <a id="a1"></a>
-**A1 — Requiring a plain language summary blocks every other save** · 🐞 · user-visible.
+**A1 — Requiring a plain language summary blocks every other save** · 🐞 · high · crash: script.
 With Settings › Workflow › Submission › "Metadata" set to "Require the author to provide
-a plain language summary…", pressing Save on the Metadata, Data or
+a plain language summary…", pressing Save on the Metadata, Data, Identifiers or
 Permissions & Disclosure page is refused with "Please correct one error.
 Go to plainLanguageSummary: This field is required. Jump to next error".
 None of those pages carries the summary field. The message shows a raw
@@ -1040,7 +1045,7 @@ form's title is dropped without a message, and an empty summary on
 Details produces "Error An unexpected error has occurred. Please reload
 the page and try again." while the wizard moves on. That leg is recorded
 in *[Submission wizard](U21-submission-wizard.md)*.
-Since: live-probed 2026-08-28 · Basis: probe. <sup>f-a1</sup>
+Since: live-probed 2026-08-28 · Basis: probe, 2026-10-01. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — Reset permissions writes the year 1970 on unpublished items** · 🐞 · user-visible.
@@ -2352,6 +2357,7 @@ Continue answered 400 and the dialog "Error An unexpected error has
 occurred. Please reload the page and try again." appeared while the
 rail moved to Contributors; with the summary filled, Details saved and
 the Review step flagged the lost Title "This field is required."
+Issue report: [docs/issues/U21-A20-plain-summary-required-refuses-other-saves.md](../issues/U21-A20-plain-summary-required-refuses-other-saves.md).
 
 <a id="fn-f-a2"></a>
 **f-a2 — A2 evidence.** `Repo::submission()->resetPermissions()` calls
