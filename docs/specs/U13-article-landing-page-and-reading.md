@@ -2562,7 +2562,7 @@ the current publication is linked, one with no file too, whose
 may not open; the Author landed on
 `user/authorizationDenied?message=user.authorization.roleBasedAccessDenied`.
 Live-probed 2026-09-25, note q3, both apps.
-Issue report: [docs/issues/U13-A5-author-view-submission-access-denied.md](../issues/U13-A5-author-view-submission-access-denied.md).
+Issue report: [pkp-e2e#222](https://github.com/jardakotesovec/pkp-e2e/issues/222) ([docs/issues/U13-A5-author-view-submission-access-denied.md](../issues/U13-A5-author-view-submission-access-denied.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `article.tpl` / `preprint.tpl` pass
