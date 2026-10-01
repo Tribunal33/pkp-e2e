@@ -1,0 +1,56 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldPubId.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldPubId.vue
+@@ -37,6 +37,7 @@
+ 			<PkpButton
+ 				v-if="pattern && canGenerateId && !currentValue"
+ 				class="pkpFormField--pubid__button"
++				:is-disabled="!canChange"
+ 				@click="assignId"
+ 			>
+ 				{{ assignIdLabel }}
+@@ -45,6 +46,7 @@
+ 				v-else-if="pattern && currentValue"
+ 				class="pkpFormField--pubid__button"
+ 				:is-warnable="true"
++				:is-disabled="!canChange"
+ 				@click="() => (currentValue = '')"
+ 			>
+ 				{{ clearIdLabel }}
+@@ -84,6 +86,9 @@
+ 		FieldError,
+ 	},
+ 	extends: FieldBase,
++	inject: {
++		formCanSubmit: {default: null},
++	},
+ 	props: {
+ 		assignIdLabel: {
+ 			type: String,
+@@ -179,6 +184,16 @@
+ 	},
+ 	computed: {
+ 		/**
++		 * May the user change the value? "Assign" and "Clear" change
++		 * what the form saves, so they follow the form's own "Save".
++		 *
++		 * @return {Boolean}
++		 */
++		canChange() {
++			return this.formCanSubmit ? this.formCanSubmit() : true;
++		},
++
++		/**
+ 		 * Is all required info available to generate a pub id
+ 		 * according to the pattern?
+ 		 *
+--- a/lib/ui-library/src/components/Form/Form.vue
++++ b/lib/ui-library/src/components/Form/Form.vue
+@@ -99,6 +99,8 @@
+ 	provide() {
+ 		return {
+ 			requireWhen: (isRequired) => requireWhen(isRequired, this.fields),
++			// Lets a field's own actions follow the form's edit gate (see FieldPubId)
++			formCanSubmit: () => this.canSubmit,
+ 		};
+ 	},
+ 	props: {
