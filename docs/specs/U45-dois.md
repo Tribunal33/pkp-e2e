@@ -1745,6 +1745,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U45-A18-deposit-unreachable-agency-stays-submitted.md`):
     a deposit the test install cannot send to the agency turns the item
     "Error" with "View Error", and "Has Error" lists it {OJS OPS}
+  - the guard for OMP1 (Rules 4, 22; issue report
+    `docs/issues/U45-OMP1-file-dois-ignored-on-dois-page.md`): a press
+    with "Files" alone ticked listing its books on the DOIs page, and a
+    book missing only its file DOI listed under "Needs DOI" {OMP}
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1829,7 +1833,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A22](#a22) | After "Assign DOIs" answered at once, the "Bulk Actions" menu stays open over the list | 🐞 | minor | — |
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | The publish window lists the ISSN warning twice | 🐞 | minor | — |
-| [OMP1](#omp1) | A press's DOIs page ignores file DOIs when choosing which books to list | 🐞 | user-visible | — |
+| [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | A DOI typed into a book's empty file row fails on the server, yet is stored | 🐞 | minor · crash: server | — |
 | [OPS1](#ops1) | The "DOIs" box reads "…to assigned to works published on this server." | 🐞 | minor | — |
 | [OPS3](#ops3) | The Crossref "Username" help reads "…see the advise above." | 🐞 | minor | — |
@@ -2161,14 +2165,19 @@ Basis: probe, 2026-09-26. <sup>f-ojs3</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — A press's DOIs page ignores file DOIs when choosing which books to list** · 🐞 · user-visible.
-A press ticks "Files" alone and saves: the side menu shows "DOIs" and
-the page opens on "Monographs", but the list reads "No items found.",
-so its files' DOIs can be neither seen nor assigned there. With
-"Monographs" also ticked the same books are listed with their file
-rows, but the "Needs DOI" filter still ignores the file DOIs, so a book
-missing only its file DOI is not listed under it.
-Basis: probe, 2026-09-26. <sup>f-omp1</sup>
+**OMP1 — A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs** · 🐞 · medium.
+A press ticks "Files" alone under "Items with DOIs" and saves. Its DOIs
+page then reads "No items found.", so the files' DOIs can be neither
+seen nor assigned there. With "Monographs" ticked as well, the press's
+books are listed with their file rows, but the "Needs DOI" filter
+ignores file DOIs. A book that has its own DOI but whose file has none
+is left out, although that file's row reads "Needs DOI". For a press
+that wants DOIs on files only, the way round is to tick a second kind,
+such as "Monographs". "Assign DOIs" then also gives each book a DOI of
+that kind, which the press must accept or delete row by row. Publishing
+a book still gives its files DOIs by themselves, unless "Automatic DOI
+Assignment" is "Never".
+Basis: probe, 2026-10-01. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
 **OMP2 — A DOI typed into a book's empty file row fails on the server, yet is stored** · 🐞 · minor · crash: server.
@@ -3831,6 +3840,7 @@ with its own DOI and an empty file DOI is not under "Needs DOI" (two
 runs). Live-probed again 2026-09-29 (q28, q33), OMP, two runs: "Files"
 alone "No items found."; with the four kinds ticked a book missing only
 its file DOI is not under "Needs DOI".
+Issue report: [docs/issues/U45-OMP1-file-dois-ignored-on-dois-page.md](../issues/U45-OMP1-file-dois-ignored-on-dois-page.md).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Live-probed 2026-09-29 (Rule 45), OMP, two runs: on a

@@ -1,0 +1,98 @@
+--- a/classes/submission/Collector.php
++++ b/classes/submission/Collector.php
+@@ -18,7 +18,9 @@
+ use APP\facades\Repo;
+ use APP\publication\Publication;
+ use Illuminate\Database\Query\Builder;
++use Illuminate\Database\Query\JoinClause;
+ use Illuminate\Support\Facades\DB;
++use PKP\submissionFile\SubmissionFile;
+ 
+ class Collector extends \PKP\submission\Collector
+ {
+@@ -71,12 +73,15 @@
+                 ->from('publications as current_p')
+                 ->leftJoin('submission_chapters as current_c', 'current_p.publication_id', '=', 'current_c.publication_id')
+                 ->leftJoin('publication_formats as current_pf', 'current_p.publication_id', '=', 'current_pf.publication_id')
++                ->leftJoin('submission_files as current_sf', fn (JoinClause $join) => $this->joinFormatProofFiles($join))
+                 ->leftJoin('dois as pd', 'pd.doi_id', '=', 'current_p.doi_id')
+                 ->leftJoin('dois as cd', 'cd.doi_id', '=', 'current_c.doi_id')
+                 ->leftJoin('dois as pfd', 'pfd.doi_id', '=', 'current_pf.doi_id')
++                ->leftJoin('dois as sfd', 'sfd.doi_id', '=', 'current_sf.doi_id')
+                 ->whereIn('pd.status', $this->doiStatuses)
+                 ->orWhereIn('cd.status', $this->doiStatuses)
+-                ->orWhereIn('pfd.status', $this->doiStatuses);
++                ->orWhereIn('pfd.status', $this->doiStatuses)
++                ->orWhereIn('sfd.status', $this->doiStatuses);
+         });
+     }
+ 
+@@ -92,6 +97,7 @@
+                 ->leftJoin('submission_chapters as current_c', 'current_p.publication_id', '=', 'current_c.publication_id')
+                 ->leftJoin('submission_chapter_settings as current_cs', 'current_cs.chapter_id', '=', 'current_c.chapter_id')
+                 ->leftJoin('publication_formats as current_pf', 'current_p.publication_id', '=', 'current_pf.publication_id')
++                ->leftJoin('submission_files as current_sf', fn (JoinClause $join) => $this->joinFormatProofFiles($join))
+                 ->where(function (Builder $q) {
+                     $q->when($this->hasDois === true, function (Builder $q) {
+                         $q->when(in_array(Repo::doi()::TYPE_PUBLICATION, $this->enabledDoiTypes), function (Builder $q) {
+@@ -103,6 +109,9 @@
+                         $q->when(in_array(Repo::doi()::TYPE_REPRESENTATION, $this->enabledDoiTypes), function (Builder $q) {
+                             $q->orWhereNotNull('current_pf.doi_id');
+                         });
++                        $q->when(in_array(Repo::doi()::TYPE_SUBMISSION_FILE, $this->enabledDoiTypes), function (Builder $q) {
++                            $q->orWhereNotNull('current_sf.doi_id');
++                        });
+                     });
+                     $q->when($this->hasDois === false, function (Builder $q) {
+                         $q->when(in_array(Repo::doi()::TYPE_PUBLICATION, $this->enabledDoiTypes), function (Builder $q) {
+@@ -124,6 +133,12 @@
+                                 $q->whereNotNull('current_pf.publication_format_id');
+                             });
+                         });
++                        $q->when(in_array(Repo::doi()::TYPE_SUBMISSION_FILE, $this->enabledDoiTypes), function (Builder $q) {
++                            $q->orWhere(function (Builder $q) {
++                                $q->whereNull('current_sf.doi_id');
++                                $q->whereNotNull('current_sf.submission_file_id');
++                            });
++                        });
+                     });
+                 });
+         });
+@@ -155,6 +170,14 @@
+                         $q->leftJoin('publication_formats as pfOnDoiPage', 'pOnDoiPage.publication_id', '=', 'pfOnDoiPage.publication_id')
+                             ->orWhereNotNull('pfOnDoiPage.doi_id');
+                     });
++                    $q->when(in_array(Repo::doi()::TYPE_SUBMISSION_FILE, $this->enabledDoiTypes), function (Builder $q) {
++                        $q->orWhereIn('pOnDoiPage.submission_id', function (Builder $q) {
++                            $q->select('sfOnDoiPage.submission_id')
++                                ->from('submission_files as sfOnDoiPage')
++                                ->where('sfOnDoiPage.file_stage', '=', SubmissionFile::SUBMISSION_FILE_PROOF)
++                                ->whereNotNull('sfOnDoiPage.doi_id');
++                        });
++                    });
+                 });
+         });
+     }
+@@ -166,10 +189,22 @@
+             Repo::doi()::TYPE_PUBLICATION,
+             Repo::doi()::TYPE_CHAPTER,
+             Repo::doi()::TYPE_REPRESENTATION,
++            Repo::doi()::TYPE_SUBMISSION_FILE,
+         ];
+     }
+ 
+     /**
++     * Join each publication format's files as the DOIs page lists them:
++     * the proof files assigned to the format (APP\publication\maps\Schema).
++     */
++    protected function joinFormatProofFiles(JoinClause $join): JoinClause
++    {
++        return $join->on('current_sf.assoc_id', '=', 'current_pf.publication_format_id')
++            ->where('current_sf.assoc_type', '=', Application::ASSOC_TYPE_REPRESENTATION)
++            ->where('current_sf.file_stage', '=', SubmissionFile::SUBMISSION_FILE_PROOF);
++    }
++
++    /**
+      * @copydoc CollectorInterface::getQueryBuilder()
+      */
+     public function getQueryBuilder(): Builder
