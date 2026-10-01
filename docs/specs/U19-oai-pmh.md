@@ -1962,7 +1962,7 @@ Issue report: [pkp-e2e#280](https://github.com/jardakotesovec/pkp-e2e/issues/280
 
 <a id="fn-f-a19"></a>
 **f-a19** — Live-probed 2026-09-26, OJS and OPS: note q10. Code: note j.
-Issue report: [docs/issues/U19-A19-oai-deleted-section-set-lists-nothing.md](../issues/U19-A19-oai-deleted-section-set-lists-nothing.md).
+Issue report: [pkp-e2e#309](https://github.com/jardakotesovec/pkp-e2e/issues/309) ([docs/issues/U19-A19-oai-deleted-section-set-lists-nothing.md](../issues/U19-A19-oai-deleted-section-set-lists-nothing.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Live-probed 2026-09-26, OJS and OPS, two sweep runs: note q11, the last read; `publicknowledge`'s deleted records of the day (OJS 198, 447, 512; OPS 174, 227) were listed for `from=2030-01-01` at its own and the site-wide address. Code: note l.
