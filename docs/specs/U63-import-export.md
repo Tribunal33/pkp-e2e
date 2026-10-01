@@ -1284,10 +1284,10 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS1](#ojs1) | The DOAJ list's issue link opens the issue's window headed "DOI Plugin Settings" | 🐞 | minor | — |
 | [OJS2](#ojs2) | With "DOAJ Plugin" off, the Plugins list still offers "DOAJ Export Plugin" and its "Import/Export Data" | 🐞 | minor | — |
 | [OJS3](#ojs3) | Once "NLM Title Abbreviation" is saved empty, the PubMed file's journal title is empty | 🐞 | minor | — |
-| [OJS4](#ojs4) | Where NLM's site cannot be reached, every PubMed export fails with a "Validation errors:" page | 🐞 | minor · crash: server | — |
+| [OJS4](#ojs4) | Where NLM's site cannot be reached, every PubMed export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS5](#ojs5) | The PubMed and DOAJ Settings forms' "Cancel" does nothing, and both say fields are required when none is | 🐞 | minor | — |
 | [OJS6](#ojs6) | The DOAJ list's title and author search matches letter case as typed | 🐞 | minor | — |
-| [OJS7](#ojs7) | Where DOAJ's site cannot be reached, every validated DOAJ export fails with a "Validation errors:" page | 🐞 | minor · crash: server | — |
+| [OJS7](#ojs7) | Where DOAJ's site cannot be reached, every validated DOAJ export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS9](#ojs9) | A DOAJ deposit that cannot reach DOAJ leaves the article "Submitted" for good | 🐞 | minor | — |
 | [OJS10](#ojs10) | "Export Issues" lists the journal's issues in no set order | 🐞 | minor | — |
 | [OMP1](#omp1) | Pressing "Tab Delimited Content Import Plugin" on a press's Tools page opens a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1556,13 +1556,13 @@ saved; instead every later file's journal title is empty.
 Basis: probe. <sup>f-ojs3</sup>
 
 <a id="ojs4"></a>
-**OJS4 — PubMed exports depend on NLM's site** · 🐞 · minor · crash: server.
+**OJS4 — PubMed exports depend on NLM's site** · 🐞 · medium · crash: server.
 "Export Articles" and "Export Issues" should download the PubMed file.
 Each export fetches PubMed's format from NLM's site to check the file;
 where that site cannot be reached, the server fails and the export
 leaves the tool for a page of "Validation errors:" and the file's text,
 with no download and no way to skip the check.
-Basis: probe. <sup>f-ojs4</sup>
+Basis: probe, 2026-10-01. <sup>f-ojs4</sup>
 
 <a id="ojs5"></a>
 **OJS5 — The tools' Settings "Cancel" does nothing** · 🐞 · minor.
@@ -1582,13 +1582,13 @@ checked (its default collation would ignore case).
 Basis: probe. <sup>f-ojs6</sup>
 
 <a id="ojs7"></a>
-**OJS7 — Validated DOAJ exports depend on DOAJ's site** · 🐞 · minor · crash: server.
+**OJS7 — Validated DOAJ exports depend on DOAJ's site** · 🐞 · medium · crash: server.
 "Export" with "Validate XML before the export and registration." ticked
-should refuse only a file that fails DOAJ's format. The check loads
-part of that format from DOAJ's site; where the site cannot be reached,
-the server fails and every export is refused with a "Validation
-errors:" page, whatever the file holds.
-Basis: probe. <sup>f-ojs7</sup>
+should refuse only a file that fails DOAJ's format. The check loads part
+of that format from DOAJ's site; where the site cannot be reached, the
+server fails and every export is refused with a "Validation errors:"
+page, whatever the file holds.
+Basis: probe, 2026-10-01. <sup>f-ojs7</sup>
 
 <a id="ojs8"></a>
 **OJS8 — "Register" skips the XML check** · ❓ · minor.
@@ -2970,6 +2970,7 @@ article ticked, three times each per run, 12 of 12 presses answered
 the log each time "DOMDocument::validate(…PubMed.dtd): Failed to open
 stream: Connection refused", "Filter output validation failed" and
 "Uncaught Exception: Could not convert selected objects.".
+Issue report: [docs/issues/U63-OJS4-OJS7-pubmed-doaj-export-needs-outside-sites.md](../issues/U63-OJS4-OJS7-pubmed-doaj-export-needs-outside-sites.md).
 
 <a id="fn-f-ojs5"></a>
 **f-ojs5** — Note p. Live-probed 2026-09-27 on both Settings tabs.
@@ -2988,6 +2989,7 @@ install on the test machines.
 www.doaj.org). Live-probed 2026-09-27: `POST
 …/DOAJExportPlugin/exportSubmissions` answered 500 twice, for journals
 with and without an ISSN.
+Issue report: [docs/issues/U63-OJS4-OJS7-pubmed-doaj-export-needs-outside-sites.md](../issues/U63-OJS4-OJS7-pubmed-doaj-export-needs-outside-sites.md).
 
 <a id="fn-f-ojs8"></a>
 **f-ojs8** — Notes r, u. Live-probed 2026-09-27: "Register" posted
