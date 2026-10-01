@@ -1828,7 +1828,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | Clearing a "Registration" filter after "Unregistered" keeps unpublished works out of the list | 🐞 | minor | — |
 | [A13](#a13) | A refused or failed bulk action closes its window with no message | 🐞 | minor | — |
 | [A14](#a14) | The "Mark DOIs Needs Sync" question asks to mark the records "as stale" | 🐞 | minor | — |
-| [A15](#a15) | "Deposit DOIs" reports success for a work with no DOI, and nothing is sent | 🐞 | minor · crash: server | — |
+| [A15](#a15) | "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | A new major version leaves the earlier version's deposited DOI as it was | 🐞 | minor | — |
 | [A18](#a18) | A DOI deposit that cannot connect to Crossref or DataCite reads "Submitted" for good, with no error | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | Saving a DOI registration agency can untick every DOI kind and leave the DOIs page blank | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
@@ -2019,13 +2019,23 @@ so the manager confirms a status the screen never names.
 Basis: probe, 2026-09-26. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — "Deposit DOIs" reports success for a work with no DOI, and nothing is sent** · 🐞 · minor · crash: server.
-A manager ticks a published work that has no DOI and presses "Deposit
-DOIs". The notice reads "Items successfully submitted for deposit", but
-the row stays "Needs DOI" and the background deposit fails on the
-server, so nothing reaches the agency. "Export DOIs" refuses the same
-work ([A13](#a13)).
-Basis: probe, 2026-09-26. <sup>f-a15</sup>
+**A15 — "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited** · 🐞 · medium · crash: server.
+A manager ticks a published work that has no DOI on the DOIs page and
+presses "Deposit DOIs". The page reports "Items successfully submitted
+for deposit", but the work stays "Needs DOI", nothing reaches the
+registration agency, and the background deposit fails on the server.
+Only the site administrator's "Failed Jobs" page shows the failure. The
+way round is to give the work a DOI first ("Assign DOIs") and deposit
+again. With DataCite, a work whose article DOI was cleared while its
+galley kept one fares worse: the galley's DOI turns "Submitted" and
+stays so, though nothing was sent. It needs a registration agency
+(Crossref, or DataCite on a journal) and a published work without an
+article or preprint DOI. Every work published before the journal or
+server set its DOI prefix is in that state, as are works whose DOI was
+cleared. On 3.5 the same notice shows, and the work is sent to Crossref
+with an empty DOI, which cannot register anything; the work stays "Needs
+DOI" and no error is recorded.
+Basis: probe, 2026-10-01. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — A "Needs Sync" item's agency panel says its metadata "has not been submitted"** · ❓ · minor.
@@ -3748,6 +3758,7 @@ same notice for a work whose article DOI was emptied): "Deposit DOIs"
 answered 200 with the notice, the row stayed "Needs DOI", and the queued
 `PKP\jobs\doi\DepositSubmission` job failed with "invalid.job.payload"
 (`DepositSubmission.php`).
+Issue report: [docs/issues/U45-A15-deposit-without-doi-reports-success.md](../issues/U45-A15-deposit-without-doi-reports-success.md).
 
 <a id="fn-f-a16"></a>
 **f-a16** — `DoiListItem.vue` shows `notSubmittedDescription` and

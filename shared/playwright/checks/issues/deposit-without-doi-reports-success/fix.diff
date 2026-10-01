@@ -1,0 +1,15 @@
+--- a/lib/pkp/api/v1/dois/PKPDoiController.php
++++ b/lib/pkp/api/v1/dois/PKPDoiController.php
+@@ -532,6 +532,12 @@
+             ->getIds()
+             ->toArray();
+ 
++        // Only a work with a published DOI can be deposited: the same rule as exportSubmissions() and DepositSubmission::handle()
++        $validIds = array_intersect(
++            $validIds,
++            Repo::publication()->getExportableDOIsSubmissionIds($context->getId(), (bool) $context->getData(Context::SETTING_DOI_VERSIONING))
++        );
++
+         $invalidIds = array_diff($requestIds, $validIds);
+         if (count($invalidIds)) {
+             return response()->json([
