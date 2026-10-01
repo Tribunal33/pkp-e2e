@@ -2649,7 +2649,7 @@ whenever the shown publication is not the current one, previews
 included; the date it names is the day of the preview, the unpublished
 version having no publication date of its own. Live-probed 2026-09-25,
 note q3.
-Issue report: [docs/issues/U13-OPS1-new-version-preview-called-outdated.md](../issues/U13-OPS1-new-version-preview-called-outdated.md).
+Issue report: [pkp-e2e#209](https://github.com/jardakotesovec/pkp-e2e/issues/209) ([docs/issues/U13-OPS1-new-version-preview-called-outdated.md](../issues/U13-OPS1-new-version-preview-called-outdated.md)).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — Note f: `PreprintHandler::initialize()` overwrites the first
