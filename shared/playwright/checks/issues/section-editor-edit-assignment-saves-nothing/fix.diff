@@ -1,0 +1,65 @@
+--- a/lib/pkp/classes/security/Validation.php
++++ b/lib/pkp/classes/security/Validation.php
+@@ -511,8 +511,9 @@
+     /**
+      * Check if the user can edit another user stage assignment in the participants grid
+      *
++     * @param int $stageId The workflow stage the participants are edited on (a stage assignment holds no stage of its own)
+      */
+-    public static function canEditParticipant(User $user, Submission $submission, StageAssignment $stageAssignment): bool
++    public static function canEditParticipant(User $user, Submission $submission, StageAssignment $stageAssignment, int $stageId): bool
+     {
+         // Admins and managers always can edit stage participants
+         if ($user->hasRole([Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER], $submission->getData('contextId'))) {
+@@ -524,7 +525,7 @@
+          */
+         $stageAssignments = StageAssignment::with('userGroup')
+             ->withSubmissionIds([$submission->getId()])
+-            ->withStageIds([$stageAssignment->stageId])
++            ->withStageIds([$stageId])
+             ->withUserId($user->getId())
+             ->get();
+ 
+@@ -539,12 +540,18 @@
+         }
+ 
+         // Don't allow to edit own assignments
+-        if ($user->getId() === $stageAssignment->userId) {
++        if ($user->getId() == $stageAssignment->userId) {
++            return false;
++        }
++
++        // Recommend-only editors aren't allowed to edit other editors' assignments
++        $isRecommendOnly = $stageAssignments->contains(fn (StageAssignment $assignment) => (bool) $assignment->recommendOnly);
++        if ($isRecommendOnly && $stageAssignment->userGroup->roleId == Role::ROLE_ID_SUB_EDITOR) {
+             return false;
+         }
+ 
+         // Editors aren't allowed to edit managers' assignments
+-        $editableUser = Repo::user()->getCollector()->filterByUserIds([$stageAssignment->getUserId()])->getMany()->first();
++        $editableUser = Repo::user()->getCollector()->filterByUserIds([$stageAssignment->userId])->getMany()->first();
+         if ($editableUser->hasRole([Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN], $submission->getData('contextId'))) {
+             return false;
+         }
+--- a/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
+@@ -336,7 +336,7 @@
+         $form->readInputData();
+         if ($form->validate()) {
+             $stageAssignment = $assignmentId ? StageAssignment::find($assignmentId) : null;
+-            if ($stageAssignment && !Validation::canEditParticipant($request->getUser(), $submission, $stageAssignment)) {
++            if ($stageAssignment && !Validation::canEditParticipant($request->getUser(), $submission, $stageAssignment, (int) $stageId)) {
+                 return new JSONMessage(true, $form->fetch($request));
+             }
+ 
+--- a/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridRow.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridRow.php
+@@ -90,7 +90,7 @@
+                     )
+                 );
+ 
+-                if (Validation::canEditParticipant($request->getUser(), $submission, $stageAssignment)) {
++                if (Validation::canEditParticipant($request->getUser(), $submission, $stageAssignment, (int) $stageId)) {
+                     $this->addAction(
+                         new LinkAction(
+                             'requestAccount',

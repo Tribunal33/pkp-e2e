@@ -913,6 +913,10 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A1 (issue report
+    `docs/issues/U35-A1-section-editor-edit-assignment-saves-nothing.md`):
+    a Section Editor changing the Author's "Permissions" in "Edit
+    Assignment", the notice and the changed box read
   - the guard for OMP1 (issue report
     `docs/issues/U35-OMP1-internal-review-no-predefined-message.md`):
     the predefined messages of a press's Internal Review, read as a set
@@ -970,7 +974,7 @@ entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A Section Editor's "OK" on "Edit Assignment" saves nothing and shows the form again | 🐞 | user-visible | — |
+| [A1](#a1) | A Section Editor's "OK" on a participant's "Edit Assignment" saves nothing and shows the form again | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A message typed in "Assign" or "Notify" with no predefined message chosen is not sent | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | "OK" on "Assign Participant" with nobody chosen, or with a person from the previous role's list, assigns nobody and gives no reason | 🐞 | minor | — |
 | [A5](#a5) | The discussion a message opens is listed as created by the person it was sent to | 🐞 | minor | — |
@@ -997,14 +1001,18 @@ entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — A Section Editor's "Edit" saves nothing** · 🐞 · user-visible.
-An assigned Section Editor or Guest Editor is offered "Edit" on the rows of
-the assistants, the Author and the other editors they may change, and the
-"Edit Assignment" window shows them the boxes. Pressing "OK" is expected to
-save the change and close the window. Instead the window shows its form
-again with the boxes as they were, no notice and no reason, and the row
-keeps its old limits. A Journal Manager's "OK" on the same row saves.
-Since: 2026-04-02 · Basis: probe. <sup>[f-a1](#fn-a1)</sup>
+**A1 — A Section Editor's "OK" on a participant's "Edit Assignment" saves nothing and shows the form again** · 🐞 · medium.
+A Section Editor assigned to a submission (a Series Editor on a press, a
+Moderator on a preprint server) is offered "Edit" on the Participants
+rows of the Author, the assistants and the other section editors, never
+on their own. The "Edit Assignment" window shows the "Permissions" box,
+and on another section editor's row also "Assignment privileges".
+Pressing "OK" is expected to save the boxes and close the window.
+Instead the window shows its form again with the boxes as they were,
+with no notice and no reason, and nothing is saved.
+A Journal Manager or Editor making the same change on the same row saves
+it.
+Since: 2026-04-02 · Basis: probe, 2026-10-01. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — "Remove" is offered where "Edit" is refused** · ❓ · minor.
@@ -1358,6 +1366,7 @@ Basis: test run. <sup>[f-ops4](#fn-ops4)</sup>
 
 <a id="fn-a1"></a>
 **f-a1** — Live-probed 2026-09-22 (all three apps, a journal's Guest Editor too): note td3. `Validation::canEditParticipant()` (added by pkp/pkp-lib#12497, lib/pkp `7ce4f2e80`, 2026-04-02) lets a Manager or Site Admin through, and for anyone else looks up the current user's assignments with `StageAssignment::withStageIds([$stageAssignment->stageId])`. A `StageAssignment` has no `stageId` (the table has no stage column, note c), so the lookup runs with a null stage, finds nothing and returns false for every Section Editor and Guest Editor; `StageParticipantGridHandler::saveParticipant()` then answers `new JSONMessage(true, $form->fetch($request))`, which redraws the form in the window without saving. The panel's own test (`useCurrentUser::canCurrentUserEditParticipant()`) offers the button on those rows. A new assignment through "Assign" is not affected (the check runs only with an `assignmentId`).
+Issue report: [docs/issues/U35-A1-section-editor-edit-assignment-saves-nothing.md](../issues/U35-A1-section-editor-edit-assignment-saves-nothing.md).
 
 <a id="fn-a2"></a>
 **f-a2** — Live-probed 2026-09-22 (all three apps): note td10. `useParticipantManagerConfig.js::getItemActions()` pushes "Remove" on the "Assign" condition alone, while "Edit" also needs `canCurrentUserEditParticipant()` (note b); `StageParticipantGridHandler::deleteParticipant()` checks only the CSRF token and that the assignment belongs to the submission, with no counterpart of `Validation::canEditParticipant()`. What a recommending editor sees with no deciding editor assigned is *[Review stage & rounds](U26-review-stage-and-rounds.md#recommendations)*'.
