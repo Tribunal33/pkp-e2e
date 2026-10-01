@@ -1043,6 +1043,10 @@ Left out of the scenarios above, by reason:
     a reader on an article published with no issue, and on one
     published at once into an unpublished issue, signed out and signed
     in, gets another citation format and a download {OJS}
+  - the guard for OPS7 and OPS8 (Rule 21; issue report
+    `docs/issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md`): a preprint's
+    page and its PDF reader shown in French, with no `##` code in the
+    keywords label or the browser tab {OPS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1203,8 +1207,8 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OPS3](#ops3) | A galley's ID address answers "404 Not Found" once the galley has a URL Path | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [OPS5](#ops5) | The PDF reader's return arrow is read to screen readers as "##article.return##" | 🐞 | minor | — |
 | [OPS6](#ops6) | The preprint summary never shows the preprint's DOI | 🐞 | minor | — |
-| [OPS7](#ops7) | On a French preprint page the keywords label reads "##preprint.subject## :" | 🐞 | user-visible | — |
-| [OPS8](#ops8) | On a French page the PDF reader's browser tab reads "##article.pageTitle##" | 🐞 | minor | — |
+| [OPS7](#ops7) | On a French preprint page the keywords label reads "##preprint.subject## :" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [OPS8](#ops8) | On a French page the PDF reader's browser tab reads "##article.pageTitle##" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS9](#ops9) | A press on the middle of a preprint's cover in a list opens nothing | 🐞 | minor | — |
 | [A3](#a3) | An article with no downloads shows an empty chart instead of "Download data is not yet available." | ❓ | minor | — |
 | [A12](#a12) | Once the first version is unpublished, the page still opens its date line with that version's date | ❓ | minor | — |
@@ -1522,20 +1526,25 @@ page shows "DOI:". Readers browsing the lists see no DOI.
 Basis: probe, 2026-09-25. <sup>[f-ops6](#fn-f-ops6)</sup>
 
 <a id="ops7"></a>
-**OPS7 — The keywords label is a raw code in French** · 🐞 · user-visible.
+**OPS7 — The keywords label is a raw code in French** · 🐞 · low.
 A preprint page shown in French labels its keywords "##preprint.subject##
-:" ("##preprint.subject## : francais") where the English page reads
-"Keywords:" and a journal's French page "Mots-clés :". A French reader
-sees a code where the label should be.
-Basis: probe, 2026-09-25. <sup>[f-ops7](#fn-f-ops7)</sup>
+:" ("##preprint.subject## : employees, survey") where the English page
+reads "Keywords:" and a journal's French page "Mots-clés :". A French
+reader sees a code where the label should be; the keywords themselves
+show. French (Canada) was walked; French (France), Spanish, Catalan,
+Finnish, Norwegian Bokmål, Portuguese and Turkish show the same code
+by the code.
+Basis: probe, 2026-10-01. <sup>[f-ops7](#fn-f-ops7)</sup>
 
 <a id="ops8"></a>
-**OPS8 — The French PDF reader's browser tab reads a raw code** · 🐞 · minor.
+**OPS8 — The French PDF reader's browser tab reads a raw code** · 🐞 · low.
 On a page shown in French, the PDF reader's browser tab reads
 "##article.pageTitle##" where a journal's reads "Vue de {title}" and
 the English page "View of {title}". The tab, and a bookmark made from it,
-does not name the preprint.
-Basis: probe, 2026-09-25. <sup>[f-ops8](#fn-f-ops8)</sup>
+does not name the preprint. French (Canada) was walked; French (France),
+Spanish, Catalan, Finnish, Norwegian Bokmål, Portuguese and Turkish show
+the same code by the code.
+Basis: probe, 2026-10-01. <sup>[f-ops8](#fn-f-ops8)</sup>
 
 <a id="ops9"></a>
 **OPS9 — The middle of a preprint's cover does not open it** · 🐞 · minor.
@@ -2663,10 +2672,12 @@ publication's DOI object instead and is unaffected. Live-probed
 <a id="fn-f-ops7"></a>
 **f-ops7** — Note c: `preprint.subject` has an empty translation in
 OPS's `locale/fr_CA/locale.po`. Live-probed 2026-09-25, note q5.
+Issue report: [docs/issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md](../issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md).
 
 <a id="fn-f-ops8"></a>
 **f-ops8** — Note d: `article.pageTitle` is absent from OPS's French
 locale. Live-probed 2026-09-25, note d.
+Issue report: [docs/issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md](../issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md).
 
 <a id="fn-f-ops9"></a>
 **f-ops9** — Note j: the element at the cover's centre is the keyword

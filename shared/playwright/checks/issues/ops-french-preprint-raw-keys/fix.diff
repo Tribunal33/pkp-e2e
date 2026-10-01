@@ -1,0 +1,161 @@
+--- a/templates/frontend/objects/preprint_details.tpl
++++ b/templates/frontend/objects/preprint_details.tpl
+@@ -207,7 +207,7 @@
+ 			{if !empty($publication->getLocalizedData('keywords'))}
+ 			<section class="item keywords">
+ 				<h2 class="label">
+-					{capture assign=translatedKeywords}{translate key="preprint.subject"}{/capture}
++					{capture assign=translatedKeywords}{translate key="common.keywords"}{/capture}
+ 					{translate key="semicolon" label=$translatedKeywords}
+ 				</h2>
+ 				<span class="value">
+--- a/locale/bg/locale.po
++++ b/locale/bg/locale.po
+@@ -84,9 +84,6 @@
+ msgid "user.role.manager"
+ msgstr "Мениджър"
+ 
+-msgid "preprint.pageTitle"
+-msgstr "Изглед на {$title}"
+-
+ msgid "submissions.published"
+ msgstr "Изпратени"
+ 
+--- a/locale/ca/locale.po
++++ b/locale/ca/locale.po
+@@ -68,7 +68,7 @@
+ msgid "preprint.abstract"
+ msgstr ""
+ 
+-msgid "preprint.pageTitle"
++msgid "article.pageTitle"
+ msgstr ""
+ 
+ msgid "submissions.published"
+--- a/locale/cs/locale.po
++++ b/locale/cs/locale.po
+@@ -74,9 +74,6 @@
+ msgid "preprint.abstract"
+ msgstr "Abstrakt"
+ 
+-msgid "preprint.pageTitle"
+-msgstr "Zobrazit {$title}"
+-
+ msgid "submissions.published"
+ msgstr "Publikováno"
+ 
+--- a/locale/de/locale.po
++++ b/locale/de/locale.po
+@@ -76,9 +76,6 @@
+ msgid "preprint.abstract"
+ msgstr "Abstract"
+ 
+-msgid "preprint.pageTitle"
+-msgstr "Ansicht von {$title}"
+-
+ msgid "submissions.published"
+ msgstr "Veröffentlicht"
+ 
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -78,9 +78,6 @@
+ msgid "preprint.abstract"
+ msgstr "Abstract"
+ 
+-msgid "preprint.pageTitle"
+-msgstr "View of {$title}"
+-
+ msgid "submissions.published"
+ msgstr "Posted"
+ 
+--- a/locale/es/locale.po
++++ b/locale/es/locale.po
+@@ -80,7 +80,7 @@
+ msgid "preprint.abstract"
+ msgstr "Resumen"
+ 
+-msgid "preprint.pageTitle"
++msgid "article.pageTitle"
+ msgstr "Vista de {$title}"
+ 
+ msgid "submissions.published"
+--- a/locale/fi/locale.po
++++ b/locale/fi/locale.po
+@@ -75,7 +75,7 @@
+ msgid "preprint.abstract"
+ msgstr "Abstrakti"
+ 
+-msgid "preprint.pageTitle"
++msgid "article.pageTitle"
+ msgstr "Näytetään: {$title}"
+ 
+ msgid "submissions.published"
+--- a/locale/fr_CA/locale.po
++++ b/locale/fr_CA/locale.po
+@@ -89,7 +89,7 @@
+ msgid "preprint.abstract"
+ msgstr "Résumé"
+ 
+-msgid "preprint.pageTitle"
++msgid "article.pageTitle"
+ msgstr "Affichage de {$title}"
+ 
+ msgid "submissions.published"
+--- a/locale/mk/locale.po
++++ b/locale/mk/locale.po
+@@ -77,9 +77,6 @@
+ msgid "preprint.abstract"
+ msgstr "Апстракт"
+ 
+-msgid "preprint.pageTitle"
+-msgstr "Поглед на {$title}"
+-
+ msgid "submissions.published"
+ msgstr "Објавено"
+ 
+--- a/locale/nb_NO/locale.po
++++ b/locale/nb_NO/locale.po
+@@ -68,7 +68,7 @@
+ msgid "preprint.abstract"
+ msgstr ""
+ 
+-msgid "preprint.pageTitle"
++msgid "article.pageTitle"
+ msgstr ""
+ 
+ msgid "submissions.published"
+--- a/locale/pt_BR/locale.po
++++ b/locale/pt_BR/locale.po
+@@ -79,9 +79,6 @@
+ msgid "preprint.abstract"
+ msgstr "Resumo"
+ 
+-msgid "preprint.pageTitle"
+-msgstr "Visualização do {$title}"
+-
+ msgid "submissions.published"
+ msgstr "Postado"
+ 
+--- a/locale/tr/locale.po
++++ b/locale/tr/locale.po
+@@ -74,7 +74,7 @@
+ msgid "preprint.abstract"
+ msgstr "Öz"
+ 
+-msgid "preprint.pageTitle"
++msgid "article.pageTitle"
+ msgstr "{$title} görünümü"
+ 
+ msgid "submissions.published"
+--- a/locale/uk/locale.po
++++ b/locale/uk/locale.po
+@@ -75,9 +75,6 @@
+ msgid "preprint.abstract"
+ msgstr "Абстрактно"
+ 
+-msgid "preprint.pageTitle"
+-msgstr "Вигляд {$title}"
+-
+ msgid "submission.search"
+ msgstr "Пошук Препринту"
+ 
