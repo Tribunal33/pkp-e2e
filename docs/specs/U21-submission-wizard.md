@@ -1052,7 +1052,7 @@ are the source; badges, Impact and Basis:
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A4](#a4) | Submission wizard footer says "Last saved 3 seconds ago" on every page load, when nothing was saved | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A5](#a5) | The copyright-agreed activity-log line opens with a raw "{$filename}" placeholder | 🐞 | minor | — |
+| [A5](#a5) | The activity log's copyright-agreement entry opens with a raw "{$filename}" placeholder instead of the author's name | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | Submitting a draft again from a second tab shows a problems banner with nothing to fix | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | On every journal, press or server but the install's first, a section's configured editors are never assigned | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1067,7 +1067,7 @@ are the source; badges, Impact and Basis:
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
 | [OPS3](#ops3) | A preprint author's "Cancel" on their own draft closes the dialog and leaves the draft in place | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OPS7](#ops7) | The preprint "Not Allowed" page shows a raw locale code where its explanation should be | 🐞 | minor | — |
+| [OPS7](#ops7) | A signed-in user who may not submit to a preprint server reads a raw translation key instead of the reason | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS8](#ops8) | A further galley on a reloaded draft gets stuck in its upload window and shows no file until a reload | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [OPS9](#ops9) | The Review step's "Files" panel says "No files have been uploaded" for galleys the draft already had when the page loaded | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A1](#a1) | Closing submissions does not stop drafts already started; they can still be filled and submitted | ❓ | latent | — |
@@ -1137,13 +1137,16 @@ is not yet saved.
 Basis: probe, 2026-10-01. <sup>[i](#fn-i)</sup>
 
 <a id="a5"></a>
-**A5 — The copyright-agreed log line is garbled** · 🐞 · minor.
-When a submission is completed with the copyright box ticked, the activity
-log's agreement entry opens with a raw placeholder: "{$filename} (…)
-agreed to the copyright terms for submission.", with the ticking user's
-username in the parentheses. This happens on every copyright-confirmed
-submission. The neighboring "submission submitted" entry renders normally.
-Basis: probe. <sup>[m](#fn-m)</sup>
+**A5 — The activity log's copyright-agreement entry opens with a raw "{$filename}" placeholder instead of the author's name** · 🐞 · low.
+When an author completes a submission with the copyright box ticked, the
+activity log's agreement entry opens with a raw placeholder: "{$filename}
+(ccorino) agreed to the copyright terms for submission.", with the
+author's username in the brackets where their name should come first.
+It shows on every journal, press or preprint server that sets a
+copyright notice, since only then does the last step of the submission
+form ask authors to agree. The sentence is built each time the log is
+shown, so a corrected text also repairs the entries already stored.
+Basis: probe, 2026-10-01. <sup>[m](#fn-m)</sup>
 
 <a id="a6"></a>
 **A6 — Submitting a draft again from a second tab shows a problems banner with nothing to fix** · 🐞 · low.
@@ -1511,14 +1514,20 @@ task entry does? Lean: yes. The pair is inconsistent on the same event.
 Basis: probe. <sup>[q](#fn-q)</sup>
 
 <a id="ops7"></a>
-**OPS7 — The "Not Allowed" page explains itself in a raw locale code** · 🐞 · minor.
-A visitor turned away from a preprint server's start screen (Rule 3) gets
-the "Not Allowed" heading with, where the explanation should be, the
-literal text "##submission.wizard.notAllowed.description##". The refused
-visitor is never told why. Both of the page's explanations are affected
-(the must-be-registered and the all-sections-closed variants). A journal
-and a press show the proper text. Basis: probe + code inspection (the
-locale keys are missing on OPS alone). <sup>[c](#fn-c)</sup>
+**OPS7 — A signed-in user who may not submit to a preprint server reads a raw translation key instead of the reason** · 🐞 · low.
+A signed-in user who opens "New Submission" on a preprint server and
+may not submit there gets the "Not Allowed" heading with a raw locale
+code where the explanation and the server's contact link should be:
+"##submission.wizard.notAllowed.description##" when authors must be
+registered by the staff, and
+"##submission.wizard.noSectionAllowed.description##" when every section
+is closed to authors. A journal and a press show the proper text, in
+every language that has it.
+Both cases follow a deliberate setting: by default the "Author" role
+allows self-registration and every section is open. The user can find
+the contact on the server's "About" page. OPS lacks the two texts the
+journal and the press define.
+Basis: probe, 2026-10-01. <sup>[c](#fn-c)</sup>
 
 <a id="ops8"></a>
 **OPS8 — A further galley on a reloaded draft gets stuck in its upload window and shows no file until a reload** · 🐞 · medium · crash: script.
@@ -1671,6 +1680,7 @@ OMP defines the one (`notAllowed.description`) its handler uses
 same day: the author's radio offered only the open sections; a Journal
 Manager was additionally offered the editor-restricted one; the deactivated
 section was offered to no one.
+OPS7 issue report: [docs/issues/U21-OPS7-preprint-not-allowed-page-raw-key.md](../issues/U21-OPS7-preprint-not-allowed-page-raw-key.md).
 
 <a id="fn-d"></a>
 **d** — Start form. Shared `PKP\components\forms\submission\StartSubmission`
@@ -2035,6 +2045,7 @@ submitted" beside the copyright entry rendered verbatim "{$filename}
 `{$filename}` token literal (A5). The copyright box must be re-ticked on
 every fresh visit to Review (test-authoring note).
 A6 issue report: [docs/issues/U21-A6-double-submit-empty-problems-banner.md](../issues/U21-A6-double-submit-empty-problems-banner.md).
+A5 issue report: [docs/issues/U21-A5-copyright-agreed-log-raw-placeholder.md](../issues/U21-A5-copyright-agreed-log-raw-placeholder.md).
 
 <a id="fn-n"></a>
 **n** — Complete/terminal screens. `complete.tpl` (OJS/OMP, AFFW-129):

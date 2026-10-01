@@ -18,7 +18,6 @@ VM marks also count the VM's issues sessions: at most two run at once
 |---|---|---|---|---|
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 |  |
 | [U19](../specs/U19-oai-pmh.md) | 26 | 5 | 6 | **Taken: issues session, VM s2, 2026-10-01**; done: OPS1, OMP4, A1, A18, A22, A16, A17, OMP3, A2, A3, OPS4, A4, A5, A12, A15, A19, A20, A7, A8, A13 (joined pkp-e2e#228 and #291) |
-| [U21](../specs/U21-submission-wizard.md) | 19 | 4 | 8 | **Taken: issues session, workstation s0, 2026-10-01** |
 | [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 | **Taken: issues session, VM s0, 2026-10-01**; done: A3, OMP1 (pkp-e2e#307 and pkp-e2e#308), A1 (pkp-e2e#311), OPS3 (pkp-e2e#314) |
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 |  |
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 |  |
@@ -60,7 +59,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 | [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 |  |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 |  |
 | [U73](../specs/U73-publication-formats-proof-terms.md) | 18 | 0 | 3 |  |
-| [U40](../specs/U40-publication-metadata.md) | 8 | 0 | 3 | **A1 taken: issues session, workstation s0, 2026-10-01** (joined to U21 A20) |
+| [U40](../specs/U40-publication-metadata.md) | 8 | 0 | 3 | A1 done with U21 A20 (docs/issues/U21-A20-plain-summary-required-refuses-other-saves.md) |
 | [U30](../specs/U30-author-response-to-reviews.md) | 7 | 0 | 3 |  |
 | [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 |  |
 | [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 |  |
