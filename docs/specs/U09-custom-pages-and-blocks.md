@@ -818,6 +818,7 @@ the footnote. <sup>y</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a static page and a "Custom Page" item saved at "dot.only" and "deep/Mixed_1.x", each opening at its address (A10; the guard its issue report names)
   - with two form languages and the second language's editor held back, the first language's "Content" box in the block and item windows taking the click and the text, no spinner left (A20; the guard its issue report names)
   - "Add Static Page" on the tab left open after "Static Pages Plugin" is unticked: no server error {OJS OMP} (A12; the guard its issue report names)
   - a placed custom block's "Custom Block Manager" unticked, then a "Page Footer" saved on "Appearance" › "Setup" without a refusal (A15; the guard its issue report names)
@@ -882,7 +883,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | A static page has no breadcrumbs and no main heading, where a custom page has both | 🐞 | minor | — |
 | [A4](#a4) | A custom block named only outside the manager's interface language is kept as a blank row with neither "Edit" nor "Delete" | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | Typing a page preview's address below manager level, or signed out, gives a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A10](#a10) | A static page whose "Path" has a "." in its first or second part is saved but answers "404 Not Found" | 🐞 | user-visible | — |
+| [A10](#a10) | A static page or custom page whose "Path" has a "." in its first two parts answers "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | After a refused "Save" in the static page window, the next successful save shows the old refusal at the top right | 🐞 | minor | — |
 | [A12](#a12) | Right after "Static Pages Plugin" is unticked, the tab's "Add Static Page" fails on the server | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | A custom block whose name holds "&" can never be placed, edited or deleted | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
@@ -1014,15 +1015,24 @@ cannot work is better left off the bar.
 Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — A static page whose "Path" has a "." near its start cannot be opened** · 🐞 · user-visible · {OJS OMP}.
-The static page window accepts "." in "Path", as its own refusal says
-("…alphanumeric characters plus '.', '/', '-', and '_'."), and lists the
-page. A manager who saves a page at "dot.only" or "deep/Mixed_1.x"
-expects it at that address. Instead the address, typed or followed from
-the list's own "Path" link, answers a bare "404 Not Found" whenever the
-"." sits in the first or second part of the path; "one/two/three.x"
-opens.
-Basis: probe. <sup>f-a10</sup>
+**A10 — A static page or custom page whose "Path" has a "." in its first two parts answers "404 Not Found"** · 🐞 · medium.
+A manager adds a static page, or a "Custom Page" item under Settings ›
+Website › "Setup" › "Navigation", and gives it a "Path" with a "." in
+its first or second part. The parts are what "/" separates, so
+"dot.only" and "deep/Mixed_1.x" qualify and "one/two/three.x" does not.
+The static page window and the item window both save it, because their
+rule for "Path" allows a ".": "The path field must contain only
+alphanumeric characters plus '.', '/', '-', and '_'." The page is
+listed. But its address, typed or followed from the list's "Path" link,
+answers a bare "404 Not Found" page. A "." in a later part works.
+Nobody is told that the path cannot be used: the manager finds out by
+opening the page, or when readers report a dead menu link. Saving the
+page under a path without a "." in its first two parts makes it
+reachable.
+Static pages come from the Static Pages plugin, which ships with OJS and
+OMP; "Custom Page" items exist in all three apps. The fix touches two
+repositories, pkp-lib and the Static Pages plugin.
+Basis: probe, 2026-10-01. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — The static page window repeats an old refusal after a good save** · 🐞 · minor · {OJS OMP}.
@@ -1952,6 +1962,7 @@ Found", with or without "/en/" and from the "Path" link;
 "one/two/three.x", "info/fees", "Upper" and "under_score" opened. Not
 driven for a "Custom Page" item, whose lookup joins the same parts (note
 d).
+Issue report: [docs/issues/U09-A10-static-page-dot-path-not-found.md](../issues/U09-A10-static-page-dot-path-not-found.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Cause not traced. Live-probed 2026-09-24 (OJS, OMP), four
