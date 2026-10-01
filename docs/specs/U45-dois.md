@@ -3759,7 +3759,7 @@ have no label. Live-probed 2026-09-26 (q8), all three apps: the page's
 accessibility tree reads `button` with only an image beside "Filters"
 and `checkbox` with no name on every row; the journal's "Issues" box is
 named "Issues".
-Issue report: [docs/issues/U45-A8-doi-page-controls-unnamed.md](../issues/U45-A8-doi-page-controls-unnamed.md).
+Issue report: [pkp-e2e#237](https://github.com/jardakotesovec/pkp-e2e/issues/237) ([docs/issues/U45-A8-doi-page-controls-unnamed.md](../issues/U45-A8-doi-page-controls-unnamed.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-26 (q14): "%p" on a journal (two runs),
