@@ -1441,7 +1441,7 @@ Issue report (a template limited to specific roles): [pkp-e2e#317](https://githu
 
 <a id="fn-a11"></a>
 **f-a11** — Live-probed 2026-09-22 (journal and press): a reviewer on round 1 with "Anonymous Reviewer/Anonymous Author", found under their Funding coordinator and Translator roles and chosen on the Submission stage and on the review stage, and a reviewer with "Anonymous Reviewer/Disclosed Author" on a scratch journal set to that type, and a press's Internal Review: no warning, and "OK" assigning them with "User added as a stage participant.". The window's data listed the right reviewers (not declined, anonymous types only, "Open" left out). Controls with no warning expected: a declined reviewer, a person with no review, Copyediting, and an "Open" review. Cause: note n. The warning dates from 2018; when the check broke was not traced.
-Issue report: [docs/issues/U35-A11-anonymous-reviewer-assign-no-warning.md](../issues/U35-A11-anonymous-reviewer-assign-no-warning.md).
+Issue report: [pkp-e2e#338](https://github.com/jardakotesovec/pkp-e2e/issues/338) ([docs/issues/U35-A11-anonymous-reviewer-assign-no-warning.md](../issues/U35-A11-anonymous-reviewer-assign-no-warning.md)).
 
 <a id="fn-a12"></a>
 **f-a12** — Live-probed 2026-09-22 (all three apps): a recommending Editor opening "Edit" on an Editor's, a Production editor's or (preprint server) a Preprint Server manager's row, their own included, and pressing "OK": the window closing with "The stage assignment has been changed.". Code: note h; the save runs the edit branch of note k.
