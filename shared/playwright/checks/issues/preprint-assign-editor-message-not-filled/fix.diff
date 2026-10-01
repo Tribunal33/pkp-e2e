@@ -1,0 +1,11 @@
+--- a/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
+@@ -611,7 +611,7 @@
+             return new JSONMessage(
+                 true,
+                 [
+-                    'body' => Mail::compileParams($template->getLocalizedData('description'), $mailable->getData()),
++                    'body' => Mail::compileParams($template->getLocalizedData('description') ?? '', $mailable->getData()),
+                     'variables' => $notifyForm->getEmailVariableNames($templateKey),
+                 ]
+             );

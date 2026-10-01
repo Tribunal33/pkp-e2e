@@ -913,6 +913,10 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for OPS2 (issue report
+    `docs/issues/U35-OPS2-preprint-assign-editor-message-not-filled.md`):
+    on a preprint server each predefined message of the Production stage
+    filling "Message"
   - the guard for A16 (issue report
     `docs/issues/U35-A16-notify-message-ignores-email-opt-out.md`):
     "Notify" to a participant who ticked "Do not send me an email…"
@@ -1003,7 +1007,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | A message sent with "Notify" is emailed to a participant who opted out of emails for new discussions | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS1](#ojs1) | The automatic assignment email tells the editor to select "Send to Review"; the button reads "Send for Review" | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's Internal Review offers no predefined message in "Assign" and "Notify" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OPS2](#ops2) | On a preprint server "Assign Editor" leaves "Message" as it was | 🐞 | minor · crash: server | — |
+| [OPS2](#ops2) | On a preprint server, choosing the predefined message "Assign Editor" leaves "Message" unfilled | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A preprint server never emails its moderators that a new preprint was assigned to them | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS4](#ops4) | On a preprint server the notice after "Assign", "Edit" or "Notify" can show in the Production entry's "Notification" box instead of at the top right | 🐞 | minor | — |
 | [A2](#a2) | A Section Editor may "Remove" rows they may not "Edit": their own, manager-level ones, and a recommending editor another editor's | ❓ | minor | — |
@@ -1251,16 +1255,22 @@ install difference in the roles, not in the panel.
 Basis: probe. <sup>[f-ops1](#fn-ops1)</sup>
 
 <a id="ops2"></a>
-**OPS2 — "Assign Editor" is empty on a preprint server** · 🐞 · minor · crash: server.
-Choosing "Assign Editor" in the predefined messages is expected to fill
-"Message" with a letter, as it does on a journal or press. On a preprint
-server "Message" is left as it was: empty in a fresh window, and any text
-typed or left by an earlier choice stays. Left empty, nothing is sent and
-only "User added as a stage participant." shows; with text typed, the
-email "Assign Editor" goes out with that text, and the discussion and the
-Tasks row appear. The request that should fetch the letter fails on the
-server, and nothing on screen says so.
-Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
+**OPS2 — On a preprint server, choosing the predefined message "Assign Editor" leaves "Message" unfilled** · 🐞 · low · crash: server.
+On a preprint server, the request that fetches a predefined message's
+text fails on the server when an editor chooses "Assign Editor" in the
+list "Choose a predefined message to use, or fill out the form below."
+on "Notify" or "Assign Participant". The editor is shown no error.
+The choice is expected to fill "Message" with the letter to a newly
+assigned moderator, as it does on a journal or a press. Instead
+"Message" stays as it was. A newly opened window keeps it empty. A
+window that already holds text, typed or filled by an earlier choice,
+keeps that text.
+With "Message" left empty, "OK" on "Assign Participant" assigns the
+person and sends them nothing; only "User added as a stage participant."
+shows. The editor can still write the message by hand.
+Only a preprint server installed or created on this version is
+affected. A server upgraded from 3.5 keeps its letter.
+Basis: probe, 2026-10-01. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="ops3"></a>
 **OPS3 — A preprint server never emails its moderators that a new preprint was assigned to them** · 🐞 · medium.
@@ -1457,6 +1467,7 @@ Issue report (a typed message not sent, this stage included): [pkp-e2e#307](http
 
 <a id="fn-ops2"></a>
 **f-ops2** — Live-probed 2026-09-22 (preprint server): "Assign Editor" chosen in a fresh window leaving "Message" empty, after typed text keeping the text, after "Discussion (Production)" keeping "Please enter your message."; left empty, "OK" assigning with only "User added as a stage participant." and nothing sent; with text typed, the email "Assign Editor" sent with it, the discussion and the Tasks row there, no editor task. Control: a journal and a press fill the letter. The choice's request answers a server error. Code: OPS `registry/taskTemplates.xml` gives `EDITOR_ASSIGN_PRODUCTION` the description key `emails.editorAssignProduction.body`, which neither OPS's `locale/en` nor lib/pkp's defines (OJS and OMP define it in their app locale).
+Issue report: [docs/issues/U35-OPS2-preprint-assign-editor-message-not-filled.md](../issues/U35-OPS2-preprint-assign-editor-message-not-filled.md).
 
 <a id="fn-ops3"></a>
 **f-ops3** — Live-probed 2026-09-22 (two preprint servers): editors seeded on a draft (two Preprint Server managers, three Moderators, one holding both roles, one who ticked the opt-out) and the draft submitted by its author: nobody got "You have been assigned as a moderator…", only "A new submission needs an editor to be assigned: …"; a manager who submitted as "Preprint Server manager" got the same; a submission seeded on the install's first server, with its Moderators assigned automatically, logged no such email. "Moderator Assigned (Auto)" is listed and opens in "Edit Template". Cause: note l; the template itself asks the moderator to post the preprint.
