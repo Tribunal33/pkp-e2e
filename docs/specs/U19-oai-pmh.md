@@ -1111,6 +1111,11 @@ Left out of the scenarios above, by reason:
     ListIdentifiers and ListRecords asked with `until` on a preprint server
     list its preprints, as scenario 5 shows on a journal and a press {OPS}
     (Rule 9)
+  - the guard for OMP4 (issue report
+    `docs/issues/U19-OMP4-book-without-abstract-oai-lists-fail.md`): a
+    press's ListRecords and GetRecord with one published book that has no
+    abstract, the book's record answered without a "Description" {OMP} (once
+    fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1243,7 +1248,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A23](#a23) | The `driver` set lists articles with no galley {OJS} | 🐞 | minor | — |
 | [A24](#a24) | A `driver` list offers "Resume" when complete, and following it repeats records {OJS} | 🐞 | minor | — |
 | [OMP3](#omp3) | A press given a set it does not have lists other records instead of none | 🐞 | minor | — |
-| [OMP4](#omp4) | One book without an abstract makes the press's record lists fail | 🐞 | user-visible · crash: server | — |
+| [OMP4](#omp4) | A press's OAI-PMH record lists answer a server error once one book is published without an abstract | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OMP6](#omp6) | A series with no prefix is named with a leading space | 🐞 | invisible | — |
 | [OPS1](#ops1) | A preprint server's OAI-PMH lists answer a server error whenever the harvester gives an "until" date | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | One preprint without an abstract makes the server's record lists fail | 🐞 | user-visible · crash: server | — |
@@ -1527,12 +1532,21 @@ path lists that press's records, as it should.
 Basis: probe, 2026-09-26. <sup>f-omp3</sup>
 
 <a id="omp4"></a>
-**OMP4 — A book without an abstract breaks the record lists** · 🐞 · user-visible · crash: server.
-A press publishes a book whose abstract was left empty, which the
-press's forms allow. From then on the press's ListRecords, and the
-site-wide one, fail with a server error instead of listing records, as
-long as the book's format is listed in the answer.
-Basis: probe, 2026-09-26. <sup>f-omp4</sup>
+**OMP4 — A press's OAI-PMH record lists answer a server error once one book is published without an abstract** · 🐞 · high · crash: server.
+When a press publishes a book that has no abstract in any language,
+which the press's forms allow at submission and in the workflow, the
+press's OAI-PMH ListRecords answers a server error instead of the page
+of the list that holds the book. GetRecord for that book fails the same
+way. ListIdentifiers still answers. ListRecords is served in pages of up
+to 100 records. A harvester gets status 500 and an empty answer for the
+page that holds the book, so it loses every record of that page and
+cannot go on to the pages after it. On a press with fewer than 100
+records that is the whole list. The site-wide address fails on the same
+page, which there also holds the other presses' records. Nothing tells
+the press: the book's page and the workflow look right. The list answers
+once the book has an abstract. Dublin Core is the only format a press
+offers, so the harvester has no other format to ask for.
+Basis: probe, 2026-10-01. <sup>f-omp4</sup>
 
 <a id="omp6"></a>
 **OMP6 — A series with no prefix is named with a leading space** · 🐞 · invisible.
@@ -1811,6 +1825,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — Live-probed 2026-09-26: a book published with its abstract saved empty on "Title & Abstract" made the press's ListRecords, its GetRecord and the site-wide `set={press}` list answer 500, while the site-wide first page (without the book) and ListIdentifiers answered; the server log: `Dc11SchemaPublicationFormatAdapter::addLocalizedElements(): Argument #3 ($localizedValues) must be of type array, null given`. The book was unpublished again at once. Code: note f (`Dc11SchemaPublicationFormatAdapter::addLocalizedElements(…, array $localizedValues)` receives `$publication->getData('abstract')`, null when never set; OMP's "Title & Abstract" does not require the abstract).
+Issue report: [docs/issues/U19-OMP4-book-without-abstract-oai-lists-fail.md](../issues/U19-OMP4-book-without-abstract-oai-lists-fail.md).
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — Live-probed 2026-09-26, all three apps, two runs: `{site address}/index.php/nosuchjournal/oai?verb=Identify` and a second unknown path answered "404 Not Found" on the press's install too. The retired entry rested on OMP `OAIHandler::index()`, which has no check of its own for an unknown press path; the request is refused before it.
