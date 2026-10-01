@@ -2018,7 +2018,7 @@ Live-probed 2026-09-17 (A15), OJS: Atom's `<updated>` and `<published>` read
 `<dc:date>` "%2026-%09-%17", RSS 2.0's `<pubDate>` "Thu, 17 Sep 2026
 10:28:01 +0000"; the same under "Limit feed to 2". The date pattern the two
 templates pass was not read.
-Issue report: [docs/issues/U19-A15-oai-marc-008-percent-signs.md](../issues/U19-A15-oai-marc-008-percent-signs.md).
+Issue report: [pkp-e2e#87](https://github.com/jardakotesovec/pkp-e2e/issues/87) ([docs/issues/U19-A15-oai-marc-008-percent-signs.md](../issues/U19-A15-oai-marc-008-percent-signs.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16 — A16 evidence.** `AnnouncementFeedPlugin` adds the `<link

@@ -1933,49 +1933,49 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 
 <a id="fn-f-a1"></a>
 **f-a1** — Live-probed 2026-09-26 and, on OMP, 2026-09-29: note q8. "Earliest Datestamp": OJS scratch journals with and without published items all gave 2026-09-26T05:20:08Z, a deleted record of `publicknowledge`; OMP gave the moment of the request, for an empty press and for one whose only book was unpublished, while `publicknowledge` held no deleted record; with one, the empty press gave that record's datestamp (2026-09-29); OPS gave the deleted record's datestamp. Code: note n; the OJS closure dates from `08c3cddc6c` (pkp/ojs#3134, 2021-06-08), OMP's from `26edcaf788` (pkp/omp#983, 2021-06-11), both for pkp/pkp-lib#6963; `88aaa6b49f` (2021-07-14) and `79302a1bd` (2021-06-15) only reformatted them. The test installs' first context is `publicknowledge`.
-Issue report: [docs/issues/U19-A1-oai-journal-deleted-records-first-journal.md](../issues/U19-A1-oai-journal-deleted-records-first-journal.md).
+Issue report: [pkp-e2e#83](https://github.com/jardakotesovec/pkp-e2e/issues/83) ([docs/issues/U19-A1-oai-journal-deleted-records-first-journal.md](../issues/U19-A1-oai-journal-deleted-records-first-journal.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Live-probed 2026-09-26: note q11, the reads with a time. Code: note l.
-Issue report: [docs/issues/U19-A2-oai-from-until-ignore-time-of-day.md](../issues/U19-A2-oai-from-until-ignore-time-of-day.md).
+Issue report: [pkp-e2e#92](https://github.com/jardakotesovec/pkp-e2e/issues/92) ([docs/issues/U19-A2-oai-from-until-ignore-time-of-day.md](../issues/U19-A2-oai-from-until-ignore-time-of-day.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Live-probed 2026-09-26: note q11, `2026-13-01` as `from` and `until`, "2026-02-30", `T25:00:00Z` and the roll-over of "2026-09-31". Code: note l.
-Issue report: [docs/issues/U19-A3-oai-impossible-date-accepted.md](../issues/U19-A3-oai-impossible-date-accepted.md).
+Issue report: [pkp-e2e#97](https://github.com/jardakotesovec/pkp-e2e/issues/97) ([docs/issues/U19-A3-oai-impossible-date-accepted.md](../issues/U19-A3-oai-impossible-date-accepted.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Live-probed 2026-09-26: note q15, the last part of each list. Code: note k.
-Issue report: [docs/issues/U19-A4-oai-last-part-offers-resume.md](../issues/U19-A4-oai-last-part-offers-resume.md).
+Issue report: [pkp-e2e#98](https://github.com/jardakotesovec/pkp-e2e/issues/98) ([docs/issues/U19-A4-oai-last-part-offers-resume.md](../issues/U19-A4-oai-last-part-offers-resume.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-26, all three apps: "formats" on a record's header opened ListMetadataFormats with the identifier, which read "This is a list of metadata formats available from this archive." and linked each prefix to the whole archive's records. Code: `oai2.xsl` sets `$identifier` from the text of `oai:request` after "identifier=", but that text is the base URL (the arguments are attributes), so the "for the record" branch never shows.
-Issue report: [docs/issues/U19-A5-oai-record-formats-shown-as-archive.md](../issues/U19-A5-oai-record-formats-shown-as-archive.md).
+Issue report: [pkp-e2e#99](https://github.com/jardakotesovec/pkp-e2e/issues/99) ([docs/issues/U19-A5-oai-record-formats-shown-as-archive.md](../issues/U19-A5-oai-record-formats-shown-as-archive.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-26: note q13; "Supporting Agencies", "Rights" and "Source" were saved on a published version's "Metadata" page on each app and reached no `oai_dc`, `oai_marc` or `marcxml` answer. Code: note f; `sponsor` left `schemas/publication.json` in `718ad72e5` "pkp/pkp-lib#2072 Working prototype of versioning based on new publication entity" (2019-06-26); no adapter reads `supportingAgencies`, `rights` or `source`.
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-26, OJS: the same article was typed "Peer-reviewed Article" before its section "Articles" was saved in its window and not after; a second journal's untouched "Articles" gave it ("Article évalué par les pairs" at `…/fr_CA/oai`) until the window was opened and saved unchanged; a section created on screen with "Will not be peer-reviewed" ticked gave none. The saved box is stored as an empty string per language, which the adapter's fallback to `metadata.pkp.peerReviewed` does not replace. Code: note f; the "Peer-reviewed Article" default came with `5d177baa85` (2005-07-30); no adapter reads `metaReviewed`.
-Issue report: [docs/issues/U19-A7-oai-section-save-drops-peer-reviewed.md](../issues/U19-A7-oai-section-save-drops-peer-reviewed.md).
+Issue report: [pkp-e2e#100](https://github.com/jardakotesovec/pkp-e2e/issues/100) ([docs/issues/U19-A7-oai-section-save-drops-peer-reviewed.md](../issues/U19-A7-oai-section-save-drops-peer-reviewed.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-26: an article in no issue read "{journal}; " and, with "Pages" "15-20", "{journal}; ; 15-20"; a press record "{press}; ". Code: note f (`'; ' . $issue?->getIssueIdentification()` with a null issue; OMP appends "; " unconditionally).
-Issue report: [docs/issues/U19-A8-oai-source-empty-part.md](../issues/U19-A8-oai-source-empty-part.md).
+Issue report: [pkp-e2e#101](https://github.com/jardakotesovec/pkp-e2e/issues/101) ([docs/issues/U19-A8-oai-source-empty-part.md](../issues/U19-A8-oai-source-empty-part.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-26, OJS, two runs: with "OJS will not be used to publish the journal's contents online." chosen, ListRecords listed the article; its Dublin Core record had no address under "Resource Identifier" or "Relation"; both MARC records kept 856 with the article page; that page sent a signed-out visitor to Login and showed a signed-in Reader "This journal does not publish its content online." (`user/authorizationDenied?message=user.authorization.journalDoesNotPublish`). The question and lean are judgment. Code: notes f, g; `OjsJournalMustPublishPolicy` is not added to the OAI handler.
 
 <a id="fn-f-a10"></a>
 **f-a10** — Live-probed 2026-09-26: note q5, step 5. Code: note h (`error()` then `exit()` inside `toXml()`, which `listRecords()` calls while building the answer).
-Issue report: [docs/issues/U19-A10-oai-jats-list-emptied-by-restricted-article.md](../issues/U19-A10-oai-jats-list-emptied-by-restricted-article.md).
+Issue report: [pkp-e2e#84](https://github.com/jardakotesovec/pkp-e2e/issues/84) ([docs/issues/U19-A10-oai-jats-list-emptied-by-restricted-article.md](../issues/U19-A10-oai-jats-list-emptied-by-restricted-article.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-26, OJS, two runs: note q21, the last step. The unpublish request answered 200, the publication became unpublished and its tombstone carried no `driver` setting; the server log recorded "Plugin APP\plugins\generic\driver\DRIVERPlugin failed to handle the hook ArticleTombstoneManager::insertArticleTombstone" with the `Repository::get()` TypeError, which `Hook::call` catches. Code: note i.
-Issue report: [docs/issues/U19-A11-oai-driver-set-misses-withdrawn-articles.md](../issues/U19-A11-oai-driver-set-misses-withdrawn-articles.md).
+Issue report: [pkp-e2e#85](https://github.com/jardakotesovec/pkp-e2e/issues/85) ([docs/issues/U19-A11-oai-driver-set-misses-withdrawn-articles.md](../issues/U19-A11-oai-driver-set-misses-withdrawn-articles.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-26: note q4. Code: note g.
-Issue report: [docs/issues/U19-A12-oai-marc-records-fail-schema.md](../issues/U19-A12-oai-marc-records-fail-schema.md).
+Issue report: [pkp-e2e#86](https://github.com/jardakotesovec/pkp-e2e/issues/86) ([docs/issues/U19-A12-oai-marc-records-fail-schema.md](../issues/U19-A12-oai-marc-records-fail-schema.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-26: note q19; OJS `oai_marc` and `marcxml` read at `…/fr_CA/oai` wrote 251 and 780 `$i` "##publication.versionStage.display##" where the English read "Version of Record 2.0" and "Version of Record 1.1". The `##…##` form is how the app prints a key it has no text for in that language. Code: notes f, g, u.
@@ -1985,42 +1985,42 @@ Issue report: [docs/issues/U19-A12-oai-marc-records-fail-schema.md](../issues/U1
 
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-26, OJS: every `oai_marc` and `marcxml` record read `"%26%09%26 %2026                        eng  "`, quotes included. Code: note g (`datePublished|date_format:"%y%m%d %Y"`; the `%` signs are printed as they stand).
-Issue report: [docs/issues/U19-A15-oai-marc-008-percent-signs.md](../issues/U19-A15-oai-marc-008-percent-signs.md).
+Issue report: [pkp-e2e#87](https://github.com/jardakotesovec/pkp-e2e/issues/87) ([docs/issues/U19-A15-oai-marc-008-percent-signs.md](../issues/U19-A15-oai-marc-008-percent-signs.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Live-probed 2026-09-26, all three apps (OJS twice): `verb=ListRecords&metadataPrefix=oai_dc&metadataPrefix=oai_dc`, and the same with `set` twice, answered 500 with an empty body; the server log: `PKP\oai\OAI::getParam(): Return value must be of type ?string, array returned`; the next Identify answered. Code: notes c, m.
-Issue report: [docs/issues/U19-A16-oai-repeated-argument-server-error.md](../issues/U19-A16-oai-repeated-argument-server-error.md).
+Issue report: [pkp-e2e#88](https://github.com/jardakotesovec/pkp-e2e/issues/88) ([docs/issues/U19-A16-oai-repeated-argument-server-error.md](../issues/U19-A16-oai-repeated-argument-server-error.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-26: note q16. Code: note e (OMP and OPS accept any identifier containing their start and cast the rest with `(int)`).
-Issue report: [docs/issues/U19-A17-oai-malformed-identifier-answers-record.md](../issues/U19-A17-oai-malformed-identifier-answers-record.md).
+Issue report: [pkp-e2e#89](https://github.com/jardakotesovec/pkp-e2e/issues/89) ([docs/issues/U19-A17-oai-malformed-identifier-answers-record.md](../issues/U19-A17-oai-malformed-identifier-answers-record.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-26: note q9. OMP: a format published at 08:28:23Z, deleted at 09:09:59Z and published again read 08:28:23Z; OPS the same with 08:28:36Z and 09:13:38Z; `submissions.last_modified` did not change. Code: note e (the datestamp is `ms.last_modified` on OMP, `a.last_modified` on OPS).
-Issue report: [docs/issues/U19-A18-oai-datestamp-never-moves-after-publication.md](../issues/U19-A18-oai-datestamp-never-moves-after-publication.md).
+Issue report: [pkp-e2e#90](https://github.com/jardakotesovec/pkp-e2e/issues/90) ([docs/issues/U19-A18-oai-datestamp-never-moves-after-publication.md](../issues/U19-A18-oai-datestamp-never-moves-after-publication.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Live-probed 2026-09-26, OJS and OPS: note q10. Code: note j.
-Issue report: [docs/issues/U19-A19-oai-deleted-section-set-lists-nothing.md](../issues/U19-A19-oai-deleted-section-set-lists-nothing.md).
+Issue report: [pkp-e2e#91](https://github.com/jardakotesovec/pkp-e2e/issues/91) ([docs/issues/U19-A19-oai-deleted-section-set-lists-nothing.md](../issues/U19-A19-oai-deleted-section-set-lists-nothing.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Live-probed 2026-09-26, OJS and OPS, two sweep runs: note q11, the last read; `publicknowledge`'s deleted records of the day (OJS 198, 447, 512; OPS 174, 227) were listed for `from=2030-01-01` at its own and the site-wide address. Code: note l.
-Issue report: [docs/issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md](../issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md).
+Issue report: [pkp-e2e#93](https://github.com/jardakotesovec/pkp-e2e/issues/93) ([docs/issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md](../issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md)).
 
 <a id="fn-f-a21"></a>
 **f-a21** — Live-probed 2026-09-26, OJS and OPS: note q19; the record headers read at `…/fr_CA/oai` named "{path}:ARTF". Code: note j (`getLocalizedAbbrev()` under the request's locale).
 
 <a id="fn-f-a22"></a>
 **f-a22** — Live-probed 2026-09-26, OJS, in three drives: while four journals of the install had "DOI Versioning" on, every Identify, list and record request of every journal and of the site-wide address answered 500 with an empty body; after "No" was saved on them, 200; a scratch journal set to "Yes" on screen brought the 500s back for 37 seconds, "No" removed them (note q20). The server log: `SQLSTATE[42804]: Datatype mismatch: 7 ERROR: UNION types text and bigint cannot be matched`, from the per-version branch of `APP\oai\ojs\OAIDAO::getRecordsRecordSetQuery()` (`NULL AS tombstone_id` against the tombstones' bigint), reached through `PKPOAIDAO::getEarliestDatestamp()` and the record lists. The test installs run Postgres; MySQL, whose union typing is looser, was not tried.
-Issue report: [docs/issues/U19-A22-oai-fails-when-a-journal-versions-dois.md](../issues/U19-A22-oai-fails-when-a-journal-versions-dois.md).
+Issue report: [pkp-e2e#94](https://github.com/jardakotesovec/pkp-e2e/issues/94) ([docs/issues/U19-A22-oai-fails-when-a-journal-versions-dois.md](../issues/U19-A22-oai-fails-when-a-journal-versions-dois.md)).
 
 <a id="fn-f-a23"></a>
 **f-a23** — Live-probed 2026-09-26, OJS, three journals, two runs: note q21; the member without a galley had no `publication_galleys` row. Code: note i.
-Issue report: [docs/issues/U19-A23-oai-driver-set-lists-articles-without-galley.md](../issues/U19-A23-oai-driver-set-lists-articles-without-galley.md).
+Issue report: [pkp-e2e#95](https://github.com/jardakotesovec/pkp-e2e/issues/95) ([docs/issues/U19-A23-oai-driver-set-lists-articles-without-galley.md](../issues/U19-A23-oai-driver-set-lists-articles-without-galley.md)).
 
 <a id="fn-f-a24"></a>
 **f-a24** — Live-probed 2026-09-26, OJS: note q21; a second walk of a two-member set answered the parts 1221 1222, 1221 1222, then 1222. Code: note i.
-Issue report: [docs/issues/U19-A24-oai-driver-set-complete-list-offers-resume.md](../issues/U19-A24-oai-driver-set-complete-list-offers-resume.md).
+Issue report: [pkp-e2e#96](https://github.com/jardakotesovec/pkp-e2e/issues/96) ([docs/issues/U19-A24-oai-driver-set-complete-list-offers-resume.md](../issues/U19-A24-oai-driver-set-complete-list-offers-resume.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Live-probed 2026-09-26: note q7; a format set "Not Available" in its "Format Availability" window left the list and its GetRecord answered "No matching identifier in this repository"; "Available" again brought it back. Code: note e (`publication_formats`, `pf.is_available = 1`); the OMP Dublin Core adapter works on a publication format (note f).
@@ -2030,7 +2030,7 @@ Issue report: [docs/issues/U19-A24-oai-driver-set-complete-list-offers-resume.md
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — Live-probed 2026-09-26: note q10, the OMP part. Code: note j.
-Issue report: [docs/issues/U19-OMP3-oai-press-unknown-set-lists-other-records.md](../issues/U19-OMP3-oai-press-unknown-set-lists-other-records.md).
+Issue report: [pkp-e2e#102](https://github.com/jardakotesovec/pkp-e2e/issues/102) ([docs/issues/U19-OMP3-oai-press-unknown-set-lists-other-records.md](../issues/U19-OMP3-oai-press-unknown-set-lists-other-records.md)).
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — Live-probed 2026-09-26: a book published with its abstract saved empty on "Title & Abstract" made the press's ListRecords, its GetRecord and the site-wide `set={press}` list answer 500, while the site-wide first page (without the book) and ListIdentifiers answered; the server log: `Dc11SchemaPublicationFormatAdapter::addLocalizedElements(): Argument #3 ($localizedValues) must be of type array, null given`. The book was unpublished again at once. Code: note f (`Dc11SchemaPublicationFormatAdapter::addLocalizedElements(…, array $localizedValues)` receives `$publication->getData('abstract')`, null when never set; OMP's "Title & Abstract" does not require the abstract).
@@ -2040,14 +2040,14 @@ Issue report: [docs/issues/U19-OMP3-oai-press-unknown-set-lists-other-records.md
 
 <a id="fn-f-omp6"></a>
 **f-omp6** — Live-probed 2026-09-26: note q10; the deleted record's set name keeps the space, and the seeded press's series read " Monographs" and " Textbooks" at `…/fr_CA/oai`. Code: note j.
-Issue report: [docs/issues/U19-OMP6-omp-series-set-name-leading-space.md](../issues/U19-OMP6-omp-series-set-name-leading-space.md).
+Issue report: [pkp-e2e#103](https://github.com/jardakotesovec/pkp-e2e/issues/103) ([docs/issues/U19-OMP6-omp-series-set-name-leading-space.md](../issues/U19-OMP6-omp-series-set-name-leading-space.md)).
 
 <a id="fn-f-omp7"></a>
 **f-omp7** — Live-probed 2026-09-26: a book whose formats were `publicationFormat/131` and `/132` listed `/136` and `/137` once "Version of Record 2.0" was published on screen, and GetRecord of `/131` answered "No matching identifier in this repository", with no deleted record. Code: note e (each version has formats of its own, and the record is a format of the current version).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Live-probed 2026-09-26: note q11, the preprint server part. Code: note l; the column name `a.last-modified` came with ops `5df1969511` "pkp/pkp-lib#6963 Port OAI rewrite to Laravel to OPS" (2021-06-11). Postgres answers "column … does not exist".
-Issue report: [docs/issues/U19-OPS1-ops-oai-until-server-error.md](../issues/U19-OPS1-ops-oai-until-server-error.md).
+Issue report: [pkp-e2e#104](https://github.com/jardakotesovec/pkp-e2e/issues/104) ([docs/issues/U19-OPS1-ops-oai-until-server-error.md](../issues/U19-OPS1-ops-oai-until-server-error.md)).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — Live-probed 2026-09-26: a preprint posted with its abstract empty made the server's ListRecords, its GetRecord and the site-wide `set={server}` list answer 500 (`Dc11SchemaPreprintAdapter::addLocalizedElements()`, the same TypeError as OMP4); the preprint was unposted again at once. The Sections spec's note f-ops6 (live-probed 2026-09-25): `Dc11SchemaPreprintAdapter::addLocalizedElements()` receives a null abstract, a TypeError; written up in `docs/reports/2026-09-25-ops-oai-empty-abstract.md`.
@@ -2057,7 +2057,7 @@ Issue report: [docs/issues/U19-OPS1-ops-oai-until-server-error.md](../issues/U19
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — Live-probed 2026-09-26, all three apps, two runs: after "Remove" under Administration › Hosted Journals ("Are you sure you want to permanently delete … and all of its contents?", "OK"), site-wide GetRecord of a posted preprint answered "No matching identifier in this repository" and no tombstone row was left; a removed journal's and press's items read as deleted, with a tombstone row each. Code: note n.
-Issue report: [docs/issues/U19-OPS4-ops-removed-server-leaves-no-deleted-records.md](../issues/U19-OPS4-ops-removed-server-leaves-no-deleted-records.md).
+Issue report: [pkp-e2e#105](https://github.com/jardakotesovec/pkp-e2e/issues/105) ([docs/issues/U19-OPS4-ops-removed-server-leaves-no-deleted-records.md](../issues/U19-OPS4-ops-removed-server-leaves-no-deleted-records.md)).
 
 ## Reference — entry points & surfaces
 
