@@ -2700,7 +2700,7 @@ French page.
 **f-ops6** — Note j. The landing page's own "DOI:" line reads the
 publication's DOI object instead and is unaffected. Live-probed
 2026-09-25, note j.
-Issue report: [docs/issues/U13-OPS6-preprint-summary-doi-never-shown.md](../issues/U13-OPS6-preprint-summary-doi-never-shown.md).
+Issue report: [pkp-e2e#212](https://github.com/jardakotesovec/pkp-e2e/issues/212) ([docs/issues/U13-OPS6-preprint-summary-doi-never-shown.md](../issues/U13-OPS6-preprint-summary-doi-never-shown.md)).
 
 <a id="fn-f-ops7"></a>
 **f-ops7** — Note c: `preprint.subject` has an empty translation in
