@@ -1127,6 +1127,11 @@ Left out of the scenarios above, by reason:
     published book (preprint) edited, then unpublished and published again:
     the record's datestamp moves each time and `from` today lists it {OMP
     OPS} (once fixed)
+  - the guard for A22 (issue report
+    `docs/issues/U19-A22-doi-versioning-oai-requests-fail.md`): with "DOI
+    Versioning" at "Yes" on one journal (a "DOI Prefix" typed first),
+    Identify, the lists and GetRecord answering at that journal, at another
+    journal and at the site-wide address {OJS} (once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1255,7 +1260,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | A press's or preprint server's OAI record keeps its earlier datestamp after an edit or a second publish {OMP OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | A deleted section's set is listed, but asking for it lists nothing {OJS OPS} | 🐞 | minor | — |
 | [A20](#a20) | Asked for a section's set, deleted records ignore `from` and `until` {OJS OPS} | 🐞 | minor | — |
-| [A22](#a22) | While any journal versions its DOIs, every journal's OAI requests fail {OJS} | 🐞 | user-visible · crash: server | — |
+| [A22](#a22) | Once one journal sets "DOI Versioning" to "Yes", every journal's OAI-PMH requests answer a server error {OJS} | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | The `driver` set lists articles with no galley {OJS} | 🐞 | minor | — |
 | [A24](#a24) | A `driver` list offers "Resume" when complete, and following it repeats records {OJS} | 🐞 | minor | — |
 | [OMP3](#omp3) | A press given a set it does not have lists other records instead of none | 🐞 | minor | — |
@@ -1496,14 +1501,17 @@ the plain address can send the same harvester to either (Rule 19a).
 Basis: probe, 2026-09-26. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — While any journal versions its DOIs, every journal's OAI requests fail** {OJS} · 🐞 · user-visible · crash: server.
-A Journal Manager turns on DOIs and "DOI Versioning" ("Yes, assign a
-unique DOI to every version of an article.") on one journal. From then
-on Identify, ListRecords, ListIdentifiers, GetRecord and
-ListMetadataFormats with an identifier fail with a server error and an
-empty page at every journal's address and at the site-wide address;
-ListSets still answers. Setting it back to "No" restores them.
-Basis: probe, 2026-09-26. <sup>f-a22</sup>
+**A22 — Once one journal sets "DOI Versioning" to "Yes", every journal's OAI-PMH requests answer a server error** {OJS} · 🐞 · medium · crash: server.
+A Journal Manager sets "DOI Versioning" to "Yes, assign a unique DOI to
+every version of an article." on a journal that has DOIs enabled. From
+then on these OAI-PMH requests answer a server error with an empty page:
+Identify, ListRecords, ListIdentifiers, GetRecord and
+ListMetadataFormats for an identifier. ListSets still answers. The
+failure is not limited to that journal. Every other journal of the
+install and the site-wide OAI-PMH address fail the same way, so no
+harvester can read anything from the install until the setting is back
+at "No". It was seen on PostgreSQL. MySQL and MariaDB were not run.
+Basis: probe, 2026-10-01. <sup>f-a22</sup>
 
 <a id="a23"></a>
 **A23 — The `driver` set lists articles with no galley** {OJS} · 🐞 · minor.
@@ -1827,6 +1835,7 @@ Issue report: [pkp-e2e#280](https://github.com/jardakotesovec/pkp-e2e/issues/280
 
 <a id="fn-f-a22"></a>
 **f-a22** — Live-probed 2026-09-26, OJS, in three drives: while four journals of the install had "DOI Versioning" on, every Identify, list and record request of every journal and of the site-wide address answered 500 with an empty body; after "No" was saved on them, 200; a scratch journal set to "Yes" on screen brought the 500s back for 37 seconds, "No" removed them (note q20). The server log: `SQLSTATE[42804]: Datatype mismatch: 7 ERROR: UNION types text and bigint cannot be matched`, from the per-version branch of `APP\oai\ojs\OAIDAO::getRecordsRecordSetQuery()` (`NULL AS tombstone_id` against the tombstones' bigint), reached through `PKPOAIDAO::getEarliestDatestamp()` and the record lists. The test installs run Postgres; MySQL, whose union typing is looser, was not tried.
+Issue report: [docs/issues/U19-A22-doi-versioning-oai-requests-fail.md](../issues/U19-A22-doi-versioning-oai-requests-fail.md).
 
 <a id="fn-f-a23"></a>
 **f-a23** — Live-probed 2026-09-26, OJS, three journals, two runs: note q21; the member without a galley had no `publication_galleys` row. Code: note i.

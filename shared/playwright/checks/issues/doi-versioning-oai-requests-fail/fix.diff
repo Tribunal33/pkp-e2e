@@ -1,0 +1,32 @@
+--- a/classes/oai/ojs/OAIDAO.php
++++ b/classes/oai/ojs/OAIDAO.php
+@@ -348,6 +348,7 @@
+ 
+         // Records for each published (major) version of record, exposed via the latest
+         // minor version of each major, for journals with DOI versioning.
++        $versionQuery = null;
+         if (!empty($versioningJournalIds)) {
+             $versionQuery = DB::table('submissions AS a')
+                 ->select([
+@@ -414,7 +415,6 @@
+                 ->when($submissionId && !$publicationId, function ($query) {
+                     return $query->whereColumn('p.publication_id', '=', 'a.current_publication_id');
+                 });
+-            $query->union($versionQuery);
+         }
+ 
+         $tombstoneQuery = DB::table('data_object_tombstones AS dot')
+@@ -470,8 +470,13 @@
+         // same journal_id and submission_id. Add a deterministic tiebreaker so
+         // offset-based resumption-token pagination stays stable across requests:
+         // publication_id disambiguates live version rows, tombstone_id the tombstones.
++        // The tombstone branch is united first: it is the only branch whose tombstone_id,
++        // set_spec and oai_identifier are typed columns. PostgreSQL types a UNION pair by
++        // pair, and two branches that both select a bare NULL become text, which the
++        // tombstones' bigint tombstone_id then cannot be matched with.
+         return $query
+             ->union($tombstoneQuery)
++            ->when($versionQuery, fn (Builder $query) => $query->union($versionQuery))
+             ->orderBy(DB::raw($orderBy . ', publication_id, tombstone_id'));
+     }
+ }
