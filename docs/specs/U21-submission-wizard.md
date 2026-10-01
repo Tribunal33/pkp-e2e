@@ -968,6 +968,12 @@ Left out of the scenarios above, by reason:
     on a second context, a submission to a section (series) with an
     editor ticked under "Editorial Assignments" arriving with that
     editor assigned
+  - the guard for A7 and OPS5 (issue reports
+    `docs/issues/U21-A7-OPS5-editorial-role-submitter-no-acknowledgement.md`
+    and `docs/issues/U21-A7-completion-screen-claims-unsent-email.md`): a
+    submitter in their own manager or editor role receiving the
+    confirmation, and with "Do not send an email." the "Submission
+    complete" screen not promising one
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1038,7 +1044,7 @@ are the source; badges, Impact and Basis:
 | [A4](#a4) | The wizard footer shows a "Last saved" time counted from page load, not from a real save | 🐞 | minor | — |
 | [A5](#a5) | The copyright-agreed activity-log line opens with a raw "{$filename}" placeholder | 🐞 | minor | — |
 | [A6](#a6) | Submitting a draft twice shows a problems banner with nothing to fix; the real refusal never appears | 🐞 | latent | — |
-| [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | minor | — |
+| [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | Editors set to be assigned automatically by a section are never assigned on a second journal | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A10](#a10) | A wizard loaded at phone width keeps its uncollapsed step rail and the page scrolls sideways (journal & press) | 🐞 | minor | — |
 | [A12](#a12) | After "Do not send an email." is saved, the Emails screen shows no Submission Confirmation option selected | 🐞 | minor | — |
@@ -1048,7 +1054,7 @@ are the source; badges, Impact and Basis:
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | minor | — |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
 | [OPS3](#ops3) | A preprint author's own "Cancel" is silently refused; the draft survives with no message | 🐞 | user-visible | — |
-| [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | user-visible | — |
+| [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OPS7](#ops7) | The preprint "Not Allowed" page shows a raw locale code where its explanation should be | 🐞 | minor | — |
 | [OPS8](#ops8) | A further galley on a draft that already listed one when the wizard was opened can never get its file | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [OPS9](#ops9) | The Review step's "Files" panel says "No files have been uploaded" for galleys the draft already had when the page loaded | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
@@ -1132,15 +1138,16 @@ So the author is told to fix problems that are not shown. Basis: probe.
 <sup>[m](#fn-m)</sup>
 
 <a id="a7"></a>
-**A7 — The completion screen claims an email that was never sent** · 🐞 · minor.
+**A7 — The completion screen claims an email that was never sent** · 🐞 · medium.
 With the journal's submission acknowledgement set to "Do not send an
 email.", the "Submission complete" screen still reads "…you've been
 emailed a confirmation for your records." No email exists. The same
-happens to a submitter who chose an editorial role in "Submit As"
-("Journal editor", "Press editor"): with the setting at its default they
+happens to a submitter who chose their own manager or editor role in
+"Submit As" ("Journal editor", "Press manager", "Preprint Server
+manager" and the like): with the setting at its default they
 get no acknowledgement, while the screen promises one. A submitter
 checking their inbox for the promised confirmation finds nothing.
-Basis: probe (a journal and a press). <sup>[q](#fn-q)</sup>
+Basis: probe, 2026-10-01. <sup>[q](#fn-q)</sup>
 
 <a id="a8"></a>
 **A8 — Editors set to be assigned automatically by a section are never assigned on a second journal** · 🐞 · medium.
@@ -1395,13 +1402,13 @@ the viewer? Lean: yes for the thank-you wording; offering a capable viewer
 the post-it-now link is defensible. Basis: probe. <sup>[n](#fn-n)</sup>
 
 <a id="ops5"></a>
-**OPS5 — No acknowledgement email for a can-post submitter** · 🐞 · user-visible.
+**OPS5 — No acknowledgement email for a can-post submitter** · 🐞 · medium.
 A submitter who may post their own preprint (a manager, by default) gets no
 acknowledgement email after submitting: neither the can-post variant the
 app defines for exactly this case nor the ordinary one. A plain author
 submitting under the same conditions receives theirs. The submitter is left
-with no emailed record of the submission. Basis: probe (with the
-plain-author control the same day). <sup>[q](#fn-q)</sup>
+with no emailed record of the submission.
+Basis: probe, 2026-10-01. <sup>[q](#fn-q)</sup>
 
 <a id="ops6"></a>
 **OPS6 — The needs-an-editor email speaks journal language on a preprint server** · ❓ · minor.
@@ -2130,6 +2137,7 @@ confirmation for your records." (A7); the same user type submitting as
 "Preprint Server manager" submitter got only the needs-an-editor email
 (the can-post case, OPS5).
 Issue report: [pkp-e2e#145](https://github.com/jardakotesovec/pkp-e2e/issues/145) ([docs/issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md](../issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md)).
+Issue report: [docs/issues/U21-A7-completion-screen-claims-unsent-email.md](../issues/U21-A7-completion-screen-claims-unsent-email.md).
 
 <a id="fn-r"></a>
 **r** — Schema. The submission record itself is defined in the shared

@@ -1,0 +1,40 @@
+--- a/lib/pkp/pages/submission/PKPSubmissionHandler.php
++++ b/lib/pkp/pages/submission/PKPSubmissionHandler.php
+@@ -358,6 +358,8 @@
+             'pageWidth' => TemplateManager::PAGE_WIDTH_NARROW,
+             'submission' => $submission,
+             'workflowUrl' => $this->getWorkflowUrl($submission, $request->getUser()),
++            // Whether the "Submission Confirmation" setting is on (it says nothing of the recipients)
++            'acknowledgementEnabled' => (bool) $request->getContext()->getData('submissionAcknowledgement'),
+         ]);
+         $templateMgr->display('submission/complete.tpl');
+     }
+--- a/lib/pkp/templates/submission/complete.tpl
++++ b/lib/pkp/templates/submission/complete.tpl
+@@ -15,7 +15,11 @@
+ 	</h1>
+ 
+     <div class="app__contentPanel">
+-        <p>{translate key="submission.submit.whatNext.description"}</p>
++        {if $acknowledgementEnabled}
++            <p>{translate key="submission.submit.whatNext.description"}</p>
++        {else}
++            <p>{translate key="submission.submit.whatNext.descriptionNoEmail"}</p>
++        {/if}
+         <p class="pt-2">{translate key="submission.submit.whatNext.forNow"}</p>
+         <ul role="list">
+             <li><a href={$workflowUrl}>{translate key="submission.submit.whatNext.review"}</a></li>
+--- a/locale/en/submission.po
++++ b/locale/en/submission.po
+@@ -176,6 +176,11 @@
+ "confirmation for your records.  Once the editor has reviewed the submission, "
+ "they will contact you."
+ 
++msgid "submission.submit.whatNext.descriptionNoEmail"
++msgstr ""
++"The press has been notified of your submission. Once the editor has reviewed "
++"the submission, they will contact you."
++
+ msgid "submission.submit.checklistErrors"
+ msgstr ""
+ "Please read and check off the items in the submission checklist.  There are "
