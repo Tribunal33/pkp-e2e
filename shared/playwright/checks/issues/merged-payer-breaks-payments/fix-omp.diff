@@ -1,0 +1,96 @@
+--- a/classes/payment/omp/OMPCompletedPaymentDAO.php
++++ b/classes/payment/omp/OMPCompletedPaymentDAO.php
+@@ -19,6 +19,7 @@
+ 
+ namespace APP\payment\omp;
+ 
++use Illuminate\Support\Facades\DB;
+ use PKP\core\Core;
+ use PKP\db\DAO;
+ use PKP\db\DAOResultFactory;
+@@ -67,7 +68,7 @@
+             [
+                 (int) $completedPayment->getType(),
+                 (int) $completedPayment->getContextId(),
+-                (int) $completedPayment->getUserId(),
++                $completedPayment->getUserId(), /* null once the account is deleted */
+                 $completedPayment->getAssocId(), /* NOT int */
+                 $completedPayment->getAmount(),
+                 $completedPayment->getCurrencyCode(),
+@@ -105,7 +106,7 @@
+             [
+                 (int) $completedPayment->getType(),
+                 (int) $completedPayment->getContextId(),
+-                (int) $completedPayment->getUserId(),
++                $completedPayment->getUserId(), /* null once the account is deleted */
+                 (int) $completedPayment->getAssocId(),
+                 $completedPayment->getAmount(),
+                 $completedPayment->getCurrencyCode(),
+@@ -176,6 +177,14 @@
+             $this,
+             '_fromRow'
+         );
++    }
++
++    /**
++     * Move a user's completed payments to another user (when merging users).
++     */
++    public function changeUser(int $oldUserId, int $newUserId): void
++    {
++        DB::table('completed_payments')->where('user_id', $oldUserId)->update(['user_id' => $newUserId]);
+     }
+ 
+     /**
+--- a/classes/user/Repository.php
++++ b/classes/user/Repository.php
+@@ -23,18 +23,19 @@
+      */
+     public function mergeUsers($oldUserId, $newUserId)
+     {
+-        if (!parent::mergeUsers($oldUserId, $newUserId)) {
++        // Need both user ids for merge
++        if (empty($oldUserId) || empty($newUserId)) {
+             return false;
+         }
+ 
++        // Move the press's own records before parent::mergeUsers() deletes the
++        // old account: the foreign key would otherwise leave its completed
++        // payments without a user (ON DELETE SET NULL).
++
+         // Transfer completed payments.
+         $paymentDao = DAORegistry::getDAO('OMPCompletedPaymentDAO'); /** @var OMPCompletedPaymentDAO $paymentDao */
+-        $paymentFactory = $paymentDao->getByUserId($oldUserId);
+-        while ($payment = $paymentFactory->next()) {
+-            $payment->setUserId($newUserId);
+-            $paymentDao->updateObject($payment);
+-        }
++        $paymentDao->changeUser($oldUserId, $newUserId);
+ 
+-        return true;
++        return parent::mergeUsers($oldUserId, $newUserId);
+     }
+ }
+--- a/lib/pkp/classes/payment/Payment.php
++++ b/lib/pkp/classes/payment/Payment.php
+@@ -136,17 +136,17 @@
+     }
+ 
+     /**
+-     * Set the user ID of the customer.
++     * Set the user ID of the customer (null once the account is deleted).
+      */
+-    public function setUserId(int $userId): int
++    public function setUserId(?int $userId): ?int
+     {
+         return $this->userId = $userId;
+     }
+ 
+     /**
+-     * Get the user ID of the customer.
++     * Get the user ID of the customer (null once the account is deleted).
+      */
+-    public function getUserId(): int
++    public function getUserId(): ?int
+     {
+         return $this->userId;
+     }

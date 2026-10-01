@@ -1,0 +1,106 @@
+--- a/classes/payment/ojs/OJSCompletedPaymentDAO.php
++++ b/classes/payment/ojs/OJSCompletedPaymentDAO.php
+@@ -68,7 +68,7 @@
+             [
+                 (int) $completedPayment->getType(),
+                 (int) $completedPayment->getContextId(),
+-                (int) $completedPayment->getUserId(),
++                $completedPayment->getUserId(), /* null once the account is deleted */
+                 (int) $completedPayment->getAssocId(),
+                 $completedPayment->getAmount(),
+                 $completedPayment->getCurrencyCode(),
+@@ -104,7 +104,7 @@
+             [
+                 (int) $completedPayment->getType(),
+                 (int) $completedPayment->getContextId(),
+-                (int) $completedPayment->getUserId(),
++                $completedPayment->getUserId(), /* null once the account is deleted */
+                 (int) $completedPayment->getAssocId(),
+                 $completedPayment->getAmount(),
+                 $completedPayment->getCurrencyCode(),
+@@ -229,6 +229,14 @@
+         );
+ 
+         return new DAOResultFactory($result, $this, '_fromRow');
++    }
++
++    /**
++     * Move a user's completed payments to another user (when merging users).
++     */
++    public function changeUser(int $oldUserId, int $newUserId): void
++    {
++        DB::table('completed_payments')->where('user_id', $oldUserId)->update(['user_id' => $newUserId]);
+     }
+ 
+     /**
+--- a/classes/user/Repository.php
++++ b/classes/user/Repository.php
+@@ -25,10 +25,16 @@
+      */
+     public function mergeUsers($oldUserId, $newUserId)
+     {
+-        if (!parent::mergeUsers($oldUserId, $newUserId)) {
++        // Need both user ids for merge
++        if (empty($oldUserId) || empty($newUserId)) {
+             return false;
+         }
+ 
++        // Move the journal's own records before parent::mergeUsers() deletes the
++        // old account: the foreign keys would otherwise delete its subscriptions
++        // (ON DELETE CASCADE) and leave its completed payments without a user
++        // (ON DELETE SET NULL).
++
+         // Transfer old user's individual subscriptions for each journal if new user
+         // does not have a valid individual subscription for a given journal.
+         $individualSubscriptionDao = DAORegistry::getDAO('IndividualSubscriptionDAO'); /** @var IndividualSubscriptionDAO $individualSubscriptionDao */
+@@ -69,12 +75,8 @@
+ 
+         // Transfer completed payments.
+         $paymentDao = DAORegistry::getDAO('OJSCompletedPaymentDAO'); /** @var OJSCompletedPaymentDAO $paymentDao */
+-        $paymentFactory = $paymentDao->getByUserId($oldUserId);
+-        while ($payment = $paymentFactory->next()) {
+-            $payment->setUserId($newUserId);
+-            $paymentDao->updateObject($payment);
+-        }
++        $paymentDao->changeUser($oldUserId, $newUserId);
+ 
+-        return true;
++        return parent::mergeUsers($oldUserId, $newUserId);
+     }
+ }
+--- a/controllers/grid/subscriptions/PaymentsGridCellProvider.php
++++ b/controllers/grid/subscriptions/PaymentsGridCellProvider.php
+@@ -57,7 +57,8 @@
+ 
+         switch ($column->getId()) {
+             case 'name':
+-                $user = Repo::user()->get($payment->getUserId(), true);
++                $userId = $payment->getUserId();
++                $user = $userId ? Repo::user()->get($userId, true) : null;
+                 return ['label' => $user ? $user->getFullName() : __('common.user.nonexistent')]; // If no $user, returns "[Nonexistent user]" to avoid null user
+             case 'type':
+                 $paymentManager = Application::get()->getPaymentManager($this->_request->getJournal());
+--- a/lib/pkp/classes/payment/Payment.php
++++ b/lib/pkp/classes/payment/Payment.php
+@@ -136,17 +136,17 @@
+     }
+ 
+     /**
+-     * Set the user ID of the customer.
++     * Set the user ID of the customer (null once the account is deleted).
+      */
+-    public function setUserId(int $userId): int
++    public function setUserId(?int $userId): ?int
+     {
+         return $this->userId = $userId;
+     }
+ 
+     /**
+-     * Get the user ID of the customer.
++     * Get the user ID of the customer (null once the account is deleted).
+      */
+-    public function getUserId(): int
++    public function getUserId(): ?int
+     {
+         return $this->userId;
+     }
