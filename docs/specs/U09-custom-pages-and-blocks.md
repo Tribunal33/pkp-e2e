@@ -818,6 +818,7 @@ the footnote. <sup>y</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - with two form languages and the second language's editor held back, the first language's "Content" box in the block and item windows taking the click and the text, no spinner left (A20; the guard its issue report names)
   - "Add Static Page" on the tab left open after "Static Pages Plugin" is unticked: no server error {OJS OMP} (A12; the guard its issue report names)
   - a placed custom block's "Custom Block Manager" unticked, then a "Page Footer" saved on "Appearance" › "Setup" without a refusal (A15; the guard its issue report names)
   - a preview's address typed by a section editor, an author or a signed-out visitor: the access-denied page, or Login (A7; the guard its issue report names)
@@ -891,7 +892,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | A pasted picture the site refuses stays in the text, embedded, and is saved | 🐞 | minor | — |
 | [A18](#a18) | A picture over the upload limit gets a server error, never "Files larger than {size} can not be uploaded." | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | The static page window closes without a question after a change made only in "Content", and the text is lost | 🐞 | user-visible | — |
-| [A20](#a20) | With two form languages, the first language's "Content" box can stay under a "Loading..." spinner that never goes, taking no click | 🐞 | minor · crash: script | — |
+| [A20](#a20) | With two form languages, the first language's "Content" box can stay under a "Loading..." spinner for good | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | A deleted custom block would keep its place in the sidebar, so a later block of the same name appears unplaced | ❓ | minor | — |
 | [A5](#a5) | Pictures named ".jpeg" are refused while ".jpg" is accepted | ❓ | user-visible | — |
 | [A6](#a6) | A static page and a "Custom Page" item can take the same path, and the static page is then unreachable | ❓ | minor | — |
@@ -1134,18 +1135,23 @@ arrow gets no question: the window closes and the text is gone.
 Basis: probe. <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — The first language's "Content" box can stay under a "Loading..." spinner** · 🐞 · minor · crash: script.
-On a journal whose "Forms" languages are English and French, the
-"Custom Page" item window and the block window each open with an English
-and a French "Content" box. A manager expects to click into the English
-box and type. When the French box finishes loading after the English
-one (rare, on a busy computer or server; every window once the French
-box's start-up is held back <sup>f-a20</sup>), the
-window's own script fails, and a "Loading..." spinner covers the
-English box and never goes away while the window is open: the box takes
-no click, and typing that has begun stops reaching it. Nothing says why.
-Expected: the spinner goes once the box is ready, as in the usual order.
-Basis: probe. <sup>f-a20</sup>
+**A20 — With two form languages, the first language's "Content" box can stay under a "Loading..." spinner for good** · 🐞 · medium · crash: script.
+On a journal whose form languages are English and French, a manager
+opens the custom block window ("Add Block") or the "Custom Page" item
+window. Each has a "Content" box per language. Now and then the page's
+script fails as the window opens, and a "Loading..." spinner covers the
+"Content" box of the first form language (here English) for as long as
+the window is open. That box takes no click, and typing already begun
+stops reaching it. Nothing says why.
+The manager loses the "Content" box of that window, and any letters
+typed before the spinner came. Reloading the page and opening the
+window again gets round it in the usual case: the fault is a race, and
+a fresh load normally comes out in the safe order.
+It happens only when the second language's box is slow to start. In
+pkp-e2e's test runs it came up once on its own, in a full suite run on
+a loaded machine. Run 35 times per app without anything holding the
+second box back, the same tests passed every time.
+Basis: probe, 2026-10-01. <sup>f-a20</sup>
 
 ---
 
@@ -2076,6 +2082,7 @@ passed 35 of 35 runs per app. Not driven: the static page window, whose
 language boxes are built the same way, and whether closing and
 reopening the window clears it. The suites take no workaround; a stuck
 box fails its test with a message naming it.
+Issue report: [docs/issues/U09-A20-first-language-content-box-stuck-loading.md](../issues/U09-A20-first-language-content-box-stuck-loading.md).
 
 ## Reference — entry points & surfaces
 
