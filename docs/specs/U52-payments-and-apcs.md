@@ -741,6 +741,10 @@ ready account. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A10 (issue report
+    `docs/issues/U52-A10-paypal-error-page-no-heading.md`):
+    the PayPal error page of scenario 5 carrying the heading "Paypal Fee Payment" and that name in its breadcrumb and browser tab
 - **Rarely met**:
   - "Purchase Issue" set: the reader's "Purchase Issue Fee" payment page
     (Settings bullet 7; Fields, the manual method's payment page)
@@ -811,7 +815,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | A payment link fails with a blank error page once the instructions are emptied, and still takes notifications once "Enable" is off | 🐞 | user-visible · crash: server | — |
 | [A4](#a4) | "Payment Types" explains required fields, but none is required | 🐞 | minor | — |
 | [A9](#a9) | The membership address gives a blank error page signed out or with payments not set up | 🐞 | minor · crash: server | — |
-| [A10](#a10) | The PayPal error page has no heading | 🐞 | minor | — |
+| [A10](#a10) | The PayPal error page has no heading, and the browser tab shows only the journal's name | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Merging a payer's account breaks the list of payments, the submission's "Payments" menu and its publishing | 🐞 | user-visible · crash: server | — |
 | [A12](#a12) | After "Enable" is saved unticked, the side menu keeps "Institutions" until the page is reloaded | 🐞 | minor | — |
 | [A5](#a5) | Payments save and ask for fees with no currency, and a saved currency cannot be removed | ❓ | minor | — |
@@ -916,12 +920,20 @@ no payment is taken.
 Basis: probe, 2026-09-27. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — The PayPal error page has no heading** · 🐞 · minor.
-A payer whose PayPal payment page fails sees only "A transaction error
-occurred. Please contact the journal manager for details." under a
-breadcrumb that ends "Home /" with nothing after it. The page has no
-heading, and the browser tab shows only the journal's name.
-Basis: probe, 2026-09-27. <sup>f-a10</sup>
+**A10 — The PayPal error page has no heading, and the browser tab shows only the journal's name** · 🐞 · low.
+On a journal or press that takes payments through "Paypal Fee Payment",
+a payment starts with the journal's own call to PayPal, made before the
+payer leaves the site. When that call fails, the payer gets a page that
+reads only "A transaction error occurred. Please contact the journal
+manager for details." (on a press, "… the press manager …"). The page's
+heading is empty, its breadcrumb ends "Home /" with nothing after it,
+and the browser tab shows only the journal's or press's name. The call
+fails while the "Client ID" or "Secret" on Settings › Distribution ›
+"Payments" is wrong, and when PayPal cannot be reached. The same page is
+shown when the payer comes back from PayPal and the payment cannot be
+confirmed: PayPal does not report it approved, its amount or currency
+differs from the one requested, or the payment request no longer exists.
+Basis: probe, 2026-10-01. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — Merging a payer's account breaks the fee records** · 🐞 · user-visible · crash: server.
@@ -1092,6 +1104,7 @@ manual page's layout to a journal (note td16).
 
 <a id="fn-f-a10"></a>
 **f-a10** — `PaypalPaymentForm::display()` shows `plugins.paymethod.paypal.error` through `frontend/pages/message.tpl` with no `pageTitle` (note l). Live-probed 2026-09-27 (note td9): the page's `h1` empty, the breadcrumb "Home /", the browser title "| {journal}".
+Issue report: [docs/issues/U52-A10-paypal-error-page-no-heading.md](../issues/U52-A10-paypal-error-page-no-heading.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — `completed_payments.user_id` references `users` with `onDelete('set null')` (OJS `OJSMigration`), and neither lib/pkp nor OJS `Repository::mergeUsers()` moves completed payments, so the merge leaves the record with no user; `OJSCompletedPaymentDAO::_fromRow()` then passes `null` to `Payment::setUserId(int)`. Every read of the journal's completed payments fails: the list's `PaymentsGridHandler::loadData()`, the menu's `SubmissionPaymentsForm` and `Repository::validatePublish()` (notes f, g, j). The grid's "[Nonexistent user]" is never reached. Live-probed 2026-09-27 (note td15), two journals, five runs: server 500 on `GET {journal}/$$$call$$$/grid/subscriptions/payments-grid/fetch-grid` and on `GET {journal}/$$$call$$$/modals/publish/publish/publish?submissionId={id}&publicationId={id}` (logged "Uncaught TypeError: PKP\payment\Payment::setUserId(): Argument #1 ($userId) must be of type int, null given, called in classes/payment/ojs/OJSCompletedPaymentDAO.php"), and on `GET {journal}/api/v1/submissions/{id}/publications/{id}/_components/submissionPayment`; another submission's waiver still read "Waived".
