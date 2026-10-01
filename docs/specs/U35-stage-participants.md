@@ -1558,7 +1558,7 @@ Issue report: [pkp-e2e#343](https://github.com/jardakotesovec/pkp-e2e/issues/343
 
 <a id="fn-a6"></a>
 **f-a6** — Live-probed 2026-09-22 (all three apps): note td6. `sendMessage()`'s `switch ($templateKey)` raises `NOTIFICATION_TYPE_EDITOR_ASSIGN` (`notification.type.editorAssign` "You have been assigned as an editor to the submission "{$title}".") only for the key `EDITOR_ASSIGN`; the installed "Assign Editor" templates carry `EDITOR_ASSIGN_SUBMISSION`, `EDITOR_ASSIGN_REVIEW` and `EDITOR_ASSIGN_PRODUCTION` (`registry/taskTemplates.xml`, keys made mandatory by pkp/pkp-lib#12593, ojs `4157f8331c`, 2026-08-07), so they fall to the default branch, which only logs. No other code raises that task.
-Issue report: [docs/issues/U35-A6-assign-editor-message-gives-no-task.md](../issues/U35-A6-assign-editor-message-gives-no-task.md).
+Issue report: [pkp-e2e#351](https://github.com/jardakotesovec/pkp-e2e/issues/351) ([docs/issues/U35-A6-assign-editor-message-gives-no-task.md](../issues/U35-A6-assign-editor-message-gives-no-task.md)).
 
 <a id="fn-a7"></a>
 **f-a7** — Live-probed 2026-09-22 (all three apps): note td8. Note k: `saveParticipant()` logs `SUBMISSION_LOG_ADD_PARTICIPANT` with `submission.event.participantAdded` on the edit branch as well, where only the trivial notice distinguishes the two.
