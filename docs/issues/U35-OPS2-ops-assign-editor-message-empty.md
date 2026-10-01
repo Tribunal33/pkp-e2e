@@ -14,6 +14,16 @@
 - **Tracked in** spec U35 [OPS2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U35-stage-participants.md#ops2)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 
+**Update 2026-10-01:** the later report on the "Assign Editor" email's
+two footers ([U35-A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U35-A15-assign-editor-email-two-footers.md)) found that this report's first
+recommendation, pointing OPS's template at the shared
+`emails.editorAssign.body`, would end every server's "Assign Editor"
+email with the server's "automated message" signature and the
+discussion footer, with no sender signature. The recommendation is now
+A15's: define `emails.editorAssignProduction.body` in OPS, the Moderator
+letter signed with the sender's `{$signature}`, which also fills the
+empty letter. The one-attribute change is now an alternative.
+
 ## Summary
 
 On a preprint server, a manager or Moderator who assigns a Moderator
@@ -131,36 +141,48 @@ Reach:
 
 ## Proposed fix
 
-Point OPS's template at the letter OPS already has, the one its
-`EDITOR_ASSIGN_PRODUCTION` used through 3.5
-([fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/ops-assign-editor-message-empty/fix.diff)):
+Define the key OPS's registry already names: add
+`emails.editorAssignProduction.body` to OPS's `locale/en/emails.po`, the
+Moderator letter of `emails.editorAssign.body` word for word with
+`{$signature}` in place of `{$contextSignature}`, as OJS and OMP sign
+their own Production letters. This is the OPS part of the fix in
+[U35-A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U35-A15-assign-editor-email-two-footers.md)
+([fix-ops.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/assign-editor-email-two-footers/fix-ops.diff)), so one OPS change closes both reports.
 
 ```diff
--	<template title="mailable.editorAssignedManual.name" description="emails.editorAssignProduction.body" key="EDITOR_ASSIGN_PRODUCTION" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
-+	<template title="mailable.editorAssignedManual.name" description="emails.editorAssign.body" key="EDITOR_ASSIGN_PRODUCTION" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
++msgid "emails.editorAssignProduction.body"
++msgstr ""
++"<p>Dear {$recipientName},</p><p>The following preprint has been assigned to "
++"you to see through the screening process in your role as Moderator.</p>…"
++"</p><p>Kind regards,</p>{$signature}"
 ```
 
-OPS's `emails.editorAssign.body` has text in `en`, `bg`, `cs`, `de`,
-`mk`, `pt_BR` and `uk`. It is empty in `fr_CA`, `es`, `ca` and `nb_NO`
-and missing from `fr` and `pt`, so in those languages the template is
-stored empty and the English letter is shown, as on 3.5.
+The registry line stays as it is. Tried in the A15 report: a server
+created with this change in stores its "Assign Editor" letter signed
+`{$signature}`, so `fetchTemplateBody()` gets a letter to compile.
 
-Tried on OPS `main`, on a server created with the fix in: "Assign
-Editor" fills "Message" with the Moderator's letter both times, with no
-server error, and the Moderator receives it. "Discussion (Production)"
-in the same list still fills "Please enter your message.".
+Translations: copy each locale's `emails.editorAssign.body` into the new
+key with the same signature swap. A language without the key stores the
+letter empty and shows the English one, as `fr_CA`, `es`, `ca` and
+`nb_NO` (empty) and `fr` and `pt` (missing) do today for
+`emails.editorAssign.body`.
 
 **Alternatives:**
-- Adding `emails.editorAssignProduction.body` to OPS's locale needs a
-  new letter and its translations, while OPS's own Moderator letter
-  already exists.
+- Point the registry at `emails.editorAssign.body`, the letter OPS's
+  `EDITOR_ASSIGN_PRODUCTION` used through 3.5
+  ([fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/ops-assign-editor-message-empty/fix.diff)).
+  Tried on OPS `main` on a server created with it in: "Assign Editor"
+  fills the letter with no server error, and "Discussion (Production)"
+  is unchanged. Not recommended: that letter ends with the server's
+  "automated message" signature, so every "Assign Editor" email would
+  carry two footers and no sender signature (U35-A15).
 - Guarding `fetchTemplateBody()` with `?? ''` stops the server error
   but still fills nothing.
 
 **What goes with it:**
 - Servers created on `main` before the fix keep the empty letter, since
   templates are written when a server is created (the dataset's server
-  still showed the fault with the fix in). No upgrade step is needed:
+  still showed the fault with the alternative in). No upgrade step is needed:
   `main` is unreleased, and an upgrade from 3.5 keeps the letter.
 - Hardening, separate from this fix: `installTaskTemplates()` could
   report a key missing from the primary locale instead of storing `''`
@@ -170,8 +192,8 @@ in the same list still fills "Please enter your message.".
 - A test that chooses each predefined message on every app and checks
   that "Message" fills.
 
-Small: one attribute in OPS's registry, using a letter OPS already has,
-and a test.
+Small: one letter in OPS's locale, copied from one OPS already has, its
+translations, and a test.
 
 ## Evidence
 
@@ -182,8 +204,9 @@ and a test.
 - Fix check: [fixcheck.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/ops-assign-editor-message-empty/fixcheck.js)
   creates a new preprint server (a manager, an author and a Moderator),
   has the author submit a preprint through the wizard, and takes Steps
-  2–7 as the manager; without the fix it shows the fault as the dataset
-  does.
+  2–7 as the manager; without a fix it shows the fault as the dataset
+  does. It was run with the alternative (`fix.diff`) in; the
+  recommended change was tried in the U35-A15 report.
 - Not driven: "Notify" with "Assign Editor"; "OK" with "Message" left
   empty; a server upgraded from 3.5 through the screens (the 3.5
   dataset upgraded to `main`, its stored letter read in the database).

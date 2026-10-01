@@ -1,6 +1,6 @@
 // Issue report docs/issues/U35-OPS2-ops-assign-editor-message-empty.md
-// (U35 OPS2), the fix check and its neighbour. A server's predefined
-// messages are written when the server is created, so the proposed fix
+// (U35 OPS2), the check of its alternative fix (fix.diff) and its neighbour. A server's predefined
+// messages are written when the server is created, so that fix
 // (registry/taskTemplates.xml) shows only on a server created after it:
 // this script builds a scratch preprint server through the kit
 // (app.api.createContext: a manager, an author and a moderator), the author
