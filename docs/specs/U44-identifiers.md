@@ -838,6 +838,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-A9-urn-assign-offered-without-edit-permission.md`):
     a Layout Editor's "Identifiers" page with "Assign" and "Clear" greyed
     like "Save", and the editor's still active
+  - the guard for A14 (Rule 14; scenario 5 passes it; issue report
+    `docs/issues/U44-A14-cleared-urn-stays-on-tab.md`): a galley's and a
+    chapter's tab read right after "Clear" › "OK", the URN gone and
+    "Assign" offered again
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -850,8 +854,6 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A13 ("Add Check Number" on an empty tab suffix writing "NaN";
     Rule 12)
-  - A14 (a galley's or a chapter's tab still showing a cleared URN;
-    Rule 14; scenario 5 passes it)
   - A12 (a URN differing from another only in case accepted; Rule 11)
   - A8, A10 and A11 (the settings window's raw text code, written-out
     angle brackets and failing page script; Fields, the URN plugin's
@@ -905,7 +907,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | The URN prefix refusal shows "&amp;lt;NID&amp;gt;" under the box and in the notice | 🐞 | minor | — |
 | [A11](#a11) | The URN settings window raises a page error on every tick while the pattern choice is selected | 🐞 | invisible · crash: script | — |
 | [A13](#a13) | "Add Check Number" on a tab writes "NaN" into an empty suffix box | 🐞 | minor | — |
-| [A14](#a14) | After "Clear", a galley's or chapter's tab still shows the removed URN | 🐞 | minor | — |
+| [A14](#a14) | After "Clear" on a galley's, chapter's, format's or file's "Identifiers" tab, the removed URN stays shown | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS1](#ojs1) | Adding an issue galley with a Publisher ID hangs on "Save" and adds nothing | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [OJS3](#ojs3) | An issue's Publisher ID, typed on its "Identifiers" tab, is silently dropped on "Save" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OMP1](#omp1) | A press cannot save URN settings with only "Chapters" or "Files" ticked | 🐞 | minor | — |
@@ -1089,12 +1091,19 @@ while its box is empty (Fields).
 Basis: probe, 2026-09-24. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — A cleared URN stays on the tab** · 🐞 · minor.
-After "Clear" › "OK" on a galley's or a chapter's "Identifiers" tab,
-the URN is removed at once, but the tab keeps showing it, with "The
-URN is assigned to this galley." and "Clear", until the window is
-closed and opened again. An issue's tab shows the change at once.
-Basis: probe, 2026-09-24. <sup>f-a14</sup>
+**A14 — After "Clear" on a galley's, chapter's, format's or file's "Identifiers" tab, the removed URN stays shown** · 🐞 · low.
+An editor presses "Clear" under an assigned URN on the "Identifiers"
+tab of a galley (OJS), or of a chapter, a publication format or a file
+(OMP), and answers "OK" to "Are you sure you wish to delete the existing
+URN?". The URN is removed at once, but the tab goes on showing it, with
+"The URN is assigned to this galley." and "Clear", until the window is
+closed and opened again. An issue's tab shows the change at once,
+except in a journal that requires subscriptions.
+Nothing is lost: the URN is gone as asked, and only the tab says
+otherwise until it is reopened. On 3.3 the DOI plugin's "Clear" on the
+same tabs behaves the same way, and DOIs are in far wider use than
+URNs.
+Basis: probe, 2026-10-01. <sup>f-a14</sup>
 
 ### OJS
 
@@ -1881,6 +1890,7 @@ the OMP chapter tab; the button is the legacy `#checkNo` (note f-a6).
 **f-a14** — Live-probed 2026-09-24 (note q25). The galley and chapter
 tabs' "Clear" deletes the URN at once (note e) without redrawing the
 tab; the issue tab reloads `#identifiersTab` (note f).
+Issue report: [docs/issues/U44-A14-cleared-urn-stays-on-tab.md](../issues/U44-A14-cleared-urn-stays-on-tab.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `IssueGalleyForm::validate()` calls

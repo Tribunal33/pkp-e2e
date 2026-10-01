@@ -1,0 +1,53 @@
+--- a/controllers/grid/articleGalleys/ArticleGalleyGridHandler.php
++++ b/controllers/grid/articleGalleys/ArticleGalleyGridHandler.php
+@@ -300,7 +300,9 @@
+         $representation = $this->getGalley();
+         $form = new PublicIdentifiersForm($representation, null, null, $this->canEdit());
+         $form->clearPubId($request->getUserVar('pubIdPlugIn'));
+-        return new JSONMessage(true);
++        $json = new JSONMessage(true);
++        $json->setEvent('reloadTab', [['tabsSelector' => '#editArticleGalleyMetadataTabs', 'tabSelector' => '#identifiersTab']]);
++        return $json;
+     }
+ 
+     /**
+--- a/lib/pkp/js/controllers/SiteHandler.js
++++ b/lib/pkp/js/controllers/SiteHandler.js
+@@ -489,7 +489,14 @@
+ 	$.pkp.controllers.SiteHandler.prototype.reloadTabHandler_ =
+ 			function(sourceElement, event, jsonData) {
+ 
+-		$(jsonData.tabsSelector).tabs('load', jsonData.tabSelector);
++		var $tabs = $(jsonData.tabsSelector),
++				index = $tabs.find(jsonData.tabSelector).index();
++
++		// jQuery UI reads a string as the end of a tab's href, not as a
++		// selector, so the tab is named by its position.
++		if (index !== -1) {
++			$tabs.tabs('load', index);
++		}
+ 	};
+ 
+ 
+--- a/lib/pkp/templates/controllers/api/file/editMetadata.tpl
++++ b/lib/pkp/templates/controllers/api/file/editMetadata.tpl
+@@ -17,7 +17,7 @@
+ 	<ul>
+ 		<li><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="editMetadataTab" submissionFileId=$submissionFile->getId() submissionId=$submissionFile->getData('submissionId') stageId=$stageId}">{translate key="grid.action.editMetadata"}</a></li>
+ 		{if $showIdentifierTab}
+-			<li><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="identifiers" submissionFileId=$submissionFile->getId() submissionId=$submissionFile->getData('submissionId') stageId=$stageId}">{translate key="submission.identifiers"}</a></li>
++			<li id="identifiersTab"><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="identifiers" submissionFileId=$submissionFile->getId() submissionId=$submissionFile->getData('submissionId') stageId=$stageId}">{translate key="submission.identifiers"}</a></li>
+ 		{/if}
+ 	</ul>
+ </div>
+--- a/templates/controllers/grid/articleGalleys/editFormat.tpl
++++ b/templates/controllers/grid/articleGalleys/editFormat.tpl
+@@ -17,7 +17,7 @@
+ 	<ul>
+ 		<li><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="editGalleyTab" submissionId=$submissionId publicationId=$publicationId representationId=$representationId}">{translate key="grid.action.editMetadata"}</a></li>
+ 		{if $enableIdentifiers}
+-			<li><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="identifiers" submissionId=$submissionId publicationId=$publicationId representationId=$representationId}">{translate key="submission.identifiers"}</a></li>
++			<li id="identifiersTab"><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="identifiers" submissionId=$submissionId publicationId=$publicationId representationId=$representationId}">{translate key="submission.identifiers"}</a></li>
+ 		{/if}
+ 	</ul>
+ </div>
