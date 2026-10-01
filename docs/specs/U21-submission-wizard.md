@@ -2009,7 +2009,7 @@ another draft succeeded through the same flow. Mechanism: OPS drafts sit
 on the Production stage, so the author never holds the *submission-stage*
 author assignment `canCurrentUserDelete()` demands — the footer's
 `$canCancelSubmission` check does not mirror it.
-Issue report: [docs/issues/U21-OPS3-author-cancel-draft-refused.md](../issues/U21-OPS3-author-cancel-draft-refused.md).
+Issue report: [pkp-e2e#162](https://github.com/jardakotesovec/pkp-e2e/issues/162) ([docs/issues/U21-OPS3-author-cancel-draft-refused.md](../issues/U21-OPS3-author-cancel-draft-refused.md)).
 
 <a id="fn-p"></a>
 **p** — Section closed mid-draft. `PKPSubmissionHandler::showWizard()`
