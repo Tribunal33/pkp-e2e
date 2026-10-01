@@ -30,7 +30,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U71](../specs/U71-internal-review-stage.md) | 6 | 2 | 2 |  |
 | [U18](../specs/U18-web-feeds.md) | 5 | 2 | 2 |  |
 | [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 |  |
-| [U48](../specs/U48-jats-and-body-text.md) | 16 | 1 | 7 |  |
+| [U48](../specs/U48-jats-and-body-text.md) | 16 | 1 | 7 | **A20 only: issues session s3, 2026-10-01** (joins U47 A6); the other entries are free for another session |
 | [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 | A16 written with U63 A12 ([pkp-e2e#15](https://github.com/jardakotesovec/pkp-e2e/issues/15), 2026-09-30); the other entries are open |
 | [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | **OMP1 done: issues session s3, 2026-09-30** (with U53 A14); the other entries are free for another session |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 |  |
