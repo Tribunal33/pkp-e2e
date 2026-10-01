@@ -1579,7 +1579,7 @@ Issue report: [pkp-e2e#81](https://github.com/jardakotesovec/pkp-e2e/issues/81) 
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-25 (td9), OJS: on a journal whose interface is English and French and whose forms are English only, a galley in French answered the notice "An issue galley locale is required." and was not listed; on a journal where French is also a form language the same galley saved as "PDF | French". `IssueGalleyForm` checks `galleyLocale` against `getSupportedFormLocales()` while the list offers `getSupportedLocaleNames()` (note p).
-Issue report: [docs/issues/U50-A11-issue-galley-language-offered-then-refused.md](../issues/U50-A11-issue-galley-language-offered-then-refused.md).
+Issue report: [pkp-e2e#106](https://github.com/jardakotesovec/pkp-e2e/issues/106) ([docs/issues/U50-A11-issue-galley-language-offered-then-refused.md](../issues/U50-A11-issue-galley-language-offered-then-refused.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-25 (td12; Side effects bullet 3), OJS, two articles over two runs (one published through its workflow, one seeded as published): after "Delete" of its issue each article's workflow header read "Published" with "Return to Workflow", its Publication Settings "Status: Unscheduled", its page "404 Not Found", and its History only "Submission metadata updated". `deleteIssue()` sets the status through `Repo::publication()->edit()`, not `unpublish()` (note t), so no unpublication is logged (note se).
