@@ -3906,7 +3906,7 @@ the new galleys' `doiId` whenever versioning is on; OJS's copy tests
 `!$isMinorVersion`. Live-probed 2026-09-26 (q16): the minor version's
 galley had no DOI in the database and read "Needs DOI" in "View all";
 the journal and the press kept theirs.
-Issue report: [docs/issues/U45-OPS4-minor-version-new-galley-dois.md](../issues/U45-OPS4-minor-version-new-galley-dois.md).
+Issue report: [pkp-e2e#220](https://github.com/jardakotesovec/pkp-e2e/issues/220) ([docs/issues/U45-OPS4-minor-version-new-galley-dois.md](../issues/U45-OPS4-minor-version-new-galley-dois.md)).
 
 <a id="fn-f-ops5"></a>
 **f-ops5** — See l for the listing rule. Live-probed 2026-09-26 (q17):
