@@ -913,6 +913,11 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for OPS3 (issue report
+    `docs/issues/U35-OPS3-moderator-assigned-email-never-sent.md`):
+    a preprint submitted to a section with Moderators under "Editorial
+    Assignments", each assigned moderator's mailbox read for "Moderator
+    Assigned (Auto)"
   - the guard for A1 (issue report
     `docs/issues/U35-A1-section-editor-edit-assignment-saves-nothing.md`):
     a Section Editor changing the Author's "Permissions" in "Edit
@@ -990,7 +995,7 @@ entry notes otherwise; the team settles them on spec review.
 | [OJS1](#ojs1) | The automatic assignment email tells the editor to select "Send to Review"; the button reads "Send for Review" | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's Internal Review offers no predefined message in "Assign" and "Notify" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | On a preprint server "Assign Editor" leaves "Message" as it was | 🐞 | minor · crash: server | — |
-| [OPS3](#ops3) | A preprint server never sends its automatic assignment email | 🐞 | user-visible | — |
+| [OPS3](#ops3) | A preprint server never emails its moderators that a new preprint was assigned to them | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS4](#ops4) | On a preprint server the notice after "Assign", "Edit" or "Notify" can show in the Production entry's "Notification" box instead of at the top right | 🐞 | minor | — |
 | [A2](#a2) | A Section Editor may "Remove" rows they may not "Edit": their own, manager-level ones, and a recommending editor another editor's | ❓ | minor | — |
 | [A8](#a8) | A Production editor assigned to a submission can open fewer of its stages than one who is not assigned | ❓ | minor | — |
@@ -1244,15 +1249,20 @@ server, and nothing on screen says so.
 Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="ops3"></a>
-**OPS3 — The automatic assignment email is never sent** · 🐞 · user-visible.
+**OPS3 — A preprint server never emails its moderators that a new preprint was assigned to them** · 🐞 · medium.
 A preprint server lists "Moderator Assigned (Auto)" under Settings ›
-Workflow › Emails and lets it be edited, but never sends it: no Preprint
-Server manager or Moderator on a submission gets it when the author
-submits, the ones the server assigns automatically included, and neither
-does a manager who submits in that role. Only "A new submission needs an
-editor to be assigned" goes out, so the editors a server assigns on
-submission are never told.
-Basis: probe. <sup>[f-ops3](#fn-ops3)</sup>
+Workflow › Emails and lets it be edited, but never sends it. When an
+author submits a preprint, the Moderators named under the section's
+"Editorial Assignments" are added to it as on a journal, but "You have
+been assigned as a moderator on a submission to {server name}" is not
+sent to any of them: no send is attempted and the preprint's Activity Log
+records none.
+The managers' "A new submission needs an editor to be assigned" email is,
+by design, sent only when nobody was assigned. So on a server whose
+section names Moderators, no email at all says that a preprint waits for
+moderation. A server with no Moderators under "Editorial Assignments" is
+not affected: nobody is assigned there and the managers get their email.
+Basis: probe, 2026-10-01. <sup>[f-ops3](#fn-ops3)</sup>
 
 <a id="ops4"></a>
 **OPS4 — A participant notice can land in the stage's own box** · 🐞 · minor.
@@ -1433,6 +1443,7 @@ Issue report (a typed message not sent, this stage included): [pkp-e2e#307](http
 
 <a id="fn-ops3"></a>
 **f-ops3** — Live-probed 2026-09-22 (two preprint servers): editors seeded on a draft (two Preprint Server managers, three Moderators, one holding both roles, one who ticked the opt-out) and the draft submitted by its author: nobody got "You have been assigned as a moderator…", only "A new submission needs an editor to be assigned: …"; a manager who submitted as "Preprint Server manager" got the same; a submission seeded on the install's first server, with its Moderators assigned automatically, logged no such email. "Moderator Assigned (Auto)" is listed and opens in "Edit Template". Cause: note l; the template itself asks the moderator to post the preprint.
+Issue report: [docs/issues/U35-OPS3-moderator-assigned-email-never-sent.md](../issues/U35-OPS3-moderator-assigned-email-never-sent.md).
 
 <a id="fn-ops4"></a>
 **f-ops4** — Test runs 2026-09-22 (preprint server; Rules 6a, 8d, 11; scenario 6): in one run, "Notify" in scenario 6 closed the window and "Notification sent to users." showed in a box headed "Notification" at the top of the Production entry's main column, above "Production Tasks & Discussions", with nothing at the top right; in every other scenario of that run, and in every scenario of the next full run, each notice showed at the top right. The journal's and press's runs showed every notice at the top right. Cause: each Participants action answers with a data-changed event, on which both the page's fetch of pending notices (note k) and the stage's `pages/workflow/components/primary/WorkflowNotificationDisplay.vue` post to `notification/fetchNotification`. On a journal's or press's Copyediting and Production entries the component posts `requestOptions` with `NOTIFICATION_LEVEL_TRIVIAL: 0`; for OPS's Production `getRequestOptionsPerStage()` returns null, so it posts none, and `NotificationHandler::fetchNotification()` with no options returns the user's trivial notices and deletes them. Whichever request is answered first takes the notice. Proposed fix: give OPS's Production stage its own request options in `getRequestOptionsPerStage()` (at least `NOTIFICATION_LEVEL_TRIVIAL: 0`, as the other apps' Production has), or skip the component's fetch when a stage has none.
