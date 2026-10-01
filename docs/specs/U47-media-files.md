@@ -1806,7 +1806,7 @@ each card's temporary-file answer as it came back
 multilingual property as a locale map, before
 `MediaFilesController::add()` wraps a string name into the
 submission's locale. The added file's name is right.
-Issue report: [docs/issues/U47-A6-media-jats-upload-php-warning-in-log.md](../issues/U47-A6-media-jats-upload-php-warning-in-log.md).
+Issue report: [pkp-e2e#149](https://github.com/jardakotesovec/pkp-e2e/issues/149) ([docs/issues/U47-A6-media-jats-upload-php-warning-in-log.md](../issues/U47-A6-media-jats-upload-php-warning-in-log.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Rule 11. Live-probed 2026-09-30 at ojs `7ce98ec09e`, omp
