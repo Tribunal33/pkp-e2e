@@ -1,0 +1,15 @@
+diff --git a/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php b/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
+--- a/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
+@@ -313,8 +313,10 @@
+ 
+     /**
+      * Get the available email template variable names for the given template name.
++     *
++     * @param ?string $emailKey The template's key; null for a template added in Settings
+      */
+-    public function getEmailVariableNames(string $emailKey): array
++    public function getEmailVariableNames(?string $emailKey): array
+     {
+         switch ($emailKey) {
+             case 'COPYEDIT_REQUEST':
