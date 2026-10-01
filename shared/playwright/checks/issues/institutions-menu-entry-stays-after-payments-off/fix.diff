@@ -1,0 +1,38 @@
+--- a/lib/ui-library/src/components/Container/SettingsPage.vue
++++ b/lib/ui-library/src/components/Container/SettingsPage.vue
+@@ -30,10 +30,17 @@
+ 		return {
+ 			announcementsNavLink: {},
+ 			institutionsNavLink: {},
++			institutionStatsEnabled: false,
+ 			paymentsNavLink: null,
+ 		};
+ 	},
+ 	mounted() {
++		// Institutional statistics also keep the institutions nav link
++		const statisticsField = this.components[
++			pkp.const.FORM_CONTEXT_STATISTICS
++		]?.fields?.find((field) => field.name === 'enableInstitutionUsageStats');
++		this.institutionStatsEnabled = !!statisticsField?.value;
++
+ 		pkp.eventBus.$on('form-success', (formId, context) => {
+ 			// Add or remove payments nav link
+ 			if (
+@@ -43,6 +50,9 @@
+ 				if (!context.paymentsEnabled && !!this.menu['payments']) {
+ 					let menu = {...this.menu};
+ 					delete menu.payments;
++					if (!this.institutionStatsEnabled) {
++						delete menu.institutions;
++					}
+ 					this.menu = menu;
+ 				} else if (
+ 					context.paymentsEnabled &&
+@@ -62,6 +72,7 @@
+ 
+ 			// Add or remove institutions nav link
+ 			if (formId === pkp.const.FORM_CONTEXT_STATISTICS) {
++				this.institutionStatsEnabled = !!context.enableInstitutionUsageStats;
+ 				if (
+ 					!context.enableInstitutionUsageStats &&
+ 					!this.menu['payments'] &&
