@@ -1057,6 +1057,10 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A16 (issue report
+    `docs/issues/U69-A16-earlier-url-path-server-error.md`): a book whose
+    later version was published under a new URL Path, opened by the
+    earlier one, forwarding to the book's current address
   - the guard for A9 (Rule 13; issue report
     `docs/issues/U69-A9-book-file-open-download-fails.md`): a reader
     opening a book's free PDF in the viewer and saving it with
@@ -1184,7 +1188,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | In a format with several files, a file for sale shows no price | 🐞 | user-visible | — |
 | [A9](#a9) | On a press, a reader who opens a book's PDF gets an empty viewer, and no download saves the file | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | The book's and chapter pages show raw codes in French | 🐞 | user-visible | — |
-| [A16](#a16) | A book's earlier URL Path shows a server error page | 🐞 | user-visible · crash: server | — |
+| [A16](#a16) | A book's earlier URL Path shows a server error page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | An older version's chapter page shows a server error page | 🐞 | user-visible · crash: server | — |
 | [A1](#a1) | An address that names no book asks visitors to sign in | 🐞 | minor | — |
 | [A3](#a3) | A version address that names no version fails with a server error | 🐞 | minor · crash: server | — |
@@ -1366,14 +1370,14 @@ with no date or name. A priced file's link drops the format's name
 Basis: probe, 2026-09-28. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — A book's earlier URL Path shows a server error page** · 🐞 · user-visible · crash: server.
+**A16 — A book's earlier URL Path shows a server error page** · 🐞 · medium · crash: server.
 After a book's URL Path changes (a later version saved a new one), the
 address with the old path shows a blank server error page instead of
 the book: bookmarks, shared links and search engines' links to it break.
 A URL Path saved on a new, unpublished version does the same at once,
 to visitors and to the Press manager, until that version is published.
 The app fails.
-Since: 2024-06-26 (two years) · Basis: probe, 2026-09-28. <sup>f-a16</sup>
+Since: 2024-06-26 (two years) · Basis: probe, 2026-10-01. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — An unpublished book's chapter page carries no preview notice** · 🐞 · minor.
@@ -1697,6 +1701,7 @@ Issue report (the view page's script error "PDFJS is not defined", low): [pkp-e2
 
 <a id="fn-f-a16"></a>
 **f-a16** — Note g: the forward to the current URL Path passes a string to `PKPRequest::redirect()`, whose path argument is `?array` since lib/pkp bee9547b49 (2024-06-26); the log reads "Uncaught TypeError: PKP\core\PKPRequest::redirect(): Argument #4 ($path) must be of type ?array, string given, called in pages/catalog/CatalogBookHandler.php on line 132". Live-probed 2026-09-28 (td2): `{press}/catalog/book/harbour` and `…/harbour-2` answered 500. A regression: the forward worked before that change.
+Issue report: [docs/issues/U69-A16-earlier-url-path-server-error.md](../issues/U69-A16-earlier-url-path-server-error.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — `chapter.tpl` prints only `submission.outdatedVersion`; `submission.viewingPreview` is in `monograph_full.tpl` alone. Live-probed 2026-09-28 (td5): the chapter page read "… Volume K1 Unpublished Book Published March 5, 2024 How to Cite …" with no notice for every previewing role.

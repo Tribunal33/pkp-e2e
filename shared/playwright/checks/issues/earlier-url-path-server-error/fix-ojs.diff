@@ -1,0 +1,22 @@
+--- a/pages/issue/IssueHandler.php
++++ b/pages/issue/IssueHandler.php
+@@ -79,7 +79,7 @@
+ 
+             // Invalid galley id, redirect to issue page
+             if (!$galley) {
+-                $request->redirect(null, null, 'view', $issue->getId());
++                $request->redirect(null, null, 'view', [$issue->getId()]);
+             }
+ 
+             $this->setGalley($galley);
+--- a/lib/pkp/classes/core/PKPRequest.php
++++ b/lib/pkp/classes/core/PKPRequest.php
+@@ -710,7 +710,7 @@
+      * @param $context The optional contextual paths
+      * @param $page The name of the op to redirect to.
+      * @param $op optional The name of the op to redirect to.
+-     * @param $path string or array containing path info for redirect.
++     * @param $path Path info for the redirect, one list item per path segment.
+      * @param $params Map of name => value pairs for additional parameters
+      * @param $anchor Name of desired anchor on the target page
+      * @param $urlLocaleForPage Whether or not to override locale for this URL; Use '' to exclude.

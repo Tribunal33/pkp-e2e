@@ -1243,7 +1243,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS4](#ojs4) | "Download Issues" holds at most 30 issues, although the page counts more | 🐞 | user-visible | — |
 | [OJS5](#ojs5) | "Journal Article Requests (IR_A1)" lists investigation rows its header leaves out | 🐞 | minor | — |
 | [OJS6](#ojs6) | The COUNTER Release 4 file names its report by a cut-off code path | 🐞 | minor | — |
-| [OMP3](#omp3) | A book's PDF or "Appendix" file is never counted | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
+| [OMP3](#omp3) | A book's PDF or "Appendix" file fails to open, so its visit is never counted | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | Custom Range refuses an open-ended range | ❓ | minor | — |
 | [A9](#a9) | The downloaded spreadsheets carry no byte-order mark | ❓ | minor | — |
 | [A12](#a12) | The date range list does not close on Escape | ❓ | minor | — |

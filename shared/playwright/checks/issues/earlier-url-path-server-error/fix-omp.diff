@@ -1,0 +1,25 @@
+--- a/pages/catalog/CatalogBookHandler.php
++++ b/pages/catalog/CatalogBookHandler.php
+@@ -126,10 +126,7 @@
+         // If the publication has been reached through an outdated
+         // urlPath, redirect to the latest version
+         if (!ctype_digit((string) $submissionId) && $submissionId !== $this->publication->getData('urlPath') && !$subPath) {
+-            $newArgs = $this->publication->getData('urlPath')
+-                ? $this->publication->getData('urlPath')
+-                : $this->publication->getId();
+-            $request->redirect(null, $request->getRequestedPage(), $request->getRequestedOp(), $newArgs);
++            $request->redirect(null, $request->getRequestedPage(), $request->getRequestedOp(), [$submission->getBestId()]);
+         }
+ 
+         $monographDoiObject = $this->publication->getData('doiObject');
+--- a/lib/pkp/classes/core/PKPRequest.php
++++ b/lib/pkp/classes/core/PKPRequest.php
+@@ -710,7 +710,7 @@
+      * @param $context The optional contextual paths
+      * @param $page The name of the op to redirect to.
+      * @param $op optional The name of the op to redirect to.
+-     * @param $path string or array containing path info for redirect.
++     * @param $path Path info for the redirect, one list item per path segment.
+      * @param $params Map of name => value pairs for additional parameters
+      * @param $anchor Name of desired anchor on the target page
+      * @param $urlLocaleForPage Whether or not to override locale for this URL; Use '' to exclude.
