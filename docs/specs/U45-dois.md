@@ -3760,7 +3760,7 @@ Live-probed 2026-09-26 (q8), all three apps (the journal twice): after
 `doiStatus=3&status[]=3`; after "Clear filter: Registered" no filter
 read chosen and the request still carried `status[]=3` (the journal
 showed 4 of its 6 works) until a reload.
-Issue report: [docs/issues/U45-A12-doi-filter-clear-hides-unpublished.md](../issues/U45-A12-doi-filter-clear-hides-unpublished.md).
+Issue report: [pkp-e2e#231](https://github.com/jardakotesovec/pkp-e2e/issues/231) ([docs/issues/U45-A12-doi-filter-clear-hides-unpublished.md](../issues/U45-A12-doi-filter-clear-hides-unpublished.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-26 (q19; p), all three apps (export and
