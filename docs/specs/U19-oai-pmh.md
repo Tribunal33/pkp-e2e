@@ -1977,7 +1977,7 @@ Issue report: [pkp-e2e#309](https://github.com/jardakotesovec/pkp-e2e/issues/309
 
 <a id="fn-f-a20"></a>
 **f-a20** — Live-probed 2026-09-26, OJS and OPS, two sweep runs: note q11, the last read; `publicknowledge`'s deleted records of the day (OJS 198, 447, 512; OPS 174, 227) were listed for `from=2030-01-01` at its own and the site-wide address. Code: note l.
-Issue report: [docs/issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md](../issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md).
+Issue report: [pkp-e2e#310](https://github.com/jardakotesovec/pkp-e2e/issues/310) ([docs/issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md](../issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md)).
 
 <a id="fn-f-a21"></a>
 **f-a21** — Live-probed 2026-09-26, OJS and OPS: note q19; the record headers read at `…/fr_CA/oai` named "{path}:ARTF". Code: note j (`getLocalizedAbbrev()` under the request's locale).
