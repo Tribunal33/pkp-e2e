@@ -1,0 +1,180 @@
+diff --git a/classes/issue/Issue.php b/classes/issue/Issue.php
+--- a/classes/issue/Issue.php
++++ b/classes/issue/Issue.php
+@@ -656,7 +656,7 @@
+     {
+         return Repo::submission()->getCollector()
+             ->filterByContextIds([$this->getData('journalId')])
+-            ->filterByIssueIds([$this->getId()])
++            ->filterByIssueIds([$this->getId()], true)
+             ->filterByCurrentPublicationStatus([PKPPublication::STATUS_SCHEDULED, PKPPublication::STATUS_PUBLISHED])
+             ->getCount();
+     }
+diff --git a/classes/issue/maps/Schema.php b/classes/issue/maps/Schema.php
+--- a/classes/issue/maps/Schema.php
++++ b/classes/issue/maps/Schema.php
+@@ -113,7 +113,7 @@
+                     $submissions = Repo::submission()
+                         ->getCollector()
+                         ->filterByContextIds([$issue->getJournalId()])
+-                        ->filterByIssueIds([$issue->getId()])
++                        ->filterByIssueIds([$issue->getId()], true)
+                         ->getMany();
+ 
+                     foreach ($submissions as $submission) {
+diff --git a/classes/section/DAO.php b/classes/section/DAO.php
+--- a/classes/section/DAO.php
++++ b/classes/section/DAO.php
+@@ -65,10 +65,12 @@
+     /**
+      * Retrieve all sections in which articles are currently published in
+      * the given issue.
++     *
++     * @param bool $listedOnly See \APP\submission\Collector::filterByIssueIds()
+      */
+-    public function getByIssueId(int $issueId): LazyCollection
++    public function getByIssueId(int $issueId, bool $listedOnly = true): LazyCollection
+     {
+-        return LazyCollection::make(function () use ($issueId) {
++        return LazyCollection::make(function () use ($issueId, $listedOnly) {
+             $issue = Repo::issue()->get($issueId);
+             $allowedStatuses = [PKPPublication::STATUS_PUBLISHED];
+             if (!$issue->getPublished()) {
+@@ -77,7 +79,7 @@
+ 
+             $submissionsCollector = Repo::submission()->getCollector()
+                 ->filterByContextIds([$issue->getJournalId()])
+-                ->filterByIssueIds([$issueId])
++                ->filterByIssueIds([$issueId], $listedOnly)
+                 ->orderBy(\APP\submission\Collector::ORDERBY_SEQUENCE, \APP\submission\Collector::ORDER_DIR_ASC);
+ 
+             // Extend the submissions query to fetch the list of section IDs instead
+diff --git a/classes/section/Repository.php b/classes/section/Repository.php
+--- a/classes/section/Repository.php
++++ b/classes/section/Repository.php
+@@ -18,9 +18,9 @@
+ class Repository extends \PKP\section\Repository
+ {
+     /** @copydoc DAO::getByIssueId() */
+-    public function getByIssueId(int $issueId): LazyCollection
++    public function getByIssueId(int $issueId, bool $listedOnly = true): LazyCollection
+     {
+-        return $this->dao->getByIssueId($issueId);
++        return $this->dao->getByIssueId($issueId, $listedOnly);
+     }
+ 
+     /** @copydoc DAO::customSectionOrderingExists() */
+diff --git a/classes/submission/Collector.php b/classes/submission/Collector.php
+--- a/classes/submission/Collector.php
++++ b/classes/submission/Collector.php
+@@ -23,6 +23,7 @@
+ class Collector extends \PKP\submission\Collector
+ {
+     public ?array $issueIds = null;
++    protected bool $issueListedOnly = false;
+     public ?array $sectionIds = null;
+     protected ?bool $latestPublished = null;
+ 
+@@ -33,10 +34,17 @@
+ 
+     /**
+      * Limit results to submissions assigned to these issues
++     *
++     * @param bool $listedOnly Match a submission only through its current publication
++     *   or a publication scheduled in these issues: the articles an issue lists (its
++     *   table of contents, its sections, its count, its feed). Otherwise any of its
++     *   publications assigned to these issues matches, also one a newer version has
++     *   superseded, as the issue's own publish, unpublish, delete and export need.
+      */
+-    public function filterByIssueIds(array $issueIds): self
++    public function filterByIssueIds(array $issueIds, bool $listedOnly = false): self
+     {
+         $this->issueIds = $issueIds;
++        $this->issueListedOnly = $listedOnly;
+         return $this;
+     }
+ 
+@@ -72,7 +80,12 @@
+             $q->whereIn('s.submission_id', function ($query) {
+                 $query->select('p.submission_id')
+                     ->from('publications as p')
+-                    ->whereIn('p.issue_id', $this->issueIds);
++                    ->whereIn('p.issue_id', $this->issueIds)
++                    ->when($this->issueListedOnly, fn (Builder $query) => $query->where(
++                        fn (Builder $query) => $query
++                            ->whereColumn('p.publication_id', 's.current_publication_id')
++                            ->orWhere('p.status', Publication::STATUS_SCHEDULED)
++                    ));
+             });
+         }
+ 
+diff --git a/classes/submission/Repository.php b/classes/submission/Repository.php
+--- a/classes/submission/Repository.php
++++ b/classes/submission/Repository.php
+@@ -31,7 +31,7 @@
+     {
+         $submissions = $this->getCollector()
+             ->filterByContextIds([$contextId])
+-            ->filterByIssueIds([$issueId])
++            ->filterByIssueIds([$issueId], true)
+             ->filterByStatus([Submission::STATUS_PUBLISHED, Submission::STATUS_SCHEDULED])
+             ->orderBy(Collector::ORDERBY_SEQUENCE, Collector::ORDER_DIR_ASC)
+             ->getMany();
+diff --git a/pages/issue/IssueHandler.php b/pages/issue/IssueHandler.php
+--- a/pages/issue/IssueHandler.php
++++ b/pages/issue/IssueHandler.php
+@@ -376,7 +376,7 @@
+ 
+         $issueSubmissions = Repo::submission()->getCollector()
+             ->filterByContextIds([$issue->getJournalId()])
+-            ->filterByIssueIds([$issue->getId()])
++            ->filterByIssueIds([$issue->getId()], true)
+             ->orderBy(\APP\submission\Collector::ORDERBY_SEQUENCE, \APP\submission\Collector::ORDER_DIR_ASC)
+             ->getMany();
+ 
+diff --git a/plugins/generic/datacite/filter/DataciteXmlFilter.php b/plugins/generic/datacite/filter/DataciteXmlFilter.php
+--- a/plugins/generic/datacite/filter/DataciteXmlFilter.php
++++ b/plugins/generic/datacite/filter/DataciteXmlFilter.php
+@@ -803,7 +803,7 @@
+                 $submissions = Repo::submission()
+                     ->getCollector()
+                     ->filterByContextIds([$issue->getJournalId()])
+-                    ->filterByIssueIds([$issue->getId()])
++                    ->filterByIssueIds([$issue->getId()], true)
+                     ->getMany();
+ 
+                 foreach ($submissions as $relatedArticle) {
+@@ -1300,7 +1300,7 @@
+         $submissions = Repo::submission()
+             ->getCollector()
+             ->filterByContextIds([$issue->getJournalId()])
+-            ->filterByIssueIds([$issue->getId()])
++            ->filterByIssueIds([$issue->getId()], true)
+             ->getMany();
+ 
+         $toc = '';
+diff --git a/plugins/generic/webFeed/WebFeedGatewayPlugin.php b/plugins/generic/webFeed/WebFeedGatewayPlugin.php
+--- a/plugins/generic/webFeed/WebFeedGatewayPlugin.php
++++ b/plugins/generic/webFeed/WebFeedGatewayPlugin.php
+@@ -87,7 +87,7 @@
+         // If the plugin is configured to display only the latest issue, so we filter by it and apply the needed changes to the query
+         if (WebFeedPlugin::hasIssues() && $displayItems === 'issue') {
+             $issue = Repo::issue()->getCurrent($context->getId(), true);
+-            $submissions->filterByIssueIds([$issue?->getId() ?? 0])
++            $submissions->filterByIssueIds([$issue?->getId() ?? 0], true)
+                 ->limit(null)
+                 ->orderBy(Collector::ORDERBY_SEQUENCE, Collector::ORDER_DIR_ASC);
+             $latestDate = $issue?->getData('datePublished');
+diff --git a/plugins/importexport/native/filter/IssueNativeXmlFilter.php b/plugins/importexport/native/filter/IssueNativeXmlFilter.php
+--- a/plugins/importexport/native/filter/IssueNativeXmlFilter.php
++++ b/plugins/importexport/native/filter/IssueNativeXmlFilter.php
+@@ -276,7 +276,8 @@
+      */
+     public function addSections($doc, $issueNode, $issue)
+     {
+-        $sections = Repo::section()->getByIssueId($issue->getId());
++        // The sections of every article addArticles() exports, a superseded version's included
++        $sections = Repo::section()->getByIssueId($issue->getId(), false);
+         $deployment = $this->getDeployment();
+         $journal = $deployment->getContext();
+ 
