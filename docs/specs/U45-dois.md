@@ -1777,6 +1777,9 @@ Left out of the scenarios above, by reason:
     `docs/issues/U45-A20-doi-agency-tool-page-empty-heading.md`): the
     agency plugins' Tools pages carrying the plugin's name in their
     heading and browser tab, under the "Tools" breadcrumb {OJS OPS}
+  - the guard for OJS3 (Rule 39; issue report
+    `docs/issues/U45-OJS3-publish-window-issn-warning-twice.md`):
+    scenario 14's publish window listing the ISSN sentence once {OJS}
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1860,7 +1863,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A21](#a21) | A "Save" on the Registration tab without an agency leaves a warning in the server log | 🐞 | invisible | — |
 | [A22](#a22) | After "Assign DOIs" answered at once, the "Bulk Actions" menu stays open over the list | 🐞 | minor | — |
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [OJS3](#ojs3) | The publish window lists the ISSN warning twice | 🐞 | minor | — |
+| [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | The "DOIs" box reads "…to assigned to works published on this server." | 🐞 | minor | — |
@@ -2239,12 +2242,20 @@ and "Issues" ticked under "Items with DOIs".
 Basis: probe, 2026-10-01. <sup>f-ojs2</sup>
 
 <a id="ojs3"></a>
-**OJS3 — The publish window lists the ISSN warning twice** · 🐞 · minor.
-While Crossref is chosen and the journal has neither ISSN, the publish
+**OJS3 — A journal's publish window lists the missing-ISSN warning for Crossref twice** · 🐞 · low.
+An editor of a journal that deposits with Crossref and has neither an
+online nor a print ISSN opens the publish confirmation window. Under
+"The following issues were found, but will not prevent publishing" the
 window lists "Either an online ISSN or print ISSN must be provided
-before submissions can be deposited with Crossref." twice under "The
-following issues were found, but will not prevent publishing".
-Basis: probe, 2026-09-26. <sup>f-ojs3</sup>
+before submissions can be deposited with Crossref." twice, where one
+line is expected. The warning itself is right, the other warnings are
+listed once, and publishing goes ahead. The journal must have "Articles"
+ticked under "Items with DOIs", and its "Automatic DOI Assignment" must
+be set to something other than "Upon publication". The default, "Upon
+reaching the copyediting stage", is inside that setup. With "Upon
+publication" the window shows no Crossref warnings at all. The Crossref
+warnings at publishing are new on `main` and in no release.
+Basis: probe, 2026-10-01. <sup>f-ojs3</sup>
 
 ### OMP
 
@@ -3924,6 +3935,7 @@ Issue report: [pkp-e2e#204](https://github.com/jardakotesovec/pkp-e2e/issues/204
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — Live-probed 2026-09-26 (q23), OJS, two processes and two
 journals.
+Issue report: [docs/issues/U45-OJS3-publish-window-issn-warning-twice.md](../issues/U45-OJS3-publish-window-issn-warning-twice.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `omp/classes/submission/Collector.php`

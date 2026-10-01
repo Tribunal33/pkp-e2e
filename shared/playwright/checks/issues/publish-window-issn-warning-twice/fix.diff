@@ -1,0 +1,21 @@
+--- a/plugins/generic/crossref/CrossrefPlugin.php
++++ b/plugins/generic/crossref/CrossrefPlugin.php
+@@ -512,8 +512,9 @@
+ 
+         $rules = [
+             'publisherInstitution' => ['required', 'string'],
++            // One rule for the pair: an ISSN is missing only when both are empty, and is reported once
+             'onlineIssn' => ['required_without:printIssn', 'nullable', 'string'],
+-            'printIssn' => ['required_without:onlineIssn', 'nullable', 'string'],
++            'printIssn' => ['nullable', 'string'],
+             'doi' => ['required', 'string'],
+             'issueId' => [
+                 'sometimes',
+@@ -563,7 +564,6 @@
+                 'publicationTitle' => $publication->getLocalizedTitle()
+             ]),
+             'onlineIssn.required_without' => __('plugins.generic.crossref.issn.requiredWithout'),
+-            'printIssn.required_without' => __('plugins.generic.crossref.issn.requiredWithout'),
+             'publisherInstitution.required' => __('plugins.generic.crossref.publisherInstitution.required')
+         ];
+     }
