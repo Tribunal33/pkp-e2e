@@ -1052,6 +1052,10 @@ Left out of the scenarios above, by reason:
     with "Recommend Articles by Author" on, two published articles by one
     contributor, one of them outside an issue, each listing the other
     under "Most read articles by the same author(s)" {OJS}
+  - the guard for OPS1 (Rule 4, Rule 5; issue report
+    `docs/issues/U13-OPS1-new-version-preview-called-outdated.md`): a new
+    version's preview showing the preview notice alone, and an older
+    posted version's page keeping the outdated notice {OPS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1207,7 +1211,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OJS9](#ojs9) | The Lens reader page's script fails on every XML galley | 🐞 | minor · crash: script | — |
 | [OJS10](#ojs10) | "Recommend Similar Articles" never lists anything | 🐞 | user-visible | — |
 | [OJS12](#ojs12) | A review marked "Publicly Show Reviewer Comments" never shows on the published article's page, though "Mark as Complete" says it will | 🐞 | user-visible | — |
-| [OPS1](#ops1) | Previewing a new version adds "This is an outdated version published on {the preview day}." | 🐞 | minor | — |
+| [OPS1](#ops1) | Previewing a new version adds "This is an outdated version published on {the preview day}." | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | A preprint with a URL Path loses the galley or version part of its ID address; its HTML and other non-PDF downloads answer "404 Not Found" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A galley's ID address answers "404 Not Found" once the galley has a URL Path | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [OPS5](#ops5) | The PDF reader's return arrow is read to screen readers as "##article.return##" | 🐞 | minor | — |
@@ -1476,14 +1480,17 @@ Basis: probe, 2026-09-28. <sup>[f-ojs12](#fn-f-ojs12)</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — A preview of a new version also calls itself outdated** · 🐞 · minor.
-Previewing a new, unposted version of a posted preprint shows "This is a
-preview and has not been published. View submission" and under it "This
-is an outdated version published on {date}. Read the most recent
-version.", {date} being the day of the preview, not a publication date.
-The version is not outdated; it is the next one. A journal shows the
-preview notice alone.
-Basis: probe, 2026-09-25. <sup>[f-ops1](#fn-f-ops1)</sup>
+**OPS1 — A preview of a new version also calls itself outdated** · 🐞 · low.
+Previewing a new, unposted version of a posted preprint shows "This is
+a preview and has not been published. View submission" and under it
+"This is an outdated version published on {today's date}. Read the most
+recent version." The version has no publication date, so the line
+prints the day of the preview. The version is not outdated; it is the
+next one, and "most recent version" leads to the posted version's page.
+A journal shows the preview notice alone. The editor or author checking
+the new version is told it is outdated and was published today; readers
+never see the line.
+Basis: probe, 2026-10-01. <sup>[f-ops1](#fn-f-ops1)</sup>
 
 <a id="ops2"></a>
 **OPS2 — A URL Path cuts the rest of an ID address** · 🐞 · high.
@@ -2642,6 +2649,7 @@ whenever the shown publication is not the current one, previews
 included; the date it names is the day of the preview, the unpublished
 version having no publication date of its own. Live-probed 2026-09-25,
 note q3.
+Issue report: [docs/issues/U13-OPS1-new-version-preview-called-outdated.md](../issues/U13-OPS1-new-version-preview-called-outdated.md).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — Note f: `PreprintHandler::initialize()` overwrites the first

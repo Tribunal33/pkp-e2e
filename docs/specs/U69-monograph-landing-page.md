@@ -1057,6 +1057,10 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A4 (Rule 5, Rule 6; issue report
+    `docs/issues/U13-OPS1-new-version-preview-called-outdated.md`): a new
+    version's preview showing the preview notice alone, and an older
+    published version's page keeping the outdated notice
   - the Login page a file for sale leads a visitor to, saying nothing of
     the purchase (Rule 14)
   - the payment page's order, the press's instructions first, and
@@ -1172,7 +1176,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | An older version's chapter page shows a server error page | 🐞 | user-visible · crash: server | — |
 | [A1](#a1) | An address that names no book asks visitors to sign in | 🐞 | minor | — |
 | [A3](#a3) | A version address that names no version fails with a server error | 🐞 | minor · crash: server | — |
-| [A4](#a4) | A new version's preview also calls itself outdated, dated today | 🐞 | minor | — |
+| [A4](#a4) | A new version's preview also calls itself outdated, dated today | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | An older version's browser tab names the current version | 🐞 | minor | — |
 | [A6](#a6) | The table of contents repeats the book's authors under every chapter | 🐞 | minor | — |
 | [A7](#a7) | A priced file's link shows its price twice | 🐞 | minor | — |
@@ -1226,12 +1230,16 @@ Administrator alike: the app fails.
 Basis: probe, 2026-09-28. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A new version's preview also calls itself outdated** · 🐞 · minor.
+**A4 — A new version's preview also calls itself outdated** · 🐞 · low.
 Previewing a new, unpublished version of a published book shows the
 preview notice and, under it, "This is an outdated version published on
-{today's date}. Read the most recent version.", although the version has
-no date and is the newest there is.
-Basis: probe, 2026-09-28. <sup>f-a4</sup>
+{today's date}. Read the most recent version." The version has no
+publication date, so the line prints the day of the preview; it is the
+newest version there is, and "most recent version" leads to the
+published version's page. A journal shows the preview notice alone. The
+editor or author checking the new version is told it is outdated and
+was published today; readers never see the line.
+Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — An older version's browser tab names the current version** · 🐞 · minor.
@@ -1627,6 +1635,7 @@ made on screen with "Create New Version".
 
 <a id="fn-f-a4"></a>
 **f-a4** — `monograph_full.tpl` prints `submission.viewingPreview` for any unpublished publication and `submission.outdatedVersion` for any publication that is not the current one, with that publication's empty `datePublished`, which prints as today (note h). Live-probed 2026-09-28 (td7).
+Issue report: [docs/issues/U13-OPS1-new-version-preview-called-outdated.md](../issues/U13-OPS1-new-version-preview-called-outdated.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `book.tpl` builds the page title from `getCurrentPublication()`. The same holds on an article's page (Article landing page & reading, its A6). Live-probed 2026-09-28 (td8).
