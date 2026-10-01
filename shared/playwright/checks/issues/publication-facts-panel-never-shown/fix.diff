@@ -1,0 +1,29 @@
+--- a/plugins/generic/pflPlugin/PflPlugin.php
++++ b/plugins/generic/pflPlugin/PflPlugin.php
+@@ -72,7 +72,7 @@
+             ->join('sections AS sec', 'p.section_id', '=', 'sec.section_id')
+             ->where('s.context_id', $journalId)
+             ->where('sec.meta_reviewed', 1)
+-            ->where('s.status', STATUS_PUBLISHED)
++            ->where('s.status', PKPSubmission::STATUS_PUBLISHED)
+             ->when($dateStart, fn($q) => $q->where('s.date_submitted', '>=', strtotime($dateStart)))
+             ->get()->first();
+         return $row->submission_count;
+@@ -449,7 +449,7 @@
+             [
+                 'inline' => false,
+                 'contexts' => ['frontend'],
+-                'priority' => STYLE_SEQUENCE_LAST
++                'priority' => TemplateManager::STYLE_SEQUENCE_LAST
+             ]
+         );
+ 
+@@ -496,7 +496,7 @@
+             [
+                 'contexts' => 'frontend',
+                 'inline' => true,
+-                'priority' => STYLE_SEQUENCE_LAST,
++                'priority' => TemplateManager::STYLE_SEQUENCE_LAST,
+             ]
+         );
+     }

@@ -1056,6 +1056,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-OPS1-new-version-preview-called-outdated.md`): a new
     version's preview showing the preview notice alone, and an older
     posted version's page keeping the outdated notice {OPS}
+  - the guard for OJS5 (Rule 19; issue report
+    `docs/issues/U13-OJS5-publication-facts-panel-never-shown.md`):
+    an article page with "Publication Facts Label plugin" on, loading the
+    plugin's script and showing the "Publication Facts" panel {OJS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1204,7 +1208,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OJS2](#ojs2) | The Publication Facts Label settings always warn "Funding Plugin Not Present" | 🐞 | minor | — |
 | [OJS3](#ojs3) | On a French page the Publication Facts panel would have no labels | 🐞 | minor | — |
 | [OJS4](#ojs4) | With "Recommend Articles by Author" on, article pages never show "Most read articles by the same author(s)" | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [OJS5](#ojs5) | The Publication Facts panel never shows; the plugin fails on the server | 🐞 | user-visible · crash: server | — |
+| [OJS5](#ojs5) | With the Publication Facts Label plugin on, no article page shows the "Publication Facts" panel | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS6](#ojs6) | The PDF reader's return arrow is announced "Return to Issue Details" but opens the article | 🐞 | minor | — |
 | [OJS7](#ojs7) | A refused "OK" in the Publication Facts settings puts back the saved values | 🐞 | minor | — |
 | [OJS8](#ojs8) | An impossible Publication Facts "Start Date" is dropped with "Your changes have been saved." | 🐞 | minor | — |
@@ -1403,14 +1407,18 @@ is caught and logged, and the page is served without the list.
 Since: 2025-08-01 (the search rebuild) · Basis: probe, 2026-10-01. <sup>[f-ojs4](#fn-f-ojs4)</sup>
 
 <a id="ojs5"></a>
-**OJS5 — The Publication Facts panel never shows** · 🐞 · user-visible · crash: server.
+**OJS5 — With the Publication Facts Label plugin on, no article page shows the "Publication Facts" panel** · 🐞 · medium · crash: server.
 With "Publication Facts Label plugin" on, no article page shows the
-Publication Facts panel, whatever the section's "Will not be
-peer-reviewed", the plugin's "Start Date" or the page's language. The
-page opens normally without it: the plugin fails on the server on every
-article page, and the page is served without its output. A journal that
-switches the plugin on and fills in its settings shows readers nothing.
-Basis: probe, 2026-09-25. <sup>[f-ojs5](#fn-f-ojs5)</sup>
+Publication Facts panel, in any language. The page opens normally
+without it: the plugin fails on the server on every article page, and
+the page is served without its output.
+A journal that switches the plugin on and fills in its settings shows
+readers nothing, and nobody is told. The authors' competing-interests
+statements, which the plugin adds under their names, are missing too,
+also on the articles meant to go without the panel (in a section marked
+"Will not be peer-reviewed", or submitted before the plugin's "Start
+Date").
+Basis: probe, 2026-10-01. <sup>[f-ojs5](#fn-f-ojs5)</sup>
 
 <a id="ojs6"></a>
 **OJS6 — The PDF reader's arrow is announced as leading to the issue** · 🐞 · minor.
@@ -2592,6 +2600,7 @@ constant "…\STYLE_SEQUENCE_LAST"` (in the `TemplateManager::display`
 hook), each caught and logged as "Plugin …PflPlugin failed to handle the
 hook …" on every article page, which still answers normally.
 Live-probed 2026-09-25, notes q6 and q13.
+Issue report: [docs/issues/U13-OJS5-publication-facts-panel-never-shown.md](../issues/U13-OJS5-publication-facts-panel-never-shown.md).
 
 <a id="fn-f-ojs6"></a>
 **f-ojs6** — Note d: `display.tpl` picks `issue.return` whenever the page
