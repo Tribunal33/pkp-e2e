@@ -1,0 +1,838 @@
+--- /dev/null
++++ b/lib/pkp/classes/migration/upgrade/v3_6_0/IXXXXX_EventLogParticipantName.php
+@@ -0,0 +1,54 @@
++<?php
++
++/**
++ * @file classes/migration/upgrade/v3_6_0/IXXXXX_EventLogParticipantName.php
++ *
++ * Copyright (c) 2026 Simon Fraser University
++ * Copyright (c) 2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * @class IXXXXX_EventLogParticipantName
++ *
++ * @brief Move the participant's name on the "was assigned" and "was removed"
++ *   event log entries from `userFullName`, which names the user who triggered
++ *   the event (EventLogEntry::getUserFullName()), to `participantFullName`.
++ *   Since 3.4.0 (pkp/pkp-lib#8933) these entries stored the participant's name
++ *   as `userFullName`, so the Activity Log showed the participant as the user
++ *   who acted; the entries' `user_id` has always held the user who acted.
++ */
++
++namespace PKP\migration\upgrade\v3_6_0;
++
++use Illuminate\Support\Facades\DB;
++use PKP\install\DowngradeNotSupportedException;
++use PKP\migration\Migration;
++
++class IXXXXX_EventLogParticipantName extends Migration
++{
++    private const EVENT_TYPES = [
++        0x10000003, // PKPSubmissionEventLogEntry::SUBMISSION_LOG_ADD_PARTICIPANT
++        0x10000004, // PKPSubmissionEventLogEntry::SUBMISSION_LOG_REMOVE_PARTICIPANT
++    ];
++
++    /**
++     * Run the migration.
++     */
++    public function up(): void
++    {
++        DB::table('event_log_settings')
++            ->where('setting_name', 'userFullName')
++            ->whereIn(
++                'log_id',
++                DB::table('event_log')->select('log_id')->whereIn('event_type', self::EVENT_TYPES)
++            )
++            ->update(['setting_name' => 'participantFullName']);
++    }
++
++    /**
++     * Reverse the migration.
++     */
++    public function down(): void
++    {
++        throw new DowngradeNotSupportedException();
++    }
++}
+--- a/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
+@@ -392,7 +392,7 @@
+                 'message' => 'submission.event.participantAdded',
+                 'isTranslated' => false,
+                 'dateLogged' => Core::getCurrentDate(),
+-                'userFullName' => $assignedUser->getFullNames(),
++                'participantFullName' => $assignedUser->getFullNames(),
+                 'username' => $assignedUser->getUsername(),
+                 'userGroupName' => $userGroup->name,
+             ]);
+@@ -477,7 +477,7 @@
+             'message' => 'submission.event.participantRemoved',
+             'isTranslated' => false,
+             'dateLogged' => Core::getCurrentDate(),
+-            'userFullName' => $assignedUser->getFullNames(),
++            'participantFullName' => $assignedUser->getFullNames(),
+             'username' => $assignedUser->getUsername(),
+             'userGroupName' => $userGroup->name,
+         ]);
+--- a/lib/pkp/locale/an/submission.po
++++ b/lib/pkp/locale/an/submission.po
+@@ -843,10 +843,10 @@
+ msgstr "Rechistro de correu electronico"
+ 
+ msgid "submission.event.participantAdded"
+-msgstr "S'anyadió a \"{$userFullName}\" ({$username}) como {$userGroupName}."
++msgstr "S'anyadió a \"{$participantFullName}\" ({$username}) como {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) s'ha eliminau de {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) s'ha eliminau de {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Tornar a rechistro d'eventos"
+--- a/lib/pkp/locale/ar/submission.po
++++ b/lib/pkp/locale/ar/submission.po
+@@ -574,10 +574,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"\"{$userFullName}\" ({$username}) تم تعيينه لطلب النشر هذا بمثابة {$userGroupName}."
++"\"{$participantFullName}\" ({$username}) تم تعيينه لطلب النشر هذا بمثابة {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) تمت إزالته بمثابة {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) تمت إزالته بمثابة {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "العودة إلى وقائع الأحداث"
+--- a/lib/pkp/locale/az/submission.po
++++ b/lib/pkp/locale/az/submission.po
+@@ -2402,11 +2402,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) bu Məqalə üçün {$userGroupName} olaraq təyin edildi."
++"{$participantFullName} ({$username}) bu Məqalə üçün {$userGroupName} olaraq təyin edildi."
+ 
+ msgid "submission.event.participantRemoved"
+ msgstr ""
+-"\"{$name}\" ({$username}) bu Məqalə üçün {$userGroupName}'dan çıxarıldı."
++"\"{$participantFullName}\" ({$username}) bu Məqalə üçün {$userGroupName}'dan çıxarıldı."
+ 
+ msgid "submission.event.decisionReviewerEmailSent"
+ msgstr ""
+--- a/lib/pkp/locale/bg/submission.po
++++ b/lib/pkp/locale/bg/submission.po
+@@ -584,12 +584,12 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) беше причислен към това подаване на материали "
++"{$participantFullName} ({$username}) беше причислен към това подаване на материали "
+ "като {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+ msgstr ""
+-"\"{$userFullName}\" ({$username}) беше премахнат като {$userGroupName}."
++"\"{$participantFullName}\" ({$username}) беше премахнат като {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Обратно към регистъра събитията (лог)"
+--- a/lib/pkp/locale/ca/submission.po
++++ b/lib/pkp/locale/ca/submission.po
+@@ -589,10 +589,10 @@
+ msgstr "Registre del correu electrònic"
+ 
+ msgid "submission.event.participantAdded"
+-msgstr "S'ha afegit«{$userFullName}» ({$username}) com a {$userGroupName}."
++msgstr "S'ha afegit«{$participantFullName}» ({$username}) com a {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "Suprimeix «{$userFullName}» ({$username}) com a {$userGroupName}."
++msgstr "Suprimeix «{$participantFullName}» ({$username}) com a {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Torna al registre d’esdeveniments"
+--- a/lib/pkp/locale/ckb/submission.po
++++ b/lib/pkp/locale/ckb/submission.po
+@@ -570,10 +570,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) بۆ ئەم پێشکەشکردنە وەک {$userGroupName} ئەرکدار کراوە."
++"{$participantFullName} ({$username}) بۆ ئەم پێشکەشکردنە وەک {$userGroupName} ئەرکدار کراوە."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) وەک {$userGroupName} سڕاوەتەوە."
++msgstr "\"{$participantFullName}\" ({$username}) وەک {$userGroupName} سڕاوەتەوە."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "گەڕانەوە بۆ بۆنەکان"
+--- a/lib/pkp/locale/cs/submission.po
++++ b/lib/pkp/locale/cs/submission.po
+@@ -581,11 +581,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"Uživatel {$userFullName} ({$username}) byl přiřazen k příspěvku jako "
++"Uživatel {$participantFullName} ({$username}) byl přiřazen k příspěvku jako "
+ "{$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) byl odebrán/a z {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) byl odebrán/a z {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Zpět k protokolu událostí"
+--- a/lib/pkp/locale/da/submission.po
++++ b/lib/pkp/locale/da/submission.po
+@@ -584,11 +584,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"\"{$userFullName}\" ({$username}) blev tilknyttet denne indsendelse som "
++"\"{$participantFullName}\" ({$username}) blev tilknyttet denne indsendelse som "
+ "{$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) blev fjernet som en {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) blev fjernet som en {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Tilbage til hændelseslog"
+--- a/lib/pkp/locale/de/submission.po
++++ b/lib/pkp/locale/de/submission.po
+@@ -608,12 +608,12 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"\"{$userFullName}\" ({$username}) wurde dieser Einreichung als {$userGroupName} "
++"\"{$participantFullName}\" ({$username}) wurde dieser Einreichung als {$userGroupName} "
+ "hinzugefügt."
+ 
+ msgid "submission.event.participantRemoved"
+ msgstr ""
+-"\"{$userFullName}\" ({$username}) wurde aus der Gruppe der {$userGroupName} entfernt."
++"\"{$participantFullName}\" ({$username}) wurde aus der Gruppe der {$userGroupName} entfernt."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Zurück zum Ereignisprotokoll"
+--- a/lib/pkp/locale/el/submission.po
++++ b/lib/pkp/locale/el/submission.po
+@@ -599,10 +599,10 @@
+ msgstr "Email Log"
+ 
+ msgid "submission.event.participantAdded"
+-msgstr "Ο/Η \"{$userFullName}\" ({$username}) έχει προστεθεί ως {$userGroupName}."
++msgstr "Ο/Η \"{$participantFullName}\" ({$username}) έχει προστεθεί ως {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "Ο/Η \"{$userFullName}\" ({$username}) έχει αφαιρεθεί από {$userGroupName}."
++msgstr "Ο/Η \"{$participantFullName}\" ({$username}) έχει αφαιρεθεί από {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Επιστροφή στο ημερολόγιο συμβάντων "
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -861,11 +861,11 @@
+ msgstr "Email Log"
+ 
+ msgid "submission.event.participantAdded"
+-msgstr "{$userFullName} ({$username}) was assigned to this submission as a {$userGroupName}."
++msgstr "{$participantFullName} ({$username}) was assigned to this submission as a {$userGroupName}."
+ 
+ # fuzzy
+ msgid "submission.event.participantRemoved"
+-msgstr "{$userFullName} ({$username}) was removed from this submission as a {$userGroupName}."
++msgstr "{$participantFullName} ({$username}) was removed from this submission as a {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Back to Event Log"
+--- a/lib/pkp/locale/es/submission.po
++++ b/lib/pkp/locale/es/submission.po
+@@ -596,10 +596,10 @@
+ msgstr "Registro de correo electrónico"
+ 
+ msgid "submission.event.participantAdded"
+-msgstr "Se añadió a \"{$userFullName}\" ({$username}) como {$userGroupName}."
++msgstr "Se añadió a \"{$participantFullName}\" ({$username}) como {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) se ha eliminado de {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) se ha eliminado de {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Volver a registro de eventos"
+--- a/lib/pkp/locale/eu/submission.po
++++ b/lib/pkp/locale/eu/submission.po
+@@ -585,12 +585,12 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"Bidalketa honi {$userFullName} ({$username}) esleitu zaio {$userGroupName} "
++"Bidalketa honi {$participantFullName} ({$username}) esleitu zaio {$userGroupName} "
+ "bezala."
+ 
+ msgid "submission.event.participantRemoved"
+ msgstr ""
+-"\"{$userFullName}\" ({$username}) ezabatua izan da {$userGroupName}-tik."
++"\"{$participantFullName}\" ({$username}) ezabatua izan da {$userGroupName}-tik."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Itzuli Gertaeren logera"
+--- a/lib/pkp/locale/fa/submission.po
++++ b/lib/pkp/locale/fa/submission.po
+@@ -577,10 +577,10 @@
+ msgstr "سوابق ایمیل"
+ 
+ msgid "submission.event.participantAdded"
+-msgstr "{$userFullName} به این مقاله به عنوان {$userGroupName} انتساب داده شدند  ."
++msgstr "{$participantFullName} به این مقاله به عنوان {$userGroupName} انتساب داده شدند  ."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "«{$userFullName}» ({$username}) به عنوان یک {$userGroupName} حذف شد."
++msgstr "«{$participantFullName}» ({$username}) به عنوان یک {$userGroupName} حذف شد."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "بازگشت به سابقه رویدادها"
+--- a/lib/pkp/locale/fi/submission.po
++++ b/lib/pkp/locale/fi/submission.po
+@@ -581,12 +581,12 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"\"{$userFullName}\" ({$username}) valittiin tämän käsikirjoituksen "
++"\"{$participantFullName}\" ({$username}) valittiin tämän käsikirjoituksen "
+ "{$userGroupName}ksi."
+ 
+ msgid "submission.event.participantRemoved"
+ msgstr ""
+-"\"{$userFullName}\" ({$username}) poistettiin roolista {$userGroupName}."
++"\"{$participantFullName}\" ({$username}) poistettiin roolista {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Takaisin tapahtumalokiin"
+--- a/lib/pkp/locale/fr/submission.po
++++ b/lib/pkp/locale/fr/submission.po
+@@ -604,12 +604,12 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) a été assigné/e à cette soumission en tant que "
++"{$participantFullName} ({$username}) a été assigné/e à cette soumission en tant que "
+ "{$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+ msgstr ""
+-"« {$userFullName} » ({$username}) ne fait plus partie du groupe "
++"« {$participantFullName} » ({$username}) ne fait plus partie du groupe "
+ "{$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+--- a/lib/pkp/locale/fr_CA/submission.po
++++ b/lib/pkp/locale/fr_CA/submission.po
+@@ -601,12 +601,12 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) a été ajouté-e à cette soumission en tant que "
++"{$participantFullName} ({$username}) a été ajouté-e à cette soumission en tant que "
+ "{$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+ msgstr ""
+-"« {$userFullName} » ({$username}) ne fait plus partie du groupe {$userGroupName}."
++"« {$participantFullName} » ({$username}) ne fait plus partie du groupe {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Retour au registre d'événements"
+--- a/lib/pkp/locale/gl/submission.po
++++ b/lib/pkp/locale/gl/submission.po
+@@ -577,10 +577,10 @@
+ msgstr "Rexistro de correo electrónico"
+ 
+ msgid "submission.event.participantAdded"
+-msgstr "{$userFullName} ({$username}) foi asignado a este envío como {$userGroupName}."
++msgstr "{$participantFullName} ({$username}) foi asignado a este envío como {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) elimínase como {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) elimínase como {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Volver ao rexistro de eventos"
+--- a/lib/pkp/locale/hr/submission.po
++++ b/lib/pkp/locale/hr/submission.po
+@@ -581,10 +581,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) je dodijeljen ovom podnesku kao {$userGroupName}."
++"{$participantFullName} ({$username}) je dodijeljen ovom podnesku kao {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) uklonjen je kao {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) uklonjen je kao {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Nazad na zapis događaja"
+--- a/lib/pkp/locale/hu/submission.po
++++ b/lib/pkp/locale/hu/submission.po
+@@ -589,11 +589,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) ehhez a beküldéshez mint {$userGroupName} lett "
++"{$participantFullName} ({$username}) ehhez a beküldéshez mint {$userGroupName} lett "
+ "hozzárendelve."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) eltávolítva mint {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) eltávolítva mint {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Vissza az esemény naplóhoz"
+--- a/lib/pkp/locale/hy/submission.po
++++ b/lib/pkp/locale/hy/submission.po
+@@ -580,10 +580,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) նշանակվել է այս ներկայացմանը որպես {$userGroupName} :"
++"{$participantFullName} ({$username}) նշանակվել է այս ներկայացմանը որպես {$userGroupName} :"
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) հեռացվել է որպես {$userGroupName}:"
++msgstr "\"{$participantFullName}\" ({$username}) հեռացվել է որպես {$userGroupName}:"
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Վերադարձ Իրադարձությունների մատյանին"
+--- a/lib/pkp/locale/id/submission.po
++++ b/lib/pkp/locale/id/submission.po
+@@ -578,10 +578,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) ditugaskan pada naskah ini sebagai {$userGroupName}."
++"{$participantFullName} ({$username}) ditugaskan pada naskah ini sebagai {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) dihapus dari {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) dihapus dari {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Kembali ke Log Event"
+--- a/lib/pkp/locale/is/submission.po
++++ b/lib/pkp/locale/is/submission.po
+@@ -582,10 +582,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) fékk þessari innsendingu úthlutað sem {$userGroupName}."
++"{$participantFullName} ({$username}) fékk þessari innsendingu úthlutað sem {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) fjarlægð(ur/-t) sem {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) fjarlægð(ur/-t) sem {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Til baka í atburðaskrá"
+--- a/lib/pkp/locale/it/submission.po
++++ b/lib/pkp/locale/it/submission.po
+@@ -591,11 +591,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) è stato assegnato a questa proposta come "
++"{$participantFullName} ({$username}) è stato assegnato a questa proposta come "
+ "{$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) è stato rimosso come {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) è stato rimosso come {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Torna al registro degli eventi"
+--- a/lib/pkp/locale/ja/submission.po
++++ b/lib/pkp/locale/ja/submission.po
+@@ -566,10 +566,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) がこの投稿に{$userGroupName}として任命されました。"
++"{$participantFullName} ({$username}) がこの投稿に{$userGroupName}として任命されました。"
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username})は{$userGroupName}として削除されました。"
++msgstr "\"{$participantFullName}\" ({$username})は{$userGroupName}として削除されました。"
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "イベントログに戻る"
+--- a/lib/pkp/locale/ka/submission.po
++++ b/lib/pkp/locale/ka/submission.po
+@@ -579,10 +579,10 @@
+ msgstr "ელფოსტის ჟურნალი"
+ 
+ msgid "submission.event.participantAdded"
+-msgstr "{$userFullName} ({$username}) ამ წარდგენას მიენიჭა, როგორც {$userGroupName}."
++msgstr "{$participantFullName} ({$username}) ამ წარდგენას მიენიჭა, როგორც {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$\\username}) წაიშალა, როგორც {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$\\username}) წაიშალა, როგორც {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "ღონისძიების ჟურნალში დაბრუნება"
+--- a/lib/pkp/locale/kk/submission.po
++++ b/lib/pkp/locale/kk/submission.po
+@@ -580,10 +580,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) осы материалға {$userGroupName} ретінде тағайындалған."
++"{$participantFullName} ({$username}) осы материалға {$userGroupName} ретінде тағайындалған."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) {$userGroupName} ретінде жойылды."
++msgstr "\"{$participantFullName}\" ({$username}) {$userGroupName} ретінде жойылды."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Оқиғалар журналына оралу"
+--- a/lib/pkp/locale/ky/submission.po
++++ b/lib/pkp/locale/ky/submission.po
+@@ -929,11 +929,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) бул материалга {$userGroupName} катары "
++"{$participantFullName} ({$username}) бул материалга {$userGroupName} катары "
+ "дайындалды."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) {$userGroupName} катары өчүрүлдү."
++msgstr "\"{$participantFullName}\" ({$username}) {$userGroupName} катары өчүрүлдү."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Окуя журналына кайтуу"
+--- a/lib/pkp/locale/lt/submission.po
++++ b/lib/pkp/locale/lt/submission.po
+@@ -707,10 +707,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$name} ({$username}) paskirtas prie šio straipsnio kaip „{$userGroupName}“."
++"{$participantFullName} ({$username}) paskirtas prie šio straipsnio kaip „{$userGroupName}“."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "{$name} ({$username}) pašalintas iš grupės „{$userGroupName}“."
++msgstr "{$participantFullName} ({$username}) pašalintas iš grupės „{$userGroupName}“."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Grįžti į įvykių žurnalą"
+--- a/lib/pkp/locale/lv/submission.po
++++ b/lib/pkp/locale/lv/submission.po
+@@ -608,11 +608,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) tika piešķirts šim materiālam kā "
++"{$participantFullName} ({$username}) tika piešķirts šim materiālam kā "
+ "{$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) tiek noņemts kā {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) tiek noņemts kā {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Atgriezties pie notikumu žurnāla"
+--- a/lib/pkp/locale/mk/submission.po
++++ b/lib/pkp/locale/mk/submission.po
+@@ -585,10 +585,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) е назначен/а на овој поднесок како {$userGroupName}."
++"{$participantFullName} ({$username}) е назначен/а на овој поднесок како {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) е отстранет/а како {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) е отстранет/а како {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Назад кон евиденција на настан"
+--- a/lib/pkp/locale/mr/submission.po
++++ b/lib/pkp/locale/mr/submission.po
+@@ -783,7 +783,7 @@
+ 
+ msgid "submission.event.participantRemoved"
+ msgstr ""
+-"{$userFullName} ({$username}) यांना {$userGroupName} म्हणून काढून टाकले आहे."
++"{$participantFullName} ({$username}) यांना {$userGroupName} म्हणून काढून टाकले आहे."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "इव्हेंट लॉगवर परत जा"
+@@ -2051,7 +2051,7 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"या सादरीकरणासाठी {$userFullName} ({$username}) यांना {$userGroupName} म्हणून "
++"या सादरीकरणासाठी {$participantFullName} ({$username}) यांना {$userGroupName} म्हणून "
+ "नियुक्त केले गेले होते."
+ 
+ msgid "submission.event.confirmClearLog"
+--- a/lib/pkp/locale/ms/submission.po
++++ b/lib/pkp/locale/ms/submission.po
+@@ -580,11 +580,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) telah ditugaskan kepada penyerahan ini sebagai "
++"{$participantFullName} ({$username}) telah ditugaskan kepada penyerahan ini sebagai "
+ "{$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) dibuang sebagai {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) dibuang sebagai {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Kembali ke Log Aktiviti"
+--- a/lib/pkp/locale/nb_NO/submission.po
++++ b/lib/pkp/locale/nb_NO/submission.po
+@@ -583,11 +583,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) ble lagt til denne innleveringen som et "
++"{$participantFullName} ({$username}) ble lagt til denne innleveringen som et "
+ "{$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "{$userFullName} ({$username}) er fjernet som {$userGroupName}."
++msgstr "{$participantFullName} ({$username}) er fjernet som {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Tilbake til aktivitetslogg"
+--- a/lib/pkp/locale/nl/submission.po
++++ b/lib/pkp/locale/nl/submission.po
+@@ -585,10 +585,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) is toegewezen aan deze inzending als {$userGroupName}."
++"{$participantFullName} ({$username}) is toegewezen aan deze inzending als {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) is verwijderd als {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) is verwijderd als {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Terug naar logboek"
+--- a/lib/pkp/locale/pl/submission.po
++++ b/lib/pkp/locale/pl/submission.po
+@@ -586,10 +586,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) został przypisany do zgłoszenia jako {$userGroupName}."
++"{$participantFullName} ({$username}) został przypisany do zgłoszenia jako {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) jest usunięty z {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) jest usunięty z {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Wróć do dziennika zdarzeń"
+--- a/lib/pkp/locale/pt/submission.po
++++ b/lib/pkp/locale/pt/submission.po
+@@ -582,11 +582,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) foi designado para esta submissão como "
++"{$participantFullName} ({$username}) foi designado para esta submissão como "
+ "{$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) foi removido como {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) foi removido como {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Voltar para Histórico de Eventos"
+--- a/lib/pkp/locale/pt_BR/submission.po
++++ b/lib/pkp/locale/pt_BR/submission.po
+@@ -587,11 +587,11 @@
+ msgstr "Log de e-mail"
+ 
+ msgid "submission.event.participantAdded"
+-msgstr "\"{$userFullName}\" ({$username}) foi incluído no grupo de {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) foi incluído no grupo de {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+ msgstr ""
+-"\"{$userFullName}\" ({$username}) foi excluído do grupo de {$userGroupName}."
++"\"{$participantFullName}\" ({$username}) foi excluído do grupo de {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Voltar para log de eventos"
+--- a/lib/pkp/locale/ro/submission.po
++++ b/lib/pkp/locale/ro/submission.po
+@@ -586,10 +586,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) a fost atribuit acestei cereri ca {$userGroupName}."
++"{$participantFullName} ({$username}) a fost atribuit acestei cereri ca {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) a fost retras din {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) a fost retras din {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Înapoi la jurnalul de evenimente"
+--- a/lib/pkp/locale/ru/submission.po
++++ b/lib/pkp/locale/ru/submission.po
+@@ -591,10 +591,10 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) был назначен в этот материал как {$userGroupName}."
++"{$participantFullName} ({$username}) был назначен в этот материал как {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "«{$userFullName}» ({$username}) удален как {$userGroupName}."
++msgstr "«{$participantFullName}» ({$username}) удален как {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Назад к журналу событий"
+--- a/lib/pkp/locale/sl/submission.po
++++ b/lib/pkp/locale/sl/submission.po
+@@ -581,11 +581,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"\"{$userFullName}\" ({$username}) je bil dodeljen prispevku kot "
++"\"{$participantFullName}\" ({$username}) je bil dodeljen prispevku kot "
+ "{$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) je odstranjen kot {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) je odstranjen kot {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Nazaj na zaporedje dogodkov"
+--- a/lib/pkp/locale/sr_Cyrl/submission.po
++++ b/lib/pkp/locale/sr_Cyrl/submission.po
+@@ -562,7 +562,7 @@
+ msgstr "Лог имејлова"
+ 
+ msgid "submission.event.participantAdded"
+-msgstr "\"{$userFullName}\" ({$username}) је додељен предаји као {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) је додељен предаји као {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+ msgstr ""
+--- a/lib/pkp/locale/sr_Latn/submission.po
++++ b/lib/pkp/locale/sr_Latn/submission.po
+@@ -573,11 +573,11 @@
+ msgstr "Log imejlova"
+ 
+ msgid "submission.event.participantAdded"
+-msgstr "\"{$userFullName}\" ({$username}) je dodeljen predaji kao {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) je dodeljen predaji kao {$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+ msgstr ""
+-"„{$userFullName}“ ({$username}) je uklonjen/a iz uloge {$userGroupName}."
++"„{$participantFullName}“ ({$username}) je uklonjen/a iz uloge {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Povratak na log dešavanja"
+--- a/lib/pkp/locale/sv/submission.po
++++ b/lib/pkp/locale/sv/submission.po
+@@ -578,11 +578,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) tilldelades det här bidraget som "
++"{$participantFullName} ({$username}) tilldelades det här bidraget som "
+ "{$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$name}\" ({$username}) togs bort som {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) togs bort som {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Tillbaka till Händelselogg"
+--- a/lib/pkp/locale/th/submission.po
++++ b/lib/pkp/locale/th/submission.po
+@@ -697,11 +697,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) ถูกมอบหมายให้กับการส่งงานนี้ในฐานะ "
++"{$participantFullName} ({$username}) ถูกมอบหมายให้กับการส่งงานนี้ในฐานะ "
+ "{$userGroupName}"
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) ถูกลบออกจากการเป็น {$userGroupName}"
++msgstr "\"{$participantFullName}\" ({$username}) ถูกลบออกจากการเป็น {$userGroupName}"
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "กลับไปยังบันทึกเหตุการณ์"
+--- a/lib/pkp/locale/tr/submission.po
++++ b/lib/pkp/locale/tr/submission.po
+@@ -574,11 +574,11 @@
+ msgstr "E-posta Kayıtları"
+ 
+ msgid "submission.event.participantAdded"
+-msgstr "{$userFullName} ({$username}) bu gönderiye {$userGroupName} olarak atandı."
++msgstr "{$participantFullName} ({$username}) bu gönderiye {$userGroupName} olarak atandı."
+ 
+ msgid "submission.event.participantRemoved"
+ msgstr ""
+-"\"{$userFullName}\" ({$username}) bu gönderi için {$userGroupName}'den kaldırıldı."
++"\"{$participantFullName}\" ({$username}) bu gönderi için {$userGroupName}'den kaldırıldı."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Olay Günlüğüne Geri Dön"
+--- a/lib/pkp/locale/uk/submission.po
++++ b/lib/pkp/locale/uk/submission.po
+@@ -595,11 +595,11 @@
+ 
+ msgid "submission.event.participantAdded"
+ msgstr ""
+-"{$userFullName} ({$username}) було призначено для цього подання як "
++"{$participantFullName} ({$username}) було призначено для цього подання як "
+ "{$userGroupName}."
+ 
+ msgid "submission.event.participantRemoved"
+-msgstr "\"{$userFullName}\" ({$username}) видалений як {$userGroupName}."
++msgstr "\"{$participantFullName}\" ({$username}) видалений як {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Повернутися до журналу подій"
+--- a/lib/pkp/schemas/eventLog.json
++++ b/lib/pkp/schemas/eventLog.json
+@@ -117,6 +117,14 @@
+ 				"nullable"
+ 			]
+ 		},
++		"participantFullName": {
++			"type": "string",
++			"description": "The full name of the user assigned to or removed from the submission, when that is not the user who triggered the event.",
++			"multilingual": true,
++			"validation": [
++				"nullable"
++			]
++		},
+ 		"recipientCount": {
+ 			"type": "integer",
+ 			"description": "The number of users indicated as recipients of an email.",
+--- a/dbscripts/xml/upgrade.xml
++++ b/dbscripts/xml/upgrade.xml
+@@ -245,4 +245,5 @@
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12347_FixRevisionUploadLogData" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13109_PermitPublishedMetadataEdit" />
++		<migration class="PKP\migration\upgrade\v3_6_0\IXXXXX_EventLogParticipantName" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13213_TaskTemplateForeignConstraint"/>
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12813_UpdateAuthorResponseAndSubmissionCommentTextType"/>
