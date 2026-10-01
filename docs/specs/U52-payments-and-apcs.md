@@ -1132,7 +1132,7 @@ Issue report: [pkp-e2e#352](https://github.com/jardakotesovec/pkp-e2e/issues/352
 
 <a id="fn-f-a12"></a>
 **f-a12** — ui-library `src/components/Container/SettingsPage.vue`: on the `form-success` of `FORM_PAYMENT_SETTINGS` with `paymentsEnabled` off it deletes only `menu.payments`; `menu.institutions`, which the same handler adds with `payments` when `paymentsEnabled` is on, is removed only by the `FORM_CONTEXT_STATISTICS` branch (note d). The server builds the menu afresh on every page load, so a reload drops the entry. OJS suite's test run of 2026-09-27 (Rule 1; scenario 1): after "Save" with "Enable" unticked the side menu held "Institutions" and no "Payments" for the whole 10-second wait on the suite's scratch journal, and the same after each of two unticked saves on another scratch journal driven by hand; after a reload it held neither; a ticked save added both on the same page.
-Issue report: [docs/issues/U52-A12-institutions-menu-entry-stays-after-payments-off.md](../issues/U52-A12-institutions-menu-entry-stays-after-payments-off.md).
+Issue report: [pkp-e2e#354](https://github.com/jardakotesovec/pkp-e2e/issues/354) ([docs/issues/U52-A12-institutions-menu-entry-stays-after-payments-off.md](../issues/U52-A12-institutions-menu-entry-stays-after-payments-off.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `schemas/context.json` `paymentPluginName` default `ManualPayment`, applied when a press is created; OJS gives no default (note b). Live-probed 2026-09-27 (note td1): the press arrived with "Manual Fee Payment" chosen and "Enable" unticked, the journal with none chosen.
