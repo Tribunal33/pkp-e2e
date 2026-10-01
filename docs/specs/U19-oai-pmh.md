@@ -1825,7 +1825,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — Live-probed 2026-09-26: a book published with its abstract saved empty on "Title & Abstract" made the press's ListRecords, its GetRecord and the site-wide `set={press}` list answer 500, while the site-wide first page (without the book) and ListIdentifiers answered; the server log: `Dc11SchemaPublicationFormatAdapter::addLocalizedElements(): Argument #3 ($localizedValues) must be of type array, null given`. The book was unpublished again at once. Code: note f (`Dc11SchemaPublicationFormatAdapter::addLocalizedElements(…, array $localizedValues)` receives `$publication->getData('abstract')`, null when never set; OMP's "Title & Abstract" does not require the abstract).
-Issue report: [docs/issues/U19-OMP4-book-without-abstract-oai-lists-fail.md](../issues/U19-OMP4-book-without-abstract-oai-lists-fail.md).
+Issue report: [pkp-e2e#253](https://github.com/jardakotesovec/pkp-e2e/issues/253) ([docs/issues/U19-OMP4-book-without-abstract-oai-lists-fail.md](../issues/U19-OMP4-book-without-abstract-oai-lists-fail.md)).
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — Live-probed 2026-09-26, all three apps, two runs: `{site address}/index.php/nosuchjournal/oai?verb=Identify` and a second unknown path answered "404 Not Found" on the press's install too. The retired entry rested on OMP `OAIHandler::index()`, which has no check of its own for an unknown press path; the request is refused before it.
