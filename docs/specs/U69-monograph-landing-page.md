@@ -1742,7 +1742,7 @@ Issue report: [pkp-e2e#226](https://github.com/jardakotesovec/pkp-e2e/issues/226
 
 <a id="fn-f-a6"></a>
 **f-a6** — Note i: `$authorString` carries the role names in brackets, the chapter's string does not; since the credits gained role names the check never matches. Live-probed 2026-09-28 (td10).
-Issue report: [docs/issues/U69-A6-contents-repeat-book-authors.md](../issues/U69-A6-contents-repeat-book-authors.md).
+Issue report: [pkp-e2e#293](https://github.com/jardakotesovec/pkp-e2e/issues/293) ([docs/issues/U69-A6-contents-repeat-book-authors.md](../issues/U69-A6-contents-repeat-book-authors.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `downloadLink.tpl` prints `{$downloadFile->getDirectSalesPrice()}` before `payment.directSales.purchase`, which carries the amount again. Seen 2026-09-28 (U73 claim check K3). Live-probed 2026-09-28: a price typed "25" reads "25 Purchase PDF (25 USD)", so the number shows as typed.
