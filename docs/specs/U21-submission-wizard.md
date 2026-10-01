@@ -2129,7 +2129,7 @@ confirmation for your records." (A7); the same user type submitting as
 "Author" got "Thank you for your submission to {journal}". On OPS the
 "Preprint Server manager" submitter got only the needs-an-editor email
 (the can-post case, OPS5).
-Issue report: [docs/issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md](../issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md).
+Issue report: [pkp-e2e#145](https://github.com/jardakotesovec/pkp-e2e/issues/145) ([docs/issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md](../issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md)).
 
 <a id="fn-r"></a>
 **r** — Schema. The submission record itself is defined in the shared
