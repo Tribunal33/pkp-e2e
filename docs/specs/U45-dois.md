@@ -1784,6 +1784,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U45-A21-registration-save-without-agency-logs-warning.md`):
     scenarios 12 and 19's "Save" without an agency plugin leaving no
     warning in the server log
+  - the guard for A22 (Rule 24; issue report
+    `docs/issues/U45-A22-bulk-actions-menu-stays-open.md`): after "Assign
+    DOIs" confirmed at once, the "Bulk Actions" menu closed and the first
+    row's expand button pressable
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1865,7 +1869,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | Saving a DOI registration agency can untick every DOI kind and leave the DOIs page blank | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | The Crossref and DataCite pages under Tools open with an empty heading and an unnamed browser tab | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | "Save" on the DOI "Registration" tab with no agency plugin enabled logs a PHP "Undefined array key" warning | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A22](#a22) | After "Assign DOIs" answered at once, the "Bulk Actions" menu stays open over the list | 🐞 | minor | — |
+| [A22](#a22) | The DOIs page's "Bulk Actions" menu stays open over the list when an action is confirmed at once | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -2204,18 +2208,21 @@ setting.
 Basis: test run, 2026-10-01. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — After "Assign DOIs" answered at once, the "Bulk Actions" menu stays open over the list** · 🐞 · minor.
-A manager ticks an item, presses "Bulk Actions", holds the mouse button
-on "Assign DOIs" for about a fifth of a second (an unhurried click),
-and presses the window's "Assign DOIs" at once. The window closes
-within half a second of the first press and "Items successfully
-assigned new DOIs" shows, but the menu is still open over the list's
-first rows, with the keyboard focus back on its "Assign DOIs" item. A
-press on the first row's expand button lands on the menu instead.
-Expected: the menu closes once the window opens, as after a press with
-no hold, or when the window closes 1.8 s after the press (other
-timings untried).
-Basis: probe, 2026-09-28. <sup>f-a22</sup>
+**A22 — The DOIs page's "Bulk Actions" menu stays open over the list when an action is confirmed at once** · 🐞 · low.
+On the DOIs page a manager chooses an action from "Bulk Actions", such
+as "Assign DOIs", and presses the button of the confirmation window as
+soon as it opens. The action is done and its notice shows, but the menu
+is still open over the first rows of the list. The manager expects it to
+have closed, as it has when the confirmation window stays open longer.
+The buttons of the covered rows cannot be pressed until the menu is
+closed. Pressing any other part of the page, or "Bulk Actions" again,
+closes it. It happens only when two things come together. The mouse
+button is held on the menu item for more than a tenth of a second, and
+the confirmation window has opened and gone again within 1.1 seconds of
+the mouse button going down, the server's answer included. With a mouse
+that leaves about half a second to press the window's button. From the
+keyboard no held press is needed.
+Basis: probe, 2026-10-01. <sup>f-a22</sup>
 
 <a id="a23"></a>
 **A23 — A journal's or a preprint server's galley given its DOI alone at a publish: its Activity Log line untried** · ❓ · minor.
@@ -3933,6 +3940,7 @@ Only "Assign DOIs" was driven; the other actions open their windows
 through the same code. The suites wait, once the window is open, for the
 menu to close before answering it (`docs/tracking/app-changes.md` row
 21; app code unchanged).
+Issue report: [docs/issues/U45-A22-bulk-actions-menu-stays-open.md](../issues/U45-A22-bulk-actions-menu-stays-open.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `IssueGridHandler::publishIssue()` calls

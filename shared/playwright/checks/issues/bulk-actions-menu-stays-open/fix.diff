@@ -1,0 +1,55 @@
+--- a/lib/ui-library/src/components/Dropdown/Dropdown.vue
++++ b/lib/ui-library/src/components/Dropdown/Dropdown.vue
+@@ -119,15 +119,28 @@
+ 		},
+ 
+ 		/**
++		 * Close the dropdown and return the focus to its button. For a
++		 * parent whose item opens a dialog: the dialog returns the focus to
++		 * the element that had it, and closeOnBlur, which only looks once a
++		 * second, would keep the dropdown open if that were the item.
++		 */
++		close() {
++			this.isOpen = false;
++			window.clearInterval(this.focusInterval);
++			this.$refs.button.$el.focus();
++		},
++
++		/**
+ 		 * Close the dropdown when it loses focus
+ 		 */
+ 		closeOnBlur() {
+ 			setTimeout(() => {
+ 				if (this.$el.contains(document.activeElement)) {
+-					var interval = setInterval(() => {
++					window.clearInterval(this.focusInterval);
++					this.focusInterval = setInterval(() => {
+ 						if (!this.$el.contains(document.activeElement)) {
+ 							this.isOpen = false;
+-							window.clearInterval(interval);
++							window.clearInterval(this.focusInterval);
+ 						}
+ 					}, 1000);
+ 				} else {
+--- a/lib/ui-library/src/components/ListPanel/doi/DoiListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/doi/DoiListPanel.vue
+@@ -13,6 +13,7 @@
+ 							/>
+ 
+ 							<Dropdown
++								ref="bulkActions"
+ 								:label="t('manager.dois.actions.bulkActions')"
+ 								class="doiListPanel__bulkActions"
+ 							>
+@@ -778,6 +779,11 @@
+ 		 * @param {Function} callback A callback function to fire when the dialog is confirmed
+ 		 */
+ 		openBulkActionDialog(title, message, callback) {
++			// Close the menu when the action came from it: the dialog would
++			// return the focus to the menu item and keep the menu open.
++			if (this.$refs.bulkActions?.isOpen) {
++				this.$refs.bulkActions.close();
++			}
+ 			this.openDialog({
+ 				name: 'bulkActions',
+ 				title: title,
