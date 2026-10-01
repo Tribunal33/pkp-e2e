@@ -1956,7 +1956,7 @@ Issue report: [pkp-e2e#304](https://github.com/jardakotesovec/pkp-e2e/issues/304
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-26, OJS: the same article was typed "Peer-reviewed Article" before its section "Articles" was saved in its window and not after; a second journal's untouched "Articles" gave it ("Article évalué par les pairs" at `…/fr_CA/oai`) until the window was opened and saved unchanged; a section created on screen with "Will not be peer-reviewed" ticked gave none. The saved box is stored as an empty string per language, which the adapter's fallback to `metadata.pkp.peerReviewed` does not replace. Code: note f; the "Peer-reviewed Article" default came with `5d177baa85` (2005-07-30); no adapter reads `metaReviewed`.
-Issue report: [docs/issues/U19-A7-oai-dc-peer-reviewed-type-gone-after-section-save.md](../issues/U19-A7-oai-dc-peer-reviewed-type-gone-after-section-save.md).
+Issue report: [pkp-e2e#312](https://github.com/jardakotesovec/pkp-e2e/issues/312) ([docs/issues/U19-A7-oai-dc-peer-reviewed-type-gone-after-section-save.md](../issues/U19-A7-oai-dc-peer-reviewed-type-gone-after-section-save.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-26: an article in no issue read "{journal}; " and, with "Pages" "15-20", "{journal}; ; 15-20"; a press record "{press}; ". Code: note f (`'; ' . $issue?->getIssueIdentification()` with a null issue; OMP appends "; " unconditionally).
