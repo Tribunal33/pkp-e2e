@@ -2257,7 +2257,7 @@ Workflow → Emails reopened after saving "Do not send an email." listed
 only." and "Do not send an email." all unchecked, and the acknowledgement
 stayed off. The form is the shared lib/pkp Emails settings form, so OMP
 and OPS are expected to match; not reopened there.
-Issue report: [docs/issues/U21-A12-confirmation-off-shows-no-option.md](../issues/U21-A12-confirmation-off-shows-no-option.md).
+Issue report: [pkp-e2e#175](https://github.com/jardakotesovec/pkp-e2e/issues/175) ([docs/issues/U21-A12-confirmation-off-shows-no-option.md](../issues/U21-A12-confirmation-off-shows-no-option.md)).
 
 <a id="fn-a13"></a>
 **fn-a13** — Language change and the copied contributor. The wizard's
