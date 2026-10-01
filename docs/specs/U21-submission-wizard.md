@@ -2137,7 +2137,7 @@ confirmation for your records." (A7); the same user type submitting as
 "Preprint Server manager" submitter got only the needs-an-editor email
 (the can-post case, OPS5).
 Issue report: [pkp-e2e#145](https://github.com/jardakotesovec/pkp-e2e/issues/145) ([docs/issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md](../issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md)).
-Issue report: [docs/issues/U21-A7-completion-screen-claims-unsent-email.md](../issues/U21-A7-completion-screen-claims-unsent-email.md).
+Issue report: [pkp-e2e#155](https://github.com/jardakotesovec/pkp-e2e/issues/155) ([docs/issues/U21-A7-completion-screen-claims-unsent-email.md](../issues/U21-A7-completion-screen-claims-unsent-email.md)).
 
 <a id="fn-r"></a>
 **r** — Schema. The submission record itself is defined in the shared
