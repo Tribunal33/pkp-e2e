@@ -2273,7 +2273,7 @@ Crash: the page error "Cannot read properties of undefined (reading
 'url')" about 4 s after the 400, in every over-limit drive (OJS 6 of 6,
 OPS 4 of 4). Control: a 10-word summary saved (200, "Last saved…"),
 showed on "Review" and survived a reload.
-Issue report: [docs/issues/U21-A16-plain-language-summary-over-limit-hangs-wizard.md](../issues/U21-A16-plain-language-summary-over-limit-hangs-wizard.md).
+Issue report: [pkp-e2e#127](https://github.com/jardakotesovec/pkp-e2e/issues/127) ([docs/issues/U21-A16-plain-language-summary-over-limit-hangs-wizard.md](../issues/U21-A16-plain-language-summary-over-limit-hangs-wizard.md)).
 
 <a id="fn-a17"></a>
 **fn-a17** — A17. `AssignEditors` sends the needs-an-editor mail and task
