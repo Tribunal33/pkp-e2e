@@ -741,6 +741,42 @@ ready account. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A1 (Fields, the "Payment Types" tab; Rule 7; issue
+    report `docs/issues/U52-A1-fees-promised-on-about-page-shown-nowhere.md`):
+    the "Reader Fees" and "General Fees" sentences read on "Payment
+    Types", beside the "Author Fees" one scenario 2 reads, promising no
+    listing in About the Journal
+  - the guard for A2 (Rule 16; Side effects, "The Author's task"; issue
+    report `docs/issues/U52-A2-fee-task-stays-after-fee-recorded.md`):
+    a requested fee recorded "Paid", then the Author's Tasks panel
+    without "The publication fee is due for payment." and the email's
+    link opening the page "Payment"
+  - the guard for A3 (Rule 9; issue report
+    `docs/issues/U52-A3-fee-link-after-payments-stop.md`): a requested
+    fee's link opened after "Enable" is saved unticked, and after the
+    instructions are emptied, each opening the page "Payment"
+  - the guard for A4 (Fields, the "Payment Types" tab; scenario 2; issue
+    report `docs/issues/U63-OJS5-tool-settings-required-note-without-required-field.md`):
+    the "Payment Types" tab with no "Required fields are marked with an
+    asterisk: *" line
+  - the guard for A9 (Actors row 6; Rule 7a; issue report
+    `docs/issues/U52-A9-membership-address-payments-off-empty-page.md`):
+    the membership address typed by a signed-in user while payments are
+    off, leading to the home page
+  - the guard for A10 (Rule 9; scenario 5; issue report
+    `docs/issues/U52-A10-paypal-error-page-no-heading.md`): the PayPal
+    error page of scenario 5 carrying a heading, on a journal and on a
+    press
+  - the guard for A11 (Rule 17; issue report
+    `docs/issues/U52-A11-merged-payer-breaks-payments.md`): an Author
+    whose fee is recorded "Paid" merged into another account, then the
+    list of payments loading, the "Payments" menu reading the record
+    and the article scheduled
+  - the guard for A12 (Rule 1; scenario 1; issue report
+    `docs/issues/U52-A12-institutions-menu-stays-after-payments-off.md`):
+    after "Enable" is saved unticked, the side menu showing neither
+    "Payments" nor "Institutions" without a reload
 - **Rarely met**:
   - "Purchase Issue" set: the reader's "Purchase Issue Fee" payment page
     (Settings bullet 7; Fields, the manual method's payment page)
@@ -806,14 +842,14 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Payment Types" says the fees appear in About the Journal; no page shows them | 🐞 | minor | — |
-| [A2](#a2) | The Author's "The publication fee is due for payment." task stays after the fee is recorded | 🐞 | user-visible | — |
-| [A3](#a3) | A payment link fails with a blank error page once the instructions are emptied, and still takes notifications once "Enable" is off | 🐞 | user-visible · crash: server | — |
-| [A4](#a4) | "Payment Types" explains required fields, but none is required | 🐞 | minor | — |
-| [A9](#a9) | The membership address gives a blank error page signed out or with payments not set up | 🐞 | minor · crash: server | — |
-| [A10](#a10) | The PayPal error page has no heading | 🐞 | minor | — |
-| [A11](#a11) | Merging a payer's account breaks the list of payments, the submission's "Payments" menu and its publishing | 🐞 | user-visible · crash: server | — |
-| [A12](#a12) | After "Enable" is saved unticked, the side menu keeps "Institutions" until the page is reloaded | 🐞 | minor | — |
+| [A1](#a1) | "Payment Types" says reader fees and the membership appear in About the Journal, but no page lists them | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A2](#a2) | An author's "publication fee is due" task stays after the editor records the fee as paid or waived | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
+| [A3](#a3) | After a journal stops payments, an author's publication fee link still sends "paid" notifications, or shows an empty page | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A4](#a4) | "Payment Types" explains required fields, but none is required | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A9](#a9) | The membership address gives an empty page signed out or with payments off | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A10](#a10) | When the call to PayPal fails, the payer's error page has no heading or page title | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A11](#a11) | Merging an author whose fee is recorded "Paid" breaks the journal's payments list and that article's publishing | 🐞 | high · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A12](#a12) | A Journal Manager who switches payments off still sees "Institutions" in the side menu until a reload | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | Payments save and ask for fees with no currency, and a saved currency cannot be removed | ❓ | minor | — |
 | [A6](#a6) | An assigned assistant role can record the APC as paid or waived | ❓ | user-visible | — |
 | [A7](#a7) | No page offers the "Association Membership" the tab prices | ❓ | user-visible | — |
@@ -823,40 +859,65 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — Fees promised on About the Journal, shown nowhere** · 🐞 · minor.
-The "Payment Types" tab says the reader fees "will appear in About the
-Journal under Policies, as well as at points where payment is required"
-and that "The Association Membership will appear in About the Journal
-under Policies.". No page of the journal lists any fee: an author learns
-of the APC only when it is requested after acceptance, and a reader
-sees an article's price only on the locked link.
-Basis: probe, 2026-09-27. <sup>f-a1</sup>
+**A1 — "Payment Types" says reader fees and the membership appear in About the Journal, but no page lists them** · 🐞 · low.
+A journal manager sets the journal's fees on the "Payment Types" tab
+of the "Payments" page. The side menu offers that page once payments
+are enabled under Settings › Distribution › "Payments". The tab says
+that the reader fees ("Purchase Issue", "Purchase Article") "will
+appear in About the Journal under Policies, as well as at points where
+payment is required". Under "General Fees" it says "The Association
+Membership will appear in About the Journal under Policies.". No page
+lists either: About the Journal shows only the journal's own text.
+Nobody pays an amount they could not see. A reader sees the purchase
+fee on the locked link where they pay, and no page offers the
+membership at all. What goes wrong is that the manager is misled about
+what readers are told. The tab promises nothing about the "Article
+Processing Charge".
+The proposed fix rewords the two sentences. It does not add a list of
+fees.
+Basis: probe, 2026-09-30. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — The fee task outlives the fee** · 🐞 · user-visible.
-After an editor records the APC as "Paid" or "Waived", each Author's Tasks
-panel still reads "The publication fee is due for payment.", and pressing
-it still opens a payment page for the fee. The Author is told to pay a fee
-that is settled, and can send the journal another "Manual Payment
-Notification" for it.
-Basis: probe, 2026-09-27. <sup>f-a2</sup>
+**A2 — An author's "publication fee is due" task stays after the editor records the fee as paid or waived** · 🐞 · high.
+After an editor records an author's publication fee as "Paid" or
+"Waived" in the workflow's "Payments" menu, the author's Tasks still
+read "The publication fee is due for payment.". That task, and the link
+in the author's "Payment Request Notification" email, still open the
+payment page with the full fee. On that page, "Send notification of
+payment" still emails the journal that the author has paid.
+Saving the fee emails nobody, so an author whose fee was waived, or
+already paid, is still asked to pay it. They may pay again, and on a
+journal using PayPal the site would charge them a second time.
+It happens on every journal that charges an article processing charge,
+each time a requested fee is recorded in the "Payments" menu.
+Basis: probe, 2026-09-30. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — A payment link after payments stop** · 🐞 · user-visible · crash: server.
-When a journal empties "Manual Payment Instructions" after requesting a
-fee, the Author's task and email link fail on the server and show a
-blank page, instead of a page saying that no payment is taken. When it
-unticks "Enable" instead, they still open the payment page, and "Send
-notification of payment" still sends the journal notifications for
-payments it no longer takes.
-Basis: probe, 2026-09-27. <sup>f-a3</sup>
+**A3 — After a journal stops payments, an author's publication fee link still sends "paid" notifications, or shows an empty page** · 🐞 · medium · crash: server.
+A journal requests an author's publication fee and later stops taking
+payments. The author's task "The publication fee is due for payment."
+and the link in their "Payment Request Notification" email then behave
+in one of two ways, depending on how payments were stopped: if the
+journal empties "Manual Payment Instructions", the link fails on the
+server and the author gets an empty page; if the journal unticks
+"Enable" instead, the link still opens the payment page with the fee
+and the old instructions. Its "Send notification of payment" still
+emails the journal that the author has paid.
+The author expects a page saying that the fee no longer has to be
+paid. Instead, they get no answer at all, or a page asking them to pay
+a fee the article no longer needs before it can be published. Nothing
+the journal can do on screen closes the open request.
+Basis: probe, 2026-09-30. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A required-fields line with no required field** · 🐞 · minor.
+**A4 — A required-fields line with no required field** · 🐞 · low.
 Under "Save" the "Payment Types" tab reads "Required fields are marked
-with an asterisk: *", yet no box carries an asterisk and every box may be
-left empty.
-Basis: probe, 2026-09-27. <sup>f-a4</sup>
+with an asterisk: *", yet no box carries an asterisk and none is
+required: the tab saves with every box empty and shows "Your changes
+have been saved.". A journal manager reading the line looks for a
+required field that is not there. The PubMed and DOAJ tools' "Settings"
+tabs print the same line ([Import & export OJS5](U63-import-export.md#ojs5)).
+Basis: probe, 2026-09-30. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — Payments without a currency** · ❓ · minor.
@@ -907,42 +968,70 @@ subscription.
 Basis: probe, 2026-09-27. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The membership address fails signed out or with payments off** · 🐞 · minor · crash: server.
+**A9 — The membership address fails signed out or with payments off** · 🐞 · medium · crash: server.
 A signed-out visitor who types the journal's address followed by
-"user/payMembership" gets a blank page, where the server failed,
-instead of the Login page. A signed-in user gets the same blank page on
-a journal whose payments are not set up, instead of a page saying that
-no payment is taken.
-Basis: probe, 2026-09-27. <sup>f-a9</sup>
+"user/payMembership" gets an empty page, where the server failed,
+instead of the Login page, as at the subscription purchase pages'
+addresses ([Subscriptions A12](U51-subscriptions.md#a12)). A signed-in
+user gets the same empty page on a journal that takes no payments,
+whether payments were never set up or "Enable" was later unticked,
+where the journal's other payment addresses lead to the home page.
+Nothing can be paid there, so nothing is lost, but the user gets no
+explanation. No page, button, link or email in OJS 3 leads to the
+address; only a link saved from OJS 2 does.
+Basis: probe, 2026-09-30. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — The PayPal error page has no heading** · 🐞 · minor.
-A payer whose PayPal payment page fails sees only "A transaction error
-occurred. Please contact the journal manager for details." under a
-breadcrumb that ends "Home /" with nothing after it. The page has no
-heading, and the browser tab shows only the journal's name.
-Basis: probe, 2026-09-27. <sup>f-a10</sup>
+**A10 — When the call to PayPal fails, the payer's error page has no heading or page title** · 🐞 · low.
+A payer presses a payment link on a journal or press that takes payments
+through PayPal. The site must first call PayPal to set up the payment.
+When that call fails, the site shows its own error page instead of
+sending the payer on to PayPal. The page reads only "A transaction error
+occurred. Please contact the journal manager for details.", under a
+breadcrumb that ends "Home /". It has no heading, and the browser tab
+reads "| " followed by the journal's name. The payer expects a page that
+names the payment, as the manual payment page does ("Manual Fee
+Payment").
+The call fails when PayPal refuses the site's PayPal credentials (wrong
+or expired) or when PayPal cannot be reached. So a correctly set-up site
+shows the page rarely, during an outage. A site whose credentials are
+wrong shows it on every payment until the manager corrects them.
+The fix is a few lines, but they are in two app repositories (OJS and
+OMP), each needing its own change.
+Basis: probe, 2026-09-30. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — Merging a payer's account breaks the fee records** · 🐞 · user-visible · crash: server.
-After an article's APC is recorded "Paid" and that Author's account is
-merged into another ([Users management](U53-users-management.md), its
-Rule 17), the server fails wherever the record is read. The "Payments"
+**A11 — Merging an author whose fee is recorded "Paid" breaks the journal's payments list and that article's publishing** · 🐞 · high · crash: server.
+An editor records an article's publication fee as "Paid", and later a
+manager merges that author's account into another. From then on the
+server fails wherever the fee's payment record is read. The "Payments"
 page's "Payments" tab shows "Loading" and never finishes, for every
-payment of the journal. The
-submission's workflow opens an "Error" window and its "Payments" menu
-opens empty. "Schedule For Publication" › "Confirm" answers "An
-unexpected error has occurred. Please reload the page and try again.",
-so the article cannot be published, and nothing on screen repairs it.
-Basis: probe, 2026-09-27. <sup>f-a11</sup>
+payment of the journal. The submission's workflow opens an "Error"
+window and its "Payments" menu opens empty. "Schedule For Publication" ›
+"Confirm" answers "An unexpected error has occurred. Please reload the
+page and try again.", so the article cannot be published, and nothing on
+screen repairs it.
+The merge reports success. It does not carry the payment over to the
+account it keeps, and it silently deletes the merged account's
+subscriptions.
+It needs a journal that charges an article processing fee (payments are
+off by default) and a merge of an account that paid one; the
+subscription loss needs only the merge of a subscriber.
+Basis: probe, 2026-09-30. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — "Institutions" stays in the side menu after payments are switched off** · 🐞 · minor.
-When a Journal Manager saves Settings › Distribution › "Payments" with
-"Enable" unticked, the side menu drops "Payments" at once but keeps
-"Institutions", although ticking "Enable" had added the two together.
-"Institutions" goes only when the page is next loaded.
-Basis: test run. <sup>f-a12</sup>
+**A12 — A Journal Manager who switches payments off still sees "Institutions" in the side menu until a reload** · 🐞 · low.
+When a Journal Manager switches payments off (Settings › Distribution ›
+"Payments", "Enable" unticked, "Save"), the side menu drops "Payments"
+at once but keeps "Institutions" until the page is next loaded. The page
+updates the menu itself after the save, and that update removes
+"Payments" but not "Institutions".
+The leftover entry still opens a working Institutions page. Institutions
+serve both institutional subscriptions and statistics counted by
+institution, so the menu shows them while payments or institutional
+statistics are on. The fault therefore shows only on a journal whose
+institutional statistics are off, which is how a new install starts.
+Basis: test run, 2026-09-30. <sup>f-a12</sup>
 
 ### OMP
 
@@ -1065,15 +1154,19 @@ manual page's layout to a journal (note td16).
 
 <a id="fn-f-a1"></a>
 **f-a1** — `paymentTypesForm.tpl` prints `manager.payment.readerFeesDescription` and `manager.payment.generalFeesDescription`; no page reads the fees (note e). The About listing of fees belonged to OJS 2 (its locale keys remain, unused). Live-probed 2026-09-27 (note td4): no page lists a fee, and the only amounts are the locked galley links'.
+Issue report: [pkp-e2e#165](https://github.com/jardakotesovec/pkp-e2e/issues/165) ([docs/issues/U52-A1-fees-promised-on-about-page-shown-nowhere.md](../issues/U52-A1-fees-promised-on-about-page-shown-nowhere.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — The menu's save fulfils a queued payment it creates itself, so the requested one and its task stay (note i). Live-probed 2026-09-27 (note td10): after "Paid" and after "Waived" the task opened the manual page with the request's "50.00 (USD)", and its notification reached the principal contact.
+Issue report: [pkp-e2e#164](https://github.com/jardakotesovec/pkp-e2e/issues/164) ([docs/issues/U52-A2-fee-task-stays-after-fee-recorded.md](../issues/U52-A2-fee-task-stays-after-fee-recorded.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `PaymentManager::getPaymentForm()` returns `false` when the chosen plugin is not configured, and `PaymentHandler::pay()` calls `display()` on the result. `ManualPaymentPlugin::isConfigured()` reads only `manualInstructions` (note d); neither `pay()` nor `plugin()` reads `paymentsEnabled`, so with "Enable" off the page and its notification still work. Live-probed 2026-09-27 (note td8): with the instructions emptied, `GET {journal}/payment/pay/{id}` answered 500 with an empty page, logged "Uncaught Error: Call to a member function display() on false in pages/payment/PaymentHandler.php:77".
+Issue report: [pkp-e2e#160](https://github.com/jardakotesovec/pkp-e2e/issues/160) ([docs/issues/U52-A3-fee-link-after-payments-stop.md](../issues/U52-A3-fee-link-after-payments-stop.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `paymentTypesForm.tpl` ends with `common.requiredField` though no element carries `required`. Live-probed 2026-09-27 (note td3): the line's asterisk is the only one in the form, and the empty tab saves.
+Issue report: [pkp-e2e#32](https://github.com/jardakotesovec/pkp-e2e/issues/32) ([docs/issues/U63-OJS5-tool-settings-required-note-without-required-field.md](../issues/U63-OJS5-tool-settings-required-note-without-required-field.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `PKPBackendPaymentsSettingsController::edit()` validates `currency` only when sent and the rule skips an empty value; no set-up check reads it; `RequestPaymentDecisionForm` builds `publicationFee . ' ' . currency`; `paymentForm.tpl` drops the code `{if $itemCurrencyCode}`. A new journal has no `currency` row, and the `FieldSelect` offers no empty option. Live-probed 2026-09-27 (notes td1, td2): "Request publication fee (50 )", the manual page's "Fee 50.00" and the list's "50" on a journal set up with no currency; the list's first choice "UAE Dirham" and no blank one.
@@ -1089,15 +1182,20 @@ manual page's layout to a journal (note td16).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `UserHandler::payMembership()` (note m) reads `$user->getId()` with no sign-in check, and with payments not set up queues the membership payment and then calls `display()` on the `false` that `getPaymentForm()` returns. Live-probed 2026-09-27 (note td13), two runs: `GET {journal}/user/payMembership` answered 500 with an empty page for a signed-out visitor on a scratch journal and on `publicknowledge` (logged "Uncaught Error: Call to a member function getId() on null in pages/user/UserHandler.php:434"), and for a signed-in Reader on a journal with payments off (logged "Call to a member function display() on false in pages/user/UserHandler.php:438", after the queued payment was written).
+Issue report: [pkp-e2e#163](https://github.com/jardakotesovec/pkp-e2e/issues/163) ([docs/issues/U52-A9-membership-address-payments-off-empty-page.md](../issues/U52-A9-membership-address-payments-off-empty-page.md)).
+Issue report: [pkp-e2e#6](https://github.com/jardakotesovec/pkp-e2e/issues/6) ([docs/issues/U51-A12-signed-out-purchase-subscription-server-error.md](../issues/U51-A12-signed-out-purchase-subscription-server-error.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — `PaypalPaymentForm::display()` shows `plugins.paymethod.paypal.error` through `frontend/pages/message.tpl` with no `pageTitle` (note l). Live-probed 2026-09-27 (note td9): the page's `h1` empty, the breadcrumb "Home /", the browser title "| {journal}".
+Issue report: [pkp-e2e#167](https://github.com/jardakotesovec/pkp-e2e/issues/167) ([docs/issues/U52-A10-paypal-error-page-no-heading.md](../issues/U52-A10-paypal-error-page-no-heading.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — `completed_payments.user_id` references `users` with `onDelete('set null')` (OJS `OJSMigration`), and neither lib/pkp nor OJS `Repository::mergeUsers()` moves completed payments, so the merge leaves the record with no user; `OJSCompletedPaymentDAO::_fromRow()` then passes `null` to `Payment::setUserId(int)`. Every read of the journal's completed payments fails: the list's `PaymentsGridHandler::loadData()`, the menu's `SubmissionPaymentsForm` and `Repository::validatePublish()` (notes f, g, j). The grid's "[Nonexistent user]" is never reached. Live-probed 2026-09-27 (note td15), two journals, five runs: server 500 on `GET {journal}/$$$call$$$/grid/subscriptions/payments-grid/fetch-grid` and on `GET {journal}/$$$call$$$/modals/publish/publish/publish?submissionId={id}&publicationId={id}` (logged "Uncaught TypeError: PKP\payment\Payment::setUserId(): Argument #1 ($userId) must be of type int, null given, called in classes/payment/ojs/OJSCompletedPaymentDAO.php"), and on `GET {journal}/api/v1/submissions/{id}/publications/{id}/_components/submissionPayment`; another submission's waiver still read "Waived".
+Issue report: [pkp-e2e#161](https://github.com/jardakotesovec/pkp-e2e/issues/161) ([docs/issues/U52-A11-merged-payer-breaks-payments.md](../issues/U52-A11-merged-payer-breaks-payments.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — ui-library `src/components/Container/SettingsPage.vue`: on the `form-success` of `FORM_PAYMENT_SETTINGS` with `paymentsEnabled` off it deletes only `menu.payments`; `menu.institutions`, which the same handler adds with `payments` when `paymentsEnabled` is on, is removed only by the `FORM_CONTEXT_STATISTICS` branch (note d). The server builds the menu afresh on every page load, so a reload drops the entry. OJS suite's test run of 2026-09-27 (Rule 1; scenario 1): after "Save" with "Enable" unticked the side menu held "Institutions" and no "Payments" for the whole 10-second wait on the suite's scratch journal, and the same after each of two unticked saves on another scratch journal driven by hand; after a reload it held neither; a ticked save added both on the same page.
+Issue report: [pkp-e2e#166](https://github.com/jardakotesovec/pkp-e2e/issues/166) ([docs/issues/U52-A12-institutions-menu-stays-after-payments-off.md](../issues/U52-A12-institutions-menu-stays-after-payments-off.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `schemas/context.json` `paymentPluginName` default `ManualPayment`, applied when a press is created; OJS gives no default (note b). Live-probed 2026-09-27 (note td1): the press arrived with "Manual Fee Payment" chosen and "Enable" unticked, the journal with none chosen.
