@@ -1,0 +1,92 @@
+diff --git a/pages/index/IndexHandler.php b/pages/index/IndexHandler.php
+--- a/pages/index/IndexHandler.php
++++ b/pages/index/IndexHandler.php
+@@ -28,6 +28,7 @@
+ use PKP\pages\index\PKPIndexHandler;
+ use PKP\plugins\PluginRegistry;
+ use PKP\security\Validation;
++use PKP\submission\GenreDAO;
+ 
+ class IndexHandler extends PKPIndexHandler
+ {
+@@ -85,6 +86,10 @@
+                 ->limit(10)
+                 ->getMany();
+ 
++            // List only the main galleys, as the preprint's page does
++            $genreDao = DAORegistry::getDAO('GenreDAO'); /** @var GenreDAO $genreDao */
++            $primaryGenres = $genreDao->getPrimaryByContextId($server->getId())->toArray();
++
+             // Assign header and content for home page
+             $templateMgr->assign([
+                 'additionalHomeContent' => $server->getLocalizedData('additionalHomeContent'),
+@@ -95,6 +100,7 @@
+                 'categories' => iterator_to_array($categories),
+                 'pubIdPlugins' => PluginRegistry::loadCategory('pubIds', true),
+                 'publishedSubmissions' => $publishedSubmissions->toArray(),
++                'primaryGenreIds' => array_map(fn ($genre) => $genre->getId(), $primaryGenres),
+             ]);
+ 
+             $templateMgr->registerClass(Server::class, Server::class);
+diff --git a/pages/preprints/PreprintsHandler.php b/pages/preprints/PreprintsHandler.php
+--- a/pages/preprints/PreprintsHandler.php
++++ b/pages/preprints/PreprintsHandler.php
+@@ -25,8 +25,10 @@
+ use APP\submission\Submission;
+ use APP\template\TemplateManager;
+ use PKP\config\Config;
++use PKP\db\DAORegistry;
+ use PKP\plugins\PluginRegistry;
+ use PKP\security\authorization\ContextRequiredPolicy;
++use PKP\submission\GenreDAO;
+ 
+ class PreprintsHandler extends Handler
+ {
+@@ -82,11 +84,16 @@
+         $nextPage = $total > $showingEnd ? $page + 1 : null;
+         $prevPage = $showingStart > 1 ? $page - 1 : null;
+ 
++        // List only the main galleys, as the preprint's page does
++        $genreDao = DAORegistry::getDAO('GenreDAO'); /** @var GenreDAO $genreDao */
++        $primaryGenres = $genreDao->getPrimaryByContextId($context->getId())->toArray();
++
+         $templateMgr->registerClass(Server::class, Server::class);
+         $templateMgr->assign([
+             'sections' => $sections,
+             'categories' => iterator_to_array($categories),
+             'publishedSubmissions' => $publishedSubmissions,
++            'primaryGenreIds' => array_map(fn ($genre) => $genre->getId(), $primaryGenres),
+             'pubIdPlugins' => PluginRegistry::loadCategory('pubIds', true),
+             'showingStart' => $showingStart,
+             'showingEnd' => $showingEnd,
+diff --git a/pages/preprints/SectionsHandler.php b/pages/preprints/SectionsHandler.php
+--- a/pages/preprints/SectionsHandler.php
++++ b/pages/preprints/SectionsHandler.php
+@@ -25,7 +25,9 @@
+ use APP\submission\Collector;
+ use APP\submission\Submission;
+ use APP\template\TemplateManager;
++use PKP\db\DAORegistry;
+ use PKP\security\authorization\ContextRequiredPolicy;
++use PKP\submission\GenreDAO;
+ 
+ class SectionsHandler extends Handler
+ {
+@@ -105,11 +107,17 @@
+         $showingEnd = min($collector->offset + $collector->count, $collector->offset + count($submissions));
+         $nextPage = $total > $showingEnd ? $page + 1 : null;
+         $prevPage = $showingStart > 1 ? $page - 1 : null;
++
++        // List only the main galleys, as the preprint's page does
++        $genreDao = DAORegistry::getDAO('GenreDAO'); /** @var GenreDAO $genreDao */
++        $primaryGenres = $genreDao->getPrimaryByContextId($contextId)->toArray();
++
+         $templateMgr = TemplateManager::getManager($request);
+         $templateMgr->assign([
+             'section' => $section,
+             'sectionPath' => $sectionPath,
+             'preprints' => $submissions,
++            'primaryGenreIds' => array_map(fn ($genre) => $genre->getId(), $primaryGenres),
+             'showingStart' => $showingStart,
+             'showingEnd' => $showingEnd,
+             'total' => $total,

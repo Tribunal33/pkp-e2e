@@ -1,0 +1,23 @@
+diff --git a/pages/index/IndexHandler.php b/pages/index/IndexHandler.php
+--- a/pages/index/IndexHandler.php
++++ b/pages/index/IndexHandler.php
+@@ -27,6 +27,7 @@
+ use PKP\db\DAORegistry;
+ use PKP\pages\index\PKPIndexHandler;
+ use PKP\security\Validation;
++use PKP\submission\GenreDAO;
+ 
+ class IndexHandler extends PKPIndexHandler
+ {
+@@ -101,6 +102,11 @@
+                     $itemsPerPage,
+                     $rangeInfo->page
+                 ));
++
++                // List only the main galleys, as the issue's table of contents does
++                $genreDao = DAORegistry::getDAO('GenreDAO'); /** @var GenreDAO $genreDao */
++                $primaryGenres = $genreDao->getPrimaryByContextId($journal->getId())->toArray();
++                $templateMgr->assign('primaryGenreIds', array_map(fn ($genre) => $genre->getId(), $primaryGenres));
+             }
+ 
+             // Assign header and content for home page
