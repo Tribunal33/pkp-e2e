@@ -788,6 +788,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U54-A11-settings-role-window-ok-unticks-settings.md`): a
     user whose only Settings role is the one they edit pressing "OK" in its
     window and keeping "Permit changes to Settings" and the Settings pages
+  - the guard for A4 (issue report
+    `docs/issues/U54-A4-role-removal-warning-never-happens.md`): "Remove"
+    offered only on a created role nobody has held, and absent on a
+    default role and on a role with members
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -870,7 +874,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | The first row of each page of the "Roles" list has no "Edit" or "Remove" | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A2](#a2) | The manager role's row shows no stage, and the stage filter leaves it out | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A3](#a3) | Saving a manager-level role's window ticks every stage, unasked | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A4](#a4) | "Remove" warns that members' assignments will be deleted, but a role with members is never removed | 🐞 | minor | — |
+| [A4](#a4) | Removing a role warns that its members' assignments will be deleted, but a role with members is refused | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | A screen reader announces each stage box of the list only as "checkbox" | 🐞 | minor | — |
 | [A9](#a9) | After a filter entry is chosen the filters hide, and only the count line shows the list is filtered | 🐞 | minor | — |
@@ -923,14 +927,21 @@ screen says the stages changed.
 Basis: probe, 2026-10-01. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — The removal warning describes what never happens** · 🐞 · minor.
-The "Confirm" window says the removal "will also delete related settings
-and all the users assignments to this role", but "OK" on a role anyone
-holds or has held refuses with "Can't remove {role} role…", and every
-role the journal was created with is refused whatever its members. The
-warning also speaks of "this context", a word no other screen uses for
-the journal.
-Basis: probe. <sup>f-a4</sup>
+**A4 — Removing a role warns that its members' assignments will be deleted, but a role with members is refused** · 🐞 · low.
+A manager presses "Remove" on a role in Settings › Users & Roles ›
+"Roles". The "Confirm" window reads: "You are about to remove this role
+from this context. This operation will also delete related settings and
+all the users assignments to this role. Do you want to continue?"
+"OK" does not do that. A role that anyone holds or has held is not
+removed: the notice reads "Can't remove {role} role. Currently {n}
+user(s) is/are assigned to it." A role the journal was created with is
+not removed either, even when nobody holds it. The only role "OK"
+removes is one created on this page that nobody has ever held, and that
+role has no assignments to delete.
+Nothing is deleted. The manager is warned of a deletion that never
+happens, and learns only after "OK" that the role cannot be removed.
+"This context" is also a word no other screen uses for the journal.
+Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — The list does not show a change it has saved** · 🐞 · medium · crash: server.
@@ -1679,6 +1690,7 @@ Issue report: [pkp-e2e#184](https://github.com/jardakotesovec/pkp-e2e/issues/184
 **f-a4** — `settings.roles.removeText` against `removeUserGroup()`
 ([q](#fn-q)): no path deletes a group that has assignments, and
 `isDefault` groups are never deleted. Live-probed 2026-09-26: [q](#fn-q).
+Issue report: [pkp-e2e#190](https://github.com/jardakotesovec/pkp-e2e/issues/190) ([docs/issues/U54-A4-role-removal-warning-never-happens.md](../issues/U54-A4-role-removal-warning-never-happens.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Row ids 0…n−1 against the role-id refresh ([i](#fn-i)); the
