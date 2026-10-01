@@ -1264,7 +1264,7 @@ OJS, OMP and OPS unless its note names fewer apps.
 
 <a id="fn-a8"></a>
 **f-a8** — `omp/locale/fr_CA/default.po` and `ops/locale/fr_CA/default.po` carry `default.contextSettings.authorGuidelines` and `default.contextSettings.checklist` with empty texts, which `Locale::translate()` answers as the internal name (note p); `ojs/locale/fr_CA/default.po` has both. Code read 2026-09-27. Live-probed 2026-09-27 (OMP, OPS; OJS the control): after a French "Forms" tick and on a press or server created with French under "UI", the French "Author Guidelines" and checklist boxes held the internal names, and `…/fr_CA/about/submissions` showed them, on the seeded press and server too.
-Issue report: [docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md).
+Issue report: [pkp-e2e#360](https://github.com/jardakotesovec/pkp-e2e/issues/360) ([docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md)).
 
 <a id="fn-a9"></a>
 **f-a9** — Names: note a (a country is added when two installed locales share a language, a script never is) and note n (`LANGUAGE_LOCALE_ONLY`). Live-probed 2026-09-27: Chinese installed in both scripts and ticked under "UI" on a scratch journal: "Chinese/中文" twice on the journal's list (codes `zh_Hans`, `zh_Hant`), "中文" twice in the block and in "Change Language"; the site's list with every language installed: "Bosnian/bosanski" (`bs`, `bs_Latn`), "Serbian/српски" (`sr`, `sr_Cyrl`), "Uzbek/o‘zbek" (`uz`, `uz_Latn`).

@@ -2019,7 +2019,7 @@ role with an end date as removed.
 interface; the same raw moderator key shows on the preprint server's
 French "Editorial Masthead" (2026-09-24). Mechanism: note u; driven by
 td14. Live-probed 2026-09-25: note td14.
-Issue report: [docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md).
+Issue report: [pkp-e2e#360](https://github.com/jardakotesovec/pkp-e2e/issues/360) ([docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md)).
 
 ## Reference — entry points & surfaces
 

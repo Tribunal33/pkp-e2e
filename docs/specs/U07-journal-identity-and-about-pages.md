@@ -2562,7 +2562,7 @@ failed the page's script as
 [Languages & locales](U57-languages-and-locales.md#a5) records, and each
 load of Settings › Website answered the Plugin Gallery's server error of
 [Plugins management](U62-plugins-management.md#a1).
-Issue report: [docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md).
+Issue report: [pkp-e2e#360](https://github.com/jardakotesovec/pkp-e2e/issues/360) ([docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md)).
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — Live-probed 2026-09-28 (Rule 14a; OPS; OJS and OMP the
@@ -2587,7 +2587,7 @@ reads "Rédacteur-trice de rubrique"), the cause of
 [Users management](U53-users-management.md#ops1) too. Each load
 of Settings › Website answered the Plugin Gallery's server error of
 [Plugins management](U62-plugins-management.md#a1).
-Issue report: [docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md).
+Issue report: [pkp-e2e#360](https://github.com/jardakotesovec/pkp-e2e/issues/360) ([docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md)).
 
 ## Reference — entry points & surfaces
 
