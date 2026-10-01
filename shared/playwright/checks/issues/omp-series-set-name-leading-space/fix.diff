@@ -1,0 +1,31 @@
+--- a/classes/section/Section.php
++++ b/classes/section/Section.php
+@@ -37,9 +37,9 @@
+      */
+     public function getLocalizedTitle(bool $includePrefix = true): string
+     {
+-        $title = $this->getLocalizedData('title');
+-        if ($includePrefix) {
+-            $title = $this->getLocalizedPrefix() . ' ' . $title;
++        $title = $this->getLocalizedData('title') ?? '';
++        if ($includePrefix && ($prefix = $this->getLocalizedPrefix())) {
++            $title = $prefix . ' ' . $title;
+         }
+         return $title;
+     }
+@@ -53,10 +53,12 @@
+         if ($includePrefix) {
+             if (is_array($title)) {
+                 foreach ($title as $locale => $currentTitle) {
+-                    $title[$locale] = $this->getPrefix($locale) . ' ' . $currentTitle;
++                    if ($prefix = $this->getPrefix($locale)) {
++                        $title[$locale] = $prefix . ' ' . $currentTitle;
++                    }
+                 }
+-            } else {
+-                $title = $this->getPrefix($locale) . ' ' . $title;
++            } elseif ($prefix = $this->getPrefix($locale)) {
++                $title = $prefix . ' ' . $title;
+             }
+         }
+         return $title;
