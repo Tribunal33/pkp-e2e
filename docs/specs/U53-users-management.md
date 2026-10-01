@@ -875,7 +875,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | Users & Roles: screen readers announce every user row's "…" button as a raw code | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | The "Disable User" and "Enable User" windows list roles the user no longer holds in the journal | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | After "Enable User", the next "Disable User" offers the enabling reason and the Login page quotes it | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A9](#a9) | A merge drops the merged account's section assignments | 🐞 | latent | — |
+| [A9](#a9) | Merging a section editor's account unassigns them from their sections, so new submissions arrive without that editor | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | The French "Users" tab prints raw codes for its search label, the Invitations heading, button and columns, and the "Start Date" column | 🐞 | minor | — |
 | [A12](#a12) | The ORCID and disabled icons after a name have no name for a screen reader | 🐞 | minor | — |
 | [A13](#a13) | The "Merge user" window and the older grid show nothing under "Roles" for the Site Administrator | 🐞 | minor | — |
@@ -1015,14 +1015,21 @@ once in all? Lean: yes, one email listing the roles ended.
 Basis: probe. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — A merge drops the merged account's section assignments** · 🐞 · latent.
-Merging an account that edits one of the journal's sections moves its
-roles, review assignments and participations to the chosen account but
-not its section assignment: in the section's "Edit" window the merged
-editor's box is gone and the chosen account's stays unticked, so the
-section loses that editor until a manager ticks the chosen account by
-hand.
-Basis: probe. <sup>f-a9</sup>
+**A9 — Merging a section editor's account unassigns them from their sections, so new submissions arrive without that editor** · 🐞 · medium.
+"Merge user" is for one person who has two accounts: a manager merges
+the duplicate (the merged account) into the account the person keeps
+(the kept account). When the merged account is an editor assigned to a
+section (a series on a press), the merge moves its roles and its places
+on submissions already in progress to the kept account, but not the
+section assignment. Afterwards the section's "Edit" window no longer
+lists the merged account, and the kept account is not ticked as the
+section's editor. Nothing on screen says so.
+From then on, new submissions to that section are not assigned to that
+person. If they were the section's only editor, new submissions arrive
+with no editor, and the managers receive the usual "A new submission
+needs an editor to be assigned" email. Otherwise the section's other
+editors are assigned and nobody is told that one is missing.
+Basis: probe, 2026-10-01. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — The administrator can disable their own account** · ❓ · latent.
@@ -1997,6 +2004,7 @@ assignment of a new submission to that section uses (code), so after
 such a merge new submissions there would reach neither account; not
 seen, since only the seeded journal assigns editors automatically and
 its accounts are never merged in testing.
+Issue report: [docs/issues/U53-A9-merge-drops-section-editor-assignment.md](../issues/U53-A9-merge-drops-section-editor-assignment.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Code: note k. Live-probed 2026-09-25: note td11. The Vue list

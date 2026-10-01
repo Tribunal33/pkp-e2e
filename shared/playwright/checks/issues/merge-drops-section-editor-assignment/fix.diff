@@ -1,0 +1,47 @@
+--- a/lib/pkp/classes/context/SubEditorsDAO.php
++++ b/lib/pkp/classes/context/SubEditorsDAO.php
+@@ -143,6 +143,34 @@
+     }
+ 
+     /**
++     * Hand a user's submission group assignments to another user, as when
++     * merging accounts. An assignment the other user already holds stays
++     * with the old user and is deleted with it.
++     */
++    public function changeUser(int $oldUserId, int $newUserId): void
++    {
++        $assignments = DB::table('subeditor_submission_group')
++            ->where('user_id', '=', $oldUserId)
++            ->get();
++
++        foreach ($assignments as $assignment) {
++            $exists = DB::table('subeditor_submission_group')
++                ->where('context_id', '=', $assignment->context_id)
++                ->where('assoc_id', '=', $assignment->assoc_id)
++                ->where('assoc_type', '=', $assignment->assoc_type)
++                ->where('user_group_id', '=', $assignment->user_group_id)
++                ->where('user_id', '=', $newUserId)
++                ->exists();
++
++            if (!$exists) {
++                DB::table('subeditor_submission_group')
++                    ->where('subeditor_submission_group_id', '=', $assignment->subeditor_submission_group_id)
++                    ->update(['user_id' => $newUserId]);
++            }
++        }
++    }
++
++    /**
+      * Delete all submission group assignments for a user group
+      */
+     public function deleteByUserGroupId(int $userGroupId)
+--- a/lib/pkp/classes/user/Repository.php
++++ b/lib/pkp/classes/user/Repository.php
+@@ -370,6 +370,7 @@
+         $temporaryFileDao = DAORegistry::getDAO('TemporaryFileDAO'); /** @var TemporaryFileDAO $temporaryFileDao */
+         $temporaryFileDao->deleteByUserId($oldUserId);
+         $subEditorsDao = DAORegistry::getDAO('SubEditorsDAO'); /** @var SubEditorsDAO $subEditorsDao */
++        $subEditorsDao->changeUser($oldUserId, $newUserId);
+         $subEditorsDao->deleteByUserId($oldUserId);
+ 
+         // Transfer old user's roles
