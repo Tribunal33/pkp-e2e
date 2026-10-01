@@ -1767,7 +1767,7 @@ viewport, step buttons laid out past the right edge); OMP fails the same
 way at 375px; OPS collapses correctly at 375px (scrollWidth 558). The same
 OJS page resized 1440→375 *without* reload collapses correctly; reloading
 at that width breaks it again — reproduced in both orders, twice.
-Issue report: [docs/issues/U21-A10-wizard-phone-rail-scrolls-sideways.md](../issues/U21-A10-wizard-phone-rail-scrolls-sideways.md).
+Issue report: [pkp-e2e#173](https://github.com/jardakotesovec/pkp-e2e/issues/173) ([docs/issues/U21-A10-wizard-phone-rail-scrolls-sideways.md](../issues/U21-A10-wizard-phone-rail-scrolls-sideways.md)).
 
 <a id="fn-i"></a>
 **i** — Autosave. `autosave` mixin: a 500 ms job timer
