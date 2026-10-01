@@ -982,6 +982,12 @@ Left out of the scenarios above, by reason:
     `docs/issues/U21-OPS3-author-cancel-draft-refused.md`): a preprint
     author's own "Cancel" on a draft reaching "Submission cancelled", and
     "Delete Incomplete Submissions" removing the author's draft
+  - the guard for A4 and A18 (issue reports
+    `docs/issues/U21-A4-wizard-footer-last-saved-without-save.md` and
+    `docs/issues/U21-A18-wizard-autosave-cuts-title-mid-typing.md`): a
+    reopened draft's footer showing no "Last saved" time before the first
+    save, and a Title typed after the first minute saved whole once typing
+    stops
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1049,7 +1055,7 @@ are the source; badges, Impact and Basis:
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A4](#a4) | The wizard footer shows a "Last saved" time counted from page load, not from a real save | 🐞 | minor | — |
+| [A4](#a4) | Reopened submission draft's footer says "Last saved 3 seconds ago" though nothing was saved | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | The copyright-agreed activity-log line opens with a raw "{$filename}" placeholder | 🐞 | minor | — |
 | [A6](#a6) | Submitting a draft twice shows a problems banner with nothing to fix; the real refusal never appears | 🐞 | latent | — |
 | [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1058,7 +1064,7 @@ are the source; badges, Impact and Basis:
 | [A12](#a12) | After "Do not send an email." is saved, the Emails screen shows no Submission Confirmation option selected | 🐞 | minor | — |
 | [A14](#a14) | Section Editors who are also Authors are offered "Section editor" in "Submit As", then refused | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | Submission wizard refuses a plain language summary over the word limit, then hangs on "Saving" | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
-| [A18](#a18) | A change typed more than a minute after the last save is saved cut after its first letters; the rest waits another minute | 🐞 | minor | — |
+| [A18](#a18) | Submission wizard autosaves a change after its first letter, and the rest only a minute later | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | minor | — |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
 | [OPS3](#ops3) | On a preprint server, authors cannot cancel their own draft: Cancel does nothing, Delete is refused | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1118,13 +1124,15 @@ Lean: yes. One string serves two audiences; split it. Basis: probe.
 <sup>[b](#fn-b)</sup>
 
 <a id="a4"></a>
-**A4 — The footer claims a save that never happened** · 🐞 · minor.
-On opening any wizard step the footer already reads "Last saved a few
-seconds ago" and keeps counting. But the time is measured from the moment
-the page loaded, not from any actual save, which may lie much further back.
-An author reading the footer is told their work was just saved when nothing
-has been sent.
-Basis: probe. <sup>[i](#fn-i)</sup>
+**A4 — Reopened submission draft's footer says "Last saved 3 seconds ago" though nothing was saved** · 🐞 · low.
+An author who reopens a draft in the submission wizard, or reloads the
+page, finds the footer reading "Last saved 3 seconds ago" and counting
+up from there. Nothing has been saved: the time is counted from the
+moment the page opened, and the draft's last save may lie minutes or
+days back.
+The draft itself is intact. The false time stays until the wizard
+first saves a change, and for the whole visit when nothing is changed.
+Basis: probe, 2026-10-01. <sup>[i](#fn-i)</sup>
 
 <a id="a5"></a>
 **A5 — The copyright-agreed log line is garbled** · 🐞 · minor.
@@ -1303,19 +1311,19 @@ false here.
 Basis: probe. <sup>[fn-a17](#fn-a17)</sup>
 
 <a id="a18"></a>
-**A18 — A change typed more than a minute after the last save is saved cut after its first letters** · 🐞 · minor.
-An author who changes the Title on "Details" more than a minute after the
-last save (after opening the wizard, when nothing has been saved yet) has
-the timer save it while they are still typing. At an ordinary pace (a key
-every quarter second) the draft's Title is saved as its first letter or
-two, or empty (the box just cleared), and the rest is saved only a minute
-later. Leaving the wizard or reloading within that next minute keeps the
-cut Title: reopened, "Details"
-shows only the part sent, as little as its first two letters, with no
-question and no "Unsaved Changes" dialog. A Title that arrives within a
-second, pasted say, is usually saved whole. A step change saves the
-change as typed (Rule 9); the timer should too.
-Basis: probe. <sup>[fn-a18](#fn-a18)</sup>
+**A18 — Submission wizard autosaves a change after its first letter, and the rest only a minute later** · 🐞 · medium.
+When more than a minute has passed since the wizard last saved (or
+since it opened, if nothing has been saved yet), the first key an
+author types in a field starts a save at once. Within a second the
+footer flashes "Saving" and the draft is saved with only the first
+letter or two. The rest waits a full minute for the next save, while
+the footer reads "Last saved 8 seconds ago" as if the change were
+saved.
+An author who leaves the wizard or reloads within that minute finds the
+field cut: a Title typed as "u21w37 Autosave cut check" reopens as "u",
+in the page heading too, with no warning. Moving to another step, or
+"Save for Later", saves the whole text.
+Basis: probe, 2026-10-01. <sup>[fn-a18](#fn-a18)</sup>
 
 ### OMP
 
@@ -1806,6 +1814,7 @@ followed. The rail back to "Upload Files" saved the same way. The
 2026-08-25 observation in note f (no write on "Continue") was a step with
 nothing changed. An untouched step sent its timer save 58.7–59.7 s after
 typing stopped. Leaving: note fn-a15.
+Issue report: [docs/issues/U21-A4-wizard-footer-last-saved-without-save.md](../issues/U21-A4-wizard-footer-last-saved-without-save.md).
 
 <a id="fn-j"></a>
 **j** — Save for later. `SubmissionWizardPage.saveForLater()` flushes
@@ -2348,6 +2357,7 @@ reload "Details" read "Autosave check leavelate" and a longer cut (OMP),
 OMP typed as fast in one run and was cut, so whole or cut follows where
 the typing falls against the 500 ms tick, not the app. No response of
 400 or more, no page error, no browser dialog.
+Issue report: [docs/issues/U21-A18-wizard-autosave-cuts-title-mid-typing.md](../issues/U21-A18-wizard-autosave-cuts-title-mid-typing.md).
 
 <a id="fn-omp1"></a>
 **fn-omp1** — OMP divergence points: `StartSubmission` (OMP) adds
