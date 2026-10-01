@@ -2075,7 +2075,7 @@ Issue report: [pkp-e2e#340](https://github.com/jardakotesovec/pkp-e2e/issues/340
 
 <a id="fn-f-a24"></a>
 **f-a24** — Live-probed 2026-09-26, OJS: note q21; a second walk of a two-member set answered the parts 1221 1222, 1221 1222, then 1222. Code: note i.
-Issue report: [docs/issues/U19-A24-oai-driver-list-says-more-results.md](../issues/U19-A24-oai-driver-list-says-more-results.md).
+Issue report: [pkp-e2e#341](https://github.com/jardakotesovec/pkp-e2e/issues/341) ([docs/issues/U19-A24-oai-driver-list-says-more-results.md](../issues/U19-A24-oai-driver-list-says-more-results.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Live-probed 2026-09-26: note q7; a format set "Not Available" in its "Format Availability" window left the list and its GetRecord answered "No matching identifier in this repository"; "Available" again brought it back. Code: note e (`publication_formats`, `pf.is_available = 1`); the OMP Dublin Core adapter works on a publication format (note f).
