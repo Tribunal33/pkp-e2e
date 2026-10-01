@@ -796,6 +796,9 @@ Left out of the scenarios above, by reason:
     `docs/issues/U54-A13-roles-list-order-changes.md`): a role saved on
     the "Roles" tab keeping its place in the list, and a paged list showing
     every role once
+  - the guard for A8 (issue report
+    `docs/issues/U54-A8-roles-stage-boxes-no-name.md`): each stage box of
+    the "Roles" list carrying an accessible name with its role and stage
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -880,7 +883,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | Saving a manager-level role's window ticks every stage, unasked | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A4](#a4) | Removing a role warns that its members' assignments will be deleted, but a role with members is refused | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A8](#a8) | A screen reader announces each stage box of the list only as "checkbox" | 🐞 | minor | — |
+| [A8](#a8) | On the "Roles" list, a screen reader reads each stage box as a bare "checkbox", naming no role | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A9](#a9) | After a filter entry is chosen the filters hide, and only the count line shows the list is filtered | 🐞 | minor | — |
 | [A10](#a10) | A role name of only spaces breaks the role window, and saving again shows a page of raw code | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [A11](#a11) | "OK" in the window of a user's only Settings role takes the Settings pages away from everyone holding it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -981,12 +984,16 @@ the field become optional or go? Lean: optional, since it has no reader.
 Basis: probe. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — The stage boxes have no name for a screen reader** · 🐞 · minor.
-The list's stage boxes carry no name a screen reader can read, neither
-the role nor the stage, so each is announced only as "checkbox". A
-manager who uses a screen reader cannot tell which role and stage a box
-sets.
-Basis: probe. <sup>f-a8</sup>
+**A8 — On the "Roles" list, a screen reader reads each stage box as a bare "checkbox", naming no role** · 🐞 · low.
+On Settings › Users & Roles › "Roles", each role's row has one box per
+workflow stage, which the manager ticks to let the role work in that
+stage. The boxes have no label. A screen reader announces each one only
+as "checkbox" and whether it is checked, so a manager who uses one cannot
+tell which role a box belongs to.
+The setting still works, and the role's "Edit" window offers the same
+stages as labelled boxes under "Stage Assignment", so the stages can be
+set there instead.
+Basis: probe, 2026-10-01. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — A filtered list does not say it is filtered** · 🐞 · minor.
@@ -1722,6 +1729,7 @@ panels or any other page visited.
 type="checkbox" id="select-cell-…">` with no `<label>`, `aria-label` or
 `title`. Live-probed 2026-09-26 (Fields; all three apps): every box of the
 list's fourth row had none of the three.
+Issue report: [docs/issues/U54-A8-roles-stage-boxes-no-name.md](../issues/U54-A8-roles-stage-boxes-no-name.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — The two lists sit in `userGroupsGridFilter.tpl`'s form
