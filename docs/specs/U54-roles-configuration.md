@@ -1750,7 +1750,7 @@ saved."; the post carried no `permitSettings`); Users & Roles then
 answered "The current role does not have access to this operation." on a
 reload and in a fresh sign-in, and the Journal Manager's "Edit" of the
 role showed the box unticked and open.
-Issue report: [docs/issues/U54-A11-settings-role-window-ok-unticks-settings.md](../issues/U54-A11-settings-role-window-ok-unticks-settings.md).
+Issue report: [pkp-e2e#186](https://github.com/jardakotesovec/pkp-e2e/issues/186) ([docs/issues/U54-A11-settings-role-window-ok-unticks-settings.md](../issues/U54-A11-settings-role-window-ok-unticks-settings.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `updateStageOptions()` hides the stage section with
