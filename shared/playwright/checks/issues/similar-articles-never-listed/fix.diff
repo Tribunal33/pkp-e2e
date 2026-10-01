@@ -1,0 +1,87 @@
+--- a/lib/pkp/classes/submission/Collector.php
++++ b/lib/pkp/classes/submission/Collector.php
+@@ -64,6 +64,7 @@
+     public string $orderDirection = 'DESC';
+     public ?string $searchPhrase = null;
+     public ?int $maxSearchKeywords = null;
++    public bool $matchAnyKeyword = false;
+     public ?array $statuses = null;
+     public ?array $currentPublicationStatuses = null;
+     public ?array $stageIds = null;
+@@ -362,11 +363,15 @@
+ 
+     /**
+      * Limit results to submissions matching this search query
++     *
++     * @param bool $matchAnyKeyword Match submissions that contain any one of the
++     *  phrase's words, instead of all of them (e.g. to find similar submissions)
+      */
+-    public function searchPhrase(?string $phrase, ?int $maxSearchKeywords = null): AppCollector
++    public function searchPhrase(?string $phrase, ?int $maxSearchKeywords = null, bool $matchAnyKeyword = false): AppCollector
+     {
+         $this->searchPhrase = $phrase;
+         $this->maxSearchKeywords = $maxSearchKeywords;
++        $this->matchAnyKeyword = $matchAnyKeyword;
+         return $this;
+     }
+ 
+@@ -668,8 +673,8 @@
+                     DB::raw('1')
+                 );
+             }
+-            // Builds the filters
+-            $keywords->map(
++            // Builds the filters: every keyword must match, or any one of them
++            $q->where(fn (Builder $q) => $keywords->map(
+                 fn ($keyword) => $q->where(
+                     fn ($q) => $q
+                         // Search on the publication title or abstract
+@@ -731,9 +736,10 @@
+                         ->when(
+                             ($numericWords = $keywords->filter(fn (string $keyword) => ctype_digit($keyword)))->count(),
+                             fn (Builder $query) => $query->orWhereIn('s.submission_id', $numericWords)
+-                        )
++                        ),
++                    boolean: $this->matchAnyKeyword ? 'or' : 'and'
+                 )
+-            );
++            ));
+         } elseif (strlen($this->searchPhrase ?? '') && !$isSearchPhraseDoi) {
+             // If there's search text, but no keywords could be extracted from it, force the query to return nothing
+             $q->whereRaw('1 = 0');
+--- a/plugins/generic/recommendBySimilarity/RecommendBySimilarityPlugin.php
++++ b/plugins/generic/recommendBySimilarity/RecommendBySimilarityPlugin.php
+@@ -25,6 +25,7 @@
+ use PKP\facades\Locale;
+ use PKP\plugins\GenericPlugin;
+ use PKP\plugins\Hook;
++use PKP\publication\PKPPublication;
+ 
+ class RecommendBySimilarityPlugin extends GenericPlugin
+ {
+@@ -82,11 +83,12 @@
+                 ControlledVocab::CONTROLLED_VOCAB_SUBMISSION_KEYWORD,
+                 Application::ASSOC_TYPE_PUBLICATION,
+                 $submission->getCurrentPublication()->getId(),
+-                [Locale::getLocale(), $submission->getData('locale'), Locale::getPrimaryLocale()]
++                [Locale::getLocale(), $submission->getData('locale'), Locale::getPrimaryLocale()],
++                asEntryData: false
+             )
+         );
+         foreach ($allSearchTerms as $localeSearchTerms) {
+-            $searchTerms += $localeSearchTerms;
++            $searchTerms = array_merge($searchTerms, $localeSearchTerms);
+         }
+ 
+         return $searchTerms;
+@@ -119,8 +121,8 @@
+             ->getCollector()
+             ->excludeIds([$submissionId])
+             ->filterByContextIds([$context->getId()])
+-            ->filterByLatestPublished(true)
+-            ->searchPhrase($searchPhrase, static::MAX_SEARCH_KEYWORDS);
++            ->filterByCurrentPublicationStatus([PKPPublication::STATUS_PUBLISHED])
++            ->searchPhrase($searchPhrase, static::MAX_SEARCH_KEYWORDS, matchAnyKeyword: true);
+ 
+         $offset = ($rangeInfo->getPage() - 1) * $rangeInfo->getCount();
+         $submissionCount = $collector->getCount();
