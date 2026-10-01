@@ -1444,6 +1444,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U51-A4-subscription-notify-refusal-names-setup.md`): with
     no subscription contact set, a subscription saved with the email box
     ticked refused with a message naming the "Subscription Policies" tab
+  - the guard for A7 (issue report
+    `docs/issues/U51-A7-toc-padlock-on-openable-galleys.md`): on a
+    restricted issue's table of contents, a Journal Manager without a
+    subscription and the article's own author seeing the galleys without
+    the padlock, a reader without a subscription still seeing it
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1539,7 +1544,7 @@ entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A4](#a4) | Subscription window's email refusal sends the manager to "the journal Setup", not "Subscription Policies" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A7](#a7) | The issue's table of contents locks galleys the reader can open | 🐞 | minor | — |
+| [A7](#a7) | Issue page shows padlocks to editors, authors and lapsed subscribers on galleys they can open | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | Subscription expiry reminders run once a month, so most subscribers never get one | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
 | [A9](#a9) | Buying an individual subscription with "Membership" empty returns the same page with no reason given | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A10](#a10) | A reader who presses "Purchase" beside an active subscription loses access at once, before paying | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1622,14 +1627,21 @@ manager a way to record it, as the workflow does for a manual publication
 fee. Basis: probe, 2026-09-25. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The table of contents locks galleys the reader can open** · 🐞 · minor.
-On an issue's page, the padlock (Rule 10) is decided by the reader's
-subscription, institution and issue purchase alone. A Journal Manager,
-Section Editor, Copyeditor or Subscription Manager without a
-subscription, the article's own Author, and a reader whose expired
-subscription still covers the issue under "Partial expiry" all see the
-padlock and the "Requires Subscription" wording, then open the galley
-when they press it. Basis: probe, 2026-09-25. <sup>f-a7</sup>
+**A7 — Issue page shows padlocks to editors, authors and lapsed subscribers on galleys they can open** · 🐞 · low.
+On a journal that requires subscriptions, the issue's table of contents
+shows the padlock and "Requires Subscription" on article and "Full
+Issue" galleys that the signed-in user can open. That happens to three
+groups when they hold no current subscription:
+- Journal Managers and Editors, Section Editors, assistants such as
+  Copyeditors, and Subscription Managers;
+- an article's own author, on that article;
+- a lapsed subscriber on a journal set to "Partial expiry", the policy
+  that lets a subscriber keep the issues and articles published while
+  they were subscribed.
+Pressing the locked link opens the galley, and the article's own page
+shows it unlocked. The journal's home page, which shows the current
+issue's table of contents, carries the same padlocks.
+Basis: probe, 2026-09-30. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — Subscription expiry reminders run once a month, so most subscribers never get one** · 🐞 · high.
@@ -2161,6 +2173,7 @@ Issue report: [pkp-e2e#65](https://github.com/jardakotesovec/pkp-e2e/issues/65) 
 
 <a id="fn-f-a7"></a>
 **f-a7** — `IssueHandler::setupIssueTemplate()` computes `hasAccess` from `subscribedUser($user, $journal)` (no submission, so no `canPreview()`), `subscribedDomain()` and a paid issue; the partial-expiry flags it assigns (`issueExpiryPartial`, `articleExpiryPartial`) are read by no template. Live-probed 2026-09-25 (td9, td21): the managers, Section Editor, Copyeditor, Subscription Manager, the article's Author and a reader under "Partial expiry" saw the padlock and opened the galley.
+Issue report: [docs/issues/U51-A7-toc-padlock-on-openable-galleys.md](../issues/U51-A7-toc-padlock-on-openable-galleys.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — pkp/pkp-lib#11683, OJS commit `b795decf26` (2025-08-13, "fix schedule task frequency") changed `SubscriptionExpiryReminder` from `daily()` to `monthlyOn(1)`; `sendJournalReminders()` still matches one end date per run (note n) and `executeActions()` still simulates the missing days of short months, which only a daily run needs. The pre-Laravel `registry/scheduledTasks.xml` read `<frequency day="1"/>` for this task. Live-probed 2026-09-25 (td29): the schedule list shows `0 0 1 * *`; the exact-day matching could not be seen, as the task fails first (f-a27).
