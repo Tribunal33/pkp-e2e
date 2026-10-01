@@ -1057,6 +1057,14 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A9 (Rule 13; issue report
+    `docs/issues/U69-A9-book-file-open-download-fails.md`): a reader
+    opening a book's free PDF in the viewer and saving it with
+    "Download", and the same link downloading the file with
+    "PDF.js PDF Viewer" off
+  - the guard for A9's script error (issue report
+    `docs/issues/U69-A9-pdf-view-page-script-error.md`): the PDF view
+    page opening with no script error
   - the guard for A5 (Rule 6; issue report
     `docs/issues/U13-A6-older-version-tab-current-title.md`): an
     older version's page, published under another title than the current
@@ -1174,7 +1182,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A8](#a8) | In a format with several files, a file for sale shows no price | 🐞 | user-visible | — |
-| [A9](#a9) | No book file can be read or saved: every download fails | 🐞 | user-visible · crash: both | — |
+| [A9](#a9) | On a press, a reader who opens a book's PDF gets an empty viewer, and no download saves the file | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | The book's and chapter pages show raw codes in French | 🐞 | user-visible | — |
 | [A16](#a16) | A book's earlier URL Path shows a server error page | 🐞 | user-visible · crash: server | — |
 | [A19](#a19) | An older version's chapter page shows a server error page | 🐞 | user-visible · crash: server | — |
@@ -1277,17 +1285,25 @@ until the link leads to the Login or payment page.
 Basis: probe, 2026-09-28. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — No book file can be read or saved** · 🐞 · user-visible · crash: both.
-Every free file of a published book fails. A PDF's link opens the PDF view
-page, but the page's own script fails: the viewer shows a red "Unexpected
-server response." bar instead of the PDF, and neither the bar's
-"Download" nor the viewer's own saves anything. Any file that downloads
-(an EPUB, a supplementary file, a PDF with the viewer off) opens a blank
-error page: the app fails. Only an HTML file shows. Readers of a press
-can open no book, in any interface language, and search engines
-following the page's file addresses get the same failure.
+**A9 — On a press, a reader who opens a book's PDF gets an empty viewer, and no download saves the file** · 🐞 · critical · crash: both.
+The server fails whenever a reader asks for a published book's PDF or
+other downloadable file. A reader who opens a book's "PDF" link gets
+the PDF view page with a red bar, "Unexpected server response.", where
+the document should be. The page's "Download" and the viewer's own
+download button save nothing.
+A file that is served as a download (a PDF with "PDF.js PDF Viewer"
+off, an EPUB, a supplementary file) opens a blank error page instead.
+A file the reader has bought fails the same way as a free one. Readers
+have no way round. No file view reaches the usage statistics, and a
+search engine that follows the file addresses in the book page's tags
+gets the same error.
+Only an HTML file still opens, and only while "HTML Monograph File" is
+on. Visitors and signed-in users are affected alike.
+The view page's own script also fails with "PDFJS is not defined", a
+second fault with its own report: it shows on 3.5 too, where the PDF
+opens, and the reader sees nothing of it.
 Worked until the download began reporting the version to the usage statistics, a change read from the code's history: a regression.
-Since: 2026-08-26 (a month), a date read from the code's history · Basis: probe, 2026-09-28. <sup>f-a9</sup>
+Since: 2026-08-26 (a month), a date read from the code's history · Basis: probe, 2026-10-01. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — The HTML view page's return arrow is named by a raw code** · 🐞 · minor.
@@ -1658,6 +1674,8 @@ Issue report: [pkp-e2e#226](https://github.com/jardakotesovec/pkp-e2e/issues/226
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note j: every free-file download reaches the `UsageEvent` built with the never-set `$this->publication`; `view` of a PDF shows the pdfJsViewer page, whose inline `PDFJS` script fails and whose viewer loads the failing download. The typed property dates from omp `29fa88508` (2025-03-20, pkp/pkp-lib#10671); the event's `publication: $this->publication` argument from omp `591d7a0e7` (2026-08-26, pkp/pkp-lib#12311, "pass publication to usage event"), which set it in `book()` but not in `download()`. Live-probed 2026-09-26 (U20 claim check), 2026-09-27 (U64), 2026-09-28 (U73 claim check K3, K4, three runs): `GET {press}/catalog/download/{book}/{format}/{file}`, with and without `?inline=1`, current or older version, answered 500 with the log line above; the view page logged "PDFJS is not defined" and "UnexpectedResponseException". Live-probed 2026-09-28 (td13, td22; two runs of each drive): 22 download 500s and 9 view 500s across the runs, "PDFJS is not defined" and "UnexpectedResponseException" on every PDF view page; the bar's "Download" and the viewer's both cancelled; the French view page (`{press}/fr_CA/catalog/download/…?inline=1`) the same. The same failure is recorded where it shows elsewhere: Search engine metadata & analytics' OMP6, Usage statistics' OMP3, Media files' OMP1 (HTML plugin off).
+Issue report: [docs/issues/U69-A9-book-file-open-download-fails.md](../issues/U69-A9-book-file-open-download-fails.md).
+Issue report (the view page's script error "PDFJS is not defined", low): [docs/issues/U69-A9-pdf-view-page-script-error.md](../issues/U69-A9-pdf-view-page-script-error.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note f: `monograph.return` is defined in no locale file of OMP, lib/pkp or the plugin. Live-probed 2026-09-28 (td21).
