@@ -2712,7 +2712,7 @@ has an issue, though its link is the article's `parentUrl`. Live-probed
 <a id="fn-f-ojs7"></a>
 **f-ojs7** — Live-probed 2026-09-25, note q15: after a refused "OK" the
 window reloaded its fields from the saved settings.
-Issue report: [docs/issues/U13-OJS7-publication-facts-settings-refused-save-resets.md](../issues/U13-OJS7-publication-facts-settings-refused-save-resets.md).
+Issue report: [pkp-e2e#227](https://github.com/jardakotesovec/pkp-e2e/issues/227) ([docs/issues/U13-OJS7-publication-facts-settings-refused-save-resets.md](../issues/U13-OJS7-publication-facts-settings-refused-save-resets.md)).
 
 <a id="fn-f-ojs8"></a>
 **f-ojs8** — The date picker writes a hidden field that the form
