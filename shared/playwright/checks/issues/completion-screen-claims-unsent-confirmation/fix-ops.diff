@@ -1,0 +1,51 @@
+--- a/lib/pkp/pages/submission/PKPSubmissionHandler.php
++++ b/lib/pkp/pages/submission/PKPSubmissionHandler.php
+@@ -43,6 +43,7 @@
+ use PKP\context\Context;
+ use PKP\facades\Locale;
+ use PKP\i18n\LocaleMetadata;
++use PKP\log\SubmissionEmailLogEventType;
+ use PKP\db\DAORegistry;
+ use PKP\security\authorization\SubmissionAccessPolicy;
+ use PKP\security\authorization\UserRequiredPolicy;
+@@ -358,6 +359,13 @@
+             'pageWidth' => TemplateManager::PAGE_WIDTH_NARROW,
+             'submission' => $submission,
+             'workflowUrl' => $this->getWorkflowUrl($submission, $request->getUser()),
++            // Whether this user was sent the submission acknowledgement
++            'confirmationEmailed' => Repo::emailLogEntry()->getByEventType(
++                $submission->getId(),
++                SubmissionEmailLogEventType::AUTHOR_SUBMISSION_ACK,
++                Application::ASSOC_TYPE_SUBMISSION,
++                $request->getUser()->getId()
++            )->isNotEmpty(),
+         ]);
+         $templateMgr->display('submission/complete.tpl');
+     }
+--- a/locale/en/submission.po
++++ b/locale/en/submission.po
+@@ -229,6 +229,9 @@
+ msgid "submission.submit.complete.canNotPost"
+ msgstr "Thank you for submitting your preprint. The server has been notified of your submission and you have been emailed a confirmation for your records. Once the moderator has reviewed your submission, they will post your preprint or contact you."
+ 
++msgid "submission.submit.complete.canNotPostNoEmail"
++msgstr "Thank you for submitting your preprint. The server has been notified of your submission. Once the moderator has reviewed your submission, they will post your preprint or contact you."
++
+ msgid "submission.wizard.confirmSubmit"
+ msgstr "Are you sure you want to submit <strong>{$title}</strong> to <strong>{$context}</strong>? Once you submit, a moderator will review the preprint before posting it online."
+ 
+--- a/templates/submission/complete.tpl
++++ b/templates/submission/complete.tpl
+@@ -17,7 +17,11 @@
+     <div class="app__contentPanel">
+ 		<p>
+ 			{if !$canAuthorPublish}
+-				{translate key="submission.submit.complete.canNotPost"}</p>
++				{if $confirmationEmailed}
++					{translate key="submission.submit.complete.canNotPost"}</p>
++				{else}
++					{translate key="submission.submit.complete.canNotPostNoEmail"}</p>
++				{/if}
+ 				<p>{translate key="submission.submit.whatNext.forNow"}</p>
+ 				<ul>
+ 					<li><a href={$workflowUrl}>{translate key="submission.submit.whatNext.review"}</a></li>

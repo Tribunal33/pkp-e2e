@@ -1,0 +1,32 @@
+--- a/lib/pkp/classes/observers/listeners/SendSubmissionAcknowledgement.php
++++ b/lib/pkp/classes/observers/listeners/SendSubmissionAcknowledgement.php
+@@ -12,9 +12,9 @@
+  *
+  * @brief Send an email acknowledgement to the submitting author when a new submission is submitted
+  *
+- * Sends an email to all users with author stage assignments and
+- * sends a separate email to all other contributors named on the
+- * submission.
++ * Sends an email to the user who started the submission and all
++ * users with author stage assignments, and sends a separate email to
++ * all other contributors named on the submission.
+  */
+ 
+ namespace PKP\observers\listeners;
+@@ -50,6 +50,16 @@
+             ->pluck('user_id')
+             ->all();
+ 
++        // The user who started the submission holds its first stage assignment, which
++        // PKPSubmissionController::add() makes in the group chosen in "Submit As". Under an
++        // editorial role that is not an Author assignment, so add that user here.
++        $starter = StageAssignment::withSubmissionIds([$event->submission->getId()])
++            ->orderBy('stage_assignment_id')
++            ->first();
++        if ($starter) {
++            $assignedUserIds = array_unique([...$assignedUserIds, $starter->userId]);
++        }
++
+         $submitterUsers = Repo::user()
+             ->getCollector()
+             ->filterByUserIds($assignedUserIds)

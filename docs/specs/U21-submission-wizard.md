@@ -1051,7 +1051,7 @@ are the source; badges, Impact and Basis:
 | [A4](#a4) | The wizard footer shows a "Last saved" time counted from page load, not from a real save | 🐞 | minor | — |
 | [A5](#a5) | The copyright-agreed activity-log line opens with a raw "{$filename}" placeholder | 🐞 | minor | — |
 | [A6](#a6) | Submitting a draft twice shows a problems banner with nothing to fix; the real refusal never appears | 🐞 | latent | — |
-| [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | minor | — |
+| [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | On every journal, press or server but the install's first, a section's configured editors are never assigned | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A wizard loaded at phone width keeps its uncollapsed step rail and the page scrolls sideways (journal & press) | 🐞 | minor | — |
 | [A12](#a12) | After "Do not send an email." is saved, the Emails screen shows no Submission Confirmation option selected | 🐞 | minor | — |
@@ -1063,7 +1063,7 @@ are the source; badges, Impact and Basis:
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | minor | — |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
 | [OPS3](#ops3) | A preprint author's own "Cancel" is silently refused; the draft survives with no message | 🐞 | user-visible | — |
-| [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | user-visible | — |
+| [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS7](#ops7) | The preprint "Not Allowed" page shows a raw locale code where its explanation should be | 🐞 | minor | — |
 | [OPS8](#ops8) | A further galley on a reloaded draft gets stuck in its upload window and shows no file until a reload | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [OPS9](#ops9) | The Review step's "Files" panel says "No files have been uploaded" for galleys the draft already had when the page loaded | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
@@ -1147,15 +1147,19 @@ So the author is told to fix problems that are not shown. Basis: probe.
 <sup>[m](#fn-m)</sup>
 
 <a id="a7"></a>
-**A7 — The completion screen claims an email that was never sent** · 🐞 · minor.
-With the journal's submission acknowledgement set to "Do not send an
-email.", the "Submission complete" screen still reads "…you've been
-emailed a confirmation for your records." No email exists. The same
-happens to a submitter who chose an editorial role in "Submit As"
-("Journal editor", "Press editor"): with the setting at its default they
-get no acknowledgement, while the screen promises one. A submitter
-checking their inbox for the promised confirmation finds nothing.
-Basis: probe (a journal and a press). <sup>[q](#fn-q)</sup>
+**A7 — The completion screen claims an email that was never sent** · 🐞 · low.
+After submitting, the "Submission complete" screen tells the submitter
+"…you've been emailed a confirmation for your records." It says so
+whether or not an email went out: when the journal's "Submission
+Confirmation" setting is "Do not send an email.", and when an editor
+submitted under their editorial role ("Journal editor", "Press editor"),
+who gets no confirmation at all, a fault of its own shared with
+[OPS5](#ops5). The submission itself is complete; a submitter who looks
+for the confirmation finds nothing and may wonder whether it went
+through. On a preprint server the claim appears only in the message for
+submitters a moderator must review, so it shows there when
+confirmations are off.
+Basis: probe, 2026-10-01. <sup>[q](#fn-q)</sup>
 
 <a id="a8"></a>
 **A8 — On every journal, press or server but the install's first, a section's configured editors are never assigned** · 🐞 · medium.
@@ -1457,13 +1461,16 @@ the viewer? Lean: yes for the thank-you wording; offering a capable viewer
 the post-it-now link is defensible. Basis: probe. <sup>[n](#fn-n)</sup>
 
 <a id="ops5"></a>
-**OPS5 — No acknowledgement email for a can-post submitter** · 🐞 · user-visible.
-A submitter who may post their own preprint (a manager, by default) gets no
-acknowledgement email after submitting: neither the can-post variant the
-app defines for exactly this case nor the ordinary one. A plain author
-submitting under the same conditions receives theirs. The submitter is left
-with no emailed record of the submission. Basis: probe (with the
-plain-author control the same day). <sup>[q](#fn-q)</sup>
+**OPS5 — No acknowledgement email for a can-post submitter** · 🐞 · low.
+A Preprint Server Manager who submits their own preprint under their
+own role gets no confirmation email. A plain author submitting under the
+same conditions gets "Thank you for your submission to …". The server
+has a confirmation written for submitters who may post without
+moderation, and it never reaches them; any copies to the primary contact
+or other addresses are lost with it. It is the same fault as an
+editorial-role submitter's missing confirmation on a journal or press
+[A7](#a7).
+Basis: probe, 2026-10-01. <sup>[q](#fn-q)</sup>
 
 <a id="ops6"></a>
 **OPS6 — The needs-an-editor email speaks journal language on a preprint server** · ❓ · minor.
@@ -2193,6 +2200,8 @@ confirmation for your records." (A7); the same user type submitting as
 "Author" got "Thank you for your submission to {journal}". On OPS the
 "Preprint Server manager" submitter got only the needs-an-editor email
 (the can-post case, OPS5).
+A7 issue reports: [docs/issues/U21-A7-completion-screen-claims-unsent-confirmation.md](../issues/U21-A7-completion-screen-claims-unsent-confirmation.md) (the screen's claim) and [docs/issues/U21-A7-OPS5-editorial-submitter-no-acknowledgement.md](../issues/U21-A7-OPS5-editorial-submitter-no-acknowledgement.md) (the editorial-role submitter, with OPS5).
+OPS5 issue report: [docs/issues/U21-A7-OPS5-editorial-submitter-no-acknowledgement.md](../issues/U21-A7-OPS5-editorial-submitter-no-acknowledgement.md).
 A8 issue report: [docs/issues/U21-A8-section-editors-not-assigned-second-journal.md](../issues/U21-A8-section-editors-not-assigned-second-journal.md).
 
 <a id="fn-r"></a>
