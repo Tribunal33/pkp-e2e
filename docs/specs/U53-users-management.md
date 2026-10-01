@@ -825,8 +825,6 @@ Left out of the scenarios above, by reason:
   - A10 (the older grid's "Disable User" and "Remove" on the
     administrator's own row; Rule 20)
   - A11 and OPS1 (the list in the French interface; Rule 25)
-  - A13 (the Site Administrator's empty "Roles" cell in the "Merge user"
-    window and on the older grid; Fields)
   - A16 ("Generate Password" unticked again, "Notify User" left locked;
     Rule 23)
   - A17 (the grid's row still listing a role just ended on "Edit User";
@@ -2056,7 +2054,7 @@ manager" ("Press manager", "Preprint Server manager") with no start date.
 The grids' "Roles" column lists active and future roles (note i), and the
 manager enrolment a new journal gives the Site Administrator has no start
 date, which fits the empty cell.
-Issue report: [docs/issues/U53-A13-merge-grid-admin-roles-empty.md](../issues/U53-A13-merge-grid-admin-roles-empty.md).
+Issue report: [pkp-e2e#198](https://github.com/jardakotesovec/pkp-e2e/issues/198) ([docs/issues/U53-A13-merge-grid-admin-roles-empty.md](../issues/U53-A13-merge-grid-admin-roles-empty.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-25, OMP and OPS: after "Confirm" on a
