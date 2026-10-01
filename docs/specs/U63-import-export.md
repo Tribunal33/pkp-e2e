@@ -1189,6 +1189,10 @@ Left out of the scenarios above, by reason:
   - the guard OJS5's issue report names, once fixed: the PubMed and
     DOAJ Settings tabs offer no "Cancel", and a typed change still
     asks before another tab opens {OJS}
+  - the guards OJS6's and OJS1's issue reports name, once fixed: the
+    DOAJ "Articles" list's "Article Title" and "Authors" search
+    finding an article typed in lower case; and its issue link opening
+    the window headed with the issue's name {OJS}
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1306,12 +1310,12 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | A submission with a title prefix comes back from a Native XML export and import titled "The The …" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | A users import stops at the first user without a registration date, silently leaving the rest out | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | A users file first imported on a 3.5.0 release and imported again after the update gives each ended role a second time | 🐞 | minor | — |
-| [OJS1](#ojs1) | The DOAJ list's issue link opens the issue's window headed "DOI Plugin Settings" | 🐞 | minor | — |
+| [OJS1](#ojs1) | DOAJ export list's issue link opens the issue's window headed "DOI Plugin Settings" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | With "DOAJ Plugin" switched off, the Plugins list still shows its export tool as on | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | PubMed files lose the journal's title once the PubMed tool's Settings are saved with no NLM abbreviation | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | Where NLM's site cannot be reached, every PubMed export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS5](#ojs5) | "Cancel" on the PubMed and DOAJ tools' Settings tabs does nothing, and both forms announce required fields | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OJS6](#ojs6) | The DOAJ list's title and author search matches letter case as typed | 🐞 | minor | — |
+| [OJS6](#ojs6) | DOAJ export list's title and author search finds nothing unless the letter case matches | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS7](#ojs7) | Where DOAJ's site cannot be reached, every validated DOAJ export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS9](#ojs9) | A DOAJ deposit that cannot connect to DOAJ leaves the article "Submitted" for good, with no error | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS10](#ojs10) | A journal manager's "Export Issues" list shows the issues in no set order | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1588,11 +1592,16 @@ Since: 2026-09-30 · Basis: probe, 2026-10-01. <sup>f-a23</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — The DOAJ list's issue window is headed "DOI Plugin Settings"** · 🐞 · minor.
-Pressing an issue's name in the DOAJ Articles list should open that
-issue's window under the issue's name; the window opens headed "DOI
-Plugin Settings", a leftover of the DOI tools that no longer applies.
-Basis: probe. <sup>f-ojs1</sup>
+**OJS1 — DOAJ export list's issue link opens the issue's window headed "DOI Plugin Settings"** · 🐞 · low.
+A journal manager or editor who presses an issue's name in the DOAJ
+Export Plugin's "Articles" list gets that issue's window, with its
+"Table of Contents", "Issue Data" and "Issue Galleys" tabs, but headed
+"DOI Plugin Settings" instead of the issue's name. The heading was
+borrowed from the DOI export tools' settings link and never fitted this
+window. Nothing is lost; only the heading misleads. The "Publications"
+list, shown instead of "Articles" while "DOI Versioning" is on, has no
+issue links and is not affected.
+Basis: probe, 2026-10-01. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
 **OJS2 — With "DOAJ Plugin" switched off, the Plugins list still shows its export tool as on** · 🐞 · low.
@@ -1645,13 +1654,22 @@ field on them is required or marked with an asterisk.
 Basis: probe, 2026-10-01. <sup>f-ojs5</sup>
 
 <a id="ojs6"></a>
-**OJS6 — The DOAJ list's search is case-sensitive** · 🐞 · minor.
-The filter's "Article Title" and "Authors" search should find an
-article whatever the letter case typed; "okapi" finds nothing where
-"Okapi" finds "Okapi forest census", and "lovelace" nothing where
-"Lovelace" finds the author's articles. Seen on PostgreSQL; MySQL not
-checked (its default collation would ignore case).
-Basis: probe. <sup>f-ojs6</sup>
+**OJS6 — DOAJ export list's title and author search finds nothing unless the letter case matches** · 🐞 · low.
+On a journal whose database is PostgreSQL, a journal manager who
+searches the DOAJ Export Plugin's list of articles by "Article Title" or
+"Authors" gets "No Items" unless they type the letter case exactly as it
+is stored. "signalling" finds nothing where "Signalling" finds "The
+Signalling Theory Dividends", and "mwandenga" nothing where "Mwandenga"
+finds it. Nothing is lost: retyping with the stored capitals, or paging
+through the list, finds the article. But "No Items" reads as if the
+article were not there to export or deposit. The "Publications" list
+that replaces "Articles" when "DOI Versioning" is on behaves the same.
+Installations on MySQL were not checked, for want of a MySQL install;
+MySQL's default collations compare text without case, so they are not
+expected to show it. The other export tools' lists (Crossref and
+DataCite on the DOIs page, Native XML, PubMed) search through another
+query that ignores case.
+Basis: probe, 2026-10-01. <sup>f-ojs6</sup>
 
 <a id="ojs7"></a>
 **OJS7 — Validated DOAJ exports depend on DOAJ's site** · 🐞 · medium · crash: server.
@@ -3028,6 +3046,7 @@ and "Status", no "Issue" column, and its rows link only "Author; Title"
 from the "Articles" list only. Set back to "No", the same journal's
 "Articles" list has "Issue" again; on a journal without versioning the
 issue's name opens the window headed "DOI Plugin Settings".
+Issue report: [docs/issues/U63-OJS1-doaj-issue-window-wrong-heading.md](../issues/U63-OJS1-doaj-issue-window-wrong-heading.md).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — The tool is registered by the enabled generic plugin
@@ -3070,6 +3089,7 @@ Live-probed again 2026-10-01, OJS main on PostgreSQL 18.6, two runs:
 "okapi" and "OKAPI" answered "No Items"; "Authors" "Lovelace" listed
 both articles, "lovelace" "No Items". MySQL not checked: no MySQL
 install on the test machines.
+Issue report: [docs/issues/U63-OJS6-doaj-search-matches-letter-case.md](../issues/U63-OJS6-doaj-search-matches-letter-case.md).
 
 <a id="fn-f-ojs7"></a>
 **f-ojs7** — Note r (`doajArticles.xsd` imports its language list from
