@@ -18,7 +18,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U50](../specs/U50-issues.md) | 14 | 2 | 9 | **In progress: workstation issues session (slot s1), 2026-09-30.** Done: A4 (joined U51 A28, pkp-e2e#53), A1, A2, A5+A6, A8, A11, A12, A13, A14, A16 (joined U09 A19, docs/issues/U09-A19-static-page-content-change-lost-unasked.md), A17+A18; in progress: A10 |
-| [U21](../specs/U21-submission-wizard.md) | 16 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30.** Done: A16, OPS8+OPS9; in progress: A8; open: A4, A5, A6, A7, A10, A12, A14, A18, OMP2, OMP3, OPS3, OPS5, OPS7 |
+| [U21](../specs/U21-submission-wizard.md) | 16 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30.** Done: A8, A16, OPS8+OPS9; in progress: A7, OPS5; open: A4, A5, A6, A10, A12, A14, A18, OMP2, OMP3, OPS3, OPS7 |
 | [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 | **In progress: issues session s3, 2026-09-30.** Done: OJS1, A4, OJS3, OMP5 (two reports), A6, A2, A5, A9, A14, A7, A8, A11, A13 (with A6), OMP1, A10, OMP2, OMP4; in progress: OMP6; open: none |

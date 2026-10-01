@@ -963,6 +963,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md`):
     on a reloaded preprint draft that already has a galley, a further
     galley's upload finishing and "Review" listing the galleys
+  - the guard for A8 (issue report
+    `docs/issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md`):
+    on a second context, a submission to a section (series) with an
+    editor ticked under "Editorial Assignments" arriving with that
+    editor assigned
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1034,7 +1039,7 @@ are the source; badges, Impact and Basis:
 | [A5](#a5) | The copyright-agreed activity-log line opens with a raw "{$filename}" placeholder | 🐞 | minor | — |
 | [A6](#a6) | Submitting a draft twice shows a problems banner with nothing to fix; the real refusal never appears | 🐞 | latent | — |
 | [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | minor | — |
-| [A8](#a8) | Section editors configured for auto-assignment are silently never assigned on any journal but the install's first | 🐞 | user-visible | — |
+| [A8](#a8) | Editors set to be assigned automatically by a section are never assigned on a second journal | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A10](#a10) | A wizard loaded at phone width keeps its uncollapsed step rail and the page scrolls sideways (journal & press) | 🐞 | minor | — |
 | [A12](#a12) | After "Do not send an email." is saved, the Emails screen shows no Submission Confirmation option selected | 🐞 | minor | — |
 | [A14](#a14) | "Submit As" offers "Section editor" ("Series editor"), and "Begin Submission" refuses it | 🐞 | user-visible | — |
@@ -1138,15 +1143,21 @@ checking their inbox for the promised confirmation finds nothing.
 Basis: probe (a journal and a press). <sup>[q](#fn-q)</sup>
 
 <a id="a8"></a>
-**A8 — Auto-assignment of section editors silently fails on all but the install's first journal** · 🐞 · user-visible.
-A section configured to assign editorial users automatically ("Editorial
-Assignments" on the section form) assigns nobody on any journal created
-after the install's first. The submission arrives with no editor, the
-configured editor is never emailed and never sees it, and the managers get
-the needs-an-editor alert instead. On the install's oldest journal the same
-setup works, which hides the defect from casual checks. Basis: probe (two
-failing journals plus a passing control, same day), with the code fault
-identified. <sup>[q](#fn-q)</sup>
+**A8 — Editors set to be assigned automatically by a section are never assigned on a second journal** · 🐞 · medium.
+A section configured to assign editorial users automatically
+("Editorial Assignments" on the section form) assigns nobody on any
+journal but the one created first on the install (the one with the
+lowest id). The submission
+arrives with no editor, the configured editor is never emailed and
+never sees it, and the managers get the needs-an-editor alert instead.
+The managers can assign the editor by hand from the submission's
+"Participants". The editor is then emailed only if the manager writes
+or picks a message in that window; the automatic "You have been
+assigned as an editor" email is not sent.
+It affects journals, presses and preprint servers, sections and series
+alike, on the development branch (`main`) only: the released versions
+(3.5, 3.4 and 3.3) assign as configured.
+Basis: probe, 2026-10-01. <sup>[q](#fn-q)</sup>
 
 <a id="a9"></a>
 **A9 — Starting a submission quietly turns a Section Editor into an Author** · ❓ · latent.
@@ -2118,6 +2129,7 @@ confirmation for your records." (A7); the same user type submitting as
 "Author" got "Thank you for your submission to {journal}". On OPS the
 "Preprint Server manager" submitter got only the needs-an-editor email
 (the can-post case, OPS5).
+Issue report: [docs/issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md](../issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md).
 
 <a id="fn-r"></a>
 **r** — Schema. The submission record itself is defined in the shared
