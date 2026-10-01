@@ -2672,12 +2672,12 @@ publication's DOI object instead and is unaffected. Live-probed
 <a id="fn-f-ops7"></a>
 **f-ops7** — Note c: `preprint.subject` has an empty translation in
 OPS's `locale/fr_CA/locale.po`. Live-probed 2026-09-25, note q5.
-Issue report: [docs/issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md](../issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md).
+Issue report: [pkp-e2e#207](https://github.com/jardakotesovec/pkp-e2e/issues/207) ([docs/issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md](../issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md)).
 
 <a id="fn-f-ops8"></a>
 **f-ops8** — Note d: `article.pageTitle` is absent from OPS's French
 locale. Live-probed 2026-09-25, note d.
-Issue report: [docs/issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md](../issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md).
+Issue report: [pkp-e2e#207](https://github.com/jardakotesovec/pkp-e2e/issues/207) ([docs/issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md](../issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md)).
 
 <a id="fn-f-ops9"></a>
 **f-ops9** — Note j: the element at the cover's centre is the keyword
