@@ -1732,7 +1732,7 @@ Issue report: [pkp-e2e#284](https://github.com/jardakotesovec/pkp-e2e/issues/284
 
 <a id="fn-f-a19"></a>
 **f-a19** — Note l. Live-probed 2026-09-28 (td17): 500 at `{press}/catalog/book/{id}/version/{id}/chapter/{n}`, typed, from the older version's table of contents and from "Versions", with the book named by number or URL Path, on every press left at "DOI Versioning" "No"; the same page opened on a press seeded with it "Yes".
-Issue report: [docs/issues/U69-A19-older-version-chapter-page-server-error.md](../issues/U69-A19-older-version-chapter-page-server-error.md).
+Issue report: [pkp-e2e#286](https://github.com/jardakotesovec/pkp-e2e/issues/286) ([docs/issues/U69-A19-older-version-chapter-page-server-error.md](../issues/U69-A19-older-version-chapter-page-server-error.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Note l: a new version copies each chapter with its `datePublished`, and the first date is the source chapter's. Live-probed 2026-09-28 (td17).
