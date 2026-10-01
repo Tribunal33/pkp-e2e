@@ -1077,6 +1077,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-OJS12-public-review-never-shown.md`): a
     confirmed review marked "Publicly Show Reviewer Comments" shown on
     the published article's page, a private or unconfirmed one not {OJS}
+  - the guard for A2 (scenario 3; issue report
+    `docs/issues/U13-A2-older-version-pdf-reader-empty.md`): an
+    older version's PDF reader page showing the document, and its
+    "Download" saving the file, on a journal and a preprint server
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1212,7 +1216,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | On a French page every version name reads "##publication.versionStage.display##" | 🐞 | user-visible | — |
-| [A2](#a2) | An older version's PDF opens a reader with no document, and its "Download" gets no file | 🐞 | user-visible · crash: script | — |
+| [A2](#a2) | An older version's PDF opens a reader with no document, and its "Download" gets no file | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | A preprint server's lists, and a journal's "Latest Publications" without the current issue, offer a link for a galley with no file, answering "404 Not Found" | 🐞 | minor | — |
 | [A5](#a5) | The preview's "View submission" gives the Author the access-denied page | 🐞 | user-visible | — |
 | [A6](#a6) | An older version's browser tab reads the current version's title | 🐞 | minor | — |
@@ -1258,19 +1262,25 @@ interface has no text for the version name at all.
 Basis: probe, 2026-09-25. <sup>[f-a1](#fn-f-a1)</sup>
 
 <a id="a2"></a>
-**A2 — An older version's PDF cannot be read** · 🐞 · user-visible · crash: script.
-An older version's page lists that version's galleys, and its PDF link
-opens the PDF reader page with the outdated-version notice. The reader,
-though, asks for the file at the current version's address, where the
-older galley does not exist: the viewer fails to load it and shows an
-empty page reading "0 of 0" with no message, and "Download" gets no
-file, the browser staying on the reader page. A reader who wants the
-version they cite cannot read it. When the galley kept its URL Path into
-the new version, the reader shows the document, because the copy shares
-the published galley's file ([→ Galleys, A4](U46-galleys.md#a4)); once
-the current version's galley with that URL Path has a file of its own,
-the older version's reader again shows nothing.
-Basis: probe, 2026-09-25. <sup>[f-a2](#fn-f-a2)</sup>
+**A2 — An older version's PDF opens a reader with no document, and its "Download" gets no file** · 🐞 · high · crash: script.
+An older version's page lists that version's galleys. Its PDF link
+opens the PDF reader page with the outdated-version notice, but the
+viewer shows no document: an empty page reading "0 of 0", with no
+message. The reader page's "Download" gets no file either, and the
+browser stays on the reader page.
+A reader who wants the version they cite cannot read or download its
+PDF, and the page offers no other link to it. The older version's
+other galleys (HTML, other files) still open. An editor who previews a
+new, unpublished version gets the same empty viewer for its PDF.
+It happens on every article or preprint with more than one version
+while the "PDF.JS PDF Viewer" plugin is on, as it is by default. A
+press's books are not affected: their PDF reader asks for the file of
+the version shown.
+When the galley's URL Path is the same in both versions, the older
+version's PDF reader page shows the current version's file under the
+outdated notice; the two are the same file only until an editor
+replaces the current galley's file ([→ Galleys, A4](U46-galleys.md#a4)).
+Basis: probe, 2026-10-01. <sup>[f-a2](#fn-f-a2)</sup>
 
 <a id="a3"></a>
 **A3 — No sentence for an article without downloads** · ❓ · minor.
@@ -2513,6 +2523,7 @@ with the published galley ([Galleys](U46-galleys.md), its A4: "Change
 File" on the new version's galley changes the published version's
 file). The HTML and Lens readers build versioned addresses. Live-probed
 2026-09-25, note q9 (two runs on the journal, one on the server).
+Issue report: [docs/issues/U13-A2-older-version-pdf-reader-empty.md](../issues/U13-A2-older-version-pdf-reader-empty.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note l: `usage-stats-chart.js` removes the sentence as soon

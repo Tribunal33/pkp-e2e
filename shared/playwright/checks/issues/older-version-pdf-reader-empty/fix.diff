@@ -1,0 +1,31 @@
+--- a/plugins/generic/pdfJsViewer/PdfJsViewerPlugin.php
++++ b/plugins/generic/pdfJsViewer/PdfJsViewerPlugin.php
+@@ -109,11 +109,18 @@
+                 $title = $galleyPublication->getLocalizedTitle(null, 'html');
+             }
+ 
++            // An older version's galley is found only under its version
++            // (ArticleHandler/PreprintHandler::initialize() look an unversioned
++            // galley up in the current publication), as the HTML and Lens
++            // readers and the galley links already do.
++            $isLatestPublication = $submission->getData('currentPublicationId') === $galley->getData('publicationId');
+             $pdfUrl = $request->url(
+                 null,
+                 $submissionNoun,
+                 'download',
+-                [$submission->getBestId(), $galley->getBestGalleyId(), $galley->getFile()->getId()]
++                $isLatestPublication
++                    ? [$submission->getBestId(), $galley->getBestGalleyId(), $galley->getFile()->getId()]
++                    : [$submission->getBestId(), 'version', $galley->getData('publicationId'), $galley->getBestGalleyId(), $galley->getFile()->getId()]
+             );
+ 
+             $parentUrl = $request->url(null, $submissionNoun, 'view', [$submission->getBestId()]);
+@@ -138,7 +145,7 @@
+                 'bestId' => $galleyPublication->getData('urlPath') ?? $submission->getId(),
+                 'galley' => $galley,
+                 'currentVersionString' => $application->getCurrentVersion()->getVersionString(false),
+-                'isLatestPublication' => $submission->getData('currentPublicationId') === $galley->getData('publicationId'),
++                'isLatestPublication' => $isLatestPublication,
+                 'galleyPublication' => $galleyPublication,
+                 'title' => $title,
+                 'pdfUrl' => $pdfUrl,
