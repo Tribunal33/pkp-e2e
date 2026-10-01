@@ -1122,6 +1122,11 @@ Left out of the scenarios above, by reason:
     GetRecord show its own deleted record and none of the first journal's,
     and the site-wide `set` of that journal lists it {OJS OMP} (Rule 4b;
     once fixed)
+  - the guard for A18 (issue report
+    `docs/issues/U19-A18-oai-datestamp-stays-after-edit-republish.md`): a
+    published book (preprint) edited, then unpublished and published again:
+    the record's datestamp moves each time and `from` today lists it {OMP
+    OPS} (once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1247,7 +1252,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | MARC field 008 reads "%26%09%26 %2026" instead of the publication date {OJS} | 🐞 | minor | — |
 | [A16](#a16) | An argument given twice fails with a server error instead of being refused | 🐞 | minor · crash: server | — |
 | [A17](#a17) | A malformed identifier answers "No matching identifier", or another record {OMP OPS} | 🐞 | minor | — |
-| [A18](#a18) | A record's datestamp never moves after publication {OMP OPS} | 🐞 | user-visible | — |
+| [A18](#a18) | A press's or preprint server's OAI record keeps its earlier datestamp after an edit or a second publish {OMP OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | A deleted section's set is listed, but asking for it lists nothing {OJS OPS} | 🐞 | minor | — |
 | [A20](#a20) | Asked for a section's set, deleted records ignore `from` and `until` {OJS OPS} | 🐞 | minor | — |
 | [A22](#a22) | While any journal versions its DOIs, every journal's OAI requests fail {OJS} | 🐞 | user-visible · crash: server | — |
@@ -1448,15 +1453,20 @@ followed by letters, such as `…/390abc`, answers record 390.
 Basis: probe, 2026-09-26. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — A datestamp never moves after publication** {OMP OPS} · 🐞 · user-visible.
+**A18 — A press's or preprint server's OAI record keeps its earlier datestamp after an edit or a second publish** {OMP OPS} · 🐞 · medium.
 A harvester that asks for the records changed since its last visit
-expects an edited item, or one published again, to come back. On a
-press and a preprint server the datestamp stays at the time the item was
-published: a saved edit of the published version does not move it, and
-an item published again after "Unpublish" ("Unpost") comes back with
-that old datestamp, older than its deleted record's. A harvester that
-harvested the deleted record never sees the item come back.
-Basis: probe, 2026-09-26. <sup>f-a18</sup>
+expects an edited item, or one published again, to come back. On a press
+and a preprint server the datestamp stays where it was before the
+change: a saved edit of the published version does not move it, and an
+item published again after "Unpublish" ("Unpost") comes back with its
+earlier datestamp, older than its deleted record's. A harvester that
+harvested the deleted record never sees the item come back, and one that
+holds the item never learns it was edited. Nothing tells the press, and
+no screen moves the datestamp. Publishing again moved the datestamp
+until 3.3; editing a published version is new with 3.5 and has never
+moved it. A journal's datestamp moves in both cases, because a journal's
+records also take the date of the published version.
+Basis: probe, 2026-10-01. <sup>f-a18</sup>
 
 <a id="a19"></a>
 **A19 — A deleted section's set lists nothing** {OJS OPS} · 🐞 · minor.
@@ -1804,6 +1814,7 @@ Issue report: [pkp-e2e#254](https://github.com/jardakotesovec/pkp-e2e/issues/254
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-26: note q9. OMP: a format published at 08:28:23Z, deleted at 09:09:59Z and published again read 08:28:23Z; OPS the same with 08:28:36Z and 09:13:38Z; `submissions.last_modified` did not change. Code: note e (the datestamp is `ms.last_modified` on OMP, `a.last_modified` on OPS).
+Issue report: [docs/issues/U19-A18-oai-datestamp-stays-after-edit-republish.md](../issues/U19-A18-oai-datestamp-stays-after-edit-republish.md).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Live-probed 2026-09-26, OJS and OPS: note q10. Code: note j.

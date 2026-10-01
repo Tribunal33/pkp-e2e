@@ -1,0 +1,24 @@
+--- a/classes/oai/omp/OAIDAO.php
++++ b/classes/oai/omp/OAIDAO.php
+@@ -205,7 +205,7 @@
+ 
+         return DB::table('publication_formats AS pf')
+             ->select([
+-                'ms.last_modified AS last_modified',
++                DB::raw('GREATEST(ms.last_modified, COALESCE(pub.last_modified, ms.last_modified)) AS last_modified'),
+                 'pf.publication_format_id AS data_object_id',
+                 DB::raw('NULL AS tombstone_id'),
+                 DB::raw('NULL AS set_spec'),
+@@ -228,10 +228,10 @@
+             ->where('pf.is_available', '=', 1)
+             ->whereNotNull('pub.date_published')
+             ->when($from, function ($query, $from) {
+-                return $query->whereDate('ms.last_modified', '>=', \DateTime::createFromFormat('U', $from));
++                return $query->whereDate(DB::raw('GREATEST(ms.last_modified, COALESCE(pub.last_modified, ms.last_modified))'), '>=', \DateTime::createFromFormat('U', $from));
+             })
+             ->when($until, function ($query, $until) {
+-                return $query->whereDate('ms.last_modified', '<=', \DateTime::createFromFormat('U', $until));
++                return $query->whereDate(DB::raw('GREATEST(ms.last_modified, COALESCE(pub.last_modified, ms.last_modified))'), '<=', \DateTime::createFromFormat('U', $until));
+             })
+             ->when($submissionId, function ($query, $submissionId) {
+                 return $query->where('pf.publication_format_id', '=', $submissionId);

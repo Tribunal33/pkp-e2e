@@ -1,0 +1,24 @@
+--- a/classes/oai/ops/OAIDAO.php
++++ b/classes/oai/ops/OAIDAO.php
+@@ -216,7 +216,7 @@
+ 
+         return DB::table('submissions AS a')
+             ->select([
+-                'a.last_modified AS last_modified',
++                DB::raw('GREATEST(a.last_modified, COALESCE(p.last_modified, a.last_modified)) AS last_modified'),
+                 'a.submission_id AS submission_id',
+                 DB::raw('NULL AS tombstone_id'),
+                 DB::raw('NULL AS set_spec'),
+@@ -242,10 +242,10 @@
+                 return $query->where('p.section_id', '=', $sectionId);
+             })
+             ->when($from, function ($query, $from) {
+-                return $query->whereDate('a.last_modified', '>=', \DateTime::createFromFormat('U', $from));
++                return $query->whereDate(DB::raw('GREATEST(a.last_modified, COALESCE(p.last_modified, a.last_modified))'), '>=', \DateTime::createFromFormat('U', $from));
+             })
+             ->when($until, function ($query, $until) {
+-                return $query->whereDate('a.last-modified', '<=', \DateTime::createFromFormat('U', $until));
++                return $query->whereDate(DB::raw('GREATEST(a.last_modified, COALESCE(p.last_modified, a.last_modified))'), '<=', \DateTime::createFromFormat('U', $until));
+             })
+             ->when($submissionId, function ($query, $submissionId) {
+                 return $query->where('a.submission_id', '=', $submissionId);
