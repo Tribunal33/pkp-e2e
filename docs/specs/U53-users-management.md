@@ -884,11 +884,11 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | Merging a section editor's account unassigns them from their sections, so new submissions arrive without that editor | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Users & Roles in French (Canada): the Users tab and the "Invite to a role" pages show raw codes | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | Users & Roles: screen readers cannot tell a disabled account or an ORCID holder from any other user | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A13](#a13) | "Merge user" and the Settings wizard's user list show no roles after a 3.4 upgrade, and none for a journal's creator | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [A13](#a13) | "Merge user" and wizard user lists show no roles after a 3.4 upgrade or for a journal's creator, but list a just-ended role | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | On presses and preprint servers, a masthead change shows a raw error and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A15](#a15) | Merging a user recorded as a discussion's or task's creator stops halfway with no message, and the account still signs in | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | Add User: unticking "Generate Password" leaves "Notify User" greyed out, so no welcome email can be chosen | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | minor | — |
+| [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | A manager cannot end a role that starts on a future date: "Remove User" fails or leaves it in place | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OPS1](#ops1) | On a French preprint server the "Roles" column prints raw codes for two roles | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A user removed from the journal stays in the list with no role | ❓ | minor | — |
@@ -1081,20 +1081,24 @@ user grid showed neither status to anyone, sighted or not.
 Basis: probe, 2026-10-01. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — "Merge user" and the Settings wizard's user list show no roles after a 3.4 upgrade, and none for a journal's creator** · 🐞 · low.
-The Site Administrator opens "Merge user" from Settings › Users &
-Roles, or the "Users" tab of a journal's (press's, server's) Settings
-wizard under Administration, where they add and edit a hosted
-journal's users. Both lists show nothing under "Roles" for any role
-stored without a start date, while Users & Roles names the role.
-On an install upgraded from 3.4, every role given before the upgrade
-has no start date, so the column is blank on every row: no account
-appears to hold a role. On a new install only one row per journal is
-blank: the manager role of the administrator who created the journal.
-The merge itself works, and it moves the merged account's roles and
-work to the account kept, so nothing is lost. But when picking which
-account to keep, the administrator cannot see from the list which one
-is the editor's or the manager's.
+**A13 — "Merge user" and wizard user lists show no roles after a 3.4 upgrade or for a journal's creator, but list a just-ended role** · 🐞 · low.
+Two older user lists leave roles out of their "Roles" column: the
+"Merge user" window, opened from Settings › Users & Roles, and the
+"Users" tab of a journal's (press's, server's) Settings wizard under
+Administration. A role stored without a start date is missing from the
+user's "Roles" cell, while Users & Roles names it.
+On an install upgraded from 3.4, no role given before the upgrade has a
+start date, so the column is blank on every row. That is every site that
+upgraded to 3.5 rather than installing it new, which is most sites
+running 3.5. On a new install, only the administrator who created a
+journal has a blank cell, for their manager role there.
+The wizard's "Users" tab also lists a role that has just ended. When the
+administrator unticks a role in "Edit User" and presses "OK", "User
+edited." shows, but the user's row still lists the role until the page
+is reloaded.
+Nothing is lost: the merge moves the merged account's roles to the
+account kept, and the role edit is saved. Users & Roles, or a reload,
+shows the real roles.
 Basis: probe, 2026-10-01. <sup>f-a13</sup>
 
 <a id="a14"></a>
@@ -1159,7 +1163,7 @@ bundled script file.
 Basis: probe, 2026-10-01. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — The grid's row still lists a role just ended** · 🐞 · minor.
+**A17 — The grid's row still lists a role just ended** · 🐞 · low.
 On the Settings wizard's "Users" tab, the Site Administrator unticks
 "Author" and ticks "Reader" on "Edit User" and presses "OK". Both changes
 are saved and "User edited." shows, but the user's row, which the grid
@@ -1167,7 +1171,7 @@ refreshes, lists both "Author" and "Reader" under "Roles" and keeps doing so.
 Only reloading the page shows "Reader" alone, and a reload made the
 moment the save ends can still list both. The Site Administrator is shown
 a role that has already ended as if it were current.
-Basis: test run, 2026-09-26. <sup>f-a17</sup>
+Basis: test run, 2026-10-01. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — "Roles" goes by the end date, not by whether the role is held today** · ❓ · minor.
@@ -2115,6 +2119,7 @@ role whose `date_end >= now` at one-second precision, while
 own second, so the refresh after "OK", or a reload within that second,
 still lists the ended role; the Users & Roles list's `withActive`
 compares with `>` and does not.
+Issue report: [pkp-e2e#198](https://github.com/jardakotesovec/pkp-e2e/issues/198) ([docs/issues/U53-A13-merge-grid-admin-roles-empty.md](../issues/U53-A13-merge-grid-admin-roles-empty.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-30, all three apps: the list as note b
