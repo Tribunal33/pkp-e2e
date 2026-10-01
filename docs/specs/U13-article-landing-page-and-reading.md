@@ -2880,7 +2880,7 @@ download path of note e. Live-probed 2026-09-25, notes q8 and q16.
 `article.return` nor `issue.return`, so the screen-reader text renders as
 the key in `##` marks. Live-probed 2026-09-25 (note d), also on the
 French page.
-Issue report: [docs/issues/U13-OPS5-preprint-pdf-reader-return-arrow-raw-key.md](../issues/U13-OPS5-preprint-pdf-reader-return-arrow-raw-key.md).
+Issue report: [pkp-e2e#240](https://github.com/jardakotesovec/pkp-e2e/issues/240) ([docs/issues/U13-OPS5-preprint-pdf-reader-return-arrow-raw-key.md](../issues/U13-OPS5-preprint-pdf-reader-return-arrow-raw-key.md)).
 
 <a id="fn-f-ops6"></a>
 **f-ops6** — Note j. The landing page's own "DOI:" line reads the
