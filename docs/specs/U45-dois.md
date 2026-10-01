@@ -3940,7 +3940,7 @@ Only "Assign DOIs" was driven; the other actions open their windows
 through the same code. The suites wait, once the window is open, for the
 menu to close before answering it (`docs/tracking/app-changes.md` row
 21; app code unchanged).
-Issue report: [docs/issues/U45-A22-bulk-actions-menu-stays-open.md](../issues/U45-A22-bulk-actions-menu-stays-open.md).
+Issue report: [pkp-e2e#251](https://github.com/jardakotesovec/pkp-e2e/issues/251) ([docs/issues/U45-A22-bulk-actions-menu-stays-open.md](../issues/U45-A22-bulk-actions-menu-stays-open.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `IssueGridHandler::publishIssue()` calls
