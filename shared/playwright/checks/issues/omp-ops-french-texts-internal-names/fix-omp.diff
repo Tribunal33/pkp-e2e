@@ -33,6 +33,67 @@
  msgstr ""
 --- a/locale/fr_CA/locale.po
 +++ b/locale/fr_CA/locale.po
+@@ -49,7 +49,7 @@
+ msgstr "Format"
+ 
+ msgid "monograph.publicationFormatDetails"
+-msgstr ""
++msgstr "Détails sur le format de publication disponible : {$format}"
+ 
+ msgid "monograph.miscellaneousDetails"
+ msgstr "Renseignements à propos de cette monographie"
+@@ -563,10 +563,10 @@
+ msgstr ""
+ 
+ msgid "catalog.manage.series.onlineIssn"
+-msgstr ""
++msgstr "ISSN en ligne"
+ 
+ msgid "catalog.manage.series.printIssn"
+-msgstr ""
++msgstr "ISSN imprimé"
+ 
+ msgid "catalog.selectSeries"
+ msgstr "Choisir une série"
+@@ -702,13 +702,13 @@
+ msgstr "Renseignements sur la publication"
+ 
+ msgid "catalog.published"
+-msgstr ""
++msgstr "Publié"
+ 
+ msgid "catalog.forthcoming"
+-msgstr ""
++msgstr "À paraître"
+ 
+ msgid "catalog.categories"
+-msgstr ""
++msgstr "Catégories"
+ 
+ msgid "catalog.parentCategory"
+ msgstr ""
+@@ -744,10 +744,10 @@
+ msgstr ""
+ 
+ msgid "catalog.viewableFile.title"
+-msgstr ""
++msgstr "Vue {$type} du fichier {$title}"
+ 
+ msgid "catalog.viewableFile.return"
+-msgstr ""
++msgstr "Retourner aux détails concernant {$monographTitle}"
+ 
+ msgid "submission.search"
+ msgstr ""
+@@ -1539,7 +1539,7 @@
+ msgstr "Il faut indiquer un prix numérique valide."
+ 
+ msgid "payment.directSales.purchase"
+-msgstr "Achat ({$amount} {$currency})"
++msgstr "Achat {$format} ({$amount} {$currency})"
+ 
+ msgid "payment.directSales.download"
+ msgstr "Télécharger"
 @@ -1559,6 +1559,7 @@
  
  msgid "rt.metadata.pkp.dctype"
@@ -51,3 +112,80 @@
  
  msgid "manager.setup.notifications.copyPrimaryContact"
  msgstr ""
+@@ -1432,7 +1433,7 @@
+ msgstr ""
+ 
+ msgid "doi.readerDisplayName"
+-msgstr ""
++msgstr "DOI :"
+ 
+ msgid "doi.manager.settings.description"
+ msgstr ""
+--- a/locale/fr_CA/submission.po
++++ b/locale/fr_CA/submission.po
+@@ -45,7 +45,7 @@
+ msgstr ""
+ 
+ msgid "submission.editorName"
+-msgstr ""
++msgstr "{$editorName} (dir.)"
+ 
+ msgid "submission.monograph"
+ msgstr "Monographie"
+@@ -57,7 +57,7 @@
+ msgstr "Copie au net"
+ 
+ msgid "submission.authorListSeparator"
+-msgstr ""
++msgstr "; "
+ 
+ msgid "submission.artwork.permissions"
+ msgstr "Permissions"
+@@ -467,16 +467,16 @@
+ msgstr ""
+ 
+ msgid "chapter.volume"
+-msgstr ""
++msgstr "Volume"
+ 
+ msgid "submission.withoutChapter"
+-msgstr ""
++msgstr "{$name} — Sans ce chapitre"
+ 
+ msgid "submission.chapterCreated"
+-msgstr ""
++msgstr " — Chapitre créé"
+ 
+ msgid "chapter.pages"
+-msgstr ""
++msgstr "Pages"
+ 
+ msgid "editor.submission.decision.sendInternalReview"
+ msgstr ""
+--- a/plugins/themes/default/locale/fr_CA/locale.po
++++ b/plugins/themes/default/locale/fr_CA/locale.po
+@@ -6,3 +6,24 @@
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+ "X-Generator: Weblate\n"
++
++msgid "plugins.themes.default.displayStats.monthInitials"
++msgstr "Jan. Fév. Mar. Avr. Mai. Juin. Juil. Août Sep. Oct. Nov. Déc."
++
++msgid "plugins.themes.default.displayStats.downloads"
++msgstr "Téléchargements"
++
++msgid "plugins.themes.default.displayStats.noStats"
++msgstr "Les données de téléchargement ne sont pas encore disponibles."
++
++msgid "plugins.themes.default.displayStats.lastYear"
++msgstr "12 derniers mois"
++
++msgid "plugins.themes.default.displayStats.allTime"
++msgstr "Depuis le début"
++
++msgid "plugins.themes.default.nextSlide"
++msgstr "À la diapositive suivante"
++
++msgid "plugins.themes.default.prevSlide"
++msgstr "À la diapositive précédente"

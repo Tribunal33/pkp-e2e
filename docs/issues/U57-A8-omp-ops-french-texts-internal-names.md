@@ -10,8 +10,13 @@
   - 3.3: OMP, OPS (code; no default author guidelines or site-management line there)
 - **Introduced** not traced; the French texts were left empty in several changes, the oldest present since at least [21fae1d76c](https://github.com/pkp/omp/commit/21fae1d76cefe797cdef61567e1ae922bac6b9b7) (2019-09-30)
 - **Upstream** none found (2026-10-01)
-- **Tracked in** spec U57 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U57-languages-and-locales.md#a8) · spec U07 [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U07-journal-identity-and-about-pages.md#ops3) · spec U61 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U61-system-administration.md#a7) · spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (its OMP half) · spec U58 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U58-submission-intake-configuration.md#a9)
+- **Tracked in** spec U57 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U57-languages-and-locales.md#a8) · spec U07 [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U07-journal-identity-and-about-pages.md#ops3) · spec U61 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U61-system-administration.md#a7) · spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (its OMP half) · spec U58 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U58-submission-intake-configuration.md#a9) · spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15) (its OMP half)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+
+Update 2026-10-01: a press's book and chapter pages join this report
+(spec U69 A15): their labels in French are OMP texts with empty French
+entries too. Summary, Steps 10 and 11, Cause, Proposed fix and Evidence
+now cover them, and `fix-omp.diff` fills them.
 
 ## Summary
 
@@ -32,6 +37,11 @@ affected; it shows French in every one of these places:
   "Components" heading of a press and a server ("##grid.genres.title##"),
   and the "Resource Type" of a press's OAI-PMH records read in French
   ("##rt.metadata.pkp.dctype##").
+- A press's book and chapter pages: "Published" ("##catalog.published##"),
+  "Forthcoming", "Categories", "DOI:", the series' ISSNs, a chapter's
+  "Volume" and "Pages", the download chart's texts and the format
+  details' screen-reader heading; a priced format's link loses the
+  format's name ("Achat (25.00 USD)").
 
 Most of these names are saved into the press's or server's own settings
 when French is added: when the press or server is created on a site with
@@ -56,8 +66,8 @@ internal name for a text that has no translation.
   press's French OAI-PMH.
 - **Way round.** A manager can type French over the saved names: the
   guidelines, the checklist, the privacy statement, the role names and
-  the file types. The Administration line, the "Components" heading and
-  the OAI value have none.
+  the file types. The Administration line, the "Components" heading,
+  the OAI value and the book pages' labels have none.
 
 Low: internal names in place of texts, with nothing lost; it would be
 medium if a press could not replace the saved ones.
@@ -97,12 +107,21 @@ Roles and file types (as `admin`):
    Serveur", path `u57w24`, "English" and "French" ticked, English
    primary › "Save". Take steps 7 and 8 on `u57w24`.
 
+Book pages (a press, signed out):
+
+10. Open book 14, "From Bricks to Brains: The Embodied Cognitive
+    Science of LEGO Robots", in French:
+    `/index.php/publicknowledge/fr_CA/catalog/book/14`.
+11. Open its "Chapter 1: Mind Control—Internal or External?".
+
 **Expected.** French texts everywhere: the press's French guidelines and
 checklist (steps 1 and 6), a French privacy statement (steps 2 and 6),
 the French word for "Book" (step 3), a French line under "Gestion du
 site" (step 4), such as OJS's "Ajouter, modifier ou supprimer des revues
 de ce site et gérer les paramètres de l'ensemble du site.", and French
-role names, file types and heading (steps 7 to 9).
+role names, file types and heading (steps 7 to 9), and French
+headings on the book and chapter pages, such as "Publié" for
+"Published" (steps 10 and 11).
 
 **Observed.** Step 1, press and server:
 
@@ -156,6 +175,12 @@ names and file types are French (its roles list heads one stage column
 "##workflow.review.externalReview##", a printed gap this report does not
 cover).
 
+Step 10: the date's heading reads "##catalog.published##"; step 11: the
+headings read "##chapter.volume##" and "##catalog.published##". The
+English pages read "Published" and "Volume". (The "Versions" list's
+"2026-09-30 (##publication.versionStage.display##)" on `main` is not
+this fault: see Cause, "Excluded".)
+
 ## Cause
 
 The texts have no French in OMP's and OPS's French translation: their
@@ -178,13 +203,33 @@ entries are empty.
   `manager.po`: `grid.genres.title`.
 - [omp `locale/fr_CA/locale.po`](https://github.com/pkp/omp/blob/3b0ecf794c/locale/fr_CA/locale.po#L1560-L1561):
   `rt.metadata.pkp.dctype`.
+- The book and chapter pages, OMP
+  [`locale/fr_CA/locale.po`](https://github.com/pkp/omp/blob/3b0ecf794c/locale/fr_CA/locale.po#L704-L705):
+  `catalog.published`, `catalog.forthcoming`, `catalog.categories`,
+  `catalog.manage.series.onlineIssn`, `catalog.manage.series.printIssn`,
+  `catalog.viewableFile.title`, `catalog.viewableFile.return`,
+  `monograph.publicationFormatDetails`;
+  [`submission.po`](https://github.com/pkp/omp/blob/3b0ecf794c/locale/fr_CA/submission.po#L469-L476):
+  `chapter.volume`, `chapter.pages`, `submission.chapterCreated`,
+  `submission.withoutChapter`, `submission.editorName`,
+  `submission.authorListSeparator`;
+  [`manager.po`](https://github.com/pkp/omp/blob/3b0ecf794c/locale/fr_CA/manager.po#L1434-L1435):
+  `doi.readerDisplayName`. OMP's default theme has no French at all:
+  its [`plugins/themes/default/locale/fr_CA/locale.po`](https://github.com/pkp/omp/blob/3b0ecf794c/plugins/themes/default/locale/fr_CA/locale.po)
+  is a header only, so the download chart's texts are names. One entry
+  is translated wrong: `payment.directSales.purchase`
+  ([line 1541](https://github.com/pkp/omp/blob/3b0ecf794c/locale/fr_CA/locale.po#L1541-L1542))
+  reads "Achat ({$amount} {$currency})", without the English
+  "{$format}".
 
-OJS's French has every one. The loader drops an empty entry
+OJS's French has every one OJS shares, its default theme's included.
+The loader drops an empty entry
 (`LocaleFile::loadArray()`, `includeEmpty => false`), so
 `Locale::translate()` finds no text and returns the key between hash
 signs ([`Locale.php` line 525](https://github.com/pkp/pkp-lib/blob/3dc90c81a6/classes/i18n/Locale.php#L525)).
-The Administration line, the "Components" heading and the OAI value are
-translated on each request, so the name is printed each time.
+The Administration line, the "Components" heading, the OAI value and
+the book pages' labels are translated on each request, so the name is
+printed each time.
 
 The default texts are translated once and saved, and three pieces of
 pkp-lib code save whatever `__()` returns, the name included:
@@ -226,11 +271,16 @@ Reach:
   are saved by no OMP code and show nowhere.
 - The wider gap: OMP's French lacks 448 of OMP's own texts and OPS's 342
   (empty or missing entries), each printed as its name on the screen
-  that uses it; this report covers the saved ones and the four printed
-  ones the specs met.
-- Excluded: OJS's French MARC "##publication.versionStage.display##"
-  (U19 A13's other half) is a text added on `main` by
-  `pkp/pkp-lib#10810` that has not been translated yet, not a defect.
+  that uses it; this report covers the saved ones and the printed ones
+  the specs met (four screens, and the book and chapter pages).
+- Excluded: the version names on `main`, "{date}
+  (##publication.versionStage.display##)" in an article's, a preprint's
+  and a book's "Versions" list and OJS's French MARC (spec U13 A1, U69
+  A15's other half, U19 A13's other half), and a book's "Plain Language
+  Summary" heading. These are pkp-lib texts added on `main` only, by
+  `pkp/pkp-lib#10810` and `pkp/pkp-lib#11540`, that no language but
+  English has yet (walked: the 3.5 pages show no such name); not a
+  defect.
 
 ## Proposed fix
 
@@ -265,7 +315,9 @@ Two changes, landed together (a proposal; the team decides):
    ([fix-omp.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-ops-french-texts-internal-names/fix-omp.diff),
    [fix-ops.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-ops-french-texts-internal-names/fix-ops.diff)),
    which fill every empty entry of `default.po` that is saved, plus the
-   site-management line, the "Components" heading and "Livre". The
+   site-management line, the "Components" heading and "Livre", and
+   (OMP) the book and chapter pages' labels, the purchase link's
+   "{$format}" and the default theme's reader texts. The
    wording adapts OJS's French; a French (Canada) translator should
    review it. These files are also written by PKP's Weblate, so the
    entries can land as a commit to each app, which Weblate takes up, or
@@ -277,7 +329,9 @@ translations alone leave every other language exposed. So both.
 Tried on `main`: with both changes on OPS, steps 3 and 4 showed French,
 step 6 showed the French guidelines, checklist and privacy statement
 after "Reload defaults", and the server created in step 9 had French
-role names, file types and heading. With the guard alone on OMP, "Reload
+role names, file types and heading. With `fix-omp.diff` alone on OMP,
+step 10 read "Publié" and step 11 "Volume" and "Publié", and the English
+book and chapter pages did not change. With the guard alone on OMP, "Reload
 defaults" saved the French guidelines and checklist empty, and the
 French "Soumissions" page showed the English texts. The dataset's saved
 role and file-type names (steps 7 and 8) stayed, which is what the
@@ -305,7 +359,8 @@ repair below is for. The English pages and OAI records did not change.
   and the guard to 3.5 except `GenreDAO`, which needs the same change by
   hand (checked with `git apply`). On 3.3 the same entries are empty
   in OPS (privacy statement, roles, file types, heading) and OMP (OAI
-  value, heading), and `UserGroupDAO::installLocale()` and
+  value, heading, the book page's "Published", "Forthcoming" and format
+  details heading; 3.3 has no chapter pages), and `UserGroupDAO::installLocale()` and
   `GenreDAO::installDefaults()` save `__()`'s answer the same way.
 - Test: a unit test that renders the context schema's defaults, the
   role names and the file types for a locale with a missing text and
@@ -324,7 +379,12 @@ and servers.
   [roles.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-ops-french-texts-internal-names/roles.js)
   (steps 7 to 9):
   `PROBE_FEATURE=issues-w24 PROBE_AGENT=w24 node bin/probe.js all shared/playwright/checks/issues/omp-ops-french-texts-internal-names/walk.js`
-  (`roles.js` the same way).
+  (`roles.js` the same way);
+  [book-page.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-ops-french-texts-internal-names/book-page.js)
+  takes steps 10 and 11 and their English twins on OMP, and reads the
+  "Versions" lists of OJS article 1 and OPS preprint 3 for the
+  exclusion: `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/omp-ops-french-texts-internal-names/book-page.js`,
+  walked on `main` (with `fix-omp.diff` in and out) and on 3.5.
 - Tips walked: OMP `main` [3b0ecf794c](https://github.com/pkp/omp/commit/3b0ecf794c),
   OPS `main` [c8af945bb7](https://github.com/pkp/ops/commit/c8af945bb7)
   (both pkp-lib [3dc90c81a6](https://github.com/pkp/pkp-lib/commit/3dc90c81a6)),
@@ -343,10 +403,17 @@ and servers.
   `LocaleBundle`, `LocaleFile::loadArray()`; `PKPSchemaService`;
   `PKPContextService::add()` and `restoreLocaleDefaults()`;
   `userGroup\Repository::installSettings()` and `installLocale()`;
-  `GenreDAO::installDefaults()`; OMP's `Dc11SchemaPublicationFormatAdapter`.
+  `GenreDAO::installDefaults()`; OMP's `Dc11SchemaPublicationFormatAdapter`;
+  OMP's `monograph_full.tpl` and `chapter.tpl`, its `submission.po` and
+  its default theme's `fr_CA/locale.po`; pkp-lib's
+  `PublicationVersionInfo::__toString()` and
+  `publication\Repository::getVersionString()` (the version names: a
+  text, no code fault), and the 71 `locale/*/submission.po` of pkp-lib
+  `main`, of which only `en` has `publication.versionStage.*` and
+  `submission.plainLanguageSummary`.
   3.4 (OMP [0aec65441f](https://github.com/pkp/omp/commit/0aec65441f),
   OPS [acd8ae704b](https://github.com/pkp/ops/commit/acd8ae704b)): every
-  entry of the Cause is empty. 3.3 (OMP [8e72fc8836](https://github.com/pkp/omp/commit/8e72fc8836),
+  entry of the Cause is empty, the book and chapter pages' included. 3.3 (OMP [8e72fc8836](https://github.com/pkp/omp/commit/8e72fc8836),
   OPS [c5532e2161](https://github.com/pkp/ops/commit/c5532e2161), pkp-lib
   [d446601ebe](https://github.com/pkp/pkp-lib/commit/d446601ebe)): the
   entries named under Backport are empty, `LocaleFile::load()` drops
@@ -368,7 +435,18 @@ and servers.
   "french", `defaultLocaleKey`, `missingKeyHandler`): nothing on these
   texts. Related, not the same fault: `pkp/pkp-lib#3223` (role names
   saved as names when a translation was missing at install, closed
-  2021) and `pkp/pkp-lib#784` (the English fallback plugin).
+  2021) and `pkp/pkp-lib#784` (the English fallback plugin). For the
+  book pages (2026-10-01; `catalog.published`, `chapter.volume`, "french
+  book page", "missing translation press", `versionStage`): nothing;
+  `pkp/pkp-lib#10810` is the change that added the version names.
+- Introduced, book pages: the entries enter today's files empty with
+  the 3.4 locale rearrangement (OMP `3bcd14e06c`); `catalog.published`
+  and `monograph.publicationFormatDetails` were empty on 3.3 already;
+  not traced further.
 - Not driven: 3.4 and 3.3 (code); the submission start page, the
   registration and review forms, the masthead and users list (code here,
-  walked in the specs named above).
+  walked in the specs named above). On the book pages, the labels the
+  default dataset does not show (categories, DOI, ISSNs, the download
+  chart, a forthcoming book, a priced format, a file's view page, a
+  chapter's versions) are read in the code; spec U69 A15 walked them on
+  a press of its own.
