@@ -1055,7 +1055,7 @@ are the source; badges, Impact and Basis:
 | [A8](#a8) | On every journal, press or server but the install's first, a section's configured editors are never assigned | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A wizard loaded at phone width keeps its uncollapsed step rail and the page scrolls sideways (journal & press) | 🐞 | minor | — |
 | [A12](#a12) | After "Do not send an email." is saved, the Emails screen shows no Submission Confirmation option selected | 🐞 | minor | — |
-| [A14](#a14) | "Submit As" offers "Section editor" ("Series editor"), and "Begin Submission" refuses it | 🐞 | user-visible | — |
+| [A14](#a14) | A section editor who is also an author is offered "Submit As: Section editor", and "Begin Submission" refuses it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | In the submission wizard, a plain language summary over the word limit is refused with an unexplained "Error" | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A change typed more than a minute after the last save is saved cut after its first letters; the rest waits another minute | 🐞 | minor | — |
 | [A19](#a19) | After the server refuses one save, the submission wizard hangs on "Saving" and the author cannot submit | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
@@ -1235,17 +1235,19 @@ Since: 2026-09-12 · Basis: probe. <sup>[fn-a13](#fn-a13)</sup>
 > post-submission language change.
 
 <a id="a14"></a>
-**A14 — "Submit As" offers "Section editor", and "Begin Submission" refuses it** · 🐞 · user-visible.
+**A14 — A section editor who is also an author is offered "Submit As: Section editor", and "Begin Submission" refuses it** · 🐞 · low.
 A user who is both a Section Editor and an Author gets "Submit As" with
 "Author" and "Section editor" ("Series editor" on a press). Choosing
 "Section editor" and pressing "Begin Submission" keeps them on the form
 with "You are not allowed to submit in this user role." under "Submit
-As", and no submission is created. Only "Author" can be used, so the form
-offers a choice it will not accept. On a press the refused role is
-sometimes the one already selected [OMP3](#omp3). A preprint server does
-not offer its Moderator role at all. The same gap turns a Section Editor
-with no other role into an Author [A9](#a9).
-Basis: probe. <sup>[fn-a14](#fn-a14)</sup>
+As", and no submission is created. The offer is what is wrong: the
+server refuses a section editor's role for submitting, as 3.4's did, and
+before 3.5 the form never offered it.
+An Editor who is also an Author is not affected: "Journal editor" ("Press
+editor") is offered and accepted. A preprint server never offers its
+Moderator role, so it is not affected either. The same gap turns a
+Section Editor with no other role into an Author [A9](#a9).
+Basis: probe, 2026-10-01. <sup>[fn-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
 **A15 — Leaving the wizard drops a change made within a minute of the last save** · ❓ · minor.
@@ -2314,6 +2316,7 @@ Submission" left the start form in place with the error under "Submit
 As", and no draft was created; "Author" picked, the same user submitted
 normally. OPS control: a Moderator + Author got no "Submit As" and
 submitted as Author.
+Issue report: [docs/issues/U21-A14-section-editor-submit-as-refused.md](../issues/U21-A14-section-editor-submit-as-refused.md).
 
 <a id="fn-a15"></a>
 **fn-a15** — A15. Live-probed 2026-09-28, two runs per app on all three:
