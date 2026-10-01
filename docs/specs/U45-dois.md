@@ -1811,11 +1811,11 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A2](#a2) | "None" (and every peer review) gets a DOI that is the prefix and a bare "/" | 🐞 | user-visible | — |
+| [A2](#a2) | "None" (and every peer review) gets a DOI that is the prefix and a bare "/" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A refused DOI edit says only "Some DOI(s) could not be updated" and gives no reason | 🐞 | minor | — |
 | [A4](#a4) | A deposited item reads "This item has been manually registered with a registration agency." | 🐞 | minor | — |
 | [A8](#a8) | The "DOI Statuses" button and the rows' tick boxes have no name for a screen reader | 🐞 | minor | — |
-| [A9](#a9) | A pattern symbol with nothing to fill it stays in the DOI | 🐞 | user-visible | — |
+| [A9](#a9) | A pattern symbol with nothing to fill it stays in the DOI | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Searching by a DOI's start finds a different set on each app, and nothing on a preprint server | 🐞 | user-visible | — |
 | [A12](#a12) | Clearing a "Registration" filter after "Unregistered" keeps unpublished works out of the list | 🐞 | minor | — |
 | [A13](#a13) | A refused or failed bulk action closes its window with no message | 🐞 | minor | — |
@@ -1863,14 +1863,17 @@ avoid it.
 Basis: probe, 2026-09-26. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — "None" (and every peer review) gets a DOI that is the prefix and a bare "/"** · 🐞 · user-visible.
+**A2 — "None" (and every peer review) gets a DOI that is the prefix and a bare "/"** · 🐞 · high.
 With "DOI Format" "None - Suffixes must be entered manually … and will
 not be generated automatically", a manager expects no DOI until one is
-typed. Instead every automatic moment and "Assign DOIs" gives the item
-"{prefix}/" with nothing after the slash, the same value for every item,
-which is then shown to readers and would be deposited. Peer reviews get
-the same bare value under "Custom pattern".
-Basis: probe, 2026-09-26. <sup>f-a2</sup>
+typed. Instead "Assign DOIs" and the automatic assignment give every
+work "{prefix}/" with nothing after the slash, the same value for every
+work; the DOIs page reports "Items successfully assigned new DOIs", and
+the work's public page, its citation tags, "How to cite" and OAI-PMH
+carry that DOI. On a journal with "Peer Review" ticked, every publicly
+shown completed review gets the same bare value, under "None" and under
+"Custom pattern". One cause with [A9](#a9).
+Basis: probe, 2026-10-01. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — A refused DOI edit says only "Some DOI(s) could not be updated" and gives no reason** · 🐞 · minor.
@@ -1933,15 +1936,17 @@ screen cannot find the status legend or tell which item a box ticks.
 Basis: probe, 2026-09-26. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — A pattern symbol with nothing to fill it stays in the DOI** · 🐞 · user-visible.
+**A9 — A pattern symbol with nothing to fill it stays in the DOI** · 🐞 · high.
 Under "Custom pattern" a manager expects a DOI built from the item's
 values, or a refusal when one is missing. Instead "Assign DOIs" on an
-item that lacks the symbol's value keeps the symbol and reports
-success: "%j.%p" on an article without "Pages" gives "10.1234/jpk.%p",
-and "k2.%x" on an item without a Publisher ID gives "10.1234/k2.%x"
-(filled, they give "10.1234/jpk.12-34" and "10.1234/k2.{Publisher
-ID}"). The row reads "Unregistered", and readers see that DOI.
-Basis: probe, 2026-09-26. <sup>f-a9</sup>
+item that lacks the symbol's value keeps the symbol and reports success:
+"%j.%p" on an article without "Pages" gives "10.1234/jpk.%p", and
+"k2.%x" on an item without a Publisher ID gives "10.1234/k2.%x" (filled,
+they give "10.1234/jpk.12-34" and "10.1234/k2.{Publisher ID}"). The row
+reads "Unregistered", and readers see that DOI on the work's page, in
+its citation tags and in OAI-PMH; Crossref's export would send it. One
+cause with [A2](#a2).
+Basis: probe, 2026-10-01. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — Under "DOI Versioning" "No", "Assign DOIs" while a newer version is unpublished gives the DOI to the published version only** · ❓ · user-visible.
@@ -3623,6 +3628,7 @@ returns '' for `SUFFIX_MANUAL`; `mintAndStoreDoi()` stores
 for every type but `default`. Neither `AssignDOIs`, `VersionDois` nor
 `assignSubmissionDois()` checks the suffix type. Live-probed 2026-09-26
 (q13, q14), all three apps and a journal's peer review.
+Issue report: [docs/issues/U45-A2-A9-unfinished-doi-assigned.md](../issues/U45-A2-A9-unfinished-doi-assigned.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `DoiListItem.postUpdatedDoiError()` records only a failure
@@ -3671,6 +3677,7 @@ named "Issues".
 "%x" on all three apps; the "Assign DOIs" answer listed no failure
 (`{"failedDoiActions":[]}`), and a pattern of "%x" alone gave
 `10.1234/%x`.
+Issue report: [docs/issues/U45-A2-A9-unfinished-doi-assigned.md](../issues/U45-A2-A9-unfinished-doi-assigned.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Live-probed 2026-09-26, OJS, two journals: the DOIs page

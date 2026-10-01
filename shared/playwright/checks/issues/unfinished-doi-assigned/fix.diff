@@ -1,0 +1,38 @@
+--- a/lib/pkp/classes/doi/Repository.php
++++ b/lib/pkp/classes/doi/Repository.php
+@@ -445,6 +445,13 @@
+             throw new DoiException('doi.exceptions.missingPrefix');
+         }
+ 
++        // An empty suffix ("None": suffixes are entered by hand) or one still holding a
++        // pattern symbol nothing filled ("%p" without pages) is no DOI: refuse it, as
++        // PKPPubIdPlugin::canBeAssigned() does for the other public identifiers
++        if ($doiSuffix === '' || str_contains($doiSuffix, '%')) {
++            throw new DoiException(DoiException::SUFFIX_NOT_GENERATED);
++        }
++
+         $completedDoi = $doiPrefix . '/' . $doiSuffix;
+ 
+         $doiDataParams = [
+--- a/lib/pkp/classes/doi/exceptions/DoiException.php
++++ b/lib/pkp/classes/doi/exceptions/DoiException.php
+@@ -22,6 +22,7 @@
+     public const INCORRECT_STALE_STATUS = 'doi.incorrectStaleStatus';
+     public const SUBMISSION_NOT_PUBLISHED = 'doi.submission.notPublished';
+     public const ISSUE_NOT_PUBLISHED = 'doi.issue.notPublished';
++    public const SUFFIX_NOT_GENERATED = 'doi.exceptions.suffixNotGenerated';
+ 
+     /**
+      * @param string $errorKey Locale key for message to send in exception
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -346,6 +346,9 @@
+ msgid "doi.exceptions.missingPrefix"
+ msgstr "Tried to create a DOI, but a DOI prefix is required for the context to create one."
+ 
++msgid "doi.exceptions.suffixNotGenerated"
++msgstr "A DOI was not created: under the DOI Format \"None\" each DOI is entered on the DOI management page, and a custom pattern needs every value it names (such as page numbers or a publisher ID)."
++
+ msgid "manager.genres.alertDelete"
+ msgstr ""
+ "Before this component can be deleted, you must associate all related "
