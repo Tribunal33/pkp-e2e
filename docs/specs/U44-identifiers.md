@@ -824,6 +824,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-A6-urn-check-number-wrong-digit.md`): "Add Check
     Number" on `urn:nbn:de:0000-abc` giving `urn:nbn:de:0000-abc2`, and
     "Assign" ending in the digit the tab preview's rule gives
+  - the guard for A2 (Rule 5; issue report
+    `docs/issues/U44-A2-publisher-id-cannot-be-removed.md`): a galley's,
+    a chapter's and a format's Publisher ID saved, then emptied and
+    saved, the reopened tab empty; a tab saved without the box keeping
+    the stored ID
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -834,7 +839,6 @@ Left out of the scenarios above, by reason:
   - "Galleys" ticked without "Articles": the confirmation window's table
     with galley rows only (Rule 17)
 - **Register carries it**:
-  - A2 (a publisher ID emptied on a tab coming back; Rule 5)
   - A13 ("Add Check Number" on an empty tab suffix writing "NaN";
     Rule 12)
   - A14 (a galley's or a chapter's tab still showing a cleared URN;
@@ -884,7 +888,7 @@ entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A2](#a2) | A publisher ID saved on a galley's, chapter's or format's tab can never be removed | 🐞 | minor | — |
+| [A2](#a2) | A Publisher ID emptied on a galley's, chapter's or format's "Identifiers" tab comes back after "Save" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | Editors saving an article's or book's own URN again are told it is "already in use" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A new version's galleys keep the old publisher ID, and their tab then refuses every save | 🐞 | minor | — |
 | [A6](#a6) | "Add Check Number" and "Assign" end URNs with the wrong check digit | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -911,12 +915,18 @@ entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a2"></a>
-**A2 — A publisher ID saved on a tab can never be removed** · 🐞 · minor.
-Emptying "Publisher ID" on a galley's, a chapter's or a publication
-format's "Identifiers" tab and pressing "Save" closes the window as a
-success, but the old value is back when the tab is reopened. The
-article's Publisher ID on the Metadata page empties normally.
-Basis: probe, 2026-09-24. <sup>f-a2</sup>
+**A2 — A Publisher ID emptied on a galley's, chapter's or format's "Identifiers" tab comes back after "Save"** · 🐞 · medium.
+An editor empties "Publisher ID" on the "Identifiers" tab of a galley,
+a chapter or a publication format and presses "Save". The window closes
+as if the change was saved, but the old value is back when the tab is
+reopened. The article's own Publisher ID on the Metadata page empties
+normally.
+The ID can be replaced by another value but never removed, and nothing
+says so. It stays in the item's native XML export, no other item of the
+same kind in the journal, press or server can take it, and a DOI or URN
+assigned to the item later from a custom pattern with "%x" is built
+from it. The fix is a few lines in one shared form class.
+Basis: probe, 2026-10-01. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — The article's Publisher ID takes what the tabs refuse** · ❓ · minor.
@@ -1760,6 +1770,7 @@ part of OMP5.
 **f-a2** — `PKPPublicIdentifiersForm::execute()`: `if
 ($this->getData('publisherId')) { setStoredPubId(…) }`; nothing clears
 it. Live-probed 2026-09-24 (note q5). An issue's and a press file's value is never stored at all (notes f-ojs3, f-omp5).
+Issue report: [docs/issues/U44-A2-publisher-id-cannot-be-removed.md](../issues/U44-A2-publisher-id-cannot-be-removed.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — The publication schema's `pub-id::publisher-id` has only
