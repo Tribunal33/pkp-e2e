@@ -1990,7 +1990,7 @@ Issue report: [pkp-e2e#358](https://github.com/jardakotesovec/pkp-e2e/issues/358
 
 <a id="fn-f-a14"></a>
 **f-a14** — `galley_link.tpl` leaves a non-PDF galley unlocked under `$restrictOnlyPdf`; `ArticleHandler::userCanViewGalley()` lets a non-PDF galley through only inside the `purchaseArticleEnabled() || membershipEnabled()` branch, and `IssueHandler::userCanViewGalley()` inside `purchaseIssueEnabled() || membershipEnabled()` (note e). Live-probed 2026-09-25 (td23).
-Issue report: [docs/issues/U51-A14-non-pdf-galley-shown-open-refused.md](../issues/U51-A14-non-pdf-galley-shown-open-refused.md).
+Issue report: [pkp-e2e#385](https://github.com/jardakotesovec/pkp-e2e/issues/385) ([docs/issues/U51-A14-non-pdf-galley-shown-open-refused.md](../issues/U51-A14-non-pdf-galley-shown-open-refused.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — `manager.subscriptionPolicies.xMonths` "{$x} Months" and `.xWeeks` "{$x} Weeks" (OJS `locale/en/manager.po`) serve every count from 1, in `AccessForm` and `SubscriptionPolicyForm`. Live-probed 2026-09-25 (td4, td14).
@@ -2009,7 +2009,7 @@ Issue report: [docs/issues/U51-A14-non-pdf-galley-shown-open-refused.md](../issu
 
 <a id="fn-f-a20"></a>
 **f-a20** — `IssueHandler::userCanViewGalley()` enters its purchase branch on `purchaseIssueEnabled() || membershipEnabled()` and then queues a `PAYMENT_TYPE_PURCHASE_ISSUE` payment of the (empty) issue fee (note e); the article side leads to the "Subscriptions" page in the same case. Live-probed 2026-09-25 (td8), on two journals.
-Issue report: [docs/issues/U51-A20-full-issue-asks-fee-of-no-amount.md](../issues/U51-A20-full-issue-asks-fee-of-no-amount.md).
+Issue report: [pkp-e2e#386](https://github.com/jardakotesovec/pkp-e2e/issues/386) ([docs/issues/U51-A20-full-issue-asks-fee-of-no-amount.md](../issues/U51-A20-full-issue-asks-fee-of-no-amount.md)).
 
 <a id="fn-f-a21"></a>
 **f-a21** — `SubscriptionForm` checks each date's presence and range (note h) but not their order. Live-probed 2026-09-25 (td11): start 2026-12-01, end 2026-01-01, saved and listed so.
