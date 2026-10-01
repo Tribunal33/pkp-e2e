@@ -3840,7 +3840,7 @@ with its own DOI and an empty file DOI is not under "Needs DOI" (two
 runs). Live-probed again 2026-09-29 (q28, q33), OMP, two runs: "Files"
 alone "No items found."; with the four kinds ticked a book missing only
 its file DOI is not under "Needs DOI".
-Issue report: [docs/issues/U45-OMP1-file-dois-ignored-on-dois-page.md](../issues/U45-OMP1-file-dois-ignored-on-dois-page.md).
+Issue report: [pkp-e2e#214](https://github.com/jardakotesovec/pkp-e2e/issues/214) ([docs/issues/U45-OMP1-file-dois-ignored-on-dois-page.md](../issues/U45-OMP1-file-dois-ignored-on-dois-page.md)).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Live-probed 2026-09-29 (Rule 45), OMP, two runs: on a
