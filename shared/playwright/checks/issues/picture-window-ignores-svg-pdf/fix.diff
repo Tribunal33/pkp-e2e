@@ -1,0 +1,32 @@
+--- a/lib/pkp/js/controllers/SiteHandler.js
++++ b/lib/pkp/js/controllers/SiteHandler.js
+@@ -178,6 +178,13 @@
+ 			if (typeof $.pkp.plugins.generic.tinymceplugin !== 'undefined' &&
+ 					typeof $.pkp.plugins.generic.tinymceplugin.uploadUrl !== 'undefined') {
+ 				tinymceParamDefaults.paste_data_images = true;
++				// TinyMCE's picture window silently discards a file whose extension
++				// is not in this list. List every picture type (TinyMCE's default
++				// plus svg, avif, heic, heif, tif, tiff) so that the file reaches the
++				// server, which decides which types it takes
++				// (API::uploadPublicFile::permissions) and says why it refuses one.
++				tinymceParamDefaults.images_file_types = 'jpeg,jpg,jpe,jfi,jif,jfif,' +
++						'png,gif,bmp,webp,svg,avif,heic,heif,tif,tiff';
+ 				tinymceParamDefaults.relative_urls = false;
+ 				tinymceParamDefaults.remove_script_host = false;
+ 				// https://www.tiny.cloud/docs/general-configuration-guide/upload-images/
+--- a/lib/ui-library/src/components/Form/fields/FieldRichTextarea.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldRichTextarea.vue
+@@ -225,6 +225,13 @@
+ 				skin_url: pkp?.tinyMCE?.skinUrl,
+ 				content_css: $.pkp.app.tinyMceContentCSS,
+ 				paste_data_images: true,
++				// TinyMCE's picture window silently discards a file whose extension
++				// is not in this list. List every picture type (TinyMCE's default
++				// plus svg, avif, heic, heif, tif, tiff) so that the file reaches the
++				// server, which decides which types it takes and says why it
++				// refuses one.
++				images_file_types:
++					'jpeg,jpg,jpe,jfi,jif,jfif,png,gif,bmp,webp,svg,avif,heic,heif,tif,tiff',
+ 				relative_urls: false,
+ 				remove_script_host: false,
+ 				convert_urls: true,

@@ -818,6 +818,7 @@ the footnote. <sup>y</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - an SVG chosen through "Browse for an image" refused with the site's types message, a PNG still stored (A16; the guard its issue report names)
   - a BMP dropped and one pasted into a custom page's "Content": each refused with its notice and gone from the box, the saved page holding no embedded picture (A17; the guard its issue report names)
   - a change made only in "Content" of the static page window and of the block window, then the back arrow: the question "The data on this form has changed. Do you wish to continue without saving?" (A19; the guard its issue report names)
   - a static page and a "Custom Page" item saved at "dot.only" and "deep/Mixed_1.x", each opening at its address (A10; the guard its issue report names)
@@ -891,7 +892,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | A custom block whose name holds "&" can never be placed, edited or deleted | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | A custom block cannot be deleted on PostgreSQL: "OK" spins and the block stays | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | With "Custom Block Manager" unticked, "Appearance" › "Setup" refuses every save over a placed block it no longer lists | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A16](#a16) | A ".pdf" or ".svg" chosen in the picture window is ignored with no message | 🐞 | minor | — |
+| [A16](#a16) | An SVG, a PDF or any file but a JPEG, PNG, GIF, BMP or WEBP is ignored in "Insert/Edit Image", with no message | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | A dropped or pasted picture the site refuses stays in the text, embedded, and is saved | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A picture over the upload limit gets a server error, never "Files larger than {size} can not be uploaded." | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | Closing a static page, custom block or reviewer email window after editing only its text loses the text without asking | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1108,11 +1109,23 @@ holds for any block plugin turned off
 Basis: probe, 2026-10-01. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — A ".pdf" or ".svg" chosen in the picture window is ignored** · 🐞 · minor.
-A manager who chooses a ".pdf" or ".svg" file through "Browse for an
-image" expects the picture or a refusal. Nothing happens: the window
-stays on "Upload", and no message says why.
-Basis: probe. <sup>f-a16</sup>
+**A16 — An SVG, a PDF or any file but a JPEG, PNG, GIF, BMP or WEBP is ignored in "Insert/Edit Image", with no message** · 🐞 · low.
+A manager opens "Insert/edit image" in a formatted text box, goes to
+"Upload" and chooses an SVG drawing or a PDF through "Browse for an
+image", or drops one onto "Drop an image here". They expect the picture,
+or a refusal that says why. Nothing happens: the window stays on
+"Upload", nothing is sent to the site, and no message shows. Any file
+other than a JPEG, PNG, GIF, BMP or WEBP is ignored the same way, an
+AVIF, HEIC or TIFF picture included.
+The site refuses these files anyway, so nothing is lost. But a BMP
+chosen in the same window gets "You can only upload the following types
+of files: gif, jpg, png, webp.", and these files get no reason at all.
+Saving the picture as PNG gets round it.
+It happens in every formatted text box with "Insert/edit image": the
+custom page, custom block and static page windows, the settings forms
+(masthead, information, privacy, appearance and announcements), and
+also a reviewer's comment boxes and every user's profile biography.
+Basis: probe, 2026-10-01. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — A dropped or pasted picture the site refuses stays in the text, embedded, and is saved** · 🐞 · low.
@@ -2045,6 +2058,7 @@ pictures and drops any other without a message; the application adds no
 message of its own. Live-probed 2026-09-24 (three apps): "doc.pdf" and
 "drawing.svg" chosen through "Browse for an image": no request, no
 message, the window unchanged.
+Issue report: [docs/issues/U09-A16-picture-window-ignores-svg-pdf.md](../issues/U09-A16-picture-window-ignores-svg-pdf.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — TinyMCE 7.9.3 puts a pasted or dropped picture into the text
