@@ -1,0 +1,11 @@
+--- a/pages/article/ArticleHandler.php
++++ b/pages/article/ArticleHandler.php
+@@ -141,7 +141,7 @@
+                     $this->publication = $publication;
+                 }
+             }
+-            if (!$this->publication) {
++            if (!isset($this->publication)) {
+                 throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+             }
+         } else {

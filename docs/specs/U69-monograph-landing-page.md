@@ -1057,6 +1057,10 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A3 (issue report
+    `docs/issues/U69-A3-version-address-no-version-server-error.md`): a
+    book's version address with an id that is none of its versions
+    answering "404 Not Found"
   - the guard for A16 (issue report
     `docs/issues/U69-A16-earlier-url-path-server-error.md`): a book whose
     later version was published under a new URL Path, opened by the
@@ -1191,7 +1195,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | A book's earlier URL Path shows a server error page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | An older version's chapter page shows a server error page | 🐞 | user-visible · crash: server | — |
 | [A1](#a1) | An address that names no book asks visitors to sign in | 🐞 | minor | — |
-| [A3](#a3) | A version address that names no version fails with a server error | 🐞 | minor · crash: server | — |
+| [A3](#a3) | A version address that names no version fails with a server error | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | A new version's preview also calls itself outdated, dated today | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | An older version's browser tab names the current version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | The table of contents repeats the book's authors under every chapter | 🐞 | minor | — |
@@ -1237,13 +1241,13 @@ but the workflow could say so.
 Basis: probe, 2026-09-28. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — A version address that names no version fails with a server error** · 🐞 · minor · crash: server.
+**A3 — A version address that names no version fails with a server error** · 🐞 · low · crash: server.
 A book's address followed by "/version/" and an id that is none of the
 book's versions (a mistyped number, another book's version, or letters
 such as "abc") shows a blank server error page instead of "404 Not
 Found", to visitors, Readers, the Press manager and the Site
 Administrator alike: the app fails.
-Basis: probe, 2026-09-28. <sup>f-a3</sup>
+Basis: probe, 2026-10-01. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — A new version's preview also calls itself outdated** · 🐞 · low.
@@ -1658,6 +1662,7 @@ made on screen with "Create New Version".
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note g: the uninitialized typed property `CatalogBookHandler::$publication` when `version/{id}` matches no publication of the submission; the log reads "Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization" (`CatalogBookHandler.php` line 122). The typed property dates from omp `29fa88508` (2025-03-20). Live-probed 2026-09-28 (td6): 500 for every id tried and every role.
+Issue report: [docs/issues/U69-A3-version-address-no-version-server-error.md](../issues/U69-A3-version-address-no-version-server-error.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `monograph_full.tpl` prints `submission.viewingPreview` for any unpublished publication and `submission.outdatedVersion` for any publication that is not the current one, with that publication's empty `datePublished`, which prints as today (note h). Live-probed 2026-09-28 (td7).

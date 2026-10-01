@@ -934,6 +934,10 @@ each scenario's seeding are in its footnote.
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for OJS3 (issue report
+    `docs/issues/U69-A3-version-address-no-version-server-error.md`): an
+    article's version address with an id that is none of its versions
+    answering "404 Not Found"
   - a new version of an article in an issue, made by an untouched
     version dialog, opening "Review Publishing Details" on its first
     publish with the copied stage, "Minor Revision" and that issue
@@ -1065,7 +1069,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A10](#a10) | In French the "Create New Version" dialog and the Publication Settings / Preprint Entry page show raw codes; the versions to copy from cannot be told apart | 🐞 | minor | — |
 | [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused with no message and publishing is unreachable | 🐞 | user-visible | — |
 | [OJS2](#ojs2) | On a journal with no published issues, the issue choice is not the one made: "Schedule Only" (the panel's first pick, or one saved on Publication Settings) publishes immediately, and a Publication Settings save for another field records "Don't Assign To An Issue" | 🐞 | user-visible | — |
-| [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | user-visible | — |
+| [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | Publishing without an issue fails with "An unexpected error has occurred" when a contributor has a verified ORCID iD (member API), though the article goes live and its author is never emailed | 🐞 | user-visible · crash: server | — |
 | [OPS1](#ops1) | A preprint scheduled by a future date is never posted by anything | 🐞 | user-visible | — |
 | [OPS4](#ops4) | Every post, the first included, sends "New Version Posted Acknowledgement"; the first-post acknowledgement never goes out | 🐞 | user-visible | — |
@@ -1300,18 +1304,16 @@ correctly. The failure is deterministic, not a timing accident. Since:
 <sup>[f-ojs2](#fn-ojs2)</sup>
 
 <a id="ojs3"></a>
-**OJS3 — A mistyped version address crashes instead of "not found"** · 🐞 ·
-user-visible.
+**OJS3 — A mistyped version address crashes instead of "not found"** · 🐞 · low · crash: server.
 An article's reader page links each OLDER published version at its own
 address (the "Versions" list). Typing a number the article has no version
 under into that address returns a blank server error instead of the
 plain "404 Not Found" page the reader should get, so an ordinary mistype
-is enough to hit it. An unpublished draft's own number, which crashed the
-same way when first seen, now answers the "404 Not Found" page; the
-current version's own number and another article's, which also crashed
-then, were not read again. Since: 2026-08-29 · Basis: probe; the draft's
-address and the mistyped one re-read on a test run.
-<sup>[f-ojs3](#fn-ojs3)</sup>
+is enough to hit it. Another article's version number and letters such
+as "abc" fail the same way. The article's own version numbers show the
+page, and an unpublished draft's own number answers the "404 Not Found"
+page. No link the journal's pages offer leads to such an address.
+Since: 2026-08-29 · Basis: probe, 2026-10-01. <sup>[f-ojs3](#fn-ojs3)</sup>
 
 <a id="ojs4"></a>
 **OJS4 — Publishing without an issue fails for a contributor with a verified ORCID iD** · 🐞 · user-visible · crash: server.
@@ -2285,6 +2287,7 @@ Found" to a signed-out visitor; a nonexistent publication id typed into
 the same address still answered HTTP 500 with an empty body (one typed
 observation on the probe server, not driven by the suite). The current
 version's own id and another submission's were not re-read at that tip.
+Issue report: [docs/issues/U69-A3-version-address-no-version-server-error.md](../issues/U69-A3-version-address-no-version-server-error.md).
 
 <a id="fn-ojs4"></a>
 **f-ojs4** — Live-probed 2026-09-28, two runs and two debug runs, the

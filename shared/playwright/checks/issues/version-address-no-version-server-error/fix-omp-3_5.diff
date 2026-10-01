@@ -1,0 +1,11 @@
+--- a/pages/catalog/CatalogBookHandler.php
++++ b/pages/catalog/CatalogBookHandler.php
+@@ -117,7 +117,7 @@
+             $this->publication = $submission->getCurrentPublication();
+         }
+ 
+-        if (!$this->publication || ($this->publication->getData('status') !== PKPSubmission::STATUS_PUBLISHED && !Repo::submission()->canPreview($user, $submission))) {
++        if (!isset($this->publication) || ($this->publication->getData('status') !== PKPSubmission::STATUS_PUBLISHED && !Repo::submission()->canPreview($user, $submission))) {
+             throw new NotFoundHttpException();
+         }
+ 
