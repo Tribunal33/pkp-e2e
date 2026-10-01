@@ -2786,7 +2786,7 @@ publish on four runs, in the typed order on later ones. Probed
 2026-09-26, OJS and OPS: moving one keyword's row on disk turned
 scenario 1's line to "current, tide" on four runs of four; four plain
 "Save"s on Publication › Metadata kept "alpha, beta, gamma".
-Issue report: [docs/issues/U13-A11-keywords-order-not-kept.md](../issues/U13-A11-keywords-order-not-kept.md).
+Issue report: [pkp-e2e#247](https://github.com/jardakotesovec/pkp-e2e/issues/247) ([docs/issues/U13-A11-keywords-order-not-kept.md](../issues/U13-A11-keywords-order-not-kept.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note g: `firstPublication` is the earliest `datePublished`
