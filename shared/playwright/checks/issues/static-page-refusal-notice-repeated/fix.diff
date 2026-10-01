@@ -1,0 +1,10 @@
+--- a/plugins/generic/staticPages/templates/editStaticPageForm.tpl
++++ b/plugins/generic/staticPages/templates/editStaticPageForm.tpl
+@@ -23,6 +23,7 @@
+ {capture assign=actionUrl}{url router=PKP\core\PKPApplication::ROUTE_COMPONENT component="plugins.generic.staticPages.controllers.grid.StaticPageGridHandler" op="updateStaticPage" existingPageName=$blockName escape=false}{/capture}
+ <form class="pkp_form" id="staticPageForm" method="post" action="{$actionUrl}">
+ 	{csrf}
++	{include file="controllers/notification/inPlaceNotification.tpl" notificationId="staticPageFormNotification"}
+ 	{if $staticPageId}
+ 		<input type="hidden" name="staticPageId" value="{$staticPageId|escape}" />
+ 	{/if}
