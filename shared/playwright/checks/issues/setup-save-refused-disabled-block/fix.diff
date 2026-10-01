@@ -1,0 +1,36 @@
+--- a/lib/pkp/classes/components/forms/context/PKPAppearanceSetupForm.php
++++ b/lib/pkp/classes/components/forms/context/PKPAppearanceSetupForm.php
+@@ -45,10 +45,16 @@
+         $this->locales = $locales;
+         $sidebarOptions = [];
+ 
+-        $currentBlocks = (array) $context->getData('sidebar');
+-
+         $plugins = PluginRegistry::loadCategory('blocks', true);
+ 
++        // The placed blocks whose plugin is enabled. A disabled or removed
++        // block's name stays stored, but the field offers no option for it,
++        // and posting it back would fail PKPContextService::validate().
++        $currentBlocks = array_values(array_filter(
++            (array) $context->getData('sidebar'),
++            fn ($blockName) => isset($plugins[$blockName])
++        ));
++
+         foreach ($plugins as $pluginName => $plugin) {
+             $sidebarOptions[] = [
+                 'value' => $pluginName,
+--- a/lib/pkp/classes/components/forms/site/PKPSiteAppearanceForm.php
++++ b/lib/pkp/classes/components/forms/site/PKPSiteAppearanceForm.php
+@@ -81,7 +81,11 @@
+             ->addField(new FieldOptions('sidebar', [
+                 'label' => __('manager.setup.layout.sidebar'),
+                 'isOrderable' => true,
+-                'value' => (array) $site->getData('sidebar'),
++                // The placed blocks whose plugin is enabled (see PKPAppearanceSetupForm)
++                'value' => array_values(array_filter(
++                    (array) $site->getData('sidebar'),
++                    fn ($blockName) => isset($plugins[$blockName])
++                )),
+                 'options' => $sidebarOptions,
+             ]))
+             ->addField(new FieldUpload('styleSheet', [

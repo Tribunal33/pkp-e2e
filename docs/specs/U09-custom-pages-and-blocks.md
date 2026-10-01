@@ -818,6 +818,7 @@ the footnote. <sup>y</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a placed custom block's "Custom Block Manager" unticked, then a "Page Footer" saved on "Appearance" › "Setup" without a refusal (A15; the guard its issue report names)
   - a preview's address typed by a section editor, an author or a signed-out visitor: the access-denied page, or Login (A7; the guard its issue report names)
   - a picture over the server's file limit, and one over its request limit, chosen in "Insert/edit image": each refused with "Files larger than {size} can not be uploaded." and no server error (A18; the guard its two issue reports name)
   - a custom block listed in "Custom Blocks" and offered under "Sidebar" by its "Block Name", and by the new one after a rename (A1; the guard its issue report names)
@@ -884,7 +885,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | Right after "Static Pages Plugin" is unticked, the tab stays and its "Add Static Page" shows "Error" | 🐞 | minor · crash: server | — |
 | [A13](#a13) | A custom block whose name holds "&" can never be placed, edited or deleted | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | A custom block cannot be deleted on PostgreSQL: "OK" spins and the block stays | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A15](#a15) | With "Custom Block Manager" unticked, "Appearance" › "Setup" refuses every save over a placed block it no longer lists | 🐞 | user-visible | — |
+| [A15](#a15) | With "Custom Block Manager" unticked, "Appearance" › "Setup" refuses every save over a placed block it no longer lists | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | A ".pdf" or ".svg" chosen in the picture window is ignored with no message | 🐞 | minor | — |
 | [A17](#a17) | A pasted picture the site refuses stays in the text, embedded, and is saved | 🐞 | minor | — |
 | [A18](#a18) | A picture over the upload limit gets a server error, never "Files larger than {size} can not be uploaded." | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1065,15 +1066,21 @@ Manager's list for good.
 Basis: probe, 2026-10-01. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — "Appearance" › "Setup" refuses to save over a block it no longer lists** · 🐞 · user-visible.
+**A15 — "Appearance" › "Setup" refuses to save over a block it no longer lists** · 🐞 · medium.
 A manager who unticks "Custom Block Manager" while a custom block is
-placed, then saves any change on Settings › Website › "Appearance" ›
-"Setup" (a new "Page Footer", say), is refused under "Sidebar" with "The
+placed in the sidebar expects the rest of the site's settings to save
+as before. Instead every save on Settings › Website › "Appearance" ›
+"Setup" (a new "Page Footer", say) is refused under "Sidebar" with "The
 our-partners block can not be found. Please make sure the plugin is
-installed and enabled.", although "Sidebar" no longer shows that block.
-The save goes through only once the "Sidebar" list is changed, which
-drops the block's place without a word.
-Basis: probe. <sup>f-a15</sup>
+installed and enabled.", although "Sidebar" no longer lists that block,
+and nothing on the tab is saved. The save goes through once the
+"Sidebar" list is changed (a box ticked or unticked, or a block moved);
+that save also takes the block out of the stored sidebar without a
+word, so when the plugin is ticked again the block comes back unticked
+and stays out of the sidebar until the manager ticks it again. The same
+holds for any block plugin turned off
+([Appearance & theming](U10-appearance-and-theming.md#a4)).
+Basis: probe, 2026-10-01. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — A ".pdf" or ".svg" chosen in the picture window is ignored** · 🐞 · minor.
@@ -1978,6 +1985,7 @@ an enabled block with `manager.setup.layout.sidebar.invalidBlock` (note
 h). Once the list is changed on screen, `FieldOptions.vue` keeps only the
 listed options, which drops the block. Live-probed 2026-09-24 (three
 apps): td25.
+Issue report: [docs/issues/U09-A15-setup-save-refused-disabled-block.md](../issues/U09-A15-setup-save-refused-disabled-block.md) (with U10 A4).
 
 <a id="fn-f-a16"></a>
 **f-a16** — TinyMCE 7.9.3's "Upload" tab takes only files it reads as

@@ -1156,6 +1156,7 @@ passwords and the tooling recipe are in the footnote. <sup>sc</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a placed block's plugin turned off, then a "Page Footer" saved on "Setup" without a refusal (A4; the guard its issue report names)
   - a press's French pages giving a book's date in the default format before a French "Date" is saved, and in the saved one after, the English pages unchanged {OMP} (Rule 3a)
   - French ticked under "UI" alone: "Date & Time" without a "French" button, and a press's French pages keeping the default format after an English "Date" is saved {OMP} (Rule 3b)
   - a chapter's page printing the book's "Date" {OMP} (Rule 31)
@@ -1212,7 +1213,7 @@ otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A press's and a preprint server's homepage image never carries its "Alternate text" | 🐞 | minor | — |
 | [A3](#a3) | A screen reader hears the up arrow on "Editorial Masthead" as "{role} Decrease position of {role}", and each "Sidebar" box's name carries both arrows' names | 🐞 | minor | — |
-| [A4](#a4) | "Setup" refuses every save while a placed block's plugin is disabled, though "Sidebar" no longer shows the block | 🐞 | user-visible | — |
+| [A4](#a4) | "Setup" refuses every save while a placed block's plugin is disabled, though "Sidebar" no longer shows the block | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | A removed style sheet stops loading on the pages, but its file stays public at its old address | 🐞 | latent | — |
 | [A6](#a6) | The French "Theme" tab shows raw codes in place of labels, on all three apps, and so do a press's "Setup" and "Advanced" | 🐞 | minor | — |
 | [A7](#a7) | After a file refused through "Upload File", the box's "Upload File" and the tab's "Save" stay disabled | 🐞 | user-visible | — |
@@ -1267,15 +1268,20 @@ reader cannot tell which arrow moves a role up. Basis: probe.
 <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — "Setup" refuses to save over a placed block whose plugin is off** · 🐞 · user-visible.
-A manager who disables a block's plugin while the block is placed, then
-saves any change on "Setup" (a new "Page Footer", say), is refused under
-"Sidebar" with "The {name} block can not be found. Please make sure the
-plugin is installed and enabled.", although "Sidebar" no longer shows the
-block. The save goes through only once the "Sidebar" list is changed,
-which drops the block's place without a word. The same holds for a custom
-block ([Custom pages & blocks](U09-custom-pages-and-blocks.md#a15)).
-Basis: probe. <sup>f-a4</sup>
+**A4 — "Setup" refuses to save over a placed block whose plugin is off** · 🐞 · medium.
+A manager who turns off a block's plugin while the block is placed in
+the sidebar (a block plugin such as "Language Toggle Block"), then
+saves any change on "Setup" (a new "Page Footer", say), is refused
+under "Sidebar" with "The {name} block can not be found. Please make
+sure the plugin is installed and enabled.", although "Sidebar" no
+longer shows the block, and nothing on the tab is saved. {name} is the
+block's internal name ("languagetoggleblockplugin"). The save goes
+through once the "Sidebar" list is changed (a box ticked or unticked,
+or a block moved); that save also takes the block out of the stored
+sidebar without a word, so when the plugin is turned on again the
+block comes back unticked. The same holds for a custom block
+([Custom pages & blocks](U09-custom-pages-and-blocks.md#a15)).
+Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A removed style sheet's file stays public** · 🐞 · latent.
@@ -1996,6 +2002,7 @@ Footer" save answered 400 with the message under "Sidebar" and "Please
 correct one error. Go to Sidebar: … Jump to next error" at the form's
 foot; the footer was not saved. The Custom pages & blocks spec drove the
 custom-block case the same day (its A15).
+Issue report: [docs/issues/U09-A15-setup-save-refused-disabled-block.md](../issues/U09-A15-setup-save-refused-disabled-block.md) (with U09 A15).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `PKPContextService::_saveFileParam()` with a `null` value

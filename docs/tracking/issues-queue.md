@@ -17,7 +17,7 @@ and the hourly routine starts one only when none is running
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s0, 2026-10-01**; done: A14, A1, A4, A13, A18, A7 |
+| [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s0, 2026-10-01**; done: A14, A1, A4, A13, A18, A7, A15 |
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 |  |
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 |  |
 | [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 |  |
@@ -54,7 +54,7 @@ and the hourly routine starts one only when none is running
 | [U70](../specs/U70-catalog-management.md) | 14 | 0 | 5 |  |
 | [U41](../specs/U41-contributors-and-affiliations.md) | 12 | 0 | 5 | A22 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
 | [U12](../specs/U12-announcements.md) | 11 | 0 | 5 | A11 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
-| [U10](../specs/U10-appearance-and-theming.md) | 13 | 0 | 4 | **A4 taken: issues session, workstation s0, 2026-10-01** (joined to U09 A15) |
+| [U10](../specs/U10-appearance-and-theming.md) | 13 | 0 | 4 | A4 done with U09 A15 (docs/issues/U09-A15-setup-save-refused-disabled-block.md) |
 | [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 |  |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 |  |
 | [U73](../specs/U73-publication-formats-proof-terms.md) | 18 | 0 | 3 |  |
