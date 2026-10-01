@@ -1,0 +1,14 @@
+--- a/lib/ui-library/src/components/Form/context/AddContextForm.vue
++++ b/lib/ui-library/src/components/Form/context/AddContextForm.vue
+@@ -14,8 +14,9 @@
+ 		submitValues(newVal, oldVal) {
+ 			// When the primaryLocale is not included in the supportedLocales,
+ 			// an error is set on primaryLocale that can only be resolved
+-			// by editing the supportedLocales.
+-			if (newVal.supportedLocales.includes(newVal.primaryLocale)) {
++			// by editing the supportedLocales. A site with one language does
++			// not ask for either, so there is no such error to clear.
++			if (newVal.supportedLocales?.includes(newVal.primaryLocale)) {
+ 				let errors = {...this.errors};
+ 				delete errors.primaryLocale;
+ 				this.$emit('set', this.id, {errors});

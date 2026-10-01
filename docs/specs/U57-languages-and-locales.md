@@ -882,6 +882,10 @@ as it stands. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A7 (issue report
+    `docs/issues/U57-A7-create-journal-one-language-script-error.md`): "Create Journal" on a one-language site, typed into, with no page script failure
+  - the guard for A5 (issue report
+    `docs/issues/U57-A5-forms-language-tick-date-time-script-error.md`): a "Forms" tick for a language the page was loaded without, then "Date & Time" offering that language's formats, with no page script failure
   - the guard for A3 (issue report
     `docs/issues/U57-A3-language-block-loses-page-on-port.md`): a visitor choosing "français" in the sidebar "Language" block on "About the Journal" and on the site's Login page, and staying on that page
   - the guard for A1 (issue report
@@ -963,9 +967,9 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | Any change to the site's languages silently unticks journals' submission languages the site does not offer | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | Choosing a language in the sidebar "Language" block lands on the home page when the site's address has a port | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A5](#a5) | Ticking "Forms" makes the Settings page's script fail five times | 🐞 | invisible · crash: script | — |
+| [A5](#a5) | After a manager ticks a language under "Forms", "Date & Time" shows no choices for it | 🐞 | low · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | Two managers adding the same form language at the same moment: one tick silently fails on the server | 🐞 | latent · crash: server | Jarda 2026-09-26 · risk accepted |
-| [A7](#a7) | On a one-language site, each field typed on "Create Journal" makes the page's script fail | 🐞 | invisible · crash: script | — |
+| [A7](#a7) | On a one-language site, typing in "Create Journal" makes the page's script fail at every keystroke | 🐞 | low · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | A press's or preprint server's French (Canada) guidelines, checklist, privacy statement and role names show internal codes | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | "Reload defaults" is offered to the Site Administrator alone | ❓ | minor | — |
 | [A4](#a4) | A text missing from a translation shows as its internal name, not in the primary language | ❓ | user-visible | — |
@@ -1043,13 +1047,20 @@ translators find gaps, but a reader cannot act on them.
 Basis: probe. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
-**A5 — Ticking "Forms" breaks the page's script** · 🐞 · invisible · crash: script.
-Each tick of a "Forms" box on Settings › Website saves and shows nothing
-wrong, but the page's script fails five times ("Cannot read properties of
-undefined (reading 'filter')") while it hands the new language to the
-page's other forms. Nothing on screen shows the failure; the same tick in
-the Settings wizard does not fail.
-Basis: probe. <sup>[f-a5](#fn-a5)</sup>
+**A5 — After a manager ticks a language under "Forms", "Date & Time" shows no choices for it** · 🐞 · low · crash: script.
+A manager ticks "Forms" for a language on Settings › Website that the
+page was loaded without (one the journal is just adding as a form
+language). The tick saves, but when the page passes the new language on
+to its other forms, the page's script fails five times ("Cannot read
+properties of undefined (reading 'filter')"). "Setup" › "Date & Time" on
+the same page then has, for each of its five settings ("Date", "Date
+(Short)", "Time", "Date & Time", "Date & Time (Short)"), an empty box
+for the new language: no formats to choose, not even "Custom".
+Nothing is stored wrong, and after a reload of the page the boxes offer
+the formats. A tick of a language that was already a form language when
+the page loaded does not fail, nor does a tick under "UI" or
+"Submissions", which changes no form language.
+Basis: probe, 2026-10-01. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
 **A6 — Adding the same form language twice at once fails** · 🐞 · latent · crash: server.
@@ -1067,14 +1078,17 @@ Basis: probe. <sup>[f-a6](#fn-a6)</sup>
 > reasonable test-side fix.
 
 <a id="a7"></a>
-**A7 — On a one-language site, "Create Journal" breaks the page's script** · 🐞 · invisible · crash: script.
-When the site has one language, Administration › "Hosted Journals" ›
-"Create Journal" ("Create Press", "Create Server") asks no languages, and
-each change to one of its fields (the name, the initials, the contact,
-the path, the country) makes the page's script fail once. Nothing shows
-on screen and "Save" creates the journal; on a site with two languages the
-same form does not fail.
-Basis: probe. <sup>[f-a7](#fn-a7)</sup>
+**A7 — On a one-language site, typing in "Create Journal" makes the page's script fail at every keystroke** · 🐞 · low · crash: script.
+When the site has one language, the window Administration › "Hosted
+Journals" › "Create Journal" ("Create Press", "Create Server") has no
+"Languages" or "Primary locale" fields, as it should. But each change to
+its other fields fails the page's script: one error in the browser's
+console for every character typed in the name, the initials, the
+contact or the path, and one for choosing the country. Nothing shows on
+screen and "Save" creates the journal. On a site with two languages the
+same window logs nothing.
+The site administrator loses nothing and needs no way round.
+Basis: probe, 2026-10-01. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
 **A8 — A press's or preprint server's French (Canada) guidelines, checklist, privacy statement and role names show internal codes** · 🐞 · medium.
@@ -1274,12 +1288,14 @@ Issue report: [pkp-e2e#362](https://github.com/jardakotesovec/pkp-e2e/issues/362
 
 <a id="fn-a5"></a>
 **f-a5** — Seen 2026-09-24 (U09 claim check K1, K1-6, three apps): each tick saved and five errors "TypeError: Cannot read properties of undefined (reading 'filter') at Proxy.isInputSelected" were logged. Live-probed 2026-09-27 (three apps): five per tick on Settings › Website, also for a tick without "UI" and a re-tick; none for the same tick in the Settings wizard. Test runs 2026-09-27 (OPS): five per tick again, logged while the "Privacy Statement" tab of Rule 10b showed its empty French box. The cause is in note i.
+Issue report: [docs/issues/U57-A5-forms-language-tick-date-time-script-error.md](../issues/U57-A5-forms-language-tick-date-time-script-error.md).
 
 <a id="fn-a6"></a>
 **f-a6** — Seen 2026-09-26 on OJS and OPS: 5 of 42 journals created at the same moment with French as a form language (the test tooling's path, which is the "Forms" tick's) answered a server error. Live-probed 2026-09-27: two scratch journals, one Journal Manager each, the second browser on the install's second server process, both "Forms" boxes pressed together, four rounds per pair, three pairs: one side's `POST …/grid/settings/languages/manage-language-grid/save-language-setting?rowId=fr_CA&setting=supportedFormLocales&value=1` answered 500 in 5 of 12 rounds on OJS, 9 of 12 on OMP and 7 of 12 on OPS; that side showed no notice and no alert, its box unticked, still unticked after a reload; the other side saved. `Locale::installLocale()` → `installEmailTemplateLocaleData()` deletes and re-inserts the site-wide default email rows of the language outside a transaction, so two at once meet the unique key of `email_templates_default_data`. The same call runs on "Install Locale", the "Submissions" tick of Rule 15a and "Reload defaults". Seen again 2026-09-27 in an OPS test run, on the "Submissions" tick: two scratch servers ticked French (Canada) under "Submissions" a second apart; one's `POST …/grid/settings/languages/submission-language-grid/save-language-setting?rowId=fr_CA&setting=supportedSubmissionLocales&value=1` answered 500 (`duplicate key value violates unique constraint "email_templates_default_data_unique"`), the other's 200. Each tick installs the language's default email texts again, whether or not the site already carries them, so a language installed once beforehand does not prevent it.
 
 <a id="fn-a7"></a>
 **f-a7** — Live-probed 2026-09-27, two runs, three apps: with French disabled on the site (English the one language), each field change on the Hosted Journals create form logged "TypeError: Cannot read properties of undefined (reading 'includes') at Proxy.submitValues" once, six per filled form, none on opening it or on "Save"; the same form on the two-language site logged none. The form then has no language fields (note g); the failing code was not traced further.
+Issue report: [docs/issues/U57-A7-create-journal-one-language-script-error.md](../issues/U57-A7-create-journal-one-language-script-error.md).
 
 <a id="fn-a8"></a>
 **f-a8** — `omp/locale/fr_CA/default.po` and `ops/locale/fr_CA/default.po` carry `default.contextSettings.authorGuidelines` and `default.contextSettings.checklist` with empty texts, which `Locale::translate()` answers as the internal name (note p); `ojs/locale/fr_CA/default.po` has both. Code read 2026-09-27. Live-probed 2026-09-27 (OMP, OPS; OJS the control): after a French "Forms" tick and on a press or server created with French under "UI", the French "Author Guidelines" and checklist boxes held the internal names, and `…/fr_CA/about/submissions` showed them, on the seeded press and server too.

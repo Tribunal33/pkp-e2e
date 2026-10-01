@@ -1,0 +1,144 @@
+--- a/lib/pkp/classes/context/Context.php
++++ b/lib/pkp/classes/context/Context.php
+@@ -459,14 +459,15 @@
+      * Return date or/and time formats available for forms, fallback to the default if not set
+      *
+      * @param string $format datetime property, e.g., dateFormatShort
++     * @param ?string[] $locales the languages to give a format for; the form languages when null
+      *
+      * @return array
+      */
+-    public function getDateTimeFormats($format)
++    public function getDateTimeFormats($format, ?array $locales = null)
+     {
+         $data = $this->getData($format) ?? [];
+         $fallbackConfigVar = strtolower(preg_replace('/([A-Z])/', '_$1', $format));
+-        foreach ($this->getSupportedFormLocales() as $supportedLocale) {
++        foreach ($locales ?? $this->getSupportedFormLocales() as $supportedLocale) {
+             if (!array_key_exists($supportedLocale, $data)) {
+                 $data[$supportedLocale] = Config::getVar('general', $fallbackConfigVar);
+             }
+--- a/lib/pkp/classes/components/forms/context/PKPDateTimeForm.php
++++ b/lib/pkp/classes/components/forms/context/PKPDateTimeForm.php
+@@ -16,6 +16,7 @@
+ 
+ namespace PKP\components\forms\context;
+ 
++use APP\core\Application;
+ use PKP\components\forms\FieldRadioInput;
+ use PKP\components\forms\FormComponent;
+ 
+@@ -26,6 +27,16 @@
+     public $method = 'PUT';
+ 
+     /**
++     * The languages the choices and values are built for: the form languages
++     * and every other language of the site, since ticking "Forms" on
++     * Settings > Website hands a new form language to this form without a
++     * reload (the `set-form-languages` event).
++     *
++     * @var string[]
++     */
++    public array $optionLocales = [];
++
++    /**
+      * Constructor
+      *
+      * @param string $action URL to submit the form to
+@@ -36,10 +47,14 @@
+     {
+         $this->action = $action;
+         $this->locales = $locales;
++        $this->optionLocales = array_values(array_unique(array_merge(
++            array_column($locales, 'key'),
++            Application::get()->getRequest()->getSite()->getSupportedLocales()
++        )));
+ 
+         $localizedOptions = []; // template for localized options to be used for date and time format
+-        foreach ($this->locales as $key => $localeValue) {
+-            $localizedOptions[$localeValue['key']] = $key;
++        foreach ($this->optionLocales as $key => $locale) {
++            $localizedOptions[$locale] = $key;
+         }
+ 
+         $this->addGroup([
+@@ -57,7 +72,7 @@
+                     'j F Y',
+                     'Y F j',
+                 ]),
+-                'value' => $context->getDateTimeFormats('dateFormatLong'),
++                'value' => $context->getDateTimeFormats('dateFormatLong', $this->optionLocales),
+                 'groupId' => 'descriptions',
+             ]))
+             // A brief date format that is used when there is less space for the full date.
+@@ -70,7 +85,7 @@
+                     'm/d/Y',
+                     'd.m.Y',
+                 ]),
+-                'value' => $context->getDateTimeFormats('dateFormatShort'),
++                'value' => $context->getDateTimeFormats('dateFormatShort', $this->optionLocales),
+                 'groupId' => 'descriptions',
+ 
+             ]))
+@@ -82,7 +97,7 @@
+                     'h:i A',
+                     'g:ia',
+                 ]),
+-                'value' => $context->getDateTimeFormats('timeFormat'),
++                'value' => $context->getDateTimeFormats('timeFormat', $this->optionLocales),
+                 'groupId' => 'descriptions',
+             ]))
+             ->addField(new FieldRadioInput('datetimeFormatLong', [
+@@ -102,7 +117,7 @@
+                         ]
+                     ];
+                 }, $localizedOptions),
+-                'value' => $context->getDateTimeFormats('datetimeFormatLong'),
++                'value' => $context->getDateTimeFormats('datetimeFormatLong', $this->optionLocales),
+                 'groupId' => 'descriptions',
+             ]))
+             ->addField(new FieldRadioInput('datetimeFormatShort', [
+@@ -122,7 +137,7 @@
+                         ]
+                     ];
+                 }, $localizedOptions),
+-                'value' => $context->getDateTimeFormats('datetimeFormatShort'),
++                'value' => $context->getDateTimeFormats('datetimeFormatShort', $this->optionLocales),
+                 'groupId' => 'descriptions',
+             ]));
+     }
+@@ -137,8 +152,7 @@
+     private function _setDateOptions($optionValues)
+     {
+         $options = [];
+-        foreach ($this->locales as $localeValue) {
+-            $locale = $localeValue['key'];
++        foreach ($this->optionLocales as $locale) {
+             foreach ($optionValues as $optionValue) {
+                 $options[$locale][] = [
+                     'value' => $optionValue,
+--- a/lib/ui-library/src/components/Form/context/DateTimeForm.vue
++++ b/lib/ui-library/src/components/Form/context/DateTimeForm.vue
+@@ -19,16 +19,18 @@
+ 		this.$nextTick(function () {
+ 			const dateTimeNow = DateTime.now();
+ 			this.fields.forEach((field) => {
+-				this.availableLocales.forEach((locale) => {
+-					dateTimeNow.setLocale(getLuxonLocale(locale.key));
+-					field.options[locale.key].forEach((option) => {
++				// Every language the field has choices for, not only the form
++				// languages of the moment: ticking "Forms" adds one without a reload
++				Object.keys(field.options).forEach((localeKey) => {
++					dateTimeNow.setLocale(getLuxonLocale(localeKey));
++					field.options[localeKey].forEach((option) => {
+ 						if (option.isInput) {
+ 							return;
+ 						}
+ 						const formattedDate = formatDateWithPhpFormat(
+ 							dateTimeNow,
+ 							option.label,
+-							locale.key,
++							localeKey,
+ 						);
+ 						if (formattedDate) {
+ 							option.label = formattedDate;
