@@ -615,6 +615,11 @@ one at a time and put back what they changed. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for OJS1 (Rule 12; issue report
+    `docs/issues/U62-OJS1-home-page-blank-theme-switched-off.md`): the
+    theme in use unticked, and the journal's home page opening unstyled
+    with its current issue, not a server error
 - **Nothing new to test**:
   - a tick made in the Settings Wizard's "Plugins" tab showing on the
     journal's own list, and the reverse (Rule 3)
@@ -693,7 +698,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | The Delete notice reads "successfuly" | 🐞 | minor | — |
 | [A9](#a9) | A refused tick or untick says nothing, and "Disable" stays open with its spinner | 🐞 | minor | — |
 | [A10](#a10) | A file that is not a plugin package is refused in the server's own words, naming a file on the server | 🐞 | minor | — |
-| [OJS1](#ojs1) | With its theme switched off, a journal's home page comes up blank | 🐞 | user-visible · crash: server | — |
+| [OJS1](#ojs1) | A journal's home page comes up blank for every visitor once its theme plugin is switched off | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | "Delete" is offered on plugins nobody can switch off, and on the theme in use | ❓ | minor | — |
 | [A6](#a6) | A Site Administrator with no manager role in a journal cannot switch its plugins | ❓ | minor | — |
 | [A8](#a8) | The theme a journal uses can be switched off | ❓ | user-visible | — |
@@ -817,13 +822,15 @@ Basis: probe. <sup>f-a10</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — With its theme switched off, a journal's home page comes up blank** · 🐞 · user-visible · crash: server.
-After the theme a journal uses is unticked (Rule 12), the journal's
-home page should show its content unstyled, as its other pages do;
-instead the server fails and the page comes up blank, so readers who
-arrive at the journal see nothing. On a press and a preprint server the
-home page shows unstyled like the rest.
-Basis: probe. <sup>f-ojs1</sup>
+**OJS1 — A journal's home page comes up blank for every visitor once its theme plugin is switched off** · 🐞 · medium · crash: server.
+After the theme a journal uses is unticked, the journal's home page
+should show its content unstyled, as its other pages do. Instead the
+server fails and the page comes up blank, so readers who arrive at the
+journal see nothing.
+
+The journal manager is told only that the plugin "has been disabled",
+and nothing warns that the home page is down.
+Basis: probe, 2026-10-01. <sup>f-ojs1</sup>
 
 ### OMP
 
@@ -1347,6 +1354,7 @@ notice. Live-probed 2026-09-27: td14.
 an empty page; server log `Call to a member function getOption() on
 null` in `IndexHandler`. OMP's and OPS's home pages, and OJS's "About
 the Journal" and login pages, showed unstyled.
+Issue report: [docs/issues/U62-OJS1-home-page-blank-theme-switched-off.md](../issues/U62-OJS1-home-page-blank-theme-switched-off.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — fn-d. The one-press test predates the 2022 controller

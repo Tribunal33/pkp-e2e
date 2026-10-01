@@ -1,0 +1,13 @@
+--- a/pages/index/IndexHandler.php
++++ b/pages/index/IndexHandler.php
+@@ -67,8 +67,9 @@
+         $this->_setupAnnouncements($journal ?? $request->getSite(), $templateMgr);
+ 
+         if ($journal) {
++            // Null when the theme is switched off or its plugin is missing: use the default options then
+             $activeTheme = $templateMgr->getTemplateVars('activeTheme');
+-            $journalContentOptions = $activeTheme->getOption('journalContentOrganization');
++            $journalContentOptions = $activeTheme?->getOption('journalContentOrganization');
+             if (!is_array($journalContentOptions)) {
+                 $journalContentOptions = JournalContentOption::default($journal);
+             }
