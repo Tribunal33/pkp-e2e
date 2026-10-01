@@ -1030,6 +1030,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U69-A16-earlier-url-path-server-error.md`): an issue's
     address naming a galley the issue does not have, forwarding to the
     issue's page
+  - the guard for A2 (issue report
+    `docs/issues/U50-A2-unpublish-back-issue-clears-current-issue.md`):
+    unpublishing a back issue that is not current, then "Current" still
+    opening the current issue
 - **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
@@ -1105,7 +1109,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Create Issue" arrives with "Title" ticked, and "Save" without a title is refused with only a passing notice; the "Title" box is not marked | 🐞 | user-visible | — |
-| [A2](#a2) | Unpublishing any issue leaves the journal with no current issue | 🐞 | user-visible | — |
+| [A2](#a2) | Unpublishing an older back issue leaves the journal with no current issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | After a refused "Save", "Date Published" shows today's date, which the issue saved next does not get | 🐞 | minor | — |
 | [A5](#a5) | A "Volume" of 99999 leaves "Create Issue" open with nothing shown | 🐞 | minor · crash: server | — |
 | [A6](#a6) | "Year" accepts letters: "20a6" is saved as 20 without a message | 🐞 | user-visible | — |
@@ -1137,15 +1141,18 @@ mark the "Title" box with its message. Basis: probe, 2026-09-25.
 <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — Unpublishing any issue removes the current issue** · 🐞 · user-visible.
-"Unpublish Issue" on any published issue, including an old back issue
-that is not the current one, leaves the journal with no current issue.
-"Current" is expected to keep showing the current issue; instead it
-opens "No Current Issue" with "This journal has not published any
-issues." while "Archives" still lists the published issues, and the
-home page's "Current Issue" part goes. This lasts until a manager
-presses "Current Issue" on a row or publishes an issue. Basis: probe,
-2026-09-25. <sup>f-a2</sup>
+**A2 — Unpublishing an older back issue leaves the journal with no current issue** · 🐞 · medium.
+A Journal Manager or editor presses "Unpublish Issue" on an older back
+issue, one that is not the current issue. The journal then has no
+current issue at all: "Current" opens "No Current Issue" with "This
+journal has not published any issues.", and the home page loses its
+"Current Issue" part, while "Archives" still lists the newer issue that
+was current. Nobody is told. The current issue stays missing until a
+manager presses "Current Issue" on the right issue's row; that this row
+now offers the link is the only hint. Publishing any issue makes that
+issue current, so only publishing a newer issue brings back the right
+one.
+Basis: probe, 2026-10-02. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — Deleting an issue unpublishes its articles with a generic warning** · ❓ · user-visible.
@@ -1469,6 +1476,7 @@ where it is made.
 
 <a id="fn-f-a2"></a>
 **f-a2** — `IssueGridHandler::unpublishIssue()` calls `Repo::issue()->updateCurrent($request->getContext()->getId())` with no issue, and `updateCurrent()` then runs `JournalDAO::removeCurrentIssue()` regardless of which issue was unpublished. The home page's part: U10 Rule 14 needs a current issue. Probe: td11; "Archives" still listed the published issues.
+Issue report: [docs/issues/U50-A2-unpublish-back-issue-clears-current-issue.md](../issues/U50-A2-unpublish-back-issue-clears-current-issue.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Confirmation: `IssueGridRow` `delete` uses `common.confirmDelete`; `editor.issues.confirmIssueDelete` exists in `locale/en/editor.po` and is used nowhere. Cascade: note t. Probe: td12; the specific warning never appeared.

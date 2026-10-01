@@ -18,7 +18,7 @@ and the hourly routine starts one only when none is running
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U51](../specs/U51-subscriptions.md) | 25 | 2 | 12 | **Taken: issues session, VM s2, 2026-10-01**; A12 done with U52 A9 (pkp-e2e#358); OPS1 done (pkp-e2e#380, with U08 OPS2); A14, A20 done (pkp-e2e#385, #386); A13, A26 done (pkp-e2e#387) |
-| [U50](../specs/U50-issues.md) | 14 | 2 | 9 | **Taken: issues session, workstation s0, 2026-10-02**; A14 done with U69 A16 (pkp-e2e#284) |
+| [U50](../specs/U50-issues.md) | 14 | 2 | 9 | **Taken: issues session, workstation s0, 2026-10-02**; A2 done (docs/issues/U50-A2-unpublish-back-issue-clears-current-issue.md); A14 done with U69 A16 (pkp-e2e#284) |
 | [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 |  |
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | A1: open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md |
 | [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 |  |

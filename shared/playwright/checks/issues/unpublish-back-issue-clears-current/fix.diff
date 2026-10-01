@@ -1,0 +1,15 @@
+--- a/classes/controllers/grid/issues/IssueGridHandler.php
++++ b/classes/controllers/grid/issues/IssueGridHandler.php
+@@ -708,7 +708,11 @@ class IssueGridHandler extends GridHandler
+         Hook::call('IssueGridHandler::unpublishIssue', [&$issue]);
+ 
+         Repo::issue()->edit($issue, $updateParams);
+-        Repo::issue()->updateCurrent($request->getContext()->getId());
++        // Only unpublishing the current issue leaves the journal without one;
++        // a back issue's unpublishing keeps the current issue as it is.
++        if ($journal->getData('currentIssueId') == $issue->getId()) {
++            Repo::issue()->updateCurrent($journal->getId());
++        }
+ 
+         Repo::doi()->issueUpdated($issue);
+ 
