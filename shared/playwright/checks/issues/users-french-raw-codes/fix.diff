@@ -1,0 +1,85 @@
+--- a/lib/pkp/locale/fr_CA/invitation.po
++++ b/lib/pkp/locale/fr_CA/invitation.po
+@@ -1,2 +1,39 @@
+ msgid ""
+-msgstr "X-Generator: Weblate\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit"
+\ No newline at end of file
++msgstr "X-Generator: Weblate\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit"
++
++msgid "invitation.header"
++msgstr "Invitations"
++
++msgid "invitation.inviteToRole.btn"
++msgstr "Inviter à un rôle"
++
++msgid "invitation.tableHeader.name"
++msgstr "Nom"
++
++msgid "invitation.management.options"
++msgstr "Options de gestion des invitations"
++
++msgid "invitation.cancelInvite.actionName"
++msgstr "Annuler l'invitation"
++
++msgid "invitation.cancelInvite.title"
++msgstr "Annuler l'invitation"
++
++msgid "invitation.cancelInvite.message"
++msgstr ""
++"Annuler l'invitation envoyée à {$givenName} {$familyName} désactivera le "
++"lien d'acceptation envoyé par courriel. Voici les détails de l'invitation : "
++
++msgid "userInvitation.status.invited"
++msgstr "Invité-e le {$date}"
++
++msgid "userInvitation.edit.title"
++msgstr "Modifier l'invitation"
++
++msgid "userInvitation.edit.message"
++msgstr ""
++"Si vous modifiez cette invitation ou ajoutez un nouveau rôle, l'invitation "
++"en cours sera annulée et une nouvelle sera envoyée. Voulez-vous poursuivre ?"
++
++msgid "userInvitation.roleTable.role"
++msgstr "Rôle"
+--- a/lib/pkp/locale/fr_CA/userAccess.po
++++ b/lib/pkp/locale/fr_CA/userAccess.po
+@@ -13,3 +13,11 @@
+ 
+ msgid "userAccess.tableHeader.name"
+ msgstr "Nom"
++
++msgid "userAccess.tableHeader.startDate"
++msgstr "Date de début"
++
++msgid "userAccess.search"
++msgstr ""
++"Saisir le nom, le rôle (p. ex. rédacteur-trice) ou l'affiliation d'un-e "
++"utilisateur-trice"
+--- a/lib/pkp/locale/fr_CA/common.po
++++ b/lib/pkp/locale/fr_CA/common.po
+@@ -2392,3 +2392,9 @@
+ 
+ msgid "common.refreshingData"
+ msgstr "Actualiser les données"
++
++msgid "common.moreActions"
++msgstr "Plus d'actions"
++
++msgid "common.loaded"
++msgstr "Chargé"
+--- a/lib/pkp/locale/fr_CA/user.po
++++ b/lib/pkp/locale/fr_CA/user.po
+@@ -912,3 +912,12 @@
+ 
+ msgid "user.bioStatement"
+ msgstr "Biographie"
++
++msgid "user.disabledModal.title"
++msgstr "Désactiver {$fullName}"
++
++msgid "user.disabledModal.description"
++msgstr "Rôles actuels : {$roles}"
++
++msgid "user.enabledModal.title"
++msgstr "Activer {$fullName}"

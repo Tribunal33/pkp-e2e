@@ -876,7 +876,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | The "Disable User" and "Enable User" windows list roles the user no longer holds in the journal | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | After "Enable User", the next "Disable User" offers the enabling reason and the Login page quotes it | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | Merging a section editor's account unassigns them from their sections, so new submissions arrive without that editor | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A11](#a11) | The French "Users" tab prints raw codes for its search label, the Invitations heading, button and columns, and the "Start Date" column | 🐞 | minor | — |
+| [A11](#a11) | Users & Roles in French (Canada): the Users tab and the "Invite to a role" pages show raw codes | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | The ORCID and disabled icons after a name have no name for a screen reader | 🐞 | minor | — |
 | [A13](#a13) | The "Merge user" window and the older grid show nothing under "Roles" for the Site Administrator | 🐞 | minor | — |
 | [A14](#a14) | On presses and preprint servers, a masthead change shows a raw error and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
@@ -1042,15 +1042,23 @@ as the list does? Lean: yes.
 Basis: probe. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The French list shows raw codes** · 🐞 · minor.
-In the French interface the "Users" tab prints raw codes instead of
-French text: the search box "##userAccess.search##", the Invitations
-heading "##invitation.header##", the "Invite to a role" button
-"##invitation.inviteToRole.btn##", the Invitations table's columns
+**A11 — Users & Roles in French (Canada): the Users tab and the "Invite to a role" pages show raw codes** · 🐞 · low.
+In the French (Canada) interface, the "Users" tab of Settings › Users &
+Roles prints raw codes instead of French text: the search box
+"##userAccess.search##", the Invitations heading
+"##invitation.header## (0)" and its button
+"##invitation.inviteToRole.btn##", the Invitations columns
 "##INVITATION.TABLEHEADER.NAME##" and "##INVITATION.HEADER##", and the
-list's "Start Date" column "##USERACCESS.TABLEHEADER.STARTDATE##". The row
-button's name is A5's raw code in every app and language.
-Basis: probe. <sup>f-a11</sup>
+user list's "Start Date" column "##USERACCESS.TABLEHEADER.STARTDATE##".
+The "Invite to a role" pages behind that button are codes almost
+throughout: the step names, the field help, every "next" button and
+the confirmation window. The email step opens with an empty subject and
+message. A manager who sends it anyway does invite the person, who
+receives the English invitation email, which the manager never saw.
+Everything works, and switching the interface to English shows every
+text. About twenty languages, French (France) among them, have these
+texts.
+Basis: probe, 2026-10-01. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — The status icons have no name for a screen reader** · 🐞 · minor.
@@ -2012,6 +2020,7 @@ guards every action but "Edit" and "Email" with not-own-row.
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-25: note td13. Mechanism: note u.
+Issue report: [docs/issues/U53-A11-users-french-raw-codes.md](../issues/U53-A11-users-french-raw-codes.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-25, all three apps: in the list's
