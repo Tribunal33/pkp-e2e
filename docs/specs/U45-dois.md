@@ -1757,6 +1757,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U45-OMP2-file-row-doi-save-error.md`): a DOI typed into a
     book's empty file row and saved answers "DOI(s) successfully updated"
     and shows at once {OMP}
+  - the guard for A12 (Rule 22; issue report
+    `docs/issues/U45-A12-doi-filter-clear-hides-unpublished.md`):
+    "Unregistered", then "Registered", then "Clear filter: Registered"
+    lists the unpublished works again
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1829,7 +1833,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | The "DOI Statuses" button and the rows' tick boxes have no name for a screen reader | 🐞 | minor | — |
 | [A9](#a9) | A pattern symbol with nothing to fill it stays in the DOI | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Searching the DOIs page by a DOI misses some DOIs on each app, and fails on a preprint server | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A12](#a12) | Clearing a "Registration" filter after "Unregistered" keeps unpublished works out of the list | 🐞 | minor | — |
+| [A12](#a12) | On the DOIs page, clearing a "Registration" filter chosen after "Unregistered" leaves only published works listed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | A refused or failed bulk action closes its window with no message | 🐞 | minor | — |
 | [A14](#a14) | The "Mark DOIs Needs Sync" question asks to mark the records "as stale" | 🐞 | minor | — |
 | [A15](#a15) | "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1993,12 +1997,16 @@ results, the error included.
 Basis: probe, 2026-10-01. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — Clearing a "Registration" filter after "Unregistered" keeps unpublished works out of the list** · 🐞 · minor.
+**A12 — On the DOIs page, clearing a "Registration" filter chosen after "Unregistered" leaves only published works listed** · 🐞 · low.
 A manager presses "Unregistered", then "Registered", then "Clear filter:
 Registered". No filter reads chosen, yet every unpublished work stays
 out of the list until the page is reloaded, so the manager takes a
-partial list for the whole one.
-Basis: probe, 2026-09-26. <sup>f-a12</sup>
+partial list for the whole one. Reloading the page brings the whole list
+back, and nothing is saved wrong. It is met in ordinary browsing: a
+manager looks at "Unregistered", switches to any other filter of the
+"Registration" group ("Submitted", "Registered", "Has Error", "Needs
+Sync") and then clears that filter.
+Basis: probe, 2026-10-01. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — A refused or failed bulk action closes its window with no message** · 🐞 · minor.
@@ -3752,6 +3760,7 @@ Live-probed 2026-09-26 (q8), all three apps (the journal twice): after
 `doiStatus=3&status[]=3`; after "Clear filter: Registered" no filter
 read chosen and the request still carried `status[]=3` (the journal
 showed 4 of its 6 works) until a reload.
+Issue report: [docs/issues/U45-A12-doi-filter-clear-hides-unpublished.md](../issues/U45-A12-doi-filter-clear-hides-unpublished.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-26 (q19; p), all three apps (export and

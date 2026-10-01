@@ -1,0 +1,21 @@
+--- a/lib/ui-library/src/components/ListPanel/doi/DoiListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/doi/DoiListPanel.vue
+@@ -478,6 +478,18 @@
+ 				param === 'doiStatus' &&
+ 				value !== pkp.const.DOI_STATUS_UNREGISTERED
+ 			) {
++				// "Unregistered" brought its own published-only status: it
++				// leaves with it, unless another filter has since set the status.
++				// An identity test: for an array (`[3]`) Vue returns one reactive
++				// proxy per array, so the stored value and the prop are the same
++				// object; the issues list compares the number 1.
++				if (
++					newFilters['unregistered'] &&
++					newFilters[this.publishedStatuses.name] ===
++						this.publishedStatuses.published
++				) {
++					delete newFilters[this.publishedStatuses.name];
++				}
+ 				delete newFilters['unregistered'];
+ 			}
+ 
