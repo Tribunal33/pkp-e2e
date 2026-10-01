@@ -1,0 +1,37 @@
+--- a/lib/pkp/controllers/grid/users/stageParticipant/form/AddParticipantForm.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/form/AddParticipantForm.php
+@@ -59,7 +59,7 @@
+         $this->_contextId = $submission->getData('contextId');
+ 
+         // add checks in addition to anything that the Notification form may apply.
+-        // FIXME: should use a custom validator to check that the userId belongs to this group.
++        // validate() checks that the userId belongs to this group.
+         $this->addCheck(new \PKP\form\validation\FormValidator($this, 'userGroupId', 'required', 'editor.submission.addStageParticipant.form.userGroupRequired'));
+         $this->addCheck(new \PKP\form\validation\FormValidatorPost($this));
+         $this->addCheck(new \PKP\form\validation\FormValidatorCSRF($this));
+@@ -251,7 +251,12 @@
+         $userGroupId = (int) $this->getData('userGroupId');
+         $userId = (int) $this->getData('userId');
+ 
+-        return Repo::userGroup()->userInGroup($userId, $userGroupId) && Repo::userGroup()->get($userGroupId) && parent::validate($callHooks);
++        if (!Repo::userGroup()->userInGroup($userId, $userGroupId) || !Repo::userGroup()->get($userGroupId)) {
++            $this->addError('userId', __('editor.submission.addStageParticipant.form.userRequired'));
++            $this->addErrorField('userId');
++        }
++
++        return parent::validate($callHooks);
+     }
+ 
+     /**
+--- a/lib/pkp/templates/controllers/grid/users/stageParticipant/addParticipantForm.tpl
++++ b/lib/pkp/templates/controllers/grid/users/stageParticipant/addParticipantForm.tpl
+@@ -62,6 +62,9 @@
+ 		{else}
+ 			{capture assign=userSelectGridUrl}{url router=PKP\core\PKPApplication::ROUTE_COMPONENT component="grid.users.userSelect.UserSelectGridHandler" op="fetchGrid" submissionId=$submissionId stageId=$stageId escape=false}{/capture}
+ 			{load_url_in_div id='userSelectGridContainer' url=$userSelectGridUrl}
++			{if $errors.userId}
++				<span class="error">{$errors.userId|escape}</span>
++			{/if}
+ 
+ 			{fbvFormSection title="stageParticipants.options" list="true" class="recommendOnlyWrapper"}
+ 				{fbvElement type="checkbox" name="recommendOnly" id="recommendOnly" label="stageParticipants.recommendOnly"}
