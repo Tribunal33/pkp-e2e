@@ -16,11 +16,11 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | Done: A4 ([pkp-e2e#199](https://github.com/jardakotesovec/pkp-e2e/issues/199), workstation s1, 2026-10-01); open, free for another session: A2, A3, A5, A6, A7, A8, A9, A10, A16, A17, A21, A24, A25, A26, A28, A29, A31, OMP1, OPS1 (A1: open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md) |
 | [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **In progress: issues session s3, 2026-09-30.** Done: A11, A21 (with U47 A4), A14, A25, A10 (with U38 A2); open: A2, A3, A4, A5, A7, A9, A12, A15, A19, A20 (A23, A24: open report pkp-lib-13288) |
 | [U17](../specs/U17-sections.md) | 16 | 2 | 2 | **In progress: issues session s3, 2026-09-30.** Done: A10 (two reports; its first case with U36 A21); open: A1, A6, A7, A8, A9, OMP2, OMP3, OMP5, OMP7, OMP8, OPS1, OPS2, OPS5 (OMP9, OPS6: open reports in docs/reports) |
-| [U59](../specs/U59-hosted-journals.md) | 9 | 2 | 2 | **In progress: workstation issues session (slot 0), 2026-10-01.** Open: A1, A2, A3, A4, A6, A7, A8, A10 (joins docs/issues/U66-A3-A8-omp-ops-institution-delete-fails.md, pkp-e2e#1), OPS1 |
-| [U62](../specs/U62-plugins-management.md) | 8 | 2 | 2 | **In progress: workstation issues session (slot 0), 2026-10-01.** Done: OJS1; in progress: A1; open: A2, A3, A5, A7, A9, A10 |
-| [U71](../specs/U71-internal-review-stage.md) | 6 | 2 | 2 | **In progress: workstation issues session (slot 0), 2026-10-01.** In progress: OMP9 (with U24 A5); open: OMP1, OMP2, OMP7 (with U24 A6), OMP8, OMP10 |
-| [U18](../specs/U18-web-feeds.md) | 5 | 2 | 2 | **In progress: workstation issues session (slot 0), 2026-10-01.** Open: A2, A3, A8; A1, A7, OPS1 left out (open regression reports in docs/reports) |
-| [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 | **In progress: workstation issues session (slot 0), 2026-10-01.** In progress: A5 (with U71 OMP9); open: A6 (with U71 OMP7), A9, A11, OMP3, OPS3 |
+| [U59](../specs/U59-hosted-journals.md) | 9 | 2 | 2 |  |
+| [U62](../specs/U62-plugins-management.md) | 8 | 2 | 2 | OJS1 written ([pkp-e2e#202](https://github.com/jardakotesovec/pkp-e2e/issues/202), workstation slot 0, 2026-10-01); the other entries are free for another session |
+| [U71](../specs/U71-internal-review-stage.md) | 6 | 2 | 2 |  |
+| [U18](../specs/U18-web-feeds.md) | 5 | 2 | 2 |  |
+| [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 |  |
 | [U48](../specs/U48-jats-and-body-text.md) | 16 | 1 | 7 | **A20 done: issues session s3, 2026-10-01** (with U47 A6); the other entries are free for another session |
 | [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 | A16 written with U63 A12 ([pkp-e2e#15](https://github.com/jardakotesovec/pkp-e2e/issues/15), 2026-09-30); the other entries are open |
 | [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | **OMP1 done: issues session s3, 2026-09-30** (with U53 A14); the other entries are free for another session |
