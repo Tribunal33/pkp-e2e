@@ -2011,7 +2011,7 @@ submitted" beside the copyright entry rendered verbatim "{$filename}
 `{$filename}` token literal (A5). The copyright box must be re-ticked on
 every fresh visit to Review (test-authoring note).
 Issue report: [pkp-e2e#177](https://github.com/jardakotesovec/pkp-e2e/issues/177) ([docs/issues/U21-A5-copyright-agreed-line-raw-placeholder.md](../issues/U21-A5-copyright-agreed-line-raw-placeholder.md)).
-Issue report: [docs/issues/U21-A6-submitted-twice-empty-problems-banner.md](../issues/U21-A6-submitted-twice-empty-problems-banner.md).
+Issue report: [pkp-e2e#180](https://github.com/jardakotesovec/pkp-e2e/issues/180) ([docs/issues/U21-A6-submitted-twice-empty-problems-banner.md](../issues/U21-A6-submitted-twice-empty-problems-banner.md)).
 
 <a id="fn-n"></a>
 **n** — Complete/terminal screens. `complete.tpl` (OJS/OMP, AFFW-129):
