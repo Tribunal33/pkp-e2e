@@ -3935,7 +3935,7 @@ Issue report: [pkp-e2e#204](https://github.com/jardakotesovec/pkp-e2e/issues/204
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — Live-probed 2026-09-26 (q23), OJS, two processes and two
 journals.
-Issue report: [docs/issues/U45-OJS3-publish-window-issn-warning-twice.md](../issues/U45-OJS3-publish-window-issn-warning-twice.md).
+Issue report: [pkp-e2e#242](https://github.com/jardakotesovec/pkp-e2e/issues/242) ([docs/issues/U45-OJS3-publish-window-issn-warning-twice.md](../issues/U45-OJS3-publish-window-issn-warning-twice.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `omp/classes/submission/Collector.php`
