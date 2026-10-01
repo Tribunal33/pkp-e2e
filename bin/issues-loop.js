@@ -81,7 +81,10 @@ function runSession(n) {
     return new Promise((resolve) => {
         const child = spawn('claude', ['-p', PROMPT, '--model', model, '--session-id', sessionId,
             '--permission-mode', 'bypassPermissions', '--output-format', 'stream-json', '--verbose'],
-        {cwd: ROOT, stdio: ['ignore', log, log]});
+        // -p waits only 600s for background agents after the main turn ends,
+        // then kills them; reporters run far longer, so wait up to 4h.
+        {cwd: ROOT, stdio: ['ignore', log, log],
+            env: {...process.env, CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS: String(4 * 60 * 60 * 1000)}});
         child.on('close', (code) => {
             fs.closeSync(log);
             const lines = fs.readFileSync(logFile, 'utf8').trim().split('\n');
@@ -118,7 +121,7 @@ async function main() {
         if (models.status !== 0) return fail(`model gate (bin/check-models.mjs):\n${models.stdout}${models.stderr}`);
         const after = dirtyTree();
         if (after) return fail(`session ${n} left ${after}`);
-        const left = queueRows().filter((r) => r.note.includes(mark));
+        const left = queueRows().filter((r) => /taken/i.test(r.note) && r.note.includes(mark));
         if (left.length) return fail(`session ${n} left ${left.map((r) => r.spec).join(', ')} Taken by ${mark}`);
         if (git('rev-parse', 'HEAD') === head) return fail(`session ${n} made no commit`);
     }
