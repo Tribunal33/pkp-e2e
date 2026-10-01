@@ -3628,7 +3628,7 @@ returns '' for `SUFFIX_MANUAL`; `mintAndStoreDoi()` stores
 for every type but `default`. Neither `AssignDOIs`, `VersionDois` nor
 `assignSubmissionDois()` checks the suffix type. Live-probed 2026-09-26
 (q13, q14), all three apps and a journal's peer review.
-Issue report: [docs/issues/U45-A2-A9-unfinished-doi-assigned.md](../issues/U45-A2-A9-unfinished-doi-assigned.md).
+Issue report: [pkp-e2e#213](https://github.com/jardakotesovec/pkp-e2e/issues/213) ([docs/issues/U45-A2-A9-unfinished-doi-assigned.md](../issues/U45-A2-A9-unfinished-doi-assigned.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `DoiListItem.postUpdatedDoiError()` records only a failure
@@ -3677,7 +3677,7 @@ named "Issues".
 "%x" on all three apps; the "Assign DOIs" answer listed no failure
 (`{"failedDoiActions":[]}`), and a pattern of "%x" alone gave
 `10.1234/%x`.
-Issue report: [docs/issues/U45-A2-A9-unfinished-doi-assigned.md](../issues/U45-A2-A9-unfinished-doi-assigned.md).
+Issue report: [pkp-e2e#213](https://github.com/jardakotesovec/pkp-e2e/issues/213) ([docs/issues/U45-A2-A9-unfinished-doi-assigned.md](../issues/U45-A2-A9-unfinished-doi-assigned.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Live-probed 2026-09-26, OJS, two journals: the DOIs page
