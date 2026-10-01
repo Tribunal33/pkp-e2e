@@ -1,0 +1,11 @@
+--- a/api/v1/_dois/BackendDoiController.php
++++ b/api/v1/_dois/BackendDoiController.php
+@@ -169,7 +169,7 @@
+ 
+         /** @var GenreDAO */
+         $genreDao = DAORegistry::getDAO('GenreDAO');
+-        $genres = $genreDao->getByContextId($submission->getData('contextId'))->toArrayAssociative();
++        $genres = $genreDao->getByContextId($submission->getData('contextId'))->toAssociativeArray();
+ 
+         return response()->json(
+             Repo::submissionFile()->getSchemaMap($submission, $genres)->map($submissionFile),

@@ -1753,6 +1753,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U45-OPS4-minor-version-new-galley-dois.md`): under "DOI
     Versioning" "Yes", a preprint's "Minor Revision" keeps its galley's
     DOI {OPS}
+  - the guard for OMP2 (Rule 45; issue report
+    `docs/issues/U45-OMP2-file-row-doi-save-error.md`): a DOI typed into a
+    book's empty file row and saved answers "DOI(s) successfully updated"
+    and shows at once {OMP}
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1838,7 +1842,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | The publish window lists the ISSN warning twice | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [OMP2](#omp2) | A DOI typed into a book's empty file row fails on the server, yet is stored | 🐞 | minor · crash: server | — |
+| [OMP2](#omp2) | A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | The "DOIs" box reads "…to assigned to works published on this server." | 🐞 | minor | — |
 | [OPS3](#ops3) | The Crossref "Username" help reads "…see the advise above." | 🐞 | minor | — |
 | [OPS4](#ops4) | On a preprint server, a minor version's galleys get new DOIs instead of keeping their source's | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -2202,18 +2206,22 @@ Assignment" is "Never".
 Basis: probe, 2026-10-01. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — A DOI typed into a book's empty file row fails on the server, yet is stored** · 🐞 · minor · crash: server.
-A Press Manager expands a published book whose file row ("PDF /
-article.pdf") has no DOI, presses "Edit", types a DOI into that row's
-box and presses "Save". Expected: "DOI(s) successfully updated", as for
-a chapter or format row. Instead the save fails on the server: the
-notice reads "Some DOI(s) could not be updated" and the box is empty
-again, yet after a reload the row holds the typed DOI and reads
-"Unregistered", and "Mark DOIs Registered" marks it like any other.
-The manager is told the DOI was not saved when it was. "Assign DOIs"
-fills file rows without the failure. It broke in a 2025 code clean-up,
-so a regression, not a choice.
-Since: 2025-08-20 · Basis: probe, 2026-09-29. <sup>f-omp2</sup>
+**OMP2 — A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure** · 🐞 · medium · crash: server.
+On a press's DOIs page, a manager expands a book whose file row ("PDF /
+epilogue.pdf") has no DOI, presses "Edit", types a DOI into that row's
+DOI box and presses "Save". The server stores the DOI, then answers the
+save with an error. The notice reads "Some DOI(s) could not be updated",
+the box is empty again and the row still reads "Needs DOI". Only after a
+reload does the row show the DOI, "Unregistered". A manager who believes
+the notice and tries again is refused the same DOI, with the same
+notice, because it is already taken. A different DOI is stored and
+linked to the file in its place, with the same notice. The first DOI
+then belongs to nothing, yet stays taken: it can no longer be given to
+this file or any other item on the install, and no screen shows or
+removes it. It needs a press with "Files" ticked under "Items with
+DOIs", which is off by default. A DOI typed into the book's own row
+saves without the error.
+Since: 2025-08-20 · Basis: probe, 2026-10-01. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
 **OMP3 — A chapter that cannot have a DOI reads "Needs DOI"** · ❓ · minor.
@@ -3886,6 +3894,7 @@ PKP\db\DAOResultFactory::toArrayAssociative()". The call read
 `toArray()` until OMP commit `4f3ca0fd1` ("pkp/pkp-lib#11682 Optimize
 the software", 2025-08-20). "Assign DOIs" fills file rows without that
 request.
+Issue report: [docs/issues/U45-OMP2-file-row-doi-save-error.md](../issues/U45-OMP2-file-row-doi-save-error.md).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — Live-probed 2026-09-29 (Rule 47), OMP, two runs: the
