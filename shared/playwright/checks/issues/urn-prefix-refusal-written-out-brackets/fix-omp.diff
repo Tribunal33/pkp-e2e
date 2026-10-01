@@ -1,0 +1,279 @@
+diff -ru a/plugins/pubIds/urn/locale/bg/locale.po b/plugins/pubIds/urn/locale/bg/locale.po
+--- a/plugins/pubIds/urn/locale/bg/locale.po	2026-10-01 02:09:55.858795691 +0000
++++ b/plugins/pubIds/urn/locale/bg/locale.po	2026-10-01 02:09:55.881802280 +0000
+@@ -166,9 +166,7 @@
+ ":nbn:de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"Моделът на УИР префикс трябва да бъде във формата \"urn:\"&lt;NID&gt;\":\""
+-"&lt;NSS&gt;."
++msgstr "Моделът на УИР префикс трябва да бъде във формата \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix.description"
+ msgstr ""
+diff -ru a/plugins/pubIds/urn/locale/ca/locale.po b/plugins/pubIds/urn/locale/ca/locale.po
+--- a/plugins/pubIds/urn/locale/ca/locale.po	2026-10-01 02:09:55.858835811 +0000
++++ b/plugins/pubIds/urn/locale/ca/locale.po	2026-10-01 02:09:55.881926237 +0000
+@@ -53,9 +53,7 @@
+ "El prefix URN és la part invariable de l'URN (p. ex., \"urn:nbn:de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"El patró del prefix URN ha de seguir el format \"urn:\"&lt;NID&gt;\":\"&lt;"
+-"NSS&gt;."
++msgstr "El patró del prefix URN ha de seguir el format \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "Sufix URN"
+diff -ru a/plugins/pubIds/urn/locale/cs/locale.po b/plugins/pubIds/urn/locale/cs/locale.po
+--- a/plugins/pubIds/urn/locale/cs/locale.po	2026-10-01 02:09:55.858883914 +0000
++++ b/plugins/pubIds/urn/locale/cs/locale.po	2026-10-01 02:09:55.882062793 +0000
+@@ -56,8 +56,7 @@
+ "Prefix URN je pevná, nikdy se neměnící část URN (např. \"urn:nbn:de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"Vzor URN prefixu musí odpovídat formátu \"urn:\"&lt;NID&gt;\":\"&lt;NSS&gt;."
++msgstr "Vzor URN prefixu musí odpovídat formátu \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "Suffix URN"
+diff -ru a/plugins/pubIds/urn/locale/da/locale.po b/plugins/pubIds/urn/locale/da/locale.po
+--- a/plugins/pubIds/urn/locale/da/locale.po	2026-10-01 02:09:55.858939137 +0000
++++ b/plugins/pubIds/urn/locale/da/locale.po	2026-10-01 02:09:55.882159499 +0000
+@@ -56,7 +56,7 @@
+ "\"urn:nbn:de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr "URN-prefikset skal have formen \"urn:\"&lt;NID&gt;\":\"&lt;NSS&gt;."
++msgstr "URN-prefikset skal have formen \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "URN-suffiks"
+diff -ru a/plugins/pubIds/urn/locale/de/locale.po b/plugins/pubIds/urn/locale/de/locale.po
+--- a/plugins/pubIds/urn/locale/de/locale.po	2026-10-01 02:09:55.858991947 +0000
++++ b/plugins/pubIds/urn/locale/de/locale.po	2026-10-01 02:09:55.882235655 +0000
+@@ -58,9 +58,7 @@
+ "nbn:de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"Das URN-Präfixmuster muss das Format \"urn:\"&lt;NID&gt;\":\"&lt;NSS&gt; "
+-"haben."
++msgstr "Das URN-Präfixmuster muss das Format \"urn:\" NID \":\" NSS haben."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "URN-Suffix"
+diff -ru a/plugins/pubIds/urn/locale/en/locale.po b/plugins/pubIds/urn/locale/en/locale.po
+--- a/plugins/pubIds/urn/locale/en/locale.po	2026-10-01 02:09:55.859038748 +0000
++++ b/plugins/pubIds/urn/locale/en/locale.po	2026-10-01 02:09:55.882322065 +0000
+@@ -52,7 +52,7 @@
+ msgstr "The URN prefix is the fix, never changing part of the URN (e.g. \"urn:nbn:de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr "The URN prefix pattern must be in the form \"urn:\"&lt;NID&gt;\":\"&lt;NSS&gt;."
++msgstr "The URN prefix pattern must be in the form \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "URN Suffix"
+diff -ru a/plugins/pubIds/urn/locale/es/locale.po b/plugins/pubIds/urn/locale/es/locale.po
+--- a/plugins/pubIds/urn/locale/es/locale.po	2026-10-01 02:09:55.859085208 +0000
++++ b/plugins/pubIds/urn/locale/es/locale.po	2026-10-01 02:09:55.882400584 +0000
+@@ -55,9 +55,7 @@
+ "de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"El patrón del prefijo URN debe tener la forma \"urn:\"&lt;NID&gt;\":\"&lt;"
+-"NSS&gt;."
++msgstr "El patrón del prefijo URN debe tener la forma \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "Sufijo URN"
+diff -ru a/plugins/pubIds/urn/locale/fi/locale.po b/plugins/pubIds/urn/locale/fi/locale.po
+--- a/plugins/pubIds/urn/locale/fi/locale.po	2026-10-01 02:09:55.859160152 +0000
++++ b/plugins/pubIds/urn/locale/fi/locale.po	2026-10-01 02:09:55.882458501 +0000
+@@ -56,9 +56,7 @@
+ "de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"URN-prefiksin rakenteen on oltava muotoa \"urn:\"&lt;NID&gt;\":\"&lt;NSS "
+-"&gt;."
++msgstr "URN-prefiksin rakenteen on oltava muotoa \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "URN-suffiksi"
+diff -ru a/plugins/pubIds/urn/locale/gl/locale.po b/plugins/pubIds/urn/locale/gl/locale.po
+--- a/plugins/pubIds/urn/locale/gl/locale.po	2026-10-01 02:09:55.859300012 +0000
++++ b/plugins/pubIds/urn/locale/gl/locale.po	2026-10-01 02:09:55.882587526 +0000
+@@ -52,8 +52,7 @@
+ "nbn:de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"O padrón do prefixo URN debe ter a forma \"urn:\"&lt;NID&gt;\":\"&lt;NSS&gt;."
++msgstr "O padrón do prefixo URN debe ter a forma \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "Sufixo URN"
+diff -ru a/plugins/pubIds/urn/locale/hr/locale.po b/plugins/pubIds/urn/locale/hr/locale.po
+--- a/plugins/pubIds/urn/locale/hr/locale.po	2026-10-01 02:09:55.859345231 +0000
++++ b/plugins/pubIds/urn/locale/hr/locale.po	2026-10-01 02:09:55.882690922 +0000
+@@ -58,8 +58,7 @@
+ "de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"URN prefiks uzorak mora biti u obliku \"urn:\"&lt;NID&gt;\":\"&lt;NSS&gt;."
++msgstr "URN prefiks uzorak mora biti u obliku \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "URN sufiks"
+diff -ru a/plugins/pubIds/urn/locale/hu/locale.po b/plugins/pubIds/urn/locale/hu/locale.po
+--- a/plugins/pubIds/urn/locale/hu/locale.po	2026-10-01 02:09:55.859391981 +0000
++++ b/plugins/pubIds/urn/locale/hu/locale.po	2026-10-01 02:09:55.882772696 +0000
+@@ -58,9 +58,7 @@
+ "Az URN előtag az URN fix, soha nem változó része (pl.: \"urn:nbn:de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"Az URN előtagnak az alábbi mintát kell követnie: \"urn:\"&lt;NID&gt;\":\"&lt;"
+-"NSS&gt;\"."
++msgstr "Az URN előtagnak az alábbi mintát kell követnie: \"urn:\" NID \":\" NSS \"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "URN utótag"
+diff -ru a/plugins/pubIds/urn/locale/mk/locale.po b/plugins/pubIds/urn/locale/mk/locale.po
+--- a/plugins/pubIds/urn/locale/mk/locale.po	2026-10-01 02:09:55.859443099 +0000
++++ b/plugins/pubIds/urn/locale/mk/locale.po	2026-10-01 02:09:55.882846577 +0000
+@@ -56,9 +56,7 @@
+ msgstr "Префиксот на URN е неменлив дел од URN."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"Моделот на префиксот URN мора да биде во следниот формат \"urn:\"&lt;NID&gt;"
+-"\":\"&lt;NSS&gt;."
++msgstr "Моделот на префиксот URN мора да биде во следниот формат \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "URN Суфикс"
+diff -ru a/plugins/pubIds/urn/locale/nb_NO/locale.po b/plugins/pubIds/urn/locale/nb_NO/locale.po
+--- a/plugins/pubIds/urn/locale/nb_NO/locale.po	2026-10-01 02:09:55.859489949 +0000
++++ b/plugins/pubIds/urn/locale/nb_NO/locale.po	2026-10-01 02:09:55.882898526 +0000
+@@ -54,7 +54,7 @@
+ "de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr "URN-prefikset skal ha formatet \"urn:\"&lt;NID&gt;\":\"&lt;NSS&gt;."
++msgstr "URN-prefikset skal ha formatet \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "URN-suffiks"
+diff -ru a/plugins/pubIds/urn/locale/pl/locale.po b/plugins/pubIds/urn/locale/pl/locale.po
+--- a/plugins/pubIds/urn/locale/pl/locale.po	2026-10-01 02:09:55.859534718 +0000
++++ b/plugins/pubIds/urn/locale/pl/locale.po	2026-10-01 02:09:55.882959698 +0000
+@@ -54,8 +54,7 @@
+ "\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"Wzór prefiks URN musi być w formie \"urn:\"&lt;NID&gt;\":\"&lt;NSS&gt;."
++msgstr "Wzór prefiks URN musi być w formie \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "Sufiks URN"
+diff -ru a/plugins/pubIds/urn/locale/pt/locale.po b/plugins/pubIds/urn/locale/pt/locale.po
+--- a/plugins/pubIds/urn/locale/pt/locale.po	2026-10-01 02:09:55.859581378 +0000
++++ b/plugins/pubIds/urn/locale/pt/locale.po	2026-10-01 02:09:55.883032628 +0000
+@@ -46,8 +46,7 @@
+ msgstr "Prefixo URN"
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"O prefixo padrão URN deve estar na forma \"urn:\"&lt;NID&gt;\":\"&lt;NSS&gt;."
++msgstr "O prefixo padrão URN deve estar na forma \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "Sufixo URN"
+diff -ru a/plugins/pubIds/urn/locale/pt_BR/locale.po b/plugins/pubIds/urn/locale/pt_BR/locale.po
+--- a/plugins/pubIds/urn/locale/pt_BR/locale.po	2026-10-01 02:09:55.859635299 +0000
++++ b/plugins/pubIds/urn/locale/pt_BR/locale.po	2026-10-01 02:09:55.883088022 +0000
+@@ -55,9 +55,7 @@
+ "de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"O padrão de prefixo URN deve estar no formato \"urn:\"&lt;NID&gt;\":\"&lt;"
+-"NSS&gt;."
++msgstr "O padrão de prefixo URN deve estar no formato \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "Sufixo URN"
+diff -ru a/plugins/pubIds/urn/locale/ro/locale.po b/plugins/pubIds/urn/locale/ro/locale.po
+--- a/plugins/pubIds/urn/locale/ro/locale.po	2026-10-01 02:09:55.859687047 +0000
++++ b/plugins/pubIds/urn/locale/ro/locale.po	2026-10-01 02:09:55.883189605 +0000
+@@ -32,9 +32,7 @@
+ msgstr "Prefix URN"
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"Modelul de prefix URN trebuie să fie sub forma "
+-"„urn:”&lt;NID&gt;”:”&lt;NSS&gt;."
++msgstr "Modelul de prefix URN trebuie să fie sub forma „urn:” NID ”:” NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "Sufix URN"
+diff -ru a/plugins/pubIds/urn/locale/ru/locale.po b/plugins/pubIds/urn/locale/ru/locale.po
+--- a/plugins/pubIds/urn/locale/ru/locale.po	2026-10-01 02:09:55.859732987 +0000
++++ b/plugins/pubIds/urn/locale/ru/locale.po	2026-10-01 02:09:55.883268996 +0000
+@@ -57,8 +57,7 @@
+ "«urn:nbn:de:0000-»)."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"Шаблон префикса URN должен быть в форме \"urn:\"&lt;NID&gt;\":\"&lt;NSS&gt;."
++msgstr "Шаблон префикса URN должен быть в форме \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "Суффикс URN"
+diff -ru a/plugins/pubIds/urn/locale/sl/locale.po b/plugins/pubIds/urn/locale/sl/locale.po
+--- a/plugins/pubIds/urn/locale/sl/locale.po	2026-10-01 02:09:55.859781550 +0000
++++ b/plugins/pubIds/urn/locale/sl/locale.po	2026-10-01 02:09:55.883331289 +0000
+@@ -60,8 +60,7 @@
+ ":nbn:de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"Vzorec URN predpone mora imeti obliko \"urn:\"&lt;NID&gt;\":\"&lt;NSS&gt;."
++msgstr "Vzorec URN predpone mora imeti obliko \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "URN pripona"
+diff -ru a/plugins/pubIds/urn/locale/tr/locale.po b/plugins/pubIds/urn/locale/tr/locale.po
+--- a/plugins/pubIds/urn/locale/tr/locale.po	2026-10-01 02:09:55.859831716 +0000
++++ b/plugins/pubIds/urn/locale/tr/locale.po	2026-10-01 02:09:55.883391991 +0000
+@@ -55,7 +55,7 @@
+ "URN ön eki URN'nin sabit, asla değişmeyen (e.g. “urn:nbn:de:0000-“) kısmıdır."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr "URN ön ek modeli “urn:”&lt;NID&gt;”:”&lt;NSS&gt; biçiminde olmalıdır."
++msgstr "URN ön ek modeli “urn:” NID ”:” NSS biçiminde olmalıdır."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "URN Son eki"
+diff -ru a/plugins/pubIds/urn/locale/uk/locale.po b/plugins/pubIds/urn/locale/uk/locale.po
+--- a/plugins/pubIds/urn/locale/uk/locale.po	2026-10-01 02:09:55.859885236 +0000
++++ b/plugins/pubIds/urn/locale/uk/locale.po	2026-10-01 02:09:55.883465022 +0000
+@@ -58,9 +58,7 @@
+ "\"urn:nbn:de:0000-\")."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.form.urnPrefixPattern"
+-msgstr ""
+-"Шаблон префіксу URN має бути сформовано за зразком \"urn:\"&lt;NID&gt;\":"
+-"\"&lt;NSS&gt;."
++msgstr "Шаблон префіксу URN має бути сформовано за зразком \"urn:\" NID \":\" NSS."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffix"
+ msgstr "URN Суфікс"

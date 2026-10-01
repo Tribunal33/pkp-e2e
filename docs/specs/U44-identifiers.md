@@ -861,6 +861,11 @@ Left out of the scenarios above, by reason:
     report `docs/issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md`):
     a press's URN settings saved with "Chapters" alone and with "Files"
     alone
+  - the guard for A10 (Fields, the URN plugin's settings window;
+    scenario 2 passes it; issue report
+    `docs/issues/U44-A10-urn-prefix-refusal-written-out-brackets.md`):
+    a prefix without "urn:" refused with the message under "URN Prefix"
+    reading the form with no written-out codes
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -872,8 +877,6 @@ Left out of the scenarios above, by reason:
     with galley rows only (Rule 17)
 - **Register carries it**:
   - A12 (a URN differing from another only in case accepted; Rule 11)
-  - A10 (the settings window's written-out angle brackets; Fields, the
-    URN plugin's settings window; scenario 2 passes it)
   - OMP6 (a press file's default URN without the format number; Rule 8)
 - **No seed**:
   - an issue galley's "Publisher ID" on an existing issue galley, its
@@ -920,7 +923,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | The assign box on a galley's, issue's, chapter's, format's or file's "Identifiers" tab does not name the URN | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | URN settings: a suffix pattern of only spaces is refused with a raw text code instead of a message | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | A Layout Editor, or anyone who may not edit the version, is offered the URN's "Assign" and "Clear" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A10](#a10) | The URN prefix refusal shows "&amp;lt;NID&amp;gt;" under the box and in the notice | 🐞 | minor | — |
+| [A10](#a10) | URN settings: a refused URN prefix's message shows "&lt;NID&gt;" codes under the box and in the notice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | URN settings: while "Use the pattern entered below…" is selected, each click on a box raises a script error | 🐞 | low · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | "Add Check Number" on a tab writes "NaN" into an empty suffix box | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | After "Clear" on a galley's, chapter's, format's or file's "Identifiers" tab, the removed URN stays shown | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1083,13 +1086,21 @@ patterns." or a typed pattern). OPS has no URN plugin.
 Basis: probe, 2026-10-01. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — The URN prefix refusal shows "&amp;lt;NID&amp;gt;"** · 🐞 · minor.
-A prefix not shaped "urn:…:" is refused, rightly. The top of the
-window reads `The URN prefix pattern must be in the form "urn:"<NID>":"<NSS>.`,
-but the message under the box and the notice at the top right read
-`…"urn:"&lt;NID&gt;":"&lt;NSS&gt;."`, the angle brackets written out as
-codes.
-Basis: probe, 2026-09-24. <sup>f-a10</sup>
+**A10 — URN settings: a refused URN prefix's message shows "&lt;NID&gt;" codes under the box and in the notice** · 🐞 · low.
+In the URN plugin's settings window, a "URN Prefix" not shaped
+"urn:…:" is refused on "Save", rightly. The message under the box reads
+`The URN prefix pattern must be in the form "urn:"&lt;NID&gt;":"&lt;NSS&gt;.`:
+the angle brackets of the notation show as the HTML codes `&lt;` and
+`&gt;`. The notice at the top right of the page shows the same text,
+but only after the manager's next successful save, next to "Your
+changes have been saved.".
+Nothing is lost: once the prefix is corrected, the settings save. The
+fix is a text change in the plugin's message and its translations.
+It shows only on a journal or press that has turned the URN plugin on
+(OPS has no URN plugin), in English and in every language that
+translates the message except Thai (OJS) and French (OMP): 45 of the
+OJS plugin's translations and 20 of OMP's.
+Basis: probe, 2026-10-01. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — URN settings: while "Use the pattern entered below…" is selected, each click on a box raises a script error** · 🐞 · low · crash: script.
@@ -1907,6 +1918,7 @@ Issue report: [pkp-e2e#82](https://github.com/jardakotesovec/pkp-e2e/issues/82) 
 refusal for `nbn:de:0000-`, `urn:nbn` and `URN:NBN:DE:0000-`, with the
 escaped form under the box and in the notice and the plain one in the
 summary at the top (`…form.urnPrefixPattern`).
+Issue report: [docs/issues/U44-A10-urn-prefix-refusal-written-out-brackets.md](../issues/U44-A10-urn-prefix-refusal-written-out-brackets.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-24 (note q10), OJS and OMP: the page
