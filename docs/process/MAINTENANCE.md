@@ -167,7 +167,9 @@ leaving the slot clean; otherwise it works one spec from step 1. A
 session asked for on Mattermost checks the same count and says so when
 it would make a third. It takes the specs from the top
 of `docs/tracking/issues-queue.md` and works every 🐞 entry in their
-registers. The ❓ and ✅ entries stay out: a question needs a ruling,
+registers. On a workstation, `node bin/issues-loop.js` runs one-spec
+sessions back to back, each a fresh headless session, and stops at the
+first one that does not end clean. The ❓ and ✅ entries stay out: a question needs a ruling,
 not a fix.
 
 1. Read the PROGRESS banner, this section, `REPORT.md` and the queue;
