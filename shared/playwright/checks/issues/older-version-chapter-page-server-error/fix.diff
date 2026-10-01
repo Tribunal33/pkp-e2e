@@ -1,0 +1,21 @@
+--- a/classes/monograph/ChapterDAO.php
++++ b/classes/monograph/ChapterDAO.php
+@@ -435,10 +435,14 @@
+     public function getCurrentPublicationChapterDoi(Publication $currentPublication, Chapter $chapter): ?Doi
+     {
+         $doiId = DB::table('submission_chapters')
+-            ->select('doi_id')
+-            ->whereIn('publication_id', $currentPublication->getId())
+-            ->where('source_chapter_id', '=', $chapter->getData('sourceChapterId'))
+-            ->get();
++            ->where('publication_id', '=', $currentPublication->getId())
++            ->where(function ($query) use ($chapter) {
++                $sourceChapterId = $chapter->getData('sourceChapterId');
++                $query->where('source_chapter_id', '=', $sourceChapterId)
++                    ->orWhere(fn ($query) => $query->whereNull('source_chapter_id')->where('chapter_id', '=', $sourceChapterId));
++            })
++            ->whereNotNull('doi_id')
++            ->value('doi_id');
+ 
+         return $doiId ? Repo::doi()->get((int) $doiId) : null;
+     }

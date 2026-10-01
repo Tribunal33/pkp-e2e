@@ -1057,6 +1057,10 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A19 (issue report
+    `docs/issues/U69-A19-older-version-chapter-page-server-error.md`):
+    an older version's chapter page opening under the outdated notice
+    on a press with "DOI Versioning" "No"
   - the guard for A3 (issue report
     `docs/issues/U69-A3-version-address-no-version-server-error.md`): a
     book's version address with an id that is none of its versions
@@ -1193,7 +1197,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | On a press, a reader who opens a book's PDF gets an empty viewer, and no download saves the file | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | The book's and chapter pages show raw codes in French | 🐞 | user-visible | — |
 | [A16](#a16) | A book's earlier URL Path shows a server error page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A19](#a19) | An older version's chapter page shows a server error page | 🐞 | user-visible · crash: server | — |
+| [A19](#a19) | An older version's chapter page of a book shows a blank server error page to every reader | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A1](#a1) | An address that names no book asks visitors to sign in | 🐞 | minor | — |
 | [A3](#a3) | A version address that names no version fails with a server error | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | A new version's preview also calls itself outdated, dated today | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1401,13 +1405,25 @@ again. A free file's Login page returns to the file (Rule 13c).
 Basis: probe, 2026-09-29. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — An older version's chapter page shows a server error page** · 🐞 · user-visible · crash: server.
-On a press whose "DOI Versioning" reads "No" (a new press's default), an
-older version's chapter page shows a blank server error page, whether
-its address is typed or pressed in the older version's table of
-contents or in a chapter's "Versions" list; the current version's
-chapter pages open. The app fails.
-Basis: probe, 2026-09-28. <sup>f-a19</sup>
+**A19 — An older version's chapter page of a book shows a blank server error page to every reader** · 🐞 · medium · crash: server.
+The server fails when a reader opens a chapter's page in an older
+version of a book. Instead of the chapter under the "This is an outdated
+version" notice, the reader gets a blank server error page. All three
+ways in fail: the address typed, the chapter's link in the older
+version's table of contents, and the older version's link in the chapter
+page's "Versions" list.
+The older version's book page and the current version's chapter pages
+still open.
+It needs three things, and the first is the default:
+- the press's "DOI Versioning" reads "No", as it does until someone
+  changes it;
+- the chapter has its own page ("Chapter Page" is a tick on each
+  chapter);
+- the chapter has no DOI in the older version, which is every chapter
+  of a press that assigns no chapter DOIs.
+A DOI assigned after the second version is published does not help: it
+goes to the current version's chapter only.
+Basis: probe, 2026-10-01. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — A later version's chapter repeats its own date** · 🐞 · minor.
@@ -1716,6 +1732,7 @@ Issue report: [pkp-e2e#284](https://github.com/jardakotesovec/pkp-e2e/issues/284
 
 <a id="fn-f-a19"></a>
 **f-a19** — Note l. Live-probed 2026-09-28 (td17): 500 at `{press}/catalog/book/{id}/version/{id}/chapter/{n}`, typed, from the older version's table of contents and from "Versions", with the book named by number or URL Path, on every press left at "DOI Versioning" "No"; the same page opened on a press seeded with it "Yes".
+Issue report: [docs/issues/U69-A19-older-version-chapter-page-server-error.md](../issues/U69-A19-older-version-chapter-page-server-error.md).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Note l: a new version copies each chapter with its `datePublished`, and the first date is the source chapter's. Live-probed 2026-09-28 (td17).
