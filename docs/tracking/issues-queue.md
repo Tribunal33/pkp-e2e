@@ -61,7 +61,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 | [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 |  |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 |  |
 | [U73](../specs/U73-publication-formats-proof-terms.md) | 18 | 0 | 3 |  |
-| [U40](../specs/U40-publication-metadata.md) | 8 | 0 | 3 |  |
+| [U40](../specs/U40-publication-metadata.md) | 8 | 0 | 3 | **A1 taken: issues session, workstation s0, 2026-10-01** (joined to U21 A20) |
 | [U30](../specs/U30-author-response-to-reviews.md) | 7 | 0 | 3 |  |
 | [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 |  |
 | [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 |  |
