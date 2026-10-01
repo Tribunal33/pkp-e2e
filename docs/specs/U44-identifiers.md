@@ -1770,7 +1770,7 @@ part of OMP5.
 **f-a2** — `PKPPublicIdentifiersForm::execute()`: `if
 ($this->getData('publisherId')) { setStoredPubId(…) }`; nothing clears
 it. Live-probed 2026-09-24 (note q5). An issue's and a press file's value is never stored at all (notes f-ojs3, f-omp5).
-Issue report: [docs/issues/U44-A2-publisher-id-cannot-be-removed.md](../issues/U44-A2-publisher-id-cannot-be-removed.md).
+Issue report: [pkp-e2e#76](https://github.com/jardakotesovec/pkp-e2e/issues/76) ([docs/issues/U44-A2-publisher-id-cannot-be-removed.md](../issues/U44-A2-publisher-id-cannot-be-removed.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — The publication schema's `pub-id::publisher-id` has only
