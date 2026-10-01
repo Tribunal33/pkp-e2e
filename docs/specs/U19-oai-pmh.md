@@ -1175,6 +1175,10 @@ Left out of the scenarios above, by reason:
     a journal's `marcxml` and `oai_marc` records valid for the schemas they
     name, with field 773, the issue date, the affiliation and the ISSN where
     a reader looks for them {OJS} (once fixed)
+  - the guard for A15 (issue report
+    `docs/issues/U19-A15-oai-marc-008-date-percent-signs.md`): a journal's
+    MARC field 008 carrying the publication date as six digits and the year
+    in both MARC formats {OJS} (once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1297,7 +1301,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | With "DRIVER" enabled, an article in no issue loses its `driver` mark when unpublished {OJS} | 🐞 | latent | — |
 | [A12](#a12) | A journal's MARC records in OAI-PMH do not follow the schemas they name, and software reading them misses the journal, the issue date, the ISSN or the affiliations {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | Records read in French carry untranslated keys {OJS OMP} | 🐞 | minor | — |
-| [A15](#a15) | MARC field 008 reads "%26%09%26 %2026" instead of the publication date {OJS} | 🐞 | minor | — |
+| [A15](#a15) | A journal's MARC records in OAI-PMH write the publication date in field 008 with "%" signs ("%26%09%30 %2026") {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | An OAI-PMH request that gives an argument twice gets a server error instead of the refusal message | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | OAI-PMH GetRecord answers a malformed identifier with a record, not "Identifier is not in a valid format" {OMP OPS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A press's or preprint server's OAI record keeps its earlier datestamp after an edit or a second publish {OMP OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1505,11 +1509,18 @@ Lean: 🐞; the record already writes the tag everywhere else.
 Basis: probe, 2026-09-26. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — MARC field 008 reads "%26%09%26 %2026"** {OJS} · 🐞 · minor.
-A harvester reading MARC field 008 expects the publication date, such as
-"260926 2026" for 26 September 2026. Every `oai_marc` and `marcxml`
-record carries "%26%09%26 %2026" in its place.
-Basis: probe, 2026-09-26. <sup>f-a15</sup>
+**A15 — A journal's MARC records in OAI-PMH write the publication date in field 008 with "%" signs ("%26%09%30 %2026")** {OJS} · 🐞 · medium.
+A harvester reading MARC field 008 of a journal's article expects the
+article's publication date as six digits, then the publication year,
+such as "260930 2026" for 30 September 2026. Every `oai_marc` and
+`marcxml` record carries "%26%09%30 %2026" in its place. On a server
+whose time zone is east of UTC the day is also the one before:
+"%26%09%29 %2026". Field 008 is read by position, and the four "%" signs
+move everything after them. Software that takes the field by position
+gets, without any error, "%26%09" as the date, "30 %" as the year and
+blanks as the language code. The same record in Dublin Core carries the
+date correctly.
+Basis: probe, 2026-10-01. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — An OAI-PMH request that gives an argument twice gets a server error instead of the refusal message** · 🐞 · low · crash: server.
@@ -1922,6 +1933,7 @@ Issue report: [pkp-e2e#305](https://github.com/jardakotesovec/pkp-e2e/issues/305
 
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-26, OJS: every `oai_marc` and `marcxml` record read `"%26%09%26 %2026                        eng  "`, quotes included. Code: note g (`datePublished|date_format:"%y%m%d %Y"`; the `%` signs are printed as they stand).
+Issue report: [docs/issues/U19-A15-oai-marc-008-date-percent-signs.md](../issues/U19-A15-oai-marc-008-date-percent-signs.md).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Live-probed 2026-09-26, all three apps (OJS twice): `verb=ListRecords&metadataPrefix=oai_dc&metadataPrefix=oai_dc`, and the same with `set` twice, answered 500 with an empty body; the server log: `PKP\oai\OAI::getParam(): Return value must be of type ?string, array returned`; the next Identify answered. Code: notes c, m.

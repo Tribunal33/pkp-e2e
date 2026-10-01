@@ -1,0 +1,22 @@
+--- a/plugins/oaiMetadataFormats/marc/templates/record.tpl
++++ b/plugins/oaiMetadataFormats/marc/templates/record.tpl
+@@ -11,7 +11,7 @@
+ 	xmlns="http://www.openarchives.org/OAI/1.1/oai_marc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ 	xsi:schemaLocation="http://www.openarchives.org/OAI/1.1/oai_marc http://www.openarchives.org/OAI/1.1/oai_marc.xsd">
+ 	{if $publication->getData('datePublished')}
+-		<fixfield id="008">"{$publication->getData('datePublished')|strtotime|date_format:"%y%m%d %Y"}                        eng  "</fixfield>
++		<fixfield id="008">"{$publication->getData('datePublished')|date_format:"ymd Y"}                        eng  "</fixfield>
+ 	{/if}
+ 	{if $journal->getData('onlineIssn')}
+ 		<varfield id="022" i1="#" i2="#">
+--- a/plugins/oaiMetadataFormats/marcxml/templates/record.tpl
++++ b/plugins/oaiMetadataFormats/marcxml/templates/record.tpl
+@@ -13,7 +13,7 @@
+ 	xsi:schemaLocation="http://www.loc.gov/MARC21/slim https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+ 	<leader>     nmb a2200000Iu 4500</leader>
+ 	{if $publication->getData('datePublished')}
+-		<controlfield tag="008">"{$publication->getData('datePublished')|strtotime|date_format:"%y%m%d %Y"}                        eng  "</controlfield>
++		<controlfield tag="008">"{$publication->getData('datePublished')|date_format:"ymd Y"}                        eng  "</controlfield>
+ 	{/if}
+ 	{if $journal->getData('onlineIssn')}
+ 		<datafield tag="022" ind1="#" ind2="#">
