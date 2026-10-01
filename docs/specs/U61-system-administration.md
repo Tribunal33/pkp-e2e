@@ -1389,7 +1389,7 @@ GuzzleHttp\Exception\ConnectException: cURL error 7 … for
 https://pkp.sfu.ca/ojs/xml/ojs-version.xml" (OMP and OPS their own
 version files), after the notice check's own caught failure for the same
 request.
-Issue report: [docs/issues/U61-A1-check-for-updates-offline-empty-page.md](../issues/U61-A1-check-for-updates-offline-empty-page.md).
+Issue report: [pkp-e2e#381](https://github.com/jardakotesovec/pkp-e2e/issues/381) ([docs/issues/U61-A1-check-for-updates-offline-empty-page.md](../issues/U61-A1-check-for-updates-offline-empty-page.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `clearDataCache()`, `clearTemplateCache()` and
@@ -1423,7 +1423,7 @@ data and two without, the two stayed; only jobs without data, `POST
 index/api/v1/jobs/redispatch/all` answered 500 and the "Error" window
 read "SQLSTATE[23502]: Not null violation … null value in column
 "payload" of relation "jobs" …"; nothing was requeued.
-Issue report: [docs/issues/U61-A4-requeue-all-failed-jobs-database-error.md](../issues/U61-A4-requeue-all-failed-jobs-database-error.md).
+Issue report: [pkp-e2e#382](https://github.com/jardakotesovec/pkp-e2e/issues/382) ([docs/issues/U61-A4-requeue-all-failed-jobs-database-error.md](../issues/U61-A4-requeue-all-failed-jobs-database-error.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `config.TEMPLATE.inc.php` `[cache]`: `web_cache = Off`,
@@ -1443,7 +1443,7 @@ loading circle was turning beside the button, the button pressable, the
 row and the old total kept. The same after A4's 500. On OJS, with page
 links under the table, a circle also turned in place of the page number.
 The request is `FailedJobsPage.vue`'s `requeueAll()` (note s).
-Issue report: [docs/issues/U61-A6-requeue-all-refused-circle-keeps-turning.md](../issues/U61-A6-requeue-all-refused-circle-keeps-turning.md).
+Issue report: [pkp-e2e#383](https://github.com/jardakotesovec/pkp-e2e/issues/383) ([docs/issues/U61-A6-requeue-all-refused-circle-keeps-turning.md](../issues/U61-A6-requeue-all-refused-circle-keeps-turning.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-29 (`index/fr_CA/admin` as `admin`, all
@@ -1460,7 +1460,7 @@ OPS's `locale/fr_CA/admin.po`. Opening "Paramètres du site" also
 answered 500 on the plugin gallery's list
 (`plugin-gallery-grid/fetch-grid`), on all three apps: the Plugins
 tab's known failure, not this page's.
-Issue report: [docs/issues/U61-A7-admin-page-french-site-management-raw-key.md](../issues/U61-A7-admin-page-french-site-management-raw-key.md).
+Issue report: [pkp-e2e#384](https://github.com/jardakotesovec/pkp-e2e/issues/384) ([docs/issues/U61-A7-admin-page-french-site-management-raw-key.md](../issues/U61-A7-admin-page-french-site-management-raw-key.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `site.upgradeAvailable.admin` in each app's
