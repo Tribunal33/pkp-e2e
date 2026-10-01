@@ -2691,7 +2691,7 @@ none before the preprint server's.
 **f-ojs12** — Note p: the open-review display is prepared but never
 mounted on the article page. Live-probed 2026-09-28, note p, OJS, two
 runs, with an unticked review as the control.
-Issue report: [docs/issues/U13-OJS12-public-review-never-shown.md](../issues/U13-OJS12-public-review-never-shown.md).
+Issue report: [pkp-e2e#218](https://github.com/jardakotesovec/pkp-e2e/issues/218) ([docs/issues/U13-OJS12-public-review-never-shown.md](../issues/U13-OJS12-public-review-never-shown.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note f: `preprint_details.tpl` shows the outdated notice
