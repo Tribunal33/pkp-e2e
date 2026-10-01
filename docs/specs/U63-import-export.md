@@ -1093,6 +1093,12 @@ Left out of the scenarios above, by reason:
     deposit with two journals, one with automatic deposit on, the other
     holding a "Needs Sync" article: the article stays "Needs Sync" and
     no deposit is queued for it {OJS}
+  - the guard A13's issue report names, once fixed: a users file with
+    an element the format does not know, imported: the "Results" tab
+    reads "Validation errors:" with the reason {OJS OMP}
+  - the guard A21's issue report names, once fixed: a users file whose
+    second user has no registration date, imported: every user in the
+    file imported {OJS OMP}
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1200,14 +1206,14 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | A published submission matches none of the export list's "Stages" filters | 🐞 | minor | — |
 | [A11](#a11) | Past one page, the export list's "Select All" never turns into "Select None", and ticks on other pages are not exported | 🐞 | minor | — |
 | [A12](#a12) | A Native XML export with nothing ticked opens an empty results tab: the server fails | 🐞 | minor · crash: server | — |
-| [A13](#a13) | A users file the import cannot read ends in an empty "Results" tab: the server fails | 🐞 | minor · crash: server | — |
+| [A13](#a13) | Importing a users file with a format error leaves an empty "Results" tab instead of the reasons | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | For an existing account, the results say a new password was sent, but nothing is sent and nothing changes | 🐞 | minor | — |
 | [A16](#a16) | On a server whose PHP is older than 8.4, a users import treats every password stored the installation's own way as stored another way | 🐞 | user-visible | — |
 | [A17](#a17) | Importing the same users file again adds a role that starts or ends on a later date once more | 🐞 | minor | — |
 | [A18](#a18) | A users file with an empty or unreadable role date stops part-way: the server fails, the tab stays empty, the user gets no role | 🐞 | user-visible · crash: server | — |
 | [A19](#a19) | A tool's address with the tool's name left off opens a blank page: the server fails | 🐞 | minor · crash: server | — |
 | [A20](#a20) | A submission with a title prefix comes back from a Native XML export and import titled "The The …" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A21](#a21) | A users file whose user has no registration date stops part-way: the server fails and the "Results" tab stays empty | 🐞 | user-visible · crash: server | — |
+| [A21](#a21) | A users import stops at the first user without a registration date, silently leaving the rest out | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS1](#ojs1) | The DOAJ list's issue link opens the issue's window headed "DOI Plugin Settings" | 🐞 | minor | — |
 | [OJS2](#ojs2) | With "DOAJ Plugin" off, the Plugins list still offers "DOAJ Export Plugin" and its "Import/Export Data" | 🐞 | minor | — |
 | [OJS3](#ojs3) | Once "NLM Title Abbreviation" is saved empty, the PubMed file's journal title is empty | 🐞 | minor | — |
@@ -1337,13 +1343,16 @@ with no text and no button.
 Basis: probe. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — A users file the import cannot read ends in an empty tab** · 🐞 · minor · crash: server.
-A users file that does not match the format (a user with no password,
-an unknown element, another kind of document, a file that is not XML)
-should be refused with the reason; instead the server fails, the
-"Results" tab stays empty, and the manager is not told that nothing was
-imported. {OJS OMP}
-Basis: probe. <sup>f-a13</sup>
+**A13 — Importing a users file with a format error leaves an empty "Results" tab instead of the reasons** · 🐞 · medium · crash: server.
+A manager imports a users file that does not match the users format,
+such as a user with no password, an element the format does not know, or
+a file that is not XML at all. The import request fails on the server. A
+"Results" tab opens with only its "Close" button and a blank panel: no
+message, no notice, no sign that anything is still loading. The manager
+expected the tab to list why the file was refused. No user is imported.
+The manager cannot tell a refused file from one still being processed,
+and has no hint of what to correct. {OJS OMP}
+Basis: probe, 2026-10-01. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — "Export Users" with nothing ticked fails** · ❓ · minor · crash: server.
@@ -1431,15 +1440,14 @@ each copy's title by hand.
 Basis: probe, 2026-10-01. <sup>f-a20</sup>
 
 <a id="a21"></a>
-**A21 — A users file whose user has no registration date stops part-way** · 🐞 · user-visible · crash: server.
-The users file format lets a user's registration date be left out, so
-a file without one should import that user like any other. Instead
-the import stops at that user: the server fails and the "Results" tab
-opens empty, with nothing said. The users listed before
-it in the file are imported with their roles; it and the users after
-it are not. The manager is left with a half-done import and no sign of
-which users are missing. A file in which every user has a
-registration date imports normally. {OJS OMP}
+**A21 — A users import stops at the first user without a registration date, silently leaving the rest out** · 🐞 · medium · crash: server.
+The users file format lets a user's registration date be left out. When
+a manager imports a file in which a user has none, the import stops at
+that user. The request fails on the server and the "Results" tab opens
+blank. The users listed before it are imported with their roles; that
+user and every one after it are not. Nothing tells the manager which
+users are missing. Importing the file again with a registration date on
+every user brings in the rest. {OJS OMP}
 Basis: probe, 2026-10-01. <sup>f-a21</sup>
 
 <a id="a22"></a>
@@ -2574,6 +2582,7 @@ on OJS.
 …/UserImportExportPlugin/import?temporaryFileId=…` answered 500 for
 each of the four files (the format check throws instead of reaching the
 `validationErrors` branch); no account was created.
+Issue report: [docs/issues/U63-A13-users-import-unreadable-file-empty-results.md](../issues/U63-A13-users-import-unreadable-file-empty-results.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-27, OJS and OMP, once each (note m):
@@ -2706,6 +2715,7 @@ SQLSTATE[23502]: Not null violation: 7 ERROR: null value in column
 "date_registered" of relation "users" violates not-null constraint".
 Control: the same three users each with `<date_registered>`: 200, the
 success sentence, three accounts.
+Issue report: [docs/issues/U63-A21-users-import-stops-at-user-without-registration-date.md](../issues/U63-A21-users-import-stops-at-user-without-registration-date.md).
 
 <a id="fn-f-a22"></a>
 **f-a22** — Note m (the users Collector's default status). Live-probed

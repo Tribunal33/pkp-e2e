@@ -1,0 +1,51 @@
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -2581,6 +2581,17 @@
+ "The username \"{$username}\" and the e-mail \"{$email}\" do not match to the "
+ "one and the same existing user."
+ 
++msgid "plugins.importexport.user.error.fileNotRead"
++msgstr ""
++"The file could not be read as a users XML file. No user has been imported."
++
++msgid "plugins.importexport.user.error.importStopped"
++msgstr ""
++"The import stopped because of an unexpected error. The users listed in the "
++"file before the one that failed have been imported, and new accounts among "
++"them may have been sent their welcome email. Check the users list before "
++"importing the file again."
++
+ msgid "plugins.importexport.user.error.invalidRoleDate"
+ msgstr ""
+ "The role \"{$userGroup}\" of the user \"{$username}\" has not been imported "
+--- a/lib/pkp/plugins/importexport/users/PKPUserImportExportPlugin.php
++++ b/lib/pkp/plugins/importexport/users/PKPUserImportExportPlugin.php
+@@ -18,6 +18,7 @@
+ 
+ use APP\facades\Repo;
+ use APP\template\TemplateManager;
++use Error;
+ use Exception;
+ use PKP\context\Context;
+ use PKP\core\JSONMessage;
+@@ -147,7 +148,19 @@
+                 libxml_use_internal_errors(true);
+ 
+                 $filter = $this->getUserImportExportFilter($context, $user);
+-                $users = $this->importUsers(file_get_contents($temporaryFilePath), $context, $user, $filter);
++                try {
++                    $users = $this->importUsers(file_get_contents($temporaryFilePath), $context, $user, $filter);
++                } catch (Error | Exception $e) {
++                    $users = null;
++                    if ($filter->getLastInput() === null) {
++                        // Filter::execute() refused the file before importing anything (results.tpl lists libxml's reasons when there are any)
++                        $filter->addError(__('plugins.importexport.user.error.fileNotRead'));
++                    } else {
++                        // The import stopped part-way: the users before the failing one are stored
++                        error_log((string) $e);
++                        $filter->addError(__('plugins.importexport.user.error.importStopped'));
++                    }
++                }
+                 $validationErrors = array_filter(libxml_get_errors(), function ($a) {
+                     return $a->level == LIBXML_ERR_ERROR || $a->level == LIBXML_ERR_FATAL;
+                 });
