@@ -2735,7 +2735,7 @@ Issue report: [pkp-e2e#241](https://github.com/jardakotesovec/pkp-e2e/issues/241
 **f-a8** — Note h: `ris.blade`'s `PY` and `Y2` lines (the version's
 date and the day of access) pass strftime patterns to
 `Carbon::format()`. Live-probed 2026-09-25, note q11, both apps.
-Issue report: [docs/issues/U13-A8-ris-download-dates-percent-signs.md](../issues/U13-A8-ris-download-dates-percent-signs.md).
+Issue report: [pkp-e2e#244](https://github.com/jardakotesovec/pkp-e2e/issues/244) ([docs/issues/U13-A8-ris-download-dates-percent-signs.md](../issues/U13-A8-ris-download-dates-percent-signs.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — With no format ticked, the list holds only the downloads and
