@@ -31,8 +31,10 @@ With "Message" left empty, "OK" on "Assign Participant" assigns the
 person and sends them nothing; only "User added as a stage participant."
 shows. The editor can still write the message by hand.
 
-Only a preprint server installed or created on this version is
-affected. A server upgraded from 3.5 keeps its letter.
+Every preprint server created on `main` is affected: the server of a
+new install, and a server added to a site that was upgraded from 3.5.
+A server that existed before the upgrade is not: it keeps the text of
+its "Assign Editor" message.
 
 ## Impact
 
@@ -42,7 +44,10 @@ affected. A server upgraded from 3.5 keeps its letter.
   notifies someone on a preprint and picks "Assign Editor". The list
   offers two predefined messages, this one and "Discussion
   (Production)".
-- **Way round**: type the message by hand in "Message".
+- **Way round**: type the message by hand in "Message". By the code, a
+  manager can also restore the text once for the whole server: edit
+  "Assign Editor" under Settings › Workflow › "Tasks and Discussions"
+  and save a text for it. Read in the code, not tried.
 
 Low: the person is assigned, and only the prepared text is missing.
 
@@ -154,10 +159,11 @@ Reach:
 
 - "Notify" and "Assign Participant" on a preprint's Production stage,
   its only stage: walked.
-- A server created on `main` (`PKPContextController::add()` calls
-  `installTaskTemplates()`), and a language installed later
-  (`InstallLanguageForm::execute()`): code. Both read the same registry
-  row.
+- A server created on `main`, on a new install or on a site upgraded
+  from 3.5: `PKPContextController::add()` calls
+  `installTaskTemplates($context)`, which reads the registry row for
+  the new server whatever the site's history. A language installed
+  later (`InstallLanguageForm::execute()`) reads the same row. Code.
 - A server upgraded from 3.5 is not affected: the upgrade
   (`I12593_EmailToTaskTemplates`) copies the 3.5 email template's text.
   Seen in the database after loading the 3.5 dataset on `main`: the
@@ -184,7 +190,14 @@ Reach:
   and the same request then fails on the next line for every template
   added in Settings, a fault with its own report
   ([U35-A10-added-message-template-not-sent.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U35-A10-added-message-template-not-sent.md)).
-- The way round is not affected, by the code:
+- A text saved for "Assign Editor" in Settings fills "Message"
+  afterwards, by the code. The Settings form sends `description` as a
+  string, `PKPEditTaskTemplateController::update()` passes it to the
+  model, and `MultilingualSettingAttribute::set()` stores a string
+  under the manager's current language. The template keeps its `key`,
+  and `getLocalizedData('description')` then returns the saved text,
+  for a reader in another language too. Not tried.
+- The typed message is not affected, by the code:
   `PKPStageParticipantNotifyForm::sendMessage()` sends the text typed in
   "Message" under the template's title and does not read the
   description. Read in the code only.
@@ -320,7 +333,8 @@ Small: one registry line in OPS and one line in pkp-lib.
   reason, closed and fixed) and `pkp/pkp-lib#8911` (missing email
   template texts in OMP, closed). The open PR `pkp/pkp-lib#13385`
   changes three pkp-lib files and no registry.
-- Not driven: the upgraded server's screens; a message typed by hand
+- Not driven: the upgraded server's screens; a server added to an
+  upgraded site; "Assign Editor" edited in Settings; a message typed by hand
   with "Assign Editor" chosen; an install that came through 3.3; a
   server created on screen on `main`; a language installed later; the
   French interface; roles other than the Preprint Server manager.

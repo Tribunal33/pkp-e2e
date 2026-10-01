@@ -1289,8 +1289,10 @@ keeps that text.
 With "Message" left empty, "OK" on "Assign Participant" assigns the
 person and sends them nothing; only "User added as a stage participant."
 shows. The editor can still write the message by hand.
-Only a preprint server installed or created on this version is
-affected. A server upgraded from 3.5 keeps its letter.
+Every preprint server created on `main` is affected: the server of a
+new install, and a server added to a site that was upgraded from 3.5.
+A server that existed before the upgrade is not: it keeps the text of
+its "Assign Editor" message.
 Basis: probe, 2026-10-01. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="ops3"></a>
