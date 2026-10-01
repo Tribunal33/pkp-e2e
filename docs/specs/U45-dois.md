@@ -4011,7 +4011,7 @@ deposit task.
 <a id="fn-f-ops3"></a>
 **f-ops3** — Live-probed 2026-09-26, OPS (both reads of the tab),
 against the journal's help.
-Issue report: [docs/issues/U45-OPS3-preprint-server-crossref-username-help-wording.md](../issues/U45-OPS3-preprint-server-crossref-username-help-wording.md).
+Issue report: [pkp-e2e#249](https://github.com/jardakotesovec/pkp-e2e/issues/249) ([docs/issues/U45-OPS3-preprint-server-crossref-username-help-wording.md](../issues/U45-OPS3-preprint-server-crossref-username-help-wording.md)).
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — `ops/classes/publication/Repository.php` `version()` clears
