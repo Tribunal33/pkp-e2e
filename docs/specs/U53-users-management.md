@@ -1892,7 +1892,7 @@ manager role and an empty "Start Date".
 `canLoginAs` / `canMergeUsers`; `UserGridHandler::editDisableUser()`
 refuses unless `getAdministrationLevel()` is `FULL` (note n). Live-probed
 2026-09-25: note td8.
-Issue report: [docs/issues/U53-A1-disable-user-offered-then-refused.md](../issues/U53-A1-disable-user-offered-then-refused.md).
+Issue report: [pkp-e2e#72](https://github.com/jardakotesovec/pkp-e2e/issues/72) ([docs/issues/U53-A1-disable-user-offered-then-refused.md](../issues/U53-A1-disable-user-offered-then-refused.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Code read 2026-09-25: note td9. The remove guard is only
