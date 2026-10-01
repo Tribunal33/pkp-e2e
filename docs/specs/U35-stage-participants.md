@@ -913,6 +913,10 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A11 (issue report
+    `docs/issues/U35-A11-anonymous-reviewer-assign-no-warning.md`):
+    a person with an anonymous review of the submission chosen in
+    "Assign", the warning read before "OK"
   - the guard for OPS2 (issue report
     `docs/issues/U35-OPS2-preprint-assign-editor-message-not-filled.md`):
     on a preprint server each predefined message of the Production stage
@@ -1000,7 +1004,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | "Edit" is logged as a new assignment | 🐞 | minor | — |
 | [A9](#a9) | A "Permissions" tick carries over when another role is chosen in "Assign", and is saved | 🐞 | minor | — |
 | [A10](#a10) | A message template added in Settings is listed but fills nothing and cannot be sent | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A11](#a11) | Choosing a person who reviews the submission anonymously shows no warning, and "OK" assigns them | 🐞 | user-visible | — |
+| [A11](#a11) | An editor assigning an anonymous reviewer of the submission as a participant gets no warning | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | "OK" on the "No changes can be made to this participant" window reports "The stage assignment has been changed." | 🐞 | minor | — |
 | [A14](#a14) | The Activity Log's "User" column names the participant, not the editor who assigned, changed or removed them | 🐞 | minor | — |
 | [A15](#a15) | The Submission stage's "Assign Editor" email ends with two footers | 🐞 | minor | — |
@@ -1140,17 +1144,20 @@ again under an installed template that is not limited.
 Basis: probe, 2026-10-01. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
-**A11 — No warning when choosing an anonymous reviewer** · 🐞 · user-visible.
-Choosing, in "Assign", a person whose review request on this submission is
-not declined and is "Anonymous Reviewer/Anonymous Author" or "Anonymous
-Reviewer/Disclosed Author" is expected to open the warning "The
-participant you selected has been assigned to conduct an anonymous review.
-If you assign them as a participant, they will have access to the author's
-identity. You are encouraged not to assign this participant unless you can
-independently ensure the integrity of the peer review process." Nothing
-appears, and "OK" assigns them, so an editor can undo the review's
+**A11 — An editor assigning an anonymous reviewer of the submission as a participant gets no warning** · 🐞 · medium.
+In "Assign", an editor chooses a person who reviews the submission
+anonymously. A warning is meant to open, saying that this person "will
+have access to the author's identity". Nothing opens, and "OK" assigns
+the person with "User added as a stage participant.".
+From then on the reviewer can open the submission's workflow, which
+shows the author's name. In this way an editor undoes a review's
 anonymity without being told.
-Basis: probe. <sup>[f-a11](#fn-a11)</sup>
+It happens while the submission is in a review stage. The person must
+hold a role that "Assign" offers there, such as Section editor. Their
+review of this submission must be of the type "Anonymous
+Reviewer/Anonymous Author" or "Anonymous Reviewer/Disclosed Author" and
+not declined. A preprint server has no review and is not affected.
+Basis: probe, 2026-10-01. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
 **A12 — "OK" reports a change where none can be made** · 🐞 · minor.
@@ -1434,6 +1441,7 @@ Issue report (a template limited to specific roles): [pkp-e2e#317](https://githu
 
 <a id="fn-a11"></a>
 **f-a11** — Live-probed 2026-09-22 (journal and press): a reviewer on round 1 with "Anonymous Reviewer/Anonymous Author", found under their Funding coordinator and Translator roles and chosen on the Submission stage and on the review stage, and a reviewer with "Anonymous Reviewer/Disclosed Author" on a scratch journal set to that type, and a press's Internal Review: no warning, and "OK" assigning them with "User added as a stage participant.". The window's data listed the right reviewers (not declined, anonymous types only, "Open" left out). Controls with no warning expected: a declined reviewer, a person with no review, Copyediting, and an "Open" review. Cause: note n. The warning dates from 2018; when the check broke was not traced.
+Issue report: [docs/issues/U35-A11-anonymous-reviewer-assign-no-warning.md](../issues/U35-A11-anonymous-reviewer-assign-no-warning.md).
 
 <a id="fn-a12"></a>
 **f-a12** — Live-probed 2026-09-22 (all three apps): a recommending Editor opening "Edit" on an Editor's, a Production editor's or (preprint server) a Preprint Server manager's row, their own included, and pressing "OK": the window closing with "The stage assignment has been changed.". Code: note h; the save runs the edit branch of note k.
