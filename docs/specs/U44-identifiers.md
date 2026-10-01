@@ -1918,7 +1918,7 @@ Issue report: [pkp-e2e#82](https://github.com/jardakotesovec/pkp-e2e/issues/82) 
 refusal for `nbn:de:0000-`, `urn:nbn` and `URN:NBN:DE:0000-`, with the
 escaped form under the box and in the notice and the plain one in the
 summary at the top (`…form.urnPrefixPattern`).
-Issue report: [docs/issues/U44-A10-urn-prefix-refusal-written-out-brackets.md](../issues/U44-A10-urn-prefix-refusal-written-out-brackets.md).
+Issue report: [pkp-e2e#138](https://github.com/jardakotesovec/pkp-e2e/issues/138) ([docs/issues/U44-A10-urn-prefix-refusal-written-out-brackets.md](../issues/U44-A10-urn-prefix-refusal-written-out-brackets.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-24 (note q10), OJS and OMP: the page
