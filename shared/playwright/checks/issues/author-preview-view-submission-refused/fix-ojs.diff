@@ -1,0 +1,25 @@
+--- a/pages/article/ArticleHandler.php
++++ b/pages/article/ArticleHandler.php
+@@ -237,6 +237,10 @@
+             'submissionFileId' => $this->submissionFileId,
+             'enablePublicComments' => $enablePublicComments,
+             'metricsByType' => $metricsByType,
++            // The preview notice's "View submission" link: the workflow page this user may open
++            'submissionWorkflowUrl' => $publication->getData('status') !== PKPPublication::STATUS_PUBLISHED
++                ? Repo::submission()->getWorkflowUrlByUserRoles($article)
++                : null,
+         ]);
+ 
+         $openReviewComponent = new OpenReviewComponent($article);
+--- a/templates/frontend/objects/article_details.tpl
++++ b/templates/frontend/objects/article_details.tpl
+@@ -78,8 +78,7 @@
+ 	{* Indicate if this is only a preview *}
+ 	{if $publication->getData('status') !== PKP\publication\PKPPublication::STATUS_PUBLISHED}
+ 	<div class="cmp_notification notice">
+-		{capture assign="submissionUrl"}{url page="dashboard" op="editorial" workflowSubmissionId=$article->getId()}{/capture}
+-		{translate key="submission.viewingPreview" url=$submissionUrl}
++		{translate key="submission.viewingPreview" url=$submissionWorkflowUrl|escape}
+ 	</div>
+ 	{* Notification that this is an old version *}
+ 	{elseif $currentPublication->getId() !== $publication->getId()}

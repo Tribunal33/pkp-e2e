@@ -1,0 +1,25 @@
+--- a/pages/catalog/CatalogBookHandler.php
++++ b/pages/catalog/CatalogBookHandler.php
+@@ -213,6 +213,10 @@
+             'firstPublication' => $firstPublication,
+             'currentPublication' => $submission->getCurrentPublication(),
+             'authorString' => $this->publication->getAuthorString(),
++            // The preview notice's "View submission" link: the workflow page this user may open
++            'submissionWorkflowUrl' => $this->publication->getData('status') !== PKPPublication::STATUS_PUBLISHED
++                ? Repo::submission()->getWorkflowUrlByUserRoles($submission)
++                : null,
+         ]);
+ 
+         // Provide the publication formats to the template
+--- a/templates/frontend/objects/monograph_full.tpl
++++ b/templates/frontend/objects/monograph_full.tpl
+@@ -78,8 +78,7 @@
+ 	{* Indicate if this is only a preview *}
+ 	{if $publication->getData('status') !== \PKP\submission\PKPSubmission::STATUS_PUBLISHED}
+ 		<div class="cmp_notification notice">
+-			{capture assign="submissionUrl"}{url page="dashboard" op="editorial" workflowSubmissionId=$monograph->getId()}{/capture}
+-			{translate key="submission.viewingPreview" url=$submissionUrl}
++			{translate key="submission.viewingPreview" url=$submissionWorkflowUrl|escape}
+ 		</div>
+ 	{/if}
+ 
