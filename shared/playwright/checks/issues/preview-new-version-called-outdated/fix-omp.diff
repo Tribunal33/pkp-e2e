@@ -1,0 +1,14 @@
+--- a/templates/frontend/objects/monograph_full.tpl
++++ b/templates/frontend/objects/monograph_full.tpl
+@@ -81,10 +81,8 @@
+ 			{capture assign="submissionUrl"}{url page="dashboard" op="editorial" workflowSubmissionId=$monograph->getId()}{/capture}
+ 			{translate key="submission.viewingPreview" url=$submissionUrl}
+ 		</div>
+-	{/if}
+-
+ 	{* Notification that this is an old version *}
+-	{if $currentPublication->getId() !== $publication->getId()}
++	{elseif $currentPublication->getId() !== $publication->getId()}
+ 		<div class="cmp_notification notice">
+ 			{capture assign="latestVersionUrl"}{url page="catalog" op="book" path=$monograph->getBestId()}{/capture}
+ 			{translate key="submission.outdatedVersion"
