@@ -1514,7 +1514,7 @@ Issue report: [pkp-e2e#338](https://github.com/jardakotesovec/pkp-e2e/issues/338
 
 <a id="fn-a12"></a>
 **f-a12** — Live-probed 2026-09-22 (all three apps): a recommending Editor opening "Edit" on an Editor's, a Production editor's or (preprint server) a Preprint Server manager's row, their own included, and pressing "OK": the window closing with "The stage assignment has been changed.". Code: note h; the save runs the edit branch of note k.
-Issue report: [docs/issues/U35-A12-no-changes-window-ok-reports-change.md](../issues/U35-A12-no-changes-window-ok-reports-change.md).
+Issue report: [pkp-e2e#345](https://github.com/jardakotesovec/pkp-e2e/issues/345) ([docs/issues/U35-A12-no-changes-window-ok-reports-change.md](../issues/U35-A12-no-changes-window-ok-reports-change.md)).
 
 <a id="fn-a13"></a>
 **f-a13** — `SubEditorsDAO::assignEditors()` builds each automatic assignment with `Repo::stageAssignment()->build(…, $userGroup->recommendOnly)` and the metadata flag from the group's default (note l). An automatic assignment happens only on the install's first journal (*[Submission wizard](U21-submission-wizard.md#a8)*), the seeded journal, whose roles keep their install options, so the case was not reached; a role's recommend-only change leaves earlier assignments alone (note m).
