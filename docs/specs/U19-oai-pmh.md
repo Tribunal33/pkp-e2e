@@ -1213,6 +1213,10 @@ Left out of the scenarios above, by reason:
     a subscription journal's `jats` list holding an article of a
     subscription issue answering with the open articles' records {OJS} (once
     the team chooses the list's answer and it is fixed)
+  - the guard for A23 (issue report
+    `docs/issues/U19-A23-oai-driver-set-lists-article-without-galley.md`):
+    with "DRIVER" enabled, an article published with no galley left out of
+    the `driver` set {OJS} (Rule 23; once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1342,7 +1346,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | An OAI set left behind by a changed section abbreviation or a deleted section is listed but lists nothing {OJS OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | Asked for a section's set, OAI lists return its deleted records whatever "from" and "until" say {OJS OPS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A22](#a22) | Once one journal sets "DOI Versioning" to "Yes", every journal's OAI-PMH requests answer a server error {OJS} | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A23](#a23) | The `driver` set lists articles with no galley {OJS} | 🐞 | minor | — |
+| [A23](#a23) | A journal's `driver` OAI set lists articles that have no galley {OJS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A24](#a24) | A `driver` list offers "Resume" when complete, and following it repeats records {OJS} | 🐞 | minor | — |
 | [OMP3](#omp3) | Asked for a set it does not have, a press's OAI-PMH address lists every record of the press, or of every press | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP4](#omp4) | A press's OAI-PMH record lists answer a server error once one book is published without an abstract | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1685,11 +1689,18 @@ at "No". It was seen on PostgreSQL. MySQL and MariaDB were not run.
 Basis: probe, 2026-10-01. <sup>f-a22</sup>
 
 <a id="a23"></a>
-**A23 — The `driver` set lists articles with no galley** {OJS} · 🐞 · minor.
-A harvester asking for the "driver" set expects only open-access
-articles with full text. An article published with no galley is listed
-in it beside one with a galley.
-Basis: probe, 2026-09-26. <sup>f-a23</sup>
+**A23 — A journal's `driver` OAI set lists articles that have no galley** {OJS} · 🐞 · low.
+A harvester asking a journal for its `driver` set expects only
+open-access articles with full text. With the "DRIVER" plugin enabled,
+an open-access article published with no galley is listed in the set
+beside the articles that have one. Its record carries the set's name
+wherever it is listed: in the journal's list without a set, in the
+identifiers list and when asked for alone. When such an article is
+unpublished, the deleted record it leaves is stored as belonging to the
+set as well. The open-access half of the set's rule holds: an article
+that readers must pay or sign in for stays out, with or without a
+galley.
+Basis: probe, 2026-10-01. <sup>f-a23</sup>
 
 <a id="a24"></a>
 **A24 — A complete `driver` list offers "Resume"** {OJS} · 🐞 · minor.
@@ -2042,6 +2053,7 @@ Issue report: [pkp-e2e#281](https://github.com/jardakotesovec/pkp-e2e/issues/281
 
 <a id="fn-f-a23"></a>
 **f-a23** — Live-probed 2026-09-26, OJS, three journals, two runs: note q21; the member without a galley had no `publication_galleys` row. Code: note i.
+Issue report: [docs/issues/U19-A23-oai-driver-set-lists-article-without-galley.md](../issues/U19-A23-oai-driver-set-lists-article-without-galley.md).
 
 <a id="fn-f-a24"></a>
 **f-a24** — Live-probed 2026-09-26, OJS: note q21; a second walk of a two-member set answered the parts 1221 1222, 1221 1222, then 1222. Code: note i.
