@@ -1946,7 +1946,7 @@ read "Current Roles : Author, Section editor". Code: `disableUser()` joins
 
 <a id="fn-f-a7"></a>
 **f-a7** — Code: note h. Live-probed 2026-09-25: note td6.
-Issue report: [docs/issues/U53-A7-enable-reason-becomes-disable-reason.md](../issues/U53-A7-enable-reason-becomes-disable-reason.md).
+Issue report: [pkp-e2e#156](https://github.com/jardakotesovec/pkp-e2e/issues/156) ([docs/issues/U53-A7-enable-reason-becomes-disable-reason.md](../issues/U53-A7-enable-reason-becomes-disable-reason.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Code read 2026-09-25: `UserGridHandler::removeUser()` writes
