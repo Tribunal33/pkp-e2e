@@ -1326,7 +1326,7 @@ OMP's own code.
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note h: OPS `citation_fulltext_html_url` names `preprint/view/{bestId}/{galleyBestId}`; with a "URL Path" set, the redirect to the download address drops the galley. Live-probed 2026-09-26: note q14.
-Issue report: [docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md](../issues/U13-OPS2-OPS3-ops-number-address-url-path.md).
+Issue report: [pkp-e2e#203](https://github.com/jardakotesovec/pkp-e2e/issues/203) ([docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md](../issues/U13-OPS2-OPS3-ops-number-address-url-path.md)).
 
 ## Reference — entry points & surfaces
 

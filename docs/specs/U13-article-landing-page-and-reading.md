@@ -2627,12 +2627,12 @@ galley. Live-probed 2026-09-25 (note q2): on the URL-Path preprint the
 HTML link went from `…/view/probe-path/{galley}` to
 `…/download/{number}/{galley}` to `…/download/probe-path`, "404 Not
 Found", while the PDF opened its reader.
-Issue report: [docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md](../issues/U13-OPS2-OPS3-ops-number-address-url-path.md).
+Issue report: [pkp-e2e#203](https://github.com/jardakotesovec/pkp-e2e/issues/203) ([docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md](../issues/U13-OPS2-OPS3-ops-number-address-url-path.md)).
 
 <a id="fn-f-ops3"></a>
 **f-ops3** — Note f: OJS's `elseif (ctype_digit($galleyId) && $galley->getId() == $galleyId)`
 redirect has no OPS counterpart. Live-probed 2026-09-25, note q10.
-Issue report: [docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md](../issues/U13-OPS2-OPS3-ops-number-address-url-path.md).
+Issue report: [pkp-e2e#203](https://github.com/jardakotesovec/pkp-e2e/issues/203) ([docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md](../issues/U13-OPS2-OPS3-ops-number-address-url-path.md)).
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — Note o: OPS ships neither plugin; its HTML galleys take the
