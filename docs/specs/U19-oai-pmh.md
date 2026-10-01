@@ -1152,6 +1152,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U19-A2-oai-from-until-ignore-time-of-day.md`): `from` and
     `until` given with a time of day listing only the records changed from,
     or until, that second (Rule 9a; once fixed)
+  - the guard for A3 (issue report
+    `docs/issues/U19-A3-oai-impossible-date-accepted.md`): ListRecords and
+    ListIdentifiers given a `from` or `until` that is not in the calendar
+    (month 13, 30 February, hour 25) answering "Illegal from parameter" or
+    "Illegal until parameter" (Rule 9b; once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1265,7 +1270,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A journal's own OAI address leaves out its deleted records and lists the first journal's instead {OJS OMP} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | OAI-PMH lists ignore the time of day in "from" and "until" and return the whole day's records | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A3](#a3) | A date that is not in the calendar is accepted instead of refused | 🐞 | minor | — |
+| [A3](#a3) | OAI-PMH lists accept a "from" or "until" date that is not in the calendar instead of refusing it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | The browser view's last page says "There are more results." and offers a "Resume" that fails | 🐞 | minor | — |
 | [A5](#a5) | The browser view of one record's formats says "from this archive" and offers no links | 🐞 | minor | — |
 | [A7](#a7) | "Peer-reviewed Article" is written only for a section never saved in its window {OJS} | 🐞 | minor | — |
@@ -1337,13 +1342,18 @@ for deleted records, with no setup.
 Basis: probe, 2026-10-01. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — An impossible date is accepted** · 🐞 · minor.
-A harvester that sends `from=2026-13-01` expects "Illegal from
-parameter", as for a date written the wrong way. The list answers as if
-no date had been given; the same date as `until` lists nothing, a time
-such as "25:00:00" is taken as no date at all, and "2026-02-30" is read
-as 2 March.
-Basis: probe, 2026-09-26. <sup>f-a3</sup>
+**A3 — OAI-PMH lists accept a "from" or "until" date that is not in the calendar instead of refusing it** · 🐞 · low.
+A harvester whose ListRecords or ListIdentifiers request carries a
+`from` or `until` date that is not in the calendar gets an answer
+instead of the refusal "Illegal from parameter" or "Illegal until
+parameter". With month 13 or hour 25 in `from`, the date is dropped and
+every record is listed, as if no date had been given. With month 13 in
+`until`, the answer is "No matching records in this repository",
+whatever the records' dates. A day the month does not have is accepted
+too: `from=2030-02-30` is answered like a real date in 2030. A date
+written in the wrong shape, such as "30-02-2030", is refused as it
+should be. Both requests do this on every install, with no setup.
+Basis: probe, 2026-10-01. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — The last page says "There are more results."** · 🐞 · minor.
@@ -1829,6 +1839,7 @@ Issue report: [pkp-e2e#300](https://github.com/jardakotesovec/pkp-e2e/issues/300
 
 <a id="fn-f-a3"></a>
 **f-a3** — Live-probed 2026-09-26: note q11, `2026-13-01` as `from` and `until`, "2026-02-30", `T25:00:00Z` and the roll-over of "2026-09-31". Code: note l.
+Issue report: [docs/issues/U19-A3-oai-impossible-date-accepted.md](../issues/U19-A3-oai-impossible-date-accepted.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Live-probed 2026-09-26: note q15, the last part of each list. Code: note k.

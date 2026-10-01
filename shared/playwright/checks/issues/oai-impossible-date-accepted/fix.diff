@@ -1,0 +1,20 @@
+--- a/lib/pkp/classes/oai/OAIUtils.php
++++ b/lib/pkp/classes/oai/OAIUtils.php
+@@ -68,7 +68,7 @@
+         if (preg_match("/^\d\d\d\d\-\d\d\-\d\d$/", $date)) {
+             // Match date
+             $time = strtotime("{$date} UTC");
+-            return ($time != -1) ? $time : 'invalid';
++            return ($time !== false && gmdate('Y-m-d', $time) === $date) ? $time : 'invalid';
+         } elseif (preg_match("/^(\d\d\d\d\-\d\d\-\d\d)T(\d\d:\d\d:\d\d)Z$/", $date, $matches)) {
+             // Match datetime
+             // FIXME
+@@ -77,7 +77,7 @@
+                 return 'invalid_granularity';
+             } else {
+                 $time = strtotime("{$date} UTC");
+-                return ($time != -1) ? $time : 'invalid';
++                return ($time !== false && gmdate('Y-m-d H:i:s', $time) === $date) ? $time : 'invalid';
+             }
+         } else {
+             return 'invalid';
