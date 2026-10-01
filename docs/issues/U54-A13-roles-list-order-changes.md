@@ -26,8 +26,7 @@ and page 2 (by another manager, or in another tab) makes page 2 show a
 role page 1 already showed, while another role appears on neither page.
 A reload shows every role again.
 
-Installs on MySQL keep the roles in the order they were created. The fix
-is a fixed sort on the list's query.
+Installs on MySQL keep the roles in the order they were created.
 
 ## Impact
 
