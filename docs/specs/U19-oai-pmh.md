@@ -2053,7 +2053,7 @@ Issue report: [pkp-e2e#281](https://github.com/jardakotesovec/pkp-e2e/issues/281
 
 <a id="fn-f-a23"></a>
 **f-a23** — Live-probed 2026-09-26, OJS, three journals, two runs: note q21; the member without a galley had no `publication_galleys` row. Code: note i.
-Issue report: [docs/issues/U19-A23-oai-driver-set-lists-article-without-galley.md](../issues/U19-A23-oai-driver-set-lists-article-without-galley.md).
+Issue report: [pkp-e2e#340](https://github.com/jardakotesovec/pkp-e2e/issues/340) ([docs/issues/U19-A23-oai-driver-set-lists-article-without-galley.md](../issues/U19-A23-oai-driver-set-lists-article-without-galley.md)).
 
 <a id="fn-f-a24"></a>
 **f-a24** — Live-probed 2026-09-26, OJS: note q21; a second walk of a two-member set answered the parts 1221 1222, 1221 1222, then 1222. Code: note i.
