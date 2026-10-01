@@ -1047,6 +1047,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-OPS7-OPS8-ops-french-preprint-raw-keys.md`): a preprint's
     page and its PDF reader shown in French, with no `##` code in the
     keywords label or the browser tab {OPS}
+  - the guard for OJS4 (Rule 20a; issue report
+    `docs/issues/U13-OJS4-recommend-by-author-list-never-shown.md`):
+    with "Recommend Articles by Author" on, two published articles by one
+    contributor, one of them outside an issue, each listing the other
+    under "Most read articles by the same author(s)" {OJS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1194,7 +1199,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OJS1](#ojs1) | Readers get no other citation format or citation download on an article published outside a published issue | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | The Publication Facts Label settings always warn "Funding Plugin Not Present" | 🐞 | minor | — |
 | [OJS3](#ojs3) | On a French page the Publication Facts panel would have no labels | 🐞 | minor | — |
-| [OJS4](#ojs4) | "Recommend Articles by Author" never shows its list; the plugin fails on the server | 🐞 | user-visible · crash: server | — |
+| [OJS4](#ojs4) | With "Recommend Articles by Author" on, article pages never show "Most read articles by the same author(s)" | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS5](#ojs5) | The Publication Facts panel never shows; the plugin fails on the server | 🐞 | user-visible · crash: server | — |
 | [OJS6](#ojs6) | The PDF reader's return arrow is announced "Return to Issue Details" but opens the article | 🐞 | minor | — |
 | [OJS7](#ojs7) | A refused "OK" in the Publication Facts settings puts back the saved values | 🐞 | minor | — |
@@ -1384,14 +1389,14 @@ this is hidden behind it.
 Basis: code. <sup>[f-ojs3](#fn-f-ojs3)</sup>
 
 <a id="ojs4"></a>
-**OJS4 — "Recommend Articles by Author" never shows its list** · 🐞 · user-visible · crash: server.
-With the plugin on, the page of an article whose contributor has another
-published article in the journal opens normally but shows no "Most read
-articles by the same author(s)": the plugin fails on the server as it
-builds the list, and the page is served without it. The list never
-appears. The plugin reads the search results in a shape the search
-stopped using in 2025.
-Since: 2025-08-01 (the search rebuild) · Basis: probe, 2026-09-25. <sup>[f-ojs4](#fn-f-ojs4)</sup>
+**OJS4 — With "Recommend Articles by Author" on, article pages never show "Most read articles by the same author(s)"** · 🐞 · medium · crash: server.
+With "Recommend Articles by Author" on (it is off on a new journal),
+the page of an article whose contributor has another published article
+in the journal opens normally, but without "Most read articles by the
+same author(s)".
+The app fails on the server as it builds that list: the plugin's error
+is caught and logged, and the page is served without the list.
+Since: 2025-08-01 (the search rebuild) · Basis: probe, 2026-10-01. <sup>[f-ojs4](#fn-f-ojs4)</sup>
 
 <a id="ojs5"></a>
 **OJS5 — The Publication Facts panel never shows** · 🐞 · user-visible · crash: server.
@@ -2570,6 +2575,7 @@ still reads; `$submission->getCurrentPublication()` on a null fails in
 "Plugin …RecommendByAuthorPlugin failed to handle the hook
 Templates::Article::Footer::PageFooter" and serves the page without the
 list. Live-probed 2026-09-25, note q14.
+Issue report: [docs/issues/U13-OJS4-recommend-by-author-list-never-shown.md](../issues/U13-OJS4-recommend-by-author-list-never-shown.md).
 
 <a id="fn-f-ojs5"></a>
 **f-ojs5** — Note k: `Undefined constant
