@@ -1906,7 +1906,7 @@ management/settings/website#plugins on choosing the pattern radio, on
 each kind tick and on "Check Number" (11 on OJS, 21 on OMP in one run
 each), none under the default choice. The window's clicks are handled
 by `URNSettingsFormHandler.js` (note b).
-Issue report: [docs/issues/U44-A11-urn-settings-pattern-script-error.md](../issues/U44-A11-urn-settings-pattern-script-error.md).
+Issue report: [pkp-e2e#131](https://github.com/jardakotesovec/pkp-e2e/issues/131) ([docs/issues/U44-A11-urn-settings-pattern-script-error.md](../issues/U44-A11-urn-settings-pattern-script-error.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-24 (note q18), OJS and OMP:
