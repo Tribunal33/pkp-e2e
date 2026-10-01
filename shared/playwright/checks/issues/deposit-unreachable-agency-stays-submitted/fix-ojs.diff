@@ -1,0 +1,58 @@
+--- a/plugins/generic/crossref/CrossrefExportPlugin.php
++++ b/plugins/generic/crossref/CrossrefExportPlugin.php
+@@ -24,6 +24,7 @@
+ use Exception;
+ use GuzzleHttp\Exception\GuzzleException;
+ use GuzzleHttp\Exception\RequestException;
++use GuzzleHttp\Exception\TransferException;
+ use PKP\config\Config;
+ use PKP\doi\Doi;
+ use PKP\file\FileManager;
+@@ -341,9 +342,9 @@
+                     ]
+                 ]
+             );
+-        } catch (RequestException $e) {
++        } catch (TransferException $e) {
+             $returnMessage = $e->getMessage();
+-            if ($e->hasResponse()) {
++            if ($e instanceof RequestException && $e->hasResponse()) {
+                 $eResponseBody = $e->getResponse()->getBody();
+                 $eStatusCode = $e->getResponse()->getStatusCode();
+                 if ($eStatusCode == static::CROSSREF_API_DEPOSIT_ERROR_FROM_CROSSREF) {
+@@ -367,6 +368,9 @@
+                     $returnMessage = $eResponseBody . ' (' . $eStatusCode . ' ' . $e->getResponse()->getReasonPhrase() . ')';
+                     $this->updateDepositStatus($context, $objects, Doi::STATUS_ERROR, null, $returnMessage);
+                 }
++            } else {
++                // No answer from Crossref (no connection, a timeout): record it, or the DOI stays "Submitted"
++                $this->updateDepositStatus($context, $objects, Doi::STATUS_ERROR, null, $returnMessage);
+             }
+             return [['plugins.importexport.common.register.error.mdsError', $returnMessage]];
+         }
+--- a/plugins/generic/datacite/DataciteExportPlugin.php
++++ b/plugins/generic/datacite/DataciteExportPlugin.php
+@@ -304,9 +304,9 @@
+                     'Content-Type' => 'application/xml;charset=UTF-8',
+                 ],
+             ]);
+-        } catch (\GuzzleHttp\Exception\RequestException $e) {
++        } catch (\GuzzleHttp\Exception\TransferException $e) {
+             $returnMessage = $e->getMessage();
+-            if ($e->hasResponse()) {
++            if ($e instanceof \GuzzleHttp\Exception\RequestException && $e->hasResponse()) {
+                 $returnMessage = $e->getResponse()->getBody() . ' (' . $e->getResponse()->getStatusCode() . ' ' . $e->getResponse()->getReasonPhrase() . ')';
+             }
+             $this->updateDepositStatus($object, Doi::STATUS_ERROR, $returnMessage);
+@@ -323,9 +323,9 @@
+                 ],
+                 'body' => "doi={$doi}\nurl={$url}",
+             ]);
+-        } catch (\GuzzleHttp\Exception\RequestException $e) {
++        } catch (\GuzzleHttp\Exception\TransferException $e) {
+             $returnMessage = $e->getMessage();
+-            if ($e->hasResponse()) {
++            if ($e instanceof \GuzzleHttp\Exception\RequestException && $e->hasResponse()) {
+                 $returnMessage = $e->getResponse()->getBody() . ' (' . $e->getResponse()->getStatusCode() . ' ' . $e->getResponse()->getReasonPhrase() . ')';
+             }
+             $this->updateDepositStatus($object, Doi::STATUS_ERROR, $returnMessage);

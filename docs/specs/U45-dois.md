@@ -1741,6 +1741,10 @@ Left out of the scenarios above, by reason:
     journal and a preprint server with the galley kind ticked before a
     kept kind choose Crossref and save; the Setup tab then shows the kept
     kinds ticked and the DOIs page lists its items {OJS OPS}
+  - the guard for A18 (Rule 33; issue report
+    `docs/issues/U45-A18-deposit-unreachable-agency-stays-submitted.md`):
+    a deposit the test install cannot send to the agency turns the item
+    "Error" with "View Error", and "Has Error" lists it {OJS OPS}
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1818,7 +1822,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | The "Mark DOIs Needs Sync" question asks to mark the records "as stale" | 🐞 | minor | — |
 | [A15](#a15) | "Deposit DOIs" reports success for a work with no DOI, and nothing is sent | 🐞 | minor · crash: server | — |
 | [A17](#a17) | A new major version leaves the earlier version's deposited DOI as it was | 🐞 | minor | — |
-| [A18](#a18) | A deposit that cannot reach the agency reads "Submitted" for good | 🐞 | user-visible · crash: server | — |
+| [A18](#a18) | A DOI deposit that cannot connect to Crossref or DataCite reads "Submitted" for good, with no error | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | Saving a DOI registration agency can untick every DOI kind and leave the DOIs page blank | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | The agency plugins' Tools pages have an empty heading | 🐞 | minor | — |
 | [A21](#a21) | A "Save" on the Registration tab without an agency leaves a warning in the server log | 🐞 | invisible | — |
@@ -2025,14 +2029,28 @@ to do so.
 Basis: probe, 2026-09-26. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — A deposit that cannot reach the agency reads "Submitted" for good** · 🐞 · user-visible · crash: server.
+**A18 — A DOI deposit that cannot connect to Crossref or DataCite reads "Submitted" for good, with no error** · 🐞 · high · crash: server.
 After "Deposit DOIs" or "Deposit All" the DOI reads "Submitted". When
-the background deposit cannot connect to the agency, it fails on the
-server, is tried twice more and is dropped; the DOI stays "Submitted"
-(its panel saying "manually registered", [A4](#a4)), no "Error" badge
-or "View Error" appears, and nothing on the DOIs page tells the manager
-that the deposit never arrived or that it should be sent again.
-Basis: probe, 2026-09-26. <sup>f-a18</sup>
+the background deposit cannot connect to the registration agency
+(Crossref or DataCite), it fails on the server. It is tried twice more,
+about five seconds apart, and then given up and recorded as a failed
+job, all within seconds. The DOI stays "Submitted": no "Error" badge or
+"View Error" appears. Nothing on the DOIs page tells the manager that
+the deposit never arrived or that it should be sent again, and nothing
+points the site administrator to Administration › "Failed Jobs". The DOI
+is never registered, so it does not resolve, while the DOIs page reports
+it as sent. A stuck "Submitted" looks the same as a deposit still
+waiting its turn. "Deposit All" and "Automatic Deposit" never send a
+"Submitted" DOI again, so it is registered only if a manager deposits
+the item again by hand. The trigger is a deposit that gets no answer: no
+connection, a failed name lookup, a failed TLS handshake, a timeout or
+an empty reply. This covers an outage at the agency and a server whose
+outbound connections are blocked, where every deposit is lost this way.
+An agency that answers with an HTTP error is recorded as "Error", as it
+should be. With Crossref, a transfer error of another kind that brings
+no answer leaves "Submitted" too; that case was read in the code and not
+reproduced.
+Basis: probe, 2026-10-01. <sup>f-a18</sup>
 
 <a id="a19"></a>
 **A19 — Saving a DOI registration agency can untick every DOI kind and leave the DOIs page blank** · 🐞 · high · crash: script.
@@ -3713,6 +3731,7 @@ three apps, one run each.
 failed with `GuzzleHttp\Exception\ConnectException` (three attempts),
 every deposit, OJS and OPS; the DOI status stayed 2 (submitted) and no
 error message was stored. Nothing on the DOIs page lists failed jobs.
+Issue report: [pkp-e2e#210](https://github.com/jardakotesovec/pkp-e2e/issues/210) ([docs/issues/U45-A18-deposit-unreachable-agency-stays-submitted.md](../issues/U45-A18-deposit-unreachable-agency-stays-submitted.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19** — `editDoiRegistrationAgencyPlugin()`'s `array_intersect()`
