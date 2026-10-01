@@ -696,7 +696,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | "Check for updates" opens an empty page when the server cannot reach PKP's website | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [A4](#a4) | "Requeue All Failed Jobs" fails with the database's error text when no failed job has stored data | 🐞 | latent · crash: server | — |
+| [A4](#a4) | "Requeue All Failed Jobs" fails with a database error when no failed job has stored data | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | After a refused "Requeue All Failed Jobs" a loading circle keeps turning until the page is reloaded | 🐞 | minor · crash: server | — |
 | [A7](#a7) | On a press or preprint server in French (Canada), Administration shows a code under "Gestion du site" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | The three deleting buttons return to Administration with no message, and "Delete Data Caches" asks nothing first | ❓ | minor | — |
@@ -742,15 +742,20 @@ failed job is diagnostic data, but a confirmation would cost little.
 Basis: probe. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — "Requeue All" fails when no failed job has stored data** · 🐞 · latent · crash: server.
-While at least one failed job has stored data, "Requeue All Failed Jobs"
-leaves those without on the list, as its notice says. When none has, the
-application fails: a window titled "Error" shows the database's own
-error text (a "Not null violation" naming the column "payload", with the
-query and the database's name), nothing is requeued, and the list stays
-as it was, its loading circle turning [A6](#a6). No screen makes a failed
-job without data, so no one meets this today.
-Basis: probe. <sup>f-a4</sup>
+**A4 — "Requeue All Failed Jobs" fails with a database error when no failed job has stored data** · 🐞 · low · crash: server.
+The site administrator presses "Requeue All Failed Jobs" on
+Administration › "View Failed Jobs". When none of the failed jobs on the
+list has stored data, the application fails on the server. A window
+titled "Error" shows the database's own error text (a "Not null
+violation" naming the column "payload"), nothing is requeued, and the
+list stays as it was. While at least one failed job has stored data, the
+button requeues those, leaves the others on the list and shows "All
+redispatchable failed jobs with valid payload have been requeued
+successfully.".
+No screen or job of the applications makes a failed job without stored
+data, so no one meets this today. It is not specific to PostgreSQL:
+MySQL and MariaDB refuse the same insert.
+Basis: probe, 2026-10-02. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — "Delete Caches" leaves the stored public pages** · ❓ · latent.
@@ -1415,8 +1420,8 @@ failed jobs whose stored data was emptied in the database: one job with
 data and two without, the two stayed; only jobs without data, `POST
 index/api/v1/jobs/redispatch/all` answered 500 and the "Error" window
 read "SQLSTATE[23502]: Not null violation … null value in column
-"payload" of relation "jobs" …" with the statement, the host and the
-database's name; nothing was requeued.
+"payload" of relation "jobs" …"; nothing was requeued.
+Issue report: [docs/issues/U61-A4-requeue-all-failed-jobs-database-error.md](../issues/U61-A4-requeue-all-failed-jobs-database-error.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `config.TEMPLATE.inc.php` `[cache]`: `web_cache = Off`,

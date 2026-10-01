@@ -1,0 +1,17 @@
+--- a/lib/pkp/classes/job/repositories/FailedJob.php
++++ b/lib/pkp/classes/job/repositories/FailedJob.php
+@@ -75,8 +75,13 @@
+             $failedJobs = $failedJobs->whereIn('id', $failedIds);
+         }
+ 
+-        $failedJobs = $failedJobs->get();
++        // Only a failed job with a payload can run again (see getRedispatchableJobsInQueue())
++        $failedJobs = $failedJobs->where('payload', '<>', '')->get();
+ 
++        if ($failedJobs->isEmpty()) {
++            return 0;
++        }
++
+         DB::beginTransaction();
+ 
+         $failedJobs->each(fn ($failedJob) => Repo::job()->add([
