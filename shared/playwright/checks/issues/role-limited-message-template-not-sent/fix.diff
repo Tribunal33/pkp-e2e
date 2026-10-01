@@ -1,0 +1,35 @@
+--- a/lib/pkp/classes/editorialTask/Repository.php
++++ b/lib/pkp/classes/editorialTask/Repository.php
+@@ -275,6 +275,11 @@
+             return true;
+         }
+ 
++        // Managers are offered every template, whatever its roles
++        if ($user->hasRole([Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER], $template->contextId)) {
++            return true;
++        }
++
+         $userGroupIds = UserGroup::withUserIds([$user->getId()])
+             ->withContextIds([$template->contextId])
+             ->pluck((new UserGroup())->getPrimaryKeyName())
+@@ -283,7 +288,7 @@
+         $template->loadMissing('userGroups');
+ 
+         return $template->userGroups()
+-            ->whereIn('user_group_id', $userGroupIds)
++            ->whereIn('user_groups.user_group_id', $userGroupIds)
+             ->exists();
+     }
+ 
+--- a/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
+@@ -182,7 +182,8 @@
+             return;
+         }
+ 
+-        if (!Repo::editorialTask()->isTemplateAccessibleToUser($template, $user)) {
++        // A template's roles limit who may use it, not who may receive it
++        if (!Repo::editorialTask()->isTemplateAccessibleToUser($template, $request->getUser())) {
+             return;
+         }
+ 

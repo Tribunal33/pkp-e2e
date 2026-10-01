@@ -913,6 +913,11 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guards for A10 (issue reports
+    `docs/issues/U35-A10-added-message-template-not-sent.md` and
+    `docs/issues/U35-A10-role-limited-message-template-not-sent.md`):
+    a template added in Settings sent from "Notify", and a template
+    limited to a role sent from "Notify" by a manager outside that role
   - the guard for OPS3 (issue report
     `docs/issues/U35-OPS3-moderator-assigned-email-never-sent.md`):
     a preprint submitted to a section with Moderators under "Editorial
@@ -986,7 +991,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | "Assign Editor" gives the new editor no task, unlike the other request messages | 🐞 | minor | — |
 | [A7](#a7) | "Edit" is logged as a new assignment | 🐞 | minor | — |
 | [A9](#a9) | A "Permissions" tick carries over when another role is chosen in "Assign", and is saved | 🐞 | minor | — |
-| [A10](#a10) | A message template added in Settings is listed but fills nothing and cannot be sent | 🐞 | user-visible · crash: server | — |
+| [A10](#a10) | A message template added in Settings is listed but fills nothing and cannot be sent | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Choosing a person who reviews the submission anonymously shows no warning, and "OK" assigns them | 🐞 | user-visible | — |
 | [A12](#a12) | "OK" on the "No changes can be made to this participant" window reports "The stage assignment has been changed." | 🐞 | minor | — |
 | [A14](#a14) | The Activity Log's "User" column names the participant, not the editor who assigned, changed or removed them | 🐞 | minor | — |
@@ -1111,17 +1116,20 @@ and "OK" saves it so.
 Basis: probe. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — Templates added in Settings cannot be used** · 🐞 · user-visible · crash: server.
-A template added in Settings › Workflow › "Tasks and Discussions" is listed
-in "Choose a predefined message…" but cannot be used. Chosen in "Assign" or
-"Notify", it leaves "Message" as it was. Sent with a message typed, the
-window stays open with no reason given and no email goes out, whether or
-not the recipient holds one of the template's roles. "OK" on "Assign"
-still assigns the person, and a template limited to no role still adds a
-discussion named after it, with no message, to the stage's discussions
-panel. Choosing the template and sending it both fail on the server, and
-nothing on screen says so.
-Basis: probe. <sup>[f-a10](#fn-a10)</sup>
+**A10 — Templates added in Settings cannot be used** · 🐞 · medium · crash: server.
+A template under Settings › Workflow › "Tasks and Discussions" cannot be
+used from the Participants panel in two cases, each a fault of its own.
+A template added on that screen is listed in "Choose a predefined
+message…", but choosing it leaves "Message" empty, and "Notify" with a
+message typed leaves the window open and shows no error. No email goes
+out, and each press of "Notify" leaves a discussion named after the
+template, with no message in it, on the stage's discussions panel.
+A template with "Limit access to specific roles" set, installed or
+added, fails the same way on the choice and on "Notify", and opens no
+discussion. In both cases the request behind the action fails on the
+server and nothing on screen says so; the text goes out once it is typed
+again under an installed template that is not limited.
+Basis: probe, 2026-10-01. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
 **A11 — No warning when choosing an anonymous reviewer** · 🐞 · user-visible.
@@ -1405,6 +1413,8 @@ Issue report: [pkp-e2e#307](https://github.com/jardakotesovec/pkp-e2e/issues/307
 
 <a id="fn-a10"></a>
 **f-a10** — Live-probed 2026-09-22 (all three apps): templates added under a stage's "Add template", unrestricted, limited to Author and limited to an editor role, each listed; choosing one leaving "Message" unchanged; "Notify" to a person who holds the role, to one who does not and to the Author each staying open with no notice, no email; the unrestricted one adding its discussion with no message to the panel; "OK" on "Assign" staying open with the person assigned. Both the choice's request and the send answer a server error. For a role-limited template the cause is traced: `editorialTask/Repository::isTemplateAccessibleToUser()` filters on an unqualified `user_group_id`, which the Postgres test database refuses as ambiguous; the unrestricted template's failure was seen, not traced. Control: "Discussion (Submission)" on the same screen sends.
+Issue report (a template added in Settings): [docs/issues/U35-A10-added-message-template-not-sent.md](../issues/U35-A10-added-message-template-not-sent.md).
+Issue report (a template limited to specific roles): [docs/issues/U35-A10-role-limited-message-template-not-sent.md](../issues/U35-A10-role-limited-message-template-not-sent.md).
 
 <a id="fn-a11"></a>
 **f-a11** — Live-probed 2026-09-22 (journal and press): a reviewer on round 1 with "Anonymous Reviewer/Anonymous Author", found under their Funding coordinator and Translator roles and chosen on the Submission stage and on the review stage, and a reviewer with "Anonymous Reviewer/Disclosed Author" on a scratch journal set to that type, and a press's Internal Review: no warning, and "OK" assigning them with "User added as a stage participant.". The window's data listed the right reviewers (not declined, anonymous types only, "Open" left out). Controls with no warning expected: a declined reviewer, a person with no review, Copyediting, and an "Open" review. Cause: note n. The warning dates from 2018; when the check broke was not traced.

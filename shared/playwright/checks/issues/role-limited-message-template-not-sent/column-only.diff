@@ -1,0 +1,11 @@
+--- a/lib/pkp/classes/editorialTask/Repository.php
++++ b/lib/pkp/classes/editorialTask/Repository.php
+@@ -283,7 +283,7 @@
+         $template->loadMissing('userGroups');
+ 
+         return $template->userGroups()
+-            ->whereIn('user_group_id', $userGroupIds)
++            ->whereIn('user_groups.user_group_id', $userGroupIds)
+             ->exists();
+     }
+ 
