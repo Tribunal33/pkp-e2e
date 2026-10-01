@@ -818,6 +818,7 @@ the footnote. <sup>y</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a BMP dropped and one pasted into a custom page's "Content": each refused with its notice and gone from the box, the saved page holding no embedded picture (A17; the guard its issue report names)
   - a change made only in "Content" of the static page window and of the block window, then the back arrow: the question "The data on this form has changed. Do you wish to continue without saving?" (A19; the guard its issue report names)
   - a static page and a "Custom Page" item saved at "dot.only" and "deep/Mixed_1.x", each opening at its address (A10; the guard its issue report names)
   - with two form languages and the second language's editor held back, the first language's "Content" box in the block and item windows taking the click and the text, no spinner left (A20; the guard its issue report names)
@@ -891,7 +892,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | A custom block cannot be deleted on PostgreSQL: "OK" spins and the block stays | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | With "Custom Block Manager" unticked, "Appearance" › "Setup" refuses every save over a placed block it no longer lists | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | A ".pdf" or ".svg" chosen in the picture window is ignored with no message | 🐞 | minor | — |
-| [A17](#a17) | A pasted picture the site refuses stays in the text, embedded, and is saved | 🐞 | minor | — |
+| [A17](#a17) | A dropped or pasted picture the site refuses stays in the text, embedded, and is saved | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A picture over the upload limit gets a server error, never "Files larger than {size} can not be uploaded." | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | Closing a static page, custom block or reviewer email window after editing only its text loses the text without asking | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | With two form languages, the first language's "Content" box can stay under a "Loading..." spinner for good | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
@@ -1114,13 +1115,22 @@ stays on "Upload", and no message says why.
 Basis: probe. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — A refused pasted picture stays in the text** · 🐞 · minor.
-A manager who pastes or drops a picture the site refuses sees "Failed to
-upload image: {message}" and expects the picture to be gone. Instead it
-stays in the box, embedded in the text itself rather than stored as a
-file: "Save" keeps it that way, the public page shows it, and a refused
-file that is not a picture shows as a broken picture.
-Basis: probe. <sup>f-a17</sup>
+**A17 — A dropped or pasted picture the site refuses stays in the text, embedded, and is saved** · 🐞 · low.
+A manager drags a picture from their computer into a formatted text
+box, or pastes one, and the site refuses it. A notice over the box
+reads "Failed to upload image:" and the reason, for a BMP "You can only
+upload the following types of files: gif, jpg, png, webp.". The manager
+expects the picture to be gone. Instead it stays in the box, its data
+written into the text itself rather than stored as a file.
+"Save" keeps it that way. The public page then holds an `<img>` whose
+address is the picture's own data: the browser draws a refused picture
+as usual, and a refused file that is not a picture as a broken picture.
+Each later picture dropped into the box sends the refused ones again
+and repeats their notices. Deleting the picture by hand before saving
+gets round it.
+It happens in every formatted text box that takes pictures: the custom
+page, custom block and static page windows, and the settings forms.
+Basis: probe, 2026-10-01. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — A picture over the upload limit gets a server error, not the size message** · 🐞 · medium · crash: server.
@@ -2048,6 +2058,7 @@ uploaded is not valid."; the saved block held it as
 broken picture. Earlier that day, while every upload failed on the
 server, pasted and dropped real pictures stayed the same way and showed
 on the public page.
+Issue report: [docs/issues/U09-A17-refused-pasted-picture-kept-embedded.md](../issues/U09-A17-refused-pasted-picture-kept-embedded.md).
 
 <a id="fn-f-a18"></a>
 **f-a18** — A file over PHP's `upload_max_filesize` arrives with an

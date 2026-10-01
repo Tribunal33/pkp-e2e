@@ -1,0 +1,34 @@
+--- a/lib/pkp/js/controllers/SiteHandler.js
++++ b/lib/pkp/js/controllers/SiteHandler.js
+@@ -200,7 +200,13 @@
+ 								resolve(r.url);
+ 							},
+ 							error: function(r) {
+-								reject(r.responseJSON.error);
++								// remove: true takes the refused picture out of the text, so it
++								// is never saved embedded; an answer without JSON still settles
++								reject({
++									message: (r.responseJSON && r.responseJSON.error) ||
++											pkp.localeKeys['common.unknownError'],
++									remove: true
++								});
+ 							}
+ 						});
+ 					});
+--- a/lib/ui-library/src/components/Form/fields/FieldRichTextarea.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldRichTextarea.vue
+@@ -257,7 +257,13 @@
+ 								resolve(r.url);
+ 							},
+ 							error(r) {
+-								reject(r.responseJSON.error);
++								// remove: true takes the refused picture out of the text, so it
++								// is never saved embedded; an answer without JSON still settles
++								reject({
++									message:
++										r?.responseJSON?.error || self.t('common.unknownError'),
++									remove: true,
++								});
+ 							},
+ 						});
+ 					});
