@@ -1,0 +1,19 @@
+--- a/templates/frontend/objects/article_details.tpl
++++ b/templates/frontend/objects/article_details.tpl
+@@ -291,6 +291,16 @@
+ 				</section>
+ 			{/if}
+ 
++			{* Open peer review: shown once a review made public is confirmed by an editor *}
++			{if $openReviewConfig.submissionPeerReviews.reviewRounds}
++				<section id="open-review" class="item open_review" data-vue-root>
++					<h2 class="label">
++						{translate key="openReview.title"}
++					</h2>
++					<pkp-open-review v-bind='{$openReviewConfig|json_encode_html_attribute}'></pkp-open-review>
++				</section>
++			{/if}
++
+ 			{if $enablePublicComments}
+ 				<section id="public-comments" class="item comments" data-vue-root>
+ 					<h2 class="label">

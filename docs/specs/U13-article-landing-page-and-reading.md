@@ -1073,6 +1073,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-OPS9-preprint-summary-cover-middle-dead.md`): on a
     preprint server's "Archives" and a journal's issue page, a click at
     the cover's centre and at the author line's row opening the item
+  - the guard for OJS12 (Rule 23; issue report
+    `docs/issues/U13-OJS12-public-review-never-shown.md`): a
+    confirmed review marked "Publicly Show Reviewer Comments" shown on
+    the published article's page, a private or unconfirmed one not {OJS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1227,7 +1231,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OJS8](#ojs8) | An impossible Publication Facts "Start Date" is dropped with "Your changes have been saved." | 🐞 | minor | — |
 | [OJS9](#ojs9) | The Lens reader page's script fails on every XML galley | 🐞 | minor · crash: script | — |
 | [OJS10](#ojs10) | With "Recommend Similar Articles" on, article pages never show "Similar Articles" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [OJS12](#ojs12) | A review marked "Publicly Show Reviewer Comments" never shows on the published article's page, though "Mark as Complete" says it will | 🐞 | user-visible | — |
+| [OJS12](#ojs12) | A review marked "Publicly Show Reviewer Comments" never shows on the published article's page | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | Previewing a new version adds "This is an outdated version published on {the preview day}." | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | A preprint with a URL Path loses the galley or version part of its ID address; its HTML and other non-PDF downloads answer "404 Not Found" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A galley's ID address answers "404 Not Found" once the galley has a URL Path | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
@@ -1492,15 +1496,20 @@ number everywhere else.
 Basis: test run, 2026-09-25. <sup>[f-ojs11](#fn-f-ojs11)</sup>
 
 <a id="ojs12"></a>
-**OJS12 — A review marked public never shows on the article's page** · 🐞 · user-visible.
-The Journal Manager ticks "Publicly Show Reviewer Comments" on an "Open"
-review and presses "Mark as Complete", whose dialog says "This review
-will be made publicly visible alongside the article." Once the article
-is published, its page shows no review: no comments, no reviewer's name,
-no review heading, for a visitor, a Reader or the Journal Manager. The
-editor is told the review goes public, and readers never see it. Either
-the page should show the review or the dialog should not promise it.
-Basis: probe, 2026-09-28. <sup>[f-ojs12](#fn-f-ojs12)</sup>
+**OJS12 — A review marked "Publicly Show Reviewer Comments" never shows on the published article's page** · 🐞 · medium.
+An editor ticks "Publicly Show Reviewer Comments" on a review and
+presses "Mark as Complete", whose dialog says "This review will be made
+publicly visible alongside the article." Once the article is published,
+its page shows no review at all: no comments, no reviewer's name, no
+review heading, for a visitor or for the editor.
+The journal believes its reviews are public, and nobody learns that
+readers never see them. No setting puts the review on the page.
+It concerns journals that publish reviews: the editor ticks the box on
+each review, or the journal ticks it for every new review under
+Settings › Workflow › Review › Setup ("Make reviewer comments publicly
+visible with published content"), which is off until a journal turns it
+on.
+Basis: probe, 2026-10-01. <sup>[f-ojs12](#fn-f-ojs12)</sup>
 
 ### OPS
 
@@ -2682,6 +2691,7 @@ none before the preprint server's.
 **f-ojs12** — Note p: the open-review display is prepared but never
 mounted on the article page. Live-probed 2026-09-28, note p, OJS, two
 runs, with an unticked review as the control.
+Issue report: [docs/issues/U13-OJS12-public-review-never-shown.md](../issues/U13-OJS12-public-review-never-shown.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note f: `preprint_details.tpl` shows the outdated notice
