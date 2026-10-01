@@ -985,7 +985,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP4](#omp4) | After "Create New Version", a press's sitemap lists chapter pages that answer "404 Not Found" | 🐞 | minor | — |
 | [OMP5](#omp5) | A book file's page names the book's page as its own address | 🐞 | minor | — |
 | [OMP6](#omp6) | Every book file address the tags give fails with a server error instead of the file | 🐞 | user-visible · crash: server | — |
-| [OPS1](#ops1) | A preprint with a "URL Path" announces an HTML full-text address that ends on "404 Not Found" | 🐞 | minor | — |
+| [OPS1](#ops1) | A preprint with a "URL Path" announces an HTML full-text address that ends on "404 Not Found" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | The site's own "Google Analytics Plugin" box can be ticked but changes nothing | ❓ | minor | — |
 | [A4](#a4) | The three apps' sitemaps list different kinds of listing pages: only a press lists its categories, and a press omits its Search page | ❓ | minor | — |
 
@@ -1142,7 +1142,7 @@ Basis: probe, 2026-09-26. <sup>f-omp6</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — A preprint with a "URL Path" announces an HTML address that ends on "404 Not Found"** · 🐞 · minor.
+**OPS1 — A preprint with a "URL Path" announces an HTML address that ends on "404 Not Found"** · 🐞 · high.
 On a preprint with a "URL Path", "citation_fulltext_html_url" names the
 HTML galley's address, which leads on to the preprint's download
 address with the galley dropped and ends on "404 Not Found", as the
@@ -1150,7 +1150,7 @@ page's own "HTML" link does; without a "URL Path" the same address
 serves the file. [Article landing page &
 reading](U13-article-landing-page-and-reading.md#ops2) records the
 address fault.
-Basis: probe, 2026-09-26. <sup>f-ops1</sup>
+Basis: probe, 2026-10-01. <sup>f-ops1</sup>
 
 ---
 
@@ -1326,6 +1326,7 @@ OMP's own code.
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note h: OPS `citation_fulltext_html_url` names `preprint/view/{bestId}/{galleyBestId}`; with a "URL Path" set, the redirect to the download address drops the galley. Live-probed 2026-09-26: note q14.
+Issue report: [docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md](../issues/U13-OPS2-OPS3-ops-number-address-url-path.md).
 
 ## Reference — entry points & surfaces
 

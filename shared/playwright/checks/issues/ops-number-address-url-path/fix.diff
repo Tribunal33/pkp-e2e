@@ -1,0 +1,37 @@
+--- a/pages/preprint/PreprintHandler.php
++++ b/pages/preprint/PreprintHandler.php
+@@ -107,9 +107,7 @@
+         // publication, redirect to the current URL
+         $currentUrlPath = $submission->getBestId();
+         if ($currentUrlPath && $currentUrlPath != $urlPath) {
+-            $newArgs = $args;
+-            $newArgs[0] = $currentUrlPath;
+-            $request->redirect(null, $request->getRequestedPage(), $request->getRequestedOp(), $newArgs);
++            $request->redirect(null, $request->getRequestedPage(), $request->getRequestedOp(), [$currentUrlPath, ...$args]);
+         }
+ 
+         $this->preprint = $submission;
+@@ -141,6 +139,14 @@
+                 if ($galley->getBestGalleyId() == $galleyId) {
+                     $this->galley = $galley;
+                     break;
++
++                    // In some cases, a URL to a galley may use the ID when it should use
++                    // the urlPath. Redirect to the galley's correct URL.
++                } elseif (ctype_digit((string) $galleyId) && $galley->getId() == $galleyId) {
++                    $redirectArgs = $subPath === 'version'
++                        ? [$submission->getBestId(), 'version', $this->publication->getId(), $galley->getBestGalleyId()]
++                        : [$submission->getBestId(), $galley->getBestGalleyId()];
++                    $request->redirect(null, $request->getRequestedPage(), $request->getRequestedOp(), [...$redirectArgs, ...$args]);
+                 }
+             }
+             // Redirect to the most recent version of the submission if the request
+@@ -345,7 +351,7 @@
+                     ];
+                 } else {
+                     $redirectArgs = [
+-                        $preprint->getId(),
++                        $preprint->getBestId(),
+                         $this->galley->getBestGalleyId()
+                     ];
+                 }

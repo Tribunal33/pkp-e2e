@@ -1032,6 +1032,12 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for OPS2 and OPS3 (Rule 1, Rule 13; issue report
+    `docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md`): on a preprint server, a
+    preprint with a URL Path, its non-PDF galley link downloading the
+    file, and its ID addresses with a galley and a version part
+    forwarding to the URL Path address with that part kept
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1188,8 +1194,8 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OJS10](#ojs10) | "Recommend Similar Articles" never lists anything | 🐞 | user-visible | — |
 | [OJS12](#ojs12) | A review marked "Publicly Show Reviewer Comments" never shows on the published article's page, though "Mark as Complete" says it will | 🐞 | user-visible | — |
 | [OPS1](#ops1) | Previewing a new version adds "This is an outdated version published on {the preview day}." | 🐞 | minor | — |
-| [OPS2](#ops2) | A preprint with a URL Path loses the galley or version part of its number address; its downloads answer "404 Not Found" | 🐞 | user-visible | — |
-| [OPS3](#ops3) | A galley's number address answers "404 Not Found" once the galley has a URL Path | 🐞 | minor | — |
+| [OPS2](#ops2) | A preprint with a URL Path loses the galley or version part of its ID address; its HTML and other non-PDF downloads answer "404 Not Found" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
+| [OPS3](#ops3) | A galley's ID address answers "404 Not Found" once the galley has a URL Path | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [OPS5](#ops5) | The PDF reader's return arrow is read to screen readers as "##article.return##" | 🐞 | minor | — |
 | [OPS6](#ops6) | The preprint summary never shows the preprint's DOI | 🐞 | minor | — |
 | [OPS7](#ops7) | On a French preprint page the keywords label reads "##preprint.subject## :" | 🐞 | user-visible | — |
@@ -1461,22 +1467,27 @@ preview notice alone.
 Basis: probe, 2026-09-25. <sup>[f-ops1](#fn-f-ops1)</sup>
 
 <a id="ops2"></a>
-**OPS2 — A URL Path cuts the rest of a number address** · 🐞 · user-visible.
-Once a preprint has a URL Path, an address that uses its number forwards
-to the URL Path address but drops what came after the number's slot: a
-galley address lands on the preprint's page, a version address answers
-"404 Not Found". Every galley that downloads (an HTML file, any file with
-no reader) passes through such an address, so on that preprint those
-galley links answer the "404 Not Found" page. A journal keeps the rest of
-the address.
-Basis: probe, 2026-09-25. <sup>[f-ops2](#fn-f-ops2)</sup>
+**OPS2 — A URL Path cuts the rest of an ID address** · 🐞 · high.
+Once a preprint has a URL Path, an address that uses its ID forwards to
+the URL Path address but drops what came after the ID: a galley's ID
+address opens the preprint's page, and version 1.0's address shows the
+current version's page with no "outdated version" notice (or answers
+"404 Not Found" when the version's ID matches none of the preprint's
+galley IDs), so a reader following a citation of 1.0 reads 2.0 without
+being told. Every galley that downloads rather than opening in a reader
+(an HTML file, any other non-PDF file; a PDF too when the "PDF.JS PDF
+Viewer" plugin is off) passes through such an address, so on that
+preprint those galley links answer "404 Not Found" instead of the file.
+A PDF opens in its reader, whose "Download" works. A journal keeps the
+rest of the address.
+Basis: probe, 2026-10-01. <sup>[f-ops2](#fn-f-ops2)</sup>
 
 <a id="ops3"></a>
-**OPS3 — A galley's number address stops working** · 🐞 · minor.
-Once a galley has a URL Path, its old number address answers the "404
-Not Found" page, so a link shared before the URL Path was set breaks. A
-journal forwards the number address to the URL Path address.
-Basis: probe, 2026-09-25. <sup>[f-ops3](#fn-f-ops3)</sup>
+**OPS3 — A galley's ID address stops working** · 🐞 · high.
+Once a galley has a URL Path, its old ID address answers "404 Not
+Found", so a link shared before the URL Path was set breaks. A journal
+forwards the ID address to the URL Path address.
+Basis: probe, 2026-10-01. <sup>[f-ops3](#fn-f-ops3)</sup>
 
 <a id="ops4"></a>
 **OPS4 — No HTML or XML reader on a preprint server** · ✅ · —.
@@ -2616,10 +2627,12 @@ galley. Live-probed 2026-09-25 (note q2): on the URL-Path preprint the
 HTML link went from `…/view/probe-path/{galley}` to
 `…/download/{number}/{galley}` to `…/download/probe-path`, "404 Not
 Found", while the PDF opened its reader.
+Issue report: [docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md](../issues/U13-OPS2-OPS3-ops-number-address-url-path.md).
 
 <a id="fn-f-ops3"></a>
 **f-ops3** — Note f: OJS's `elseif (ctype_digit($galleyId) && $galley->getId() == $galleyId)`
 redirect has no OPS counterpart. Live-probed 2026-09-25, note q10.
+Issue report: [docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md](../issues/U13-OPS2-OPS3-ops-number-address-url-path.md).
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — Note o: OPS ships neither plugin; its HTML galleys take the
