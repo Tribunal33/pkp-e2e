@@ -1714,7 +1714,7 @@ answered 200 with the refused form, the window stayed open with the notice
 quoted in Rule 15b and no message under the boxes, and the page logged the
 script error "Failed to execute 'appendChild' on 'Node': Unexpected token
 ','" on `management/settings/access`.
-Issue report: [docs/issues/U54-A10-role-name-spaces-window-broken.md](../issues/U54-A10-role-name-spaces-window-broken.md).
+Issue report: [pkp-e2e#183](https://github.com/jardakotesovec/pkp-e2e/issues/183) ([docs/issues/U54-A10-role-name-spaces-window-broken.md](../issues/U54-A10-role-name-spaces-window-broken.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — The greyed box is the window's guard alone ([o](#fn-o)): a
