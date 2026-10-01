@@ -1,0 +1,44 @@
+--- a/classes/issue/Collector.php
++++ b/classes/issue/Collector.php
+@@ -37,6 +37,7 @@
+     public const ORDER_DIR_ASC = 'ASC';
+     public const ORDER_DIR_DESC = 'DESC';
+     private const ORDER_CURRENT_ISSUE = 'currentIssue';
++    private const ORDER_ISSUE_NUMBER = 'issueNumber';
+ 
+     public DAO $dao;
+ 
+@@ -187,13 +188,13 @@
+             static::ORDERBY_UNPUBLISHED_ISSUES => [
+                 ['orderBy' => 'i.year', 'direction' => static::ORDER_DIR_ASC],
+                 ['orderBy' => 'i.volume', 'direction' => static::ORDER_DIR_ASC],
+-                ['orderBy' => 'i.number', 'direction' => static::ORDER_DIR_ASC]
++                ['orderBy' => static::ORDER_ISSUE_NUMBER, 'direction' => static::ORDER_DIR_ASC]
+             ],
+             static::ORDERBY_SHELF => [
+                 ['orderBy' => static::ORDER_CURRENT_ISSUE, 'direction' => static::ORDER_DIR_DESC],
+                 ['orderBy' => 'i.year', 'direction' => static::ORDER_DIR_ASC],
+                 ['orderBy' => 'i.volume', 'direction' => static::ORDER_DIR_ASC],
+-                ['orderBy' => 'i.number', 'direction' => static::ORDER_DIR_ASC]
++                ['orderBy' => static::ORDER_ISSUE_NUMBER, 'direction' => static::ORDER_DIR_ASC]
+             ],
+             default => throw new InvalidArgumentException('One of ORDERBY_* constants must be provided')
+         };
+@@ -505,6 +506,17 @@
+                     // Custom query to order by current issue status from the journals table
+                     $q->leftJoin('journals as j', 'j.current_issue_id', '=', 'i.issue_id')
+                         ->orderByRaw('CASE WHEN j.current_issue_id IS NOT NULL then 1 else 0 END ' . $resultOrdering['direction']);
++                } elseif ($resultOrdering['orderBy'] === static::ORDER_ISSUE_NUMBER) {
++                    // The number is text ("2", "10", "1-2", "Suppl."): order by its leading digits
++                    // as a number, numbers that do not start with a digit last, then by the text
++                    $direction = $resultOrdering['direction'];
++                    match (DB::getDriverName()) {
++                        'mysql', 'mariadb' => $q->orderByRaw("COALESCE(i.number, '') NOT REGEXP '^[0-9]'")
++                            ->orderByRaw("CAST(i.number AS UNSIGNED) {$direction}"),
++                        'pgsql' => $q->orderByRaw("CAST(SUBSTRING(i.number FROM '^[0-9]+') AS NUMERIC) {$direction} NULLS LAST"),
++                        default => throw new Exception('Unexpected database driver!')
++                    };
++                    $q->orderBy('i.number', $direction);
+                 } else {
+                     $q->orderBy($resultOrdering['orderBy'], $resultOrdering['direction']);
+                 }
