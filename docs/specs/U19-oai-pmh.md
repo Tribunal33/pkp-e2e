@@ -1862,7 +1862,7 @@ Issue report: [pkp-e2e#301](https://github.com/jardakotesovec/pkp-e2e/issues/301
 
 <a id="fn-f-a4"></a>
 **f-a4** — Live-probed 2026-09-26: note q15, the last part of each list. Code: note k.
-Issue report: [docs/issues/U19-A4-oai-browser-last-part-says-more-results.md](../issues/U19-A4-oai-browser-last-part-says-more-results.md).
+Issue report: [pkp-e2e#303](https://github.com/jardakotesovec/pkp-e2e/issues/303) ([docs/issues/U19-A4-oai-browser-last-part-says-more-results.md](../issues/U19-A4-oai-browser-last-part-says-more-results.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-26, all three apps: "formats" on a record's header opened ListMetadataFormats with the identifier, which read "This is a list of metadata formats available from this archive." and linked each prefix to the whole archive's records. Code: `oai2.xsl` sets `$identifier` from the text of `oai:request` after "identifier=", but that text is the base URL (the arguments are attributes), so the "for the record" branch never shows.
