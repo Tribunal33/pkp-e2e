@@ -695,25 +695,36 @@ exports.resultLines = resultLines;
  * older PHP every bcrypt hash counts as "stored another way" and gives the
  * second. Either way every account is imported.
  *
+ * `otherLines` are lines the file also earns, such as a role the account
+ * already holds in the context (pkp/pkp-lib#13412): with them the panel
+ * always takes the second form, the password lines present or not. With
+ * `otherLinesOptional` the panel may also leave them out, for an app whose
+ * lib/pkp does not write them yet.
+ *
  * @param {import('@playwright/test').Locator} panel
- * @param {{usernames: string[], successText: string, newPasswordLine: (username: string) => string}} expected
+ * @param {{usernames: string[], successText: string, newPasswordLine: (username: string) => string, otherLines?: string[], otherLinesOptional?: boolean}} expected
  */
-async function expectEveryUserImported(panel, {usernames, successText, newPasswordLine}) {
+async function expectEveryUserImported(panel, {usernames, successText, newPasswordLine, otherLines = [], otherLinesOptional = false}) {
     const flat = (t) => (t || '').replace(/\s+/g, ' ').trim();
-    const everyLine = usernames.map((u) => flat(newPasswordLine(u))).sort();
+    const passwordLines = usernames.map((u) => flat(newPasswordLine(u)));
+    const others = otherLines.map(flat);
+    const sets = [[...others], [...passwordLines, ...others]];
+    if (others.length && otherLinesOptional) sets.push([], passwordLines);
+    const accepted = sets.filter((set) => set.length).map((set) => JSON.stringify([...set].sort()));
+    const successAllowed = !others.length || otherLinesOptional;
     await expect
         .poll(
             async () => {
                 const text = flat(await panel.innerText());
                 const lines = (await panel.getByRole('listitem').allInnerTexts()).map(flat).sort();
-                if (text === flat(successText) && lines.length === 0) return 'every user imported';
+                if (successAllowed && text === flat(successText) && lines.length === 0) return 'every user imported';
                 const heading = await panel.getByRole('heading', {name: 'Import/Export errors:', exact: true}).count();
-                if (heading === 1 && !text.includes(flat(successText)) && JSON.stringify(lines) === JSON.stringify(everyLine)) {
+                if (heading === 1 && !text.includes(flat(successText)) && accepted.includes(JSON.stringify(lines))) {
                     return 'every user imported';
                 }
                 return {text, lines};
             },
-            {timeout: T, message: 'every account of the file imported (success sentence, or a new-password line for each)'}
+            {timeout: T, message: 'every account of the file imported (success sentence, or a new-password line for each, with the other lines expected)'}
         )
         .toBe('every user imported');
 }

@@ -99,6 +99,8 @@ const USERS_NOTE =
     'Note that if the imported file contains any usernames or email addresses that already exist in the system, the user data for those users will not be imported and any new roles to be created will be assigned to the existing users.';
 const NEW_PASSWORD_SENT = (u) =>
     `The imported user "${u}" password could not be imported as is. A new password is been send to the user email. The user has been imported.`;
+const ROLE_HELD = (u, g) =>
+    `The role "${g}" of the user "${u}" has not been imported because the user already holds this role in an overlapping period.`;
 const NO_MATCH = (u, e) => `The username "${u}" and the e-mail "${e}" do not match to the one and the same existing user.`;
 const SAVED = 'Your changes have been saved.';
 const NONE_SELECTED = 'No objects selected.';
@@ -806,11 +808,13 @@ test.describe('Import & export', () => {
         // Every account of the file imported, in either of the two forms
         // the server's PHP decides (T-ojs-3): the success sentence, or the
         // "…could not be imported as is. … The user has been imported." line
-        // for each account.
+        // for each account; with the line for the manager's role, which the
+        // manager already holds in B (pkp/pkp-lib#13412).
         await expectEveryUserImported(results, {
             usernames: inFile.map((u) => /** @type {string} */ (u.username)),
             successText: USERS_IMPORTED,
             newPasswordLine: NEW_PASSWORD_SENT,
+            otherLines: [ROLE_HELD(manager, 'Journal manager')],
         });
 
         // B's users: moss Copyeditor, fern Author (Rules 23, 28); their

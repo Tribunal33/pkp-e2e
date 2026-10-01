@@ -50,6 +50,16 @@ deletes each once it is a report, a register entry or dismissed._
   the two changes that added and removed those columns; OMP and OPS not
   checked.
 - 2026-09-30 (issues session, workstation, U19 A1 reporter on the 3.5 dataset fleet): OPS `stable-3_5_0` only: "Title & Abstract" on a preprint of a server created under Administration › Hosted Servers opens an "Error" window; the log has `TitleAbstractForm::__construct(): Argument #4 ($abstractWordLimit) must be of type int, null given` (`api/v1/submissions/SubmissionController.php:191`). `main` casts the value with `(int)`, so it looks fixed there and not backported; for the stable-3_5_0 read.
+- 2026-10-01 (housekeeping session, s2): ojs `bade233f73` (pkp-lib
+  `2e377d27fc`, #13412, the fix for the #13390 regression row) red OJS
+  U63 S6 on CI (run 36729054418): importing journal A's users into B now
+  adds "The role "Journal manager" of the user "{manager}" has not been
+  imported because the user already holds this role in an overlapping
+  period." for the manager B already has. S6 now expects that line on
+  OJS and accepts it on OMP (`otherLinesOptional`, required once OMP's
+  lib/pkp carries #13412; OMP checked on lib/pkp `887ad73d6c`). The spec
+  side is the sync's: U63 Rules 22, 22c, 24 and 28, A17 and A18, the new
+  invalid-date and overlap lines, and the ci-triage row.
 
 ## Sync log
 
