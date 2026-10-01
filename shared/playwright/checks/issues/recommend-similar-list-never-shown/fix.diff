@@ -1,0 +1,29 @@
+--- a/plugins/generic/recommendBySimilarity/RecommendBySimilarityPlugin.php
++++ b/plugins/generic/recommendBySimilarity/RecommendBySimilarityPlugin.php
+@@ -25,6 +25,7 @@
+ use PKP\facades\Locale;
+ use PKP\plugins\GenericPlugin;
+ use PKP\plugins\Hook;
++use PKP\publication\PKPPublication;
+ 
+ class RecommendBySimilarityPlugin extends GenericPlugin
+ {
+@@ -82,7 +83,8 @@
+                 ControlledVocab::CONTROLLED_VOCAB_SUBMISSION_KEYWORD,
+                 Application::ASSOC_TYPE_PUBLICATION,
+                 $submission->getCurrentPublication()->getId(),
+-                [Locale::getLocale(), $submission->getData('locale'), Locale::getPrimaryLocale()]
++                [Locale::getLocale(), $submission->getData('locale'), Locale::getPrimaryLocale()],
++                asEntryData: false
+             )
+         );
+         foreach ($allSearchTerms as $localeSearchTerms) {
+@@ -119,7 +121,7 @@
+             ->getCollector()
+             ->excludeIds([$submissionId])
+             ->filterByContextIds([$context->getId()])
+-            ->filterByLatestPublished(true)
++            ->filterByCurrentPublicationStatus([PKPPublication::STATUS_PUBLISHED])
+             ->searchPhrase($searchPhrase, static::MAX_SEARCH_KEYWORDS);
+ 
+         $offset = ($rangeInfo->getPage() - 1) * $rangeInfo->getCount();

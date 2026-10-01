@@ -1064,6 +1064,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-OPS6-preprint-summary-doi-never-shown.md`): a
     preprint with a DOI, its entry in "Archives" showing the "DOI:" line
     {OPS}
+  - the guard for OJS10 (Rule 20b; issue report
+    `docs/issues/U13-OJS10-similar-articles-list-never-shown.md`):
+    with "Recommend Similar Articles" on, an article page listing the
+    published articles that share its keywords, one in an issue and one
+    outside any issue, and leaving out a scheduled one {OJS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1217,7 +1222,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OJS7](#ojs7) | A refused "OK" in the Publication Facts settings puts back the saved values | 🐞 | minor | — |
 | [OJS8](#ojs8) | An impossible Publication Facts "Start Date" is dropped with "Your changes have been saved." | 🐞 | minor | — |
 | [OJS9](#ojs9) | The Lens reader page's script fails on every XML galley | 🐞 | minor · crash: script | — |
-| [OJS10](#ojs10) | "Recommend Similar Articles" never lists anything | 🐞 | user-visible | — |
+| [OJS10](#ojs10) | With "Recommend Similar Articles" on, article pages never show "Similar Articles" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS12](#ojs12) | A review marked "Publicly Show Reviewer Comments" never shows on the published article's page, though "Mark as Complete" says it will | 🐞 | user-visible | — |
 | [OPS1](#ops1) | Previewing a new version adds "This is an outdated version published on {the preview day}." | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | A preprint with a URL Path loses the galley or version part of its ID address; its HTML and other non-PDF downloads answer "404 Not Found" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
@@ -1458,12 +1463,16 @@ typeset. The article's text and its tabs still show.
 Basis: probe, 2026-09-25. <sup>[f-ojs9](#fn-f-ojs9)</sup>
 
 <a id="ojs10"></a>
-**OJS10 — "Recommend Similar Articles" never lists anything** · 🐞 · user-visible.
-With "Recommend Similar Articles" on, no article shows "Similar
-Articles", even when a dozen published articles in the journal share its
-keywords, before and after the site's scheduled jobs run. The page opens
+**OJS10 — With "Recommend Similar Articles" on, article pages never show "Similar Articles"** · 🐞 · medium.
+With the "Recommend Similar Articles" plugin on (it is off on a new
+journal), no article page shows "Similar Articles", even when another published
+article in the journal carries exactly the same keywords. The page opens
 normally, with no list and no message.
-Basis: probe, 2026-09-25. <sup>[f-ojs10](#fn-f-ojs10)</sup>
+Readers lose the list that leads from an article to related ones in the
+journal, and the journal has nothing to set that brings it back. It
+happens on every article, whether it sits in a published issue or was
+published without one.
+Basis: probe, 2026-10-01. <sup>[f-ojs10](#fn-f-ojs10)</sup>
 
 <a id="ojs11"></a>
 **OJS11 — The IEEE citation shown first carries its number** · ❓ · minor.
@@ -2639,6 +2648,7 @@ note q8, two runs.
 entries without their names ("Array Array"), and the query filters to
 articles outside a published issue; nothing is logged.
 Live-probed 2026-09-25, note q14.
+Issue report: [docs/issues/U13-OJS10-similar-articles-list-never-shown.md](../issues/U13-OJS10-similar-articles-list-never-shown.md).
 
 <a id="fn-f-ojs11"></a>
 **f-ojs11** — Note h: CSL numbers each IEEE entry in a
