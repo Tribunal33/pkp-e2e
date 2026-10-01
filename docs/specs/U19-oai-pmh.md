@@ -1953,7 +1953,7 @@ Issue report: [pkp-e2e#252](https://github.com/jardakotesovec/pkp-e2e/issues/252
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — Live-probed 2026-09-26, all three apps, two runs: after "Remove" under Administration › Hosted Journals ("Are you sure you want to permanently delete … and all of its contents?", "OK"), site-wide GetRecord of a posted preprint answered "No matching identifier in this repository" and no tombstone row was left; a removed journal's and press's items read as deleted, with a tombstone row each. Code: note n.
-Issue report: [docs/issues/U19-OPS4-removed-preprint-server-no-deleted-records.md](../issues/U19-OPS4-removed-preprint-server-no-deleted-records.md).
+Issue report: [pkp-e2e#302](https://github.com/jardakotesovec/pkp-e2e/issues/302) ([docs/issues/U19-OPS4-removed-preprint-server-no-deleted-records.md](../issues/U19-OPS4-removed-preprint-server-no-deleted-records.md)).
 
 ## Reference — entry points & surfaces
 
