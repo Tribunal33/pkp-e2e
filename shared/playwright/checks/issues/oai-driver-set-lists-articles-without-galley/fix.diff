@@ -1,0 +1,22 @@
+--- a/plugins/generic/driver/DRIVERPlugin.php
++++ b/plugins/generic/driver/DRIVERPlugin.php
+@@ -195,8 +195,7 @@
+             }
+ 
+             // is there a full text
+-            $galleys = $publication->getData('galleys');
+-            if (!empty($galleys)) {
++            if (count($publication->getData('galleys')) > 0) {
+                 return $status == DRIVER_ACCESS_OPEN;
+             }
+             return false;
+@@ -249,8 +248,7 @@
+         }
+ 
+         // is there a full text
+-        $galleys = $publication->getData('galleys');
+-        if (!empty($galleys)) {
++        if (count($publication->getData('galleys')) > 0) {
+             return $status == DRIVER_ACCESS_OPEN;
+         }
+         return false;
