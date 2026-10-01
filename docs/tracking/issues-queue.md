@@ -10,8 +10,8 @@ entry lands in it (MAINTENANCE "The issues session").
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 | **In progress: issues session s1, 2026-10-01.** Done: A2, A5, OJS1, OJS4, OJS5, OJS9; A1 pending translation (incidentals; U69 A15 joined pkp-e2e#124); done also: OJS10; in progress: OJS12, OPS2; open: the rest (A1 with U69 A15) |
-| [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **In progress: issues session s1, 2026-10-01.** Done: A2, A5, OJS1, OJS4, OJS5, OJS9; A1 pending translation (incidentals; U69 A15 joined pkp-e2e#124); done also: OJS10; in progress: OJS12, OPS2; open: the rest (A1 with U69 A15) |
+| [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 | **In progress: issues session s1, 2026-10-01.** Done: A2, A5, OJS1, OJS4, OJS5, OJS9; A1 pending translation (incidentals; U69 A15 joined pkp-e2e#124); done also: OJS10, OPS2 (with U20 OPS1); in review: OJS12; in progress: OPS7; open: the rest (A1 with U69 A15) |
+| [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **In progress: issues session s1, 2026-10-01.** Done: A2, A5, OJS1, OJS4, OJS5, OJS9; A1 pending translation (incidentals; U69 A15 joined pkp-e2e#124); done also: OJS10, OPS2 (with U20 OPS1); in review: OJS12; in progress: OPS7; open: the rest (A1 with U69 A15) |
 | [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 | **Claimed: issues session s1, 2026-09-30** (A15 with U13 A1); **A9 done: issues session s3, 2026-09-30** (with U47 OMP1) |
 | [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
@@ -40,7 +40,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 4 | 1 | 4 |  |
 | [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | OPS2 done with U51 OPS1 (2026-09-30, workstation s1) |
 | [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 |  |
-| [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | **OMP6 done: issues session s3, 2026-09-30** (with U69 A9); the other entries are free for another session |
+| [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | **OMP6 done: issues session s3, 2026-09-30** (with U69 A9); **OPS1 done: issues session s1, 2026-10-01** (with U13 OPS2); the other entries are free for another session |
 | [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 |  |
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 7 | 1 | 1 |  |
 | [U15](../specs/U15-search.md) | 13 | 0 | 6 | OPS2 (❓, not queued work) is named in the U51 OPS1 report |
