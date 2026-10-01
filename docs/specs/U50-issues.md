@@ -1034,6 +1034,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U50-A14-full-issue-wrong-galley-address-empty-page.md`):
     a signed-out visitor at a "Full Issue" galley address that names no
     galley of the issue landing on the issue's page
+  - the guard for A2 (issue report
+    `docs/issues/U50-A2-unpublish-back-issue-clears-current.md`):
+    "Unpublish Issue" on a back issue that is not the current one leaving
+    "Current" on the current issue
 - **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
@@ -1109,7 +1113,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Create Issue" arrives with "Title" ticked, and "Save" without a title is refused with only a passing notice; the "Title" box is not marked | 🐞 | user-visible | — |
-| [A2](#a2) | Unpublishing any issue leaves the journal with no current issue | 🐞 | user-visible | — |
+| [A2](#a2) | Unpublishing an older issue leaves the journal with no current issue | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A4](#a4) | After a refused "Save", "Date Published" shows today's date, which the issue saved next does not get | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A "Volume" of 99999 leaves "Create Issue" open with nothing shown | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A6](#a6) | "Year" accepts letters: "20a6" is saved as 20 without a message | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
@@ -1141,15 +1145,17 @@ mark the "Title" box with its message. Basis: probe, 2026-09-25.
 <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — Unpublishing any issue removes the current issue** · 🐞 · user-visible.
-"Unpublish Issue" on any published issue, including an old back issue
-that is not the current one, leaves the journal with no current issue.
-"Current" is expected to keep showing the current issue; instead it
-opens "No Current Issue" with "This journal has not published any
-issues." while "Archives" still lists the published issues, and the
-home page's "Current Issue" part goes. This lasts until a manager
-presses "Current Issue" on a row or publishes an issue. Basis: probe,
-2026-09-25. <sup>f-a2</sup>
+**A2 — Unpublishing an older issue leaves the journal with no current issue** · 🐞 · medium.
+An editor uses "Unpublish Issue" on an older back issue, one that is
+not the journal's current issue. Unpublishing clears the journal's
+current issue whichever issue is unpublished, so the journal is left
+with no current issue at all. Readers who follow "Current" get "No
+Current Issue" and "This journal has not published any issues.", and
+the home page loses its "Current Issue" part. "Archives" still lists
+the newer issue.
+The journal stays without a current issue until a manager sets one
+again by hand, or publishes another issue.
+Basis: probe, 2026-09-30. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — Deleting an issue unpublishes its articles with a generic warning** · ❓ · user-visible.
@@ -1479,6 +1485,7 @@ where it is made.
 
 <a id="fn-f-a2"></a>
 **f-a2** — `IssueGridHandler::unpublishIssue()` calls `Repo::issue()->updateCurrent($request->getContext()->getId())` with no issue, and `updateCurrent()` then runs `JournalDAO::removeCurrentIssue()` regardless of which issue was unpublished. The home page's part: U10 Rule 14 needs a current issue. Probe: td11; "Archives" still listed the published issues.
+Issue report: [docs/issues/U50-A2-unpublish-back-issue-clears-current.md](../issues/U50-A2-unpublish-back-issue-clears-current.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Confirmation: `IssueGridRow` `delete` uses `common.confirmDelete`; `editor.issues.confirmIssueDelete` exists in `locale/en/editor.po` and is used nowhere. Cascade: note t. Probe: td12; the specific warning never appeared.

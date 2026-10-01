@@ -1,0 +1,14 @@
+--- a/classes/controllers/grid/issues/IssueGridHandler.php
++++ b/classes/controllers/grid/issues/IssueGridHandler.php
+@@ -708,7 +708,10 @@
+         Hook::call('IssueGridHandler::unpublishIssue', [&$issue]);
+ 
+         Repo::issue()->edit($issue, $updateParams);
+-        Repo::issue()->updateCurrent($request->getContext()->getId());
++        // Only the current issue stops being current when it is unpublished
++        if ($journal->getData('currentIssueId') == $issue->getId()) {
++            Repo::issue()->updateCurrent($journal->getId());
++        }
+ 
+         Repo::doi()->issueUpdated($issue);
+ 
