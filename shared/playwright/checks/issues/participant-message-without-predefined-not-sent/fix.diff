@@ -1,0 +1,58 @@
+diff --git a/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php b/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
+--- a/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
+@@ -596,10 +596,11 @@
+      */
+     public function fetchTemplateBody($args, $request)
+     {
+-        $templateId = $request->getUserVar('template');
++        $templateId = (int) $request->getUserVar('template');
+         $context = $request->getContext();
+         $user = $request->getUser();
+-        $template = Template::with('userGroups')->withContextId($context->getId())->find($templateId);
++        // The blank entry has no body: leave the message as it is
++        $template = $templateId ? Template::with('userGroups')->withContextId($context->getId())->find($templateId) : null;
+         if ($template && Repo::editorialTask()->isTemplateAccessibleToUser($template, $user)) {
+             $submission = $this->getSubmission();
+             $mailable = new TemplateVariables($template->promote($submission), $submission, $context);
+diff --git a/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php b/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
+--- a/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
+@@ -175,8 +175,10 @@
+ 
+         $contextDao = Application::getContextDAO();
+         $context = $contextDao->getById($submission->getData('contextId'));
+-        $templateId = $this->getData('template');
+-        $template = Template::withContextId($context->getId())->find($templateId);
++        $templateId = (int) $this->getData('template');
++        $template = $templateId
++            ? Template::withContextId($context->getId())->find($templateId)
++            : $this->getDefaultTemplate($context->getId());
+ 
+         if (!is_a($template, Template::class)) {
+             return;
+@@ -309,6 +311,24 @@
+                 $submission->getId()
+             );
+         }
++    }
++
++    /**
++     * Get the stage's default discussion template, used when no predefined
++     * message is chosen. Both review stages use the review one, as the stage
++     * mailables did before the discussion templates (StageMailable).
++     */
++    protected function getDefaultTemplate(int $contextId): ?Template
++    {
++        $key = match ((int) $this->_stageId) {
++            WORKFLOW_STAGE_ID_SUBMISSION => 'DISCUSSION_NOTIFICATION_SUBMISSION',
++            WORKFLOW_STAGE_ID_INTERNAL_REVIEW, WORKFLOW_STAGE_ID_EXTERNAL_REVIEW => 'DISCUSSION_NOTIFICATION_REVIEW',
++            WORKFLOW_STAGE_ID_EDITING => 'DISCUSSION_NOTIFICATION_COPYEDITING',
++            WORKFLOW_STAGE_ID_PRODUCTION => 'DISCUSSION_NOTIFICATION_PRODUCTION',
++            default => null,
++        };
++
++        return $key ? Template::withKeys([$key], $contextId)->first() : null;
+     }
+ 
+     /**
