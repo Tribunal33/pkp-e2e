@@ -9,7 +9,7 @@ The work is split between three sessions, each with its own list: the
 **upstream session** keeps the suite in step with what the team ships,
 the **housekeeping session** works the campaign's own backlog
 (incidentals, friction, flakes, stale artifacts), both scheduled, and
-the **issues session**, started on request, turns the specs' defects
+the **issues session**, started on request or hourly, turns the specs' defects
 into reports the team can triage. A session does its own
 list only; work it finds for another goes as a line into the tracking
 file that session reads. A red `main` interrupts any of them.
@@ -153,9 +153,19 @@ proposed fix. The session makes these from the findings the specs
 already hold, spec by spec, and every report is held to
 `docs/process/REPORT.md`.
 
-It runs on the VM and is not scheduled: it starts when someone asks for
-it on Mattermost with the number of specs to work, "start issues
-session, 2 specs" (no number means one). It takes the specs from the top
+It runs on the VM, started two ways: when someone asks for it on
+Mattermost with the number of specs to work, "start issues session, 2
+specs" (no number means one), and every hour by a claude-threads routine
+that starts a one-spec session. **At most two VM issues sessions run at
+once.** A VM session counts while its "Taken: issues session, VM s<n>"
+mark is in the pushed queue (step 4) and slot s<n> is held in `node
+bin/slot.js status`; a mark whose slot is free is stale, and the reader
+removes it in its own push. Workstation sessions do not count. The
+hourly routine first pulls `main` and counts: at two it posts one line
+("issues: two VM sessions running (s<n>, s<m>), skipped") and ends,
+leaving the slot clean; otherwise it works one spec from step 1. A
+session asked for on Mattermost checks the same count and says so when
+it would make a third. It takes the specs from the top
 of `docs/tracking/issues-queue.md` and works every 🐞 entry in their
 registers. The ❓ and ✅ entries stay out: a question needs a ruling,
 not a fix.

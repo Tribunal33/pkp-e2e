@@ -10,7 +10,9 @@ entry lands in it (MAINTENANCE "The issues session").
 
 A session takes a row by marking its Note "**Taken: issues session,
 <VM or workstation> s<n>, <date>**" and pushing before any other work
-(MAINTENANCE issues session step 4); a row so marked is not free.
+(MAINTENANCE issues session step 4); a row so marked is not free. The
+VM marks also count the VM's issues sessions: at most two run at once
+(MAINTENANCE "The issues session").
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
