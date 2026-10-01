@@ -1115,6 +1115,10 @@ Left out of the scenarios above, by reason:
     preprint server's lists, and a journal's "Latest Publications" shown
     without the current issue, leaving out a galley with no file and the
     additional files
+  - the guard for OJS3 (Rule 19, Rule 21; issue report
+    `docs/issues/U13-OJS3-publication-facts-panel-missing-without-label-file.md`):
+    an article page shown in French (Canada) with the "Publication Facts"
+    panel and its labels {OJS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1261,7 +1265,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A11](#a11) | Keywords are listed in no fixed order: the order typed is not kept | 🐞 | minor | — |
 | [OJS1](#ojs1) | Readers get no other citation format or citation download on an article published outside a published issue | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | Publication Facts Label settings always warn "Funding Plugin Not Present", for a plugin that no longer exists | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OJS3](#ojs3) | On a French page the Publication Facts panel would have no labels | 🐞 | minor | — |
+| [OJS3](#ojs3) | In French (Canada) and every other language without its own labels, article pages show no "Publication Facts" panel | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | With "Recommend Articles by Author" on, article pages never show "Most read articles by the same author(s)" | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS5](#ojs5) | With the Publication Facts Label plugin on, no article page shows the "Publication Facts" panel | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS6](#ojs6) | The PDF reader's return arrow is announced "Return to Issue Details" but opens the article | 🐞 | minor | — |
@@ -1489,13 +1493,22 @@ plugin, so the warning there is true.
 Basis: probe, 2026-10-01. <sup>[f-ojs2](#fn-f-ojs2)</sup>
 
 <a id="ojs3"></a>
-**OJS3 — The Publication Facts panel is empty in French** · 🐞 · minor.
-The panel takes its labels from a file per language, and has none for
-Canadian French, the seeded journals' second language: on a French page
-the panel would show no labels. The plugin ships labels for "fr", which
-the page never asks for. While the panel never shows ([OJS5](#ojs5)),
-this is hidden behind it.
-Basis: code. <sup>[f-ojs3](#fn-f-ojs3)</sup>
+**OJS3 — In French (Canada) and every other language without its own labels, article pages show no "Publication Facts" panel** · 🐞 · medium.
+With "Publication Facts Label plugin" on, an article page read in French
+(Canada) shows no Publication Facts panel, and nothing says so. The same
+page in English shows it.
+It is one problem with two cases. The panel takes its labels from one
+file per language and stays empty when the page's language has no file
+of its own:
+- French (Canada) and Spanish (Mexico): the labels exist under the base
+  language ("fr", "es"), and the page does not look there.
+- 58 more of the 78 languages OJS ships, German, Dutch and Arabic among
+  them: the plugin has no labels at all.
+With the proposed fix a reader of the first case sees the panel with the
+base language's labels. A reader of the second sees it with English
+labels, or still no panel if the team keeps to no English fallback.
+On `main` this is hidden while the panel never shows ([OJS5](#ojs5)).
+Basis: probe, 2026-10-01. <sup>[f-ojs3](#fn-f-ojs3)</sup>
 
 <a id="ojs4"></a>
 **OJS4 — With "Recommend Articles by Author" on, article pages never show "Most read articles by the same author(s)"** · 🐞 · medium · crash: server.
@@ -2733,6 +2746,7 @@ failure only logs "PFL: failed to load translations" to the console.
 Live-probed 2026-09-25 (note q13): the French page showed no panel and
 fetched no label file, the same as the English page, so the entry rests
 on the code until the panel shows.
+Issue report: [docs/issues/U13-OJS3-publication-facts-panel-missing-without-label-file.md](../issues/U13-OJS3-publication-facts-panel-missing-without-label-file.md).
 
 <a id="fn-f-ojs4"></a>
 **f-ojs4** — Note n. The search results' shape changed with pkp-lib's

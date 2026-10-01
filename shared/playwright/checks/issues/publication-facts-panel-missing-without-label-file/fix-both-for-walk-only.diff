@@ -1,0 +1,100 @@
+--- a/plugins/generic/pflPlugin/PflPlugin.php
++++ b/plugins/generic/pflPlugin/PflPlugin.php
+@@ -72,7 +72,7 @@
+             ->join('sections AS sec', 'p.section_id', '=', 'sec.section_id')
+             ->where('s.context_id', $journalId)
+             ->where('sec.meta_reviewed', 1)
+-            ->where('s.status', STATUS_PUBLISHED)
++            ->where('s.status', PKPSubmission::STATUS_PUBLISHED)
+             ->when($dateStart, fn($q) => $q->where('s.date_submitted', '>=', strtotime($dateStart)))
+             ->get()->first();
+         return $row->submission_count;
+@@ -191,6 +191,33 @@
+     }
+ 
+     /**
++     * Get the locale of the label file to load: the current locale's, else
++     * its language's (fr for fr_CA), else the English one.
++     */
++    function getLabelLocale(): string
++    {
++        $locale = Locale::getLocale();
++        foreach ([$locale, \Locale::getPrimaryLanguage($locale)] as $localeCheck) {
++            if (file_exists(__DIR__ . "/pfl/locale/{$localeCheck}.json")) return $localeCheck;
++        }
++        return 'en';
++    }
++
++    /**
++     * Format a percentage in the current locale, else in the label file's
++     * locale, else in English, so that a locale without the plugin's own
++     * translation does not print the raw locale key.
++     */
++    function formatPercentage($num): string
++    {
++        foreach ([Locale::getLocale(), $this->getLabelLocale(), 'en'] as $locale) {
++            $value = Locale::getBundle($locale)->translateSingular('plugins.generic.pfl.percentage', ['num' => $num]);
++            if ($value !== null) return $value;
++        }
++        return "{$num}%";
++    }
++
++    /**
+      * Hook handler to display article PFL
+      */
+     function displayArticlePfl(string $hookName, array $args): bool
+@@ -304,21 +331,21 @@
+         $templateMgr->assign([
+             'pflData' => [
+                 'baseUrl' => "{$request->getBaseUrl()}/{$this->getPluginPath()}/pfl",
+-                'locale' =>  Locale::getLocale(),
++                'locale' => $this->getLabelLocale(),
+                 'values' => [
+                     'pflReviewerCount' => $this->getReviewerCount($article->getId()),
+                     'pflReviewerCountClass' => round($this->getReviewerAverage($journal->getId(), $dateStart), 1),
+                     'pflDataAvailabilityValue' => $pflDataAvailabilityValue,
+                     'pflDataAvailabilityValueUrl' => $pflDataAvailabilityValueUrl,
+-                    'pflDataAvailabilityPercentClass' => __('plugins.generic.pfl.percentage', ['num' => $statistics['pflDataAvailabilityPercentClass']]),
++                    'pflDataAvailabilityPercentClass' => $this->formatPercentage($statistics['pflDataAvailabilityPercentClass']),
+                     'pflFundersValue' => $pflFundersValue,
+                     'pflFundersCount' => $pflFundersValueUrl,
+-                    'pflNumHaveFundersClass' => __('plugins.generic.pfl.percentage', ['num' => $statistics['pflNumHaveFundersClass']]),
++                    'pflNumHaveFundersClass' => $this->formatPercentage($statistics['pflNumHaveFundersClass']),
+                     'pflCompetingInterestsValue' => $pflCompetingInterestsValue,
+                     'pflCompetingInterestsValueUrl' => $pflCompetingInterestsValueUrl,
+-                    'pflCompetingInterestsPercentClass' => __('plugins.generic.pfl.percentage', ['num' => $statistics['pflCompetingInterestsPercentClass']]),
+-                    'pflAcceptedPercent' => __('plugins.generic.pfl.percentage', ['num' => $acceptanceRate]),
+-                    'pflNumAcceptedClass' => __('plugins.generic.pfl.percentage', ['num' => $statistics['pflNumAcceptedClass']]),
++                    'pflCompetingInterestsPercentClass' => $this->formatPercentage($statistics['pflCompetingInterestsPercentClass']),
++                    'pflAcceptedPercent' => $this->formatPercentage($acceptanceRate),
++                    'pflNumAcceptedClass' => $this->formatPercentage($statistics['pflNumAcceptedClass']),
+                     'pflDaysToPublication' => $publicationDate->diff($submissionDate)->format('%a'),
+                     'pflDaysToPublicationClass' =>  $statistics['pflDaysToPublicationClass'],
+                     'pflIndexList' => $pflIndexListTransformed,
+@@ -449,7 +476,7 @@
+             [
+                 'inline' => false,
+                 'contexts' => ['frontend'],
+-                'priority' => STYLE_SEQUENCE_LAST
++                'priority' => TemplateManager::STYLE_SEQUENCE_LAST
+             ]
+         );
+ 
+@@ -487,7 +514,7 @@
+ 
+         $templateMgr->addHeader(
+             'pfl_locale',
+-            '<link rel="preload" href="'. $pflPath .'locale/'. Locale::getLocale() .'.json" as="fetch" crossorigin="anonymous">'
++            '<link rel="preload" href="'. $pflPath .'locale/'. $this->getLabelLocale() .'.json" as="fetch" crossorigin="anonymous">'
+         );
+ 
+         $templateMgr->addStyleSheet(
+@@ -496,7 +523,7 @@
+             [
+                 'contexts' => 'frontend',
+                 'inline' => true,
+-                'priority' => STYLE_SEQUENCE_LAST,
++                'priority' => TemplateManager::STYLE_SEQUENCE_LAST,
+             ]
+         );
+     }
