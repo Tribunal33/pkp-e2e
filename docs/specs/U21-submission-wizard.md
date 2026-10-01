@@ -1007,6 +1007,10 @@ Left out of the scenarios above, by reason:
     draft submitted from a second tab, then "Submit" on the first tab's
     Review step showing the "already submitted" message, not an empty
     problems banner
+  - the guard for OMP2 (issue report
+    `docs/issues/U21-OMP2-press-notify-anyone-list-refused.md`): a press
+    saving two comma-separated addresses under "Notify Anyone" and keeping
+    them after a reload
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1084,7 +1088,7 @@ are the source; badges, Impact and Basis:
 | [A14](#a14) | Section Editors who are also Authors are offered "Section editor" in "Submit As", then refused | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | Submission wizard refuses a plain language summary over the word limit, then hangs on "Saving" | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [A18](#a18) | Submission wizard autosaves a change after its first letter, and the rest only a minute later | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | minor | — |
+| [OMP2](#omp2) | A press manager cannot save two "Notify Anyone" addresses, though the box's help text asks for a comma-separated list | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
 | [OPS3](#ops3) | On a preprint server, authors cannot cancel their own draft: Cancel does nothing, Delete is refused | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1383,14 +1387,15 @@ summarizes them. Chapter management itself belongs to
 section machinery by design. <sup>[fn-omp1](#fn-omp1)</sup>
 
 <a id="omp2"></a>
-**OMP2 — A press refuses the comma-separated copy list its help text asks for** · 🐞 · minor.
-On the workflow settings' Emails screen the "Notify Anyone" box's help
-reads "Separate multiple email addresses with a comma. Example:
-one@example.com,two@example.com", the same words on every app. On a press,
-saving two addresses that way is refused with "This is not a valid email
-address."; a journal and a preprint server accept the list. So a press can
-copy the acknowledgement to one extra address only, and its own screen
-says otherwise. Basis: probe. <sup>[fn-omp2](#fn-omp2)</sup>
+**OMP2 — A press manager cannot save two "Notify Anyone" addresses, though the box's help text asks for a comma-separated list** · 🐞 · low.
+On a press, the "Notify Anyone" box (Settings › Workflow › "Emails")
+says "Separate multiple email addresses with a comma. Example:
+one@example.com,two@example.com". A press manager who enters two
+addresses that way and saves is refused with "This is not a valid
+email address.". Nothing on the "Emails" tab is saved: any other
+setting changed there before the same save is not stored either. A
+journal and a preprint server save the same list.
+Basis: probe, 2026-10-01. <sup>[fn-omp2](#fn-omp2)</sup>
 
 <a id="omp3"></a>
 **OMP3 — "Submit As" lists its roles in a changing order** · 🐞 · minor.
@@ -2436,6 +2441,7 @@ building the scenario tooling, through the settings form's own validation:
 address." and accepted on OJS and OPS; the box's help text read "Separate
 multiple email addresses with a comma. Example:
 one@example.com,two@example.com" on all three apps.
+Issue report: [docs/issues/U21-OMP2-press-notify-anyone-list-refused.md](../issues/U21-OMP2-press-notify-anyone-list-refused.md).
 
 <a id="fn-omp3"></a>
 **fn-omp3** — OMP3. `getSubmitUserGroups()` (note c) reads the user's
