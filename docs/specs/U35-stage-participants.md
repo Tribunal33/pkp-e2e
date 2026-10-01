@@ -913,6 +913,10 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for OPS4 (issue report
+    `docs/issues/U35-OPS4-participant-notice-lands-in-stage-box.md`):
+    on a preprint server "Notification sent to users." at the top right
+    after "Notify", and no "Notification" box in the Production entry
   - the guard for OJS1 (issue report
     `docs/issues/U35-OJS1-assigned-email-names-send-to-review.md`):
     the "Editor Assigned (Auto)" email naming the Submission stage's
@@ -1033,7 +1037,7 @@ entry notes otherwise; the team settles them on spec review.
 | [OMP1](#omp1) | A press's Internal Review offers no predefined message in "Assign" and "Notify" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | On a preprint server, choosing the predefined message "Assign Editor" leaves "Message" unfilled | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A preprint server never emails its moderators that a new preprint was assigned to them | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [OPS4](#ops4) | On a preprint server the notice after "Assign", "Edit" or "Notify" can show in the Production entry's "Notification" box instead of at the top right | 🐞 | minor | — |
+| [OPS4](#ops4) | On a preprint server, "Notification sent to users." shows in a box in the Production stage instead of at the top right | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | A Section Editor may "Remove" rows they may not "Edit": their own, manager-level ones, and a recommending editor another editor's | ❓ | minor | — |
 | [A8](#a8) | A Production editor assigned to a submission can open fewer of its stages than one who is not assigned | ❓ | minor | — |
 | [A13](#a13) | Whether an automatic assignment in a recommend-only role is recommend-only was never seen | ❓ | latent | — |
@@ -1377,16 +1381,19 @@ not affected: nobody is assigned there and the managers get their email.
 Basis: probe, 2026-10-01. <sup>[f-ops3](#fn-ops3)</sup>
 
 <a id="ops4"></a>
-**OPS4 — A participant notice can land in the stage's own box** · 🐞 · minor.
-After "OK" on "Assign Participant" or "Edit Assignment", or "Notify", the
-editor expects the confirmation at the top right of the page ("User added
-as a stage participant.", "The stage assignment has been changed.",
-"Notification sent to users."), where a journal or press shows it. On a
-preprint server it is usually there, but it can show instead in a box
-headed "Notification" at the top of the Production entry's main column,
-above "Production Tasks & Discussions", with nothing at the top right.
-Which place the editor gets is down to timing, not to anything they did.
-Basis: test run. <sup>[f-ops4](#fn-ops4)</sup>
+**OPS4 — On a preprint server, "Notification sent to users." shows in a box in the Production stage instead of at the top right** · 🐞 · low.
+On a preprint server, an editor who sends a participant a message with
+"Notify" gets the confirmation "Notification sent to users." in a box
+headed "Notification" at the top of the workflow's main column, above
+"Production Tasks & Discussions". The editor expects it as a notice at
+the top right of the page. A journal and a press show it there, and so
+does the preprint server for "Assign" and "Edit".
+The message is sent. The box sits in a place that is otherwise empty on
+a preprint server, so it covers nothing, and it goes away with the
+editor's next action on the page or when the page is loaded again.
+Every "Notify" on a preprint server does this. The fix is one condition
+in the component that draws the box.
+Basis: test run, 2026-10-01. <sup>[f-ops4](#fn-ops4)</sup>
 
 ---
 
@@ -1569,6 +1576,7 @@ Issue report: [pkp-e2e#314](https://github.com/jardakotesovec/pkp-e2e/issues/314
 
 <a id="fn-ops4"></a>
 **f-ops4** — Test runs 2026-09-22 (preprint server; Rules 6a, 8d, 11; scenario 6): in one run, "Notify" in scenario 6 closed the window and "Notification sent to users." showed in a box headed "Notification" at the top of the Production entry's main column, above "Production Tasks & Discussions", with nothing at the top right; in every other scenario of that run, and in every scenario of the next full run, each notice showed at the top right. The journal's and press's runs showed every notice at the top right. Cause: each Participants action answers with a data-changed event, on which both the page's fetch of pending notices (note k) and the stage's `pages/workflow/components/primary/WorkflowNotificationDisplay.vue` post to `notification/fetchNotification`. On a journal's or press's Copyediting and Production entries the component posts `requestOptions` with `NOTIFICATION_LEVEL_TRIVIAL: 0`; for OPS's Production `getRequestOptionsPerStage()` returns null, so it posts none, and `NotificationHandler::fetchNotification()` with no options returns the user's trivial notices and deletes them. Whichever request is answered first takes the notice. Proposed fix: give OPS's Production stage its own request options in `getRequestOptionsPerStage()` (at least `NOTIFICATION_LEVEL_TRIVIAL: 0`, as the other apps' Production has), or skip the component's fetch when a stage has none.
+Issue report: [docs/issues/U35-OPS4-participant-notice-lands-in-stage-box.md](../issues/U35-OPS4-participant-notice-lands-in-stage-box.md).
 
 ## Reference — entry points & surfaces
 

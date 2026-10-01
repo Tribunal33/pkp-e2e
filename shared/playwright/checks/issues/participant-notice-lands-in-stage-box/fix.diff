@@ -1,0 +1,17 @@
+--- a/lib/ui-library/src/pages/workflow/components/primary/WorkflowNotificationDisplay.vue
++++ b/lib/ui-library/src/pages/workflow/components/primary/WorkflowNotificationDisplay.vue
+@@ -116,8 +116,12 @@
+ 	{immediate: true},
+ );
+ 
+-/** Reload notifications when data on screen changes */
+-useDataChanged(() => fetch());
++/** Reload notifications when data on screen changes, for a stage that has notifications of its own */
++useDataChanged(() => {
++	if (requestBody.value) {
++		return fetch();
++	}
++});
+ 
+ const notificationsToDisplay = computed(() => {
+ 	const notifications = [];
