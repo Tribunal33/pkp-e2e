@@ -1353,6 +1353,15 @@ Left out of the scenarios above, by reason:
     preprint server, Settings › Distribution › "Access" offers "Enable OAI"
     and no "Posting Mode", and an "Enable OAI" choice saved is still
     selected after a reload {OPS}.
+  - the guard for A14 (issue report
+    `docs/issues/U51-A14-non-pdf-galley-shown-open-refused.md`): with "Only
+    Restrict Access to PDF version of issues and articles" ticked and no fee
+    set, a visitor opens the HTML galley of a restricted article and of a
+    "Full Issue".
+  - the guard for A20 (issue report
+    `docs/issues/U51-A20-full-issue-asks-fee-of-no-amount.md`): with only an
+    "Association Membership" fee, a signed-in reader without a subscription
+    who presses a "Full Issue" galley lands on the "Subscriptions" page.
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1457,13 +1466,13 @@ entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | Every institutional purchase adds another institution | 🐞 | minor | — |
 | [A12](#a12) | A signed-out visitor at a purchase page's address gets an empty page, the server failing | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | The "Subscription" block reads "Expired: {today}" for a subscription awaiting payment | 🐞 | minor | — |
-| [A14](#a14) | "Only Restrict Access to PDF…" unlocks the look of non-PDF galleys that stay refused | 🐞 | user-visible | — |
+| [A14](#a14) | A journal restricting only PDFs shows its HTML galleys unlocked, then refuses them to readers without a subscription | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | Month and week counts read "1 Months" and "1 Weeks" | 🐞 | minor | — |
 | [A16](#a16) | The Subscription Manager is offered "Institutions" and refused it | 🐞 | user-visible | — |
 | [A17](#a17) | "Delayed Open Access" shows an empty box until someone saves a value | 🐞 | minor | — |
 | [A18](#a18) | A restricted article's additional file shows no padlock, yet is refused | 🐞 | user-visible | — |
 | [A19](#a19) | A fee shows on the locked link while payments are off and nothing can be bought | 🐞 | minor | — |
-| [A20](#a20) | With only a membership fee, "Full Issue" asks the reader to pay an issue fee of no amount | 🐞 | user-visible | — |
+| [A20](#a20) | A reader pressing a locked "Full Issue" is asked to pay an issue fee of no amount when only a membership fee is set | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | The subscription window saves a start date after the end date | 🐞 | minor | — |
 | [A22](#a22) | Six of the subscription lists' search fields list every subscription whatever is typed | 🐞 | user-visible | — |
 | [A23](#a23) | "Purchase New Subscription" on a journal that does not require subscriptions leads home | 🐞 | minor | — |
@@ -1594,14 +1603,19 @@ type's name and "Expired: {today}" (for a non-expiring type,
 read "Awaiting Manual Payment". Basis: probe, 2026-09-25. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — Non-PDF galleys look open and are refused** · 🐞 · user-visible.
-With "Only Restrict Access to PDF version of issues and articles" ticked,
-a restricted issue's non-PDF galleys (HTML, for one) show no padlock,
-but unless a "Purchase Article" (for a "Full Issue", "Purchase Issue")
-or "Association Membership" fee is set, a reader without a subscription
-who presses one is turned away exactly like a PDF (Rule 12). The box
-promises that only PDFs are restricted. Basis: probe, 2026-09-25.
-<sup>f-a14</sup>
+**A14 — A journal restricting only PDFs shows its HTML galleys unlocked, then refuses them to readers without a subscription** · 🐞 · medium.
+A subscription journal with payments enabled ticks "Only Restrict Access
+to PDF version of issues and articles" and saves no "Purchase Article",
+"Purchase Issue" or "Association Membership" fee. Its restricted issues
+then show the non-PDF galleys (HTML, for one) without the padlock, on
+the issue's page and the article's page. A reader without a subscription
+who presses one is turned away exactly like a PDF: a signed-out visitor
+to the Login page, a signed-in reader to the "Subscriptions" page. The
+box and the link both say that only PDFs are restricted, so the journal
+believes its HTML is open while every reader without a subscription is
+refused it. The reader is not told why, and nothing tells the journal's
+managers that the HTML is refused. Saving a fee makes the HTML open.
+Basis: probe, 2026-10-01. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — "1 Months" and "1 Weeks"** · 🐞 · minor.
@@ -1644,14 +1658,17 @@ presses one lands on the journal's home page. Basis: probe, 2026-09-25.
 <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — "Full Issue" asks for an issue fee of no amount** · 🐞 · user-visible.
-With "Association Membership" set and no "Purchase Issue" fee, a
-signed-in reader without a subscription or membership who presses a
-"Full Issue" galley gets the payment method's page for a "Purchase
-Issue Fee" with no amount (with the manual method: its instructions and
-"Send notification of payment"), where an article galley in the same
-case leads to the "Subscriptions" page. Basis: probe, 2026-09-25.
-<sup>f-a20</sup>
+**A20 — A reader pressing a locked "Full Issue" is asked to pay an issue fee of no amount when only a membership fee is set** · 🐞 · low.
+On a subscription journal with an "Association Membership" fee and no
+"Purchase Issue" fee, a signed-in reader without a subscription or
+membership who presses a locked "Full Issue" galley gets the payment
+method's page for a "Purchase Issue Fee" with no amount (with the manual
+method: its payment instructions and "Send notification of payment"). An
+article galley in the same case leads to the "Subscriptions" page. The
+reader is invited to pay for something the journal does not sell, and
+"Send notification of payment" tells the journal's contact that a
+"Purchase Issue Fee" costing 0 is to be processed. Basis: probe,
+2026-10-01. <sup>f-a20</sup>
 
 <a id="a21"></a>
 **A21 — A subscription can end before it starts** · 🐞 · minor.
@@ -1973,6 +1990,7 @@ Issue report: [pkp-e2e#358](https://github.com/jardakotesovec/pkp-e2e/issues/358
 
 <a id="fn-f-a14"></a>
 **f-a14** — `galley_link.tpl` leaves a non-PDF galley unlocked under `$restrictOnlyPdf`; `ArticleHandler::userCanViewGalley()` lets a non-PDF galley through only inside the `purchaseArticleEnabled() || membershipEnabled()` branch, and `IssueHandler::userCanViewGalley()` inside `purchaseIssueEnabled() || membershipEnabled()` (note e). Live-probed 2026-09-25 (td23).
+Issue report: [docs/issues/U51-A14-non-pdf-galley-shown-open-refused.md](../issues/U51-A14-non-pdf-galley-shown-open-refused.md).
 
 <a id="fn-f-a15"></a>
 **f-a15** — `manager.subscriptionPolicies.xMonths` "{$x} Months" and `.xWeeks` "{$x} Weeks" (OJS `locale/en/manager.po`) serve every count from 1, in `AccessForm` and `SubscriptionPolicyForm`. Live-probed 2026-09-25 (td4, td14).
@@ -1991,6 +2009,7 @@ Issue report: [pkp-e2e#358](https://github.com/jardakotesovec/pkp-e2e/issues/358
 
 <a id="fn-f-a20"></a>
 **f-a20** — `IssueHandler::userCanViewGalley()` enters its purchase branch on `purchaseIssueEnabled() || membershipEnabled()` and then queues a `PAYMENT_TYPE_PURCHASE_ISSUE` payment of the (empty) issue fee (note e); the article side leads to the "Subscriptions" page in the same case. Live-probed 2026-09-25 (td8), on two journals.
+Issue report: [docs/issues/U51-A20-full-issue-asks-fee-of-no-amount.md](../issues/U51-A20-full-issue-asks-fee-of-no-amount.md).
 
 <a id="fn-f-a21"></a>
 **f-a21** — `SubscriptionForm` checks each date's presence and range (note h) but not their order. Live-probed 2026-09-25 (td11): start 2026-12-01, end 2026-01-01, saved and listed so.
