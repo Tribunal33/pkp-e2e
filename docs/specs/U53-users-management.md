@@ -2020,7 +2020,7 @@ guards every action but "Edit" and "Email" with not-own-row.
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-25: note td13. Mechanism: note u.
-Issue report: [docs/issues/U53-A11-users-french-raw-codes.md](../issues/U53-A11-users-french-raw-codes.md).
+Issue report: [pkp-e2e#195](https://github.com/jardakotesovec/pkp-e2e/issues/195) ([docs/issues/U53-A11-users-french-raw-codes.md](../issues/U53-A11-users-french-raw-codes.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-25, all three apps: in the list's
