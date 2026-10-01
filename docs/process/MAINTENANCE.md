@@ -161,8 +161,9 @@ once.** A VM session counts while its "Taken: issues session, VM s<n>"
 mark is in the pushed queue (step 4) and slot s<n> is held in `node
 bin/slot.js status`; a mark whose slot is free is stale, and the reader
 removes it in its own push. Workstation sessions do not count. The
-hourly routine first pulls `main` and counts: at two it posts one line
-("issues: two VM sessions running (s<n>, s<m>), skipped") and ends,
+hourly routine keeps one session going and never starts a second: it
+first pulls `main` and counts, and at one or more it posts one line
+("issues: a VM session is running (s<n>), skipped") and ends,
 leaving the slot clean; otherwise it works one spec from step 1. A
 session asked for on Mattermost checks the same count and says so when
 it would make a third. It takes the specs from the top
