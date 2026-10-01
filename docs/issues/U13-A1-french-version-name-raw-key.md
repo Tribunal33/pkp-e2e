@@ -10,7 +10,7 @@
   - 3.3: none (code)
 - **Introduced** `pkp/pkp-lib#10810` for `pkp/pkp-lib#10669` · [958592a159](https://github.com/pkp/pkp-lib/commit/958592a15966ca41ce8b02cfe655b74d7f554241) · 2025-05-30 · Dimitris Efstathiou (defstat)
 - **Upstream** none found (2026-10-01)
-- **Tracked in** spec U13 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#a1)
+- **Tracked in** spec U13 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#a1), spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15) (the version names)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -142,8 +142,8 @@ Reach. Most readers take the name from
 string; two cast it themselves. The fix covers all of them:
 
 - The "Versions" list on the article, book, chapter and preprint pages,
-  and the preprint's line above the title (on screen: OJS, OMP, OPS; the
-  chapter page by the code).
+  and the preprint's line above the title (on screen: OJS, OMP, OPS,
+  and a press's chapter page).
 - The publication's `versionString` in the REST API, which the workflow
   prints in its "Publication" menu (on screen, all three apps).
 - The author's dashboard list of publications, the DOIs page's version
@@ -309,10 +309,16 @@ English locale entry removed, tried, with no data to repair.
   Record locale" and "versions list locale key". Read:
   `pkp/pkp-lib#10669` and `pkp/pkp-lib#10810` (no mention of the
   pattern's translation).
+- The chapter page: a press's chapter page was read in the walk of
+  [`omp-french-book-page-raw-keys/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-book-page-raw-keys/walk.js)
+  (the other French codes of a book's pages, spec U69 A15). Its
+  "Versions" list read "2026-10-01
+  (##publication.versionStage.display##)" on both versions of book 14,
+  without this fix.
 - Fix trial: `node bin/try-fix.js apply shared/playwright/checks/issues/french-version-name-raw-key/fix.diff ojs omp ops`,
   the kept script, then `revert`.
 - Not driven: 3.4 and 3.3 (code only); languages other than French
-  (Canada) (code only); the chapter page, the author's dashboard, the
+  (Canada) (code only); the author's dashboard, the
   "Publish" window, the next-version API field, the DOIs page, the
   comments and open review panels, and the MARC and JATS output (code
   only); the languages without `submission.versionIdentity` (code

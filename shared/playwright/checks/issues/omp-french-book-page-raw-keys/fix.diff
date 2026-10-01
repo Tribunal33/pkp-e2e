@@ -1,0 +1,135 @@
+--- a/locale/fr_CA/locale.po
++++ b/locale/fr_CA/locale.po
+@@ -49,7 +49,7 @@
+ msgstr "Format"
+ 
+ msgid "monograph.publicationFormatDetails"
+-msgstr ""
++msgstr "Détails sur le format de publication disponible : {$format}"
+ 
+ msgid "monograph.miscellaneousDetails"
+ msgstr "Renseignements à propos de cette monographie"
+@@ -563,10 +563,10 @@
+ msgstr ""
+ 
+ msgid "catalog.manage.series.onlineIssn"
+-msgstr ""
++msgstr "ISSN numérique"
+ 
+ msgid "catalog.manage.series.printIssn"
+-msgstr ""
++msgstr "ISSN imprimé"
+ 
+ msgid "catalog.selectSeries"
+ msgstr "Choisir une série"
+@@ -702,13 +702,13 @@
+ msgstr "Renseignements sur la publication"
+ 
+ msgid "catalog.published"
+-msgstr ""
++msgstr "Publié"
+ 
+ msgid "catalog.forthcoming"
+-msgstr ""
++msgstr "À paraître"
+ 
+ msgid "catalog.categories"
+-msgstr ""
++msgstr "Catégories"
+ 
+ msgid "catalog.parentCategory"
+ msgstr ""
+@@ -744,10 +744,10 @@
+ msgstr ""
+ 
+ msgid "catalog.viewableFile.title"
+-msgstr ""
++msgstr "{$type} vue du fichier {$title}"
+ 
+ msgid "catalog.viewableFile.return"
+-msgstr ""
++msgstr "Retournez pour voir les détails sur {$monographTitle}"
+ 
+ msgid "submission.search"
+ msgstr ""
+@@ -1539,7 +1539,7 @@
+ msgstr "Il faut indiquer un prix numérique valide."
+ 
+ msgid "payment.directSales.purchase"
+-msgstr "Achat ({$amount} {$currency})"
++msgstr "Achat {$format} ({$amount} {$currency})"
+ 
+ msgid "payment.directSales.download"
+ msgstr "Télécharger"
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -1432,7 +1432,7 @@
+ msgstr ""
+ 
+ msgid "doi.readerDisplayName"
+-msgstr ""
++msgstr "DOI :"
+ 
+ msgid "doi.manager.settings.description"
+ msgstr ""
+--- a/locale/fr_CA/submission.po
++++ b/locale/fr_CA/submission.po
+@@ -45,7 +45,7 @@
+ msgstr ""
+ 
+ msgid "submission.editorName"
+-msgstr ""
++msgstr "{$editorName} (éd.)"
+ 
+ msgid "submission.monograph"
+ msgstr "Monographie"
+@@ -57,7 +57,7 @@
+ msgstr "Copie au net"
+ 
+ msgid "submission.authorListSeparator"
+-msgstr ""
++msgstr "&nbsp;; "
+ 
+ msgid "submission.artwork.permissions"
+ msgstr "Permissions"
+@@ -467,16 +467,16 @@
+ msgstr ""
+ 
+ msgid "chapter.volume"
+-msgstr ""
++msgstr "Volume"
+ 
+ msgid "submission.withoutChapter"
+-msgstr ""
++msgstr "{$name} - Sans ce chapitre"
+ 
+ msgid "submission.chapterCreated"
+-msgstr ""
++msgstr " — Chapitre créé"
+ 
+ msgid "chapter.pages"
+-msgstr ""
++msgstr "Pages"
+ 
+ msgid "editor.submission.decision.sendInternalReview"
+ msgstr ""
+--- a/plugins/themes/default/locale/fr_CA/locale.po
++++ b/plugins/themes/default/locale/fr_CA/locale.po
+@@ -6,3 +6,6 @@
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+ "X-Generator: Weblate\n"
++
++msgid "plugins.themes.default.displayStats.downloads"
++msgstr "Téléchargements"
+--- a/locale/fr/locale.po
++++ b/locale/fr/locale.po
+@@ -1587,7 +1587,7 @@
+ msgstr "Un prix numérique valide est requis."
+ 
+ msgid "payment.directSales.purchase"
+-msgstr "Achat ({$amount} {$currency})"
++msgstr "Achat {$format} ({$amount} {$currency})"
+ 
+ msgid "payment.directSales.download"
+ msgstr "Télécharger {$format}"

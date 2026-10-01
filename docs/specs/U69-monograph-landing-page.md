@@ -1057,6 +1057,10 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A15 (issue report
+    `docs/issues/U69-A15-omp-french-book-page-raw-keys.md`): a book's and a
+    chapter's page in French (Canada) showing no raw code, an edited
+    volume's editors named
   - the guard for A7 and A8 (issue report
     `docs/issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md`):
     a priced file's link naming its price once, in a format with one
@@ -1203,7 +1207,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A8](#a8) | In a format with several files, a file for sale shows no price | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | On a press, a reader who opens a book's PDF gets an empty viewer, and no download saves the file | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
-| [A15](#a15) | The book's and chapter pages show raw codes in French | 🐞 | user-visible | — |
+| [A15](#a15) | On a press shown in French (Canada), book and chapter pages show codes in place of labels and of editors' names | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | A book's earlier URL Path shows a server error page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | An older version's chapter page of a book shows a blank server error page to every reader | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A1](#a1) | An address that names no book asks visitors to sign in | 🐞 | minor | — |
@@ -1380,19 +1384,25 @@ Lean: yes, a defect; the chapter did not exist in that year.
 Basis: probe, 2026-09-28. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — The book's and chapter pages show raw codes in French** · 🐞 · user-visible.
-With French as the interface language, "Published", "Forthcoming",
-"Categories", "DOI:", "Online ISSN", "Print ISSN", "Plain Language
-Summary", the chart's "Downloads", "Volume", "Pages", the format details'
-screen-reader heading and a file view page's browser tab and return arrow
-show as raw codes such as "##catalog.published##". Every version name
-reads "{date} (##publication.versionStage.display##)", as on an
-article's page ([→ Article landing page & reading, A1](U13-article-landing-page-and-reading.md#a1));
-a chapter's first version runs "##submission.chapterCreated##" on to it,
-and a version without the chapter reads "##submission.withoutChapter##"
-with no date or name. A priced file's link drops the format's name
-("Achat (25.00 USD)").
-Basis: probe, 2026-09-28. <sup>f-a15</sup>
+**A15 — On a press shown in French (Canada), book and chapter pages show codes in place of labels and of editors' names** · 🐞 · medium.
+On a press shown in French (Canada), a book's page and a chapter's page
+show raw codes where the English pages show labels: the date is headed
+"##catalog.published##" instead of "Published", and a file's view page
+has the browser tab "##catalog.viewableFile.title##". On an edited
+volume the code also takes the place of each editor's name: the page
+lists "##submission.editorName##" where the English page lists "Sarah
+Carter (ed)" and "Peter Fortna (ed)". A file for sale is linked as
+"Achat (25.00 USD)", without the format's name that the English link
+gives ("Purchase PDF (25.00 USD)").
+The rest of each page shows as usual and every link works. A French
+reader of an edited volume cannot see who edited it, and the press
+cannot change these texts from its settings.
+A press shows these codes when "Français (Canada)" is among the
+languages it offers in its language settings. A press that offers
+"Français" (France) instead has every one of these texts but the priced
+link's format name.
+Every version name reads "{date} (##publication.versionStage.display##)", as on an article's page ([→ Article landing page & reading, A1](U13-article-landing-page-and-reading.md#a1)), whose report covers it.
+Basis: probe, 2026-10-01. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — A book's earlier URL Path shows a server error page** · 🐞 · medium · crash: server.
@@ -1739,6 +1749,8 @@ Issue report: [pkp-e2e#288](https://github.com/jardakotesovec/pkp-e2e/issues/288
 
 <a id="fn-f-a15"></a>
 **f-a15** — Note o. Seen 2026-09-24 (U10 claim check K1): the version names and "Published". Live-probed 2026-09-28 (td20): every label Rule 21 lists.
+Issue report: [docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md).
+Issue report (the version names): [pkp-e2e#228](https://github.com/jardakotesovec/pkp-e2e/issues/228) ([docs/issues/U13-A1-french-version-name-raw-key.md](../issues/U13-A1-french-version-name-raw-key.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Note g: the forward to the current URL Path passes a string to `PKPRequest::redirect()`, whose path argument is `?array` since lib/pkp bee9547b49 (2024-06-26); the log reads "Uncaught TypeError: PKP\core\PKPRequest::redirect(): Argument #4 ($path) must be of type ?array, string given, called in pages/catalog/CatalogBookHandler.php on line 132". Live-probed 2026-09-28 (td2): `{press}/catalog/book/harbour` and `…/harbour-2` answered 500. A regression: the forward worked before that change.
