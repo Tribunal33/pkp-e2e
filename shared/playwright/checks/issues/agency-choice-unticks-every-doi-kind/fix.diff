@@ -1,0 +1,12 @@
+--- a/lib/pkp/api/v1/contexts/PKPContextController.php
++++ b/lib/pkp/api/v1/contexts/PKPContextController.php
+@@ -633,7 +633,8 @@
+             $newContext = $contextService->get($contextId);
+             $enabledPubObjectTypes = $newContext->getEnabledDoiTypes();
+             $allowedPubObjectTypes = $selectedPlugin->getAllowedDoiTypes();
+-            $filteredPubObjectTypes = array_intersect($enabledPubObjectTypes, $allowedPubObjectTypes);
++            // array_values(): the setting is a list, and array_intersect() keeps keys
++            $filteredPubObjectTypes = array_values(array_intersect($enabledPubObjectTypes, $allowedPubObjectTypes));
+ 
+             if ($filteredPubObjectTypes != $enabledPubObjectTypes) {
+                 $contextService->edit(

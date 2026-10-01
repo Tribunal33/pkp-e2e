@@ -1735,6 +1735,12 @@ throwaway accounts. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A19 (Rule 35; issue report
+    `docs/issues/U45-A19-agency-choice-unticks-every-doi-kind.md`): a
+    journal and a preprint server with the galley kind ticked before a
+    kept kind choose Crossref and save; the Setup tab then shows the kept
+    kinds ticked and the DOIs page lists its items {OJS OPS}
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1813,7 +1819,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | "Deposit DOIs" reports success for a work with no DOI, and nothing is sent | 🐞 | minor · crash: server | — |
 | [A17](#a17) | A new major version leaves the earlier version's deposited DOI as it was | 🐞 | minor | — |
 | [A18](#a18) | A deposit that cannot reach the agency reads "Submitted" for good | 🐞 | user-visible · crash: server | — |
-| [A19](#a19) | Choosing an agency can untick every kind and leave the DOIs page without its list | 🐞 | user-visible · crash: script | — |
+| [A19](#a19) | Saving a DOI registration agency can untick every DOI kind and leave the DOIs page blank | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | The agency plugins' Tools pages have an empty heading | 🐞 | minor | — |
 | [A21](#a21) | A "Save" on the Registration tab without an agency leaves a warning in the server log | 🐞 | invisible | — |
 | [A22](#a22) | After "Assign DOIs" answered at once, the "Bulk Actions" menu stays open over the list | 🐞 | minor | — |
@@ -2029,16 +2035,28 @@ that the deposit never arrived or that it should be sent again.
 Basis: probe, 2026-09-26. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — Choosing an agency can untick every kind and leave the DOIs page without its list** · 🐞 · user-visible · crash: script.
-A journal with "Articles", "Article galleys, such as a published PDF"
-and "Peer Review" ticked chooses Crossref and saves ("Saved"). Expected:
-only the galley kind goes ([A6](#a6)). Instead every box on the Setup
-tab then reads unticked, and the DOIs page shows its heading and an
-"Articles" tab with no list, search, filters or items: the page's
-script fails. The same happened under DataCite, "Peer Review" being
-dropped from between two kept kinds. With the dropped kind last
-(galleys beside "Articles" alone), only it goes.
-Basis: probe, 2026-09-26. <sup>f-a19</sup>
+**A19 — Saving a DOI registration agency can untick every DOI kind and leave the DOIs page blank** · 🐞 · high · crash: script.
+A journal manager chooses Crossref or DataCite as the registration
+agency and saves. Saving an agency unticks the DOI types it does not
+register (the boxes the Setup tab lists under "Items with DOIs", here
+called kinds). When such a kind comes before one the agency keeps, every
+"Items with DOIs" box then reads unticked, and the DOIs page shows its
+heading and tabs but no list: the page's script fails. Nothing on screen
+explains it. The stored kinds survive: the setting still holds
+"Articles" and the other kept kind, and the server goes on assigning
+DOIs and, where "Automatic Deposit" is on, depositing them by those
+kinds. What is lost is the two screens. The DOIs page is the only place
+to deposit, assign, edit or mark DOIs by hand, so a manager without
+"Automatic Deposit" cannot register any DOI. The Setup tab cannot put
+the kinds back: its boxes tick and untick all together, and "Save" is
+refused. "Comes before" is the order of the stored list, which follows
+the order the boxes were ticked, across saves. It is reached on a
+journal choosing Crossref, with galleys before "Peer Review" or before
+"Issues"; on a preprint server choosing Crossref, with galleys before
+"Preprints"; and on a journal choosing DataCite, with "Peer Review"
+before a kept kind (seen once in the spec's footnote, not reproduced
+here).
+Basis: probe, 2026-10-01. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — The agency plugins' Tools pages have an empty heading** · 🐞 · minor.
@@ -3707,6 +3725,7 @@ only) instead of a list; the Setup form then ticks nothing and
 not a function`. Live-probed 2026-09-26, OJS, three journals over two
 processes (Crossref and DataCite); controls with the dropped kind last,
 and DataCite with nothing to drop, kept the other kinds.
+Issue report: [docs/issues/U45-A19-agency-choice-unticks-every-doi-kind.md](../issues/U45-A19-agency-choice-unticks-every-doi-kind.md).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Live-probed 2026-09-26 (q26), OJS (both plugins) and OPS
