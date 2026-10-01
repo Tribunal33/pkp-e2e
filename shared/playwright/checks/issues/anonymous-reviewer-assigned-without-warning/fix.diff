@@ -1,0 +1,12 @@
+--- a/lib/pkp/js/controllers/grid/users/stageParticipant/form/StageParticipantNotifyHandler.js
++++ b/lib/pkp/js/controllers/grid/users/stageParticipant/form/StageParticipantNotifyHandler.js
+@@ -275,7 +275,8 @@
+ 		var userId = $(sourceElement).val(),
+ 				opts;
+
+-		if (!userId || this.anonymousReviewerIds_.indexOf(userId) < 0) {
++		if (!userId ||
++				this.anonymousReviewerIds_.indexOf(parseInt(userId, 10)) < 0) {
+ 			return;
+ 		}
+
