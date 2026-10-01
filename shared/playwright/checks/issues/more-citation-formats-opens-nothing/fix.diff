@@ -1,0 +1,46 @@
+--- a/plugins/generic/citationStyleLanguage/js/articleCitation.js
++++ b/plugins/generic/citationStyleLanguage/js/articleCitation.js
+@@ -47,8 +47,9 @@
+ 	);
+ 	const citationFormatDropdown = document.getElementById('cslCitationFormats');
+ 
+-	// Check if the required elements exist
+-	if (!citationOutput || citationFormatLinks.length === 0) {
++	// Check if the required element exists. A page may offer no additional
++	// format (no link to load) and still list downloads in the dropdown.
++	if (!citationOutput) {
+ 		return;
+ 	}
+ 
+--- a/plugins/generic/citationStyleLanguage/templates/citation-block.blade
++++ b/plugins/generic/citationStyleLanguage/templates/citation-block.blade
+@@ -18,11 +18,13 @@
+                 <div id="citationOutput" role="region" aria-live="polite">
+                     {!! ViewHelper::sanitizeHtml($citation) !!}
+                 </div>
++                @if(count($citationStyles) || count($citationDownloads))
+                 <div class="citation_formats">
+                     <button class="citation_formats_button label" aria-controls="cslCitationFormats" aria-expanded="false" data-csl-dropdown="true">
+                         {{ __('submission.howToCite.citationFormats') }}
+                     </button>
+                     <div id="cslCitationFormats" class="citation_formats_list" aria-hidden="true">
++                        @if(count($citationStyles))
+                         <ul class="citation_formats_styles">
+                             @foreach($citationStyles as $citationStyle)
+                                 <li>
+@@ -48,6 +50,7 @@
+                                 </li>
+                             @endforeach
+                         </ul>
++                        @endif
+                         @if(count($citationDownloads))
+                             <div class="label">
+                                 {{ __('submission.howToCite.downloadCitation') }}
+@@ -71,6 +74,7 @@
+                         @endif
+                     </div>
+                 </div>
++                @endif
+             </div>
+         </section>
+     </div>

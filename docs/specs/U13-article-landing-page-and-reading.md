@@ -1140,6 +1140,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-A8-ris-download-dates-percent-signs.md`): the
     "Endnote/Zotero/Mendeley (RIS)" download's "PY" and "Y2" lines with
     no "%"
+  - the guard for A9 (Rule 16; issue report
+    `docs/issues/U13-A9-more-citation-formats-opens-nothing.md`): with no
+    "Additional Citation Formats" ticked, "More Citation Formats" opening
+    the ticked "Downloadable Formats", and no button when nothing is
+    ticked
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1281,7 +1286,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A6](#a6) | An older version's browser tab reads the current version's title | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | "ABNT" citation runs a preprint's title into the server's name and prints the date as "30 Sept.2026" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | "Endnote/Zotero/Mendeley (RIS)" citation download writes its dates with "%" signs ("PY  - %2026/%09/%30") | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A9](#a9) | With no additional format ticked, "More Citation Formats" opens nothing and hides the downloads | 🐞 | minor | — |
+| [A9](#a9) | "More Citation Formats" opens nothing when no additional citation format is offered, so readers cannot reach the citation downloads | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A reference's web address written in parentheses becomes a link that includes the closing ")" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Keywords are listed in no fixed order: the order typed is not kept | 🐞 | minor | — |
 | [OJS1](#ojs1) | Readers get no other citation format or citation download on an article published outside a published issue | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1445,12 +1450,18 @@ download is affected, whatever the item.
 Basis: probe, 2026-10-01. <sup>[f-a8](#fn-f-a8)</sup>
 
 <a id="a9"></a>
-**A9 — "More Citation Formats" can open nothing** · 🐞 · minor.
-With no "Additional Citation Formats" ticked, the page still shows "More
-Citation Formats", but pressing it opens nothing, so the ticked
-"Downloadable Formats", which sit in the same list, cannot be reached. A
-reader is offered a button that does nothing, and loses the downloads.
-Basis: probe, 2026-09-25. <sup>[f-a9](#fn-f-a9)</sup>
+**A9 — "More Citation Formats" opens nothing when no additional citation format is offered, so readers cannot reach the citation downloads** · 🐞 · low.
+When a manager unticks every "Additional Citation Formats" box in the
+"Citation Style Language" settings and leaves the "Downloadable Formats"
+ticked, the "How to Cite" block of an article's, a preprint's or a
+book's page still shows "More Citation Formats", but pressing it opens
+nothing. The reader expects a list with "Download Citation",
+"Endnote/Zotero/Mendeley (RIS)" and "BibTeX", and cannot download the
+citation.
+The page's script attaches the button's handler only when the list
+holds at least one format link. With the downloads unticked as well,
+the button is still shown and still opens nothing.
+Basis: probe, 2026-10-01. <sup>[f-a9](#fn-f-a9)</sup>
 
 <a id="a10"></a>
 **A10 — A reference's web address written in parentheses becomes a link that includes the closing ")"** · 🐞 · low.
@@ -2741,6 +2752,7 @@ Issue report: [pkp-e2e#244](https://github.com/jardakotesovec/pkp-e2e/issues/244
 **f-a9** — With no format ticked, the list holds only the downloads and
 the button's toggle does not open it (`aria-expanded` stays "false").
 Live-probed 2026-09-25, note q12, both apps.
+Issue report: [docs/issues/U13-A9-more-citation-formats-opens-nothing.md](../issues/U13-A9-more-citation-formats-opens-nothing.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note m: the link pattern stops at spaces and square or
