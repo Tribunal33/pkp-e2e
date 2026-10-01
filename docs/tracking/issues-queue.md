@@ -16,7 +16,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U63](../specs/U63-import-export.md) | 28 | 9 | 7 | **Taken: issues session, workstation s0, 2026-10-01**; done: A9, A5, A20, A13, A21, A7, A4, A15, A16, A1, A19, A12 (with U74 A16), OMP1, OJS4, OJS7, A8 (two reports; its country line to incidentals), A10, A11, A6, OJS10 (U50 A13 not joined: another cause), OJS9; out (open report docs/reports/2026-10-01-pkp-lib-13414.md): A23; A17, A18 retired by the upstream session; open: OJS1, OJS2, OJS3, OJS5, OJS6, OMP4 |
+| [U63](../specs/U63-import-export.md) | 28 | 9 | 7 | **Taken: issues session, workstation s0, 2026-10-01**; done: A9, A5, A20, A13, A21, A7, A4, A15, A16, A1, A19, A12 (with U74 A16), OMP1, OJS4, OJS7, A8 (two reports; its country line to incidentals), A10, A11, A6, OJS10 (U50 A13 not joined: another cause), OJS9, OJS2, OJS3; out (open report docs/reports/2026-10-01-pkp-lib-13414.md): A23; A17, A18 retired by the upstream session; open: OJS1, OJS5, OJS6, OMP4 |
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s1, 2026-10-01** |
 | [U19](../specs/U19-oai-pmh.md) | 26 | 5 | 6 | **Taken: issues session, VM s2, 2026-10-01** |
 | [U21](../specs/U21-submission-wizard.md) | 19 | 4 | 8 |  |

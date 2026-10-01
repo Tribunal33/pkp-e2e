@@ -1183,6 +1183,9 @@ Left out of the scenarios above, by reason:
     out of year and volume order and one of them saved again: the
     "Export Issues" list keeps the "Back Issues" order, then the
     "Future Issues" {OJS}
+  - the guard OJS2's issue report names, once fixed: in the "DOAJ
+    Plugin" unticked scenario, the Plugins list's "Import/Export
+    Plugins" leaves out "DOAJ Export Plugin" {OJS}
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1301,8 +1304,8 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A21](#a21) | A users import stops at the first user without a registration date, silently leaving the rest out | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | A users file first imported on a 3.5.0 release and imported again after the update gives each ended role a second time | 🐞 | minor | — |
 | [OJS1](#ojs1) | The DOAJ list's issue link opens the issue's window headed "DOI Plugin Settings" | 🐞 | minor | — |
-| [OJS2](#ojs2) | With "DOAJ Plugin" off, the Plugins list still offers "DOAJ Export Plugin" and its "Import/Export Data" | 🐞 | minor | — |
-| [OJS3](#ojs3) | Once "NLM Title Abbreviation" is saved empty, the PubMed file's journal title is empty | 🐞 | minor | — |
+| [OJS2](#ojs2) | With "DOAJ Plugin" switched off, the Plugins list still shows its export tool as on | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [OJS3](#ojs3) | PubMed files lose the journal's title once the PubMed tool's Settings are saved with no NLM abbreviation | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | Where NLM's site cannot be reached, every PubMed export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS5](#ojs5) | The PubMed and DOAJ Settings forms' "Cancel" does nothing, and both say fields are required when none is | 🐞 | minor | — |
 | [OJS6](#ojs6) | The DOAJ list's title and author search matches letter case as typed | 🐞 | minor | — |
@@ -1589,19 +1592,31 @@ Plugin Settings", a leftover of the DOI tools that no longer applies.
 Basis: probe. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
-**OJS2 — The DOAJ tool stays on the Plugins list when switched off** · 🐞 · minor.
-With "DOAJ Plugin" unticked, the Tools list rightly leaves "DOAJ Export
-Plugin" out, but Settings › Website › "Plugins" still lists it under
-"Import/Export Plugins", ticked, its box not pressable, with
-"Import/Export Data"; that link opens the raw code text of A1.
-Basis: probe. <sup>f-ojs2</sup>
+**OJS2 — With "DOAJ Plugin" switched off, the Plugins list still shows its export tool as on** · 🐞 · low.
+A journal manager switches off "DOAJ Plugin" on Settings › Website ›
+"Plugins". The Tools list drops "DOAJ Export Plugin", but the Plugins
+list keeps it under "Import/Export Plugins", ticked and greyed out, so
+DOAJ still looks active there. The row's "Import/Export Data" link opens
+a page with no heading and no menu that shows the Tools page's list of
+tools as one line of code, `{"status":true,"content":"…"}`. DOAJ
+deposits do stop, so nothing is lost. "DOAJ Plugin" is on for every new
+journal, so only journals whose manager has switched it off see the
+stray row. The switch came with a 2025 change that is not yet in any
+release.
+Basis: probe, 2026-10-01. <sup>f-ojs2</sup>
 
 <a id="ojs3"></a>
-**OJS3 — An empty NLM title empties the PubMed file's journal title** · 🐞 · minor.
-Clearing "NLM Title Abbreviation" and pressing "Save" should bring back
-the journal's name in the PubMed file, as before the box was first
-saved; instead every later file's journal title is empty.
-Basis: probe. <sup>f-ojs3</sup>
+**OJS3 — PubMed files lose the journal's title once the PubMed tool's Settings are saved with no NLM abbreviation** · 🐞 · medium.
+A journal manager who presses "Save" on the PubMed XML Export Plugin's
+"Settings" tab with "NLM Title Abbreviation" empty, whether they cleared
+an abbreviation or never typed one, expects the PubMed file to name the
+journal by its title, as it did before the tab was first saved. Instead,
+every PubMed file from then on has an empty journal title. The file
+still passes the PubMed format check that the export runs, so it
+downloads with no message. NLM lists the journal title as a required
+field of the file. Saving an abbreviation in the box puts a title back
+in the files exported after that.
+Basis: probe, 2026-10-01. <sup>f-ojs3</sup>
 
 <a id="ojs4"></a>
 **OJS4 — PubMed exports depend on NLM's site** · 🐞 · medium · crash: server.
@@ -3011,12 +3026,14 @@ issue's name opens the window headed "DOI Plugin Settings".
 Live-probed 2026-09-27 (note o): the row in two runs; its
 "Import/Export Data" opened the raw text once, at the same address
 note td2 saw answer it.
+Issue report: [docs/issues/U63-OJS2-doaj-tool-stays-on-plugins-list-when-off.md](../issues/U63-OJS2-doaj-tool-stays-on-plugins-list-when-off.md).
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — Note n (`??` keeps a saved empty string). Live-probed
 2026-09-27: the file text on the export page read
 `<JournalTitle></JournalTitle>` after the box was saved empty (the box
 empty after a reload).
+Issue report: [docs/issues/U63-OJS3-pubmed-empty-nlm-title-empties-journal-title.md](../issues/U63-OJS3-pubmed-empty-nlm-title-empties-journal-title.md).
 
 <a id="fn-f-ojs4"></a>
 **f-ojs4** — Note n. Live-probed 2026-09-27: `POST

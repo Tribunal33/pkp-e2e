@@ -1,0 +1,11 @@
+--- a/plugins/importexport/pubmed/filter/ArticlePubMedXmlFilter.php
++++ b/plugins/importexport/pubmed/filter/ArticlePubMedXmlFilter.php
+@@ -218,7 +218,7 @@
+         $publisherNameNode->appendChild($doc->createTextNode($journal->getData('publisherInstitution')));
+         $journalNode->appendChild($publisherNameNode);
+ 
+-        $journalTitle = $nlmTitle ?? $journal->getName($journal->getPrimaryLocale());
++        $journalTitle = $nlmTitle ?: $journal->getName($journal->getPrimaryLocale());
+ 
+         $journalTitleNode = $doc->createElement('JournalTitle');
+         $journalTitleNode->appendChild($doc->createTextNode($journalTitle));

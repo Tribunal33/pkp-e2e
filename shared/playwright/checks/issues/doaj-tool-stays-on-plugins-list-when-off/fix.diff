@@ -1,0 +1,13 @@
+--- a/classes/plugins/PubObjectsExportGenericPlugin.php
++++ b/classes/plugins/PubObjectsExportGenericPlugin.php
+@@ -40,7 +40,9 @@
+             return false;
+         }
+ 
+-        if (Application::isUnderMaintenance()) {
++        // A plugin read from disk (the Plugins list, the command line) is
++        // registered even while switched off: keep its tool and hooks out then.
++        if (Application::isUnderMaintenance() || !$this->getEnabled($mainContextId)) {
+             return true;
+         }
+ 
