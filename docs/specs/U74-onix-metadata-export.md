@@ -939,11 +939,6 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Planned**:
-  - the guard for A16 (Rule 18a; issue report
-    `docs/issues/U63-A12-export-nothing-ticked-empty-results-tab.md`):
-    "Export Submissions" pressed with no book ticked, the validation box
-    ticked and unticked, the notice shown and no tab added
 - **Rarely met**:
   - a format that has used all nine sales-rights types, whose "Add
     Sales Rights" list is empty (Rule 10)
@@ -1034,7 +1029,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | A representative whose type is changed shows in both groups until a reload | 🐞 | minor | — |
 | [A14](#a14) | A refused representative delete answers with a browser pop-up and leaves the "Delete" dialog open | 🐞 | minor | — |
 | [A15](#a15) | A second "Rest of World?" entry, or a market date or price of spaces, is refused without a message | 🐞 | minor | — |
-| [A16](#a16) | "Export Submissions" with no book ticked opens an empty results tab | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A16](#a16) | "Export Submissions" with no book ticked opens an empty results tab | 🐞 | minor · crash: server | — |
 | [A18](#a18) | The returns and availability the "Metadata" tab shows can differ from what the product carries, and an import loses both | 🐞 | minor | — |
 | [A19](#a19) | A Native XML import adds the exporting press as a supplier and changes the suppliers' websites | 🐞 | minor | — |
 | [A3](#a3) | A saved audience list cannot be emptied again | ❓ | minor | — |
@@ -1226,16 +1221,14 @@ refused, in words, when it refuses it.
 Basis: probe. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — An ONIX export with nothing ticked fails** · 🐞 · low · crash: server.
-"Export Submissions" pressed with no book ticked should say that
-nothing is selected and add no tab; instead the server fails and the
-new "Export Submissions Results" tab stays empty: no text, no file, and
-nothing says that no book was ticked, whether "Validate XML before the
-export and registration." is ticked or not. Nothing is lost: with a
-book ticked the button gets past this, to the failure of [A1](#a1).
-The Native XML tool fails the same way
+**A16 — An ONIX export with nothing ticked fails** · 🐞 · minor · crash: server.
+"Export Submissions" pressed with no book ticked should say to tick
+one; instead the server fails and the "Export Submissions Results" tab
+opens empty, with no text and no button, whether "Validate XML before
+the export and registration." is ticked or not. The Native XML tool
+fails the same way
 ([Import & export, its A12](U63-import-export.md#a12)).
-Since: 2021-06-03 · Basis: probe, 2026-09-30. <sup>f-a16</sup>
+Basis: probe. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — Any tax rate but "Zero-rated (Z)" breaks the Native XML export** · 🐞 · user-visible.
@@ -2303,7 +2296,6 @@ runs: notes td15 and td16.
 **f-a16** — Note j. Live-probed 2026-09-28 (A16), two runs: note td21;
 the server answered 500 to both requests, and nothing else in those
 runs did.
-Issue report: [pkp-e2e#15](https://github.com/jardakotesovec/pkp-e2e/issues/15) ([docs/issues/U63-A12-export-nothing-ticked-empty-results-tab.md](../issues/U63-A12-export-nothing-ticked-empty-results-tab.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Note k: the tax statement carries `TaxRatePercent` only for

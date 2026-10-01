@@ -1387,7 +1387,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | On a press and a preprint server as shipped, saving a discussion or a reply ends in an error dialog, and nobody is emailed or told | 🐞 | user-visible · crash: server | — |
 | [A2](#a2) | The "Add" window's subtitle reads "Open for What? Open to What? Beyond Content" | 🐞 | minor | — |
 | [A3](#a3) | The writer of a message receives it by email and as a Tasks row | 🐞 | minor | — |
-| [A4](#a4) | Searching "Find Template" for the word "discussion" or "task" opens an "Error" window when adding or editing a discussion | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A4](#a4) | A "Find Template" search holding "discussion" or "task" ends in an "Error" window | 🐞 | user-visible · crash: server | — |
 | [A5](#a5) | Choosing a template leaves "Participants" as it was, though the template says it fills them | 🐞 | minor | — |
 | [A6](#a6) | A task's owner who did not write its first message is offered "Edit" and refused on "Save" | 🐞 | user-visible | — |
 | [A7](#a7) | On a press and a preprint server the edit refusals show a raw key | 🐞 | minor | — |
@@ -1449,21 +1449,15 @@ The writer expects only the other participants to be told; before the
 Since: 2026-02-10 · Basis: probe. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
-**A4 — Searching "Find Template" for the word "discussion" or "task" opens an "Error" window when adding or editing a discussion** · 🐞 · low · crash: server.
-In the "Add" or "Edit" window of a task or discussion, a "Find Template"
-search fails on the server when it includes one of the words
-"discussion", "discussions", "task" or "tasks" as a separate word,
-alone or with other words. A window "Error" opens with a programming
-error and "OK", and the template list reads "No items found.". Even a
-template's full name, "Discussion (Production)", fails this way.
-These words are meant to narrow the list to one kind of template.
-Every template the application installs is a discussion, and a manager
-can add task templates in Settings, so "task" is the one search that
-would list only those.
-Only `main` has tasks, discussion templates and this search; no
-released version does, so the fault would ship with the next release
-unless fixed.
-Basis: probe, 2026-10-01. <sup>[f-a4](#fn-a4)</sup>
+**A4 — "Find Template" fails on "discussion" and "task"** · 🐞 · user-visible · crash: server.
+Any "Find Template" search holding "discussion", "discussions", "task"
+or "tasks", alone or with other words (even a template's full name),
+fails: the application opens a window "Error" with "OK", and the list
+reads "No items found.". A template whose name holds one of these words
+cannot be found by it, and the words cannot narrow the list to one kind
+of template, although every installed template is named "Discussion
+(…)" or is a discussion.
+Basis: probe. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
 **A5 — A template does not fill "Participants"** · 🐞 · minor.
@@ -1947,7 +1941,6 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="fn-a4"></a>
 **f-a4** — `Template::scopeWithSearch()` maps the words `task(s)`/`discussion(s)` to a type and calls `$query->filterByType($typeFilter)`; the model has `scopeWithType()` and no `scopeFilterByType()`, so the query builder throws `BadMethodCallException` and `GET editTaskTemplates?search=…` fails. Live-probed 2026-09-23 (all three apps): each Enter sends `GET /api/v1/editTaskTemplates?stageId={4|5}&search=…` twice and each answers 500; the "Error" window reads "Call to undefined method PKP\core\SettingsBuilder::filterByType()" with "OK".
-Issue report: [pkp-e2e#199](https://github.com/jardakotesovec/pkp-e2e/issues/199) ([docs/issues/U37-A4-find-template-discussion-task-error.md](../issues/U37-A4-find-template-discussion-task-error.md)).
 
 <a id="fn-a5"></a>
 **f-a5** — `Template::promote()` fills participants from the template's roles' stage assignments; `setValuesFromTemplate()` sets title, task box, due date, owner and message, never `participants`. Texts `discussion.template.discussionDescription` / `…taskDescription`. Live-probed 2026-09-23 on all three apps (td4).

@@ -1166,7 +1166,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A8](#a8) | In a format with several files, a file for sale shows no price | 🐞 | user-visible | — |
-| [A9](#a9) | Readers cannot open or download a book's files on a press: an empty PDF viewer or a blank page | 🐞 | critical · crash: both | issues (claude), 2026-09-30 — re-verified |
+| [A9](#a9) | No book file can be read or saved: every download fails | 🐞 | user-visible · crash: both | — |
 | [A15](#a15) | The book's and chapter pages show raw codes in French | 🐞 | user-visible | — |
 | [A16](#a16) | A book's earlier URL Path shows a server error page | 🐞 | user-visible · crash: server | — |
 | [A19](#a19) | An older version's chapter page shows a server error page | 🐞 | user-visible · crash: server | — |
@@ -1263,21 +1263,17 @@ until the link leads to the Login or payment page.
 Basis: probe, 2026-09-28. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — Readers cannot open or download a book's files on a press: an empty PDF viewer or a blank page** · 🐞 · critical · crash: both.
-On a press, no reader can open or save a file of a published book:
-every request for a book file fails on the server with an error (500),
-and the PDF viewer's script then fails on that answer. A PDF's link
-opens the PDF view page, but the viewer shows a red "Unexpected server
-response." bar instead of the PDF, and the page's "Download" saves
-nothing. Any other file opens a blank page. A PDF also opens a blank
-page while "PDF.js PDF Viewer" is off. Only an HTML file shows, and
-only while "HTML Monograph File" is on.
-There is no way round on screen, signed in or not; search engines get
-the same error, and no file view is counted in the usage statistics.
-No released version is affected; the fault is only on `main`.
-Same fault: [Media files' OMP1](U47-media-files.md#omp1), [Search engine metadata & analytics' OMP6](U20-search-engine-metadata-and-analytics.md#omp6), [Usage statistics' OMP3](U64-usage-statistics.md#omp3).
+**A9 — No book file can be read or saved** · 🐞 · user-visible · crash: both.
+Every free file of a published book fails. A PDF's link opens the PDF view
+page, but the page's own script fails: the viewer shows a red "Unexpected
+server response." bar instead of the PDF, and neither the bar's
+"Download" nor the viewer's own saves anything. Any file that downloads
+(an EPUB, a supplementary file, a PDF with the viewer off) opens a blank
+error page: the app fails. Only an HTML file shows. Readers of a press
+can open no book, in any interface language, and search engines
+following the page's file addresses get the same failure.
 Worked until the download began reporting the version to the usage statistics, a change read from the code's history: a regression.
-Since: 2026-08-26 (a month), a date read from the code's history · Basis: probe, 2026-09-30. <sup>f-a9</sup>
+Since: 2026-08-26 (a month), a date read from the code's history · Basis: probe, 2026-09-28. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — The HTML view page's return arrow is named by a raw code** · 🐞 · minor.
@@ -1646,7 +1642,6 @@ made on screen with "Create New Version".
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note j: every free-file download reaches the `UsageEvent` built with the never-set `$this->publication`; `view` of a PDF shows the pdfJsViewer page, whose inline `PDFJS` script fails and whose viewer loads the failing download. The typed property dates from omp `29fa88508` (2025-03-20, pkp/pkp-lib#10671); the event's `publication: $this->publication` argument from omp `591d7a0e7` (2026-08-26, pkp/pkp-lib#12311, "pass publication to usage event"), which set it in `book()` but not in `download()`. Live-probed 2026-09-26 (U20 claim check), 2026-09-27 (U64), 2026-09-28 (U73 claim check K3, K4, three runs): `GET {press}/catalog/download/{book}/{format}/{file}`, with and without `?inline=1`, current or older version, answered 500 with the log line above; the view page logged "PDFJS is not defined" and "UnexpectedResponseException". Live-probed 2026-09-28 (td13, td22; two runs of each drive): 22 download 500s and 9 view 500s across the runs, "PDFJS is not defined" and "UnexpectedResponseException" on every PDF view page; the bar's "Download" and the viewer's both cancelled; the French view page (`{press}/fr_CA/catalog/download/…?inline=1`) the same. The same failure is recorded where it shows elsewhere: Search engine metadata & analytics' OMP6, Usage statistics' OMP3, Media files' OMP1 (HTML plugin off).
-Issue report: [pkp-e2e#38](https://github.com/jardakotesovec/pkp-e2e/issues/38) ([docs/issues/U69-A9-omp-book-files-fail-to-open.md](../issues/U69-A9-omp-book-files-fail-to-open.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note f: `monograph.return` is defined in no locale file of OMP, lib/pkp or the plugin. Live-probed 2026-09-28 (td21).

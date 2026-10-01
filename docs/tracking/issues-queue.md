@@ -10,41 +10,57 @@ entry lands in it (MAINTENANCE "The issues session").
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 | **In progress: issues session s1, 2026-10-01.** Done: A2, A5, OJS1, OJS4, OJS5, OJS9; A1 pending translation (incidentals; U69 A15 joined pkp-e2e#124); done also: OJS10, OPS2 (with U20 OPS1); done also: A4, A6 (with U69 A5), OJS12, OPS7; done also: A7, A8 (joined pkp-e2e#87), A9, A10, OJS2, OJS6, OJS7; done also: A11, OJS8, OPS1 (with U69 A4); in review: OPS3; in progress: OPS5, OPS6; open: the rest (A1 with U69 A15) |
-| [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **In progress: issues session s1, 2026-10-01.** Done: A2, A5, OJS1, OJS4, OJS5, OJS9; A1 pending translation (incidentals; U69 A15 joined pkp-e2e#124); done also: OJS10, OPS2 (with U20 OPS1); done also: A4, A6 (with U69 A5), OJS12, OPS7; done also: A7, A8 (joined pkp-e2e#87), A9, A10, OJS2, OJS6, OJS7; done also: A11, OJS8; in review: OPS1 (with U69 A4); in progress: OPS3, OPS5; open: the rest (A1 with U69 A15) |
-| [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 | **Claimed: issues session s1, 2026-09-30** (A15 with U13 A1; A4 done with U13 OPS1; A5 done with U13 A6); **A9 done: issues session s3, 2026-09-30** (with U47 OMP1) |
-| [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | Done: A4 ([pkp-e2e#199](https://github.com/jardakotesovec/pkp-e2e/issues/199), workstation s1, 2026-10-01); open, free for another session: A2, A3, A5, A6, A7, A8, A9, A10, A16, A17, A21, A24, A25, A26, A28, A29, A31, OMP1, OPS1 (A1: open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md) |
-| [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **In progress: issues session s3, 2026-09-30.** Done: A11, A21 (with U47 A4), A14, A25, A10 (with U38 A2); open: A2, A3, A4, A5, A7, A9, A12, A15, A19, A20 (A23, A24: open report pkp-lib-13288) |
-| [U17](../specs/U17-sections.md) | 16 | 2 | 2 | **In progress: issues session s3, 2026-09-30.** Done: A10 (two reports; its first case with U36 A21); open: A1, A6, A7, A8, A9, OMP2, OMP3, OMP5, OMP7, OMP8, OPS1, OPS2, OPS5 (OMP9, OPS6: open reports in docs/reports) |
+| [U63](../specs/U63-import-export.md) | 28 | 9 | 7 |  |
+| [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 |  |
+| [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 |  |
+| [U45](../specs/U45-dois.md) | 23 | 5 | 8 |  |
+| [U19](../specs/U19-oai-pmh.md) | 26 | 5 | 6 |  |
+| [U21](../specs/U21-submission-wizard.md) | 19 | 4 | 8 |  |
+| [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 |  |
+| [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 |  |
+| [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 |  |
+| [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 |  |
+| [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 |  |
+| [U51](../specs/U51-subscriptions.md) | 25 | 2 | 12 |  |
+| [U50](../specs/U50-issues.md) | 14 | 2 | 9 |  |
+| [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 |  |
+| [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | A1: open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md |
+| [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 |  |
+| [U53](../specs/U53-users-management.md) | 16 | 2 | 5 |  |
+| [U47](../specs/U47-media-files.md) | 8 | 2 | 4 |  |
+| [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | A23, A24: open report docs/reports/2026-09-27-pkp-lib-13288.md |
+| [U17](../specs/U17-sections.md) | 16 | 2 | 2 |  |
 | [U59](../specs/U59-hosted-journals.md) | 9 | 2 | 2 |  |
-| [U62](../specs/U62-plugins-management.md) | 8 | 2 | 2 | OJS1 written ([pkp-e2e#202](https://github.com/jardakotesovec/pkp-e2e/issues/202), workstation slot 0, 2026-10-01); the other entries are free for another session |
+| [U62](../specs/U62-plugins-management.md) | 8 | 2 | 2 |  |
+| [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 |  |
 | [U71](../specs/U71-internal-review-stage.md) | 6 | 2 | 2 |  |
-| [U18](../specs/U18-web-feeds.md) | 5 | 2 | 2 |  |
 | [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 |  |
-| [U48](../specs/U48-jats-and-body-text.md) | 16 | 1 | 7 | **A20 done: issues session s3, 2026-10-01** (with U47 A6); the other entries are free for another session |
-| [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 | A16 written with U63 A12 ([pkp-e2e#15](https://github.com/jardakotesovec/pkp-e2e/issues/15), 2026-09-30); the other entries are open |
-| [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | **OMP1 done: issues session s3, 2026-09-30** (with U53 A14); the other entries are free for another session |
+| [U49](../specs/U49-publish-schedule-and-versions.md) | 9 | 1 | 8 |  |
+| [U48](../specs/U48-jats-and-body-text.md) | 17 | 1 | 7 |  |
+| [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 |  |
+| [U28](../specs/U28-reviewers-review.md) | 14 | 1 | 5 |  |
+| [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 |  |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | A16 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet; the report calls the window's box "Title" where the screen says "Name", and its Reach names "Applied Science" where reach.js uses "Social Sciences" on OPS |
-| [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | **OMP3 done: issues session s3, 2026-09-30** (with U69 A9); the other entries are free for another session |
+| [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 |  |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
-| [U49](../specs/U49-publish-schedule-and-versions.md) | 4 | 1 | 4 |  |
-| [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | OPS2 done with U51 OPS1 (2026-09-30, workstation s1) |
+| [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 |  |
 | [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 |  |
-| [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | **OMP6 done: issues session s3, 2026-09-30** (with U69 A9); **OPS1 done: issues session s1, 2026-10-01** (with U13 OPS2); the other entries are free for another session |
+| [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 |  |
 | [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 |  |
-| [U39](../specs/U39-submission-and-publisher-libraries.md) | 7 | 1 | 1 |  |
-| [U15](../specs/U15-search.md) | 13 | 0 | 6 | OPS2 (❓, not queued work) is named in the U51 OPS1 report |
-| [U70](../specs/U70-catalog-management.md) | 13 | 0 | 5 |  |
-| [U12](../specs/U12-announcements.md) | 8 | 0 | 5 | A11 written with U66 A2 (2026-09-30); A15 joined to U19 A15 by the workstation session (2026-10-01); the other six open |
-| [U04](../specs/U04-orcid-integration.md) | 7 | 0 | 5 |  |
-| [U10](../specs/U10-appearance-and-theming.md) | 13 | 0 | 4 | A4 written with U09 A15 ([pkp-e2e#113](https://github.com/jardakotesovec/pkp-e2e/issues/113), 2026-10-01); the other entries are free for another session |
-| [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 | A19 written with U09 A19 ([pkp-e2e#117](https://github.com/jardakotesovec/pkp-e2e/issues/117), 2026-10-01); the other entries are free for another session |
-| [U41](../specs/U41-contributors-and-affiliations.md) | 10 | 0 | 4 | A22 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
-| [U07](../specs/U07-journal-identity-and-about-pages.md) | 7 | 0 | 4 | **OPS4 done: issues session s3, 2026-10-01** (joined U57-A8, pkp-e2e#124); the other entries are free for another session |
-| [U73](../specs/U73-publication-formats-proof-terms.md) | 17 | 0 | 3 |  |
-| [U28](../specs/U28-reviewers-review.md) | 12 | 0 | 3 | A15 written with U09 A19 ([pkp-e2e#117](https://github.com/jardakotesovec/pkp-e2e/issues/117), 2026-10-01); the other entries are free for another session |
-| [U40](../specs/U40-publication-metadata.md) | 7 | 0 | 3 |  |
-| [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 | A9 joined to docs/issues/U57-A8-omp-ops-french-texts-internal-names.md by the workstation session (2026-10-01); the other nine open |
+| [U39](../specs/U39-submission-and-publisher-libraries.md) | 8 | 1 | 1 |  |
+| [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 |  |
+| [U15](../specs/U15-search.md) | 13 | 0 | 6 |  |
+| [U04](../specs/U04-orcid-integration.md) | 8 | 0 | 6 |  |
+| [U70](../specs/U70-catalog-management.md) | 14 | 0 | 5 |  |
+| [U41](../specs/U41-contributors-and-affiliations.md) | 12 | 0 | 5 | A22 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
+| [U12](../specs/U12-announcements.md) | 11 | 0 | 5 | A11 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
+| [U10](../specs/U10-appearance-and-theming.md) | 13 | 0 | 4 |  |
+| [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 |  |
+| [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 |  |
+| [U73](../specs/U73-publication-formats-proof-terms.md) | 18 | 0 | 3 |  |
+| [U40](../specs/U40-publication-metadata.md) | 8 | 0 | 3 |  |
+| [U30](../specs/U30-author-response-to-reviews.md) | 7 | 0 | 3 |  |
+| [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 |  |
 | [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 |  |
 | [U02](../specs/U02-registration-and-account-validation.md) | 8 | 0 | 2 |  |
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 |  |
@@ -53,22 +69,17 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 |  |
 | [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 |  |
 | [U26](../specs/U26-review-stage-and-rounds.md) | 4 | 0 | 2 |  |
-| [U30](../specs/U30-author-response-to-reviews.md) | 4 | 0 | 2 |  |
-| [U42](../specs/U42-citations-and-references.md) | 15 | 0 | 1 |  |
-| [U27](../specs/U27-reviewer-assignment-and-management.md) | 11 | 0 | 1 |  |
-| [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | **OMP1 done: issues session s3, 2026-09-30** (with U53 A14); the other entries are free for another session |
+| [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 |  |
+| [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 |  |
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
-| [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | **A2 done: issues session s3, 2026-09-30** (with U36 A10); the other entries are free for another session |
-| [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 (2026-09-30); the other four open |
-| [U43](../specs/U43-funding.md) | 3 | 0 | 1 |  |
-| [U22](../specs/U22-my-submissions.md) | 1 | 0 | 1 |  |
+| [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 |  |
+| [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
+| [U43](../specs/U43-funding.md) | 4 | 0 | 1 |  |
+| [U22](../specs/U22-my-submissions.md) | 2 | 0 | 1 |  |
 | [U14](../specs/U14-reader-comments-and-moderation.md) | 5 | 0 | 0 |  |
-| [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 | A9 joined to docs/issues/U35-A5-message-discussion-created-by-recipient.md by the workstation session (2026-10-01; its missing activity line, another cause, went to incidentals); the other four open |
-| [U23](../specs/U23-submissions-dashboard.md) | 4 | 0 | 0 |  |
-| [U29](../specs/U29-review-setup-and-review-forms.md) | 4 | 0 | 0 | A11 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
+| [U23](../specs/U23-submissions-dashboard.md) | 5 | 0 | 0 |  |
+| [U29](../specs/U29-review-setup-and-review-forms.md) | 5 | 0 | 0 | A11 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
+| [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 |  |
 | [U55](../specs/U55-notify-users.md) | 4 | 0 | 0 |  |
+| [U33](../specs/U33-production-stage.md) | 3 | 0 | 0 |  |
 | [U67](../specs/U67-archiving-preservation.md) | 3 | 0 | 0 |  |
-| [U33](../specs/U33-production-stage.md) | 2 | 0 | 0 |  |
-| [U51](../specs/U51-subscriptions.md) | 1 | 0 | 1 | A29 added 2026-10-01 by the housekeeping session (the open-access email sent twice on the 1st of some months; met by the suite on CI); open |
-| [U21](../specs/U21-submission-wizard.md) | 2 | 2 | 2 | A19 and A20 added 2026-10-01 by the housekeeping fold (claim check I01: the wizard hangs on "Saving" after any refused save; a required plain language summary refuses every save without it), open; the A16 report (pkp-e2e#127) says the required-summary check never refuses the wizard's saves and that the footer turns after "OK": both wrong per I01 (`.reports/U21/cc-I01.md` in slot s2, kept script `shared/playwright/checks/U21/I01/i01.js`) |
-| [U63](../specs/U63-import-export.md) | 4 | 2 | 2 | A19, A20, A21, OJS10 (🐞) and A22 (❓) added 2026-10-01 by the housekeeping fold (claim check I01), open; A5 widened (the first hosted journal takes the article; its report should follow); the OJS4/OJS7 report's "Export Issues answers 200" did not reproduce (12 of 12 answered 500, `.reports/U63/cc-I01.md` in slot s2) |

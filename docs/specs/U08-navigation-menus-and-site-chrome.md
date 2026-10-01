@@ -1274,7 +1274,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A23](#a23) | In French, the side menu's "Content" group {OJS OMP}, "DOIs" entry {OMP OPS}, "Search submissions" box and a press's "Monographs" entry {OMP} read raw codes | 🐞 | minor | — |
 | [A24](#a24) | In French, the item window's "Query Parameters" box, the menu window's drag handles and a press's "New Releases" type read raw codes | 🐞 | minor | — |
 | [OJS1](#ojs1) | "Subscriptions" and "My Subscriptions" carry no eye icon, so their notices never show {OJS} | 🐞 | minor | — |
-| [OPS2](#ops2) | A preprint server's "Posting Mode" is not kept, so "Archives" never hides {OPS} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [OPS2](#ops2) | A preprint server's "Posting Mode" is not kept, so "Archives" never hides {OPS} | 🐞 | user-visible | — |
 | [OPS3](#ops3) | On a preprint server's French pages the "Developed By" heading reads a raw code {OPS} | 🐞 | minor | — |
 | [OPS4](#ops4) | A server's settings address opened at the site's level reads "No server in context!" {OPS} | 🐞 | minor | — |
 | [A5](#a5) | The "About" item's notice promises a condition the header never applies | ❓ | minor | — |
@@ -1566,13 +1566,13 @@ are on, holding "Comments" alone. Intended.
 Basis: probe. <sup>f-ops1</sup>
 
 <a id="ops2"></a>
-**OPS2 — "Posting Mode" is not kept, so "Archives" never hides** · 🐞 · medium.
+**OPS2 — "Posting Mode" is not kept, so "Archives" never hides** · 🐞 · user-visible.
 On Settings › Distribution › "Access", choosing "OPS will not be used to
 post the server's contents online." and pressing "Save" shows "Saved",
 but the next load has neither choice marked, the "Archives" item stays
 in the header and the list of preprints still opens. A manager who
 takes the server's contents offline this way believes it is done.
-Basis: probe, 2026-09-30. <sup>f-ops2</sup>
+Basis: probe. <sup>f-ops2</sup>
 
 <a id="ops3"></a>
 **OPS3 — The French "Developed By" heading reads a raw code** · 🐞 · minor.
@@ -2878,7 +2878,6 @@ stayed with "Issues" or "Catalog".
 carried no `publishingMode`, nothing was stored, the radios were
 unmarked on the next load and the header read "Announcements Archives
 About".
-Issue report: [pkp-e2e#42](https://github.com/jardakotesovec/pkp-e2e/issues/42) ([docs/issues/U51-OPS1-posting-mode-not-kept.md](../issues/U51-OPS1-posting-mode-not-kept.md)).
 
 <a id="fn-f-ops3"></a>
 **f-ops3** — Note s. Live-probed 2026-09-23 (Rule 21), OPS, with OJS and

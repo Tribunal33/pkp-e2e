@@ -26,7 +26,8 @@ deletes each once it is a report, a register entry or dismissed._
   "not allowed" and `contributor_type` and publication `id` "required but
   missing". Walked on all three apps (dataset fleets, 3.5 export imported
   on main with `FILE=` in
-  `shared/playwright/checks/issues/native-import-other-context-resets-contributor-roles/walk.js`).
+  `shared/playwright/checks/issues/native-import-other-context-resets-contributor-roles/walk.js`,
+  removed by the issues reset, in git at `20c10bf`).
   The upgrade path between releases; is the schema change intended?
 - 2026-09-30 (issues session, U63 A13): main's users XML schema refuses
   the `<show_title>` a 3.5 users export writes in its user groups

@@ -1105,64 +1105,6 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Planned**:
-  - the guard for A2 (Rule 9a; issue report
-    `docs/issues/U19-A2-oai-from-until-ignore-time-of-day.md`): scenario 5
-    asking with a time inside the day, `from` one second after the
-    latest datestamp and `until` one second before the earliest, each
-    answering "No matching records in this repository"
-  - the guard for A3 (Rule 9b; issue report
-    `docs/issues/U19-A3-oai-impossible-date-accepted.md`): scenario 5
-    sending a date not in the calendar, such as the 13th month, and
-    answered "Illegal from parameter"
-  - the guard for A4 (Rule 13; issue report
-    `docs/issues/U19-A4-oai-last-part-offers-resume.md`): a list paged in
-    the browser view to its last part, which shows no "There are more
-    results." and no "Resume"
-  - the guard for A5 (the table of the answer's parts; issue report
-    `docs/issues/U19-A5-oai-record-formats-shown-as-archive.md`):
-    "formats" pressed on a record's header, the page naming that
-    record's formats with a link to the record in each
-  - the guard for A7 {OJS} (Settings bullet 11; issue report
-    `docs/issues/U19-A7-oai-section-save-drops-peer-reviewed.md`): a
-    section with an empty "Identify items published in this section as
-    a(n)" saved unchanged in its window, its records still typed
-    "Peer-reviewed Article"
-  - the guard for A11 {OJS} (Rule 23a; issue report
-    `docs/issues/U19-A11-oai-driver-set-misses-withdrawn-articles.md`):
-    with "DRIVER" enabled, an article published without an issue
-    unpublished and a published issue deleted, each withdrawn article
-    listed in the `driver` set as a deleted record
-  - the guard for A16 (the table "Errors"; issue report
-    `docs/issues/U19-A16-oai-repeated-argument-server-error.md`):
-    `metadataPrefix` given twice refused with "Multiple values are not
-    allowed for the metadataPrefix parameter", and `verb` given twice
-    with "Illegal OAI verb"
-  - the guard for A18 {OMP OPS} (Rule 5; issue report
-    `docs/issues/U19-A18-oai-datestamp-never-moves-after-publication.md`):
-    a saved edit of a published version moving the record's datestamp,
-    and an item published again after "Unpublish" ("Unpost") coming
-    back with a datestamp later than its deleted record's
-  - the guard for A20 {OJS OPS} (Rule 9d; issue report
-    `docs/issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md`):
-    an article withdrawn, then its section's set asked with a `from`
-    after today, answering no record
-  - the guard for A22 {OJS} (Rule 20; Settings bullet 6; issue report
-    `docs/issues/U19-A22-oai-fails-when-a-journal-versions-dois.md`): one
-    journal with "DOI Versioning" set to "Yes", Identify, the lists and
-    GetRecord still answering at every journal's address and the
-    site-wide one
-  - the guard for OMP3 (Rule 8; issue report
-    `docs/issues/U19-OMP3-oai-press-unknown-set-lists-other-records.md`):
-    scenario 5's "A set the journal does not have" extended to a press,
-    an unknown series and another press's path answering "No matching
-    records in this repository"
-  - the guard for OMP6 (Rule 7b; issue report
-    `docs/issues/U19-OMP6-omp-series-set-name-leading-space.md`): a
-    press's ListSets naming a series with no "Prefix" by its title alone
-  - the guard for OPS1 (Rule 9c; issue report
-    `docs/issues/U19-OPS1-ops-oai-until-server-error.md`): scenario 5's
-    `until` run on a preprint server too
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1274,32 +1216,32 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A journal's or press's OAI address hides the items it withdraws and lists the first journal's withdrawals instead {OJS OMP} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A2](#a2) | OAI-PMH harvesters asking for records changed since or until a time of day get the whole day's records | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A3](#a3) | OAI-PMH harvesters sending a date not in the calendar get a list instead of "Illegal from parameter" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A4](#a4) | In the browser view of OAI, a list's last part says "There are more results." and its "Resume" fails | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A5](#a5) | In the browser view of OAI, a record's "formats" page lists the whole archive's formats, with no link to the record | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A7](#a7) | Saving a journal section's settings, even unchanged, removes "Peer-reviewed Article" from its OAI records {OJS} | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A8](#a8) | In OAI Dublin Core records, "Source" ends in an empty part for articles in no issue and for every book {OJS OMP} | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A10](#a10) | A harvester listing a subscription journal's JATS records gets only an error, articles in open issues included {OJS} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A11](#a11) | DRIVER set never learns of articles withdrawn by deleting their issue or published without one {OJS} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A12](#a12) | A journal's OAI-PMH MARC records do not validate against the schemas they name {OJS} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A13](#a13) | A book's record read in French carries an untranslated key {OMP} | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A15](#a15) | A journal's MARC records and its Atom and RSS 1.0 announcement feeds print dates with stray "%" signs {OJS} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A16](#a16) | A harvester that repeats an OAI-PMH argument gets a blank server error instead of a refusal | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A17](#a17) | OAI-PMH GetRecord for a malformed identifier such as "…/2abc" answers record 2 instead of refusing it {OMP OPS} | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A18](#a18) | Harvesters of a press or preprint server miss edits of published items and keep republished items deleted {OMP OPS} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A19](#a19) | OAI-PMH offers a deleted section's set, but asking for it lists nothing {OJS OPS} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A20](#a20) | OAI-PMH lists a section's deleted records whatever the harvester's `from` and `until` dates say {OJS OPS} | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A22](#a22) | Once one journal turns on "DOI Versioning", every journal's OAI-PMH requests answer a blank server error {OJS} | 🐞 | high · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A23](#a23) | DRIVER set offers harvesters articles that have no full text {OJS} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A24](#a24) | Harvesters of a journal's DRIVER set in OAI-PMH get repeated records, an error, or (3.5) only 100 records {OJS} | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
-| [OMP3](#omp3) | A harvester asking a press's OAI-PMH for a set it does not have gets other books instead of none | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A1](#a1) | A journal's own OAI address leaves out its deleted records and shows the first journal's instead {OJS OMP} | 🐞 | user-visible | — |
+| [A2](#a2) | `from` and `until` ignore the time of day | 🐞 | minor | — |
+| [A3](#a3) | A date that is not in the calendar is accepted instead of refused | 🐞 | minor | — |
+| [A4](#a4) | The browser view's last page says "There are more results." and offers a "Resume" that fails | 🐞 | minor | — |
+| [A5](#a5) | The browser view of one record's formats says "from this archive" and offers no links | 🐞 | minor | — |
+| [A7](#a7) | "Peer-reviewed Article" is written only for a section never saved in its window {OJS} | 🐞 | minor | — |
+| [A8](#a8) | The Dublin Core "Source" keeps an empty part for an article in no issue {OJS} and on every press record {OMP} | 🐞 | minor | — |
+| [A10](#a10) | One article in a subscription issue empties a whole `jats` list {OJS} | 🐞 | latent | — |
+| [A11](#a11) | With "DRIVER" enabled, an article in no issue loses its `driver` mark when unpublished {OJS} | 🐞 | latent | — |
+| [A12](#a12) | The MARC records do not follow their schemas {OJS} | 🐞 | minor | — |
+| [A13](#a13) | Records read in French carry untranslated keys {OJS OMP} | 🐞 | minor | — |
+| [A15](#a15) | MARC field 008 reads "%26%09%26 %2026" instead of the publication date {OJS} | 🐞 | minor | — |
+| [A16](#a16) | An argument given twice fails with a server error instead of being refused | 🐞 | minor · crash: server | — |
+| [A17](#a17) | A malformed identifier answers "No matching identifier", or another record {OMP OPS} | 🐞 | minor | — |
+| [A18](#a18) | A record's datestamp never moves after publication {OMP OPS} | 🐞 | user-visible | — |
+| [A19](#a19) | A deleted section's set is listed, but asking for it lists nothing {OJS OPS} | 🐞 | minor | — |
+| [A20](#a20) | Asked for a section's set, deleted records ignore `from` and `until` {OJS OPS} | 🐞 | minor | — |
+| [A22](#a22) | While any journal versions its DOIs, every journal's OAI requests fail {OJS} | 🐞 | user-visible · crash: server | — |
+| [A23](#a23) | The `driver` set lists articles with no galley {OJS} | 🐞 | minor | — |
+| [A24](#a24) | A `driver` list offers "Resume" when complete, and following it repeats records {OJS} | 🐞 | minor | — |
+| [OMP3](#omp3) | A press given a set it does not have lists other records instead of none | 🐞 | minor | — |
 | [OMP4](#omp4) | One book without an abstract makes the press's record lists fail | 🐞 | user-visible · crash: server | — |
-| [OMP6](#omp6) | A press's series with no prefix are named with a leading space in OAI-PMH sets and web feeds | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [OPS1](#ops1) | Harvesters asking a preprint server's OAI-PMH interface for records up to a date get a blank server error | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [OMP6](#omp6) | A series with no prefix is named with a leading space | 🐞 | invisible | — |
+| [OPS1](#ops1) | Any list with `until` fails with a server error on a preprint server | 🐞 | user-visible · crash: server | — |
 | [OPS2](#ops2) | One preprint without an abstract makes the server's record lists fail | 🐞 | user-visible · crash: server | — |
-| [OPS4](#ops4) | A preprint server removed under Hosted Servers leaves no deleted records for OAI-PMH harvesters | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [OPS4](#ops4) | A removed preprint server leaves no deleted records | 🐞 | minor | — |
 | [A6](#a6) | "Supporting Agencies", "Rights" and "Source" reach no record | ❓ | minor | — |
 | [A9](#a9) | A journal that does not publish online still hands out records, the MARC ones with the article's address {OJS} | ❓ | minor | — |
 | [A14](#a14) | "Language" writes a galley's language with an underscore {OJS OPS} | ❓ | minor | — |
@@ -1313,80 +1255,57 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — A journal's or press's OAI address hides the items it withdraws and lists the first journal's withdrawals instead** {OJS OMP} · 🐞 · medium.
-On an install that hosts more than one journal, a harvester that reads
-one journal's OAI-PMH address is never told when that journal withdraws
-a published article (an editor's "Unpublish"). The article drops out of
-the journal's lists instead of turning into a deleted record, GetRecord
-answers "No matching identifier in this repository", and the site-wide
-address asked for that journal's set leaves it out too. In its place,
-the journal's lists, GetRecord and "Earliest Datestamp" show the
-withdrawals of the install's first journal, filed under the first
-journal's sets.
-Indexes that harvest the journal keep listing its withdrawn articles,
-and nobody is told. The journal cannot work round it.
-The first journal on the install is spared. Presses have the same fault,
-plus a second one: a series' set leaves out its withdrawn books at every
-press, the first press included. Live (published) records are listed
-correctly.
-Since: 2021-06-08 (OMP 2021-06-11) · Basis: probe, 2026-09-30. <sup>f-a1</sup>
+**A1 — A journal's own address leaves out its deleted records** {OJS OMP} · 🐞 · user-visible.
+A harvester of one journal's address expects an unpublished article to
+come back as a deleted record, so it can drop it. On every journal but
+the first (Rule 4b), the record disappears instead: the lists leave it
+out and GetRecord answers "No matching identifier in this repository",
+so the harvester keeps showing the withdrawn article. Asked for that
+journal's set, the site-wide address leaves its deleted records out
+too, and the `driver` set never shows one (Rule 23a). In place of its
+own, the journal's lists and GetRecord show the first journal's deleted
+records, under that journal's identifiers and set (a set the journal's
+ListSets does not name), and its "Earliest Datestamp" is the oldest of
+them, even on a journal with nothing published; a press lists them
+before its own records. Only while the first journal has no
+deleted record does an empty journal answer "No matching records in
+this repository" and give the moment of the request. A preprint server
+is not affected.
+Since: 2021-07-14 · Basis: probe, 2026-09-26; OMP 2026-09-29. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — OAI-PMH harvesters asking for records changed since or until a time of day get the whole day's records** · 🐞 · low.
-The OAI-PMH interface says it accepts dates to the second, but it
-ignores the time of day. A harvester asking for the records changed
-since noon gets every record changed that day. A harvester asking for
-the records changed until noon also gets the ones changed that
-afternoon.
-The harvester is not told, and no record inside the window it asked
-for is left out. Nobody at the journal, press or server can change it on screen.
-It happens on every journal, press and preprint server whose OAI
-interface is on, which is the default.
-Basis: probe, 2026-09-30. <sup>f-a2</sup>
+**A2 — `from` and `until` ignore the time of day** · 🐞 · minor.
+Identify announces the granularity "YYYY-MM-DDThh:mm:ssZ", so a harvester
+asking `from=2026-09-26T12:00:00Z` expects only the records changed since
+noon. It gets every record changed that day, and `until` likewise
+includes the whole of its day. Harvests repeat records, and a record
+changed after `until` on the same day is listed.
+Basis: probe, 2026-09-26. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — OAI-PMH harvesters sending a date not in the calendar get a list instead of "Illegal from parameter"** · 🐞 · low.
-A harvester that asks the OAI-PMH interface for records from or until a
-date that is not in the calendar, such as the 13th month, 30 February or
-the hour 25, expects the refusal "Illegal from parameter" (or "Illegal
-until parameter"), as for a date written the wrong way. Instead the
-interface answers with a list.
-A month 13 or an hour 25 in `from` lists every record, as if no date had
-been given; a month 13 in `until` lists nothing. A day the month does not
-have is read as a later day: 30 February is 2 March.
-The OAI interface is on by default, so every journal, press and preprint
-server answers this way.
-Basis: probe, 2026-09-30. <sup>f-a3</sup>
+**A3 — An impossible date is accepted** · 🐞 · minor.
+A harvester that sends `from=2026-13-01` expects "Illegal from
+parameter", as for a date written the wrong way. The list answers as if
+no date had been given; the same date as `until` lists nothing, a time
+such as "25:00:00" is taken as no date at all, and "2026-02-30" is read
+as 2 March.
+Basis: probe, 2026-09-26. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — In the browser view of OAI, a list's last part says "There are more results." and its "Resume" fails** · 🐞 · low.
-Opened in a web browser, an install's OAI address shows each response as a
-readable page, built by one stylesheet shared by all three apps. A
-journal manager, a support person or an indexing service's staff member
-who pages through a long list there expects its last page to end the
-list. It still shows "There are more results." and a "Resume" link, which
-answers "The requested resumptionToken is invalid or has expired".
-This happens on every list long enough to be split over several pages:
-records, identifiers and sets, for a single journal, press or server and
-for the whole install.
-Basis: probe, 2026-09-30. <sup>f-a4</sup>
+**A4 — The last page says "There are more results."** · 🐞 · minor.
+A tester paging through a long list in a browser expects the last part
+to end the list. It still shows "There are more results." and a
+"Resume" link, which answers "The requested resumptionToken is invalid
+or has expired". Harvesters, which read the XML, are not misled.
+Basis: probe, 2026-09-26. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — In the browser view of OAI, a record's "formats" page lists the whole archive's formats, with no link to the record** · 🐞 · low.
-Opened in a web browser, an install's OAI address shows each response as
-a readable page, built by one stylesheet shared by all three apps. On
-those pages every record carries a block "OAI Record Header", and that
-block has a "formats" link. The block appears on the ListRecords,
-ListIdentifiers and GetRecord pages.
-A journal manager, a support person or an indexing service's staff
-member who presses "formats" expects a page about that record: which
-formats it comes in, with a link to the record in each. Instead they
-get the same page as the archive-wide "ListMetadataFormats" link at the
-top. It reads "This is a list of metadata formats available from this
-archive." and has no link to the record.
-This happens for every record, on a journal's, press's or server's own
-address and on the install-wide one.
-Basis: probe, 2026-09-30. <sup>f-a5</sup>
+**A5 — One record's formats are shown as the whole archive's** · 🐞 · minor.
+A tester who presses "formats" on a record's header expects the page to
+say which formats that record comes in, with a link to each. It says
+"This is a list of metadata formats available from this archive." and
+offers no such links, as for a request without an identifier.
+Basis: probe, 2026-09-26. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — Three metadata items reach no record** · ❓ · minor.
@@ -1402,38 +1321,24 @@ field removed in 2019; ❓ for "Rights" and "Source".
 Since: 2019-06-26 · Basis: probe, 2026-09-26. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — Saving a journal section's settings, even unchanged, removes "Peer-reviewed Article" from its OAI records** {OJS} · 🐞 · low.
-A journal's Dublin Core records in OAI-PMH give each article a "Resource
-Type". A section whose "Identify items published in this section as a(n)"
-box is empty types its articles "Peer-reviewed Article", but only until
-someone saves the section. When a Journal Manager opens the section's
-"Edit" form under Settings › Journal › "Sections" and presses "Save",
-even with nothing changed, every record of the section loses that type.
-Nothing on screen says so.
-Every section with an empty box loses the type once it is saved, whether
-or not "Will not be peer-reviewed" is ticked. Only a section that was
-never saved keeps it, such as the "Articles" section a new journal starts
-with. A section created on the "Sections" page never has it.
-The fix is rated medium effort, although the code change is small.
-Restoring the type changes the records of the majority of journals, and
-that change of default output still has to be agreed in pkp's open issue
-on it.
-Basis: probe, 2026-09-30. <sup>f-a7</sup>
+**A7 — "Peer-reviewed Article" only for a section never saved in its window** {OJS} · 🐞 · minor.
+Two sections whose "Identify items published in this section as a(n)"
+is empty type their articles differently in the Dublin Core records.
+One never saved in its window, such as a section made with the journal,
+gives "Peer-reviewed Article" ("Article évalué par les pairs" in
+French); one saved there, even unchanged, or created there, gives no
+type word, whether or not it is ticked "Will not be peer-reviewed". A
+Journal Manager who opens a section's window and presses "Save" changes
+the type of every record of the section without being told.
+Basis: probe, 2026-09-26. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — In OAI Dublin Core records, "Source" ends in an empty part for articles in no issue and for every book** {OJS OMP} · 🐞 · low.
-A harvester reading an OAI-PMH Dublin Core record expects "Source" to
-read "{journal name}; {issue}; {pages or article number}", with only
-the parts the item has. An article published in no issue reads
-"Journal of Public Knowledge; " instead, or "Journal of Public
-Knowledge; ; 15-20" when it has pages ("; ; e0142" with an article
-number). Every record of a press reads "Public Knowledge Press; ". A
-preprint server writes no "Source", so it is not affected.
-The two halves differ in age. The journal half is new on `main`:
-articles in no issue reach the OAI lists only since continuous
-publication came in (`pkp/ojs#5039`), so it can be fixed before the
-next release. The press half has been there since 2012.
-Basis: probe, 2026-09-30. <sup>f-a8</sup>
+**A8 — The source line keeps an empty part** {OJS OMP} · 🐞 · minor.
+A harvester expects "Source" to read "{journal name}; {issue}; {pages}"
+with only the parts the article has. An article in no issue reads
+"{journal name}; " (or "{journal name}; ; 15-20" with pages); every press
+record reads "{press name}; ".
+Basis: probe, 2026-09-26. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — A journal that does not publish online still hands out records** {OJS} · ❓ · minor.
@@ -1450,61 +1355,43 @@ may index work published elsewhere) and drop the address from MARC.
 Basis: probe, 2026-09-26. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — A harvester listing a subscription journal's JATS records gets only an error, articles in open issues included** {OJS} · 🐞 · medium.
-A harvester asks a subscription journal for its records in the JATS
-format (`jats`). It expects the records of articles in open issues, and
-none for articles in issues that still require a subscription. Instead,
-the first answer that contains one article from a subscription issue
-holds only the error "Cannot disseminate format (unauthenticated access
-to JATS XML not allowed)". None of that answer's records arrive, the ones
-from open issues included. The answer also carries no link to the rest
-of the list, so every later record is lost too.
-The journal is not told. The error's code is the one OAI-PMH uses when a
-format is not available, so the harvester has no sign that the other
-records exist. It can still fetch each article on its own. It happens
-only to journals that sell subscriptions and have turned on "JATS
-Metadata Format".
-Basis: probe, 2026-09-30. <sup>f-a10</sup>
+**A10 — One restricted article empties a `jats` list** {OJS} · 🐞 · latent.
+A harvester lists a subscription journal's records in `jats`, expecting
+the open articles and a refusal for the restricted ones only. The first
+article in a subscription issue replaces the whole answer with "Cannot
+disseminate format (unauthenticated access to JATS XML not allowed)", so
+no record of the list arrives. Only journals that sell subscriptions and
+enable "JATS Metadata Format" meet it.
+Basis: probe, 2026-09-26. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — DRIVER set never learns of articles withdrawn by deleting their issue or published without one** {OJS} · 🐞 · medium.
-With the "DRIVER" plugin enabled, a journal editor deletes a published
-issue, or unpublishes an article that was published without an issue.
-The articles go offline, and the journal's OAI-PMH list reports them as
-deleted, but the `driver` set does not: they drop out of it without a
-deleted record. A harvester that follows the set is never told of the
-withdrawal and keeps the article as live. An article unpublished while
-still in its issue is reported to the set as it should be.
-The editor sees the action succeed and is not told. Unpublishing each
-article before deleting its issue avoids it; for an article published
-without an issue there is no way round.
-Basis: probe, 2026-09-30. <sup>f-a11</sup>
+**A11 — "DRIVER" loses the mark of an article in no issue** {OJS} · 🐞 · latent.
+With "DRIVER" enabled, a Journal Manager unpublishes an article
+published without an issue ("Don't Assign To An Issue"). It is
+unpublished as expected, but its deleted record is not marked for the
+`driver` set. No harvester sees the difference today, since the set
+never lists a deleted record (Rule 23a).
+Basis: probe, 2026-09-26. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — A journal's OAI-PMH MARC records do not validate against the schemas they name** {OJS} · 🐞 · medium.
-OJS offers two MARC formats over OAI-PMH, `marcxml` and `oai_marc`. Both
-are always on, with no setting. The records do not validate against the
-schemas they name, because several fields are written with the wrong
-markup. A MARC reader either refuses them or reads them with a field
-missing: on `main`, the pymarc library refuses every `marcxml` record,
-and on 3.5 it reads each one without the issue's publication date.
-Which records fail:
-- `marcxml`: every article's record, in every journal.
-- `oai_marc`: all records of a journal with an ISSN, and the record of
-  any article whose contributor has an affiliation. A journal
-  with neither ISSN nor affiliations gets valid `oai_marc` records.
-
-The part that makes pymarc refuse the whole record is new on `main` and
-not yet released.
-Basis: probe, 2026-09-30. <sup>f-a12</sup>
+**A12 — The MARC records do not follow their schemas** {OJS} · 🐞 · minor.
+A harvester that checks `marcxml` records against the MARC21 schema they
+name finds them invalid: field 773 is written in the older MARC format's
+way, the issue date's 260 element is misspelled, and 022 and 024 carry
+the indicator "#", which the schema does not allow. The `oai_marc`
+record mixes two spellings: the affiliations in 100 and 720 are written
+`code="u"` among subfields written with `label`, and 022's subfield is
+labelled "$a". A strict harvester drops the records.
+Basis: probe, 2026-09-26. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — A book's record read in French carries an untranslated key** {OMP} · 🐞 · low.
-A harvester reading a press's `…/fr_CA/oai` expects French words. Every
-book's "Resource Type" reads "##rt.metadata.pkp.dctype##" instead of the
-French for "Book", since the press's French translation has no text for
-it; the English records read "Book".
-Basis: probe, 2026-09-30. <sup>f-a13</sup>
+**A13 — Records read in French carry untranslated keys** {OJS OMP} · 🐞 · minor.
+A harvester reading `…/fr_CA/oai` expects French words. A book's
+"Resource Type" reads "##rt.metadata.pkp.dctype##" instead of the French
+for "Book", and an article's MARC 251 and 780 read
+"##publication.versionStage.display##" instead of its version, such as
+"Version of Record 2.0".
+Basis: probe, 2026-09-26. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — "Language" writes a galley's language with an underscore** {OJS OPS} · ❓ · minor.
@@ -1516,105 +1403,57 @@ Lean: 🐞; the record already writes the tag everywhere else.
 Basis: probe, 2026-09-26. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — A journal's MARC records and its Atom and RSS 1.0 announcement feeds print dates with stray "%" signs** {OJS} · 🐞 · medium.
-Two of the dates a journal gives out to machines come out with a "%"
-sign before each part:
-- A harvester that takes the journal's articles in MARC (`marcxml` or
-  `oai_marc`) from its OAI-PMH interface expects field 008 to open with
-  the publication date, such as "260930 2026" for 30 September 2026.
-  Every record carries "%26%09%30 %2026" in its place.
-- A visitor who subscribes to the journal's announcement feed gets
-  "%2026-%09-%30UTC%UTC%272" as every date of the Atom feed (the time
-  part is garbled the same way), and "%2026-%09-%30" as each
-  announcement's date in the RSS 1.0 feed.
-
-Nobody is told. No setting or form lets the journal correct these
-dates. The article page and its Dublin Core record show the right date.
-The same as [Announcements A15](U12-announcements.md#a15).
-Basis: probe, 2026-09-30. <sup>f-a15</sup>
+**A15 — MARC field 008 reads "%26%09%26 %2026"** {OJS} · 🐞 · minor.
+A harvester reading MARC field 008 expects the publication date, such as
+"260926 2026" for 26 September 2026. Every `oai_marc` and `marcxml`
+record carries "%26%09%26 %2026" in its place.
+Basis: probe, 2026-09-26. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — A harvester that repeats an OAI-PMH argument gets a blank server error instead of a refusal** · 🐞 · low · crash: server.
+**A16 — An argument given twice fails** · 🐞 · minor · crash: server.
 A harvester that sends an argument twice, such as
 `metadataPrefix=oai_dc&metadataPrefix=oai_dc` or `set` twice, expects
 "Multiple values are not allowed for the metadataPrefix parameter". The
 app fails with a server error and an empty page instead; the next
 request is answered as usual.
-Every argument fails this way when it is repeated on a verb that takes
-it: `verb` itself, where the protocol's "Illegal OAI verb" is expected,
-and `identifier`, `metadataPrefix`, `from`, `until`, `set` and
-`resumptionToken`. An argument the verb does not take is still refused
-as illegal. The request is invalid either way, so no record is withheld,
-but the harvester is not told what it did wrong.
-Basis: probe, 2026-09-30. <sup>f-a16</sup>
+Basis: probe, 2026-09-26. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — OAI-PMH GetRecord for a malformed identifier such as "…/2abc" answers record 2 instead of refusing it** {OMP OPS} · 🐞 · low.
-A harvester that sends GetRecord the identifier `oai:ops.localhost:preprint/2abc`
-gets back preprint 2, whose header shows `…:preprint/2`, not what it
-sent. OAI-PMH asks for the refusal "Identifier is not in a valid
-format". An identifier with only letters after the prefix, such as
-`…:preprint/abc`, gets "No matching identifier in this repository"
-instead of that refusal, which is the same fault.
-Only identifiers that carry the app's own prefix are affected
-(`…:publicationFormat/` on a press, `…:preprint/` on a preprint server,
-`…:article/` on a journal); any other identifier is refused as it
-should be. Journals on `main` already refuse both shapes, since their
-identifier handling was rewritten in July 2026; journals on 3.5 and
-older answer like presses and preprint servers.
-The fix is small in each app, but it is needed in two apps on `main`
-and in all three on 3.5.
-Basis: probe, 2026-09-30. <sup>f-a17</sup>
+**A17 — A malformed identifier answers another way** {OMP OPS} · 🐞 · minor.
+A harvester that sends GetRecord a malformed identifier expects
+"Identifier is not in a valid format", as a journal answers. After the
+app's own start (`oai:{repository identifier}:publicationFormat/` on a
+press, `…:preprint/` on a preprint server), an identifier that is not a
+number answers "No matching identifier in this repository", and a number
+followed by letters, such as `…/390abc`, answers record 390.
+Basis: probe, 2026-09-26. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — Harvesters of a press or preprint server miss edits of published items and keep republished items deleted** {OMP OPS} · 🐞 · medium.
-A harvester that asks a press or a preprint server for the records
-changed since its last visit expects an edited book or preprint, or one
-published again, to come back. Instead the record's datestamp stays at
-the time the item was first published. Saving "Title & Abstract" on the
-published version does not move it. An item published again after
-"Unpublish" (on OPS "Unpost") comes back with that first datestamp. Its
-deleted record was dated later, at the unpublish.
-Nobody is told. The harvester never picks up the edit. A harvester that
-visited while the item was unpublished never sees it come back, so its
-index keeps the item as deleted.
-It happens on every press, and on every preprint server whose OAI
-interface is on, as it is by default. Journals are not affected: OJS's
-datestamp already includes the publication's last change
-(`pkp/ojs#3197`). The open `pkp/pkp-lib#12958` is a general complaint
-with no steps or app; this report is the press and preprint server
-case, with its cause and a fix.
-Basis: probe, 2026-09-30. <sup>f-a18</sup>
+**A18 — A datestamp never moves after publication** {OMP OPS} · 🐞 · user-visible.
+A harvester that asks for the records changed since its last visit
+expects an edited item, or one published again, to come back. On a
+press and a preprint server the datestamp stays at the time the item was
+published: a saved edit of the published version does not move it, and
+an item published again after "Unpublish" ("Unpost") comes back with
+that old datestamp, older than its deleted record's. A harvester that
+harvested the deleted record never sees the item come back.
+Basis: probe, 2026-09-26. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — OAI-PMH offers a deleted section's set, but asking for it lists nothing** {OJS OPS} · 🐞 · medium.
-When an editor withdraws an article or preprint ("Unpublish", on OPS
-"Unpost"), OAI-PMH lists a deleted record for it, filed under its
-section's set. If a manager then deletes that section, ListSets keeps
-offering the section's set, but asking for the set answers "No matching
-records in this repository", at the journal's address and the site-wide
-one.
-A harvester that collects that section's set is never told the item
-was withdrawn, and gets no error. Nothing a journal can change on screen
-prevents it.
-It takes a section deleted after one of its items was withdrawn. OMP
-has the same pattern in its series sets, hidden today by two other
-faults (checked in the code).
-Basis: probe, 2026-09-30. <sup>f-a19</sup>
+**A19 — A deleted section's set lists nothing** {OJS OPS} · 🐞 · minor.
+A harvester that finds a set in ListSets expects asking for it to list
+its records. A deleted section stays in ListSets while it holds deleted
+records, but asking for its set answers "No matching records in this
+repository", at the journal's address and the site-wide one, so those
+deleted records never arrive by set.
+Basis: probe, 2026-09-26. <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — OAI-PMH lists a section's deleted records whatever the harvester's `from` and `until` dates say** {OJS OPS} · 🐞 · low.
-A harvester asks a journal's OAI-PMH endpoint for one section's
-records with `from=2030-01-01`, and expects nothing. Instead it gets
-every deleted record of that section, including an article withdrawn
-today. `until` is ignored the same way. This happens at the journal's
-own OAI endpoint and at the site-wide one.
-Every dated harvest of a section's set therefore receives all of that
-section's deleted records again, however old, each with its true
-deletion date.
-It needs a harvester that asks for one section (`set` of the form
-"journal:section") together with a date.
-Basis: probe, 2026-09-30. <sup>f-a20</sup>
+**A20 — A section's set ignores the dates for deleted records** {OJS OPS} · 🐞 · minor.
+A harvester asking for one section's records with `from=2030-01-01`
+expects nothing. It gets the section's deleted records, deleted today,
+at the journal's address and the site-wide one.
+Basis: probe, 2026-09-26. <sup>f-a20</sup>
 
 <a id="a21"></a>
 **A21 — A section has one set identifier per language** {OJS OPS} · ❓ · minor.
@@ -1628,50 +1467,29 @@ the plain address can send the same harvester to either (Rule 19a).
 Basis: probe, 2026-09-26. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — Once one journal turns on "DOI Versioning", every journal's OAI-PMH requests answer a blank server error** {OJS} · 🐞 · high · crash: server.
-A Journal Manager sets "DOI Versioning" to "Yes, assign a unique DOI to
-every version of an article." on one journal, where DOIs are on by
-default. From then on, the server fails on Identify, ListRecords,
-ListIdentifiers and GetRecord, and on ListMetadataFormats when it names
-an identifier. Each answers an empty page, at every journal's OAI
-address and at the site-wide one. ListSets still answers.
-Harvesters get nothing from any journal on the install, and no one on
-screen is told.
-It happens on installs that run PostgreSQL, as soon as the setting is
-saved: the journal needs nothing published.
-Basis: probe, 2026-09-30. <sup>f-a22</sup>
+**A22 — While any journal versions its DOIs, every journal's OAI requests fail** {OJS} · 🐞 · user-visible · crash: server.
+A Journal Manager turns on DOIs and "DOI Versioning" ("Yes, assign a
+unique DOI to every version of an article.") on one journal. From then
+on Identify, ListRecords, ListIdentifiers, GetRecord and
+ListMetadataFormats with an identifier fail with a server error and an
+empty page at every journal's address and at the site-wide address;
+ListSets still answers. Setting it back to "No" restores them.
+Basis: probe, 2026-09-26. <sup>f-a22</sup>
 
 <a id="a23"></a>
-**A23 — DRIVER set offers harvesters articles that have no full text** {OJS} · 🐞 · medium.
-With the "DRIVER" plugin enabled, a journal publishes an article that has
-no galley. The journal's OAI-PMH `driver` set is meant only for
-open-access articles with full text, but it lists this article beside the
-ones that have a galley, and the article's OAI record header carries the
-`driver` set. If the article is later unpublished, its deleted record
-keeps the `driver` mark.
-Only the missing-galley check is wrong. Subscription-only articles are
-still kept out, and any galley counts as full text, a remote-URL one
-included. A harvester that follows the set takes a metadata-only record
-for a full-text one, and the journal is not told.
-Basis: probe, 2026-09-30. <sup>f-a23</sup>
+**A23 — The `driver` set lists articles with no galley** {OJS} · 🐞 · minor.
+A harvester asking for the "driver" set expects only open-access
+articles with full text. An article published with no galley is listed
+in it beside one with a galley.
+Basis: probe, 2026-09-26. <sup>f-a23</sup>
 
 <a id="a24"></a>
-**A24 — Harvesters of a journal's DRIVER set in OAI-PMH get repeated records, an error, or (3.5) only 100 records** {OJS} · 🐞 · high.
-With the "DRIVER" plugin enabled, a harvester lists a journal's `driver`
-set through OAI-PMH. On 3.5, 3.4 and 3.3 the list of records stops after
-about 100 and says it is complete: an open access journal with more than
-100 articles has the rest left out of the set, and nothing says so.
-On main the list reaches the end of the set, but as soon as the journal
-holds one record outside the set it says more records follow when none
-do. The next request sends records already sent, or answers "No matching
-records in this repository". A stretch of 100 records outside the set,
-in the order the journal's OAI records are listed, ends the list there,
-and the set's records after it are never sent.
-A record is outside the set when only subscribers can read the article,
-when the journal requires signing in to read content, or when the
-article was withdrawn before the plugin was enabled (its deleted record
-was never marked for the set).
-Basis: probe, 2026-09-30. <sup>f-a24</sup>
+**A24 — A complete `driver` list offers "Resume"** {OJS} · 🐞 · minor.
+A harvester lists a journal's `driver` set. The answer holds every
+member but says "There are more results.", its "completeListSize"
+counting the journal's whole list; following "Resume" returns the same
+records again before the list ends.
+Basis: probe, 2026-09-26. <sup>f-a24</sup>
 
 ### OMP
 
@@ -1693,26 +1511,14 @@ have? Lean: yes; the switch was added for the other two apps only.
 Basis: probe, 2026-09-26. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
-**OMP3 — A harvester asking a press's OAI-PMH for a set it does not have gets other books instead of none** · 🐞 · medium.
-A harvester can ask a press's OAI-PMH address for one set: a press,
-named by its path (`publicknowledge`), or one of its series, named
-"press path:series path" (`publicknowledge:psy`). When the press has no
-such set, a harvester expects "No matching records in this repository",
-as a journal answers. Instead it gets other books:
-- At a press's address, a series that press does not have: all of that
-  press's books.
-- At a press's address, another press, a press that does not exist, or
-  another press's series: the books of every press on the install.
-- At the site-wide address, a press that does not exist: the books of
-  every press; a series the press does not have: all of that press's
-  books. Another press's set there is answered correctly.
-
-A deleted series counts as a series the press does not have: ListSets
-keeps offering its set while withdrawn books remain in it, and asking
-for that set lists all the press's books. On an install with one press,
-every case lists that press's own books; the "every press" cases need
-several presses.
-Basis: probe, 2026-09-30. <sup>f-omp3</sup>
+**OMP3 — An unknown set lists other records** · 🐞 · minor.
+A harvester that asks a press for a set it does not have expects "No
+matching records in this repository", as a journal answers. With an
+unknown series after the press's path it gets all the press's records;
+with another press's path, an unknown path or another press's series,
+the records of every press. The site-wide address given another press's
+path lists that press's records, as it should.
+Basis: probe, 2026-09-26. <sup>f-omp3</sup>
 
 <a id="omp4"></a>
 **OMP4 — A book without an abstract breaks the record lists** · 🐞 · user-visible · crash: server.
@@ -1723,17 +1529,11 @@ long as the book's format is listed in the answer.
 Basis: probe, 2026-09-26. <sup>f-omp4</sup>
 
 <a id="omp6"></a>
-**OMP6 — A press's series with no prefix are named with a leading space in OAI-PMH sets and web feeds** · 🐞 · low.
+**OMP6 — A series with no prefix is named with a leading space** · 🐞 · invisible.
 A harvester reading a press's ListSets expects each series named by its
-title. A series with no "Prefix" is named " Psychology", with a leading
-space. A browser showing the answer collapses the space, so it is seen
-only in the page source.
-The Web Feed plugin, on by default for every press, sends a book's
-series with the same space in its Atom, RSS 1.0 and RSS 2.0 feeds.
-The sets' addresses and records are right, and a series that has a
-"Prefix" reads "Prefix Title" as it should. The only way to avoid the
-space is to give every series a prefix.
-Basis: probe, 2026-09-30. <sup>f-omp6</sup>
+title. A series with no "Prefix" is named " Series One", with a leading
+space, which the browser view does not show.
+Basis: probe, 2026-09-26. <sup>f-omp6</sup>
 
 <a id="omp7"></a>
 **OMP7 — A new version changes a book's format identifiers** · ❓ · minor.
@@ -1750,17 +1550,11 @@ Basis: probe, 2026-09-26. <sup>f-omp7</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — Harvesters asking a preprint server's OAI-PMH interface for records up to a date get a blank server error** · 🐞 · medium · crash: server.
+**OPS1 — `until` fails on a preprint server** · 🐞 · user-visible · crash: server.
 A harvester that asks a preprint server for the records changed until a
 date, the usual way of harvesting in slices, gets a server error instead
 of a list; the same list without `until` answers normally.
-ListRecords and ListIdentifiers fail whenever `until` is given, at the
-server's own OAI address and at the site-wide one. The answer is HTTP
-500 and an empty page, and nobody at the server is told. Harvests that
-ask by `from` alone still work.
-It happens on every preprint server whose OAI interface is on, which is
-the default.
-Since: 2021-06-11 · Basis: probe, 2026-09-30. <sup>f-ops1</sup>
+Since: 2021-06-11 · Basis: probe, 2026-09-26. <sup>f-ops1</sup>
 
 <a id="ops2"></a>
 **OPS2 — A preprint without an abstract breaks the server's lists** · 🐞 · user-visible · crash: server.
@@ -1780,20 +1574,14 @@ dropped it on purpose in 2019.
 Since: 2019-11-21 · Basis: probe, 2026-09-26. <sup>f-ops3</sup>
 
 <a id="ops4"></a>
-**OPS4 — A preprint server removed under Hosted Servers leaves no deleted records for OAI-PMH harvesters** · 🐞 · medium.
+**OPS4 — A removed preprint server leaves no deleted records** · 🐞 · minor.
 A Site Administrator removes a preprint server under Administration ›
-"Hosted Servers". Every OPS site tells OAI-PMH harvesters that it keeps
-a deleted record for each item it withdraws. This is not a setting: the
-site-wide Identify always answers "persistent". A removed journal or
-press does leave deleted records. A removed server leaves none: at the
-site-wide OAI-PMH address its preprints are simply gone. GetRecord
-answers "No matching identifier in this repository" and the lists
-answer "No matching records in this repository".
-Harvesters are never told that the preprints were withdrawn, so their
-indexes keep listing them. It happens on any OPS site whenever a server
-with posted preprints is removed, whether the site hosts one server or
-several.
-Basis: probe, 2026-09-30. <sup>f-ops4</sup>
+Hosted Journals. A harvester of the site-wide address expects each
+posted preprint to come back as a deleted record, as the "persistent"
+"Deleted Record Policy" promises and as a removed journal's or press's
+does. GetRecord answers "No matching identifier in this repository" and
+nothing is left.
+Basis: probe, 2026-09-26. <sup>f-ops4</sup>
 
 ### Retired
 
@@ -1931,96 +1719,76 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 **q21** — Live-probed 2026-09-26 (Rules 23, 23a; A11, A23, A24), OJS, two runs: "DRIVER" ticked on screen asked nothing and showed 'The plugin "DRIVER" has been enabled.'; ListSets added `driver` "Open Access DRIVERset". On an open journal an article with a galley and one with none were both members, each header naming "driver". On a subscription journal an article in an open issue and one marked "Open Access" in a subscription issue were members; one in a subscription issue, one past its open access date and one in no issue were not. "Users must be registered and log in to view open access content." (and the site box) ticked emptied the set; unticked, the members were back. `set=driver` said "There are more results." with "completeListSize" 5 for two members, and "Resume" returned the same two again. An article in no issue unpublished with the plugin on showed "Status: Unscheduled" and "Schedule For Publication", its page answered 404 signed out, and its deleted record carried no `driver` mark. No deleted record was listed in the set, and the site-wide address had no `driver` set.
 
 <a id="fn-f-a1"></a>
-**f-a1** — Live-probed 2026-09-26 and, on OMP, 2026-09-29: note q8. "Earliest Datestamp": OJS scratch journals with and without published items all gave 2026-09-26T05:20:08Z, a deleted record of `publicknowledge`; OMP gave the moment of the request, for an empty press and for one whose only book was unpublished, while `publicknowledge` held no deleted record; with one, the empty press gave that record's datestamp (2026-09-29); OPS gave the deleted record's datestamp. Code: note n; the OJS closure dates from `08c3cddc6c` (pkp/ojs#3134, 2021-06-08), OMP's from `26edcaf788` (pkp/omp#983, 2021-06-11), both for pkp/pkp-lib#6963; `88aaa6b49f` (2021-07-14) and `79302a1bd` (2021-06-15) only reformatted them. The test installs' first context is `publicknowledge`.
-Issue report: [pkp-e2e#83](https://github.com/jardakotesovec/pkp-e2e/issues/83) ([docs/issues/U19-A1-oai-journal-deleted-records-first-journal.md](../issues/U19-A1-oai-journal-deleted-records-first-journal.md)).
+**f-a1** — Live-probed 2026-09-26 and, on OMP, 2026-09-29: note q8. "Earliest Datestamp": OJS scratch journals with and without published items all gave 2026-09-26T05:20:08Z, a deleted record of `publicknowledge`; OMP gave the moment of the request, for an empty press and for one whose only book was unpublished, while `publicknowledge` held no deleted record; with one, the empty press gave that record's datestamp (2026-09-29); OPS gave the deleted record's datestamp. Code: note n; the OJS closure dates from `88aaa6b49f` "pkp/pkp-lib#7129 Issue EntityDAO refactor" (2021-07-14), OMP's from the 2021 Laravel port (`79302a1bd`, 2021-06-15). The test installs' first context is `publicknowledge`.
 
 <a id="fn-f-a2"></a>
 **f-a2** — Live-probed 2026-09-26: note q11, the reads with a time. Code: note l.
-Issue report: [pkp-e2e#92](https://github.com/jardakotesovec/pkp-e2e/issues/92) ([docs/issues/U19-A2-oai-from-until-ignore-time-of-day.md](../issues/U19-A2-oai-from-until-ignore-time-of-day.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Live-probed 2026-09-26: note q11, `2026-13-01` as `from` and `until`, "2026-02-30", `T25:00:00Z` and the roll-over of "2026-09-31". Code: note l.
-Issue report: [pkp-e2e#97](https://github.com/jardakotesovec/pkp-e2e/issues/97) ([docs/issues/U19-A3-oai-impossible-date-accepted.md](../issues/U19-A3-oai-impossible-date-accepted.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Live-probed 2026-09-26: note q15, the last part of each list. Code: note k.
-Issue report: [pkp-e2e#98](https://github.com/jardakotesovec/pkp-e2e/issues/98) ([docs/issues/U19-A4-oai-last-part-offers-resume.md](../issues/U19-A4-oai-last-part-offers-resume.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-26, all three apps: "formats" on a record's header opened ListMetadataFormats with the identifier, which read "This is a list of metadata formats available from this archive." and linked each prefix to the whole archive's records. Code: `oai2.xsl` sets `$identifier` from the text of `oai:request` after "identifier=", but that text is the base URL (the arguments are attributes), so the "for the record" branch never shows.
-Issue report: [pkp-e2e#99](https://github.com/jardakotesovec/pkp-e2e/issues/99) ([docs/issues/U19-A5-oai-record-formats-shown-as-archive.md](../issues/U19-A5-oai-record-formats-shown-as-archive.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-26: note q13; "Supporting Agencies", "Rights" and "Source" were saved on a published version's "Metadata" page on each app and reached no `oai_dc`, `oai_marc` or `marcxml` answer. Code: note f; `sponsor` left `schemas/publication.json` in `718ad72e5` "pkp/pkp-lib#2072 Working prototype of versioning based on new publication entity" (2019-06-26); no adapter reads `supportingAgencies`, `rights` or `source`.
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-26, OJS: the same article was typed "Peer-reviewed Article" before its section "Articles" was saved in its window and not after; a second journal's untouched "Articles" gave it ("Article évalué par les pairs" at `…/fr_CA/oai`) until the window was opened and saved unchanged; a section created on screen with "Will not be peer-reviewed" ticked gave none. The saved box is stored as an empty string per language, which the adapter's fallback to `metadata.pkp.peerReviewed` does not replace. Code: note f; the "Peer-reviewed Article" default came with `5d177baa85` (2005-07-30); no adapter reads `metaReviewed`.
-Issue report: [pkp-e2e#100](https://github.com/jardakotesovec/pkp-e2e/issues/100) ([docs/issues/U19-A7-oai-section-save-drops-peer-reviewed.md](../issues/U19-A7-oai-section-save-drops-peer-reviewed.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-26: an article in no issue read "{journal}; " and, with "Pages" "15-20", "{journal}; ; 15-20"; a press record "{press}; ". Code: note f (`'; ' . $issue?->getIssueIdentification()` with a null issue; OMP appends "; " unconditionally).
-Issue report: [pkp-e2e#101](https://github.com/jardakotesovec/pkp-e2e/issues/101) ([docs/issues/U19-A8-oai-source-empty-part.md](../issues/U19-A8-oai-source-empty-part.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-26, OJS, two runs: with "OJS will not be used to publish the journal's contents online." chosen, ListRecords listed the article; its Dublin Core record had no address under "Resource Identifier" or "Relation"; both MARC records kept 856 with the article page; that page sent a signed-out visitor to Login and showed a signed-in Reader "This journal does not publish its content online." (`user/authorizationDenied?message=user.authorization.journalDoesNotPublish`). The question and lean are judgment. Code: notes f, g; `OjsJournalMustPublishPolicy` is not added to the OAI handler.
 
 <a id="fn-f-a10"></a>
 **f-a10** — Live-probed 2026-09-26: note q5, step 5. Code: note h (`error()` then `exit()` inside `toXml()`, which `listRecords()` calls while building the answer).
-Issue report: [pkp-e2e#84](https://github.com/jardakotesovec/pkp-e2e/issues/84) ([docs/issues/U19-A10-oai-jats-list-emptied-by-restricted-article.md](../issues/U19-A10-oai-jats-list-emptied-by-restricted-article.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-26, OJS, two runs: note q21, the last step. The unpublish request answered 200, the publication became unpublished and its tombstone carried no `driver` setting; the server log recorded "Plugin APP\plugins\generic\driver\DRIVERPlugin failed to handle the hook ArticleTombstoneManager::insertArticleTombstone" with the `Repository::get()` TypeError, which `Hook::call` catches. Code: note i.
-Issue report: [pkp-e2e#85](https://github.com/jardakotesovec/pkp-e2e/issues/85) ([docs/issues/U19-A11-oai-driver-set-misses-withdrawn-articles.md](../issues/U19-A11-oai-driver-set-misses-withdrawn-articles.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-26: note q4. Code: note g.
-Issue report: [pkp-e2e#86](https://github.com/jardakotesovec/pkp-e2e/issues/86) ([docs/issues/U19-A12-oai-marc-records-fail-schema.md](../issues/U19-A12-oai-marc-records-fail-schema.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-26: note q19; OJS `oai_marc` and `marcxml` read at `…/fr_CA/oai` wrote 251 and 780 `$i` "##publication.versionStage.display##" where the English read "Version of Record 2.0" and "Version of Record 1.1". The `##…##` form is how the app prints a key it has no text for in that language. Code: notes f, g, u.
-Issue report: [pkp-e2e#124](https://github.com/jardakotesovec/pkp-e2e/issues/124) ([docs/issues/U57-A8-omp-ops-french-texts-internal-names.md](../issues/U57-A8-omp-ops-french-texts-internal-names.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-26, OJS and OPS: an article with the galleys "PDF" (en) and "PDF FR" (fr_CA) read "Language" "en" and "fr_CA", and its French values `xml:lang="fr-CA"`. Code: note f (`dc:language` the galleys' stored `locale`; `xml:lang` turns `_` into `-`).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-26, OJS: every `oai_marc` and `marcxml` record read `"%26%09%26 %2026                        eng  "`, quotes included. Code: note g (`datePublished|date_format:"%y%m%d %Y"`; the `%` signs are printed as they stand).
-Issue report: [pkp-e2e#87](https://github.com/jardakotesovec/pkp-e2e/issues/87) ([docs/issues/U19-A15-oai-marc-008-percent-signs.md](../issues/U19-A15-oai-marc-008-percent-signs.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Live-probed 2026-09-26, all three apps (OJS twice): `verb=ListRecords&metadataPrefix=oai_dc&metadataPrefix=oai_dc`, and the same with `set` twice, answered 500 with an empty body; the server log: `PKP\oai\OAI::getParam(): Return value must be of type ?string, array returned`; the next Identify answered. Code: notes c, m.
-Issue report: [pkp-e2e#88](https://github.com/jardakotesovec/pkp-e2e/issues/88) ([docs/issues/U19-A16-oai-repeated-argument-server-error.md](../issues/U19-A16-oai-repeated-argument-server-error.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-26: note q16. Code: note e (OMP and OPS accept any identifier containing their start and cast the rest with `(int)`).
-Issue report: [pkp-e2e#89](https://github.com/jardakotesovec/pkp-e2e/issues/89) ([docs/issues/U19-A17-oai-malformed-identifier-answers-record.md](../issues/U19-A17-oai-malformed-identifier-answers-record.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-26: note q9. OMP: a format published at 08:28:23Z, deleted at 09:09:59Z and published again read 08:28:23Z; OPS the same with 08:28:36Z and 09:13:38Z; `submissions.last_modified` did not change. Code: note e (the datestamp is `ms.last_modified` on OMP, `a.last_modified` on OPS).
-Issue report: [pkp-e2e#90](https://github.com/jardakotesovec/pkp-e2e/issues/90) ([docs/issues/U19-A18-oai-datestamp-never-moves-after-publication.md](../issues/U19-A18-oai-datestamp-never-moves-after-publication.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Live-probed 2026-09-26, OJS and OPS: note q10. Code: note j.
-Issue report: [pkp-e2e#91](https://github.com/jardakotesovec/pkp-e2e/issues/91) ([docs/issues/U19-A19-oai-deleted-section-set-lists-nothing.md](../issues/U19-A19-oai-deleted-section-set-lists-nothing.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Live-probed 2026-09-26, OJS and OPS, two sweep runs: note q11, the last read; `publicknowledge`'s deleted records of the day (OJS 198, 447, 512; OPS 174, 227) were listed for `from=2030-01-01` at its own and the site-wide address. Code: note l.
-Issue report: [pkp-e2e#93](https://github.com/jardakotesovec/pkp-e2e/issues/93) ([docs/issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md](../issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md)).
 
 <a id="fn-f-a21"></a>
 **f-a21** — Live-probed 2026-09-26, OJS and OPS: note q19; the record headers read at `…/fr_CA/oai` named "{path}:ARTF". Code: note j (`getLocalizedAbbrev()` under the request's locale).
 
 <a id="fn-f-a22"></a>
 **f-a22** — Live-probed 2026-09-26, OJS, in three drives: while four journals of the install had "DOI Versioning" on, every Identify, list and record request of every journal and of the site-wide address answered 500 with an empty body; after "No" was saved on them, 200; a scratch journal set to "Yes" on screen brought the 500s back for 37 seconds, "No" removed them (note q20). The server log: `SQLSTATE[42804]: Datatype mismatch: 7 ERROR: UNION types text and bigint cannot be matched`, from the per-version branch of `APP\oai\ojs\OAIDAO::getRecordsRecordSetQuery()` (`NULL AS tombstone_id` against the tombstones' bigint), reached through `PKPOAIDAO::getEarliestDatestamp()` and the record lists. The test installs run Postgres; MySQL, whose union typing is looser, was not tried.
-Issue report: [pkp-e2e#94](https://github.com/jardakotesovec/pkp-e2e/issues/94) ([docs/issues/U19-A22-oai-fails-when-a-journal-versions-dois.md](../issues/U19-A22-oai-fails-when-a-journal-versions-dois.md)).
 
 <a id="fn-f-a23"></a>
 **f-a23** — Live-probed 2026-09-26, OJS, three journals, two runs: note q21; the member without a galley had no `publication_galleys` row. Code: note i.
-Issue report: [pkp-e2e#95](https://github.com/jardakotesovec/pkp-e2e/issues/95) ([docs/issues/U19-A23-oai-driver-set-lists-articles-without-galley.md](../issues/U19-A23-oai-driver-set-lists-articles-without-galley.md)).
 
 <a id="fn-f-a24"></a>
 **f-a24** — Live-probed 2026-09-26, OJS: note q21; a second walk of a two-member set answered the parts 1221 1222, 1221 1222, then 1222. Code: note i.
-Issue report: [pkp-e2e#96](https://github.com/jardakotesovec/pkp-e2e/issues/96) ([docs/issues/U19-A24-oai-driver-set-complete-list-offers-resume.md](../issues/U19-A24-oai-driver-set-complete-list-offers-resume.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Live-probed 2026-09-26: note q7; a format set "Not Available" in its "Format Availability" window left the list and its GetRecord answered "No matching identifier in this repository"; "Available" again brought it back. Code: note e (`publication_formats`, `pf.is_available = 1`); the OMP Dublin Core adapter works on a publication format (note f).
@@ -2030,7 +1798,6 @@ Issue report: [pkp-e2e#96](https://github.com/jardakotesovec/pkp-e2e/issues/96) 
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — Live-probed 2026-09-26: note q10, the OMP part. Code: note j.
-Issue report: [pkp-e2e#102](https://github.com/jardakotesovec/pkp-e2e/issues/102) ([docs/issues/U19-OMP3-oai-press-unknown-set-lists-other-records.md](../issues/U19-OMP3-oai-press-unknown-set-lists-other-records.md)).
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — Live-probed 2026-09-26: a book published with its abstract saved empty on "Title & Abstract" made the press's ListRecords, its GetRecord and the site-wide `set={press}` list answer 500, while the site-wide first page (without the book) and ListIdentifiers answered; the server log: `Dc11SchemaPublicationFormatAdapter::addLocalizedElements(): Argument #3 ($localizedValues) must be of type array, null given`. The book was unpublished again at once. Code: note f (`Dc11SchemaPublicationFormatAdapter::addLocalizedElements(…, array $localizedValues)` receives `$publication->getData('abstract')`, null when never set; OMP's "Title & Abstract" does not require the abstract).
@@ -2040,14 +1807,12 @@ Issue report: [pkp-e2e#102](https://github.com/jardakotesovec/pkp-e2e/issues/102
 
 <a id="fn-f-omp6"></a>
 **f-omp6** — Live-probed 2026-09-26: note q10; the deleted record's set name keeps the space, and the seeded press's series read " Monographs" and " Textbooks" at `…/fr_CA/oai`. Code: note j.
-Issue report: [pkp-e2e#103](https://github.com/jardakotesovec/pkp-e2e/issues/103) ([docs/issues/U19-OMP6-omp-series-set-name-leading-space.md](../issues/U19-OMP6-omp-series-set-name-leading-space.md)).
 
 <a id="fn-f-omp7"></a>
 **f-omp7** — Live-probed 2026-09-26: a book whose formats were `publicationFormat/131` and `/132` listed `/136` and `/137` once "Version of Record 2.0" was published on screen, and GetRecord of `/131` answered "No matching identifier in this repository", with no deleted record. Code: note e (each version has formats of its own, and the record is a format of the current version).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Live-probed 2026-09-26: note q11, the preprint server part. Code: note l; the column name `a.last-modified` came with ops `5df1969511` "pkp/pkp-lib#6963 Port OAI rewrite to Laravel to OPS" (2021-06-11). Postgres answers "column … does not exist".
-Issue report: [pkp-e2e#104](https://github.com/jardakotesovec/pkp-e2e/issues/104) ([docs/issues/U19-OPS1-ops-oai-until-server-error.md](../issues/U19-OPS1-ops-oai-until-server-error.md)).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — Live-probed 2026-09-26: a preprint posted with its abstract empty made the server's ListRecords, its GetRecord and the site-wide `set={server}` list answer 500 (`Dc11SchemaPreprintAdapter::addLocalizedElements()`, the same TypeError as OMP4); the preprint was unposted again at once. The Sections spec's note f-ops6 (live-probed 2026-09-25): `Dc11SchemaPreprintAdapter::addLocalizedElements()` receives a null abstract, a TypeError; written up in `docs/reports/2026-09-25-ops-oai-empty-abstract.md`.
@@ -2057,7 +1822,6 @@ Issue report: [pkp-e2e#104](https://github.com/jardakotesovec/pkp-e2e/issues/104
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — Live-probed 2026-09-26, all three apps, two runs: after "Remove" under Administration › Hosted Journals ("Are you sure you want to permanently delete … and all of its contents?", "OK"), site-wide GetRecord of a posted preprint answered "No matching identifier in this repository" and no tombstone row was left; a removed journal's and press's items read as deleted, with a tombstone row each. Code: note n.
-Issue report: [pkp-e2e#105](https://github.com/jardakotesovec/pkp-e2e/issues/105) ([docs/issues/U19-OPS4-ops-removed-server-leaves-no-deleted-records.md](../issues/U19-OPS4-ops-removed-server-leaves-no-deleted-records.md)).
 
 ## Reference — entry points & surfaces
 

@@ -927,26 +927,6 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
-  - the guard for A11 (Rule 18; scenario 9 marks it; issue report
-    `docs/issues/U36-A11-save-without-component-server-error.md`): "Save"
-    in "Edit {file name}" with no component chosen refused with "Missing
-    or invalid component!", then the same file saved with a component
-  - the guard for A14 (Rule 5a; issue report
-    `docs/issues/U36-A14-change-file-keeps-first-upload.md`): "Change
-    File" on step 1, then "Complete", leaving one new file; on a
-    revision, the file keeping its original version and not the
-    discarded pick; on an OJS galley, "Cancel" after the first pick
-    leaving the galley without a file and no error
-  - the guard for A25 (Rule 17a; issue report
-    `docs/issues/U36-A25-cancel-upload-after-sent-keeps-file.md`): the
-    wizard's "Cancel upload" pressed once the whole file has been sent,
-    on a slowed answer, leaving no file after a reload and none on
-    "Review"
-  - the guard for A10 (Rule 14; issue report
-    `docs/issues/U36-A10-empty-note-posted.md`): "Add Note" with the box
-    empty in a file's "More Information", refused with "This field is
-    required." and no new note
-- **Planned**:
   - the file's "History" keeping no line of the revision cancelled with "Cancel": one "A file revision "notes.md" …" line, not two (Rule 9): likely a bullet in scenario 3, which cancels a revision before the "History" it reads
   - "Edit a file" closed with its header "Close" after the name is changed: no question, the list keeping the old name after a reload, and the window reopening on it (Rule 10): likely a bullet in scenario 4 before "The rename"
 - **Nothing new to test**:
@@ -971,8 +951,11 @@ Left out of the scenarios above, by reason:
   - A7 (the Author's "Upload" above "Revisions Uploaded" offered on a round that asks for no revisions; Actors row 2; scenario 7 marks it)
   - A8 (the revise list naming files by name alone; Fields)
   - A9 (step 1's hidden upload box read by a screen reader, its drop-downs unnamed; Fields)
+  - A10 (an empty note posted; Rule 14)
+  - A11 ("Save" in "Edit {file name}" with no component chosen failing; Rule 18; scenario 9 marks it)
   - A12 (the "Download All Files" zip named with two hyphens; Rule 3; scenario 4 marks it)
   - A13 (deleting a file also deleting its copies on other lists; Rule 4)
+  - A14 ("Change File" in step 1 keeping the first upload as a file of its own; Rule 5a)
   - A15 (step 2 reopened from step 3 offering "Complete" and showing "File Added" again; Rule 5b)
   - A16 (a galley's "Change File" closed with "Close" keeping the new file; Rule 9a)
   - A17 (the page's script failing after two "History" downloads and closing the window; Rule 13b)
@@ -983,6 +966,7 @@ Left out of the scenarios above, by reason:
   - A22 (the Activity Log recording a new file's upload as a "Revision"; Side effects)
   - A23 ("Cancel" after a second pick on step 1 leaving the first pick as the file; Rule 9b)
   - A24 (one file revised in two windows: one "Cancel" doing nothing, the file keeping a cancelled upload; Rule 9c)
+  - A25 ("Cancel upload" pressed after the whole file has been sent keeping the file; Rule 17a)
 - **Owned by another feature**:
   - a Production editor's lists: every stage's while not assigned, Copyediting and Production only once assigned (Actors preamble; *Workflow screen & stage access*, and *Stage participants*, whose A8 records the assigned case)
   - the Author's revision upload through "Upload revisions" (Actors row 2; *Review stage & rounds*, scenario 4)
@@ -1007,17 +991,17 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | A galley's "Change File" shows "Current file" with no file name under it | 🐞 | minor | — |
 | [A7](#a7) | The Author's "Upload" on "Revisions Uploaded" shows on every round and is refused before revisions are requested | 🐞 | minor | — |
 | [A9](#a9) | A screen reader reads step 1's hidden upload box, and the step's two drop-downs have no name | 🐞 | minor | — |
-| [A10](#a10) | Pressing "Add Note" with nothing typed posts an empty note on a submission or a file | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A11](#a11) | An author pressing "Save" with no file component chosen in the submission wizard gets an unexpected error | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A10](#a10) | "Add Note" with an empty box posts an empty note | 🐞 | minor | — |
+| [A11](#a11) | "Save" in the submission wizard's "Edit {file name}" with no component chosen fails with "An unexpected error has occurred." | 🐞 | minor · crash: server | — |
 | [A12](#a12) | The "Download All Files" zip is named with two hyphens ("12--submission-files.zip") | 🐞 | minor | — |
-| [A14](#a14) | "Change File" in the upload window keeps the replaced file as an extra file | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A14](#a14) | "Change File" in step 1 keeps the first upload on the list as a file of its own | 🐞 | user-visible | — |
 | [A15](#a15) | Step 2 reopened from step 3 offers "Complete" but shows "File Added" again instead of closing | 🐞 | minor | — |
 | [A19](#a19) | In "Upload/Select Files", another stage's files refuse their "More Information", "Edit" and "Delete" | 🐞 | minor | — |
 | [A20](#a20) | The reviewer's "Review Files" search keeps every file | 🐞 | minor | — |
-| [A21](#a21) | The submission wizard's Files panel accepts files larger than the server can take, then fails | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A21](#a21) | A file of exactly the upload limit ends with "Invalid JSON response from server." instead of being refused | 🐞 | minor · crash: server | — |
 | [A23](#a23) | Revising a file, a second pick on step 1 and then "Cancel" leave the first pick as the file instead of the original | 🐞 | minor | — |
 | [A24](#a24) | One file revised in two windows: the first window's "Cancel" does nothing, and the file keeps the upload cancelled there | 🐞 | minor | — |
-| [A25](#a25) | An author's "Cancel upload" pressed after the whole file has been sent keeps the file in the submission | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A25](#a25) | "Cancel upload" pressed after the whole file has been sent removes the row, but the file is stored and back after a reload | 🐞 | user-visible | — |
 | [A6](#a6) | Every file row's menu button is named "More Actions" alone, so a screen reader cannot tell the rows apart | ❓ | minor | — |
 | [A8](#a8) | The revise list names files only, so two files with the same name read the same | ❓ | minor | — |
 | [A13](#a13) | Deleting a file also deletes every copy made from it on other lists | ❓ | user-visible | — |
@@ -1108,31 +1092,22 @@ reader: their labels are not tied to them.
 Basis: probe. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — Pressing "Add Note" with nothing typed posts an empty note on a submission or a file** · 🐞 · low.
-Notes can be written in two places: the "Notes" tab of a submission's
-"Activity Log & Notes" window, and the "Notes" tab of a file's "More
-Information" window. In both, pressing "Add Note" with the box empty
-posts a note with no text. The page shows "Note posted.", the list
-gains a note with only the writer's name, the date and "Delete", and
-the window's "History" tab gains "Posted new note.". The writer
-expects to be told to type a note. A box holding only spaces posts the
-same empty note.
-Same fault: [Submission activity log & notes' A2](U38-submission-activity-log-and-notes.md#a2) (the submission's window).
-Basis: probe, 2026-09-30. <sup>[f-a10](#fn-a10)</sup>
+**A10 — "Add Note" posts an empty note** · 🐞 · minor.
+In "More Information" › "Notes", pressing "Add Note" with the box empty
+adds a note with no text (only its writer, its date and "Delete"), shows
+"Note posted." and adds "Posted new note." to "History". An empty note
+should be refused.
+Basis: probe. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
-**A11 — An author pressing "Save" with no file component chosen in the submission wizard gets an unexpected error** · 🐞 · low · crash: server.
-In the submission wizard's "Upload Files" step, each uploaded file's row
-asks "What kind of file is this?" and offers the main component as a
-link, and "Other". "Other" and the file's "Edit" open a side panel,
-"Edit {file name}", with every component as a radio button. Pressing "Save" there without choosing a component makes the app
-fail on the server: "An unexpected error has occurred. Please reload the
-page and try again." appears, the panel stays open and nothing is saved.
-The author expects to be told to choose a component.
-Only the submission wizard has this panel. The editorial workflow's
-file "Edit" opens a different form with no component choice, and a
-preprint server's "Upload Files" step lists galleys instead.
-Basis: probe, 2026-09-30. <sup>[f-a11](#fn-a11)</sup>
+**A11 — "Save" in "Edit {file name}" with no component chosen fails** · 🐞 · minor · crash: server.
+In the submission wizard's "Files" panel, "Other" or a row's "Edit"
+opens "Edit {file name}". Pressing "Save" there without choosing a
+component makes the app fail: "An unexpected error has occurred. Please
+reload the page and try again." appears, the panel stays open and
+nothing is saved. Expected: a message asking for a component, or no
+save until one is chosen.
+Basis: probe. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
 **A12 — The "Download All Files" zip's name has two hyphens** · 🐞 · minor.
@@ -1157,23 +1132,13 @@ nothing of the link.
 Basis: probe. <sup>[f-a13](#fn-a13)</sup>
 
 <a id="a14"></a>
-**A14 — "Change File" in the upload window keeps the replaced file as an extra file** · 🐞 · medium.
+**A14 — "Change File" in step 1 keeps the first upload** · 🐞 · user-visible.
 In step 1 of the upload wizard, "Change File" should replace the file
 just uploaded. It uploads the new one, but the first stays: after
-"Complete" the list holds both, the first under its own name and the
-component chosen in step 1. When "Change File" is pressed, the window
-asks the server to delete the first file; the server refuses, for every
-role, and nothing on screen says so.
-On a file list the kept file looks like any other, and whatever happens
-next to that list includes it. On "Submission Files", "Send for Review"
-offers it ticked for copying to the review files, and a reviewer
-assigned there gets every review file unless the editor unticks it.
-Deleting the row removes it.
-Two cases leave a copy no list shows. Swapping picks while revising a
-file stores the first pick as one of the file's earlier versions. On a
-galley's first file, the galley serves the second pick, and the first
-stays stored on the server without being offered to anyone.
-Basis: probe, 2026-09-30. <sup>[f-a14](#fn-a14)</sup>
+"Complete" the list holds both, the first under its uploaded name and
+the step-1 component. The app refuses the screen's request to delete the
+first file, even for a Journal Manager, and nothing on screen says so.
+Basis: probe. <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
 **A15 — Step 2 reopened from step 3 offers "Complete" but does not close** · 🐞 · minor.
@@ -1238,26 +1203,14 @@ windows for a reviewer's request narrows the list.
 Basis: probe. <sup>[f-a20](#fn-a20)</sup>
 
 <a id="a21"></a>
-**A21 — The submission wizard's Files panel accepts files larger than the server can take, then fails** · 🐞 · medium.
-The submission wizard's "Files" panel refuses in the browser any file
-over PHP's `upload_max_filesize` ("File is too big (9MiB). Max filesize:
-8MiB."). The server also refuses any request over `post_max_size`, and a
-request carries the file and the form's fields. On an install whose
-`post_max_size` is no larger than `upload_max_filesize`, the panel
-therefore lets through files the server cannot take. Every file between
-the two limits fails after it is sent, and when the limits are equal,
-a file of exactly the panel's limit fails too.
-The author is refused with a message that names no limit: on 3.5 and
-`main` a server error, "The POST data is too large." ([a separate
-report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U36-A21-upload-over-request-limit-server-error.md)),
-and on 3.4 and 3.3 "No file to be uploaded could be found with the
-request.". The author has been told a larger size is allowed and cannot
-tell which size will pass.
-PHP ships with `upload_max_filesize` 2M and `post_max_size` 8M, where
-this does not happen. An install lands in it when an administrator
-raises `upload_max_filesize` without raising `post_max_size` above it.
-The server error such a file ends in, which the media window meets too ([Media files' A4](U47-media-files.md#a4)), is a separate fault with its own report.
-Basis: probe, 2026-09-30. <sup>[f-a21](#fn-a21)</sup>
+**A21 — A file of exactly the upload limit fails on the server** · 🐞 · minor · crash: server.
+In the submission wizard's "Files" panel a file larger than the limit is
+refused at once in its row. A file of exactly the limit (100 MiB on a
+server that allows 100 MiB) passes that check, starts uploading and ends
+with "Invalid JSON response from server." in its row: the app failed,
+and nothing is stored. It should be refused like a larger file, or
+stored.
+Basis: probe. <sup>[f-a21](#fn-a21)</sup>
 
 <a id="a22"></a>
 **A22 — The Activity Log records a new file as a "Revision"** · ❓ · minor.
@@ -1300,20 +1253,16 @@ a renamed file too ([A1](#a1)).
 Since: 2026-09-27 · Basis: probe. <sup>[f-a24](#fn-a24)</sup>
 
 <a id="a25"></a>
-**A25 — An author's "Cancel upload" pressed after the whole file has been sent keeps the file in the submission** · 🐞 · medium.
-In the submission wizard's "Upload Files" step, an author who presses
-"Cancel upload" on a file expects the file to be dropped, and its row
-goes at once without a question. If the author presses it after the
-whole file has been sent but before the server has answered, only the
-row goes: the server has already stored the file, and the file goes in
-with the submission. Nothing says so.
-That gap lasts while a slow connection or a busy server holds the
-answer back, with the bar full and "Cancel upload" still offered.
-The file shows again only once the draft is reloaded or reopened, and
-after "Submit" the author can no longer remove it. When the editor
-sends the submission for review, the file is offered to the reviewers
-ticked. A preprint server's wizard has no such panel.
-Basis: probe, 2026-09-30. <sup>[f-a25](#fn-a25)</sup>
+**A25 — "Cancel upload" pressed after the whole file has been sent keeps the file** · 🐞 · user-visible.
+In the submission wizard's "Files" panel, the Author who presses "Cancel
+upload" expects the file to be dropped, and the row goes at once without
+a question. Pressed after the whole file has been sent but before the
+server's answer, only the row goes: the file is stored, is back on the
+panel with "Edit" and "Remove" after a reload, and, like any file there,
+goes in with the submission. Nothing says so when the row goes. An answer
+slowed by the link or the server holds that window open; so does limiting
+only the browser's download speed.
+Basis: probe. <sup>[f-a25](#fn-a25)</sup>
 
 ### OPS
 
@@ -2260,14 +2209,12 @@ button "Choose File", while the screenshot showed no box.
 **f-a10** — Note v (`NewNoteForm` has no check on the text). Live-probed
 2026-09-23 (d14; all three apps): an empty note row "Mira Manager 2026-09-23
 11:57 AM · Delete", "Note posted.", and a "Posted new note." row in "History".
-Issue report: [pkp-e2e#67](https://github.com/jardakotesovec/pkp-e2e/issues/67) ([docs/issues/U36-A10-empty-note-posted.md](../issues/U36-A10-empty-note-posted.md)).
 
 <a id="fn-a11"></a>
 **f-a11** — Note k. Live-probed 2026-09-23 (OJS and OMP): "Other" › "Save"
 with no radio chosen showed the message with the panel still open; the save, a
 POST to `…/api/v1/submissions/{id}/files/{fileId}?stageId=1` with a PUT
 override, answered 500.
-Issue report: [pkp-e2e#41](https://github.com/jardakotesovec/pkp-e2e/issues/41) ([docs/issues/U36-A11-save-without-component-server-error.md](../issues/U36-A11-save-without-component-server-error.md)).
 
 <a id="fn-a12"></a>
 **f-a12** — Note h (`Str::kebab()`). Live-probed 2026-09-23: note d19.
@@ -2286,7 +2233,6 @@ A8 saw it from "Copyedited Files" to "Draft Files".
 `status:false` "The current user is not authorized to access the specified
 submission file." (HTTP 200); after "Complete" the list held "change-first.pdf
 … Research Instrument" beside the renamed second file.
-Issue report: [pkp-e2e#64](https://github.com/jardakotesovec/pkp-e2e/issues/64) ([docs/issues/U36-A14-change-file-keeps-first-upload.md](../issues/U36-A14-change-file-keeps-first-upload.md)).
 
 <a id="fn-a15"></a>
 **f-a15** — Note n. Live-probed 2026-09-23 (OJS twice, OMP once): "2. Review
@@ -2339,8 +2285,6 @@ POST to `…/api/v1/submissions/{id}/files` answered 500, the server log reading
 "POST Content-Length of 104857994 bytes exceeds the limit of 104857600 bytes":
 the form fields push the request past the limit the panel's size check
 compares against.
-Issue report (the panel's limit): [pkp-e2e#70](https://github.com/jardakotesovec/pkp-e2e/issues/70) ([docs/issues/U36-A21-files-panel-limit-ignores-request-limit.md](../issues/U36-A21-files-panel-limit-ignores-request-limit.md)).
-Issue report (the server error): [pkp-e2e#43](https://github.com/jardakotesovec/pkp-e2e/issues/43) ([docs/issues/U36-A21-upload-over-request-limit-server-error.md](../issues/U36-A21-upload-over-request-limit-server-error.md)).
 
 <a id="fn-a22"></a>
 **f-a22** — Note y: `add()` logs `submission.event.fileRevised` on the
@@ -2424,7 +2368,6 @@ of 6). Under an emulated upload throttle the bar fills before the request
 has left the browser, so there a full bar does not mean the file was sent.
 Scenario 9 presses mid-upload; no test drives the window after the last
 byte.
-Issue report: [pkp-e2e#66](https://github.com/jardakotesovec/pkp-e2e/issues/66) ([docs/issues/U36-A25-cancel-upload-after-sent-keeps-file.md](../issues/U36-A25-cancel-upload-after-sent-keeps-file.md)).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Note a (the OPS workflow and wizard configs). Live-probed

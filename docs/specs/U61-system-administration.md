@@ -635,17 +635,6 @@ All Failed Jobs" or "Delete Task Logs", run alone. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Planned**:
-  - the guard for A1 (Rule 6; issue report
-    `docs/issues/U61-A1-check-for-updates-empty-page.md`): "Check for
-    updates" on an installation that cannot reach PKP's website, System
-    Information opening again with a warning that the latest version
-    could not be retrieved and the rest of the page as before
-  - the guard for A6 (Rule 19; issue report
-    `docs/issues/U61-A6-requeue-all-refused-spinner-keeps-turning.md`): a
-    "Requeue All Failed Jobs" refused after the list was emptied in
-    another tab, no loading circle left beside the button or under the
-    table after "OK"
 - **Nothing new to test**:
   - a refused "Try Again" or "Delete" on a failed job already taken off
     the list in another tab (Rule 17b)
@@ -703,10 +692,10 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | "Check for updates" on System Information opens an empty page when the server cannot reach PKP's website | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A4](#a4) | "Requeue All Failed Jobs" shows a database error when no failed job has its stored data | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A6](#a6) | After a refused "Requeue All Failed Jobs", the Failed Jobs page keeps showing a loading circle | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A7](#a7) | A press's and a preprint server's French Administration page shows a raw code under "Gestion du site" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A1](#a1) | "Check for updates" shows an empty page when the installation cannot reach PKP's site | 🐞 | user-visible · crash: server | — |
+| [A4](#a4) | "Requeue All Failed Jobs" fails with the database's error text when no failed job has stored data | 🐞 | latent · crash: server | — |
+| [A6](#a6) | After a refused "Requeue All Failed Jobs" a loading circle keeps turning until the page is reloaded | 🐞 | minor · crash: server | — |
+| [A7](#a7) | A press's and a preprint server's French Administration page shows a raw code under "Gestion du site" | 🐞 | minor | — |
 | [A2](#a2) | The three deleting buttons return to Administration with no message, and "Delete Data Caches" asks nothing first | ❓ | minor | — |
 | [A3](#a3) | A failed job's "Delete" removes it for good without asking | ❓ | minor | — |
 | [A5](#a5) | Neither "Delete Caches" button empties the stored copies of public pages | ❓ | latent | — |
@@ -715,20 +704,13 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — "Check for updates" on System Information opens an empty page when the server cannot reach PKP's website** · 🐞 · low · crash: server.
-On an installation that cannot reach PKP's website, a site administrator
-who clicks "Check for updates" on Administration › System Information
-gets an empty page: the application fails on the server. They expected
-System Information again, with the latest release or a word that it
-could not be found.
-The browser's Back button returns to the full page, but the administrator
-is never told that PKP's website was out of reach, so the empty page reads
-as a broken installation. The new-release notice at the top of the
-Administration and System Information pages meets the same failure and
-quietly stays hidden.
-The fix is short, but it spans four files in pkp-lib, changes what a
-shared method returns on failure and adds a new warning text.
-Basis: probe, 2026-09-30. <sup>f-a1</sup>
+**A1 — "Check for updates" fails when PKP's site cannot be reached** · 🐞 · user-visible · crash: server.
+The link promises the latest release; on an installation that cannot
+reach PKP's site (behind a firewall, or with outbound traffic blocked, as
+on the test installs) the application fails and opens an empty page, with
+no heading and no text, instead of System Information. The notice of
+Rule 4 on the same pages handles the same failure quietly.
+Basis: probe. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — The deleting buttons give no feedback** · ❓ · minor.
@@ -752,19 +734,15 @@ failed job is diagnostic data, but a confirmation would cost little.
 Basis: probe. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — "Requeue All Failed Jobs" shows a database error when no failed job has its stored data** · 🐞 · low · crash: server.
-On Administration › "View Failed Jobs", "Requeue All Failed Jobs" puts
-back on the queue every failed job that still has its stored data (the
-data the job was queued with) and leaves the others on the list, as its
-notice says. When no failed job on the list has its stored data, the
-application fails on the server instead: a window titled "Error" shows
-the database's own error text, nothing is requeued, and the list stays
-as it was.
-Nothing is lost, and "Delete" clears such jobs. Nothing in the
-application saves a failed job without its data, so no site
-administrator meets this today. The only known way to get such a job
-is an edit made directly in the database.
-Basis: probe, 2026-09-30. <sup>f-a4</sup>
+**A4 — "Requeue All" fails when no failed job has stored data** · 🐞 · latent · crash: server.
+While at least one failed job has stored data, "Requeue All Failed Jobs"
+leaves those without on the list, as its notice says. When none has, the
+application fails: a window titled "Error" shows the database's own
+error text (a "Not null violation" naming the column "payload", with the
+query and the database's name), nothing is requeued, and the list stays
+as it was, its loading circle turning [A6](#a6). No screen makes a failed
+job without data, so no one meets this today.
+Basis: probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — "Delete Caches" leaves the stored public pages** · ❓ · latent.
@@ -779,20 +757,18 @@ server job.
 Basis: code. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — After a refused "Requeue All Failed Jobs", the Failed Jobs page keeps showing a loading circle** · 🐞 · low.
-On Administration › "View Failed Jobs", a Site Administrator presses
-"Requeue All Failed Jobs" and it is refused, for example because the
-list was already emptied in another tab. A window titled "Error" says
-why. After "OK" the failed jobs are still listed, which is correct,
-since nothing was requeued. But a loading circle keeps turning beside
-the button until the page is reloaded. On a list long enough to have
-page links, a second circle takes the place of the current page number.
-The page looks busy when nothing is happening, which suggests the
-requeue is still running.
-Basis: probe, 2026-09-30. <sup>f-a6</sup>
+**A6 — A refused "Requeue All" leaves its loading circle turning** · 🐞 · minor · crash: server.
+After "Requeue All Failed Jobs" is refused and "OK" is pressed on the
+"Error" window, the rows rightly stay as they were, but a loading circle
+keeps turning beside the button (and, with page links under the table,
+in place of the page number) until the page is reloaded. It happens both
+when the list was already emptied in another tab (Rule 19) and when the
+application fails as in [A4](#a4). The page looks busy when nothing is
+happening.
+Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — A raw code under "Gestion du site" on a press's and a preprint server's French Administration page** · 🐞 · low.
+**A7 — A raw code under "Gestion du site" on a press's and a preprint server's French Administration page** · 🐞 · minor.
 A Site Administrator reading Administration in French expects the
 "Gestion du site" panel (English "Site Management") to say what it is
 for, as it does on a journal installation: "Ajouter, modifier ou supprimer
@@ -800,9 +776,8 @@ des revues de ce site et gérer les paramètres de l'ensemble du site.". On
 a press and on a preprint server the line reads
 "##admin.siteManagement.description##" instead; the panel's buttons and
 the other five panels are in French. The French translations of both
-applications have no text for this line, so it is printed as its internal
-name each time the page opens.
-Basis: probe, 2026-09-30. <sup>f-a7</sup>
+applications have no text for this line.
+Basis: probe. <sup>f-a7</sup>
 
 ### OMP
 
@@ -1397,7 +1372,6 @@ GuzzleHttp\Exception\ConnectException: cURL error 7 … for
 https://pkp.sfu.ca/ojs/xml/ojs-version.xml" (OMP and OPS their own
 version files), after the notice check's own caught failure for the same
 request.
-Issue report: [pkp-e2e#174](https://github.com/jardakotesovec/pkp-e2e/issues/174) ([docs/issues/U61-A1-check-for-updates-empty-page.md](../issues/U61-A1-check-for-updates-empty-page.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `clearDataCache()`, `clearTemplateCache()` and
@@ -1432,7 +1406,6 @@ index/api/v1/jobs/redispatch/all` answered 500 and the "Error" window
 read "SQLSTATE[23502]: Not null violation … null value in column
 "payload" of relation "jobs" …" with the statement, the host and the
 database's name; nothing was requeued.
-Issue report: [pkp-e2e#176](https://github.com/jardakotesovec/pkp-e2e/issues/176) ([docs/issues/U61-A4-requeue-all-failed-jobs-database-error.md](../issues/U61-A4-requeue-all-failed-jobs-database-error.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `config.TEMPLATE.inc.php` `[cache]`: `web_cache = Off`,
@@ -1452,7 +1425,6 @@ loading circle was turning beside the button, the button pressable, the
 row and the old total kept. The same after A4's 500. On OJS, with page
 links under the table, a circle also turned in place of the page number.
 The request is `FailedJobsPage.vue`'s `requeueAll()` (note s).
-Issue report: [pkp-e2e#178](https://github.com/jardakotesovec/pkp-e2e/issues/178) ([docs/issues/U61-A6-requeue-all-refused-spinner-keeps-turning.md](../issues/U61-A6-requeue-all-refused-spinner-keeps-turning.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-29 (`index/fr_CA/admin` as `admin`, all
@@ -1469,7 +1441,6 @@ OPS's `locale/fr_CA/admin.po`. Opening "Paramètres du site" also
 answered 500 on the plugin gallery's list
 (`plugin-gallery-grid/fetch-grid`), on all three apps: the Plugins
 tab's known failure, not this page's.
-Issue report: [pkp-e2e#124](https://github.com/jardakotesovec/pkp-e2e/issues/124) ([docs/issues/U57-A8-omp-ops-french-texts-internal-names.md](../issues/U57-A8-omp-ops-french-texts-internal-names.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `site.upgradeAvailable.admin` in each app's

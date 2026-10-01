@@ -1025,44 +1025,6 @@ catcher's address, background-jobs command and tooling recipe. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Planned**:
-  - the guard for A5 and A6 (issue report
-    `docs/issues/U50-A5-A6-issue-large-volume-lettered-year.md`): on
-    "Create Issue", a "Volume" of 99999 and a "Year" of "20a6" each
-    refused with a message beside the box, nothing saved
-  - the guard for A14 (issue report
-    `docs/issues/U50-A14-full-issue-wrong-galley-address-empty-page.md`):
-    a signed-out visitor at a "Full Issue" galley address that names no
-    galley of the issue landing on the issue's page
-  - the guard for A2 (issue report
-    `docs/issues/U50-A2-unpublish-back-issue-clears-current.md`):
-    "Unpublish Issue" on a back issue that is not the current one leaving
-    "Current" on the current issue
-  - the guard for A17 and A18 (issue report
-    `docs/issues/U50-A17-A18-issue-lists-article-published-outside-it.md`):
-    an article whose newer version was published with "Don't Assign To An
-    Issue" no longer listed in the issue or on its "Table of Contents"
-    tab, and its earlier version still published
-  - the guard for A12 (issue report
-    `docs/issues/U50-A12-delete-issue-articles-read-published.md`): after
-    "Delete" of a published issue, its articles' workflow reading
-    "Production" and their History recording the unpublishing
-  - the guard for A13 (issue report
-    `docs/issues/U50-A13-archive-issues-no-set-order.md`): on a journal
-    with no saved order, "Archives" listing the published issues in the
-    order "Back Issues" shows (current first, then newest first), also
-    after an older issue is edited
-  - the guard for A1 (issue report
-    `docs/issues/U50-A1-create-issue-title-refusal-unmarked.md`): "Create
-    Issue" saved with "Title" ticked and no title refused with "Title is
-    required for the issue." under the "Title" text field
-  - the guard for A8 (issue report
-    `docs/issues/U50-A8-future-issues-number-as-text.md`): "Future
-    Issues" listing "No. 2" before "No. 10" of the same volume and year
-  - the guard for A11 (issue report
-    `docs/issues/U50-A11-issue-galley-language-offered-then-refused.md`):
-    with French unticked under "Forms", "Create Issue Galley" offering
-    only the form languages, and the chosen one saving
 - **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
@@ -1137,20 +1099,20 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Create Issue" arrives with "Title" ticked and refuses "Save" without a title, marking nothing on the form | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A2](#a2) | Unpublishing an older issue leaves the journal with no current issue | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A4](#a4) | After a refused "Save", "Date Published" shows today's date, which the issue saved next does not get | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A5](#a5) | A "Volume" of 99999 leaves "Create Issue" open with nothing shown | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A6](#a6) | "Year" accepts letters: "20a6" is saved as 20 without a message | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A8](#a8) | "Future Issues" lists "No. 10" before "No. 2" within the same volume and year | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A1](#a1) | "Create Issue" arrives with "Title" ticked, and "Save" without a title is refused with only a passing notice; the "Title" box is not marked | 🐞 | user-visible | — |
+| [A2](#a2) | Unpublishing any issue leaves the journal with no current issue | 🐞 | user-visible | — |
+| [A4](#a4) | After a refused "Save", "Date Published" shows today's date, which the issue saved next does not get | 🐞 | minor | — |
+| [A5](#a5) | A "Volume" of 99999 leaves "Create Issue" open with nothing shown | 🐞 | minor · crash: server | — |
+| [A6](#a6) | "Year" accepts letters: "20a6" is saved as 20 without a message | 🐞 | user-visible | — |
+| [A8](#a8) | "Future Issues" lists "No. 10" before "No. 2" | 🐞 | minor | — |
 | [A10](#a10) | An article dropped under another section in "Order" is back in its own section on reopening | 🐞 | minor | — |
-| [A11](#a11) | "Create Issue Galley" offers a language that "Save" then refuses with "An issue galley locale is required." | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A12](#a12) | After "Delete" of a published issue, its offline articles still read "Published" in the workflow | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A13](#a13) | "Archives" lists a journal's issues in no set order until someone saves an order on "Back Issues" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A14](#a14) | Visitors opening a deleted or mistyped "Full Issue" galley address get an empty page, not the issue | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A16](#a16) | With only "Description" changed on "Issue Data", another tab opens without the unsaved-change question | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A17](#a17) | An article whose newer version was published with "Don't Assign To An Issue" stays listed in the issue, under the newer title, linking to a page that names no issue | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A18](#a18) | On such an article, "Remove" leaves it in the issue and unpublishes its earlier version, the one the issue published | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A11](#a11) | "Create Issue Galley" offers interface-only languages, then refuses them as if no language were chosen | 🐞 | user-visible | — |
+| [A12](#a12) | After "Delete" of their issue, offline articles still read "Published" in their workflow, and their history does not say they were unpublished | 🐞 | user-visible | — |
+| [A13](#a13) | "Archives" lists the issues in no set order until someone orders "Back Issues" | 🐞 | user-visible | — |
+| [A14](#a14) | A galley address that names no galley of the issue fails with an empty page | 🐞 | user-visible · crash: server | — |
+| [A16](#a16) | With only "Description" changed on "Issue Data", another tab opens without the unsaved-change question | 🐞 | minor | — |
+| [A17](#a17) | An article whose newer version was published with "Don't Assign To An Issue" stays listed in the issue, under the newer title, linking to a page that names no issue | 🐞 | user-visible | — |
+| [A18](#a18) | On such an article, "Remove" leaves it in the issue and unpublishes its earlier version, the one the issue published | 🐞 | user-visible | — |
 | [A3](#a3) | "Delete" takes an issue's published articles offline behind a generic confirmation | ❓ | user-visible | — |
 | [A7](#a7) | On "Archives", a cover with no alternate text is a link with no name | ❓ | minor | — |
 | [A9](#a9) | No section could be moved in the table of contents' "Order" | ❓ | minor | — |
@@ -1159,36 +1121,26 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 ### All apps
 
 <a id="a1"></a>
-**A1 — "Create Issue" arrives with "Title" ticked and refuses "Save" without a title, marking nothing on the form** · 🐞 · low.
-On "Create Issue", each part of the issue's name whose tick box is
-ticked ("Volume", "Number", "Year", "Title") must be filled in, and the
-form arrives with all four ticked on every journal; no setting changes
-that. A Journal Manager or editor who fills in "Volume", "Number" and
-"Year" and presses "Save" gets no new issue. The window stays open, a
-notice at the top right reads "Title is required for the issue." for
-about five seconds, and nothing on the form is marked: neither the
-"Title" text field nor its tick box.
-Once the notice has gone, nothing on screen says why the issue was not
-created. The notice asks for a title; it does not say that unticking
-"Title" is the other way to save.
-Every journal whose issues have no title meets it, and the same happens
-when a ticked "Volume", "Number" or "Year" is left empty, on new issues
-and existing ones. OJS 3.1.0 still printed the message under the tick
-boxes; 3.1.1 dropped it.
-Basis: probe, 2026-09-30. <sup>f-a1</sup>
+**A1 — "Create Issue" refuses its own default with only a passing notice** · 🐞 · user-visible.
+The "Create Issue" form arrives with the "Title" box ticked, and most
+issues have no title. A Journal Manager who fills in Volume, Number and
+Year and presses "Save" gets no new issue: the window stays open, a
+notice at its top right reads "Title is required for the issue." for a
+few seconds, the "Title" box is not marked, and "Future Issues" still
+reads "No Items". The form should either arrive with "Title" unticked or
+mark the "Title" box with its message. Basis: probe, 2026-09-25.
+<sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — Unpublishing an older issue leaves the journal with no current issue** · 🐞 · medium.
-An editor uses "Unpublish Issue" on an older back issue, one that is
-not the journal's current issue. Unpublishing clears the journal's
-current issue whichever issue is unpublished, so the journal is left
-with no current issue at all. Readers who follow "Current" get "No
-Current Issue" and "This journal has not published any issues.", and
-the home page loses its "Current Issue" part. "Archives" still lists
-the newer issue.
-The journal stays without a current issue until a manager sets one
-again by hand, or publishes another issue.
-Basis: probe, 2026-09-30. <sup>f-a2</sup>
+**A2 — Unpublishing any issue removes the current issue** · 🐞 · user-visible.
+"Unpublish Issue" on any published issue, including an old back issue
+that is not the current one, leaves the journal with no current issue.
+"Current" is expected to keep showing the current issue; instead it
+opens "No Current Issue" with "This journal has not published any
+issues." while "Archives" still lists the published issues, and the
+home page's "Current Issue" part goes. This lasts until a manager
+presses "Current Issue" on a row or publishes an issue. Basis: probe,
+2026-09-25. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — Deleting an issue unpublishes its articles with a generic warning** · ❓ · user-visible.
@@ -1204,27 +1156,26 @@ published ones? Lean: warn with the existing text; a published issue is
 better unpublished first. Basis: probe, 2026-09-25. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — "Date Published" shows a date the issue never gets** · 🐞 · medium.
+**A4 — "Date Published" shows a date the issue never gets** · 🐞 · minor.
 After "Save" is refused on "Create Issue" or "Issue Data", the "Date
 Published" box shows today's date, though nobody typed it. The issue
 saved next has no Date Published, so the box showed a date the issue
-never got. The box should keep what was typed, empty included.
-Basis: probe, 2026-09-30. <sup>f-a4</sup>
+never got. The box should keep what was typed, empty included. Basis:
+probe, 2026-09-25. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A large "Volume" fails the save** · 🐞 · medium · crash: server.
+**A5 — A large "Volume" fails the save** · 🐞 · minor · crash: server.
 With "Volume" 99999 on "Create Issue", "Save" fails: the window stays
 open with no message, no issue is created, and the app has failed on the
 server. The Journal Manager expects either the issue or a message saying
-what "Volume" accepts.
-Basis: probe, 2026-09-30. <sup>f-a5</sup>
+what "Volume" accepts. Basis: probe, 2026-09-25. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — "Year" accepts letters** · 🐞 · medium · crash: server.
+**A6 — "Year" accepts letters** · 🐞 · user-visible.
 A "Year" of "20a6" is saved without a message as 20, and the issue is
 named "Vol. 1 No. 2a (20)" in the lists and on its page. "Volume" refuses
-letters with a message; "Year" should do the same.
-Basis: probe, 2026-09-30. <sup>f-a6</sup>
+letters with a message; "Year" should do the same. Basis: probe,
+2026-09-25. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — The archive's cover has no name when no alternate text was typed** · ❓ · minor.
@@ -1237,18 +1188,11 @@ with no name is announced as a bare link. Basis: probe, 2026-09-25.
 <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — "Future Issues" lists "No. 10" before "No. 2" within the same volume and year** · 🐞 · low.
+**A8 — "Future Issues" sorts numbers as text** · 🐞 · minor.
 "Future Issues" is ordered by year, volume and number, but the number is
-compared as text: "Vol. 3 No. 10 (2016)" is listed before "Vol. 3 No. 2
-(2016)".
-It shows when two unpublished issues share a volume and year and the
-shorter number has the higher first digit (2 and 10, 9 and 12); "1" and
-"10" already sort right. Issues that carry only a number share an empty
-volume and year, so for them the rule applies across the whole list.
-The issues are all listed with their right names, on one page, and
-nothing else follows this order; the list cannot be reordered on
-screen.
-Basis: probe, 2026-09-30. <sup>f-a8</sup>
+compared as text: "Vol. 1 No. 10 (2026)" is listed before "Vol. 1 No. 2
+(2026)". A Journal Manager planning issues ahead expects No. 2 before
+No. 10. Basis: probe, 2026-09-25. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — No section could be moved in the table of contents' "Order"** · ❓ · minor.
@@ -1272,66 +1216,42 @@ keep; it should either refuse the drop or move the article. Basis: probe,
 2026-09-25. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — "Create Issue Galley" offers a language that "Save" then refuses with "An issue galley locale is required."** · 🐞 · medium.
-On a journal whose "UI" and "Forms" languages differ, the "Language"
-list of "Create Issue Galley" offers the interface ("UI") languages,
-but "Save" accepts only the form languages. A Journal Manager who picks
-a language the journal has under "UI" alone gets the notice "An issue
-galley locale is required." The window stays open with nothing marked,
-as if no language had been chosen.
-The galley cannot be saved in that language. Neither can an existing
-galley whose language has since been unticked under "Forms", even when
-only its label is changed. A language ticked under "Forms" alone is
-never offered. The manager gets round it only by changing the journal's
-languages or the galley's.
-Basis: probe, 2026-09-30. <sup>f-a11</sup>
+**A11 — An issue galley in an interface-only language is refused as if no language were chosen** · 🐞 · user-visible.
+The "Language" list of "Create Issue Galley" offers every interface
+language, but "Save" with a language the forms are not in keeps the
+window open with nothing marked and the notice "An issue galley locale
+is required.". The Journal Manager picked an offered language and is
+told to pick one. The list should offer only the languages "Save"
+accepts, or "Save" should accept what the list offers. Basis: probe,
+2026-09-25. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — After "Delete" of a published issue, its offline articles still read "Published" in the workflow** · 🐞 · medium.
-An editor deletes a published issue with "Delete". Its articles go
-offline as expected, and their stored status is correctly back to
-unpublished. But on OJS `main` each article's workflow header still
-reads "Published" and offers "Return to Workflow", and the editorial
-dashboard still lists it under "Published" instead of in Production.
-In every version, the article's History records only "Submission
-metadata updated", where "Unpublish Issue" records that the article
-was unpublished. The article's DOIs are not flagged on the DOIs page
-as needing a new deposit, and plugins that act when an article is
-unpublished, such as the DOAJ plugin on `main`, are never called.
-Pressing "Unpublish Issue" before "Delete" avoids all of it. After the
-fact, "Return to Workflow" moves each article back to Production on
-`main`, but it does not add the History line or flag the DOIs.
-Basis: probe, 2026-09-30. <sup>f-a12</sup>
+**A12 — Deleting an issue leaves its articles marked "Published"** · 🐞 · user-visible.
+After "Delete" takes an issue away, its formerly published articles are
+offline: their pages answer "404 Not Found" and their Publication
+Settings read "Status: Unscheduled". Yet each article's workflow header
+keeps reading "Published" with "Return to Workflow", and its History
+records only "Submission metadata updated", where unpublishing the issue
+or "Remove" records "The submission was unpublished.". An editor
+reading the workflow is told the article is live when it is not. Basis:
+probe, 2026-09-25. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — "Archives" lists a journal's issues in no set order until someone saves an order on "Back Issues"** · 🐞 · medium.
-"Back Issues" lists a journal's published issues with the current
-issue first and the rest newest first. Until a Journal Manager saves
-an order there with "Order", the reader's "Archives" does not follow
-that order or any other the journal chose: it lists the issues in
-whatever order the database returns them. On PostgreSQL that is the
-order their records were last saved, so editing one issue moves it to
-the end of the archive.
-Readers get the back catalogue out of order, and nothing on "Back
-Issues" shows the journal that anything is wrong. On PostgreSQL an
-archive that runs to several pages can also show an issue on two pages
-and leave another off every page. A manager can set the order by
-saving one on "Back Issues".
-The archive has behaved this way since OJS 3.1.1-4 (September 2018).
-Basis: probe, 2026-09-30. <sup>f-a13</sup>
+**A13 — "Archives" follows no order until "Back Issues" is ordered** · 🐞 · user-visible.
+Until a Journal Manager saves an order with "Order" on "Back Issues",
+the reader's "Archives" lists the published issues in no set order:
+neither the current issue first nor newest first, as "Back Issues" does.
+On one journal "Archives" read 2024, 2026, 2025 where "Back Issues" read
+2025, 2026, 2024. Readers expect the archive in the order the journal
+sees on "Back Issues". Basis: probe, 2026-09-25. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — Visitors opening a deleted or mistyped "Full Issue" galley address get an empty page, not the issue** · 🐞 · low · crash: server.
+**A14 — A wrong galley address fails with an empty page** · 🐞 · user-visible · crash: server.
 A "Full Issue" address that names no galley of the issue (a wrong
 number, a word, another issue's galley) is expected to open the issue's
 page. Instead the app fails on the server and the visitor gets an empty
-page, so a stale or mistyped galley link leads nowhere.
-The server answers `500`, both for the galley's viewing address and for
-its download address. The code means to send the visitor to the issue's
-page instead. OJS 3.5 does that, because pkp fixed the line there under
-`pkp/pkp-lib#11245`. The fix never reached `main`, so the next release
-would bring the fault back unless the one-line fix is ported.
-Basis: probe, 2026-09-30. <sup>f-a14</sup>
+page, so a stale or mistyped galley link leads nowhere. Basis: probe,
+2026-09-25. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — "Publish Issue" offers an email that never goes** · ❓ · user-visible.
@@ -1344,17 +1264,17 @@ hide it; the email would link to pages readers cannot open. Basis:
 probe, 2026-09-25. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — A description alone raises no unsaved-change question** · 🐞 · medium.
+**A16 — A description alone raises no unsaved-change question** · 🐞 · minor.
 On "Issue Data", a change typed in a text box such as "Volume" or "URL
 Path" makes another tab ask "The data on this form has changed. Do you
 wish to continue without saving?" before it opens. Text typed only in
 "Description" does not: pressing another tab opens it at once, with no
 question. A Journal Manager who has written only a description expects
-the same question before leaving the form.
-Basis: probe, 2026-09-30. <sup>f-a16</sup>
+the same question before leaving the form. Basis: test run, 2026-09-25.
+<sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — An article published outside the issue stays listed in it** · 🐞 · medium.
+**A17 — An article published outside the issue stays listed in it** · 🐞 · user-visible.
 A Journal Manager publishes a newer version of an issue's article with
 "Don't Assign To An Issue", after a window that says "This will be
 published immediately without any issue association.". The issue still
@@ -1366,11 +1286,10 @@ feeds ([Web feeds](U18-web-feeds.md), its Rule 5). Its link opens the
 newer version's page, whose breadcrumb and "Issue" line name no issue, so
 a reader browsing the issue lands on an article that says it belongs to
 none. The issue should list the version that is in it, or drop the
-article.
-Basis: probe, 2026-09-30. <sup>f-a17</sup>
+article. Basis: probe, 2026-09-28. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — "Remove" unpublishes the older version and leaves the article in the issue** · 🐞 · medium.
+**A18 — "Remove" unpublishes the older version and leaves the article in the issue** · 🐞 · user-visible.
 On an article of A17, the "Table of Contents" tab's "Remove" asks its
 usual question, and "OK" closes the window as if the article had been
 taken out. It has not: it stays on the tab, in "Items" and on the
@@ -1382,8 +1301,7 @@ issue's own version of the article, and every link to that version
 breaks; nothing tells the Journal Manager that a version went offline.
 "Remove" should take
 the article out of the issue and leave its published versions alone, or
-refuse with a message.
-Basis: probe, 2026-09-30. <sup>f-a18</sup>
+refuse with a message. Basis: probe, 2026-09-28. <sup>f-a18</sup>
 
 ---
 
@@ -1543,33 +1461,27 @@ where it is made.
 
 <a id="fn-f-a1"></a>
 **f-a1** — Incidental of 2026-09-04 (U05 test author, OJS): on Issues › Future Issues › "Create Issue" the "Title" box arrived ticked, "Save" with an empty title re-rendered the form with no visible error line and the grid stayed "No Items". Mechanism: `IssueForm::initData()` ticks `showTitle` for a new issue; its `FormValidatorCustom` is registered on the field `showTitle` (the check box) with `editor.issues.titleRequired`. The scenario API seeds its issues with the box unticked for this reason (scenarios.md `issues[]`). Live-probed 2026-09-25 (td4): the notice "Title is required for the issue." showed at the window's top right from about 0.2 s to 4.5 s after "Save" and was gone at 6 s; nothing on the form was marked; the list still read "No Items" 16 s later.
-Issue report: [pkp-e2e#80](https://github.com/jardakotesovec/pkp-e2e/issues/80) ([docs/issues/U50-A1-create-issue-title-refusal-unmarked.md](../issues/U50-A1-create-issue-title-refusal-unmarked.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `IssueGridHandler::unpublishIssue()` calls `Repo::issue()->updateCurrent($request->getContext()->getId())` with no issue, and `updateCurrent()` then runs `JournalDAO::removeCurrentIssue()` regardless of which issue was unpublished. The home page's part: U10 Rule 14 needs a current issue. Probe: td11; "Archives" still listed the published issues.
-Issue report: [pkp-e2e#73](https://github.com/jardakotesovec/pkp-e2e/issues/73) ([docs/issues/U50-A2-unpublish-back-issue-clears-current.md](../issues/U50-A2-unpublish-back-issue-clears-current.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Confirmation: `IssueGridRow` `delete` uses `common.confirmDelete`; `editor.issues.confirmIssueDelete` exists in `locale/en/editor.po` and is used nowhere. Cascade: note t. Probe: td12; the specific warning never appeared.
 
 <a id="fn-f-a4"></a>
 **f-a4** — Live-probed 2026-09-25 (Fields "Date Published"; Rule 3), OJS: on "Create Issue" with the date box empty, the refused "Save" of A1 left "2026-09-25" in the box; after unticking "Title" and saving, the issue's "Issue Data" showed the date empty. On a published issue, after "Date Published is required when the issue is published." the box showed today again. Mechanism not read.
-Issue report: [pkp-e2e#53](https://github.com/jardakotesovec/pkp-e2e/issues/53) ([docs/issues/U51-A28-subscription-date-boxes-show-today-unsent.md](../issues/U51-A28-subscription-date-boxes-show-today-unsent.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-25 (td3), OJS: "Volume" 99999 with a valid "Year": `POST …/$$$call$$$/grid/issues/future-issue-grid/update-issue` answered 500, the window stayed open with no message and the list was unchanged. The schema stores `volume` in a `smallint` column (note i), whose limit is 32767, the likely cause; only 99999 was driven, and no server-log line was read.
-Issue report: [pkp-e2e#68](https://github.com/jardakotesovec/pkp-e2e/issues/68) ([docs/issues/U50-A5-A6-issue-large-volume-lettered-year.md](../issues/U50-A5-A6-issue-large-volume-lettered-year.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-25 (td3), OJS: Volume 1, Number "2a", "Year" "20a6", "Title" unticked: saved without a message and listed as "Vol. 1 No. 2a (20)". `IssueForm` has no check on `year` beyond the box's `maxlength` 4; the stored integer keeps the leading digits (note i).
-Issue report: [pkp-e2e#68](https://github.com/jardakotesovec/pkp-e2e/issues/68) ([docs/issues/U50-A5-A6-issue-large-volume-lettered-year.md](../issues/U50-A5-A6-issue-large-volume-lettered-year.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-25 (Fields, the archive's issue summary), OJS, two runs: on "Archives" the cover of an issue with no alternate text carried `alt=""` while its page read "View Vol. 1 No. 2 (2025)"; an issue with "K3 cover alt" typed read that on both. `issue_summary.tpl` defaults the alt to `''`, where `issue_toc.tpl` defaults it to `issue.viewIssueIdentification` (note w).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-25 (Rule 1), OJS: "Future Issues" read 2025 Vol. 3; then 2026 Vol. 1 No. 1, No. 10, No. 2; then 2027. `ORDERBY_UNPUBLISHED_ISSUES` sorts year, volume, number (note g); `schemas/issue.json` types `number` as a string.
-Issue report: [pkp-e2e#81](https://github.com/jardakotesovec/pkp-e2e/issues/81) ([docs/issues/U50-A8-future-issues-number-as-text.md](../issues/U50-A8-future-issues-number-as-text.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-25 (Rules 10a, 23), OJS, two drives: a mouse drag of a section heading above another section, several shapes, three attempts each; the article rows moved, the section headings did not (one heading moved below its own article, then "Cancel ordering"), and a "Done" the server accepted (save-sequence 200) left the order unchanged on the tab and on the issue's page. Each section is its own sortable block on the page. The grid offers section ordering (`ORDER_CATEGORY_GRID_CATEGORIES_AND_ROWS`, note m) and the issue's page reads the saved order (note w), so the custom-order half of Rule 23 is code-read only.
@@ -1579,34 +1491,27 @@ Issue report: [pkp-e2e#81](https://github.com/jardakotesovec/pkp-e2e/issues/81) 
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-25 (td9), OJS: on a journal whose interface is English and French and whose forms are English only, a galley in French answered the notice "An issue galley locale is required." and was not listed; on a journal where French is also a form language the same galley saved as "PDF | French". `IssueGalleyForm` checks `galleyLocale` against `getSupportedFormLocales()` while the list offers `getSupportedLocaleNames()` (note p).
-Issue report: [pkp-e2e#106](https://github.com/jardakotesovec/pkp-e2e/issues/106) ([docs/issues/U50-A11-issue-galley-language-offered-then-refused.md](../issues/U50-A11-issue-galley-language-offered-then-refused.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-25 (td12; Side effects bullet 3), OJS, two articles over two runs (one published through its workflow, one seeded as published): after "Delete" of its issue each article's workflow header read "Published" with "Return to Workflow", its Publication Settings "Status: Unscheduled", its page "404 Not Found", and its History only "Submission metadata updated". `deleteIssue()` sets the status through `Repo::publication()->edit()`, not `unpublish()` (note t), so no unpublication is logged (note se).
-Issue report: [pkp-e2e#77](https://github.com/jardakotesovec/pkp-e2e/issues/77) ([docs/issues/U50-A12-delete-issue-articles-read-published.md](../issues/U50-A12-delete-issue-articles-read-published.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25 (td13; Rule 25a), OJS, three journals, before any saved order: "Back Issues" 2025, 2026, 2024 (2025 current) against "Archives" 2024, 2026, 2025; "Back Issues" 2023, 2022, 2021 against 2021, 2022, 2023; after an unpublish, 2020, 2026, 2025 against 2026, 2020, 2025. Mechanism: note u, the archive orders by the saved order alone.
-Issue report: [pkp-e2e#78](https://github.com/jardakotesovec/pkp-e2e/issues/78) ([docs/issues/U50-A13-archive-issues-no-set-order.md](../issues/U50-A13-archive-issues-no-set-order.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-25 (td14; Rule 26), OJS, eight times over three runs: `issue/view/{id}/999`, `/{id}/nosuch`, `/{urlPath}/999` and another issue's galley each answered 500 with an empty title and body. Server log: "Uncaught TypeError: PKP\core\PKPRequest::redirect(): Argument #4 ($path) must be of type ?array, int given" in `IssueHandler.php`, the unknown-galley redirect of `initialize()` (note x). Code read: `stable-3_5_0` passes the path as a list; not driven there.
-Issue report: [pkp-e2e#71](https://github.com/jardakotesovec/pkp-e2e/issues/71) ([docs/issues/U50-A14-full-issue-wrong-galley-address-empty-page.md](../issues/U50-A14-full-issue-wrong-galley-address-empty-page.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-25 (td16; Settings bullet 1), OJS, two journals: on a journal set to not publish online, "Publish Issue" arrived with the box ticked; "OK" published the issue, queued no job, and after the queue ran no email had arrived and no notification was recorded. `publishIssue()` skips both when `publishingMode == PUBLISHING_MODE_NONE` (note f); `assignPublicIdentifiersForm.tpl` shows the box ticked whatever the mode.
 
 <a id="fn-f-a16"></a>
 **f-a16** — Test run 2026-09-25 (Fields, after the "Issue Data" table; scenario 2), OJS: with An issue about tides. typed only in "Description" on a published issue's "Issue Data", pressing "Table of Contents" raised no browser question and the selected tab read "Table of Contents". A follow-up probe the same day on a scratch journal tried three ways (the tab pressed at once, 1.5 s after typing, after first clicking into "Volume"): no question in any, the tab moved each time. A typed "URL Path" raised the question in the same run, as a typed "Volume" had in note i's probe. The window's "Close" was not driven with a description-only change. Mechanism not read.
-Issue report: [pkp-e2e#117](https://github.com/jardakotesovec/pkp-e2e/issues/117) ([docs/issues/U09-A19-static-page-content-change-lost-unasked.md](../issues/U09-A19-static-page-content-change-lost-unasked.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-28 (Fields "Items"; Rules 9, 9a, 23, 23a), OJS, four runs, each on a scratch journal with the sections "Articles" and "Second Section" and the published, current issue "Vol. 1 No. 1 (2024)" holding three published articles. As the journal's Journal Manager, "Create New Version" on two of them, each new version retitled and saved; one was then published with "Don't Assign To An Issue" (the window read "…This will be published immediately without any issue association…", and its Publication Settings then showed "Don't Assign To An Issue" with no issue box), the other with the preselected "Assign To Current/Back Issue" and the issue. Signed out, the issue's page, "Current" (`issue/current`) and the home page's "Current Issue" listed the first article under its new title in "Articles", on the page and after a reload; its link `article/view/{id}` opened the new version's page, with the breadcrumb "Home / Archives / Articles" and an issue part reading only "Section Articles". "Back Issues" read "Items" 3 and the "Table of Contents" tab listed the new title. The article published into the issue was listed under its new title, with the breadcrumb and "Issue" line naming the issue. With the journal's web feed set to "Display items in current published issue." (two of the runs), the Atom, RSS 2.0 and RSS 1.0 items carried the new title and linked to `article/view/{id}`, while an article published with no issue at all was not listed. Code read 2026-09-28 (ojs `72b85f4ba0`): the issue's page, the tab and "Items" start from `APP\submission\Collector::filterByIssueIds()`, which keeps a submission when any of its publications carries the issue's id, whatever that publication's status; `IssueHandler::setupIssueTemplate()`, `Repository::getInSections()` and `Issue::getNumArticles()` then read only the current publication's status and section (notes g, m, w). The current-issue feed applies the same filter ([Web feeds](U18-web-feeds.md), its note f).
-Issue report: [pkp-e2e#74](https://github.com/jardakotesovec/pkp-e2e/issues/74) ([docs/issues/U50-A17-A18-issue-lists-article-published-outside-it.md](../issues/U50-A17-A18-issue-lists-article-published-outside-it.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-28 (Rule 12a), OJS, four runs, on the article of f-a17 published outside the issue: "Remove" showed Rule 12's window and question, and "OK" answered with success (`remove-article` 200, `{"status":true}`) and closed the window. The row stayed on the tab, on the same window and after it was reopened; "Items" stayed 3; the issue's page, and in the two feed runs the current-issue feeds, still listed the new title; the workflow read "Status: Published" with only "Unpublish". The first version was unpublished instead: its page `article/view/{id}/version/{firstVersionId}` answered "404 Not Found", the article's "Versions" list dropped "2024-03-01 (Version of Record 1.0)", and the article's page, still the new version, read "Published 2024-03-01 — Updated on 2026-09-28". No run recorded a server error or a script error. Mechanism: note n.
-Issue report: [pkp-e2e#74](https://github.com/jardakotesovec/pkp-e2e/issues/74) ([docs/issues/U50-A17-A18-issue-lists-article-published-outside-it.md](../issues/U50-A17-A18-issue-lists-article-published-outside-it.md)).
 
 ## Reference — entry points & surfaces
 

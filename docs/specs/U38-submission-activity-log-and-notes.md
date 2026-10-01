@@ -506,11 +506,6 @@ footnote. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Planned**:
-  - the guard for A2 (Rule 10a; issue report
-    `docs/issues/U36-A10-empty-note-posted.md`): "Add Note" with the box
-    empty in the submission's "Activity Log & Notes", refused with "This
-    field is required." and no new note
 - **Nothing new to test**:
   - a revision cancelled with "Cancel", leaving no line of it, metadata line included, on either "History" (Rule 6c)
   - a preprint server's file lines, from a galley's file, and its "Change File" cancelled (Rules 6, 6c)
@@ -528,6 +523,7 @@ Left out of the scenarios above, by reason:
   - the Editor and the Production editor {OJS OMP}, and the Guest Editor {OJS} (Actors row 1): the Journal Manager's and the Section Editor's offer, which scenario 1 reads
 - **Register carries it**:
   - A1 (a discussion's, "Notify"'s and "Assign"'s email lines with an empty "User"; Rule 4c)
+  - A2 (an empty note; Rule 10a)
   - A3 (closing the window with text typed once the submission has a note; Rule 10d)
   - A5 (the "Review complete" line naming its recipient; Rule 4c)
   - A7 (file lines read in French; Rule 8a)
@@ -552,7 +548,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A discussion's emails and the Participants messages show no sender under "User" | 🐞 | minor | — |
-| [A2](#a2) | "Add Note" with an empty box posts an empty note | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A2](#a2) | "Add Note" with an empty box posts an empty note | 🐞 | minor | — |
 | [A3](#a3) | Once the submission has a note, closing the window drops a note typed and not added, without asking | 🐞 | minor | — |
 | [A5](#a5) | The "Review complete" email line names the editor who received it under "User" | 🐞 | minor | — |
 | [A7](#a7) | Read in French, file lines print an empty file name | 🐞 | user-visible | — |
@@ -575,12 +571,12 @@ emails without opening each discussion.
 Basis: probe. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
-**A2 — "Add Note" posts an empty note** · 🐞 · low.
+**A2 — "Add Note" posts an empty note** · 🐞 · minor.
 Pressing "Add Note" with the box empty shows "Note posted.", adds a note
 with its writer and date and no text, and adds "Posted new note." to
 "History". An empty note is expected to be refused. A file's "Notes" tab
 does the same ([→ Submission files' A10](U36-submission-files.md#a10)).
-Basis: probe, 2026-09-30. <sup>[f-a2](#fn-a2)</sup>
+Basis: probe. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
 **A3 — Closing the window drops a note not yet added, once the submission has a note** · 🐞 · minor.
@@ -1210,7 +1206,6 @@ them; the decision's email line named the editor.
 galley's) posted an empty note ("Note posted.", a note 0 px high,
 "Posted new note." on "History"); the file window's form did the same on
 2026-09-23 (the submission-files spec's f-a10).
-Issue report: [pkp-e2e#67](https://github.com/jardakotesovec/pkp-e2e/issues/67) ([docs/issues/U36-A10-empty-note-posted.md](../issues/U36-A10-empty-note-posted.md)).
 
 <a id="fn-a3"></a>
 **f-a3** — The window is a side modal holding the legacy form.

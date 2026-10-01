@@ -819,28 +819,6 @@ mail catcher's address and tooling recipe. <sup>t</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Planned**:
-  - the guard for A1 (Actors row 2; Rule 7; issue report
-    `docs/issues/U47-A1-media-actions-offered-without-permissions.md`):
-    an assigned Layout Editor without "Permissions" shown the "Media"
-    list without its write actions, and an editor still offered every
-    action
-  - the guard for A5 (Rule 6a; scenario 3 reloads before reopening the
-    window; issue report
-    `docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md`):
-    a file's name changed in "Edit Metadata" and left with "Yes", the
-    row and the reopened window holding the saved name, and the next
-    "Save" of another box keeping it
-  - the guard for OMP2 (Actors row 1; scenario 8 passes the link without
-    pressing it; issue report
-    `docs/issues/U47-OMP2-press-media-download-refused-outside-production.md`):
-    an assigned Copyeditor on a press monograph in Copyediting finding no
-    "Media" under the version, an editor on the same monograph still
-    finding it
-  - the guard for A3 (Fields, the upload window; scenario 1 passes it;
-    issue report `docs/issues/U47-A3-media-upload-hidden-drop-button.md`):
-    the empty "Upload Media File" window listing no "Drop files here to
-    upload" to screen readers or the Tab key
 - **Rarely met**:
   - no component marked as a dependent file, where "Upload Media File"
     holds only "No media types are configured. Please contact the
@@ -854,7 +832,15 @@ Left out of the scenarios above, by reason:
   - a Site Administrator not assigned to the submission, offered what
     the Journal Manager of scenarios 1 to 3 is (Actors row 2)
 - **Register carries it**:
+  - A1 (an assigned Layout Editor or Guest Editor without
+    "Permissions", offered every action, each change failing; Actors
+    row 2; Rule 7)
+  - A3 (the "Drop files here to upload" button only a screen reader
+    finds; Fields, the upload window; scenario 1 passes it)
   - A4 (a file over the upload limit failing on its card; Rule 2c)
+  - A5 (a name typed in "Edit Metadata" and left with "Yes" showing in
+    the list until a reload; Rule 6a; scenario 3 reloads before
+    reopening the window)
   - A6 (the warning each added file leaves in the server's log; Rule 2)
   - A7 (raw codes on the page, its windows and the delete dialog with
     the interface in French; Rule 11)
@@ -864,6 +850,9 @@ Left out of the scenarios above, by reason:
     no media file reaches readers; Side effects)
   - OMP1 ("HTML Monograph File" off, a book's HTML file opening as a
     blank page; Settings bullet 6)
+  - OMP2 (a press role outside Production pressing a file name gets a
+    refusal instead of the file; Actors row 1; scenario 8 passes the
+    link without pressing it)
 - **Owned by another feature**:
   - "More Information"'s "History" tab kept on "Loading" for the
     assistant roles (Actors row 3; *[Submission
@@ -881,41 +870,36 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A Layout Editor, or anyone without "Permissions", is offered every "Media" action, and the server refuses each change | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A3](#a3) | The empty "Upload Media File" window offers screen readers and the Tab key a button nobody sees | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A4](#a4) | A file over the request size limit fails with a server error; its card reads "The POST data is too large." | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, unsaved, until a reload | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [A1](#a1) | Assigned roles without "Permissions" are offered every media action, and each fails: with an "Error" window, or with no message on "Save" | 🐞 | user-visible | — |
+| [A3](#a3) | The empty "Upload Media File" window lists a button "Drop files here to upload" for screen readers that nothing on screen shows | 🐞 | minor | — |
+| [A4](#a4) | A file over the upload limit fails with a server error; its card reads "Invalid JSON response from server." | 🐞 | minor · crash: server | — |
+| [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, unsaved, until a reload | 🐞 | user-visible | — |
+| [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | invisible | — |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | minor | — |
-| [OMP1](#omp1) | With "HTML Monograph File" off, a book's HTML file opens as a blank page | 🐞 | critical · crash: both | issues (claude), 2026-09-30 — re-verified |
-| [OMP2](#omp2) | On a press, roles without Production access see "Media" file names that open a raw refusal, not the file | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [OMP1](#omp1) | With "HTML Monograph File" off, a book's HTML file opens as a blank page | 🐞 | user-visible · crash: server | — |
+| [OMP2](#omp2) | On a press, a role that sees the list outside Production cannot download its files: the tab shows a refusal | 🐞 | user-visible | — |
 | [A2](#a2) | The "ID" column shows a pair's number for linked files and another kind of number for the rest | ❓ | minor | — |
 | [OJS1](#ojs1) | A reader who is not signed in sees a media change on an HTML galley up to a day late | ❓ | user-visible | — |
 | [OPS1](#ops1) | A preprint server offers the "Media" page, but no reader page shows its files | ❓ | user-visible | — |
 
 ### All apps
 <a id="a1"></a>
-**A1 — A Layout Editor, or anyone without "Permissions", is offered every "Media" action, and the server refuses each change** · 🐞 · medium.
-A participant whose assignment on a submission in Production has
-"Permissions" unticked sees "Add Media File", "Batch Link Media" and the
-full row menu on the version's "Media" page (the version's images and
-multimedia files). Every change they try is refused. "Upload Files",
-"Link Media" and "OK" in the delete dialog each open a dialog titled
-"Error" that reads "You are not allowed to edit this publication.".
-"Save" in "Edit Metadata" shows "An unexpected error has occurred.
-Please reload the page and try again." and leaves the window open.
-Nothing is saved.
-This report takes the server's rule as the intended one. The
-"Permissions" box on the assignment decides who may change the
-publication, its media included, so these participants should not be
-offered the changes. Whether they should be allowed to make them is a
-product decision (Proposed fix, Alternatives).
-"Permissions" is unticked by default for the Layout Editor, Designer,
-Indexer and Proofreader, and in OJS also for the Guest Editor. So the
-roles that usually prepare production files meet this unless an editor
-ticks the box for them. The "Media" page is new on `main` and not yet
-in a release.
-Basis: probe, 2026-09-30. <sup>f-a1</sup>
+**A1 — Media actions offered to people whose changes are refused** · 🐞 · user-visible.
+An assigned Guest Editor, Layout Editor, Designer, Indexer or
+Proofreader (and a Section Editor or Moderator whose assignment's
+"Permissions" box was unticked) sees "Add Media File", "Batch Link
+Media" and the full row menu, exactly as a Journal Manager does. Every
+change they make then fails. "Upload Files", "Link Media" and the
+delete dialog's "OK" open an "Error" window reading "You are not
+allowed to edit this publication."; "Save" in "Edit Metadata" opens
+nothing, and the window stays open with the new value and no message.
+The list stays as it was. The page decides what to offer from the
+person's role alone; the server checks the publication's edit
+permission. Either the page should offer the actions only to people who
+may edit the publication, or the server should accept the roles the
+page offers them to. At install this refuses the Guest Editor and every
+assistant role that reaches Production.
+Basis: probe, 2026-09-24. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — The "ID" column mixes two kinds of number** · ❓ · minor.
@@ -931,49 +915,40 @@ Basis: probe, 2026-09-24 (the changing numbers); code (two rows with
 one number). <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — The empty "Upload Media File" window offers screen readers and the Tab key a button nobody sees** · 🐞 · low.
-On a submission's "Media" page, the button "Add Media File" opens the
-window "Upload Media File". Until a file has been added to it, a screen
-reader lists a button "Drop files here to upload" there that has nothing
-visible behind it: a sighted user sees only the drop area and "Click to
-upload files". The Tab key stops on it too, right after "Click to upload
-files", and nothing on the page shows where the focus is.
-The hidden button opens the same file chooser as "Click to upload
-files", so uploads work either way. The "Media" page is new on `main`
-and in no release yet, so no live site meets this; the fix is one
-setting in the window's upload component.
-Basis: probe, 2026-10-01. <sup>f-a3</sup>
+**A3 — The empty upload window offers screen readers a button nobody sees** · 🐞 · minor.
+While no file is on "Upload Media File", a screen reader lists a
+button "Drop files here to upload" that has nothing visible behind it:
+a sighted user sees only the drop area and "Click to upload files". The
+button goes once a file is on the window. A screen-reader user is
+offered a control the page does not show.
+Basis: probe, 2026-09-24. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A file over the request size limit fails with a server error** · 🐞 · low · crash: server.
-A file larger than the server takes in one request (PHP's
-`post_max_size`) fails on the server: its card on "Upload Media File"
-reads "The POST data is too large." instead of the app's own size
-message with the limit, and nothing is stored. The user learns that the
-file is too large, in English whatever the site's language, but not how
-large a file may be. Smaller files on the same window upload normally.
-The window checks no size in the browser below Dropzone's own 256 MiB.
-Same fault: [Submission files' A21](U36-submission-files.md#a21).
-Basis: probe, 2026-09-30. <sup>f-a4</sup>
+**A4 — A file over the upload limit fails with a server error** · 🐞 · minor · crash: server.
+A file larger than the install accepts fails on the server: its card on
+"Upload Media File" reads "Invalid JSON response from server." instead
+of saying that the file is too large or how large a file may be. The
+user cannot tell why the upload failed. Smaller files on the same
+window upload normally.
+Basis: probe, 2026-09-24. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A name left with "Yes" shows in the list, unsaved** · 🐞 · medium.
+**A5 — A name left with "Yes" shows in the list, unsaved** · 🐞 · user-visible.
 A user types a new "Name of the file" in "Edit Metadata", then leaves
 the window with "Close" or "Cancel" and "Yes" in the "Warning" dialog
 ("continue without saving"). Nothing is saved, yet the file's row in
 the list shows the typed name, and "Edit Metadata" opened again arrives
-holding it. The next "Save" in that window, made only to set another
-box such as "Caption", stores the abandoned name. Until then only a
-reload of the page shows the saved name again. The same fault as
-[Institutions' A2](U66-institutions.md#a2).
-Basis: probe, 2026-09-30 (OJS, OMP and OPS). <sup>f-a5</sup>
+holding it. Only a reload of the page shows the saved name again. The
+user is led to believe the rename was kept.
+Basis: test run, 2026-09-25 (OJS); code (OMP and OPS, the same
+window). <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — Each media file added leaves a warning in the server's log** · 🐞 · low.
+**A6 — Each media file added leaves a warning in the server's log** · 🐞 · invisible.
 Every file "Upload Files" adds writes a PHP warning ("foreach()
 argument must be of type array|object, string given") to the web
 server's error log. The file is added normally; no screen shows it.
-Basis: test run, 2026-10-01. <sup>f-a6</sup>
+Basis: test run, 2026-09-25. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — In French the "Media" page and its windows show raw codes** · 🐞 · minor.
@@ -1040,29 +1015,26 @@ Basis: probe, 2026-09-24. <sup>f-ojs1</sup>
 
 ### OMP
 <a id="omp1"></a>
-**OMP1 — With "HTML Monograph File" off, a book's HTML file opens as a blank page** · 🐞 · critical · crash: both.
+**OMP1 — With "HTML Monograph File" off, a book's HTML file opens as a blank page** · 🐞 · user-visible · crash: server.
 With the plugin off, a reader who opens a book's HTML file from the
 book page gets a blank page: the server fails behind it, and the file
 is neither shown nor downloaded. A journal with "HTML Article Galley"
 off downloads the file instead. The reader gets neither the book's HTML
 nor a message.
-Basis: probe, 2026-09-30. <sup>f-omp1</sup>
+Basis: probe, 2026-09-24. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — On a press, roles without Production access see "Media" file names that open a raw refusal, not the file** · 🐞 · low.
-On a press, three roles are offered the version's "Media" page, with
-each file name as a link: the Copyeditor and the Marketing and Sales
-Coordinator while a monograph is in Copyediting, and the Funding
-Coordinator while it is in Submission or review. Pressing a name opens a
-new tab that shows one line of raw text holding "The current role does
-not have access to this operation.", and no file arrives.
-These roles are not meant to download media files, which belong to the
-Production stage, so withholding the file is right. The fault is that
-the menu lists the page for them. The proposed fix stops listing "Media"
-for roles without Production access, as a journal and a preprint server
-already do.
-Basis: probe, 2026-09-30 (the Copyeditor); code (the Funding and the
-Marketing and Sales Coordinator). <sup>f-omp2</sup>
+**OMP2 — Press roles outside Production cannot download the media files they see** · 🐞 · user-visible.
+On a press, the Funding Coordinator on a monograph in External Review
+sees the "Media" list with each file name as a link, as the Author
+does. Pressing a name opens a new tab showing a line of raw text,
+{"status":false,"content":"The current role does not have access to
+this operation.",…}, and no file arrives. The page offers a download
+it then refuses. The Copyeditor and the Marketing and Sales Coordinator
+on a monograph in Copyediting get the same link, and by the code the
+same refusal.
+Basis: test run, 2026-09-25 (the Funding Coordinator); code (the
+Copyeditor and the Marketing and Sales Coordinator). <sup>f-omp2</sup>
 
 ### OPS
 <a id="ops1"></a>
@@ -1749,7 +1721,6 @@ OPS Moderator and Author; absent (false) for Guest Editor and every
 declares only `publication` and `submission`. The silent "Save": note s.
 Live-probed 2026-09-24: note q2. Compare the galley page, where on a
 journal the "Permissions" box plays no part (*Galleys*).
-Issue report: [pkp-e2e#59](https://github.com/jardakotesovec/pkp-e2e/issues/59) ([docs/issues/U47-A1-media-actions-offered-without-permissions.md](../issues/U47-A1-media-actions-offered-without-permissions.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note d: `MediaFileManagerCellGroupId.vue` shows
@@ -1771,7 +1742,6 @@ here to upload"`, with no visible element; the button is gone once a
 card is on the window. The text is that of Dropzone's default message
 (lib/pkp `form.dropzone.dictDefaultMessage`); the source of the hidden
 button was not traced further.
-Issue report: [pkp-e2e#152](https://github.com/jardakotesovec/pkp-e2e/issues/152) ([docs/issues/U47-A3-media-upload-hidden-drop-button.md](../issues/U47-A3-media-upload-hidden-drop-button.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note q28. The 101 MB request failed with a server error on
@@ -1781,7 +1751,6 @@ reading "POST Content-Length of 105906466 bytes exceeds the limit of
 `upload_max_filesize` (100 MB on the probe hosts); the card shows the
 client's failure to read the answer, not a message from
 `PKPTemporaryFilesController::uploadFile()` (note e).
-Issue report: [pkp-e2e#43](https://github.com/jardakotesovec/pkp-e2e/issues/43) ([docs/issues/U36-A21-upload-over-request-limit-server-error.md](../issues/U36-A21-upload-over-request-limit-server-error.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Test run 2026-09-25, OJS (scenario 3): after "figure-1.png"
@@ -1798,7 +1767,6 @@ file's own multilingual name object (`value: mediaFile.name`), so
 typing edits the list's copy in place, and "Yes" does not re-read the
 list. The window is the shared ui-library `MediaFileManager`, the same
 commit in the three apps; OMP and OPS were not driven for it.
-Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md](../issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Test run 2026-09-25, OJS, OMP and OPS: the worker servers'
@@ -1814,7 +1782,6 @@ each card's temporary-file answer as it came back
 multilingual property as a locale map, before
 `MediaFilesController::add()` wraps a string name into the
 submission's locale. The added file's name is right.
-Issue report: [pkp-e2e#149](https://github.com/jardakotesovec/pkp-e2e/issues/149) ([docs/issues/U47-A6-media-jats-upload-php-warning-in-log.md](../issues/U47-A6-media-jats-upload-php-warning-in-log.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Rule 11. Live-probed 2026-09-30 at ojs `7ce98ec09e`, omp
@@ -1854,7 +1821,6 @@ APP\pages\catalog\CatalogBookHandler::$publication must not be accessed
 before initialization", app log). The same path probably fails for any
 format file no viewer plugin takes; that was not driven. Control:
 plugin on, the page showed the image.
-Issue report: [pkp-e2e#38](https://github.com/jardakotesovec/pkp-e2e/issues/38) ([docs/issues/U69-A9-omp-book-files-fail-to-open.md](../issues/U69-A9-omp-book-files-fail-to-open.md)).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Test run 2026-09-25, OMP (scenario 8): the Funding
@@ -1874,7 +1840,6 @@ Coordinator's stages do not include Production (note b). The
 Copyeditor's and the Marketing and Sales Coordinator's link in
 Copyediting is the same address and was not pressed. The Author and every
 role with Production download normally (note q1).
-Issue report: [pkp-e2e#61](https://github.com/jardakotesovec/pkp-e2e/issues/61) ([docs/issues/U47-OMP2-press-media-download-refused-outside-production.md](../issues/U47-OMP2-press-media-download-refused-outside-production.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Notes a and n: the OPS side menu lists "Media" for

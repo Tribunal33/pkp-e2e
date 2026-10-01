@@ -975,63 +975,6 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the Review step after a language change asking for the new language's title, contributor names and typed institution names, the affiliation copied from the author's profile included, with "Submit" disabled until they are typed (Rule 11): likely bullets in scenario 5, which changes the language and reaches Review
   - the timer's minute counted from the last save, not from the end of typing: scenario 3's "Saving" coming as the footer reaches "Last saved 1 minute ago", and a step with no change sending nothing (Rule 9): the suites move the page's clock on a minute after the typing, which cannot tell the two readings apart
-  - the guard for A16 (issue report
-    `docs/issues/U21-A16-plain-language-summary-over-limit-hangs-wizard.md`):
-    a plain language summary over the section's word limit saved on
-    "Details", flagged on "Review" with "Submit" disabled, and still there
-    after a reload
-  - the guard for OPS8 and OPS9 (issue report
-    `docs/issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md`):
-    on a reloaded preprint draft that already has a galley, a further
-    galley's upload finishing and "Review" listing the galleys
-  - the guard for A8 (issue report
-    `docs/issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md`):
-    on a second context, a submission to a section (series) with an
-    editor ticked under "Editorial Assignments" arriving with that
-    editor assigned
-  - the guard for A7 and OPS5 (issue reports
-    `docs/issues/U21-A7-OPS5-editorial-role-submitter-no-acknowledgement.md`
-    and `docs/issues/U21-A7-completion-screen-claims-unsent-email.md`): a
-    submitter in their own manager or editor role receiving the
-    confirmation, and with "Do not send an email." the "Submission
-    complete" screen not promising one
-  - the guard for A14 (issue report
-    `docs/issues/U21-A14-submit-as-section-editor-refused.md`): a Section
-    Editor who also holds Author offered only the roles "Begin Submission"
-    accepts in "Submit As", and beginning a submission as Author
-  - the guard for OPS3 (issue report
-    `docs/issues/U21-OPS3-author-cancel-draft-refused.md`): a preprint
-    author's own "Cancel" on a draft reaching "Submission cancelled", and
-    "Delete Incomplete Submissions" removing the author's draft
-  - the guard for A4 and A18 (issue reports
-    `docs/issues/U21-A4-wizard-footer-last-saved-without-save.md` and
-    `docs/issues/U21-A18-wizard-autosave-cuts-title-mid-typing.md`): a
-    reopened draft's footer showing no "Last saved" time before the first
-    save, and a Title typed after the first minute saved whole once typing
-    stops
-  - the guard for A10 (issue report
-    `docs/issues/U21-A10-wizard-phone-rail-scrolls-sideways.md`): the
-    wizard opened at 375 px showing its step rail collapsed to "1/5 steps"
-  - the guard for A12 (issue report
-    `docs/issues/U21-A12-confirmation-off-shows-no-option.md`): "Do not
-    send an email." saved under "Submission Confirmation" still selected
-    after a reload
-  - the guard for A5 (issue report
-    `docs/issues/U21-A5-copyright-agreed-line-raw-placeholder.md`): the
-    copyright-agreed History line naming the submitter
-  - the guard for OPS7 (issue report
-    `docs/issues/U21-OPS7-preprint-not-allowed-raw-code.md`): the preprint
-    server's "Not Allowed" page showing its explanation and the contact's
-    link, not a raw key
-  - the guard for A6 (issue report
-    `docs/issues/U21-A6-submitted-twice-empty-problems-banner.md`): a
-    draft submitted from a second tab, then "Submit" on the first tab's
-    Review step showing the "already submitted" message, not an empty
-    problems banner
-  - the guard for OMP2 (issue report
-    `docs/issues/U21-OMP2-press-notify-anyone-list-refused.md`): a press
-    saving two comma-separated addresses under "Notify Anyone" and keeping
-    them after a reload
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1101,25 +1044,25 @@ are the source; badges, Impact and Basis:
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A4](#a4) | Reopened submission draft's footer says "Last saved 3 seconds ago" though nothing was saved | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A5](#a5) | The Activity Log's copyright-agreement line shows "{$filename}" where the submitter's name belongs | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A6](#a6) | "Submit" refused with an empty problems banner when the draft was already submitted or its section closed | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A8](#a8) | Editors set to be assigned automatically by a section are never assigned on a second journal | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A10](#a10) | On a phone, the submission wizard opens with its full step rail running off the screen | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A12](#a12) | After a manager saves "Do not send an email.", the Emails settings show no "Submission Confirmation" option selected | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A14](#a14) | Section Editors who are also Authors are offered "Section editor" in "Submit As", then refused | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A16](#a16) | Submission wizard refuses a plain language summary over the word limit, then hangs on "Saving" | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
-| [A18](#a18) | Submission wizard autosaves a change after its first letter, and the rest only a minute later | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A4](#a4) | The wizard footer shows a "Last saved" time counted from page load, not from a real save | 🐞 | minor | — |
+| [A5](#a5) | The copyright-agreed activity-log line opens with a raw "{$filename}" placeholder | 🐞 | minor | — |
+| [A6](#a6) | Submitting a draft twice shows a problems banner with nothing to fix; the real refusal never appears | 🐞 | latent | — |
+| [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | minor | — |
+| [A8](#a8) | Section editors configured for auto-assignment are silently never assigned on any journal but the install's first | 🐞 | user-visible | — |
+| [A10](#a10) | A wizard loaded at phone width keeps its uncollapsed step rail and the page scrolls sideways (journal & press) | 🐞 | minor | — |
+| [A12](#a12) | After "Do not send an email." is saved, the Emails screen shows no Submission Confirmation option selected | 🐞 | minor | — |
+| [A14](#a14) | "Submit As" offers "Section editor" ("Series editor"), and "Begin Submission" refuses it | 🐞 | user-visible | — |
+| [A16](#a16) | A plain language summary over the section's word limit is refused on save with an unexplained error, and the wizard hangs on "Saving" with "Submit" disabled | 🐞 | user-visible · crash: script | — |
+| [A18](#a18) | A change typed more than a minute after the last save is saved cut after its first letters; the rest waits another minute | 🐞 | minor | — |
 | [A19](#a19) | After any save the server refuses, the submission wizard hangs on "Saving" until reloaded | 🐞 | user-visible · crash: script | — |
 | [A20](#a20) | Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang | 🐞 | user-visible · crash: script | — |
-| [OMP2](#omp2) | A press manager cannot save two "Notify Anyone" addresses, though the box's help text asks for a comma-separated list | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | minor | — |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
-| [OPS3](#ops3) | On a preprint server, authors cannot cancel their own draft: Cancel does nothing, Delete is refused | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [OPS7](#ops7) | A user turned away from a preprint server's "Make a Submission" sees a raw code instead of the reason | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [OPS8](#ops8) | A further galley on a draft that already listed one when the wizard was opened can never get its file | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
-| [OPS9](#ops9) | The Review step's "Files" panel says "No files have been uploaded" for galleys the draft already had when the page loaded | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
+| [OPS3](#ops3) | A preprint author's own "Cancel" is silently refused; the draft survives with no message | 🐞 | user-visible | — |
+| [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | user-visible | — |
+| [OPS7](#ops7) | The preprint "Not Allowed" page shows a raw locale code where its explanation should be | 🐞 | minor | — |
+| [OPS8](#ops8) | A further galley on a draft that already listed one when the wizard was opened can never get its file | 🐞 | user-visible · crash: script | — |
+| [OPS9](#ops9) | The Review step's "Files" panel says "No files have been uploaded" for galleys the draft already had when the page loaded | 🐞 | minor | — |
 | [A1](#a1) | Closing submissions does not stop drafts already started; they can still be filled and submitted | ❓ | latent | — |
 | [A2](#a2) | The save-for-later confirmation email goes to whoever pressed the button, not to the submitting author | ❓ | latent | — |
 | [A3](#a3) | The submissions-closed notice shown to would-be authors ends with an instruction meant for managers | ❓ | minor | — |
@@ -1172,75 +1115,54 @@ Lean: yes. One string serves two audiences; split it. Basis: probe.
 <sup>[b](#fn-b)</sup>
 
 <a id="a4"></a>
-**A4 — Reopened submission draft's footer says "Last saved 3 seconds ago" though nothing was saved** · 🐞 · low.
-An author who reopens a draft in the submission wizard, or reloads the
-page, finds the footer reading "Last saved 3 seconds ago" and counting
-up from there. Nothing has been saved: the time is counted from the
-moment the page opened, and the draft's last save may lie minutes or
-days back.
-The draft itself is intact. The false time stays until the wizard
-first saves a change, and for the whole visit when nothing is changed.
-Basis: probe, 2026-10-01. <sup>[i](#fn-i)</sup>
+**A4 — The footer claims a save that never happened** · 🐞 · minor.
+On opening any wizard step the footer already reads "Last saved a few
+seconds ago" and keeps counting. But the time is measured from the moment
+the page loaded, not from any actual save, which may lie much further back.
+An author reading the footer is told their work was just saved when nothing
+has been sent.
+Basis: probe. <sup>[i](#fn-i)</sup>
 
 <a id="a5"></a>
-**A5 — The Activity Log's copyright-agreement line shows "{$filename}" where the submitter's name belongs** · 🐞 · low.
-When a submitter (the user who ticks the copyright box and submits,
-normally the author) completes a submission, the Activity Log's
-agreement line opens with a raw placeholder where the submitter's name
-belongs: "{$filename} (ccorino) agreed to the copyright terms for
-submission." instead of "Carlo Corino (ccorino) agreed …".
-The copyright box, and so this line, exists only in a journal, press or
-server whose manager has set a Copyright Notice under Settings ›
-Workflow.
-Basis: probe, 2026-10-01. <sup>[m](#fn-m)</sup>
+**A5 — The copyright-agreed log line is garbled** · 🐞 · minor.
+When a submission is completed with the copyright box ticked, the activity
+log's agreement entry opens with a raw placeholder: "{$filename} (…)
+agreed to the copyright terms for submission.", with the ticking user's
+username in the parentheses. This happens on every copyright-confirmed
+submission. The neighboring "submission submitted" entry renders normally.
+Basis: probe. <sup>[m](#fn-m)</sup>
 
 <a id="a6"></a>
-**A6 — "Submit" refused with an empty problems banner when the draft was already submitted or its section closed** · 🐞 · medium.
-An author has the same draft open in two browser tabs. They submit it
-from one tab, then press "Submit" in the other tab, which was still open
-on "Review". The second tab stays on "Review" under the banner "There
-are one or more problems that need to be fixed before you can submit…",
-nothing below it is flagged, and its "Submit" button is now disabled.
-The server's actual refusal, "This submission has already been
-submitted…", never reaches the screen.
-The same happens when a manager closes the draft's section to authors
-while the author is on "Review": "Submit" is refused and the author sees
-only the empty banner, not "… is not accepting submissions to the
-Articles section…". On a press, the "For the Editors" step also shows
-that message spelled out one character per line under "Series".
-The double submit costs nothing: the submission went in from the first
-tab. With a closed section the submission stays a draft, and the author
-learns why only by reloading the page.
-Basis: probe, 2026-10-01. <sup>[m](#fn-m)</sup>
+**A6 — Double-submitting dead-ends on an empty problems banner** · 🐞 · latent.
+Pressing "Submit" on a draft that was already submitted, say from a second
+browser tab left on the Review step, leaves the author on Review under the
+banner "There are one or more problems that need to be fixed before you can
+submit…" with nothing flagged on any panel. The server's actual refusal,
+"This submission has already been submitted…", never reaches the screen.
+So the author is told to fix problems that are not shown. Basis: probe.
+<sup>[m](#fn-m)</sup>
 
 <a id="a7"></a>
-**A7 — The completion screen claims an email that was never sent** · 🐞 · medium.
+**A7 — The completion screen claims an email that was never sent** · 🐞 · minor.
 With the journal's submission acknowledgement set to "Do not send an
 email.", the "Submission complete" screen still reads "…you've been
 emailed a confirmation for your records." No email exists. The same
-happens to a submitter who chose their own manager or editor role in
-"Submit As" ("Journal editor", "Press manager", "Preprint Server
-manager" and the like): with the setting at its default they
+happens to a submitter who chose an editorial role in "Submit As"
+("Journal editor", "Press editor"): with the setting at its default they
 get no acknowledgement, while the screen promises one. A submitter
 checking their inbox for the promised confirmation finds nothing.
-Basis: probe, 2026-10-01. <sup>[q](#fn-q)</sup>
+Basis: probe (a journal and a press). <sup>[q](#fn-q)</sup>
 
 <a id="a8"></a>
-**A8 — Editors set to be assigned automatically by a section are never assigned on a second journal** · 🐞 · medium.
-A section configured to assign editorial users automatically
-("Editorial Assignments" on the section form) assigns nobody on any
-journal but the one created first on the install (the one with the
-lowest id). The submission
-arrives with no editor, the configured editor is never emailed and
-never sees it, and the managers get the needs-an-editor alert instead.
-The managers can assign the editor by hand from the submission's
-"Participants". The editor is then emailed only if the manager writes
-or picks a message in that window; the automatic "You have been
-assigned as an editor" email is not sent.
-It affects journals, presses and preprint servers, sections and series
-alike, on the development branch (`main`) only: the released versions
-(3.5, 3.4 and 3.3) assign as configured.
-Basis: probe, 2026-10-01. <sup>[q](#fn-q)</sup>
+**A8 — Auto-assignment of section editors silently fails on all but the install's first journal** · 🐞 · user-visible.
+A section configured to assign editorial users automatically ("Editorial
+Assignments" on the section form) assigns nobody on any journal created
+after the install's first. The submission arrives with no editor, the
+configured editor is never emailed and never sees it, and the managers get
+the needs-an-editor alert instead. On the install's oldest journal the same
+setup works, which hides the defect from casual checks. Basis: probe (two
+failing journals plus a passing control, same day), with the code fault
+identified. <sup>[q](#fn-q)</sup>
 
 <a id="a9"></a>
 **A9 — Starting a submission quietly turns a Section Editor into an Author** · ❓ · latent.
@@ -1262,35 +1184,24 @@ Basis: probe + code inspection (Section Editor); code inspection only
 (Site Administrator). <sup>[fn-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — On a phone, the submission wizard opens with its full step rail running off the screen** · 🐞 · low.
-On narrow screens the submission wizard's step rail is meant to collapse
-to "1/5 steps" with a "Show all steps" control. When an author opens the
-wizard in a phone-sized window on a journal or press, the rail stays a
-single row of all five steps. That row runs off the right edge and
-widens the page to about 1,050 pixels in a 375-pixel window. A reload at
-that width brings the full row back each time.
-The fix proposed here makes the rail collapse on load. At 375 pixels the
-page still scrolls sideways afterwards, to about 560 pixels, because the
-back office's side menu keeps its full width on a phone. That is a
-separate fault. PKP's own accessibility conformance report for OJS
-(`docs/vpat.yaml`) says the back office does not yet reflow at 320
-pixels ("submission pages and dashboard grids are rendered unusable"),
-so phone-width use is not supported today.
-Basis: probe, 2026-10-01. <sup>[h](#fn-h)</sup>
+**A10 — At phone width the step rail never collapses on a fresh load** · 🐞 · minor.
+Opening a wizard in a phone-sized window on a journal or press renders the
+full uncollapsed step rail and pushes the page into sideways scrolling. The
+"{n}/{total} steps" collapse never engages. The same window resized down
+after loading collapses correctly, as does a moderately narrow window from
+the start. A preprint server collapses correctly even on a phone-width load.
+Every step stays reachable by scrolling, hence minor. Basis: probe
+(repeatable both orders, three apps compared). <sup>[h](#fn-h)</sup>
 
 <a id="a12"></a>
-**A12 — After a manager saves "Do not send an email.", the Emails settings show no "Submission Confirmation" option selected** · 🐞 · low.
-A journal, press or preprint server manager sets "Submission
-Confirmation" (Settings › Workflow › "Emails") to "Do not send an
-email." and saves. On every later visit none of its three options is
-selected, so the screen gives no sign that confirmations are off. The
-setting itself still works: no confirmation goes out, and saving the
-screen again keeps it off.
-The DOI "Registration Agency" list on a journal or preprint server
-shows the same empty box instead of "None" whenever a registration
-agency plugin is enabled and no agency is chosen. Saving it from the
-empty box keeps "no agency".
-Basis: probe, 2026-10-01. <sup>[fn-a12](#fn-a12)</sup>
+**A12 — The Emails screen forgets which acknowledgement option is on** · 🐞 · minor.
+After a Journal Manager picks "Do not send an email." under "Submission
+Confirmation" on the workflow settings' Emails screen and saves, reopening
+the screen shows none of the three options selected. The choice is in
+force: no acknowledgement goes out, and saving the screen again keeps it
+so. But the screen no longer says which option applies, so a manager
+cannot tell "off" from a choice never made. Basis: probe.
+<sup>[fn-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
 **A13 — Changing the language mid-wizard asks for the new language's values, the copied affiliation included** · ✅ · intended.
@@ -1318,21 +1229,17 @@ Since: 2026-09-12 · Basis: probe. <sup>[fn-a13](#fn-a13)</sup>
 > post-submission language change.
 
 <a id="a14"></a>
-**A14 — Section Editors who are also Authors are offered "Section editor" in "Submit As", then refused** · 🐞 · medium.
-A Section Editor who is also an Author opens "Make a Submission" and finds
-"Submit As" offering "Section editor" ("Series editor" on a press) and
-"Author". With "Section editor" chosen, "Begin Submission" leaves them on
-the form with "You are not allowed to submit in this user role." under
-"Submit As", and no submission is made.
-The list has no fixed order and the form selects whichever role comes
-first. On PKP's test dataset that is "Section editor", so an editor who
-leaves the role as it is gets refused. Choosing "Author" gets them
-through, and the form keeps what they typed.
-Every other role that has access to the submission stage but is neither a
-manager nor an author role is offered and refused the same way. On a
-journal's default roles that is also "Guest editor" and "Funding
-coordinator"; on a press's, "Funding coordinator".
-Basis: probe, 2026-10-01. <sup>[fn-a14](#fn-a14)</sup>
+**A14 — "Submit As" offers "Section editor", and "Begin Submission" refuses it** · 🐞 · user-visible.
+A user who is both a Section Editor and an Author gets "Submit As" with
+"Author" and "Section editor" ("Series editor" on a press). Choosing
+"Section editor" and pressing "Begin Submission" keeps them on the form
+with "You are not allowed to submit in this user role." under "Submit
+As", and no submission is created. Only "Author" can be used, so the form
+offers a choice it will not accept. On a press the refused role is
+sometimes the one already selected [OMP3](#omp3). A preprint server does
+not offer its Moderator role at all. The same gap turns a Section Editor
+with no other role into an Author [A9](#a9).
+Basis: probe. <sup>[fn-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
 **A15 — Leaving the wizard drops a change made within a minute of the last save** · ❓ · minor.
@@ -1352,20 +1259,22 @@ drops it silently.
 Basis: probe. <sup>[fn-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
-**A16 — Submission wizard refuses a plain language summary over the word limit, then hangs on "Saving"** · 🐞 · medium · crash: script.
-An author whose plain language summary is longer than the section's
-word limit cannot save the "Details" step of the submission wizard, and
-the page's own script then fails in the browser. When the step is
-saved, an "Error" dialog reads "An unexpected error has occurred.
-Please reload the page and try again." without naming the field. The
-footer then shows "Saving" for good, and on "Review" "Checking your
-submission" never clears, so "Submit" stays disabled.
-That save carries the title, keywords, abstract and summary, so all of
-them are lost (Rule 9c). While typing, the summary's box does mark its
-count with a warning sign ("Word Count: 20/10"). The abstract's box
-shows the same sign for the same limit, but an abstract over it is
-saved and flagged on "Review" instead.
-Basis: probe, 2026-10-01. <sup>[fn-a16](#fn-a16)</sup>
+**A16 — A plain language summary over the word limit hangs the wizard on "Saving"** · 🐞 · user-visible · crash: script.
+In a section with a word limit, "Details" counts a too-long plain
+language summary ("Word Count: 20/10") but flags nothing, so the author
+expects it to be saved. Instead the save, by the timer or "Continue",
+is refused. An "Error" dialog reads "An unexpected error has occurred.
+Please reload the page and try again.", naming no field, and the page's
+script fails a few seconds later. The footer shows
+"Reconnecting", then "Saving" for good. "Review" shows the old summary
+("None provided") under "Checking your submission", which never clears,
+so "Submit" stays disabled. After a reload "Details" shows the summary
+empty, and the title, keywords and abstract that save carried are lost
+too (Rule 9c). After a timer save, and on a preprint server after "Continue"
+too, an "Unsaved Changes" dialog (Rule 9a) opens first, and "No,
+discard" leaves it empty. An abstract over the same
+limit is saved and reported by the Review check instead (Rule 13).
+Basis: probe. <sup>[fn-a16](#fn-a16)</sup>
 
 <a id="a17"></a>
 **A17 — "Needs an editor" goes out for a submission that already has one** · ❓ · minor.
@@ -1382,19 +1291,19 @@ false here.
 Basis: probe. <sup>[fn-a17](#fn-a17)</sup>
 
 <a id="a18"></a>
-**A18 — Submission wizard autosaves a change after its first letter, and the rest only a minute later** · 🐞 · medium.
-When more than a minute has passed since the wizard last saved (or
-since it opened, if nothing has been saved yet), the first key an
-author types in a field starts a save at once. Within a second the
-footer flashes "Saving" and the draft is saved with only the first
-letter or two. The rest waits a full minute for the next save, while
-the footer reads "Last saved 8 seconds ago" as if the change were
-saved.
-An author who leaves the wizard or reloads within that minute finds the
-field cut: a Title typed as "u21w37 Autosave cut check" reopens as "u",
-in the page heading too, with no warning. Moving to another step, or
-"Save for Later", saves the whole text.
-Basis: probe, 2026-10-01. <sup>[fn-a18](#fn-a18)</sup>
+**A18 — A change typed more than a minute after the last save is saved cut after its first letters** · 🐞 · minor.
+An author who changes the Title on "Details" more than a minute after the
+last save (after opening the wizard, when nothing has been saved yet) has
+the timer save it while they are still typing. At an ordinary pace (a key
+every quarter second) the draft's Title is saved as its first letter or
+two, or empty (the box just cleared), and the rest is saved only a minute
+later. Leaving the wizard or reloading within that next minute keeps the
+cut Title: reopened, "Details"
+shows only the part sent, as little as its first two letters, with no
+question and no "Unsaved Changes" dialog. A Title that arrives within a
+second, pasted say, is usually saved whole. A step change saves the
+change as typed (Rule 9); the timer should too.
+Basis: probe. <sup>[fn-a18](#fn-a18)</sup>
 
 <a id="a19"></a>
 **A19 — After any save the server refuses, the submission wizard hangs on "Saving" until reloaded** · 🐞 · user-visible · crash: script.
@@ -1449,15 +1358,14 @@ summarizes them. Chapter management itself belongs to
 section machinery by design. <sup>[fn-omp1](#fn-omp1)</sup>
 
 <a id="omp2"></a>
-**OMP2 — A press manager cannot save two "Notify Anyone" addresses, though the box's help text asks for a comma-separated list** · 🐞 · low.
-On a press, the "Notify Anyone" box (Settings › Workflow › "Emails")
-says "Separate multiple email addresses with a comma. Example:
-one@example.com,two@example.com". A press manager who enters two
-addresses that way and saves is refused with "This is not a valid
-email address.". Nothing on the "Emails" tab is saved: any other
-setting changed there before the same save is not stored either. A
-journal and a preprint server save the same list.
-Basis: probe, 2026-10-01. <sup>[fn-omp2](#fn-omp2)</sup>
+**OMP2 — A press refuses the comma-separated copy list its help text asks for** · 🐞 · minor.
+On the workflow settings' Emails screen the "Notify Anyone" box's help
+reads "Separate multiple email addresses with a comma. Example:
+one@example.com,two@example.com", the same words on every app. On a press,
+saving two addresses that way is refused with "This is not a valid email
+address."; a journal and a preprint server accept the list. So a press can
+copy the acknowledgement to one extra address only, and its own screen
+says otherwise. Basis: probe. <sup>[fn-omp2](#fn-omp2)</sup>
 
 <a id="omp3"></a>
 **OMP3 — "Submit As" lists its roles in a changing order** · 🐞 · minor.
@@ -1507,16 +1415,15 @@ Lean: no. Enrol at creation, as the other apps do. Basis: probe.
 <sup>[c](#fn-c)</sup>
 
 <a id="ops3"></a>
-**OPS3 — On a preprint server, authors cannot cancel their own draft: Cancel does nothing, Delete is refused** · 🐞 · medium.
-On a preprint server the submission wizard offers the submitting author
-the same "Cancel" control and "Cancel submission" dialog as everywhere
-else, but confirming does nothing. The dialog closes, no message
-appears, and the draft survives; the deletion is refused behind the
-scenes. Deleting the draft from "My Submissions" with "Delete Incomplete
-Submissions" is refused too, with the error "You do not have permission
-to delete this submission."
-On a journal or a press the author's own cancel works.
-Basis: probe, 2026-10-01. <sup>[o](#fn-o)</sup>
+**OPS3 — An author's own Cancel silently does nothing** · 🐞 · user-visible.
+On a preprint server the wizard offers the submitting author the same
+"Cancel" control and "Cancel submission" dialog as everywhere else, but
+confirming does nothing. The dialog closes, no message appears, and the
+draft survives; the deletion is refused behind the scenes. A manager
+cancelling the same draft succeeds, and on a journal or press the author's
+own cancel works. So the control is offered to someone the server always
+refuses. Basis: probe (two independent runs, same day).
+<sup>[o](#fn-o)</sup>
 
 <a id="ops4"></a>
 **OPS4 — The completion screen thanks whoever is looking at it** · ❓ · latent.
@@ -1532,13 +1439,13 @@ the viewer? Lean: yes for the thank-you wording; offering a capable viewer
 the post-it-now link is defensible. Basis: probe. <sup>[n](#fn-n)</sup>
 
 <a id="ops5"></a>
-**OPS5 — No acknowledgement email for a can-post submitter** · 🐞 · medium.
+**OPS5 — No acknowledgement email for a can-post submitter** · 🐞 · user-visible.
 A submitter who may post their own preprint (a manager, by default) gets no
 acknowledgement email after submitting: neither the can-post variant the
 app defines for exactly this case nor the ordinary one. A plain author
 submitting under the same conditions receives theirs. The submitter is left
-with no emailed record of the submission.
-Basis: probe, 2026-10-01. <sup>[q](#fn-q)</sup>
+with no emailed record of the submission. Basis: probe (with the
+plain-author control the same day). <sup>[q](#fn-q)</sup>
 
 <a id="ops6"></a>
 **OPS6 — The needs-an-editor email speaks journal language on a preprint server** · ❓ · minor.
@@ -1552,42 +1459,37 @@ task entry does? Lean: yes. The pair is inconsistent on the same event.
 Basis: probe. <sup>[q](#fn-q)</sup>
 
 <a id="ops7"></a>
-**OPS7 — A user turned away from a preprint server's "Make a Submission" sees a raw code instead of the reason** · 🐞 · low.
-A signed-in user whom a preprint server does not let submit gets the
-"Not Allowed" page. In place of the explanation it shows the raw code
-"##submission.wizard.notAllowed.description##" or
-"##submission.wizard.noSectionAllowed.description##", so they are not
-told why they were refused or whom to contact. A journal and a press
-show the proper sentence, with a link to the contact.
-No submission or data is lost, and the refusal itself is right; only the
-explanation and the contact's link are missing. The user can still find
-the contact under About › "Contact".
-Basis: probe, 2026-10-01. <sup>[c](#fn-c)</sup>
+**OPS7 — The "Not Allowed" page explains itself in a raw locale code** · 🐞 · minor.
+A visitor turned away from a preprint server's start screen (Rule 3) gets
+the "Not Allowed" heading with, where the explanation should be, the
+literal text "##submission.wizard.notAllowed.description##". The refused
+visitor is never told why. Both of the page's explanations are affected
+(the must-be-registered and the all-sections-closed variants). A journal
+and a press show the proper text. Basis: probe + code inspection (the
+locale keys are missing on OPS alone). <sup>[c](#fn-c)</sup>
 
 <a id="ops8"></a>
-**OPS8 — A further galley on a resumed or reloaded draft cannot finish its upload** · 🐞 · medium · crash: script.
+**OPS8 — A further galley on a resumed or reloaded draft never gets its file** · 🐞 · user-visible · crash: script.
 When the wizard is opened on a draft that already lists a galley
 (resumed after "Save for Later", or simply reloaded), "Add File" › label ›
 "Save" leaves the label window open, opens "Upload a File Ready for
 Publication" over it, and the page's script fails. Choosing the
 Preprint Component and uploading the file work, but after "Continue"
 the window's "2. Review Details" step stays blank and its "Continue"
-greyed, so the upload can never be finished. The file is in fact saved
-with the new galley, but once the windows are closed the "Files" list
-shows the new label as plain text, as for a galley with no file, until
-the page is reloaded. A draft's first galley, and a second one added
-without reloading, upload normally.
-Basis: probe, 2026-10-01. <sup>[fn-ops8](#fn-ops8)</sup>
+greyed, so the upload can never be finished. The new label stays in the
+"Files" list with no file, also after a reload. A draft's first galley,
+and a second one added without reloading, upload normally.
+Basis: probe. <sup>[fn-ops8](#fn-ops8)</sup>
 
 <a id="ops9"></a>
-**OPS9 — "Review" says no files were uploaded for a galley already on the draft** · 🐞 · medium · crash: script.
+**OPS9 — "Review" says no files were uploaded for a galley already on the draft** · 🐞 · minor.
 When the wizard is opened on a draft that already has a galley (resumed
 later, or reloaded), the Review step's "Files" panel reads "No files
 have been uploaded for this submission.", although "Upload Files" lists
 the galley, no problem is raised and "Submit" is enabled. Only a galley
 uploaded since the page was loaded is listed ("PDF Preprint Text"). The
 author's last look before submitting tells them their file is missing.
-Basis: probe, 2026-10-01. <sup>[fn-ops9](#fn-ops9)</sup>
+Basis: probe. <sup>[fn-ops9](#fn-ops9)</sup>
 
 <a id="ops10"></a>
 **OPS10 — A Moderator already on a preprint is not told it was submitted** · ❓ · minor.
@@ -1713,7 +1615,6 @@ OMP defines the one (`notAllowed.description`) its handler uses
 same day: the author's radio offered only the open sections; a Journal
 Manager was additionally offered the editor-restricted one; the deactivated
 section was offered to no one.
-Issue report: [pkp-e2e#179](https://github.com/jardakotesovec/pkp-e2e/issues/179) ([docs/issues/U21-OPS7-preprint-not-allowed-raw-code.md](../issues/U21-OPS7-preprint-not-allowed-raw-code.md)).
 
 <a id="fn-d"></a>
 **d** — Start form. Shared `PKP\components\forms\submission\StartSubmission`
@@ -1870,7 +1771,6 @@ viewport, step buttons laid out past the right edge); OMP fails the same
 way at 375px; OPS collapses correctly at 375px (scrollWidth 558). The same
 OJS page resized 1440→375 *without* reload collapses correctly; reloading
 at that width breaks it again — reproduced in both orders, twice.
-Issue report: [pkp-e2e#173](https://github.com/jardakotesovec/pkp-e2e/issues/173) ([docs/issues/U21-A10-wizard-phone-rail-scrolls-sideways.md](../issues/U21-A10-wizard-phone-rail-scrolls-sideways.md)).
 
 <a id="fn-i"></a>
 **i** — Autosave. `autosave` mixin: a 500 ms job timer
@@ -1928,7 +1828,6 @@ followed. The rail back to "Upload Files" saved the same way. The
 2026-08-25 observation in note f (no write on "Continue") was a step with
 nothing changed. An untouched step sent its timer save 58.7–59.7 s after
 typing stopped. Leaving: note fn-a15.
-Issue report: [pkp-e2e#169](https://github.com/jardakotesovec/pkp-e2e/issues/169) ([docs/issues/U21-A4-wizard-footer-last-saved-without-save.md](../issues/U21-A4-wizard-footer-last-saved-without-save.md)).
 
 <a id="fn-j"></a>
 **j** — Save for later. `SubmissionWizardPage.saveForLater()` flushes
@@ -2077,8 +1976,6 @@ submitted" beside the copyright entry rendered verbatim "{$filename}
 ({username}) agreed to the copyright terms for submission." — the
 `{$filename}` token literal (A5). The copyright box must be re-ticked on
 every fresh visit to Review (test-authoring note).
-Issue report: [pkp-e2e#177](https://github.com/jardakotesovec/pkp-e2e/issues/177) ([docs/issues/U21-A5-copyright-agreed-line-raw-placeholder.md](../issues/U21-A5-copyright-agreed-line-raw-placeholder.md)).
-Issue report: [pkp-e2e#180](https://github.com/jardakotesovec/pkp-e2e/issues/180) ([docs/issues/U21-A6-submitted-twice-empty-problems-banner.md](../issues/U21-A6-submitted-twice-empty-problems-banner.md)).
 
 <a id="fn-n"></a>
 **n** — Complete/terminal screens. `complete.tpl` (OJS/OMP, AFFW-129):
@@ -2134,7 +2031,6 @@ another draft succeeded through the same flow. Mechanism: OPS drafts sit
 on the Production stage, so the author never holds the *submission-stage*
 author assignment `canCurrentUserDelete()` demands — the footer's
 `$canCancelSubmission` check does not mirror it.
-Issue report: [pkp-e2e#162](https://github.com/jardakotesovec/pkp-e2e/issues/162) ([docs/issues/U21-OPS3-author-cancel-draft-refused.md](../issues/U21-OPS3-author-cancel-draft-refused.md)).
 
 <a id="fn-p"></a>
 **p** — Section closed mid-draft. `PKPSubmissionHandler::showWizard()`
@@ -2275,9 +2171,6 @@ confirmation for your records." (A7); the same user type submitting as
 "Author" got "Thank you for your submission to {journal}". On OPS the
 "Preprint Server manager" submitter got only the needs-an-editor email
 (the can-post case, OPS5).
-Issue report: [pkp-e2e#145](https://github.com/jardakotesovec/pkp-e2e/issues/145) ([docs/issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md](../issues/U21-A8-auto-assigned-editor-never-assigned-second-journal.md)).
-Issue report: [pkp-e2e#155](https://github.com/jardakotesovec/pkp-e2e/issues/155) ([docs/issues/U21-A7-completion-screen-claims-unsent-email.md](../issues/U21-A7-completion-screen-claims-unsent-email.md)).
-Issue report: [pkp-e2e#154](https://github.com/jardakotesovec/pkp-e2e/issues/154) ([docs/issues/U21-A7-OPS5-editorial-role-submitter-no-acknowledgement.md](../issues/U21-A7-OPS5-editorial-role-submitter-no-acknowledgement.md)).
 
 <a id="fn-r"></a>
 **r** — Schema. The submission record itself is defined in the shared
@@ -2354,7 +2247,6 @@ Workflow → Emails reopened after saving "Do not send an email." listed
 only." and "Do not send an email." all unchecked, and the acknowledgement
 stayed off. The form is the shared lib/pkp Emails settings form, so OMP
 and OPS are expected to match; not reopened there.
-Issue report: [pkp-e2e#175](https://github.com/jardakotesovec/pkp-e2e/issues/175) ([docs/issues/U21-A12-confirmation-off-shows-no-option.md](../issues/U21-A12-confirmation-off-shows-no-option.md)).
 
 <a id="fn-a13"></a>
 **fn-a13** — Language change and the copied contributor. The wizard's
@@ -2401,7 +2293,6 @@ Submission" left the start form in place with the error under "Submit
 As", and no draft was created; "Author" picked, the same user submitted
 normally. OPS control: a Moderator + Author got no "Submit As" and
 submitted as Author.
-Issue report: [pkp-e2e#159](https://github.com/jardakotesovec/pkp-e2e/issues/159) ([docs/issues/U21-A14-submit-as-section-editor-refused.md](../issues/U21-A14-submit-as-section-editor-refused.md)).
 
 <a id="fn-a15"></a>
 **fn-a15** — A15. Live-probed 2026-09-28, two runs per app on all three:
@@ -2443,7 +2334,6 @@ Crash: the page error "Cannot read properties of undefined (reading
 'url')" about 4 s after the 400, in every over-limit drive (OJS 6 of 6,
 OPS 4 of 4). Control: a 10-word summary saved (200, "Last saved…"),
 showed on "Review" and survived a reload.
-Issue report: [pkp-e2e#127](https://github.com/jardakotesovec/pkp-e2e/issues/127) ([docs/issues/U21-A16-plain-language-summary-over-limit-hangs-wizard.md](../issues/U21-A16-plain-language-summary-over-limit-hangs-wizard.md)).
 
 <a id="fn-a17"></a>
 **fn-a17** — A17. `AssignEditors` sends the needs-an-editor mail and task
@@ -2476,7 +2366,6 @@ reload "Details" read "Autosave check leavelate" and a longer cut (OMP),
 OMP typed as fast in one run and was cut, so whole or cut follows where
 the typing falls against the 500 ms tick, not the app. No response of
 400 or more, no page error, no browser dialog.
-Issue report: [pkp-e2e#170](https://github.com/jardakotesovec/pkp-e2e/issues/170) ([docs/issues/U21-A18-wizard-autosave-cuts-title-mid-typing.md](../issues/U21-A18-wizard-autosave-cuts-title-mid-typing.md)).
 
 <a id="fn-a19"></a>
 **fn-a19** — Rules 9b and 9c, A19. ui-library `SubmissionWizardPage.vue`
@@ -2485,8 +2374,8 @@ any status but 0, 500 and 403 and opens the dialog; the autosave
 mixin's `onError` has already set `isDisconnected`, so `_runReconnect()`
 calls `_sendAutosave(undefined)` about 4 s later, which sets
 `isAutosaving` and throws on `payload.url`; neither flag is cleared, and
-"Save for Later", `canSubmit` and the Review check all wait on them
-(the A16 issue report's code read, "Cause"). Live-probed 2026-10-01, two
+"Save for Later", `canSubmit` and the Review check all wait on them.
+Live-probed 2026-10-01, two
 runs per app on all three (the Author of a seeded draft on scratch
 contexts; kept script `shared/playwright/checks/U21/I01/i01.js`), 36
 refused saves: a step's `PUT …/publications/{id}` answered 400 by a
@@ -2561,7 +2450,6 @@ building the scenario tooling, through the settings form's own validation:
 address." and accepted on OJS and OPS; the box's help text read "Separate
 multiple email addresses with a comma. Example:
 one@example.com,two@example.com" on all three apps.
-Issue report: [pkp-e2e#181](https://github.com/jardakotesovec/pkp-e2e/issues/181) ([docs/issues/U21-OMP2-press-notify-anyone-list-refused.md](../issues/U21-OMP2-press-notify-anyone-list-refused.md)).
 
 <a id="fn-omp3"></a>
 **fn-omp3** — OMP3. `getSubmitUserGroups()` (note c) reads the user's
@@ -2627,7 +2515,6 @@ a function" followed; the "2. Review Details" step stayed blank and its
 "Continue" could not be pressed. The "Files" list then held the new label with no
 file, also after a reload. Controls: a draft's first galley, and a
 second added in the same visit, completed with no page error.
-Issue report: [pkp-e2e#134](https://github.com/jardakotesovec/pkp-e2e/issues/134) ([docs/issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md](../issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md)).
 
 <a id="fn-ops9"></a>
 **fn-ops9** — OPS9. Review panel `review-galleys.tpl` (note l).
@@ -2637,7 +2524,6 @@ the visit showed on "Review" as "PDF Preprint Text"; after a reload,
 "Submit" enabled while "Upload Files" still listed the galley. The same
 text showed on the first "Review" of all 14 drafts built with a galley
 by the scenario tooling, each of which passed the check.
-Issue report: [pkp-e2e#134](https://github.com/jardakotesovec/pkp-e2e/issues/134) ([docs/issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md](../issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md)).
 
 <a id="fn-ops10"></a>
 **fn-ops10** — OPS10. Mechanism and the 2026-09-28 drive: note q (the

@@ -765,46 +765,6 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Planned**:
-  - the guard for A15 (Rule 17; issue report
-    `docs/issues/U53-A15-merge-account-opened-discussion-fails.md`):
-    merging the editor who recorded a submission's recommendation into
-    another account, the window closing, the merged account refused at
-    sign-in and the discussion naming the chosen account as creator
-  - the guard for A2 (Rule 15; scenario 4 passes it; issue report
-    `docs/issues/U53-A2-remove-site-administrator-unexplained-error.md`):
-    a manager's "Remove User" on the Site Administrator's row showing the
-    server's refusal, not "An unexpected error has occurred"
-  - the guard for A1 (Rule 13; scenario 4 passes it; issue report
-    `docs/issues/U53-A1-disable-user-offered-then-refused.md`): a
-    manager's menu offering no "Disable User" on the Site
-    Administrator's row or on a user with a current role in another
-    journal, and offering "Disable User", "Login As" and "Merge user" on
-    a user whose role elsewhere has ended
-  - the guard for A7 (Rule 12; scenario 3 passes it; issue report
-    `docs/issues/U53-A7-enable-reason-becomes-disable-reason.md`): the
-    enable window's reason box starting empty, and the next disabling's
-    box empty after an enabling with a typed reason
-  - the guard for A6 (issue report
-    `docs/issues/U53-A6-disable-window-lists-ended-roles.md`): "Disable
-    User" after "Remove Role" on one of a user's roles, the window's
-    "Current Roles:" line naming only the roles still held
-  - the guard for A4 (issue report
-    `docs/issues/U53-A4-users-search-example-journal-role.md`): the Users
-    search box's text on a press and a preprint server naming no
-    journal-only role
-  - the guard for A12 (Fields "Name"; issue report
-    `docs/issues/U53-A12-users-status-icons-unnamed.md`): the "Name" cell
-    of a disabled account and of an ORCID holder each naming that status
-    to a screen reader
-  - the guard for A13 (issue report
-    `docs/issues/U53-A13-merge-grid-admin-roles-empty.md`): on the
-    default dataset, the Site Administrator's row in the "Merge user"
-    list reading the manager role
-  - the guard for A16 (Rule 23; issue report
-    `docs/issues/U53-A16-notify-user-locked-after-generate-password.md`):
-    "Add User" with "Generate Password" ticked and unticked, then "Notify
-    User" ticked and the welcome email received
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -820,15 +780,29 @@ Left out of the scenarios above, by reason:
     3, 5 and 6 do, only the disable and enable windows' headings
     differing (Rule 20)
 - **Register carries it**:
+  - A1 ("Disable User" and "Enable User" refused inside the window on the
+    rows of users outside the manager's reach; Rule 13; scenario 4
+    passes it)
+  - A2 ("Remove User" on the Site Administrator's row; Rule 15; scenario
+    4 passes it)
   - A3 (a user with no role left, still listed on the Users list, in the
     "Merge user" window and on the older grid; Rules 3, 16; scenario 5
     passes it)
+  - A7 (the reason for enabling kept as the next reason for disabling;
+    Rule 12; scenario 3 passes it)
   - A8 ("Remove User" sending no email; Rule 14; scenario 5 passes it)
   - A9 (a merge dropping the merged account's section assignments; Rule
     18)
   - A10 (the older grid's "Disable User" and "Remove" on the
     administrator's own row; Rule 20)
   - A11 and OPS1 (the list in the French interface; Rule 25)
+  - A12 (the ORCID and disabled icons unnamed to a screen reader; Fields
+    "Name")
+  - A13 (the Site Administrator's empty "Roles" cell in the "Merge user"
+    window and on the older grid; Fields)
+  - A15 (merging an account that opened a discussion; Rule 17)
+  - A16 ("Generate Password" unticked again, "Notify User" left locked;
+    Rule 23)
   - A17 (the grid's row still listing a role just ended on "Edit User";
     Rule 24; scenario 8 passes it)
   - A18 (a role with an end date still to come left out of "Roles", a
@@ -875,22 +849,22 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A manager's "Disable User" on a user they may not administer opens a window that refuses it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A2](#a2) | A manager's "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A4](#a4) | Presses and preprint servers: the Users search box suggests searching for "Journal editor", a role they lack | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A5](#a5) | Users & Roles: screen readers announce every user row's "…" button as a raw code | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A6](#a6) | The "Disable User" and "Enable User" windows list roles the user no longer holds in the journal | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A7](#a7) | After "Enable User", the next "Disable User" offers the enabling reason and the Login page quotes it | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A9](#a9) | Merging a section editor's account unassigns them from their sections, so new submissions arrive without that editor | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A11](#a11) | Users & Roles in French (Canada): the Users tab and the "Invite to a role" pages show raw codes | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A12](#a12) | Users & Roles: screen readers cannot tell a disabled account or an ORCID holder from any other user | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A13](#a13) | "Merge user" and wizard user lists show no roles after a 3.4 upgrade or for a journal's creator, but list a just-ended role | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A14](#a14) | On presses and preprint servers, a masthead change shows a raw error and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A15](#a15) | Merging a user recorded as a discussion's or task's creator stops halfway with no message, and the account still signs in | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A16](#a16) | Add User: unticking "Generate Password" leaves "Notify User" greyed out, so no welcome email can be chosen | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A19](#a19) | A manager cannot end a role that starts on a future date: "Remove User" fails or leaves it in place | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [OPS1](#ops1) | On a French preprint server the "Roles" column prints raw codes for two roles | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [A1](#a1) | "Disable User" and "Enable User" are offered on rows the manager may not administer, and refused only inside the window | 🐞 | user-visible | — |
+| [A2](#a2) | "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred…" | 🐞 | user-visible | — |
+| [A4](#a4) | The search box's example names "Journal editor" on a press and a preprint server | 🐞 | minor | — |
+| [A5](#a5) | The row's "…" button is announced to screen readers as a raw code | 🐞 | minor | — |
+| [A6](#a6) | The disable window's "Current Roles : " line lists roles that have ended | 🐞 | minor | — |
+| [A7](#a7) | The reason typed when enabling becomes the reason shown at the next disabling | 🐞 | minor | — |
+| [A9](#a9) | A merge drops the merged account's section assignments | 🐞 | latent | — |
+| [A11](#a11) | The French "Users" tab prints raw codes for its search label, the Invitations heading, button and columns, and the "Start Date" column | 🐞 | minor | — |
+| [A12](#a12) | The ORCID and disabled icons after a name have no name for a screen reader | 🐞 | minor | — |
+| [A13](#a13) | The "Merge user" window and the older grid show nothing under "Roles" for the Site Administrator | 🐞 | minor | — |
+| [A14](#a14) | A masthead change on the roles page of a press or preprint server ends in an "Error" dialog and emails nobody | 🐞 | user-visible · crash: server | — |
+| [A15](#a15) | Merging an account that opened a discussion fails partway with no message and leaves the account behind | 🐞 | user-visible · crash: server | — |
+| [A16](#a16) | "Notify User" stays greyed out after "Generate Password" is unticked | 🐞 | minor | — |
+| [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | minor | — |
+| [A19](#a19) | "Remove User" on a user whose only role has not yet begun ends in "An unexpected error has occurred…" | 🐞 | user-visible | — |
+| [OPS1](#ops1) | On a French preprint server the "Roles" column prints raw codes for two roles | 🐞 | minor | — |
 | [A3](#a3) | A user removed from the journal stays in the list with no role | ❓ | minor | — |
 | [A8](#a8) | "Remove User" tells the user nothing, where "Remove Role" emails them | ❓ | minor | — |
 | [A10](#a10) | The Site Administrator's older grid offers "Disable User" and "Remove" on the administrator's own row | ❓ | latent | — |
@@ -900,39 +874,26 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — A manager's "Disable User" on a user they may not administer opens a window that refuses it** · 🐞 · low.
-On Settings › Users & Roles, a manager who is not the Site
-Administrator is offered "Disable User" (or "Enable User") on rows they
-may not administer. The manager can be a journal, press or server
-manager, or an editor. Those rows are the Site Administrator's, and
-those of users with a current role in a journal the manager does not
-manage.
-Choosing the item opens the "Disable {name}" window, which then
-refuses: "You do not have sufficient permissions to administer this
-user. In order to administer a user, you must either be site
-administrator, or administer all contexts that this user is enrolled
-in.", with only "Close". The account stays as it was.
-On the same rows the menu already leaves out "Login As" and "Merge
-user". Those two follow their own rule only loosely: they are hidden on
-some rows where they would work.
-Basis: probe, 2026-10-01. <sup>f-a1</sup>
+**A1 — Disabling offered where it is refused** · 🐞 · user-visible.
+A manager other than the Site Administrator sees "Disable User" (or
+"Enable User") on every row but their own, including the rows of users
+with a current role in a journal the manager does not manage and the Site
+Administrator's. The menu hides "Login As" and "Merge user" on those
+rows, but pressing "Disable User" there opens the window and then
+refuses with "You do not have sufficient permissions to administer this
+user…". The manager expects either the action to work or not to be
+offered.
+Basis: probe. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — A manager's "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred"** · 🐞 · low.
-On Settings › Users & Roles, a journal manager's list offers "Remove User"
-on the Site Administrator's row. "OK" in the "Remove" dialog brings an
-"Error" dialog, "An unexpected error has occurred. Please reload the page
-and try again.", and the administrator keeps every role.
-A manager may not remove a Site Administrator, and the app refuses with
-its reason: "You do not have sufficient permissions to administer this
-user. In order to administer a user, you must either be site
-administrator, or administer all contexts that this user is enrolled
-in." The page drops that message and tells the manager to reload and try
-again, which changes nothing: after a reload the row still offers
-"Remove User" and fails the same way. The proposed fix makes the dialog
-show the refusal; whether the menu should still offer "Remove User" on
-that row is left to a separate product decision.
-Basis: probe, 2026-09-30. <sup>f-a2</sup>
+**A2 — Removing the Site Administrator fails with an unexplained error** · 🐞 · user-visible.
+A manager's list offers "Remove User" on the Site Administrator's row.
+"OK" in the "Remove" dialog brings an "Error" dialog, "An unexpected
+error has occurred. Please reload the page and try again.", and the
+administrator keeps every role. The manager expects the action to be
+absent, or a message saying why it cannot be done; reloading changes
+nothing.
+Basis: probe. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — A removed user stays listed with no role** · ❓ · minor.
@@ -949,66 +910,36 @@ them.
 Basis: probe. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — Presses and preprint servers: the Users search box suggests searching for "Journal editor", a role they lack** · 🐞 · low.
-On Settings › Users & Roles, the search box above "Current Users" reads
-"Enter a user's name, role (e.g Journal editor), or affiliation" on a
-press and on a preprint server too. Neither has a role of that name: a
-press calls its editors "Press editor", and a preprint server has no
-editor role. A manager who searches for the suggested role gets "Current
-Users (0)". On a journal the example is right, since "Journal editor" is
-the journal's own role.
-The search itself works when the manager types the role as their press
-or server names it. The box read "Search User" in the first 3.5 release
-(3.5.0-0); the example came with 3.5.0-1.
-Basis: probe, 2026-10-01. <sup>f-a4</sup>
+**A4 — The search example names a journal role everywhere** · 🐞 · minor.
+The search box reads "Enter a user's name, role (e.g Journal editor), or
+affiliation" on a press and a preprint server too, where no role of that
+name exists (a press has "Press editor"; a preprint server has no editor
+role). The example should name a role of the app it is shown in.
+Basis: probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — Users & Roles: screen readers announce every user row's "…" button as a raw code** · 🐞 · low.
-On Settings › Users & Roles, "Users" tab, a screen reader announces the
-"…" button at the end of every row as "##userAccess.management.options##"
-instead of a word such as "Options"; the menu it opens reads normally.
-The manager gets the job done: the button opens the row's menu ("Edit",
-"Email", "Remove User", …) and every action works. The code shows because
-the button's name points to a text that exists in no language.
-`pkp/pkp-lib#12646`, open, reports the same fault on OMP 3.5.0 without a
-cause or a fix. This report adds the cause, a one-line fix tried on all
-three apps, and OJS, OPS and `main`, so the team can comment there or
-close one of the two as a duplicate.
-Basis: probe, 2026-10-01. <sup>f-a5</sup>
+**A5 — The row's action button has a raw code for a name** · 🐞 · minor.
+A screen reader announces the "…" button at the end of every row as
+"##userAccess.management.options##" instead of a word such as "Options";
+the menu it opens reads normally.
+Basis: probe. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — The "Disable User" and "Enable User" windows list roles the user no longer holds in the journal** · 🐞 · low.
-On Settings › Users & Roles, "Disable User" opens a window headed
-"Disable {full name}" with a line "Current Roles : {roles}". The line
-names every role the user has held in the journal, ended ones included,
-while the list's "Roles" column shows only the current ones. A user
-removed from the journal has nothing under "Roles", yet the window says
-"Current Roles : Reader, Author".
-The "Enable {full name}" window has the same line. Disabling ends no
-role, so that window is wrong only for a disabled user who also has an
-ended role. The space before the colon shows for every user. The fix is
-one line in the window's script and one character in the English text.
-Basis: probe, 2026-10-01. <sup>f-a6</sup>
+**A6 — The disable window lists ended roles** · 🐞 · minor.
+The line under "Disable {full name}" reads "Current Roles : {roles}" with
+a space before the colon, and names every role the user ever held in the
+journal, ended ones included, although the list's "Roles" column leaves
+ended roles out.
+Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — After "Enable User", the next "Disable User" offers the enabling reason and the Login page quotes it** · 🐞 · medium.
-On Settings › Users & Roles, "Enable User" opens with the old disabling
-reason in "Reason for enabling user". Whatever that box holds on "OK" is
-saved as the reason for disabling the account, although the account is
-now enabled. The next "Disable User" offers that text, and if nobody
-clears it the Login page tells the user their account was disabled "for
-the following reason:" followed by the reason for enabling it.
-The two boxes have different readers. The reason for disabling is shown
-to the user when they try to sign in, by design. The reason for enabling
-is a note to staff: its label and its note address the manager, and the
-user never sees it while the account is enabled. The fault shows that
-staff note to the user as the reason they were disabled.
-Every account enabled through this window carries text into its next
-disabling unless the manager empties the box, whether they typed an
-enabling reason or left the prefilled one alone. Clearing or retyping
-the box at each step avoids it. The fix is to stop prefilling both boxes and to stop saving the
-enabling text as the disabling reason.
-Basis: probe, 2026-10-01. <sup>f-a7</sup>
+**A7 — The enabling reason becomes the next disabling reason** · 🐞 · minor.
+"Enable User" opens with the old disabling reason in "Reason for enabling
+user", and whatever the box holds on "OK" is stored as the account's
+reason. The next "Disable User" offers that text, and if nobody clears
+it the Login page tells the user their account was disabled "for the
+following reason:" followed by the reason for enabling it.
+Basis: probe. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — Removal from the journal sends no word** · ❓ · minor.
@@ -1021,21 +952,14 @@ once in all? Lean: yes, one email listing the roles ended.
 Basis: probe. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — Merging a section editor's account unassigns them from their sections, so new submissions arrive without that editor** · 🐞 · medium.
-"Merge user" is for one person who has two accounts: a manager merges
-the duplicate (the merged account) into the account the person keeps
-(the kept account). When the merged account is an editor assigned to a
-section (a series on a press), the merge moves its roles and its places
-on submissions already in progress to the kept account, but not the
-section assignment. Afterwards the section's "Edit" window no longer
-lists the merged account, and the kept account is not ticked as the
-section's editor. Nothing on screen says so.
-From then on, new submissions to that section are not assigned to that
-person. If they were the section's only editor, new submissions arrive
-with no editor, and the managers receive the usual "A new submission
-needs an editor to be assigned" email. Otherwise the section's other
-editors are assigned and nobody is told that one is missing.
-Basis: probe, 2026-10-01. <sup>f-a9</sup>
+**A9 — A merge drops the merged account's section assignments** · 🐞 · latent.
+Merging an account that edits one of the journal's sections moves its
+roles, review assignments and participations to the chosen account but
+not its section assignment: in the section's "Edit" window the merged
+editor's box is gone and the chosen account's stays unticked, so the
+section loses that editor until a manager ticks the chosen account by
+hand.
+Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — The administrator can disable their own account** · ❓ · latent.
@@ -1048,122 +972,69 @@ as the list does? Lean: yes.
 Basis: probe. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — Users & Roles in French (Canada): the Users tab and the "Invite to a role" pages show raw codes** · 🐞 · low.
-In the French (Canada) interface, the "Users" tab of Settings › Users &
-Roles prints raw codes instead of French text: the search box
-"##userAccess.search##", the Invitations heading
-"##invitation.header## (0)" and its button
-"##invitation.inviteToRole.btn##", the Invitations columns
+**A11 — The French list shows raw codes** · 🐞 · minor.
+In the French interface the "Users" tab prints raw codes instead of
+French text: the search box "##userAccess.search##", the Invitations
+heading "##invitation.header##", the "Invite to a role" button
+"##invitation.inviteToRole.btn##", the Invitations table's columns
 "##INVITATION.TABLEHEADER.NAME##" and "##INVITATION.HEADER##", and the
-user list's "Start Date" column "##USERACCESS.TABLEHEADER.STARTDATE##".
-The "Invite to a role" pages behind that button are codes almost
-throughout: the step names, the field help, every "next" button and
-the confirmation window. The email step opens with an empty subject and
-message. A manager who sends it anyway does invite the person, who
-receives the English invitation email, which the manager never saw.
-Everything works, and switching the interface to English shows every
-text. About twenty languages, French (France) among them, have these
-texts.
-Basis: probe, 2026-10-01. <sup>f-a11</sup>
+list's "Start Date" column "##USERACCESS.TABLEHEADER.STARTDATE##". The row
+button's name is A5's raw code in every app and language.
+Basis: probe. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — Users & Roles: screen readers cannot tell a disabled account or an ORCID holder from any other user** · 🐞 · low.
-On Settings › Users & Roles, "Users" tab, a red crossed-out person icon
-follows the name of a disabled account, and the ORCID icon follows the
-name of an account with an ORCID iD. The icons have no text
-alternative, so a screen reader reads the name alone: a disabled account
-sounds like an enabled one, and an ORCID holder like any other user.
-Every task on the list still works. A screen-reader user can still
-find the disabled accounts, but only by opening the rows' menus one by
-one.
-This is a gap in the list that came with 3.5, not a regression: 3.4's
-user grid showed neither status to anyone, sighted or not.
-Basis: probe, 2026-10-01. <sup>f-a12</sup>
+**A12 — The status icons have no name for a screen reader** · 🐞 · minor.
+In the list's "Name" cell a screen reader hears the ORCID icon and the red
+disabled icon as unnamed images, so without sight a disabled account
+cannot be told from an enabled one, nor an account with an ORCID iD from
+one without. Each icon should carry a name, such as "ORCID iD" and
+"Disabled".
+Basis: probe. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — "Merge user" and wizard user lists show no roles after a 3.4 upgrade or for a journal's creator, but list a just-ended role** · 🐞 · low.
-Two older user lists leave roles out of their "Roles" column: the
-"Merge user" window, opened from Settings › Users & Roles, and the
-"Users" tab of a journal's (press's, server's) Settings wizard under
-Administration. A role stored without a start date is missing from the
-user's "Roles" cell, while Users & Roles names it.
-On an install upgraded from 3.4, no role given before the upgrade has a
-start date, so the column is blank on every row. That is every site that
-upgraded to 3.5 rather than installing it new, which is most sites
-running 3.5. On a new install, only the administrator who created a
-journal has a blank cell, for their manager role there.
-The wizard's "Users" tab also lists a role that has just ended. When the
-administrator unticks a role in "Edit User" and presses "OK", "User
-edited." shows, but the user's row still lists the role until the page
-is reloaded.
-Nothing is lost: the merge moves the merged account's roles to the
-account kept, and the role edit is saved. Users & Roles, or a reload,
-shows the real roles.
-Basis: probe, 2026-10-01. <sup>f-a13</sup>
+**A13 — The older lists show no role for the Site Administrator** · 🐞 · minor.
+In the "Merge user" window and on the Settings wizard's "Users" grid the
+Site Administrator's row shows nothing under "Roles", while the Users &
+Roles list names their manager role ("Journal manager", "Press manager",
+"Preprint Server manager") with an empty "Start Date". The grid still
+offers "Remove" on that row. The lists should agree on the roles an
+account holds.
+Basis: probe. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — On presses and preprint servers, a masthead change shows a raw error and emails nobody** · 🐞 · medium · crash: server.
-On a press or preprint server, a manager changes whether a member
-appears on the masthead, on that member's roles page. An "Error" dialog
-opens, naming a missing email template and a migration script. The app
-fails on the server while sending the member's notice: the new choice
-is saved, but the member is not emailed, and nothing on screen can send
-it.
-On a press, "Manage Emails" lists "User Role Masthead Visibility Update
-Notification", but its "Edit" greys the page behind a spinner that never
-ends, so the press cannot read or change that email. A preprint server
-does not list the email at all. A journal is not affected: OJS ships
-this email's template.
-The template is missing on every new installation of the current
-development code, and on every site upgraded to it from 3.4 or from a
-3.5 release before 3.5.0-4. Sites upgraded from 3.5.0-4 or later keep
-the template they already have. Unless it is fixed before the next
-release, every press and preprint server installed from that release,
-or upgraded to it from before 3.5.0-4, has the fault.
-Same fault: [User invitations' OMP1](U06-user-invitations.md#omp1) (the roles page and "Invite to a role") and [Emails management's OMP1](U56-emails-management.md#omp1).
-Basis: probe, 2026-09-30. <sup>f-a14</sup>
+**A14 — A masthead change on a press or preprint server ends in an error** · 🐞 · user-visible · crash: server.
+On a press or preprint server, confirming a masthead change on the
+user's roles page (Rule 8) brings an "Error" dialog, "Email template
+USER_ROLE_MASTHEAD_UPDATE not found. The migration script
+I11800_AddUserRoleMastheadUpdateEmail needs to be run.": the app fails
+while sending the notice. The choice is kept after a reload, and the
+user gets no email. The page belongs to *User invitations*, whose
+[OMP1](U06-user-invitations.md#omp1) holds the full entry.
+Basis: probe. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — Merging a user recorded as a discussion's or task's creator stops halfway with no message, and the account still signs in** · 🐞 · medium · crash: server.
-A manager merges one user account (the merged account) into another (the
-chosen account). The app fails on the server partway through. After "OK"
-in the "Confirm" dialog nothing seems to happen: the dialog and the
-"Merge user" window stay open, and no message appears.
-By then the merge has already handed the merged account's roles,
-submission assignments and messages to the chosen account. But the
-merged account is not deleted. It no longer appears under "Users &
-Roles", yet it still signs in with its username and password, and its
-discussions still name it as their creator. After a reload the merge
-looks done.
-This happens whenever the merged account is recorded as the creator or
-starter of a discussion or task on any submission. That covers anyone
-who opened a discussion or added a task, and any editor who recorded a
-recommendation, which opens a discussion in the editor's name. It also
-covers any participant who was sent a message with the Participants
-list's "Notify", which records the recipient as the creator. Merging an
-account that only takes part in someone else's discussion works. No
-release is affected: the fault is only on `main`, which is not yet
-released.
-Basis: probe, 2026-09-30. <sup>f-a15</sup>
+**A15 — Merging an account that opened a discussion fails partway** · 🐞 · user-visible · crash: server.
+A manager merges an account that once opened a discussion on a
+submission. After "OK" in the "Confirm" dialog nothing seems to happen:
+the dialog and the "Merge user" window stay open and no message appears,
+because the app failed partway through the merge. Behind them the roles
+and the submission's participant place have moved to the chosen account,
+but the merged account is not deleted: it remains with no role, still
+signs in with its old username and password, and the discussion still
+names it as its creator. Merging an account that only takes part in
+someone else's discussion works.
+Basis: probe. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — Add User: unticking "Generate Password" leaves "Notify User" greyed out, so no welcome email can be chosen** · 🐞 · low.
+**A16 — "Notify User" stays locked after "Generate Password" is unticked** · 🐞 · minor.
 On "Add User", ticking "Generate Password" and then unticking it empties
-the password boxes and lets them be typed in again, but "Notify User"
-stays greyed out and unticked, so the welcome email cannot be chosen for
-a typed password until the window is closed and opened again.
-On `main` and 3.5 only the Site Administrator meets this window, at
-Administration › "Hosted Journals" › a journal's "Settings wizard" ›
-tab "Users". Journal managers there add people with "Invite to a role"
-on Settings › Users & Roles, which does not use this window. On 3.4 and
-3.3 this window is also every journal manager's "Add User" on Settings ›
-Users & Roles.
-The fix is one call in one shared script, plus rebuilding each app's
-bundled script file.
-Basis: probe, 2026-10-01. <sup>f-a16</sup>
+and opens the password boxes again, but "Notify User" stays greyed out
+and unticked, so the welcome email cannot be chosen for a typed password
+until the window is closed and opened again.
+Basis: probe. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — The grid's row still lists a role just ended** · 🐞 · low.
+**A17 — The grid's row still lists a role just ended** · 🐞 · minor.
 On the Settings wizard's "Users" tab, the Site Administrator unticks
 "Author" and ticks "Reader" on "Edit User" and presses "OK". Both changes
 are saved and "User edited." shows, but the user's row, which the grid
@@ -1171,7 +1042,7 @@ refreshes, lists both "Author" and "Reader" under "Roles" and keeps doing so.
 Only reloading the page shows "Reader" alone, and a reload made the
 moment the save ends can still list both. The Site Administrator is shown
 a role that has already ended as if it were current.
-Basis: test run, 2026-10-01. <sup>f-a17</sup>
+Basis: test run, 2026-09-26. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — "Roles" goes by the end date, not by whether the role is held today** · ❓ · minor.
@@ -1189,21 +1060,14 @@ it; a role still to begin may stay listed if its row says it has not begun.
 Basis: probe. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — A manager cannot end a role that starts on a future date: "Remove User" fails or leaves it in place** · 🐞 · medium.
-A manager can invite someone to a role that starts on a later date. On
-Settings › Users & Roles, the list then shows the role with that start
-date, and the row offers "Remove User". When the role is the user's only
-one here, "OK" in the "Remove" dialog brings an "Error" dialog, "An
-unexpected error has occurred. Please reload the page and try again.",
-and the role stays. When the user also holds current roles, "OK" ends
-those without a message and keeps the future role, so the user "removed"
-from the journal still takes up that role on its start date.
-The roles page cannot end it either. When the future role is the
-user's only role, "Remove Role" answers "You cannot remove the role. At
-least one role must be assigned to the user." When the user holds other
-roles too, "Remove Role" on the future role ends in "Error" / "The
-requested resource was not found."
-Basis: probe, 2026-09-30. <sup>f-a19</sup>
+**A19 — Removing a user whose only role has not begun fails with an unexplained error** · 🐞 · user-visible.
+A user whose only role here starts on a future date is offered "Remove
+User". "OK" in the "Remove" dialog brings an "Error" dialog, "An
+unexpected error has occurred. Please reload the page and try again.";
+the role stays and the menu keeps offering "Remove User", after a reload
+too. The manager expects the role to end, or a message saying why it
+cannot; the same failure as [A2](#a2) on the Site Administrator's row.
+Basis: probe. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — A role ending on a future date cannot be ended early** · ❓ · user-visible.
@@ -1222,12 +1086,12 @@ Basis: probe. <sup>f-a20</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — French role names missing on a preprint server** · 🐞 · low.
+**OPS1 — French role names missing on a preprint server** · 🐞 · minor.
 In the French interface of a preprint server the "Roles" column prints
 "##default.groups.name.manager##" and
 "##default.groups.name.sectionEditor##" for the manager and Moderator
 roles, where a journal and a press print French role names.
-Basis: probe, 2026-10-01. <sup>f-ops1</sup>
+Basis: probe. <sup>f-ops1</sup>
 
 ---
 
@@ -1977,13 +1841,11 @@ manager role and an empty "Start Date".
 `canLoginAs` / `canMergeUsers`; `UserGridHandler::editDisableUser()`
 refuses unless `getAdministrationLevel()` is `FULL` (note n). Live-probed
 2026-09-25: note td8.
-Issue report: [pkp-e2e#72](https://github.com/jardakotesovec/pkp-e2e/issues/72) ([docs/issues/U53-A1-disable-user-offered-then-refused.md](../issues/U53-A1-disable-user-offered-then-refused.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Code read 2026-09-25: note td9. The remove guard is only
 `user.groups.find(g => g.dateEnd === null)` and not-own-row. Live-probed
 2026-09-25: note td9.
-Issue report: [pkp-e2e#48](https://github.com/jardakotesovec/pkp-e2e/issues/48) ([docs/issues/U53-A2-remove-site-administrator-unexplained-error.md](../issues/U53-A2-remove-site-administrator-unexplained-error.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Seen 2026-09-23 (journal-identity claim check K4-3); a reviewer
@@ -2000,14 +1862,12 @@ overrides it. OMP's editor group is `default.groups.name.editor` "Press
 editor"; OPS installs no editor group. Live-probed 2026-09-25: the same
 text on all three apps; the press's roles include "Press editor", the
 preprint server's no editor.
-Issue report: [pkp-e2e#187](https://github.com/jardakotesovec/pkp-e2e/issues/187) ([docs/issues/U53-A4-users-search-example-journal-role.md](../issues/U53-A4-users-search-example-journal-role.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-25, all three apps, English interface:
 every row's "…" button is named `##userAccess.management.options##` (25 of
 25 on the seeded journal's first page), and the menu reads normally. Seen
 first on 2026-09-05 on OPS (review-stage claim check). Mechanism: note q.
-Issue report: [pkp-e2e#188](https://github.com/jardakotesovec/pkp-e2e/issues/188) ([docs/issues/U53-A5-users-row-button-raw-code-name.md](../issues/U53-A5-users-row-button-raw-code-name.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-25, all three apps: a throwaway Author
@@ -2017,11 +1877,9 @@ read "Current Roles : Author, Section editor". Code: `disableUser()` joins
 `user.groups.map(g => g.name)`, every assignment in the context
 (`preloadGroups()`), without the `dateEnd` filter the "Roles" cell uses;
 `user.disabledModal.description` is "Current Roles : {$roles}".
-Issue report: [pkp-e2e#157](https://github.com/jardakotesovec/pkp-e2e/issues/157) ([docs/issues/U53-A6-disable-window-lists-ended-roles.md](../issues/U53-A6-disable-window-lists-ended-roles.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Code: note h. Live-probed 2026-09-25: note td6.
-Issue report: [pkp-e2e#156](https://github.com/jardakotesovec/pkp-e2e/issues/156) ([docs/issues/U53-A7-enable-reason-becomes-disable-reason.md](../issues/U53-A7-enable-reason-becomes-disable-reason.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Code read 2026-09-25: `UserGridHandler::removeUser()` writes
@@ -2042,7 +1900,6 @@ assignment of a new submission to that section uses (code), so after
 such a merge new submissions there would reach neither account; not
 seen, since only the seeded journal assigns editors automatically and
 its accounts are never merged in testing.
-Issue report: [pkp-e2e#193](https://github.com/jardakotesovec/pkp-e2e/issues/193) ([docs/issues/U53-A9-merge-drops-section-editor-assignment.md](../issues/U53-A9-merge-drops-section-editor-assignment.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Code: note k. Live-probed 2026-09-25: note td11. The Vue list
@@ -2050,7 +1907,6 @@ guards every action but "Edit" and "Email" with not-own-row.
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-25: note td13. Mechanism: note u.
-Issue report: [pkp-e2e#195](https://github.com/jardakotesovec/pkp-e2e/issues/195) ([docs/issues/U53-A11-users-french-raw-codes.md](../issues/U53-A11-users-french-raw-codes.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-25, all three apps: in the list's
@@ -2058,7 +1914,6 @@ accessibility tree a disabled account's and an ORCID holder's "Name" cell
 read the name, then an image with no name. The icons
 (`UserAccessManagerCellName.vue`, note g) carry no `aria-label` and no
 `aria-hidden`.
-Issue report: [pkp-e2e#196](https://github.com/jardakotesovec/pkp-e2e/issues/196) ([docs/issues/U53-A12-users-status-icons-unnamed.md](../issues/U53-A12-users-status-icons-unnamed.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25, all three apps: the "Merge user"
@@ -2068,7 +1923,6 @@ manager" ("Press manager", "Preprint Server manager") with no start date.
 The grids' "Roles" column lists active and future roles (note i), and the
 manager enrolment a new journal gives the Site Administrator has no start
 date, which fits the empty cell.
-Issue report: [pkp-e2e#198](https://github.com/jardakotesovec/pkp-e2e/issues/198) ([docs/issues/U53-A13-merge-grid-admin-roles-empty.md](../issues/U53-A13-merge-grid-admin-roles-empty.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-25, OMP and OPS: after "Confirm" on a
@@ -2078,7 +1932,6 @@ answered 500 and the dialog quoted showed; after a reload the choice read
 "Your journal masthead visibility has been updated". Presses and preprint
 servers ship without the `USER_ROLE_MASTHEAD_UPDATE` template (*User
 invitations*, note f-omp1).
-Issue report: [pkp-e2e#12](https://github.com/jardakotesovec/pkp-e2e/issues/12) ([docs/issues/U53-A14-masthead-change-error-emails-nobody.md](../issues/U53-A14-masthead-change-error-emails-nobody.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-25, all three apps, three times each:
@@ -2092,7 +1945,6 @@ ticked, signed in with its old password (landing on the journal's home
 page), and the discussion read "Created by: {old username}". An account
 that was only a participant in someone else's discussion merged cleanly:
 200, deleted, its sign-in refused.
-Issue report: [pkp-e2e#10](https://github.com/jardakotesovec/pkp-e2e/issues/10) ([docs/issues/U53-A15-merge-account-opened-discussion-fails.md](../issues/U53-A15-merge-account-opened-discussion-fails.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Live-probed 2026-09-25, all three apps: after "Generate
@@ -2100,7 +1952,6 @@ Password" was ticked and then unticked, the password boxes were empty and
 open, "Notify User" disabled and unticked. Code:
 `UserDetailsFormHandler::setGenerateRandom()` unticks with
 `.attr('disabled', '')`, which leaves the `disabled` attribute in place.
-Issue report: [pkp-e2e#200](https://github.com/jardakotesovec/pkp-e2e/issues/200) ([docs/issues/U53-A16-notify-user-locked-after-generate-password.md](../issues/U53-A16-notify-user-locked-after-generate-password.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Test run 2026-09-26 (Rule 24; scenario 8), OJS and OPS: after
@@ -2119,7 +1970,6 @@ role whose `date_end >= now` at one-second precision, while
 own second, so the refresh after "OK", or a reload within that second,
 still lists the ended role; the Users & Roles list's `withActive`
 compares with `>` and does not.
-Issue report: [pkp-e2e#198](https://github.com/jardakotesovec/pkp-e2e/issues/198) ([docs/issues/U53-A13-merge-grid-admin-roles-empty.md](../issues/U53-A13-merge-grid-admin-roles-empty.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-30, all three apps: the list as note b
@@ -2149,7 +1999,6 @@ after a reload, the row read the role and 2027-06-01 and the menu offered
 menu's guard `user.groups.find(g => g.dateEnd === null)` (note c) counts
 a role not yet begun, while `removeUser()` ends only roles active now and
 answers `grid.user.userNoRoles` when there are none.
-Issue report: [pkp-e2e#58](https://github.com/jardakotesovec/pkp-e2e/issues/58) ([docs/issues/U53-A19-remove-user-role-not-yet-begun-kept.md](../issues/U53-A19-remove-user-role-not-yet-begun-kept.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Live-probed 2026-09-30, OJS and OMP, two runs each, users
@@ -2170,7 +2019,6 @@ role with an end date as removed.
 interface; the same raw moderator key shows on the preprint server's
 French "Editorial Masthead" (2026-09-24). Mechanism: note u; driven by
 td14. Live-probed 2026-09-25: note td14.
-Issue report: [pkp-e2e#124](https://github.com/jardakotesovec/pkp-e2e/issues/124) ([docs/issues/U57-A8-omp-ops-french-texts-internal-names.md](../issues/U57-A8-omp-ops-french-texts-internal-names.md)).
 
 ## Reference — entry points & surfaces
 

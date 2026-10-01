@@ -765,49 +765,6 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
-- **Planned**:
-  - the guard for A1 and A5 (issue report
-    `docs/issues/U54-A1-A5-roles-list-stale-after-change.md`): on the
-    "Roles" tab, a pressed stage box flipping at once and pressable again,
-    a removed role leaving the list, and the first row offering "Edit" and
-    "Remove"
-  - the guard for A10 (issue report
-    `docs/issues/U54-A10-role-name-spaces-window-broken.md`): a role name
-    of spaces refused in a window that keeps its stage boxes and working
-    script, the corrected "OK" saving the role (and an edit renaming the
-    same role)
-  - the guard for A2 and A3 (issue report
-    `docs/issues/U54-A2-A3-manager-role-stages-differ-until-saved.md`):
-    the manager-level roles' rows showing every stage before any save,
-    and "OK" with nothing changed leaving their stages as they were
-  - the guard for A14 (issue report
-    `docs/issues/U54-A14-users-tab-keeps-old-role-name.md`): a role renamed
-    on the "Roles" tab showing its new name on the "Users" tab, and in
-    "Invitations", without a reload
-  - the guard for A11 (issue report
-    `docs/issues/U54-A11-settings-role-window-ok-unticks-settings.md`): a
-    user whose only Settings role is the one they edit pressing "OK" in its
-    window and keeping "Permit changes to Settings" and the Settings pages
-  - the guard for A4 (issue report
-    `docs/issues/U54-A4-role-removal-warning-never-happens.md`): "Remove"
-    offered only on a created role nobody has held, and absent on a
-    default role and on a role with members
-  - the guard for A13 (issue report
-    `docs/issues/U54-A13-roles-list-order-changes.md`): a role saved on
-    the "Roles" tab keeping its place in the list, and a paged list showing
-    every role once
-  - the guard for A8 (issue report
-    `docs/issues/U54-A8-roles-stage-boxes-no-name.md`): each stage box of
-    the "Roles" list carrying an accessible name with its role and stage
-  - the guard for OPS1 (issue report
-    `docs/issues/U54-OPS1-open-content-login-box-not-kept.md`): on a
-    preprint server, "Users must be registered and log in to view open
-    access content." staying ticked after a reload, and a signed-out
-    visitor's "PDF" leading to the Login page
-  - the guard for A9 (issue report
-    `docs/issues/U54-A9-roles-filters-hide-after-choice.md`): after a
-    filter choice on the "Roles" list, the filters staying open beside the
-    filtered list
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -887,20 +844,20 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | The first row of each page of the "Roles" list has no "Edit" or "Remove" | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A2](#a2) | The manager role's row shows no stage, and the stage filter leaves it out | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A3](#a3) | Saving a manager-level role's window ticks every stage, unasked | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A4](#a4) | Removing a role warns that its members' assignments will be deleted, but a role with members is refused | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A8](#a8) | On the "Roles" list, a screen reader reads each stage box as a bare "checkbox", naming no role | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A9](#a9) | The Roles list hides its filters after each choice, so a filtered list looks like the whole list | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A10](#a10) | A role name of only spaces breaks the role window, and saving again shows a page of raw code | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
-| [A11](#a11) | "OK" in the window of a user's only Settings role takes the Settings pages away from everyone holding it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A13](#a13) | On PostgreSQL a saved role jumps to the end of the Roles list, and pages can repeat or skip roles | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A14](#a14) | After renaming a role, the Users tab keeps showing its old name until the page is reloaded | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [OMP1](#omp1) | In French a press's "Roles" list heads its External Review column with a code | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [OPS1](#ops1) | A preprint server's "log in to view open access content" box says "Saved", is not kept, and visitors still download preprints | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [OPS3](#ops3) | In French (Canada), a preprint server names its Moderator permission level "Éditeur-trice de série" (Series Editor) | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A1](#a1) | The first row of each page of the "Roles" list has no "Edit" or "Remove" | 🐞 | user-visible | — |
+| [A2](#a2) | The manager role's row shows no stage, and the stage filter leaves it out | 🐞 | minor | — |
+| [A3](#a3) | Saving a manager-level role's window ticks every stage, unasked | 🐞 | user-visible | — |
+| [A4](#a4) | "Remove" warns that members' assignments will be deleted, but a role with members is never removed | 🐞 | minor | — |
+| [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | user-visible · crash: server | — |
+| [A8](#a8) | A screen reader announces each stage box of the list only as "checkbox" | 🐞 | minor | — |
+| [A9](#a9) | After a filter entry is chosen the filters hide, and only the count line shows the list is filtered | 🐞 | minor | — |
+| [A10](#a10) | A role name of spaces is refused with a different notice while the page's script fails | 🐞 | minor · crash: script | — |
+| [A11](#a11) | "OK" in the window whose Settings box is greyed takes the Settings pages away from the role's holders | 🐞 | user-visible | — |
+| [A13](#a13) | The "Roles" list keeps no fixed order: a role just made can come first, without "Edit" or "Remove", a saved role moves down, and a paged list can show a role twice and another never | 🐞 | user-visible | test run (claude), 2026-09-29 — was ❓ |
+| [A14](#a14) | After a rename on the "Roles" tab, the "Users" tab shows the role's old name until a reload | 🐞 | minor | — |
+| [OMP1](#omp1) | In French a press's "Roles" list heads its External Review column with a code | 🐞 | minor | — |
+| [OPS1](#ops1) | "Users must be registered and log in to view open access content." is not kept on a preprint server | 🐞 | user-visible | — |
+| [OPS3](#ops3) | In French a preprint server's Moderator level reads "Éditeur-trice de série" (Series Editor) | 🐞 | minor | — |
 | [A6](#a6) | A role anyone has ever held can never be removed | ❓ | minor | — |
 | [A7](#a7) | "Abbreviation" is required, and no screen but the role's own window shows it | ❓ | minor | — |
 | [A12](#a12) | "Stage Assignment" was seen both hidden and on screen with every box greyed in the same four window states | ❓ | minor | — |
@@ -909,7 +866,7 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — The first row of each page has no "Edit" or "Remove"** · 🐞 · medium · crash: server.
+**A1 — The first row of each page has no "Edit" or "Remove"** · 🐞 · user-visible.
 Every row of the "Roles" list has a "Settings" arrow that opens "Edit"
 and "Remove", except the first row of each page. On a new journal that is
 normally the manager role, whose options therefore cannot be changed.
@@ -918,10 +875,10 @@ order (a role just made can come first, [A13](#a13)), the role that comes
 first there loses both actions instead, whatever it is; no other screen
 changes or removes a role. The manager expects every row to offer the
 same actions, or the manager role alone to be kept out on purpose.
-Basis: probe, 2026-10-01. <sup>f-a1</sup>
+Basis: probe. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — The manager role's row shows no stage** · 🐞 · medium.
+**A2 — The manager role's row shows no stage** · 🐞 · minor.
 The "Journal manager" ("Press manager") row shows every stage box empty,
 while the "Preprint Server manager" row shows its box ticked; the role's
 members open every stage in all three apps. Choosing a stage under "List
@@ -929,10 +886,10 @@ roles assigned to" leaves the manager role out on a journal and a press,
 and no stage's "Assign" offers it there, while a preprint server's
 Production stage does ([Stage participants](U35-stage-participants.md)).
 The list tells the manager that the most powerful role works nowhere.
-Basis: probe, 2026-10-01. <sup>f-a2</sup>
+Basis: probe. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — Saving a manager-level role ticks every stage** · 🐞 · medium.
+**A3 — Saving a manager-level role ticks every stage** · 🐞 · user-visible.
 The window of a Journal Manager-level role offers no stage box to tick,
 yet its "OK" stores every stage. After the manager changes only the
 name or an option of "Production editor", the row reads every stage
@@ -940,27 +897,20 @@ ticked instead of Copyediting and Production, the role starts being
 offered in a section's "Editorial Assignments", and its assigned members
 open the Submission and Review stages they were kept out of. Nothing on
 screen says the stages changed.
-Basis: probe, 2026-10-01. <sup>f-a3</sup>
+Basis: probe. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — Removing a role warns that its members' assignments will be deleted, but a role with members is refused** · 🐞 · low.
-A manager presses "Remove" on a role in Settings › Users & Roles ›
-"Roles". The "Confirm" window reads: "You are about to remove this role
-from this context. This operation will also delete related settings and
-all the users assignments to this role. Do you want to continue?"
-"OK" does not do that. A role that anyone holds or has held is not
-removed: the notice reads "Can't remove {role} role. Currently {n}
-user(s) is/are assigned to it." A role the journal was created with is
-not removed either, even when nobody holds it. The only role "OK"
-removes is one created on this page that nobody has ever held, and that
-role has no assignments to delete.
-Nothing is deleted. The manager is warned of a deletion that never
-happens, and learns only after "OK" that the role cannot be removed.
-"This context" is also a word no other screen uses for the journal.
-Basis: probe, 2026-10-01. <sup>f-a4</sup>
+**A4 — The removal warning describes what never happens** · 🐞 · minor.
+The "Confirm" window says the removal "will also delete related settings
+and all the users assignments to this role", but "OK" on a role anyone
+holds or has held refuses with "Can't remove {role} role…", and every
+role the journal was created with is refused whatever its members. The
+warning also speaks of "this context", a word no other screen uses for
+the journal.
+Basis: probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — The list does not show a change it has saved** · 🐞 · medium · crash: server.
+**A5 — The list does not show a change it has saved** · 🐞 · user-visible · crash: server.
 A pressed stage box keeps its old look until the page is reloaded,
 though the notice says the change was saved, so the manager presses it
 again. After a tick, the second press fails on the server: no notice
@@ -970,7 +920,7 @@ unassigned from … stage." again while the box still looks ticked. After
 a successful "Remove" the role stays listed until a reload, and pressing
 one of its boxes, or its "Remove" › "OK" again, fails on the server with
 no message. The manager expects the list to show what is stored.
-Basis: probe, 2026-10-01. <sup>f-a5</sup>
+Basis: probe. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — A role ever held can never be removed** · ❓ · minor.
@@ -993,64 +943,46 @@ the field become optional or go? Lean: optional, since it has no reader.
 Basis: probe. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — On the "Roles" list, a screen reader reads each stage box as a bare "checkbox", naming no role** · 🐞 · low.
-On Settings › Users & Roles › "Roles", each role's row has one box per
-workflow stage, which the manager ticks to let the role work in that
-stage. The boxes have no label. A screen reader announces each one only
-as "checkbox" and whether it is checked, so a manager who uses one cannot
-tell which role a box belongs to.
-The setting still works, and the role's "Edit" window offers the same
-stages as labelled boxes under "Stage Assignment", so the stages can be
-set there instead.
-Basis: probe, 2026-10-01. <sup>f-a8</sup>
+**A8 — The stage boxes have no name for a screen reader** · 🐞 · minor.
+The list's stage boxes carry no name a screen reader can read, neither
+the role nor the stage, so each is announced only as "checkbox". A
+manager who uses a screen reader cannot tell which role and stage a box
+sets.
+Basis: probe. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The Roles list hides its filters after each choice, so a filtered list looks like the whole list** · 🐞 · low.
-On Settings › Users & Roles › "Roles", "Search" shows two filters above
-the list: "List roles assigned to" and "With permission level set to".
-When a manager chooses an entry in either filter, the list shows only the
-matching roles, and both filters hide again behind "Search". The filters
-stay hidden when the manager switches to another tab and comes back.
-Nothing on screen then says the list is filtered. Its count line gives
-only the filtered total ("1 - 8 of 8 items"), so a manager who comes back
-to the tab can take the shorter list for all the journal's roles.
-The same happens after each search on the older grid lists that have a
-"Search" link above them, such as "Installed Plugins" under Settings ›
-Website › Plugins.
-Basis: probe, 2026-10-01. <sup>f-a9</sup>
+**A9 — A filtered list does not say it is filtered** · 🐞 · minor.
+After an entry is chosen under "List roles assigned to" or "With
+permission level set to", both lists hide again behind "Search", and the
+list shows only the matching roles with nothing but its count line to
+say so, also after switching to another tab and back. A manager who
+comes back to the tab can take the shorter list for all the journal's
+roles.
+Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — A role name of only spaces breaks the role window, and saving again shows a page of raw code** · 🐞 · medium · crash: script.
-A manager types only spaces as a role's "Role Name" or "Abbreviation"
-and presses "OK". The server refuses it, and the page's own script fails
-in the browser. The window stays open under "Errors occurred processing
-this form", but its "Stage Assignment" boxes are gone and it no longer
-works.
-The manager fixes the name and presses "OK" again. Instead of closing
-the window, the browser replaces the whole Users & Roles page with raw
-code. A new role is saved anyway, under the corrected name but without
-the stages ticked before the refusal. An edited role is not changed at
-all, and nothing says so.
-Basis: probe, 2026-10-01. <sup>f-a10</sup>
+**A10 — A role name of spaces fails the page's script** · 🐞 · minor · crash: script.
+A "Role Name" or "Abbreviation" of spaces passes the window's own check,
+which refuses an empty box with "This field is required." under it.
+"OK" then keeps the window open with a different refusal at its top,
+"Errors occurred processing this form", naming the "role abbreviature",
+while the page's own script fails behind it. The manager expects the
+same refusal as for an empty box.
+Basis: probe. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — "OK" in the window of a user's only Settings role takes the Settings pages away from everyone holding it** · 🐞 · medium.
-Some users have exactly one role with "Permit changes to Settings"
-ticked: an Editor whose only role is "Journal editor" ("Press editor"),
-for example. When such a user opens that role's window on Settings ›
-Users & Roles › "Roles", the box is ticked and greyed out, so they
-cannot untick it. Yet "OK" in that window, even with nothing changed,
-says "Your changes have been saved." and stores the role with the box
-unticked. The user's next Settings page reads "The current role does not
-have access to this operation.", and so does the next Settings page of
-everyone else who holds that role.
-So such a user cannot save any change to their own role, a new name
-included. Every "OK" takes Settings away, and "Cancel" throws the change
-away.
-On 3.5, a Journal Manager pressing "OK" in the "Journal manager" window
-locks every journal manager out in the same way, and so does the site
-administrator.
-Basis: probe, 2026-10-01. <sup>f-a11</sup>
+**A11 — "OK" in a manager's own role window takes Settings away** · 🐞 · user-visible.
+In the window of the only role that gives the signed-in manager the
+Settings pages, "Permit changes to Settings" is ticked and greyed out,
+so the manager expects it to stay on. "OK" in that window, even with
+nothing changed, stores the role with the box unticked: the manager's
+next Settings page is the access-denied page, "The current role does not
+have access to this operation.", and so is every other holder's. A
+Journal Manager's "Edit" of the role then shows the box unticked and
+open. It happens on "Journal editor" ("Press editor") for an Editor who
+holds no other manager-level role, and on a role created at the manager
+level for its only holder.
+Basis: probe. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — "Stage Assignment" hidden, or shown with every box greyed** · ❓ · minor.
@@ -1066,59 +998,63 @@ ended.
 Basis: probe. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — On PostgreSQL a saved role jumps to the end of the Roles list, and pages can repeat or skip roles** · 🐞 · low.
-The "Roles" list on Settings › Users & Roles keeps no fixed order on a
-PostgreSQL install. When a manager changes a role's options in its window
-and presses "OK", that role moves to the end of the list, and it stays
-there after a reload. A role the manager has just created is usually
-listed last, but on a site with several journals it can be listed first.
-With the list on more than one page, a role saved between reading page 1
-and page 2 (by another manager, or in another tab) makes page 2 show a
-role page 1 already showed, while another role appears on neither page.
-A reload shows every role again.
-Installs on MySQL keep the roles in the order they were created.
-Basis: probe, 2026-10-01. <sup>f-a13</sup>
+**A13 — The "Roles" list keeps no fixed order** · 🐞 · user-visible.
+The list keeps no fixed order, on a journal, a press and a preprint
+server alike. A role just made with "Create New Role" can be listed
+first, above "Journal manager": a Journal Manager who creates "Data
+editor", reloads the page and opens the "Roles" tab finds it as the
+first row, with no "Edit" or "Remove" ([A1](#a1)), so it can be neither
+changed nor removed, while "Journal manager" below it now offers both.
+How often this happens depends on the installation, not on anything the
+manager does: on one test installation, where the automated tests create
+a role at the same point each time, it came first every time; on
+another, about once in eighty new journals.
+Saving a role's window usually moves its row down the list (Rule 2), so
+the order a manager has learned changes after any "OK". A new journal's
+own roles do not always come in the order of the roles table either.
+Once, a new preprint server with nothing saved on it listed "Author",
+"Reader", "Editorial Board Member", "Preprint Server manager" and
+"Moderator": "Author" had no "Edit" or "Remove", and the manager row had
+both. With the list on more than one page (Rule 4), each page takes its
+rows from the list in whatever order it has when that page opens, so the
+second page can repeat a role the first showed and leave another role off
+both. Expected: a fixed order, the installed roles first in the table's
+order and created roles after them.
+Re-checked: test run (claude), 2026-09-29 — was ❓ (whether the list
+should keep a fixed order); a defect, since a role just made can land
+first and then cannot be edited or removed.
+Basis: probe; test run; code (the pages). <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — After renaming a role, the Users tab keeps showing its old name until the page is reloaded** · 🐞 · low.
-A manager renames a role in its "Edit" window on Settings › Users &
-Roles › "Roles". The tab says "Your changes have been saved." and lists
-the new name. But the "Users" tab of the same page, opened without a
-reload, still shows the old name in the "Roles" cell of every member of
-that role. The "Invitations" list at the top of the "Users" tab keeps the
-old name for a pending invitation to the role in the same way.
-The rename is saved, and a reload of the page shows the new name in both
-lists. Until then the manager sees a role name the journal no longer
-has, and may think the rename did not take.
-Basis: probe, 2026-10-01. <sup>f-a14</sup>
+**A14 — The "Users" tab keeps a renamed role's old name** · 🐞 · minor.
+After a role is renamed in its "Edit" window, the "Roles" tab reads "Your
+changes have been saved." and lists the new name, but the "Users" tab of
+the same page, opened without a reload, still shows the old name in its
+members' rows under "Roles": Quinn Ashdown's row reads "Editorial Board Member"
+after the role became "Advisory Board". Only a reload of the page shows
+the new name. The manager sees a role name the journal no longer has.
+Basis: test run. <sup>f-a14</sup>
 
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — A code heads the External Review column in French** · 🐞 · low.
+**OMP1 — A code heads the External Review column in French** · 🐞 · minor.
 In the French interface a press's "Roles" list heads its External Review
 column "##workflow.review.externalReview##", while the other columns
 read "Soumission", "Évaluation interne", "Révision" and "Production". A
 journal's list prints a French name for every column.
-Basis: probe, 2026-10-01. <sup>f-omp1</sup>
+Basis: probe. <sup>f-omp1</sup>
 
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — A preprint server's "log in to view open access content" box says "Saved", is not kept, and visitors still download preprints** · 🐞 · medium.
+**OPS1 — The open access sign-in box is not kept on a preprint server** · 🐞 · user-visible.
 A preprint server's "Site Access Options" tab offers "Users must be
 registered and log in to view open access content." under "View Preprint
 Content". Ticked and saved, the tab says "Saved", but opened again the
 box is unticked, and signed-out visitors still open every posted
 preprint's files. A journal and a press keep the box and apply it.
-Two things are broken. The server never stores the choice, and no code
-on a preprint server checks it, so a stored value would change nothing
-either.
-The proposed fix makes the box work as it does on a journal and a press:
-the choice is stored, and a signed-out visitor who opens a preprint's
-file is sent to the Login page. Removing the box instead would leave a
-preprint server with no way to ask readers to register before they read.
-Basis: probe, 2026-10-01. <sup>f-ops1</sup>
+Basis: probe. <sup>f-ops1</sup>
 
 <a id="ops2"></a>
 **OPS2 — The "Reviewer" level on a preprint server** · ❓ · minor.
@@ -1140,22 +1076,13 @@ page for the role's holders.
 Basis: probe. <sup>f-ops2</sup>
 
 <a id="ops3"></a>
-**OPS3 — In French (Canada), a preprint server names its Moderator permission level "Éditeur-trice de série" (Series Editor)** · 🐞 · low.
-In French (Canada) a preprint server's "Rôles" list reads
+**OPS3 — The Moderator level reads "Series Editor" in French** · 🐞 · minor.
+In the French interface a preprint server's "Roles" list reads
 "Éditeur-trice de série" (Series Editor, a press's level) in the
-"Niveau d'autorisation" cell of the Moderator row. The list's level
-filter and "Créer un nouveau rôle" offer the same name, and the user
-statistics page (Statistiques › "Utilisateurs-trices") uses it as the
-label of the row that counts the Moderators. In English all four read
-"Moderator".
-A manager who creates or reviews roles in French is told the server has
-series editors, a role it does not have, while the level itself works as
-a Moderator. Switching the interface to English shows the right name;
-nothing in French does.
-The wrong text is one entry in OPS's French (Canada) translation file,
-so a translator can correct it on PKP's Weblate, or a developer in the
-`.po` file.
-Basis: probe, 2026-10-01. <sup>f-ops3</sup>
+"Permission level" cell of the Moderator row; the manager row reads
+"Administrateur-trice du serveur". A journal's list prints its own
+French level names.
+Basis: probe. <sup>f-ops3</sup>
 
 ---
 
@@ -1684,14 +1611,12 @@ just made listed first (test runs 2026-09-28 and 2026-09-29):
 [f-a13](#fn-f-a13); nothing moves a first row down (no filter, page size
 or page link does, and a saved role only moves down), and the grid is the
 only place a role is edited or removed.
-Issue report: [pkp-e2e#182](https://github.com/jardakotesovec/pkp-e2e/issues/182) ([docs/issues/U54-A1-A5-roles-list-stale-after-change.md](../issues/U54-A1-A5-roles-list-stale-after-change.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Live-probed 2026-09-19 (the Production stage's claim check, all
 three apps). Cause: the registries (manager group without `stages` on OJS
 and OMP, `5,6` on OPS); the stage filter's `withStageIds()` reads the same
 rows. Filter half: [j](#fn-j). Live-probed 2026-09-26: [j](#fn-j).
-Issue report: [pkp-e2e#184](https://github.com/jardakotesovec/pkp-e2e/issues/184) ([docs/issues/U54-A2-A3-manager-role-stages-differ-until-saved.md](../issues/U54-A2-A3-manager-role-stages-differ-until-saved.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `UserGroupForm::execute()` with `getAlwaysActiveStages()`
@@ -1711,13 +1636,11 @@ Internal Review) before and opened them after. "OK" with nothing changed
 did the same, and a role created at the manager level arrived with every
 stage ticked (all three apps; OPS its one box). The only notice was "Your
 changes have been saved.".
-Issue report: [pkp-e2e#184](https://github.com/jardakotesovec/pkp-e2e/issues/184) ([docs/issues/U54-A2-A3-manager-role-stages-differ-until-saved.md](../issues/U54-A2-A3-manager-role-stages-differ-until-saved.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `settings.roles.removeText` against `removeUserGroup()`
 ([q](#fn-q)): no path deletes a group that has assignments, and
 `isDefault` groups are never deleted. Live-probed 2026-09-26: [q](#fn-q).
-Issue report: [pkp-e2e#190](https://github.com/jardakotesovec/pkp-e2e/issues/190) ([docs/issues/U54-A4-role-removal-warning-never-happens.md](../issues/U54-A4-role-removal-warning-never-happens.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Row ids 0…n−1 against the role-id refresh ([i](#fn-i)); the
@@ -1734,7 +1657,6 @@ box still ticked; a switch to "Users" and back changed nothing. After
 "Remove" › "OK" again answered 500 (`POST
 …/user-group-grid/remove-user-group`) with no notice; the row was gone
 after a reload.
-Issue report: [pkp-e2e#182](https://github.com/jardakotesovec/pkp-e2e/issues/182) ([docs/issues/U54-A1-A5-roles-list-stale-after-change.md](../issues/U54-A1-A5-roles-list-stale-after-change.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `$userGroup->userUserGroups()->count()` counts every
@@ -1759,14 +1681,12 @@ panels or any other page visited.
 type="checkbox" id="select-cell-…">` with no `<label>`, `aria-label` or
 `title`. Live-probed 2026-09-26 (Fields; all three apps): every box of the
 list's fourth row had none of the three.
-Issue report: [pkp-e2e#192](https://github.com/jardakotesovec/pkp-e2e/issues/192) ([docs/issues/U54-A8-roles-stage-boxes-no-name.md](../issues/U54-A8-roles-stage-boxes-no-name.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — The two lists sit in `userGroupsGridFilter.tpl`'s form
 (`#userGroupSearchForm`), which the header's "Search" link shows and hides
 and which is hidden again after each choice submits it. Live-probed
 2026-09-26: [d](#fn-d).
-Issue report: [pkp-e2e#197](https://github.com/jardakotesovec/pkp-e2e/issues/197) ([docs/issues/U54-A9-roles-filters-hide-after-choice.md](../issues/U54-A9-roles-filters-hide-after-choice.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — The window's own check refuses only an empty box; the server's
@@ -1777,7 +1697,6 @@ answered 200 with the refused form, the window stayed open with the notice
 quoted in Rule 15b and no message under the boxes, and the page logged the
 script error "Failed to execute 'appendChild' on 'Node': Unexpected token
 ','" on `management/settings/access`.
-Issue report: [pkp-e2e#183](https://github.com/jardakotesovec/pkp-e2e/issues/183) ([docs/issues/U54-A10-role-name-spaces-window-broken.md](../issues/U54-A10-role-name-spaces-window-broken.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — The greyed box is the window's guard alone ([o](#fn-o)): a
@@ -1791,7 +1710,6 @@ saved."; the post carried no `permitSettings`); Users & Roles then
 answered "The current role does not have access to this operation." on a
 reload and in a fresh sign-in, and the Journal Manager's "Edit" of the
 role showed the box unticked and open.
-Issue report: [pkp-e2e#186](https://github.com/jardakotesovec/pkp-e2e/issues/186) ([docs/issues/U54-A11-settings-role-window-ok-unticks-settings.md](../issues/U54-A11-settings-role-window-ok-unticks-settings.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `updateStageOptions()` hides the stage section with
@@ -1841,7 +1759,6 @@ after the new role's, it came first in 10 of 10 runs; without that, one
 new journal in about eighty listed its created role first on the local
 fleet. Scenarios 3 to 6 therefore start again on a new scratch journal
 when, and only when, the row they open comes first ([s](#fn-s)).
-Issue report: [pkp-e2e#191](https://github.com/jardakotesovec/pkp-e2e/issues/191) ([docs/issues/U54-A13-roles-list-order-changes.md](../issues/U54-A13-roles-list-order-changes.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Test run 2026-09-26 (Side effects; scenario 4; all three
@@ -1852,7 +1769,6 @@ saved.", an "Advisory Board" row and no "Editorial Board Member" row; the
 Board Member" in Quinn Ashdown's "Roles" cell throughout ten seconds of
 reads; after a reload the cell read "Advisory Board". The suites read the
 tab after a reload.
-Issue report: [pkp-e2e#185](https://github.com/jardakotesovec/pkp-e2e/issues/185) ([docs/issues/U54-A14-users-tab-keeps-old-role-name.md](../issues/U54-A14-users-tab-keeps-old-role-name.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP's `locale/fr_CA/submission.po` leaves
@@ -1861,7 +1777,6 @@ key ([b](#fn-b)). Live-probed 2026-09-26 (Fields; all three apps, French
 as a UI language): the press's columns read "Soumission", "Évaluation
 interne", "##workflow.review.externalReview##", "Révision", "Production";
 OJS printed French headings throughout.
-Issue report: [pkp-e2e#124](https://github.com/jardakotesovec/pkp-e2e/issues/124) ([docs/issues/U57-A8-omp-ops-french-texts-internal-names.md](../issues/U57-A8-omp-ops-french-texts-internal-names.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — OPS `UserAccessForm` posts `restrictPreprintAccess`, but
@@ -1875,7 +1790,6 @@ all three apps): on OPS the box ticked and saved read "Saved" and was
 unticked after a reload, the context held no `restrictPreprintAccess`
 value, and a signed-out visitor opened and downloaded a posted preprint's
 "PDF" galley; on OJS and OMP the box was kept and applied ([t](#fn-t)).
-Issue report: [pkp-e2e#194](https://github.com/jardakotesovec/pkp-e2e/issues/194) ([docs/issues/U54-OPS1-open-content-login-box-not-kept.md](../issues/U54-OPS1-open-content-login-box-not-kept.md)).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — `Application::getRoleNames(true)` is lib/pkp's, not
@@ -1921,7 +1835,6 @@ press's word ([b](#fn-b)). Live-probed 2026-09-26 (Fields; all three apps,
 French as a UI language): the "Permission level" cells read
 "Administrateur-trice du serveur" and "Éditeur-trice de série" on the
 manager and Moderator rows.
-Issue report: [pkp-e2e#201](https://github.com/jardakotesovec/pkp-e2e/issues/201) ([docs/issues/U54-OPS3-ops-moderator-level-series-editor-french.md](../issues/U54-OPS3-ops-moderator-level-series-editor-french.md)).
 
 ## Reference — entry points & surfaces
 

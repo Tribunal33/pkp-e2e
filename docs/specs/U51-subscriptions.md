@@ -1344,116 +1344,6 @@ scheduled tasks and background jobs, and the tooling recipe. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Planned**:
-  - the guard for A12 (issue report
-    `docs/issues/U51-A12-signed-out-purchase-subscription-server-error.md`):
-    a signed-out visitor at "Purchase Individual Subscription"'s address,
-    on a journal that requires subscriptions and takes payments, lands on
-    Login, and after signing in on "Purchase Individual Subscription"
-  - the guard for A27 (issue report
-    `docs/issues/U51-A27-subscription-expiry-reminder-task-fails.md`):
-    a journal requiring subscriptions with "1 Months" set before expiry
-    and one individual subscription ending a calendar month from the run,
-    the reminder task run as the scheduler runs it finishing and the
-    subscriber receiving "Notice of Subscription Expiry"
-  - the guard for A8 (issue report
-    `docs/issues/U51-A8-subscription-expiry-reminders-monthly.md`):
-    the reminder task listed as a daily task by the scheduler, and a run
-    reaching subscriptions ending on several different days of the month
-  - the guard for A13 and A26 (issue report
-    `docs/issues/U51-A13-A26-subscription-block-inactive-reads-dates.md`):
-    the "Subscription" block placed in the sidebar, read after a manual
-    purchase ("Awaiting Manual Payment") and for a subscription set to
-    "Needs Approval" with its end date ahead, each reading its status
-    rather than an "Expired" or "Expires" date
-  - the guard for A10 (issue report
-    `docs/issues/U51-A10-purchase-active-subscription-takes-access-away.md`):
-    an active subscription on "My Subscriptions" offering "Renew" only,
-    and its purchase address leading to the home page with the
-    subscription still active
-  - the guard for A25 (issue report
-    `docs/issues/U51-A25-institutional-purchase-ip-ranges-array.md`):
-    "Purchase Institutional Subscription" opened for an institutional
-    subscription showing its institution's ranges one per line, and
-    "Continue" accepted without changes
-  - the guard for A22 (issue report
-    `docs/issues/U51-A22-subscription-search-fields-narrow-nothing.md`):
-    each subscription list searched by "Reference Number" (and on the
-    institutional tab by "Institution name") listing only the matching
-    subscription
-  - the guard for A16 (issue report
-    `docs/issues/U51-A16-subscription-manager-institutions-refused.md`):
-    a Subscription Manager, with payments enabled, opening "Institutions"
-    from the side menu and adding an institution, which the institutional
-    subscription window then offers (or, if the team hides the menu entry
-    instead, the entry absent for that role)
-  - the guard for OPS1 (issue report
-    `docs/issues/U51-OPS1-posting-mode-not-kept.md`): on a preprint
-    server, each "Posting Mode" choice saved and still selected on the
-    next load, and with "OPS will not be used to post the server's
-    contents online." "Archives" gone from the header
-  - the guard for A9 (issue report
-    `docs/issues/U51-A9-individual-purchase-refused-silently.md`): "Save"
-    on "Purchase Individual Subscription" with a membership-requiring
-    type and "Membership" empty showing "The selected subscription type
-    requires membership information." and storing nothing
-  - the guard for A23 (issue report
-    `docs/issues/U51-A23-open-journal-offers-subscription-purchase.md`):
-    on an open-access journal with subscription types and payments set
-    up, the "Subscriptions" page's address leading home and the menu
-    offering no "Subscriptions" item
-  - the guard for A24 (issue report
-    `docs/issues/U51-A24-subscription-type-links-lead-home.md`): a
-    signed-in subscriber of a journal requiring subscriptions without
-    payments set up seeing neither "Learn More" in the block nor "View
-    Available Subscription Types" on "My Subscriptions"
-  - the guard for A14 (issue report
-    `docs/issues/U51-A14-restrict-only-pdf-html-galley-refused.md`): with
-    "Only Restrict Access to PDF…" ticked and no reader fee, a signed-out
-    visitor opening a restricted article's HTML galley and refused its
-    PDF, and `issue/download/{id}` without a galley still leading to Login
-  - the guard for A18 (issue report
-    `docs/issues/U51-A18-additional-file-no-padlock.md`): an additional
-    file of an article in a restricted issue showing the padlock, and one
-    in an open issue its file icon
-  - the guard for A20 (issue report
-    `docs/issues/U51-A20-full-issue-fee-of-no-amount.md`): with only
-    "Association Membership" set, a signed-in reader without a
-    subscription pressing a "Full Issue" galley landing on the
-    "Subscriptions" page, as for an article galley, with no payment queued
-  - the guard for A11 (issue report
-    `docs/issues/U51-A11-institutional-purchase-adds-duplicate-institution.md`):
-    an institutional purchase under an existing institution's name and
-    IP ranges leaving one row on "Institutions", and the manager's edit
-    of that row's ranges reaching the reader's subscription
-  - the guard for A19 (issue report
-    `docs/issues/U51-A19-fee-shown-while-payments-off.md`): with a
-    "Purchase Article" and a "Purchase Issue" fee set and payments then
-    switched off, the locked galley links on the home, issue and article
-    pages reading "PDF" with no price
-  - the guard for A21 (issue report
-    `docs/issues/U51-A21-subscription-end-before-start-saved.md`): the
-    subscription window, on both tabs, refusing a "Start date" after the
-    "End date" and storing nothing, and saving a subscription whose start
-    and end are the same day
-  - the guard for A17 (issue report
-    `docs/issues/U51-A17-delayed-open-access-empty-box.md`): on a journal
-    that never saved it, "Delayed Open Access" on Settings › Distribution ›
-    "Access" reading "Disabled" at first look, and an untouched "Save"
-    keeping "Disabled" after a reload
-  - the guard for A15 (issue report
-    `docs/issues/U51-A15-month-week-lists-read-1-months.md`): the first
-    entries of "Delayed Open Access" and the "Subscription Expiry
-    Reminders" lists reading "1 Month" and "1 Week"
-  - the guard for A4 (issue report
-    `docs/issues/U51-A4-subscription-notify-refusal-names-setup.md`): with
-    no subscription contact set, a subscription saved with the email box
-    ticked refused with a message naming the "Subscription Policies" tab
-  - the guard for A7 (issue report
-    `docs/issues/U51-A7-toc-padlock-on-openable-galleys.md`): on a
-    restricted issue's table of contents, a Journal Manager without a
-    subscription and the article's own author seeing the galleys without
-    the padlock, a reader without a subscription still seeing it
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1550,31 +1440,31 @@ entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A4](#a4) | Subscription window's email refusal sends the manager to "the journal Setup", not "Subscription Policies" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A7](#a7) | Issue page shows padlocks to editors, authors and lapsed subscribers on galleys they can open | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A8](#a8) | Subscription expiry reminders run once a month, so most subscribers never get one | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
-| [A9](#a9) | Buying an individual subscription with "Membership" empty returns the same page with no reason given | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A10](#a10) | A reader who presses "Purchase" beside an active subscription loses access at once, before paying | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A11](#a11) | Each institutional subscription a reader buys gets its own copy of the institution, which the manager's edits miss | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A12](#a12) | A signed-out visitor who opens a subscription purchase page's address gets an empty page, not Login | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A13](#a13) | The "Subscription" block reads "Expired: {today}" for a subscription awaiting payment | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A14](#a14) | With "Only Restrict Access to PDF…" ticked and no reader fee, HTML galleys show no padlock but refuse readers | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A15](#a15) | The journal's "Delayed Open Access" and expiry reminder lists offer "1 Months" and "1 Weeks" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A16](#a16) | Subscription Manager is refused the Institutions page the menu offers, so cannot add a subscribing institution | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A17](#a17) | A journal's "Delayed Open Access" shows an empty box instead of "Disabled" until a manager picks a value | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A18](#a18) | Additional files of an article in a restricted issue show no padlock, yet readers without access are refused | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A19](#a19) | Locked galleys keep showing an article or issue price after the journal switches payments off | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A20](#a20) | With only a membership fee set, a reader pressing "Full Issue" is asked to pay an issue fee of no amount | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A21](#a21) | A subscription saved with its end date before its start date is listed "Active" but opens nothing | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A22](#a22) | Subscription lists searched by membership, reference number, notes, institution, domain or IP range show every subscription | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A23](#a23) | An open-access journal's "Subscriptions" page offers "Purchase New Subscription", which leads to the home page | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A24](#a24) | On a subscription journal without payments set up, "Learn More" and "View Available Subscription Types" lead readers home | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A25](#a25) | "Purchase" beside an institutional subscription opens with "IP ranges" reading "Array", refused on "Continue" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A26](#a26) | The "Subscription" block reads "Expires: {date}" for an inactive subscription | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A27](#a27) | Subscribers get no expiry reminders: the reminder task stops with an error on every run | 🐞 | high · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A28](#a28) | After a refused "Save", a subscription's empty date boxes show today's date, and "Save" says they are empty | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A4](#a4) | The email-box refusal sends the manager to "the journal Setup" for fields that are on "Subscription Policies" | 🐞 | minor | — |
+| [A7](#a7) | The issue's table of contents locks galleys the reader can open | 🐞 | minor | — |
+| [A8](#a8) | Expiry reminders run once a month and reach only subscriptions ending on matching days | 🐞 | user-visible | — |
+| [A9](#a9) | The individual purchase page refuses a missing membership without saying so | 🐞 | user-visible | — |
+| [A10](#a10) | "Purchase" on an active subscription, saved, takes the reader's access away at once | 🐞 | user-visible | — |
+| [A11](#a11) | Every institutional purchase adds another institution | 🐞 | minor | — |
+| [A12](#a12) | A signed-out visitor at a purchase page's address gets an empty page, the server failing | 🐞 | minor · crash: server | — |
+| [A13](#a13) | The "Subscription" block reads "Expired: {today}" for a subscription awaiting payment | 🐞 | minor | — |
+| [A14](#a14) | "Only Restrict Access to PDF…" unlocks the look of non-PDF galleys that stay refused | 🐞 | user-visible | — |
+| [A15](#a15) | Month and week counts read "1 Months" and "1 Weeks" | 🐞 | minor | — |
+| [A16](#a16) | The Subscription Manager is offered "Institutions" and refused it | 🐞 | user-visible | — |
+| [A17](#a17) | "Delayed Open Access" shows an empty box until someone saves a value | 🐞 | minor | — |
+| [A18](#a18) | A restricted article's additional file shows no padlock, yet is refused | 🐞 | user-visible | — |
+| [A19](#a19) | A fee shows on the locked link while payments are off and nothing can be bought | 🐞 | minor | — |
+| [A20](#a20) | With only a membership fee, "Full Issue" asks the reader to pay an issue fee of no amount | 🐞 | user-visible | — |
+| [A21](#a21) | The subscription window saves a start date after the end date | 🐞 | minor | — |
+| [A22](#a22) | Six of the subscription lists' search fields list every subscription whatever is typed | 🐞 | user-visible | — |
+| [A23](#a23) | "Purchase New Subscription" on a journal that does not require subscriptions leads home | 🐞 | minor | — |
+| [A24](#a24) | "View Available Subscription Types" and "Learn More" lead home while payments are not set up | 🐞 | minor | — |
+| [A25](#a25) | "Purchase" on an active institutional subscription arrives with "IP ranges" reading "Array" | 🐞 | minor | — |
+| [A26](#a26) | The "Subscription" block reads "Expires: {date}" for an inactive subscription | 🐞 | user-visible | — |
+| [A27](#a27) | The expiry-reminder task stops with an error and sends nothing | 🐞 | user-visible · crash: server | — |
+| [A28](#a28) | After a refused "Save", the date boxes show today's date, yet "Save" says the start date is missing | 🐞 | user-visible | — |
 | [A29](#a29) | Readers get the open-access email twice when an issue opens on the 1st of some months | 🐞 | minor | — |
-| [OPS1](#ops1) | A preprint server's "Posting Mode" says "Saved" but keeps nothing, and the server goes on posting | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [OPS1](#ops1) | A preprint server's "Posting Mode" says "Saved" and keeps nothing {OPS} | 🐞 | user-visible | — |
 | [A1](#a1) | "Publishing Mode" shows no choice on a new journal, which publishes as open access | ❓ | minor | — |
 | [A5](#a5) | Without payments set up, a signed-in reader pressing a locked galley lands on the home page with no word | ❓ | user-visible | — |
 | [A6](#a6) | With the manual method, a bought article or issue never opens | ❓ | user-visible | — |
@@ -1594,20 +1484,14 @@ access to its contents." selected? Lean: yes; the tab should show what
 the journal does. Basis: probe, 2026-09-25. <sup>f-a1</sup>
 
 <a id="a4"></a>
-**A4 — Subscription window's email refusal sends the manager to "the journal Setup", not "Subscription Policies"** · 🐞 · low.
-On the "Subscriptions" page, a manager saves a subscription with "Send
-the user an email with their username and subscription details." ticked,
-on a journal with no subscription contact. The save is refused with "In
-order to send the user a notification email, the subscription contact
-name and email address must be specified in the journal Setup.".
-The fields it means are "Name" and "Email" under the heading
-"Subscription Manager", on the same page's "Subscription Policies" tab.
-No setup screen holds them: the "Setup" tab under Settings › Website is
-about the website. The message was right until 2006, when the fields
-moved there from the "Journal Setup" of OJS 2.
-The subscription saves, and the email goes out, once the manager finds
-the tab and fills the contact in.
-Basis: probe, 2026-09-30. <sup>f-a4</sup>
+**A4 — The notify refusal points to the wrong screen** · 🐞 · minor.
+Saving a subscription with "Send the user an email with their username
+and subscription details." ticked while the subscription contact is
+missing is refused with "In order to send the user a notification email,
+the subscription contact name and email address must be specified in the
+journal Setup.". The fields are on the "Payments" page's "Subscription
+Policies" tab; no "Setup" screen holds them. Basis: probe, 2026-09-25.
+<sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A locked galley leads home without a word** · ❓ · user-visible.
@@ -1635,338 +1519,202 @@ manager a way to record it, as the workflow does for a manual publication
 fee. Basis: probe, 2026-09-25. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — Issue page shows padlocks to editors, authors and lapsed subscribers on galleys they can open** · 🐞 · low.
-On a journal that requires subscriptions, the issue's table of contents
-shows the padlock and "Requires Subscription" on article and "Full
-Issue" galleys that the signed-in user can open. That happens to three
-groups when they hold no current subscription:
-- Journal Managers and Editors, Section Editors, assistants such as
-  Copyeditors, and Subscription Managers;
-- an article's own author, on that article;
-- a lapsed subscriber on a journal set to "Partial expiry", the policy
-  that lets a subscriber keep the issues and articles published while
-  they were subscribed.
-Pressing the locked link opens the galley, and the article's own page
-shows it unlocked. The journal's home page, which shows the current
-issue's table of contents, carries the same padlocks.
-Basis: probe, 2026-09-30. <sup>f-a7</sup>
+**A7 — The table of contents locks galleys the reader can open** · 🐞 · minor.
+On an issue's page, the padlock (Rule 10) is decided by the reader's
+subscription, institution and issue purchase alone. A Journal Manager,
+Section Editor, Copyeditor or Subscription Manager without a
+subscription, the article's own Author, and a reader whose expired
+subscription still covers the issue under "Partial expiry" all see the
+padlock and the "Requires Subscription" wording, then open the galley
+when they press it. Basis: probe, 2026-09-25. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — Subscription expiry reminders run once a month, so most subscribers never get one** · 🐞 · high.
+**A8 — Expiry reminders reach almost nobody** · 🐞 · user-visible.
 "Subscription Expiry Reminders" promise an email a set number of months
 or weeks before and after each subscription's end. The task that sends
-them is scheduled for the first day of each month only. Each run matches
-one end date per reminder period: the run's own day, moved by the
-months or weeks chosen.
-So with "1 Months" before expiry, only subscriptions ending on the 1st
-of a month, or on one of the few month-end days the task adds on the
-1st, get the notice. Every other subscriber gets none, loses access
-without warning and misses the prompt to renew, and nobody is told.
-On 3.3 this is what journals live with today. On the later versions the
-task currently stops with an error before it sends anything
-("Subscribers get no expiry reminders: the reminder task stops with an
-error on every run"); once that is fixed, this decides who gets a
-notice.
-Since: 2025-08-13 · Basis: probe, 2026-09-30. <sup>f-a8</sup>
+them runs on the first day of each month only, and each run looks for
+subscriptions ending on exactly one day (the run's day moved by the
+chosen interval), so a subscription whose end date falls on any other
+day of the month gets none. The task was written for a
+daily run; it has run monthly since 2025-08-13 (a regression, not a
+choice). Today the task fails before sending anything ([A27](#a27));
+this is what remains once that is fixed. Since: 2025-08-13 · Basis:
+commit. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — Buying an individual subscription with "Membership" empty returns the same page with no reason given** · 🐞 · medium.
+**A9 — The individual purchase page refuses without saying why** · 🐞 · user-visible.
 On "Purchase Individual Subscription", choosing a type that asks for
 membership and pressing "Save" with "Membership" empty shows the same
 page again, with no message and nothing marked, and no subscription is
 created. The institutional purchase page shows its refusals at the top;
-this page has no place for them.
-In practice the missing membership is the refusal readers meet. The
-page's only other refusal, "Please select a valid subscription type.",
-comes only from a page left open while the journal withdrew the type,
-or from a crafted request; it is silent too.
-Nothing on the page says that the type needs membership information, so
-a reader who does not think of filling "Membership" cannot buy the
-subscription, and the journal is not told of the lost sale.
-Basis: probe, 2026-09-30. <sup>f-a9</sup>
+this page has no place for them. Basis: probe, 2026-09-25. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — A reader who presses "Purchase" beside an active subscription loses access at once, before paying** · 🐞 · medium.
+**A10 — "Purchase" on an active subscription removes access** · 🐞 · user-visible.
 On "My Subscriptions", an active subscription, individual or
-institutional, offers "Purchase" beside "Renew". It opens the purchase
-page filled with the subscription's type, where the reader can choose
-another type or buy the same one again. Submitting it ("Save", or
-"Continue" on the institutional page) turns the active subscription
-into "Awaiting Manual Payment" with today as its start and end dates.
-The reader loses access to restricted content at once, before anything
-is paid, and "My Subscriptions" no longer offers "Renew".
-Access comes back when the payment is recorded, and then only from
-today. With manual payments, the journal manager records it by editing
-the subscription: the edit window shows today as both dates, so the
-manager must type a new end date. The reader's earlier end date is on
-no screen, so the time they had left is lost. Nothing on the row or the
-page warns that the current subscription ends.
-Basis: probe, 2026-09-30. <sup>f-a10</sup>
+institutional, offers "Purchase". Pressing it opens the purchase page,
+and saving there ("Save", or "Continue" on the institutional page) turns
+the active subscription into "Awaiting Manual Payment" with today as its
+start and end dates: the reader loses access to restricted content at
+once, before anything is paid, and "My Subscriptions" no longer offers
+"Renew". Basis: probe, 2026-09-25. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — Each institutional subscription a reader buys gets its own copy of the institution, which the manager's edits miss** · 🐞 · medium.
-A reader who buys an institutional subscription types the institution's
-name and IP ranges on "Purchase Institutional Subscription". Each time
-they press "Continue", the journal's "Institutions" list gets a new
-institution under that name. This happens even when the list already
-has one with the same name and ranges. It also happens when the reader
-presses "Purchase" beside a subscription they already hold.
-The subscription uses its own copy, not the institution the manager
-created. When the library's addresses change and the manager updates
-the ranges on their institution, nothing tells them that the bought
-subscription keeps the old ranges. Readers at the library's new
-addresses are refused, and the old addresses keep access. It works again
-only once the manager edits every row of that name.
-Basis: probe, 2026-09-30. <sup>f-a11</sup>
+**A11 — Each institutional purchase adds an institution** · 🐞 · minor.
+Every "Continue" on "Purchase Institutional Subscription" adds a new
+institution to the journal's [Institutions](U66-institutions.md) list under the typed name,
+even when an institution of that name exists or the reader is changing an
+existing purchase, so the list fills with duplicates the manager must
+tidy by hand. Basis: probe, 2026-09-25. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — A signed-out visitor who opens a subscription purchase page's address gets an empty page, not Login** · 🐞 · medium · crash: server.
+**A12 — A signed-out purchase address fails with an empty page** · 🐞 · minor · crash: server.
 A signed-out visitor who opens "Purchase Individual Subscription" or
 "Purchase Institutional Subscription" by its address (a bookmark, or a
-link shared by a colleague) gets a server error instead of the Login
-page. The request fails on the server, and the visitor sees an empty
-page.
-A reader whose session ends while a purchase form is open meets the
-same empty page when they press the form's button. The empty page gives
-no hint that signing in would help. A reader who signs in first and
-then opens the address again can buy the subscription.
-The two pages fail this way only on a journal that requires
-subscriptions and takes payments. On other journals their addresses
-lead to the home page.
-Basis: probe, 2026-09-30. <sup>f-a12</sup>
+link shared by a colleague) gets an empty page, the server failing,
+instead of the Login page. Basis: probe, 2026-09-25. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — The block reads "Expired" for a subscription awaiting payment** · 🐞 · low.
+**A13 — The block reads "Expired" for a subscription awaiting payment** · 🐞 · minor.
 A reader who has just bought a subscription with the manual method sees,
 in the "Subscription" block on the home page and the article pages, the
-type's name and "Expired: {purchase date}" (for a non-expiring type,
+type's name and "Expired: {today}" (for a non-expiring type,
 "Non-expiring"), where "My Subscriptions", and the block on that page,
-read "Awaiting Manual Payment": the purchase is stored with the purchase
-day as its start and end date, and the block reads the end date.
-Basis: probe, 2026-09-30. <sup>f-a13</sup>
+read "Awaiting Manual Payment". Basis: probe, 2026-09-25. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — With "Only Restrict Access to PDF…" ticked and no reader fee, HTML galleys show no padlock but refuse readers** · 🐞 · medium.
-A journal requires subscriptions, has payments set up, and its Journal
-Manager has ticked "Only Restrict Access to PDF version of issues and
-articles" under "Payment Types" but set no reader fee. On that journal,
-a restricted issue's HTML galleys show their file icon and no padlock.
-That holds on the article page and under "Full Issue", while the PDF
-beside them shows the padlock. Anyone without a subscription who presses
-the HTML is still turned away, exactly as for the PDF:
-- signed out, they land on the Login page with "Subscription required to
-  access item.";
-- signed in, they land on the "Subscriptions" page.
-The same goes for every galley that is not a PDF. A fee frees the
-non-PDF galleys at no charge while the PDF stays restricted:
-- "Association Membership" frees the article's and the issue's;
-- "Purchase Article" frees only the article's;
-- "Purchase Issue" frees only the "Full Issue" ones.
-A "Purchase Article" or "Purchase Issue" fee also puts the PDF on sale
-at that price.
-Basis: probe, 2026-09-30. <sup>f-a14</sup>
+**A14 — Non-PDF galleys look open and are refused** · 🐞 · user-visible.
+With "Only Restrict Access to PDF version of issues and articles" ticked,
+a restricted issue's non-PDF galleys (HTML, for one) show no padlock,
+but unless a "Purchase Article" (for a "Full Issue", "Purchase Issue")
+or "Association Membership" fee is set, a reader without a subscription
+who presses one is turned away exactly like a PDF (Rule 12). The box
+promises that only PDFs are restricted. Basis: probe, 2026-09-25.
+<sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — The journal's "Delayed Open Access" and expiry reminder lists offer "1 Months" and "1 Weeks"** · 🐞 · low.
+**A15 — "1 Months" and "1 Weeks"** · 🐞 · minor.
 The month and week lists of "Delayed Open Access" and "Subscription
 Expiry Reminders" read "1 Months" and "1 Weeks" for their first choice.
-That is five lists: "Delayed Open Access" on Settings › Distribution ›
-"Access" (months), and the four reminder lists on the "Payments" page's
-"Subscription Policies" tab (before and after expiry, each in months and
-in weeks). Until 2017 the reminder lists offered a bare "1" followed by
-"month(s)", which read correctly.
-The choice still means one month or one week and saves as such. Other
-languages show the same fault: in French the week lists read "1
-semaines".
-Basis: probe, 2026-09-30. <sup>f-a15</sup>
+Basis: probe, 2026-09-25. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — Subscription Manager is refused the Institutions page the menu offers, so cannot add a subscribing institution** · 🐞 · medium.
+**A16 — The Subscription Manager is offered "Institutions" and refused it** · 🐞 · user-visible.
 On the "Payments" page, while payments are enabled, the Subscription
 Manager's side menu offers "Institutions"; pressing it, or opening its
 address, shows "The current role does not have access to this
-operation.". The institutional subscription window offers only the
-institutions already on that page, so a Subscription Manager cannot
-subscribe an institution that is not on the list yet, and cannot change
-an institution's name or IP ranges.
-Subscriptions for institutions already on the list, and individual
-subscriptions, still work for the Subscription Manager. A journal manager
-has to add or change each institution for them.
-Basis: probe, 2026-09-30. <sup>f-a16</sup>
+operation.". The institutional subscription window needs an institution
+from that page, so a Subscription Manager cannot create the first
+institutional subscription alone. Basis: probe, 2026-09-25.
+<sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — A journal's "Delayed Open Access" shows an empty box instead of "Disabled" until a manager picks a value** · 🐞 · low.
-On a journal that has never saved the "Delayed Open Access" setting,
-the list on Settings › Distribution › "Access" shows an empty box
-instead of "Disabled", though the journal publishes issues as
-"Disabled" does. Pressing "Save" with the box untouched keeps it empty.
-Every journal that turns on subscriptions sees the empty box until a
-manager saves a choice in it. Before the list moved to the "Access" tab
-in 2019, the "Subscription Policies" page showed "Disabled" in the same
-case (read in the code).
-Basis: probe, 2026-09-30. <sup>f-a17</sup>
+**A17 — "Delayed Open Access" arrives as an empty box** · 🐞 · minor.
+On a journal that has never saved it, "Delayed Open Access" on Settings
+› Distribution › "Access" shows an empty box instead of "Disabled",
+though the journal behaves as "Disabled"; "Save" with the box untouched
+keeps it empty. Only a saved "Disabled" reads "Disabled". Basis: probe,
+2026-09-25. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — Additional files of an article in a restricted issue show no padlock, yet readers without access are refused** · 🐞 · low.
-On the page of an article in a restricted issue, the article's PDF shows
-a padlock, but an additional file listed below it (a data set, for one)
-keeps its file icon. Anyone without a subscription who presses the file
-is refused, just as for the PDF:
-- signed out, they land on the Login page with "Subscription required to
-  access item.";
-- signed in, they are sent on to the "Subscriptions" page, or, on a
-  journal whose payments are not set up, to the journal's home page.
-Screen-reader users already hear "Requires Subscription" before the
-file's name; only the padlock is missing. Nothing is lost, and the
-refusal is correct.
-The fix is the padlock rule for these links in OJS's default theme
-stylesheet, as the PDF button already has.
-Basis: probe, 2026-09-30. <sup>f-a18</sup>
+**A18 — An additional file looks open and is refused** · 🐞 · user-visible.
+On a restricted article's page, a file under "Additional Files" keeps
+its file icon and shows no padlock, yet a reader without access who
+presses it is turned away as Rule 12 says, like the article's other
+galleys. A screen reader still hears "Requires Subscription" before its
+label. Basis: probe, 2026-09-25. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — Locked galleys keep showing an article or issue price after the journal switches payments off** · 🐞 · low.
-With a "Purchase Article" or "Purchase Issue" fee set and payments then
+**A19 — A fee shows on the locked link while payments are off** · 🐞 · minor.
+With "Purchase Article" or "Purchase Issue" saved and payments then
 switched off, the locked links still show the fee, such as "(USD 5)"
 or "(USD 20)", but nothing can be bought: a signed-in reader who
-presses one lands on the journal's home page, as on any subscription
-journal with payments off, fee or none.
-The price shows on the article page and beside each article in the
-issue's table of contents. The "Full Issue" links show it too, both on
-the issue page and on the journal's home page. With payments off a
-reader cannot pay for anything on the site: buying a subscription
-online closes as well.
-It needs a subscription journal that set an article or issue fee while
-payments were on, then unticked "Payments will be enabled for this
-journal…". The fee amounts stay stored. The "Payments" page that holds
-them leaves the side menu when payments are switched off.
-Basis: probe, 2026-09-30. <sup>f-a19</sup>
+presses one lands on the journal's home page. Basis: probe, 2026-09-25.
+<sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — With only a membership fee set, a reader pressing "Full Issue" is asked to pay an issue fee of no amount** · 🐞 · medium.
-On a journal that sells subscriptions, sets an "Association
-Membership" fee and leaves "Purchase Issue" empty, a signed-in reader
-with no subscription or membership who presses a restricted "Full
-Issue" galley gets the payment page for a "Purchase Issue Fee" with no
-amount. An article galley in the same issue takes the same reader to
-the "Subscriptions" page, as it should, since the journal does not sell
-single issues.
-The reader is asked to pay for something the journal does not sell,
-and the page offers no way to what it does sell. With manual payment,
-"Send notification of payment" mails the journal's contact a notice of
-an issue purchase that costs 0, which no screen lets staff act on.
-Basis: probe, 2026-09-30. <sup>f-a20</sup>
+**A20 — "Full Issue" asks for an issue fee of no amount** · 🐞 · user-visible.
+With "Association Membership" set and no "Purchase Issue" fee, a
+signed-in reader without a subscription or membership who presses a
+"Full Issue" galley gets the payment method's page for a "Purchase
+Issue Fee" with no amount (with the manual method: its instructions and
+"Send notification of payment"), where an article galley in the same
+case leads to the "Subscriptions" page. Basis: probe, 2026-09-25.
+<sup>f-a20</sup>
 
 <a id="a21"></a>
-**A21 — A subscription saved with its end date before its start date is listed "Active" but opens nothing** · 🐞 · medium.
-On the "Subscriptions" page, the window that creates or edits a
-subscription saves it when its "End date" is before its "Start date",
-with "Your changes have been saved.". This is what happens when a
-manager types the wrong year into "End date" or swaps the two dates.
-The list then shows the subscription as "Active" with those dates. The
-same window already refuses a date left empty or more than ten years
-from today, but it never compares the two.
-The subscriber gets no access from it, and nobody is told. With the
-journal's subscription expiry setting at "Full expiry", which is how a
-journal starts, every restricted article and issue stays locked for
-them.
-It happens for individual and institutional subscriptions alike. Only a
-manager typing the dates can store such a subscription; a reader's own
-purchase and "Renew" set the dates themselves.
-Basis: probe, 2026-09-30. <sup>f-a21</sup>
+**A21 — A subscription can end before it starts** · 🐞 · minor.
+The subscription window saves a subscription whose "Start date" is
+after its "End date" with "Your changes have been saved.", and the list
+shows it with those dates; the other date checks of Rule 19 let it
+through. Basis: probe, 2026-09-25. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — Subscription lists searched by membership, reference number, notes, institution, domain or IP range show every subscription** · 🐞 · medium.
-On both subscription lists, "Search" by "Membership", "Reference
-Number" or "Notes" (and on the institutional tab by "Institution name",
+**A22 — Six search fields narrow nothing** · 🐞 · user-visible.
+On both subscription lists, "Search" by "Membership", "Reference Number"
+or "Notes" (and on the institutional tab by "Institution name",
 "Domain" or "IP ranges") lists every subscription whatever is typed,
 even text no subscription holds; only "Given Name", "Family Name",
-"Username" and "Email" narrow the list.
-Nothing says the search was ignored. A manager who has only a reference
-number, a membership number, a payment note or an institution's name,
-domain or address has to find the subscription by reading the list.
-Basis: probe, 2026-09-30. <sup>f-a22</sup>
+"Username" and "Email" narrow the list. A manager looking a subscriber
+up by reference number gets the whole list. Basis: probe, 2026-09-25.
+<sup>f-a22</sup>
 
 <a id="a23"></a>
-**A23 — An open-access journal's "Subscriptions" page offers "Purchase New Subscription", which leads to the home page** · 🐞 · low.
-On a journal that does not require subscriptions (open access, or not
-published online) but still has subscription types and payments set
-up, the "Subscriptions" page lists the types with their prices and
-offers a signed-in reader "Purchase New Subscription". Pressing it
-lands on the journal's home page with no message, because such a
-journal does not sell subscriptions.
-A journal gets here when it switches from subscriptions to open access
-(or stops publishing online) and keeps its types and payments, for
-example to take author fees. Readers reach
-the page by its address or by a "Subscriptions" menu item the journal
-placed; the default menus do not hold one. Signed-out readers see the
-types but no purchase link.
-Basis: probe, 2026-09-30. <sup>f-a23</sup>
+**A23 — "Purchase New Subscription" leads home on an open journal** · 🐞 · minor.
+On an open-access journal, or one not published online, that has
+subscription types and payments set up, the "Subscriptions" page lists
+the types and offers a signed-in reader "Purchase New Subscription";
+pressing it leads to the journal's home page with no message. Basis:
+probe, 2026-09-25. <sup>f-a23</sup>
 
 <a id="a24"></a>
-**A24 — On a subscription journal without payments set up, "Learn More" and "View Available Subscription Types" lead readers home** · 🐞 · low.
-A journal that requires subscriptions but has no payment method set up
-still shows signed-in readers two links to its "Subscriptions" page:
-"Learn More" in the "Subscription" block, and "View Available
-Subscription Types" on "My Subscriptions". That page is closed while
-payments are not set up, so both links land on the journal's home page
-with no message.
-Payments are off on a new journal, so a journal that sells
-subscriptions by hand, without an online payment method, is in this
-state. Readers meet the links only when they are signed in and have no
-subscription, and only where the journal placed the "Subscription"
-block in its sidebar or the reader opens "My Subscriptions". Signed-out
-readers see neither link: the block asks them to log in.
-Basis: probe, 2026-09-30. <sup>f-a24</sup>
+**A24 — Two links to the subscription offer lead home** · 🐞 · minor.
+While payments are not set up (the install default), "My
+Subscriptions" offers "View Available Subscription Types" under each
+kind of subscription, and the "Subscription" block offers "Learn More",
+but the "Subscriptions" page is closed then, so both lead to the
+journal's home page with no message. Basis: probe, 2026-09-25.
+<sup>f-a24</sup>
 
 <a id="a25"></a>
-**A25 — "Purchase" beside an institutional subscription opens with "IP ranges" reading "Array", refused on "Continue"** · 🐞 · low.
+**A25 — "Purchase" on an institutional subscription arrives with "Array"** · 🐞 · minor.
 On "My Subscriptions", "Purchase" beside an active institutional
 subscription opens "Purchase Institutional Subscription" with "IP
-ranges" reading "Array". This happens whether the institution has IP
-ranges or only a domain. Pressing "Continue" without changing anything
-is refused with "Please enter a valid IP range.".
-To go on, the reader must type the institution's IP ranges into the box,
-one per line, or empty it when the institution is known by its domain
-alone. No page a reader can open lists the ranges.
-Basis: probe, 2026-09-30. <sup>f-a25</sup>
+ranges" reading "Array"; "Continue" as it arrives is refused with
+"Please enter a valid IP range.". Once the ranges are typed again,
+"Continue" adds a second institution of the same name ([A11](#a11)) and
+sets the subscription to "Awaiting Manual Payment" with today's dates
+([A10](#a10)). Basis: probe, 2026-09-25. <sup>f-a25</sup>
 
 <a id="a26"></a>
-**A26 — The block shows an inactive subscription as running** · 🐞 · low.
+**A26 — The block shows an inactive subscription as running** · 🐞 · user-visible.
 A subscription set to "Needs Approval", "Needs Information" or "Other,
-See Notes" with its end date ahead shows in the "Subscription" block as
-the type's name and "Expires: {end date}" on every page, "My
-Subscriptions" included, whose own table reads "Inactive" for it; the
-reader's galleys are refused.
-Basis: probe, 2026-09-30. <sup>f-a26</sup>
+See Notes" shows in the "Subscription" block as the type's name and
+"Expires: {date}" on every page, "My Subscriptions" included, whose own
+table reads "Inactive" for it; the reader's galleys are refused. Basis:
+probe, 2026-09-25. <sup>f-a26</sup>
 
 <a id="a27"></a>
-**A27 — Subscribers get no expiry reminders: the reminder task stops with an error on every run** · 🐞 · high · crash: server.
-The scheduled task that sends the "Subscription Expiry Reminders" stops
-with an error on the server as soon as one journal on the site requires
-subscriptions and has any of its four reminder periods set on
-"Subscription Policies". No reminder goes out, for that journal or any
-other, in the monthly run or a run started by hand.
-Readers lose access at the end of their subscription with no warning,
-and the renewals the reminders were meant to prompt are missed. Nothing
-on screen tells the journal. The only way round is by hand: finding the
-expiring subscriptions and writing to each subscriber.
-It happens with the site's scheduler run from cron, and with the
-built-in web task runner on PostgreSQL. On MySQL, a web-runner run
-started from a journal's page still sends the individual subscribers'
-reminders. A journal needs no institutional subscription for it.
-Basis: probe, 2026-09-30. <sup>f-a27</sup>
+**A27 — The expiry-reminder task fails and sends nothing** · 🐞 · user-visible · crash: server.
+Run as the site's timer runs it, the scheduled task that sends the
+"Subscription Expiry Reminders" stops with an error as soon as a
+journal requiring subscriptions has a reminder list set on
+"Subscription Policies", and no reminder goes out, on its day or any
+other. Subscribers get no warning before their access ends, whatever
+the tab promises. Basis: probe, 2026-09-25. <sup>f-a27</sup>
 
 <a id="a28"></a>
-**A28 — After a refused "Save", a subscription's empty date boxes show today's date, and "Save" says they are empty** · 🐞 · medium.
-On the "Subscriptions" page, when a "Save" in "Create New Subscription"
-or "Edit Subscription" is refused while "Start date" or "End date" is
-empty, the window then shows today's date in that box. The date is only
-on screen: the form does not send it, so the next "Save" is refused
-again with "A subscription start date is required." (or the end date's
-message).
-The manager sees a filled box and a message saying it is empty. It
-happens for individual and institutional subscriptions alike.
-Basis: probe, 2026-09-30. <sup>f-a28</sup>
+**A28 — A date box shows a date the window does not send** · 🐞 · user-visible.
+On "Individual Subscriptions" › "Create New Subscription", once a "Save"
+is refused while "Start date" and "End date" are empty, the window shows
+today's date in both boxes, but nothing is behind it: the next "Save" is
+refused with "A subscription start date is required." (and the end
+date's message for an untouched "End date"), beside any other refusal.
+Typing today's date into "Start date" changes nothing; only a different
+date is taken. A Journal Manager or Subscription Manager sees a filled
+box and a message saying it is empty, and cannot save a subscription starting today
+without first typing another day. Basis: test run, 2026-09-25.
+<sup>f-a28</sup>
 
 <a id="a29"></a>
 **A29 — Readers get the open-access email twice when an issue opens on the 1st of some months** · 🐞 · minor.
@@ -1983,21 +1731,16 @@ Since: 2006-04-18 · Basis: test run, 2026-10-01. <sup>f-a29</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — A preprint server's "Posting Mode" says "Saved" but keeps nothing, and the server goes on posting** · 🐞 · medium.
+**OPS1 — "Posting Mode" says "Saved" and keeps nothing** · 🐞 · user-visible.
 On a preprint server's Settings › Distribution › "Access", choosing
 either "Posting Mode" choice and pressing "Save" shows "Saved", but the
-next load of the tab shows neither choice selected. A manager who
-chooses "OPS will not be used to post the server's contents online."
-expects the server's content to go offline. Instead, visitors and
-readers still get "Archives", the search box above the preprints list,
-the preprints list, every preprint page with its PDF, and the Search
-page.
-The proposal makes "Posting Mode" work as the tab promises: the choice
-is stored, and the server's pages close as they are already written to.
-`pkp/pkp-lib#8343` plans to implement the same mode but to take the
-choice off the screen. Storing the choice is needed for that plan too;
-whether the tab keeps offering it is the team's decision.
-Basis: probe, 2026-09-30. <sup>f-ops1</sup>
+next load of the tab shows neither selected, and the server goes on
+posting: the visitor and the Reader still see "Archives", the preprint
+page and its PDF ([Navigation menus & site
+chrome](U08-navigation-menus-and-site-chrome.md), its OPS2;
+[Search](U15-search.md), its OPS2). A manager who takes the server
+offline this way believes it is done. Basis: probe, 2026-09-25.
+<sup>f-ops1</sup>
 
 ### Retired
 
@@ -2183,7 +1926,6 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `manager.subscriptions.form.subscriptionContactRequired` (OJS `locale/en/manager.po`); the fields are `subscriptionName` and `subscriptionEmail` of `SubscriptionPolicyForm`. Live-probed 2026-09-25 (td28): the refusal verbatim at the window's top.
-Issue report: [pkp-e2e#65](https://github.com/jardakotesovec/pkp-e2e/issues/65) ([docs/issues/U51-A4-subscription-notify-refusal-names-setup.md](../issues/U51-A4-subscription-notify-refusal-names-setup.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `ArticleHandler::userCanViewGalley()` redirects a signed-in reader to `about/subscriptions` (note e), and `AboutHandler::subscriptions()` redirects to the journal index while payments are not configured (note f). Live-probed 2026-09-25 (td8): the home page, no notice.
@@ -2193,98 +1935,75 @@ Issue report: [pkp-e2e#65](https://github.com/jardakotesovec/pkp-e2e/issues/65) 
 
 <a id="fn-f-a7"></a>
 **f-a7** — `IssueHandler::setupIssueTemplate()` computes `hasAccess` from `subscribedUser($user, $journal)` (no submission, so no `canPreview()`), `subscribedDomain()` and a paid issue; the partial-expiry flags it assigns (`issueExpiryPartial`, `articleExpiryPartial`) are read by no template. Live-probed 2026-09-25 (td9, td21): the managers, Section Editor, Copyeditor, Subscription Manager, the article's Author and a reader under "Partial expiry" saw the padlock and opened the galley.
-Issue report: [pkp-e2e#75](https://github.com/jardakotesovec/pkp-e2e/issues/75) ([docs/issues/U51-A7-toc-padlock-on-openable-galleys.md](../issues/U51-A7-toc-padlock-on-openable-galleys.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — pkp/pkp-lib#11683, OJS commit `b795decf26` (2025-08-13, "fix schedule task frequency") changed `SubscriptionExpiryReminder` from `daily()` to `monthlyOn(1)`; `sendJournalReminders()` still matches one end date per run (note n) and `executeActions()` still simulates the missing days of short months, which only a daily run needs. The pre-Laravel `registry/scheduledTasks.xml` read `<frequency day="1"/>` for this task. Live-probed 2026-09-25 (td29): the schedule list shows `0 0 1 * *`; the exact-day matching could not be seen, as the task fails first (f-a27).
-Issue report: [pkp-e2e#9](https://github.com/jardakotesovec/pkp-e2e/issues/9) ([docs/issues/U51-A8-subscription-expiry-reminders-monthly.md](../issues/U51-A8-subscription-expiry-reminders-monthly.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `purchaseIndividualSubscription.tpl` has no `common/formErrors.tpl` include (the institutional page has one); `UserHandler::payPurchaseSubscription()` re-displays the form on a failed `validate()`. Live-probed 2026-09-25 (td16).
-Issue report: [pkp-e2e#47](https://github.com/jardakotesovec/pkp-e2e/issues/47) ([docs/issues/U51-A9-individual-purchase-refused-silently.md](../issues/U51-A9-individual-purchase-refused-silently.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — `userSubscriptions.tpl` offers `purchaseSubscription/{kind}/{id}` on an `ACTIVE` subscription; `UserIndividualSubscriptionForm::execute()` (and the institutional one) set the existing subscription's status to `AWAITING_MANUAL_PAYMENT` (or `_ONLINE_`) and both dates to today before any payment. Live-probed 2026-09-25 (td18), individual and institutional.
-Issue report: [pkp-e2e#36](https://github.com/jardakotesovec/pkp-e2e/issues/36) ([docs/issues/U51-A10-purchase-active-subscription-takes-access-away.md](../issues/U51-A10-purchase-active-subscription-takes-access-away.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — `UserInstitutionalSubscriptionForm::execute()` calls `Repo::institution()->add()` for a new `Institution` on every save, then points the subscription at it. Live-probed 2026-09-25 (td17, td18): two "Tide University" rows after two purchases, a second "K3 Uni B" after "Purchase" on an existing one.
-Issue report: [pkp-e2e#56](https://github.com/jardakotesovec/pkp-e2e/issues/56) ([docs/issues/U51-A11-institutional-purchase-adds-duplicate-institution.md](../issues/U51-A11-institutional-purchase-adds-duplicate-institution.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `UserHandler::purchaseSubscription()` has no sign-in check: with no user, `$user->getId()` is called on nothing (the individual path in `subscriptionExistsByUserForJournal()`, the institutional path in the form's constructor). The page router authorises page requests by default. Live-probed 2026-09-25 (td19): signed out, `GET {journal}/user/purchaseSubscription/individual` and `GET …/institutional` answered HTTP 500 with an empty body.
-Issue report: [pkp-e2e#6](https://github.com/jardakotesovec/pkp-e2e/issues/6) ([docs/issues/U51-A12-signed-out-purchase-subscription-server-error.md](../issues/U51-A12-signed-out-purchase-subscription-server-error.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — `block.tpl` gates the awaiting lines on `$paymentsEnabled && $acceptSubscriptionPayments`; `SubscriptionBlockPlugin` assigns only `acceptSubscriptionPayments`, so the awaiting lines show only where the page itself assigns `paymentsEnabled` ("My Subscriptions"). A manual purchase stores `dateEnd` as today at midnight (note f), which `Subscription::isExpired()` reads as passed. Live-probed 2026-09-25 (td20).
-Issue report: [pkp-e2e#11](https://github.com/jardakotesovec/pkp-e2e/issues/11) ([docs/issues/U51-A13-A26-subscription-block-inactive-reads-dates.md](../issues/U51-A13-A26-subscription-block-inactive-reads-dates.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — `galley_link.tpl` leaves a non-PDF galley unlocked under `$restrictOnlyPdf`; `ArticleHandler::userCanViewGalley()` lets a non-PDF galley through only inside the `purchaseArticleEnabled() || membershipEnabled()` branch, and `IssueHandler::userCanViewGalley()` inside `purchaseIssueEnabled() || membershipEnabled()` (note e). Live-probed 2026-09-25 (td23).
-Issue report: [pkp-e2e#51](https://github.com/jardakotesovec/pkp-e2e/issues/51) ([docs/issues/U51-A14-restrict-only-pdf-html-galley-refused.md](../issues/U51-A14-restrict-only-pdf-html-galley-refused.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — `manager.subscriptionPolicies.xMonths` "{$x} Months" and `.xWeeks` "{$x} Weeks" (OJS `locale/en/manager.po`) serve every count from 1, in `AccessForm` and `SubscriptionPolicyForm`. Live-probed 2026-09-25 (td4, td14).
-Issue report: [pkp-e2e#63](https://github.com/jardakotesovec/pkp-e2e/issues/63) ([docs/issues/U51-A15-month-week-lists-read-1-months.md](../issues/U51-A15-month-week-lists-read-1-months.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — OJS `TemplateManager` adds the side menu's "Institutions" (`management/settings/institutions`) in the same step as "Payments", for every role that gets "Payments", the Subscription Manager included; the Institutions page itself is a management page the role cannot open. Live-probed 2026-09-25 (td3), on three scratch journals, by the menu and by the address.
-Issue report: [pkp-e2e#40](https://github.com/jardakotesovec/pkp-e2e/issues/40) ([docs/issues/U51-A16-subscription-manager-institutions-refused.md](../issues/U51-A16-subscription-manager-institutions-refused.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — `AccessForm`'s select gives "Disabled" the value 0; a fresh journal stores no `delayedOpenAccessDuration`, which matches no option, so the box shows empty; `IssueGridHandler::publishIssue()` treats an empty value as disabled (note m). Live-probed 2026-09-25 (td4): the save posted `delayedOpenAccessDuration=` with the box untouched.
-Issue report: [pkp-e2e#62](https://github.com/jardakotesovec/pkp-e2e/issues/62) ([docs/issues/U51-A17-delayed-open-access-empty-box.md](../issues/U51-A17-delayed-open-access-empty-box.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — The article page lists the file under "Additional Files" through the supplementary link (`a.obj_galley_link_supplementary`), which keeps the file glyph where a restricted galley link gets the padlock; `ArticleHandler::download()` refuses it like any galley (note e). Live-probed 2026-09-25 (td6).
-Issue report: [pkp-e2e#52](https://github.com/jardakotesovec/pkp-e2e/issues/52) ([docs/issues/U51-A18-additional-file-no-padlock.md](../issues/U51-A18-additional-file-no-padlock.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19** — `galley_link.tpl` prints `reader.purchasePrice` whenever a fee and a currency are passed; `article_details.tpl`, `article_summary.tpl` and `issue_toc.tpl` pass the journal's saved `purchaseArticleFee` / `purchaseIssueFee` without asking whether payments are configured, while the purchase itself needs `purchaseArticleEnabled()` / `purchaseIssueEnabled()` (note o). Live-probed 2026-09-25 (td6, td8).
-Issue report: [pkp-e2e#57](https://github.com/jardakotesovec/pkp-e2e/issues/57) ([docs/issues/U51-A19-fee-shown-while-payments-off.md](../issues/U51-A19-fee-shown-while-payments-off.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — `IssueHandler::userCanViewGalley()` enters its purchase branch on `purchaseIssueEnabled() || membershipEnabled()` and then queues a `PAYMENT_TYPE_PURCHASE_ISSUE` payment of the (empty) issue fee (note e); the article side leads to the "Subscriptions" page in the same case. Live-probed 2026-09-25 (td8), on two journals.
-Issue report: [pkp-e2e#55](https://github.com/jardakotesovec/pkp-e2e/issues/55) ([docs/issues/U51-A20-full-issue-fee-of-no-amount.md](../issues/U51-A20-full-issue-fee-of-no-amount.md)).
 
 <a id="fn-f-a21"></a>
 **f-a21** — `SubscriptionForm` checks each date's presence and range (note h) but not their order. Live-probed 2026-09-25 (td11): start 2026-12-01, end 2026-01-01, saved and listed so.
-Issue report: [pkp-e2e#60](https://github.com/jardakotesovec/pkp-e2e/issues/60) ([docs/issues/U51-A21-subscription-end-before-start-saved.md](../issues/U51-A21-subscription-end-before-start-saved.md)).
 
 <a id="fn-f-a22"></a>
 **f-a22** — `SubscriptionDAO::applySearchFilters()` maps given name, family name, username and email to columns; the institutional fields have no mapping (`default => null`), so the filter is dropped. Membership, reference number and notes are mapped there, yet the screen returned the whole list for them too. Live-probed 2026-09-25 (td10), on two journals, "contains" and "is".
-Issue report: [pkp-e2e#39](https://github.com/jardakotesovec/pkp-e2e/issues/39) ([docs/issues/U51-A22-subscription-search-fields-narrow-nothing.md](../issues/U51-A22-subscription-search-fields-narrow-nothing.md)).
 
 <a id="fn-f-a23"></a>
 **f-a23** — `AboutHandler::subscriptions()` checks only the payment setup (note f) and the template offers "Purchase New Subscription" to any signed-in visitor, while `UserHandler::purchaseSubscription()` redirects to the index outside `PUBLISHING_MODE_SUBSCRIPTION`. Live-probed 2026-09-25 (td27), on an open-access and a not-online journal.
-Issue report: [pkp-e2e#49](https://github.com/jardakotesovec/pkp-e2e/issues/49) ([docs/issues/U51-A23-open-journal-offers-subscription-purchase.md](../issues/U51-A23-open-journal-offers-subscription-purchase.md)).
 
 <a id="fn-f-a24"></a>
 **f-a24** — `userSubscriptions.tpl` and the block link to `about/subscriptions`, which redirects to the journal index while payments are not configured (note f). Live-probed 2026-09-25 (td20, td25).
-Issue report: [pkp-e2e#50](https://github.com/jardakotesovec/pkp-e2e/issues/50) ([docs/issues/U51-A24-subscription-type-links-lead-home.md](../issues/U51-A24-subscription-type-links-lead-home.md)).
 
 <a id="fn-f-a25"></a>
 **f-a25** — `UserInstitutionalSubscriptionForm::initData()` fills `ipRanges` with `$institution->getIPRanges()`, an array, which the text box prints as "Array"; the IP check then refuses it. Live-probed 2026-09-25 (td18).
-Issue report: [pkp-e2e#37](https://github.com/jardakotesovec/pkp-e2e/issues/37) ([docs/issues/U51-A25-institutional-purchase-ip-ranges-array.md](../issues/U51-A25-institutional-purchase-ip-ranges-array.md)).
 
 <a id="fn-f-a26"></a>
 **f-a26** — `block.tpl` has lines only for the two awaiting statuses (note f-a13); any other status falls through to the date lines (`isNonExpiring()`, `isExpired()`, else "Expires: {date}"). Live-probed 2026-09-25 (td20): "Needs Approval", "Needs Information" and "Other, See Notes" read "Expires: 2027-09-25" in the block while "My Subscriptions" read "Inactive" and the PDF led to the "Subscriptions" page.
-Issue report: [pkp-e2e#11](https://github.com/jardakotesovec/pkp-e2e/issues/11) ([docs/issues/U51-A13-A26-subscription-block-inactive-reads-dates.md](../issues/U51-A13-A26-subscription-block-inactive-reads-dates.md)).
 
 <a id="fn-f-a27"></a>
 **f-a27** — Live-probed 2026-09-25 (td29): the scheduled task `SubscriptionExpiryReminder`, run with no request, died with "Call to a member function getPrimaryLocale() on null" in `InstitutionalSubscriptionDAO::getInstitutionNameFetchParameters()` (the request's context is missing when the site's timer runs it); its task log holds "Task process started." and nothing after, twice.
-Issue report: [pkp-e2e#8](https://github.com/jardakotesovec/pkp-e2e/issues/8) ([docs/issues/U51-A27-subscription-expiry-reminder-task-fails.md](../issues/U51-A27-subscription-expiry-reminder-task-fails.md)).
 
 <a id="fn-f-a28"></a>
 **f-a28** — Test run 2026-09-25 (Rule 19; scenario 6). The four answers to "Save" were: "A user is required. A subscription start date is required. A subscription end date is required." (no user, no dates); then, Nova chosen, "A subscription start date is required." and "A subscription end date is required." again, the boxes now reading today's date; then, Sam chosen, today's date typed into "Start date" and next year's into "End date", "This user already has a subscription for this journal. A subscription start date is required."; then, Nova chosen, "A subscription start date is required.", the window staying open. A probe the same day read the fields after each step: from the first refusal on, the visible boxes held today's date while the values the window sends were empty; typing today's date left the sent start date empty, next year's end date was sent. The boxes are jQuery UI date pickers: lib/pkp `js/controllers/form/FormHandler.js` renames the visible box to `{name}-removed` and sends a hidden copy under the field's name (`templates/payments/individualSubscriptionForm.tpl`, `dateStart`/`dateEnd` with class `datepicker`).
-Issue report: [pkp-e2e#53](https://github.com/jardakotesovec/pkp-e2e/issues/53) ([docs/issues/U51-A28-subscription-date-boxes-show-today-unsent.md](../issues/U51-A28-subscription-date-boxes-show-today-unsent.md)).
 
 <a id="fn-f-a29"></a>
 **f-a29** — Test run 2026-10-01 (Side effects; scenario 12), OJS main (ojs `bade233f73`, lib/pkp `2e377d27fc`): after the scheduled task `APP\tasks\OpenAccessNotification` ran once and the jobs ran, the mail catcher held two emails "Free to read: Vol. 1 No. 1 (2026) of {journal} is now open access" for the Reader and two for the Journal Manager (one expected). Seen on the VM on a reset database and on every OJS CI run of 2026-10-01; the same check passed on every run of 2026-09-30. Mechanism (code read): `executeActions()` calls `sendNotifications()` for today, then, on the 1st of a month whose previous month is in `$shortMonths = [2,4,6,9,11]`, again for a simulated 31st of that month, and on 1 March for a simulated 30 February and, unless `date('L', mktime(0, 0, 0, 0, 0, $year))` (which reads the previous year) says leap, 29 February. `sendNotifications()` matches `strtotime($openAccessDate) == mktime(0, 0, 0, $month, $day, $year)`; PHP's `mktime()` rolls 31 April, June, September and November over to the 1st of the next month, 29 February of a common year and 30 February of a leap year to 1 March, so an issue opening today matches twice and gets two `OpenAccessMailUsers` batches. In the year after a leap year the 29th is skipped and 30 February falls on 2 March, so 1 March sends once. Only 1 October was driven; the other days are read in the code and checked against PHP's date arithmetic. The simulation dates from the task's first version (OJS `b33af3e5a5`, 2006-04-18, then with the list `2,4,6,8,10,12`); the task runs daily (`classes/scheduler/Scheduler.php`, `daily()`).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Live-probed 2026-09-23 by the Navigation menus claim check (its OPS2): "Saved" shown, the next load with neither choice marked, "Archives" still in the header; the Search claim check saw every role still reach the Search page. Live-probed 2026-09-25 (td1) on a scratch server: "OPS will not be used…" and "The server will provide open access…" each saved with "Saved" and came back unselected; with the second saved, the visitor and the Reader still saw "Archives", the preprint page and its PDF. OPS `schemas/context.json` has no `publishingMode`, so the context API drops the value (note b); OPS `OpsServerMustPublishPolicy` and the archive header still read it.
-Issue report: [pkp-e2e#42](https://github.com/jardakotesovec/pkp-e2e/issues/42) ([docs/issues/U51-OPS1-posting-mode-not-kept.md](../issues/U51-OPS1-posting-mode-not-kept.md)).
 
 ## Reference — entry points & surfaces
 

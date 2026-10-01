@@ -1085,88 +1085,6 @@ Left out of the scenarios above, by reason:
   - an account whose only role has ended, left off "Export Users" and
     out of the "Export All Users" file, while one with a role that ends
     on a later date is listed (Rules 26, 27)
-  - the guard for A1 (Rule 5; issue report
-    `docs/issues/U63-A1-tools-absent-tool-address-raw-json.md`): the
-    address of a tool the installation lacks, such as the Crossref
-    tool's on a press, answering "not found" (404)
-  - the guard for A4 (Rule 25; issue report
-    `docs/issues/U63-A4-users-import-refused-password-creates-account.md`):
-    a users file with a plain password shorter than the site's minimum,
-    the user named in the results and no account created
-  - the guard for A6 (Rule 8; issue report
-    `docs/issues/U63-A6-upload-file-keyboard-unreachable.md`): on the
-    Native XML "Import" tab, Tab from the tab's name reaching "Upload
-    File", and Enter there opening the computer's file picker
-  - the guard for A7 (Rule 9; issue report
-    `docs/issues/U63-A7-import-results-tab-imports-again.md`): a file
-    imported, then the "Import" tab and the "Import Results" tab chosen
-    again, no second import sent and one new submission on the Dashboard
-  - the guard for A8's issue line (Rule 10a; issue report
-    `docs/issues/U63-A8-native-import-article-without-issue-lists-error.md`):
-    an article not assigned to an issue exported and imported, its
-    results tab with no "Errors occured:"
-  - the guard for A8's contributor roles (Rule 10a; issue report
-    `docs/issues/U63-A8-native-import-other-context-resets-contributor-roles.md`):
-    a submission with a contributor role other than "Author" exported
-    and imported into a second journal, press or preprint server, the
-    role read on its "Contributors" page
-  - the guard for A9 (Rule 12a; issue report
-    `docs/issues/U63-A9-import-unknown-section-broken-submission.md`): a
-    file naming a section the journal lacks, "The process failed…" with
-    "Unknown section …" and no new submission {OJS OPS}
-  - the guard for A10 (Rule 14a; issue report
-    `docs/issues/U63-A10-export-list-published-no-stage.md`): the export
-    list's "Published" filter listing the published submissions
-  - the guard for A11 (Rule 15a; issue report
-    `docs/issues/U63-A11-export-selection-stops-at-page.md`): on a
-    context with more than 100 submissions, a line ticked on each of two
-    pages, both in the exported file
-  - the guard for A12 (Rules 16, 18; issue report
-    `docs/issues/U63-A12-export-nothing-ticked-empty-results-tab.md`):
-    each export button pressed with nothing ticked, the notice shown and
-    no tab added
-  - the guard for A13 (Rule 22a; issue report
-    `docs/issues/U63-A13-users-import-unreadable-file-empty-results.md`):
-    a users file that fails the format, "Validation errors:" in the
-    "Results" tab and no account created {OJS OMP}
-  - the guard for A15 (Rule 25; issue report
-    `docs/issues/U63-A15-users-import-existing-account-told-new-password.md`):
-    a users file of existing accounts whose passwords are SHA-1 values,
-    the "Results" tab reading only "The import completed successfully."
-    sentence {OJS OMP}
-  - the guard for A16 (Rule 25; issue report
-    `docs/issues/U63-A16-users-import-resets-installation-passwords.md`):
-    in the users-import scenario, a new account whose file password is a
-    hash this installation wrote, imported with no results line and no
-    email and signing in with its password, on PHP 8.2 and 8.3 as on
-    8.4 {OJS OMP}
-  - the guard for OJS1 (Rule 36; issue report
-    `docs/issues/U63-OJS1-doaj-issue-window-headed-doi-plugin-settings.md`):
-    the issue window opened from the DOAJ Articles list, for an issue
-    whose name holds "&", headed "Issue Management: {issue}"
-  - the guard for OJS2 (Rule 3; issue report
-    `docs/issues/U63-OJS2-doaj-tool-listed-when-doaj-plugin-off.md`):
-    with "DOAJ Plugin" off, the Plugins list leaving "DOAJ Export Plugin"
-    out
-  - the guard for OJS4 and OJS7 (Rules 31, 32, 40; issue report
-    `docs/issues/U63-OJS4-OJS7-pubmed-doaj-export-fails-site-unreachable.md`):
-    on an install that cannot reach NLM's or DOAJ's site, the PubMed
-    exports and the validated DOAJ export downloading their file
-  - the guard for OJS5's "Cancel" (Rule 35a; issue report
-    `docs/issues/U63-OJS5-tool-settings-cancel-does-nothing.md`): the
-    PubMed and DOAJ "Settings" tabs offering no "Cancel", and a tab
-    switch with an unsaved change asking
-  - the guard for OJS5's note (Rule 35a; issue report
-    `docs/issues/U63-OJS5-tool-settings-required-note-without-required-field.md`):
-    the PubMed and DOAJ "Settings" tabs carrying no required-fields note
-  - the guard for OJS6 (Rule 36a; issue report
-    `docs/issues/U63-OJS6-doaj-list-search-matches-letter-case.md`): the
-    DOAJ list's "Article Title" and "Authors" search typed in lower case
-    finding the article
-  - the guard for OMP1 (Rule 6; issue report
-    `docs/issues/U63-OMP1-omp-tools-csv-import-blank-page.md`): every
-    link in Tools › "Import/Export", on all three apps, opening a page
-    with a heading and no server error
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1264,34 +1182,34 @@ unless an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | Opening the address of a tool the installation lacks shows the tool list as raw JSON | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A4](#a4) | A users import says a user with a short or empty password "has not been imported", yet creates the account | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A5](#a5) | One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
-| [A6](#a6) | Keyboard users cannot choose a file in Native XML import, authors' revision uploads and other legacy upload forms | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
-| [A7](#a7) | Going back to an earlier Native XML "Import Results" tab imports the file again, duplicating submissions and published articles | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
-| [A8](#a8) | Importing a file the app itself exported lists "Errors occured:" under the success text, and into another context makes every contributor an "Author" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A9](#a9) | Native XML import of an article whose section the journal lacks leaves a broken submission and empties the export list | 🐞 | medium · crash: both | issues (claude), 2026-09-30 — re-verified |
-| [A10](#a10) | Export list's "Stages" filters leave out every published submission, with no "Published" stage to pick | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A11](#a11) | Export list with more than one page: ticks on other pages are left out of the file, and "Select All" cannot be undone | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A12](#a12) | A Native XML export with nothing ticked opens an empty results tab: the server fails | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A13](#a13) | A users file the Users XML Plugin cannot read ends in a blank "Results" tab, with no reason given | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A15](#a15) | A users import says an existing account was emailed a new password, but nothing is sent or changed | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A16](#a16) | On PHP 8.2 or 8.3, a users import drops the file's passwords and mails each new account a new one | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A1](#a1) | An address naming a tool the installation lacks prints the Import/Export list as raw code text | 🐞 | minor | — |
+| [A4](#a4) | A users import says a user with a short or empty password "has not been imported", yet creates the account | 🐞 | minor | — |
+| [A5](#a5) | The daily DOAJ deposit of one journal also takes other journals' articles that read "Needs Sync" | 🐞 | user-visible | — |
+| [A6](#a6) | The Native XML "Import" tab's "Upload File" cannot be reached with the keyboard | 🐞 | minor | — |
+| [A7](#a7) | Choosing an earlier "Import Results" tab again imports the file once more | 🐞 | user-visible | — |
+| [A8](#a8) | Importing a file the app itself exported lists "Errors occured:" under the success text | 🐞 | minor | — |
+| [A9](#a9) | An import naming an unknown section ends in an empty results tab and leaves a broken submission | 🐞 | user-visible · crash: both | — |
+| [A10](#a10) | A published submission matches none of the export list's "Stages" filters | 🐞 | minor | — |
+| [A11](#a11) | Past one page, the export list's "Select All" never turns into "Select None", and ticks on other pages are not exported | 🐞 | minor | — |
+| [A12](#a12) | A Native XML export with nothing ticked opens an empty results tab: the server fails | 🐞 | minor · crash: server | — |
+| [A13](#a13) | A users file the import cannot read ends in an empty "Results" tab: the server fails | 🐞 | minor · crash: server | — |
+| [A15](#a15) | For an existing account, the results say a new password was sent, but nothing is sent and nothing changes | 🐞 | minor | — |
+| [A16](#a16) | On a server whose PHP is older than 8.4, a users import treats every password stored the installation's own way as stored another way | 🐞 | user-visible | — |
 | [A17](#a17) | Importing the same users file again adds a role that starts or ends on a later date once more | 🐞 | minor | — |
 | [A18](#a18) | A users file with an empty or unreadable role date stops part-way: the server fails, the tab stays empty, the user gets no role | 🐞 | user-visible · crash: server | — |
 | [A19](#a19) | A tool's address with the tool's name left off opens a blank page: the server fails | 🐞 | minor · crash: server | — |
 | [A20](#a20) | A Native XML round trip doubles a title's prefix: the copy is titled "The The …" | 🐞 | user-visible | — |
 | [A21](#a21) | A users file whose user has no registration date stops part-way: the server fails and the "Results" tab stays empty | 🐞 | user-visible · crash: server | — |
-| [OJS1](#ojs1) | Pressing an issue in the DOAJ Articles list opens its window headed "DOI Plugin Settings" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [OJS2](#ojs2) | With "DOAJ Plugin" switched off, the Plugins list still offers the DOAJ tool, whose link shows raw JSON | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [OJS3](#ojs3) | PubMed files carry an empty journal title once a manager saves "NLM Title Abbreviation" empty | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [OJS4](#ojs4) | Where NLM's site cannot be reached, every PubMed export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [OJS5](#ojs5) | The PubMed and DOAJ Settings forms' "Cancel" keeps the change for the next "Save", and both say fields are required when none is | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [OJS6](#ojs6) | On PostgreSQL, the DOAJ Articles list's title and author search is case-sensitive | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [OJS7](#ojs7) | Where DOAJ's site cannot be reached, every validated DOAJ export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [OJS9](#ojs9) | A DOAJ "Register" that cannot reach DOAJ leaves the article reading "Submitted" for good, never "Failed" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [OJS1](#ojs1) | The DOAJ list's issue link opens the issue's window headed "DOI Plugin Settings" | 🐞 | minor | — |
+| [OJS2](#ojs2) | With "DOAJ Plugin" off, the Plugins list still offers "DOAJ Export Plugin" and its "Import/Export Data" | 🐞 | minor | — |
+| [OJS3](#ojs3) | Once "NLM Title Abbreviation" is saved empty, the PubMed file's journal title is empty | 🐞 | minor | — |
+| [OJS4](#ojs4) | Where NLM's site cannot be reached, every PubMed export fails with a "Validation errors:" page | 🐞 | minor · crash: server | — |
+| [OJS5](#ojs5) | The PubMed and DOAJ Settings forms' "Cancel" does nothing, and both say fields are required when none is | 🐞 | minor | — |
+| [OJS6](#ojs6) | The DOAJ list's title and author search matches letter case as typed | 🐞 | minor | — |
+| [OJS7](#ojs7) | Where DOAJ's site cannot be reached, every validated DOAJ export fails with a "Validation errors:" page | 🐞 | minor · crash: server | — |
+| [OJS9](#ojs9) | A DOAJ deposit that cannot reach DOAJ leaves the article "Submitted" for good | 🐞 | minor | — |
 | [OJS10](#ojs10) | "Export Issues" lists the journal's issues in no set order | 🐞 | minor | — |
-| [OMP1](#omp1) | Pressing "Tab Delimited Content Import Plugin" in a press's Tools list opens a blank page | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [OMP1](#omp1) | A press's Tools list links "Tab Delimited Content Import Plugin", which opens a blank page: the server fails | 🐞 | minor · crash: server | — |
 | [A14](#a14) | "Export Users" with no row ticked ends on a blank page: the server fails | ❓ | minor · crash: server | — |
 | [A22](#a22) | "Export Users" leaves out an account whose only role starts on a later date | ❓ | minor | — |
 | [OJS8](#ojs8) | DOAJ "Register" checks nothing, "Validate XML before the export and registration." ticked or not | ❓ | minor | — |
@@ -1303,37 +1221,24 @@ unless an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — Opening the address of a tool the installation lacks shows the tool list as raw JSON** · 🐞 · low.
-A manager who opens the address of an import/export tool that the
-installation does not have expects a "not found" page. An example is the
-address of a journal's Crossref tool, opened on a press, which has no
-Crossref tool. Instead the browser shows a bare page of JSON text, with
-no heading, no menu and no link back.
-The JSON is the list that the Tools page's "Import/Export" tab shows:
-each tool's name, its link and its one-line description, and nothing
-more. Only users who can open Tools see it (a manager-level role or the
-site administrator). Anyone else is refused, as before.
-The way back is the browser's back button or "Tools" in the side menu.
-Since: 2016-07-11 · Basis: probe, 2026-09-30. <sup>f-a1</sup>
+**A1 — An absent tool's address prints raw code text** · 🐞 · minor.
+An address that names a tool the installation does not have, such as a
+bookmarked Crossref page opened on a press, should say there is no such
+page; instead the page shows the "Import/Export" list as a line of raw
+code text, with no heading, no menu and no way back.
+Basis: probe. <sup>f-a1</sup>
 
 <a id="a4"></a>
-**A4 — A users import says a user with a short or empty password "has not been imported", yet creates the account** · 🐞 · medium.
+**A4 — A refused password still creates the account** · 🐞 · minor.
 For a user whose plain-text password in the file is shorter than the
 site's minimum, or empty, the results say "The user has not been
 imported."; the account is nevertheless created, with its roles, and no
 password signs in to it until someone resets it. The manager is told
-the opposite of what happened.
-When the refused user is someone who already has an account (the same
-username and email), that account's password is left as it was, but
-the account gains the roles the file names, although the results say
-it was not imported. The other users in the file import normally.
-Only files written by hand or by another system are affected. The
-app's own "Export Users" writes each password already encrypted, and
-the import takes those without the length check. {OJS OMP}
-Since: 2018-04-30 · Basis: probe, 2026-09-30. <sup>f-a4</sup>
+the opposite of what happened. {OJS OMP}
+Basis: probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own** · 🐞 · high.
+**A5 — One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own** · 🐞 · user-visible.
 On an installation that hosts several journals, the daily automatic
 DOAJ deposit of a journal also takes the articles of other journals
 whose DOAJ status reads "Needs Sync". It sends them to DOAJ with its
@@ -1342,7 +1247,7 @@ ISSNs, with a link built on its own address, where the article does not
 exist and the site shows "not found". The article's own journal sent
 nothing, yet its DOAJ list now reads "Submitted".
 A journal without "DOI Versioning" takes other such journals'
-articles; a journal with it takes other such journals' versions. The
+articles; a journal with it takes other such journals' versions.
 Even when the article's own journal deposits automatically, a
 depositing journal listed before it on Administration › "Hosted
 Journals" takes the article, and the article's journal sends nothing.
@@ -1360,131 +1265,77 @@ published again or replaced by a newly published version. {OJS}
 Since: 2025-10-07 · Basis: probe, 2026-09-30. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — Keyboard users cannot choose a file in Native XML import, authors' revision uploads and other legacy upload forms** · 🐞 · high.
+**A6 — "Upload File" is out of the keyboard's reach** · 🐞 · minor.
 On the Native XML Plugin's "Import" tab, the Tab key should stop on
-"Upload File". Instead it skips the button and the box and goes straight
-to "Import", so a manager who works without a mouse cannot choose a file
+"Upload File"; it skips the button and the box and goes straight to
+"Import", so a manager who works without a mouse cannot choose a file
 to import.
-The same happens in every legacy upload form, the ones built on the
-shared "Drag and drop a file here to begin upload" box. These include
-the "Upload File" window that a submission's workflow file lists open,
-where an author uploads revisions and editors upload files at every
-stage. They also include the Users XML import, plugin upload, library
-files, issue cover images and galleys, series cover images and profile
-images. The author's "Start A New Submission" wizard uses a newer upload
-control, which the keyboard reaches.
-Keyboard users have no way round: only a mouse click or a dropped file
-chooses one. The keyboard reached the button until a 2018 library
-upgrade, first released in 3.1.2.
-Since: 2018-10-22 · Basis: probe, 2026-09-30. <sup>f-a6</sup>
+Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — Going back to an earlier Native XML "Import Results" tab imports the file again, duplicating submissions and published articles** · 🐞 · high.
-A manager imports a file with Tools › "Native XML Plugin" and gets an
-"Import Results" tab ("Results" on a press). If they choose another tab
-on that page and then that results tab again, the app runs the whole
-import once more. The tab reads as before, apart from the new
-submission numbers.
-Each return adds another copy of every item in the file, and no warning
-is shown. Articles that the file marks as published are published
-again: a journal's issue table of contents lists each of them once per
-copy. No screen deletes the copies.
-Since: 2014-04-17 · Basis: probe, 2026-09-30. <sup>f-a7</sup>
+**A7 — Returning to an "Import Results" tab imports the file again** · 🐞 · user-visible.
+Choosing an earlier "Import Results" tab ("Results" on a press) should
+show that import's outcome again; instead it runs the import once more,
+and the journal gains another copy of every item in the file. A manager
+who looks back at an earlier result finds duplicate submissions on the
+Dashboard.
+Basis: probe. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — A clean round trip reports errors** · 🐞 · medium.
+**A8 — A clean round trip reports errors** · 🐞 · minor.
 Importing a file the app itself exported, unchanged, should read as a
 plain success; the success text is followed by "Errors occured:" with a
-line for each contributor exported without a country and, on a journal,
-"The issue identification element is missing for the article …" for
-each article that is not assigned to an issue, in any journal and with
-any file, the journal's own export included. Nothing is wrong with those
-articles: an article that has not been given an issue has none to name.
-Imported into another journal, press or preprint server, the file also
-gives every contributor, authors included, the line "The author
-'{name}' does not have any contributor role. Defaults to AUTHOR.", and
-every contributor then is an "Author": a book's "Volume editor" and
-"Chapter Author" contributors lose their role, and only editing each
-contributor puts it back. The items are imported all the same, and
-these lines stand in one list with the file's real problems, with
-nothing to tell them apart.
-Since: 2020-02-26 (the issue line), 2025-11-20 (the contributor roles) · Basis: probe, 2026-09-30. <sup>f-a8</sup>
+line for each contributor exported without a country or a contributor
+role and, on a journal, for each article in no issue. The items are
+imported all the same, so the manager cannot tell these lines from
+real failures.
+Basis: probe. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — Native XML import of an article whose section the journal lacks leaves a broken submission and empties the export list** · 🐞 · medium · crash: both.
-A journal or preprint server manager imports a Native XML file whose
-article names a section the journal does not have. The server fails and the "Import
-Results" tab stays empty, with no message. The manager expects the
-import to be refused with the line "Unknown section …".
-The article is kept all the same, as a broken submission. Its Dashboard
-row shows only its number and stage, and its "View" opens nothing. While
-it exists, the Native XML plugin's "Export Articles" list is empty, so
-no article can be exported from that screen. No screen can delete the
-broken submission, and each retry of the import adds another.
-A file exported from another journal carries that journal's section
-abbreviations, so an import meets this whenever the two journals'
-abbreviations differ. {OJS OPS}
-Basis: probe, 2026-09-30. <sup>f-a9</sup>
+**A9 — An unknown section leaves a broken submission** · 🐞 · user-visible · crash: both.
+An article or preprint whose section the journal lacks should be left
+out with the line "Unknown section {abbreviation}", or refused.
+Instead the server fails, the results tab stays empty, and a submission
+with no version is kept: its Dashboard row shows only its number and
+stage, its "View" opens nothing because the page's script fails, and
+the script failure also removes the export list from the export tab.
+{OJS OPS}
+Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — Export list's "Stages" filters leave out every published submission, with no "Published" stage to pick** · 🐞 · medium.
-In Tools › "Native XML Plugin", the export list's "Filters" panel lists
-the workflow stages under "Stages". No stage lists a published
-submission: "Production" gives only the unpublished submissions in
-production, and every stage pressed at once gives every submission but
-the published ones. The dashboard shows them under "Published", which
-the export list does not offer.
-A manager who wants to export only published work cannot narrow the
-list to it, and nothing on screen says that the stage filters leave it
-out. They have to pick it out of the full list by hand. Nothing is
-lost.
-The same list and filters are on OJS's "PubMed XML Export Plugin" and
-OMP's "ONIX 3.0 Monograph Export Plugin", tools whose purpose is
-exporting published work.
-Since: 2026-06-29 · Basis: probe, 2026-09-30. <sup>f-a10</sup>
+**A10 — Published submissions match no stage filter** · 🐞 · minor.
+The export list's "Stages" filters should find a published submission
+under the stage it was published from; pressing any stage, "Production"
+included, leaves it out, so a manager cannot narrow the list to
+published work by stage.
+Basis: probe. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — Export list with more than one page: ticks on other pages are left out of the file, and "Select All" cannot be undone** · 🐞 · medium.
-A manager exporting from Tools › "Native XML Plugin" on a journal,
-press or preprint server with more than 100 submissions sees the list
-split into pages of 100. They tick submissions on one page, move to the
-next and tick more. Going back, the earlier ticks still show. But only
-the lines ticked on the page on screen go into the exported file, and
-nothing says the others were left out.
-"Select All" ticks the 100 lines of the page, but its label stays
-"Select All" instead of turning into "Select None". Pressing it again
-unticks nothing, so the only way back is to untick lines one by one or
-reload the page.
-The file can be completed by exporting each page on its own.
-Since: 2020-05-13 ("Select All"; the dropped ticks are older) · Basis: probe, 2026-09-30. <sup>f-a11</sup>
+**A11 — The export list's selection stops at the page** · 🐞 · minor.
+With more submissions than one page shows, "Select All" should tick
+them all and then read "Select None"; it ticks the page's lines only,
+keeps reading "Select All", and a second press unticks nothing. Ticks
+on another page are dropped from the export: only the page on screen
+goes into the file. A manager exporting a large journal gets fewer
+submissions than ticked, with nothing on screen saying so.
+Basis: probe. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — An export with nothing ticked fails** · 🐞 · low · crash: server.
+**A12 — An export with nothing ticked fails** · 🐞 · minor · crash: server.
 "Export Articles" ("Export Submissions", "Export Preprints") or
-"Export Issues" {OJS} pressed with nothing ticked should say that
-nothing is selected and add no tab, as a journal's DOI export tools do
-("No objects selected."); instead the server fails and the new results
-tab ("Export Submissions Results", "Export Issues Results") stays
-empty: no text, no file, and nothing says that no line was ticked.
-Nothing is lost: ticking at least one line and pressing the button
-again exports as usual. A press's ONIX tool fails the same way
-([ONIX metadata & export, its A16](U74-onix-metadata-export.md#a16)).
-Since: 2021-06-03 ("Export Issues": 2021-07-14) · Basis: probe, 2026-09-30. <sup>f-a12</sup>
+"Export Issues" {OJS} pressed with nothing ticked should say to tick
+something; instead the server fails and the results tab opens empty,
+with no text and no button.
+Basis: probe. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — A users file the Users XML Plugin cannot read ends in a blank "Results" tab, with no reason given** · 🐞 · medium · crash: server.
-A journal or press manager imports a users file in Tools › "Users XML
-Plugin", and the file does not match the format the tool reads: a user
-with no password, a user's role entry without its masthead setting, an
-unknown element, another kind of document, or a file that is not XML.
-The tool should refuse the file and tell the manager why. Instead the
-server answers the import with an error, and the "Results" tab that the
-import opens stays blank: no text, no message. No account is created.
-The manager cannot find out on screen what is wrong with the file, and
-the blank tab can pass for an import still running. A users file
-exported from 3.4 is refused this way on 3.5 and later, because the
-file format changed in 3.5. {OJS OMP}
-Since: 2021-04-19 · Basis: probe, 2026-09-30. <sup>f-a13</sup>
+**A13 — A users file the import cannot read ends in an empty tab** · 🐞 · minor · crash: server.
+A users file that does not match the format (a user with no password,
+an unknown element, another kind of document, a file that is not XML)
+should be refused with the reason; instead the server fails, the
+"Results" tab stays empty, and the manager is not told that nothing was
+imported. {OJS OMP}
+Basis: probe. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — "Export Users" with nothing ticked fails** · ❓ · minor · crash: server.
@@ -1496,48 +1347,31 @@ Lean: 🐞, as the Native tool's empty export (A12).
 Basis: probe. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — A users import says an existing account was emailed a new password, but nothing is sent or changed** · 🐞 · low.
-A journal or press manager imports a users file in Tools › "Users XML
-Plugin". For an account the installation already has, the file's
-password is an old-form hash (see below). The "Results" tab lists,
-under "Import/Export errors:", "The imported user "{username}" password
-could not be imported as is. A new password is been send to the user
-email. The user has been imported.". No email goes out, and the
-account's own password still signs in.
-The manager may tell the person to look for a password that never
-comes, or read the import as having failed. For a new account the same line
-is true: a new password is set and emailed.
-Which file passwords count as old-form depends on the server's PHP:
-on every PHP version, a SHA-1 or MD5 value, the form OJS 2.x wrote; on
-PHP 8.4 and later, also a bcrypt hash at a cost below 12, which
-versions before 3.5.0-2 wrote on PHP older than 8.4, for an account
-that has not signed in since; on PHP 8.2 and 8.3, every bcrypt hash that
-3.5.0-2 and later write, so every existing account in a file exported
-from the same installation gets the line. That is a separate fault
-([users-import-resets-installation-passwords](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U63-A16-users-import-resets-installation-passwords.md)).
-{OJS OMP}
-Since: 2018-04-30 · Basis: probe, 2026-09-30. <sup>f-a15</sup>
+**A15 — An existing account is told a new password was sent** · 🐞 · minor.
+For an account that already exists, a file password stored another way
+makes the results read "…password could not be imported as is. A new
+password is been send to the user email. The user has been imported.";
+no email goes out and the account's own password still signs in. The
+manager is told of a password change that never happened. {OJS OMP}
+Basis: probe. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — On PHP 8.2 or 8.3, a users import drops the file's passwords and mails each new account a new one** · 🐞 · medium.
-A journal or press manager imports a users file in Tools › "Users XML
-Plugin" on a server running PHP 8.2 or 8.3. The file comes from "Export
-Users" on an installation of 3.5.0-2 or later, which writes each
-password as a scrambled copy (a hash) in the form 3.5.0-2 and later
-store. Each new account should sign in with the password it had there.
-Instead it gets a new password that it must change at its first
-sign-in, sent in a "Journal Registration" email ("Press Registration" on
-a press), and its old password no longer works. The "Results" tab reads
-"Import/Export errors:" with a line for each account.
-The accounts and their roles are imported, and each person can get back
-in with the emailed password. The manager cannot move accounts with
-their passwords, and every person moved gets an email the manager did
-not choose to send.
-A file with plain-text passwords imports normally. So do passwords
-that older versions stored on PHP below 8.4, and passwords not changed
-or signed in to since 3.5.0-2. With PHP 8.4 or later on the importing server, the file keeps
-its passwords. {OJS OMP}
-Since: 2025-10-19 · Basis: probe, 2026-09-30. <sup>f-a16</sup>
+**A16 — Below PHP 8.4, every stored password counts as stored another way** · 🐞 · user-visible.
+A password in the file stored the way this installation stores
+passwords should keep working (Rule 25, third row). On a server whose
+PHP is older than 8.4, which the application still supports, it takes
+the last row instead: the "Results" tab reads "The imported user
+"{username}" password could not be imported as is. A new password is
+been send to the user email. The user has been imported." for every
+such account, even in a file exported from another journal of the same
+installation. A new account made from such a file is given a new
+password it must change at its first sign-in, sent by the "Journal
+Registration" email ("Press Registration" on a press); an existing
+account keeps its password and gets no email ([A15](#a15)). With PHP
+8.4 or later, only a password stored another way gets the line.
+{OJS OMP}
+Basis: test run, 2026-09-27 (the results line); probe, 2026-09-29
+(what happens to the passwords); OJS and OMP. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — Importing a users file again gives a later-dated role again** · 🐞 · minor.
@@ -1623,110 +1457,61 @@ Basis: probe, 2026-10-01. <sup>f-a22</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — Pressing an issue in the DOAJ Articles list opens its window headed "DOI Plugin Settings"** · 🐞 · low.
-A journal manager opens Tools › "DOAJ Export Plugin" › "Articles" and
-presses an issue's name in the "Issue" column. The issue's window opens,
-headed "DOI Plugin Settings".
-It is the window the Issues page opens for the same issue, where it is
-headed "Issue Management: Vol. 1 No. 2 (2014)", and that is the heading
-it should carry here. Only the heading is wrong: the manager is told they
-are in a plugin's settings while they edit an issue.
-The name is pressable for every article in the list that sits in an
-issue. The "Articles" tab is there while the journal's "DOI Versioning"
-is off, as it is by default. On 3.3 the Crossref, DataCite and mEDRA
-tools' lists open the window under the same heading.
-Since: 2016-08-27 · Basis: probe, 2026-09-30. <sup>f-ojs1</sup>
+**OJS1 — The DOAJ list's issue window is headed "DOI Plugin Settings"** · 🐞 · minor.
+Pressing an issue's name in the DOAJ Articles list should open that
+issue's window under the issue's name; the window opens headed "DOI
+Plugin Settings", a leftover of the DOI tools that no longer applies.
+Basis: probe. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
-**OJS2 — With "DOAJ Plugin" switched off, the Plugins list still offers the DOAJ tool, whose link shows raw JSON** · 🐞 · low.
-In OJS, the "DOAJ Export Plugin" tool (Tools › "Import/Export") comes
-with the generic "DOAJ Plugin": switching "DOAJ Plugin" off is how a
-journal turns the DOAJ tool off. After a journal manager switches it
-off, the Tools list rightly leaves "DOAJ Export Plugin" out. Settings ›
-Website › "Plugins" does not: under "Import/Export Plugins" the "DOAJ
-Export Plugin" row is still there.
-That row's box shows ticked, so the tool reads as on, and the box cannot
-be pressed. The row still offers "Import/Export Data". That link opens a
-bare page of JSON text in place of the whole screen, with no heading,
-side menu or link back. The JSON is the list the Tools page's
-"Import/Export" tab shows: each tool's name, link and one-line
-description, and no other data.
-"DOAJ Plugin" is on by default, so only a journal that has switched it
-off sees this. The generic "DOAJ Plugin" exists on `main` only; no
-release has it yet.
-Since: 2025-10-04 · Basis: probe, 2026-09-30. <sup>f-ojs2</sup>
+**OJS2 — The DOAJ tool stays on the Plugins list when switched off** · 🐞 · minor.
+With "DOAJ Plugin" unticked, the Tools list rightly leaves "DOAJ Export
+Plugin" out, but Settings › Website › "Plugins" still lists it under
+"Import/Export Plugins", ticked, its box not pressable, with
+"Import/Export Data"; that link opens the raw code text of A1.
+Basis: probe. <sup>f-ojs2</sup>
 
 <a id="ojs3"></a>
-**OJS3 — PubMed files carry an empty journal title once a manager saves "NLM Title Abbreviation" empty** · 🐞 · medium.
-A journal manager opens the PubMed XML Export Plugin and presses "Save" on
-its "Settings" tab while "NLM Title Abbreviation" is empty. That happens
-when they clear an abbreviation, or when they press "Save" on a first visit
-without typing anything, since the box starts empty. From then on, every
-PubMed file the journal exports has an empty journal title. Before that
-save, the file carries the journal's full name, and the manager would
-expect the same while the box is empty.
-The save says "Your changes have been saved.", and the box looks as it did
-before, so nothing tells the manager that the title is gone. NLM requires
-the journal title in every file PubMed receives. Typing an abbreviation, or
-the journal's name, into the box and saving again brings it back.
-Since: 2025-06-04 (3.5, first released in 3.5.0-1; main 2025-06-24) · Basis: probe, 2026-09-30. <sup>f-ojs3</sup>
+**OJS3 — An empty NLM title empties the PubMed file's journal title** · 🐞 · minor.
+Clearing "NLM Title Abbreviation" and pressing "Save" should bring back
+the journal's name in the PubMed file, as before the box was first
+saved; instead every later file's journal title is empty.
+Basis: probe. <sup>f-ojs3</sup>
 
 <a id="ojs4"></a>
-**OJS4 — PubMed exports depend on NLM's site** · 🐞 · medium · crash: server.
+**OJS4 — PubMed exports depend on NLM's site** · 🐞 · minor · crash: server.
 "Export Articles" and "Export Issues" should download the PubMed file.
-Each export loads PubMed's description of the file format from NLM's
-site to check the file; where OJS cannot reach that site (a server
-without outbound access, PHP's remote file access off, or the site
-down), the request ends in a server error and the export leaves the
-tool for a bare page headed "Validation errors:", saying that the
-format could not be loaded, then the file's text, in which nothing is
-wrong. No file downloads, and the PubMed tool has no way to skip the
-check. A refused connection brings the page at once, a dropped one
-after about a minute. Validated DOAJ exports fail the same way
-([OJS7](#ojs7)).
-Since: 2017-03-20 · Basis: probe, 2026-09-30. <sup>f-ojs4</sup>
+Each export fetches PubMed's format from NLM's site to check the file;
+where that site cannot be reached, the server fails and the export
+leaves the tool for a page of "Validation errors:" and the file's text,
+with no download and no way to skip the check.
+Basis: probe. <sup>f-ojs4</sup>
 
 <a id="ojs5"></a>
-**OJS5 — The tools' Settings "Cancel" does nothing** · 🐞 · medium.
+**OJS5 — The tools' Settings "Cancel" does nothing** · 🐞 · minor.
 On the PubMed and the DOAJ Settings tabs, the form's "Cancel" should
-drop the change and put the form back to its saved values; it does
-nothing: the typed text and the ticked box stay, nothing is saved yet,
-and right after it the other tabs open without the usual "The data on
-this form has changed" question. The next "Save" on that form stores
-the change along with whatever the manager meant to save: a DOAJ
-manager who ticks "OJS will deposit articles automatically to DOAJ",
-presses "Cancel", then enters the API key and saves, has turned
-automatic deposits on. Only a reload before saving brings back the
-saved values. Both forms also end with "Required fields are marked
-with an asterisk: *", though no field has an asterisk and none is
-required: both save empty.
-Since: 2016-10-01 (DOAJ), 2025-06-24 (PubMed) · Basis: probe, 2026-09-30. <sup>f-ojs5</sup>
+discard the change or close the form; it does nothing, the typed text
+stays, and nothing is saved. Both forms also end with "Required fields
+are marked with an asterisk: *", though no field is required.
+Basis: probe. <sup>f-ojs5</sup>
 
 <a id="ojs6"></a>
-**OJS6 — On PostgreSQL, the DOAJ Articles list's title and author search is case-sensitive** · 🐞 · low.
+**OJS6 — The DOAJ list's search is case-sensitive** · 🐞 · minor.
 The filter's "Article Title" and "Authors" search should find an
-article whatever the letter case typed; "signalling" finds nothing
-where "Signalling" finds "Signalling Theory Dividends", and "mwandenga"
-nothing where "Mwandenga" finds it. The list answers "No Items", as if
-no published article matched.
-The manager still finds the article by typing the words as they are
-written, or by choosing its issue. Seen on PostgreSQL; MySQL not
+article whatever the letter case typed; "okapi" finds nothing where
+"Okapi" finds "Okapi forest census", and "lovelace" nothing where
+"Lovelace" finds the author's articles. Seen on PostgreSQL; MySQL not
 checked (its default collation would ignore case).
-Since: 2016-06-28 · Basis: probe, 2026-09-30. <sup>f-ojs6</sup>
+Basis: probe. <sup>f-ojs6</sup>
 
 <a id="ojs7"></a>
-**OJS7 — Validated DOAJ exports depend on DOAJ's site** · 🐞 · medium · crash: server.
-"Export" with "Validate XML before the export and registration." ticked,
-as the tab opens, should refuse only a file that fails DOAJ's format.
-The check loads part of that format from DOAJ's site; where OJS cannot
-reach it (a server without outbound access, PHP's remote file access
-off, or the site down), the request ends in a server error and every
-such export leaves the tool for a bare page headed "Validation
-errors:", saying that the format could not be loaded, then the file's
-text, whatever the file holds. No file downloads; with the box
-unticked the file downloads, unchecked. PubMed's exports fail the same
-way ([OJS4](#ojs4)).
-Since: 2016-08-27 · Basis: probe, 2026-09-30. <sup>f-ojs7</sup>
+**OJS7 — Validated DOAJ exports depend on DOAJ's site** · 🐞 · minor · crash: server.
+"Export" with "Validate XML before the export and registration." ticked
+should refuse only a file that fails DOAJ's format. The check loads
+part of that format from DOAJ's site; where the site cannot be reached,
+the server fails and every export is refused with a "Validation
+errors:" page, whatever the file holds.
+Basis: probe. <sup>f-ojs7</sup>
 
 <a id="ojs8"></a>
 **OJS8 — "Register" skips the XML check** · ❓ · minor.
@@ -1739,23 +1524,13 @@ Lean: 🐞 minor, since the label names registration.
 Basis: probe. <sup>f-ojs8</sup>
 
 <a id="ojs9"></a>
-**OJS9 — A DOAJ "Register" that cannot reach DOAJ leaves the article reading "Submitted" for good, never "Failed"** · 🐞 · medium.
-A journal manager presses "Register" in the DOAJ Export Plugin while OJS
-cannot reach DOAJ. The notice says "Articles submitted successfully" and
-the article reads "Submitted". The deposit then fails in the background,
-but the article keeps reading "Submitted" for good, and the status
-filter's "Error" finds nothing.
-Only a site administrator can see the failure, under Administration ›
-"View Failed Jobs". The daily automatic deposit never sends a
-"Submitted" article again, so the article stays out of DOAJ until
-someone presses "Register" again. In 3.5 the same press showed "Deposit
-was not successful!" at once.
-It happens whenever DOAJ's API cannot be reached: DOAJ is down, its name
-does not resolve, or the server has no outbound access. The journal
-needs "DOAJ Plugin" on and a DOAJ API key saved. When DOAJ does answer,
-with an error (a wrong key, a rejected record), the article reads
-"Failed" as it should.
-Since: 2025-06-30 · Basis: probe, 2026-09-30. <sup>f-ojs9</sup>
+**OJS9 — A deposit that cannot reach DOAJ stays "Submitted"** · 🐞 · minor.
+A deposit that fails should turn the row to "Failed" (Rule 37). When the
+installation cannot reach DOAJ at all, the queued deposit fails and
+Administration › "View Failed Jobs" lists it, but the row keeps reading
+"Submitted" for good and the "Error" status of the filter lists
+nothing, so the manager believes the deposit is still under way.
+Basis: probe. <sup>f-ojs9</sup>
 
 <a id="ojs10"></a>
 **OJS10 — "Export Issues" lists the journal's issues in no set order** · 🐞 · minor.
@@ -1775,16 +1550,13 @@ Since: 2021-08-30 · Basis: probe, 2026-10-01. <sup>f-ojs10</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — Pressing "Tab Delimited Content Import Plugin" in a press's Tools list opens a blank page** · 🐞 · low · crash: server.
-A press's Tools › "Import/Export" list shows "Tab Delimited Content
-Import Plugin" as a link. When a manager presses it, the server fails and
-the browser shows a blank white page.
-The tool runs only from the server's command line. The page behind the
-link was meant to say so and how to run it. The plugin has that message,
-translated, but the page that would show it is missing.
-Nothing is lost. PKP's "Learning OMP" guide says the tool is
-command-line only, and the command line prints its usage.
-Since: 2016-03-16 · Basis: probe, 2026-09-30. <sup>f-omp1</sup>
+**OMP1 — A command-line tool is linked from the Tools list** · 🐞 · minor · crash: server.
+"Tab Delimited Content Import Plugin" is meant only for the server's
+command line: the Plugins list gives its row no "Import/Export Data".
+The Tools list still shows its name as a link, which should either be
+plain text or lead to a page explaining how to use the tool; pressing
+it opens a blank white page, because the server fails.
+Basis: probe. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
 **OMP2 — The press's Native XML export asks for ONIX details** · ✅ · minor.
@@ -2659,7 +2431,6 @@ page itself loads into its "Import/Export" and "Permissions" tabs
 `application/json` by design; live-probed 2026-10-01, three apps, two
 runs, as the Journal Manager (a Section Editor gets the access-denied
 page at each).
-Issue report: [pkp-e2e#19](https://github.com/jardakotesovec/pkp-e2e/issues/19) ([docs/issues/U63-A1-tools-absent-tool-address-raw-json.md](../issues/U63-A1-tools-absent-tool-address-raw-json.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `UserXmlPKPUserFilter::parseUser()` (note l): `if
@@ -2694,7 +2465,6 @@ fixed 2026-09-29, OJS and OMP, two runs each (note td14).
 skip the user; `parseUser()` goes on to `Repo::user()->add()` and the
 role rows. Live-probed 2026-09-27, OJS and OMP (notes td13, l): 3
 and 5 characters and an empty `<value>`; a reset was not driven.
-Issue report: [pkp-e2e#20](https://github.com/jardakotesovec/pkp-e2e/issues/20) ([docs/issues/U63-A4-users-import-refused-password-creates-account.md](../issues/U63-A4-users-import-refused-password-creates-account.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `APP\submission\DAO::getExportable()` with
@@ -2742,19 +2512,11 @@ Sync": one job, in N1's name; X2 before N2, both depositing, N2's
 article "Needs Sync": one job, in X2's name with X2's link, none from
 N2, and N2's list read "Submitted". Journals are taken in `ORDER BY
 seq`. Both versioning journals were set back to "No" afterwards.
-Issue report: [pkp-e2e#21](https://github.com/jardakotesovec/pkp-e2e/issues/21) ([docs/issues/U63-A5-doaj-daily-deposit-takes-other-journals-articles.md](../issues/U63-A5-doaj-daily-deposit-takes-other-journals-articles.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-27, three apps (note e): the "Upload
 File" button carries `tabindex="-1"`, and Tab from the tab strip lands
-first on "Import". The attribute is in the shared
-`templates/controllers/fileUploadContainer.tpl`; since pkp-lib
-`3342372300` (plupload 2.1.9 to 2.3.6, 2018-10-22) plupload also takes
-its hidden file input out of the tab order, so nothing in the box takes
-the focus. Walked 2026-09-30, main and stable-3_5_0, three apps, and on
-OJS main the upload window from an author's "Revisions Uploaded" and an
-editor's "Draft Files": Tab from "Article Component" lands on "Cancel".
-Issue report: [pkp-e2e#22](https://github.com/jardakotesovec/pkp-e2e/issues/22) ([docs/issues/U63-A6-upload-file-keyboard-unreachable.md](../issues/U63-A6-upload-file-keyboard-unreachable.md)).
+first on "Import".
 
 <a id="fn-f-a7"></a>
 **f-a7** — The results tab's content is loaded by its tab's own
@@ -2762,15 +2524,12 @@ request, `…/import?temporaryFileId=…`, which runs again whenever the
 tab is chosen (note f). Live-probed 2026-09-27, three apps: two presses
 and one click on each tab left four copies (OJS numbers 802–805, OMP
 662–665).
-Issue report: [pkp-e2e#23](https://github.com/jardakotesovec/pkp-e2e/issues/23) ([docs/issues/U63-A7-import-results-tab-imports-again.md](../issues/U63-A7-import-results-tab-imports-again.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-27, three apps (note f): a submitted
 submission and a published one with two versions, exported and
 re-imported unchanged. The lines come from the native filters'
 `addError()` calls, which do not stop the import.
-Issue report: [pkp-e2e#24](https://github.com/jardakotesovec/pkp-e2e/issues/24) ([docs/issues/U63-A8-native-import-article-without-issue-lists-error.md](../issues/U63-A8-native-import-article-without-issue-lists-error.md)).
-Issue report: [pkp-e2e#25](https://github.com/jardakotesovec/pkp-e2e/issues/25) ([docs/issues/U63-A8-native-import-other-context-resets-contributor-roles.md](../issues/U63-A8-native-import-other-context-resets-contributor-roles.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — OJS `NativeXmlPublicationFilter` adds `unknownSection` and
@@ -2783,14 +2542,12 @@ Submission 0 Assign Editor View" (OPS "521 Production 0 View"); its
 "TypeError: Cannot read properties of undefined (reading
 'authorsStringShort')"; the export tab kept only "Select All" and its
 button, with "…(reading 'fullTitle')".
-Issue report: [pkp-e2e#26](https://github.com/jardakotesovec/pkp-e2e/issues/26) ([docs/issues/U63-A9-import-unknown-section-broken-submission.md](../issues/U63-A9-import-unknown-section-broken-submission.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note g. Live-probed 2026-09-27, three apps: with
 Submission, Review and Production pressed the published submission was
 absent, and present once cleared; on OPS "Production" listed three
 submissions, not the published one.
-Issue report: [pkp-e2e#13](https://github.com/jardakotesovec/pkp-e2e/issues/13) ([docs/issues/U63-A10-export-list-published-no-stage.md](../issues/U63-A10-export-list-published-no-stage.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — `ImportExportPage.vue::toggleSelectAll()` selects the
@@ -2798,21 +2555,18 @@ loaded page and compares with `itemsMax` (note g). Live-probed
 2026-09-27, three apps, 101 submissions: 100 ticked, the label "Select
 All" after both presses; "Paged item 100" ticked on page 1 and "Paged
 item 001" on page 2 gave a file holding "Paged item 001" only.
-Issue report: [pkp-e2e#14](https://github.com/jardakotesovec/pkp-e2e/issues/14) ([docs/issues/U63-A11-export-selection-stops-at-page.md](../issues/U63-A11-export-selection-stops-at-page.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-27 (notes h, i): `GET
 …/NativeImportExportPlugin/exportSubmissions?selectedSubmissions=`
 answered 500 on all three apps, `GET …/exportIssues?selectedIssues=`
 on OJS.
-Issue report: [pkp-e2e#15](https://github.com/jardakotesovec/pkp-e2e/issues/15) ([docs/issues/U63-A12-export-nothing-ticked-empty-results-tab.md](../issues/U63-A12-export-nothing-ticked-empty-results-tab.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-27, OJS and OMP (note k): `GET
 …/UserImportExportPlugin/import?temporaryFileId=…` answered 500 for
 each of the four files (the format check throws instead of reaching the
 `validationErrors` branch); no account was created.
-Issue report: [pkp-e2e#16](https://github.com/jardakotesovec/pkp-e2e/issues/16) ([docs/issues/U63-A13-users-import-unreadable-file-empty-results.md](../issues/U63-A13-users-import-unreadable-file-empty-results.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-27, OJS and OMP, once each (note m):
@@ -2832,7 +2586,6 @@ moved before its first sign-in, got the line, no mail and kept their
 passwords. On PHP older than 8.4 (A16) the same code path keeps an
 existing account's password and sends it nothing; read from the code,
 not driven.
-Issue report: [pkp-e2e#17](https://github.com/jardakotesovec/pkp-e2e/issues/17) ([docs/issues/U63-A15-users-import-existing-account-told-new-password.md](../issues/U63-A15-users-import-existing-account-told-new-password.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Note l: `password_needs_rehash()` is called without a cost,
@@ -2854,7 +2607,6 @@ manager with the contact as reply-to, and its original password no
 longer signed in; a cost-10 bcrypt, PHP's default below 8.4, got no
 line and no mail and signed in with the original. Note l's cost-10
 row-4 line of 2026-09-27 is the PHP 8.4 branch.
-Issue report: [pkp-e2e#18](https://github.com/jardakotesovec/pkp-e2e/issues/18) ([docs/issues/U63-A16-users-import-resets-installation-passwords.md](../issues/U63-A16-users-import-resets-installation-passwords.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Note l. A regression of lib/pkp `85f6b3c074`
@@ -2977,7 +2729,6 @@ and "Status", no "Issue" column, and its rows link only "Author; Title"
 from the "Articles" list only. Set back to "No", the same journal's
 "Articles" list has "Issue" again; on a journal without versioning the
 issue's name opens the window headed "DOI Plugin Settings".
-Issue report: [pkp-e2e#27](https://github.com/jardakotesovec/pkp-e2e/issues/27) ([docs/issues/U63-OJS1-doaj-issue-window-headed-doi-plugin-settings.md](../issues/U63-OJS1-doaj-issue-window-headed-doi-plugin-settings.md)).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — The tool is registered by the enabled generic plugin
@@ -2985,17 +2736,12 @@ Issue report: [pkp-e2e#27](https://github.com/jardakotesovec/pkp-e2e/issues/27) 
 Live-probed 2026-09-27 (note o): the row in two runs; its
 "Import/Export Data" opened the raw text once, at the same address
 note td2 saw answer it.
-Issue report: [pkp-e2e#28](https://github.com/jardakotesovec/pkp-e2e/issues/28) ([docs/issues/U63-OJS2-doaj-tool-listed-when-doaj-plugin-off.md](../issues/U63-OJS2-doaj-tool-listed-when-doaj-plugin-off.md)).
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — Note n (`??` keeps a saved empty string). Live-probed
 2026-09-27: the file text on the export page read
 `<JournalTitle></JournalTitle>` after the box was saved empty (the box
-empty after a reload). Walked 2026-09-30, main and stable-3_5_0: a first
-"Save" with the box untouched empties the title too. Since ojs
-`1e556c9455` (pkp/ojs#4955, main, 2025-06-24) and `c1d5f94e79`
-(pkp/ojs#4918, stable-3_5_0, 2025-06-04).
-Issue report: [pkp-e2e#29](https://github.com/jardakotesovec/pkp-e2e/issues/29) ([docs/issues/U63-OJS3-pubmed-empty-nlm-title-empty-journal-title.md](../issues/U63-OJS3-pubmed-empty-nlm-title-empty-journal-title.md)).
+empty after a reload).
 
 <a id="fn-f-ojs4"></a>
 **f-ojs4** — Note n. Live-probed 2026-09-27: `POST
@@ -3009,12 +2755,9 @@ article ticked, three times each per run, 12 of 12 presses answered
 the log each time "DOMDocument::validate(…PubMed.dtd): Failed to open
 stream: Connection refused", "Filter output validation failed" and
 "Uncaught Exception: Could not convert selected objects.".
-Issue report: [pkp-e2e#30](https://github.com/jardakotesovec/pkp-e2e/issues/30) ([docs/issues/U63-OJS4-OJS7-pubmed-doaj-export-fails-site-unreachable.md](../issues/U63-OJS4-OJS7-pubmed-doaj-export-fails-site-unreachable.md)).
 
 <a id="fn-f-ojs5"></a>
 **f-ojs5** — Note p. Live-probed 2026-09-27 on both Settings tabs.
-Issue report: [pkp-e2e#31](https://github.com/jardakotesovec/pkp-e2e/issues/31) ([docs/issues/U63-OJS5-tool-settings-cancel-does-nothing.md](../issues/U63-OJS5-tool-settings-cancel-does-nothing.md)).
-Issue report: [pkp-e2e#32](https://github.com/jardakotesovec/pkp-e2e/issues/32) ([docs/issues/U63-OJS5-tool-settings-required-note-without-required-field.md](../issues/U63-OJS5-tool-settings-required-note-without-required-field.md)).
 
 <a id="fn-f-ojs6"></a>
 **f-ojs6** — Note q. Live-probed 2026-09-27 on the test installs,
@@ -3024,14 +2767,12 @@ Live-probed again 2026-10-01, OJS main on PostgreSQL 18.6, two runs:
 "okapi" and "OKAPI" answered "No Items"; "Authors" "Lovelace" listed
 both articles, "lovelace" "No Items". MySQL not checked: no MySQL
 install on the test machines.
-Issue report: [pkp-e2e#33](https://github.com/jardakotesovec/pkp-e2e/issues/33) ([docs/issues/U63-OJS6-doaj-list-search-matches-letter-case.md](../issues/U63-OJS6-doaj-list-search-matches-letter-case.md)).
 
 <a id="fn-f-ojs7"></a>
 **f-ojs7** — Note r (`doajArticles.xsd` imports its language list from
 www.doaj.org). Live-probed 2026-09-27: `POST
 …/DOAJExportPlugin/exportSubmissions` answered 500 twice, for journals
 with and without an ISSN.
-Issue report: [pkp-e2e#30](https://github.com/jardakotesovec/pkp-e2e/issues/30) ([docs/issues/U63-OJS4-OJS7-pubmed-doaj-export-fails-site-unreachable.md](../issues/U63-OJS4-OJS7-pubmed-doaj-export-fails-site-unreachable.md)).
 
 <a id="fn-f-ojs8"></a>
 **f-ojs8** — Notes r, u. Live-probed 2026-09-27: "Register" posted
@@ -3040,7 +2781,6 @@ with the box ticked returned "Articles submitted successfully" and
 
 <a id="fn-f-ojs9"></a>
 **f-ojs9** — Live-probed 2026-09-27: note u.
-Issue report: [pkp-e2e#34](https://github.com/jardakotesovec/pkp-e2e/issues/34) ([docs/issues/U63-OJS9-doaj-deposit-unreachable-stays-submitted.md](../issues/U63-OJS9-doaj-deposit-unreachable-stays-submitted.md)).
 
 <a id="fn-f-ojs10"></a>
 **f-ojs10** — Note i (`ExportableIssuesListGridHandler::loadData()`, no
@@ -3066,7 +2806,6 @@ the managers where the other rows offer "Import/Export Data".
 Live-probed 2026-09-27 (note td4): `GET
 …/management/importexport/plugin/CSVImportExportPlugin` answered 500
 with a blank page (the missing `templates/index.tpl`).
-Issue report: [pkp-e2e#35](https://github.com/jardakotesovec/pkp-e2e/issues/35) ([docs/issues/U63-OMP1-omp-tools-csv-import-blank-page.md](../issues/U63-OMP1-omp-tools-csv-import-blank-page.md)).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Note j (omp `1f666119c`, 2016-04-04, "optional ONIX

@@ -980,8 +980,6 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the "Supporting Agencies" row in the "View All Submission Details" window: shown on a review type that discloses the authors, absent on an anonymous one (Rule 7): likely a bullet in scenario 9, which opens the window on an "Open" review
   - {OPS} "Reviewer" chosen in "Create New Role" hiding the whole "Stage Assignment" list, not only greying out its "Production" box (scenario 17, "Roles")
-  - the guard for A15 (Rule 18; issue report
-    `docs/issues/U09-A19-static-page-content-change-lost-unasked.md`): text typed only into "For author and editor" on step 3, then another step's tab, the question asked and the text kept on "Cancel"
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1040,7 +1038,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A10](#a10) | A one-click link opened in a browser signed in as somebody else shows a blank page, never the intended message | 🐞 | user-visible | — |
 | [A12](#a12) | A reviewer's own round is listed under "Previous Reviews" once the submission moves past it | 🐞 | minor | — |
 | [A14](#a14) | "Save for Later" on a review form says "Your changes have been saved." and, on the same screen, "Please fill in required fields." | 🐞 | minor | — |
-| [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a review form's answers are guarded | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a review form's answers are guarded | 🐞 | minor | — |
 | [OMP2](#omp2) | {OMP} The review-complete email tells editors the reviewer "recommends None" | 🐞 | minor | — |
 | [OMP3](#omp3) | {OMP} A review form's "required fields" refusal opens with a raw locale key | 🐞 | minor | — |
 | [OPS1](#ops1) | {OPS} A home-made reviewer role opens a "My Assignments as Reviewer" page headed "undefined (0)" under an "Error" window | 🐞 | minor · crash: script | claim check (claude), 2026-09-30 — "Loading" corrected to "No Items" under an "Error" window; the landing after sign-in and the page's console "TypeError" added |
@@ -1210,21 +1208,14 @@ it cannot be accepted as it is.
 Basis: probe (2026-09-28, both apps). <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
-**A15 — An unsaved free-form review is dropped without a warning** · 🐞 · medium.
+**A15 — An unsaved free-form review is dropped without a warning** · 🐞 · minor.
 A reviewer who types into "For author and editor" or "For editor" {OJS} /
 "For editor only" {OMP} and then presses another tab or leaves the page
 before "Save for Later" is asked nothing, and back on step 3 the text is
 gone. The same step asks "The data on this form has changed. Do you wish
 to continue without saving?" before dropping a changed review-form
-answer, so only the free-form review is left unprotected. The free-form
-review is the default review: a new journal or press has no review
-forms, and the editor's choice when assigning a reviewer starts at "None
-/ Free Form Review". The older forms never count a rich-text box's
-change, so the same text is lost in a static page's "Content"
-([Custom pages & blocks A19](U09-custom-pages-and-blocks.md#a19)), on the
-Profile page ([User profile A19](U03-user-profile.md#a19)) and in an
-issue's "Description" ([Issues A16](U50-issues.md#a16)).
-Basis: probe, 2026-09-30. <sup>[f-a15](#fn-a15)</sup>
+answer, so only the free-form review is left unprotected.
+Basis: probe (2026-09-28, both apps). <sup>[f-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
 **A16 — A refused review-form submit marks the unanswered questions on one form and none on another** · ❓ · minor.
@@ -2381,7 +2372,6 @@ through the address bar raised the browser's leave-page prompt, and the
 change was gone after it. Text typed into "For author and editor" with
 nothing saved before, then the tab or the address bar: no question
 either way, and back on step 3 the box was empty.
-Issue report: [pkp-e2e#117](https://github.com/jardakotesovec/pkp-e2e/issues/117) ([docs/issues/U09-A19-static-page-content-change-lost-unasked.md](../issues/U09-A19-static-page-content-change-lost-unasked.md)).
 
 <a id="fn-a16"></a>
 **f-a16** — `reviewStep3Required.js` adds one `required` rule to the first

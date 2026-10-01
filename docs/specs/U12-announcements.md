@@ -937,7 +937,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | A deleted announcement's image file, and the file a refused or replaced image had, stay in the public files | 🐞 | minor | — |
 | [A13](#a13) | An edited announcement type keeps its old name in the table until a reload; the row's refresh fails with a server error | 🐞 | user-visible | — |
 | [A14](#a14) | The announcement email's "Visit our website…" sentence stays English on a French press or preprint server {OMP OPS} | 🐞 | minor | — |
-| [A15](#a15) | The Atom and RSS 1.0 feeds carry unreadable dates {OJS} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A15](#a15) | The Atom and RSS 1.0 feeds carry unreadable dates ("%2026-%09-%17UTC%UTC%259") {OJS} | 🐞 | minor | — |
 | [OMP2](#omp2) | A press with "Display on Homepage" empty shows the site's announcements on its home page while the site's are on with a count {OMP} | 🐞 | user-visible | — |
 | [A5](#a5) | An announcement's type is printed nowhere a reader looks | ❓ | minor | — |
 | [A6](#a6) | A chosen "Announcement Type" cannot be cleared, only changed | ❓ | minor | — |
@@ -1073,15 +1073,12 @@ website to read the full announcement." in English between them; a
 journal sends the whole mail in French. Basis: probe. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — The Atom and RSS 1.0 feeds carry unreadable dates** {OJS} · 🐞 · medium.
-A visitor who subscribes to the journal's announcement feed gets
-"%2026-%09-%30UTC%UTC%272" as every date of the Atom feed, the feed's
-own stamp and every entry alike (the time part is garbled the same way),
-and "%2026-%09-%30" as each announcement's date in the RSS 1.0 feed, so
-a feed reader cannot date or order the announcements by them. Nobody is
-told, and no setting or form lets the journal correct these dates. The
-RSS 2.0 feed's dates are right. The same fault prints the dates in the
-journal's MARC records: [OAI-PMH A15](U19-oai-pmh.md#a15). Basis: probe, 2026-09-30. <sup>f-a15</sup>
+**A15 — The Atom and RSS 1.0 feeds carry unreadable dates** {OJS} · 🐞 · minor.
+A visitor who subscribes to the Atom or RSS 1.0 feed gets entries whose
+date reads "%2026-%09-%17UTC%UTC%259" (Atom, the feed's own stamp and
+every entry alike) or "%2026-%09-%17" (RSS 1.0); a strict feed reader may
+refuse the whole feed. The RSS 2.0 feed's dates are well formed. Basis:
+probe. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — The browser's feed links do not follow the box until a choice is saved** {OJS} · ❓ · minor.
@@ -2029,7 +2026,6 @@ Live-probed 2026-09-17 (A15), OJS: Atom's `<updated>` and `<published>` read
 `<dc:date>` "%2026-%09-%17", RSS 2.0's `<pubDate>` "Thu, 17 Sep 2026
 10:28:01 +0000"; the same under "Limit feed to 2". The date pattern the two
 templates pass was not read.
-Issue report: [pkp-e2e#87](https://github.com/jardakotesovec/pkp-e2e/issues/87) ([docs/issues/U19-A15-oai-marc-008-percent-signs.md](../issues/U19-A15-oai-marc-008-percent-signs.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16 — A16 evidence.** `AnnouncementFeedPlugin` adds the `<link

@@ -801,79 +801,6 @@ are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Planned**:
-  - the guard for OJS1 (Fields, the issue galley form; issue report
-    `docs/issues/U44-OJS1-new-issue-galley-publisher-id-save-error.md`):
-    a new issue galley added with a Publisher ID, then a second new one
-    with the same value refused as a duplicate
-  - the guard for A4 (Rules 11 and 19; issue report
-    `docs/issues/U44-A4-urn-resave-refused-already-in-use.md`): an
-    article's and a book's URN saved twice on "Identifiers", a new
-    version's inherited URN saved unchanged, and another submission's URN
-    still refused
-  - the guard for OJS3 (Rule 15; issue report
-    `docs/issues/U44-OJS3-issue-publisher-id-not-kept.md`): an issue's
-    Publisher ID saved on its "Identifiers" tab, read back on reopening,
-    and the same value refused on a second issue
-  - the guards for OMP5 (Rule 6; issue reports
-    `docs/issues/U44-OMP5-press-file-publisher-id-not-kept.md` and
-    `docs/issues/U44-OMP5-press-file-publisher-id-box-gone-after-refusal.md`):
-    a format file's Publisher ID saved and read back on the reopened tab,
-    and a refused value leaving the box on the tab with the value
-  - the guard for A6 (Rule 10; scenario 4 passes it; issue report
-    `docs/issues/U44-A6-urn-check-number-wrong-digit.md`): "Add Check
-    Number" on `urn:nbn:de:0000-abc` giving `urn:nbn:de:0000-abc2`, and
-    "Assign" ending in the digit the tab preview's rule gives
-  - the guard for A13 (Rule 12; issue report
-    `docs/issues/U44-A6-urn-check-number-wrong-digit.md`): a galley's
-    tab with "URN Suffix" empty, "Add Check Number" greyed or never
-    writing "NaN"
-  - the guard for A2 (Rule 5; issue report
-    `docs/issues/U44-A2-publisher-id-cannot-be-removed.md`): a galley's,
-    a chapter's and a format's Publisher ID saved, then emptied and
-    saved, the reopened tab empty; a tab saved without the box keeping
-    the stored ID
-  - the guard for A5 (Rule 19; issue report
-    `docs/issues/U44-A5-new-version-galley-publisher-id-refused.md`): a
-    galley's Publisher ID saved, a new version created, and the new
-    version's galley tab saved unchanged; another submission's galley
-    still refused the same value
-  - the guard for A9 (Fields, the "Identifiers" page; issue report
-    `docs/issues/U44-A9-urn-assign-offered-without-edit-permission.md`):
-    a Layout Editor's "Identifiers" page with "Assign" and "Clear" greyed
-    like "Save", and the editor's still active
-  - the guard for A14 (Rule 14; scenario 5 passes it; issue report
-    `docs/issues/U44-A14-cleared-urn-stays-on-tab.md`): a galley's and a
-    chapter's tab read right after "Clear" › "OK", the URN gone and
-    "Assign" offered again
-  - the guard for A7 (issue report
-    `docs/issues/U44-A7-urn-assign-box-leaves-urn-out.md`): a galley's
-    "Identifiers" tab whose assign box names the URN the tab shows
-  - the guard for A8 (Fields, the URN plugin's settings; issue report
-    `docs/issues/U44-A8-urn-suffix-pattern-refusal-text-code.md`): a
-    suffix pattern box of spaces saved and refused with the box's own
-    message
-  - the guard for A11 (Fields, the URN plugin's settings window; issue
-    report `docs/issues/U44-A11-urn-settings-pattern-script-error.md`):
-    the pattern choice selected and every box ticked and unticked with no
-    page error, and the window reopened with the choice saved
-  - the guard for OMP1 (Fields, the URN plugin's settings window; issue
-    report `docs/issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md`):
-    a press's URN settings saved with "Chapters" alone and with "Files"
-    alone
-  - the guard for A10 (Fields, the URN plugin's settings window;
-    scenario 2 passes it; issue report
-    `docs/issues/U44-A10-urn-prefix-refusal-written-out-brackets.md`):
-    a prefix without "urn:" refused with the message under "URN Prefix"
-    reading the form with no written-out codes
-  - the guard for OMP2 (Side effects, the book page; issue report
-    `docs/issues/U44-OMP2-book-page-format-urn-labelled-code-unlinked.md`):
-    a format's assigned URN on the book page headed "URN" and linked to
-    the resolver
-  - the guard for OMP4 (Rule 17; issue report
-    `docs/issues/U44-OMP4-press-publish-urn-table-instead-of-sentence.md`):
-    a press with "Monographs" alone ticked, its publish window showing
-    one line for the monograph's URN, as a journal's does
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -884,7 +811,24 @@ Left out of the scenarios above, by reason:
   - "Galleys" ticked without "Articles": the confirmation window's table
     with galley rows only (Rule 17)
 - **Register carries it**:
+  - OJS3 (an issue's Publisher ID never kept; Rule 15)
+  - OJS1 (a new issue galley with a Publisher ID failing; Fields, the
+    issue galley form)
+  - A2 (a publisher ID emptied on a tab coming back; Rule 5)
+  - OMP5 (a press file's Publisher ID never kept; Rule 6)
+  - A4 (the article's own URN refused on a later "Save"; Rule 11)
+  - A13 ("Add Check Number" on an empty tab suffix writing "NaN";
+    Rule 12)
+  - A14 (a galley's or a chapter's tab still showing a cleared URN;
+    Rule 14; scenario 5 passes it)
+  - A4 and A5 (a new version copying the URN and the galleys' publisher
+    IDs, then refusing their saves; Rule 19)
+  - A6 (the check digit of "Add Check Number" and "Assign" differing
+    from the app's own; Rule 10; scenario 4 passes it)
   - A12 (a URN differing from another only in case accepted; Rule 11)
+  - A8, A10 and A11 (the settings window's raw text code, written-out
+    angle brackets and failing page script; Fields, the URN plugin's
+    settings window; scenario 2 passes A10)
   - OMP6 (a press file's default URN without the format number; Rule 8)
 - **No seed**:
   - an issue galley's "Publisher ID" on an existing issue galley, its
@@ -924,24 +868,24 @@ entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A2](#a2) | A Publisher ID emptied on a galley's, chapter's or format's "Identifiers" tab comes back after "Save" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A4](#a4) | Editors saving an article's or book's own URN again are told it is "already in use" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A5](#a5) | A new version's galley, chapter or format tab refuses the publisher ID copied from the earlier version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A6](#a6) | "Add Check Number" and "Assign" end URNs with the wrong check digit | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A7](#a7) | The assign box on a galley's, issue's, chapter's, format's or file's "Identifiers" tab does not name the URN | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A8](#a8) | URN settings: a suffix pattern of only spaces is refused with a raw text code instead of a message | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A9](#a9) | A Layout Editor, or anyone who may not edit the version, is offered the URN's "Assign" and "Clear" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A10](#a10) | URN settings: a refused URN prefix's message shows "&lt;NID&gt;" codes under the box and in the notice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A11](#a11) | URN settings: while "Use the pattern entered below…" is selected, each click on a box raises a script error | 🐞 | low · crash: script | issues (claude), 2026-10-01 — re-verified |
-| [A13](#a13) | "Add Check Number" on a tab writes "NaN" into an empty suffix box | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A14](#a14) | After "Clear" on a galley's, chapter's, format's or file's "Identifiers" tab, the removed URN stays shown | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OJS1](#ojs1) | Adding an issue galley with a Publisher ID hangs on "Save" and adds nothing | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [OJS3](#ojs3) | An issue's Publisher ID, typed on its "Identifiers" tab, is silently dropped on "Save" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [OMP1](#omp1) | URN settings: a press that ticks only "Chapters" or "Files" is told to choose the objects | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OMP2](#omp2) | Book page: a publication format's URN is headed "other::urn" and shown as plain text, not linked | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OMP4](#omp4) | Publishing a book on a press that gives URNs to monographs alone shows a one-row table, not one line | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OMP5](#omp5) | A press file's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [OMP6](#omp6) | A press's format files get URNs without their format number, or none when the files pattern uses "%f" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [A2](#a2) | A publisher ID saved on a galley's, chapter's or format's tab can never be removed | 🐞 | minor | — |
+| [A4](#a4) | The article's own URN is refused as "already in use" on a later save and on every new version | 🐞 | user-visible | — |
+| [A5](#a5) | A new version's galleys keep the old publisher ID, and their tab then refuses every save | 🐞 | minor | — |
+| [A6](#a6) | "Add Check Number" and "Assign" compute a different check digit from the one the app appends itself | 🐞 | user-visible | — |
+| [A7](#a7) | The tab's assign box reads "Assign the URN to this galley" with the URN left out | 🐞 | minor | — |
+| [A8](#a8) | A suffix pattern of spaces is refused with a raw text code | 🐞 | minor | — |
+| [A9](#a9) | "Assign" is offered on the "Identifiers" page to a role that cannot save it | 🐞 | minor | — |
+| [A10](#a10) | The URN prefix refusal shows "&amp;lt;NID&amp;gt;" under the box and in the notice | 🐞 | minor | — |
+| [A11](#a11) | The URN settings window raises a page error on every tick while the pattern choice is selected | 🐞 | invisible · crash: script | — |
+| [A13](#a13) | "Add Check Number" on a tab writes "NaN" into an empty suffix box | 🐞 | minor | — |
+| [A14](#a14) | After "Clear", a galley's or chapter's tab still shows the removed URN | 🐞 | minor | — |
+| [OJS1](#ojs1) | A new issue galley with a Publisher ID fails with a server error | 🐞 | user-visible · crash: server | — |
+| [OJS3](#ojs3) | An issue's Publisher ID is never kept | 🐞 | user-visible | — |
+| [OMP1](#omp1) | A press cannot save URN settings with only "Chapters" or "Files" ticked | 🐞 | minor | — |
+| [OMP2](#omp2) | The book page labels a format's URN with a code and does not link it | 🐞 | minor | — |
+| [OMP4](#omp4) | A press's confirmation window shows the URN table where a journal shows one sentence | 🐞 | minor | — |
+| [OMP5](#omp5) | A press file's Publisher ID is never kept | 🐞 | user-visible | — |
+| [OMP6](#omp6) | A press file's default URN leaves out the format number the settings window announces | 🐞 | minor | — |
 | [A3](#a3) | An article's Publisher ID accepts values the tabs refuse, a duplicate included | ❓ | minor | — |
 | [A12](#a12) | A URN that differs from another only in case is accepted as new | ❓ | minor | — |
 | [OJS2](#ojs2) | The JATS XML's publisher ID is the article's number, not the typed Publisher ID | ❓ | minor | — |
@@ -951,18 +895,12 @@ entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a2"></a>
-**A2 — A Publisher ID emptied on a galley's, chapter's or format's "Identifiers" tab comes back after "Save"** · 🐞 · medium.
-An editor empties "Publisher ID" on the "Identifiers" tab of a galley,
-a chapter or a publication format and presses "Save". The window closes
-as if the change was saved, but the old value is back when the tab is
-reopened. The article's own Publisher ID on the Metadata page empties
-normally.
-The ID can be replaced by another value but never removed, and nothing
-says so. It stays in the item's native XML export, no other item of the
-same kind in the journal, press or server can take it, and a DOI or URN
-assigned to the item later from a custom pattern with "%x" is built
-from it. The fix is a few lines in one shared form class.
-Basis: probe, 2026-10-01. <sup>f-a2</sup>
+**A2 — A publisher ID saved on a tab can never be removed** · 🐞 · minor.
+Emptying "Publisher ID" on a galley's, a chapter's or a publication
+format's "Identifiers" tab and pressing "Save" closes the window as a
+success, but the old value is back when the tab is reopened. The
+article's Publisher ID on the Metadata page empties normally.
+Basis: probe, 2026-09-24. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — The article's Publisher ID takes what the tabs refuse** · ❓ · minor.
@@ -981,149 +919,88 @@ where the ID is part of an address (a press's files).
 Basis: probe, 2026-09-24. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — Editors saving an article's or book's own URN again are told it is "already in use"** · 🐞 · medium.
-An editor opens the "Identifiers" page of an article (on a press, a
-book) whose URN is already saved and presses "Save" without changing
-it. For example, they save a new version's page as it arrives, or they
-clear the URN and assign it again. The save is refused with "The given
-URN suffix is already in use for another published item. Please enter
-a unique URN suffix for each item.", but no other item carries that
-URN.
-This happens whenever the version's internal number differs from its
-submission's number. That is always the case for a second or later
-version. On a journal or press, it is also the case for every
-submission created after any submission first got a second version.
-The same check also lets a real duplicate through. If another
-submission's number equals this version's number and that submission
-already carries the URN, the save is accepted.
-The URN is the only field on the page in a standard install, so the
-refusal blocks only that save. It needs the "URN" plugin switched on
-with URNs for articles (on a press, for monographs). Preprint servers
-have no URN plugin.
-Basis: probe, 2026-09-30. <sup>f-a4</sup>
+**A4 — The article's own URN counts as "already in use"** · 🐞 · user-visible.
+An editor who presses "Save" on an article's "Identifiers" page with
+the URN it already carries (to save nothing new, or on a new version,
+which inherits the URN, Rule 19) expects the save to pass. It is
+refused with "The given URN suffix is already in use for another
+published item. Please enter a unique URN suffix for each item." The
+duplicate check compares the version's number with the submission's
+number, so the refusal comes whenever the two differ, which is always
+the case for a second version and, on an install with some history,
+for most first ones.
+Basis: probe, 2026-09-24. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A new version's galley, chapter or format tab refuses the publisher ID copied from the earlier version** · 🐞 · low.
-An editor gives an article's galley a publisher ID on its "Identifiers"
-tab, then creates a new version. On a press the same goes for a book's
-chapters and publication formats. The new version's galley is stored
-with the same publisher ID, and keeps it as long as nobody saves its
-tab. When the editor presses "Save" on that tab, even without changing
-anything, the save is refused with "The public identifier '…' already
-exists for another object of the same type." The other object is the
-earlier version's galley.
-While the copied value is in the box, no save on the tab goes through.
-On a journal or press with the "URN" plugin on, that includes
-assigning the new version's galley a URN. Saving with the box emptied
-does not help either, because an emptied publisher ID is not removed
-([A2](#a2), [pkp-e2e#76](https://github.com/jardakotesovec/pkp-e2e/issues/76)).
-It needs publisher IDs switched on for galleys (on a press, for
-chapters or publication formats), which is off by default, and an item
-that was given one before the new version was made.
-Basis: probe, 2026-10-01. <sup>f-a5</sup>
+**A5 — A new version's galleys keep the old publisher ID** · 🐞 · minor.
+After "Create New Version", each galley of the new version carries the
+publisher ID of the galley it was copied from. The uniqueness rule then
+counts the old galley against the new one, so every "Save" on the new
+galley's "Identifiers" tab is refused with "The public identifier
+'{value}' already exists for another object of the same type…" until
+its publisher ID is changed, and while it stands the new galley's URN
+cannot be assigned either. Emptying the box does not help: the old
+value is kept ([A2](#a2)).
+Basis: probe, 2026-09-24. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — "Add Check Number" and "Assign" end URNs with the wrong check digit** · 🐞 · medium.
-With "Check Number" ticked in the URN plugin, an editor who presses
-"Add Check Number" or "Assign" gets a URN whose last digit is worked
-out by the wrong rule. The buttons compute it from the part after the
-plugin's "URN Prefix" setting only. The check digit covers the whole
-URN, prefix included, and the server computes it that way for the URNs
-it builds itself, such as a galley's or a chapter's. For
-`urn:nbn:de:0000-abc` (prefix `urn:nbn:de:0000-`), "Add Check Number"
-appends "0", while the URN's check digit is "2".
-Nothing warns the editor: the URN saves as it stands, and the
-published article's or book's page shows it. The two rules give the
-same digit about one time in ten, so about nine in ten URNs set
-through these buttons end in a digit that fails the check. The way
-round is to work out the digit elsewhere and type it by hand.
-This affects "Add Check Number" on the "Identifiers" page of an article
-or book and on the "Identifiers" tab of a galley, issue, chapter,
-publication format or file. It also affects "Assign" on the
-"Identifiers" page when URN suffixes come from a pattern.
-Basis: probe, 2026-09-30. <sup>f-a6</sup>
+**A6 — Two different check digits for the same URN** · 🐞 · user-visible.
+With "Check Number" ticked, the digit that "Add Check Number" appends,
+and the one "Assign" appends on the article's page, are worked out from
+the suffix alone. The URNs the app builds itself from a pattern on the
+tabs and in "Publish Issue" get their digit from the whole URN, prefix
+included, which is how national libraries check it. With the prefix
+`urn:nbn:de:0000-` and the suffix `abc`, "Add Check Number" appends
+"0" where the whole-URN rule gives "2", so the URN handed to the
+library does not validate.
+Basis: probe, 2026-09-24. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The assign box on a galley's, issue's, chapter's, format's or file's "Identifiers" tab does not name the URN** · 🐞 · low.
-On the "Identifiers" tab of a galley or an issue (journal), or of a
-chapter, a publication format or a file (press), the box that assigns
-the URN reads "Assign the URN to this galley" (issue, chapter…) and does
-not say which URN. The same box in "Publish Issue", and on a press in
-"Format Approval", names it: "Assign the URN urn:nbn:de:0000-jpkjpk.v2i1
-to this issue".
-Nothing is lost: the URN is shown just above the box. In Turkish,
-Azerbaijani and Georgian the label also keeps a word ending or a colon
-that belongs to the missing URN.
-The URN plugin is off by default. The box shows once a manager switches
-the plugin on for these items, with the "URN Suffix" setting on "Use
-default patterns." or on a typed pattern. With "Enter an individual URN
-suffix for each published item…" the box leaves the URN out too, which
-is right there (Cause).
-Basis: probe, 2026-10-01. <sup>f-a7</sup>
+**A7 — The assign box leaves the URN out** · 🐞 · minor.
+On an "Identifiers" tab the box that assigns the URN reads "Assign the
+URN to this galley" (issue, chapter…), with a double space where the
+URN belongs. The same box in "Publish Issue", and on a press in
+"Format Approval", names it ("Assign the URN {urn} to this issue").
+Basis: probe, 2026-09-24. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — URN settings: a suffix pattern of only spaces is refused with a raw text code instead of a message** · 🐞 · low.
-In the URN plugin's settings window, with "Use the pattern entered
-below…" chosen, a pattern box that holds only spaces is refused on
-"Save", rightly. But the message under the box and at the top of the
-window is a text code such as
+**A8 — A suffix pattern of spaces is refused with a raw text code** · 🐞 · minor.
+With "Use the pattern entered below…" chosen and a ticked kind's box
+holding only spaces, "Save" is refused, rightly, but the message under
+the box, at the top of the window and in the notice at the top right
+is a text code such as
 "##plugins.pubIds.urn.manager.settings.form.urnPublicationSuffixPatternRequired##"
 instead of "Please enter the URN suffix pattern for articles." An empty
 box is refused properly, with "This field is required."
-Nothing is saved wrong, and the manager gets past it by typing a
-pattern. The code shows in every interface language. OPS has no URN
-plugin.
-Basis: probe, 2026-10-01. <sup>f-a8</sup>
+Basis: probe, 2026-09-24. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — A Layout Editor, or anyone who may not edit the version, is offered the URN's "Assign" and "Clear"** · 🐞 · low.
-On the article's or book's "Identifiers" page, a person who may not
-edit the version (a Layout Editor, a Proofreader, or a Section Editor
-whose assignment has "Permissions" unticked) sees "Save" greyed but
-"Assign" enabled. Pressing "Assign" fills the box with the URN, which
-cannot be saved and is gone when the page is left. Once a URN is
-stored, the same person is offered "Clear", which empties the box but
-cannot be saved either. Expected: "Assign" and "Clear" greyed like
-"Save", which already follows the person's permission.
-The URN on record never changes, and nothing tells the person that what
-the box shows was not kept.
-This shows only on a journal or press that has switched on the URN
-plugin (off until a manager ticks it), with URNs for articles (OJS) or
-monographs (OMP) and suffixes made from a pattern ("Use default
-patterns." or a typed pattern). OPS has no URN plugin.
-Basis: probe, 2026-10-01. <sup>f-a9</sup>
+**A9 — "Assign" is offered to a role that cannot save** · 🐞 · minor.
+On the article's "Identifiers" page, a role that may not edit the
+publication (an assigned Section Editor whose assignment has
+"Permissions" unticked, a Layout Editor, a Proofreader) sees "Save"
+greyed but "Assign" enabled. Pressing "Assign" fills the box with the
+URN, which cannot be saved and is gone when the page is left. Expected:
+"Assign" greyed like "Save".
+Basis: probe, 2026-09-24. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — URN settings: a refused URN prefix's message shows "&lt;NID&gt;" codes under the box and in the notice** · 🐞 · low.
-In the URN plugin's settings window, a "URN Prefix" not shaped
-"urn:…:" is refused on "Save", rightly. The message under the box reads
-`The URN prefix pattern must be in the form "urn:"&lt;NID&gt;":"&lt;NSS&gt;.`:
-the angle brackets of the notation show as the HTML codes `&lt;` and
-`&gt;`. The notice at the top right of the page shows the same text,
-but only after the manager's next successful save, next to "Your
-changes have been saved.".
-Nothing is lost: once the prefix is corrected, the settings save. The
-fix is a text change in the plugin's message and its translations.
-It shows only on a journal or press that has turned the URN plugin on
-(OPS has no URN plugin), in English and in every language that
-translates the message except Thai (OJS) and French (OMP): 45 of the
-OJS plugin's translations and 20 of OMP's.
-Basis: probe, 2026-10-01. <sup>f-a10</sup>
+**A10 — The URN prefix refusal shows "&amp;lt;NID&amp;gt;"** · 🐞 · minor.
+A prefix not shaped "urn:…:" is refused, rightly. The top of the
+window reads `The URN prefix pattern must be in the form "urn:"<NID>":"<NSS>.`,
+but the message under the box and the notice at the top right read
+`…"urn:"&lt;NID&gt;":"&lt;NSS&gt;."`, the angle brackets written out as
+codes.
+Basis: probe, 2026-09-24. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — URN settings: while "Use the pattern entered below…" is selected, each click on a box raises a script error** · 🐞 · low · crash: script.
-In the URN plugin's settings window, the window's own script fails in
-the browser while "Use the pattern entered below to generate URN
-suffixes…" is selected. Choosing that option, and every tick or untick
-of a content box ("Issues", "Articles", …) or of "Check Number" after
-it, raises an error that only the browser's console shows. Opening the
-window again once that option is saved raises one more. The script
-reads the result of a name match before checking that the match
-succeeded, and "Check Number" never matches.
-Nothing visible is wrong: the pattern boxes open and grey out as they
-should, and "Save" works. OPS is not affected because it has no URN
-plugin.
-Basis: probe, 2026-10-01. <sup>f-a11</sup>
+**A11 — The URN settings window's script fails under the pattern choice** · 🐞 · invisible · crash: script.
+While "Use the pattern entered below…" is selected, every tick of a
+kind box, of "Check Number" or of a suffix choice raises an error in
+the page, seen only in the browser's console: the window's own script
+fails. The pattern boxes still turn on and off as they should, and the
+save works.
+Basis: probe, 2026-09-24. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — A URN that differs only in case counts as new** · ❓ · minor.
@@ -1136,43 +1013,33 @@ then fail registration; that one answer settles it.
 Basis: probe, 2026-09-24. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — "Add Check Number" writes "NaN" into an empty suffix box** · 🐞 · medium.
+**A13 — "Add Check Number" writes "NaN" into an empty suffix box** · 🐞 · minor.
 On an "Identifiers" tab with the individual suffix choice and "Check
 Number" ticked, "Add Check Number" pressed while the "URN Suffix" box
 is empty writes "NaN" into the box. With a suffix typed it appends one
 digit ("g1" becomes "g16"). The article's page greys the same button
 while its box is empty (Fields).
-Basis: probe, 2026-10-01. <sup>f-a13</sup>
+Basis: probe, 2026-09-24. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — After "Clear" on a galley's, chapter's, format's or file's "Identifiers" tab, the removed URN stays shown** · 🐞 · low.
-An editor presses "Clear" under an assigned URN on the "Identifiers"
-tab of a galley (OJS), or of a chapter, a publication format or a file
-(OMP), and answers "OK" to "Are you sure you wish to delete the existing
-URN?". The URN is removed at once, but the tab goes on showing it, with
-"The URN is assigned to this galley." and "Clear", until the window is
-closed and opened again. An issue's tab shows the change at once,
-except in a journal that requires subscriptions.
-Nothing is lost: the URN is gone as asked, and only the tab says
-otherwise until it is reopened. On 3.3 the DOI plugin's "Clear" on the
-same tabs behaves the same way, and DOIs are in far wider use than
-URNs.
-Basis: probe, 2026-10-01. <sup>f-a14</sup>
+**A14 — A cleared URN stays on the tab** · 🐞 · minor.
+After "Clear" › "OK" on a galley's or a chapter's "Identifiers" tab,
+the URN is removed at once, but the tab keeps showing it, with "The
+URN is assigned to this galley." and "Clear", until the window is
+closed and opened again. An issue's tab shows the change at once.
+Basis: probe, 2026-09-24. <sup>f-a14</sup>
 
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — Adding an issue galley with a Publisher ID hangs on "Save" and adds nothing** · 🐞 · medium · crash: server.
+**OJS1 — A new issue galley with a Publisher ID fails** · 🐞 · user-visible · crash: server.
 A manager who uploads a new issue galley and types a Publisher ID that
 is not only digits expects the galley to be added. The save fails on
 the server: the window stays open with a spinner beside a greyed
 "Save" and no message, and the galley is not added (the list still
-reads "No Items"). "Cancel" still closes the window.
-A value of digits alone is refused with a message, by the form's own
-rule; every other value makes the save fail. There is a way round on
-screen, which nothing points to. It happens only in a journal that has
-turned on Publisher IDs for issue galleys, which is off by default.
-Basis: probe, 2026-09-30. <sup>f-ojs1</sup>
+reads "No Items"). "Cancel" still closes the window. Saving the same
+value on an existing issue galley works.
+Basis: probe, 2026-09-24. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
 **OJS2 — The JATS XML's publisher ID is not the typed one** · ❓ · minor.
@@ -1185,47 +1052,30 @@ exports carry; the article's number can stay when none is typed.
 Basis: probe, 2026-09-24. <sup>f-ojs2</sup>
 
 <a id="ojs3"></a>
-**OJS3 — An issue's Publisher ID, typed on its "Identifiers" tab, is silently dropped on "Save"** · 🐞 · medium.
+**OJS3 — An issue's Publisher ID is never kept** · 🐞 · user-visible.
 A manager who types a Publisher ID on an issue's "Identifiers" tab and
-presses "Save" sees the window close as if the value were saved. When
-the tab is reopened the box is empty, and the value appears nowhere
-else. The tab's own format check still works: a value made only of
-digits, or one containing "/", is refused with its message.
-No message says the value was dropped, and no other screen stores an
-issue's Publisher ID. Some journals build issue DOIs from a custom
-suffix pattern containing "%x" (Custom Identifier). There the issue is
-given a DOI with a literal "%x" where the Publisher ID should be. Only
-journals that have ticked "Enable for Issues" under Publisher ID, which
-is off by default, meet any of this.
-Basis: probe, 2026-09-30. <sup>f-ojs3</sup>
+presses "Save" sees the window close as a success, but the box is
+empty when the tab is reopened, and the value shows nowhere. Digits
+and "/" are still refused with the tab's message. "Enable for Issues"
+offers a field that keeps nothing.
+Basis: probe, 2026-09-24. <sup>f-ojs3</sup>
 
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — URN settings: a press that ticks only "Chapters" or "Files" is told to choose the objects** · 🐞 · low.
-A Press manager who ticks only "Chapters", only "Files", or only those
-two under "Press Content" in the URN plugin's settings window cannot
-save it. "Save" is refused with "Please choose the objects URNs should
-be assigned to.", though objects are chosen.
-Nothing is lost. Ticking "Monographs" or "Publication Formats" as well
-lets the save through, so the press still gets its chapter or file
-URNs, at the cost of a warning each time a book is published.
-Basis: probe, 2026-10-01. <sup>f-omp1</sup>
+**OMP1 — "Chapters" or "Files" alone cannot be saved** · 🐞 · minor.
+A Press Manager who ticks only "Chapters", only "Files", or only those
+two under "Press Content" and saves the URN settings is refused with
+"Please choose the objects URNs should be assigned to." Ticking
+"Monographs" or "Publication Formats" as well lets the save through.
+Basis: probe, 2026-09-24. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — Book page: a publication format's URN is headed "other::urn" and shown as plain text, not linked** · 🐞 · low.
-Readers of a press's book page see a publication format's URN under
-the heading "other::urn". That heading is the system's internal code
-for a URN. The URN itself is plain text, not a link. On a journal, an
-article's URN is headed "URN" and links to the resolver address.
-The URN shown is right, so readers can copy it into a resolver by
-hand, but they cannot follow it. The fix is one block in one template.
-It shows only on a press that uses the URN plugin with "Publication
-Formats" ticked and has assigned a format's URN. The book page shows
-no other URN to compare with: chapter URNs appear on no reader page,
-and whether the book's own URN should appear is an open question of
-its own.
-Basis: probe, 2026-10-01. <sup>f-omp2</sup>
+**OMP2 — A format's URN is labelled with a code** · 🐞 · minor.
+Under an approved, available publication format on the book page, a
+URN is shown under the label "other::urn" and as plain text. On a
+journal the same block reads "URN" and links to the resolver.
+Basis: probe, 2026-09-24. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
 **OMP3 — Readers never see a monograph's URN** · ❓ · user-visible.
@@ -1238,47 +1088,30 @@ a journal does, labelled "URN" and linked to the resolver.
 Basis: probe, 2026-09-24. <sup>f-omp3</sup>
 
 <a id="omp4"></a>
-**OMP4 — Publishing a book on a press that gives URNs to monographs alone shows a one-row table, not one line** · 🐞 · low.
-A press can have the URN plugin give URNs to monographs and to nothing
-else, with "Monographs" the only box ticked under "Press Content". When
-an editor presses "Publish" on a book, the confirmation window shows a
-small table headed "URN" and "Item", with a single row, "Publication".
-Up to OMP 3.3.0-14, the window showed one line in this setup: "The URN
-for this publication will be {urn}.", or the highlighted warning "A URN
-has not been assigned to this publication.". OJS still shows that line
-to a journal that ticks only "Articles".
-When the book has no URN yet, the table marks it with a small warning
-sign beside "Unassigned" instead of the highlighted box. In either
-layout the window only warns, and the book can still be published. With
-more than one kind ticked, the table is the intended view and lists
-every item.
-Basis: probe, 2026-10-01. <sup>f-omp4</sup>
+**OMP4 — A press always gets the URN table** · 🐞 · minor.
+With only "Monographs" ticked, a journal's confirmation window says
+"The URN for this publication will be {urn}." A press in the same
+state shows the two-column table with one row, "Publication", because
+the press's check for the one-line case can never be true.
+Basis: probe, 2026-09-24. <sup>f-omp4</sup>
 
 <a id="omp5"></a>
-**OMP5 — A press file's Publisher ID is never kept** · 🐞 · medium.
+**OMP5 — A press file's Publisher ID is never kept** · 🐞 · user-visible.
 On a format file's "Edit a file" › "Identifiers", "Save" closes the
 window as a success, but the "Publisher ID" box is empty when it is
-reopened, whatever the value; it last worked in OMP 3.2. The values
-Rule 4 refuses ("12345", "a/b", "12-34") are still refused, and after
-such a refusal the box disappears from the tab, leaving only the
-message, "Cancel" and "Save", until the window is closed and opened
-again: a second fault with its own fix, which the first fix leaves in
-place.
-Basis: probe, 2026-09-30. <sup>f-omp5</sup>
+reopened, whatever the value. The values Rule 4 refuses ("12345",
+"a/b", "12-34") are still refused, and after such a refusal the box
+disappears from the tab, leaving only the message, "Cancel" and
+"Save".
+Basis: probe, 2026-09-24. <sup>f-omp5</sup>
 
 <a id="omp6"></a>
-**OMP6 — A press's format files get URNs without their format number, or none when the files pattern uses "%f"** · 🐞 · medium.
-Under "Use default patterns." the URN plugin's settings window lists
-"%p.%m.%f.%s for files": press initials, book, publication format,
-file. A format file's "Identifiers" tab instead previews, and "Save"
-assigns, `urn:nbn:de:0000-jpk.14.113`: press "jpk", book 14, file 113,
-with the format's number (3) missing.
-Under "Use the pattern entered below…", a files pattern with "%f", as
-the window's own help offers it, makes the file's URN
-`urn:nbn:de:0000-jpk.14.%f.113`. The tab refuses to assign it, so no
-file gets a URN until the press drops "%f" from the files pattern, and
-with it the format's number.
-Basis: probe, 2026-10-01. <sup>f-omp6</sup>
+**OMP6 — A press file's default URN leaves out the format number** · 🐞 · minor.
+Under "Use default patterns." the settings window lists "%p.%m.%f.%s
+for files", but a format file's tab previews
+"urn:nbn:de:0000-{press initials}.{monograph number}.{file number}",
+with no format number; chapter and format URNs follow their lines.
+Basis: probe, 2026-09-24. <sup>f-omp6</sup>
 
 ### Retired
 
@@ -1882,7 +1715,6 @@ part of OMP5.
 **f-a2** — `PKPPublicIdentifiersForm::execute()`: `if
 ($this->getData('publisherId')) { setStoredPubId(…) }`; nothing clears
 it. Live-probed 2026-09-24 (note q5). An issue's and a press file's value is never stored at all (notes f-ojs3, f-omp5).
-Issue report: [pkp-e2e#76](https://github.com/jardakotesovec/pkp-e2e/issues/76) ([docs/issues/U44-A2-publisher-id-cannot-be-removed.md](../issues/U44-A2-publisher-id-cannot-be-removed.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — The publication schema's `pub-id::publisher-id` has only
@@ -1899,7 +1731,6 @@ $contextId)`, whose query excludes `s.submission_id <> $excludePubObjectId`:
 a publication number compared with submission numbers. A version's own
 row (and its siblings' copies, note c) is therefore counted unless its
 number equals the submission's. Live-probed 2026-09-24 (note q6): the refusal met every first version too, the submission and publication numbers differing on every new seed (537 and 551 on OJS, 512 and 524 on OMP).
-Issue report: [pkp-e2e#7](https://github.com/jardakotesovec/pkp-e2e/issues/7) ([docs/issues/U44-A4-urn-resave-refused-already-in-use.md](../issues/U44-A4-urn-resave-refused-already-in-use.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — OJS `Publication Repository::version()` clones each galley
@@ -1907,7 +1738,6 @@ Issue report: [pkp-e2e#7](https://github.com/jardakotesovec/pkp-e2e/issues/7) ([
 `anyPubIdExists(…, ASSOC_TYPE_REPRESENTATION, $galleyId, true)` →
 `Galley DAO::pubIdExists()` excludes only the galley itself. Live-probed
 2026-09-24 (note q7).
-Issue report: [pkp-e2e#79](https://github.com/jardakotesovec/pkp-e2e/issues/79) ([docs/issues/U44-A5-new-version-galley-publisher-id-refused.md](../issues/U44-A5-new-version-galley-publisher-id-refused.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `plugins/pubIds/urn/js/checkNumber.js`
@@ -1919,13 +1749,11 @@ server-built URN except `customId`) computes over the whole URN, per the
 algorithm its comment cites. Both run the same conversion table; for
 `urn:nbn:de:0000-abc` the suffix-only digit is 0 and the whole-URN
 digit 2 (worked with both routines, 2026-09-24). Live-probed 2026-09-24 (note q8).
-Issue report: [pkp-e2e#54](https://github.com/jardakotesovec/pkp-e2e/issues/54) ([docs/issues/U44-A6-urn-check-number-wrong-digit.md](../issues/U44-A6-urn-check-number-wrong-digit.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `urnSuffixEdit.tpl` includes `urnAssignCheckBox.tpl` with
 `pubId=""` in both places; `urnAssign.tpl` passes the real `$pubId`.
 Live-probed 2026-09-24 (note q9).
-Issue report: [pkp-e2e#123](https://github.com/jardakotesovec/pkp-e2e/issues/123) ([docs/issues/U44-A7-urn-assign-box-leaves-urn-out.md](../issues/U44-A7-urn-assign-box-leaves-urn-out.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — `URNSettingsForm` messages
@@ -1936,20 +1764,17 @@ without the `.form` segment (`…settings.urnPublicationSuffixPatternRequired`),
 and `Locale::get()` renders a missing key as `##key##`. An empty box is
 stopped in the browser as a required field before any message is
 looked up. Live-probed 2026-09-24 (note q10).
-Issue report: [pkp-e2e#126](https://github.com/jardakotesovec/pkp-e2e/issues/126) ([docs/issues/U44-A8-urn-suffix-pattern-refusal-text-code.md](../issues/U44-A8-urn-suffix-pattern-refusal-text-code.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `FieldPubIdUrn` offers "Assign" whenever it can build the
 URN and the box is empty (note c); the page's "Save" follows the edit
 gate. Live-probed 2026-09-24 (note q1).
-Issue report: [pkp-e2e#82](https://github.com/jardakotesovec/pkp-e2e/issues/82) ([docs/issues/U44-A9-urn-assign-offered-without-edit-permission.md](../issues/U44-A9-urn-assign-offered-without-edit-permission.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Live-probed 2026-09-24, OJS and OMP (note b): the same
 refusal for `nbn:de:0000-`, `urn:nbn` and `URN:NBN:DE:0000-`, with the
 escaped form under the box and in the notice and the plain one in the
 summary at the top (`…form.urnPrefixPattern`).
-Issue report: [pkp-e2e#138](https://github.com/jardakotesovec/pkp-e2e/issues/138) ([docs/issues/U44-A10-urn-prefix-refusal-written-out-brackets.md](../issues/U44-A10-urn-prefix-refusal-written-out-brackets.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-24 (note q10), OJS and OMP: the page
@@ -1958,7 +1783,6 @@ management/settings/website#plugins on choosing the pattern radio, on
 each kind tick and on "Check Number" (11 on OJS, 21 on OMP in one run
 each), none under the default choice. The window's clicks are handled
 by `URNSettingsFormHandler.js` (note b).
-Issue report: [pkp-e2e#131](https://github.com/jardakotesovec/pkp-e2e/issues/131) ([docs/issues/U44-A11-urn-settings-pattern-script-error.md](../issues/U44-A11-urn-settings-pattern-script-error.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-24 (note q18), OJS and OMP:
@@ -1969,13 +1793,11 @@ agency's resolver treats the two as one URN.
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-24 (note q23), the OJS galley tab and
 the OMP chapter tab; the button is the legacy `#checkNo` (note f-a6).
-Issue report: [pkp-e2e#54](https://github.com/jardakotesovec/pkp-e2e/issues/54) ([docs/issues/U44-A6-urn-check-number-wrong-digit.md](../issues/U44-A6-urn-check-number-wrong-digit.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-24 (note q25). The galley and chapter
 tabs' "Clear" deletes the URN at once (note e) without redrawing the
 tab; the issue tab reloads `#identifiersTab` (note f).
-Issue report: [pkp-e2e#107](https://github.com/jardakotesovec/pkp-e2e/issues/107) ([docs/issues/U44-A14-cleared-urn-stays-on-tab.md](../issues/U44-A14-cleared-urn-stays-on-tab.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `IssueGalleyForm::validate()` calls
@@ -1983,7 +1805,6 @@ Issue report: [pkp-e2e#107](https://github.com/jardakotesovec/pkp-e2e/issues/107
 ? $this->_issueGalley->getId() : null, true)`, which passes the `null`
 of a new galley to `IssueGalleyDAO::pubIdExists(…, int $excludeGalleyId,
 …)`: a `TypeError`, answered as a server error. Live-probed 2026-09-24 (note q11): the save answered a server error (500) on `…/grid/issue-galleys/issue-galley-grid/update?issueId=…&issueGalleyId=`.
-Issue report: [pkp-e2e#5](https://github.com/jardakotesovec/pkp-e2e/issues/5) ([docs/issues/U44-OJS1-new-issue-galley-publisher-id-save-error.md](../issues/U44-OJS1-new-issue-galley-publisher-id-save-error.md)).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — `ArticleFront` (note i). Live-probed 2026-09-24 (note q24).
@@ -1994,20 +1815,17 @@ Issue report: [pkp-e2e#5](https://github.com/jardakotesovec/pkp-e2e/issues/5) ([
 closed the window and read back empty; no issue setting row held a
 publisher ID. OJS `schemas/issue.json` declares no
 `pub-id::publisher-id`, so the issue save drops it.
-Issue report: [pkp-e2e#44](https://github.com/jardakotesovec/pkp-e2e/issues/44) ([docs/issues/U44-OJS3-issue-publisher-id-not-kept.md](../issues/U44-OJS3-issue-publisher-id-not-kept.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `URNSettingsForm` `urnObjects` check: `enableIssueURN
 || enablePublicationURN || enableRepresentationURN`; the form has no
 `enableIssueURN` and never names `enableChapterURN` or
 `enableSubmissionFileURN`. Live-probed 2026-09-24 (note q15).
-Issue report: [pkp-e2e#137](https://github.com/jardakotesovec/pkp-e2e/issues/137) ([docs/issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md](../issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md)).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — `monograph_full.tpl` prints `{$pubIdType}` (the plugin's
 `getPubIdType()`, `other::urn`) as the label and the stored value as
 text. Live-probed 2026-09-24 (notes h, q22).
-Issue report: [pkp-e2e#141](https://github.com/jardakotesovec/pkp-e2e/issues/141) ([docs/issues/U44-OMP2-book-page-format-urn-labelled-code-unlinked.md](../issues/U44-OMP2-book-page-format-urn-labelled-code-unlinked.md)).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — `monograph_full.tpl` loops over the pub-id plugins only
@@ -2019,7 +1837,6 @@ inside the publication formats; nothing reads the publication's
 ($publicationFormatUrnEnabled && !$chapterUrnEnabled &&
 !$publicationFormatUrnEnabled && !$submissionFileUrnEnabled)` can never
 hold, so every enabled case reaches the table. Live-probed 2026-09-24 (note q16).
-Issue report: [pkp-e2e#144](https://github.com/jardakotesovec/pkp-e2e/issues/144) ([docs/issues/U44-OMP4-press-publish-urn-table-instead-of-sentence.md](../issues/U44-OMP4-press-publish-urn-table-instead-of-sentence.md)).
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — Live-probed 2026-09-24 (notes q4, g): every value, typed
@@ -2032,8 +1849,6 @@ out. Were a value stored, `SubmissionFile::getBestId()` and
 `CatalogBookHandler` would put it in the file's download address on the
 book page in place of the file's number (the reason for the "12-34"
 refusal); nothing on screen can store one.
-Issue report: [pkp-e2e#45](https://github.com/jardakotesovec/pkp-e2e/issues/45) ([docs/issues/U44-OMP5-press-file-publisher-id-not-kept.md](../issues/U44-OMP5-press-file-publisher-id-not-kept.md)).
-Issue report (the box lost after a refusal): [pkp-e2e#46](https://github.com/jardakotesovec/pkp-e2e/issues/46) ([docs/issues/U44-OMP5-press-file-publisher-id-box-gone-after-refusal.md](../issues/U44-OMP5-press-file-publisher-id-box-gone-after-refusal.md)).
 
 <a id="fn-f-omp6"></a>
 **f-omp6** — Live-probed 2026-09-24 in two runs (note g): file
@@ -2041,7 +1856,6 @@ previews `urn:nbn:de:0000-kone.531.132` and `…pkp.536.138` beside the
 formats' `…kone.531.4` and `…pkp.536.7`, while the settings window lists
 "%p.%m.%f.%s for files". OMP `classes/plugins/PubIdPlugin.php`
 `generateDefaultPattern()` does not resolve the format for a file.
-Issue report: [pkp-e2e#146](https://github.com/jardakotesovec/pkp-e2e/issues/146) ([docs/issues/U44-OMP6-press-file-urn-default-pattern-no-format.md](../issues/U44-OMP6-press-file-urn-default-pattern-no-format.md)).
 
 ## Reference — entry points & surfaces
 
