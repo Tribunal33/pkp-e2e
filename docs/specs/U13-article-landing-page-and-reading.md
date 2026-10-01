@@ -2794,7 +2794,7 @@ Issue report: [pkp-e2e#211](https://github.com/jardakotesovec/pkp-e2e/issues/211
 **f-ojs6** — Note d: `display.tpl` picks `issue.return` whenever the page
 has an issue, though its link is the article's `parentUrl`. Live-probed
 2026-09-25 (note d), two runs.
-Issue report: [docs/issues/U13-OJS6-pdf-reader-return-arrow-names-issue.md](../issues/U13-OJS6-pdf-reader-return-arrow-names-issue.md).
+Issue report: [pkp-e2e#239](https://github.com/jardakotesovec/pkp-e2e/issues/239) ([docs/issues/U13-OJS6-pdf-reader-return-arrow-names-issue.md](../issues/U13-OJS6-pdf-reader-return-arrow-names-issue.md)).
 
 <a id="fn-f-ojs7"></a>
 **f-ojs7** — Live-probed 2026-09-25, note q15: after a refused "OK" the
