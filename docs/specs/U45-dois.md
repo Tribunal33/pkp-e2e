@@ -1820,7 +1820,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A deposited item reads "This item has been manually registered with a registration agency." | 🐞 | minor | — |
 | [A8](#a8) | The "DOI Statuses" button and the rows' tick boxes have no name for a screen reader | 🐞 | minor | — |
 | [A9](#a9) | A pattern symbol with nothing to fill it stays in the DOI | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
-| [A11](#a11) | Searching by a DOI's start finds a different set on each app, and nothing on a preprint server | 🐞 | user-visible | — |
+| [A11](#a11) | Searching the DOIs page by a DOI misses some DOIs on each app, and fails on a preprint server | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | Clearing a "Registration" filter after "Unregistered" keeps unpublished works out of the list | 🐞 | minor | — |
 | [A13](#a13) | A refused or failed bulk action closes its window with no message | 🐞 | minor | — |
 | [A14](#a14) | The "Mark DOIs Needs Sync" question asks to mark the records "as stale" | 🐞 | minor | — |
@@ -1966,15 +1966,23 @@ is what the manager chose.
 Basis: probe, 2026-09-26. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — Searching by a DOI's start finds a different set on each app, and nothing on a preprint server** · 🐞 · user-visible.
-A phrase beginning with digits and a dot is meant to find the items
-whose DOI begins with it. On a journal it finds articles by their own
-DOI only (a galley's DOI finds nothing); on a press only books with a
-matching chapter, format or file DOI (the monograph's own DOI finds
-nothing, even typed whole); on a preprint server nothing at all, "10.1234/" included. A
-manager looking an item up by its DOI gets an empty or partial list and
-no hint why.
-Basis: probe, 2026-09-26. <sup>f-a11</sup>
+**A11 — Searching the DOIs page by a DOI misses some DOIs on each app, and fails on a preprint server** · 🐞 · medium · crash: server.
+A manager types a DOI, or its start, into the search box of the DOIs
+page and presses Enter, expecting the items that carry it. What the
+search finds depends on the app and on the kinds ticked under "Items
+with DOIs" (Settings › Distribution › "DOIs"). Each app starts with only
+the works' own kind ticked. A journal ("Articles") finds an article by
+its DOI. Once "Article galleys" is ticked, a galley's DOI is never
+found. A press ("Monographs") finds nothing for any DOI. The book's own
+DOI is the one kind it never finds. Once chapters, formats or files are
+ticked, their DOIs are found. A preprint server ("Preprints") fails on
+the server at every DOI search. An "Error" window opens and the list
+stays unfiltered. Once "Preprint galleys" is ticked, the error stops,
+but no DOI is ever found. Where the search misses, the list reads "No
+items found.", so the manager is led to believe that no item carries the
+DOI. The editorial dashboard's "Search submissions" gives the same
+results, the error included.
+Basis: probe, 2026-10-01. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — Clearing a "Registration" filter after "Unregistered" keeps unpublished works out of the list** · 🐞 · minor.
@@ -3701,6 +3709,7 @@ unpublished) was seen on all three apps.
 three apps, two runs each. Live-probed again 2026-09-29 (q33) on a press
 with chapter and format DOIs, and on a journal and a preprint server:
 the same.
+Issue report: [docs/issues/U45-A11-doi-search-finds-different-sets.md](../issues/U45-A11-doi-search-finds-different-sets.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `addFilter()` sets the published status with `unregistered`
