@@ -21,7 +21,7 @@ and the hourly routine starts one only when none is running
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 | **Taken: issues session, VM s1, 2026-10-01**; done: A10 (pkp-e2e#352), A2 (pkp-e2e#353), A12 (pkp-e2e#354), A1 (pkp-e2e#355), A4 (pkp-e2e#356) |
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 |  |
 | [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 |  |
-| [U51](../specs/U51-subscriptions.md) | 25 | 2 | 12 |  |
+| [U51](../specs/U51-subscriptions.md) | 25 | 2 | 12 | **A12 taken: issues session, VM s1, 2026-10-01** (joined to U52 A9) |
 | [U50](../specs/U50-issues.md) | 14 | 2 | 9 | A14 done with U69 A16 (pkp-e2e#284) |
 | [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 |  |
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | A1: open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md |
