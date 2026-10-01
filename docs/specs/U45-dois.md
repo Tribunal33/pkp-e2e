@@ -1870,8 +1870,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [OPS1](#ops1) | The "DOIs" box reads "…to assigned to works published on this server." | 🐞 | minor | — |
-| [OPS3](#ops3) | The Crossref "Username" help reads "…see the advise above." | 🐞 | minor | — |
+| [OPS1](#ops1) | A preprint server's "DOIs" settings box is labelled "Allow … (DOIs) to assigned to works …" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [OPS3](#ops3) | A preprint server's Crossref "Username" help reads "see the advise above" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS4](#ops4) | On a preprint server, a minor version's galleys get new DOIs instead of keeping their source's | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A1](#a1) | A new journal arrives in a DOI state its own Setup tab refuses to save | ❓ | minor | — |
 | [A5](#a5) | The Registration tab keeps a new agency even when its fields are refused | ❓ | minor | — |
@@ -2317,11 +2317,13 @@ Basis: probe, 2026-09-29. <sup>f-omp3</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — The "DOIs" box reads "…to assigned to works published on this server."** · 🐞 · minor.
-The box's label on a preprint server reads "Allow Digital Object
-Identifiers (DOIs) to assigned to works published on this server.";
-"to be assigned" is meant.
-Basis: probe, 2026-09-26. <sup>f-ops1</sup>
+**OPS1 — A preprint server's "DOIs" settings box is labelled "Allow … (DOIs) to assigned to works …"** · 🐞 · low.
+A manager of a preprint server opens Settings › Distribution › "DOIs".
+The box under "DOIs" is labelled "Allow Digital Object Identifiers
+(DOIs) to assigned to works published on this server."; "to be assigned"
+is meant. Only the English label of a preprint server has the slip. A
+journal's and a press's labels read correctly.
+Basis: probe, 2026-10-01. <sup>f-ops1</sup>
 
 <a id="ops2"></a>
 **OPS2 — A preprint server offers "Automatic Deposit" but nothing runs it** · ❓ · user-visible.
@@ -2335,12 +2337,15 @@ Lean: deposit on a schedule, as a journal does.
 Basis: probe, 2026-09-26. <sup>f-ops2</sup>
 
 <a id="ops3"></a>
-**OPS3 — The Crossref "Username" help reads "…see the advise above."** · 🐞 · minor.
-On a preprint server the Crossref block's "Username" help reads "The
-Crossref username that will be used to authenticate your deposits. If
-you are using a personal account, see the advise above."; a journal's
-reads "…please see the advice above.".
-Basis: probe, 2026-09-26. <sup>f-ops3</sup>
+**OPS3 — A preprint server's Crossref "Username" help reads "see the advise above"** · 🐞 · low.
+A manager of a preprint server chooses Crossref as the registration
+agency under Settings › Distribution › "DOIs" › "Registration". The help
+under "Username" reads "The Crossref username that will be used to
+authenticate your deposits. If you are using a personal account, see the
+advise above.": "advise" stands where "advice" is meant. A journal's
+help has "advice", and also says "please see". Only the English help of
+a preprint server's Crossref plugin has the slip.
+Basis: probe, 2026-10-01. <sup>f-ops3</sup>
 
 <a id="ops4"></a>
 **OPS4 — On a preprint server, a minor version's galleys get new DOIs instead of keeping their source's** · 🐞 · low.
@@ -3992,6 +3997,7 @@ missing only that chapter (q33; the filter's rule is note z8).
 <a id="fn-f-ops1"></a>
 **f-ops1** — `ops/locale/en/manager.po`
 `manager.setup.enableDois.description`. Live-probed 2026-09-26, OPS.
+Issue report: [docs/issues/U45-OPS1-preprint-server-dois-box-label-wording.md](../issues/U45-OPS1-preprint-server-dois-box-label-wording.md).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — `ops/classes/scheduler/Scheduler.php` registers only the
@@ -4005,6 +4011,7 @@ deposit task.
 <a id="fn-f-ops3"></a>
 **f-ops3** — Live-probed 2026-09-26, OPS (both reads of the tab),
 against the journal's help.
+Issue report: [docs/issues/U45-OPS3-preprint-server-crossref-username-help-wording.md](../issues/U45-OPS3-preprint-server-crossref-username-help-wording.md).
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — `ops/classes/publication/Repository.php` `version()` clears

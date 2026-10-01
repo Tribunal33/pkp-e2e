@@ -1,0 +1,13 @@
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -185,8 +185,8 @@
+ 
+ msgid "manager.setup.enableDois.description"
+ msgstr ""
+-"Allow Digital Object Identifiers (DOIs) to assigned to works published on "
+-"this server."
++"Allow Digital Object Identifiers (DOIs) to be assigned to works published "
++"on this server."
+ 
+ msgid "doi.manager.settings.doiObjectsRequired"
+ msgstr ""

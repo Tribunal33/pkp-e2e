@@ -1,0 +1,11 @@
+--- a/plugins/generic/crossref/locale/en/locale.po
++++ b/plugins/generic/crossref/locale/en/locale.po
+@@ -73,7 +73,7 @@
+ msgstr "Username"
+ 
+ msgid "plugins.importexport.crossref.settings.form.username.description"
+-msgstr "The Crossref username that will be used to authenticate your deposits. If you are using a personal account, see the advise above."
++msgstr "The Crossref username that will be used to authenticate your deposits. If you are using a personal account, please see the advice above."
+ 
+ msgid "plugins.importexport.crossref.settings.form.usernameRequired"
+ msgstr "Please enter the username you got from Crossref."
