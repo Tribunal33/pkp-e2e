@@ -1524,7 +1524,7 @@ where it is made.
 
 <a id="fn-f-a1"></a>
 **f-a1** — Incidental of 2026-09-04 (U05 test author, OJS): on Issues › Future Issues › "Create Issue" the "Title" box arrived ticked, "Save" with an empty title re-rendered the form with no visible error line and the grid stayed "No Items". Mechanism: `IssueForm::initData()` ticks `showTitle` for a new issue; its `FormValidatorCustom` is registered on the field `showTitle` (the check box) with `editor.issues.titleRequired`. The scenario API seeds its issues with the box unticked for this reason (scenarios.md `issues[]`). Live-probed 2026-09-25 (td4): the notice "Title is required for the issue." showed at the window's top right from about 0.2 s to 4.5 s after "Save" and was gone at 6 s; nothing on the form was marked; the list still read "No Items" 16 s later.
-Issue report: [docs/issues/U50-A1-create-issue-title-refusal-unmarked.md](../issues/U50-A1-create-issue-title-refusal-unmarked.md).
+Issue report: [pkp-e2e#80](https://github.com/jardakotesovec/pkp-e2e/issues/80) ([docs/issues/U50-A1-create-issue-title-refusal-unmarked.md](../issues/U50-A1-create-issue-title-refusal-unmarked.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `IssueGridHandler::unpublishIssue()` calls `Repo::issue()->updateCurrent($request->getContext()->getId())` with no issue, and `updateCurrent()` then runs `JournalDAO::removeCurrentIssue()` regardless of which issue was unpublished. The home page's part: U10 Rule 14 needs a current issue. Probe: td11; "Archives" still listed the published issues.
