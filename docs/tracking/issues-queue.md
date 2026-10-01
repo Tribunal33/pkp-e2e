@@ -73,7 +73,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U43](../specs/U43-funding.md) | 3 | 0 | 1 |  |
 | [U22](../specs/U22-my-submissions.md) | 1 | 0 | 1 |  |
 | [U14](../specs/U14-reader-comments-and-moderation.md) | 5 | 0 | 0 |  |
-| [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 |  |
+| [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 | A9 joined to docs/issues/U35-A5-message-discussion-created-by-recipient.md by the workstation session (2026-10-01; its missing activity line, another cause, went to incidentals); the other four open |
 | [U23](../specs/U23-submissions-dashboard.md) | 4 | 0 | 0 |  |
 | [U29](../specs/U29-review-setup-and-review-forms.md) | 4 | 0 | 0 |  |
 | [U55](../specs/U55-notify-users.md) | 4 | 0 | 0 |  |
