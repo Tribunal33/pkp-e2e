@@ -1,0 +1,20 @@
+--- a/plugins/generic/datacite/filter/DataciteXmlFilter.php
++++ b/plugins/generic/datacite/filter/DataciteXmlFilter.php
+@@ -827,11 +827,16 @@
+     /**
+      * Create funding references node.
+      */
+-    public function createFundingReferencesNode(DOMDocument $doc, Publication $publication, Submission $submission): ?DOMNode
++    public function createFundingReferencesNode(DOMDocument $doc, ?Publication $publication, ?Submission $submission): ?DOMNode
+     {
+         /** @var DataciteExportDeployment $deployment */
+         $deployment = $this->getDeployment();
+ 
++        // Issues have no funders: only an article or its galley carries funding references.
++        if (!$publication || !$submission) {
++            return null;
++        }
++
+         $funders = $submission->getData('funders');
+         if ($funders->isEmpty()) {
+             return null;

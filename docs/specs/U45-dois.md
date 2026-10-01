@@ -1817,7 +1817,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | The agency plugins' Tools pages have an empty heading | 🐞 | minor | — |
 | [A21](#a21) | A "Save" on the Registration tab without an agency leaves a warning in the server log | 🐞 | invisible | — |
 | [A22](#a22) | After "Assign DOIs" answered at once, the "Bulk Actions" menu stays open over the list | 🐞 | minor | — |
-| [OJS2](#ojs2) | With DataCite, a published issue cannot be exported or deposited: both fail on the server | 🐞 | user-visible · crash: server | — |
+| [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | The publish window lists the ISSN warning twice | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's DOIs page ignores file DOIs when choosing which books to list | 🐞 | user-visible | — |
 | [OMP2](#omp2) | A DOI typed into a book's empty file row fails on the server, yet is stored | 🐞 | minor · crash: server | — |
@@ -2096,13 +2096,18 @@ who chose "Never" expects no DOI to appear by itself.
 Basis: probe, 2026-09-26. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
-**OJS2 — With DataCite, a published issue cannot be exported or deposited: both fail on the server** · 🐞 · user-visible · crash: server.
+**OJS2 — On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it** · 🐞 · high · crash: server.
 On a journal with DataCite chosen, "Export DOIs" on a published issue
-("Issues" tab) closes its window and shows nothing: the export fails on
-the server. "Deposit All" marks the issue "Submitted", and its
-background deposit fails the same way, so the issue's DOI never reaches
-DataCite.
-Basis: probe, 2026-09-26. <sup>f-ojs2</sup>
+("Issues" tab) closes the "Export DOIs" confirmation window and shows
+nothing: the export fails on the server. "Deposit All" marks the issue
+"Submitted", and its background deposit fails the same way, so the
+issue's DOI never reaches DataCite. The journal cannot register any
+issue DOI with DataCite from the application, by deposit or by a
+downloaded file. The DOIs page tells the manager the opposite: the issue
+reads "Submitted" and no error shows. Article DOIs on the same journal
+are not affected. It needs DataCite as the journal's registration agency
+and "Issues" ticked under "Items with DOIs".
+Basis: probe, 2026-10-01. <sup>f-ojs2</sup>
 
 <a id="ojs3"></a>
 **OJS3 — The publish window lists the ISSN warning twice** · 🐞 · minor.
@@ -3760,6 +3765,7 @@ Argument #2 ($publication) must be of type APP\publication\Publication,
 null given"); after "Deposit All" the issue's deposit job failed with the
 same error. On a Crossref journal the issue export answers the 400 of
 A13 instead.
+Issue report: [docs/issues/U45-OJS2-datacite-issue-export-fails.md](../issues/U45-OJS2-datacite-issue-export-fails.md).
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — Live-probed 2026-09-26 (q23), OJS, two processes and two
