@@ -745,6 +745,9 @@ Left out of the scenarios above, by reason:
   - the guard for A10 (issue report
     `docs/issues/U52-A10-paypal-error-page-no-heading.md`):
     the PayPal error page of scenario 5 carrying the heading "Paypal Fee Payment" and that name in its breadcrumb and browser tab
+  - the guard for A2 (issue report
+    `docs/issues/U52-A2-fee-task-stays-after-fee-recorded.md`):
+    after "Paid" and after "Waived" are saved in the "Payments" menu, the Author's Tasks panel holding no "The publication fee is due for payment." task
 - **Rarely met**:
   - "Purchase Issue" set: the reader's "Purchase Issue Fee" payment page
     (Settings bullet 7; Fields, the manual method's payment page)
@@ -811,7 +814,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Payment Types" says the fees appear in About the Journal; no page shows them | 🐞 | minor | — |
-| [A2](#a2) | The Author's "The publication fee is due for payment." task stays after the fee is recorded | 🐞 | user-visible | — |
+| [A2](#a2) | Authors are still told to pay the publication fee after the editor records it as "Paid" or "Waived" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A payment link fails with a blank error page once the instructions are emptied, and still takes notifications once "Enable" is off | 🐞 | user-visible · crash: server | — |
 | [A4](#a4) | "Payment Types" explains required fields, but none is required | 🐞 | minor | — |
 | [A9](#a9) | The membership address gives a blank error page signed out or with payments not set up | 🐞 | minor · crash: server | — |
@@ -837,13 +840,20 @@ sees an article's price only on the locked link.
 Basis: probe, 2026-09-27. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — The fee task outlives the fee** · 🐞 · user-visible.
-After an editor records the APC as "Paid" or "Waived", each Author's Tasks
-panel still reads "The publication fee is due for payment.", and pressing
-it still opens a payment page for the fee. The Author is told to pay a fee
-that is settled, and can send the journal another "Manual Payment
-Notification" for it.
-Basis: probe, 2026-09-27. <sup>f-a2</sup>
+**A2 — Authors are still told to pay the publication fee after the editor records it as "Paid" or "Waived"** · 🐞 · medium.
+After an editor records the APC as "Paid" or "Waived", each Author's
+Tasks panel still reads "The publication fee is due for payment.", and
+pressing it still opens a payment page for the fee. The Author is told
+to pay a fee that is settled, and can send the journal another "Manual
+Payment Notification" for it. The editor's record is right: the
+"Payments" menu and the journal's list of payments show the fee as paid
+or waived. It happens whenever an editor records a requested fee in the
+workflow's "Payments" menu, whatever the journal's payment method. A
+journal on "Manual Fee Payment" records every fee there. On "Paypal Fee
+Payment", a fee the Author pays through the task settles that request,
+and its task goes; only a fee the editor waives, or records as paid
+outside PayPal, leaves the task.
+Basis: probe, 2026-10-01. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — A payment link after payments stop** · 🐞 · user-visible · crash: server.
@@ -1080,6 +1090,7 @@ manual page's layout to a journal (note td16).
 
 <a id="fn-f-a2"></a>
 **f-a2** — The menu's save fulfils a queued payment it creates itself, so the requested one and its task stay (note i). Live-probed 2026-09-27 (note td10): after "Paid" and after "Waived" the task opened the manual page with the request's "50.00 (USD)", and its notification reached the principal contact.
+Issue report: [docs/issues/U52-A2-fee-task-stays-after-fee-recorded.md](../issues/U52-A2-fee-task-stays-after-fee-recorded.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `PaymentManager::getPaymentForm()` returns `false` when the chosen plugin is not configured, and `PaymentHandler::pay()` calls `display()` on the result. `ManualPaymentPlugin::isConfigured()` reads only `manualInstructions` (note d); neither `pay()` nor `plugin()` reads `paymentsEnabled`, so with "Enable" off the page and its notification still work. Live-probed 2026-09-27 (note td8): with the instructions emptied, `GET {journal}/payment/pay/{id}` answered 500 with an empty page, logged "Uncaught Error: Call to a member function display() on false in pages/payment/PaymentHandler.php:77".

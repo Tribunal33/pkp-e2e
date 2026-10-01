@@ -1,0 +1,58 @@
+--- a/classes/payment/ojs/OJSPaymentManager.php
++++ b/classes/payment/ojs/OJSPaymentManager.php
+@@ -32,6 +32,7 @@
+ use APP\subscription\SubscriptionAction;
+ use APP\subscription\SubscriptionTypeDAO;
+ use PKP\db\DAORegistry;
++use PKP\notification\Notification;
+ use PKP\payment\CompletedPayment;
+ use PKP\payment\PaymentManager;
+ use PKP\payment\QueuedPayment;
+@@ -347,7 +348,11 @@
+                 case self::PAYMENT_TYPE_PURCHASE_ARTICLE:
+                 case self::PAYMENT_TYPE_PURCHASE_ISSUE:
+                 case self::PAYMENT_TYPE_SUBMISSION:
++                    $returner = true;
++                    break;
+                 case self::PAYMENT_TYPE_PUBLICATION:
++                    // The fee is settled: withdraw the requests still waiting for it, and the authors' tasks with them.
++                    $this->deleteQueuedPublicationPayments($queuedPayment);
+                     $returner = true;
+                     break;
+                 default:
+@@ -366,6 +371,35 @@
+     }
+ 
+     /**
++     * Delete the other queued publication fee payments of the submission
++     * a publication fee payment is fulfilled for, with the authors'
++     * "payment required" tasks (QueuedPaymentDAO::deleteById()).
++     *
++     * A queued payment is stored serialized, so the requests are found
++     * through the tasks RequestPayment::requestPayment() creates for them.
++     */
++    protected function deleteQueuedPublicationPayments(QueuedPayment $fulfilledPayment): void
++    {
++        $queuedPaymentDao = DAORegistry::getDAO('QueuedPaymentDAO'); /** @var QueuedPaymentDAO $queuedPaymentDao */
++        $queuedPaymentIds = Notification::withContextId($fulfilledPayment->getContextId())
++            ->withType(Notification::NOTIFICATION_TYPE_PAYMENT_REQUIRED)
++            ->where('assoc_type', Application::ASSOC_TYPE_QUEUED_PAYMENT)
++            ->pluck('assoc_id')
++            ->unique();
++
++        foreach ($queuedPaymentIds as $queuedPaymentId) {
++            $queuedPayment = $queuedPaymentDao->getById($queuedPaymentId);
++            if (
++                $queuedPayment
++                && $queuedPayment->getType() == self::PAYMENT_TYPE_PUBLICATION
++                && $queuedPayment->getAssocId() == $fulfilledPayment->getAssocId()
++            ) {
++                $queuedPaymentDao->deleteById($queuedPaymentId);
++            }
++        }
++    }
++
++    /**
+      * Fetch the name of the description.
+      *
+      * @return string
