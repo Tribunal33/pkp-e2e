@@ -1,0 +1,40 @@
+--- a/lib/ui-library/src/mixins/autosave.js
++++ b/lib/ui-library/src/mixins/autosave.js
+@@ -55,6 +55,12 @@
+ 			lastSavedTimestamp: Date.now(),
+ 
+ 			/**
++			 * A timestamp when the data waiting to be autosaved last changed.
++			 * Components set it whenever they mark data as changed.
++			 */
++			lastChangedTimestamp: 0,
++
++			/**
+ 			 * Autosave payloads that are in the queue waiting to be saved
+ 			 */
+ 			pendingAutosaves: [],
+@@ -191,8 +197,12 @@
+ 
+ 			if (!payload) {
+ 				// If the last autosave was more than a minute ago,
+-				// save their progress
+-				if (Date.now() - this.lastSavedTimestamp > 60000) {
++				// save their progress once they pause, so that a
++				// field is not saved halfway through being typed
++				if (
++					Date.now() - this.lastSavedTimestamp > 60000 &&
++					Date.now() - this.lastChangedTimestamp > 2000
++				) {
+ 					this.addAutosaves();
+ 				}
+ 				return;
+--- a/lib/ui-library/src/components/Container/SubmissionWizardPage.vue
++++ b/lib/ui-library/src/components/Container/SubmissionWizardPage.vue
+@@ -758,6 +758,7 @@
+ 		 */
+ 		updateAutosaveForm(formId, data) {
+ 			this.updateForm(formId, data);
++			this.lastChangedTimestamp = Date.now();
+ 			if (this.staleForms.indexOf(formId) === -1) {
+ 				this.staleForms.push(formId);
+ 			}

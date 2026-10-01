@@ -1,0 +1,33 @@
+--- a/lib/ui-library/src/mixins/autosave.js
++++ b/lib/ui-library/src/mixins/autosave.js
+@@ -50,9 +50,15 @@
+ 			isDisconnected: false,
+ 
+ 			/**
+-			 * A timestamp when the last autosave occured
++			 * A timestamp when the last autosave occured, or null
++			 * before the first one
+ 			 */
+-			lastSavedTimestamp: Date.now(),
++			lastSavedTimestamp: null,
++
++			/**
++			 * A timestamp when the autosave feature was loaded
++			 */
++			autosaveLoadedTimestamp: Date.now(),
+ 
+ 			/**
+ 			 * Autosave payloads that are in the queue waiting to be saved
+@@ -192,7 +198,11 @@
+ 			if (!payload) {
+ 				// If the last autosave was more than a minute ago,
+ 				// save their progress
+-				if (Date.now() - this.lastSavedTimestamp > 60000) {
++				if (
++					Date.now() -
++						(this.lastSavedTimestamp ?? this.autosaveLoadedTimestamp) >
++					60000
++				) {
+ 					this.addAutosaves();
+ 				}
+ 				return;
