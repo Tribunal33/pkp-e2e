@@ -2575,7 +2575,7 @@ still reads; `$submission->getCurrentPublication()` on a null fails in
 "Plugin …RecommendByAuthorPlugin failed to handle the hook
 Templates::Article::Footer::PageFooter" and serves the page without the
 list. Live-probed 2026-09-25, note q14.
-Issue report: [docs/issues/U13-OJS4-recommend-by-author-list-never-shown.md](../issues/U13-OJS4-recommend-by-author-list-never-shown.md).
+Issue report: [pkp-e2e#208](https://github.com/jardakotesovec/pkp-e2e/issues/208) ([docs/issues/U13-OJS4-recommend-by-author-list-never-shown.md](../issues/U13-OJS4-recommend-by-author-list-never-shown.md)).
 
 <a id="fn-f-ojs5"></a>
 **f-ojs5** — Note k: `Undefined constant
