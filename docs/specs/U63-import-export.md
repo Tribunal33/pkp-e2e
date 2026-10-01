@@ -1307,7 +1307,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS5](#ojs5) | The PubMed and DOAJ Settings forms' "Cancel" does nothing, and both say fields are required when none is | 🐞 | minor | — |
 | [OJS6](#ojs6) | The DOAJ list's title and author search matches letter case as typed | 🐞 | minor | — |
 | [OJS7](#ojs7) | Where DOAJ's site cannot be reached, every validated DOAJ export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [OJS9](#ojs9) | A DOAJ deposit that cannot reach DOAJ leaves the article "Submitted" for good | 🐞 | minor | — |
+| [OJS9](#ojs9) | A DOAJ deposit that cannot connect to DOAJ leaves the article "Submitted" for good, with no error | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS10](#ojs10) | A journal manager's "Export Issues" list shows the issues in no set order | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP1](#omp1) | Pressing "Tab Delimited Content Import Plugin" on a press's Tools page opens a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OMP4](#omp4) | Run from the command line, a press's "Tab Delimited Content Import Plugin" stops with a fatal error and leaves an empty submission | 🐞 | minor · crash: server | — |
@@ -1649,13 +1649,22 @@ Lean: 🐞 minor, since the label names registration.
 Basis: probe. <sup>f-ojs8</sup>
 
 <a id="ojs9"></a>
-**OJS9 — A deposit that cannot reach DOAJ stays "Submitted"** · 🐞 · minor.
-A deposit that fails should turn the row to "Failed" (Rule 37). When the
-installation cannot reach DOAJ at all, the queued deposit fails and
-Administration › "View Failed Jobs" lists it, but the row keeps reading
-"Submitted" for good and the "Error" status of the filter lists
-nothing, so the manager believes the deposit is still under way.
-Basis: probe. <sup>f-ojs9</sup>
+**OJS9 — A DOAJ deposit that cannot connect to DOAJ leaves the article "Submitted" for good, with no error** · 🐞 · medium · crash: server.
+When a journal manager presses "Register" on the DOAJ tool while the
+server cannot connect to DOAJ, the deposit that runs in the background
+stops on a server error. The article reads "Submitted" for good: it
+never reads "Failed", and the list filtered by the status "Error" shows
+no rows. The failure is listed only under Administration › "View Failed
+Jobs". The article does not reach DOAJ, and the manager believes the
+deposit is still under way. Articles sent by the daily automatic deposit
+get stuck the same way, and it never sends a "Submitted" article again.
+It takes a journal that deposits with a DOAJ API key while DOAJ cannot
+be reached: during an outage at DOAJ, or on a server whose outbound
+connections are blocked, where every deposit sticks. When DOAJ itself
+answers with an error (a wrong key, a refused record), the article reads
+"Failed" as it should. A separate report covers Crossref and DataCite
+deposits, which stick the same way; OJS ships no mEDRA plugin.
+Basis: probe, 2026-10-01. <sup>f-ojs9</sup>
 
 <a id="ojs10"></a>
 **OJS10 — A journal manager's "Export Issues" list shows the issues in no set order** · 🐞 · low.
@@ -3049,6 +3058,7 @@ with the box ticked returned "Articles submitted successfully" and
 
 <a id="fn-f-ojs9"></a>
 **f-ojs9** — Live-probed 2026-09-27: note u.
+Issue report: [docs/issues/U63-OJS9-doaj-deposit-unreachable-stays-submitted.md](../issues/U63-OJS9-doaj-deposit-unreachable-stays-submitted.md).
 
 <a id="fn-f-ojs10"></a>
 **f-ojs10** — Note i (`ExportableIssuesListGridHandler::loadData()`, no
