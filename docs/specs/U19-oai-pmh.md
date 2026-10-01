@@ -1835,7 +1835,7 @@ Issue report: [pkp-e2e#280](https://github.com/jardakotesovec/pkp-e2e/issues/280
 
 <a id="fn-f-a22"></a>
 **f-a22** — Live-probed 2026-09-26, OJS, in three drives: while four journals of the install had "DOI Versioning" on, every Identify, list and record request of every journal and of the site-wide address answered 500 with an empty body; after "No" was saved on them, 200; a scratch journal set to "Yes" on screen brought the 500s back for 37 seconds, "No" removed them (note q20). The server log: `SQLSTATE[42804]: Datatype mismatch: 7 ERROR: UNION types text and bigint cannot be matched`, from the per-version branch of `APP\oai\ojs\OAIDAO::getRecordsRecordSetQuery()` (`NULL AS tombstone_id` against the tombstones' bigint), reached through `PKPOAIDAO::getEarliestDatestamp()` and the record lists. The test installs run Postgres; MySQL, whose union typing is looser, was not tried.
-Issue report: [docs/issues/U19-A22-doi-versioning-oai-requests-fail.md](../issues/U19-A22-doi-versioning-oai-requests-fail.md).
+Issue report: [pkp-e2e#281](https://github.com/jardakotesovec/pkp-e2e/issues/281) ([docs/issues/U19-A22-doi-versioning-oai-requests-fail.md](../issues/U19-A22-doi-versioning-oai-requests-fail.md)).
 
 <a id="fn-f-a23"></a>
 **f-a23** — Live-probed 2026-09-26, OJS, three journals, two runs: note q21; the member without a galley had no `publication_galleys` row. Code: note i.
