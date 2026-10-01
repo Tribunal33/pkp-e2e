@@ -1,0 +1,11 @@
+--- a/classes/publication/Repository.php
++++ b/classes/publication/Repository.php
+@@ -129,7 +129,7 @@
+                 $newGalley = clone $galley;
+                 $newGalley->setData('id', null);
+                 $newGalley->setData('publicationId', $newId);
+-                if ($isDoiVersioningEnabled) {
++                if ($isDoiVersioningEnabled && !$isMinorVersion) {
+                     $newGalley->setData('doiId', null);
+                 }
+                 Repo::galley()->add($newGalley);

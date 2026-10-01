@@ -1749,6 +1749,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U45-OMP1-file-dois-ignored-on-dois-page.md`): a press
     with "Files" alone ticked listing its books on the DOIs page, and a
     book missing only its file DOI listed under "Needs DOI" {OMP}
+  - the guard for OPS4 (Rule 12; issue report
+    `docs/issues/U45-OPS4-minor-version-new-galley-dois.md`): under "DOI
+    Versioning" "Yes", a preprint's "Minor Revision" keeps its galley's
+    DOI {OPS}
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1837,7 +1841,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP2](#omp2) | A DOI typed into a book's empty file row fails on the server, yet is stored | 🐞 | minor · crash: server | — |
 | [OPS1](#ops1) | The "DOIs" box reads "…to assigned to works published on this server." | 🐞 | minor | — |
 | [OPS3](#ops3) | The Crossref "Username" help reads "…see the advise above." | 🐞 | minor | — |
-| [OPS4](#ops4) | A minor version's galleys start without a DOI and get new ones | 🐞 | user-visible | — |
+| [OPS4](#ops4) | On a preprint server, a minor version's galleys get new DOIs instead of keeping their source's | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A1](#a1) | A new journal arrives in a DOI state its own Setup tab refuses to save | ❓ | minor | — |
 | [A5](#a5) | The Registration tab keeps a new agency even when its fields are refused | ❓ | minor | — |
 | [A6](#a6) | Choosing an agency silently unticks the kinds it does not accept | ❓ | minor | — |
@@ -2244,13 +2248,16 @@ reads "…please see the advice above.".
 Basis: probe, 2026-09-26. <sup>f-ops3</sup>
 
 <a id="ops4"></a>
-**OPS4 — A minor version's galleys start without a DOI and get new ones** · 🐞 · user-visible.
-With "DOI Versioning" "Yes", a version made with "Minor Revision" keeps
-the preprint's DOI, but its galleys read "Needs DOI" in the "View all"
-window and get new DOIs on publication, instead of sharing their
-source's as a journal's and a press's minor versions do (Rule 12). A
-minor correction thus registers new galley DOIs.
-Basis: probe, 2026-09-26. <sup>f-ops4</sup>
+**OPS4 — On a preprint server, a minor version's galleys get new DOIs instead of keeping their source's** · 🐞 · low.
+A preprint server has "DOI Versioning" set to "Yes" and gives DOIs to
+its galleys (off by default). A manager creates a new version of a
+posted preprint with "Minor Revision" and posts it. The new version
+keeps the preprint's DOI, but its galleys do not keep theirs: each gets
+a new DOI. On a journal and a press, a minor version keeps its galleys'
+and formats' DOIs. Nothing on screen says so, and the manager cannot put
+the old DOI back: the DOIs page refuses it with "Some DOI(s) could not
+be updated".
+Basis: probe, 2026-10-01. <sup>f-ops4</sup>
 
 <a id="ops5"></a>
 **OPS5 — A preprint server's DOIs page lists drafts nobody has submitted** · ❓ · minor.
@@ -3899,6 +3906,7 @@ the new galleys' `doiId` whenever versioning is on; OJS's copy tests
 `!$isMinorVersion`. Live-probed 2026-09-26 (q16): the minor version's
 galley had no DOI in the database and read "Needs DOI" in "View all";
 the journal and the press kept theirs.
+Issue report: [docs/issues/U45-OPS4-minor-version-new-galley-dois.md](../issues/U45-OPS4-minor-version-new-galley-dois.md).
 
 <a id="fn-f-ops5"></a>
 **f-ops5** — See l for the listing rule. Live-probed 2026-09-26 (q17):
