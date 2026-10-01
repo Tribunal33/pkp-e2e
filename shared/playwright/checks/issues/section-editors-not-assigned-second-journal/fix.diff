@@ -1,0 +1,12 @@
+--- a/lib/pkp/classes/context/SubEditorsDAO.php
++++ b/lib/pkp/classes/context/SubEditorsDAO.php
+@@ -206,7 +206,8 @@
+ 
+         $userGroups = UserGroup::query()
+             ->withContextIds([$submission->getData('contextId')])
+-            ->get();
++            ->get()
++            ->keyBy('id');
+ 
+         $userGroupIds = $userGroups->keys();
+ 
