@@ -1,0 +1,65 @@
+--- a/pages/user/UserHandler.php
++++ b/pages/user/UserHandler.php
+@@ -29,6 +29,7 @@
+ use APP\template\TemplateManager;
+ use PKP\db\DAORegistry;
+ use PKP\pages\user\PKPUserHandler;
++use PKP\security\Validation;
+ 
+ class UserHandler extends PKPUserHandler
+ {
+@@ -137,6 +138,10 @@
+             $request->redirect(null, 'index');
+         }
+ 
++        if (!Validation::isLoggedIn()) {
++            Validation::redirectLogin();
++        }
++
+         $this->setupTemplate($request);
+         $user = $request->getUser();
+ 
+@@ -221,6 +226,10 @@
+             $request->redirect(null, 'index');
+         }
+ 
++        if (!Validation::isLoggedIn()) {
++            Validation::redirectLogin();
++        }
++
+         $this->setupTemplate($request);
+         $user = $request->getUser();
+ 
+@@ -321,6 +330,10 @@
+             $request->redirect(null, 'index');
+         }
+ 
++        if (!Validation::isLoggedIn()) {
++            Validation::redirectLogin();
++        }
++
+         $this->setupTemplate($request);
+         $user = $request->getUser();
+         $institutional = array_shift($args);
+@@ -374,6 +387,10 @@
+             $request->redirect(null, 'index');
+         }
+ 
++        if (!Validation::isLoggedIn()) {
++            Validation::redirectLogin();
++        }
++
+         $this->setupTemplate($request);
+         $user = $request->getUser();
+         $institutional = array_shift($args);
+@@ -425,6 +442,10 @@
+     public function payMembership($args, $request)
+     {
+         $this->validate(null, $request);
++        if (!Validation::isLoggedIn()) {
++            Validation::redirectLogin();
++        }
++
+         $this->setupTemplate($request);
+         $journal = $request->getContext();
+         $user = $request->getUser();

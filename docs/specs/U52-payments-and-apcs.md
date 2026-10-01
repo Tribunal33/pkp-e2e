@@ -754,6 +754,9 @@ Left out of the scenarios above, by reason:
   - the guard for A4 (issue report
     `docs/issues/U52-A4-payment-types-required-note-no-required-field.md`):
     the "Payment Types" tab carrying no "Required fields are marked with an asterisk" line
+  - the guard for A3 (issue report
+    `docs/issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md`):
+    with a fee requested, the Author's fee link opening no payment page once "Enable" is saved unticked or the method's instructions are emptied
 - **Rarely met**:
   - "Purchase Issue" set: the reader's "Purchase Issue Fee" payment page
     (Settings bullet 7; Fields, the manual method's payment page)
@@ -821,9 +824,9 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Payment Types" tells a journal manager the fees appear in About the Journal, but no page lists them | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | Authors are still told to pay the publication fee after the editor records it as "Paid" or "Waived" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A3](#a3) | A payment link fails with a blank error page once the instructions are emptied, and still takes notifications once "Enable" is off | 🐞 | user-visible · crash: server | — |
+| [A3](#a3) | An author's payment link gives a blank error page, or still asks for the fee, after the journal stops payments | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | "Payment Types" says required fields are marked with an asterisk, but no field is marked or required | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A9](#a9) | The membership address gives a blank error page signed out or with payments not set up | 🐞 | minor · crash: server | — |
+| [A9](#a9) | The membership address gives a blank error page signed out or with payments not set up | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | The PayPal error page has no heading, and the browser tab shows only the journal's name | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Merging a payer's account breaks the list of payments, the submission's "Payments" menu and its publishing | 🐞 | user-visible · crash: server | — |
 | [A12](#a12) | After a journal switches payments off, the side menu keeps "Institutions" until the page is reloaded | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -868,14 +871,21 @@ outside PayPal, leaves the task.
 Basis: probe, 2026-10-01. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — A payment link after payments stop** · 🐞 · user-visible · crash: server.
-When a journal empties "Manual Payment Instructions" after requesting a
-fee, the Author's task and email link fail on the server and show a
-blank page, instead of a page saying that no payment is taken. When it
-unticks "Enable" instead, they still open the payment page, and "Send
-notification of payment" still sends the journal notifications for
-payments it no longer takes.
-Basis: probe, 2026-09-27. <sup>f-a3</sup>
+**A3 — An author's payment link gives a blank error page, or still asks for the fee, after the journal stops payments** · 🐞 · low · crash: server.
+A journal requests its publication fee from an author, then stops taking
+payments. If it empties "Manual Payment Instructions" (or PayPal's
+"Account Name"), the author's "Tasks" link and the link in the "Payment
+Request Notification" email fail on the server with a blank page. If it
+unticks "Enable" instead, the same links still open the payment page
+with the fee and the instructions, and "Send notification of payment"
+still emails the journal. The author expects to be told that the fee is
+no longer collected. Once payments stop, the fee no longer holds back
+publication, so nothing is lost, but the author is shown an error or
+asked to pay. The membership payment page (the journal's address
+followed by "user/payMembership", reached only by typing it) gives the
+same blank page to a signed-in user on a journal whose payments are not
+set up, which is every journal until a manager sets them up.
+Basis: probe, 2026-10-01. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — "Payment Types" says required fields are marked with an asterisk, but no field is marked or required** · 🐞 · low.
@@ -936,13 +946,14 @@ subscription.
 Basis: probe, 2026-09-27. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The membership address fails signed out or with payments off** · 🐞 · minor · crash: server.
+**A9 — The membership address fails signed out or with payments off** · 🐞 · low · crash: server.
 A signed-out visitor who types the journal's address followed by
 "user/payMembership" gets a blank page, where the server failed,
-instead of the Login page. A signed-in user gets the same blank page on
-a journal whose payments are not set up, instead of a page saying that
-no payment is taken.
-Basis: probe, 2026-09-27. <sup>f-a9</sup>
+instead of the Login page, as at the two subscription purchase
+addresses ([Subscriptions](U51-subscriptions.md#a12)). A signed-in user
+gets the same blank page on a journal whose payments are not set up,
+which is every journal until a manager sets them up.
+Basis: probe, 2026-10-01. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — The PayPal error page has no heading, and the browser tab shows only the journal's name** · 🐞 · low.
@@ -1117,6 +1128,7 @@ Issue report: [pkp-e2e#353](https://github.com/jardakotesovec/pkp-e2e/issues/353
 
 <a id="fn-f-a3"></a>
 **f-a3** — `PaymentManager::getPaymentForm()` returns `false` when the chosen plugin is not configured, and `PaymentHandler::pay()` calls `display()` on the result. `ManualPaymentPlugin::isConfigured()` reads only `manualInstructions` (note d); neither `pay()` nor `plugin()` reads `paymentsEnabled`, so with "Enable" off the page and its notification still work. Live-probed 2026-09-27 (note td8): with the instructions emptied, `GET {journal}/payment/pay/{id}` answered 500 with an empty page, logged "Uncaught Error: Call to a member function display() on false in pages/payment/PaymentHandler.php:77".
+Issue report: [docs/issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md](../issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `paymentTypesForm.tpl` ends with `common.requiredField` though no element carries `required`. Live-probed 2026-09-27 (note td3): the line's asterisk is the only one in the form, and the empty tab saves.
@@ -1136,6 +1148,8 @@ Issue report: [pkp-e2e#356](https://github.com/jardakotesovec/pkp-e2e/issues/356
 
 <a id="fn-f-a9"></a>
 **f-a9** — `UserHandler::payMembership()` (note m) reads `$user->getId()` with no sign-in check, and with payments not set up queues the membership payment and then calls `display()` on the `false` that `getPaymentForm()` returns. Live-probed 2026-09-27 (note td13), two runs: `GET {journal}/user/payMembership` answered 500 with an empty page for a signed-out visitor on a scratch journal and on `publicknowledge` (logged "Uncaught Error: Call to a member function getId() on null in pages/user/UserHandler.php:434"), and for a signed-in Reader on a journal with payments off (logged "Call to a member function display() on false in pages/user/UserHandler.php:438", after the queued payment was written).
+Issue report: [docs/issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md](../issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md).
+Issue report: [docs/issues/U52-A9-membership-address-signed-out-blank-page.md](../issues/U52-A9-membership-address-signed-out-blank-page.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — `PaypalPaymentForm::display()` shows `plugins.paymethod.paypal.error` through `frontend/pages/message.tpl` with no `pageTitle` (note l). Live-probed 2026-09-27 (note td9): the page's `h1` empty, the breadcrumb "Home /", the browser title "| {journal}".

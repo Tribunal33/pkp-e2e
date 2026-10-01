@@ -1,0 +1,23 @@
+--- a/pages/payment/PaymentHandler.php
++++ b/pages/payment/PaymentHandler.php
+@@ -64,7 +64,7 @@
+         $templateMgr = TemplateManager::getManager($request);
+         $queuedPaymentDao = DAORegistry::getDAO('QueuedPaymentDAO'); /** @var QueuedPaymentDAO $queuedPaymentDao */
+         $queuedPayment = $queuedPaymentDao->getById($queuedPaymentId = array_shift($args));
+-        if (!$queuedPayment) {
++        if (!$queuedPayment || !$paymentManager->isConfigured()) {
+             $templateMgr->assign([
+                 'pageTitle' => 'common.payment',
+                 'message' => 'payment.notFound',
+--- a/pages/user/UserHandler.php
++++ b/pages/user/UserHandler.php
+@@ -430,6 +430,9 @@
+         $user = $request->getUser();
+ 
+         $paymentManager = Application::get()->getPaymentManager($journal);
++        if (!$paymentManager->isConfigured()) {
++            $request->redirect(null, 'index');
++        }
+ 
+         $queuedPayment = $paymentManager->createQueuedPayment($request, OJSPaymentManager::PAYMENT_TYPE_MEMBERSHIP, $user->getId(), null, $journal->getData('membershipFee'));
+         $paymentManager->queuePayment($queuedPayment);

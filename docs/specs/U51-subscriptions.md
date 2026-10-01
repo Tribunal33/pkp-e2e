@@ -1344,6 +1344,10 @@ scheduled tasks and background jobs, and the tooling recipe. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A12 (issue report
+    `docs/issues/U52-A9-membership-address-signed-out-blank-page.md`):
+    a signed-out visitor at the "Purchase Individual Subscription", "Purchase Institutional Subscription" and membership addresses sent to the Login page
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1446,7 +1450,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | The individual purchase page refuses a missing membership without saying so | 🐞 | user-visible | — |
 | [A10](#a10) | "Purchase" on an active subscription, saved, takes the reader's access away at once | 🐞 | user-visible | — |
 | [A11](#a11) | Every institutional purchase adds another institution | 🐞 | minor | — |
-| [A12](#a12) | A signed-out visitor at a purchase page's address gets an empty page, the server failing | 🐞 | minor · crash: server | — |
+| [A12](#a12) | A signed-out visitor at a purchase page's address gets an empty page, the server failing | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | The "Subscription" block reads "Expired: {today}" for a subscription awaiting payment | 🐞 | minor | — |
 | [A14](#a14) | "Only Restrict Access to PDF…" unlocks the look of non-PDF galleys that stay refused | 🐞 | user-visible | — |
 | [A15](#a15) | Month and week counts read "1 Months" and "1 Weeks" | 🐞 | minor | — |
@@ -1568,11 +1572,13 @@ existing purchase, so the list fills with duplicates the manager must
 tidy by hand. Basis: probe, 2026-09-25. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — A signed-out purchase address fails with an empty page** · 🐞 · minor · crash: server.
+**A12 — A signed-out purchase address fails with an empty page** · 🐞 · low · crash: server.
 A signed-out visitor who opens "Purchase Individual Subscription" or
 "Purchase Institutional Subscription" by its address (a bookmark, or a
 link shared by a colleague) gets an empty page, the server failing,
-instead of the Login page. Basis: probe, 2026-09-25. <sup>f-a12</sup>
+instead of the Login page. The membership payment address fails the
+same way ([Payments & APCs](U52-payments-and-apcs.md#a9)).
+Basis: probe, 2026-10-01. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — The block reads "Expired" for a subscription awaiting payment** · 🐞 · minor.
@@ -1950,6 +1956,7 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `UserHandler::purchaseSubscription()` has no sign-in check: with no user, `$user->getId()` is called on nothing (the individual path in `subscriptionExistsByUserForJournal()`, the institutional path in the form's constructor). The page router authorises page requests by default. Live-probed 2026-09-25 (td19): signed out, `GET {journal}/user/purchaseSubscription/individual` and `GET …/institutional` answered HTTP 500 with an empty body.
+Issue report: [docs/issues/U52-A9-membership-address-signed-out-blank-page.md](../issues/U52-A9-membership-address-signed-out-blank-page.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — `block.tpl` gates the awaiting lines on `$paymentsEnabled && $acceptSubscriptionPayments`; `SubscriptionBlockPlugin` assigns only `acceptSubscriptionPayments`, so the awaiting lines show only where the page itself assigns `paymentsEnabled` ("My Subscriptions"). A manual purchase stores `dateEnd` as today at midnight (note f), which `Subscription::isExpired()` reads as passed. Live-probed 2026-09-25 (td20).
