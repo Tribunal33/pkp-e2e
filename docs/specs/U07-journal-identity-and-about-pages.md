@@ -1110,8 +1110,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | A press's and a preprint server's French Masthead tab shows raw text keys in place of headings, labels and help lines {OMP OPS} | 🐞 | minor | — |
 | [A13](#a13) | With the masthead not based on enrollments, invitations and masthead changes still promise "Your name will appear in the {journal}'s masthead"; reviewers are promised it while the journal lists none | 🐞 | minor | — |
 | [OMP2](#omp2) | The site-level page about the software says "This press uses Open Monograph Press" on a press site {OMP} | 🐞 | minor | — |
-| [OPS3](#ops3) | A preprint server's French "Privacy Statement" default is the raw text "##default.contextSettings.privacyStatement##" {OPS} | 🐞 | user-visible | — |
-| [OPS4](#ops4) | A preprint server's French "Editorial Masthead" heads the Moderators "##default.groups.name.sectionEditor##" {OPS} | 🐞 | user-visible | — |
+| [OPS3](#ops3) | A preprint server's French "Privacy Statement" default is the raw text "##default.contextSettings.privacyStatement##" {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [OPS4](#ops4) | A preprint server's French "Editorial Masthead" heads the Moderators "##default.groups.name.sectionEditor##" {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | The "Edit" link of the About pages is shown to a manager-level role that cannot open the Settings pages | ❓ | minor | — |
 | [A3](#a3) | The "Contact" tab cannot be saved until a technical support contact is entered, and new journals have none | ❓ | minor | — |
 | [A6](#a6) | The "Editorial History" page is headed "Editorial History Page" | ❓ | minor | — |
@@ -1289,17 +1289,18 @@ or should the field go? Lean: show it or drop it; a field that goes
 nowhere misleads. Since: 2019-06-04 · Basis: probe + commit. <sup>f-ops2</sup>
 
 <a id="ops3"></a>
-**OPS3 — The French privacy statement arrives as a raw text key** · 🐞 · user-visible.
+**OPS3 — The French privacy statement arrives as a raw text key** · 🐞 · medium.
 When French is ticked under "Forms" on Settings › Website › "Setup" ›
 "Languages", or the server is created with French forms, the "Privacy
 Statement" tab's French box holds
 "##default.contextSettings.privacyStatement##" where a journal and a
 press get a French statement. Left as it is, that text is the whole
 body of the server's French "Privacy Statement" page, headed
-"Déclaration de confidentialité". Basis: probe. <sup>f-ops3</sup>
+"Déclaration de confidentialité".
+Basis: probe, 2026-10-01. <sup>f-ops3</sup>
 
 <a id="ops4"></a>
-**OPS4 — The French masthead names the Moderators by a raw text key** · 🐞 · user-visible.
+**OPS4 — The French masthead names the Moderators by a raw text key** · 🐞 · medium.
 A visitor reading a preprint server in French expects the role headings
 of "Editorial Masthead" (headed "Entête" in French) in French, as a
 journal gives them ("Rédacteur-trice", "Rédacteur-trice de rubrique")
@@ -1310,7 +1311,8 @@ comité éditorial" for the Editorial Board Member. The order list under
 Settings › Website › "Appearance" › "Editorial Masthead" ("Entête" in
 French) names the role the same way. The server's French translation has
 no text for the role's name; the users list shows the same key
-([Users management](U53-users-management.md#ops1)). Basis: probe.
+([Users management](U53-users-management.md#ops1)).
+Basis: probe, 2026-10-01.
 <sup>f-ops4</sup>
 
 ### Retired
@@ -2560,6 +2562,7 @@ failed the page's script as
 [Languages & locales](U57-languages-and-locales.md#a5) records, and each
 load of Settings › Website answered the Plugin Gallery's server error of
 [Plugins management](U62-plugins-management.md#a1).
+Issue report: [docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md).
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — Live-probed 2026-09-28 (Rule 14a; OPS; OJS and OMP the
@@ -2584,6 +2587,7 @@ reads "Rédacteur-trice de rubrique"), the cause of
 [Users management](U53-users-management.md#ops1) too. Each load
 of Settings › Website answered the Plugin Gallery's server error of
 [Plugins management](U62-plugins-management.md#a1).
+Issue report: [docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md).
 
 ## Reference — entry points & surfaces
 

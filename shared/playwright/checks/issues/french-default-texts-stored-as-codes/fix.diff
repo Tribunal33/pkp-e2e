@@ -1,0 +1,123 @@
+--- a/lib/pkp/classes/i18n/interfaces/LocaleInterface.php
++++ b/lib/pkp/classes/i18n/interfaces/LocaleInterface.php
+@@ -129,6 +129,12 @@
+     public function getMissingKeyHandler(): ?callable;
+ 
+     /**
++     * Translates a key, or returns an empty string when the locale has no
++     * text for it, for code that stores the translation (default texts)
++     */
++    public function getIfTranslated(string $key, array $params = [], ?string $locale = null): string;
++
++    /**
+      * Retrieves a locale bundle to translate texts.
+      *
+      */
+--- a/lib/pkp/classes/i18n/Locale.php
++++ b/lib/pkp/classes/i18n/Locale.php
+@@ -349,6 +349,20 @@
+     }
+ 
+     /**
++     * @copy LocaleInterface::getIfTranslated()
++     */
++    public function getIfTranslated(string $key, array $params = [], ?string $locale = null): string
++    {
++        $previous = $this->missingKeyHandler;
++        $this->missingKeyHandler = fn (string $key): string => '';
++        try {
++            return $this->get($key, $params, $locale);
++        } finally {
++            $this->missingKeyHandler = $previous;
++        }
++    }
++
++    /**
+      * @copy LocaleInterface::getBundle()
+      */
+     public function getBundle(?string $locale = null, bool $useCache = true): LocaleBundle
+--- a/lib/pkp/classes/facades/Locale.php
++++ b/lib/pkp/classes/facades/Locale.php
+@@ -35,6 +35,7 @@
+  * @method static array getSupportedLocales() Deprecated 3.4.0, use Context::getSupportedLocales()
+  * @method static void setMissingKeyHandler(callable $handler) Sets the handler to format missing locale keys
+  * @method static callable getMissingKeyHandler() Retrieves the handler to format missing locale keys
++ * @method static string getIfTranslated(string $key, array $params = [], ?string $locale = null) Translates a key, or returns '' when the locale has no text for it
+  * @method static \PKP\i18n\translation\LocaleBundle getBundle(?string $locale = null, bool $useCache = true) Retrieves a locale bundle to translate texts.
+  * @method static string getDefaultLocale() Retrieves the default locale
+  * @method static \Sokil\IsoCodes\Database\Countries getCountries(?string $locale = null) Retrieve the countries
+--- a/lib/pkp/classes/services/PKPSchemaService.php
++++ b/lib/pkp/classes/services/PKPSchemaService.php
+@@ -22,6 +22,7 @@
+ use Illuminate\Support\MessageBag;
+ use PKP\core\DataObject;
+ use PKP\core\maps\Schema;
++use PKP\facades\Locale;
+ use PKP\plugins\Hook;
+ 
+ /**
+@@ -581,7 +582,8 @@
+                 if (property_exists($propSchema, 'default')) {
+                     return $propSchema->default;
+                 } elseif (property_exists($propSchema, 'defaultLocaleKey')) {
+-                    return __($propSchema->defaultLocaleKey, $localeParams, $localeKey);
++                    // A missing translation is stored as an empty text, never as its "##key##" placeholder
++                    return Locale::getIfTranslated($propSchema->defaultLocaleKey, $localeParams, $localeKey);
+                 }
+                 break;
+             case 'array':
+@@ -604,7 +606,7 @@
+                     // translation. Otherwise, we assign the values as-is and do not
+                     // recursively check for nested objects/arrays inside of objects.
+                     if ($subPropSchema->type === 'string' && is_object($defaultSubProp) && property_exists($defaultSubProp, 'defaultLocaleKey')) {
+-                        $value[$subPropName] = __($defaultSubProp->defaultLocaleKey, $localeParams, $localeKey);
++                        $value[$subPropName] = Locale::getIfTranslated($defaultSubProp->defaultLocaleKey, $localeParams, $localeKey);
+                     } else {
+                         $value[$subPropName] = $defaultSubProp;
+                     }
+--- a/lib/pkp/classes/userGroup/Repository.php
++++ b/lib/pkp/classes/userGroup/Repository.php
+@@ -589,11 +589,11 @@
+             $abbrevKey = $userGroup->abbrevLocaleKey ?? null;
+ 
+             if ($nameKey) {
+-                $userGroup->name = [$locale => __($nameKey, [], $locale)];
++                $userGroup->name = [$locale => Locale::getIfTranslated($nameKey, [], $locale)];
+             }
+ 
+             if ($abbrevKey) {
+-                $userGroup->abbrev = [$locale => __($abbrevKey, [], $locale)];
++                $userGroup->abbrev = [$locale => Locale::getIfTranslated($abbrevKey, [], $locale)];
+             }
+ 
+             $userGroup->save();
+--- a/lib/pkp/classes/submission/GenreDAO.php
++++ b/lib/pkp/classes/submission/GenreDAO.php
+@@ -23,6 +23,7 @@
+ use PKP\db\DAO;
+ use PKP\db\DAOResultFactory;
+ use PKP\db\XMLDAO;
++use PKP\facades\Locale;
+ use PKP\plugins\Hook;
+ 
+ class GenreDAO extends DAO
+@@ -384,7 +385,7 @@
+             $genre->setSupportsFileVariants((bool) ($attrs['supportsFileVariants'] ?? false));
+             $genre->setSequence($seq++);
+             foreach ($locales as $locale) {
+-                $genre->setName(__($attrs['localeKey'], [], $locale), $locale);
++                $genre->setName(Locale::getIfTranslated($attrs['localeKey'], [], $locale), $locale);
+             }
+ 
+             if ($genre->getId() > 0) { // existing genre.
+--- a/lib/pkp/classes/services/PKPContextService.php
++++ b/lib/pkp/classes/services/PKPContextService.php
+@@ -634,7 +634,7 @@
+             'default.groups.name.translator' => ContributorRoleIdentifier::TRANSLATOR->getName(),
+         ])
+             ->each(fn (string $identifier, string $nameLocaleKey) => ContributorRole::add([
+-                'name' => Arr::mapWithKeys($supportedLocales, fn (string $l) => [$l => __($nameLocaleKey, locale: $l)]),
++                'name' => Arr::mapWithKeys($supportedLocales, fn (string $l) => [$l => Locale::getIfTranslated($nameLocaleKey, [], $l)]),
+                 'contributorRoleIdentifier' => $identifier,
+                 'contextId' => $context->getId(),
+             ]));

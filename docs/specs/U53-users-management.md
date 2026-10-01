@@ -864,7 +864,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | "Notify User" stays greyed out after "Generate Password" is unticked | 🐞 | minor | — |
 | [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | minor | — |
 | [A19](#a19) | "Remove User" on a user whose only role has not yet begun ends in "An unexpected error has occurred…" | 🐞 | user-visible | — |
-| [OPS1](#ops1) | On a French preprint server the "Roles" column prints raw codes for two roles | 🐞 | minor | — |
+| [OPS1](#ops1) | On a French preprint server the "Roles" column prints raw codes for two roles | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A user removed from the journal stays in the list with no role | ❓ | minor | — |
 | [A8](#a8) | "Remove User" tells the user nothing, where "Remove Role" emails them | ❓ | minor | — |
 | [A10](#a10) | The Site Administrator's older grid offers "Disable User" and "Remove" on the administrator's own row | ❓ | latent | — |
@@ -1086,12 +1086,12 @@ Basis: probe. <sup>f-a20</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — French role names missing on a preprint server** · 🐞 · minor.
+**OPS1 — French role names missing on a preprint server** · 🐞 · medium.
 In the French interface of a preprint server the "Roles" column prints
 "##default.groups.name.manager##" and
 "##default.groups.name.sectionEditor##" for the manager and Moderator
 roles, where a journal and a press print French role names.
-Basis: probe. <sup>f-ops1</sup>
+Basis: probe, 2026-10-01. <sup>f-ops1</sup>
 
 ---
 
@@ -2019,6 +2019,7 @@ role with an end date as removed.
 interface; the same raw moderator key shows on the preprint server's
 French "Editorial Masthead" (2026-09-24). Mechanism: note u; driven by
 td14. Live-probed 2026-09-25: note td14.
+Issue report: [docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md).
 
 ## Reference — entry points & surfaces
 
