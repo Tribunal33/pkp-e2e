@@ -801,6 +801,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U53-A13-merge-grid-admin-roles-empty.md`): on the
     default dataset, the Site Administrator's row in the "Merge user"
     list reading the manager role
+  - the guard for A16 (Rule 23; issue report
+    `docs/issues/U53-A16-notify-user-locked-after-generate-password.md`):
+    "Add User" with "Generate Password" ticked and unticked, then "Notify
+    User" ticked and the welcome email received
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -825,8 +829,6 @@ Left out of the scenarios above, by reason:
   - A10 (the older grid's "Disable User" and "Remove" on the
     administrator's own row; Rule 20)
   - A11 and OPS1 (the list in the French interface; Rule 25)
-  - A16 ("Generate Password" unticked again, "Notify User" left locked;
-    Rule 23)
   - A17 (the grid's row still listing a role just ended on "Edit User";
     Rule 24; scenario 8 passes it)
   - A18 (a role with an end date still to come left out of "Roles", a
@@ -885,7 +887,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | "Merge user" and the Settings wizard's user list show no roles after a 3.4 upgrade, and none for a journal's creator | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | On presses and preprint servers, a masthead change shows a raw error and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A15](#a15) | Merging a user recorded as a discussion's or task's creator stops halfway with no message, and the account still signs in | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A16](#a16) | "Notify User" stays greyed out after "Generate Password" is unticked | 🐞 | minor | — |
+| [A16](#a16) | Add User: unticking "Generate Password" leaves "Notify User" greyed out, so no welcome email can be chosen | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | minor | — |
 | [A19](#a19) | A manager cannot end a role that starts on a future date: "Remove User" fails or leaves it in place | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OPS1](#ops1) | On a French preprint server the "Roles" column prints raw codes for two roles | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1141,12 +1143,20 @@ released.
 Basis: probe, 2026-09-30. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — "Notify User" stays locked after "Generate Password" is unticked** · 🐞 · minor.
+**A16 — Add User: unticking "Generate Password" leaves "Notify User" greyed out, so no welcome email can be chosen** · 🐞 · low.
 On "Add User", ticking "Generate Password" and then unticking it empties
-and opens the password boxes again, but "Notify User" stays greyed out
-and unticked, so the welcome email cannot be chosen for a typed password
-until the window is closed and opened again.
-Basis: probe. <sup>f-a16</sup>
+the password boxes and lets them be typed in again, but "Notify User"
+stays greyed out and unticked, so the welcome email cannot be chosen for
+a typed password until the window is closed and opened again.
+On `main` and 3.5 only the Site Administrator meets this window, at
+Administration › "Hosted Journals" › a journal's "Settings wizard" ›
+tab "Users". Journal managers there add people with "Invite to a role"
+on Settings › Users & Roles, which does not use this window. On 3.4 and
+3.3 this window is also every journal manager's "Add User" on Settings ›
+Users & Roles.
+The fix is one call in one shared script, plus rebuilding each app's
+bundled script file.
+Basis: probe, 2026-10-01. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — The grid's row still lists a role just ended** · 🐞 · minor.
@@ -2086,6 +2096,7 @@ Password" was ticked and then unticked, the password boxes were empty and
 open, "Notify User" disabled and unticked. Code:
 `UserDetailsFormHandler::setGenerateRandom()` unticks with
 `.attr('disabled', '')`, which leaves the `disabled` attribute in place.
+Issue report: [docs/issues/U53-A16-notify-user-locked-after-generate-password.md](../issues/U53-A16-notify-user-locked-after-generate-password.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Test run 2026-09-26 (Rule 24; scenario 8), OJS and OPS: after

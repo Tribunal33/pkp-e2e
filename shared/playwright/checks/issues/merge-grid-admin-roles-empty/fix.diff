@@ -1,6 +1,6 @@
 --- a/lib/pkp/classes/userGroup/relationships/UserUserGroup.php
 +++ b/lib/pkp/classes/userGroup/relationships/UserUserGroup.php
-@@ -126,10 +126,11 @@
+@@ -126,13 +126,14 @@
      public function scopeWithActiveAndActiveInFuture(Builder $query): Builder
      {
          $currentDateTime = Core::getCurrentDate();
@@ -13,4 +13,8 @@
 +                    $q->where(fn ($q) => $q->where('user_user_groups.date_start', '<=', $currentDateTime)->orWhereNull('user_user_groups.date_start'))
                          ->where(function ($q) use ($currentDateTime) {
                              $q->whereNull('user_user_groups.date_end') // No end date means still active
-                                 ->orWhere('user_user_groups.date_end', '>=', $currentDateTime); // End date in the future
+-                                ->orWhere('user_user_groups.date_end', '>=', $currentDateTime); // End date in the future
++                                ->orWhere('user_user_groups.date_end', '>', $currentDateTime); // End date in the future; a role ended now is ended (as in scopeWithActive())
+                         });
+                 })
+                     ->orWhere('user_user_groups.date_start', '>', $currentDateTime); // Future ones
