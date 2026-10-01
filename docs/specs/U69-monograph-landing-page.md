@@ -1749,7 +1749,7 @@ Issue report: [pkp-e2e#288](https://github.com/jardakotesovec/pkp-e2e/issues/288
 
 <a id="fn-f-a15"></a>
 **f-a15** — Note o. Seen 2026-09-24 (U10 claim check K1): the version names and "Published". Live-probed 2026-09-28 (td20): every label Rule 21 lists.
-Issue report: [docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md).
+Issue report: [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) ([docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md)).
 Issue report (the version names): [pkp-e2e#228](https://github.com/jardakotesovec/pkp-e2e/issues/228) ([docs/issues/U13-A1-french-version-name-raw-key.md](../issues/U13-A1-french-version-name-raw-key.md)).
 
 <a id="fn-f-a16"></a>
