@@ -10,8 +10,8 @@ entry lands in it (MAINTENANCE "The issues session").
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 | **In progress: issues session s1, 2026-10-01.** Open: all (OJS1 in progress; A1 with U69 A15) |
-| [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **In progress: issues session s1, 2026-10-01.** Open: all (OJS1 in progress; A1 with U69 A15) |
+| [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 | **In progress: issues session s1, 2026-10-01.** Done: OJS1; in progress: A2, OJS4, OJS5; open: the rest (A1 with U69 A15) |
+| [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **In progress: issues session s1, 2026-10-01.** Done: OJS1; in progress: A2, OJS4, OJS5; open: the rest (A1 with U69 A15) |
 | [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 | **Claimed: issues session s1, 2026-09-30** (A15 with U13 A1); **A9 done: issues session s3, 2026-09-30** (with U47 OMP1) |
 | [U19](../specs/U19-oai-pmh.md) | 11 | 4 | 3 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
