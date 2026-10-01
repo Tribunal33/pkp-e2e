@@ -8,6 +8,10 @@ the queue when every 🐞 entry has an outcome; a spec left mid-way names
 its open entries in the Note. A spec gains a row again when a new 🐞
 entry lands in it (MAINTENANCE "The issues session").
 
+A session takes a row by marking its Note "**Taken: issues session,
+<VM or workstation> s<n>, <date>**" and pushing before any other work
+(MAINTENANCE issues session step 4); a row so marked is not free.
+
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U63](../specs/U63-import-export.md) | 28 | 9 | 7 |  |

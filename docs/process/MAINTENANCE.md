@@ -182,14 +182,21 @@ not a fix.
    particular issue, on the `stable-3_4_0` or `stable-3_3_0` line
    (harness.md "The stable lines"), with that line's datasets fetched
    (`npm run fetch-datasets -- --line <line>`).
-4. Take the specs: the top N rows of the queue, each claimed with `node
-   bin/slot.js claim <U<nn>>` so that no parallel session takes it too.
-   A spec left mid-way by an earlier session continues with the entries
-   its row names. The session marks each taken row in the queue's Note
-   ("**In progress: issues session s<n>, <date>**", or "**<entries>
-   only: …**" for a spec joined through one entry) and pushes at once,
-   so parallel sessions see it; it keeps the Note's done and open
-   entries current as reports land.
+4. Take the specs: the top N free rows of the queue (no "Taken" in the
+   Note). The pushed queue is the claim, since sessions run on the VM
+   and on workstations and `node bin/slot.js claim <U<nn>>` (run too)
+   guards only one machine. Before any other work, the session marks
+   each row's Note "**Taken: issues session, <machine> s<n>, <date>**"
+   (or "**<entries> taken: …**" for a spec joined later through one
+   entry), where `<machine>` is `VM` for a clone under `/home/e2e` (the
+   e2e-bot's sessions) and `workstation` otherwise, then commits the
+   queue alone and pushes. A rejected push means another session pushed
+   first: fetch, rebase, re-read the queue and take the next free rows
+   in place of any it took. A spec left mid-way by an earlier session
+   continues with the entries its row names. The session keeps the
+   Note's done and open entries current as reports land, and a session
+   that stops removes its "Taken" marks and pushes, naming what stays
+   open.
 5. **Group the entries.** Read the spec's 🐞 entries and their footnotes.
    Leave out an entry whose footnote points at an open report in
    `docs/reports/` (a regression the upstream session is carrying) and a
