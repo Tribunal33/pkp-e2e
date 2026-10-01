@@ -431,7 +431,8 @@ test.describe('OAI-PMH', () => {
         const gone = recordOf(deleted, tidalId);
         expect(gone, 'the deleted record').toBeTruthy();
         expect(gone && gone.header.deleted).toBe(true);
-        expect(gone && gone.header.datestamp).toMatch(new RegExp(`^${today}T`));
+        // The unpublish may cross midnight UTC after `today` was taken.
+        expect(gone && gone.header.datestamp).toMatch(new RegExp(`^(${today}|${utcDate()})T`));
         expect(gone && gone.header.setSpecs).toEqual(tidalSets);
         expect(gone && gone.metadata).toBeNull();
         expectLiveRecord(await site.getRecord(coralId), coralId, 'Coral Reefs', 'Control, unpublished');

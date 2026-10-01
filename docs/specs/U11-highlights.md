@@ -101,11 +101,14 @@ second language's boxes, labelled "{Field} in {language}" (Rule 11).
    row's values filled in, the current image previewed. "Save" closes the
    panel and the row shows the new title in place; the slide changes on the
    next load of the home page. Closing the panel with its close control
-   instead of "Save" keeps the highlight as it was, but the row shows the
-   unsaved title until the tab is reloaded ⚠ [A4](#a4). Escape on a plain
-   box (inside a formatted-text box Escape does nothing), a click outside
-   the panel or leaving the page also close either panel, with nothing
-   saved and no warning. <sup>a</sup> <sup>d</sup>
+   instead of "Save" saves nothing at that point, but the row shows the
+   unsaved title, "Edit" reopens the panel with it, and the next "Save" of
+   the highlight, even one made to change another box, stores it; only a
+   reload of the tab before editing again puts the saved title back ⚠
+   [A4](#a4). Escape on a plain box (inside a formatted-text box Escape
+   does nothing), a click outside the panel or leaving the page close
+   either panel with no warning, saving nothing then. <sup>a</sup>
+   <sup>d</sup>
 7. **Ordering position of a new highlight.** A new highlight always goes
    last, whatever ordering was saved before. <sup>i</sup>
 8. **Deleting.** "Delete" on a row opens the "Delete Highlight" dialog:
@@ -421,7 +424,7 @@ Left out of the scenarios above, by reason:
   - A2 ("URL" accepting text that is not a web address; Fields)
   - A3 (a formatted title's tags printed in its row; Fields "Title")
   - A4 ("Edit Highlight" closed with its close control leaving the
-    unsaved title on the row; Rule 6)
+    unsaved title on the row for the next "Save" to store; Rule 6)
   - A6 (a dot pressed under the carousel; Rule 4; scenario 3 marks it)
   - A7 (a press's and a preprint server's carousel arrows, and the
     fourth tab across the top of Settings › Website, named by raw keys in
@@ -995,7 +998,14 @@ row and bold on the slide and in the "Delete Highlight" sentence.
 "Edit" › the title changed to "Changed but not saved" › the panel's close
 control: no dialog, the row reads "Changed but not saved", the panel
 reopened after a reload shows the old title; the panel's own list request
-still returns the saved title.
+still returns the saved title. Walked again 2026-09-30 on `main` and
+`stable-3_5_0`, OJS, OMP and OPS, with the issue's kept script
+`shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/walk.js`
+(steps 17 to 20): " Draft" added to "Open call" and the panel closed with
+its close control; the row read "Open call Draft", "Edit" reopened with
+it, and a "Save" that changed only "URL" stored it: after a reload the
+row and "Title" read "Open call Draft". Checked against that evidence
+2026-10-01.
 Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md](../issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md)).
 
 <a id="fn-f-a5"></a>

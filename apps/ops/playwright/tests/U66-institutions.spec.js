@@ -26,8 +26,9 @@
  * - A10 ❓: every list is read as a set, never in order.
  * - A11 ❓: S1 reads "Jump to next error", never presses it.
  * - A1, A4–A7: not on these scenarios' paths (A1 needs a manager-level
- *   role without "Permit changes to Settings", which a preprint server
- *   does not have).
+ *   role without "Permit changes to Settings", which a new server comes
+ *   without; a role created at the manager level starts unticked, a
+ *   Planned item).
  *
  * Seeding (footnote s): every test seeds its own scratch server with
  * throwaway accounts (the username twice as password) through `POST

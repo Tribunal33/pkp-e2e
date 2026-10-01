@@ -215,9 +215,12 @@ screen, Rule 12): <sup>e</sup>
     Fields & validation. A successful save reports "Contributor role
     saved". In "Edit Role", the only way out besides "Save" is "Close"
     at the top (no "Cancel"). It shuts the window at once, with no
-    question, saving nothing: reopened after a reload, the window shows
-    the stored names; reopened before, it still holds what was typed
-    ⚠ [A22](#a22). "Add Role" was not tried. <sup>e</sup>
+    question, saving nothing; after a reload the row and the window show
+    the stored names. Before a reload, though, a changed name stays:
+    "Edit" reopens the window with it, and a changed primary-language
+    name shows on the row and is stored by the role's next "Save"
+    ⚠ [A22](#a22). "Add Role" was not tried.
+    <sup>e</sup>
 13. **Deleting a role.** "Delete Role" opens a type-to-confirm dialog:
     'Are you absolutely sure you want to delete "{identifier}" role?' Its
     warning lists the two preconditions: at least one AUTHOR role must
@@ -809,8 +812,8 @@ Left out of the scenarios above, by reason:
     Settings)
   - A21 (contributor roles arriving named in the primary language
     only; Rule 11)
-  - A22 (a role name closed without saving still showing when "Edit
-    Role" is reopened before a reload; Rule 12)
+  - A22 (a role name closed without saving shown on the row and in the
+    reopened "Edit Role", and stored by the role's next "Save"; Rule 12)
   - A23 (a CRediT role's degree printing as a raw code on a French
     landing page; Rule 14)
   - OPS2 (the Competing Interests label rendering raw on a preprint
@@ -859,6 +862,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A5](#a5) | A registry pick the server cannot cache raises an error dialog, then saves and publishes with no name | 🐞 | user-visible | — |
 | [A14](#a14) | On a one-role journal no contributor can be saved from the form; every attempt errors, yet creates a role-less contributor | 🐞 | user-visible | — |
 | [A20](#a20) | On a journal with a "Forms" language not ticked under "Metadata", the workflow's "Add Contributor" never saves, refused on fields the form does not show | 🐞 | user-visible | — |
+| [A22](#a22) | A role name changed in "Edit Role" and closed without saving shows on the row, and the role's next "Save" stores it | 🐞 | medium | — |
 | [A7](#a7) | The contributor form's error summary prints "Go to Affiliations: [object Object]" | 🐞 | minor | — |
 | [A9](#a9) | The landing page's affiliation ROR link has no accessible name | 🐞 | minor | — |
 | [A10](#a10) | The typed affiliation's per-language name boxes are announced wrongly by a screen reader | 🐞 | minor | — |
@@ -876,7 +880,6 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A18](#a18) | An Anonymous contributor's Email and Country are marked "* Required" but save empty | ❓ | minor | — |
 | [A19](#a19) | The contributor form's email field is labeled "Email" on one install and "Email address" on another, and the error summary's "Go to …:" link follows the label | ❓ | minor | — |
 | [A21](#a21) | Contributor roles arrive named in the primary language only, so readers in another language see "Author" | ❓ | minor | — |
-| [A22](#a22) | A role name typed and closed without saving still shows when "Edit Role" is reopened before a reload | ❓ | minor | — |
 | [OMP1](#omp1) | A book with five or more contributors compacts to bare name-and-affiliation lines | ✅ | user-visible | — |
 | [OMP2](#omp2) | An Edited Volume's book page credits volume editors instead of the contributor list | ✅ | user-visible | — |
 | [OPS1](#ops1) | The submitting author edits their own unposted preprint's contributors | ✅ | user-visible | — |
@@ -1156,16 +1159,30 @@ counts the French one missing, yet nothing ever fills it.
 Basis: probe + code reading. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — A role name closed without saving reappears in "Edit Role"** · ❓ · minor.
-In a role's "Edit Role" window, a French name typed and left with
-"Close" is not saved: the Contributor Roles list is unchanged, and after
-a reload the window's French box is empty. Reopened on the same page
-before any reload, though, the window shows the typed name and "2/2
-languages completed", as if it had been stored. A Journal Manager who
-reopens the window to check reads an unsaved name as saved.
-Question: should a reopened window show the stored values? Lean: yes.
-The window is where a manager checks what readers will see (Rule 15a).
-Basis: probe. <sup>f-a22</sup>
+**A22 — A role name closed without saving stays on the row, and the next "Save" stores it** · 🐞 · medium.
+A Journal Manager who changes a role's name in "Edit Role" and leaves
+with "Close" expects the change dropped. Nothing is saved at that
+moment, but until the page is reloaded the change stays:
+
+- **The row.** A changed primary-language name shows in the Contributor
+  Roles table as if saved: "Translator" changed to "Translator Draft"
+  reads "Translator Draft". A name typed in another language's box
+  alone leaves the row as it was, since the row shows the
+  primary-language name.
+- **The window.** "Edit" reopens "Edit Role" with the changed name in
+  its box and the "{count}/{total} languages completed" count to match:
+  a French name typed and closed reads "2/2 languages completed".
+- **The next "Save".** Pressed in that reopened window without
+  retyping the name, it stores the abandoned primary-language name,
+  which then shows beside authors wherever the role's name is printed
+  (Rule 15a). Saving a role after an abandoned name in another
+  language was not tried.
+
+Only a reload before reopening puts the stored names back. The same as
+[Institutions A2](U66-institutions.md#a2),
+[Announcements A11](U12-announcements.md#a11) and
+[Highlights A4](U11-highlights.md#a4).
+Since: 2025-11-11 (10½ months) · Basis: probe, 2026-09-30. <sup>f-a22</sup>
 
 <a id="a23"></a>
 **A23 — A CRediT role's degree prints as a raw code on a French landing page** · 🐞 · minor.
@@ -2110,7 +2127,23 @@ typed, "Close" pressed: the window closed, no browser dialog, the list
 unchanged; reopened at once, the French box read "Auteur-e" and both
 counts "2/2 languages completed"; after a reload and a reopen the French
 box was empty and the count "1/2 languages completed". No request of
-500 or more and no page error.
+500 or more and no page error. Walked 2026-09-30 for the issue report
+(OJS, OMP and OPS on `main`, each freshly loaded from PKP's default test
+dataset; kept script
+`shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/reach.js`):
+"Edit" on "Translator", " Draft" added to the English "Role Name",
+"Close": the row read "Translator Draft"; "Edit" again and "Save" with
+nothing else changed stored "Translator Draft". The same in-place
+write affects Institutions A2, Announcements A11, Highlights A4 and
+Media files A5. Mechanism: lib/ui-library
+`ContributorRoleManager/useContributorRoleManagerFormAddRole.js` passes
+`{...contributorRole}` to `setValues()`, handing the row's own `name`
+object to the form, and `Form.vue::fieldChanged()` writes a change into
+that object (`field[prop][localeKey] = value`); the row prints
+`localize(role.name)`. Since: ui-library `b628fd2b` (2025-11-11,
+"Contributor Roles and Type"), the date read from the checkout's
+history.
+Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md](../issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md)).
 
 <a id="fn-f-a23"></a>
 **f-a23 — A23 evidence.** Live-probed 2026-09-29 (OJS, two runs,

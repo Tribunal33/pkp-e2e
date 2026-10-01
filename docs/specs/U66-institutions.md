@@ -30,12 +30,14 @@ there the list serves statistics alone. <sup>a</sup>
 "Manager-level roles" below are the roles whose row on the journal's
 Roles settings reads "Journal Manager" ("Press Manager" on a press,
 "Manager" on a preprint server) for its permission level: Journal
-Manager, Editor and Production Editor on a journal or press; on a
-preprint server the manager alone. The Settings pages are open to a
+Manager, Editor and Production Editor on a journal or press, the manager
+alone on a preprint server, and any role created at that level with
+"Create New Role". The Settings pages are open to a
 manager-level role only while the role has "Permit changes to Settings"
 ticked on the Roles settings: the Editor and Production Editor rows have
 it ticked and can lose it; the manager role's row offers no "Edit", so it
-keeps it, and on a preprint server no manager-level role can lose it
+keeps it; a role created at the manager level starts with it unticked,
+on a preprint server as on the other two
 ([→ settings access](U07-journal-identity-and-about-pages.md#settings-access)).
 The Institutions page asks for it too. The Site Administrator holds a
 manager role in every journal of a test install. <sup>b</sup>
@@ -74,7 +76,7 @@ languages these are:
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
 | "Name" | yes, in the journal's primary language | One line of text per language. The label carries no required mark, yet a save with the primary language's box empty is refused with "This field is required." under it; on "Edit Institution" of a journal with two or more form languages the message reads "You must complete this field in {language}.", naming the primary language. The other languages may stay empty. A name another institution of the journal already has is accepted. Shown as the row's name (Rule 3) and wherever the journal offers its institutions (Side effects) <sup>d</sup> |
-| "IP ranges" | no | A box of several lines under "Valid values include an IP address (e.g. 142.58.103.1), IP range (e.g. 142.58.103.1 - 142.58.103.4), IP range with wildcard '*' (e.g. 142.58.*.*), and an IP range with CIDR (e.g. 142.58.100.0/24).". One entry per line, each one of: an IPv4 address; two addresses joined by "-", with or without spaces around it; an address with "*" standing for any of its four parts, alone or in a range; or an address followed by "/" and a number from 0 to 32. Spaces at either end of a line and empty lines before the first entry and after the last are dropped; otherwise each line is kept as typed, a repeated line and a range written high to low included. Any other line refuses the save with "Invalid IP range" under the box, shown once however many lines are wrong: an empty line between two entries, a part written with a leading zero ("010.0.0.1"), a part above 255, or an IPv6 address ⚠ [A7](#a7) <sup>q8</sup>. A line may run to 40 characters. A longer one, such as a range with many spaces around "-", is neither saved nor refused, yet each "Save" adds the institution without IP ranges ⚠ [A9](#a9). Left empty, the institution matches no visitor <sup>d</sup> |
+| "IP ranges" | no | A box of several lines under "Valid values include an IP address (e.g. 142.58.103.1), IP range (e.g. 142.58.103.1 - 142.58.103.4), IP range with wildcard '*' (e.g. 142.58.*.*), and an IP range with CIDR (e.g. 142.58.100.0/24).". One entry per line, each one of: an IPv4 address; two addresses joined by "-", with or without spaces around it; an address with "*" standing for any of its four parts, alone or in a range; or an address followed by "/" and a number from 0 to 32. Spaces at either end of a line and empty lines before the first entry and after the last are dropped; otherwise each line is kept as typed, a repeated line and a range written high to low included. Any other line refuses the save with "Invalid IP range" under the box, shown once however many lines are wrong: an empty line between two entries, a part written with a leading zero ("010.0.0.1"), a part above 255, or an IPv6 address ⚠ [A7](#a7) <sup>q8</sup>. A line may run to 40 characters. A longer one, such as a range with many spaces around "-", is neither saved nor refused: the panel stays open with "An unexpected error has occurred. Please reload the page and try again.", yet each "Save" on "Add Institution" adds the institution without IP ranges, and a "Save" on "Edit Institution" stores only the lines above the long one: placed first, it wipes every stored range ⚠ [A9](#a9). Left empty, the institution matches no visitor <sup>d</sup> |
 | "ROR" | no | One line under "Research Organization Registry ID for this institution.". Only a full registry address saves, spaces around it dropped: "https://ror.org/" followed by a nine-character identifier that starts with 0 and ends in two digits, such as "https://ror.org/0213rcc28". Anything else, the identifier "0213rcc28" alone included, is refused with "This is not formatted correctly." under the box ⚠ [A5](#a5) <sup>q9</sup>. Nothing is looked up: the box offers no suggestions and the address is not checked against the registry, unlike the registry search on a contributor's affiliations ([→ ROR lookup](U41-contributors-and-affiliations.md#ror-lookup)). No page shows the ROR but this panel; the COUNTER reports print it (Side effects) <sup>d</sup> |
 
 ## Rules & state
@@ -192,12 +194,14 @@ languages these are:
    whatever the statistics boxes. A press's "Payments" tab adds no entry.
    <sup>i</sup>
 3. **"Permit changes to Settings"** (Settings › Users & Roles › "Roles",
-   a role's "Edit"; ticked on the Editor and Production Editor roles; the
-   manager role's row offers no "Edit"; described in
+   a role's "Edit"; ticked on the Editor and Production Editor roles,
+   unticked on a role created with "Create New Role" at the manager
+   level, on all three apps; the manager role's row offers no "Edit";
+   described in
    [Roles configuration](U54-roles-configuration.md)). Unticked: the
    role's members get the access-denied page on the Institutions page
    (Actors row 2), while the side menu still offers the entry (Actors
-   row 1). <sup>b</sup>
+   row 1). <sup>b</sup> <sup>f-a1</sup>
 4. **Form languages** (Settings › Website › "Setup" › "Languages", the
    "Forms" column; English alone on the seeded journal, which ticks
    French under "UI" only, and on a new one;
@@ -487,6 +491,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U66-A9-institution-long-ip-range-save-error.md`): a valid
     range longer than 40 characters on "Add Institution" and on "Edit
     Institution", saved once or refused, the ranges already stored kept
+  - a role created by "Create New Role" at the manager level (Settings
+    bullet 3; Actors row 2): its "Permit changes to Settings" unticked
+    from the start, and its member refused the Institutions page by its
+    address, on all three apps; scenario 3 checks the refusal with the
+    Editor role, on a journal and a press only
 - **Rarely met**:
   - more than thirty institutions: thirty rows a page and the page
     controls "Previous", the page numbers and "Next" under the list
@@ -668,8 +677,8 @@ reload the page and try again.", and nothing says which line is at
 fault.
 Even so, each "Save" on "Add Institution" adds the institution, without
 IP ranges, so every retry adds another institution with the same name.
-A "Save" on "Edit Institution" keeps only the lines above the long one,
-so the institution loses the ranges it had.
+A "Save" on "Edit Institution" stores only the lines above the long
+one: placed first, it wipes every stored range.
 Only such extra spaces make a valid range longer than 40 characters; a
 range written normally has at most 33.
 Basis: probe, 2026-09-30. <sup>f-a9</sup>
@@ -777,8 +786,9 @@ and after it no role (the manager included) had the entry, while the
 manager still opened the page by its address; ticking it again added
 the entry back at once. On OJS the same Editor is shown the entry with
 payments enabled and the statistics boxes off, and pressing it gives the
-same refusal. OPS: the Roles settings list one manager-level row,
-"Preprint Server manager", with no "Edit".
+same refusal. OPS: of the roles a new server has, the Roles settings
+list one manager-level row, "Preprint Server manager", with no "Edit"; a
+role created at the manager level is in f-a1.
 
 <a id="fn-c"></a>
 **c — the side-menu entry.** `PKPTemplateManager::setupBackendPage()`
@@ -1159,8 +1169,21 @@ email".
 **f-a1 — A1 evidence.** Note c: the entry's two sources test the role
 level and the setting, never `permitSettings`; note b: the page's
 `CanAccessSettingsPolicy` does. The Editor and Production Editor groups
-carry `permitSettings` and can lose it (Settings bullet 3); OPS offers no
-manager-level group that can. Live-probed 2026-09-28: q1.
+carry `permitSettings` and can lose it (Settings bullet 3); a role
+created at the manager level does not: lib/pkp's `UserGroupForm`, which
+no app subclasses, gives a new role no value, so its box starts unticked
+on all three apps (code read 2026-10-01; seen on screen on OPS), and on
+OPS it is the only manager-level role without it. Live-probed
+2026-09-28: q1. Issue walk 2026-09-30, OPS main and 3.5, on PKP's default
+test dataset (kept script
+`shared/playwright/checks/issues/institutions-menu-without-settings-permission/walk.js`):
+as the manager, Settings › Users & Roles › "Roles" › "Create New Role",
+"Permission level" "Manager", "Permit changes to Settings" unticked from
+the start; an existing Author invited to the role and the invitation
+accepted; that member's side menu shows "Institutions" and no "Settings",
+and "Institutions" opens "The current role does not have access to this
+operation.". The same walk on OJS and OMP, with the Editor role's box
+unticked, gave the same refusal.
 Issue report: [pkp-e2e#3](https://github.com/jardakotesovec/pkp-e2e/issues/3) ([docs/issues/U66-A1-institutions-menu-without-settings-permission.md](../issues/U66-A1-institutions-menu-without-settings-permission.md)).
 
 <a id="fn-f-a2"></a>
@@ -1252,6 +1275,19 @@ each: the 45-character line answered 500 on `POST {context}/api/v1/institutions`
 on every "Save"; after two presses and a reload the list read "Long
 Library" twice, and "Edit" showed "IP ranges" empty; a 40-character line
 answered 200, a 41-character one 500.
+`DAO::update()` writes the row, deletes every stored range, then inserts
+the new lines one by one, outside a transaction, so a failed edit keeps
+only the lines before the long one. Issue walk 2026-09-30, three apps,
+main and 3.5, on PKP's default test dataset (kept script
+`shared/playwright/checks/issues/institution-long-ip-range-save-error/walk.js`):
+"Campus Library" saved with `10.1.0.0/16`, then "Edit", the 45-character
+line put on a new first line above it, "Save": the panel stayed open
+with "An unexpected error has occurred. Please reload the page and try
+again." (500 on `POST {context}/api/v1/institutions/{id}`, method
+override `PUT`; the server log reads "value too long for type character
+varying(40)"); after a reload "Edit" showed "IP ranges" empty,
+`10.1.0.0/16` gone. The add steps of the same walk repeated the
+"Long Library" result above.
 Issue report: [pkp-e2e#2](https://github.com/jardakotesovec/pkp-e2e/issues/2) ([docs/issues/U66-A9-institution-long-ip-range-save-error.md](../issues/U66-A9-institution-long-ip-range-save-error.md)).
 
 <a id="fn-f-a10"></a>

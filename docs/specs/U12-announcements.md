@@ -167,9 +167,12 @@ discards the changes. <sup>g</sup>
    shows the new title in place; the public pages show the change on
    their next load. The posted date never changes: an edited announcement
    keeps its place in every list. Closing the panel with its close control,
-   Escape on a plain box or a click outside it keeps the announcement as it
-   was, with no warning, but the row shows the unsaved title until the
-   page is reloaded ⚠ [A11](#a11). <sup>c</sup> <sup>o</sup>
+   Escape on a plain box or a click outside it saves nothing and gives no
+   warning, but the row shows the unsaved title, "Edit" reopens the panel
+   with it in "Title", and the next "Save" there stores it, whatever else
+   it changes, so the public Announcements page shows it; only a reload of
+   the page before editing again puts the saved title back ⚠ [A11](#a11). <sup>c</sup> <sup>o</sup>
+   <sup>f-a11</sup>
 7. **Deleting.** "Delete" on a row opens the "Delete Announcement"
    dialog: "Are you sure you want to permanently delete the announcement
    {title}?" with "Yes" and "No". "Yes" removes the row and the
@@ -876,7 +879,7 @@ Left out of the scenarios above, by reason:
   - A12 (the image file left in the public files after a delete, a
     refused edit or a replacement of another type; Rules 7, 15)
   - A11 (an unsaved title left on the row after "Edit Announcement" is
-    closed; Rule 6)
+    closed, and stored by the next "Save"; Rule 6)
   - A2 (an image refused on "Save" deleting the announcement on an edit;
     Fields "Image")
   - A9 ("Send an email about this to all registered users." ticked on an
@@ -1981,6 +1984,14 @@ place (*Highlights* A4). Live-probed 2026-09-17 (A11), OJS, OMP and OPS: the
 rows read "Call for papers UNSAVED", "… ESC" and "… OUTSIDE" after the three
 closes, no browser or in-app dialog, "Call for papers" after the reload and
 on the public page.
+Walked 2026-09-30 (Rule 6, A11), OJS, OMP and OPS on `main` and
+`stable-3_5_0`, kept script
+`shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/walk.js`:
+" Draft" added to "Title" and the panel closed by its close control left
+the row reading "Call for papers Draft"; "Edit" reopened with that title,
+and a "Save" made to add "Deadline in May." to "Short Description" stored
+it, the row after a reload and the public Announcements page reading
+"Call for papers Draft". Read into Rule 6 2026-10-01.
 Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md](../issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md)).
 
 <a id="fn-f-a12"></a>

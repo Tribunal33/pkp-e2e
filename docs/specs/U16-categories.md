@@ -897,7 +897,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | A screen reader announces the "Select Categories" window's arrow column as "##common.expand##" | 🐞 | minor | — |
 | [A13](#a13) | A category's "Editorial Assignments" assign nobody on any journal or press but the install's first | 🐞 | user-visible | — |
 | [A15](#a15) | In French, the tab, the delete dialog, the "Select Categories" window and a press's category page show raw codes | 🐞 | minor | — |
-| [A16](#a16) | A name changed and closed without saving comes back in the same category's next "Edit" | 🐞 | minor | — |
+| [A16](#a16) | A name changed and closed without saving comes back in the same category's next "Edit" | 🐞 | medium | — |
 | [A17](#a17) | A file that is not a picture leaves a broken preview in "Cover Image" | 🐞 | minor | — |
 | [A18](#a18) | The delete dialog's confirmation box has no name for a screen reader | 🐞 | minor | — |
 | [A19](#a19) | A category with one item reads "1 Items" ("1 Titles" on a press) | 🐞 | minor | — |
@@ -1060,15 +1060,17 @@ journal's and a preprint server's page are translated.
 Basis: probe, 2026-09-25. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — An unsaved name comes back in the next "Edit"** · 🐞 · minor.
+**A16 — An unsaved name comes back in the next "Edit"** · 🐞 · medium.
 A manager changes a category's "Name" in "Edit Category" and presses
 "Close" or Escape: nothing asks, and the tab keeps the old name, so the
 change looks discarded. But that category's next "Edit" opens with the
 unsaved name ("Path" back to the saved one), also after a switch to
 "Masthead" and back, and "Save" there stores it. Another category's
 "Edit" and "Add Category" open clean; a reload or leaving the page drops
-the change, again without a question.
-Basis: probe, 2026-09-25. <sup>f-a16</sup>
+the change, again without a question. The same fault as
+[Institutions A2](U66-institutions.md#a2), whose row shows the unsaved
+name as well.
+Basis: probe, 2026-09-25; again 2026-09-30. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — A file that is not a picture leaves a broken preview** · 🐞 · minor.
@@ -1929,6 +1931,20 @@ with Escape: no dialog, the tab kept the saved names; the same category's
 "Masthead" tab and back; "Arts"'s "Edit" and "Add Category" opened with
 their own values; after a reload "Edit" showed the saved name. Leaving the
 page with the window open and changed asked nothing.
+Re-walked 2026-09-30 on main, all three apps, by the issue report's
+`shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/reach.js`
+(a dataset category, " Draft" added to its name, the window shut with its
+close control, "Edit" and an unchanged "Save"): the row kept the saved
+name, the reopened "Name" held the abandoned text, and the save stored
+it. Mechanism: `CategoryManager/categoryManagerStore.js`
+`getCategoryForm()` fills the form through `useForm`'s `setValues()`
+with a shallow copy of the row, so the form's name field is the row's
+own per-language object, and `Form.vue::fieldChanged()` writes each
+keystroke into it (`field[prop][localeKey] = value`); closing discards
+only the form. The row prints the API's `localizedTitle` string, so it
+keeps the saved name, unlike Institutions A2. The report's severity,
+medium, is the entry's impact.
+Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md](../issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-25, all three apps: note d (the preview's

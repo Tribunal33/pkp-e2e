@@ -403,6 +403,10 @@ and "Save" is greyed out until the boxes are filled: <sup>g</sup>
     sure you want to delete the recommendation {title}" (window "Delete
     Recommendation"), "Yes" / "No". The six starting entries can be
     edited and deleted like any other while not in use. <sup>g</sup>
+    When the text in "Review Recommendations" is changed and "Edit
+    Recommendation" is closed with its back arrow ("Close"), not "Save",
+    the row shows the changed text, "Edit" reopens with it, and the next
+    "Save" stores it ⚠ [A11](#a11). <sup>f-a11</sup>
 
 ## Side effects
 
@@ -833,6 +837,10 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - an unsaved "Setup" edit staying through "Submission" and back to
     "Review", and a reload then dropping it (Rule 2)
+  - the guard for A11 {OJS} (Rule 18; issue report
+    `docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md`): a
+    changed "Review Recommendations" closed with "Close", then "Edit"
+    and "Save", the row keeping its title from before the change
 - **Rarely met**:
   - ordering the forms and a form's items with "Order", "Done" and "Cancel
     ordering", and the editors' "Review Form" lists following the order
@@ -884,6 +892,8 @@ Left out of the scenarios above, by reason:
   - A8 (a declined request counting in neither column; Rule 12)
   - A9 (the reviewer row's "Edit" window detaching a deactivated form;
     Rule 12a)
+  - A11 ("Edit Recommendation" closed with "Close" leaving the
+    unsaved title on the row for the next "Save" to store; Rule 18)
   - OMP3 (the "Internal Review Guidelines" toolbar without quote and list
     buttons; Fields)
 - **No seed**:
@@ -932,6 +942,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A5](#a5) | Saving a form item with a text type drops its "Response Options" without the warning the app carries for it | 🐞 | minor | — |
 | [OMP3](#omp3) | On a press, a list or quote can be typed into "External Review Guidelines" but not into "Internal Review Guidelines" | 🐞 | minor | — |
 | [A9](#a9) | Once a form carried by an open request is deactivated, the reviewer row's "Edit" window shows "None / Free Form Review", and "OK" there detaches the form and lowers its "In Review" count | 🐞 | minor | — |
+| [A11](#a11) | A recommendation title abandoned in "Edit Recommendation" stays on the row and is stored by the next "Save" | 🐞 | medium | — |
 | [A2](#a2) | A form in use can still be deactivated, although the activation confirmation promises it cannot | ❓ | minor | — |
 | [A3](#a3) | A deadline saved as 0 or left empty makes Add Reviewer preset three weeks for the response but four for the review | ❓ | minor | — |
 | [A4](#a4) | A reload on a "Review" side tab lands on "Submission" › "Disable Submissions", although the address names the side tab and a pressed "Submission" side tab survives a reload | ❓ | minor | — |
@@ -1046,6 +1057,18 @@ After a refused save on "Setup", "Save" is greyed out, and what makes it
 pressable again was not tried. Question: should correcting every refused
 box give "Save" back? Lean: yes, as the "Reviewer Recommendations" window does.
 Basis: probe. <sup>d</sup>
+
+<a id="a11"></a>
+**A11 — A recommendation title abandoned in "Edit Recommendation" stays on the row and is stored by the next "Save"** · 🐞 · medium.
+A Journal Manager changes "Review Recommendations" in "Edit
+Recommendation", then closes the window with "Close", not "Save", and
+expects the change dropped. Instead the row shows the
+changed title ("Accept Submission" with " Draft" added reads "Accept
+Submission Draft"), and "Edit" reopens with it in the box; a "Save"
+there, even with nothing else changed, stores the title the manager had
+abandoned.
+The same fault as [Institutions' A2](U66-institutions.md#a2).
+Since: 2026-09-24 (a week) · Basis: probe, 2026-09-30. <sup>f-a11</sup>
 
 ### OMP
 
@@ -1850,6 +1873,27 @@ answered 200, the form's "In Review" went 1 → 0, and the reviewer's step 3
 showed "For author and editor" and "For editor" instead of the questions.
 The count still read 1 before the "OK", so the window's save does the
 detaching. First seen 2026-09-05 by the earlier build of this spec.
+
+<a id="fn-f-a11"></a>
+**f-a11** — Folded 2026-10-01 from the issue report's walk (Rule 18;
+A11). `reviewerRecommendationManagerStore.js` `handleEdit()` passes the
+row to `useForm`'s `setValues(item)`, so the form's multilingual `title`
+field holds the row's own object, and `Form.vue` `fieldChanged()` writes
+a change into it (`field[prop][localeKey] = value`); the row prints the
+same object, and closing discards only the form. Seen on screen
+2026-09-30 on OJS `main` (lib/ui-library 280f98c5), signed in as `rvaca`
+on PKP's default test dataset: "Edit" on "Accept Submission", " Draft"
+added to "Review Recommendations" (`title-en`), the window closed with
+its "Close"; the row read "Accept Submission Draft", the reopened
+box held it, and "Save" unchanged stored it (read again after a
+reload). Kept script
+`shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/reach.js`.
+Since: ui-library 1afd40a9 (`pkp/ui-library#853`, 2026-09-24) reloads the
+list on close only after a save; before it every close reloaded the list
+and hid the fault (read in the code, not reproduced). Not on 3.5, which
+has no such manager. A press has no "Reviewer Recommendations" tab
+(OMP1). Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md](../issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md)).
+
 <a id="fn-f-omp1"></a>
 **f-omp1** — Footnote b (`hasCustomizableReviewerRecommendation()`); the
 press wizard's missing "Recommendation" list is the reviewer's-review
