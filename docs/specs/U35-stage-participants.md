@@ -913,6 +913,14 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for OMP1 (issue report
+    `docs/issues/U35-OMP1-internal-review-no-predefined-message.md`):
+    the predefined messages of a press's Internal Review, read as a set
+  - the guard for A3 (issue report
+    `docs/issues/U35-A3-OMP1-typed-participant-message-not-sent.md`):
+    a message typed in "Notify" and in "Assign Participant" with the
+    list on its blank entry, the recipient's mailbox and the stage's
+    discussions panel read
   - the "Notify" window's close control, asking first or not (Rule 11c)
   - Escape and a reload on the "Notify" window (Rule 11d)
 - **Nothing new to test**:
@@ -963,7 +971,7 @@ entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A Section Editor's "OK" on "Edit Assignment" saves nothing and shows the form again | 🐞 | user-visible | — |
-| [A3](#a3) | A message typed with no predefined message chosen is not sent, and the window stays open with no reason given, on "Assign" and on "Notify" | 🐞 | user-visible · crash: server | — |
+| [A3](#a3) | A message typed in "Assign" or "Notify" with no predefined message chosen is not sent | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | "OK" on "Assign Participant" with nobody chosen, or with a person from the previous role's list, assigns nobody and gives no reason | 🐞 | minor | — |
 | [A5](#a5) | The discussion a message opens is listed as created by the person it was sent to | 🐞 | minor | — |
 | [A6](#a6) | "Assign Editor" gives the new editor no task, unlike the other request messages | 🐞 | minor | — |
@@ -976,7 +984,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | The Submission stage's "Assign Editor" email ends with two footers | 🐞 | minor | — |
 | [A16](#a16) | A message's email arrives although the person ticked "Do not send me an email…" for "Discussion added." | 🐞 | user-visible | — |
 | [OJS1](#ojs1) | The automatic assignment email tells the editor to select "Send to Review"; the button reads "Send for Review" | 🐞 | minor | — |
-| [OMP1](#omp1) | A press's Internal Review offers no predefined message, so no message can be sent from its Participants panel | 🐞 | user-visible | — |
+| [OMP1](#omp1) | A press's Internal Review offers no predefined message in "Assign" and "Notify" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | On a preprint server "Assign Editor" leaves "Message" as it was | 🐞 | minor · crash: server | — |
 | [OPS3](#ops3) | A preprint server never sends its automatic assignment email | 🐞 | user-visible | — |
 | [OPS4](#ops4) | On a preprint server the notice after "Assign", "Edit" or "Notify" can show in the Production entry's "Notification" box instead of at the top right | 🐞 | minor | — |
@@ -1011,18 +1019,23 @@ the rows a person may not change should not be removable by them either.
 Basis: probe. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
-**A3 — A message without a predefined message is dropped** · 🐞 · user-visible · crash: server.
-The list reads "Choose a predefined message to use, or fill out the form
-below.", so an editor who leaves it on its blank entry and types a message
-expects that message to be sent. On "Assign", "OK" leaves the window open
-as filled with no reason given, yet the person is assigned: the row
-appears once the page is opened again, and the Activity Log gets no line
-for it. On "Notify" the window stays open with no reason given. In both
-cases no email goes out and no discussion opens. Behind both buttons the
-request fails on the server, and nothing on screen says so. In "Notify",
-choosing the blank entry again after a predefined message fails the same
-way, keeping the text and showing nothing wrong.
-Basis: probe. <sup>[f-a3](#fn-a3)</sup>
+**A3 — A message typed in "Assign" or "Notify" with no predefined message chosen is not sent** · 🐞 · medium · crash: server.
+The request behind "Notify" and behind "OK" on "Assign Participant"
+fails on the server when a message is typed and the list "Choose a
+predefined message to use, or fill out the form below." is left on its
+blank entry. The window stays open with the typed text in it and shows
+no error. No email goes out and no discussion opens.
+On "Assign" the person is assigned all the same. Their row shows once
+the page is opened again, and the Activity Log has no line for the
+assignment. Pressing "OK" again fails the same way and does not assign
+them twice.
+The message goes out when a predefined message is chosen first and its
+text replaced, or from the stage's discussions panel. A press's
+Internal Review offers no predefined message, so nothing can be sent
+from its Participants panel.
+The server failure was seen on PostgreSQL. Setting the list back to its
+blank entry after a predefined message was chosen fails there too.
+Basis: probe, 2026-10-01. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
 **A4 — "OK" on "Assign" can do nothing, without a reason** · 🐞 · minor.
@@ -1185,14 +1198,20 @@ Basis: probe. <sup>[f-ojs1](#fn-ojs1)</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — Internal Review has no predefined message** · 🐞 · user-visible.
-On a press's Internal Review the "Choose a predefined message…" list of
-"Assign Participant" and "Notify" holds only its blank entry, so no message
-can be sent from that stage's panel (A3). "Notify" with a typed message
-stays open with no reason given and nothing is sent; "OK" on "Assign"
-stays open too, although the person is assigned. Every other stage of a
-press offers at least a "Discussion (…)" message.
-Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
+**OMP1 — A press's Internal Review offers no predefined message in "Assign" and "Notify"** · 🐞 · low.
+On a press's Internal Review the list "Choose a predefined message to
+use, or fill out the form below." of "Assign Participant" and "Notify"
+holds only its blank entry. On 3.5 it offers "Discussion (Review)" and
+"Assign Editor" there, as External Review still does.
+Every press has this stage, and every other stage of a press offers at
+least a "Discussion (…)" message. "OK" on "Assign" with "Message" left
+empty still assigns the person.
+A second fault makes this one worse today: a message typed with no
+predefined message chosen is not sent on any stage
+([U35-A3-OMP1-typed-participant-message-not-sent.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U35-A3-OMP1-typed-participant-message-not-sent.md)).
+With both faults, the Internal Review stage's Participants panel sends
+nothing.
+Basis: probe, 2026-10-01. <sup>[f-omp1](#fn-omp1)</sup>
 
 ### OPS
 
@@ -1345,6 +1364,7 @@ Basis: test run. <sup>[f-ops4](#fn-ops4)</sup>
 
 <a id="fn-a3"></a>
 **f-a3** — Live-probed 2026-09-22 (all three apps, two scratch journals each; a press's Internal Review too): note td4. With the list blank, `PKPStageParticipantNotifyForm::sendMessage()` runs `Template::withContextId()->find('')`, which the Postgres test database refuses ("invalid input syntax for type bigint"), so both requests answer a server error; on "Assign" the person is assigned all the same, and neither the log line nor a notice follows. Introduced with pkp/pkp-lib#12593 (lib/pkp `b3b882bec`, 2026-06-01). A MySQL install may read the empty id as no template and return early, and would then show "Notification sent to users." with nothing sent (not driven). The list's own wording (`stageParticipants.notify.chooseMessage` "Choose a predefined message to use, or fill out the form below.") presents the message box as an alternative to the list. Live-probed 2026-09-29 (Fields "Notify"; all three apps, two runs each, as Journal Manager): a predefined message chosen in "Notify" and the list set back to its blank entry, the text kept and nothing shown, while the request it posts (`StageParticipantGridHandler::fetchTemplateBody()` with an empty `template`) answered a server error with an empty body, the only one of each run. The handler runs `Template::with('userGroups')->withContextId()->find('')`, the same empty-id lookup as `sendMessage()`. The "Assign" window's list posts the same request (not driven).
+Issue report: [docs/issues/U35-A3-OMP1-typed-participant-message-not-sent.md](../issues/U35-A3-OMP1-typed-participant-message-not-sent.md).
 
 <a id="fn-a4"></a>
 **f-a4** — Live-probed 2026-09-22 (all three apps): note td5. `AddParticipantForm::validate()` returns `Repo::userGroup()->userInGroup($userId, $userGroupId) && Repo::userGroup()->get($userGroupId) && parent::validate()`: with no user, or with a user who does not hold the newly chosen role, the first test is false and `parent::validate()`, which would record the `userId` check's message, never runs; `saveParticipant()` answers the redrawn form with no error.
@@ -1393,6 +1413,8 @@ Basis: test run. <sup>[f-ops4](#fn-ops4)</sup>
 
 <a id="fn-omp1"></a>
 **f-omp1** — Live-probed 2026-09-22 (press): "Assign" (as Press Manager and as Series editor) and "Notify" on Internal Review offering only the blank entry; "Notify" with "Hello" typed staying open as filled, nothing received, no discussion; "OK" on "Assign" with a typed message staying open while the person was assigned; neither logged. Control: External Review lists "Discussion (Review)" and "Assign Editor". Code: OMP `registry/taskTemplates.xml` has no template with `stageId="WORKFLOW_STAGE_ID_INTERNAL_REVIEW"` and OMP's locale no Internal Review discussion name; `PKPStageParticipantNotifyForm::fetch()` filters by the stage (note f), and `sendMessage()` needs a template (A3's footnote).
+Issue report: [docs/issues/U35-OMP1-internal-review-no-predefined-message.md](../issues/U35-OMP1-internal-review-no-predefined-message.md).
+Issue report (a typed message not sent, this stage included): [docs/issues/U35-A3-OMP1-typed-participant-message-not-sent.md](../issues/U35-A3-OMP1-typed-participant-message-not-sent.md).
 
 <a id="fn-ops1"></a>
 **f-ops1** — OPS `registry/userGroups.xml` gives the manager group `stages="5,6"`, OJS and OMP none. Live-probed 2026-09-19 (all three apps, the Production stage's "Assign"): the preprint server's role list "Preprint Server manager, Moderator, Author", the journal's and press's without their manager role; seen before on 2026-09-04 (OPS, the notifications probes). Live-probed 2026-09-19 (the Roles screen): the manager row's stage boxes ticked on OPS only (note m). Live-probed 2026-09-22 (all three apps, every stage's "Assign" and the Roles screen): as on 2026-09-19.

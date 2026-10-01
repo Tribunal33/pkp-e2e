@@ -1,0 +1,106 @@
+--- a/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
+@@ -596,10 +596,11 @@
+      */
+     public function fetchTemplateBody($args, $request)
+     {
+-        $templateId = $request->getUserVar('template');
++        // The list's blank entry posts an empty value: there is no text to fetch
++        $templateId = (int) $request->getUserVar('template');
+         $context = $request->getContext();
+         $user = $request->getUser();
+-        $template = Template::with('userGroups')->withContextId($context->getId())->find($templateId);
++        $template = $templateId ? Template::with('userGroups')->withContextId($context->getId())->find($templateId) : null;
+         if ($template && Repo::editorialTask()->isTemplateAccessibleToUser($template, $user)) {
+             $submission = $this->getSubmission();
+             $mailable = new TemplateVariables($template->promote($submission), $submission, $context);
+--- a/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
+@@ -175,25 +175,40 @@
+ 
+         $contextDao = Application::getContextDAO();
+         $context = $contextDao->getById($submission->getData('contextId'));
+-        $templateId = $this->getData('template');
+-        $template = Template::withContextId($context->getId())->find($templateId);
++        // The list's blank entry posts an empty value: no predefined message was chosen
++        $templateId = (int) $this->getData('template');
++        $template = null;
+ 
+-        if (!is_a($template, Template::class)) {
+-            return;
+-        }
++        if ($templateId) {
++            $template = Template::withContextId($context->getId())->find($templateId);
++
++            if (!is_a($template, Template::class)) {
++                return;
++            }
+ 
+-        if (!Repo::editorialTask()->isTemplateAccessibleToUser($template, $user)) {
+-            return;
++            if (!Repo::editorialTask()->isTemplateAccessibleToUser($template, $user)) {
++                return;
++            }
+         }
+ 
+-        $mailable = new TemplateVariables($template->promote($submission), $submission, $context);
++        // Without a predefined message, the typed message opens a discussion named after the stage
++        $title = $template ? $template->getLocalizedData('title') : $this->getStageDiscussionTitle();
++        $task = $template ? $template->promote($submission) : new EditorialTask([
++            'type' => EditorialTaskType::DISCUSSION->value,
++            'title' => $title,
++            'stageId' => $this->_stageId,
++            'assocType' => PKPApplication::ASSOC_TYPE_SUBMISSION,
++            'assocId' => $submission->getId(),
++        ]);
++
++        $mailable = new TemplateVariables($task, $submission, $context);
+         // Populate mailable with data before compiling headNote
+         $mailable
+             ->addData(['authorName' => $user->getFullName()]) // For compatibility with removed AUTHOR_ASSIGN and AUTHOR_NOTIFY
+             ->sender($request->getUser())
+             ->recipients([$user])
+             ->body($this->getData('message'))
+-            ->subject($template->getLocalizedData('title'));
++            ->subject($title);
+ 
+         // Create a query
+         $query = EditorialTask::create([
+@@ -203,7 +218,7 @@
+             'seq' => REALLY_BIG_NUMBER,
+             'createdBy' => $user->getId(),
+             'type' => EditorialTaskType::DISCUSSION,
+-            'title' => $template->getLocalizedData('title'),
++            'title' => $title,
+         ]);
+ 
+         Repo::editorialTask()->resequence(PKPApplication::ASSOC_TYPE_SUBMISSION, $submission->getId());
+@@ -220,7 +235,7 @@
+             ]);
+         }
+ 
+-        $templateKey = $template->key;
++        $templateKey = (string) $template?->key;
+         $additionalVariables = $this->getEmailVariableNames($templateKey);
+ 
+         // Create a head note
+@@ -312,6 +327,19 @@
+     }
+ 
+     /**
++     * The name of the discussion a message opens when no predefined message is chosen
++     */
++    protected function getStageDiscussionTitle(): string
++    {
++        return __(match ((int) $this->_stageId) {
++            WORKFLOW_STAGE_ID_SUBMISSION => 'mailable.discussionSubmission.name',
++            WORKFLOW_STAGE_ID_INTERNAL_REVIEW, WORKFLOW_STAGE_ID_EXTERNAL_REVIEW => 'mailable.discussionReview.name',
++            WORKFLOW_STAGE_ID_EDITING => 'mailable.discussionCopyediting.name',
++            WORKFLOW_STAGE_ID_PRODUCTION => 'mailable.discussionProduction.name',
++        });
++    }
++
++    /**
+      * Get the available email template variable names for the given template name.
+      */
+     public function getEmailVariableNames(string $emailKey): array
