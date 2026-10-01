@@ -1,0 +1,30 @@
+--- a/plugins/generic/driver/DRIVERDAO.php
++++ b/plugins/generic/driver/DRIVERDAO.php
+@@ -54,15 +54,19 @@
+     ): array {
+         $records = [];
+ 
+-        $query = $this->getRecordsRecordSetQuery($setIds, $from, $until, null);
+-        $total = $query->getCountForPagination();
+-        $results = $query->offset($offset)->limit($limit)->get();
+-
+-        foreach ($results as $row) {
+-            $record = $this->$funcName((array) $row);
+-            if (in_array('driver', $record->sets)) {
+-                $records[] = $record;
++        // The set's members are told apart in PHP (DRIVERPlugin::addSet()), so the offset, the
++        // limit and the total count the members, not the rows of the journal's whole list.
++        $total = 0;
++        foreach ($this->getRecordsRecordSetQuery($setIds, $from, $until, null)->get() as $row) {
++            $row = (array) $row;
++            $identifier = $this->returnIdentifierFromRow($row);
++            if (!in_array('driver', $identifier->sets)) {
++                continue;
++            }
++            if ($total >= $offset && count($records) < $limit) {
++                $records[] = $funcName == 'returnIdentifierFromRow' ? $identifier : $this->$funcName($row);
+             }
++            $total++;
+         }
+         return $records;
+     }

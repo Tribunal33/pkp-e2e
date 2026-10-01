@@ -1,0 +1,35 @@
+--- a/plugins/generic/driver/DRIVERDAO.php
++++ b/plugins/generic/driver/DRIVERDAO.php
+@@ -50,21 +50,19 @@
+     {
+         $records = [];
+ 
+-        $result = new \ArrayIterator($this->_getRecordsRecordSetQuery($setIds, $from, $until, null)->get()->all());
+-
++        // The set's members are told apart in PHP (DRIVERPlugin::addSet()), so the offset, the
++        // limit and the total count the members, not the rows of the journal's whole list.
+         $total = 0;
+-        for ($i = 0; $i < $offset; $i++) {
+-            if ($result->next()) {
+-                $total++;
+-            } // FIXME: This is inefficient
+-        }
+-        for ($count = 0; $count < $limit && $result->current(); $count++ && $total++) {
+-            $row = (array) $result->current();
+-            $record = $this->_returnRecordFromRow($row);
+-            if (in_array('driver', $record->sets)) {
+-                $records[] = $record;
++        foreach ($this->_getRecordsRecordSetQuery($setIds, $from, $until, null)->get() as $row) {
++            $row = (array) $row;
++            $identifier = $this->_returnIdentifierFromRow($row);
++            if (!in_array('driver', $identifier->sets)) {
++                continue;
++            }
++            if ($total >= $offset && count($records) < $limit) {
++                $records[] = $funcName == '_returnIdentifierFromRow' ? $identifier : $this->$funcName($row);
+             }
+-            $result->next();
++            $total++;
+         }
+         return $records;
+     }

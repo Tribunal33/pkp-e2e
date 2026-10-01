@@ -1217,6 +1217,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U19-A23-oai-driver-set-lists-article-without-galley.md`):
     with "DRIVER" enabled, an article published with no galley left out of
     the `driver` set {OJS} (Rule 23; once fixed)
+  - the guard for A24 (issue report
+    `docs/issues/U19-A24-oai-driver-list-says-more-results.md`): a journal's
+    `driver` list ending without "Resume" when it holds every member, its
+    "completeListSize" counting the members, and a set of more than a
+    hundred members listed in parts to its end {OJS} (Rule 23; once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1347,7 +1352,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | Asked for a section's set, OAI lists return its deleted records whatever "from" and "until" say {OJS OPS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A22](#a22) | Once one journal sets "DOI Versioning" to "Yes", every journal's OAI-PMH requests answer a server error {OJS} | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | A journal's `driver` OAI set lists articles that have no galley {OJS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A24](#a24) | A `driver` list offers "Resume" when complete, and following it repeats records {OJS} | 🐞 | minor | — |
+| [A24](#a24) | On 3.5 a journal's `driver` OAI list stops after a hundred records; on every version it offers "Resume" when complete {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP3](#omp3) | Asked for a set it does not have, a press's OAI-PMH address lists every record of the press, or of every press | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP4](#omp4) | A press's OAI-PMH record lists answer a server error once one book is published without an abstract | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OMP6](#omp6) | A press's OAI-PMH set list names every series that has no prefix with a leading space | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1703,12 +1708,25 @@ galley.
 Basis: probe, 2026-10-01. <sup>f-a23</sup>
 
 <a id="a24"></a>
-**A24 — A complete `driver` list offers "Resume"** {OJS} · 🐞 · minor.
-A harvester lists a journal's `driver` set. The answer holds every
-member but says "There are more results.", its "completeListSize"
-counting the journal's whole list; following "Resume" returns the same
-records again before the list ends.
-Basis: probe, 2026-09-26. <sup>f-a24</sup>
+**A24 — On 3.5 a journal's `driver` OAI list stops after a hundred records; on every version it offers "Resume" when complete** {OJS} · 🐞 · medium.
+The "DRIVER" plugin adds the set `driver` to a journal's OAI address. On
+3.5, a harvester that lists the records of that set on a journal with
+more than a hundred of them gets the first hundred and no "Resume": the
+other records are never listed. On every version, the set's list also
+goes wrong as soon as the journal has a record outside the set (an
+article that is not open access, or a deleted record made while the
+plugin was off). The answer then says "There are more results." when it
+holds every member, with a "completeListSize" that counts the journal's
+whole list. "Resume" returns records the harvester already has when a
+member follows in the journal's list, and the error "No matching records
+in this repository" when none does. Both come from one cause: the plugin
+takes one part of the journal's whole list and only then drops the
+records outside the set, so its count of what remains is wrong. On
+`main` the count is too high, which gives the false "Resume" and loses
+nothing in the lists walked. From 3.3 to 3.5 a 2020 change made the
+count too low, which ends the list early; a 2026 rewrite on `main` undid
+that.
+Basis: probe, 2026-10-01. <sup>f-a24</sup>
 
 ### OMP
 
@@ -2057,6 +2075,7 @@ Issue report: [pkp-e2e#340](https://github.com/jardakotesovec/pkp-e2e/issues/340
 
 <a id="fn-f-a24"></a>
 **f-a24** — Live-probed 2026-09-26, OJS: note q21; a second walk of a two-member set answered the parts 1221 1222, 1221 1222, then 1222. Code: note i.
+Issue report: [docs/issues/U19-A24-oai-driver-list-says-more-results.md](../issues/U19-A24-oai-driver-list-says-more-results.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Live-probed 2026-09-26: note q7; a format set "Not Available" in its "Format Availability" window left the list and its GetRecord answered "No matching identifier in this repository"; "Available" again brought it back. Code: note e (`publication_formats`, `pf.is_available = 1`); the OMP Dublin Core adapter works on a publication format (note f).
