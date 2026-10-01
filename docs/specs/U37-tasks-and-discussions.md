@@ -1947,7 +1947,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="fn-a4"></a>
 **f-a4** — `Template::scopeWithSearch()` maps the words `task(s)`/`discussion(s)` to a type and calls `$query->filterByType($typeFilter)`; the model has `scopeWithType()` and no `scopeFilterByType()`, so the query builder throws `BadMethodCallException` and `GET editTaskTemplates?search=…` fails. Live-probed 2026-09-23 (all three apps): each Enter sends `GET /api/v1/editTaskTemplates?stageId={4|5}&search=…` twice and each answers 500; the "Error" window reads "Call to undefined method PKP\core\SettingsBuilder::filterByType()" with "OK".
-Issue report: [docs/issues/U37-A4-find-template-discussion-task-error.md](../issues/U37-A4-find-template-discussion-task-error.md).
+Issue report: [pkp-e2e#199](https://github.com/jardakotesovec/pkp-e2e/issues/199) ([docs/issues/U37-A4-find-template-discussion-task-error.md](../issues/U37-A4-find-template-discussion-task-error.md)).
 
 <a id="fn-a5"></a>
 **f-a5** — `Template::promote()` fills participants from the template's roles' stage assignments; `setValuesFromTemplate()` sets title, task box, due date, owner and message, never `participants`. Texts `discussion.template.discussionDescription` / `…taskDescription`. Live-probed 2026-09-23 on all three apps (td4).
