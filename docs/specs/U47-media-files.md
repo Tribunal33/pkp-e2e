@@ -837,6 +837,10 @@ Left out of the scenarios above, by reason:
     an assigned Copyeditor on a press monograph in Copyediting finding no
     "Media" under the version, an editor on the same monograph still
     finding it
+  - the guard for A3 (Fields, the upload window; scenario 1 passes it;
+    issue report `docs/issues/U47-A3-media-upload-hidden-drop-button.md`):
+    the empty "Upload Media File" window listing no "Drop files here to
+    upload" to screen readers or the Tab key
 - **Rarely met**:
   - no component marked as a dependent file, where "Upload Media File"
     holds only "No media types are configured. Please contact the
@@ -850,8 +854,6 @@ Left out of the scenarios above, by reason:
   - a Site Administrator not assigned to the submission, offered what
     the Journal Manager of scenarios 1 to 3 is (Actors row 2)
 - **Register carries it**:
-  - A3 (the "Drop files here to upload" button only a screen reader
-    finds; Fields, the upload window; scenario 1 passes it)
   - A4 (a file over the upload limit failing on its card; Rule 2c)
   - A6 (the warning each added file leaves in the server's log; Rule 2)
   - A7 (raw codes on the page, its windows and the delete dialog with
@@ -880,7 +882,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A Layout Editor, or anyone without "Permissions", is offered every "Media" action, and the server refuses each change | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A3](#a3) | The empty "Upload Media File" window lists a button "Drop files here to upload" for screen readers that nothing on screen shows | 🐞 | minor | — |
+| [A3](#a3) | The empty "Upload Media File" window offers screen readers and the Tab key a button nobody sees | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | A file over the request size limit fails with a server error; its card reads "The POST data is too large." | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, unsaved, until a reload | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -929,13 +931,18 @@ Basis: probe, 2026-09-24 (the changing numbers); code (two rows with
 one number). <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — The empty upload window offers screen readers a button nobody sees** · 🐞 · minor.
-While no file is on "Upload Media File", a screen reader lists a
-button "Drop files here to upload" that has nothing visible behind it:
-a sighted user sees only the drop area and "Click to upload files". The
-button goes once a file is on the window. A screen-reader user is
-offered a control the page does not show.
-Basis: probe, 2026-09-24. <sup>f-a3</sup>
+**A3 — The empty "Upload Media File" window offers screen readers and the Tab key a button nobody sees** · 🐞 · low.
+On a submission's "Media" page, the button "Add Media File" opens the
+window "Upload Media File". Until a file has been added to it, a screen
+reader lists a button "Drop files here to upload" there that has nothing
+visible behind it: a sighted user sees only the drop area and "Click to
+upload files". The Tab key stops on it too, right after "Click to upload
+files", and nothing on the page shows where the focus is.
+The hidden button opens the same file chooser as "Click to upload
+files", so uploads work either way. The "Media" page is new on `main`
+and in no release yet, so no live site meets this; the fix is one
+setting in the window's upload component.
+Basis: probe, 2026-10-01. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — A file over the request size limit fails with a server error** · 🐞 · low · crash: server.
@@ -1764,6 +1771,7 @@ here to upload"`, with no visible element; the button is gone once a
 card is on the window. The text is that of Dropzone's default message
 (lib/pkp `form.dropzone.dictDefaultMessage`); the source of the hidden
 button was not traced further.
+Issue report: [docs/issues/U47-A3-media-upload-hidden-drop-button.md](../issues/U47-A3-media-upload-hidden-drop-button.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note q28. The 101 MB request failed with a server error on

@@ -22,7 +22,6 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U53](../specs/U53-users-management.md) | 15 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: A15, A14, A2, A19, A1; open: A4, A5, A6, A7, A9, A11, A12, A13, A16, A17, OPS1. OPS1 (with U07 OPS4) is the fault of docs/issues/U57-A8-omp-ops-french-texts-internal-names.md (the workstation session, 2026-10-01), whose fix already fills and guards the French role names: join it rather than writing a second report |
-| [U47](../specs/U47-media-files.md) | 7 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: OMP1 (with U69 A9), A4 (with U36 A21), A1, A5 (with U66 A2), OMP2, A6 (with U48 A20), A7 (pending translation, to housekeeping); in progress: A3 |
 | [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **In progress: issues session s3, 2026-09-30.** Done: A11, A21 (with U47 A4), A14, A25, A10 (with U38 A2); open: A2, A3, A4, A5, A7, A9, A12, A15, A19, A20 (A23, A24: open report pkp-lib-13288) |
 | [U17](../specs/U17-sections.md) | 16 | 2 | 2 | **In progress: issues session s3, 2026-09-30.** Done: A10 (two reports; its first case with U36 A21); open: A1, A6, A7, A8, A9, OMP2, OMP3, OMP5, OMP7, OMP8, OPS1, OPS2, OPS5 (OMP9, OPS6: open reports in docs/reports) |
 | [U59](../specs/U59-hosted-journals.md) | 9 | 2 | 2 |  |
