@@ -1,0 +1,93 @@
+--- a/lib/ui-library/src/components/ListPanel/doi/DoiListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/doi/DoiListPanel.vue
+@@ -548,9 +548,9 @@
+ 						);
+ 					},
+ 					error: (response) => this.ajaxErrorCallback(response),
+-					complete: () => {
++					complete: (jqXHR, textStatus) => {
+ 						self.isloading = false;
+-						return this.onBulkActionComplete(closeDialog);
++						return this.onBulkActionComplete(closeDialog, textStatus);
+ 					},
+ 				});
+ 			});
+@@ -594,7 +594,8 @@
+ 						);
+ 					},
+ 					error: (response) => this.ajaxErrorCallback(response),
+-					complete: () => this.onBulkActionComplete(closeDialog),
++					complete: (jqXHR, textStatus) =>
++						this.onBulkActionComplete(closeDialog, textStatus),
+ 				});
+ 			});
+ 		},
+@@ -633,7 +634,8 @@
+ 						}
+ 						return this.ajaxErrorCallback(response);
+ 					},
+-					complete: () => this.onBulkActionComplete(closeDialog),
++					complete: (jqXHR, textStatus) =>
++						this.onBulkActionComplete(closeDialog, textStatus),
+ 				});
+ 			});
+ 		},
+@@ -661,7 +663,8 @@
+ 						);
+ 					},
+ 					error: (response) => this.ajaxErrorCallback(response),
+-					complete: () => this.onBulkActionComplete(closeDialog),
++					complete: (jqXHR, textStatus) =>
++						this.onBulkActionComplete(closeDialog, textStatus),
+ 				});
+ 			});
+ 		},
+@@ -699,7 +702,8 @@
+ 						}
+ 						return this.ajaxErrorCallback(response);
+ 					},
+-					complete: () => this.onBulkActionComplete(closeDialog),
++					complete: (jqXHR, textStatus) =>
++						this.onBulkActionComplete(closeDialog, textStatus),
+ 				});
+ 			});
+ 		},
+@@ -737,7 +741,8 @@
+ 						}
+ 						return this.ajaxErrorCallback(response);
+ 					},
+-					complete: () => this.onBulkActionComplete(closeDialog),
++					complete: (jqXHR, textStatus) =>
++						this.onBulkActionComplete(closeDialog, textStatus),
+ 				});
+ 			});
+ 		},
+@@ -766,7 +771,8 @@
+ 						);
+ 					},
+ 					error: (response) => this.ajaxErrorCallback(response),
+-					complete: () => this.onBulkActionComplete(closeDialog),
++					complete: (jqXHR, textStatus) =>
++						this.onBulkActionComplete(closeDialog, textStatus),
+ 				});
+ 			});
+ 		},
+@@ -820,9 +826,16 @@
+ 		},
+ 		/**
+ 		 * Performs cleanup operations after bulk actions finish
++		 *
++		 * @param {Function} closeDialog Closes the dialog that is open
++		 * @param {string} textStatus jQuery's status of the request
+ 		 */
+-		onBulkActionComplete(closeDialog) {
+-			closeDialog();
++		onBulkActionComplete(closeDialog, textStatus) {
++			// Only one dialog is open at a time: after a failed request the error
++			// dialog has taken the confirmation's place and must stay open.
++			if (textStatus === 'success') {
++				closeDialog();
++			}
+ 			this.get();
+ 			this.selected = [];
+ 		},

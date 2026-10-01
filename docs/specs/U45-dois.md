@@ -1765,6 +1765,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U45-A4-deposited-item-reads-manually-registered.md`):
     after "Deposit DOIs" the "Submitted" item's agency box reads "The
     metadata for this item has been submitted to {agency}." {OJS OPS}
+  - the guard for A13 (Rules 24, 29; issue report
+    `docs/issues/U45-A13-bulk-action-refusal-no-message.md`): "Deposit
+    DOIs" with an unpublished work among the ticked ones shows the "Error"
+    window with the server's reason
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1832,13 +1836,13 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | "None" (and every peer review) gets a DOI that is the prefix and a bare "/" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
-| [A3](#a3) | A refused DOI edit says only "Some DOI(s) could not be updated" and gives no reason | 🐞 | minor | — |
+| [A3](#a3) | A DOI refused on the DOIs page gets only "Some DOI(s) could not be updated", never the reason | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | After "Deposit DOIs", the item's agency box says it "has been manually registered", though nobody marked it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | The "DOI Statuses" button and the rows' tick boxes have no name for a screen reader | 🐞 | minor | — |
 | [A9](#a9) | A pattern symbol with nothing to fill it stays in the DOI | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Searching the DOIs page by a DOI misses some DOIs on each app, and fails on a preprint server | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | On the DOIs page, clearing a "Registration" filter chosen after "Unregistered" leaves only published works listed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A13](#a13) | A refused or failed bulk action closes its window with no message | 🐞 | minor | — |
+| [A13](#a13) | A bulk action the server refuses on the DOIs page closes its window and shows no message | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | The "Mark DOIs Needs Sync" question asks to mark the records "as stale" | 🐞 | minor | — |
 | [A15](#a15) | "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | With "DOI Versioning" "Yes", publishing a new major version leaves the earlier version's DOI "Registered" instead of "Needs Sync" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1896,15 +1900,17 @@ shown completed review gets the same bare value, under "None" and under
 Basis: probe, 2026-10-01. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — A refused DOI edit says only "Some DOI(s) could not be updated" and gives no reason** · 🐞 · minor.
-A manager types a DOI already used elsewhere on the install, or one in a
-wrong shape, and presses "Save". The notice reads "Some DOI(s) could not
-be updated" and the box returns to its old value; the reason the install
-knows ("The given DOI suffix is already in use for another published
-item. Please enter a unique DOI suffix for each item.", "This is not
-formatted correctly.", "The DOI contains invalid characters.") is never
-shown, so the manager cannot tell what to fix.
-Basis: probe, 2026-09-26. <sup>f-a3</sup>
+**A3 — A DOI refused on the DOIs page gets only "Some DOI(s) could not be updated", never the reason** · 🐞 · low.
+A manager types a DOI into a box on the DOIs page and presses "Save".
+When the server refuses the DOI, the notice reads only "Some DOI(s)
+could not be updated" and the box returns to its old value. The server
+sends its reason with the refusal: "This is not formatted correctly.",
+"The DOI contains invalid characters." or "The given DOI suffix is
+already in use for another published item. Please enter a unique DOI
+suffix for each item.". The page never shows it, so a mistyped DOI
+cannot be told from one that another work already has. The way round is
+to try other values until one is accepted.
+Basis: probe, 2026-10-01. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — After "Deposit DOIs", the item's agency box says it "has been manually registered", though nobody marked it** · 🐞 · low.
@@ -2021,18 +2027,20 @@ Sync") and then clears that filter.
 Basis: probe, 2026-10-01. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — A refused or failed bulk action closes its window with no message** · 🐞 · minor.
-A manager confirms a bulk action; the window closes, the list reloads
-and nothing says the action failed, in three cases: any action
-confirmed with nothing ticked ("…for 0 item(s)…"); "Export DOIs" or
-"Deposit DOIs" with a ticked item that has no published DOI (nothing is
-exported or marked); and an "Export DOIs" whose file the install cannot
-build (nothing downloads). The install knows the reason ("No valid
-publication objects were included with the request.", "The requested
-resource was not found.", "One or more invalid publication objects were
-included with the request.", "An XML validation error occurred and the
-XML could not be exported.") and never shows it.
-Basis: probe, 2026-09-26. <sup>f-a13</sup>
+**A13 — A bulk action the server refuses on the DOIs page closes its window and shows no message** · 🐞 · medium.
+A manager confirms a bulk action on the DOIs page and the server refuses
+the request. The confirmation window closes, the list reloads with
+nothing ticked, and no "Error" window says that the action was refused
+or why. The case a manager meets is "Deposit DOIs" or "Export DOIs" with
+an unpublished work among the ticked ones. The DOIs list shows
+unpublished works beside published ones, so "Select All" ticks them. The
+server then refuses the whole selection: nothing is deposited or
+exported, for the published works either. The same silence follows any
+action confirmed with nothing ticked, and an "Export DOIs" whose file
+does not pass the registration agency's format check. For an unpublished
+work the way round is to untick it and run the action again, once the
+manager has guessed that this is the reason.
+Basis: probe, 2026-10-01. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — The "Mark DOIs Needs Sync" question asks to mark the records "as stale"** · 🐞 · minor.
@@ -3705,6 +3713,7 @@ Issue report: [pkp-e2e#213](https://github.com/jardakotesovec/pkp-e2e/issues/213
 flag; `postUpdatedDoiComplete()` emits `manager.dois.update.partialFailure`
 and restores the old values; the 400 body's messages are dropped.
 Live-probed 2026-09-26 (q9), all three apps.
+Issue report: [docs/issues/U45-A3-doi-edit-refusal-no-reason.md](../issues/U45-A3-doi-edit-refusal-no-reason.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `DAO::markSubmitted()` sets only the status;
@@ -3785,6 +3794,7 @@ answered 400 `api.dois.400.invalidPubObjectIncluded`; exports answered
 400 "An XML validation error occurred and the XML could not be
 exported.". In each case the confirm window closed, no other window or
 notice appeared, and the list reloaded with nothing ticked.
+Issue report: [docs/issues/U45-A13-bulk-action-refusal-no-message.md](../issues/U45-A13-bulk-action-refusal-no-message.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-26 (Rule 28), all three apps: the

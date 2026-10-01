@@ -1,0 +1,91 @@
+--- a/lib/ui-library/src/components/ListPanel/doi/DoiListItem.vue
++++ b/lib/ui-library/src/components/ListPanel/doi/DoiListItem.vue
+@@ -243,6 +243,7 @@
+ import TableBody from '@/components/Table/TableBody.vue';
+ import TableRow from '@/components/Table/TableRow.vue';
+ import DoiItemViewErrorDialogBody from './DoiItemViewErrorDialogBody.vue';
++import DoiFailedActionDialogBody from './DoiFailedActionDialogBody.vue';
+ import DoiItemViewRegisteredMessageDialogBody from './DoiItemViewRegisteredMessageDialogBody.vue';
+ import DoiItemVersionModal from './DoiItemVersionModal.vue';
+ import {computed} from 'vue';
+@@ -710,9 +711,30 @@
+ 		postUpdatedDoiError(response, itemUid) {
+ 			let items = {...this.itemsToUpdate};
+ 			items[itemUid].isSuccess = false;
++			items[itemUid].errorMessages = this.getErrorMessages(response);
+ 			this.itemsToUpdate = items;
+ 		},
+ 		/**
++		 * The reasons the server gives for a refused DOI: the validation
++		 * messages of each field ({doi: ['...']}) or a single error
++		 *
++		 * @param {Object} response The response to the AJAX request
++		 * @return {String[]}
++		 */
++		getErrorMessages(response) {
++			const body = response?.responseJSON;
++			if (!body || typeof body !== 'object') {
++				return [this.t('common.unknownError')];
++			}
++			if (body.errorMessage || body.error) {
++				return [body.errorMessage || body.error];
++			}
++			const messages = Object.values(body)
++				.flat()
++				.filter((message) => typeof message === 'string');
++			return messages.length ? messages : [this.t('common.unknownError')];
++		},
++		/**
+ 		 * Callback to fire when the form submission's ajax request has been
+ 		 * returned, and the success or error callbacks have already been fired
+ 		 *
+@@ -730,22 +752,41 @@
+ 
+ 			if (isAllDoisUpdated) {
+ 				let items = {...this.itemsToUpdate};
+-				let didUpdatesFail = false;
++				let failedDoiActions = [];
+ 
+ 				Object.keys(items).forEach((itemUid) => {
+ 					if (!items[itemUid].isSuccess) {
+-						didUpdatesFail = true;
++						const displayType = this.item.doiObjects.find(
++							(doiObject) => doiObject.uid === itemUid,
++						)?.displayType;
++						const label = items[itemUid].identifier
++							? `${displayType} (${items[itemUid].identifier})`
++							: displayType;
++						(
++							items[itemUid].errorMessages ?? [this.t('common.unknownError')]
++						).forEach((message) => {
++							failedDoiActions.push(`${label}: ${message}`);
++						});
+ 						delete items[itemUid];
+ 					}
+ 				});
+ 				this.itemsToUpdate = items;
+ 
+-				if (didUpdatesFail) {
+-					pkp.eventBus.$emit(
+-						'notify',
+-						this.t('manager.dois.update.partialFailure'),
+-						'warning',
+-					);
++				if (failedDoiActions.length) {
++					// Say which DOI was refused and why, in the window the bulk actions use
++					const {openDialog} = useModal();
++					openDialog({
++						title: this.t('manager.dois.update.failedCreation'),
++						actions: [
++							{
++								label: this.t('common.ok'),
++								callback: (close) => close(),
++							},
++						],
++						modalStyle: 'negative',
++						bodyComponent: DoiFailedActionDialogBody,
++						bodyProps: {failedDoiActions},
++					});
+ 				}
+ 
+ 				if (Object.keys(this.itemsToUpdate).length !== 0) {
