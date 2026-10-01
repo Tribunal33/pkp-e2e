@@ -1876,7 +1876,7 @@ without the `.form` segment (`…settings.urnPublicationSuffixPatternRequired`),
 and `Locale::get()` renders a missing key as `##key##`. An empty box is
 stopped in the browser as a required field before any message is
 looked up. Live-probed 2026-09-24 (note q10).
-Issue report: [docs/issues/U44-A8-urn-suffix-pattern-refusal-text-code.md](../issues/U44-A8-urn-suffix-pattern-refusal-text-code.md).
+Issue report: [pkp-e2e#126](https://github.com/jardakotesovec/pkp-e2e/issues/126) ([docs/issues/U44-A8-urn-suffix-pattern-refusal-text-code.md](../issues/U44-A8-urn-suffix-pattern-refusal-text-code.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `FieldPubIdUrn` offers "Assign" whenever it can build the
