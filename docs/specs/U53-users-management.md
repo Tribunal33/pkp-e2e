@@ -797,6 +797,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U53-A12-users-status-icons-unnamed.md`): the "Name" cell
     of a disabled account and of an ORCID holder each naming that status
     to a screen reader
+  - the guard for A13 (issue report
+    `docs/issues/U53-A13-merge-grid-admin-roles-empty.md`): on the
+    default dataset, the Site Administrator's row in the "Merge user"
+    list reading the manager role
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -880,7 +884,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | Merging a section editor's account unassigns them from their sections, so new submissions arrive without that editor | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Users & Roles in French (Canada): the Users tab and the "Invite to a role" pages show raw codes | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | Users & Roles: screen readers cannot tell a disabled account or an ORCID holder from any other user | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A13](#a13) | The "Merge user" window and the older grid show nothing under "Roles" for the Site Administrator | 🐞 | minor | — |
+| [A13](#a13) | "Merge user" and the Settings wizard's user list show no roles after a 3.4 upgrade, and none for a journal's creator | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | On presses and preprint servers, a masthead change shows a raw error and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A15](#a15) | Merging a user recorded as a discussion's or task's creator stops halfway with no message, and the account still signs in | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | "Notify User" stays greyed out after "Generate Password" is unticked | 🐞 | minor | — |
@@ -1077,14 +1081,21 @@ user grid showed neither status to anyone, sighted or not.
 Basis: probe, 2026-10-01. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — The older lists show no role for the Site Administrator** · 🐞 · minor.
-In the "Merge user" window and on the Settings wizard's "Users" grid the
-Site Administrator's row shows nothing under "Roles", while the Users &
-Roles list names their manager role ("Journal manager", "Press manager",
-"Preprint Server manager") with an empty "Start Date". The grid still
-offers "Remove" on that row. The lists should agree on the roles an
-account holds.
-Basis: probe. <sup>f-a13</sup>
+**A13 — "Merge user" and the Settings wizard's user list show no roles after a 3.4 upgrade, and none for a journal's creator** · 🐞 · low.
+The Site Administrator opens "Merge user" from Settings › Users &
+Roles, or the "Users" tab of a journal's (press's, server's) Settings
+wizard under Administration, where they add and edit a hosted
+journal's users. Both lists show nothing under "Roles" for any role
+stored without a start date, while Users & Roles names the role.
+On an install upgraded from 3.4, every role given before the upgrade
+has no start date, so the column is blank on every row: no account
+appears to hold a role. On a new install only one row per journal is
+blank: the manager role of the administrator who created the journal.
+The merge itself works, and it moves the merged account's roles and
+work to the account kept, so nothing is lost. But when picking which
+account to keep, the administrator cannot see from the list which one
+is the editor's or the manager's.
+Basis: probe, 2026-10-01. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — On presses and preprint servers, a masthead change shows a raw error and emails nobody** · 🐞 · medium · crash: server.
@@ -2045,6 +2056,7 @@ manager" ("Press manager", "Preprint Server manager") with no start date.
 The grids' "Roles" column lists active and future roles (note i), and the
 manager enrolment a new journal gives the Site Administrator has no start
 date, which fits the empty cell.
+Issue report: [docs/issues/U53-A13-merge-grid-admin-roles-empty.md](../issues/U53-A13-merge-grid-admin-roles-empty.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-25, OMP and OPS: after "Confirm" on a
