@@ -1921,7 +1921,7 @@ press's word ([b](#fn-b)). Live-probed 2026-09-26 (Fields; all three apps,
 French as a UI language): the "Permission level" cells read
 "Administrateur-trice du serveur" and "Éditeur-trice de série" on the
 manager and Moderator rows.
-Issue report: [docs/issues/U54-OPS3-ops-moderator-level-series-editor-french.md](../issues/U54-OPS3-ops-moderator-level-series-editor-french.md).
+Issue report: [pkp-e2e#201](https://github.com/jardakotesovec/pkp-e2e/issues/201) ([docs/issues/U54-OPS3-ops-moderator-level-series-editor-french.md](../issues/U54-OPS3-ops-moderator-level-series-editor-french.md)).
 
 ## Reference — entry points & surfaces
 
