@@ -818,6 +818,8 @@ the footnote. <sup>y</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a custom block listed in "Custom Blocks" and offered under "Sidebar" by its "Block Name", and by the new one after a rename (A1; the guard its issue report names)
+  - a custom block named with "&", and one named only in the primary language by a manager working in another, each opened with "Edit" and placed under "Sidebar" (A4, A13; the guard their issue report names)
   - deleting a custom block: "OK" closing the window, the block gone from the Custom Block Manager's list, the sidebar and "Sidebar" (A14; the guard its issue report names)
 - **Rarely met**:
   - "Static Pages Plugin" unticked with pages stored: every page answering "404 Not Found" and the tab gone, then the pages back when it is ticked again {OJS OMP} (Settings bullet 1; Rule 15)
@@ -871,14 +873,14 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | The "Custom Blocks" list and the "Sidebar" list name a block by a lower-case, hyphenated form of its first "Block Name", and never follow a rename | 🐞 | minor | — |
+| [A1](#a1) | Custom blocks are listed by a lower-case name built from their first "Block Name", even after a rename | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A static page has no breadcrumbs and no main heading, where a custom page has both | 🐞 | minor | — |
-| [A4](#a4) | A custom block named only outside the manager's interface language is kept as a blank row with neither "Edit" nor "Delete" | 🐞 | minor | — |
+| [A4](#a4) | A custom block named only outside the manager's interface language is kept as a blank row with neither "Edit" nor "Delete" | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | Anyone below manager level who types a preview's address, or a signed-out visitor, gets a blank page | 🐞 | minor · crash: server | — |
 | [A10](#a10) | A static page whose "Path" has a "." in its first or second part is saved but answers "404 Not Found" | 🐞 | user-visible | — |
 | [A11](#a11) | After a refused "Save" in the static page window, the next successful save shows the old refusal at the top right | 🐞 | minor | — |
 | [A12](#a12) | Right after "Static Pages Plugin" is unticked, the tab stays and its "Add Static Page" shows "Error" | 🐞 | minor · crash: server | — |
-| [A13](#a13) | A custom block whose name holds "&" can never be placed, edited or deleted | 🐞 | user-visible · crash: script | — |
+| [A13](#a13) | A custom block whose name holds "&" can never be placed, edited or deleted | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | A custom block cannot be deleted on PostgreSQL: "OK" spins and the block stays | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | With "Custom Block Manager" unticked, "Appearance" › "Setup" refuses every save over a placed block it no longer lists | 🐞 | user-visible | — |
 | [A16](#a16) | A ".pdf" or ".svg" chosen in the picture window is ignored with no message | 🐞 | minor | — |
@@ -895,15 +897,19 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — Custom blocks are listed by a name made from their first "Block Name"** · 🐞 · minor.
-A manager who types "Our Partners" as "Block Name" expects to find "Our
-Partners" in the "Custom Blocks" list and under "Sidebar". Instead both
-read "our-partners" ("our-partners (Custom Block)"), and after the block
-is renamed "Friends" they still read "our-partners", while the public
-pages show "Friends". Other names come out harder to recognise ("News
-2026 & Events" is listed as "news2026&-events"), so a journal with
-several blocks has to guess which entry is which.
-Basis: probe. <sup>f-a1</sup>
+**A1 — Custom blocks are listed by a lower-case name built from their first "Block Name", even after a rename** · 🐞 · low.
+A manager who types "Our Partners" as a custom block's "Block Name"
+expects to find "Our Partners" in the "Custom Blocks" list and in the
+"Sidebar" list on "Appearance" › "Setup", where blocks are picked for
+the public pages. Instead both read "our-partners" ("our-partners
+(Custom Block)"). After the block is renamed "Friends" they still read
+"our-partners", while the public pages show "Friends".
+Nothing is lost and the block works. But other names come out harder
+to recognise ("News 2026 & Events" is listed as "news2026&-events"),
+so a journal with several blocks, or with renamed ones, has to open
+each block to tell which entry is which before ticking one under
+"Sidebar".
+Basis: probe, 2026-10-01. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — A deleted custom block keeps its place in the sidebar** · ❓ · minor.
@@ -928,15 +934,16 @@ screen readers and outline tools.
 Basis: probe. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A custom block named only outside the manager's interface language cannot be edited or deleted** · 🐞 · minor.
-The "Block Name" box of the journal's primary language is required, but
-the block's name is made from the box of the manager's interface
-language. A manager working in French who types only the English name
-expects a block they can find and correct. Instead the "Custom Blocks"
-list gains a blank row with no arrow, so neither "Edit" nor "Delete",
-and ticking the block under "Sidebar" is refused, so the block stays for
-good, unused.
-Basis: probe. <sup>f-a4</sup>
+**A4 — A custom block named only outside the manager's interface language cannot be edited or deleted** · 🐞 · medium · crash: script.
+The browser requires the "Block Name" box of the journal's primary
+language, but the block's name is made from the box of the manager's
+interface language. A manager working in French who types only the
+English name expects a block they can find and correct. Instead the
+"Custom Blocks" list gains a blank row with no arrow, so neither "Edit"
+nor "Delete", and ticking the block under "Sidebar" is refused, so the
+block can never be shown, corrected or deleted from the screens. It
+needs a journal offering more than one interface language.
+Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — ".jpeg" pictures are refused** · ❓ · user-visible.
@@ -1025,14 +1032,14 @@ server. The tab goes only with a reload.
 Basis: probe. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — A custom block whose name holds "&" is stuck** · 🐞 · user-visible · crash: script.
+**A13 — A custom block whose name holds "&" is stuck** · 🐞 · medium · crash: script.
 A manager who names a block "News 2026 & Events" gets it saved and
-listed as "news2026&-events". Ticking it under "Sidebar" is refused with
-"This may only contain letters, numbers, dashes and underscores.", and
-its row's "Edit" and "Delete" do nothing, because the window's own
-script fails as the list loads. The block can be neither shown nor
-removed.
-Basis: probe. <sup>f-a13</sup>
+listed as "news2026&-events". Its row's "Edit" and "Delete" do nothing,
+because the window's own script fails as the list loads, and ticking it
+under "Sidebar" is refused with "This may only contain letters,
+numbers, dashes and underscores.". The block can never be shown,
+corrected or deleted from the screens.
+Basis: probe, 2026-10-01. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — A custom block cannot be deleted on PostgreSQL: "OK" spins and the block stays** · 🐞 · medium · crash: server.
@@ -1824,6 +1831,7 @@ column, and `CustomBlockPlugin::getDisplayName()` gives the "Sidebar"
 label "{name} (Custom Block)". `Str::kebab()` drops the spaces and puts
 "-" before each word whose first letter it can capitalise (a to z), so a
 word opening with a digit, a sign or an accented letter runs into the one
+Issue report: [docs/issues/U09-A1-custom-block-listed-by-made-up-name.md](../issues/U09-A1-custom-block-listed-by-made-up-name.md).
 before. Live-probed 2026-09-24 (three apps): td19, td22.
 
 <a id="fn-f-a2"></a>
@@ -1852,6 +1860,7 @@ interface language's box (note g), empty for a manager working in French
 who typed the English name only; `CustomBlockGridRow::initialize()` adds
 "Edit" and "Delete" only for a non-empty row id, and the "Sidebar" save
 refuses the blank name with the two messages Rule 26a quotes. Live-probed
+Issue report: [docs/issues/U09-A4-A13-custom-block-stuck-with-unusable-name.md](../issues/U09-A4-A13-custom-block-stuck-with-unusable-name.md).
 2026-09-24 (three apps): td26.
 
 <a id="fn-f-a5"></a>
@@ -1930,6 +1939,7 @@ the links get no action. The "Sidebar" save refuses an entry outside
 letters, digits, "-" and "_", accented letters counting as letters.
 Live-probed 2026-09-24 (three apps): td19; "Edit" and "Delete" on
 "news2026&-events" opened nothing, and ticking it under "Sidebar" was
+Issue report: [docs/issues/U09-A4-A13-custom-block-stuck-with-unusable-name.md](../issues/U09-A4-A13-custom-block-stuck-with-unusable-name.md).
 refused (status 400).
 
 <a id="fn-f-a14"></a>

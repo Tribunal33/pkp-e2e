@@ -1,0 +1,40 @@
+--- a/plugins/generic/customBlockManager/CustomBlockPlugin.php
++++ b/plugins/generic/customBlockManager/CustomBlockPlugin.php
+@@ -104,10 +104,25 @@
+      */
+     public function getDisplayName()
+     {
+-        return $this->_blockName . ' ' . __('plugins.generic.customBlock.nameSuffix');
++        return $this->getLocalizedBlockTitle() . ' ' . __('plugins.generic.customBlock.nameSuffix');
+     }
+ 
+     /**
++     * Get the block's title ("Block Name") in the current language, or in the
++     * primary language when it has none in the current one. The block name
++     * only identifies the block and is not shown.
++     */
++    public function getLocalizedBlockTitle(): string
++    {
++        $request = Application::get()->getRequest();
++        $context = $request->getContext();
++        $contextId = $context ? $context->getId() : Application::SITE_CONTEXT_ID;
++        $contextPrimaryLocale = $context ? $context->getPrimaryLocale() : $request->getSite()->getPrimaryLocale();
++        $titles = (array) $this->getSetting($contextId, 'blockTitle');
++        return ($titles[Locale::getLocale()] ?? '') ?: ($titles[$contextPrimaryLocale] ?? '') ?: $this->_blockName;
++    }
++
++    /**
+      * @copydoc Plugin::getDescription()
+      */
+     public function getDescription()
+--- a/plugins/generic/customBlockManager/controllers/grid/CustomBlockGridHandler.php
++++ b/plugins/generic/customBlockManager/controllers/grid/CustomBlockGridHandler.php
+@@ -92,7 +92,7 @@
+         if (is_array($blocks)) {
+             foreach ($blocks as $block) {
+                 $gridData[$block] = [
+-                    'title' => $block
++                    'title' => (new CustomBlockPlugin($block, $customBlockManagerPlugin))->getLocalizedBlockTitle()
+                 ];
+             }
+         }

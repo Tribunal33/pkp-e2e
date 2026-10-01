@@ -1,0 +1,36 @@
+--- a/plugins/generic/customBlockManager/controllers/grid/form/CustomBlockForm.php
++++ b/plugins/generic/customBlockManager/controllers/grid/form/CustomBlockForm.php
+@@ -21,7 +21,6 @@
+ use APP\plugins\generic\customBlockManager\CustomBlockManagerPlugin;
+ use APP\template\TemplateManager;
+ use Illuminate\Support\Str;
+-use PKP\facades\Locale;
+ use PKP\form\Form;
+ use PKP\plugins\PluginRegistry;
+ use PKP\core\PKPApplication;
+@@ -96,13 +95,22 @@
+         $plugin = $this->plugin;
+         $contextId = $this->contextId;
+         if (!$plugin) {
+-            $locale = Locale::getLocale();
+-
+             // Add the custom block to the list of the custom block plugins in the
+             // custom block manager plugin
+             $blocks = $this->customBlockManagerPlugin->getSetting($contextId, 'blocks') ?? [];
+ 
+-            $blockName = preg_replace('[^a-z0-9\-\_.]', '', Str::of($this->getData('blockTitle')[$locale])->lower()->kebab());
++            // The block name identifies the block in the "sidebar" setting, which
++            // accepts only letters, numbers, dashes and underscores, and in the
++            // grid's row ids. Make it from the primary language's title, which the
++            // form requires, and keep only those characters.
++            $request = PKPApplication::get()->getRequest();
++            $context = $request->getContext();
++            $primaryLocale = $context ? $context->getPrimaryLocale() : $request->getSite()->getPrimaryLocale();
++            $blockTitle = (string) ($this->getData('blockTitle')[$primaryLocale] ?? '');
++            $blockName = trim(preg_replace('/[^\pL\pM\pN_-]/u', '', Str::of($blockTitle)->lower()->kebab()), '-');
++            if ($blockName === '') {
++                $blockName = 'custom-block';
++            }
+             if (in_array($blockName, $blocks)) {
+                 $blockName = uniqid($blockName);
+             }

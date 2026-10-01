@@ -17,7 +17,7 @@ and the hourly routine starts one only when none is running
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s0, 2026-10-01**; done: A14 |
+| [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s0, 2026-10-01**; done: A14, A1, A4, A13 |
 | [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 | **Taken: issues session, VM s0, 2026-10-01**; done: A3, OMP1 (pkp-e2e#307 and pkp-e2e#308), A1 (pkp-e2e#311), OPS3 (pkp-e2e#314), A10 (pkp-e2e#315 and pkp-e2e#317), A16 (pkp-e2e#336), OPS2 (pkp-e2e#337), A11 (pkp-e2e#338), A9 (pkp-e2e#339), A5 (pkp-e2e#343 and pkp-e2e#344, with U32 A9), A12 (pkp-e2e#345), OJS1 (pkp-e2e#346), OPS4 (pkp-e2e#347), A4 (pkp-e2e#348) |
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 |  |
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 |  |
