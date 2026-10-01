@@ -1444,7 +1444,7 @@ Issue report: [pkp-e2e#307](https://github.com/jardakotesovec/pkp-e2e/issues/307
 
 <a id="fn-a9"></a>
 **f-a9** — Live-probed 2026-09-22 (all three apps; on a preprint server with the Author's default switched off): a Section Editor (Moderator) chosen with "Permissions" ticked, the role switched to Funding coordinator (Author), whose default is off, and a person chosen: the box shown ticked; "OK"; that row's "Edit" showing it ticked. After the switch the box is hidden but still ticked. Code: note e.
-Issue report: [docs/issues/U35-A9-permissions-tick-carries-to-other-role.md](../issues/U35-A9-permissions-tick-carries-to-other-role.md).
+Issue report: [pkp-e2e#339](https://github.com/jardakotesovec/pkp-e2e/issues/339) ([docs/issues/U35-A9-permissions-tick-carries-to-other-role.md](../issues/U35-A9-permissions-tick-carries-to-other-role.md)).
 
 <a id="fn-a10"></a>
 **f-a10** — Live-probed 2026-09-22 (all three apps): templates added under a stage's "Add template", unrestricted, limited to Author and limited to an editor role, each listed; choosing one leaving "Message" unchanged; "Notify" to a person who holds the role, to one who does not and to the Author each staying open with no notice, no email; the unrestricted one adding its discussion with no message to the panel; "OK" on "Assign" staying open with the person assigned. Both the choice's request and the send answer a server error. For a role-limited template the cause is traced: `editorialTask/Repository::isTemplateAccessibleToUser()` filters on an unqualified `user_group_id`, which the Postgres test database refuses as ambiguous; the unrestricted template's failure was seen, not traced. Control: "Discussion (Submission)" on the same screen sends.
