@@ -1105,6 +1105,12 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for OPS1 (issue report
+    `docs/issues/U19-OPS1-preprint-server-oai-until-fails.md`):
+    ListIdentifiers and ListRecords asked with `until` on a preprint server
+    list its preprints, as scenario 5 shows on a journal and a press {OPS}
+    (Rule 9)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1239,7 +1245,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP3](#omp3) | A press given a set it does not have lists other records instead of none | 🐞 | minor | — |
 | [OMP4](#omp4) | One book without an abstract makes the press's record lists fail | 🐞 | user-visible · crash: server | — |
 | [OMP6](#omp6) | A series with no prefix is named with a leading space | 🐞 | invisible | — |
-| [OPS1](#ops1) | Any list with `until` fails with a server error on a preprint server | 🐞 | user-visible · crash: server | — |
+| [OPS1](#ops1) | A preprint server's OAI-PMH lists answer a server error whenever the harvester gives an "until" date | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | One preprint without an abstract makes the server's record lists fail | 🐞 | user-visible · crash: server | — |
 | [OPS4](#ops4) | A removed preprint server leaves no deleted records | 🐞 | minor | — |
 | [A6](#a6) | "Supporting Agencies", "Rights" and "Source" reach no record | ❓ | minor | — |
@@ -1550,11 +1556,15 @@ Basis: probe, 2026-09-26. <sup>f-omp7</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — `until` fails on a preprint server** · 🐞 · user-visible · crash: server.
+**OPS1 — A preprint server's OAI-PMH lists answer a server error whenever the harvester gives an "until" date** · 🐞 · medium · crash: server.
 A harvester that asks a preprint server for the records changed until a
-date, the usual way of harvesting in slices, gets a server error instead
-of a list; the same list without `until` answers normally.
-Since: 2021-06-11 · Basis: probe, 2026-09-26. <sup>f-ops1</sup>
+date gets a server error instead of a list. The answer is an empty page
+with status 500, for ListRecords and ListIdentifiers, at the preprint
+server's own OAI-PMH address and at the site-wide one, whatever the
+date. Harvesting a preprint server in slices of dates, each with a
+`from` and an `until`, is therefore impossible. The same lists answer
+normally when `until` is left out.
+Since: 2021-06-11 · Basis: probe, 2026-10-01. <sup>f-ops1</sup>
 
 <a id="ops2"></a>
 **OPS2 — A preprint without an abstract breaks the server's lists** · 🐞 · user-visible · crash: server.
@@ -1813,6 +1823,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Live-probed 2026-09-26: note q11, the preprint server part. Code: note l; the column name `a.last-modified` came with ops `5df1969511` "pkp/pkp-lib#6963 Port OAI rewrite to Laravel to OPS" (2021-06-11). Postgres answers "column … does not exist".
+Issue report: [docs/issues/U19-OPS1-preprint-server-oai-until-fails.md](../issues/U19-OPS1-preprint-server-oai-until-fails.md).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — Live-probed 2026-09-26: a preprint posted with its abstract empty made the server's ListRecords, its GetRecord and the site-wide `set={server}` list answer 500 (`Dc11SchemaPreprintAdapter::addLocalizedElements()`, the same TypeError as OMP4); the preprint was unposted again at once. The Sections spec's note f-ops6 (live-probed 2026-09-25): `Dc11SchemaPreprintAdapter::addLocalizedElements()` receives a null abstract, a TypeError; written up in `docs/reports/2026-09-25-ops-oai-empty-abstract.md`.
