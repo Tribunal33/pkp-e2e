@@ -2752,7 +2752,7 @@ Issue report: [pkp-e2e#227](https://github.com/jardakotesovec/pkp-e2e/issues/227
 stores, filled only as keys are typed; with "2026-99-99" the save
 stored an empty start date and no refusal from the `strtotime()` check
 (note k) appeared. Live-probed 2026-09-25, note q15.
-Issue report: [docs/issues/U13-OJS8-impossible-typed-date-saved-wrong.md](../issues/U13-OJS8-impossible-typed-date-saved-wrong.md).
+Issue report: [pkp-e2e#230](https://github.com/jardakotesovec/pkp-e2e/issues/230) ([docs/issues/U13-OJS8-impossible-typed-date-saved-wrong.md](../issues/U13-OJS8-impossible-typed-date-saved-wrong.md)).
 
 <a id="fn-f-ojs9"></a>
 **f-ojs9** — Note e: `lensGalley`'s `display.tpl` loads MathJax 3.2.2,
