@@ -1933,7 +1933,7 @@ Issue report: [pkp-e2e#305](https://github.com/jardakotesovec/pkp-e2e/issues/305
 
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-26, OJS: every `oai_marc` and `marcxml` record read `"%26%09%26 %2026                        eng  "`, quotes included. Code: note g (`datePublished|date_format:"%y%m%d %Y"`; the `%` signs are printed as they stand).
-Issue report: [docs/issues/U19-A15-oai-marc-008-date-percent-signs.md](../issues/U19-A15-oai-marc-008-date-percent-signs.md).
+Issue report: [pkp-e2e#306](https://github.com/jardakotesovec/pkp-e2e/issues/306) ([docs/issues/U19-A15-oai-marc-008-date-percent-signs.md](../issues/U19-A15-oai-marc-008-date-percent-signs.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Live-probed 2026-09-26, all three apps (OJS twice): `verb=ListRecords&metadataPrefix=oai_dc&metadataPrefix=oai_dc`, and the same with `set` twice, answered 500 with an empty body; the server log: `PKP\oai\OAI::getParam(): Return value must be of type ?string, array returned`; the next Identify answered. Code: notes c, m.
