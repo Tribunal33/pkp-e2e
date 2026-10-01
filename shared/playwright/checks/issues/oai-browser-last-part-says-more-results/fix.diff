@@ -1,0 +1,29 @@
+--- a/lib/pkp/xml/oai2.xsl
++++ b/lib/pkp/xml/oai2.xsl
+@@ -531,7 +531,14 @@
+ <!-- oai resumptionToken -->
+ 
+ <xsl:template match="oai:resumptionToken">
+-  <p>There are more results.</p>
++  <xsl:choose>
++    <xsl:when test="normalize-space(.)">
++      <p>There are more results.</p>
++    </xsl:when>
++    <xsl:otherwise>
++      <p>There are no more results.</p>
++    </xsl:otherwise>
++  </xsl:choose>
+   <table class="values">
+     <xsl:if test="@expirationDate">
+       <tr><td class="key">expirationDate</td><td class="value"><xsl:value-of select="@expirationDate"/></td></tr>
+@@ -542,7 +549,9 @@
+     <xsl:if test="@cursor">
+       <tr><td class="key">cursor</td><td class="value"><xsl:value-of select="@cursor"/></td></tr>
+     </xsl:if>
+-    <tr><td class="key">resumptionToken:</td><td class="value"><xsl:value-of select="."/><xsl:text> </xsl:text><a class="link" href="?verb={/oai:OAI-PMH/oai:request/@verb}&amp;resumptionToken={.}">Resume</a></td></tr>
++    <xsl:if test="normalize-space(.)">
++      <tr><td class="key">resumptionToken:</td><td class="value"><xsl:value-of select="."/><xsl:text> </xsl:text><a class="link" href="?verb={/oai:OAI-PMH/oai:request/@verb}&amp;resumptionToken={.}">Resume</a></td></tr>
++    </xsl:if>
+   </table>
+ </xsl:template>
+ 

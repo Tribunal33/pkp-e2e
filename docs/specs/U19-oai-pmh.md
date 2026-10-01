@@ -1162,6 +1162,10 @@ Left out of the scenarios above, by reason:
     second preprint server with a posted preprint removed under
     Administration › Hosted Servers: the site-wide GetRecord and list show
     the preprint as a deleted record {OPS} (once fixed)
+  - the guard for A4 (issue report
+    `docs/issues/U19-A4-oai-browser-last-part-says-more-results.md`): the
+    browser view of a paged list's last part ending the list, with no
+    "Resume" (Rule 13; once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1276,7 +1280,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | A journal's own OAI address leaves out its deleted records and lists the first journal's instead {OJS OMP} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | OAI-PMH lists ignore the time of day in "from" and "until" and return the whole day's records | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | OAI-PMH lists accept a "from" or "until" date that is not in the calendar instead of refusing it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A4](#a4) | The browser view's last page says "There are more results." and offers a "Resume" that fails | 🐞 | minor | — |
+| [A4](#a4) | The browser view of the last part of a long OAI-PMH list says "There are more results." and offers a "Resume" that is refused | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | The browser view of one record's formats says "from this archive" and offers no links | 🐞 | minor | — |
 | [A7](#a7) | "Peer-reviewed Article" is written only for a section never saved in its window {OJS} | 🐞 | minor | — |
 | [A8](#a8) | The Dublin Core "Source" keeps an empty part for an article in no issue {OJS} and on every press record {OMP} | 🐞 | minor | — |
@@ -1361,12 +1365,17 @@ should be. Both requests do this on every install, with no setup.
 Basis: probe, 2026-10-01. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — The last page says "There are more results."** · 🐞 · minor.
-A tester paging through a long list in a browser expects the last part
-to end the list. It still shows "There are more results." and a
+**A4 — The browser view of the last part of a long OAI-PMH list says "There are more results." and offers a "Resume" that is refused** · 🐞 · low.
+A manager or developer who reads a journal's OAI-PMH address in a
+browser and pages through a long list with "Resume" reaches the last
+page of the list. That page still shows "There are more results." and a
 "Resume" link, which answers "The requested resumptionToken is invalid
-or has expired". Harvesters, which read the XML, are not misled.
-Basis: probe, 2026-09-26. <sup>f-a4</sup>
+or has expired". Nothing is missing from the list: every record was
+shown before that link. Harvesters, which read the XML, are not misled.
+It shows on the last page of any list too long for one page: more than
+100 records or sets (500 on the list of identifiers), or fewer records
+or sets where the site administrator lowered the number per page.
+Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — One record's formats are shown as the whole archive's** · 🐞 · minor.
@@ -1853,6 +1862,7 @@ Issue report: [pkp-e2e#301](https://github.com/jardakotesovec/pkp-e2e/issues/301
 
 <a id="fn-f-a4"></a>
 **f-a4** — Live-probed 2026-09-26: note q15, the last part of each list. Code: note k.
+Issue report: [docs/issues/U19-A4-oai-browser-last-part-says-more-results.md](../issues/U19-A4-oai-browser-last-part-says-more-results.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-26, all three apps: "formats" on a record's header opened ListMetadataFormats with the identifier, which read "This is a list of metadata formats available from this archive." and linked each prefix to the whole archive's records. Code: `oai2.xsl` sets `$identifier` from the text of `oai:request` after "identifier=", but that text is the base URL (the arguments are attributes), so the "for the record" branch never shows.

@@ -17,7 +17,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s1, 2026-10-01** |
-| [U19](../specs/U19-oai-pmh.md) | 26 | 5 | 6 | **Taken: issues session, VM s2, 2026-10-01**; done: OPS1, OMP4, A1, A18, A22, A16, A17, OMP3, A2, A3, OPS4 |
+| [U19](../specs/U19-oai-pmh.md) | 26 | 5 | 6 | **Taken: issues session, VM s2, 2026-10-01**; done: OPS1, OMP4, A1, A18, A22, A16, A17, OMP3, A2, A3, OPS4, A4 |
 | [U21](../specs/U21-submission-wizard.md) | 19 | 4 | 8 | **Taken: issues session, workstation s0, 2026-10-01** |
 | [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 | **Taken: issues session, VM s0, 2026-10-01** |
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 |  |
