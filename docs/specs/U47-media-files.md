@@ -1821,7 +1821,7 @@ APP\pages\catalog\CatalogBookHandler::$publication must not be accessed
 before initialization", app log). The same path probably fails for any
 format file no viewer plugin takes; that was not driven. Control:
 plugin on, the page showed the image.
-Issue report: [docs/issues/U69-A9-book-file-open-download-fails.md](../issues/U69-A9-book-file-open-download-fails.md).
+Issue report: [pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282) ([docs/issues/U69-A9-book-file-open-download-fails.md](../issues/U69-A9-book-file-open-download-fails.md)).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Test run 2026-09-25, OMP (scenario 8): the Funding

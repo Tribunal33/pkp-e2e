@@ -1323,7 +1323,7 @@ OMP's own code.
 
 <a id="fn-f-omp6"></a>
 **f-omp6** — Every `GET {press address}/catalog/download/{book}/{format}/{file}`, with or without `?inline=1`, current or earlier version, answered 500, the server logging "Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization"; the file's view page failed in the browser with "PDFJS is not defined" and "UnexpectedResponseException". The failure is in the book file download, which *Monograph landing page* owns; the tags merely name its addresses. Live-probed 2026-09-26: notes q14, q15, q19.
-Issue report: [docs/issues/U69-A9-book-file-open-download-fails.md](../issues/U69-A9-book-file-open-download-fails.md).
+Issue report: [pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282) ([docs/issues/U69-A9-book-file-open-download-fails.md](../issues/U69-A9-book-file-open-download-fails.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note h: OPS `citation_fulltext_html_url` names `preprint/view/{bestId}/{galleyBestId}`; with a "URL Path" set, the redirect to the download address drops the galley. Live-probed 2026-09-26: note q14.
