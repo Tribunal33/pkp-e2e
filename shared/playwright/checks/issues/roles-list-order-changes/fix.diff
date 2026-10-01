@@ -1,0 +1,15 @@
+--- a/lib/pkp/controllers/grid/settings/roles/UserGroupGridHandler.php
++++ b/lib/pkp/controllers/grid/settings/roles/UserGroupGridHandler.php
+@@ -206,7 +206,11 @@
+         $totalCount = $builder->count();
+         $offset = ($page - 1) * $perPage;
+ 
+-        $pageResults = $builder->offset($offset)
++        // A fixed order, so that a saved or new role keeps its place and each page
++        // continues the one before it: the order the roles were created in. Added
++        // after count(), which would otherwise carry the ORDER BY (PostgreSQL refuses it).
++        $pageResults = $builder->orderById()
++            ->offset($offset)
+             ->limit($perPage)
+             ->get()
+             ->all();
