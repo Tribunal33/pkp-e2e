@@ -1188,6 +1188,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md`):
     a section's set asked with `from` or `until` leaving out the deleted
     records outside the dates {OJS OPS} (Rule 9d; once fixed)
+  - the guard for A7 (issue report
+    `docs/issues/U19-A7-oai-dc-peer-reviewed-type-gone-after-section-save.md`):
+    a section with an empty "Identify items published in this section as
+    a(n)" typing its articles the same before and after its window is saved
+    {OJS} (once the team rules on the default, pkp/pkp-lib#10839)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1304,7 +1309,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | OAI-PMH lists accept a "from" or "until" date that is not in the calendar instead of refusing it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | The browser view of the last part of a long OAI-PMH list says "There are more results." and offers a "Resume" that is refused | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | The browser view of one OAI-PMH record's formats reads "available from this archive" and has no links to that record | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A7](#a7) | "Peer-reviewed Article" is written only for a section never saved in its window {OJS} | 🐞 | minor | — |
+| [A7](#a7) | Saving a journal section removes "Peer-reviewed Article" from its articles' OAI-PMH Dublin Core records {OJS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | The Dublin Core "Source" keeps an empty part for an article in no issue {OJS} and on every press record {OMP} | 🐞 | minor | — |
 | [A10](#a10) | One article in a subscription issue empties a whole `jats` list {OJS} | 🐞 | latent | — |
 | [A11](#a11) | With "DRIVER" enabled, an article in no issue loses its `driver` mark when unpublished {OJS} | 🐞 | latent | — |
@@ -1426,16 +1431,23 @@ field removed in 2019; ❓ for "Rights" and "Source".
 Since: 2019-06-26 · Basis: probe, 2026-09-26. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — "Peer-reviewed Article" only for a section never saved in its window** {OJS} · 🐞 · minor.
-Two sections whose "Identify items published in this section as a(n)"
-is empty type their articles differently in the Dublin Core records.
-One never saved in its window, such as a section made with the journal,
-gives "Peer-reviewed Article" ("Article évalué par les pairs" in
-French); one saved there, even unchanged, or created there, gives no
-type word, whether or not it is ticked "Will not be peer-reviewed". A
-Journal Manager who opens a section's window and presses "Save" changes
-the type of every record of the section without being told.
-Basis: probe, 2026-09-26. <sup>f-a7</sup>
+**A7 — Saving a journal section removes "Peer-reviewed Article" from its articles' OAI-PMH Dublin Core records** {OJS} · 🐞 · low.
+A journal section's edit form has a box "Identify items published in
+this section as a(n)". While the box is empty, the OAI-PMH Dublin Core
+record of each article in the section gives "Peer-reviewed Article" as a
+resource type, beside "info:eu-repo/semantics/article" and
+"info:eu-repo/semantics/publishedVersion". That holds only until someone
+saves the form. From then on the records keep the two "info:eu-repo"
+values and lose "Peer-reviewed Article", although the box is still
+empty. A Journal Manager who opens a section and presses "Save", for any
+reason, changes every record of the section and is not told. A section
+created through the form never has the default. Only a section made with
+a new journal, or imported, still gives it. This report takes the
+default for an empty box as the intended behaviour and the loss on save
+as the fault. The open `pkp/pkp-lib#10839` questions the default itself,
+so the team's decision on that issue comes first: if the default goes,
+the fix is to remove it everywhere, not to restore it.
+Basis: probe, 2026-10-01. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — The source line keeps an empty part** {OJS OMP} · 🐞 · minor.
@@ -1932,6 +1944,7 @@ Issue report: [pkp-e2e#304](https://github.com/jardakotesovec/pkp-e2e/issues/304
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-26, OJS: the same article was typed "Peer-reviewed Article" before its section "Articles" was saved in its window and not after; a second journal's untouched "Articles" gave it ("Article évalué par les pairs" at `…/fr_CA/oai`) until the window was opened and saved unchanged; a section created on screen with "Will not be peer-reviewed" ticked gave none. The saved box is stored as an empty string per language, which the adapter's fallback to `metadata.pkp.peerReviewed` does not replace. Code: note f; the "Peer-reviewed Article" default came with `5d177baa85` (2005-07-30); no adapter reads `metaReviewed`.
+Issue report: [docs/issues/U19-A7-oai-dc-peer-reviewed-type-gone-after-section-save.md](../issues/U19-A7-oai-dc-peer-reviewed-type-gone-after-section-save.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-26: an article in no issue read "{journal}; " and, with "Pages" "15-20", "{journal}; ; 15-20"; a press record "{press}; ". Code: note f (`'; ' . $issue?->getIssueIdentification()` with a null issue; OMP appends "; " unconditionally).
