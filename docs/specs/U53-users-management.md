@@ -785,6 +785,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U53-A7-enable-reason-becomes-disable-reason.md`): the
     enable window's reason box starting empty, and the next disabling's
     box empty after an enabling with a typed reason
+  - the guard for A6 (issue report
+    `docs/issues/U53-A6-disable-window-lists-ended-roles.md`): "Disable
+    User" after "Remove Role" on one of a user's roles, the window's
+    "Current Roles:" line naming only the roles still held
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -865,7 +869,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | A manager's "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A4](#a4) | The search box's example names "Journal editor" on a press and a preprint server | 🐞 | minor | — |
 | [A5](#a5) | The row's "…" button is announced to screen readers as a raw code | 🐞 | minor | — |
-| [A6](#a6) | The disable window's "Current Roles : " line lists roles that have ended | 🐞 | minor | — |
+| [A6](#a6) | The "Disable User" and "Enable User" windows list roles the user no longer holds in the journal | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | After "Enable User", the next "Disable User" offers the enabling reason and the Login page quotes it | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | A merge drops the merged account's section assignments | 🐞 | latent | — |
 | [A11](#a11) | The French "Users" tab prints raw codes for its search label, the Invitations heading, button and columns, and the "Start Date" column | 🐞 | minor | — |
@@ -950,12 +954,18 @@ the menu it opens reads normally.
 Basis: probe. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — The disable window lists ended roles** · 🐞 · minor.
-The line under "Disable {full name}" reads "Current Roles : {roles}" with
-a space before the colon, and names every role the user ever held in the
-journal, ended ones included, although the list's "Roles" column leaves
-ended roles out.
-Basis: probe. <sup>f-a6</sup>
+**A6 — The "Disable User" and "Enable User" windows list roles the user no longer holds in the journal** · 🐞 · low.
+On Settings › Users & Roles, "Disable User" opens a window headed
+"Disable {full name}" with a line "Current Roles : {roles}". The line
+names every role the user has held in the journal, ended ones included,
+while the list's "Roles" column shows only the current ones. A user
+removed from the journal has nothing under "Roles", yet the window says
+"Current Roles : Reader, Author".
+The "Enable {full name}" window has the same line. Disabling ends no
+role, so that window is wrong only for a disabled user who also has an
+ended role. The space before the colon shows for every user. The fix is
+one line in the window's script and one character in the English text.
+Basis: probe, 2026-10-01. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — After "Enable User", the next "Disable User" offers the enabling reason and the Login page quotes it** · 🐞 · medium.
@@ -1943,6 +1953,7 @@ read "Current Roles : Author, Section editor". Code: `disableUser()` joins
 `user.groups.map(g => g.name)`, every assignment in the context
 (`preloadGroups()`), without the `dateEnd` filter the "Roles" cell uses;
 `user.disabledModal.description` is "Current Roles : {$roles}".
+Issue report: [docs/issues/U53-A6-disable-window-lists-ended-roles.md](../issues/U53-A6-disable-window-lists-ended-roles.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Code: note h. Live-probed 2026-09-25: note td6.
