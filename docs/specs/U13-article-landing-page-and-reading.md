@@ -2708,7 +2708,7 @@ Issue report: [pkp-e2e#226](https://github.com/jardakotesovec/pkp-e2e/issues/226
 `<b>{title}</b><b>{server name}</b>, 24 Sept.2026`; the journal's ABNT
 citation has the same "Sept.2026". Both come from the vendored CSL style
 and its locale. Live-probed 2026-09-25, note q11.
-Issue report: [docs/issues/U13-A7-abnt-citation-runs-text-together.md](../issues/U13-A7-abnt-citation-runs-text-together.md).
+Issue report: [pkp-e2e#241](https://github.com/jardakotesovec/pkp-e2e/issues/241) ([docs/issues/U13-A7-abnt-citation-runs-text-together.md](../issues/U13-A7-abnt-citation-runs-text-together.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note h: `ris.blade`'s `PY` and `Y2` lines (the version's
