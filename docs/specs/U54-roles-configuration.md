@@ -784,6 +784,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U54-A14-users-tab-keeps-old-role-name.md`): a role renamed
     on the "Roles" tab showing its new name on the "Users" tab, and in
     "Invitations", without a reload
+  - the guard for A11 (issue report
+    `docs/issues/U54-A11-settings-role-window-ok-unticks-settings.md`): a
+    user whose only Settings role is the one they edit pressing "OK" in its
+    window and keeping "Permit changes to Settings" and the Settings pages
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -871,7 +875,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | A screen reader announces each stage box of the list only as "checkbox" | 🐞 | minor | — |
 | [A9](#a9) | After a filter entry is chosen the filters hide, and only the count line shows the list is filtered | 🐞 | minor | — |
 | [A10](#a10) | A role name of only spaces breaks the role window, and saving again shows a page of raw code | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
-| [A11](#a11) | "OK" in the window whose Settings box is greyed takes the Settings pages away from the role's holders | 🐞 | user-visible | — |
+| [A11](#a11) | "OK" in the window of a user's only Settings role takes the Settings pages away from everyone holding it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A13](#a13) | The "Roles" list keeps no fixed order: a role just made can come first, without "Edit" or "Remove", a saved role moves down, and a paged list can show a role twice and another never | 🐞 | user-visible | test run (claude), 2026-09-29 — was ❓ |
 | [A14](#a14) | After renaming a role, the Users tab keeps showing its old name until the page is reloaded | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [OMP1](#omp1) | In French a press's "Roles" list heads its External Review column with a code | 🐞 | minor | — |
@@ -994,18 +998,23 @@ all, and nothing says so.
 Basis: probe, 2026-10-01. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — "OK" in a manager's own role window takes Settings away** · 🐞 · user-visible.
-In the window of the only role that gives the signed-in manager the
-Settings pages, "Permit changes to Settings" is ticked and greyed out,
-so the manager expects it to stay on. "OK" in that window, even with
-nothing changed, stores the role with the box unticked: the manager's
-next Settings page is the access-denied page, "The current role does not
-have access to this operation.", and so is every other holder's. A
-Journal Manager's "Edit" of the role then shows the box unticked and
-open. It happens on "Journal editor" ("Press editor") for an Editor who
-holds no other manager-level role, and on a role created at the manager
-level for its only holder.
-Basis: probe. <sup>f-a11</sup>
+**A11 — "OK" in the window of a user's only Settings role takes the Settings pages away from everyone holding it** · 🐞 · medium.
+Some users have exactly one role with "Permit changes to Settings"
+ticked: an Editor whose only role is "Journal editor" ("Press editor"),
+for example. When such a user opens that role's window on Settings ›
+Users & Roles › "Roles", the box is ticked and greyed out, so they
+cannot untick it. Yet "OK" in that window, even with nothing changed,
+says "Your changes have been saved." and stores the role with the box
+unticked. The user's next Settings page reads "The current role does not
+have access to this operation.", and so does the next Settings page of
+everyone else who holds that role.
+So such a user cannot save any change to their own role, a new name
+included. Every "OK" takes Settings away, and "Cancel" throws the change
+away.
+On 3.5, a Journal Manager pressing "OK" in the "Journal manager" window
+locks every journal manager out in the same way, and so does the site
+administrator.
+Basis: probe, 2026-10-01. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — "Stage Assignment" hidden, or shown with every box greyed** · ❓ · minor.
@@ -1741,6 +1750,7 @@ saved."; the post carried no `permitSettings`); Users & Roles then
 answered "The current role does not have access to this operation." on a
 reload and in a fresh sign-in, and the Journal Manager's "Edit" of the
 role showed the box unticked and open.
+Issue report: [docs/issues/U54-A11-settings-role-window-ok-unticks-settings.md](../issues/U54-A11-settings-role-window-ok-unticks-settings.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `updateStageOptions()` hides the stage section with
