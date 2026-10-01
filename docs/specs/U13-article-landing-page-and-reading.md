@@ -1098,6 +1098,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-A6-older-version-tab-current-title.md`): an
     older version's page, published under another title than the current
     one, with the browser tab reading the older version's title
+  - the guard for OJS7 (Fields, the settings window; issue report
+    `docs/issues/U13-OJS7-publication-facts-settings-refused-save-resets.md`):
+    a refused "OK" in the "Publication Facts Label plugin" settings
+    keeping every value typed in the window {OJS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1248,7 +1252,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OJS4](#ojs4) | With "Recommend Articles by Author" on, article pages never show "Most read articles by the same author(s)" | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS5](#ojs5) | With the Publication Facts Label plugin on, no article page shows the "Publication Facts" panel | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS6](#ojs6) | The PDF reader's return arrow is announced "Return to Issue Details" but opens the article | 🐞 | minor | — |
-| [OJS7](#ojs7) | A refused "OK" in the Publication Facts settings puts back the saved values | 🐞 | minor | — |
+| [OJS7](#ojs7) | A refused "OK" in the Publication Facts Label settings shows the saved values again, dropping every change just made | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS8](#ojs8) | An impossible Publication Facts "Start Date" is dropped with "Your changes have been saved." | 🐞 | minor | — |
 | [OJS9](#ojs9) | Readers opening an XML galley in the Lens reader see its TeX formulas as blanks | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [OJS10](#ojs10) | With "Recommend Similar Articles" on, article pages never show "Similar Articles" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1487,13 +1491,21 @@ is told the arrow leads somewhere it does not.
 Basis: probe, 2026-09-25. <sup>[f-ojs6](#fn-f-ojs6)</sup>
 
 <a id="ojs7"></a>
-**OJS7 — A refused save in the Publication Facts settings drops the changes** · 🐞 · minor.
-When "OK" is refused (an index that cannot be verified, a Scopus or Web
-of Science address in the wrong form), the window stays open with the
-message but shows the values saved before: the address just typed, a box
-just ticked and every other change made in the window are gone, so the
-manager retypes everything.
-Basis: probe, 2026-09-25. <sup>[f-ojs7](#fn-f-ojs7)</sup>
+**OJS7 — A refused "OK" in the Publication Facts Label settings shows the saved values again, dropping every change just made** · 🐞 · low.
+A journal manager fills in the "Publication Facts Label plugin" settings
+window and presses "OK". When the save is refused (a Scopus or Web of
+Science address in the wrong form, an index listing that cannot be
+verified), the window stays open with the message, but every field
+shows the value saved before: the address just typed, a box just ticked
+and every other change made in the window are gone.
+The stored settings are untouched. The manager has to enter everything
+again, with the refused field corrected. A manager who corrects only
+the refused field and presses "OK" again gets "Your changes have been
+saved." while the other changes are left out.
+It happens at every refused "OK", on any journal with the plugin on. A
+refusal does not need a mistake: an index listing is also refused when
+the index's server cannot be reached.
+Basis: probe, 2026-10-01. <sup>[f-ojs7](#fn-f-ojs7)</sup>
 
 <a id="ojs8"></a>
 **OJS8 — An impossible "Start Date" is dropped with a success message** · 🐞 · minor.
@@ -2700,6 +2712,7 @@ has an issue, though its link is the article's `parentUrl`. Live-probed
 <a id="fn-f-ojs7"></a>
 **f-ojs7** — Live-probed 2026-09-25, note q15: after a refused "OK" the
 window reloaded its fields from the saved settings.
+Issue report: [docs/issues/U13-OJS7-publication-facts-settings-refused-save-resets.md](../issues/U13-OJS7-publication-facts-settings-refused-save-resets.md).
 
 <a id="fn-f-ojs8"></a>
 **f-ojs8** — The date picker writes a hidden field that the form
