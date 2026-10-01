@@ -9,9 +9,14 @@
   - 3.4: OJS, OMP (code)
   - 3.3: OJS, OMP (code)
 - **Introduced** `pkp/ojs#2519` and `pkp/omp#721` for `pkp/pkp-lib#5208` · [ce8a2617a0](https://github.com/pkp/ojs/commit/ce8a2617a0ba9f02b8129c431e2870ec75ce0e4e) and [8cadd091c3](https://github.com/pkp/omp/commit/8cadd091c3f54687ab2175166e6ffc2de6c9aebb) · 2019-10-25 · Nate Wright (NateWr)
-- **Upstream** none found (2026-09-30)
-- **Tracked in** spec U44 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U44-identifiers.md#a6)
-- **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
+- **Upstream** none found (2026-10-01)
+- **Tracked in** spec U44 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U44-identifiers.md#a6), [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U44-identifiers.md#a13)
+- **Checked** 2026-09-30 (steps 11–14: 2026-10-01), each branch's tip (the commits in Evidence)
+
+2026-10-01: The same fault shows in a second way. An editor who
+presses "Add Check Number" with nothing typed after the URN prefix
+gets "NaN" in the box. The fix below stops that, and the button
+should then be greyed in that case, which is proposed with it.
 
 ## Summary
 
@@ -38,9 +43,12 @@ publication format or file. It also affects "Assign" on the
 ## Impact
 
 - **Lost.** A correct check digit on a persistent identifier, which
-  is not meant to change once published. URNs already saved this way
-  keep the wrong digit: the fix does not touch them, and no automatic
-  repair is proposed.
+  is not meant to change once published. Until a 2019 change,
+  "Add Check Number" on the "Identifiers" tabs gave the right digit. URNs
+  already saved this way keep the wrong digit: the fix does not touch
+  them, and no automatic repair is proposed. A journal or press can
+  list them with a read-only query (Proposed fix, "What goes with
+  it").
 - **Who.** Journals and presses that assign URNs with a check number,
   typically in the German National Library's `urn:nbn:de` namespace.
 - **Way round.** Type the URN with its correct digit into the box.
@@ -52,12 +60,11 @@ publication format or file. It also affects "Assign" on the
   that covers the check digit. Whether the service refuses or flags a
   URN whose digit fails was not established.
 
-Medium: about nine in ten URNs set through the buttons carry a wrong
-check digit, silently and for good, but only on installs with the URN
-plugin and "Check Number" on, and a hand-typed digit is accepted. The
-agency makes the digit optional, so what is lost is the digit's own
-correctness, not the registration. It would be high if the agency
-refuses such URNs.
+Medium: the wrong digits are silent and permanent, but only on
+installs with the URN plugin and "Check Number" on, and a hand-typed
+digit is accepted. Whether the German National Library's service
+refuses or flags such URNs was not established; if it refuses them,
+this is high.
 
 ## Steps to reproduce
 
@@ -111,12 +118,34 @@ The URN built from the default pattern:
     previews the galley's (chapter's) URN, which the app builds on the
     server.
 
-**Expected.** Each button appends the check digit of the whole URN,
-the digit the app appends to the URN in step 10:
+Nothing typed after the prefix:
+
+Reload the default dataset and set up the plugin as in the
+preconditions again. Step 5 saved a URN on submission 5, and step 8
+switched the suffix setting away.
+
+11. As `dbarnes`, open the galley "PDF Version 2" › "Edit" ›
+    "Identifiers" as in step 6 [press: the chapter "Introduction" ›
+    "Identifiers"].
+12. Leave "URN Suffix" empty and press "Add Check Number".
+13. Open submission 5's "Identifiers" as in steps 2–3 [press:
+    submission 4's]. With "URN" empty, "Add Check Number" is greyed.
+    [3.5, press: the page shows no "URN" field while the book has no
+    URN (Evidence), so steps 13–14 cannot be taken]
+14. In "URN" type `urn:nbn:de:0000-` (the prefix alone) and press "Add
+    Check Number".
+
+**Expected.** The buttons append the check digit of the whole URN,
+the digit the app appends to the URN in step 10, and never "NaN":
 
 - step 4: `urn:nbn:de:0000-abc2`; step 7: the suffix reads `abc2`;
 - step 9: `urn:nbn:de:0000-jpkjpk.v1i2.18` [press:
-  `urn:nbn:de:0000-jpk.74`].
+  `urn:nbn:de:0000-jpk.74`];
+- step 12: "Add Check Number" is greyed while "URN Suffix" is empty,
+  as the page's is in step 13. That is what the greying recommended
+  under "What goes with it" gives. The tried fix gives `6` instead,
+  the prefix's check digit, as the whole suffix;
+- step 14: `urn:nbn:de:0000-6`, the check digit of the URN as typed.
 
 **Observed.** Both apps, the same values:
 
@@ -125,6 +154,8 @@ step 4   URN          urn:nbn:de:0000-abc0            (step 5: "Saved", stored a
 step 7   URN Suffix   abc0
 step 9   URN          urn:nbn:de:0000-jpkjpk.v1i2.12   [press: urn:nbn:de:0000-jpk.70]
 step 10  preview      urn:nbn:de:0000-jpkjpk.v1i2.1.g27  [press: urn:nbn:de:0000-jpk.7.c277]
+step 12  URN Suffix   NaN
+step 14  URN          urn:nbn:de:0000-NaN
 ```
 
 The final digit is wrong in steps 4, 7 and 9. For example, the check
@@ -156,6 +187,13 @@ pass the whole-URN rule and fail the suffix-only one:
 - the test URN of [bohnelang/URN-Pruefziffer](https://github.com/bohnelang/URN-Pruefziffer),
   `urn:nbn:de:0183-mbi0003721`. pkp's own `pkp/pkp-lib#6293`
   discussion points to that implementation.
+
+With nothing after the prefix, the same line leaves an empty string.
+The sum is then 0 and the "last number" an empty string, so the
+division gives `NaN`, which the function returns and both buttons
+append as text. The page's button is greyed only while its box is
+empty (`FieldTextUrn`'s `:disabled`), so a box holding the prefix
+alone gets through; the tab's `#checkNo` has no guard at all.
 
 The Kind is regression because this worked before `pkp/pkp-lib#5208`
 (2019): the tabs' button (`#checkNo`) computed over `urnPrefix +
@@ -190,6 +228,9 @@ Reach:
   publication URN on save, checks only the prefix and duplicates. With
   an individual suffix, `constructPubId()` appends nothing ("checkNo is
   already calculated for custom suffixes").
+- A character outside the conversion table (a space, "#", "ä") makes
+  the function return `NaN` too, before and after the fix: read in the
+  code and run in Node, not walked. It is left out of this fix.
 - No other copy of the algorithm exists in OJS, OMP, OPS or their
   pkp-lib and ui-library (searched for the conversion table and the
   function's name).
@@ -272,6 +313,9 @@ Tried on `main`, OJS and OMP:
 - With "Check Number" unticked, "Assign" and the tab previews still
   give URNs without a digit, and no "Add Check Number" is offered,
   with the fix in and out.
+- Step 12 gives `6` and step 14 `urn:nbn:de:0000-6`, with no "NaN";
+  the page's button stays greyed on an empty box (step 13). The
+  greying of the tab's button (below) was not tried.
 
 **Alternatives**
 
@@ -285,10 +329,16 @@ Tried on `main`, OJS and OMP:
 **What goes with it**
 
 - Stored data: no automatic repair, since some wrong URNs may already
-  be registered or cited. A query or script can list the stored URNs
+  be registered or cited. A read-only query lists the stored URNs
   (`pub-id::other::urn` in the settings tables of publications,
-  galleys, issues, chapters, formats and files) whose last digit fails
-  the whole-URN rule. A journal can then decide what to do with each.
+  galleys and issues, or publications, chapters, formats and files)
+  whose last digit is not the whole-URN check digit, with the right
+  digit beside each:
+  [find-wrong-digits-ojs.sql](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/urn-check-number-wrong-digit/find-wrong-digits-ojs.sql)
+  and
+  [find-wrong-digits-omp.sql](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/urn-check-number-wrong-digit/find-wrong-digits-omp.sql)
+  (PostgreSQL, `main`'s tables). A journal or press can then decide
+  what to do with each.
 - Follow-up, not part of this fix: a check-digit test in
   `validatePublicationUrn()` and the tab forms would also catch a
   wrong hand-typed digit. It would refuse input the app accepts today,
@@ -296,13 +346,35 @@ Tried on `main`, OJS and OMP:
 - Backport: applies as written to `stable-3_5_0` and `stable-3_4_0`. On
   `stable-3_3_0` the `#checkNo` handler is written as
   `.click(function() {…})`, so that hunk needs its context adjusted; the
-  function's hunks apply.
+  function's hunks apply. On 3.4 and 3.3 the page's `FieldTextUrn.js`
+  has no greying and no null guard, so there a box the editor has
+  emptied still gets "NaN" with the fix (the whole URN is then empty),
+  and a box never filled throws a TypeError. A backport there also
+  needs the page button's empty-box guard, which came with
+  `pkp/pkp-lib#10821`
+  ([972f4af1d5](https://github.com/pkp/ojs/commit/972f4af1d5833b0b73a89c85fbf855056f2b5595), with a null guard in
+  [1f04ae4160](https://github.com/pkp/ojs/commit/1f04ae4160b756f8744278e22d54be72d51de196); OMP
+  [55b885600](https://github.com/pkp/omp/commit/55b885600019dd365bc85156d512b96d17f92f41)).
+- The tab's button on an empty box, recommended with the fix but not
+  tried: grey `#checkNo` while "URN Suffix" is empty, as
+  `FieldTextUrn` greys the page's button. Without it, the fixed button
+  writes the prefix's check digit (`6`) as the whole suffix, as it did
+  before 2019. An untried sketch, after the click handler in
+  `checkNumber.js`:
+
+  ```js
+  $('#checkNo').prop('disabled', !$('[id^="urnSuffix"]').val());
+  $('[id^="urnSuffix"]').on('input', function() {
+  	$('#checkNo').prop('disabled', !$(this).val());
+  });
+  ```
 - Test: an e2e check in the identifiers scenario that "Add Check
   Number" on `urn:nbn:de:0000-abc` gives `urn:nbn:de:0000-abc2`, and
   that "Assign" ends in the digit the tab preview's rule gives.
 
-Medium: two repositories (OJS and OMP), the same few-line change in
-each, with no data repair; tried.
+Medium: the same few-line change in two repositories, OJS and OMP,
+each its own pull request and test, with no data repair; tried. In one
+repository it would be small.
 
 ## Evidence
 
@@ -314,12 +386,20 @@ each, with no data repair; tried.
     (`PKP_E2E_LINE=stable-3_5_0` in front for 3.5). Beside each digit,
     it records what the plugin's algorithm gives over the whole URN and
     over the suffix alone.
+  - [empty-suffix.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/urn-check-number-wrong-digit/empty-suffix.js)
+    takes the preconditions and steps 11–14 on a fresh load:
+    `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js
+    all shared/playwright/checks/issues/urn-check-number-wrong-digit/empty-suffix.js`.
+    Walked 2026-10-01 on `main` (OJS, OMP) and `stable-3_5_0` (OJS
+    steps 11–14, OMP steps 11–12), the same tips; on `main` again with
+    the fix applied.
   - [neighbour.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/urn-check-number-wrong-digit/neighbour.js)
     is the check with "Check Number" unticked, run with the fix in and
     out, each time on a fresh load.
   - The fix was tried with `node bin/try-fix.js apply
     shared/playwright/checks/issues/urn-check-number-wrong-digit/fix.diff ojs omp`,
-    then `walk.js` and `neighbour.js`, then `node bin/try-fix.js revert
+    then `walk.js` and `neighbour.js` (and on 2026-10-01
+    `empty-suffix.js`), then `node bin/try-fix.js revert
     ojs omp`. The fixed function was also run in Node on the two
     published URNs in the Cause, without their last digit. It returned
     that digit for each (9 and 1).
@@ -373,7 +453,12 @@ each, with no data repair; tried.
 - Code reads:
   - 3.5: `checkNumber.js` line 52 as on `main`, and
     `_calculateCheckNo()` over the whole URN (OJS and OMP).
-  - 3.4 and 3.3: the same line 52 in both apps' `checkNumber.js`.
+  - 3.4 and 3.3: the same line 52 in both apps' `checkNumber.js`,
+    and `urnSuffixEdit.tpl` offers `#checkNo` with no guard on an
+    empty suffix. The page's `FieldTextUrn.js` renders a plain
+    `<button>` with no `:disabled` and passes `this.currentValue`
+    unguarded, so step 13's greying is not there: an emptied box gets
+    "NaN" with or without the fix, and a never-filled one (null) throws.
     `FieldTextUrn.js` and `FieldPubIdUrn.js` call it, and
     `URNPubIdPlugin` (`.inc.php` on 3.3) computes over the whole URN
     (`strtolower_codesafe($urn)`). "Assign" appends the function's
@@ -389,10 +474,17 @@ each, with no data repair; tried.
 - Upstream search, 2026-09-30: pkp/pkp-lib, pkp/ojs, pkp/omp and
   pkp/ui-library, by "URN check number", "URN check digit", "URN check
   no", "URN invalid", "URN prefix wrong", "URN DNB", `getCheckNumber` and
-  `_calculateCheckNo`. `pkp/pkp-lib#6293` (closed) asked for a check
+  `_calculateCheckNo`; on 2026-10-01 also "URN NaN" (pkp-lib, ojs,
+  omp, ui-library), "check number URN empty" and "checkNo URN".
+  `pkp/pkp-lib#10821` (closed, the 3.5 URN test pass) does not mention
+  "NaN" or an empty suffix. `pkp/pkp-lib#6293` (closed) asked for a check
   number on generated URNs, and its fix is the one that made "Assign"
   use this function. `pkp/pkp-lib#8940` (closed) is the 3.4 URN
   rework. Neither mentions the prefix.
+- The two queries were run on the `main` dataset installs with six
+  known URNs added in the query: they flagged the two this report
+  computes as wrong and passed the four right ones, the two published
+  ones included.
 - Not driven: OPS (no URN plugin); the issue, publication format and
   file tabs (read in the code).
 - Unverified: whether the German National Library's URN service
