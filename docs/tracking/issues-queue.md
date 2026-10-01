@@ -38,7 +38,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 |  |
 | [U71](../specs/U71-internal-review-stage.md) | 6 | 2 | 2 |  |
 | [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 |  |
-| [U49](../specs/U49-publish-schedule-and-versions.md) | 9 | 1 | 8 |  |
+| [U49](../specs/U49-publish-schedule-and-versions.md) | 9 | 1 | 8 | **OJS3 taken: issues session, VM s0, 2026-10-01** (joined to U69 A3) |
 | [U48](../specs/U48-jats-and-body-text.md) | 17 | 1 | 7 |  |
 | [U28](../specs/U28-reviewers-review.md) | 14 | 1 | 5 |  |
 | [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 |  |
