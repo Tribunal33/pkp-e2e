@@ -2589,7 +2589,7 @@ Issue report: [pkp-e2e#222](https://github.com/jardakotesovec/pkp-e2e/issues/222
 `getCurrentPublication()->getLocalizedFullTitle()` to the header as the
 page title, whichever publication the page shows. Live-probed
 2026-09-25, note q4, both apps.
-Issue report: [docs/issues/U13-A6-older-version-tab-current-title.md](../issues/U13-A6-older-version-tab-current-title.md).
+Issue report: [pkp-e2e#226](https://github.com/jardakotesovec/pkp-e2e/issues/226) ([docs/issues/U13-A6-older-version-tab-current-title.md](../issues/U13-A6-older-version-tab-current-title.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — The "ABNT" answer for a preprint reads

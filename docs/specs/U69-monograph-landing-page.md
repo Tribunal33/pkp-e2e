@@ -1645,7 +1645,7 @@ Issue report: [pkp-e2e#209](https://github.com/jardakotesovec/pkp-e2e/issues/209
 
 <a id="fn-f-a5"></a>
 **f-a5** — `book.tpl` builds the page title from `getCurrentPublication()`. The same holds on an article's page (Article landing page & reading, its A6). Live-probed 2026-09-28 (td8).
-Issue report: [docs/issues/U13-A6-older-version-tab-current-title.md](../issues/U13-A6-older-version-tab-current-title.md).
+Issue report: [pkp-e2e#226](https://github.com/jardakotesovec/pkp-e2e/issues/226) ([docs/issues/U13-A6-older-version-tab-current-title.md](../issues/U13-A6-older-version-tab-current-title.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Note i: `$authorString` carries the role names in brackets, the chapter's string does not; since the credits gained role names the check never matches. Live-probed 2026-09-28 (td10).
