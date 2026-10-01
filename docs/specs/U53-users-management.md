@@ -2096,7 +2096,7 @@ Password" was ticked and then unticked, the password boxes were empty and
 open, "Notify User" disabled and unticked. Code:
 `UserDetailsFormHandler::setGenerateRandom()` unticks with
 `.attr('disabled', '')`, which leaves the `disabled` attribute in place.
-Issue report: [docs/issues/U53-A16-notify-user-locked-after-generate-password.md](../issues/U53-A16-notify-user-locked-after-generate-password.md).
+Issue report: [pkp-e2e#200](https://github.com/jardakotesovec/pkp-e2e/issues/200) ([docs/issues/U53-A16-notify-user-locked-after-generate-password.md](../issues/U53-A16-notify-user-locked-after-generate-password.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Test run 2026-09-26 (Rule 24; scenario 8), OJS and OPS: after
