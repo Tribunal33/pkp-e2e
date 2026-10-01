@@ -2737,7 +2737,7 @@ Issue report: [pkp-e2e#207](https://github.com/jardakotesovec/pkp-e2e/issues/207
 <a id="fn-f-ops9"></a>
 **f-ops9** — Note j: the element at the cover's centre is the keyword
 list laid over it. Live-probed 2026-09-25, note j, two runs.
-Issue report: [docs/issues/U13-OPS9-preprint-summary-cover-middle-dead.md](../issues/U13-OPS9-preprint-summary-cover-middle-dead.md).
+Issue report: [pkp-e2e#216](https://github.com/jardakotesovec/pkp-e2e/issues/216) ([docs/issues/U13-OPS9-preprint-summary-cover-middle-dead.md](../issues/U13-OPS9-preprint-summary-cover-middle-dead.md)).
 
 ## Reference — entry points & surfaces
 
