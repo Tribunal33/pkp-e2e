@@ -1757,7 +1757,7 @@ Issue report: [pkp-e2e#192](https://github.com/jardakotesovec/pkp-e2e/issues/192
 (`#userGroupSearchForm`), which the header's "Search" link shows and hides
 and which is hidden again after each choice submits it. Live-probed
 2026-09-26: [d](#fn-d).
-Issue report: [docs/issues/U54-A9-roles-filters-hide-after-choice.md](../issues/U54-A9-roles-filters-hide-after-choice.md).
+Issue report: [pkp-e2e#197](https://github.com/jardakotesovec/pkp-e2e/issues/197) ([docs/issues/U54-A9-roles-filters-hide-after-choice.md](../issues/U54-A9-roles-filters-hide-after-choice.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — The window's own check refuses only an empty box; the server's
