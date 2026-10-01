@@ -1992,7 +1992,7 @@ Issue report: [pkp-e2e#358](https://github.com/jardakotesovec/pkp-e2e/issues/358
 
 <a id="fn-f-a13"></a>
 **f-a13** — `block.tpl` gates the awaiting lines on `$paymentsEnabled && $acceptSubscriptionPayments`; `SubscriptionBlockPlugin` assigns only `acceptSubscriptionPayments`, so the awaiting lines show only where the page itself assigns `paymentsEnabled` ("My Subscriptions"). A manual purchase stores `dateEnd` as today at midnight (note f), which `Subscription::isExpired()` reads as passed. Live-probed 2026-09-25 (td20).
-Issue report: [docs/issues/U51-A13-A26-subscription-block-status-wrong.md](../issues/U51-A13-A26-subscription-block-status-wrong.md).
+Issue report: [pkp-e2e#387](https://github.com/jardakotesovec/pkp-e2e/issues/387) ([docs/issues/U51-A13-A26-subscription-block-status-wrong.md](../issues/U51-A13-A26-subscription-block-status-wrong.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — `galley_link.tpl` leaves a non-PDF galley unlocked under `$restrictOnlyPdf`; `ArticleHandler::userCanViewGalley()` lets a non-PDF galley through only inside the `purchaseArticleEnabled() || membershipEnabled()` branch, and `IssueHandler::userCanViewGalley()` inside `purchaseIssueEnabled() || membershipEnabled()` (note e). Live-probed 2026-09-25 (td23).
@@ -2034,7 +2034,7 @@ Issue report: [pkp-e2e#386](https://github.com/jardakotesovec/pkp-e2e/issues/386
 
 <a id="fn-f-a26"></a>
 **f-a26** — `block.tpl` has lines only for the two awaiting statuses (note f-a13); any other status falls through to the date lines (`isNonExpiring()`, `isExpired()`, else "Expires: {date}"). Live-probed 2026-09-25 (td20): "Needs Approval", "Needs Information" and "Other, See Notes" read "Expires: 2027-09-25" in the block while "My Subscriptions" read "Inactive" and the PDF led to the "Subscriptions" page.
-Issue report: [docs/issues/U51-A13-A26-subscription-block-status-wrong.md](../issues/U51-A13-A26-subscription-block-status-wrong.md).
+Issue report: [pkp-e2e#387](https://github.com/jardakotesovec/pkp-e2e/issues/387) ([docs/issues/U51-A13-A26-subscription-block-status-wrong.md](../issues/U51-A13-A26-subscription-block-status-wrong.md)).
 
 <a id="fn-f-a27"></a>
 **f-a27** — Live-probed 2026-09-25 (td29): the scheduled task `SubscriptionExpiryReminder`, run with no request, died with "Call to a member function getPrimaryLocale() on null" in `InstitutionalSubscriptionDAO::getInstitutionNameFetchParameters()` (the request's context is missing when the site's timer runs it); its task log holds "Task process started." and nothing after, twice.
