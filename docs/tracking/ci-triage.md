@@ -1170,4 +1170,3 @@ verdict yet) · `ready` (pushed, green at the PR ref, developer told) ·
 
 | App PR | Branch | State | Since | Note (one line) |
 |--------|--------|-------|-------|-----------------|
-| ojs#5882 + ui-library#989 (pkp-lib#13127) | `i13127_main` | ready | 2026-10-01 | invitation id reset only on invitee change; green at the PR heads, CI 36842671866 9/9; merge: rebase, CI, fast-forward (U06 A2/f-a2 fold + kept check) |
