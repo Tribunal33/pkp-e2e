@@ -1,0 +1,40 @@
+--- a/plugins/paymethod/paypal/PaypalPaymentForm.php
++++ b/plugins/paymethod/paypal/PaypalPaymentForm.php
+@@ -54,7 +54,10 @@
+         if (Config::getVar('general', 'sandbox', false)) {
+             error_log('Application is set to sandbox mode and no payment will be done via paypal');
+             TemplateManager::getManager($request)
+-                ->assign('message', 'common.sandbox')
++                ->assign([
++                    'pageTitle' => 'plugins.paymethod.paypal',
++                    'message' => 'common.sandbox',
++                ])
+                 ->display('frontend/pages/message.tpl');
+             return;
+         }
+@@ -87,7 +90,10 @@
+         } catch (Exception $e) {
+             error_log('PayPal transaction exception: ' . $e->getMessage());
+             $templateMgr = TemplateManager::getManager($request);
+-            $templateMgr->assign('message', 'plugins.paymethod.paypal.error');
++            $templateMgr->assign([
++                'pageTitle' => 'plugins.paymethod.paypal',
++                'message' => 'plugins.paymethod.paypal.error',
++            ]);
+             $templateMgr->display('frontend/pages/message.tpl');
+         }
+     }
+--- a/plugins/paymethod/paypal/PaypalPaymentPlugin.php
++++ b/plugins/paymethod/paypal/PaypalPaymentPlugin.php
+@@ -226,7 +226,10 @@
+         } catch (Exception $e) {
+             error_log('PayPal transaction exception: ' . $e->getMessage());
+             $templateMgr = TemplateManager::getManager($request);
+-            $templateMgr->assign('message', 'plugins.paymethod.paypal.error');
++            $templateMgr->assign([
++                'pageTitle' => 'plugins.paymethod.paypal',
++                'message' => 'plugins.paymethod.paypal.error',
++            ]);
+             $templateMgr->display('frontend/pages/message.tpl');
+         }
+     }
