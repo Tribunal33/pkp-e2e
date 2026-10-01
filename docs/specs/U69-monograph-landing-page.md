@@ -1701,7 +1701,7 @@ Issue report (the view page's script error "PDFJS is not defined", low): [pkp-e2
 
 <a id="fn-f-a16"></a>
 **f-a16** — Note g: the forward to the current URL Path passes a string to `PKPRequest::redirect()`, whose path argument is `?array` since lib/pkp bee9547b49 (2024-06-26); the log reads "Uncaught TypeError: PKP\core\PKPRequest::redirect(): Argument #4 ($path) must be of type ?array, string given, called in pages/catalog/CatalogBookHandler.php on line 132". Live-probed 2026-09-28 (td2): `{press}/catalog/book/harbour` and `…/harbour-2` answered 500. A regression: the forward worked before that change.
-Issue report: [docs/issues/U69-A16-earlier-url-path-server-error.md](../issues/U69-A16-earlier-url-path-server-error.md).
+Issue report: [pkp-e2e#284](https://github.com/jardakotesovec/pkp-e2e/issues/284) ([docs/issues/U69-A16-earlier-url-path-server-error.md](../issues/U69-A16-earlier-url-path-server-error.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — `chapter.tpl` prints only `submission.outdatedVersion`; `submission.viewingPreview` is in `monograph_full.tpl` alone. Live-probed 2026-09-28 (td5): the chapter page read "… Volume K1 Unpublished Book Published March 5, 2024 How to Cite …" with no notice for every previewing role.
