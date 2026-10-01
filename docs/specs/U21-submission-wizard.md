@@ -954,6 +954,11 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the Review step after a language change asking for the new language's title, contributor names and typed institution names, the affiliation copied from the author's profile included, with "Submit" disabled until they are typed (Rule 11): likely bullets in scenario 5, which changes the language and reaches Review
   - the timer's minute counted from the last save, not from the end of typing: scenario 3's "Saving" coming as the footer reaches "Last saved 1 minute ago", and a step with no change sending nothing (Rule 9): the suites move the page's clock on a minute after the typing, which cannot tell the two readings apart
+  - the guard for A16 (issue report
+    `docs/issues/U21-A16-plain-language-summary-over-limit-hangs-wizard.md`):
+    a plain language summary over the section's word limit saved on
+    "Details", flagged on "Review" with "Submit" disabled, and still there
+    after a reload
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1029,7 +1034,7 @@ are the source; badges, Impact and Basis:
 | [A10](#a10) | A wizard loaded at phone width keeps its uncollapsed step rail and the page scrolls sideways (journal & press) | 🐞 | minor | — |
 | [A12](#a12) | After "Do not send an email." is saved, the Emails screen shows no Submission Confirmation option selected | 🐞 | minor | — |
 | [A14](#a14) | "Submit As" offers "Section editor" ("Series editor"), and "Begin Submission" refuses it | 🐞 | user-visible | — |
-| [A16](#a16) | A plain language summary over the section's word limit is refused on save with an unexplained error, and the wizard hangs on "Saving" with "Submit" disabled | 🐞 | user-visible · crash: script | — |
+| [A16](#a16) | Submission wizard refuses a plain language summary over the word limit, then hangs on "Saving" | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [A18](#a18) | A change typed more than a minute after the last save is saved cut after its first letters; the rest waits another minute | 🐞 | minor | — |
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | minor | — |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
@@ -1234,21 +1239,20 @@ drops it silently.
 Basis: probe. <sup>[fn-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
-**A16 — A plain language summary over the word limit hangs the wizard on "Saving"** · 🐞 · user-visible · crash: script.
-In a section with a word limit, "Details" counts a too-long plain
-language summary ("Word Count: 20/10") but flags nothing, so the author
-expects it to be saved. Instead the save, by the timer or "Continue",
-is refused. An "Error" dialog reads "An unexpected error has occurred.
-Please reload the page and try again.", naming no field, and the page's
-script fails a few seconds later. The footer shows
-"Reconnecting", then "Saving" for good. "Review" shows the old summary
-("None provided") under "Checking your submission", which never clears,
-so "Submit" stays disabled. After a reload "Details" shows the summary
-empty. After a timer save, and on a preprint server after "Continue"
-too, an "Unsaved Changes" dialog (Rule 9a) opens first, and "No,
-discard" leaves it empty. An abstract over the same
-limit is saved and reported by the Review check instead (Rule 13).
-Basis: probe. <sup>[fn-a16](#fn-a16)</sup>
+**A16 — Submission wizard refuses a plain language summary over the word limit, then hangs on "Saving"** · 🐞 · medium · crash: script.
+An author whose plain language summary is longer than the section's
+word limit cannot save the "Details" step of the submission wizard, and
+the page's own script then fails in the browser. When the step is
+saved, an "Error" dialog reads "An unexpected error has occurred.
+Please reload the page and try again." without naming the field. The
+footer then shows "Saving" for good, and on "Review" "Checking your
+submission" never clears, so "Submit" stays disabled.
+Everything typed on "Details" in that visit is lost, the summary and
+the abstract included. While typing, the summary's box does mark its
+count with a warning sign ("Word Count: 20/10"). The abstract's box
+shows the same sign for the same limit, but an abstract over it is
+saved and flagged on "Review" instead.
+Basis: probe, 2026-10-01. <sup>[fn-a16](#fn-a16)</sup>
 
 <a id="a17"></a>
 **A17 — "Needs an editor" goes out for a submission that already has one** · ❓ · minor.
@@ -2269,6 +2273,7 @@ Crash: the page error "Cannot read properties of undefined (reading
 'url')" about 4 s after the 400, in every over-limit drive (OJS 6 of 6,
 OPS 4 of 4). Control: a 10-word summary saved (200, "Last saved…"),
 showed on "Review" and survived a reload.
+Issue report: [docs/issues/U21-A16-plain-language-summary-over-limit-hangs-wizard.md](../issues/U21-A16-plain-language-summary-over-limit-hangs-wizard.md).
 
 <a id="fn-a17"></a>
 **fn-a17** — A17. `AssignEditors` sends the needs-an-editor mail and task
