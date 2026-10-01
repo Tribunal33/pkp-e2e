@@ -973,6 +973,7 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - with "Do not send an email." saved, the completion screen making no email claim (A7; the guard its issue report names)
   - a Title typed after a quiet minute on "Details" saved whole, not cut after its first letters (A18; the guard its issue report names)
   - the footer blank on opening a draft until the first real save, with no "Last saved" time from the page load (A4; the guard its issue report names)
   - a preprint author cancelling their own draft from the wizard, "Submission cancelled" shown and the draft gone from My Submissions {OPS} (OPS3; the guard its issue report names)
@@ -999,7 +1000,6 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A2 (the resume-link email going to a Journal Manager who pressed "Save for Later")
   - A6 (submitting the same draft twice)
-  - A7 (the completion screen's email sentence, with acknowledgements off or after an editorial-role submission)
   - A9 (a Section Editor or Site Administrator pressing "Begin Submission")
   - A10 (the step rail at phone width)
   - A12 (the Emails screen showing no acknowledgement option after off is saved)
@@ -1053,7 +1053,7 @@ are the source; badges, Impact and Basis:
 |----|-----------------------------|------|--------|--------|
 | [A4](#a4) | Submission wizard footer says "Last saved 3 seconds ago" on every page load, when nothing was saved | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | The copyright-agreed activity-log line opens with a raw "{$filename}" placeholder | 🐞 | minor | — |
-| [A6](#a6) | Submitting a draft twice shows a problems banner with nothing to fix; the real refusal never appears | 🐞 | latent | — |
+| [A6](#a6) | Submitting a draft again from a second tab shows a problems banner with nothing to fix | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | On every journal, press or server but the install's first, a section's configured editors are never assigned | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A wizard loaded at phone width keeps its uncollapsed step rail and the page scrolls sideways (journal & press) | 🐞 | minor | — |
@@ -1146,14 +1146,20 @@ submission. The neighboring "submission submitted" entry renders normally.
 Basis: probe. <sup>[m](#fn-m)</sup>
 
 <a id="a6"></a>
-**A6 — Double-submitting dead-ends on an empty problems banner** · 🐞 · latent.
-Pressing "Submit" on a draft that was already submitted, say from a second
-browser tab left on the Review step, leaves the author on Review under the
-banner "There are one or more problems that need to be fixed before you can
-submit…" with nothing flagged on any panel. The server's actual refusal,
-"This submission has already been submitted…", never reaches the screen.
-So the author is told to fix problems that are not shown. Basis: probe.
-<sup>[m](#fn-m)</sup>
+**A6 — Submitting a draft again from a second tab shows a problems banner with nothing to fix** · 🐞 · low.
+An author has the same draft open in two browser tabs. They submit it
+from one tab, then press "Submit" in the other, which was left on the
+"Review" step. That tab stays on "Review" under "There are one or more
+problems that need to be fixed before you can submit…", with nothing
+flagged on any panel and "Submit" now disabled. The app's own refusal,
+"This submission has already been submitted. Please visit your
+submissions dashboard to view it.", never appears.
+The submission went in once, from the first tab, but the author is told
+to fix problems that do not exist. Reloading the tab shows "Submission
+complete". The same empty banner meets an author whose section a
+manager closes to authors while the draft is on "Review"; there a
+reload shows the "Section Closed" page and its reason.
+Basis: probe, 2026-10-01. <sup>[m](#fn-m)</sup>
 
 <a id="a7"></a>
 **A7 — The completion screen claims an email that was never sent** · 🐞 · low.
@@ -2023,6 +2029,7 @@ submitted" beside the copyright entry rendered verbatim "{$filename}
 ({username}) agreed to the copyright terms for submission." — the
 `{$filename}` token literal (A5). The copyright box must be re-ticked on
 every fresh visit to Review (test-authoring note).
+A6 issue report: [docs/issues/U21-A6-double-submit-empty-problems-banner.md](../issues/U21-A6-double-submit-empty-problems-banner.md).
 
 <a id="fn-n"></a>
 **n** — Complete/terminal screens. `complete.tpl` (OJS/OMP, AFFW-129):

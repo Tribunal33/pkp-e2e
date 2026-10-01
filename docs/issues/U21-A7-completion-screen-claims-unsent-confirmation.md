@@ -24,10 +24,6 @@ The other is an editor who submitted under their editorial role.
 The submission itself goes through. A submitter who looks for the promised
 email finds nothing and may wonder whether it did.
 
-The fix is more than new wording: the screen has to work out whether this
-user was actually sent the email, and each app needs a new sentence for
-when they were not.
-
 ## Impact
 
 - **Lost**: nothing; the submission is made.
@@ -198,6 +194,10 @@ confirmation.
 - 3.5 takes the diffs as they stand. 3.4 reads the log through
   `SubmissionEmailLogDAO::getByEventType()` with
   `SubmissionEmailLogEntry::SUBMISSION_EMAIL_AUTHOR_SUBMISSION_ACK`.
+
+Medium: more than new wording, since the screen has to work out whether
+this user was sent the email (one change in pkp-lib), and each app needs
+a new sentence for when they were not.
 
 ## Evidence
 
