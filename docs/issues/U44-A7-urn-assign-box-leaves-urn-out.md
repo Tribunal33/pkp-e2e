@@ -138,8 +138,8 @@ so the message is filled with nothing.
 
 `urnAssign.tpl`, the same box in "Publish Issue" and "Format Approval",
 builds the URN once with `getPubId()` and passes it to the box
-([L20, L31](https://github.com/pkp/ojs/blob/bade233f73f5a1ccfb7f29c48b8becdb278f1287/plugins/pubIds/urn/templates/urnAssign.tpl#L20-L31)),
-without `|escape`. It prints the URN as text only when it cannot offer
+([L20, L31](https://github.com/pkp/ojs/blob/bade233f73f5a1ccfb7f29c48b8becdb278f1287/plugins/pubIds/urn/templates/urnAssign.tpl#L20-L31)).
+It prints the URN as text only when it cannot offer
 the box (L26, "The URN … cannot be assigned because it contains an
 unresolved pattern.").
 
@@ -217,8 +217,7 @@ line numbers are OJS's, and in OMP the same lines start one earlier, so
 ```
 
 It follows `urnAssign.tpl`, which also assigns `getPubId()` once and
-passes it to the box. Unlike there, the value is escaped, as the preview
-line is, because `form/checkbox.tpl` prints the label as it is given.
+passes it to the box; the value is escaped as the preview line is.
 
 The label then always repeats the preview line, `%x` case included. In
 that case both name the URN as it stands before the Publisher ID change
@@ -255,9 +254,6 @@ reopened tab showed it with "The URN is assigned to this galley." and
 **What goes with it**
 
 - No data repair: nothing is stored wrong.
-- Left out: `urnAssign.tpl` passes its URN to the same box without
-  `|escape` (L31). Adding it there keeps the two templates alike; it is
-  not in the diff and was not tried.
 - Backport: the diff applies to 3.5, 3.4 and 3.3 in both apps, with the
   same one-line offset in OMP (checked with `patch --dry-run`).
 - A guard: an e2e scenario on the galley tab reading the box's label
@@ -322,4 +318,4 @@ scenario.
   the code); the Turkish, Azerbaijani and Georgian labels (read in the
   locale files); 3.4 and 3.3.
 - Revised after two reviews, from code reads only: the `%x` case and the
-  note on `urnAssign.tpl` were added; the diff did not change.
+  rest were added; the diff did not change.
