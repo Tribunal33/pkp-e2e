@@ -15,7 +15,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 | **Claimed: issues session s1, 2026-09-30** (A15 with U13 A1); **A9 done: issues session s3, 2026-09-30** (with U47 OMP1) |
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
-| [U21](../specs/U21-submission-wizard.md) | 16 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30.** Done: A4, A7 (two reports), A8, A10, A12, A14, A16, A18, OPS3, OPS5, OPS8+OPS9; OMP3 not reproduced (incidentals); in progress: A5, OPS7; open: A6, OMP2 |
+| [U21](../specs/U21-submission-wizard.md) | 16 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30.** Done: A4, A5, A7 (two reports), A8, A10, A12, A14, A16, A18, OPS3, OPS5, OPS8+OPS9; OMP3 not reproduced (incidentals); in progress: A6, OPS7; open: OMP2 |
 | [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U53](../specs/U53-users-management.md) | 15 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: A15, A14, A2, A19, A1, A7, A6; in progress: A4, A5; open: A9, A11, A12, A13, A16, A17, OPS1. OPS1 (with U07 OPS4) is the fault of docs/issues/U57-A8-omp-ops-french-texts-internal-names.md (the workstation session, 2026-10-01), whose fix already fills and guards the French role names: join it rather than writing a second report |

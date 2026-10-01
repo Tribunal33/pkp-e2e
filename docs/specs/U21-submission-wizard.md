@@ -995,6 +995,9 @@ Left out of the scenarios above, by reason:
     `docs/issues/U21-A12-confirmation-off-shows-no-option.md`): "Do not
     send an email." saved under "Submission Confirmation" still selected
     after a reload
+  - the guard for A5 (issue report
+    `docs/issues/U21-A5-copyright-agreed-line-raw-placeholder.md`): the
+    copyright-agreed History line naming the submitter
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1063,7 +1066,7 @@ are the source; badges, Impact and Basis:
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A4](#a4) | Reopened submission draft's footer says "Last saved 3 seconds ago" though nothing was saved | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A5](#a5) | The copyright-agreed activity-log line opens with a raw "{$filename}" placeholder | 🐞 | minor | — |
+| [A5](#a5) | The Activity Log's copyright-agreement line shows "{$filename}" where the submitter's name belongs | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A6](#a6) | Submitting a draft twice shows a problems banner with nothing to fix; the real refusal never appears | 🐞 | latent | — |
 | [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | Editors set to be assigned automatically by a section are never assigned on a second journal | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1142,13 +1145,16 @@ first saves a change, and for the whole visit when nothing is changed.
 Basis: probe, 2026-10-01. <sup>[i](#fn-i)</sup>
 
 <a id="a5"></a>
-**A5 — The copyright-agreed log line is garbled** · 🐞 · minor.
-When a submission is completed with the copyright box ticked, the activity
-log's agreement entry opens with a raw placeholder: "{$filename} (…)
-agreed to the copyright terms for submission.", with the ticking user's
-username in the parentheses. This happens on every copyright-confirmed
-submission. The neighboring "submission submitted" entry renders normally.
-Basis: probe. <sup>[m](#fn-m)</sup>
+**A5 — The Activity Log's copyright-agreement line shows "{$filename}" where the submitter's name belongs** · 🐞 · low.
+When a submitter (the user who ticks the copyright box and submits,
+normally the author) completes a submission, the Activity Log's
+agreement line opens with a raw placeholder where the submitter's name
+belongs: "{$filename} (ccorino) agreed to the copyright terms for
+submission." instead of "Carlo Corino (ccorino) agreed …".
+The copyright box, and so this line, exists only in a journal, press or
+server whose manager has set a Copyright Notice under Settings ›
+Workflow.
+Basis: probe, 2026-10-01. <sup>[m](#fn-m)</sup>
 
 <a id="a6"></a>
 **A6 — Double-submitting dead-ends on an empty problems banner** · 🐞 · latent.
@@ -1982,6 +1988,7 @@ submitted" beside the copyright entry rendered verbatim "{$filename}
 ({username}) agreed to the copyright terms for submission." — the
 `{$filename}` token literal (A5). The copyright box must be re-ticked on
 every fresh visit to Review (test-authoring note).
+Issue report: [docs/issues/U21-A5-copyright-agreed-line-raw-placeholder.md](../issues/U21-A5-copyright-agreed-line-raw-placeholder.md).
 
 <a id="fn-n"></a>
 **n** — Complete/terminal screens. `complete.tpl` (OJS/OMP, AFFW-129):
