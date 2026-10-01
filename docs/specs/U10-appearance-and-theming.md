@@ -1161,6 +1161,8 @@ Left out of the scenarios above, by reason:
   - a chapter's page printing the book's "Date" {OMP} (Rule 31)
   - "Present a masthead based on user enrollments" unticked: the list and "Reviewers" leaving the tab before any save; saved, the box still unticked after a reload; ticked again and saved, the list back in its saved order, a role moved just before the box was unticked included (Fields, "Editorial Masthead"; Rule 28a; Settings bullet 15a)
   - "Enable listing of reviewers on the masthead" ticked and saved, still ticked after a reload {OJS OMP} (Fields, "Editorial Masthead"; Settings bullet 15b)
+  - the guard for A4 (Rule 25; issue report
+    `docs/issues/U09-A15-setup-save-refused-disabled-block.md`): "Setup" saved with a changed "Page Footer" while a placed block's plugin is disabled, the save going through
 - **Nothing new to test**:
   - a role newly considered for the masthead on a preprint server, before and after the tab's first save {OPS} (Rule 28; Settings bullet 24)
   - the Editor and the Production Editor on the same tabs: the same fields and saves as the Journal Manager in scenarios 1 to 10 (Actors row 1)
@@ -1212,7 +1214,7 @@ otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A press's and a preprint server's homepage image never carries its "Alternate text" | 🐞 | minor | — |
 | [A3](#a3) | A screen reader hears the up arrow on "Editorial Masthead" as "{role} Decrease position of {role}", and each "Sidebar" box's name carries both arrows' names | 🐞 | minor | — |
-| [A4](#a4) | "Setup" refuses every save while a placed block's plugin is disabled, though "Sidebar" no longer shows the block | 🐞 | user-visible | — |
+| [A4](#a4) | "Setup" refuses every save while a placed block's plugin is disabled, though "Sidebar" no longer shows the block | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A removed style sheet stops loading on the pages, but its file stays public at its old address | 🐞 | latent | — |
 | [A6](#a6) | The French "Theme" tab shows raw codes in place of labels, on all three apps, and so do a press's "Setup" and "Advanced" | 🐞 | minor | — |
 | [A7](#a7) | After a file refused through "Upload File", the box's "Upload File" and the tab's "Save" stay disabled | 🐞 | user-visible | — |
@@ -1267,15 +1269,19 @@ reader cannot tell which arrow moves a role up. Basis: probe.
 <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — "Setup" refuses to save over a placed block whose plugin is off** · 🐞 · user-visible.
-A manager who disables a block's plugin while the block is placed, then
-saves any change on "Setup" (a new "Page Footer", say), is refused under
-"Sidebar" with "The {name} block can not be found. Please make sure the
-plugin is installed and enabled.", although "Sidebar" no longer shows the
-block. The save goes through only once the "Sidebar" list is changed,
-which drops the block's place without a word. The same holds for a custom
-block ([Custom pages & blocks](U09-custom-pages-and-blocks.md#a15)).
-Basis: probe. <sup>f-a4</sup>
+**A4 — "Setup" refuses to save over a placed block whose plugin is off** · 🐞 · medium.
+A manager who disables a block's plugin while the block is placed in the
+sidebar, then saves any change on "Setup" (the logo, the homepage image,
+the "Page Footer" or the sidebar), is refused under "Sidebar" with "The
+{name} block can not be found. Please make sure the plugin is installed
+and enabled.", although "Sidebar" no longer shows the block. The save
+goes through only once the "Sidebar" list is changed, and that save
+takes the disabled block out of the sidebar without a word: when its
+plugin is enabled again, the block stays off the public pages until the
+manager ticks it again under "Sidebar". The same holds for a custom
+block once "Custom Block Manager" is disabled
+([Custom pages & blocks A15](U09-custom-pages-and-blocks.md#a15)).
+Since: 2018-10-23 · Basis: probe, 2026-09-30. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A removed style sheet's file stays public** · 🐞 · latent.
@@ -1996,6 +2002,7 @@ Footer" save answered 400 with the message under "Sidebar" and "Please
 correct one error. Go to Sidebar: … Jump to next error" at the form's
 foot; the footer was not saved. The Custom pages & blocks spec drove the
 custom-block case the same day (its A15).
+Issue report: [docs/issues/U09-A15-setup-save-refused-disabled-block.md](../issues/U09-A15-setup-save-refused-disabled-block.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `PKPContextService::_saveFileParam()` with a `null` value

@@ -817,6 +817,25 @@ the footnote. <sup>y</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A7 (Actors row 2; issue report
+    `docs/issues/U09-A7-preview-address-blank-server-error.md`): both preview addresses opened signed out and as a Section Editor, Login and the access-denied page answering, and "Preview" pressed after signing out in another tab
+  - the guard for A11 (Rule 10; issue report
+    `docs/issues/U09-A11-static-page-refusal-notice-repeated.md`): a refused "Path", then a corrected "Save", with no notice after it {OJS OMP}
+  - the guard for A14 (Rule 24; issue report
+    `docs/issues/U09-A14-custom-block-delete-fails-postgresql.md`): a custom block's "Delete" › "OK", the block gone from the list, the sidebar and "Sidebar"
+  - the guard for A15 (Rule 25a; issue report
+    `docs/issues/U09-A15-setup-save-refused-disabled-block.md`): "Setup" saved with a changed "Page Footer" while a placed custom block's "Custom Block Manager" is unticked
+  - the guard for A16 (Rule 29; issue report
+    `docs/issues/U09-A16-picture-window-other-file-ignored-silently.md`): an SVG chosen in the picture window's "Upload", a message saying why it is not taken
+  - the guard for A17 (Rule 29c; issue report
+    `docs/issues/U09-A17-dropped-picture-refused-stays-embedded.md`): a refused file dropped into a "Content" box, the box empty after the notice
+  - the guard for A18 (Rule 29; issue report
+    `docs/issues/U09-A18-picture-over-upload-limit-server-error.md`): a picture over the server's file limit uploaded in the picture window, "Files larger than {size} can not be uploaded." shown
+  - the guard for A19 (Rule 30; issue report
+    `docs/issues/U09-A19-static-page-content-change-lost-unasked.md`): a change made only in the static page window's "Content", then the back arrow, the question asked {OJS OMP}
+  - the guard for A20 (Fields; issue report
+    `docs/issues/U09-A20-content-box-stuck-loading-spinner.md`): the first language's "Content" box of the block window taking a click and typed text while the second language's box is set up last
 - **Rarely met**:
   - "Static Pages Plugin" unticked with pages stored: every page answering "404 Not Found" and the tab gone, then the pages back when it is ticked again {OJS OMP} (Settings bullet 1; Rule 15)
   - "Custom Block Manager" unticked with a block placed: the block leaving the public pages and "Sidebar", then back at its place when it is ticked again (Settings bullet 2; Rule 25)
@@ -869,21 +888,21 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | The "Custom Blocks" list and the "Sidebar" list name a block by a lower-case, hyphenated form of its first "Block Name", and never follow a rename | 🐞 | minor | — |
-| [A3](#a3) | A static page has no breadcrumbs and no main heading, where a custom page has both | 🐞 | minor | — |
-| [A4](#a4) | A custom block named only outside the manager's interface language is kept as a blank row with neither "Edit" nor "Delete" | 🐞 | minor | — |
-| [A7](#a7) | Anyone below manager level who types a preview's address, or a signed-out visitor, gets a blank page | 🐞 | minor · crash: server | — |
-| [A10](#a10) | A static page whose "Path" has a "." in its first or second part is saved but answers "404 Not Found" | 🐞 | user-visible | — |
-| [A11](#a11) | After a refused "Save" in the static page window, the next successful save shows the old refusal at the top right | 🐞 | minor | — |
-| [A12](#a12) | Right after "Static Pages Plugin" is unticked, the tab stays and its "Add Static Page" shows "Error" | 🐞 | minor · crash: server | — |
-| [A13](#a13) | A custom block whose name holds "&" can never be placed, edited or deleted | 🐞 | user-visible · crash: script | — |
-| [A14](#a14) | "OK" in a custom block's "Delete" window deletes nothing and leaves a spinner | 🐞 | user-visible · crash: server | — |
-| [A15](#a15) | With "Custom Block Manager" unticked, "Appearance" › "Setup" refuses every save over a placed block it no longer lists | 🐞 | user-visible | — |
-| [A16](#a16) | A ".pdf" or ".svg" chosen in the picture window is ignored with no message | 🐞 | minor | — |
-| [A17](#a17) | A pasted picture the site refuses stays in the text, embedded, and is saved | 🐞 | minor | — |
-| [A18](#a18) | A picture over the upload limit gets a server error, never "Files larger than {size} can not be uploaded." | 🐞 | user-visible · crash: server | — |
-| [A19](#a19) | The static page window closes without a question after a change made only in "Content", and the text is lost | 🐞 | user-visible | — |
-| [A20](#a20) | With two form languages, the first language's "Content" box can stay under a "Loading..." spinner that never goes, taking no click | 🐞 | minor · crash: script | — |
+| [A1](#a1) | Managers see custom blocks listed by a lower-case id from their first title, ignoring title changes | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A3](#a3) | A static page has no breadcrumbs and no main heading, unlike the site's other pages | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A4](#a4) | A manager working in another language than the journal's primary one saves a custom block as a blank row that cannot be edited, deleted or placed | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A7](#a7) | Page previews fail blank for non-managers and signed-out users, and "Preview" goes silent once signed out | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A10](#a10) | A static page whose "Path" has a "." in its first or second part is saved but answers "404 Not Found" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A11](#a11) | A refused static page "Path" reappears at the top right: after the corrected save, or on the next back-office page | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A12](#a12) | After a manager turns off Static Pages, the tab still on screen answers "Add Static Page" with a server error | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A13](#a13) | A custom block titled with "&" or an apostrophe can never be placed, edited or deleted | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
+| [A14](#a14) | On PostgreSQL, a manager's "Delete" on a custom block hangs on a spinner and the block stays | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A15](#a15) | With "Custom Block Manager" unticked, "Appearance" › "Setup" refuses every save over a placed block it no longer lists, until a changed "Sidebar" drops its place | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A16](#a16) | An SVG, HEIC or PDF file chosen in a text box's "Insert/Edit Image" window is ignored without a message | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A17](#a17) | A picture dropped or pasted into a text box stays in the text after the site refuses it, and is published | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A18](#a18) | A picture over the upload limit gets a server error, never "Files larger than {size} can not be uploaded." | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A19](#a19) | The static page window closes without a question after a change made only in "Content", and the text is lost | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A20](#a20) | In the custom page or custom block window, a "Content" box can stay covered by a "Loading..." spinner | 🐞 | low · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [A2](#a2) | A deleted custom block would keep its place in the sidebar, so a later block of the same name appears unplaced | ❓ | minor | — |
 | [A5](#a5) | Pictures named ".jpeg" are refused while ".jpg" is accepted | ❓ | user-visible | — |
 | [A6](#a6) | A static page and a "Custom Page" item can take the same path, and the static page is then unreachable | ❓ | minor | — |
@@ -893,15 +912,22 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — Custom blocks are listed by a name made from their first "Block Name"** · 🐞 · minor.
-A manager who types "Our Partners" as "Block Name" expects to find "Our
-Partners" in the "Custom Blocks" list and under "Sidebar". Instead both
-read "our-partners" ("our-partners (Custom Block)"), and after the block
-is renamed "Friends" they still read "our-partners", while the public
-pages show "Friends". Other names come out harder to recognise ("News
-2026 & Events" is listed as "news2026&-events"), so a journal with
-several blocks has to guess which entry is which.
-Basis: probe. <sup>f-a1</sup>
+**A1 — Managers see custom blocks listed by a lower-case id from their first title, ignoring title changes** · 🐞 · low.
+A manager who types "Our Partners" as a custom block's "Block Name"
+expects to see "Our Partners" in the "Custom Blocks" list. They also
+expect "Our Partners (Custom Block)" in the "Sidebar" list, on
+Settings › Website › "Appearance" › "Setup". Instead the block is shown
+as "our-partners", and as "our-partners (Custom Block)" under
+"Sidebar". Once the "Block Name" is changed to "Friends", both still
+read "our-partners", while the public pages show "Friends". Before the
+"Block Name" became a title in 3.3, managers typed this id themselves,
+so both lists showed what they had typed.
+Every task still gets done. But a manager with several blocks has to
+open each one with "Edit" to tell which is which. Deleting the block and
+adding it again under the new title does not help either. On
+PostgreSQL, "Delete" fails. On MySQL, it costs the block's content and
+its place in the sidebar.
+Since: 2020-11-12 · Basis: probe, 2026-09-30. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — A deleted custom block keeps its place in the sidebar** · ❓ · minor.
@@ -917,24 +943,33 @@ is not what any manager expects.
 Basis: code. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — A static page has no breadcrumbs and no main heading** · 🐞 · minor · {OJS OMP}.
+**A3 — A static page has no breadcrumbs and no main heading, unlike the site's other pages** · 🐞 · low · {OJS OMP}.
 A visitor expects a static page to look like the journal's other pages,
 a custom page among them: breadcrumbs "Home / {Title}" and the title as
-the page's main heading. Instead a static page has no breadcrumbs, and its
-title is a second-level heading, so the page has no main heading for
-screen readers and outline tools.
-Basis: probe. <sup>f-a3</sup>
+the page's main heading. Instead a static page has no breadcrumbs, and
+its title is a second-level heading, so the page has no main heading for
+screen readers and outline tools. The manager's "Preview" of the page
+shows the same layout.
+The page's title and text all show, and the browser tab reads "{Title} |
+{journal name}". A manager can avoid it only by re-creating each page as
+a "Custom Page" under "Navigation", copying its title and text by hand.
+It shows with the default theme, and with any theme that does not supply
+its own static page template. OPS is not affected: it has no Static
+Pages plugin.
+Since: 2019-10-23 · Basis: probe, 2026-09-30. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A custom block named only outside the manager's interface language cannot be edited or deleted** · 🐞 · minor.
-The "Block Name" box of the journal's primary language is required, but
-the block's name is made from the box of the manager's interface
-language. A manager working in French who types only the English name
-expects a block they can find and correct. Instead the "Custom Blocks"
-list gains a blank row with no arrow, so neither "Edit" nor "Delete",
-and ticking the block under "Sidebar" is refused, so the block stays for
-good, unused.
-Basis: probe. <sup>f-a4</sup>
+**A4 — A manager working in another language than the journal's primary one saves a custom block as a blank row that cannot be edited, deleted or placed** · 🐞 · medium.
+The "Add Block" window shows one "Block Name" box, the one for the
+journal's primary language, and requires it. The block's hidden id,
+though, is made from the title in the manager's interface language. A
+manager working in French on an English journal who types the title in
+that one box expects a block they can find and correct.
+Instead the save goes through and the "Custom Blocks" list gains a blank
+row. The row has no "Edit" and no "Delete". Under "Sidebar" the block
+cannot be placed: ticking it is refused. No screen removes the row; the
+other blocks keep working.
+Since: 2020-11-12 · Basis: probe, 2026-09-30. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — ".jpeg" pictures are refused** · ❓ · user-visible.
@@ -959,14 +994,20 @@ path.".
 Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — A typed preview address gives a blank page below manager level** · 🐞 · minor · crash: server.
-A Section Editor, Assistant, Author, Reviewer or Reader who types a
-preview's address ({journal address}/navigationMenu/preview, or with
-"Static Pages Plugin" on {journal address}/pages/preview), or a
-signed-out visitor who does, expects the access-denied page or Login.
-Instead the browser shows a blank page: the application fails on the
-server and sends nothing back.
-Basis: probe. <sup>f-a7</sup>
+**A7 — Page previews fail blank for non-managers and signed-out users, and "Preview" goes silent once signed out** · 🐞 · low · crash: server.
+A preview address is {journal address}/navigationMenu/preview for a
+custom page, or {journal address}/pages/preview for a static page when
+"Static Pages Plugin" is on. When a Section Editor, Assistant, Author,
+Reviewer or Reader opens one, the application fails on the server and
+the browser shows a blank page; they expect the access-denied page. A
+signed-out visitor gets the same blank page where Login is expected.
+A manager meets the same failure when their session ends while a
+Custom Page or static page window is open, for instance after signing
+out in another tab. Pressing "Preview" then does nothing at all: no tab
+opens and no message says they must sign in again.
+The preview is rightly withheld from all of them. Only the answer is
+wrong, and each such request writes a fatal error to the server's log.
+Since: 2017-06-15 (custom pages), 2014-09-26 (static pages) · Basis: probe, 2026-09-30. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — The site's Plugins list offers "Static Pages Plugin", to no effect** · ❓ · minor · {OJS OMP}.
@@ -992,113 +1033,179 @@ cannot work is better left off the bar.
 Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — A static page whose "Path" has a "." near its start cannot be opened** · 🐞 · user-visible · {OJS OMP}.
-The static page window accepts "." in "Path", as its own refusal says
-("…alphanumeric characters plus '.', '/', '-', and '_'."), and lists the
-page. A manager who saves a page at "dot.only" or "deep/Mixed_1.x"
+**A10 — A static page whose "Path" has a "." near its start cannot be opened** · 🐞 · medium · {OJS OMP}.
+The static page window accepts "." in "Path": the message it shows for a
+refused path lists it among the allowed characters ("…alphanumeric
+characters plus '.', '/', '-', and '_'."), and the page is saved and
+listed. A manager who saves a page at "fees.html" or "info/fees.html"
 expects it at that address. Instead the address, typed or followed from
-the list's own "Path" link, answers a bare "404 Not Found" whenever the
-"." sits in the first or second part of the path; "one/two/three.x"
-opens.
-Basis: probe. <sup>f-a10</sup>
+the list's own "Path" link, answers the application's bare "404 Not
+Found" page whenever the "." sits in the first or second part of the
+path; "info/more/fees.html" opens. Nothing tells the manager when they
+save, and no reader can open the page until its path is changed. Such
+paths have never worked, and every install meets it, whatever its URL
+settings.
+Since: 2014-09-25 · Basis: probe, 2026-09-30. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The static page window repeats an old refusal after a good save** · 🐞 · minor · {OJS OMP}.
-A manager whose "Save" was refused for its "Path" corrects the path and
-saves: the window closes and the page is listed, but a red notice at the
-top right repeats the earlier refusal ("The path field must contain only
-alphanumeric characters plus '.', '/', '-', and '_'."), as if the save
-had failed. With the window closed after the refusal instead, the notice
-shows on the next load of Settings › Website.
-Basis: probe. <sup>f-a11</sup>
+**A11 — A refused static page "Path" reappears at the top right: after the corrected save, or on the next back-office page** · 🐞 · low · {OJS OMP}.
+After a refused "Save" in the static page window, the next successful
+save shows the old refusal at the top right. The refusal first shows
+under "Path" inside the window, which stays open. When the manager
+corrects the path and saves, the window closes and the page is listed,
+and the same message appears again as a warning at the top right. It is
+the only notice, since this window shows no message on a good save.
+If the manager closes the window after the refusal instead, the message
+appears at the top right of the next back-office page they open:
+Settings › Website again, "Submissions" or any other. Every refusal
+comes back once, so two refusals before a good save give two notices.
+Since: 2014-09-23 · Basis: probe, 2026-09-30. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — Right after the plugin is unticked, "Add Static Page" fails** · 🐞 · minor · crash: server · {OJS OMP}.
-After "OK" on "Are you sure you want to disable this plugin?", the
-"Static Pages" tab stays on the open Settings › Website page and still
-lists the pages. A manager who presses "Add Static Page" there gets an
-empty window and, over it, "Error": "An unexpected error has occurred.
-Please reload the page and try again.": the application fails on the
-server. The tab goes only with a reload.
-Basis: probe. <sup>f-a12</sup>
+**A12 — After a manager turns off Static Pages, the tab still on screen answers "Add Static Page" with a server error** · 🐞 · low · crash: server · {OJS OMP}.
+A manager unticks "Static Pages Plugin" on Settings › Website. The
+"Static Pages" tab stays on the open page until it is reloaded. Pressing
+its "Add Static Page" opens an empty window with "Error": "An unexpected
+error has occurred. Please reload the page and try again.", because the
+application fails on the server. Up to 3.4 the same request was answered
+"404 Not Found".
+Nothing is lost, and reloading the page, as the message asks, removes
+the tab. OPS ships no Static Pages plugin, so its managers never see
+this tab.
+Since: 2024-06-17 · Basis: probe, 2026-09-30. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — A custom block whose name holds "&" is stuck** · 🐞 · user-visible · crash: script.
-A manager who names a block "News 2026 & Events" gets it saved and
-listed as "news2026&-events". Ticking it under "Sidebar" is refused with
-"This may only contain letters, numbers, dashes and underscores.", and
-its row's "Edit" and "Delete" do nothing, because the window's own
-script fails as the list loads. The block can be neither shown nor
-removed.
-Basis: probe. <sup>f-a13</sup>
+**A13 — A custom block titled with "&" or an apostrophe can never be placed, edited or deleted** · 🐞 · medium · crash: script.
+A manager who names a custom block "News 2026 & Events" gets it saved
+and listed as "news2026&-events". That row's "Edit" and "Delete" do
+nothing, because a script error in the browser leaves them without an
+action. Ticking the block under "Sidebar" is refused with "This may only
+contain letters, numbers, dashes and underscores.". An apostrophe in the
+title does the same. The other blocks in the list keep working.
+The block can never be shown, and no screen can remove it: it stays in
+the list until someone deletes it in the database. The way round is to
+save the block first under a title without the character, then rename
+it.
+It depends only on the title typed in the manager's interface language
+when the block is first saved. A title with "." can be edited and
+deleted, but is refused under "Sidebar" in the same way.
+Since: 2024-02-08 · Basis: probe, 2026-09-30. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — A custom block cannot be deleted** · 🐞 · user-visible · crash: server.
+**A14 — On PostgreSQL, a manager's "Delete" on a custom block hangs on a spinner and the block stays** · 🐞 · medium · crash: server.
 On an installation whose database is PostgreSQL, "OK" in a custom
-block's "Delete" window leaves the window open with a spinner and no
-message: the application fails on the server, and the block stays in
-the list, in the sidebar and in the "Sidebar" list. "Delete" is the only
-way to remove a block, a journal's or the site's.
-Basis: probe. <sup>f-a14</sup>
+block's "Delete" window fails on the server: the window stays open with
+a spinner and no message, and the block stays in the "Custom Block
+Manager" list. "Delete" is the only way to remove a custom block, so
+once made, a block cannot be removed. This holds for the blocks of a
+journal, press or server and for the site's own blocks.
+A manager can still keep a block off the public pages by unticking it
+under "Sidebar" on the "Appearance" › "Setup" settings page.
+Installations on MySQL or MariaDB are not affected. Other plugin
+settings are saved and changed normally on PostgreSQL; the only other
+page that removes a plugin setting the same way is a theme's settings
+page when an option is emptied, which the theme shipped with the apps
+does not allow.
+Since: 2024-06-21 · Basis: probe, 2026-09-30. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — "Appearance" › "Setup" refuses to save over a block it no longer lists** · 🐞 · user-visible.
+**A15 — "Appearance" › "Setup" refuses to save over a block it no longer lists** · 🐞 · medium.
 A manager who unticks "Custom Block Manager" while a custom block is
-placed, then saves any change on Settings › Website › "Appearance" ›
-"Setup" (a new "Page Footer", say), is refused under "Sidebar" with "The
-our-partners block can not be found. Please make sure the plugin is
-installed and enabled.", although "Sidebar" no longer shows that block.
-The save goes through only once the "Sidebar" list is changed, which
-drops the block's place without a word.
-Basis: probe. <sup>f-a15</sup>
+placed in the sidebar, then saves any change on Settings › Website ›
+"Appearance" › "Setup" (the logo, the homepage image, the "Page Footer"
+or the sidebar), is refused under "Sidebar" with "The our-partners block
+can not be found. Please make sure the plugin is installed and
+enabled.", although "Sidebar" no longer shows that block. The save goes
+through only once the "Sidebar" list is changed, and that save takes the
+block out of the sidebar without a word: when "Custom Block Manager" is
+ticked again, the block stays off the public pages until the manager
+ticks it again under "Sidebar". The same holds for a block plugin such
+as "Language Toggle Block"
+([Appearance & theming A4](U10-appearance-and-theming.md#a4)).
+Since: 2018-10-23 · Basis: probe, 2026-09-30. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — A ".pdf" or ".svg" chosen in the picture window is ignored** · 🐞 · minor.
-A manager who chooses a ".pdf" or ".svg" file through "Browse for an
-image" expects the picture or a refusal. Nothing happens: the window
-stays on "Upload", and no message says why.
-Basis: probe. <sup>f-a16</sup>
+**A16 — An SVG, HEIC or PDF file chosen in a text box's "Insert/Edit Image" window is ignored without a message** · 🐞 · low.
+Someone adds a picture to a formatted text box ("Insert/edit image" ›
+"Upload"), for example a custom block's "Content" or the "Page Footer",
+and chooses or drops a file the text editor does not take for a picture:
+an SVG drawing, a HEIC photo or a PDF. Nothing happens. The window stays
+on "Upload", nothing is sent to the site, and no message says why.
+The file is rightly refused, since the site takes only GIF, JPEG, PNG
+and WebP pictures. But the person is not told so, unlike with a BMP,
+which the text editor passes on and the site refuses with "You can only
+upload the following types of files: gif, jpg, png, webp.".
+Managers meet it in their settings, custom blocks, static pages and
+announcements, editors in their email windows, reviewers in their review,
+and every user in their profile's "Bio Statement". The fix is a message,
+but in two code bases, since the older screens and the newer forms set up
+the text editor separately.
+Basis: probe, 2026-09-30. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — A refused pasted picture stays in the text** · 🐞 · minor.
-A manager who pastes or drops a picture the site refuses sees "Failed to
-upload image: {message}" and expects the picture to be gone. Instead it
-stays in the box, embedded in the text itself rather than stored as a
-file: "Save" keeps it that way, the public page shows it, and a refused
-file that is not a picture shows as a broken picture.
-Basis: probe. <sup>f-a17</sup>
+**A17 — A picture dropped or pasted into a text box stays in the text after the site refuses it, and is published** · 🐞 · medium.
+Someone drops or pastes a picture into a formatted text box, for
+example a manager into a custom block's "Content" or the website's
+"Page Footer", and the site refuses the upload with "Failed to upload
+image: {reason}". The picture stays in the box all the same, its data
+written into the text instead of stored as a file, and "Save" publishes
+it that way.
+A typical case is a photo over the server's 2 MB file limit: it shows
+normally on the public pages, but its data travels inside every page
+that carries the box. A 2.5 MB photo in "Page Footer" made every public
+page about 3.4 MB of HTML. A refused file that is not a picture shows as
+a broken picture.
+The way round is to delete the picture by hand before "Save", but after
+the failure notice nothing tells the user that the picture still in the
+box will be saved. In boxes that cannot upload pictures at all, such as
+the license terms, a dropped picture is saved as an address that works
+only in the browser tab it was dropped in, so it shows for no one.
+Since: 2019-10-31 · Basis: probe, 2026-09-30. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — A picture over the upload limit gets a server error, not the size message** · 🐞 · user-visible · crash: server.
-A manager uploading a picture larger than the server takes in one upload
-(2 MB on the test installs, less than many phone photos) expects "Files
-larger than {size} can not be uploaded.". Instead the application fails
-on the server, and the window reads "Path cannot be empty" or "One or
-more files could not be uploaded.", and a file over the limit for a
-whole request (8 MB there) "The POST data is too large.". None of them tells the manager to send a smaller file.
-Basis: probe. <sup>f-a18</sup>
+**A18 — A picture over the upload limit gets a server error, not the size message** · 🐞 · low · crash: server.
+A manager uploading a picture through "Insert/edit image" › "Upload"
+that is larger than the server accepts for one file (2 MB on PHP's
+shipped settings, less than many phone photos) expects "Files larger
+than 2MB can not be uploaded.", naming the server's actual limit.
+Instead the application fails on the server, and the error message over
+the "Insert/Edit Image" window reads "Path cannot be empty" for a PNG,
+JPEG or GIF, or "One or more files could not be uploaded." for a WebP.
+A picture over the limit for a whole request (8 MB on the test installs)
+fails on the server too, with "The POST data is too large." in English
+whatever the site's language. The picture is rightly refused, but no
+message tells the manager it is too large or what the limit is, so
+shrinking it has to be guessed.
+Since: 2019-10-31 (one file), 2023-10-13 (a whole request) · Basis: probe, 2026-09-30. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — The static page window loses a "Content"-only change without asking** · 🐞 · user-visible · {OJS OMP}.
+**A19 — The static page window loses a "Content"-only change without asking** · 🐞 · medium · {OJS OMP}.
 The window asks "The data on this form has changed. Do you wish to
 continue without saving?" when it is closed after a change to "Path" or
 "Title". A manager who has changed only "Content" and presses the back
-arrow gets no question: the window closes and the text is gone.
-Basis: probe. <sup>f-a19</sup>
+arrow gets no question: the window closes and the text is gone. Leaving
+the page loses it the same way: a reload, or a link to another page,
+goes ahead with no question. A change typed only into a rich-text box
+never counts as a change on these older forms, so the same text is lost
+on the Profile page ([User profile A19](U03-user-profile.md#a19)), in a
+free-form review ([Reviewer's review A15](U28-reviewers-review.md#a15))
+and in an issue's "Description" ([Issues A16](U50-issues.md#a16)).
+Basis: probe, 2026-09-30. <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — The first language's "Content" box can stay under a "Loading..." spinner** · 🐞 · minor · crash: script.
-On a journal whose "Forms" languages are English and French, the
-"Custom Page" item window and the block window each open with an English
-and a French "Content" box. A manager expects to click into the English
-box and type. When the French box finishes loading after the English
-one (rare, on a busy computer or server; every window once the French
-box's start-up is held back <sup>f-a20</sup>), the
-window's own script fails, and a "Loading..." spinner covers the
-English box and never goes away while the window is open: the box takes
-no click, and typing that has begun stops reaching it. Nothing says why.
-Expected: the spinner goes once the box is ready, as in the usual order.
-Basis: probe. <sup>f-a20</sup>
+**A20 — In the custom page or custom block window, a "Content" box can stay covered by a "Loading..." spinner** · 🐞 · low · crash: script.
+A manager of a journal, press or server with two or more form languages
+(English and French, say) opens the "Custom Page" item window or the
+custom block window. Each has one "Content" box per language. When the
+manager's browser is slow to set up the French box, the page's
+JavaScript fails and a "Loading..." spinner covers the English box for
+as long as the window stays open. The box takes no click, and nothing
+typed reaches it.
+The rest of the window still works and saves: only what the manager
+meant to write in that one box is missed, and closing the window and
+opening it again gives a working box. The slow set-up is rare: it needs
+the manager's browser to be heavily loaded.
+Since: 2025-01-13 · Basis: probe, 2026-09-30. <sup>f-a20</sup>
 
 ---
 
@@ -1819,6 +1926,7 @@ label "{name} (Custom Block)". `Str::kebab()` drops the spaces and puts
 "-" before each word whose first letter it can capitalise (a to z), so a
 word opening with a digit, a sign or an accented letter runs into the one
 before. Live-probed 2026-09-24 (three apps): td19, td22.
+Issue report: [docs/issues/U09-A1-custom-block-listed-by-first-name.md](../issues/U09-A1-custom-block-listed-by-first-name.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `CustomBlockGridHandler::deleteCustomBlock()` removes the
@@ -1838,6 +1946,7 @@ a MySQL installation: delete a placed block, add one with the same
 2026-09-24 (OJS, OMP): td12; on the same journal the custom page
 "Shared custom" had the breadcrumbs "Home / Shared custom" and a main
 heading. The static page's preview has the same layout.
+Issue report: [docs/issues/U09-A3-static-page-no-breadcrumbs-main-heading.md](../issues/U09-A3-static-page-no-breadcrumbs-main-heading.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — The screen checks only the primary language's "Block Name"
@@ -1847,6 +1956,7 @@ who typed the English name only; `CustomBlockGridRow::initialize()` adds
 "Edit" and "Delete" only for a non-empty row id, and the "Sidebar" save
 refuses the blank name with the two messages Rule 26a quotes. Live-probed
 2026-09-24 (three apps): td26.
+Issue report: [docs/issues/U09-A4-custom-block-blank-row-other-language.md](../issues/U09-A4-custom-block-blank-row-other-language.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `PKPUploadPublicFileController::uploadFile()`'s allowed
@@ -1868,6 +1978,7 @@ the manager or site administrator role in the journal, and for a
 signed-out request, which has no role list; nothing turns it into the
 access-denied page or Login, so the answer is status 500 with an empty
 body. Live-probed 2026-09-24 (three apps, `pages/preview` OJS OMP): td7.
+Issue report: [docs/issues/U09-A7-preview-address-blank-server-error.md](../issues/U09-A7-preview-address-blank-server-error.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — The site's list (`AdminPluginGridHandler`) lists every
@@ -1896,6 +2007,7 @@ Found", with or without "/en/" and from the "Path" link;
 "one/two/three.x", "info/fees", "Upper" and "under_score" opened. Not
 driven for a "Custom Page" item, whose lookup joins the same parts (note
 d).
+Issue report: [docs/issues/U09-A10-static-page-dot-path-not-found.md](../issues/U09-A10-static-page-dot-path-not-found.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Cause not traced. Live-probed 2026-09-24 (OJS, OMP), four
@@ -1905,6 +2017,7 @@ was refused, the corrected save showed the red notice with the refusal
 refusal, "This path already exists for another static page." showed on
 the next load of Settings › Website; a save with no refusal before it
 showed none.
+Issue report: [docs/issues/U09-A11-static-page-refusal-notice-repeated.md](../issues/U09-A11-static-page-refusal-notice-repeated.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — The open page keeps the tab it loaded with, while the
@@ -1912,6 +2025,7 @@ unticked plugin no longer registers its grid (note e, `LoadComponentHandler`
 only while enabled), so the grid's `add-static-page` request answers
 status 500. Live-probed 2026-09-24 (OJS, OMP): td15; the request failed
 twice per app.
+Issue report: [docs/issues/U09-A12-static-pages-disabled-tab-add-server-error.md](../issues/U09-A12-static-pages-disabled-tab-add-server-error.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — The row's controls carry the block name in their element
@@ -1925,6 +2039,7 @@ letters, digits, "-" and "_", accented letters counting as letters.
 Live-probed 2026-09-24 (three apps): td19; "Edit" and "Delete" on
 "news2026&-events" opened nothing, and ticking it under "Sidebar" was
 refused (status 400).
+Issue report: [docs/issues/U09-A13-custom-block-ampersand-name-stuck.md](../issues/U09-A13-custom-block-ampersand-name-stuck.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — `CustomBlockGridHandler::deleteCustomBlock()` first calls
@@ -1936,6 +2051,7 @@ case, so the call works there (read, not driven). The test installs run
 PostgreSQL. Present since pkp-lib#7111 (the caching rewrite), on
 stable-3_5_0 too. Live-probed 2026-09-24 (three apps): td24, td27; the
 server log recorded the error on every "OK".
+Issue report: [docs/issues/U09-A14-custom-block-delete-fails-postgresql.md](../issues/U09-A14-custom-block-delete-fails-postgresql.md).
 
 <a id="fn-f-a15"></a>
 **f-a15** — With the plugin unticked its blocks are not loaded, but the
@@ -1945,6 +2061,7 @@ an enabled block with `manager.setup.layout.sidebar.invalidBlock` (note
 h). Once the list is changed on screen, `FieldOptions.vue` keeps only the
 listed options, which drops the block. Live-probed 2026-09-24 (three
 apps): td25.
+Issue report: [docs/issues/U09-A15-setup-save-refused-disabled-block.md](../issues/U09-A15-setup-save-refused-disabled-block.md).
 
 <a id="fn-f-a16"></a>
 **f-a16** — TinyMCE 7.9.3's "Upload" tab takes only files it reads as
@@ -1952,6 +2069,7 @@ pictures and drops any other without a message; the application adds no
 message of its own. Live-probed 2026-09-24 (three apps): "doc.pdf" and
 "drawing.svg" chosen through "Browse for an image": no request, no
 message, the window unchanged.
+Issue report: [docs/issues/U09-A16-picture-window-other-file-ignored-silently.md](../issues/U09-A16-picture-window-other-file-ignored-silently.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — TinyMCE 7.9.3 puts a pasted or dropped picture into the text
@@ -1965,6 +2083,7 @@ uploaded is not valid."; the saved block held it as
 broken picture. Earlier that day, while every upload failed on the
 server, pasted and dropped real pictures stayed the same way and showed
 on the public page.
+Issue report: [docs/issues/U09-A17-dropped-picture-refused-stays-embedded.md](../issues/U09-A17-dropped-picture-refused-stays-embedded.md).
 
 <a id="fn-f-a18"></a>
 **f-a18** — A file over PHP's `upload_max_filesize` arrives with an
@@ -1976,11 +2095,14 @@ never reached and `api.files.400.uploadFailed` answers. A request over
 `post_max_size` fails before the application runs ("The POST data is too
 large.", status 500). Live-probed 2026-09-24 (three apps): td30; the
 test installs' limits are 2 MB per file and 8 MB per request.
+Issue report: [docs/issues/U09-A18-picture-over-upload-limit-server-error.md](../issues/U09-A18-picture-over-upload-limit-server-error.md).
+Request-limit case: [pkp-e2e#43](https://github.com/jardakotesovec/pkp-e2e/issues/43).
 
 <a id="fn-f-a19"></a>
 **f-a19** — The window's unsaved-change tracking (note f) reacts to
 "Path" and "Title" and not to the "Content" editor; cause not traced
 further. Live-probed 2026-09-24 (OJS, OMP): td17.
+Issue report: [docs/issues/U09-A19-static-page-content-change-lost-unasked.md](../issues/U09-A19-static-page-content-change-lost-unasked.md).
 
 <a id="fn-f-a20"></a>
 **f-a20** — `Handler.js::initializeTinyMCE()` renders one TinyMCE 7.9.3
@@ -2021,6 +2143,7 @@ passed 35 of 35 runs per app. Not driven: the static page window, whose
 language boxes are built the same way, and whether closing and
 reopening the window clears it. The suites take no workaround; a stuck
 box fails its test with a message naming it.
+Issue report: [docs/issues/U09-A20-content-box-stuck-loading-spinner.md](../issues/U09-A20-content-box-stuck-loading-spinner.md).
 
 ## Reference — entry points & surfaces
 
