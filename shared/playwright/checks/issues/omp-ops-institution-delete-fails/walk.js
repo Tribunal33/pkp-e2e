@@ -1,4 +1,4 @@
-// Issue report docs/issues/U66-A3-A8-omp-ops-institution-delete-fails.md (U66 A3, A8):
+// Issue report docs/issues/U66-A3-A8-omp-ops-institution-delete-fails.md (U66 A3, A8; U59 A10):
 // the report's Steps to reproduce, walked through the screens on PKP's
 // default test dataset (a dataset fleet, harness.md "Dataset fleets"), as
 // the dataset's `admin`, on its own context `publicknowledge`.
@@ -13,7 +13,10 @@
 //   4. "OK" on the window that opens, reload
 //   5. Administration › Hosted … › the dataset's context › "Remove" › "OK"
 //   6. reload Hosted …
-//   7. the Institutions page again, Settings › Users & Roles, the home page
+//   6a. (U59 A10) "Remove" › "OK" on the same row again; "Cancel" on the
+//      window when it stays open; reload
+//   7. the Institutions page again, Settings › Users & Roles, the home page,
+//      and (U59 A10) the row's "Settings wizard"
 //   8. control: "Remove" › "OK" on "Empty Press <tag>"
 // Besides the screens it reads the database (the context row, its
 // institutions, user groups and genres, and OMP's publication format
@@ -184,12 +187,12 @@ forEachApp(async (app) => {
         fact('oai before removal', await oai(page, 'oai-before'));
 
         // 5, 6, 8
-        const remove = async (k) => {
+        const remove = async (k, shotKey = k) => {
             const path = facts.contexts[k].path;
             await page.goto(hostedUrl);
             await hosted.expectOpen();
             const name = await hosted.rowName(path);
-            const before = await snap(page, `s5-${k}-hosted-before`);
+            const before = await snap(page, `s5-${shotKey}-hosted-before`);
             const controls = await hosted.rowControls(path);
             await controls.getByRole('link', {name: 'Remove', exact: true}).click();
             const conf = page.getByRole('dialog', {name: 'Confirm', exact: true});
@@ -202,18 +205,29 @@ forEachApp(async (app) => {
             await sleep(2000);
             await idle(page);
             ww.stop();
-            const after = await snap(page, `s5-${k}-after-ok`);
+            const after = await snap(page, `s5-${shotKey}-after-ok`);
             const res = {rowName: name, beforeSnap: before.name, confirmText: confText, requests: ww.seen,
                 afterSnap: after.name, dialogsAfter: await visibleDialogs(page), notices: after.notices, rowSamePage: await hosted.row(path).count()};
+            // The window still open: its "Cancel", as a person would close it.
+            const confOpen = await conf.isVisible().catch(() => false);
+            res.confirmStillOpen = confOpen;
+            if (confOpen) {
+                await conf.getByRole('button', {name: 'Cancel', exact: true}).click();
+                await conf.waitFor({state: 'hidden', timeout: T}).catch(() => {});
+                res.cancelClosed = !(await conf.isVisible().catch(() => false));
+                res.rowAfterCancel = await hosted.row(path).count();
+            }
             await page.goto(hostedUrl);
             await idle(page);
-            const re = await snap(page, `s6-${k}-hosted-reloaded`);
+            const re = await snap(page, `s6-${shotKey}-hosted-reloaded`);
             res.reloadSnap = re.name;
             res.rowAfterReload = await hosted.row(path).count();
             res.db = dbState(facts.contexts[k].id);
             return res;
         };
         fact('5-6 remove dataset context', await remove('A'));
+        // 6a (U59 A10): the same "Remove" once more.
+        fact('6a remove dataset context again', await remove('A', 'A2'));
 
         // 7
         await page.goto(instUrl);
@@ -228,11 +242,28 @@ forEachApp(async (app) => {
         await page.goto(app.url(`/index.php/${ctx}`));
         await idle(page);
         const s7c = await snap(page, 's7-home-after');
+        // (U59 A10) the row's "Settings wizard"
+        await page.goto(hostedUrl);
+        await hosted.expectOpen();
+        let wizard = {rowPresent: await hosted.row(ctx).count()};
+        if (wizard.rowPresent) {
+            const controls = await hosted.rowControls(ctx);
+            await controls.getByRole('link', {name: 'Settings wizard', exact: true}).click();
+            await page.waitForURL(/\/admin\/wizard\/\d+/, {timeout: T, waitUntil: 'commit'}).catch(() => {});
+            await idle(page);
+            await sleep(800);
+            const s7d = await snap(page, 's7-wizard-after');
+            wizard = {...wizard, snap: s7d.name, url: rel(page.url()), title: s7d.title,
+                h1: flat(await page.locator('main h1').first().innerText().catch(() => null), 120),
+                tabs: (await page.getByRole('tab').allInnerTexts().catch(() => [])).map((x) => flat(x, 40)),
+                text: flat(`${s7d.text.main || ''} ${s7d.text.dialog || ''}`, 300)};
+        }
         const denied = (s) => (s.match(/[^.]*does not have access to this operation\./) || [null])[0];
         fact('7 after removal', {
             institutions: {snap: s7.name, url: rel(s7.url), denied: denied(t7)},
             access: {snap: s7b.name, url: rel(s7b.url), denied: denied(t7b), text: flat(s7b.text.main, 300)},
-            home: {snap: s7c.name, url: rel(page.url()), title: s7c.title, text: flat(s7c.text.main, 300)},
+            home: {snap: s7c.name, url: rel(s7c.url), title: s7c.title, text: flat(s7c.text.main, 300)},
+            wizard,
         });
         fact('oai after removal', await oai(page, 'oai-after'));
 
