@@ -898,7 +898,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | "OK" in the window of a user's only Settings role takes the Settings pages away from everyone holding it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A13](#a13) | On PostgreSQL a saved role jumps to the end of the Roles list, and pages can repeat or skip roles | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A14](#a14) | After renaming a role, the Users tab keeps showing its old name until the page is reloaded | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [OMP1](#omp1) | In French a press's "Roles" list heads its External Review column with a code | 🐞 | minor | — |
+| [OMP1](#omp1) | In French a press's "Roles" list heads its External Review column with a code | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [OPS1](#ops1) | A preprint server's "log in to view open access content" box says "Saved", is not kept, and visitors still download preprints | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OPS3](#ops3) | In French a preprint server's Moderator level reads "Éditeur-trice de série" (Series Editor) | 🐞 | minor | — |
 | [A6](#a6) | A role anyone has ever held can never be removed | ❓ | minor | — |
@@ -1095,12 +1095,12 @@ Basis: probe, 2026-10-01. <sup>f-a14</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — A code heads the External Review column in French** · 🐞 · minor.
+**OMP1 — A code heads the External Review column in French** · 🐞 · low.
 In the French interface a press's "Roles" list heads its External Review
 column "##workflow.review.externalReview##", while the other columns
 read "Soumission", "Évaluation interne", "Révision" and "Production". A
 journal's list prints a French name for every column.
-Basis: probe. <sup>f-omp1</sup>
+Basis: probe, 2026-10-01. <sup>f-omp1</sup>
 
 ### OPS
 
@@ -1852,6 +1852,7 @@ key ([b](#fn-b)). Live-probed 2026-09-26 (Fields; all three apps, French
 as a UI language): the press's columns read "Soumission", "Évaluation
 interne", "##workflow.review.externalReview##", "Révision", "Production";
 OJS printed French headings throughout.
+Issue report: [pkp-e2e#124](https://github.com/jardakotesovec/pkp-e2e/issues/124) ([docs/issues/U57-A8-omp-ops-french-texts-internal-names.md](../issues/U57-A8-omp-ops-french-texts-internal-names.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — OPS `UserAccessForm` posts `restrictPreprintAccess`, but

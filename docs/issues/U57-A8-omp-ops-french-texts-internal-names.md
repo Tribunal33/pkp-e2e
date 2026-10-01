@@ -10,13 +10,20 @@
   - 3.3: OMP, OPS (code; no default author guidelines or site-management line there)
 - **Introduced** not traced; the French texts were left empty in several changes, the oldest present since at least [21fae1d76c](https://github.com/pkp/omp/commit/21fae1d76cefe797cdef61567e1ae922bac6b9b7) (2019-09-30)
 - **Upstream** none found (2026-10-01)
-- **Tracked in** spec U57 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U57-languages-and-locales.md#a8) · spec U07 [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U07-journal-identity-and-about-pages.md#ops3) · spec U61 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U61-system-administration.md#a7) · spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (its OMP half) · spec U58 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U58-submission-intake-configuration.md#a9) · spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15) (its OMP half) · spec U53 [OPS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#ops1) · spec U07 [OPS4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U07-journal-identity-and-about-pages.md#ops4)
+- **Tracked in** spec U57 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U57-languages-and-locales.md#a8) · spec U07 [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U07-journal-identity-and-about-pages.md#ops3) · spec U61 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U61-system-administration.md#a7) · spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (its OMP half) · spec U58 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U58-submission-intake-configuration.md#a9) · spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15) (its OMP half) · spec U53 [OPS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#ops1) · spec U07 [OPS4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U07-journal-identity-and-about-pages.md#ops4) · spec U54 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U54-roles-configuration.md#omp1)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 
 Update 2026-10-01: a press's book and chapter pages join this report
 (spec U69 A15): their labels in French are OMP texts with empty French
 entries too. Summary, Steps 10 and 11, Cause, Proposed fix and Evidence
 now cover them, and `fix-omp.diff` fills them.
+
+Update 2026-10-01: a press's names for its review stages join this
+report (spec U54 OMP1): the "Rôles" list's External Review column, the
+workflow's stage menu and the dashboard's Internal Review rows print OMP
+texts whose French entries are empty or missing. Summary, Impact, Steps
+12 to 14, Cause, Proposed fix and Evidence now cover them, and
+`fix-omp.diff` fills them.
 
 ## Summary
 
@@ -42,6 +49,11 @@ affected; it shows French in every one of these places:
   "Volume" and "Pages", the download chart's texts and the format
   details' screen-reader heading; a priced format's link loses the
   format's name ("Achat (25.00 USD)").
+- A press's review stages: the External Review column of the "Rôles"
+  list and the stage in the workflow's menu read
+  "##workflow.review.externalReview##", and a book in Internal Review
+  shows its stage on the dashboard as
+  "##submission.stage.internalReviewWithRound##".
 
 Most of these names are saved into the press's or server's own settings
 when French is added: when the press or server is created on a site with
@@ -67,7 +79,8 @@ internal name for a text that has no translation.
 - **Way round.** A manager can type French over the saved names: the
   guidelines, the checklist, the privacy statement, the role names and
   the file types. The Administration line, the "Components" heading,
-  the OAI value and the book pages' labels have none.
+  the OAI value, the book pages' labels and the review stage names have
+  none.
 
 Low: internal names in place of texts, with nothing lost; it would be
 medium if a press could not replace the saved ones.
@@ -114,6 +127,18 @@ Book pages (a press, signed out):
     `/index.php/publicknowledge/fr_CA/catalog/book/14`.
 11. Open its "Chapter 1: Mind Control—Internal or External?".
 
+Review stage names (a press, as `admin`):
+
+12. Sign in as `admin`. Open
+    `/index.php/publicknowledge/fr_CA/management/settings/access`, tab
+    "Rôles". Read the stage column headings.
+13. Open `/index.php/publicknowledge/fr_CA/dashboard/editorial`, view
+    "Toutes les soumissions actives". Read the stage of submission 16,
+    "A Designer's Log: Case Studies in Instructional Design" (External
+    Review), and of submission 6, "The Information Literacy User’s
+    Guide" (Internal Review).
+14. Open submission 16. Read the workflow's menu.
+
 **Expected.** French texts everywhere: the press's French guidelines and
 checklist (steps 1 and 6), a French privacy statement (steps 2 and 6),
 the French word for "Book" (step 3), a French line under "Gestion du
@@ -121,7 +146,8 @@ site" (step 4), such as OJS's "Ajouter, modifier ou supprimer des revues
 de ce site et gérer les paramètres de l'ensemble du site.", and French
 role names, file types and heading (steps 7 to 9), and French
 headings on the book and chapter pages, such as "Publié" for
-"Published" (steps 10 and 11).
+"Published" (steps 10 and 11), and a French name for each review stage
+(steps 12 to 14), as "Évaluation interne" already is.
 
 **Observed.** Step 1, press and server:
 
@@ -170,16 +196,31 @@ Texte de la prépublication
 ##default.genres.sourceTexts##
 ```
 
+(The level "Éditeur-trice de série" on the Moderator row is a separate
+fault: [U54-OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U54-OPS3-ops-moderator-level-series-editor-french.md).)
 The press's components tab is headed "##grid.genres.title##"; its role
-names and file types are French (its roles list heads one stage column
-"##workflow.review.externalReview##", a printed gap this report does not
-cover).
+names and file types are French.
 
 Step 10: the date's heading reads "##catalog.published##"; step 11: the
 headings read "##chapter.volume##" and "##catalog.published##". The
 English pages read "Published" and "Volume". (The "Versions" list's
 "2026-09-30 (##publication.versionStage.display##)" on `main` is not
 this fault: see Cause, "Excluded".)
+
+Steps 12 to 14, press:
+
+```
+Nom du rôle  Niveau d'autorisation  Soumission  Évaluation interne  ##workflow.review.externalReview##  Révision  Production
+
+16 Power — A Designer's Log: Case Studies in Instructional Design  Évaluation (Cycle 1)
+6 Bernnard et al. — The Information Literacy User’s Guide  ##submission.stage.internalReviewWithRound##
+
+Flux des travaux  Soumission  Évaluation interne  ##workflow.review.externalReview##  Cycle d'évaluation 1  Révision  Production
+```
+
+The English pages read "External Review", "External Review (Round 1)"
+and "Internal Review (Round 1)". OJS's French list heads its review
+column "Évaluation".
 
 ## Cause
 
@@ -221,15 +262,24 @@ entries are empty.
   ([line 1541](https://github.com/pkp/omp/blob/3b0ecf794c/locale/fr_CA/locale.po#L1541-L1542))
   reads "Achat ({$amount} {$currency})", without the English
   "{$format}".
+- The review stage names, OMP
+  [`locale/fr_CA/submission.po`](https://github.com/pkp/omp/blob/3b0ecf794c/locale/fr_CA/submission.po#L293-L294):
+  `workflow.review.externalReview` is empty, and
+  `submission.stage.internalReviewWithRound` and
+  `submission.stage.externalReviewWithRound`, which OMP's English
+  overrides as "Internal Review (Round {$round})" and "External Review
+  (Round {$round})", have no French entry. The external one falls back
+  to pkp-lib's French "Évaluation (Cycle {$round})", which does not say
+  which review; the internal one has nothing to fall back to.
 
 OJS's French has every one OJS shares, its default theme's included.
 The loader drops an empty entry
 (`LocaleFile::loadArray()`, `includeEmpty => false`), so
 `Locale::translate()` finds no text and returns the key between hash
 signs ([`Locale.php` line 525](https://github.com/pkp/pkp-lib/blob/3dc90c81a6/classes/i18n/Locale.php#L525)).
-The Administration line, the "Components" heading, the OAI value and
-the book pages' labels are translated on each request, so the name is
-printed each time.
+The Administration line, the "Components" heading, the OAI value, the
+book pages' labels and the stage names are translated on each request,
+so the name is printed each time.
 
 The default texts are translated once and saved, and three pieces of
 pkp-lib code save whatever `__()` returns, the name included:
@@ -267,6 +317,13 @@ Reach:
   primary gets it as a name (code).
 - Printed names: Administration and the "Components" heading on OMP and
   OPS, a press's OAI-PMH at `…/fr_CA/oai` (walked).
+- The External Review stage name, wherever OMP names the stage through
+  `WorkflowStageDAO`: the "Rôles" list's column (walked), its stage
+  filter, the role window's "Stage Assignment" box and the notice after
+  a stage box is pressed, the stage in decision and editorial reminder
+  emails, the submission's stage label in the REST API and the review
+  report (code); and through the dashboard's stage labels
+  (`useSubmission.js`) and the workflow's menu (walked).
 - OMP's other empty default texts, the subscription manager's role names,
   are saved by no OMP code and show nowhere.
 - The wider gap: OMP's French lacks 448 of OMP's own texts and OPS's 342
@@ -317,7 +374,9 @@ Two changes, landed together (a proposal; the team decides):
    which fill every empty entry of `default.po` that is saved, plus the
    site-management line, the "Components" heading and "Livre", and
    (OMP) the book and chapter pages' labels, the purchase link's
-   "{$format}" and the default theme's reader texts. The
+   "{$format}", the default theme's reader texts and the review stage
+   names ("Évaluation externe", "Évaluation interne (Cycle {$round})",
+   "Évaluation externe (Cycle {$round})"). The
    wording adapts OJS's French; a French (Canada) translator should
    review it. These files are also written by PKP's Weblate, so the
    entries can land as a commit to each app, which Weblate takes up, or
@@ -331,7 +390,10 @@ step 6 showed the French guidelines, checklist and privacy statement
 after "Reload defaults", and the server created in step 9 had French
 role names, file types and heading. With `fix-omp.diff` alone on OMP,
 step 10 read "Publié" and step 11 "Volume" and "Publié", and the English
-book and chapter pages did not change. With the guard alone on OMP, "Reload
+book and chapter pages did not change; steps 12 to 14 read "Évaluation
+externe" in the column and the menu, "Évaluation externe (Cycle 1)" and
+"Évaluation interne (Cycle 1)" on the dashboard, and the English names
+and "Évaluation interne" did not change. With the guard alone on OMP, "Reload
 defaults" saved the French guidelines and checklist empty, and the
 French "Soumissions" page showed the English texts. The dataset's saved
 role and file-type names (steps 7 and 8) stayed, which is what the
@@ -360,7 +422,8 @@ repair below is for. The English pages and OAI records did not change.
   hand (checked with `git apply`). On 3.3 the same entries are empty
   in OPS (privacy statement, roles, file types, heading) and OMP (OAI
   value, heading, the book page's "Published", "Forthcoming" and format
-  details heading; 3.3 has no chapter pages), and `UserGroupDAO::installLocale()` and
+  details heading; 3.3 has no chapter pages; the External Review stage
+  name, while the two round labels exist only from 3.5 on), and `UserGroupDAO::installLocale()` and
   `GenreDAO::installDefaults()` save `__()`'s answer the same way.
 - Test: a unit test that renders the context schema's defaults, the
   role names and the file types for a locale with a missing text and
@@ -384,6 +447,10 @@ and servers.
   takes steps 10 and 11 and their English twins on OMP, and reads the
   "Versions" lists of OJS article 1 and OPS preprint 3 for the
   exclusion: `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/omp-ops-french-texts-internal-names/book-page.js`,
+  walked on `main` (with `fix-omp.diff` in and out) and on 3.5;
+  [review-stage.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-ops-french-texts-internal-names/review-stage.js)
+  takes steps 12 to 14 and their English twins on OMP (OJS submission
+  12 the control): `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/omp-ops-french-texts-internal-names/review-stage.js`,
   walked on `main` (with `fix-omp.diff` in and out) and on 3.5.
 - Tips walked: OMP `main` [3b0ecf794c](https://github.com/pkp/omp/commit/3b0ecf794c),
   OPS `main` [c8af945bb7](https://github.com/pkp/ops/commit/c8af945bb7)
@@ -410,7 +477,11 @@ and servers.
   `publication\Repository::getVersionString()` (the version names: a
   text, no code fault), and the 71 `locale/*/submission.po` of pkp-lib
   `main`, of which only `en` has `publication.versionStage.*` and
-  `submission.plainLanguageSummary`.
+  `submission.plainLanguageSummary`. For the stage names: OMP's French
+  and English `submission.po`, pkp-lib's French `submission.po`,
+  `WorkflowStageDAO` and its callers, `UserGroupGridHandler`, and
+  ui-library's `useSubmission.js` and
+  `useWorkflowNavigationConfigOMP.js`.
   3.4 (OMP [0aec65441f](https://github.com/pkp/omp/commit/0aec65441f),
   OPS [acd8ae704b](https://github.com/pkp/ops/commit/acd8ae704b)): every
   entry of the Cause is empty, the book and chapter pages' included. 3.3 (OMP [8e72fc8836](https://github.com/pkp/omp/commit/8e72fc8836),
@@ -430,7 +501,13 @@ and servers.
   OPS [eb1d961fe7](https://github.com/pkp/ops/commit/eb1d961fe79bbdf2feb2a8035934b1ecb1c6f8e7),
   2023-01-30, Alec Smecher, asmecher), and OJS's French was filled on
   Weblate afterwards. The role and file-type entries are empty on 3.3
-  already; not traced further.
+  already; not traced further. `workflow.review.externalReview` is empty
+  on 3.3 and 3.4 too (OMP `upstream/stable-3_3_0`, `stable-3_4_0`); on
+  `main` it was absent from OMP's French until `3bcd14e06c` added it
+  empty. The two round labels came with `pkp/pkp-lib#10684` (OMP
+  [963af48bd2](https://github.com/pkp/omp/commit/963af48bd269819d9706a95026c38200dd7bf0b1), 2024-12-12)
+  and have French in none of OMP's files; 14 of OMP's 34 languages
+  translate them.
 - Upstream search (pkp-lib, omp, ops; the keys, "missing translation",
   "french", `defaultLocaleKey`, `missingKeyHandler`): nothing on these
   texts. Related, not the same fault: `pkp/pkp-lib#3223` (role names
@@ -438,7 +515,11 @@ and servers.
   2021) and `pkp/pkp-lib#784` (the English fallback plugin). For the
   book pages (2026-10-01; `catalog.published`, `chapter.volume`, "french
   book page", "missing translation press", `versionStage`): nothing;
-  `pkp/pkp-lib#10810` is the change that added the version names.
+  `pkp/pkp-lib#10810` is the change that added the version names. For
+  the stage names (2026-10-01; `workflow.review.externalReview`,
+  `externalReview`, "External Review french", "french review stage"):
+  nothing; `pkp/pkp-lib#5335` (closed 2019) met the same printed name
+  in OJS 3.1's editorial report, a gap in another app's language file.
 - Introduced, book pages: the entries enter today's files empty with
   the 3.4 locale rearrangement (OMP `3bcd14e06c`); `catalog.published`
   and `monograph.publicationFormatDetails` were empty on 3.3 already;

@@ -141,6 +141,15 @@
  
  msgid "submission.artwork.permissions"
  msgstr "Permissions"
+@@ -291,7 +291,7 @@
+ msgstr ""
+ 
+ msgid "workflow.review.externalReview"
+-msgstr ""
++msgstr "Évaluation externe"
+ 
+ msgid "submission.upload.fileContents"
+ msgstr ""
 @@ -467,16 +467,16 @@
  msgstr ""
  
@@ -162,6 +171,19 @@
  
  msgid "editor.submission.decision.sendInternalReview"
  msgstr ""
+@@ -583,6 +583,12 @@
+ msgid "submission.wizard.chapters.description"
+ msgstr ""
+ 
++msgid "submission.stage.externalReviewWithRound"
++msgstr "Évaluation externe (Cycle {$round})"
++
++msgid "submission.stage.internalReviewWithRound"
++msgstr "Évaluation interne (Cycle {$round})"
++
+ #~ msgid "submission.submit.upload.description"
+ #~ msgstr ""
+ #~ "Les fichiers téléchargés associés à cette soumision, y compris le "
 --- a/plugins/themes/default/locale/fr_CA/locale.po
 +++ b/plugins/themes/default/locale/fr_CA/locale.po
 @@ -6,3 +6,24 @@
