@@ -1,0 +1,56 @@
+--- a/controllers/grid/issues/form/IssueGalleyForm.php	2026-10-01 02:46:52
++++ b/controllers/grid/issues/form/IssueGalleyForm.php	2026-10-01 02:46:52
+@@ -24,11 +24,14 @@
+ use APP\issue\Issue;
+ use APP\issue\IssueGalley;
+ use APP\issue\IssueGalleyDAO;
++use APP\journal\Journal;
+ use APP\journal\JournalDAO;
+ use APP\template\TemplateManager;
+ use PKP\db\DAORegistry;
++use PKP\facades\Locale;
+ use PKP\file\TemporaryFileDAO;
+ use PKP\form\Form;
++use PKP\i18n\LocaleMetadata;
+ 
+ class IssueGalleyForm extends Form
+ {
+@@ -63,9 +66,7 @@
+             'galleyLocale',
+             'required',
+             'editor.issues.galleyLocaleRequired',
+-            function ($galleyLocale) use ($journal) {
+-                return in_array($galleyLocale, $journal->getSupportedFormLocales());
+-            }
++            fn ($galleyLocale) => in_array($galleyLocale, $this->getGalleyLocales($journal))
+         ));
+ 
+         if (!$issueGalley) {
+@@ -75,6 +76,18 @@
+     }
+ 
+     /**
++     * The languages an issue galley may be in: the journal's form languages,
++     * and the language an existing galley already has.
++     */
++    protected function getGalleyLocales(Journal $journal): array
++    {
++        return array_values(array_unique(array_filter([
++            ...($journal->getSupportedFormLocales() ?? []),
++            $this->_issueGalley?->getLocale(),
++        ])));
++    }
++
++    /**
+      * @copydoc Form::fetch()
+      *
+      * @param Request $request
+@@ -87,7 +100,7 @@
+ 
+         $templateMgr->assign([
+             'issueId' => $this->_issue->getId(),
+-            'supportedLocales' => $journal->getSupportedLocaleNames(),
++            'supportedLocales' => Locale::getFormattedDisplayNames($this->getGalleyLocales($journal), null, LocaleMetadata::LANGUAGE_LOCALE_WITHOUT),
+             'enablePublisherId' => in_array('issueGalley', (array) $request->getContext()->getData('enablePublisherId')),
+         ]);
+         if ($this->_issueGalley) {
