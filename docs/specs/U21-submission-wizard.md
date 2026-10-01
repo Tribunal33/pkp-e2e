@@ -998,6 +998,10 @@ Left out of the scenarios above, by reason:
   - the guard for A5 (issue report
     `docs/issues/U21-A5-copyright-agreed-line-raw-placeholder.md`): the
     copyright-agreed History line naming the submitter
+  - the guard for OPS7 (issue report
+    `docs/issues/U21-OPS7-preprint-not-allowed-raw-code.md`): the preprint
+    server's "Not Allowed" page showing its explanation and the contact's
+    link, not a raw key
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1079,7 +1083,7 @@ are the source; badges, Impact and Basis:
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
 | [OPS3](#ops3) | On a preprint server, authors cannot cancel their own draft: Cancel does nothing, Delete is refused | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [OPS7](#ops7) | The preprint "Not Allowed" page shows a raw locale code where its explanation should be | 🐞 | minor | — |
+| [OPS7](#ops7) | A user turned away from a preprint server's "Make a Submission" sees a raw code instead of the reason | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [OPS8](#ops8) | A further galley on a draft that already listed one when the wizard was opened can never get its file | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [OPS9](#ops9) | The Review step's "Files" panel says "No files have been uploaded" for galleys the draft already had when the page loaded | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [A1](#a1) | Closing submissions does not stop drafts already started; they can still be filled and submitted | ❓ | latent | — |
@@ -1467,14 +1471,17 @@ task entry does? Lean: yes. The pair is inconsistent on the same event.
 Basis: probe. <sup>[q](#fn-q)</sup>
 
 <a id="ops7"></a>
-**OPS7 — The "Not Allowed" page explains itself in a raw locale code** · 🐞 · minor.
-A visitor turned away from a preprint server's start screen (Rule 3) gets
-the "Not Allowed" heading with, where the explanation should be, the
-literal text "##submission.wizard.notAllowed.description##". The refused
-visitor is never told why. Both of the page's explanations are affected
-(the must-be-registered and the all-sections-closed variants). A journal
-and a press show the proper text. Basis: probe + code inspection (the
-locale keys are missing on OPS alone). <sup>[c](#fn-c)</sup>
+**OPS7 — A user turned away from a preprint server's "Make a Submission" sees a raw code instead of the reason** · 🐞 · low.
+A signed-in user whom a preprint server does not let submit gets the
+"Not Allowed" page. In place of the explanation it shows the raw code
+"##submission.wizard.notAllowed.description##" or
+"##submission.wizard.noSectionAllowed.description##", so they are not
+told why they were refused or whom to contact. A journal and a press
+show the proper sentence, with a link to the contact.
+No submission or data is lost, and the refusal itself is right; only the
+explanation and the contact's link are missing. The user can still find
+the contact under About › "Contact".
+Basis: probe, 2026-10-01. <sup>[c](#fn-c)</sup>
 
 <a id="ops8"></a>
 **OPS8 — A further galley on a resumed or reloaded draft cannot finish its upload** · 🐞 · medium · crash: script.
@@ -1625,6 +1632,7 @@ OMP defines the one (`notAllowed.description`) its handler uses
 same day: the author's radio offered only the open sections; a Journal
 Manager was additionally offered the editor-restricted one; the deactivated
 section was offered to no one.
+Issue report: [pkp-e2e#179](https://github.com/jardakotesovec/pkp-e2e/issues/179) ([docs/issues/U21-OPS7-preprint-not-allowed-raw-code.md](../issues/U21-OPS7-preprint-not-allowed-raw-code.md)).
 
 <a id="fn-d"></a>
 **d** — Start form. Shared `PKP\components\forms\submission\StartSubmission`
