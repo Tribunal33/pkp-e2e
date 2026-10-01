@@ -10,10 +10,10 @@ and no CI follows this branch. `main`'s baselines are in
 
 | Repo | Last-read commit | Date | Read by |
 |------|------------------|------|---------|
-| ojs | `18d097d94e` | 2026-10-01 | claude (daily maintenance session) |
-| omp | `b24879c3d` | 2026-10-01 | claude (daily maintenance session) |
-| ops | `3f0919468c` | 2026-10-01 | claude (daily maintenance session) |
-| pkp-lib | `1fb843f491` (ojs, omp, ops) | 2026-10-01 | claude (daily maintenance session); ui-library `7a3c244b` (ojs, omp, ops); ojs `plugins/generic/jatsTemplate` `5d4ea3db73` (2026-09-30); `plugins/generic/citationStyleLanguage` `41ddd1b265` (ojs, omp, ops, 2026-10-01) |
+| ojs | `3517e640f2` | 2026-10-01 | claude (daily maintenance session) |
+| omp | `c7b45f88ea` | 2026-10-01 | claude (daily maintenance session) |
+| ops | `8eaf899468` | 2026-10-01 | claude (daily maintenance session) |
+| pkp-lib | `b1981810da` (ojs; omp, ops at `1fb843f491`) | 2026-10-01 | claude (daily maintenance session); ui-library `d4e01883` (ojs, omp, ops); ojs `plugins/generic/jatsTemplate` `5d4ea3db73` (2026-09-30); `plugins/generic/citationStyleLanguage` `41ddd1b265` (ojs, omp, ops, 2026-10-01) |
 
 ## Read log
 
@@ -22,6 +22,13 @@ one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
 
+- **2026-10-01 (upstream session on request, VM s3) — ojs `18d097d94e..3517e640f2` (3), omp `b24879c3d..c7b45f88ea` (2), ops `3f0919468c..8eaf899468` (2), pkp-lib `1fb843f491..b1981810da` (1, OJS's pointer; omp and ops stay at `1fb843f491`), ui-library `7a3c244b..d4e01883` (1, all three apps). `main` first: synced today (U14 accommodated, the OJS red fixed), then the line's range read in full.**
+  - ui-library `d4e0188353` (ui-library#1004) with ojs `0a8812a777` (ojs#5885), omp `7c9eb1ebc9`, ops `140af0ff50` ("Dependency update", `stable-only`, no description: tinymce 7.7.1 → 7.9.3, uuid 9 → 14, dompurify 3.2 → 3.4.16, vite, postcss; cypress and vitest for the build) → regression read rrdeps on OJS (`.reports/sync-3_5/rrdeps/suspicions.md`): 4 suspicions, 0 reproduced, 2 unverified hunches (old-browser syntax and CSS prefixes from the newer build tools), nothing routed → no regression. Driven: the Vue rich-text boxes keep their content over a save (Masthead, the Emails signature; ten kinds of content byte-identical under TinyMCE 7.7.1 and 7.9.3 in a harness page), `v-strip-unsafe-html` sanitizes fourteen kinds of HTML alike under both DOMPurify versions, uuid 14 still gives the wizard its client id with `crypto.randomUUID` removed, a page with several editors opens at the top. The legacy editors already loaded TinyMCE 7.9.3 from composer, so the update removes a mismatch; `js/build_frontend.js` holds none of the three packages. OMP and OPS carry the same packages, not driven.
+  - pkp-lib `b1981810da` (`=main 25562b0e1a`, #13426, the Plugin Gallery's search) → `main`'s read today carries over (no regression); 3.5's callers are the same three (`PluginGalleryGridHandler.php:155`, `:364`, `tools/plugins.php`).
+  - ojs `4fca1027f4`, `3517e640f2`, omp `c7b45f88ea`, ops `8eaf899468` (pointer bumps) → nothing of their own. ui-library `7a3c244b` (#13127, PR-reviewed and read 2026-10-01) is now under the pointers.
+  - Carried over from `main`: today's `main` range brought no regression; pkp-lib#13422 is not on the line (`main`'s comments block).
+  - Open stable rows (#13414, #13370, #13376, #13181, ojs#5813 titles) not re-run: lib/pkp moved the Plugin Gallery list alone.
+  - Baselines advanced: ojs `3517e640f2`, omp `c7b45f88ea`, ops `8eaf899468`, pkp-lib `b1981810da` (ojs), ui-library `d4e01883`.
 - **2026-10-01 (daily session, VM s2) — ojs `040e916378..18d097d94e` (5), omp `4f90dadac0..b24879c3d` (5), ops `0bb1ca0f6e..3f0919468c` (5): pointer bumps and the merges of #5871/#2481/#1423 (#13412) and #5803/#2454/#1393 (citationStyleLanguage#128); pkp-lib `8809a197de..1fb843f491` (9, all three apps), ui-library `1a7a4750..7a3c244b` (1), citationStyleLanguage `62e02795c1..41ddd1b265` (1). `main` first: synced today (U63 accommodated), then the line's range read in full.**
   - pkp-lib `a9c76aed62` + merge `1fb843f491` (#13413, `=main 2e377d27fc`, #13412) → `main`'s read today carries over (rr13412). **Regression, also on 3.5**: a users file imported on a 3.5.0 release (ended roles stored with the import day as start) and imported again at the tip gains each ended role a second time; walked here with the old importer's own rows (lib/pkp `d3216eed72` for the first import, the tip for the second) on scratch journals and the 3.5 default dataset, OJS and OMP; control at `8809a197de`: nothing added; fix tried (`checks/sync/pkp-lib-13412/`, `.reports/sync-3_5/s01-13412*`, `.reports/sync-ds35/l13412ds/`). Report `docs/reports/2026-10-01-pkp-lib-13414.md`, ci-triage row. The #13390 stable row is fixed: `import-dates.js` on the line gives one row after three imports and the empty start the import day (`.reports/sync-3_5/s01-13390/`); row deleted.
   - pkp-lib `e4e720a7f6` (`=main aa077419e3`, #13376 backport #13382) → `main`'s verdict (2026-09-27): the #13376 intention gap; **3.5 shows it too**: `greeting.js` leg `s2e` greets by the address on OJS and OMP (`.reports/sync-3_5/s01-13376/`); the row and the report say so.

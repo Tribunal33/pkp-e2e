@@ -61,7 +61,7 @@ page. Every row below assumes the journal has public comments switched on
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| The comment box (no visible label; its placeholder reads "What do you think about this publication? Type your comments here.") | yes | Free text, no length limit. "Submit" stays grayed out while the box is empty or holds only spaces, and while a submit is in flight. The text is kept as typed; simple formatting tags typed into it (bold, a link) are kept and shown formatted, anything unsafe is stripped without a message (Rule 5) <sup>f</sup> |
+| The comment box (no visible label; its placeholder reads "What do you think about this publication? Type your comments here.") | yes | Free text, no length limit. "Submit" stays grayed out while the box is empty or holds only spaces, and while a submit is in flight. The text is kept as typed; simple formatting tags typed into it (bold, a link) are kept and shown formatted, anything unsafe is stripped without a message (Rule 5). Leaving the page with text typed and not submitted asks nothing and posts nothing: the browser's Back brings the page back with the text still in the box, a reload shows the box empty <sup>f</sup> |
 | "Please tell us why you want to report this comment" (the "Report Comment" dialog) | yes | Free text. With the box empty or holding only spaces, "Submit" does nothing: the dialog stays open and no message appears ⚠ [A3](#a3) (Rule 8) <sup>g</sup> |
 
 **The "Comments" tab** of Settings › Website › Content (Rule 2). <sup>b</sup>
@@ -76,9 +76,9 @@ page. Every row below assumes the journal has public comments switched on
 |------------------|-----------|-------|
 | The tabs "All", "Approved", "Hidden/Needs Approval", "Reported" | — | Which comments the table lists (Rule 10). The chosen tab is written into the page's address after "#" and comes back on reload <sup>i</sup> |
 | The comments table: columns "Submission", "Comment", "User", "Status" and an unlabelled "…" ("More Actions") column | — | One row per comment, newest first, 25 per page (Settings bullet 2). "Submission" reads "{submission number}. {authors} ; {title}" (the authors part is the family names, a space on each side of the semicolon), "Comment" the comment's text cut to one line, "User" the writer's name, "Status" as Rule 10b. With nothing to list the table reads "No Items" <sup>i</sup> |
-| The comment panel "View comment details by {writer}" | — | Opened by "View Comment" (Rule 12). Above the title the same submission line as the table's "Submission" cell; then "Comment preview" with the date and time, the text, the writer's name, their ORCID iD when they have one (verified: the iD as a link with a solid icon; not verified: a hollow icon and "{iD} (unauthenticated)" [A6](#a6)) and their affiliation; then the "Reports" table; on the right the approval note and the three buttons "Approve Comment", "Delete Comment", "Hide Comment" <sup>j</sup> |
+| The comment panel "View comment details by {writer}" | — | Opened by "View Comment" (Rule 12). Above the title the same submission line as the table's "Submission" cell; then "Comment preview" with the date and time, the text, the writer's name, their ORCID iD when they have one (verified: the iD as a link with a solid icon; not verified: a hollow icon and "{iD} (unauthenticated)", a link that does not open the iD's ORCID page ⚠ [A6](#a6)) and their affiliation; then the "Reports" table; on the right the approval note and the three buttons "Approve Comment", "Delete Comment", "Hide Comment" <sup>j</sup> |
 | The "Reports" table inside the comment panel: columns "Reported By", "Reason", "Date Reported" and an unlabelled "…" column; described "This is the list of all the users who have reported this comment" | — | One row per report, newest first, 25 per page; with none, "No one has reported this comment yet" (Rule 15) <sup>k</sup> |
-| The report panel "View report details by {reporter}" | — | Opened by "View Report" (Rule 15): "Report preview" with the date and time, the reason as typed, the reporter's name, ORCID iD and affiliation, and the button "Delete Report" <sup>k</sup> |
+| The report panel "View report details by {reporter}" | — | Opened by "View Report" (Rule 15): "Report preview" with the date and time, the reason as typed, the reporter's name, ORCID iD and affiliation, shown as the comment panel shows the writer's [A6](#a6), and the button "Delete Report" <sup>k</sup> |
 
 ## Rules & state
 
@@ -169,10 +169,15 @@ page. Every row below assumes the journal has public comments switched on
      ⚠ [A1](#a1).
    - 6b. **What each viewer gets.** Everyone, signed in or not, sees the
      approved comments of the article, newest first, each with its date
-     and time, its text, the writer's name, the writer's ORCID iD when they
-     have one (verified: the iD as a link with a solid icon; not verified:
-     a hollow icon and the iD followed by "(unauthenticated)", a link that
-     leads nowhere ⚠ [A6](#a6)) and the writer's affiliation. A signed-in visitor sees,
+     and time, its text and the writer's name. Directly after the name
+     comes the writer's ORCID icon when they have an iD: solid when the iD
+     is verified, hollow when it is not. The iD itself is not written out;
+     the icon is a link, read out by a screen reader as "ORCID iD", that
+     opens the iD's ORCID page in a new tab, for a verified and an
+     unverified iD alike, and nothing but the icon's look tells the two
+     apart ⚠ [A15](#a15). The writer's
+     affiliation is on the line below the name when the profile holds one.
+     A signed-in visitor sees,
      in addition, their own pending and hidden comments on that article,
      each carrying the notice. Nobody else's unapproved comment is ever
      shown on the landing page, whatever the viewer's role. Comments on
@@ -384,7 +389,10 @@ page. Every row below assumes the journal has public comments switched on
 - **The writer's name, ORCID iD and affiliation** shown with a comment are
   the account's own, from *[User profile](U03-user-profile.md)* and
   *[ORCID integration](U04-orcid-integration.md)*; a comment shows whatever
-  the profile holds at the moment the page loads. <sup>e</sup>
+  the profile holds at the moment the page loads. The name is the
+  account's "Preferred Public Name" when the profile holds one, the given
+  and family name otherwise, under the comment and in the Comments page's
+  "User" cell and panels alike. <sup>e</sup>
 - **The Website settings screen** the "Comments" tab sits in, and its
   "Lists" tab, belong to *Journal identity & about pages* and *Appearance
   & theming* (specs not yet written); this spec owns the one tab. <sup>p</sup>
@@ -481,8 +489,9 @@ and a preprint server. <sup>s0</sup>
      address.
    - **The landing page after the approval** {OJS}: signed out, the
      article's page lists the comment with its date and time, its text, the
-     writer's name, the ORCID iD as a link with a solid icon and the
-     affiliation, and the sidebar reads "All Comments (3)".
+     writer's name followed by a solid ORCID icon (a link named "ORCID iD"
+     to the writer's iD) and the affiliation on the line below, and the
+     sidebar reads "All Comments (3)".
    - **"Hide Comment"**: open the reported comment's panel and press "Hide
      Comment": the notice "The comment has been updated successfully.", the
      panel closes and the row leaves "Approved" for "Hidden/Needs
@@ -826,6 +835,9 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - a comment's deletion leaving the tasks of a report numbered like it, and of a comment numbered like one of its reports, anywhere on the site (Side effects; A11, retired)
+  - under a comment on the landing page, a writer with an unverified ORCID iD: the hollow icon after the name, a link named "ORCID iD" that opens the iD's ORCID page (Rule 6b; the landing-page half A6 used to carry)
+  - under a comment on the landing page, a writer with no ORCID iD and one with no affiliation: no icon after the name, no line below it (Rule 6b)
+  - the comment box left with text typed and not submitted: nothing asked, nothing posted, the box empty after a reload (Fields, the comment box)
 - **Rarely met**:
   - an Editor whose role does not permit settings changes, refused the "Comments" tab and still opening the Comments page {OJS OMP} (Actors rows 5 and 6; a preprint server has no second manager-level role to untick): unticking "Permit changes to Settings" on a role is a setup few journals make, not a state an editor meets in an ordinary week
   - a Site Administrator holding no manager role in the journal, with no task row in their Tasks panel (Actors row 7): the state needs the Site Administrator's manager role ended on their own edit page, a setup no journal makes in an ordinary week
@@ -840,12 +852,13 @@ Left out of the scenarios above, by reason:
   - the "Report Comment" dialog's line with the writer's affiliation in parentheses (Rule 8): a wording variant of the line scenario 9 reads
 - **Register carries it**:
   - A3 (a second report on the same comment by the same person; Rule 8)
-  - A6 (the unverified ORCID iD's dead link under a comment and in the comment panel; Rule 6b)
+  - A6 (the unverified ORCID iD's dead link in the comment panel and the report panel; Fields, the comment panel)
   - A7 (the comment's "…" button without a name for a screen reader; Rule 7)
   - A8 (closing the report panel clearing both numbers from the address; Rule 15; scenario 3 marks it)
   - A9 (the Site Administrator with Reader as their only journal role: the "Error" dialog over the Comments page, and the page working after "OK"; Rule 17b)
   - A12 (moderating or reporting another journal's comment by requests made by hand; Actors rows 3 and 7)
   - A13 (the Comments page's browser tab without the page's name; Rule 10)
+  - A15 (the verified and the unverified ORCID icon under a comment sharing one name and no text; Rule 6b)
   - OMP1 and OPS1 (the Site Administrator holding no manager role: the Comments page open on a journal, refused on a press and a preprint server; Rules 17a, 17c)
 - **Owned by another feature**:
   - the Tasks panel's own controls on a comment task, Mark Read and Delete (Cross-feature interactions; *Notifications center & email preferences*, scenario 2)
@@ -866,7 +879,7 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A6](#a6) | The unverified ORCID iD under a comment and in the comment panel links to a broken address | 🐞 | minor | — |
+| [A6](#a6) | The unverified ORCID iD in the comment panel and the report panel links to a broken address | 🐞 | minor | upstream sync (claude), 2026-10-01 — the landing page's half fixed upstream, the panels' stands |
 | [A10](#a10) | A comment deleted with its submission or its writer's account leaves its moderation tasks behind, blank and dead | 🐞 | minor | — |
 | [A12](#a12) | A Journal Manager of one journal can read, approve, hide and delete another journal's comments by requests made by hand, and any signed-in account can report them | 🐞 | latent | — |
 | [A13](#a13) | The Comments page's browser tab carries no page name, only the journal's | 🐞 | minor | — |
@@ -879,6 +892,7 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A7](#a7) | The comment's "…" button has no name for a screen reader | ❓ | minor | — |
 | [A8](#a8) | Closing the report panel wipes the open comment's number from the address too | ❓ | minor | — |
 | [A9](#a9) | A Site Administrator whose only journal role is Reader gets an "Error" dialog on every editorial page, the Comments page included | ❓ | minor | claim check (claude), 2026-09-28 — the dialog is the side menu's |
+| [A15](#a15) | Under a comment, nothing but the icon's fill tells an unverified ORCID iD from a verified one, and the iD is no longer written out | ❓ | minor | — |
 | [OMP1](#omp1) | On a press, a Site Administrator holding no manager role is offered Content › Comments but the page answers the access-denied page | ❓ | minor | — |
 | [OPS1](#ops1) | On a preprint server, a Site Administrator holding no manager role is offered Content › Comments but the page answers the access-denied page | ❓ | minor | — |
 | [A11](#a11) | Retired: on a press and a preprint server, deleting a comment removed the task about an unrelated report or comment that shared its number; it now removes only its own tasks {OMP OPS} | ✅ | retired | upstream sync (claude), 2026-09-29 — fixed upstream |
@@ -946,14 +960,18 @@ follow on the next page load as the landing pages do. Basis: test run.
 <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — The unverified ORCID iD under a comment links to a broken address** · 🐞 · minor.
-Under a comment on the landing page and in the comment panel, a writer
-whose ORCID iD is not verified is shown a hollow icon and a link reading
-"{iD} (unauthenticated)"; the link's address is that same text, suffix
-included, so pressing it does not open the iD's ORCID page. A verified
-writer's link reads the bare iD and opens it. Expected the link to lead
-to the iD in both cases; observed a dead link for the unverified one.
-Basis: test run. <sup>f-a6</sup>
+**A6 — The unverified ORCID iD in the comment panel links to a broken address** · 🐞 · minor.
+In the Comments page's comment panel and report panel, a writer or
+reporter whose ORCID iD is not verified is shown a hollow icon and a link
+reading "{iD} (unauthenticated)"; the link's address is that same text,
+suffix included, so pressing it opens "{iD}%20(unauthenticated)" in a new
+tab, not the iD's ORCID page. A verified person's link reads the bare iD
+and opens it. Expected the link to lead to the iD in both cases; observed
+a dead link for the unverified one.
+Re-checked: upstream sync (claude), 2026-10-01 — the landing page had the
+same fault under a comment until the iD there became an icon that leads
+to the bare iD (pkp/pkp-lib#13422, Rule 6b); the two panels keep it.
+Basis: test run; probe for the report panel. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — The comment's "…" button has no name for a screen reader** · ❓ · minor.
@@ -1051,6 +1069,22 @@ window. Expected an "Error" window naming the failure, the reason kept;
 observed silence, so the reader believes the report reached the
 moderators.
 Since: 2026-09-29 · Basis: probe. <sup>f-a14</sup>
+
+<a id="a15"></a>
+**A15 — Only the icon's fill tells an unverified ORCID iD under a comment from a verified one** · ❓ · minor.
+Under a comment on the landing page, a verified and an unverified
+writer's ORCID icon are both a link named "ORCID iD", with no text beside
+it and nothing shown on hover; only the icon's look differs, solid or
+hollow, where the page used to write "(unauthenticated)" after the iD, as
+the comment panel still does. A screen-reader user, or a reader who does
+not know the two icons, cannot tell an unverified iD from a verified one,
+and nobody can read the iD itself without following the link. Expected
+the unverified state to be named in words; observed one name for both.
+Question: is the icon alone meant to carry the difference between a
+verified and an unverified iD? Lean: the look is intended, since the page
+was changed on purpose to show the iD as an icon after the name; the
+shared name is an oversight, two states read out as one.
+Since: 2026-10-01 · Basis: probe. <sup>f-a15</sup>
 
 ### OMP
 
@@ -1227,11 +1261,21 @@ signed-in user gets this publication's approved comments plus their own
 unapproved ones and nothing from other publications. Order:
 `Repository::getPaginatedData()` sorts `created_at DESC` and pages by
 `itemsPerPage`. Per comment the resource `UserCommentResource` carries
-`userName` (`getFullName()`), `userOrcidDisplayValue` and
-`isUserOrcidAuthenticated` (`PkpOrcidDisplay`: icon `Orcid` when verified,
-`OrcidUnauthenticated` otherwise, the iD as the link text),
-`userAffiliation` (`getLocalizedAffiliation()`), `createdAt`
-(`formatShortDateTime`). `PkpCommentsNotificationMessageNeedsApproval`
+`userName` (`getFullName()`, which prefers the preferred public name),
+`userOrcid` (the bare iD), `userOrcidDisplayValue` and
+`isUserOrcidAuthenticated`, `userAffiliation`
+(`getLocalizedAffiliation()`), `createdAt` (`formatShortDateTime`). Since
+pkp/pkp-lib#13422 ("Refine comments rendering - mainly author section":
+ui-library `64d67363`, pkp-lib `f5bd392a69`, ojs `06fd981b01`; on OJS
+`main` since 2026-10-01) the landing page's comment footer renders
+`PkpOrcidDisplay` with `variant="icon"` inside the name's element, fed
+`userOrcid`: a link with the accessible name "ORCID iD", no text and no
+`title`, `target="_blank"`, holding the icon `Orcid` when verified and
+`OrcidUnauthenticated` otherwise; the affiliation is its own element
+below, absent when the profile holds none. Before that change the iD was
+the link's text, with the "(unauthenticated)" suffix for an unverified
+one. The Comments page's two panels still take `userOrcidDisplayValue`
+(footnote f-a6). `PkpCommentsNotificationMessageNeedsApproval`
 shows `userComment.awaitingApprovalNotice` with the `Help` icon when the
 viewer is the writer and `isApproved` is false, which is the pending and
 the hidden state alike (A1). Live-probed 2026-09-16 (Rule 6, A1): the
@@ -1242,7 +1286,30 @@ Editor, the Journal Manager and the Site Administrator (the heading "(2)"
 for them, "(5)" for the writer with two pending); after a hide the writer
 saw the comment again with the same notice; another article's comments
 never listed; the per-version headings "1.1 (1)" and "1.0 (2)" beside the
-sidebar's "(3)".
+sidebar's "(3)". Live-probed 2026-10-01 on a journal at ojs `68615b5a32`,
+twice on separate scratch journals (Rule 6b, the Cross-feature bullet on
+the writer's name, scenario 2's landing-page bullet): six approved
+comments, by writers with a verified iD, an unverified iD and none, each
+with and without an affiliation, read the same signed out and as the
+three writers, an uninvolved Reader, an Author, a Reviewer, a Section
+Editor, the Journal Manager and the Site Administrator: the name as plain
+text, then for the four with an iD one link named "ORCID iD" with no
+text, the icon solid for the verified and hollow for the unverified; the
+affiliation on a second line for the three who have one, and no such
+line for the others. A press on the icon opened a new tab at
+`https://orcid.org/0000-0002-1825-0097` (verified) and at
+`https://orcid.org/0000-0001-5109-3700` (unverified), read against a
+stand-in for orcid.org since the install has no outside network; hovering
+the icon showed nothing. A comment just written through the box showed
+the same writer part at once and after a reload. On Profile › Contact an
+affiliation renamed, added and cleared, and on Profile › Identity a given
+name changed, showed on that writer's every comment, old and new, at the
+next page load, and in the comment panel; "Preferred Public Name" set to
+"Dr V. Verified" replaced the given and family name under both of her
+comments, in the Comments page's "User" cell, in the panel's title and on
+its name line (the panel is shared code; not driven on a press or a
+preprint server). A verified writer who deleted her iD on Profile ›
+Identity of a journal with ORCID on lost the icon under her comment.
 
 <a id="fn-f"></a>
 **f — writing a comment.** `usePkpCommentsStore.addComment()` refuses
@@ -1270,7 +1337,12 @@ rendered as bold, plain and a link with the script gone and no message; a
 (either block) opened the Login page with the article's address as
 `source` and, signed in, returned to "…/article/view/{id}#public-comments"
 with the box present and the block's top 187–287 px down a 900 px window
-on two runs, where the sidebar link puts it at 0.
+on two runs, where the sidebar link puts it at 0. Live-probed 2026-10-01
+(Fields, the comment box), twice: a Reader typed a sentence in the box
+and opened another page of the journal without pressing "Submit": no
+browser dialog; the browser's Back showed the article with the sentence
+still in the box; a reload showed the box empty, and the comment was not
+listed.
 
 <a id="fn-g"></a>
 **g — the "…" menu and reporting.** `PkpCommentsMessageActions` renders
@@ -1658,10 +1730,9 @@ landing-page bullets on OJS at `article/view/{id}`.
 <a id="fn-s2"></a>
 **s2 — scenario 2.** Throwaway `users[]`: the pending comment's writer a
 `reader` with `orcid` and `orcidIsVerified: true` (the solid icon,
-footnote f-a6); `users[]` has no affiliation key, so the test sets the
-writer's affiliation on the account's Profile › Contact before the pages
-are read (a comment shows whatever the profile holds at load), or the
-harness step adds the key. Two more `reader`s: one writes the approved
+footnote f-a6) and with `affiliation`: `users[]` takes the key, and the
+comment shows the affiliation without a visit to Profile › Contact (seen
+2026-10-01). Two more `reader`s: one writes the approved
 comment, the other the approved-and-reported one, reported by the first
 (a reporter must not be the writer). The three `userComments[]` entries
 may go in one call: the bullets locate rows by their "User" or "Comment"
@@ -1840,15 +1911,28 @@ and Setup › Lists forms, the control, showing "Saving" then "Saved" in
 place.
 
 <a id="fn-f-a6"></a>
-**f-a6 — A6.** `PkpOrcidDisplay` (the shared ORCID display the comment and
-the panels use) takes `userOrcidDisplayValue`, which already carries the
-"(unauthenticated)" suffix for an unverified iD, as both the link's text
-and its address. Live-probed 2026-09-16, the landing page (journal) and
+**f-a6 — A6.** In the comment panel and the report panel `PkpOrcidDisplay`
+(the shared ORCID display) takes `userOrcidDisplayValue`, which already
+carries the "(unauthenticated)" suffix for an unverified iD, as both the
+link's text and its address. Live-probed 2026-09-16, the landing page (journal) and
 the comment panel (the three apps): verified, the address and the text
 `https://orcid.org/0000-0002-1825-0097` with the solid icon; unverified,
 the text and the address both `https://orcid.org/0000-0001-5109-3700
 (unauthenticated)` with the hollow icon. The report panel's unverified
-end was not driven (the same field feeds it). The profile's own display
+end was not driven (the same field feeds it). Live-probed 2026-10-01 on a
+journal at ojs `68615b5a32`, twice: the landing page's half is gone with
+pkp/pkp-lib#13422 (ui-library `64d67363`): under a comment the iD is an
+icon link fed `userOrcid`, and a press on the unverified writer's icon
+opened a new tab at `https://orcid.org/0000-0001-5109-3700` (footnote
+e). The comment panel, approved and pending comments alike, and the
+report panel, now driven at its unverified end, were unchanged: the
+unverified link's text and address both carried the suffix, and a press
+opened a new tab at
+`https://orcid.org/0000-0001-5109-3700%20(unauthenticated)`; the verified
+link opened the bare iD. The opened addresses were read against a
+stand-in for orcid.org (the install has no outside network); what ORCID
+answers to the suffixed address was not read. The panels on a press and a
+preprint server rest on the 2026-09-16 read. The profile's own display
 of an iD is *[ORCID integration](U04-orcid-integration.md)*'s.
 
 <a id="fn-f-a7"></a>
@@ -2057,6 +2141,19 @@ kept, `d1` one "Error An unexpected error has occurred. Please reload the
 page and try again." window (the delete path calls
 `openDialogNetworkError()` without the error, so the server's message is
 not shown). Report: `docs/reports/2026-09-29-ui-library-992.md`.
+
+<a id="fn-f-a15"></a>
+**f-a15 — A15.** pkp/pkp-lib#13422 ("For consistency the orcid is now
+rendered just as icon behind the author name (same as in open peer
+review) And affiliation is on second line"; ui-library `64d67363`, on OJS
+`main` since 2026-10-01) renders `PkpOrcidDisplay` with `variant="icon"`
+under a comment. Live-probed 2026-10-01 on a journal at ojs `68615b5a32`,
+twice: the four ORCID links under the six comments (two verified, two
+unverified writers) all had the accessible name "ORCID iD", no text and
+no `title`; the icons were `#icon-Orcid` for the verified and
+`#icon-OrcidUnauthenticated` for the unverified; hovering either showed
+no tooltip. The comment panel's link still reads "{iD} (unauthenticated)"
+(A6).
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1.** Footnote m: `omp/pages/management/SettingsHandler::__construct()`
