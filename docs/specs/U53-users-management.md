@@ -775,6 +775,12 @@ Left out of the scenarios above, by reason:
     `docs/issues/U53-A2-remove-site-administrator-unexplained-error.md`):
     a manager's "Remove User" on the Site Administrator's row showing the
     server's refusal, not "An unexpected error has occurred"
+  - the guard for A1 (Rule 13; scenario 4 passes it; issue report
+    `docs/issues/U53-A1-disable-user-offered-then-refused.md`): a
+    manager's menu offering no "Disable User" on the Site
+    Administrator's row or on a user with a current role in another
+    journal, and offering "Disable User", "Login As" and "Merge user" on
+    a user whose role elsewhere has ended
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -790,9 +796,6 @@ Left out of the scenarios above, by reason:
     3, 5 and 6 do, only the disable and enable windows' headings
     differing (Rule 20)
 - **Register carries it**:
-  - A1 ("Disable User" and "Enable User" refused inside the window on the
-    rows of users outside the manager's reach; Rule 13; scenario 4
-    passes it)
   - A3 (a user with no role left, still listed on the Users list, in the
     "Merge user" window and on the older grid; Rules 3, 16; scenario 5
     passes it)
@@ -856,7 +859,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Disable User" and "Enable User" are offered on rows the manager may not administer, and refused only inside the window | 🐞 | user-visible | — |
+| [A1](#a1) | A manager's "Disable User" on a user they may not administer opens a window that refuses it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | A manager's "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A4](#a4) | The search box's example names "Journal editor" on a press and a preprint server | 🐞 | minor | — |
 | [A5](#a5) | The row's "…" button is announced to screen readers as a raw code | 🐞 | minor | — |
@@ -881,16 +884,22 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — Disabling offered where it is refused** · 🐞 · user-visible.
-A manager other than the Site Administrator sees "Disable User" (or
-"Enable User") on every row but their own, including the rows of users
-with a current role in a journal the manager does not manage and the Site
-Administrator's. The menu hides "Login As" and "Merge user" on those
-rows, but pressing "Disable User" there opens the window and then
-refuses with "You do not have sufficient permissions to administer this
-user…". The manager expects either the action to work or not to be
-offered.
-Basis: probe. <sup>f-a1</sup>
+**A1 — A manager's "Disable User" on a user they may not administer opens a window that refuses it** · 🐞 · low.
+On Settings › Users & Roles, a manager who is not the Site
+Administrator is offered "Disable User" (or "Enable User") on rows they
+may not administer. The manager can be a journal, press or server
+manager, or an editor. Those rows are the Site Administrator's, and
+those of users with a current role in a journal the manager does not
+manage.
+Choosing the item opens the "Disable {name}" window, which then
+refuses: "You do not have sufficient permissions to administer this
+user. In order to administer a user, you must either be site
+administrator, or administer all contexts that this user is enrolled
+in.", with only "Close". The account stays as it was.
+On the same rows the menu already leaves out "Login As" and "Merge
+user". Those two follow their own rule only loosely: they are hidden on
+some rows where they would work.
+Basis: probe, 2026-10-01. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — A manager's "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred"** · 🐞 · low.
@@ -1883,6 +1892,7 @@ manager role and an empty "Start Date".
 `canLoginAs` / `canMergeUsers`; `UserGridHandler::editDisableUser()`
 refuses unless `getAdministrationLevel()` is `FULL` (note n). Live-probed
 2026-09-25: note td8.
+Issue report: [docs/issues/U53-A1-disable-user-offered-then-refused.md](../issues/U53-A1-disable-user-offered-then-refused.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Code read 2026-09-25: note td9. The remove guard is only
