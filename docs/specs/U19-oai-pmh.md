@@ -1137,6 +1137,12 @@ Left out of the scenarios above, by reason:
     that gives `metadataPrefix`, `set` or `verb` twice answering the
     protocol's refusal ("Multiple values are not allowed for the …
     parameter", "Illegal OAI verb") (once fixed)
+  - the guard for A17 (issue report
+    `docs/issues/U19-A17-oai-malformed-identifier-answers-record.md`):
+    GetRecord of an identifier with letters after the number, or with the
+    app's start in its middle, answering "Identifier is not in a valid
+    format" on a press and a preprint server, as scenario's journal does
+    {OMP OPS} (once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1261,7 +1267,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | Records read in French carry untranslated keys {OJS OMP} | 🐞 | minor | — |
 | [A15](#a15) | MARC field 008 reads "%26%09%26 %2026" instead of the publication date {OJS} | 🐞 | minor | — |
 | [A16](#a16) | An OAI-PMH request that gives an argument twice gets a server error instead of the refusal message | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A17](#a17) | A malformed identifier answers "No matching identifier", or another record {OMP OPS} | 🐞 | minor | — |
+| [A17](#a17) | OAI-PMH GetRecord answers a malformed identifier with a record, not "Identifier is not in a valid format" {OMP OPS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A press's or preprint server's OAI record keeps its earlier datestamp after an edit or a second publish {OMP OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | A deleted section's set is listed, but asking for it lists nothing {OJS OPS} | 🐞 | minor | — |
 | [A20](#a20) | Asked for a section's set, deleted records ignore `from` and `until` {OJS OPS} | 🐞 | minor | — |
@@ -1459,14 +1465,25 @@ site-wide one.
 Basis: probe, 2026-10-01. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — A malformed identifier answers another way** {OMP OPS} · 🐞 · minor.
-A harvester that sends GetRecord a malformed identifier expects
-"Identifier is not in a valid format", as a journal answers. After the
-app's own start (`oai:{repository identifier}:publicationFormat/` on a
-press, `…:preprint/` on a preprint server), an identifier that is not a
-number answers "No matching identifier in this repository", and a number
-followed by letters, such as `…/390abc`, answers record 390.
-Basis: probe, 2026-09-26. <sup>f-a17</sup>
+**A17 — OAI-PMH GetRecord answers a malformed identifier with a record, not "Identifier is not in a valid format"** {OMP OPS} · 🐞 · low.
+On a press and a preprint server, the OAI-PMH address answers a
+malformed record identifier as if it were well formed. Every identifier
+of the app begins with a fixed start (`oai:{repository
+identifier}:publicationFormat/` on a press, `…:preprint/` on a preprint
+server), and the record's number follows it. - An identifier with a
+number and then anything else after the start, such as `…/2abc`, makes
+GetRecord answer record 2. - An identifier with no number after the
+start, such as `…/abc`, makes it answer "No matching identifier in this
+repository". - For `…/2abc`, ListMetadataFormats lists the formats of
+record 2. A harvester expects "Identifier is not in a valid format" from
+GetRecord and "No matching identifier in this repository" from
+ListMetadataFormats. A journal on main answers so; a journal on 3.5 and
+earlier answers like the other two. A malformed identifier reaches no
+record a well-formed one could not. It goes through the same lookup, in
+the same press or preprint server and among published records only, and
+the record comes back under its own, correct identifier. The harvester
+is only not told that its identifier was malformed.
+Basis: probe, 2026-10-01. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — A press's or preprint server's OAI record keeps its earlier datestamp after an edit or a second publish** {OMP OPS} · 🐞 · medium.
@@ -1831,6 +1848,7 @@ Issue report: [pkp-e2e#287](https://github.com/jardakotesovec/pkp-e2e/issues/287
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-26: note q16. Code: note e (OMP and OPS accept any identifier containing their start and cast the rest with `(int)`).
+Issue report: [docs/issues/U19-A17-oai-malformed-identifier-answers-record.md](../issues/U19-A17-oai-malformed-identifier-answers-record.md).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-26: note q9. OMP: a format published at 08:28:23Z, deleted at 09:09:59Z and published again read 08:28:23Z; OPS the same with 08:28:36Z and 09:13:38Z; `submissions.last_modified` did not change. Code: note e (the datestamp is `ms.last_modified` on OMP, `a.last_modified` on OPS).
