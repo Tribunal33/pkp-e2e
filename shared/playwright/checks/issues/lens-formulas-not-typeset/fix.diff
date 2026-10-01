@@ -1,0 +1,59 @@
+--- a/plugins/generic/lensGalley/templates/display.tpl
++++ b/plugins/generic/lensGalley/templates/display.tpl
+@@ -9,22 +9,49 @@
+  *}
+ <script src="{$jQueryUrl}"></script>
+ <script src="{$pluginLensPath}/lens.js"></script>
+-<script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+-<script type="text/javascript">
++<script type="text/javascript">{literal}
++  // MathJax 3 reads its configuration when it loads, so it is set before the script.
+   window.MathJax = {
+-    tex: {
+-      inlineMath: [['$', '$'], ['\\(', '\\)']],
+-      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+-    },
+     options: {
+       menuOptions: {
+         settings: {
+           assistiveMml: true
+         }
++      },
++      renderActions: {
++        // Lens writes TeX formulas as MathJax 2 <script type="math/tex"> tags,
++        // which MathJax 3 no longer finds by itself.
++        findScript: [10, function (doc) {
++          var scripts = document.querySelectorAll('script[type^="math/tex"]');
++          for (var i = 0; i < scripts.length; i++) {
++            var node = scripts[i];
++            var display = !!node.type.match(/; *mode=display/);
++            var math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
++            var text = document.createTextNode('');
++            node.parentNode.replaceChild(text, node);
++            math.start = {node: text, delim: '', n: 0};
++            math.end = {node: text, delim: '', n: 0};
++            doc.math.push(math);
++          }
++        }, '']
++      }
++    }
++  };
++{/literal}</script>
++<script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
++<script type="text/javascript">{literal}
++  // Lens calls the MathJax 2 interface MathJax.Hub.Queue(); run its jobs on MathJax 3.
++  window.MathJax.Hub = {
++    Queue: function () {
++      for (var i = 0; i < arguments.length; i++) {
++        var job = arguments[i];
++        MathJax.startup.promise = MathJax.startup.promise.then(typeof job === 'function' ? job : function () {
++          return MathJax.typesetPromise();
++        });
+       }
+     }
+   };
+-</script>
++{/literal}</script>
+ <script type="text/javascript">{literal}
+ 
+ 	var linkElement = document.createElement("link");

@@ -1081,6 +1081,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-A2-older-version-pdf-reader-empty.md`): an
     older version's PDF reader page showing the document, and its
     "Download" saving the file, on a journal and a preprint server
+  - the guard for OJS9 (Rule 11; issue report
+    `docs/issues/U13-OJS9-lens-formulas-not-typeset.md`): an
+    XML galley with a TeX formula opened in the Lens reader, the formula
+    typeset and no page script error {OJS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1233,7 +1237,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OJS6](#ojs6) | The PDF reader's return arrow is announced "Return to Issue Details" but opens the article | 🐞 | minor | — |
 | [OJS7](#ojs7) | A refused "OK" in the Publication Facts settings puts back the saved values | 🐞 | minor | — |
 | [OJS8](#ojs8) | An impossible Publication Facts "Start Date" is dropped with "Your changes have been saved." | 🐞 | minor | — |
-| [OJS9](#ojs9) | The Lens reader page's script fails on every XML galley | 🐞 | minor · crash: script | — |
+| [OJS9](#ojs9) | Readers opening an XML galley in the Lens reader see its TeX formulas as blanks | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [OJS10](#ojs10) | With "Recommend Similar Articles" on, article pages never show "Similar Articles" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS12](#ojs12) | A review marked "Publicly Show Reviewer Comments" never shows on the published article's page | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | Previewing a new version adds "This is an outdated version published on {the preview day}." | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1474,11 +1478,18 @@ reopens. The manager believes a date is set.
 Basis: probe, 2026-09-25. <sup>[f-ojs8](#fn-f-ojs8)</sup>
 
 <a id="ojs9"></a>
-**OJS9 — The Lens reader's script fails** · 🐞 · minor · crash: script.
-Opening an XML galley lays the article out in the Lens reader, but the
-page's own script fails as it loads, so formulas in an article cannot be
-typeset. The article's text and its tabs still show.
-Basis: probe, 2026-09-25. <sup>[f-ojs9](#fn-f-ojs9)</sup>
+**OJS9 — Readers opening an XML galley in the Lens reader see its TeX formulas as blanks** · 🐞 · medium · crash: script.
+When a reader opens an article's XML galley, the eLife Lens reader lays
+the article out, but the page's own script fails as it finishes, and the
+article's formulas written in TeX never appear. A display formula leaves
+only its number, such as "(1)", and an inline one leaves a gap in its
+sentence. Formulas written in MathML still show, and so does the rest of
+the article.
+Readers lose the article's mathematics, and nothing tells them anything
+is missing.
+It concerns journals that publish JATS XML galleys whose formulas are in
+TeX. "eLife Lens Article Viewer" is on for a new journal.
+Basis: probe, 2026-10-01. <sup>[f-ojs9](#fn-f-ojs9)</sup>
 
 <a id="ojs10"></a>
 **OJS10 — With "Recommend Similar Articles" on, article pages never show "Similar Articles"** · 🐞 · medium.
@@ -2674,6 +2685,7 @@ while `lib/lens/lens.js` calls the MathJax 2 interface
 (reading 'Queue')" on every XML galley. The test fixture has no formula,
 so the typesetting loss follows from the code. Live-probed 2026-09-25,
 note q8, two runs.
+Issue report: [docs/issues/U13-OJS9-lens-formulas-not-typeset.md](../issues/U13-OJS9-lens-formulas-not-typeset.md).
 
 <a id="fn-f-ojs10"></a>
 **f-ojs10** — Note n: the search phrase is built from the keyword
