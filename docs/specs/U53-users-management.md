@@ -1948,7 +1948,7 @@ overrides it. OMP's editor group is `default.groups.name.editor` "Press
 editor"; OPS installs no editor group. Live-probed 2026-09-25: the same
 text on all three apps; the press's roles include "Press editor", the
 preprint server's no editor.
-Issue report: [docs/issues/U53-A4-users-search-example-journal-role.md](../issues/U53-A4-users-search-example-journal-role.md).
+Issue report: [pkp-e2e#187](https://github.com/jardakotesovec/pkp-e2e/issues/187) ([docs/issues/U53-A4-users-search-example-journal-role.md](../issues/U53-A4-users-search-example-journal-role.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-25, all three apps, English interface:
