@@ -1858,7 +1858,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | Searching the DOIs page by a DOI misses some DOIs on each app, and fails on a preprint server | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | On the DOIs page, clearing a "Registration" filter chosen after "Unregistered" leaves only published works listed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | A bulk action the server refuses on the DOIs page closes its window and shows no message | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A14](#a14) | The "Mark DOIs Needs Sync" question asks to mark the records "as stale" | 🐞 | minor | — |
+| [A14](#a14) | The "Mark DOIs Needs Sync" window on the DOIs page asks to mark the records "as stale" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | With "DOI Versioning" "Yes", publishing a new major version leaves the earlier version's DOI "Registered" instead of "Needs Sync" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A DOI deposit that cannot connect to Crossref or DataCite reads "Submitted" for good, with no error | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -2062,12 +2062,16 @@ manager has guessed that this is the reason.
 Basis: probe, 2026-10-01. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — The "Mark DOIs Needs Sync" question asks to mark the records "as stale"** · 🐞 · minor.
-The window ends "Are you sure you want to mark these records as
-stale?", while the action, the badge, the filter and the "DOI Statuses"
-window all say "Needs Sync"; "stale" appears nowhere else on the page,
-so the manager confirms a status the screen never names.
-Basis: probe, 2026-09-26. <sup>f-a14</sup>
+**A14 — The "Mark DOIs Needs Sync" window on the DOIs page asks to mark the records "as stale"** · 🐞 · low.
+A manager chooses "Mark DOIs Needs Sync" in the DOIs page's "Bulk
+Actions" menu. The confirmation window ends "Are you sure you want to
+mark these records as stale?", while the action, the filter, the badge
+and the rest of the same window all call the status "Needs Sync". The
+action still sets "Needs Sync"; only the question's last word is wrong.
+It is one English sentence left over from 2023, when the status was
+renamed from "Stale" to "Needs Sync". The window shows on every journal,
+press and preprint server that has DOIs turned on.
+Basis: probe, 2026-10-01. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited** · 🐞 · medium · crash: server.
@@ -3846,6 +3850,7 @@ Issue report: [pkp-e2e#234](https://github.com/jardakotesovec/pkp-e2e/issues/234
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-26 (Rule 28), all three apps: the
 window text as quoted, with nothing ticked and with one item ticked.
+Issue report: [docs/issues/U45-A14-needs-sync-question-says-stale.md](../issues/U45-A14-needs-sync-question-says-stale.md).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-26, OJS and OPS Crossref (DataCite the

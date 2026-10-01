@@ -1,0 +1,11 @@
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -191,7 +191,7 @@
+ msgstr ""
+ "You are about to mark DOI metadata records for {$count} item(s) as needing to be synced. "
+ "The Needs Sync status can only be applied to previously submitted DOIs. Are you "
+-"sure you want to mark these records as stale?"
++"sure you want to mark these records as needing to be synced?"
+ 
+ msgid "manager.dois.actions.export.label"
+ msgstr "Export DOIs"
