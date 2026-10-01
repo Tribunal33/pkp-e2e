@@ -1851,7 +1851,7 @@ looked up. Live-probed 2026-09-24 (note q10).
 **f-a9** — `FieldPubIdUrn` offers "Assign" whenever it can build the
 URN and the box is empty (note c); the page's "Save" follows the edit
 gate. Live-probed 2026-09-24 (note q1).
-Issue report: [docs/issues/U44-A9-urn-assign-offered-without-edit-permission.md](../issues/U44-A9-urn-assign-offered-without-edit-permission.md).
+Issue report: [pkp-e2e#82](https://github.com/jardakotesovec/pkp-e2e/issues/82) ([docs/issues/U44-A9-urn-assign-offered-without-edit-permission.md](../issues/U44-A9-urn-assign-offered-without-edit-permission.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Live-probed 2026-09-24, OJS and OMP (note b): the same
