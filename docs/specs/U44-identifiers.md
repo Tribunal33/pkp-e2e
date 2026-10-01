@@ -1806,7 +1806,7 @@ Issue report: [pkp-e2e#7](https://github.com/jardakotesovec/pkp-e2e/issues/7) ([
 `anyPubIdExists(…, ASSOC_TYPE_REPRESENTATION, $galleyId, true)` →
 `Galley DAO::pubIdExists()` excludes only the galley itself. Live-probed
 2026-09-24 (note q7).
-Issue report: [docs/issues/U44-A5-new-version-galley-publisher-id-refused.md](../issues/U44-A5-new-version-galley-publisher-id-refused.md).
+Issue report: [pkp-e2e#79](https://github.com/jardakotesovec/pkp-e2e/issues/79) ([docs/issues/U44-A5-new-version-galley-publisher-id-refused.md](../issues/U44-A5-new-version-galley-publisher-id-refused.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `plugins/pubIds/urn/js/checkNumber.js`
