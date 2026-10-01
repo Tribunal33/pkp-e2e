@@ -872,7 +872,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | A manager's "Disable User" on a user they may not administer opens a window that refuses it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | A manager's "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A4](#a4) | Presses and preprint servers: the Users search box suggests searching for "Journal editor", a role they lack | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A5](#a5) | The row's "…" button is announced to screen readers as a raw code | 🐞 | minor | — |
+| [A5](#a5) | Users & Roles: screen readers announce every user row's "…" button as a raw code | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | The "Disable User" and "Enable User" windows list roles the user no longer holds in the journal | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | After "Enable User", the next "Disable User" offers the enabling reason and the Login page quotes it | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | A merge drops the merged account's section assignments | 🐞 | latent | — |
@@ -957,11 +957,18 @@ or server names it. The box read "Search User" in the first 3.5 release
 Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — The row's action button has a raw code for a name** · 🐞 · minor.
-A screen reader announces the "…" button at the end of every row as
-"##userAccess.management.options##" instead of a word such as "Options";
-the menu it opens reads normally.
-Basis: probe. <sup>f-a5</sup>
+**A5 — Users & Roles: screen readers announce every user row's "…" button as a raw code** · 🐞 · low.
+On Settings › Users & Roles, "Users" tab, a screen reader announces the
+"…" button at the end of every row as "##userAccess.management.options##"
+instead of a word such as "Options"; the menu it opens reads normally.
+The manager gets the job done: the button opens the row's menu ("Edit",
+"Email", "Remove User", …) and every action works. The code shows because
+the button's name points to a text that exists in no language.
+`pkp/pkp-lib#12646`, open, reports the same fault on OMP 3.5.0 without a
+cause or a fix. This report adds the cause, a one-line fix tried on all
+three apps, and OJS, OPS and `main`, so the team can comment there or
+close one of the two as a duplicate.
+Basis: probe, 2026-10-01. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — The "Disable User" and "Enable User" windows list roles the user no longer holds in the journal** · 🐞 · low.
@@ -1955,6 +1962,7 @@ Issue report: [pkp-e2e#187](https://github.com/jardakotesovec/pkp-e2e/issues/187
 every row's "…" button is named `##userAccess.management.options##` (25 of
 25 on the seeded journal's first page), and the menu reads normally. Seen
 first on 2026-09-05 on OPS (review-stage claim check). Mechanism: note q.
+Issue report: [docs/issues/U53-A5-users-row-button-raw-code-name.md](../issues/U53-A5-users-row-button-raw-code-name.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-25, all three apps: a throwaway Author
