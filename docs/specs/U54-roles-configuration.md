@@ -1803,7 +1803,7 @@ after the new role's, it came first in 10 of 10 runs; without that, one
 new journal in about eighty listed its created role first on the local
 fleet. Scenarios 3 to 6 therefore start again on a new scratch journal
 when, and only when, the row they open comes first ([s](#fn-s)).
-Issue report: [docs/issues/U54-A13-roles-list-order-changes.md](../issues/U54-A13-roles-list-order-changes.md).
+Issue report: [pkp-e2e#191](https://github.com/jardakotesovec/pkp-e2e/issues/191) ([docs/issues/U54-A13-roles-list-order-changes.md](../issues/U54-A13-roles-list-order-changes.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Test run 2026-09-26 (Side effects; scenario 4; all three
