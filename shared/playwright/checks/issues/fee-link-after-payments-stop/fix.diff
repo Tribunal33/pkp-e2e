@@ -1,0 +1,13 @@
+--- a/pages/payment/PaymentHandler.php
++++ b/pages/payment/PaymentHandler.php
+@@ -64,7 +64,9 @@
+         $templateMgr = TemplateManager::getManager($request);
+         $queuedPaymentDao = DAORegistry::getDAO('QueuedPaymentDAO'); /** @var QueuedPaymentDAO $queuedPaymentDao */
+         $queuedPayment = $queuedPaymentDao->getById($queuedPaymentId = array_shift($args));
+-        if (!$queuedPayment) {
++        // A request made while the journal took payments is no longer served
++        // once it stops (payments disabled, or the payment method not configured).
++        if (!$queuedPayment || !$paymentManager->isConfigured()) {
+             $templateMgr->assign([
+                 'pageTitle' => 'common.payment',
+                 'message' => 'payment.notFound',
