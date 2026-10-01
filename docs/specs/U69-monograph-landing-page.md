@@ -1710,11 +1710,11 @@ Issue report: [pkp-e2e#226](https://github.com/jardakotesovec/pkp-e2e/issues/226
 
 <a id="fn-f-a7"></a>
 **f-a7** — `downloadLink.tpl` prints `{$downloadFile->getDirectSalesPrice()}` before `payment.directSales.purchase`, which carries the amount again. Seen 2026-09-28 (U73 claim check K3). Live-probed 2026-09-28: a price typed "25" reads "25 Purchase PDF (25 USD)", so the number shows as typed.
-Issue report: [docs/issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md](../issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md).
+Issue report: [pkp-e2e#289](https://github.com/jardakotesovec/pkp-e2e/issues/289) ([docs/issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md](../issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — `publicationFormats.tpl` prints `span.name` and then `downloadLink.tpl` with `useFilename=true`, which skips the price branch. The two-file listing by file name seen 2026-09-28 (U73 claim check K3). Live-probed 2026-09-28 (td11): the priced file among two.
-Issue report: [docs/issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md](../issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md).
+Issue report: [pkp-e2e#289](https://github.com/jardakotesovec/pkp-e2e/issues/289) ([docs/issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md](../issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note j: every free-file download reaches the `UsageEvent` built with the never-set `$this->publication`; `view` of a PDF shows the pdfJsViewer page, whose inline `PDFJS` script fails and whose viewer loads the failing download. The typed property dates from omp `29fa88508` (2025-03-20, pkp/pkp-lib#10671); the event's `publication: $this->publication` argument from omp `591d7a0e7` (2026-08-26, pkp/pkp-lib#12311, "pass publication to usage event"), which set it in `book()` but not in `download()`. Live-probed 2026-09-26 (U20 claim check), 2026-09-27 (U64), 2026-09-28 (U73 claim check K3, K4, three runs): `GET {press}/catalog/download/{book}/{format}/{file}`, with and without `?inline=1`, current or older version, answered 500 with the log line above; the view page logged "PDFJS is not defined" and "UnexpectedResponseException". Live-probed 2026-09-28 (td13, td22; two runs of each drive): 22 download 500s and 9 view 500s across the runs, "PDFJS is not defined" and "UnexpectedResponseException" on every PDF view page; the bar's "Download" and the viewer's both cancelled; the French view page (`{press}/fr_CA/catalog/download/…?inline=1`) the same. The same failure is recorded where it shows elsewhere: Search engine metadata & analytics' OMP6, Usage statistics' OMP3, Media files' OMP1 (HTML plugin off).
