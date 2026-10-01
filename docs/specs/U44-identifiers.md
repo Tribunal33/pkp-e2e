@@ -2013,7 +2013,7 @@ inside the publication formats; nothing reads the publication's
 ($publicationFormatUrnEnabled && !$chapterUrnEnabled &&
 !$publicationFormatUrnEnabled && !$submissionFileUrnEnabled)` can never
 hold, so every enabled case reaches the table. Live-probed 2026-09-24 (note q16).
-Issue report: [docs/issues/U44-OMP4-press-publish-urn-table-instead-of-sentence.md](../issues/U44-OMP4-press-publish-urn-table-instead-of-sentence.md).
+Issue report: [pkp-e2e#144](https://github.com/jardakotesovec/pkp-e2e/issues/144) ([docs/issues/U44-OMP4-press-publish-urn-table-instead-of-sentence.md](../issues/U44-OMP4-press-publish-urn-table-instead-of-sentence.md)).
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — Live-probed 2026-09-24 (notes q4, g): every value, typed
