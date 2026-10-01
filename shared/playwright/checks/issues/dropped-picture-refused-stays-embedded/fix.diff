@@ -1,0 +1,44 @@
+--- a/lib/pkp/js/controllers/SiteHandler.js
++++ b/lib/pkp/js/controllers/SiteHandler.js
+@@ -200,7 +200,13 @@
+ 								resolve(r.url);
+ 							},
+ 							error: function(r) {
+-								reject(r.responseJSON.error);
++								// Take a pasted or dropped picture out of the text
++								// when the site refuses it.
++								reject({
++									message: (r.responseJSON && r.responseJSON.error) ||
++											r.status + ' ' + r.statusText,
++									remove: true
++								});
+ 							}
+ 						});
+ 					});
+--- a/lib/ui-library/src/components/Form/fields/FieldRichTextarea.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldRichTextarea.vue
+@@ -224,7 +224,9 @@
+ 				sandbox_iframes: false,
+ 				skin_url: pkp?.tinyMCE?.skinUrl,
+ 				content_css: $.pkp.app.tinyMceContentCSS,
+-				paste_data_images: true,
++				// Pictures pasted or dropped in are uploaded, so only where
++				// there is somewhere to upload them, as in SiteHandler.js.
++				paste_data_images: !!this.uploadUrl,
+ 				relative_urls: false,
+ 				remove_script_host: false,
+ 				convert_urls: true,
+@@ -257,7 +259,12 @@
+ 								resolve(r.url);
+ 							},
+ 							error(r) {
+-								reject(r.responseJSON.error);
++								// Take a pasted or dropped picture out of the text
++								// when the site refuses it.
++								reject({
++									message: r.responseJSON?.error || `${r.status} ${r.statusText}`,
++									remove: true,
++								});
+ 							},
+ 						});
+ 					});
