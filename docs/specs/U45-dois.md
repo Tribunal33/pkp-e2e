@@ -3865,7 +3865,7 @@ Issue report: [pkp-e2e#206](https://github.com/jardakotesovec/pkp-e2e/issues/206
 **f-a20** — Live-probed 2026-09-26 (q26), OJS (both plugins) and OPS
 (Crossref): the page's `h1` is empty (the accessibility tree reads
 `heading [level=1]` with no name).
-Issue report: [docs/issues/U45-A20-doi-agency-tool-page-empty-heading.md](../issues/U45-A20-doi-agency-tool-page-empty-heading.md).
+Issue report: [pkp-e2e#238](https://github.com/jardakotesovec/pkp-e2e/issues/238) ([docs/issues/U45-A20-doi-agency-tool-page-empty-heading.md](../issues/U45-A20-doi-agency-tool-page-empty-heading.md)).
 
 <a id="fn-f-a21"></a>
 **f-a21** — `PKPContextController::editDoiRegistrationAgencyPlugin()`
