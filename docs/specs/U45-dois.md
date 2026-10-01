@@ -3712,7 +3712,7 @@ Live-probed 2026-09-26 (q9), all three apps.
 (submitted or registered) item as "manually registered". Live-probed
 2026-09-26 (q20), OJS Crossref and DataCite, OPS Crossref: at once,
 after a reload, ten minutes later, and after the jobs had run and failed.
-Issue report: [docs/issues/U45-A4-deposited-item-reads-manually-registered.md](../issues/U45-A4-deposited-item-reads-manually-registered.md).
+Issue report: [pkp-e2e#232](https://github.com/jardakotesovec/pkp-e2e/issues/232) ([docs/issues/U45-A4-deposited-item-reads-manually-registered.md](../issues/U45-A4-deposited-item-reads-manually-registered.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `PKPContextController::editDoiRegistrationAgencyPlugin()`
