@@ -1,0 +1,63 @@
+--- a/lib/pkp/js/controllers/form/FormHandler.js
++++ b/lib/pkp/js/controllers/form/FormHandler.js
+@@ -69,7 +69,31 @@
+ 				altField: '#' + $this.prop('id') + '-altField',
+ 				altFormat: 'yy-mm-dd',
+ 				dateFormat: $('#' + $this.prop('id') + '-altField')
+-						.attr('data-date-format')
++						.attr('data-date-format'),
++				onSelect: function() {
++					// A picked day replaces the box's text: check it again (an
++					// earlier refusal goes), and fire the change event the
++					// datepicker fires when it has no onSelect.
++					var validator = $(this).closest('form').data('validator');
++					if (validator) {
++						validator.element(this);
++					}
++					$(this).trigger('change');
++				}
++			});
++
++			// The datepicker copies a date to the altField only on a key press;
++			// text set without one (a mouse paste, autofill) is copied here.
++			$this.on('input', function() {
++				var date;
++				try {
++					date = $.datepicker.parseDate(
++							$this.datepicker('option', 'dateFormat'), $this.val());
++				} catch (e) {
++					return;
++				}
++				$('#' + $this.prop('id') + '-altField').val(
++						date ? $.datepicker.formatDate('yy-mm-dd', date) : '');
+ 			});
+ 
+ 			$this.prop('name', $this.prop('name') + '-removed');
+@@ -124,6 +148,27 @@
+ 			}
+ 		});
+ 
++		// A date box must hold a date the datepicker can read: the form posts
++		// the altField, which keeps the last date the box could read.
++		if (!$.validator.methods.pkpDatepickerDate) {
++			$.validator.addMethod('pkpDatepickerDate', function(value, element) {
++				if (this.optional(element)) {
++					return true;
++				}
++				try {
++					return !!$.datepicker.parseDate(
++							$(element).datepicker('option', 'dateFormat'), value);
++				} catch (e) {
++					return false;
++				}
++			}, function() {
++				return $.validator.messages.date;
++			});
++		}
++		$form.find('.datepicker').each(function() {
++			$(this).rules('add', {pkpDatepickerDate: true});
++		});
++
+ 		// Activate the cancel button (if present).
+ 		$('[id^=\'cancelFormButton-\']', $form)
+ 				.click(this.callbackWrapper(this.cancelForm));
