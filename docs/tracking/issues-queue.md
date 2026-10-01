@@ -10,8 +10,8 @@ entry lands in it (MAINTENANCE "The issues session").
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 | **In progress: issues session s1, 2026-10-01.** Done: A2, A5, OJS1, OJS4, OJS5, OJS9; A1 pending translation (incidentals; U69 A15 joined pkp-e2e#124); done also: OJS10, OPS2 (with U20 OPS1); done also: OJS12; in progress: A4, OPS7; open: the rest (A1 with U69 A15) |
-| [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **In progress: issues session s1, 2026-10-01.** Done: A2, A5, OJS1, OJS4, OJS5, OJS9; A1 pending translation (incidentals; U69 A15 joined pkp-e2e#124); done also: OJS10, OPS2 (with U20 OPS1); done also: OJS12; in progress: A4, OPS7; open: the rest (A1 with U69 A15) |
+| [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 | **In progress: issues session s1, 2026-10-01.** Done: A2, A5, OJS1, OJS4, OJS5, OJS9; A1 pending translation (incidentals; U69 A15 joined pkp-e2e#124); done also: OJS10, OPS2 (with U20 OPS1); done also: OJS12, OPS7; in progress: A4, A6; open: the rest (A1 with U69 A15) |
+| [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **In progress: issues session s1, 2026-10-01.** Done: A2, A5, OJS1, OJS4, OJS5, OJS9; A1 pending translation (incidentals; U69 A15 joined pkp-e2e#124); done also: OJS10, OPS2 (with U20 OPS1); done also: OJS12, OPS7; in progress: A4, A6; open: the rest (A1 with U69 A15) |
 | [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 | **Claimed: issues session s1, 2026-09-30** (A15 with U13 A1); **A9 done: issues session s3, 2026-09-30** (with U47 OMP1) |
 | [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
