@@ -1284,7 +1284,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | A harvester listing a subscription journal's JATS records gets only an error, articles in open issues included {OJS} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A11](#a11) | DRIVER set never learns of articles withdrawn by deleting their issue or published without one {OJS} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A12](#a12) | A journal's OAI-PMH MARC records do not validate against the schemas they name {OJS} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A13](#a13) | Records read in French carry untranslated keys {OJS OMP} | 🐞 | minor | — |
+| [A13](#a13) | A book's record read in French carries an untranslated key {OMP} | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A15](#a15) | A journal's MARC records and its Atom and RSS 1.0 announcement feeds print dates with stray "%" signs {OJS} | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | A harvester that repeats an OAI-PMH argument gets a blank server error instead of a refusal | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A17](#a17) | OAI-PMH GetRecord for a malformed identifier such as "…/2abc" answers record 2 instead of refusing it {OMP OPS} | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
@@ -1499,13 +1499,12 @@ not yet released.
 Basis: probe, 2026-09-30. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — Records read in French carry untranslated keys** {OJS OMP} · 🐞 · minor.
-A harvester reading `…/fr_CA/oai` expects French words. A book's
-"Resource Type" reads "##rt.metadata.pkp.dctype##" instead of the French
-for "Book", and an article's MARC 251 and 780 read
-"##publication.versionStage.display##" instead of its version, such as
-"Version of Record 2.0".
-Basis: probe, 2026-09-26. <sup>f-a13</sup>
+**A13 — A book's record read in French carries an untranslated key** {OMP} · 🐞 · low.
+A harvester reading a press's `…/fr_CA/oai` expects French words. Every
+book's "Resource Type" reads "##rt.metadata.pkp.dctype##" instead of the
+French for "Book", since the press's French translation has no text for
+it; the English records read "Book".
+Basis: probe, 2026-09-30. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — "Language" writes a galley's language with an underscore** {OJS OPS} · ❓ · minor.
@@ -1979,6 +1978,7 @@ Issue report: [pkp-e2e#86](https://github.com/jardakotesovec/pkp-e2e/issues/86) 
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-26: note q19; OJS `oai_marc` and `marcxml` read at `…/fr_CA/oai` wrote 251 and 780 `$i` "##publication.versionStage.display##" where the English read "Version of Record 2.0" and "Version of Record 1.1". The `##…##` form is how the app prints a key it has no text for in that language. Code: notes f, g, u.
+Issue report: [pkp-e2e#124](https://github.com/jardakotesovec/pkp-e2e/issues/124) ([docs/issues/U57-A8-omp-ops-french-texts-internal-names.md](../issues/U57-A8-omp-ops-french-texts-internal-names.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-26, OJS and OPS: an article with the galleys "PDF" (en) and "PDF FR" (fr_CA) read "Language" "en" and "fr_CA", and its French values `xml:lang="fr-CA"`. Code: note f (`dc:language` the galleys' stored `locale`; `xml:lang` turns `_` into `-`).

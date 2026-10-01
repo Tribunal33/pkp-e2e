@@ -959,7 +959,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | Ticking "Forms" makes the Settings page's script fail five times | 🐞 | invisible · crash: script | — |
 | [A6](#a6) | Two managers adding the same form language at the same moment: one tick silently fails on the server | 🐞 | latent · crash: server | Jarda 2026-09-26 · risk accepted |
 | [A7](#a7) | On a one-language site, each field typed on "Create Journal" makes the page's script fail | 🐞 | invisible · crash: script | — |
-| [A8](#a8) | A press's and a server's French "Author Guidelines" and checklist are internal names {OMP OPS} | 🐞 | user-visible | — |
+| [A8](#a8) | A press's and a server's French "Author Guidelines" and checklist are internal names {OMP OPS} | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A2](#a2) | "Reload defaults" is offered to the Site Administrator alone | ❓ | minor | — |
 | [A4](#a4) | A text missing from a translation shows as its internal name, not in the primary language | ❓ | user-visible | — |
 | [A9](#a9) | Two scripts of one language carry the same name, so a reader cannot tell their links apart | ❓ | minor | — |
@@ -1057,17 +1057,18 @@ same form does not fail.
 Basis: probe. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
-**A8 — A press's and a server's French author guidelines are internal names** · 🐞 · user-visible.
+**A8 — A press's and a server's French author guidelines are internal names** · 🐞 · low.
 On a press and a preprint server, the French default "Author Guidelines"
 and submission checklist that Rule 10a puts in (and Rule 8a, when the
-press is created with French under "UI") are the internal names
+press is created with French under "UI") are saved as the internal names
 "##default.contextSettings.authorGuidelines##" and
 "##default.contextSettings.checklist##"; a journal gets French texts. A
-French reader of the press's or the server's "Submissions" page sees those
-names, on the seeded press and server too. A server's French privacy
-statement is the same defect
+French reader of the press's or the server's "Soumissions" page sees those
+names, on the seeded press and server too, and "Reload defaults" for
+French saves them again. They stay until a manager types French over
+them. A server's French privacy statement is the same defect
 ([Journal identity & about pages](U07-journal-identity-and-about-pages.md#ops3)).
-Basis: probe. <sup>[f-a8](#fn-a8)</sup>
+Basis: probe, 2026-09-30. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
 **A9 — Two scripts of one language carry the same name** · ❓ · minor.
@@ -1246,6 +1247,7 @@ OJS, OMP and OPS unless its note names fewer apps.
 
 <a id="fn-a8"></a>
 **f-a8** — `omp/locale/fr_CA/default.po` and `ops/locale/fr_CA/default.po` carry `default.contextSettings.authorGuidelines` and `default.contextSettings.checklist` with empty texts, which `Locale::translate()` answers as the internal name (note p); `ojs/locale/fr_CA/default.po` has both. Code read 2026-09-27. Live-probed 2026-09-27 (OMP, OPS; OJS the control): after a French "Forms" tick and on a press or server created with French under "UI", the French "Author Guidelines" and checklist boxes held the internal names, and `…/fr_CA/about/submissions` showed them, on the seeded press and server too.
+Issue report: [pkp-e2e#124](https://github.com/jardakotesovec/pkp-e2e/issues/124) ([docs/issues/U57-A8-omp-ops-french-texts-internal-names.md](../issues/U57-A8-omp-ops-french-texts-internal-names.md)).
 
 <a id="fn-a9"></a>
 **f-a9** — Names: note a (a country is added when two installed locales share a language, a script never is) and note n (`LANGUAGE_LOCALE_ONLY`). Live-probed 2026-09-27: Chinese installed in both scripts and ticked under "UI" on a scratch journal: "Chinese/中文" twice on the journal's list (codes `zh_Hans`, `zh_Hant`), "中文" twice in the block and in "Change Language"; the site's list with every language installed: "Bosnian/bosanski" (`bs`, `bs_Latn`), "Serbian/српски" (`sr`, `sr_Cyrl`), "Uzbek/o‘zbek" (`uz`, `uz_Latn`).

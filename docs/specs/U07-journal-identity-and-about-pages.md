@@ -1110,7 +1110,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | A press's and a preprint server's French Masthead tab shows raw text keys in place of headings, labels and help lines {OMP OPS} | 🐞 | minor | — |
 | [A13](#a13) | With the masthead not based on enrollments, invitations and masthead changes still promise "Your name will appear in the {journal}'s masthead"; reviewers are promised it while the journal lists none | 🐞 | minor | — |
 | [OMP2](#omp2) | The site-level page about the software says "This press uses Open Monograph Press" on a press site {OMP} | 🐞 | minor | — |
-| [OPS3](#ops3) | A preprint server's French "Privacy Statement" default is the raw text "##default.contextSettings.privacyStatement##" {OPS} | 🐞 | user-visible | — |
+| [OPS3](#ops3) | A preprint server's French "Privacy Statement" default is the raw text "##default.contextSettings.privacyStatement##" {OPS} | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [OPS4](#ops4) | A preprint server's French "Editorial Masthead" heads the Moderators "##default.groups.name.sectionEditor##" {OPS} | 🐞 | user-visible | — |
 | [A2](#a2) | The "Edit" link of the About pages is shown to a manager-level role that cannot open the Settings pages | ❓ | minor | — |
 | [A3](#a3) | The "Contact" tab cannot be saved until a technical support contact is entered, and new journals have none | ❓ | minor | — |
@@ -1289,14 +1289,14 @@ or should the field go? Lean: show it or drop it; a field that goes
 nowhere misleads. Since: 2019-06-04 · Basis: probe + commit. <sup>f-ops2</sup>
 
 <a id="ops3"></a>
-**OPS3 — The French privacy statement arrives as a raw text key** · 🐞 · user-visible.
+**OPS3 — The French privacy statement arrives as a raw text key** · 🐞 · low.
 When French is ticked under "Forms" on Settings › Website › "Setup" ›
 "Languages", or the server is created with French forms, the "Privacy
 Statement" tab's French box holds
 "##default.contextSettings.privacyStatement##" where a journal and a
-press get a French statement. Left as it is, that text is the whole
-body of the server's French "Privacy Statement" page, headed
-"Déclaration de confidentialité". Basis: probe. <sup>f-ops3</sup>
+press get a French statement, and "Reload defaults" for French saves
+it again. Left as it is, that text is the whole body of the server's French "Privacy Statement" page, headed
+"Déclaration de confidentialité". Basis: probe, 2026-09-30. <sup>f-ops3</sup>
 
 <a id="ops4"></a>
 **OPS4 — The French masthead names the Moderators by a raw text key** · 🐞 · user-visible.
@@ -2560,6 +2560,7 @@ failed the page's script as
 [Languages & locales](U57-languages-and-locales.md#a5) records, and each
 load of Settings › Website answered the Plugin Gallery's server error of
 [Plugins management](U62-plugins-management.md#a1).
+Issue report: [pkp-e2e#124](https://github.com/jardakotesovec/pkp-e2e/issues/124) ([docs/issues/U57-A8-omp-ops-french-texts-internal-names.md](../issues/U57-A8-omp-ops-french-texts-internal-names.md)).
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — Live-probed 2026-09-28 (Rule 14a; OPS; OJS and OMP the

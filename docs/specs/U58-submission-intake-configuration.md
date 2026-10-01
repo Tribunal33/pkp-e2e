@@ -929,7 +929,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | The "Media" page still offers a deleted dependent component as a media type | 🐞 | user-visible | — |
 | [A7](#a7) | The "For Reviewer Suggestion" box's help describes the Contributors step | 🐞 | minor | — |
 | [A8](#a8) | The component window's "Key" help misspells "identifier" and calls the component a "genre" | 🐞 | minor | — |
-| [A9](#a9) | In French, a press's and a preprint server's component list shows raw text keys | 🐞 | user-visible | — |
+| [A9](#a9) | In French, a press's and a preprint server's component list shows raw text keys | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A10](#a10) | A component name of only spaces is refused with a raw text key | 🐞 | minor | — |
 | [A12](#a12) | A refused component delete leaves its confirmation window spinning | 🐞 | minor | — |
 | [A13](#a13) | The "×" of a refused key's notice cannot be pressed while the component window is open | 🐞 | minor | — |
@@ -1032,7 +1032,7 @@ word the screen uses nowhere else; the screen says "component".
 Basis: code. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — Raw text keys in a press's and a server's French component list** · 🐞 · user-visible.
+**A9 — Raw text keys in a press's and a server's French component list** · 🐞 · low.
 With the interface in French, a journal's "Components" list is headed
 "Éléments de l'article" and names every component in French. A press's
 and a preprint server's list is headed "##grid.genres.title##" instead.
@@ -1042,8 +1042,9 @@ Instrument", "Research Materials", "Research Results", "Transcripts",
 "Data Analysis", "Data Set" and "Source Texts" read
 "##default.genres.researchInstrument##" … "##default.genres.sourceTexts##"
 in the list and in each "Edit" window, and "Restore Defaults" writes the
-keys back.
-Basis: probe. <sup>f-a9</sup>
+keys back. A manager can type French over
+the names; the heading has no such way round.
+Basis: probe, 2026-09-30. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — A name of only spaces is refused with a raw text key** · 🐞 · minor.
@@ -1732,6 +1733,7 @@ untranslated key as the French name. Live-probed 2026-09-27, two runs
 per app, OJS the control: the list in French, and on a preprint server
 with English and French form languages the seven names in the list, in
 each "Edit" window and after "Restore Defaults".
+Issue report: [pkp-e2e#124](https://github.com/jardakotesovec/pkp-e2e/issues/124) ([docs/issues/U57-A8-omp-ops-french-texts-internal-names.md](../issues/U57-A8-omp-ops-french-texts-internal-names.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note f: the box's own check accepts spaces, and the server's

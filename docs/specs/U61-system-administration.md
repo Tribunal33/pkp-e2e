@@ -695,7 +695,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | "Check for updates" shows an empty page when the installation cannot reach PKP's site | 🐞 | user-visible · crash: server | — |
 | [A4](#a4) | "Requeue All Failed Jobs" fails with the database's error text when no failed job has stored data | 🐞 | latent · crash: server | — |
 | [A6](#a6) | After a refused "Requeue All Failed Jobs" a loading circle keeps turning until the page is reloaded | 🐞 | minor · crash: server | — |
-| [A7](#a7) | A press's and a preprint server's French Administration page shows a raw code under "Gestion du site" | 🐞 | minor | — |
+| [A7](#a7) | A press's and a preprint server's French Administration page shows a raw code under "Gestion du site" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A2](#a2) | The three deleting buttons return to Administration with no message, and "Delete Data Caches" asks nothing first | ❓ | minor | — |
 | [A3](#a3) | A failed job's "Delete" removes it for good without asking | ❓ | minor | — |
 | [A5](#a5) | Neither "Delete Caches" button empties the stored copies of public pages | ❓ | latent | — |
@@ -768,7 +768,7 @@ happening.
 Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — A raw code under "Gestion du site" on a press's and a preprint server's French Administration page** · 🐞 · minor.
+**A7 — A raw code under "Gestion du site" on a press's and a preprint server's French Administration page** · 🐞 · low.
 A Site Administrator reading Administration in French expects the
 "Gestion du site" panel (English "Site Management") to say what it is
 for, as it does on a journal installation: "Ajouter, modifier ou supprimer
@@ -776,8 +776,9 @@ des revues de ce site et gérer les paramètres de l'ensemble du site.". On
 a press and on a preprint server the line reads
 "##admin.siteManagement.description##" instead; the panel's buttons and
 the other five panels are in French. The French translations of both
-applications have no text for this line.
-Basis: probe. <sup>f-a7</sup>
+applications have no text for this line, so it is printed as its internal
+name each time the page opens.
+Basis: probe, 2026-09-30. <sup>f-a7</sup>
 
 ### OMP
 
@@ -1441,6 +1442,7 @@ OPS's `locale/fr_CA/admin.po`. Opening "Paramètres du site" also
 answered 500 on the plugin gallery's list
 (`plugin-gallery-grid/fetch-grid`), on all three apps: the Plugins
 tab's known failure, not this page's.
+Issue report: [pkp-e2e#124](https://github.com/jardakotesovec/pkp-e2e/issues/124) ([docs/issues/U57-A8-omp-ops-french-texts-internal-names.md](../issues/U57-A8-omp-ops-french-texts-internal-names.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `site.upgradeAvailable.admin` in each app's
