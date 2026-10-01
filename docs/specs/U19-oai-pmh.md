@@ -1848,7 +1848,7 @@ Issue report: [pkp-e2e#287](https://github.com/jardakotesovec/pkp-e2e/issues/287
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-26: note q16. Code: note e (OMP and OPS accept any identifier containing their start and cast the rest with `(int)`).
-Issue report: [docs/issues/U19-A17-oai-malformed-identifier-answers-record.md](../issues/U19-A17-oai-malformed-identifier-answers-record.md).
+Issue report: [pkp-e2e#290](https://github.com/jardakotesovec/pkp-e2e/issues/290) ([docs/issues/U19-A17-oai-malformed-identifier-answers-record.md](../issues/U19-A17-oai-malformed-identifier-answers-record.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-26: note q9. OMP: a format published at 08:28:23Z, deleted at 09:09:59Z and published again read 08:28:23Z; OPS the same with 08:28:36Z and 09:13:38Z; `submissions.last_modified` did not change. Code: note e (the datestamp is `ms.last_modified` on OMP, `a.last_modified` on OPS).
