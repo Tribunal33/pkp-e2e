@@ -973,6 +973,7 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a preprint draft reloaded with a galley: "Review" listing it, and a second galley uploading to its end {OPS} (OPS8, OPS9; the guard their issue report names)
   - scenario 11's automatic assignment on a journal, press or server other than the install's first, its configured editor assigned and emailed and no needs-an-editor alert (A8; the guard its issue report names)
   - an author's plain language summary over the section's word limit saved on "Details" and reported on "Review", with "Submit" disabled until it is shortened (A16; the guard its issue report names)
   - a journal that requires the plain language summary: the start page's title, a "Details" save before the summary is typed and the "References" box all saved, and "Submit" disabled until the summary is typed (A20; the guard its issue report names)
@@ -1064,8 +1065,8 @@ are the source; badges, Impact and Basis:
 | [OPS3](#ops3) | A preprint author's own "Cancel" is silently refused; the draft survives with no message | 🐞 | user-visible | — |
 | [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | user-visible | — |
 | [OPS7](#ops7) | The preprint "Not Allowed" page shows a raw locale code where its explanation should be | 🐞 | minor | — |
-| [OPS8](#ops8) | A further galley on a draft that already listed one when the wizard was opened can never get its file | 🐞 | user-visible · crash: script | — |
-| [OPS9](#ops9) | The Review step's "Files" panel says "No files have been uploaded" for galleys the draft already had when the page loaded | 🐞 | minor | — |
+| [OPS8](#ops8) | A further galley on a reloaded draft gets stuck in its upload window and shows no file until a reload | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
+| [OPS9](#ops9) | The Review step's "Files" panel says "No files have been uploaded" for galleys the draft already had when the page loaded | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A1](#a1) | Closing submissions does not stop drafts already started; they can still be filled and submitted | ❓ | latent | — |
 | [A2](#a2) | The save-for-later confirmation email goes to whoever pressed the button, not to the submitting author | ❓ | latent | — |
 | [A3](#a3) | The submissions-closed notice shown to would-be authors ends with an instruction meant for managers | ❓ | minor | — |
@@ -1484,27 +1485,31 @@ and a press show the proper text. Basis: probe + code inspection (the
 locale keys are missing on OPS alone). <sup>[c](#fn-c)</sup>
 
 <a id="ops8"></a>
-**OPS8 — A further galley on a resumed or reloaded draft never gets its file** · 🐞 · user-visible · crash: script.
-When the wizard is opened on a draft that already lists a galley
-(resumed after "Save for Later", or simply reloaded), "Add File" › label ›
-"Save" leaves the label window open, opens "Upload a File Ready for
-Publication" over it, and the page's script fails. Choosing the
-Preprint Component and uploading the file work, but after "Continue"
-the window's "2. Review Details" step stays blank and its "Continue"
-greyed, so the upload can never be finished. The new label stays in the
-"Files" list with no file, also after a reload. A draft's first galley,
-and a second one added without reloading, upload normally.
-Basis: probe. <sup>[fn-ops8](#fn-ops8)</sup>
+**OPS8 — A further galley on a reloaded draft gets stuck in its upload window and shows no file until a reload** · 🐞 · medium · crash: script.
+When the wizard is opened on a draft that already has a galley (resumed
+after "Save for Later", or simply reloaded), adding a further galley
+breaks the page's own script in the browser. The "Add File" window,
+where the author typed the galley's label, stays open under "Upload a
+File Ready for Publication". After the author picks the file, that
+window stops at a blank "2. Review Details" step that cannot be
+continued, and cancelling it leaves the new galley listed without a
+file. What is stored is complete: the galley, its label and language,
+and its file under the file's own name, which a reload shows. A draft's
+first galley, and a second one added before the draft is first
+reloaded, upload normally. The same page fault is [OPS9](#ops9).
+Basis: probe, 2026-10-01. <sup>[fn-ops8](#fn-ops8)</sup>
 
 <a id="ops9"></a>
-**OPS9 — "Review" says no files were uploaded for a galley already on the draft** · 🐞 · minor.
+**OPS9 — "Review" says no files were uploaded for a galley already on the draft** · 🐞 · medium · crash: script.
 When the wizard is opened on a draft that already has a galley (resumed
 later, or reloaded), the Review step's "Files" panel reads "No files
 have been uploaded for this submission.", although "Upload Files" lists
 the galley, no problem is raised and "Submit" is enabled. Only a galley
 uploaded since the page was loaded is listed ("PDF Preprint Text"). The
 author's last look before submitting tells them their file is missing.
-Basis: probe. <sup>[fn-ops9](#fn-ops9)</sup>
+A moderator gets the submission with every galley. The same page fault
+breaks a further galley's upload [OPS8](#ops8).
+Basis: probe, 2026-10-01. <sup>[fn-ops9](#fn-ops9)</sup>
 
 <a id="ops10"></a>
 **OPS10 — A Moderator already on a preprint is not told it was submitted** · ❓ · minor.
@@ -2534,6 +2539,7 @@ a function" followed; the "2. Review Details" step stayed blank and its
 "Continue" could not be pressed. The "Files" list then held the new label with no
 file, also after a reload. Controls: a draft's first galley, and a
 second added in the same visit, completed with no page error.
+Issue report: [docs/issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md](../issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md).
 
 <a id="fn-ops9"></a>
 **fn-ops9** — OPS9. Review panel `review-galleys.tpl` (note l).
@@ -2543,6 +2549,7 @@ the visit showed on "Review" as "PDF Preprint Text"; after a reload,
 "Submit" enabled while "Upload Files" still listed the galley. The same
 text showed on the first "Review" of all 14 drafts built with a galley
 by the scenario tooling, each of which passed the check.
+Issue report: [docs/issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md](../issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md).
 
 <a id="fn-ops10"></a>
 **fn-ops10** — OPS10. Mechanism and the 2026-09-28 drive: note q (the
