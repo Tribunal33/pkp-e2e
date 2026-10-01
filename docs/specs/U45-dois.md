@@ -3894,7 +3894,7 @@ PKP\db\DAOResultFactory::toArrayAssociative()". The call read
 `toArray()` until OMP commit `4f3ca0fd1` ("pkp/pkp-lib#11682 Optimize
 the software", 2025-08-20). "Assign DOIs" fills file rows without that
 request.
-Issue report: [docs/issues/U45-OMP2-file-row-doi-save-error.md](../issues/U45-OMP2-file-row-doi-save-error.md).
+Issue report: [pkp-e2e#224](https://github.com/jardakotesovec/pkp-e2e/issues/224) ([docs/issues/U45-OMP2-file-row-doi-save-error.md](../issues/U45-OMP2-file-row-doi-save-error.md)).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — Live-probed 2026-09-29 (Rule 47), OMP, two runs: the
