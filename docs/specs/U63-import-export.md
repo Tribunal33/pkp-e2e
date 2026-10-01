@@ -1089,6 +1089,10 @@ Left out of the scenarios above, by reason:
     preprint) naming a section the journal (server) lacks, imported:
     the import refused whole with "Unknown section …", no submission
     added, the export list unchanged {OJS OPS}
+  - the guard A5's issue report names, once fixed: the daily DOAJ
+    deposit with two journals, one with automatic deposit on, the other
+    holding a "Needs Sync" article: the article stays "Needs Sync" and
+    no deposit is queued for it {OJS}
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1188,7 +1192,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | An address naming a tool the installation lacks prints the Import/Export list as raw code text | 🐞 | minor | — |
 | [A4](#a4) | A users import says a user with a short or empty password "has not been imported", yet creates the account | 🐞 | minor | — |
-| [A5](#a5) | The daily DOAJ deposit of one journal also takes other journals' articles that read "Needs Sync" | 🐞 | user-visible | — |
+| [A5](#a5) | One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | The Native XML "Import" tab's "Upload File" cannot be reached with the keyboard | 🐞 | minor | — |
 | [A7](#a7) | Choosing an earlier "Import Results" tab again imports the file once more | 🐞 | user-visible | — |
 | [A8](#a8) | Importing a file the app itself exported lists "Errors occured:" under the success text | 🐞 | minor | — |
@@ -1242,31 +1246,25 @@ the opposite of what happened. {OJS OMP}
 Basis: probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own** · 🐞 · user-visible.
-On an installation that hosts several journals, the daily automatic
-DOAJ deposit of a journal also takes the articles of other journals
-whose DOAJ status reads "Needs Sync". It sends them to DOAJ with its
-own API key and as its own articles: under its own journal name and
-ISSNs, with a link built on its own address, where the article does not
-exist and the site shows "not found". The article's own journal sent
-nothing, yet its DOAJ list now reads "Submitted".
-A journal without "DOI Versioning" takes other such journals'
-articles; a journal with it takes other such journals' versions.
-Even when the article's own journal deposits automatically, a
-depositing journal listed before it on Administration › "Hosted
-Journals" takes the article, and the article's journal sends nothing.
-Only when the article's journal comes first does it send its own.
-A journal with "DOI Versioning" also sends a version a later minor
-version replaced: with 1.0 and 1.1 both "Needs Sync", the run sends
-both, while the "Publications" list shows only "VoR 1.1" go from
-"Needs Sync" to "Submitted".
-Nobody is told, and the article's journal has no setting that prevents
-it. Where the article already has a DOAJ record, the run first asks
-DOAJ to delete that record, with the depositing journal's key.
-An article reads "Needs Sync" once it has been deposited to DOAJ (or
-marked as deposited) and its current version is then unpublished,
-published again or replaced by a newly published version. {OJS}
-Since: 2025-10-07 · Basis: probe, 2026-09-30. <sup>f-a5</sup>
+**A5 — One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own** · 🐞 · high.
+On an installation that hosts several journals, the daily automatic DOAJ
+deposit of one journal also takes the articles of other journals whose
+DOAJ status reads "Needs Sync". It sends them to DOAJ with its own API
+key and as its own articles: under its own journal name and ISSNs, with
+a link built on its own address, where the site shows "not found". The
+article's own journal sent nothing, yet its DOAJ list now reads
+"Submitted". Nobody is told, and the article's journal has no setting
+that prevents it. Even when that journal deposits automatically itself,
+a journal listed before it on "Hosted Journals" takes the article first.
+A journal without "DOI Versioning" takes the articles of other journals
+without it; a journal with "DOI Versioning" takes the versions of other
+journals with it. A journal with "DOI Versioning" also sends its own
+versions that a later minor version replaced, on a single-journal
+installation too. An article reads "Needs Sync" once it has been
+deposited to DOAJ (or marked as deposited) and its current version is
+then unpublished, published again or replaced by a newly published
+version. {OJS}
+Since: 2025-10-07 · Basis: probe, 2026-10-01. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — "Upload File" is out of the keyboard's reach** · 🐞 · minor.
@@ -2522,6 +2520,7 @@ Sync": one job, in N1's name; X2 before N2, both depositing, N2's
 article "Needs Sync": one job, in X2's name with X2's link, none from
 N2, and N2's list read "Submitted". Journals are taken in `ORDER BY
 seq`. Both versioning journals were set back to "No" afterwards.
+Issue report: [docs/issues/U63-A5-doaj-deposit-takes-other-journals-articles.md](../issues/U63-A5-doaj-deposit-takes-other-journals-articles.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-27, three apps (note e): the "Upload

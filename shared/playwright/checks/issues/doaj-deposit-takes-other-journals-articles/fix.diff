@@ -1,0 +1,22 @@
+--- a/classes/publication/DAO.php
++++ b/classes/publication/DAO.php
+@@ -134,7 +134,7 @@
+                         fn (Builder $q) => $q->whereNull('pss.setting_value'),
+                         fn (Builder $q) => $q->when(
+                             $settingValue == PubObjectsExportPlugin::EXPORT_STATUS_DEPOSITABLE,
+-                            fn (Builder $q) => $q->whereNull('pss.setting_value')->orWhere('pss.setting_value', '=', PubObjectsExportPlugin::EXPORT_STATUS_STALE),
++                            fn (Builder $q) => $q->where(fn (Builder $q) => $q->whereNull('pss.setting_value')->orWhere('pss.setting_value', '=', PubObjectsExportPlugin::EXPORT_STATUS_STALE)),
+                             fn (Builder $q) => $q->where('pss.setting_value', '=', $settingValue)
+                         )
+                     )
+--- a/classes/submission/DAO.php
++++ b/classes/submission/DAO.php
+@@ -93,7 +93,7 @@
+                         fn (Builder $q) => $q->whereNull('pss.setting_value'),
+                         fn (Builder $q) => $q->when(
+                             $settingValue == PubObjectsExportPlugin::EXPORT_STATUS_DEPOSITABLE,
+-                            fn (Builder $q) => $q->whereNull('pss.setting_value')->orWhere('pss.setting_value', '=', PubObjectsExportPlugin::EXPORT_STATUS_STALE),
++                            fn (Builder $q) => $q->where(fn (Builder $q) => $q->whereNull('pss.setting_value')->orWhere('pss.setting_value', '=', PubObjectsExportPlugin::EXPORT_STATUS_STALE)),
+                             fn (Builder $q) => $q->where('pss.setting_value', '=', $settingValue)
+                         )
+                     )
