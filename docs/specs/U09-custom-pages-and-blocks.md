@@ -818,6 +818,7 @@ the footnote. <sup>y</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a picture over the server's file limit, and one over its request limit, chosen in "Insert/edit image": each refused with "Files larger than {size} can not be uploaded." and no server error (A18; the guard its two issue reports name)
   - a custom block listed in "Custom Blocks" and offered under "Sidebar" by its "Block Name", and by the new one after a rename (A1; the guard its issue report names)
   - a custom block named with "&", and one named only in the primary language by a manager working in another, each opened with "Edit" and placed under "Sidebar" (A4, A13; the guard their issue report names)
   - deleting a custom block: "OK" closing the window, the block gone from the Custom Block Manager's list, the sidebar and "Sidebar" (A14; the guard its issue report names)
@@ -885,7 +886,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | With "Custom Block Manager" unticked, "Appearance" › "Setup" refuses every save over a placed block it no longer lists | 🐞 | user-visible | — |
 | [A16](#a16) | A ".pdf" or ".svg" chosen in the picture window is ignored with no message | 🐞 | minor | — |
 | [A17](#a17) | A pasted picture the site refuses stays in the text, embedded, and is saved | 🐞 | minor | — |
-| [A18](#a18) | A picture over the upload limit gets a server error, never "Files larger than {size} can not be uploaded." | 🐞 | user-visible · crash: server | — |
+| [A18](#a18) | A picture over the upload limit gets a server error, never "Files larger than {size} can not be uploaded." | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | The static page window closes without a question after a change made only in "Content", and the text is lost | 🐞 | user-visible | — |
 | [A20](#a20) | With two form languages, the first language's "Content" box can stay under a "Loading..." spinner that never goes, taking no click | 🐞 | minor · crash: script | — |
 | [A2](#a2) | A deleted custom block would keep its place in the sidebar, so a later block of the same name appears unplaced | ❓ | minor | — |
@@ -1082,14 +1083,19 @@ file that is not a picture shows as a broken picture.
 Basis: probe. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — A picture over the upload limit gets a server error, not the size message** · 🐞 · user-visible · crash: server.
-A manager uploading a picture larger than the server takes in one upload
-(2 MB on the test installs, less than many phone photos) expects "Files
-larger than {size} can not be uploaded.". Instead the application fails
-on the server, and the window reads "Path cannot be empty" or "One or
-more files could not be uploaded.", and a file over the limit for a
-whole request (8 MB there) "The POST data is too large.". None of them tells the manager to send a smaller file.
-Basis: probe. <sup>f-a18</sup>
+**A18 — A picture over the upload limit gets a server error, not the size message** · 🐞 · medium · crash: server.
+A manager uploading a picture through "Insert/edit image" expects
+"Files larger than {size} can not be uploaded.", the message the
+application gives for a file over the limit on its other uploads.
+Instead the application fails on the server. Over the limit for one
+uploaded file (PHP's default 2 MB, less than many phone photos), the
+alert over the "Insert/Edit Image" window reads "Path must not be
+empty" for a PNG, JPEG or GIF picture, or "One or more files could not
+be uploaded." for a WEBP one. Over the limit for a whole request (8 MB
+by default), it reads "The POST data is too large.", in English
+whatever the interface language. None of them tells the manager to send
+a smaller file.
+Basis: probe, 2026-10-01. <sup>f-a18</sup>
 
 <a id="a19"></a>
 **A19 — The static page window loses a "Content"-only change without asking** · 🐞 · user-visible · {OJS OMP}.
@@ -1993,6 +1999,7 @@ never reached and `api.files.400.uploadFailed` answers. A request over
 `post_max_size` fails before the application runs ("The POST data is too
 large.", status 500). Live-probed 2026-09-24 (three apps): td30; the
 test installs' limits are 2 MB per file and 8 MB per request.
+Issue reports, one per cause: [docs/issues/U09-A18-picture-over-upload-limit-server-error.md](../issues/U09-A18-picture-over-upload-limit-server-error.md) (the file limit) and [docs/issues/U09-A18-picture-over-request-limit-server-error.md](../issues/U09-A18-picture-over-request-limit-server-error.md) (the request limit).
 
 <a id="fn-f-a19"></a>
 **f-a19** — The window's unsaved-change tracking (note f) reacts to

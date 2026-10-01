@@ -1,0 +1,45 @@
+--- a/lib/pkp/api/v1/_uploadPublicFile/PKPUploadPublicFileController.php
++++ b/lib/pkp/api/v1/_uploadPublicFile/PKPUploadPublicFileController.php
+@@ -111,6 +111,11 @@
+             ], Response::HTTP_BAD_REQUEST);
+         }
+ 
++        // A file over upload_max_filesize arrives with an error code and no temporary file
++        if ($_FILES['file']['error'] !== UPLOAD_ERR_OK) {
++            return $this->getUploadErrorResponse($_FILES['file']['error']);
++        }
++
+         $siteDir = Core::getBaseDir() . '/' . Config::getVar('files', 'public_files_dir') . '/site';
+ 
+         if (!file_exists($siteDir) || !is_writeable($siteDir)) {
+@@ -200,30 +205,6 @@
+         $success = $fileManager->uploadFile('file', $destinationPath);
+ 
+         if ($success === false) {
+-            if ($fileManager->uploadError($filename)) {
+-                switch ($fileManager->getUploadErrorCode($filename)) {
+-                    case UPLOAD_ERR_INI_SIZE:
+-                    case UPLOAD_ERR_FORM_SIZE:
+-                        return response()->json([
+-                            'error' => __('api.files.400.fileSize', ['maxSize' => Application::getReadableMaxFileSize()]),
+-                        ], Response::HTTP_BAD_REQUEST);
+-                    case UPLOAD_ERR_PARTIAL:
+-                        return response()->json([
+-                            'error' => __('api.files.400.uploadFailed'),
+-                        ], Response::HTTP_BAD_REQUEST);
+-                    case UPLOAD_ERR_NO_FILE:
+-                        return response()->json([
+-                            'error' => __('api.files.400.noUpload'),
+-                        ], Response::HTTP_BAD_REQUEST);
+-                    case UPLOAD_ERR_NO_TMP_DIR:
+-                    case UPLOAD_ERR_CANT_WRITE:
+-                    case UPLOAD_ERR_EXTENSION:
+-                        return response()->json([
+-                            'error' => __('api.files.400.config'),
+-                        ], Response::HTTP_BAD_REQUEST);
+-                }
+-            }
+-
+             return response()->json([
+                 'error' => __('api.files.400.uploadFailed'),
+             ], Response::HTTP_BAD_REQUEST);

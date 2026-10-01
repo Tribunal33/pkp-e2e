@@ -1,0 +1,40 @@
+--- a/lib/pkp/classes/core/PKPExceptionHandler.php
++++ b/lib/pkp/classes/core/PKPExceptionHandler.php
+@@ -18,9 +18,11 @@
+ 
+ use APP\core\Application;
+ use Illuminate\Contracts\Debug\ExceptionHandler;
++use Illuminate\Http\Exceptions\PostTooLargeException;
+ use Illuminate\Http\Response;
+ use Illuminate\Support\Facades\Log;
+ use PKP\config\Config;
++use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+ use Throwable;
+ 
+ class PKPExceptionHandler implements ExceptionHandler
+@@ -66,13 +68,22 @@
+                     ->json($exception->errors(), $exception->status);
+             }
+ 
++            // A request over post_max_size (in practice an upload): PHP dropped its body and files
++            if ($exception instanceof PostTooLargeException) {
++                return response()->json([
++                    'error' => __('api.files.400.fileSize', ['maxSize' => Application::getReadableMaxFileSize()]),
++                ], $exception->getStatusCode());
++            }
++
+             return response()->json(
+                 [
+                     'error' => $exception->getMessage()
+                 ],
+-                in_array($exception->getCode(), array_keys(Response::$statusTexts))
+-                    ? $exception->getCode()
+-                    : Response::HTTP_INTERNAL_SERVER_ERROR
++                $exception instanceof HttpExceptionInterface
++                    ? $exception->getStatusCode()
++                    : (in_array($exception->getCode(), array_keys(Response::$statusTexts))
++                        ? $exception->getCode()
++                        : Response::HTTP_INTERNAL_SERVER_ERROR)
+             );
+         }
+ 
