@@ -1,0 +1,996 @@
+--- a/locale/an/manager.po
++++ b/locale/an/manager.po
+@@ -243,6 +243,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Cuotas chenerals"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Los miembros de l'asociación s'amostrarán en a sección \"Sobre la revista\", "
+@@ -317,6 +318,7 @@
+ msgid "subscriptionManager.subscription.confirmRemove"
+ msgstr "Seguro que quiere eliminar esta subscripción?"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Las opcions triadas, la suya descripción y las cuotas (tot ixo se puede "
+--- a/locale/ar/manager.po
++++ b/locale/ar/manager.po
+@@ -152,6 +152,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "رسوم عامة"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "رابطة العضوية ستظهر ضمن (عن المجلة) تحت باب السياسات."
+ 
+@@ -225,6 +226,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "رسوم القرّاء"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "الخيارات المحددة مع أوصافها ورسوماتها (والتي بالإمكان تعديلها أدناه)، ستظهر "
+--- a/locale/az/manager.po
++++ b/locale/az/manager.po
+@@ -1272,6 +1272,7 @@
+ msgstr ""
+ "Müəllif ödənişlərini aktivlədirmək üçün ödəniş miqdarını aşağıya daxil edin"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "Dərnək üzvlüyü, Jurnal Haqqında səhifəsində Politikalar altındadır"
+ 
+@@ -1296,6 +1297,7 @@
+ "Bu ekrandan aşağıdakı Ödəmə Metodu Qoşmalarından hər hansı birini edə "
+ "bilərsiniz."
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Seçilən seçimlər, izahları və haqqları (aşağıda tənzimlənə bilən) ilə "
+--- a/locale/be/manager.po
++++ b/locale/be/manager.po
+@@ -145,6 +145,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Агульныя плацяжы"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Спасылка «Членства ў асацыяцыі» з'явіцца на старонцы «Пра часопіс» у "
+@@ -225,6 +226,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Плацяжы чытача"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Выбраныя варыянты, разам з іх апісаннямі і цэнамі (яны могуць быць зменены "
+--- a/locale/bg/manager.po
++++ b/locale/bg/manager.po
+@@ -160,6 +160,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Общи такси"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "Членството в Асоциацията ще се появи в „За списанието“ под „Политики“."
+ 
+@@ -236,6 +237,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Такси за читатели"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Избраните опции, заедно с техните описания и такси (които могат да бъдат "
+--- a/locale/bs_Latn/manager.po
++++ b/locale/bs_Latn/manager.po
+@@ -154,6 +154,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Opće naplate"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Članstvo u Udruženju pojavit će se na stranici O časopisu ispod rubrike  "
+@@ -232,6 +233,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Naplata od čitatelja"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Odabrane opcije, zajedno s njihovim opisom i iznosom (koji se mogu uređivati "
+--- a/locale/ca/manager.po
++++ b/locale/ca/manager.po
+@@ -162,6 +162,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Quotes generals"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Els membres de l’associació apareixeran en la secció «Sobre la revista», "
+@@ -241,6 +242,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Quotes per als lectors/ores"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Les opcions seleccionades, juntament amb la descripció i la quota "
+--- a/locale/ckb/manager.po
++++ b/locale/ckb/manager.po
+@@ -147,6 +147,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "تێچوی گشتی"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "بون بە ئەندام لە بەشی زانیارییەکانی گۆڤار پیشان دەدرێت و شێوازی بەخشین لە "
+@@ -222,6 +223,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "بڕی پارەی خوێنەر"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "بژاردە دیاریکراوەکان، لەگەڵ ڕونکردنەوەی پارەدانەکان (دەتواندرێت لە خوارەوە "
+--- a/locale/cnr/manager.po
++++ b/locale/cnr/manager.po
+@@ -239,6 +239,7 @@
+ msgid "manager.payment.editSubscription"
+ msgstr "Uredi pretplatu"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Članstvo u Udruženju pojavit će se na stranici O časopisu ispod rubrike "
+@@ -249,6 +250,7 @@
+ "Ovo će aktivirati naplate u modulu pretplata, đe administrator pretplate "
+ "određuje tipove, iznose i trajanje pretplata te održava listu pretplatnika."
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Odabrane opcije sa njihovim opisima i naknadama (koje mogu biti izmijenjene "
+--- a/locale/cs/manager.po
++++ b/locale/cs/manager.po
+@@ -156,6 +156,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Obecné poplatky"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "Členství v asociaci se objeví v části O časopise pod Pravidly."
+ 
+@@ -232,6 +233,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Poplatky čtenářů"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Vybrané možnosti spolu s jejich popisem a poplatky (lze editovat níže) se "
+--- a/locale/da/manager.po
++++ b/locale/da/manager.po
+@@ -162,6 +162,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Generelle gebyrer"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "Foreningsmedlemskab vises under 'Om tidsskriftet' under 'Politikker'."
+ 
+@@ -238,6 +239,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Læsergebyrer"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "De valgte indstillinger samt deres beskrivelser og gebyrer (som kan "
+--- a/locale/de/manager.po
++++ b/locale/de/manager.po
+@@ -170,6 +170,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Allgemeine Gebühren"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "\"Institutionelle Mitgliedschaft\" steht im \"Über uns\" der Zeitschrift "
+@@ -247,6 +248,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Leser/innen-Gebühren"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Die ausgewählten Optionen (zusammen mit der jeweiligen Beschreibung und den "
+--- a/locale/el/manager.po
++++ b/locale/el/manager.po
+@@ -245,6 +245,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Εισφορές Αναγνωστών"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Οι επιλεγμένες ρυθμίσεις σχετικά με τις εισφορές (όπως θα διαμορφωθούν "
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -128,7 +128,7 @@
+ msgstr "General Fees"
+ 
+ msgid "manager.payment.generalFeesDescription"
+-msgstr "The Association Membership will appear in About the Journal under Policies."
++msgstr "The journal's pages do not offer the Association Membership to readers."
+ 
+ msgid "manager.payment.generalOptions"
+ msgstr "General Options"
+@@ -197,7 +197,7 @@
+ msgstr "Reader Fees"
+ 
+ msgid "manager.payment.readerFeesDescription"
+-msgstr "Selected options, along with their descriptions and fees (which can be edited below), will appear in About the Journal under Policies, as well as at points where payment is required."
++msgstr "Readers without a subscription will be offered these purchases, with their fees, at the points where payment is required."
+ 
+ msgid "manager.payment.records"
+ msgstr "Records"
+--- a/locale/es/manager.po
++++ b/locale/es/manager.po
+@@ -164,6 +164,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Cuotas generales"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Los miembros de la asociación se mostrarán en la sección \"Acerca de la "
+@@ -245,6 +246,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Cuota para lectores/as"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Las opciones seleccionadas, su descripción y las cuotas (todo ello se puede "
+--- a/locale/et/manager.po
++++ b/locale/et/manager.po
+@@ -1404,6 +1404,7 @@
+ "administraatoril installida keel saidi administreerimisliidese kaudu. "
+ "Juhiseid uute keelte toe lisamiseks vaadake OJS-i dokumentatsioonist."
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Assotsiatsiooni liikmesus kuvatakse ajakirja kohta käivas infos eeskirjade "
+@@ -1417,6 +1418,7 @@
+ "Selles ajakirjas lubatakse maksed. Pange tähele, et kasutajad peavad maksete "
+ "tegemiseks sisse logima."
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Valikud koos nende kirjelduste ja tasudega (mida saab allpool muuta) "
+--- a/locale/eu/manager.po
++++ b/locale/eu/manager.po
+@@ -158,6 +158,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Tarifa orokorrak"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Elkarteko kideak “Aldizkariari buruz” atalean agertuko dira, “Politika” "
+@@ -236,6 +237,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Irakurle-tarifak"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Hautatutako aukerak, dagozkien azalpenekin eta tarifekin batera (behean "
+--- a/locale/fa/manager.po
++++ b/locale/fa/manager.po
+@@ -142,6 +142,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "هزینه‌های عمومی"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "عضویت همکار در قسمت «درباره مجله» تحت قسمت سیاست‌ها خواهد آمد."
+ 
+@@ -218,6 +219,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "هزینه‌های خواننده"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "گزینه‌های انتخابی همراه با شرح و قیمت‌های آن (که در این قسمت قابل ویرایش است)"
+--- a/locale/fi/manager.po
++++ b/locale/fi/manager.po
+@@ -160,6 +160,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Yleiset maksut"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Yhdistyksen jäsenyys näkyy Tietoa julkaisusta -sivulla Toimintaperiaatteet-"
+@@ -238,6 +239,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Lukijamaksut"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Valitut vaihtoehdot kuvauksineen ja maksuineen (joita voidaan muokata alla), "
+--- a/locale/fr/manager.po
++++ b/locale/fr/manager.po
+@@ -170,6 +170,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Frais généraux"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "L'adhésion à l'association apparaîtra dans À propos de la revue, sous "
+@@ -250,6 +251,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Frais de lecture"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Les options choisies, ainsi que leurs descriptions et frais (qui peuvent "
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -170,6 +170,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Frais généraux"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "L'adhésion à l'association apparaîtra dans « À propos de la revue », sous « "
+@@ -247,6 +248,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Frais de lecture"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Les options choisies, ainsi que leurs descriptions et frais (qui peuvent "
+--- a/locale/gl/manager.po
++++ b/locale/gl/manager.po
+@@ -157,6 +157,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Cotas xerais"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Os membros da asociación aparecerán na sección \"Sobre a revista\", baixo o "
+@@ -237,6 +238,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Cotas para os lectores/as"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "As opcións seleccionadas, xunto coa descrición e as cotas correspondentes "
+--- a/locale/hi/manager.po
++++ b/locale/hi/manager.po
+@@ -277,6 +277,7 @@
+ # (pofilter) brackets: Added '(', ')'
+ # (pofilter) doublespacing: Different use of double spaces
+ # (pofilter) endpunc: Different punctuation at the end
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "चयनित विकल्प, उनके विवरण और शुल्क (जो नीचे संपादित किए जा सकते हैं) के साथ,  जर्नल के "
+--- a/locale/hr/manager.po
++++ b/locale/hr/manager.po
+@@ -161,6 +161,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Opće naplate"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Mogućnost članstva u organizaciji bit će navedena u rubrici \"uređivačka "
+@@ -242,6 +243,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Naplata od čitatelja"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Odabrane opcije, zajedno s njihovim opisom i iznosom (koji se mogu uređivati "
+--- a/locale/hu/manager.po
++++ b/locale/hu/manager.po
+@@ -157,6 +157,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Általános költségek"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Az Egyesületi tagság meg fog jelenni a Folyóiratról menü oldalán, az "
+@@ -235,6 +236,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Olvasói díjak"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "A kiválasztott opciók a leírásokkal és fizetendőkkel (amelyek alább "
+--- a/locale/hy/manager.po
++++ b/locale/hy/manager.po
+@@ -157,6 +157,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Ընդհանուր վճարներ"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Ասոցիացիայի Անդամակցությունը կհայտնվի «Օրագրի մասին» բաժնում՝ "
+@@ -234,6 +235,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Ընթերցողի վճարներ"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Ընտրված ընտրանքները, դրանց նկարագրությունների և վճարների հետ միասին (որոնք "
+--- a/locale/id/manager.po
++++ b/locale/id/manager.po
+@@ -162,6 +162,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Biaya Umum"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Keanggotaan Asosiasi akan ditampilkan pada Tentang Jurnal di bagian "
+@@ -240,6 +241,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Biaya Pembaca"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Pilihan ini, bersama dengan deskripsi dan biaya (yang dapat diedit di bawah "
+--- a/locale/it/manager.po
++++ b/locale/it/manager.po
+@@ -166,6 +166,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Quote generali"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "La quota associativa comparirà nella pagina delle informazioni sulla rivista."
+@@ -242,6 +243,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Tariffe per i lettori"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Le opzioni selezionate, insieme alle loro descrizioni e quote (che possono "
+--- a/locale/ja/manager.po
++++ b/locale/ja/manager.po
+@@ -150,6 +150,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "一般料金"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "組織会員は「ジャーナルについて」の「ポリシー」に表示されます。"
+ 
+@@ -223,6 +224,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "読者の料金"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "選択されたオプションは、その説明と料金（以下で編集可能）とともに、「ポリ"
+--- a/locale/ka/manager.po
++++ b/locale/ka/manager.po
+@@ -153,6 +153,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "ზოგადი გადახდები"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "ასოცირებული წევრობა გამოჩნდება ჟურნალ About the Journal under Policies-ში."
+@@ -227,6 +228,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "მკითხველის გადახდები"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "შერჩეული ვარიანტები, მათ აღწერასა და საფასურთან ერთად (რომლის რედაქტირებაც "
+--- a/locale/kk/manager.po
++++ b/locale/kk/manager.po
+@@ -151,6 +151,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Жалпы төлемдер"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "«Қауымдастырылған мүшелік» сілтемесі «Ережелер» бөліміндегі «Журнал туралы» "
+@@ -229,6 +230,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Оқырман төлемдері"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Таңдалған түрлеріне байланысты сипаттамасы мен бағалары бірге (төменде "
+--- a/locale/ky/manager.po
++++ b/locale/ky/manager.po
+@@ -113,6 +113,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Жалпы төлөмдөр"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Ассоциация мүчөлүгү Журнал жөнүндө бөлүмүндө Саясаттардын астында көрсөтүлөт."
+@@ -360,6 +361,7 @@
+ "Бул экрандан төмөнкү Төлөм ыкмасы плагиндеринин каалаганын конфигурациялай "
+ "аласыз."
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Тандалган параметрлер, алардын түшүндүрмөлөрү жана төлөмдөрү (төмөндө "
+--- a/locale/lt/manager.po
++++ b/locale/lt/manager.po
+@@ -154,6 +154,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Pagrindiniai mokesčiai"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Apie narystę bus pažymėta atsivertus skiltį „Apie žurnalą“ („Nuostatos“), o "
+@@ -229,6 +230,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Skaitytojo mokesčiai"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Pasirinktosios parinktys, taip pat ir jų aprašymas bei mokesčiai (žemiau) "
+--- a/locale/lv/manager.po
++++ b/locale/lv/manager.po
+@@ -153,6 +153,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Vispārējās maksas"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "Asociācijas dalība būs redzama sadaļā Par žurnālu, sadaļā Politika."
+ 
+@@ -227,6 +228,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Lasītāju maksas"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Izvēlētās iespējas kopā ar to aprakstiem un maksām (kuras var rediģēt zemāk) "
+--- a/locale/mk/manager.po
++++ b/locale/mk/manager.po
+@@ -162,6 +162,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Општи такси"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "Членството во здружението ќе се појави во За весникот под Политики."
+ 
+@@ -237,6 +238,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Надоместоци за читачи"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Избраните опции, заедно со нивните описи и надоместоци (кои може да се "
+--- a/locale/mn/manager.po
++++ b/locale/mn/manager.po
+@@ -149,6 +149,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Ерөнхий хураамж"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Холбооны гишүүнчлэл нь 'Сэтгүүлийн тухай' хэсгийн 'Бодлого' доор харагдах "
+@@ -226,6 +227,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Уншигчийн хураамж"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Сонгосон сонголтууд, тэдгээрийн тайлбар болон хураамж нь 'Сэтгүүлийн тухай' "
+--- a/locale/mr/manager.po
++++ b/locale/mr/manager.po
+@@ -96,6 +96,7 @@
+ "तुम्ही या स्क्रीनवरून खालीलपैकी कोणतेही शुल्क प्रदान करण्याच्या पद्धतीचे "
+ "प्लग-इन कॉन्फिगर करू शकता."
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "निवडलेले पर्याय, त्यांचे वर्णन आणि शुल्कासह (जे खाली संपादित केले जाऊ शकतात) "
+@@ -612,6 +613,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "सर्वसाधारण फी"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "संस्था सदस्यत्वाच्या धोरणाविषयीची माहिती <i>धोरणे > नियतकालिकाविषयी</i> मध्ये"
+--- a/locale/ms/manager.po
++++ b/locale/ms/manager.po
+@@ -157,6 +157,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Bayaran Am"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "Keahlian Persatuan akan muncul di Tentang Jurnal di bawah Polisi."
+ 
+@@ -232,6 +233,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Bayaran Pembaca"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Pilihan yang dipilih, bersama dengan butiran dan yurannya (yang dapat diedit "
+--- a/locale/nb_NO/manager.po
++++ b/locale/nb_NO/manager.po
+@@ -168,6 +168,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Standardbetaling"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Organisasjonsmedlemskap vil vises i «Om» tidsskriftet under «Retningslinjer» "
+@@ -246,6 +247,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Leserbetaling"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "De valgte alternativene med beskrivelse og priser vil vises både i «Om» "
+--- a/locale/nl/manager.po
++++ b/locale/nl/manager.po
+@@ -163,6 +163,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Algemene betalingen"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Het verenigingslidmaatschap verschijnt in Over dit Tijdschrift onder Beleid."
+@@ -238,6 +239,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Betaling door de lezer"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "De geselecteerde opties worden met hun beschrijving (die hieronder aangepast "
+--- a/locale/pl/manager.po
++++ b/locale/pl/manager.po
+@@ -157,6 +157,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Koszty ogólne"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Członkostwo w stowarzyszeniu pojawi się w sekcji O czasopiśmie, pod polem "
+@@ -233,6 +234,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Opłaty czytelnika"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Wybrane opcje, razem z ich opisem i opłatami (które mogą być edytowane "
+--- a/locale/pt/manager.po
++++ b/locale/pt/manager.po
+@@ -160,6 +160,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Taxas Gerais"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "A Taxa de Adesão aparecerá na secção Políticas no Sobre a Revista."
+ 
+@@ -235,6 +236,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Taxas para Leitores"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "As opções definidas, bem como as descrições e as taxas (que podem ser "
+--- a/locale/pt_BR/manager.po
++++ b/locale/pt_BR/manager.po
+@@ -168,6 +168,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Taxas gerais"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "A taxa de adesão aparecerá na seção Políticas da página Sobre a Revista."
+@@ -246,6 +247,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Taxas para leitores"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "As opções definidas (bem como as descrições, que podem ser alteradas, e as "
+--- a/locale/ro/manager.po
++++ b/locale/ro/manager.po
+@@ -232,6 +232,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Taxe cititori"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Opțiunile selectate, împreună cu descrierile și taxele (care pot fi editate "
+--- a/locale/ru/manager.po
++++ b/locale/ru/manager.po
+@@ -160,6 +160,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Общие платежи"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Ссылка «Ассоциированное членство» появится на странице «О журнале» в разделе "
+@@ -238,6 +239,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Платежи читателя"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Выбранные варианты, вместе с их описаниями и ценами (они могут быть изменены "
+--- a/locale/sk/manager.po
++++ b/locale/sk/manager.po
+@@ -148,6 +148,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Obecné poplatky"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Členstvo v asociácii sa objaví v časti O časopise pod Pravidlami a odkaz pre "
+@@ -226,6 +227,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Poplatky čitateľov"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Vybrané možnosti spolu s ich popisom a poplatky (možno editovať nižšie) sa "
+--- a/locale/sl/manager.po
++++ b/locale/sl/manager.po
+@@ -155,6 +155,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Splošna pristojbina"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "Možnost članstva bo objavljena na strani O reviji pod Politike."
+ 
+@@ -228,6 +229,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Pristojbina za branje"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Izbrane opcije (ki se lahko urejajo spodaj) bodo prikazane na strani O "
+--- a/locale/sr_Cyrl/manager.po
++++ b/locale/sr_Cyrl/manager.po
+@@ -226,6 +226,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Накнада за читаоце"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Одабране опције са њиховим описима и накнадама (које могу бити измењене "
+--- a/locale/sr_Latn/manager.po
++++ b/locale/sr_Latn/manager.po
+@@ -158,6 +158,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Opšte naknade"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Članstvo u udruženju biće prikazano na stranici „O časopisu”, u odeljku "
+@@ -234,6 +235,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Naknada za čitaoce"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Odabrane opcije sa njihovim opisima i naknadama (koje mogu biti izmenjene "
+--- a/locale/sv/manager.po
++++ b/locale/sv/manager.po
+@@ -153,6 +153,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Allmänna avgifter"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Föreningsprenumeranters medlemskap kommer att synas under Policyer i Om "
+@@ -229,6 +230,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Läsaravgifter"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Följande alternativ, inklusive beskrivningar och avgifter (redigeras nedan), "
+--- a/locale/th/manager.po
++++ b/locale/th/manager.po
+@@ -447,6 +447,7 @@
+ msgstr ""
+ "อนุญาตให้กำหนดหมายเลขวัตถุดิจิทัล (DOIs) สำหรับผลงานที่เผยแพร่ในวารสารนี้"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "การเป็นสมาชิกสมาคมจะปรากฏในเกี่ยวกับวารสารภายใต้นโยบาย"
+ 
+@@ -838,6 +839,7 @@
+ "ระยะเวลา และการสมัครสมาชิกจะถูกจัดการโดยผู้จัดการวารสาร (Subscription "
+ "Manager)"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "ตัวเลือกที่เลือกพร้อมคำอธิบายและค่าธรรมเนียม (ที่สามารถแก้ไขได้ด้านล่าง) "
+--- a/locale/tr/manager.po
++++ b/locale/tr/manager.po
+@@ -157,6 +157,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Genel Ücretler"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Dernek Üyeliği, Dergi Hakkında sayfasında Politikalar altında yer alacaktır."
+@@ -233,6 +234,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Okuyucu Ücretleri"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Seçilen seçenekler, açıklamaları ve ücretleri (aşağıda düzenlenebilir) ile "
+--- a/locale/uk/manager.po
++++ b/locale/uk/manager.po
+@@ -160,6 +160,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Загальні платежі"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Посилання \"Членство в асоціації\" з'явиться у розділі \"Політика\" сторінки "
+@@ -237,6 +238,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Платежі читачів"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Інформація про обрані платежі, разом з їх описами та сумами внесків, які "
+--- a/locale/uz_Latn/manager.po
++++ b/locale/uz_Latn/manager.po
+@@ -159,6 +159,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Umumiy to'lovlar"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Assotsiatsiyaga a'zolik \"Siyosat to'g'risida\" jurnalida paydo bo'ladi."
+@@ -235,6 +236,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "O'quvchi to'lovlari"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Tanlangan variantlar, ularning tavsiflari va to'lovlari bilan birga (quyida "
+--- a/locale/vi/manager.po
++++ b/locale/vi/manager.po
+@@ -151,6 +151,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "Phí chung"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr ""
+ "Tư cách thành viên Hiệp hội sẽ xuất hiện trong Giới thiệu về Tạp chí bên "
+@@ -230,6 +231,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "Phí bạn đọc"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "Các tùy chọn đã chọn, cùng với các mô tả và phí của chúng (có thể được chỉnh "
+--- a/locale/zh_Hans/manager.po
++++ b/locale/zh_Hans/manager.po
+@@ -142,6 +142,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "一般费用"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "会员资格将出现在“政策”下的“关于期刊”中。"
+ 
+@@ -211,6 +212,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "读者费用"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "选定的选项以及它们的简介和费用（可在下面进行编辑），将显示在“政策”下的“关于期"
+--- a/locale/zh_Hant/manager.po
++++ b/locale/zh_Hant/manager.po
+@@ -139,6 +139,7 @@
+ msgid "manager.payment.generalFees"
+ msgstr "一般費用"
+ 
++#, fuzzy
+ msgid "manager.payment.generalFeesDescription"
+ msgstr "協會會員資格會出現在政策內關於期刊頁面。"
+ 
+@@ -209,6 +210,7 @@
+ msgid "manager.payment.readerFees"
+ msgstr "讀者費用"
+ 
++#, fuzzy
+ msgid "manager.payment.readerFeesDescription"
+ msgstr ""
+ "已選取選項與其描述及費用（您可在下方進行編輯），相關內容會在政策內關於期刊的"
