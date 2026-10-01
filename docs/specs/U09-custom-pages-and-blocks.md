@@ -818,6 +818,7 @@ the footnote. <sup>y</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - "Add Static Page" on the tab left open after "Static Pages Plugin" is unticked: no server error {OJS OMP} (A12; the guard its issue report names)
   - a placed custom block's "Custom Block Manager" unticked, then a "Page Footer" saved on "Appearance" › "Setup" without a refusal (A15; the guard its issue report names)
   - a preview's address typed by a section editor, an author or a signed-out visitor: the access-denied page, or Login (A7; the guard its issue report names)
   - a picture over the server's file limit, and one over its request limit, chosen in "Insert/edit image": each refused with "Files larger than {size} can not be uploaded." and no server error (A18; the guard its two issue reports name)
@@ -882,7 +883,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Typing a page preview's address below manager level, or signed out, gives a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A static page whose "Path" has a "." in its first or second part is saved but answers "404 Not Found" | 🐞 | user-visible | — |
 | [A11](#a11) | After a refused "Save" in the static page window, the next successful save shows the old refusal at the top right | 🐞 | minor | — |
-| [A12](#a12) | Right after "Static Pages Plugin" is unticked, the tab stays and its "Add Static Page" shows "Error" | 🐞 | minor · crash: server | — |
+| [A12](#a12) | Right after "Static Pages Plugin" is unticked, the tab's "Add Static Page" fails on the server | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | A custom block whose name holds "&" can never be placed, edited or deleted | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | A custom block cannot be deleted on PostgreSQL: "OK" spins and the block stays | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | With "Custom Block Manager" unticked, "Appearance" › "Setup" refuses every save over a placed block it no longer lists | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1033,14 +1034,25 @@ shows on the next load of Settings › Website.
 Basis: probe. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — Right after the plugin is unticked, "Add Static Page" fails** · 🐞 · minor · crash: server · {OJS OMP}.
-After "OK" on "Are you sure you want to disable this plugin?", the
-"Static Pages" tab stays on the open Settings › Website page and still
-lists the pages. A manager who presses "Add Static Page" there gets an
-empty window and, over it, "Error": "An unexpected error has occurred.
-Please reload the page and try again.": the application fails on the
-server. The tab goes only with a reload.
-Basis: probe. <sup>f-a12</sup>
+**A12 — Right after "Static Pages Plugin" is unticked, the tab's "Add Static Page" fails on the server** · 🐞 · low · crash: server · {OJS OMP}.
+The application fails on the server when a manager unticks "Static
+Pages Plugin" and then, on the same open Settings › Website page, presses
+"Add Static Page". The "Static Pages" tab stays until the page is
+reloaded. The button opens an empty window. Over it, a window "Error"
+says "An unexpected error has occurred. Please reload the page and try
+again."
+The user sees that same "Error" window with the fix too, and a reload
+takes the tab away. The difference is the server's answer: today a PHP
+fatal error and status 500, written to the server log; with the fix a
+"404 Not Found" and nothing logged. On 3.4, before the change that broke
+it, the server answered 404 and the browser showed "Failed Ajax request
+or invalid JSON returned." (read in the code, not driven).
+The same server error answers every address that the settings pages'
+tables and windows load when no code serves it. In normal work only a
+page left open while a plugin is turned off leads there; otherwise it
+takes an address entered by hand or a screen that sends a wrong address.
+The fix is one parameter type in the shared router.
+Basis: probe, 2026-10-01. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — A custom block whose name holds "&" is stuck** · 🐞 · medium · crash: script.
@@ -1950,6 +1962,7 @@ unticked plugin no longer registers its grid (note e, `LoadComponentHandler`
 only while enabled), so the grid's `add-static-page` request answers
 status 500. Live-probed 2026-09-24 (OJS, OMP): td15; the request failed
 twice per app.
+Issue report: [docs/issues/U09-A12-static-page-add-after-plugin-off-server-error.md](../issues/U09-A12-static-page-add-after-plugin-off-server-error.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — The row's controls carry the block name in their element

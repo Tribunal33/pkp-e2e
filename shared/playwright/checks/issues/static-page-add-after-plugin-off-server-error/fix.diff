@@ -1,0 +1,15 @@
+--- a/lib/pkp/classes/core/PKPRouter.php
++++ b/lib/pkp/classes/core/PKPRouter.php
+@@ -295,10 +295,10 @@
+      * 4) execution
+      * 5) client response
+      *
+-     * @param array{0:PKPHandler,1:string} $serviceEndpoint
++     * @param callable|array{0:PKPHandler,1:string}|null $serviceEndpoint Null when no handler serves the address (answered with a 404)
+      * @param bool $validate whether or not to execute the validation step.
+      */
+-    public function _authorizeInitializeAndCallRequest(callable|array $serviceEndpoint, PKPRequest $request, array $args, bool $validate = true): void
++    public function _authorizeInitializeAndCallRequest(callable|array|null $serviceEndpoint, PKPRequest $request, array $args, bool $validate = true): void
+     {
+         $dispatcher = $this->getDispatcher();
+ 
