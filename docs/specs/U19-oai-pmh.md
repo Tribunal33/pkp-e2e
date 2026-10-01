@@ -1827,7 +1827,7 @@ Issue report: [pkp-e2e#254](https://github.com/jardakotesovec/pkp-e2e/issues/254
 
 <a id="fn-f-a16"></a>
 **f-a16** — Live-probed 2026-09-26, all three apps (OJS twice): `verb=ListRecords&metadataPrefix=oai_dc&metadataPrefix=oai_dc`, and the same with `set` twice, answered 500 with an empty body; the server log: `PKP\oai\OAI::getParam(): Return value must be of type ?string, array returned`; the next Identify answered. Code: notes c, m.
-Issue report: [docs/issues/U19-A16-oai-argument-twice-server-error.md](../issues/U19-A16-oai-argument-twice-server-error.md).
+Issue report: [pkp-e2e#287](https://github.com/jardakotesovec/pkp-e2e/issues/287) ([docs/issues/U19-A16-oai-argument-twice-server-error.md](../issues/U19-A16-oai-argument-twice-server-error.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-26: note q16. Code: note e (OMP and OPS accept any identifier containing their start and cast the rest with `(int)`).
