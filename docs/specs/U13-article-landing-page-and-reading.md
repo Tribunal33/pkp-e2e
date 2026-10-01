@@ -2752,7 +2752,7 @@ Issue report: [pkp-e2e#244](https://github.com/jardakotesovec/pkp-e2e/issues/244
 **f-a9** — With no format ticked, the list holds only the downloads and
 the button's toggle does not open it (`aria-expanded` stays "false").
 Live-probed 2026-09-25, note q12, both apps.
-Issue report: [docs/issues/U13-A9-more-citation-formats-opens-nothing.md](../issues/U13-A9-more-citation-formats-opens-nothing.md).
+Issue report: [pkp-e2e#246](https://github.com/jardakotesovec/pkp-e2e/issues/246) ([docs/issues/U13-A9-more-citation-formats-opens-nothing.md](../issues/U13-A9-more-citation-formats-opens-nothing.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note m: the link pattern stops at spaces and square or
