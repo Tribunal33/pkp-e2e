@@ -1858,7 +1858,7 @@ Issue report: [pkp-e2e#54](https://github.com/jardakotesovec/pkp-e2e/issues/54) 
 **f-a7** — `urnSuffixEdit.tpl` includes `urnAssignCheckBox.tpl` with
 `pubId=""` in both places; `urnAssign.tpl` passes the real `$pubId`.
 Live-probed 2026-09-24 (note q9).
-Issue report: [docs/issues/U44-A7-urn-assign-box-leaves-urn-out.md](../issues/U44-A7-urn-assign-box-leaves-urn-out.md).
+Issue report: [pkp-e2e#123](https://github.com/jardakotesovec/pkp-e2e/issues/123) ([docs/issues/U44-A7-urn-assign-box-leaves-urn-out.md](../issues/U44-A7-urn-assign-box-leaves-urn-out.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — `URNSettingsForm` messages
