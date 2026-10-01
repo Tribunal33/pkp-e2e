@@ -1823,7 +1823,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Live-probed 2026-09-26: note q11, the preprint server part. Code: note l; the column name `a.last-modified` came with ops `5df1969511` "pkp/pkp-lib#6963 Port OAI rewrite to Laravel to OPS" (2021-06-11). Postgres answers "column … does not exist".
-Issue report: [docs/issues/U19-OPS1-preprint-server-oai-until-fails.md](../issues/U19-OPS1-preprint-server-oai-until-fails.md).
+Issue report: [pkp-e2e#252](https://github.com/jardakotesovec/pkp-e2e/issues/252) ([docs/issues/U19-OPS1-preprint-server-oai-until-fails.md](../issues/U19-OPS1-preprint-server-oai-until-fails.md)).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — Live-probed 2026-09-26: a preprint posted with its abstract empty made the server's ListRecords, its GetRecord and the site-wide `set={server}` list answer 500 (`Dc11SchemaPreprintAdapter::addLocalizedElements()`, the same TypeError as OMP4); the preprint was unposted again at once. The Sections spec's note f-ops6 (live-probed 2026-09-25): `Dc11SchemaPreprintAdapter::addLocalizedElements()` receives a null abstract, a TypeError; written up in `docs/reports/2026-09-25-ops-oai-empty-abstract.md`.
