@@ -2052,7 +2052,7 @@ Issue report: [pkp-e2e#253](https://github.com/jardakotesovec/pkp-e2e/issues/253
 
 <a id="fn-f-omp6"></a>
 **f-omp6** — Live-probed 2026-09-26: note q10; the deleted record's set name keeps the space, and the seeded press's series read " Monographs" and " Textbooks" at `…/fr_CA/oai`. Code: note j.
-Issue report: [docs/issues/U19-OMP6-oai-series-set-name-leading-space.md](../issues/U19-OMP6-oai-series-set-name-leading-space.md).
+Issue report: [pkp-e2e#334](https://github.com/jardakotesovec/pkp-e2e/issues/334) ([docs/issues/U19-OMP6-oai-series-set-name-leading-space.md](../issues/U19-OMP6-oai-series-set-name-leading-space.md)).
 
 <a id="fn-f-omp7"></a>
 **f-omp7** — Live-probed 2026-09-26: a book whose formats were `publicationFormat/131` and `/132` listed `/136` and `/137` once "Version of Record 2.0" was published on screen, and GetRecord of `/131` answered "No matching identifier in this repository", with no deleted record. Code: note e (each version has formats of its own, and the record is a format of the current version).
