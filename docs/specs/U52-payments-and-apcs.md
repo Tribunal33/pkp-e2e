@@ -1128,7 +1128,7 @@ Issue report: [pkp-e2e#353](https://github.com/jardakotesovec/pkp-e2e/issues/353
 
 <a id="fn-f-a3"></a>
 **f-a3** — `PaymentManager::getPaymentForm()` returns `false` when the chosen plugin is not configured, and `PaymentHandler::pay()` calls `display()` on the result. `ManualPaymentPlugin::isConfigured()` reads only `manualInstructions` (note d); neither `pay()` nor `plugin()` reads `paymentsEnabled`, so with "Enable" off the page and its notification still work. Live-probed 2026-09-27 (note td8): with the instructions emptied, `GET {journal}/payment/pay/{id}` answered 500 with an empty page, logged "Uncaught Error: Call to a member function display() on false in pages/payment/PaymentHandler.php:77".
-Issue report: [docs/issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md](../issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md).
+Issue report: [pkp-e2e#357](https://github.com/jardakotesovec/pkp-e2e/issues/357) ([docs/issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md](../issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `paymentTypesForm.tpl` ends with `common.requiredField` though no element carries `required`. Live-probed 2026-09-27 (note td3): the line's asterisk is the only one in the form, and the empty tab saves.
@@ -1148,8 +1148,8 @@ Issue report: [pkp-e2e#356](https://github.com/jardakotesovec/pkp-e2e/issues/356
 
 <a id="fn-f-a9"></a>
 **f-a9** — `UserHandler::payMembership()` (note m) reads `$user->getId()` with no sign-in check, and with payments not set up queues the membership payment and then calls `display()` on the `false` that `getPaymentForm()` returns. Live-probed 2026-09-27 (note td13), two runs: `GET {journal}/user/payMembership` answered 500 with an empty page for a signed-out visitor on a scratch journal and on `publicknowledge` (logged "Uncaught Error: Call to a member function getId() on null in pages/user/UserHandler.php:434"), and for a signed-in Reader on a journal with payments off (logged "Call to a member function display() on false in pages/user/UserHandler.php:438", after the queued payment was written).
-Issue report: [docs/issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md](../issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md).
-Issue report: [docs/issues/U52-A9-membership-address-signed-out-blank-page.md](../issues/U52-A9-membership-address-signed-out-blank-page.md).
+Issue report: [pkp-e2e#357](https://github.com/jardakotesovec/pkp-e2e/issues/357) ([docs/issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md](../issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md)).
+Issue report: [pkp-e2e#358](https://github.com/jardakotesovec/pkp-e2e/issues/358) ([docs/issues/U52-A9-membership-address-signed-out-blank-page.md](../issues/U52-A9-membership-address-signed-out-blank-page.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — `PaypalPaymentForm::display()` shows `plugins.paymethod.paypal.error` through `frontend/pages/message.tpl` with no `pageTitle` (note l). Live-probed 2026-09-27 (note td9): the page's `h1` empty, the breadcrumb "Home /", the browser title "| {journal}".

@@ -1956,7 +1956,7 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `UserHandler::purchaseSubscription()` has no sign-in check: with no user, `$user->getId()` is called on nothing (the individual path in `subscriptionExistsByUserForJournal()`, the institutional path in the form's constructor). The page router authorises page requests by default. Live-probed 2026-09-25 (td19): signed out, `GET {journal}/user/purchaseSubscription/individual` and `GET …/institutional` answered HTTP 500 with an empty body.
-Issue report: [docs/issues/U52-A9-membership-address-signed-out-blank-page.md](../issues/U52-A9-membership-address-signed-out-blank-page.md).
+Issue report: [pkp-e2e#358](https://github.com/jardakotesovec/pkp-e2e/issues/358) ([docs/issues/U52-A9-membership-address-signed-out-blank-page.md](../issues/U52-A9-membership-address-signed-out-blank-page.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — `block.tpl` gates the awaiting lines on `$paymentsEnabled && $acceptSubscriptionPayments`; `SubscriptionBlockPlugin` assigns only `acceptSubscriptionPayments`, so the awaiting lines show only where the page itself assigns `paymentsEnabled` ("My Subscriptions"). A manual purchase stores `dateEnd` as today at midnight (note f), which `Subscription::isExpired()` reads as passed. Live-probed 2026-09-25 (td20).
