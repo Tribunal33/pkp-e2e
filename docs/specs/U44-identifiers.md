@@ -1890,7 +1890,7 @@ the OMP chapter tab; the button is the legacy `#checkNo` (note f-a6).
 **f-a14** — Live-probed 2026-09-24 (note q25). The galley and chapter
 tabs' "Clear" deletes the URN at once (note e) without redrawing the
 tab; the issue tab reloads `#identifiersTab` (note f).
-Issue report: [docs/issues/U44-A14-cleared-urn-stays-on-tab.md](../issues/U44-A14-cleared-urn-stays-on-tab.md).
+Issue report: [pkp-e2e#107](https://github.com/jardakotesovec/pkp-e2e/issues/107) ([docs/issues/U44-A14-cleared-urn-stays-on-tab.md](../issues/U44-A14-cleared-urn-stays-on-tab.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `IssueGalleyForm::validate()` calls
