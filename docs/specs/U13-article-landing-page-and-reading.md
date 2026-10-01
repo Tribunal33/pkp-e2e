@@ -2648,7 +2648,7 @@ note q8, two runs.
 entries without their names ("Array Array"), and the query filters to
 articles outside a published issue; nothing is logged.
 Live-probed 2026-09-25, note q14.
-Issue report: [docs/issues/U13-OJS10-similar-articles-list-never-shown.md](../issues/U13-OJS10-similar-articles-list-never-shown.md).
+Issue report: [pkp-e2e#215](https://github.com/jardakotesovec/pkp-e2e/issues/215) ([docs/issues/U13-OJS10-similar-articles-list-never-shown.md](../issues/U13-OJS10-similar-articles-list-never-shown.md)).
 
 <a id="fn-f-ojs11"></a>
 **f-ojs11** — Note h: CSL numbers each IEEE entry in a
