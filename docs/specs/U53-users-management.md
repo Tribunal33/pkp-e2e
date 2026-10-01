@@ -789,6 +789,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U53-A6-disable-window-lists-ended-roles.md`): "Disable
     User" after "Remove Role" on one of a user's roles, the window's
     "Current Roles:" line naming only the roles still held
+  - the guard for A4 (issue report
+    `docs/issues/U53-A4-users-search-example-journal-role.md`): the Users
+    search box's text on a press and a preprint server naming no
+    journal-only role
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -867,7 +871,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A manager's "Disable User" on a user they may not administer opens a window that refuses it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | A manager's "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A4](#a4) | The search box's example names "Journal editor" on a press and a preprint server | 🐞 | minor | — |
+| [A4](#a4) | Presses and preprint servers: the Users search box suggests searching for "Journal editor", a role they lack | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | The row's "…" button is announced to screen readers as a raw code | 🐞 | minor | — |
 | [A6](#a6) | The "Disable User" and "Enable User" windows list roles the user no longer holds in the journal | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | After "Enable User", the next "Disable User" offers the enabling reason and the Login page quotes it | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -939,12 +943,18 @@ them.
 Basis: probe. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — The search example names a journal role everywhere** · 🐞 · minor.
-The search box reads "Enter a user's name, role (e.g Journal editor), or
-affiliation" on a press and a preprint server too, where no role of that
-name exists (a press has "Press editor"; a preprint server has no editor
-role). The example should name a role of the app it is shown in.
-Basis: probe. <sup>f-a4</sup>
+**A4 — Presses and preprint servers: the Users search box suggests searching for "Journal editor", a role they lack** · 🐞 · low.
+On Settings › Users & Roles, the search box above "Current Users" reads
+"Enter a user's name, role (e.g Journal editor), or affiliation" on a
+press and on a preprint server too. Neither has a role of that name: a
+press calls its editors "Press editor", and a preprint server has no
+editor role. A manager who searches for the suggested role gets "Current
+Users (0)". On a journal the example is right, since "Journal editor" is
+the journal's own role.
+The search itself works when the manager types the role as their press
+or server names it. The box read "Search User" in the first 3.5 release
+(3.5.0-0); the example came with 3.5.0-1.
+Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — The row's action button has a raw code for a name** · 🐞 · minor.
@@ -1938,6 +1948,7 @@ overrides it. OMP's editor group is `default.groups.name.editor` "Press
 editor"; OPS installs no editor group. Live-probed 2026-09-25: the same
 text on all three apps; the press's roles include "Press editor", the
 preprint server's no editor.
+Issue report: [docs/issues/U53-A4-users-search-example-journal-role.md](../issues/U53-A4-users-search-example-journal-role.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-25, all three apps, English interface:
