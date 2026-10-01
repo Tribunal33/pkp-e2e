@@ -913,6 +913,10 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A16 (issue report
+    `docs/issues/U35-A16-notify-message-ignores-email-opt-out.md`):
+    "Notify" to a participant who ticked "Do not send me an email…"
+    under "Discussion added.", the mailbox empty and the Tasks entry there
   - the guards for A10 (issue reports
     `docs/issues/U35-A10-added-message-template-not-sent.md` and
     `docs/issues/U35-A10-role-limited-message-template-not-sent.md`):
@@ -996,7 +1000,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | "OK" on the "No changes can be made to this participant" window reports "The stage assignment has been changed." | 🐞 | minor | — |
 | [A14](#a14) | The Activity Log's "User" column names the participant, not the editor who assigned, changed or removed them | 🐞 | minor | — |
 | [A15](#a15) | The Submission stage's "Assign Editor" email ends with two footers | 🐞 | minor | — |
-| [A16](#a16) | A message's email arrives although the person ticked "Do not send me an email…" for "Discussion added." | 🐞 | user-visible | — |
+| [A16](#a16) | A message sent with "Notify" is emailed to a participant who opted out of emails for new discussions | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS1](#ojs1) | The automatic assignment email tells the editor to select "Send to Review"; the button reads "Send for Review" | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's Internal Review offers no predefined message in "Assign" and "Notify" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | On a preprint server "Assign Editor" leaves "Message" as it was | 🐞 | minor · crash: server | — |
@@ -1187,15 +1191,17 @@ the discussion footer alone.
 Basis: probe. <sup>[f-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
-**A16 — The email opt-out for discussions is ignored** · 🐞 · user-visible.
-A person who ticked "Do not send me an email for these types of
-notifications." on the "Discussion added." row of their Notifications tab
-expects no email when a discussion is opened with them
-(*[Notifications center](U05-notifications-center-and-email-preferences.md)*).
-A message sent to them from "Assign" or "Notify" still arrives in their
-mailbox; only "Enable these types of notifications." unticked stops it,
-and the task with it.
-Basis: probe. <sup>[f-a16](#fn-a16)</sup>
+**A16 — A message sent with "Notify" is emailed to a participant who opted out of emails for new discussions** · 🐞 · low.
+On the profile's Notifications tab, the row named "Discussion added."
+has a box "Do not send me an email for these types of notifications.".
+A person who ticked it expects no email when a discussion is opened
+with them. A message an editor sends them with "Notify" on the
+workflow's Participants panel still arrives in their mailbox.
+Only the Participants panel's message window ignores the box: a
+discussion started from the stage's discussions panel sends that person
+no email. "Assign" with a message uses the same window and code as
+"Notify"; it was read in the code and not tried on screen.
+Basis: probe, 2026-10-01. <sup>[f-a16](#fn-a16)</sup>
 
 <a id="a17"></a>
 **A17 — "Notify" after the list is set back to blank was never seen** · ❓ · latent.
@@ -1433,6 +1439,7 @@ Issue report (a template limited to specific roles): [pkp-e2e#317](https://githu
 
 <a id="fn-a16"></a>
 **f-a16** — Live-probed 2026-09-22 (all three apps): note td7. The email is sent whenever the discussion's task-level notification is created, which follows "Enable these types of notifications." only (note g).
+Issue report: [docs/issues/U35-A16-notify-message-ignores-email-opt-out.md](../issues/U35-A16-notify-message-ignores-email-opt-out.md).
 
 <a id="fn-a17"></a>
 **f-a17** — Not driven. The 2026-09-29 probe (note j, A3's footnote) chose a predefined message in "Notify", set the list back to its blank entry and read the window (the list's value empty, "Message" as filled; `.reports/U35/ccI29/r2-cases-<app>.json`, `mgr-tplBack`), then only closed it; "Notify" was pressed only in the control with a predefined message chosen. The lean, from the code and not seen: the list then holds an empty value as when untouched, and `fetchTemplateBody()` (note f) only returns the text for the editor, so the form would post no template and `sendMessage()` take A3's path (note g). One press of "Notify" in that state, then the stage's discussions panel and the recipient's mailbox read, settles it. Rule 11b's untouched-list sentence rests on note td4.
