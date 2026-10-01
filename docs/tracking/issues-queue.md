@@ -14,7 +14,6 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **In progress: issues session s1, 2026-10-01.** Done: A2, A5, OJS1, OJS4, OJS5, OJS9; A1 pending translation (incidentals; U69 A15 joined pkp-e2e#124); done also: OJS10, OPS2 (with U20 OPS1); done also: A4, A6 (with U69 A5), OJS12, OPS7; done also: A7, A8 (joined pkp-e2e#87), A9; in progress: A10, A11; open: the rest (A1 with U69 A15) |
 | [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 | **Claimed: issues session s1, 2026-09-30** (A15 with U13 A1); **A9 done: issues session s3, 2026-09-30** (with U47 OMP1) |
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
-| [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 | Taken 2026-09-30 by the workstation issues session, beside the VM's |
 | [U21](../specs/U21-submission-wizard.md) | 16 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30.** Done: A4, A5, A7 (two reports), A8, A10, A12, A14, A16, A18, OPS3, OPS5, OPS8+OPS9; OMP3 not reproduced (incidentals); in progress: A6, OPS7; open: OMP2 |
 | [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | **In progress: workstation issues session (slot s1), 2026-09-30** |
