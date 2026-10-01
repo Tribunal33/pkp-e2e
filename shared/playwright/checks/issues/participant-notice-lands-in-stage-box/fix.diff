@@ -1,0 +1,21 @@
+--- a/lib/ui-library/src/pages/workflow/components/primary/WorkflowNotificationDisplay.vue
++++ b/lib/ui-library/src/pages/workflow/components/primary/WorkflowNotificationDisplay.vue
+@@ -116,8 +116,16 @@
+ 	{immediate: true},
+ );
+ 
+-/** Reload notifications when data on screen changes */
+-useDataChanged(() => fetch());
++/**
++ * Reload notifications when data on screen changes.
++ * A stage without request options shows nothing, so it never fetches:
++ * a fetch without options takes the user's pending notices away from the page.
++ */
++useDataChanged(() => {
++	if (requestBody.value) {
++		fetch();
++	}
++});
+ 
+ const notificationsToDisplay = computed(() => {
+ 	const notifications = [];
