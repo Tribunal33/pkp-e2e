@@ -1519,7 +1519,7 @@ Issue report: [pkp-e2e#307](https://github.com/jardakotesovec/pkp-e2e/issues/307
 
 <a id="fn-a4"></a>
 **f-a4** — Live-probed 2026-09-22 (all three apps): note td5. `AddParticipantForm::validate()` returns `Repo::userGroup()->userInGroup($userId, $userGroupId) && Repo::userGroup()->get($userGroupId) && parent::validate()`: with no user, or with a user who does not hold the newly chosen role, the first test is false and `parent::validate()`, which would record the `userId` check's message, never runs; `saveParticipant()` answers the redrawn form with no error.
-Issue report: [docs/issues/U35-A4-assign-participant-ok-assigns-nobody-no-reason.md](../issues/U35-A4-assign-participant-ok-assigns-nobody-no-reason.md).
+Issue report: [pkp-e2e#348](https://github.com/jardakotesovec/pkp-e2e/issues/348) ([docs/issues/U35-A4-assign-participant-ok-assigns-nobody-no-reason.md](../issues/U35-A4-assign-participant-ok-assigns-nobody-no-reason.md)).
 
 <a id="fn-a5"></a>
 **f-a5** — `PKPStageParticipantNotifyForm::sendMessage()` creates the discussion with `'createdBy' => $user->getId()`, `$user` being the recipient, while the head note's `userId` and the task's sender are the signed-in user. Live-probed 2026-09-18 (Copyediting stage, OJS and OMP): the "Request Copyedit" discussion listed as "Discussion Request Copyedit Created by: {Copyeditor}"; live-probed 2026-09-19 (all three apps, the "Notify" window): the discussion reading "Created by: {the recipient}". Live-probed 2026-09-22 (all three apps, from "Assign" and "Notify"): the panel row "Discussion {name} Created by: {the recipient's username}", the discussion's first entry "Message from {the sender's username}", the recipient's task naming the sender.
