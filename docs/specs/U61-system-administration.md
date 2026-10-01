@@ -638,6 +638,7 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - "Check for updates" pressed on the test installs, which cannot reach PKP's site: System Information with a warning that the latest version could not be retrieved, the link still there, no server error (A1; the guard its issue report names)
   - Administration read in French (Canada) on a press and a preprint server: no `##` code on the page {OMP OPS} (A7; the guard its issue report names)
+  - "Requeue All Failed Jobs" refused because the list was emptied in another tab: after "OK" no loading circle beside the button or in the page links (A6; the guard its issue report names)
 - **Nothing new to test**:
   - a refused "Try Again" or "Delete" on a failed job already taken off
     the list in another tab (Rule 17b)
@@ -697,7 +698,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | "Check for updates" opens an empty page when the server cannot reach PKP's website | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | "Requeue All Failed Jobs" fails with a database error when no failed job has stored data | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [A6](#a6) | After a refused "Requeue All Failed Jobs" a loading circle keeps turning until the page is reloaded | 🐞 | minor · crash: server | — |
+| [A6](#a6) | Failed Jobs: after a refused "Requeue All Failed Jobs", loading circles keep turning until the page is reloaded | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | On a press or preprint server in French (Canada), Administration shows a code under "Gestion du site" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | The three deleting buttons return to Administration with no message, and "Delete Data Caches" asks nothing first | ❓ | minor | — |
 | [A3](#a3) | A failed job's "Delete" removes it for good without asking | ❓ | minor | — |
@@ -770,15 +771,16 @@ server job.
 Basis: code. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — A refused "Requeue All" leaves its loading circle turning** · 🐞 · minor · crash: server.
-After "Requeue All Failed Jobs" is refused and "OK" is pressed on the
-"Error" window, the rows rightly stay as they were, but a loading circle
-keeps turning beside the button (and, with page links under the table,
-in place of the page number) until the page is reloaded. It happens both
-when the list was already emptied in another tab (Rule 19) and when the
-application fails as in [A4](#a4). The page looks busy when nothing is
-happening.
-Basis: probe. <sup>f-a6</sup>
+**A6 — Failed Jobs: after a refused "Requeue All Failed Jobs", loading circles keep turning until the page is reloaded** · 🐞 · low.
+The site administrator presses "Requeue All Failed Jobs" on Administration ›
+"Failed Jobs", and the server refuses the request: a window titled "Error"
+gives the reason, for example "No failed job found in the list." when the
+list was already emptied in another tab. After "OK" the rows rightly stay as
+they were, but a loading circle keeps turning beside the button, and a
+second one in place of the page number when the list has page links.
+The page looks busy when nothing is happening, until it is reloaded. Every
+error answer to this button does the same, whatever its reason.
+Basis: probe, 2026-10-02. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — On a press or preprint server in French (Canada), Administration shows a code under "Gestion du site"** · 🐞 · low.
@@ -1441,6 +1443,7 @@ loading circle was turning beside the button, the button pressable, the
 row and the old total kept. The same after A4's 500. On OJS, with page
 links under the table, a circle also turned in place of the page number.
 The request is `FailedJobsPage.vue`'s `requeueAll()` (note s).
+Issue report: [docs/issues/U61-A6-requeue-all-refused-circle-keeps-turning.md](../issues/U61-A6-requeue-all-refused-circle-keeps-turning.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-29 (`index/fr_CA/admin` as `admin`, all
