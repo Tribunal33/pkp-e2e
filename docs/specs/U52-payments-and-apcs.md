@@ -751,6 +751,9 @@ Left out of the scenarios above, by reason:
   - the guard for A12 (issue report
     `docs/issues/U52-A12-institutions-menu-entry-stays-after-payments-off.md`):
     after "Enable" is saved unticked, the side menu dropping "Institutions" together with "Payments" on the same page (the journal's institutional statistics off)
+  - the guard for A4 (issue report
+    `docs/issues/U52-A4-payment-types-required-note-no-required-field.md`):
+    the "Payment Types" tab carrying no "Required fields are marked with an asterisk" line
 - **Rarely met**:
   - "Purchase Issue" set: the reader's "Purchase Issue Fee" payment page
     (Settings bullet 7; Fields, the manual method's payment page)
@@ -816,10 +819,10 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Payment Types" says the fees appear in About the Journal; no page shows them | 🐞 | minor | — |
+| [A1](#a1) | "Payment Types" tells a journal manager the fees appear in About the Journal, but no page lists them | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | Authors are still told to pay the publication fee after the editor records it as "Paid" or "Waived" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A payment link fails with a blank error page once the instructions are emptied, and still takes notifications once "Enable" is off | 🐞 | user-visible · crash: server | — |
-| [A4](#a4) | "Payment Types" explains required fields, but none is required | 🐞 | minor | — |
+| [A4](#a4) | "Payment Types" says required fields are marked with an asterisk, but no field is marked or required | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | The membership address gives a blank error page signed out or with payments not set up | 🐞 | minor · crash: server | — |
 | [A10](#a10) | The PayPal error page has no heading, and the browser tab shows only the journal's name | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Merging a payer's account breaks the list of payments, the submission's "Payments" menu and its publishing | 🐞 | user-visible · crash: server | — |
@@ -833,14 +836,20 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — Fees promised on About the Journal, shown nowhere** · 🐞 · minor.
-The "Payment Types" tab says the reader fees "will appear in About the
-Journal under Policies, as well as at points where payment is required"
-and that "The Association Membership will appear in About the Journal
-under Policies.". No page of the journal lists any fee: an author learns
-of the APC only when it is requested after acceptance, and a reader
-sees an article's price only on the locked link.
-Basis: probe, 2026-09-27. <sup>f-a1</sup>
+**A1 — "Payment Types" tells a journal manager the fees appear in About the Journal, but no page lists them** · 🐞 · low.
+The "Payment Types" tab tells a journal manager that the reader fees
+"will appear in About the Journal under Policies, as well as at points
+where payment is required", and that "The Association Membership will
+appear in About the Journal under Policies." None of the fees set on
+that tab appears on any page of the journal in advance: About the
+Journal has no "Policies" section and shows no amount. An author learns
+of the publication fee only when it is requested after acceptance, and a
+reader sees an article's or an issue's price only on the locked galley
+link. A manager who trusts the tab to publish the fees, and so writes
+them nowhere else, leaves authors and readers without them until the
+moment of payment. The tab is reached from the side menu's "Payments"
+once a journal has turned payments on.
+Basis: probe, 2026-10-01. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — Authors are still told to pay the publication fee after the editor records it as "Paid" or "Waived"** · 🐞 · medium.
@@ -869,11 +878,14 @@ payments it no longer takes.
 Basis: probe, 2026-09-27. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A required-fields line with no required field** · 🐞 · minor.
-Under "Save" the "Payment Types" tab reads "Required fields are marked
-with an asterisk: *", yet no box carries an asterisk and every box may be
-left empty.
-Basis: probe, 2026-09-27. <sup>f-a4</sup>
+**A4 — "Payment Types" says required fields are marked with an asterisk, but no field is marked or required** · 🐞 · low.
+Under "Save", the "Payment Types" tab of the journal's "Payments" page
+reads "Required fields are marked with an asterisk: *". No field on the
+tab carries an asterisk, and none is required: an empty fee box turns
+that fee off, by design, so the form rightly saves with every box empty.
+The line only sends the journal manager looking for a required field
+that does not exist.
+Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — Payments without a currency** · ❓ · minor.
@@ -1097,6 +1109,7 @@ manual page's layout to a journal (note td16).
 
 <a id="fn-f-a1"></a>
 **f-a1** — `paymentTypesForm.tpl` prints `manager.payment.readerFeesDescription` and `manager.payment.generalFeesDescription`; no page reads the fees (note e). The About listing of fees belonged to OJS 2 (its locale keys remain, unused). Live-probed 2026-09-27 (note td4): no page lists a fee, and the only amounts are the locked galley links'.
+Issue report: [docs/issues/U52-A1-payment-types-promise-fees-on-about.md](../issues/U52-A1-payment-types-promise-fees-on-about.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — The menu's save fulfils a queued payment it creates itself, so the requested one and its task stay (note i). Live-probed 2026-09-27 (note td10): after "Paid" and after "Waived" the task opened the manual page with the request's "50.00 (USD)", and its notification reached the principal contact.
@@ -1107,6 +1120,7 @@ Issue report: [pkp-e2e#353](https://github.com/jardakotesovec/pkp-e2e/issues/353
 
 <a id="fn-f-a4"></a>
 **f-a4** — `paymentTypesForm.tpl` ends with `common.requiredField` though no element carries `required`. Live-probed 2026-09-27 (note td3): the line's asterisk is the only one in the form, and the empty tab saves.
+Issue report: [docs/issues/U52-A4-payment-types-required-note-no-required-field.md](../issues/U52-A4-payment-types-required-note-no-required-field.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `PKPBackendPaymentsSettingsController::edit()` validates `currency` only when sent and the rule skips an empty value; no set-up check reads it; `RequestPaymentDecisionForm` builds `publicationFee . ' ' . currency`; `paymentForm.tpl` drops the code `{if $itemCurrencyCode}`. A new journal has no `currency` row, and the `FieldSelect` offers no empty option. Live-probed 2026-09-27 (notes td1, td2): "Request publication fee (50 )", the manual page's "Fee 50.00" and the list's "50" on a journal set up with no currency; the list's first choice "UAE Dirham" and no blank one.

@@ -1,0 +1,21 @@
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -197,7 +197,7 @@
+ msgstr "Reader Fees"
+ 
+ msgid "manager.payment.readerFeesDescription"
+-msgstr "Selected options, along with their descriptions and fees (which can be edited below), will appear in About the Journal under Policies, as well as at points where payment is required."
++msgstr "Readers are shown these fees at the points where payment is required."
+ 
+ msgid "manager.payment.records"
+ msgstr "Records"
+--- a/templates/payments/paymentTypesForm.tpl
++++ b/templates/payments/paymentTypesForm.tpl
+@@ -36,7 +36,6 @@
+ 	{/fbvFormSection}
+ 
+ 	{fbvFormSection title="manager.payment.generalFees"}
+-		<p>{translate key="manager.payment.generalFeesDescription"}
+ 		{if $membershipFee==0}{assign var=membershipFee value=""}{/if}
+ 		{fbvElement type="text" name="membershipFee" id="membershipFee" label="manager.payment.options.membershipFee" value=$membershipFee size=$fbvStyles.size.SMALL}
+ 	{/fbvFormSection}

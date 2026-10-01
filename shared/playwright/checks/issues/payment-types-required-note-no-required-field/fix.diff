@@ -1,0 +1,8 @@
+--- a/templates/payments/paymentTypesForm.tpl
++++ b/templates/payments/paymentTypesForm.tpl
+@@ -42,5 +42,4 @@
+ 	{/fbvFormSection}
+ 
+ 	{fbvFormButtons hideCancel=true submitText="common.save"}
+-	<p><span class="formRequired">{translate key="common.requiredField"}</span></p>
+ </form>
