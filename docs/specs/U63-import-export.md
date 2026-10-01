@@ -1172,6 +1172,10 @@ Left out of the scenarios above, by reason:
   - the guard A10's issue report names, once fixed: a published
     submission found under the export list's "Done" filter, then sent
     back to the workflow and found under that stage instead
+  - the guard A11's issue report names, once fixed: an export list of
+    more than one page, submissions ticked on two pages and "Select
+    All" pressed on a page: the file holds every ticked submission,
+    and the button turns into "Select None"
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1280,7 +1284,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | Importing a file the app itself exported lists "Errors occured:" under the success text | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | Native XML import of an article in a missing section shows nothing and leaves an unopenable submission | 🐞 | medium · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | Native XML export list: no "Stages" filter finds published submissions | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A11](#a11) | Past one page, the export list's "Select All" never turns into "Select None", and ticks on other pages are not exported | 🐞 | minor | — |
+| [A11](#a11) | Native XML, ONIX and PubMed exports leave out submissions ticked on other pages of the list | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | A Native XML export with nothing ticked opens an empty results tab: the server fails | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | Importing a users file with a format error leaves an empty "Results" tab instead of the reasons | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | For an existing account, the results say a new password was sent, but nothing is sent and nothing changes | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1423,14 +1427,20 @@ release, whose upgrade moves the published submissions into Done.
 Basis: probe, 2026-10-01. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The export list's selection stops at the page** · 🐞 · minor.
-With more submissions than one page shows, "Select All" should tick
-them all and then read "Select None"; it ticks the page's lines only,
-keeps reading "Select All", and a second press unticks nothing. Ticks
-on another page are dropped from the export: only the page on screen
-goes into the file. A manager exporting a large journal gets fewer
-submissions than ticked, with nothing on screen saying so.
-Basis: probe. <sup>f-a11</sup>
+**A11 — Native XML, ONIX and PubMed exports leave out submissions ticked on other pages of the list** · 🐞 · medium.
+The export tools (Native XML, and ONIX 3.0 on a press and PubMed on a
+journal) list the submissions 100 to a page. A manager who ticks
+submissions on more than one page and then exports gets a file holding
+only the ticks on the page shown at that moment. The other ticks are
+left out. The page says the export completed, and nothing on it counts
+the ticked submissions. On a list of one page, "Select All" ticks every
+line and then turns into "Select None", which unticks them. Past one
+page, "Select All" ticks only the 100 lines shown and its label never
+changes, so a second press does not untick them. Pressed on page 2, it
+also clears the ticks made on page 1. The way round is one export per
+page, or narrowing the list with the search box or "Filters" until it
+fits on one page.
+Basis: probe, 2026-10-01. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — An export with nothing ticked fails** · 🐞 · low · crash: server.
@@ -2742,6 +2752,7 @@ loaded page and compares with `itemsMax` (note g). Live-probed
 2026-09-27, three apps, 101 submissions: 100 ticked, the label "Select
 All" after both presses; "Paged item 100" ticked on page 1 and "Paged
 item 001" on page 2 gave a file holding "Paged item 001" only.
+Issue report: [docs/issues/U63-A11-export-list-selection-stops-at-page.md](../issues/U63-A11-export-list-selection-stops-at-page.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-27 (notes h, i): `GET
