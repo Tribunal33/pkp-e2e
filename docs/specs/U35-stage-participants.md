@@ -915,6 +915,49 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the "Notify" window's close control, asking first or not (Rule 11c)
   - Escape and a reload on the "Notify" window (Rule 11d)
+  - the guard for A1 (Actors row "Edit"; Rules 8d, 8e; issue report
+    `docs/issues/U35-A1-section-editor-edit-assignment-saves-nothing.md`):
+    an assigned Section Editor's "OK" on "Edit Assignment" on the
+    Author's row and on another editor's row closing the window with "The
+    stage assignment has been changed.", the change kept after a reload
+  - the guard for A5 (Side effects; issue report
+    `docs/issues/U35-A5-message-discussion-created-by-recipient.md`):
+    scenario 1's discussion "Assign Editor" listed on the stage's
+    discussions panel as "Created by:" the Editor who sent it
+  - the guard for A6 (Side effects; issue report
+    `docs/issues/U35-A6-assign-editor-message-no-editor-task.md`):
+    scenario 1's Section Editor's Tasks panel also listing "You have been
+    assigned as an editor to the submission {title}"
+  - the guard for A9 (Rule 4c; issue report
+    `docs/issues/U35-A9-permissions-tick-carried-to-other-role.md`):
+    Section editor chosen in "Assign", then Author, "Permissions"
+    following the Author role's default and saved so
+  - the guard for A10 (Rule 5a; Settings bullet 4; issue report
+    `docs/issues/U35-A10-added-discussion-template-fills-nothing.md`): a
+    template added in Settings chosen in "Notify", "Message" filled with
+    its text, and "Notify" sending the email and the discussion holding it
+  - the guard for A14 (Side effects; issue report
+    `docs/issues/U35-A14-activity-log-names-participant-not-editor.md`):
+    scenario 1's Activity Log line "… was assigned to this submission as
+    a Section editor." with the Editor who assigned in its "User" column
+  - the guard for A16 (Side effects; issue report
+    `docs/issues/U35-A16-discussion-email-opt-out-ignored.md`): a message
+    from "Notify" or "Assign" to a person who ticked "Do not send me an
+    email…" on "Discussion added.", their mailbox staying empty while the
+    Tasks entry appears
+  - the guard for OJS1 {OJS} (Rule 12b; issue report
+    `docs/issues/U35-OJS1-editor-assigned-email-names-send-to-review.md`):
+    scenario 8's email naming the button the Submission stage shows,
+    "Send for Review"
+  - the guard for OPS3 {OPS} (Rule 12a; issue report
+    `docs/issues/U35-OPS3-ops-moderator-assigned-email-never-sent.md`): a
+    preprint submitted into a section with a Moderator under "Editorial
+    Assignments", the Moderator's mailbox holding "You have been assigned
+    as a moderator on a submission to {server name}"
+  - the guard for OPS4 {OPS} (Rule 11a; issue report
+    `docs/issues/U35-OPS4-participant-notice-lands-in-stage-box.md`):
+    scenario 6's "Notify" on a preprint showing "Notification sent to
+    users." at the top right of the page
 - **Nothing new to test**:
   - "Cancel" on "Edit Assignment" after a box was changed, and its close control asking first (Rule 8f): scenario 3 cancels only an unchanged window
   - "Assignments" counting open review requests and leaving out published submissions (Fields "Assign Participant")
@@ -962,24 +1005,24 @@ entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A Section Editor's "OK" on "Edit Assignment" saves nothing and shows the form again | 🐞 | user-visible | — |
-| [A3](#a3) | A message typed with no predefined message chosen is not sent, and the window stays open with no reason given, on "Assign" and on "Notify" | 🐞 | user-visible · crash: server | — |
-| [A4](#a4) | "OK" on "Assign Participant" with nobody chosen, or with a person from the previous role's list, assigns nobody and gives no reason | 🐞 | minor | — |
-| [A5](#a5) | The discussion a message opens is listed as created by the person it was sent to | 🐞 | minor | — |
-| [A6](#a6) | "Assign Editor" gives the new editor no task, unlike the other request messages | 🐞 | minor | — |
-| [A7](#a7) | "Edit" is logged as a new assignment | 🐞 | minor | — |
-| [A9](#a9) | A "Permissions" tick carries over when another role is chosen in "Assign", and is saved | 🐞 | minor | — |
-| [A10](#a10) | A message template added in Settings is listed but fills nothing and cannot be sent | 🐞 | user-visible · crash: server | — |
-| [A11](#a11) | Choosing a person who reviews the submission anonymously shows no warning, and "OK" assigns them | 🐞 | user-visible | — |
-| [A12](#a12) | "OK" on the "No changes can be made to this participant" window reports "The stage assignment has been changed." | 🐞 | minor | — |
-| [A14](#a14) | The Activity Log's "User" column names the participant, not the editor who assigned, changed or removed them | 🐞 | minor | — |
-| [A15](#a15) | The Submission stage's "Assign Editor" email ends with two footers | 🐞 | minor | — |
-| [A16](#a16) | A message's email arrives although the person ticked "Do not send me an email…" for "Discussion added." | 🐞 | user-visible | — |
-| [OJS1](#ojs1) | The automatic assignment email tells the editor to select "Send to Review"; the button reads "Send for Review" | 🐞 | minor | — |
-| [OMP1](#omp1) | A press's Internal Review offers no predefined message, so no message can be sent from its Participants panel | 🐞 | user-visible | — |
-| [OPS2](#ops2) | On a preprint server "Assign Editor" leaves "Message" as it was | 🐞 | minor · crash: server | — |
-| [OPS3](#ops3) | A preprint server never sends its automatic assignment email | 🐞 | user-visible | — |
-| [OPS4](#ops4) | On a preprint server the notice after "Assign", "Edit" or "Notify" can show in the Production entry's "Notification" box instead of at the top right | 🐞 | minor | — |
+| [A1](#a1) | Section editors' "OK" on "Edit Assignment" saves nothing and shows the form again | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A3](#a3) | A message typed with no predefined message chosen is not sent, and the window stays open with no reason given, on "Assign" and on "Notify" | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A4](#a4) | "OK" on "Assign Participant" with nobody chosen, or with the previous role's person still chosen, resets the window without a reason | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A5](#a5) | A message sent from "Participants" opens a discussion listed as "Created by" the person it was sent to | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A6](#a6) | An editor assigned with the "Assign Editor" message gets no "You have been assigned as an editor" task | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A7](#a7) | Editing a participant's assignment is logged in the Activity Log as a new assignment | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A9](#a9) | "Assign Participant" keeps the "Permissions" tick of the first role chosen, and saves it for another role | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A10](#a10) | A discussion template added in Settings, or limited to some roles, is listed but fills nothing and cannot be sent | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A11](#a11) | Editors get no warning when assigning a participant who reviews the submission anonymously | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A12](#a12) | A recommend-only editor's "Edit Assignment" says no changes can be made, yet "OK" reports a change | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A14](#a14) | The Activity Log credits a participant's assignment or removal to the participant, not the editor | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A15](#a15) | The Submission stage's "Assign Editor" email says it is automated and ends with two footers | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [A16](#a16) | Messages from "Notify" and "Assign" email people who turned off emails for "Discussion added." | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [OJS1](#ojs1) | A journal's editor assignment email tells editors to select "Send to Review", a button that reads "Send for Review" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
+| [OMP1](#omp1) | A press's Internal Review offers no predefined message, so no message can be sent from its Participants panel | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [OPS2](#ops2) | On a preprint server, choosing "Assign Editor" when assigning a Moderator leaves "Message" empty | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [OPS3](#ops3) | On a preprint server, Moderators assigned automatically to a new preprint are never emailed | 🐞 | high | issues (claude), 2026-09-30 — re-verified |
+| [OPS4](#ops4) | On a preprint server, "Notify" on a participant shows its confirmation in the Production stage, not at the top right | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A2](#a2) | A Section Editor may "Remove" rows they may not "Edit": their own, manager-level ones, and a recommending editor another editor's | ❓ | minor | — |
 | [A8](#a8) | A Production editor assigned to a submission can open fewer of its stages than one who is not assigned | ❓ | minor | — |
 | [A13](#a13) | Whether an automatic assignment in a recommend-only role is recommend-only was never seen | ❓ | latent | — |
@@ -989,14 +1032,21 @@ entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — A Section Editor's "Edit" saves nothing** · 🐞 · user-visible.
-An assigned Section Editor or Guest Editor is offered "Edit" on the rows of
-the assistants, the Author and the other editors they may change, and the
-"Edit Assignment" window shows them the boxes. Pressing "OK" is expected to
-save the change and close the window. Instead the window shows its form
-again with the boxes as they were, no notice and no reason, and the row
-keeps its old limits. A Journal Manager's "OK" on the same row saves.
-Since: 2026-04-02 · Basis: probe. <sup>[f-a1](#fn-a1)</sup>
+**A1 — Section editors' "OK" on "Edit Assignment" saves nothing and shows the form again** · 🐞 · medium.
+An assigned Section Editor or Guest Editor is offered "Edit" on the rows
+of the assistants, the Author and the other editors they may change, and
+the "Edit Assignment" window shows them the boxes. Pressing "OK" is
+expected to save the change and close the window. Instead the window
+shows its form again with the boxes as they were, no notice and no
+reason, and the row keeps its old limits. A Journal Manager's "OK" on the
+same row saves.
+The boxes are "Permissions" (whether the person may change the
+publication's title, abstract and other details) and "Assignment
+privileges" (whether an editor may only recommend a decision). A
+permission check on the server refuses the change for every editor in a
+section-level role: Section and Guest Editors on a journal, Series
+Editors on a press, Moderators on a preprint server.
+Since: 2026-04-02 · Basis: probe, 2026-09-30. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — "Remove" is offered where "Edit" is refused** · ❓ · minor.
@@ -1011,54 +1061,87 @@ the rows a person may not change should not be removable by them either.
 Basis: probe. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
-**A3 — A message without a predefined message is dropped** · 🐞 · user-visible · crash: server.
-The list reads "Choose a predefined message to use, or fill out the form
-below.", so an editor who leaves it on its blank entry and types a message
-expects that message to be sent. On "Assign", "OK" leaves the window open
-as filled with no reason given, yet the person is assigned: the row
-appears once the page is opened again, and the Activity Log gets no line
-for it. On "Notify" the window stays open with no reason given. In both
-cases no email goes out and no discussion opens. Behind both buttons the
-request fails on the server, and nothing on screen says so. In "Notify",
-choosing the blank entry again after a predefined message fails the same
-way, keeping the text and showing nothing wrong.
-Basis: probe. <sup>[f-a3](#fn-a3)</sup>
+**A3 — A message without a predefined message is dropped** · 🐞 · medium · crash: server.
+In a submission's "Participants" panel, the "Notify" and "Assign
+Participant" windows offer a list that reads "Choose a predefined message
+to use, or fill out the form below.", so an editor who leaves it on its
+blank entry and types a message expects that message to be sent. Instead
+the request fails on the server and nothing on screen says so: after
+"Notify" or "OK" the window does not close and still holds the text.
+"Assign Participant" assigns the person all the same (the row appears
+once the page is opened again), but the Activity Log gets no line for
+it. No email goes out and no discussion opens. Choosing a predefined
+message first gets the message out. An editor who picks a predefined
+message and then sets the list back to its blank entry meets the same
+server failure at that moment, though the text stays.
+Basis: probe, 2026-09-30. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
-**A4 — "OK" on "Assign" can do nothing, without a reason** · 🐞 · minor.
-"OK" on "Assign Participant" is expected to assign the person chosen, or
-to say that a person is needed. It shows the form again, reset to the
-first role and its people, with no message, and assigns nobody, both when
-nobody is chosen and when the person chosen was listed under the previous
-role (another role chosen without "Search", Rule 3).
-Basis: probe. <sup>[f-a4](#fn-a4)</sup>
+**A4 — "OK" on "Assign Participant" with nobody chosen, or with the previous role's person still chosen, resets the window without a reason** · 🐞 · low.
+In "Assign Participant", "OK" assigns nobody and gives no reason in two
+cases: the editor presses "OK" with nobody chosen; the editor chooses a
+person, switches to another role without pressing "Search", and presses
+"OK" while the person from the old role's list is still chosen.
+The editor expects the window to say that a person is needed. Instead it
+shows its form again, reset to the first role and its people, with no
+message, so the editor chooses again without knowing what went wrong.
+The second case is easy to meet, because the list of people follows a
+newly chosen role only after "Search".
+Basis: probe, 2026-09-30. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
-**A5 — The discussion is listed under the recipient's name** · 🐞 · minor.
-A message sent from "Assign" or "Notify" opens a discussion that the
-stage's discussions panel lists as "Created by: {the person it was sent
-to}", while the discussion's first entry and the recipient's task name
-the sender. The Copyediting stage's instance of this is that spec's
+**A5 — A message sent from "Participants" opens a discussion listed as "Created by" the person it was sent to** · 🐞 · low.
+An editor can send a message from a submission's "Participants" panel,
+from "Assign" or from a participant's "Notify", by choosing a
+predefined message. The message opens a discussion with the person it
+is sent to. The stage's "Tasks & Discussions" panel lists that
+discussion as "Created by:" that person, not the editor who wrote it:
+a Copyeditor seems to have opened "Request Copyedit" themselves. The
+discussion's first entry and the recipient's own entry in their
+"Tasks" list name the editor correctly.
+The wrong creator is stored with the discussion. A fix corrects new
+discussions; the ones already stored exist only on `main`, which is not
+released yet.
+The Copyediting stage's instance of this is that spec's
 [finding](U32-copyediting-stage.md#a9).
-Basis: probe. <sup>[f-a5](#fn-a5)</sup>
+Basis: probe, 2026-09-30. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
-**A6 — "Assign Editor" gives no task** · 🐞 · minor.
-"Request Copyedit", "Ready for Production" and "Index Requested" each put a
-task of their own in the recipient's Tasks panel ("You have been asked to
-review copyedits…"). "Assign Editor" is expected to do the same with "You
-have been assigned as an editor to the submission "{title}"."; the new
-editor gets the email and the discussion task only, from the Submission,
-Review and Production stages alike.
-Basis: probe. <sup>[f-a6](#fn-a6)</sup>
+**A6 — An editor assigned with the "Assign Editor" message gets no "You have been assigned as an editor" task** · 🐞 · low.
+An editor assigns someone from a submission's "Participants" panel and
+chooses the predefined message "Assign Editor". The person's "Tasks"
+list should gain the entry "You have been assigned as an editor to the
+submission {title}". It gains only the message's own entry, "{sender}
+started a discussion: Assign Editor: {message}", while the message
+still arrives by email and as a discussion. Other predefined messages
+that ask for work, such as "Request Copyedit" and "Ready for
+Production", still add a task of their own.
+The editor task is tied to the "Assign Editor" message alone: nothing
+else in the application raises it. An assignment with no message, or
+with any other message, never gave it. The role the person is assigned
+in does not matter: a Journal editor or a manager assigned with this
+message misses it the same way as a Section editor.
+"Assign Editor" is offered on the Submission, Review and Production
+stages of a journal or press, and on the Production stage of a preprint
+server. Copyediting has never offered it.
+Basis: probe, 2026-09-30. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
-**A7 — An edit is logged as an assignment** · 🐞 · minor.
-Changing an assignment's boxes through "Edit" adds "{name} ({username}) was
-assigned to this submission as a {role}." to the Activity Log, the line a
-new assignment writes, so the log shows an assignment that did not happen
-and not the change that did.
-Basis: probe. <sup>[f-a7](#fn-a7)</sup>
+**A7 — Editing a participant's assignment is logged in the Activity Log as a new assignment** · 🐞 · low.
+Changing a participant's "Assignment privileges" (whether an editor may
+only recommend a decision) or "Permissions" (whether the person may
+change the publication's details) through "Edit" adds "{name}
+({username}) was assigned to this submission as a {role}." to the
+Activity Log, the line a new assignment writes, so the log shows an
+assignment that did not happen and not the change that did.
+The assignment is saved as changed; only the log's record of the change
+is wrong. The false line carries the date of the edit, and its "User"
+column names the participant, not the editor who made the change. The
+participant gets no notice or email. Only editors read the Activity
+Log: managers and the editors assigned to the submission.
+Every "Edit" › "OK" on a Participants row does it, even one that changes
+nothing, on any submission and stage.
+Basis: probe, 2026-09-30. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
 **A8 — Assigning a Production editor narrows the stages they can open** · ❓ · minor.
@@ -1075,47 +1158,77 @@ journal-wide access looks unintended.
 Basis: probe. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
-**A9 — A "Permissions" tick carries over to another role** · 🐞 · minor.
-In "Assign Participant", choosing another role hides both boxes and is
-expected to start them afresh for the next person. "Assignment
-privileges" is unticked, but "Permissions" keeps its tick: an editor who
-first chose a Section Editor and then switched to Author sees the
-Author's box ticked, although an Author starts without the permission,
-and "OK" saves it so.
-Basis: probe. <sup>[f-a9](#fn-a9)</sup>
+**A9 — "Assign Participant" keeps the "Permissions" tick of the first role chosen, and saves it for another role** · 🐞 · medium.
+In "Assign Participant", the two boxes disappear when the editor
+chooses another role and come back once a person is chosen under the
+new role. "Assignment privileges" comes back unticked, but
+"Permissions" comes back as it was. A tick it had, from the first
+role's default or added by hand, is still there, and "OK" saves it for
+the new role. For example, an editor who first chose a Section editor
+and then switched to Author sees the Author's box ticked, although the
+Author role does not give the permission, and the Author is assigned
+with it.
+An Author given the tick can then change the title, abstract and
+other metadata of the versions not yet published or scheduled, which
+the role's own setting withholds. Nothing marks the tick as carried
+over: it looks like the new role's default.
+At install, the roles that tick the box are Section editor (Series
+editor on a press, Moderator on a preprint server). On a journal or
+press, Guest editor, the assistant roles (Copyeditor, Layout Editor,
+Proofreader and others), Author and Translator do not tick it, nor do
+Volume editor and Chapter Author on a press. On a preprint server every
+role offered ticks it, so only a server that has switched a role's
+setting off is affected.
+Basis: probe, 2026-09-30. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — Templates added in Settings cannot be used** · 🐞 · user-visible · crash: server.
-A template added in Settings › Workflow › "Tasks and Discussions" is listed
-in "Choose a predefined message…" but cannot be used. Chosen in "Assign" or
-"Notify", it leaves "Message" as it was. Sent with a message typed, the
-window stays open with no reason given and no email goes out, whether or
-not the recipient holds one of the template's roles. "OK" on "Assign"
-still assigns the person, and a template limited to no role still adds a
-discussion named after it, with no message, to the stage's discussions
-panel. Choosing the template and sending it both fail on the server, and
+**A10 — Templates added in Settings cannot be used** · 🐞 · medium · crash: server.
+A discussion template added in Settings › Workflow › "Tasks and
+Discussions", or one a manager has limited there to some roles with
+"Limit access to specific roles", is listed in "Choose a predefined
+message…" of "Notify" and "Assign" but cannot be used. Choosing it leaves
+"Message" as it was. Pressing "Notify" or "OK" leaves the window open and
+shows no error, and no email goes out; "OK" on "Assign" still assigns the
+person. An added template still adds an empty discussion named after it
+to the stage on every try, which stays until someone deletes it. A
+limited template, one that came with the install included, adds none,
+and fails even when the sender and the recipient both hold one of its
+roles. Choosing the template and sending it both fail on the server, and
 nothing on screen says so.
-Basis: probe. <sup>[f-a10](#fn-a10)</sup>
+Basis: probe, 2026-09-30. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
-**A11 — No warning when choosing an anonymous reviewer** · 🐞 · user-visible.
-Choosing, in "Assign", a person whose review request on this submission is
-not declined and is "Anonymous Reviewer/Anonymous Author" or "Anonymous
-Reviewer/Disclosed Author" is expected to open the warning "The
-participant you selected has been assigned to conduct an anonymous review.
-If you assign them as a participant, they will have access to the author's
-identity. You are encouraged not to assign this participant unless you can
-independently ensure the integrity of the peer review process." Nothing
-appears, and "OK" assigns them, so an editor can undo the review's
-anonymity without being told.
-Basis: probe. <sup>[f-a11](#fn-a11)</sup>
+**A11 — Editors get no warning when assigning a participant who reviews the submission anonymously** · 🐞 · low.
+While a submission is in review, an editor may choose, in "Assign
+Participant", someone who has an anonymous review request on it that is
+not declined. The window is meant to warn the editor at that moment:
+"The participant you selected has been assigned to conduct an anonymous
+review. …". Nothing appears, and "OK" assigns the person.
+Nobody is told that the new participant also reviews the submission.
+The editor can only find out by checking the reviewer list by hand
+first.
+This happens only when the reviewer also holds a role that "Assign
+Participant" offers on that stage, such as Author, which most registered
+users hold.
+Basis: probe, 2026-09-30. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
-**A12 — "OK" reports a change where none can be made** · 🐞 · minor.
-A recommending Editor who opens "Edit" on a manager-level row sees "No
-changes can be made to this participant", yet "OK" closes the window with
-"The stage assignment has been changed.", although nothing could change.
-Basis: probe. <sup>[f-a12](#fn-a12)</sup>
+**A12 — A recommend-only editor's "Edit Assignment" says no changes can be made, yet "OK" reports a change** · 🐞 · low.
+An Editor who has been made recommend-only on a submission opens "Edit"
+on their own Participants row. The window says "No changes can be made
+to this participant", yet its "OK", the only button besides "Cancel",
+closes it with the notice "The stage assignment has been changed.".
+Before April 2026 the same window showed the "Assignment privileges"
+box, and "OK" saved it.
+Nothing is saved, so nothing is lost, but the editor is told that
+something changed. "Cancel" avoids the notice. The fix is a change to
+one template.
+It happens on any participant row whose role is a manager-level one
+(Journal or Press editor, Production editor, Preprint Server manager),
+and only for an editor in such a role who is recommend-only on that
+submission. A recommend-only Section editor is not offered "Edit" on
+these rows.
+Basis: probe, 2026-09-30. <sup>[f-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
 **A13 — An automatic assignment's recommend-only limit was never seen** · ❓ · latent.
@@ -1133,35 +1246,62 @@ it.
 Basis: code. <sup>[f-a13](#fn-a13)</sup>
 
 <a id="a14"></a>
-**A14 — The Activity Log names the participant, not the editor** · 🐞 · minor.
+**A14 — The Activity Log credits a participant's assignment or removal to the participant, not the editor** · 🐞 · low.
 On the "{name} ({username}) was assigned to this submission as a {role}."
 and "{name} ({username}) was removed from this submission as a {role}."
-lines, the Activity Log's "User" column is expected to name the editor who
-acted. It names the participant, so the log never says who assigned,
-changed or removed them. The "Notification sent to users." lines do name
-the sender.
-Basis: probe. <sup>[f-a14](#fn-a14)</sup>
+lines of a submission's Activity Log, the "User" column should name the
+editor who acted. It names the participant instead, so the log never
+says who assigned or removed them. "Edit" on a participant writes the
+same "was assigned" line ([reported separately](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U35-A7-edit-assignment-logged-as-assigned.md)), with the same
+wrong "User". The other lines, such as "Article submitted" or a
+decision, name the person who acted.
+The assignment or removal itself is done as asked, and the database
+still records who acted; only the Activity Log shows the wrong person,
+and no screen shows the right one.
+This holds for every such line, new or old. On 3.3 these lines name the
+editor; once an install is upgraded to 3.4 or later, the same lines name
+the participant. The proposed fix also corrects the lines already in the
+log, through an upgrade migration, which is why its effort is medium.
+Basis: probe, 2026-09-30. <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
-**A15 — Two footers on the "Assign Editor" email** · 🐞 · minor.
-The email the Submission stage's "Assign Editor" message sends ends with
-the letter's own "— This is an automated message from {journal name}."
-followed by the discussion footer "— Reply to this comment at
-#{submission number} {authors} or unsubscribe from emails sent by {journal
-name}.". The Review and Production stages' "Assign Editor" emails end with
-the discussion footer alone.
-Basis: probe. <sup>[f-a15](#fn-a15)</sup>
+**A15 — The Submission stage's "Assign Editor" email says it is automated and ends with two footers** · 🐞 · low.
+An editor assigns someone from a submission's "Participants" panel on
+the Submission stage and chooses the predefined message "Assign
+Editor". The letter closes with "Kind regards," and then "— This is an
+automated message from {journal name}." instead of the editor's own
+signature. The email the new editor receives then adds the discussion
+footer "— Reply to this comment at #{submission} {authors} or
+unsubscribe from emails sent by {journal name}.", so it ends with two
+footers. The Review and Production stages' "Assign Editor" letters are
+signed by the editor and end with the discussion footer alone.
+The automated line is the journal's email signature (Settings ›
+Workflow › Emails, "Signature"). Every journal shows it unless its
+manager has changed that default; a journal with its own signature gets
+that signature instead of the editor's, still followed by the second
+footer. On a preprint server the Production stage's "Editor Assigned"
+letter does the same.
+The fix is medium-sized because it spans three apps' letters, a pkp-lib
+upgrade migration and the letter's translations.
+Basis: probe, 2026-09-30. <sup>[f-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
-**A16 — The email opt-out for discussions is ignored** · 🐞 · user-visible.
-A person who ticked "Do not send me an email for these types of
-notifications." on the "Discussion added." row of their Notifications tab
-expects no email when a discussion is opened with them
-(*[Notifications center](U05-notifications-center-and-email-preferences.md)*).
-A message sent to them from "Assign" or "Notify" still arrives in their
-mailbox; only "Enable these types of notifications." unticked stops it,
-and the task with it.
-Basis: probe. <sup>[f-a16](#fn-a16)</sup>
+**A16 — Messages from "Notify" and "Assign" email people who turned off emails for "Discussion added."** · 🐞 · medium.
+A message an editor or assistant sends from "Assign" or "Notify" in a
+submission's "Participants" panel opens a discussion with the person and
+emails it to them. A person can tick "Do not send me an email for these
+types of notifications." on the "Discussion added." row of their
+Notifications tab, and then expects no email when a discussion is
+opened with them. These messages still arrive in their mailbox.
+Nothing tells the person their choice was skipped. The "unsubscribe"
+link at the foot of the email saves that very tick, so it does not stop
+the next message. The sender has no way round either: nothing on
+screen shows the person's choice, although a discussion opened from the
+stage's discussions panel respects it.
+It happens on every stage, to anyone listed in "Participants" or being
+assigned there. Reviewers are not affected, since they are not listed
+in "Participants".
+Basis: probe, 2026-09-30. <sup>[f-a16](#fn-a16)</sup>
 
 <a id="a17"></a>
 **A17 — "Notify" after the list is set back to blank was never seen** · ❓ · latent.
@@ -1175,24 +1315,34 @@ Basis: judgment. <sup>[f-a17](#fn-a17)</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — The automatic email names a button that does not exist** · 🐞 · minor.
-The "Editor Assigned (Auto)" email asks the editor to forward the
-submission "by selecting "Send to Review""; the Submission stage's button
-reads "Send for Review". A press's email names "Send to Internal Review",
-which matches its button.
-Basis: probe. <sup>[f-ojs1](#fn-ojs1)</sup>
+**OJS1 — A journal's editor assignment email tells editors to select "Send to Review", a button that reads "Send for Review"** · 🐞 · low.
+When a submission arrives, the journal emails each editor assigned to
+it "You have been assigned as an editor on a submission to {journal
+name}". The email asks the editor to forward the submission to review
+"by selecting "Send to Review"", but the Submission stage's button
+reads "Send for Review", and no button reads "Send to Review". The
+"Assign Editor" message offered under "Participants" on the Submission
+stage carries the same sentence.
+The English letter names the wrong button, and so does the Mongolian
+one, which gives the label in English; the other translations checked
+name their own button. Each journal keeps its own copy of the letter, so
+correcting the text reaches existing journals only through an upgrade
+step that rewrites those copies.
+Basis: probe, 2026-09-30. <sup>[f-ojs1](#fn-ojs1)</sup>
 
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — Internal Review has no predefined message** · 🐞 · user-visible.
+**OMP1 — Internal Review has no predefined message** · 🐞 · medium · crash: server.
 On a press's Internal Review the "Choose a predefined message…" list of
 "Assign Participant" and "Notify" holds only its blank entry, so no message
-can be sent from that stage's panel (A3). "Notify" with a typed message
-stays open with no reason given and nothing is sent; "OK" on "Assign"
-stays open too, although the person is assigned. Every other stage of a
-press offers at least a "Discussion (…)" message.
-Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
+can be sent from that stage's "Participants" panel (A3). A typed message
+fails on the server and nothing on screen says so: after "Notify" the
+window does not close and still holds the text, and nothing is sent;
+after "OK" on "Assign Participant" the window does not close either,
+although the person is assigned. Every other stage of a press offers at
+least a "Discussion (…)" message.
+Basis: probe, 2026-09-30. <sup>[f-omp1](#fn-omp1)</sup>
 
 ### OPS
 
@@ -1205,39 +1355,60 @@ install difference in the roles, not in the panel.
 Basis: probe. <sup>[f-ops1](#fn-ops1)</sup>
 
 <a id="ops2"></a>
-**OPS2 — "Assign Editor" is empty on a preprint server** · 🐞 · minor · crash: server.
-Choosing "Assign Editor" in the predefined messages is expected to fill
-"Message" with a letter, as it does on a journal or press. On a preprint
-server "Message" is left as it was: empty in a fresh window, and any text
-typed or left by an earlier choice stays. Left empty, nothing is sent and
-only "User added as a stage participant." shows; with text typed, the
-email "Assign Editor" goes out with that text, and the discussion and the
-Tasks row appear. The request that should fetch the letter fails on the
-server, and nothing on screen says so.
-Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
+**OPS2 — On a preprint server, choosing "Assign Editor" when assigning a Moderator leaves "Message" empty** · 🐞 · low · crash: server.
+On a preprint server, a manager or Moderator who assigns a Moderator
+from a submission's "Participants" panel and chooses the predefined
+message "Assign Editor" expects "Message" to fill with the assignment
+letter, as it does on a journal or a press. Instead the request for the
+letter fails on the server, nothing on screen says so, and "Message"
+stays as it was.
+In a fresh window "Message" stays empty, and "OK" assigns the Moderator
+without sending anything. If the sender first chose "Discussion
+(Production)", "Message" still holds that message's text, "Please enter
+your message.". When they then choose "Assign Editor" and press "OK",
+the new Moderator gets an email with the subject "Assign Editor" and
+only that sentence as its text.
+No released version is affected: only servers created on the
+development version (`main`) have the fault, and a server upgraded from
+3.5 keeps its letter. Servers already created on `main` keep the empty
+letter after the fix, which matters only for test and development
+installs, since `main` is unreleased.
+Basis: probe, 2026-09-30. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="ops3"></a>
-**OPS3 — The automatic assignment email is never sent** · 🐞 · user-visible.
-A preprint server lists "Moderator Assigned (Auto)" under Settings ›
-Workflow › Emails and lets it be edited, but never sends it: no Preprint
-Server manager or Moderator on a submission gets it when the author
-submits, the ones the server assigns automatically included, and neither
-does a manager who submits in that role. Only "A new submission needs an
-editor to be assigned" goes out, so the editors a server assigns on
-submission are never told.
-Basis: probe. <sup>[f-ops3](#fn-ops3)</sup>
+**OPS3 — On a preprint server, Moderators assigned automatically to a new preprint are never emailed** · 🐞 · high.
+When an author submits a preprint, the server assigns the Moderators its
+section lists under "Editorial Assignments", and each of them should get
+the email "You have been assigned as a moderator on a submission to
+{server name}". None of them does: they appear in the preprint's
+"Participants" panel, but no email goes out, the Activity Log records
+none, and no task appears in their Tasks panel either.
+Nobody else on the editorial side is told. The managers get no "A new
+submission needs an editor to be assigned" email, because the preprint
+already has Moderators. The only email the submission sends is the
+author's acknowledgement, and nothing shows that the Moderators' emails
+are missing.
+It needs only a section with Moderators under "Editorial Assignments".
+Basis: probe, 2026-09-30. <sup>[f-ops3](#fn-ops3)</sup>
 
 <a id="ops4"></a>
-**OPS4 — A participant notice can land in the stage's own box** · 🐞 · minor.
-After "OK" on "Assign Participant" or "Edit Assignment", or "Notify", the
-editor expects the confirmation at the top right of the page ("User added
-as a stage participant.", "The stage assignment has been changed.",
-"Notification sent to users."), where a journal or press shows it. On a
-preprint server it is usually there, but it can show instead in a box
-headed "Notification" at the top of the Production entry's main column,
-above "Production Tasks & Discussions", with nothing at the top right.
-Which place the editor gets is down to timing, not to anything they did.
-Basis: test run. <sup>[f-ops4](#fn-ops4)</sup>
+**OPS4 — On a preprint server, "Notify" on a participant shows its confirmation in the Production stage, not at the top right** · 🐞 · low.
+On a preprint server, an editor sends a message to a participant with
+"Notify" in the Participants panel of a submission's Production stage.
+The window closes and the message is sent, but "Notification sent to
+users." does not show at the top right of the page, where a journal or
+press shows it. It shows instead in a box headed "Notification" at the
+top of the Production stage, above "Production Tasks & Discussions",
+and stays there until the page is reloaded or another change on the
+page (a participant added, for example) refreshes it.
+Nothing is lost: the message reaches the participant and opens a
+discussion. The confirmation is only in an unexpected place, where it
+reads like a standing notice about the preprint. On a preprint server
+that box shows nothing else, so no notice of the stage's own is hidden
+or pushed out.
+"Assign" and "Edit" in the same panel still show their notices at the
+top right.
+Basis: test run, 2026-09-30. <sup>[f-ops4](#fn-ops4)</sup>
 
 ---
 
@@ -1339,72 +1510,91 @@ Basis: test run. <sup>[f-ops4](#fn-ops4)</sup>
 
 <a id="fn-a1"></a>
 **f-a1** — Live-probed 2026-09-22 (all three apps, a journal's Guest Editor too): note td3. `Validation::canEditParticipant()` (added by pkp/pkp-lib#12497, lib/pkp `7ce4f2e80`, 2026-04-02) lets a Manager or Site Admin through, and for anyone else looks up the current user's assignments with `StageAssignment::withStageIds([$stageAssignment->stageId])`. A `StageAssignment` has no `stageId` (the table has no stage column, note c), so the lookup runs with a null stage, finds nothing and returns false for every Section Editor and Guest Editor; `StageParticipantGridHandler::saveParticipant()` then answers `new JSONMessage(true, $form->fetch($request))`, which redraws the form in the window without saving. The panel's own test (`useCurrentUser::canCurrentUserEditParticipant()`) offers the button on those rows. A new assignment through "Assign" is not affected (the check runs only with an `assignmentId`).
+Issue report: [pkp-e2e#132](https://github.com/jardakotesovec/pkp-e2e/issues/132) ([docs/issues/U35-A1-section-editor-edit-assignment-saves-nothing.md](../issues/U35-A1-section-editor-edit-assignment-saves-nothing.md)).
 
 <a id="fn-a2"></a>
 **f-a2** — Live-probed 2026-09-22 (all three apps): note td10. `useParticipantManagerConfig.js::getItemActions()` pushes "Remove" on the "Assign" condition alone, while "Edit" also needs `canCurrentUserEditParticipant()` (note b); `StageParticipantGridHandler::deleteParticipant()` checks only the CSRF token and that the assignment belongs to the submission, with no counterpart of `Validation::canEditParticipant()`. What a recommending editor sees with no deciding editor assigned is *[Review stage & rounds](U26-review-stage-and-rounds.md#recommendations)*'.
 
 <a id="fn-a3"></a>
 **f-a3** — Live-probed 2026-09-22 (all three apps, two scratch journals each; a press's Internal Review too): note td4. With the list blank, `PKPStageParticipantNotifyForm::sendMessage()` runs `Template::withContextId()->find('')`, which the Postgres test database refuses ("invalid input syntax for type bigint"), so both requests answer a server error; on "Assign" the person is assigned all the same, and neither the log line nor a notice follows. Introduced with pkp/pkp-lib#12593 (lib/pkp `b3b882bec`, 2026-06-01). A MySQL install may read the empty id as no template and return early, and would then show "Notification sent to users." with nothing sent (not driven). The list's own wording (`stageParticipants.notify.chooseMessage` "Choose a predefined message to use, or fill out the form below.") presents the message box as an alternative to the list. Live-probed 2026-09-29 (Fields "Notify"; all three apps, two runs each, as Journal Manager): a predefined message chosen in "Notify" and the list set back to its blank entry, the text kept and nothing shown, while the request it posts (`StageParticipantGridHandler::fetchTemplateBody()` with an empty `template`) answered a server error with an empty body, the only one of each run. The handler runs `Template::with('userGroups')->withContextId()->find('')`, the same empty-id lookup as `sendMessage()`. The "Assign" window's list posts the same request (not driven).
+Issue report: [pkp-e2e#125](https://github.com/jardakotesovec/pkp-e2e/issues/125) ([docs/issues/U35-A3-OMP1-participant-message-without-predefined-not-sent.md](../issues/U35-A3-OMP1-participant-message-without-predefined-not-sent.md)).
 
 <a id="fn-a4"></a>
 **f-a4** — Live-probed 2026-09-22 (all three apps): note td5. `AddParticipantForm::validate()` returns `Repo::userGroup()->userInGroup($userId, $userGroupId) && Repo::userGroup()->get($userGroupId) && parent::validate()`: with no user, or with a user who does not hold the newly chosen role, the first test is false and `parent::validate()`, which would record the `userId` check's message, never runs; `saveParticipant()` answers the redrawn form with no error.
+Issue report: [pkp-e2e#139](https://github.com/jardakotesovec/pkp-e2e/issues/139) ([docs/issues/U35-A4-assign-participant-ok-without-reason.md](../issues/U35-A4-assign-participant-ok-without-reason.md)).
 
 <a id="fn-a5"></a>
 **f-a5** — `PKPStageParticipantNotifyForm::sendMessage()` creates the discussion with `'createdBy' => $user->getId()`, `$user` being the recipient, while the head note's `userId` and the task's sender are the signed-in user. Live-probed 2026-09-18 (Copyediting stage, OJS and OMP): the "Request Copyedit" discussion listed as "Discussion Request Copyedit Created by: {Copyeditor}"; live-probed 2026-09-19 (all three apps, the "Notify" window): the discussion reading "Created by: {the recipient}". Live-probed 2026-09-22 (all three apps, from "Assign" and "Notify"): the panel row "Discussion {name} Created by: {the recipient's username}", the discussion's first entry "Message from {the sender's username}", the recipient's task naming the sender.
+Issue report: [pkp-e2e#140](https://github.com/jardakotesovec/pkp-e2e/issues/140) ([docs/issues/U35-A5-message-discussion-created-by-recipient.md](../issues/U35-A5-message-discussion-created-by-recipient.md)).
 
 <a id="fn-a6"></a>
 **f-a6** — Live-probed 2026-09-22 (all three apps): note td6. `sendMessage()`'s `switch ($templateKey)` raises `NOTIFICATION_TYPE_EDITOR_ASSIGN` (`notification.type.editorAssign` "You have been assigned as an editor to the submission "{$title}".") only for the key `EDITOR_ASSIGN`; the installed "Assign Editor" templates carry `EDITOR_ASSIGN_SUBMISSION`, `EDITOR_ASSIGN_REVIEW` and `EDITOR_ASSIGN_PRODUCTION` (`registry/taskTemplates.xml`, keys made mandatory by pkp/pkp-lib#12593, ojs `4157f8331c`, 2026-08-07), so they fall to the default branch, which only logs. No other code raises that task.
+Issue report: [pkp-e2e#142](https://github.com/jardakotesovec/pkp-e2e/issues/142) ([docs/issues/U35-A6-assign-editor-message-no-editor-task.md](../issues/U35-A6-assign-editor-message-no-editor-task.md)).
 
 <a id="fn-a7"></a>
 **f-a7** — Live-probed 2026-09-22 (all three apps): note td8. Note k: `saveParticipant()` logs `SUBMISSION_LOG_ADD_PARTICIPANT` with `submission.event.participantAdded` on the edit branch as well, where only the trivial notice distinguishes the two.
+Issue report: [pkp-e2e#143](https://github.com/jardakotesovec/pkp-e2e/issues/143) ([docs/issues/U35-A7-edit-assignment-logged-as-assigned.md](../issues/U35-A7-edit-assignment-logged-as-assigned.md)).
 
 <a id="fn-a8"></a>
 **f-a8** — Live-probed 2026-09-22 (journal and press): an unassigned Production editor opening every stage of a submission with "Assign" and every row's "Edit"; the same role assigned to a submission opening Copyediting and Production, and the Submission and Review entries (a press's Internal Review too) showing "You don't currently have access to that stage of the workflow.". Code, not traced further: an assigned user's stages come from their assignments' roles, and the fallback that gives a manager-level user every stage applies only to a user with no assignment on the submission (`submission/maps/Schema::getPropertyStages()`, note p).
 
 <a id="fn-a9"></a>
 **f-a9** — Live-probed 2026-09-22 (all three apps; on a preprint server with the Author's default switched off): a Section Editor (Moderator) chosen with "Permissions" ticked, the role switched to Funding coordinator (Author), whose default is off, and a person chosen: the box shown ticked; "OK"; that row's "Edit" showing it ticked. After the switch the box is hidden but still ticked. Code: note e.
+Issue report: [pkp-e2e#148](https://github.com/jardakotesovec/pkp-e2e/issues/148) ([docs/issues/U35-A9-permissions-tick-carried-to-other-role.md](../issues/U35-A9-permissions-tick-carried-to-other-role.md)).
 
 <a id="fn-a10"></a>
 **f-a10** — Live-probed 2026-09-22 (all three apps): templates added under a stage's "Add template", unrestricted, limited to Author and limited to an editor role, each listed; choosing one leaving "Message" unchanged; "Notify" to a person who holds the role, to one who does not and to the Author each staying open with no notice, no email; the unrestricted one adding its discussion with no message to the panel; "OK" on "Assign" staying open with the person assigned. Both the choice's request and the send answer a server error. For a role-limited template the cause is traced: `editorialTask/Repository::isTemplateAccessibleToUser()` filters on an unqualified `user_group_id`, which the Postgres test database refuses as ambiguous; the unrestricted template's failure was seen, not traced. Control: "Discussion (Submission)" on the same screen sends.
+Issue report: [pkp-e2e#129](https://github.com/jardakotesovec/pkp-e2e/issues/129) ([docs/issues/U35-A10-added-discussion-template-fills-nothing.md](../issues/U35-A10-added-discussion-template-fills-nothing.md)).
+Issue report: [pkp-e2e#130](https://github.com/jardakotesovec/pkp-e2e/issues/130) ([docs/issues/U35-A10-role-limited-discussion-template-fails.md](../issues/U35-A10-role-limited-discussion-template-fails.md)).
 
 <a id="fn-a11"></a>
 **f-a11** — Live-probed 2026-09-22 (journal and press): a reviewer on round 1 with "Anonymous Reviewer/Anonymous Author", found under their Funding coordinator and Translator roles and chosen on the Submission stage and on the review stage, and a reviewer with "Anonymous Reviewer/Disclosed Author" on a scratch journal set to that type, and a press's Internal Review: no warning, and "OK" assigning them with "User added as a stage participant.". The window's data listed the right reviewers (not declined, anonymous types only, "Open" left out). Controls with no warning expected: a declined reviewer, a person with no review, Copyediting, and an "Open" review. Cause: note n. The warning dates from 2018; when the check broke was not traced.
+Issue report: [pkp-e2e#133](https://github.com/jardakotesovec/pkp-e2e/issues/133) ([docs/issues/U35-A11-anonymous-reviewer-assigned-without-warning.md](../issues/U35-A11-anonymous-reviewer-assigned-without-warning.md)).
 
 <a id="fn-a12"></a>
 **f-a12** — Live-probed 2026-09-22 (all three apps): a recommending Editor opening "Edit" on an Editor's, a Production editor's or (preprint server) a Preprint Server manager's row, their own included, and pressing "OK": the window closing with "The stage assignment has been changed.". Code: note h; the save runs the edit branch of note k.
+Issue report: [pkp-e2e#147](https://github.com/jardakotesovec/pkp-e2e/issues/147) ([docs/issues/U35-A12-edit-assignment-no-changes-ok-says-changed.md](../issues/U35-A12-edit-assignment-no-changes-ok-says-changed.md)).
 
 <a id="fn-a13"></a>
 **f-a13** — `SubEditorsDAO::assignEditors()` builds each automatic assignment with `Repo::stageAssignment()->build(…, $userGroup->recommendOnly)` and the metadata flag from the group's default (note l). An automatic assignment happens only on the install's first journal (*[Submission wizard](U21-submission-wizard.md#a8)*), the seeded journal, whose roles keep their install options, so the case was not reached; a role's recommend-only change leaves earlier assignments alone (note m).
 
 <a id="fn-a14"></a>
 **f-a14** — Live-probed 2026-09-22 (all three apps): the "User" column of "… was assigned …" lines naming the assigned person when a Journal Manager or a Section Editor assigned them, of the lines "Edit" writes naming the edited person, and of "… was removed …" lines naming the removed person; "Notification sent to users." lines naming the sender. Cause: note k.
+Issue report: [pkp-e2e#150](https://github.com/jardakotesovec/pkp-e2e/issues/150) ([docs/issues/U35-A14-activity-log-names-participant-not-editor.md](../issues/U35-A14-activity-log-names-participant-not-editor.md)).
 
 <a id="fn-a15"></a>
 **f-a15** — Live-probed 2026-09-22 (journal and press): the Submission stage's "Assign Editor" email ending "— This is an automated message from {journal name}." and then the discussion footer; the Review and Production letters, and the other messages, with the footer alone. The first closing is part of the template's own text, which the discussion email then adds its footer to (note g).
+Issue report: [pkp-e2e#151](https://github.com/jardakotesovec/pkp-e2e/issues/151) ([docs/issues/U35-A15-assign-editor-email-two-footers.md](../issues/U35-A15-assign-editor-email-two-footers.md)).
 
 <a id="fn-a16"></a>
 **f-a16** — Live-probed 2026-09-22 (all three apps): note td7. The email is sent whenever the discussion's task-level notification is created, which follows "Enable these types of notifications." only (note g).
+Issue report: [pkp-e2e#135](https://github.com/jardakotesovec/pkp-e2e/issues/135) ([docs/issues/U35-A16-discussion-email-opt-out-ignored.md](../issues/U35-A16-discussion-email-opt-out-ignored.md)).
 
 <a id="fn-a17"></a>
 **f-a17** — Not driven. The 2026-09-29 probe (note j, A3's footnote) chose a predefined message in "Notify", set the list back to its blank entry and read the window (the list's value empty, "Message" as filled; `.reports/U35/ccI29/r2-cases-<app>.json`, `mgr-tplBack`), then only closed it; "Notify" was pressed only in the control with a predefined message chosen. The lean, from the code and not seen: the list then holds an empty value as when untouched, and `fetchTemplateBody()` (note f) only returns the text for the editor, so the form would post no template and `sendMessage()` take A3's path (note g). One press of "Notify" in that state, then the stage's discussions panel and the recipient's mailbox read, settles it. Rule 11b's untouched-list sentence rests on note td4.
 
 <a id="fn-ojs1"></a>
 **f-ojs1** — OJS `locale/en/emails.po` `emails.editorAssign.body`: "…please forward the submission to the review stage by selecting \"Send to Review\" and then assign reviewers by clicking \"Add Reviewer\"."; the decision's label is lib/pkp `editor.submission.decision.sendExternalReview` "Send for Review" (no OJS override). OMP's app body names "Send to Internal Review", OMP's `editor.submission.decision.sendInternalReview` label. Live-probed 2026-09-22 (journal and press): the received email and Settings › Workflow › Emails › "Editor Assigned (Auto)" say "Send to Review"; the Submission stage's button reads "Send for Review" for the Editor and the Section Editor; the press's email and button both read "Send to Internal Review".
+Issue report: [pkp-e2e#153](https://github.com/jardakotesovec/pkp-e2e/issues/153) ([docs/issues/U35-OJS1-editor-assigned-email-names-send-to-review.md](../issues/U35-OJS1-editor-assigned-email-names-send-to-review.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Live-probed 2026-09-22 (press): "Assign" (as Press Manager and as Series editor) and "Notify" on Internal Review offering only the blank entry; "Notify" with "Hello" typed staying open as filled, nothing received, no discussion; "OK" on "Assign" with a typed message staying open while the person was assigned; neither logged. Control: External Review lists "Discussion (Review)" and "Assign Editor". Code: OMP `registry/taskTemplates.xml` has no template with `stageId="WORKFLOW_STAGE_ID_INTERNAL_REVIEW"` and OMP's locale no Internal Review discussion name; `PKPStageParticipantNotifyForm::fetch()` filters by the stage (note f), and `sendMessage()` needs a template (A3's footnote).
+Issue report: [pkp-e2e#125](https://github.com/jardakotesovec/pkp-e2e/issues/125) ([docs/issues/U35-A3-OMP1-participant-message-without-predefined-not-sent.md](../issues/U35-A3-OMP1-participant-message-without-predefined-not-sent.md)).
 
 <a id="fn-ops1"></a>
 **f-ops1** — OPS `registry/userGroups.xml` gives the manager group `stages="5,6"`, OJS and OMP none. Live-probed 2026-09-19 (all three apps, the Production stage's "Assign"): the preprint server's role list "Preprint Server manager, Moderator, Author", the journal's and press's without their manager role; seen before on 2026-09-04 (OPS, the notifications probes). Live-probed 2026-09-19 (the Roles screen): the manager row's stage boxes ticked on OPS only (note m). Live-probed 2026-09-22 (all three apps, every stage's "Assign" and the Roles screen): as on 2026-09-19.
 
 <a id="fn-ops2"></a>
 **f-ops2** — Live-probed 2026-09-22 (preprint server): "Assign Editor" chosen in a fresh window leaving "Message" empty, after typed text keeping the text, after "Discussion (Production)" keeping "Please enter your message."; left empty, "OK" assigning with only "User added as a stage participant." and nothing sent; with text typed, the email "Assign Editor" sent with it, the discussion and the Tasks row there, no editor task. Control: a journal and a press fill the letter. The choice's request answers a server error. Code: OPS `registry/taskTemplates.xml` gives `EDITOR_ASSIGN_PRODUCTION` the description key `emails.editorAssignProduction.body`, which neither OPS's `locale/en` nor lib/pkp's defines (OJS and OMP define it in their app locale).
+Issue report: [pkp-e2e#128](https://github.com/jardakotesovec/pkp-e2e/issues/128) ([docs/issues/U35-OPS2-ops-assign-editor-message-empty.md](../issues/U35-OPS2-ops-assign-editor-message-empty.md)).
 
 <a id="fn-ops3"></a>
 **f-ops3** — Live-probed 2026-09-22 (two preprint servers): editors seeded on a draft (two Preprint Server managers, three Moderators, one holding both roles, one who ticked the opt-out) and the draft submitted by its author: nobody got "You have been assigned as a moderator…", only "A new submission needs an editor to be assigned: …"; a manager who submitted as "Preprint Server manager" got the same; a submission seeded on the install's first server, with its Moderators assigned automatically, logged no such email. "Moderator Assigned (Auto)" is listed and opens in "Edit Template". Cause: note l; the template itself asks the moderator to post the preprint.
+Issue report: [pkp-e2e#136](https://github.com/jardakotesovec/pkp-e2e/issues/136) ([docs/issues/U35-OPS3-ops-moderator-assigned-email-never-sent.md](../issues/U35-OPS3-ops-moderator-assigned-email-never-sent.md)).
 
 <a id="fn-ops4"></a>
 **f-ops4** — Test runs 2026-09-22 (preprint server; Rules 6a, 8d, 11; scenario 6): in one run, "Notify" in scenario 6 closed the window and "Notification sent to users." showed in a box headed "Notification" at the top of the Production entry's main column, above "Production Tasks & Discussions", with nothing at the top right; in every other scenario of that run, and in every scenario of the next full run, each notice showed at the top right. The journal's and press's runs showed every notice at the top right. Cause: each Participants action answers with a data-changed event, on which both the page's fetch of pending notices (note k) and the stage's `pages/workflow/components/primary/WorkflowNotificationDisplay.vue` post to `notification/fetchNotification`. On a journal's or press's Copyediting and Production entries the component posts `requestOptions` with `NOTIFICATION_LEVEL_TRIVIAL: 0`; for OPS's Production `getRequestOptionsPerStage()` returns null, so it posts none, and `NotificationHandler::fetchNotification()` with no options returns the user's trivial notices and deletes them. Whichever request is answered first takes the notice. Proposed fix: give OPS's Production stage its own request options in `getRequestOptionsPerStage()` (at least `NOTIFICATION_LEVEL_TRIVIAL: 0`, as the other apps' Production has), or skip the component's fetch when a stage has none.
+Issue report: [pkp-e2e#158](https://github.com/jardakotesovec/pkp-e2e/issues/158) ([docs/issues/U35-OPS4-participant-notice-lands-in-stage-box.md](../issues/U35-OPS4-participant-notice-lands-in-stage-box.md)).
 
 ## Reference — entry points & surfaces
 
