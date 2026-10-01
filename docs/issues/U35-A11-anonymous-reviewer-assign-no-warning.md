@@ -1,4 +1,4 @@
-# An editor assigning an anonymous reviewer of the submission as a participant gets no warning
+# No warning opens when an editor assigns, as a participant, a person who reviews the submission anonymously
 
 - **Severity** medium
 - **Effort** medium
@@ -20,37 +20,51 @@ anonymously. A warning is meant to open, saying that this person "will
 have access to the author's identity". Nothing opens, and "OK" assigns
 the person with "User added as a stage participant.".
 
-From then on the reviewer can open the submission's workflow, which
-shows the author's name. In this way an editor undoes a review's
-anonymity without being told.
+From then on the reviewer can open the submission's workflow as one of
+its editors. It shows the author's name, which a reviewer of the type
+"Anonymous Reviewer/Anonymous Author" is not meant to have.
 
-It happens while the submission is in a review stage. The person must
-hold a role that "Assign" offers there, such as Section editor. Their
-review of this submission must be of the type "Anonymous
-Reviewer/Anonymous Author" or "Anonymous Reviewer/Disclosed Author" and
-not declined. A preprint server has no review and is not affected.
+It happens while the submission is in a review stage. Besides being a
+reviewer, the person must hold a role in the journal that can be
+assigned on a review stage, such as Section editor. Their review of
+this submission must be of the type "Anonymous Reviewer/Anonymous
+Author" or "Anonymous Reviewer/Disclosed Author" and not declined. A
+preprint server has no review and is not affected.
+
+The fault is one line of script. The effort is medium because the fix
+also has to be shipped as a rebuilt script bundle in each app.
 
 ## Impact
 
-- **Lost**: the review's anonymity. Before the assignment the reviewer
-  sees the submission without its author. After it, the workflow opens
-  for them as for any editor, with the author's name in its heading and
-  the "Publication" pages in its menu. The reviewer has to open the
-  workflow to see it; the assignment sends them no email.
+- **Lost**, for an "Anonymous Reviewer/Anonymous Author" review: the
+  author's anonymity. Before the assignment the reviewer sees the
+  submission without its author. After it, the workflow opens for them
+  with the author's name in its heading.
+- **Lost**, for an "Anonymous Reviewer/Disclosed Author" review: no
+  identity, since this reviewer has the author's name already. What is
+  lost is the editor's chance to think again before making a reviewer
+  an editor of the submission they review.
+- **What else the reviewer gets**: the editor's view of the review
+  stage, which offers them "Add Reviewer" and the decision buttons. The
+  other reviewers are listed with their status and review type but
+  without their names. This was seen on screen for an "Anonymous
+  Reviewer/Anonymous Author" review; for the other type the names stay
+  hidden by the code. Whether the other reviewers' submitted reviews
+  can be opened was not checked.
 - **Who**: an editor or section editor who assigns, during review, a
   person who is also a reviewer of that submission. That is rare in a
   large journal and likelier in a small one, where the same people edit
   and review and a second editor may not know whom the first one asked
-  to review.
+  to review. The reviewer has to open the workflow to see any of it;
+  the assignment sends them no email.
 - **Way round**: the editor can compare the chosen name with the
   "Reviewers" panel before pressing "OK". "Remove" on the participant's
-  row closes the workflow to the reviewer again, but not what they have
-  already seen.
+  row takes the access away again; the reviewer keeps what they have
+  seen.
 
-Medium: the author's identity does reach an anonymous reviewer, and
-nothing says so, but only when an editor assigns that same person, a
-state few submissions reach. An assignment editors make routinely would
-put it at high.
+Medium: rare, but silent, and the author's name does reach an anonymous
+reviewer. It would be high if editors made this kind of assignment
+often.
 
 ## Steps to reproduce
 
@@ -241,7 +255,16 @@ is the untried half.
   the ticked button's value was `6`, and no box opened. Datasets:
   pkp/datasets c657990 (2026-10-01).
 - `access.js` ran on OJS `main` and `stable-3_5_0`, with the same
-  result. Her mailbox held the "Invitation to review" from step 4 and
+  result, for an "Anonymous Reviewer/Anonymous Author" review. As the
+  assigned reviewer the Review stage showed "Add Reviewer", "Request
+  Revisions", "Accept Submission" and "Decline Submission" (not
+  pressed), and the two other reviewers' rows with "Request Sent", their
+  review type and an empty name. No other reviewer had submitted a
+  review, so opening one was not tried. For "Anonymous
+  Reviewer/Disclosed Author" nothing was walked: that the other
+  reviewers' names stay hidden there too is read in
+  `AnonymizeData::reviewsToAnonymize()`, which treats every review that
+  is not "Open" alike. Her mailbox held the "Invitation to review" from step 4 and
   nothing from the assignment. Whether the assignment puts a notice in
   her "Tasks" was not read.
 - Not driven: 3.4 and 3.3 (read in the code); a press's Internal Review;

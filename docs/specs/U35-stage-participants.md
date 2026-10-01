@@ -1008,7 +1008,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | "Edit" is logged as a new assignment | 🐞 | minor | — |
 | [A9](#a9) | In "Assign Participant", the "Permissions" box stays ticked after the editor chooses another role | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A message template added in Settings is listed but fills nothing and cannot be sent | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A11](#a11) | An editor assigning an anonymous reviewer of the submission as a participant gets no warning | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [A11](#a11) | No warning opens when an editor assigns, as a participant, a person who reviews the submission anonymously | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | "OK" on the "No changes can be made to this participant" window reports "The stage assignment has been changed." | 🐞 | minor | — |
 | [A14](#a14) | The Activity Log's "User" column names the participant, not the editor who assigned, changed or removed them | 🐞 | minor | — |
 | [A15](#a15) | The Submission stage's "Assign Editor" email ends with two footers | 🐞 | minor | — |
@@ -1156,19 +1156,22 @@ again under an installed template that is not limited.
 Basis: probe, 2026-10-01. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
-**A11 — An editor assigning an anonymous reviewer of the submission as a participant gets no warning** · 🐞 · medium.
+**A11 — No warning opens when an editor assigns, as a participant, a person who reviews the submission anonymously** · 🐞 · medium.
 In "Assign", an editor chooses a person who reviews the submission
 anonymously. A warning is meant to open, saying that this person "will
 have access to the author's identity". Nothing opens, and "OK" assigns
 the person with "User added as a stage participant.".
-From then on the reviewer can open the submission's workflow, which
-shows the author's name. In this way an editor undoes a review's
-anonymity without being told.
-It happens while the submission is in a review stage. The person must
-hold a role that "Assign" offers there, such as Section editor. Their
-review of this submission must be of the type "Anonymous
-Reviewer/Anonymous Author" or "Anonymous Reviewer/Disclosed Author" and
-not declined. A preprint server has no review and is not affected.
+From then on the reviewer can open the submission's workflow as one of
+its editors. It shows the author's name, which a reviewer of the type
+"Anonymous Reviewer/Anonymous Author" is not meant to have.
+It happens while the submission is in a review stage. Besides being a
+reviewer, the person must hold a role in the journal that can be
+assigned on a review stage, such as Section editor. Their review of
+this submission must be of the type "Anonymous Reviewer/Anonymous
+Author" or "Anonymous Reviewer/Disclosed Author" and not declined. A
+preprint server has no review and is not affected.
+The fault is one line of script. The effort is medium because the fix
+also has to be shipped as a rebuilt script bundle in each app.
 Basis: probe, 2026-10-01. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
