@@ -882,6 +882,8 @@ as it stands. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A1 (issue report
+    `docs/issues/U57-A1-site-language-change-unticks-submission-languages.md`): a language the site does not enable, ticked under "Submissions" and made the "Default", keeping both ticks and its place on "Make a Submission" after the Site Administrator installs another language
   - the guard for A8 (issue report
     `docs/issues/U57-A8-french-default-texts-stored-as-codes.md`): a press and a server created with French under "UI", and French "Reload defaults", leaving no "##" code on the French "Submissions", "Privacy Statement" and "Editorial Masthead" pages {OMP OPS}
 - **Rarely met**:
@@ -957,7 +959,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | Any change on the site's "Languages" list unticks every journal's submission languages that the site has not enabled | 🐞 | user-visible | — |
+| [A1](#a1) | Any change to the site's languages silently unticks journals' submission languages the site does not offer | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | On a site served on a port of its own, the "Language" block's links land on the site's home page | 🐞 | minor | — |
 | [A5](#a5) | Ticking "Forms" makes the Settings page's script fail five times | 🐞 | invisible · crash: script | — |
 | [A6](#a6) | Two managers adding the same form language at the same moment: one tick silently fails on the server | 🐞 | latent · crash: server | Jarda 2026-09-26 · risk accepted |
@@ -975,19 +977,25 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — A site-level language change strips journals' submission languages** · 🐞 · user-visible.
-A journal can accept submissions in any language of the world ("Add/Remove
-Languages", Rule 14), including one the site has not enabled, such as
-German on a site with English and French. When the Site Administrator then
-installs, enables, disables or removes any language on the site's
-"Languages" list, every such language loses its "Submissions" and
-"Metadata" ticks on every journal: its row stays on "Submission Languages"
-with both boxes empty (a "Default" radio included), "Make a Submission"
-stops offering it, and no one is told. The Journal Manager expects the
-site's interface languages and the journal's submission languages to be
-independent, as the two lists say.
-Since: 2024-03-21 (submission languages made independent of the site's) ·
-Basis: probe. <sup>[f-a1](#fn-a1)</sup>
+**A1 — Any change to the site's languages silently unticks journals' submission languages the site does not offer** · 🐞 · high.
+A journal can accept submissions in any language of the world, including
+one the site has not enabled, such as German on a site with English and
+French. Later the Site Administrator installs, enables, disables or
+removes a language on the site's "Languages" list, any language at all.
+After that, every submission language of every journal that the site
+does not offer loses its "Submissions" and "Metadata" ticks. Its row stays
+on "Submission Languages" with both boxes empty, even when it is the
+"Default", and "Make a Submission" stops offering it. No one is told.
+When a journal is left with a single ticked language, "Make a
+Submission" asks for no language at all, and each new submission is
+created in the journal's "Default". When the "Default" was one of the
+stripped languages, submissions silently go in a language the journal
+no longer offers, whatever their authors write in.
+The Journal Manager expects the journal's submission languages to stay
+as set. The settings page shows "Website Languages" and "Submission
+Languages" as two separate lists, and only the first is tied to the
+site's languages.
+Basis: probe, 2026-10-01. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — "Reload defaults" is for the Site Administrator only** · ❓ · minor.
@@ -1243,6 +1251,7 @@ OJS, OMP and OPS unless its note names fewer apps.
 
 <a id="fn-a1"></a>
 **f-a1** — `AdminLanguageGridHandler::_updateContextLocaleSettings()`, run by `saveInstallLocale()`, `uninstallLocale()` and `_updateLocaleSupportState()`, intersects each journal's `supportedSubmissionLocales` and `supportedSubmissionMetadataLocales` with the site's supported list; `supportedAddedSubmissionLocales` and `supportedDefaultSubmissionLocale` are left alone, so the row stays with both boxes empty. The metadata list joined the intersection in pkp/pkp-lib `7781b8a799` "Make submission language selection and metadata forms independent from website language settings" (2024-03-21), the change that let "Add/Remove Languages" offer every language. Live-probed 2026-09-27: German, not installed on the site, added through "Add/Remove Languages" and ticked under "Submissions": "Make a Submission" asked "Submission Language" with "German", "English"; after the site installed Spanish, German's row stayed with both boxes empty and the start page asked no language; the same after a removal, a disable and an enable; with German made the "Default" first, it kept the "Default" with both boxes empty. What a new submission then gets as its language was seen once and not settled.
+Issue report: [docs/issues/U57-A1-site-language-change-unticks-submission-languages.md](../issues/U57-A1-site-language-change-unticks-submission-languages.md).
 
 <a id="fn-a2"></a>
 **f-a2** — `LanguageGridRow::initialize()` guards both row actions with `Validation::isSiteAdmin()`, unchanged since pkp/pkp-lib `2ac16d58aa` (2020-07-10) at least; `ManageLanguageGridHandler` role-assigns `reloadLocale` to `ROLE_ID_MANAGER` as well, so the restriction is the link's alone (code only; the request was not sent as a manager). Code read 2026-09-27. Live-probed 2026-09-27: note k.

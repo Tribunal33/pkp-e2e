@@ -1,0 +1,14 @@
+--- a/lib/pkp/controllers/grid/admin/languages/AdminLanguageGridHandler.php
++++ b/lib/pkp/controllers/grid/admin/languages/AdminLanguageGridHandler.php
+@@ -430,8 +430,9 @@
+         while ($context = $contexts->next()) { /** @var \PKP\context\Context $context */
+             $params = [];
+             $primaryLocale = $context->getPrimaryLocale();
+-            $params['supportedDefaultSubmissionLocale'] = $context->getData('supportedDefaultSubmissionLocale');
+-            foreach (['supportedLocales', 'supportedFormLocales', 'supportedSubmissionLocales', 'supportedSubmissionMetadataLocales'] as $settingName) {
++            // Only the website languages follow the site's; the submission and
++            // metadata languages are independent of it (pkp/pkp-lib#9425)
++            foreach (['supportedLocales', 'supportedFormLocales'] as $settingName) {
+                 $localeList = $context->getData($settingName);
+ 
+                 if (is_array($localeList)) {
