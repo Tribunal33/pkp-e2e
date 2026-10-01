@@ -1038,6 +1038,11 @@ Left out of the scenarios above, by reason:
     preprint with a URL Path, its non-PDF galley link downloading the
     file, and its ID addresses with a galley and a version part
     forwarding to the URL Path address with that part kept
+  - the guard for OJS1 (Rule 15c; issue report
+    `docs/issues/U13-OJS1-citation-formats-fail-outside-published-issue.md`):
+    a reader on an article published with no issue, and on one
+    published at once into an unpublished issue, signed out and signed
+    in, gets another citation format and a download {OJS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1182,7 +1187,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A9](#a9) | With no additional format ticked, "More Citation Formats" opens nothing and hides the downloads | 🐞 | minor | — |
 | [A10](#a10) | A reference's address in parentheses takes the ")" into its link | 🐞 | minor | — |
 | [A11](#a11) | Keywords are listed in no fixed order: the order typed is not kept | 🐞 | minor | — |
-| [OJS1](#ojs1) | Outside a published issue, other citation formats and the downloads fail for readers: a blank page signed out, "404 Not Found" signed in | 🐞 | user-visible · crash: server | — |
+| [OJS1](#ojs1) | Readers get no other citation format or citation download on an article published outside a published issue | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | The Publication Facts Label settings always warn "Funding Plugin Not Present" | 🐞 | minor | — |
 | [OJS3](#ojs3) | On a French page the Publication Facts panel would have no labels | 🐞 | minor | — |
 | [OJS4](#ojs4) | "Recommend Articles by Author" never shows its list; the plugin fails on the server | 🐞 | user-visible · crash: server | — |
@@ -1335,20 +1340,25 @@ Basis: probe, 2026-09-28. <sup>[f-a12](#fn-f-a12)</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — Other citation formats fail outside a published issue** · 🐞 · user-visible · crash: server.
-On an article published with no issue (the journal's continuous
-publication), or published at once into an issue that is not yet
-published ("Assign To Future Issue and Publish Immediately"), "How to
-Cite" shows the primary citation. For a visitor who is not signed in,
+**OJS1 — Readers get no other citation format or citation download on an article published outside a published issue** · 🐞 · medium · crash: server.
+On an article published outside a published issue, the app fails on
+the server when a visitor who is not signed in uses "How to Cite":
 choosing a format under "More Citation Formats" leaves the citation
-unchanged with no message, and "Endnote/Zotero/Mendeley (RIS)" and
-"BibTeX" open a blank page: the app fails on the server for both. A
-signed-in Reader, Author or Section Editor not assigned to the article
-gets the same unchanged citation, and the downloads show "404 Not
-Found". A Journal Manager, and a Section Editor or Copyeditor assigned to
-the article, get the other formats and the files. All of it works on an
-article in a published issue, for everyone.
-Basis: probe, 2026-09-25. <sup>[f-ojs1](#fn-f-ojs1)</sup>
+unchanged with no message, and the "BibTeX" and
+"Endnote/Zotero/Mendeley (RIS)" downloads open a blank page.
+This happens on an article published with no issue (the journal's
+continuous publication), or published at once into an issue that is
+not yet published ("Assign To Future Issue and Publish Immediately").
+A signed-in Reader, the article's Author or a Section Editor not
+assigned to the article gets the same unchanged citation, and the
+downloads show "404 Not Found". A Journal Manager, and a Section Editor
+or Copyeditor assigned to the article, get the other formats and the
+files. On an article in a published issue all of it works, for
+everyone.
+It needs the "Citation Style Language" plugin turned on. No released
+version can publish an article outside a published issue, so only
+journals on the coming release meet it.
+Basis: probe, 2026-10-01. <sup>[f-ojs1](#fn-f-ojs1)</sup>
 
 <a id="ojs2"></a>
 **OJS2 — A stale funding warning in the Publication Facts settings** · 🐞 · minor.
@@ -2522,6 +2532,7 @@ a signed-out visitor's fail with a server error, the log reading
 ($userRoles) must be of type array, null given`. `articleCitation.js`
 swallows the failed fetch. On OPS a posted preprint's formats and
 downloads work for every role. Live-probed 2026-09-25, note q11.
+Issue report: [docs/issues/U13-OJS1-citation-formats-fail-outside-published-issue.md](../issues/U13-OJS1-citation-formats-fail-outside-published-issue.md).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — `PflSettingsForm::fetch()` assigns `fundingPluginPresent`
