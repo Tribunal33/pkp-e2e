@@ -1222,6 +1222,11 @@ Left out of the scenarios above, by reason:
     `driver` list ending without "Resume" when it holds every member, its
     "completeListSize" counting the members, and a set of more than a
     hundred members listed in parts to its end {OJS} (Rule 23; once fixed)
+  - the guard for A11 (issue report
+    `docs/issues/U19-A11-oai-driver-set-misses-deleted-record-of-article-in-no-issue.md`):
+    with "DRIVER" enabled, an article published in no issue and then
+    unpublished leaving a deleted record in the `driver` set {OJS} (Rule
+    23a; once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1341,7 +1346,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Saving a journal section removes "Peer-reviewed Article" from its articles' OAI-PMH Dublin Core records {OJS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | The OAI-PMH Dublin Core "Source" ends in "; " for an article in no issue and for every book {OJS OMP} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | On a subscription journal, the OAI-PMH record list in JATS is refused whole when it holds one article that needs a subscription {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A11](#a11) | With "DRIVER" enabled, an article in no issue loses its `driver` mark when unpublished {OJS} | 🐞 | latent | — |
+| [A11](#a11) | An article in no issue, once unpublished, has no deleted record in the journal's `driver` OAI set {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | A journal's MARC records in OAI-PMH do not follow the schemas they name, and software reading them misses the journal, the issue date, the ISSN or the affiliations {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | Records read in French carry untranslated keys {OJS OMP} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | A journal's MARC records in OAI-PMH write the publication date in field 008 with "%" signs ("%26%09%30 %2026") {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1525,13 +1530,17 @@ off by default. The same records in Dublin Core are not affected.
 Basis: probe, 2026-10-01. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — "DRIVER" loses the mark of an article in no issue** {OJS} · 🐞 · latent.
-With "DRIVER" enabled, a Journal Manager unpublishes an article
-published without an issue ("Don't Assign To An Issue"). It is
-unpublished as expected, but its deleted record is not marked for the
-`driver` set. No harvester sees the difference today, since the set
-never lists a deleted record (Rule 23a).
-Basis: probe, 2026-09-26. <sup>f-a11</sup>
+**A11 — An article in no issue, once unpublished, has no deleted record in the journal's `driver` OAI set** {OJS} · 🐞 · medium.
+With the "DRIVER" plugin enabled, a Journal Manager unpublishes an
+article that was published without an issue ("Don't Assign To An
+Issue"). The deleted record this leaves is stored without its place in
+the `driver` set, so a harvest of that set shows neither the article nor
+a notice that it was deleted. An article unpublished from an issue
+leaves a deleted record in the set. A service that harvests the set
+keeps the withdrawn article, and nothing on screen says so. It happens
+on every journal with the plugin enabled, each time such an article is
+unpublished.
+Basis: probe, 2026-10-01. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — A journal's MARC records in OAI-PMH do not follow the schemas they name, and software reading them misses the journal, the issue date, the ISSN or the affiliations** {OJS} · 🐞 · medium.
@@ -2026,6 +2035,7 @@ Issue report: [pkp-e2e#335](https://github.com/jardakotesovec/pkp-e2e/issues/335
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-26, OJS, two runs: note q21, the last step. The unpublish request answered 200, the publication became unpublished and its tombstone carried no `driver` setting; the server log recorded "Plugin APP\plugins\generic\driver\DRIVERPlugin failed to handle the hook ArticleTombstoneManager::insertArticleTombstone" with the `Repository::get()` TypeError, which `Hook::call` catches. Code: note i.
+Issue report: [docs/issues/U19-A11-oai-driver-set-misses-deleted-record-of-article-in-no-issue.md](../issues/U19-A11-oai-driver-set-misses-deleted-record-of-article-in-no-issue.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-26: note q4. Code: note g.

@@ -18,7 +18,7 @@ and the hourly routine starts one only when none is running
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s0, 2026-10-01** |
-| [U19](../specs/U19-oai-pmh.md) | 26 | 5 | 6 | **Taken: issues session, VM s2, 2026-10-01**; done: OPS1, OMP4, A1, A18, A22, A16, A17, OMP3, A2, A3, OPS4, A4, A5, A12, A15, A19, A20, A7, A8, A13 (joined pkp-e2e#228 and #291), OMP6, A10, A23, A24 |
+| [U19](../specs/U19-oai-pmh.md) | 26 | 5 | 6 | **Taken: issues session, VM s2, 2026-10-01**; done: OPS1, OMP4, A1, A18, A22, A16, A17, OMP3, A2, A3, OPS4, A4, A5, A12, A15, A19, A20, A7, A8, A13 (joined pkp-e2e#228 and #291), OMP6, A10, A23, A24, A11 |
 | [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 | **Taken: issues session, VM s0, 2026-10-01**; done: A3, OMP1 (pkp-e2e#307 and pkp-e2e#308), A1 (pkp-e2e#311), OPS3 (pkp-e2e#314), A10 (pkp-e2e#315 and pkp-e2e#317), A16 (pkp-e2e#336), OPS2 (pkp-e2e#337), A11 (pkp-e2e#338), A9 (pkp-e2e#339) |
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 |  |
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 |  |
