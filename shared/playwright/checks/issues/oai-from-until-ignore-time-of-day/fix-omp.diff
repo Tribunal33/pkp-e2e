@@ -1,0 +1,28 @@
+--- a/classes/oai/omp/OAIDAO.php
++++ b/classes/oai/omp/OAIDAO.php
+@@ -228,10 +228,10 @@
+             ->where('pf.is_available', '=', 1)
+             ->whereNotNull('pub.date_published')
+             ->when($from, function ($query, $from) {
+-                return $query->whereDate('ms.last_modified', '>=', \DateTime::createFromFormat('U', $from));
++                return $query->where('ms.last_modified', '>=', date('Y-m-d H:i:s', $from));
+             })
+             ->when($until, function ($query, $until) {
+-                return $query->whereDate('ms.last_modified', '<=', \DateTime::createFromFormat('U', $until));
++                return $query->where('ms.last_modified', '<=', date('Y-m-d H:i:s', $until));
+             })
+             ->when($submissionId, function ($query, $submissionId) {
+                 return $query->where('pf.publication_format_id', '=', $submissionId);
+@@ -267,10 +267,10 @@
+                         return $query->where('dot.set_spec', '=', $set);
+                     })
+                     ->when($from, function ($query, $from) {
+-                        return $query->whereDate('dot.date_deleted', '>=', \DateTime::createFromFormat('U', $from));
++                        return $query->where('dot.date_deleted', '>=', date('Y-m-d H:i:s', $from));
+                     })
+                     ->when($until, function ($query, $until) {
+-                        return $query->whereDate('dot.date_deleted', '<=', \DateTime::createFromFormat('U', $until));
++                        return $query->where('dot.date_deleted', '<=', date('Y-m-d H:i:s', $until));
+                     })
+                     ->when($submissionId, function ($query, $submissionId) {
+                         return $query->where('dot.data_object_id', '=', (int) $submissionId);

@@ -1148,6 +1148,10 @@ Left out of the scenarios above, by reason:
     asked for an unknown series, another press's path and an unknown path as
     `set`, each answering "No matching records in this repository" {OMP}
     (once fixed)
+  - the guard for A2 (issue report
+    `docs/issues/U19-A2-oai-from-until-ignore-time-of-day.md`): `from` and
+    `until` given with a time of day listing only the records changed from,
+    or until, that second (Rule 9a; once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1260,7 +1264,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A journal's own OAI address leaves out its deleted records and lists the first journal's instead {OJS OMP} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A2](#a2) | `from` and `until` ignore the time of day | 🐞 | minor | — |
+| [A2](#a2) | OAI-PMH lists ignore the time of day in "from" and "until" and return the whole day's records | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A date that is not in the calendar is accepted instead of refused | 🐞 | minor | — |
 | [A4](#a4) | The browser view's last page says "There are more results." and offers a "Resume" that fails | 🐞 | minor | — |
 | [A5](#a5) | The browser view of one record's formats says "from this archive" and offers no links | 🐞 | minor | — |
@@ -1319,13 +1323,18 @@ preprint server is not affected.
 Since: 2021-06-08 · Basis: probe, 2026-10-01. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — `from` and `until` ignore the time of day** · 🐞 · minor.
-Identify announces the granularity "YYYY-MM-DDThh:mm:ssZ", so a harvester
-asking `from=2026-09-26T12:00:00Z` expects only the records changed since
-noon. It gets every record changed that day, and `until` likewise
-includes the whole of its day. Harvests repeat records, and a record
-changed after `until` on the same day is listed.
-Basis: probe, 2026-09-26. <sup>f-a2</sup>
+**A2 — OAI-PMH lists ignore the time of day in "from" and "until" and return the whole day's records** · 🐞 · low.
+A harvester that asks an OAI-PMH list for the records changed since a
+time of day gets every record changed on that day. Identify announces
+the granularity "YYYY-MM-DDThh:mm:ssZ", so `from=2026-09-30T12:30:14Z`
+should list only the records changed from that second on. `until` with a
+time likewise takes in the whole of its day. On an install whose time
+zone is UTC, every record inside the range asked is listed, so such a
+harvest only repeats records the harvester already has. A validator that
+checks the announced granularity reports the repository as failing it.
+Every list with a time in `from` or `until` does this, for published and
+for deleted records, with no setup.
+Basis: probe, 2026-10-01. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — An impossible date is accepted** · 🐞 · minor.
@@ -1816,6 +1825,7 @@ Issue report: [pkp-e2e#254](https://github.com/jardakotesovec/pkp-e2e/issues/254
 
 <a id="fn-f-a2"></a>
 **f-a2** — Live-probed 2026-09-26: note q11, the reads with a time. Code: note l.
+Issue report: [docs/issues/U19-A2-oai-from-until-ignore-time-of-day.md](../issues/U19-A2-oai-from-until-ignore-time-of-day.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Live-probed 2026-09-26: note q11, `2026-13-01` as `from` and `until`, "2026-02-30", `T25:00:00Z` and the roll-over of "2026-09-31". Code: note l.
