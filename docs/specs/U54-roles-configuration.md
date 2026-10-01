@@ -771,6 +771,11 @@ Left out of the scenarios above, by reason:
     "Roles" tab, a pressed stage box flipping at once and pressable again,
     a removed role leaving the list, and the first row offering "Edit" and
     "Remove"
+  - the guard for A10 (issue report
+    `docs/issues/U54-A10-role-name-spaces-window-broken.md`): a role name
+    of spaces refused in a window that keeps its stage boxes and working
+    script, the corrected "OK" saving the role (and an edit renaming the
+    same role)
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -857,7 +862,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | A screen reader announces each stage box of the list only as "checkbox" | 🐞 | minor | — |
 | [A9](#a9) | After a filter entry is chosen the filters hide, and only the count line shows the list is filtered | 🐞 | minor | — |
-| [A10](#a10) | A role name of spaces is refused with a different notice while the page's script fails | 🐞 | minor · crash: script | — |
+| [A10](#a10) | A role name of only spaces breaks the role window, and saving again shows a page of raw code | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [A11](#a11) | "OK" in the window whose Settings box is greyed takes the Settings pages away from the role's holders | 🐞 | user-visible | — |
 | [A13](#a13) | The "Roles" list keeps no fixed order: a role just made can come first, without "Edit" or "Remove", a saved role moves down, and a paged list can show a role twice and another never | 🐞 | user-visible | test run (claude), 2026-09-29 — was ❓ |
 | [A14](#a14) | After a rename on the "Roles" tab, the "Users" tab shows the role's old name until a reload | 🐞 | minor | — |
@@ -967,14 +972,18 @@ roles.
 Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — A role name of spaces fails the page's script** · 🐞 · minor · crash: script.
-A "Role Name" or "Abbreviation" of spaces passes the window's own check,
-which refuses an empty box with "This field is required." under it.
-"OK" then keeps the window open with a different refusal at its top,
-"Errors occurred processing this form", naming the "role abbreviature",
-while the page's own script fails behind it. The manager expects the
-same refusal as for an empty box.
-Basis: probe. <sup>f-a10</sup>
+**A10 — A role name of only spaces breaks the role window, and saving again shows a page of raw code** · 🐞 · medium · crash: script.
+A manager types only spaces as a role's "Role Name" or "Abbreviation"
+and presses "OK". The server refuses it, and the page's own script fails
+in the browser. The window stays open under "Errors occurred processing
+this form", but its "Stage Assignment" boxes are gone and it no longer
+works.
+The manager fixes the name and presses "OK" again. Instead of closing
+the window, the browser replaces the whole Users & Roles page with raw
+code. A new role is saved anyway, under the corrected name but without
+the stages ticked before the refusal. An edited role is not changed at
+all, and nothing says so.
+Basis: probe, 2026-10-01. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — "OK" in a manager's own role window takes Settings away** · 🐞 · user-visible.
@@ -1705,6 +1714,7 @@ answered 200 with the refused form, the window stayed open with the notice
 quoted in Rule 15b and no message under the boxes, and the page logged the
 script error "Failed to execute 'appendChild' on 'Node': Unexpected token
 ','" on `management/settings/access`.
+Issue report: [docs/issues/U54-A10-role-name-spaces-window-broken.md](../issues/U54-A10-role-name-spaces-window-broken.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — The greyed box is the window's guard alone ([o](#fn-o)): a
