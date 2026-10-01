@@ -1069,6 +1069,10 @@ Left out of the scenarios above, by reason:
     with "Recommend Similar Articles" on, an article page listing the
     published articles that share its keywords, one in an issue and one
     outside any issue, and leaving out a scheduled one {OJS}
+  - the guard for OPS9 (Rule 22; issue report
+    `docs/issues/U13-OPS9-preprint-summary-cover-middle-dead.md`): on a
+    preprint server's "Archives" and a journal's issue page, a click at
+    the cover's centre and at the author line's row opening the item
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1231,7 +1235,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OPS6](#ops6) | Preprint lists never show a preprint's DOI, though the preprint's own page does | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS7](#ops7) | On a French preprint page the keywords label reads "##preprint.subject## :" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS8](#ops8) | On a French page the PDF reader's browser tab reads "##article.pageTitle##" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OPS9](#ops9) | A press on the middle of a preprint's cover in a list opens nothing | 🐞 | minor | — |
+| [OPS9](#ops9) | A click on a cover beside its summary text opens nothing, in a journal's issue page and a server's lists | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | An article with no downloads shows an empty chart instead of "Download data is not yet available." | ❓ | minor | — |
 | [A12](#a12) | Once the first version is unpublished, the page still opens its date line with that version's date | ❓ | minor | — |
 | [OJS11](#ojs11) | The IEEE citation shown first opens with the number "[1]" | ❓ | minor | — |
@@ -1585,12 +1589,20 @@ the same code by the code.
 Basis: probe, 2026-10-01. <sup>[f-ops8](#fn-f-ops8)</sup>
 
 <a id="ops9"></a>
-**OPS9 — The middle of a preprint's cover does not open it** · 🐞 · minor.
-On a preprint server's home page and "Archives" list the keyword row runs
-across the middle of a preprint's cover image, so a press on the middle
-of the cover does nothing; only its upper and lower parts open the
-preprint. A journal's cover opens the article wherever it is pressed.
-Basis: probe, 2026-09-25. <sup>[f-ops9](#fn-f-ops9)</sup>
+**OPS9 — A click on a cover beside its summary text opens nothing, in a journal's issue page and a server's lists** · 🐞 · low.
+On a preprint server's lists ("Archives", the home page's "Latest
+preprints", section, category and search pages), a preprint's cover
+image sits to the right of its author line, keywords and "Downloads …
+Posted" line. On a screen 768 px wide or wider, a click or tap on the
+cover beside those lines does nothing. The dead band runs from just
+under the title to just under the "Downloads" line; on a square cover
+that is about the middle half. Above and below the band the cover opens
+the preprint.
+A journal's issue page and its other article lists do the same in the
+row of the author line, about an eighth of a square cover's height.
+The title and the rest of the cover still open the page, so readers get
+there with a second click.
+Basis: probe, 2026-10-01. <sup>[f-ops9](#fn-f-ops9)</sup>
 
 ---
 
@@ -2725,6 +2737,7 @@ Issue report: [pkp-e2e#207](https://github.com/jardakotesovec/pkp-e2e/issues/207
 <a id="fn-f-ops9"></a>
 **f-ops9** — Note j: the element at the cover's centre is the keyword
 list laid over it. Live-probed 2026-09-25, note j, two runs.
+Issue report: [docs/issues/U13-OPS9-preprint-summary-cover-middle-dead.md](../issues/U13-OPS9-preprint-summary-cover-middle-dead.md).
 
 ## Reference — entry points & surfaces
 

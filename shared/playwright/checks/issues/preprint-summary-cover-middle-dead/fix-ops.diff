@@ -1,0 +1,14 @@
+--- a/plugins/themes/default/styles/objects/preprint_summary.less
++++ b/plugins/themes/default/styles/objects/preprint_summary.less
+@@ -114,7 +114,11 @@
+ 			padding-right: 5em;
+ 		}
+ 
++		// Above .meta, whose position: relative would otherwise draw the
++		// text block's box over the floated cover and swallow presses on it.
+ 		.cover {
++			position: relative;
++			z-index: 1;
+ 			float: right;
+ 			width: 25%;
+ 			height: auto;

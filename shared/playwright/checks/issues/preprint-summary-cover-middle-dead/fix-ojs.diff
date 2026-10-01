@@ -1,0 +1,29 @@
+--- a/plugins/themes/default/styles/objects/article_summary.less
++++ b/plugins/themes/default/styles/objects/article_summary.less
+@@ -84,7 +84,11 @@
+ 			line-height: @line-lead;
+ 		}
+ 
++		// Above .meta, whose position: relative would otherwise draw the
++		// text block's box over the floated cover and swallow presses on it.
+ 		.cover {
++			position: relative;
++			z-index: 1;
+ 			float: left;
+ 			width: 25%;
+ 			height: auto;
+--- a/plugins/themes/default/styles/rtl.less
++++ b/plugins/themes/default/styles/rtl.less
+@@ -159,6 +159,12 @@
+ 		@media(min-width: @screen-tablet) {
+ 			padding-right: 0;
+ 			padding-left: 5em;
++
++			// The cover floats right here: keep the page numbers clear of it
++			.pages {
++				right: auto;
++				left: 0;
++			}
+ 		}
+ 	}
+ 
