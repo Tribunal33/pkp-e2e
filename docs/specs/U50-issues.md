@@ -1052,6 +1052,10 @@ Left out of the scenarios above, by reason:
     with no saved order, "Archives" listing the published issues in the
     order "Back Issues" shows (current first, then newest first), also
     after an older issue is edited
+  - the guard for A1 (issue report
+    `docs/issues/U50-A1-create-issue-title-refusal-unmarked.md`): "Create
+    Issue" saved with "Title" ticked and no title refused with "Title is
+    required for the issue." under the "Title" text field
 - **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
@@ -1126,7 +1130,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Create Issue" arrives with "Title" ticked, and "Save" without a title is refused with only a passing notice; the "Title" box is not marked | 🐞 | user-visible | — |
+| [A1](#a1) | "Create Issue" arrives with "Title" ticked and refuses "Save" without a title, marking nothing on the form | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A2](#a2) | Unpublishing an older issue leaves the journal with no current issue | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A4](#a4) | After a refused "Save", "Date Published" shows today's date, which the issue saved next does not get | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A "Volume" of 99999 leaves "Create Issue" open with nothing shown | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
@@ -1148,15 +1152,23 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 ### All apps
 
 <a id="a1"></a>
-**A1 — "Create Issue" refuses its own default with only a passing notice** · 🐞 · user-visible.
-The "Create Issue" form arrives with the "Title" box ticked, and most
-issues have no title. A Journal Manager who fills in Volume, Number and
-Year and presses "Save" gets no new issue: the window stays open, a
-notice at its top right reads "Title is required for the issue." for a
-few seconds, the "Title" box is not marked, and "Future Issues" still
-reads "No Items". The form should either arrive with "Title" unticked or
-mark the "Title" box with its message. Basis: probe, 2026-09-25.
-<sup>f-a1</sup>
+**A1 — "Create Issue" arrives with "Title" ticked and refuses "Save" without a title, marking nothing on the form** · 🐞 · low.
+On "Create Issue", each part of the issue's name whose tick box is
+ticked ("Volume", "Number", "Year", "Title") must be filled in, and the
+form arrives with all four ticked on every journal; no setting changes
+that. A Journal Manager or editor who fills in "Volume", "Number" and
+"Year" and presses "Save" gets no new issue. The window stays open, a
+notice at the top right reads "Title is required for the issue." for
+about five seconds, and nothing on the form is marked: neither the
+"Title" text field nor its tick box.
+Once the notice has gone, nothing on screen says why the issue was not
+created. The notice asks for a title; it does not say that unticking
+"Title" is the other way to save.
+Every journal whose issues have no title meets it, and the same happens
+when a ticked "Volume", "Number" or "Year" is left empty, on new issues
+and existing ones. OJS 3.1.0 still printed the message under the tick
+boxes; 3.1.1 dropped it.
+Basis: probe, 2026-09-30. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — Unpublishing an older issue leaves the journal with no current issue** · 🐞 · medium.
@@ -1512,6 +1524,7 @@ where it is made.
 
 <a id="fn-f-a1"></a>
 **f-a1** — Incidental of 2026-09-04 (U05 test author, OJS): on Issues › Future Issues › "Create Issue" the "Title" box arrived ticked, "Save" with an empty title re-rendered the form with no visible error line and the grid stayed "No Items". Mechanism: `IssueForm::initData()` ticks `showTitle` for a new issue; its `FormValidatorCustom` is registered on the field `showTitle` (the check box) with `editor.issues.titleRequired`. The scenario API seeds its issues with the box unticked for this reason (scenarios.md `issues[]`). Live-probed 2026-09-25 (td4): the notice "Title is required for the issue." showed at the window's top right from about 0.2 s to 4.5 s after "Save" and was gone at 6 s; nothing on the form was marked; the list still read "No Items" 16 s later.
+Issue report: [docs/issues/U50-A1-create-issue-title-refusal-unmarked.md](../issues/U50-A1-create-issue-title-refusal-unmarked.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `IssueGridHandler::unpublishIssue()` calls `Repo::issue()->updateCurrent($request->getContext()->getId())` with no issue, and `updateCurrent()` then runs `JournalDAO::removeCurrentIssue()` regardless of which issue was unpublished. The home page's part: U10 Rule 14 needs a current issue. Probe: td11; "Archives" still listed the published issues.
