@@ -1,0 +1,14 @@
+--- a/lib/pkp/templates/controllers/grid/users/stageParticipant/addParticipantForm.tpl
++++ b/lib/pkp/templates/controllers/grid/users/stageParticipant/addParticipantForm.tpl
+@@ -85,5 +85,10 @@
+ 			<p><span class="formRequired">{translate key="common.requiredField"}</span></p>
+ 		{/fbvFormArea}
+ 	{/if}
+-	{fbvFormButtons}
++	{if $assignmentId && !$isChangePermitMetadataAllowed && !$isChangeRecommendOnlyAllowed}
++		{* Nothing can be changed: no "OK" to press *}
++		{fbvFormButtons submitDisabled=true}
++	{else}
++		{fbvFormButtons}
++	{/if}
+ </form>

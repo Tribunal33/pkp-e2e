@@ -913,6 +913,10 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A12 (issue report
+    `docs/issues/U35-A12-no-changes-window-ok-reports-change.md`):
+    the "No changes can be made to this participant" window, "OK"
+    disabled or closing with no "The stage assignment has been changed."
   - the guard for A15 (issue report
     `docs/issues/U35-A15-assign-editor-email-two-footers.md`):
     the Submission stage's "Assign Editor" letter ending with the
@@ -1017,7 +1021,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | In "Assign Participant", the "Permissions" box stays ticked after the editor chooses another role | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A message template added in Settings is listed but fills nothing and cannot be sent | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | No warning opens when an editor assigns, as a participant, a person who reviews the submission anonymously | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A12](#a12) | "OK" on the "No changes can be made to this participant" window reports "The stage assignment has been changed." | 🐞 | minor | — |
+| [A12](#a12) | "OK" on the "No changes can be made to this participant" window reports "The stage assignment has been changed." | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | The Activity Log's "User" column names the participant, not the editor who assigned, changed or removed them | 🐞 | minor | — |
 | [A15](#a15) | The Submission stage's "Assign Editor" message ends "This is an automated message from…" instead of the editor's signature | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | A message sent with "Notify" is emailed to a participant who opted out of emails for new discussions | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1194,11 +1198,22 @@ also has to be shipped as a rebuilt script bundle in each app.
 Basis: probe, 2026-10-01. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
-**A12 — "OK" reports a change where none can be made** · 🐞 · minor.
-A recommending Editor who opens "Edit" on a manager-level row sees "No
-changes can be made to this participant", yet "OK" closes the window with
-"The stage assignment has been changed.", although nothing could change.
-Basis: probe. <sup>[f-a12](#fn-a12)</sup>
+**A12 — "OK" on the "No changes can be made to this participant" window reports "The stage assignment has been changed."** · 🐞 · low.
+A Journal manager, Journal editor or Production editor (Press manager,
+Press editor; Preprint Server manager) whose own assignment on a
+submission is ticked "only allowed to recommend an editorial decision"
+opens "Edit" on the Participants row of a person assigned in one of
+those roles, their own row included. The window reads "No changes can be
+made to this participant", yet its "OK" can be pressed and closes the
+window with the notice "The stage assignment has been changed."
+On `main`, 3.5 and 3.4 nothing is lost: the assignment stays as it was,
+and only the notice misleads. "Cancel" closes the window without it.
+The same "OK" also adds a line to the submission's activity log, but
+every "Edit Assignment" save does that, a real one included: it is a
+separate fault (spec U35 A7) and is not counted here. The proposed fix
+is one condition in the window's template that disables "OK" when there
+is nothing to change.
+Basis: probe, 2026-10-01. <sup>[f-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
 **A13 — An automatic assignment's recommend-only limit was never seen** · ❓ · latent.
@@ -1499,6 +1514,7 @@ Issue report: [pkp-e2e#338](https://github.com/jardakotesovec/pkp-e2e/issues/338
 
 <a id="fn-a12"></a>
 **f-a12** — Live-probed 2026-09-22 (all three apps): a recommending Editor opening "Edit" on an Editor's, a Production editor's or (preprint server) a Preprint Server manager's row, their own included, and pressing "OK": the window closing with "The stage assignment has been changed.". Code: note h; the save runs the edit branch of note k.
+Issue report: [docs/issues/U35-A12-no-changes-window-ok-reports-change.md](../issues/U35-A12-no-changes-window-ok-reports-change.md).
 
 <a id="fn-a13"></a>
 **f-a13** — `SubEditorsDAO::assignEditors()` builds each automatic assignment with `Repo::stageAssignment()->build(…, $userGroup->recommendOnly)` and the metadata flag from the group's default (note l). An automatic assignment happens only on the install's first journal (*[Submission wizard](U21-submission-wizard.md#a8)*), the seeded journal, whose roles keep their install options, so the case was not reached; a role's recommend-only change leaves earlier assignments alone (note m).
