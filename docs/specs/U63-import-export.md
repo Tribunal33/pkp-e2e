@@ -2688,7 +2688,7 @@ page itself loads into its "Import/Export" and "Permissions" tabs
 `application/json` by design; live-probed 2026-10-01, three apps, two
 runs, as the Journal Manager (a Section Editor gets the access-denied
 page at each).
-Issue report: [docs/issues/U63-A1-A19-tool-address-without-tool-raw-text.md](../issues/U63-A1-A19-tool-address-without-tool-raw-text.md).
+Issue report: [pkp-e2e#255](https://github.com/jardakotesovec/pkp-e2e/issues/255) ([docs/issues/U63-A1-A19-tool-address-without-tool-raw-text.md](../issues/U63-A1-A19-tool-address-without-tool-raw-text.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `UserXmlPKPUserFilter::parseUser()` (note l): `if
@@ -2723,7 +2723,7 @@ fixed 2026-09-29, OJS and OMP, two runs each (note td14).
 skip the user; `parseUser()` goes on to `Repo::user()->add()` and the
 role rows. Live-probed 2026-09-27, OJS and OMP (notes td13, l): 3
 and 5 characters and an empty `<value>`; a reset was not driven.
-Issue report: [docs/issues/U63-A4-A15-users-import-refused-password-creates-account.md](../issues/U63-A4-A15-users-import-refused-password-creates-account.md).
+Issue report: [pkp-e2e#263](https://github.com/jardakotesovec/pkp-e2e/issues/263) ([docs/issues/U63-A4-A15-users-import-refused-password-creates-account.md](../issues/U63-A4-A15-users-import-refused-password-creates-account.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `APP\submission\DAO::getExportable()` with
@@ -2771,13 +2771,13 @@ Sync": one job, in N1's name; X2 before N2, both depositing, N2's
 article "Needs Sync": one job, in X2's name with X2's link, none from
 N2, and N2's list read "Submitted". Journals are taken in `ORDER BY
 seq`. Both versioning journals were set back to "No" afterwards.
-Issue report: [docs/issues/U63-A5-doaj-deposit-takes-other-journals-articles.md](../issues/U63-A5-doaj-deposit-takes-other-journals-articles.md).
+Issue report: [pkp-e2e#264](https://github.com/jardakotesovec/pkp-e2e/issues/264) ([docs/issues/U63-A5-doaj-deposit-takes-other-journals-articles.md](../issues/U63-A5-doaj-deposit-takes-other-journals-articles.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-27, three apps (note e): the "Upload
 File" button carries `tabindex="-1"`, and Tab from the tab strip lands
 first on "Import".
-Issue report: [docs/issues/U63-A6-upload-file-out-of-keyboard-reach.md](../issues/U63-A6-upload-file-out-of-keyboard-reach.md).
+Issue report: [pkp-e2e#265](https://github.com/jardakotesovec/pkp-e2e/issues/265) ([docs/issues/U63-A6-upload-file-out-of-keyboard-reach.md](../issues/U63-A6-upload-file-out-of-keyboard-reach.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — The results tab's content is loaded by its tab's own
@@ -2785,15 +2785,15 @@ request, `…/import?temporaryFileId=…`, which runs again whenever the
 tab is chosen (note f). Live-probed 2026-09-27, three apps: two presses
 and one click on each tab left four copies (OJS numbers 802–805, OMP
 662–665).
-Issue report: [docs/issues/U63-A7-returning-to-import-results-imports-again.md](../issues/U63-A7-returning-to-import-results-imports-again.md).
+Issue report: [pkp-e2e#266](https://github.com/jardakotesovec/pkp-e2e/issues/266) ([docs/issues/U63-A7-returning-to-import-results-imports-again.md](../issues/U63-A7-returning-to-import-results-imports-again.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-27, three apps (note f): a submitted
 submission and a published one with two versions, exported and
 re-imported unchanged. The lines come from the native filters'
 `addError()` calls, which do not stop the import.
-Issue report: [docs/issues/U63-A8-native-import-article-without-issue-lists-error.md](../issues/U63-A8-native-import-article-without-issue-lists-error.md).
-Issue report: [docs/issues/U63-A8-native-import-other-context-resets-contributor-roles.md](../issues/U63-A8-native-import-other-context-resets-contributor-roles.md).
+Issue report: [pkp-e2e#267](https://github.com/jardakotesovec/pkp-e2e/issues/267) ([docs/issues/U63-A8-native-import-article-without-issue-lists-error.md](../issues/U63-A8-native-import-article-without-issue-lists-error.md)).
+Issue report: [pkp-e2e#268](https://github.com/jardakotesovec/pkp-e2e/issues/268) ([docs/issues/U63-A8-native-import-other-context-resets-contributor-roles.md](../issues/U63-A8-native-import-other-context-resets-contributor-roles.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — OJS `NativeXmlPublicationFilter` adds `unknownSection` and
@@ -2806,14 +2806,14 @@ Submission 0 Assign Editor View" (OPS "521 Production 0 View"); its
 "TypeError: Cannot read properties of undefined (reading
 'authorsStringShort')"; the export tab kept only "Select All" and its
 button, with "…(reading 'fullTitle')".
-Issue report: [docs/issues/U63-A9-unknown-section-import-broken-submission.md](../issues/U63-A9-unknown-section-import-broken-submission.md).
+Issue report: [pkp-e2e#269](https://github.com/jardakotesovec/pkp-e2e/issues/269) ([docs/issues/U63-A9-unknown-section-import-broken-submission.md](../issues/U63-A9-unknown-section-import-broken-submission.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note g. Live-probed 2026-09-27, three apps: with
 Submission, Review and Production pressed the published submission was
 absent, and present once cleared; on OPS "Production" listed three
 submissions, not the published one.
-Issue report: [docs/issues/U63-A10-export-list-stages-skip-published.md](../issues/U63-A10-export-list-stages-skip-published.md).
+Issue report: [pkp-e2e#256](https://github.com/jardakotesovec/pkp-e2e/issues/256) ([docs/issues/U63-A10-export-list-stages-skip-published.md](../issues/U63-A10-export-list-stages-skip-published.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — `ImportExportPage.vue::toggleSelectAll()` selects the
@@ -2821,21 +2821,21 @@ loaded page and compares with `itemsMax` (note g). Live-probed
 2026-09-27, three apps, 101 submissions: 100 ticked, the label "Select
 All" after both presses; "Paged item 100" ticked on page 1 and "Paged
 item 001" on page 2 gave a file holding "Paged item 001" only.
-Issue report: [docs/issues/U63-A11-export-list-selection-stops-at-page.md](../issues/U63-A11-export-list-selection-stops-at-page.md).
+Issue report: [pkp-e2e#257](https://github.com/jardakotesovec/pkp-e2e/issues/257) ([docs/issues/U63-A11-export-list-selection-stops-at-page.md](../issues/U63-A11-export-list-selection-stops-at-page.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-27 (notes h, i): `GET
 …/NativeImportExportPlugin/exportSubmissions?selectedSubmissions=`
 answered 500 on all three apps, `GET …/exportIssues?selectedIssues=`
 on OJS.
-Issue report: [docs/issues/U63-A12-native-export-nothing-ticked-empty-tab.md](../issues/U63-A12-native-export-nothing-ticked-empty-tab.md).
+Issue report: [pkp-e2e#258](https://github.com/jardakotesovec/pkp-e2e/issues/258) ([docs/issues/U63-A12-native-export-nothing-ticked-empty-tab.md](../issues/U63-A12-native-export-nothing-ticked-empty-tab.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-27, OJS and OMP (note k): `GET
 …/UserImportExportPlugin/import?temporaryFileId=…` answered 500 for
 each of the four files (the format check throws instead of reaching the
 `validationErrors` branch); no account was created.
-Issue report: [docs/issues/U63-A13-users-import-unreadable-file-empty-results.md](../issues/U63-A13-users-import-unreadable-file-empty-results.md).
+Issue report: [pkp-e2e#259](https://github.com/jardakotesovec/pkp-e2e/issues/259) ([docs/issues/U63-A13-users-import-unreadable-file-empty-results.md](../issues/U63-A13-users-import-unreadable-file-empty-results.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-27, OJS and OMP, once each (note m):
@@ -2857,7 +2857,7 @@ two runs each (the branch below PHP 8.4, where every exported password
 gets the line, A16): the four accounts of scenario 6's move and two
 seeded accounts of a second move each got the line, no email and no
 must-change flag, and moss signed in to B with its own password.
-Issue report: [docs/issues/U63-A4-A15-users-import-refused-password-creates-account.md](../issues/U63-A4-A15-users-import-refused-password-creates-account.md).
+Issue report: [pkp-e2e#263](https://github.com/jardakotesovec/pkp-e2e/issues/263) ([docs/issues/U63-A4-A15-users-import-refused-password-creates-account.md](../issues/U63-A4-A15-users-import-refused-password-creates-account.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Note l: `password_needs_rehash()` is called without a cost,
@@ -2883,7 +2883,7 @@ row-4 line of 2026-09-27 is the PHP 8.4 branch. Live-probed again
 both hashes; in a move, seeded accounts that had never signed in
 (stored at a lower cost than 12) got the line beside the signed-in
 ones, so every account of the file did (Rule 28).
-Issue report: [docs/issues/U63-A16-users-import-resets-passwords-below-php84.md](../issues/U63-A16-users-import-resets-passwords-below-php84.md).
+Issue report: [pkp-e2e#260](https://github.com/jardakotesovec/pkp-e2e/issues/260) ([docs/issues/U63-A16-users-import-resets-passwords-below-php84.md](../issues/U63-A16-users-import-resets-passwords-below-php84.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Note l. A regression of lib/pkp `85f6b3c074`
@@ -2951,7 +2951,7 @@ type string, null given`. Live-probed 2026-10-01, OJS, OMP and OPS
 main, two runs each, as the Journal Manager: `GET
 …/management/importexport/plugin` answered 500 with an empty body; as
 the Section Editor, the access-denied page.
-Issue report: [docs/issues/U63-A1-A19-tool-address-without-tool-raw-text.md](../issues/U63-A1-A19-tool-address-without-tool-raw-text.md).
+Issue report: [pkp-e2e#255](https://github.com/jardakotesovec/pkp-e2e/issues/255) ([docs/issues/U63-A1-A19-tool-address-without-tool-raw-text.md](../issues/U63-A1-A19-tool-address-without-tool-raw-text.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — `PKPPublicationNativeXmlFilter::addMetadata()` writes
@@ -2971,7 +2971,7 @@ Literature"" (OJS r1), the copy's workflow header the same, its
 "Prefix" "The" and stored title "The Signalling …". Control: "Okapi
 forest census", no prefix, came back unchanged. Not traced to a
 commit; the same on 3.5.
-Issue report: [docs/issues/U63-A20-native-import-doubles-title-prefix.md](../issues/U63-A20-native-import-doubles-title-prefix.md).
+Issue report: [pkp-e2e#261](https://github.com/jardakotesovec/pkp-e2e/issues/261) ([docs/issues/U63-A20-native-import-doubles-title-prefix.md](../issues/U63-A20-native-import-doubles-title-prefix.md)).
 
 <a id="fn-f-a21"></a>
 **f-a21** — Note l. `UserXmlPKPUserFilter::parseUser()` sets the
@@ -2989,7 +2989,7 @@ SQLSTATE[23502]: Not null violation: 7 ERROR: null value in column
 "date_registered" of relation "users" violates not-null constraint".
 Control: the same three users each with `<date_registered>`: 200, the
 success sentence, three accounts.
-Issue report: [docs/issues/U63-A21-users-import-stops-at-user-without-registration-date.md](../issues/U63-A21-users-import-stops-at-user-without-registration-date.md).
+Issue report: [pkp-e2e#262](https://github.com/jardakotesovec/pkp-e2e/issues/262) ([docs/issues/U63-A21-users-import-stops-at-user-without-registration-date.md](../issues/U63-A21-users-import-stops-at-user-without-registration-date.md)).
 
 <a id="fn-f-a22"></a>
 **f-a22** — Note m (the users Collector's default status). Live-probed
@@ -3049,7 +3049,7 @@ and "Status", no "Issue" column, and its rows link only "Author; Title"
 from the "Articles" list only. Set back to "No", the same journal's
 "Articles" list has "Issue" again; on a journal without versioning the
 issue's name opens the window headed "DOI Plugin Settings".
-Issue report: [docs/issues/U63-OJS1-doaj-issue-window-wrong-heading.md](../issues/U63-OJS1-doaj-issue-window-wrong-heading.md).
+Issue report: [pkp-e2e#270](https://github.com/jardakotesovec/pkp-e2e/issues/270) ([docs/issues/U63-OJS1-doaj-issue-window-wrong-heading.md](../issues/U63-OJS1-doaj-issue-window-wrong-heading.md)).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — The tool is registered by the enabled generic plugin
@@ -3057,14 +3057,14 @@ Issue report: [docs/issues/U63-OJS1-doaj-issue-window-wrong-heading.md](../issue
 Live-probed 2026-09-27 (note o): the row in two runs; its
 "Import/Export Data" opened the raw text once, at the same address
 note td2 saw answer it.
-Issue report: [docs/issues/U63-OJS2-doaj-tool-stays-on-plugins-list-when-off.md](../issues/U63-OJS2-doaj-tool-stays-on-plugins-list-when-off.md).
+Issue report: [pkp-e2e#272](https://github.com/jardakotesovec/pkp-e2e/issues/272) ([docs/issues/U63-OJS2-doaj-tool-stays-on-plugins-list-when-off.md](../issues/U63-OJS2-doaj-tool-stays-on-plugins-list-when-off.md)).
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — Note n (`??` keeps a saved empty string). Live-probed
 2026-09-27: the file text on the export page read
 `<JournalTitle></JournalTitle>` after the box was saved empty (the box
 empty after a reload).
-Issue report: [docs/issues/U63-OJS3-pubmed-empty-nlm-title-empties-journal-title.md](../issues/U63-OJS3-pubmed-empty-nlm-title-empties-journal-title.md).
+Issue report: [pkp-e2e#273](https://github.com/jardakotesovec/pkp-e2e/issues/273) ([docs/issues/U63-OJS3-pubmed-empty-nlm-title-empties-journal-title.md](../issues/U63-OJS3-pubmed-empty-nlm-title-empties-journal-title.md)).
 
 <a id="fn-f-ojs4"></a>
 **f-ojs4** — Note n. Live-probed 2026-09-27: `POST
@@ -3078,11 +3078,11 @@ article ticked, three times each per run, 12 of 12 presses answered
 the log each time "DOMDocument::validate(…PubMed.dtd): Failed to open
 stream: Connection refused", "Filter output validation failed" and
 "Uncaught Exception: Could not convert selected objects.".
-Issue report: [docs/issues/U63-OJS4-OJS7-pubmed-doaj-export-needs-outside-sites.md](../issues/U63-OJS4-OJS7-pubmed-doaj-export-needs-outside-sites.md).
+Issue report: [pkp-e2e#274](https://github.com/jardakotesovec/pkp-e2e/issues/274) ([docs/issues/U63-OJS4-OJS7-pubmed-doaj-export-needs-outside-sites.md](../issues/U63-OJS4-OJS7-pubmed-doaj-export-needs-outside-sites.md)).
 
 <a id="fn-f-ojs5"></a>
 **f-ojs5** — Note p. Live-probed 2026-09-27 on both Settings tabs.
-Issue report: [docs/issues/U63-OJS5-pubmed-doaj-settings-cancel-does-nothing.md](../issues/U63-OJS5-pubmed-doaj-settings-cancel-does-nothing.md).
+Issue report: [pkp-e2e#275](https://github.com/jardakotesovec/pkp-e2e/issues/275) ([docs/issues/U63-OJS5-pubmed-doaj-settings-cancel-does-nothing.md](../issues/U63-OJS5-pubmed-doaj-settings-cancel-does-nothing.md)).
 
 <a id="fn-f-ojs6"></a>
 **f-ojs6** — Note q. Live-probed 2026-09-27 on the test installs,
@@ -3092,14 +3092,14 @@ Live-probed again 2026-10-01, OJS main on PostgreSQL 18.6, two runs:
 "okapi" and "OKAPI" answered "No Items"; "Authors" "Lovelace" listed
 both articles, "lovelace" "No Items". MySQL not checked: no MySQL
 install on the test machines.
-Issue report: [docs/issues/U63-OJS6-doaj-search-matches-letter-case.md](../issues/U63-OJS6-doaj-search-matches-letter-case.md).
+Issue report: [pkp-e2e#276](https://github.com/jardakotesovec/pkp-e2e/issues/276) ([docs/issues/U63-OJS6-doaj-search-matches-letter-case.md](../issues/U63-OJS6-doaj-search-matches-letter-case.md)).
 
 <a id="fn-f-ojs7"></a>
 **f-ojs7** — Note r (`doajArticles.xsd` imports its language list from
 www.doaj.org). Live-probed 2026-09-27: `POST
 …/DOAJExportPlugin/exportSubmissions` answered 500 twice, for journals
 with and without an ISSN.
-Issue report: [docs/issues/U63-OJS4-OJS7-pubmed-doaj-export-needs-outside-sites.md](../issues/U63-OJS4-OJS7-pubmed-doaj-export-needs-outside-sites.md).
+Issue report: [pkp-e2e#274](https://github.com/jardakotesovec/pkp-e2e/issues/274) ([docs/issues/U63-OJS4-OJS7-pubmed-doaj-export-needs-outside-sites.md](../issues/U63-OJS4-OJS7-pubmed-doaj-export-needs-outside-sites.md)).
 
 <a id="fn-f-ojs8"></a>
 **f-ojs8** — Notes r, u. Live-probed 2026-09-27: "Register" posted
@@ -3108,7 +3108,7 @@ with the box ticked returned "Articles submitted successfully" and
 
 <a id="fn-f-ojs9"></a>
 **f-ojs9** — Live-probed 2026-09-27: note u.
-Issue report: [docs/issues/U63-OJS9-doaj-deposit-unreachable-stays-submitted.md](../issues/U63-OJS9-doaj-deposit-unreachable-stays-submitted.md).
+Issue report: [pkp-e2e#277](https://github.com/jardakotesovec/pkp-e2e/issues/277) ([docs/issues/U63-OJS9-doaj-deposit-unreachable-stays-submitted.md](../issues/U63-OJS9-doaj-deposit-unreachable-stays-submitted.md)).
 
 <a id="fn-f-ojs10"></a>
 **f-ojs10** — Note i (`ExportableIssuesListGridHandler::loadData()`, no
@@ -3126,7 +3126,7 @@ listed them in the order they were created ("Vol. 8 No. 2 (2006)",
 creation nor any column's order ("Vol. 21 No. 3 (2005)", "Vol. 28 No.
 1 (2016)", "Vol. 5 No. 2 (1997)" …). OJS stable-3_5_0, two runs: the
 same, `loadData()` identical there.
-Issue report: [docs/issues/U63-OJS10-export-issues-list-no-order.md](../issues/U63-OJS10-export-issues-list-no-order.md).
+Issue report: [pkp-e2e#271](https://github.com/jardakotesovec/pkp-e2e/issues/271) ([docs/issues/U63-OJS10-export-issues-list-no-order.md](../issues/U63-OJS10-export-issues-list-no-order.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note v. Seen 2026-09-27 on OMP (Plugins management claim
@@ -3135,7 +3135,7 @@ the managers where the other rows offer "Import/Export Data".
 Live-probed 2026-09-27 (note td4): `GET
 …/management/importexport/plugin/CSVImportExportPlugin` answered 500
 with a blank page (the missing `templates/index.tpl`).
-Issue report: [docs/issues/U63-OMP1-command-line-tool-link-blank-page.md](../issues/U63-OMP1-command-line-tool-link-blank-page.md).
+Issue report: [pkp-e2e#278](https://github.com/jardakotesovec/pkp-e2e/issues/278) ([docs/issues/U63-OMP1-command-line-tool-link-blank-page.md](../issues/U63-OMP1-command-line-tool-link-blank-page.md)).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Note j (omp `1f666119c`, 2016-04-04, "optional ONIX
@@ -3165,7 +3165,7 @@ submission to one: queued, in the submission stage, never completed,
 its one version with no title and no author, and no file. Kept script:
 `shared/playwright/checks/sync/omp-csv-cli/csv-cli.js`. No upstream
 issue found (pkp/pkp-lib#10116 is an older one about other fields).
-Issue report: [docs/issues/U63-OMP4-command-line-csv-import-empty-submission.md](../issues/U63-OMP4-command-line-csv-import-empty-submission.md).
+Issue report: [pkp-e2e#279](https://github.com/jardakotesovec/pkp-e2e/issues/279) ([docs/issues/U63-OMP4-command-line-csv-import-empty-submission.md](../issues/U63-OMP4-command-line-csv-import-empty-submission.md)).
 
 ## Reference — entry points & surfaces
 

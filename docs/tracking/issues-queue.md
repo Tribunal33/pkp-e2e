@@ -51,7 +51,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 | [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 |  |
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 8 | 1 | 1 |  |
 | [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 |  |
-| [U74](../specs/U74-onix-metadata-export.md) | 16 | 0 | 6 | A16 done with U63 A12 (docs/issues/U63-A12-native-export-nothing-ticked-empty-tab.md) |
+| [U74](../specs/U74-onix-metadata-export.md) | 16 | 0 | 6 | A16 done with U63 A12 (pkp-e2e#258) |
 | [U15](../specs/U15-search.md) | 13 | 0 | 6 |  |
 | [U04](../specs/U04-orcid-integration.md) | 8 | 0 | 6 |  |
 | [U70](../specs/U70-catalog-management.md) | 14 | 0 | 5 |  |
