@@ -1553,7 +1553,7 @@ Issue report: [pkp-e2e#77](https://github.com/jardakotesovec/pkp-e2e/issues/77) 
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25 (td13; Rule 25a), OJS, three journals, before any saved order: "Back Issues" 2025, 2026, 2024 (2025 current) against "Archives" 2024, 2026, 2025; "Back Issues" 2023, 2022, 2021 against 2021, 2022, 2023; after an unpublish, 2020, 2026, 2025 against 2026, 2020, 2025. Mechanism: note u, the archive orders by the saved order alone.
-Issue report: [docs/issues/U50-A13-archive-issues-no-set-order.md](../issues/U50-A13-archive-issues-no-set-order.md).
+Issue report: [pkp-e2e#78](https://github.com/jardakotesovec/pkp-e2e/issues/78) ([docs/issues/U50-A13-archive-issues-no-set-order.md](../issues/U50-A13-archive-issues-no-set-order.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-25 (td14; Rule 26), OJS, eight times over three runs: `issue/view/{id}/999`, `/{id}/nosuch`, `/{urlPath}/999` and another issue's galley each answered 500 with an empty title and body. Server log: "Uncaught TypeError: PKP\core\PKPRequest::redirect(): Argument #4 ($path) must be of type ?array, int given" in `IssueHandler.php`, the unknown-galley redirect of `initialize()` (note x). Code read: `stable-3_5_0` passes the path as a list; not driven there.
