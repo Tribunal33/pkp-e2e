@@ -1833,7 +1833,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | A refused or failed bulk action closes its window with no message | 🐞 | minor | — |
 | [A14](#a14) | The "Mark DOIs Needs Sync" question asks to mark the records "as stale" | 🐞 | minor | — |
 | [A15](#a15) | "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A17](#a17) | A new major version leaves the earlier version's deposited DOI as it was | 🐞 | minor | — |
+| [A17](#a17) | With "DOI Versioning" "Yes", publishing a new major version leaves the earlier version's DOI "Registered" instead of "Needs Sync" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A DOI deposit that cannot connect to Crossref or DataCite reads "Submitted" for good, with no error | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | Saving a DOI registration agency can untick every DOI kind and leave the DOIs page blank | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | The agency plugins' Tools pages have an empty heading | 🐞 | minor | — |
@@ -2054,14 +2054,22 @@ resubmitted…").
 Basis: probe, 2026-09-26. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — A new major version leaves the earlier version's deposited DOI as it was** · 🐞 · minor.
-With "DOI Versioning" "Yes", a work whose 1.0 DOI reads "Registered"
-gets a new major version, 2.0, which is published: 2.0 gets its own DOI
-("Unregistered") and 1.0's stays "Registered". Expected: 1.0's DOI
-turns "Needs Sync", so that its deposited record, which should now name
-the newer version, is sent again; as it is, nothing prompts the manager
-to do so.
-Basis: probe, 2026-09-26. <sup>f-a17</sup>
+**A17 — With "DOI Versioning" "Yes", publishing a new major version leaves the earlier version's DOI "Registered" instead of "Needs Sync"** · 🐞 · low.
+A journal, press or preprint server has "DOI Versioning" set to "Yes". A
+manager creates a new version of a published work with "Major Revision"
+and publishes it. The new version gets a DOI of its own, "Unregistered".
+The earlier version's DOI was "Registered" and still is, where the code
+means it to turn "Needs Sync". The status shows in the window that "View
+all" opens on the DOIs page. Only a preprint server's Crossref record
+for the earlier version is out of date: it should now name the new
+version. Depositing the work for its new DOI, by hand or by "Automatic
+Deposit", sends every version's record and sets every status again. On a
+journal and a press the earlier version's record at the agency does not
+change, so only the label differs from what the code intends. "DOI
+Versioning" is "Yes" by default on a preprint server and "No" on a
+journal and a press. A new version gets its DOI on publication unless
+"Automatic DOI Assignment" is "Never".
+Basis: probe, 2026-10-01. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — A DOI deposit that cannot connect to Crossref or DataCite reads "Submitted" for good, with no error** · 🐞 · high · crash: server.
@@ -3776,6 +3784,7 @@ registered, "Needs Sync" included. Live-probed 2026-09-26 (q20).
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-26 (q21, which gives the cause), all
 three apps, one run each.
+Issue report: [docs/issues/U45-A17-major-version-earlier-doi-stays-registered.md](../issues/U45-A17-major-version-earlier-doi-stays-registered.md).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-26 (q22): `PKP\jobs\doi\DepositSubmission`

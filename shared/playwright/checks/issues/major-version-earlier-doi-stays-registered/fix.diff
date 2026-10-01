@@ -1,0 +1,14 @@
+--- a/lib/pkp/classes/publication/Repository.php
++++ b/lib/pkp/classes/publication/Repository.php
+@@ -688,8 +688,9 @@
+         // Mark DOIs stale (if applicable).
+         if ($newPublication->getData('status') === Publication::STATUS_PUBLISHED) {
+             if ($context->getData(Context::SETTING_DOI_VERSIONING)) {
+-                $isMajorVersion = $newPublication->getData('versionStage') != $publication->getData('versionStage') ||
+-                    $newPublication->getData('versionMajor') != $publication->getData('versionMajor');
++                // $publication is this same version before publishing, so its stage and major never differ;
++                // a major version is the one whose minor number is 0, as in unpublish()
++                $isMajorVersion = $newPublication->getData('versionMinor') == 0;
+                 // if a major version is published, mark all submission's DOIs stale, so that their relationships can be updated
+                 if ($isMajorVersion) {
+                     $staleDoiIds = Repo::doi()->getDoisForSubmission($newPublication->getData('submissionId'));
