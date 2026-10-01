@@ -2654,7 +2654,7 @@ plugin ships (funders are core metadata, [Funding](U43-funding.md)), so
 while `displayArticlePfl()` reads the context's `funders` setting.
 Live-probed 2026-09-25 (note k): the warning on every opening; the
 Plugin Gallery could not be searched on the test installs.
-Issue report: [docs/issues/U13-OJS2-publication-facts-settings-funding-warning.md](../issues/U13-OJS2-publication-facts-settings-funding-warning.md).
+Issue report: [pkp-e2e#225](https://github.com/jardakotesovec/pkp-e2e/issues/225) ([docs/issues/U13-OJS2-publication-facts-settings-funding-warning.md](../issues/U13-OJS2-publication-facts-settings-funding-warning.md)).
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — `templates/pfl.tpl` fetches `pfl/locale/` + `Locale::getLocale()`
