@@ -1,0 +1,22 @@
+--- a/plugins/metadata/dc11/filter/Dc11SchemaPublicationFormatAdapter.php
++++ b/plugins/metadata/dc11/filter/Dc11SchemaPublicationFormatAdapter.php
+@@ -228,17 +228,8 @@
+             $dc11Description->addStatement('dc:identifier', $identificationCode->getValue());
+         }
+ 
+-        // Source (press title and pages)
+-        $sources = $press->getName(null);
+-        $pages = $publication->getData('pages');
+-        if (!empty($pages)) {
+-            $pages = '; ' . $pages;
+-        }
+-        foreach ($sources as $locale => $source) {
+-            $sources[$locale] .= '; ';
+-            $sources[$locale] .= $pages;
+-        }
+-        $this->addLocalizedElements($dc11Description, 'dc:source', $sources);
++        // Source (press title)
++        $this->addLocalizedElements($dc11Description, 'dc:source', $press->getName(null));
+ 
+         // Language
+         $submissionLanguage = $monograph->getData('locale');

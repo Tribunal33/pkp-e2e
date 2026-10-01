@@ -1193,6 +1193,11 @@ Left out of the scenarios above, by reason:
     a section with an empty "Identify items published in this section as
     a(n)" typing its articles the same before and after its window is saved
     {OJS} (once the team rules on the default, pkp/pkp-lib#10839)
+  - the guard for A8 (issue report
+    `docs/issues/U19-A8-oai-dc-source-keeps-empty-part.md`): the Dublin Core
+    "Source" of an article in no issue and of a press record carrying only
+    the parts it has, with no trailing or doubled "; " {OJS OMP} (once
+    fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1310,7 +1315,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | The browser view of the last part of a long OAI-PMH list says "There are more results." and offers a "Resume" that is refused | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | The browser view of one OAI-PMH record's formats reads "available from this archive" and has no links to that record | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | Saving a journal section removes "Peer-reviewed Article" from its articles' OAI-PMH Dublin Core records {OJS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A8](#a8) | The Dublin Core "Source" keeps an empty part for an article in no issue {OJS} and on every press record {OMP} | 🐞 | minor | — |
+| [A8](#a8) | The OAI-PMH Dublin Core "Source" ends in "; " for an article in no issue and for every book {OJS OMP} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | One article in a subscription issue empties a whole `jats` list {OJS} | 🐞 | latent | — |
 | [A11](#a11) | With "DRIVER" enabled, an article in no issue loses its `driver` mark when unpublished {OJS} | 🐞 | latent | — |
 | [A12](#a12) | A journal's MARC records in OAI-PMH do not follow the schemas they name, and software reading them misses the journal, the issue date, the ISSN or the affiliations {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1450,12 +1455,19 @@ the fix is to remove it everywhere, not to restore it.
 Basis: probe, 2026-10-01. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — The source line keeps an empty part** {OJS OMP} · 🐞 · minor.
-A harvester expects "Source" to read "{journal name}; {issue}; {pages}"
-with only the parts the article has. An article in no issue reads
-"{journal name}; " (or "{journal name}; ; 15-20" with pages); every press
-record reads "{press name}; ".
-Basis: probe, 2026-09-26. <sup>f-a8</sup>
+**A8 — The OAI-PMH Dublin Core "Source" ends in "; " for an article in no issue and for every book** {OJS OMP} · 🐞 · low.
+The "Source" of a journal article's Dublin Core record is meant to read
+"{journal name}; {issue}; {pages}", leaving out a part the article lacks
+together with its separator. An article published without an issue reads
+"{journal name}; " instead, and "{journal name}; ; 15-20" when it has
+pages: the separator of the missing issue stays. Every book record of a
+press reads "{press name}; ", since a book has neither an issue nor
+pages. The names and pages in the line are right; it is malformed for
+whoever splits it at "; ". The press half is long-standing and shows on
+every press. The journal half is new and not yet released: it needs an
+article published with "Don't Assign To An Issue", a choice that
+journals did not have before.
+Basis: probe, 2026-10-01. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — A journal that does not publish online still hands out records** {OJS} · ❓ · minor.
@@ -1948,6 +1960,7 @@ Issue report: [docs/issues/U19-A7-oai-dc-peer-reviewed-type-gone-after-section-s
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-26: an article in no issue read "{journal}; " and, with "Pages" "15-20", "{journal}; ; 15-20"; a press record "{press}; ". Code: note f (`'; ' . $issue?->getIssueIdentification()` with a null issue; OMP appends "; " unconditionally).
+Issue report: [docs/issues/U19-A8-oai-dc-source-keeps-empty-part.md](../issues/U19-A8-oai-dc-source-keeps-empty-part.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-26, OJS, two runs: with "OJS will not be used to publish the journal's contents online." chosen, ListRecords listed the article; its Dublin Core record had no address under "Resource Identifier" or "Relation"; both MARC records kept 856 with the article page; that page sent a signed-out visitor to Login and showed a signed-in Reader "This journal does not publish its content online." (`user/authorizationDenied?message=user.authorization.journalDoesNotPublish`). The question and lean are judgment. Code: notes f, g; `OjsJournalMustPublishPolicy` is not added to the OAI handler.

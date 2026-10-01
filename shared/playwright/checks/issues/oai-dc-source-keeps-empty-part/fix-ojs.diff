@@ -1,0 +1,20 @@
+--- a/plugins/metadata/dc11/filter/Dc11SchemaArticleAdapter.php
++++ b/plugins/metadata/dc11/filter/Dc11SchemaArticleAdapter.php
+@@ -184,12 +184,12 @@
+         // Source (journal title, issue id and pages or article number)
+         $sources = $journal->getName(null);
+         $pages = $publication->getData('pages') ?: $publication->getData('articleNumber');
+-        if (!empty($pages)) {
+-            $pages = '; ' . $pages;
+-        }
+         foreach ($sources as $locale => $source) {
+-            $sources[$locale] .= '; ' . $issue?->getIssueIdentification([], $locale);
+-            $sources[$locale] .= $pages;
++            $sources[$locale] = implode('; ', array_filter([
++                $source,
++                $issue?->getIssueIdentification([], $locale),
++                $pages,
++            ]));
+         }
+         $this->addLocalizedElements($dc11Description, 'dc:source', $sources);
+         if ($issn = $journal->getData('onlineIssn')) {
