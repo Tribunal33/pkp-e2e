@@ -2004,7 +2004,7 @@ assignment of a new submission to that section uses (code), so after
 such a merge new submissions there would reach neither account; not
 seen, since only the seeded journal assigns editors automatically and
 its accounts are never merged in testing.
-Issue report: [docs/issues/U53-A9-merge-drops-section-editor-assignment.md](../issues/U53-A9-merge-drops-section-editor-assignment.md).
+Issue report: [pkp-e2e#193](https://github.com/jardakotesovec/pkp-e2e/issues/193) ([docs/issues/U53-A9-merge-drops-section-editor-assignment.md](../issues/U53-A9-merge-drops-section-editor-assignment.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Code: note k. Live-probed 2026-09-25: note td11. The Vue list
