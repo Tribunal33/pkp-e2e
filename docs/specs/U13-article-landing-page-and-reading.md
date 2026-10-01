@@ -2746,7 +2746,7 @@ failure only logs "PFL: failed to load translations" to the console.
 Live-probed 2026-09-25 (note q13): the French page showed no panel and
 fetched no label file, the same as the English page, so the entry rests
 on the code until the panel shows.
-Issue report: [docs/issues/U13-OJS3-publication-facts-panel-missing-without-label-file.md](../issues/U13-OJS3-publication-facts-panel-missing-without-label-file.md).
+Issue report: [pkp-e2e#236](https://github.com/jardakotesovec/pkp-e2e/issues/236) ([docs/issues/U13-OJS3-publication-facts-panel-missing-without-label-file.md](../issues/U13-OJS3-publication-facts-panel-missing-without-label-file.md)).
 
 <a id="fn-f-ojs4"></a>
 **f-ojs4** — Note n. The search results' shape changed with pkp-lib's
