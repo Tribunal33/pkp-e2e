@@ -1,0 +1,20 @@
+--- a/lib/pkp/classes/plugins/PluginSettingsDAO.php
++++ b/lib/pkp/classes/plugins/PluginSettingsDAO.php
+@@ -113,7 +113,7 @@
+         Cache::forget($this->_getCacheId($contextId, $pluginName, true));
+ 
+         DB::table('plugin_settings')
+-            ->where('plugin_Name', $pluginName)
++            ->where('plugin_name', $pluginName)
+             ->whereRaw('COALESCE(context_id, 0) = ?', [(int) $contextId])
+             ->where('setting_name', $settingName)
+             ->delete();
+@@ -130,7 +130,7 @@
+         Cache::forget($this->_getCacheId($contextId, $pluginName, true));
+ 
+         DB::table('plugin_settings')
+-            ->where('plugin_Name', $pluginName)
++            ->where('plugin_name', $pluginName)
+             ->whereRaw('COALESCE(context_id, 0) = ?', [(int) $contextId])
+             ->delete();
+     }

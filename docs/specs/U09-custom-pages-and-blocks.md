@@ -817,6 +817,8 @@ the footnote. <sup>y</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - deleting a custom block: "OK" closing the window, the block gone from the Custom Block Manager's list, the sidebar and "Sidebar" (A14; the guard its issue report names)
 - **Rarely met**:
   - "Static Pages Plugin" unticked with pages stored: every page answering "404 Not Found" and the tab gone, then the pages back when it is ticked again {OJS OMP} (Settings bullet 1; Rule 15)
   - "Custom Block Manager" unticked with a block placed: the block leaving the public pages and "Sidebar", then back at its place when it is ticked again (Settings bullet 2; Rule 25)
@@ -877,7 +879,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | After a refused "Save" in the static page window, the next successful save shows the old refusal at the top right | 🐞 | minor | — |
 | [A12](#a12) | Right after "Static Pages Plugin" is unticked, the tab stays and its "Add Static Page" shows "Error" | 🐞 | minor · crash: server | — |
 | [A13](#a13) | A custom block whose name holds "&" can never be placed, edited or deleted | 🐞 | user-visible · crash: script | — |
-| [A14](#a14) | "OK" in a custom block's "Delete" window deletes nothing and leaves a spinner | 🐞 | user-visible · crash: server | — |
+| [A14](#a14) | A custom block cannot be deleted on PostgreSQL: "OK" spins and the block stays | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | With "Custom Block Manager" unticked, "Appearance" › "Setup" refuses every save over a placed block it no longer lists | 🐞 | user-visible | — |
 | [A16](#a16) | A ".pdf" or ".svg" chosen in the picture window is ignored with no message | 🐞 | minor | — |
 | [A17](#a17) | A pasted picture the site refuses stays in the text, embedded, and is saved | 🐞 | minor | — |
@@ -1033,13 +1035,17 @@ removed.
 Basis: probe. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — A custom block cannot be deleted** · 🐞 · user-visible · crash: server.
+**A14 — A custom block cannot be deleted on PostgreSQL: "OK" spins and the block stays** · 🐞 · medium · crash: server.
 On an installation whose database is PostgreSQL, "OK" in a custom
 block's "Delete" window leaves the window open with a spinner and no
-message: the application fails on the server, and the block stays in
-the list, in the sidebar and in the "Sidebar" list. "Delete" is the only
-way to remove a block, a journal's or the site's.
-Basis: probe. <sup>f-a14</sup>
+message. The block stays in three places: the Custom Block Manager's
+list, the sidebar on the public pages, and Settings › Website ›
+"Appearance" › "Setup" › "Sidebar".
+"Delete" is the only way to remove a block, both for a journal's blocks
+and for the site's. A manager can still take a block off the public
+pages by unticking it under "Sidebar", but it stays in the Custom Block
+Manager's list for good.
+Basis: probe, 2026-10-01. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — "Appearance" › "Setup" refuses to save over a block it no longer lists** · 🐞 · user-visible.
@@ -1936,6 +1942,7 @@ case, so the call works there (read, not driven). The test installs run
 PostgreSQL. Present since pkp-lib#7111 (the caching rewrite), on
 stable-3_5_0 too. Live-probed 2026-09-24 (three apps): td24, td27; the
 server log recorded the error on every "OK".
+Issue report: [docs/issues/U09-A14-custom-block-delete-fails-postgresql.md](../issues/U09-A14-custom-block-delete-fails-postgresql.md).
 
 <a id="fn-f-a15"></a>
 **f-a15** — With the plugin unticked its blocks are not loaded, but the
