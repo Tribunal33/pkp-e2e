@@ -1,0 +1,24 @@
+--- a/plugins/generic/citationStyleLanguage/templates/citation-styles/ris.blade
++++ b/plugins/generic/citationStyleLanguage/templates/citation-styles/ris.blade
+@@ -42,10 +42,10 @@
+ @endif
+ @if($citationData->risType === 'JOUR'){{-- OJS only --}}
+ @if($citationData->issued)
+-PY  - {{ \Carbon\Carbon::parse($citationData->issued->raw)->format('%Y/%m/%d') }}
++PY  - {{ \Carbon\Carbon::parse($citationData->issued->raw)->format('Y/m/d') }}
+ @endif
+ @if($citationData->accessed)
+-Y2  - {{ \Carbon\Carbon::parse($citationData->accessed->raw)->format('%Y/%m/%d') }}
++Y2  - {{ \Carbon\Carbon::parse($citationData->accessed->raw)->format('Y/m/d') }}
+ @endif
+ @if($citationData->{'container-title'})
+ JF  - {{ $citationData->{'container-title'} }}
+@@ -79,7 +79,7 @@
+ PB  - {{ $citationData->publisher }}
+ @endif
+ @if($citationData->issued)
+-PY  - {{ \Carbon\Carbon::parse($citationData->issued->raw)->format('%Y') }}
++PY  - {{ \Carbon\Carbon::parse($citationData->issued->raw)->format('Y') }}
+ @endif
+ @endif
+ @foreach($citationData->languages ?? [] as $language)
