@@ -1912,7 +1912,7 @@ Issue report: [pkp-e2e#304](https://github.com/jardakotesovec/pkp-e2e/issues/304
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-26: note q4. Code: note g.
-Issue report: [docs/issues/U19-A12-oai-marc-records-not-valid-for-their-schemas.md](../issues/U19-A12-oai-marc-records-not-valid-for-their-schemas.md).
+Issue report: [pkp-e2e#305](https://github.com/jardakotesovec/pkp-e2e/issues/305) ([docs/issues/U19-A12-oai-marc-records-not-valid-for-their-schemas.md](../issues/U19-A12-oai-marc-records-not-valid-for-their-schemas.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-26: note q19; OJS `oai_marc` and `marcxml` read at `…/fr_CA/oai` wrote 251 and 780 `$i` "##publication.versionStage.display##" where the English read "Version of Record 2.0" and "Version of Record 1.1". The `##…##` form is how the app prints a key it has no text for in that language. Code: notes f, g, u.
