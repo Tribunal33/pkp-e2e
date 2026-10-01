@@ -51,7 +51,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
 | [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 |  |
 | [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 |  |
-| [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 |  |
+| [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | **OPS1 taken: issues session, VM s1, 2026-10-01** (with U13 OPS2, OPS3) |
 | [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 |  |
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 8 | 1 | 1 |  |
 | [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 |  |
