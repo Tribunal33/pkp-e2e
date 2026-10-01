@@ -829,6 +829,11 @@ Left out of the scenarios above, by reason:
     a chapter's and a format's Publisher ID saved, then emptied and
     saved, the reopened tab empty; a tab saved without the box keeping
     the stored ID
+  - the guard for A5 (Rule 19; issue report
+    `docs/issues/U44-A5-new-version-galley-publisher-id-refused.md`): a
+    galley's Publisher ID saved, a new version created, and the new
+    version's galley tab saved unchanged; another submission's galley
+    still refused the same value
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -843,8 +848,6 @@ Left out of the scenarios above, by reason:
     Rule 12)
   - A14 (a galley's or a chapter's tab still showing a cleared URN;
     Rule 14; scenario 5 passes it)
-  - A5 (a new version copying the galleys' publisher IDs, then refusing
-    their saves; Rule 19)
   - A12 (a URN differing from another only in case accepted; Rule 11)
   - A8, A10 and A11 (the settings window's raw text code, written-out
     angle brackets and failing page script; Fields, the URN plugin's
@@ -890,7 +893,7 @@ entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | A Publisher ID emptied on a galley's, chapter's or format's "Identifiers" tab comes back after "Save" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | Editors saving an article's or book's own URN again are told it is "already in use" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A5](#a5) | A new version's galleys keep the old publisher ID, and their tab then refuses every save | 🐞 | minor | — |
+| [A5](#a5) | A new version's galley, chapter or format tab refuses the publisher ID copied from the earlier version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | "Add Check Number" and "Assign" end URNs with the wrong check digit | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A7](#a7) | The tab's assign box reads "Assign the URN to this galley" with the URN left out | 🐞 | minor | — |
 | [A8](#a8) | A suffix pattern of spaces is refused with a raw text code | 🐞 | minor | — |
@@ -967,16 +970,24 @@ have no URN plugin.
 Basis: probe, 2026-09-30. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A new version's galleys keep the old publisher ID** · 🐞 · minor.
-After "Create New Version", each galley of the new version carries the
-publisher ID of the galley it was copied from. The uniqueness rule then
-counts the old galley against the new one, so every "Save" on the new
-galley's "Identifiers" tab is refused with "The public identifier
-'{value}' already exists for another object of the same type…" until
-its publisher ID is changed, and while it stands the new galley's URN
-cannot be assigned either. Emptying the box does not help: the old
-value is kept ([A2](#a2)).
-Basis: probe, 2026-09-24. <sup>f-a5</sup>
+**A5 — A new version's galley, chapter or format tab refuses the publisher ID copied from the earlier version** · 🐞 · low.
+An editor gives an article's galley a publisher ID on its "Identifiers"
+tab, then creates a new version. On a press the same goes for a book's
+chapters and publication formats. The new version's galley is stored
+with the same publisher ID, and keeps it as long as nobody saves its
+tab. When the editor presses "Save" on that tab, even without changing
+anything, the save is refused with "The public identifier '…' already
+exists for another object of the same type." The other object is the
+earlier version's galley.
+While the copied value is in the box, no save on the tab goes through.
+On a journal or press with the "URN" plugin on, that includes
+assigning the new version's galley a URN. Saving with the box emptied
+does not help either, because an emptied publisher ID is not removed
+([A2](#a2), [pkp-e2e#76](https://github.com/jardakotesovec/pkp-e2e/issues/76)).
+It needs publisher IDs switched on for galleys (on a press, for
+chapters or publication formats), which is off by default, and an item
+that was given one before the new version was made.
+Basis: probe, 2026-10-01. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — "Add Check Number" and "Assign" end URNs with the wrong check digit** · 🐞 · medium.
@@ -1795,6 +1806,7 @@ Issue report: [pkp-e2e#7](https://github.com/jardakotesovec/pkp-e2e/issues/7) ([
 `anyPubIdExists(…, ASSOC_TYPE_REPRESENTATION, $galleyId, true)` →
 `Galley DAO::pubIdExists()` excludes only the galley itself. Live-probed
 2026-09-24 (note q7).
+Issue report: [docs/issues/U44-A5-new-version-galley-publisher-id-refused.md](../issues/U44-A5-new-version-galley-publisher-id-refused.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `plugins/pubIds/urn/js/checkNumber.js`

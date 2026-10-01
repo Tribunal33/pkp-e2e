@@ -1,0 +1,62 @@
+--- a/classes/monograph/ChapterDAO.php
++++ b/classes/monograph/ChapterDAO.php
+@@ -314,9 +314,20 @@
+ 
+     /**
+      * @copydoc PKPPubIdPluginDAO::pubIdExists()
++     *
++     * A new version copies its chapters with their pub ids, and the versions of
++     * one submission may share a pub id, so the chapters of the excluded chapter's
++     * other versions are left out of the check.
+      */
+     public function pubIdExists(string $pubIdType, string $pubId, int $excludePubObjectId, int $contextId): bool
+     {
++        $otherVersions = DB::table('publications AS op')
++            ->join('publications AS ep', 'op.submission_id', '=', 'ep.submission_id')
++            ->join('submission_chapters AS ec', 'ec.publication_id', '=', 'ep.publication_id')
++            ->where('ec.chapter_id', '=', $excludePubObjectId)
++            ->whereColumn('op.publication_id', '<>', 'ep.publication_id')
++            ->select('op.publication_id');
++
+         return DB::table('submission_chapter_settings AS scs')
+             ->join('submission_chapters AS sc', 'scs.chapter_id', '=', 'sc.chapter_id')
+             ->join('publications AS p', 'sc.publication_id', '=', 'p.publication_id')
+@@ -324,6 +335,7 @@
+             ->where('scs.setting_name', '=', "pub-id::{$pubIdType}")
+             ->where('scs.setting_value', '=', $pubId)
+             ->where('sc.chapter_id', '<>', $excludePubObjectId)
++            ->whereNotIn('sc.publication_id', $otherVersions)
+             ->where('s.context_id', '=', $contextId)
+             ->count() > 0;
+     }
+--- a/classes/publicationFormat/PublicationFormatDAO.php
++++ b/classes/publicationFormat/PublicationFormatDAO.php
+@@ -486,9 +486,20 @@
+ 
+     /**
+      * @copydoc PKPPubIdPluginDAO::pubIdExists()
++     *
++     * A new version copies its publication formats with their pub ids, and the
++     * versions of one submission may share a pub id, so the formats of the
++     * excluded format's other versions are left out of the check.
+      */
+     public function pubIdExists(string $pubIdType, string $pubId, int $excludePubObjectId, int $contextId): bool
+     {
++        $otherVersions = DB::table('publications AS op')
++            ->join('publications AS ep', 'op.submission_id', '=', 'ep.submission_id')
++            ->join('publication_formats AS ef', 'ef.publication_id', '=', 'ep.publication_id')
++            ->where('ef.publication_format_id', '=', $excludePubObjectId)
++            ->whereColumn('op.publication_id', '<>', 'ep.publication_id')
++            ->select('op.publication_id');
++
+         return DB::table('publication_format_settings AS pft')
+             ->join('publication_formats AS pf', 'pft.publication_format_id', '=', 'pf.publication_format_id')
+             ->join('publications AS p', 'p.publication_id', '=', 'pf.publication_id')
+@@ -496,6 +507,7 @@
+             ->where('pft.setting_name', '=', "pub-id::{$pubIdType}")
+             ->where('pft.setting_value', '=', $pubId)
+             ->where('pf.publication_format_id', '<>', $excludePubObjectId)
++            ->whereNotIn('pf.publication_id', $otherVersions)
+             ->where('s.context_id', '=', $contextId)
+             ->count() > 0;
+     }
