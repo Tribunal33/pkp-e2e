@@ -11,8 +11,8 @@
   - 3.3: OJS (code)
 - **Introduced** `pkp/ojs#1307` for `pkp/pkp-lib#2336` · [a96cb05987](https://github.com/pkp/ojs/commit/a96cb05987e473fe8c83caa0d2ef9904baf5b5f6) · 2017-03-08 · Alec Smecher (asmecher)
 - **Upstream** none found (2026-09-30)
-- **Tracked in** spec U51 [A12](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U51-subscriptions.md#a12)
-- **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
+- **Tracked in** spec U51 [A12](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U51-subscriptions.md#a12); spec U52 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U52-payments-and-apcs.md#a9) (its signed-out half; the payments-off half is `U52-A9-membership-address-payments-off-empty-page.md`)
+- **Checked** 2026-09-30 (step 15: 2026-10-01), each branch's tip (the commits in Evidence)
 
 ## Summary
 
@@ -94,11 +94,17 @@ The session ends on the form:
 13. In a second browser tab, log out.
 14. Back on the first tab, press "Save".
 
+The membership address (this needs none of steps 1–9; it fails the same
+on the dataset's own journal):
+
+15. Signed out, open `/index.php/publicknowledge/en/user/payMembership`.
+
 **Expected.** Steps 10 and 11 show the "Login" page. After signing in
 there, the reader lands on "Purchase Individual Subscription" and
-"Purchase Institutional Subscription". Step 14 shows the "Login" page.
+"Purchase Institutional Subscription". Steps 14 and 15 show the "Login"
+page.
 
-**Observed.** Steps 10, 11 and 14 each answer HTTP 500, which is an
+**Observed.** Steps 10, 11, 14 and 15 each answer HTTP 500, which is an
 empty page where errors are not displayed. The server log:
 
 ```
@@ -108,6 +114,8 @@ PHP Fatal error:  Uncaught Error: Call to a member function getId() on null in �
 [500]: GET /index.php/publicknowledge/en/user/purchaseSubscription/institutional
 PHP Fatal error:  Uncaught Error: Call to a member function getId() on null in …/pages/user/UserHandler.php:269
 [500]: POST /index.php/publicknowledge/en/user/payPurchaseSubscription/individual/
+PHP Fatal error:  Uncaught Error: Call to a member function getId() on null in …/pages/user/UserHandler.php:434
+[500]: GET /index.php/publicknowledge/en/user/payMembership
 ```
 
 Signed in, the same two addresses open "Purchase Individual
@@ -150,10 +158,13 @@ The same missing check reaches:
   Those buttons are never shown signed out, but their addresses, opened
   signed out, fail at `$user->getId()` on lines 335 and 388 (checked in
   the code).
-- `payMembership()`: `$user->getId()` at line 434, checked in the code.
+- `payMembership()`: `$user->getId()` at line 434, checked on screen
+  (step 15) on the dataset's journal and on one with payments set up.
   It has no journal, publishing-mode or payment check before that line,
   so its address fails signed out on every journal. No screen and no
-  email links to it.
+  email links to it. Signed in, the same address fails while payments
+  are not set up, a separate cause
+  (`U52-A9-membership-address-payments-off-empty-page.md`).
 - `subscriptions()` ("My Subscriptions") checks for a user itself and
   sends a signed-out visitor to the home page, checked on screen.
 - Each operation fails before it reads or writes anything for a user,
@@ -274,6 +285,14 @@ tried, with one e2e scenario.
   page, the address again, then the "Subscriptions" page and "Purchase
   New Subscription". With the fix in, it signs in on step 14's Login
   page and presses "Save" there.
+- Step 15 was walked by
+  [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/membership-address-payments-off-empty-page/walk.js)
+  of the U52 A9 report, on `main` and `stable-3_5_0` (2026-10-01, OJS
+  `main` bade233f73 and `stable-3_5_0` 92b9a16b48, the same tips as
+  below): signed out on the freshly loaded dataset, and again after
+  payments were set up. The fix below was not walked on step 15. Its
+  `UserRequiredPolicy` list names `payMembership`, so step 15 leading to
+  Login is read in the code.
 - The fix was tried with `node bin/try-fix.js apply fix.diff ojs`, the
   same script, then `node bin/try-fix.js revert ojs`.
 - Driven through the browser on PostgreSQL, on the default dataset from
