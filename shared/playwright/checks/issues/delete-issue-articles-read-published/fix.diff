@@ -1,0 +1,38 @@
+--- a/classes/controllers/grid/issues/IssueGridHandler.php
++++ b/classes/controllers/grid/issues/IssueGridHandler.php
+@@ -22,7 +22,6 @@
+ 
+ namespace APP\controllers\grid\issues;
+ 
+-use APP\article\ArticleTombstoneManager;
+ use APP\controllers\grid\issues\form\IssueAccessForm;
+ use APP\controllers\grid\issues\form\IssueForm;
+ use APP\controllers\grid\pubIds\form\AssignPublicIdentifiersForm;
+@@ -381,19 +380,16 @@
+             $publications = $submission->getData('publications');
+             foreach ($publications as $publication) {
+                 if ($publication->getData('issueId') === (int) $issue->getId()) {
+-                    $wasCurrentPublication = $publication->getId() == $submission->getData('currentPublicationId');
+-                    Repo::publication()->edit(
+-                        $publication,
+-                        ['issueId' => null, 'status' => Publication::STATUS_QUEUED]
+-                    );
+-                    // edit() bypasses unpublish(), so tombstone the OAI identifier(s)
+-                    // this now-offline publication was exposing.
+-                    $unpublishedPublication = Repo::publication()->get($publication->getId());
+-                    (new ArticleTombstoneManager())->reconcileTombstonesOnUnpublish($unpublishedPublication, $wasCurrentPublication, $submission, $journal);
++                    // Take published and scheduled publications offline through unpublish(),
++                    // so the submission leaves the Done stage, the unpublication is logged
++                    // and the OAI tombstones, DOIs and search index follow, as for "Unpublish Issue"
++                    if (in_array($publication->getData('status'), [Publication::STATUS_PUBLISHED, Publication::STATUS_SCHEDULED])) {
++                        Repo::publication()->unpublish($publication);
++                        $publication = Repo::publication()->get($publication->getId());
++                    }
++                    Repo::publication()->edit($publication, ['issueId' => null]);
+                 }
+             }
+-            $newSubmission = Repo::submission()->get($submission->getId());
+-            Repo::submission()->updateStatus($newSubmission);
+         }
+ 
+         Repo::issue()->delete($issue);

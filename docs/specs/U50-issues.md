@@ -1043,6 +1043,10 @@ Left out of the scenarios above, by reason:
     an article whose newer version was published with "Don't Assign To An
     Issue" no longer listed in the issue or on its "Table of Contents"
     tab, and its earlier version still published
+  - the guard for A12 (issue report
+    `docs/issues/U50-A12-delete-issue-articles-read-published.md`): after
+    "Delete" of a published issue, its articles' workflow reading
+    "Production" and their History recording the unpublishing
 - **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
@@ -1125,7 +1129,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 | [A8](#a8) | "Future Issues" lists "No. 10" before "No. 2" | 🐞 | minor | — |
 | [A10](#a10) | An article dropped under another section in "Order" is back in its own section on reopening | 🐞 | minor | — |
 | [A11](#a11) | "Create Issue Galley" offers interface-only languages, then refuses them as if no language were chosen | 🐞 | user-visible | — |
-| [A12](#a12) | After "Delete" of their issue, offline articles still read "Published" in their workflow, and their history does not say they were unpublished | 🐞 | user-visible | — |
+| [A12](#a12) | After "Delete" of a published issue, its offline articles still read "Published" in the workflow | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A13](#a13) | "Archives" lists the issues in no set order until someone orders "Back Issues" | 🐞 | user-visible | — |
 | [A14](#a14) | Visitors opening a deleted or mistyped "Full Issue" galley address get an empty page, not the issue | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | With only "Description" changed on "Issue Data", another tab opens without the unsaved-change question | 🐞 | minor | — |
@@ -1247,15 +1251,21 @@ accepts, or "Save" should accept what the list offers. Basis: probe,
 2026-09-25. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — Deleting an issue leaves its articles marked "Published"** · 🐞 · user-visible.
-After "Delete" takes an issue away, its formerly published articles are
-offline: their pages answer "404 Not Found" and their Publication
-Settings read "Status: Unscheduled". Yet each article's workflow header
-keeps reading "Published" with "Return to Workflow", and its History
-records only "Submission metadata updated", where unpublishing the issue
-or "Remove" records "The submission was unpublished.". An editor
-reading the workflow is told the article is live when it is not. Basis:
-probe, 2026-09-25. <sup>f-a12</sup>
+**A12 — After "Delete" of a published issue, its offline articles still read "Published" in the workflow** · 🐞 · medium.
+An editor deletes a published issue with "Delete". Its articles go
+offline as expected, and their stored status is correctly back to
+unpublished. But on OJS `main` each article's workflow header still
+reads "Published" and offers "Return to Workflow", and the editorial
+dashboard still lists it under "Published" instead of in Production.
+In every version, the article's History records only "Submission
+metadata updated", where "Unpublish Issue" records that the article
+was unpublished. The article's DOIs are not flagged on the DOIs page
+as needing a new deposit, and plugins that act when an article is
+unpublished, such as the DOAJ plugin on `main`, are never called.
+Pressing "Unpublish Issue" before "Delete" avoids all of it. After the
+fact, "Return to Workflow" moves each article back to Production on
+`main`, but it does not add the History line or flag the DOIs.
+Basis: probe, 2026-09-30. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — "Archives" follows no order until "Back Issues" is ordered** · 🐞 · user-visible.
@@ -1526,6 +1536,7 @@ Issue report: [pkp-e2e#68](https://github.com/jardakotesovec/pkp-e2e/issues/68) 
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-25 (td12; Side effects bullet 3), OJS, two articles over two runs (one published through its workflow, one seeded as published): after "Delete" of its issue each article's workflow header read "Published" with "Return to Workflow", its Publication Settings "Status: Unscheduled", its page "404 Not Found", and its History only "Submission metadata updated". `deleteIssue()` sets the status through `Repo::publication()->edit()`, not `unpublish()` (note t), so no unpublication is logged (note se).
+Issue report: [docs/issues/U50-A12-delete-issue-articles-read-published.md](../issues/U50-A12-delete-issue-articles-read-published.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25 (td13; Rule 25a), OJS, three journals, before any saved order: "Back Issues" 2025, 2026, 2024 (2025 current) against "Archives" 2024, 2026, 2025; "Back Issues" 2023, 2022, 2021 against 2021, 2022, 2023; after an unpublish, 2020, 2026, 2025 against 2026, 2020, 2025. Mechanism: note u, the archive orders by the saved order alone.
