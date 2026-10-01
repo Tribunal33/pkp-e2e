@@ -1617,7 +1617,7 @@ just made listed first (test runs 2026-09-28 and 2026-09-29):
 [f-a13](#fn-f-a13); nothing moves a first row down (no filter, page size
 or page link does, and a saved role only moves down), and the grid is the
 only place a role is edited or removed.
-Issue report: [docs/issues/U54-A1-A5-roles-list-stale-after-change.md](../issues/U54-A1-A5-roles-list-stale-after-change.md).
+Issue report: [pkp-e2e#182](https://github.com/jardakotesovec/pkp-e2e/issues/182) ([docs/issues/U54-A1-A5-roles-list-stale-after-change.md](../issues/U54-A1-A5-roles-list-stale-after-change.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Live-probed 2026-09-19 (the Production stage's claim check, all
@@ -1664,7 +1664,7 @@ box still ticked; a switch to "Users" and back changed nothing. After
 "Remove" › "OK" again answered 500 (`POST
 …/user-group-grid/remove-user-group`) with no notice; the row was gone
 after a reload.
-Issue report: [docs/issues/U54-A1-A5-roles-list-stale-after-change.md](../issues/U54-A1-A5-roles-list-stale-after-change.md).
+Issue report: [pkp-e2e#182](https://github.com/jardakotesovec/pkp-e2e/issues/182) ([docs/issues/U54-A1-A5-roles-list-stale-after-change.md](../issues/U54-A1-A5-roles-list-stale-after-change.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `$userGroup->userUserGroups()->count()` counts every
