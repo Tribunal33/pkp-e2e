@@ -1761,6 +1761,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U45-A12-doi-filter-clear-hides-unpublished.md`):
     "Unregistered", then "Registered", then "Clear filter: Registered"
     lists the unpublished works again
+  - the guard for A4 (Rule 30; issue report
+    `docs/issues/U45-A4-deposited-item-reads-manually-registered.md`):
+    after "Deposit DOIs" the "Submitted" item's agency box reads "The
+    metadata for this item has been submitted to {agency}." {OJS OPS}
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1829,7 +1833,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | "None" (and every peer review) gets a DOI that is the prefix and a bare "/" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A refused DOI edit says only "Some DOI(s) could not be updated" and gives no reason | 🐞 | minor | — |
-| [A4](#a4) | A deposited item reads "This item has been manually registered with a registration agency." | 🐞 | minor | — |
+| [A4](#a4) | After "Deposit DOIs", the item's agency box says it "has been manually registered", though nobody marked it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | The "DOI Statuses" button and the rows' tick boxes have no name for a screen reader | 🐞 | minor | — |
 | [A9](#a9) | A pattern symbol with nothing to fill it stays in the DOI | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Searching the DOIs page by a DOI misses some DOIs on each app, and fails on a preprint server | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1903,14 +1907,22 @@ shown, so the manager cannot tell what to fix.
 Basis: probe, 2026-09-26. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A deposited item reads "This item has been manually registered with a registration agency."** · 🐞 · minor.
-After "Deposit DOIs" (or the panel's "Deposit DOI(s)"), the item reads
-"Submitted" and its agency panel says "This item has been manually
-registered with a registration agency." at once, after a reload, and
-after its background deposit has run and failed. Expected: "The
+**A4 — After "Deposit DOIs", the item's agency box says it "has been manually registered", though nobody marked it** · 🐞 · low.
+On the DOIs page, an item whose DOI was sent for deposit reads
+"Submitted", and the agency box in its expanded view says "This item has
+been manually registered with a registration agency." Expected: "The
 metadata for this item has been submitted to {agency}.", since nobody
-marked it registered.
-Basis: probe, 2026-09-26. <sup>f-a4</sup>
+marked it registered. Nothing is lost: the badge, the deposit and the
+stored status are right, and the box picks the wrong one of two
+sentences. The sentence is wrong for as long as the item reads
+"Submitted". That is seconds where queued jobs run on web requests (the
+default), and until the worker's or cron's next run otherwise. When the
+deposit cannot connect to the agency, the item stays "Submitted" (a
+separate fault, [A18](#a18)) and the sentence stays with it. It needs
+Crossref or DataCite configured, which a press cannot have. It shows on
+an item whose DOI no agency has registered before; an item deposited
+again after an agency registered it reads the right sentence.
+Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — The Registration tab keeps a new agency even when its fields are refused** · ❓ · minor.
@@ -3700,6 +3712,7 @@ Live-probed 2026-09-26 (q9), all three apps.
 (submitted or registered) item as "manually registered". Live-probed
 2026-09-26 (q20), OJS Crossref and DataCite, OPS Crossref: at once,
 after a reload, ten minutes later, and after the jobs had run and failed.
+Issue report: [docs/issues/U45-A4-deposited-item-reads-manually-registered.md](../issues/U45-A4-deposited-item-reads-manually-registered.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `PKPContextController::editDoiRegistrationAgencyPlugin()`

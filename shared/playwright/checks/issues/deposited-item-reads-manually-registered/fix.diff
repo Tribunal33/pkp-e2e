@@ -1,0 +1,43 @@
+--- a/lib/ui-library/src/components/ListPanel/doi/DoiListItem.vue
++++ b/lib/ui-library/src/components/ListPanel/doi/DoiListItem.vue
+@@ -185,10 +185,10 @@
+ 				<span v-if="item.isPublished" class="doiListItem__depositorDescription">
+ 					{{
+ 						isDeposited(itemDepositStatus)
+-							? itemRegistrationAgency === null
++							? isManuallyRegistered
+ 								? t('manager.dois.registration.manuallyMarkedRegistered')
+ 								: t('manager.dois.registration.submittedDescription', {
+-										registrationAgency: itemRegistrationAgencyName,
++										registrationAgency: depositedAgencyName,
+ 									})
+ 							: t('manager.dois.registration.notSubmittedDescription', {
+ 									registrationAgency: registrationAgencyInfo['displayName'],
+@@ -432,6 +432,27 @@
+ 				: `[${key}]`;
+ 		},
+ 		/**
++		 * Whether the item was marked registered by hand: only a registered DOI
++		 * without an agency. A submitted DOI has no agency yet either.
++		 * @return {boolean}
++		 */
++		isManuallyRegistered() {
++			return (
++				this.itemDepositStatus === pkp.const.DOI_STATUS_REGISTERED &&
++				this.itemRegistrationAgency === null
++			);
++		},
++		/**
++		 * The agency the item's metadata went to: while the deposit is only
++		 * submitted, the configured agency; once registered, the stored one.
++		 * @return {string}
++		 */
++		depositedAgencyName() {
++			return this.itemDepositStatus === pkp.const.DOI_STATUS_SUBMITTED
++				? this.registrationAgencyInfo['displayName']
++				: this.itemRegistrationAgencyName;
++		},
++		/**
+ 		 * Checks whether DOI object has an associated error message
+ 		 */
+ 		hasErrorMessage() {
