@@ -16,7 +16,8 @@
  * empty reason and "Report" offered again; no second report is filed),
  * A4 ❓ (S1 asserts the page opening by address with the comment listed),
  * A5 ❓ (S1 asserts the reload onto Appearance › Theme and no "Saved"),
- * A6 🐞 (the unverified iD's link is never opened; S2's iD is verified),
+ * A6 🐞 (the comment panel's unverified iD link is never opened; S2's iD
+ * is verified), A15 ❓ (the landing page's hollow icon is not read),
  * A7 ❓ (the "…" button is reached as the article's only button; nothing
  * asserts its name), A8 ❓ (S3 asserts both numbers leaving the address on
  * the report panel's "Close"), A9 ❓, A10 🐞 (S12 and S13 assert the rows
@@ -408,8 +409,10 @@ test.describe('reader comments & moderation', () => {
         await expect(landing.time(shown)).toHaveText(DATE_TIME);
         await expect(landing.body(shown)).toHaveText(pendingText);
         await expect(landing.author(shown)).toHaveText('Vera Verified');
+        // The iD is a solid icon after the name, a link to the iD; it is not
+        // written out (pkp/pkp-lib#13422).
         await expect(landing.orcidLink(shown)).toHaveAttribute('href', TEST_ORCID);
-        await expect(landing.orcidLink(shown)).toHaveText(TEST_ORCID);
+        await expect(landing.orcidLink(shown)).toHaveText('');
         await expect(landing.orcidIcon(shown)).toHaveCount(1);
         await expect(landing.affiliation(shown)).toHaveText(affiliation);
         await landing.expectAllComments(3);

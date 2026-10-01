@@ -248,13 +248,16 @@ exports.ArticleCommentsPage = class ArticleCommentsPage extends BasePage {
         return article.locator('time');
     }
 
+    /** The ORCID icon after the writer's name: a link named "ORCID iD", the iD not written out. */
     orcidLink(article) {
-        return article.locator('a[href*="orcid.org"]');
+        return this.author(article).getByRole('link', {name: 'ORCID iD', exact: true});
     }
 
-    /** The ORCID icon shown before the link (`svg` or `img`). */
-    orcidIcon(article) {
-        return article.locator('[class*="OrcidDisplay__icon"]');
+    /** The link's icon: `#icon-Orcid` (solid) for a verified iD, `#icon-OrcidUnauthenticated` (hollow) otherwise. */
+    orcidIcon(article, {verified = true} = {}) {
+        return this.orcidLink(article).locator(
+            `svg[class*="OrcidDisplay__icon"]:has(use[href="#icon-${verified ? 'Orcid' : 'OrcidUnauthenticated'}"])`
+        );
     }
 
     pendingNotice(article) {
