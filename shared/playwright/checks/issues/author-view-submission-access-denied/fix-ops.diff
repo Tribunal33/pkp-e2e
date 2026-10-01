@@ -1,0 +1,27 @@
+--- a/pages/preprint/PreprintHandler.php
++++ b/pages/preprint/PreprintHandler.php
+@@ -193,6 +193,10 @@
+         $templateMgr->assign([
+             'preprint' => $preprint,
+             'publication' => $publication,
++            // The preview notice's "View submission": the workflow this user's role opens
++            'submissionWorkflowUrl' => $publication->getData('status') !== PKPSubmission::STATUS_PUBLISHED
++                ? Repo::submission()->getWorkflowUrlByUserRoles($preprint)
++                : null,
+             'firstPublication' => $firstPublication,
+             'currentPublication' => $preprint->getCurrentPublication(),
+             'galley' => $this->galley,
+--- a/templates/frontend/objects/preprint_details.tpl
++++ b/templates/frontend/objects/preprint_details.tpl
+@@ -71,10 +71,7 @@
+ 	{* Indicate if this is only a preview *}
+ 	{if $publication->getData('status') !== \PKP\submission\PKPSubmission::STATUS_PUBLISHED}
+ 		<div class="cmp_notification notice">
+-
+-			{capture assign="submissionUrl"}{url page="dashboard" op="editorial" workflowSubmissionId=$preprint->getId()}{/capture}
+-
+-			{translate key="submission.viewingPreview" url=$submissionUrl}
++			{translate key="submission.viewingPreview" url=$submissionWorkflowUrl|escape}
+ 		</div>
+ 	{/if}
+ 

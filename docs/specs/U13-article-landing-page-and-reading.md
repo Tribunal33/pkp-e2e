@@ -1085,6 +1085,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-OJS9-lens-formulas-not-typeset.md`): an
     XML galley with a TeX formula opened in the Lens reader, the formula
     typeset and no page script error {OJS}
+  - the guard for A5 (Rule 4, scenario 4; issue report
+    `docs/issues/U13-A5-author-view-submission-access-denied.md`):
+    the Author's "View submission" on a preview opening their
+    submission, and an editor's still opening the editorial workflow
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1222,7 +1226,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A1](#a1) | On a French page every version name reads "##publication.versionStage.display##" | 🐞 | user-visible | — |
 | [A2](#a2) | An older version's PDF opens a reader with no document, and its "Download" gets no file | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | A preprint server's lists, and a journal's "Latest Publications" without the current issue, offer a link for a galley with no file, answering "404 Not Found" | 🐞 | minor | — |
-| [A5](#a5) | The preview's "View submission" gives the Author the access-denied page | 🐞 | user-visible | — |
+| [A5](#a5) | An author previewing their unpublished article, book or preprint gets "access denied" from "View submission" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | An older version's browser tab reads the current version's title | 🐞 | minor | — |
 | [A7](#a7) | "ABNT" runs a preprint's title into the server's name and prints "24 Sept.2026" | 🐞 | minor | — |
 | [A8](#a8) | The RIS file writes its dates with a stray "%" | 🐞 | minor | — |
@@ -1307,14 +1311,16 @@ additional files beside the main galleys.
 Basis: probe, 2026-09-25. <sup>[f-a4](#fn-f-a4)</sup>
 
 <a id="a5"></a>
-**A5 — "View submission" refuses the Author** · 🐞 · user-visible.
-The submission's Author, who opens the preview of an unpublished version
-by typing its address (Actors row 2), presses the preview notice's "View
-submission" and gets the access-denied page ("The current role does not
-have access to this operation.") instead of the submission. The Journal
-Manager and an assigned Section Editor pressing the same link land on the
-submission's workflow.
-Basis: probe, 2026-09-25. <sup>[f-a5](#fn-f-a5)</sup>
+**A5 — An author previewing their unpublished article, book or preprint gets "access denied" from "View submission"** · 🐞 · low.
+An author who opens the page of their own article, book or preprint
+before it is published sees it under "This is a preview and has not
+been published. View submission". Pressing "View submission" opens a
+page reading "The current role does not have access to this
+operation." instead of their submission.
+The author reaches the submission from "My Submissions" instead.
+Editors and managers pressing the same link land on the submission's
+workflow.
+Basis: probe, 2026-10-01. <sup>[f-a5](#fn-f-a5)</sup>
 
 <a id="a6"></a>
 **A6 — An older version's browser tab names the current version** · 🐞 · minor.
@@ -2556,6 +2562,7 @@ the current publication is linked, one with no file too, whose
 may not open; the Author landed on
 `user/authorizationDenied?message=user.authorization.roleBasedAccessDenied`.
 Live-probed 2026-09-25, note q3, both apps.
+Issue report: [docs/issues/U13-A5-author-view-submission-access-denied.md](../issues/U13-A5-author-view-submission-access-denied.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `article.tpl` / `preprint.tpl` pass
