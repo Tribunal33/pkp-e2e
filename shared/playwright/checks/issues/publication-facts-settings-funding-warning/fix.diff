@@ -1,0 +1,56 @@
+--- a/plugins/generic/pflPlugin/PflSettingsForm.php
++++ b/plugins/generic/pflPlugin/PflSettingsForm.php
+@@ -13,7 +13,6 @@
+ 
+ use PKP\form\Form;
+ use APP\core\Application;
+-use PKP\plugins\PluginRegistry;
+ use PKP\form\validation\FormValidatorPost;
+ use PKP\form\validation\FormValidatorCSRF;
+ use PKP\form\validation\FormValidatorCustom;
+@@ -129,10 +128,10 @@
+         $context = $request->getContext();
+ 
+         $templateMgr = TemplateManager::getManager($request);
+-        $fundingPlugin = PluginRegistry::getPlugin('generic', 'FundingPlugin');
+         $templateMgr->assign([
+             'pluginName' => $this->plugin->getName(),
+-            'fundingPluginPresent' => $fundingPlugin ? $fundingPlugin->getEnabled() : null,
++            // The panel's "External funding" row reads the journal's funder metadata (pkp/pkp-lib#12392).
++            'fundersEnabled' => (bool) $context->getData('funders'),
+         ]);
+ 
+         return parent::fetch($request, $template, $display);
+--- a/plugins/generic/pflPlugin/templates/settings.tpl
++++ b/plugins/generic/pflPlugin/templates/settings.tpl
+@@ -19,9 +19,9 @@
+ 	{csrf}
+ 	{include file="controllers/notification/inPlaceNotification.tpl" notificationId="pflPluginSettingsFormNotification"}
+ 
+-	{if !$fundingPluginPresent}
+-		{fbvFormArea id="pflPluginSettings" title="plugins.generic.pflPlugin.fundingPluginMissing"}
+-			<p><strong>{translate key="plugins.generic.pflPlugin.fundingPluginMissing.description"}</strong></p>
++	{if !$fundersEnabled}
++		{fbvFormArea id="pflPluginSettings" title="plugins.generic.pflPlugin.fundersDisabled"}
++			<p><strong>{translate key="plugins.generic.pflPlugin.fundersDisabled.description"}</strong></p>
+ 		{/fbvFormArea}
+ 	{/if}
+ 
+--- a/plugins/generic/pflPlugin/locale/en/locale.po
++++ b/plugins/generic/pflPlugin/locale/en/locale.po
+@@ -41,11 +41,11 @@
+ msgid "plugins.generic.pflPlugin.settings.academicSocietyUrl.invalid"
+ msgstr "The academic society URL is not valid. Make sure the URL is complete and properly formatted."
+ 
+-msgid "plugins.generic.pflPlugin.fundingPluginMissing"
+-msgstr "Funding Plugin Not Present"
++msgid "plugins.generic.pflPlugin.fundersDisabled"
++msgstr "Funder Metadata Not Enabled"
+ 
+-msgid "plugins.generic.pflPlugin.fundingPluginMissing.description"
+-msgstr "The Funding plugin is not present and enabled. In order for funding data to be presented by the Publication Facts Label, this plugin will need to be installed and enabled, and provided with the relevant data for each submission. Check the Plugin Gallery for this plugin."
++msgid "plugins.generic.pflPlugin.fundersDisabled.description"
++msgstr "Funder metadata is not enabled for this journal. In order for funding data to be presented by the Publication Facts Label, enable \"Funders\" under Settings > Workflow > Submission > Metadata, and provide the funders for each submission."
+ 
+ msgid "plugins.generic.pflPlugin.settings.indexes"
+ msgstr "Journal's Index Listings"

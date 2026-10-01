@@ -1089,6 +1089,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-A5-author-view-submission-access-denied.md`):
     the Author's "View submission" on a preview opening their
     submission, and an editor's still opening the editorial workflow
+  - the guard for OJS2 (Fields, the settings window; issue report
+    `docs/issues/U13-OJS2-publication-facts-settings-funding-warning.md`):
+    the "Publication Facts Label plugin" settings window opening with no
+    funding warning while funder metadata is on, and naming the setting
+    when it is off {OJS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1234,7 +1239,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A10](#a10) | A reference's address in parentheses takes the ")" into its link | 🐞 | minor | — |
 | [A11](#a11) | Keywords are listed in no fixed order: the order typed is not kept | 🐞 | minor | — |
 | [OJS1](#ojs1) | Readers get no other citation format or citation download on an article published outside a published issue | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [OJS2](#ojs2) | The Publication Facts Label settings always warn "Funding Plugin Not Present" | 🐞 | minor | — |
+| [OJS2](#ojs2) | Publication Facts Label settings always warn "Funding Plugin Not Present", for a plugin that no longer exists | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | On a French page the Publication Facts panel would have no labels | 🐞 | minor | — |
 | [OJS4](#ojs4) | With "Recommend Articles by Author" on, article pages never show "Most read articles by the same author(s)" | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS5](#ojs5) | With the Publication Facts Label plugin on, no article page shows the "Publication Facts" panel | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1415,14 +1420,23 @@ journals on the coming release meet it.
 Basis: probe, 2026-10-01. <sup>[f-ojs1](#fn-f-ojs1)</sup>
 
 <a id="ojs2"></a>
-**OJS2 — A stale funding warning in the Publication Facts settings** · 🐞 · minor.
-The "Publication Facts Label plugin" settings window always opens with
-"Funding Plugin Not Present" and "The Funding plugin is not present and
-enabled… Check the Plugin Gallery for this plugin.", although funders
-are part of the journal's own metadata and the panel's "External
-funding" row is built from them. A manager is sent looking for a plugin
-that no longer exists.
-Basis: code. <sup>[f-ojs2](#fn-f-ojs2)</sup>
+**OJS2 — Publication Facts Label settings always warn "Funding Plugin Not Present", for a plugin that no longer exists** · 🐞 · low.
+A journal manager who opens the "Publication Facts Label plugin"
+settings window always finds it headed "Funding Plugin Not Present",
+which tells them to install and enable the Funding plugin from the
+Plugin Gallery. That plugin is gone: funders are now part of the
+journal's own metadata (the "Funders" setting), and the plugin's
+"Publication Facts" panel on article pages takes its "External funding"
+row from that setting.
+The settings still save, but the manager is sent looking for a plugin
+that cannot be installed, and the warning never goes away. The warning
+also ignores the "Funders" setting. A journal that turns funder metadata
+off, which leaves the panel with no funding data, sees the same warning
+and is not told to turn the setting back on.
+Only journals on the coming release meet it, once they turn the plugin
+on (it is off by default). On 3.5 the panel still uses the Funding
+plugin, so the warning there is true.
+Basis: probe, 2026-10-01. <sup>[f-ojs2](#fn-f-ojs2)</sup>
 
 <a id="ojs3"></a>
 **OJS3 — The Publication Facts panel is empty in French** · 🐞 · minor.
@@ -2640,6 +2654,7 @@ plugin ships (funders are core metadata, [Funding](U43-funding.md)), so
 while `displayArticlePfl()` reads the context's `funders` setting.
 Live-probed 2026-09-25 (note k): the warning on every opening; the
 Plugin Gallery could not be searched on the test installs.
+Issue report: [docs/issues/U13-OJS2-publication-facts-settings-funding-warning.md](../issues/U13-OJS2-publication-facts-settings-funding-warning.md).
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — `templates/pfl.tpl` fetches `pfl/locale/` + `Locale::getLocale()`
