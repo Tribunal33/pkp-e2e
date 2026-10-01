@@ -3794,7 +3794,7 @@ answered 400 `api.dois.400.invalidPubObjectIncluded`; exports answered
 400 "An XML validation error occurred and the XML could not be
 exported.". In each case the confirm window closed, no other window or
 notice appeared, and the list reloaded with nothing ticked.
-Issue report: [docs/issues/U45-A13-bulk-action-refusal-no-message.md](../issues/U45-A13-bulk-action-refusal-no-message.md).
+Issue report: [pkp-e2e#234](https://github.com/jardakotesovec/pkp-e2e/issues/234) ([docs/issues/U45-A13-bulk-action-refusal-no-message.md](../issues/U45-A13-bulk-action-refusal-no-message.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-26 (Rule 28), all three apps: the
