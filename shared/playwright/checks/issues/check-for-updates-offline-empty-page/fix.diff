@@ -1,0 +1,53 @@
+--- a/lib/pkp/pages/admin/AdminHandler.php
++++ b/lib/pkp/pages/admin/AdminHandler.php
+@@ -397,10 +397,15 @@
+         $versionDao = DAORegistry::getDAO('VersionDAO'); /** @var VersionDAO $versionDao */
+         $currentVersion = $versionDao->getCurrentVersion();
+ 
++        $latestVersionInfo = null;
++        $latestVersionCheckFailed = false;
+         if ($request->getUserVar('versionCheck')) {
+-            $latestVersionInfo = VersionCheck::getLatestVersion();
+-        } else {
+-            $latestVersionInfo = null;
++            try {
++                $latestVersionInfo = VersionCheck::getLatestVersion();
++            } catch (\GuzzleHttp\Exception\TransferException $e) {
++                error_log('Failed to retrieve the latest version info: ' . $e->getMessage());
++                $latestVersionCheckFailed = true;
++            }
+         }
+ 
+         $versionDao = DAORegistry::getDAO('VersionDAO'); /** @var VersionDAO $versionDao */
+@@ -427,6 +432,7 @@
+             'breadcrumbs' => $breadcrumbs,
+             'currentVersion' => $currentVersion,
+             'latestVersionInfo' => $latestVersionInfo,
++            'latestVersionCheckFailed' => $latestVersionCheckFailed,
+             'pageTitle' => __('admin.systemInformation'),
+             'versionHistory' => $versionHistory,
+             'serverInfo' => $serverInfo,
+--- a/lib/pkp/templates/admin/systemInfo.tpl
++++ b/lib/pkp/templates/admin/systemInfo.tpl
+@@ -32,6 +32,9 @@
+ 				<p><strong>{translate key="admin.version.upToDate"}</strong></p>
+ 			{/if}
+ 		{else}
++		{if $latestVersionCheckFailed}
++			<notification type="warning">{translate key="admin.version.checkFailed"}</notification>
++		{/if}
+ 		<p><a href="{url versionCheck=1}">{translate key="admin.version.checkForUpdates"}</a></p>
+ 		{/if}
+ 
+--- a/lib/pkp/locale/en/admin.po
++++ b/lib/pkp/locale/en/admin.po
+@@ -480,6 +480,9 @@
+ msgid "admin.version.checkForUpdates"
+ msgstr "Check for updates"
+ 
++msgid "admin.version.checkFailed"
++msgstr "The latest version could not be retrieved from the PKP website. Please try again later."
++
+ msgid "admin.version.downloadPackage"
+ msgstr "Download"
+ 

@@ -1,0 +1,11 @@
+--- a/locale/fr_CA/admin.po
++++ b/locale/fr_CA/admin.po
+@@ -81,6 +81,8 @@
+ 
+ msgid "admin.siteManagement.description"
+ msgstr ""
++"Ajouter, modifier ou supprimer des serveurs de ce site et gérer les "
++"paramètres de l'ensemble du site."
+ 
+ msgid "admin.settings.statistics.geo.description"
+ msgstr ""
