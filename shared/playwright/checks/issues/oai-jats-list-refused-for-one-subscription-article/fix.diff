@@ -1,0 +1,158 @@
+--- a/lib/pkp/classes/oai/OAI.php
++++ b/lib/pkp/classes/oai/OAI.php
+@@ -269,9 +269,16 @@
+         }
+         $response .= "\t\t\t</header>\n";
+         if (!empty($record->data)) {
++            try {
++                $metadata = $this->formatMetadata($metadataPrefix, $record);
++            } catch (OAIFormatUnavailableException $e) {
++                // This record cannot be given in the requested format
++                $this->error('cannotDisseminateFormat', $e->getMessage());
++                return;
++            }
+             $response .= "\t\t\t<metadata>\n";
+             // Output metadata
+-            $response .= $this->formatMetadata($metadataPrefix, $record);
++            $response .= $metadata;
+             $response .= "\t\t\t</metadata>\n";
+         }
+         $response .= "\t\t</record>\n" .
+@@ -543,27 +550,48 @@
+         // Format body of response
+         $response = "\t<ListRecords>\n";
+ 
+-        // Output records
+-        for ($i = 0, $num = count($records); $i < $num; $i++) {
+-            $record = $records[$i];
+-            $response .= "\t\t<record>\n" .
+-                "\t\t\t<header" . (($record->status == self::OAIRECORD_STATUS_DELETED) ? " status=\"deleted\">\n" : ">\n") .
+-                "\t\t\t\t<identifier>" . $record->identifier . "</identifier>\n" .
+-                "\t\t\t\t<datestamp>" . $record->datestamp . "</datestamp>\n";
+-            // Output set memberships
+-            foreach ($record->sets as $setSpec) {
+-                $response .= "\t\t\t\t<setSpec>" . OAIUtils::prepOutput($setSpec) . "</setSpec>\n";
++        // Output records. A record that cannot be given in the requested
++        // format is left out; a part left empty that way takes the next
++        // records instead, since a list part must hold a record.
++        $listed = 0;
++        do {
++            foreach ($records as $record) {
++                $metadata = null;
++                if (!empty($record->data)) {
++                    try {
++                        $metadata = $this->formatMetadata($metadataPrefix, $record);
++                    } catch (OAIFormatUnavailableException) {
++                        continue;
++                    }
++                }
++                $response .= "\t\t<record>\n" .
++                    "\t\t\t<header" . (($record->status == self::OAIRECORD_STATUS_DELETED) ? " status=\"deleted\">\n" : ">\n") .
++                    "\t\t\t\t<identifier>" . $record->identifier . "</identifier>\n" .
++                    "\t\t\t\t<datestamp>" . $record->datestamp . "</datestamp>\n";
++                // Output set memberships
++                foreach ($record->sets as $setSpec) {
++                    $response .= "\t\t\t\t<setSpec>" . OAIUtils::prepOutput($setSpec) . "</setSpec>\n";
++                }
++                $response .= "\t\t\t</header>\n";
++                if ($metadata !== null) {
++                    $response .= "\t\t\t<metadata>\n";
++                    // Output metadata
++                    $response .= $metadata;
++                    $response .= "\t\t\t</metadata>\n";
++                }
++                $response .= "\t\t</record>\n";
++                $listed++;
+             }
+-            $response .= "\t\t\t</header>\n";
+-            if (!empty($record->data)) {
+-                $response .= "\t\t\t<metadata>\n";
+-                // Output metadata
+-                $response .= $this->formatMetadata($this->getParam('metadataPrefix'), $record);
+-                $response .= "\t\t\t</metadata>\n";
+-            }
+-            $response .= "\t\t</record>\n";
++            $offset += count($records);
++        } while (
++            $listed == 0 && $offset < $total
++            && !empty($records = $this->records($metadataPrefix, $from, $until, $set, $offset, $this->config->maxRecords, $total))
++        );
++
++        if ($listed == 0) {
++            $this->error('noRecordsMatch', 'No matching records in this repository');
++            return;
+         }
+-        $offset += $num;
+ 
+         if ($offset != 0 && $offset < $total) {
+             // Partial result, save resumption token
+--- /dev/null
++++ b/lib/pkp/classes/oai/OAIFormatUnavailableException.php
+@@ -0,0 +1,23 @@
++<?php
++
++/**
++ * @file classes/oai/OAIFormatUnavailableException.php
++ *
++ * Copyright (c) 2026 Simon Fraser University
++ * Copyright (c) 2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * @class OAIFormatUnavailableException
++ *
++ * @brief Thrown by OAIMetadataFormat::toXml() when one record cannot be given
++ *  in the format: GetRecord answers cannotDisseminateFormat with the message,
++ *  and ListRecords leaves the record out.
++ */
++
++namespace PKP\oai;
++
++use Exception;
++
++class OAIFormatUnavailableException extends Exception
++{
++}
+--- a/plugins/oaiMetadataFormats/oaiJats/OAIMetadataFormat_JATS.php
++++ b/plugins/oaiMetadataFormats/oaiJats/OAIMetadataFormat_JATS.php
+@@ -20,7 +20,6 @@
+ use APP\issue\Issue;
+ use APP\issue\IssueAction;
+ use APP\journal\Journal;
+-use APP\oai\ojs\OAIDAO;
+ use APP\section\Section;
+ use APP\submission\Submission;
+ use DOMDocument;
+@@ -29,6 +28,7 @@
+ use PKP\db\DAORegistry;
+ use PKP\galley\Galley;
+ use PKP\i18n\LocaleConversion;
++use PKP\oai\OAIFormatUnavailableException;
+ use PKP\oai\OAIMetadataFormat;
+ use PKP\oai\OAIRecord;
+ use PKP\plugins\Hook;
+@@ -164,7 +164,6 @@
+      */
+     public function toXml($record, $format = null)
+     {
+-        $oaiDao = DAORegistry::getDAO('OAIDAO'); /** @var OAIDAO $oaiDao */
+         $journal = $record->getData('journal'); /** @var Journal $journal */
+         $article = $record->getData('article'); /** @var Submission $article */
+         $section = $record->getData('section'); /** @var Section $section */
+@@ -180,15 +179,13 @@
+             $subscriptionRequired = $issueAction->subscriptionRequired($issue, $journal);
+             $isSubscribedDomain = $issueAction->subscribedDomain($request, $journal, $issue->getId(), $article);
+             if ($subscriptionRequired && (!$allowedPrePublicationAccess && !$isSubscribedDomain)) {
+-                $oaiDao->oai->error('cannotDisseminateFormat', 'Cannot disseminate format (unauthenticated access to JATS XML not allowed)');
+-                exit();
++                throw new OAIFormatUnavailableException('Cannot disseminate format (unauthenticated access to JATS XML not allowed)');
+             }
+         }
+ 
+         $doc = $this->findJats($record);
+         if (!$doc) {
+-            $oaiDao->oai->error('cannotDisseminateFormat', 'Cannot disseminate format (JATS XML not available)');
+-            exit();
++            throw new OAIFormatUnavailableException('Cannot disseminate format (JATS XML not available)');
+         }
+ 
+         $this->_mungeMetadata(

@@ -1208,6 +1208,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U19-OMP6-oai-series-set-name-leading-space.md`): a press's
     ListSets naming a series that has no "Prefix" by its title, with no
     leading space {OMP} (once fixed)
+  - the guard for A10 (issue report
+    `docs/issues/U19-A10-oai-jats-list-refused-for-one-subscription-article.md`):
+    a subscription journal's `jats` list holding an article of a
+    subscription issue answering with the open articles' records {OJS} (once
+    the team chooses the list's answer and it is fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1326,7 +1331,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | The browser view of one OAI-PMH record's formats reads "available from this archive" and has no links to that record | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | Saving a journal section removes "Peer-reviewed Article" from its articles' OAI-PMH Dublin Core records {OJS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | The OAI-PMH Dublin Core "Source" ends in "; " for an article in no issue and for every book {OJS OMP} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A10](#a10) | One article in a subscription issue empties a whole `jats` list {OJS} | 🐞 | latent | — |
+| [A10](#a10) | On a subscription journal, the OAI-PMH record list in JATS is refused whole when it holds one article that needs a subscription {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | With "DRIVER" enabled, an article in no issue loses its `driver` mark when unpublished {OJS} | 🐞 | latent | — |
 | [A12](#a12) | A journal's MARC records in OAI-PMH do not follow the schemas they name, and software reading them misses the journal, the issue date, the ISSN or the affiliations {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | Records read in French carry untranslated keys {OJS OMP} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1494,14 +1499,21 @@ may index work published elsewhere) and drop the address from MARC.
 Basis: probe, 2026-09-26. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — One restricted article empties a `jats` list** {OJS} · 🐞 · latent.
-A harvester lists a subscription journal's records in `jats`, expecting
-the open articles and a refusal for the restricted ones only. The first
-article in a subscription issue replaces the whole answer with "Cannot
-disseminate format (unauthenticated access to JATS XML not allowed)", so
-no record of the list arrives. Only journals that sell subscriptions and
-enable "JATS Metadata Format" meet it.
-Basis: probe, 2026-09-26. <sup>f-a10</sup>
+**A10 — On a subscription journal, the OAI-PMH record list in JATS is refused whole when it holds one article that needs a subscription** {OJS} · 🐞 · medium.
+On a subscription journal with "JATS Metadata Format" on, a harvester
+that asks for the list of records in `jats` gets one error, "Cannot
+disseminate format (unauthenticated access to JATS XML not allowed)", as
+soon as the list holds one article of a subscription issue. The articles
+that need no subscription are lost with it. The list comes in parts of
+100 records: the part that holds such an article is refused, and the
+harvester cannot reach the parts after it. The right answer for a list
+is a choice for the team: leave the restricted articles out of the
+`jats` list, or list them with their metadata and without their text.
+Today's answer is neither. The harvester can still get the open articles
+one at a time, since ListIdentifiers lists every article and GetRecord
+serves each open one. The plugin ships with OJS on `main` and 3.5 and is
+off by default. The same records in Dublin Core are not affected.
+Basis: probe, 2026-10-01. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — "DRIVER" loses the mark of an article in no issue** {OJS} · 🐞 · latent.
@@ -1981,6 +1993,7 @@ Issue report: [pkp-e2e#313](https://github.com/jardakotesovec/pkp-e2e/issues/313
 
 <a id="fn-f-a10"></a>
 **f-a10** — Live-probed 2026-09-26: note q5, step 5. Code: note h (`error()` then `exit()` inside `toXml()`, which `listRecords()` calls while building the answer).
+Issue report: [docs/issues/U19-A10-oai-jats-list-refused-for-one-subscription-article.md](../issues/U19-A10-oai-jats-list-refused-for-one-subscription-article.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-26, OJS, two runs: note q21, the last step. The unpublish request answered 200, the publication became unpublished and its tombstone carried no `driver` setting; the server log recorded "Plugin APP\plugins\generic\driver\DRIVERPlugin failed to handle the hook ArticleTombstoneManager::insertArticleTombstone" with the `Repository::get()` TypeError, which `Hook::call` catches. Code: note i.
