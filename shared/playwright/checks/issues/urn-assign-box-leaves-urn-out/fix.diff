@@ -1,0 +1,17 @@
+--- a/plugins/pubIds/urn/templates/urnSuffixEdit.tpl
++++ b/plugins/pubIds/urn/templates/urnSuffixEdit.tpl
+@@ -42,11 +42,12 @@
+ 				</p>
+ 			{/if}
+ 		{else} {* pub id preview *}
+-			<p>{$pubIdPlugin->getPubId($pubObject)|escape}</p>
++			{assign var=pubId value=$pubIdPlugin->getPubId($pubObject)}
++			<p>{$pubId|escape}</p>
+ 			{if $canBeAssigned}
+ 				<p class="pkp_help">{translate key="plugins.pubIds.urn.editor.canBeAssigned"}</p>
+ 				{assign var=templatePath value=$pubIdPlugin->getTemplateResource('urnAssignCheckBox.tpl')}
+-				{include file=$templatePath pubId="" pubObjectType=$pubObjectType}
++				{include file=$templatePath pubId=$pubId|escape pubObjectType=$pubObjectType}
+ 			{else}
+ 				<p class="pkp_help">{translate key="plugins.pubIds.urn.editor.patternNotResolved"}</p>
+ 			{/if}

@@ -842,6 +842,9 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-A14-cleared-urn-stays-on-tab.md`): a galley's and a
     chapter's tab read right after "Clear" › "OK", the URN gone and
     "Assign" offered again
+  - the guard for A7 (issue report
+    `docs/issues/U44-A7-urn-assign-box-leaves-urn-out.md`): a galley's
+    "Identifiers" tab whose assign box names the URN the tab shows
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -901,7 +904,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | Editors saving an article's or book's own URN again are told it is "already in use" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A new version's galley, chapter or format tab refuses the publisher ID copied from the earlier version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | "Add Check Number" and "Assign" end URNs with the wrong check digit | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A7](#a7) | The tab's assign box reads "Assign the URN to this galley" with the URN left out | 🐞 | minor | — |
+| [A7](#a7) | The assign box on a galley's, issue's, chapter's, format's or file's "Identifiers" tab does not name the URN | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | A suffix pattern of spaces is refused with a raw text code | 🐞 | minor | — |
 | [A9](#a9) | A Layout Editor, or anyone who may not edit the version, is offered the URN's "Assign" and "Clear" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | The URN prefix refusal shows "&amp;lt;NID&amp;gt;" under the box and in the notice | 🐞 | minor | — |
@@ -1017,12 +1020,22 @@ publication format or file. It also affects "Assign" on the
 Basis: probe, 2026-09-30. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The assign box leaves the URN out** · 🐞 · minor.
-On an "Identifiers" tab the box that assigns the URN reads "Assign the
-URN to this galley" (issue, chapter…), with a double space where the
-URN belongs. The same box in "Publish Issue", and on a press in
-"Format Approval", names it ("Assign the URN {urn} to this issue").
-Basis: probe, 2026-09-24. <sup>f-a7</sup>
+**A7 — The assign box on a galley's, issue's, chapter's, format's or file's "Identifiers" tab does not name the URN** · 🐞 · low.
+On the "Identifiers" tab of a galley or an issue (journal), or of a
+chapter, a publication format or a file (press), the box that assigns
+the URN reads "Assign the URN to this galley" (issue, chapter…) and does
+not say which URN. The same box in "Publish Issue", and on a press in
+"Format Approval", names it: "Assign the URN urn:nbn:de:0000-jpkjpk.v2i1
+to this issue".
+Nothing is lost: the URN is shown just above the box. In Turkish,
+Azerbaijani and Georgian the label also keeps a word ending or a colon
+that belongs to the missing URN.
+The URN plugin is off by default. The box shows once a manager switches
+the plugin on for these items, with the "URN Suffix" setting on "Use
+default patterns." or on a typed pattern. With "Enter an individual URN
+suffix for each published item…" the box leaves the URN out too, which
+is right there (Cause).
+Basis: probe, 2026-10-01. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — A suffix pattern of spaces is refused with a raw text code** · 🐞 · minor.
@@ -1845,6 +1858,7 @@ Issue report: [pkp-e2e#54](https://github.com/jardakotesovec/pkp-e2e/issues/54) 
 **f-a7** — `urnSuffixEdit.tpl` includes `urnAssignCheckBox.tpl` with
 `pubId=""` in both places; `urnAssign.tpl` passes the real `$pubId`.
 Live-probed 2026-09-24 (note q9).
+Issue report: [docs/issues/U44-A7-urn-assign-box-leaves-urn-out.md](../issues/U44-A7-urn-assign-box-leaves-urn-out.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — `URNSettingsForm` messages
