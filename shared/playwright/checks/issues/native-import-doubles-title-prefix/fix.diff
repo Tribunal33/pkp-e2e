@@ -1,0 +1,11 @@
+--- a/lib/pkp/plugins/importexport/native/filter/PKPPublicationNativeXmlFilter.php
++++ b/lib/pkp/plugins/importexport/native/filter/PKPPublicationNativeXmlFilter.php
+@@ -206,7 +206,7 @@
+     public function addMetadata($doc, $entityNode, $entity)
+     {
+         $deployment = $this->getDeployment();
+-        $this->createLocalizedNodes($doc, $entityNode, 'title', $entity->getTitles('html'));
++        $this->createLocalizedNodes($doc, $entityNode, 'title', $entity->getData('title'));
+         $this->createLocalizedNodes($doc, $entityNode, 'prefix', $entity->getData('prefix'));
+         $this->createLocalizedNodes($doc, $entityNode, 'subtitle', $entity->getSubTitles('html'));
+         $this->createLocalizedNodes($doc, $entityNode, 'abstract', $entity->getData('abstract'));

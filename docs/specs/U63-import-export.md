@@ -1206,7 +1206,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | Importing the same users file again adds a role that starts or ends on a later date once more | 🐞 | minor | — |
 | [A18](#a18) | A users file with an empty or unreadable role date stops part-way: the server fails, the tab stays empty, the user gets no role | 🐞 | user-visible · crash: server | — |
 | [A19](#a19) | A tool's address with the tool's name left off opens a blank page: the server fails | 🐞 | minor · crash: server | — |
-| [A20](#a20) | A Native XML round trip doubles a title's prefix: the copy is titled "The The …" | 🐞 | user-visible | — |
+| [A20](#a20) | A submission with a title prefix comes back from a Native XML export and import titled "The The …" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | A users file whose user has no registration date stops part-way: the server fails and the "Results" tab stays empty | 🐞 | user-visible · crash: server | — |
 | [OJS1](#ojs1) | The DOAJ list's issue link opens the issue's window headed "DOI Plugin Settings" | 🐞 | minor | — |
 | [OJS2](#ojs2) | With "DOAJ Plugin" off, the Plugins list still offers "DOAJ Export Plugin" and its "Import/Export Data" | 🐞 | minor | — |
@@ -1418,19 +1418,16 @@ as at any tool's address.
 Basis: probe, 2026-10-01. <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — A Native XML round trip doubles a title's prefix** · 🐞 · user-visible.
-A submission whose "Prefix" (Publication › "Title & Abstract") reads
-"The" and whose title reads "Signalling Theory Dividends: A Review Of
-The Literature" is listed as "The Signalling Theory Dividends: …".
-Exported with the "Native XML Plugin" and imported, into another
-journal or the same one, it should come back the same. Instead the
-"Import Results" tab ("Results" on a press) lists ""{number}" - "The
-The Signalling Theory Dividends: …"", and the copy's workflow screen
-is headed the same: its "Prefix" reads "The" and its title "The
-Signalling Theory Dividends: …". Every
-submission with a prefix is affected, and the manager has to correct
-each copy's title by hand. A submission without a prefix comes back
-unchanged.
+**A20 — A submission with a title prefix comes back from a Native XML export and import titled "The The …"** · 🐞 · medium.
+A manager uses the "Native XML Plugin" to export a submission whose
+"Prefix" (Publication › "Title & Abstract") reads "The", and imports the
+file into another journal, press or server, or the same one. The copy
+should come back titled as the original. Instead the prefix is doubled.
+The "Import Results" tab ("Results" on a press) lists the copy as "The
+The …", and the copy's workflow is headed the same. On its "Title &
+Abstract", "Prefix" reads "The" and "Title" also starts with "The".
+Nothing on screen calls it a problem, and the manager has to correct
+each copy's title by hand.
 Basis: probe, 2026-10-01. <sup>f-a20</sup>
 
 <a id="a21"></a>
@@ -2691,6 +2688,7 @@ Literature"" (OJS r1), the copy's workflow header the same, its
 "Prefix" "The" and stored title "The Signalling …". Control: "Okapi
 forest census", no prefix, came back unchanged. Not traced to a
 commit; the same on 3.5.
+Issue report: [docs/issues/U63-A20-native-import-doubles-title-prefix.md](../issues/U63-A20-native-import-doubles-title-prefix.md).
 
 <a id="fn-f-a21"></a>
 **f-a21** — Note l. `UserXmlPKPUserFilter::parseUser()` sets the
