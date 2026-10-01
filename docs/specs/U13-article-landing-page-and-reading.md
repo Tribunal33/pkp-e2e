@@ -1094,6 +1094,10 @@ Left out of the scenarios above, by reason:
     the "Publication Facts Label plugin" settings window opening with no
     funding warning while funder metadata is on, and naming the setting
     when it is off {OJS}
+  - the guard for A6 (Rule 5; issue report
+    `docs/issues/U13-A6-older-version-tab-current-title.md`): an
+    older version's page, published under another title than the current
+    one, with the browser tab reading the older version's title
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1232,7 +1236,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A2](#a2) | An older version's PDF opens a reader with no document, and its "Download" gets no file | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | A preprint server's lists, and a journal's "Latest Publications" without the current issue, offer a link for a galley with no file, answering "404 Not Found" | 🐞 | minor | — |
 | [A5](#a5) | An author previewing their unpublished article, book or preprint gets "access denied" from "View submission" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A6](#a6) | An older version's browser tab reads the current version's title | 🐞 | minor | — |
+| [A6](#a6) | An older version's browser tab reads the current version's title | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | "ABNT" runs a preprint's title into the server's name and prints "24 Sept.2026" | 🐞 | minor | — |
 | [A8](#a8) | The RIS file writes its dates with a stray "%" | 🐞 | minor | — |
 | [A9](#a9) | With no additional format ticked, "More Citation Formats" opens nothing and hides the downloads | 🐞 | minor | — |
@@ -1328,12 +1332,14 @@ workflow.
 Basis: probe, 2026-10-01. <sup>[f-a5](#fn-f-a5)</sup>
 
 <a id="a6"></a>
-**A6 — An older version's browser tab names the current version** · 🐞 · minor.
+**A6 — An older version's browser tab names the current version** · 🐞 · low.
 An older version's page is headed with that version's title, but the
 browser tab, and a bookmark made from it, reads the current version's
-title. A reader who bookmarks the version they cite gets a bookmark named
-after another version.
-Basis: probe, 2026-09-25. <sup>[f-a6](#fn-f-a6)</sup>
+title. On a journal, the page that shows an older version's HTML galley
+has the same fault. A reader who bookmarks the version they cite gets a
+bookmark named after another version. The fault shows only when a later
+version was published under a different title.
+Basis: probe, 2026-10-01. <sup>[f-a6](#fn-f-a6)</sup>
 
 <a id="a7"></a>
 **A7 — "ABNT" citations run text together** · 🐞 · minor.
@@ -2583,6 +2589,7 @@ Issue report: [pkp-e2e#222](https://github.com/jardakotesovec/pkp-e2e/issues/222
 `getCurrentPublication()->getLocalizedFullTitle()` to the header as the
 page title, whichever publication the page shows. Live-probed
 2026-09-25, note q4, both apps.
+Issue report: [docs/issues/U13-A6-older-version-tab-current-title.md](../issues/U13-A6-older-version-tab-current-title.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — The "ABNT" answer for a preprint reads

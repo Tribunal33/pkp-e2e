@@ -1,0 +1,31 @@
+--- a/templates/frontend/pages/article.tpl
++++ b/templates/frontend/pages/article.tpl
+@@ -19,7 +19,7 @@
+  *
+  * @hook Templates::Article::Footer::PageFooter []
+  *}
+-{include file="frontend/components/header.tpl" pageTitleTranslated=$article->getCurrentPublication()->getLocalizedFullTitle(null, 'html')|strip_unsafe_html}
++{include file="frontend/components/header.tpl" pageTitleTranslated=$publication->getLocalizedFullTitle(null, 'html')|strip_unsafe_html}
+ 
+ <div class="page page_article">
+ 	{if $section}
+--- a/plugins/generic/htmlArticleGalley/templates/display.tpl
++++ b/plugins/generic/htmlArticleGalley/templates/display.tpl
+@@ -11,7 +11,7 @@
+  *}
+ <!DOCTYPE html>
+ <html lang="{$currentLocale|replace:"_":"-"}" xml:lang="{$currentLocale|replace:"_":"-"}">
+-{capture assign="pageTitleTranslated"}{translate key="article.pageTitle" title=$article->getCurrentPublication()->getLocalizedFullTitle(null, 'html')|strip_unsafe_html}{/capture}
++{capture assign="pageTitleTranslated"}{translate key="article.pageTitle" title=$galleyPublication->getLocalizedFullTitle(null, 'html')|strip_unsafe_html}{/capture}
+ {include file="frontend/components/headerHead.tpl"}
+ <body class="pkp_page_{$requestedPage|escape} pkp_op_{$requestedOp|escape}">
+ 
+@@ -26,7 +26,7 @@
+ 		</a>
+ 
+ 		<a href="{$articleUrl}" class="title">
+-			{$article->getCurrentPublication()->getLocalizedTitle(null, 'html')|strip_unsafe_html}
++			{$galleyPublication->getLocalizedTitle(null, 'html')|strip_unsafe_html}
+ 		</a>
+ 	</header>
+ 
