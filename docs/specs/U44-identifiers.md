@@ -857,6 +857,10 @@ Left out of the scenarios above, by reason:
     report `docs/issues/U44-A11-urn-settings-pattern-script-error.md`):
     the pattern choice selected and every box ticked and unticked with no
     page error, and the window reopened with the choice saved
+  - the guard for OMP1 (Fields, the URN plugin's settings window; issue
+    report `docs/issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md`):
+    a press's URN settings saved with "Chapters" alone and with "Files"
+    alone
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -922,7 +926,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | After "Clear" on a galley's, chapter's, format's or file's "Identifiers" tab, the removed URN stays shown | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS1](#ojs1) | Adding an issue galley with a Publisher ID hangs on "Save" and adds nothing | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [OJS3](#ojs3) | An issue's Publisher ID, typed on its "Identifiers" tab, is silently dropped on "Save" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [OMP1](#omp1) | A press cannot save URN settings with only "Chapters" or "Files" ticked | 🐞 | minor | — |
+| [OMP1](#omp1) | URN settings: a press that ticks only "Chapters" or "Files" is told to choose the objects | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | The book page labels a format's URN with a code and does not link it | 🐞 | minor | — |
 | [OMP4](#omp4) | A press's confirmation window shows the URN table where a journal shows one sentence | 🐞 | minor | — |
 | [OMP5](#omp5) | A press file's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1179,12 +1183,15 @@ Basis: probe, 2026-09-30. <sup>f-ojs3</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — "Chapters" or "Files" alone cannot be saved** · 🐞 · minor.
-A Press Manager who ticks only "Chapters", only "Files", or only those
-two under "Press Content" and saves the URN settings is refused with
-"Please choose the objects URNs should be assigned to." Ticking
-"Monographs" or "Publication Formats" as well lets the save through.
-Basis: probe, 2026-09-24. <sup>f-omp1</sup>
+**OMP1 — URN settings: a press that ticks only "Chapters" or "Files" is told to choose the objects** · 🐞 · low.
+A Press manager who ticks only "Chapters", only "Files", or only those
+two under "Press Content" in the URN plugin's settings window cannot
+save it. "Save" is refused with "Please choose the objects URNs should
+be assigned to.", though objects are chosen.
+Nothing is lost. Ticking "Monographs" or "Publication Formats" as well
+lets the save through, so the press still gets its chapter or file
+URNs, at the cost of a warning each time a book is published.
+Basis: probe, 2026-10-01. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
 **OMP2 — A format's URN is labelled with a code** · 🐞 · minor.
@@ -1951,6 +1958,7 @@ Issue report: [pkp-e2e#44](https://github.com/jardakotesovec/pkp-e2e/issues/44) 
 || enablePublicationURN || enableRepresentationURN`; the form has no
 `enableIssueURN` and never names `enableChapterURN` or
 `enableSubmissionFileURN`. Live-probed 2026-09-24 (note q15).
+Issue report: [docs/issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md](../issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — `monograph_full.tpl` prints `{$pubIdType}` (the plugin's
