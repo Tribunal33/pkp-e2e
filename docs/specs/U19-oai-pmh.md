@@ -1825,7 +1825,7 @@ Issue report: [pkp-e2e#254](https://github.com/jardakotesovec/pkp-e2e/issues/254
 
 <a id="fn-f-a2"></a>
 **f-a2** — Live-probed 2026-09-26: note q11, the reads with a time. Code: note l.
-Issue report: [docs/issues/U19-A2-oai-from-until-ignore-time-of-day.md](../issues/U19-A2-oai-from-until-ignore-time-of-day.md).
+Issue report: [pkp-e2e#300](https://github.com/jardakotesovec/pkp-e2e/issues/300) ([docs/issues/U19-A2-oai-from-until-ignore-time-of-day.md](../issues/U19-A2-oai-from-until-ignore-time-of-day.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Live-probed 2026-09-26: note q11, `2026-13-01` as `from` and `until`, "2026-02-30", `T25:00:00Z` and the roll-over of "2026-09-31". Code: note l.
