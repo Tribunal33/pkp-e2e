@@ -1637,7 +1637,7 @@ Issue report: [pkp-e2e#182](https://github.com/jardakotesovec/pkp-e2e/issues/182
 three apps). Cause: the registries (manager group without `stages` on OJS
 and OMP, `5,6` on OPS); the stage filter's `withStageIds()` reads the same
 rows. Filter half: [j](#fn-j). Live-probed 2026-09-26: [j](#fn-j).
-Issue report: [docs/issues/U54-A2-A3-manager-role-stages-differ-until-saved.md](../issues/U54-A2-A3-manager-role-stages-differ-until-saved.md).
+Issue report: [pkp-e2e#184](https://github.com/jardakotesovec/pkp-e2e/issues/184) ([docs/issues/U54-A2-A3-manager-role-stages-differ-until-saved.md](../issues/U54-A2-A3-manager-role-stages-differ-until-saved.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `UserGroupForm::execute()` with `getAlwaysActiveStages()`
@@ -1657,7 +1657,7 @@ Internal Review) before and opened them after. "OK" with nothing changed
 did the same, and a role created at the manager level arrived with every
 stage ticked (all three apps; OPS its one box). The only notice was "Your
 changes have been saved.".
-Issue report: [docs/issues/U54-A2-A3-manager-role-stages-differ-until-saved.md](../issues/U54-A2-A3-manager-role-stages-differ-until-saved.md).
+Issue report: [pkp-e2e#184](https://github.com/jardakotesovec/pkp-e2e/issues/184) ([docs/issues/U54-A2-A3-manager-role-stages-differ-until-saved.md](../issues/U54-A2-A3-manager-role-stages-differ-until-saved.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `settings.roles.removeText` against `removeUserGroup()`
