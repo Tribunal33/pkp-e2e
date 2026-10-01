@@ -1,0 +1,41 @@
+--- a/pages/index/IndexHandler.php
++++ b/pages/index/IndexHandler.php
+@@ -27,6 +27,7 @@
+ use PKP\db\DAORegistry;
+ use PKP\pages\index\PKPIndexHandler;
+ use PKP\security\Validation;
++use PKP\submission\GenreDAO;
+ 
+ class IndexHandler extends PKPIndexHandler
+ {
+@@ -101,6 +102,12 @@
+                     $itemsPerPage,
+                     $rangeInfo->page
+                 ));
++
++                // The summaries list only the main galleys, as an issue's table of contents does
++                $genreDao = DAORegistry::getDAO('GenreDAO'); /** @var GenreDAO $genreDao */
++                $primaryGenres = $genreDao->getPrimaryByContextId($journal->getId())->toArray();
++                $primaryGenreIds = array_map(fn ($genre) => $genre->getId(), $primaryGenres);
++                $templateMgr->assign('primaryGenreIds', $primaryGenreIds);
+             }
+ 
+             // Assign header and content for home page
+--- a/templates/frontend/objects/article_summary.tpl
++++ b/templates/frontend/objects/article_summary.tpl
+@@ -85,9 +85,13 @@
+ 	{if !$hideGalleys}
+ 		<ul class="galleys_links">
+ 			{foreach from=$publication->getData('galleys') item=galley}
++				{* A galley with neither a file nor a remote address has nothing to open *}
++				{assign var="file" value=$galley->getFile()}
++				{if !$galley->getData('urlRemote') && !$file}
++					{continue}
++				{/if}
+ 				{if $primaryGenreIds}
+-					{assign var="file" value=$galley->getFile()}
+-					{if !$galley->getData('urlRemote') && !($file && in_array($file->getGenreId(), $primaryGenreIds))}
++					{if !$galley->getData('urlRemote') && !in_array($file->getGenreId(), $primaryGenreIds)}
+ 						{continue}
+ 					{/if}
+ 				{/if}

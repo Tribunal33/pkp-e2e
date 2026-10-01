@@ -1110,6 +1110,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-OJS8-impossible-typed-date-saved-wrong.md`):
     a date that does not exist typed into the "Publication Facts Label
     plugin" "Start Date" refused with a message, nothing saved {OJS}
+  - the guard for A4 (Rule 22; issue report
+    `docs/issues/U13-A4-listing-offers-galley-without-file.md`): a
+    preprint server's lists, and a journal's "Latest Publications" shown
+    without the current issue, leaving out a galley with no file and the
+    additional files
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1246,7 +1251,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | In French, readers and editors see a raw translation key in place of every version's name and number | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | An older version's PDF opens a reader with no document, and its "Download" gets no file | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
-| [A4](#a4) | A preprint server's lists, and a journal's "Latest Publications" without the current issue, offer a link for a galley with no file, answering "404 Not Found" | 🐞 | minor | — |
+| [A4](#a4) | Preprint lists and a journal's "Latest Publications" show additional files and link a galley with no file ("404 Not Found") | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | An author previewing their unpublished article, book or preprint gets "access denied" from "View submission" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | An older version's browser tab reads the current version's title | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | "ABNT" runs a preprint's title into the server's name and prints "24 Sept.2026" | 🐞 | minor | — |
@@ -1337,14 +1342,26 @@ of an empty chart? Lean: yes; the sentence exists for exactly this case.
 Basis: probe, 2026-09-25. <sup>[f-a3](#fn-f-a3)</sup>
 
 <a id="a4"></a>
-**A4 — A galley with no file is offered in listings** · 🐞 · minor.
-An article's page leaves out a galley that has no file (its upload never
-finished), and so does an issue's table of contents. A preprint server's
-lists, and a journal's "Latest Publications" when the home page does not
-also show the current issue, show it as a link like any other, and the
-link answers the "404 Not Found" page. Those lists also show the
-additional files beside the main galleys.
-Basis: probe, 2026-09-25. <sup>[f-a4](#fn-f-a4)</sup>
+**A4 — Preprint lists and a journal's "Latest Publications" show additional files and link a galley with no file ("404 Not Found")** · 🐞 · low.
+An article's or preprint's own page offers its main galleys, sets its
+additional files (a data set, a research instrument) apart under
+"Additional Files", and leaves out a galley that has no file. An
+issue's table of contents offers the main galleys only. A preprint
+server's lists, and a journal's "Latest Publications" when the home
+page does not also show the current issue's table of contents, offer
+every galley instead: the additional files as if they were the article
+itself, and the galley with no file as a link that answers "404 Not
+Found".
+A galley has no file when an editor presses "Add galley", saves the
+label and then cancels the upload window. A galley at a separate
+website is not this case: it has an address, and its link works.
+Both symptoms come from one missing filter, and one fix covers both.
+Every file stays reachable from the item's own page. On a journal the
+list in question, "Latest Publications", exists on `main` only. A
+journal with no issue shows it that way with no setting touched; a
+journal with issues does once a manager turns it on and takes the
+current issue's table of contents off the home page.
+Basis: probe, 2026-10-01. <sup>[f-a4](#fn-f-a4)</sup>
 
 <a id="a5"></a>
 **A5 — An author previewing their unpublished article, book or preprint gets "access denied" from "View submission"** · 🐞 · low.
@@ -2620,6 +2637,7 @@ home page while it shows the current issue); elsewhere every galley of
 the current publication is linked, one with no file too, whose
 `download` finds no `submissionFileId` and answers
 `NotFoundHttpException`. Live-probed 2026-09-25, note q7.
+Issue report: [docs/issues/U13-A4-listing-offers-galley-without-file.md](../issues/U13-A4-listing-offers-galley-without-file.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Note f: the notice's link is always

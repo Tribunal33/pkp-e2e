@@ -1,0 +1,110 @@
+--- a/pages/index/IndexHandler.php
++++ b/pages/index/IndexHandler.php
+@@ -28,6 +28,7 @@
+ use PKP\pages\index\PKPIndexHandler;
+ use PKP\plugins\PluginRegistry;
+ use PKP\security\Validation;
++use PKP\submission\GenreDAO;
+ 
+ class IndexHandler extends PKPIndexHandler
+ {
+@@ -85,6 +86,11 @@
+                 ->limit(10)
+                 ->getMany();
+ 
++            // The summaries list only the main galleys, as an issue's table of contents does
++            $genreDao = DAORegistry::getDAO('GenreDAO'); /** @var GenreDAO $genreDao */
++            $primaryGenres = $genreDao->getPrimaryByContextId($server->getId())->toArray();
++            $primaryGenreIds = array_map(fn ($genre) => $genre->getId(), $primaryGenres);
++
+             // Assign header and content for home page
+             $templateMgr->assign([
+                 'additionalHomeContent' => $server->getLocalizedData('additionalHomeContent'),
+@@ -95,6 +101,7 @@
+                 'categories' => iterator_to_array($categories),
+                 'pubIdPlugins' => PluginRegistry::loadCategory('pubIds', true),
+                 'publishedSubmissions' => $publishedSubmissions->toArray(),
++                'primaryGenreIds' => $primaryGenreIds,
+             ]);
+ 
+             $templateMgr->registerClass(Server::class, Server::class);
+--- a/pages/preprints/PreprintsHandler.php
++++ b/pages/preprints/PreprintsHandler.php
+@@ -25,8 +25,10 @@
+ use APP\submission\Submission;
+ use APP\template\TemplateManager;
+ use PKP\config\Config;
++use PKP\db\DAORegistry;
+ use PKP\plugins\PluginRegistry;
+ use PKP\security\authorization\ContextRequiredPolicy;
++use PKP\submission\GenreDAO;
+ 
+ class PreprintsHandler extends Handler
+ {
+@@ -82,11 +84,17 @@
+         $nextPage = $total > $showingEnd ? $page + 1 : null;
+         $prevPage = $showingStart > 1 ? $page - 1 : null;
+ 
++        // The summaries list only the main galleys, as an issue's table of contents does
++        $genreDao = DAORegistry::getDAO('GenreDAO'); /** @var GenreDAO $genreDao */
++        $primaryGenres = $genreDao->getPrimaryByContextId($context->getId())->toArray();
++        $primaryGenreIds = array_map(fn ($genre) => $genre->getId(), $primaryGenres);
++
+         $templateMgr->registerClass(Server::class, Server::class);
+         $templateMgr->assign([
+             'sections' => $sections,
+             'categories' => iterator_to_array($categories),
+             'publishedSubmissions' => $publishedSubmissions,
++            'primaryGenreIds' => $primaryGenreIds,
+             'pubIdPlugins' => PluginRegistry::loadCategory('pubIds', true),
+             'showingStart' => $showingStart,
+             'showingEnd' => $showingEnd,
+--- a/pages/preprints/SectionsHandler.php
++++ b/pages/preprints/SectionsHandler.php
+@@ -25,7 +25,9 @@
+ use APP\submission\Collector;
+ use APP\submission\Submission;
+ use APP\template\TemplateManager;
++use PKP\db\DAORegistry;
+ use PKP\security\authorization\ContextRequiredPolicy;
++use PKP\submission\GenreDAO;
+ 
+ class SectionsHandler extends Handler
+ {
+@@ -105,11 +107,18 @@
+         $showingEnd = min($collector->offset + $collector->count, $collector->offset + count($submissions));
+         $nextPage = $total > $showingEnd ? $page + 1 : null;
+         $prevPage = $showingStart > 1 ? $page - 1 : null;
++
++        // The summaries list only the main galleys, as an issue's table of contents does
++        $genreDao = DAORegistry::getDAO('GenreDAO'); /** @var GenreDAO $genreDao */
++        $primaryGenres = $genreDao->getPrimaryByContextId($contextId)->toArray();
++        $primaryGenreIds = array_map(fn ($genre) => $genre->getId(), $primaryGenres);
++
+         $templateMgr = TemplateManager::getManager($request);
+         $templateMgr->assign([
+             'section' => $section,
+             'sectionPath' => $sectionPath,
+             'preprints' => $submissions,
++            'primaryGenreIds' => $primaryGenreIds,
+             'showingStart' => $showingStart,
+             'showingEnd' => $showingEnd,
+             'total' => $total,
+--- a/templates/frontend/objects/preprint_summary.tpl
++++ b/templates/frontend/objects/preprint_summary.tpl
+@@ -104,9 +104,13 @@
+ 	{if !$hideGalleys}
+ 		<ul class="galleys_links">
+ 			{foreach from=$preprint->getCurrentPublication()->getData('galleys') item=galley}
++				{* A galley with neither a file nor a remote address has nothing to open *}
++				{assign var="file" value=$galley->getFile()}
++				{if !$galley->getData('urlRemote') && !$file}
++					{continue}
++				{/if}
+ 				{if $primaryGenreIds}
+-					{assign var="file" value=$galley->getFile()}
+-					{if !$galley->getData('urlRemote') && !($file && in_array($file->getGenreId(), $primaryGenreIds))}
++					{if !$galley->getData('urlRemote') && !in_array($file->getGenreId(), $primaryGenreIds)}
+ 						{continue}
+ 					{/if}
+ 				{/if}
