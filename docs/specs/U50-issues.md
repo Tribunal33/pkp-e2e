@@ -1485,7 +1485,7 @@ where it is made.
 
 <a id="fn-f-a2"></a>
 **f-a2** — `IssueGridHandler::unpublishIssue()` calls `Repo::issue()->updateCurrent($request->getContext()->getId())` with no issue, and `updateCurrent()` then runs `JournalDAO::removeCurrentIssue()` regardless of which issue was unpublished. The home page's part: U10 Rule 14 needs a current issue. Probe: td11; "Archives" still listed the published issues.
-Issue report: [docs/issues/U50-A2-unpublish-back-issue-clears-current.md](../issues/U50-A2-unpublish-back-issue-clears-current.md).
+Issue report: [pkp-e2e#73](https://github.com/jardakotesovec/pkp-e2e/issues/73) ([docs/issues/U50-A2-unpublish-back-issue-clears-current.md](../issues/U50-A2-unpublish-back-issue-clears-current.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Confirmation: `IssueGridRow` `delete` uses `common.confirmDelete`; `editor.issues.confirmIssueDelete` exists in `locale/en/editor.po` and is used nowhere. Cascade: note t. Probe: td12; the specific warning never appeared.
