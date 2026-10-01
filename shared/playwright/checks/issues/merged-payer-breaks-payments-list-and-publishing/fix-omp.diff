@@ -1,0 +1,97 @@
+--- a/classes/payment/omp/OMPCompletedPaymentDAO.php
++++ b/classes/payment/omp/OMPCompletedPaymentDAO.php
+@@ -19,6 +19,7 @@
+ 
+ namespace APP\payment\omp;
+ 
++use Illuminate\Support\Facades\DB;
+ use PKP\core\Core;
+ use PKP\db\DAO;
+ use PKP\db\DAOResultFactory;
+@@ -67,7 +68,7 @@
+             [
+                 (int) $completedPayment->getType(),
+                 (int) $completedPayment->getContextId(),
+-                (int) $completedPayment->getUserId(),
++                $completedPayment->getUserId(),
+                 $completedPayment->getAssocId(), /* NOT int */
+                 $completedPayment->getAmount(),
+                 $completedPayment->getCurrencyCode(),
+@@ -105,7 +106,7 @@
+             [
+                 (int) $completedPayment->getType(),
+                 (int) $completedPayment->getContextId(),
+-                (int) $completedPayment->getUserId(),
++                $completedPayment->getUserId(),
+                 (int) $completedPayment->getAssocId(),
+                 $completedPayment->getAmount(),
+                 $completedPayment->getCurrencyCode(),
+@@ -179,6 +180,18 @@
+     }
+ 
+     /**
++     * Move every completed payment of one user to another (a user merge).
++     *
++     * @return int The number of payments moved
++     */
++    public function transfer(int $oldUserId, int $newUserId): int
++    {
++        return DB::table('completed_payments')
++            ->where('user_id', '=', $oldUserId)
++            ->update(['user_id' => $newUserId]);
++    }
++
++    /**
+      * Return a new data object.
+      *
+      * @return CompletedPayment
+--- a/classes/user/Repository.php
++++ b/classes/user/Repository.php
+@@ -23,18 +23,16 @@
+      */
+     public function mergeUsers($oldUserId, $newUserId)
+     {
+-        if (!parent::mergeUsers($oldUserId, $newUserId)) {
++        // Need both user ids for merge
++        if (empty($oldUserId) || empty($newUserId)) {
+             return false;
+         }
+ 
+-        // Transfer completed payments.
++        // Transfer completed payments first: the parent deletes the old user,
++        // which empties the user of its payments (ON DELETE SET NULL).
+         $paymentDao = DAORegistry::getDAO('OMPCompletedPaymentDAO'); /** @var OMPCompletedPaymentDAO $paymentDao */
+-        $paymentFactory = $paymentDao->getByUserId($oldUserId);
+-        while ($payment = $paymentFactory->next()) {
+-            $payment->setUserId($newUserId);
+-            $paymentDao->updateObject($payment);
+-        }
++        $paymentDao->transfer($oldUserId, $newUserId);
+ 
+-        return true;
++        return parent::mergeUsers($oldUserId, $newUserId);
+     }
+ }
+--- a/lib/pkp/classes/payment/Payment.php
++++ b/lib/pkp/classes/payment/Payment.php
+@@ -136,9 +136,9 @@
+     }
+ 
+     /**
+-     * Set the user ID of the customer.
++     * Set the user ID of the customer (null once the customer's account no longer exists).
+      */
+-    public function setUserId(int $userId): int
++    public function setUserId(?int $userId): ?int
+     {
+         return $this->userId = $userId;
+     }
+@@ -146,7 +146,7 @@
+     /**
+      * Get the user ID of the customer.
+      */
+-    public function getUserId(): int
++    public function getUserId(): ?int
+     {
+         return $this->userId;
+     }

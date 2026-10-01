@@ -757,6 +757,9 @@ Left out of the scenarios above, by reason:
   - the guard for A3 (issue report
     `docs/issues/U52-A3-A9-payment-link-blank-page-when-payments-off.md`):
     with a fee requested, the Author's fee link opening no payment page once "Enable" is saved unticked or the method's instructions are emptied
+  - the guard for A11 (issue report
+    `docs/issues/U52-A11-merged-payer-breaks-payments-list-and-publishing.md`):
+    merging a paid Author and a subscriber into other accounts, then the "Payments" list loading, the menu reading "Paid", the publish window passing and the subscription moved
 - **Rarely met**:
   - "Purchase Issue" set: the reader's "Purchase Issue Fee" payment page
     (Settings bullet 7; Fields, the manual method's payment page)
@@ -828,7 +831,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | "Payment Types" says required fields are marked with an asterisk, but no field is marked or required | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | The membership address gives a blank error page signed out or with payments not set up | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | The PayPal error page has no heading, and the browser tab shows only the journal's name | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A11](#a11) | Merging a payer's account breaks the list of payments, the submission's "Payments" menu and its publishing | 🐞 | user-visible · crash: server | — |
+| [A11](#a11) | Merging a payer's account breaks the journal's list of payments and the paid article's publishing | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | After a journal switches payments off, the side menu keeps "Institutions" until the page is reloaded | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | Payments save and ask for fees with no currency, and a saved currency cannot be removed | ❓ | minor | — |
 | [A6](#a6) | An assigned assistant role can record the APC as paid or waived | ❓ | user-visible | — |
@@ -972,17 +975,22 @@ differs from the one requested, or the payment request no longer exists.
 Basis: probe, 2026-10-01. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — Merging a payer's account breaks the fee records** · 🐞 · user-visible · crash: server.
-After an article's APC is recorded "Paid" and that Author's account is
-merged into another ([Users management](U53-users-management.md), its
-Rule 17), the server fails wherever the record is read. The "Payments"
-page's "Payments" tab shows "Loading" and never finishes, for every
-payment of the journal. The
-submission's workflow opens an "Error" window and its "Payments" menu
-opens empty. "Schedule For Publication" › "Confirm" answers "An
-unexpected error has occurred. Please reload the page and try again.",
-so the article cannot be published, and nothing on screen repairs it.
-Basis: probe, 2026-09-27. <sup>f-a11</sup>
+**A11 — Merging a payer's account breaks the journal's list of payments and the paid article's publishing** · 🐞 · medium · crash: server.
+A manager merges the account of an Author whose article's publication
+fee is recorded "Paid" into another account. From then on the app fails
+on the server wherever that fee record is read. The journal's "Payments"
+list never loads: it stays on "Loading". The article's workflow opens an
+"Error" window, its "Payments" menu opens empty, and "Schedule For
+Publication" ends in "An unexpected error has occurred." The same merge
+deletes the merged account's subscriptions instead of moving them. Any
+recorded payment that names the merged account breaks the list in the
+same way. That includes a waiver, which names the editor who saved it,
+and a subscription or article bought online. On a press nothing fails on
+screen. A reader who bought a book file and whose account is merged into
+another loses the purchase: the remaining account is asked to pay for
+the file again. On 3.4 (2022 to 2025) only the list fails; the menu and
+publishing still work there.
+Basis: probe, 2026-10-01. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — After a journal switches payments off, the side menu keeps "Institutions" until the page is reloaded** · 🐞 · low.
@@ -1157,6 +1165,7 @@ Issue report: [pkp-e2e#352](https://github.com/jardakotesovec/pkp-e2e/issues/352
 
 <a id="fn-f-a11"></a>
 **f-a11** — `completed_payments.user_id` references `users` with `onDelete('set null')` (OJS `OJSMigration`), and neither lib/pkp nor OJS `Repository::mergeUsers()` moves completed payments, so the merge leaves the record with no user; `OJSCompletedPaymentDAO::_fromRow()` then passes `null` to `Payment::setUserId(int)`. Every read of the journal's completed payments fails: the list's `PaymentsGridHandler::loadData()`, the menu's `SubmissionPaymentsForm` and `Repository::validatePublish()` (notes f, g, j). The grid's "[Nonexistent user]" is never reached. Live-probed 2026-09-27 (note td15), two journals, five runs: server 500 on `GET {journal}/$$$call$$$/grid/subscriptions/payments-grid/fetch-grid` and on `GET {journal}/$$$call$$$/modals/publish/publish/publish?submissionId={id}&publicationId={id}` (logged "Uncaught TypeError: PKP\payment\Payment::setUserId(): Argument #1 ($userId) must be of type int, null given, called in classes/payment/ojs/OJSCompletedPaymentDAO.php"), and on `GET {journal}/api/v1/submissions/{id}/publications/{id}/_components/submissionPayment`; another submission's waiver still read "Waived".
+Issue report: [docs/issues/U52-A11-merged-payer-breaks-payments-list-and-publishing.md](../issues/U52-A11-merged-payer-breaks-payments-list-and-publishing.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — ui-library `src/components/Container/SettingsPage.vue`: on the `form-success` of `FORM_PAYMENT_SETTINGS` with `paymentsEnabled` off it deletes only `menu.payments`; `menu.institutions`, which the same handler adds with `payments` when `paymentsEnabled` is on, is removed only by the `FORM_CONTEXT_STATISTICS` branch (note d). The server builds the menu afresh on every page load, so a reload drops the entry. OJS suite's test run of 2026-09-27 (Rule 1; scenario 1): after "Save" with "Enable" unticked the side menu held "Institutions" and no "Payments" for the whole 10-second wait on the suite's scratch journal, and the same after each of two unticked saves on another scratch journal driven by hand; after a reload it held neither; a ticked save added both on the same page.
