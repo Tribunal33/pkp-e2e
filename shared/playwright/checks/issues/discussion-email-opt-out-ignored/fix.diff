@@ -1,0 +1,39 @@
+--- a/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
+@@ -26,6 +26,7 @@
+ use PKP\core\Core;
+ use PKP\core\PKPApplication;
+ use PKP\core\PKPRequest;
++use PKP\db\DAORegistry;
+ use PKP\editorialTask\EditorialTask;
+ use PKP\editorialTask\enums\EditorialTaskType;
+ use PKP\editorialTask\Participant;
+@@ -39,6 +40,7 @@
+ use PKP\log\SubmissionEmailLogEventType;
+ use PKP\note\Note;
+ use PKP\notification\Notification;
++use PKP\notification\NotificationSubscriptionSettingsDAO;
+ use PKP\security\Role;
+ use PKP\security\Validation;
+ use PKP\userGroup\UserGroup;
+@@ -245,9 +247,18 @@
+             Notification::NOTIFICATION_LEVEL_TASK
+         );
+ 
++        // Only send the email if the recipient has neither disabled the notification
++        // nor chosen not to receive its email
++        /** @var NotificationSubscriptionSettingsDAO $notificationSubscriptionSettingsDao */
++        $notificationSubscriptionSettingsDao = DAORegistry::getDAO('NotificationSubscriptionSettingsDAO');
++        $blockedEmails = $notificationSubscriptionSettingsDao->getNotificationSubscriptionSettings(
++            NotificationSubscriptionSettingsDAO::BLOCKED_EMAIL_NOTIFICATION_KEY,
++            $user->getId(),
++            $context->getId()
++        );
++
+         $logRepository = null;
+-        if ($notification) {
+-            // Only send the email if notifications have not been disabled
++        if ($notification && !in_array(Notification::NOTIFICATION_TYPE_NEW_QUERY, $blockedEmails)) {
+             $mailable->allowUnsubscribe($notification);
+             try {
+                 Mail::send($mailable);
