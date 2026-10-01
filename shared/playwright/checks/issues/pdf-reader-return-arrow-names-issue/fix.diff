@@ -1,0 +1,11 @@
+--- a/plugins/generic/pdfJsViewer/templates/display.tpl
++++ b/plugins/generic/pdfJsViewer/templates/display.tpl
+@@ -33,7 +33,7 @@
+ 
+ 		<a href="{$parentUrl}" class="return">
+ 			<span class="pkp_screen_reader">
+-				{if $issue}
++				{if $issue && !$submission}
+ 					{translate key="issue.return"}
+ 				{else}
+ 					{translate key="article.return"}

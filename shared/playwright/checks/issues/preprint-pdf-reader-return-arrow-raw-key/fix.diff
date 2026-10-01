@@ -1,0 +1,24 @@
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -494,6 +494,9 @@
+ msgid "article.pageTitle"
+ msgstr "View of {$title}"
+ 
++msgid "article.return"
++msgstr "Return to Preprint Details"
++
+ msgid "user.profile.form.hideOtherContexts"
+ msgstr "Hide other servers"
+ 
+--- a/locale/fr_CA/locale.po
++++ b/locale/fr_CA/locale.po
+@@ -92,6 +92,9 @@
+ msgid "preprint.pageTitle"
+ msgstr "Affichage de {$title}"
+ 
++msgid "article.return"
++msgstr "Retourner aux renseignements sur la prépublication"
++
+ msgid "submissions.published"
+ msgstr "Diffusé-e"
+ 

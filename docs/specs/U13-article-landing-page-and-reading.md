@@ -1119,6 +1119,15 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-OJS3-publication-facts-panel-missing-without-label-file.md`):
     an article page shown in French (Canada) with the "Publication Facts"
     panel and its labels {OJS}
+  - the guard for OJS6 (Fields, the PDF reader page; issue report
+    `docs/issues/U13-OJS6-pdf-reader-return-arrow-names-issue.md`): the PDF
+    reader's return arrow announced "Return to Article Details" on an
+    article in an issue, and "Return to Issue Details" on an issue galley
+    {OJS}
+  - the guard for OPS5 (Fields, the PDF reader page; issue report
+    `docs/issues/U13-OPS5-preprint-pdf-reader-return-arrow-raw-key.md`): the PDF
+    reader's return arrow on a preprint server announced with a text,
+    not "##article.return##" {OPS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1268,7 +1277,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OJS3](#ojs3) | In French (Canada) and every other language without its own labels, article pages show no "Publication Facts" panel | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | With "Recommend Articles by Author" on, article pages never show "Most read articles by the same author(s)" | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS5](#ojs5) | With the Publication Facts Label plugin on, no article page shows the "Publication Facts" panel | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [OJS6](#ojs6) | The PDF reader's return arrow is announced "Return to Issue Details" but opens the article | 🐞 | minor | — |
+| [OJS6](#ojs6) | On a journal article's PDF reader, the return arrow is announced "Return to Issue Details" but opens the article | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS7](#ojs7) | A refused "OK" in the Publication Facts Label settings shows the saved values again, dropping every change just made | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS8](#ojs8) | A typed date that does not exist is saved as another date, or not at all, with no message | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS9](#ojs9) | Readers opening an XML galley in the Lens reader see its TeX formulas as blanks | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
@@ -1277,7 +1286,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OPS1](#ops1) | Previewing a new version adds "This is an outdated version published on {the preview day}." | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | A preprint with a URL Path loses the galley or version part of its ID address; its HTML and other non-PDF downloads answer "404 Not Found" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A galley's ID address answers "404 Not Found" once the galley has a URL Path | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
-| [OPS5](#ops5) | The PDF reader's return arrow is read to screen readers as "##article.return##" | 🐞 | minor | — |
+| [OPS5](#ops5) | On a preprint server's PDF reader, the return arrow is announced as the code "##article.return##" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS6](#ops6) | Preprint lists never show a preprint's DOI, though the preprint's own page does | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS7](#ops7) | On a French preprint page the keywords label reads "##preprint.subject## :" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS8](#ops8) | On a French page the PDF reader's browser tab reads "##article.pageTitle##" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1535,13 +1544,18 @@ Date").
 Basis: probe, 2026-10-01. <sup>[f-ojs5](#fn-f-ojs5)</sup>
 
 <a id="ojs6"></a>
-**OJS6 — The PDF reader's arrow is announced as leading to the issue** · 🐞 · minor.
+**OJS6 — On a journal article's PDF reader, the return arrow is announced "Return to Issue Details" but opens the article** · 🐞 · low.
 On a journal article in an issue, a screen reader announces the PDF
 reader's return arrow as "Return to Issue Details", but pressing it
-opens the article's page. For an article in no issue it reads "Return to
-Article Details", as the HTML reader's arrow always does. A blind reader
-is told the arrow leads somewhere it does not.
-Basis: probe, 2026-09-25. <sup>[f-ojs6](#fn-f-ojs6)</sup>
+opens the article's page. The destination is right and the label is
+wrong: the arrow should announce "Return to Article Details", as it does
+for an article in no issue and as the HTML reader's arrow always does.
+The arrow announced "Return to Article Details" on these pages until a
+2024 change to the reader. The arrow has no visible text and no hover
+tooltip, so only screen-reader users meet the wording.
+The reader is the page of the "PDF.JS PDF Viewer" plugin, which is on by
+default in every journal.
+Basis: probe, 2026-10-01. <sup>[f-ojs6](#fn-f-ojs6)</sup>
 
 <a id="ojs7"></a>
 **OJS7 — A refused "OK" in the Publication Facts Label settings shows the saved values again, dropping every change just made** · 🐞 · low.
@@ -1678,12 +1692,19 @@ it in a reader. Intended: the application ships that way.
 Basis: probe, 2026-09-25. <sup>[f-ops4](#fn-f-ops4)</sup>
 
 <a id="ops5"></a>
-**OPS5 — The PDF reader's return arrow reads a raw key** · 🐞 · minor.
+**OPS5 — On a preprint server's PDF reader, the return arrow is announced as the code "##article.return##"** · 🐞 · low.
 The return arrow at the top left of the PDF reader page has no visible
-text; a screen reader announces it as "##article.return##" on a preprint
-server, where a journal reads "Return to Issue Details" or "Return to
-Article Details". A blind reader cannot tell where the arrow leads.
-Basis: probe, 2026-09-25. <sup>[f-ops5](#fn-f-ops5)</sup>
+text; on a preprint server a screen reader announces it as the code
+"##article.return##". On a journal the same arrow is announced "Return
+to Issue Details" or "Return to Article Details".
+A blind reader cannot tell where the arrow leads. The arrow works and
+opens the preprint's page. It has no hover tooltip, so sighted readers
+never see the code.
+The code is announced on every preprint's PDF, in every language the
+server offers, English included. OPS's language files lack the
+`article.return` text that the PDF viewer template, shared with OJS,
+reads; the fix is in OPS.
+Basis: probe, 2026-10-01. <sup>[f-ops5](#fn-f-ops5)</sup>
 
 <a id="ops6"></a>
 **OPS6 — Preprint lists never show a preprint's DOI, though the preprint's own page does** · 🐞 · low.
@@ -2773,6 +2794,7 @@ Issue report: [pkp-e2e#211](https://github.com/jardakotesovec/pkp-e2e/issues/211
 **f-ojs6** — Note d: `display.tpl` picks `issue.return` whenever the page
 has an issue, though its link is the article's `parentUrl`. Live-probed
 2026-09-25 (note d), two runs.
+Issue report: [docs/issues/U13-OJS6-pdf-reader-return-arrow-names-issue.md](../issues/U13-OJS6-pdf-reader-return-arrow-names-issue.md).
 
 <a id="fn-f-ojs7"></a>
 **f-ojs7** — Live-probed 2026-09-25, note q15: after a refused "OK" the
@@ -2858,6 +2880,7 @@ download path of note e. Live-probed 2026-09-25, notes q8 and q16.
 `article.return` nor `issue.return`, so the screen-reader text renders as
 the key in `##` marks. Live-probed 2026-09-25 (note d), also on the
 French page.
+Issue report: [docs/issues/U13-OPS5-preprint-pdf-reader-return-arrow-raw-key.md](../issues/U13-OPS5-preprint-pdf-reader-return-arrow-raw-key.md).
 
 <a id="fn-f-ops6"></a>
 **f-ops6** — Note j. The landing page's own "DOI:" line reads the
