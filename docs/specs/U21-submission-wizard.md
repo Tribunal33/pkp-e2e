@@ -239,15 +239,33 @@ itself enforces before submission is Rule 13.
     wizard for which the browser still holds unsaved changes opens an
     "Unsaved Changes" dialog. It offers to restore them ("Yes") or discard
     them ("No, discard unsaved changes"). <sup>i</sup>
-9b. **A save the server refuses.** A plain language summary longer than
-    the section's word limit (Rule 13) is refused when the step saves,
-    whether by the timer or by "Continue". The wizard then opens an
-    "Error" dialog, "An unexpected error has occurred. Please reload the
-    page and try again.", which does not name the field. The footer shows
-    "Reconnecting" and, once the dialog's "OK" is pressed, "Saving" for
-    good, though no retry is sent. On "Review", "Checking your
-    submission" never clears and "Submit" stays disabled ⚠ [A16](#a16).
-    <sup>[fn-a16](#fn-a16)</sup>
+9b. **A save the server refuses.** The server refuses a step's save,
+    whether sent by the timer or by "Continue", in these cases:
+    - a plain language summary longer than the section's word limit
+      (Rule 13) ⚠ [A16](#a16);
+    - with the plain language summary set to "require" (*Settings that
+      modify behavior*, "Metadata asked of authors"), saves of other
+      fields, step by step in ⚠ [A20](#a20);
+    - on a preprint server, a "DOI of the published preprint" typed
+      without its web address
+      [→ Preprint relations A7](U75-preprint-relations.md#a7).
+    <sup>[fn-a19](#fn-a19)</sup>
+9c. **After a refused save.** Whatever field was refused, the wizard
+    hangs ⚠ [A19](#a19):
+    - "Continue" still moves on one step. An "Error" dialog opens, "An
+      unexpected error has occurred. Please reload the page and try
+      again.", which does not name the field.
+    - The footer shows "Reconnecting" and, about four seconds later,
+      "Saving" for good, whether or not "OK" is pressed. No retry is
+      sent, and nothing changed later in that visit is sent either.
+    - Both "Save for Later" buttons and "Submit" stay disabled; "Back"
+      and "Cancel" stay enabled. On "Review", "Checking your submission"
+      never clears.
+    - After a reload, every field the refused save sent shows what it
+      held before ("Details" sends title, keywords, abstract and summary
+      in one save [A16](#a16)). "Unsaved Changes" offers only changes
+      made after the refusal, and "Yes" sends them.
+    <sup>[fn-a19](#fn-a19)</sup>
 10. **Save for Later.** "Save for Later" is offered in the header and the
     footer. It finishes any saves in flight, records the step reached, and
     lands on the **Saved for Later** screen. That screen shows a link back
@@ -323,8 +341,8 @@ itself enforces before submission is Rule 13.
     ⚠ [A6](#a6). <sup>m</sup>
 14. **Submitting.** On the Review step the primary button reads "Submit".
     It stays disabled until the check passes, every confirmation box is
-    ticked, and no failed save has put the wizard into its "Reconnecting"
-    state (Rules 9a, 9b). Pressing it asks for confirmation. On a journal
+    ticked, and no failed save has left the wizard "Reconnecting" or hung
+    on "Saving" (Rules 9a, 9c). Pressing it asks for confirmation. On a journal
     the message reads: "The submission, {title}, will be submitted to
     {journal} for editorial review. Are you sure you want to complete this
     submission?" A preprint server's message says instead what happens
@@ -476,8 +494,11 @@ them live are the subject of *Submission intake configuration*.
 - **Metadata asked of authors**: each metadata item the journal's setup
   sets to "ask" or "require" during submission adds its field to the
   Details or For the Editors step (Rule 7). Setting it to "require" makes
-  it a submit blocker (Rule 13). The install default asks for keywords and
-  references without requiring them, so a fresh journal's Details step
+  it a submit blocker (Rule 13). Setting the plain language summary
+  (Settings › Workflow › Submission › "Metadata") to "require" also makes
+  the server refuse wizard saves of other fields (Rule 9b) [A20](#a20).
+  The install default asks for keywords and references without
+  requiring them, so a fresh journal's Details step
   already shows a "Keywords" field, not marked required, and a references
   box.
 - **References, data citations, data availability, funders**: the same
@@ -519,7 +540,7 @@ them live are the subject of *Submission intake configuration*.
   the Details / For the Editors metadata fields, and the plain language
   summary sharing the abstract's word limit. The wizard owns only which
   fields appear, which block submission, and what a refused save does
-  (Rule 9b).
+  (Rules 9b, 9c).
 - **Reviewer suggestions**: the suggestions panel and what editors later
   do with them. The wizard owns the step's presence gate.
 - **Sections**: section configuration (deactivated, editor-restricted,
@@ -1037,6 +1058,8 @@ Left out of the scenarios above, by reason:
   - A16 (a plain language summary over the section's word limit)
   - A17 (the "needs an editor" alert with an editor already on the submission)
   - A18 (a change typed more than a minute after the last save, saved cut after its first letters)
+  - A19 (the wizard hung on "Saving" after any save the server refuses, and the reload's "Unsaved Changes" after it)
+  - A20 (a required plain language summary refusing saves of other fields)
   - OMP2 (a second copy address on a press)
   - OMP3 (the order of the "Submit As" roles on a press)
   - OPS4 (a manager reading another author's completion screen)
@@ -1071,7 +1094,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-08-25; additions
-2026-08-26, 2026-09-07, 2026-09-28 and 2026-09-30), unreviewed unless an entry notes otherwise; the team settles
+2026-08-26, 2026-09-07, 2026-09-28, 2026-09-30 and 2026-10-01), unreviewed unless an entry notes otherwise; the team settles
 them on spec review. The summary is sorted 🐞 → ❓ → ✅ and the entries below
 are the source; badges, Impact and Basis:
 [Reading a spec](GLOSSARY.md#reading-a-spec).
@@ -1088,6 +1111,8 @@ are the source; badges, Impact and Basis:
 | [A14](#a14) | Section Editors who are also Authors are offered "Section editor" in "Submit As", then refused | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | Submission wizard refuses a plain language summary over the word limit, then hangs on "Saving" | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [A18](#a18) | Submission wizard autosaves a change after its first letter, and the rest only a minute later | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A19](#a19) | After any save the server refuses, the submission wizard hangs on "Saving" until reloaded | 🐞 | user-visible · crash: script | — |
+| [A20](#a20) | Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang | 🐞 | user-visible · crash: script | — |
 | [OMP2](#omp2) | A press manager cannot save two "Notify Anyone" addresses, though the box's help text asks for a comma-separated list | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
 | [OPS3](#ops3) | On a preprint server, authors cannot cancel their own draft: Cancel does nothing, Delete is refused | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1335,8 +1360,8 @@ saved, an "Error" dialog reads "An unexpected error has occurred.
 Please reload the page and try again." without naming the field. The
 footer then shows "Saving" for good, and on "Review" "Checking your
 submission" never clears, so "Submit" stays disabled.
-Everything typed on "Details" in that visit is lost, the summary and
-the abstract included. While typing, the summary's box does mark its
+That save carries the title, keywords, abstract and summary, so all of
+them are lost (Rule 9c). While typing, the summary's box does mark its
 count with a warning sign ("Word Count: 20/10"). The abstract's box
 shows the same sign for the same limit, but an abstract over it is
 saved and flagged on "Review" instead.
@@ -1370,6 +1395,43 @@ field cut: a Title typed as "u21w37 Autosave cut check" reopens as "u",
 in the page heading too, with no warning. Moving to another step, or
 "Save for Later", saves the whole text.
 Basis: probe, 2026-10-01. <sup>[fn-a18](#fn-a18)</sup>
+
+<a id="a19"></a>
+**A19 — After any save the server refuses, the submission wizard hangs on "Saving" until reloaded** · 🐞 · user-visible · crash: script.
+When the server refuses one of a step's saves, whatever the field, the
+wizard shows its "Error" dialog, and about four seconds later the page's
+own script fails in the browser. From then on the footer reads "Saving",
+nothing more is sent, both "Save for Later" buttons and "Submit" stay
+disabled, and "Review" never gets past "Checking your submission". The
+author's only way on is a reload, which loses the refused change.
+A lost connection or a server failure is retried and recovers (Rule 9a);
+only a refusal hangs (Rule 9c). What the server refuses is [A16](#a16),
+[A20](#a20) and, on a preprint server,
+[→ Preprint relations A7](U75-preprint-relations.md#a7).
+Basis: probe, 2026-10-01. <sup>[fn-a19](#fn-a19)</sup>
+
+<a id="a20"></a>
+**A20 — Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang** · 🐞 · user-visible · crash: script.
+With Settings › Workflow › Submission › "Metadata" set to require the
+plain language summary, the server refuses these wizard saves, and the
+wizard hangs [A19](#a19):
+- On "Details", a change saved while the summary's box is still empty
+  (a new Title, say). Once the summary is typed, the "Details" save
+  goes through, but text typed in the step's "References" box is
+  still refused.
+- On "For the Editors", a metadata field the journal asks for there
+  ("Coverage", for one). "Review" lists "Coverage" as "None provided",
+  and after a reload the field is empty.
+- On a preprint server, every answer to the required "Relation status"
+  on "For Readers", also one ticked after the hang that "Unsaved
+  Changes" offers after a reload (Rule 9c), so it cannot be saved while
+  the setting is on.
+
+With the summary only asked for, the same saves go through and the text
+survives a reload. The same requirement refuses the Publication pages'
+saves after submission
+([→ Publication metadata A1](U40-publication-metadata.md#a1)).
+Basis: probe, 2026-10-01. <sup>[fn-a20](#fn-a20)</sup>
 
 ### OMP
 
@@ -2367,8 +2429,10 @@ which the wizard shows only as its generic error. Live-probed
 language summary enabled, a section with a 10-word limit, a draft in
 it): a 20-word summary typed on "Details" ("Word Count: 20/10") drew the
 400 from the timer save (58.7–59.7 s) or at once on "Continue" (the step
-still advanced); then the "Error" dialog, the footer "Reconnecting" and,
-after "OK", "Saving" for good; one request in 20 s, no retry. "Review"
+still advanced); then the "Error" dialog, the footer "Reconnecting" and
+then "Saving" for good; one request in 20 s, no retry. The switch to
+"Saving" comes with the page error about 4 s after the 400, whether or
+not "OK" is pressed (live-probed 2026-10-01, note fn-a19). "Review"
 listed "Plain Language Summary / None provided" under "Checking your
 submission", "Submit" disabled. On reload the summary was empty; an
 "Unsaved Changes" dialog came first after a timer save (OJS 3 of 3, OPS
@@ -2413,6 +2477,62 @@ OMP typed as fast in one run and was cut, so whole or cut follows where
 the typing falls against the 500 ms tick, not the app. No response of
 400 or more, no page error, no browser dialog.
 Issue report: [pkp-e2e#170](https://github.com/jardakotesovec/pkp-e2e/issues/170) ([docs/issues/U21-A18-wizard-autosave-cuts-title-mid-typing.md](../issues/U21-A18-wizard-autosave-cuts-title-mid-typing.md)).
+
+<a id="fn-a19"></a>
+**fn-a19** — Rules 9b and 9c, A19. ui-library `SubmissionWizardPage.vue`
+`autosaveErrored()` drops the refused save from the browser store for
+any status but 0, 500 and 403 and opens the dialog; the autosave
+mixin's `onError` has already set `isDisconnected`, so `_runReconnect()`
+calls `_sendAutosave(undefined)` about 4 s later, which sets
+`isAutosaving` and throws on `payload.url`; neither flag is cleared, and
+"Save for Later", `canSubmit` and the Review check all wait on them
+(the A16 issue report's code read, "Cause"). Live-probed 2026-10-01, two
+runs per app on all three (the Author of a seeded draft on scratch
+contexts; kept script `shared/playwright/checks/U21/I01/i01.js`), 36
+refused saves: a step's `PUT …/publications/{id}` answered 400 by a
+Playwright route on a Title change (fault injection, three apps), the
+server's 400 `plainLanguageSummary: This field is required.` (A20,
+three apps) and OPS's 400 "This is not a valid URL." for a bare DOI.
+Every one: the step advanced; the "Error" dialog; the footer
+"Reconnecting", then "Saving" 4.1–5.3 s after the 400, at the page error
+"Cannot read properties of undefined (reading 'url')", with the dialog
+still open; no request in the next 25 s; both "Save for Later" and
+"Submit" disabled, "Back" and "Cancel" enabled; "Checking your
+submission" on "Review". A new Title typed on "Details" afterwards (and
+on OPS the full DOI address typed into the same box) with "Continue"
+sent nothing. After a reload "Unsaved Changes" ("We found unsaved
+changes from 18 seconds ago. …") offered that later change; "Yes" sent
+it (200), "Submit" enabled, and on OPS "Review" read "This preprint has
+been published."; the refused change was never offered. With nothing
+changed after the refusal (OJS, OMP), the reload opened no dialog and
+the Title read as before. Controls the same runs (Rule 9a): a 500 from
+the route and an aborted request on the same save gave "Reconnecting",
+a retry 4.1–4.7 s later answering 200, "Last saved 4 seconds ago", the
+buttons enabled, and the Title kept after a reload.
+
+<a id="fn-a20"></a>
+**fn-a20** — A20. pkp-lib `PKPPublication\Repository::validate()`
+checks a required `plainLanguageSummary` against what each save sends,
+not against what the publication holds (as for the Publication pages,
+*Publication metadata* A1); the wizard's other step forms never send the
+summary, and the "Details" form sends its box even when empty. Live-probed 2026-10-01, two
+runs per app on all three (scratch contexts with "Plain Language
+Summary" at require and "Coverage" at ask; kept script
+`shared/playwright/checks/U21/I01/i01.js`, variants `pls`, `plsdetails`,
+`refs`, `relreq`, controls `cov`, `refsctl`): a summary typed on
+"Details" saved (200); "Coverage" typed on "For the Editors" / "For
+Readers" and "Continue" answered 400
+`{"plainLanguageSummary":{"en":["This field is required."]}}`, then
+note fn-a19's hang; "Review" read "Coverage / None provided" under
+"Checking your submission", and after a reload "Coverage" was empty. A
+summary and two lines in "References" on "Details": 200, then 400 for
+the references. A Title change with the summary box empty: 400. OPS,
+"This preprint has not been published elsewhere." answered alone: 400,
+nothing stored. OPS, an answer ticked after the hang, offered by
+"Unsaved Changes" after a reload and sent by "Yes": 400 and the page
+error again; ticked again on "For Readers" after a plain reload: the
+same. Controls, the summary at ask: the same drives answered 200 and
+the text read back after a reload.
 
 <a id="fn-omp1"></a>
 **fn-omp1** — OMP divergence points: `StartSubmission` (OMP) adds

@@ -26,7 +26,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U48](../specs/U48-jats-and-body-text.md) | 16 | 1 | 7 | **A20 done: issues session s3, 2026-10-01** (with U47 A6); the other entries are free for another session |
 | [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 | A16 written with U63 A12 ([pkp-e2e#15](https://github.com/jardakotesovec/pkp-e2e/issues/15), 2026-09-30); the other entries are open |
 | [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | **OMP1 done: issues session s3, 2026-09-30** (with U53 A14); the other entries are free for another session |
-| [U16](../specs/U16-categories.md) | 22 | 1 | 4 |  |
+| [U16](../specs/U16-categories.md) | 22 | 1 | 4 | A16 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet; the report calls the window's box "Title" where the screen says "Name", and its Reach names "Applied Science" where reach.js uses "Social Sciences" on OPS |
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | **OMP3 done: issues session s3, 2026-09-30** (with U69 A9); the other entries are free for another session |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 4 | 1 | 4 |  |
@@ -41,7 +41,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U04](../specs/U04-orcid-integration.md) | 7 | 0 | 5 |  |
 | [U10](../specs/U10-appearance-and-theming.md) | 13 | 0 | 4 | A4 written with U09 A15 ([pkp-e2e#113](https://github.com/jardakotesovec/pkp-e2e/issues/113), 2026-10-01); the other entries are free for another session |
 | [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 | A19 written with U09 A19 ([pkp-e2e#117](https://github.com/jardakotesovec/pkp-e2e/issues/117), 2026-10-01); the other entries are free for another session |
-| [U41](../specs/U41-contributors-and-affiliations.md) | 10 | 0 | 4 |  |
+| [U41](../specs/U41-contributors-and-affiliations.md) | 10 | 0 | 4 | A22 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 7 | 0 | 4 | **OPS4 only: issues session s3, 2026-09-30** (joins U53 OPS1); the other entries are free for another session |
 | [U73](../specs/U73-publication-formats-proof-terms.md) | 17 | 0 | 3 |  |
 | [U28](../specs/U28-reviewers-review.md) | 12 | 0 | 3 | A15 written with U09 A19 ([pkp-e2e#117](https://github.com/jardakotesovec/pkp-e2e/issues/117), 2026-10-01); the other entries are free for another session |
@@ -67,7 +67,9 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U14](../specs/U14-reader-comments-and-moderation.md) | 5 | 0 | 0 |  |
 | [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 | A9 joined to docs/issues/U35-A5-message-discussion-created-by-recipient.md by the workstation session (2026-10-01; its missing activity line, another cause, went to incidentals); the other four open |
 | [U23](../specs/U23-submissions-dashboard.md) | 4 | 0 | 0 |  |
-| [U29](../specs/U29-review-setup-and-review-forms.md) | 4 | 0 | 0 |  |
+| [U29](../specs/U29-review-setup-and-review-forms.md) | 4 | 0 | 0 | A11 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
 | [U55](../specs/U55-notify-users.md) | 4 | 0 | 0 |  |
 | [U67](../specs/U67-archiving-preservation.md) | 3 | 0 | 0 |  |
 | [U33](../specs/U33-production-stage.md) | 2 | 0 | 0 |  |
+| [U51](../specs/U51-subscriptions.md) | 1 | 0 | 1 | A29 added 2026-10-01 by the housekeeping session (the open-access email sent twice on the 1st of some months; met by the suite on CI); open |
+| [U21](../specs/U21-submission-wizard.md) | 2 | 2 | 2 | A19 and A20 added 2026-10-01 by the housekeeping fold (claim check I01: the wizard hangs on "Saving" after any refused save; a required plain language summary refuses every save without it), open; the A16 report (pkp-e2e#127) says the required-summary check never refuses the wizard's saves and that the footer turns after "OK": both wrong per I01 (`.reports/U21/cc-I01.md` in slot s2, kept script `shared/playwright/checks/U21/I01/i01.js`) |
