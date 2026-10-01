@@ -1,0 +1,80 @@
+--- a/plugins/oaiMetadataFormats/marc/templates/record.tpl
++++ b/plugins/oaiMetadataFormats/marc/templates/record.tpl
+@@ -14,13 +14,13 @@
+ 		<fixfield id="008">"{$publication->getData('datePublished')|strtotime|date_format:"%y%m%d %Y"}                        eng  "</fixfield>
+ 	{/if}
+ 	{if $journal->getData('onlineIssn')}
+-		<varfield id="022" i1="#" i2="#">
+-			<subfield label="$a">{$journal->getData('onlineIssn')|escape}</subfield>
++		<varfield id="022" i1=" " i2=" ">
++			<subfield label="a">{$journal->getData('onlineIssn')|escape}</subfield>
+ 		</varfield>
+ 	{/if}
+ 	{if $journal->getData('printIssn')}
+-		<varfield id="022" i1="#" i2="#">
+-			<subfield label="$a">{$journal->getData('printIssn')|escape}</subfield>
++		<varfield id="022" i1=" " i2=" ">
++			<subfield label="a">{$journal->getData('printIssn')|escape}</subfield>
+ 		</varfield>
+ 	{/if}
+ 	{if $versionString}
+@@ -52,8 +52,8 @@
+ 		<varfield id="{if $authors|@count==1}100{else}720{/if}" i1="1" i2=" ">
+ 			<subfield label="a">{$author->getFullName(false, true, $publicationLocale)|escape}</subfield>
+ 			{foreach from=$author->getAffiliations() item=$affiliation}
+-				{if $affiliation->getRor()}<subfield code="u">{$affiliation->getRor()|escape}</subfield>
+-				{elseif $affiliation->getLocalizedName($publicationLocale)}<subfield code="u">{$affiliation->getLocalizedName($publicationLocale)|escape}</subfield>{/if}
++				{if $affiliation->getRor()}<subfield label="u">{$affiliation->getRor()|escape}</subfield>
++				{elseif $affiliation->getLocalizedName($publicationLocale)}<subfield label="u">{$affiliation->getLocalizedName($publicationLocale)|escape}</subfield>{/if}
+ 			{/foreach}
+ 			{if $author->getUrl()}<subfield label="0">{$author->getUrl()|escape}</subfield>{/if}
+ 			{if $author->getData('orcid') && $author->getData('orcidIsVerified')}<subfield label="0">{$author->getData('orcid')|escape}</subfield>{/if}
+--- a/plugins/oaiMetadataFormats/marcxml/templates/record.tpl
++++ b/plugins/oaiMetadataFormats/marcxml/templates/record.tpl
+@@ -16,17 +16,17 @@
+ 		<controlfield tag="008">"{$publication->getData('datePublished')|strtotime|date_format:"%y%m%d %Y"}                        eng  "</controlfield>
+ 	{/if}
+ 	{if $journal->getData('onlineIssn')}
+-		<datafield tag="022" ind1="#" ind2="#">
++		<datafield tag="022" ind1=" " ind2=" ">
+ 			<subfield code="a">{$journal->getData('onlineIssn')|escape}</subfield>
+ 		</datafield>
+ 	{/if}
+ 	{if $journal->getData('printIssn')}
+-		<datafield tag="022" ind1="#" ind2="#">
++		<datafield tag="022" ind1=" " ind2=" ">
+ 			<subfield code="a">{$journal->getData('printIssn')|escape}</subfield>
+ 		</datafield>
+ 	{/if}
+ 	{if $publication->getStoredPubId('doi')}
+-	<datafield tag="024" ind1="7" ind2="#">
++	<datafield tag="024" ind1="7" ind2=" ">
+ 		<subfield code="a">{$publication->getStoredPubId('doi')|escape}</subfield>
+ 		<subfield code="2">doi</subfield>
+ 	</datafield>
+@@ -87,9 +87,9 @@
+ 		<subfield code="b">{$publisher|escape}</subfield>
+ 	</datafield>
+ 	{if $issue}
+-		<dataField tag="260" ind1=" " ind2=" ">
++		<datafield tag="260" ind1=" " ind2=" ">
+ 			<subfield code="c">{$issue->getDatePublished()}</subfield>
+-		</dataField>
++		</datafield>
+ 	{/if}
+ 
+ 	{assign var=identifyType value=$section->getIdentifyType($journal->getPrimaryLocale())}
+@@ -106,10 +106,10 @@
+ 		<subfield code="u">{url router=PKP\core\PKPApplication::ROUTE_PAGE journal=$journal->getPath() page="article" op="view" path=$article->getBestId()|escape urlLocaleForPage=""}</subfield>
+ 	</datafield>
+ 
+-	<datafield id="773" i1="0" i2=" ">
+-		<subfield label="t">{$journal->getName($journal->getPrimaryLocale())|escape};</subfield>
++	<datafield tag="773" ind1="0" ind2=" ">
++		<subfield code="t">{$journal->getName($journal->getPrimaryLocale())|escape};</subfield>
+ 		{if $relatedParts}
+-			<subfield label="g">{$relatedParts|escape}</subfield>
++			<subfield code="g">{$relatedParts|escape}</subfield>
+ 		{/if}
+ 	</datafield>
+ 

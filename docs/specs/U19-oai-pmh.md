@@ -1170,6 +1170,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U19-A5-oai-browser-record-formats-shown-as-archive.md`):
     the browser view of "formats" on a record's header naming the record and
     linking each format to that record (once fixed)
+  - the guard for A12 (issue report
+    `docs/issues/U19-A12-oai-marc-records-not-valid-for-their-schemas.md`):
+    a journal's `marcxml` and `oai_marc` records valid for the schemas they
+    name, with field 773, the issue date, the affiliation and the ISSN where
+    a reader looks for them {OJS} (once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1290,7 +1295,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | The Dublin Core "Source" keeps an empty part for an article in no issue {OJS} and on every press record {OMP} | 🐞 | minor | — |
 | [A10](#a10) | One article in a subscription issue empties a whole `jats` list {OJS} | 🐞 | latent | — |
 | [A11](#a11) | With "DRIVER" enabled, an article in no issue loses its `driver` mark when unpublished {OJS} | 🐞 | latent | — |
-| [A12](#a12) | The MARC records do not follow their schemas {OJS} | 🐞 | minor | — |
+| [A12](#a12) | A journal's MARC records in OAI-PMH do not follow the schemas they name, and software reading them misses the journal, the issue date, the ISSN or the affiliations {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | Records read in French carry untranslated keys {OJS OMP} | 🐞 | minor | — |
 | [A15](#a15) | MARC field 008 reads "%26%09%26 %2026" instead of the publication date {OJS} | 🐞 | minor | — |
 | [A16](#a16) | An OAI-PMH request that gives an argument twice gets a server error instead of the refusal message | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1461,15 +1466,25 @@ never lists a deleted record (Rule 23a).
 Basis: probe, 2026-09-26. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — The MARC records do not follow their schemas** {OJS} · 🐞 · minor.
-A harvester that checks `marcxml` records against the MARC21 schema they
-name finds them invalid: field 773 is written in the older MARC format's
-way, the issue date's 260 element is misspelled, and 022 and 024 carry
-the indicator "#", which the schema does not allow. The `oai_marc`
-record mixes two spellings: the affiliations in 100 and 720 are written
-`code="u"` among subfields written with `label`, and 022's subfield is
-labelled "$a". A strict harvester drops the records.
-Basis: probe, 2026-09-26. <sup>f-a12</sup>
+**A12 — A journal's MARC records in OAI-PMH do not follow the schemas they name, and software reading them misses the journal, the issue date, the ISSN or the affiliations** {OJS} · 🐞 · medium.
+A harvester that checks a journal's `marcxml` records against the MARC21
+schema they name finds every one invalid, and so does one that checks
+the `oai_marc` records against theirs. Five things are wrong: -
+`marcxml` writes field 773 (the journal's name and the issue) with the
+attribute names of `oai_marc`. This came after 3.5 and is on main only.
+- `marcxml` writes the element of the issue's date in field 260 as
+"dataField", where the schema's name is "datafield". - `oai_marc` writes
+each affiliation with the attribute name of `marcxml`. - `oai_marc`
+names the ISSN's subfield "$a" where the schema's name is "a". - Both
+write the indicators of the ISSN field, and `marcxml` those of the DOI
+field, as "#", which neither schema allows. Software that reads a record
+without checking it, and takes the fields by element name, field number
+and subfield code, loses nothing to the "#" indicators. It silently
+finds no field for the other four: no journal and issue and no issue
+date in `marcxml`, no ISSN and no affiliation in `oai_marc`. Every
+article of every journal is affected, in both formats, which are always
+on. The same records in Dublin Core are not affected.
+Basis: probe, 2026-10-01. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — Records read in French carry untranslated keys** {OJS OMP} · 🐞 · minor.
@@ -1897,6 +1912,7 @@ Issue report: [pkp-e2e#304](https://github.com/jardakotesovec/pkp-e2e/issues/304
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-26: note q4. Code: note g.
+Issue report: [docs/issues/U19-A12-oai-marc-records-not-valid-for-their-schemas.md](../issues/U19-A12-oai-marc-records-not-valid-for-their-schemas.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-26: note q19; OJS `oai_marc` and `marcxml` read at `…/fr_CA/oai` wrote 251 and 780 `$i` "##publication.versionStage.display##" where the English read "Version of Record 2.0" and "Version of Record 1.1". The `##…##` form is how the app prints a key it has no text for in that language. Code: notes f, g, u.
