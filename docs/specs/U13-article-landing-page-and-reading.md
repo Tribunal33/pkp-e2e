@@ -2575,7 +2575,7 @@ in passing during the appearance spec's claim check (a press's book page
 also labels its date "##catalog.published##", the monograph page's
 business); live-probed 2026-09-25 on both apps and the press (note q5),
 the date printed "2026-09-24" in French as in English.
-Issue report: [docs/issues/U13-A1-french-version-name-raw-key.md](../issues/U13-A1-french-version-name-raw-key.md).
+Issue report: [pkp-e2e#228](https://github.com/jardakotesovec/pkp-e2e/issues/228) ([docs/issues/U13-A1-french-version-name-raw-key.md](../issues/U13-A1-french-version-name-raw-key.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `PdfJsViewerPlugin::submissionCallback()` builds `pdfUrl` from
