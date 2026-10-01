@@ -17,28 +17,39 @@
 
 On the profile's Notifications tab, the row named "Discussion added."
 has a box "Do not send me an email for these types of notifications.".
-A person who ticked it expects no email when a discussion is opened
-with them. A message an editor sends them with "Notify" on the
-workflow's Participants panel still arrives in their mailbox.
+A person ticks it, and a message an editor sends them with "Notify" on
+the workflow's Participants panel still arrives in their mailbox.
 
 Only the Participants panel's message window ignores the box: a
 discussion started from the stage's discussions panel sends that person
-no email. "Assign" with a message uses the same window and code as
-"Notify"; it was read in the code and not tried on screen.
+no email. "Assign" with a message sends the email too, through the same
+code; that was read in the code and not tried on screen.
+
+The email's own "unsubscribe" link sets this same box, so a person who
+unsubscribes through the email keeps getting these emails. This too was
+read in the code and not tried on screen.
 
 ## Impact
 
 - **Lost**: no data and no work. The discussion opens and the person's
-  Tasks list shows it; the cost is an email they asked not to get.
+  Tasks list shows it; the cost is an email they asked not to get, and
+  nothing tells them their choice does not cover it.
 - **Who**: anyone listed in a submission's Participants panel (editor,
-  assistant, author) who ticked the box, each time an editor sends them
-  a message with "Notify".
+  assistant, author) who ticked the box or unsubscribed through an
+  email's link, each time an editor sends them a message with "Notify"
+  or with "Assign".
 - **Way round**: the person can untick "Enable these types of
-  notifications." on the same row, which stops the email and also the
-  Tasks entry for every new discussion. The editor can start the
-  discussion from the stage's discussions panel instead.
+  notifications." on the same row. That stops these emails, and it also
+  removes new discussions from their Tasks list, whichever way they
+  were started. An editor could start the discussion from the stage's
+  discussions panel instead, but no screen shows the editor who ticked
+  the box, so they have no reason to.
 
-Low: the task gets done and the only harm is an unwanted email.
+Low: the editorial work is done and nothing is lost; the opt-out fails
+for one kind of message only, and on screen the person can still stop
+it. It would be medium once the unsubscribe link is seen to fail on
+screen, because a person who unsubscribed from the very email that then
+keeps coming has a task that looks done and is not.
 
 ## Steps to reproduce
 
@@ -129,10 +140,17 @@ Reach:
 - "Notify" on all three apps (on screen).
 - "Assign" with a predefined message: `AddParticipantForm` extends this
   form and reaches the same `sendMessage()` (in the code, not driven).
-- The email's own "unsubscribe" link:
-  `PKPNotificationsUnsubscribeForm::execute()` writes the same
-  `blocked_emailed_notification` setting, so unsubscribing through the
-  link does not stop these emails either (in the code, not driven).
+- The email's own "unsubscribe" link (in the code, not driven). The
+  link opens `NotificationHandler::unsubscribe()`, whose form
+  (`templates/notification/unsubscribeNotificationsForm.tpl`) lists
+  every notification type, each ticked, "Discussion added." among
+  them. `PKPNotificationsUnsubscribeForm::execute()` stores the ticked
+  types as `blocked_emailed_notification`, the setting the profile's
+  box writes, so unsubscribing does not stop these emails either. The
+  link works only on an install with `api_key_secret` set; without it
+  the link's token is empty and the page answers not found, which is
+  tracked separately (spec U05
+  [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U05-notifications-center-and-email-preferences.md#a6)).
 - A discussion started from the stage's discussions panel is not
   affected on any of the three versions (in the code): on `main`
   `EditorialTaskController::notifyParticipants()` reads the setting
@@ -258,7 +276,8 @@ team decides.
   fixed), `#6627` (unsubscribe for the users list's "Notify"), `#4115`
   (the two boxes' wording), `#3440` (2018, fixed).
 - Not driven: "Assign" with a predefined message; the email's
-  "unsubscribe" link; a discussion started from the discussions panel;
+  "unsubscribe" link (the test installs have no `api_key_secret`, so
+  the link in the walk's emails carries an empty token); a discussion started from the discussions panel;
   the fix on 3.5.
 - Tips: OJS `main` 4408b94def with lib/pkp f5bd392a69; OMP `main`
   3b0ecf794c and OPS `main` c8af945bb7, both with lib/pkp 3dc90c81a6

@@ -1217,13 +1217,15 @@ Basis: probe. <sup>[f-a15](#fn-a15)</sup>
 **A16 — A message sent with "Notify" is emailed to a participant who opted out of emails for new discussions** · 🐞 · low.
 On the profile's Notifications tab, the row named "Discussion added."
 has a box "Do not send me an email for these types of notifications.".
-A person who ticked it expects no email when a discussion is opened
-with them. A message an editor sends them with "Notify" on the
-workflow's Participants panel still arrives in their mailbox.
+A person ticks it, and a message an editor sends them with "Notify" on
+the workflow's Participants panel still arrives in their mailbox.
 Only the Participants panel's message window ignores the box: a
 discussion started from the stage's discussions panel sends that person
-no email. "Assign" with a message uses the same window and code as
-"Notify"; it was read in the code and not tried on screen.
+no email. "Assign" with a message sends the email too, through the same
+code; that was read in the code and not tried on screen.
+The email's own "unsubscribe" link sets this same box, so a person who
+unsubscribes through the email keeps getting these emails. This too was
+read in the code and not tried on screen.
 Basis: probe, 2026-10-01. <sup>[f-a16](#fn-a16)</sup>
 
 <a id="a17"></a>
