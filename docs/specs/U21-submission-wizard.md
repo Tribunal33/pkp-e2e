@@ -1002,6 +1002,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U21-OPS7-preprint-not-allowed-raw-code.md`): the preprint
     server's "Not Allowed" page showing its explanation and the contact's
     link, not a raw key
+  - the guard for A6 (issue report
+    `docs/issues/U21-A6-submitted-twice-empty-problems-banner.md`): a
+    draft submitted from a second tab, then "Submit" on the first tab's
+    Review step showing the "already submitted" message, not an empty
+    problems banner
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1071,7 +1076,7 @@ are the source; badges, Impact and Basis:
 |----|-----------------------------|------|--------|--------|
 | [A4](#a4) | Reopened submission draft's footer says "Last saved 3 seconds ago" though nothing was saved | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | The Activity Log's copyright-agreement line shows "{$filename}" where the submitter's name belongs | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A6](#a6) | Submitting a draft twice shows a problems banner with nothing to fix; the real refusal never appears | 🐞 | latent | — |
+| [A6](#a6) | "Submit" refused with an empty problems banner when the draft was already submitted or its section closed | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | Editors set to be assigned automatically by a section are never assigned on a second journal | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A10](#a10) | On a phone, the submission wizard opens with its full step rail running off the screen | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
@@ -1161,14 +1166,23 @@ Workflow.
 Basis: probe, 2026-10-01. <sup>[m](#fn-m)</sup>
 
 <a id="a6"></a>
-**A6 — Double-submitting dead-ends on an empty problems banner** · 🐞 · latent.
-Pressing "Submit" on a draft that was already submitted, say from a second
-browser tab left on the Review step, leaves the author on Review under the
-banner "There are one or more problems that need to be fixed before you can
-submit…" with nothing flagged on any panel. The server's actual refusal,
-"This submission has already been submitted…", never reaches the screen.
-So the author is told to fix problems that are not shown. Basis: probe.
-<sup>[m](#fn-m)</sup>
+**A6 — "Submit" refused with an empty problems banner when the draft was already submitted or its section closed** · 🐞 · medium.
+An author has the same draft open in two browser tabs. They submit it
+from one tab, then press "Submit" in the other tab, which was still open
+on "Review". The second tab stays on "Review" under the banner "There
+are one or more problems that need to be fixed before you can submit…",
+nothing below it is flagged, and its "Submit" button is now disabled.
+The server's actual refusal, "This submission has already been
+submitted…", never reaches the screen.
+The same happens when a manager closes the draft's section to authors
+while the author is on "Review": "Submit" is refused and the author sees
+only the empty banner, not "… is not accepting submissions to the
+Articles section…". On a press, the "For the Editors" step also shows
+that message spelled out one character per line under "Series".
+The double submit costs nothing: the submission went in from the first
+tab. With a closed section the submission stays a draft, and the author
+learns why only by reloading the page.
+Basis: probe, 2026-10-01. <sup>[m](#fn-m)</sup>
 
 <a id="a7"></a>
 **A7 — The completion screen claims an email that was never sent** · 🐞 · medium.
@@ -1997,6 +2011,7 @@ submitted" beside the copyright entry rendered verbatim "{$filename}
 `{$filename}` token literal (A5). The copyright box must be re-ticked on
 every fresh visit to Review (test-authoring note).
 Issue report: [pkp-e2e#177](https://github.com/jardakotesovec/pkp-e2e/issues/177) ([docs/issues/U21-A5-copyright-agreed-line-raw-placeholder.md](../issues/U21-A5-copyright-agreed-line-raw-placeholder.md)).
+Issue report: [docs/issues/U21-A6-submitted-twice-empty-problems-banner.md](../issues/U21-A6-submitted-twice-empty-problems-banner.md).
 
 <a id="fn-n"></a>
 **n** — Complete/terminal screens. `complete.tpl` (OJS/OMP, AFFW-129):

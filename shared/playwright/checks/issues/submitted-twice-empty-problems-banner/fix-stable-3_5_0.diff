@@ -1,0 +1,20 @@
+--- a/lib/pkp/templates/submission/wizard.tpl
++++ b/lib/pkp/templates/submission/wizard.tpl
+@@ -98,9 +98,16 @@
+                         ></reviewer-suggestions-list-panel>
+                         <template v-else-if="section.type === 'review'">
+                             <notification
+-                                v-if="Object.keys(errors).length" type="warning"
++                                v-if="errors.submissionProgress"
++                                type="warning"
+                                 class="submissionWizard__review_errors"
+                             >
++                                <span v-strip-unsafe-html="errors.submissionProgress"></span>
++                            </notification>
++                            <notification
++                                v-else-if="Object.keys(errors).length" type="warning"
++                                class="submissionWizard__review_errors"
++                            >
+                                 {translate key="submission.wizard.errors"}
+                             </notification>
+                             {foreach from=$reviewSteps item=$step}
