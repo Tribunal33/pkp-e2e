@@ -39,7 +39,7 @@ and the hourly routine starts one only when none is running
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | A16 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet; the report calls the window's box "Title" where the screen says "Name", and its Reach names "Applied Science" where reach.js uses "Social Sciences" on OPS |
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | OMP3 done with U69 A9 (pkp-e2e#282) |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
-| [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 |  |
+| [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | **OPS2 taken: issues session, VM s2, 2026-10-01** (joined to U51 OPS1) |
 | [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 |  |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OPS1 done with U13 OPS2, OPS3 (docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md); OMP6 done with U69 A9 (pkp-e2e#282) |
 | [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 |  |
