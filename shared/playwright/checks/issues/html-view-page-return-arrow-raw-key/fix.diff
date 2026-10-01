@@ -1,0 +1,11 @@
+--- a/plugins/generic/htmlMonographFile/templates/display.tpl
++++ b/plugins/generic/htmlMonographFile/templates/display.tpl
+@@ -29,7 +29,7 @@
+ 
+ 		<a href="{$submissionUrl}" class="return">
+ 			<span class="pkp_screen_reader">
+-				{translate key="monograph.return"}
++				{translate key="catalog.viewableFile.return" monographTitle=$filePublication->getLocalizedTitle()|escape}
+ 			</span>
+ 		</a>
+ 

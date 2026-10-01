@@ -1057,6 +1057,10 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A10 (issue report
+    `docs/issues/U69-A10-html-view-page-return-arrow-raw-key.md`):
+    the HTML view page's return arrow read out as "Return to view
+    details about {title}"
   - the guard for A19 (issue report
     `docs/issues/U69-A19-older-version-chapter-page-server-error.md`):
     an older version's chapter page opening under the outdated notice
@@ -1204,7 +1208,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | An older version's browser tab names the current version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | The table of contents repeats the book's authors under every chapter | 🐞 | minor | — |
 | [A7](#a7) | A priced file's link shows its price twice | 🐞 | minor | — |
-| [A10](#a10) | The HTML view page's return arrow is named by a raw code | 🐞 | minor | — |
+| [A10](#a10) | On a press, the return arrow of a book's HTML view page is announced as the code "##monograph.return##" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | Unticking payments "Enable" does not stop a press selling files | 🐞 | minor | — |
 | [A13](#a13) | Under a day-first date format a chapter page mixes up "Published" and "Forthcoming" | 🐞 | minor | — |
 | [A17](#a17) | An unpublished book's chapter page carries no preview notice | 🐞 | minor | — |
@@ -1318,10 +1322,19 @@ Worked until the download began reporting the version to the usage statistics, a
 Since: 2026-08-26 (a month), a date read from the code's history · Basis: probe, 2026-10-01. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — The HTML view page's return arrow is named by a raw code** · 🐞 · minor.
-The return arrow of the HTML view page has no visible text, and a screen
-reader announces it as "##monograph.return##".
-Basis: probe, 2026-09-28. <sup>f-a10</sup>
+**A10 — On a press, the return arrow of a book's HTML view page is announced as the code "##monograph.return##"** · 🐞 · low.
+The return arrow at the top left of a book's HTML view page has no
+visible text, and a screen reader announces it as the code
+"##monograph.return##". On the PDF view page the same arrow is
+announced "Return to view details about" and the book's title.
+A blind reader cannot tell where the arrow leads. The arrow works and
+opens the book's page, and the link beside it, read out as the book's
+title, opens the same page. The arrow has no hover tooltip, so sighted
+readers never see the code.
+The code is announced on every HTML book file, in every language the
+press offers, English included. The page is the one the "HTML Monograph
+File" plugin shows, and the plugin is on by default.
+Basis: probe, 2026-10-01. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — A buyer who pays by hand never gets the file** · ❓ · user-visible.
@@ -1704,6 +1717,7 @@ Issue report (the view page's script error "PDFJS is not defined", low): [pkp-e2
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note f: `monograph.return` is defined in no locale file of OMP, lib/pkp or the plugin. Live-probed 2026-09-28 (td21).
+Issue report: [docs/issues/U69-A10-html-view-page-return-arrow-raw-key.md](../issues/U69-A10-html-view-page-return-arrow-raw-key.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Note k. The manual plugin's own description reads "The manager will manually record receipt of a user's payment (outside of this software)."; nothing in OMP calls `fulfillQueuedPayment()` for a manual payment. The OMP purchase path dates from the early direct-sales work, and the missing record may be long-standing, hence ❓. Live-probed 2026-09-28 (td14): "Continue" led back to the payment page and the Reader's link stayed priced; the Press manager's menu has no "Payments", and `{press}/payments` and `{press}/management/settings/payments` answered 404, where OJS's `{journal}/payments` opens its payment lists and OPS has none.
