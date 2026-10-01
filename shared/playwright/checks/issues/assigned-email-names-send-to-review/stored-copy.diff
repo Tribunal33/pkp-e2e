@@ -1,0 +1,50 @@
+--- a/dbscripts/xml/upgrade.xml
++++ b/dbscripts/xml/upgrade.xml
+@@ -239,6 +239,7 @@
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13059_EventLogImpersonation" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\InstallEmailTemplates"/>
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13117_AddReviewAssignmentLastModifiedBy"/>
++		<migration class="APP\migration\upgrade\v3_6_0\EditorAssignEmailSendForReview"/><!-- before I12593, which moves EDITOR_ASSIGN_SUBMISSION into the task templates -->
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12593_EmailToTaskTemplates"/>
+ 		<migration class="APP\migration\upgrade\v3_5_0\I13128_FixEmailUrlLinks"/><!-- Already added to 3.5.0-5 but idempotent -->
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12903_ReviewerUnassignEmailTemplate" />
+--- /dev/null
++++ b/classes/migration/upgrade/v3_6_0/EditorAssignEmailSendForReview.php
+@@ -0,0 +1,37 @@
++<?php
++
++/**
++ * @file classes/migration/upgrade/v3_6_0/EditorAssignEmailSendForReview.php
++ *
++ * Copyright (c) 2026 Simon Fraser University
++ * Copyright (c) 2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * @class EditorAssignEmailSendForReview
++ *
++ * @brief Names the "Send for Review" button as it reads in the stored English texts of the Editor Assigned emails
++ */
++
++namespace APP\migration\upgrade\v3_6_0;
++
++class EditorAssignEmailSendForReview extends \PKP\migration\upgrade\v3_5_0\I13128_FixEmailUrlLinks
++{
++    /** The automatic email and the Submission stage's predefined message, which share one locale text */
++    protected const KEYS = ['EDITOR_ASSIGN', 'EDITOR_ASSIGN_SUBMISSION'];
++
++    public function up(): void
++    {
++        // The Submission stage's button reads "Send for Review" since 3.4.0 (pkp/pkp-lib#7265)
++        foreach (self::KEYS as $key) {
++            $this->replace($key, 'selecting "Send to Review"', 'selecting "Send for Review"', '', 'en');
++        }
++    }
++
++    // Overridden: the parent's down() would undo its own replacements in other emails
++    public function down(): void
++    {
++        foreach (self::KEYS as $key) {
++            $this->replace($key, 'selecting "Send for Review"', 'selecting "Send to Review"', '', 'en');
++        }
++    }
++}

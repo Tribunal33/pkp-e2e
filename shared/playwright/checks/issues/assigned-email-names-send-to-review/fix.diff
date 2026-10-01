@@ -1,0 +1,11 @@
+--- a/locale/en/emails.po
++++ b/locale/en/emails.po
+@@ -112,7 +112,7 @@
+ "<p><b>Abstract</b></p>"
+ "{$submissionAbstract}"
+ "<p>If you find the submission to be relevant for {$contextName}, please forward the submission to the review stage by "
+-"selecting \"Send to Review\" and then assign reviewers by clicking \"Add Reviewer\".</p>"
++"selecting \"Send for Review\" and then assign reviewers by clicking \"Add Reviewer\".</p>"
+ "<p>If the submission is not appropriate for this journal, please decline the submission.</p>"
+ "<p>Thank you in advance.</p>"
+ "<p>Kind regards,</p>"

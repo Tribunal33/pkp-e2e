@@ -913,6 +913,10 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for OJS1 (issue report
+    `docs/issues/U35-OJS1-assigned-email-names-send-to-review.md`):
+    the "Editor Assigned (Auto)" email naming the Submission stage's
+    button as the screen shows it
   - the guard for A12 (issue report
     `docs/issues/U35-A12-no-changes-window-ok-reports-change.md`):
     the "No changes can be made to this participant" window, "OK"
@@ -1025,7 +1029,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | The Activity Log's "User" column names the participant, not the editor who assigned, changed or removed them | 🐞 | minor | — |
 | [A15](#a15) | The Submission stage's "Assign Editor" message ends "This is an automated message from…" instead of the editor's signature | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | A message sent with "Notify" is emailed to a participant who opted out of emails for new discussions | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OJS1](#ojs1) | The automatic assignment email tells the editor to select "Send to Review"; the button reads "Send for Review" | 🐞 | minor | — |
+| [OJS1](#ojs1) | A journal's "Editor Assigned" email tells the editor to select "Send to Review"; the button reads "Send for Review" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP1](#omp1) | A press's Internal Review offers no predefined message in "Assign" and "Notify" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | On a preprint server, choosing the predefined message "Assign Editor" leaves "Message" unfilled | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A preprint server never emails its moderators that a new preprint was assigned to them | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1210,9 +1214,9 @@ On `main`, 3.5 and 3.4 nothing is lost: the assignment stays as it was,
 and only the notice misleads. "Cancel" closes the window without it.
 The same "OK" also adds a line to the submission's activity log, but
 every "Edit Assignment" save does that, a real one included: it is a
-separate fault (spec U35 A7) and is not counted here. The proposed fix
-is one condition in the window's template that disables "OK" when there
-is nothing to change.
+separate fault ("Edit" is logged as a new assignment) and is not counted
+here. The proposed fix is one condition in the window's template that
+disables "OK" when there is nothing to change.
 Basis: probe, 2026-10-01. <sup>[f-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
@@ -1291,12 +1295,22 @@ Basis: judgment. <sup>[f-a17](#fn-a17)</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — The automatic email names a button that does not exist** · 🐞 · minor.
-The "Editor Assigned (Auto)" email asks the editor to forward the
-submission "by selecting "Send to Review""; the Submission stage's button
-reads "Send for Review". A press's email names "Send to Internal Review",
-which matches its button.
-Basis: probe. <sup>[f-ojs1](#fn-ojs1)</sup>
+**OJS1 — A journal's "Editor Assigned" email tells the editor to select "Send to Review"; the button reads "Send for Review"** · 🐞 · low.
+When an author submits to a journal, each editor assigned automatically
+through the section's "Editorial Assignments" gets the email "You have
+been assigned as an editor on a submission to {journal name}". Its English
+text asks them to forward the submission "by selecting "Send to Review"".
+No button has that name: the Submission stage's button reads "Send for
+Review".
+The editor still finds the button, since it is the only one about review
+on that stage. A journal manager can correct the sentence under Settings ›
+Workflow › Emails › "Editor Assigned (Auto)".
+The reach is narrow. Only journals installed on 3.4 or later hold the
+sentence; a journal upgraded from 3.3 still sends the older letter, which
+names no button. A press's email names its own button correctly, and a
+preprint server's email names none. The French text is right; the other
+translations were not checked.
+Basis: probe, 2026-10-01. <sup>[f-ojs1](#fn-ojs1)</sup>
 
 ### OMP
 
@@ -1535,6 +1549,7 @@ Issue report: [pkp-e2e#336](https://github.com/jardakotesovec/pkp-e2e/issues/336
 
 <a id="fn-ojs1"></a>
 **f-ojs1** — OJS `locale/en/emails.po` `emails.editorAssign.body`: "…please forward the submission to the review stage by selecting \"Send to Review\" and then assign reviewers by clicking \"Add Reviewer\"."; the decision's label is lib/pkp `editor.submission.decision.sendExternalReview` "Send for Review" (no OJS override). OMP's app body names "Send to Internal Review", OMP's `editor.submission.decision.sendInternalReview` label. Live-probed 2026-09-22 (journal and press): the received email and Settings › Workflow › Emails › "Editor Assigned (Auto)" say "Send to Review"; the Submission stage's button reads "Send for Review" for the Editor and the Section Editor; the press's email and button both read "Send to Internal Review".
+Issue report: [docs/issues/U35-OJS1-assigned-email-names-send-to-review.md](../issues/U35-OJS1-assigned-email-names-send-to-review.md).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Live-probed 2026-09-22 (press): "Assign" (as Press Manager and as Series editor) and "Notify" on Internal Review offering only the blank entry; "Notify" with "Hello" typed staying open as filled, nothing received, no discussion; "OK" on "Assign" with a typed message staying open while the person was assigned; neither logged. Control: External Review lists "Discussion (Review)" and "Assign Editor". Code: OMP `registry/taskTemplates.xml` has no template with `stageId="WORKFLOW_STAGE_ID_INTERNAL_REVIEW"` and OMP's locale no Internal Review discussion name; `PKPStageParticipantNotifyForm::fetch()` filters by the stage (note f), and `sendMessage()` needs a template (A3's footnote).
