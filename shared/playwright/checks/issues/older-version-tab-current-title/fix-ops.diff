@@ -1,0 +1,11 @@
+--- a/templates/frontend/pages/preprint.tpl
++++ b/templates/frontend/pages/preprint.tpl
+@@ -18,7 +18,7 @@
+  *
+  * @hook Templates::Preprint::Footer::PageFooter []
+  *}
+-{include file="frontend/components/header.tpl" pageTitleTranslated=$preprint->getCurrentPublication()->getLocalizedFullTitle(null, 'html')|strip_unsafe_html}
++{include file="frontend/components/header.tpl" pageTitleTranslated=$publication->getLocalizedFullTitle(null, 'html')|strip_unsafe_html}
+ 
+ <div class="page page_preprint">
+ 	{if $section}
