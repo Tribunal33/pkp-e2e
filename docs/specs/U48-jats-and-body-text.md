@@ -772,7 +772,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | "Cite" beside each reference on "Body Text" is never enabled | 🐞 | user-visible | — |
 | [A17](#a17) | Opening a "Body Text" side section while another is open closes both | 🐞 | minor | — |
 | [A18](#a18) | A sent file that cannot be converted fails with no message | 🐞 | minor | — |
-| [A20](#a20) | Each JATS "Upload" leaves a warning in the server's log | 🐞 | invisible | — |
+| [A20](#a20) | Each JATS "Upload" leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | In French the tick box, its two windows and labels of the "Body Text" panel show raw codes | 🐞 | minor | — |
 | [OMP1](#omp1) | A press offers "Send to Text Editor", but has no "Body Text" page to send to | 🐞 | user-visible | — |
 | [A3](#a3) | A published version's Body Text stays editable | ❓ | minor | — |
@@ -976,13 +976,13 @@ Lean: yes; the page left behind looks signed out.
 Basis: probe, 2026-09-25. <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — Each JATS "Upload" leaves a warning in the server's log** · 🐞 · invisible.
+**A20 — Each JATS "Upload" leaves a warning in the server's log** · 🐞 · low.
 Every "Upload" on "JATS XML" writes a PHP warning ("foreach() argument
 must be of type array|object, string given") to the server's log (note
 f-a20 names it), which no screen shows. The upload succeeds. Adding a
 media file does the same
 ([→ Media files A6](U47-media-files.md#a6)).
-Basis: test run, 2026-09-25. <sup>f-a20</sup>
+Basis: test run, 2026-10-01. <sup>f-a20</sup>
 
 <a id="a21"></a>
 **A21 — In French the tick box and the "Body Text" panel show raw codes** · 🐞 · minor.
@@ -1255,6 +1255,7 @@ is made.
 
 <a id="fn-f-a20"></a>
 **f-a20** — Test run 2026-09-25, OJS, scenario 1 in the green run and a rerun of scenarios 1, 3 and 6: the screen showed the upload as Rule 3 says (the toast, the uploaded XML, the line), and the worker servers' logs (`apps/ojs/playwright/.server-logs/server-<port>.log`, one per worker port; `docs/process/harness.md` "Server output") held "PHP Warning: foreach() argument must be of type array|object, string given in …/lib/pkp/classes/core/PKPBaseController.php on line 428" right before the upload's `POST …/submissions/{n}/publications/{m}/jats` (200), once per run and on no other request; no 5xx. A seeded `jats.file` (scenarios 3 and 6) logged none. Code: `PKPJatsController::add()` runs `convertStringsToSchema(SCHEMA_SUBMISSION_FILE, …)` on the upload's form fields, and a field the submission-file schema declares multilingual arrives as a plain string, which `convertStringsToSchema()` walks as a locale map. The same class as U47 A6 (note f-a6 there).
+Issue report: [docs/issues/U47-A6-media-jats-upload-php-warning-in-log.md](../issues/U47-A6-media-jats-upload-php-warning-in-log.md).
 
 <a id="fn-f-a21"></a>
 **f-a21** — Live-probed 2026-09-30 (A21; Rules 9, 16), OJS, two runs, each on its own scratch journal with English and French (Canada) as interface languages, as the Journal Manager, on a version in Production with no uploaded file, one with an uploaded file and two references, and a published one; every French read was paired with the same read in English, which showed no code on either page. Codes seen, as visible text: `publication.jats.makePublic`; in the windows (text and title) `publication.jats.enableVisibilityTitle`, `…enableVisibilityMessage`, `…disableVisibilityTitle`, `…disableVisibilityMessage`; on "Body Text" `publication.bodyText.documentPanel` (also the panel's `aria-label`), `…references.dragHint`, `…selectedElement`, `…outline`, and `publication.bodyText` in the editor's screen-reader-only `h2` (`WorkflowPublicationBodyText.vue`, `#sciflow-editor-heading`), not visible on screen. In French, ticking the box and pressing "Confirmer" kept it ticked right after and after a reload; "Annuler" in the untick window kept it ticked. Leaving "Body Text" for "Titre et résumé" with typed text asked nothing, and the text was gone on return and after a reload (Rule 16; A15). OMP and OPS list neither page in French either. No server error, page error or failed request on any drive. Cause: lib/pkp `locale/fr_CA/submission.po` (at `3dc90c81a6`) has no entry for these keys, nor for any other `publication.bodyText*` key, while it carries `publication.jats`, `…confirmDeleteFile*`, `…autoCreatedMessage` and `…lastModified`. Code read only, not driven: the article page's "JATS XML" link (`publication.jats.download`) and the Body Text import box's texts (`publication.bodyText.import.*`) have no French entry either.

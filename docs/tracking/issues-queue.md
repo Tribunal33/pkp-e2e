@@ -22,7 +22,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | **In progress: workstation issues session (slot s1), 2026-09-30** |
 | [U53](../specs/U53-users-management.md) | 15 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: A15, A14, A2, A19, A1; open: A4, A5, A6, A7, A9, A11, A12, A13, A16, A17, OPS1. OPS1 (with U07 OPS4) is the fault of docs/issues/U57-A8-omp-ops-french-texts-internal-names.md (the workstation session, 2026-10-01), whose fix already fills and guards the French role names: join it rather than writing a second report |
-| [U47](../specs/U47-media-files.md) | 7 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: OMP1 (with U69 A9), A4 (with U36 A21), A1, A5 (with U66 A2), OMP2; open: A3, A6, A7 |
+| [U47](../specs/U47-media-files.md) | 7 | 2 | 4 | **In progress: issues session s3, 2026-09-30.** Done: OMP1 (with U69 A9), A4 (with U36 A21), A1, A5 (with U66 A2), OMP2, A6 (with U48 A20); in progress: A3, A7 |
 | [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **In progress: issues session s3, 2026-09-30.** Done: A11, A21 (with U47 A4), A14, A25, A10 (with U38 A2); open: A2, A3, A4, A5, A7, A9, A12, A15, A19, A20 (A23, A24: open report pkp-lib-13288) |
 | [U17](../specs/U17-sections.md) | 16 | 2 | 2 | **In progress: issues session s3, 2026-09-30.** Done: A10 (two reports; its first case with U36 A21); open: A1, A6, A7, A8, A9, OMP2, OMP3, OMP5, OMP7, OMP8, OPS1, OPS2, OPS5 (OMP9, OPS6: open reports in docs/reports) |
 | [U59](../specs/U59-hosted-journals.md) | 9 | 2 | 2 |  |
@@ -30,7 +30,7 @@ entry lands in it (MAINTENANCE "The issues session").
 | [U71](../specs/U71-internal-review-stage.md) | 6 | 2 | 2 |  |
 | [U18](../specs/U18-web-feeds.md) | 5 | 2 | 2 |  |
 | [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 |  |
-| [U48](../specs/U48-jats-and-body-text.md) | 16 | 1 | 7 | **A20 only: issues session s3, 2026-10-01** (joins U47 A6); the other entries are free for another session |
+| [U48](../specs/U48-jats-and-body-text.md) | 16 | 1 | 7 | **A20 done: issues session s3, 2026-10-01** (with U47 A6); the other entries are free for another session |
 | [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 | A16 written with U63 A12 ([pkp-e2e#15](https://github.com/jardakotesovec/pkp-e2e/issues/15), 2026-09-30); the other entries are open |
 | [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | **OMP1 done: issues session s3, 2026-09-30** (with U53 A14); the other entries are free for another session |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 |  |

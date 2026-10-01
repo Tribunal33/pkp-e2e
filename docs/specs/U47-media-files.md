@@ -883,7 +883,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | The empty "Upload Media File" window lists a button "Drop files here to upload" for screen readers that nothing on screen shows | 🐞 | minor | — |
 | [A4](#a4) | A file over the request size limit fails with a server error; its card reads "The POST data is too large." | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, unsaved, until a reload | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | invisible | — |
+| [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | minor | — |
 | [OMP1](#omp1) | With "HTML Monograph File" off, a book's HTML file opens as a blank page | 🐞 | critical · crash: both | issues (claude), 2026-09-30 — re-verified |
 | [OMP2](#omp2) | On a press, roles without Production access see "Media" file names that open a raw refusal, not the file | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
@@ -962,11 +962,11 @@ reload of the page shows the saved name again. The same fault as
 Basis: probe, 2026-09-30 (OJS, OMP and OPS). <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — Each media file added leaves a warning in the server's log** · 🐞 · invisible.
+**A6 — Each media file added leaves a warning in the server's log** · 🐞 · low.
 Every file "Upload Files" adds writes a PHP warning ("foreach()
 argument must be of type array|object, string given") to the web
 server's error log. The file is added normally; no screen shows it.
-Basis: test run, 2026-09-25. <sup>f-a6</sup>
+Basis: test run, 2026-10-01. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — In French the "Media" page and its windows show raw codes** · 🐞 · minor.
@@ -1806,6 +1806,7 @@ each card's temporary-file answer as it came back
 multilingual property as a locale map, before
 `MediaFilesController::add()` wraps a string name into the
 submission's locale. The added file's name is right.
+Issue report: [docs/issues/U47-A6-media-jats-upload-php-warning-in-log.md](../issues/U47-A6-media-jats-upload-php-warning-in-log.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Rule 11. Live-probed 2026-09-30 at ojs `7ce98ec09e`, omp
