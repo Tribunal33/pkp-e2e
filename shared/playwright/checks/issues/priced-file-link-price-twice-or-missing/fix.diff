@@ -1,0 +1,28 @@
+--- a/templates/frontend/components/downloadLink.tpl
++++ b/templates/frontend/components/downloadLink.tpl
+@@ -23,15 +23,17 @@
+ 	{capture assign=downloadUrl}{url op="view" path=$monograph->getBestId()|to_array:"version":$publication->getId():$publicationFormatId:$downloadFile->getBestId()}{/capture}
+ {/if}
+ 
+-{* Display the download link *}
++{* Display the download link: the format's name, or the file's name where
++   the format lists several files; a file for sale says so, with its price *}
++{if $useFilename}
++	{assign var=linkName value=$downloadFile->getLocalizedData('name')}
++{else}
++	{assign var=linkName value=$publicationFormat->getLocalizedName()}
++{/if}
+ <a href="{$downloadUrl}" class="cmp_download_link">
+-	{if $useFilename}
+-		{$downloadFile->getLocalizedData('name')}
++	{if $downloadFile->getDirectSalesPrice() && $currency}
++		{translate key="payment.directSales.purchase" format=$linkName amount=$downloadFile->getDirectSalesPrice() currency=$currency->getLetterCode()}
+ 	{else}
+-		{if $downloadFile->getDirectSalesPrice() && $currency}{$downloadFile->getDirectSalesPrice()}
+-			{translate key="payment.directSales.purchase" format=$publicationFormat->getLocalizedName() amount=$downloadFile->getDirectSalesPrice() currency=$currency->getLetterCode()}
+-		{else}
+-			{$publicationFormat->getLocalizedName()}
+-		{/if}
++		{$linkName}
+ 	{/if}
+ </a>

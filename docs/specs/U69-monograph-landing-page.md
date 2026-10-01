@@ -1057,6 +1057,10 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A7 and A8 (issue report
+    `docs/issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md`):
+    a priced file's link naming its price once, in a format with one
+    listed file and in one with several
   - the guard for A10 (issue report
     `docs/issues/U69-A10-html-view-page-return-arrow-raw-key.md`):
     the HTML view page's return arrow read out as "Return to view
@@ -1197,7 +1201,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A8](#a8) | In a format with several files, a file for sale shows no price | 🐞 | user-visible | — |
+| [A8](#a8) | In a format with several files, a file for sale shows no price | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | On a press, a reader who opens a book's PDF gets an empty viewer, and no download saves the file | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | The book's and chapter pages show raw codes in French | 🐞 | user-visible | — |
 | [A16](#a16) | A book's earlier URL Path shows a server error page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1207,7 +1211,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A new version's preview also calls itself outdated, dated today | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | An older version's browser tab names the current version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | The table of contents repeats the book's authors under every chapter | 🐞 | minor | — |
-| [A7](#a7) | A priced file's link shows its price twice | 🐞 | minor | — |
+| [A7](#a7) | A priced file's link shows its price twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | On a press, the return arrow of a book's HTML view page is announced as the code "##monograph.return##" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | Unticking payments "Enable" does not stop a press selling files | 🐞 | minor | — |
 | [A13](#a13) | Under a day-first date format a chapter page mixes up "Published" and "Forthcoming" | 🐞 | minor | — |
@@ -1287,18 +1291,18 @@ chapters.
 Basis: probe, 2026-09-28. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — A priced file's link shows its price twice** · 🐞 · minor.
+**A7 — A priced file's link shows its price twice** · 🐞 · low.
 The link of a file for sale reads "25.00 Purchase PDF (25.00 USD)": the
 bare price, then the sentence with the price again.
-Basis: probe, 2026-09-28. <sup>f-a7</sup>
+Basis: probe, 2026-10-01. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — In a format with several files, a file for sale shows no price** · 🐞 · user-visible.
+**A8 — In a format with several files, a file for sale shows no price** · 🐞 · low.
 A format with more than one listed file shows each file's name twice, as
 text and as a link, and the link of a file for sale reads only its name:
 no price and no "Purchase". The reader cannot tell it from a free file
 until the link leads to the Login or payment page.
-Basis: probe, 2026-09-28. <sup>f-a8</sup>
+Basis: probe, 2026-10-01. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — On a press, a reader who opens a book's PDF gets an empty viewer, and no download saves the file** · 🐞 · critical · crash: both.
@@ -1706,9 +1710,11 @@ Issue report: [pkp-e2e#226](https://github.com/jardakotesovec/pkp-e2e/issues/226
 
 <a id="fn-f-a7"></a>
 **f-a7** — `downloadLink.tpl` prints `{$downloadFile->getDirectSalesPrice()}` before `payment.directSales.purchase`, which carries the amount again. Seen 2026-09-28 (U73 claim check K3). Live-probed 2026-09-28: a price typed "25" reads "25 Purchase PDF (25 USD)", so the number shows as typed.
+Issue report: [docs/issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md](../issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — `publicationFormats.tpl` prints `span.name` and then `downloadLink.tpl` with `useFilename=true`, which skips the price branch. The two-file listing by file name seen 2026-09-28 (U73 claim check K3). Live-probed 2026-09-28 (td11): the priced file among two.
+Issue report: [docs/issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md](../issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note j: every free-file download reaches the `UsageEvent` built with the never-set `$this->publication`; `view` of a PDF shows the pdfJsViewer page, whose inline `PDFJS` script fails and whose viewer loads the failing download. The typed property dates from omp `29fa88508` (2025-03-20, pkp/pkp-lib#10671); the event's `publication: $this->publication` argument from omp `591d7a0e7` (2026-08-26, pkp/pkp-lib#12311, "pass publication to usage event"), which set it in `book()` but not in `download()`. Live-probed 2026-09-26 (U20 claim check), 2026-09-27 (U64), 2026-09-28 (U73 claim check K3, K4, three runs): `GET {press}/catalog/download/{book}/{format}/{file}`, with and without `?inline=1`, current or older version, answered 500 with the log line above; the view page logged "PDFJS is not defined" and "UnexpectedResponseException". Live-probed 2026-09-28 (td13, td22; two runs of each drive): 22 download 500s and 9 view 500s across the runs, "PDFJS is not defined" and "UnexpectedResponseException" on every PDF view page; the bar's "Download" and the viewer's both cancelled; the French view page (`{press}/fr_CA/catalog/download/…?inline=1`) the same. The same failure is recorded where it shows elsewhere: Search engine metadata & analytics' OMP6, Usage statistics' OMP3, Media files' OMP1 (HTML plugin off).
