@@ -1204,6 +1204,10 @@ Left out of the scenarios above, by reason:
     "Source" of an article in no issue and of a press record carrying only
     the parts it has, with no trailing or doubled "; " {OJS OMP} (once
     fixed)
+  - the guard for OMP6 (issue report
+    `docs/issues/U19-OMP6-oai-series-set-name-leading-space.md`): a press's
+    ListSets naming a series that has no "Prefix" by its title, with no
+    leading space {OMP} (once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1337,7 +1341,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A24](#a24) | A `driver` list offers "Resume" when complete, and following it repeats records {OJS} | 🐞 | minor | — |
 | [OMP3](#omp3) | Asked for a set it does not have, a press's OAI-PMH address lists every record of the press, or of every press | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP4](#omp4) | A press's OAI-PMH record lists answer a server error once one book is published without an abstract | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [OMP6](#omp6) | A series with no prefix is named with a leading space | 🐞 | invisible | — |
+| [OMP6](#omp6) | A press's OAI-PMH set list names every series that has no prefix with a leading space | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | A preprint server's OAI-PMH lists answer a server error whenever the harvester gives an "until" date | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | One preprint without an abstract makes the server's record lists fail | 🐞 | user-visible · crash: server | — |
 | [OPS4](#ops4) | Removing a preprint server leaves no deleted records for its posted preprints at the site-wide OAI address | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1739,11 +1743,15 @@ offers, so the harvester has no other format to ask for.
 Basis: probe, 2026-10-01. <sup>f-omp4</sup>
 
 <a id="omp6"></a>
-**OMP6 — A series with no prefix is named with a leading space** · 🐞 · invisible.
+**OMP6 — A press's OAI-PMH set list names every series that has no prefix with a leading space** · 🐞 · low.
 A harvester reading a press's ListSets expects each series named by its
-title. A series with no "Prefix" is named " Series One", with a leading
-space, which the browser view does not show.
-Basis: probe, 2026-09-26. <sup>f-omp6</sup>
+title. A series with no "Prefix" is named " Library & Information
+Studies", with a leading space. Opened in a web browser, the same list
+shows the name without the space. In OAI-PMH the space is in the set
+list only: a record names its set by identifier, which is right. The
+default dataset's five series have no prefix, so all five are named this
+way.
+Basis: probe, 2026-10-01. <sup>f-omp6</sup>
 
 <a id="omp7"></a>
 **OMP7 — A new version changes a book's format identifiers** · ❓ · minor.
@@ -2044,6 +2052,7 @@ Issue report: [pkp-e2e#253](https://github.com/jardakotesovec/pkp-e2e/issues/253
 
 <a id="fn-f-omp6"></a>
 **f-omp6** — Live-probed 2026-09-26: note q10; the deleted record's set name keeps the space, and the seeded press's series read " Monographs" and " Textbooks" at `…/fr_CA/oai`. Code: note j.
+Issue report: [docs/issues/U19-OMP6-oai-series-set-name-leading-space.md](../issues/U19-OMP6-oai-series-set-name-leading-space.md).
 
 <a id="fn-f-omp7"></a>
 **f-omp7** — Live-probed 2026-09-26: a book whose formats were `publicationFormat/131` and `/132` listed `/136` and `/137` once "Version of Record 2.0" was published on screen, and GetRecord of `/131` answered "No matching identifier in this repository", with no deleted record. Code: note e (each version has formats of its own, and the record is a format of the current version).
