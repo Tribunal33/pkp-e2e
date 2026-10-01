@@ -1090,7 +1090,7 @@ manual page's layout to a journal (note td16).
 
 <a id="fn-f-a2"></a>
 **f-a2** — The menu's save fulfils a queued payment it creates itself, so the requested one and its task stay (note i). Live-probed 2026-09-27 (note td10): after "Paid" and after "Waived" the task opened the manual page with the request's "50.00 (USD)", and its notification reached the principal contact.
-Issue report: [docs/issues/U52-A2-fee-task-stays-after-fee-recorded.md](../issues/U52-A2-fee-task-stays-after-fee-recorded.md).
+Issue report: [pkp-e2e#353](https://github.com/jardakotesovec/pkp-e2e/issues/353) ([docs/issues/U52-A2-fee-task-stays-after-fee-recorded.md](../issues/U52-A2-fee-task-stays-after-fee-recorded.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `PaymentManager::getPaymentForm()` returns `false` when the chosen plugin is not configured, and `PaymentHandler::pay()` calls `display()` on the result. `ManualPaymentPlugin::isConfigured()` reads only `manualInstructions` (note d); neither `pay()` nor `plugin()` reads `paymentsEnabled`, so with "Enable" off the page and its notification still work. Live-probed 2026-09-27 (note td8): with the instructions emptied, `GET {journal}/payment/pay/{id}` answered 500 with an empty page, logged "Uncaught Error: Call to a member function display() on false in pages/payment/PaymentHandler.php:77".
