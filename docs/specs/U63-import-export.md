@@ -1161,6 +1161,9 @@ Left out of the scenarios above, by reason:
     ("Export Submissions", "Export Preprints") and "Export Issues"
     {OJS} pressed with nothing ticked: the alert "No objects
     selected.", no results tab opened
+  - the guard OMP1's issue report names, once fixed: every link in a
+    press's Tools list opening a page headed with the tool's name,
+    "Tab Delimited Content Import Plugin" included {OMP}
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1287,7 +1290,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS7](#ojs7) | Where DOAJ's site cannot be reached, every validated DOAJ export fails with a "Validation errors:" page | 🐞 | minor · crash: server | — |
 | [OJS9](#ojs9) | A DOAJ deposit that cannot reach DOAJ leaves the article "Submitted" for good | 🐞 | minor | — |
 | [OJS10](#ojs10) | "Export Issues" lists the journal's issues in no set order | 🐞 | minor | — |
-| [OMP1](#omp1) | A press's Tools list links "Tab Delimited Content Import Plugin", which opens a blank page: the server fails | 🐞 | minor · crash: server | — |
+| [OMP1](#omp1) | Pressing "Tab Delimited Content Import Plugin" on a press's Tools page opens a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OMP4](#omp4) | Run from the command line, a press's "Tab Delimited Content Import Plugin" stops with a fatal error and leaves an empty submission | 🐞 | minor · crash: server | — |
 | [A14](#a14) | "Export Users" with no row ticked ends on a blank page: the server fails | ❓ | minor · crash: server | — |
 | [A22](#a22) | "Export Users" leaves out an account whose only role starts on a later date | ❓ | minor | — |
@@ -1624,13 +1627,15 @@ Since: 2021-08-30 · Basis: probe, 2026-10-01. <sup>f-ojs10</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — A command-line tool is linked from the Tools list** · 🐞 · minor · crash: server.
-"Tab Delimited Content Import Plugin" is meant only for the server's
-command line: the Plugins list gives its row no "Import/Export Data".
-The Tools list still shows its name as a link, which should either be
-plain text or lead to a page explaining how to use the tool; pressing
-it opens a blank white page, because the server fails.
-Basis: probe. <sup>f-omp1</sup>
+**OMP1 — Pressing "Tab Delimited Content Import Plugin" on a press's Tools page opens a blank page** · 🐞 · low · crash: server.
+A press's Tools list links "Tab Delimited Content Import Plugin", which
+opens a blank page: the server fails. The tool works only from the
+server's command line, and the page behind the link was meant to say so
+and name the command. Nothing is lost, since the tool imports nothing
+through the screens. But a press manager who presses the link learns
+nothing about how to use the tool, and sees no error message. Every
+press shows the link, with no setting needed.
+Basis: probe, 2026-10-01. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
 **OMP2 — The press's Native XML export asks for ONIX details** · ✅ · minor.
@@ -3016,6 +3021,7 @@ the managers where the other rows offer "Import/Export Data".
 Live-probed 2026-09-27 (note td4): `GET
 …/management/importexport/plugin/CSVImportExportPlugin` answered 500
 with a blank page (the missing `templates/index.tpl`).
+Issue report: [docs/issues/U63-OMP1-command-line-tool-link-blank-page.md](../issues/U63-OMP1-command-line-tool-link-blank-page.md).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Note j (omp `1f666119c`, 2016-04-04, "optional ONIX
