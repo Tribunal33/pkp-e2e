@@ -1729,7 +1729,7 @@ panels or any other page visited.
 type="checkbox" id="select-cell-…">` with no `<label>`, `aria-label` or
 `title`. Live-probed 2026-09-26 (Fields; all three apps): every box of the
 list's fourth row had none of the three.
-Issue report: [docs/issues/U54-A8-roles-stage-boxes-no-name.md](../issues/U54-A8-roles-stage-boxes-no-name.md).
+Issue report: [pkp-e2e#192](https://github.com/jardakotesovec/pkp-e2e/issues/192) ([docs/issues/U54-A8-roles-stage-boxes-no-name.md](../issues/U54-A8-roles-stage-boxes-no-name.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — The two lists sit in `userGroupsGridFilter.tpl`'s form
