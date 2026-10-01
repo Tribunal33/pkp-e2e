@@ -1875,7 +1875,7 @@ Issue report: [pkp-e2e#303](https://github.com/jardakotesovec/pkp-e2e/issues/303
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-26, all three apps: "formats" on a record's header opened ListMetadataFormats with the identifier, which read "This is a list of metadata formats available from this archive." and linked each prefix to the whole archive's records. Code: `oai2.xsl` sets `$identifier` from the text of `oai:request` after "identifier=", but that text is the base URL (the arguments are attributes), so the "for the record" branch never shows.
-Issue report: [docs/issues/U19-A5-oai-browser-record-formats-shown-as-archive.md](../issues/U19-A5-oai-browser-record-formats-shown-as-archive.md).
+Issue report: [pkp-e2e#304](https://github.com/jardakotesovec/pkp-e2e/issues/304) ([docs/issues/U19-A5-oai-browser-record-formats-shown-as-archive.md](../issues/U19-A5-oai-browser-record-formats-shown-as-archive.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-26: note q13; "Supporting Agencies", "Rights" and "Source" were saved on a published version's "Metadata" page on each app and reached no `oai_dc`, `oai_marc` or `marcxml` answer. Code: note f; `sponsor` left `schemas/publication.json` in `718ad72e5` "pkp/pkp-lib#2072 Working prototype of versioning based on new publication entity" (2019-06-26); no adapter reads `supportingAgencies`, `rights` or `source`.
