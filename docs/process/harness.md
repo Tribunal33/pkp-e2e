@@ -736,7 +736,10 @@ node process, never a broad `pkill` ("Slots": other slots run beside it).
   It prints a line as each job ends, then every failed and flaky test per
   app from the job logs and the run's URL; exit 0 green, 1 red, 2 no run
   or timed out (`--timeout <min>`, default 120). Run it in the background
-  under the keepalive. A branch name with `/` gets no push run.
+  under the keepalive. A branch name with `/` gets no push run, and
+  neither does a push touching only `docs/`, `*.md` files or
+  `shared/playwright/checks/` (`e2e.yml` `paths-ignore`): `dispatch` runs
+  such a branch when a suite run is wanted.
 - `.github/workflows/run-app.yml` is the reusable job. Each app repo's
   `e2e-tests.yml` calls it on every push and PR with `app_ref` set to the
   commit under test; it runs this repo's `main` unless `e2e_ref` is given.

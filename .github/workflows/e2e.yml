@@ -10,6 +10,13 @@ name: e2e
 on:
   push:
     branches: ['*']
+    # Specs, tracking files and kept probe scripts change no test result; a
+    # push touching only those queues nothing (2026-10-01: ~260 such pushes
+    # in a day had queued 130+ full runs).
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - 'shared/playwright/checks/**'
   pull_request:
     branches: ['main']
   schedule:
