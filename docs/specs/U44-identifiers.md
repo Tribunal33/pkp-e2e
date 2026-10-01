@@ -2041,7 +2041,7 @@ previews `urn:nbn:de:0000-kone.531.132` and `…pkp.536.138` beside the
 formats' `…kone.531.4` and `…pkp.536.7`, while the settings window lists
 "%p.%m.%f.%s for files". OMP `classes/plugins/PubIdPlugin.php`
 `generateDefaultPattern()` does not resolve the format for a file.
-Issue report: [docs/issues/U44-OMP6-press-file-urn-default-pattern-no-format.md](../issues/U44-OMP6-press-file-urn-default-pattern-no-format.md).
+Issue report: [pkp-e2e#146](https://github.com/jardakotesovec/pkp-e2e/issues/146) ([docs/issues/U44-OMP6-press-file-urn-default-pattern-no-format.md](../issues/U44-OMP6-press-file-urn-default-pattern-no-format.md)).
 
 ## Reference — entry points & surfaces
 
