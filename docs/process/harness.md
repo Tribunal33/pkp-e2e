@@ -432,7 +432,17 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
   registers itself, so the bot does not place a thread on top of it.
 - **Feature claims.** `node bin/slot.js claim U<nn>` (RUNBOOK step 1)
   refuses a feature another slot's session holds; a claim lapses when its
-  session's slot is freed.
+  session's slot is freed, and a session drops one early with `node
+  bin/slot.js unclaim U<nn>`.
+- **A session never runs `acquire`, `release`, `reconcile` or `free`.**
+  They are the bot's and the operator's: `slot.js` refuses them inside a
+  Claude session (`CLAUDECODE` set) and `release` needs the lease `acquire`
+  printed, which only the bot holds. A release from the session frees the
+  slot under its own feet; an acquire to put it back replaces the bot's
+  lease, so the bot's own release is ignored and the slot stays live with
+  nobody in it (2026-10-01, cleared with `free <n>` from a shell).
+  `PKP_E2E_SLOT_FORCE=1` in front overrides, when the operator asks a
+  session to do it.
 - **Cleanup is per slot.** Kill by this clone's paths or ports, never a
   broad `pkill php` or `pkill chrome`.
 - **Provisioning a slot**: clone `origin` to `/home/e2e/pkp-e2e-s<n>`, write

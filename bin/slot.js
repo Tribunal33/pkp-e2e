@@ -29,6 +29,13 @@
  *   node bin/slot.js status
  *   node bin/slot.js hook                         Claude Code SessionStart hook (stdin JSON)
  *
+ * acquire, release, reconcile and free belong to the bot and the operator: a
+ * Claude session (CLAUDECODE set) that runs one is refused, since a release
+ * frees the slot under its own feet and an acquire replaces the lease the
+ * bot holds, so the bot's own release is then ignored and the slot stays
+ * live with nobody in it. A session drops a feature claim with `unclaim`.
+ * PKP_E2E_SLOT_FORCE=1 overrides, for an operator who asks a session to do it.
+ *
  * The bot-facing commands print one JSON line. State lives in
  * <PKP_E2E_SLOTS_HOME or ~/.pkp-e2e-slots>/: slots.json (the slot list, by
  * hand: {"slots": [{"n": 0, "dir": "/home/e2e/pkp-e2e"}, …]}) and
@@ -352,6 +359,7 @@ function releaseSlot(reg, n, thread, dir) {
 
 function release({thread, lease}) {
     if (!thread) throw new Error('release needs --thread');
+    if (!lease) throw new Error('release needs --lease, the one acquire printed (the bot holds it); a feature claim is dropped with `unclaim <U<nn>>`');
     const slots = slotList();
     return withRegistry((reg) => {
         const s = slots.find((x) => reg.slots[x.n]?.state === 'live' && reg.slots[x.n].thread === thread && (!lease || reg.slots[x.n].lease === lease));
@@ -604,11 +612,23 @@ function parseFlags(argv) {
     return out;
 }
 
+/** The commands only the bot or the operator may run (the header says why). */
+const BOT_ONLY = ['acquire', 'release', 'reconcile', 'free'];
+
 function main() {
     const [cmd, ...rest] = process.argv.slice(2);
     const flags = parseFlags(rest);
     const print = (o) => process.stdout.write(JSON.stringify(o) + '\n');
     try {
+        if (BOT_ONLY.includes(cmd) && process.env.CLAUDECODE && process.env.PKP_E2E_SLOT_FORCE !== '1') {
+            throw new Error(
+                `\`${cmd}\` is the bot's and the operator's command, refused inside a Claude session: ` +
+                    'it would free or re-lease the slot this session runs in. To drop a feature claim: `node bin/slot.js unclaim <U<nn>>`'
+            );
+        }
+        if (cmd === 'release' && (flags._ || []).length) {
+            throw new Error(`release takes no \`${flags._[0]}\`: a feature claim is dropped with \`unclaim ${flags._[0]}\``);
+        }
         switch (cmd) {
             case 'acquire':
                 return print(acquire(flags));
@@ -640,7 +660,7 @@ function main() {
                 return;
             }
             default:
-                console.error('usage: node bin/slot.js acquire|release|reconcile|free <n>|status|hook');
+                console.error('usage: node bin/slot.js claim <U<nn>>|unclaim <U<nn>>|claims|status|hook (bot and operator only: acquire|release|reconcile|free <n>)');
                 process.exit(1);
         }
     } catch (e) {
