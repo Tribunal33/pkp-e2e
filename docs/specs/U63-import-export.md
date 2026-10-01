@@ -1186,6 +1186,9 @@ Left out of the scenarios above, by reason:
   - the guard OJS2's issue report names, once fixed: in the "DOAJ
     Plugin" unticked scenario, the Plugins list's "Import/Export
     Plugins" leaves out "DOAJ Export Plugin" {OJS}
+  - the guard OJS5's issue report names, once fixed: the PubMed and
+    DOAJ Settings tabs offer no "Cancel", and a typed change still
+    asks before another tab opens {OJS}
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1307,7 +1310,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS2](#ojs2) | With "DOAJ Plugin" switched off, the Plugins list still shows its export tool as on | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | PubMed files lose the journal's title once the PubMed tool's Settings are saved with no NLM abbreviation | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | Where NLM's site cannot be reached, every PubMed export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [OJS5](#ojs5) | The PubMed and DOAJ Settings forms' "Cancel" does nothing, and both say fields are required when none is | 🐞 | minor | — |
+| [OJS5](#ojs5) | "Cancel" on the PubMed and DOAJ tools' Settings tabs does nothing, and both forms announce required fields | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS6](#ojs6) | The DOAJ list's title and author search matches letter case as typed | 🐞 | minor | — |
 | [OJS7](#ojs7) | Where DOAJ's site cannot be reached, every validated DOAJ export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS9](#ojs9) | A DOAJ deposit that cannot connect to DOAJ leaves the article "Submitted" for good, with no error | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1628,12 +1631,18 @@ with no download and no way to skip the check.
 Basis: probe, 2026-10-01. <sup>f-ojs4</sup>
 
 <a id="ojs5"></a>
-**OJS5 — The tools' Settings "Cancel" does nothing** · 🐞 · minor.
-On the PubMed and the DOAJ Settings tabs, the form's "Cancel" should
-discard the change or close the form; it does nothing, the typed text
-stays, and nothing is saved. Both forms also end with "Required fields
-are marked with an asterisk: *", though no field is required.
-Basis: probe. <sup>f-ojs5</sup>
+**OJS5 — "Cancel" on the PubMed and DOAJ tools' Settings tabs does nothing, and both forms announce required fields** · 🐞 · low.
+On the "Settings" tab of the PubMed XML Export Plugin and of the DOAJ
+Export Plugin, a journal manager who has typed a change and presses
+"Cancel" under the form expects the change to be thrown away. Nothing
+happens: the typed text stays in the box and no message shows. "Cancel"
+does turn off one thing: the question the tool asks before another of
+its tabs opens with an unsaved change. After "Cancel", the manager can
+open "Export Articles" or "Articles" without being asked. Back on
+"Settings", the typed text is still in the box, unsaved. Both forms also
+end with "Required fields are marked with an asterisk: *", though no
+field on them is required or marked with an asterisk.
+Basis: probe, 2026-10-01. <sup>f-ojs5</sup>
 
 <a id="ojs6"></a>
 **OJS6 — The DOAJ list's search is case-sensitive** · 🐞 · minor.
@@ -3051,6 +3060,7 @@ Issue report: [docs/issues/U63-OJS4-OJS7-pubmed-doaj-export-needs-outside-sites.
 
 <a id="fn-f-ojs5"></a>
 **f-ojs5** — Note p. Live-probed 2026-09-27 on both Settings tabs.
+Issue report: [docs/issues/U63-OJS5-pubmed-doaj-settings-cancel-does-nothing.md](../issues/U63-OJS5-pubmed-doaj-settings-cancel-does-nothing.md).
 
 <a id="fn-f-ojs6"></a>
 **f-ojs6** — Note q. Live-probed 2026-09-27 on the test installs,
