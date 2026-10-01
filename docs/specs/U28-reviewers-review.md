@@ -2381,7 +2381,7 @@ through the address bar raised the browser's leave-page prompt, and the
 change was gone after it. Text typed into "For author and editor" with
 nothing saved before, then the tab or the address bar: no question
 either way, and back on step 3 the box was empty.
-Issue report: [docs/issues/U09-A19-static-page-content-change-lost-unasked.md](../issues/U09-A19-static-page-content-change-lost-unasked.md).
+Issue report: [pkp-e2e#117](https://github.com/jardakotesovec/pkp-e2e/issues/117) ([docs/issues/U09-A19-static-page-content-change-lost-unasked.md](../issues/U09-A19-static-page-content-change-lost-unasked.md)).
 
 <a id="fn-a16"></a>
 **f-a16** — `reviewStep3Required.js` adds one `required` rule to the first

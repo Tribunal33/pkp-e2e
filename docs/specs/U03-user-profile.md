@@ -2462,7 +2462,7 @@ values and OK lost both, after a reload too. Reloading with "Signature"
 alone raised no `beforeunload` dialog and the text was gone, while an
 unsent "Phone" raised one (note b). First sighted 2026-09-28 on the
 Contact tab from the editorial-decision claim check, three runs per app.
-Issue report: [docs/issues/U09-A19-static-page-content-change-lost-unasked.md](../issues/U09-A19-static-page-content-change-lost-unasked.md).
+Issue report: [pkp-e2e#117](https://github.com/jardakotesovec/pkp-e2e/issues/117) ([docs/issues/U09-A19-static-page-content-change-lost-unasked.md](../issues/U09-A19-static-page-content-change-lost-unasked.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp/registry/userGroups.xml`: `permitSelfRegistration="true"`

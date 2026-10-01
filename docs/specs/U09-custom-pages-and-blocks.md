@@ -1926,7 +1926,7 @@ label "{name} (Custom Block)". `Str::kebab()` drops the spaces and puts
 "-" before each word whose first letter it can capitalise (a to z), so a
 word opening with a digit, a sign or an accented letter runs into the one
 before. Live-probed 2026-09-24 (three apps): td19, td22.
-Issue report: [docs/issues/U09-A1-custom-block-listed-by-first-name.md](../issues/U09-A1-custom-block-listed-by-first-name.md).
+Issue report: [pkp-e2e#118](https://github.com/jardakotesovec/pkp-e2e/issues/118) ([docs/issues/U09-A1-custom-block-listed-by-first-name.md](../issues/U09-A1-custom-block-listed-by-first-name.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `CustomBlockGridHandler::deleteCustomBlock()` removes the
@@ -1946,7 +1946,7 @@ a MySQL installation: delete a placed block, add one with the same
 2026-09-24 (OJS, OMP): td12; on the same journal the custom page
 "Shared custom" had the breadcrumbs "Home / Shared custom" and a main
 heading. The static page's preview has the same layout.
-Issue report: [docs/issues/U09-A3-static-page-no-breadcrumbs-main-heading.md](../issues/U09-A3-static-page-no-breadcrumbs-main-heading.md).
+Issue report: [pkp-e2e#120](https://github.com/jardakotesovec/pkp-e2e/issues/120) ([docs/issues/U09-A3-static-page-no-breadcrumbs-main-heading.md](../issues/U09-A3-static-page-no-breadcrumbs-main-heading.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — The screen checks only the primary language's "Block Name"
@@ -1956,7 +1956,7 @@ who typed the English name only; `CustomBlockGridRow::initialize()` adds
 "Edit" and "Delete" only for a non-empty row id, and the "Sidebar" save
 refuses the blank name with the two messages Rule 26a quotes. Live-probed
 2026-09-24 (three apps): td26.
-Issue report: [docs/issues/U09-A4-custom-block-blank-row-other-language.md](../issues/U09-A4-custom-block-blank-row-other-language.md).
+Issue report: [pkp-e2e#121](https://github.com/jardakotesovec/pkp-e2e/issues/121) ([docs/issues/U09-A4-custom-block-blank-row-other-language.md](../issues/U09-A4-custom-block-blank-row-other-language.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `PKPUploadPublicFileController::uploadFile()`'s allowed
@@ -1978,7 +1978,7 @@ the manager or site administrator role in the journal, and for a
 signed-out request, which has no role list; nothing turns it into the
 access-denied page or Login, so the answer is status 500 with an empty
 body. Live-probed 2026-09-24 (three apps, `pages/preview` OJS OMP): td7.
-Issue report: [docs/issues/U09-A7-preview-address-blank-server-error.md](../issues/U09-A7-preview-address-blank-server-error.md).
+Issue report: [pkp-e2e#122](https://github.com/jardakotesovec/pkp-e2e/issues/122) ([docs/issues/U09-A7-preview-address-blank-server-error.md](../issues/U09-A7-preview-address-blank-server-error.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — The site's list (`AdminPluginGridHandler`) lists every
@@ -2007,7 +2007,7 @@ Found", with or without "/en/" and from the "Path" link;
 "one/two/three.x", "info/fees", "Upper" and "under_score" opened. Not
 driven for a "Custom Page" item, whose lookup joins the same parts (note
 d).
-Issue report: [docs/issues/U09-A10-static-page-dot-path-not-found.md](../issues/U09-A10-static-page-dot-path-not-found.md).
+Issue report: [pkp-e2e#108](https://github.com/jardakotesovec/pkp-e2e/issues/108) ([docs/issues/U09-A10-static-page-dot-path-not-found.md](../issues/U09-A10-static-page-dot-path-not-found.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Cause not traced. Live-probed 2026-09-24 (OJS, OMP), four
@@ -2017,7 +2017,7 @@ was refused, the corrected save showed the red notice with the refusal
 refusal, "This path already exists for another static page." showed on
 the next load of Settings › Website; a save with no refusal before it
 showed none.
-Issue report: [docs/issues/U09-A11-static-page-refusal-notice-repeated.md](../issues/U09-A11-static-page-refusal-notice-repeated.md).
+Issue report: [pkp-e2e#109](https://github.com/jardakotesovec/pkp-e2e/issues/109) ([docs/issues/U09-A11-static-page-refusal-notice-repeated.md](../issues/U09-A11-static-page-refusal-notice-repeated.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — The open page keeps the tab it loaded with, while the
@@ -2025,7 +2025,7 @@ unticked plugin no longer registers its grid (note e, `LoadComponentHandler`
 only while enabled), so the grid's `add-static-page` request answers
 status 500. Live-probed 2026-09-24 (OJS, OMP): td15; the request failed
 twice per app.
-Issue report: [docs/issues/U09-A12-static-pages-disabled-tab-add-server-error.md](../issues/U09-A12-static-pages-disabled-tab-add-server-error.md).
+Issue report: [pkp-e2e#110](https://github.com/jardakotesovec/pkp-e2e/issues/110) ([docs/issues/U09-A12-static-pages-disabled-tab-add-server-error.md](../issues/U09-A12-static-pages-disabled-tab-add-server-error.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — The row's controls carry the block name in their element
@@ -2039,7 +2039,7 @@ letters, digits, "-" and "_", accented letters counting as letters.
 Live-probed 2026-09-24 (three apps): td19; "Edit" and "Delete" on
 "news2026&-events" opened nothing, and ticking it under "Sidebar" was
 refused (status 400).
-Issue report: [docs/issues/U09-A13-custom-block-ampersand-name-stuck.md](../issues/U09-A13-custom-block-ampersand-name-stuck.md).
+Issue report: [pkp-e2e#111](https://github.com/jardakotesovec/pkp-e2e/issues/111) ([docs/issues/U09-A13-custom-block-ampersand-name-stuck.md](../issues/U09-A13-custom-block-ampersand-name-stuck.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — `CustomBlockGridHandler::deleteCustomBlock()` first calls
@@ -2051,7 +2051,7 @@ case, so the call works there (read, not driven). The test installs run
 PostgreSQL. Present since pkp-lib#7111 (the caching rewrite), on
 stable-3_5_0 too. Live-probed 2026-09-24 (three apps): td24, td27; the
 server log recorded the error on every "OK".
-Issue report: [docs/issues/U09-A14-custom-block-delete-fails-postgresql.md](../issues/U09-A14-custom-block-delete-fails-postgresql.md).
+Issue report: [pkp-e2e#112](https://github.com/jardakotesovec/pkp-e2e/issues/112) ([docs/issues/U09-A14-custom-block-delete-fails-postgresql.md](../issues/U09-A14-custom-block-delete-fails-postgresql.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — With the plugin unticked its blocks are not loaded, but the
@@ -2061,7 +2061,7 @@ an enabled block with `manager.setup.layout.sidebar.invalidBlock` (note
 h). Once the list is changed on screen, `FieldOptions.vue` keeps only the
 listed options, which drops the block. Live-probed 2026-09-24 (three
 apps): td25.
-Issue report: [docs/issues/U09-A15-setup-save-refused-disabled-block.md](../issues/U09-A15-setup-save-refused-disabled-block.md).
+Issue report: [pkp-e2e#113](https://github.com/jardakotesovec/pkp-e2e/issues/113) ([docs/issues/U09-A15-setup-save-refused-disabled-block.md](../issues/U09-A15-setup-save-refused-disabled-block.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — TinyMCE 7.9.3's "Upload" tab takes only files it reads as
@@ -2069,7 +2069,7 @@ pictures and drops any other without a message; the application adds no
 message of its own. Live-probed 2026-09-24 (three apps): "doc.pdf" and
 "drawing.svg" chosen through "Browse for an image": no request, no
 message, the window unchanged.
-Issue report: [docs/issues/U09-A16-picture-window-other-file-ignored-silently.md](../issues/U09-A16-picture-window-other-file-ignored-silently.md).
+Issue report: [pkp-e2e#114](https://github.com/jardakotesovec/pkp-e2e/issues/114) ([docs/issues/U09-A16-picture-window-other-file-ignored-silently.md](../issues/U09-A16-picture-window-other-file-ignored-silently.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — TinyMCE 7.9.3 puts a pasted or dropped picture into the text
@@ -2083,7 +2083,7 @@ uploaded is not valid."; the saved block held it as
 broken picture. Earlier that day, while every upload failed on the
 server, pasted and dropped real pictures stayed the same way and showed
 on the public page.
-Issue report: [docs/issues/U09-A17-dropped-picture-refused-stays-embedded.md](../issues/U09-A17-dropped-picture-refused-stays-embedded.md).
+Issue report: [pkp-e2e#115](https://github.com/jardakotesovec/pkp-e2e/issues/115) ([docs/issues/U09-A17-dropped-picture-refused-stays-embedded.md](../issues/U09-A17-dropped-picture-refused-stays-embedded.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — A file over PHP's `upload_max_filesize` arrives with an
@@ -2095,14 +2095,14 @@ never reached and `api.files.400.uploadFailed` answers. A request over
 `post_max_size` fails before the application runs ("The POST data is too
 large.", status 500). Live-probed 2026-09-24 (three apps): td30; the
 test installs' limits are 2 MB per file and 8 MB per request.
-Issue report: [docs/issues/U09-A18-picture-over-upload-limit-server-error.md](../issues/U09-A18-picture-over-upload-limit-server-error.md).
+Issue report: [pkp-e2e#116](https://github.com/jardakotesovec/pkp-e2e/issues/116) ([docs/issues/U09-A18-picture-over-upload-limit-server-error.md](../issues/U09-A18-picture-over-upload-limit-server-error.md)).
 Request-limit case: [pkp-e2e#43](https://github.com/jardakotesovec/pkp-e2e/issues/43).
 
 <a id="fn-f-a19"></a>
 **f-a19** — The window's unsaved-change tracking (note f) reacts to
 "Path" and "Title" and not to the "Content" editor; cause not traced
 further. Live-probed 2026-09-24 (OJS, OMP): td17.
-Issue report: [docs/issues/U09-A19-static-page-content-change-lost-unasked.md](../issues/U09-A19-static-page-content-change-lost-unasked.md).
+Issue report: [pkp-e2e#117](https://github.com/jardakotesovec/pkp-e2e/issues/117) ([docs/issues/U09-A19-static-page-content-change-lost-unasked.md](../issues/U09-A19-static-page-content-change-lost-unasked.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — `Handler.js::initializeTinyMCE()` renders one TinyMCE 7.9.3
@@ -2143,7 +2143,7 @@ passed 35 of 35 runs per app. Not driven: the static page window, whose
 language boxes are built the same way, and whether closing and
 reopening the window clears it. The suites take no workaround; a stuck
 box fails its test with a message naming it.
-Issue report: [docs/issues/U09-A20-content-box-stuck-loading-spinner.md](../issues/U09-A20-content-box-stuck-loading-spinner.md).
+Issue report: [pkp-e2e#119](https://github.com/jardakotesovec/pkp-e2e/issues/119) ([docs/issues/U09-A20-content-box-stuck-loading-spinner.md](../issues/U09-A20-content-box-stuck-loading-spinner.md)).
 
 ## Reference — entry points & surfaces
 
