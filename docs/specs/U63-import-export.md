@@ -149,7 +149,9 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
 5. **An address naming a tool the installation lacks** (such as the
    Crossref tool's address typed on a press) shows the "Import/Export"
    list as raw code text on an otherwise empty page, instead of a page
-   saying there is no such tool ⚠ [A1](#a1). <sup>w</sup> <sup>td3</sup>
+   saying there is no such tool ⚠ [A1](#a1). A tool's address with the
+   tool's name left off its end opens a blank white page: the server
+   fails ⚠ [A19](#a19). <sup>w</sup> <sup>td3</sup>
 6. **Tools this spec does not describe.** The pages of "Crossref XML
    Export Plugin" and "DataCite Export/Registration Plugin" only say
    that DOI management has moved ([DOIs](U45-dois.md), Rule 44; their
@@ -265,10 +267,11 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
     the results tab again, from another tab, runs the export again, and
     its button then downloads a new file. <sup>h</sup> <sup>td9</sup>
 18. **Exporting issues** {OJS}. "Export Issues" lists every issue of the
-    journal, published or not, with the number of items in each; ticking
-    issues and pressing "Export Issues" adds a tab "Export Issues
-    Results" that works as Rule 16, its file holding the issues with
-    their articles. Pressed with nothing ticked, the tab opens empty, as
+    journal once, published or not, with the number of items in each,
+    in the order they were created or in none, published and
+    unpublished mixed ⚠ [OJS10](#ojs10). Ticking issues and pressing
+    "Export Issues" adds a tab "Export Issues Results" that works as
+    Rule 16, its file holding the issues with their articles. Pressed with nothing ticked, the tab opens empty, as
     in Rule 16 ([A12](#a12)). <sup>i</sup> <sup>td11</sup>
 19. **A press's ONIX reminder** {OMP}. While any of the press's
     "Press Publisher Name", "Geographical Location", "Publisher Code
@@ -279,8 +282,10 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
     [OMP2](#omp2). <sup>j</sup> <sup>td12</sup>
 20. **What the file carries.** Each submission's versions with their
     metadata, contributors, galleys (publication formats on a press)
-    and files, so that Rule 10 can rebuild it elsewhere. Which
-    identifiers travel is described in
+    and files, so that Rule 10 can rebuild it elsewhere. A title's
+    prefix comes back doubled: the imported copy of a submission whose
+    "Prefix" (Publication › "Title & Abstract") is "The" is titled "The
+    The …" ⚠ [A20](#a20). Which identifiers travel is described in
     [Identifiers](U44-identifiers.md), and the references in
     [Citations & references](U42-citations-and-references.md).
     <sup>h</sup>
@@ -318,6 +323,11 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
     created and signs in, but holds no role in the journal, and the
     users listed after it in the file are not imported ⚠ [A18](#a18).
     <sup>l</sup>
+22d. **A user with no registration date.** The format lets a file
+    leave out a user's registration date. When a user has none, the
+    import stops at that user: the "Results" tab stays empty, the users
+    listed before it are imported with their roles, and it and the
+    users after it are not ⚠ [A21](#a21). <sup>l</sup>
 23. <a id="users-matching"></a> **Which accounts.** Each user in the
     file is matched on username and email together:
     - neither is in use on the installation: a new account is created
@@ -366,7 +376,12 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
     ⚠ [A15](#a15).
 
 26. **The users list.** "Export Users" lists every account holding a
-    role in the journal, with paging under the list. "Search" at the
+    role in the journal that has begun and not ended, with paging under
+    the list. An account whose only role here has ended is not listed.
+    Nor is one whose only role starts on a later date (given by an
+    invitation or a users import), and "Search" does not find it,
+    though Settings › Users & Roles › "Users" lists it ⚠ [A22](#a22).
+    "Search" at the
     list's top right shows the filter of Fields; "Search" there narrows
     the list to the accounts in which every word typed appears in the
     name, username, email or affiliation, or in the name of a role the
@@ -453,9 +468,10 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
     headed "DOI Plugin Settings" ⚠ [OJS1](#ojs1). <sup>q</sup>
     <sup>td20</sup>
 36a. **The filter.** The filter of Fields narrows the list by title or
-    authors, issue and status. Its text search matches letter case as
-    typed: "Okapi" finds "Okapi forest census", "okapi" finds nothing
-    ⚠ [OJS6](#ojs6). <sup>q</sup>
+    authors, issue and status. On a PostgreSQL installation (MySQL is
+    not checked) its text search matches letter case as typed: "Okapi"
+    finds "Okapi forest census", "okapi" finds nothing ⚠ [OJS6](#ojs6).
+    <sup>q</sup>
 37. **Statuses.** "Status" reads "Not Deposited" until one of Rules
     41–44 changes it: "Marked registered", "Submitted", "Registered" or
     "Needs Sync". <sup>q</sup>
@@ -489,11 +505,18 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
     fails (Administration › "View Failed Jobs" lists it) and the row
     keeps reading "Submitted": it never reads "Failed", and the "Error"
     status of the filter lists nothing ⚠ [OJS9](#ojs9). <sup>u</sup>
-43. **Automatic deposit.** Once a day, for a journal with "DOAJ Plugin"
-    ticked, an API key saved and the automatic-deposit box ticked, the
-    installation sends DOAJ every published article of the journal that
-    has no status yet or reads "Needs Sync"; articles of other journals
-    that read "Needs Sync" are taken along ⚠ [A5](#a5). <sup>s</sup>
+43. **Automatic deposit.** Once a day (no screen starts it; run by
+    hand <sup>s</sup>), for a journal with "DOAJ Plugin" ticked, an API
+    key saved and the automatic-deposit box ticked, the installation
+    sends DOAJ every published article of the journal that has no
+    status yet or reads "Needs Sync". Other "Needs Sync" items are
+    taken along ⚠ [A5](#a5):
+    - other journals' articles, from a journal without "DOI
+      Versioning", and other journals' versions, from a journal with
+      it;
+    - with "DOI Versioning", a version a later minor version replaced,
+      which no screen shows (Rule 45); its deposit is seen only among
+      the installation's queued jobs.
 44. **Needs Sync.** Publishing a new version of an article that reads
     "Registered" or "Marked registered" turns its status to "Needs
     Sync", so that it is sent again. <sup>t</sup> <sup>td21</sup>
@@ -547,7 +570,8 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
 5. **"DOI Versioning"** {OJS} (Settings › Distribution › "DOIs",
    [DOIs](U45-dois.md); "No" on a new journal). "No": the DOAJ tab
    "Articles"; "Yes": "Publications" (Rules 34, 45), each with its own
-   statuses. <sup>q</sup>
+   statuses, and the daily deposit takes along the "Needs Sync" items
+   of journals with the same choice (Rule 43). <sup>q</sup>
 6. **"NLM Title Abbreviation"** {OJS} (the PubMed Settings tab; empty).
    Never saved: the PubMed file names the journal by its name; saved:
    by the abbreviation; saved empty: by nothing (Rule 30). <sup>n</sup>
@@ -1058,6 +1082,9 @@ Left out of the scenarios above, by reason:
     and funding statement carried from one journal to another (Rule 20):
     in scenario 4, "Okapi field notes" given all three in A, each read
     on B's copy after the import
+  - an account whose only role has ended, left off "Export Users" and
+    out of the "Export All Users" file, while one with a role that ends
+    on a later date is listed (Rules 26, 27)
   - the guard for A1 (Rule 5; issue report
     `docs/issues/U63-A1-tools-absent-tool-address-raw-json.md`): the
     address of a tool the installation lacks, such as the Crossref
@@ -1171,8 +1198,8 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A1 (an address naming a tool the installation lacks; Rule 5)
   - A4 (a short or empty plain password; Rule 25)
-  - A5 (the daily deposit taking other journals' "Needs Sync" articles;
-    Rule 43)
+  - A5 (the daily deposit taking other journals' "Needs Sync" articles,
+    and a replaced version; Rule 43)
   - A6 ("Upload File" from the keyboard; Rule 8)
   - A7 (a second "Import" press, and an earlier results tab chosen
     again; Rule 9)
@@ -1193,6 +1220,11 @@ Left out of the scenarios above, by reason:
   - A17 (the same users file imported again with a role starting or
     ending on a later date; Rule 24)
   - A18 (a users file with an empty or unreadable role date; Rule 22c)
+  - A19 (a tool's address with the tool's name left off; Rule 5)
+  - A20 (a title with a prefix exported and imported; Rule 20)
+  - A21 (a users file whose user has no registration date; Rule 22d)
+  - A22 (an account whose only role starts on a later date, left off
+    "Export Users"; Rule 26)
   - OJS1 (the DOAJ list's issue window heading; Rule 36)
   - OJS2 (the "DOAJ Export Plugin" row kept on the Plugins list while
     "DOAJ Plugin" is off; Rule 3)
@@ -1207,6 +1239,7 @@ Left out of the scenarios above, by reason:
     scenario 9 marks it)
   - OJS9 (a deposit that cannot reach DOAJ staying "Submitted"; Rule 42;
     scenario 9 marks it)
+  - OJS10 (the order of the "Export Issues" list; Rule 18)
   - OMP1 (the press's "Tab Delimited Content Import Plugin" link; Rule
     6; scenario 1 marks it)
 - **No seed**:
@@ -1246,6 +1279,9 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | On PHP 8.2 or 8.3, a users import drops the file's passwords and mails each new account a new one | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A17](#a17) | Importing the same users file again adds a role that starts or ends on a later date once more | 🐞 | minor | — |
 | [A18](#a18) | A users file with an empty or unreadable role date stops part-way: the server fails, the tab stays empty, the user gets no role | 🐞 | user-visible · crash: server | — |
+| [A19](#a19) | A tool's address with the tool's name left off opens a blank page: the server fails | 🐞 | minor · crash: server | — |
+| [A20](#a20) | A Native XML round trip doubles a title's prefix: the copy is titled "The The …" | 🐞 | user-visible | — |
+| [A21](#a21) | A users file whose user has no registration date stops part-way: the server fails and the "Results" tab stays empty | 🐞 | user-visible · crash: server | — |
 | [OJS1](#ojs1) | Pressing an issue in the DOAJ Articles list opens its window headed "DOI Plugin Settings" | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [OJS2](#ojs2) | With "DOAJ Plugin" switched off, the Plugins list still offers the DOAJ tool, whose link shows raw JSON | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [OJS3](#ojs3) | PubMed files carry an empty journal title once a manager saves "NLM Title Abbreviation" empty | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1254,8 +1290,10 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS6](#ojs6) | On PostgreSQL, the DOAJ Articles list's title and author search is case-sensitive | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [OJS7](#ojs7) | Where DOAJ's site cannot be reached, every validated DOAJ export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [OJS9](#ojs9) | A DOAJ "Register" that cannot reach DOAJ leaves the article reading "Submitted" for good, never "Failed" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [OJS10](#ojs10) | "Export Issues" lists the journal's issues in no set order | 🐞 | minor | — |
 | [OMP1](#omp1) | Pressing "Tab Delimited Content Import Plugin" in a press's Tools list opens a blank page | 🐞 | low · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A14](#a14) | "Export Users" with no row ticked ends on a blank page: the server fails | ❓ | minor · crash: server | — |
+| [A22](#a22) | "Export Users" leaves out an account whose only role starts on a later date | ❓ | minor | — |
 | [OJS8](#ojs8) | DOAJ "Register" checks nothing, "Validate XML before the export and registration." ticked or not | ❓ | minor | — |
 | [OMP2](#omp2) | A press's Native XML export reminds the manager to fill in the press's ONIX details | ✅ | minor | — |
 | [OMP3](#omp3) | A press's import creates a series the file names but the press lacks | ✅ | minor | — |
@@ -1303,6 +1341,16 @@ own API key and as its own articles: under its own journal name and
 ISSNs, with a link built on its own address, where the article does not
 exist and the site shows "not found". The article's own journal sent
 nothing, yet its DOAJ list now reads "Submitted".
+A journal without "DOI Versioning" takes other such journals'
+articles; a journal with it takes other such journals' versions. The
+Even when the article's own journal deposits automatically, a
+depositing journal listed before it on Administration › "Hosted
+Journals" takes the article, and the article's journal sends nothing.
+Only when the article's journal comes first does it send its own.
+A journal with "DOI Versioning" also sends a version a later minor
+version replaced: with 1.0 and 1.1 both "Needs Sync", the run sends
+both, while the "Publications" list shows only "VoR 1.1" go from
+"Needs Sync" to "Submitted".
 Nobody is told, and the article's journal has no setting that prevents
 it. Where the article already has a DOAJ record, the run first asks
 DOAJ to delete that record, with the depositing journal's key.
@@ -1517,6 +1565,61 @@ dates fail since the import began keeping the file's start date; the
 empty end date failed before. {OJS OMP}
 Since: 2026-09-28 · Basis: probe. <sup>f-a18</sup>
 
+<a id="a19"></a>
+**A19 — A tool's address with the tool's name left off fails** · 🐞 · minor · crash: server.
+A manager who opens a tool's address with the tool's name left off its
+end should get a "not found" page, or the Tools list. Instead the
+server fails and the browser shows a blank white page, with no
+heading, no menu and no link back. Only an address typed or edited by
+hand leads there. A Section Editor gets the access-denied page there,
+as at any tool's address.
+Basis: probe, 2026-10-01. <sup>f-a19</sup>
+
+<a id="a20"></a>
+**A20 — A Native XML round trip doubles a title's prefix** · 🐞 · user-visible.
+A submission whose "Prefix" (Publication › "Title & Abstract") reads
+"The" and whose title reads "Signalling Theory Dividends: A Review Of
+The Literature" is listed as "The Signalling Theory Dividends: …".
+Exported with the "Native XML Plugin" and imported, into another
+journal or the same one, it should come back the same. Instead the
+"Import Results" tab ("Results" on a press) lists ""{number}" - "The
+The Signalling Theory Dividends: …"", and the copy's workflow screen
+is headed the same: its "Prefix" reads "The" and its title "The
+Signalling Theory Dividends: …". Every
+submission with a prefix is affected, and the manager has to correct
+each copy's title by hand. A submission without a prefix comes back
+unchanged.
+Basis: probe, 2026-10-01. <sup>f-a20</sup>
+
+<a id="a21"></a>
+**A21 — A users file whose user has no registration date stops part-way** · 🐞 · user-visible · crash: server.
+The users file format lets a user's registration date be left out, so
+a file without one should import that user like any other. Instead
+the import stops at that user: the server fails and the "Results" tab
+opens empty, with nothing said. The users listed before
+it in the file are imported with their roles; it and the users after
+it are not. The manager is left with a half-done import and no sign of
+which users are missing. A file in which every user has a
+registration date imports normally. {OJS OMP}
+Basis: probe, 2026-10-01. <sup>f-a21</sup>
+
+<a id="a22"></a>
+**A22 — "Export Users" leaves out an account whose only role starts on a later date** · ❓ · minor.
+A manager can give a person a role that starts on a later date, by an
+invitation's later "Start Date" or by a users import. Settings › Users
+& Roles › "Users" lists that account with the role and its start date,
+but "Export Users" does not list it, "Search" there does not find it,
+and "Export All Users" leaves it out of the file. The manager cannot
+move next year's Section Editor to another journal with this tool
+until the role has begun. An account whose only role has ended is left
+out the same way, which matches the list's title, "Current Users".
+Question: should "Export Users" offer accounts whose role has not yet
+begun? Lean: yes, since a users import keeps a later start date (Rule
+24b), so the tool could move such a role, and Settings › Users &
+Roles lists the account.
+{OJS OMP}
+Basis: probe, 2026-10-01. <sup>f-a22</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -1607,9 +1710,8 @@ where "Signalling" finds "Signalling Theory Dividends", and "mwandenga"
 nothing where "Mwandenga" finds it. The list answers "No Items", as if
 no published article matched.
 The manager still finds the article by typing the words as they are
-written, or by choosing its issue. Only journals on a PostgreSQL
-database meet it: PKP's default MySQL collation compares text without
-regard to case.
+written, or by choosing its issue. Seen on PostgreSQL; MySQL not
+checked (its default collation would ignore case).
 Since: 2016-06-28 · Basis: probe, 2026-09-30. <sup>f-ojs6</sup>
 
 <a id="ojs7"></a>
@@ -1654,6 +1756,21 @@ needs "DOAJ Plugin" on and a DOAJ API key saved. When DOAJ does answer,
 with an error (a wrong key, a rejected record), the article reads
 "Failed" as it should.
 Since: 2025-06-30 · Basis: probe, 2026-09-30. <sup>f-ojs9</sup>
+
+<a id="ojs10"></a>
+**OJS10 — "Export Issues" lists the journal's issues in no set order** · 🐞 · minor.
+The "Export Issues" list of the "Native XML Plugin" and of the "PubMed
+XML Export Plugin" should list a journal's issues in an order a
+manager can follow, such as newest first. Instead, issues created out
+of year and volume order keep the order they were created in ("Vol. 8
+No. 2 (2006)", "Vol. 15 No. 3 (2017)", "Vol. 22 No. 1 (1998)" …), or
+none, published and unpublished mixed. With more issues than one page
+holds, the manager pages through the whole list to find one to tick.
+Nothing is lost. Until a
+2021 change the list put the current issue first and the rest newest
+first. The reader's "Archives" has a like fault
+([Issues, its A13](U50-issues.md#a13)).
+Since: 2021-08-30 · Basis: probe, 2026-10-01. <sup>f-ojs10</sup>
 
 ### OMP
 
@@ -1930,7 +2047,9 @@ carries them.
 `grid.issues.ExportableIssuesListGridHandler` (`IssueGridHandler`
 columns `issue.issue` "Issue", `editor.issues.numArticles` "Items", plus
 `SelectableItemsFeature`'s `common.select` "Select" column and
-`PagingFeature`); `loadData()` takes every issue of the journal.
+`PagingFeature`); `loadData()` takes every issue of the journal
+(`Repo::issue()->getCollector()->filterByContextIds()`, no `orderBy()`,
+so no ORDER BY), paged by limit and offset (OJS10).
 `NativeImportExportPlugin::display()` `exportIssuesBounce` → tab
 `plugins.importexport.native.export.issues.results` "Export Issues
 Results"; `exportIssues` → `getExportIssuesDeployment()`, file part
@@ -1987,7 +2106,14 @@ up is dropped on leaving the page, with no question.
 `plugins/importexport/users/filter/`): matches `getByUsername()` and
 `getByEmail()` (disabled accounts included); same id → existing user
 kept; neither → `Repo::user()->add()`; otherwise
-`plugins.importexport.user.error.usernameEmailMismatch`. Roles: each
+`plugins.importexport.user.error.usernameEmailMismatch`; that branch
+leaves `$userId` unset, so the later `if ($userId)` logs "PHP Warning:
+Undefined variable $userId" for both mismatch cases (the username in
+use with another email, an email in use with a free username), while
+the request answers 200 and the screen shows only the mismatch line
+(live-probed 2026-10-01, OJS and OMP, two runs each; no warning for a
+file naming one existing account's username and email). A user with
+no `<date_registered>` (optional in `pkp-users.xsd`): note f-a21. Roles: each
 `user_user_group` whose `user_group_ref` is in a context group's
 localized `name` array, with the file's `<date_start>`, `<date_end>`
 and `<masthead>` (read at lib/pkp `fab29cfeca`, 2026-09-29). A reviewer
@@ -2067,7 +2193,10 @@ install's locale-file order picks the header), plus the
 `userGridFilter.tpl` never shows). The template's form posts `export`
 with `selectedUsers[]`; `export` / `exportAllUsers` write
 `users-{date}-users-{contextId}.xml`, stream it and delete it.
-`exportAllUsers()` takes every user with a role in the context. The
+`loadData()` and `exportAllUsers()` take the users through the users
+Collector, whose default `userUserGroupStatus` is `STATUS_ACTIVE` (a
+role begun and not ended), so they hold every user with a current role
+in the context (A22, note f-a22). The
 search goes through the users `Collector::buildSearchFilter()`, which
 also matches biography and ORCID iD (not driven). Live-probed
 2026-09-27, OJS and OMP (Rules 26–27; Fields): 38 accounts, "Items per
@@ -2514,14 +2643,22 @@ menu), not the editorial one.
 <a id="fn-f-a1"></a>
 **f-a1** — `PKPToolsHandler::importexport()` (note w). Live-probed
 2026-09-27 on all three apps (notes w, td3). The same raw text answers
-`…/management/importexport` with nothing after it, a tool's address in
+any unknown name after `…/management/importexport/` (such as
+`…/importexport/anything`), a tool's address in
 lower case (`…/plugin/nativeimportexportplugin`), the "DOAJ Export
 Plugin" address while "DOAJ Plugin" is off (OJS), and every other
 application's tool names (OJS: `CSVImportExportPlugin`,
 `Onix30ExportPlugin`; OMP: `DOAJExportPlugin`, `PubMedExportPlugin`;
 OPS: `UserImportExportPlugin`, `DOAJExportPlugin`,
 `DataciteExportPlugin`); each 200 `application/json`, no heading, no
-navigation.
+navigation. The bare `…/management/importexport` and
+`…/management/permissions` are not part of A1: they are what the Tools
+page itself loads into its "Import/Export" and "Permissions" tabs
+(`GET …/management/importexport?_=…` on opening Tools,
+`…/management/permissions?_=…` on pressing "Permissions"), each 200
+`application/json` by design; live-probed 2026-10-01, three apps, two
+runs, as the Journal Manager (a Section Editor gets the access-denied
+page at each).
 Issue report: [pkp-e2e#19](https://github.com/jardakotesovec/pkp-e2e/issues/19) ([docs/issues/U63-A1-tools-absent-tool-address-raw-json.md](../issues/U63-A1-tools-absent-tool-address-raw-json.md)).
 
 <a id="fn-f-a2"></a>
@@ -2581,7 +2718,30 @@ and published again ("Needs Sync"); the task run with
 `php lib/pkp/tools/scheduler.php test`: submission 17 read "Submitted"
 and one `DOAJRegister` job was queued in the new journal's name, its
 link on the new journal's path (404). On stable-3_5_0 the task queued
-nothing.
+nothing. Walked 2026-10-01, OJS main, two runs, the task run once per
+stage with `php lib/pkp/tools/scheduler.php test
+--name='APP\plugins\generic\doaj\DOAJInfoSender'` and the queued jobs
+and stored statuses read from the database beside the DOAJ lists;
+journals created (and listed on "Hosted Journals") in the order Nv, Vv,
+Xn, Vb, N1, X1, X2, N2, the V journals with "DOI Versioning" "Yes";
+each "Needs Sync" item made by "Mark registered", "Unpublish" and
+"Publish". (a) Xn (no versioning) and Vb (versioning) depositing, Nv's
+article and Vv's version "Needs Sync", their boxes unticked: Xn queued
+one `DOAJRegister` in its own name for Nv's article (link
+`…xn…/article/view/<Nv's id>`), none for Vv's; Vb one for Vv's version
+(`…vb…/article/view/<id>/version/<id>`), none for Nv's; Nv's and Vv's
+lists then read "Submitted". `DOAJInfoSender::executeActions()` calls
+`getAllDepositablePublications()` for a versioning journal and
+`getAllDepositableArticles()` otherwise. (b) Vb's own article, 1.0
+"Needs Sync" and a minor 1.1 published: the "Publications" list showed
+one row, "VoR 1.1 … Needs Sync"; the task queued two jobs, for 1.0 and
+for 1.1, both stored statuses went from `stale` to `submitted`, and the
+row read "Submitted" (the `stale` branch also drops the latest-minor
+condition). (c) N1 before X1, both depositing, N1's article "Needs
+Sync": one job, in N1's name; X2 before N2, both depositing, N2's
+article "Needs Sync": one job, in X2's name with X2's link, none from
+N2, and N2's list read "Submitted". Journals are taken in `ORDER BY
+seq`. Both versioning journals were set back to "No" afterwards.
 Issue report: [pkp-e2e#21](https://github.com/jardakotesovec/pkp-e2e/issues/21) ([docs/issues/U63-A5-doaj-daily-deposit-takes-other-journals-articles.md](../issues/U63-A5-doaj-daily-deposit-takes-other-journals-articles.md)).
 
 <a id="fn-f-a6"></a>
@@ -2742,12 +2902,81 @@ patch). Written up for the team in
 `docs/reports/2026-09-29-pkp-lib-13390.md` (Finding 1; a temporary
 report, deleted once acted on).
 
+<a id="fn-f-a19"></a>
+**f-a19** — `PKPToolsHandler::importexport()` (note w) hands the
+missing name on to the plugin lookup, which fails: the server log reads
+`PKP\plugins\PluginRegistry::getPlugin(): Argument #2 ($name) must be of
+type string, null given`. Live-probed 2026-10-01, OJS, OMP and OPS
+main, two runs each, as the Journal Manager: `GET
+…/management/importexport/plugin` answered 500 with an empty body; as
+the Section Editor, the access-denied page.
+
+<a id="fn-f-a20"></a>
+**f-a20** — `PKPPublicationNativeXmlFilter::addMetadata()` writes
+`<title>` from `getTitles('html')`, the prefix and the title joined,
+beside a separate `<prefix>`; `NativeXmlPKPPublicationFilter` reads
+both back, so the copy stores the prefix "The" and the title "The
+Signalling …". Live-probed 2026-10-01, OJS, OMP and OPS main and OJS
+stable-3_5_0, two runs each: "Prefix" "The" saved on Publication ›
+"Title & Abstract" (the box read "The" after a reload; stored
+`prefix=The`, `title=Signalling Theory Dividends: A Review Of The
+Literature`); the exported file read `<title locale="en">The
+Signalling Theory Dividends: A Review Of The Literature</title>` and
+`<prefix locale="en">The</prefix>`; imported into a second journal
+(press, server) and into the same one, the results line read
+""46" - "The The Signalling Theory Dividends: A Review Of The
+Literature"" (OJS r1), the copy's workflow header the same, its
+"Prefix" "The" and stored title "The Signalling …". Control: "Okapi
+forest census", no prefix, came back unchanged. Not traced to a
+commit; the same on 3.5.
+
+<a id="fn-f-a21"></a>
+**f-a21** — Note l. `UserXmlPKPUserFilter::parseUser()` sets the
+registration date only from a `<date_registered>` element, so a user
+without one reaches `Repo::user()->add()` with none, and the insert
+fails on `users.date_registered`'s not-null constraint; the users added
+before it stay. Live-probed 2026-10-01, OJS and OMP main, two runs
+each: a file of three users, the second without `<date_registered>`:
+`GET …/UserImportExportPlugin/import?temporaryFileId=…` answered 500
+and the "Results" tab (with "Close") stayed empty; the first user was
+created with its Reader role (Settings › Users & Roles › "Users":
+"Current Users (1)", "Reader 2026-10-01"), the second and third were
+not. Server log (PostgreSQL): "PHP Fatal error: Uncaught PDOException:
+SQLSTATE[23502]: Not null violation: 7 ERROR: null value in column
+"date_registered" of relation "users" violates not-null constraint".
+Control: the same three users each with `<date_registered>`: 200, the
+success sentence, three accounts.
+
+<a id="fn-f-a22"></a>
+**f-a22** — Note m (the users Collector's default status). Live-probed
+2026-10-01, OJS and OMP main, two runs each, a scratch journal (press)
+with: B, "Section editor" ("Series editor") from today; C, the same
+role from 2020-01-01 to 2021-06-30 only; D, the role from 2020-01-01 to
+2030-12-31 (by users import); A by import, the role from 2027-06-01 as
+its only role; A by invitation, a new account invited to the role with
+START DATE 2027-06-01 and accepted from the email. "Export Users":
+"Current Users", "1 - 9 of 9 items", the Site Administrator, the
+manager, B, D and the readers, neither A nor C; "Search" with either
+A's given name "No Items", with D's D listed. "Export All Users" ›
+"Confirm" › "OK" downloaded `users-…-users-<id>.xml` with the same nine
+accounts, D's role with `2020-01-01` and `2030-12-31`. Settings › Users
+& Roles › "Users": "Current Users (11)", both A accounts ("Section
+editor 2027-06-01" / "Series editor 2027-06-01"), C and D. A role not
+yet begun is also one the users list cannot end:
+[Users management, its A19](U53-users-management.md#a19).
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `ExportPublishedSubmissionsListGridCellProvider::getCellActions()`
 `issue`: `AjaxModal(…BackIssueGridHandler/editIssue…,
-__('plugins.importexport.common.settings.DOIPluginSettings'))`. The
-same title on the Publications grid's provider. Live-probed 2026-09-27:
-note q.
+__('plugins.importexport.common.settings.DOIPluginSettings'))`.
+Live-probed 2026-09-27: note q. Live-probed 2026-10-01, OJS main, two
+runs: with "DOI Versioning" "Yes" the "Publications" list has the
+columns "Select", "Submission ID", "Publication Stage", "Author; Title"
+and "Status", no "Issue" column, and its rows link only "Author; Title"
+(to the workflow); nothing on it opens an issue window, so OJS1 is met
+from the "Articles" list only. Set back to "No", the same journal's
+"Articles" list has "Issue" again; on a journal without versioning the
+issue's name opens the window headed "DOI Plugin Settings".
 Issue report: [pkp-e2e#27](https://github.com/jardakotesovec/pkp-e2e/issues/27) ([docs/issues/U63-OJS1-doaj-issue-window-headed-doi-plugin-settings.md](../issues/U63-OJS1-doaj-issue-window-headed-doi-plugin-settings.md)).
 
 <a id="fn-f-ojs2"></a>
@@ -2773,6 +3002,13 @@ Issue report: [pkp-e2e#29](https://github.com/jardakotesovec/pkp-e2e/issues/29) 
 …/PubMedExportPlugin/exportSubmissions` answered 500 four times and
 `…/exportIssues` three times, each with "Could not load the external
 subset "https://dtd.nlm.nih.gov/ncbi/pubmed/in/PubMed.dtd"".
+Live-probed again 2026-10-01, OJS main, NLM unreachable, two runs:
+"Export Issues" with one issue ticked and "Export Articles" with one
+article ticked, three times each per run, 12 of 12 presses answered
+500 in about 0.2 s with the "Validation errors:" page and no download;
+the log each time "DOMDocument::validate(…PubMed.dtd): Failed to open
+stream: Connection refused", "Filter output validation failed" and
+"Uncaught Exception: Could not convert selected objects.".
 Issue report: [pkp-e2e#30](https://github.com/jardakotesovec/pkp-e2e/issues/30) ([docs/issues/U63-OJS4-OJS7-pubmed-doaj-export-fails-site-unreachable.md](../issues/U63-OJS4-OJS7-pubmed-doaj-export-fails-site-unreachable.md)).
 
 <a id="fn-f-ojs5"></a>
@@ -2783,6 +3019,11 @@ Issue report: [pkp-e2e#32](https://github.com/jardakotesovec/pkp-e2e/issues/32) 
 <a id="fn-f-ojs6"></a>
 **f-ojs6** — Note q. Live-probed 2026-09-27 on the test installs,
 whose databases are PostgreSQL; a MySQL install was not tried.
+Live-probed again 2026-10-01, OJS main on PostgreSQL 18.6, two runs:
+"Article Title" "Okapi" listed "Lovelace; Okapi forest census",
+"okapi" and "OKAPI" answered "No Items"; "Authors" "Lovelace" listed
+both articles, "lovelace" "No Items". MySQL not checked: no MySQL
+install on the test machines.
 Issue report: [pkp-e2e#33](https://github.com/jardakotesovec/pkp-e2e/issues/33) ([docs/issues/U63-OJS6-doaj-list-search-matches-letter-case.md](../issues/U63-OJS6-doaj-list-search-matches-letter-case.md)).
 
 <a id="fn-f-ojs7"></a>
@@ -2800,6 +3041,23 @@ with the box ticked returned "Articles submitted successfully" and
 <a id="fn-f-ojs9"></a>
 **f-ojs9** — Live-probed 2026-09-27: note u.
 Issue report: [pkp-e2e#34](https://github.com/jardakotesovec/pkp-e2e/issues/34) ([docs/issues/U63-OJS9-doaj-deposit-unreachable-stays-submitted.md](../issues/U63-OJS9-doaj-deposit-unreachable-stays-submitted.md)).
+
+<a id="fn-f-ojs10"></a>
+**f-ojs10** — Note i (`ExportableIssuesListGridHandler::loadData()`, no
+order). Before ojs `88aaa6b49f` (pkp/pkp-lib#7129, 2021-08-30)
+`loadData()` called `IssueDAO::getIssues()`, `… ORDER BY current DESC,
+date_published DESC` (read in `IssueDAO.inc.php` at the parent
+commit). Live-probed 2026-10-01, OJS main, Journal Manager, a scratch
+journal of 30 issues (every third unpublished, volumes and years
+mixed), two runs: "Export Issues" on the Native XML and the PubMed
+tools read "1 - 25 of 30 items" with page links and "Items per page"
+10/25/50/75/100; three loads of each tool, both pages: every issue once,
+none repeated, none missing, the same order on both tools. Run 2
+listed them in the order they were created ("Vol. 8 No. 2 (2006)",
+"Vol. 15 No. 3 (2017)", "Vol. 22 No. 1 (1998)" …); run 1 in neither
+creation nor any column's order ("Vol. 21 No. 3 (2005)", "Vol. 28 No.
+1 (2016)", "Vol. 5 No. 2 (1997)" …). OJS stable-3_5_0, two runs: the
+same, `loadData()` identical there.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note v. Seen 2026-09-27 on OMP (Plugins management claim
