@@ -1057,6 +1057,17 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A20 (issue report
+    `docs/issues/U69-A20-later-version-chapter-repeats-date.md`): a later
+    version's chapter page printing one date when its two dates are
+    the same
+  - the guard for A17 (issue report
+    `docs/issues/U69-A17-unpublished-book-chapter-page-no-preview-notice.md`):
+    an unpublished book's chapter page carrying the preview notice
+  - the guard for A13 (issue report
+    `docs/issues/U69-A13-chapter-page-forthcoming-under-other-date-format.md`):
+    a published chapter's page headed "Published" under each
+    "Date (Short)" format
   - the guard for A18 (issue report
     `docs/issues/U69-A18-sign-in-to-buy-file-skips-payment-page.md`): a
     visitor who signs in from a priced file's link landing on the
@@ -1234,10 +1245,10 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | A priced file's link shows its price twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | On a press, the return arrow of a book's HTML view page is announced as the code "##monograph.return##" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | A press that unticks "Enable" on its Payments tab still sells its priced files | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A13](#a13) | Under a day-first date format a chapter page mixes up "Published" and "Forthcoming" | 🐞 | minor | — |
-| [A17](#a17) | An unpublished book's chapter page carries no preview notice | 🐞 | minor | — |
+| [A13](#a13) | On a press whose short date format is not year-first, a published chapter's page is headed "Forthcoming" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [A17](#a17) | Previewing an unpublished book, its chapter pages carry no notice that they are a preview | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A visitor who signs in or registers to buy a book file lands on their home page, not the payment page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A20](#a20) | A later version's chapter repeats its own date | 🐞 | minor | — |
+| [A20](#a20) | A chapter with its own date reads "June 1, 2024 — Updated on June 1, 2024" in a book's later version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | A buyer who pays by hand never gets the file | ❓ | user-visible | — |
 | [A2](#a2) | A book published only as an Author Original has no page | ❓ | minor | — |
 | [A21](#a21) | On a preview, "How to Cite" works only for the roles assigned to the book | ❓ | minor | — |
@@ -1404,15 +1415,23 @@ payments off.
 Basis: probe, 2026-10-01. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — Under a day-first date format a chapter page mixes up "Published" and "Forthcoming"** · 🐞 · minor.
-A chapter page compares the version's date with today as written in the
-press's short date format. Under a day-first format such as "d/m/Y", a
-chapter published on 31/12/2024 and read on 28/09/2026 is headed
-"Forthcoming". The other way round, a chapter of a book scheduled for
-15/01/2027 reads "Published" in the Press manager's preview while its
-book's page reads "Forthcoming". The heading follows the version's date,
-never the chapter's own. The book's page compares the dates correctly.
-Basis: probe, 2026-09-28. <sup>f-a13</sup>
+**A13 — On a press whose short date format is not year-first, a published chapter's page is headed "Forthcoming"** · 🐞 · low.
+On a press that has changed its "Date (Short)" setting, a published
+chapter's page can be headed "Forthcoming" above its publication date:
+a chapter of a book published on December 31, 2024 reads "Forthcoming
+December 31, 2024". The book's own page reads "Published".
+The other way round, a chapter of a book scheduled for a later date can
+read "Published" in an editor's preview while the book's page reads
+"Forthcoming".
+Only the heading is wrong, and whether it is wrong changes with the day
+the page is read: on part of each month under a day-first format, on
+part of each year under the month-first one, depending on the day or
+month the book was published.
+It needs a chapter with its own page. The year-first format, which a
+press has until someone changes the setting, is not affected; the three
+other choices the setting offers (day-month-year, month/day/year,
+day.month.year) are.
+Basis: probe, 2026-10-01. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — A chapter new in a later version is cited as older than it is** · ❓ · minor.
@@ -1456,12 +1475,22 @@ The app fails.
 Since: 2024-06-26 (two years) · Basis: probe, 2026-10-01. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — An unpublished book's chapter page carries no preview notice** · 🐞 · minor.
-Those who may preview a book open its chapter pages without the notice
-"This is a preview and has not been published. View submission" that the
-book's page carries, and with a date saved the chapter page reads
-"Published {date}", so nothing tells the editor the page is not public.
-Basis: probe, 2026-09-28. <sup>f-a17</sup>
+**A17 — Previewing an unpublished book, its chapter pages carry no notice that they are a preview** · 🐞 · low.
+An editor who previews an unpublished book sees "This is a preview and
+has not been published. View submission" at the top of the book's page.
+A chapter's page opened from that preview shows no such notice, and so
+no link back to the submission.
+When the book carries a date, the chapter's page also reads "Published
+{date}" or "Forthcoming {date}", as the book's page does, so it looks
+like a public page. A book carries a date when it was published and
+then unpublished, or is scheduled, or its "Date Published" was typed in
+"Catalog Entry".
+Readers are not affected: to them the address answers "404 Not Found".
+It needs a chapter with its own page in a book, or a version, that is
+not published. A chapter has its own page when "Show this chapter on
+its own page and link to that page from the book's table of contents."
+is ticked in its window; the box is unticked on a new chapter.
+Basis: probe, 2026-10-01. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — A visitor who signs in or registers to buy a book file lands on their home page, not the payment page** · 🐞 · low.
@@ -1502,11 +1531,19 @@ goes to the current version's chapter only.
 Basis: probe, 2026-10-01. <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — A later version's chapter repeats its own date** · 🐞 · minor.
-On a book whose chapters carry their own dates, a new version copies the
-chapter's "Date Published", so the chapter page reads "June 1, 2024 —
-Updated on June 1, 2024" and never shows the new version's date.
-Basis: probe, 2026-09-28. <sup>f-a20</sup>
+**A20 — A chapter with its own date reads "June 1, 2024 — Updated on June 1, 2024" in a book's later version** · 🐞 · low.
+On a book whose chapters carry their own publication dates, a chapter's
+page in a later version of the book gives the same date twice: "June 1,
+2024 — Updated on June 1, 2024". A reader is told the chapter was
+updated on the day it was first published.
+A new version copies each chapter with its "Date Published", and the
+page prints the chapter's first date and its date in this version
+whether or not they differ. The line stays that way until an editor
+types another date into the chapter.
+It needs a book set to "Each chapter may have its own publication
+date.", which is a choice made per book and not what a new book has, a
+chapter with its own page and date, and a second published version.
+Basis: probe, 2026-10-01. <sup>f-a20</sup>
 
 <a id="a21"></a>
 **A21 — On a preview, "How to Cite" works only for the roles assigned to the book** · ❓ · minor.
@@ -1795,6 +1832,7 @@ Issue report: [pkp-e2e#294](https://github.com/jardakotesovec/pkp-e2e/issues/294
 
 <a id="fn-f-a13"></a>
 **f-a13** — Note l: `chapter.tpl` compares `date_format:$dateFormatShort` strings, where `monograph_full.tpl` compares `Y-m-d` (pkp-lib#10169 fixed only the book page). Live-probed 2026-09-28 (td16): both directions.
+Issue report: [docs/issues/U69-A13-chapter-page-forthcoming-under-other-date-format.md](../issues/U69-A13-chapter-page-forthcoming-under-other-date-format.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note m: `getCitation()` sets the CSL `original-date` from `$submission->getOriginalPublication()` whenever its date differs from the shown version's, for a chapter as for the book, and the APA style prints it as "Original work published {year}". Live-probed 2026-09-28 (td18).
@@ -1810,6 +1848,7 @@ Issue report: [pkp-e2e#284](https://github.com/jardakotesovec/pkp-e2e/issues/284
 
 <a id="fn-f-a17"></a>
 **f-a17** — `chapter.tpl` prints only `submission.outdatedVersion`; `submission.viewingPreview` is in `monograph_full.tpl` alone. Live-probed 2026-09-28 (td5): the chapter page read "… Volume K1 Unpublished Book Published March 5, 2024 How to Cite …" with no notice for every previewing role.
+Issue report: [docs/issues/U69-A17-unpublished-book-chapter-page-no-preview-notice.md](../issues/U69-A17-unpublished-book-chapter-page-no-preview-notice.md).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Note k: `CatalogBookHandler::download()` sends a signed-out buyer to Login with `source` built by `$request->url()`, a full address, and `LoginHandler::signIn()` follows only a `source` starting with "/", so `_redirectAfterLogin()` (its dashboard branch needs an empty `source`) falls back to `PKPPageRouter::getHomeUrl()`, the user's home by role: the press's index for a Reader, `dashboard/editorial` for a manager, sub-editor or assistant role, `dashboard/reviewAssignments` for a Reviewer, `dashboard/mySubmissions` for an Author (the last two untried); a free file's Login (`Validation::redirectLogin()`) carries a path. Live-probed 2026-09-28 (td13, td14): the priced file's Login address carried `source=http%3A%2F%2F…`, the free file's `source=%2Findex.php%2F…`. Live-probed 2026-09-29 (td14): the Press manager's sign-in went to `dashboard/editorial`.
@@ -1821,6 +1860,7 @@ Issue report: [pkp-e2e#286](https://github.com/jardakotesovec/pkp-e2e/issues/286
 
 <a id="fn-f-a20"></a>
 **f-a20** — Note l: a new version copies each chapter with its `datePublished`, and the first date is the source chapter's. Live-probed 2026-09-28 (td17).
+Issue report: [docs/issues/U69-A20-later-version-chapter-repeats-date.md](../issues/U69-A20-later-version-chapter-repeats-date.md).
 
 <a id="fn-f-a21"></a>
 **f-a21** — Note m: `CitationStyleLanguageHandler::setupRequest()` lets an unpublished submission through only for managers, the Site Administrator and assigned sub-editors or assistants, while the block itself shows to everyone `canPreview()` admits. Live-probed 2026-09-28 (td18).

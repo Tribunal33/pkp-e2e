@@ -1,0 +1,24 @@
+--- a/templates/frontend/objects/chapter.tpl
++++ b/templates/frontend/objects/chapter.tpl
+@@ -196,7 +196,8 @@
+ 						</h2>
+ 						<div class="value">
+ 							{* If this is the original version *}
+-							{if $sourceChapter->getId() === $chapter->getId()}
++							{* ... or a later version whose chapter keeps the first date *}
++							{if $sourceChapter->getId() === $chapter->getId() || $firstDatePublished|date_format:"Y-m-d" === $datePublished|date_format:"Y-m-d"}
+ 								<span>{$firstDatePublished|date_format:$dateFormatLong}</span>
+ 								{* If this is an updated version *}
+ 							{else}
+--- a/templates/frontend/objects/monograph_full.tpl
++++ b/templates/frontend/objects/monograph_full.tpl
+@@ -338,7 +338,8 @@
+ 						</h2>
+ 						<div class="value">
+ 							{* If this is the original version *}
+-							{if $firstPublication->getId() === $publication->getId()}
++							{* ... or a later version published on the first date *}
++							{if $firstPublication->getId() === $publication->getId() || $firstPublication->getData('datePublished')|date_format:"Y-m-d" === $publication->getData('datePublished')|date_format:"Y-m-d"}
+ 								<span>{$firstPublication->getData('datePublished')|date_format:$dateFormatLong}</span>
+ 								{* If this is an updated version *}
+ 							{else}

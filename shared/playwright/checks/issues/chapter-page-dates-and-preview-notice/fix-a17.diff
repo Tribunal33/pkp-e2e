@@ -1,0 +1,19 @@
+--- a/templates/frontend/objects/chapter.tpl
++++ b/templates/frontend/objects/chapter.tpl
+@@ -35,8 +35,15 @@
+  *}
+ <div class="obj_monograph_full obj_chapter">
+ 
++	{* Indicate if this is only a preview *}
++	{if $publication->getData('status') !== \PKP\submission\PKPSubmission::STATUS_PUBLISHED}
++		<div class="cmp_notification notice">
++			{capture assign="submissionUrl"}{url page="dashboard" op="editorial" workflowSubmissionId=$monograph->getId()}{/capture}
++			{translate key="submission.viewingPreview" url=$submissionUrl}
++		</div>
++
+ 	{* Notification that this is an old version *}
+-	{if $currentPublication->getId() !== $publication->getId()}
++	{elseif $currentPublication->getId() !== $publication->getId()}
+ 		<div class="cmp_notification notice">
+ 			{if $currentPublication->getID()|in_array:$chapterPublicationIds}
+ 				{capture assign="latestVersionUrl"}{url page="catalog" op="book" path=$monograph->getBestId()|to_array:"chapter":$chapter->getSourceChapterId()}{/capture}

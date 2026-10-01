@@ -1,0 +1,51 @@
+--- a/templates/frontend/objects/chapter.tpl
++++ b/templates/frontend/objects/chapter.tpl
+@@ -35,8 +35,15 @@
+  *}
+ <div class="obj_monograph_full obj_chapter">
+ 
++	{* Indicate if this is only a preview *}
++	{if $publication->getData('status') !== \PKP\submission\PKPSubmission::STATUS_PUBLISHED}
++		<div class="cmp_notification notice">
++			{capture assign="submissionUrl"}{url page="dashboard" op="editorial" workflowSubmissionId=$monograph->getId()}{/capture}
++			{translate key="submission.viewingPreview" url=$submissionUrl}
++		</div>
++
+ 	{* Notification that this is an old version *}
+-	{if $currentPublication->getId() !== $publication->getId()}
++	{elseif $currentPublication->getId() !== $publication->getId()}
+ 		<div class="cmp_notification notice">
+ 			{if $currentPublication->getID()|in_array:$chapterPublicationIds}
+ 				{capture assign="latestVersionUrl"}{url page="catalog" op="book" path=$monograph->getBestId()|to_array:"chapter":$chapter->getSourceChapterId()}{/capture}
+@@ -188,7 +195,8 @@
+ 				<div class="item date_published">
+ 					<div class="sub_item">
+ 						<h2 class="label">
+-							{if $publication->getData('datePublished')|date_format:$dateFormatShort > $smarty.now|date_format:$dateFormatShort}
++							{* Use Y-m-d to compare dates instead of customizable date formats (pkp-lib#10169) *}
++							{if $publication->getData('datePublished')|date_format:"Y-m-d" > $smarty.now|date_format:"Y-m-d"}
+ 								{translate key="catalog.forthcoming"}
+ 							{else}
+ 								{translate key="catalog.published"}
+@@ -196,7 +204,8 @@
+ 						</h2>
+ 						<div class="value">
+ 							{* If this is the original version *}
+-							{if $sourceChapter->getId() === $chapter->getId()}
++							{* ... or a later version whose chapter keeps the first date *}
++							{if $sourceChapter->getId() === $chapter->getId() || $firstDatePublished|date_format:"Y-m-d" === $datePublished|date_format:"Y-m-d"}
+ 								<span>{$firstDatePublished|date_format:$dateFormatLong}</span>
+ 								{* If this is an updated version *}
+ 							{else}
+--- a/templates/frontend/objects/monograph_full.tpl
++++ b/templates/frontend/objects/monograph_full.tpl
+@@ -338,7 +338,8 @@
+ 						</h2>
+ 						<div class="value">
+ 							{* If this is the original version *}
+-							{if $firstPublication->getId() === $publication->getId()}
++							{* ... or a later version published on the first date *}
++							{if $firstPublication->getId() === $publication->getId() || $firstPublication->getData('datePublished')|date_format:"Y-m-d" === $publication->getData('datePublished')|date_format:"Y-m-d"}
+ 								<span>{$firstPublication->getData('datePublished')|date_format:$dateFormatLong}</span>
+ 								{* If this is an updated version *}
+ 							{else}
