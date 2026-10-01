@@ -72,13 +72,7 @@ journal's records give at the site's address:
 {"error":"The requested resource was not found."}
 ```
 
-**Observed.** HTTP 500:
-
-```
-{"error":"Call to a member function getId() on null"}
-```
-
-The server log:
+**Observed.** HTTP 500. The server log:
 
 ```
 production.ERROR: Call to a member function getId() on null {"exception":"[object] (Error(code: 0): Call to a member function getId() on null at …/lib/pkp/api/v1/sections/SectionController.php:147)
