@@ -2405,7 +2405,7 @@ a function" followed; the "2. Review Details" step stayed blank and its
 "Continue" could not be pressed. The "Files" list then held the new label with no
 file, also after a reload. Controls: a draft's first galley, and a
 second added in the same visit, completed with no page error.
-Issue report: [docs/issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md](../issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md).
+Issue report: [pkp-e2e#134](https://github.com/jardakotesovec/pkp-e2e/issues/134) ([docs/issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md](../issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md)).
 
 <a id="fn-ops9"></a>
 **fn-ops9** — OPS9. Review panel `review-galleys.tpl` (note l).
@@ -2415,7 +2415,7 @@ the visit showed on "Review" as "PDF Preprint Text"; after a reload,
 "Submit" enabled while "Upload Files" still listed the galley. The same
 text showed on the first "Review" of all 14 drafts built with a galley
 by the scenario tooling, each of which passed the check.
-Issue report: [docs/issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md](../issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md).
+Issue report: [pkp-e2e#134](https://github.com/jardakotesovec/pkp-e2e/issues/134) ([docs/issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md](../issues/U21-OPS8-OPS9-reopened-preprint-draft-galley-upload-stalls.md)).
 
 <a id="fn-ops10"></a>
 **fn-ops10** — OPS10. Mechanism and the 2026-09-28 drive: note q (the
