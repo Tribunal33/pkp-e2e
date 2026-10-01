@@ -1791,7 +1791,7 @@ Issue report: [pkp-e2e#288](https://github.com/jardakotesovec/pkp-e2e/issues/288
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note k: `paymentsEnabled` is read only by the form's `showWhen`; `OMPPaymentManager::isConfigured()` ignores it, where OJS's payment paths check it. Live-probed 2026-09-28 (td15).
-Issue report: [docs/issues/U69-A12-payments-enable-unticked-press-still-sells.md](../issues/U69-A12-payments-enable-unticked-press-still-sells.md).
+Issue report: [pkp-e2e#294](https://github.com/jardakotesovec/pkp-e2e/issues/294) ([docs/issues/U69-A12-payments-enable-unticked-press-still-sells.md](../issues/U69-A12-payments-enable-unticked-press-still-sells.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Note l: `chapter.tpl` compares `date_format:$dateFormatShort` strings, where `monograph_full.tpl` compares `Y-m-d` (pkp-lib#10169 fixed only the book page). Live-probed 2026-09-28 (td16): both directions.
@@ -1813,7 +1813,7 @@ Issue report: [pkp-e2e#284](https://github.com/jardakotesovec/pkp-e2e/issues/284
 
 <a id="fn-f-a18"></a>
 **f-a18** — Note k: `CatalogBookHandler::download()` sends a signed-out buyer to Login with `source` built by `$request->url()`, a full address, and `LoginHandler::signIn()` follows only a `source` starting with "/", so `_redirectAfterLogin()` (its dashboard branch needs an empty `source`) falls back to `PKPPageRouter::getHomeUrl()`, the user's home by role: the press's index for a Reader, `dashboard/editorial` for a manager, sub-editor or assistant role, `dashboard/reviewAssignments` for a Reviewer, `dashboard/mySubmissions` for an Author (the last two untried); a free file's Login (`Validation::redirectLogin()`) carries a path. Live-probed 2026-09-28 (td13, td14): the priced file's Login address carried `source=http%3A%2F%2F…`, the free file's `source=%2Findex.php%2F…`. Live-probed 2026-09-29 (td14): the Press manager's sign-in went to `dashboard/editorial`.
-Issue report: [docs/issues/U69-A18-sign-in-to-buy-file-skips-payment-page.md](../issues/U69-A18-sign-in-to-buy-file-skips-payment-page.md).
+Issue report: [pkp-e2e#295](https://github.com/jardakotesovec/pkp-e2e/issues/295) ([docs/issues/U69-A18-sign-in-to-buy-file-skips-payment-page.md](../issues/U69-A18-sign-in-to-buy-file-skips-payment-page.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Note l. Live-probed 2026-09-28 (td17): 500 at `{press}/catalog/book/{id}/version/{id}/chapter/{n}`, typed, from the older version's table of contents and from "Versions", with the book named by number or URL Path, on every press left at "DOI Versioning" "No"; the same page opened on a press seeded with it "Yes".
