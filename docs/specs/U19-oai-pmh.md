@@ -2035,7 +2035,7 @@ Issue report: [pkp-e2e#335](https://github.com/jardakotesovec/pkp-e2e/issues/335
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-26, OJS, two runs: note q21, the last step. The unpublish request answered 200, the publication became unpublished and its tombstone carried no `driver` setting; the server log recorded "Plugin APP\plugins\generic\driver\DRIVERPlugin failed to handle the hook ArticleTombstoneManager::insertArticleTombstone" with the `Repository::get()` TypeError, which `Hook::call` catches. Code: note i.
-Issue report: [docs/issues/U19-A11-oai-driver-set-misses-deleted-record-of-article-in-no-issue.md](../issues/U19-A11-oai-driver-set-misses-deleted-record-of-article-in-no-issue.md).
+Issue report: [pkp-e2e#342](https://github.com/jardakotesovec/pkp-e2e/issues/342) ([docs/issues/U19-A11-oai-driver-set-misses-deleted-record-of-article-in-no-issue.md](../issues/U19-A11-oai-driver-set-misses-deleted-record-of-article-in-no-issue.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-26: note q4. Code: note g.
