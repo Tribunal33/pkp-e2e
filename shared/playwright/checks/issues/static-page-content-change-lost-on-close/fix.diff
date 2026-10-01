@@ -1,0 +1,15 @@
+--- a/lib/pkp/js/controllers/form/FormHandler.js
++++ b/lib/pkp/js/controllers/form/FormHandler.js
+@@ -534,6 +534,12 @@
+ 					validator = $form.validate();
+ 
+ 			validator.element(formElement);
++		}));
++
++		// A rich text box is not an ':input' that fires 'change', so report
++		// its edits as a form change, as listbuilders do.
++		tinyMCEObject.on('input change', this.callbackWrapper(function() {
++			this.getHtmlElement().trigger('formChange');
+ 		}));
+ 	};
+ 

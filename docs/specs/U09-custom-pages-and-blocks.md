@@ -818,6 +818,7 @@ the footnote. <sup>y</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a change made only in "Content" of the static page window and of the block window, then the back arrow: the question "The data on this form has changed. Do you wish to continue without saving?" (A19; the guard its issue report names)
   - a static page and a "Custom Page" item saved at "dot.only" and "deep/Mixed_1.x", each opening at its address (A10; the guard its issue report names)
   - with two form languages and the second language's editor held back, the first language's "Content" box in the block and item windows taking the click and the text, no spinner left (A20; the guard its issue report names)
   - "Add Static Page" on the tab left open after "Static Pages Plugin" is unticked: no server error {OJS OMP} (A12; the guard its issue report names)
@@ -892,7 +893,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | A ".pdf" or ".svg" chosen in the picture window is ignored with no message | 🐞 | minor | — |
 | [A17](#a17) | A pasted picture the site refuses stays in the text, embedded, and is saved | 🐞 | minor | — |
 | [A18](#a18) | A picture over the upload limit gets a server error, never "Files larger than {size} can not be uploaded." | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A19](#a19) | The static page window closes without a question after a change made only in "Content", and the text is lost | 🐞 | user-visible | — |
+| [A19](#a19) | Closing a static page, custom block or reviewer email window after editing only its text loses the text without asking | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | With two form languages, the first language's "Content" box can stay under a "Loading..." spinner for good | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | A deleted custom block would keep its place in the sidebar, so a later block of the same name appears unplaced | ❓ | minor | — |
 | [A5](#a5) | Pictures named ".jpeg" are refused while ".jpg" is accepted | ❓ | user-visible | — |
@@ -1137,12 +1138,23 @@ a smaller file.
 Basis: probe, 2026-10-01. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — The static page window loses a "Content"-only change without asking** · 🐞 · user-visible · {OJS OMP}.
-The window asks "The data on this form has changed. Do you wish to
-continue without saving?" when it is closed after a change to "Path" or
-"Title". A manager who has changed only "Content" and presses the back
-arrow gets no question: the window closes and the text is gone.
-Basis: probe. <sup>f-a19</sup>
+**A19 — Closing a static page, custom block or reviewer email window after editing only its text loses the text without asking** · 🐞 · medium.
+A manager writes or edits the text of a static page in its "Content"
+box, then presses the window's back arrow. The window closes at once and
+the text is gone, without a word. After a change to "Path" or "Title"
+the same arrow first asks "The data on this form has changed. Do you
+wish to continue without saving?", so the manager has no reason to
+expect the loss. Going to another address with the window open loses
+the text the same way, without the browser's "Leave site?" question.
+The custom block window loses its "Content" the same way. So do an
+editor's email windows to a reviewer: an editor who adds a line to the
+message in "Thank Reviewer" or "Unassign Reviewer" and closes the panel
+loses it without a question, and the window opens again with the
+template's text. Any other window built with the older form code does
+the same when its formatted-text box is the only thing changed (listed
+under Cause). Pressing "Save" or sending before closing is the
+only way round.
+Basis: probe, 2026-10-01. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — With two form languages, the first language's "Content" box can stay under a "Loading..." spinner for good** · 🐞 · medium · crash: script.
@@ -2053,6 +2065,7 @@ Issue reports, one per cause: [docs/issues/U09-A18-picture-over-upload-limit-ser
 **f-a19** — The window's unsaved-change tracking (note f) reacts to
 "Path" and "Title" and not to the "Content" editor; cause not traced
 further. Live-probed 2026-09-24 (OJS, OMP): td17.
+Issue report: [docs/issues/U09-A19-static-page-content-change-lost-on-close.md](../issues/U09-A19-static-page-content-change-lost-on-close.md).
 
 <a id="fn-f-a20"></a>
 **f-a20** — `Handler.js::initializeTinyMCE()` renders one TinyMCE 7.9.3
