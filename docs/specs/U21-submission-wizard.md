@@ -978,6 +978,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U21-A14-submit-as-section-editor-refused.md`): a Section
     Editor who also holds Author offered only the roles "Begin Submission"
     accepts in "Submit As", and beginning a submission as Author
+  - the guard for OPS3 (issue report
+    `docs/issues/U21-OPS3-author-cancel-draft-refused.md`): a preprint
+    author's own "Cancel" on a draft reaching "Submission cancelled", and
+    "Delete Incomplete Submissions" removing the author's draft
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1057,7 +1061,7 @@ are the source; badges, Impact and Basis:
 | [A18](#a18) | A change typed more than a minute after the last save is saved cut after its first letters; the rest waits another minute | 🐞 | minor | — |
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | minor | — |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
-| [OPS3](#ops3) | A preprint author's own "Cancel" is silently refused; the draft survives with no message | 🐞 | user-visible | — |
+| [OPS3](#ops3) | On a preprint server, authors cannot cancel their own draft: Cancel does nothing, Delete is refused | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OPS7](#ops7) | The preprint "Not Allowed" page shows a raw locale code where its explanation should be | 🐞 | minor | — |
 | [OPS8](#ops8) | A further galley on a draft that already listed one when the wizard was opened can never get its file | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
@@ -1386,15 +1390,16 @@ Lean: no. Enrol at creation, as the other apps do. Basis: probe.
 <sup>[c](#fn-c)</sup>
 
 <a id="ops3"></a>
-**OPS3 — An author's own Cancel silently does nothing** · 🐞 · user-visible.
-On a preprint server the wizard offers the submitting author the same
-"Cancel" control and "Cancel submission" dialog as everywhere else, but
-confirming does nothing. The dialog closes, no message appears, and the
-draft survives; the deletion is refused behind the scenes. A manager
-cancelling the same draft succeeds, and on a journal or press the author's
-own cancel works. So the control is offered to someone the server always
-refuses. Basis: probe (two independent runs, same day).
-<sup>[o](#fn-o)</sup>
+**OPS3 — On a preprint server, authors cannot cancel their own draft: Cancel does nothing, Delete is refused** · 🐞 · medium.
+On a preprint server the submission wizard offers the submitting author
+the same "Cancel" control and "Cancel submission" dialog as everywhere
+else, but confirming does nothing. The dialog closes, no message
+appears, and the draft survives; the deletion is refused behind the
+scenes. Deleting the draft from "My Submissions" with "Delete Incomplete
+Submissions" is refused too, with the error "You do not have permission
+to delete this submission."
+On a journal or a press the author's own cancel works.
+Basis: probe, 2026-10-01. <sup>[o](#fn-o)</sup>
 
 <a id="ops4"></a>
 **OPS4 — The completion screen thanks whoever is looking at it** · ❓ · latent.
@@ -2004,6 +2009,7 @@ another draft succeeded through the same flow. Mechanism: OPS drafts sit
 on the Production stage, so the author never holds the *submission-stage*
 author assignment `canCurrentUserDelete()` demands — the footer's
 `$canCancelSubmission` check does not mirror it.
+Issue report: [docs/issues/U21-OPS3-author-cancel-draft-refused.md](../issues/U21-OPS3-author-cancel-draft-refused.md).
 
 <a id="fn-p"></a>
 **p** — Section closed mid-draft. `PKPSubmissionHandler::showWizard()`
