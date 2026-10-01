@@ -1439,7 +1439,7 @@ Issue report (a template limited to specific roles): [pkp-e2e#317](https://githu
 
 <a id="fn-a16"></a>
 **f-a16** — Live-probed 2026-09-22 (all three apps): note td7. The email is sent whenever the discussion's task-level notification is created, which follows "Enable these types of notifications." only (note g).
-Issue report: [docs/issues/U35-A16-notify-message-ignores-email-opt-out.md](../issues/U35-A16-notify-message-ignores-email-opt-out.md).
+Issue report: [pkp-e2e#336](https://github.com/jardakotesovec/pkp-e2e/issues/336) ([docs/issues/U35-A16-notify-message-ignores-email-opt-out.md](../issues/U35-A16-notify-message-ignores-email-opt-out.md)).
 
 <a id="fn-a17"></a>
 **f-a17** — Not driven. The 2026-09-29 probe (note j, A3's footnote) chose a predefined message in "Notify", set the list back to its blank entry and read the window (the list's value empty, "Message" as filled; `.reports/U35/ccI29/r2-cases-<app>.json`, `mgr-tplBack`), then only closed it; "Notify" was pressed only in the control with a predefined message chosen. The lean, from the code and not seen: the list then holds an empty value as when untouched, and `fetchTemplateBody()` (note f) only returns the text for the editor, so the form would post no template and `sendMessage()` take A3's path (note g). One press of "Notify" in that state, then the stage's discussions panel and the recipient's mailbox read, settles it. Rule 11b's untouched-list sentence rests on note td4.
