@@ -884,7 +884,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | Custom blocks are listed by a lower-case name built from their first "Block Name", even after a rename | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A3](#a3) | A static page has no breadcrumbs and no main heading, where a custom page has both | 🐞 | minor | — |
+| [A3](#a3) | A static page has no breadcrumbs and no main heading, unlike a custom page | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | A custom block named only outside the manager's interface language is kept as a blank row with neither "Edit" nor "Delete" | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | Typing a page preview's address below manager level, or signed out, gives a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A static page or custom page whose "Path" has a "." in its first two parts answers "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -935,13 +935,17 @@ is not what any manager expects.
 Basis: code. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — A static page has no breadcrumbs and no main heading** · 🐞 · minor · {OJS OMP}.
-A visitor expects a static page to look like the journal's other pages,
-a custom page among them: breadcrumbs "Home / {Title}" and the title as
-the page's main heading. Instead a static page has no breadcrumbs, and its
-title is a second-level heading, so the page has no main heading for
-screen readers and outline tools.
-Basis: probe. <sup>f-a3</sup>
+**A3 — A static page has no breadcrumbs and no main heading, unlike a custom page** · 🐞 · low · {OJS OMP}.
+A visitor who opens a page made with the Static Pages plugin expects it
+to look like the journal's other pages, a custom page among them:
+breadcrumbs "Home / {Title}" and the title as the page's main heading.
+Instead the static page has no breadcrumbs, and its title is a
+second-level heading. The page has no main heading at all, so screen
+readers and outline tools find none.
+Every static page shows this, and so does the "Preview" in the window
+where a manager edits one. It was seen with the default theme. OPS has
+no Static Pages plugin.
+Basis: probe, 2026-10-02. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — A custom block named only outside the manager's interface language cannot be edited or deleted** · 🐞 · medium · crash: script.
@@ -1950,6 +1954,7 @@ a MySQL installation: delete a placed block, add one with the same
 2026-09-24 (OJS, OMP): td12; on the same journal the custom page
 "Shared custom" had the breadcrumbs "Home / Shared custom" and a main
 heading. The static page's preview has the same layout.
+Issue report: [docs/issues/U09-A3-static-page-no-breadcrumbs-or-main-heading.md](../issues/U09-A3-static-page-no-breadcrumbs-or-main-heading.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — The screen checks only the primary language's "Block Name"
