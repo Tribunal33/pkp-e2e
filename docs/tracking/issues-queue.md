@@ -81,7 +81,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 | [U14](../specs/U14-reader-comments-and-moderation.md) | 5 | 0 | 0 |  |
 | [U23](../specs/U23-submissions-dashboard.md) | 5 | 0 | 0 |  |
 | [U29](../specs/U29-review-setup-and-review-forms.md) | 5 | 0 | 0 | A11 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
-| [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 |  |
+| [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 | **A9 taken: issues session, VM s0, 2026-10-01** (joined to U35 A5) |
 | [U55](../specs/U55-notify-users.md) | 4 | 0 | 0 |  |
 | [U33](../specs/U33-production-stage.md) | 3 | 0 | 0 |  |
 | [U67](../specs/U67-archiving-preservation.md) | 3 | 0 | 0 |  |
