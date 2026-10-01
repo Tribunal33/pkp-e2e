@@ -1814,7 +1814,7 @@ followed. The rail back to "Upload Files" saved the same way. The
 2026-08-25 observation in note f (no write on "Continue") was a step with
 nothing changed. An untouched step sent its timer save 58.7–59.7 s after
 typing stopped. Leaving: note fn-a15.
-Issue report: [docs/issues/U21-A4-wizard-footer-last-saved-without-save.md](../issues/U21-A4-wizard-footer-last-saved-without-save.md).
+Issue report: [pkp-e2e#169](https://github.com/jardakotesovec/pkp-e2e/issues/169) ([docs/issues/U21-A4-wizard-footer-last-saved-without-save.md](../issues/U21-A4-wizard-footer-last-saved-without-save.md)).
 
 <a id="fn-j"></a>
 **j** — Save for later. `SubmissionWizardPage.saveForLater()` flushes
@@ -2357,7 +2357,7 @@ reload "Details" read "Autosave check leavelate" and a longer cut (OMP),
 OMP typed as fast in one run and was cut, so whole or cut follows where
 the typing falls against the 500 ms tick, not the app. No response of
 400 or more, no page error, no browser dialog.
-Issue report: [docs/issues/U21-A18-wizard-autosave-cuts-title-mid-typing.md](../issues/U21-A18-wizard-autosave-cuts-title-mid-typing.md).
+Issue report: [pkp-e2e#170](https://github.com/jardakotesovec/pkp-e2e/issues/170) ([docs/issues/U21-A18-wizard-autosave-cuts-title-mid-typing.md](../issues/U21-A18-wizard-autosave-cuts-title-mid-typing.md)).
 
 <a id="fn-omp1"></a>
 **fn-omp1** — OMP divergence points: `StartSubmission` (OMP) adds
