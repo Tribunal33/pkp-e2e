@@ -1116,6 +1116,12 @@ Left out of the scenarios above, by reason:
     press's ListRecords and GetRecord with one published book that has no
     abstract, the book's record answered without a "Description" {OMP} (once
     fixed)
+  - the guard for A1 (issue report
+    `docs/issues/U19-A1-oai-own-address-loses-deleted-records.md`): a second
+    journal's own address after it unpublishes an article: its lists and
+    GetRecord show its own deleted record and none of the first journal's,
+    and the site-wide `set` of that journal lists it {OJS OMP} (Rule 4b;
+    once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1227,7 +1233,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A journal's own OAI address leaves out its deleted records and shows the first journal's instead {OJS OMP} | 🐞 | user-visible | — |
+| [A1](#a1) | A journal's own OAI address leaves out its deleted records and lists the first journal's instead {OJS OMP} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | `from` and `until` ignore the time of day | 🐞 | minor | — |
 | [A3](#a3) | A date that is not in the calendar is accepted instead of refused | 🐞 | minor | — |
 | [A4](#a4) | The browser view's last page says "There are more results." and offers a "Resume" that fails | 🐞 | minor | — |
@@ -1266,23 +1272,25 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — A journal's own address leaves out its deleted records** {OJS OMP} · 🐞 · user-visible.
-A harvester of one journal's address expects an unpublished article to
-come back as a deleted record, so it can drop it. On every journal but
-the first (Rule 4b), the record disappears instead: the lists leave it
-out and GetRecord answers "No matching identifier in this repository",
-so the harvester keeps showing the withdrawn article. Asked for that
-journal's set, the site-wide address leaves its deleted records out
-too, and the `driver` set never shows one (Rule 23a). In place of its
-own, the journal's lists and GetRecord show the first journal's deleted
-records, under that journal's identifiers and set (a set the journal's
-ListSets does not name), and its "Earliest Datestamp" is the oldest of
-them, even on a journal with nothing published; a press lists them
-before its own records. Only while the first journal has no
-deleted record does an empty journal answer "No matching records in
-this repository" and give the moment of the request. A preprint server
-is not affected.
-Since: 2021-07-14 · Basis: probe, 2026-09-26; OMP 2026-09-29. <sup>f-a1</sup>
+**A1 — A journal's own OAI address leaves out its deleted records and lists the first journal's instead** {OJS OMP} · 🐞 · medium.
+A harvester of one journal's OAI address expects an unpublished article
+to come back as a deleted record, so it can drop it. On every journal
+except the one with ID 1 (the first created on the installation), the
+record disappears instead: the journal's lists leave it out and
+GetRecord answers "No matching identifier in this repository". The
+site-wide address, when asked for that journal's set, leaves the
+journal's deleted records out too. The journal's published records are
+listed correctly throughout. In place of its own deleted records, such a
+journal's lists and GetRecord show those of journal 1. They carry
+journal 1's identifiers and its set, which the journal's own ListSets
+does not name, and the journal's "Earliest Datestamp" becomes the oldest
+of them. This half needs nothing unpublished in the journal itself: it
+shows even on a journal with nothing published, as soon as journal 1 has
+a deleted record. The harvester keeps showing the withdrawn article, and
+nothing tells the journal. The fault needs an installation with more
+than one journal. A press does the same with its publication formats; a
+preprint server is not affected.
+Since: 2021-06-08 · Basis: probe, 2026-10-01. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — `from` and `until` ignore the time of day** · 🐞 · minor.
@@ -1744,6 +1752,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 
 <a id="fn-f-a1"></a>
 **f-a1** — Live-probed 2026-09-26 and, on OMP, 2026-09-29: note q8. "Earliest Datestamp": OJS scratch journals with and without published items all gave 2026-09-26T05:20:08Z, a deleted record of `publicknowledge`; OMP gave the moment of the request, for an empty press and for one whose only book was unpublished, while `publicknowledge` held no deleted record; with one, the empty press gave that record's datestamp (2026-09-29); OPS gave the deleted record's datestamp. Code: note n; the OJS closure dates from `88aaa6b49f` "pkp/pkp-lib#7129 Issue EntityDAO refactor" (2021-07-14), OMP's from the 2021 Laravel port (`79302a1bd`, 2021-06-15). The test installs' first context is `publicknowledge`.
+Issue report: [docs/issues/U19-A1-oai-own-address-loses-deleted-records.md](../issues/U19-A1-oai-own-address-loses-deleted-records.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Live-probed 2026-09-26: note q11, the reads with a time. Code: note l.
