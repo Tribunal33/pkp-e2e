@@ -18,7 +18,7 @@ and the hourly routine starts one only when none is running
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s0, 2026-10-01**; done: A14 |
-| [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 | **Taken: issues session, VM s0, 2026-10-01**; done: A3, OMP1 (pkp-e2e#307 and pkp-e2e#308), A1 (pkp-e2e#311), OPS3 (pkp-e2e#314), A10 (pkp-e2e#315 and pkp-e2e#317), A16 (pkp-e2e#336), OPS2 (pkp-e2e#337), A11 (pkp-e2e#338), A9 (pkp-e2e#339) |
+| [U35](../specs/U35-stage-participants.md) | 18 | 3 | 7 | **Taken: issues session, VM s0, 2026-10-01**; done: A3, OMP1 (pkp-e2e#307 and pkp-e2e#308), A1 (pkp-e2e#311), OPS3 (pkp-e2e#314), A10 (pkp-e2e#315 and pkp-e2e#317), A16 (pkp-e2e#336), OPS2 (pkp-e2e#337), A11 (pkp-e2e#338), A9 (pkp-e2e#339), A5 (pkp-e2e#343 and pkp-e2e#344, with U32 A9) |
 | [U52](../specs/U52-payments-and-apcs.md) | 8 | 3 | 3 |  |
 | [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 |  |
 | [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 |  |
@@ -80,7 +80,7 @@ and the hourly routine starts one only when none is running
 | [U14](../specs/U14-reader-comments-and-moderation.md) | 5 | 0 | 0 |  |
 | [U23](../specs/U23-submissions-dashboard.md) | 5 | 0 | 0 |  |
 | [U29](../specs/U29-review-setup-and-review-forms.md) | 5 | 0 | 0 | A11 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
-| [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 | **A9 taken: issues session, VM s0, 2026-10-01** (joined to U35 A5) |
+| [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 | A9 done with U35 A5 (pkp-e2e#343) |
 | [U55](../specs/U55-notify-users.md) | 4 | 0 | 0 |  |
 | [U33](../specs/U33-production-stage.md) | 3 | 0 | 0 |  |
 | [U67](../specs/U67-archiving-preservation.md) | 3 | 0 | 0 |  |

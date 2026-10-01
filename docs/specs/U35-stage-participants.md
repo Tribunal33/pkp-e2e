@@ -1473,7 +1473,7 @@ Issue report: [pkp-e2e#307](https://github.com/jardakotesovec/pkp-e2e/issues/307
 
 <a id="fn-a5"></a>
 **f-a5** — `PKPStageParticipantNotifyForm::sendMessage()` creates the discussion with `'createdBy' => $user->getId()`, `$user` being the recipient, while the head note's `userId` and the task's sender are the signed-in user. Live-probed 2026-09-18 (Copyediting stage, OJS and OMP): the "Request Copyedit" discussion listed as "Discussion Request Copyedit Created by: {Copyeditor}"; live-probed 2026-09-19 (all three apps, the "Notify" window): the discussion reading "Created by: {the recipient}". Live-probed 2026-09-22 (all three apps, from "Assign" and "Notify"): the panel row "Discussion {name} Created by: {the recipient's username}", the discussion's first entry "Message from {the sender's username}", the recipient's task naming the sender.
-Issue report: [docs/issues/U35-A5-message-discussion-created-by-recipient.md](../issues/U35-A5-message-discussion-created-by-recipient.md).
+Issue report: [pkp-e2e#343](https://github.com/jardakotesovec/pkp-e2e/issues/343) ([docs/issues/U35-A5-message-discussion-created-by-recipient.md](../issues/U35-A5-message-discussion-created-by-recipient.md)).
 
 <a id="fn-a6"></a>
 **f-a6** — Live-probed 2026-09-22 (all three apps): note td6. `sendMessage()`'s `switch ($templateKey)` raises `NOTIFICATION_TYPE_EDITOR_ASSIGN` (`notification.type.editorAssign` "You have been assigned as an editor to the submission "{$title}".") only for the key `EDITOR_ASSIGN`; the installed "Assign Editor" templates carry `EDITOR_ASSIGN_SUBMISSION`, `EDITOR_ASSIGN_REVIEW` and `EDITOR_ASSIGN_PRODUCTION` (`registry/taskTemplates.xml`, keys made mandatory by pkp/pkp-lib#12593, ojs `4157f8331c`, 2026-08-07), so they fall to the default branch, which only logs. No other code raises that task.
@@ -1508,7 +1508,7 @@ Issue report: [pkp-e2e#338](https://github.com/jardakotesovec/pkp-e2e/issues/338
 
 <a id="fn-a15"></a>
 **f-a15** — Live-probed 2026-09-22 (journal and press): the Submission stage's "Assign Editor" email ending "— This is an automated message from {journal name}." and then the discussion footer; the Review and Production letters, and the other messages, with the footer alone. The first closing is part of the template's own text, which the discussion email then adds its footer to (note g).
-Issue report: [docs/issues/U35-A15-assign-editor-email-two-footers.md](../issues/U35-A15-assign-editor-email-two-footers.md).
+Issue report: [pkp-e2e#344](https://github.com/jardakotesovec/pkp-e2e/issues/344) ([docs/issues/U35-A15-assign-editor-email-two-footers.md](../issues/U35-A15-assign-editor-email-two-footers.md)).
 
 <a id="fn-a16"></a>
 **f-a16** — Live-probed 2026-09-22 (all three apps): note td7. The email is sent whenever the discussion's task-level notification is created, which follows "Enable these types of notifications." only (note g).
