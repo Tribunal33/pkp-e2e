@@ -1141,8 +1141,13 @@ Left out of the scenarios above, by reason:
     `docs/issues/U19-A17-oai-malformed-identifier-answers-record.md`):
     GetRecord of an identifier with letters after the number, or with the
     app's start in its middle, answering "Identifier is not in a valid
-    format" on a press and a preprint server, as scenario's journal does
+    format" on a press and a preprint server, as a journal does
     {OMP OPS} (once fixed)
+  - the guard for OMP3 (issue report
+    `docs/issues/U19-OMP3-oai-unknown-set-lists-other-records.md`): a press
+    asked for an unknown series, another press's path and an unknown path as
+    `set`, each answering "No matching records in this repository" {OMP}
+    (once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1274,7 +1279,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A22](#a22) | Once one journal sets "DOI Versioning" to "Yes", every journal's OAI-PMH requests answer a server error {OJS} | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | The `driver` set lists articles with no galley {OJS} | 🐞 | minor | — |
 | [A24](#a24) | A `driver` list offers "Resume" when complete, and following it repeats records {OJS} | 🐞 | minor | — |
-| [OMP3](#omp3) | A press given a set it does not have lists other records instead of none | 🐞 | minor | — |
+| [OMP3](#omp3) | Asked for a set it does not have, a press's OAI-PMH address lists every record of the press, or of every press | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP4](#omp4) | A press's OAI-PMH record lists answer a server error once one book is published without an abstract | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OMP6](#omp6) | A series with no prefix is named with a leading space | 🐞 | invisible | — |
 | [OPS1](#ops1) | A preprint server's OAI-PMH lists answer a server error whenever the harvester gives an "until" date | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1576,14 +1581,23 @@ have? Lean: yes; the switch was added for the other two apps only.
 Basis: probe, 2026-09-26. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
-**OMP3 — An unknown set lists other records** · 🐞 · minor.
-A harvester that asks a press for a set it does not have expects "No
-matching records in this repository", as a journal answers. With an
-unknown series after the press's path it gets all the press's records;
-with another press's path, an unknown path or another press's series,
-the records of every press. The site-wide address given another press's
-path lists that press's records, as it should.
-Basis: probe, 2026-09-26. <sup>f-omp3</sup>
+**OMP3 — Asked for a set it does not have, a press's OAI-PMH address lists every record of the press, or of every press** · 🐞 · medium.
+A harvester that sends ListRecords or ListIdentifiers to a press's
+OAI-PMH address with a set the press does not have expects "No matching
+records in this repository", as a journal and a preprint server answer.
+A press answers with records instead. This is one fault with two
+outcomes. For a set written as the press's own path and a series it does
+not have (`publicknowledge:nosuchseries`), the answer is every record of
+the press. For any other unknown set, another press's set included, it
+is every record of every press on the installation. Each record names
+its real set, and nothing in the answer says the set was not found. A
+harvester set up for one set is therefore handed books that are not in
+that set, with no error. The fault needs a request for a set the press
+does not have: a mistyped one, or the set of a series that has since
+been removed or given another path. A set the press has is answered
+correctly. The site-wide address answers a press's set correctly and an
+unknown set with every press's records.
+Basis: probe, 2026-10-01. <sup>f-omp3</sup>
 
 <a id="omp4"></a>
 **OMP4 — A press's OAI-PMH record lists answer a server error once one book is published without an abstract** · 🐞 · high · crash: server.
@@ -1881,6 +1895,7 @@ Issue report: [pkp-e2e#281](https://github.com/jardakotesovec/pkp-e2e/issues/281
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — Live-probed 2026-09-26: note q10, the OMP part. Code: note j.
+Issue report: [docs/issues/U19-OMP3-oai-unknown-set-lists-other-records.md](../issues/U19-OMP3-oai-unknown-set-lists-other-records.md).
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — Live-probed 2026-09-26: a book published with its abstract saved empty on "Title & Abstract" made the press's ListRecords, its GetRecord and the site-wide `set={press}` list answer 500, while the site-wide first page (without the book) and ListIdentifiers answered; the server log: `Dc11SchemaPublicationFormatAdapter::addLocalizedElements(): Argument #3 ($localizedValues) must be of type array, null given`. The book was unpublished again at once. Code: note f (`Dc11SchemaPublicationFormatAdapter::addLocalizedElements(…, array $localizedValues)` receives `$publication->getData('abstract')`, null when never set; OMP's "Title & Abstract" does not require the abstract).
