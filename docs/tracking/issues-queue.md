@@ -10,7 +10,7 @@ entry lands in it (MAINTENANCE "The issues session").
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **In progress: issues session s1, 2026-09-30.** Done: A13, A14, A15 (with U10 A4), A18 (its request-limit case with U36 A21, pkp-e2e#43); in progress: A3, A16; done also: A1, A4, A7, A10, A11, A12, A19 (with U03 A19, U28 A15), A20; open: A17 |
+| [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **In progress: issues session s1, 2026-09-30.** Done: A13, A14, A15 (with U10 A4), A18 (its request-limit case with U36 A21, pkp-e2e#43); in progress: A16, A17; done also: A1, A3, A4, A7, A10, A11, A12, A19 (with U03 A19, U28 A15), A20 |
 | [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 | **Claimed: issues session s1, 2026-09-30** |
 | [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **Claimed: issues session s1, 2026-09-30** |
 | [U69](../specs/U69-monograph-landing-page.md) | 17 | 4 | 5 | **Claimed: issues session s1, 2026-09-30** (A15 with U13 A1); **A9 done: issues session s3, 2026-09-30** (with U47 OMP1) |
