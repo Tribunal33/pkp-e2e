@@ -1,0 +1,37 @@
+--- a/lib/pkp/classes/controlledVocab/ControlledVocabEntry.php
++++ b/lib/pkp/classes/controlledVocab/ControlledVocabEntry.php
+@@ -116,6 +116,14 @@
+     }
+ 
+     /**
++     * Scope a query to return entries in their stored order
++     */
++    public function scopeOrderBySeq(Builder $query): Builder
++    {
++        return $query->orderBy('seq')->orderBy($this->primaryKey);
++    }
++
++    /**
+      * Scope a query to only include entries for a specific controlled vocab id
+      */
+     public function scopeWithControlledVocabId(Builder $query, int $controlledVocabId): Builder
+--- a/lib/pkp/classes/controlledVocab/Repository.php
++++ b/lib/pkp/classes/controlledVocab/Repository.php
+@@ -62,6 +62,7 @@
+                 fn ($query) => $query->withSymbolics([$symbolic])->withAssoc($assocType, $assocId)
+             )
+             ->when(!empty($locales), fn ($query) => $query->withLocales($locales))
++            ->orderBySeq()
+             ->get()
+             ->each(function ($entry) use (&$result, $asEntryData) {
+                 foreach ($entry->name as $locale => $value) {
+--- a/lib/pkp/classes/publication/DAO.php
++++ b/lib/pkp/classes/publication/DAO.php
+@@ -197,6 +197,7 @@
+ 
+         $cache->controlledVocabs ??= ControlledVocabEntry::query()
+             ->withWhereHas('controlledVocab', fn ($query) => $query->withSymbolics([ControlledVocab::CONTROLLED_VOCAB_SUBMISSION_KEYWORD, ControlledVocab::CONTROLLED_VOCAB_SUBMISSION_SUBJECT, ControlledVocab::CONTROLLED_VOCAB_SUBMISSION_DISCIPLINE, ControlledVocab::CONTROLLED_VOCAB_SUBMISSION_AGENCY])->withAssoc(Application::ASSOC_TYPE_PUBLICATION, $ids))
++            ->orderBySeq()
+             ->get()
+             ->collect()
+             ->groupBy(fn ($cve) => $cve->controlledVocab->assocId, true);

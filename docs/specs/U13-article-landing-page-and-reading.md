@@ -1145,6 +1145,10 @@ Left out of the scenarios above, by reason:
     "Additional Citation Formats" ticked, "More Citation Formats" opening
     the ticked "Downloadable Formats", and no button when nothing is
     ticked
+  - the guard for A11 (Fields "Keywords:"; issue report
+    `docs/issues/U13-A11-keywords-order-not-kept.md`): keywords shown in
+    the order typed on the page and in the "Metadata" form (a unit test
+    in pkp-lib reads entries stored with `seq` against primary-key order)
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1288,7 +1292,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A8](#a8) | "Endnote/Zotero/Mendeley (RIS)" citation download writes its dates with "%" signs ("PY  - %2026/%09/%30") | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | "More Citation Formats" opens nothing when no additional citation format is offered, so readers cannot reach the citation downloads | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A reference's web address written in parentheses becomes a link that includes the closing ")" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A11](#a11) | Keywords are listed in no fixed order: the order typed is not kept | 🐞 | minor | — |
+| [A11](#a11) | Keywords on an article, book or preprint page can appear in another order than the editor typed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS1](#ojs1) | Readers get no other citation format or citation download on an article published outside a published issue | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | Publication Facts Label settings always warn "Funding Plugin Not Present", for a plugin that no longer exists | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | In French (Canada) and every other language without its own labels, article pages show no "Publication Facts" panel | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1478,17 +1482,22 @@ address, also when the ")" is followed by ".", "," or ";". A ";" or
 Basis: probe, 2026-10-01. <sup>[f-a10](#fn-f-a10)</sup>
 
 <a id="a11"></a>
-**A11 — Keywords lose the order they were typed in** · 🐞 · minor.
-Keywords typed "tide" then "current" can show on the article's page as
-"Keywords: current, tide", and in a preprint server's lists as
-"current" then "tide". The app keeps no order for them. Any save of the
-publication, publishing and scheduling included, can store them in the
-order just shown, after which the typed order is kept nowhere. Four
-saves in a row on the publication's Metadata page kept the typed order,
-so an editor cannot tell when the order will turn. A reader sees the keywords in an order the editor did
-not choose. The keywords are typed as described in
+**A11 — Keywords on an article, book or preprint page can appear in another order than the editor typed** · 🐞 · low.
+Keywords typed "tide" then "current" can show on the article's, book's
+or preprint's page as "Keywords: current, tide", and in a preprint
+server's lists as "current" then "tide". The editor expects the order
+they typed.
+The app saves the order and never reads it back, so the page shows the
+keywords in whatever order the database returns them. Once they show in
+another order, the next save of the publication stores that order, and
+the typed order is kept nowhere. Nothing tells the editor.
+On a freshly installed site the typed order holds; it turns only after
+the database has stored the rows of one list out of order, which an
+editor cannot see coming. Subjects, disciplines and supporting agencies
+are stored and read the same way.
+The keywords are typed as described in
 [Publication metadata](U40-publication-metadata.md), its Rule 7.
-Basis: probe, 2026-09-26. <sup>[f-a11](#fn-f-a11)</sup>
+Basis: probe, 2026-10-01. <sup>[f-a11](#fn-f-a11)</sup>
 
 <a id="a12"></a>
 **A12 — An unpublished first version still dates the article** · ❓ · minor.
@@ -2777,6 +2786,7 @@ publish on four runs, in the typed order on later ones. Probed
 2026-09-26, OJS and OPS: moving one keyword's row on disk turned
 scenario 1's line to "current, tide" on four runs of four; four plain
 "Save"s on Publication › Metadata kept "alpha, beta, gamma".
+Issue report: [docs/issues/U13-A11-keywords-order-not-kept.md](../issues/U13-A11-keywords-order-not-kept.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note g: `firstPublication` is the earliest `datePublished`
