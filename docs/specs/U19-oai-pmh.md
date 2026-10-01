@@ -1814,7 +1814,7 @@ Issue report: [pkp-e2e#254](https://github.com/jardakotesovec/pkp-e2e/issues/254
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-26: note q9. OMP: a format published at 08:28:23Z, deleted at 09:09:59Z and published again read 08:28:23Z; OPS the same with 08:28:36Z and 09:13:38Z; `submissions.last_modified` did not change. Code: note e (the datestamp is `ms.last_modified` on OMP, `a.last_modified` on OPS).
-Issue report: [docs/issues/U19-A18-oai-datestamp-stays-after-edit-republish.md](../issues/U19-A18-oai-datestamp-stays-after-edit-republish.md).
+Issue report: [pkp-e2e#280](https://github.com/jardakotesovec/pkp-e2e/issues/280) ([docs/issues/U19-A18-oai-datestamp-stays-after-edit-republish.md](../issues/U19-A18-oai-datestamp-stays-after-edit-republish.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Live-probed 2026-09-26, OJS and OPS: note q10. Code: note j.
