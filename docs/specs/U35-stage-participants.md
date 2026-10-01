@@ -1548,7 +1548,7 @@ Issue report: [pkp-e2e#343](https://github.com/jardakotesovec/pkp-e2e/issues/343
 
 <a id="fn-a7"></a>
 **f-a7** — Live-probed 2026-09-22 (all three apps): note td8. Note k: `saveParticipant()` logs `SUBMISSION_LOG_ADD_PARTICIPANT` with `submission.event.participantAdded` on the edit branch as well, where only the trivial notice distinguishes the two.
-Issue report: [docs/issues/U35-A7-edit-assignment-logged-as-assignment.md](../issues/U35-A7-edit-assignment-logged-as-assignment.md).
+Issue report: [pkp-e2e#350](https://github.com/jardakotesovec/pkp-e2e/issues/350) ([docs/issues/U35-A7-edit-assignment-logged-as-assignment.md](../issues/U35-A7-edit-assignment-logged-as-assignment.md)).
 
 <a id="fn-a8"></a>
 **f-a8** — Live-probed 2026-09-22 (journal and press): an unassigned Production editor opening every stage of a submission with "Assign" and every row's "Edit"; the same role assigned to a submission opening Copyediting and Production, and the Submission and Review entries (a press's Internal Review too) showing "You don't currently have access to that stage of the workflow.". Code, not traced further: an assigned user's stages come from their assignments' roles, and the fallback that gives a manager-level user every stage applies only to a user with no assignment on the submission (`submission/maps/Schema::getPropertyStages()`, note p).
@@ -1575,7 +1575,7 @@ Issue report: [pkp-e2e#345](https://github.com/jardakotesovec/pkp-e2e/issues/345
 
 <a id="fn-a14"></a>
 **f-a14** — Live-probed 2026-09-22 (all three apps): the "User" column of "… was assigned …" lines naming the assigned person when a Journal Manager or a Section Editor assigned them, of the lines "Edit" writes naming the edited person, and of "… was removed …" lines naming the removed person; "Notification sent to users." lines naming the sender. Cause: note k.
-Issue report: [docs/issues/U35-A14-activity-log-names-participant-not-editor.md](../issues/U35-A14-activity-log-names-participant-not-editor.md).
+Issue report: [pkp-e2e#349](https://github.com/jardakotesovec/pkp-e2e/issues/349) ([docs/issues/U35-A14-activity-log-names-participant-not-editor.md](../issues/U35-A14-activity-log-names-participant-not-editor.md)).
 
 <a id="fn-a15"></a>
 **f-a15** — Live-probed 2026-09-22 (journal and press): the Submission stage's "Assign Editor" email ending "— This is an automated message from {journal name}." and then the discussion footer; the Review and Production letters, and the other messages, with the footer alone. The first closing is part of the template's own text, which the discussion email then adds its footer to (note g).
