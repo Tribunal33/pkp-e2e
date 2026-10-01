@@ -4,10 +4,10 @@
 - **Effort** medium
 - **Kind** defect
 - **Affects**
-  - main: OJS, OMP, OPS (with a role's "Permit submission metadata edit." switched off)
-  - 3.5: OJS, OMP, OPS (with a role's "Permit submission metadata edit." switched off)
-  - 3.4: OJS, OMP, OPS (code)
-  - 3.3: OJS, OMP, OPS (code)
+  - main: OJS, OMP (as installed); OPS (only after a role's "Permit submission metadata edit." is switched off)
+  - 3.5: OJS, OMP (as installed); OPS (only after a role's "Permit submission metadata edit." is switched off)
+  - 3.4: OJS, OMP, OPS (code; OPS as above)
+  - 3.3: OJS, OMP, OPS (code; OPS as above)
 - **Introduced** `pkp/pkp-lib#4753` for `pkp/pkp-lib#3758` · [8484a16aff](https://github.com/pkp/pkp-lib/commit/8484a16affc13b7d0d0830c73522d53f31c542d4) · 2018-10-30 · Dimitris Efstathiou (defstat)
 - **Upstream** none found for this box (2026-10-01); `pkp/pkp-lib#11236` (closed, fixed) covers the same fault on the "Assignment privileges" box only
 - **Tracked in** spec U35 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U35-stage-participants.md#a9)
@@ -23,9 +23,10 @@ box to start from the new role's setting, as "Assignment privileges"
 does. "OK" saves the assignment with the tick.
 
 That person may then change the submission's title, abstract and other
-publication details for as long as the assignment keeps the tick,
-although their role's "Permit submission metadata edit." is off. The
-editor can untick the box before "OK", or later under the row's "Edit".
+publication details, although their role's "Permit submission metadata
+edit." is off, until an editor unticks the box under the row's "Edit"
+or removes the person with "Remove". The editor can also untick the box
+before "OK".
 
 On a preprint server the fault shows only after a manager has switched
 a role's "Permit submission metadata edit." off: as installed, every

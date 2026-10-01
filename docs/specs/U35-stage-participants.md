@@ -1130,9 +1130,10 @@ changes the role to one that starts without it, such as Author, sees
 box to start from the new role's setting, as "Assignment privileges"
 does. "OK" saves the assignment with the tick.
 That person may then change the submission's title, abstract and other
-publication details for as long as the assignment keeps the tick,
-although their role's "Permit submission metadata edit." is off. The
-editor can untick the box before "OK", or later under the row's "Edit".
+publication details, although their role's "Permit submission metadata
+edit." is off, until an editor unticks the box under the row's "Edit"
+or removes the person with "Remove". The editor can also untick the box
+before "OK".
 On a preprint server the fault shows only after a manager has switched
 a role's "Permit submission metadata edit." off: as installed, every
 role "Assign" offers there has it on.

@@ -45,8 +45,9 @@ blank entry after a predefined message was chosen fails there too.
 - **Way round**: choose a "Discussion (…)" entry in the list and replace
   its text; or use "Add" in the stage's discussions panel.
 
-Medium: a way round exists in the same window. It would be high
-if on MySQL the window closes with "Notification sent to users." while
+Medium: a way round exists in the same window, except on a press's
+Internal Review, where only the discussions panel works. It would be
+high if on MySQL the window closes with "Notification sent to users." while
 nothing is sent, which the code suggests and no walk checked (Evidence).
 
 ## Steps to reproduce

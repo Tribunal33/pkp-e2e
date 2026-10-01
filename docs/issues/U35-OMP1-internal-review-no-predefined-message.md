@@ -44,6 +44,13 @@ Low: what this fault takes away is a ready-made text. That the stage's
 panel sends nothing today is the typed-message fault's doing and is
 rated in that report.
 
+Order of the two fixes: if PR `pkp/pkp-lib#13385` merges and this fault
+stays, the Internal Review panel still sends nothing, because the PR
+sends a typed message under the stage's "Discussion (…)" template and
+this stage has none (read in the PR's diff, not walked). The fix here
+is medium rather than small because presses upgraded from 3.5 need a
+migration that copies their review-stage messages to Internal Review.
+
 ## Steps to reproduce
 
 Preconditions:
