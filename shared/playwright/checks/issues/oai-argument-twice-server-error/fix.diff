@@ -1,0 +1,31 @@
+--- a/lib/pkp/classes/oai/OAI.php
++++ b/lib/pkp/classes/oai/OAI.php
+@@ -78,7 +78,9 @@
+      */
+     public function execute(): void
+     {
+-        switch ($this->getParam('verb')) {
++        // A repeated verb is an array (OAIUtils::parseStr()): refuse it as badVerb
++        $verb = $this->params['verb'] ?? null;
++        switch (is_array($verb) ? null : $verb) {
+             case 'GetRecord':
+                 $this->getRecord();
+                 break;
+@@ -764,7 +766,7 @@
+             if (!$this->paramExists($k)) {
+                 $this->error('badArgument', "Missing {$k} parameter");
+                 return false;
+-            } elseif (is_array($this->getParam($k))) {
++            } elseif (is_array($this->params[$k])) {
+                 $this->error('badArgument', "Multiple values are not allowed for the {$k} parameter");
+                 return false;
+             }
+@@ -772,7 +774,7 @@
+ 
+         // Check for duplicate optional parameters
+         foreach ($optional as $k) {
+-            if ($this->paramExists($k) && is_array($this->getParam($k))) {
++            if ($this->paramExists($k) && is_array($this->params[$k])) {
+                 $this->error('badArgument', "Multiple values are not allowed for the {$k} parameter");
+                 return false;
+             }

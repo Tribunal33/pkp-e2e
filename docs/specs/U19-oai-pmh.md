@@ -1132,6 +1132,11 @@ Left out of the scenarios above, by reason:
     Versioning" at "Yes" on one journal (a "DOI Prefix" typed first),
     Identify, the lists and GetRecord answering at that journal, at another
     journal and at the site-wide address {OJS} (once fixed)
+  - the guard for A16 (issue report
+    `docs/issues/U19-A16-oai-argument-twice-server-error.md`): a request
+    that gives `metadataPrefix`, `set` or `verb` twice answering the
+    protocol's refusal ("Multiple values are not allowed for the …
+    parameter", "Illegal OAI verb") (once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1255,7 +1260,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | The MARC records do not follow their schemas {OJS} | 🐞 | minor | — |
 | [A13](#a13) | Records read in French carry untranslated keys {OJS OMP} | 🐞 | minor | — |
 | [A15](#a15) | MARC field 008 reads "%26%09%26 %2026" instead of the publication date {OJS} | 🐞 | minor | — |
-| [A16](#a16) | An argument given twice fails with a server error instead of being refused | 🐞 | minor · crash: server | — |
+| [A16](#a16) | An OAI-PMH request that gives an argument twice gets a server error instead of the refusal message | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | A malformed identifier answers "No matching identifier", or another record {OMP OPS} | 🐞 | minor | — |
 | [A18](#a18) | A press's or preprint server's OAI record keeps its earlier datestamp after an edit or a second publish {OMP OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | A deleted section's set is listed, but asking for it lists nothing {OJS OPS} | 🐞 | minor | — |
@@ -1439,13 +1444,19 @@ record carries "%26%09%26 %2026" in its place.
 Basis: probe, 2026-09-26. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — An argument given twice fails** · 🐞 · minor · crash: server.
-A harvester that sends an argument twice, such as
-`metadataPrefix=oai_dc&metadataPrefix=oai_dc` or `set` twice, expects
-"Multiple values are not allowed for the metadataPrefix parameter". The
-app fails with a server error and an empty page instead; the next
-request is answered as usual.
-Basis: probe, 2026-09-26. <sup>f-a16</sup>
+**A16 — An OAI-PMH request that gives an argument twice gets a server error instead of the refusal message** · 🐞 · low · crash: server.
+The app fails with a server error when a harvester sends an OAI-PMH
+request that gives an argument twice, such as
+`metadataPrefix=oai_dc&metadataPrefix=oai_dc`. The harvester expects the
+refusal "Multiple values are not allowed for the metadataPrefix
+parameter", or "Illegal OAI verb" when the repeated argument is `verb`.
+It gets an empty page with status 500 instead. Such a request is
+malformed and is refused on every version, so no record and no
+well-formed request is affected, and the next request is answered as
+usual. Every request name and every argument is affected, at a
+journal's, press's or preprint server's own OAI-PMH address and at the
+site-wide one.
+Basis: probe, 2026-10-01. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — A malformed identifier answers another way** {OMP OPS} · 🐞 · minor.
@@ -1816,6 +1827,7 @@ Issue report: [pkp-e2e#254](https://github.com/jardakotesovec/pkp-e2e/issues/254
 
 <a id="fn-f-a16"></a>
 **f-a16** — Live-probed 2026-09-26, all three apps (OJS twice): `verb=ListRecords&metadataPrefix=oai_dc&metadataPrefix=oai_dc`, and the same with `set` twice, answered 500 with an empty body; the server log: `PKP\oai\OAI::getParam(): Return value must be of type ?string, array returned`; the next Identify answered. Code: notes c, m.
+Issue report: [docs/issues/U19-A16-oai-argument-twice-server-error.md](../issues/U19-A16-oai-argument-twice-server-error.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-26: note q16. Code: note e (OMP and OPS accept any identifier containing their start and cast the rest with `(int)`).
