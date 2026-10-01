@@ -1962,7 +1962,7 @@ Issue report: [pkp-e2e#187](https://github.com/jardakotesovec/pkp-e2e/issues/187
 every row's "…" button is named `##userAccess.management.options##` (25 of
 25 on the seeded journal's first page), and the menu reads normally. Seen
 first on 2026-09-05 on OPS (review-stage claim check). Mechanism: note q.
-Issue report: [docs/issues/U53-A5-users-row-button-raw-code-name.md](../issues/U53-A5-users-row-button-raw-code-name.md).
+Issue report: [pkp-e2e#188](https://github.com/jardakotesovec/pkp-e2e/issues/188) ([docs/issues/U53-A5-users-row-button-raw-code-name.md](../issues/U53-A5-users-row-button-raw-code-name.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-25, all three apps: a throwaway Author
