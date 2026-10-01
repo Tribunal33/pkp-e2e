@@ -882,6 +882,8 @@ as it stands. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A3 (issue report
+    `docs/issues/U57-A3-language-block-loses-page-on-port.md`): a visitor choosing "français" in the sidebar "Language" block on "About the Journal" and on the site's Login page, and staying on that page
   - the guard for A1 (issue report
     `docs/issues/U57-A1-site-language-change-unticks-submission-languages.md`): a language the site does not enable, ticked under "Submissions" and made the "Default", keeping both ticks and its place on "Make a Submission" after the Site Administrator installs another language
   - the guard for A8 (issue report
@@ -960,7 +962,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | Any change to the site's languages silently unticks journals' submission languages the site does not offer | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
-| [A3](#a3) | On a site served on a port of its own, the "Language" block's links land on the site's home page | 🐞 | minor | — |
+| [A3](#a3) | Choosing a language in the sidebar "Language" block lands on the home page when the site's address has a port | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | Ticking "Forms" makes the Settings page's script fail five times | 🐞 | invisible · crash: script | — |
 | [A6](#a6) | Two managers adding the same form language at the same moment: one tick silently fails on the server | 🐞 | latent · crash: server | Jarda 2026-09-26 · risk accepted |
 | [A7](#a7) | On a one-language site, each field typed on "Create Journal" makes the page's script fail | 🐞 | invisible · crash: script | — |
@@ -1008,17 +1010,24 @@ the action overwrites texts in bulk.
 Basis: probe. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
-**A3 — The "Language" block loses the page on a site with a port** · 🐞 · minor.
-On a site whose address carries a port number, such as
+**A3 — Choosing a language in the sidebar "Language" block lands on the home page when the site's address has a port** · 🐞 · low.
+On a site whose public address includes a port number, such as
 `http://example.org:8080`, choosing a language in the sidebar "Language"
-block does not reopen the page the visitor was on: it lands on the site's
-home page in the chosen language, and the visitor has to find the page
-again (the journal's pages are then in that language). The same happens
-with the block placed in the site's sidebar: a language chosen on the
-site's Login page lands on the site's home. A site on the usual
-web ports is not affected; "Change Language" on the editorial screens is
-not affected.
-Basis: probe. <sup>[f-a3](#fn-a3)</sup>
+block does not reopen the page the visitor was on. It opens the home
+page in the chosen language: the journal's home on a site with one
+journal, the site's home on a site with several. The same happens with
+the block placed in the site's own sidebar, for example on the site's
+Login page.
+The language does change; the visitor has to open the page again, and a
+search has to be typed again. What decides is the address in the
+visitor's browser against the web server's own name for the site, which
+never carries the port; the site's configured base address plays no
+part.
+A site on the usual web ports is affected only when its web server knows
+itself by another name than the public address and its list of allowed
+hosts is empty; the installer always fills that list. "Change Language"
+on the editorial screens is not affected.
+Basis: probe, 2026-10-01. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
 **A4 — Missing translations show internal names** · ❓ · user-visible.
@@ -1258,6 +1267,7 @@ Issue report: [pkp-e2e#361](https://github.com/jardakotesovec/pkp-e2e/issues/361
 
 <a id="fn-a3"></a>
 **f-a3** — Seen 2026-09-24 (U09 claim check K1, three apps: from a custom page and from "About the Journal" the links landed on `index.php/index/<locale>`) and 2026-09-25 (U18 claim check K1: "français" linked to the host without the port and landed on `/index.php/index/fr_CA`; back on the journal the pages were French). Live-probed 2026-09-27 (three apps): the links carry `source=127.0.0.1/index.php/…` without the port; chosen from About, from a search result and, with the block in the site's sidebar, from the site's Login page, "français" landed on `/index.php/index/fr_CA`. Cause, read from the code: the block builds `source` from `SERVER_NAME` and the request address, which carry no port, so `PKPPageRouter::_setLocale()` cannot strip the installation's base address (with its port) from it and falls back to `/index/{code}`; "Change Language" passes the full page address and is not affected. The test installs serve on their own ports; a site on the usual ports was not driven.
+Issue report: [docs/issues/U57-A3-language-block-loses-page-on-port.md](../issues/U57-A3-language-block-loses-page-on-port.md).
 
 <a id="fn-a4"></a>
 **f-a4** — `Locale::translate()` (note p). The `##…##` form of a missing text is PKP's long-standing one. Seen: [Tasks & discussions](U37-tasks-and-discussions.md#a15), [Users management](U53-users-management.md#a11), [Site settings](U60-site-settings.md#a2), all in the French interface; live-probed 2026-09-27 (note p).
