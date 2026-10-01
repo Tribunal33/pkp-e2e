@@ -1111,7 +1111,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | With the masthead not based on enrollments, invitations and masthead changes still promise "Your name will appear in the {journal}'s masthead"; reviewers are promised it while the journal lists none | 🐞 | minor | — |
 | [OMP2](#omp2) | The site-level page about the software says "This press uses Open Monograph Press" on a press site {OMP} | 🐞 | minor | — |
 | [OPS3](#ops3) | A preprint server's French "Privacy Statement" default is the raw text "##default.contextSettings.privacyStatement##" {OPS} | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [OPS4](#ops4) | A preprint server's French "Editorial Masthead" heads the Moderators "##default.groups.name.sectionEditor##" {OPS} | 🐞 | user-visible | — |
+| [OPS4](#ops4) | A preprint server's French "Editorial Masthead" heads the Moderators "##default.groups.name.sectionEditor##" {OPS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | The "Edit" link of the About pages is shown to a manager-level role that cannot open the Settings pages | ❓ | minor | — |
 | [A3](#a3) | The "Contact" tab cannot be saved until a technical support contact is entered, and new journals have none | ❓ | minor | — |
 | [A6](#a6) | The "Editorial History" page is headed "Editorial History Page" | ❓ | minor | — |
@@ -1299,7 +1299,7 @@ it again. Left as it is, that text is the whole body of the server's French "Pri
 "Déclaration de confidentialité". Basis: probe, 2026-09-30. <sup>f-ops3</sup>
 
 <a id="ops4"></a>
-**OPS4 — The French masthead names the Moderators by a raw text key** · 🐞 · user-visible.
+**OPS4 — The French masthead names the Moderators by a raw text key** · 🐞 · low.
 A visitor reading a preprint server in French expects the role headings
 of "Editorial Masthead" (headed "Entête" in French) in French, as a
 journal gives them ("Rédacteur-trice", "Rédacteur-trice de rubrique")
@@ -1310,7 +1310,7 @@ comité éditorial" for the Editorial Board Member. The order list under
 Settings › Website › "Appearance" › "Editorial Masthead" ("Entête" in
 French) names the role the same way. The server's French translation has
 no text for the role's name; the users list shows the same key
-([Users management](U53-users-management.md#ops1)). Basis: probe.
+([Users management](U53-users-management.md#ops1)). Basis: probe, 2026-10-01.
 <sup>f-ops4</sup>
 
 ### Retired
@@ -2585,6 +2585,7 @@ reads "Rédacteur-trice de rubrique"), the cause of
 [Users management](U53-users-management.md#ops1) too. Each load
 of Settings › Website answered the Plugin Gallery's server error of
 [Plugins management](U62-plugins-management.md#a1).
+Issue report: [pkp-e2e#124](https://github.com/jardakotesovec/pkp-e2e/issues/124) ([docs/issues/U57-A8-omp-ops-french-texts-internal-names.md](../issues/U57-A8-omp-ops-french-texts-internal-names.md)).
 
 ## Reference — entry points & surfaces
 
