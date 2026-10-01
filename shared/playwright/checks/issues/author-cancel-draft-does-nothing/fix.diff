@@ -1,0 +1,20 @@
+--- a/lib/pkp/classes/submission/Repository.php
++++ b/lib/pkp/classes/submission/Repository.php
+@@ -530,12 +530,16 @@
+ 
+         // Only allow admins and journal managers to delete submissions, except
+         // for authors who can delete their own incomplete submissions
++        $stages = Application::getApplicationStages();
+         return ($currentUser->hasRole([Role::ROLE_ID_MANAGER], $contextId) || $currentUser->hasRole([Role::ROLE_ID_SITE_ADMIN], Application::SITE_CONTEXT_ID))
+             || (
+                 $submission->getData('submissionProgress') &&
+                 StageAssignment::withSubmissionIds([$submission->getId()])
+                     ->withRoleIds([Role::ROLE_ID_AUTHOR])
+-                    ->withStageIds([WORKFLOW_STAGE_ID_SUBMISSION])
++                    ->withStageIds([
++                        // WORKFLOW_STAGE_ID_SUBMISSION for OJS/OMP and WORKFLOW_STAGE_ID_PRODUCTION for OPS, see pkp/pkp-lib#10874
++                        array_shift($stages)
++                    ])
+                     ->withUserId($currentUser->getId())
+                     ->get()
+                     ->isNotEmpty()

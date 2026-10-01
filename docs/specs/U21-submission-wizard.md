@@ -973,6 +973,7 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a preprint author cancelling their own draft from the wizard, "Submission cancelled" shown and the draft gone from My Submissions {OPS} (OPS3; the guard its issue report names)
   - a preprint draft reloaded with a galley: "Review" listing it, and a second galley uploading to its end {OPS} (OPS8, OPS9; the guard their issue report names)
   - scenario 11's automatic assignment on a journal, press or server other than the install's first, its configured editor assigned and emailed and no needs-an-editor alert (A8; the guard its issue report names)
   - an author's plain language summary over the section's word limit saved on "Details" and reported on "Review", with "Submit" disabled until it is shortened (A16; the guard its issue report names)
@@ -1062,7 +1063,7 @@ are the source; badges, Impact and Basis:
 | [A20](#a20) | Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | minor | — |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
-| [OPS3](#ops3) | A preprint author's own "Cancel" is silently refused; the draft survives with no message | 🐞 | user-visible | — |
+| [OPS3](#ops3) | A preprint author's "Cancel" on their own draft closes the dialog and leaves the draft in place | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS7](#ops7) | The preprint "Not Allowed" page shows a raw locale code where its explanation should be | 🐞 | minor | — |
 | [OPS8](#ops8) | A further galley on a reloaded draft gets stuck in its upload window and shows no file until a reload | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
@@ -1437,15 +1438,15 @@ Lean: no. Enrol at creation, as the other apps do. Basis: probe.
 <sup>[c](#fn-c)</sup>
 
 <a id="ops3"></a>
-**OPS3 — An author's own Cancel silently does nothing** · 🐞 · user-visible.
-On a preprint server the wizard offers the submitting author the same
-"Cancel" control and "Cancel submission" dialog as everywhere else, but
-confirming does nothing. The dialog closes, no message appears, and the
-draft survives; the deletion is refused behind the scenes. A manager
-cancelling the same draft succeeds, and on a journal or press the author's
-own cancel works. So the control is offered to someone the server always
-refuses. Basis: probe (two independent runs, same day).
-<sup>[o](#fn-o)</sup>
+**OPS3 — A preprint author's "Cancel" on their own draft closes the dialog and leaves the draft in place** · 🐞 · medium.
+On a preprint server, an author who presses "Cancel" in the submission
+wizard and confirms "Cancel submission" sees the dialog close and
+nothing else. The draft is not deleted, the wizard stays open, and no
+message says why. Deleting the draft from My Submissions with "Delete
+Incomplete Submissions" fails the same silent way.
+The author cannot remove their own draft. Only a server manager can
+delete it for them.
+Basis: probe, 2026-10-01. <sup>[o](#fn-o)</sup>
 
 <a id="ops4"></a>
 **OPS4 — The completion screen thanks whoever is looking at it** · ❓ · latent.
@@ -2060,6 +2061,7 @@ another draft succeeded through the same flow. Mechanism: OPS drafts sit
 on the Production stage, so the author never holds the *submission-stage*
 author assignment `canCurrentUserDelete()` demands — the footer's
 `$canCancelSubmission` check does not mirror it.
+OPS3 issue report: [docs/issues/U21-OPS3-author-cancel-draft-does-nothing.md](../issues/U21-OPS3-author-cancel-draft-does-nothing.md).
 
 <a id="fn-p"></a>
 **p** — Section closed mid-draft. `PKPSubmissionHandler::showWizard()`
