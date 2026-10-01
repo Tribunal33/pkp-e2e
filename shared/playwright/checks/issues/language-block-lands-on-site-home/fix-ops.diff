@@ -1,0 +1,23 @@
+--- a/plugins/blocks/languageToggle/LanguageToggleBlockPlugin.php
++++ b/plugins/blocks/languageToggle/LanguageToggleBlockPlugin.php
+@@ -88,6 +88,9 @@
+ 
+         $templateMgr->assign('enableLanguageToggle', count($locales) > 1);
+         $templateMgr->assign('languageToggleLocales', $locales);
++        // The page being read, as the router builds its own addresses (protocol, host and port),
++        // so that PKPPageRouter::_setLocale() can send the visitor back to it
++        $templateMgr->assign('languageToggleSource', $request->getCompleteUrl());
+ 
+         return parent::getContents($templateMgr, $request);
+     }
+--- a/plugins/blocks/languageToggle/templates/block.tpl
++++ b/plugins/blocks/languageToggle/templates/block.tpl
+@@ -17,7 +17,7 @@
+ 		<ul>
+ 			{foreach from=$languageToggleLocales item=localeName key=localeKey}
+ 				<li class="locale_{$localeKey|escape}{if $localeKey == $currentLocale} current{/if}" lang="{$localeKey|replace:"_":"-"}">
+-					<a href="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="user" op="setLocale" path=$localeKey source=$smarty.server.SERVER_NAME|cat:$smarty.server.REQUEST_URI}">
++					<a href="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="user" op="setLocale" path=$localeKey source=$languageToggleSource}">
+ 						{$localeName}
+ 					</a>
+ 				</li>
