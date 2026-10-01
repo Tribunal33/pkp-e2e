@@ -866,6 +866,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-A10-urn-prefix-refusal-written-out-brackets.md`):
     a prefix without "urn:" refused with the message under "URN Prefix"
     reading the form with no written-out codes
+  - the guard for OMP2 (Side effects, the book page; issue report
+    `docs/issues/U44-OMP2-book-page-format-urn-labelled-code-unlinked.md`):
+    a format's assigned URN on the book page headed "URN" and linked to
+    the resolver
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -930,7 +934,7 @@ entry notes otherwise; the team settles them on spec review.
 | [OJS1](#ojs1) | Adding an issue galley with a Publisher ID hangs on "Save" and adds nothing | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [OJS3](#ojs3) | An issue's Publisher ID, typed on its "Identifiers" tab, is silently dropped on "Save" | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OMP1](#omp1) | URN settings: a press that ticks only "Chapters" or "Files" is told to choose the objects | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OMP2](#omp2) | The book page labels a format's URN with a code and does not link it | 🐞 | minor | — |
+| [OMP2](#omp2) | Book page: a publication format's URN is headed "other::urn" and shown as plain text, not linked | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP4](#omp4) | A press's confirmation window shows the URN table where a journal shows one sentence | 🐞 | minor | — |
 | [OMP5](#omp5) | A press file's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [OMP6](#omp6) | A press file's default URN leaves out the format number the settings window announces | 🐞 | minor | — |
@@ -1205,11 +1209,19 @@ URNs, at the cost of a warning each time a book is published.
 Basis: probe, 2026-10-01. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — A format's URN is labelled with a code** · 🐞 · minor.
-Under an approved, available publication format on the book page, a
-URN is shown under the label "other::urn" and as plain text. On a
-journal the same block reads "URN" and links to the resolver.
-Basis: probe, 2026-09-24. <sup>f-omp2</sup>
+**OMP2 — Book page: a publication format's URN is headed "other::urn" and shown as plain text, not linked** · 🐞 · low.
+Readers of a press's book page see a publication format's URN under
+the heading "other::urn". That heading is the system's internal code
+for a URN. The URN itself is plain text, not a link. On a journal, an
+article's URN is headed "URN" and links to the resolver address.
+The URN shown is right, so readers can copy it into a resolver by
+hand, but they cannot follow it. The fix is one block in one template.
+It shows only on a press that uses the URN plugin with "Publication
+Formats" ticked and has assigned a format's URN. The book page shows
+no other URN to compare with: chapter URNs appear on no reader page,
+and whether the book's own URN should appear is an open question of
+its own.
+Basis: probe, 2026-10-01. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
 **OMP3 — Readers never see a monograph's URN** · ❓ · user-visible.
@@ -1976,6 +1988,7 @@ Issue report: [pkp-e2e#137](https://github.com/jardakotesovec/pkp-e2e/issues/137
 **f-omp2** — `monograph_full.tpl` prints `{$pubIdType}` (the plugin's
 `getPubIdType()`, `other::urn`) as the label and the stored value as
 text. Live-probed 2026-09-24 (notes h, q22).
+Issue report: [docs/issues/U44-OMP2-book-page-format-urn-labelled-code-unlinked.md](../issues/U44-OMP2-book-page-format-urn-labelled-code-unlinked.md).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — `monograph_full.tpl` loops over the pub-id plugins only

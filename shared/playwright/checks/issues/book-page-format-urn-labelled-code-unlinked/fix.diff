@@ -1,0 +1,24 @@
+--- a/templates/frontend/objects/monograph_full.tpl
++++ b/templates/frontend/objects/monograph_full.tpl
+@@ -580,12 +580,19 @@
+ 								{assign var=pubIdType value=$pubIdPlugin->getPubIdType()}
+ 								{assign var=storedPubId value=$publicationFormat->getStoredPubId($pubIdType)}
+ 								{if $storedPubId != ''}
++									{assign var=resolvingUrl value=$pubIdPlugin->getResolvingURL($currentContext->getId(), $storedPubId)}
+ 									<div class="sub_item pubid {$publicationFormat->getId()|escape}">
+ 										<h2 class="label">
+-											{$pubIdType}
++											{$pubIdPlugin->getPubIdDisplayType()|escape}
+ 										</h2>
+ 										<div class="value">
+-											{$storedPubId|escape}
++											{if $resolvingUrl}
++												<a href="{$resolvingUrl|escape}">
++													{$resolvingUrl|escape}
++												</a>
++											{else}
++												{$storedPubId|escape}
++											{/if}
+ 										</div>
+ 									</div>
+ 								{/if}
