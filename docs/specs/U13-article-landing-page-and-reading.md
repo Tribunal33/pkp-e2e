@@ -1060,6 +1060,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-OJS5-publication-facts-panel-never-shown.md`):
     an article page with "Publication Facts Label plugin" on, loading the
     plugin's script and showing the "Publication Facts" panel {OJS}
+  - the guard for OPS6 (Rule 22; issue report
+    `docs/issues/U13-OPS6-preprint-summary-doi-never-shown.md`): a
+    preprint with a DOI, its entry in "Archives" showing the "DOI:" line
+    {OPS}
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1219,7 +1223,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OPS2](#ops2) | A preprint with a URL Path loses the galley or version part of its ID address; its HTML and other non-PDF downloads answer "404 Not Found" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A galley's ID address answers "404 Not Found" once the galley has a URL Path | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [OPS5](#ops5) | The PDF reader's return arrow is read to screen readers as "##article.return##" | 🐞 | minor | — |
-| [OPS6](#ops6) | The preprint summary never shows the preprint's DOI | 🐞 | minor | — |
+| [OPS6](#ops6) | Preprint lists never show a preprint's DOI, though the preprint's own page does | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS7](#ops7) | On a French preprint page the keywords label reads "##preprint.subject## :" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS8](#ops8) | On a French page the PDF reader's browser tab reads "##article.pageTitle##" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS9](#ops9) | A press on the middle of a preprint's cover in a list opens nothing | 🐞 | minor | — |
@@ -1539,11 +1543,16 @@ Article Details". A blind reader cannot tell where the arrow leads.
 Basis: probe, 2026-09-25. <sup>[f-ops5](#fn-f-ops5)</sup>
 
 <a id="ops6"></a>
-**OPS6 — Preprint summaries never show the DOI** · 🐞 · minor.
-The preprint summary on the listing pages has a "DOI:" line meant to show
-the preprint's DOI, but it never appears, even for a preprint whose own
-page shows "DOI:". Readers browsing the lists see no DOI.
-Basis: probe, 2026-09-25. <sup>[f-ops6](#fn-f-ops6)</sup>
+**OPS6 — Preprint lists never show a preprint's DOI, though the preprint's own page does** · 🐞 · low.
+Each preprint's entry in a preprint server's lists has a "DOI:" line,
+meant to show the preprint's DOI as a link. It never appears, even for a
+preprint whose own page shows "DOI:". Readers browsing the lists see no
+DOI; the preprint's own page still shows it.
+The lists are the home page's "Latest preprints", "Archives", section
+and category pages, and search results. It applies to every server that
+assigns DOIs to its preprints and uses OPS's own list template, as the
+default theme does.
+Basis: probe, 2026-10-01. <sup>[f-ops6](#fn-f-ops6)</sup>
 
 <a id="ops7"></a>
 **OPS7 — The keywords label is a raw code in French** · 🐞 · low.
@@ -2691,6 +2700,7 @@ French page.
 **f-ops6** — Note j. The landing page's own "DOI:" line reads the
 publication's DOI object instead and is unaffected. Live-probed
 2026-09-25, note j.
+Issue report: [docs/issues/U13-OPS6-preprint-summary-doi-never-shown.md](../issues/U13-OPS6-preprint-summary-doi-never-shown.md).
 
 <a id="fn-f-ops7"></a>
 **f-ops7** — Note c: `preprint.subject` has an empty translation in

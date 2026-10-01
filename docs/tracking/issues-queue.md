@@ -18,7 +18,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 |---|---|---|---|---|
 | [U63](../specs/U63-import-export.md) | 28 | 9 | 7 | **Taken: issues session, workstation s0, 2026-10-01**; done: A9, A5; out (open report docs/reports/2026-09-29-pkp-lib-13390.md): A17, A18 |
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s1, 2026-10-01** |
-| [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 | **Taken: issues session, VM s1, 2026-10-01**; done: OPS2, OPS3 (pkp-e2e#203, with U20 OPS1), OJS1 (pkp-e2e#205), OPS7, OPS8 (pkp-e2e#207), OJS4 (pkp-e2e#208), OPS1 (pkp-e2e#209, with U69 A4), OJS5 (pkp-e2e#211) |
+| [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 | **Taken: issues session, VM s1, 2026-10-01**; done: OPS2, OPS3 (pkp-e2e#203, with U20 OPS1), OJS1 (pkp-e2e#205), OPS7, OPS8 (pkp-e2e#207), OJS4 (pkp-e2e#208), OPS1 (pkp-e2e#209, with U69 A4), OJS5 (pkp-e2e#211), OPS6 |
 | [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **Taken: issues session, VM s3, 2026-10-01**; done: OJS2, A19, A18 |
 | [U19](../specs/U19-oai-pmh.md) | 26 | 5 | 6 |  |
 | [U21](../specs/U21-submission-wizard.md) | 19 | 4 | 8 |  |

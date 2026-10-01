@@ -1,0 +1,42 @@
+--- a/templates/frontend/objects/preprint_summary.tpl
++++ b/templates/frontend/objects/preprint_summary.tpl
+@@ -58,25 +58,20 @@
+ 		</div>
+ 		{/if}
+ 
+-		{* DOI (requires plugin) *}
+-		{foreach from=$pubIdPlugins item=pubIdPlugin}
+-			{if $pubIdPlugin->getPubIdType() != 'doi'}
+-				{continue}
+-			{/if}
+-			{assign var=pubId value=$preprint->getCurrentPublication()->getStoredPubId($pubIdPlugin->getPubIdType())}
+-			{if $pubId}
+-				{assign var="doiUrl" value=$pubIdPlugin->getResolvingURL($currentServer->getId(), $pubId)|escape}
+-				<div class="doi">
+-						{capture assign=translatedDOI}{translate key="doi.readerDisplayName"}{/capture}
+-						{translate key="semicolon" label=$translatedDOI}
+-					<span class="value">
+-						<a href="{$doiUrl}">
+-							{$doiUrl}
+-						</a>
+-					</span>
+-				</div>
+-			{/if}
+-		{/foreach}
++		{* DOI *}
++		{assign var=doiObject value=$preprint->getCurrentPublication()->getData('doiObject')}
++		{if $doiObject}
++			{assign var="doiUrl" value=$doiObject->getData('resolvingUrl')|escape}
++			<div class="doi">
++				{capture assign=translatedDOI}{translate key="doi.readerDisplayName"}{/capture}
++				{translate key="semicolon" label=$translatedDOI}
++				<span class="value">
++					<a href="{$doiUrl}">
++						{$doiUrl}
++					</a>
++				</span>
++			</div>
++		{/if}
+ 
+ 		{if !empty($preprint->getCurrentPublication()->getLocalizedData('keywords'))}
+ 		<div class="keywords">
