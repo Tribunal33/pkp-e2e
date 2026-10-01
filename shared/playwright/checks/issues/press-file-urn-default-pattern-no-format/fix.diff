@@ -1,0 +1,45 @@
+--- a/classes/plugins/PubIdPlugin.php
++++ b/classes/plugins/PubIdPlugin.php
+@@ -16,6 +16,7 @@
+ 
+ namespace APP\plugins;
+ 
++use APP\core\Application;
+ use APP\facades\Repo;
+ use APP\monograph\Chapter;
+ use APP\monograph\ChapterDAO;
+@@ -145,6 +146,7 @@
+         ?Representation $representation = null,
+         ?SubmissionFile $submissionFile = null
+     ): string {
++        $representation ??= $submissionFile ? static::getSubmissionFileRepresentation($submissionFile) : null;
+         $pubIdSuffix = preg_replace('/[^-._;()\/A-Za-z0-9]/', '', Str::lower($context->getAcronym($context->getPrimaryLocale())));
+ 
+         if ($submission) {
+@@ -167,6 +169,18 @@
+     }
+ 
+     /**
++     * Get the publication format a file belongs to, whose ID the
++     * file's suffix patterns include (%f, and the default pattern)
++     */
++    public static function getSubmissionFileRepresentation(SubmissionFile $submissionFile): ?Representation
++    {
++        if ($submissionFile->getData('assocType') != Application::ASSOC_TYPE_REPRESENTATION || !$submissionFile->getData('assocId')) {
++            return null;
++        }
++        return Application::getRepresentationDAO()->getById((int) $submissionFile->getData('assocId'));
++    }
++
++    /**
+      * Generate the custom, user-defined pub-id suffix pattern
+      *
+      */
+@@ -179,6 +193,7 @@
+         ?Representation $representation = null,
+         ?SubmissionFile $submissionFile = null
+     ): string {
++        $representation ??= $submissionFile ? static::getSubmissionFileRepresentation($submissionFile) : null;
+         // %p - press initials
+         $pubIdSuffix = preg_replace('/%p/', preg_replace('/[^-._;()\/A-Za-z0-9]/u', '', Str::lower($context->getAcronym($context->getPrimaryLocale()))), $pubIdSuffix);
+         /** @var Chapter $pubObject */

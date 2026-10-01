@@ -941,7 +941,7 @@ entry notes otherwise; the team settles them on spec review.
 | [OMP2](#omp2) | Book page: a publication format's URN is headed "other::urn" and shown as plain text, not linked | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP4](#omp4) | Publishing a book on a press that gives URNs to monographs alone shows a one-row table, not one line | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP5](#omp5) | A press file's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [OMP6](#omp6) | A press file's default URN leaves out the format number the settings window announces | 🐞 | minor | — |
+| [OMP6](#omp6) | A press's format files get URNs without their format number, or none when the files pattern uses "%f" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | An article's Publisher ID accepts values the tabs refuse, a duplicate included | ❓ | minor | — |
 | [A12](#a12) | A URN that differs from another only in case is accepted as new | ❓ | minor | — |
 | [OJS2](#ojs2) | The JATS XML's publisher ID is the article's number, not the typed Publisher ID | ❓ | minor | — |
@@ -1267,12 +1267,18 @@ place.
 Basis: probe, 2026-09-30. <sup>f-omp5</sup>
 
 <a id="omp6"></a>
-**OMP6 — A press file's default URN leaves out the format number** · 🐞 · minor.
-Under "Use default patterns." the settings window lists "%p.%m.%f.%s
-for files", but a format file's tab previews
-"urn:nbn:de:0000-{press initials}.{monograph number}.{file number}",
-with no format number; chapter and format URNs follow their lines.
-Basis: probe, 2026-09-24. <sup>f-omp6</sup>
+**OMP6 — A press's format files get URNs without their format number, or none when the files pattern uses "%f"** · 🐞 · medium.
+Under "Use default patterns." the URN plugin's settings window lists
+"%p.%m.%f.%s for files": press initials, book, publication format,
+file. A format file's "Identifiers" tab instead previews, and "Save"
+assigns, `urn:nbn:de:0000-jpk.14.113`: press "jpk", book 14, file 113,
+with the format's number (3) missing.
+Under "Use the pattern entered below…", a files pattern with "%f", as
+the window's own help offers it, makes the file's URN
+`urn:nbn:de:0000-jpk.14.%f.113`. The tab refuses to assign it, so no
+file gets a URN until the press drops "%f" from the files pattern, and
+with it the format's number.
+Basis: probe, 2026-10-01. <sup>f-omp6</sup>
 
 ### Retired
 
@@ -2035,6 +2041,7 @@ previews `urn:nbn:de:0000-kone.531.132` and `…pkp.536.138` beside the
 formats' `…kone.531.4` and `…pkp.536.7`, while the settings window lists
 "%p.%m.%f.%s for files". OMP `classes/plugins/PubIdPlugin.php`
 `generateDefaultPattern()` does not resolve the format for a file.
+Issue report: [docs/issues/U44-OMP6-press-file-urn-default-pattern-no-format.md](../issues/U44-OMP6-press-file-urn-default-pattern-no-format.md).
 
 ## Reference — entry points & surfaces
 
