@@ -1536,7 +1536,7 @@ Issue report: [pkp-e2e#68](https://github.com/jardakotesovec/pkp-e2e/issues/68) 
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-25 (td12; Side effects bullet 3), OJS, two articles over two runs (one published through its workflow, one seeded as published): after "Delete" of its issue each article's workflow header read "Published" with "Return to Workflow", its Publication Settings "Status: Unscheduled", its page "404 Not Found", and its History only "Submission metadata updated". `deleteIssue()` sets the status through `Repo::publication()->edit()`, not `unpublish()` (note t), so no unpublication is logged (note se).
-Issue report: [docs/issues/U50-A12-delete-issue-articles-read-published.md](../issues/U50-A12-delete-issue-articles-read-published.md).
+Issue report: [pkp-e2e#77](https://github.com/jardakotesovec/pkp-e2e/issues/77) ([docs/issues/U50-A12-delete-issue-articles-read-published.md](../issues/U50-A12-delete-issue-articles-read-published.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25 (td13; Rule 25a), OJS, three journals, before any saved order: "Back Issues" 2025, 2026, 2024 (2025 current) against "Archives" 2024, 2026, 2025; "Back Issues" 2023, 2022, 2021 against 2021, 2022, 2023; after an unpublish, 2020, 2026, 2025 against 2026, 2020, 2025. Mechanism: note u, the archive orders by the saved order alone.
