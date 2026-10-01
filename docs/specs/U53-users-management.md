@@ -781,6 +781,10 @@ Left out of the scenarios above, by reason:
     Administrator's row or on a user with a current role in another
     journal, and offering "Disable User", "Login As" and "Merge user" on
     a user whose role elsewhere has ended
+  - the guard for A7 (Rule 12; scenario 3 passes it; issue report
+    `docs/issues/U53-A7-enable-reason-becomes-disable-reason.md`): the
+    enable window's reason box starting empty, and the next disabling's
+    box empty after an enabling with a typed reason
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -799,8 +803,6 @@ Left out of the scenarios above, by reason:
   - A3 (a user with no role left, still listed on the Users list, in the
     "Merge user" window and on the older grid; Rules 3, 16; scenario 5
     passes it)
-  - A7 (the reason for enabling kept as the next reason for disabling;
-    Rule 12; scenario 3 passes it)
   - A8 ("Remove User" sending no email; Rule 14; scenario 5 passes it)
   - A9 (a merge dropping the merged account's section assignments; Rule
     18)
@@ -864,7 +866,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | The search box's example names "Journal editor" on a press and a preprint server | 🐞 | minor | — |
 | [A5](#a5) | The row's "…" button is announced to screen readers as a raw code | 🐞 | minor | — |
 | [A6](#a6) | The disable window's "Current Roles : " line lists roles that have ended | 🐞 | minor | — |
-| [A7](#a7) | The reason typed when enabling becomes the reason shown at the next disabling | 🐞 | minor | — |
+| [A7](#a7) | After "Enable User", the next "Disable User" offers the enabling reason and the Login page quotes it | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | A merge drops the merged account's section assignments | 🐞 | latent | — |
 | [A11](#a11) | The French "Users" tab prints raw codes for its search label, the Invitations heading, button and columns, and the "Start Date" column | 🐞 | minor | — |
 | [A12](#a12) | The ORCID and disabled icons after a name have no name for a screen reader | 🐞 | minor | — |
@@ -956,13 +958,24 @@ ended roles out.
 Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The enabling reason becomes the next disabling reason** · 🐞 · minor.
-"Enable User" opens with the old disabling reason in "Reason for enabling
-user", and whatever the box holds on "OK" is stored as the account's
-reason. The next "Disable User" offers that text, and if nobody clears
-it the Login page tells the user their account was disabled "for the
-following reason:" followed by the reason for enabling it.
-Basis: probe. <sup>f-a7</sup>
+**A7 — After "Enable User", the next "Disable User" offers the enabling reason and the Login page quotes it** · 🐞 · medium.
+On Settings › Users & Roles, "Enable User" opens with the old disabling
+reason in "Reason for enabling user". Whatever that box holds on "OK" is
+saved as the reason for disabling the account, although the account is
+now enabled. The next "Disable User" offers that text, and if nobody
+clears it the Login page tells the user their account was disabled "for
+the following reason:" followed by the reason for enabling it.
+The two boxes have different readers. The reason for disabling is shown
+to the user when they try to sign in, by design. The reason for enabling
+is a note to staff: its label and its note address the manager, and the
+user never sees it while the account is enabled. The fault shows that
+staff note to the user as the reason they were disabled.
+Every account enabled through this window carries text into its next
+disabling unless the manager empties the box, whether they typed an
+enabling reason or left the prefilled one alone. Clearing or retyping
+the box at each step avoids it. The fix is to stop prefilling both boxes and to stop saving the
+enabling text as the disabling reason.
+Basis: probe, 2026-10-01. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — Removal from the journal sends no word** · ❓ · minor.
@@ -1933,6 +1946,7 @@ read "Current Roles : Author, Section editor". Code: `disableUser()` joins
 
 <a id="fn-f-a7"></a>
 **f-a7** — Code: note h. Live-probed 2026-09-25: note td6.
+Issue report: [docs/issues/U53-A7-enable-reason-becomes-disable-reason.md](../issues/U53-A7-enable-reason-becomes-disable-reason.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Code read 2026-09-25: `UserGridHandler::removeUser()` writes
