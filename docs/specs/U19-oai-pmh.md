@@ -1839,7 +1839,7 @@ Issue report: [pkp-e2e#300](https://github.com/jardakotesovec/pkp-e2e/issues/300
 
 <a id="fn-f-a3"></a>
 **f-a3** — Live-probed 2026-09-26: note q11, `2026-13-01` as `from` and `until`, "2026-02-30", `T25:00:00Z` and the roll-over of "2026-09-31". Code: note l.
-Issue report: [docs/issues/U19-A3-oai-impossible-date-accepted.md](../issues/U19-A3-oai-impossible-date-accepted.md).
+Issue report: [pkp-e2e#301](https://github.com/jardakotesovec/pkp-e2e/issues/301) ([docs/issues/U19-A3-oai-impossible-date-accepted.md](../issues/U19-A3-oai-impossible-date-accepted.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Live-probed 2026-09-26: note q15, the last part of each list. Code: note k.
