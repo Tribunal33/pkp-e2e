@@ -2002,7 +2002,7 @@ Footer" save answered 400 with the message under "Sidebar" and "Please
 correct one error. Go to Sidebar: … Jump to next error" at the form's
 foot; the footer was not saved. The Custom pages & blocks spec drove the
 custom-block case the same day (its A15).
-Issue report: [docs/issues/U09-A15-setup-save-refused-disabled-block.md](../issues/U09-A15-setup-save-refused-disabled-block.md) (with U09 A15).
+Issue report: [pkp-e2e#370](https://github.com/jardakotesovec/pkp-e2e/issues/370) ([docs/issues/U09-A15-setup-save-refused-disabled-block.md](../issues/U09-A15-setup-save-refused-disabled-block.md)) (with U09 A15).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `PKPContextService::_saveFileParam()` with a `null` value
