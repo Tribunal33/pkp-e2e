@@ -1157,6 +1157,11 @@ Left out of the scenarios above, by reason:
     ListIdentifiers given a `from` or `until` that is not in the calendar
     (month 13, 30 February, hour 25) answering "Illegal from parameter" or
     "Illegal until parameter" (Rule 9b; once fixed)
+  - the guard for OPS4 (issue report
+    `docs/issues/U19-OPS4-removed-preprint-server-no-deleted-records.md`): a
+    second preprint server with a posted preprint removed under
+    Administration › Hosted Servers: the site-wide GetRecord and list show
+    the preprint as a deleted record {OPS} (once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1293,7 +1298,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP6](#omp6) | A series with no prefix is named with a leading space | 🐞 | invisible | — |
 | [OPS1](#ops1) | A preprint server's OAI-PMH lists answer a server error whenever the harvester gives an "until" date | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | One preprint without an abstract makes the server's record lists fail | 🐞 | user-visible · crash: server | — |
-| [OPS4](#ops4) | A removed preprint server leaves no deleted records | 🐞 | minor | — |
+| [OPS4](#ops4) | Removing a preprint server leaves no deleted records for its posted preprints at the site-wide OAI address | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | "Supporting Agencies", "Rights" and "Source" reach no record | ❓ | minor | — |
 | [A9](#a9) | A journal that does not publish online still hands out records, the MARC ones with the article's address {OJS} | ❓ | minor | — |
 | [A14](#a14) | "Language" writes a galley's language with an underscore {OJS OPS} | ❓ | minor | — |
@@ -1685,14 +1690,19 @@ dropped it on purpose in 2019.
 Since: 2019-11-21 · Basis: probe, 2026-09-26. <sup>f-ops3</sup>
 
 <a id="ops4"></a>
-**OPS4 — A removed preprint server leaves no deleted records** · 🐞 · minor.
+**OPS4 — Removing a preprint server leaves no deleted records for its posted preprints at the site-wide OAI address** · 🐞 · medium.
 A Site Administrator removes a preprint server under Administration ›
-Hosted Journals. A harvester of the site-wide address expects each
-posted preprint to come back as a deleted record, as the "persistent"
-"Deleted Record Policy" promises and as a removed journal's or press's
-does. GetRecord answers "No matching identifier in this repository" and
-nothing is left.
-Basis: probe, 2026-09-26. <sup>f-ops4</sup>
+Hosted Servers. The installation's Identify answer declares its "Deleted
+Record Policy" as "persistent", so a harvester of the site-wide OAI
+address expects each posted preprint of that server to come back as a
+deleted record, as a removed journal's or press's records do. Instead
+GetRecord answers "No matching identifier in this repository", and
+ListRecords and ListIdentifiers no longer name the preprints. The
+removed server's own OAI address is gone with it, so the site-wide
+address is the only place its deleted records could be read. It was
+checked on an installation that keeps another preprint server; removing
+an installation's only server was not checked.
+Basis: probe, 2026-10-01. <sup>f-ops4</sup>
 
 ### Retired
 
@@ -1943,6 +1953,7 @@ Issue report: [pkp-e2e#252](https://github.com/jardakotesovec/pkp-e2e/issues/252
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — Live-probed 2026-09-26, all three apps, two runs: after "Remove" under Administration › Hosted Journals ("Are you sure you want to permanently delete … and all of its contents?", "OK"), site-wide GetRecord of a posted preprint answered "No matching identifier in this repository" and no tombstone row was left; a removed journal's and press's items read as deleted, with a tombstone row each. Code: note n.
+Issue report: [docs/issues/U19-OPS4-removed-preprint-server-no-deleted-records.md](../issues/U19-OPS4-removed-preprint-server-no-deleted-records.md).
 
 ## Reference — entry points & surfaces
 
