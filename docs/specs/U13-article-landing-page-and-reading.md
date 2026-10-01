@@ -2685,7 +2685,7 @@ while `lib/lens/lens.js` calls the MathJax 2 interface
 (reading 'Queue')" on every XML galley. The test fixture has no formula,
 so the typesetting loss follows from the code. Live-probed 2026-09-25,
 note q8, two runs.
-Issue report: [docs/issues/U13-OJS9-lens-formulas-not-typeset.md](../issues/U13-OJS9-lens-formulas-not-typeset.md).
+Issue report: [pkp-e2e#221](https://github.com/jardakotesovec/pkp-e2e/issues/221) ([docs/issues/U13-OJS9-lens-formulas-not-typeset.md](../issues/U13-OJS9-lens-formulas-not-typeset.md)).
 
 <a id="fn-f-ojs10"></a>
 **f-ojs10** — Note n: the search phrase is built from the keyword
