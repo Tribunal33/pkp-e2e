@@ -1166,6 +1166,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U19-A4-oai-browser-last-part-says-more-results.md`): the
     browser view of a paged list's last part ending the list, with no
     "Resume" (Rule 13; once fixed)
+  - the guard for A5 (issue report
+    `docs/issues/U19-A5-oai-browser-record-formats-shown-as-archive.md`):
+    the browser view of "formats" on a record's header naming the record and
+    linking each format to that record (once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1281,7 +1285,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | OAI-PMH lists ignore the time of day in "from" and "until" and return the whole day's records | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | OAI-PMH lists accept a "from" or "until" date that is not in the calendar instead of refusing it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | The browser view of the last part of a long OAI-PMH list says "There are more results." and offers a "Resume" that is refused | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A5](#a5) | The browser view of one record's formats says "from this archive" and offers no links | 🐞 | minor | — |
+| [A5](#a5) | The browser view of one OAI-PMH record's formats reads "available from this archive" and has no links to that record | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | "Peer-reviewed Article" is written only for a section never saved in its window {OJS} | 🐞 | minor | — |
 | [A8](#a8) | The Dublin Core "Source" keeps an empty part for an article in no issue {OJS} and on every press record {OMP} | 🐞 | minor | — |
 | [A10](#a10) | One article in a subscription issue empties a whole `jats` list {OJS} | 🐞 | latent | — |
@@ -1378,12 +1382,17 @@ or sets where the site administrator lowered the number per page.
 Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — One record's formats are shown as the whole archive's** · 🐞 · minor.
-A tester who presses "formats" on a record's header expects the page to
-say which formats that record comes in, with a link to each. It says
-"This is a list of metadata formats available from this archive." and
-offers no such links, as for a request without an identifier.
-Basis: probe, 2026-09-26. <sup>f-a5</sup>
+**A5 — The browser view of one OAI-PMH record's formats reads "available from this archive" and has no links to that record** · 🐞 · low.
+A manager or developer who reads a journal's OAI-PMH address in a
+browser sees a "formats" link beside each record of a list. Pressing it
+should open a page that says which formats that record comes in, with a
+link to the record in each. The page says "This is a list of metadata
+formats available from this archive." instead. It is the same page as
+the formats of the whole archive. The formats listed are the record's
+own, but each links to the list of every record in that format, not to
+the record. It happens for every record, with no setup. Harvesters,
+which read the XML, are not affected.
+Basis: probe, 2026-10-01. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — Three metadata items reach no record** · ❓ · minor.
@@ -1866,6 +1875,7 @@ Issue report: [pkp-e2e#303](https://github.com/jardakotesovec/pkp-e2e/issues/303
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-26, all three apps: "formats" on a record's header opened ListMetadataFormats with the identifier, which read "This is a list of metadata formats available from this archive." and linked each prefix to the whole archive's records. Code: `oai2.xsl` sets `$identifier` from the text of `oai:request` after "identifier=", but that text is the base URL (the arguments are attributes), so the "for the record" branch never shows.
+Issue report: [docs/issues/U19-A5-oai-browser-record-formats-shown-as-archive.md](../issues/U19-A5-oai-browser-record-formats-shown-as-archive.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-26: note q13; "Supporting Agencies", "Rights" and "Source" were saved on a published version's "Metadata" page on each app and reached no `oai_dc`, `oai_marc` or `marcxml` answer. Code: note f; `sponsor` left `schemas/publication.json` in `718ad72e5` "pkp/pkp-lib#2072 Working prototype of versioning based on new publication entity" (2019-06-26); no adapter reads `supportingAgencies`, `rights` or `source`.
