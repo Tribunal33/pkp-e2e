@@ -2600,7 +2600,7 @@ constant "…\STYLE_SEQUENCE_LAST"` (in the `TemplateManager::display`
 hook), each caught and logged as "Plugin …PflPlugin failed to handle the
 hook …" on every article page, which still answers normally.
 Live-probed 2026-09-25, notes q6 and q13.
-Issue report: [docs/issues/U13-OJS5-publication-facts-panel-never-shown.md](../issues/U13-OJS5-publication-facts-panel-never-shown.md).
+Issue report: [pkp-e2e#211](https://github.com/jardakotesovec/pkp-e2e/issues/211) ([docs/issues/U13-OJS5-publication-facts-panel-never-shown.md](../issues/U13-OJS5-publication-facts-panel-never-shown.md)).
 
 <a id="fn-f-ojs6"></a>
 **f-ojs6** — Note d: `display.tpl` picks `issue.return` whenever the page
