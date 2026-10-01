@@ -1780,6 +1780,10 @@ Left out of the scenarios above, by reason:
   - the guard for OJS3 (Rule 39; issue report
     `docs/issues/U45-OJS3-publish-window-issn-warning-twice.md`):
     scenario 14's publish window listing the ISSN sentence once {OJS}
+  - the guard for A21 (Fields, the Registration tab; issue report
+    `docs/issues/U45-A21-registration-save-without-agency-logs-warning.md`):
+    scenarios 12 and 19's "Save" without an agency plugin leaving no
+    warning in the server log
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1860,7 +1864,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | A DOI deposit that cannot connect to Crossref or DataCite reads "Submitted" for good, with no error | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | Saving a DOI registration agency can untick every DOI kind and leave the DOIs page blank | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | The Crossref and DataCite pages under Tools open with an empty heading and an unnamed browser tab | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A21](#a21) | A "Save" on the Registration tab without an agency leaves a warning in the server log | 🐞 | invisible | — |
+| [A21](#a21) | "Save" on the DOI "Registration" tab with no agency plugin enabled logs a PHP "Undefined array key" warning | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A22](#a22) | After "Assign DOIs" answered at once, the "Bulk Actions" menu stays open over the list | 🐞 | minor | — |
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -2182,14 +2186,18 @@ proposes to name them rather than to remove them.
 Basis: probe, 2026-10-01. <sup>f-a20</sup>
 
 <a id="a21"></a>
-**A21 — A "Save" on the Registration tab without an agency leaves a warning in the server log** · 🐞 · invisible.
-On a journal or preprint server with no agency plugin enabled, and on
-every press, the "Registration" tab holds no field but "Save". Pressing
-it answers "Saved" and changes nothing, as expected, but each press
-also writes a warning to the install's server error log, because the
-save expects a "Registration Agency" choice the tab does not have.
-Nothing on screen shows it; the log gains a line per save.
-Basis: test run, 2026-09-26. <sup>f-a21</sup>
+**A21 — "Save" on the DOI "Registration" tab with no agency plugin enabled logs a PHP "Undefined array key" warning** · 🐞 · low.
+Under Settings › Distribution › "DOIs", the "Registration" tab reads "No
+Registration Agency Enabled" and shows only a "Save" button when no
+registration agency plugin is enabled. That is the case on a journal or
+preprint server until its manager enables one, and on a press (OMP)
+always. Each time "Save" is pressed, the page shows "Saved" and stores
+nothing, as expected, but the server's error log gains a PHP warning
+that a value the save expects, the "Registration Agency" choice, is
+missing from the request. Nothing is lost and nothing on screen shows
+it, on an install that only logs PHP warnings, which is the shipped
+setting.
+Basis: test run, 2026-10-01. <sup>f-a21</sup>
 
 <a id="a22"></a>
 **A22 — After "Assign DOIs" answered at once, the "Bulk Actions" menu stays open over the list** · 🐞 · minor.
@@ -3889,6 +3897,7 @@ footnote d) posts no such key, so PHP logs `Undefined array key
 tab on OMP, in each app's green run): the screen showed "Saved" and the
 server log held the warning for that save. Live-probed 2026-09-26
 (Fields, the Registration tab, OJS): the same line at the tab's "Save".
+Issue report: [docs/issues/U45-A21-registration-save-without-agency-logs-warning.md](../issues/U45-A21-registration-save-without-agency-logs-warning.md).
 
 <a id="fn-f-a22"></a>
 **f-a22** — ui-library `Dropdown.vue` `closeOnBlur()` (the "Bulk

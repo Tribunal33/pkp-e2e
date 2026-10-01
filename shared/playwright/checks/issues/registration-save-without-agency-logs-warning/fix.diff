@@ -1,0 +1,11 @@
+--- a/lib/pkp/api/v1/contexts/PKPContextController.php
++++ b/lib/pkp/api/v1/contexts/PKPContextController.php
+@@ -600,7 +600,7 @@
+         }
+ 
+         // Return if no registration agency enabled;
+-        if ($contextParams[Context::SETTING_CONFIGURED_REGISTRATION_AGENCY] === null) {
++        if (($contextParams[Context::SETTING_CONFIGURED_REGISTRATION_AGENCY] ?? null) === null) {
+             return response()->json($contextParams, Response::HTTP_OK);
+         }
+ 
