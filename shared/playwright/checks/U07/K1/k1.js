@@ -530,7 +530,7 @@ forEachApp(async (app) => {
             await country.selectOption({label: 'Canada'}).catch((e) => { res.countryErr = e.message.slice(0, 100); });
             await page.locator('#masthead-acronym-control-en').fill('K1S');
             const title = page.locator('[id^="masthead-name-control"]').first();
-            await loc(page, 'Masthead "Journal title" box (primary language)', title);
+            await loc(page, 'Masthead "Journal Title" box (primary language)', title);
             res.titleBefore = await title.inputValue().catch(() => null);
             await title.fill(`K1 Saved Title ${S}`);
             res.mgrMasthead = await saveForm(page, title, 'saves-mgr-masthead-save');
@@ -553,7 +553,7 @@ forEachApp(async (app) => {
                 await signIn(page, `${S}pe`, {contextPath: S});
                 await openTab(page, app, S, 'context', 'masthead');
                 const ini = page.locator('[id^="masthead-acronym-control"]').first();
-                await loc(page, 'Masthead "Journal initials" box', ini);
+                await loc(page, 'Masthead "Journal Initials" box', ini);
                 await ini.fill('K1PE');
                 res.peMasthead = await saveForm(page, ini, 'saves-pe-masthead-save');
                 await openTab(page, app, S, 'website', 'setup', 'information');

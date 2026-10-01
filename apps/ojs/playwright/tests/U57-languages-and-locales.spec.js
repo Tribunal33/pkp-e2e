@@ -487,7 +487,7 @@ test.describe('languages and locales', () => {
             await expect.poll(() => privacy.richContent('privacy-privacyStatement-control-en')).toContain(PRIVACY_EN_TEXT);
 
             // Required in French: the Masthead's "Save" refused under the
-            // French "Journal title" (Rule 11; U07 Rule 11).
+            // French "Journal Title" (Rule 11; U07 Rule 11).
             const masthead = await tab.settings.openJournalTab('Masthead');
             await expect(masthead.control('masthead-name-control-fr_CA')).toHaveValue('');
             await masthead.saveButton.click();

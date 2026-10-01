@@ -614,19 +614,20 @@ test.describe('Catalog management', () => {
         const entry = new CatalogEntryPage(page, tag);
         const reader = new PublicCatalog(visitor, tag);
 
-        // The page: heading, five groups top to bottom, "Save" at the foot,
+        // The page: heading, six groups top to bottom on a published book (the
+        // read-only "Identity" last, pkp-lib#7527), "Save" at the foot,
         // an empty first "Series" choice (Fields, the Catalog Entry page).
         await catalog.openFromSideMenu();
         const bookAddress = await catalog.viewEntry('Harbour Currents').getAttribute('href');
         await catalog.viewSubmission('Harbour Currents').click();
         await workflow.expectOpen(harbour.submissionId);
         await entry.openFromWorkflow();
-        await expect.poll(() => entry.groupNames(), {timeout: T}).toEqual(['Placement', 'Publication Timing', 'Version and Updates', 'Display', 'Access']);
+        await expect.poll(() => entry.groupNames(), {timeout: T}).toEqual(['Placement', 'Publication Timing', 'Version and Updates', 'Display', 'Access', 'Identity']);
         await expect(entry.saveButton()).toBeVisible();
         await expect(entry.footer().getByRole('button', {name: 'Save', exact: true})).toBeVisible();
-        const accessBox = await entry.group('Access').boundingBox();
+        const lastBox = await entry.group('Identity').boundingBox();
         const saveBox = await entry.saveButton().boundingBox();
-        expect(saveBox.y, '"Save" stands below the last group').toBeGreaterThan(accessBox.y);
+        expect(saveBox.y, '"Save" stands below the last group').toBeGreaterThan(lastBox.y);
         await expect(entry.seriesOptions().first()).toHaveText('');
         await expect(entry.seriesSelect()).toHaveValue('');
 

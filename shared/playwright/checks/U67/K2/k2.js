@@ -322,7 +322,7 @@ forEachApp(async (app) => {
         };
         if (on('seed')) {
             const levels = [['mgr', ['manager'], 'Mia', 'Manager'], ['se', ['sectionEditor'], 'Sid', 'Subeditor'], ['rv', ['externalReviewer'], 'Rae', 'Reviewer'], ['au', ['author'], 'Ada', 'Author'], ['rd', ['reader'], 'Rob', 'Reader']];
-            // "Journal initials" and "Country" given so the Masthead's "Save" is not refused (seed-facts)
+            // "Journal Initials" and "Country" given so the Masthead's "Save" is not refused (seed-facts)
             await mk('a', {context: {acronym: 'K2A', country: 'CA'}, issues: [{volume: 1, number: 1, year: 2020, published: true}]}, levels);
             await mk('y', {enableLockss: true, enableClockss: true, issues: [
                 {volume: 1, number: 1, year: 2011, published: true},

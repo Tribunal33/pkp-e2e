@@ -407,12 +407,12 @@ class ContextFormWindow extends SettingsForm {
         await super.ready();
     }
 
-    /** "Journal title" ("Press Name", "Server title") in a language. */
+    /** "Journal Title" ("Press Name", "Server Title") in a language. */
     title(locale = 'en') {
         return this.form.locator(`[id="context-name-control-${locale}"]`);
     }
 
-    /** "Journal initials" ("Press Initials", "Server initials") in a language. */
+    /** "Journal Initials" ("Press Initials", "Server Initials") in a language. */
     initials(locale = 'en') {
         return this.form.locator(`[id="context-acronym-control-${locale}"]`);
     }

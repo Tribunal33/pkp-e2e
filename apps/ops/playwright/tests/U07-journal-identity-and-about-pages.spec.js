@@ -4,7 +4,7 @@
  *
  * Journal identity & about pages — OPS suite, one test per canonical
  * scenario the spec runs on a preprint server, in the server's own words
- * ("About the Server", "Server Settings", "Server title", "Moderator",
+ * ("About the Server", "Server Settings", "Server Title", "Moderator",
  * "This server …"): the common scenarios 1–5, 7, 8 and 10, and the
  * server's own scenario 12. Scenarios 6, 9 and 11 are badged {OJS OMP}: a
  * preprint server has no Information texts (scenario 12 reads their
@@ -358,7 +358,7 @@ test.describe('journal identity & about pages', () => {
         await expect(form.fieldError('masthead-country-control')).toHaveText(whole(REQUIRED));
         await expect(form.errorSummary).toContainText('Please correct 3 errors.');
         await expect(form.goToButtons()).toHaveCount(3);
-        await expect(form.goToButton('Go to Server initials: This field is required.')).toHaveCount(1);
+        await expect(form.goToButton('Go to Server Initials: This field is required.')).toHaveCount(1);
         await expect(form.goToButton('Go to Country: This field is required.')).toHaveCount(1);
         await expect(form.jumpToErrorButton).toBeVisible();
         await expect(form.saveButton).toBeDisabled();

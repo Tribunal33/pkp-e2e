@@ -1258,7 +1258,7 @@ test.describe('DOIs', () => {
     test('S14: Crossref\'s requirements on a journal', async ({asUser, ojsApi}, testInfo) => {
         test.setTimeout(300_000);
         const tag = makeTag('s14', testInfo);
-        // The Masthead refuses its first "Save" without "Journal initials"
+        // The Masthead refuses its first "Save" without "Journal Initials"
         // and a "Country" (scenarios.md, `context.country`).
         const {manager, ada} = await seedJournal(ojsApi, tag, {
             context: {acronym: 'JPK', country: 'CA'},

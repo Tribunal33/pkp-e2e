@@ -475,7 +475,7 @@ forEachApp(async (app) => {
             out.empty = await pressSave(page, cf, ev, 'r-01-empty');
             // "Go to" link: what it does
             out.goTo = {};
-            for (const f of ['Path', 'Journal initials|Press Initials|Server initials', 'Languages']) {
+            for (const f of ['Path', 'Journal Initials|Press Initials|Server Initials', 'Languages']) {
                 const go = cf.getByRole('button', {name: new RegExp(`^Go to (${f}):`)}).first();
                 if (!(await go.count())) { out.goTo[f] = 'absent'; continue; }
                 await go.click().catch(() => {}); await sleep(700);

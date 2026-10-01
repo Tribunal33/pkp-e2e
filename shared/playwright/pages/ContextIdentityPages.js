@@ -4,7 +4,7 @@
  * Page objects for U07 "Journal identity & about pages"
  * (docs/specs/U07-journal-identity-and-about-pages.md), shared by the OJS,
  * OMP and OPS suites. App-neutral: every on-screen word that differs per
- * app (the page headings, "Journal title" / "Press Name", the role names)
+ * app (the page headings, "Journal Title" / "Press Name", the role names)
  * is passed in by the suite; the locators here are the markup the three
  * apps share (lib/pkp templates and the ui-library forms).
  *

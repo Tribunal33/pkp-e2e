@@ -482,7 +482,7 @@ forEachApp(async (app) => {
             Wz.nameInText = txt.includes(W.name);
             Wz.nameAt = Wz.nameInText ? flat(txt.slice(Math.max(0, txt.indexOf(W.name) - 80), txt.indexOf(W.name) + 80), 200) : null;
             Wz.users = {hasW: /wmgr|wau/i.test(Wz.panels.users.text), hasMaya: /maya/i.test(Wz.panels.users.text)};
-            // the "Journal" tab: its fields and a save of "Journal initials"
+            // the "Journal" tab: its fields and a save of "Journal Initials"
             await page.locator('#setup-button').first().click().catch(() => {});
             await page.locator('#context-button').first().click(); await idle(page); await sleep(700);
             const jForm = page.locator('[role="tabpanel"]#context form').first();

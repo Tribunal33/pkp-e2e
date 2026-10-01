@@ -5,7 +5,7 @@
  * Languages & locales — OPS suite, the parallel half: scenarios 4–9 (all
  * common), in OPS vocabulary: a preprint server, its Preprint Server
  * Manager, "About the Server", Settings › Server › "Masthead" with its
- * "Server title". Scenarios 1–3 change the site's own language list and
+ * "Server Title". Scenarios 1–3 change the site's own language list and
  * live in `serial/U57-languages-and-locales.spec.js`.
  * Spec: docs/specs/U57-languages-and-locales.md
  *
@@ -463,7 +463,7 @@ test.describe('languages and locales', () => {
             await expect(privacy.richBody(`${PRIVACY_BOX}-fr_CA`)).toBeVisible();
             expect(plain(await privacy.richContent(`${PRIVACY_BOX}-fr_CA`))).toBe('');
 
-            // Required in French: "Server title" (Rule 11; U07 Rule 11).
+            // Required in French: "Server Title" (Rule 11; U07 Rule 11).
             const masthead = await new SettingsPages(mp, tag, {locale: 'en'}).openJournalTab('Masthead');
             await masthead.saveButton.click();
             await expect(masthead.fieldError('masthead-name-control-fr_CA')).toHaveText(REQUIRED, {timeout: T});

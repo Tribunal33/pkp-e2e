@@ -334,7 +334,7 @@ forEachApp(async (app) => {
             o.arrival = await formShape(page, f);
             await snap(page, 'f01-f-masthead-arrival', {shape: o.arrival, tabs: o.tabs});
             await loc(page, 'Settings › Journal › Masthead: the form\'s "Save"', f.getByRole('button', {name: 'Save', exact: true}));
-            await loc(page, 'Masthead: "Journal title" box (primary language)', page.locator('[id^="masthead-name-control"]').first());
+            await loc(page, 'Masthead: "Journal Title" box (primary language)', page.locator('[id^="masthead-name-control"]').first());
             // 1. as it stands (initials and country empty)
             o.save0 = await pressSave(page, f);
             await snap(page, 'f02-f-masthead-save-as-is', {save: o.save0});

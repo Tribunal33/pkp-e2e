@@ -35,7 +35,7 @@ const {dbName} = require('../../../../../bin/apps.js'); // the slot's and line's
 //              a Journal Manager on the Site Settings address
 //   reread     the site's pages with no Site Name and no logo (read-only)
 // Not driven here: exactly one context enabled publicly. Hosted Journals › "Edit"
-// cannot save a scratch context without "Journal initials" (none is seeded), so
+// cannot save a scratch context without "Journal Initials" (none is seeded), so
 // disabling the other contexts would change other checkers' contexts for good.
 // Run: PROBE_FEATURE=U60 PROBE_AGENT=ccK1 node bin/probe.js all shared/playwright/checks/U60/K1/k1.js
 const fs = require('fs');

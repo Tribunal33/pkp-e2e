@@ -352,7 +352,7 @@ test.describe('journal identity & about pages', () => {
         await expect(form.fieldError('masthead-country-control')).toHaveText(whole(REQUIRED));
         await expect(form.errorSummary).toContainText('Please correct 3 errors.');
         await expect(form.goToButtons()).toHaveCount(3);
-        await expect(form.goToButton('Go to Journal initials: This field is required.')).toHaveCount(1);
+        await expect(form.goToButton('Go to Journal Initials: This field is required.')).toHaveCount(1);
         await expect(form.goToButton('Go to Country: This field is required.')).toHaveCount(1);
         await expect(form.jumpToErrorButton).toBeVisible();
         await expect(form.saveButton).toBeDisabled();
