@@ -3758,7 +3758,7 @@ same notice for a work whose article DOI was emptied): "Deposit DOIs"
 answered 200 with the notice, the row stayed "Needs DOI", and the queued
 `PKP\jobs\doi\DepositSubmission` job failed with "invalid.job.payload"
 (`DepositSubmission.php`).
-Issue report: [docs/issues/U45-A15-deposit-without-doi-reports-success.md](../issues/U45-A15-deposit-without-doi-reports-success.md).
+Issue report: [pkp-e2e#223](https://github.com/jardakotesovec/pkp-e2e/issues/223) ([docs/issues/U45-A15-deposit-without-doi-reports-success.md](../issues/U45-A15-deposit-without-doi-reports-success.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — `DoiListItem.vue` shows `notSubmittedDescription` and
