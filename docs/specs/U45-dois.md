@@ -3997,7 +3997,7 @@ missing only that chapter (q33; the filter's rule is note z8).
 <a id="fn-f-ops1"></a>
 **f-ops1** — `ops/locale/en/manager.po`
 `manager.setup.enableDois.description`. Live-probed 2026-09-26, OPS.
-Issue report: [docs/issues/U45-OPS1-preprint-server-dois-box-label-wording.md](../issues/U45-OPS1-preprint-server-dois-box-label-wording.md).
+Issue report: [pkp-e2e#248](https://github.com/jardakotesovec/pkp-e2e/issues/248) ([docs/issues/U45-OPS1-preprint-server-dois-box-label-wording.md](../issues/U45-OPS1-preprint-server-dois-box-label-wording.md)).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — `ops/classes/scheduler/Scheduler.php` registers only the
