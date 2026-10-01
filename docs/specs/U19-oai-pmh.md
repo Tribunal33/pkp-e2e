@@ -1106,6 +1106,12 @@ footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A13 (issue reports
+    `docs/issues/U13-A1-french-version-name-raw-key.md` and
+    `docs/issues/U69-A15-omp-french-book-page-raw-keys.md`): records read
+    at `…/fr_CA/oai` carrying French words in a book's "Resource Type"
+    and in an article's MARC field 251, no "##…##" key {OJS OMP} (Rule
+    19; once fixed)
   - the guard for OPS1 (issue report
     `docs/issues/U19-OPS1-preprint-server-oai-until-fails.md`):
     ListIdentifiers and ListRecords asked with `until` on a preprint server
@@ -1319,7 +1325,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | One article in a subscription issue empties a whole `jats` list {OJS} | 🐞 | latent | — |
 | [A11](#a11) | With "DRIVER" enabled, an article in no issue loses its `driver` mark when unpublished {OJS} | 🐞 | latent | — |
 | [A12](#a12) | A journal's MARC records in OAI-PMH do not follow the schemas they name, and software reading them misses the journal, the issue date, the ISSN or the affiliations {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A13](#a13) | Records read in French carry untranslated keys {OJS OMP} | 🐞 | minor | — |
+| [A13](#a13) | Records read in French carry untranslated keys {OJS OMP} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | A journal's MARC records in OAI-PMH write the publication date in field 008 with "%" signs ("%26%09%30 %2026") {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | An OAI-PMH request that gives an argument twice gets a server error instead of the refusal message | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | OAI-PMH GetRecord answers a malformed identifier with a record, not "Identifier is not in a valid format" {OMP OPS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1524,13 +1530,13 @@ on. The same records in Dublin Core are not affected.
 Basis: probe, 2026-10-01. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — Records read in French carry untranslated keys** {OJS OMP} · 🐞 · minor.
+**A13 — Records read in French carry untranslated keys** {OJS OMP} · 🐞 · low.
 A harvester reading `…/fr_CA/oai` expects French words. A book's
 "Resource Type" reads "##rt.metadata.pkp.dctype##" instead of the French
 for "Book", and an article's MARC 251 and 780 read
 "##publication.versionStage.display##" instead of its version, such as
 "Version of Record 2.0".
-Basis: probe, 2026-09-26. <sup>f-a13</sup>
+Basis: probe, 2026-10-01. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — "Language" writes a galley's language with an underscore** {OJS OPS} · ❓ · minor.
@@ -1977,6 +1983,7 @@ Issue report: [pkp-e2e#305](https://github.com/jardakotesovec/pkp-e2e/issues/305
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-26: note q19; OJS `oai_marc` and `marcxml` read at `…/fr_CA/oai` wrote 251 and 780 `$i` "##publication.versionStage.display##" where the English read "Version of Record 2.0" and "Version of Record 1.1". The `##…##` form is how the app prints a key it has no text for in that language. Code: notes f, g, u.
+Issue reports: the MARC version fields, [pkp-e2e#228](https://github.com/jardakotesovec/pkp-e2e/issues/228) ([docs/issues/U13-A1-french-version-name-raw-key.md](../issues/U13-A1-french-version-name-raw-key.md)); a book's "Resource Type", [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) ([docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-26, OJS and OPS: an article with the galleys "PDF" (en) and "PDF FR" (fr_CA) read "Language" "en" and "fr_CA", and its French values `xml:lang="fr-CA"`. Code: note f (`dc:language` the galleys' stored `locale`; `xml:lang` turns `_` into `-`).

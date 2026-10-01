@@ -10,7 +10,7 @@
   - 3.3: OMP (code; the book's page only, it has no chapter pages)
 - **Introduced** not traced; each text was added in English at a different time and never entered in French (Canada). The oldest are the book page's "Published" and "Categories", since [52df855c59](https://github.com/pkp/omp/commit/52df855c59a26832353324486789159f965d5605) (2015-09-04)
 - **Upstream** none found (2026-10-01)
-- **Tracked in** spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15)
+- **Tracked in** spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15), spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (a book's OAI-PMH "Resource Type")
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -209,6 +209,14 @@ left out.
   `chapter.pages`, `catalog.viewableFile.title`,
   `catalog.viewableFile.return`, `submission.chapterCreated` and the
   priced link. On screen on `main` only: `submission.editorName`.
+- On screen (`main` and 3.5), outside the pages: `rt.metadata.pkp.dctype`,
+  the "Resource Type" of every book's Dublin Core record. Read at the
+  press's French OAI-PMH address
+  (`/index.php/publicknowledge/fr_CA/oai?verb=ListRecords&metadataPrefix=oai_dc`),
+  each record carries
+  `<dc:type xml:lang="fr-CA">##rt.metadata.pkp.dctype##</dc:type>` where
+  the English address gives "Book"
+  (`Dc11SchemaPublicationFormatAdapter`).
 - By the code, in cases not set up on screen here, the same templates
   read nine more keys that are empty in `locale/fr_CA`:
   - `catalog.forthcoming`, over a publication date in the future.
@@ -255,7 +263,7 @@ on Weblate, in OMP's French (Canada) and its default theme's, or to
 hand the list to the French (Canada) translators. No code changes and
 no data is involved.
 
-The diff holds 18 texts. Sixteen fill the 15 empty entries and the
+The diff holds 19 texts. Seventeen fill the 16 empty entries and the
 theme's missing one, each copied from OMP's own French (France) files.
 Two add `{$format}` to the priced link, in French (Canada) and French
 (France):
@@ -287,7 +295,8 @@ détails sur From Bricks to Brains: …", "2026-10-01
 PDF (25.00 USD)" and "Sarah Carter (éd.)", "Peter Fortna (éd.)". The
 English pages and the French labels that were already translated
 ("Synopsis", "Séries", "Mots-clés :") read the same with the diff in
-and out.
+and out. The French OAI-PMH records' "Resource Type" read "Livre", with
+every other element of the records and the English records unchanged.
 
 **Alternatives**
 
@@ -300,7 +309,7 @@ and out.
 - Read pkp-lib's translated keys where one has the same word
   (`category.category` "Catégories", `submission.downloads`
   "Téléchargements"), as proposed for OPS's keywords label: it covers
-  two of the 17 keys, and the rest still need a text.
+  two of the 18 keys, and the rest still need a text.
 - Print the editor's name, the version's name and " — " from the
   template and translate only the words of `submission.editorName`,
   `submission.chapterCreated` and `submission.withoutChapter`: a code
@@ -322,7 +331,7 @@ and out.
 - The guard: the U69 spec's French-page scenario asserting that a
   book's and a chapter's page show no `##` code (a Planned item).
 
-Small: 18 texts entered on Weblate, tried as a diff, with no code
+Small: 19 texts entered on Weblate, tried as a diff, with no code
 change.
 
 ## Evidence
@@ -370,11 +379,12 @@ change.
   `locale/*/locale.po`, `manager.po` and `submission.po` of OMP and the
   theme's `locale.po` for the counts (an empty `msgstr` counts as
   missing).
-- 3.4 (code): the same 16 keys empty or absent in `fr_CA`, the same
+- 3.4 (code): the same 17 keys empty or absent in `fr_CA`, the same
   templates. 3.3 (code): `catalog.published`, `catalog.forthcoming`,
   `catalog.categories`, the two ISSN labels, the two view-page texts,
   `monograph.publicationFormatDetails`, `submission.editorName` and
-  `submission.authorListSeparator` empty in `fr_CA`, and the priced
+  `submission.authorListSeparator` and `rt.metadata.pkp.dctype` empty
+  in `fr_CA`, and the priced
   link without `{$format}`; the chapter keys and
   `doi.readerDisplayName` do not exist there.
 - Introduced: `git log -S` of each key on OMP's English locale files
@@ -391,6 +401,15 @@ change.
   "Forthcoming" label under another date format, fixed),
   `pkp/pkp-lib#9707` (locale folders renamed to Weblate's codes),
   `pkp/pkp-lib#784`.
+- The OAI-PMH "Resource Type" (spec U19 A13): read by
+  [`oai-french-records-raw-keys/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/oai-french-records-raw-keys/walk.js),
+  which lists the press's Dublin Core records at the French and the
+  English address, signed out, and changes nothing. Walked on `main`
+  and `stable-3_5_0` (pkp/datasets 2c84c3c, 2026-10-01), and on `main`
+  with the diff applied. `rt.metadata.pkp.dctype` is empty in
+  `locale/fr_CA/locale.po` on `main`, 3.5, 3.4 and 3.3, and
+  `Dc11SchemaPublicationFormatAdapter` reads it under the request's
+  language on each.
 - Fix trial:
   `node bin/try-fix.js apply shared/playwright/checks/issues/omp-french-book-page-raw-keys/fix.diff omp`,
   the kept script, then `revert`.

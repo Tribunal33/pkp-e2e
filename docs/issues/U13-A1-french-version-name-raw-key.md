@@ -10,7 +10,7 @@
   - 3.3: none (code)
 - **Introduced** `pkp/pkp-lib#10810` for `pkp/pkp-lib#10669` · [958592a159](https://github.com/pkp/pkp-lib/commit/958592a15966ca41ce8b02cfe655b74d7f554241) · 2025-05-30 · Dimitris Efstathiou (defstat)
 - **Upstream** none found (2026-10-01)
-- **Tracked in** spec U13 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#a1), spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15) (the version names)
+- **Tracked in** spec U13 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#a1), spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15) (the version names), spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (a journal's MARC records)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -152,10 +152,16 @@ string; two cast it themselves. The fix covers all of them:
   …" in the "Publish" window), and `PublicationVersionInfoResource`,
   whose `versionDisplay` field the REST API returns for the next
   available version (code).
-- Machine output written under the request's language: field 251 of
-  OJS's MARC and MARC21 OAI records and the `related-article` text of
-  the JATS plugin (code; OJS `main` only, its pkp-lib is ahead of the
-  other two apps').
+- Machine output written under the request's language, on OJS `main`
+  only (its pkp-lib is ahead of the other two apps'):
+  - Field 251 of a journal's `marcxml` and `oai_marc` OAI-PMH records.
+    Read at `/index.php/publicknowledge/fr_CA/oai`, the record of
+    "Signalling Theory Dividends" carries
+    `##publication.versionStage.display##` where the English address
+    gives "Version of Record 1.0" (on screen).
+  - Field 780 `$i` of the same records, which names the version before
+    on an article with a second major version, and the
+    `related-article` text of the JATS plugin (code).
 - Not touched: a version without a stage reads
   `publication.versionStage.unassignedVersion`, a text with words, which
   waits for its translation like the stage names. The JATS
@@ -232,7 +238,10 @@ pages read "2026-09-30 (##publication.versionStage.authorOriginal##
 "(##publication.versionStage.versionOfRecord## 1.0)" on the article and
 the book, and the editor's menu "… 1.0" and "… 1.1": the numbers are
 back, and the stage name shows its own raw key until it is translated.
-The English pages read the same with the fix in and out.
+The English pages read the same with the fix in and out. On OJS, field
+251 of the French MARC records then reads
+"##publication.versionStage.versionOfRecord## 1.0", and the English
+records and every other field are unchanged.
 
 **Alternatives**
 
@@ -309,6 +318,13 @@ English locale entry removed, tried, with no data to repair.
   Record locale" and "versions list locale key". Read:
   `pkp/pkp-lib#10669` and `pkp/pkp-lib#10810` (no mention of the
   pattern's translation).
+- The MARC records: field 251 was read in the walk of
+  [`oai-french-records-raw-keys/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/oai-french-records-raw-keys/walk.js)
+  (spec U19 A13), on OJS `main` at 06fd981b01 (`lib/pkp` 2e377d27fc),
+  in `marcxml` and `oai_marc`, at the French and the English address,
+  with this fix in and out. On `stable-3_5_0` the records have no field
+  251. Field 780 was not walked: the dataset has no article with two
+  published major versions.
 - The chapter page: a press's chapter page was read in the walk of
   [`omp-french-book-page-raw-keys/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-book-page-raw-keys/walk.js)
   (the other French codes of a book's pages, spec U69 A15). Its
@@ -320,8 +336,8 @@ English locale entry removed, tried, with no data to repair.
 - Not driven: 3.4 and 3.3 (code only); languages other than French
   (Canada) (code only); the author's dashboard, the
   "Publish" window, the next-version API field, the DOIs page, the
-  comments and open review panels, and the MARC and JATS output (code
-  only); the languages without `submission.versionIdentity` (code
+  comments and open review panels, MARC field 780 and the JATS output
+  (code only); the languages without `submission.versionIdentity` (code
   only).
 - Unverified: whether the Default Translation or Custom Locale plugins
   would replace the code; neither was installed.
