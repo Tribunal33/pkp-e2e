@@ -1098,8 +1098,8 @@ are in the footnote. <sup>y</sup>
 
    Given: two scratch journals, a first and a second, each with the Site
    Administrator as a Journal Manager and English as its one interface
-   language, and a throwaway Author of the first journal who holds no
-   role in the second.
+   language, a throwaway Author of the first journal who holds no role
+   in the second, and a visitor, signed out, in a second browser.
 
    - **No role in the journal**: Author: sign in, open the second
      journal's home page, press the username and choose "View Profile":
@@ -1127,6 +1127,17 @@ are in the footnote. <sup>y</sup>
      the username: the list holds "Dashboard", "View Profile",
      "Administration" and "Logout"; press "Administration": the
      Administration page opens (Rule 18).
+   - **A journal's settings address at the site's level** {OJS OMP}:
+     Site Administrator: open the first journal's Settings › Website
+     again and, in the browser's address bar, replace the journal's path
+     (its "Path" under Hosted Journals) with "index": the access-denied
+     page opens, reading "No journal was found that matched your
+     request." ("No press was found that matched your request.") in
+     place of "The current role does not have access to this
+     operation." (Rules 26a, 26c). The visitor opens the same address:
+     the site's Login page opens; the visitor signs in there as the
+     Author: the same access-denied page opens, with the same sentence
+     (Rule 26c). A preprint server answers otherwise [OPS4](#ops4).
    - **Control**: on the first journal's My Submissions the Author has a
      side menu, "My Submissions as Author" and "Start A New Submission"
      (Rule 30).
@@ -1175,8 +1186,6 @@ are in the footnote. <sup>y</sup>
 
 Left out of the scenarios above, by reason:
 
-- **Planned**:
-  - a journal's settings address opened at the site's level: the access-denied page reading "No journal was found that matched your request." for every signed-in user, the site's Login page for a signed-out visitor (Rule 26c)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -2622,7 +2631,10 @@ context exists (the side tab needs a second context, seed-facts); it
 changes the site's own items, which every test on the install shares,
 so it runs alone and puts "Login" back. 9 — two scratch contexts, each
 enrolling `admin` as manager (every `createContext` does); a throwaway
-`author` in the first's `users[]` only.
+`author` in the first's `users[]` only; the visitor is a second
+browser context, signed out, that signs in as that `author` on the
+site's Login page; the address of the settings bullet {OJS OMP} is
+`index.php/index/management/settings/website`.
 
 <a id="fn-f-a1"></a>
 **f-a1** — `TopNavActions.vue` prints `t('common.help')` in the help

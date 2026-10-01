@@ -49,8 +49,9 @@
  * journal, and on a second journal the plugin enabled and not placed for
  * the "before" control, since no key places the block after the journal
  * exists. Signed-out reads run in a browser context with an empty storage
- * state (patterns.md, parallel lesson 8); each actor gets its own `asUser`
- * context. Addresses outside the install (the Remote URL item's
+ * state (patterns.md, parallel lesson 8); S9's visitor signs in there as
+ * the scratch Author through the site's Login page, the step under test
+ * (Rule 26c); each actor gets its own `asUser` context. Addresses outside the install (the Remote URL item's
  * https://pkp.sfu.ca, the help link's documentation) are answered by a
  * route stub in the browser context, so a press follows the link without
  * the test leaving the machine.
@@ -63,6 +64,8 @@ const {
     whole,
 } = require('../../../../shared/playwright/pages/NavigationChromePages.js');
 const {closeTab} = require('../../../../shared/playwright/support/tabs.js');
+const {LoginPage} = require('../../../../shared/playwright/pages/LoginPage.js');
+const {getPassword} = require('../../../../shared/playwright/data/users.js');
 
 const JOURNAL = 'publicknowledge';
 const JOURNAL_NAME = 'Journal of Public Knowledge';
@@ -85,6 +88,8 @@ const MENU_UPDATED = 'Navigation menu was successfully updated';
 const MENU_REMOVED = 'Navigation menu was successfully removed';
 const NO_ITEMS_ASSIGNED = 'No items assigned to this menu. Drag items from Unassigned Menu Items.';
 const ANNOUNCEMENTS_NOTICE = 'This link will only be displayed if you have enabled announcements under Settings > Website.';
+const NO_CONTEXT = 'No journal was found that matched your request.';
+const NO_ACCESS = 'The current role does not have access to this operation.';
 const WARNING_NOTICE =
     "When a menu item opens a submenu, it's link can not be followed on all devices. For example, if you have an \"About\" item which opens a submenu with \"Contact\" and \"Editorial Masthead\", the \"About\" link may not be reachable on all devices. In the default menu, this is handled by creating a second menu item, \"About the Journal\", which appears in the submenu.";
 
@@ -153,6 +158,24 @@ async function seedJournal(ojsApi, tag, extra = {}) {
 /** An address's path, for URL assertions on a context-relative page. */
 function pathOf(page) {
     return new URL(page.url()).pathname;
+}
+
+/** A journal's address with "index" in place of its path: the same page at the site's level (Rule 26c). */
+function atSiteLevel(page, contextPath) {
+    const url = new URL(page.url());
+    url.pathname = url.pathname.replace(`/index.php/${contextPath}/`, '/index.php/index/');
+    return url.toString();
+}
+
+/**
+ * The access-denied page at the site's level reading "No journal was found
+ * that matched your request." in place of the role sentence (Rules 26a,
+ * 26c); the sentence shown is the positive control for the one absent.
+ */
+async function expectNoContextPage(page, what) {
+    await expect(page, `${what}: the access-denied page`).toHaveURL(/\/index\.php\/index(\/en)?\/user\/authorizationDenied/, {timeout: T});
+    await expect(page.getByText(NO_CONTEXT, {exact: true}), `${what}: its sentence`).toBeVisible({timeout: T});
+    await expect(page.getByText(NO_ACCESS), `${what}: not the role sentence`).toHaveCount(0);
 }
 
 /** The header's name, primary menu and user menu, as read. */
@@ -858,7 +881,7 @@ test.describe('navigation menus & site chrome', () => {
         expect(items).toContain('Contact');
     });
 
-    test('S9: the journals switcher, and a journal where the user holds no role', async ({asUser, ojsApi}, testInfo) => {
+    test('S9: the journals switcher, and a journal where the user holds no role', async ({asUser, ojsApi, visitor}, testInfo) => {
         test.slow();
         test.setTimeout(240_000);
         const tag = makeTag('9', testInfo);
@@ -948,6 +971,29 @@ test.describe('navigation menus & site chrome', () => {
         await apub.submenuLink('user', adminTop, 'Administration').click();
         await expect(admin).toHaveURL(/\/index\.php\/index(\/en)?\/admin/);
         await expect(admin.locator('main h1, .app__page h1').first()).toHaveText(whole('Administration'));
+
+        // A journal's settings address at the site's level {OJS OMP}: the
+        // first journal's Settings › Website with "index" in place of its
+        // path gives the Site Administrator the access-denied page reading
+        // "No journal was found that matched your request." (Rules 26a,
+        // 26c); control: the journal's own address opens Settings › Website.
+        await admin.goto(`/index.php/${first}/management/settings/website`);
+        await aed.waitReady();
+        await expect(aed.contextTitle).toHaveText(whole(firstName));
+        await expect(admin).toHaveURL(new RegExp(`/index\\.php/${first}/management/settings/website`));
+        const siteLevel = atSiteLevel(admin, first);
+        expect(new URL(siteLevel).pathname).toBe('/index.php/index/management/settings/website');
+        await admin.goto(siteLevel);
+        await expectNoContextPage(admin, 'Site Administrator');
+
+        // The visitor opening the same address gets the site's Login page;
+        // signing in there as the Author leads to the same page (Rule 26c).
+        await visitor.goto(siteLevel);
+        await expect(visitor).toHaveURL(/\/index\.php\/index(\/en)?\/login\b/, {timeout: T});
+        const login = new LoginPage(visitor);
+        await login.expectForm();
+        await login.signIn(author, getPassword(author));
+        await expectNoContextPage(visitor, 'Author signed in from the site\'s Login page');
     });
 
     test('S10: page links on a list longer than a page', async ({asUser, ojsApi, visitor}, testInfo) => {

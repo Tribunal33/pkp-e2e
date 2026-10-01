@@ -20,7 +20,9 @@
  *   where it leads; nothing reads its accessible name.
  * - A2 🐞: no test presses a Series editor's "Dashboard" in the public
  *   header (S2 reads the Series editor's landing on the Dashboard only).
- * - A3, A4, A7, A8, A10, A16, A17, A21, A22, A23, A24 🐞: no test reaches
+ * - A3 🐞: S9 reads the access-denied page's sentence and address only,
+ *   never its heading or its trail's last step.
+ * - A4, A7, A8, A10, A16, A17, A21, A22, A23, A24 🐞: no test reaches
  *   those states (the site's menu window is S8's, which opens none).
  * - A5, A9, A10 ❓: not driven.
  * - A11 🐞, A12 🐞: S5 reads each refused save through the window staying
@@ -34,7 +36,7 @@
  *   save or removal and a reload.
  * - A18 🐞: S5's back arrow is pressed with a browser-dialog handler that
  *   answers "OK" if the box comes; nothing asserts that it does.
- * - OJS1, OPS1, OPS2, OPS3: another app's territory.
+ * - OJS1, OPS1, OPS2, OPS3, OPS4: another app's territory.
  *
  * Seeding: scenario endpoints only. S1–S3 read the seeded press
  * `publicknowledge` with roster accounts and change nothing there
@@ -61,6 +63,8 @@ const {
     whole,
 } = require('../../../../shared/playwright/pages/NavigationChromePages.js');
 const {closeTab} = require('../../../../shared/playwright/support/tabs.js');
+const {LoginPage} = require('../../../../shared/playwright/pages/LoginPage.js');
+const {getPassword} = require('../../../../shared/playwright/data/users.js');
 
 const PRESS = 'publicknowledge';
 const PRESS_NAME = 'Public Knowledge Press';
@@ -99,6 +103,10 @@ const MANAGER_SIDE = ['Editor Dashboard', 'Start A New Submission', 'DOIs', 'Set
 const STATISTICS = ['Monographs', 'Press', 'Editorial Activity', 'Users', 'Counter R5', 'Reports'];
 
 const sorted = (list) => [...list].sort();
+
+/** The access-denied page's sentences: the site-level refusal (Rule 26c) and the role refusal (Rule 26a). */
+const NO_PRESS = 'No press was found that matched your request.';
+const ROLE_DENIED = 'The current role does not have access to this operation.';
 
 /** A visitor's page: a second browser context with no session at all (parallel lesson 8). */
 const test = base.extend({
@@ -143,6 +151,19 @@ async function seedPress(ompApi, tag, extra = {}) {
         ...rest,
     });
     return `${tag}mg`;
+}
+
+/**
+ * `page` is on the access-denied page for a settings address opened at the
+ * site's level (Rules 26a, 26c): the site's `authorizationDenied` address,
+ * the press-not-found sentence, and, once that is on screen, not the role
+ * sentence it replaces.
+ */
+async function expectNoPressPage(page, who) {
+    await expect(page, `${who}: the access-denied page`).toHaveURL(/\/index\.php\/index(\/en)?\/user\/authorizationDenied\b/, {timeout: T});
+    const main = page.locator('.pkp_structure_main');
+    await expect(main.getByText(NO_PRESS, {exact: true}), `${who}: "${NO_PRESS}"`).toBeVisible({timeout: T});
+    await expect(main.getByText(ROLE_DENIED), `${who}: no "${ROLE_DENIED}"`).toHaveCount(0);
 }
 
 /** An address's path, for URL assertions on a context-relative page. */
@@ -828,7 +849,7 @@ test.describe('navigation menus & site chrome', () => {
         expect(items).toContain('Contact');
     });
 
-    test('S9: the presses switcher, and a press where the user holds no role', async ({asUser, ompApi}, testInfo) => {
+    test('S9: the presses switcher, and a press where the user holds no role', async ({asUser, ompApi, visitor}, testInfo) => {
         test.slow();
         test.setTimeout(240_000);
         const tag = makeTag('9', testInfo);
@@ -916,6 +937,31 @@ test.describe('navigation menus & site chrome', () => {
         await apub.submenuLink('user', adminTop, 'Administration').click();
         await expect(admin).toHaveURL(/\/index\.php\/index(\/en)?\/admin/);
         await expect(admin.locator('main h1, .app__page h1').first()).toHaveText(whole('Administration'));
+
+        // A press's settings address at the site's level: the first press's
+        // Settings › Website again, its path replaced by "index" in the
+        // address: the access-denied page with "No press was found that
+        // matched your request." in place of the role sentence (Rules 26a,
+        // 26c). Control: the press's own address opened the Website page.
+        await admin.goto(`/index.php/${first}/management/settings/website`);
+        await expect(admin).toHaveURL(new RegExp(`/index\\.php/${first}/management/settings/website`));
+        await aed.waitReady();
+        await expect(aed.contextTitle).toHaveText(whole(firstName));
+        const siteLevel = pathOf(admin).replace(`/index.php/${first}/`, '/index.php/index/');
+        expect(siteLevel).toBe('/index.php/index/management/settings/website');
+        await admin.goto(siteLevel);
+        await expectNoPressPage(admin, 'Site Administrator');
+
+        // The visitor, signed out, at the same address: the site's Login
+        // page; signing in there as the Author leads to the same page with
+        // the same sentence (Rule 26c).
+        await visitor.goto(siteLevel);
+        await expect(visitor).toHaveURL(/\/index\.php\/index(\/en)?\/login\b/);
+        const login = new LoginPage(visitor);
+        await login.expectForm();
+        await expect(visitor.getByText(NO_PRESS)).toHaveCount(0);
+        await login.signIn(author, getPassword(author));
+        await expectNoPressPage(visitor, 'the Author signed in from the Login page');
     });
 
     test('S10: page links on a list longer than a page', async ({asUser, ompApi, visitor}, testInfo) => {
