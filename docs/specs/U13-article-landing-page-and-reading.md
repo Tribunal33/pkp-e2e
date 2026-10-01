@@ -1132,6 +1132,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-A7-abnt-citation-runs-text-together.md`): the "ABNT"
     citation of a preprint and of an article, with a full stop between
     title and server and a space between month and year
+  - the guard for A10 (Fields, "References"; issue report
+    `docs/issues/U13-A10-reference-link-takes-closing-parenthesis.md`):
+    a reference whose address is closed by a parenthesis, "(https://doi.org/…).",
+    linked without the ")"
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1274,7 +1278,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A7](#a7) | "ABNT" citation runs a preprint's title into the server's name and prints the date as "30 Sept.2026" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | The RIS file writes its dates with a stray "%" | 🐞 | minor | — |
 | [A9](#a9) | With no additional format ticked, "More Citation Formats" opens nothing and hides the downloads | 🐞 | minor | — |
-| [A10](#a10) | A reference's address in parentheses takes the ")" into its link | 🐞 | minor | — |
+| [A10](#a10) | A reference's web address written in parentheses becomes a link that includes the closing ")" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Keywords are listed in no fixed order: the order typed is not kept | 🐞 | minor | — |
 | [OJS1](#ojs1) | Readers get no other citation format or citation download on an article published outside a published issue | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | Publication Facts Label settings always warn "Funding Plugin Not Present", for a plugin that no longer exists | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1438,12 +1442,18 @@ reader is offered a button that does nothing, and loses the downloads.
 Basis: probe, 2026-09-25. <sup>[f-a9](#fn-f-a9)</sup>
 
 <a id="a10"></a>
-**A10 — A reference's link takes a closing parenthesis** · 🐞 · minor.
-In "References", an address written inside parentheses,
-"(ftp://files.example.org/ridge/data.csv)", becomes a link whose address
-and text end in ")", pointing to a file that does not exist. A trailing
-"." or "," is correctly left out of the link.
-Basis: probe, 2026-09-25. <sup>[f-a10](#fn-f-a10)</sup>
+**A10 — A reference's web address written in parentheses becomes a link that includes the closing ")"** · 🐞 · low.
+Under "References" on an article's, preprint's or book's page, a web
+address followed directly by ")" becomes a link whose address and text
+end in ")". A reference that gives its DOI address in parentheses,
+"(https://doi.org/10.1234/u13ir23).", is the usual case: its link leads
+to "https://doi.org/10.1234/u13ir23)", which does not exist.
+The reader expects the link to stop before the ")", as it does before a
+"." or "," after an address.
+It shows wherever a reference closes a parenthesis right after an
+address, also when the ")" is followed by ".", "," or ";". A ";" or
+":" right after an address is taken into the link in the same way.
+Basis: probe, 2026-10-01. <sup>[f-a10](#fn-f-a10)</sup>
 
 <a id="a11"></a>
 **A11 — Keywords lose the order they were typed in** · 🐞 · minor.
@@ -2724,6 +2734,7 @@ Live-probed 2026-09-25, note q12, both apps.
 **f-a10** — Note m: the link pattern stops at spaces and square or
 angle brackets, not at a parenthesis. Live-probed 2026-09-25, note m,
 both apps.
+Issue report: [docs/issues/U13-A10-reference-link-takes-closing-parenthesis.md](../issues/U13-A10-reference-link-takes-closing-parenthesis.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Note c: `PKP\publication\DAO::fromRow()` reads the keyword

@@ -1,0 +1,26 @@
+--- a/lib/pkp/classes/citation/Citation.php
++++ b/lib/pkp/classes/citation/Citation.php
+@@ -88,9 +88,20 @@
+             $rawCitationWithLinks = preg_replace_callback(
+                 '#(http|https|ftp)://[\d\w\.-]+\.[\w\.]{2,6}[^\s\]\[\<\>]*/?#',
+                 function ($matches) {
+-                    $trailingDot = in_array($char = substr($matches[0], -1), ['.', ',']);
+-                    $url = rtrim($matches[0], '.,');
+-                    return "<a href='{$url}' target='_blank'>{$url}</a>" . ($trailingDot ? $char : '');
++                    // Punctuation that follows the address stays outside the link: ".", ",", ";" or ":",
++                    // and a ")" that closes a parenthesis opened before the address.
++                    $url = $matches[0];
++                    $trailing = '';
++                    while ($url !== '') {
++                        $char = substr($url, -1);
++                        $closesOuterParenthesis = $char === ')' && substr_count($url, ')') > substr_count($url, '(');
++                        if (!in_array($char, ['.', ',', ';', ':']) && !$closesOuterParenthesis) {
++                            break;
++                        }
++                        $trailing = $char . $trailing;
++                        $url = substr($url, 0, -1);
++                    }
++                    return "<a href='{$url}' target='_blank'>{$url}</a>" . $trailing;
+                 },
+                 $rawCitationWithLinks
+             );
