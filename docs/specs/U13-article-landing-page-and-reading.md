@@ -1102,6 +1102,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-OJS7-publication-facts-settings-refused-save-resets.md`):
     a refused "OK" in the "Publication Facts Label plugin" settings
     keeping every value typed in the window {OJS}
+  - the guard for A1 (Rule 21, scenario 8; issue report
+    `docs/issues/U13-A1-french-version-name-raw-key.md`): a page shown
+    in French naming each version with its numbers and no
+    "##publication.versionStage.display##"
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1236,7 +1240,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | On a French page every version name reads "##publication.versionStage.display##" | 🐞 | user-visible | — |
+| [A1](#a1) | In French, readers and editors see a raw translation key in place of every version's name and number | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | An older version's PDF opens a reader with no document, and its "Download" gets no file | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | A preprint server's lists, and a journal's "Latest Publications" without the current issue, offer a link for a galley with no file, answering "404 Not Found" | 🐞 | minor | — |
 | [A5](#a5) | An author previewing their unpublished article, book or preprint gets "access denied" from "View submission" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1273,14 +1277,29 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 ### All apps
 
 <a id="a1"></a>
-**A1 — Version names show a raw key in French** · 🐞 · user-visible.
-On a page shown in French, the "Versions" list reads "2026-09-24
-(##publication.versionStage.display##)" where the English page reads
-"2026-09-24 (Version of Record 1.0)", and the preprint page's label line
-reads "Prépublication / 2026-09-24 (##publication.versionStage.display##)".
-A French reader cannot tell the versions apart by name. The French
-interface has no text for the version name at all.
-Basis: probe, 2026-09-25. <sup>[f-a1](#fn-f-a1)</sup>
+**A1 — In French, readers and editors see a raw translation key in place of every version's name and number** · 🐞 · low.
+On an article, book or preprint page shown in French, the "Versions"
+list names every version with a raw translation key,
+"##publication.versionStage.display##": two versions posted the same day
+read "2026-09-30 (##publication.versionStage.display##)" twice. The
+English page reads "2026-09-30 (Author Original 2.0)" and "2026-09-30
+(Author Original 1.0)". A preprint's line above its title shows the same
+key, and so does the editor's workflow, whose "Publication" menu lists
+one entry per version.
+Nothing is lost and every link still opens its version, but neither a
+reader nor an editor can tell the versions apart by name or number in
+French. The release before listed them by number in French ("2026-09-30
+(2)").
+French (Canada) was walked. By the code, every language but English
+shows the key. The text behind it is only the pattern "stage
+major.minor", which holds no word. New texts are offered to translators
+once the release branch opens, so this one would reach them before the
+release, and each language shows the key until its translators copy the
+pattern. The proposed fix builds the name in code instead, so the
+numbers show in every language at once. After it a French reader sees
+"2026-09-30 (##publication.versionStage.authorOriginal## 2.0)": the
+stage name stays a raw key until it is translated.
+Basis: probe, 2026-10-01. <sup>[f-a1](#fn-f-a1)</sup>
 
 <a id="a2"></a>
 **A2 — An older version's PDF opens a reader with no document, and its "Download" gets no file** · 🐞 · high · crash: script.
@@ -2556,6 +2575,7 @@ in passing during the appearance spec's claim check (a press's book page
 also labels its date "##catalog.published##", the monograph page's
 business); live-probed 2026-09-25 on both apps and the press (note q5),
 the date printed "2026-09-24" in French as in English.
+Issue report: [docs/issues/U13-A1-french-version-name-raw-key.md](../issues/U13-A1-french-version-name-raw-key.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `PdfJsViewerPlugin::submissionCallback()` builds `pdfUrl` from

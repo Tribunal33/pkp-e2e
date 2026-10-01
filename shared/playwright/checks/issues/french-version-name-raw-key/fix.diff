@@ -1,0 +1,31 @@
+--- a/lib/pkp/classes/publication/helpers/PublicationVersionInfo.php
++++ b/lib/pkp/classes/publication/helpers/PublicationVersionInfo.php
+@@ -35,13 +35,9 @@
+ 
+     public function __toString(): string
+     {
+-        $versionStageLabel = $this->stage->label();
+-
+-        return __('publication.versionStage.display', [
+-            'stage' => $versionStageLabel,
+-            'majorNumbering' => $this->majorNumbering,
+-            'minorNumbering' => $this->minorNumbering,
+-        ]);
++        // The pattern holds no words to translate, so it is not a locale key:
++        // a language without it would lose the stage name and the numbers.
++        return "{$this->stage->label()} {$this->majorNumbering}.{$this->minorNumbering}";
+     }
+ 
+     /**
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -3481,9 +3481,6 @@
+ msgid "publication.versionStage.unassignedVersion"
+ msgstr "Unassigned version ({$publicationCreatedDate})"
+ 
+-msgid "publication.versionStage.display"
+-msgstr "{$stage} {$majorNumbering}.{$minorNumbering}"
+-
+ msgid "publication.required.versionStage"
+ msgstr ""
+ "The publication must have a version stage assigned before it can "
