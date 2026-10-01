@@ -818,6 +818,7 @@ the footnote. <sup>y</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a static page "Save" refused for its "Path", then corrected and saved: no red notice after the good save {OJS OMP} (A11; the guard its issue report names)
   - an SVG chosen through "Browse for an image" refused with the site's types message, a PNG still stored (A16; the guard its issue report names)
   - a BMP dropped and one pasted into a custom page's "Content": each refused with its notice and gone from the box, the saved page holding no embedded picture (A17; the guard its issue report names)
   - a change made only in "Content" of the static page window and of the block window, then the back arrow: the question "The data on this form has changed. Do you wish to continue without saving?" (A19; the guard its issue report names)
@@ -887,7 +888,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A custom block named only outside the manager's interface language is kept as a blank row with neither "Edit" nor "Delete" | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | Typing a page preview's address below manager level, or signed out, gives a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A static page or custom page whose "Path" has a "." in its first two parts answers "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A11](#a11) | After a refused "Save" in the static page window, the next successful save shows the old refusal at the top right | 🐞 | minor | — |
+| [A11](#a11) | A manager's good save in the static page window shows the earlier refusal as a red notice | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | Right after "Static Pages Plugin" is unticked, the tab's "Add Static Page" fails on the server | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | A custom block whose name holds "&" can never be placed, edited or deleted | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | A custom block cannot be deleted on PostgreSQL: "OK" spins and the block stays | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1038,14 +1039,26 @@ repositories, pkp-lib and the Static Pages plugin.
 Basis: probe, 2026-10-01. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The static page window repeats an old refusal after a good save** · 🐞 · minor · {OJS OMP}.
-A manager whose "Save" was refused for its "Path" corrects the path and
-saves: the window closes and the page is listed, but a red notice at the
-top right repeats the earlier refusal ("The path field must contain only
-alphanumeric characters plus '.', '/', '-', and '_'."), as if the save
-had failed. With the window closed after the refusal instead, the notice
-shows on the next load of Settings › Website.
-Basis: probe. <sup>f-a11</sup>
+**A11 — A manager's good save in the static page window shows the earlier refusal as a red notice** · 🐞 · low.
+A manager's "Save" in the static page window is refused because of the
+"Path". The reason shows under the box, and nothing shows at the top
+right. The manager corrects the path and saves again. The window closes
+and the page is listed. But a red notice at the top right now repeats
+the earlier refusal ("The path field must contain only alphanumeric
+characters plus '.', '/', '-', and '_'."), as if this save had failed.
+Each refused save leaves a notice of its own, and all of them show
+together at the next save. If the manager closes the window after a
+refusal instead, the notice shows on the next page that loads, such as
+the Editor Dashboard.
+The cause is shared by every window that draws its form again after a
+refused save and has no message box of its own. Read
+in the code, not tried on screen, these include: the galley window in
+OJS and OPS (editors and moderators setting a galley's "URL Path"); OMP's
+catalog-entry windows for publication formats, identification codes,
+markets, publication dates and sales rights (press editors); and "Assign
+Participant" in every workflow stage (editors). Preprint servers have no
+static pages, so OPS meets the fault only in those other windows.
+Basis: probe, 2026-10-02. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — Right after "Static Pages Plugin" is unticked, the tab's "Add Static Page" fails on the server** · 🐞 · low · crash: server · {OJS OMP}.
@@ -2007,6 +2020,7 @@ was refused, the corrected save showed the red notice with the refusal
 refusal, "This path already exists for another static page." showed on
 the next load of Settings › Website; a save with no refusal before it
 showed none.
+Issue report: [docs/issues/U09-A11-static-page-refusal-repeated-after-save.md](../issues/U09-A11-static-page-refusal-repeated-after-save.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — The open page keeps the tab it loaded with, while the

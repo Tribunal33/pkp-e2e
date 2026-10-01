@@ -1,0 +1,45 @@
+--- a/lib/pkp/js/controllers/form/AjaxFormHandler.js
++++ b/lib/pkp/js/controllers/form/AjaxFormHandler.js
+@@ -116,7 +116,8 @@
+ 	$.pkp.controllers.form.AjaxFormHandler.prototype.handleResponse =
+ 			function(formElement, jsonData) {
+ 
+-		var $form, formSubmittedEvent, processedJsonData;
++		var $form, formSubmittedEvent, processedJsonData, $parent, $content,
++				redisplayed = false;
+ 
+ 		processedJsonData = this.handleJson(jsonData);
+ 		if (processedJsonData !== false) {
+@@ -136,7 +137,20 @@
+ 				}
+ 			} else {
+ 				// Redisplay the form.
+-				this.replaceWith(processedJsonData.content);
++				$parent = this.getHtmlElement().parent();
++				$content = $($.parseHTML(processedJsonData.content, document, true));
++				this.replaceWith($content);
++				redisplayed = true;
++
++				// The replaced form is detached, so the notify user event
++				// below would reach no handler, and the notification the
++				// server created for this answer (the form's errors) would
++				// show with the next one. Trigger it from the form's parent,
++				// unless the redrawn form has a visible in-place notification
++				// box of its own, which fetches the notification itself.
++				if ($content.find('.pkp_notification:visible').length === 0) {
++					$parent.trigger('notifyUser');
++				}
+ 			}
+ 		} else {
+ 			// data was false -- assume errors, re-enable form controls.
+@@ -145,7 +159,9 @@
+ 
+ 		// Trigger the notify user event, passing this
+ 		// html element as data.
+-		this.trigger('notifyUser');
++		if (!redisplayed) {
++			this.trigger('notifyUser');
++		}
+ 
+ 		// Hide the form spinner.
+ 		this.hideSpinner();
