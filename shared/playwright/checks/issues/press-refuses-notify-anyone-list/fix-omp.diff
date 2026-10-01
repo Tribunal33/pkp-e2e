@@ -1,0 +1,16 @@
+--- a/schemas/context.json
++++ b/schemas/context.json
+@@ -23,13 +23,6 @@
+ 				"nullable"
+ 			]
+ 		},
+-		"copySubmissionAckAddress": {
+-			"type": "string",
+-			"validation": [
+-				"nullable",
+-				"email_or_localhost"
+-			]
+-		},
+ 		"copySubmissionAckPrimaryContact": {
+ 			"type": "boolean",
+ 			"validation": [

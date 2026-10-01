@@ -1,0 +1,185 @@
+--- a/lib/pkp/classes/components/forms/Field.php
++++ b/lib/pkp/classes/components/forms/Field.php
+@@ -168,4 +168,19 @@
+     {
+         return '';
+     }
++
++    /**
++     * Whether one of the given options has the value `null`
++     *
++     * A field that offers `null` as a choice (a radio's "Do not send an
++     * email.", a select's "None") stores that choice as `null`, so its empty
++     * value must be `null` too: any other value matches no option and the
++     * saved choice shows as unselected.
++     */
++    protected static function offersNullOption(array $options): bool
++    {
++        return collect($options)->contains(
++            fn ($option) => is_array($option) && array_key_exists('value', $option) && $option['value'] === null
++        );
++    }
+ }
+--- a/lib/pkp/classes/components/forms/FieldOptions.php
++++ b/lib/pkp/classes/components/forms/FieldOptions.php
+@@ -63,7 +63,7 @@
+     public function getEmptyValue()
+     {
+         if ($this->type === 'radio') {
+-            return '';
++            return static::offersNullOption($this->options) ? null : '';
+         }
+         $option = count($this->options) === 1 ? reset($this->options) : null;
+         return is_bool($option['value'] ?? null) ? false : [];
+--- a/lib/pkp/classes/components/forms/FieldSelect.php
++++ b/lib/pkp/classes/components/forms/FieldSelect.php
+@@ -37,4 +37,12 @@
+ 
+         return $config;
+     }
++
++    /**
++     * @copydoc Field::getEmptyValue()
++     */
++    public function getEmptyValue()
++    {
++        return static::offersNullOption($this->options) ? null : parent::getEmptyValue();
++    }
+ }
+--- a/lib/pkp/classes/components/forms/FieldRadioInput.php
++++ b/lib/pkp/classes/components/forms/FieldRadioInput.php
+@@ -34,4 +34,12 @@
+ 
+         return $config;
+     }
++
++    /**
++     * @copydoc Field::getEmptyValue()
++     */
++    public function getEmptyValue()
++    {
++        return static::offersNullOption($this->options) ? null : parent::getEmptyValue();
++    }
+ }
+--- a/lib/pkp/classes/migration/upgrade/v3_4_0/I5716_EmailTemplateAssignments.php
++++ b/lib/pkp/classes/migration/upgrade/v3_4_0/I5716_EmailTemplateAssignments.php
+@@ -119,18 +119,22 @@
+                 ->where('email_key', 'STATISTICS_REPORT_NOTIFICATION')
+                 ->exists();
+ 
+-            DB::table($this->getContextSettingsTable())->insert([
++            $rows = [
+                 [
+                     $this->getContextIdColumn() => $contextId,
+-                    'setting_name' => 'submissionAcknowledgement',
+-                    'setting_value' => $submissionAckSetting,
+-                ],
+-                [
+-                    $this->getContextIdColumn() => $contextId,
+                     'setting_name' => 'editorialStatsEmail',
+                     'setting_value' => $statsReportSetting,
+                 ],
+-            ]);
++            ];
++            // "Do not send an email." (Context::SUBMISSION_ACKNOWLEDGEMENT_OFF) is stored as no row
++            if ($submissionAckSetting !== '') {
++                $rows[] = [
++                    $this->getContextIdColumn() => $contextId,
++                    'setting_name' => 'submissionAcknowledgement',
++                    'setting_value' => $submissionAckSetting,
++                ];
++            }
++            DB::table($this->getContextSettingsTable())->insert($rows);
+         });
+     }
+ 
+--- a/lib/pkp/tests/classes/components/forms/FieldConfigTest.php
++++ b/lib/pkp/tests/classes/components/forms/FieldConfigTest.php
+@@ -21,6 +21,8 @@
+ use PKP\components\forms\Field;
+ use PKP\components\forms\FieldMetadataSetting;
+ use PKP\components\forms\FieldOptions;
++use PKP\components\forms\FieldRadioInput;
++use PKP\components\forms\FieldSelect;
+ use PKP\components\forms\FieldSlider;
+ use PKP\components\forms\FieldText;
+ use PKP\components\forms\FieldUpload;
+@@ -138,6 +140,24 @@
+         self::assertNull($config['value']);
+     }
+ 
++    public function testNullOptionKeepsNullThroughFieldConfig()
++    {
++        // A field that offers null as a choice ("Do not send an email.", a
++        // select's "None") must reach the client with null, or that choice
++        // shows as unselected
++        $form = $this->getForm();
++        $options = [
++            ['value' => 'allAuthors', 'label' => 'All authors'],
++            ['value' => null, 'label' => 'Off'],
++        ];
++        self::assertNull($form->getFieldConfig(new FieldOptions('ack', ['type' => 'radio', 'options' => $options]))['value']);
++        self::assertNull($form->getFieldConfig(new FieldOptions('ack', ['type' => 'radio', 'options' => $options, 'value' => null]))['value']);
++        self::assertNull($form->getFieldConfig(new FieldSelect('agency', ['options' => $options]))['value']);
++        self::assertNull($form->getFieldConfig(new FieldRadioInput('choice', ['options' => $options]))['value']);
++        // without a null option the empty value stays ''
++        self::assertSame('', $form->getFieldConfig(new FieldSelect('plain', ['options' => [['value' => 'a', 'label' => 'A']]]))['value']);
++    }
++
+     public function testFieldConfigFillsEmptyValueWhenSubclassEmitsNull()
+     {
+         // A subclass that assigns its own null value in getConfig() bypasses
+--- /dev/null
++++ b/lib/pkp/classes/migration/upgrade/v3_6_0/RemoveEmptySubmissionAcknowledgementSetting.php
+@@ -0,0 +1,41 @@
++<?php
++
++/**
++ * @file classes/migration/upgrade/v3_6_0/RemoveEmptySubmissionAcknowledgementSetting.php
++ *
++ * Copyright (c) 2026 Simon Fraser University
++ * Copyright (c) 2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * @class RemoveEmptySubmissionAcknowledgementSetting
++ *
++ * @brief Store "Do not send an email." the way the application does, as no
++ *   submissionAcknowledgement row. The 3.4 upgrade (I5716_EmailTemplateAssignments)
++ *   stored it as an empty string, which the Emails settings form shows as no
++ *   option selected and the mail repository reads as enabled.
++ */
++
++namespace PKP\migration\upgrade\v3_6_0;
++
++use Illuminate\Support\Facades\DB;
++use PKP\install\DowngradeNotSupportedException;
++use PKP\migration\HasContextNameHelper;
++use PKP\migration\Migration;
++
++class RemoveEmptySubmissionAcknowledgementSetting extends Migration
++{
++    use HasContextNameHelper;
++
++    public function up(): void
++    {
++        DB::table($this->getContextSettingsTableName())
++            ->where('setting_name', 'submissionAcknowledgement')
++            ->where('setting_value', '')
++            ->delete();
++    }
++
++    public function down(): void
++    {
++        throw new DowngradeNotSupportedException();
++    }
++}
+--- a/dbscripts/xml/upgrade.xml
++++ b/dbscripts/xml/upgrade.xml
+@@ -228,6 +228,7 @@
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13109_PermitPublishedMetadataEdit" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13213_TaskTemplateForeignConstraint"/>
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12813_UpdateAuthorResponseAndSubmissionCommentTextType"/>
++		<migration class="PKP\migration\upgrade\v3_6_0\RemoveEmptySubmissionAcknowledgementSetting"/>
+ 		<code function="rebuildSearchIndex" />
+ 		<note file="docs/release-notes/README-3.6.0" />
+ 	</upgrade>

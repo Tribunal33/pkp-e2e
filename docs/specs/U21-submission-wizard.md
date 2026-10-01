@@ -1055,13 +1055,13 @@ are the source; badges, Impact and Basis:
 | [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | On every journal, press or server but the install's first, a section's configured editors are never assigned | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A wizard loaded at phone width keeps its uncollapsed step rail and the page scrolls sideways (journal & press) | 🐞 | minor | — |
-| [A12](#a12) | After "Do not send an email." is saved, the Emails screen shows no Submission Confirmation option selected | 🐞 | minor | — |
+| [A12](#a12) | After "Do not send an email." is saved, the Emails settings show no Submission Confirmation option selected | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | A section editor who is also an author is offered "Submit As: Section editor", and "Begin Submission" refuses it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | In the submission wizard, a plain language summary over the word limit is refused with an unexplained "Error" | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A change typed more than a minute after the last save is saved cut after its first letters; the rest waits another minute | 🐞 | minor | — |
 | [A19](#a19) | After the server refuses one save, the submission wizard hangs on "Saving" and the author cannot submit | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
-| [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | minor | — |
+| [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
 | [OPS3](#ops3) | A preprint author's "Cancel" on their own draft closes the dialog and leaves the draft in place | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1205,14 +1205,17 @@ Every step stays reachable by scrolling, hence minor. Basis: probe
 (repeatable both orders, three apps compared). <sup>[h](#fn-h)</sup>
 
 <a id="a12"></a>
-**A12 — The Emails screen forgets which acknowledgement option is on** · 🐞 · minor.
-After a Journal Manager picks "Do not send an email." under "Submission
-Confirmation" on the workflow settings' Emails screen and saves, reopening
-the screen shows none of the three options selected. The choice is in
-force: no acknowledgement goes out, and saving the screen again keeps it
-so. But the screen no longer says which option applies, so a manager
-cannot tell "off" from a choice never made. Basis: probe.
-<sup>[fn-a12](#fn-a12)</sup>
+**A12 — After "Do not send an email." is saved, the Emails settings show no Submission Confirmation option selected** · 🐞 · low.
+A manager picks "Do not send an email." under "Submission Confirmation"
+on the workflow settings' Emails screen and saves. When the screen is
+opened again, none of the three options is selected. A journal upgraded
+from 3.3 with the acknowledgement email disabled opens the same way, and
+its "Manage Emails" list still shows the acknowledgement email.
+No acknowledgement goes out, and saving the screen again keeps it off.
+But the screen no longer says that acknowledgements are off, and an
+empty group is not something the screen shows otherwise: a new journal
+starts at "Send an email to all authors.".
+Basis: probe, 2026-10-01. <sup>[fn-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
 **A13 — Changing the language mid-wizard asks for the new language's values, the copied affiliation included** · ✅ · intended.
@@ -1381,14 +1384,16 @@ summarizes them. Chapter management itself belongs to
 section machinery by design. <sup>[fn-omp1](#fn-omp1)</sup>
 
 <a id="omp2"></a>
-**OMP2 — A press refuses the comma-separated copy list its help text asks for** · 🐞 · minor.
-On the workflow settings' Emails screen the "Notify Anyone" box's help
-reads "Separate multiple email addresses with a comma. Example:
-one@example.com,two@example.com", the same words on every app. On a press,
-saving two addresses that way is refused with "This is not a valid email
-address."; a journal and a preprint server accept the list. So a press can
-copy the acknowledgement to one extra address only, and its own screen
-says otherwise. Basis: probe. <sup>[fn-omp2](#fn-omp2)</sup>
+**OMP2 — A press refuses the comma-separated "Notify Anyone" list its own help text asks for** · 🐞 · low.
+On the workflow settings' Emails screen, the help under the "Notify
+Anyone" box reads "Separate multiple email addresses with a comma.
+Example: one@example.com,two@example.com". On a press, saving two
+addresses that way is refused with "This is not a valid email address.",
+and nothing on the screen is saved until the box holds one address. A
+journal and a preprint server accept the list.
+So a press can copy the submission acknowledgement to only one extra
+address, though its own screen says otherwise.
+Basis: probe, 2026-10-01. <sup>[fn-omp2](#fn-omp2)</sup>
 
 <a id="omp3"></a>
 **OMP3 — "Submit As" lists its roles in a changing order** · 🐞 · minor.
@@ -2281,6 +2286,7 @@ Workflow → Emails reopened after saving "Do not send an email." listed
 only." and "Do not send an email." all unchecked, and the acknowledgement
 stayed off. The form is the shared lib/pkp Emails settings form, so OMP
 and OPS are expected to match; not reopened there.
+Issue report: [docs/issues/U21-A12-emails-confirmation-off-shows-unselected.md](../issues/U21-A12-emails-confirmation-off-shows-unselected.md).
 
 <a id="fn-a13"></a>
 **fn-a13** — Language change and the copied contributor. The wizard's
@@ -2488,6 +2494,7 @@ building the scenario tooling, through the settings form's own validation:
 address." and accepted on OJS and OPS; the box's help text read "Separate
 multiple email addresses with a comma. Example:
 one@example.com,two@example.com" on all three apps.
+Issue report: [docs/issues/U21-OMP2-press-refuses-notify-anyone-list.md](../issues/U21-OMP2-press-refuses-notify-anyone-list.md).
 
 <a id="fn-omp3"></a>
 **fn-omp3** — OMP3. `getSubmitUserGroups()` (note c) reads the user's
