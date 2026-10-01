@@ -17,7 +17,7 @@ and the hourly routine starts one only when none is running
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 |  |
+| [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 | **Taken: issues session, workstation s0, 2026-10-02** |
 | [U51](../specs/U51-subscriptions.md) | 25 | 2 | 12 | A12 done with U52 A9 (pkp-e2e#358) |
 | [U50](../specs/U50-issues.md) | 14 | 2 | 9 | A14 done with U69 A16 (pkp-e2e#284) |
 | [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 |  |
