@@ -18,7 +18,7 @@ and the hourly routine starts one only when none is running
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s0, 2026-10-01**; done: A14, A1, A4, A13, A18, A7, A15, A12, A20, A10, A19, A17, A16 |
-| [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 | **Taken: issues session, VM s0, 2026-10-01**; done: A8 (pkp-e2e#360, with U07 OPS3, U07 OPS4, U53 OPS1), A1 (pkp-e2e#361), A3 (pkp-e2e#362) |
+| [U57](../specs/U57-languages-and-locales.md) | 6 | 3 | 2 | **Taken: issues session, VM s0, 2026-10-01**; done: A8 (pkp-e2e#360, with U07 OPS3, U07 OPS4, U53 OPS1), A1 (pkp-e2e#361), A3 (pkp-e2e#362), A5 and A7 (pkp-e2e#363 and pkp-e2e#364) |
 | [U61](../specs/U61-system-administration.md) | 4 | 3 | 1 |  |
 | [U51](../specs/U51-subscriptions.md) | 25 | 2 | 12 | A12 done with U52 A9 (pkp-e2e#358) |
 | [U50](../specs/U50-issues.md) | 14 | 2 | 9 | A14 done with U69 A16 (pkp-e2e#284) |
