@@ -1057,6 +1057,10 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A1 (issue report
+    `docs/issues/U69-A1-unknown-book-address-asks-sign-in.md`): a book address
+    that names no book answering "404 Not Found", signed out and
+    signed in
   - the guard for A15 (issue report
     `docs/issues/U69-A15-omp-french-book-page-raw-keys.md`): a book's and a
     chapter's page in French (Canada) showing no raw code, an edited
@@ -1210,7 +1214,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | On a press shown in French (Canada), book and chapter pages show codes in place of labels and of editors' names | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | A book's earlier URL Path shows a server error page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | An older version's chapter page of a book shows a blank server error page to every reader | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A1](#a1) | An address that names no book asks visitors to sign in | 🐞 | minor | — |
+| [A1](#a1) | On a press, a book address that names no book opens the Login page instead of "404 Not Found" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A version address that names no version fails with a server error | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | A new version's preview also calls itself outdated, dated today | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | An older version's browser tab names the current version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1231,15 +1235,22 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — An address that names no book asks visitors to sign in** · 🐞 · minor.
-A visitor who opens a book address with a number or URL Path the press
-does not have gets the Login page, and a signed-in user an error page
-with no heading, its browser tab "| {press name}", reading "An invalid
-published submission was specified.". An unpublished book's address
-answers "404 Not Found", as an article's unknown address does on a
-journal. A mistyped or stale link thus asks the visitor to sign in for
-something that does not exist.
-Basis: probe, 2026-09-28. <sup>f-a1</sup>
+**A1 — On a press, a book address that names no book opens the Login page instead of "404 Not Found"** · 🐞 · low.
+On a press, a visitor who opens a book address with a number or URL
+Path the press does not have is sent to the Login page. A visitor who
+signs in there, like anyone already signed in, gets an error page
+instead: its heading is empty, its browser tab reads "| {press name}",
+and its text is "An invalid published submission was specified.". In
+both cases the answer should be "404 Not Found".
+Nothing is lost, since there is no book to show. But a mistyped or
+stale link asks the visitor to sign in for something that does not
+exist, and a crawler is redirected instead of being told the address
+is gone.
+The press already answers "404 Not Found" in the neighbouring case, an
+unpublished book's address opened by a visitor. A journal and a
+preprint server answer "404 Not Found" for this case, an article or
+preprint address that names nothing.
+Basis: probe, 2026-10-01. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — A book published only as an Author Original has no page** · ❓ · minor.
@@ -1699,6 +1710,7 @@ made on screen with "Create New Version".
 
 <a id="fn-f-a1"></a>
 **f-a1** — Note g (policy failure → Login or `user/authorizationDenied`). An unpublished book's address is refused later, in `book()`, with not found. Live-probed 2026-09-28, signed out and signed in (td4).
+Issue report: [docs/issues/U69-A1-unknown-book-address-asks-sign-in.md](../issues/U69-A1-unknown-book-address-asks-sign-in.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note g (`getStatusByPublications()` needs a published Version of Record); `canPreview()` lets the Press manager and the Site Administrator in, and the shown publication is published, so no preview notice prints. Live-probed 2026-09-28 (td3): the book's page answered 404 to a visitor and a Reader and opened as published for the Press manager and the Site Administrator; the workflow showed the Author Original "Status: Published", the Version of Record "Status: Unpublished", and neither "View" nor "Preview". The catalog's leaving it out is Catalog browse's Rule 3.

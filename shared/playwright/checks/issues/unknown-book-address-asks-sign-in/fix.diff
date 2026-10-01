@@ -1,0 +1,16 @@
+--- a/classes/security/authorization/OmpPublishedSubmissionRequiredPolicy.php
++++ b/classes/security/authorization/OmpPublishedSubmissionRequiredPolicy.php
+@@ -41,6 +41,13 @@
+     {
+         parent::__construct($request, $args, $submissionParameterName, 'user.authorization.invalidPublishedSubmission', $operations);
+         $this->context = $request->getContext();
++
++        // An address that names no book of the press has no page: answer 404,
++        // as SubmissionRequiredPolicy does
++        $this->setAdvice(
++            AuthorizationPolicy::AUTHORIZATION_ADVICE_CALL_ON_DENY,
++            fn () => throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException()
++        );
+     }
+ 
+     //
