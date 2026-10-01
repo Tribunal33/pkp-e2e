@@ -988,6 +988,9 @@ Left out of the scenarios above, by reason:
     reopened draft's footer showing no "Last saved" time before the first
     save, and a Title typed after the first minute saved whole once typing
     stops
+  - the guard for A10 (issue report
+    `docs/issues/U21-A10-wizard-phone-rail-scrolls-sideways.md`): the
+    wizard opened at 375 px showing its step rail collapsed to "1/5 steps"
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1060,7 +1063,7 @@ are the source; badges, Impact and Basis:
 | [A6](#a6) | Submitting a draft twice shows a problems banner with nothing to fix; the real refusal never appears | 🐞 | latent | — |
 | [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | Editors set to be assigned automatically by a section are never assigned on a second journal | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A10](#a10) | A wizard loaded at phone width keeps its uncollapsed step rail and the page scrolls sideways (journal & press) | 🐞 | minor | — |
+| [A10](#a10) | On a phone, the submission wizard opens with its full step rail running off the screen | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A12](#a12) | After "Do not send an email." is saved, the Emails screen shows no Submission Confirmation option selected | 🐞 | minor | — |
 | [A14](#a14) | Section Editors who are also Authors are offered "Section editor" in "Submit As", then refused | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | Submission wizard refuses a plain language summary over the word limit, then hangs on "Saving" | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
@@ -1202,14 +1205,21 @@ Basis: probe + code inspection (Section Editor); code inspection only
 (Site Administrator). <sup>[fn-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — At phone width the step rail never collapses on a fresh load** · 🐞 · minor.
-Opening a wizard in a phone-sized window on a journal or press renders the
-full uncollapsed step rail and pushes the page into sideways scrolling. The
-"{n}/{total} steps" collapse never engages. The same window resized down
-after loading collapses correctly, as does a moderately narrow window from
-the start. A preprint server collapses correctly even on a phone-width load.
-Every step stays reachable by scrolling, hence minor. Basis: probe
-(repeatable both orders, three apps compared). <sup>[h](#fn-h)</sup>
+**A10 — On a phone, the submission wizard opens with its full step rail running off the screen** · 🐞 · low.
+On narrow screens the submission wizard's step rail is meant to collapse
+to "1/5 steps" with a "Show all steps" control. When an author opens the
+wizard in a phone-sized window on a journal or press, the rail stays a
+single row of all five steps. That row runs off the right edge and
+widens the page to about 1,050 pixels in a 375-pixel window. A reload at
+that width brings the full row back each time.
+The fix proposed here makes the rail collapse on load. At 375 pixels the
+page still scrolls sideways afterwards, to about 560 pixels, because the
+back office's side menu keeps its full width on a phone. That is a
+separate fault. PKP's own accessibility conformance report for OJS
+(`docs/vpat.yaml`) says the back office does not yet reflow at 320
+pixels ("submission pages and dashboard grids are rendered unusable"),
+so phone-width use is not supported today.
+Basis: probe, 2026-10-01. <sup>[h](#fn-h)</sup>
 
 <a id="a12"></a>
 **A12 — The Emails screen forgets which acknowledgement option is on** · 🐞 · minor.
@@ -1757,6 +1767,7 @@ viewport, step buttons laid out past the right edge); OMP fails the same
 way at 375px; OPS collapses correctly at 375px (scrollWidth 558). The same
 OJS page resized 1440→375 *without* reload collapses correctly; reloading
 at that width breaks it again — reproduced in both orders, twice.
+Issue report: [docs/issues/U21-A10-wizard-phone-rail-scrolls-sideways.md](../issues/U21-A10-wizard-phone-rail-scrolls-sideways.md).
 
 <a id="fn-i"></a>
 **i** — Autosave. `autosave` mixin: a 500 ms job timer
