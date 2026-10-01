@@ -776,6 +776,10 @@ Left out of the scenarios above, by reason:
     of spaces refused in a window that keeps its stage boxes and working
     script, the corrected "OK" saving the role (and an edit renaming the
     same role)
+  - the guard for A2 and A3 (issue report
+    `docs/issues/U54-A2-A3-manager-role-stages-differ-until-saved.md`):
+    the manager-level roles' rows showing every stage before any save,
+    and "OK" with nothing changed leaving their stages as they were
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -856,8 +860,8 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | The first row of each page of the "Roles" list has no "Edit" or "Remove" | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A2](#a2) | The manager role's row shows no stage, and the stage filter leaves it out | 🐞 | minor | — |
-| [A3](#a3) | Saving a manager-level role's window ticks every stage, unasked | 🐞 | user-visible | — |
+| [A2](#a2) | The manager role's row shows no stage, and the stage filter leaves it out | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
+| [A3](#a3) | Saving a manager-level role's window ticks every stage, unasked | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A4](#a4) | "Remove" warns that members' assignments will be deleted, but a role with members is never removed | 🐞 | minor | — |
 | [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | A screen reader announces each stage box of the list only as "checkbox" | 🐞 | minor | — |
@@ -889,7 +893,7 @@ same actions, or the manager role alone to be kept out on purpose.
 Basis: probe, 2026-10-01. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — The manager role's row shows no stage** · 🐞 · minor.
+**A2 — The manager role's row shows no stage** · 🐞 · medium.
 The "Journal manager" ("Press manager") row shows every stage box empty,
 while the "Preprint Server manager" row shows its box ticked; the role's
 members open every stage in all three apps. Choosing a stage under "List
@@ -897,10 +901,10 @@ roles assigned to" leaves the manager role out on a journal and a press,
 and no stage's "Assign" offers it there, while a preprint server's
 Production stage does ([Stage participants](U35-stage-participants.md)).
 The list tells the manager that the most powerful role works nowhere.
-Basis: probe. <sup>f-a2</sup>
+Basis: probe, 2026-10-01. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — Saving a manager-level role ticks every stage** · 🐞 · user-visible.
+**A3 — Saving a manager-level role ticks every stage** · 🐞 · medium.
 The window of a Journal Manager-level role offers no stage box to tick,
 yet its "OK" stores every stage. After the manager changes only the
 name or an option of "Production editor", the row reads every stage
@@ -908,7 +912,7 @@ ticked instead of Copyediting and Production, the role starts being
 offered in a section's "Editorial Assignments", and its assigned members
 open the Submission and Review stages they were kept out of. Nothing on
 screen says the stages changed.
-Basis: probe. <sup>f-a3</sup>
+Basis: probe, 2026-10-01. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — The removal warning describes what never happens** · 🐞 · minor.
@@ -1633,6 +1637,7 @@ Issue report: [pkp-e2e#182](https://github.com/jardakotesovec/pkp-e2e/issues/182
 three apps). Cause: the registries (manager group without `stages` on OJS
 and OMP, `5,6` on OPS); the stage filter's `withStageIds()` reads the same
 rows. Filter half: [j](#fn-j). Live-probed 2026-09-26: [j](#fn-j).
+Issue report: [docs/issues/U54-A2-A3-manager-role-stages-differ-until-saved.md](../issues/U54-A2-A3-manager-role-stages-differ-until-saved.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `UserGroupForm::execute()` with `getAlwaysActiveStages()`
@@ -1652,6 +1657,7 @@ Internal Review) before and opened them after. "OK" with nothing changed
 did the same, and a role created at the manager level arrived with every
 stage ticked (all three apps; OPS its one box). The only notice was "Your
 changes have been saved.".
+Issue report: [docs/issues/U54-A2-A3-manager-role-stages-differ-until-saved.md](../issues/U54-A2-A3-manager-role-stages-differ-until-saved.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `settings.roles.removeText` against `removeUserGroup()`

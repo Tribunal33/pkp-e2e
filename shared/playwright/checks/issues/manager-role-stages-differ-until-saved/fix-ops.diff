@@ -1,0 +1,102 @@
+--- a/lib/pkp/controllers/grid/settings/roles/form/UserGroupForm.php
++++ b/lib/pkp/controllers/grid/settings/roles/form/UserGroupForm.php
+@@ -314,9 +314,10 @@
+         // After we have created/edited the user group, we assign/update its stages.
+         $assignedStages = $this->getData('assignedStages');
+ 
+-        // Always set all stages active for some permission levels.
++        // Always set all stages active for some permission levels, the
++        // stages outside the editorial workflow (Done) included.
+         if (in_array($userGroup->roleId, $roleDao->getAlwaysActiveStages())) {
+-            $assignedStages = array_keys(WorkflowStageDAO::getWorkflowStageTranslationKeys());
++            $assignedStages = Application::getValidStages();
+         }
+         if ($assignedStages) {
+             $this->_assignStagesToUserGroup($userGroupId, $assignedStages);
+@@ -340,9 +341,6 @@
+         $roleDao = DAORegistry::getDAO('RoleDAO'); /** @var RoleDAO $roleDao */
+ 
+ 
+-        // Current existing workflow stages.
+-        $stages = WorkflowStageDAO::getWorkflowStageTranslationKeys();
+-
+         // Remove all existing stage assignments for this user group
+         UserGroupStage::query()
+             ->withContextId($contextId)
+@@ -358,7 +356,7 @@
+             }
+ 
+             // Check if it's a valid stage.
+-            if (array_key_exists($stageId, $stages)) {
++            if (in_array((int) $stageId, Application::getValidStages())) {
+                 UserGroupStage::create([
+                     'contextId' => $contextId,
+                     'userGroupId' => $userGroupId,
+--- /dev/null
++++ b/lib/pkp/classes/migration/upgrade/v3_6_0/I11515_ManagerLevelRolesEveryStage.php
+@@ -0,0 +1,55 @@
++<?php
++
++/**
++ * @file classes/migration/upgrade/v3_6_0/I11515_ManagerLevelRolesEveryStage.php
++ *
++ * Copyright (c) 2026 Simon Fraser University
++ * Copyright (c) 2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * @class I11515_ManagerLevelRolesEveryStage
++ *
++ * @brief Give every Journal Manager-level user group every stage, as
++ *  UserGroupForm::execute() does when such a role is saved (pkp/pkp-lib#2849).
++ */
++
++namespace PKP\migration\upgrade\v3_6_0;
++
++use APP\core\Application;
++use Illuminate\Support\Facades\DB;
++use PKP\install\DowngradeNotSupportedException;
++use PKP\migration\Migration;
++use PKP\security\Role;
++
++class I11515_ManagerLevelRolesEveryStage extends Migration
++{
++    /**
++     * @inheritDoc
++     */
++    public function up(): void
++    {
++        $userGroups = DB::table('user_groups')
++            ->where('role_id', Role::ROLE_ID_MANAGER)
++            ->whereNotNull('context_id')
++            ->get(['user_group_id', 'context_id']);
++
++        foreach ($userGroups as $userGroup) {
++            DB::table('user_group_stage')->insertOrIgnore(array_map(
++                fn (int $stageId) => [
++                    'context_id' => $userGroup->context_id,
++                    'user_group_id' => $userGroup->user_group_id,
++                    'stage_id' => $stageId,
++                ],
++                Application::getValidStages()
++            ));
++        }
++    }
++
++    /**
++     * @inheritDoc
++     */
++    public function down(): void
++    {
++        throw new DowngradeNotSupportedException();
++    }
++}
+--- a/dbscripts/xml/upgrade.xml
++++ b/dbscripts/xml/upgrade.xml
+@@ -218,6 +218,7 @@
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13109_PermitPublishedMetadataEdit" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13213_TaskTemplateForeignConstraint"/>
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12813_UpdateAuthorResponseAndSubmissionCommentTextType"/>
++		<migration class="PKP\migration\upgrade\v3_6_0\I11515_ManagerLevelRolesEveryStage"/>
+         <migration class="APP\migration\upgrade\v3_4_0\I11759_RemoveDuplicateFilters"/>
+ 		<code function="rebuildSearchIndex" />
+ 		<note file="docs/release-notes/README-3.6.0" />
