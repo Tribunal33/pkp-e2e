@@ -2523,7 +2523,7 @@ with the published galley ([Galleys](U46-galleys.md), its A4: "Change
 File" on the new version's galley changes the published version's
 file). The HTML and Lens readers build versioned addresses. Live-probed
 2026-09-25, note q9 (two runs on the journal, one on the server).
-Issue report: [docs/issues/U13-A2-older-version-pdf-reader-empty.md](../issues/U13-A2-older-version-pdf-reader-empty.md).
+Issue report: [pkp-e2e#219](https://github.com/jardakotesovec/pkp-e2e/issues/219) ([docs/issues/U13-A2-older-version-pdf-reader-empty.md](../issues/U13-A2-older-version-pdf-reader-empty.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note l: `usage-stats-chart.js` removes the sentence as soon
