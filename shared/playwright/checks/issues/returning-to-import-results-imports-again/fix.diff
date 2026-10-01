@@ -1,0 +1,27 @@
+--- a/lib/pkp/js/controllers/TabHandler.js
++++ b/lib/pkp/js/controllers/TabHandler.js
+@@ -236,6 +236,16 @@
+ 	$.pkp.controllers.TabHandler.prototype.tabsBeforeLoad =
+ 			function(tabsElement, event, ui) {
+ 
++		// A tab added by an addTab event shows the result of one action (an
++		// import, an export) that its URL runs on the server: load it once,
++		// and keep what it showed when the tab is chosen again.
++		if (ui.tab.data('pkpLoadOnce')) {
++			if (ui.tab.data('pkpLoadRequested')) {
++				return false;
++			}
++			ui.tab.data('pkpLoadRequested', true);
++		}
++
+ 		// We must unbind global events before the new tab content is loaded.
+ 		// This reaches out to the tab content element and unbinds any events
+ 		// attached to that element or any embedded handlers before it gets
+@@ -293,6 +303,7 @@
+ 						.text(pkp.localeKeys['common.close'])
+ 						.attr('href', '#'),
+ 				$liElement = $('<li/>')
++						.data('pkpLoadOnce', true)
+ 						.append($anchorElement)
+ 						.append($closeSpanElement);
+ 

@@ -1,0 +1,54 @@
+--- a/lib/pkp/plugins/importexport/users/filter/UserXmlPKPUserFilter.php
++++ b/lib/pkp/plugins/importexport/users/filter/UserXmlPKPUserFilter.php
+@@ -205,8 +205,8 @@
+ 
+                         $passwordValueNodeList = $n->getElementsByTagNameNS($deployment->getNamespace(), 'value');
+                         if ($passwordValueNodeList->length == 1) {
+-                            $password = $passwordValueNodeList->item(0);
+-                            $user->setPassword($password->textContent);
++                            $passwordNode = $passwordValueNodeList->item(0);
++                            $user->setPassword($passwordNode->textContent);
+                         } else {
+                             $this->addError(__('plugins.importexport.user.error.userHasNoPassword', ['username' => $user->getUsername()]));
+                         }
+@@ -216,9 +216,6 @@
+             }
+         }
+ 
+-        // Password Import Validation
+-        $password = $this->importUserPasswordValidation($user, $encryption);
+-
+         $userByUsername = Repo::user()->getByUsername($user->getUsername(), true);
+         $userByEmail = Repo::user()->getByEmail($user->getEmail(), true);
+         // username and email are both required and unique, so either
+@@ -227,6 +224,13 @@
+             $user = $userByUsername;
+             $userId = $user->getId();
+         } elseif (!$userByUsername && !$userByEmail) {
++            // Only a new account takes the file's password: an existing account keeps its own
++            $password = $this->importUserPasswordValidation($user, $encryption);
++            if ($password === false) {
++                // Refused, and reported as not imported: do not create the account
++                return $user;
++            }
++
+             // if usernames do not exist in the site primary locale
+             // copy one of the existing for the default/required site primary locale
+             if (empty($user->getGivenName($site->getPrimaryLocale()))) {
+@@ -473,7 +477,7 @@
+      * @param User $userToImport ByRef. The user that is being imported.
+      * @param string $encryption null, sha1, md5 (or any other encryption algorithm defined)
+      *
+-     * @return string if a new password is generated, the function returns it.
++     * @return string|false|null the new password if one is generated, false if the password is refused
+      */
+     public function importUserPasswordValidation($userToImport, $encryption)
+     {
+@@ -486,6 +490,7 @@
+                 $userToImport->setPassword(Validation::encryptCredentials($userToImport->getUsername(), $passwordHash));
+             } else {
+                 $this->addError(__('plugins.importexport.user.error.plainPasswordNotValid', ['username' => $userToImport->getUsername()]));
++                return false;
+             }
+         } else {
+             if (password_needs_rehash($passwordHash, PASSWORD_BCRYPT)) {

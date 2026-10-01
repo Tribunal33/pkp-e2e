@@ -1099,6 +1099,10 @@ Left out of the scenarios above, by reason:
   - the guard A21's issue report names, once fixed: a users file whose
     second user has no registration date, imported: every user in the
     file imported {OJS OMP}
+  - the guard A7's issue report names, once fixed: a file imported,
+    the "Import" tab opened, then the "Import Results" tab chosen
+    again: the same submission number shown and no new submission
+    added
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1197,18 +1201,18 @@ unless an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | An address naming a tool the installation lacks prints the Import/Export list as raw code text | 🐞 | minor | — |
-| [A4](#a4) | A users import says a user with a short or empty password "has not been imported", yet creates the account | 🐞 | minor | — |
+| [A4](#a4) | A users import says a user with a short or empty password "has not been imported", yet creates the account | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | The Native XML "Import" tab's "Upload File" cannot be reached with the keyboard | 🐞 | minor | — |
-| [A7](#a7) | Choosing an earlier "Import Results" tab again imports the file once more | 🐞 | user-visible | — |
+| [A7](#a7) | Going back to a Native XML "Import Results" tab imports the file again, duplicating every item | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | Importing a file the app itself exported lists "Errors occured:" under the success text | 🐞 | minor | — |
 | [A9](#a9) | Native XML import of an article in a missing section shows nothing and leaves an unopenable submission | 🐞 | medium · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A published submission matches none of the export list's "Stages" filters | 🐞 | minor | — |
 | [A11](#a11) | Past one page, the export list's "Select All" never turns into "Select None", and ticks on other pages are not exported | 🐞 | minor | — |
 | [A12](#a12) | A Native XML export with nothing ticked opens an empty results tab: the server fails | 🐞 | minor · crash: server | — |
 | [A13](#a13) | Importing a users file with a format error leaves an empty "Results" tab instead of the reasons | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A15](#a15) | For an existing account, the results say a new password was sent, but nothing is sent and nothing changes | 🐞 | minor | — |
-| [A16](#a16) | On a server whose PHP is older than 8.4, a users import treats every password stored the installation's own way as stored another way | 🐞 | user-visible | — |
+| [A15](#a15) | For an existing account, the results say a new password was sent, but nothing is sent and nothing changes | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [A16](#a16) | On PHP older than 8.4, a users import replaces each new user's working password and emails a new one | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | Importing the same users file again adds a role that starts or ends on a later date once more | 🐞 | minor | — |
 | [A18](#a18) | A users file with an empty or unreadable role date stops part-way: the server fails, the tab stays empty, the user gets no role | 🐞 | user-visible · crash: server | — |
 | [A19](#a19) | A tool's address with the tool's name left off opens a blank page: the server fails | 🐞 | minor · crash: server | — |
@@ -1243,13 +1247,13 @@ code text, with no heading, no menu and no way back.
 Basis: probe. <sup>f-a1</sup>
 
 <a id="a4"></a>
-**A4 — A refused password still creates the account** · 🐞 · minor.
+**A4 — A refused password still creates the account** · 🐞 · medium.
 For a user whose plain-text password in the file is shorter than the
 site's minimum, or empty, the results say "The user has not been
 imported."; the account is nevertheless created, with its roles, and no
-password signs in to it until someone resets it. The manager is told
-the opposite of what happened. {OJS OMP}
-Basis: probe. <sup>f-a4</sup>
+password signs in to it until someone resets it. The manager is told the
+opposite of what happened. {OJS OMP}
+Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own** · 🐞 · high.
@@ -1281,13 +1285,19 @@ to import.
 Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — Returning to an "Import Results" tab imports the file again** · 🐞 · user-visible.
-Choosing an earlier "Import Results" tab ("Results" on a press) should
-show that import's outcome again; instead it runs the import once more,
-and the journal gains another copy of every item in the file. A manager
-who looks back at an earlier result finds duplicate submissions on the
-Dashboard.
-Basis: probe. <sup>f-a7</sup>
+**A7 — Going back to a Native XML "Import Results" tab imports the file again, duplicating every item** · 🐞 · high.
+On the Native XML Plugin page, a manager imports a file, opens another
+tab, and then chooses the "Import Results" tab ("Results" on a press)
+again to look at the outcome. Instead of showing it, the plugin runs the
+import once more. The tab reads "The import completed successfully" and
+lists the new copies under new submission numbers, and the journal,
+press or server now holds another copy of every article, monograph or
+preprint in the file. Nothing tells the manager this happened. When the
+file is a published issue, the copies are published at once: the issue's
+public table of contents lists every article one more time, each copy
+with its own article page and PDF. Each further visit to the tab adds
+another set. Removing the copies is manual work, one copy at a time.
+Basis: probe, 2026-10-01. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — A clean round trip reports errors** · 🐞 · minor.
@@ -1364,31 +1374,30 @@ Lean: 🐞, as the Native tool's empty export (A12).
 Basis: probe. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — An existing account is told a new password was sent** · 🐞 · minor.
+**A15 — An existing account is told a new password was sent** · 🐞 · medium.
 For an account that already exists, a file password stored another way
 makes the results read "…password could not be imported as is. A new
 password is been send to the user email. The user has been imported.";
 no email goes out and the account's own password still signs in. The
 manager is told of a password change that never happened. {OJS OMP}
-Basis: probe. <sup>f-a15</sup>
+Basis: probe, 2026-10-01. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — Below PHP 8.4, every stored password counts as stored another way** · 🐞 · user-visible.
-A password in the file stored the way this installation stores
-passwords should keep working (Rule 25, third row). On a server whose
-PHP is older than 8.4, which the application still supports, it takes
-the last row instead: the "Results" tab reads "The imported user
-"{username}" password could not be imported as is. A new password is
-been send to the user email. The user has been imported." for every
-such account, even in a file exported from another journal of the same
-installation. A new account made from such a file is given a new
-password it must change at its first sign-in, sent by the "Journal
-Registration" email ("Press Registration" on a press); an existing
-account keeps its password and gets no email ([A15](#a15)). With PHP
-8.4 or later, only a password stored another way gets the line.
-{OJS OMP}
-Basis: test run, 2026-09-27 (the results line); probe, 2026-09-29
-(what happens to the passwords); OJS and OMP. <sup>f-a16</sup>
+**A16 — On PHP older than 8.4, a users import replaces each new user's working password and emails a new one** · 🐞 · medium.
+A users file exported from OJS or OMP 3.5 or later carries each user's
+password as a hash, in the form these versions store it. On a server
+running PHP 8.2 or 8.3, both of which the application supports, a users
+import does not recognise that form as its own. Each new account gets a
+new password it must change at its first sign-in, sent in the "Journal
+Registration" email ("Press Registration" on a press), and its own
+password no longer signs in. The "Results" tab lists "…password could
+not be imported as is. A new password is been send to the user email.
+The user has been imported." for every user in the file. Accounts that
+already exist get the line too, but they keep their passwords and
+receive no email. Released 3.5 versions from 3.5.0-2 on carry it. On PHP
+8.4 the same import keeps these passwords, but replaces those in files
+from 3.4 and 3.3. {OJS OMP}
+Basis: probe, 2026-10-01. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — Importing a users file again gives a later-dated role again** · 🐞 · minor.
@@ -2478,6 +2487,7 @@ fixed 2026-09-29, OJS and OMP, two runs each (note td14).
 skip the user; `parseUser()` goes on to `Repo::user()->add()` and the
 role rows. Live-probed 2026-09-27, OJS and OMP (notes td13, l): 3
 and 5 characters and an empty `<value>`; a reset was not driven.
+Issue report: [docs/issues/U63-A4-A15-users-import-refused-password-creates-account.md](../issues/U63-A4-A15-users-import-refused-password-creates-account.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `APP\submission\DAO::getExportable()` with
@@ -2538,6 +2548,7 @@ request, `…/import?temporaryFileId=…`, which runs again whenever the
 tab is chosen (note f). Live-probed 2026-09-27, three apps: two presses
 and one click on each tab left four copies (OJS numbers 802–805, OMP
 662–665).
+Issue report: [docs/issues/U63-A7-returning-to-import-results-imports-again.md](../issues/U63-A7-returning-to-import-results-imports-again.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-27, three apps (note f): a submitted
@@ -2602,6 +2613,7 @@ moved before its first sign-in, got the line, no mail and kept their
 passwords. On PHP older than 8.4 (A16) the same code path keeps an
 existing account's password and sends it nothing; read from the code,
 not driven.
+Issue report: [docs/issues/U63-A4-A15-users-import-refused-password-creates-account.md](../issues/U63-A4-A15-users-import-refused-password-creates-account.md).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Note l: `password_needs_rehash()` is called without a cost,
@@ -2623,6 +2635,7 @@ manager with the contact as reply-to, and its original password no
 longer signed in; a cost-10 bcrypt, PHP's default below 8.4, got no
 line and no mail and signed in with the original. Note l's cost-10
 row-4 line of 2026-09-27 is the PHP 8.4 branch.
+Issue report: [docs/issues/U63-A16-users-import-resets-passwords-below-php84.md](../issues/U63-A16-users-import-resets-passwords-below-php84.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Note l. A regression of lib/pkp `85f6b3c074`
