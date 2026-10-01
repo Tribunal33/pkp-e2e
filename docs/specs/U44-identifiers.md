@@ -845,6 +845,10 @@ Left out of the scenarios above, by reason:
   - the guard for A7 (issue report
     `docs/issues/U44-A7-urn-assign-box-leaves-urn-out.md`): a galley's
     "Identifiers" tab whose assign box names the URN the tab shows
+  - the guard for A8 (Fields, the URN plugin's settings; issue report
+    `docs/issues/U44-A8-urn-suffix-pattern-refusal-text-code.md`): a
+    suffix pattern box of spaces saved and refused with the box's own
+    message
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -858,9 +862,9 @@ Left out of the scenarios above, by reason:
   - A13 ("Add Check Number" on an empty tab suffix writing "NaN";
     Rule 12)
   - A12 (a URN differing from another only in case accepted; Rule 11)
-  - A8, A10 and A11 (the settings window's raw text code, written-out
-    angle brackets and failing page script; Fields, the URN plugin's
-    settings window; scenario 2 passes A10)
+  - A10 and A11 (the settings window's written-out angle brackets and
+    failing page script; Fields, the URN plugin's settings window;
+    scenario 2 passes A10)
   - OMP6 (a press file's default URN without the format number; Rule 8)
 - **No seed**:
   - an issue galley's "Publisher ID" on an existing issue galley, its
@@ -905,7 +909,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | A new version's galley, chapter or format tab refuses the publisher ID copied from the earlier version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | "Add Check Number" and "Assign" end URNs with the wrong check digit | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A7](#a7) | The assign box on a galley's, issue's, chapter's, format's or file's "Identifiers" tab does not name the URN | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A8](#a8) | A suffix pattern of spaces is refused with a raw text code | 🐞 | minor | — |
+| [A8](#a8) | URN settings: a suffix pattern of only spaces is refused with a raw text code instead of a message | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | A Layout Editor, or anyone who may not edit the version, is offered the URN's "Assign" and "Clear" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | The URN prefix refusal shows "&amp;lt;NID&amp;gt;" under the box and in the notice | 🐞 | minor | — |
 | [A11](#a11) | The URN settings window raises a page error on every tick while the pattern choice is selected | 🐞 | invisible · crash: script | — |
@@ -1038,15 +1042,18 @@ is right there (Cause).
 Basis: probe, 2026-10-01. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — A suffix pattern of spaces is refused with a raw text code** · 🐞 · minor.
-With "Use the pattern entered below…" chosen and a ticked kind's box
-holding only spaces, "Save" is refused, rightly, but the message under
-the box, at the top of the window and in the notice at the top right
-is a text code such as
+**A8 — URN settings: a suffix pattern of only spaces is refused with a raw text code instead of a message** · 🐞 · low.
+In the URN plugin's settings window, with "Use the pattern entered
+below…" chosen, a pattern box that holds only spaces is refused on
+"Save", rightly. But the message under the box and at the top of the
+window is a text code such as
 "##plugins.pubIds.urn.manager.settings.form.urnPublicationSuffixPatternRequired##"
 instead of "Please enter the URN suffix pattern for articles." An empty
 box is refused properly, with "This field is required."
-Basis: probe, 2026-09-24. <sup>f-a8</sup>
+Nothing is saved wrong, and the manager gets past it by typing a
+pattern. The code shows in every interface language. OPS has no URN
+plugin.
+Basis: probe, 2026-10-01. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — A Layout Editor, or anyone who may not edit the version, is offered the URN's "Assign" and "Clear"** · 🐞 · low.
@@ -1869,6 +1876,7 @@ without the `.form` segment (`…settings.urnPublicationSuffixPatternRequired`),
 and `Locale::get()` renders a missing key as `##key##`. An empty box is
 stopped in the browser as a required field before any message is
 looked up. Live-probed 2026-09-24 (note q10).
+Issue report: [docs/issues/U44-A8-urn-suffix-pattern-refusal-text-code.md](../issues/U44-A8-urn-suffix-pattern-refusal-text-code.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `FieldPubIdUrn` offers "Assign" whenever it can build the
