@@ -269,7 +269,8 @@ class ReviewerGuidanceForm extends VueSettingsForm {
      * `internalReviewGuidelines`).
      */
     richBody(setting) {
-        return this.page.frameLocator(`iframe[id^="reviewerGuidance-${setting}-control"]`).locator('body');
+        // The first editor is the primary language's: a bilingual journal shows one per language.
+        return this.page.frameLocator(`iframe[id^="reviewerGuidance-${setting}-control"]`).first().locator('body');
     }
 
     /** Replace a rich-text box's content. */

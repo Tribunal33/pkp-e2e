@@ -25,7 +25,7 @@
  * - A10: S3 reads the "Production" filter's list as the set it gives;
  *   that the posted preprint is in no stage is read only as its absence
  *   there.
- * - A1, A4–A7, A9, A11–A18: not on these scenarios' paths. OJS1–OJS9: the
+ * - A1, A4–A7, A9, A11–A16, A19–A23: not on these scenarios' paths. OJS1–OJS9: the
  *   journal's. OMP1–OMP3: the press's.
  *
  * Seeding (footnote sc): S2 reads `publicknowledge` with the OPS roster

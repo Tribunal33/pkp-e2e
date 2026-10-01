@@ -23,7 +23,7 @@
  *   says; nothing reads whether the box holds it back.
  * - OJS9: S9 does not await DOAJ's answer; the queued deposit is never
  *   drained here.
- * - A1, A4–A7, A9, A11–A18, OJS1–OJS3, OJS5–OJS7: not on these scenarios'
+ * - A1, A4–A7, A9, A11–A16, A19–A23, OJS1–OJS3, OJS5–OJS7: not on these scenarios'
  *   paths. OMP1–OMP3: the press's.
  *
  * Seeding (footnote sc): S2 reads `publicknowledge` with the roster; every
@@ -726,6 +726,10 @@ test.describe('Import & export', () => {
             context: contact(a),
             users: [user(manager, 'Mona', 'Manager', ['manager']), user(moss, 'Moss', 'Copyeditor', ['copyeditor']), user(fern, 'Fern', 'Author', ['author'])],
         });
+        // The manager's role in B must start in a later second than in A: equal
+        // start dates read as "already imported" and the overlap line of
+        // pkp/pkp-lib#13412 would not come (claim check S01, 2026-10-01).
+        await new Promise((r) => setTimeout(r, 1100));
         await ojsApi.createContext({tag: b, context: contact(b), users: [{username: manager, roles: ['manager']}]});
         // Every account signs in once through the login form (footnote sc).
         for (const who of [moss, fern]) {

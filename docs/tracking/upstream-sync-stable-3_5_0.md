@@ -10,10 +10,10 @@ and no CI follows this branch. `main`'s baselines are in
 
 | Repo | Last-read commit | Date | Read by |
 |------|------------------|------|---------|
-| ojs | `040e916378` | 2026-09-30 | claude (daily maintenance session) |
-| omp | `4f90dadac0` | 2026-09-29 | claude (daily maintenance session) |
-| ops | `0bb1ca0f6e` | 2026-09-29 | claude (daily maintenance session) |
-| pkp-lib | `8809a197de` (ojs, omp, ops) | 2026-09-29 | claude (daily maintenance session); ui-library `1a7a4750` (ojs, omp, ops); ojs `plugins/generic/jatsTemplate` `5d4ea3db73` (2026-09-30) |
+| ojs | `18d097d94e` | 2026-10-01 | claude (daily maintenance session) |
+| omp | `b24879c3d` | 2026-10-01 | claude (daily maintenance session) |
+| ops | `3f0919468c` | 2026-10-01 | claude (daily maintenance session) |
+| pkp-lib | `1fb843f491` (ojs, omp, ops) | 2026-10-01 | claude (daily maintenance session); ui-library `7a3c244b` (ojs, omp, ops); ojs `plugins/generic/jatsTemplate` `5d4ea3db73` (2026-09-30); `plugins/generic/citationStyleLanguage` `41ddd1b265` (ojs, omp, ops, 2026-10-01) |
 
 ## Read log
 
@@ -22,6 +22,18 @@ one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
 
+- **2026-10-01 (daily session, VM s2) — ojs `040e916378..18d097d94e` (5), omp `4f90dadac0..b24879c3d` (5), ops `0bb1ca0f6e..3f0919468c` (5): pointer bumps and the merges of #5871/#2481/#1423 (#13412) and #5803/#2454/#1393 (citationStyleLanguage#128); pkp-lib `8809a197de..1fb843f491` (9, all three apps), ui-library `1a7a4750..7a3c244b` (1), citationStyleLanguage `62e02795c1..41ddd1b265` (1). `main` first: synced today (U63 accommodated), then the line's range read in full.**
+  - pkp-lib `a9c76aed62` + merge `1fb843f491` (#13413, `=main 2e377d27fc`, #13412) → `main`'s read today carries over (rr13412). **Regression, also on 3.5**: a users file imported on a 3.5.0 release (ended roles stored with the import day as start) and imported again at the tip gains each ended role a second time; walked here with the old importer's own rows (lib/pkp `d3216eed72` for the first import, the tip for the second) on scratch journals and the 3.5 default dataset, OJS and OMP; control at `8809a197de`: nothing added; fix tried (`checks/sync/pkp-lib-13412/`, `.reports/sync-3_5/s01-13412*`, `.reports/sync-ds35/l13412ds/`). Report `docs/reports/2026-10-01-pkp-lib-13414.md`, ci-triage row. The #13390 stable row is fixed: `import-dates.js` on the line gives one row after three imports and the empty start the import day (`.reports/sync-3_5/s01-13390/`); row deleted.
+  - pkp-lib `e4e720a7f6` (`=main aa077419e3`, #13376 backport #13382) → `main`'s verdict (2026-09-27): the #13376 intention gap; **3.5 shows it too**: `greeting.js` leg `s2e` greets by the address on OJS and OMP (`.reports/sync-3_5/s01-13376/`); the row and the report say so.
+  - pkp-lib `7199bda396`, `506b7a94b4`, `bbeb002900`, `7ec8e30556` + merge `e7e8deed73` (#13366, `~main`/`=main`; `main` read 2026-09-29, rr13366: 0 suspicions) → the net diff equals `main`'s minus `RequestReviewResponsePage` (main-only) and formatting; `getDisplayName()`'s second parameter renamed `$withCountry` → `$qualified`, same position, so 3.5's positional callers (`Locale.php:439`, `InstallForm.php:106`) keep working; no bundled caller names `withCountry:`. No regression; unverified: a third-party plugin calling it by that name would now fail.
+  - pkp-lib `cb54f12b89` (merge joining the `8809a197de` baseline) → nothing of its own.
+  - ui-library `7a3c244b` (#13127) → the tree PR-reviewed today (ui-library#1001 head `6fca194749`, `git diff` empty): the fix works (log entry below).
+  - citationStyleLanguage `41ddd1b265` (#128) → the PR head reviewed 2026-09-30, merged unchanged; the unticking behaviour ruled intended that day.
+  - ojs `ee991097a2`, `fdb4ed688e`, `18d097d94e`, merges `e184c58cfa`, `92b9a16b48`; omp `27719083a4`, `1bce46f3eb`, `b24879c3db`, merges `f4b5785ae2`, `3081c9b00d`; ops `0e18045946`, `8bd815c895`, `3f0919468c`, merges `14582d373e`, `cf4fce69bd` (pointer bumps, submodule-only merges) → nothing of their own.
+  - Lead (issues session, 2026-09-30): OPS 3.5 "Title & Abstract" on a preprint of a server made under Hosted Servers opens "Error" (`TitleAbstractForm` given a null word limit, `api/v1/submissions/SubmissionController.php:191`). Not this range's: on 3.5 since pkp-lib#10336 (2024); `main` casts with `(int)` since pkp-lib `12c625bd7e` (#13227, the e2e pilot, 2026-08-26), never backported. A backport candidate, named in the day's summary; lead deleted.
+  - Open stable rows re-run at the new tips (fleet reset 10:22): #13370 (OJS `s1` invitation still "Your name will appear in the … masthead", `.reports/sync-3_5/s01-13370/`), #13181 (`s4.chain` ending in GET 500, `stillPending` 1, `.reports/sync-3_5/s01-13181/`): both still reproduce.
+  - Checkouts set back to the line pointers after the drives (`1fb843f491`).
+  - Baselines advanced: ojs `18d097d94e`, omp `b24879c3d`, ops `3f0919468c`, pkp-lib `1fb843f491`, ui-library `7a3c244b`, citationStyleLanguage `41ddd1b265`.
 - **2026-10-01 — PR review, pkp/pkp-lib#13127 (the 3.5 half; `main`'s is companion `i13127_main`): ui-library#1001 (jardakotesovec `i13127_3_5`, head `6fca194749` on base `1a7a47504c`, the three line pointers) + submodule-only ojs#5881 (head `c733146e85` on base `92b9a16b48`, the line tip). Same one-file diff as `main`'s ui-library#989. Not merged; baselines not advanced. No companion: no spec, suite or CI follows the line.**
   - **Merged 2026-10-01**: ui-library `stable-3_5_0` `7a3c244b84` (squash of #1001 on `1a7a4750`, tree equal to the reviewed `6fca1947`); ojs#5881 (the pointer bump) still open, so the line's pointers stay at `1a7a4750` and their move to `7a3c244b84` is already reviewed here.
   - The fix works: the kept `checks/sync/ui-library-989/invite-race.js` on a freshly reset line fleet (`.reports/sync35/`), all three apps. At the base (`rb35a`) the send wizard's final `populate` held 2.5 s with the subject edited meanwhile ends in `PUT invitations/null/invite` 500 ("The route …/invitations/null/invite could not be found.") with nothing sent, for an existing user and for a newcomer alike (the old watcher compared against `createInvitationPayload.inviteeEmail`, which lives under `invitationData`, so any payload change reset the id); every pass that edits the compose step also made a second draft. At the PR head (`ra35a`) every leg sends, one `invitations/add` per pass, and a pass that goes Back to Search for a newcomer still starts a new invitation for the newcomer (the first person's draft stays, unsent). No regression; the same results as `main` at #989.

@@ -9,10 +9,10 @@ The `stable-3_5_0` branch, read for regressions only, has its own file:
 
 | Repo | Last-reviewed commit | Date | Reviewed by |
 |------|----------------------|------|-------------|
-| ojs | `7ce98ec09e` | 2026-09-30 | claude (daily maintenance session) |
+| ojs | `bade233f73` | 2026-10-01 | claude (daily maintenance session) |
 | omp | `3b0ecf794` | 2026-09-30 | claude (daily maintenance session) |
 | ops | `c8af945bb7` | 2026-09-30 | claude (daily maintenance session) |
-| pkp-lib | `3dc90c81a6` (ojs, omp, ops) | 2026-09-30 | claude (daily maintenance session); ui-library `280f98c5` (ojs, omp, ops); ojs `plugins/generic/crossref` `46a4d469bf`, ops `plugins/generic/crossref` `b6b94dd5de`, ojs `plugins/generic/jatsTemplate` `dfcb4ee60b` (2026-09-30), ojs `plugins/generic/googleScholar` `4cae9952f9` (2026-09-25) |
+| pkp-lib | `887ad73d6c` (`main`; ojs at `2e377d27fc`, the same tree; omp, ops at `3dc90c81a6`) | 2026-10-01 | claude (daily maintenance session); ui-library `280f98c5` (ojs, omp, ops); ojs `plugins/generic/crossref` `46a4d469bf`, ops `plugins/generic/crossref` `b6b94dd5de`, ojs `plugins/generic/jatsTemplate` `dfcb4ee60b` (2026-09-30), ojs `plugins/generic/googleScholar` `4cae9952f9` (2026-09-25) |
 
 ## Leads
 
@@ -20,47 +20,11 @@ _Suspicions another session met and handed over, one line each; the
 upstream session works them (MAINTENANCE upstream session step 3) and
 deletes each once it is a report, a register entry or dismissed._
 
-- 2026-09-30 (issues session, U63 A8 revision): a Native XML file exported
-  from a 3.5 install cannot be imported into OJS, OMP or OPS `main` at all:
-  "The process failed", with `user_group_ref` and publication `version`
-  "not allowed" and `contributor_type` and publication `id` "required but
-  missing". Walked on all three apps (dataset fleets, 3.5 export imported
-  on main with `FILE=` in
-  `shared/playwright/checks/issues/native-import-other-context-resets-contributor-roles/walk.js`,
-  removed by the issues reset, in git at `20c10bf`).
-  The upgrade path between releases; is the schema change intended?
-- 2026-09-30 (issues session, U63 A13): main's users XML schema refuses
-  the `<show_title>` a 3.5 users export writes in its user groups
-  (pkp-lib#11971), so users exported from 3.5 are refused on main. A
-  hand-made file validated against both schemas only; not imported through
-  the screens.
-- 2026-09-30 (issues session, U63 OMP1 revision): OMP `main`'s CSV
-  command-line import of the plugin's own `sample.csv` fails with a fatal
-  error, `Author::setUserGroupId()` gone since pkp-lib 52d3a0f8e7
-  (Contributor Roles, 2025-11-11), `CSVImportExportPlugin` line 220.
-  Whether it leaves a half-created submission was not checked.
-
-- 2026-09-30 (issues session, while proving the dataset fleets): the
-  3.5 dataset (`pkp/datasets` `ojs/stable-3_5_0/pgsql`, 3.5.0.5) upgraded
-  to OJS `main` with `php tools/upgrade.php upgrade` (3.6.0.0) does not
-  give a fresh `main` install's schema: `review_assignments.competing_interests_declared`
-  is missing and `edit_tasks.status` is left over. Reproduce with
-  `PKP_E2E_DATASET_BRANCH=stable-3_5_0 npm run fleet-prep -- --feature
-  <f> --dataset <n> --reset` (the reset prints the column comparison;
-  harness.md "Dataset fleets"). Possibly an upgrade migration gap for
-  the two changes that added and removed those columns; OMP and OPS not
-  checked.
-- 2026-09-30 (issues session, workstation, U19 A1 reporter on the 3.5 dataset fleet): OPS `stable-3_5_0` only: "Title & Abstract" on a preprint of a server created under Administration › Hosted Servers opens an "Error" window; the log has `TitleAbstractForm::__construct(): Argument #4 ($abstractWordLimit) must be of type int, null given` (`api/v1/submissions/SubmissionController.php:191`). `main` casts the value with `(int)`, so it looks fixed there and not backported; for the stable-3_5_0 read.
-- 2026-10-01 (housekeeping session, s2): ojs `bade233f73` (pkp-lib
-  `2e377d27fc`, #13412, the fix for the #13390 regression row) red OJS
-  U63 S6 on CI (run 36729054418): importing journal A's users into B now
-  adds "The role "Journal manager" of the user "{manager}" has not been
-  imported because the user already holds this role in an overlapping
-  period." for the manager B already has. S6 now expects that line on
-  OJS and accepts it on OMP (`otherLinesOptional`, required once OMP's
-  lib/pkp carries #13412; OMP checked on lib/pkp `887ad73d6c`). The spec
-  side is the sync's: U63 Rules 22, 22c, 24 and 28, A17 and A18, the new
-  invalid-date and overlap lines, and the ci-triage row.
+- 2026-10-01 (upstream session): when OMP's `lib/pkp` pointer carries
+  pkp/pkp-lib#13412 (`2e377d27fc`), OMP U63 S6's overlap line becomes
+  required as on OJS (`otherLinesOptional` out of
+  `apps/omp/playwright/tests/U63-import-export.spec.js`): the spec's
+  scenario 6 already requires it on both apps.
 
 ## Sync log
 
@@ -68,6 +32,15 @@ _Newest first; one entry per sync: the date and the range per repo, then
 one line per change reviewed (commit → no impact / spec and tests touched /
 finding filed, with a link)._
 
+- **2026-10-01 (daily session, VM s2) — ojs `7ce98ec09e..bade233f73` (2), pkp-lib `3dc90c81a6..887ad73d6c` (2: `2e377d27fc` and its merge, OJS's pointer at the commit), omp, ops, ui-library (`280f98c5`) and the plugins unchanged; pkp-lib `main` holds nothing past `887ad73d6c`. OMP's `lib/pkp` was checked out at `887ad73d6c` for the day's drives and set back.**
+  - pkp-lib `2e377d27fc` + merge `887ad73d6c` (#13414, issue #13412: Users XML import reads role dates strictly, reports an invalid date, an inverted period and an overlap, and detects a re-import) → **the #13390 regression is fixed**: `checks/sync/pkp-lib-13390/import-dates.js` on reset OJS and OMP (`.reports/sync/s01-13390/`): the empty start imports with 200 and starts today, one row after three imports; ci-triage row and `docs/reports/2026-09-29-pkp-lib-13390.md` deleted. Spec touched: U63 (kept `checks/U63/K3/k3.js` re-run on OJS and OMP, `.reports/U63/s01K3/`; claim check S01 on OJS and OMP, two runs, 277 lines: 20 holds, 6 wrong, 3 imprecise; new kept `checks/U63/S01/s01.js`; fold; persona read): **A17 and A18 RETIRED**, Rules 22, 22c, 24, 24b, 28 and scenario 6 rewritten (the three new results lines; a moved manager's role reported as overlapping), four **Planned** items. Regression verdict rr13412 (`.reports/sync/rr13412/suspicions.md`): 1 suspicion, reproduced, 2 hunches → **regression, U63 A23 🐞**: a users file first imported on a 3.5.0 release and imported again gains each ended role a second time (walked on stable-3_5_0 with the old importer's own rows, control at `8809a197de`; fix tried); report `docs/reports/2026-10-01-pkp-lib-13414.md`, ci-triage row, kept `checks/sync/pkp-lib-13412/`.
+  - ojs `0c84417f41`, merge `bade233f73` (#5872, pointer bump) → nothing of its own.
+  - Leads worked (all deleted): (1) the 3.5 → `main` upgrade leaves `review_assignments.competing_interests_declared` out (pkp-lib `07b19290b4`, #12994: `I12994_CompetingInterestsDeclared` in no app's `upgrade.xml`; pkp/ojs#5688 open) → **regression, high**: on an upgraded site with "Competing Interests" guidance a reviewer can neither accept nor decline (500), walked on the 3.5 dataset upgraded to OJS `main` (rrupg, `.reports/sync/rrupg/suspicions.md`: 3 reproduced, 1 not, 3 hunches; `checks/sync/upgrade-3_5/`; fix tried on three apps); report `docs/reports/2026-10-01-pkp-lib-12994.md`, ci-triage row; no register entry (the upgrader is out of scope); the leftover `edit_tasks.status` (`I11702_ExtendTasks`, `removeColumn`) is harmless and named in the report. (2) OMP's command-line CSV import fatal (`Author::setUserGroupId()`, gone since pkp-lib `52d3a0f8e7`), leaving an empty submission → **U63 OMP4 🐞** (`checks/sync/omp-csv-cli/csv-cli.js`, `.reports/sync/csv01/`). (3) A 3.5 Native XML file refused on `main` → intended: PKP's Administrator's Guide says "The Native XML format changes with each major version. You can not import an XML file generated with 3.4 into a 3.5 install." (the same of Users XML); one sentence in U63 Rule 11. (4) The 3.5 users file's `<show_title>` refused on `main` → dismissed, the same sentence of the guide. (5) OPS 3.5 "Title & Abstract" error → the stable line's log, a backport candidate. (6) U63 S6's overlap line (housekeeping) → the U63 accommodation above; OMP's test keeps the line optional until its pointer moves (a Lead).
+  - Tests: U63 S6 on OJS and OMP waits a second between seeding journal A and B, since equal start dates of the manager's two roles read as "already imported" and the overlap line would not come (claim check S01, code read); the three U63 suite headers name the entries left after the retirement; `pages/ReviewSettingsPages.js` `richBody()` takes the first editor (a bilingual journal shows one per language; met on the dataset).
+  - CI: pkp/ojs 36729054418 (`bade233f73`) red on U63 S6 alone, the test fixed by housekeeping `c30bde4`; pkp-e2e push run 36838791213 (`b9ef2fc`) green at the same tips. pkp/omp 36618354774 and pkp/ops 36618628082 (unchanged tips) green.
+  - Open regressions: #13370, #13288, #13376, #12798, #13181, ojs#5813 not re-run on `main`: the tips moved the Users XML filter alone (re-run 2026-09-30); #13376 now shows on stable-3_5_0 too (that line's log).
+  - Suites: U63 green on OJS and OMP (`.reports/sync/s01/u63-<app>.log`); lint and `--tests` zero on U63.
+  - Baselines advanced: ojs `bade233f73`, pkp-lib `887ad73d6c`.
 - **2026-10-01 — PR review, pkp/pkp-lib#13127 (main half; 3.5's in `upstream-sync-stable-3_5_0.md`): ui-library#989 (jardakotesovec `i13127_main`, head `47eb5915a7` on base `280f98c570`, the three apps' pointer) + submodule-only ojs#5882 (head `7f85908aa3` on base `bade233f73`, the ojs tip). Companion `i13127_main`. Not merged; baselines not advanced.**
   - **Merged 2026-10-01**: ui-library `8936d9a60e` (squash of #989 on `280f98c5`, tree equal to the reviewed `47eb5915`). Companion rebased and fast-forwarded into `main` after CI 36847430076 (9/9 green, no flaky) with ui-library pinned at `8936d9a60e` in all three apps; row deleted. ojs#5882 (the pointer bump) still open at the merge: baselines stay at the pointers, and the pointer move to `8936d9a60e` is already reviewed here.
   - ui-library `47eb5915` (`UserInvitationPageStore.js`: the deep payload watcher replaced by a watcher on `createInvitationPayload`, so the invitation id resets only when userId or inviteeEmail changes) → spec touched: U06 A2 and f-a2 (one pass makes one invitation; a pass that goes Back to Search for another person leaves the first person's draft). Kept `checks/sync/ui-library-989/invite-race.js`, all three apps: at the base (`.reports/sync/rb2/`) the final `populate` held 2.5 s with the subject edited meanwhile ends in `PUT invitations/null/invite` 500 with nothing sent, for an existing user and a newcomer alike (the old watcher compared against `createInvitationPayload.inviteeEmail`, which lives under `invitationData`, so every payload change reset the id), and every compose-step edit made one more draft; at the PR head (`ra1/`) every leg sends with one `add` per pass. No regression found.

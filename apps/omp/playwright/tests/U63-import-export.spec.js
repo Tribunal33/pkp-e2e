@@ -24,7 +24,7 @@
  *   unread.
  * - A10: S3 reads the stage filters' lists as the set they give; that the
  *   published monograph is in no stage is read only as its absence there.
- * - A1, A4–A7, A9, A11–A18: not on these scenarios' press paths.
+ * - A1, A4–A7, A9, A11–A16, A19–A23: not on these scenarios' press paths.
  *   OJS1–OJS9: the journal's.
  *
  * Seeding (footnote sc): S2 reads `publicknowledge` with the roster; every
@@ -649,6 +649,10 @@ test.describe('Import & export', () => {
             context: contact(a),
             users: [user(manager, 'Mona', 'Manager', ['manager']), user(moss, 'Moss', 'Copyeditor', ['copyeditor']), user(fern, 'Fern', 'Author', ['author'])],
         });
+        // The manager's role in B must start in a later second than in A: equal
+        // start dates read as "already imported" and the overlap line of
+        // pkp/pkp-lib#13412 would not come (claim check S01, 2026-10-01).
+        await new Promise((r) => setTimeout(r, 1100));
         await ompApi.createContext({tag: b, context: contact(b), users: [{username: manager, roles: ['manager']}]});
         // Every account signs in once through the login form (footnote sc).
         for (const who of [moss, fern]) {

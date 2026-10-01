@@ -1,0 +1,22 @@
+--- a/lib/pkp/plugins/importexport/users/filter/UserXmlPKPUserFilter.php
++++ b/lib/pkp/plugins/importexport/users/filter/UserXmlPKPUserFilter.php
+@@ -365,6 +365,9 @@
+                                     fn (Builder $query) => $query->where(
+                                         fn (Builder $query) => $query->whereNull('user_user_groups.date_start')
+                                             ->orWhere('user_user_groups.date_start', '<', $dateEnd)
++                                            // The import before start dates were kept stored the import day as the start,
++                                            // after an ended role's end: such a row's start is unknown.
++                                            ->orWhereColumn('user_user_groups.date_start', '>', 'user_user_groups.date_end')
+                                     )
+                                 )
+                                 ->get();
+@@ -375,7 +378,8 @@
+                                 fn (UserUserGroup $existing) => $startsOnImport
+                                     ? ($existing->dateStart === null || $existing->dateStart->toDateTimeString() <= $dateStart)
+                                         && ($dateEnd === null || $existing->dateEnd === null || $existing->dateEnd->toDateTimeString() >= $dateEnd)
+-                                    : $existing->dateStart?->toDateTimeString() === $dateStart && $existing->dateEnd?->toDateTimeString() === $dateEnd
++                                    : ($existing->dateStart?->toDateTimeString() === $dateStart || ($existing->dateEnd !== null && $existing->dateStart > $existing->dateEnd))
++                                        && $existing->dateEnd?->toDateTimeString() === $dateEnd
+                             );
+ 
+                             if ($overlapping->isNotEmpty() && !$alreadyImported) {

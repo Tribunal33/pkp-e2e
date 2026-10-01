@@ -1,0 +1,10 @@
+--- a/dbscripts/xml/upgrade.xml
++++ b/dbscripts/xml/upgrade.xml
+@@ -228,6 +228,7 @@
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13109_PermitPublishedMetadataEdit" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13213_TaskTemplateForeignConstraint"/>
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12813_UpdateAuthorResponseAndSubmissionCommentTextType"/>
++		<migration class="PKP\migration\upgrade\v3_6_0\I12994_CompetingInterestsDeclared"/>
+ 		<code function="rebuildSearchIndex" />
+ 		<note file="docs/release-notes/README-3.6.0" />
+ 	</upgrade>
