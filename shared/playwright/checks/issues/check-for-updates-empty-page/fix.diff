@@ -1,0 +1,100 @@
+--- a/lib/pkp/classes/site/VersionCheck.php
++++ b/lib/pkp/classes/site/VersionCheck.php
+@@ -33,9 +33,10 @@
+     public const VERSION_CODE_PATH = 'dbscripts/xml/version.xml';
+ 
+     /**
+-     * Return information about the latest available version.
++     * Return information about the latest available version, or null when
++     * PKP's version descriptor cannot be retrieved.
+      */
+-    public static function getLatestVersion(): array
++    public static function getLatestVersion(): ?array
+     {
+         $application = Application::get();
+         $includeId = Application::isInstalled() &&
+@@ -49,12 +50,17 @@
+         }
+ 
+         $request = $application->getRequest();
+-        return self::parseVersionXML(
+-            $application->getVersionDescriptorUrl() .
+-            ($includeId ? '?id=' . urlencode($uniqueSiteId) .
+-                '&oai=' . urlencode($request->url(Application::SITE_CONTEXT_PATH, 'oai'))
+-            : '')
+-        );
++        try {
++            return self::parseVersionXML(
++                $application->getVersionDescriptorUrl() .
++                ($includeId ? '?id=' . urlencode($uniqueSiteId) .
++                    '&oai=' . urlencode($request->url(Application::SITE_CONTEXT_PATH, 'oai'))
++                : '')
++            );
++        } catch (\GuzzleHttp\Exception\TransferException $e) {
++            error_log('Failed to retrieve the latest version info: ' . $e->getMessage());
++            return null;
++        }
+     }
+ 
+     /**
+@@ -155,10 +161,8 @@
+      */
+     public static function checkIfNewVersionExists(): bool|string
+     {
+-        try {
+-            $versionInfo = self::getLatestVersion();
+-        } catch (\GuzzleHttp\Exception\TransferException $e) {
+-            error_log('Failed to retrieve the latest version info: ' . $e->getMessage());
++        $versionInfo = self::getLatestVersion();
++        if (!$versionInfo) {
+             return false;
+         }
+         $latestVersion = $versionInfo['release'];
+--- a/lib/pkp/pages/admin/AdminHandler.php
++++ b/lib/pkp/pages/admin/AdminHandler.php
+@@ -397,10 +397,11 @@
+         $versionDao = DAORegistry::getDAO('VersionDAO'); /** @var VersionDAO $versionDao */
+         $currentVersion = $versionDao->getCurrentVersion();
+ 
++        $latestVersionInfo = null;
++        $versionCheckFailed = false;
+         if ($request->getUserVar('versionCheck')) {
+             $latestVersionInfo = VersionCheck::getLatestVersion();
+-        } else {
+-            $latestVersionInfo = null;
++            $versionCheckFailed = !$latestVersionInfo;
+         }
+ 
+         $versionDao = DAORegistry::getDAO('VersionDAO'); /** @var VersionDAO $versionDao */
+@@ -427,6 +428,7 @@
+             'breadcrumbs' => $breadcrumbs,
+             'currentVersion' => $currentVersion,
+             'latestVersionInfo' => $latestVersionInfo,
++            'versionCheckFailed' => $versionCheckFailed,
+             'pageTitle' => __('admin.systemInformation'),
+             'versionHistory' => $versionHistory,
+             'serverInfo' => $serverInfo,
+--- a/lib/pkp/templates/admin/systemInfo.tpl
++++ b/lib/pkp/templates/admin/systemInfo.tpl
+@@ -32,6 +32,9 @@
+ 				<p><strong>{translate key="admin.version.upToDate"}</strong></p>
+ 			{/if}
+ 		{else}
++			{if $versionCheckFailed}
++				<notification type="warning">{translate key="admin.version.checkFailed"}</notification>
++			{/if}
+ 		<p><a href="{url versionCheck=1}">{translate key="admin.version.checkForUpdates"}</a></p>
+ 		{/if}
+ 
+--- a/lib/pkp/locale/en/admin.po
++++ b/lib/pkp/locale/en/admin.po
+@@ -480,6 +480,9 @@
+ msgid "admin.version.checkForUpdates"
+ msgstr "Check for updates"
+ 
++msgid "admin.version.checkFailed"
++msgstr "The latest version could not be retrieved from PKP's website. Please try again later."
++
+ msgid "admin.version.downloadPackage"
+ msgstr "Download"
+ 
