@@ -1,0 +1,95 @@
+--- a/lib/pkp/classes/services/PKPSchemaService.php
++++ b/lib/pkp/classes/services/PKPSchemaService.php
+@@ -22,6 +22,7 @@
+ use Illuminate\Support\MessageBag;
+ use PKP\core\DataObject;
+ use PKP\core\maps\Schema;
++use PKP\facades\Locale;
+ use PKP\plugins\Hook;
+ 
+ /**
+@@ -581,7 +582,7 @@
+                 if (property_exists($propSchema, 'default')) {
+                     return $propSchema->default;
+                 } elseif (property_exists($propSchema, 'defaultLocaleKey')) {
+-                    return __($propSchema->defaultLocaleKey, $localeParams, $localeKey);
++                    return $this->translateDefault($propSchema->defaultLocaleKey, $localeParams, $localeKey);
+                 }
+                 break;
+             case 'array':
+@@ -604,7 +605,7 @@
+                     // translation. Otherwise, we assign the values as-is and do not
+                     // recursively check for nested objects/arrays inside of objects.
+                     if ($subPropSchema->type === 'string' && is_object($defaultSubProp) && property_exists($defaultSubProp, 'defaultLocaleKey')) {
+-                        $value[$subPropName] = __($defaultSubProp->defaultLocaleKey, $localeParams, $localeKey);
++                        $value[$subPropName] = $this->translateDefault($defaultSubProp->defaultLocaleKey, $localeParams, $localeKey);
+                     } else {
+                         $value[$subPropName] = $defaultSubProp;
+                     }
+@@ -612,6 +613,22 @@
+                 return $value;
+         }
+         return null;
++    }
++
++    /**
++     * Translate a default value, or return an empty string when the locale
++     * has no translation for it, so that a missing translation is stored as
++     * an empty value (shown in the primary language) and never as "##key##"
++     */
++    protected function translateDefault(string $key, array $localeParams, ?string $localeKey): string
++    {
++        $previous = Locale::getMissingKeyHandler();
++        Locale::setMissingKeyHandler(fn (string $missingKey): string => '');
++        try {
++            return __($key, $localeParams, $localeKey);
++        } finally {
++            Locale::setMissingKeyHandler($previous);
++        }
+     }
+ 
+     /**
+--- a/lib/pkp/classes/submission/GenreDAO.php
++++ b/lib/pkp/classes/submission/GenreDAO.php
+@@ -23,6 +23,7 @@
+ use PKP\db\DAO;
+ use PKP\db\DAOResultFactory;
+ use PKP\db\XMLDAO;
++use PKP\facades\Locale;
+ use PKP\plugins\Hook;
+ 
+ class GenreDAO extends DAO
+@@ -383,9 +384,13 @@
+             $genre->setRequired((bool) ($attrs['required'] ?? false));
+             $genre->setSupportsFileVariants((bool) ($attrs['supportsFileVariants'] ?? false));
+             $genre->setSequence($seq++);
++            // A name with no translation in this locale is stored empty, never as "##key##"
++            $previous = Locale::getMissingKeyHandler();
++            Locale::setMissingKeyHandler(fn (string $key): string => '');
+             foreach ($locales as $locale) {
+                 $genre->setName(__($attrs['localeKey'], [], $locale), $locale);
+             }
++            Locale::setMissingKeyHandler($previous);
+ 
+             if ($genre->getId() > 0) { // existing genre.
+                 $genre->setEnabled(1);
+--- a/lib/pkp/classes/userGroup/Repository.php
++++ b/lib/pkp/classes/userGroup/Repository.php
+@@ -584,6 +584,9 @@
+ 
+         $userGroups = $userGroups->get();
+ 
++        // A name with no translation in this locale is stored empty, never as "##key##"
++        $previous = Locale::getMissingKeyHandler();
++        Locale::setMissingKeyHandler(fn (string $key): string => '');
+         foreach ($userGroups as $userGroup) {
+             $nameKey = $userGroup->nameLocaleKey ?? null;
+             $abbrevKey = $userGroup->abbrevLocaleKey ?? null;
+@@ -598,6 +601,7 @@
+ 
+             $userGroup->save();
+         }
++        Locale::setMissingKeyHandler($previous);
+     }
+ 
+     /**

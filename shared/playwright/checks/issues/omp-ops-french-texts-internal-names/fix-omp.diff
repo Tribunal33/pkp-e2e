@@ -1,0 +1,53 @@
+--- a/locale/fr_CA/admin.po
++++ b/locale/fr_CA/admin.po
+@@ -137,6 +137,7 @@
+ 
+ msgid "admin.siteManagement.description"
+ msgstr ""
++"Ajouter, modifier ou supprimer des presses de ce site et gérer les paramètres de l'ensemble du site."
+ 
+ msgid "admin.job.processLogFile.invalidLogEntry.chapterId"
+ msgstr ""
+--- a/locale/fr_CA/default.po
++++ b/locale/fr_CA/default.po
+@@ -110,9 +110,20 @@
+ 
+ msgid "default.contextSettings.authorGuidelines"
+ msgstr ""
++"<p>Les auteur.e.s sont invité.e.s à soumettre un manuscrit à cette presse. Les soumissions jugées appropriées seront envoyées à des pairs pour évaluation avant qu'il soit décidé si elles sont acceptées ou rejetées.</p>"
++"<p>Avant de soumettre leur manuscrit, les auteur.e.s sont responsables d'obtenir l'autorisation de publier tout matériel inclus dans la soumission, tels que des photos, des documents et des ensembles de données. Tous les auteur.e.s identifié.e.s dans la soumission doivent consentir à être identifié.e.s comme auteur.e.s. Lorsque cela est approprié, la recherche doit être approuvée par un comité d'éthique approprié conformément aux exigences légales du pays de l'étude.</p>"
++"<p>Un.e rédacteur.trice peut rejeter une soumission sans examen approfondi si elle ne répond pas aux normes minimales de qualité. Avant de soumettre votre manuscrit, veuillez vous assurer que la portée et le plan du livre sont structurés et articulés correctement. Le titre doit être concis et le résumé doit pouvoir être compris indépendamment du reste du texte. Cela augmentera la probabilité que les évaluateur.trice.s acceptent d'examiner le livre. Lorsque vous êtes confiant.e que votre soumission répond à ces exigences, vous pouvez suivre la liste de contrôle ci-dessous pour préparer votre soumission.</p>"
+ 
+ msgid "default.contextSettings.checklist"
+ msgstr ""
++"<p>Toutes les soumissions doivent répondre aux exigences suivantes : </p>"
++"<ul>"
++"<li>Cette soumission répond aux exigences définies dans les <a href=\"{$submissionGuidelinesUrl}\">directives aux auteur.e.s</a>.</li>"
++"<li>Cette soumission n'a ni été publiée précédemment, ni été soumise à une autre presse.</li>"
++"<li>Toutes les références ont été vérifiées et sont exactes.</li>"
++"<li>Tous les tableaux et figures sont numérotés et définis.</li>"
++"<li>L'autorisation de publier toutes les photos, tous les ensembles de données et tout autre matériel fourni avec cette soumission a été obtenue.</li>"
++"</ul>"
+ 
+ msgid "default.contextSettings.privacyStatement"
+ msgstr ""
+--- a/locale/fr_CA/locale.po
++++ b/locale/fr_CA/locale.po
+@@ -1559,6 +1559,7 @@
+ 
+ msgid "rt.metadata.pkp.dctype"
+ msgstr ""
++"Livre"
+ 
+ msgid "submission.pdf.download"
+ msgstr "Télécharger ce fichier PDF"
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -1282,6 +1282,7 @@
+ 
+ msgid "grid.genres.title"
+ msgstr ""
++"Éléments de la monographie"
+ 
+ msgid "manager.setup.notifications.copyPrimaryContact"
+ msgstr ""

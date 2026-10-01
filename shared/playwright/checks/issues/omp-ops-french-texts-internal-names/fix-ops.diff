@@ -1,0 +1,122 @@
+--- a/locale/fr_CA/admin.po
++++ b/locale/fr_CA/admin.po
+@@ -81,6 +81,7 @@
+ 
+ msgid "admin.siteManagement.description"
+ msgstr ""
++"Ajouter, modifier ou supprimer des serveurs de prépublication de ce site et gérer les paramètres de l'ensemble du site."
+ 
+ msgid "admin.settings.statistics.geo.description"
+ msgstr ""
+--- a/locale/fr_CA/default.po
++++ b/locale/fr_CA/default.po
+@@ -23,69 +23,99 @@
+ 
+ msgid "section.default.policy"
+ msgstr ""
++"Politique par défaut de la rubrique"
+ 
+ msgid "default.genres.preprint"
+ msgstr "Texte de la prépublication"
+ 
+ msgid "default.contextSettings.authorGuidelines"
+ msgstr ""
++"<p>Les chercheur.e.s sont invité.e.s à soumettre une prépublication pour diffusion sur ce serveur. Toutes les prépublications seront modérées afin de déterminer si elles correspondent aux objectifs et au champ d'application de ce serveur. Celles jugées appropriées seront diffusées et l'auteur.e en sera avisé.e.</p>"
++"<p>Avant de soumettre une prépublication, les auteur.e.s sont responsables d'obtenir l'autorisation de partager tout matériel inclus dans la prépublication, tels que des photos, des documents et des ensembles de données. Tous les auteur.e.s identifié.e.s dans la prépublication doivent consentir à être identifié.e.s comme auteur.e.s. Lorsque cela est approprié, la recherche doit être approuvée par un comité d'éthique approprié conformément aux exigences légales du pays de l'étude.</p>"
++"<p>Lorsque vous êtes confiant.e que votre prépublication répond à ces exigences, vous pouvez suivre la liste de contrôle ci-dessous pour préparer votre soumission.</p>"
+ 
+ msgid "default.contextSettings.checklist"
+ msgstr ""
++"<p>Toutes les soumissions doivent répondre aux exigences suivantes : </p>"
++"<ul>"
++"<li>Cette soumission répond aux exigences définies dans les <a href=\"{$submissionGuidelinesUrl}\">directives aux auteur.e.s</a>.</li>"
++"<li>Cette soumission n'a pas été diffusée précédemment.</li>"
++"<li>Toutes les références ont été vérifiées et sont exactes.</li>"
++"<li>Tous les tableaux et figures sont numérotés et définis.</li>"
++"<li>L'autorisation de diffuser toutes les photos, tous les ensembles de données et tout autre matériel fourni avec cette prépublication a été obtenue.</li>"
++"</ul>"
+ 
+ msgid "default.contextSettings.forReaders"
+ msgstr ""
++"Nous invitons les lecteurs-trices à s'inscrire au service d'avis de diffusion de ce serveur. Utilisez le lien <a href=\"{$indexUrl}/{$contextPath}/user/register\">S'inscrire</a> en haut de la page d'accueil. Cette liste permet aussi au serveur de revendiquer un certain niveau de soutien ou de lectorat. Voir la <a href=\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Déclaration de confidentialité</a>, qui certifie aux lecteurs-trices que leur nom et leur courriel ne seront pas utilisés à d'autres fins."
+ 
+ msgid "default.contextSettings.forAuthors"
+ msgstr ""
++"Intéressé-e à soumettre à ce serveur ? Nous vous recommandons de consulter la page <a href=\"{$indexUrl}/{$contextPath}/about\">À propos</a> pour ses politiques, ainsi que les <a href=\"{$indexUrl}/{$contextPath}/about/submissions#authorGuidelines\">directives aux auteurs-es</a>. Les auteurs-es doivent <a href=\"{$indexUrl}/{$contextPath}/user/register\">s'inscrire</a> avant de soumettre ou, s'ils et elles sont déjà inscrits-es, simplement <a href=\"{$indexUrl}/index/login\">ouvrir une session</a> et commencer le processus."
+ 
+ msgid "default.contextSettings.forLibrarians"
+ msgstr ""
++"Nous incitons les bibliothécaires de recherche à lister ce serveur dans les fonds de leur bibliothèque. Aussi, il peut être pertinent de mentionner que le système en code source libre de ce serveur peut être hébergé par les bibliothèques pour les membres de leurs facultés (voir <a href=\"https://pkp.sfu.ca\">Public Knowledge Project</a>)."
+ 
+ msgid "default.contextSettings.privacyStatement"
+ msgstr ""
++"<p>Les noms et adresses courriel saisis sur ce serveur seront utilisés exclusivement pour les fins convenues de ce serveur. Ils ne seront pas utilisés pour d'autres fins ou transmis à une tierce partie.</p>"
+ 
+ msgid "default.contextSettings.openAccessPolicy"
+ msgstr ""
++"Ce serveur fournit le libre accès immédiat à son contenu, se basant sur le principe que rendre la recherche disponible au public gratuitement facilite un plus grand échange du savoir, à l'échelle de la planète."
+ 
+ msgid "default.groups.name.manager"
+ msgstr ""
++"Gestionnaire du serveur de prépublication"
+ 
+ msgid "default.groups.plural.manager"
+ msgstr ""
++"Gestionnaires du serveur de prépublication"
+ 
+ msgid "default.groups.abbrev.manager"
+ msgstr ""
++"GSP"
+ 
+ msgid "default.groups.name.sectionEditor"
+ msgstr ""
++"Modérateur-trice"
+ 
+ msgid "default.groups.plural.sectionEditor"
+ msgstr ""
++"Modérateurs-trices"
+ 
+ msgid "default.groups.abbrev.sectionEditor"
+ msgstr ""
++"MOD"
+ 
+ msgid "default.genres.researchInstrument"
+ msgstr ""
++"Instruments de recherche"
+ 
+ msgid "default.genres.researchMaterials"
+ msgstr ""
++"Documents de recherche"
+ 
+ msgid "default.genres.researchResults"
+ msgstr ""
++"Résultats de recherche"
+ 
+ msgid "default.genres.transcripts"
+ msgstr ""
++"Transcriptions"
+ 
+ msgid "default.genres.dataAnalysis"
+ msgstr ""
++"Analyse de données"
+ 
+ msgid "default.genres.dataSet"
+ msgstr ""
++"Ensemble de données"
+ 
+ msgid "default.genres.sourceTexts"
+ msgstr ""
++"Textes source"
+ 
+ msgid "default.submission.step.beforeYouBegin"
+ msgstr ""
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -389,6 +389,7 @@
+ 
+ msgid "grid.genres.title"
+ msgstr ""
++"Éléments de la prépublication"
+ 
+ msgid "plugins.importexport.common.settings"
+ msgstr ""
