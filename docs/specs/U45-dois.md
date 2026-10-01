@@ -3713,7 +3713,7 @@ Issue report: [pkp-e2e#213](https://github.com/jardakotesovec/pkp-e2e/issues/213
 flag; `postUpdatedDoiComplete()` emits `manager.dois.update.partialFailure`
 and restores the old values; the 400 body's messages are dropped.
 Live-probed 2026-09-26 (q9), all three apps.
-Issue report: [docs/issues/U45-A3-doi-edit-refusal-no-reason.md](../issues/U45-A3-doi-edit-refusal-no-reason.md).
+Issue report: [pkp-e2e#233](https://github.com/jardakotesovec/pkp-e2e/issues/233) ([docs/issues/U45-A3-doi-edit-refusal-no-reason.md](../issues/U45-A3-doi-edit-refusal-no-reason.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `DAO::markSubmitted()` sets only the status;
