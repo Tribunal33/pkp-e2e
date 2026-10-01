@@ -1958,7 +1958,7 @@ Issue report: [pkp-e2e#44](https://github.com/jardakotesovec/pkp-e2e/issues/44) 
 || enablePublicationURN || enableRepresentationURN`; the form has no
 `enableIssueURN` and never names `enableChapterURN` or
 `enableSubmissionFileURN`. Live-probed 2026-09-24 (note q15).
-Issue report: [docs/issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md](../issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md).
+Issue report: [pkp-e2e#137](https://github.com/jardakotesovec/pkp-e2e/issues/137) ([docs/issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md](../issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md)).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — `monograph_full.tpl` prints `{$pubIdType}` (the plugin's
