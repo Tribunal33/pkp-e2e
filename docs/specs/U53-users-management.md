@@ -2035,7 +2035,7 @@ accessibility tree a disabled account's and an ORCID holder's "Name" cell
 read the name, then an image with no name. The icons
 (`UserAccessManagerCellName.vue`, note g) carry no `aria-label` and no
 `aria-hidden`.
-Issue report: [docs/issues/U53-A12-users-status-icons-unnamed.md](../issues/U53-A12-users-status-icons-unnamed.md).
+Issue report: [pkp-e2e#196](https://github.com/jardakotesovec/pkp-e2e/issues/196) ([docs/issues/U53-A12-users-status-icons-unnamed.md](../issues/U53-A12-users-status-icons-unnamed.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25, all three apps: the "Merge user"
