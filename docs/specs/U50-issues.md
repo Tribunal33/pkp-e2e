@@ -1560,7 +1560,7 @@ Issue report: [pkp-e2e#68](https://github.com/jardakotesovec/pkp-e2e/issues/68) 
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-25 (Rule 1), OJS: "Future Issues" read 2025 Vol. 3; then 2026 Vol. 1 No. 1, No. 10, No. 2; then 2027. `ORDERBY_UNPUBLISHED_ISSUES` sorts year, volume, number (note g); `schemas/issue.json` types `number` as a string.
-Issue report: [docs/issues/U50-A8-future-issues-number-as-text.md](../issues/U50-A8-future-issues-number-as-text.md).
+Issue report: [pkp-e2e#81](https://github.com/jardakotesovec/pkp-e2e/issues/81) ([docs/issues/U50-A8-future-issues-number-as-text.md](../issues/U50-A8-future-issues-number-as-text.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-25 (Rules 10a, 23), OJS, two drives: a mouse drag of a section heading above another section, several shapes, three attempts each; the article rows moved, the section headings did not (one heading moved below its own article, then "Cancel ordering"), and a "Done" the server accepted (save-sequence 200) left the order unchanged on the tab and on the issue's page. Each section is its own sortable block on the page. The grid offers section ordering (`ORDER_CATEGORY_GRID_CATEGORIES_AND_ROWS`, note m) and the issue's page reads the saved order (note w), so the custom-order half of Rule 23 is code-read only.
