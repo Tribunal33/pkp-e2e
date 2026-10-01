@@ -1,0 +1,45 @@
+--- a/lib/pkp/classes/migration/upgrade/v3_6_0/I12593_EmailToTaskTemplates.php
++++ b/lib/pkp/classes/migration/upgrade/v3_6_0/I12593_EmailToTaskTemplates.php
+@@ -75,6 +75,20 @@
+     protected function getEmailKeys(): array
+     {
+         return array_keys($this->emailKeyToStageMap());
++    }
++
++    /**
++     * The default body of a migrated template. The manual "Assign Editor" letters are
++     * sent by the assigning user as a discussion, which adds its own footer: sign them
++     * with the sender's signature, as 3.4 already did for the Review and Production
++     * letters, not with the automated EDITOR_ASSIGN letter's context signature.
++     */
++    protected function defaultBody(string $emailKey, ?string $body): ?string
++    {
++        if ($body === null || !str_starts_with($emailKey, 'EDITOR_ASSIGN_')) {
++            return $body;
++        }
++        return str_replace('{$contextSignature}', '{$signature}', $body);
+     }
+ 
+     /**
+@@ -151,10 +165,10 @@
+                  * Try to get the body from the default templates
+                  */
+                 if (!isset($setting['body'])) {
+-                    $setting['body'] = DB::table('email_templates_default_data')
++                    $setting['body'] = $this->defaultBody($customTemplate->email_key, DB::table('email_templates_default_data')
+                         ->where('email_key', $customTemplate->email_key)
+                         ->where('locale', $locale)
+-                        ->first(['body'])->body;
++                        ->first(['body'])->body);
+                 }
+ 
+                 /**
+@@ -236,7 +250,7 @@
+                             'edit_task_template_id' => $insertedTaskTemplateId,
+                             'locale' => $item->locale,
+                             'setting_name' => 'description',
+-                            'setting_value' => $item->body,
++                            'setting_value' => $this->defaultBody($key, $item->body),
+                         ],
+                     ]);
+                 }

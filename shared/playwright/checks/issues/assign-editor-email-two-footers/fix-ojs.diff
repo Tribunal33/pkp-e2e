@@ -1,0 +1,35 @@
+--- a/locale/en/emails.po
++++ b/locale/en/emails.po
+@@ -118,6 +118,21 @@
+ "<p>Kind regards,</p>"
+ "{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Dear {$recipientName},</p>"
++"<p>The following submission has been assigned to you to see through the editorial process.</p>"
++"<p><a href=\"{$submissionUrl}\">{$submissionTitle}</a><br />"
++"{$authors}</p>"
++"<p><b>Abstract</b></p>"
++"{$submissionAbstract}"
++"<p>If you find the submission to be relevant for {$contextName}, please forward the submission to the review stage by "
++"selecting \"Send to Review\" and then assign reviewers by clicking \"Add Reviewer\".</p>"
++"<p>If the submission is not appropriate for this journal, please decline the submission.</p>"
++"<p>Thank you in advance.</p>"
++"<p>Kind regards,</p>"
++"{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Dear {$recipientName},</p>"
+--- a/registry/taskTemplates.xml
++++ b/registry/taskTemplates.xml
+@@ -15,7 +15,7 @@
+ 	<template title="mailable.discussionCopyediting.name" description="emails.discussion.body" key="DISCUSSION_NOTIFICATION_COPYEDITING" stageId="WORKFLOW_STAGE_ID_EDITING"/>
+ 	<template title="mailable.discussionProduction.name" description="emails.discussion.body" key="DISCUSSION_NOTIFICATION_PRODUCTION" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
+ 	<template title="mailable.copyeditRequest.name" description="emails.copyeditRequest.body" key="COPYEDIT_REQUEST" stageId="WORKFLOW_STAGE_ID_EDITING"/>
+-	<template title="mailable.editorAssignedManual.name" description="emails.editorAssign.body" key="EDITOR_ASSIGN_SUBMISSION" stageId="WORKFLOW_STAGE_ID_SUBMISSION"/>
++	<template title="mailable.editorAssignedManual.name" description="emails.editorAssignSubmission.body" key="EDITOR_ASSIGN_SUBMISSION" stageId="WORKFLOW_STAGE_ID_SUBMISSION"/>
+ 	<template title="mailable.editorAssignedManual.name" description="emails.editorAssignReview.body" key="EDITOR_ASSIGN_REVIEW" stageId="WORKFLOW_STAGE_ID_EXTERNAL_REVIEW"/>
+ 	<template title="mailable.editorAssignedManual.name" description="emails.editorAssignProduction.body" key="EDITOR_ASSIGN_PRODUCTION" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
+ 	<template title="mailable.layoutRequest.name" description="emails.layoutRequest.body" key="LAYOUT_REQUEST" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
