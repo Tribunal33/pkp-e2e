@@ -1,0 +1,1262 @@
+--- a/locale/an/emails.po
++++ b/locale/an/emails.po
+@@ -394,6 +394,17 @@
+ "\"Anyadir revisor/a\".</p><p>Si lo ninvio no ye apropiau pa esta revista, lo "
+ "refuse.</p><p>Gracias de antemano.</p><p>Atentament,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Estimau/a {$recipientName},</p><p>Se le ha asignau lo siguient ninvio pa "
++"que coordine lo suyo proceso editorial.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Resumen</b></p>{$submissionAbstract}<p>Si le pareixe "
++"que lo ninvio ye relevant pa {$contextName}, lo ninvie a la fase de revisión "
++"triando \"Ninviar ta revisión\" y dimpués asigne revisors/as fendo clic en "
++"\"Anyadir revisor/a\".</p><p>Si lo ninvio no ye apropiau pa esta revista, lo "
++"refuse.</p><p>Gracias de antemano.</p><p>Atentament,</p>{$signature}"
++
+ msgid "emails.reviewResponseOverdueAuto.body"
+ msgstr ""
+ "<p>Estimau/a {$recipientName},</p><p>Este correu electronico ye un "
+--- a/locale/ar/emails.po
++++ b/locale/ar/emails.po
+@@ -124,6 +124,17 @@
+ "كان طلب التقديم غير مناسب لهذه المجلة، يرجى رفض الطلب.</p><p>شكرًا لك مقدمًا.</"
+ "p><p>أطيب التحايا،</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>عزيزي {$recipientName}،</p><p>طلب التقديم الآتي قد تمت إحالته إليك لتقوم "
++"بإجراءات التحرير المتعلقة به.</p><p><a href="
++"\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</p><p><b>الملخص</"
++"b></p>{$submissionAbstract}<p>إذا وجدت بأن طلب التقديم ذي صلة بـ "
++"{$contextName}، يرجى تمريره إلى مرحلة التحكيم عبر اختيار \"الإرسال إلى "
++"التحكيم\" ومن ثم قم بتعيين المحكمين عبر النقر على \"إضافة محكم\".</p><p>إذا "
++"كان طلب التقديم غير مناسب لهذه المجلة، يرجى رفض الطلب.</p><p>شكرًا لك مقدمًا.</"
++"p><p>أطيب التحايا،</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>عزيزي {$recipientName}،</p><p>لقد تم تكليفك بطلب التقديم الآتي لمتابعته "
+--- a/locale/az/emails.po
++++ b/locale/az/emails.po
+@@ -214,6 +214,18 @@
+ "uyğun deyilsə, onu rədd edin.</p><p>İndiden təşəkkür "
+ "edirik.</p><p>Hörmətlə,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Hörmətli {$recipientName},</p><p>Aşağıdakı məqalə redaktə prosesini "
++"izləməyiniz üçün sizə təyin edilmişdir.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Xülasə</b></p>{$submissionAbstract}<p>Məqalənin "
++"{$contextName} ilə əlaqəli olduğunu düşünürsünüzsə, \"Rəyçilərə Göndər\" "
++"seçərək rəyçi dəyərləndirmə mərhələsinə göndərin və sonra \"Rəyçi əlavə "
++"edin\" düyməsini basaraq rəyçiləri təyin edin.</p><p>Ərizə bu jurnal üçün "
++"uyğun deyilsə, onu rədd edin.</p><p>İndiden təşəkkür "
++"edirik.</p><p>Hörmətlə,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Hörmətli {$recipientName},</p><p>Aşağıdakı məqalə rəyçi dəyərləndirmə "
+--- a/locale/bg/emails.po
++++ b/locale/bg/emails.po
+@@ -125,6 +125,18 @@
+ "това списание, моля, отхвърлете го.</p><p>Благодаря ви предварително.</p> "
+ "<p>С уважение,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Уважаеми, {$recipientName},</p><p>Следното изпращане ви е възложено, за "
++"да видите редакционния процес.</p><p><a href="
++"\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</p><p><b>Резюме:"
++"</b></p>{$submissionAbstract}<p>Ако смятате, че изпратеното е подходящо за "
++"{$contextName}, моля, препратете го към етапа на рецензия, като изберете "
++"„Изпращане за рецензия\" и след това асоциирайте рецензенти, като щракнете "
++"върху \"Добавяне на рецензент\".</p><p>Ако изпращането не е подходящо за "
++"това списание, моля, отхвърлете го.</p><p>Благодаря ви предварително.</p> "
++"<p>С уважение,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Здравейте, {$recipientName},</p><p>Следното изпращане на материали е "
+--- a/locale/bs_Latn/emails.po
++++ b/locale/bs_Latn/emails.po
+@@ -133,6 +133,20 @@
+ "<br />\n"
+ "Unaprijed hvala."
+ 
++#, fuzzy
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"{$recipientName},<br />\n"
++"<br />\n"
++"u okviru raspodjele uredničkih zaduženja za časopis {$contextName} vama je "
++"dodijeljen zaprimljeni prilog &quot;{$submissionTitle}&quot; kako biste "
++"proveli postupak njegova uređivanja.<br />\n"
++"<br />\n"
++"URL priloga: {$submissionUrl}<br />\n"
++"Korisničko ime: {$recipientUsername}<br />\n"
++"<br />\n"
++"Unaprijed hvala."
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ 
+--- a/locale/ca/emails.po
++++ b/locale/ca/emails.po
+@@ -137,6 +137,19 @@
+ "endavant.</p><p>Atentament,</p>{$contextSignature}"
+ 
+ #, fuzzy
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Benvolgut/uda {$recipientName},</p><p>Us ha estat assignada la següent "
++"tramesa perquè en superviseu el seu procés editorial.</p><p><a href=\""
++"{$submissionUrl}\">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Resum</b></p>{$submissionAbstract}<p>Si considera que "
++"la tramesa és rellevant per a {$contextName}, enviï'l a la fase de revisió "
++"seleccionant \"Enviar a revisió\" i després assigni revisors/es fent clic a "
++"\"Afegir revisor/a\".</p><p>Si la tramesa no és apropiada per a aquesta "
++"revista, rebutgi-la.</p><p>Gràcies per "
++"endavant.</p><p>Atentament,</p>{$signature}"
++
++#, fuzzy
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Benvolgut/uda {$recipientName},</p><p>Us ha estat assignada la següent "
+--- a/locale/ckb/emails.po
++++ b/locale/ckb/emails.po
+@@ -140,6 +140,20 @@
+ "<br />\n"
+ "Thank you."
+ 
++#, fuzzy
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"{$recipientName}:<br />\n"
++"<br />\n"
++"پێشکەشکردنەکە, &quot;{$submissionTitle},&quot; بۆ{$contextName} تۆ دیاری "
++"کرایت وەک سەرنوسەری بەش بەمەبەستی تەواوکردنی کارەکانی هەڵسەنگاندنی ئەم "
++"توێژینەوەیە.<br />\n"
++"<br />\n"
++"لینکی پێشکەشکردن: {$submissionUrl}<br />\n"
++"ناوی بەکارهێنەر: {$recipientUsername}<br />\n"
++"<br />\n"
++"Thank you."
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ 
+--- a/locale/cnr/emails.po
++++ b/locale/cnr/emails.po
+@@ -82,6 +82,18 @@
+ "časopis, odbijte prilog.</p><p>Unaprijed hvala.</p><p>Lijepi "
+ "pozdrav,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Poštovani {$recipientName},</p><p>Sljedeća prijava dodijeljena vam je da "
++"ga pregledate kroz urednički postupak.</p><p><a href=\"{$submissionUrl}\">{$submissionTitle}"
++"</a><br "
++"/>{$authors}</p><p><b>Sažetak</b></p>{$submissionAbstract}<p>Ako smatrate da "
++"je prijava relevantna za {$contextName}, proslijedite prijavu u fazu "
++"recenzije odabirom \"Pošalji na recenziju\", a zatim dodijelite recenzente "
++"klikom na \"Dodaj recenzenta\".</p><p>Ako prijava nije prikladna za ovaj "
++"časopis, odbijte prilog.</p><p>Unaprijed hvala.</p><p>Lijepi "
++"pozdrav,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Poštovani {$recipientName},</p><p>Sljedeća prijava dodijeljena Vam je da "
+--- a/locale/cs/emails.po
++++ b/locale/cs/emails.po
+@@ -126,6 +126,18 @@
+ "není příspěvek vhodný pro tento časopis, odmítněte jej, prosím.</p><p>Předem "
+ "děkujeme.</p><p>S pozdravem,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Dobrý den {$recipientName},</p><p>Následující příspěvek byl přidělen Vám, "
++"abyste ho provedl/a redakčním procesem.</p><p><a href="
++"\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</"
++"p><p><b>Abstrakt</b></p>{$submissionAbstract}<p>Pokud považujete příspěvek "
++"za relevantní pro {$contextName}, předejte prosím příspěvek do fáze "
++"recenzního řízení výběrem možnosti „Odeslat k recenznímu řízení“ a poté "
++"přidejte recenzenty kliknutím na „Přidat recenzenta“. </p><p>Pokud podle vás "
++"není příspěvek vhodný pro tento časopis, odmítněte jej, prosím.</p><p>Předem "
++"děkujeme.</p><p>S pozdravem,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Vážený/á{$recipientName},</p><p>Následující příspěvek vám byl přidělen k "
+--- a/locale/da/emails.po
++++ b/locale/da/emails.po
+@@ -131,6 +131,18 @@
+ "tidsskrift, så afvis indsendelsen.</p><p>Tak på forhånd.</p><p>Med venlig "
+ "hilsen</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Kære {$recipientName}</p><p>Du er blevet tildelt det følgende manuskript, "
++"som du skal følge igennem det redaktionelle workflow. </p><p><a href="
++"\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</"
++"p><p><b>Abstract</b></p>{$submissionAbstract}<p>Hvis du mener, manuskriptet "
++"er relevant for {$contextName}, så send det til bedømmelsestrinnet ved at "
++"klikke på \"Send til bedømmelse\" og tildel dernæst bedømmer(e) ved at "
++"klikke på \"Tilføj bedømmer\".</p><p>Hvis indsendelsen ikke passer til dette "
++"tidsskrift, så afvis indsendelsen.</p><p>Tak på forhånd.</p><p>Med venlig "
++"hilsen</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Kære {$recipientName}</p><p>Du er blevet tilknyttet den følgende "
+--- a/locale/de/emails.po
++++ b/locale/de/emails.po
+@@ -245,6 +245,20 @@
+ "Einreichung bitte ab.</p><p>Danke im Voraus.</p><p>Mit freundlichen "
+ "Grüßen</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Guten Tag {$recipientName},</p><p>Die folgende Einreichung wurde Ihnen "
++"zur redaktionellen Bearbeitung zugewiesen. </p><p><a href=\"{$submissionUrl}"
++"\">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Abstract</b></p>{$submissionAbstract}<p>Wenn Sie der "
++"Meinung sind, dass die Einreichung für die Zeitschrift {$contextName} "
++"relevant ist, leiten Sie die Einreichung bitte zur Begutachtung weiter, "
++"indem Sie \"In die Begutachtung schicken\" wählen und dann Gutachter/innen "
++"zuweisen, indem Sie auf \"Gutachter/in hinzufügen\" klicken. </p><p>Wenn die "
++"Einreichung nicht für diese Zeitschrift geeignet ist, lehnen Sie die "
++"Einreichung bitte ab.</p><p>Danke im Voraus.</p><p>Mit freundlichen "
++"Grüßen</p>{$signature}"
++
+ msgid "emails.reviewRequestSubsequent.body"
+ msgstr ""
+ "<p>Guten Tag {$recipientName},</p><p>Danke für Ihr Gutachten zu <a href=\""
+--- a/locale/el/emails.po
++++ b/locale/el/emails.po
+@@ -150,6 +150,20 @@
+ "<br />\n"
+ "Σας ευχαριστούμε."
+ 
++#, fuzzy
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"{$recipientName}:<br />\n"
++"<br />\n"
++"Σας έχει ανατεθεί η επιμέλεια της υποβολής &quot;{$submissionTitle},&quot; "
++"στο περιοδικό {$contextName}, στο πλαίσιο του ρόλου σας ως Επιμελητής "
++"Ενότητας.<br />\n"
++"<br />\n"
++"Σύνδεσμος υποβολής: {$submissionUrl}<br />\n"
++"Όνομα Χρήστη: {$recipientUsername}<br />\n"
++"<br />\n"
++"Σας ευχαριστούμε."
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ 
+--- a/locale/en/emails.po
++++ b/locale/en/emails.po
+@@ -118,6 +118,21 @@
+ "<p>Kind regards,</p>"
+ "{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Dear {$recipientName},</p>"
++"<p>The following submission has been assigned to you to see through the editorial process.</p>"
++"<p><a href=\"{$submissionUrl}\">{$submissionTitle}</a><br />"
++"{$authors}</p>"
++"<p><b>Abstract</b></p>"
++"{$submissionAbstract}"
++"<p>If you find the submission to be relevant for {$contextName}, please forward the submission to the review stage by "
++"selecting \"Send to Review\" and then assign reviewers by clicking \"Add Reviewer\".</p>"
++"<p>If the submission is not appropriate for this journal, please decline the submission.</p>"
++"<p>Thank you in advance.</p>"
++"<p>Kind regards,</p>"
++"{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Dear {$recipientName},</p>"
+--- a/locale/es/emails.po
++++ b/locale/es/emails.po
+@@ -130,6 +130,18 @@
+ "revista, rechácelo.</p><p>Gracias de "
+ "antemano.</p><p>Atentamente,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Estimado/a {$recipientName},</p><p>Se le ha asignado el siguiente envío "
++"para que coordine su proceso editorial.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Resumen</b></p>{$submissionAbstract}<p>Si le parece "
++"que el envío es relevante para {$contextName}, envíelo a la fase de revisión "
++"seleccionando \"Enviar a revisión\" y luego asigne revisores/as haciendo "
++"clic en \"Añadir revisor/a\".</p><p>Si el envío no es apropiado para esta "
++"revista, rechácelo.</p><p>Gracias de "
++"antemano.</p><p>Atentamente,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Estimado/a {$recipientName},</p><p>Se le ha asignado el siguiente envío "
+--- a/locale/et/emails.po
++++ b/locale/et/emails.po
+@@ -265,6 +265,18 @@
+ "ei ole selle ajakirja jaoks sobiv, lükake see tagasi.</p><p>Täname teid "
+ "ette.</p><p>Parimate soovidega</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Lugupeetud {$recipientName},</p><p>Järgnev kaastöö on määratud teile "
++"toimetamisprotsessi läbiviimiseks.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Kokkuvõte</b></p>{$submissionAbstract}<p>Kui leiate, "
++"et käsikiri on ajakirjale {$contextName}, asjakohane, palun suunake kaastöö "
++"retsenseerimise etappi valides \"Saada retsenseerimisele\" ja seejärel "
++"määrake retsensendid, klõpsates nuppu \"Lisa retsensent\".</p><p>Kui kaastöö "
++"ei ole selle ajakirja jaoks sobiv, lükake see tagasi.</p><p>Täname teid "
++"ette.</p><p>Parimate soovidega</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Lugupeetud{$recipientName},</p><p>Järgnev kaastöö on määratud teile "
+--- a/locale/eu/emails.po
++++ b/locale/eu/emails.po
+@@ -133,6 +133,18 @@
+ "honetarako, mesedez, baztertu bidalketa.</p><p>Eskerrik asko aldez "
+ "aurretik.</p><p>Adeitasunez,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>{$recipientName} agurgarria:</p><p>Ondorengo bidalketa esleitu dizugu "
++"bere argitalpen-prozesua eraman dezazun.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionUrl}</a><br "
++"/>{$authors}</p><p><b>Laburpena</b></p>{$submissionAbstract}<p>Bidalketa "
++"{$contextName} aldizkarirako egokia dela uste baduzu, bidal ezazu ebaluazio-"
++"fasera \"Bidali ebaluatzera\" hautatuz, eta esleitu ebaluatzaileak \"Gehitu "
++"ebaluatzailea\" sakatuz.</p><p>Zure ustez bidalketa ez bada egokia aldizkari "
++"honetarako, mesedez, baztertu bidalketa.</p><p>Eskerrik asko aldez "
++"aurretik.</p><p>Adeitasunez,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>{$recipientName} agurgarria:</p><p>Bidalketa hau egokitu zaizu, itsu "
+--- a/locale/fa/emails.po
++++ b/locale/fa/emails.po
+@@ -128,6 +128,21 @@
+ "با تشکر،\n"
+ "{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"{$recipientName}:<br />\n"
++"<br />\n"
++"شما به عنوان دبیر مسئول مقاله در مجله {$contextName} انتخاب شده‌اید تا بر "
++"مراحل داوری و ویرایش آن نظارت داشته باشید. شما می‌تواند مراحل داوری را با "
++"ارسال به داوران و افزودن داور مدیریت کنید. در صورتی که فکر می‌کنید مقاله "
++"ارسالی برای این مجله مناسب نیست آن را رد کنید.<br />\n"
++"<br />\n"
++"آدرس مقاله: {$submissionUrl}<br />\n"
++"نام کاربری: {$recipientUsername}<br />\n"
++"<br />\n"
++"با تشکر،\n"
++"{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "{$recipientName} گرامی،\n"
+--- a/locale/fi/emails.po
++++ b/locale/fi/emails.po
+@@ -129,6 +129,18 @@
+ "hylkää se.</p><p>Kiitos jo etukäteen.</p><p>Ystävällisin terveisin,</"
+ "p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Hyvä {$recipientName},</p><p>Seuraava käsikirjoitus on osoitettu sinulle "
++"toimitustyötä varten.</p><p><a href=\"{$submissionUrl}\">{$submissionTitle}</"
++"a><br />{$authors}</p><p><b>Abstract</b></p>{$submissionAbstract}<p>Jos olet "
++"sitä mieltä, että käsikirjoitus on sopiva julkaisuun {$contextName}, lähetä "
++"käsikirjoitus eteenpäin arviointivaiheeseen valitsemalla \"Lähetä "
++"arvioitavaksi\" ja osoita sitten arvioijat valitsemalla \"Lisää arvioija\".</"
++"p><p>Jos käsikirjoitus ei mielestäsi sovi tähän julkaisuun, ole hyvä ja "
++"hylkää se.</p><p>Kiitos jo etukäteen.</p><p>Ystävällisin terveisin,</"
++"p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Hyvä {$recipientName},</p><p>Seuraava käsikirjoitus on osoitettu sinulle "
+--- a/locale/fr/emails.po
++++ b/locale/fr/emails.po
+@@ -139,6 +139,19 @@
+ "décliner.</p><p>Je vous remercie "
+ "d'avance.</p><p>Cordialement,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Bonjour {$recipientName},</p><p>La soumission suivante vous a été "
++"assignée pour le suivi du processus éditorial.</p><p><a href=\""
++"{$submissionUrl}\">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Résumé</b></p>{$submissionAbstract}<p>Si vous jugez la "
++"soumission pertinente pour la revue {$contextName}, veuillez la transmettre "
++"à l'étape d'évaluation en sélectionnant « Envoyer en évaluation» et en "
++"désignant des responsables en cliquant sur « Ajouter un/e évaluateur/ice ».</"
++"p><p>Si la soumission n'est pas appropriée pour cette revue, veuillez la "
++"décliner.</p><p>Je vous remercie "
++"d'avance.</p><p>Cordialement,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Bonjour {$recipientName},</p><p>La soumission suivante vous a été "
+--- a/locale/fr_CA/emails.po
++++ b/locale/fr_CA/emails.po
+@@ -141,6 +141,18 @@
+ "soumission n'est pas appropriée pour cette revue, veuillez la décliner.</"
+ "p><p>Je vous remercie d'avance.</p><p>Cordialement,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>{$recipientName},</p><p>La soumission suivante vous a été assignée pour "
++"le suivi du processus éditorial.</p><p><a href="
++"\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</p><p><b>Résumé</"
++"b></p>{$submissionAbstract}</p><p>Si vous jugez la soumission pertinente "
++"pour la revue {$contextName}, veuillez la transmettre à l'étape d'évaluation "
++"en sélectionnant \"Envoyer en évaluation\" et en désignant des évaluateur."
++"trice.s en cliquant sur « Ajouter un.e évaluateur.trice ».</p><p>Si la "
++"soumission n'est pas appropriée pour cette revue, veuillez la décliner.</"
++"p><p>Je vous remercie d'avance.</p><p>Cordialement,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>{$recipientName},</p><p>La soumission suivante vous a été assignée pour "
+--- a/locale/gd/emails.po
++++ b/locale/gd/emails.po
+@@ -132,6 +132,20 @@
+ "<br />\n"
+ "Mòran taing."
+ 
++#, fuzzy
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"{$recipientName}:<br />\n"
++"<br />\n"
++"Chaidh an tagradh “{$submissionTitle}” airson {$contextName} iomruineadh "
++"dhut airson a stiùireadh tron phròiseas deasachaidh ’s tu nad dheasaiche "
++"earrainn.<br />\n"
++"<br />\n"
++"URL an tagraidh: {$submissionUrl}<br />\n"
++"Ainm-cleachdaiche: {$recipientUsername}<br />\n"
++"<br />\n"
++"Mòran taing."
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ 
+--- a/locale/gl/emails.po
++++ b/locale/gl/emails.po
+@@ -129,6 +129,19 @@
+ "favor, rexeite a proposta.</p> <p>Moitas grazas por adiantado.</p> <p>Reciba "
+ "un cordial saúdo,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Estimado/a {$recipientName},</p> <p>Asignóuselle a seguinte proposta para "
++"que a acompañe ao longo do proceso editorial.</p> <p><a href=\""
++"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</p> "
++"<p><b>Resumo</b></p>\n"
++"{$submissionAbstract}<p>Se considera que a proposta é relevante para "
++"{$contextName}, avance ao paso de revisión seleccionando \"Enviar a "
++"revisión\" e logo asigne persoas revisoras premendo en \"Engadir revisor/a\""
++".</p> <p>Se considera que a proposta non é axeitada para esta revista, por "
++"favor, rexeite a proposta.</p> <p>Moitas grazas por adiantado.</p> <p>Reciba "
++"un cordial saúdo,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Estimado/a {$recipientName},</p> <p>Asignóuselle a seguinte proposta para "
+--- a/locale/he/emails.po
++++ b/locale/he/emails.po
+@@ -122,6 +122,19 @@
+ "<br />\n"
+ "תודה."
+ 
++#, fuzzy
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"{$recipientName}:<br />\n"
++"<br />\n"
++"כתב יד {$submissionTitle} ל{$contextName} שויך אליך לטיפול בשלבי העריכה.<br /"
++">\n"
++"<br />\n"
++"אתר הגשה: {$submissionUrl}<br />\n"
++"שם משתמש: {$recipientUsername}<br />\n"
++"<br />\n"
++"תודה."
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ 
+--- a/locale/hi/emails.po
++++ b/locale/hi/emails.po
+@@ -179,6 +179,27 @@
+ "<br />\n"
+ "Thank you."
+ 
++# (pofilter) brackets: Added '{', '}'
++# (pofilter) endpunc: Different punctuation at the end
++# (pofilter) long: The translation is much longer than the original
++# (pofilter) newlines: Different line endings
++# (pofilter) pythonbraceformat: Unknown named placeholders in translation: {$recipientUsername}, {$submissionTitle}, {$contextName}, {$recipientName}, {$submissionUrl}
++# (pofilter) simplecaps: Different capitalization
++# (pofilter) startpunc: Different punctuation at the start
++# (pofilter) xmltags: Added XML tags
++#, fuzzy
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"{$recipientName}:<br />\n"
++"<br />\n"
++"प्रस्तुत, &quot;{$submissionTitle},&quot; to {$contextName} आपको सेक्शन एडिटर के "
++"रूप में अपनी भूमिका में संपादकीय प्रक्रिया के माध्यम से देखने का काम सौंपा गया है.<br />\n"
++"<br />\n"
++"Submission URL: {$submissionUrl}<br />\n"
++"Username: {$recipientUsername}<br />\n"
++"<br />\n"
++"Thank you."
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ 
+--- a/locale/hr/emails.po
++++ b/locale/hr/emails.po
+@@ -131,6 +131,18 @@
+ "prikladna za ovaj časopis, molimo vas da je odbijete.</p><p>Unaprijed "
+ "zahvaljujemo.</p><p>Uz srdačan pozdrav,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Poštovani/a {$recipientName},</p><p>sljedeća prijava vam je dodijeljena "
++"kako biste vodili urednički proces.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Sažetak</b></p>{$submissionAbstract}<p>Ako smatrate da "
++"je prijava relevantna za {$contextName}, molimo vas da je proslijedite u "
++"recenzijski postupak odabirom opcije \"Pošalji na recenziju\", a zatim "
++"dodijelite recenzente odabirom \"Dodaj recenzenta\".</p><p>Ako prijava nije "
++"prikladna za ovaj časopis, molimo vas da je odbijete.</p><p>Unaprijed "
++"zahvaljujemo.</p><p>Uz srdačan pozdrav,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Poštovani/a {$recipientName},</p><p>sljedeća prijava vam je dodijeljena "
+--- a/locale/hu/emails.po
++++ b/locale/hu/emails.po
+@@ -138,6 +138,20 @@
+ "beküldést.</p><p>Előre is "
+ "köszönjük.</p><p>Üdvözlettel,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Tisztelt {$recipientName}!</p><p>A alábbi kézirat Önhöz lett rendelve, "
++"hogy kísérje végig annak szerkesztési folyamatát.</p><p><a href=\""
++"{$submissionUrl}\">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Absztrakt</b></p>{$submissionAbstract}<p>Ha a "
++"beküldést relevánsnak találja a(z) {$contextName} számára, kérjük, "
++"továbbítsa a beküldést a szakmai lektorálási szakaszba a \"Szakmai "
++"lektorálásra küldés\" gomb megnyomásával, majd jelölje ki a szakmai "
++"lektorokat a \"Szakmai lektor hozzáadása\" gombra kattintva.</p><p>Ha a "
++"beküldött kézirat nem megfelelő a folyóirat számára, kérjük, utasítsa el a "
++"beküldést.</p><p>Előre is "
++"köszönjük.</p><p>Üdvözlettel,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Tisztelt {$recipientName}!</p><p>A alábbi kézirat Önhöz lett rendelve, "
+--- a/locale/hy/emails.po
++++ b/locale/hy/emails.po
+@@ -125,6 +125,18 @@
+ "համապատասխանում այս ամսագրին, խնդրում ենք մերժել այն:</p><p>Կանխավ "
+ "շնորհակալությամբ</p><p>Հարգանքներով,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Հարգելի {$recipientName},</p><p>Հետևյալ ներկայացումը ձեզ հանձնարարվել է "
++"խմբագրական գործընթացին ծանոթանալու համար:</p><p><a href="
++"\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</"
++"p><p><b>Abstract</b></p>{$submissionAbstract}<p>Եթե գտնում եք, որ "
++"ներկայացումը տեղին է {$contextName}-ի համար, խնդրում ենք ուղարկել այն "
++"գրախոսման փուլ՝ ընտրելով «Ուղարկել գրախոսման» և այնուհետև նշանակել "
++"գրախոսներ՝ սեղմելով «Ավելացնել գրախոս»:</p><p>Եթե ներկայացումը չի "
++"համապատասխանում այս ամսագրին, խնդրում ենք մերժել այն:</p><p>Կանխավ "
++"շնորհակալությամբ</p><p>Հարգանքներով,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Հարգելի {$recipientName},</p><p>Հետևյալ ներկայացումը հանձնարարվել է ձեզ` "
+--- a/locale/id/emails.po
++++ b/locale/id/emails.po
+@@ -129,6 +129,18 @@
+ "ketentuan jurnal, silakan naskah ditolak.</p><p>Terima kasih.</p><p>Salam "
+ "hormat,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Yth. {$recipientName},</p><p>Naskah berikut telah ditugaskan kepada Anda "
++"untuk diperiksa melalui proses editorial.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Abstract</b></p>{$submissionAbstract}<p>Jika telah "
++"sesuai dengan {$contextName}, lanjutkan naskah tersebut ke tahap dengan "
++"memilih \"Kirim ke Taha Review\" lalu tugaskan seorang mitra bestari dengan "
++"mengklik \"Tambahkan Mitra Bestari\".</p><p>Jika tidak sesuai dengan "
++"ketentuan jurnal, silakan naskah ditolak.</p><p>Terima kasih.</p><p>Salam "
++"hormat,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Yth {$recipientName},</p><p>Naskah berikut telah ditugaskan kepada Anda "
+--- a/locale/is/emails.po
++++ b/locale/is/emails.po
+@@ -132,6 +132,17 @@
+ "fyrir tímaritið þá vinsamlega hafnaðu henni.</p><p>Með fyrirfram þökk.</"
+ "p><p>Bestu kveðjur,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Kæri móttakandi  {$recipientName},</p><p>Eftirfarndi innsendingu hefur "
++"verið úthlutað þér til utanumhalds í gengum ritstjórnarferlið. </p><p><a "
++"href=\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</p><p>If "
++"Innsendingin er fyrir {$contextName}. Vinsamlega sendu innsendinguna áfram á "
++"ritrýniþrep með því að velja  \"Senda í ritrýni\" og úthluta ritrýni með því "
++"að smella á \"Bæta við ritirýni\".</p><p>Ef þessi innsending hentar ekki "
++"fyrir tímaritið þá vinsamlega hafnaðu henni.</p><p>Með fyrirfram þökk.</"
++"p><p>Bestu kveðjur,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ 
+--- a/locale/it/emails.po
++++ b/locale/it/emails.po
+@@ -133,6 +133,19 @@
+ "rivista, La preghiamo di rifiutarla.</p><p>Grazie in anticipo.</"
+ "p><p>Cordiali saluti,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Gentile {$recipientName},</p><p>La seguente proposta Le è stata assegnata "
++"per il processo editoriale:</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Abstract</b></p>{$submissionAbstract}<p>ualora dovesse "
++"ritenere a proposta sia rilevante per {$contextName}, potrà inoltrarla alla "
++"fase di revisione selezionando \"Invia alla revisione\" e, successivamente, "
++"potrà assegnare i revisori utilizzando il tasto \"Aggiungi revisore\".</"
++"p><p>Se la proposta non dovesse essere a Suo giudizio appropriata per questa "
++"rivista, La preghiamo di rifiutarla.</p><p>Grazie in anticipo.</"
++"p><p>Cordiali saluti,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Gentile {$recipientName},</p><p>La seguente proposta Le è stata assegnata "
+--- a/locale/ja/emails.po
++++ b/locale/ja/emails.po
+@@ -122,6 +122,16 @@
+ "ください。</p><p>投稿がこの雑誌に適していない場合は、投稿を不採用してください"
+ "。</p><p>感謝します。</p><p>よろしくお願いいたします。</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>{$recipientName} 様、</p><p>下記の投稿は、編集プロセスを確認するために貴方"
++"が担当者として指定されました。</p><p><a href=\"{$submissionUrl}\""
++">「{$submissionTitle}」</a><br />{$authors}</p><p><b>要約</b></p>{$submission"
++"Abstract}<p>I投稿が『{$contextName}』に関連している場合は、「査読に送る」を選"
++"択して投稿を査読段階に転送し、「査読者の追加」をクリックして査読者を指定して"
++"ください。</p><p>投稿がこの雑誌に適していない場合は、投稿を不採用してください"
++"。</p><p>感謝します。</p><p>よろしくお願いいたします。</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>{$recipientName} 様、</p><p>下記の投稿は、査読プロセスを確認するために貴方"
+--- a/locale/ka/emails.po
++++ b/locale/ka/emails.po
+@@ -138,6 +138,20 @@
+ "<br />\n"
+ "Thank you."
+ 
++#, fuzzy
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"{$recipientName}:<br />\n"
++"<br />\n"
++"The submission, &quot;{$submissionTitle},&quot; to {$contextName} has been "
++"assigned to you to see through the editorial process in your role as Section "
++"Editor..<br />\n"
++"<br />\n"
++"Submission URL: {$submissionUrl}<br />\n"
++"Username: {$recipientUsername}<br />\n"
++"<br />\n"
++"Thank you."
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ 
+--- a/locale/kk/emails.po
++++ b/locale/kk/emails.po
+@@ -142,6 +142,18 @@
+ "</p><p>Құрметпен,</p>{$contextSignature}"
+ 
+ #, fuzzy
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Cәлеметсіз бе, {$recipientName}!</p><p>Сізге келесі материалдың "
++"редакциялық процесі арқылы өтуін бақылау жүктелген:</p><p><a href="
++"\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</p><p>Егер сіз "
++"бұл материал «{$contextName}» журналының тақырыбына сәйкес келеді деп "
++"ойласаңыз, оны «Рецензиялауға жіберу» таңдап, кейін «Рецензент қосу» "
++"батырмасын басу арқылы рецензиялау тармағына жіберіңіз.</p><p>Егер материал "
++"осы журналға сәйкес келмесе, оны қайтарып жіберіңіз.</p><p>Алдын ала рахмет."
++"</p><p>Құрметпен,</p>{$signature}"
++
++#, fuzzy
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Құрметті  {$recipientName},</p><p>Сізге рецензиялау процесі арқылы қарау "
+--- a/locale/ky/emails.po
++++ b/locale/ky/emails.po
+@@ -239,6 +239,18 @@
+ "четке кагыңыз.</p><p>Алдын ала рахмат.</p><p>Сый урмат "
+ "менен,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Урматтуу {$recipientName},</p><p>Төмөнкү тапшырма редакциялык процессти "
++"жүргүзүү үчүн сизге дайындалды.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Аннотация</b></p>{$submissionAbstract}<p>Эгер тапшырма "
++"{$contextName} үчүн ылайыктуу болсо, \"Кароо стадиясына жөнөтүү\" баскычын "
++"тандап, андан кийин \"Рецензент кошуу\" баскычы аркылуу рецензенттерди "
++"дайындаңыз.</p><p>Эгер тапшырма бул журналга ылайыксыз болсо, тапшырманы "
++"четке кагыңыз.</p><p>Алдын ала рахмат.</p><p>Сый урмат "
++"менен,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Урматтуу {$recipientName},</p><p>Төмөнкү тапшырма сизге рецензенттик "
+--- a/locale/lt/emails.po
++++ b/locale/lt/emails.po
+@@ -144,6 +144,17 @@
+ "„Pridėti recenzentą“.</p><p>Jei darbas netinka šiam žurnalui, atmeskite "
+ "darbą.</p><p>Iš anksto dėkojame.</p><p>Pagarbiai,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Gerb. {$recipientName},</p><p>Jums buvo paskirtas šis darbas, kad "
++"peržiūrėtumėte redagavimo procesą.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle</a><br "
++"/>{$authors}</p><p><b>Santrauka</b></p>{$submissionAbstract}<p>Jei manote, "
++"kad darbas yra aktualus {$contextName}, persiųskite jį peržiūros etapui "
++"pasirinkdami „Siųsti peržiūrai“ ir tada priskirkite recenzentus spustelėdami "
++"„Pridėti recenzentą“.</p><p>Jei darbas netinka šiam žurnalui, atmeskite "
++"darbą.</p><p>Iš anksto dėkojame.</p><p>Pagarbiai,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Gerb. {$recipientName},</p><p>Jums buvo paskirtas šis pateiktas darbas, "
+--- a/locale/lv/emails.po
++++ b/locale/lv/emails.po
+@@ -373,6 +373,18 @@
+ "iesniegtais materiāls nav piemērots šim žurnālam, lūdzu, noraidiet to.</"
+ "p><p>Paldies jau iepriekš!</p><p>Ar cieņu</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p> {$recipientName}!</p><p>Jums ir uzticēts vadīt redakcijas procesu šādam "
++"iesniegtajam materiālam:</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Kopsavilkums</b></p>{$submissionAbstract}<p>Ja "
++"uzskatāt, ka materiāls attiecas uz žurnālu {$contextName}, lūdzu, pārsūtiet "
++"to uz recenzēšanas posmu, izvēloties \"Sūtīt recenzēšanai\", un pēc tam "
++"ieceliet recenzentus, noklikšķinot uz \"Pievienot recenzentu\".</p><p>Ja "
++"iesniegtais materiāls nav piemērots šim žurnālam, lūdzu, noraidiet to.</"
++"p><p>Paldies jau iepriekš!</p><p>Ar cieņu</p>{$signature}"
++
+ msgid "emails.editorDecisionSkipReview.body"
+ msgstr ""
+ "<p>{$recipientName}!</p>\n"
+--- a/locale/mk/emails.po
++++ b/locale/mk/emails.po
+@@ -130,6 +130,18 @@
+ "поднесокот не е соодветен за ова списание, одбиете го.</p><p>Ви благодариме "
+ "однапред.</p> <p>Со почит,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Почитуван/а {$recipientName},</p><p>Следниот поднесок ви е доделен за да "
++"го проследите низ уредувачкиот процес.</p><p><a href=\"{$submissionUrl}\">{$submissionTitle}"
++"</a><br "
++"/>{$authors}</p><p><b>Апстракт</b></p>{$submissionAbstract}<p>Доколку "
++"сметате дека поднесокот е релевантен за {$contextName}, ве молиме проследете "
++"го поднесокот до фазата на рецензијасо избирање „Испрати на рецензија\" и "
++"потоа доделете рецензенти со кликнување на „Додај рецензент\".</p><p>Ако "
++"поднесокот не е соодветен за ова списание, одбиете го.</p><p>Ви благодариме "
++"однапред.</p> <p>Со почит,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Почитувани {$recipientName},</p><p>Следниот поднесок ви е доделен за да "
+--- a/locale/mn/emails.po
++++ b/locale/mn/emails.po
+@@ -115,6 +115,18 @@
+ "сэтгүүлд тохирохгүй бол татгалзсан шийдвэр гаргана уу.</p><p>Урьдчилан "
+ "талархсанаа илэрхийлье.</p><p>Хүндэтгэсэн,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Эрхэм {$recipientName},</p><p>Дараах илгээлтийг редакцийн үйл явцыг "
++"удирдуулахаар танд хуваарилж байна.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Хураангуй</b></p>{$submissionAbstract}<p>Хэрэв та уг "
++"илгээлтийг {$contextName} сэтгүүлд тохирно гэж үзвэл \"Хяналт руу илгээх\" ("
++"Send to Review) гэснийг сонгож хяналтын шатанд шилжүүлэн, \"Хянагч нэмэх\" ("
++"Add Reviewer) товчийг дарж хянагч нарыг томилно уу.</p><p>Хэрэв илгээлт энэ "
++"сэтгүүлд тохирохгүй бол татгалзсан шийдвэр гаргана уу.</p><p>Урьдчилан "
++"талархсанаа илэрхийлье.</p><p>Хүндэтгэсэн,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Эрхэм {$recipientName},</p><p>Дараах илгээлтийг хөндлөнгийн хяналтын үйл "
+--- a/locale/mr/emails.po
++++ b/locale/mr/emails.po
+@@ -143,6 +143,18 @@
+ "योग्य नसल्यास त्याला कृपया नकार द्या. "
+ "</p><p>धन्यवाद.</p><p>विनम्र,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>प्रिय {$recipientName},</p><p>खालील सादरीकरणावर तुम्हाला संपादकीय "
++"सोपस्कारासाठी नियुक्त केले गेले आहे.</p><p><a href=\"{$submissionUrl}\">{$submissionTitle}"
++"</a><br "
++"/>{$authors}</p><p><b>गोषवारा</b></p>{$submissionAbstract}<p>तुम्हाला हे "
++"सादरीकरण {$contextName} शी संबंधित वाटत असल्यास, कृपया हे सादरीकरण \"सम"
++"ीक्षणासाठी पाठवा\" क्लिक करून समीक्षणाच्या टप्प्यावर पाठवा आणि नंतर \"समीक्"
++"षक जोडा\" क्लिक करून समीक्षक नियुक्त करा.</p><p>सादरीकरण या नियतकालिकासाठी "
++"योग्य नसल्यास त्याला कृपया नकार द्या. "
++"</p><p>धन्यवाद.</p><p>विनम्र,</p>{$signature}"
++
+ msgid "emails.editorAssignProduction.body"
+ msgstr ""
+ "<p>प्रिय {$recipientName},</p><p>पुढील सादरीकरण तुम्हाला निर्मिती टप्प्यातून "
+--- a/locale/ms/emails.po
++++ b/locale/ms/emails.po
+@@ -128,6 +128,18 @@
+ "sesuai untuk jurnal ini, sila tolak penyerahan.</p><p>Terima kasih terlebih "
+ "dahulu.</p><p>Sekian,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p> {$recipientName} yang dihormati,</p><p>Serahan berikut telah diberikan "
++"kepada anda untuk melihat melalui proses editorial.</p><p><a href="
++"\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</"
++"p><p><b>Abstrak</b></p>{$submissionAbstract}<p>Jika anda mendapati "
++"penyerahan itu relevan untuk {$contextName}, sila majukan penyerahan ke "
++"peringkat semakan dengan memilih \"Hantar ke Semakan\" dan kemudian tetapkan "
++"penyemak dengan mengklik \"Tambah Penyemak\".</p><p>Jika penyerahan tidak "
++"sesuai untuk jurnal ini, sila tolak penyerahan.</p><p>Terima kasih terlebih "
++"dahulu.</p><p>Sekian,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p> {$recipientName} yang dihormati,</p><p>Serahan berikut telah diberikan "
+--- a/locale/nb_NO/emails.po
++++ b/locale/nb_NO/emails.po
+@@ -134,6 +134,18 @@
+ "innleveringen ikke passer til dette tidsskriftet, så avvis innleveringen.</"
+ "p><p>På forhånd takk.</p><p>Med vennlig hilsen</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Kjære {$recipientName}</p><p>Du er blitt tildelt det følgende "
++"manuskriptet, som du skal følge gjennom den redaksjonelle prosessen. </"
++"p><p><a href=\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</"
++"p><p><b>Sammendrag</b></p>{$submissionAbstract}\n"
++"<p>Hvis du mener at manuskriptet er relevant for {$contextName}, så send det "
++"videre til vurdering ved å klikke på \"Send til fagfellevurdering\" og "
++"oppnevn fagfeller ved å klikke på \"Legg til fagfelle\".</p><p>Hvis "
++"innleveringen ikke passer til dette tidsskriftet, så avvis innleveringen.</"
++"p><p>På forhånd takk.</p><p>Med vennlig hilsen</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Kjære {$recipientName},</p><p> Følgende innlevering er tildelt deg for "
+--- a/locale/nl/emails.po
++++ b/locale/nl/emails.po
+@@ -132,6 +132,19 @@
+ "<br />\n"
+ "Dank u, </p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"{$recipientName}:<br />\n"
++"<br />\n"
++"De inzending &quot;{$submissionTitle}&quot; voor {$contextName} is aan u "
++"toegewezen om in uw rol als sectieredacteur door het redactieproces te "
++"leiden.<br />\n"
++"<br />\n"
++"URL inzending: {$submissionUrl}<br />\n"
++"Gebruikersnaam: {$recipientUsername}<br />\n"
++"<br />\n"
++"Dank u, </p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Beste{$recipientName},</p><p>De volgende inzending is aan u toegwezen "
+--- a/locale/pl/emails.po
++++ b/locale/pl/emails.po
+@@ -136,6 +136,20 @@
+ "odpowiednie dla czasopisma, proszę je odrzucić.</p><p>Z góry "
+ "dziękuję.</p><p>Pozdrawiam,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Szanowna Pani/Szanowny Panie,</p><p>Następujące zgłoszenie do czasopisma "
++"{$contextName} zostało przydzielone Pani/Panu do przeprowadzenia przez "
++"wszystkie etapy procesu redakcyjnego.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Abstrakt</b></p>{$submissionAbstract}<p>Jeżeli jako "
++"redaktor prowadzący uzna Pani/Pan to zgłoszenie jako istotne dla czasopisma, "
++"to proszę przekazać je do etapu recenzji (należy kliknąć <b>Wyślij do "
++"recenzji</b>), a następnie przydzielić mu recenzentów (należy kliknąć "
++"<b>Dodaj recenzenta</b>). W przypadku uznania zgłoszenia jako nie "
++"odpowiednie dla czasopisma, proszę je odrzucić.</p><p>Z góry "
++"dziękuję.</p><p>Pozdrawiam,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Szanowna Pani / Szanowny Panie,</p><p>Zostało przypisane Ci "
+--- a/locale/ps/emails.po
++++ b/locale/ps/emails.po
+@@ -134,6 +134,18 @@
+ "دې ژورنال لپاره مناسبې نه وي، مهرباني وکړئ سپارښتنې رد کړئ.</p><p>مخکې له "
+ "مخکې مننه.</p><p>مهرباني وکړئ،</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>ګرانه {$recipientName}،</p><p>لاندې سپارښتنې تاسو ته سپارل شوې دي ترڅو د "
++"اداریې پروسې له لارې وګورئ.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Abstract</b></p>{$submissionAbstract}<p>که تاسو "
++"سپارښتنې د {$contextName} لپاره اړونده ومومئ، مهرباني وکړئ سپارښتنې د "
++"\"بیاکتنې ته لیږل\" غوره کولو سره د بیاکتنې مرحلې ته واستوئ او بیا د "
++"\"بیاکتونکي اضافه کړئ\" کلیک کولو سره بیاکتونکي وټاکئ.</p><p>که سپارښتنې د "
++"دې ژورنال لپاره مناسبې نه وي، مهرباني وکړئ سپارښتنې رد کړئ.</p><p>مخکې له "
++"مخکې مننه.</p><p>مهرباني وکړئ،</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>ګرانه {$recipientName}،</p><p>لاندې سپارښتنې تاسو ته سپارل شوې دي ترڅو د "
+--- a/locale/pt/emails.po
++++ b/locale/pt/emails.po
+@@ -127,6 +127,18 @@
+ "para esta revista, rejeite a submissão.</p><p>Agradecendo desde já a sua "
+ "atenção.</p><p>Atentamente,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Caro{$recipientName},</p><p>A seguinte submissão foi-lhe atribuída para "
++"acompanhar o processo editorial.</p><p><a href="
++"\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</"
++"p><p><b>Abstract</b></p>{$submissionAbstract}<p>Se considerar que a "
++"submissão é relevante para {$contextName}, reencaminhe-a para a etapa de "
++"revisão selecionando \"Enviar para Revisão\" e depois designando revisores "
++"ao clicar em \"Adicionar Revisor\"</p><p>Se a submissão não for apropriada "
++"para esta revista, rejeite a submissão.</p><p>Agradecendo desde já a sua "
++"atenção.</p><p>Atentamente,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Caro(a) {$recipientName},</p><p>a seguinte submissão foi-lhe atribuída "
+--- a/locale/pt_BR/emails.po
++++ b/locale/pt_BR/emails.po
+@@ -134,6 +134,18 @@
+ "periódico, recuse a submissão.</p><p>Agradecemos antecipadamente.</p> "
+ "<p>Atenciosamente,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Prezado(a) {$recipientName},</p><p>A seguinte submissão foi designado a "
++"você para acompanhar o processo editorial.</p><p><a href="
++"\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</p><p><b>Resumo</"
++"b></p>{$submissionAbstract}<p>Se você achar que a submissão é relevante para "
++"o periódico {$contextName}, encaminhe para a etapa de avaliação selecionando "
++"\"Enviar para Avaliação \" e, em seguida, atribua avaliadores clicando em "
++"\"Adicionar Avaliador\".</p><p>Se a submissão não for apropriada para este "
++"periódico, recuse a submissão.</p><p>Agradecemos antecipadamente.</p> "
++"<p>Atenciosamente,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Prezado(a) {$recipientName},</p><p>a seguinte submissão foi atribuída a "
+--- a/locale/ro/emails.po
++++ b/locale/ro/emails.po
+@@ -133,6 +133,20 @@
+ "<br />\n"
+ "Mulțumesc."
+ 
++#, fuzzy
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"{$recipientName}:<br />\n"
++"<br />\n"
++"Manuscrisul, &quot;{$submissionTitle},&quot; înregistrat la {$contextName} v-"
++"a fost atribuit pentru a coordona procesul editorial ca editor de secțiune."
++"<br />\n"
++"<br />\n"
++"URL înregistrare manuscris: {$submissionUrl}<br />\n"
++"Utilizator: {$recipientUsername}<br />\n"
++"<br />\n"
++"Mulțumesc."
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ 
+--- a/locale/ru/emails.po
++++ b/locale/ru/emails.po
+@@ -131,6 +131,18 @@
+ "материал не подходит для этого журнала, пожалуйста отклоните его.</"
+ "p><p>Заранее благодарю.</p><p>С уважением,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Здравствуйте, {$recipientName}!</p><p>Вам поручен контроль прохождения "
++"через редакционный процесс следующего материала:</p><p><a href="
++"\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</"
++"p><p><b>Аннотация</b></p>{$submissionAbstract}<p>Если Вы считаете, что "
++"данный материал соответствует тематике журнала «{$contextName}», пожалуйста, "
++"направьте его на этап рецензирования, выбрав «Отправить на рецензию», а "
++"затем назначив рецензентов, щелкнув на «Добавить рецензента».</p><p>Если "
++"материал не подходит для этого журнала, пожалуйста отклоните его.</"
++"p><p>Заранее благодарю.</p><p>С уважением,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Здравствуйте, {$recipientName}!</p><p>Вам поручен контроль прохождения "
+--- a/locale/sk/emails.po
++++ b/locale/sk/emails.po
+@@ -129,6 +129,20 @@
+ "<br />\n"
+ "Ďakujeme."
+ 
++#, fuzzy
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"{$recipientName}:<br />\n"
++"<br />\n"
++"Bol Vám pridelený príspevok &quot;{$submissionTitle}&quot; do "
++"{$contextName}, aby ste s ním v úlohe editora sekcie prešiel redakčným "
++"spracovaním.<br />\n"
++"<br />\n"
++"URL príspevku: {$submissionUrl}<br />\n"
++"Používateľské meno: {$recipientUsername}<br />\n"
++"<br />\n"
++"Ďakujeme."
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ 
+--- a/locale/sl/emails.po
++++ b/locale/sl/emails.po
+@@ -126,6 +126,18 @@
+ "ga prosim zavrnite.</p><p>Hvala že vnaprej.</p><p>S "
+ "spoštovanjem,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Spoštovani {$recipientName},</p><p>Spodnji prispevek vam je bil dodeljen, "
++"da ga vodite skozi uredniški postopek.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Povzetek</b></p>{$submissionAbstract}<p>Če smatrate, "
++"da je prispevek relevanten za revijo {$contextName}, ga prosimo premaknite v "
++"fazo recenzije s klikom na \"Pošlji v recenzijo\" in določite recenzente s "
++"klikom na \"Dodaj recenzenta\".</p><p>Če prispevek ni primeren za to revijo, "
++"ga prosim zavrnite.</p><p>Hvala že vnaprej.</p><p>S "
++"spoštovanjem,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Spoštovani {$recipientName},</p><p>Spodnji prispevek vam je bil dodeljen, "
+--- a/locale/sr_Latn/emails.po
++++ b/locale/sr_Latn/emails.po
+@@ -127,6 +127,18 @@
+ "časopis, molimo Vas da ga odbijete.</p><p>Hvala unapred.</p><p>Srdačan "
+ "pozdrav,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Poštovani/a {$recipientName},</p><p>Sledeći podnesak Vam je dodeljen za "
++"vođenje kroz urednički proces.</p><p><a href=\"{$submissionUrl}\""
++">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Apstrakt</b></p>{$submissionAbstract}<p>Ako smatrate "
++"da je podnesak relevantan za časopis {$contextName}, prosledite ga u fazu "
++"recenzije izborom opcije „Pošalji na recenziju”, a zatim dodelite recenzente "
++"klikom na „Dodaj recenzenta”.</p><p>Ako podnesak nije odgovarajući za ovaj "
++"časopis, molimo Vas da ga odbijete.</p><p>Hvala unapred.</p><p>Srdačan "
++"pozdrav,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Poštovani/a {$recipientName},</p><p>Sledeći podnesak Vam je dodeljen za "
+--- a/locale/sv/emails.po
++++ b/locale/sv/emails.po
+@@ -127,6 +127,17 @@
+ "för tidskriften kan du avslå det. </p><p>Tack på förhand.</p><p>Vänliga "
+ "hälsningar,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Hej{$recipientName},</p><p>Du har tilldelats uppdraget att föra följande "
++"bidrag genom den redaktionella processen.</p><p><a href="
++"\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</p><p>Om du "
++"finner bidraget relevant för {$contextName} kan du skicka den vidare till "
++"granskning genom att välja \"Skicka till granskning\" och lägga till "
++"granskare med \"Lägg till granskare\".</p><p>Om inte bidraget är lämpligt "
++"för tidskriften kan du avslå det. </p><p>Tack på förhand.</p><p>Vänliga "
++"hälsningar,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Hej {$recipientName},</p><p>Du har tilldelats uppdraget att föra följande "
+--- a/locale/th/emails.po
++++ b/locale/th/emails.po
+@@ -463,6 +463,16 @@
+ "</p><p>หากบทความไม่เหมาะสมกับวารสารนี้ โปรดปฏิเสธบทความ</p><p>ขอขอบคุณล่วงหน้"
+ "า</p><p>ขอแสดงความนับถือ</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>เรียน {$recipientName}</p><p>บทความต่อไปนี้ได้รับมอบหมายให้คุณดูแลตลอดกระบ"
++"วนการบรรณาธิการ</p><p><a href=\"{$submissionUrl}\">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>บทคัดย่อ</b></p>{$submissionAbstract}<p>หากเห็นว่าบทควา"
++"มนี้เหมาะสมกับ {$contextName} โปรดส่งบทความเข้าสู่ขั้นตอนการประเมินโดยเลือก "
++"\"ส่งเพื่อประเมิน\" จากนั้นมอบหมายผู้ประเมินโดยคลิก \"เพิ่มผู้ประเมิน\""
++"</p><p>หากบทความไม่เหมาะสมกับวารสารนี้ โปรดปฏิเสธบทความ</p><p>ขอขอบคุณล่วงหน้"
++"า</p><p>ขอแสดงความนับถือ</p>{$signature}"
++
+ msgid "emails.editorAssignProduction.body"
+ msgstr ""
+ "<p>เรียน {$recipientName}</p><p>บทความต่อไปนี้ได้รับมอบหมายให้คุณดูแลในขั้นตอ"
+--- a/locale/tr/emails.po
++++ b/locale/tr/emails.po
+@@ -140,6 +140,20 @@
+ "<p>Saygılarımızla,</p>\n"
+ "{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Sayın {$recipientName},</p>\n"
++"<p>Aşağıdaki gönderi, editoryal süreci yürütmeniz için size atanmıştır.</p>\n"
++"<p><a href=\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</p>\n"
++"<p><b>Özet</b></p>{$submissionAbstract}\n"
++"<p>Gönderiyi {$contextName} için uygun bulursanız, lütfen \"İncelemeye "
++"Gönder\" seçeneğini tıklayarak inceleme aşamasına iletin ve ardından \"Hakem "
++"Ekle\" seçeneğini tıklayarak hakem atayın.</p>\n"
++"<p>Eğer gönderi bu dergi için uygun değilse, lütfen gönderiyi reddedin.</p>\n"
++"<p>Şimdiden teşekkür ederiz.</p>\n"
++"<p>Saygılarımızla,</p>\n"
++"{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Sayın {$recipientName},</p> <p>Aşağıdaki aday makaleyi size değerlendirme "
+--- a/locale/uk/emails.po
++++ b/locale/uk/emails.po
+@@ -128,6 +128,18 @@
+ "p><p>Якщо подання не підходить для цього журналу, будь ласка, відхиліть "
+ "подання.</p><p>Заздалегідь дякую.</p><p>З повагою,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Шановний(-а) {$recipientName}!</p><p>Вам призначено наступне подання для "
++"проведення через редакційний процес.</p><p><a href=\"{$submissionUrl}\">\""
++"{$submissionTitle}\"</a><br "
++"/>{$authors}</p><p><b>Анотація</b></p>{$submissionAbstract}<p>Якщо Ви "
++"вважаєте, що подання є релевантним для \"{$contextName}\", будь ласка, "
++"перешліть його на стадію рецензування, вибравши \"Надіслати до рецензування\""
++", а потім призначте рецензентів, натиснувши \"Додати рецензента\".</"
++"p><p>Якщо подання не підходить для цього журналу, будь ласка, відхиліть "
++"подання.</p><p>Заздалегідь дякую.</p><p>З повагою,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Шановний(-а) {$recipientName}!</p><p>Вам призначено наступне подання для "
+--- a/locale/uz_Latn/emails.po
++++ b/locale/uz_Latn/emails.po
+@@ -138,6 +138,18 @@
+ "mos kelmasa, taqdim etishni rad eting.</p><p>Oldindan rahmat.</p> <p>Hurmat "
+ "bilan,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>Hurmatli {$recipientName},</p><p>Quyidagi xabar tahririyat jarayonini "
++"ko‘rish uchun sizga topshirildi.</p><p><a href="
++"\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</p><p>Agar siz "
++"taqdim etgan xabarni {$contextName} uchun mos deb topsangiz, iltimos, "
++"\"Koʻrib chiqishga yuborish\" tugmasini bosib, uni koʻrib chiqish bosqichiga "
++"yoʻnaltiring. \" va keyin \"Tarzchi qo'shish\" tugmasini bosish orqali "
++"sharhlovchilarni tayinlang.</p><p>Agar taqdim etilgan maqola ushbu jurnalga "
++"mos kelmasa, taqdim etishni rad eting.</p><p>Oldindan rahmat.</p> <p>Hurmat "
++"bilan,</p>{$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ 
+--- a/locale/vi/emails.po
++++ b/locale/vi/emails.po
+@@ -134,6 +134,19 @@
+ "<br />\n"
+ "Trân trọng."
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"Kính gửi {$recipientName},<br />\n"
++"<br />\n"
++"Bài gửi, &quot;{$submissionTitle},&quot; của {$contextName} đã được phân "
++"công cho bạn để xem qua quy trình biên tập với vai trò là Biên tập viên "
++"chuyên mục.<br />\n"
++"<br />\n"
++"URL bài gửi: {$submissionUrl}<br />\n"
++"Username: {$recipientUsername}<br />\n"
++"<br />\n"
++"Trân trọng."
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>Kính gửi {$recipientName},</p><p>Bài gửi sau đây đã được giao cho bạn để "
+--- a/locale/zh_Hans/emails.po
++++ b/locale/zh_Hans/emails.po
+@@ -114,6 +114,16 @@
+ "添加审稿人”来分配审稿人。</p> <p>如果该稿件不适合本期刊，请拒绝该提交。</p> "
+ "<p>感谢您的配合。</p> <p>此致，</p> {$contextSignature}"
+ 
++msgid "emails.editorAssignSubmission.body"
++msgstr ""
++"<p>尊敬的 "
++"{$recipientName},</p><p>以下提交稿件已分配给您，需您完成编辑流程。</p> <p><a "
++"href=\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</p> "
++"<p><b>摘要</b></p> {$submissionAbstract} <p>如果您认为该提交稿件符合 "
++"{$contextName} 的要求，请通过选择“发送至审稿”将稿件推进到审稿阶段，然后点击“"
++"添加审稿人”来分配审稿人。</p> <p>如果该稿件不适合本期刊，请拒绝该提交。</p> "
++"<p>感谢您的配合。</p> <p>此致，</p> {$signature}"
++
+ msgid "emails.editorAssignReview.body"
+ msgstr ""
+ "<p>尊敬的 "
+--- a/registry/taskTemplates.xml
++++ b/registry/taskTemplates.xml
+@@ -15,7 +15,7 @@
+ 	<template title="mailable.discussionCopyediting.name" description="emails.discussion.body" key="DISCUSSION_NOTIFICATION_COPYEDITING" stageId="WORKFLOW_STAGE_ID_EDITING"/>
+ 	<template title="mailable.discussionProduction.name" description="emails.discussion.body" key="DISCUSSION_NOTIFICATION_PRODUCTION" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
+ 	<template title="mailable.copyeditRequest.name" description="emails.copyeditRequest.body" key="COPYEDIT_REQUEST" stageId="WORKFLOW_STAGE_ID_EDITING"/>
+-	<template title="mailable.editorAssignedManual.name" description="emails.editorAssign.body" key="EDITOR_ASSIGN_SUBMISSION" stageId="WORKFLOW_STAGE_ID_SUBMISSION"/>
++	<template title="mailable.editorAssignedManual.name" description="emails.editorAssignSubmission.body" key="EDITOR_ASSIGN_SUBMISSION" stageId="WORKFLOW_STAGE_ID_SUBMISSION"/>
+ 	<template title="mailable.editorAssignedManual.name" description="emails.editorAssignReview.body" key="EDITOR_ASSIGN_REVIEW" stageId="WORKFLOW_STAGE_ID_EXTERNAL_REVIEW"/>
+ 	<template title="mailable.editorAssignedManual.name" description="emails.editorAssignProduction.body" key="EDITOR_ASSIGN_PRODUCTION" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
+ 	<template title="mailable.layoutRequest.name" description="emails.layoutRequest.body" key="LAYOUT_REQUEST" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>

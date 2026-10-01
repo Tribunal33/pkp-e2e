@@ -1,0 +1,144 @@
+--- a/locale/bg/emails.po
++++ b/locale/bg/emails.po
+@@ -196,6 +196,18 @@
+ "p><p>Благодарим ви предварително.</p><p>Сърдечни "
+ "поздрави,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignProduction.body"
++msgstr ""
++"<p>Уважаема/и {$recipientName},</p><p>Следният препринт ви е възложен, за да "
++"прегледате процеса на проверка в ролята си на модератор.</p><p><a href=\""
++"{$submissionUrl}\">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Резюме</b></p>{$submissionAbstract}<p>Моля, влезте в "
++"<a href=\"{$submissionUrl}\">вижте препринта</a>. Използвайте раздела "
++"Дискусии, за да се свържете с автора, ако имате въпроси. Моля, публикувайте "
++"препринта, след като се уверите, че отговаря на всички изисквания.</"
++"p><p>Благодарим ви предварително.</p><p>Сърдечни "
++"поздрави,</p>{$signature}"
++
+ msgid "emails.editorDecisionAccept.body"
+ msgstr ""
+ "<p>Уважаема/и {$recipientName},</p><p>Имам удоволствието да ви информирам, "
+--- a/locale/cs/emails.po
++++ b/locale/cs/emails.po
+@@ -44,6 +44,17 @@
+ "preprint splňuje všechny požadavky, zveřejněte jej.</p><p>Předem děkujeme.</"
+ "p><p>S pozdravem,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignProduction.body"
++msgstr ""
++"<p>Vážený/á {$recipientName},</p><p>Následující preprint vám byl přidělen, "
++"abyste v roli moderátora prošli procesem prověřování.</p><p><a href=\""
++"{$submissionUrl}\">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Abstrakt</b></p>{$submissionAbstract}<p>Přihlaste se, "
++"prosím, <a href=\"{$submissionUrl}\">k zobrazení preprintu</a>. V případě "
++"dotazů můžete autora kontaktovat v sekci Diskuze. Jakmile se přesvědčíte, že "
++"preprint splňuje všechny požadavky, zveřejněte jej.</p><p>Předem děkujeme.</"
++"p><p>S pozdravem,</p>{$signature}"
++
+ msgid "emails.editorDecisionAccept.subject"
+ msgstr "Váš příspěvek byl předán k moderování v rámci {$contextName}"
+ 
+--- a/locale/de/emails.po
++++ b/locale/de/emails.po
+@@ -144,6 +144,18 @@
+ "Ihrer Meinung nach alle Anforderungen erfüllt.</p><p>Danke im Voraus.</"
+ "p><p>Mit freundlichen Grüßen</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignProduction.body"
++msgstr ""
++"<p>Guten Tag {$recipientName},</p><p>die folgende Einreichung wurde Ihnen "
++"zugewiesen, um in Ihrer Rolle als Moderator/in den Screening-Prozess zu "
++"durchlaufen.</p><p><a href=\"{$submissionUrl}\">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Abstract</b></p>{$submissionAbstract}<p>Bitte melden "
++"Sie sich an, um den<a href=\"{$submissionUrl}\">Preprint zu betrachten</a>. "
++"Benutzen Sie den Diskussionsbereich, um den/die Autor/in zu kontaktieren, "
++"falls Sie Fragen haben. Bitte veröffentlichen Sie den Preprint, sobald er "
++"Ihrer Meinung nach alle Anforderungen erfüllt.</p><p>Danke im Voraus.</"
++"p><p>Mit freundlichen Grüßen</p>{$signature}"
++
+ #, fuzzy
+ msgid "emails.editorDecisionAccept.subject"
+ msgstr "Moderator Entscheidung"
+--- a/locale/en/emails.po
++++ b/locale/en/emails.po
+@@ -146,6 +146,17 @@
+ "you are satisfied that it meets all requirements.</p><p>Thank you in advance."
+ "</p><p>Kind regards,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignProduction.body"
++msgstr ""
++"<p>Dear {$recipientName},</p><p>The following preprint has been assigned to "
++"you to see through the screening process in your role as Moderator.</p><p><a "
++"href=\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</"
++"p><p><b>Abstract</b></p>{$submissionAbstract}<p>Please login to <a href="
++"\"{$submissionUrl}\">view the preprint</a>. Use the Discussions section to "
++"contact the author if you have any questions. Please post the preprint once "
++"you are satisfied that it meets all requirements.</p><p>Thank you in advance."
++"</p><p>Kind regards,</p>{$signature}"
++
+ msgid "emails.editorDecisionAccept.subject"
+ msgstr "Your submission has passed moderation at {$contextName}"
+ 
+--- a/locale/mk/emails.po
++++ b/locale/mk/emails.po
+@@ -143,6 +143,18 @@
+ "исполнува сите барања.</p><p>Ви благодариме однапред.</p><p>Топли "
+ "поздрави,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignProduction.body"
++msgstr ""
++"<p>Драг{$recipientName},</p><p>Следниов препринт ви е доделен Вам да го "
++"проследите низ процесот на проверка во вашата улога како модератор.</p><p><a "
++"href=\"{$submissionUrl}\">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Абстракт</b></p>{$submissionAbstract}<p>Ве молиме "
++"логирајте се во <a href=\"{$submissionUrl}\">погледнете го препринтот</a>. "
++"Користете го Одделот за дискусии за да го контактирате авторот доколку имате "
++"било какви прашања.Ве молиме објавете го препринтот кога ќе сметате дека ги "
++"исполнува сите барања.</p><p>Ви благодариме однапред.</p><p>Топли "
++"поздрави,</p>{$signature}"
++
+ msgid "emails.editorDecisionAccept.subject"
+ msgstr "Вашето поднесување помина модерација на {$contextName}"
+ 
+--- a/locale/pt_BR/emails.po
++++ b/locale/pt_BR/emails.po
+@@ -141,6 +141,17 @@
+ "dúvida. Por favor, poste o preprint uma vez que estiver cumprindo todos os "
+ "requisitos.</p><p>Obrigado.</p><p>Atenciosamente,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignProduction.body"
++msgstr ""
++"<p>Prezado(a) {$recipientName},</p><p>O preprint a seguir lhe foi designado "
++"com o papel de Moderador para que seja feita sua moderação.</p><p><a href=\""
++"{$submissionUrl}\">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Resumo</b></p>{$submissionAbstract}<p>Por favor, faça "
++"login para <a href=\"{$submissionUrl}\">visualizar o preprint</a>. Use a "
++"seção Discussões para entrar em contato com o(a) autor(a) caso tenha alguma "
++"dúvida. Por favor, poste o preprint uma vez que estiver cumprindo todos os "
++"requisitos.</p><p>Obrigado.</p><p>Atenciosamente,</p>{$signature}"
++
+ msgid "emails.editorDecisionAccept.subject"
+ msgstr "Decisão do moderador"
+ 
+--- a/locale/uk/emails.po
++++ b/locale/uk/emails.po
+@@ -226,6 +226,18 @@
+ "задовольняє усім вимогам.</p><p>Дякую.</p><p>Усього "
+ "найкращого,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignProduction.body"
++msgstr ""
++"<p>Шановний{$recipientName},</p><p>Препринт призаченоВам для того, щоб "
++"провести процес скрінінгу у якості модератора.</p><p><a href=\""
++"{$submissionUrl}\">{$submissionTitle}</a><br "
++"/>{$authors}</p><p><b>Анотація</b></p>{$submissionAbstract}<p>Будь ласка "
++"авторизуйтесь для <a href=\"{$submissionUrl}\">перегляду препринту</a>. "
++"Використовуйте секцію Дискусій для комунікації з автором, якщо маєте "
++"запитання. Будь ласка розміщуйте препринт коли впевнились, що він "
++"задовольняє усім вимогам.</p><p>Дякую.</p><p>Усього "
++"найкращого,</p>{$signature}"
++
+ msgid "emails.editorDecisionAccept.body"
+ msgstr ""
+ "<p>Шановний {$recipientName},</p><p>я радий повідомити, що модератор вирішив "

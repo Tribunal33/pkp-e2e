@@ -687,7 +687,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | The "Copyedited Files" list's "Upload/Select Files" opens a window titled "Upload Review File" | 🐞 | minor | claim check (claude), 2026-09-18 — holds |
 | [A6](#a6) | A submission accepted without review, or on a press from Internal Review, never shows its editors the "Assign a copyeditor" notice | 🐞 | minor | claim check (claude), 2026-09-28 — widened: a press's internal "Accept Submission" too; "Awaiting Copyedits." still comes |
 | [A7](#a7) | Deleting the last copyedited file brings no notice back | 🐞 | minor | — |
-| [A9](#a9) | The discussion opened by the "Request Copyedit" message is listed as created by the Copyeditor | 🐞 | minor | — |
+| [A9](#a9) | The discussion opened by the "Request Copyedit" message is listed as created by the Copyeditor | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | The page "Move to Review" opens is headed "Move to Submission", also on a submission going back to review | 🐞 | minor | — |
 | [A1](#a1) | "Move to Review" sends a submission accepted without review back to the Submission stage; the decision page says so, the button and the author's email still say review | ❓ | user-visible | claim check (claude), 2026-09-26 — reworded: the decision page now names the Submission stage |
 | [A3](#a3) | The "Assign a copyeditor" notice flips on a discussion, not on the assignment | ❓ | minor | claim check (claude), 2026-09-18 — holds |
@@ -813,7 +813,7 @@ stays.
 Basis: probe. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
-**A9 — The "Request Copyedit" discussion is listed under the Copyeditor's name** · 🐞 · minor.
+**A9 — The "Request Copyedit" discussion is listed under the Copyeditor's name** · 🐞 · low.
 The discussion the "Assign" form's message opens is listed on "Copyediting
 Tasks & Discussions" as "Discussion Request Copyedit Created by: {the
 Copyeditor's username}", with no "Discussion created by … on …" line,
@@ -822,7 +822,7 @@ although the editor wrote and sent it; the Copyeditor's own Tasks row says
 editor adds by hand from the panel names the editor in both places. The
 panel is *Tasks & discussions*'; the form that sends the message is this
 stage's.
-Basis: probe. <sup>[f-a9](#fn-a9)</sup>
+Basis: probe, 2026-10-01. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
 **A10 — A role's last stage cannot be unticked, and the form says saved** · ❓ · minor.
@@ -1006,6 +1006,7 @@ f-a11, f-a12, f-a13).
 
 <a id="fn-a9"></a>
 **f-a9** — `PKPStageParticipantNotifyForm::sendMessage()` creates the `EditorialTask` with `'createdBy' => $user->getId()`, where `$user` is the message's recipient, and adds the recipient and the sender as participants; the panel's row prints `createdBy`, and the row's "Discussion created by … on …" line is absent for it. Live-probed 2026-09-18 on OJS and OMP: the row "Discussion Request Copyedit Created by: {the Copyeditor's username}" after the editor's "Assign" with the "Request Copyedit" message, against the editor's own "Add" discussion listed as "Created by: {editor} Discussion created by {editor} ({role}) on {date}"; the Copyeditor's Tasks row "{editor} started a discussion: Request Copyedit: …".
+Issue report (with U35 A5): [docs/issues/U35-A5-message-discussion-created-by-recipient.md](../issues/U35-A5-message-discussion-created-by-recipient.md).
 
 <a id="fn-a10"></a>
 **f-a10** — `lib/pkp/controllers/grid/settings/roles/form/UserGroupForm.php::execute()`: the stages are rewritten by `_assignStagesToUserGroup()` only inside `if ($assignedStages)`, so a form saved with every box clear leaves the stored stages untouched while the grid answers "Your changes have been saved."; `getAlwaysActiveStages()` (`ROLE_ID_MANAGER`) explains the manager row's missing "Edit". Live-probed 2026-09-19 on OJS and OMP: the Copyeditor role with Copyediting as its only stage, unticked and saved, twice; the same with Production as the only stage; the form reopened with the box ticked each time; unticking Copyediting while ticking Production saved.

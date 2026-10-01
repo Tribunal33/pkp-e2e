@@ -913,6 +913,14 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A15 (issue report
+    `docs/issues/U35-A15-assign-editor-email-two-footers.md`):
+    the Submission stage's "Assign Editor" letter ending with the
+    sender's signature and the discussion footer alone
+  - the guard for A5 (issue report
+    `docs/issues/U35-A5-message-discussion-created-by-recipient.md`):
+    after "Notify" the discussions panel's row reading "Created by:"
+    the sender
   - the guard for A9 (issue report
     `docs/issues/U35-A9-permissions-tick-carries-to-other-role.md`):
     in "Assign Participant" a Section Editor chosen, then the role
@@ -1003,7 +1011,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | A Section Editor's "OK" on a participant's "Edit Assignment" saves nothing and shows the form again | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A message typed in "Assign" or "Notify" with no predefined message chosen is not sent | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | "OK" on "Assign Participant" with nobody chosen, or with a person from the previous role's list, assigns nobody and gives no reason | 🐞 | minor | — |
-| [A5](#a5) | The discussion a message opens is listed as created by the person it was sent to | 🐞 | minor | — |
+| [A5](#a5) | A message sent from "Notify" or "Assign" opens a discussion listed as created by its recipient | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | "Assign Editor" gives the new editor no task, unlike the other request messages | 🐞 | minor | — |
 | [A7](#a7) | "Edit" is logged as a new assignment | 🐞 | minor | — |
 | [A9](#a9) | In "Assign Participant", the "Permissions" box stays ticked after the editor chooses another role | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1011,7 +1019,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | No warning opens when an editor assigns, as a participant, a person who reviews the submission anonymously | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | "OK" on the "No changes can be made to this participant" window reports "The stage assignment has been changed." | 🐞 | minor | — |
 | [A14](#a14) | The Activity Log's "User" column names the participant, not the editor who assigned, changed or removed them | 🐞 | minor | — |
-| [A15](#a15) | The Submission stage's "Assign Editor" email ends with two footers | 🐞 | minor | — |
+| [A15](#a15) | The Submission stage's "Assign Editor" message ends "This is an automated message from…" instead of the editor's signature | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | A message sent with "Notify" is emailed to a participant who opted out of emails for new discussions | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS1](#ojs1) | The automatic assignment email tells the editor to select "Send to Review"; the button reads "Send for Review" | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's Internal Review offers no predefined message in "Assign" and "Notify" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1081,13 +1089,24 @@ role (another role chosen without "Search", Rule 3).
 Basis: probe. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
-**A5 — The discussion is listed under the recipient's name** · 🐞 · minor.
-A message sent from "Assign" or "Notify" opens a discussion that the
-stage's discussions panel lists as "Created by: {the person it was sent
-to}", while the discussion's first entry and the recipient's task name
-the sender. The Copyediting stage's instance of this is that spec's
+**A5 — A message sent from "Notify" or "Assign" opens a discussion listed as created by its recipient** · 🐞 · low.
+A message sent from "Assign" or "Notify" opens a discussion, and the
+person it was sent to is recorded as its creator: the stage's
+discussions panel lists it as "Created by: {the person it was sent
+to}". The discussion's first entry and the recipient's task name the
+sender.
+The message, the email and the task arrive as written. To see who
+started a discussion, a reader has to open it. The fix is small: one
+line, where the discussion is created, takes the sender instead of the
+recipient.
+Every predefined message sent from the Participants panel is affected,
+in every stage. A preprint server has two of them, "Discussion
+(Production)" and "Assign Editor"; "Request Copyedit" exists on a
+journal and a press only. A discussion added with the panel's "Add"
+names the person who added it.
+The Copyediting stage's instance of this is that spec's
 [finding](U32-copyediting-stage.md#a9).
-Basis: probe. <sup>[f-a5](#fn-a5)</sup>
+Basis: probe, 2026-10-01. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
 **A6 — "Assign Editor" gives no task** · 🐞 · minor.
@@ -1207,14 +1226,28 @@ the sender.
 Basis: probe. <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
-**A15 — Two footers on the "Assign Editor" email** · 🐞 · minor.
-The email the Submission stage's "Assign Editor" message sends ends with
-the letter's own "— This is an automated message from {journal name}."
-followed by the discussion footer "— Reply to this comment at
-#{submission number} {authors} or unsubscribe from emails sent by {journal
-name}.". The Review and Production stages' "Assign Editor" emails end with
-the discussion footer alone.
-Basis: probe. <sup>[f-a15](#fn-a15)</sup>
+**A15 — The Submission stage's "Assign Editor" message ends "This is an automated message from…" instead of the editor's signature** · 🐞 · low.
+An editor who assigns a participant on the Submission stage and chooses
+the predefined message "Assign Editor" sends a letter that closes, after
+"Kind regards,", with "— This is an automated message from {journal
+name}." where the editor's own signature is expected. The discussion
+footer that follows it ("— Reply to this comment at #{submission
+number} {authors} or unsubscribe from emails sent by {journal name}.")
+is expected; only the "automated message" line is wrong, and with it
+the email ends with two footers.
+The letter opens a discussion the recipient can reply to, yet it says
+it is automated and names nobody. The line is the journal's or press's
+email signature: one that changed its signature under Settings gets its
+own signature there, which is still not the editor's. The Review and
+Production stages' "Assign Editor" letters close with the sender's
+signature.
+The wrong text is stored per journal or press when it is installed, so
+a fix corrects new installs only; an existing one keeps the line until
+a manager edits the message under Settings › Workflow. The fix is
+medium because it changes each app's own files and adds a text in every
+language. A preprint server installed on `main` has no "Assign Editor"
+letter at all today, a separate fault; one on 3.5 has this one.
+Basis: probe, 2026-10-01. <sup>[f-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
 **A16 — A message sent with "Notify" is emailed to a participant who opted out of emails for new discussions** · 🐞 · low.
@@ -1440,6 +1473,7 @@ Issue report: [pkp-e2e#307](https://github.com/jardakotesovec/pkp-e2e/issues/307
 
 <a id="fn-a5"></a>
 **f-a5** — `PKPStageParticipantNotifyForm::sendMessage()` creates the discussion with `'createdBy' => $user->getId()`, `$user` being the recipient, while the head note's `userId` and the task's sender are the signed-in user. Live-probed 2026-09-18 (Copyediting stage, OJS and OMP): the "Request Copyedit" discussion listed as "Discussion Request Copyedit Created by: {Copyeditor}"; live-probed 2026-09-19 (all three apps, the "Notify" window): the discussion reading "Created by: {the recipient}". Live-probed 2026-09-22 (all three apps, from "Assign" and "Notify"): the panel row "Discussion {name} Created by: {the recipient's username}", the discussion's first entry "Message from {the sender's username}", the recipient's task naming the sender.
+Issue report: [docs/issues/U35-A5-message-discussion-created-by-recipient.md](../issues/U35-A5-message-discussion-created-by-recipient.md).
 
 <a id="fn-a6"></a>
 **f-a6** — Live-probed 2026-09-22 (all three apps): note td6. `sendMessage()`'s `switch ($templateKey)` raises `NOTIFICATION_TYPE_EDITOR_ASSIGN` (`notification.type.editorAssign` "You have been assigned as an editor to the submission "{$title}".") only for the key `EDITOR_ASSIGN`; the installed "Assign Editor" templates carry `EDITOR_ASSIGN_SUBMISSION`, `EDITOR_ASSIGN_REVIEW` and `EDITOR_ASSIGN_PRODUCTION` (`registry/taskTemplates.xml`, keys made mandatory by pkp/pkp-lib#12593, ojs `4157f8331c`, 2026-08-07), so they fall to the default branch, which only logs. No other code raises that task.
@@ -1474,6 +1508,7 @@ Issue report: [pkp-e2e#338](https://github.com/jardakotesovec/pkp-e2e/issues/338
 
 <a id="fn-a15"></a>
 **f-a15** — Live-probed 2026-09-22 (journal and press): the Submission stage's "Assign Editor" email ending "— This is an automated message from {journal name}." and then the discussion footer; the Review and Production letters, and the other messages, with the footer alone. The first closing is part of the template's own text, which the discussion email then adds its footer to (note g).
+Issue report: [docs/issues/U35-A15-assign-editor-email-two-footers.md](../issues/U35-A15-assign-editor-email-two-footers.md).
 
 <a id="fn-a16"></a>
 **f-a16** — Live-probed 2026-09-22 (all three apps): note td7. The email is sent whenever the discussion's task-level notification is created, which follows "Enable these types of notifications." only (note g).
