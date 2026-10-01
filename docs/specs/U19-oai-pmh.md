@@ -1179,6 +1179,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U19-A15-oai-marc-008-date-percent-signs.md`): a journal's
     MARC field 008 carrying the publication date as six digits and the year
     in both MARC formats {OJS} (once fixed)
+  - the guard for A19 (issue report
+    `docs/issues/U19-A19-oai-deleted-section-set-lists-nothing.md`): the set
+    of a section whose "Abbreviation" was changed, or that was deleted,
+    after an article in it was unpublished: asked for, it lists its deleted
+    records {OJS OPS} (once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1305,7 +1310,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | An OAI-PMH request that gives an argument twice gets a server error instead of the refusal message | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | OAI-PMH GetRecord answers a malformed identifier with a record, not "Identifier is not in a valid format" {OMP OPS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A press's or preprint server's OAI record keeps its earlier datestamp after an edit or a second publish {OMP OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A19](#a19) | A deleted section's set is listed, but asking for it lists nothing {OJS OPS} | 🐞 | minor | — |
+| [A19](#a19) | An OAI set left behind by a changed section abbreviation or a deleted section is listed but lists nothing {OJS OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | Asked for a section's set, deleted records ignore `from` and `until` {OJS OPS} | 🐞 | minor | — |
 | [A22](#a22) | Once one journal sets "DOI Versioning" to "Yes", every journal's OAI-PMH requests answer a server error {OJS} | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | The `driver` set lists articles with no galley {OJS} | 🐞 | minor | — |
@@ -1575,13 +1580,21 @@ records also take the date of the published version.
 Basis: probe, 2026-10-01. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — A deleted section's set lists nothing** {OJS OPS} · 🐞 · minor.
-A harvester that finds a set in ListSets expects asking for it to list
-its records. A deleted section stays in ListSets while it holds deleted
-records, but asking for its set answers "No matching records in this
-repository", at the journal's address and the site-wide one, so those
-deleted records never arrive by set.
-Basis: probe, 2026-09-26. <sup>f-a19</sup>
+**A19 — An OAI set left behind by a changed section abbreviation or a deleted section is listed but lists nothing** {OJS OPS} · 🐞 · medium.
+When a section's "Abbreviation" is changed, the deleted records of
+articles unpublished in it before the change can no longer be harvested
+by section. ListSets names two sets for the section, the old identifier
+and the new one. Asking for the old set answers "No matching records in
+this repository", and the new set lists the section's published articles
+without those deleted records. The same happens to the set of a section
+that was deleted after its unpublished article was moved to another
+section: ListSets still names it, and asking for it lists nothing. Both
+show for ListRecords and ListIdentifiers, at the journal's address and
+the site-wide one. A service that harvests by section keeps the
+withdrawn article and is not told. The journal's own set and a list
+without a set do carry the deleted records. A press's series were not
+checked on screen.
+Basis: probe, 2026-10-01. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — A section's set ignores the dates for deleted records** {OJS OPS} · 🐞 · minor.
@@ -1949,6 +1962,7 @@ Issue report: [pkp-e2e#280](https://github.com/jardakotesovec/pkp-e2e/issues/280
 
 <a id="fn-f-a19"></a>
 **f-a19** — Live-probed 2026-09-26, OJS and OPS: note q10. Code: note j.
+Issue report: [docs/issues/U19-A19-oai-deleted-section-set-lists-nothing.md](../issues/U19-A19-oai-deleted-section-set-lists-nothing.md).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Live-probed 2026-09-26, OJS and OPS, two sweep runs: note q11, the last read; `publicknowledge`'s deleted records of the day (OJS 198, 447, 512; OPS 174, 227) were listed for `from=2030-01-01` at its own and the site-wide address. Code: note l.

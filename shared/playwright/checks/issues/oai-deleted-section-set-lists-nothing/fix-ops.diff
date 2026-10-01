@@ -1,0 +1,14 @@
+--- a/classes/oai/ops/OAIDAO.php
++++ b/classes/oai/ops/OAIDAO.php
+@@ -269,7 +269,10 @@
+                     }, function ($query) {
+                         return $query->addSelect([DB::raw('NULL AS server_id')]);
+                     })
+-                    ->when(isset($sectionId), function ($query) use ($sectionId) {
++                    // A set listed from the deleted records alone (its section was deleted, or its
++                    // abbreviation changed since) has a server but no section to join: $sectionId is 0,
++                    // and the set_spec filter below selects its tombstones.
++                    ->when(isset($sectionId) && ($sectionId || !$serverId), function ($query) use ($sectionId) {
+                         return $query->join('data_object_tombstone_oai_set_objects AS tsos', function ($join) use ($sectionId) {
+                             $join->on('tsos.tombstone_id', '=', 'dot.tombstone_id')
+                                 ->where('tsos.assoc_type', '=', Application::ASSOC_TYPE_SECTION)
