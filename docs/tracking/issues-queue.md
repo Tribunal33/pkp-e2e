@@ -17,7 +17,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U63](../specs/U63-import-export.md) | 28 | 9 | 7 | **Taken: issues session, workstation s0, 2026-10-01** |
-| [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 |  |
+| [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s1, 2026-10-01** |
 | [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 |  |
 | [U45](../specs/U45-dois.md) | 23 | 5 | 8 |  |
 | [U19](../specs/U19-oai-pmh.md) | 26 | 5 | 6 |  |
