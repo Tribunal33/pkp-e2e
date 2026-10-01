@@ -1128,6 +1128,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-OPS5-preprint-pdf-reader-return-arrow-raw-key.md`): the PDF
     reader's return arrow on a preprint server announced with a text,
     not "##article.return##" {OPS}
+  - the guard for A7 (Rules 15, 15b; issue report
+    `docs/issues/U13-A7-abnt-citation-runs-text-together.md`): the "ABNT"
+    citation of a preprint and of an article, with a full stop between
+    title and server and a space between month and year
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1267,7 +1271,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A4](#a4) | Preprint lists and a journal's "Latest Publications" show additional files and link a galley with no file ("404 Not Found") | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | An author previewing their unpublished article, book or preprint gets "access denied" from "View submission" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | An older version's browser tab reads the current version's title | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A7](#a7) | "ABNT" runs a preprint's title into the server's name and prints "24 Sept.2026" | 🐞 | minor | — |
+| [A7](#a7) | "ABNT" citation runs a preprint's title into the server's name and prints the date as "30 Sept.2026" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | The RIS file writes its dates with a stray "%" | 🐞 | minor | — |
 | [A9](#a9) | With no additional format ticked, "More Citation Formats" opens nothing and hides the downloads | 🐞 | minor | — |
 | [A10](#a10) | A reference's address in parentheses takes the ")" into its link | 🐞 | minor | — |
@@ -1399,12 +1403,23 @@ version was published under a different title.
 Basis: probe, 2026-10-01. <sup>[f-a6](#fn-f-a6)</sup>
 
 <a id="a7"></a>
-**A7 — "ABNT" citations run text together** · 🐞 · minor.
-In the "ABNT" format a preprint's title and the server's name print back
-to back with nothing between them, and on both apps the date runs the
-month into the year ("24 Sept.2026"). A reader who copies the citation
-has to repair it by hand.
-Basis: probe, 2026-09-25. <sup>[f-a7](#fn-f-a7)</sup>
+**A7 — "ABNT" citation runs a preprint's title into the server's name and prints the date as "30 Sept.2026"** · 🐞 · low.
+In the "ABNT" format under "How to Cite", a preprint's title and the
+preprint server's name are printed with no space or full stop between
+them, and on a journal and a preprint server alike the date runs the
+month into the year ("30 Sept.2026"). A reader who copies the citation
+has to repair it by hand. The citation was punctuated correctly until
+the plugin's "ABNT" style file was replaced in May 2026.
+On a preprint server whose plugin settings have "Publisher Location"
+filled in, the citation also runs the server's name into the place
+("Public Knowledge Preprint ServerLondon, U.K."). A journal's citation
+does not print the place and is not affected by this part.
+It needs the "Citation Style Language" plugin, which is off on a new
+journal or server until a manager turns it on, and a reader who picks
+"ABNT" under "More Citation Formats", or "ABNT" set as the primary
+format. The other ten formats, the two citation downloads and a press's
+"ABNT" citation of a book are not affected.
+Basis: probe, 2026-10-01. <sup>[f-a7](#fn-f-a7)</sup>
 
 <a id="a8"></a>
 **A8 — The RIS file's dates carry a stray "%"** · 🐞 · minor.
@@ -2693,6 +2708,7 @@ Issue report: [pkp-e2e#226](https://github.com/jardakotesovec/pkp-e2e/issues/226
 `<b>{title}</b><b>{server name}</b>, 24 Sept.2026`; the journal's ABNT
 citation has the same "Sept.2026". Both come from the vendored CSL style
 and its locale. Live-probed 2026-09-25, note q11.
+Issue report: [docs/issues/U13-A7-abnt-citation-runs-text-together.md](../issues/U13-A7-abnt-citation-runs-text-together.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note h: `ris.blade`'s `PY` and `Y2` lines (the version's
