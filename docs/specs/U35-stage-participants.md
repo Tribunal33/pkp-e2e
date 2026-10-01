@@ -913,6 +913,10 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A9 (issue report
+    `docs/issues/U35-A9-permissions-tick-carries-to-other-role.md`):
+    in "Assign Participant" a Section Editor chosen, then the role
+    changed to Author and a person chosen, "Permissions" read unticked
   - the guard for A11 (issue report
     `docs/issues/U35-A11-anonymous-reviewer-assign-no-warning.md`):
     a person with an anonymous review of the submission chosen in
@@ -1002,7 +1006,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | The discussion a message opens is listed as created by the person it was sent to | 🐞 | minor | — |
 | [A6](#a6) | "Assign Editor" gives the new editor no task, unlike the other request messages | 🐞 | minor | — |
 | [A7](#a7) | "Edit" is logged as a new assignment | 🐞 | minor | — |
-| [A9](#a9) | A "Permissions" tick carries over when another role is chosen in "Assign", and is saved | 🐞 | minor | — |
+| [A9](#a9) | In "Assign Participant", the "Permissions" box stays ticked after the editor chooses another role | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A message template added in Settings is listed but fills nothing and cannot be sent | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | An editor assigning an anonymous reviewer of the submission as a participant gets no warning | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | "OK" on the "No changes can be made to this participant" window reports "The stage assignment has been changed." | 🐞 | minor | — |
@@ -1118,14 +1122,21 @@ journal-wide access looks unintended.
 Basis: probe. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
-**A9 — A "Permissions" tick carries over to another role** · 🐞 · minor.
-In "Assign Participant", choosing another role hides both boxes and is
-expected to start them afresh for the next person. "Assignment
-privileges" is unticked, but "Permissions" keeps its tick: an editor who
-first chose a Section Editor and then switched to Author sees the
-Author's box ticked, although an Author starts without the permission,
-and "OK" saves it so.
-Basis: probe. <sup>[f-a9](#fn-a9)</sup>
+**A9 — In "Assign Participant", the "Permissions" box stays ticked after the editor chooses another role** · 🐞 · low.
+In "Assign Participant", an editor who chooses a person in a role that
+starts with "Permissions" ticked, such as Section editor, and then
+changes the role to one that starts without it, such as Author, sees
+"Permissions" ticked for the person chosen next. The editor expects the
+box to start from the new role's setting, as "Assignment privileges"
+does. "OK" saves the assignment with the tick.
+That person may then change the submission's title, abstract and other
+publication details for as long as the assignment keeps the tick,
+although their role's "Permit submission metadata edit." is off. The
+editor can untick the box before "OK", or later under the row's "Edit".
+On a preprint server the fault shows only after a manager has switched
+a role's "Permit submission metadata edit." off: as installed, every
+role "Assign" offers there has it on.
+Basis: probe, 2026-10-01. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
 **A10 — Templates added in Settings cannot be used** · 🐞 · medium · crash: server.
@@ -1433,6 +1444,7 @@ Issue report: [pkp-e2e#307](https://github.com/jardakotesovec/pkp-e2e/issues/307
 
 <a id="fn-a9"></a>
 **f-a9** — Live-probed 2026-09-22 (all three apps; on a preprint server with the Author's default switched off): a Section Editor (Moderator) chosen with "Permissions" ticked, the role switched to Funding coordinator (Author), whose default is off, and a person chosen: the box shown ticked; "OK"; that row's "Edit" showing it ticked. After the switch the box is hidden but still ticked. Code: note e.
+Issue report: [docs/issues/U35-A9-permissions-tick-carries-to-other-role.md](../issues/U35-A9-permissions-tick-carries-to-other-role.md).
 
 <a id="fn-a10"></a>
 **f-a10** — Live-probed 2026-09-22 (all three apps): templates added under a stage's "Add template", unrestricted, limited to Author and limited to an editor role, each listed; choosing one leaving "Message" unchanged; "Notify" to a person who holds the role, to one who does not and to the Author each staying open with no notice, no email; the unrestricted one adding its discussion with no message to the panel; "OK" on "Assign" staying open with the person assigned. Both the choice's request and the send answer a server error. For a role-limited template the cause is traced: `editorialTask/Repository::isTemplateAccessibleToUser()` filters on an unqualified `user_group_id`, which the Postgres test database refuses as ambiguous; the unrestricted template's failure was seen, not traced. Control: "Discussion (Submission)" on the same screen sends.
