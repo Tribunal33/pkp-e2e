@@ -1267,7 +1267,7 @@ Issue report: [pkp-e2e#361](https://github.com/jardakotesovec/pkp-e2e/issues/361
 
 <a id="fn-a3"></a>
 **f-a3** — Seen 2026-09-24 (U09 claim check K1, three apps: from a custom page and from "About the Journal" the links landed on `index.php/index/<locale>`) and 2026-09-25 (U18 claim check K1: "français" linked to the host without the port and landed on `/index.php/index/fr_CA`; back on the journal the pages were French). Live-probed 2026-09-27 (three apps): the links carry `source=127.0.0.1/index.php/…` without the port; chosen from About, from a search result and, with the block in the site's sidebar, from the site's Login page, "français" landed on `/index.php/index/fr_CA`. Cause, read from the code: the block builds `source` from `SERVER_NAME` and the request address, which carry no port, so `PKPPageRouter::_setLocale()` cannot strip the installation's base address (with its port) from it and falls back to `/index/{code}`; "Change Language" passes the full page address and is not affected. The test installs serve on their own ports; a site on the usual ports was not driven.
-Issue report: [docs/issues/U57-A3-language-block-loses-page-on-port.md](../issues/U57-A3-language-block-loses-page-on-port.md).
+Issue report: [pkp-e2e#362](https://github.com/jardakotesovec/pkp-e2e/issues/362) ([docs/issues/U57-A3-language-block-loses-page-on-port.md](../issues/U57-A3-language-block-loses-page-on-port.md)).
 
 <a id="fn-a4"></a>
 **f-a4** — `Locale::translate()` (note p). The `##…##` form of a missing text is PKP's long-standing one. Seen: [Tasks & discussions](U37-tasks-and-discussions.md#a15), [Users management](U53-users-management.md#a11), [Site settings](U60-site-settings.md#a2), all in the French interface; live-probed 2026-09-27 (note p).
