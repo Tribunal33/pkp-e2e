@@ -1179,6 +1179,10 @@ Left out of the scenarios above, by reason:
   - the guard A6's issue report names, once fixed, on this feature's
     screen: on the Native XML "Import" tab, Tab stops on "Upload
     File" and Enter opens the file picker
+  - the guard OJS10's issue report names, once fixed: issues created
+    out of year and volume order and one of them saved again: the
+    "Export Issues" list keeps the "Back Issues" order, then the
+    "Future Issues" {OJS}
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1304,7 +1308,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS6](#ojs6) | The DOAJ list's title and author search matches letter case as typed | 🐞 | minor | — |
 | [OJS7](#ojs7) | Where DOAJ's site cannot be reached, every validated DOAJ export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS9](#ojs9) | A DOAJ deposit that cannot reach DOAJ leaves the article "Submitted" for good | 🐞 | minor | — |
-| [OJS10](#ojs10) | "Export Issues" lists the journal's issues in no set order | 🐞 | minor | — |
+| [OJS10](#ojs10) | A journal manager's "Export Issues" list shows the issues in no set order | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP1](#omp1) | Pressing "Tab Delimited Content Import Plugin" on a press's Tools page opens a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OMP4](#omp4) | Run from the command line, a press's "Tab Delimited Content Import Plugin" stops with a fatal error and leaves an empty submission | 🐞 | minor · crash: server | — |
 | [A14](#a14) | "Export Users" with no row ticked ends on a blank page: the server fails | ❓ | minor · crash: server | — |
@@ -1654,18 +1658,16 @@ nothing, so the manager believes the deposit is still under way.
 Basis: probe. <sup>f-ojs9</sup>
 
 <a id="ojs10"></a>
-**OJS10 — "Export Issues" lists the journal's issues in no set order** · 🐞 · minor.
+**OJS10 — A journal manager's "Export Issues" list shows the issues in no set order** · 🐞 · low.
 The "Export Issues" list of the "Native XML Plugin" and of the "PubMed
-XML Export Plugin" should list a journal's issues in an order a
-manager can follow, such as newest first. Instead, issues created out
-of year and volume order keep the order they were created in ("Vol. 8
-No. 2 (2006)", "Vol. 15 No. 3 (2017)", "Vol. 22 No. 1 (1998)" …), or
-none, published and unpublished mixed. With more issues than one page
-holds, the manager pages through the whole list to find one to tick.
-Nothing is lost. Until a
-2021 change the list put the current issue first and the rest newest
-first. The reader's "Archives" has a like fault
-([Issues, its A13](U50-issues.md#a13)).
+XML Export Plugin" should list a journal's issues in an order a manager
+can follow, as the Issues page does. Instead the list is not sorted by
+anything the manager can see: published and unpublished issues come
+mixed, the current issue need not come first, and an issue that a
+manager edits and saves moves to the bottom. The export itself works.
+But to find the issue to tick, the manager reads the whole list, page
+after page once the journal has more than 25 issues. Seen on PostgreSQL;
+MySQL was not checked.
 Since: 2021-08-30 · Basis: probe, 2026-10-01. <sup>f-ojs10</sup>
 
 ### OMP
@@ -3064,6 +3066,7 @@ listed them in the order they were created ("Vol. 8 No. 2 (2006)",
 creation nor any column's order ("Vol. 21 No. 3 (2005)", "Vol. 28 No.
 1 (2016)", "Vol. 5 No. 2 (1997)" …). OJS stable-3_5_0, two runs: the
 same, `loadData()` identical there.
+Issue report: [docs/issues/U63-OJS10-export-issues-list-no-order.md](../issues/U63-OJS10-export-issues-list-no-order.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note v. Seen 2026-09-27 on OMP (Plugins management claim

@@ -1,0 +1,47 @@
+--- a/controllers/grid/issues/ExportableIssuesListGridHandler.php
++++ b/controllers/grid/issues/ExportableIssuesListGridHandler.php
+@@ -17,9 +17,11 @@
+ namespace APP\controllers\grid\issues;
+ 
+ use APP\facades\Repo;
++use APP\issue\Collector;
+ use PKP\controllers\grid\feature\PagingFeature;
+ use PKP\controllers\grid\feature\selectableItems\SelectableItemsFeature;
+ use PKP\controllers\grid\GridRow;
++use PKP\core\VirtualArrayIterator;
+ 
+ class ExportableIssuesListGridHandler extends IssueGridHandler
+ {
+@@ -49,17 +51,22 @@
+     {
+         $journal = $request->getJournal();
+ 
+-        // Handle grid paging (deprecated style)
++        // List the published issues as "Back Issues" does, then the unpublished ones as
++        // "Future Issues" does, so the order is set and is the one the Issues page shows.
++        $published = Repo::issue()->getCollector()
++            ->filterByContextIds([$journal->getId()])
++            ->filterByPublished(true)
++            ->orderBy(Collector::ORDERBY_PUBLISHED_ISSUES)
++            ->getMany()
++            ->toArray();
++        $unpublished = Repo::issue()->getCollector()
++            ->filterByContextIds([$journal->getId()])
++            ->filterByPublished(false)
++            ->orderBy(Collector::ORDERBY_UNPUBLISHED_ISSUES)
++            ->getMany()
++            ->toArray();
+ 
+-        $rangeInfo = $this->getGridRangeInfo($request, $this->getId());
+-        $collector = Repo::issue()->getCollector()
+-            ->filterByContextIds([$journal->getId()]);
+-
+-        $totalCount = $collector->getCount();
+-        $collector->limit($rangeInfo->getCount());
+-        $collector->offset($rangeInfo->getOffset() + max(0, $rangeInfo->getPage() - 1) * $rangeInfo->getCount());
+-
+-        return new \PKP\core\VirtualArrayIterator($collector->getMany()->toArray(), $totalCount, $rangeInfo->getPage(), $rangeInfo->getCount());
++        return VirtualArrayIterator::factory($published + $unpublished, $this->getGridRangeInfo($request, $this->getId()));
+     }
+ 
+     /**
