@@ -991,6 +991,10 @@ Left out of the scenarios above, by reason:
   - the guard for A10 (issue report
     `docs/issues/U21-A10-wizard-phone-rail-scrolls-sideways.md`): the
     wizard opened at 375 px showing its step rail collapsed to "1/5 steps"
+  - the guard for A12 (issue report
+    `docs/issues/U21-A12-confirmation-off-shows-no-option.md`): "Do not
+    send an email." saved under "Submission Confirmation" still selected
+    after a reload
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1064,7 +1068,7 @@ are the source; badges, Impact and Basis:
 | [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | Editors set to be assigned automatically by a section are never assigned on a second journal | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A10](#a10) | On a phone, the submission wizard opens with its full step rail running off the screen | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A12](#a12) | After "Do not send an email." is saved, the Emails screen shows no Submission Confirmation option selected | 🐞 | minor | — |
+| [A12](#a12) | After a manager saves "Do not send an email.", the Emails settings show no "Submission Confirmation" option selected | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A14](#a14) | Section Editors who are also Authors are offered "Section editor" in "Submit As", then refused | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A16](#a16) | Submission wizard refuses a plain language summary over the word limit, then hangs on "Saving" | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [A18](#a18) | Submission wizard autosaves a change after its first letter, and the rest only a minute later | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -1222,14 +1226,18 @@ so phone-width use is not supported today.
 Basis: probe, 2026-10-01. <sup>[h](#fn-h)</sup>
 
 <a id="a12"></a>
-**A12 — The Emails screen forgets which acknowledgement option is on** · 🐞 · minor.
-After a Journal Manager picks "Do not send an email." under "Submission
-Confirmation" on the workflow settings' Emails screen and saves, reopening
-the screen shows none of the three options selected. The choice is in
-force: no acknowledgement goes out, and saving the screen again keeps it
-so. But the screen no longer says which option applies, so a manager
-cannot tell "off" from a choice never made. Basis: probe.
-<sup>[fn-a12](#fn-a12)</sup>
+**A12 — After a manager saves "Do not send an email.", the Emails settings show no "Submission Confirmation" option selected** · 🐞 · low.
+A journal, press or preprint server manager sets "Submission
+Confirmation" (Settings › Workflow › "Emails") to "Do not send an
+email." and saves. On every later visit none of its three options is
+selected, so the screen gives no sign that confirmations are off. The
+setting itself still works: no confirmation goes out, and saving the
+screen again keeps it off.
+The DOI "Registration Agency" list on a journal or preprint server
+shows the same empty box instead of "None" whenever a registration
+agency plugin is enabled and no agency is chosen. Saving it from the
+empty box keeps "no agency".
+Basis: probe, 2026-10-01. <sup>[fn-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
 **A13 — Changing the language mid-wizard asks for the new language's values, the copied affiliation included** · ✅ · intended.
@@ -2249,6 +2257,7 @@ Workflow → Emails reopened after saving "Do not send an email." listed
 only." and "Do not send an email." all unchecked, and the acknowledgement
 stayed off. The form is the shared lib/pkp Emails settings form, so OMP
 and OPS are expected to match; not reopened there.
+Issue report: [docs/issues/U21-A12-confirmation-off-shows-no-option.md](../issues/U21-A12-confirmation-off-shows-no-option.md).
 
 <a id="fn-a13"></a>
 **fn-a13** — Language change and the copied contributor. The wizard's
