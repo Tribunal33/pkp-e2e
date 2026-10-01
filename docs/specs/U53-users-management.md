@@ -793,6 +793,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U53-A4-users-search-example-journal-role.md`): the Users
     search box's text on a press and a preprint server naming no
     journal-only role
+  - the guard for A12 (Fields "Name"; issue report
+    `docs/issues/U53-A12-users-status-icons-unnamed.md`): the "Name" cell
+    of a disabled account and of an ORCID holder each naming that status
+    to a screen reader
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -817,8 +821,6 @@ Left out of the scenarios above, by reason:
   - A10 (the older grid's "Disable User" and "Remove" on the
     administrator's own row; Rule 20)
   - A11 and OPS1 (the list in the French interface; Rule 25)
-  - A12 (the ORCID and disabled icons unnamed to a screen reader; Fields
-    "Name")
   - A13 (the Site Administrator's empty "Roles" cell in the "Merge user"
     window and on the older grid; Fields)
   - A16 ("Generate Password" unticked again, "Notify User" left locked;
@@ -877,7 +879,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | After "Enable User", the next "Disable User" offers the enabling reason and the Login page quotes it | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | Merging a section editor's account unassigns them from their sections, so new submissions arrive without that editor | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Users & Roles in French (Canada): the Users tab and the "Invite to a role" pages show raw codes | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A12](#a12) | The ORCID and disabled icons after a name have no name for a screen reader | 🐞 | minor | — |
+| [A12](#a12) | Users & Roles: screen readers cannot tell a disabled account or an ORCID holder from any other user | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | The "Merge user" window and the older grid show nothing under "Roles" for the Site Administrator | 🐞 | minor | — |
 | [A14](#a14) | On presses and preprint servers, a masthead change shows a raw error and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A15](#a15) | Merging a user recorded as a discussion's or task's creator stops halfway with no message, and the account still signs in | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
@@ -1061,13 +1063,18 @@ texts.
 Basis: probe, 2026-10-01. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — The status icons have no name for a screen reader** · 🐞 · minor.
-In the list's "Name" cell a screen reader hears the ORCID icon and the red
-disabled icon as unnamed images, so without sight a disabled account
-cannot be told from an enabled one, nor an account with an ORCID iD from
-one without. Each icon should carry a name, such as "ORCID iD" and
-"Disabled".
-Basis: probe. <sup>f-a12</sup>
+**A12 — Users & Roles: screen readers cannot tell a disabled account or an ORCID holder from any other user** · 🐞 · low.
+On Settings › Users & Roles, "Users" tab, a red crossed-out person icon
+follows the name of a disabled account, and the ORCID icon follows the
+name of an account with an ORCID iD. The icons have no text
+alternative, so a screen reader reads the name alone: a disabled account
+sounds like an enabled one, and an ORCID holder like any other user.
+Every task on the list still works. A screen-reader user can still
+find the disabled accounts, but only by opening the rows' menus one by
+one.
+This is a gap in the list that came with 3.5, not a regression: 3.4's
+user grid showed neither status to anyone, sighted or not.
+Basis: probe, 2026-10-01. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — The older lists show no role for the Site Administrator** · 🐞 · minor.
@@ -2028,6 +2035,7 @@ accessibility tree a disabled account's and an ORCID holder's "Name" cell
 read the name, then an image with no name. The icons
 (`UserAccessManagerCellName.vue`, note g) carry no `aria-label` and no
 `aria-hidden`.
+Issue report: [docs/issues/U53-A12-users-status-icons-unnamed.md](../issues/U53-A12-users-status-icons-unnamed.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25, all three apps: the "Merge user"
