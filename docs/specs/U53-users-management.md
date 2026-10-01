@@ -1953,7 +1953,7 @@ read "Current Roles : Author, Section editor". Code: `disableUser()` joins
 `user.groups.map(g => g.name)`, every assignment in the context
 (`preloadGroups()`), without the `dateEnd` filter the "Roles" cell uses;
 `user.disabledModal.description` is "Current Roles : {$roles}".
-Issue report: [docs/issues/U53-A6-disable-window-lists-ended-roles.md](../issues/U53-A6-disable-window-lists-ended-roles.md).
+Issue report: [pkp-e2e#157](https://github.com/jardakotesovec/pkp-e2e/issues/157) ([docs/issues/U53-A6-disable-window-lists-ended-roles.md](../issues/U53-A6-disable-window-lists-ended-roles.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Code: note h. Live-probed 2026-09-25: note td6.
