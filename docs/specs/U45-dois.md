@@ -3850,7 +3850,7 @@ Issue report: [pkp-e2e#234](https://github.com/jardakotesovec/pkp-e2e/issues/234
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-26 (Rule 28), all three apps: the
 window text as quoted, with nothing ticked and with one item ticked.
-Issue report: [docs/issues/U45-A14-needs-sync-question-says-stale.md](../issues/U45-A14-needs-sync-question-says-stale.md).
+Issue report: [pkp-e2e#250](https://github.com/jardakotesovec/pkp-e2e/issues/250) ([docs/issues/U45-A14-needs-sync-question-says-stale.md](../issues/U45-A14-needs-sync-question-says-stale.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-26, OJS and OPS Crossref (DataCite the
