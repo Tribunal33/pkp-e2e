@@ -1085,6 +1085,10 @@ Left out of the scenarios above, by reason:
   - an account whose only role has ended, left off "Export Users" and
     out of the "Export All Users" file, while one with a role that ends
     on a later date is listed (Rules 26, 27)
+  - the guard A9's issue report names, once fixed: an article (a
+    preprint) naming a section the journal (server) lacks, imported:
+    the import refused whole with "Unknown section …", no submission
+    added, the export list unchanged {OJS OPS}
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1188,7 +1192,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | The Native XML "Import" tab's "Upload File" cannot be reached with the keyboard | 🐞 | minor | — |
 | [A7](#a7) | Choosing an earlier "Import Results" tab again imports the file once more | 🐞 | user-visible | — |
 | [A8](#a8) | Importing a file the app itself exported lists "Errors occured:" under the success text | 🐞 | minor | — |
-| [A9](#a9) | An import naming an unknown section ends in an empty results tab and leaves a broken submission | 🐞 | user-visible · crash: both | — |
+| [A9](#a9) | Native XML import of an article in a missing section shows nothing and leaves an unopenable submission | 🐞 | medium · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A published submission matches none of the export list's "Stages" filters | 🐞 | minor | — |
 | [A11](#a11) | Past one page, the export list's "Select All" never turns into "Select None", and ticks on other pages are not exported | 🐞 | minor | — |
 | [A12](#a12) | A Native XML export with nothing ticked opens an empty results tab: the server fails | 🐞 | minor · crash: server | — |
@@ -1292,15 +1296,21 @@ real failures.
 Basis: probe. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — An unknown section leaves a broken submission** · 🐞 · user-visible · crash: both.
-An article or preprint whose section the journal lacks should be left
-out with the line "Unknown section {abbreviation}", or refused.
-Instead the server fails, the results tab stays empty, and a submission
-with no version is kept: its Dashboard row shows only its number and
-stage, its "View" opens nothing because the page's script fails, and
-the script failure also removes the export list from the export tab.
-{OJS OPS}
-Basis: probe. <sup>f-a9</sup>
+**A9 — Native XML import of an article in a missing section shows nothing and leaves an unopenable submission** · 🐞 · medium · crash: both.
+A manager imports a Native XML file in which an article or preprint
+names a section the journal or server does not have. The import request
+fails on the server, and the "Import Results" tab opens empty, with no
+message. The manager expected that article to be left out with the line
+"Unknown section …", or the whole file to be refused. The import still
+saves everything in the file, that article included, but without its
+publication data: no title, no authors. Its Dashboard row shows only its
+number and stage, and its "View" opens nothing. The broken submission
+also makes the export tab's script fail, so the plugin's export list
+stays empty from then on, for every submission. Nothing on screen
+removes the broken submission. It needs a file with a section
+abbreviation this journal or server does not use, such as a file from
+another journal. {OJS OPS}
+Basis: probe, 2026-10-01. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — Published submissions match no stage filter** · 🐞 · minor.
@@ -2542,6 +2552,7 @@ Submission 0 Assign Editor View" (OPS "521 Production 0 View"); its
 "TypeError: Cannot read properties of undefined (reading
 'authorsStringShort')"; the export tab kept only "Select All" and its
 button, with "…(reading 'fullTitle')".
+Issue report: [docs/issues/U63-A9-unknown-section-import-broken-submission.md](../issues/U63-A9-unknown-section-import-broken-submission.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note g. Live-probed 2026-09-27, three apps: with

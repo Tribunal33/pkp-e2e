@@ -1,0 +1,33 @@
+--- a/lib/pkp/plugins/importexport/native/filter/NativeXmlSubmissionFilter.php
++++ b/lib/pkp/plugins/importexport/native/filter/NativeXmlSubmissionFilter.php
+@@ -105,6 +105,13 @@
+ 
+         $submission = Repo::submission()->get($submission->getId());
+ 
++        // A submission whose publication could not be imported (an unknown
++        // section, a failed child filter) must not be kept: throwing rolls the
++        // whole import back (PKPImportExportDeployment::import()).
++        if (!$submission->getCurrentPublication()) {
++            throw new \Exception(__('plugins.importexport.common.error.currentPublicationNullOrMissing'));
++        }
++
+         $deployment->addImportedRootEntity(Application::ASSOC_TYPE_SUBMISSION, $submission);
+ 
+         if ($stageName === "externalReview" or $stageName === "internalReview") {
+@@ -188,16 +195,10 @@
+     {
+         $importedObjects = &parent::process($document);
+ 
+-        $deployment = $this->getDeployment();
+-
+         // Index imported content
+         $submissionIds = [];
+         foreach ($importedObjects as $submission) {
+             assert($submission instanceof Submission);
+-            $publication = $submission->getCurrentPublication();
+-            if (!isset($publication)) {
+-                $deployment->addError(Application::ASSOC_TYPE_SUBMISSION, $submission->getId(), __('plugins.importexport.common.error.currentPublicationNullOrMissing'));
+-            }
+             $submissionIds[] = $submission->getId();
+         }
+ 
