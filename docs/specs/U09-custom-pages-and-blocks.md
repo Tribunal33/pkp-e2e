@@ -818,6 +818,7 @@ the footnote. <sup>y</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a preview's address typed by a section editor, an author or a signed-out visitor: the access-denied page, or Login (A7; the guard its issue report names)
   - a picture over the server's file limit, and one over its request limit, chosen in "Insert/edit image": each refused with "Files larger than {size} can not be uploaded." and no server error (A18; the guard its two issue reports name)
   - a custom block listed in "Custom Blocks" and offered under "Sidebar" by its "Block Name", and by the new one after a rename (A1; the guard its issue report names)
   - a custom block named with "&", and one named only in the primary language by a manager working in another, each opened with "Edit" and placed under "Sidebar" (A4, A13; the guard their issue report names)
@@ -877,7 +878,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | Custom blocks are listed by a lower-case name built from their first "Block Name", even after a rename | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A static page has no breadcrumbs and no main heading, where a custom page has both | 🐞 | minor | — |
 | [A4](#a4) | A custom block named only outside the manager's interface language is kept as a blank row with neither "Edit" nor "Delete" | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
-| [A7](#a7) | Anyone below manager level who types a preview's address, or a signed-out visitor, gets a blank page | 🐞 | minor · crash: server | — |
+| [A7](#a7) | Typing a page preview's address below manager level, or signed out, gives a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A static page whose "Path" has a "." in its first or second part is saved but answers "404 Not Found" | 🐞 | user-visible | — |
 | [A11](#a11) | After a refused "Save" in the static page window, the next successful save shows the old refusal at the top right | 🐞 | minor | — |
 | [A12](#a12) | Right after "Static Pages Plugin" is unticked, the tab stays and its "Add Static Page" shows "Error" | 🐞 | minor · crash: server | — |
@@ -969,14 +970,22 @@ path.".
 Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — A typed preview address gives a blank page below manager level** · 🐞 · minor · crash: server.
-A Section Editor, Assistant, Author, Reviewer or Reader who types a
-preview's address ({journal address}/navigationMenu/preview, or with
-"Static Pages Plugin" on {journal address}/pages/preview), or a
-signed-out visitor who does, expects the access-denied page or Login.
-Instead the browser shows a blank page: the application fails on the
-server and sends nothing back.
-Basis: probe. <sup>f-a7</sup>
+**A7 — Typing a page preview's address below manager level, or signed out, gives a blank page** · 🐞 · low · crash: server.
+The application fails on the server when anyone below manager level (a
+section editor, an assistant, an author, a reviewer, a reader) types the
+address of a page preview, or when a signed-out visitor does: the
+browser shows a blank page. The addresses are the custom page preview,
+{journal address}/navigationMenu/preview, and, with "Static Pages
+Plugin" on, the static page preview, {journal address}/pages/preview.
+The person who types the address expects the access-denied page, or
+Login when signed out.
+Nothing is lost: only managers and the Site Administrator may preview,
+and no link leads anyone else to these addresses. But the person gets no
+page and no reason, and every such visit adds a server error to the
+log. The fix is a few lines, but in two repositories (pkp-lib, and the
+Static Pages plugin with its pointer in OJS and OMP), hence medium
+effort; within one it would be small.
+Basis: probe, 2026-10-01. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — The site's Plugins list offers "Static Pages Plugin", to no effect** · ❓ · minor · {OJS OMP}.
@@ -1889,6 +1898,7 @@ the manager or site administrator role in the journal, and for a
 signed-out request, which has no role list; nothing turns it into the
 access-denied page or Login, so the answer is status 500 with an empty
 body. Live-probed 2026-09-24 (three apps, `pages/preview` OJS OMP): td7.
+Issue report: [docs/issues/U09-A7-typed-preview-address-blank-page.md](../issues/U09-A7-typed-preview-address-blank-page.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — The site's list (`AdminPluginGridHandler`) lists every
