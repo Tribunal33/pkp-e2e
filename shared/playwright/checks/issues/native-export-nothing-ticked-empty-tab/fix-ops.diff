@@ -1,0 +1,15 @@
+--- a/lib/pkp/plugins/importexport/native/PKPNativeImportExportPlugin.php
++++ b/lib/pkp/plugins/importexport/native/PKPNativeImportExportPlugin.php
+@@ -187,6 +187,12 @@
+                 $this->isResultManaged = true;
+                 break;
+             case 'exportSubmissionsBounce':
++                if (empty($request->getUserVar('selectedSubmissions'))) {
++                    $this->result = (new JSONMessage(false, __('plugins.importexport.common.error.noObjectsSelected')))->getString();
++                    $this->isResultManaged = true;
++                    break;
++                }
++
+                 $tab = $this->getBounceTab(
+                     $request,
+                     __('plugins.importexport.native.export.submissions.results'),

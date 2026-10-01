@@ -1,0 +1,45 @@
+--- a/lib/pkp/pages/management/PKPToolsHandler.php
++++ b/lib/pkp/pages/management/PKPToolsHandler.php
+@@ -25,6 +25,7 @@
+ use PKP\plugins\ImportExportPlugin;
+ use PKP\plugins\PluginRegistry;
+ use PKP\security\Role;
++use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+ 
+ define('IMPORTEXPORT_PLUGIN_CATEGORY', 'importexport');
+ 
+@@ -65,7 +66,8 @@
+             case 'resetPermissions':
+                 $this->resetPermissions($args, $request);
+                 break;
+-            default: assert(false);
++            default:
++                throw new NotFoundHttpException();
+         }
+     }
+ 
+@@ -96,14 +98,19 @@
+         PluginRegistry::loadCategory(IMPORTEXPORT_PLUGIN_CATEGORY);
+         $templateMgr = TemplateManager::getManager($request);
+ 
+-        if (array_shift($args) === 'plugin') {
+-            $pluginName = array_shift($args);
+-            /** @var ImportExportPlugin */
++        $path = array_shift($args);
++        if ($path === 'plugin') {
++            $pluginName = (string) array_shift($args);
++            /** @var ?ImportExportPlugin */
+             $plugin = PluginRegistry::getPlugin(IMPORTEXPORT_PLUGIN_CATEGORY, $pluginName);
+-            if ($plugin) {
+-                return $plugin->display($args, $request);
++            if (!$plugin) {
++                throw new NotFoundHttpException();
+             }
++            return $plugin->display($args, $request);
+         }
++        if ($path !== null) {
++            throw new NotFoundHttpException();
++        }
+         $templateMgr->assign('plugins', PluginRegistry::getPlugins(IMPORTEXPORT_PLUGIN_CATEGORY));
+         return $templateMgr->fetchJson('management/tools/importexport.tpl');
+     }

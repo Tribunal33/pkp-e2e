@@ -16,7 +16,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U63](../specs/U63-import-export.md) | 28 | 9 | 7 | **Taken: issues session, workstation s0, 2026-10-01**; done: A9, A5, A20, A13, A21, A7, A4, A15, A16; retired by the 2026-10-01 sync (fixed by pkp/pkp-lib#13412): A17, A18; new the same day: OMP4 (open), A23 (out: open report docs/reports/2026-10-01-pkp-lib-13414.md) |
+| [U63](../specs/U63-import-export.md) | 28 | 9 | 7 | **Taken: issues session, workstation s0, 2026-10-01**; done: A9, A5, A20, A13, A21, A7, A4, A15, A16, A1, A19, A12 (with U74 A16); out (open report docs/reports/2026-10-01-pkp-lib-13414.md): A23; A17, A18 retired by the upstream session; open: A6, A8, A10, A11, OJS1, OJS2, OJS3, OJS4, OJS5, OJS6, OJS7, OJS9, OJS10, OMP1, OMP4 |
 | [U09](../specs/U09-custom-pages-and-blocks.md) | 15 | 6 | 6 | **Taken: issues session, workstation s1, 2026-10-01** |
 | [U13](../specs/U13-article-landing-page-and-reading.md) | 29 | 5 | 10 | **Taken: issues session, VM s1, 2026-10-01**; done: OPS2, OPS3 (pkp-e2e#203, with U20 OPS1), OJS1 (pkp-e2e#205), OPS7, OPS8 (pkp-e2e#207), OJS4 (pkp-e2e#208), OPS1 (pkp-e2e#209, with U69 A4), OJS5 (pkp-e2e#211), OPS6 (pkp-e2e#212), OJS10 (pkp-e2e#215), OPS9 (pkp-e2e#216), OJS12 (pkp-e2e#218), A2 (pkp-e2e#219), OJS9 (pkp-e2e#221), A5 (pkp-e2e#222), OJS2 (pkp-e2e#225), A6 (pkp-e2e#226, with U69 A5), OJS7 (pkp-e2e#227), A1 (pkp-e2e#228) |
 | [U45](../specs/U45-dois.md) | 23 | 5 | 8 | **Taken: issues session, VM s3, 2026-10-01**; done: OJS2, A19, A18, A2, A9, OMP1, A11, OPS4, A15, OMP2 |
@@ -43,7 +43,7 @@ VM marks also count the VM's issues sessions: at most two run at once
 | [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 |  |
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 9 | 1 | 8 |  |
 | [U48](../specs/U48-jats-and-body-text.md) | 17 | 1 | 7 |  |
-| [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 | **A16 taken: issues session, workstation s0, 2026-10-01** (with U63 A12) |
+| [U74](../specs/U74-onix-metadata-export.md) | 17 | 1 | 6 | **A16 taken: issues session, workstation s0, 2026-10-01** (with U63 A12); done: A16 |
 | [U28](../specs/U28-reviewers-review.md) | 14 | 1 | 5 |  |
 | [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 |  |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | A16 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet; the report calls the window's box "Title" where the screen says "Name", and its Reach names "Applied Science" where reach.js uses "Social Sciences" on OPS |

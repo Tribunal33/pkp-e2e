@@ -1154,6 +1154,13 @@ Left out of the scenarios above, by reason:
     the "Import" tab opened, then the "Import Results" tab chosen
     again: the same submission number shown and no new submission
     added
+  - the guard A1 and A19's issue report names, once fixed: a tool's
+    address naming a tool the installation lacks, and one with the
+    tool's name left off, each answering "404 Not Found"
+  - the guard A12's issue report names, once fixed: "Export Articles"
+    ("Export Submissions", "Export Preprints") and "Export Issues"
+    {OJS} pressed with nothing ticked: the alert "No objects
+    selected.", no results tab opened
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1254,7 +1261,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | An address naming a tool the installation lacks prints the Import/Export list as raw code text | 🐞 | minor | — |
+| [A1](#a1) | An address naming a tool the installation lacks prints the Import/Export list as raw code text | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | A users import says a user with a short or empty password "has not been imported", yet creates the account | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | The Native XML "Import" tab's "Upload File" cannot be reached with the keyboard | 🐞 | minor | — |
@@ -1263,11 +1270,11 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | Native XML import of an article in a missing section shows nothing and leaves an unopenable submission | 🐞 | medium · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A published submission matches none of the export list's "Stages" filters | 🐞 | minor | — |
 | [A11](#a11) | Past one page, the export list's "Select All" never turns into "Select None", and ticks on other pages are not exported | 🐞 | minor | — |
-| [A12](#a12) | A Native XML export with nothing ticked opens an empty results tab: the server fails | 🐞 | minor · crash: server | — |
+| [A12](#a12) | A Native XML export with nothing ticked opens an empty results tab: the server fails | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | Importing a users file with a format error leaves an empty "Results" tab instead of the reasons | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | For an existing account, the results say a new password was sent, but nothing is sent and nothing changes | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | On PHP older than 8.4, a users import replaces each new user's working password and emails a new one | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A19](#a19) | A tool's address with the tool's name left off opens a blank page: the server fails | 🐞 | minor · crash: server | — |
+| [A19](#a19) | A tool's address with the tool's name left off opens a blank page: the server fails | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | A submission with a title prefix comes back from a Native XML export and import titled "The The …" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | A users import stops at the first user without a registration date, silently leaving the rest out | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | A users file first imported on a 3.5.0 release and imported again after the update gives each ended role a second time | 🐞 | minor | — |
@@ -1295,12 +1302,12 @@ unless an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — An absent tool's address prints raw code text** · 🐞 · minor.
+**A1 — An absent tool's address prints raw code text** · 🐞 · low.
 An address that names a tool the installation does not have, such as a
 bookmarked Crossref page opened on a press, should say there is no such
 page; instead the page shows the "Import/Export" list as a line of raw
 code text, with no heading, no menu and no way back.
-Basis: probe. <sup>f-a1</sup>
+Basis: probe, 2026-10-01. <sup>f-a1</sup>
 
 <a id="a4"></a>
 **A4 — A refused password still creates the account** · 🐞 · medium.
@@ -1401,12 +1408,12 @@ submissions than ticked, with nothing on screen saying so.
 Basis: probe. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — An export with nothing ticked fails** · 🐞 · minor · crash: server.
-"Export Articles" ("Export Submissions", "Export Preprints") or
-"Export Issues" {OJS} pressed with nothing ticked should say to tick
-something; instead the server fails and the results tab opens empty,
-with no text and no button.
-Basis: probe. <sup>f-a12</sup>
+**A12 — An export with nothing ticked fails** · 🐞 · low · crash: server.
+"Export Articles" ("Export Submissions", "Export Preprints") or "Export
+Issues" {OJS} pressed with nothing ticked should say to tick something;
+instead the server fails and the results tab opens empty, with no text
+and no button.
+Basis: probe, 2026-10-01. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — Importing a users file with a format error leaves an empty "Results" tab instead of the reasons** · 🐞 · medium · crash: server.
@@ -1456,13 +1463,13 @@ from 3.4 and 3.3. {OJS OMP}
 Basis: probe, 2026-10-01. <sup>f-a16</sup>
 
 <a id="a19"></a>
-**A19 — A tool's address with the tool's name left off fails** · 🐞 · minor · crash: server.
+**A19 — A tool's address with the tool's name left off fails** · 🐞 · low · crash: server.
 A manager who opens a tool's address with the tool's name left off its
-end should get a "not found" page, or the Tools list. Instead the
-server fails and the browser shows a blank white page, with no
-heading, no menu and no link back. Only an address typed or edited by
-hand leads there. A Section Editor gets the access-denied page there,
-as at any tool's address.
+end should get a "not found" page, or the Tools list. Instead the server
+fails and the browser shows a blank white page, with no heading, no menu
+and no link back. Only an address typed or edited by hand leads there. A
+Section Editor gets the access-denied page there, as at any tool's
+address.
 Basis: probe, 2026-10-01. <sup>f-a19</sup>
 
 <a id="a20"></a>
@@ -2576,6 +2583,7 @@ page itself loads into its "Import/Export" and "Permissions" tabs
 `application/json` by design; live-probed 2026-10-01, three apps, two
 runs, as the Journal Manager (a Section Editor gets the access-denied
 page at each).
+Issue report: [docs/issues/U63-A1-A19-tool-address-without-tool-raw-text.md](../issues/U63-A1-A19-tool-address-without-tool-raw-text.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `UserXmlPKPUserFilter::parseUser()` (note l): `if
@@ -2710,6 +2718,7 @@ item 001" on page 2 gave a file holding "Paged item 001" only.
 …/NativeImportExportPlugin/exportSubmissions?selectedSubmissions=`
 answered 500 on all three apps, `GET …/exportIssues?selectedIssues=`
 on OJS.
+Issue report: [docs/issues/U63-A12-native-export-nothing-ticked-empty-tab.md](../issues/U63-A12-native-export-nothing-ticked-empty-tab.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-27, OJS and OMP (note k): `GET
@@ -2832,6 +2841,7 @@ type string, null given`. Live-probed 2026-10-01, OJS, OMP and OPS
 main, two runs each, as the Journal Manager: `GET
 …/management/importexport/plugin` answered 500 with an empty body; as
 the Section Editor, the access-denied page.
+Issue report: [docs/issues/U63-A1-A19-tool-address-without-tool-raw-text.md](../issues/U63-A1-A19-tool-address-without-tool-raw-text.md).
 
 <a id="fn-f-a20"></a>
 **f-a20** — `PKPPublicationNativeXmlFilter::addMetadata()` writes

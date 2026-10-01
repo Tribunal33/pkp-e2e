@@ -1,0 +1,36 @@
+--- a/lib/pkp/plugins/importexport/native/PKPNativeImportExportPlugin.php
++++ b/lib/pkp/plugins/importexport/native/PKPNativeImportExportPlugin.php
+@@ -187,6 +187,12 @@
+                 $this->isResultManaged = true;
+                 break;
+             case 'exportSubmissionsBounce':
++                if (empty($request->getUserVar('selectedSubmissions'))) {
++                    $this->result = (new JSONMessage(false, __('plugins.importexport.common.error.noObjectsSelected')))->getString();
++                    $this->isResultManaged = true;
++                    break;
++                }
++
+                 $tab = $this->getBounceTab(
+                     $request,
+                     __('plugins.importexport.native.export.submissions.results'),
+--- a/plugins/importexport/native/NativeImportExportPlugin.php
++++ b/plugins/importexport/native/NativeImportExportPlugin.php
+@@ -18,6 +18,7 @@
+ 
+ use APP\facades\Repo;
+ use APP\template\TemplateManager;
++use PKP\core\JSONMessage;
+ use PKP\plugins\importexport\native\PKPNativeImportExportDeployment;
+ 
+ class NativeImportExportPlugin extends \PKP\plugins\importexport\native\PKPNativeImportExportPlugin
+@@ -41,6 +42,10 @@
+ 
+         switch ($this->opType) {
+             case 'exportIssuesBounce':
++                if (empty($request->getUserVar('selectedIssues'))) {
++                    return (new JSONMessage(false, __('plugins.importexport.common.error.noObjectsSelected')))->getString();
++                }
++
+                 return $this->getBounceTab(
+                     $request,
+                     __('plugins.importexport.native.export.issues.results'),
