@@ -1184,6 +1184,10 @@ Left out of the scenarios above, by reason:
     of a section whose "Abbreviation" was changed, or that was deleted,
     after an article in it was unpublished: asked for, it lists its deleted
     records {OJS OPS} (once fixed)
+  - the guard for A20 (issue report
+    `docs/issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md`):
+    a section's set asked with `from` or `until` leaving out the deleted
+    records outside the dates {OJS OPS} (Rule 9d; once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1311,7 +1315,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | OAI-PMH GetRecord answers a malformed identifier with a record, not "Identifier is not in a valid format" {OMP OPS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A press's or preprint server's OAI record keeps its earlier datestamp after an edit or a second publish {OMP OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | An OAI set left behind by a changed section abbreviation or a deleted section is listed but lists nothing {OJS OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A20](#a20) | Asked for a section's set, deleted records ignore `from` and `until` {OJS OPS} | 🐞 | minor | — |
+| [A20](#a20) | Asked for a section's set, OAI lists return its deleted records whatever "from" and "until" say {OJS OPS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A22](#a22) | Once one journal sets "DOI Versioning" to "Yes", every journal's OAI-PMH requests answer a server error {OJS} | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | The `driver` set lists articles with no galley {OJS} | 🐞 | minor | — |
 | [A24](#a24) | A `driver` list offers "Resume" when complete, and following it repeats records {OJS} | 🐞 | minor | — |
@@ -1597,11 +1601,18 @@ checked on screen.
 Basis: probe, 2026-10-01. <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — A section's set ignores the dates for deleted records** {OJS OPS} · 🐞 · minor.
-A harvester asking for one section's records with `from=2030-01-01`
-expects nothing. It gets the section's deleted records, deleted today,
-at the journal's address and the site-wide one.
-Basis: probe, 2026-09-26. <sup>f-a20</sup>
+**A20 — Asked for a section's set, OAI lists return its deleted records whatever "from" and "until" say** {OJS OPS} · 🐞 · low.
+A harvester asks ListRecords or ListIdentifiers for one section's set
+with `from=2030-01-01` and expects nothing. It gets every deleted record
+of the section: the articles unpublished in it, whatever the date they
+were unpublished. `until` is ignored the same way. In an ordinary date
+window the section's deleted records come beside the records that belong
+in the window. A harvester that collects a section's changes since its
+last visit receives all the section's deleted records again on every
+visit. Only a section's set does this, and only for deleted records. The
+journal's set and a list without a set keep to the dates, and so do the
+section's published records.
+Basis: probe, 2026-10-01. <sup>f-a20</sup>
 
 <a id="a21"></a>
 **A21 — A section has one set identifier per language** {OJS OPS} · ❓ · minor.
@@ -1966,6 +1977,7 @@ Issue report: [pkp-e2e#309](https://github.com/jardakotesovec/pkp-e2e/issues/309
 
 <a id="fn-f-a20"></a>
 **f-a20** — Live-probed 2026-09-26, OJS and OPS, two sweep runs: note q11, the last read; `publicknowledge`'s deleted records of the day (OJS 198, 447, 512; OPS 174, 227) were listed for `from=2030-01-01` at its own and the site-wide address. Code: note l.
+Issue report: [docs/issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md](../issues/U19-A20-oai-section-set-deleted-records-ignore-dates.md).
 
 <a id="fn-f-a21"></a>
 **f-a21** — Live-probed 2026-09-26, OJS and OPS: note q19; the record headers read at `…/fr_CA/oai` named "{path}:ARTF". Code: note j (`getLocalizedAbbrev()` under the request's locale).
