@@ -1,0 +1,18 @@
+--- a/lib/pkp/js/controllers/grid/GridHandler.js
++++ b/lib/pkp/js/controllers/grid/GridHandler.js
+@@ -846,8 +846,13 @@
+ 			this.activateRowActions_();
+ 
+ 			if (isFilterVisible) {
+-				// Open search control again.
+-				$newGrid.find('.pkp_linkaction_search').click();
++				// Open search control again, once the new grid's own handler
++				// has bound the search link and hidden the form: grid.tpl
++				// attaches that handler in a ready callback, which jQuery 3
++				// runs after this callback has returned.
++				$newGrid.one('gridInitialized', function() {
++					$newGrid.find('.pkp_linkaction_search').click();
++				});
+ 			}
+ 		}
+ 	};

@@ -804,6 +804,10 @@ Left out of the scenarios above, by reason:
     preprint server, "Users must be registered and log in to view open
     access content." staying ticked after a reload, and a signed-out
     visitor's "PDF" leading to the Login page
+  - the guard for A9 (issue report
+    `docs/issues/U54-A9-roles-filters-hide-after-choice.md`): after a
+    filter choice on the "Roles" list, the filters staying open beside the
+    filtered list
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -889,7 +893,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | Removing a role warns that its members' assignments will be deleted, but a role with members is refused | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | On the "Roles" list, a screen reader reads each stage box as a bare "checkbox", naming no role | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
-| [A9](#a9) | After a filter entry is chosen the filters hide, and only the count line shows the list is filtered | 🐞 | minor | — |
+| [A9](#a9) | The Roles list hides its filters after each choice, so a filtered list looks like the whole list | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
 | [A10](#a10) | A role name of only spaces breaks the role window, and saving again shows a page of raw code | 🐞 | medium · crash: script | issues (claude), 2026-09-30 — re-verified |
 | [A11](#a11) | "OK" in the window of a user's only Settings role takes the Settings pages away from everyone holding it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A13](#a13) | On PostgreSQL a saved role jumps to the end of the Roles list, and pages can repeat or skip roles | 🐞 | low | issues (claude), 2026-09-30 — re-verified |
@@ -1001,14 +1005,19 @@ set there instead.
 Basis: probe, 2026-10-01. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — A filtered list does not say it is filtered** · 🐞 · minor.
-After an entry is chosen under "List roles assigned to" or "With
-permission level set to", both lists hide again behind "Search", and the
-list shows only the matching roles with nothing but its count line to
-say so, also after switching to another tab and back. A manager who
-comes back to the tab can take the shorter list for all the journal's
-roles.
-Basis: probe. <sup>f-a9</sup>
+**A9 — The Roles list hides its filters after each choice, so a filtered list looks like the whole list** · 🐞 · low.
+On Settings › Users & Roles › "Roles", "Search" shows two filters above
+the list: "List roles assigned to" and "With permission level set to".
+When a manager chooses an entry in either filter, the list shows only the
+matching roles, and both filters hide again behind "Search". The filters
+stay hidden when the manager switches to another tab and comes back.
+Nothing on screen then says the list is filtered. Its count line gives
+only the filtered total ("1 - 8 of 8 items"), so a manager who comes back
+to the tab can take the shorter list for all the journal's roles.
+The same happens after each search on the older grid lists that have a
+"Search" link above them, such as "Installed Plugins" under Settings ›
+Website › Plugins.
+Basis: probe, 2026-10-01. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — A role name of only spaces breaks the role window, and saving again shows a page of raw code** · 🐞 · medium · crash: script.
@@ -1748,6 +1757,7 @@ Issue report: [pkp-e2e#192](https://github.com/jardakotesovec/pkp-e2e/issues/192
 (`#userGroupSearchForm`), which the header's "Search" link shows and hides
 and which is hidden again after each choice submits it. Live-probed
 2026-09-26: [d](#fn-d).
+Issue report: [docs/issues/U54-A9-roles-filters-hide-after-choice.md](../issues/U54-A9-roles-filters-hide-after-choice.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — The window's own check refuses only an empty box; the server's
