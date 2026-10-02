@@ -801,6 +801,11 @@ are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for OJS1 (issue report
+    `docs/issues/U44-OJS1-new-issue-galley-publisher-id-server-error.md`):
+    "Create Issue Galley" with a Publisher ID saving the galley, and a
+    Publisher ID another issue galley already has refused with its notice
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -879,7 +884,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | The URN settings window raises a page error on every tick while the pattern choice is selected | 🐞 | invisible · crash: script | — |
 | [A13](#a13) | "Add Check Number" on a tab writes "NaN" into an empty suffix box | 🐞 | minor | — |
 | [A14](#a14) | After "Clear", a galley's or chapter's tab still shows the removed URN | 🐞 | minor | — |
-| [OJS1](#ojs1) | A new issue galley with a Publisher ID fails with a server error | 🐞 | user-visible · crash: server | — |
+| [OJS1](#ojs1) | A new issue galley with a Publisher ID is not saved: "Save" stays greyed with no message | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | An issue's Publisher ID is never kept | 🐞 | user-visible | — |
 | [OMP1](#omp1) | A press cannot save URN settings with only "Chapters" or "Files" ticked | 🐞 | minor | — |
 | [OMP2](#omp2) | The book page labels a format's URN with a code and does not link it | 🐞 | minor | — |
@@ -1032,14 +1037,17 @@ Basis: probe, 2026-09-24. <sup>f-a14</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — A new issue galley with a Publisher ID fails** · 🐞 · user-visible · crash: server.
-A manager who uploads a new issue galley and types a Publisher ID that
-is not only digits expects the galley to be added. The save fails on
-the server: the window stays open with a spinner beside a greyed
-"Save" and no message, and the galley is not added (the list still
-reads "No Items"). "Cancel" still closes the window. Saving the same
-value on an existing issue galley works.
-Basis: probe, 2026-09-24. <sup>f-ojs1</sup>
+**OJS1 — A new issue galley with a Publisher ID is not saved: "Save" stays greyed with no message** · 🐞 · medium · crash: server.
+A Journal Manager adds a galley to an issue and types a Publisher ID in
+"Create Issue Galley". On "Save" the request fails on the server. The
+window stays open with a spinner beside a greyed "Save", no message
+appears, and the galley is not added. The upload and the typed fields
+are lost when the window is cancelled. There is a way round: save the
+galley without a Publisher ID, then open its "Edit" and add the
+Publisher ID there, which works. Nothing on screen points to it. It
+happens only on journals that turned on publisher IDs for issue galleys,
+and on every new issue galley with a Publisher ID there.
+Basis: probe, 2026-10-02. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
 **OJS2 — The JATS XML's publisher ID is not the typed one** · ❓ · minor.
@@ -1805,6 +1813,7 @@ tab; the issue tab reloads `#identifiersTab` (note f).
 ? $this->_issueGalley->getId() : null, true)`, which passes the `null`
 of a new galley to `IssueGalleyDAO::pubIdExists(…, int $excludeGalleyId,
 …)`: a `TypeError`, answered as a server error. Live-probed 2026-09-24 (note q11): the save answered a server error (500) on `…/grid/issue-galleys/issue-galley-grid/update?issueId=…&issueGalleyId=`.
+Issue report: [docs/issues/U44-OJS1-new-issue-galley-publisher-id-server-error.md](../issues/U44-OJS1-new-issue-galley-publisher-id-server-error.md).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — `ArticleFront` (note i). Live-probed 2026-09-24 (note q24).
