@@ -1164,6 +1164,7 @@ Left out of the scenarios above, by reason:
   - "Download Issues" on Statistics › "Issues" with more than 30 issues visited in the range: the file holds every issue the page counts (the guard for OJS4, once fixed) {OJS}
   - a search phrase typed with double quotes on Statistics › "Articles", then each downloaded file's "Search Phrase" line parsed back to the phrase as typed (the guard for A8, once fixed)
   - Tab on Statistics › "Journal" stops on the "About journal statistics" icon and its text shows while it holds the focus (the guard for A7, once fixed)
+  - on Site Settings › "Statistics", a refused Platform ID left in the box, "Platform" unticked, "Save" answers "Saved" (the guard for A10, once fixed)
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1244,7 +1245,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | French interface: raw codes on the statistics screens of a press and a preprint server, and one column heading on a journal | 🐞 | minor | — |
 | [A7](#a7) | Information icons show their text on mouse hover only: Tab skips them on the Statistics pages and in settings forms | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | Statistics downloads: a double quote in the search phrase or a filter's name breaks that line of the file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A10](#a10) | A malformed Platform ID behind an unticked "Platform" refuses every save of the site's tab | 🐞 | minor | — |
+| [A10](#a10) | Site administrator cannot save Site Settings › "Statistics" after unticking "Platform" over a mistyped Platform ID | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | The COUNTER report downloads as "counterReport.tsv" but is comma-separated | 🐞 | minor | — |
 | [OJS4](#ojs4) | Statistics › Issues: "Download Issues" leaves out every issue after the first 30, without saying so | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS5](#ojs5) | "Journal Article Requests (IR_A1)" lists investigation rows its header leaves out | 🐞 | minor | — |
@@ -1404,15 +1405,25 @@ missing on the way to the file.
 Basis: probe, 2026-09-27. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — A hidden, malformed Platform ID blocks the site's tab** · 🐞 · minor.
-With "Platform" ticked, a malformed ID typed ("bad id!") and "Platform"
-then unticked, "Save" on Administration › Site Settings › "Statistics"
-is refused with "Please correct one error." and "Go to Platform ID: This
-is not formatted correctly." while the "Platform ID" box is hidden, and
-nothing is stored. The Site Administrator must tick "Platform" again to
-see and fix the box. Expected: a hidden ID is ignored, or the box stays
-visible with its error.
-Basis: probe, 2026-09-27. <sup>f-a10</sup>
+**A10 — Site administrator cannot save Site Settings › "Statistics" after unticking "Platform" over a mistyped Platform ID** · 🐞 · low.
+On Administration › Site Settings › "Statistics", a Site Administrator
+ticks "Platform", types a Platform ID that is not allowed (one with a
+space, for example) and unticks "Platform" again without correcting
+it. The "Platform ID" box disappears from the page. Since the site is
+not set as the platform, they expect "Save" to work.
+
+Instead the save is refused with "Please correct one error.", and
+nothing a sighted administrator can see says which box is wrong. The
+line that names it, "Go to Platform ID: This is not formatted
+correctly.", is in the page but visually hidden, and the box it names
+is not on the page. "Save" then stays greyed out, and nothing chosen
+on the tab is stored.
+
+To save, the administrator ticks "Platform" again, empties or corrects
+the box that comes back and unticks it, or reloads the page and makes
+the other choices again. An allowed ID, or an empty box, behind an
+unticked "Platform" saves as usual.
+Basis: probe, 2026-10-02. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — The COUNTER ".tsv" file is comma-separated** · 🐞 · minor.
@@ -2407,6 +2418,7 @@ correct one error." with "Go to Platform ID: This is not formatted
 correctly.", the box hidden, and the stored ID unchanged. The box is
 only hidden (`showWhen`, fn-q), so its value is still checked on
 "Save".
+Issue report: [docs/issues/U64-A10-hidden-platform-id-blocks-site-statistics-save.md](../issues/U64-A10-hidden-platform-id-blocks-site-statistics-save.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-27, three apps: 63 downloaded files over

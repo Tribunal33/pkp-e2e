@@ -1,0 +1,15 @@
+--- a/lib/pkp/api/v1/site/PKPSiteController.php
++++ b/lib/pkp/api/v1/site/PKPSiteController.php
+@@ -152,6 +152,12 @@
+ 
+         $params = $this->convertStringsToSchema(PKPSchemaService::SCHEMA_SITE, $illuminateRequest->input());
+ 
++        // The platform ID is used, and shown in the form, only while the site is the SUSHI platform.
++        // A save that leaves the platform off does not touch the stored ID.
++        if (array_key_exists('isSiteSushiPlatform', $params) && !$params['isSiteSushiPlatform']) {
++            unset($params['sushiPlatformID']);
++        }
++
+         $errors = $siteService->validate($params, $site->getSupportedLocales(), $site->getPrimaryLocale());
+ 
+         if (!empty($errors)) {
