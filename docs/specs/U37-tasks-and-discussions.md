@@ -1337,6 +1337,7 @@ Left out of the scenarios above, by reason:
   - the "Select submission stage" list of "Workflow Files" offering the stages up to Production and never Done (Rule 14a): likely a bullet in scenario 1's "A workflow file", read before "Submission" is chosen
   - the browser's leave-page prompt while the window holds unsaved changes (Rule 11d)
   - an edit of the comments-box discussion, by the submitting Author within the hour and by the Journal Manager, and of the recommendation discussion, each replacing the first message in place (Rules 15a, 15c, 21; A9 no longer covers them)
+  - the guard for A4 (issue report `docs/issues/U37-A4-find-template-discussion-task-error.md`): a "Find Template" search for "task", "discussion" and a phrase holding one of them lists the matching templates of that kind, with no "Error" window (Rule 10a)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1387,7 +1388,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | On a press and a preprint server as shipped, saving a discussion or a reply ends in an error dialog, and nobody is emailed or told | 🐞 | user-visible · crash: server | — |
 | [A2](#a2) | The "Add" window's subtitle reads "Open for What? Open to What? Beyond Content" | 🐞 | minor | — |
 | [A3](#a3) | The writer of a message receives it by email and as a Tasks row | 🐞 | minor | — |
-| [A4](#a4) | A "Find Template" search holding "discussion" or "task" ends in an "Error" window | 🐞 | user-visible · crash: server | — |
+| [A4](#a4) | When adding a task or discussion, a "Find Template" search for "discussion" or "task" opens an "Error" window | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | Choosing a template leaves "Participants" as it was, though the template says it fills them | 🐞 | minor | — |
 | [A6](#a6) | A task's owner who did not write its first message is offered "Edit" and refused on "Save" | 🐞 | user-visible | — |
 | [A7](#a7) | On a press and a preprint server the edit refusals show a raw key | 🐞 | minor | — |
@@ -1449,15 +1450,18 @@ The writer expects only the other participants to be told; before the
 Since: 2026-02-10 · Basis: probe. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
-**A4 — "Find Template" fails on "discussion" and "task"** · 🐞 · user-visible · crash: server.
-Any "Find Template" search holding "discussion", "discussions", "task"
-or "tasks", alone or with other words (even a template's full name),
-fails: the application opens a window "Error" with "OK", and the list
-reads "No items found.". A template whose name holds one of these words
-cannot be found by it, and the words cannot narrow the list to one kind
-of template, although every installed template is named "Discussion
-(…)" or is a discussion.
-Basis: probe. <sup>[f-a4](#fn-a4)</sup>
+**A4 — When adding a task or discussion, a "Find Template" search for "discussion" or "task" opens an "Error" window** · 🐞 · low · crash: server.
+The application fails on the server when someone adding a task or a
+discussion searches the templates for "discussion", "discussions",
+"task" or "tasks", alone or with other words, even a template's full
+name such as "Discussion (Production)". A window "Error" opens over the
+"Add" window with a PHP error message, and the template list reads "No
+items found.". So typing "discussion" or "task" does not filter the list
+to only discussions or only tasks, although each template button starts
+with its kind ("DISCUSSION - …", "TASK - …"). After "OK" the "Add"
+window stays open; its list reads "No items found." until the next
+search, and a search by another word lists templates again.
+Basis: probe, 2026-10-02. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
 **A5 — A template does not fill "Participants"** · 🐞 · minor.
@@ -1941,6 +1945,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="fn-a4"></a>
 **f-a4** — `Template::scopeWithSearch()` maps the words `task(s)`/`discussion(s)` to a type and calls `$query->filterByType($typeFilter)`; the model has `scopeWithType()` and no `scopeFilterByType()`, so the query builder throws `BadMethodCallException` and `GET editTaskTemplates?search=…` fails. Live-probed 2026-09-23 (all three apps): each Enter sends `GET /api/v1/editTaskTemplates?stageId={4|5}&search=…` twice and each answers 500; the "Error" window reads "Call to undefined method PKP\core\SettingsBuilder::filterByType()" with "OK".
+Issue report: [docs/issues/U37-A4-find-template-discussion-task-error.md](../issues/U37-A4-find-template-discussion-task-error.md).
 
 <a id="fn-a5"></a>
 **f-a5** — `Template::promote()` fills participants from the template's roles' stage assignments; `setValuesFromTemplate()` sets title, task box, due date, owner and message, never `participants`. Texts `discussion.template.discussionDescription` / `…taskDescription`. Live-probed 2026-09-23 on all three apps (td4).
