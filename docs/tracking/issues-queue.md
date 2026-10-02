@@ -63,7 +63,7 @@ and the hourly routine starts one only when none is running
 | [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 |  |
 | [U26](../specs/U26-review-stage-and-rounds.md) | 4 | 0 | 2 |  |
 | [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 |  |
-| [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 |  |
+| [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | **OMP1 taken: issues session, VM s2, 2026-10-02** (joined to U53 A14) |
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
 | [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 |  |
 | [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
