@@ -826,6 +826,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-A2-publisher-id-on-tab-never-removed.md`): a
     galley's and a chapter's "Publisher ID" saved, emptied and saved,
     and the reopened tab empty
+  - the guard for A9 (issue report
+    `docs/issues/U44-A9-urn-assign-offered-without-edit-rights.md`): a
+    participant whose "Save" is greyed on the "Identifiers" page (a
+    Layout Editor) finding "Assign" greyed too
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -899,7 +903,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | "Add Check Number" and "Assign" end URNs with the wrong check digit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | The tab's assign box reads "Assign the URN to this galley" with the URN left out | 🐞 | minor | — |
 | [A8](#a8) | A suffix pattern of spaces is refused with a raw text code | 🐞 | minor | — |
-| [A9](#a9) | "Assign" is offered on the "Identifiers" page to a role that cannot save it | 🐞 | minor | — |
+| [A9](#a9) | "Assign" fills the URN box for a participant whose "Save" is greyed on the "Identifiers" page | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | The URN prefix refusal shows "&amp;lt;NID&amp;gt;" under the box and in the notice | 🐞 | minor | — |
 | [A11](#a11) | The URN settings window raises a page error on every tick while the pattern choice is selected | 🐞 | invisible · crash: script | — |
 | [A13](#a13) | "Add Check Number" on a tab writes "NaN" into an empty suffix box | 🐞 | minor | — |
@@ -1018,14 +1022,22 @@ box is refused properly, with "This field is required."
 Basis: probe, 2026-09-24. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — "Assign" is offered to a role that cannot save** · 🐞 · minor.
-On the article's "Identifiers" page, a role that may not edit the
-publication (an assigned Section Editor whose assignment has
-"Permissions" unticked, a Layout Editor, a Proofreader) sees "Save"
-greyed but "Assign" enabled. Pressing "Assign" fills the box with the
-URN, which cannot be saved and is gone when the page is left. Expected:
-"Assign" greyed like "Save".
-Basis: probe, 2026-09-24. <sup>f-a9</sup>
+**A9 — "Assign" fills the URN box for a participant whose "Save" is greyed on the "Identifiers" page** · 🐞 · low.
+Some participants may open an article's or monograph's "Identifiers"
+page but may not change the publication: a Layout Editor, a Copyeditor,
+a Proofreader, or a section editor whose assignment does not allow
+changes to the publication. For them "Save" is greyed, but the URN
+field's "Assign" stays active. Pressing it fills the URN box as if the
+URN had been assigned, and "Clear" takes the place of "Assign". Nothing
+is sent: the box is empty again the next time the page opens. The
+participant is offered a step they cannot finish, and only the greyed
+"Save" hints that the URN was never assigned. It needs the URN plugin,
+which is off until a manager turns it on, with URNs for articles
+(monographs on a press) and the suffix left at "Use default patterns.",
+the choice its settings start with. OPS has no URN plugin. DOIs are not
+affected: since 3.4 they are assigned on the "DOIs" page, which only
+managers open (3.3 is in the Cause).
+Basis: probe, 2026-10-02. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — The URN prefix refusal shows "&amp;lt;NID&amp;gt;"** · 🐞 · minor.
@@ -1820,6 +1832,7 @@ looked up. Live-probed 2026-09-24 (note q10).
 **f-a9** — `FieldPubIdUrn` offers "Assign" whenever it can build the
 URN and the box is empty (note c); the page's "Save" follows the edit
 gate. Live-probed 2026-09-24 (note q1).
+Issue report: [docs/issues/U44-A9-urn-assign-offered-without-edit-rights.md](../issues/U44-A9-urn-assign-offered-without-edit-rights.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Live-probed 2026-09-24, OJS and OMP (note b): the same

@@ -1,0 +1,40 @@
+--- a/lib/ui-library/src/components/Form/Form.vue
++++ b/lib/ui-library/src/components/Form/Form.vue
+@@ -99,6 +99,8 @@
+ 	provide() {
+ 		return {
+ 			requireWhen: (isRequired) => requireWhen(isRequired, this.fields),
++			// Lets a field's own actions follow the save button (e.g. FieldPubId's Assign)
++			formCanSubmit: () => this.canSubmit,
+ 		};
+ 	},
+ 	props: {
+--- a/lib/ui-library/src/components/Form/fields/FieldPubId.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldPubId.vue
+@@ -37,6 +37,7 @@
+ 			<PkpButton
+ 				v-if="pattern && canGenerateId && !currentValue"
+ 				class="pkpFormField--pubid__button"
++				:is-disabled="!formCanSubmit()"
+ 				@click="assignId"
+ 			>
+ 				{{ assignIdLabel }}
+@@ -44,6 +45,7 @@
+ 			<PkpButton
+ 				v-else-if="pattern && currentValue"
+ 				class="pkpFormField--pubid__button"
++				:is-disabled="!formCanSubmit()"
+ 				:is-warnable="true"
+ 				@click="() => (currentValue = '')"
+ 			>
+@@ -84,6 +86,10 @@
+ 		FieldError,
+ 	},
+ 	extends: FieldBase,
++	inject: {
++		/** Whether the form holding this field can be saved. Assign and Clear are disabled when it cannot. */
++		formCanSubmit: {default: () => () => true},
++	},
+ 	props: {
+ 		assignIdLabel: {
+ 			type: String,
