@@ -1158,6 +1158,7 @@ Left out of the scenarios above, by reason:
     button pressed again, a click outside it, the focus leaving it), and
     typed dates kept in the boxes while not applied (Fields "The date
     range")
+  - a Journal Manager's "Do not collect any geographical data" on a site that collects geographical data: the choice still selected after a reload, and no "Download Geographic" in the "Download Report" window (the guard for A4, once fixed)
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1233,7 +1234,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | "All dates" on "Articles" of a journal with nothing published opens an "Error" window reading a raw code, and the chart stays on the previous range | 🐞 | user-visible | — |
 | [A3](#a3) | "Counter R5" date refusals show a raw code with the date inside it | 🐞 | minor | — |
-| [A4](#a4) | A journal's "Do not collect any geographical data" is not kept; it collects at the site's level | 🐞 | user-visible | — |
+| [A4](#a4) | A journal's "Do not collect any geographical data" is not kept: the journal keeps collecting at the site's level | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A Section Editor's "Counter R5" opens an "Error" window over an empty list while the journal's COUNTER statistics are restricted | 🐞 | minor | — |
 | [A6](#a6) | French interface: raw codes on the statistics screens of a press and a preprint server, and one column heading on a journal | 🐞 | minor | — |
 | [A7](#a7) | The information icons show their text on mouse hover only; the keyboard never reaches them | 🐞 | minor | — |
@@ -1292,16 +1293,24 @@ plainly.
 Basis: probe, 2026-09-27. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A journal cannot stop collecting geographical data** · 🐞 · user-visible.
-With the site collecting geographical data, a Journal Manager who
-chooses "Do not collect any geographical data" on Settings › Distribution
-› "Statistics" and saves sees "Saved" with the choice still shown, but
-reopened the tab has the site's level chosen again, and the journal
-keeps collecting at the site's level: the "Download" window of
-"Articles" still offers "Geographic", whose file reports at the site's
-level (cities, at a city-level site). Expected: the choice holds and
-nothing geographical is collected, as it does for the shallower levels.
-Basis: probe, 2026-09-27. <sup>f-a4</sup>
+**A4 — A journal's "Do not collect any geographical data" is not kept: the journal keeps collecting at the site's level** · 🐞 · medium.
+On a site that collects geographical statistics, a Journal Manager
+chooses "Do not collect any geographical data" on Settings ›
+Distribution › "Statistics" and saves. The tab shows "Saved" with the
+choice still selected. When the manager opens the tab again, the
+site's level is selected, and the journal keeps collecting at that
+level: the "Download Report" window of Statistics › "Articles" still
+offers "Download Geographic", and its file reports at the site's level
+(cities, on a site that collects cities).
+
+The manager expects the choice to hold and nothing geographical to be
+collected for the journal, as a less detailed level than the site's
+holds ("Collect the visitor's country" on a site that collects cities).
+The manager cannot stop the collection entirely; choosing "Collect the
+visitor's country" only limits it to the country. This needs a site
+whose "Geographical Statistics" is set to collect; a new install
+collects none.
+Basis: probe, 2026-10-02. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A Section Editor's "Counter R5" fails while restricted** · 🐞 · minor.
@@ -2303,6 +2312,7 @@ untranslated code. Live-probed 2026-09-27: td5.
 
 <a id="fn-f-a4"></a>
 **f-a4** — fn-s. Live-probed 2026-09-27: td7.
+Issue report: [docs/issues/U64-A4-journal-geographical-data-opt-out-not-kept.md](../issues/U64-A4-journal-geographical-data-opt-out-not-kept.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — fn-n (restricted: site admin and manager roles alone) against

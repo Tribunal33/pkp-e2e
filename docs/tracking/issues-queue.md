@@ -22,7 +22,7 @@ and the hourly routine starts one only when none is running
 | [U17](../specs/U17-sections.md) | 16 | 2 | 2 | OMP9, OPS6: open reports docs/reports/2026-09-25-omp-series-page-blank.md and docs/reports/2026-09-25-ops-oai-empty-abstract.md (the rest of U17 written up by the issues session, workstation s0, 2026-10-02) |
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 | A1, A7, OPS1: open reports docs/reports/2026-09-26-webfeed-rss2-empty-feed-fails.md, docs/reports/2026-09-26-webfeed-terms-read-array.md and docs/reports/2026-09-26-webfeed-ops-publisher-array.md (the rest of U18 written up by the issues session, workstation s0, 2026-10-02) |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
-| [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | **Taken: issues session, workstation s0, 2026-10-02**; OMP3 done with U69 A9 (pkp-e2e#282) |
+| [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | **Taken: issues session, workstation s0, 2026-10-02**; OMP3 done with U69 A9 (pkp-e2e#282); A4 done; open: A1, A3, A5, A6, A7, A8, A10, A11, OJS4, OJS5, OJS6 |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
 | [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | OPS2 done with U51 OPS1 (pkp-e2e#380) |
 | [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 | **A5 taken: issues session, workstation s0, 2026-10-02** (with U64 A7) |

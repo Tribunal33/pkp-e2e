@@ -1,0 +1,50 @@
+--- a/lib/pkp/classes/context/Context.php
++++ b/lib/pkp/classes/context/Context.php
+@@ -579,6 +579,7 @@
+     /**
+     * What Geo data to track for usage statistics.
+     * Consider context setting only if the site setting is enabled and context setting considers less Geo data than site setting.
++    * A context without a setting of its own follows the site.
+     *
+     * @return ?string Possible return values: null, disabled, PKPStatisticsHelper::self::STATISTICS_SETTING_COUNTRY, PKPStatisticsHelper::self::STATISTICS_SETTING_REGION, PKPStatisticsHelper::self::STATISTICS_SETTING_CITY
+     */
+@@ -589,7 +590,8 @@
+             return $siteSetting;
+         }
+         $contextSetting = $this->getData('enableGeoUsageStats');
+-        if ($contextSetting != null && str_starts_with($siteSetting, $contextSetting)) {
++        // The context may collect less than the site: nothing at all, or a level the site's level starts with.
++        if ($contextSetting != null && ($contextSetting === 'disabled' || str_starts_with($siteSetting, $contextSetting))) {
+             return $contextSetting;
+         }
+         return $siteSetting;
+--- a/lib/pkp/classes/components/forms/context/PKPContextStatisticsForm.php
++++ b/lib/pkp/classes/components/forms/context/PKPContextStatisticsForm.php
+@@ -55,11 +55,8 @@
+                 break;
+             }
+         }
+-        $selectedGeoOption = $site->getData('enableGeoUsageStats');
+-        if ($context->getData('enableGeoUsageStats') != null &&
+-            str_starts_with($selectedGeoOption, $context->getData('enableGeoUsageStats'))) {
+-            $selectedGeoOption = $context->getData('enableGeoUsageStats');
+-        }
++        // The level the context collects at: the one rule lives in Context::getEnableGeoUsageStats()
++        $selectedGeoOption = $context->getEnableGeoUsageStats($site);
+ 
+         if ($site->getData('enableGeoUsageStats') && $site->getData('enableGeoUsageStats') !== 'disabled') {
+             $this->addField(new FieldOptions('enableGeoUsageStats', [
+--- a/lib/pkp/schemas/context.json
++++ b/lib/pkp/schemas/context.json
+@@ -1009,9 +1009,9 @@
+ 		},
+ 		"enableGeoUsageStats": {
+ 			"type": "string",
+-			"description": "Whether to track usage statistics by location, and whether to track at the country, region or city level.",
+-			"default": "disabled",
++			"description": "Whether to track usage statistics by location, and whether to track at the country, region or city level. A context without a value follows the site.",
+ 			"validation": [
++				"nullable",
+ 				"in:disabled,country,country+region,country+region+city"
+ 			]
+ 		},
