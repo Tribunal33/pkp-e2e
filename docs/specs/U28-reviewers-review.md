@@ -998,6 +998,7 @@ Left out of the scenarios above, by reason:
     wish to continue without saving?", "Cancel" keeping the text
     ([A15](#a15); Rule 18): the guard the issue report proposes, once
     fixed
+  - {OPS} a user invited to a home-made "Reviewer"-level role beside Author landing on "Active submissions" after sign-in, with no "My Assignments as Reviewer" group and the typed reviewer-list address refused ([OPS1](#ops1); Purpose, scenario 17): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1059,7 +1060,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a changed "Recommendation" or review-form answer is guarded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | {OMP} On a press, the email telling editors a review is in says the reviewer "recommends None" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | {OMP} On a press, a review form refused for an unanswered required question shows the reviewer a raw text code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OPS1](#ops1) | {OPS} A home-made reviewer role opens a "My Assignments as Reviewer" page headed "undefined (0)" under an "Error" window | 🐞 | minor · crash: script | claim check (claude), 2026-09-30 — "Loading" corrected to "No Items" under an "Error" window; the landing after sign-in and the page's console "TypeError" added |
+| [OPS1](#ops1) | {OPS} On a preprint server, a user given a "Reviewer"-level role lands after every sign-in on a page headed "undefined (0)" under an "Error" window | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | Declining a request sends the reviewer to the journal's public home page instead of their assignments | ❓ | minor | — |
 | [A11](#a11) | An assignment left behind under "Archived" still opens a wizard that takes and submits a full review | ❓ | minor | — |
 | [A13](#a13) | The "Read Round {N} Review" window never lists the files that were sent for review | ❓ | minor | — |
@@ -1411,21 +1412,24 @@ Basis: probe, 2026-10-02. <sup>[f-omp3](#fn-omp3)</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — A home-made reviewer role opens a "My Assignments as Reviewer" page headed "undefined (0)" under an "Error" window** · 🐞 · minor · crash: script.
-A Preprint Server Manager can create a role at the "Reviewer" permission
-level and invite a user to it. Whether that user holds the role alone or
-beside Author, signing in on the server's login page lands them on a
-page headed "undefined (0)". Its table reads "No Items" over "Showing 0
-to 0 of 0", under an "Error" window "The current role does not have
-access to this operation.", and every load logs a "TypeError" in the
-browser's console. "OK" leaves the empty page, and "Filters" › "Apply Filters" opens
-the window again. The sidebar's "My Assignments as Reviewer" heading has
-no entries and pressing it opens nothing; the wizard's address stays a
-bare "404 Not Found" page. A journal or press shows the
-same account an empty "Action Required by me (0)" list with no window.
-An Author still reaches their own submissions under "My Submissions as
-Author". Reached only through a role the install never creates.
-Basis: probe (2026-09-05, 2026-09-30). <sup>[f-ops1](#fn-ops1)</sup>
+**OPS1 — On a preprint server, a user given a "Reviewer"-level role lands after every sign-in on a page headed "undefined (0)" under an "Error" window** · 🐞 · low · crash: script.
+On a preprint server, a manager can create a role at the "Reviewer"
+permission level and invite a user to it. After every sign-in that user
+lands on a reviewer page whose script fails in the browser: it is headed
+"undefined (0)" with an empty table, under an "Error" window that reads
+"The current role does not have access to this operation.". A user who
+is also an Author expected to land on their own submissions, as before
+the invitation.
+
+An Author still reaches their submissions through "My Submissions as
+Author" in the side menu. The menu also shows a "My Assignments as
+Reviewer" group, which is empty. A user who holds only the new role can
+do nothing on that page until a manager ends the role or adds another.
+
+The install does not create such a role: a preprint server has no review
+stage and no reviewer role, but "Create New Role" still offers the
+level. The fix is three guards in pkp-lib.
+Basis: probe, 2026-10-02. <sup>[f-ops1](#fn-ops1)</sup>
 
 ### Retired
 
@@ -2637,6 +2641,7 @@ shapes of account, and an installed External Reviewer, land on
 the sidebar listing the six views, "Apply Filters" refetching with 200,
 and no window and no console error. Not security-shaped: the page shows
 nothing and the request is refused.
+Issue report: [docs/issues/U28-OPS1-ops-reviewer-level-role-lands-on-undefined-list.md](../issues/U28-OPS1-ops-reviewer-level-role-lands-on-undefined-list.md).
 
 ## Reference — entry points & surfaces
 

@@ -1,0 +1,60 @@
+--- a/lib/pkp/classes/core/PKPPageRouter.php
++++ b/lib/pkp/classes/core/PKPPageRouter.php
+@@ -423,6 +423,15 @@
+ 
+         $roleIdsArray = $userGroups->pluck('role_id')->all();
+ 
++        // An application without a review stage has no reviewer dashboard: there a
++        // reviewer-level role opens no page of its own, and its holder goes on as without it.
++        if (!array_intersect([WORKFLOW_STAGE_ID_INTERNAL_REVIEW, WORKFLOW_STAGE_ID_EXTERNAL_REVIEW], Application::getApplicationStages())) {
++            $roleIdsArray = array_diff($roleIdsArray, [Role::ROLE_ID_REVIEWER]);
++            if (!array_diff($roleIdsArray, [Role::ROLE_ID_READER])) {
++                return $request->url(null, 'index');
++            }
++        }
++
+         if (array_intersect([Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT], $roleIdsArray)) {
+             return $request->url(null, 'dashboard', 'editorial');
+         }
+--- a/lib/pkp/pages/dashboard/PKPDashboardHandler.php
++++ b/lib/pkp/pages/dashboard/PKPDashboardHandler.php
+@@ -98,10 +98,13 @@
+             ['editorial']
+         );
+ 
+-        $this->addRoleAssignment(
+-            Role::ROLE_ID_REVIEWER,
+-            ['reviewAssignments']
+-        );
++        // The reviewer dashboard exists only where the application has a review stage
++        if (array_intersect([WORKFLOW_STAGE_ID_INTERNAL_REVIEW, WORKFLOW_STAGE_ID_EXTERNAL_REVIEW], Application::getApplicationStages())) {
++            $this->addRoleAssignment(
++                Role::ROLE_ID_REVIEWER,
++                ['reviewAssignments']
++            );
++        }
+ 
+         $this->addRoleAssignment(
+             Role::ROLE_ID_AUTHOR,
+--- a/lib/pkp/classes/template/PKPTemplateManager.php
++++ b/lib/pkp/classes/template/PKPTemplateManager.php
+@@ -1268,11 +1268,14 @@
+                                     'badge' => ['slot' => '-']
+                                 ];
+                             });
+-                            $menu['reviewAssignments'] = [
+-                                'name' => __('navigation.reviewAssignments'),
+-                                'submenu' => $viewsData,
+-                                'icon' => 'ReviewAssignments',
+-                            ];
++                            // No reviewer views (an application without a review stage): no menu group
++                            if ($viewsData->isNotEmpty()) {
++                                $menu['reviewAssignments'] = [
++                                    'name' => __('navigation.reviewAssignments'),
++                                    'submenu' => $viewsData,
++                                    'icon' => 'ReviewAssignments',
++                                ];
++                            }
+                         }
+                         if (count(array_intersect([Role::ROLE_ID_AUTHOR], $userRoles))) {
+                             $dashboardViews = Repo::submission()->getDashboardViews($request->getContext(), $request->getUser(), [Role::ROLE_ID_AUTHOR]);
