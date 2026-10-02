@@ -896,7 +896,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | An SVG, a PDF or any file but a JPEG, PNG, GIF, BMP or WEBP is ignored in "Insert/Edit Image", with no message | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | A dropped or pasted picture the site refuses stays in the text, embedded, and is saved | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A picture over the upload limit gets a server error, never "Files larger than {size} can not be uploaded." | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A19](#a19) | Closing a static page, custom block or reviewer email window after editing only its text loses the text without asking | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [A19](#a19) | Closing a static page, custom block, reviewer email or issue window after editing only its text loses it without asking | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | With two form languages, the first language's "Content" box can stay under a "Loading..." spinner for good | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | A deleted custom block would keep its place in the sidebar, so a later block of the same name appears unplaced | ❓ | minor | — |
 | [A5](#a5) | Pictures named ".jpeg" are refused while ".jpg" is accepted | ❓ | user-visible | — |
@@ -1178,23 +1178,25 @@ a smaller file.
 Basis: probe, 2026-10-01. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — Closing a static page, custom block or reviewer email window after editing only its text loses the text without asking** · 🐞 · medium.
+**A19 — Closing a static page, custom block, reviewer email or issue window after editing only its text loses it without asking** · 🐞 · medium.
 A manager writes or edits the text of a static page in its "Content"
 box, then presses the window's back arrow. The window closes at once and
 the text is gone, without a word. After a change to "Path" or "Title"
 the same arrow first asks "The data on this form has changed. Do you
 wish to continue without saving?", so the manager has no reason to
-expect the loss. Going to another address with the window open loses
-the text the same way, without the browser's "Leave site?" question.
-The custom block window loses its "Content" the same way. So do an
-editor's email windows to a reviewer: an editor who adds a line to the
-message in "Thank Reviewer" or "Unassign Reviewer" and closes the panel
-loses it without a question, and the window opens again with the
-template's text. Any other window built with the older form code does
-the same when its formatted-text box is the only thing changed (listed
-under Cause). Pressing "Save" or sending before closing is the
-only way round.
-Basis: probe, 2026-10-01. <sup>f-a19</sup>
+expect the loss. The same happens in about fifteen windows built on the
+older form framework (the windows drawn by the server, not the newer Vue
+forms) whenever a text box with formatting buttons is the only thing
+changed. The ones met most often are the custom block window's
+"Content"; an editor's emails to a reviewer ("Thank Reviewer", "Unassign
+Reviewer", "Send Reminder", "Resend Request", "Cancel Reviewer",
+"Reinstate"), which open again with the template's text; and an issue's
+"Description" on "Issue Data", which is also lost without the question
+when the Journal Manager presses another tab of the issue's window.
+Pressing "Save" or sending before closing is the only way round. All of
+these windows share one piece of form code, so one change there fixes
+them all.
+Basis: probe, 2026-10-02. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — With two form languages, the first language's "Content" box can stay under a "Loading..." spinner for good** · 🐞 · medium · crash: script.
