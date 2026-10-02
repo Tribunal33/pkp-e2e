@@ -2393,8 +2393,8 @@ your preprint… The new version is now available. If you have any
 questions, please contact me.{$signature}" — the "{$signature}"
 rendered raw; "Preprint Posted Acknowledgement" appeared in no mailbox
 (recipient-scoped Mailpit).
-Issue report: [docs/issues/U49-OPS4-first-post-thanked-for-new-version.md](../issues/U49-OPS4-first-post-thanked-for-new-version.md).
-Issue report: [docs/issues/U49-OPS4-posted-acknowledgement-raw-signature.md](../issues/U49-OPS4-posted-acknowledgement-raw-signature.md).
+Issue report: [pkp-e2e#551](https://github.com/jardakotesovec/pkp-e2e/issues/551) ([docs/issues/U49-OPS4-first-post-thanked-for-new-version.md](../issues/U49-OPS4-first-post-thanked-for-new-version.md)).
+Issue report: [pkp-e2e#552](https://github.com/jardakotesovec/pkp-e2e/issues/552) ([docs/issues/U49-OPS4-posted-acknowledgement-raw-signature.md](../issues/U49-OPS4-posted-acknowledgement-raw-signature.md)).
 
 <a id="fn-ops5"></a>
 **f-ops5** — Live-probed 2026-08-29 (scratch server): after a post the
