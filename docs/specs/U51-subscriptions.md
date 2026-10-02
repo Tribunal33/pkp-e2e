@@ -1370,8 +1370,8 @@ Left out of the scenarios above, by reason:
   - the guard for A9 (issue report
     `docs/issues/U51-A9-individual-purchase-refusal-says-nothing.md`): on
     "Purchase Individual Subscription", "Save" with a type that requires
-    membership and "Membership" empty shows the refusal "Membership" message
-    on the page.
+    membership and "Membership" empty shows a message
+    that "Membership" is required.
   - the guard for A23 (issue report
     `docs/issues/U51-A23-purchase-link-on-open-journal-leads-home.md`): a
     signed-in reader on an open-access journal with payments set up finds no
@@ -2008,7 +2008,7 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `purchaseIndividualSubscription.tpl` has no `common/formErrors.tpl` include (the institutional page has one); `UserHandler::payPurchaseSubscription()` re-displays the form on a failed `validate()`. Live-probed 2026-09-25 (td16).
-Issue report: [docs/issues/U51-A9-individual-purchase-refusal-says-nothing.md](../issues/U51-A9-individual-purchase-refusal-says-nothing.md).
+Issue report: [pkp-e2e#388](https://github.com/jardakotesovec/pkp-e2e/issues/388) ([docs/issues/U51-A9-individual-purchase-refusal-says-nothing.md](../issues/U51-A9-individual-purchase-refusal-says-nothing.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — `userSubscriptions.tpl` offers `purchaseSubscription/{kind}/{id}` on an `ACTIVE` subscription; `UserIndividualSubscriptionForm::execute()` (and the institutional one) set the existing subscription's status to `AWAITING_MANUAL_PAYMENT` (or `_ONLINE_`) and both dates to today before any payment. Live-probed 2026-09-25 (td18), individual and institutional.
@@ -2055,11 +2055,11 @@ Issue report: [pkp-e2e#386](https://github.com/jardakotesovec/pkp-e2e/issues/386
 
 <a id="fn-f-a23"></a>
 **f-a23** — `AboutHandler::subscriptions()` checks only the payment setup (note f) and the template offers "Purchase New Subscription" to any signed-in visitor, while `UserHandler::purchaseSubscription()` redirects to the index outside `PUBLISHING_MODE_SUBSCRIPTION`. Live-probed 2026-09-25 (td27), on an open-access and a not-online journal.
-Issue report: [docs/issues/U51-A23-purchase-link-on-open-journal-leads-home.md](../issues/U51-A23-purchase-link-on-open-journal-leads-home.md).
+Issue report: [pkp-e2e#389](https://github.com/jardakotesovec/pkp-e2e/issues/389) ([docs/issues/U51-A23-purchase-link-on-open-journal-leads-home.md](../issues/U51-A23-purchase-link-on-open-journal-leads-home.md)).
 
 <a id="fn-f-a24"></a>
 **f-a24** — `userSubscriptions.tpl` and the block link to `about/subscriptions`, which redirects to the journal index while payments are not configured (note f). Live-probed 2026-09-25 (td20, td25).
-Issue report: [docs/issues/U51-A24-subscription-offer-links-lead-home-payments-off.md](../issues/U51-A24-subscription-offer-links-lead-home-payments-off.md).
+Issue report: [pkp-e2e#390](https://github.com/jardakotesovec/pkp-e2e/issues/390) ([docs/issues/U51-A24-subscription-offer-links-lead-home-payments-off.md](../issues/U51-A24-subscription-offer-links-lead-home-payments-off.md)).
 
 <a id="fn-f-a25"></a>
 **f-a25** — `UserInstitutionalSubscriptionForm::initData()` fills `ipRanges` with `$institution->getIPRanges()`, an array, which the text box prints as "Array"; the IP check then refuses it. Live-probed 2026-09-25 (td18).
