@@ -1,0 +1,45 @@
+--- a/lib/pkp/controllers/grid/settings/user/form/UserDisableForm.php
++++ b/lib/pkp/controllers/grid/settings/user/form/UserDisableForm.php
+@@ -51,15 +51,10 @@
+      */
+     public function initData()
+     {
+-        if ($this->_userId) {
+-            $user = Repo::user()->get($this->_userId, true);
+-
+-            if ($user) {
+-                $this->_data = [
+-                    'disableReason' => $user->getDisabledReason()
+-                ];
+-            }
+-        }
++        // A stored reason belongs to an earlier disabling and is not offered again.
++        $this->_data = [
++            'disableReason' => '',
++        ];
+     }
+ 
+     /**
+@@ -101,7 +96,7 @@
+ 
+         if ($user) {
+             $user->setDisabled($this->_enable ? false : true);
+-            $user->setDisabledReason($this->getData('disableReason'));
++            $user->setDisabledReason($this->_enable ? '' : $this->getData('disableReason'));
+             Repo::user()->edit($user);
+             if ($this->_enable) {
+                 AuditLog::log(AuditEvent::USER_ENABLED, LogLevel::NOTICE, ['targetUserId' => $user->getId()]);
+--- a/lib/pkp/templates/controllers/grid/settings/user/form/userDisableForm.tpl
++++ b/lib/pkp/templates/controllers/grid/settings/user/form/userDisableForm.tpl
+@@ -20,10 +20,7 @@
+ 	<input type="hidden" name="enable" value="{$enable|escape}" />
+ 
+ 	{if $enable}
+-		{fbvFormSection title="grid.user.enableReason" for="disableReason"}
+-			<p class="mb-4">{translate key ="grid.user.enableReasonDescription"}</p>
+-			{fbvElement type="textarea" id="disableReason" value=$disableReason size=$fbvStyles.size.LARGE}
+-		{/fbvFormSection}
++		<p class="mb-4">{translate key ="grid.user.enableReasonDescription"}</p>
+ 	{else}
+ 		{fbvFormSection title="grid.user.disableReason" for="disableReason"}
+ 			<p class="mb-4">{translate key ="grid.user.disableReasonDescription"}</p>

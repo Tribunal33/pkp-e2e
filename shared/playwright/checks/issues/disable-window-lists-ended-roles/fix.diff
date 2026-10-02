@@ -1,0 +1,25 @@
+--- a/lib/ui-library/src/managers/UserAccessManager/useUserAccessManagerActions.js
++++ b/lib/ui-library/src/managers/UserAccessManager/useUserAccessManagerActions.js
+@@ -37,7 +37,10 @@
+ 				enable: user.disabled ? '1' : '',
+ 			},
+ 		});
+-		const currentRoles = user.groups.map((group) => group.name).join(', ');
++		const currentRoles = user.groups
++			.filter((group) => !group.dateEnd)
++			.map((group) => group.name)
++			.join(', ');
+ 
+ 		openLegacyModal(
+ 			{
+--- a/lib/pkp/locale/en/user.po
++++ b/lib/pkp/locale/en/user.po
+@@ -882,7 +882,7 @@
+ msgstr "Until then, you can review and update your profile. If you believe this is an error, please contact the administrator."
+ 
+ msgid "user.disabledModal.description"
+-msgstr "Current Roles : {$roles}"
++msgstr "Current Roles: {$roles}"
+ 
+ msgid "user.disabledModal.title"
+ msgstr "Disable {$fullName}"

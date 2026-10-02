@@ -778,6 +778,16 @@ Left out of the scenarios above, by reason:
     "Merge user" window: the administrator's row names the manager role
     under "Roles"; after "Edit User" ends a role, the refreshed row no
     longer lists it
+  - the guard for A6 (issue report
+    `docs/issues/U53-A6-disable-window-lists-ended-roles.md`): a manager
+    opens "Disable User" on a user one of whose roles has ended: the
+    window's "Current Roles:" line names only the roles the list's "Roles"
+    column shows
+  - the guard for A7 (issue report
+    `docs/issues/U53-A7-enabling-reason-kept-as-disabling-reason.md`): a
+    manager disables an account, enables it and disables it again: the
+    second "Disable User" opens with an empty reason box, and the Login page
+    never shows text typed when enabling
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -866,8 +876,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred…" | 🐞 | user-visible | — |
 | [A4](#a4) | The search box's example names "Journal editor" on a press and a preprint server | 🐞 | minor | — |
 | [A5](#a5) | The row's "…" button is announced to screen readers as a raw code | 🐞 | minor | — |
-| [A6](#a6) | The disable window's "Current Roles : " line lists roles that have ended | 🐞 | minor | — |
-| [A7](#a7) | The reason typed when enabling becomes the reason shown at the next disabling | 🐞 | minor | — |
+| [A6](#a6) | Users & Roles: the "Disable User" window names roles the user no longer holds | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A7](#a7) | Users & Roles: the reason typed when enabling a user is shown to them when disabled again | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | Merging a section editor's account silently drops them from their sections instead of moving them | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | The French "Users" tab prints raw codes for its search label, the Invitations heading, button and columns, and the "Start Date" column | 🐞 | minor | — |
 | [A12](#a12) | Users & Roles: the ORCID and "disabled" icons after a user's name have no name for screen readers | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -938,21 +948,35 @@ the menu it opens reads normally.
 Basis: probe. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — The disable window lists ended roles** · 🐞 · minor.
-The line under "Disable {full name}" reads "Current Roles : {roles}" with
-a space before the colon, and names every role the user ever held in the
-journal, ended ones included, although the list's "Roles" column leaves
-ended roles out.
-Basis: probe. <sup>f-a6</sup>
+**A6 — Users & Roles: the "Disable User" window names roles the user no longer holds** · 🐞 · low.
+On Settings › Users & Roles, a manager presses "Disable User" on a
+user's row. The line under "Disable {full name}" reads "Current Roles :
+{roles}" with a space before the colon, and names every role the user
+ever held in the journal, ended ones included, although the list's
+"Roles" column leaves ended roles out. The "Enable User" window shows
+the same line. For a user whose roles in the journal have all ended, the
+line still lists each of them. The account is disabled or enabled as
+asked, and nothing else reads the line. The harm is confusion: a manager
+can take a role they removed earlier, an editor's role for instance, for
+one the user still holds. It shows for every user who has had a role
+removed, one role with "Remove Role" on the user's roles page or all of
+them with "Remove User". Basis: probe, 2026-10-02. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The enabling reason becomes the next disabling reason** · 🐞 · minor.
-"Enable User" opens with the old disabling reason in "Reason for enabling
-user", and whatever the box holds on "OK" is stored as the account's
-reason. The next "Disable User" offers that text, and if nobody clears
-it the Login page tells the user their account was disabled "for the
-following reason:" followed by the reason for enabling it.
-Basis: probe. <sup>f-a7</sup>
+**A7 — Users & Roles: the reason typed when enabling a user is shown to them when disabled again** · 🐞 · low.
+On Settings › Users & Roles, "Enable User" opens with the old disabling
+reason in "Reason for enabling user", and whatever the box holds on "OK"
+is stored as the account's reason. The next "Disable User" offers that
+text, and if nobody clears it the Login page tells the user their
+account was disabled "for the following reason:" followed by the reason
+for enabling it. The manager can clear or retype the box in either
+window, but neither window says that the text will be shown to the user.
+So a note meant for the journal's own record ("Appeal accepted") can
+reach the user as the reason they were shut out. It needs an account
+that is disabled, enabled and disabled again. The older users grid
+(Administration › "Hosted Journals" › the journal's arrow › "Settings
+wizard" › "Users") opens the same windows. Basis: probe, 2026-10-02.
+<sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — Removal from the journal sends no word** · ❓ · minor.
@@ -1921,9 +1945,11 @@ read "Current Roles : Author, Section editor". Code: `disableUser()` joins
 `user.groups.map(g => g.name)`, every assignment in the context
 (`preloadGroups()`), without the `dateEnd` filter the "Roles" cell uses;
 `user.disabledModal.description` is "Current Roles : {$roles}".
+Issue report: [docs/issues/U53-A6-disable-window-lists-ended-roles.md](../issues/U53-A6-disable-window-lists-ended-roles.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Code: note h. Live-probed 2026-09-25: note td6.
+Issue report: [docs/issues/U53-A7-enabling-reason-kept-as-disabling-reason.md](../issues/U53-A7-enabling-reason-kept-as-disabling-reason.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Code read 2026-09-25: `UserGridHandler::removeUser()` writes
