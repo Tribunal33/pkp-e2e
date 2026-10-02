@@ -1302,11 +1302,11 @@ Issue report: [pkp-e2e#564](https://github.com/jardakotesovec/pkp-e2e/issues/564
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note e: the 24-hour `Cache::remember()` is cleared only by upload, delete and the visibility change; neither `Repo::publication()->edit()` nor publishing clears it, so a copy cached from "Preview" (whose download goes through the same `getPublicJatsContent()`) outlives publication. Probe: d14.
-Issue report: [docs/issues/U48-A8-published-jats-xml-stays-old-after-edit.md](../issues/U48-A8-published-jats-xml-stays-old-after-edit.md).
+Issue report: [pkp-e2e#569](https://github.com/jardakotesovec/pkp-e2e/issues/569) ([docs/issues/U48-A8-published-jats-xml-stays-old-after-edit.md](../issues/U48-A8-published-jats-xml-stays-old-after-edit.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note e: the `urlPath` branch appends no hyphen before "publication-". The returning reader's old name: the response's ETag hashes the XML alone, so an unchanged XML answers "not modified" and the browser reuses the earlier `Content-Disposition`. Probe: d27.
-Issue report: [docs/issues/U48-A9-published-jats-xml-name-url-path.md](../issues/U48-A9-published-jats-xml-name-url-path.md).
+Issue report: [pkp-e2e#570](https://github.com/jardakotesovec/pkp-e2e/issues/570) ([docs/issues/U48-A9-published-jats-xml-name-url-path.md](../issues/U48-A9-published-jats-xml-name-url-path.md)).
 
 <a id="fn-d27"></a>
 **d27** — Live-probed 2026-09-25 (Rule 10; A9), OJS, two runs: "URL Path" "my-article" saved on the published version's "Publication Settings" gave "my-articlepublication-57-jats.xml", and "k2-second" gave "k2-secondpublication-54-jats.xml" to a first-time visitor. Clearing the path gave a first-time visitor "submission-55-publication-57-jats.xml", while the browser that had downloaded before got "my-articlepublication-57-jats.xml" again; after "k2-second" was set, the returning browser got "submission-52-publication-54-jats.xml".
