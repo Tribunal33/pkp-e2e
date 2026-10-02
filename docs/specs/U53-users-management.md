@@ -1964,7 +1964,7 @@ manager" ("Press manager", "Preprint Server manager") with no start date.
 The grids' "Roles" column lists active and future roles (note i), and the
 manager enrolment a new journal gives the Site Administrator has no start
 date, which fits the empty cell.
-Issue report: [docs/issues/U53-A13-A17-users-grid-roles-admin-empty-ended-listed.md](../issues/U53-A13-A17-users-grid-roles-admin-empty-ended-listed.md).
+Issue report: [pkp-e2e#450](https://github.com/jardakotesovec/pkp-e2e/issues/450) ([docs/issues/U53-A13-A17-users-grid-roles-admin-empty-ended-listed.md](../issues/U53-A13-A17-users-grid-roles-admin-empty-ended-listed.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-25, OMP and OPS: after "Confirm" on a
@@ -1996,7 +1996,7 @@ Password" was ticked and then unticked, the password boxes were empty and
 open, "Notify User" disabled and unticked. Code:
 `UserDetailsFormHandler::setGenerateRandom()` unticks with
 `.attr('disabled', '')`, which leaves the `disabled` attribute in place.
-Issue report: [docs/issues/U53-A16-add-user-notify-stays-greyed.md](../issues/U53-A16-add-user-notify-stays-greyed.md).
+Issue report: [pkp-e2e#451](https://github.com/jardakotesovec/pkp-e2e/issues/451) ([docs/issues/U53-A16-add-user-notify-stays-greyed.md](../issues/U53-A16-add-user-notify-stays-greyed.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Test run 2026-09-26 (Rule 24; scenario 8), OJS and OPS: after
@@ -2015,7 +2015,7 @@ role whose `date_end >= now` at one-second precision, while
 own second, so the refresh after "OK", or a reload within that second,
 still lists the ended role; the Users & Roles list's `withActive`
 compares with `>` and does not.
-Issue report: [docs/issues/U53-A13-A17-users-grid-roles-admin-empty-ended-listed.md](../issues/U53-A13-A17-users-grid-roles-admin-empty-ended-listed.md).
+Issue report: [pkp-e2e#450](https://github.com/jardakotesovec/pkp-e2e/issues/450) ([docs/issues/U53-A13-A17-users-grid-roles-admin-empty-ended-listed.md](../issues/U53-A13-A17-users-grid-roles-admin-empty-ended-listed.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-30, all three apps: the list as note b
