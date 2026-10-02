@@ -1353,6 +1353,8 @@ Left out of the scenarios above, by reason:
   - the guard for OMP1 (issue report `docs/issues/U37-OMP1-external-reviewer-listed-as-internal.md`): on a press, each reviewer in a discussion's "Participants" reads the reviewer role of the stage they review ("External Reviewer" on External Review) in the editor's and the reviewer's windows (Rule 20)
   - the guard for A31 (issue report `docs/issues/U37-A31-auto-added-item-letter-placeholders.md`): an auto-added discussion's letter, and one a manager adds without taking part, closes with no "{$signature}" or "{$senderName}" left as typed (Rules 10d, 9)
   - the guard for A26 (issue report `docs/issues/U37-A26-no-answer-box-screen-reader-opposite-state.md`): after "No" in a row box's question, the box reads to a screen reader as it looks (Rule 16)
+  - the guard for A25 (issue report `docs/issues/U37-A25-converted-task-not-begun.md`): a discussion turned into a task through "Add Task Details" or "Edit" is saved begun, under "In progress" (Rule 15b)
+  - the guard for A28 (issue report `docs/issues/U37-A28-converted-task-history-says-task-created.md`): a converted discussion's History keeps "Discussion created by …" as its oldest line (Rule 18)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1414,9 +1416,9 @@ an entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | A closed task past its due date still reads "This task is overdue. Remind the task owner…" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A21](#a21) | A refused task or discussion window tells screen-reader users "Go to undefined" for the empty message box | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A24](#a24) | An assistant's "Workflow Files" offers stages that show nothing | 🐞 | minor | — |
-| [A25](#a25) | A discussion turned into a task reads "Begin Task Upon Saving" but is not begun | 🐞 | minor | — |
+| [A25](#a25) | A discussion turned into a task reads "Begin Task Upon Saving", but the saved task is not begun | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A26](#a26) | After "No" to a Tasks & Discussions box's question, a screen reader hears the box in the opposite state | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A28](#a28) | A discussion turned into a task reads "Task created by …" in its History | 🐞 | minor | — |
+| [A28](#a28) | A discussion turned into a task reads "Task created by …" in its History | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A29](#a29) | A file attached to the first message in the "Add" window never shows in the discussion's History | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A31](#a31) | A discussion's letter keeps "{$signature}" when its writer is not a participant: auto-added, or a manager stays out | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | A press's discussion window lists an External Review reviewer as "Internal Reviewer" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1697,12 +1699,19 @@ assistant is offered sources that neither list files nor say why not.
 Basis: probe. <sup>[f-a24](#fn-a24)</sup>
 
 <a id="a25"></a>
-**A25 — A converted task is not begun** · 🐞 · minor.
-When "Add Task Details" or "Edit" turns a discussion into a task, the
-drop-down under "Task Information" reads "Begin Task Upon Saving",
-greyed, but "Save" leaves the new task under "Yet to begin", not
-started. The window promises a start it does not make.
-Basis: probe. <sup>[f-a25](#fn-a25)</sup>
+**A25 — A discussion turned into a task reads "Begin Task Upon Saving", but the saved task is not begun** · 🐞 · low.
+When someone turns a discussion into a task, through the row's "Add Task
+Details" or through "Edit" and its "Enter task information" box, the
+drop-down under "Task Information" reads "Begin Task Upon Saving" and is
+greyed. They expect the saved task to begin, as the drop-down says.
+Instead it is listed under "Yet to begin" with its "Started" box empty,
+and they cannot choose "Create Task (Do Not Start)" either. They can
+start the task afterwards from its row or its window. Tasks made through
+"Add" begin or not as chosen. In "Edit", every task shows the same
+greyed "Begin Task Upon Saving", also one made with "Create Task (Do Not
+Start)". The fix belongs in the window: send the start after the save
+when a discussion becomes a task, as "Add" does.
+Basis: probe, 2026-10-02. <sup>[f-a25](#fn-a25)</sup>
 
 <a id="a26"></a>
 **A26 — After "No" to a Tasks & Discussions box's question, a screen reader hears the box in the opposite state** · 🐞 · low.
@@ -1731,13 +1740,17 @@ message is shown under, as "User" already names both people.
 Basis: probe. <sup>[f-a27](#fn-a27)</sup>
 
 <a id="a28"></a>
-**A28 — A converted discussion's History says it began as a task** · 🐞 · minor.
-Once "Add Task Details" or "Edit" turns a discussion into a task, the
-History's first line reads "Task created by {username} ({roles}) on
-{date}", where the row's "Activity" read "Discussion created by …"
-before. Nothing records the change itself beyond "Task assigned to
-{owner} by …", so the History misstates how the item began.
-Basis: probe. <sup>[f-a28](#fn-a28)</sup>
+**A28 — A converted discussion's History says it began as a task** · 🐞 · low.
+Once "Add Task Details", or "Edit" with "Enter task information"
+ticked, turns a discussion into a task, the History's oldest line reads
+"Task created by …" where it and the row's "Activity" read "Discussion
+created by {username} ({role}) on {date}" before. Above it, "Task
+assigned to {owner} by …" is the only trace of the change, so the
+History says the item began as a task. The same save writes two PHP
+warnings to the server's error log (`Attempt to read property "userId"
+on null`), while it succeeds and the screens show nothing wrong; that
+is a cause of its own, with a report of its own.
+Basis: probe, 2026-10-02. <sup>[f-a28](#fn-a28)</sup>
 
 <a id="a29"></a>
 **A29 — A file attached to the first message in the "Add" window never shows in the discussion's History** · 🐞 · low.
@@ -2084,6 +2097,7 @@ Issue report: [pkp-e2e#427](https://github.com/jardakotesovec/pkp-e2e/issues/427
 
 <a id="fn-a25"></a>
 **f-a25** — Note p. Live-probed 2026-09-23 on all three apps: "Add Task Details" and "Edit" with the box ticked showed the drop-down at "Begin Task Upon Saving", greyed; after "Save" the task sat under "Yet to begin" with its "Started" box empty.
+Issue report: [docs/issues/U37-A25-converted-task-not-begun.md](../issues/U37-A25-converted-task-not-begun.md).
 
 <a id="fn-a26"></a>
 **f-a26** — `TableCellSelect.onChange()` calls `preventDefault()` on the change event, too late to undo the browser's own toggle, so the input keeps the new state while the icon is drawn from the saved one. Live-probed 2026-09-23 on all three apps: after "No" the row's "Started" read checked and a closed discussion's "Closed" not checked to the accessibility tree until a reload; the same on the template screen's "Auto-add at stage" box.
@@ -2094,6 +2108,8 @@ Issue report: [pkp-e2e#431](https://github.com/jardakotesovec/pkp-e2e/issues/431
 
 <a id="fn-a28"></a>
 **f-a28** — Note y: `{$taskType}` is the item's current type. Live-probed 2026-09-23 on all three apps: a discussion's "Activity" read "Discussion created by …" before "Add Task Details" and its History "Task created by …" and "Task assigned to …" after. Test run 2026-09-23 on all three apps (scenario 5): "Add Task Details" choosing the first owner answered 200 and wrote "Task assigned to …", while the server logged `PHP Warning: Attempt to read property "userId" on null` twice: `EditorialTaskController::logOwner()` picks the "assigned" event when there is no old owner, then reads the old owner's `userId` for `taskOwnerOldUserId` and `taskOwnerOldUsername` anyway. Nothing on screen fails.
+Issue report: [docs/issues/U37-A28-converted-task-history-says-task-created.md](../issues/U37-A28-converted-task-history-says-task-created.md).
+Issue report: [docs/issues/U37-A28-task-first-owner-server-warning.md](../issues/U37-A28-task-first-owner-server-warning.md).
 
 <a id="fn-a29"></a>
 **f-a29** — Note v: `editTask()` logs the first message's files through `logTaskFiles()`; the add path logged no file line in the drive. Live-probed 2026-09-23 (OJS twice, OMP and OPS once): a file attached at "Add" listed in the window, absent from the History until "Edit" removed it ("… removed by …"); a reply's file logged as "… uploaded by …".

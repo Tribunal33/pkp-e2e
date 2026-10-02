@@ -1,0 +1,35 @@
+--- a/lib/ui-library/src/managers/DiscussionManager/useDiscussionManagerForm.js
++++ b/lib/ui-library/src/managers/DiscussionManager/useDiscussionManagerForm.js
+@@ -604,9 +604,10 @@
+ 
+ 			result = (await updateWorkItemStatus(workItemRef.value?.id)) ?? result;
+ 		} else {
+-			if (workItemRef.value) {
++			if (workItemRef.value?.type === pkp.const.EDITORIAL_TASK_TYPE_TASK) {
+ 				result = await saveWorkItem(formData);
+ 			} else {
++				// a new item, or a discussion being turned into a task: "Begin Task Upon Saving" applies
+ 				result = await addWorkItem(formData);
+ 			}
+ 		}
+@@ -697,14 +698,17 @@
+ 
+ 	addTaskInfoAssignee();
+ 
+-	// this select is only enabled when adding a new entry
++	// this select is enabled until the item is a task; an existing task shows whether it was started
+ 	addFieldSelect('taskInfoShouldStart', {
+ 		groupId: 'taskInformation',
+ 		name: 'taskInfoShouldStart',
+ 		showWhen: 'taskInfoAdd',
+-		value: true,
++		value:
++			workItemRef.value?.type === pkp.const.EDITORIAL_TASK_TYPE_TASK
++				? workItemRef.value.status !== pkp.const.EDITORIAL_TASK_STATUS_PENDING
++				: true,
+ 		hideOnDisplay: true,
+-		disabled: !!workItemRef.value,
++		disabled: workItemRef.value?.type === pkp.const.EDITORIAL_TASK_TYPE_TASK,
+ 		options: [
+ 			{
+ 				label: t('discussion.form.startTaskUponSaving'),

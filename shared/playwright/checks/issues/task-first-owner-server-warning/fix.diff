@@ -1,0 +1,13 @@
+--- a/lib/pkp/api/v1/submissions/tasks/EditorialTaskController.php
++++ b/lib/pkp/api/v1/submissions/tasks/EditorialTaskController.php
+@@ -1299,8 +1299,8 @@
+             'isTranslated' => false,
+             'dateLogged' => Core::getCurrentDate(),
+             'submissionId' => $submission->getId(),
+-            'taskOwnerOldUserId' => $oldOwner->userId,
+-            'taskOwnerOldUsername' => $oldOwner->userId ? Repo::user()->get($oldOwner->userId, true)->getUsername() : '',
++            'taskOwnerOldUserId' => $oldOwner?->userId,
++            'taskOwnerOldUsername' => $oldOwner?->userId ? Repo::user()->get($oldOwner->userId, true)->getUsername() : '',
+             'taskOwnerNewUserId' => $newOwner->userId,
+             'taskOwnerNewUsername' => $newOwner->userId ? Repo::user()->get($newOwner->userId, true)->getUsername() : '',
+             'username' => $actionedUser->getUsername(),

@@ -1,0 +1,12 @@
+--- a/lib/pkp/api/v1/submissions/tasks/resources/TaskResource.php
++++ b/lib/pkp/api/v1/submissions/tasks/resources/TaskResource.php
+@@ -85,7 +85,8 @@
+             $dateLogged = $activity->getDateLogged();
+ 
+             $activityMessage = __($activity->getMessage(), [
+-                'taskType' => EditorialTaskType::from($this->type)->label(),
++                // the type the item had when the event was logged: a discussion turned into a task was created as a discussion
++                'taskType' => EditorialTaskType::from((int) ($activity->getData('taskType') ?? $this->type))->label(),
+                 'username' => $activity->getData('username'),
+                 'dateLogged' => $dateLogged ? Carbon::parse($dateLogged)->format('Y-m-d') : null,
+                 'userGroupName' => $activity->getLocalizedData('userGroupName') ?? implode(', ', $activity->getLocalizedData('userGroupNames') ?? []),
