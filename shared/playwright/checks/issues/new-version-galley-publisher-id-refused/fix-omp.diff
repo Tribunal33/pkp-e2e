@@ -1,0 +1,56 @@
+--- a/classes/monograph/ChapterDAO.php
++++ b/classes/monograph/ChapterDAO.php
+@@ -317,6 +317,14 @@
+      */
+     public function pubIdExists(string $pubIdType, string $pubId, int $excludePubObjectId, int $contextId): bool
+     {
++        // A new version's chapters are copies of the earlier version's and keep their identifiers,
++        // so the submission's other versions do not count (the
++        // publication DAO, likewise, leaves out the whole submission).
++        $excluded = DB::table('submission_chapters AS sc')
++            ->join('publications AS p', 'p.publication_id', '=', 'sc.publication_id')
++            ->where('sc.chapter_id', '=', $excludePubObjectId)
++            ->first(['p.submission_id', 'p.publication_id']);
++
+         return DB::table('submission_chapter_settings AS scs')
+             ->join('submission_chapters AS sc', 'scs.chapter_id', '=', 'sc.chapter_id')
+             ->join('publications AS p', 'sc.publication_id', '=', 'p.publication_id')
+@@ -324,6 +332,10 @@
+             ->where('scs.setting_name', '=', "pub-id::{$pubIdType}")
+             ->where('scs.setting_value', '=', $pubId)
+             ->where('sc.chapter_id', '<>', $excludePubObjectId)
++            ->when($excluded, fn ($query) => $query->where(
++                fn ($query) => $query->where('p.submission_id', '<>', $excluded->submission_id)
++                    ->orWhere('p.publication_id', '=', $excluded->publication_id)
++            ))
+             ->where('s.context_id', '=', $contextId)
+             ->count() > 0;
+     }
+--- a/classes/publicationFormat/PublicationFormatDAO.php
++++ b/classes/publicationFormat/PublicationFormatDAO.php
+@@ -489,6 +489,14 @@
+      */
+     public function pubIdExists(string $pubIdType, string $pubId, int $excludePubObjectId, int $contextId): bool
+     {
++        // A new version's formats are copies of the earlier version's and keep their identifiers,
++        // so the submission's other versions do not count (the
++        // publication DAO, likewise, leaves out the whole submission).
++        $excluded = DB::table('publication_formats AS pf')
++            ->join('publications AS p', 'p.publication_id', '=', 'pf.publication_id')
++            ->where('pf.publication_format_id', '=', $excludePubObjectId)
++            ->first(['p.submission_id', 'p.publication_id']);
++
+         return DB::table('publication_format_settings AS pft')
+             ->join('publication_formats AS pf', 'pft.publication_format_id', '=', 'pf.publication_format_id')
+             ->join('publications AS p', 'p.publication_id', '=', 'pf.publication_id')
+@@ -496,6 +504,10 @@
+             ->where('pft.setting_name', '=', "pub-id::{$pubIdType}")
+             ->where('pft.setting_value', '=', $pubId)
+             ->where('pf.publication_format_id', '<>', $excludePubObjectId)
++            ->when($excluded, fn ($query) => $query->where(
++                fn ($query) => $query->where('p.submission_id', '<>', $excluded->submission_id)
++                    ->orWhere('p.publication_id', '=', $excluded->publication_id)
++            ))
+             ->where('s.context_id', '=', $contextId)
+             ->count() > 0;
+     }

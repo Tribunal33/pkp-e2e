@@ -830,6 +830,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-A9-urn-assign-offered-without-edit-rights.md`): a
     participant whose "Save" is greyed on the "Identifiers" page (a
     Layout Editor) finding "Assign" greyed too
+  - the guard for A5 (issue report
+    `docs/issues/U44-A5-new-version-galley-publisher-id-refused.md`): a
+    galley's and a chapter's Publisher ID set, "Create New Version", and
+    the copy's "Identifiers" tab saving with the copied ID
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -899,7 +903,7 @@ entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | A Publisher ID saved on a galley's, chapter's or format's "Identifiers" tab cannot be removed | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | The Identifiers page refuses an article's own URN as "already in use" when saved again or on a new version | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A5](#a5) | A new version's galleys keep the old publisher ID, and their tab then refuses every save | 🐞 | minor | — |
+| [A5](#a5) | After "Create New Version", a galley's or chapter's Identifiers tab refuses its own copied Publisher ID | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "Add Check Number" and "Assign" end URNs with the wrong check digit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | The tab's assign box reads "Assign the URN to this galley" with the URN left out | 🐞 | minor | — |
 | [A8](#a8) | A suffix pattern of spaces is refused with a raw text code | 🐞 | minor | — |
@@ -974,16 +978,22 @@ for articles (monographs on a press).
 Basis: probe, 2026-10-02. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A new version's galleys keep the old publisher ID** · 🐞 · minor.
-After "Create New Version", each galley of the new version carries the
-publisher ID of the galley it was copied from. The uniqueness rule then
-counts the old galley against the new one, so every "Save" on the new
-galley's "Identifiers" tab is refused with "The public identifier
-'{value}' already exists for another object of the same type…" until
-its publisher ID is changed, and while it stands the new galley's URN
-cannot be assigned either. Emptying the box does not help: the old
-value is kept ([A2](#a2)).
-Basis: probe, 2026-09-24. <sup>f-a5</sup>
+**A5 — After "Create New Version", a galley's or chapter's Identifiers tab refuses its own copied Publisher ID** · 🐞 · medium.
+An editor makes a new version of an article or preprint whose galley has
+a Publisher ID, or of a book whose chapter or publication format has
+one. Each galley, chapter and format of the new version starts with the
+same Publisher ID as the one it was copied from. When the editor opens
+the copy's "Identifiers" tab and presses "Save", the save is refused:
+"The public identifier '…' already exists for another object of the same
+type." The other object is the same galley in the earlier version. The
+refusal comes back on every save until the Publisher ID is changed to a
+new value, so the new version cannot keep the item's ID. On a journal or
+press that uses URNs for these items, the URN on the same tab cannot be
+assigned meanwhile. A Publisher ID can be set on these items only while
+"Enable for Galleys" ("Enable for Chapters", "Enable for Publication
+Formats") is ticked under Settings › Workflow › "Metadata", and all
+three are off by default.
+Basis: probe, 2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — "Add Check Number" and "Assign" end URNs with the wrong check digit** · 🐞 · medium.
@@ -1800,6 +1810,7 @@ Issue report: [docs/issues/U44-A4-article-own-urn-refused-as-in-use.md](../issue
 `anyPubIdExists(…, ASSOC_TYPE_REPRESENTATION, $galleyId, true)` →
 `Galley DAO::pubIdExists()` excludes only the galley itself. Live-probed
 2026-09-24 (note q7).
+Issue report: [docs/issues/U44-A5-new-version-galley-publisher-id-refused.md](../issues/U44-A5-new-version-galley-publisher-id-refused.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `plugins/pubIds/urn/js/checkNumber.js`

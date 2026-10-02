@@ -1,0 +1,28 @@
+--- a/lib/pkp/classes/galley/DAO.php
++++ b/lib/pkp/classes/galley/DAO.php
+@@ -171,6 +171,14 @@
+      */
+     public function pubIdExists(string $pubIdType, string $pubId, int $excludePubObjectId, int $contextId): bool
+     {
++        // A new version's galleys are copies of the earlier version's and keep their identifiers,
++        // so the submission's other versions do not count (the
++        // publication DAO, likewise, leaves out the whole submission).
++        $excluded = DB::table('publication_galleys AS pg')
++            ->join('publications AS p', 'p.publication_id', '=', 'pg.publication_id')
++            ->where('pg.galley_id', '=', $excludePubObjectId)
++            ->first(['p.submission_id', 'p.publication_id']);
++
+         return DB::table('publication_galley_settings AS pgs')
+             ->join('publication_galleys AS pg', 'pgs.galley_id', '=', 'pg.galley_id')
+             ->join('publications AS p', 'pg.publication_id', '=', 'p.publication_id')
+@@ -178,6 +186,10 @@
+             ->where('pgs.setting_name', '=', "pub-id::{$pubIdType}")
+             ->where('pgs.setting_value', '=', $pubId)
+             ->where('pgs.galley_id', '<>', $excludePubObjectId)
++            ->when($excluded, fn ($query) => $query->where(
++                fn ($query) => $query->where('p.submission_id', '<>', $excluded->submission_id)
++                    ->orWhere('p.publication_id', '=', $excluded->publication_id)
++            ))
+             ->where('s.context_id', '=', $contextId)
+             ->count() > 0;
+     }
