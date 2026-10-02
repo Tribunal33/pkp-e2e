@@ -991,6 +991,7 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the "Subscriptions Report" download with an institutional subscription whose contact has no country: the file arrives, that row's "Country" empty (the guard for OJS4, once fixed; Rule 22)
   - a book declined at Internal Review on a press: "Submissions Declined", "Submissions Declined (After Review)" and both rejection rates count it (the guard for OMP1, once fixed; Rule 13)
+  - a context whose every count is dated this year: the "Total" column of "Editorial Activity" holds no "/year" (the guard for A2, once fixed; Rule 8b)
 - **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
@@ -1057,7 +1058,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | Submissions received on the date range's last day are left out of "Submissions Received" (and of "Imported Submissions") | 🐞 | minor | — |
-| [A2](#a2) | A journal whose activity all falls in this year shows "(0/year)" after its counts | 🐞 | minor | — |
+| [A2](#a2) | Editorial Activity shows "(0/year)" after each total that has nothing dated before this calendar year | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | The "Trends" information icons cannot be read from the keyboard | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "Site Administrator" on "Users" always reads 0 | 🐞 | minor | — |
 | [A8](#a8) | A report address naming no report lands on "404 Not Found" | 🐞 | minor | — |
@@ -1101,14 +1102,21 @@ for August but not in "Submissions Received" for the Custom Range from
 Basis: probe. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — "(0/year)" on a journal whose activity is all this year** · 🐞 · minor.
-On a journal that received, decided and published everything in the
-current year, the "Total" cell of every count row above 0 reads "{count}
-(0/year)", as "3 (0/year)". Expected: no yearly average until a full
-calendar year of activity exists, as a journal that started last year
-shows none. Every new journal, and every scratch journal of a test
-install, shows it.
-Basis: probe. <sup>f-a2</sup>
+**A2 — Editorial Activity shows "(0/year)" after each total that has nothing dated before this calendar year** · 🐞 · low.
+In the "Total" column of Statistics › "Editorial Activity", a count
+reads "{count} (0/year)", as "20 (0/year)", when nothing it counts is
+dated before 1 January of the current year. Each row goes by its own
+dates: the submission dates for "Submissions Received", the decision
+dates for the accepted and declined rows, the first publication dates
+for "Submissions Published". The count should stand alone, as it does
+when the earliest of those dates is last year, since there is no full
+calendar year to average over yet.
+
+A new journal, press or preprint server shows it on every count from its
+first submission to the end of that year. An older one shows it on a row
+whose first item came this year, such as its first desk reject.
+Expected: no yearly average until a full calendar year exists.
+Basis: probe, 2026-10-02. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — Drafts started within the range, in "Submissions In Progress"** · ❓ · minor.
@@ -2013,6 +2021,7 @@ that the page's Custom Range 2026-08-01 — 2026-08-31 left out.
 **f-a2** — fn g: with the first and last year both this year, `years` is
 −1, which the `if ($years)` guard lets through; the count over the empty
 span is 0. Live-probed 2026-09-28: td3.
+Issue report: [docs/issues/U65-A2-yearly-average-zero-first-year.md](../issues/U65-A2-yearly-average-zero-first-year.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `PKPStatsEditorialQueryBuilder::countInProgress()` applies the

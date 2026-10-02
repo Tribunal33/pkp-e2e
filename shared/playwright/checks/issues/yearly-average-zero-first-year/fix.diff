@@ -1,0 +1,29 @@
+--- a/lib/pkp/classes/services/PKPStatsEditorialService.php
++++ b/lib/pkp/classes/services/PKPStatsEditorialService.php
+@@ -218,7 +218,7 @@
+                 $yearEnd--;
+             }
+             $years = ($yearEnd - $yearStart) + 1;
+-            if ($years) {
++            if ($years > 0) {
+                 $argsReceived = array_merge(
+                     $args,
+                     [
+@@ -250,7 +250,7 @@
+                     $yearEnd--;
+                 }
+                 $years = ($yearEnd - $yearStart) + 1;
+-                if ($years) {
++                if ($years > 0) {
+                     $argsYearly = array_merge(
+                         $args,
+                         [
+@@ -276,7 +276,7 @@
+                 $yearEnd--;
+             }
+             $years = ($yearEnd - $yearStart) + 1;
+-            if ($years) {
++            if ($years > 0) {
+                 $argsPublished = array_merge(
+                     $args,
+                     [
