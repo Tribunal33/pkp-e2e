@@ -1,0 +1,11 @@
+--- a/lib/ui-library/src/components/Form/fields/VocabularyModal/VocabularyModal.vue
++++ b/lib/ui-library/src/components/Form/fields/VocabularyModal/VocabularyModal.vue
+@@ -18,7 +18,7 @@
+ 						<!-- Expand/Collapse column -->
+ 						<TableColumn>
+ 							<span class="sr-only">
+-								{{ t('common.expand') }}
++								{{ t('list.expand') }}
+ 							</span>
+ 						</TableColumn>
+ 					</TableHeader>
