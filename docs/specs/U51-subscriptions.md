@@ -1413,6 +1413,14 @@ Left out of the scenarios above, by reason:
     `docs/issues/U51-A11-institutional-purchase-adds-institution-each-time.md`):
     two institutional purchases for the same institution leave one entry on
     the Institutions page.
+  - the guard for A21 (issue report
+    `docs/issues/U51-A21-subscription-end-before-start-saved.md`): the
+    subscription window refuses a subscription whose end date is before its
+    start date.
+  - the guard for A28 (issue report
+    `docs/issues/U51-A28-refused-form-date-box-shows-today.md`): after a
+    refused "Save" with the date boxes empty, the subscription window's date
+    boxes stay empty.
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1509,7 +1517,7 @@ entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A4](#a4) | The email-box refusal sends the manager to "the journal Setup" for fields that are on "Subscription Policies" | 🐞 | minor | — |
+| [A4](#a4) | A manager saving a subscription with its email is told to look in a "journal Setup" that has no such fields | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | An issue's table of contents shows a padlock on galleys that editors, the article's author or a former subscriber under "Partial expiry" can open | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | Expiry reminders run once a month and reach only subscriptions ending on matching days | 🐞 | user-visible | — |
 | [A9](#a9) | A reader buying a subscription type that requires membership gets the same page back, unexplained, when "Membership" is empty | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1524,14 +1532,14 @@ entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | A restricted article's additional file shows a plain file icon instead of a padlock, then refuses the reader | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | A journal with payments turned off still shows readers a price on its locked galley links | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | A reader pressing a locked "Full Issue" is asked to pay an issue fee of no amount when only a membership fee is set | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A21](#a21) | The subscription window saves a start date after the end date | 🐞 | minor | — |
+| [A21](#a21) | A subscription whose end date is before its start date is saved as active and grants no access | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A22](#a22) | Searching the subscription lists by reference number, membership, notes or institution lists every subscription | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | "Subscriptions" offers "Purchase New Subscription" on an open-access journal, and it leads to the home page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A24](#a24) | While payments are off, a reader's "Learn More" and "View Available Subscription Types" lead to the home page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A25](#a25) | A reader reopening their institutional subscription's purchase page finds "IP ranges" reading "Array" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A26](#a26) | The "Subscription" block reads "Expires: {date}" for an inactive subscription | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A27](#a27) | The expiry-reminder task stops with an error and sends nothing | 🐞 | user-visible · crash: server | — |
-| [A28](#a28) | After a refused "Save", the date boxes show today's date, yet "Save" says the start date is missing | 🐞 | user-visible | — |
+| [A28](#a28) | After a refused "Save", a subscription's empty date boxes show today's date, but the form does not submit it | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A29](#a29) | Readers get the open-access email twice when an issue opens on the 1st of some months | 🐞 | minor | — |
 | [OPS1](#ops1) | A preprint server's "Posting Mode" says "Saved" but keeps nothing, so the server goes on posting {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A1](#a1) | "Publishing Mode" shows no choice on a new journal, which publishes as open access | ❓ | minor | — |
@@ -1553,14 +1561,20 @@ access to its contents." selected? Lean: yes; the tab should show what
 the journal does. Basis: probe, 2026-09-25. <sup>f-a1</sup>
 
 <a id="a4"></a>
-**A4 — The notify refusal points to the wrong screen** · 🐞 · minor.
-Saving a subscription with "Send the user an email with their username
-and subscription details." ticked while the subscription contact is
-missing is refused with "In order to send the user a notification email,
-the subscription contact name and email address must be specified in the
-journal Setup.". The fields are on the "Payments" page's "Subscription
-Policies" tab; no "Setup" screen holds them. Basis: probe, 2026-09-25.
-<sup>f-a4</sup>
+**A4 — A manager saving a subscription with its email is told to look in a "journal Setup" that has no such fields** · 🐞 · low.
+A journal manager creates or edits a subscription, individual or
+institutional, ticks "Send the user an email with their username and
+subscription details." and presses "Save" while the journal has no
+subscription contact. The window refuses with "In order to send the user
+a notification email, the subscription contact name and email address
+must be specified in the journal Setup." No "Setup" screen holds those
+fields: they are "Name" and "Email address" under "Subscription Manager"
+on the "Subscription Policies" tab of the same "Subscriptions" page. The
+refusal itself is right: the subscription is not saved, and nothing else
+changes. The manager has to find the fields without help. Any journal
+whose subscription contact is still empty gives this refusal when the
+box is ticked, and a new journal starts with it empty. Basis: probe,
+2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A locked galley leads home without a word** · ❓ · user-visible.
@@ -1774,11 +1788,19 @@ reader is invited to pay for something the journal does not sell, and
 2026-10-01. <sup>f-a20</sup>
 
 <a id="a21"></a>
-**A21 — A subscription can end before it starts** · 🐞 · minor.
-The subscription window saves a subscription whose "Start date" is
-after its "End date" with "Your changes have been saved.", and the list
-shows it with those dates; the other date checks of Rule 19 let it
-through. Basis: probe, 2026-09-25. <sup>f-a21</sup>
+**A21 — A subscription whose end date is before its start date is saved as active and grants no access** · 🐞 · medium.
+A journal manager creating or editing a subscription types a "Start
+date" that is after the "End date" (the two dates swapped, or a year
+mistyped) and presses "Save". The window accepts it with "Your changes
+have been saved.", and the list shows the subscription as "Active" with
+those dates. A subscription gives access only on days between its start
+and end dates, and with the dates swapped there is no such day. Under
+"Full expiry" (also what a journal that never chose gets), the
+subscriber is therefore refused every restricted article and issue,
+exactly like a reader without a subscription, and nobody is told. Under
+"Partial expiry" the same subscription opens, from its start date on,
+the content published on or before its end date. Basis: probe,
+2026-10-01. <sup>f-a21</sup>
 
 <a id="a22"></a>
 **A22 — Searching the subscription lists by reference number, membership, notes or institution lists every subscription** · 🐞 · medium.
@@ -1848,17 +1870,19 @@ other. Subscribers get no warning before their access ends, whatever
 the tab promises. Basis: probe, 2026-09-25. <sup>f-a27</sup>
 
 <a id="a28"></a>
-**A28 — A date box shows a date the window does not send** · 🐞 · user-visible.
-On "Individual Subscriptions" › "Create New Subscription", once a "Save"
-is refused while "Start date" and "End date" are empty, the window shows
-today's date in both boxes, but nothing is behind it: the next "Save" is
-refused with "A subscription start date is required." (and the end
-date's message for an untouched "End date"), beside any other refusal.
-Typing today's date into "Start date" changes nothing; only a different
-date is taken. A Journal Manager or Subscription Manager sees a filled
-box and a message saying it is empty, and cannot save a subscription starting today
-without first typing another day. Basis: test run, 2026-09-25.
-<sup>f-a28</sup>
+**A28 — After a refused "Save", a subscription's empty date boxes show today's date, but the form does not submit it** · 🐞 · medium.
+A journal manager presses "Save" in "Create New Subscription" before
+filling in "Start date" and "End date". The window refuses, as it
+should, but from then on both empty date boxes show today's date, which
+the form does not submit. The next "Save" is refused again with "A
+subscription start date is required." and "A subscription end date is
+required." beside boxes that show a date. On the 1st to the 9th of a
+month, typing today's date over the one shown does not help either, so a
+subscription starting today cannot be saved until the manager types
+another day first and then today's date again, or closes the window and
+starts over. Any "Save" pressed before both dates are typed leads into
+this, since an expiring subscription type requires both. Basis: probe,
+2026-10-01. <sup>f-a28</sup>
 
 <a id="a29"></a>
 **A29 — Readers get the open-access email twice when an issue opens on the 1st of some months** · 🐞 · minor.
@@ -2075,6 +2099,7 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `manager.subscriptions.form.subscriptionContactRequired` (OJS `locale/en/manager.po`); the fields are `subscriptionName` and `subscriptionEmail` of `SubscriptionPolicyForm`. Live-probed 2026-09-25 (td28): the refusal verbatim at the window's top.
+Issue report: [docs/issues/U51-A4-subscription-email-refusal-names-setup.md](../issues/U51-A4-subscription-email-refusal-names-setup.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `ArticleHandler::userCanViewGalley()` redirects a signed-in reader to `about/subscriptions` (note e), and `AboutHandler::subscriptions()` redirects to the journal index while payments are not configured (note f). Live-probed 2026-09-25 (td8): the home page, no notice.
@@ -2139,6 +2164,7 @@ Issue report: [pkp-e2e#386](https://github.com/jardakotesovec/pkp-e2e/issues/386
 
 <a id="fn-f-a21"></a>
 **f-a21** — `SubscriptionForm` checks each date's presence and range (note h) but not their order. Live-probed 2026-09-25 (td11): start 2026-12-01, end 2026-01-01, saved and listed so.
+Issue report: [docs/issues/U51-A21-subscription-end-before-start-saved.md](../issues/U51-A21-subscription-end-before-start-saved.md).
 
 <a id="fn-f-a22"></a>
 **f-a22** — `SubscriptionDAO::applySearchFilters()` maps given name, family name, username and email to columns; the institutional fields have no mapping (`default => null`), so the filter is dropped. Membership, reference number and notes are mapped there, yet the screen returned the whole list for them too. Live-probed 2026-09-25 (td10), on two journals, "contains" and "is".
@@ -2165,6 +2191,7 @@ Issue report: [pkp-e2e#387](https://github.com/jardakotesovec/pkp-e2e/issues/387
 
 <a id="fn-f-a28"></a>
 **f-a28** — Test run 2026-09-25 (Rule 19; scenario 6). The four answers to "Save" were: "A user is required. A subscription start date is required. A subscription end date is required." (no user, no dates); then, Nova chosen, "A subscription start date is required." and "A subscription end date is required." again, the boxes now reading today's date; then, Sam chosen, today's date typed into "Start date" and next year's into "End date", "This user already has a subscription for this journal. A subscription start date is required."; then, Nova chosen, "A subscription start date is required.", the window staying open. A probe the same day read the fields after each step: from the first refusal on, the visible boxes held today's date while the values the window sends were empty; typing today's date left the sent start date empty, next year's end date was sent. The boxes are jQuery UI date pickers: lib/pkp `js/controllers/form/FormHandler.js` renames the visible box to `{name}-removed` and sends a hidden copy under the field's name (`templates/payments/individualSubscriptionForm.tpl`, `dateStart`/`dateEnd` with class `datepicker`).
+Issue report: [docs/issues/U51-A28-refused-form-date-box-shows-today.md](../issues/U51-A28-refused-form-date-box-shows-today.md).
 
 <a id="fn-f-a29"></a>
 **f-a29** — Test run 2026-10-01 (Side effects; scenario 12), OJS main (ojs `bade233f73`, lib/pkp `2e377d27fc`): after the scheduled task `APP\tasks\OpenAccessNotification` ran once and the jobs ran, the mail catcher held two emails "Free to read: Vol. 1 No. 1 (2026) of {journal} is now open access" for the Reader and two for the Journal Manager (one expected). Seen on the VM on a reset database and on every OJS CI run of 2026-10-01; the same check passed on every run of 2026-09-30. Mechanism (code read): `executeActions()` calls `sendNotifications()` for today, then, on the 1st of a month whose previous month is in `$shortMonths = [2,4,6,9,11]`, again for a simulated 31st of that month, and on 1 March for a simulated 30 February and, unless `date('L', mktime(0, 0, 0, 0, 0, $year))` (which reads the previous year) says leap, 29 February. `sendNotifications()` matches `strtotime($openAccessDate) == mktime(0, 0, 0, $month, $day, $year)`; PHP's `mktime()` rolls 31 April, June, September and November over to the 1st of the next month, 29 February of a common year and 30 February of a leap year to 1 March, so an issue opening today matches twice and gets two `OpenAccessMailUsers` batches. In the year after a leap year the 29th is skipped and 30 February falls on 2 March, so 1 March sends once. Only 1 October was driven; the other days are read in the code and checked against PHP's date arithmetic. The simulation dates from the task's first version (OJS `b33af3e5a5`, 2006-04-18, then with the list `2,4,6,8,10,12`); the task runs daily (`classes/scheduler/Scheduler.php`, `daily()`).

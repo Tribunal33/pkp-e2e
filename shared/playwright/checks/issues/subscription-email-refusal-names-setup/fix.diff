@@ -1,0 +1,11 @@
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -1342,7 +1342,7 @@
+ msgstr "Save and Create Another"
+ 
+ msgid "manager.subscriptions.form.subscriptionContactRequired"
+-msgstr "In order to send the user a notification email, the subscription contact name and email address must be specified in the journal Setup."
++msgstr "In order to send the user a notification email, the subscription contact's name, email address and mailing address must be filled in on the Subscription Policies tab."
+ 
+ msgid "manager.subscriptions.form.subscriptionExists"
+ msgstr "This user already has a subscription for this journal."
