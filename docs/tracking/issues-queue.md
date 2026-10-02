@@ -38,12 +38,12 @@ and the hourly routine starts one only when none is running
 | [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 |  |
 | [U74](../specs/U74-onix-metadata-export.md) | 16 | 0 | 6 | A16 done with U63 A12 (pkp-e2e#258) |
 | [U15](../specs/U15-search.md) | 13 | 0 | 6 |  |
-| [U04](../specs/U04-orcid-integration.md) | 8 | 0 | 6 |  |
+| [U04](../specs/U04-orcid-integration.md) | 8 | 0 | 6 | **OPS2 taken: issues session, VM s3, 2026-10-02** (joined U06 OPS1, one cause: the preprint server's own emails list) |
 | [U70](../specs/U70-catalog-management.md) | 14 | 0 | 5 |  |
 | [U41](../specs/U41-contributors-and-affiliations.md) | 12 | 0 | 5 | A22 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
 | [U12](../specs/U12-announcements.md) | 11 | 0 | 5 | A11 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
 | [U10](../specs/U10-appearance-and-theming.md) | 13 | 0 | 4 | A4 done with U09 A15 ([pkp-e2e#370](https://github.com/jardakotesovec/pkp-e2e/issues/370)) |
-| [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 |  |
+| [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 | **OPS2 taken: issues session, VM s3, 2026-10-02** (joined U06 OPS1, one cause: the preprint server's own emails list) |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 | OPS3 done with U57 A8 (pkp-e2e#360); OPS4 done with U57 A8 (pkp-e2e#360); A11 done with U59 A1 (pkp-e2e#496) |
 | [U73](../specs/U73-publication-formats-proof-terms.md) | 18 | 0 | 3 |  |
 | [U40](../specs/U40-publication-metadata.md) | 8 | 0 | 3 | A1 done with U21 A20 ([pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323)) |
