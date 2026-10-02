@@ -1,0 +1,37 @@
+--- a/lib/ui-library/src/components/Form/FormErrors.vue
++++ b/lib/ui-library/src/components/Form/FormErrors.vue
+@@ -30,6 +30,12 @@
+ 		errors: Object,
+ 		fields: Array,
+ 	},
++	data() {
++		return {
++			/** The name of the field whose error was shown last */
++			lastShownError: null,
++		};
++	},
+ 	computed: {
+ 		/**
+ 		 * A message indicating how many errors are in the form
+@@ -78,7 +84,12 @@
+ 		 * Emit an event to display the next error in the list
+ 		 */
+ 		showNextError() {
+-			this.showError(Object.keys(this.errors)[0]);
++			const fieldNames = Object.keys(this.errors);
++			// The error after the one shown last; the first one when none has
++			// been shown yet, the last one was reached or it has been corrected
++			const next =
++				(fieldNames.indexOf(this.lastShownError) + 1) % fieldNames.length;
++			this.showError(fieldNames[next]);
+ 		},
+ 
+ 		/**
+@@ -91,6 +102,7 @@
+ 			if (error && typeof error === 'object' && error.constructor === Object) {
+ 				this.$emit('showLocale', Object.keys(error)[0]);
+ 			}
++			this.lastShownError = fieldName;
+ 			this.$emit('showField', fieldName);
+ 		},
+ 	},

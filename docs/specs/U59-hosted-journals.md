@@ -786,6 +786,9 @@ Left out of the scenarios above, by reason:
   - the address in front of "Path" on the journal form reading the
     journal's address up to its path, with "index.php/" on the test
     installs ([A3](#a3)): the guard the issue report proposes
+  - "Jump to next error" pressed twice after a refused empty "Create
+    Journal", the second press reaching the second refused field
+    ([A6](#a6)): the guard the issue report proposes
 - **Rarely met**:
   - exactly one journal enabled publicly, where the site's address opens
     that journal instead of the list (Rule 19; Settings bullet 4): a
@@ -885,7 +888,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | Hosted Journals: after a saved "Edit", the list keeps the journal's old name and path until a reload | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | Journal form: the address in front of "Path" leaves out "index.php/", so it is not the address the site gives the journal | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | After a path change on the Settings Wizard, its further saves and list actions fail until a reload | 🐞 | minor | — |
-| [A6](#a6) | "Jump to next error" never gets past the first refused field | 🐞 | minor | — |
+| [A6](#a6) | "Jump to next error" on a refused form always scrolls to the first refused field, never on to the next | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Closing the "Edit" or "Create Journal" window right after it opens makes the page's script fail | 🐞 | invisible · crash: script | — |
 | [A8](#a8) | Signing in from the Login page of a journal not enabled publicly does not lead on to the page the visitor asked for | 🐞 | minor | — |
 | [A10](#a10) | A press or preprint server that holds an institution cannot be removed and is left half deleted {OMP OPS} | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
@@ -971,13 +974,20 @@ texts a manager may have edited is riskier than the dead links.
 Basis: probe. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — "Jump to next error" never gets past the first refused field** · 🐞 · minor.
-After a refused "Save" with several errors on the journal form (every
-field left empty, for one), "Jump to next error" beside "Save" scrolls to
-the first refused field, "Journal title"; pressed again it stays there,
-so the later ones ("Path", "Languages", "Primary locale") are never
-reached this way.
-Basis: probe. <sup>f-a6</sup>
+**A6 — "Jump to next error" on a refused form always scrolls to the first refused field, never on to the next** · 🐞 · low.
+On the "Create Journal" form in Administration › "Hosted Journals",
+after a refused "Save" with several errors, for example with every
+field left empty, "Jump to next error" beside "Save" scrolls to the
+first refused field, "Journal title". Pressed again it goes to "Journal
+title" again, so the later refused fields ("Journal initials",
+"Principal Contact Name", "Path" and the rest) are never reached this
+way.
+
+Every settings and workflow form that shows "Please correct {n}
+errors." beside its "Save" has the same fault, so editors and journal
+managers meet it too. The button has gone to the first error since it
+was added in 2019.
+Basis: probe, 2026-10-02. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — Closing the journal form's window right after it opens makes the page's script fail** · 🐞 · invisible · crash: script.
@@ -1749,6 +1759,7 @@ footer is shared by every form built on it. Live-probed 2026-09-27, three
 apps, two runs each: after "Save" on an empty "Create Journal" ("Please
 correct 7 errors."), each of five presses left "Journal title" at the top
 of the window and the focus on the link.
+Issue report: [docs/issues/U59-A6-jump-to-next-error-stays-on-first-field.md](../issues/U59-A6-jump-to-next-error-stays-on-first-field.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `lib/ui-library/src/components/Form/fields/FieldText.vue`
