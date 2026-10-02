@@ -1,0 +1,147 @@
+--- /dev/null
++++ b/lib/pkp/classes/invitation/core/exceptions/SignedInAsDifferentUserException.php
+@@ -0,0 +1,20 @@
++<?php
++
++/**
++ * @file classes/invitation/core/exceptions/SignedInAsDifferentUserException.php
++ *
++ * Copyright (c) 2026 Simon Fraser University
++ * Copyright (c) 2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * @class SignedInAsDifferentUserException
++ *
++ */
++
++namespace PKP\invitation\core\exceptions;
++
++use Exception;
++
++class SignedInAsDifferentUserException extends Exception
++{
++}
+--- a/lib/pkp/classes/invitation/invitations/reviewerAccess/ReviewerAccessInvite.php
++++ b/lib/pkp/classes/invitation/invitations/reviewerAccess/ReviewerAccessInvite.php
+@@ -23,6 +23,7 @@
+ use PKP\invitation\core\enums\InvitationAction;
+ use PKP\invitation\core\enums\InvitationStatus;
+ use PKP\invitation\core\enums\ValidationContext;
++use PKP\invitation\core\exceptions\SignedInAsDifferentUserException;
+ use PKP\invitation\core\Invitation;
+ use PKP\invitation\core\InvitationActionRedirectController;
+ use PKP\invitation\core\InvitationUIActionRedirectController;
+@@ -132,7 +133,7 @@
+         // Check if a different user is already logged in
+         $loggedInUserId = Application::get()->getRequest()->getSessionGuard()->getUserId();
+         if ($loggedInUserId && $loggedInUserId != $this->invitationModel->userId) {
+-            throw new Exception('You are logged in as a different user. Please log out and try the invitation link again.');
++            throw new SignedInAsDifferentUserException('You are logged in as a different user. Please log out and try the invitation link again.');
+         }
+ 
+         $reviewSubmission = Repo::submission()->getByBestId($reviewAssignment->getSubmissionId());
+--- a/lib/pkp/locale/en/invitation.po
++++ b/lib/pkp/locale/en/invitation.po
+@@ -396,3 +396,12 @@
+ 
+ msgid "invitation.unavailable.description"
+ msgstr "This invitation is no longer available. It may have already been accepted, declined, or expired. Please contact the journal manager for further assistance."
++
++msgid "invitation.signedInAsDifferentUser.title"
++msgstr "You are signed in as a different user"
++
++msgid "invitation.signedInAsDifferentUser.description"
++msgstr "This invitation was sent to a different account than the one you are currently signed in with. Sign out and continue to accept the invitation with the correct account."
++
++msgid "invitation.signedInAsDifferentUser.signOutAndContinue"
++msgstr "Sign out and continue"
+--- a/lib/pkp/pages/invitation/InvitationHandler.php
++++ b/lib/pkp/pages/invitation/InvitationHandler.php
+@@ -23,6 +23,7 @@
+ use APP\template\TemplateManager;
+ use Illuminate\Http\Response;
+ use PKP\invitation\core\enums\InvitationAction;
++use PKP\invitation\core\exceptions\SignedInAsDifferentUserException;
+ use PKP\invitation\core\Invitation;
+ use Symfony\Component\HttpKernel\Exception\HttpException;
+ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+@@ -43,8 +44,13 @@
+         $this->setupTemplate($request);
+         $invitation = $this->getInvitationByKey($request);
+         $invitationHandler = $invitation->getInvitationActionRedirectController();
+-        $invitationHandler->preRedirectActions(InvitationAction::ACCEPT);
+-        $invitationHandler->acceptHandle($request);
++
++        try {
++            $invitationHandler->preRedirectActions(InvitationAction::ACCEPT);
++            $invitationHandler->acceptHandle($request);
++        } catch (SignedInAsDifferentUserException $e) {
++            $this->displaySignedInAsDifferentUserPage($request);
++        }
+     }
+ 
+     /**
+@@ -168,4 +174,37 @@
+         $templateMgr->display('invitation/invitationUnavailable.tpl');
+         exit;
+     }
++
++    /**
++     * Display a landing page when someone other than the invited user is signed in,
++     * providing the choice to sign out and return to the invitation.
++     */
++    private function displaySignedInAsDifferentUserPage(Request $request): never
++    {
++        $this->setupTemplate($request);
++        $templateMgr = TemplateManager::getManager($request);
++
++        $contextPath = $request->getContext()?->getData('urlPath');
++
++        // Return to this same invitation after signing out.
++        $source = ltrim($_SERVER['REQUEST_URI'] ?? '', '/');
++
++        $signOutUrl = Application::get()->getDispatcher()->url(
++            $request,
++            Application::ROUTE_PAGE,
++            $contextPath,
++            'login',
++            'signOut',
++            null,
++            ['source' => $source]
++        );
++
++        $templateMgr->assign([
++            'signOutUrl' => $signOutUrl,
++            'pageComponent' => 'Page',
++        ]);
++
++        $templateMgr->display('invitation/invitationSignedInAsDifferentUser.tpl');
++        exit;
++    }
+ }
+--- /dev/null
++++ b/lib/pkp/templates/invitation/invitationSignedInAsDifferentUser.tpl
+@@ -0,0 +1,23 @@
++{**
++ * templates/invitation/invitationSignedInAsDifferentUser.tpl
++ *
++ * Copyright (c) 2026 Simon Fraser University
++ * Copyright (c) 2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * @brief Landing page shown when someone other than the invited user is signed in.
++ *}
++{extends file="layouts/backend.tpl"}
++{block name="page"}
++    <div class="page page_invitation_signed_in_as_different_user">
++        <h1>
++            {translate key="invitation.signedInAsDifferentUser.title"}
++        </h1>
++        <p>
++            {translate key="invitation.signedInAsDifferentUser.description"}
++        </p>
++        <a href="{$signOutUrl}" class="pkpButton inline-flex relative items-center gap-x-1 text-lg-semibold text-primary border-light hover:text-hover bg-secondary py-[0.4375rem] px-3 border rounded">
++            {translate key="invitation.signedInAsDifferentUser.signOutAndContinue"}
++        </a>
++    </div>
++{/block}

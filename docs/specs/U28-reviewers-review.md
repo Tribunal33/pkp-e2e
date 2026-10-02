@@ -989,6 +989,7 @@ Left out of the scenarios above, by reason:
   - a file link opened by a reviewer with no assignment on the submission landing on the access-denied page, and opened signed out landing on the Login page, where signing in downloads the file ([A6](#a6); Rule 15): the guard the issue report proposes, once fixed
   - a reviewer holding requests on two submissions opening each request email's one-click link onto its own review, while a sent reminder still replaces the same review's link ([A9](#a9); Rule 16): the guard the issue report proposes, once fixed
   - the request email's one-click link still opening the review after "Send Reminder" was pressed and the "Review Reminder" window closed with "Cancel" ([A9](#a9); Rule 16): the guard the issue report proposes, once fixed
+  - a reviewer's one-click link opened in a browser signed in as another user showing "You are signed in as a different user", and "Sign out and continue" opening the review as the reviewer ([A10](#a10); Actors row 9, Rule 16): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1044,7 +1045,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A6](#a6) | A file link opened after signing out, or without access to the file, shows one line of machine text | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Reviewer's step 3 on a journal says a review or file is required, yet an empty review is submitted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | A second request, or a "Send Reminder" window opened and cancelled, kills the reviewer's one-click link, which then shows a bare "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A10](#a10) | A one-click link opened in a browser signed in as somebody else shows a blank page, never the intended message | 🐞 | user-visible | — |
+| [A10](#a10) | A reviewer's one-click review link shows a blank page in a browser signed in as another user | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A reviewer's own review is listed under "Previous Reviews" once the submission has a later round | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | "Save for Later" on a review form says "Your changes have been saved." and, on the same screen, "Please fill in required fields." | 🐞 | minor | — |
 | [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a review form's answers are guarded | 🐞 | minor | — |
@@ -1222,13 +1223,23 @@ as Reviewer".
 Basis: probe, 2026-10-02. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — A one-click link opened as somebody else shows a blank page** · 🐞 · user-visible.
-When a browser signed in as another user (an author was tried) opens a
-reviewer's one-click link, the screen is entirely blank: no page, no
-message, no way on. The sentence written for this case, "You are logged in
-as a different user. Please log out and try the invitation link again.",
-never shows.
-Basis: probe (2026-09-04, both apps). <sup>[f-a10](#fn-a10)</sup>
+**A10 — A reviewer's one-click review link shows a blank page in a browser signed in as another user** · 🐞 · medium · crash: server.
+The app fails on the server when a reviewer's one-click review link is
+opened in a browser that is signed in as somebody else: the page is
+entirely blank, with no message and no way on. The person expects the
+review, or at least to be told that they are signed in to the wrong
+account.
+
+The link opens the review as before once the browser is signed out.
+
+It needs "One-click Reviewer Access" turned on in the review settings,
+which is off by default, and a browser signed in to another account: a
+reviewer who also has a second account, an editor trying the link they
+have just sent, or a shared computer.
+
+pkp already tracks this, with a fix written for 3.5 and none for `main`.
+This report adds that fix brought to `main` and tried there.
+Basis: probe, 2026-10-02. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
 **A11 — An archived assignment still opens a wizard that takes a full review** · ❓ · minor.
@@ -2377,6 +2388,7 @@ HTTP 500 with a zero-length body, and the app's server log recorded
 out and try the invitation link again. in
 …/lib/pkp/classes/invitation/invitations/reviewerAccess/ReviewerAccessInvite.php`.
 Not security-shaped: the link denies the wrong user, only without a page.
+Issue report: [docs/issues/U28-A10-reviewer-link-blank-page-signed-in-as-another.md](../issues/U28-A10-reviewer-link-blank-page-signed-in-as-another.md).
 
 <a id="fn-a11"></a>
 **f-a11** — `ReviewerReviewForm::fetch()` sets `reviewIsClosed` from
