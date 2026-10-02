@@ -790,6 +790,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U54-A14-users-tab-keeps-renamed-role-old-name.md`): a
     role renamed on the "Roles" tab, then the "Users" tab read without a
     reload showing the new name
+  - the guard for A2 (issue report
+    `docs/issues/U54-A2-manager-role-row-shows-no-stage.md`): a new
+    journal's or press's manager role row with every stage ticked, and
+    listed under each stage of "List roles assigned to"
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -870,7 +874,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | The first row of each page of the "Roles" list has no "Edit" or "Remove" | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [A2](#a2) | The manager role's row shows no stage, and the stage filter leaves it out | 🐞 | minor | — |
+| [A2](#a2) | The Roles list shows "Journal manager" in no stage, and "Assign" never offers it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | Saving the "Production editor" role, even unchanged, opens Submission and Review to its assigned members | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | "Remove" warns that members' assignments will be deleted, but a role with members is never removed | 🐞 | minor | — |
 | [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
@@ -906,15 +910,22 @@ release lists every row with its arrow.
 Basis: probe, 2026-10-02. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — The manager role's row shows no stage** · 🐞 · minor.
-The "Journal manager" ("Press manager") row shows every stage box empty,
-while the "Preprint Server manager" row shows its box ticked; the role's
-members open every stage in all three apps. Choosing a stage under "List
-roles assigned to" leaves the manager role out on a journal and a press,
-and no stage's "Assign" offers it there, while a preprint server's
-Production stage does ([Stage participants](U35-stage-participants.md)).
-The list tells the manager that the most powerful role works nowhere.
-Basis: probe. <sup>f-a2</sup>
+**A2 — The Roles list shows "Journal manager" in no stage, and "Assign" never offers it** · 🐞 · low.
+On Settings › Users & Roles › "Roles", the "Journal manager" row
+("Press manager" on a press) has every stage box empty. The "Journal
+editor" row, at the same permission level, has every stage ticked. Yet
+the journal's managers open every stage of every submission.
+
+Choosing a stage under "List roles assigned to" leaves the manager role
+out, and a submission's "Assign" never offers it. Nobody loses access,
+and a person can be assigned as "Journal editor" instead. A manager
+cannot correct the row, because it is the first row of the list, which
+has no "Edit".
+
+The fix needs the install data for new journals and presses, and an
+upgrade for existing ones. A preprint server's manager row is right.
+The "Assign" lists belong to [Stage participants](U35-stage-participants.md).
+Basis: probe, 2026-10-02. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — Saving the "Production editor" role, even unchanged, opens Submission and Review to its assigned members** · 🐞 · medium.
@@ -1669,6 +1680,7 @@ Issue report: [docs/issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md]
 three apps). Cause: the registries (manager group without `stages` on OJS
 and OMP, `5,6` on OPS); the stage filter's `withStageIds()` reads the same
 rows. Filter half: [j](#fn-j). Live-probed 2026-09-26: [j](#fn-j).
+Issue report: [docs/issues/U54-A2-manager-role-row-shows-no-stage.md](../issues/U54-A2-manager-role-row-shows-no-stage.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `UserGroupForm::execute()` with `getAlwaysActiveStages()`

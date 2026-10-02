@@ -1,0 +1,88 @@
+--- a/registry/userGroups.xml
++++ b/registry/userGroups.xml
+@@ -14,7 +14,7 @@
+ 
+ <groups>
+ 	<!-- Managerial Role -->
+-	<group roleId="0x00000010" name="default.groups.name.manager" plural="default.groups.plural.manager" abbrev="default.groups.abbrev.manager" permitMetadataEdit="true" permitSettings="true" />
++	<group roleId="0x00000010" stages="1,2,3,4,5,6" name="default.groups.name.manager" plural="default.groups.plural.manager" abbrev="default.groups.abbrev.manager" permitMetadataEdit="true" permitSettings="true" />
+ 	<group roleId="0x00000010" stages="1,2,3,4,5,6" name="default.groups.name.editor" plural="default.groups.plural.editor" abbrev="default.groups.abbrev.editor" permitMetadataEdit="true" masthead="true" permitSettings="true" />
+ 	<group roleId="0x00000010" stages="4,5,6" name="default.groups.name.productionEditor" plural="default.groups.plural.productionEditor" abbrev="default.groups.abbrev.productionEditor" permitMetadataEdit="true" permitSettings="true" />
+ 
+--- a/dbscripts/xml/upgrade.xml
++++ b/dbscripts/xml/upgrade.xml
+@@ -227,6 +227,7 @@
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12347_FixRevisionUploadLogData" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13109_PermitPublishedMetadataEdit" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13213_TaskTemplateForeignConstraint"/>
++		<migration class="PKP\migration\upgrade\v3_6_0\I5962_ManagerRoleStages"/>
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12813_UpdateAuthorResponseAndSubmissionCommentTextType"/>
+ 		<code function="rebuildSearchIndex" />
+ 		<note file="docs/release-notes/README-3.6.0" />
+--- /dev/null
++++ b/lib/pkp/classes/migration/upgrade/v3_6_0/I5962_ManagerRoleStages.php
+@@ -0,0 +1,64 @@
++<?php
++
++/**
++ * @file classes/migration/upgrade/v3_6_0/I5962_ManagerRoleStages.php
++ *
++ * Copyright (c) 2026 Simon Fraser University
++ * Copyright (c) 2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * @class I5962_ManagerRoleStages
++ *
++ * @brief Give every workflow stage to the manager-level user groups that hold none.
++ *
++ * All stages are always active for the manager permission level
++ * (RoleDAO::getAlwaysActiveStages(), pkp/pkp-lib#2849), but the journal and
++ * press manager groups were installed without a stage.
++ */
++
++namespace PKP\migration\upgrade\v3_6_0;
++
++use APP\core\Application;
++use Illuminate\Support\Facades\DB;
++use PKP\install\DowngradeNotSupportedException;
++use PKP\migration\Migration;
++use PKP\security\Role;
++
++class I5962_ManagerRoleStages extends Migration
++{
++    /**
++     * @inheritDoc
++     */
++    public function up(): void
++    {
++        $workflowStageIds = Application::getApplicationStages();
++
++        $userGroups = DB::table('user_groups as ug')
++            ->where('ug.role_id', Role::ROLE_ID_MANAGER)
++            ->whereNotExists(
++                fn ($query) => $query->select(DB::raw(1))
++                    ->from('user_group_stage as ugs')
++                    ->whereColumn('ugs.user_group_id', 'ug.user_group_id')
++                    ->whereIn('ugs.stage_id', $workflowStageIds)
++            )
++            ->get(['ug.user_group_id', 'ug.context_id']);
++
++        foreach ($userGroups as $userGroup) {
++            foreach (array_merge($workflowStageIds, [WORKFLOW_STAGE_ID_DONE]) as $stageId) {
++                DB::table('user_group_stage')->insertOrIgnore([
++                    'context_id' => $userGroup->context_id,
++                    'user_group_id' => $userGroup->user_group_id,
++                    'stage_id' => $stageId,
++                ]);
++            }
++        }
++    }
++
++    /**
++     * @inheritDoc
++     */
++    public function down(): void
++    {
++        throw new DowngradeNotSupportedException();
++    }
++}
