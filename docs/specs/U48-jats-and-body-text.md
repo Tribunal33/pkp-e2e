@@ -690,6 +690,8 @@ Left out of the scenarios above, by reason:
   - the guard for A13 (issue report `docs/issues/U48-A13-jats-image-upload-breaks-page.md`): an image and an ISO-8859-1 JATS XML file uploaded on "JATS XML" are refused with a message, and the page still opens.
   - the guard for A16 (issue report `docs/issues/U48-A16-body-text-cite-never-enabled.md`): "Cite" on "Body Text" is greyed on arrival and, with the cursor in the text, places a citation when pressed with the mouse and from the keyboard.
   - the guard for A17 (issue report `docs/issues/U48-A17-body-text-side-section-needs-two-presses.md`): pressing "Document Outline" with "References" open opens "Document Outline" alone, and selecting a word opens "Selected Element" alone.
+  - the guard for A1 (issue report `docs/issues/U48-A1-jats-make-available-offered-then-refused.md`): an assigned Layout Editor without "Permissions" sees "Make available with publication" greyed on "JATS XML".
+  - the guard for A2 (issue report `docs/issues/U48-A2-body-text-save-offered-then-refused.md`): an assigned Layout Editor without "Permissions" sees the "Body Text" read-only, with no "Save".
 - **Nothing new to test**:
   - a second "Upload" on a version that already has a file, which
     becomes a revision of that one file, listed in its "History"
@@ -766,8 +768,8 @@ entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Make available with publication" is offered to people who may not change it, and "Confirm" is refused | 🐞 | user-visible | — |
-| [A2](#a2) | The Body Text's "Save" is offered to people who may not edit the publication, and is refused | 🐞 | user-visible | — |
+| [A1](#a1) | A Layout Editor, other assistant or Guest Editor without "Permissions" is offered "Make available with publication", and "Confirm" is refused | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A2](#a2) | A Layout Editor without "Permissions" can write on "Body Text", but "Save" is refused and the text is lost | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | A new or older article version's JATS XML carries the current version's galley text, not its own | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | An article's generated JATS XML gives its HTML galley as one paragraph with the tags as text | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | The published "JATS XML" keeps old metadata for up to a day after an edit, and a preview's XML after publishing | 🐞 | minor | — |
@@ -792,28 +794,38 @@ entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — The tick box is offered to people who may not change it** · 🐞 · user-visible.
-An assistant role, a Guest Editor or a Section Editor whose assignment
-lacks the metadata-edit permission sees no "Upload" or "Delete" on "JATS
-XML", yet is offered "Make available with publication" enabled, with its
+**A1 — A Layout Editor, other assistant or Guest Editor without "Permissions" is offered "Make available with publication", and "Confirm" is refused** · 🐞 · low.
+A Layout Editor or other assistant, or a Guest Editor, whose assignment
+has "Permissions" unticked sees no "Upload" or "Delete" on "JATS XML",
+yet is offered "Make available with publication" enabled, with its
 confirmation window. Pressing "Confirm" is refused with a window "Error"
 / "You are not allowed to edit this publication." and "OK". After "OK"
-the box stays as they set it, ticked or unticked, although nothing was
-saved; reopening the page shows the saved state. The box should be
-greyed or hidden for them, as the two buttons are.
-Basis: probe, 2026-09-25. <sup>f-a1</sup>
+the box looks unticked again, as saved, but a screen reader still hears
+it as the person set it until the page is reloaded. "Permissions" is
+unticked by default for the Guest Editor and every assistant role. So
+with default roles, every Guest Editor, Layout Editor or other assistant
+assigned to an article meets this. A Section Editor meets it only when
+"Permissions" has been unticked on their assignment, since it is ticked
+by default for that role.
+Basis: probe, 2026-10-02. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — "Save" on "Body Text" is offered to people who may not edit** · 🐞 · user-visible.
-A Layout Editor, Proofreader or other assistant role assigned in
-Production, without the metadata-edit permission, gets the full editor and
-an active "Save" on "Body Text". They can write for as long as they like;
-"Save" is then refused with a window "Error" reading "You are not allowed
-to edit this publication." ("You don't currently have access to that
-stage of the workflow." on a published version). "Unsaved Changes" stays,
-and the text is lost on leaving. The page should say the text is
-read-only, or not offer "Save".
-Basis: probe, 2026-09-25. <sup>f-a2</sup>
+**A2 — A Layout Editor without "Permissions" can write on "Body Text", but "Save" is refused and the text is lost** · 🐞 · medium.
+A Layout Editor, Proofreader or other assistant assigned in Production,
+whose assignment has "Permissions" unticked, gets the text editor and an
+active "Save" on "Body Text". They can write for as long as they like;
+"Save" is then refused with a window "Error" reading "You are not
+allowed to edit this publication.". "Unsaved Changes" stays, and the
+text is lost when they reload or leave the page. The page lets anyone
+who can open it write, but the server saves the text only for people who
+may change the publication. For a Layout Editor or other assistant, that
+means an editor has ticked "Permissions" on their assignment. An editor
+can do that, but what was typed before is gone unless the person copied
+it out. "Permissions" is unticked by default for the Guest Editor and
+every assistant role. So with default roles, every Layout Editor,
+Proofreader or other assistant assigned to an article in Production
+meets this.
+Basis: probe, 2026-10-02. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — A published version's Body Text stays editable** · ❓ · minor.
@@ -1255,9 +1267,11 @@ is made.
 
 <a id="fn-f-a1"></a>
 **f-a1** — Note c: the tick box's only guard is `loadingContentError == null`; `updateVisibility()` hits `PublicationWritePolicy`, which refuses a user whose assignment lacks `canChangeMetadata` (`api.submissions.403.userCantEdit`, answered 401); the box is not reset (note l). Probe: d2.
+Issue report: [docs/issues/U48-A1-jats-make-available-offered-then-refused.md](../issues/U48-A1-jats-make-available-offered-then-refused.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note c: `workflowConfigEditorialOJS.js` passes no `canEdit` to `WorkflowPublicationBodyText`, which renders "Save" unconditionally; the save goes through `PublicationWritePolicy` (401). Probe: d3.
+Issue report: [docs/issues/U48-A2-body-text-save-offered-then-refused.md](../issues/U48-A2-body-text-save-offered-then-refused.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Notes c and g: the Body Text page has no status check, and `canEditPublication()` lets editorial roles write to published versions; the JATS page's published-status test never matches (A12). Probe: d21, d30.

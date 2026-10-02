@@ -1,0 +1,109 @@
+--- a/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.vue
++++ b/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.vue
+@@ -11,6 +11,7 @@
+ 				{{ t('publication.bodyText') }}
+ 			</h2>
+ 			<PandocConverter
++				v-if="canEdit"
+ 				:upload-image="handleFigureUpload"
+ 				:disabled="!isEditorReady"
+ 				@html-ready="handlePandocHtmlReady"
+@@ -20,7 +21,7 @@
+ 				aria-labelledby="sciflow-editor-heading"
+ 			>
+ 				<div class="sciflow-body-text__editor-area">
+-					<div class="sciflow-body-text__editor-toolbar">
++					<div v-if="canEdit" class="sciflow-body-text__editor-toolbar">
+ 						<sciflow-formatbar
+ 							class="sciflow-body-text__formatbar"
+ 							for="sciflow-editor"
+@@ -45,7 +46,7 @@
+ 					<h2 class="sciflow-body-text__panel-title">
+ 						{{ t('publication.bodyText.documentPanel') }}
+ 					</h2>
+-					<div class="sciflow-body-text__save-row">
++					<div v-if="canEdit" class="sciflow-body-text__save-row">
+ 						<PkpButton is-primary @click="saveDocument">
+ 							{{ saveButtonLabel }}
+ 						</PkpButton>
+@@ -176,6 +177,7 @@
+ const props = defineProps({
+ 	submission: {type: Object, required: true},
+ 	publication: {type: Object, required: true},
++	canEdit: {type: Boolean, required: true},
+ });
+ 
+ const workflowStore = useWorkflowStore();
+@@ -202,7 +204,7 @@
+ const openAccordionSection = ref('references');
+ 
+ /** Sidebar sections */
+-const sidebarSections = [
++const allSidebarSections = [
+ 	{
+ 		key: 'references',
+ 		title: t('submission.citations'),
+@@ -223,6 +225,13 @@
+ 	},
+ ];
+ 
++/** "Selected Element" edits the text, so people who may not edit get the other two */
++const sidebarSections = computed(() =>
++	allSidebarSections.filter(
++		(section) => props.canEdit || section.key !== 'selected-element',
++	),
++);
++
+ const navigationGuard = (item) => {
+ 	if (!isDirty.value) return true;
+ 	const currentKey = workflowStore.sideMenuProps?.activeItemKey;
+@@ -307,6 +316,9 @@
+ 	setSciFlowThemeStyles(SCIFLOW_THEME_STYLES);
+ 	editor.setShadowStyles([PROSEMIRROR_SHADOW_STYLES]);
+ 	await applyFeatureConfiguration();
++	// The view is (re)created on each mount; keep it read-only for those who may not edit
++	editor.addEventListener('editor-ready', applyEditable);
++	applyEditable();
+ 	editor.addEventListener('editor-change', handleEditorChange);
+ 	editor.addEventListener('editor-selection-change', handleSelectionChange);
+ 
+@@ -348,6 +360,10 @@
+ 	onEscape: exitFullscreen,
+ });
+ 
++function applyEditable() {
++	editorRef.value?.editorView?.setProps({editable: () => props.canEdit});
++}
++
+ function handleAccordionToggle(sectionKey, event) {
+ 	const details = event.target;
+ 	if (details?.open) {
+@@ -447,7 +463,7 @@
+ 	const hasNode =
+ 		selection && (selection.node != null || selection.jsonID === 'node');
+ 
+-	if (hasRange || hasNode) {
++	if ((hasRange || hasNode) && props.canEdit) {
+ 		openAccordionSection.value = 'selected-element';
+ 	}
+ 	syncReferenceListHighlight();
+--- a/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.stories.js
++++ b/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.stories.js
+@@ -115,6 +115,6 @@
+ 			return {args};
+ 		},
+ 		template:
+-			'<WorkflowPublicationBodyText :submission="args.submission" :publication="args.publication" />',
++			'<WorkflowPublicationBodyText :can-edit="true" :submission="args.submission" :publication="args.publication" />',
+ 	}),
+ };
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigEditorialOJS.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigEditorialOJS.js
+@@ -1051,6 +1051,7 @@
+ 				{
+ 					component: 'WorkflowPublicationBodyText',
+ 					props: {
++						canEdit: permissions.canEditPublication,
+ 						submission,
+ 						publication: selectedPublication,
+ 					},
