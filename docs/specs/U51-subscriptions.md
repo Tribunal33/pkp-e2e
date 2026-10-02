@@ -1367,6 +1367,20 @@ Left out of the scenarios above, by reason:
     subscription bought with the manual method reads "Awaiting Manual
     Payment" in the "Subscription" block on the home page, and once set to
     "Needs Approval" reads "Inactive" there (A13, A26).
+  - the guard for A9 (issue report
+    `docs/issues/U51-A9-individual-purchase-refusal-says-nothing.md`): on
+    "Purchase Individual Subscription", "Save" with a type that requires
+    membership and "Membership" empty shows the refusal "Membership" message
+    on the page.
+  - the guard for A23 (issue report
+    `docs/issues/U51-A23-purchase-link-on-open-journal-leads-home.md`): a
+    signed-in reader on an open-access journal with payments set up finds no
+    "Purchase New Subscription" on "Subscriptions".
+  - the guard for A24 (issue report
+    `docs/issues/U51-A24-subscription-offer-links-lead-home-payments-off.md`):
+    on a journal that requires subscriptions with payments off, "My
+    Subscriptions" and the "Subscription" block offer neither "View
+    Available Subscription Types" nor "Learn More".
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1466,7 +1480,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | The email-box refusal sends the manager to "the journal Setup" for fields that are on "Subscription Policies" | 🐞 | minor | — |
 | [A7](#a7) | The issue's table of contents locks galleys the reader can open | 🐞 | minor | — |
 | [A8](#a8) | Expiry reminders run once a month and reach only subscriptions ending on matching days | 🐞 | user-visible | — |
-| [A9](#a9) | The individual purchase page refuses a missing membership without saying so | 🐞 | user-visible | — |
+| [A9](#a9) | A reader buying a subscription type that requires membership gets the same page back, unexplained, when "Membership" is empty | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | "Purchase" on an active subscription, saved, takes the reader's access away at once | 🐞 | user-visible | — |
 | [A11](#a11) | Every institutional purchase adds another institution | 🐞 | minor | — |
 | [A12](#a12) | A signed-out visitor at a purchase page's address gets an empty page, the server failing | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1480,8 +1494,8 @@ entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | A reader pressing a locked "Full Issue" is asked to pay an issue fee of no amount when only a membership fee is set | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | The subscription window saves a start date after the end date | 🐞 | minor | — |
 | [A22](#a22) | Six of the subscription lists' search fields list every subscription whatever is typed | 🐞 | user-visible | — |
-| [A23](#a23) | "Purchase New Subscription" on a journal that does not require subscriptions leads home | 🐞 | minor | — |
-| [A24](#a24) | "View Available Subscription Types" and "Learn More" lead home while payments are not set up | 🐞 | minor | — |
+| [A23](#a23) | "Subscriptions" offers "Purchase New Subscription" on an open-access journal, and it leads to the home page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [A24](#a24) | While payments are off, a reader's "Learn More" and "View Available Subscription Types" lead to the home page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A25](#a25) | "Purchase" on an active institutional subscription arrives with "IP ranges" reading "Array" | 🐞 | minor | — |
 | [A26](#a26) | The "Subscription" block reads "Expires: {date}" for an inactive subscription | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A27](#a27) | The expiry-reminder task stops with an error and sends nothing | 🐞 | user-visible · crash: server | — |
@@ -1565,12 +1579,20 @@ this is what remains once that is fixed. Since: 2025-08-13 · Basis:
 commit. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The individual purchase page refuses without saying why** · 🐞 · user-visible.
-On "Purchase Individual Subscription", choosing a type that asks for
-membership and pressing "Save" with "Membership" empty shows the same
-page again, with no message and nothing marked, and no subscription is
-created. The institutional purchase page shows its refusals at the top;
-this page has no place for them. Basis: probe, 2026-09-25. <sup>f-a9</sup>
+**A9 — A reader buying a subscription type that requires membership gets the same page back, unexplained, when "Membership" is empty** · 🐞 · low.
+On "Purchase Individual Subscription", a signed-in reader chooses a
+subscription type that requires membership information and presses
+"Save" with "Membership" empty. The same page comes back with the type
+still chosen, no message and nothing marked, and no subscription is
+created. The form's own message, "The selected subscription type
+requires membership information.", is never shown. Nothing on the page
+says the box is needed: "Membership" carries no required mark and no
+hint, and the type's name need not mention membership. The reader gets
+through only by guessing that the one empty box is the reason. It needs
+a journal that requires subscriptions and has payments set up (Settings
+› Distribution › "Payments": "Enable" and a payment method), with an
+individual type that requires membership. Basis: probe, 2026-10-01.
+<sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — "Purchase" on an active subscription removes access** · 🐞 · user-visible.
@@ -1693,20 +1715,27 @@ up by reference number gets the whole list. Basis: probe, 2026-09-25.
 <sup>f-a22</sup>
 
 <a id="a23"></a>
-**A23 — "Purchase New Subscription" leads home on an open journal** · 🐞 · minor.
-On an open-access journal, or one not published online, that has
-subscription types and payments set up, the "Subscriptions" page lists
-the types and offers a signed-in reader "Purchase New Subscription";
-pressing it leads to the journal's home page with no message. Basis:
-probe, 2026-09-25. <sup>f-a23</sup>
+**A23 — "Subscriptions" offers "Purchase New Subscription" on an open-access journal, and it leads to the home page** · 🐞 · low.
+On a journal that does not require subscriptions (open access, or not
+published online) but has payments set up and subscription types, the
+"Subscriptions" page lists the types and offers a signed-in reader
+"Purchase New Subscription" under each list. Pressing it leads to the
+journal's home page with no message. The purchase pages refuse every
+journal that does not require subscriptions, so the page offers a
+purchase that cannot happen. Readers reach "Subscriptions" there only
+through a menu item the journal added itself, or by its address. Basis:
+probe, 2026-10-01. <sup>f-a23</sup>
 
 <a id="a24"></a>
-**A24 — Two links to the subscription offer lead home** · 🐞 · minor.
-While payments are not set up (the install default), "My
-Subscriptions" offers "View Available Subscription Types" under each
-kind of subscription, and the "Subscription" block offers "Learn More",
-but the "Subscriptions" page is closed then, so both lead to the
-journal's home page with no message. Basis: probe, 2026-09-25.
+**A24 — While payments are off, a reader's "Learn More" and "View Available Subscription Types" lead to the home page** · 🐞 · low.
+On a journal that requires subscriptions and has not set up payments
+(payments are off on a new journal), a signed-in reader with no
+subscription is offered "Learn More" in the sidebar's "Subscription"
+block, and "View Available Subscription Types" on "My Subscriptions".
+Both lead to the journal's home page with no message. Both links point
+to the "Subscriptions" page, which has been closed while payments are
+off since 2018; until then they opened it. The proposed fix hides the
+two links while the page is closed. Basis: probe, 2026-10-01.
 <sup>f-a24</sup>
 
 <a id="a25"></a>
@@ -1979,6 +2008,7 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `purchaseIndividualSubscription.tpl` has no `common/formErrors.tpl` include (the institutional page has one); `UserHandler::payPurchaseSubscription()` re-displays the form on a failed `validate()`. Live-probed 2026-09-25 (td16).
+Issue report: [docs/issues/U51-A9-individual-purchase-refusal-says-nothing.md](../issues/U51-A9-individual-purchase-refusal-says-nothing.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — `userSubscriptions.tpl` offers `purchaseSubscription/{kind}/{id}` on an `ACTIVE` subscription; `UserIndividualSubscriptionForm::execute()` (and the institutional one) set the existing subscription's status to `AWAITING_MANUAL_PAYMENT` (or `_ONLINE_`) and both dates to today before any payment. Live-probed 2026-09-25 (td18), individual and institutional.
@@ -2025,9 +2055,11 @@ Issue report: [pkp-e2e#386](https://github.com/jardakotesovec/pkp-e2e/issues/386
 
 <a id="fn-f-a23"></a>
 **f-a23** — `AboutHandler::subscriptions()` checks only the payment setup (note f) and the template offers "Purchase New Subscription" to any signed-in visitor, while `UserHandler::purchaseSubscription()` redirects to the index outside `PUBLISHING_MODE_SUBSCRIPTION`. Live-probed 2026-09-25 (td27), on an open-access and a not-online journal.
+Issue report: [docs/issues/U51-A23-purchase-link-on-open-journal-leads-home.md](../issues/U51-A23-purchase-link-on-open-journal-leads-home.md).
 
 <a id="fn-f-a24"></a>
 **f-a24** — `userSubscriptions.tpl` and the block link to `about/subscriptions`, which redirects to the journal index while payments are not configured (note f). Live-probed 2026-09-25 (td20, td25).
+Issue report: [docs/issues/U51-A24-subscription-offer-links-lead-home-payments-off.md](../issues/U51-A24-subscription-offer-links-lead-home-payments-off.md).
 
 <a id="fn-f-a25"></a>
 **f-a25** — `UserInstitutionalSubscriptionForm::initData()` fills `ipRanges` with `$institution->getIPRanges()`, an array, which the text box prints as "Array"; the IP check then refuses it. Live-probed 2026-09-25 (td18).

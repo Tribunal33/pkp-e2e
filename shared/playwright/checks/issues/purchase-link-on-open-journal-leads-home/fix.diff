@@ -1,0 +1,39 @@
+--- a/pages/about/AboutHandler.php
++++ b/pages/about/AboutHandler.php
+@@ -17,6 +17,7 @@
+ namespace APP\pages\about;
+ 
+ use APP\core\Application;
++use APP\journal\Journal;
+ use APP\subscription\SubscriptionTypeDAO;
+ use APP\template\TemplateManager;
+ use PKP\db\DAORegistry;
+@@ -52,6 +53,8 @@
+             'subscriptionEmail' => $journal->getData('subscriptionEmail'),
+             'individualSubscriptionTypes' => $subscriptionTypeDao->getByInstitutional($journal->getId(), false, false)->toArray(),
+             'institutionalSubscriptionTypes' => $subscriptionTypeDao->getByInstitutional($journal->getId(), true, false)->toArray(),
++            // The purchase pages also require the subscription publishing mode (UserHandler::purchaseSubscription())
++            'acceptSubscriptionPayments' => $paymentManager->isConfigured() && $journal->getData('publishingMode') == Journal::PUBLISHING_MODE_SUBSCRIPTION,
+         ]);
+         $templateMgr->display('frontend/pages/subscriptions.tpl');
+     }
+--- a/templates/frontend/pages/subscriptions.tpl
++++ b/templates/frontend/pages/subscriptions.tpl
+@@ -46,7 +46,7 @@
+ 				{/foreach}
+ 			</table>
+ 		</div>
+-		{if $isUserLoggedIn}
++		{if $isUserLoggedIn && $acceptSubscriptionPayments}
+ 			<div class="subscriptions_individual_purchase">
+ 				<a class="action" href="{url page="user" op="purchaseSubscription" path="individual"}">
+ 					{translate key="user.subscriptions.purchaseNewSubscription"}
+@@ -81,7 +81,7 @@
+ 				</tr>
+ 			{/foreach}
+ 		</table>
+-		{if $isUserLoggedIn}
++		{if $isUserLoggedIn && $acceptSubscriptionPayments}
+ 			<div class="subscriptions_institutional_purchase">
+ 				<a class="action" href="{url page="user" op="purchaseSubscription" path="institutional"}">
+ 					{translate key="user.subscriptions.purchaseNewSubscription"}
