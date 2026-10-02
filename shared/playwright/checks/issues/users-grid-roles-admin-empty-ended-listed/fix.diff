@@ -1,0 +1,32 @@
+--- a/lib/pkp/classes/userGroup/relationships/UserUserGroup.php
++++ b/lib/pkp/classes/userGroup/relationships/UserUserGroup.php
+@@ -123,20 +123,17 @@
+             ->orderBy('user_user_groups.date_start', 'asc');
+     }
+ 
++    /**
++     * The assignments that are active now or will start in the future: the union of
++     * scopeWithActive() and scopeWithActiveInFuture(), so that an assignment without a start
++     * date counts as started and one ended this second counts as ended, as everywhere else.
++     */
+     public function scopeWithActiveAndActiveInFuture(Builder $query): Builder
+     {
+-        $currentDateTime = Core::getCurrentDate();
+-        return $query->whereNotNull('user_user_groups.date_start')
+-            ->where(function ($q) use ($currentDateTime) {
+-                $q->where(function ($q) use ($currentDateTime) {
+-                    $q->where('user_user_groups.date_start', '<=', $currentDateTime) // Active ones
+-                        ->where(function ($q) use ($currentDateTime) {
+-                            $q->whereNull('user_user_groups.date_end') // No end date means still active
+-                                ->orWhere('user_user_groups.date_end', '>=', $currentDateTime); // End date in the future
+-                        });
+-                })
+-                    ->orWhere('user_user_groups.date_start', '>', $currentDateTime); // Future ones
+-            })
++        return $query->where(
++            fn (Builder $query) => $query->withActive()
++                ->orWhere(fn (Builder $query) => $query->withActiveInFuture())
++        )
+             ->orderBy('user_user_groups.date_start', 'asc');
+     }
+ }

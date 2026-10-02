@@ -772,6 +772,12 @@ Left out of the scenarios above, by reason:
     account: the merge completes with a message, the merged account is gone
     and cannot sign in, and the discussion names the chosen account as its
     creator
+  - the guard for A13 (issue report
+    `docs/issues/U53-A13-A17-users-grid-roles-admin-empty-ended-listed.md`):
+    the Site Administrator opens the Settings wizard's "Users" grid and the
+    "Merge user" window: the administrator's row names the manager role
+    under "Roles"; after "Edit User" ends a role, the refreshed row no
+    longer lists it
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -865,11 +871,11 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | Merging a section editor's account silently drops them from their sections instead of moving them | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | The French "Users" tab prints raw codes for its search label, the Invitations heading, button and columns, and the "Start Date" column | 🐞 | minor | — |
 | [A12](#a12) | The ORCID and disabled icons after a name have no name for a screen reader | 🐞 | minor | — |
-| [A13](#a13) | The "Merge user" window and the older grid show nothing under "Roles" for the Site Administrator | 🐞 | minor | — |
+| [A13](#a13) | The "Merge user" window and the older grid show nothing under "Roles" for the Site Administrator | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | Merging an account that opened a discussion fails without a message and leaves the account behind | 🐞 | high · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [A16](#a16) | "Notify User" stays greyed out after "Generate Password" is unticked | 🐞 | minor | — |
-| [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | minor | — |
+| [A16](#a16) | On "Add User", unticking "Generate Password" leaves "Notify User" greyed out, so no welcome email can be chosen | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A19](#a19) | "Remove User" on a user whose only role has not yet begun ends in "An unexpected error has occurred…" | 🐞 | user-visible | — |
 | [OPS1](#ops1) | On a French preprint server the "Roles" column prints raw codes for two roles | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A user removed from the journal stays in the list with no role | ❓ | minor | — |
@@ -1004,14 +1010,17 @@ one without. Each icon should carry a name, such as "ORCID iD" and
 Basis: probe. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — The older lists show no role for the Site Administrator** · 🐞 · minor.
+**A13 — The older lists show no role for the Site Administrator** · 🐞 · medium.
 In the "Merge user" window and on the Settings wizard's "Users" grid the
 Site Administrator's row shows nothing under "Roles", while the Users &
 Roles list names their manager role ("Journal manager", "Press manager",
 "Preprint Server manager") with an empty "Start Date". The grid still
-offers "Remove" on that row. The lists should agree on the roles an
-account holds.
-Basis: probe. <sup>f-a13</sup>
+offers "Remove" on that row. The same cells are empty for every role
+with no start date, so on an install upgraded from 3.4 they are empty
+for every role held from before the upgrade, in the window where a
+manager picks the account to merge. The lists should agree on the roles
+an account holds.
+Basis: probe, 2026-10-02. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody** · 🐞 · medium · crash: server.
@@ -1052,15 +1061,20 @@ author. Released versions are not affected. Basis: probe, 2026-10-02.
 <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — "Notify User" stays locked after "Generate Password" is unticked** · 🐞 · minor.
-On "Add User", ticking "Generate Password" and then unticking it empties
-and opens the password boxes again, but "Notify User" stays greyed out
-and unticked, so the welcome email cannot be chosen for a typed password
-until the window is closed and opened again.
-Basis: probe. <sup>f-a16</sup>
+**A16 — On "Add User", unticking "Generate Password" leaves "Notify User" greyed out, so no welcome email can be chosen** · 🐞 · low.
+On "Add User", ticking "Generate Password" fills and locks the password
+boxes and ticks and locks "Notify User". Unticking it again empties and
+opens the password boxes, but "Notify User" stays greyed out and
+unticked. The welcome email with the username and password cannot be
+chosen for a password typed by hand, and the account is created without
+it. It happens only to someone who ticks "Generate Password" and then
+changes their mind. On `main` and 3.5 the window belongs to the Site
+Administrator's Settings wizard. A manager's Settings › Users & Roles
+adds people by "Invite to a role" and does not have this window. Basis:
+probe, 2026-10-02. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — The grid's row still lists a role just ended** · 🐞 · minor.
+**A17 — The grid's row still lists a role just ended** · 🐞 · medium.
 On the Settings wizard's "Users" tab, the Site Administrator unticks
 "Author" and ticks "Reader" on "Edit User" and presses "OK". Both changes
 are saved and "User edited." shows, but the user's row, which the grid
@@ -1068,7 +1082,7 @@ refreshes, lists both "Author" and "Reader" under "Roles" and keeps doing so.
 Only reloading the page shows "Reader" alone, and a reload made the
 moment the save ends can still list both. The Site Administrator is shown
 a role that has already ended as if it were current.
-Basis: test run, 2026-09-26. <sup>f-a17</sup>
+Basis: probe, 2026-10-02. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — "Roles" goes by the end date, not by whether the role is held today** · ❓ · minor.
@@ -1950,6 +1964,7 @@ manager" ("Press manager", "Preprint Server manager") with no start date.
 The grids' "Roles" column lists active and future roles (note i), and the
 manager enrolment a new journal gives the Site Administrator has no start
 date, which fits the empty cell.
+Issue report: [docs/issues/U53-A13-A17-users-grid-roles-admin-empty-ended-listed.md](../issues/U53-A13-A17-users-grid-roles-admin-empty-ended-listed.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-25, OMP and OPS: after "Confirm" on a
@@ -1981,6 +1996,7 @@ Password" was ticked and then unticked, the password boxes were empty and
 open, "Notify User" disabled and unticked. Code:
 `UserDetailsFormHandler::setGenerateRandom()` unticks with
 `.attr('disabled', '')`, which leaves the `disabled` attribute in place.
+Issue report: [docs/issues/U53-A16-add-user-notify-stays-greyed.md](../issues/U53-A16-add-user-notify-stays-greyed.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Test run 2026-09-26 (Rule 24; scenario 8), OJS and OPS: after
@@ -1999,6 +2015,7 @@ role whose `date_end >= now` at one-second precision, while
 own second, so the refresh after "OK", or a reload within that second,
 still lists the ended role; the Users & Roles list's `withActive`
 compares with `>` and does not.
+Issue report: [docs/issues/U53-A13-A17-users-grid-roles-admin-empty-ended-listed.md](../issues/U53-A13-A17-users-grid-roles-admin-empty-ended-listed.md).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-30, all three apps: the list as note b
