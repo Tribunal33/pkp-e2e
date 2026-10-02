@@ -938,6 +938,7 @@ Left out of the scenarios above, by reason:
   - "Download All Files" on "Submission Files": the zip named with one hyphen, "{number}-submission-files.zip" ([A12](#a12)): the guard the issue report proposes; likely an assertion in scenario 4
   - the reviewer's "Review Files" search for a text no file name contains: "No Files" ([A20](#a20)): the guard the issue report proposes
   - step 1 of the upload wizard before a component is chosen: the upload box absent from the accessibility snapshot, and each drop-down found by its role and label ([A9](#a9)): the guards the two issue reports propose
+  - "2. Review Details" reopened from "3. Confirm": the button reads "Continue", and one "Complete" on step 3 closes the window ([A15](#a15)): the guard the issue report proposes
 - **Nothing new to test**:
   - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
   - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
@@ -1004,7 +1005,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | Submission wizard: "Save" in a file's "Edit" panel with no component chosen shows "An unexpected error has occurred" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | "Download All Files" names its zip with two hyphens after the submission's number | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | Upload wizard: "Change File" on step 1 uploads the second file but keeps the first, and the list shows both | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A15](#a15) | Step 2 reopened from step 3 offers "Complete" but shows "File Added" again instead of closing | 🐞 | minor | — |
+| [A15](#a15) | Upload wizard: a reopened "2. Review Details" keeps the "Complete" button, which shows "File Added" again instead of closing | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A19](#a19) | In "Upload/Select Files", another stage's files refuse "More Information", "Edit", "Delete" and their download | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | Reviewer's "Review Files" list: "Search" keeps every file listed, whatever text is typed | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A21](#a21) | A file at the upload limit passes the size check, uploads, then fails on the server instead of being refused | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
@@ -1256,12 +1257,15 @@ shows it.
 Basis: probe, 2026-10-02. <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
-**A15 — Step 2 reopened from step 3 offers "Complete" but does not close** · 🐞 · minor.
-Pressing "2. Review Details" on "3. Confirm" opens step 2 again, its
-button now reading "Complete". Pressing it saves the name and shows "File
-Added" again instead of closing the window; the window closes only when
-"Complete" is pressed a second time.
-Basis: probe. <sup>[f-a15](#fn-a15)</sup>
+**A15 — Upload wizard: a reopened "2. Review Details" keeps the "Complete" button, which shows "File Added" again instead of closing** · 🐞 · low.
+In the upload wizard, pressing "2. Review Details" on "3. Confirm" opens
+step 2 again, and the button under it still reads "Complete" where it
+should read "Continue". Pressing it does what "Continue" does: it saves
+the details and shows "3. Confirm" with "File Added" again. The window
+stays open until "Complete" is pressed there a second time.
+
+The wrong label is the whole fault. The upload itself is not affected.
+Basis: probe, 2026-10-02. <sup>[f-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
 **A16 — Closing a galley's "Change File" replaces the file without asking** · ❓ · user-visible.
@@ -2388,6 +2392,7 @@ Details" pressed on "3. Confirm" reopened step 2 with the name box, its button
 reading "Complete"; pressing it posted `save-metadata` with the new name and
 showed "File Added" in the window, still open; the list then read "Back at
 step two.pdf".
+Issue report: [docs/issues/U36-A15-upload-wizard-reopened-step-complete-does-not-close.md](../issues/U36-A15-upload-wizard-reopened-step-complete-does-not-close.md).
 
 <a id="fn-a16"></a>
 **f-a16** — Notes l and p. Live-probed 2026-09-23 (d4; OJS and OPS, two runs):

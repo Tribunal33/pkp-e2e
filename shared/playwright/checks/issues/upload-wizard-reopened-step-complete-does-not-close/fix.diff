@@ -1,0 +1,32 @@
+--- a/lib/pkp/js/controllers/wizard/WizardHandler.js
++++ b/lib/pkp/js/controllers/wizard/WizardHandler.js
+@@ -354,8 +354,29 @@
+ 		this.hideProgressIndicator_();
+ 		this.enableContinueButton();
+ 	};
++
++
++	/**
++	 * @inheritDoc
++	 */
++	$.pkp.controllers.wizard.WizardHandler.prototype.tabsActivate =
++			function(tabsElement, event, ui) {
+ 
++		var result = this.parent('tabsActivate', tabsElement, event, ui),
++				$continueButton = this.getContinueButton();
+ 
++		// The button's label follows the step shown, however it was reached
++		// (a wizard may let the user return to an earlier step).
++		if ($continueButton) {
++			$continueButton.text(/** @type {string} */ (
++					this.getCurrentStep() === this.getNumberOfSteps() - 1 ?
++					this.getFinishButtonText() : this.getContinueButtonText()));
++		}
++
++		return /** @type {boolean} */ (result);
++	};
++
++
+ 	//
+ 	// Protected methods
+ 	//
