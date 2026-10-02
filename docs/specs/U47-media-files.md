@@ -819,6 +819,8 @@ mail catcher's address and tooling recipe. <sup>t</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A5 (issue report `docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md`): change a media file's "Name of the file" in "Edit Metadata", leave with "Cancel" › "Yes", and check the row and the reopened box show the saved name, and that a "Save" of another field does not store the abandoned one.
 - **Rarely met**:
   - no component marked as a dependent file, where "Upload Media File"
     holds only "No media types are configured. Please contact the
@@ -873,7 +875,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | Assigned roles without "Permissions" are offered every media action, and each fails: with an "Error" window, or with no message on "Save" | 🐞 | user-visible | — |
 | [A3](#a3) | The empty "Upload Media File" window lists a button "Drop files here to upload" for screen readers that nothing on screen shows | 🐞 | minor | — |
 | [A4](#a4) | A file over the upload limit fails with a server error; its card reads "Invalid JSON response from server." | 🐞 | minor · crash: server | — |
-| [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, unsaved, until a reload | 🐞 | user-visible | — |
+| [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | invisible | — |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | minor | — |
 | [OMP1](#omp1) | With "HTML Monograph File" off, a book's HTML file opens as a blank page | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
@@ -933,15 +935,18 @@ window upload normally.
 Basis: probe, 2026-09-24. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A name left with "Yes" shows in the list, unsaved** · 🐞 · user-visible.
+**A5 — A name left with "Yes" stays in the list, and the next "Save" stores it** · 🐞 · medium.
 A user types a new "Name of the file" in "Edit Metadata", then leaves
 the window with "Close" or "Cancel" and "Yes" in the "Warning" dialog
-("continue without saving"). Nothing is saved, yet the file's row in
-the list shows the typed name, and "Edit Metadata" opened again arrives
-holding it. Only a reload of the page shows the saved name again. The
-user is led to believe the rename was kept.
-Basis: test run, 2026-09-25 (OJS); code (OMP and OPS, the same
-window). <sup>f-a5</sup>
+("continue without saving"). Nothing is sent, yet the file's row in the
+list shows the typed name, and "Edit Metadata" opened again arrives
+holding it. The next "Save" of that window, made to change another
+field such as "Caption", stores the abandoned name without a warning;
+only a reload before that shows the saved name again. The user is led
+to believe the rename was kept, and a later save keeps it for good. The
+same cause leaves an abandoned name or title in the other "Edit" panels
+the issue report lists.
+Basis: test run, 2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — Each media file added leaves a warning in the server's log** · 🐞 · invisible.
@@ -1767,6 +1772,7 @@ file's own multilingual name object (`value: mediaFile.name`), so
 typing edits the list's copy in place, and "Yes" does not re-read the
 list. The window is the shared ui-library `MediaFileManager`, the same
 commit in the three apps; OMP and OPS were not driven for it.
+Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md](../issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Test run 2026-09-25, OJS, OMP and OPS: the worker servers'

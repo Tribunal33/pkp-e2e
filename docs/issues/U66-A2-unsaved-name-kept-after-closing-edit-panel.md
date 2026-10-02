@@ -11,7 +11,7 @@
 - **Introduced** `pkp/ui-library#88` for `pkp/pkp-lib#5865` · [d0ffc05ab4](https://github.com/pkp/ui-library/commit/d0ffc05ab4ae7f06e8d2ab82f30ffb8a5ea9a7a3) · 2020-05-13 · Nate Wright (NateWr)
 - **Upstream** none found (2026-09-30)
 - **Tracked in** specs U66 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a2), U12 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a11), U11 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U11-highlights.md#a4), U47 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a5)
-- **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
+- **Checked** 2026-09-30, each branch's tip (the commits in Evidence); the "Media files" Steps again on `main` 2026-10-02
 
 ## Summary
 
@@ -414,6 +414,15 @@ two overrides, in one repo; it covers all seven windows.
     [38ab955](https://github.com/pkp/datasets/commit/38ab95511dd060c2ea185cb11eb5eedfb2a99e40)
     (2026-09-30), with OJS on a newer tip (bade233f73, lib/pkp
     2e377d27fc); OMP, OPS and ui-library as above.
+  - The "Media files" Steps and their Control were walked again on
+    2026-10-02 with media.js, on all three apps, each install freshly
+    loaded from pkp/datasets
+    [c657990](https://github.com/pkp/datasets/commit/c657990320435ecbd047603eadb4b4ac863f6dba)
+    (2026-10-01): OJS b84f8e2e44 (lib/pkp ddd8ab243a, lib/ui-library
+    64d67363), OMP and OPS as above. Every app showed the Observed, the
+    "Save" request of step 26 included, and no request failed. Neither
+    ui-library commit since 280f98c5 touches `Form.vue` or
+    `src/managers/MediaFileManager/`, and the fix applies as written.
   - The fault is in the browser, so the database does not bear on it.
 - The "Media" page on 3.5, 3.4 and 3.3, by code: `stable-3_5_0`'s
   ui-library (1a7a4750) has no `src/managers/MediaFileManager/` and its
@@ -457,4 +466,5 @@ two overrides, in one repo; it covers all seven windows.
   saving, `fieldChanged`, `openEditModal`, `cloneDeep`), and again for the
   "Media" page (media file name without saving, media metadata name,
   `MediaFileManager`; `pkp/pkp-lib#12262` and its QA comments read):
-  nothing about this fault.
+  nothing about this fault. The "Media" page's searches were run again on
+  2026-10-02, with the same result.
