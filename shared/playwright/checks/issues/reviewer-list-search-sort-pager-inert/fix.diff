@@ -1,0 +1,146 @@
+--- a/lib/pkp/api/v1/_submissions/PKPBackendSubmissionsController.php
++++ b/lib/pkp/api/v1/_submissions/PKPBackendSubmissionsController.php
+@@ -368,11 +368,16 @@
+             ], Response::HTTP_NOT_FOUND);
+         }
+         $currentUser = $request->getUser();
++        $queryParams = $illuminateRequest->query();
+         $collector = Repo::reviewAssignment()->getCollector()
+             ->filterByReviewerIds([$currentUser->getId()], true)
+             ->filterByContextIds([$context->getId()]);
+ 
+-        foreach ($illuminateRequest->query() as $param => $val) {
++        $count = 30;
++        $offset = 0;
++        $orderDirection = $collector::ORDER_DIR_DESC;
++
++        foreach ($queryParams as $param => $val) {
+             switch ($param) {
+                 case 'actionRequired':
+                     $collector->filterByActionRequiredByReviewer(true);
+@@ -391,14 +396,56 @@
+                     break;
+                 case 'published':
+                     $collector->filterByPublished(true);
++                    break;
++                case 'searchPhrase':
++                    if (is_string($val)) {
++                        $collector->searchPhrase($val);
++                    }
++                    break;
++                case 'orderBy':
++                    // The list's one sortable column is the submission ID
++                    if ($val === Collector::ORDERBY_ID && ($queryParams['orderDirection'] ?? null) === $collector::ORDER_DIR_ASC) {
++                        $orderDirection = $collector::ORDER_DIR_ASC;
++                    }
+                     break;
++                case 'count':
++                    $count = min(self::MAX_COUNT, (int) $val);
++                    break;
++                case 'offset':
++                    $offset = (int) $val;
++                    break;
+             }
+         }
+ 
+-        $reviewAssignments = $collector->getMany();
++        // The "Filters" window sends the same parameters as on the other dashboards (section, issue,
++        // category, days inactive, ...): let the app's submission collector say which of the
++        // reviewer's submissions pass them. The search phrase is left out on purpose: the submission
++        // search also matches author names, which an anonymous review hides from the reviewer.
++        $filterParams = array_diff_key($queryParams, array_flip([
++            'actionRequired', 'active', 'archived', 'declined', 'completed', 'published',
++            'searchPhrase', 'orderBy', 'orderDirection', 'count', 'offset', 'page', 'perPage',
++        ]));
++        if (!empty($filterParams)) {
++            $collector->filterBySubmissionIds(
++                $this->getSubmissionCollector($filterParams)
++                    ->limit(null)
++                    ->offset(null)
++                    ->filterByReviewIds($collector->getIds()->all())
++                    ->getIds()
++                    ->all()
++            );
++        }
+ 
++        // Count before the page is cut, and give the pages a stable order
++        $itemsMax = $collector->getCount();
++        $reviewAssignments = $collector
++            ->orderBySubmissionId($orderDirection)
++            ->limit($count)
++            ->offset($offset)
++            ->getMany();
++
+         return response()->json([
+-            'itemsMax' => $collector->getCount(),
++            'itemsMax' => $itemsMax,
+             'items' => Repo::reviewAssignment()->getSchemaMap()->mapMany($reviewAssignments)->values(),
+         ], Response::HTTP_OK);
+     }
+--- a/lib/pkp/classes/submission/reviewAssignment/Collector.php
++++ b/lib/pkp/classes/submission/reviewAssignment/Collector.php
+@@ -63,6 +63,7 @@
+     public ?bool $isConfirmedByEditor = null;
+     public ?array $doiIds = null;
+     public ?bool $isAccepted = false;
++    public ?string $searchPhrase = null;
+ 
+     public function __construct(DAO $dao)
+     {
+@@ -309,6 +310,18 @@
+     public function filterByDoiIds(?array $doiIds): self
+     {
+         $this->doiIds = $doiIds;
++        return $this;
++    }
++
++    /**
++     * Limit results to assignments on submissions matching this search phrase: every word must be
++     * in the title of the submission's current publication, or be the submission's ID.
++     * Narrower than the submission collector's search on purpose: it never matches author names,
++     * which an anonymous review hides from the reviewer.
++     */
++    public function searchPhrase(?string $searchPhrase): static
++    {
++        $this->searchPhrase = $searchPhrase;
+         return $this;
+     }
+ 
+@@ -629,6 +642,26 @@
+             $q->whereIn('ra.doi_id', $this->doiIds);
+         });
+ 
++        $keywords = collect(preg_split('/\s+/', trim($this->searchPhrase ?? ''), -1, PREG_SPLIT_NO_EMPTY))->unique();
++        $keywords->each(
++            fn (string $keyword) => $q->where(
++                fn (Builder $q) => $q
++                    ->whereIn(
++                        'ra.submission_id',
++                        fn (Builder $q) => $q
++                            ->select('s.submission_id')
++                            ->from('submissions AS s')
++                            ->join('publication_settings AS ps', 'ps.publication_id', '=', 's.current_publication_id')
++                            ->where('ps.setting_name', '=', 'title')
++                            ->whereRaw('LOWER(ps.setting_value) LIKE ?', ['%' . addcslashes(mb_strtolower($keyword), '%_\\') . '%'])
++                    )
++                    ->when(
++                        ctype_digit($keyword),
++                        fn (Builder $q) => $q->orWhere('ra.submission_id', '=', (int) $keyword)
++                    )
++            )
++        );
++
+         $q->when(
+             $this->count !== null,
+             fn (Builder $q) =>
+@@ -658,6 +691,10 @@
+             $q->orderBy(
+                 'ra.submission_id',
+                 $this->orderBySubmissionIdDirection
++            )->orderBy(
++                // Keep two assignments on one submission in a fixed order
++                'ra.review_id',
++                $this->orderBySubmissionIdDirection
+             )
+         );
+ 

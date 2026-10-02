@@ -983,6 +983,7 @@ Left out of the scenarios above, by reason:
   - a reviewer asked again after a round they left unfinished reading "The review was not completed." on that round's "Previous Reviews" row, and no row ending in "Submitted on" without a date ([A2](#a2); Rule 14): the guard the issue report proposes, once fixed
   - a round-1 reviewer whose submission gets round 2 without them, and a press's Internal Reviewer after "Send to External Review" {OMP}, finding no "Previous Reviews" box on their review, while a reviewer asked again on round 2 finds the round-1 line ([A12](#a12); Actors row 8, Rule 14): the guard the issue report proposes, once fixed
   - a reviewer who saves a text, empties the box, saves again and reopens the review finding the box empty, and the editor reading no text ([A4](#a4); Rule 13): the guard the issue report proposes, once fixed
+  - a reviewer's search for a word of one title listing that row alone under "All assignments (1)", and a search for no title's word reading "No Items" ([A1](#a1); Rules 3–4): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1031,7 +1032,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | The reviewer list's search box, "Sort" control and pager do nothing: every phrase, every sort and every page shows the same rows | 🐞 | user-visible | — |
+| [A1](#a1) | Reviewer's "My Assignments as Reviewer" list: search, "Sort", "Filters" and the pager leave the rows unchanged | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | "Previous Reviews" says "Round 1 Review Submitted on" with no date for a round the reviewer never finished | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | Reviewer empties a saved review text and saves again: the old text stays saved and is what the editor reads | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | The accepted row's "Please complete this review by" date prints with a 00:00:00 clock time | 🐞 | minor | — |
@@ -1056,21 +1057,24 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 ### All apps
 
 <a id="a1"></a>
-**A1 — Search, sorting and paging on the reviewer list are inert** · 🐞 ·
-user-visible.
-The list under "My Assignments as Reviewer" offers the search box "Search
-submissions, ID, authors, keywords, etc.", a "Sort" control on the "ID"
-column and a pager once a view holds more than 30 rows. Typing a phrase
-puts "Search: {phrase}" above the table and leaves the rows exactly as they
-were, a phrase matching nothing included. Pressing "Sort" changes the
-address and leaves the rows in the same order, pressed once or twice. Past
-30 rows a pager appears, but every page lists every row: "Showing 1 to 30
-of 34" stands under a table of 34 rows, and page 2 shows the same 34 rows
-under "Showing 31 to 34 of 34". The editorial dashboard's identical
-controls work as expected. A reviewer with many assignments cannot find
-one by title.
-Basis: probe (the search, 2026-09-04; sort and pager, 2026-09-05; both
-apps). <sup>[f-a1](#fn-a1)</sup>
+**A1 — Reviewer's "My Assignments as Reviewer" list: search, "Sort", "Filters" and the pager leave the rows unchanged** · 🐞 · low.
+On "My Assignments as Reviewer", the search box, the "Sort" control
+on the "ID" column and the "Filters" window do nothing: every phrase,
+every sort and every filter shows the same rows in the same order.
+The page still prints "Search: {phrase}" or "Section: Reviews" above
+rows that do not match. The list is never cut into pages either: a
+view with more than 30 rows shows them all on every page of its pager.
+
+Nothing is lost: all of the reviewer's assignments stay on screen and
+each one opens. The editors' dashboard has the same controls, and
+there they work; its search cannot simply be reused, because it
+matches author names, which a reviewer under anonymous review must
+not find.
+
+The fault came with the reviewer's list of 3.5. In 3.4 the reviewer's
+list searched, filtered and paged; "Sort" is new with the 3.5 list
+and has never worked on it.
+Basis: probe, 2026-10-02. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — "Previous Reviews" says "Round 1 Review Submitted on" with no date for a round the reviewer never finished** · 🐞 · low.
@@ -2198,6 +2202,7 @@ same 34 rows under "Showing 31 to 34 of 34"; "Sort" on "ID" put
 times; the editorial dashboard's pager showed 30 of 38 and its search cut
 30 rows to 1. Cosmetic, both apps: "Clear search phrase" leaves an empty
 `searchPhrase=` in the address.
+Issue report: [docs/issues/U28-A1-reviewer-list-search-sort-pager-inert.md](../issues/U28-A1-reviewer-list-search-sort-pager-inert.md).
 
 <a id="fn-a2"></a>
 **f-a2** — `PKPReviewerHandler::submission()` sets `submittedOn` to
