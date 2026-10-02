@@ -1,0 +1,19 @@
+--- a/lib/pkp/api/v1/jats/PKPJatsController.php
++++ b/lib/pkp/api/v1/jats/PKPJatsController.php
+@@ -311,11 +311,12 @@
+             ], Response::HTTP_NOT_FOUND);
+         }
+ 
+-        $urlPath = ($publication->getData('urlPath') ?? ("submission-{$submission->getBestId()}-")) . "publication-{$publication->getId()}";
+-        $filename = $urlPath . '-jats.xml';
++        $prefix = $publication->getData('urlPath') ?: "submission-{$submission->getBestId()}";
++        $filename = "{$prefix}-publication-{$publication->getId()}-jats.xml";
+ 
+-        // ETag for conditional request support
+-        $etag = '"' . md5($jatsContent) . '"';
++        // ETag for conditional request support. The file name is part of what the
++        // browser keeps from a 200, and a 304 does not carry it, so it is in the tag.
++        $etag = '"' . md5($filename . $jatsContent) . '"';
+ 
+         // Use private, no-store for unpublished content to prevent intermediary cache leakage.
+         // For published content, use 'public, no-cache' which allows caching but forces

@@ -1,0 +1,49 @@
+--- a/lib/pkp/api/v1/jats/PKPJatsController.php
++++ b/lib/pkp/api/v1/jats/PKPJatsController.php
+@@ -303,7 +303,7 @@
+             }
+         }
+ 
+-        $jatsContent = Repo::jats()->getPublicJatsContent($publication->getId(), $submission->getId());
++        $jatsContent = Repo::jats()->getPublicJatsContent($publication->getId(), $submission->getId(), $publication->getData('lastModified'));
+ 
+         if (!$jatsContent) {
+             return response()->json([
+--- a/lib/pkp/classes/jats/Repository.php
++++ b/lib/pkp/classes/jats/Repository.php
+@@ -276,12 +276,16 @@
+      * - JATS file is uploaded (addJatsFile)
+      * - JATS file is deleted (deleteJatsFile)
+      * - Visibility setting changes (via controller)
++     * - The publication is edited, published or unpublished: the key carries its lastModified
++     *
++     * @param string|null $lastModified The publication's lastModified, when the caller holds the
++     *  publication (as the public download does), to spare a lookup on every request
+      *
+      * @return string|null The JATS XML content or null if unavailable
+      */
+-    public function getPublicJatsContent(int $publicationId, int $submissionId): ?string
++    public function getPublicJatsContent(int $publicationId, int $submissionId, ?string $lastModified = null): ?string
+     {
+-        $cacheKey = $this->getPublicJatsCacheKey($publicationId);
++        $cacheKey = $this->getPublicJatsCacheKey($publicationId, $lastModified);
+ 
+         return Cache::remember($cacheKey, static::JATS_FILE_CACHE_LIFETIME, function () use ($publicationId, $submissionId) {
+             $submission = Repo::submission()->get($submissionId);
+@@ -309,9 +313,14 @@
+ 
+     /**
+      * Get the cache key for public JATS content.
++     *
++     * The key carries the publication's last modification, so an edit of its
++     * metadata, publishing and unpublishing (each stamps the publication)
++     * start a fresh copy, as an upload, a delete or a visibility change does.
+      */
+-    protected function getPublicJatsCacheKey(int $publicationId): string
++    protected function getPublicJatsCacheKey(int $publicationId, ?string $lastModified = null): string
+     {
+-        return "jats-public-content-{$publicationId}";
++        $lastModified ??= Repo::publication()->get($publicationId)?->getData('lastModified');
++        return "jats-public-content-{$publicationId}-" . md5((string) $lastModified);
+     }
+ }

@@ -692,6 +692,8 @@ Left out of the scenarios above, by reason:
   - the guard for A17 (issue report `docs/issues/U48-A17-body-text-side-section-needs-two-presses.md`): pressing "Document Outline" with "References" open opens "Document Outline" alone, and selecting a word opens "Selected Element" alone.
   - the guard for A1 (issue report `docs/issues/U48-A1-jats-make-available-offered-then-refused.md`): an assigned Layout Editor without "Permissions" sees "Make available with publication" greyed on "JATS XML".
   - the guard for A2 (issue report `docs/issues/U48-A2-body-text-save-offered-then-refused.md`): an assigned Layout Editor without "Permissions" sees the "Body Text" read-only, with no "Save".
+  - the guard for A8 (issue report `docs/issues/U48-A8-published-jats-xml-stays-old-after-edit.md`): with "Make available with publication" ticked, a reader who downloaded "JATS XML" gets the corrected title right after the editor edits it, and the published XML right after publishing.
+  - the guard for A9 (issue report `docs/issues/U48-A9-published-jats-xml-name-url-path.md`): with a URL path set, the downloaded "JATS XML" is named "<path>-publication-<id>-jats.xml", and a reader who downloaded it before the path changed gets the new name.
 - **Nothing new to test**:
   - a second "Upload" on a version that already has a file, which
     becomes a revision of that one file, listed in its "History"
@@ -772,8 +774,8 @@ entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | A Layout Editor without "Permissions" can write on "Body Text", but "Save" is refused and the text is lost | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | A new or older article version's JATS XML carries the current version's galley text, not its own | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | An article's generated JATS XML gives its HTML galley as one paragraph with the tags as text | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A8](#a8) | The published "JATS XML" keeps old metadata for up to a day after an edit, and a preview's XML after publishing | 🐞 | minor | — |
-| [A9](#a9) | A URL path runs into the published file's name, and a returning reader keeps the earlier name | 🐞 | minor | — |
+| [A8](#a8) | Readers download an article's old JATS XML for up to a day after the editor corrects or publishes it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A9](#a9) | An article's JATS XML download runs its URL path into "publication", and earlier downloaders keep the old file name | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | A Copyeditor pressing "Download" on an uploaded JATS XML file saves a refusal as "download-file.json" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | Editors can still replace or delete a published version's JATS XML file, which 3.5 does not offer | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | Uploading an image as JATS XML stores it silently, then the "JATS XML" page fails on every opening | 🐞 | medium · crash: both | issues (claude), 2026-10-02 — re-verified |
@@ -893,28 +895,36 @@ screen says the body is broken.
 Basis: probe, 2026-10-02. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — The published XML stays old for up to a day** · 🐞 · minor.
+**A8 — Readers download an article's old JATS XML for up to a day after the editor corrects or publishes it** · 🐞 · medium.
 After an editor corrects a published version's title, the "JATS XML"
 page shows the corrected XML, but the article page's "JATS XML" link
-keeps serving the XML from before the edit for up to 24 hours. Publishing
-does the same to a preview: when "JATS XML" was downloaded from "Preview"
-before publication, readers get that preview's XML after publishing,
-without the publication date. An edit of the metadata, and publishing,
-should refresh the published copy, as an upload or a change of the tick
-box does.
-Basis: probe, 2026-09-25. <sup>f-a8</sup>
+keeps serving the XML from before the edit for up to 24 hours. The link
+serves a copy of the XML kept on the server, the published copy, and it
+is the first download after a change that fills it. Publishing does not
+refresh it either. When the editor or author downloads "JATS XML" from
+"Preview" before publishing, readers get that preview's XML for up to 24
+hours after publication: no change made after the preview reaches them,
+and a version that had no publication date at the preview has none in
+the file. An edit of the metadata, and publishing, should refresh the
+published copy, as an upload or a change of the tick box does. Only
+journals that tick "Make available with publication", which is off by
+default, are affected.
+Basis: probe, 2026-10-02. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The published file's name: a URL path runs into it, and a returning reader keeps the old one** · 🐞 · minor.
-Without a URL path the published file is named
-"submission-{n}-publication-{m}-jats.xml". With a URL path such as
-"my-article" set on the version, it is named
-"my-articlepublication-{m}-jats.xml", with no separator. When the URL
-path is set or cleared, a reader who downloaded "JATS XML" before gets
-the file again under its earlier name, while a first-time visitor gets
-the new one; the returning reader's name changes only once the XML
-itself changes.
-Basis: probe, 2026-09-25. <sup>f-a9</sup>
+**A9 — An article's JATS XML download runs its URL path into "publication", and earlier downloaders keep the old file name** · 🐞 · low.
+The file a reader saves from the article page's "JATS XML" link is named
+"submission-{n}-publication-{m}-jats.xml" when the version has no URL
+path. With a URL path such as "my-article", it is named "my-
+articlepublication-{m}-jats.xml", with no separator. When the editor
+sets, changes or clears the URL path, a reader whose browser already
+holds the file gets it again under its earlier name, while a first-time
+visitor gets the new one. The browser reuses its cached copy, and the
+server's check of that copy looks at the XML's content only, so the file
+name a returning reader gets changes only once the XML itself changes.
+The file's content is right in every case. The editor's "Download" on
+the "JATS XML" page names its file differently and is not affected.
+Basis: probe, 2026-10-02. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — "Upload" accepts any file as JATS XML** · ❓ · minor.
@@ -1292,9 +1302,11 @@ Issue report: [pkp-e2e#564](https://github.com/jardakotesovec/pkp-e2e/issues/564
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note e: the 24-hour `Cache::remember()` is cleared only by upload, delete and the visibility change; neither `Repo::publication()->edit()` nor publishing clears it, so a copy cached from "Preview" (whose download goes through the same `getPublicJatsContent()`) outlives publication. Probe: d14.
+Issue report: [docs/issues/U48-A8-published-jats-xml-stays-old-after-edit.md](../issues/U48-A8-published-jats-xml-stays-old-after-edit.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note e: the `urlPath` branch appends no hyphen before "publication-". The returning reader's old name: the response's ETag hashes the XML alone, so an unchanged XML answers "not modified" and the browser reuses the earlier `Content-Disposition`. Probe: d27.
+Issue report: [docs/issues/U48-A9-published-jats-xml-name-url-path.md](../issues/U48-A9-published-jats-xml-name-url-path.md).
 
 <a id="fn-d27"></a>
 **d27** — Live-probed 2026-09-25 (Rule 10; A9), OJS, two runs: "URL Path" "my-article" saved on the published version's "Publication Settings" gave "my-articlepublication-57-jats.xml", and "k2-second" gave "k2-secondpublication-54-jats.xml" to a first-time visitor. Clearing the path gave a first-time visitor "submission-55-publication-57-jats.xml", while the browser that had downloaded before got "my-articlepublication-57-jats.xml" again; after "k2-second" was set, the returning browser got "submission-52-publication-54-jats.xml".
