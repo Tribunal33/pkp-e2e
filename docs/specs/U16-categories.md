@@ -2009,7 +2009,7 @@ answering 404, then "Save" refused with `form.invalidImage`).
 **f-a18** — `CategoryDeleteDialogBody.vue` (note e): the input has no
 label, `aria-label` or placeholder. Live-probed 2026-09-25, all three apps:
 the accessibility tree lists it as a `textbox` with no name.
-Issue report: [docs/issues/U16-A18-delete-category-box-unnamed.md](../issues/U16-A18-delete-category-box-unnamed.md).
+Issue report: [pkp-e2e#590](https://github.com/jardakotesovec/pkp-e2e/issues/590) ([docs/issues/U16-A18-delete-category-box-unnamed.md](../issues/U16-A18-delete-category-box-unnamed.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Note g: `catalog.browseTitles` "{$numTitles} Items" (OMP
