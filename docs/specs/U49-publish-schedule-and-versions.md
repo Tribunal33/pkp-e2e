@@ -948,6 +948,10 @@ Left out of the scenarios above, by reason:
     page stays live (Rule 9a)
   - a journal's "Submission metadata updated" line from the panel's
     Confirm, read in scenario 1's Activity Log (Side effects)
+  - the guard for OPS1 (issue report
+    `docs/issues/U49-OPS1-scheduled-preprint-never-posted.md`): a preprint
+    posted with a future "Date Posted" reading "Status: Posted" once the
+    scheduled tasks run on or after that date
 - **Rarely met**:
   - the publish button skipping the details panel on a journal with
     issues, after a Publication Settings save on a version that already
@@ -1071,7 +1075,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OJS2](#ojs2) | On a journal with no published issues, the issue choice is not the one made: "Schedule Only" (the panel's first pick, or one saved on Publication Settings) publishes immediately, and a Publication Settings save for another field records "Don't Assign To An Issue" | 🐞 | user-visible | — |
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | Publishing without an issue fails with "An unexpected error has occurred" when a contributor has a verified ORCID iD (member API), though the article goes live and its author is never emailed | 🐞 | user-visible · crash: server | — |
-| [OPS1](#ops1) | A preprint scheduled by a future date is never posted by anything | 🐞 | user-visible | — |
+| [OPS1](#ops1) | A preprint posted with a future "Date Posted" stays "Scheduled" for good and never goes public | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS4](#ops4) | Every post, the first included, sends "New Version Posted Acknowledgement"; the first-post acknowledgement never goes out | 🐞 | user-visible | — |
 | [A1](#a1) | The new-version email announces itself to editors but goes to every stage-assigned user, the submitting author included | ❓ | user-visible | — |
 | [A2](#a2) | Publishing is offered to managers only, although the app's deeper plumbing names Section Editors and Assistants; on a preprint server that leaves Moderators without a Post button | ❓ | user-visible | — |
@@ -1350,16 +1354,17 @@ release itself was not observed; the date lies in the future).
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — A scheduled preprint is never posted** · 🐞 · user-visible.
-Posting a preprint that carries a future date on its Preprint Entry page
-sets "Status: Scheduled". The "Post the preprint" window gives no hint of
-this; it still asks "…post this?". Nothing ever posts it: the preprint
-server runs no scheduled-publications check (a press runs one daily), and
-no issue exists whose publication could release it. The preprint waits
-until someone unschedules it, clears or passes the date, and posts again.
-Since: 2026-08-29 · Basis: probe for the reachable scheduled state
-(twice); the never-posts half is a code reading, as no
-scheduled-publications task is registered.
+**OPS1 — A preprint posted with a future "Date Posted" stays "Scheduled" for good and never goes public** · 🐞 · medium.
+A manager or moderator who types a future date into "Date Posted" on a
+preprint's "Preprint entry" page and then posts the preprint gets
+"Status: Scheduled", not a posted preprint. It stays "Scheduled" after
+the date, because the preprint server has no task that posts scheduled
+preprints. Its public page never appears, while the authors receive the
+usual email telling them it has been posted. The only way round is to
+press "Unschedule" and post again by hand on or after the date. Clearing
+the date and posting at once posts the preprint the same day, with that
+day's date. This needs a future date in a field whose help says to fill
+it only when backdating. Since: 2026-08-29 · Basis: probe, 2026-10-02.
 <sup>[f-ops1](#fn-ops1)</sup>
 
 <a id="ops2"></a>
@@ -2328,6 +2333,7 @@ twice (scratch servers): "Date Posted" saved as a future date, the
 confirm → "Status: Scheduled" with controls Preview and Unschedule, the
 anonymous preprint page 404. The never-posts claim rests on the absent
 task registration.
+Issue report: [docs/issues/U49-OPS1-scheduled-preprint-never-posted.md](../issues/U49-OPS1-scheduled-preprint-never-posted.md).
 
 <a id="fn-ops2"></a>
 **f-ops2** — `SendPostedAcknowledgement` runs on the publish event with

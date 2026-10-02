@@ -1,0 +1,24 @@
+--- a/classes/scheduler/Scheduler.php
++++ b/classes/scheduler/Scheduler.php
+@@ -16,6 +16,7 @@
+ 
+ use APP\tasks\UsageStatsLoader;
+ use PKP\scheduledTask\PKPScheduler;
++use PKP\task\PublishSubmissions;
+ 
+ class Scheduler extends PKPScheduler
+ {
+@@ -28,6 +29,13 @@
+ 
+         $this
+             ->schedule
++            ->call(fn () => (new PublishSubmissions())->execute())
++            ->daily()
++            ->name(PublishSubmissions::class)
++            ->withoutOverlapping();
++
++        $this
++            ->schedule
+             ->call(fn () => (new UsageStatsLoader([]))->execute())
+             ->daily()
+             ->name(UsageStatsLoader::class)
