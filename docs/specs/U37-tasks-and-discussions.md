@@ -1339,6 +1339,7 @@ Left out of the scenarios above, by reason:
   - an edit of the comments-box discussion, by the submitting Author within the hour and by the Journal Manager, and of the recommendation discussion, each replacing the first message in place (Rules 15a, 15c, 21; A9 no longer covers them)
   - the guard for A4 (issue report `docs/issues/U37-A4-find-template-discussion-task-error.md`): a "Find Template" search for "task", "discussion" and a phrase holding one of them lists the matching templates of that kind, with no "Error" window (Rule 10a)
   - the guard for A16-A17 (issue report `docs/issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md`): scenario 4 closes its task three days past due and reads "Task closed by …" in "Activity", and a task due today shows a badge and a line that agree (Rules 2d, 2e)
+  - the guard for A6 (issue report `docs/issues/U37-A6-task-owner-cannot-save-edit.md`): scenario 10's task owner (an assistant or the Author who did not write the first message) saves a new due date from "Edit", and a rewrite of the first message is still refused (Rule 15c)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1391,7 +1392,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | The writer of a message receives it by email and as a Tasks row | 🐞 | minor | — |
 | [A4](#a4) | When adding a task or discussion, a "Find Template" search for "discussion" or "task" opens an "Error" window | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | Choosing a template leaves "Participants" as it was, though the template says it fills them | 🐞 | minor | — |
-| [A6](#a6) | A task's owner who did not write its first message is offered "Edit" and refused on "Save" | 🐞 | user-visible | — |
+| [A6](#a6) | A task's owner is offered "Edit" but cannot save even a new due date on a task someone else opened | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | On a press and a preprint server the edit refusals show a raw key | 🐞 | minor | — |
 | [A8](#a8) | An Author cannot save an edit of a discussion whose first message has an uploaded file, and the refusal names no field | 🐞 | user-visible | — |
 | [A9](#a9) | Editing a discussion a Participants message opened adds a second message, under the name of the person it was sent to | 🐞 | user-visible | — |
@@ -1473,14 +1474,15 @@ but leaves "Participants" exactly as it was.
 Basis: probe. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
-**A6 — A task's owner cannot save an edit** · 🐞 · user-visible.
-The "Task Owner" of a task someone else opened, when that owner is an
-assistant role or the Author, is offered "Edit", but "Save" is refused
-with "You can only edit your own discussion message." under the message
-box (a raw key on a press and a preprint server, A7), even when they
-changed only the due date or ticked one more participant. The person the
-task is handed to cannot move its due date.
-Basis: probe. <sup>[f-a6](#fn-a6)</sup>
+**A6 — A task's owner is offered "Edit" but cannot save even a new due date on a task someone else opened** · 🐞 · medium.
+An editor opens a task and makes a Copyeditor (or another assistant
+role) or the Author its "Task Owner". That owner is offered "Edit" on
+the task. But their "Save" is refused with "You can only edit your own
+discussion message." under the message box, even when they changed only
+the due date or ticked one more participant and left the message alone.
+The person who opened the task, or a manager-level user, can make the
+change for them.
+Basis: probe, 2026-10-02. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
 **A7 — Raw keys for the edit refusals on a press and a preprint server** · 🐞 · minor.
@@ -1956,6 +1958,7 @@ Issue report: [docs/issues/U37-A4-find-template-discussion-task-error.md](../iss
 
 <a id="fn-a6"></a>
 **f-a6** — `EditTask` `description` closure (note v) against `QueryWritePolicy` (note b): a responsible participant who holds neither `MANAGER` nor `SUB_EDITOR` passes the write policy and fails the closure unless they wrote the head note; `saveWorkItem()` always sends `description`. The recorded-creator case: *Stage participants* A5 (a Participants message's `createdBy` is the recipient, its note's writer the sender), though that note is unflagged (A9), so the closure there finds no head note and passes. Live-probed 2026-09-23 (all three apps): the owner case refuses (td8), also with only one more participant ticked; the recorded creator of a Participants message saves, and the save adds a message (A9).
+Issue report: [docs/issues/U37-A6-task-owner-cannot-save-edit.md](../issues/U37-A6-task-owner-cannot-save-edit.md).
 
 <a id="fn-a7"></a>
 **f-a7** — The two texts are defined in `ojs/locale/en/locale.po` only (pkp/pkp-lib#12278, `05ade99f1e`, 2026-03-22, added them to OJS's own file); neither `lib/pkp/locale/en/*.po` nor OMP's or OPS's locale files have them, and the application prints a missing key as `##key##`. Live-probed 2026-09-23: both keys on a press and a preprint server, both texts on a journal (td8, and past the hour).

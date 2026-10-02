@@ -1,0 +1,16 @@
+--- a/lib/pkp/api/v1/submissions/tasks/formRequests/EditTask.php
++++ b/lib/pkp/api/v1/submissions/tasks/formRequests/EditTask.php
+@@ -100,6 +100,13 @@
+                         return;
+                     }
+ 
++                    // The edit form sends the first message back with every save. Only a change
++                    // to the message is limited to its writer and its first hour (pkp/pkp-lib#12278).
++                    // The request's strings are trimmed (TrimStrings), the stored message may not be.
++                    if (trim($value) === trim((string) $headnote->contents)) {
++                        return;
++                    }
++
+                     if ($headnote->userId != $currentUser->getId()) {
+                         $fail(__('submission.task.validation.error.headnote.author'));
+                         return;
