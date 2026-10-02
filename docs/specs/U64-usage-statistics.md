@@ -1166,6 +1166,7 @@ Left out of the scenarios above, by reason:
   - Tab on Statistics › "Journal" stops on the "About journal statistics" icon and its text shows while it holds the focus (the guard for A7, once fixed)
   - on Site Settings › "Statistics", a refused Platform ID left in the box, "Platform" unticked, "Save" answers "Saved" (the guard for A10, once fixed)
   - "Download" in "Report Settings" of a "Counter R5" report: the saved "counterReport.tsv" is tab-separated, its first line split on a tab giving "Report_Name" (the guard for A11, once fixed)
+  - a French (Canada) reading of a press's and a preprint server's statistics pages, both "Télécharger le rapport" windows and the site's "Statistiques" tab: no "##" code (the guard for A6, once fixed) {OMP OPS}
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1243,7 +1244,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | "Counter R5" date refusals show a raw code with the date inside it | 🐞 | minor | — |
 | [A4](#a4) | A journal's "Do not collect any geographical data" is not kept: the journal keeps collecting at the site's level | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A Section Editor's "Counter R5" opens an "Error" window over an empty list while the COUNTER statistics are restricted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A6](#a6) | French interface: raw codes on the statistics screens of a press and a preprint server, and one column heading on a journal | 🐞 | minor | — |
+| [A6](#a6) | In French (Canada), a press's and a preprint server's statistics pages and site statistics settings show codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | Information icons show their text on mouse hover only: Tab skips them on the Statistics pages and in settings forms | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | Statistics downloads: a double quote in the search phrase or a filter's name breaks that line of the file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | Site administrator cannot save Site Settings › "Statistics" after unticking "Platform" over a mistyped Platform ID | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1344,18 +1345,32 @@ the fault is that the menu still offers the page.
 Basis: probe, 2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — Raw codes in the French statistics screens** · 🐞 · minor.
-With the interface in French, Administration › Site Settings ›
-"Statistiques" on a press and a preprint server shows the raw codes
-"##admin.settings.statistics.geo.description##",
-"##admin.settings.statistics.institutions.description##" and
-"##admin.settings.statistics.sushi.public.description##" in place of the
-three descriptions; a journal shows French text. The press's and the
-server's statistics pages show raw codes in their browser tab titles,
-headings, table titles, count lines, chart buttons and both "Download"
-windows. A journal's pages are translated except the "JATS" column
-heading of "Articles", which reads "##stats.jats##".
-Basis: probe, 2026-09-27. <sup>f-a6</sup>
+**A6 — In French (Canada), a press's and a preprint server's statistics pages and site statistics settings show codes** · 🐞 · low.
+A manager or editor of a press or a preprint server who reads the
+interface in French (Canada) and opens Statistics sees codes
+(untranslated keys, such as "##stats.publicationStats##") in place of
+about twenty labels. On the "Monographs" ("Preprints" on a preprint
+server) page they replace the browser tab's title, a chart button, the
+table's title and its count line, and on a press also the heading and
+the side menu's entry. On the "Press" ("Server") page they replace the
+browser tab's title. In the window that "Télécharger le rapport" opens
+on either page, they replace the description and the first button. A
+Site Administrator sees three more on Administration › Site Settings ›
+"Statistiques", in place of the descriptions of three settings.
+
+No code is at fault: OMP's and OPS's own French (Canada) translation
+files lack these texts, which a journal has. The fix is 39 texts
+entered on PKP's translation platform. The usage figures, the downloads
+and the settings work, and the same screens in English show every text.
+
+Only a user whose interface language is French (Canada) sees the codes,
+so it takes a press, a server or a site that offers French (Canada) as
+an interface language; a user reading the same press in English sees
+none. Other languages of OMP and OPS lack some of the same texts and
+are left to their translators.
+
+A journal's pages are translated except the "JATS" column heading of "Articles", which reads "##stats.jats##": a text new on `main` that no language but English has yet, which the report leaves out.
+Basis: probe, 2026-10-03. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — Information icons show their text on mouse hover only: Tab skips them on the Statistics pages and in settings forms** · 🐞 · low.
@@ -2393,6 +2408,7 @@ Issue report: [docs/issues/U64-A5-section-editor-counter-r5-error-while-restrict
 
 <a id="fn-f-a6"></a>
 **f-a6** — fn-v. Live-probed 2026-09-27: td8.
+Issue report: [docs/issues/U64-A6-french-statistics-pages-raw-keys.md](../issues/U64-A6-french-statistics-pages-raw-keys.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-27, three apps: the icons (`.tooltipButton`)

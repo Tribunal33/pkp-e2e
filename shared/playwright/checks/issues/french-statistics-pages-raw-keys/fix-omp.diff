@@ -1,0 +1,122 @@
+--- a/locale/fr_CA/admin.po
++++ b/locale/fr_CA/admin.po
+@@ -146,12 +146,32 @@
+ 
+ msgid "admin.settings.statistics.geo.description"
+ msgstr ""
++"Sélectionner le type de statistiques d'utilisation géographique qui peuvent "
++"être collectées par les presses sur ce site. Des statistiques géographiques "
++"plus détaillées peuvent considérablement augmenter la taille de votre base "
++"de données et, dans de rares cas, compromettre l'anonymat de vos visiteurs. "
++"Chaque presse peut configurer ce paramètre différemment, mais une presse ne "
++"peut jamais collecter des enregistrements plus détaillés que ce qui est "
++"configuré ici. Par exemple, si le site ne prend en charge que le pays et la "
++"région, la presse peut sélectionner le pays et la région ou uniquement le "
++"pays. La presse ne pourra pas enregistrer le pays, la région et la ville."
+ 
+ msgid "admin.settings.statistics.institutions.description"
+ msgstr ""
++"Activer les statistiques institutionnelles si vous souhaitez que les presses"
++" sur ce site puissent collecter des statistiques d'utilisation par "
++"institution. Les presses devront ajouter l'institution et ses plages "
++"d'adresses IP pour utiliser cette fonctionnalité. L'activation des "
++"statistiques institutionnelles peut considérablement augmenter la taille de "
++"votre base de données."
+ 
+ msgid "admin.settings.statistics.sushi.public.description"
+ msgstr ""
++"Indiquer si vous souhaitez que les points de terminaison de l'API SUSHI "
++"soient accessibles publiquement pour toutes les presses sur ce site. Si vous"
++" activez l'API publique, chaque presse pourra remplacer ce paramètre pour "
++"rendre ses statistiques privées. Cependant, si vous désactivez l'API "
++"publique, les presses ne pourront pas rendre leur propre API publique."
+ 
+ #~ msgid "admin.systemConfigurationDescription"
+ #~ msgstr "Paramètres de configuration OMP pour <tt>config.inc.php</tt>."
+--- a/locale/fr_CA/locale.po
++++ b/locale/fr_CA/locale.po
+@@ -756,7 +756,7 @@
+ msgstr ""
+ 
+ msgid "common.publications"
+-msgstr ""
++msgstr "Monographies"
+ 
+ msgid "common.prefix"
+ msgstr "Préfixe"
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -1310,52 +1310,62 @@
+ msgstr ""
+ 
+ msgid "stats.contextStats"
+-msgstr ""
++msgstr "Statistiques de la presse"
+ 
+ msgid "stats.context.tooltip.text"
+ msgstr ""
++"Nombre de visiteurs ayant consulté la page d'accueil de la presse et du "
++"catalogue."
+ 
+ msgid "stats.context.tooltip.label"
+-msgstr ""
++msgstr "À propos des statistiques de la presse"
+ 
+ msgid "stats.context.downloadReport.description"
+ msgstr ""
++"Télécharger un fichier CSV/Excel avec les statistiques d'utilisation pour "
++"cette presse correspondant aux paramètres suivants."
+ 
+ msgid "stats.context.downloadReport.downloadContext.description"
+-msgstr ""
++msgstr "Nombre de vues sur la page d'accueil de la presse et du catalogue."
+ 
+ msgid "stats.context.downloadReport.downloadContext"
+-msgstr ""
++msgstr "Téléchargements de la presse"
+ 
+ msgid "stats.publications.downloadReport.description"
+ msgstr ""
++"Télécharger un fichier CSV/Excel avec les statistiques d'utilisation des "
++"monographies correspondant aux paramètres suivants."
+ 
+ msgid "stats.publications.downloadReport.downloadSubmissions"
+-msgstr ""
++msgstr "Téléchargements de monographies"
+ 
+ msgid "stats.publications.downloadReport.downloadSubmissions.description"
+ msgstr ""
++"Nombre de vues sur les résumés et le téléchargement de fichiers pour chaque "
++"monographie."
+ 
+ msgid "stats.publicationStats"
+-msgstr ""
++msgstr "Statistiques de la monographie"
+ 
+ msgid "stats.publications.details"
+-msgstr ""
++msgstr "Renseignements sur la monographie"
+ 
+ msgid "stats.publications.none"
+ msgstr ""
++"Aucune monographie n'a été trouvée avec des statistiques d'utilisation "
++"correspondant à ces paramètres."
+ 
+ msgid "stats.publications.totalAbstractViews.timelineInterval"
+-msgstr ""
++msgstr "Total des consultations du catalogue par date"
+ 
+ msgid "stats.publications.totalGalleyViews.timelineInterval"
+-msgstr ""
++msgstr "Total des consultations de fichiers par date"
+ 
+ msgid "stats.publications.countOfTotal"
+-msgstr ""
++msgstr "{$count} de {$total} monographies"
+ 
+ msgid "stats.publications.abstracts"
+-msgstr ""
++msgstr "Entrées de catalogue"
+ 
+ msgid "plugins.importexport.common.error.noObjectsSelected"
+ msgstr ""

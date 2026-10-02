@@ -1,0 +1,110 @@
+--- a/locale/fr_CA/admin.po
++++ b/locale/fr_CA/admin.po
+@@ -84,12 +84,32 @@
+ 
+ msgid "admin.settings.statistics.geo.description"
+ msgstr ""
++"Sélectionner le type de statistiques d'utilisation géographique qui peuvent "
++"être collectées par les serveurs sur ce site. Des statistiques géographiques"
++" plus détaillées peuvent considérablement augmenter la taille de votre base "
++"de données et, dans de rares cas, compromettre l'anonymat de vos visiteurs. "
++"Chaque serveur peut configurer ce paramètre différemment, mais un serveur ne"
++" peut jamais collecter des enregistrements plus détaillés que ce qui est "
++"configuré ici. Par exemple, si le site ne prend en charge que le pays et la "
++"région, le serveur peut sélectionner le pays et la région ou uniquement le "
++"pays. Le serveur ne pourra pas enregistrer le pays, la région et la ville."
+ 
+ msgid "admin.settings.statistics.institutions.description"
+ msgstr ""
++"Activer les statistiques institutionnelles si vous souhaitez que les "
++"serveurs sur ce site puissent collecter des statistiques d'utilisation par "
++"institution. Les serveurs devront ajouter l'institution et ses plages "
++"d'adresses IP pour utiliser cette fonctionnalité. L'activation des "
++"statistiques institutionnelles peut considérablement augmenter la taille de "
++"votre base de données."
+ 
+ msgid "admin.settings.statistics.sushi.public.description"
+ msgstr ""
++"Indiquer si vous souhaitez que les points de terminaison de l'API SUSHI "
++"soient accessibles publiquement pour tous les serveurs sur ce site. Si vous "
++"activez l'API publique, chaque serveur pourra remplacer ce paramètre pour "
++"rendre ses statistiques privées. Cependant, si vous désactivez l'API "
++"publique, les serveurs ne pourront pas rendre leur propre API publique."
+ 
+ #, fuzzy
+ msgid "admin.settings.statistics.sushiPlatform.isSiteSushiPlatform"
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -463,52 +463,60 @@
+ msgstr ""
+ 
+ msgid "stats.contextStats"
+-msgstr ""
++msgstr "Statistiques du serveur"
+ 
+ msgid "stats.context.tooltip.text"
+-msgstr ""
++msgstr "Nombre de visiteurs ayant consulté la page d'accueil du serveur."
+ 
+ msgid "stats.context.tooltip.label"
+-msgstr ""
++msgstr "À propos des statistiques du serveur"
+ 
+ msgid "stats.context.downloadReport.description"
+ msgstr ""
++"Télécharger un fichier CSV/Excel avec les statistiques d'utilisation pour ce"
++" serveur correspondant aux paramètres suivants."
+ 
+ msgid "stats.context.downloadReport.downloadContext.description"
+-msgstr ""
++msgstr "Nombre de vues sur la page d'accueil du serveur."
+ 
+ msgid "stats.context.downloadReport.downloadContext"
+-msgstr ""
++msgstr "Téléchargements du serveur"
+ 
+ msgid "stats.publications.downloadReport.description"
+ msgstr ""
++"Télécharger un fichier CSV/Excel avec les statistiques d'utilisation des "
++"prépublications correspondant aux paramètres suivants."
+ 
+ msgid "stats.publications.downloadReport.downloadSubmissions"
+-msgstr ""
++msgstr "Téléchargements de prépublications"
+ 
+ msgid "stats.publications.downloadReport.downloadSubmissions.description"
+ msgstr ""
++"Nombre de vues sur les résumés et le téléchargement de fichiers pour chaque "
++"prépublication."
+ 
+ msgid "stats.publicationStats"
+-msgstr ""
++msgstr "Statistiques de la prépublication"
+ 
+ msgid "stats.publications.details"
+-msgstr ""
++msgstr "Renseignements sur la prépublication"
+ 
+ msgid "stats.publications.none"
+ msgstr ""
++"Aucune prépublication n'a été trouvée avec des statistiques d'utilisation "
++"correspondant à ces paramètres."
+ 
+ msgid "stats.publications.totalAbstractViews.timelineInterval"
+-msgstr ""
++msgstr "Total des consultations de résumés par date"
+ 
+ msgid "stats.publications.totalGalleyViews.timelineInterval"
+-msgstr ""
++msgstr "Total des consultations de fichiers par date"
+ 
+ msgid "stats.publications.countOfTotal"
+-msgstr ""
++msgstr "{$count} de {$total} prépublications"
+ 
+ msgid "stats.publications.abstracts"
+-msgstr ""
++msgstr "Résumés"
+ 
+ msgid "manager.setup.notifications.copySubmissionAckPrimaryContact.description"
+ msgstr ""
