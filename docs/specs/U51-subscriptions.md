@@ -1381,6 +1381,11 @@ Left out of the scenarios above, by reason:
     on a journal that requires subscriptions with payments off, "My
     Subscriptions" and the "Subscription" block offer neither "View
     Available Subscription Types" nor "Learn More".
+  - the guard for A16 (issue report
+    `docs/issues/U51-A16-subscription-manager-offered-institutions-refused.md`):
+    a Subscription Manager without the Journal Manager role creates an
+    institution from "Institutions" and then an institutional subscription
+    (with the other fix: the side menu offers no "Institutions").
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1487,7 +1492,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | The "Subscription" block reads "Expired: {today}" for a subscription awaiting payment | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | A journal restricting only PDFs shows its HTML galleys unlocked, then refuses them to readers without a subscription | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | The delayed open access and expiry reminder lists offer "1 Months" and "1 Weeks" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A16](#a16) | The Subscription Manager is offered "Institutions" and refused it | 🐞 | user-visible | — |
+| [A16](#a16) | A Subscription Manager's side menu offers "Institutions", and the page refuses them | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | "Delayed Open Access" shows an empty box instead of "Disabled" until a manager saves a choice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A restricted article's additional file shows no padlock, yet is refused | 🐞 | user-visible | — |
 | [A19](#a19) | A fee shows on the locked link while payments are off and nothing can be bought | 🐞 | minor | — |
@@ -1657,14 +1662,19 @@ wording is wrong. Most translations have the same fault, such as German
 <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — The Subscription Manager is offered "Institutions" and refused it** · 🐞 · user-visible.
-On the "Payments" page, while payments are enabled, the Subscription
-Manager's side menu offers "Institutions"; pressing it, or opening its
-address, shows "The current role does not have access to this
-operation.". The institutional subscription window needs an institution
-from that page, so a Subscription Manager cannot create the first
-institutional subscription alone. Basis: probe, 2026-09-25.
-<sup>f-a16</sup>
+**A16 — A Subscription Manager's side menu offers "Institutions", and the page refuses them** · 🐞 · medium.
+On a journal with payments enabled, a Subscription Manager who is not
+also a Journal Manager sees "Institutions" in the side menu above
+"Payments". Pressing it, or typing its address, shows "The current role
+does not have access to this operation.". So the Subscription Manager
+can no longer create the first institutional subscription alone. The
+"Create New Subscription" window on "Institutional Subscriptions" reads
+"An institution must be created before new subscriptions can be made.",
+and only a Journal Manager can create one. Up to 3.3 the Subscription
+Manager typed the institution's name and IP ranges into that window.
+This reaches every subscription journal that gives someone the
+Subscription Manager role without the Journal Manager role. Basis:
+probe, 2026-10-01. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — "Delayed Open Access" shows an empty box instead of "Disabled" until a manager saves a choice** · 🐞 · low.
@@ -2045,6 +2055,7 @@ Issue report: [pkp-e2e#391](https://github.com/jardakotesovec/pkp-e2e/issues/391
 
 <a id="fn-f-a16"></a>
 **f-a16** — OJS `TemplateManager` adds the side menu's "Institutions" (`management/settings/institutions`) in the same step as "Payments", for every role that gets "Payments", the Subscription Manager included; the Institutions page itself is a management page the role cannot open. Live-probed 2026-09-25 (td3), on three scratch journals, by the menu and by the address.
+Issue report: [docs/issues/U51-A16-subscription-manager-offered-institutions-refused.md](../issues/U51-A16-subscription-manager-offered-institutions-refused.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — `AccessForm`'s select gives "Disabled" the value 0; a fresh journal stores no `delayedOpenAccessDuration`, which matches no option, so the box shows empty; `IssueGridHandler::publishIssue()` treats an empty value as disabled (note m). Live-probed 2026-09-25 (td4): the save posted `delayedOpenAccessDuration=` with the box untouched.

@@ -1,0 +1,34 @@
+--- a/classes/template/TemplateManager.php
++++ b/classes/template/TemplateManager.php
+@@ -203,17 +203,20 @@
+                     array_slice($menu, $index, null, true);
+             }
+ 
+-            // add institutions menu if needed
+-            $institutionsLink = [
+-                'name' => __('institution.institutions'),
+-                'url' => $router->url($request, null, 'management', 'settings', ['institutions']),
+-                'isCurrent' => $request->getRequestedPage() === 'management' && in_array('institutions', $request->getRequestedArgs()),
+-                'icon' => 'Institutes'
+-            ];
+-            $paymentsIndex = array_search('payments', array_keys($menu));
+-            $menu = array_slice($menu, 0, $paymentsIndex, true) +
+-                ['institutions' => $institutionsLink] +
+-                array_slice($menu, $paymentsIndex, null, true);
++            // add institutions menu if needed: only for the roles the Institutions page admits,
++            // not a subscription manager alone
++            if (array_intersect([Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER], $userRoles)) {
++                $institutionsLink = [
++                    'name' => __('institution.institutions'),
++                    'url' => $router->url($request, null, 'management', 'settings', ['institutions']),
++                    'isCurrent' => $request->getRequestedPage() === 'management' && in_array('institutions', $request->getRequestedArgs()),
++                    'icon' => 'Institutes'
++                ];
++                $paymentsIndex = array_search('payments', array_keys($menu));
++                $menu = array_slice($menu, 0, $paymentsIndex, true) +
++                    ['institutions' => $institutionsLink] +
++                    array_slice($menu, $paymentsIndex, null, true);
++            }
+         }
+ 
+         $this->setState(['menu' => $menu]);
