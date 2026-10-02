@@ -1,0 +1,23 @@
+--- a/lib/ui-library/src/components/Container/AdminPage.vue
++++ b/lib/ui-library/src/components/Container/AdminPage.vue
+@@ -20,10 +20,18 @@
+ 		};
+ 	},
+ 	mounted() {
+-		pkp.eventBus.$on('form-success', (formId, site) => {
++		pkp.eventBus.$on('form-success', (formId, data) => {
+ 			if (formId === pkp.const.FORM_ANNOUNCEMENT_SETTINGS) {
+-				this.announcementsEnabled = !!site.enableAnnouncements;
++				this.announcementsEnabled = !!data.enableAnnouncements;
+ 			}
++
++			// The Settings Wizard's forms and lists are built with the context's
++			// path when the page loads. Reload the page once a save has changed
++			// the path, since they would otherwise go on using the old address.
++			const form = this.components?.[formId];
++			if (form?.action && data?._href && !form.action.startsWith(data._href)) {
++				window.location.reload();
++			}
+ 		});
+ 	},
+ };

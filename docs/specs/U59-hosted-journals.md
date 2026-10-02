@@ -789,6 +789,9 @@ Left out of the scenarios above, by reason:
   - "Jump to next error" pressed twice after a refused empty "Create
     Journal", the second press reaching the second refused field
     ([A6](#a6)): the guard the issue report proposes
+  - on the Settings Wizard, a new "Path" saved and then "Journal title"
+    saved on the same page, showing "Saved" ([A4](#a4)): the guard the
+    issue report proposes
 - **Rarely met**:
   - exactly one journal enabled publicly, where the site's address opens
     that journal instead of the list (Rule 19; Settings bullet 4): a
@@ -887,7 +890,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | Hosted Journals: "Country" carries no Required mark, yet no journal saves without one | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | Hosted Journals: after a saved "Edit", the list keeps the journal's old name and path until a reload | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | Journal form: the address in front of "Path" leaves out "index.php/", so it is not the address the site gives the journal | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A4](#a4) | After a path change on the Settings Wizard, its further saves and list actions fail until a reload | 🐞 | minor | — |
+| [A4](#a4) | Settings Wizard: after a saved "Path" change, further saves and list actions fail until a reload | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "Jump to next error" on a refused form always scrolls to the first refused field, never on to the next | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Closing the "Edit" or "Create Journal" window right after it opens makes the page's script fail | 🐞 | invisible · crash: script | — |
 | [A8](#a8) | Signing in from the Login page of a journal not enabled publicly does not lead on to the page the visitor asked for | 🐞 | minor | — |
@@ -948,18 +951,22 @@ was not checked.
 Basis: probe, 2026-10-02. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — The Settings Wizard's saves fail after a path change** · 🐞 · minor.
-The Site Administrator changes "Path" on the wizard's "Journal" tab and
-sees "Saved". A second save on the same tab, or a save on "Appearance",
-"Search Indexing" or "Restrict Bulk Emails", is then sent to the journal's
-old address: the button shows "Saving" and then nothing, the page shows
-"An unexpected error has occurred. Please reload the page and try
-again.", and the change is not kept. The lists on the page fail the same
-way: a "Languages" box and an "Installed Plugins" "Enabled" box change
-nothing and show no message (on a press the plugin's box stays ticked
-although nothing was stored), and "Users" › "Add User" shows "Error" with
-the same sentence and "OK". After a reload each works.
-Basis: probe. <sup>f-a4</sup>
+**A4 — Settings Wizard: after a saved "Path" change, further saves and list actions fail until a reload** · 🐞 · medium.
+The Site Administrator changes "Path" on the Settings Wizard's "Journal"
+tab and sees "Saved". Every later action on that page then fails. A
+second save on the "Journal" tab, or a save on "Appearance" or "Search
+Indexing", shows "Saving" and then the notice "An unexpected error has
+occurred. Please reload the page and try again.", and the change is not
+kept.
+
+The lists on the page fail too. A box pressed in the "Website
+Languages" list does not change, and no message shows. The same goes
+for an "Enabled" box in the "Installed Plugins" list. "Users" › "Add
+User" opens an "Error" window with the notice's sentence.
+
+The path change itself is stored, and after a reload of the page every
+action works. No setting narrows this: any install shows it.
+Basis: probe, 2026-10-02. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A changed path leaves old links in the default texts** · ❓ · minor.
@@ -1741,6 +1748,7 @@ users) are likewise built with the page's journal path. Live-probed
 2026-09-27, three apps, two runs: note td7. A "Saved" still on screen
 from the path save can read as the second save's; once it had gone,
 nothing followed "Saving".
+Issue report: [docs/issues/U59-A4-wizard-saves-fail-after-path-change.md](../issues/U59-A4-wizard-saves-fail-after-path-change.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Note e: `readerInformation` and `authorInformation` are
