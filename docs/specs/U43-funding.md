@@ -1068,7 +1068,7 @@ unexplained at code level.
 components): the `TableCellOrder` up/down buttons expose no accessible
 name; in the multilingual name boxes the primary input's accessible name
 concatenates both languages' labels and the secondary input has none.
-Issue report: [docs/issues/U46-A5-ordering-arrows-unnamed.md](../issues/U46-A5-ordering-arrows-unnamed.md).
+Issue report: [pkp-e2e#619](https://github.com/jardakotesovec/pkp-e2e/issues/619) ([docs/issues/U46-A5-ordering-arrows-unnamed.md](../issues/U46-A5-ordering-arrows-unnamed.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6 — A6 evidence.** `FieldAffiliationsRorAutoSuggest` with

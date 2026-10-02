@@ -2133,7 +2133,7 @@ completion. The save on a step change is `SubmissionWizardPage.vue`'s
 **f-a19 — A19 evidence.** Note m (`TableCellOrder`, icon-only buttons).
 Live-probed 2026-09-24, all three apps: the accessibility tree lists two
 unnamed buttons, each holding an image, per row in ordering mode.
-Issue report: [docs/issues/U46-A5-ordering-arrows-unnamed.md](../issues/U46-A5-ordering-arrows-unnamed.md).
+Issue report: [pkp-e2e#619](https://github.com/jardakotesovec/pkp-e2e/issues/619) ([docs/issues/U46-A5-ordering-arrows-unnamed.md](../issues/U46-A5-ordering-arrows-unnamed.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20 — A20 evidence.** Note p (the OMP and OPS template conditions).

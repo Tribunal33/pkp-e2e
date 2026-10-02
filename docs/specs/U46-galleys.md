@@ -1357,7 +1357,7 @@ arrows carry screen-reader text (*Contributors & affiliations*, Rule
 `button: img` in the accessibility tree; the Contributors arrows as
 "Increase position of Ava Author" / "Decrease position of Ava
 Author".
-Issue report: [docs/issues/U46-A5-ordering-arrows-unnamed.md](../issues/U46-A5-ordering-arrows-unnamed.md).
+Issue report: [pkp-e2e#619](https://github.com/jardakotesovec/pkp-e2e/issues/619) ([docs/issues/U46-A5-ordering-arrows-unnamed.md](../issues/U46-A5-ordering-arrows-unnamed.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `ArticleGalleyForm` / `PreprintGalleyForm` add no check for
