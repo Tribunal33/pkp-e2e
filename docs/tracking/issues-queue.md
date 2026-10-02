@@ -23,7 +23,7 @@ and the hourly routine starts one only when none is running
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 | A1, A7, OPS1: open reports docs/reports/2026-09-26-webfeed-rss2-empty-feed-fails.md, docs/reports/2026-09-26-webfeed-terms-read-array.md and docs/reports/2026-09-26-webfeed-ops-publisher-array.md (the rest of U18 written up by the issues session, workstation s0, 2026-10-02) |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | **Taken: issues session, workstation s0, 2026-10-02**; OMP3 done with U69 A9 (pkp-e2e#282); A1, A4, A5, A7, A8, OJS4 done; open: A3, A6, A10, A11, OJS5, OJS6 |
-| [U46](../specs/U46-galleys.md) | 9 | 1 | 4 | **Taken: issues session, VM s2, 2026-10-02**; OPS2 done (pkp-e2e#613), OPS3 done (pkp-e2e#614); A7 done (pkp-e2e#617, with U73 A14) |
+| [U46](../specs/U46-galleys.md) | 9 | 1 | 4 | **Taken: issues session, VM s2, 2026-10-02**; OPS2 done (pkp-e2e#613), OPS3 done (pkp-e2e#614); A7 done (pkp-e2e#617, with U73 A14); A4 and OJS1 done (docs/issues/U46-A4-OJS1-new-version-galley-shares-published-file.md) |
 | [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | OPS2 done with U51 OPS1 (pkp-e2e#380) |
 | [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 | A5 done with U64 A7 (pkp-e2e#616) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OPS1 done with U13 OPS2, OPS3 (docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md); OMP6 done with U69 A9 (pkp-e2e#282) |

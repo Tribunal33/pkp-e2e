@@ -1,0 +1,62 @@
+--- a/classes/publication/Repository.php
++++ b/classes/publication/Repository.php
+@@ -29,6 +29,7 @@
+ use PKP\security\Role;
+ use PKP\stageAssignment\StageAssignment;
+ use PKP\user\User;
++use PKP\submissionFile\SubmissionFile;
+ 
+ class Repository extends \PKP\publication\Repository
+ {
+@@ -132,13 +133,50 @@
+                 if ($isDoiVersioningEnabled) {
+                     $newGalley->setData('doiId', null);
+                 }
+-                Repo::galley()->add($newGalley);
++                $newGalleyId = Repo::galley()->add($newGalley);
++                $this->versionGalleyFile($galley, $newGalleyId);
+             }
+         }
+ 
+         return $newId;
+     }
+ 
++    /**
++     * Give a galley copied into a new version a file of its own, as OMP does
++     * for a publication format's files: a new submission file attached to the
++     * copy (the stored file is shared until either one is replaced), with its
++     * dependent files. Without it, both versions' galleys point at the same
++     * submission file, so changing or deleting one changes or breaks the other.
++     */
++    protected function versionGalleyFile(\PKP\galley\Galley $galley, int $newGalleyId): void
++    {
++        $submissionFileId = $galley->getData('submissionFileId');
++        $submissionFile = $submissionFileId ? Repo::submissionFile()->get($submissionFileId) : null;
++        if (!$submissionFile) {
++            return;
++        }
++
++        $newSubmissionFile = clone $submissionFile;
++        $newSubmissionFile->setData('id', null);
++        $newSubmissionFile->setData('assocId', $newGalleyId);
++        $newSubmissionFileId = Repo::submissionFile()->add($newSubmissionFile);
++
++        $dependentFiles = Repo::submissionFile()
++            ->getCollector()
++            ->filterByFileStages([SubmissionFile::SUBMISSION_FILE_DEPENDENT])
++            ->filterByAssoc(Application::ASSOC_TYPE_SUBMISSION_FILE, [$submissionFile->getId()])
++            ->includeDependentFiles()
++            ->getMany();
++        foreach ($dependentFiles as $dependentFile) {
++            $newDependentFile = clone $dependentFile;
++            $newDependentFile->setData('id', null);
++            $newDependentFile->setData('assocId', $newSubmissionFileId);
++            Repo::submissionFile()->add($newDependentFile);
++        }
++
++        Repo::galley()->edit(Repo::galley()->get($newGalleyId), ['submissionFileId' => $newSubmissionFileId]);
++    }
++
+     public function validatePublish(Publication $publication, Submission $submission, array $allowedLocales, string $primaryLocale): array
+     {
+         $errors = parent::validatePublish($publication, $submission, $allowedLocales, $primaryLocale);

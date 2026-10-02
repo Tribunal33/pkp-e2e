@@ -600,6 +600,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U46-A7-galley-format-moves-in-list-when-saved.md`): with no
     order ever saved, "Edit" › "Save" on the first of three galleys leaves
     the list and the public page in the order the galleys were added
+  - the guard for A4 (issue report
+    `docs/issues/U46-A4-OJS1-new-version-galley-shares-published-file.md`):
+    after "Create New Version", "Change File" on the new version's galley
+    leaves the published version's download unchanged, and deleting the
+    published version's galley leaves the copy's file downloading
 - **Nothing new to test**:
   - a new galley's place in the list, before and after a saved order
     (Rule 8d)
@@ -653,11 +658,11 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A galley's "Edit" window is headed "Upload a File Ready for Publication" | 🐞 | minor | — |
 | [A3](#a3) | A remote galley is still sent to the upload wizard and offered "Change File" | 🐞 | minor | — |
-| [A4](#a4) | A new version's galley shares its file with the published version's galley | 🐞 | user-visible | — |
+| [A4](#a4) | Changing the file of a new version's galley replaces the file readers download from the published version | 🐞 | high · crash: server · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | The ordering arrows have no names for screen readers | 🐞 | minor | — |
 | [A6](#a6) | "URL of remotely-hosted content" keeps text that is not a web address | 🐞 | minor | — |
 | [A7](#a7) | Until an order is saved, editing a galley moves it to the end of the list | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OJS1](#ojs1) | Deleting a published galley that a new version copied fails with an error | 🐞 | user-visible · crash: both | — |
+| [OJS1](#ojs1) | Deleting a published galley that a new version copied fails with an error | 🐞 | high · crash: server · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [OPS2](#ops2) | Before posting, a Moderator without "Permissions" cannot edit, add or reorder the galleys the page offers | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS3](#ops3) | A preprint's Author is offered "Change File" on every galley and refused on files others uploaded | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | On a preprint server galley editing follows the publication's edit permission; on a journal, Production access | ✅ | — | — |
@@ -690,16 +695,21 @@ file nor an address, and offers no file upload on a remote galley.
 Since: 2024-09-19 · Basis: probe, 2026-09-24. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A new version's galley shares the published file** · 🐞 · user-visible.
+**A4 — Changing the file of a new version's galley replaces the file readers download from the published version** · 🐞 · high · crash: server · crash: script.
 After "Create New Version", the new version's galley opens the same
 stored file as the published version's galley it was copied from. An
-editor who uses "Change File" on the draft version's galley, expecting to
-prepare the next version, replaces the file readers download from the
-published version at once. On a preprint server, deleting the published
-version's galley deletes the file the draft's copy uses (on a journal
-that delete fails, [OJS1](#ojs1)). A version's other files (its JATS
-XML, its media) are copied as files of their own.
-Basis: probe, 2026-09-24. <sup>f-a4</sup>
+editor who uses "Change File" on the new version's galley, expecting to
+prepare the next version, immediately replaces the file readers download
+from the published version. Deleting the published version's galley
+reaches the copy too. On a journal installed fresh since 3.3, the app
+fails: a window titled "Error" opens, the galley is gone anyway, and the
+new version's galley keeps a link that no longer downloads. On a journal
+upgraded to 3.4 or later, and on a preprint server, the delete goes
+through without a word and takes the new version's file with it. Nothing
+on screen says the two versions share a file. An editor who knows can
+delete the copied galley and add a new one with "Add galley", which
+gives the new version a file of its own. Basis: probe, 2026-10-02.
+<sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — The ordering arrows are unnamed** · 🐞 · minor.
@@ -732,17 +742,19 @@ Basis: probe, 2026-10-02. <sup>f-a7</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — Deleting a published galley that a new version copied fails** · 🐞 · user-visible · crash: both.
+**OJS1 — Deleting a published galley that a new version copied fails** · 🐞 · high · crash: server · crash: script.
 After "Create New Version", an editor who deletes the published
 version's galley ("Delete" › "OK") expects the row to go. The app fails
 instead: a window titled "Error" reads "An unexpected error has
 occurred. Please reload the page and try again." The galley is gone from
 the published version anyway, and readers lose its link. The new
-version's copy keeps its label as a link, and pressing it fails with a
-server error instead of downloading the file. A published galley that no
-version copied, and the copy itself, delete cleanly; on a preprint
-server the same delete works ([A4](#a4)).
-Basis: probe, 2026-09-24. <sup>f-ojs1</sup>
+version's copy keeps its label as a link, and pressing it opens a "404
+Not Found" page instead of downloading the file (on 3.5 a server error).
+This is a journal installed fresh; on a journal upgraded to 3.4 or
+later, as on a preprint server, the delete goes through without a word
+and takes the copy's file with it ([A4](#a4)). A published galley that
+no version copied, and the copy itself, delete cleanly.
+Basis: probe, 2026-10-02. <sup>f-ojs1</sup>
 
 ### OPS
 
@@ -1332,6 +1344,7 @@ remote galley and gave its row "Edit" and "Delete" only.
 <a id="fn-f-a4"></a>
 **f-a4** — Note m. The earlier version's galley file keeps
 `assocId` = the earlier galley. Live-probed 2026-09-24 (note q15).
+Issue report: [docs/issues/U46-A4-OJS1-new-version-galley-shares-published-file.md](../issues/U46-A4-OJS1-new-version-galley-shares-published-file.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `TableCellOrder.vue` (note j). The Contributors list's
@@ -1365,6 +1378,7 @@ The copy's label link, `…/api/file/file-api/download-file`, answered
 and its menu still offered "More Information". OPS ran the same steps
 with no error. Controls on both apps: a published galley no version
 copied, and the copy itself, deleted cleanly.
+Issue report: [docs/issues/U46-A4-OJS1-new-version-galley-shares-published-file.md](../issues/U46-A4-OJS1-new-version-galley-shares-published-file.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Notes b, c and l: OPS `PreprintGalleyGridHandler::canEdit()`
