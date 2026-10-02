@@ -2539,7 +2539,7 @@ Issue report: [docs/issues/U64-OJS5-ir-a1-lists-investigation-rows.md](../issues
 `<Report … Name="eports\counter\classes\reports\CounterReportJR1"
 Title="Journal Report 1">` (AR1 likewise); `<ItemPlatform>` reads "Open
 Journal Systems". fn-p.
-Issue report: [docs/issues/U64-OJS6-counter-release-4-report-name-code-path.md](../issues/U64-OJS6-counter-release-4-report-name-code-path.md).
+Issue report: [docs/issues/U64-OJS6-counter-release-4-report-name-code-path.md](../issues/U64-OJS6-counter-release-4-report-name-code-path.md), filed as [pkp-e2e#628](https://github.com/jardakotesovec/pkp-e2e/issues/628).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `CatalogHandler` fires the series event and
