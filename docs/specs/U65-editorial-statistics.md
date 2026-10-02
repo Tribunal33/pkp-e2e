@@ -2112,7 +2112,7 @@ only; `getOverview()` and `getAverages()` count `INITIAL_DECLINE` and
 `DECLINE`, and the monthly email reads `getOverview()`. Live-probed 2026-09-28: td6; the August email read "Declined
 submissions this month: 1" with one Internal Review decline and one
 desk decline that month.
-Issue report: [docs/issues/U65-OMP1-internal-review-decline-not-counted-declined.md](../issues/U65-OMP1-internal-review-decline-not-counted-declined.md).
+Issue report: [docs/issues/U65-OMP1-internal-review-decline-not-counted-declined.md](../issues/U65-OMP1-internal-review-decline-not-counted-declined.md), filed as [pkp-e2e#632](https://github.com/jardakotesovec/pkp-e2e/issues/632).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — `stats.description.daysToDecision` in lib/pkp
