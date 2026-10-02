@@ -2097,7 +2097,7 @@ Issue report: [pkp-e2e#427](https://github.com/jardakotesovec/pkp-e2e/issues/427
 
 <a id="fn-a25"></a>
 **f-a25** — Note p. Live-probed 2026-09-23 on all three apps: "Add Task Details" and "Edit" with the box ticked showed the drop-down at "Begin Task Upon Saving", greyed; after "Save" the task sat under "Yet to begin" with its "Started" box empty.
-Issue report: [docs/issues/U37-A25-converted-task-not-begun.md](../issues/U37-A25-converted-task-not-begun.md).
+Issue report: [pkp-e2e#444](https://github.com/jardakotesovec/pkp-e2e/issues/444) ([docs/issues/U37-A25-converted-task-not-begun.md](../issues/U37-A25-converted-task-not-begun.md)).
 
 <a id="fn-a26"></a>
 **f-a26** — `TableCellSelect.onChange()` calls `preventDefault()` on the change event, too late to undo the browser's own toggle, so the input keeps the new state while the icon is drawn from the saved one. Live-probed 2026-09-23 on all three apps: after "No" the row's "Started" read checked and a closed discussion's "Closed" not checked to the accessibility tree until a reload; the same on the template screen's "Auto-add at stage" box.
@@ -2108,8 +2108,8 @@ Issue report: [pkp-e2e#431](https://github.com/jardakotesovec/pkp-e2e/issues/431
 
 <a id="fn-a28"></a>
 **f-a28** — Note y: `{$taskType}` is the item's current type. Live-probed 2026-09-23 on all three apps: a discussion's "Activity" read "Discussion created by …" before "Add Task Details" and its History "Task created by …" and "Task assigned to …" after. Test run 2026-09-23 on all three apps (scenario 5): "Add Task Details" choosing the first owner answered 200 and wrote "Task assigned to …", while the server logged `PHP Warning: Attempt to read property "userId" on null` twice: `EditorialTaskController::logOwner()` picks the "assigned" event when there is no old owner, then reads the old owner's `userId` for `taskOwnerOldUserId` and `taskOwnerOldUsername` anyway. Nothing on screen fails.
-Issue report: [docs/issues/U37-A28-converted-task-history-says-task-created.md](../issues/U37-A28-converted-task-history-says-task-created.md).
-Issue report: [docs/issues/U37-A28-task-first-owner-server-warning.md](../issues/U37-A28-task-first-owner-server-warning.md).
+Issue report: [pkp-e2e#445](https://github.com/jardakotesovec/pkp-e2e/issues/445) ([docs/issues/U37-A28-converted-task-history-says-task-created.md](../issues/U37-A28-converted-task-history-says-task-created.md)).
+Issue report: [pkp-e2e#446](https://github.com/jardakotesovec/pkp-e2e/issues/446) ([docs/issues/U37-A28-task-first-owner-server-warning.md](../issues/U37-A28-task-first-owner-server-warning.md)).
 
 <a id="fn-a29"></a>
 **f-a29** — Note v: `editTask()` logs the first message's files through `logTaskFiles()`; the add path logged no file line in the drive. Live-probed 2026-09-23 (OJS twice, OMP and OPS once): a file attached at "Add" listed in the window, absent from the History until "Edit" removed it ("… removed by …"); a reply's file logged as "… uploaded by …".
