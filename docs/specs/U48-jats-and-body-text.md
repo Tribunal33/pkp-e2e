@@ -775,7 +775,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | Opening a "Body Text" side section while another is open closes both | 🐞 | minor | — |
 | [A18](#a18) | A sent file that cannot be converted fails with no message | 🐞 | minor | — |
 | [A20](#a20) | Each JATS "Upload" leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A21](#a21) | In French the tick box, its two windows and labels of the "Body Text" panel show raw codes | 🐞 | minor | — |
+| [A21](#a21) | In French the tick box, its two windows and labels of the "Body Text" panel show raw codes | 🐞 | minor | issues (claude), 2026-10-02 — no report: unreleased 3.6 texts |
 | [OMP1](#omp1) | A press offers "Send to Text Editor", but has no "Body Text" page to send to | 🐞 | user-visible | — |
 | [A3](#a3) | A published version's Body Text stays editable | ❓ | minor | — |
 | [A4](#a4) | A new version starts with an empty Body Text, though its JATS file and media are copied | ❓ | user-visible | — |
@@ -1023,6 +1023,13 @@ menu's "Body Text" entry and the "Publication: Body Text" heading are
 [Workflow screen & stage access A11](U24-workflow-screen-and-stage-access.md#a11)'s
 finding, and why a missing French text shows as a code at all is
 [Languages & locales](U57-languages-and-locales.md#a4)'.
+Every code here came to `main` with its page, none is on
+`stable-3_5_0`, and no language has them yet: the box and its windows
+with pkp-lib 5f5066e1f6 (2026-02-13, `pkp/pkp-lib#10405`), the "Body
+Text" panel with pkp-lib 4f5c499736 (2026-05-25, `pkp/pkp-lib#12787`).
+They are unreleased 3.6 texts waiting for Weblate, which so far
+translates `stable-3_5_0` only; no report (issues session ruling,
+2026-10-02).
 Basis: probe, 2026-09-30. <sup>f-a21</sup>
 
 ### OMP
