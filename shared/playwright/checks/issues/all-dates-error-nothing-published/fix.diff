@@ -1,0 +1,17 @@
+--- a/lib/pkp/api/v1/stats/publications/PKPStatsPublicationController.php
++++ b/lib/pkp/api/v1/stats/publications/PKPStatsPublicationController.php
+@@ -807,7 +807,13 @@
+                     ->getCollector()
+                     ->filterByContextIds([$this->getRequest()->getContext()->getId()])
+             );
+-            $returnParams['dateStart'] = $dateRange->min_date_published;
++            // No publication date yet, or one earlier than the statistics go back:
++            // start where the statistics start, which is the earliest date the
++            // validation accepts.
++            $returnParams['dateStart'] = max(
++                (string) $dateRange->min_date_published,
++                StatisticsHelper::STATISTICS_EARLIEST_DATE
++            );
+         }
+         return $returnParams;
+     }

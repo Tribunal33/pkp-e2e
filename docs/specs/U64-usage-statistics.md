@@ -1159,6 +1159,7 @@ Left out of the scenarios above, by reason:
     typed dates kept in the boxes while not applied (Fields "The date
     range")
   - a Journal Manager's "Do not collect any geographical data" on a site that collects geographical data: the choice still selected after a reload, and no "Download Geographic" in the "Download Report" window (the guard for A4, once fixed)
+  - "All dates" on Statistics › "Articles" of a context with nothing published and of one whose earliest publication is dated before 2001: no "Error" window, the monthly chart from January 2001 (the guard for A1, once fixed)
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1232,7 +1233,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | "All dates" on "Articles" of a journal with nothing published opens an "Error" window reading a raw code, and the chart stays on the previous range | 🐞 | user-visible | — |
+| [A1](#a1) | Statistics › Articles: "All dates" opens an "Error" window when nothing is published or an item predates 2001 | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | "Counter R5" date refusals show a raw code with the date inside it | 🐞 | minor | — |
 | [A4](#a4) | A journal's "Do not collect any geographical data" is not kept: the journal keeps collecting at the site's level | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A Section Editor's "Counter R5" opens an "Error" window over an empty list while the journal's COUNTER statistics are restricted | 🐞 | minor | — |
@@ -1259,14 +1260,22 @@ unless an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — "All dates" fails on a journal with nothing published** · 🐞 · user-visible.
-On "Articles" of a journal that has not published an article yet,
-choosing "All dates" should show the empty table for the whole range.
-Instead one "Error" window opens reading the raw code
-"api.stats.400.wrongDateFormat" with "OK"; behind it the range reads
-"All dates" and "Monthly" is pressed, but the chart still shows the
-previous range.
-Basis: probe, 2026-09-27. <sup>f-a1</sup>
+**A1 — Statistics › Articles: "All dates" opens an "Error" window when nothing is published or an item predates 2001** · 🐞 · medium.
+On Statistics › "Articles" of a journal that has not published an
+article yet, choosing "All dates" should show the empty table for the
+whole range. Instead an "Error" window opens reading the raw code
+"api.stats.400.wrongDateFormat"; behind it the range reads "All
+dates", but the chart still shows the previous range.
+
+The same happens on a journal whose earliest article is dated before
+2001, as back issues can be; there the code is
+"api.stats.400.earlyDateRange". Such a journal cannot see or download
+its all-time article figures through "All dates".
+
+A "Custom Range" starting at 2001-01-01 gives the figures "All dates"
+should have shown, but nothing on screen points to it. Statistics ›
+"Journal" and "Issues" are not affected.
+Basis: probe, 2026-10-02. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — Custom Range refuses an open-ended range** · ❓ · minor.
@@ -2298,6 +2307,7 @@ chart and "Search Phrase · zzzz". "Issues" {OJS}, with issues 7/3
 <a id="fn-f-a1"></a>
 **f-a1** — fn-f (the null start date and the untranslated key).
 Live-probed 2026-09-27: td1.
+Issue report: [docs/issues/U64-A1-all-dates-error-nothing-published.md](../issues/U64-A1-all-dates-error-nothing-published.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — fn-c (`validateDateStartMin()`/`validateDateEndMax()` on an
