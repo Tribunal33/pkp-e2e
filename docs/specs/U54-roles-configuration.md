@@ -798,6 +798,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U54-A10-role-name-of-spaces-breaks-window.md`): a role
     created at "Assistant" with one stage ticked and a "Role Name" of
     spaces, then a real name, listed with its stage
+  - the guard for A4 (issue report
+    `docs/issues/U54-A4-role-remove-warning-promises-deletion.md`): a
+    default role's row offering "Edit" and no "Remove", and a created
+    role's "Remove" window text before the role is removed
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -880,7 +884,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | The first row of each page of the "Roles" list has no "Edit" or "Remove" | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | The Roles list shows "Journal manager" in no stage, and "Assign" never offers it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | Saving the "Production editor" role, even unchanged, opens Submission and Review to its assigned members | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A4](#a4) | "Remove" warns that members' assignments will be deleted, but a role with members is never removed | 🐞 | minor | — |
+| [A4](#a4) | Removing a role warns that its members' assignments will be deleted, but a held role is never removed | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | A screen reader announces each stage box of the list only as "checkbox" | 🐞 | minor | — |
 | [A9](#a9) | After a filter entry is chosen the filters hide, and only the count line shows the list is filtered | 🐞 | minor | — |
@@ -951,14 +955,23 @@ two stages back.
 Basis: probe, 2026-10-02. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — The removal warning describes what never happens** · 🐞 · minor.
-The "Confirm" window says the removal "will also delete related settings
-and all the users assignments to this role", but "OK" on a role anyone
-holds or has held refuses with "Can't remove {role} role…", and every
-role the journal was created with is refused whatever its members. The
-warning also speaks of "this context", a word no other screen uses for
-the journal.
-Basis: probe. <sup>f-a4</sup>
+**A4 — Removing a role warns that its members' assignments will be deleted, but a held role is never removed** · 🐞 · low.
+On Settings › Users & Roles › "Roles", a role's "Remove" opens a
+"Confirm" window. The window says the removal "will also delete related
+settings and all the users assignments to this role", but that never
+happens. "OK" refuses every role that has ever been given to anyone,
+even when nobody holds it any more: "Can't remove {role} role. Currently
+{n} user(s) is/are assigned to it.". It also refuses every role the
+journal was created with, even one nobody holds. The only role it
+removes is one made with "Create New Role" that was never given to
+anyone.
+
+After a refusal the role and its members stay as they were. But the
+manager is warned that the members will lose the role, and may cancel
+for fear of that, or press "OK" expecting it. The proposed fix is the
+narrow one beside `pkp/pkp-lib#11513`: it rewords the window and stops
+offering "Remove" on the roles the journal was created with.
+Basis: probe, 2026-10-02. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — The list does not show a change it has saved** · 🐞 · medium · crash: server.
@@ -1719,6 +1732,7 @@ Issue report: [docs/issues/U54-A3-manager-level-role-save-ticks-every-stage.md](
 **f-a4** — `settings.roles.removeText` against `removeUserGroup()`
 ([q](#fn-q)): no path deletes a group that has assignments, and
 `isDefault` groups are never deleted. Live-probed 2026-09-26: [q](#fn-q).
+Issue report: [docs/issues/U54-A4-role-remove-warning-promises-deletion.md](../issues/U54-A4-role-remove-warning-promises-deletion.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Row ids 0…n−1 against the role-id refresh ([i](#fn-i)); the

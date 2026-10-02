@@ -1,0 +1,53 @@
+--- a/lib/pkp/controllers/grid/settings/roles/UserGroupGridRow.php
++++ b/lib/pkp/controllers/grid/settings/roles/UserGroupGridRow.php
+@@ -58,18 +58,22 @@
+                 'edit'
+             ));
+ 
+-            $this->addAction(new LinkAction(
+-                'removeUserGroup',
+-                new RemoteActionConfirmationModal(
+-                    $request->getSession(),
+-                    __('settings.roles.removeText'),
+-                    null,
+-                    $router->url($request, null, null, 'removeUserGroup', null, $actionArgs),
+-                    'negative'
+-                ),
+-                __('grid.action.remove'),
+-                'delete'
+-            ));
++            // A role the context was created with can never be removed
++            // (removeUserGroup() refuses it), so do not offer it.
++            if (!$userGroup->isDefault) {
++                $this->addAction(new LinkAction(
++                    'removeUserGroup',
++                    new RemoteActionConfirmationModal(
++                        $request->getSession(),
++                        __('settings.roles.removeText'),
++                        null,
++                        $router->url($request, null, null, 'removeUserGroup', null, $actionArgs),
++                        'negative'
++                    ),
++                    __('grid.action.remove'),
++                    'delete'
++                ));
++            }
+         }
+     }
+ }
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -1905,9 +1905,10 @@
+ 
+ msgid "settings.roles.removeText"
+ msgstr ""
+-"You are about to remove this role from this context. This operation will "
+-"also delete related settings and all the users assignments to this role. Do "
+-"you want to continue?"
++"You are about to remove this role. Its settings and workflow stages are "
++"deleted with it, and it is taken off any task or discussion template that "
++"lists it. A role that has ever been given to anyone can't be removed, even "
++"when nobody holds it now. Do you want to continue?"
+ 
+ msgid "settings.roles.nameRequired"
+ msgstr "You need to define a role name."
