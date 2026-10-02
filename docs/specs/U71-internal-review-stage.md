@@ -822,6 +822,7 @@ footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - {OMP} the author's "Upload" on an internal round that was sent on to External Review refusing with "You are not allowed to add and edit these files.", while External Review's "Upload revisions" takes the file ([OMP8](#omp8); Rule 18): the guard the issue report proposes, once fixed
   - {OMP} "Accept Submission" and "Create New Review Round" on an internal round listing the author's revised file under "Revisions", ticked, and copying it into "Draft Files" and the new round's "Files for Review" ([OMP2](#omp2); Rule 13b): the guard the issue report proposes, once fixed
   - {OMP} the author's header Tasks panel gaining "Revisions to consider in Internal Review." after "Request Revisions" on an internal round, and losing it on the revised-file upload ([OMP1](#omp1); Side effects bullet 2): the guard the issue report proposes, once fixed
 - **Rarely met**:
@@ -932,7 +933,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP1](#omp1) | After "Request Revisions" on Internal Review, a press author gets no task in the Tasks panel | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | On a press's Internal Review, "Accept Submission" and "Create New Review Round" carry none of the author's revised files | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP7](#omp7) | The author selecting the "Internal Review" entry itself gets a stale or empty page, and the page's script fails | 🐞 | medium · crash: script | issues (claude), 2026-10-02 — re-verified |
-| [OMP8](#omp8) | While External Review asks for revisions, the author's "Upload" on an earlier internal round files the revision there, out of the editor's sight | 🐞 | minor | — |
+| [OMP8](#omp8) | A press author's "Upload" on a past Internal Review round files the revision there while External Review waits for it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP9](#omp9) | The stage's address typed without the monograph's number gives an empty page from a server failure | 🐞 | latent · crash: server | — |
 | [OMP10](#omp10) | After "Accept Submission" on Internal Review the assigned editors get no notice box on Copyediting | 🐞 | minor | — |
 | [OMP3](#omp3) | The author's Internal Review has no "Notifications" list, so its letters cannot be re-read there | ❓ | user-visible | — |
@@ -1056,18 +1057,29 @@ shares its issue report and its severity.
 Basis: probe, 2026-10-02. <sup>[f-omp7](#fn-omp7)</sup>
 
 <a id="omp8"></a>
-**OMP8 — A revision filed on an earlier internal round while External Review waits for it** · 🐞 · minor.
-While External Review asks the author for revisions, the author's "Upload"
-above an earlier internal round's "Revisions Uploaded" opens the full
-"Upload Review File" wizard, and the file lands on that internal round.
-External Review's box keeps reading "Revisions have been requested." over
-an empty "Revisions Uploaded", so the editor sees no revision where it was
-asked for. The author's files on the internal round keep "Update File
-Details" and "Delete" in "More Actions". Expected: on a round that asks
-for nothing, "Upload" refuses, as it does before any revision request
-(Rule 15b; [→ submission files A7](U36-submission-files.md#a7)), leaving
-External Review's "Upload revisions" as the way in.
-Basis: probe. <sup>[f-omp8](#fn-omp8)</sup>
+**OMP8 — A press author's "Upload" on a past Internal Review round files the revision there while External Review waits for it** · 🐞 · low.
+On a press, an author can still upload revision files to a monograph's
+last Internal Review round after the monograph has moved to External
+Review, if that round ever had a "Request Revisions" decision. When
+External Review then asks for revisions and the author opens the earlier
+Internal Review round from the side menu, "Upload" above "Revisions
+Uploaded" takes the file, and the file is listed on that internal round.
+
+Nothing tells the author it went to the wrong round, but the request
+stays visibly open: External Review still reads "Revisions have been
+requested." with "Upload revisions", and the "My Submissions" row still
+reads "Revision requested". The assigned editors get the "Revised
+Version Uploaded" email, then find External Review reading "Revisions
+have been requested." over an empty "Revisions Uploaded"; the file is on
+the Internal Review round.
+
+An Internal Review round sent to External Review with no "Request
+Revisions" decision refuses the same "Upload".
+
+The "Upload" offered where it should refuse is
+[→ submission files A7](U36-submission-files.md#a7); here the server takes
+the file as well (Rule 15b).
+Basis: probe, 2026-10-02. <sup>[f-omp8](#fn-omp8)</sup>
 
 <a id="omp9"></a>
 **OMP9 — The stage's address without a number fails on the server** · 🐞 · latent · crash: server.
@@ -1238,6 +1250,7 @@ Issue report: [docs/issues/U71-OMP7-review-stage-entry-page-of-no-round.md](../i
 
 <a id="fn-omp8"></a>
 **f-omp8** — Live-probed 2026-09-27 (Rule 18): a monograph with an internal "Request Revisions" and the author's upload on Round 1, sent to External Review, where the editor then recorded "Request Revisions". The author's "Upload" above internal Round 1's "Revisions Uploaded" opened the three-step "Upload Review File" wizard; the file landed on that round, on the page and after a reload, while External Review Round 1 read "Revisions have been requested." over "No Items" for the author and the editor. The file's "More Actions" offered "Update File Details" and "Delete". Control: on a monograph whose internal round never asked for revisions the same "Upload" refused with "You are not allowed to add and edit these files.". Consistent with note d's server gate, which looks at the decisions of the latest internal round, not at the stage the monograph is on.
+Issue report: [docs/issues/U71-OMP8-author-revision-filed-on-earlier-internal-round.md](../issues/U71-OMP8-author-revision-filed-on-earlier-internal-round.md).
 
 <a id="fn-omp9"></a>
 **f-omp9** — Live-probed 2026-09-27 (Rule 19): `{press}/workflow/internalReview` with no id answered 500 and an empty page; so did `externalReview`, `submission`, `editorial` and `production` on a press, the same four on a journal and `submission` and `production` on a preprint server, 12 server errors in all (`GET /index.php/{context}/workflow/{op}`); `internalReview` on a journal or a preprint server answers "404 Not Found". The stage-numbered form of the same defect is the workflow-screen spec's A5.

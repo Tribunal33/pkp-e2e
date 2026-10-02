@@ -1,0 +1,29 @@
+--- a/lib/pkp/classes/security/authorization/internal/SubmissionFileStageAccessPolicy.php
++++ b/lib/pkp/classes/security/authorization/internal/SubmissionFileStageAccessPolicy.php
+@@ -128,14 +128,22 @@
+                         ? $externalReviewDecisions
+                         : $internalReviewDecisions;
+ 
+-                    $countDecisions = Repo::decision()->getCollector()
++                    // An internal round sent on to external review no longer takes
++                    // revisions, whatever was decided on it before: the latest of
++                    // these decisions is the one that stands
++                    $closingDecisions = $reviewStage === WORKFLOW_STAGE_ID_INTERNAL_REVIEW
++                        ? [Decision::EXTERNAL_REVIEW]
++                        : [];
++
++                    $lastDecision = Repo::decision()->getCollector()
+                         ->filterBySubmissionIds([$submission->getId()])
+                         ->filterByStageIds([$reviewRound->getStageId()])
+                         ->filterByReviewRoundIds([$reviewRound->getId()])
+-                        ->filterByDecisionTypes($decisionTypes)
+-                        ->getCount();
++                        ->filterByDecisionTypes([...$decisionTypes, ...$closingDecisions])
++                        ->getMany()
++                        ->last();
+ 
+-                    if ($countDecisions) {
++                    if ($lastDecision && in_array($lastDecision->getData('decision'), $decisionTypes)) {
+                         $assignedFileStages[] = $this->_fileStage;
+                     }
+                 }
