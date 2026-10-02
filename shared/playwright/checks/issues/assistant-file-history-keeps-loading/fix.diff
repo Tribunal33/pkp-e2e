@@ -1,0 +1,24 @@
+--- a/lib/pkp/controllers/grid/eventLog/SubmissionFileEventLogGridHandler.php
++++ b/lib/pkp/controllers/grid/eventLog/SubmissionFileEventLogGridHandler.php
+@@ -29,6 +29,21 @@
+     /** @var SubmissionFile SubmissionFile */
+     public $_submissionFile;
+ 
++    /**
++     * Constructor
++     */
++    public function __construct()
++    {
++        parent::__construct();
++        // The file's information center opens its "History" tab for the assistant
++        // roles too (FileInformationCenterHandler::viewHistory). The submission's
++        // own log, which lists its emails (viewEmail), stays with the parent's roles.
++        $this->addRoleAssignment(
++            [Role::ROLE_ID_ASSISTANT],
++            ['fetchGrid', 'fetchRow']
++        );
++    }
++
+     //
+     // Getters/Setters
+     //

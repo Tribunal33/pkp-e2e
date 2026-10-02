@@ -992,7 +992,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | An author is offered "Update File Details" on a file somebody else uploaded, and the window only refuses them | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A3](#a3) | "More Information"'s "History" tab keeps showing "Loading" for the Copyeditor, Layout Editor and the other assistant roles | 🐞 | minor | — |
+| [A3](#a3) | A Copyeditor, Layout Editor or Proofreader opening a file's "More Information" gets two alerts and a "History" tab stuck on "Loading" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | A file's "History" tab: ticking "Show events from prior versions" reloads the same rows | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A galley's "Change File" shows the heading "Current file" with no file name under it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | An Author is offered "Upload" above "Revisions Uploaded" before revisions are requested, then refused | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1046,13 +1046,25 @@ question.
 Basis: probe, 2026-10-02. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
-**A3 — "More Information" never loads its "History" tab for the assistant roles** · 🐞 · minor.
-A Copyeditor, Layout Editor, Proofreader or other assistant role assigned
-to a stage is offered "More Information" on that stage's files, and the
-window opens on its "History" tab. The tab never loads for them: it keeps
-showing "Loading", with no message. Their "Notes" tab works. Either the
-tab should load for them or the window should open without it.
-Basis: probe. <sup>[f-a3](#fn-a3)</sup>
+**A3 — A Copyeditor, Layout Editor or Proofreader opening a file's "More Information" gets two alerts and a "History" tab stuck on "Loading"** · 🐞 · low.
+A Copyeditor, Layout Editor, Proofreader or other assistant role
+assigned to a stage is offered "More Information" on that stage's files,
+and the window opens on its "History" tab. For them the tab never loads.
+The browser shows the alert "The current role does not have access to
+this operation.", then a second alert that says only "undefined", and
+the tab keeps showing "Loading".
+
+"More Information" is where a file's notes are read and written, so an
+assistant who uses notes meets the two alerts on every opening. The
+"Notes" tab works once both are dismissed. The file's history, and the
+download of an earlier upload it offers, stay out of their reach.
+
+Until a change in 2014 the code let assistants load this tab; the
+change closed the submission's activity log to them and took the file's
+history with it. The report recommends loading the tab for them again.
+A preprint server is not listed because its default roles include no
+assistant that can be assigned to a preprint.
+Basis: probe, 2026-10-02. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
 **A4 — A file's "History" tab: ticking "Show events from prior versions" reloads the same rows** · 🐞 · low.
@@ -2256,6 +2268,7 @@ OJS and OMP; Copyeditor, Layout Editor, Proofreader): "Loading" after 10 s;
 the History grid's `fetch-grid` answered `status:false` "The current role does
 not have access to this operation.", which the tab never shows. Their notes
 posted with "Note posted.".
+Issue report: [docs/issues/U36-A3-assistant-file-history-keeps-loading.md](../issues/U36-A3-assistant-file-history-keeps-loading.md).
 
 <a id="fn-a4"></a>
 **f-a4** — Note v. Live-probed 2026-09-23 (d3; all three apps; Journal
