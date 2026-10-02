@@ -1349,6 +1349,7 @@ Left out of the scenarios above, by reason:
   - the guard for A10 (issue report `docs/issues/U37-A10-past-due-date-speaks-of-start-date.md`): a past "Due Date" typed into the box is refused with a message that names the due date (Rule 2d)
   - the guard for A2 (issue report `docs/issues/U37-A2-discussion-window-placeholder-subtitle.md`): the "Add" and "Edit" windows hold no placeholder line under the title (Rule 10)
   - the guard for A21 (issue report `docs/issues/U37-A21-error-list-calls-message-box-undefined.md`): a "Save" refused with the message box empty lists "Go to Message: This field is required." in the "Add", "Edit" and template windows (Rule 11a)
+  - the guard for A29 (issue report `docs/issues/U37-A29-add-window-file-missing-from-history.md`): a file attached in the "Add" window shows "{file name} uploaded by …" with "Download" in the History (Rule 18)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1413,7 +1414,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A25](#a25) | A discussion turned into a task reads "Begin Task Upon Saving" but is not begun | 🐞 | minor | — |
 | [A26](#a26) | After "No" in a row box's question, a screen reader hears the opposite state | 🐞 | minor | — |
 | [A28](#a28) | A discussion turned into a task reads "Task created by …" in its History | 🐞 | minor | — |
-| [A29](#a29) | A file attached in the "Add" window never appears in the item's History | 🐞 | minor | — |
+| [A29](#a29) | A file attached to the first message in the "Add" window never shows in the discussion's History | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A31](#a31) | An auto-added item's letter keeps "{$recipientName}" and the sender placeholder | 🐞 | minor | — |
 | [OMP1](#omp1) | A press lists its External Review reviewers as "Internal Reviewer" or "External Reviewer", varying | 🐞 | minor | — |
 | [OPS1](#ops1) | A preprint server's "Assign Editor" template has no text, and choosing it leaves the message box showing text "Save" ignores | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
@@ -1732,13 +1733,17 @@ before. Nothing records the change itself beyond "Task assigned to
 Basis: probe. <sup>[f-a28](#fn-a28)</sup>
 
 <a id="a29"></a>
-**A29 — A file attached in the "Add" window never shows in the History** · 🐞 · minor.
-A file attached to the first message in the "Add" window gets no "{file
-name} uploaded by …" line in the item's History, so it has no
-"Download" row there; files attached to replies or added by "Edit" do.
-Its removal through "Edit" is logged ("… removed by …"), so the History
-shows the file leaving but never arriving.
-Basis: probe. <sup>[f-a29](#fn-a29)</sup>
+**A29 — A file attached to the first message in the "Add" window never shows in the discussion's History** · 🐞 · low.
+Someone starts a discussion or task with the "Add" button of a stage's
+"Tasks & Discussions" panel and attaches a file to its first message.
+That file gets no "{file name} uploaded by …" line in the discussion's
+or task's History, so the History has no "Download" row for it. Files
+attached to a reply, or added later through "Edit", do get that line.
+When the file is later taken off through "Edit", the History logs "…
+removed by …", so it shows the file leaving but never arriving. The file
+itself stays under the first message, where it can still be opened.
+Discussions and tasks already started this way keep the gap after a fix.
+Basis: probe, 2026-10-02. <sup>[f-a29](#fn-a29)</sup>
 
 <a id="a30"></a>
 **A30 — A task loses its owner silently** · ❓ · minor.
@@ -2072,6 +2077,7 @@ Issue report: [docs/issues/U37-A21-error-list-calls-message-box-undefined.md](..
 
 <a id="fn-a29"></a>
 **f-a29** — Note v: `editTask()` logs the first message's files through `logTaskFiles()`; the add path logged no file line in the drive. Live-probed 2026-09-23 (OJS twice, OMP and OPS once): a file attached at "Add" listed in the window, absent from the History until "Edit" removed it ("… removed by …"); a reply's file logged as "… uploaded by …".
+Issue report: [docs/issues/U37-A29-add-window-file-missing-from-history.md](../issues/U37-A29-add-window-file-missing-from-history.md).
 
 <a id="fn-a30"></a>
 **f-a30** — Note ac: the removal deletes the person's participant rows, the owner's included; the drive saw no History line. Live-probed 2026-09-23 (OJS twice, OMP and OPS once): "Task Owner: {username}" before the Participants panel's "Remove", "Task Owner:" after, the History holding only the created and initiated lines.

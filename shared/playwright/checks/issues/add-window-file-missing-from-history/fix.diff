@@ -1,0 +1,19 @@
+--- a/lib/pkp/api/v1/submissions/tasks/EditorialTaskController.php
++++ b/lib/pkp/api/v1/submissions/tasks/EditorialTaskController.php
+@@ -226,6 +226,16 @@
+ 
+         Repo::eventLog()->add($eventLog);
+ 
++        // Log the files attached to the first message, as addNote() and editTask() do for theirs
++        $headnote = $editorialTask->notes->where(fn (Note $note) => $note->isHeadnote == true)->first();
++        if ($headnote) {
++            $headnoteFiles = Repo::submissionFile()->getCollector()
++                ->filterByAssoc(PKPApplication::ASSOC_TYPE_NOTE, [$headnote->id])
++                ->getMany()
++                ->toArray();
++            $this->logTaskFiles($headnoteFiles, $submission, $editorialTask, $currentUser);
++        }
++
+         $newParticipants = $editorialTask->participants->pluck('userId')->toArray();
+         if (!in_array($currentUser->getId(), $newParticipants)) {
+             $newParticipants[] = $currentUser->getId();
