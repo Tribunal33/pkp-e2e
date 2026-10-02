@@ -1,0 +1,15 @@
+--- a/lib/pkp/controllers/grid/settings/roles/UserGroupGridHandler.php
++++ b/lib/pkp/controllers/grid/settings/roles/UserGroupGridHandler.php
+@@ -206,9 +206,12 @@
+         $totalCount = $builder->count();
+         $offset = ($page - 1) * $perPage;
+ 
++        // Key the rows by the role's id: the grid's row ids, which its row actions
++        // and every single-row refresh (fetchRow) rely on, are these keys.
+         $pageResults = $builder->offset($offset)
+             ->limit($perPage)
+             ->get()
++            ->keyBy(fn (UserGroup $userGroup) => $userGroup->id)
+             ->all();
+ 
+         // results

@@ -765,6 +765,12 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A1 and A5 (issue report
+    `docs/issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md`):
+    every row of the "Roles" list, the first included, offering "Edit"
+    and "Remove", and a pressed stage box showing its new state without
+    a reload
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -844,11 +850,11 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | The first row of each page of the "Roles" list has no "Edit" or "Remove" | 🐞 | user-visible | — |
+| [A1](#a1) | The first row of each page of the "Roles" list has no "Edit" or "Remove" | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | The manager role's row shows no stage, and the stage filter leaves it out | 🐞 | minor | — |
 | [A3](#a3) | Saving a manager-level role's window ticks every stage, unasked | 🐞 | user-visible | — |
 | [A4](#a4) | "Remove" warns that members' assignments will be deleted, but a role with members is never removed | 🐞 | minor | — |
-| [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | user-visible · crash: server | — |
+| [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | A screen reader announces each stage box of the list only as "checkbox" | 🐞 | minor | — |
 | [A9](#a9) | After a filter entry is chosen the filters hide, and only the count line shows the list is filtered | 🐞 | minor | — |
 | [A10](#a10) | A role name of spaces is refused with a different notice while the page's script fails | 🐞 | minor · crash: script | — |
@@ -866,16 +872,19 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — The first row of each page has no "Edit" or "Remove"** · 🐞 · user-visible.
+**A1 — The first row of each page has no "Edit" or "Remove"** · 🐞 · medium · crash: server.
 Every row of the "Roles" list has a "Settings" arrow that opens "Edit"
-and "Remove", except the first row of each page. On a new journal that is
-normally the manager role, whose options therefore cannot be changed.
-On a second page, with a filter chosen, or when the list comes in another
-order (a role just made can come first, [A13](#a13)), the role that comes
-first there loses both actions instead, whatever it is; no other screen
-changes or removes a role. The manager expects every row to offer the
-same actions, or the manager role alone to be kept out on purpose.
-Basis: probe. <sup>f-a1</sup>
+and "Remove", except the first row of each page. On a journal, new or
+long in use, that row is normally the manager role: it is stored before
+every other role, so it leads page 1 at every page size and every
+filtered list that includes it, and its name and options cannot be
+changed at all. On a second page, with a filter chosen, or when the list
+comes in another order (a role just made can come first, [A13](#a13)),
+the role that comes first there loses both actions instead; no other
+screen changes or removes a role. The manager expects every row to offer
+the same actions. A press and a preprint server alike; the stable 3.5
+release lists every row with its arrow.
+Basis: probe, 2026-10-02. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — The manager role's row shows no stage** · 🐞 · minor.
@@ -910,7 +919,7 @@ the journal.
 Basis: probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — The list does not show a change it has saved** · 🐞 · user-visible · crash: server.
+**A5 — The list does not show a change it has saved** · 🐞 · medium · crash: server.
 A pressed stage box keeps its old look until the page is reloaded,
 though the notice says the change was saved, so the manager presses it
 again. After a tick, the second press fails on the server: no notice
@@ -919,8 +928,10 @@ shows the stage ticked. After an untick, the second press reads "…
 unassigned from … stage." again while the box still looks ticked. After
 a successful "Remove" the role stays listed until a reload, and pressing
 one of its boxes, or its "Remove" › "OK" again, fails on the server with
-no message. The manager expects the list to show what is stored.
-Basis: probe. <sup>f-a5</sup>
+no message. The failing press stores nothing, so what is stored stays as
+the first press left it. The manager expects the list to show what is
+stored. The stable 3.5 release redraws each row as pressed.
+Basis: probe, 2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — A role ever held can never be removed** · ❓ · minor.
@@ -1611,6 +1622,7 @@ just made listed first (test runs 2026-09-28 and 2026-09-29):
 [f-a13](#fn-f-a13); nothing moves a first row down (no filter, page size
 or page link does, and a saved role only moves down), and the grid is the
 only place a role is edited or removed.
+Issue report: [docs/issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md](../issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Live-probed 2026-09-19 (the Production stage's claim check, all
@@ -1657,6 +1669,7 @@ box still ticked; a switch to "Users" and back changed nothing. After
 "Remove" › "OK" again answered 500 (`POST
 …/user-group-grid/remove-user-group`) with no notice; the row was gone
 after a reload.
+Issue report: [docs/issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md](../issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `$userGroup->userUserGroups()->count()` counts every
