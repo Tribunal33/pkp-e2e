@@ -2081,7 +2081,7 @@ context's public files as `{id}-category.{ext}` and the thumbnail as
 `PKPCatalogHandler` reads for OJS and OPS. With no file at the old place,
 `downloadByPath()` sends nothing.
 Live-probed 2026-09-25: note td11.
-Issue report: [docs/issues/U16-OMP1-press-category-picture-broken.md](../issues/U16-OMP1-press-category-picture-broken.md).
+Issue report: [pkp-e2e#598](https://github.com/jardakotesovec/pkp-e2e/issues/598) ([docs/issues/U16-OMP1-press-category-picture-broken.md](../issues/U16-OMP1-press-category-picture-broken.md)).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Note h (OMP flat array, `is_sub` one indent step at any depth;
