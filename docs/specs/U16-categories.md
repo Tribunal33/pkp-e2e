@@ -817,6 +817,9 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a category's "Order of articles" set to "Title (A-Z)" and "Title
+    (Z-A)" over three items, the page following each ([A2](#a2)): the
+    guard the issue report proposes
   - a category's ticked editor assigned to a new submission on a journal
     or press other than the install's first ([A13](#a13)): the guard the
     issue report proposes
@@ -912,7 +915,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A visitor opening an empty category sees "0 Items" and no "Nothing has been published" message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A2](#a2) | A category's "Order of articles" has no effect on its page | 🐞 | user-visible | — |
+| [A2](#a2) | A category's "Order of articles" has no effect: its public page keeps one order whatever is chosen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | A category's picture is not a link; its full-size version is unreachable from the page | 🐞 | minor | — |
 | [A7](#a7) | The picture's "Alternate text" is used nowhere; a journal's page describes the picture as "null" | 🐞 | minor | — |
 | [A8](#a8) | A category path with "/" saves, but the category's links open another category's page or "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -954,12 +957,21 @@ which the default theme uses.
 Since: 2026-01-09 · Basis: probe, 2026-10-02; the regression, code reading. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — "Order of articles" does nothing** · 🐞 · user-visible.
-A manager sets "Order of articles" to "Title (A-Z)", expecting the
-category's page to list its articles alphabetically. The page keeps the
-same order whatever the choice.
-It was honored until the page moved onto the search machinery in January 2026 (read from the code): a regression.
-Since: 2026-01-09 · Basis: probe, 2026-09-25; the regression, code reading. <sup>f-a2</sup>
+**A2 — A category's "Order of articles" has no effect: its public page keeps one order whatever is chosen** · 🐞 · medium.
+A manager sets "Order of articles" ("Order of monographs" on a press,
+"Order of preprints" on a preprint server) to "Title (A-Z)", expecting
+the category's page to list its articles alphabetically. The page keeps
+the same order whatever the choice. Every choice is ignored, the default
+"Publication date (newest first)" included: the page asks the database
+for no order at all.
+The saved choice stays in the category's settings and every item is
+still listed, but readers see the items in an order the journal did not
+choose, and the manager is not told. Where the database returns them
+oldest submission first, as on the test installs, and items were
+published in the order they were submitted, a category at the default
+lists its oldest items first, the reverse of its setting, so sites that
+never touched the setting see it too.
+Since: 2026-01-09 · Basis: probe, 2026-10-02; the regression, code reading. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — Sub-categories' articles stay off the parent's page** · ❓ · minor.
@@ -1902,6 +1914,7 @@ Issue report: [pkp-e2e#586](https://github.com/jardakotesovec/pkp-e2e/issues/586
 **f-a2** — Note i. Live-probed 2026-09-25: note td9, the order the items
 were published in whatever the choice; whether that is the order Search
 gives its results was not compared.
+Issue report: [docs/issues/U16-A2-category-order-of-articles-ignored.md](../issues/U16-A2-category-order-of-articles-ignored.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note g (`whereIn('categoryIds', [$category->getId()])`, no

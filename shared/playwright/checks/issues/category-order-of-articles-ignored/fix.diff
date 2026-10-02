@@ -1,0 +1,128 @@
+--- a/lib/pkp/pages/catalog/PKPCatalogHandler.php
++++ b/lib/pkp/pages/catalog/PKPCatalogHandler.php
+@@ -79,6 +79,10 @@
+             // Featured items are only in OMP at this time
+             $builder->orderBy('featured');
+         }
++        if (!$request->getUserVar('orderBy')) {
++            // The category's own "Order of articles", unless the request names an order
++            $builder->orderBy($orderBy, $orderDir);
++        }
+         $results = $builder->paginate($rangeInfo->getCount(), 'submissions', $rangeInfo->getPage());
+ 
+         // Provide the parent category and a list of subcategories
+--- a/lib/pkp/classes/search/engines/DatabaseEngine.php
++++ b/lib/pkp/classes/search/engines/DatabaseEngine.php
+@@ -91,32 +91,26 @@
+             }
+         };
+ 
+-        // Handle ordering
+-        switch (count((array) $builder->orders)) {
+-            case 0: $orderBy = $orderDirection = null;
+-                break;
+-            case 1:
+-                $order = $builder->orders[0];
+-                switch ($order['column']) {
+-                    case 'datePublished':
+-                    case 'title':
+-                        $orderBy = $order['column'];
+-                        $orderDirection = $order['direction'];
+-                        break;
+-                    case 'featured': // OMP only
+-                        if ($applicationName = Application::get()->getName() != 'omp') {
+-                            throw new \Exception("Features not supported in {$applicationName}!");
+-                        }
+-                        $orderBy = 'feature';
+-                        $orderDirection = $order['direction'];
+-                        break;
+-                    default: throw new \Exception('Order-by "' . $order['column'] . '" not supported by DatabaseEngine!');
+-                }
+-                break;
+-            default: throw new \Exception('Only a single order condition is accepted by DatabaseEngine!');
++        // Handle ordering: each condition in turn (OMP puts featured items first, then the sort)
++        $orders = [];
++        foreach ((array) $builder->orders as $order) {
++            switch ($order['column']) {
++                case 'datePublished':
++                case 'title':
++                    $orders[] = [$order['column'], $order['direction']];
++                    break;
++                case 'featured': // OMP only
++                case 'seriesPosition': // OMP only
++                    if (($applicationName = Application::get()->getName()) != 'omp') {
++                        throw new \Exception('Order-by "' . $order['column'] . "\" not supported in {$applicationName}!");
++                    }
++                    $orders[] = [$order['column'], $order['direction']];
++                    break;
++                default: throw new \Exception('Order-by "' . $order['column'] . '" not supported by DatabaseEngine!');
++            }
+         }
+ 
+-        return DB::table('submissions_fulltext AS ft')
++        $query = DB::table('submissions_fulltext AS ft')
+             ->join('submissions AS s', 'ft.submission_id', 's.submission_id')
+             ->when($contextId, fn (DatabaseBuilder $q) => $q->where('context_id', $contextId))
+             ->whereIn('s.submission_id', DB::table('publications')->where('status', PKPPublication::STATUS_PUBLISHED)->select('submission_id'))
+@@ -195,30 +189,43 @@
+                         }
+                     })
+             ))
+-            ->when($orderBy == 'datePublished', function ($q) use ($orderBy, $orderDirection) {
+-                $q->leftJoin('publications AS cp', 's.current_publication_id', 'cp.publication_id')
+-                    ->orderBy('cp.date_published', $orderDirection);
+-            })
+-            ->when($orderBy == 'feature', function ($q) {
+-                $q->leftJoin('features as f', 's.submission_id', 'f.submission_id')
+-                    ->orderByRaw('COALESCE(MAX(f.seq), 999999)'); // MySQL and PostgreSQL don't agree on ORDER BY with NULLs
+-            })
+-            ->when($orderBy == 'title', function ($q) use ($orderBy, $orderDirection) {
+-                $q->leftJoin(
+-                    'publication_settings AS title_current',
+-                    fn (JoinClause $j) =>
+-                    $j->on('s.current_publication_id', '=', 'title_current.publication_id')
+-                        ->where('title_current.setting_name', '=', 'title')
+-                        ->where('title_current.locale', '=', Locale::getLocale())
+-                )
+-                    ->orderBy($q->raw('MIN(title_current.setting_value)'), $orderDirection);
+-            })
+             ->when($builder->query, fn ($q) => $q->whereFullText(['title', 'abstract', 'body', 'authors'], $builder->query))
+             ->when(!empty($title), fn ($q) => $q->whereFullText(['title'], $title))
+             ->when(!empty($abstract), fn ($q) => $q->whereFullText(['abstract'], $abstract))
+             ->when(!empty($author), fn ($q) => $q->whereFullText(['authors'], $author))
+             ->when(!empty($body), fn ($q) => $q->whereFullText(['body'], $body))
+             ->groupBy('s.submission_id');
++
++        // Results are grouped by submission, so every sort column is aggregated
++        if (array_intersect(array_column($orders, 0), ['datePublished', 'seriesPosition'])) {
++            $query->leftJoin('publications AS cp', 's.current_publication_id', 'cp.publication_id');
++        }
++        foreach ($orders as [$orderBy, $orderDirection]) {
++            switch ($orderBy) {
++                case 'datePublished':
++                    $query->orderBy($query->raw('MAX(cp.date_published)'), $orderDirection);
++                    break;
++                case 'seriesPosition':
++                    $query->orderBy($query->raw('MAX(cp.series_position)'), $orderDirection);
++                    break;
++                case 'featured':
++                    $query->leftJoin('features AS f', 's.submission_id', 'f.submission_id')
++                        ->orderByRaw('COALESCE(MAX(f.seq), 999999)'); // MySQL and PostgreSQL don't agree on ORDER BY with NULLs
++                    break;
++                case 'title':
++                    $query->leftJoin(
++                        'publication_settings AS title_current',
++                        fn (JoinClause $j) =>
++                        $j->on('s.current_publication_id', '=', 'title_current.publication_id')
++                            ->where('title_current.setting_name', '=', 'title')
++                            ->where('title_current.locale', '=', Locale::getLocale())
++                    )
++                        ->orderBy($query->raw('MIN(title_current.setting_value)'), $orderDirection);
++                    break;
++            }
++        }
++
++        return $query;
+     }
+ 
+     public function search(SearchBuilder $builder): array
