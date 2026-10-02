@@ -817,6 +817,17 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - {OMP} the press's "Browse" read as a level-2 heading
+    ([OMP3](#omp3)): the guard the issue report proposes
+  - {OMP} the press's "Browse" block nesting "Computer Vision" under
+    "Computer Science" under "Applied Science" ([OMP2](#omp2)): the guard
+    the issue report proposes
+  - {OJS OPS} the breadcrumb's last step without a left border while the
+    "Browse" block is placed ([A20](#a20)): the guard the issue report
+    proposes
+  - {OJS OPS} a journal or server with no category showing no "Browse"
+    block once it is placed ([A10](#a10)): the guard the issue report
+    proposes
   - a category's picture linking to its full-size version and carrying
     its alternate text ([A6](#a6), [A7](#a7)): the guard the issue report
     proposes
@@ -927,7 +938,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | The picture's "Alternate text" is used nowhere; a journal's page describes the picture as "null" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | A category path with "/" saves, but the category's links open another category's page or "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | The path message says "only letters and numbers" while "-", "_", "." and "/" are accepted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A10](#a10) | With no category, the "Browse" block shows "Categories" with nothing under it | 🐞 | minor | — |
+| [A10](#a10) | A journal's "Browse" block with no category shows "Categories" over an empty list | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | On the Categories tab, keyboard users cannot open a category's sub-categories, and the arrows are misnamed | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A screen reader announces the "Select Categories" window's arrow column as "##common.expand##" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | A category's "Editorial Assignments" assign nobody on any journal or press but the install's first | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -936,11 +947,11 @@ an entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | A file that is not a picture, put in any image upload box, leaves a broken preview and a request for "[object Event]" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A18](#a18) | The box where a manager types a category's name to delete it has no name for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A19](#a19) | A category with one item reads "1 Items" ("1 Titles" on a press) | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A20](#a20) | With the "Browse" block placed, every breadcrumb's last step gets the block's grey bar | 🐞 | minor | — |
+| [A20](#a20) | With the "Browse" block in a journal's sidebar, every page's breadcrumb gets a grey bar | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | A press's category page shows a broken-picture mark instead of the category's picture | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OMP2](#omp2) | The press's "Browse" block lists sub-categories among the top-level ones, not under their parents | 🐞 | minor | — |
-| [OMP3](#omp3) | A press's "Browse" is not a heading for a screen reader | 🐞 | minor | — |
-| [OMP4](#omp4) | A press's "Browse" block with every "Settings" box unticked shows "Browse" alone | 🐞 | minor | — |
+| [OMP2](#omp2) | A press's "Browse" block lists sub-categories in one alphabetical run, not under their parents | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [OMP3](#omp3) | A press's "Browse" block title is not a heading, so screen-reader users cannot reach it by heading | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [OMP4](#omp4) | A press's "Browse" block with nothing to list still shows as an empty box | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP5](#omp5) | A press's first category page opened after its catalog page, its search results or a settings save fails to load | 🐞 | user-visible · crash: server | — |
 | [OPS1](#ops1) | A preprint server's category offers no moderator to assign automatically, only an empty "Editorial Assignments" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | A category's page leaves out the articles of its sub-categories | ❓ | minor | — |
@@ -1043,11 +1054,14 @@ same message for the same pattern (*[Sections](U17-sections.md)* OMP2).
 Basis: probe, 2026-10-02. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — An empty "Browse" block on a journal without categories** · 🐞 · minor.
-Placed on a journal or preprint server with no category, the "Browse"
-block shows its heading and the line "Categories" with nothing under
-it; a press's block leaves the line out.
-Basis: probe, 2026-09-25. <sup>f-a10</sup>
+**A10 — A journal's "Browse" block with no category shows "Categories" over an empty list** · 🐞 · low.
+When a journal or preprint server has no category and its manager
+places the "Browse" block in the sidebar, the block still shows its
+heading and the line "Categories", with no link under it. On a press
+the line is left out.
+Visitors see a heading and a label that lead nowhere; the manager can
+take the block out of the sidebar until there is a category.
+Basis: probe, 2026-10-02. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — On the Categories tab, keyboard users cannot open a category's sub-categories, and the arrows are misnamed** · 🐞 · medium.
@@ -1175,13 +1189,16 @@ press) where "1 Item" is expected.
 Basis: probe, 2026-10-02. <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — The "Browse" block restyles the breadcrumb** · 🐞 · minor.
+**A20 — With the "Browse" block in a journal's sidebar, every page's breadcrumb gets a grey bar** · 🐞 · low.
 While the "Browse" block is in the sidebar of a journal or a preprint
 server, the last step of every page's breadcrumb ("About the Journal", a
-category's name) is drawn like the block's marked link: grayed, with a
-grey bar at its left. Without the block it is plain grey text. A press's
-breadcrumb is unchanged.
-Basis: probe, 2026-09-25. <sup>f-a20</sup>
+category's name) gets a grey bar at its left and moves right by about
+half a letter, the way the block marks the category being viewed. Its
+grey colour stays as it was. Without the block the step has no bar.
+No released version has it: it came with a change on `main` and would
+ship with the next release. Pages work as before; the breadcrumb only
+looks like a selected menu entry.
+Basis: probe, 2026-10-02. <sup>f-a20</sup>
 
 ### OMP
 
@@ -1197,27 +1214,40 @@ fixed.
 Basis: probe, 2026-10-02; the cause, code reading. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — The press's "Browse" block flattens the tree** · 🐞 · minor.
-A journal's block nests each sub-category under its parent; the press's
-lists every category in one alphabetical run, so "Computer Vision" stands
-between "Computer Science" and "Engineering", indented like every
-sub-category, with nothing showing which category it belongs to or how
-deep it sits.
-Basis: probe, 2026-09-25. <sup>f-omp2</sup>
+**OMP2 — A press's "Browse" block lists sub-categories in one alphabetical run, not under their parents** · 🐞 · low.
+A journal's "Browse" block nests each sub-category under its parent. A
+press's block lists every category in one alphabetical run, each
+sub-category indented by the same single step. So "Anthropology" (a
+sub-category of "Social Sciences") opens the list, and "Computer Vision"
+sits level with "Computer Science", its parent, between it and
+"Engineering".
+Every category is listed and every link works, but visitors cannot
+tell which category a sub-category belongs to, and may take it for part
+of the category just above it. Released versions list each parent with
+its sub-categories after it; the run is new on `main`.
+Basis: probe, 2026-10-02. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
-**OMP3 — A press's "Browse" is not a heading** · 🐞 · minor.
-On a press the block's "Browse" is drawn like a heading, but a screen
-reader reads it as plain text, so the block cannot be reached by
-heading; a journal's and a preprint server's "Browse" is a heading.
-Basis: probe, 2026-09-25. <sup>f-omp3</sup>
+**OMP3 — A press's "Browse" block title is not a heading, so screen-reader users cannot reach it by heading** · 🐞 · low.
+On a press, the "Browse" block's title is drawn like a heading, but a
+screen reader reads it as plain text, so the block cannot be reached by
+heading. A journal's and a preprint server's "Browse" is a heading, as
+is the title of every other block in a press's sidebar.
+A screen-reader user who jumps from heading to heading never lands on
+the block, and has to find its links by reading on or by landmark.
+Basis: probe, 2026-10-02. <sup>f-omp3</sup>
 
 <a id="omp4"></a>
-**OMP4 — A "Browse" block with nothing to show still shows** · 🐞 · minor.
-With "New releases", "Categories" and "Series" all unticked in the
-block's "Settings", the placed block still shows its "Browse" title with
-nothing under it, an empty box in the sidebar.
-Basis: probe, 2026-09-25. <sup>f-omp4</sup>
+**OMP4 — A press's "Browse" block with nothing to list still shows as an empty box** · 🐞 · low.
+When a press manager unticks all three checkboxes in the "Browse
+Block" settings ("New releases", "Categories" and "Series"), the block
+in the sidebar still shows its "Browse" title with nothing under it, on
+every page.
+The same happens with "New releases" unticked when the checkboxes left
+ticked have nothing to list: "Categories" on a press with no category,
+"Series" on a press with no active series. While "New releases" is
+ticked, as it is by default, the block always holds that link.
+Basis: probe, 2026-10-02. <sup>f-omp4</sup>
 
 <a id="omp5"></a>
 **OMP5 — A press's category page fails after its catalog or a settings save** · 🐞 · user-visible · crash: server.
@@ -1977,6 +2007,7 @@ Issue report: [pkp-e2e#483](https://github.com/jardakotesovec/pkp-e2e/issues/483
 <a id="fn-f-a10"></a>
 **f-a10** — Note h (`{if $browseCategories}` on a `LazyCollection`).
 Live-probed 2026-09-25: note td12.
+Issue report: [docs/issues/U16-A10-browse-block-empty-categories-line.md](../issues/U16-A10-browse-block-empty-categories-line.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Note c. Live-probed 2026-09-25: note td1; the "Select
@@ -2069,6 +2100,7 @@ matches the breadcrumb's last step, `li.current`. Live-probed 2026-09-25,
 OJS and OPS: "About the Journal" had no bar before the block was placed and
 a 4 px left border in rgb(221, 221, 221) with padding after it, as every
 category page's breadcrumb did; OMP's breadcrumb had no bar.
+Issue report: [docs/issues/U16-A20-browse-block-restyles-breadcrumb.md](../issues/U16-A20-browse-block-restyles-breadcrumb.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `CatalogHandler::thumbnail()` / `fullSize()` read
@@ -2086,16 +2118,19 @@ Issue report: [pkp-e2e#598](https://github.com/jardakotesovec/pkp-e2e/issues/598
 <a id="fn-f-omp2"></a>
 **f-omp2** — Note h (OMP flat array, `is_sub` one indent step at any depth;
 order note i). Live-probed 2026-09-25: note td12.
+Issue report: [docs/issues/U16-OMP2-browse-block-flat-category-list.md](../issues/U16-OMP2-browse-block-flat-category-list.md).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — OMP `plugins/blocks/browse/templates/block.tpl` prints
 "Browse" in a `span.title`; OJS and OPS print it in an `h2`. Live-probed
 2026-09-25: the accessibility tree read "Browse" as text on a press and as
 a level-2 heading on a journal and a server.
+Issue report: [docs/issues/U16-OMP3-press-browse-not-a-heading.md](../issues/U16-OMP3-press-browse-not-a-heading.md).
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — Note h. Live-probed 2026-09-25: note td12 (the block's text
 "Browse" and no link, in two runs).
+Issue report: [docs/issues/U16-OMP4-press-browse-block-empty-box.md](../issues/U16-OMP4-press-browse-block-empty-box.md).
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — Test run 2026-09-25 (Rule 9; scenario 8), the OMP suite,

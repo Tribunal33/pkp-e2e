@@ -1,0 +1,42 @@
+--- a/plugins/blocks/browse/BrowseBlockPlugin.php
++++ b/plugins/blocks/browse/BrowseBlockPlugin.php
+@@ -114,24 +114,33 @@
+         $browseNewReleases = $this->getSetting($press->getId(), 'browseNewReleases');
+         $templateMgr->assign('browseNewReleases', $browseNewReleases);
+ 
++        $series = [];
+         $seriesDisplay = $this->getSetting($press->getId(), 'browseSeries');
+         if ($seriesDisplay) {
+-            // Provide a list of series to browse
++            // Provide a list of the active series to browse
+             $series = Repo::section()
+                 ->getCollector()
+                 ->filterByContextIds([$press->getId()])
+-                ->getMany();
+-            $templateMgr->assign('browseSeries', $series->toArray());
++                ->excludeInactive()
++                ->getMany()
++                ->toArray();
++            $templateMgr->assign('browseSeries', $series);
+         }
+ 
++        $categories = [];
+         $categoriesDisplay = $this->getSetting($press->getId(), 'browseCategories');
+         if ($categoriesDisplay) {
+             // Provide a list of categories to browse
+-            $categories = Repo::category()->getCollector()
++            $categories = iterator_to_array(Repo::category()->getCollector()
+                 ->filterByContextIds([$press->getId()])
+-                ->getMany();
++                ->getMany());
+ 
+-            $templateMgr->assign('browseCategories', iterator_to_array($categories));
++            $templateMgr->assign('browseCategories', $categories);
++        }
++
++        // Nothing to browse: draw no block
++        if (!$browseNewReleases && empty($series) && empty($categories)) {
++            return '';
+         }
+ 
+         // If we're currently viewing a series or catalog, detect it

@@ -1,0 +1,120 @@
+--- a/plugins/blocks/browse/BrowseBlockPlugin.php
++++ b/plugins/blocks/browse/BrowseBlockPlugin.php
+@@ -17,6 +17,7 @@
+ namespace APP\plugins\blocks\browse;
+ 
+ use APP\facades\Repo;
++use PKP\category\Category;
+ use PKP\core\JSONMessage;
+ use PKP\linkAction\LinkAction;
+ use PKP\linkAction\request\AjaxModal;
+@@ -25,6 +26,8 @@
+ 
+ class BrowseBlockPlugin extends BlockPlugin
+ {
++    private array $processedCategoryIds = [];
++
+     /**
+      * Install default settings on press creation.
+      *
+@@ -126,12 +129,14 @@
+ 
+         $categoriesDisplay = $this->getSetting($press->getId(), 'browseCategories');
+         if ($categoriesDisplay) {
+-            // Provide a list of categories to browse
++            // Provide the top-level categories to browse, each with its sub-categories
+             $categories = Repo::category()->getCollector()
+                 ->filterByContextIds([$press->getId()])
++                ->filterByParentIds([null])
+                 ->getMany();
+ 
+-            $templateMgr->assign('browseCategories', iterator_to_array($categories));
++            $this->processedCategoryIds = [];
++            $templateMgr->assign('browseCategories', $categories->map(fn (Category $category) => $this->formatCategoryData($category))->filter()->all());
+         }
+ 
+         // If we're currently viewing a series or catalog, detect it
+@@ -151,4 +156,29 @@
+ 
+         return parent::getContents($templateMgr);
+     }
++
++    /**
++     * A category and its sub-categories, at every depth, as the template lists them.
++     */
++    private function formatCategoryData(Category $category): array
++    {
++        // Avoid processing the same category multiple times (left out of the list)
++        if (in_array($category->getId(), $this->processedCategoryIds)) {
++            return [];
++        }
++        $this->processedCategoryIds[] = $category->getId();
++
++        $children = Repo::category()->getCollector()
++            ->filterByContextIds([$category->getContextId()])
++            ->filterByParentIds([$category->getId()])
++            ->getMany();
++
++        return [
++            'id' => $category->getId(),
++            'path' => $category->getPath(),
++            'parentId' => $category->getParentId(),
++            'localizedTitle' => $category->getLocalizedTitle(),
++            'subCategories' => $children->map(fn (Category $child) => $this->formatCategoryData($child))->filter()->all(),
++        ];
++    }
+ }
+--- a/plugins/blocks/browse/templates/block.tpl
++++ b/plugins/blocks/browse/templates/block.tpl
+@@ -14,6 +14,21 @@
+  *  browseable series.
+  *
+  *}
++{function name=browseCategoryList categories=[]}
++	<ul>
++		{foreach from=$categories item="browseCategory"}
++			<li class="category_{$browseCategory.id}{if $browseCategory.parentId} is_sub{/if}">
++				<a href="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="category" path=$browseCategory.path|escape}"{if $browseBlockSelectedCategory == $browseCategory.path} class="current"{/if}>
++					{$browseCategory.localizedTitle|escape}
++				</a>
++				{if $browseCategory.subCategories}
++					{call name=browseCategoryList categories=$browseCategory.subCategories}
++				{/if}
++			</li>
++		{/foreach}
++	</ul>
++{/function}
++
+ <div class="pkp_block block_browse">
+ 	<span class="title">
+ 		{translate key="plugins.block.browse"}
+@@ -33,15 +48,7 @@
+ 			{if $browseCategories}
+ 				<li class="has_submenu">
+ 					{translate key="plugins.block.browse.category"}
+-					<ul>
+-						{foreach from=$browseCategories item="browseCategory"}
+-							<li class="category_{$browseCategory->getId()}{if $browseCategory->getParentId()} is_sub{/if}{if $browseBlockSelectedCategory == $browseCategory->getPath()} current{/if}">
+-								<a href="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="category" path=$browseCategory->getPath()|escape}">
+-									{$browseCategory->getLocalizedTitle()|escape}
+-								</a>
+-							</li>
+-						{/foreach}
+-					</ul>
++					{call name=browseCategoryList categories=$browseCategories}
+ 				</li>
+ 			{/if}
+ 
+@@ -65,3 +72,12 @@
+ 		</ul>
+ 	</nav>
+ </div><!-- .block_browse -->
++
++<style>
++	.block_browse a.current {
++		padding-left: 0.5em;
++		border-left: 4px solid #ddd;
++		color: rgba(0, 0, 0, 0.54);
++		cursor: text;
++	}
++</style>

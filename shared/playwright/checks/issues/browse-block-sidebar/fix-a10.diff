@@ -1,0 +1,17 @@
+--- a/plugins/blocks/browse/BrowseBlockPlugin.php
++++ b/plugins/blocks/browse/BrowseBlockPlugin.php
+@@ -70,7 +70,13 @@
+             ->getMany();
+ 
+         // Process each root category
+-        $processedCategories = $categories->map(fn($category) => $this->formatCategoryData($category));
++        $processedCategories = $categories->map(fn($category) => $this->formatCategoryData($category))->all();
++
++        // No category to browse: draw no block
++        if (empty($processedCategories)) {
++            return '';
++        }
++
+         $templateMgr->assign([
+             'browseBlockSelectedCategory' => $requestedCategoryPath,
+             'browseCategories' => $processedCategories,

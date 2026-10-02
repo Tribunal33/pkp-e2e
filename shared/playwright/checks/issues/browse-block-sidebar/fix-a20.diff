@@ -1,0 +1,11 @@
+--- a/plugins/blocks/browse/templates/block.tpl
++++ b/plugins/blocks/browse/templates/block.tpl
+@@ -47,7 +47,7 @@
+ </div><!-- .block_browse -->
+ 
+ <style>
+-	.current {
++	.block_browse a.current {
+ 		padding-left: 0.5em !important;
+ 		border-left: 4px solid #ddd !important;
+ 		color: rgba(0, 0, 0, 0.54) !important;
