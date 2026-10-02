@@ -915,6 +915,8 @@ Left out of the scenarios above, by reason:
   - {OMP} the series list's "Inactive" box asking "…deactivate this
     series?" ("…activate this series?") ([OMP5](#omp5)): the guard the
     issue report proposes
+  - {OMP} the help under a saved series' "Path" showing the series' own
+    address ([OMP8](#omp8)): the guard the issue report proposes
 - **Rarely met**:
   - {OJS} "Omit author names for section items from issues' table of
     contents." ticked, the issue's table of contents without the section's
@@ -1046,7 +1048,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP3](#omp3) | A series "Save" with an SVG cover chosen saves nothing, not even the other changes, and shows no message | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP5](#omp5) | A press manager deactivating or reactivating a series is asked about a "section" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP7](#omp7) | The ISSN help in a press's series window reads "which identifying" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OMP8](#omp8) | The series path help always ends in the word "Path", never the path | 🐞 | minor | — |
+| [OMP8](#omp8) | The help under a series' "Path" shows an address ending in the word "Path", never the series' own | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP9](#omp9) | A series' public page shows no name, description or ISSN, and lists the books newest first whatever the series' order | 🐞 | user-visible | — |
 | [OPS1](#ops1) | An empty "Archives" page shows nothing under the archive header, not even a sentence | 🐞 | minor | — |
 | [OPS2](#ops2) | The help under "Identify items posted in this section as a(n)" reads "(For example etc.)" | 🐞 | minor | — |
@@ -1277,12 +1279,19 @@ identifies". The other interface languages' texts do not have the slip.
 Basis: probe, 2026-10-02. <sup>f-omp7</sup>
 
 <a id="omp8"></a>
-**OMP8 — The path help never shows the path** · 🐞 · minor.
-Under a series' "Path" the help reads "The series's URL will be:
-…/catalog/series/Path" while the manager types a path, and it still reads
-so on a saved series whose path is "new-series.v2". The manager expects
-the address the series will have and gets the word "Path" instead.
-Basis: probe, 2026-09-25. <sup>f-omp8</sup>
+**OMP8 — The help under a series' "Path" shows an address ending in the word "Path", never the series' own** · 🐞 · low.
+A press manager who opens a series' "Edit" window finds a help line
+under the "Path" box with a sample address: "The series's URL will be:
+…/catalog/series/Path". The press's part of the address is right, but
+the last part is always the word "Path", where the series' own path
+belongs. For the series "History", whose path is "his", the manager
+expects "…/catalog/series/his". The help shows the same sample before
+and after the path is changed and saved. Nothing is lost: the series'
+page is at its own address, and the box holds the path. Every series
+shows it. The "Add Series" window shows the same sample, which suits a
+new series that has no path yet. The help is written when the window
+opens, so it does not follow the box while the manager types either.
+Basis: probe, 2026-10-02. <sup>f-omp8</sup>
 
 <a id="omp9"></a>
 **OMP9 — A series' public page loses the series' name, description, ISSNs and book order** · 🐞 · user-visible.
@@ -1586,6 +1595,7 @@ Issue report: [docs/issues/U17-OMP7-series-issn-help-which-identifying.md](../is
 
 <a id="fn-f-omp8"></a>
 **f-omp8** — OMP `seriesForm.tpl` builds the help from a sample address, `{url … page="catalog" op="series" path="Path"}`, passed to `grid.series.urlWillBe`; the typed or saved path never reaches it. Live-probed 2026-09-25: note td6.
+Issue report: [docs/issues/U17-OMP8-series-path-help-never-shows-path.md](../issues/U17-OMP8-series-path-help-never-shows-path.md).
 
 <a id="fn-f-omp9"></a>
 **f-omp9** — OMP `classes/section/DAO.php` `getByPath()` builds the series from `$row->section_id`, a column the series table does not have (its key is `series_id`), so the page gets a series with no data; the probe server logged `PHP Warning: Undefined property: stdClass::$section_id in …/classes/section/DAO.php on line 71` on each such page. The line came with omp `4c2b5d77b` "pkp/pkp-lib#13003 Port batch loading to OMP" (2026-08-26), which changed `fromRow($row)` to `fromRow($row, [$row->section_id], (object) [])`. The cover survives because `image` is a column of the `series` table (`primaryTableColumns`); the title, prefix, subtitle, description, ISSNs and `sortOption` are rows of `series_settings` and are lost, and with no sort option `CatalogHandler::series()` falls back to `ORDERBY_DATE_PUBLISHED` descending. Live-probed 2026-09-25 on the seeded press (read only) and on scratch presses, four chunks: an empty `h1` and last trail step, no description or ISSN; "1 Titles" and the book for a series holding a published book, "0 Titles" and "No titles have been published yet." for one without (the seeded "Monographs" and "Textbooks" as much as a new series). With every field of a series set (note td5): the cover showed, 100×100, from `catalog/thumbnail?type=series&id={id}` (200, image/png), its text alternative a single space and its `.cover` wrapper a `div` carrying an `href` rather than a link; the tab title read "| {press name}" ("| Public Knowledge Press" on the seeded press); each of the six orders saved and reopened as saved, and after each the page listed the books by publication date, newest first; the same page for visitor, Reader and Press Manager. The series window's unique-path check (`SeriesForm`, through `Repo::section()->getByPath()`) goes through the same line: test run 2026-09-25 (Fields "Path"; scenario 7, "A path in use"), seen in two runs, a "Save" with "monographs" in "Path" while another series had it showed "The series path already exists. Please enter a unique path." and logged the same warning on its `update-series` request, which answered 200; the saves with a path no series had logged nothing. A "Save" of a series with its own unchanged path logged it too (two processes, 2026-09-25), so any save whose path finds a series logs it. The screen's refusal is right, so the warning makes no entry of its own. Written up for the team in `docs/reports/2026-09-25-omp-series-page-blank.md` (a temporary report, deleted once addressed; git history keeps it).

@@ -1,0 +1,11 @@
+--- a/templates/controllers/grid/settings/series/form/seriesForm.tpl
++++ b/templates/controllers/grid/settings/series/form/seriesForm.tpl
+@@ -122,7 +122,7 @@
+ 		{/if}
+ 
+ 		{capture assign="instruct"}
+-			{capture assign="sampleUrl"}{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="series" path="Path"}{/capture}
++			{capture assign="sampleUrl"}{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="series" path=$path|default:"Path"}{/capture}
+ 			{translate key="grid.series.urlWillBe" sampleUrl=$sampleUrl}
+ 		{/capture}
+ 		{fbvFormSection title="series.path" required=true for="path"}
