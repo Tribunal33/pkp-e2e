@@ -2303,7 +2303,7 @@ OMP: the assigned Section Editor and the Journal Manager downloaded the
 same link (`SubmissionFileAssignedReviewerAccessPolicy` is one of several
 policies the file endpoint accepts; the editors pass on their stage
 assignment); a reviewer with no assignment got the JSON refusal.
-Issue report: [docs/issues/U28-A6-file-link-refusal-bare-machine-text.md](../issues/U28-A6-file-link-refusal-bare-machine-text.md).
+Issue report: [docs/issues/U28-A6-file-link-refusal-bare-machine-text.md](../issues/U28-A6-file-link-refusal-bare-machine-text.md), filed as [pkp-e2e#585](https://github.com/jardakotesovec/pkp-e2e/issues/585).
 
 <a id="fn-a7"></a>
 **f-a7** — The hidden textareas behind the two editors carry the browser's
