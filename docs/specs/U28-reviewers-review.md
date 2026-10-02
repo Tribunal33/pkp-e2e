@@ -2641,7 +2641,7 @@ shapes of account, and an installed External Reviewer, land on
 the sidebar listing the six views, "Apply Filters" refetching with 200,
 and no window and no console error. Not security-shaped: the page shows
 nothing and the request is refused.
-Issue report: [docs/issues/U28-OPS1-ops-reviewer-level-role-lands-on-undefined-list.md](../issues/U28-OPS1-ops-reviewer-level-role-lands-on-undefined-list.md).
+Issue report: [docs/issues/U28-OPS1-ops-reviewer-level-role-lands-on-undefined-list.md](../issues/U28-OPS1-ops-reviewer-level-role-lands-on-undefined-list.md), filed as [pkp-e2e#608](https://github.com/jardakotesovec/pkp-e2e/issues/608).
 
 ## Reference — entry points & surfaces
 
