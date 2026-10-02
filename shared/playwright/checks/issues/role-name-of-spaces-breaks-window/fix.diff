@@ -1,0 +1,76 @@
+--- a/lib/pkp/controllers/grid/settings/roles/form/UserGroupForm.php
++++ b/lib/pkp/controllers/grid/settings/roles/form/UserGroupForm.php
+@@ -106,37 +106,15 @@
+     public function initData()
+     {
+         $userGroup = UserGroup::findById($this->getUserGroupId(), $this->getContextId());
+-        $stages = WorkflowStageDAO::getWorkflowStageTranslationKeys();
+-        $this->setData('stages', $stages);
+         $this->setData('assignedStages', []); // sensible default
+ 
+-        $roleDao = DAORegistry::getDAO('RoleDAO'); /** @var RoleDAO $roleDao */
+-        $jsonMessage = new JSONMessage();
+-        $jsonMessage->setContent($roleDao->getForbiddenStages());
+-        $this->setData('roleForbiddenStagesJSON', $jsonMessage->getString());
+-
+         if ($userGroup) {
+             $assignedStages = $userGroup->getAssignedStageIds()->toArray();
+-            // Get a list of all settings-accessible user groups for the current user in
+-            // order to prevent them from locking themselves out by disabling the only one.
+-            $mySettingsAccessUserGroupIds = UserGroup::withContextIds([$this->getContextId()])
+-                ->whereHas(
+-                    'userUserGroups',
+-                    fn (EloquentBuilder $q) =>
+-                    $q->withActive()->withUserId(Application::get()->getRequest()->getUser()->getId())
+-                )
+-                ->get()
+-                ->filter(fn ($userGroup) => $userGroup->permitSettings)
+-                ->map(fn ($userGroup) => $userGroup->id)
+-                ->all();
+ 
+             $data = [
+-                'userGroupId' => $userGroup->id,
+-                'roleId' => $userGroup->roleId,
+                 'name' => $userGroup->name, // Localized array
+                 'abbrev' => $userGroup->abbrev, // Localized array
+                 'assignedStages' => $assignedStages,
+-                'mySettingsAccessUserGroupIds' => array_values($mySettingsAccessUserGroupIds),
+                 'permitSelfRegistration' => $userGroup->permitSelfRegistration,
+                 'permitMetadataEdit' => $userGroup->permitMetadataEdit,
+                 'permitSettings' => $userGroup->permitSettings,
+@@ -167,7 +145,35 @@
+     {
+         $templateMgr = TemplateManager::getManager($request);
+ 
++        // What the window needs on every draw. A refused save is drawn again after
++        // readInputData(), not initData(), and the post carries none of this.
++        $this->setData('stages', WorkflowStageDAO::getWorkflowStageTranslationKeys());
++        $this->setData('assignedStages', $this->getData('assignedStages') ?? []); // no box ticked posts nothing
+         $roleDao = DAORegistry::getDAO('RoleDAO'); /** @var RoleDAO $roleDao */
++        $jsonMessage = new JSONMessage();
++        $jsonMessage->setContent($roleDao->getForbiddenStages());
++        $this->setData('roleForbiddenStagesJSON', $jsonMessage->getString());
++
++        $userGroup = UserGroup::findById($this->getUserGroupId(), $this->getContextId());
++        if ($userGroup) {
++            // The level select is disabled for an existing role, so it is never posted.
++            $this->setData('userGroupId', $userGroup->id);
++            $this->setData('roleId', $userGroup->roleId);
++            // Get a list of all settings-accessible user groups for the current user in
++            // order to prevent them from locking themselves out by disabling the only one.
++            $mySettingsAccessUserGroupIds = UserGroup::withContextIds([$this->getContextId()])
++                ->whereHas(
++                    'userUserGroups',
++                    fn (EloquentBuilder $q) =>
++                    $q->withActive()->withUserId($request->getUser()->getId())
++                )
++                ->get()
++                ->filter(fn ($userGroup) => $userGroup->permitSettings)
++                ->map(fn ($userGroup) => $userGroup->id)
++                ->all();
++            $this->setData('mySettingsAccessUserGroupIds', array_values($mySettingsAccessUserGroupIds));
++        }
++
+         $templateMgr->assign('roleOptions', Application::getRoleNames(true));
+ 
+         // Users can't edit the role once user group is created.

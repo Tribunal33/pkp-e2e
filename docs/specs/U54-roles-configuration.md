@@ -794,6 +794,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U54-A2-manager-role-row-shows-no-stage.md`): a new
     journal's or press's manager role row with every stage ticked, and
     listed under each stage of "List roles assigned to"
+  - the guard for A10 (issue report
+    `docs/issues/U54-A10-role-name-of-spaces-breaks-window.md`): a role
+    created at "Assistant" with one stage ticked and a "Role Name" of
+    spaces, then a real name, listed with its stage
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -880,7 +884,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | A screen reader announces each stage box of the list only as "checkbox" | 🐞 | minor | — |
 | [A9](#a9) | After a filter entry is chosen the filters hide, and only the count line shows the list is filtered | 🐞 | minor | — |
-| [A10](#a10) | A role name of spaces is refused with a different notice while the page's script fails | 🐞 | minor · crash: script | — |
+| [A10](#a10) | A role name of spaces breaks the role window, and the second "OK" leaves Settings for a page of code | 🐞 | medium · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | "OK" in an Editor's own role window takes the Settings pages away from every holder of the role | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | Roles list: a saved role jumps to the end, and its pages can repeat one role and skip another | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | Users & Roles: after a role is renamed, the "Users" tab shows its old name until a reload | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1010,14 +1014,23 @@ roles.
 Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — A role name of spaces fails the page's script** · 🐞 · minor · crash: script.
-A "Role Name" or "Abbreviation" of spaces passes the window's own check,
-which refuses an empty box with "This field is required." under it.
-"OK" then keeps the window open with a different refusal at its top,
-"Errors occurred processing this form", naming the "role abbreviature",
-while the page's own script fails behind it. The manager expects the
-same refusal as for an empty box.
-Basis: probe. <sup>f-a10</sup>
+**A10 — A role name of spaces breaks the role window, and the second "OK" leaves Settings for a page of code** · 🐞 · medium · crash: script.
+A manager types only spaces as a role's "Role Name" or "Abbreviation"
+in Settings › Users & Roles › "Roles" and presses "OK". There is no
+"This field is required." under the box. The window stays open with
+"Errors occurred processing this form" at its top, and a script error
+the manager does not see breaks it. The window has lost its "Stage
+Assignment" boxes. When it was opened with "Edit", it also no longer
+knows which role it belongs to.
+
+The manager corrects the box and presses "OK" a second time, and the
+browser leaves Settings for a page of raw code. On "Create New Role" the
+role is saved anyway, but without the stages ticked before the refusal,
+and nothing says so. On "Edit" nothing is saved.
+
+Only a name or abbreviation that is empty once its spaces are removed
+leads there. The form has no other check a person can fail by typing.
+Basis: probe, 2026-10-02. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — "OK" in an Editor's own role window takes the Settings pages away from every holder of the role** · 🐞 · medium.
@@ -1763,6 +1776,7 @@ answered 200 with the refused form, the window stayed open with the notice
 quoted in Rule 15b and no message under the boxes, and the page logged the
 script error "Failed to execute 'appendChild' on 'Node': Unexpected token
 ','" on `management/settings/access`.
+Issue report: [docs/issues/U54-A10-role-name-of-spaces-breaks-window.md](../issues/U54-A10-role-name-of-spaces-breaks-window.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — The greyed box is the window's guard alone ([o](#fn-o)): a
