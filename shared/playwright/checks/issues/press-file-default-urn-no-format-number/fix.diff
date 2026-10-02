@@ -1,0 +1,35 @@
+--- a/classes/plugins/PubIdPlugin.php
++++ b/classes/plugins/PubIdPlugin.php
+@@ -16,6 +16,7 @@
+ 
+ namespace APP\plugins;
+ 
++use APP\core\Application;
+ use APP\facades\Repo;
+ use APP\monograph\Chapter;
+ use APP\monograph\ChapterDAO;
+@@ -83,6 +84,10 @@
+         if (!$submission) {
+             return null;
+         }
++        // A format's file: its patterns name the format it belongs to.
++        if ($submissionFile && $submissionFile->getData('assocType') == Application::ASSOC_TYPE_REPRESENTATION) {
++            $representation = Application::getRepresentationDAO()->getById((int) $submissionFile->getData('assocId'));
++        }
+         // Now we can identify the context.
+         $contextId = $submission->getData('contextId');
+ 
+--- a/classes/doi/Repository.php
++++ b/classes/doi/Repository.php
+@@ -105,7 +105,10 @@
+         if ($context->getData(Context::SETTING_DOI_SUFFIX_TYPE) === Repo::doi()::SUFFIX_DEFAULT) {
+             $doiSuffix = $this->generateDefaultSuffix();
+         } else {
+-            $doiSuffix = $this->generateSuffixPattern($submissionFile, $context, $context->getData(Context::SETTING_DOI_SUFFIX_TYPE), $submission, null, null, $submissionFile);
++            $publicationFormat = $submissionFile->getData('assocType') == Application::ASSOC_TYPE_REPRESENTATION
++                ? Application::getRepresentationDAO()->getById((int) $submissionFile->getData('assocId'))
++                : null;
++            $doiSuffix = $this->generateSuffixPattern($submissionFile, $context, $context->getData(Context::SETTING_DOI_SUFFIX_TYPE), $submission, null, $publicationFormat, $submissionFile);
+         }
+ 
+         return $this->mintAndStoreDoi($context, $doiSuffix);

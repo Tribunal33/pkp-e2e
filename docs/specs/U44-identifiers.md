@@ -865,6 +865,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-OMP2-book-page-format-urn-code-label.md`): the book
     page showing an approved, available format's URN under "URN", linked
     to the resolver
+  - the guard for OMP6 (issue report
+    `docs/issues/U44-OMP6-press-file-default-urn-no-format-number.md`):
+    a format file's "Identifiers" tab previewing its default URN with
+    the format number, `…{press}.{monograph}.{format}.{file}`
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -949,7 +953,7 @@ entry notes otherwise; the team settles them on spec review.
 | [OMP2](#omp2) | Book page: a publication format's URN is labelled "other::urn" and is not linked | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP4](#omp4) | A press's confirmation window shows the URN table where a journal shows one sentence | 🐞 | minor | — |
 | [OMP5](#omp5) | A press file's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OMP6](#omp6) | A press file's default URN leaves out the format number the settings window announces | 🐞 | minor | — |
+| [OMP6](#omp6) | A press file's URN leaves out its format number, and file patterns leave "%f" unfilled | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | An article's Publisher ID accepts values the tabs refuse, a duplicate included | ❓ | minor | — |
 | [A12](#a12) | A URN that differs from another only in case is accepted as new | ❓ | minor | — |
 | [OJS2](#ojs2) | The JATS XML's publisher ID is the article's number, not the typed Publisher ID | ❓ | minor | — |
@@ -1247,12 +1251,21 @@ closed and opened again; a format's own tab keeps its box.
 Basis: probe, 2026-10-02. <sup>f-omp5</sup>
 
 <a id="omp6"></a>
-**OMP6 — A press file's default URN leaves out the format number** · 🐞 · minor.
-Under "Use default patterns." the settings window lists "%p.%m.%f.%s
-for files", but a format file's tab previews
-"urn:nbn:de:0000-{press initials}.{monograph number}.{file number}",
-with no format number; chapter and format URNs follow their lines.
-Basis: probe, 2026-09-24. <sup>f-omp6</sup>
+**OMP6 — A press file's URN leaves out its format number, and file patterns leave "%f" unfilled** · 🐞 · medium.
+A press that gives URNs to files and keeps "Use default patterns." is
+told by the URN settings window that a file's URN is "%p.%m.%f.%s":
+press initials, book, publication format, file. A format file's
+"Identifiers" tab instead previews and assigns "urn:nbn:de:0000-{press
+initials}.{book}.{file}", with no format number. Formats and chapters
+get the URNs the window lists for them. A press that writes its own file
+pattern with "%f", which the window describes as "the publication format
+id", gets the "%f" left in. The file's URN tab then refuses to assign it
+("The URN cannot be assigned because it contains an unresolved
+pattern."). A file DOI made from a custom pattern with "%f" is assigned
+with "%f" in it ("10.1234/jpk.5.%f.41"), under "Items successfully
+assigned new DOIs". File DOIs under the "Default" DOI format are not
+affected.
+Basis: probe, 2026-10-02. <sup>f-omp6</sup>
 
 ### Retired
 
@@ -2014,6 +2027,7 @@ previews `urn:nbn:de:0000-kone.531.132` and `…pkp.536.138` beside the
 formats' `…kone.531.4` and `…pkp.536.7`, while the settings window lists
 "%p.%m.%f.%s for files". OMP `classes/plugins/PubIdPlugin.php`
 `generateDefaultPattern()` does not resolve the format for a file.
+Issue report: [docs/issues/U44-OMP6-press-file-default-urn-no-format-number.md](../issues/U44-OMP6-press-file-default-urn-no-format-number.md).
 
 ## Reference — entry points & surfaces
 
