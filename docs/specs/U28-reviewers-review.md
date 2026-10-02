@@ -2237,7 +2237,7 @@ times, the save request answering `status: true`), reload → both boxes
 showed the first-save texts; new text in one box only → that box updated,
 the other still the first-save text; no email left, the editor's row still
 "Request Accepted".
-Issue report: [docs/issues/U28-A4-emptied-review-text-kept-after-save.md](../issues/U28-A4-emptied-review-text-kept-after-save.md).
+Issue report: [docs/issues/U28-A4-emptied-review-text-kept-after-save.md](../issues/U28-A4-emptied-review-text-kept-after-save.md), filed as [pkp-e2e#580](https://github.com/jardakotesovec/pkp-e2e/issues/580).
 
 <a id="fn-a5"></a>
 **f-a5** — `useDashboardConfigEditorialActivity.js::getEditorialActivityForMyReviewAssignments`
