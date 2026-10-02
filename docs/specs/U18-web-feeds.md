@@ -652,6 +652,8 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a feed address with a feed name that does not exist ("ATOM", "atom.xml", "json") or with none answering "404 Not Found" ([A2](#a2); Rule 15): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - {OJS} "Display items in current published issue." on a journal with
     no published issue, its Atom and RSS 1.0 feeds holding no item (Rules
@@ -717,7 +719,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | The RSS 2.0 feed of a journal with nothing to list shows a blank page, the app failing, instead of an empty feed | 🐞 | user-visible · crash: server | — |
-| [A2](#a2) | A feed address with an unknown feed name shows a blank page, the app failing, instead of "404 Not Found" | 🐞 | minor · crash: server | — |
+| [A2](#a2) | A web feed address with a mistyped or missing feed name shows a blank page instead of "404 Not Found" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | "Include identifiers (ISBN, …)" never adds an ISBN | 🐞 | minor | — |
 | [A7](#a7) | Every keyword, subject and discipline reads "Array" in the feeds | 🐞 | user-visible | — |
 | [A8](#a8) | On a press and a preprint server, publishing does not move an item up the feeds, so a full feed can leave it out {OMP OPS} | 🐞 | latent | — |
@@ -739,13 +741,22 @@ than a feed it can check later.
 Since: 2026-06-27 · Basis: probe, 2026-09-25. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — An unknown feed name fails instead of answering "404 Not Found"** · 🐞 · minor · crash: server.
-A visitor who opens the feed address with a feed name other than "atom",
-"rss2" or "rss" (a mistyped subscription such as "ATOM" or "atom.xml",
-say), or with none, expects "404 Not Found", as for an unknown plugin
-name. The address shows a blank page with no tab title instead: the app
-fails with a server error.
-Basis: probe, 2026-09-26. <sup>f-a2</sup>
+**A2 — A web feed address with a mistyped or missing feed name shows a blank page instead of "404 Not Found"** · 🐞 · low · crash: server.
+The application fails on the server when a visitor or a feed reader
+opens a web feed address of a journal, press or preprint server with a
+feed name that does not exist, or with none: the browser shows a blank
+page with no tab title. The feed names are "atom", "rss2" and "rss" in
+lower case, so a mistyped subscription such as "ATOM" or "atom.xml"
+fails this way.
+
+They expect "404 Not Found": the same kind of address with a plugin name
+that does not exist answers that. On 3.3 the address led to the home
+page; since 3.4 the application fails.
+
+Nothing is lost: the three feeds work at their own addresses, and the
+feed links the pages offer lead to those. Each such visit adds a server
+error to the log. "Web Feed Plugin" is on by default.
+Basis: probe, 2026-10-02. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — "Include identifiers (ISBN, …)" never adds an ISBN** · 🐞 · minor.
@@ -917,6 +928,7 @@ preprint servers made for the check; the `td` notes record what was seen.
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note c: `fetch()` throws `Exception('Invalid feed format')` for a type outside `FEED_MIME_TYPE`, including none; an unknown plugin name throws `NotFoundHttpException` in the handler's constructor instead. Live-probed 2026-09-26, two runs per app, signed out, as the journal's Reader and as the Site Administrator (Rule 15; A2): `…/WebFeedGatewayPlugin/json`, `…/WebFeedGatewayPlugin`, `…/WebFeedGatewayPlugin/`, `…/ATOM`, `…/atom.xml` and `…/WebFeedGatewayPlugin?type=atom` answered 500 with an empty body and an empty tab title; `…/atom/extra` served the Atom feed.
+Issue report: [docs/issues/U18-A2-unknown-feed-name-blank-page.md](../issues/U18-A2-unknown-feed-name-blank-page.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note g. The label key is `plugins.generic.webfeed.settings.includeIdentifiers`; OMP keeps ISBNs on publication formats' identification codes, which `getIdentifiers()` never reads. Live-probed 2026-09-25 (A3), OMP: with an "ISBN-13 (15)" code, 9780306406157, saved on the book's publication format, the ticked summary carried no ISBN line; the label read the same on the three apps.

@@ -1,0 +1,26 @@
+--- a/plugins/generic/webFeed/WebFeedGatewayPlugin.php
++++ b/plugins/generic/webFeed/WebFeedGatewayPlugin.php
+@@ -22,13 +22,13 @@
+ use APP\submission\Collector;
+ use APP\submission\Submission;
+ use APP\template\TemplateManager;
+-use Exception;
+ use PKP\category\Category;
+ use PKP\core\Registry;
+ use PKP\facades\Locale;
+ use PKP\i18n\LocaleConversion;
+ use PKP\plugins\GatewayPlugin;
+ use PKP\userGroup\UserGroup;
++use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+ 
+ class WebFeedGatewayPlugin extends GatewayPlugin
+ {
+@@ -68,7 +68,7 @@
+         // Make sure the feed type is specified and valid
+         $feedType = array_shift($args);
+         if (!in_array($feedType, array_keys(static::FEED_MIME_TYPE))) {
+-            throw new Exception('Invalid feed format');
++            throw new NotFoundHttpException();
+         }
+ 
+         // Get limit setting from web feeds plugin
