@@ -654,6 +654,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - a feed address with a feed name that does not exist ("ATOM", "atom.xml", "json") or with none answering "404 Not Found" ([A2](#a2); Rule 15): the guard the issue report proposes, once fixed
+  - "Include identifiers…" ticked: the label names what the summary then carries (the section or series, categories, keywords, subjects, disciplines) and no ISBN ([A3](#a3); Rule 9b): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - {OJS} "Display items in current published issue." on a journal with
     no published issue, its Atom and RSS 1.0 feeds holding no item (Rules
@@ -720,7 +721,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | The RSS 2.0 feed of a journal with nothing to list shows a blank page, the app failing, instead of an empty feed | 🐞 | user-visible · crash: server | — |
 | [A2](#a2) | A web feed address with a mistyped or missing feed name shows a blank page instead of "404 Not Found" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [A3](#a3) | "Include identifiers (ISBN, …)" never adds an ISBN | 🐞 | minor | — |
+| [A3](#a3) | The web feed setting "Include identifiers (ISBN, …)" names an ISBN, and no feed ever carries one | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Every keyword, subject and discipline reads "Array" in the feeds | 🐞 | user-visible | — |
 | [A8](#a8) | On a press and a preprint server, publishing does not move an item up the feeds, so a full feed can leave it out {OMP OPS} | 🐞 | latent | — |
 | [OPS1](#ops1) | A preprint server's RSS 1.0 feed names its publisher "Array" | 🐞 | minor | — |
@@ -759,13 +760,18 @@ error to the log. "Web Feed Plugin" is on by default.
 Basis: probe, 2026-10-02. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — "Include identifiers (ISBN, …)" never adds an ISBN** · 🐞 · minor.
+**A3 — The web feed setting "Include identifiers (ISBN, …)" names an ISBN, and no feed ever carries one** · 🐞 · low.
 A manager ticks "Include identifiers (ISBN, keywords, categories, etc.)
-in the feed summary?" expecting each item's summary to name its ISBN,
-the identifier the label lists first. The summary names the section,
-categories, keywords, subjects and disciplines only; no ISBN appears on
-a press either, where books carry one.
-Basis: probe, 2026-09-25. <sup>f-a3</sup>
+in the feed summary?" in the Web Feed Plugin's settings, expecting each
+item's summary to name its ISBN, the identifier the label lists first.
+The summary names the section (the series on a press), categories,
+keywords, subjects and disciplines only.
+
+The label is what is wrong: the option was never written to add an
+ISBN, and no app's feeds have ever carried one. A journal and a preprint
+server have no ISBN at all. A press does, saved on a book's publication
+format and shown on the book's page, and its feeds leave it out too.
+Basis: probe, 2026-10-02. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — The display choice does not move the box** · ❓ · minor.
@@ -932,6 +938,7 @@ Issue report: [docs/issues/U18-A2-unknown-feed-name-blank-page.md](../issues/U18
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note g. The label key is `plugins.generic.webfeed.settings.includeIdentifiers`; OMP keeps ISBNs on publication formats' identification codes, which `getIdentifiers()` never reads. Live-probed 2026-09-25 (A3), OMP: with an "ISBN-13 (15)" code, 9780306406157, saved on the book's publication format, the ticked summary carried no ISBN line; the label read the same on the three apps.
+Issue report: [docs/issues/U18-A3-web-feed-identifiers-label-names-isbn.md](../issues/U18-A3-web-feed-identifiers-label-names-isbn.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note e: the block has not read `displayPage` since at least `edd1785a0d` (2015-11-16, OJS tree); OJS's announcement feed block (`AnnouncementFeedBlockPlugin`) does read its own `displayPage`, as the Announcements spec's feed rule states. Live-probed 2026-09-25 (A4), all three apps: at "…homepage only." and "…issue pages only." the box still showed on the About, article, Search and Login pages, which carried no discovery link.
