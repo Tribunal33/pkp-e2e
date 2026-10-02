@@ -2139,7 +2139,7 @@ catalog page and the preprint page grew the same "Updated on" line
 ("Published August 29, 2026 — Updated on August 29, 2026" / "Posted
 2026-08-29 — Updated on 2026-08-29"); same-day dates masked the
 inversion there.
-Issue report: [docs/issues/U49-A6-new-version-draft-rewrites-published-date.md](../issues/U49-A6-new-version-draft-rewrites-published-date.md).
+Issue report: [pkp-e2e#550](https://github.com/jardakotesovec/pkp-e2e/issues/550) ([docs/issues/U49-A6-new-version-draft-rewrites-published-date.md](../issues/U49-A6-new-version-draft-rewrites-published-date.md)).
 
 <a id="fn-a7"></a>
 **f-a7** — Live-probed 2026-08-29 (scratch press + preprint server):
