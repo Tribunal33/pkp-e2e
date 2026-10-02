@@ -1,0 +1,19 @@
+--- a/lib/pkp/controllers/tab/pubIds/form/PKPPublicIdentifiersForm.php
++++ b/lib/pkp/controllers/tab/pubIds/form/PKPPublicIdentifiersForm.php
+@@ -223,8 +223,14 @@
+         parent::execute(...$functionArgs);
+ 
+         $pubObject = $this->getPubObject();
+-        if ($this->getData('publisherId')) {
+-            $pubObject->setStoredPubId('publisher-id', $this->getData('publisherId'));
++        $publisherId = $this->getData('publisherId');
++        // null: no box was posted (none on this tab, or a disabled one), so the stored value stays
++        if ($publisherId !== null) {
++            if ($publisherId !== '') {
++                $pubObject->setStoredPubId('publisher-id', $publisherId);
++            } else {
++                $pubObject->unsetData('pub-id::publisher-id');
++            }
+         }
+ 
+         $pubIdPluginHelper = new PKPPubIdPluginHelper();
