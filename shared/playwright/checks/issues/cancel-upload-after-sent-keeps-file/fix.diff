@@ -1,0 +1,153 @@
+--- a/lib/ui-library/src/components/FileUploader/FileUploader.vue
++++ b/lib/ui-library/src/components/FileUploader/FileUploader.vue
+@@ -77,6 +77,8 @@
+ 		'set',
+ 		/** Emitted when the files have changed. Payload: `(files)` */
+ 		'updated:files',
++		/** Emitted when an upload cancelled after the whole file was sent has been stored by the server. Payload: `(response)` */
++		'cancelled:stored',
+ 	],
+ 	setup() {
+ 		const {isDragging, drop} = useDropzoneDragDrop();
+@@ -86,6 +88,8 @@
+ 		return {
+ 			status: '',
+ 			isMounted: false,
++			/** Uploads cancelled once the whole file had been sent, whose answer has not come yet */
++			cancelledIds: [],
+ 		};
+ 	},
+ 	computed: {
+@@ -139,15 +143,32 @@
+ 		/**
+ 		 * Cancel an upload in progress
+ 		 *
++		 * An upload still on its way is aborted. One whose request has been
++		 * sent in full is left to finish, and the file the server stored is
++		 * reported with `cancelled:stored` for the parent to remove.
++		 *
+ 		 * @param {Number} id The id of the file to remove
+ 		 */
+ 		cancelUpload(id) {
+ 			const file = this.$refs.dropzone.dropzone.files.find(
+ 				(f) => f.upload.uuid === id,
+ 			);
+-			if (file) {
+-				this.$refs.dropzone.removeFile(file);
++			if (!file) {
++				return;
+ 			}
++			// Once the whole request has been sent the server stores the file
++			// whether or not the request is aborted. Keep the request, drop the
++			// row, and report the stored file when the answer comes.
++			const {bytesSent, total} = file.upload;
++			if (file.status === 'uploading' && total && bytesSent >= total) {
++				this.cancelledIds.push(id);
++				this.$emit(
++					'updated:files',
++					this.files.filter((item) => item.id !== id),
++				);
++				return;
++			}
++			this.$refs.dropzone.removeFile(file);
+ 		},
+ 
+ 		/**
+@@ -161,6 +182,14 @@
+ 		 * @see https://www.dropzonejs.com/#event-list
+ 		 */
+ 		dropzoneError(erroredFile, error) {
++			// A cancelled upload that failed has stored nothing: forget it
++			if (this.cancelledIds.includes(erroredFile.upload?.uuid)) {
++				this.cancelledIds = this.cancelledIds.filter(
++					(id) => id !== erroredFile.upload.uuid,
++				);
++				this.$refs.dropzone.removeFile(erroredFile);
++				return;
++			}
+ 			const errors = parseDropzoneError(error);
+ 
+ 			// Use $nextTick to compensate for the fact that this fires
+@@ -228,6 +257,14 @@
+ 		 * @see https://www.dropzonejs.com/#event-list
+ 		 */
+ 		dropzoneSuccess(file, response) {
++			if (this.cancelledIds.includes(file.upload.uuid)) {
++				this.cancelledIds = this.cancelledIds.filter(
++					(id) => id !== file.upload.uuid,
++				);
++				this.$refs.dropzone.removeFile(file);
++				this.$emit('cancelled:stored', response);
++				return;
++			}
+ 			const files = this.files.map((item) => {
+ 				if (item.id === file.upload.uuid) {
+ 					return response;
+--- a/lib/ui-library/src/components/ListPanel/submissionFiles/SubmissionFilesListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/submissionFiles/SubmissionFilesListPanel.vue
+@@ -48,6 +48,7 @@
+ 			:query-params="{fileStage}"
+ 			:upload-progress-label="uploadProgressLabel"
+ 			@updated:files="setFiles"
++			@cancelled:stored="removeCancelled"
+ 		/>
+ 	</div>
+ </template>
+@@ -58,6 +59,7 @@
+ import PkpButton from '@/components/Button/Button.vue';
+ import PkpHeader from '@/components/Header/Header.vue';
+ import SubmissionFilesListItem from '@/components/ListPanel/submissionFiles/SubmissionFilesListItem.vue';
++import ajaxError from '@/mixins/ajaxError';
+ import dialog from '@/mixins/dialog.js';
+ import cloneDeep from 'clone-deep';
+ import SubmissionFilesEditModal from './SubmissionFilesEditModal.vue';
+@@ -70,7 +72,7 @@
+ 		PkpHeader,
+ 		SubmissionFilesListItem,
+ 	},
+-	mixins: [dialog],
++	mixins: [dialog, ajaxError],
+ 	props: {
+ 		/** A localized string for the button to add a file. */
+ 		addFileLabel: {
+@@ -189,8 +191,9 @@
+ 		 * Cancel an upload in progress or completed but not yet
+ 		 * saved as a submission file
+ 		 *
+-		 * This will not remove a file once it has been uploaded.
+-		 * Use this.remove(item).
++		 * A file the server stores after its upload was cancelled is
++		 * removed by this.removeCancelled(item). To remove a file shown
++		 * as uploaded, use this.remove(item).
+ 		 */
+ 		cancelUpload(id) {
+ 			this.$refs.uploader.cancelUpload(id);
+@@ -289,6 +292,28 @@
+ 		},
+ 
+ 		/**
++		 * Remove a file the server stored after its upload was cancelled
++		 *
++		 * @param {Object} item The submission file the upload's answer returned
++		 */
++		removeCancelled(item) {
++			$.ajax({
++				url: this.apiUrl + '/' + item.id + '?stageId=' + this.stageId,
++				type: 'POST',
++				context: this,
++				headers: {
++					'X-Csrf-Token': pkp.currentUser.csrfToken,
++					'X-Http-Method-Override': 'DELETE',
++				},
++				error(r) {
++					// The file could not be removed: show it rather than keep it unseen
++					this.setFiles(this.items.concat([item]));
++					this.ajaxErrorCallback(r);
++				},
++			});
++		},
++
++		/**
+ 		 * Set the files
+ 		 */
+ 		setFiles(files) {

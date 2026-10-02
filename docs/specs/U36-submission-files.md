@@ -931,6 +931,7 @@ Left out of the scenarios above, by reason:
   - "Edit a file" closed with its header "Close" after the name is changed: no question, the list keeping the old name after a reload, and the window reopening on it (Rule 10): likely a bullet in scenario 4 before "The rename"
   - the "Files" panel's "Other" on a file with no component, then "Save" with no radio button chosen: a message under "What kind of file is this?" and no server error ([A11](#a11)): the guard the issue report proposes
   - "Add Note" with the box empty on a file's "Notes": refused, no note listed and no "Posted new note." line in "History" ([A10](#a10)): the guard the issue report proposes
+  - "Cancel upload" pressed on the full bar with the server's answer held back: no file stored, the panel empty after a reload ([A25](#a25)): the guard the issue report proposes
 - **Nothing new to test**:
   - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
   - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
@@ -1003,7 +1004,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A21](#a21) | A file at the upload limit passes the size check, uploads, then fails on the server instead of being refused | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A23](#a23) | Revising a file, a second pick on step 1 and then "Cancel" leave the first pick as the file instead of the original | 🐞 | minor | — |
 | [A24](#a24) | One file revised in two windows: the first window's "Cancel" does nothing, and the file keeps the upload cancelled there | 🐞 | minor | — |
-| [A25](#a25) | "Cancel upload" pressed after the whole file has been sent removes the row, but the file is stored and back after a reload | 🐞 | user-visible | — |
+| [A25](#a25) | "Cancel upload" in the submission wizard, pressed once the file has been sent, keeps the file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Every file row's menu button is named "More Actions" alone, so a screen reader cannot tell the rows apart | ❓ | minor | — |
 | [A8](#a8) | The revise list names files only, so two files with the same name read the same | ❓ | minor | — |
 | [A13](#a13) | Deleting a file also deletes every copy made from it on other lists | ❓ | user-visible | — |
@@ -1277,16 +1278,17 @@ a renamed file too ([A1](#a1)).
 Since: 2026-09-27 · Basis: probe. <sup>[f-a24](#fn-a24)</sup>
 
 <a id="a25"></a>
-**A25 — "Cancel upload" pressed after the whole file has been sent keeps the file** · 🐞 · user-visible.
-In the submission wizard's "Files" panel, the Author who presses "Cancel
-upload" expects the file to be dropped, and the row goes at once without
-a question. Pressed after the whole file has been sent but before the
-server's answer, only the row goes: the file is stored, is back on the
-panel with "Edit" and "Remove" after a reload, and, like any file there,
-goes in with the submission. Nothing says so when the row goes. An answer
-slowed by the link or the server holds that window open; so does limiting
-only the browser's download speed.
-Basis: probe. <sup>[f-a25](#fn-a25)</sup>
+**A25 — "Cancel upload" in the submission wizard, pressed once the file has been sent, keeps the file** · 🐞 · low.
+In the submission wizard's "Files" panel, "Cancel upload" removes a
+file's row at once, without a question, and the Author expects the
+file to be dropped. Pressed after the whole file has been sent but
+before the server's answer, only the row goes: the file is stored.
+
+Nothing says so. The "Review" step does not list the file, and when
+the author submits, the editor finds it among the submission's files.
+The author sees it on the panel, with "Edit" and "Remove", only after
+a reload.
+Basis: probe, 2026-10-02. <sup>[f-a25](#fn-a25)</sup>
 
 ### OPS
 
@@ -2396,6 +2398,7 @@ of 6). Under an emulated upload throttle the bar fills before the request
 has left the browser, so there a full bar does not mean the file was sent.
 Scenario 9 presses mid-upload; no test drives the window after the last
 byte.
+Issue report: [docs/issues/U36-A25-cancel-upload-after-sent-keeps-file.md](../issues/U36-A25-cancel-upload-after-sent-keeps-file.md).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Note a (the OPS workflow and wizard configs). Live-probed
