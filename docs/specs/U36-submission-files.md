@@ -994,7 +994,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | "More Information"'s "History" tab keeps showing "Loading" for the Copyeditor, Layout Editor and the other assistant roles | 🐞 | minor | — |
 | [A4](#a4) | The "History" tab's "Show events from prior versions" box changes nothing | 🐞 | minor | — |
 | [A5](#a5) | A galley's "Change File" shows "Current file" with no file name under it | 🐞 | minor | — |
-| [A7](#a7) | The Author's "Upload" on "Revisions Uploaded" shows on every round and is refused before revisions are requested | 🐞 | minor | — |
+| [A7](#a7) | An Author is offered "Upload" above "Revisions Uploaded" before revisions are requested, then refused | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | A screen reader reads step 1's hidden upload box, and the step's two drop-downs have no name | 🐞 | minor | — |
 | [A10](#a10) | "Add Note" with an empty box posts a note with no text, on a file's "Notes" and in "Activity Log & Notes" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | Submission wizard: "Save" in a file's "Edit" panel with no component chosen shows "An unexpected error has occurred" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
@@ -1084,13 +1084,23 @@ heading, so the fix is cheap.
 Basis: probe. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
-**A7 — The Author's "Upload" on "Revisions Uploaded" is offered on every round** · 🐞 · minor.
-Above "Revisions Uploaded" the Author sees "Upload" on every review
-round. Before the editor has asked for revisions, pressing it opens
-"Upload Review File" reading only "You are not allowed to add and edit
-these files." with "Close". The "Upload revisions" button under the round
-shows only once revisions are requested; "Upload" should follow it.
-Basis: probe. <sup>[f-a7](#fn-a7)</sup>
+**A7 — An Author is offered "Upload" above "Revisions Uploaded" before revisions are requested, then refused** · 🐞 · low.
+Above "Revisions Uploaded" on a review round, the Author sees "Upload"
+whether or not an editor has requested revisions. Before revisions are
+requested, pressing it opens "Upload Review File" reading only "You are
+not allowed to add and edit these files." with "Close". The "Upload
+revisions" button under the round shows only once revisions are
+requested.
+
+No file is uploaded and the list stays "No Items". The refusal does not
+say that uploading opens once revisions are requested.
+
+The "Upload" button shows on every review round on which no editor has
+requested revisions. The two open pkp issues about it want opposite
+outcomes: one asks that the upload be allowed, the other that the button
+be hidden. This report proposes hiding it, as the "Upload revisions"
+button already is; the team has to choose.
+Basis: probe, 2026-10-02. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
 **A8 — The revise list shows file names only** · ❓ · minor.
@@ -2259,6 +2269,7 @@ round awaiting reviewers ("Awaiting responses from reviewers.") the Author had
 "Upload Review File" with "You are not allowed to add and edit these files."
 and "Close" alone, and the list stayed "No Items". Seen again from the review
 stage's side the same day.
+Issue report: [docs/issues/U36-A7-author-revisions-upload-offered-then-refused.md](../issues/U36-A7-author-revisions-upload-offered-then-refused.md).
 
 <a id="fn-a8"></a>
 **f-a8** — Note o. Live-probed 2026-09-23 (OJS and OMP): one list's revise

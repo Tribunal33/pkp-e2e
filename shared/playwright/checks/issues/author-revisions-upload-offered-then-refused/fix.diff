@@ -1,0 +1,84 @@
+--- a/lib/ui-library/src/managers/FileManager/useFileManagerConfig.js
++++ b/lib/ui-library/src/managers/FileManager/useFileManagerConfig.js
+@@ -24,6 +24,22 @@
+ 	Actions.FILE_EDIT,
+ 	Actions.FILE_DELETE,
+ ];
++
++// Whether the server takes a revision file from the author on this round, as
++// far as the round's status tells (SubmissionFileStageAccessPolicy): once
++// revisions were requested, or once the round was accepted
++function canAuthorUploadRevisions({stageId, reviewRound}) {
++	return (
++		[
++			pkp.const.REVIEW_ROUND_STATUS_REVISIONS_REQUESTED,
++			pkp.const.REVIEW_ROUND_STATUS_REVISIONS_SUBMITTED,
++			pkp.const.REVIEW_ROUND_STATUS_RESUBMIT_FOR_REVIEW,
++			pkp.const.REVIEW_ROUND_STATUS_RESUBMIT_FOR_REVIEW_SUBMITTED,
++		].includes(reviewRound?.statusId) ||
++		(stageId === pkp.const.WORKFLOW_STAGE_ID_EXTERNAL_REVIEW &&
++			reviewRound?.statusId === pkp.const.REVIEW_ROUND_STATUS_ACCEPTED)
++	);
++}
+ 
+ export const FileManagerConfigurations = {
+ 	SUBMISSION_FILES: ({stageId}) => ({
+@@ -145,13 +161,15 @@
+ 			actions: [Actions.FILE_SEE_NOTES, Actions.FILE_SELECT],
+ 		};
+ 	},
+-	WORKFLOW_REVIEW_REVISIONS: ({stageId}) => ({
++	WORKFLOW_REVIEW_REVISIONS: ({stageId, reviewRound}) => ({
+ 		permissions: [
+ 			{
+ 				roles: [pkp.const.ROLE_ID_AUTHOR],
+ 				actions: [
+ 					Actions.FILE_LIST,
+-					Actions.FILE_UPLOAD,
++					...(canAuthorUploadRevisions({stageId, reviewRound})
++						? [Actions.FILE_UPLOAD]
++						: []),
+ 					Actions.FILE_EDIT,
+ 					Actions.FILE_DELETE,
+ 				],
+@@ -418,9 +436,13 @@
+ 		submissionStageId,
+ 		submission,
+ 		readOnly,
++		reviewRoundId,
+ 	}) {
+ 		const config = FileManagerConfigurations[namespace.value]({
+ 			stageId: submissionStageId.value,
++			reviewRound: submission.value?.reviewRounds?.find(
++				(reviewRound) => reviewRound.id === reviewRoundId?.value,
++			),
+ 		});
+ 
+ 		const availableActions = readOnly?.value
+--- a/lib/ui-library/src/managers/FileManager/fileManagerStore.js
++++ b/lib/ui-library/src/managers/FileManager/fileManagerStore.js
+@@ -12,8 +12,14 @@
+ 	({props, emit}) => {
+ 		const extender = useExtender();
+ 
+-		const {namespace, submissionStageId, submission, selectedFiles, readOnly} =
+-			toRefs(props);
++		const {
++			namespace,
++			submissionStageId,
++			submission,
++			selectedFiles,
++			readOnly,
++			reviewRoundId,
++		} = toRefs(props);
+ 		/**
+ 		 * Config
+ 		 */
+@@ -25,6 +31,7 @@
+ 				submissionStageId: submissionStageId,
+ 				submission,
+ 				readOnly,
++				reviewRoundId,
+ 			}),
+ 		);
+ 
