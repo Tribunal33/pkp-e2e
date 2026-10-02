@@ -984,6 +984,7 @@ Left out of the scenarios above, by reason:
   - a round-1 reviewer whose submission gets round 2 without them, and a press's Internal Reviewer after "Send to External Review" {OMP}, finding no "Previous Reviews" box on their review, while a reviewer asked again on round 2 finds the round-1 line ([A12](#a12); Actors row 8, Rule 14): the guard the issue report proposes, once fixed
   - a reviewer who saves a text, empties the box, saves again and reopens the review finding the box empty, and the editor reading no text ([A4](#a4); Rule 13): the guard the issue report proposes, once fixed
   - a reviewer's search for a word of one title listing that row alone under "All assignments (1)", and a search for no title's word reading "No Items" ([A1](#a1); Rules 3–4): the guard the issue report proposes, once fixed
+  - the accepted row of the reviewer's list reading "Please complete this review by" with the due date in the journal's short date format and no clock time ([A5](#a5); Rule 3): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1035,7 +1036,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A1](#a1) | Reviewer's "My Assignments as Reviewer" list: search, "Sort", "Filters" and the pager leave the rows unchanged | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | "Previous Reviews" says "Round 1 Review Submitted on" with no date for a round the reviewer never finished | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | Reviewer empties a saved review text and saves again: the old text stays saved and is what the editor reads | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A5](#a5) | The accepted row's "Please complete this review by" date prints with a 00:00:00 clock time | 🐞 | minor | — |
+| [A5](#a5) | A reviewer's list shows an accepted review's due date with a midnight clock time, "2026-10-30 00:00:00" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | A file link opened by an account without file access answers a bare line of text, not the access-denied page | 🐞 | minor | — |
 | [A7](#a7) | A review with nothing typed and no file attached can be submitted | 🐞 | user-visible | — |
 | [A9](#a9) | A reminder, or a request on another submission, kills the reviewer's earlier one-click link, which then shows a bare "404 Not Found" | 🐞 | user-visible | — |
@@ -1131,13 +1132,21 @@ fix is in one place, this step's save.
 Basis: probe, 2026-10-02. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
-**A5 — The accepted row's due date carries a clock time** · 🐞 · minor.
-Once the request is accepted, the list row reads "Please complete this
-review by 2026-10-02 00:00:00." — the due date followed by a midnight time
-and a period — where the unanswered row reads "Please accept or decline this
-request by 2026-10-02" and step 1's "Review Due Date" shows the date alone.
-The reviewer reads a deadline of midnight that nobody set.
-Basis: probe (2026-09-04, both apps). <sup>[f-a5](#fn-a5)</sup>
+**A5 — A reviewer's list shows an accepted review's due date with a midnight clock time, "2026-10-30 00:00:00"** · 🐞 · low.
+Once a reviewer accepts a review request, the row of their assignments
+list reads "Please complete this review by 2026-10-30 00:00:00.": the
+due date followed by a midnight time. Before they accept, the same row
+reads "Please accept or decline this request by 2026-10-30", and the
+review page shows "Review Due Date" as 2026-10-30, the date alone.
+
+The reviewer reads a deadline of midnight that nobody set, since an
+editor chooses a day and no time. The day itself is not misleading: the
+list calls the review overdue from the start of the 30th.
+
+The clock time shows on every review the reviewer has accepted and not
+yet submitted, while it is not overdue and the submission is still in
+review. The fix is one line in one ui-library file.
+Basis: probe, 2026-10-02. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
 **A6 — A file link opened by an account without file access answers a bare line of text** · 🐞 · minor.
@@ -2252,6 +2261,7 @@ review by {$date}."), while the unanswered branch formats `dateResponseDue`
 and the declined branch `dateConfirmed`. Live-probed 2026-09-04 on OJS and
 OMP: "Please complete this review by 2026-10-02 00:00:00." on every
 accepted row, step 1's "Review Due Date" "2026-10-02".
+Issue report: [docs/issues/U28-A5-accepted-review-row-due-date-clock-time.md](../issues/U28-A5-accepted-review-row-due-date-clock-time.md).
 
 <a id="fn-a6"></a>
 **f-a6** — The file link is the legacy JSON endpoint

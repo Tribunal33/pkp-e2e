@@ -1,0 +1,11 @@
+--- a/lib/ui-library/src/pages/dashboard/composables/useDashboardConfigEditorialActivity.js
++++ b/lib/ui-library/src/pages/dashboard/composables/useDashboardConfigEditorialActivity.js
+@@ -615,7 +615,7 @@
+ 					component: 'DashboardCellReviewAssignmentActivityAlert',
+ 					props: {
+ 						alert: t('dashboard.reviewAssignment.completeReviewByDate', {
+-							date,
++							date: formatShortDate(date),
+ 						}),
+ 					},
+ 				},
