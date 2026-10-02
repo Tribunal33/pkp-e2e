@@ -1339,7 +1339,7 @@ Author; an HTML galley's window carried the "Dependent Files" list with
 its own "Upload File". A preprint server's submission wizard, which
 still shows the legacy grid, headed its "Edit" "Edit a Layout Galley"
 and its add window "Add File".
-Issue report: [docs/issues/U46-A1-galley-edit-window-upload-heading.md](../issues/U46-A1-galley-edit-window-upload-heading.md).
+Issue report: [pkp-e2e#622](https://github.com/jardakotesovec/pkp-e2e/issues/622) ([docs/issues/U46-A1-galley-edit-window-upload-heading.md](../issues/U46-A1-galley-edit-window-upload-heading.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Retired. Live-probed 2026-09-24 (note h), OJS and OPS: the
@@ -1358,7 +1358,7 @@ file; `ArticleGalleyGridRow` adding its upload action only when
 (note p) wins over any file. Live-probed 2026-09-24 (note q8); the
 submission wizard's legacy grid on OPS opened no upload wizard for a
 remote galley and gave its row "Edit" and "Delete" only.
-Issue report: [docs/issues/U46-A3-remote-galley-asked-for-file.md](../issues/U46-A3-remote-galley-asked-for-file.md).
+Issue report: [pkp-e2e#623](https://github.com/jardakotesovec/pkp-e2e/issues/623) ([docs/issues/U46-A3-remote-galley-asked-for-file.md](../issues/U46-A3-remote-galley-asked-for-file.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note m. The earlier version's galley file keeps
