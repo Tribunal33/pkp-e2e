@@ -1887,7 +1887,7 @@ Live-probed 2026-09-25: note td11.
 link carries "%2F", and `category()` looks up `$args[0]` only, the part
 before the first "/" once the address is split.
 Live-probed 2026-09-25: note td2.
-Issue report: [docs/issues/U16-A8-category-path-slash-wrong-page.md](../issues/U16-A8-category-path-slash-wrong-page.md).
+Issue report: [pkp-e2e#584](https://github.com/jardakotesovec/pkp-e2e/issues/584) ([docs/issues/U16-A8-category-path-slash-wrong-page.md](../issues/U16-A8-category-path-slash-wrong-page.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `grid.category.pathAlphaNumeric` against `CATEGORY_PATH_REGEX`
