@@ -878,7 +878,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A Layout Editor is offered every action on the "Media" page, and each change is refused | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | The empty "Upload Media File" window gives screen readers and the keyboard a button nobody can see | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A4](#a4) | A file over the upload limit fails with a server error; its card reads "Invalid JSON response from server." | 🐞 | minor · crash: server | — |
+| [A4](#a4) | A file over the request limit fails with a server error; its card gives no size limit | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -941,13 +941,17 @@ moderator on a preprint server), guest editor or production assistant
 Basis: probe, 2026-10-02. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A file over the upload limit fails with a server error** · 🐞 · minor · crash: server.
-A file larger than the install accepts fails on the server: its card on
-"Upload Media File" reads "Invalid JSON response from server." instead
-of saying that the file is too large or how large a file may be. The
-user cannot tell why the upload failed. Smaller files on the same
-window upload normally.
-Basis: probe, 2026-09-24. <sup>f-a4</sup>
+**A4 — A file over the request limit fails with a server error** · 🐞 · medium · crash: server.
+On a publication's "Media" page, "Upload Media File" sends a file of any
+size: there is no size check in the browser. A file larger than the most
+the server accepts in one request (PHP's `post_max_size`, 8 MB by
+default) fails on the server, and its card reads "The POST data is too
+large." (or "Invalid JSON response from server." where PHP prints
+startup errors into the answer) instead of the size limit. The user
+cannot tell how large a file may be, and a figure or video over the
+limit cannot be added until the server's administrator raises it.
+Smaller files on the same window upload normally.
+Basis: probe, 2026-10-02. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A name left with "Yes" stays in the list, and the next "Save" stores it** · 🐞 · medium.
@@ -1755,6 +1759,7 @@ reading "POST Content-Length of 105906466 bytes exceeds the limit of
 `upload_max_filesize` (100 MB on the probe hosts); the card shows the
 client's failure to read the answer, not a message from
 `PKPTemporaryFilesController::uploadFile()` (note e).
+Issue report: [pkp-e2e#373](https://github.com/jardakotesovec/pkp-e2e/issues/373) ([docs/issues/U09-A18-picture-over-request-limit-server-error.md](../issues/U09-A18-picture-over-request-limit-server-error.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Test run 2026-09-25, OJS (scenario 3): after "figure-1.png"

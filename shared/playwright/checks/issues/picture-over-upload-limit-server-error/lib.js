@@ -16,12 +16,14 @@ const flat = (s, n = 600) => (s == null ? s : String(s).replace(/\s+/g, ' ').tri
  * values php.ini-production and php.ini-development ship). The fleet's server runs on the host's
  * php.ini, which may raise them; this starts a second `php -S` for the same checkout and database
  * (base port + 74) with those two limits set, through a copy of the fleet's config that differs
- * only in the port of base_url and allowed_hosts. `ini` adds PHP settings (`display_errors=Off`).
+ * only in the port of base_url and allowed_hosts. `ini` adds PHP settings (`display_errors=Off`; a
+ * later `-d` wins, so `upload_max_filesize=8M` there replaces the 2M). `portOffset` moves the port
+ * off base + 74 for a second walk running beside one that uses it.
  * Returns the server's origin, its log and a stop().
  */
-async function startDefaultLimitsServer(app, outDir, {ini = []} = {}) {
+async function startDefaultLimitsServer(app, outDir, {ini = [], portOffset = 74} = {}) {
     const {spawn} = require('child_process');
-    const port = app.basePort + 74;
+    const port = app.basePort + portOffset;
     const origin = `http://127.0.0.1:${port}`;
     const source = fs.readFileSync(app.configFile, 'utf8');
     const config = source

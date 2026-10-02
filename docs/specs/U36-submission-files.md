@@ -998,7 +998,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | Step 2 reopened from step 3 offers "Complete" but shows "File Added" again instead of closing | 🐞 | minor | — |
 | [A19](#a19) | In "Upload/Select Files", another stage's files refuse their "More Information", "Edit" and "Delete" | 🐞 | minor | — |
 | [A20](#a20) | The reviewer's "Review Files" search keeps every file | 🐞 | minor | — |
-| [A21](#a21) | A file of exactly the upload limit ends with "Invalid JSON response from server." instead of being refused | 🐞 | minor · crash: server | — |
+| [A21](#a21) | A file at the upload limit passes the size check, uploads, then fails on the server instead of being refused | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A23](#a23) | Revising a file, a second pick on step 1 and then "Cancel" leave the first pick as the file instead of the original | 🐞 | minor | — |
 | [A24](#a24) | One file revised in two windows: the first window's "Cancel" does nothing, and the file keeps the upload cancelled there | 🐞 | minor | — |
 | [A25](#a25) | "Cancel upload" pressed after the whole file has been sent removes the row, but the file is stored and back after a reload | 🐞 | user-visible | — |
@@ -1203,14 +1203,18 @@ windows for a reviewer's request narrows the list.
 Basis: probe. <sup>[f-a20](#fn-a20)</sup>
 
 <a id="a21"></a>
-**A21 — A file of exactly the upload limit fails on the server** · 🐞 · minor · crash: server.
-In the submission wizard's "Files" panel a file larger than the limit is
-refused at once in its row. A file of exactly the limit (100 MiB on a
-server that allows 100 MiB) passes that check, starts uploading and ends
-with "Invalid JSON response from server." in its row: the app failed,
-and nothing is stored. It should be refused like a larger file, or
-stored.
-Basis: probe. <sup>[f-a21](#fn-a21)</sup>
+**A21 — A file at the upload limit passes the check, then fails on the server** · 🐞 · medium · crash: server.
+In the submission wizard's "Files" panel a file larger than the stated
+limit is refused at once in its row. On a server whose request limit is
+no larger than its per-file limit, a file within a few hundred bytes of
+the limit, up to exactly the limit (every file between the two when the
+request limit is lower), passes that check, uploads to 100% and is then
+refused: the limit the check uses ignores the request limit and the
+bytes the request adds, and on `main` and 3.5 the refusal is a server
+error, "The POST data is too large.", in its row. Nothing is stored. It
+should be refused at once like a larger file, or stored. The website
+settings' "Logo" box fails the same way.
+Basis: probe, 2026-10-02. <sup>[f-a21](#fn-a21)</sup>
 
 <a id="a22"></a>
 **A22 — The Activity Log records a new file as a "Revision"** · ❓ · minor.
@@ -2285,6 +2289,8 @@ POST to `…/api/v1/submissions/{id}/files` answered 500, the server log reading
 "POST Content-Length of 104857994 bytes exceeds the limit of 104857600 bytes":
 the form fields push the request past the limit the panel's size check
 compares against.
+Issue report: [pkp-e2e#373](https://github.com/jardakotesovec/pkp-e2e/issues/373) ([docs/issues/U09-A18-picture-over-request-limit-server-error.md](../issues/U09-A18-picture-over-request-limit-server-error.md)), the server error.
+Issue report: [docs/issues/U36-A21-exact-limit-file-passes-size-check-then-refused.md](../issues/U36-A21-exact-limit-file-passes-size-check-then-refused.md), the file passing the size check.
 
 <a id="fn-a22"></a>
 **f-a22** — Note y: `add()` logs `submission.event.fileRevised` on the

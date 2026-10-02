@@ -1,0 +1,61 @@
+--- a/lib/pkp/classes/core/PKPApplication.php
++++ b/lib/pkp/classes/core/PKPApplication.php
+@@ -658,10 +658,37 @@
+     }
+ 
+     /**
++     * Room left in an upload request for its other form fields and the multipart framing: a few
++     * hundred bytes for the submission files list (421 with a 25-character file name), with
++     * headroom for long file names and other forms' fields. The limit is then floored to whole
++     * MiB, so with both PHP limits at 8M the browser checks against 7 MiB.
++     */
++    public const UPLOAD_REQUEST_MARGIN = 65536;
++
++    /**
++     * The largest file one upload request can carry: upload_max_filesize, or less when
++     * post_max_size leaves no room for such a file and the request's other fields
++     */
++    public static function getMaxFileBytes(): int
++    {
++        $fileLimit = ini_parse_quantity(UPLOAD_MAX_FILESIZE);
++        $requestLimit = ini_parse_quantity((string) ini_get('post_max_size'));
++        // post_max_size 0 means no request limit
++        if ($requestLimit > 0) {
++            $fileLimit = min($fileLimit, $requestLimit - self::UPLOAD_REQUEST_MARGIN);
++        }
++        return max($fileLimit, 0);
++    }
++
++    /**
+      * Get a human-readable version of the max file upload size
+      */
+     public static function getReadableMaxFileSize(): string
+     {
++        // The request limit is the smaller one: name the size the browser checks against
++        if (static::getMaxFileBytes() < ini_parse_quantity(UPLOAD_MAX_FILESIZE)) {
++            return static::getIntMaxFileMBs() . 'MB';
++        }
+         return strtoupper(UPLOAD_MAX_FILESIZE) . 'B';
+     }
+ 
+@@ -670,17 +697,9 @@
+      */
+     public static function getIntMaxFileMBs(): int
+     {
+-        $size = (int) UPLOAD_MAX_FILESIZE;
+-        $unit = strtolower(substr(UPLOAD_MAX_FILESIZE, -1));
+-        // No suffix fallbacks to "byte"
+-        match (ctype_alpha($unit) ? $unit : 'b') {
+-            'g' => $size <<= 10,
+-            'm' => null,
+-            'k' => $size >>= 10,
+-            'b' => $size >>= 20,
+-            default => error_log(sprintf('Invalid value for the PHP configuration upload_max_filesize "%s"', UPLOAD_MAX_FILESIZE))
+-        };
+-        return floor($size);
++        $bytes = static::getMaxFileBytes();
++        // Never 0 while there is a limit: Dropzone reads a maxFilesize of 0 as "no size check"
++        return $bytes > 0 ? max(1, intdiv($bytes, 1048576)) : 0;
+     }
+ 
+     /**
