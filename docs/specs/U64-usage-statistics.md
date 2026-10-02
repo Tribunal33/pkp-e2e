@@ -2312,7 +2312,7 @@ untranslated code. Live-probed 2026-09-27: td5.
 
 <a id="fn-f-a4"></a>
 **f-a4** — fn-s. Live-probed 2026-09-27: td7.
-Issue report: [docs/issues/U64-A4-journal-geographical-data-opt-out-not-kept.md](../issues/U64-A4-journal-geographical-data-opt-out-not-kept.md).
+Issue report: [docs/issues/U64-A4-journal-geographical-data-opt-out-not-kept.md](../issues/U64-A4-journal-geographical-data-opt-out-not-kept.md), filed as [pkp-e2e#609](https://github.com/jardakotesovec/pkp-e2e/issues/609).
 
 <a id="fn-f-a5"></a>
 **f-a5** — fn-n (restricted: site admin and manager roles alone) against
