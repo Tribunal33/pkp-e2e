@@ -1318,7 +1318,7 @@ DOMDocument::loadXML(): Argument #1 ($source) must not be empty`, from
 Seen before on the same installs during other features' drives,
 2026-09-04, 2026-09-06, 2026-09-24, 2026-09-25 and 2026-09-27 (system
 administration). Mechanism fn-o.
-Issue report: [docs/issues/U62-A1-plugin-gallery-offline-stays-loading.md](../issues/U62-A1-plugin-gallery-offline-stays-loading.md).
+Issue report: [pkp-e2e#510](https://github.com/jardakotesovec/pkp-e2e/issues/510) ([docs/issues/U62-A1-plugin-gallery-offline-stays-loading.md](../issues/U62-A1-plugin-gallery-offline-stays-loading.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — fn-k: the template tests `'install'`, the action is
