@@ -1,0 +1,105 @@
+--- a/lib/pkp/classes/controllers/grid/GridHandler.php
++++ b/lib/pkp/classes/controllers/grid/GridHandler.php
+@@ -50,6 +50,7 @@
+ use PKP\core\PKPRequest;
+ use PKP\db\DAOResultFactory;
+ use PKP\db\DBResultRange;
++use PKP\facades\Locale;
+ use PKP\form\Form;
+ use PKP\handler\PKPHandler;
+ use PKP\linkAction\LinkAction;
+@@ -59,6 +60,12 @@
+ 
+ class GridHandler extends PKPHandler
+ {
++    /** Cell templates that name their control after the row, see getRowLabel() */
++    public const ROW_NAMED_CELL_TEMPLATES = [
++        'controllers/grid/common/cell/selectStatusCell.tpl',
++        'controllers/grid/common/cell/radioButtonCell.tpl',
++    ];
++
+     public const GRID_ACTION_POSITION_DEFAULT = 'default';
+     public const GRID_ACTION_POSITION_ABOVE = 'above';
+     public const GRID_ACTION_POSITION_LASTCOL = 'lastcol';
+@@ -845,6 +852,7 @@
+         }
+ 
+         // Render the cell
++        TemplateManager::getManager($request)->assign('rowLabel', $this->getRowLabel($row));
+         return new JSONMessage(true, $this->_renderCellInternally($request, $row, $column));
+     }
+ 
+@@ -1160,13 +1168,14 @@
+         // cells for the given row.
+         $renderedCells = [];
+         $columns = $this->getColumns();
++        $templateMgr = TemplateManager::getManager($request);
++        $templateMgr->assign('rowLabel', $this->getRowLabel($row));
+         foreach ($columns as $column) {
+             assert($column instanceof GridColumn);
+             $renderedCells[] = $this->_renderCellInternally($request, $row, $column);
+         }
+ 
+         // Pass control to the view to render the row
+-        $templateMgr = TemplateManager::getManager($request);
+         $templateMgr->assign([
+             'grid' => $this,
+             'columns' => $columns,
+@@ -1177,6 +1186,38 @@
+     }
+ 
+     /**
++     * The row's name as plain text, for the cell templates that name their
++     * control after the row (selectStatusCell.tpl, radioButtonCell.tpl):
++     * the label of the column flagged 'firstColumn' (setFirstDataColumn()).
++     * Null when the grid has no column drawn with those templates.
++     *
++     * @param \PKP\controllers\grid\GridRow $row
++     */
++    protected function getRowLabel($row): ?string
++    {
++        $columns = $this->getColumns();
++        $templates = array_map(fn (GridColumn $column) => $column->getTemplate(), $columns);
++        if (!array_intersect($templates, self::ROW_NAMED_CELL_TEMPLATES) || $row->getData() === null) {
++            return null;
++        }
++        foreach ($columns as $column) {
++            if (!$column->hasFlag('firstColumn')) {
++                continue;
++            }
++            $cellProvider = $row->getCellProvider();
++            if (!$cellProvider instanceof GridCellProvider) {
++                $cellProvider = $column->getCellProvider();
++            }
++            $label = $cellProvider->getTemplateVarsFromRowColumn($row, $column)['label'] ?? null;
++            if (is_array($label)) { // A multilingual column
++                $label = $label[Locale::getLocale()] ?? reset($label);
++            }
++            return is_string($label) ? trim(strip_tags($label)) : null;
++        }
++        return null;
++    }
++
++    /**
+      * Method that renders tbodys to go in the grid main body.
+      *
+      * @param PKPRequest $request
+--- a/lib/pkp/templates/controllers/grid/common/cell/radioButtonCell.tpl
++++ b/lib/pkp/templates/controllers/grid/common/cell/radioButtonCell.tpl
+@@ -13,6 +13,6 @@
+ 		{assign var=defaultCellAction value=$actions[0]}
+ 		{include file="linkAction/buttonGenericLinkAction.tpl" action=$defaultCellAction buttonSelector="#select-"|concat:$cellId}
+ 	{/if}
+-	<input type="radio" id="select-{$cellId}" style="height: 15px; width: 15px;" {if $selected}checked="checked"{/if} {if $disabled}disabled="disabled"{/if}/>
++	<input type="radio" id="select-{$cellId}" aria-label="{if $rowLabel}{$rowLabel|escape}, {/if}{$column->getLocalizedTitle()|strip_tags|escape}" style="height: 15px; width: 15px;" {if $selected}checked="checked"{/if} {if $disabled}disabled="disabled"{/if}/>
+ </span>
+ 
+--- a/lib/pkp/templates/controllers/grid/common/cell/selectStatusCell.tpl
++++ b/lib/pkp/templates/controllers/grid/common/cell/selectStatusCell.tpl
+@@ -13,5 +13,5 @@
+ 		{assign var=defaultCellAction value=$actions[0]}
+ 		{include file="linkAction/buttonGenericLinkAction.tpl" action=$defaultCellAction buttonSelector="#select-"|concat:$cellId}
+ 	{/if}
+-	<input type="checkbox" id="select-{$cellId}" {if $name}name="{$name|escape}"{/if} {if $value}value="{$value|escape}"{/if} style="height: 15px; width: 15px;" {if $selected}checked="checked"{/if} {if $disabled}disabled="disabled"{/if}/>
++	<input type="checkbox" id="select-{$cellId}" aria-label="{if $rowLabel}{$rowLabel|escape}, {/if}{$column->getLocalizedTitle()|strip_tags|escape}" {if $name}name="{$name|escape}"{/if} {if $value}value="{$value|escape}"{/if} style="height: 15px; width: 15px;" {if $selected}checked="checked"{/if} {if $disabled}disabled="disabled"{/if}/>
+ </span>

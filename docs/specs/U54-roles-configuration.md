@@ -806,6 +806,9 @@ Left out of the scenarios above, by reason:
     `docs/issues/U54-A9-roles-filter-lists-hide-after-choice.md`): a
     level chosen in the "Roles" tab's filter, then the two filter lists
     still shown with the choice
+  - the guard for A8 (issue report
+    `docs/issues/U54-A8-role-stage-boxes-unnamed.md`): each stage box of
+    the "Roles" list found by its role and stage name
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -890,7 +893,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | Saving the "Production editor" role, even unchanged, opens Submission and Review to its assigned members | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | Removing a role warns that its members' assignments will be deleted, but a held role is never removed | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [A8](#a8) | A screen reader announces each stage box of the list only as "checkbox" | 🐞 | minor | — |
+| [A8](#a8) | In the Roles list, a screen reader cannot tell which role and stage each stage tick box sets | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | On the Roles list, the two filter lists fold away after a choice, so a filtered list looks complete | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A role name of spaces breaks the role window, and the second "OK" leaves Settings for a page of code | 🐞 | medium · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | "OK" in an Editor's own role window takes the Settings pages away from every holder of the role | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1013,12 +1016,24 @@ the field become optional or go? Lean: optional, since it has no reader.
 Basis: probe. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — The stage boxes have no name for a screen reader** · 🐞 · minor.
-The list's stage boxes carry no name a screen reader can read, neither
-the role nor the stage, so each is announced only as "checkbox". A
-manager who uses a screen reader cannot tell which role and stage a box
-sets.
-Basis: probe. <sup>f-a8</sup>
+**A8 — In the Roles list, a screen reader cannot tell which role and stage each stage tick box sets** · 🐞 · low.
+The stage tick boxes of the "Roles" list (Settings › Users & Roles) have
+no name, neither the role nor the stage. A screen reader has nothing to
+announce for a box but "checkbox" and whether it is ticked, so a manager
+who uses one cannot tell which role and stage a box sets.
+
+The boxes work from the keyboard, and there is a way round. The list is
+a table with marked column headings, so a screen reader's table mode can
+give the stage. The role's name sits in the row's first cell, which is
+not marked as the row's heading, so the user has to move back to it for
+each row.
+
+One shared cell template draws these boxes, and one fix names them all.
+The same template draws the "Enabled" boxes of the plugins list and the
+language boxes of Settings › Website › "Languages". A sibling template
+draws the "Primary locale" and "Default" buttons there. All of them have
+no name and the same way round.
+Basis: probe, 2026-10-02. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — On the Roles list, the two filter lists fold away after a choice, so a filtered list looks complete** · 🐞 · low.
@@ -1788,6 +1803,7 @@ panels or any other page visited.
 type="checkbox" id="select-cell-…">` with no `<label>`, `aria-label` or
 `title`. Live-probed 2026-09-26 (Fields; all three apps): every box of the
 list's fourth row had none of the three.
+Issue report: [docs/issues/U54-A8-role-stage-boxes-unnamed.md](../issues/U54-A8-role-stage-boxes-unnamed.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — The two lists sit in `userGroupsGridFilter.tpl`'s form
