@@ -1380,8 +1380,8 @@ td19. The server answers the `enable` and `disable` requests with
 "##user.authorization.pluginLevel##" (an untranslated key) on a journal
 and a preprint server, "You do not have sufficient privileges to manage
 this plugin." on a press.
-Issue report: [docs/issues/U62-A9-plugin-switch-refusal-raw-key.md](../issues/U62-A9-plugin-switch-refusal-raw-key.md).
-Issue report: [docs/issues/U62-A9-refused-confirmation-window-keeps-spinning.md](../issues/U62-A9-refused-confirmation-window-keeps-spinning.md).
+Issue report: [pkp-e2e#512](https://github.com/jardakotesovec/pkp-e2e/issues/512) ([docs/issues/U62-A9-plugin-switch-refusal-raw-key.md](../issues/U62-A9-plugin-switch-refusal-raw-key.md)).
+Issue report: [pkp-e2e#511](https://github.com/jardakotesovec/pkp-e2e/issues/511) ([docs/issues/U62-A9-refused-confirmation-window-keeps-spinning.md](../issues/U62-A9-refused-confirmation-window-keeps-spinning.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — fn-l: `PharData`'s own exception message reaches the

@@ -1755,7 +1755,7 @@ filled once at context creation with the absolute address. Live-probed
 `manager.genres.alertDelete`, shown as a browser alert; the confirmation
 window does not close on it. Live-probed 2026-09-27, two runs per
 app (note td6).
-Issue report: [docs/issues/U62-A9-refused-confirmation-window-keeps-spinning.md](../issues/U62-A9-refused-confirmation-window-keeps-spinning.md).
+Issue report: [pkp-e2e#511](https://github.com/jardakotesovec/pkp-e2e/issues/511) ([docs/issues/U62-A9-refused-confirmation-window-keeps-spinning.md](../issues/U62-A9-refused-confirmation-window-keeps-spinning.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Test run 2026-09-27, all three apps (scenario 6, "A malformed
