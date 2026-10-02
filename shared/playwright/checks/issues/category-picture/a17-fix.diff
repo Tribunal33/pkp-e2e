@@ -1,0 +1,45 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldUpload.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldUpload.vue
+@@ -247,6 +247,24 @@
+ 				headers: {
+ 					'X-Csrf-Token': pkp.currentUser.csrfToken,
+ 				},
++				/**
++				 * dropzone.js passes the image's error event instead of a data URL
++				 * when the browser cannot read the file as a picture. Draw no
++				 * thumbnail then, rather than an <img> whose src is "[object Event]".
++				 */
++				thumbnail(file, dataUrl) {
++					if (typeof dataUrl !== 'string' || !file.previewElement) {
++						return;
++					}
++					file.previewElement.classList.remove('dz-file-preview');
++					file.previewElement
++						.querySelectorAll('[data-dz-thumbnail]')
++						.forEach((thumbnailElement) => {
++							thumbnailElement.alt = file.name;
++							thumbnailElement.src = dataUrl;
++						});
++					file.previewElement.classList.add('dz-image-preview');
++				},
+ 				...this.options,
+ 			};
+ 		},
+--- a/lib/ui-library/src/components/Form/fields/FieldUploadImage.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldUploadImage.vue
+@@ -282,9 +282,14 @@
+ 		 * Respond to a dropzone.js event when it creates a thumbnail
+ 		 *
+ 		 * @param {Object} file Details about the file
++		 * @param {String|Event} dataUrl The thumbnail, or the image's error event
++		 *   when the browser cannot read the file as a picture
+ 		 * @see https://www.dropzonejs.com/#event-thumbnail
+ 		 */
+-		onThumbnail: function (file) {
++		onThumbnail: function (file, dataUrl) {
++			if (typeof dataUrl !== 'string') {
++				return;
++			}
+ 			this.uploadFile = {...file};
+ 			this.setFocusToControl();
+ 		},

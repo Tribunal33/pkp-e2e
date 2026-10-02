@@ -1,0 +1,29 @@
+--- a/templates/frontend/pages/catalogCategory.tpl
++++ b/templates/frontend/pages/catalogCategory.tpl
+@@ -36,9 +36,9 @@
+ 	{assign var="description" value=$category->getLocalizedDescription()|strip_unsafe_html}
+ 	<div class="about_section{if $image} has_image{/if}{if $description} has_description{/if}">
+ 		{if $image}
+-			<div class="cover" href="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="fullSize" type="category" id=$category->getId()}">
+-				<img src="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="thumbnail" type="category" id=$category->getId()}" alt="{$category->getLocalizedTitle()|escape|default:''}" />
+-			</div>
++			<a class="cover" href="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="fullSize" type="category" id=$category->getId()}">
++				<img src="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="thumbnail" type="category" id=$category->getId()}" alt="{$image.altText|default:$category->getLocalizedTitle()|escape}" />
++			</a>
+ 		{/if}
+ 		<div class="description">
+ 			{$description|strip_unsafe_html}
+--- a/templates/frontend/pages/catalogSeries.tpl
++++ b/templates/frontend/pages/catalogSeries.tpl
+@@ -35,9 +35,9 @@
+ 	{assign var="description" value=$series->getLocalizedDescription()|strip_unsafe_html}
+ 	<div class="about_section{if $image} has_image{/if}{if $description} has_description{/if}">
+ 		{if $image}
+-			<div class="cover" href="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="fullSize" type="series" id=$series->getId()}">
++			<a class="cover" href="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="fullSize" type="series" id=$series->getId()}">
+ 				<img src="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="thumbnail" type="series" id=$series->getId()}" alt="{$series->getLocalizedTitle()|escape|default: 'null'}" />
+-			</div>
++			</a>
+ 		{/if}
+ 		<div class="description">
+ 			{$description|strip_unsafe_html}

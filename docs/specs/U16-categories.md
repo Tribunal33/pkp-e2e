@@ -817,6 +817,13 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a category's picture linking to its full-size version and carrying
+    its alternate text ([A6](#a6), [A7](#a7)): the guard the issue report
+    proposes
+  - a file that is not a picture put in "Cover Image", leaving no preview
+    and no request ([A17](#a17)): the guard the issue report proposes
+  - {OMP} a press's category page loading its picture ([OMP1](#omp1)):
+    the guard the issue report proposes
   - a category's "Order of articles" set to "Title (A-Z)" and "Title
     (Z-A)" over three items, the page following each ([A2](#a2)): the
     guard the issue report proposes
@@ -916,8 +923,8 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A visitor opening an empty category sees "0 Items" and no "Nothing has been published" message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | A category's "Order of articles" has no effect: its public page keeps one order whatever is chosen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A6](#a6) | A category's picture is not a link; its full-size version is unreachable from the page | 🐞 | minor | — |
-| [A7](#a7) | The picture's "Alternate text" is used nowhere; a journal's page describes the picture as "null" | 🐞 | minor | — |
+| [A6](#a6) | A category's picture is not a link; its full-size version is unreachable from the page | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A7](#a7) | The picture's "Alternate text" is used nowhere; a journal's page describes the picture as "null" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | A category path with "/" saves, but the category's links open another category's page or "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | The path message says "only letters and numbers" while "-", "_", "." and "/" are accepted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | With no category, the "Browse" block shows "Categories" with nothing under it | 🐞 | minor | — |
@@ -926,11 +933,11 @@ an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | A category's "Editorial Assignments" assign nobody on any journal or press but the install's first | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | In French, the tab, the delete dialog, the "Select Categories" window and a press's category page show raw codes | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A16](#a16) | A name changed and closed without saving comes back in the same category's next "Edit" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A17](#a17) | A file that is not a picture leaves a broken preview in "Cover Image" | 🐞 | minor | — |
+| [A17](#a17) | A file that is not a picture, put in any image upload box, leaves a broken preview and a request for "[object Event]" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A18](#a18) | The box where a manager types a category's name to delete it has no name for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A19](#a19) | A category with one item reads "1 Items" ("1 Titles" on a press) | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | With the "Browse" block placed, every breadcrumb's last step gets the block's grey bar | 🐞 | minor | — |
-| [OMP1](#omp1) | A press's category page shows a broken-picture mark instead of the picture | 🐞 | user-visible | — |
+| [OMP1](#omp1) | A press's category page shows a broken-picture mark instead of the category's picture | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | The press's "Browse" block lists sub-categories among the top-level ones, not under their parents | 🐞 | minor | — |
 | [OMP3](#omp3) | A press's "Browse" is not a heading for a screen reader | 🐞 | minor | — |
 | [OMP4](#omp4) | A press's "Browse" block with every "Settings" box unticked shows "Browse" alone | 🐞 | minor | — |
@@ -1001,18 +1008,18 @@ Question: should the trail name every level? Lean: yes; categories nest to any d
 Basis: probe, 2026-09-25; the trail's history, code reading. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — The category picture is not a link** · 🐞 · minor.
+**A6 — The category picture is not a link** · 🐞 · low.
 The picture on a category's page is meant to open its full-size version;
 it is not a link, and nothing on the page leads to the full-size picture,
 which answers only at its typed address.
-Since: 2018 · Basis: probe, 2026-09-25; its age, code reading. <sup>f-a6</sup>
+Since: 2018 · Basis: probe, 2026-10-02; its age, code reading. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The picture's alternate text is ignored** · 🐞 · minor.
+**A7 — The picture's alternate text is ignored** · 🐞 · low.
 The window asks for "Alternate text" beside the picture, but no page uses
 it: a screen reader hears "null" for the picture on a journal's and a
 preprint server's category page, and the category's name on a press's.
-Basis: probe, 2026-09-25; that no page at all uses it, code reading. <sup>f-a7</sup>
+Basis: probe, 2026-10-02; that no page at all uses it, code reading. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — A category path with "/" saves, but the category's links open another category's page or "404 Not Found"** · 🐞 · medium.
@@ -1135,12 +1142,17 @@ name as well.
 Basis: probe, 2026-09-25; again 2026-09-30 and 2026-10-02. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — A file that is not a picture leaves a broken preview** · 🐞 · minor.
-After a file named as a picture but holding none (a text file renamed
-".png") is put in "Cover Image", the window's preview is a broken image
-whose address is "[object Event]", and the browser asks the server for a
-page of that name, which does not exist. "Save" then refuses the file.
-Basis: probe, 2026-09-25. <sup>f-a17</sup>
+**A17 — A file that is not a picture, put in any image upload box, leaves a broken preview and a request for "[object Event]"** · 🐞 · low.
+A manager puts a file that is named as a picture but holds none (a text
+file renamed ".png") in an image upload box, such as a category's "Cover
+Image". The box takes it as if it were a picture: it shows a broken
+picture as the preview and offers "Alternate text" for it, and the
+browser asks the server for a page named "[object Event]", which does
+not exist. Only "Save" says the file is not a picture: "An invalid image
+was uploaded. Accepted formats are .png, .gif, or .jpg."
+Every image upload box of the settings and publication forms built on
+the shared form library behaves the same way; Cause lists them per app.
+Basis: probe, 2026-10-02. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — The box where a manager types a category's name to delete it has no name for a screen reader** · 🐞 · low.
@@ -1174,13 +1186,15 @@ Basis: probe, 2026-09-25. <sup>f-a20</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — A press's category page shows no picture** · 🐞 · user-visible.
-A press manager sets a category's "Cover Image" and saves; the category's
-page shows the browser's broken-picture mark with the category's name
-beside it instead of the picture, and the picture's small and full-size
-addresses answer with an empty page.
-The page looks for the picture where the press's earlier settings screen kept it, not where the category window now stores it (read from the code).
-Basis: probe, 2026-09-25; the cause, code reading. <sup>f-omp1</sup>
+**OMP1 — A press's category page shows a broken-picture mark instead of the category's picture** · 🐞 · medium.
+A press manager gives a category a "Cover Image" and saves: "Category
+saved". The category's page then shows the browser's broken-picture mark,
+with the category's name beside it, where the picture should be, and the
+picture's own small and full-size addresses open an empty page.
+After an upgrade from 3.5, every category picture a press had is hidden
+the same way; the files are moved, not deleted, and show again once
+fixed.
+Basis: probe, 2026-10-02; the cause, code reading. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
 **OMP2 — The press's "Browse" block flattens the tree** · 🐞 · minor.
@@ -1937,12 +1951,14 @@ Live-probed 2026-09-25: note td10.
 **f-a6** — Note g: a `div` carries the `href`; there is no `<a>`. The
 markup dates from ojs `ea9c1cefd4` (2018-12-17, pkp/pkp-lib#4158).
 Live-probed 2026-09-25: note td11.
+Issue report: [docs/issues/U16-A6-A7-category-picture-not-link-alt-null.md](../issues/U16-A6-A7-category-picture-not-link-alt-null.md), shared with [A7](#a7).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Note g: OJS and OPS `alt="null"`, OMP
 `alt="{$category->getLocalizedTitle()|escape}"`; `image.altText` is saved
 by `saveCategory()` and read by no template.
 Live-probed 2026-09-25: note td11.
+Issue report: [docs/issues/U16-A6-A7-category-picture-not-link-alt-null.md](../issues/U16-A6-A7-category-picture-not-link-alt-null.md), shared with [A6](#a6); OJS's and OPS's "null" since ojs caa6c07dc7 (2019), a regression.
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note d (`/` allowed by `CATEGORY_PATH_REGEX`) and note g: the
@@ -2033,6 +2049,7 @@ Re-walked 2026-10-02 by the issue report's `reach.js` on `main` (all three apps:
 **f-a17** — Live-probed 2026-09-25, all three apps: note d (the preview's
 `src` "[object Event]", a GET `…/management/settings/[object%20Event]`
 answering 404, then "Save" refused with `form.invalidImage`).
+Issue report: [docs/issues/U16-A17-not-a-picture-broken-preview.md](../issues/U16-A17-not-a-picture-broken-preview.md).
 
 <a id="fn-f-a18"></a>
 **f-a18** — `CategoryDeleteDialogBody.vue` (note e): the input has no
@@ -2064,6 +2081,7 @@ context's public files as `{id}-category.{ext}` and the thumbnail as
 `PKPCatalogHandler` reads for OJS and OPS. With no file at the old place,
 `downloadByPath()` sends nothing.
 Live-probed 2026-09-25: note td11.
+Issue report: [docs/issues/U16-OMP1-press-category-picture-broken.md](../issues/U16-OMP1-press-category-picture-broken.md).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Note h (OMP flat array, `is_sub` one indent step at any depth;
