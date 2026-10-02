@@ -1,0 +1,50 @@
+--- a/src/managers/UserAccessManager/useUserAccessManagerConfig.js
++++ b/src/managers/UserAccessManager/useUserAccessManagerConfig.js
+@@ -29,7 +29,10 @@
+ 					name: Actions.USER_ACCESS_LOGIN_AS,
+ 				});
+ 
+-			if (user.groups.find((value) => value.dateEnd === null)) {
++			if (
++				user.canRemove &&
++				user.groups.find((value) => value.dateEnd === null)
++			) {
+ 				actions.push({
+ 					label: t('grid.user.remove'),
+ 					icon: 'Cancel',
+@@ -38,12 +41,13 @@
+ 				});
+ 			}
+ 
+-			actions.push({
+-				label: user.disabled ? t('grid.user.enable') : t('grid.user.disable'),
+-				icon: user.disabled ? 'User' : 'DisableUser',
+-				name: Actions.USER_ACCESS_DISABLE_USER,
+-				isWarnable: !user.disabled,
+-			});
++			user.canDisable &&
++				actions.push({
++					label: user.disabled ? t('grid.user.enable') : t('grid.user.disable'),
++					icon: user.disabled ? 'User' : 'DisableUser',
++					name: Actions.USER_ACCESS_DISABLE_USER,
++					isWarnable: !user.disabled,
++				});
+ 
+ 			user.canMergeUsers &&
+ 				actions.push({
+--- a/src/managers/UserAccessManager/useUserAccessManagerActions.js
++++ b/src/managers/UserAccessManager/useUserAccessManagerActions.js
+@@ -84,8 +84,11 @@
+ 							close();
+ 							finishedCallback();
+ 
+-							if (data.value.status !== true) {
+-								openDialogNetworkError();
++							if (data.value?.status !== true) {
++								// show the server's reason (a legacy JSONMessage's content)
++								openDialogNetworkError({
++									data: {errorMessage: data.value?.content},
++								});
+ 							}
+ 						},
+ 					},

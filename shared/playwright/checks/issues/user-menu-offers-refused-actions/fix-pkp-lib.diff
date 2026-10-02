@@ -1,0 +1,117 @@
+--- a/schemas/user.json
++++ b/schemas/user.json
+@@ -371,6 +371,20 @@
+ 			"readOnly": true,
+ 			"apiSummary": true,
+ 			"apiDetail": true
++		},
++		"canDisable": {
++			"type": "boolean",
++			"description": "Whether the current user can disable or enable this user account.",
++			"readOnly": true,
++			"apiSummary": true,
++			"apiDetail": true
++		},
++		"canRemove": {
++			"type": "boolean",
++			"description": "Whether the current user can remove this user from the current context's roles.",
++			"readOnly": true,
++			"apiSummary": true,
++			"apiDetail": true
+ 		}
+ 	}
+ }
+--- a/classes/user/Repository.php
++++ b/classes/user/Repository.php
+@@ -457,6 +457,29 @@
+     }
+ 
+     /**
++     * Of the given users, those who hold the Site Administrator role now. Nobody may
++     * administer them (Validation::getAdministrationLevel()).
++     *
++     * @return int[]
++     */
++    public function siteAdminIds(array $userIds): array
++    {
++        if (empty($userIds)) {
++            return [];
++        }
++
++        return UserUserGroup::query()
++            ->withUserIds($userIds)
++            ->withActive()
++            ->whereHas('userGroup', fn ($query) => $query->where('role_id', Role::ROLE_ID_SITE_ADMIN))
++            ->pluck('user_user_groups.user_id')
++            ->map(fn ($id) => (int) $id)
++            ->unique()
++            ->values()
++            ->all();
++    }
++
++    /**
+      * build a permission map for a manager over a set of users
+      */
+     public function permissionMapForManager(int $managerUserId, array $userIds): array
+--- a/classes/user/maps/Schema.php
++++ b/classes/user/maps/Schema.php
+@@ -129,6 +129,7 @@
+         $currentUserId = $options['currentUserId'] ?? null;
+         $isSiteAdmin = (bool)($options['isSiteAdmin'] ?? Validation::isSiteAdmin());
+         $options['isSiteAdmin'] = $isSiteAdmin;
++        $options['siteAdminIds'] = Repo::user()->siteAdminIds($userIds);
+ 
+         if (empty($userIds)) {
+             $options['permissionMap'] = [];
+@@ -195,6 +196,12 @@
+                 case 'canMergeUsers':
+                     $output[$prop] = $this->getPropertyCanMergeUsers($user, $auxiliaryData);
+                     break;
++                case 'canDisable':
++                    $output[$prop] = $this->getPropertyCanDisable($user, $auxiliaryData);
++                    break;
++                case 'canRemove':
++                    $output[$prop] = $this->getPropertyCanRemove($user, $auxiliaryData);
++                    break;
+                 case 'reviewsActive':
+                     $output[$prop] = $user->getData('incompleteCount');
+                     break;
+@@ -309,5 +316,38 @@
+         }
+         return (bool) ($permissionMap[(int) $userToMerge->getId()] ?? false);
+     }
++
++    /**
++     * Determine if the current user can disable or enable the target user's account:
++     * UserGridHandler::disableUser() asks for Validation::ADMINISTRATION_FULL. A manager's
++     * permissionMap already answers false for a site administrator; a site administrator's
++     * map answers true for everyone, so site administrators are left out here.
++     */
++    protected function getPropertyCanDisable(User $user, array $auxiliaryData = []): bool
++    {
++        $currentUserId = $auxiliaryData['currentUserId'] ?? null;
++        $userId = (int) $user->getId();
++        if ($currentUserId === null || (int) $currentUserId === $userId || in_array($userId, $auxiliaryData['siteAdminIds'] ?? [], true)) {
++            return false;
++        }
++
++        return (bool) ($auxiliaryData['permissionMap'][$userId] ?? false);
++    }
++
++    /**
++     * Determine if the current user can remove the target user from the context:
++     * UserGridHandler::removeUser() refuses only Validation::ADMINISTRATION_PROHIBITED,
++     * which, for a manager of the context or a site administrator, is a site administrator.
++     * The current user's own row is left out, as the menu leaves it out.
++     */
++    protected function getPropertyCanRemove(User $user, array $auxiliaryData = []): bool
++    {
++        $currentUserId = $auxiliaryData['currentUserId'] ?? null;
++        $userId = (int) $user->getId();
++
++        return $currentUserId !== null
++            && (int) $currentUserId !== $userId
++            && !in_array($userId, $auxiliaryData['siteAdminIds'] ?? [], true);
++    }
+ }
+ 

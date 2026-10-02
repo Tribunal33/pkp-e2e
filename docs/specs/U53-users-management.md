@@ -788,6 +788,16 @@ Left out of the scenarios above, by reason:
     manager disables an account, enables it and disables it again: the
     second "Disable User" opens with an empty reason box, and the Login page
     never shows text typed when enabling
+  - the guard for A1 (issue report
+    `docs/issues/U53-A1-A2-user-menu-offers-refused-actions.md`): a manager
+    opens the row menu on the Site Administrator's row and on a user who
+    holds a role in another journal: neither offers an action the server
+    then refuses ("Disable User" on both; "Remove User" on the Site
+    Administrator's)
+  - the guard for A19 (issue report
+    `docs/issues/U53-A19-remove-user-upcoming-role-error.md`): a manager
+    uses "Remove User" on a user who holds a current role and a role
+    starting on a later date: both roles end in one go, with no error
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -872,8 +882,8 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Disable User" and "Enable User" are offered on rows the manager may not administer, and refused only inside the window | 🐞 | user-visible | — |
-| [A2](#a2) | "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred…" | 🐞 | user-visible | — |
+| [A1](#a1) | "Disable User" and "Enable User" are offered on rows the manager may not administer, and refused only inside the window | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A2](#a2) | "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred…" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | The search box's example names "Journal editor" on a press and a preprint server | 🐞 | minor | — |
 | [A5](#a5) | The row's "…" button is announced to screen readers as a raw code | 🐞 | minor | — |
 | [A6](#a6) | Users & Roles: the "Disable User" window names roles the user no longer holds | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -886,7 +896,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | Merging an account that opened a discussion fails without a message and leaves the account behind | 🐞 | high · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A16](#a16) | On "Add User", unticking "Generate Password" leaves "Notify User" greyed out, so no welcome email can be chosen | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A19](#a19) | "Remove User" on a user whose only role has not yet begun ends in "An unexpected error has occurred…" | 🐞 | user-visible | — |
+| [A19](#a19) | "Remove User" keeps a role that starts on a later date, and removing the user again fails | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | On a French preprint server the "Roles" column prints raw codes for two roles | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A user removed from the journal stays in the list with no role | ❓ | minor | — |
 | [A8](#a8) | "Remove User" tells the user nothing, where "Remove Role" emails them | ❓ | minor | — |
@@ -897,7 +907,7 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — Disabling offered where it is refused** · 🐞 · user-visible.
+**A1 — Disabling offered where it is refused** · 🐞 · low.
 A manager other than the Site Administrator sees "Disable User" (or
 "Enable User") on every row but their own, including the rows of users
 with a current role in a journal the manager does not manage and the Site
@@ -906,17 +916,17 @@ rows, but pressing "Disable User" there opens the window and then
 refuses with "You do not have sufficient permissions to administer this
 user…". The manager expects either the action to work or not to be
 offered.
-Basis: probe. <sup>f-a1</sup>
+Basis: probe, 2026-10-02. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — Removing the Site Administrator fails with an unexplained error** · 🐞 · user-visible.
+**A2 — Removing the Site Administrator fails with an unexplained error** · 🐞 · low.
 A manager's list offers "Remove User" on the Site Administrator's row.
 "OK" in the "Remove" dialog brings an "Error" dialog, "An unexpected
 error has occurred. Please reload the page and try again.", and the
 administrator keeps every role. The manager expects the action to be
 absent, or a message saying why it cannot be done; reloading changes
 nothing.
-Basis: probe. <sup>f-a2</sup>
+Basis: probe, 2026-10-02. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — A removed user stays listed with no role** · ❓ · minor.
@@ -1128,14 +1138,17 @@ it; a role still to begin may stay listed if its row says it has not begun.
 Basis: probe. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — Removing a user whose only role has not begun fails with an unexplained error** · 🐞 · user-visible.
-A user whose only role here starts on a future date is offered "Remove
-User". "OK" in the "Remove" dialog brings an "Error" dialog, "An
-unexpected error has occurred. Please reload the page and try again.";
-the role stays and the menu keeps offering "Remove User", after a reload
-too. The manager expects the role to end, or a message saying why it
-cannot; the same failure as [A2](#a2) on the Site Administrator's row.
-Basis: probe. <sup>f-a19</sup>
+**A19 — "Remove User" keeps a role that starts on a later date, and removing the user again fails** · 🐞 · medium.
+A manager invites a user to a role that starts on a later date, the user
+accepts, and later the manager removes the user with "Remove User" on
+Settings › Users & Roles. The user's current roles end, but the role
+still to begin stays; the row keeps listing it and still offers "Remove
+User". "OK" in the "Remove" dialog then brings an "Error" dialog, "An
+unexpected error has occurred. Please reload the page and try again.",
+and the role stays, after a reload too. Once the invitation is accepted,
+no screen can withdraw the role. On its start date the user holds the
+role the manager tried to take away. Basis: probe, 2026-10-02.
+<sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — A role ending on a future date cannot be ended early** · ❓ · user-visible.
@@ -1909,11 +1922,13 @@ manager role and an empty "Start Date".
 `canLoginAs` / `canMergeUsers`; `UserGridHandler::editDisableUser()`
 refuses unless `getAdministrationLevel()` is `FULL` (note n). Live-probed
 2026-09-25: note td8.
+Issue report: [docs/issues/U53-A1-A2-user-menu-offers-refused-actions.md](../issues/U53-A1-A2-user-menu-offers-refused-actions.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Code read 2026-09-25: note td9. The remove guard is only
 `user.groups.find(g => g.dateEnd === null)` and not-own-row. Live-probed
 2026-09-25: note td9.
+Issue report: [docs/issues/U53-A1-A2-user-menu-offers-refused-actions.md](../issues/U53-A1-A2-user-menu-offers-refused-actions.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Seen 2026-09-23 (journal-identity claim check K4-3); a reviewer
@@ -2076,6 +2091,7 @@ after a reload, the row read the role and 2027-06-01 and the menu offered
 menu's guard `user.groups.find(g => g.dateEnd === null)` (note c) counts
 a role not yet begun, while `removeUser()` ends only roles active now and
 answers `grid.user.userNoRoles` when there are none.
+Issue report: [docs/issues/U53-A19-remove-user-upcoming-role-error.md](../issues/U53-A19-remove-user-upcoming-role-error.md).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Live-probed 2026-09-30, OJS and OMP, two runs each, users

@@ -1,0 +1,167 @@
+--- a/lib/pkp/schemas/user.json
++++ b/lib/pkp/schemas/user.json
+@@ -371,6 +371,20 @@
+ 			"readOnly": true,
+ 			"apiSummary": true,
+ 			"apiDetail": true
++		},
++		"canDisable": {
++			"type": "boolean",
++			"description": "Whether the current user can disable or enable this user account.",
++			"readOnly": true,
++			"apiSummary": true,
++			"apiDetail": true
++		},
++		"canRemove": {
++			"type": "boolean",
++			"description": "Whether the current user can remove this user from the current context's roles.",
++			"readOnly": true,
++			"apiSummary": true,
++			"apiDetail": true
+ 		}
+ 	}
+ }
+--- a/lib/pkp/classes/user/Repository.php
++++ b/lib/pkp/classes/user/Repository.php
+@@ -457,6 +457,29 @@
+     }
+ 
+     /**
++     * Of the given users, those who hold the Site Administrator role now. Nobody may
++     * administer them (Validation::getAdministrationLevel()).
++     *
++     * @return int[]
++     */
++    public function siteAdminIds(array $userIds): array
++    {
++        if (empty($userIds)) {
++            return [];
++        }
++
++        return UserUserGroup::query()
++            ->withUserIds($userIds)
++            ->withActive()
++            ->whereHas('userGroup', fn ($query) => $query->where('role_id', Role::ROLE_ID_SITE_ADMIN))
++            ->pluck('user_user_groups.user_id')
++            ->map(fn ($id) => (int) $id)
++            ->unique()
++            ->values()
++            ->all();
++    }
++
++    /**
+      * build a permission map for a manager over a set of users
+      */
+     public function permissionMapForManager(int $managerUserId, array $userIds): array
+--- a/lib/pkp/classes/user/maps/Schema.php
++++ b/lib/pkp/classes/user/maps/Schema.php
+@@ -129,6 +129,7 @@
+         $currentUserId = $options['currentUserId'] ?? null;
+         $isSiteAdmin = (bool)($options['isSiteAdmin'] ?? Validation::isSiteAdmin());
+         $options['isSiteAdmin'] = $isSiteAdmin;
++        $options['siteAdminIds'] = Repo::user()->siteAdminIds($userIds);
+ 
+         if (empty($userIds)) {
+             $options['permissionMap'] = [];
+@@ -195,6 +196,12 @@
+                 case 'canMergeUsers':
+                     $output[$prop] = $this->getPropertyCanMergeUsers($user, $auxiliaryData);
+                     break;
++                case 'canDisable':
++                    $output[$prop] = $this->getPropertyCanDisable($user, $auxiliaryData);
++                    break;
++                case 'canRemove':
++                    $output[$prop] = $this->getPropertyCanRemove($user, $auxiliaryData);
++                    break;
+                 case 'reviewsActive':
+                     $output[$prop] = $user->getData('incompleteCount');
+                     break;
+@@ -309,5 +316,38 @@
+         }
+         return (bool) ($permissionMap[(int) $userToMerge->getId()] ?? false);
+     }
++
++    /**
++     * Determine if the current user can disable or enable the target user's account:
++     * UserGridHandler::disableUser() asks for Validation::ADMINISTRATION_FULL. A manager's
++     * permissionMap already answers false for a site administrator; a site administrator's
++     * map answers true for everyone, so site administrators are left out here.
++     */
++    protected function getPropertyCanDisable(User $user, array $auxiliaryData = []): bool
++    {
++        $currentUserId = $auxiliaryData['currentUserId'] ?? null;
++        $userId = (int) $user->getId();
++        if ($currentUserId === null || (int) $currentUserId === $userId || in_array($userId, $auxiliaryData['siteAdminIds'] ?? [], true)) {
++            return false;
++        }
++
++        return (bool) ($auxiliaryData['permissionMap'][$userId] ?? false);
++    }
++
++    /**
++     * Determine if the current user can remove the target user from the context:
++     * UserGridHandler::removeUser() refuses only Validation::ADMINISTRATION_PROHIBITED,
++     * which, for a manager of the context or a site administrator, is a site administrator.
++     * The current user's own row is left out, as the menu leaves it out.
++     */
++    protected function getPropertyCanRemove(User $user, array $auxiliaryData = []): bool
++    {
++        $currentUserId = $auxiliaryData['currentUserId'] ?? null;
++        $userId = (int) $user->getId();
++
++        return $currentUserId !== null
++            && (int) $currentUserId !== $userId
++            && !in_array($userId, $auxiliaryData['siteAdminIds'] ?? [], true);
++    }
+ }
+ 
+--- a/lib/ui-library/src/managers/UserAccessManager/useUserAccessManagerConfig.js
++++ b/lib/ui-library/src/managers/UserAccessManager/useUserAccessManagerConfig.js
+@@ -29,7 +29,10 @@
+ 					name: Actions.USER_ACCESS_LOGIN_AS,
+ 				});
+ 
+-			if (user.groups.find((value) => value.dateEnd === null)) {
++			if (
++				user.canRemove &&
++				user.groups.find((value) => value.dateEnd === null)
++			) {
+ 				actions.push({
+ 					label: t('grid.user.remove'),
+ 					icon: 'Cancel',
+@@ -38,12 +41,13 @@
+ 				});
+ 			}
+ 
+-			actions.push({
+-				label: user.disabled ? t('grid.user.enable') : t('grid.user.disable'),
+-				icon: user.disabled ? 'User' : 'DisableUser',
+-				name: Actions.USER_ACCESS_DISABLE_USER,
+-				isWarnable: !user.disabled,
+-			});
++			user.canDisable &&
++				actions.push({
++					label: user.disabled ? t('grid.user.enable') : t('grid.user.disable'),
++					icon: user.disabled ? 'User' : 'DisableUser',
++					name: Actions.USER_ACCESS_DISABLE_USER,
++					isWarnable: !user.disabled,
++				});
+ 
+ 			user.canMergeUsers &&
+ 				actions.push({
+--- a/lib/ui-library/src/managers/UserAccessManager/useUserAccessManagerActions.js
++++ b/lib/ui-library/src/managers/UserAccessManager/useUserAccessManagerActions.js
+@@ -84,8 +84,11 @@
+ 							close();
+ 							finishedCallback();
+ 
+-							if (data.value.status !== true) {
+-								openDialogNetworkError();
++							if (data.value?.status !== true) {
++								// show the server's reason (a legacy JSONMessage's content)
++								openDialogNetworkError({
++									data: {errorMessage: data.value?.content},
++								});
+ 							}
+ 						},
+ 					},

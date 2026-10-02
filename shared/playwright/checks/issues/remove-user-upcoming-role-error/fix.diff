@@ -1,0 +1,79 @@
+--- a/lib/pkp/classes/userGroup/relationships/UserUserGroup.php
++++ b/lib/pkp/classes/userGroup/relationships/UserUserGroup.php
+@@ -81,6 +81,19 @@
+             );
+     }
+ 
++    /**
++     * Assignments not yet ended: held now, or due to begin on a later date
++     */
++    public function scopeWithNotEnded(Builder $query): Builder
++    {
++        $currentDateTime = Core::getCurrentDate();
++        return $query->where(
++            fn (Builder $query) =>
++            $query->whereNull('user_user_groups.date_end')
++                ->orWhere('user_user_groups.date_end', '>', $currentDateTime)
++        );
++    }
++
+     public function scopeWithEnded(Builder $query): Builder
+     {
+         $currentDateTime = Core::getCurrentDate();
+--- a/lib/pkp/classes/userGroup/Repository.php
++++ b/lib/pkp/classes/userGroup/Repository.php
+@@ -397,14 +397,20 @@
+         $dateEnd = Core::getCurrentDate();
+         $query = UserUserGroup::query()
+             ->withContextId($contextId)
+-            ->withUserId($userId)
+-            ->withActive();
++            ->withUserId($userId);
+ 
+         if ($userGroupId) {
+             $query->withUserGroupIds([$userGroupId]);
+         }
+ 
+-        $query->update(['date_end' => $dateEnd]);
++        // An assignment that has not begun was never held: withdraw it, so that it
++        // leaves no service behind on the editorial history.
++        (clone $query)
++            ->whereNotNull('user_user_groups.date_start')
++            ->where('user_user_groups.date_start', '>', $dateEnd)
++            ->delete();
++
++        $query->withActive()->update(['date_end' => $dateEnd]);
+ 
+         AuditLog::log(AuditEvent::USER_ROLE_REMOVED, LogLevel::NOTICE, [
+             'targetUserId' => $userId,
+--- a/lib/pkp/controllers/grid/settings/user/UserGridHandler.php
++++ b/lib/pkp/controllers/grid/settings/user/UserGridHandler.php
+@@ -564,12 +564,12 @@
+             return new JSONMessage(false, __('grid.user.cannotAdminister'));
+         }
+ 
+-        // Check if this user has any active user group assignments for this context.
++        // Check if this user has any active or upcoming user group assignments for this context.
+         $activeUserGroupCount = UserGroup::query()
+             ->withContextIds($context->getId())
+             ->whereHas('userUserGroups', function ($query) use ($userId) {
+                 $query->withUserId($userId)
+-                    ->withActive();
++                    ->withNotEnded();
+             })
+             ->count();
+ 
+--- a/lib/pkp/api/v1/users/PKPUserController.php
++++ b/lib/pkp/api/v1/users/PKPUserController.php
+@@ -327,7 +327,10 @@
+         // Ensure user has role
+         // Will not appear if role has ended or if user never had role to begin with
+         $userGroupId = $request->route('userGroupId');
+-        $userUserGroups = Repo::userGroup()->userUserGroups($userId); /** @var LazyCollection<UserGroup> $userUserGroups */
++        // A role that has not begun yet can be withdrawn too
++        $userUserGroups = UserGroup::query()
++            ->whereHas('userUserGroups', fn ($query) => $query->withUserId((int) $userId)->withNotEnded())
++            ->cursor(); /** @var LazyCollection<UserGroup> $userUserGroups */
+         $userGroup = $userUserGroups->first(fn (UserGroup $userGroup) => $userGroup->id === (int) $userGroupId); /** @var UserGroup $userGroup */
+         if (!$userGroup) {
+             return response()->json([
