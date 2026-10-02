@@ -935,7 +935,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | On an item's "Identifiers" tab, the box that assigns the URN does not name the URN | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | URN settings: a suffix pattern of spaces is refused with a raw text code instead of a message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | "Assign" fills the URN box for a participant whose "Save" is greyed on the "Identifiers" page | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A10](#a10) | URN settings: a refused "URN Prefix" shows "&lt;NID&gt;" codes under the box and in a notice | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A10](#a10) | URN settings: a refused "URN Prefix" shows "&amp;lt;NID&amp;gt;" codes under the box and in a notice | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | URN settings window: every click under the pattern choice raises a page script error | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | "Add Check Number" on an item's "Identifiers" tab writes "NaN" into an empty URN suffix box | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | A galley's or chapter's "Identifiers" tab keeps showing a URN after "Clear" has removed it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1088,7 +1088,7 @@ managers open (3.3 is in the Cause).
 Basis: probe, 2026-10-02. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — URN settings: a refused "URN Prefix" shows "&lt;NID&gt;" codes under the box and in a notice** · 🐞 · low.
+**A10 — URN settings: a refused "URN Prefix" shows "&amp;lt;NID&amp;gt;" codes under the box and in a notice** · 🐞 · low.
 In the URN plugin's settings window, a "URN Prefix" that does not start
 with "urn:", a name and a colon is refused on "Save", rightly. The list
 at the top of the window explains it as `The URN prefix pattern must be
