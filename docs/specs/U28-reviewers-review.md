@@ -2361,8 +2361,8 @@ a request on another submission had gone to them, both answered HTTP 404
 with the plain body "404 Not Found" on every open (three opens on OMP);
 a request link opened with no later email in between landed on the
 wizard. The code reading is the explanation, not a driven fact.
-Issue report: [docs/issues/U28-A9-reviewer-link-dead-after-second-request.md](../issues/U28-A9-reviewer-link-dead-after-second-request.md).
-Issue report: [docs/issues/U28-A9-reminder-window-kills-reviewer-link.md](../issues/U28-A9-reminder-window-kills-reviewer-link.md).
+Issue report: [docs/issues/U28-A9-reviewer-link-dead-after-second-request.md](../issues/U28-A9-reviewer-link-dead-after-second-request.md), filed as [pkp-e2e#593](https://github.com/jardakotesovec/pkp-e2e/issues/593).
+Issue report: [docs/issues/U28-A9-reminder-window-kills-reviewer-link.md](../issues/U28-A9-reminder-window-kills-reviewer-link.md), filed as [pkp-e2e#592](https://github.com/jardakotesovec/pkp-e2e/issues/592).
 Issue report (the bare "404 Not Found" page, joined): [docs/issues/U06-A3-replaced-invitation-links-not-found.md](../issues/U06-A3-replaced-invitation-links-not-found.md), filed as [pkp-e2e#513](https://github.com/jardakotesovec/pkp-e2e/issues/513).
 
 <a id="fn-a10"></a>
