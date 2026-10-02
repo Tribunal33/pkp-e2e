@@ -1,0 +1,78 @@
+--- a/lib/pkp/classes/invitation/core/Invitation.php
++++ b/lib/pkp/classes/invitation/core/Invitation.php
+@@ -19,6 +19,7 @@
+ use Carbon\Carbon;
+ use Exception;
+ use Illuminate\Database\Eloquent\Builder;
++use Illuminate\Database\Eloquent\Collection;
+ use Illuminate\Support\Facades\Mail;
+ use PKP\config\Config;
+ use PKP\context\Context;
+@@ -323,15 +324,31 @@
+ 
+         $this->invitationModel->save();
+ 
+-        InvitationModel::byStatus(InvitationStatus::PENDING)
++        $invitationIds = $this->getInvitationsToDelete()
++            ->pluck('id')
++            ->all();
++
++        InvitationModel::query()
++            ->whereIn('invitation_id', $invitationIds)
++            ->delete();
++
++        return true;
++    }
++
++    /**
++     * Pending related invitations, delete when invitation is dispatched.
++     *
++     * @return Collection<int,InvitationModel>
++     */
++    protected function getInvitationsToDelete(): Collection
++    {
++        return InvitationModel::byStatus(InvitationStatus::PENDING)
+             ->byType($this->getType())
+             ->byNotId($this->getId())
+             ->when(isset($this->invitationModel->userId), fn (Builder $q) => $q->byUserId($this->invitationModel->userId))
+             ->when(!isset($this->invitationModel->userId) && $this->invitationModel->email, fn (Builder $q) => $q->byEmail($this->invitationModel->email))
+             ->when(isset($this->invitationModel->contextId), fn (Builder $q) => $q->byContextId($this->invitationModel->contextId))
+-            ->delete();
+-
+-        return true;
++            ->get();
+     }
+ 
+     public function getInviter(): ?User
+--- a/lib/pkp/classes/invitation/invitations/reviewerAccess/ReviewerAccessInvite.php
++++ b/lib/pkp/classes/invitation/invitations/reviewerAccess/ReviewerAccessInvite.php
+@@ -17,6 +17,7 @@
+ use APP\core\Application;
+ use APP\facades\Repo;
+ use Exception;
++use Illuminate\Database\Eloquent\Collection;
+ use Illuminate\Mail\Mailable;
+ use PKP\invitation\core\contracts\IBackofficeHandleable;
+ use PKP\invitation\core\contracts\IMailableUrlUpdateable;
+@@ -88,6 +89,21 @@
+         return array_merge(parent::getNotAccessibleAfterInvite(), $this->notAccessibleAfterInvite);
+     }
+ 
++    /**
++     * Only the invitations for the same assignment are replaced.
++     */
++    protected function getInvitationsToDelete(): Collection
++    {
++        $reviewAssignmentId = $this->getPayload()->reviewAssignmentId;
++
++        if (!isset($reviewAssignmentId)) {
++            return new Collection();
++        }
++
++        return parent::getInvitationsToDelete()
++            ->where('payload.reviewAssignmentId', $reviewAssignmentId);
++    }
++
+     public function updateMailableWithUrl(Mailable $mailable): void
+     {
+         $url = $this->getActionURL(InvitationAction::ACCEPT);

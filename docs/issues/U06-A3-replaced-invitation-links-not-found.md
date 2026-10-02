@@ -9,8 +9,8 @@
   - 3.4: none (code; no "Invite to a role")
   - 3.3: none (code; no "Invite to a role")
 - **Introduced** `pkp/pkp-lib#10472` for `pkp/pkp-lib#10459` · [7e3a26ea83](https://github.com/pkp/pkp-lib/commit/7e3a26ea83db5428a8747b7dba574259e749cf98) · 2024-09-26 · Dimitris Efstathiou (defstat)
-- **Upstream** none found (2026-10-02)
-- **Tracked in** spec U06 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U06-user-invitations.md#a3)
+- **Upstream** none found (2026-10-02); a comment on `pkp/pkp-lib#12608` (closed) reports the 404 for a reviewer's link after a reminder and is answered as a design decision (Evidence)
+- **Tracked in** spec U06 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U06-user-invitations.md#a3) · spec U28 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U28-reviewers-review.md#a9)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -151,23 +151,27 @@ Reach:
 
 - Role invitations, through "Edit" and through a new send to the same
   person: walked on OJS, OMP and OPS, on main and 3.5.
-- The other invitation kinds go through the same `invite()`, so a
-  replaced email of theirs gets the same bare 404. Read in the code, not
-  walked, with or without the fix. They are:
-  - registration validation;
-  - the profile's email change;
-  - reviewer one-click access. A review reminder sends a new access
-    link, which replaces the earlier one, but only while Settings ›
-    Workflow › Review › "Include a secure link in the email invitation
-    to reviewers." is on (`reviewerAccessKeysEnabled`).
-- A reviewer's access link for one submission is also deleted when the
-  same reviewer is invited to another submission in the same journal.
-  That is a scoping fault in the same query, tracked as
-  `pkp/pkp-lib#11154` (fix in PR `pkp/pkp-lib#13259`, open against
-  `stable-3_5_0`), and it is not this report's. With this report's fix
-  in, that wrongly withdrawn link would show "Invitation Unavailable"
-  instead of a 404, which looks deliberate. So #11154 still needs its
-  own fix.
+- Reviewer one-click access, on a journal or press with Settings ›
+  Workflow › Review › "Include a secure link in the email invitation
+  to reviewers." on (`reviewerAccessKeysEnabled`): walked on OJS and
+  OMP, main and 3.5. An editor's "Send Reminder" mails a new access
+  link, which replaces the one in the request email. That link then
+  answers the bare "404 Not Found", while the link of a submitted or
+  declined review shows "Invitation Unavailable".
+- Registration validation and the profile's email change go through
+  the same `invite()`, so a replaced email of theirs gets the same bare
+  404. Read in the code, not walked, with or without the fix.
+- A reviewer's access link is also replaced when it should not be:
+  by a request to the same reviewer on another submission of the
+  journal
+  ([its report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U28-A9-reviewer-link-dead-after-second-request.md),
+  `pkp/pkp-lib#11154`), and by opening the "Send Reminder" window
+  without sending
+  ([its report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U28-A9-reminder-window-kills-reviewer-link.md)).
+  Those are faults of their own and not this report's. With this
+  report's fix in, such a wrongly withdrawn link shows "Invitation
+  Unavailable" instead of a 404, which looks deliberate. So both still
+  need their own fixes.
 - Rows already deleted cannot be brought back, and their links stay
   404. The daily cleanup (`RemoveExpiredInvitationsJob`) deletes every
   invitation past its deadline, whatever its status. So any old link,
@@ -212,7 +216,9 @@ deletion recorded nothing.
 
 The fix was tried on main, on OJS, OMP and OPS. The earlier email's
 accept and decline links show "Invitation Unavailable" in both paths,
-and the newest email still opens the accept wizard. Two further checks
+and the newest email still opens the accept wizard. On OJS and OMP, a
+reviewer's request link replaced by a reminder shows "Invitation
+Unavailable" too, and the reminder's link opens the review. Two further checks
 gave the same result with and without the fix. They ran with an
 earlier form of the diff, which did the same through
 `Collection::each()`. That form was dropped because `each()` stops at
@@ -255,6 +261,11 @@ the first `markAs()` that returns false. The checks were:
     status. A withdrawn invitation can therefore still be opened there
     until the cleanup removes it. Sending from it creates a new
     invitation, as "Edit" does.
+- Until the "Send Reminder" window stops minting access links when it
+  opens (its report, linked in the Cause), each opening leaves
+  cancelled rows behind, two on main, where it left none before. The
+  daily cleanup removes them once they pass their deadline. Seen in
+  the reviewer walk with the fix in.
 - PR `pkp/pkp-lib#13259` rewrites the same statement. It collects the
   rows through a new `getInvitationsToDelete()` and deletes them by id.
   If that PR merges first, its delete-by-id becomes the same
@@ -287,6 +298,10 @@ part, still within a couple of hours.
   (with `PKP_E2E_LINE=stable-3_5_0` in front for 3.5). With
   `WALK_MODE=neighbour` it runs only the two further checks of the
   Proposed fix.
+- The reviewer-link reach was walked by
+  [reminder-window-kills-reviewer-link/walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/reminder-window-kills-reviewer-link/walk.js)
+  on OJS and OMP (a preprint server has no review), run the same way:
+  its last step opens a request email's link after a reminder was sent.
 - No request failed on the server and no page script failed in any
   walk. The only console errors in the browser are the 404 answers
   themselves. The walks ran on PostgreSQL; the fault involves no
@@ -321,5 +336,12 @@ part, still within a couple of hours.
     and expired links, and does not mention replaced ones.
   - `pkp/pkp-lib#11154` (open), with PR `pkp/pkp-lib#13259`, is about
     which reviewer-access invitations the same deletion reaches.
+  - On `pkp/pkp-lib#12608` (closed, about a reviewer's link dying on
+    its first use), a tester's comment of 2026-04-29 notes that after a
+    reminder the former link shows "a 404 error and not the standard
+    3.5.0.4 link expired page". The answer of 2026-04-30 calls it a
+    design decision: a replaced invitation is deleted, not marked
+    expired, "so it is not considered a malfunction". No issue tracks
+    it.
 - Unverified: the audit entry the fix adds on main was read in the code
   and not looked at.

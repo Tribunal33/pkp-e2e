@@ -987,6 +987,8 @@ Left out of the scenarios above, by reason:
   - the accepted row of the reviewer's list reading "Please complete this review by" with the due date in the journal's short date format and no clock time ([A5](#a5); Rule 3): the guard the issue report proposes, once fixed
   - {OJS} step 3 of a review without a review form reading that a review or file "should" be entered, and a review with nothing typed and no file submitted once a "Recommendation" is chosen ([A7](#a7); Fields, Rule 13): the guard the issue report proposes, once fixed
   - a file link opened by a reviewer with no assignment on the submission landing on the access-denied page, and opened signed out landing on the Login page, where signing in downloads the file ([A6](#a6); Rule 15): the guard the issue report proposes, once fixed
+  - a reviewer holding requests on two submissions opening each request email's one-click link onto its own review, while a sent reminder still replaces the same review's link ([A9](#a9); Rule 16): the guard the issue report proposes, once fixed
+  - the request email's one-click link still opening the review after "Send Reminder" was pressed and the "Review Reminder" window closed with "Cancel" ([A9](#a9); Rule 16): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1041,7 +1043,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A5](#a5) | A reviewer's list shows an accepted review's due date with a midnight clock time, "2026-10-30 00:00:00" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | A file link opened after signing out, or without access to the file, shows one line of machine text | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Reviewer's step 3 on a journal says a review or file is required, yet an empty review is submitted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A9](#a9) | A reminder, or a request on another submission, kills the reviewer's earlier one-click link, which then shows a bare "404 Not Found" | 🐞 | user-visible | — |
+| [A9](#a9) | A second request, or a "Send Reminder" window opened and cancelled, kills the reviewer's one-click link, which then shows a bare "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A one-click link opened in a browser signed in as somebody else shows a blank page, never the intended message | 🐞 | user-visible | — |
 | [A12](#a12) | A reviewer's own review is listed under "Previous Reviews" once the submission has a later round | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | "Save for Later" on a review form says "Your changes have been saved." and, on the same screen, "Please fill in required fields." | 🐞 | minor | — |
@@ -1196,16 +1198,28 @@ A press's step states no such rule, and an empty review is submitted there at on
 Basis: probe, 2026-10-02. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a9"></a>
-**A9 — A later one-click email kills the earlier link** · 🐞 · user-visible.
-A reviewer holds a request email with its one-click link. When the journal
-sends them a second one-click email, a reminder for the same review or a
-request on another submission, the first email's link stops working:
-opening it shows a bare "404 Not Found" page, not the wizard and not
-"Invitation Unavailable". A reviewer who goes back to the original request
-email is locked out without a word of explanation; only the newest email's
-link works.
-Basis: probe (2026-09-04, both apps); the reason is a code reading.
-<sup>[f-a9](#fn-a9)</sup>
+**A9 — A second request, or a "Send Reminder" window opened and cancelled, kills the reviewer's one-click link, which then shows a bare "404 Not Found"** · 🐞 · medium.
+With "One-click Reviewer Access" on, a reviewer's emails carry a personal
+link that opens the review without a sign-in, and only the newest link
+the journal made for that reviewer works. Three faults sit behind that,
+each with its own report:
+- A request to the same reviewer on a second submission of the journal
+  kills the link in the first request's email, although that review is
+  still waiting for the reviewer.
+- Pressing "Send Reminder" on a reviewer's row withdraws the reviewer's
+  current link as soon as the "Review Reminder" window opens; after
+  "Cancel" nothing is mailed and the reviewer has no working link at all.
+- A link withdrawn in either way, or replaced by a reminder that was
+  sent, opens a bare page reading only "404 Not Found", not the
+  "Invitation Unavailable" page a cancelled or expired invitation gets;
+  the same fault as a replaced role invitation's
+  ([User invitations A3](U06-user-invitations.md#a3)).
+
+A sent reminder replacing the same review's link is the invitations'
+design. Nobody is told in any of the three; the reviewer can still sign
+in with username and password and open the review from "My Assignments
+as Reviewer".
+Basis: probe, 2026-10-02. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
 **A10 — A one-click link opened as somebody else shows a blank page** · 🐞 · user-visible.
@@ -2347,6 +2361,9 @@ a request on another submission had gone to them, both answered HTTP 404
 with the plain body "404 Not Found" on every open (three opens on OMP);
 a request link opened with no later email in between landed on the
 wizard. The code reading is the explanation, not a driven fact.
+Issue report: [docs/issues/U28-A9-reviewer-link-dead-after-second-request.md](../issues/U28-A9-reviewer-link-dead-after-second-request.md).
+Issue report: [docs/issues/U28-A9-reminder-window-kills-reviewer-link.md](../issues/U28-A9-reminder-window-kills-reviewer-link.md).
+Issue report (the bare "404 Not Found" page, joined): [docs/issues/U06-A3-replaced-invitation-links-not-found.md](../issues/U06-A3-replaced-invitation-links-not-found.md), filed as [pkp-e2e#513](https://github.com/jardakotesovec/pkp-e2e/issues/513).
 
 <a id="fn-a10"></a>
 **f-a10** — `ReviewerAccessInvite::handleAccess()` (or its redirect
