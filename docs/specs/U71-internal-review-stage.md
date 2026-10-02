@@ -821,6 +821,8 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - {OMP} the author's header Tasks panel gaining "Revisions to consider in Internal Review." after "Request Revisions" on an internal round, and losing it on the revised-file upload ([OMP1](#omp1); Side effects bullet 2): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - a round with a recommending editor assigned and no review under way,
     its box reading "Awaiting recommendations from editors." (Rule 14c)
@@ -926,7 +928,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [OMP1](#omp1) | After "Request Revisions" on Internal Review the author gets no task in the header Tasks panel | 🐞 | user-visible | — |
+| [OMP1](#omp1) | After "Request Revisions" on Internal Review, a press author gets no task in the Tasks panel | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | "Accept Submission" and "Create New Review Round" on an internal round carry none of the author's revised files | 🐞 | user-visible | — |
 | [OMP7](#omp7) | The author selecting the "Internal Review" entry itself gets a stale or empty page, and the page's script fails | 🐞 | minor · crash: script | — |
 | [OMP8](#omp8) | While External Review asks for revisions, the author's "Upload" on an earlier internal round files the revision there, out of the editor's sight | 🐞 | minor | — |
@@ -940,15 +942,17 @@ an entry notes otherwise; the team settles them on spec review.
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — No task for the author after an internal revision request** · 🐞 · user-visible.
-After "Request Revisions" on External Review the author's header Tasks
-panel gains "Revisions to consider in External Review.", linking to the
-monograph. After the same decision on Internal Review the Tasks panel
-gains nothing, and nothing appears later either. The author learns of the
-request from the email, from the round's box ("Revisions have been
-requested.") and from the "Revision requested" row on My Submissions with
-its "Submit revisions" button.
-Since: 2022-01-18 · Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
+**OMP1 — After "Request Revisions" on Internal Review, a press author gets no task in the Tasks panel** · 🐞 · low.
+After a press editor records "Request Revisions" on Internal Review,
+the author's Tasks panel in the page header gains nothing: it reads "No
+Items", and the "Tasks" button shows no count. After the same decision
+on External Review the panel lists "Revisions to consider in External
+Review." with the monograph's title.
+
+The request is recorded and the author can still answer it: the
+monograph's row on My Submissions reads "Revision requested" with a
+"Submit revisions" button.
+Since: 2022-01-18 · Basis: probe, 2026-10-02. <sup>[f-omp1](#fn-omp1)</sup>
 
 <a id="omp2"></a>
 **OMP2 — Revised files left behind by "Accept Submission" and "Create New Review Round"** · 🐞 · user-visible.
@@ -1199,6 +1203,7 @@ Basis: probe. <sup>[f-omp10](#fn-omp10)</sup>
 
 <a id="fn-omp1"></a>
 **f-omp1** — `PKP\decision\Repository::updateNotifications()` updates, for a `PENDING_REVISIONS_INTERNAL` decision, the types `[NOTIFICATION_TYPE_PENDING_INTERNAL_REVISIONS` (OMP's `getNotificationTypeByEditorDecision()`), then OMP's `getReviewNotificationTypes()` internal and external`]` for the authors assigned at the stage. `PendingRevisionsNotificationManager::updateNotification()` asks `Repo::decision()->getActivePendingRevisionsDecision($submissionId, $expectedStageId, Decision::PENDING_REVISIONS)`; for the internal stage that function accepts only `PENDING_REVISIONS_INTERNAL` and `RESUBMIT_INTERNAL` and returns null, so the delegate takes its removal branch and deletes the internal task (atom NOTIF-030) together with any decision task; `submissionFile/Repository::add()` runs the same update on every revised-file upload. The call's form dates from lib/pkp `f75706ba57` (pkp/pkp-lib#7265, 2022-01-18); before pkp/pkp-lib#11219 (2025-04-09) the lookup matched `PENDING_REVISIONS` decisions of the internal stage, of which there are none, so no internal task has been raised since that refactor. The task's wording would be `notification.type.pendingRevisions` "Revisions to consider in {$stage}." with "Internal Review". Live-probed 2026-09-27 (note td-task).
+Issue report: [docs/issues/U71-OMP1-internal-revisions-request-gives-author-no-task.md](../issues/U71-OMP1-internal-revisions-request-gives-author-no-task.md).
 
 <a id="fn-omp2"></a>
 **f-omp2** — lib/pkp `Accept::getSteps()` and `NewExternalReviewRound::getSteps()`, inherited unchanged by OMP's `AcceptFromInternal` and `NewInternalReviewRound`, build the "Revisions" list (`editor.submission.revisions`) with `filterByFileStages([SubmissionFile::SUBMISSION_FILE_REVIEW_REVISION])` and the round's id, hard-coded where the trait's `getRevisionFileStage()` would give `SUBMISSION_FILE_INTERNAL_REVIEW_REVISION`; an internal round's revised files sit in that internal stage, so the list is empty. `NewExternalReviewRound`'s promotion target is `SUBMISSION_FILE_REVIEW_FILE`, External Review's stage, not `SUBMISSION_FILE_INTERNAL_REVIEW_FILE`. Both since lib/pkp `f75706ba57` (pkp/pkp-lib#7265, 2022-01-18). The decision-recording spec's page table links here from both rows (corrected 2026-09-28). Live-probed 2026-09-27 (note td-carry); the External Review control the same day, after "Request Revisions" with "Revisions will not be subject to a new round of peer reviews." and the author's upload: both decisions' "Revisions" listed the file, ticked, and recording copied it into "Draft Files" and into Round 2's "Files for Review".

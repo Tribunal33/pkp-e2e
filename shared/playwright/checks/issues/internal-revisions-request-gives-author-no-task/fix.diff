@@ -1,0 +1,13 @@
+--- a/lib/pkp/classes/notification/managerDelegate/PendingRevisionsNotificationManager.php
++++ b/lib/pkp/classes/notification/managerDelegate/PendingRevisionsNotificationManager.php
+@@ -114,7 +114,9 @@
+         }
+         $expectedStageId = $stageData['id'];
+ 
+-        $pendingRevisionDecision = Repo::decision()->getActivePendingRevisionsDecision($submissionId, $expectedStageId, Decision::PENDING_REVISIONS);
++        // Each review stage records its own revisions decision (as ReviewRound::determineStatus() asks).
++        $decisionToCheck = $expectedStageId === WORKFLOW_STAGE_ID_EXTERNAL_REVIEW ? Decision::PENDING_REVISIONS : Decision::PENDING_REVISIONS_INTERNAL;
++        $pendingRevisionDecision = Repo::decision()->getActivePendingRevisionsDecision($submissionId, $expectedStageId, $decisionToCheck);
+         $removeNotifications = false;
+ 
+         if ($pendingRevisionDecision) {
