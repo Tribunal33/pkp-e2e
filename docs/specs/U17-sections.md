@@ -912,6 +912,9 @@ Left out of the scenarios above, by reason:
     ([OMP3](#omp3)): the guard the issue report proposes
   - {OMP} the ISSN paragraph in the series window reading "which
     identifies" ([OMP7](#omp7)): the guard the issue report proposes
+  - {OMP} the series list's "Inactive" box asking "…deactivate this
+    series?" ("…activate this series?") ([OMP5](#omp5)): the guard the
+    issue report proposes
 - **Rarely met**:
   - {OJS} "Omit author names for section items from issues' table of
     contents." ticked, the issue's table of contents without the section's
@@ -1041,7 +1044,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | The sections interface fails with a server error on a section asked for by a word, and on the site's address | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | The series path message says "only letters and numbers" while ".", "/", "_" and "-" are accepted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | A series "Save" with an SVG cover chosen saves nothing, not even the other changes, and shows no message | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OMP5](#omp5) | The series list's activate and deactivate windows ask about a "section" | 🐞 | minor | — |
+| [OMP5](#omp5) | A press manager deactivating or reactivating a series is asked about a "section" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP7](#omp7) | The ISSN help in a press's series window reads "which identifying" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP8](#omp8) | The series path help always ends in the word "Path", never the path | 🐞 | minor | — |
 | [OMP9](#omp9) | A series' public page shows no name, description or ISSN, and lists the books newest first whatever the series' order | 🐞 | user-visible | — |
@@ -1241,11 +1244,16 @@ nothing, drop the boxes and the column.
 Basis: probe, 2026-09-25. <sup>f-omp4</sup>
 
 <a id="omp5"></a>
-**OMP5 — The series list asks about a "section"** · 🐞 · minor.
-Pressing a series' "Inactive" box asks "Are you sure you wish to
-deactivate this section?" ("…to activate this section?" to reactivate)
-on a press, whose screens otherwise say "series".
-Basis: probe, 2026-09-25. <sup>f-omp5</sup>
+**OMP5 — A press manager deactivating or reactivating a series is asked about a "section"** · 🐞 · low.
+A press manager presses a series' "Inactive" box on Settings › Press ›
+"Series". The window asks "Are you sure you wish to deactivate this
+section?". When the series is already inactive, it asks "Are you sure
+you wish to activate this section?". Every other screen of a press says
+"series". "OK" deactivates or reactivates the series as asked. The
+question asks about a "section" in every interface language, in French a
+"rubrique", since none of OMP's 34 languages gives these questions a
+press's wording.
+Basis: probe, 2026-10-02. <sup>f-omp5</sup>
 
 <a id="omp6"></a>
 **OMP6 — A new series has no fixed place in the list** · ❓ · minor.
@@ -1567,6 +1575,7 @@ Issue report: [docs/issues/U17-OMP3-series-svg-cover-dropped-silently.md](../iss
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — `SeriesGridCellProvider::getCellActions()` uses `manager.sections.confirmActivateSection` / `confirmDeactivateSection`, which OMP's locale does not override. Live-probed 2026-09-25: note td9.
+Issue report: [docs/issues/U17-OMP5-series-toggle-asks-about-section.md](../issues/U17-OMP5-series-toggle-asks-about-section.md).
 
 <a id="fn-f-omp6"></a>
 **f-omp6** — OMP's `SeriesForm` sets no place in the order for a new series, where the section form puts a new section last (fn i); the list is read by `seq`, so series sharing a value come back in whatever order the database returns (the test installs run PostgreSQL). Live-probed 2026-09-25 (two presses, several drives): note td7.

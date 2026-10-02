@@ -20,7 +20,7 @@ and the hourly routine starts one only when none is running
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | A1: open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md (the rest of U37 written up by the issues session, VM s1, 2026-10-02) |
 | [U47](../specs/U47-media-files.md) | 8 | 2 | 4 | **Taken: issues session, VM s1, 2026-10-02**; OMP1 done with U69 A9 (pkp-e2e#282); A5 done with U66 A2 (pkp-e2e#4) |
 | [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **A21 taken: issues session, VM s1, 2026-10-02** (joined to U47 A4); A23, A24: open report docs/reports/2026-09-27-pkp-lib-13288.md |
-| [U17](../specs/U17-sections.md) | 16 | 2 | 2 | **Taken: issues session, workstation s0, 2026-10-02**; A1, A6 (with U58 A10), A7, A8, A9, A10 (its word-as-id half joined pkp-e2e#373), OMP2 (with U16 A9), OMP3, OMP7 done; OMP9, OPS6: open reports docs/reports/2026-09-25-omp-series-page-blank.md and 2026-09-25-ops-oai-empty-abstract.md |
+| [U17](../specs/U17-sections.md) | 16 | 2 | 2 | **Taken: issues session, workstation s0, 2026-10-02**; A1, A6 (with U58 A10), A7, A8, A9, A10 (its word-as-id half joined pkp-e2e#373), OMP2 (with U16 A9), OMP3, OMP5, OMP7 done; OMP9, OPS6: open reports docs/reports/2026-09-25-omp-series-page-blank.md and 2026-09-25-ops-oai-empty-abstract.md |
 | [U59](../specs/U59-hosted-journals.md) | 9 | 2 | 2 |  |
 | [U62](../specs/U62-plugins-management.md) | 8 | 2 | 2 |  |
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 |  |
