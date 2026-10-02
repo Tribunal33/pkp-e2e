@@ -2125,7 +2125,7 @@ Issue report: [pkp-e2e#605](https://github.com/jardakotesovec/pkp-e2e/issues/605
 "Browse" in a `span.title`; OJS and OPS print it in an `h2`. Live-probed
 2026-09-25: the accessibility tree read "Browse" as text on a press and as
 a level-2 heading on a journal and a server.
-Issue report: [docs/issues/U16-OMP3-press-browse-not-a-heading.md](../issues/U16-OMP3-press-browse-not-a-heading.md).
+Issue report: [pkp-e2e#606](https://github.com/jardakotesovec/pkp-e2e/issues/606) ([docs/issues/U16-OMP3-press-browse-not-a-heading.md](../issues/U16-OMP3-press-browse-not-a-heading.md)).
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — Note h. Live-probed 2026-09-25: note td12 (the block's text
