@@ -1343,6 +1343,7 @@ Left out of the scenarios above, by reason:
   - the guard for OPS1 (issue report `docs/issues/U35-OPS2-preprint-assign-editor-message-not-filled.md`): on a preprint server, "Assign Editor" chosen in the "Add" window fills "Message" with its letter and saves (Rule 10d)
   - the guard for A3 (issue report `docs/issues/U37-A3-writer-told-of-own-message.md`): after an opening and a reply, the writer's mailbox and Tasks list stay empty while the other participants get both (Side effects)
   - the guard for A5 (issue report `docs/issues/U37-A5-template-says-it-fills-participants.md`): pressing a template leaves "Participants" unchanged and its line names only what it fills (Rule 10d)
+  - the guard for A9 (issue report `docs/issues/U37-A9-participant-message-edit-adds-message.md`): a discussion opened by "Notify", renamed through "Edit", keeps one first message, its text replaced in place and headed with the sender (Rules 15a, 15e)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1398,7 +1399,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | A task's owner is offered "Edit" but cannot save even a new due date on a task someone else opened | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | On a press and a preprint server the edit refusals show a raw key | 🐞 | minor | — |
 | [A8](#a8) | An Author cannot save an edit of a discussion whose first message has an uploaded file, and the refusal names no field | 🐞 | user-visible | — |
-| [A9](#a9) | Editing a discussion a Participants message opened adds a second message, under the name of the person it was sent to | 🐞 | user-visible | — |
+| [A9](#a9) | Editing a discussion that "Notify" or "Assign" opened adds a copy of its message under the recipient's name | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A past "Due Date" is refused with "Start date should be greater than or equal to today" | 🐞 | minor | — |
 | [A16](#a16) | A task due today already reads "Overdue" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | A closed task past its due date still reads "This task is overdue. Remind the task owner…" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1527,19 +1528,19 @@ the same edit.
 Basis: probe. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
-**A9 — Editing a Participants message's discussion adds a second message** · 🐞 · user-visible.
-A discussion opened by a Participants "Notify" or "Assign" shows its
-first message in "Edit". The first "Save", even one that only renames
-the item, does not replace that message: the discussion window then
-shows the original first message and, after it, a second message with
-the box's text, headed with the name the row gives as "Created by:"
-(the person the message went to), whoever pressed "Save". Later saves
-rewrite that second message. The History records nothing, so the text
-reads as written by someone who never wrote it. An Author or assistant
-role the message went to saves this way at any time, though Rule 15c
-holds everyone else in those roles to their own first message and its
-first hour.
-Basis: probe. <sup>[f-a9](#fn-a9)</sup>
+**A9 — Editing a discussion that "Notify" or "Assign" opened adds a copy of its message under the recipient's name** · 🐞 · medium.
+An editor who uses "Edit" on a discussion opened by a message from the
+Participants panel ("Notify", or the "Message" box of "Assign
+Participant") does not change that message. The first "Save", even one
+that only renames the discussion or adds a participant, adds a copy of
+the message box's text as a second message, headed with the name of the
+person the message was sent to. Later saves rewrite that copy, and the
+original message stays as it was. The copy cannot be removed afterwards,
+since a single message cannot be deleted. The person the message was
+sent to is offered "Edit" too, and their "Save" adds a message under
+their own name. Every discussion such a message opens is affected, in
+every stage.
+Basis: probe, 2026-10-02. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
 **A10 — A due-date refusal speaks of a start date** · 🐞 · minor.
@@ -1988,6 +1989,7 @@ Issue report: [docs/issues/U37-A6-task-owner-cannot-save-edit.md](../issues/U37-
 
 <a id="fn-a9"></a>
 **f-a9** — The Participants message path of note aa (`PKPStageParticipantNotifyForm::sendMessage()`) creates its first `Note` without `isHeadnote`; `addQuery()` (the comments box and the recommendation) has flagged it since pkp/pkp-lib#13409 (`3dc90c81a6`, 2026-09-29, issue pkp/pkp-lib#13345), and the auto-added item was never affected. On the Participants path `editTask()` reads the head note as `null` (its later `$headnote->id` reads a property of null, a warning); `EditorialTask::saveHeadnote()` finds no flagged note and saves a new flagged one with the edited text, which later saves update; the window heads it with the item's `createdBy`. With no head note the `EditTask` `description` closure passes (note v), so the recipient's save is held neither to the message's writer nor to the hour. Live-probed 2026-09-23, before that change (all three apps, the recommendation OJS and OMP): the "Notify", comments-box and recommendation discussions each gaining a second message under the recipient's, the Author's or the recommender's username after another person's "Save". Re-probed 2026-09-30: the Participants path alone, a name-only "Save" adding the copy and the next one rewriting it, and the recipient Author's and Funding Coordinator's saves past the hour (td10).
+Issue report: [docs/issues/U37-A9-participant-message-edit-adds-message.md](../issues/U37-A9-participant-message-edit-adds-message.md).
 
 <a id="fn-a10"></a>
 **f-a10** — `EditTask::messages()` maps `dateDue.after_or_equal` to `validation.after_or_equal` "Start date should be greater than or equal to today" (lib/pkp `locale/en/validation.po`). The date field's `min: 'today'` greys earlier days in the picker; typed, it reaches the server (td11, live-probed 2026-09-23).

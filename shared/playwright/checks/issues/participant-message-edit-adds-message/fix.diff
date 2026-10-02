@@ -1,0 +1,10 @@
+--- a/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
++++ b/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
+@@ -232,6 +232,7 @@
+                 $this->getData('message'),
+                 array_intersect_key($mailable->getData(), $additionalVariables)
+             ),
++            'isHeadnote' => true,
+         ]);
+ 
+         // Send the email
