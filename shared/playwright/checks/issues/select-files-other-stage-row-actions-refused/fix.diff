@@ -1,0 +1,30 @@
+--- a/lib/pkp/controllers/grid/files/SelectableSubmissionFileListCategoryGridHandler.php
++++ b/lib/pkp/controllers/grid/files/SelectableSubmissionFileListCategoryGridHandler.php
+@@ -232,7 +232,12 @@
+      */
+     protected function getRowInstance()
+     {
+-        return new SubmissionFilesGridRow($this->getCapabilities(), $this->getStageId());
++        // Each category is a workflow stage and lists that stage's files, so a
++        // row's actions name its category's stage, not the stage the grid was
++        // opened from: SubmissionFileAccessPolicy refuses a file whose stage
++        // differs from the request's stageId.
++        $categoryId = $this->getCurrentCategoryId();
++        return new SubmissionFilesGridRow($this->getCapabilities(), is_null($categoryId) ? $this->getStageId() : (int) $categoryId);
+     }
+ 
+ 
+--- a/lib/pkp/controllers/grid/files/FileNameGridColumn.php
++++ b/lib/pkp/controllers/grid/files/FileNameGridColumn.php
+@@ -95,7 +95,10 @@
+         $submissionFile = $submissionFileData['submissionFile']; /** @var SubmissionFile $submissionFile */
+ 
+         // Create the cell action to download a file.
+-        $cellActions[] = new DownloadFileLinkAction($request, $submissionFile, $this->_getStageId());
++        // A file grid's row knows the stage its file is listed under
++        // (a category grid lists several stages).
++        $stageId = $row instanceof SubmissionFilesGridRow ? $row->getStageId() : null;
++        $cellActions[] = new DownloadFileLinkAction($request, $submissionFile, $stageId ?? $this->_getStageId());
+ 
+         return $cellActions;
+     }

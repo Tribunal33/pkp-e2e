@@ -933,6 +933,7 @@ Left out of the scenarios above, by reason:
   - "Add Note" with the box empty on a file's "Notes": refused, no note listed and no "Posted new note." line in "History" ([A10](#a10)): the guard the issue report proposes
   - "Cancel upload" pressed on the full bar with the server's answer held back: no file stored, the panel empty after a reload ([A25](#a25)): the guard the issue report proposes
   - "Change File" on step 1 of a new file's upload, then "Complete": the list gains the second file alone ([A14](#a14)): the guard the issue report proposes
+  - in "Upload/Select Files" with "Show files from all accessible workflow stages." ticked, another stage's row: "More Information" loads and the file name downloads ([A19](#a19)): the guard the issue report proposes
 - **Nothing new to test**:
   - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
   - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
@@ -1000,7 +1001,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | The "Download All Files" zip is named with two hyphens ("12--submission-files.zip") | 🐞 | minor | — |
 | [A14](#a14) | Upload wizard: "Change File" on step 1 uploads the second file but keeps the first, and the list shows both | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | Step 2 reopened from step 3 offers "Complete" but shows "File Added" again instead of closing | 🐞 | minor | — |
-| [A19](#a19) | In "Upload/Select Files", another stage's files refuse their "More Information", "Edit" and "Delete" | 🐞 | minor | — |
+| [A19](#a19) | In "Upload/Select Files", another stage's files refuse "More Information", "Edit", "Delete" and their download | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | The reviewer's "Review Files" search keeps every file | 🐞 | minor | — |
 | [A21](#a21) | A file at the upload limit passes the size check, uploads, then fails on the server instead of being refused | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A23](#a23) | Revising a file, a second pick on step 1 and then "Cancel" leave the first pick as the file instead of the original | 🐞 | minor | — |
@@ -1233,16 +1234,25 @@ tab switch does? Lean: yes, and the stray leave-page question should go.
 Basis: probe. <sup>[f-a18](#fn-a18)</sup>
 
 <a id="a19"></a>
-**A19 — "Upload/Select Files" refuses the row actions of another stage's files** · 🐞 · minor.
-With "Show files from all accessible workflow stages." ticked, a file
-listed under another stage offers "More Information" (and, on the
-Copyediting lists, "Edit" and "Delete"), and none of them works, even
-for a Journal Manager. "More Information" pops up "The current role does
-not have access to this operation." and "undefined", then stays on
-"Loading"; "Edit" opens "Edit a file" holding only that refusal; "Delete"
-asks its question and, on "OK", keeps its dialog open with a spinner,
-deleting nothing. The same controls work on the list's own stage.
-Basis: probe. <sup>[f-a19](#fn-a19)</sup>
+**A19 — In "Upload/Select Files", another stage's files refuse "More Information", "Edit", "Delete" and their download** · 🐞 · medium.
+In the "Upload/Select Files" window, with "Show files from all
+accessible workflow stages." ticked, an editor is refused every action
+on a file listed under another stage. "More Information" raises two
+alerts and stays on "Loading", "Edit" opens a window holding only "The
+current role does not have access to this operation.", and "Delete"
+asks its question and deletes nothing. Pressing the file's name replaces
+the whole page with a line of raw text instead of downloading the file.
+The same actions work on the files of the window's own stage, and they
+worked on every row until a 2020 change.
+
+"More Information" and the file's name should plainly work on such a
+row. Whether "Edit" and "Delete" should work there or should not be
+offered is the team's choice: with the proposed fix, "Delete" in this
+window removes the earlier stage's original and every copy made from it.
+
+Ticking the files and copying them with "OK" works. A site
+administrator is not refused.
+Basis: probe, 2026-10-02. <sup>[f-a19](#fn-a19)</sup>
 
 <a id="a20"></a>
 **A20 — The reviewer's "Review Files" search changes nothing** · 🐞 · minor.
@@ -2330,6 +2340,7 @@ s; "Edit" showed the refusal; `delete-file?…&stageId=4` answered
 `status:false` "The current role does not have access to this operation.", the
 dialog still spinning after 13 s and "notes.md" still in "Submission Files"
 (twice per app).
+Issue report: [docs/issues/U36-A19-select-files-other-stage-row-actions-refused.md](../issues/U36-A19-select-files-other-stage-row-actions-refused.md).
 
 <a id="fn-a20"></a>
 **f-a20** — Note x. Live-probed 2026-09-23 (OJS and OMP): the reviewer's grid
