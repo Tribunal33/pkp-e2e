@@ -1,0 +1,5 @@
+--- a/locale/en/userAccess.po
++++ b/locale/en/userAccess.po
+@@ -0,0 +1,2 @@
++msgid "userAccess.search"
++msgstr "Enter a user's name, role (e.g. Press editor), or affiliation"

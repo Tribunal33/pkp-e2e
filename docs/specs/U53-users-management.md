@@ -798,6 +798,17 @@ Left out of the scenarios above, by reason:
     `docs/issues/U53-A19-remove-user-upcoming-role-error.md`): a manager
     uses "Remove User" on a user who holds a current role and a role
     starting on a later date: both roles end in one go, with no error
+  - the guard for A11 (issue report
+    `docs/issues/U53-A11-users-tab-french-raw-keys.md`): in the French
+    (Canada) interface, the "Users" tab and the first page of "Invite to a
+    role" show no "##" code
+  - the guard for A4 (issue report
+    `docs/issues/U53-A4-user-search-example-journal-role.md`): on a press
+    and a preprint server, searching the users box's own example lists at
+    least one user
+  - the guard for A5 (issue report
+    `docs/issues/U53-A5-users-list-row-button-raw-key.md`): every row's "…"
+    button on the users list has an accessible name with no "##"
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -884,12 +895,12 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Disable User" and "Enable User" are offered on rows the manager may not administer, and refused only inside the window | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | "Remove User" on the Site Administrator's row ends in "An unexpected error has occurred…" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A4](#a4) | The search box's example names "Journal editor" on a press and a preprint server | 🐞 | minor | — |
-| [A5](#a5) | The row's "…" button is announced to screen readers as a raw code | 🐞 | minor | — |
+| [A4](#a4) | On a press or preprint server, the users search box suggests searching for "Journal editor", which finds nobody | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A5](#a5) | Users & Roles: screen readers announce every user row's "…" button as "##userAccess.management.options##" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Users & Roles: the "Disable User" window names roles the user no longer holds | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Users & Roles: the reason typed when enabling a user is shown to them when disabled again | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | Merging a section editor's account silently drops them from their sections instead of moving them | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A11](#a11) | The French "Users" tab prints raw codes for its search label, the Invitations heading, button and columns, and the "Start Date" column | 🐞 | minor | — |
+| [A11](#a11) | In French (Canada), the Users & Roles "Users" tab and the role invitation pages show codes instead of labels | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | Users & Roles: the ORCID and "disabled" icons after a user's name have no name for screen readers | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | The "Merge user" window and the older grid show nothing under "Roles" for the Site Administrator | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
@@ -943,19 +954,26 @@ them.
 Basis: probe. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — The search example names a journal role everywhere** · 🐞 · minor.
-The search box reads "Enter a user's name, role (e.g Journal editor), or
-affiliation" on a press and a preprint server too, where no role of that
-name exists (a press has "Press editor"; a preprint server has no editor
-role). The example should name a role of the app it is shown in.
-Basis: probe. <sup>f-a4</sup>
+**A4 — On a press or preprint server, the users search box suggests searching for "Journal editor", which finds nobody** · 🐞 · low.
+On a press or a preprint server, the search box of Settings › Users &
+Roles › "Users" reads "Enter a user's name, role (e.g Journal editor),
+or affiliation". Neither has a role of that name: a press's editor is
+the "Press editor", and a preprint server's editorial role is the
+"Moderator". A manager who types the example gets an empty list,
+"Current Users (0)". The wrong example shows in English and, read in the
+code, in French (France), on both presses and preprint servers. Basis:
+probe, 2026-10-02. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — The row's action button has a raw code for a name** · 🐞 · minor.
-A screen reader announces the "…" button at the end of every row as
-"##userAccess.management.options##" instead of a word such as "Options";
-the menu it opens reads normally.
-Basis: probe. <sup>f-a5</sup>
+**A5 — Users & Roles: screen readers announce every user row's "…" button as "##userAccess.management.options##"** · 🐞 · low.
+A screen reader announces the "…" button at the end of every row in
+Settings › Users & Roles › "Current Users" as
+"##userAccess.management.options##" instead of a word such as "More
+Actions". The button shows only three dots, so this raw translation key
+is all a blind manager hears. Nothing is lost: the button works, and the
+menu it opens reads normally. The raw key is the same in every language
+the journal, press or server offers, English included. Basis: probe,
+2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — Users & Roles: the "Disable User" window names roles the user no longer holds** · 🐞 · low.
@@ -1024,15 +1042,25 @@ as the list does? Lean: yes.
 Basis: probe. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The French list shows raw codes** · 🐞 · minor.
-In the French interface the "Users" tab prints raw codes instead of
-French text: the search box "##userAccess.search##", the Invitations
-heading "##invitation.header##", the "Invite to a role" button
-"##invitation.inviteToRole.btn##", the Invitations table's columns
-"##INVITATION.TABLEHEADER.NAME##" and "##INVITATION.HEADER##", and the
-list's "Start Date" column "##USERACCESS.TABLEHEADER.STARTDATE##". The row
-button's name is A5's raw code in every app and language.
-Basis: probe. <sup>f-a11</sup>
+**A11 — In French (Canada), the Users & Roles "Users" tab and the role invitation pages show codes instead of labels** · 🐞 · low.
+A manager working in French (Canada) who opens Settings › Users & Roles
+sees codes where the "Users" tab's labels should be: the search box
+reads "##userAccess.search##", the Invitations table is headed
+"##invitation.header## (0)" with the button
+"##invitation.inviteToRole.btn##", two of its columns and the users
+list's "Start Date" column are codes, and the window that disables a
+user is titled "##user.disabledModal.title##". The button opens the role
+invitation pages, where every heading, step, field and button but
+"Annuler" is a code. The rest of the tab is French, and its buttons and
+menus still work, so a manager can get through by switching the
+interface to English. The fix covers French (Canada) only: its missing
+texts, entered on PKP's Weblate by the French (Canada) translators or a
+developer, or committed as the tried diff, with no code change. Every
+journal, press and preprint server that offers French (Canada) shows
+these codes. The same five tab texts are also missing in 50 other
+languages; French (France) is not among them, as it has all five. Those
+languages are for their translators and are not counted in this report's
+effort. Basis: probe, 2026-10-02. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — Users & Roles: the ORCID and "disabled" icons after a user's name have no name for screen readers** · 🐞 · low.
@@ -1945,12 +1973,14 @@ overrides it. OMP's editor group is `default.groups.name.editor` "Press
 editor"; OPS installs no editor group. Live-probed 2026-09-25: the same
 text on all three apps; the press's roles include "Press editor", the
 preprint server's no editor.
+Issue report: [docs/issues/U53-A4-user-search-example-journal-role.md](../issues/U53-A4-user-search-example-journal-role.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-25, all three apps, English interface:
 every row's "…" button is named `##userAccess.management.options##` (25 of
 25 on the seeded journal's first page), and the menu reads normally. Seen
 first on 2026-09-05 on OPS (review-stage claim check). Mechanism: note q.
+Issue report: [docs/issues/U53-A5-users-list-row-button-raw-key.md](../issues/U53-A5-users-list-row-button-raw-key.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-25, all three apps: a throwaway Author
@@ -1993,6 +2023,7 @@ guards every action but "Edit" and "Email" with not-own-row.
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-25: note td13. Mechanism: note u.
+Issue report: [docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-25, all three apps: in the list's
