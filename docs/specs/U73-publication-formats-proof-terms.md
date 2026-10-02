@@ -2377,7 +2377,7 @@ and the rows' physical order in `publication_formats` matched them;
 every `seq` read 0, and a step that moved a format had rewritten its
 row. One book of thirty listed "Charlie, Delta, Alpha, Bravo" before
 any action.
-Issue report: [docs/issues/U46-A7-galley-format-moves-in-list-when-saved.md](../issues/U46-A7-galley-format-moves-in-list-when-saved.md).
+Issue report: [pkp-e2e#617](https://github.com/jardakotesovec/pkp-e2e/issues/617) ([docs/issues/U46-A7-galley-format-moves-in-list-when-saved.md](../issues/U46-A7-galley-format-moves-in-list-when-saved.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Note e: the form requires the name in the book's language

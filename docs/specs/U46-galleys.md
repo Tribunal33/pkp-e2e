@@ -1351,7 +1351,7 @@ Live-probed 2026-09-24 (note q9).
 **f-a7** — Note j: every galley shares position 0 until an order is
 saved, so the database's own order decides the list. Live-probed
 2026-09-24 (note q12) on OJS and OPS, the same on both.
-Issue report: [docs/issues/U46-A7-galley-format-moves-in-list-when-saved.md](../issues/U46-A7-galley-format-moves-in-list-when-saved.md).
+Issue report: [pkp-e2e#617](https://github.com/jardakotesovec/pkp-e2e/issues/617) ([docs/issues/U46-A7-galley-format-moves-in-list-when-saved.md](../issues/U46-A7-galley-format-moves-in-list-when-saved.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — Live-probed 2026-09-24 (note q15), twice on OJS: the
