@@ -986,6 +986,7 @@ Left out of the scenarios above, by reason:
   - a reviewer's search for a word of one title listing that row alone under "All assignments (1)", and a search for no title's word reading "No Items" ([A1](#a1); Rules 3–4): the guard the issue report proposes, once fixed
   - the accepted row of the reviewer's list reading "Please complete this review by" with the due date in the journal's short date format and no clock time ([A5](#a5); Rule 3): the guard the issue report proposes, once fixed
   - {OJS} step 3 of a review without a review form reading that a review or file "should" be entered, and a review with nothing typed and no file submitted once a "Recommendation" is chosen ([A7](#a7); Fields, Rule 13): the guard the issue report proposes, once fixed
+  - a file link opened by a reviewer with no assignment on the submission landing on the access-denied page, and opened signed out landing on the Login page, where signing in downloads the file ([A6](#a6); Rule 15): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1038,7 +1039,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A2](#a2) | "Previous Reviews" says "Round 1 Review Submitted on" with no date for a round the reviewer never finished | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | Reviewer empties a saved review text and saves again: the old text stays saved and is what the editor reads | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A reviewer's list shows an accepted review's due date with a midnight clock time, "2026-10-30 00:00:00" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A6](#a6) | A file link opened by an account without file access answers a bare line of text, not the access-denied page | 🐞 | minor | — |
+| [A6](#a6) | A file link opened after signing out, or without access to the file, shows one line of machine text | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Reviewer's step 3 on a journal says a review or file is required, yet an empty review is submitted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | A reminder, or a request on another submission, kills the reviewer's earlier one-click link, which then shows a bare "404 Not Found" | 🐞 | user-visible | — |
 | [A10](#a10) | A one-click link opened in a browser signed in as somebody else shows a blank page, never the intended message | 🐞 | user-visible | — |
@@ -1150,15 +1151,26 @@ review. The fix is one line in one ui-library file.
 Basis: probe, 2026-10-02. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
-**A6 — A file link opened by an account without file access answers a bare line of text** · 🐞 · minor.
-A file link copied from the wizard and opened by an account with no access
-to the submission's files (a reviewer without an assignment on that
-submission; the submission's editors download the file) shows a page
-holding nothing but one line of machine text with the message "The current
-role does not have access to this operation." inside it, and no file,
-instead of the access-denied page every other refused address shows. The
-refusal itself holds.
-Basis: probe (2026-09-04 and 2026-09-05, both apps). <sup>[f-a6](#fn-a6)</sup>
+**A6 — A file link opened after signing out, or without access to the file, shows one line of machine text** · 🐞 · low.
+A file's name in the workflow's file lists and in a reviewer's review
+request is a link that downloads the file. When the person who opens
+that link is signed out, or is signed in without access to the file,
+the browser shows a page with no header or menu and one line of
+machine text: the refusal as raw JSON, with "The current role does not
+have access to this operation." inside it. They expect the login page
+when signed out, and the access-denied page otherwise.
+
+The ordinary way to meet it is a session that ended while the workflow
+stayed open: pressing a file's name then shows that line, in a new tab
+or in place of the page they were on, and nothing says to sign in
+again.
+
+An account without access (a reviewer with no assignment on the
+submission who is given the link) is rightly refused. Only the form of
+the refusal is wrong. That form is shared by every address of the older
+kind the screens' scripts call, not only file links, so the fix changes
+one shared answer.
+Basis: probe, 2026-10-02. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
 **A7 — Reviewer's step 3 on a journal says a review or file is required, yet an empty review is submitted** · 🐞 · low.
@@ -2291,6 +2303,7 @@ OMP: the assigned Section Editor and the Journal Manager downloaded the
 same link (`SubmissionFileAssignedReviewerAccessPolicy` is one of several
 policies the file endpoint accepts; the editors pass on their stage
 assignment); a reviewer with no assignment got the JSON refusal.
+Issue report: [docs/issues/U28-A6-file-link-refusal-bare-machine-text.md](../issues/U28-A6-file-link-refusal-bare-machine-text.md).
 
 <a id="fn-a7"></a>
 **f-a7** — The hidden textareas behind the two editors carry the browser's

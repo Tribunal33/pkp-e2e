@@ -1,0 +1,29 @@
+--- a/lib/pkp/classes/core/PKPComponentRouter.php
++++ b/lib/pkp/classes/core/PKPComponentRouter.php
+@@ -50,6 +50,7 @@
+ use Exception;
+ use PKP\config\Config;
+ use PKP\plugins\Hook;
++use PKP\security\Validation;
+ 
+ // The string to be found in the URL to mark this request as a component request
+ define('COMPONENT_ROUTER_PATHINFO_MARKER', '$$$call$$$');
+@@ -333,6 +334,18 @@
+         string $authorizationMessage,
+         array $messageParams = []
+     ) {
++        // A component address the browser opens as a page (a file's download
++        // link, pressed or typed) shows its answer to a person, not to a
++        // script: send them where the page router does, to Login or to the
++        // access-denied page. A page load asks for text/html by name; the
++        // scripts' requests ask for JSON or for anything.
++        if ($request->isGet() && str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'text/html')) {
++            if (!$request->getUser()) {
++                Validation::redirectLogin();
++            }
++            $request->redirect(null, 'user', 'authorizationDenied', null, ['message' => $authorizationMessage]);
++        }
++
+         $translatedAuthorizationMessage = __($authorizationMessage, $messageParams);
+ 
+         // Add the router name and operation if show_stacktrace is enabled.
