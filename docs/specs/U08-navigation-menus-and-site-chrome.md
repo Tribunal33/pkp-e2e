@@ -2686,7 +2686,7 @@ ROLE_ID_ASSISTANT, ROLE_ID_REVIEWER, ROLE_ID_AUTHOR]` has had no
 `ROLE_ID_SUB_EDITOR` through every rewrite of the method (PSR-12 reformat
 2021-04-20 and later), while `PKPPageRouter::getHomeUrl()` sends a sub
 editor to `dashboard/editorial`. Seen on screen 2026-09-04 (note e).
-Issue report: [docs/issues/U08-A2-section-editor-dashboard-opens-profile.md](../issues/U08-A2-section-editor-dashboard-opens-profile.md).
+Issue report: [docs/issues/U08-A2-section-editor-dashboard-opens-profile.md](../issues/U08-A2-section-editor-dashboard-opens-profile.md), filed as [pkp-e2e#634](https://github.com/jardakotesovec/pkp-e2e/issues/634).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note w. The heading is `{translate key=$pageTitle}` with no
