@@ -1,0 +1,25 @@
+--- a/templates/frontend/objects/monograph_full.tpl
++++ b/templates/frontend/objects/monograph_full.tpl
+@@ -134,6 +134,22 @@
+ 				</div>
+ 			{/if}
+ 
++			{* Amendment notice: what this version changed *}
++			{if $publication->getLocalizedData('summaryOfChanges')}
++				{assign var="updateType" value=null}
++				{if $publication->getData('updateType')}
++					{assign var="updateType" value=PKP\publication\enums\UpdateType::tryFrom($publication->getData('updateType'))}
++				{/if}
++				<div class="item amendment_notice">
++					<h2 class="label">
++						{if $updateType}{$updateType->label()|escape}{else}{translate key="publication.updateType.newVersion"}{/if}
++					</h2>
++					<div class="value">
++						{$publication->getLocalizedData('summaryOfChanges')|strip_unsafe_html}
++					</div>
++				</div>
++			{/if}
++
+ 			{* Abstract *}
+ 			<div class="item abstract">
+ 				<h2 class="label">

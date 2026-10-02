@@ -1,0 +1,21 @@
+--- a/templates/frontend/objects/article_details.tpl
++++ b/templates/frontend/objects/article_details.tpl
+@@ -200,6 +200,18 @@
+ 			</section>
+ 			{/if}
+ 
++			{* Amendment notice: what this version changed *}
++			{if $publication->getLocalizedData('summaryOfChanges')}
++				{assign var="updateType" value=null}
++				{if $publication->getData('updateType')}
++					{assign var="updateType" value=PKP\publication\enums\UpdateType::tryFrom($publication->getData('updateType'))}
++				{/if}
++				<section class="item amendment_notice">
++					<h2 class="label">{if $updateType}{$updateType->label()|escape}{else}{translate key="publication.updateType.newVersion"}{/if}</h2>
++					{$publication->getLocalizedData('summaryOfChanges')|strip_unsafe_html}
++				</section>
++			{/if}
++
+ 			{* Abstract *}
+ 			{if $publication->getLocalizedData('abstract')}
+ 				<section class="item abstract">

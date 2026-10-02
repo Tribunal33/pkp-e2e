@@ -957,6 +957,10 @@ Left out of the scenarios above, by reason:
     a journal whose only issues are future ones, the panel's first pick of
     "Assign To Future Issue and Schedule Only" ending in "Status:
     Scheduled", and a Publication Settings save of it coming back checked
+  - the guard for A5 (issue report
+    `docs/issues/U49-A5-amendment-notice-shown-to-no-reader.md`): a version
+    published with Update Type "Correction" and a Summary of Changes showing
+    that summary on its own reader page, in every app
 - **Rarely met**:
   - the publish button skipping the details panel on a journal with
     issues, after a Publication Settings save on a version that already
@@ -1073,7 +1077,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A5](#a5) | The published Summary of Changes appears on no reader page; the promised amendment notice never renders | 🐞 | user-visible | — |
+| [A5](#a5) | Readers never see a new version's Summary of Changes, though the editor is told it appears publicly | 🐞 | high | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Merely creating an unpublished version rewrites the live reader page's date line | 🐞 | user-visible | — |
 | [A10](#a10) | In French the "Create New Version" dialog and the Publication Settings / Preprint Entry page show raw codes; the versions to copy from cannot be told apart | 🐞 | minor | — |
 | [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused with no message and publishing is unreachable | 🐞 | user-visible | — |
@@ -1164,16 +1168,21 @@ overriding a made choice is a defect-shaped convenience. Since:
 <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
-**A5 — The amendment notice never reaches readers** · 🐞 · user-visible.
-Every screen carrying the Summary of Changes promises "This will appear
-publicly as the version amendment notice…". Yet a version published with
-Update Type "Correction" and a saved summary shows that notice on no
-reader page in any app: not the article landing page, not the
-per-version pages, not the press's catalog page, not the preprint page.
-Readers see a new version appear with no word on what changed, while the
-editor believes they published a correction notice. Since: 2026-08-29 ·
-Basis: probe (all three apps, default themes).
-<sup>[f-a5](#fn-a5)</sup>
+**A5 — Readers never see a new version's Summary of Changes, though the editor is told it appears publicly** · 🐞 · high.
+An editor who publishes a new version of an article, book or preprint
+with Update Type "Correction" and a Summary of Changes is promised on
+the form that "This will appear publicly as the version amendment
+notice". After publishing, the new version's reader page does not show
+it. Readers see only a new entry in the "Versions" list and an "Updated
+on" date, with no word on what changed. The publish goes through and the
+form keeps the text, so the editor has no reason to check. A retraction
+or a withdrawal published this way leaves readers no mark at all. The
+display was never built: the change that added the field left the themes
+for later, and upstream's open plan for the feature lists only where the
+notice should go on a press and a preprint server. Every version
+published with a summary is affected, whatever its Update Type, on every
+install using the default theme, the only theme the three apps ship.
+Basis: probe, 2026-10-02. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
 **A6 — An unpublished draft rewrites the public dates** · 🐞 ·
@@ -2106,6 +2115,7 @@ promise is `publication.summaryOfChanges.description` ("This will
 appear publicly as the version amendment notice. Ensure it accurately
 reflects the changes made in this version before publishing."), shown
 on the panel and every entry page.
+Issue report: [docs/issues/U49-A5-amendment-notice-shown-to-no-reader.md](../issues/U49-A5-amendment-notice-shown-to-no-reader.md).
 
 <a id="fn-a6"></a>
 **f-a6** — Live-probed 2026-08-29, all three apps (scratch contexts):
