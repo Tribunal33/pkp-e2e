@@ -1341,6 +1341,7 @@ Left out of the scenarios above, by reason:
   - the guard for A16-A17 (issue report `docs/issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md`): scenario 4 closes its task three days past due and reads "Task closed by …" in "Activity", and a task due today shows a badge and a line that agree (Rules 2d, 2e)
   - the guard for A6 (issue report `docs/issues/U37-A6-task-owner-cannot-save-edit.md`): scenario 10's task owner (an assistant or the Author who did not write the first message) saves a new due date from "Edit", and a rewrite of the first message is still refused (Rule 15c)
   - the guard for OPS1 (issue report `docs/issues/U35-OPS2-preprint-assign-editor-message-not-filled.md`): on a preprint server, "Assign Editor" chosen in the "Add" window fills "Message" with its letter and saves (Rule 10d)
+  - the guard for A3 (issue report `docs/issues/U37-A3-writer-told-of-own-message.md`): after an opening and a reply, the writer's mailbox and Tasks list stay empty while the other participants get both (Side effects)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1390,7 +1391,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | On a press and a preprint server as shipped, saving a discussion or a reply ends in an error dialog, and nobody is emailed or told | 🐞 | user-visible · crash: server | — |
 | [A2](#a2) | The "Add" window's subtitle reads "Open for What? Open to What? Beyond Content" | 🐞 | minor | — |
-| [A3](#a3) | The writer of a message receives it by email and as a Tasks row | 🐞 | minor | — |
+| [A3](#a3) | Whoever opens a discussion or replies gets their own message back by email and as a Tasks row | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | When adding a task or discussion, a "Find Template" search for "discussion" or "task" opens an "Error" window | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | Choosing a template leaves "Participants" as it was, though the template says it fills them | 🐞 | minor | — |
 | [A6](#a6) | A task's owner is offered "Edit" but cannot save even a new due date on a task someone else opened | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1445,12 +1446,20 @@ nothing.
 Basis: probe. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
-**A3 — The writer is told of their own message** · 🐞 · minor.
-Opening a discussion or replying emails the writer a copy of what they
-just wrote and adds a "Discussion added." row to their own Tasks panel.
-The writer expects only the other participants to be told; before the
-2026 rework the writer was left out.
-Since: 2026-02-10 · Basis: probe. <sup>[f-a3](#fn-a3)</sup>
+**A3 — Whoever opens a discussion or replies gets their own message back by email and as a Tasks row** · 🐞 · low.
+Opening a discussion or task emails the writer a copy of what they just
+wrote, sent from themselves. It also adds a row "{writer} started a
+discussion: {name}: {message}" to their own Tasks list. A reply does the
+same to the person replying, and their row is worded like the opening's.
+The writer expects only the other participants to be told, as they were
+before tasks and discussions were reworked (`pkp/pkp-lib#12322`). Every
+message still reaches the people it is for. But each message a person
+writes adds one email to their inbox and one row to their Tasks list,
+which they have to clear by hand. Journal users meet it today. Press and
+preprint server users do not yet: there, saving a discussion or reply
+fails before anyone is told (`pkp/pkp-lib#13072`). Once that is fixed,
+they will meet it too.
+Since: 2026-02-10 · Basis: probe, 2026-10-02. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
 **A4 — When adding a task or discussion, a "Find Template" search for "discussion" or "task" opens an "Error" window** · 🐞 · low · crash: server.
@@ -1950,6 +1959,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="fn-a3"></a>
 **f-a3** — `addTask()` adds the current user to the notified list; `addNote()` notifies every participant, the writer included. Live 2026-09-04 on all three apps (Notifications center's scenario 5: the Manager's own mailbox holds the copy). The pre-rework `QueriesGridHandler::updateQuery()` removed the current user ("Don't notify the current user", pkp-lib `958592a15`, 2025); the rework is pkp/pkp-lib#12322 (2026-02-10). Live-probed 2026-09-23 on all three apps: the writer's mailbox holding each message they wrote, with its attachments, the Activity Log's "View Email" reading From and To the same person, and a "Discussion added." row per message in the writer's own Tasks panel.
+Issue report: [docs/issues/U37-A3-writer-told-of-own-message.md](../issues/U37-A3-writer-told-of-own-message.md).
 
 <a id="fn-a4"></a>
 **f-a4** — `Template::scopeWithSearch()` maps the words `task(s)`/`discussion(s)` to a type and calls `$query->filterByType($typeFilter)`; the model has `scopeWithType()` and no `scopeFilterByType()`, so the query builder throws `BadMethodCallException` and `GET editTaskTemplates?search=…` fails. Live-probed 2026-09-23 (all three apps): each Enter sends `GET /api/v1/editTaskTemplates?stageId={4|5}&search=…` twice and each answers 500; the "Error" window reads "Call to undefined method PKP\core\SettingsBuilder::filterByType()" with "OK".

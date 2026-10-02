@@ -1,0 +1,25 @@
+--- a/lib/pkp/api/v1/submissions/tasks/EditorialTaskController.php
++++ b/lib/pkp/api/v1/submissions/tasks/EditorialTaskController.php
+@@ -226,12 +226,7 @@
+ 
+         Repo::eventLog()->add($eventLog);
+ 
+-        $newParticipants = $editorialTask->participants->pluck('userId')->toArray();
+-        if (!in_array($currentUser->getId(), $newParticipants)) {
+-            $newParticipants[] = $currentUser->getId();
+-        }
+-
+-        $this->notifyParticipants($newParticipants, $editorialTask);
++        $this->notifyParticipants($editorialTask->participants->pluck('userId')->toArray(), $editorialTask);
+ 
+         return response()->json(
+             new TaskResource(resource: $editorialTask, data: $this->getTaskData($submission, $editorialTask)),
+@@ -1055,6 +1050,8 @@
+                 $submission->getId()
+             );
+         }
++        // Don't notify the user who wrote the message or made the change
++        $participantIds = array_diff($participantIds, [$currentUser->getId()]);
+         $users = Repo::user()->getCollector()->filterByUserIds($participantIds)->getMany();
+ 
+         foreach ($users as $user) {
