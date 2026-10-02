@@ -1,0 +1,12 @@
+--- a/lib/pkp/classes/user/Repository.php
++++ b/lib/pkp/classes/user/Repository.php
+@@ -302,7 +302,8 @@
+             ],
+         ];
+ 
+-        $roleNames = Application::get()->getRoleNames();
++        // A site administrator's role belongs to no context, so an overview limited to contexts leaves it out
++        $roleNames = Application::get()->getRoleNames(contextOnly: !empty(array_filter($collector->contextIds ?? [])));
+ 
+         foreach ($roleNames as $roleId => $roleName) {
+             $result[] = [

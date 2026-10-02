@@ -992,6 +992,7 @@ Left out of the scenarios above, by reason:
   - the "Subscriptions Report" download with an institutional subscription whose contact has no country: the file arrives, that row's "Country" empty (the guard for OJS4, once fixed; Rule 22)
   - a book declined at Internal Review on a press: "Submissions Declined", "Submissions Declined (After Review)" and both rejection rates count it (the guard for OMP1, once fixed; Rule 13)
   - a context whose every count is dated this year: the "Total" column of "Editorial Activity" holds no "/year" (the guard for A2, once fixed; Rule 8b)
+  - Statistics › "Users" of a journal: no "Site Administrator" row (the guard for A6, once fixed; Rule 14)
 - **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
@@ -1060,7 +1061,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | Submissions received on the date range's last day are left out of "Submissions Received" (and of "Imported Submissions") | 🐞 | minor | — |
 | [A2](#a2) | Editorial Activity shows "(0/year)" after each total that has nothing dated before this calendar year | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | The "Trends" information icons cannot be read from the keyboard | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A6](#a6) | "Site Administrator" on "Users" always reads 0 | 🐞 | minor | — |
+| [A6](#a6) | Statistics › "Users" lists a "Site Administrator" row that always reads 0 | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | A report address naming no report lands on "404 Not Found" | 🐞 | minor | — |
 | [A9](#a9) | Monthly editorial email's attachment counts every journal's active submissions, not the journal's own | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | The monthly email reads "Login to the the press" ("the the preprint server") | 🐞 | minor | — |
@@ -1159,12 +1160,19 @@ can be reached from the keyboard.
 Basis: probe, 2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — "Site Administrator" on "Users" always reads 0** · 🐞 · minor.
-"Users" lists a "Site Administrator" row that reads 0 on every journal,
-although the site administrator holds a role in it (a Journal Manager
-role on the test installs). Expected: the row counts the site
-administrators with a role in the journal, or is not listed.
-Basis: probe. <sup>f-a6</sup>
+**A6 — Statistics › "Users" lists a "Site Administrator" row that always reads 0** · 🐞 · low.
+A journal's Statistics › "Users" page lists a "Site Administrator" row
+under "All Users", and it reads 0 on every journal, even when the site
+administrator holds a role in that journal and is the one reading the
+page. Site administration is a role of the whole site, not of a journal,
+so the page has nothing to count there. Every other row is right.
+
+The same 0 row appears in the "Users" block of the monthly editorial
+email's attachment, which goes to the journal's managers and section
+editors (on by default). The fix leaves the row out of a journal's
+overview, which the page, the monthly email and the statistics API
+share. Expected: the row is not listed.
+Basis: probe, 2026-10-02. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — "Journal Manager" also counts Editors** · ❓ · minor.
@@ -2052,6 +2060,7 @@ Issue report: [docs/issues/U64-A7-information-icons-out-of-keyboard-reach.md](..
 <a id="fn-f-a6"></a>
 **f-a6** — fn i. Live-probed 2026-09-28: td7; `publicknowledge` read "Site
 Administrator" 0 as manager.maya and as `admin`.
+Issue report: [docs/issues/U65-A6-users-stats-site-administrator-reads-zero.md](../issues/U65-A6-users-stats-site-administrator-reads-zero.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — fn i: `getRoleNames()` is keyed by role ID and
