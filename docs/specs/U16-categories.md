@@ -817,6 +817,11 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a category's ticked editor assigned to a new submission on a journal
+    or press other than the install's first ([A13](#a13)): the guard the
+    issue report proposes
+  - {OPS} a server's category naming a moderator, and a preprint in it
+    assigned to them ([OPS1](#ops1)): the guard the issue report proposes
   - the delete dialog's confirmation box found by its name
     ([A18](#a18)): the guard the issue report proposes
   - the "Select Categories" window's column headings read as a screen
@@ -915,7 +920,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | With no category, the "Browse" block shows "Categories" with nothing under it | 🐞 | minor | — |
 | [A11](#a11) | On the Categories tab, keyboard users cannot open a category's sub-categories, and the arrows are misnamed | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A screen reader announces the "Select Categories" window's arrow column as "##common.expand##" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A13](#a13) | A category's "Editorial Assignments" assign nobody on any journal or press but the install's first | 🐞 | user-visible | — |
+| [A13](#a13) | A category's "Editorial Assignments" assign nobody on any journal or press but the install's first | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | In French, the tab, the delete dialog, the "Select Categories" window and a press's category page show raw codes | 🐞 | minor | — |
 | [A16](#a16) | A name changed and closed without saving comes back in the same category's next "Edit" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | A file that is not a picture leaves a broken preview in "Cover Image" | 🐞 | minor | — |
@@ -927,7 +932,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP3](#omp3) | A press's "Browse" is not a heading for a screen reader | 🐞 | minor | — |
 | [OMP4](#omp4) | A press's "Browse" block with every "Settings" box unticked shows "Browse" alone | 🐞 | minor | — |
 | [OMP5](#omp5) | A press's first category page opened after its catalog page, its search results or a settings save fails to load | 🐞 | user-visible · crash: server | — |
-| [OPS1](#ops1) | The category window shows "Editorial Assignments" with nothing to tick | 🐞 | minor | — |
+| [OPS1](#ops1) | A preprint server's category offers no moderator to assign automatically, only an empty "Editorial Assignments" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | A category's page leaves out the articles of its sub-categories | ❓ | minor | — |
 | [A4](#a4) | A category cannot be moved to another parent or to the top level | ❓ | minor | — |
 | [A5](#a5) | The breadcrumb names only the nearest parent | ❓ | minor | — |
@@ -1058,7 +1063,7 @@ The window opens from every "Categories" field: the dashboard's
 Basis: probe, 2026-10-02. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — Category editors are assigned only on the install's first journal** · 🐞 · user-visible.
+**A13 — Category editors are assigned only on the install's first journal** · 🐞 · medium.
 A manager ticks editors under a category's "Editorial Assignments",
 expecting them to be assigned to every new submission that arrives in
 that category. On any journal or press but the install's first, nobody
@@ -1068,7 +1073,7 @@ the needs-an-editor email instead. It is the same fault as the section's
 automatic assignment
 ([Submission wizard A8](U21-submission-wizard.md#a8)), which works on
 the install's first journal only.
-Basis: probe, 2026-09-25. <sup>f-a13</sup>
+Basis: probe, 2026-10-02. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — A category added after arrival brings no editors** · ❓ · minor.
@@ -1201,13 +1206,18 @@ Basis: test run, 2026-09-25; the cause, probe. <sup>f-omp5</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — "Editorial Assignments" with nothing to tick** · 🐞 · minor.
-A preprint server has no role that works on a Submission stage, so the
-category window has no editor to offer; it still shows the heading
-"Editorial Assignments" and the sentence "Select the editorial users who
-should be assigned automatically to all new submissions to this
-category.", with no box under them.
-Basis: probe, 2026-09-25. <sup>f-ops1</sup>
+**OPS1 — A preprint server's category offers no moderator to assign automatically, only an empty "Editorial Assignments"** · 🐞 · medium.
+A preprint server's manager opens a category to name the moderators who
+should be assigned to every new preprint in it. The window shows the
+heading "Editorial Assignments" with no box under it, on every preprint
+server, whatever its roles and members. A new preprint filed under the
+category gets no moderator from it.
+So a server cannot route preprints to moderators by subject through its
+categories. A server upgraded from 3.4 keeps the category moderators it
+saved there, and they are still assigned, until a manager saves that
+category's window on 3.5, which removes them without a word; on `main`
+such a save keeps them, and with the fix below they show ticked.
+Basis: probe, 2026-10-02. <sup>f-ops1</sup>
 
 ---
 
@@ -1955,6 +1965,7 @@ listener (note k) serves sections and categories alike, so the category
 path fails where the section's does (the wizard spec's A8: every context
 but the install's first). Live-probed 2026-09-25 (OJS, OMP): note td13. A
 preprint server offers no one to tick (OPS1).
+Re-walked 2026-10-02 on main (OJS and OMP, a second journal and press made on screen: only the author listed, the managers alerted; the dataset's own journal and press assigned the editor) and on stable-3_5_0 (assigned there); the U21 A8 report's fix tried again, the category path included. Issue report: [pkp-e2e#329](https://github.com/jardakotesovec/pkp-e2e/issues/329) ([docs/issues/U21-A8-section-editors-not-assigned-second-journal.md](../issues/U21-A8-section-editors-not-assigned-second-journal.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note k: `AssignEditors` runs once, on submission, and nothing
@@ -2087,6 +2098,7 @@ page until it answers (`docs/tracking/app-changes.md` row 18).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note k. Live-probed 2026-09-25: note k.
+Issue report: [docs/issues/U16-OPS1-preprint-category-offers-no-moderator.md](../issues/U16-OPS1-preprint-category-offers-no-moderator.md).
 
 ## Reference — entry points & surfaces
 

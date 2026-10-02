@@ -1,4 +1,4 @@
-# On every journal, press or server but the install's first, a section's configured editors are never assigned
+# On every journal, press or server but the install's first, a section's or category's configured editors are never assigned
 
 - **Severity** medium
 - **Effort** medium
@@ -10,15 +10,22 @@
   - 3.3: none (code)
 - **Introduced** `pkp/pkp-lib#12221` for `pkp/pkp-lib#12197` · [8a9c145806](https://github.com/pkp/pkp-lib/commit/8a9c14580699690fc2ba5b23e9fd5bcf02fb2b32) · 2026-01-26 · Hafsa-Naeem (Hafsa-Naeem)
 - **Upstream** none found (2026-10-01)
-- **Tracked in** spec U21 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#a8)
-- **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Tracked in** spec U21 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#a8), spec U16 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a13)
+- **Checked** 2026-10-01 (sections) and 2026-10-02 (categories), each branch's tip (the commits in Evidence)
+
+2026-10-02: the same fault through a category's "Editorial Assignments"
+(spec U16 A13) was walked on OJS and OMP and joins this report: the
+Steps' "Category" group, the Cause's first reach bullet and Evidence.
+A preprint server's category offers no one to tick at all, a separate
+fault reported apart (U16 OPS1).
 
 ## Summary
 
-A journal can name editors under a section's "Editorial Assignments", and
-a press under a series', so that they are assigned to every new submission.
-On any journal, press or server created after the install's first one,
-this assigns nobody. The submission arrives with no editor, the
+A journal can name editors under a section's "Editorial Assignments", a
+press under a series', a preprint server under a section's, and a journal
+or press also under a category's, so that they are assigned to every new
+submission in it. On any journal, press or server but the first one
+created on the install, this assigns nobody. The submission arrives with no editor, the
 configured editor is never emailed and never sees it, and the managers
 get the "needs an editor" alert instead.
 
@@ -31,9 +38,11 @@ the same setup works, which hides the fault from a quick check.
 - **Lost**: the automatic assignment of the configured editors, and the
   email that tells them.
 - **Who**: every author, and every configured editor, of a section,
-  series or preprint section with editors under "Editorial Assignments",
-  on every journal, press or server of an install apart from the first
-  one created.
+  series or category with editors under "Editorial Assignments" on a
+  journal or press, and of a section on a preprint server, on every one
+  of them but the first created on the install. (A preprint server's
+  category offers no one to tick at all:
+  [U16 OPS1's report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U16-OPS1-preprint-category-offers-no-moderator.md).)
 - **Way round**: the managers get "A new submission needs an editor to be
   assigned" (an email and a task), and one of them assigns the editor from
   the submission's "Participants" › "Assign".
@@ -67,16 +76,19 @@ Second journal:
    Series", title "u21ir25 Series", path `u21ir25s`, tick "Assign David
    Buskins as Series editor", "Save".]
 6. Sign out. Sign in as `ccorino` [`aclark`] and open
-   `/index.php/u21ir25/en/submission`. Type a title (the journal has one
-   section, "Articles", so the page offers no section choice; OPS the
-   same with "Preprints"; OMP: leave "Monograph: Authors are associated
-   with the book as a whole." chosen), tick the two boxes, "Begin
-   Submission". Upload a file, type an
+   `/index.php/u21ir25/en/submission`. Type a title. Tick "Yes, my
+   submission meets all of these requirements." and "Yes, I agree to have
+   my data collected and stored according to the privacy statement.", and
+   press "Begin Submission". The journal has one section, "Articles"
+   (OPS: "Preprints"), so the page offers no section choice; on OMP leave
+   "Monograph: Authors are associated with the book as a whole." chosen. Upload a file, type an
    abstract [OMP: on "For the Editors" choose the series "u21ir25 Series";
    OPS: on "For Readers" choose "This preprint has not been published
    elsewhere."], "Submit", and confirm with "Submit".
-7. Sign out. Sign in as `admin` and open the submission from the new
-   journal's Dashboard. Read "Participants".
+7. Sign out. Sign in as `admin`, open the new journal's Dashboard and
+   choose "Active submissions" (`admin` lands on "Assigned to me", which
+   does not list a submission with no editor). Open the submission and
+   read "Participants".
 8. Read the mail of `dbuskins@mailinator.com` and
    `pkpadmin@mailinator.com`.
 
@@ -117,6 +129,39 @@ Buskins (Series editor); OPS David Buskins and Stephanie Berardo
 submission to Journal of Public Knowledge" (OJS; OMP likewise), and no
 "needs an editor" email goes out.
 
+Category, on a freshly loaded dataset (OJS and OMP; a preprint server's
+category offers no one to tick, U16 OPS1):
+
+11. Take steps 1 to 4 with the title "Second Journal u16c8" and the path
+    `u16c8`, and leave out step 5, so the section names no editor.
+12. On the new journal: Settings › Workflow › "Submission" › "Metadata",
+    under "Categories" choose "Yes, add a categories field to the
+    submission wizard.", "Save".
+13. Settings › Journal › "Categories" › "Add Category": Name "u16c8 Arts",
+    Path "u16c8-arts", tick "Assign David Buskins as Section editor"
+    ["Series editor"] under "Editorial Assignments", "Save".
+14. As `ccorino` [`aclark`], submit to `u16c8` as in step 6; on "For the
+    Editors", under "Categories", type "u16c8" and choose "u16c8 Arts".
+15. As `admin`, open the submission and read "Participants"; read the mail
+    of `dbuskins@mailinator.com` and `pkpadmin@mailinator.com`.
+16. Control: on `publicknowledge`, steps 12 and 13 with the category
+    "u16c8 Control" ticking "Assign Minoti Inoue as Section editor"
+    ["Series editor"] (she is on no section's or series' "Editorial
+    Assignments" in the dataset); submit as in step 9 choosing "u16c8
+    Control"; read "Participants".
+
+**Expected.** Step 15 lists David Buskins as "Section editor" ("Series
+editor"), he gets "You have been assigned as an editor on a submission to
+Second Journal u16c8", and no "needs an editor" email goes out.
+
+**Observed.** Step 15 lists the author alone ("PARTICIPANTS Assign CC
+Carlo Corino Author"; OMP Arthur Clark alone), David Buskins gets no
+email, and `admin` gets `A new submission needs an editor to be assigned:
+"<title>"`. The control lists Minoti Inoue (Section editor; OMP Series
+editor) beside the section's or series' editors, and she gets "You have
+been assigned as an editor on a submission to Journal of Public
+Knowledge" ("Public Knowledge Press").
+
 ## Cause
 
 `SubEditorsDAO::assignEditors()` (lib/pkp
@@ -135,9 +180,13 @@ It then keeps only the configured assignments whose `userGroupId` is in
 `$userGroupIds`. An Eloquent `get()` returns a list keyed 0, 1, 2…, so
 `$userGroupIds` holds positions, not ids. An assignment survives only when
 its group's id happens to be smaller than the number of groups in the
-context. On the install's first context the ids start at 2, so its
-editorial groups pass. A later context's groups all have ids above that
-count, so every assignment is dropped. The listener `AssignEditors` then
+context. "The install's first" is the first journal, press or server
+created on the install: its groups take the ids right after the site
+administrator's group (2 to 19 for a journal's 18 groups), so all but its
+last two groups have ids below the group count, and the editorial
+groups, created early, pass. A
+later context's groups all have ids above that count, so every
+assignment is dropped; deleting the first context does not change that. The listener `AssignEditors` then
 sees no assigned editor and alerts the managers.
 
 The line was written in 2022 for the old user group collector, whose
@@ -145,17 +194,19 @@ The line was written in 2022 for the old user group collector, whose
 after the Eloquent refactor (`pkp/pkp-lib#10506`), because `SettingsBuilder`, which
 loads every model with a settings table, keyed its result by the primary
 key (`$this->query->get()->keyBy($primaryKey)` in
-`getModelWithSettings()`). 8a9c145806 (`pkp/pkp-lib#12197`) removed that
-keying so that eager loads which return several rows per id keep them
-all. Since then a `UserGroup` collection is keyed by position, and this
+`getModelWithSettings()`). Two commits of `pkp/pkp-lib#12221` (for
+`pkp/pkp-lib#12197`) took it away, so that eager loads which return
+several rows per id keep them all: 6bcbd5c080 kept the keying only for
+results whose ids are unique, and 8a9c145806 removed that case too. Since then a `UserGroup` collection is keyed by position, and this
 line has been wrong. `stable-3_5_0` still keys by id, which is why 3.5
 assigns correctly.
 
 Reach:
 
 - The section path and the category path both go through this filter,
-  so category "Editorial Assignments" fail the same way (code read, not
-  driven).
+  so a category's "Editorial Assignments" fail the same way: driven on
+  OJS and OMP (the Steps' "Category" group); 3.5 assigns the category's
+  editor on a second journal and press.
 - Any editorial role whose id is not smaller than the context's group
   count is dropped on the first context too, for example a role created later
   under Users & Roles › "Roles" (code read, not driven).
@@ -191,18 +242,23 @@ Key the collection by id where it is built, as the masthead fix did
 `$userGroups->first(fn … $userGroup->id == $assignment->userGroupId)`
 still works (it could become `$userGroups->get($assignment->userGroupId)`).
 The fix was tried on OJS, OMP and OPS `main`: the Steps then gave the
-Expected on all three. As a negative control, a second journal whose
-section names no editor under "Editorial Assignments", while David
+Expected on all three. Tried again on OJS and OMP `main` for the
+"Category" group (2026-10-02): David Buskins was then assigned from
+"u16c8 Arts" and got the assignment email, and no "needs an editor" email
+went out. As a negative control, a second journal whose section names no
+editor under "Editorial Assignments", while David
 Buskins holds the Section editor role there, still assigned nobody and
-still alerted the managers, with and without the fix.
+still alerted the managers, with and without the fix. A proposal; the
+team decides.
 
 **Alternatives**
 
 - Restore the id keying in `SettingsBuilder::getModelWithSettings()` for
   results with one row per id, as 6bcbd5c080 briefly did. That would mend
-  every caller at once, but it makes settings-backed models behave
-  differently from plain Eloquent ones, which is the assumption that
-  broke here, and pkp-lib already chose to fix the masthead at its caller.
+  every caller at once. But settings-backed models would again be keyed
+  differently from plain Eloquent ones, and callers that relied on that
+  difference are what broke here; pkp-lib already chose to fix the
+  masthead at its caller.
 - `$userGroupIds = $userGroups->pluck('id')` fixes the filter just as
   well; `keyBy('id')` also keeps the collection usable by id below.
 
@@ -216,17 +272,15 @@ still alerted the managers, with and without the fix.
   `subeditor_submission_group` row, a sub-editor holding that group and
   a submitted submission, then checks `assignEditors()` returns that
   user and builds the stage assignment; the method also reads the request
-  and sends mail, which the test must stub. The cheaper guard is the e2e
-  scenario "Editors learn of the new submission" run on a context other
-  than the first (spec U21, Rule 11), which this report's Steps already
-  take.
+  and sends mail, which the test must stub. The cheaper guard is an e2e
+  scenario that takes this report's Steps on a context other than the
+  first.
 - `UpdateAuthorStageAssignments` is left out of the fix: it duplicates
   `RestrictAuthorAssignment`, so the right change there is to remove it,
   which is a separate clean-up.
 - No data repair and no API change.
 
-Medium: the fix is one line, but its unit test needs a new fixture for a
-second context with its user groups.
+Medium: one line of code, and a new test fixture.
 
 ## Evidence
 
@@ -236,6 +290,14 @@ second context with its user groups.
   [neighbour.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/section-editors-not-assigned-second-journal/neighbour.js).
   On an install freshly loaded from the default dataset:
   `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/section-editors-not-assigned-second-journal/walk.js`
+- The "Category" group (steps 11 to 16) is taken by
+  [category-editors-not-assigned/walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/category-editors-not-assigned/walk.js)
+  (`WALK=a13`, the default on OJS and OMP), on OJS and OMP `main` and
+  `stable-3_5_0`, 2026-10-02, datasets pkp/datasets e8dafbc: OJS `main`
+  b84f8e2e44 (lib/pkp ddd8ab243a), OMP `main` 3b0ecf794c (lib/pkp
+  3dc90c81a6); `stable-3_5_0` OJS 091fb65453, OMP 9c5e24246c (lib/pkp
+  cf3f984335). The category walk replaces step 5's tick with steps 12
+  and 13 and the title and path with "u16c8".
 - Taken on OJS, OMP and OPS `main` and `stable-3_5_0`, on PostgreSQL;
   nothing here depends on the database. Datasets: pkp/datasets 27f1204
   (2026-10-01).
@@ -246,24 +308,20 @@ second context with its user groups.
   df13621c2d); `stable-3_3_0` OJS 9fdb9bcf9a, OMP 8e72fc883, OPS
   c5532e2161 (lib/pkp d446601ebe).
 - Code reads:
-  - `main`: `SubEditorsDAO::assignEditors()`, the `AssignEditors`,
-    `UpdateAuthorStageAssignments` and `RestrictAuthorAssignment`
-    listeners, `PKPSectionForm` (which roles "Editorial Assignments"
-    offers), `SettingsBuilder::getModelWithSettings()` with `git log -L`
-    (6bcbd5c080, then 8a9c145806, both in `pkp/pkp-lib#12221`, merged
-    2026-01-28), `Repository::getSortedMastheadUserGroups()`, and
-    `lib/pkp/tests` for an existing context fixture (none). A PHP check
-    on the loaded installs printed the second journal's `UserGroup`
-    collection keys: `[20, …, 37]` on 3.5, `[0, …, 17]` on `main`.
+  - `main`: `SettingsBuilder::getModelWithSettings()` with `git log -L`
+    (`pkp/pkp-lib#12221` merged 2026-01-28), and `lib/pkp/tests` for a
+    context fixture (none). A PHP check on the loaded installs printed
+    the second journal's `UserGroup` collection keys: `[20, …, 37]` on
+    3.5, `[0, …, 17]` on `main`; the dataset's journal holds groups 2 to
+    19.
   - 3.4: `assignEditors()` takes `$userGroups` from the collector
-    (`getMany()`, keyed by id), so the filter holds.
+    (`getMany()`, keyed by id), so the filter holds, for the section's
+    and the categories' editors alike.
   - 3.3: `PKPSubmissionSubmitStep4Form::execute()` assigns each
-    configured sub-editor through `getByUserId()` in the submission's
-    context, with no such filter.
-- Upstream searches (2026-10-01): pkp/pkp-lib, pkp/ojs, pkp/omp and
-  pkp/ops, by the symptom ("section editor not assigned automatically",
-  "editorial assignments", "series editor", "moderator") and by
-  `assignEditors`, `SubEditorsDAO`, `SettingsBuilder` and "keyed by
-  index".
+    configured sub-editor, the section's and each category's, through
+    `getByUserId()` in the submission's context, with no such filter.
+- Upstream searches: 2026-10-01, and 2026-10-02 for categories, in
+  pkp/pkp-lib, pkp/ojs, pkp/omp and pkp/ops. Closest hit:
+  `pkp/pkp-lib#13218`, the masthead's fault of the same kind, fixed.
 - Unverified: MySQL; the `stable-3_4_0` and `stable-3_3_0` lines were read
   in the code only.

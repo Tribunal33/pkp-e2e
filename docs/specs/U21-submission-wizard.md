@@ -1055,7 +1055,7 @@ are the source; badges, Impact and Basis:
 | [A5](#a5) | The activity log's copyright-agreement entry opens with a raw "{$filename}" placeholder instead of the author's name | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | Submitting a draft again from a second tab shows a problems banner with nothing to fix | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | The completion screen claims a confirmation email was sent when none was: acknowledgements off, or an editorial-role submitter | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A8](#a8) | On every journal, press or server but the install's first, a section's configured editors are never assigned | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [A8](#a8) | On every journal, press or server but the install's first, a section's or category's configured editors are never assigned | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | Submission wizard opened in a narrow window can keep its full row of steps, running past the window's edge | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | After "Do not send an email." is saved, the Emails settings show no Submission Confirmation option selected | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | A section editor who is also an author is offered "Submit As: Section editor", and "Begin Submission" refuses it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1180,11 +1180,12 @@ confirmations are off.
 Basis: probe, 2026-10-01. <sup>[q](#fn-q)</sup>
 
 <a id="a8"></a>
-**A8 — On every journal, press or server but the install's first, a section's configured editors are never assigned** · 🐞 · medium.
-A journal can name editors under a section's "Editorial Assignments", and
-a press under a series', so that they are assigned to every new submission.
-On any journal, press or server created after the install's first one,
-this assigns nobody. The submission arrives with no editor, the
+**A8 — On every journal, press or server but the install's first, a section's or category's configured editors are never assigned** · 🐞 · medium.
+A journal can name editors under a section's "Editorial Assignments", a
+press under a series', a preprint server under a section's, and a journal
+or press also under a category's, so that they are assigned to every new
+submission in it. On any journal, press or server but the first one
+created on the install, this assigns nobody. The submission arrives with no editor, the
 configured editor is never emailed and never sees it, and the managers
 get the "needs an editor" alert instead.
 The submission is not lost, but on such a journal every submission waits

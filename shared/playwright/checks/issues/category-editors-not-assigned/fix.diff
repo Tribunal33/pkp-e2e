@@ -1,0 +1,53 @@
+--- a/lib/pkp/classes/components/forms/context/CategoryForm.php
++++ b/lib/pkp/classes/components/forms/context/CategoryForm.php
+@@ -49,10 +49,14 @@
+         $this->locales = $locales;
+         $request = Application::get()->getRequest();
+ 
++        $stages = Application::getApplicationStages();
+         $assignableUserGroups = UserGroup::query()
+             ->withContextIds([$request->getContext()->getId()])
+             ->withRoleIds(Category::ASSIGNABLE_ROLES)
+-            ->withStageIds([WORKFLOW_STAGE_ID_SUBMISSION])
++            ->withStageIds([
++                // WORKFLOW_STAGE_ID_SUBMISSION for OJS/OMP and WORKFLOW_STAGE_ID_PRODUCTION for OPS, see pkp/pkp-lib#10874
++                array_shift($stages)
++            ])
+             ->get()
+             ->map(function (UserGroup $userGroup) use ($request) {
+                 return [
+@@ -75,9 +79,8 @@
+             ->map(fn ($label, $value) => ['value' => $value, 'label' => $label])
+             ->values();
+ 
+-        // Conditionally add this group. This is done because assignable user groups would have access to WORKFLOW_STAGE_ID_SUBMISSION,
+-        // but submission stage does not exist in OPS, so we don't display this group in OPS.
+-        if (!empty($assignableUserGroups)) {
++        // Only add this group when the context has a role that can be assigned.
++        if ($assignableUserGroups->isNotEmpty()) {
+             $this->addGroup([
+                 'label' => __('manager.category.form.assignEditors'),
+                 'description' => __('manager.categories.form.assignEditors.description'),
+@@ -142,9 +145,7 @@
+                 ])
+             );
+ 
+-        // Conditionally add this field. This is done because assignable user groups would have access to WORKFLOW_STAGE_ID_SUBMISSION,
+-        // but submission stage does not exist in OPS, so we don't display this field in OPS.
+-        if (!empty($assignableUserGroups)) {
++        if ($assignableUserGroups->isNotEmpty()) {
+             foreach ($assignableUserGroups as $assignableUserGroup) {
+                 $assignableUserOptions = [];
+                 $groupName = $assignableUserGroup['userGroup']->getLocalizedData('name');
+--- a/lib/pkp/api/v1/categories/CategoryCategoryController.php
++++ b/lib/pkp/api/v1/categories/CategoryCategoryController.php
+@@ -170,8 +170,7 @@
+         // Expects subEditor to be an array of sub-editor IDs, grouped by Group IDs.
+         $subEditors = $illuminateRequest->input('subEditors');
+ 
+-        // Subeditors are assigned to user group that has access to WORKFLOW_STAGE_ID_SUBMISSION stage, but OPS does not have that stage.
+-        // So $subEditors will be null in OPS.
++        // $subEditors is null when the form offered no role to assign.
+         if ($subEditors !== null) {
+             Repo::category()->updateEditors($categoryId, $subEditors, Category::ASSIGNABLE_ROLES, $context->getId());
+         }
