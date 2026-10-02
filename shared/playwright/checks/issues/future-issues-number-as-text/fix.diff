@@ -1,0 +1,37 @@
+--- a/classes/issue/Collector.php
++++ b/classes/issue/Collector.php
+@@ -37,6 +37,7 @@
+     public const ORDER_DIR_ASC = 'ASC';
+     public const ORDER_DIR_DESC = 'DESC';
+     private const ORDER_CURRENT_ISSUE = 'currentIssue';
++    private const ORDER_NUMBER = 'number';
+ 
+     public DAO $dao;
+ 
+@@ -187,13 +188,13 @@
+             static::ORDERBY_UNPUBLISHED_ISSUES => [
+                 ['orderBy' => 'i.year', 'direction' => static::ORDER_DIR_ASC],
+                 ['orderBy' => 'i.volume', 'direction' => static::ORDER_DIR_ASC],
+-                ['orderBy' => 'i.number', 'direction' => static::ORDER_DIR_ASC]
++                ['orderBy' => static::ORDER_NUMBER, 'direction' => static::ORDER_DIR_ASC]
+             ],
+             static::ORDERBY_SHELF => [
+                 ['orderBy' => static::ORDER_CURRENT_ISSUE, 'direction' => static::ORDER_DIR_DESC],
+                 ['orderBy' => 'i.year', 'direction' => static::ORDER_DIR_ASC],
+                 ['orderBy' => 'i.volume', 'direction' => static::ORDER_DIR_ASC],
+-                ['orderBy' => 'i.number', 'direction' => static::ORDER_DIR_ASC]
++                ['orderBy' => static::ORDER_NUMBER, 'direction' => static::ORDER_DIR_ASC]
+             ],
+             default => throw new InvalidArgumentException('One of ORDERBY_* constants must be provided')
+         };
+@@ -505,6 +506,10 @@
+                     // Custom query to order by current issue status from the journals table
+                     $q->leftJoin('journals as j', 'j.current_issue_id', '=', 'i.issue_id')
+                         ->orderByRaw('CASE WHEN j.current_issue_id IS NOT NULL then 1 else 0 END ' . $resultOrdering['direction']);
++                } elseif ($resultOrdering['orderBy'] === static::ORDER_NUMBER) {
++                    // The number is text ("1-2", "Suppl."): a shorter value first puts "2" before "10"
++                    $q->orderByRaw('CHAR_LENGTH(i.number) ' . $resultOrdering['direction'])
++                        ->orderBy('i.number', $resultOrdering['direction']);
+                 } else {
+                     $q->orderBy($resultOrdering['orderBy'], $resultOrdering['direction']);
+                 }

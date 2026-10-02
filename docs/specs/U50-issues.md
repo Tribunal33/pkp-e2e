@@ -1058,6 +1058,9 @@ Left out of the scenarios above, by reason:
     `docs/issues/U50-A1-create-issue-ticked-title-passing-notice.md`):
     a ticked, empty "Title" on "Create Issue" refused with its message
     under the Title box
+  - the guard for A8 (issue report
+    `docs/issues/U50-A8-future-issues-number-as-text.md`): "Future
+    Issues" listing No. 2 before No. 10 of one volume and year
 - **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
@@ -1137,7 +1140,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 | [A4](#a4) | After a refused "Save", "Date Published" shows today's date, which the issue saved next does not get | 🐞 | minor | — |
 | [A5](#a5) | A "Volume" of 99999 leaves "Create Issue" open with nothing shown | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "Year" accepts letters: "20a6" is saved as 20 without a message | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A8](#a8) | "Future Issues" lists "No. 10" before "No. 2" | 🐞 | minor | — |
+| [A8](#a8) | "Future Issues" lists "No. 10" before "No. 2" of the same volume and year | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | An article dropped under another section in "Order" is back in its own section on reopening | 🐞 | minor | — |
 | [A11](#a11) | An issue galley in an interface-only language is refused as if no language were chosen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | After "Delete" on an issue, its offline articles still read "Published" and History records no unpublishing | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1237,11 +1240,14 @@ with no name is announced as a bare link. Basis: probe, 2026-09-25.
 <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — "Future Issues" sorts numbers as text** · 🐞 · minor.
-"Future Issues" is ordered by year, volume and number, but the number is
-compared as text: "Vol. 1 No. 10 (2026)" is listed before "Vol. 1 No. 2
-(2026)". A Journal Manager planning issues ahead expects No. 2 before
-No. 10. Basis: probe, 2026-09-25. <sup>f-a8</sup>
+**A8 — "Future Issues" lists "No. 10" before "No. 2" of the same volume and year** · 🐞 · low.
+"Future Issues" on the Issues page is ordered by year, volume and
+number, lowest first, but the number is compared as text. So "Vol. 2 No.
+10 (2015)" is listed before "Vol. 2 No. 2 (2015)", where a Journal
+Manager planning issues ahead expects No. 2 before No. 10. It shows when
+one volume and year has both No. 2 and No. 10 unpublished, for example
+on a journal that sets up a year of monthly issues ahead.
+Basis: probe, 2026-10-02. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — No section could be moved in the table of contents' "Order"** · ❓ · minor.
@@ -1550,6 +1556,7 @@ Issue report: [docs/issues/U50-A5-A6-issue-big-volume-or-lettered-year.md](../is
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-25 (Rule 1), OJS: "Future Issues" read 2025 Vol. 3; then 2026 Vol. 1 No. 1, No. 10, No. 2; then 2027. `ORDERBY_UNPUBLISHED_ISSUES` sorts year, volume, number (note g); `schemas/issue.json` types `number` as a string.
+Issue report: [docs/issues/U50-A8-future-issues-number-as-text.md](../issues/U50-A8-future-issues-number-as-text.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-25 (Rules 10a, 23), OJS, two drives: a mouse drag of a section heading above another section, several shapes, three attempts each; the article rows moved, the section headings did not (one heading moved below its own article, then "Cancel ordering"), and a "Done" the server accepted (save-sequence 200) left the order unchanged on the tab and on the issue's page. Each section is its own sortable block on the page. The grid offers section ordering (`ORDER_CATEGORY_GRID_CATEGORIES_AND_ROWS`, note m) and the issue's page reads the saved order (note w), so the custom-order half of Rule 23 is code-read only.
