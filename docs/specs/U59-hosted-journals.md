@@ -780,6 +780,9 @@ Left out of the scenarios above, by reason:
   - "Create Journal" saved with "Country" left empty, and "Edit" saved on
     a journal with no country ([A1](#a1)): the guard the issue report
     proposes
+  - the row read right after a saved "Edit", before any reload, showing
+    the new name and path ([A2](#a2)): the guard the issue report
+    proposes
 - **Rarely met**:
   - exactly one journal enabled publicly, where the site's address opens
     that journal instead of the list (Rule 19; Settings bullet 4): a
@@ -876,7 +879,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | Hosted Journals: "Country" carries no Required mark, yet no journal saves without one | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A2](#a2) | After "Save" in the "Edit" window, the list keeps the journal's old name and path until a reload | 🐞 | minor | — |
+| [A2](#a2) | Hosted Journals: after a saved "Edit", the list keeps the journal's old name and path until a reload | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | The address in front of "Path" is not the journal's real address | 🐞 | minor | — |
 | [A4](#a4) | After a path change on the Settings Wizard, its further saves and list actions fail until a reload | 🐞 | minor | — |
 | [A6](#a6) | "Jump to next error" never gets past the first refused field | 🐞 | minor | — |
@@ -908,12 +911,15 @@ records the "Edit" side.
 Basis: probe, 2026-10-02. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — The list shows the old name and path after "Edit"** · 🐞 · minor.
+**A2 — Hosted Journals: after a saved "Edit", the list keeps the journal's old name and path until a reload** · 🐞 · low.
 The Site Administrator changes a journal's title or path in the "Edit"
-window, sees "Saved" and the window closes; the row still shows the old
-name and the old path until the page is reloaded, so the list looks as if
-the save did not take.
-Basis: probe. <sup>f-a2</sup>
+window of Administration › "Hosted Journals", sees "Saved", and the
+window closes. The row still shows the old name and the old path until
+the page is reloaded, so the list looks as if the save did not take.
+
+Until the reload, the row's "Remove" confirmation also names the
+journal by its old title.
+Basis: probe, 2026-10-02. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — The address in front of "Path" is not the journal's address** · 🐞 · minor.
@@ -1693,6 +1699,7 @@ Issue report: [docs/issues/U59-A1-journal-form-country-unmarked-refused.md](../i
 **f-a2** — Note f: the modal closes on the form's success event and
 nothing sends the grid a data-changed event. Live-probed 2026-09-27,
 three apps: note td5; the "Path" column kept the old path the same way.
+Issue report: [docs/issues/U59-A2-hosted-journals-list-keeps-old-name-after-edit.md](../issues/U59-A2-hosted-journals-list-keeps-old-name-after-edit.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `PKPContextForm`'s `urlPath` field has `prefix` `$baseUrl .
