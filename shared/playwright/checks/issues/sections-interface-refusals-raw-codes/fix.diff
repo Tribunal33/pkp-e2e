@@ -1,0 +1,15 @@
+--- a/lib/pkp/locale/en/api.po
++++ b/lib/pkp/locale/en/api.po
+@@ -478,6 +478,12 @@
+ 
+ msgid "api.contributorRole.400.errorDeletingAuthorRole"
+ msgstr "Last AUTHOR role cannot be deleted."
++
++msgid "api.sections.404.sectionNotFound"
++msgstr "The section you requested was not found."
++
++msgid "api.sections.400.contextsNotMatched"
++msgstr "The section you requested is not part of this journal."
+ 
+ msgid "api.submission.400.emptyContributorRoles"
+ msgstr "There have to be at least one assigned contributor role."

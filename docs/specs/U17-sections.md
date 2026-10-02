@@ -1018,7 +1018,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | A title of spaces only is refused with a notice that shows a raw code instead of a sentence | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Under an inactive section's policy, the editorial roles get a submission link to a section the start form does not offer | 🐞 | minor | — |
 | [A8](#a8) | With "Disable Submissions" ticked, the "Submissions" page keeps its per-section submission links | 🐞 | minor | — |
-| [A9](#a9) | The sections interface refuses an unknown section, or another journal's, with a message code instead of a sentence | 🐞 | latent | — |
+| [A9](#a9) | The REST API's sections endpoint refuses a missing or another journal's section with a raw message code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | The sections interface fails with a server error on a section asked for by a word, and on the site's address | 🐞 | latent · crash: server | — |
 | [OMP2](#omp2) | The series path message says "only letters and numbers" while ".", "/", "_" and "-" are accepted | 🐞 | minor | — |
 | [OMP3](#omp3) | The series cover uploader offers SVG files, and "Save" then keeps nothing and says nothing | 🐞 | minor | — |
@@ -1144,15 +1144,15 @@ has just said it does not accept.
 Basis: probe, 2026-09-25. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The sections interface's refusals have no text** · 🐞 · latent.
-The apps' own screens never call this interface, so no user of them
-meets this. A program asking a journal's sections interface for one
-section (Rule 17c) by a number the journal has no section under (0
-included) gets "##api.sections.404.sectionNotFound##", and for another
-journal's section "##api.sections.400.contextsNotMatched##", where a
-sentence saying what went wrong should be: neither message has any text
-in the install.
-Basis: probe, 2026-09-25. <sup>f-a9</sup>
+**A9 — The REST API's sections endpoint refuses a missing or another journal's section with a raw message code** · 🐞 · low.
+When a program reads one section through the REST API's sections
+endpoint and the journal has no section with that number, the refusal
+reads "##api.sections.404.sectionNotFound##" instead of a sentence. When
+it asks for a section that belongs to another journal, the refusal reads
+"##api.sections.400.contextsNotMatched##". Neither message has any text
+in the install. No screen of the application sends this request, so only
+the authors of programs that call the endpoint meet it.
+Basis: probe, 2026-10-02. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — The sections interface fails where it should refuse** · 🐞 · latent · crash: server.
@@ -1509,6 +1509,7 @@ Issue report: [docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.m
 
 <a id="fn-f-a9"></a>
 **f-a9** — fn g: `SectionController::get()` passes `api.sections.404.sectionNotFound` and `api.sections.400.contextsNotMatched` to `__()`, and neither key is defined in any locale file of the OJS checkout or its `lib/pkp` (no `api.sections.*` msgid), so the translator returns the key between `##`. Live-probed 2026-09-25, two runs: note g, one section and the site's address.
+Issue report: [docs/issues/U17-A9-sections-interface-refusals-raw-codes.md](../issues/U17-A9-sections-interface-refusals-raw-codes.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — fn g. A word as the id misses the route's `whereNumber('sectionId')`; `APIHandler` maps only a `NotFoundHttpException` to 404 `api.404.endpointNotFound`, and this route miss arrives as another exception, so it answers 500 with the exception's message (handler-wide by the code; no other interface was driven). At the site's address `getRequest()->getContext()` is null and `getMany()` calls `getId()` on it. Live-probed 2026-09-25, two runs: note g, one section and the site's address; OMP and OPS answered 404 at the same site address.
