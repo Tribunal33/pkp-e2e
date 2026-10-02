@@ -893,6 +893,13 @@ Left out of the scenarios above, by reason:
     with the sentence "A title is required for the section." (OMP "…for
     the series.") in the notice, not a raw code ([A6](#a6)): the guard
     the issue report proposes
+  - the section link under a policy on the "Submissions" page opening
+    "Make a Submission" with that section chosen ([A1](#a1)): the guard
+    the issue report proposes
+  - the "Submissions" page with "Disable Submissions" ticked showing no
+    "Make a new submission to the {section} section." line, and an
+    inactive section's policy absent for the editorial roles ([A7](#a7),
+    [A8](#a8)): the guard the issue report proposes
 - **Rarely met**:
   - {OJS} "Omit author names for section items from issues' table of
     contents." ticked, the issue's table of contents without the section's
@@ -1014,10 +1021,10 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Make a new submission to the {section} section." opens the start form with no section chosen | 🐞 | minor | — |
+| [A1](#a1) | A section's "Make a new submission to the … section." link opens "Make a Submission" with no section chosen | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | A title of spaces only is refused with a notice that shows a raw code instead of a sentence | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A7](#a7) | Under an inactive section's policy, the editorial roles get a submission link to a section the start form does not offer | 🐞 | minor | — |
-| [A8](#a8) | With "Disable Submissions" ticked, the "Submissions" page keeps its per-section submission links | 🐞 | minor | — |
+| [A7](#a7) | Under an inactive section's policy, the editorial roles get a submission link to a section the start form does not offer | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A8](#a8) | With "Disable Submissions" ticked, the "Submissions" page keeps its per-section submission links | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | The REST API's sections endpoint refuses a missing or another journal's section with a raw message code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | The sections interface fails with a server error on a section asked for by a word, and on the site's address | 🐞 | latent · crash: server | — |
 | [OMP2](#omp2) | The series path message says "only letters and numbers" while ".", "/", "_" and "-" are accepted | 🐞 | minor | — |
@@ -1043,13 +1050,17 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — The section link on the "Submissions" page chooses no section** · 🐞 · minor.
-A signed-in visitor reads "Make a new submission to the Articles section."
-under the "Articles" policy and presses "Articles", expecting "Make a
+**A1 — A section's "Make a new submission to the … section." link opens "Make a Submission" with no section chosen** · 🐞 · low.
+A signed-in author reads "Make a new submission to the Articles
+section." under the "Articles" policy on the "Submissions" page and
+presses "Articles", the link inside that sentence, expecting "Make a
 Submission" with "Articles" chosen. The start form opens with no section
 chosen, exactly as from "Make a new submission" at the top of the page,
-and the author has to pick "Articles" again.
-Basis: probe, 2026-09-25. <sup>f-a1</sup>
+and the author has to pick "Articles" again. The sentence shows only to
+signed-in users. The fault needs two or more sections open to the
+author; with one, the form asks for no section. A press's "Submissions"
+page has no such sentence.
+Basis: probe, 2026-10-02. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — A negative "Word Count" refuses every abstract** · ❓ · user-visible.
@@ -1122,26 +1133,27 @@ configuration](U58-submission-intake-configuration.md)* A10.
 Basis: probe, 2026-10-02. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — An inactive section's policy offers a link the start form refuses** · 🐞 · minor.
+**A7 — An inactive section's policy offers a link the start form refuses** · 🐞 · low.
 Signed in with an editorial role, a user reads an inactive section's
 policy on the "Submissions" page with "Make a new submission to the
-{section} section." under it, and presses the section's name expecting to
-submit to it. "Make a Submission" opens, and its "Section" choice lists
-every other section but not that one. The page offers a section the start
-form refuses.
-Basis: probe, 2026-09-25. <sup>f-a7</sup>
+{section} section." under it, and presses the section's name expecting
+to submit to it. "Make a Submission" opens, and its "Section" choice
+lists every other section but not that one; with one other section left,
+the form asks for no section at all and files the submission under that
+other section. The page offers a section the start form refuses.
+Basis: probe, 2026-10-02. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — With submissions disabled, the section links still invite one** · 🐞 · minor.
-With "Disable Submissions" ticked, a signed-in Author reads "This journal
-is not accepting submissions at this time." ("This server is not
+**A8 — With submissions disabled, the section links still invite one** · 🐞 · low.
+With "Disable Submissions" ticked, a signed-in Author reads "This
+journal is not accepting submissions at this time." ("This server is not
 accepting submissions at this time.") at the top of the "Submissions"
 page, and "Make a new submission to the {section} section." under every
 policy. Pressing a section's name opens "Make a Submission" showing only
 "This journal is not accepting submissions at this time. Visit the
-workflow settings to allow submissions." The page invites a submission it
-has just said it does not accept.
-Basis: probe, 2026-09-25. <sup>f-a8</sup>
+workflow settings to allow submissions." The page invites a submission
+it has just said it does not accept.
+Basis: probe, 2026-10-02. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — The REST API's sections endpoint refuses a missing or another journal's section with a raw message code** · 🐞 · low.
@@ -1484,6 +1496,7 @@ each state the scenarios start from was reached on a scratch context.
 
 <a id="fn-f-a1"></a>
 **f-a1** — The link is `url page="submission" sectionId={id}` (fn e). No part of the start page reads a `sectionId` parameter: `PKPSubmissionHandler` builds `StartSubmission` from the sections alone and OJS/OPS `StartSubmission` sets the radio's `value` to `''`. Live-probed 2026-09-25 (OJS and OPS, two runs): note td11.
+Issue report: [docs/issues/U17-A1-section-link-chooses-no-section.md](../issues/U17-A1-section-link-chooses-no-section.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `SectionForm::execute()` saves `(int) wordCount`; `Submission\Repository::validateSubmit()` checks `if ($section->getAbstractWordCount())` (true for a negative number) and `HasWordCountValidation::validateWordCount()` compares `$wordCount > $wordLimit` per locale, so any non-empty abstract fails, with `publication.abstract.wordCountLong`; the publication form applies the same limit to the abstract and the plain language summary. Live-probed 2026-09-25 (OJS and OPS): note td3.
@@ -1503,9 +1516,11 @@ Issue report: [docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.m
 
 <a id="fn-f-a7"></a>
 **f-a7** — The start page leaves inactive sections out for everyone (`excludeInactive()`, fn d); the "Submissions" page shows them to the editorial roles (`excludeEditorOnly(!$canSubmitAll)`, fn e) with the same signed-in line under each. Live-probed 2026-09-25 (OJS and OPS, two runs): note td11.
+Issue report: [docs/issues/U17-A7-A8-section-links-offer-closed-submissions.md](../issues/U17-A7-A8-section-links-offer-closed-submissions.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — The per-section line prints for any signed-in reader (`{if $isUserLoggedIn}`, fn e), whatever the journal's `disableSubmissions`; the notice comes from the core template on that setting. The start form's message is the Submission wizard's A3. Live-probed 2026-09-25 (OJS and OPS, two runs): note td12.
+Issue report: [docs/issues/U17-A7-A8-section-links-offer-closed-submissions.md](../issues/U17-A7-A8-section-links-offer-closed-submissions.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — fn g: `SectionController::get()` passes `api.sections.404.sectionNotFound` and `api.sections.400.contextsNotMatched` to `__()`, and neither key is defined in any locale file of the OJS checkout or its `lib/pkp` (no `api.sections.*` msgid), so the translator returns the key between `##`. Live-probed 2026-09-25, two runs: note g, one section and the site's address.

@@ -1,0 +1,33 @@
+--- a/pages/submission/SubmissionHandler.php
++++ b/pages/submission/SubmissionHandler.php
+@@ -80,7 +80,7 @@
+             'submissions'
+         );
+ 
+-        $form = new StartSubmission($apiUrl, $context, $userGroups, $sections);
++        $form = new StartSubmission($apiUrl, $context, $userGroups, $sections, (int) $request->getUserVar('sectionId'));
+ 
+         $templateMgr = TemplateManager::getManager($request);
+ 
+--- a/classes/components/forms/submission/StartSubmission.php
++++ b/classes/components/forms/submission/StartSubmission.php
+@@ -27,8 +27,9 @@
+ {
+     /**
+      * @param Section[] $sections The sections that this user can submit to
++     * @param ?int $sectionId The section to choose at first, when it is one of $sections (a link to a section's submission page)
+      */
+-    public function __construct(string $action, Context $context, Enumerable $userGroups, array $sections)
++    public function __construct(string $action, Context $context, Enumerable $userGroups, array $sections, ?int $sectionId = null)
+     {
+         parent::__construct($action, $context, $userGroups);
+ 
+@@ -40,7 +41,7 @@
+                 'label' => __('section.section'),
+                 'description' => __('author.submit.serverSectionDescription'),
+                 'options' => $this->getSectionOptions($sections),
+-                'value' => '',
++                'value' => collect($sections)->contains(fn (Section $section) => (int) $section->getId() === $sectionId) ? $sectionId : '',
+                 'isRequired' => true,
+             ]), [FIELD_POSITION_AFTER, 'title']);
+ 
