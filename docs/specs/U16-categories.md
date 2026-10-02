@@ -1938,7 +1938,7 @@ Live-probed 2026-09-25: note td12.
 <a id="fn-f-a11"></a>
 **f-a11** — Note c. Live-probed 2026-09-25: note td1; the "Select
 Categories" window's arrows: note td4.
-Issue report: [docs/issues/U16-A11-category-arrows-keyboard-and-names.md](../issues/U16-A11-category-arrows-keyboard-and-names.md).
+Issue report: [pkp-e2e#588](https://github.com/jardakotesovec/pkp-e2e/issues/588) ([docs/issues/U16-A11-category-arrows-keyboard-and-names.md](../issues/U16-A11-category-arrows-keyboard-and-names.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note f (`common.expand`, a key no locale file defines, is the
