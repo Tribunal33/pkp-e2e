@@ -2100,7 +2100,7 @@ matches the breadcrumb's last step, `li.current`. Live-probed 2026-09-25,
 OJS and OPS: "About the Journal" had no bar before the block was placed and
 a 4 px left border in rgb(221, 221, 221) with padding after it, as every
 category page's breadcrumb did; OMP's breadcrumb had no bar.
-Issue report: [docs/issues/U16-A20-browse-block-restyles-breadcrumb.md](../issues/U16-A20-browse-block-restyles-breadcrumb.md).
+Issue report: [pkp-e2e#604](https://github.com/jardakotesovec/pkp-e2e/issues/604) ([docs/issues/U16-A20-browse-block-restyles-breadcrumb.md](../issues/U16-A20-browse-block-restyles-breadcrumb.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `CatalogHandler::thumbnail()` / `fullSize()` read
