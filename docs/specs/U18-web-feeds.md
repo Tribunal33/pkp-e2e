@@ -948,11 +948,11 @@ preprint servers made for the check; the `td` notes record what was seen.
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note c: `fetch()` throws `Exception('Invalid feed format')` for a type outside `FEED_MIME_TYPE`, including none; an unknown plugin name throws `NotFoundHttpException` in the handler's constructor instead. Live-probed 2026-09-26, two runs per app, signed out, as the journal's Reader and as the Site Administrator (Rule 15; A2): `…/WebFeedGatewayPlugin/json`, `…/WebFeedGatewayPlugin`, `…/WebFeedGatewayPlugin/`, `…/ATOM`, `…/atom.xml` and `…/WebFeedGatewayPlugin?type=atom` answered 500 with an empty body and an empty tab title; `…/atom/extra` served the Atom feed.
-Issue report: [docs/issues/U18-A2-unknown-feed-name-blank-page.md](../issues/U18-A2-unknown-feed-name-blank-page.md).
+Issue report: [docs/issues/U18-A2-unknown-feed-name-blank-page.md](../issues/U18-A2-unknown-feed-name-blank-page.md), filed as [pkp-e2e#537](https://github.com/jardakotesovec/pkp-e2e/issues/537).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note g. The label key is `plugins.generic.webfeed.settings.includeIdentifiers`; OMP keeps ISBNs on publication formats' identification codes, which `getIdentifiers()` never reads. Live-probed 2026-09-25 (A3), OMP: with an "ISBN-13 (15)" code, 9780306406157, saved on the book's publication format, the ticked summary carried no ISBN line; the label read the same on the three apps.
-Issue report: [docs/issues/U18-A3-web-feed-identifiers-label-names-isbn.md](../issues/U18-A3-web-feed-identifiers-label-names-isbn.md).
+Issue report: [docs/issues/U18-A3-web-feed-identifiers-label-names-isbn.md](../issues/U18-A3-web-feed-identifiers-label-names-isbn.md), filed as [pkp-e2e#538](https://github.com/jardakotesovec/pkp-e2e/issues/538).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note e: the block has not read `displayPage` since at least `edd1785a0d` (2015-11-16, OJS tree); OJS's announcement feed block (`AnnouncementFeedBlockPlugin`) does read its own `displayPage`, as the Announcements spec's feed rule states. Live-probed 2026-09-25 (A4), all three apps: at "…homepage only." and "…issue pages only." the box still showed on the About, article, Search and Login pages, which carried no discovery link.
@@ -968,7 +968,7 @@ Issue report: [docs/issues/U18-A3-web-feed-identifiers-label-names-isbn.md](../i
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note f: the recent list is ordered by the submission's `lastModified`, which publishing moves on OJS and not on OMP or OPS. Live-probed 2026-09-25, two runs per app (A8; Rule 4a): with 31 published items and the number at 30, the item left out ("Cap 01") was unpublished and published again on its workflow screen; at the next read it came first in the three feeds on OJS, and stayed out on OMP and OPS, its stored `lastModified` unchanged.
-Issue report: [docs/issues/U18-A8-published-item-not-moved-up-feeds.md](../issues/U18-A8-published-item-not-moved-up-feeds.md).
+Issue report: [docs/issues/U18-A8-published-item-not-moved-up-feeds.md](../issues/U18-A8-published-item-not-moved-up-feeds.md), filed as [pkp-e2e#539](https://github.com/jardakotesovec/pkp-e2e/issues/539).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note c: pkp/webFeed `85a7d80` "pkp/pkp-lib#11795 fix publisher metadata for omp and ops" (2025-09-09) passes `$context->getData('name')`, the per-language array of the server's name, to `rss.tpl`, which prints it as "Array"; OJS's `publisherInstitution` and OMP's `publisher` are plain text. Live-probed 2026-09-25 (OPS1): on a new server, after its Masthead save and read in French alike, `<dc:publisher>` read "Array"; OJS showed its "Publisher", OMP its "Press Publisher Name". Written up for the team in `docs/reports/2026-09-26-webfeed-ops-publisher-array.md`.
