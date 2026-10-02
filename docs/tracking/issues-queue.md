@@ -25,7 +25,7 @@ and the hourly routine starts one only when none is running
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | **Taken: issues session, workstation s0, 2026-10-02**; OMP3 done with U69 A9 (pkp-e2e#282) |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
 | [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | OPS2 done with U51 OPS1 (pkp-e2e#380) |
-| [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 |  |
+| [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 | **A5 taken: issues session, workstation s0, 2026-10-02** (with U64 A7) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OPS1 done with U13 OPS2, OPS3 (docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md); OMP6 done with U69 A9 (pkp-e2e#282) |
 | [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 |  |
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 8 | 1 | 1 |  |
