@@ -2229,7 +2229,7 @@ an empty `msgstr` (OPS `publication.datePublished` in
 `locale/fr_CA/submission.po`), and the client prints the key in place
 of the text. No request failed and no
 script error was logged.
-Issue report: [docs/issues/U49-A10-ops-french-date-posted-raw-key.md](../issues/U49-A10-ops-french-date-posted-raw-key.md).
+Issue report: [pkp-e2e#548](https://github.com/jardakotesovec/pkp-e2e/issues/548) ([docs/issues/U49-A10-ops-french-date-posted-raw-key.md](../issues/U49-A10-ops-french-date-posted-raw-key.md)).
 Issue report: [pkp-e2e#228](https://github.com/jardakotesovec/pkp-e2e/issues/228) ([docs/issues/U13-A1-french-version-name-raw-key.md](../issues/U13-A1-french-version-name-raw-key.md)), the list of versions to copy from.
 
 <a id="fn-ojs1"></a>
