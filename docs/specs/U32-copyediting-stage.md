@@ -637,6 +637,7 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the "Notification" box "Assign a copyeditor using the Assign link in the Participants list." for an assigned editor after "Accept and Skip Review", after {OMP} "Accept Submission" on Internal Review and after "Move To Copyediting" from Production ([A6](#a6); Rule 3): the guard the issue report proposes, once fixed
   - scenario 1's recommending Section Editor bullet, no notice box on a
     press (A11; Actors row 2): no assertion in the OMP suite
   - scenario 6's "Copyediting" entry bullet, the panel headed "Production
@@ -685,7 +686,7 @@ entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | The "Copyedited Files" list's "Upload/Select Files" opens a window titled "Upload Review File" | 🐞 | minor | claim check (claude), 2026-09-18 — holds |
-| [A6](#a6) | A submission accepted without review, or on a press from Internal Review, never shows its editors the "Assign a copyeditor" notice | 🐞 | minor | claim check (claude), 2026-09-28 — widened: a press's internal "Accept Submission" too; "Awaiting Copyedits." still comes |
+| [A6](#a6) | No "Assign a copyeditor" notice on Copyediting after skipped review, a press's Internal Review or a return from Production | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Deleting the last copyedited file brings no notice back | 🐞 | minor | — |
 | [A9](#a9) | The discussion opened by the "Request Copyedit" message is listed as created by the Copyeditor | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | The page "Move to Review" opens is headed "Move to Submission", also on a submission going back to review | 🐞 | minor | — |
@@ -773,19 +774,25 @@ them.
 Basis: probe. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
-**A6 — No "Assign a copyeditor" notice on a submission accepted without review or from a press's Internal Review** · 🐞 · minor.
-An assigned editor opening a submission that reached Copyediting through
-"Accept and Skip Review" expects "Assign a copyeditor using the Assign link
-in the Participants list.", as on a submission accepted from review. No
-notice shows: not on landing, and not after a further editor is assigned
-through "Assign". The same editors read the notice on a submission accepted
-from review. On a press the same happens after "Accept Submission" on
-Internal Review, while the same decision on External Review brings the
-notice ([→ Internal Review stage OMP10](U71-internal-review-stage.md#omp10)).
-Only this first notice is missing: once a Copyeditor is assigned through
-"Assign" with the "Request Copyedit" message, the editors read "Awaiting
-Copyedits." on both paths.
-Basis: probe. <sup>[f-a6](#fn-a6)</sup>
+**A6 — No "Assign a copyeditor" notice on Copyediting after skipped review, a press's Internal Review or a return from Production** · 🐞 · low.
+An assigned editor opens Copyediting and finds no "Assign a copyeditor
+using the Assign link in the Participants list." notice when the
+submission got there in one of three ways:
+
+- "Accept and Skip Review" on the Submission stage;
+- "Accept Submission" on a press's Internal Review;
+- "Move To Copyediting" on Production.
+
+The notice shows only after "Accept Submission" on a journal's review
+round or a press's External Review. Up to 3.3 it showed after skipped
+review and after a press's Internal Review too.
+
+Nothing else on the stage is affected, and "Assign" works without the
+notice.
+
+The press's Internal Review path is also recorded as
+[→ Internal Review stage OMP10](U71-internal-review-stage.md#omp10).
+Basis: probe, 2026-10-02. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
 **A7 — The notice does not return when the last copyedited file is deleted** · 🐞 · minor.
@@ -997,6 +1004,7 @@ f-a11, f-a12, f-a13).
 
 <a id="fn-a6"></a>
 **f-a6** — `lib/pkp/classes/decision/Repository.php::getSubmissionNotificationTypes()` returns the `ASSIGN_COPYEDITOR` / `AWAITING_COPYEDITS` pair for `Decision::ACCEPT` and `Decision::SEND_TO_PRODUCTION` only; `Decision::SKIP_EXTERNAL_REVIEW` (the "Accept and Skip Review" decision, whose `getNewStageId()` is also `WORKFLOW_STAGE_ID_EDITING`) falls through to an empty list, so the decision creates no notice row for the editors assigned at that moment. Why a later "Assign" creates none either is not explained by the code read: `StageParticipantGridHandler::addParticipant()` does call `updateNotification()` for the pair at the editing stage, and the manager loops over every assigned editor; the observation stands on its own. Live-probed 2026-09-19 on OJS and OMP: a seeded `skipExternalReview` submission and one moved on screen by "Accept and Skip Review" showed the assigned Section Editor no "Notification" heading on landing, on the Copyediting entry, and after a second Section Editor was assigned through "Assign" (that editor saw none either); the same accounts read "Assign a copyeditor…" on submissions accepted from review the same day. OMP's internal "Accept Submission" is `Decision::ACCEPT_INTERNAL` (`classes/decision/types/AcceptFromInternal.php`), which the same list omits and OMP's `classes/decision/Repository.php` does not override; the Internal Review spec records that path as its OMP10. Live-probed 2026-09-28 (note d): the internal path on OMP without the notice; on it and on "Accept and Skip Review" (OJS and OMP) "Awaiting Copyedits." for both assigned editors after a Copyeditor was assigned through "Assign" with the "Request Copyedit" message. A further editor assigned through "Assign" was not driven again.
+Issue report: [docs/issues/U71-OMP10-copyediting-no-assign-copyeditor-notice.md](../issues/U71-OMP10-copyediting-no-assign-copyeditor-notice.md).
 
 <a id="fn-a7"></a>
 **f-a7** — `lib/pkp/classes/submissionFile/Repository.php::delete()`: for a `SUBMISSION_FILE_COPYEDIT` file it calls `updateNotification()` for the pair before `$this->dao->delete($submissionFile)`, so `PKPEditingProductionStatusNotificationManager` still counts the file being deleted, deletes both types, and nothing recomputes them once the row is gone. Live-probed 2026-09-18 on OJS and OMP: "Delete" › OK on the only copyedited file left "Copyedited Files" at "No Items" and both assigned editors with no notice, on the same page, re-landed and minutes later, from the "Assign a copyeditor…" state and from the "Awaiting Copyedits." state.

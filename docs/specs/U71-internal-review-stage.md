@@ -935,7 +935,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP7](#omp7) | The author selecting the "Internal Review" entry itself gets a stale or empty page, and the page's script fails | 🐞 | medium · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [OMP8](#omp8) | A press author's "Upload" on a past Internal Review round files the revision there while External Review waits for it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP9](#omp9) | The stage's address typed without the monograph's number gives an empty page from a server failure | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [OMP10](#omp10) | After "Accept Submission" on Internal Review the assigned editors get no notice box on Copyediting | 🐞 | minor | — |
+| [OMP10](#omp10) | After "Accept Submission" on Internal Review the assigned editors get no notice box on Copyediting | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | The author's Internal Review has no "Notifications" list, so its letters cannot be re-read there | ❓ | user-visible | — |
 | [OMP4](#omp4) | "Send to External Review" offers only the revised files, not the files that were under internal review | ❓ | minor | — |
 | [OMP5](#omp5) | The author sees an empty "Reviewers" table while an open internal review is under way | ❓ | minor | — |
@@ -1092,15 +1092,17 @@ shares its issue report and its severity.
 Basis: probe, 2026-10-02. <sup>[f-omp9](#fn-omp9)</sup>
 
 <a id="omp10"></a>
-**OMP10 — No Copyediting notice after an internal "Accept Submission"** · 🐞 · minor.
+**OMP10 — No Copyediting notice after an internal "Accept Submission"** · 🐞 · low.
 An assigned editor opening a monograph that "Accept Submission" moved from
 Internal Review to Copyediting expects "Assign a copyeditor using the
 Assign link in the Participants list.", as after External Review's
 "Accept Submission". No notice box shows, on landing or after a reload.
-This is the gap
-[→ copyediting stage A6](U32-copyediting-stage.md#a6) records for "Accept
-and Skip Review", on a second path.
-Basis: probe. <sup>[f-omp10](#fn-omp10)</sup>
+Only the prompt is missing: "Assign" in the Participants panel works
+without it. It is one fault with
+[→ copyediting stage A6](U32-copyediting-stage.md#a6), which records it
+for "Accept and Skip Review" and "Move To Copyediting" as well, and
+shares its issue report and its severity.
+Basis: probe, 2026-10-02. <sup>[f-omp10](#fn-omp10)</sup>
 
 ---
 
@@ -1258,6 +1260,7 @@ Issue report: [docs/issues/U71-OMP9-stage-address-without-number-blank-page.md](
 
 <a id="fn-omp10"></a>
 **f-omp10** — Note td-notice, with the code. The copyediting spec's Rule 3 grants the notice after a journal's review round or a press's External Review, and its A6 covers this path and "Accept and Skip Review" (corrected 2026-09-28). Live-probed 2026-09-27.
+Issue report: [docs/issues/U71-OMP10-copyediting-no-assign-copyeditor-notice.md](../issues/U71-OMP10-copyediting-no-assign-copyeditor-notice.md).
 
 ## Reference — entry points & surfaces
 

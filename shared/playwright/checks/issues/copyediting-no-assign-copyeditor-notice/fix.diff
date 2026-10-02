@@ -1,0 +1,14 @@
+--- a/lib/pkp/classes/decision/Repository.php
++++ b/lib/pkp/classes/decision/Repository.php
+@@ -493,7 +493,11 @@
+     protected function getSubmissionNotificationTypes(Decision $decision): array
+     {
+         switch ($decision->getData('decision')) {
++            // Every decision that brings a submission to the copyediting stage
+             case Decision::ACCEPT:
++            case Decision::ACCEPT_INTERNAL:
++            case Decision::SKIP_EXTERNAL_REVIEW:
++            case Decision::BACK_FROM_PRODUCTION:
+                 return [
+                     Notification::NOTIFICATION_TYPE_ASSIGN_COPYEDITOR,
+                     Notification::NOTIFICATION_TYPE_AWAITING_COPYEDITS
