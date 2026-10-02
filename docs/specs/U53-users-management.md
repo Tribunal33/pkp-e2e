@@ -1973,14 +1973,14 @@ overrides it. OMP's editor group is `default.groups.name.editor` "Press
 editor"; OPS installs no editor group. Live-probed 2026-09-25: the same
 text on all three apps; the press's roles include "Press editor", the
 preprint server's no editor.
-Issue report: [docs/issues/U53-A4-user-search-example-journal-role.md](../issues/U53-A4-user-search-example-journal-role.md).
+Issue report: [pkp-e2e#458](https://github.com/jardakotesovec/pkp-e2e/issues/458) ([docs/issues/U53-A4-user-search-example-journal-role.md](../issues/U53-A4-user-search-example-journal-role.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-25, all three apps, English interface:
 every row's "…" button is named `##userAccess.management.options##` (25 of
 25 on the seeded journal's first page), and the menu reads normally. Seen
 first on 2026-09-05 on OPS (review-stage claim check). Mechanism: note q.
-Issue report: [docs/issues/U53-A5-users-list-row-button-raw-key.md](../issues/U53-A5-users-list-row-button-raw-key.md).
+Issue report: [pkp-e2e#459](https://github.com/jardakotesovec/pkp-e2e/issues/459) ([docs/issues/U53-A5-users-list-row-button-raw-key.md](../issues/U53-A5-users-list-row-button-raw-key.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-25, all three apps: a throwaway Author
@@ -2023,7 +2023,7 @@ guards every action but "Edit" and "Email" with not-own-row.
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-25: note td13. Mechanism: note u.
-Issue report: [docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md).
+Issue report: [pkp-e2e#457](https://github.com/jardakotesovec/pkp-e2e/issues/457) ([docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-25, all three apps: in the list's
