@@ -1050,6 +1050,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U50-A11-issue-galley-interface-language-refused.md`):
     on a journal with an interface-only language, "Create Issue Galley"
     offering only the languages "Save" accepts
+  - the guard for A13 (issue report
+    `docs/issues/U50-A13-archive-issues-no-set-order.md`): issues
+    published out of order and one saved, then "Archives" reading as
+    "Back Issues" before any order is saved
 - **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
@@ -1133,7 +1137,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 | [A10](#a10) | An article dropped under another section in "Order" is back in its own section on reopening | 🐞 | minor | — |
 | [A11](#a11) | An issue galley in an interface-only language is refused as if no language were chosen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | After "Delete" on an issue, its offline articles still read "Published" and History records no unpublishing | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A13](#a13) | "Archives" lists the issues in no set order until someone orders "Back Issues" | 🐞 | user-visible | — |
+| [A13](#a13) | A journal's "Archives" lists its issues in no set order until a manager orders "Back Issues" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | A galley address that names no galley of the issue fails with an empty page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | With only "Description" changed on "Issue Data", another tab opens without the unsaved-change question | 🐞 | minor | — |
 | [A17](#a17) | An article whose newer version was published with "Don't Assign To An Issue" stays listed in the issue, under the newer title, linking to a page that names no issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1280,13 +1284,19 @@ an article taken offline this way can stay offline unnoticed.
 Basis: probe, 2026-10-02. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — "Archives" follows no order until "Back Issues" is ordered** · 🐞 · user-visible.
-Until a Journal Manager saves an order with "Order" on "Back Issues",
-the reader's "Archives" lists the published issues in no set order:
-neither the current issue first nor newest first, as "Back Issues" does.
-On one journal "Archives" read 2024, 2026, 2025 where "Back Issues" read
-2025, 2026, 2024. Readers expect the archive in the order the journal
-sees on "Back Issues". Basis: probe, 2026-09-25. <sup>f-a13</sup>
+**A13 — A journal's "Archives" lists its issues in no set order until a manager orders "Back Issues"** · 🐞 · medium.
+A reader opens a journal's "Archives" and expects its issues in the
+order the editors see on "Back Issues": the current issue first, then
+the rest newest first. Until a Journal Manager saves an order with
+"Order" on "Back Issues", the archive instead lists them in the order
+the database happens to return. That order stays the same from one visit
+to the next, but it has nothing to do with the issues' dates. On
+PostgreSQL it also changes whenever an editor saves an issue. Nobody is
+told, and "Back Issues" looks right, so editors have no reason to check.
+Saving an order once on "Back Issues" fixes the archive. This reaches
+every journal with two or more published issues that has never saved an
+order. Every new journal starts without one, and no upgrade saves one.
+Basis: probe, 2026-10-02. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — A wrong galley address fails with an empty page** · 🐞 · medium · crash: server.
@@ -1545,6 +1555,7 @@ Issue report: [docs/issues/U50-A12-delete-issue-articles-still-published.md](../
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25 (td13; Rule 25a), OJS, three journals, before any saved order: "Back Issues" 2025, 2026, 2024 (2025 current) against "Archives" 2024, 2026, 2025; "Back Issues" 2023, 2022, 2021 against 2021, 2022, 2023; after an unpublish, 2020, 2026, 2025 against 2026, 2020, 2025. Mechanism: note u, the archive orders by the saved order alone.
+Issue report: [docs/issues/U50-A13-archive-issues-no-set-order.md](../issues/U50-A13-archive-issues-no-set-order.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-25 (td14; Rule 26), OJS, eight times over three runs: `issue/view/{id}/999`, `/{id}/nosuch`, `/{urlPath}/999` and another issue's galley each answered 500 with an empty title and body. Server log: "Uncaught TypeError: PKP\core\PKPRequest::redirect(): Argument #4 ($path) must be of type ?array, int given" in `IssueHandler.php`, the unknown-galley redirect of `initialize()` (note x). Code read: `stable-3_5_0` passes the path as a list; not driven there.

@@ -1,0 +1,11 @@
+--- a/pages/issue/IssueHandler.php
++++ b/pages/issue/IssueHandler.php
+@@ -167,7 +167,7 @@
+             ->limit($count)
+             ->offset($offset)
+             ->filterByContextIds([$context->getId()])
+-            ->orderBy(Collector::ORDERBY_SEQUENCE)
++            ->orderBy(Collector::ORDERBY_PUBLISHED_ISSUES)
+             ->filterByPublished(true);
+ 
+         $issues = $collector->getMany()->toArray();
