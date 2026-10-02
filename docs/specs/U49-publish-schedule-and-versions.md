@@ -967,6 +967,11 @@ Left out of the scenarios above, by reason:
     Assign To An Issue" whose contributor holds a verified iD reaching
     "Status: Published" without an error, and its author receiving
     "Publication Published"
+  - the guard for A6 (issue report
+    `docs/issues/U49-A6-new-version-draft-rewrites-published-date.md`): a
+    published article, book or preprint keeping its "Published {date}" line
+    unchanged after "Create New Version" makes a still unpublished version,
+    in every app
 - **Rarely met**:
   - the publish button skipping the details panel on a journal with
     issues, after a Publication Settings save on a version that already
@@ -1084,7 +1089,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A5](#a5) | Readers never see a new version's Summary of Changes, though the editor is told it appears publicly | 🐞 | high | issues (claude), 2026-10-02 — re-verified |
-| [A6](#a6) | Merely creating an unpublished version rewrites the live reader page's date line | 🐞 | user-visible | — |
+| [A6](#a6) | Creating a new version, still unpublished, makes the reader page say "Published {today} — Updated on {real date}" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | In French the "Create New Version" dialog and the Publication Settings / Preprint Entry page show raw codes; the versions to copy from cannot be told apart | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused with no message and publishing is unreachable | 🐞 | user-visible | — |
 | [OJS2](#ojs2) | Editor's "Schedule Only" publishes the article at once when the journal has no published issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1191,16 +1196,17 @@ install using the default theme, the only theme the three apps ship.
 Basis: probe, 2026-10-02. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
-**A6 — An unpublished draft rewrites the public dates** · 🐞 ·
-user-visible.
-Merely creating a new, still unpublished, version changes the live reader
-page's date line in every app. It becomes "Published {date} — Updated on
-{date}", with the draft's creation day presented as the published date
-and the real publication date demoted to "Updated on". Readers still get
-the old version, and its "Versions" list shows nothing new. An editor who
-quietly starts preparing a revision thereby falsifies the published
-record's dates. Since: 2026-08-29 · Basis: probe.
-<sup>[f-a6](#fn-a6)</sup>
+**A6 — Creating a new version, still unpublished, makes the reader page say "Published {today} — Updated on {real date}"** · 🐞 · medium.
+An editor who presses "Create New Version" on a published article, book
+or preprint changes its public page at once, before the new version is
+published. The date under "Published" ("Posted" on a preprint server)
+changes from the real date to "{the day the page is read} — Updated on
+{the real date}". The page still shows the old version, and its
+"Versions" list gains no entry. The first date is not the day the draft
+was created: it is the date of each visit, so it moves forward every day
+until the new version is published or deleted. Nobody is warned. The
+page's citation tags keep the real date. Since: 2026-08-29 · Basis:
+probe, 2026-10-02. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
 **A7 — A requirement-shaped sentence under "all met"** · ❓ · minor.
@@ -2133,6 +2139,7 @@ catalog page and the preprint page grew the same "Updated on" line
 ("Published August 29, 2026 — Updated on August 29, 2026" / "Posted
 2026-08-29 — Updated on 2026-08-29"); same-day dates masked the
 inversion there.
+Issue report: [docs/issues/U49-A6-new-version-draft-rewrites-published-date.md](../issues/U49-A6-new-version-draft-rewrites-published-date.md).
 
 <a id="fn-a7"></a>
 **f-a7** — Live-probed 2026-08-29 (scratch press + preprint server):

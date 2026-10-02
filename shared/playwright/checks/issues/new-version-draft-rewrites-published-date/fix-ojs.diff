@@ -1,0 +1,18 @@
+--- a/pages/article/ArticleHandler.php
++++ b/pages/article/ArticleHandler.php
+@@ -263,10 +263,12 @@
+             'doiObject' => $doiObject,
+         ]);
+ 
+-        // Get the earliest published publication
+-        $firstPublication = $article->getData('publications')->reduce(function ($a, $b) {
++        // Get the earliest published publication. Only published versions
++        // count: a new version has no date until it is published, and an
++        // empty date would win the comparison.
++        $firstPublication = collect($article->getPublishedPublications())->reduce(function ($a, $b) {
+             return empty($a) || strtotime((string) $b->getData('datePublished')) < strtotime((string) $a->getData('datePublished')) ? $b : $a;
+-        }, 0);
++        }, 0) ?: $publication;
+         $templateMgr->assign([
+             'firstPublication' => $firstPublication,
+         ]);
