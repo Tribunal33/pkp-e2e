@@ -1091,7 +1091,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A5](#a5) | Readers never see a new version's Summary of Changes, though the editor is told it appears publicly | 🐞 | high | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Creating a new version, still unpublished, makes the reader page say "Published {today} — Updated on {real date}" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | In French the "Create New Version" dialog and the Publication Settings / Preprint Entry page show raw codes; the versions to copy from cannot be told apart | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused with no message and publishing is unreachable | 🐞 | user-visible | — |
+| [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused without naming the summary and publishing is unreachable | 🐞 | high | issues (claude), 2026-10-02 — re-verified |
 | [OJS2](#ojs2) | Editor's "Schedule Only" publishes the article at once when the journal has no published issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | Editor publishing an article without an issue gets an error when a contributor has a verified ORCID iD | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
@@ -1301,14 +1301,17 @@ Since: 2026-09-30 · Basis: probe, 2026-10-02. <sup>[f-a10](#fn-a10)</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — A required plain language summary blocks Confirm silently** · 🐞 · user-visible.
+**OJS1 — A required plain language summary blocks Confirm silently** · 🐞 · high.
 On a journal that requires a plain language summary, the "Review
-Publishing Details" panel's Confirm is refused with no message for a
-version without one. Publishing and scheduling are never reached, and
-nothing names the missing summary. The requirement's save-blocking side
-is [Publication metadata](U40-publication-metadata.md#a1)'s finding; a
-press and preprint server publish without a summary. Since: 2026-08-28 ·
-Basis: probe. <sup>[f-ojs1](#fn-ojs1)</sup>
+Publishing Details" panel's Confirm is refused for every version, one
+that already holds a summary included. Publishing and scheduling are
+never reached. Nothing names the summary: a passing notice counts "1
+error(s)", nothing in the panel is marked, and a second, blank copy of
+the panel opens over the first. The requirement's save-blocking side
+is [Publication metadata](U40-publication-metadata.md#a1)'s finding,
+with the same cause; a press and preprint server publish without a
+summary. Since: 2026-08-28 · Basis: probe, 2026-10-02.
+<sup>[f-ojs1](#fn-ojs1)</sup>
 
 <a id="ojs2"></a>
 **OJS2 — Editor's "Schedule Only" publishes the article at once when the journal has no published issue** · 🐞 · medium.
@@ -2249,6 +2252,7 @@ panel's Confirm was refused with no message on a summary-less version;
 OMP published and OPS posted under the same requirement. The
 requirement is checked against what each save sends; the panel's save
 does not carry the summary field.
+Issue report: [pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323) ([docs/issues/U21-A20-plain-summary-required-refuses-other-saves.md](../issues/U21-A20-plain-summary-required-refuses-other-saves.md)).
 
 <a id="fn-ojs2"></a>
 **f-ojs2** — `getIssueAssignmentStatus()` returns the default

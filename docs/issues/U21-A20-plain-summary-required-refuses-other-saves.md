@@ -10,9 +10,9 @@
   - 3.4: none (code; no plain language summary setting)
   - 3.3: none (code; no plain language summary setting)
 - **Introduced** `pkp/pkp-lib#11741` for `pkp/pkp-lib#11540` · [0b283f407b](https://github.com/pkp/pkp-lib/commit/0b283f407bd9e10bd6ccd4059a97edc6062be2fa) · 2025-09-12 · Touhidur Rahman (touhidurabir)
-- **Upstream** none found (2026-10-01)
-- **Tracked in** spec U21 [A20](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#a20), spec U40 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U40-publication-metadata.md#a1)
-- **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Upstream** none found (2026-10-02)
+- **Tracked in** spec U21 [A20](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#a20), spec U40 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U40-publication-metadata.md#a1), spec U49 [OJS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U49-publish-schedule-and-versions.md#ojs1)
+- **Checked** 2026-10-01 (journal publishing again 2026-10-02), each branch's tip (the commits in Evidence)
 
 ## Summary
 
@@ -21,10 +21,14 @@ summary to "Require", the server refuses every save made from a form
 that has no summary field, even when the submission already holds a
 summary. Editors cannot save the Metadata, Permissions & Disclosure,
 Data or Identifiers pages, or the issue, catalog or preprint entry
-page; only "Title & Abstract" saves. A journal cannot schedule or
-publish any article, while a press and a preprint server still
-publish. The refusal names a raw field, "plainLanguageSummary", which
-is not on the page.
+page; only "Title & Abstract" saves. The refusal names a raw field,
+"plainLanguageSummary", which is not on the page.
+
+A journal cannot schedule or publish any article, even one that holds
+a summary, while a press and a preprint server still publish. The
+publishing panel's "Confirm" names nothing: a passing notice counts
+"1 error(s)", and a second, blank copy of the panel opens over the
+first.
 
 In the submission wizard, the title typed on the start page is lost
 without any message. Three more saves are refused, each with an
@@ -52,9 +56,9 @@ without a relation status.
   submission, every time.
 - **Way round:** authors can submit as above, without references.
   Editors have none in the workflow: saving a summary on "Title &
-  Abstract" first does not unblock the other pages. Setting the summary
-  back to "Ask" makes every save work again, but drops the requirement
-  the journal chose.
+  Abstract" first does not unblock the other pages or publishing.
+  Setting the summary back to "Ask" makes every save work again, but
+  drops the requirement the journal chose.
 
 High: a journal cannot publish, with no way round short of dropping
 the requirement, in an ordinary setup that is not the default. It
@@ -93,39 +97,42 @@ Publishing (OJS, as `dbarnes`):
 9. In "Review Publishing Details": "Version of Record (VoR)", "Major
    Revision", "Assign To Current/Back Issue", "Vol. 1 No. 2 (2014)",
    "Confirm".
+10. "Cancel" the panel; "Title & Abstract": type a summary into "Plain
+    Language Summary", "Save"; "Schedule For Publication" again, the
+    same choices as in step 9, "Confirm".
 
 Submission wizard (as the author `ccorino` [OMP: `aclark`]):
 
-10. "New Submission": type the title "u21ir24 wizard submission", tick
+11. "New Submission": type the title "u21ir24 wizard submission", tick
     the checklist and privacy boxes, "Begin Submission".
-11. "Upload Files": add a file (OJS "Article Text", OMP "Book
+12. "Upload Files": add a file (OJS "Article Text", OMP "Book
     Manuscript", OPS "Add File" with the label "PDF" and "Preprint
     Text"), "Continue".
-12. "Details": leave "Plain Language Summary" empty, type an abstract
+13. "Details": leave "Plain Language Summary" empty, type an abstract
     [OMP: no abstract], "Continue".
-13. Reload the page. "Continue" on to "Review" [OPS: on "For Readers",
+14. Reload the page. "Continue" on to "Review" [OPS: on "For Readers",
     answer "Relation status" with "This preprint has not been published
     elsewhere."].
-14. Reload the page, back to "Details": type a summary into "Plain
+15. Reload the page, back to "Details": type a summary into "Plain
     Language Summary" and two lines into "References", "Continue".
-15. OPS only: reload; "For Readers": "This preprint has not been
+16. OPS only: reload; "For Readers": "This preprint has not been
     published elsewhere.", "Continue".
-16. Reload; read "Details" (and on OPS "For Readers") back.
+17. Reload; read "Details" (and on OPS "For Readers") back.
 
 Getting the submission in (as the same author, a new submission):
 
-17. "New Submission": the title, the boxes, "Begin Submission"; add a
-    file as in step 11, "Continue".
-18. "Details": type the title again, an abstract [OMP: none] and a
+18. "New Submission": the title, the boxes, "Begin Submission"; add a
+    file as in step 12, "Continue".
+19. "Details": type the title again, an abstract [OMP: none] and a
     summary, leave "References" empty, "Continue".
-19. "Continue" on to "Review" [OPS: answer "Relation status" as in step
-    13, then reload the page], "Submit", and "Submit" in the
+20. "Continue" on to "Review" [OPS: answer "Relation status" as in step
+    14, then reload the page], "Submit", and "Submit" in the
     confirmation.
 
 **Expected:** every save shows "Saved" or moves the wizard on. The
 summary is required only where it is typed ("Title & Abstract", the
 wizard's "Details"), and in the wizard its absence blocks "Submit".
-Step 9 opens "Are you sure you want to publish this?".
+Steps 9 and 10 open "Are you sure you want to publish this?".
 
 **Observed:**
 
@@ -141,32 +148,36 @@ Step 9 opens "Are you sure you want to publish this?".
   400 {"plainLanguageSummary":{"en":["This field is required."]}}
   ```
 
-- Step 9 is refused with the same answer. The panel stays open, nothing
-  on it is marked, and a notice reads "The form was not saved because
-  1 error(s) were encountered. Please correct these errors and try
-  again."
-- Step 10: the start page's title save answers the same 400. The wizard
+- Step 9 is refused with the same answer. A second "Review Publishing
+  Details" panel opens over the first, its "Publication Stage" and
+  "Revision Significance" empty; nothing in either panel is marked, and
+  a passing notice reads "The form was not saved because 1 error(s)
+  were encountered. Please correct these errors and try again." One
+  "Cancel" closes both.
+- Step 10: the summary saves ("Saved"); the second "Confirm" is refused
+  exactly as in step 9.
+- Step 11: the start page's title save answers the same 400. The wizard
   opens with "21 / Corino" in its header, and "Review" later shows
   "Title: None provided" with "This field is required."
-- Step 12: the step's save answers the same 400. The wizard moves on to
+- Step 13: the step's save answers the same 400. The wizard moves on to
   "Contributors", opens "Error: An unexpected error has occurred.
   Please reload the page and try again.", and its footer goes from
   "Reconnecting" to "Saving" for good, with the page script error
   `Cannot read properties of undefined (reading 'url')` (that hang
   follows any refused wizard save, and is reported apart).
-- Step 13 (OJS, OMP): "Review" lists the title, the abstract and "Plain
+- Step 14 (OJS, OMP): "Review" lists the title, the abstract and "Plain
   Language Summary" as "This field is required.", and "Submit" is
   disabled. On OPS the "Relation status" save answers the same 400 with
   the same dialog and hang, and "Review" stays on "Checking your
   submission".
-- Step 14: the summary's save answers 200, the references' save the
-  same 400, with the same dialog and hang. Step 15 (OPS): the same 400
-  as in step 13.
-- Step 16: the summary is kept; "References" is empty, and on OPS no
+- Step 15: the summary's save answers 200, the references' save the
+  same 400, with the same dialog and hang. Step 16 (OPS): the same 400
+  as in step 14.
+- Step 17: the summary is kept; "References" is empty, and on OPS no
   relation status is chosen.
-- Steps 17–19: the start page's title is refused again; the "Details"
+- Steps 18–20: the start page's title is refused again; the "Details"
   save answers 200 and the next steps save (OPS: the relation answer is
-  refused as in step 13, and after the reload "Review" shows no
+  refused as in step 14, and after the reload "Review" shows no
   problem). "Submit" is enabled and "Submission complete" shows.
 
 ## Cause
@@ -211,9 +222,16 @@ Reach: `validate()` runs on every publication write through
   sends it. Contributors and Galleys save through their own endpoints
   and are not touched (code).
 - OJS publishing: the "Review Publishing Details" panel saves the issue
-  and status through `editPublication` before publishing (on screen).
-  OMP and OPS publish through `…/publish`, which does not call
-  `validate()` (code).
+  and status through `editPublication` before publishing, so a stored
+  summary does not help (on screen). The refusal is then shown on no
+  field, since the panel has no summary field and is built with
+  `showErrorFooter: false`; and `useWorkflowVersionForm()` (ui-library
+  `src/pages/workflow/composables/useWorkflowVersionForm.js`) calls the
+  panel's `onSubmitFn` whether or not the save succeeded, which reopens
+  the panel, blank, while the version still has no stage (on screen;
+  the reopening is a fault of its own, which any refused save of that
+  panel would show). OMP and OPS publish through `…/publish`, which does
+  not call `validate()` (code).
 - The submission wizard (`editPublication`): the start page's title,
   the "Details" step without the summary, the "References" box, and the
   OPS "Relation status" (on screen, the three apps; OPS for the last).
@@ -234,11 +252,11 @@ Reach: `validate()` runs on every publication write through
 A proposal, tried on main:
 [`fix.diff`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/plain-summary-required-refuses-other-saves/fix.diff)
 applied to OJS, OMP and OPS. With it, the Steps show Expected: steps 4,
-6, 7 and 9 save (and step 9 publishes), and every wizard save in steps
-10 to 15 answers 200, with the title and references read back. The
-requirement still holds: "Review" lists "Plain Language Summary" as
-required with "Submit" disabled, and "Title & Abstract" with the
-summary emptied is refused ("Go to Plain Language Summary: This field
+6, 7 and 9 save (and step 9 publishes: "Status: Published"), and every
+wizard save in steps 11 to 16 answers 200, with the title and
+references read back. The requirement still holds: "Review" lists
+"Plain Language Summary" as required with "Submit" disabled, and
+"Title & Abstract" with the summary emptied is refused ("Go to Plain Language Summary: This field
 is required.") with the fix in and out. The guard added to
 `ValidatorFactory::required()` (the second hunk) is read in the code
 only: no screen creates a publication through `addPublication()`.
@@ -347,6 +365,9 @@ error alone, for every caller of `required()`.
   wording ("…before accepting their submission"). Requiring a summary
   at publishing too would be a product decision and a check in
   `validatePublish()`; the fix does not need it.
+- The panel's reopening after a refused "Confirm" (Cause) is not
+  covered: with the fix this refusal no longer reaches it, but the
+  ui-library call stays for any other refusal of that panel.
 - Guard: a unit test of `Repo::publication()->validate()` in pkp-lib
   (beside `tests/classes/publication/PublicationTest.php`) with the
   context at "require": an edit without the summary passes, an edit
@@ -366,12 +387,27 @@ already has, and a unit test.
   with its
   [`lib.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/plain-summary-required-refuses-other-saves/lib.js),
   run with `PROBE_FEATURE=issues-ir24 PROBE_AGENT=ir24 node bin/probe.js all shared/playwright/checks/issues/plain-summary-required-refuses-other-saves/walk.js`
-  (steps 17–19 with `WALK_GROUPS=submit` in front). Steps 10 and 17
+  (steps 18–20 with `WALK_GROUPS=submit` in front). Steps 11 and 18
   open the start page by its address
   (`/index.php/publicknowledge/submission`).
 - The fix was tried by applying `fix.diff` to the three checkouts and
-  taking steps 1–16 again (the second hunk was added afterwards, from
-  the code).
+  taking steps 1–9 and 11–17 again (the second hunk was added
+  afterwards, from the code).
+- Journal publishing (steps 1, 2 and 8–10, OJS), walked again
+  2026-10-02 on a fresh load of pkp/datasets e8dafbc (2026-10-02) at
+  OJS b84f8e2e44, pkp-lib ddd8ab243a, ui-library 64d67363 (3.5: OJS
+  091fb65453, pkp-lib cf3f984335, ui-library d4e0188353):
+  [`shared/playwright/checks/issues/plain-summary-required-refuses-other-saves/publish-confirm.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/plain-summary-required-refuses-other-saves/publish-confirm.js),
+  run with `PROBE_FEATURE=issues-v4 PROBE_AGENT=v4 node bin/probe.js ojs shared/playwright/checks/issues/plain-summary-required-refuses-other-saves/publish-confirm.js`
+  (`WALK_MODE=neighbour` for the emptied-summary check). In step 10 the
+  script opens the workflow again before typing the summary, because
+  its editor did not take input after the panels closed although the
+  page showed the box. The two stacked panels are counted by their
+  "Review Publishing Details" headings. With `fix.diff` applied to OJS
+  the first "Confirm" opened "Are you sure you want to publish this?"
+  and "Publish" ended on "Status: Published"; "Title & Abstract" with
+  the summary emptied was refused on the page with the fix in and out.
+  3.5, walked: the "Metadata" tab offers no plain language summary item.
 - Branch tips. main: OJS 4408b94def, its pkp-lib f5bd392a69 and
   ui-library 64d673631; OMP 3b0ecf794c and OPS c8af945bb7, both with
   pkp-lib 3dc90c81a6 and ui-library 280f98c57 (`Repository.php` is
@@ -398,6 +434,11 @@ already has, and a unit test.
   plainLanguageSummary" and the PRs of `pkp/pkp-lib#11540`. Only the
   feature's own issue and PRs (`pkp/pkp-lib#11540`, `#11570`, `#11741`,
   `#12674`) and unrelated issues came up; none reports this refusal.
+  Again 2026-10-02 for journal publishing: "plain language summary"
+  with publish and with schedule, "Review Publishing Details" (pkp-lib,
+  ui-library), `onSubmitFn` (ui-library); only `pkp/pkp-lib#12409`
+  (the panel shown again for an already staged version) came up, a
+  different fault.
 - Not driven: Data, Identifiers and the issue, catalog and preprint
   entry pages; the version form's `changeVersion`; OMP and OPS
   publishing; a journal asking for "Coverage" on "For the Editors".

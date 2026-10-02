@@ -264,8 +264,63 @@ async function afterContinue(page, writes, t0) {
     return o;
 }
 
+/**
+ * OJS: "Schedule For Publication" from the open Publication page, then in "Review Publishing Details" the Version of
+ * Record, "Major Revision", "Assign To Current/Back Issue" and the issue matching `issue`, "Confirm". Records what
+ * follows (never throws on the state a fix brings): the writes, whether the confirmation opened, whether the panel
+ * stayed open, the marks inside it and the notices shown. Returns {panel, confirm, out}.
+ */
+async function confirmPublishPanel(app, page, writes, issue = /Vol\. 1 No\. 2/) {
+    const {PublicationScreen} = require(path.join(app.suiteDir, 'pages', 'PublicationMetadataPages.js'));
+    const pub = new PublicationScreen(page, app.contextPath);
+    const panel = await pub.openPublishPanel();
+    await pub.fillVersionDetails(panel);
+    await pub.awaitAssignmentPreselected(panel);
+    await panel.getByRole('radio', {name: 'Assign To Current/Back Issue'}).check();
+    await pub.selectIssueOption(panel, issue);
+    await screen(page).catch(() => null); // empties the notice queue before the press
+    const t = Date.now();
+    await panel.getByRole('button', {name: 'Confirm', exact: true}).click();
+    const confirm = page.getByRole('dialog').filter({hasText: 'Are you sure you want to publish this?'});
+    await confirm.waitFor({timeout: 8000}).catch(() => {});
+    await idle(page);
+    const out = {writes: writes.since(t)};
+    const s = await screen(page).catch(() => ({}));
+    out.notices = s.notices || [];
+    out.confirmOpened = await confirm.isVisible().catch(() => false);
+    // The side panels nest (the SideModal wrappers have no box of their own), so they are read by their contents.
+    out.panelStillOpen = (await publishPanelsOpen(page)) > 0;
+    out.fieldMarks = await page.locator('.pkpFormErrors, .pkpFieldError').evaluateAll((els) => els.filter((e) => e.getClientRects().length).map((e) => e.innerText.replace(/\s+/g, ' ').trim())).catch(() => []);
+    out.panelText = out.panelStillOpen ? flat(await page.locator('[data-cy="active-modal"]').last().innerText().catch(() => null), 1500) : null;
+    // How many "Review Publishing Details" panels are open now, and what the top one's selects hold.
+    out.panelsOpen = await publishPanelsOpen(page);
+    out.topPanelValues = await page.locator('[data-cy="active-modal"]').filter({hasText: 'Review Publishing Details'}).last()
+        .locator('select').evaluateAll((els) => els.map((e) => ({name: e.name, value: e.value}))).catch(() => null);
+    return {panel, confirm, out};
+}
+
+/** How many "Review Publishing Details" panels are on screen (stacked side panels; the lower ones are inert). */
+async function publishPanelsOpen(page) {
+    return page.locator('h1, h2, h3').evaluateAll((els) => els.filter((e) => e.innerText.trim() === 'Review Publishing Details' && e.getClientRects().length).length).catch(() => null);
+}
+
+/** "Cancel" in the top "Review Publishing Details" panel until none is open. Returns [panels open before each press]. */
+async function closePublishPanels(page) {
+    const seen = [];
+    for (let i = 0; i < 6; i++) {
+        const open = await publishPanelsOpen(page);
+        seen.push(open);
+        if (!open) break;
+        const cancel = page.locator('[data-cy="active-modal"]').last().getByRole('button', {name: 'Cancel', exact: true}).last();
+        await cancel.click({timeout: 10_000});
+        await idle(page);
+        await sleep(500);
+    }
+    return seen;
+}
+
 module.exports = {
     FIXTURES, T, sleep, flat, PUB_WRITE, wf, snap, watchWrites, requireSummary, openWorkflow, openEntry, savePage, typeRich,
     currentStep, curText, footer, footerText, errDialog, startSubmission, uploadFile, pressContinue, continueUntil, railTo, goToStep,
-    reloadWizard, afterContinue,
+    reloadWizard, afterContinue, confirmPublishPanel, closePublishPanels, publishPanelsOpen,
 };
