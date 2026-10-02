@@ -22,7 +22,7 @@ and the hourly routine starts one only when none is running
 | [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | A23, A24: open report docs/reports/2026-09-27-pkp-lib-13288.md (the rest of U36 written up by the issues session, workstation s0, 2026-10-02) |
 | [U17](../specs/U17-sections.md) | 16 | 2 | 2 | OMP9, OPS6: open reports docs/reports/2026-09-25-omp-series-page-blank.md and docs/reports/2026-09-25-ops-oai-empty-abstract.md (the rest of U17 written up by the issues session, workstation s0, 2026-10-02) |
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 | A1, A7, OPS1: open reports docs/reports/2026-09-26-webfeed-rss2-empty-feed-fails.md, docs/reports/2026-09-26-webfeed-terms-read-array.md and docs/reports/2026-09-26-webfeed-ops-publisher-array.md (the rest of U18 written up by the issues session, workstation s0, 2026-10-02) |
-| [U71](../specs/U71-internal-review-stage.md) | 6 | 2 | 2 |  |
+| [U71](../specs/U71-internal-review-stage.md) | 6 | 2 | 2 | **Taken: issues session, workstation s0, 2026-10-02** |
 | [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 |  |
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 9 | 1 | 8 | OJS3 done with U69 A3 (pkp-e2e#285) |
 | [U48](../specs/U48-jats-and-body-text.md) | 17 | 1 | 7 | A20 done with U47 A6 (pkp-e2e#494) |
