@@ -2118,7 +2118,7 @@ Issue report: [pkp-e2e#598](https://github.com/jardakotesovec/pkp-e2e/issues/598
 <a id="fn-f-omp2"></a>
 **f-omp2** — Note h (OMP flat array, `is_sub` one indent step at any depth;
 order note i). Live-probed 2026-09-25: note td12.
-Issue report: [docs/issues/U16-OMP2-browse-block-flat-category-list.md](../issues/U16-OMP2-browse-block-flat-category-list.md).
+Issue report: [pkp-e2e#605](https://github.com/jardakotesovec/pkp-e2e/issues/605) ([docs/issues/U16-OMP2-browse-block-flat-category-list.md](../issues/U16-OMP2-browse-block-flat-category-list.md)).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — OMP `plugins/blocks/browse/templates/block.tpl` prints
