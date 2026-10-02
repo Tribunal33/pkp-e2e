@@ -817,6 +817,13 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the delete dialog's confirmation box found by its name
+    ([A18](#a18)): the guard the issue report proposes
+  - the "Select Categories" window's column headings read as a screen
+    reader hears them ([A12](#a12)): the guard the issue report proposes
+  - a "Categories" tab row opened from the keyboard, its arrow's name
+    read before and after ([A11](#a11)): the guard the issue report
+    proposes
   - a category with one item reading "1 Item" ([A19](#a19)): the guard
     the issue report proposes
   - an empty category's page showing its "Nothing has been published"
@@ -906,13 +913,13 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | A category path with "/" saves, but the category's links open another category's page or "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | The path message says "only letters and numbers" while "-", "_", "." and "/" are accepted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | With no category, the "Browse" block shows "Categories" with nothing under it | 🐞 | minor | — |
-| [A11](#a11) | The tab's arrows cannot be worked from the keyboard, and all read "Expand sub-categories" to a screen reader, open or not, with or without sub-categories | 🐞 | minor | — |
-| [A12](#a12) | A screen reader announces the "Select Categories" window's arrow column as "##common.expand##" | 🐞 | minor | — |
+| [A11](#a11) | On the Categories tab, keyboard users cannot open a category's sub-categories, and the arrows are misnamed | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A12](#a12) | A screen reader announces the "Select Categories" window's arrow column as "##common.expand##" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | A category's "Editorial Assignments" assign nobody on any journal or press but the install's first | 🐞 | user-visible | — |
 | [A15](#a15) | In French, the tab, the delete dialog, the "Select Categories" window and a press's category page show raw codes | 🐞 | minor | — |
 | [A16](#a16) | A name changed and closed without saving comes back in the same category's next "Edit" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | A file that is not a picture leaves a broken preview in "Cover Image" | 🐞 | minor | — |
-| [A18](#a18) | The delete dialog's confirmation box has no name for a screen reader | 🐞 | minor | — |
+| [A18](#a18) | The box where a manager types a category's name to delete it has no name for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A19](#a19) | A category with one item reads "1 Items" ("1 Titles" on a press) | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | With the "Browse" block placed, every breadcrumb's last step gets the block's grey bar | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's category page shows a broken-picture mark instead of the picture | 🐞 | user-visible | — |
@@ -1019,22 +1026,36 @@ it; a press's block leaves the line out.
 Basis: probe, 2026-09-25. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The tab's arrows fail keyboard and screen-reader users** · 🐞 · minor.
-Every row of the "Categories" tab has an arrow button, named "Expand
-sub-categories" for a screen reader whether its row is open or closed; on
-a row with no sub-categories the button is there, invisible, and does
-nothing. A keyboard user cannot open a row: Tab reaches each row's arrow
-after its "More Actions", but Enter and Space on it do nothing; only a
-pointer click opens the row. The "Select Categories" window's arrows are
-all named "Collapse" in the same way, open or closed.
-Basis: probe, 2026-09-25. <sup>f-a11</sup>
+**A11 — On the Categories tab, keyboard users cannot open a category's sub-categories, and the arrows are misnamed** · 🐞 · medium.
+On Settings › Journal (Press, Server) › "Categories", a manager opens a
+category's row with the arrow at its right end to reach its
+sub-categories. The arrow works only with a mouse: Tab reaches it, but
+Enter and Space do nothing. For a screen reader its name is "Expand
+sub-categories" whether the row is open or closed. Rows with no
+sub-categories also carry an arrow, invisible and named the same: Tab
+stops on it, and it does nothing.
+A manager who works from the keyboard cannot reach a sub-category's row
+on the tab, so cannot edit or delete it, or add a category under it.
+A screen reader user is also told the wrong thing about each arrow.
+The "Select Categories" window has the same arrows. It opens from the
+"Categories" field of the dashboard's "Filters", of a submission's
+publication pages and of the submission wizard's "For the Editors" step.
+There every row with sub-categories is open when the window opens, so a
+keyboard user can still tick any category. But a row closed
+with the mouse cannot be opened again from the keyboard, and every arrow
+is named "Collapse", open or closed.
+Basis: probe, 2026-10-02. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — A raw code names the "Select Categories" window's arrow column** · 🐞 · minor.
-A screen reader announces the window's last column, the one holding the
-arrows, as "##common.expand##" instead of a word, in all three apps; on
-screen the column's heading is empty.
-Basis: probe, 2026-09-25. <sup>f-a12</sup>
+**A12 — A screen reader announces the "Select Categories" window's arrow column as "##common.expand##"** · 🐞 · low.
+The "Select Categories" window lists the categories in a table whose last
+column holds the arrows that open and close each row. A screen reader
+announces that column's heading as the raw code "##common.expand##"
+instead of a word. On screen the heading is empty.
+The window opens from every "Categories" field: the dashboard's
+"Filters", a submission's publication pages, and the submission wizard's
+"For the Editors" step when the journal asks authors for categories.
+Basis: probe, 2026-10-02. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — Category editors are assigned only on the install's first journal** · 🐞 · user-visible.
@@ -1101,11 +1122,18 @@ page of that name, which does not exist. "Save" then refuses the file.
 Basis: probe, 2026-09-25. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — The delete dialog's box has no name** · 🐞 · minor.
-The box under "To confirm, please type the name of the category…" has no
-label: a screen reader announces an unnamed edit field, so its user is
-not told what the box is for.
-Basis: probe, 2026-09-25. <sup>f-a18</sup>
+**A18 — The box where a manager types a category's name to delete it has no name for a screen reader** · 🐞 · low.
+To delete a category, a manager types its name into a box in the
+dialog "Are you absolutely sure you want to delete "{name}" category?".
+The box has no label, so a screen reader announces only an edit field,
+without saying what to type.
+The instruction above it ("To confirm, please type the name of the
+category … below to proceed") can still be read, so the delete gets
+done.
+The dialog for deleting a contributor role (Settings › Workflow ›
+Submission › "Contributor Roles") has the same unnamed box, on the same
+apps and versions.
+Basis: probe, 2026-10-02. <sup>f-a18</sup>
 
 <a id="a19"></a>
 **A19 — "1 Items"** · 🐞 · low.
@@ -1910,6 +1938,7 @@ Live-probed 2026-09-25: note td12.
 <a id="fn-f-a11"></a>
 **f-a11** — Note c. Live-probed 2026-09-25: note td1; the "Select
 Categories" window's arrows: note td4.
+Issue report: [docs/issues/U16-A11-category-arrows-keyboard-and-names.md](../issues/U16-A11-category-arrows-keyboard-and-names.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note f (`common.expand`, a key no locale file defines, is the
@@ -1918,6 +1947,7 @@ three apps, the entry pages' and the Filters' window: the drawn header cell
 empty, the accessibility tree's column header "##common.expand##". The
 "##COMMON.EXPAND##" seen on 2026-09-24 during another feature's check
 (Identifiers) was that hidden text read with the table's upper-case style.
+Issue report: [docs/issues/U16-A12-select-categories-column-raw-code.md](../issues/U16-A12-select-categories-column-raw-code.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — `SubEditorsDAO::assignEditors()` through the `AssignEditors`
@@ -1979,6 +2009,7 @@ answering 404, then "Save" refused with `form.invalidImage`).
 **f-a18** — `CategoryDeleteDialogBody.vue` (note e): the input has no
 label, `aria-label` or placeholder. Live-probed 2026-09-25, all three apps:
 the accessibility tree lists it as a `textbox` with no name.
+Issue report: [docs/issues/U16-A18-delete-category-box-unnamed.md](../issues/U16-A18-delete-category-box-unnamed.md).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Note g: `catalog.browseTitles` "{$numTitles} Items" (OMP

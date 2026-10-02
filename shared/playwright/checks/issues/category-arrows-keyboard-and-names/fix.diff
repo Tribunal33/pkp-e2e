@@ -1,0 +1,50 @@
+--- a/lib/ui-library/src/components/Table/TableCellTreeExpand.vue
++++ b/lib/ui-library/src/components/Table/TableCellTreeExpand.vue
+@@ -4,13 +4,16 @@
+ 			class="flex justify-center"
+ 			:style="{'padding-inline-end': `${depth + 0.5}rem`}"
+ 		>
+-			<button data-cy="category-manager-toggle-sub-categories">
++			<button
++				v-if="isDisplayed"
++				type="button"
++				data-cy="category-manager-toggle-sub-categories"
++				@click="emit('toggle')"
++			>
+ 				<Icon
+-					v-if="isDisplayed"
+ 					class="h-6 w-6 cursor-pointer text-primary"
+ 					:icon="isExpanded ? 'Dropup' : 'Dropdown'"
+ 					:aria-hidden="true"
+-					@click="emit('toggle', itemId)"
+ 				/>
+ 				<span class="sr-only">
+ 					{{ toggleText }}
+@@ -49,8 +52,8 @@
+ const emit = defineEmits(['toggle']);
+ 
+ const toggleText = computed(() =>
+-	props.isExpanded.value
+-		? props.expandLabel || t('list.expand')
+-		: props.collapseLabel || t('list.collapse'),
++	props.isExpanded
++		? props.collapseLabel || t('list.collapse')
++		: props.expandLabel || t('list.expand'),
+ );
+ </script>
+--- a/lib/ui-library/src/managers/CategoryManager/CategoryTreeRow.vue
++++ b/lib/ui-library/src/managers/CategoryManager/CategoryTreeRow.vue
+@@ -10,10 +10,10 @@
+ 		></component>
+ 		<TableCellTreeExpand
+ 			:is-expanded="categoryManagerStore.expanded.includes(category.id)"
+-			:is-displayed="category.subCategories?.length"
++			:is-displayed="!!category.subCategories?.length"
+ 			:depth="depth"
+-			:expand-label="t('manager.category.collapseSubcategories')"
+-			:collapse-label="t('manager.category.expandSubcategories')"
++			:expand-label="t('manager.category.expandSubcategories')"
++			:collapse-label="t('manager.category.collapseSubcategories')"
+ 			@toggle="categoryManagerStore.toggleItemExpansion(category.id)"
+ 		/>
+ 	</TableRow>
