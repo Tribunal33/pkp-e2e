@@ -1340,12 +1340,12 @@ Issue report: [pkp-e2e#562](https://github.com/jardakotesovec/pkp-e2e/issues/562
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note g: the badge is `v-show="isDirty"`, true on arrival at a never-saved version (the console then warns "TextSelection endpoint not pointing into a node with inline content (doc)"). The "Saved" during an import: `handleFigureUpload()` saves the document first when no Body Text record exists (note q), and the import uploads its images before it pastes the text (note p). Probe: d16, d20.
-Issue report: [docs/issues/U48-A14-body-text-opens-with-unsaved-changes.md](../issues/U48-A14-body-text-opens-with-unsaved-changes.md).
-Issue report: [docs/issues/U48-A14-body-text-import-reads-saved-while-unsaved.md](../issues/U48-A14-body-text-import-reads-saved-while-unsaved.md).
+Issue report: [pkp-e2e#571](https://github.com/jardakotesovec/pkp-e2e/issues/571) ([docs/issues/U48-A14-body-text-opens-with-unsaved-changes.md](../issues/U48-A14-body-text-opens-with-unsaved-changes.md)).
+Issue report: [pkp-e2e#572](https://github.com/jardakotesovec/pkp-e2e/issues/572) ([docs/issues/U48-A14-body-text-import-reads-saved-while-unsaved.md](../issues/U48-A14-body-text-import-reads-saved-while-unsaved.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Note g: `navigationGuard` would ask `form.dataHasChanged`, yet no drive saw it or any browser dialog; there is no `beforeunload` handler. Probe: d17.
-Issue report: [docs/issues/U48-A15-body-text-leaving-loses-text-unasked.md](../issues/U48-A15-body-text-leaving-loses-text-unasked.md).
+Issue report: [pkp-e2e#573](https://github.com/jardakotesovec/pkp-e2e/issues/573) ([docs/issues/U48-A15-body-text-leaving-loses-text-unasked.md](../issues/U48-A15-body-text-leaving-loses-text-unasked.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — `referenceList.insertCitation` "Cite" in `sciflow-reference-list` (note g) stayed disabled in every state tried. Probe: d18.
@@ -1357,7 +1357,7 @@ Issue report: [pkp-e2e#566](https://github.com/jardakotesovec/pkp-e2e/issues/566
 
 <a id="fn-f-a18"></a>
 **f-a18** — Note p: the box's failure state never showed; the import ended with no status. Probe: d20.
-Issue report: [docs/issues/U48-A18-body-text-unconvertible-file-no-message.md](../issues/U48-A18-body-text-unconvertible-file-no-message.md).
+Issue report: [pkp-e2e#574](https://github.com/jardakotesovec/pkp-e2e/issues/574) ([docs/issues/U48-A18-body-text-unconvertible-file-no-message.md](../issues/U48-A18-body-text-unconvertible-file-no-message.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Note e: `RedirectGuestToLogin` sends the visitor to `login?source=…/jats/download`; after `login/signIn` the browser follows to the download, whose attachment response leaves the tab on the Login page. Probe: d26.
