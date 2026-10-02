@@ -1466,7 +1466,7 @@ in-round path (statuses 1→11) keeps the button through both states. Probed
 2026-07-31 (contrast, same probe: the in-round path keeps
 the button and its task clears on upload); the persisting "Resubmit for
 review." task is the decision-owned resubmit task (note m).
-Issue report: [docs/issues/U26-A1-upload-revisions-button-gone-after-resubmit-upload.md](../issues/U26-A1-upload-revisions-button-gone-after-resubmit-upload.md).
+Issue report: [pkp-e2e#520](https://github.com/jardakotesovec/pkp-e2e/issues/520) ([docs/issues/U26-A1-upload-revisions-button-gone-after-resubmit-upload.md](../issues/U26-A1-upload-revisions-button-gone-after-resubmit-upload.md)).
 
 <a id="fn-a2"></a>
 **f-a2** — `Schema::getPropertyReviewRounds()` calls

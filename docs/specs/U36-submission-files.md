@@ -2296,7 +2296,7 @@ role does not have access to this operation." and the header "Close". On a
 round with revisions requested the manager's file in "Revisions Uploaded" was
 refused the same way, so `SubmissionFileRequestedRevisionRequiredPolicy` does
 not open another's file to the Author.
-Issue report: [docs/issues/U36-A2-author-update-file-details-offered-then-refused.md](../issues/U36-A2-author-update-file-details-offered-then-refused.md). The refusal while revisions are requested: [docs/issues/U36-A2-author-refused-on-editors-revision-file.md](../issues/U36-A2-author-refused-on-editors-revision-file.md).
+Issue report: [pkp-e2e#528](https://github.com/jardakotesovec/pkp-e2e/issues/528) ([docs/issues/U36-A2-author-update-file-details-offered-then-refused.md](../issues/U36-A2-author-update-file-details-offered-then-refused.md)). The refusal while revisions are requested: [pkp-e2e#527](https://github.com/jardakotesovec/pkp-e2e/issues/527) ([docs/issues/U36-A2-author-refused-on-editors-revision-file.md](../issues/U36-A2-author-refused-on-editors-revision-file.md)).
 
 <a id="fn-a3"></a>
 **f-a3** — Note e; `FileManagerConfigurations` grants `FILE_SEE_NOTES` to
@@ -2305,7 +2305,7 @@ OJS and OMP; Copyeditor, Layout Editor, Proofreader): "Loading" after 10 s;
 the History grid's `fetch-grid` answered `status:false` "The current role does
 not have access to this operation.", which the tab never shows. Their notes
 posted with "Note posted.".
-Issue report: [docs/issues/U36-A3-assistant-file-history-keeps-loading.md](../issues/U36-A3-assistant-file-history-keeps-loading.md).
+Issue report: [pkp-e2e#531](https://github.com/jardakotesovec/pkp-e2e/issues/531) ([docs/issues/U36-A3-assistant-file-history-keeps-loading.md](../issues/U36-A3-assistant-file-history-keeps-loading.md)).
 
 <a id="fn-a4"></a>
 **f-a4** — Note v. Live-probed 2026-09-23 (d3; all three apps; Journal
@@ -2313,13 +2313,13 @@ Manager, Section Editor, Moderator): the filter form hidden until "Search";
 the POST to `submission-file-event-log-grid/fetch-grid` carried `allEvents=on`
 and returned the same rows (eight on an OJS file; on a copy the same three,
 none of its source's), and the form came back collapsed and unticked.
-Issue report: [docs/issues/U36-A4-history-prior-versions-box-changes-nothing.md](../issues/U36-A4-history-prior-versions-box-changes-nothing.md).
+Issue report: [pkp-e2e#532](https://github.com/jardakotesovec/pkp-e2e/issues/532) ([docs/issues/U36-A4-history-prior-versions-box-changes-nothing.md](../issues/U36-A4-history-prior-versions-box-changes-nothing.md)).
 
 <a id="fn-a5"></a>
 **f-a5** — Note o: `fileUploadForm.tpl` prints `{$revisedFileName}` under
 `submission.submit.currentFile`; no PHP in lib/pkp or the three apps assigns
 it (grep, 2026-09-23). Live-probed 2026-09-23: note d4.
-Issue report: [docs/issues/U36-A5-galley-change-file-names-no-current-file.md](../issues/U36-A5-galley-change-file-names-no-current-file.md).
+Issue report: [pkp-e2e#533](https://github.com/jardakotesovec/pkp-e2e/issues/533) ([docs/issues/U36-A5-galley-change-file-names-no-current-file.md](../issues/U36-A5-galley-change-file-names-no-current-file.md)).
 
 <a id="fn-a6"></a>
 **f-a6** — Production-stage claim check, 2026-09-19 (K2, OJS and OMP): the
@@ -2339,7 +2339,7 @@ round awaiting reviewers ("Awaiting responses from reviewers.") the Author had
 "Upload Review File" with "You are not allowed to add and edit these files."
 and "Close" alone, and the list stayed "No Items". Seen again from the review
 stage's side the same day.
-Issue report: [docs/issues/U36-A7-author-revisions-upload-offered-then-refused.md](../issues/U36-A7-author-revisions-upload-offered-then-refused.md).
+Issue report: [pkp-e2e#534](https://github.com/jardakotesovec/pkp-e2e/issues/534) ([docs/issues/U36-A7-author-revisions-upload-offered-then-refused.md](../issues/U36-A7-author-revisions-upload-offered-then-refused.md)).
 
 <a id="fn-a8"></a>
 **f-a8** — Note o. Live-probed 2026-09-23 (OJS and OMP): one list's revise
@@ -2351,24 +2351,24 @@ options read "article.pdf", "article.pdf", "close-step1.pdf",
 snapshot of step 1 before a component was chosen held two unnamed comboboxes,
 "Drag and drop a file here to begin upload", the button "Upload File" and the
 button "Choose File", while the screenshot showed no box.
-Issue report: [docs/issues/U36-A9-upload-window-hidden-box-read-by-screen-reader.md](../issues/U36-A9-upload-window-hidden-box-read-by-screen-reader.md). The unnamed drop-downs: [docs/issues/U36-A9-upload-window-drop-downs-unnamed.md](../issues/U36-A9-upload-window-drop-downs-unnamed.md).
+Issue report: [pkp-e2e#536](https://github.com/jardakotesovec/pkp-e2e/issues/536) ([docs/issues/U36-A9-upload-window-hidden-box-read-by-screen-reader.md](../issues/U36-A9-upload-window-hidden-box-read-by-screen-reader.md)). The unnamed drop-downs: [pkp-e2e#535](https://github.com/jardakotesovec/pkp-e2e/issues/535) ([docs/issues/U36-A9-upload-window-drop-downs-unnamed.md](../issues/U36-A9-upload-window-drop-downs-unnamed.md)).
 
 <a id="fn-a10"></a>
 **f-a10** — Note v (`NewNoteForm` has no check on the text). Live-probed
 2026-09-23 (d14; all three apps): an empty note row "Mira Manager 2026-09-23
 11:57 AM · Delete", "Note posted.", and a "Posted new note." row in "History".
-Issue report: [docs/issues/U36-A10-add-note-empty-box-posts-empty-note.md](../issues/U36-A10-add-note-empty-box-posts-empty-note.md).
+Issue report: [pkp-e2e#521](https://github.com/jardakotesovec/pkp-e2e/issues/521) ([docs/issues/U36-A10-add-note-empty-box-posts-empty-note.md](../issues/U36-A10-add-note-empty-box-posts-empty-note.md)).
 
 <a id="fn-a11"></a>
 **f-a11** — Note k. Live-probed 2026-09-23 (OJS and OMP): "Other" › "Save"
 with no radio chosen showed the message with the panel still open; the save, a
 POST to `…/api/v1/submissions/{id}/files/{fileId}?stageId=1` with a PUT
 override, answered 500.
-Issue report: [docs/issues/U36-A11-wizard-file-edit-save-no-component-server-error.md](../issues/U36-A11-wizard-file-edit-save-no-component-server-error.md).
+Issue report: [pkp-e2e#522](https://github.com/jardakotesovec/pkp-e2e/issues/522) ([docs/issues/U36-A11-wizard-file-edit-save-no-component-server-error.md](../issues/U36-A11-wizard-file-edit-save-no-component-server-error.md)).
 
 <a id="fn-a12"></a>
 **f-a12** — Note h (`Str::kebab()`). Live-probed 2026-09-23: note d19.
-Issue report: [docs/issues/U36-A12-download-all-files-zip-name-two-hyphens.md](../issues/U36-A12-download-all-files-zip-name-two-hyphens.md).
+Issue report: [pkp-e2e#523](https://github.com/jardakotesovec/pkp-e2e/issues/523) ([docs/issues/U36-A12-download-all-files-zip-name-two-hyphens.md](../issues/U36-A12-download-all-files-zip-name-two-hyphens.md)).
 
 <a id="fn-a13"></a>
 **f-a13** — Note g (`source_submission_file_id` `ON DELETE CASCADE`).
@@ -2384,7 +2384,7 @@ A8 saw it from "Copyedited Files" to "Draft Files".
 `status:false` "The current user is not authorized to access the specified
 submission file." (HTTP 200); after "Complete" the list held "change-first.pdf
 … Research Instrument" beside the renamed second file.
-Issue report: [docs/issues/U36-A14-change-file-keeps-first-upload.md](../issues/U36-A14-change-file-keeps-first-upload.md).
+Issue report: [pkp-e2e#524](https://github.com/jardakotesovec/pkp-e2e/issues/524) ([docs/issues/U36-A14-change-file-keeps-first-upload.md](../issues/U36-A14-change-file-keeps-first-upload.md)).
 
 <a id="fn-a15"></a>
 **f-a15** — Note n. Live-probed 2026-09-23 (OJS twice, OMP once): "2. Review
@@ -2392,7 +2392,7 @@ Details" pressed on "3. Confirm" reopened step 2 with the name box, its button
 reading "Complete"; pressing it posted `save-metadata` with the new name and
 showed "File Added" in the window, still open; the list then read "Back at
 step two.pdf".
-Issue report: [docs/issues/U36-A15-upload-wizard-reopened-step-complete-does-not-close.md](../issues/U36-A15-upload-wizard-reopened-step-complete-does-not-close.md).
+Issue report: [pkp-e2e#525](https://github.com/jardakotesovec/pkp-e2e/issues/525) ([docs/issues/U36-A15-upload-wizard-reopened-step-complete-does-not-close.md](../issues/U36-A15-upload-wizard-reopened-step-complete-does-not-close.md)).
 
 <a id="fn-a16"></a>
 **f-a16** — Notes l and p. Live-probed 2026-09-23 (d4; OJS and OPS, two runs):
@@ -2424,14 +2424,14 @@ s; "Edit" showed the refusal; `delete-file?…&stageId=4` answered
 `status:false` "The current role does not have access to this operation.", the
 dialog still spinning after 13 s and "notes.md" still in "Submission Files"
 (twice per app).
-Issue report: [docs/issues/U36-A19-select-files-other-stage-row-actions-refused.md](../issues/U36-A19-select-files-other-stage-row-actions-refused.md).
+Issue report: [pkp-e2e#526](https://github.com/jardakotesovec/pkp-e2e/issues/526) ([docs/issues/U36-A19-select-files-other-stage-row-actions-refused.md](../issues/U36-A19-select-files-other-stage-row-actions-refused.md)).
 
 <a id="fn-a20"></a>
 **f-a20** — Note x. Live-probed 2026-09-23 (OJS and OMP): the reviewer's grid
 sent `search=notes` and `search=zzzz` and answered both rows each time; the
 same searches in the editor's reviewer "Edit" window answered one row and
 none.
-Issue report: [docs/issues/U36-A20-reviewer-review-files-search-keeps-every-file.md](../issues/U36-A20-reviewer-review-files-search-keeps-every-file.md).
+Issue report: [pkp-e2e#529](https://github.com/jardakotesovec/pkp-e2e/issues/529) ([docs/issues/U36-A20-reviewer-review-files-search-keeps-every-file.md](../issues/U36-A20-reviewer-review-files-search-keeps-every-file.md)).
 
 <a id="fn-a21"></a>
 **f-a21** — Note k. Live-probed 2026-09-23 (OJS and OMP; probe servers with
@@ -2525,7 +2525,7 @@ of 6). Under an emulated upload throttle the bar fills before the request
 has left the browser, so there a full bar does not mean the file was sent.
 Scenario 9 presses mid-upload; no test drives the window after the last
 byte.
-Issue report: [docs/issues/U36-A25-cancel-upload-after-sent-keeps-file.md](../issues/U36-A25-cancel-upload-after-sent-keeps-file.md).
+Issue report: [pkp-e2e#530](https://github.com/jardakotesovec/pkp-e2e/issues/530) ([docs/issues/U36-A25-cancel-upload-after-sent-keeps-file.md](../issues/U36-A25-cancel-upload-after-sent-keeps-file.md)).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Note a (the OPS workflow and wizard configs). Live-probed

@@ -1219,7 +1219,7 @@ them; the decision's email line named the editor.
 galley's) posted an empty note ("Note posted.", a note 0 px high,
 "Posted new note." on "History"); the file window's form did the same on
 2026-09-23 (the submission-files spec's f-a10).
-Issue report: [docs/issues/U36-A10-add-note-empty-box-posts-empty-note.md](../issues/U36-A10-add-note-empty-box-posts-empty-note.md).
+Issue report: [pkp-e2e#521](https://github.com/jardakotesovec/pkp-e2e/issues/521) ([docs/issues/U36-A10-add-note-empty-box-posts-empty-note.md](../issues/U36-A10-add-note-empty-box-posts-empty-note.md)).
 
 <a id="fn-a3"></a>
 **f-a3** — The window is a side modal holding the legacy form.
