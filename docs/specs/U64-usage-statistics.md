@@ -1162,6 +1162,7 @@ Left out of the scenarios above, by reason:
   - "All dates" on Statistics › "Articles" of a context with nothing published and of one whose earliest publication is dated before 2001: no "Error" window, the monthly chart from January 2001 (the guard for A1, once fixed)
   - a Section Editor's "Statistics" menu and the "Counter R5" address while the journal's COUNTER statistics are restricted: no "Counter R5" entry, the access-denied page (the guard for A5, once fixed)
   - "Download Issues" on Statistics › "Issues" with more than 30 issues visited in the range: the file holds every issue the page counts (the guard for OJS4, once fixed) {OJS}
+  - a search phrase typed with double quotes on Statistics › "Articles", then each downloaded file's "Search Phrase" line parsed back to the phrase as typed (the guard for A8, once fixed)
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1241,7 +1242,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | A Section Editor's "Counter R5" opens an "Error" window over an empty list while the COUNTER statistics are restricted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | French interface: raw codes on the statistics screens of a press and a preprint server, and one column heading on a journal | 🐞 | minor | — |
 | [A7](#a7) | The information icons show their text on mouse hover only; the keyboard never reaches them | 🐞 | minor | — |
-| [A8](#a8) | A search phrase with double quotes breaks the spreadsheet's "Search Phrase" line | 🐞 | minor | — |
+| [A8](#a8) | Statistics downloads: a double quote in the search phrase or a filter's name breaks that line of the file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A malformed Platform ID behind an unticked "Platform" refuses every save of the site's tab | 🐞 | minor | — |
 | [A11](#a11) | The COUNTER report downloads as "counterReport.tsv" but is comma-separated | 🐞 | minor | — |
 | [OJS4](#ojs4) | Statistics › Issues: "Download Issues" leaves out every issue after the first 30, without saying so | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1363,13 +1364,22 @@ text. Expected: the text can be reached from the keyboard.
 Basis: probe, 2026-09-27. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — A quoted search phrase breaks the spreadsheet** · 🐞 · minor.
-With the search phrase "Quoted" (typed with its double quotes) applied
-on "Articles", every downloaded file's line reads
-`"Search Phrase",""Quoted""`: the phrase's own quotes are not doubled,
-so a spreadsheet program reads a broken cell. The rows below escape the
-same quotes correctly. Expected: `"Search Phrase","""Quoted"""`.
-Basis: probe, 2026-09-27. <sup>f-a8</sup>
+**A8 — Statistics downloads: a double quote in the search phrase or a filter's name breaks that line of the file** · 🐞 · low.
+On Statistics › "Articles", an editor searches for a phrase typed with
+double quotes, such as "Signalling Theory", presses "Download Report"
+and downloads any file of the window that opens. Each file starts with
+lines that record the date range, the filters and the search phrase,
+and its search phrase line reads
+`"Search Phrase",""Signalling Theory""`: the phrase's own quotes are
+not doubled, so the line is not valid CSV and a CSV parser reads the
+value as `Signalling Theory""`. Expected:
+`"Search Phrase","""Signalling Theory"""`.
+
+A filter's line is written the same way, so it is malformed when the
+chosen section, issue or series has a double quote in its name. The
+rows of figures are not touched, and the window on screen shows the
+phrase and the name correctly.
+Basis: probe, 2026-10-02. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — No byte-order mark in the spreadsheets** · ❓ · minor.
@@ -2367,6 +2377,7 @@ Work"`. The parameter lines are joined as plain strings in the browser
 (`StatsPublicationsPage.vue::downloadReport()`: `searchPhraseRow`,
 `dateRangeRow`, `filtersRow`), so a filter name holding a quote would
 break its line the same way (by the code, not driven).
+Issue report: [docs/issues/U64-A8-statistics-download-quotes-break-parameter-lines.md](../issues/U64-A8-statistics-download-quotes-break-parameter-lines.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-27, three apps: neither the server's answer to

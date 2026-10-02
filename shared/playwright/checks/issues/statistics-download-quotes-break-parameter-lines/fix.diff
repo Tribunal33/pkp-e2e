@@ -1,0 +1,77 @@
+--- a/lib/ui-library/src/components/Container/StatsPublicationsPage.vue
++++ b/lib/ui-library/src/components/Container/StatsPublicationsPage.vue
+@@ -310,6 +310,19 @@
+ 					? 'submissions_timeline'
+ 					: type
+ 				: 'submissions';
++		},
++
++		/**
++		 * Get one parameter row of the CSV report: every value in double
++		 * quotes, a double quote inside a value doubled
++		 *
++		 * @param Array
++		 * @return string
++		 */
++		getReportRow(values) {
++			return values
++				.map((value) => '"' + String(value).replace(/"/g, '""') + '"')
++				.join(',');
+ 		},
+ 
+ 		/**
+@@ -328,37 +341,33 @@
+ 				].join('_') + '.csv';
+ 
+ 			let dateRangeRow =
+-				'"' +
+-				this.dateRangeLabel +
+-				'","' +
+-				this.getDateRangeDescription() +
+-				'"\n';
++				this.getReportRow([
++					this.dateRangeLabel,
++					this.getDateRangeDescription(),
++				]) + '\n';
+ 			let filtersRow = [];
+ 			Object.values(this.filters).forEach((filterSet) => {
+ 				filtersRow.push(
+-					'"' +
+-						filterSet.heading +
+-						'","' +
+-						this.getFilterDescription(filterSet) +
+-						'"',
++					this.getReportRow([
++						filterSet.heading,
++						this.getFilterDescription(filterSet),
++					]),
+ 				);
+ 			});
+ 			let searchPhraseRow = this.searchPhrase
+-				? '"' + this.searchPhraseLabel + '","' + this.searchPhrase + '"\n'
++				? this.getReportRow([this.searchPhraseLabel, this.searchPhrase]) + '\n'
+ 				: '';
+ 
+ 			let timelineTypeRow =
+-				'"' +
+-				this.timelineTypeLabel +
+-				'","' +
+-				this.getTimelineTypeLabel() +
+-				'"\n';
++				this.getReportRow([
++					this.timelineTypeLabel,
++					this.getTimelineTypeLabel(),
++				]) + '\n';
+ 			let timelineIntervalRow =
+-				'"' +
+-				this.timelineIntervalLabel +
+-				'","' +
+-				this.getTimelineIntervalLabel() +
+-				'"\n';
++				this.getReportRow([
++					this.timelineIntervalLabel,
++					this.getTimelineIntervalLabel(),
++				]) + '\n';
+ 
+ 			$.ajax({
+ 				url:
