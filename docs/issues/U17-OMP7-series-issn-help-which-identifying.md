@@ -68,7 +68,7 @@ description of the ISSN section
 (`templates/controllers/grid/settings/series/form/seriesForm.tpl`,
 line 86).
 
-37ae194f74 ("pkp/pkp-lib#1212 Tidy strings and forms in Press >
+37ae194f74 ("`pkp/pkp-lib#1212` Tidy strings and forms in Press >
 Settings") shortened the message, and in cutting "as such," changed
 "identifies" to "identifying".
 

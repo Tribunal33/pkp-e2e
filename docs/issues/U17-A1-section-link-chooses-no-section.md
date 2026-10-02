@@ -202,7 +202,7 @@ repositories, OJS and OPS; in one repository it would be small.
   `$request->getUserVar('sectionId')`, and OJS `submission/form/section.tpl`
   renders the list with `selected=$sectionId`.
 - Trace: `git blame` on `StartSubmission.php`'s `'value' => ''` gives
-  ojs 6358d611e3 and ops 8fd2c6d834 (Nate Wright, "pkp/pkp-lib#7191
+  ojs 6358d611e3 and ops 8fd2c6d834 (Nate Wright, "`pkp/pkp-lib#7191`
   Implement new submission wizard"), merged as `pkp/ojs#3638` and
   `pkp/ops#411` with `pkp/pkp-lib#8495` (e79fc21e20, which rewrote the
   link's address). Nate Wright authored the commits; asmecher opened
