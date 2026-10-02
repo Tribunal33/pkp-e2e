@@ -2408,7 +2408,7 @@ Issue report: [docs/issues/U64-A5-section-editor-counter-r5-error-while-restrict
 
 <a id="fn-f-a6"></a>
 **f-a6** — fn-v. Live-probed 2026-09-27: td8.
-Issue report: [docs/issues/U64-A6-french-statistics-pages-raw-keys.md](../issues/U64-A6-french-statistics-pages-raw-keys.md).
+Issue report: [docs/issues/U64-A6-french-statistics-pages-raw-keys.md](../issues/U64-A6-french-statistics-pages-raw-keys.md), filed as [pkp-e2e#625](https://github.com/jardakotesovec/pkp-e2e/issues/625).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-27, three apps: the icons (`.tooltipButton`)
