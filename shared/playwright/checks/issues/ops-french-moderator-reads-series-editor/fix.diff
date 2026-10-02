@@ -1,0 +1,38 @@
+--- a/locale/fr_CA/locale.po
++++ b/locale/fr_CA/locale.po
+@@ -134,13 +134,11 @@
+ msgid "user.role.manager"
+ msgstr "Administrateur-trice du serveur"
+ 
+-#, fuzzy
+ msgid "user.role.subEditor"
+-msgstr "Éditeur-trice de série"
+-
+-#, fuzzy
++msgstr "Modérateur-trice"
++
+ msgid "user.role.subEditors"
+-msgstr "Éditeurs-trices de série"
++msgstr "Modérateurs-trices"
+ 
+ msgid "submission.event.submissionSubmitted"
+ msgstr "Prépublication soumise"
+--- a/locale/es/locale.po
++++ b/locale/es/locale.po
+@@ -123,13 +123,11 @@
+ msgid "user.role.manager"
+ msgstr "Administrador de servidores"
+ 
+-#, fuzzy
+ msgid "user.role.subEditor"
+-msgstr "Editor de series"
+-
+-#, fuzzy
++msgstr "Moderador/a"
++
+ msgid "user.role.subEditors"
+-msgstr "Editores de series"
++msgstr "Moderadores/as"
+ 
+ msgid "submission.event.submissionSubmitted"
+ msgstr "Preprint enviado"

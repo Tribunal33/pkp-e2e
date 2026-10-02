@@ -809,6 +809,10 @@ Left out of the scenarios above, by reason:
   - the guard for A8 (issue report
     `docs/issues/U54-A8-role-stage-boxes-unnamed.md`): each stage box of
     the "Roles" list found by its role and stage name
+  - the guard for OPS3 (issue report
+    `docs/issues/U54-OPS3-ops-french-moderator-reads-series-editor.md`):
+    a preprint server's French "Rôles" tab reading the Moderator level by
+    its French name
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -901,7 +905,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | Users & Roles: after a role is renamed, the "Users" tab shows its old name until a reload | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | In French a press's "Roles" list heads its External Review column with a code | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | A preprint server's "View Preprint Content" sign-in box says "Saved" but keeps nothing, so files stay open | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OPS3](#ops3) | In French a preprint server's Moderator level reads "Éditeur-trice de série" (Series Editor) | 🐞 | minor | — |
+| [OPS3](#ops3) | A preprint server in French names its Moderator permission level "Éditeur-trice de série" (Series Editor) | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | A role anyone has ever held can never be removed | ❓ | minor | — |
 | [A7](#a7) | "Abbreviation" is required, and no screen but the role's own window shows it | ❓ | minor | — |
 | [A12](#a12) | "Stage Assignment" was seen both hidden and on screen with every box greyed in the same four window states | ❓ | minor | — |
@@ -1198,13 +1202,24 @@ page for the role's holders.
 Basis: probe. <sup>f-ops2</sup>
 
 <a id="ops3"></a>
-**OPS3 — The Moderator level reads "Series Editor" in French** · 🐞 · minor.
-In the French interface a preprint server's "Roles" list reads
-"Éditeur-trice de série" (Series Editor, a press's level) in the
-"Permission level" cell of the Moderator row; the manager row reads
-"Administrateur-trice du serveur". A journal's list prints its own
-French level names.
-Basis: probe. <sup>f-ops3</sup>
+**OPS3 — A preprint server in French names its Moderator permission level "Éditeur-trice de série" (Series Editor)** · 🐞 · low.
+In French (Canada), a preprint server names its Moderator permission
+level "Éditeur-trice de série" (Series Editor) wherever the level
+shows: the "Niveau d'autorisation" column of Users & Roles › "Rôles",
+that list's search filter, the role window's "Niveau d'autorisation"
+list, and Statistics › Users. The English pages read "Moderator", and
+the server's other French texts call the role "modérateur-trice". The
+name was right until 2020, when OPS renamed the role in English and the
+French text was never updated.
+
+Every task still works, but a manager who sets up roles in French is
+shown a press's title for the Moderator level, and the server cannot
+change it from its settings.
+
+The Spanish interface reads "Editor de series" for the same reason.
+These are the only two languages affected. The fix is a translation
+fix, with no code change.
+Basis: probe, 2026-10-02. <sup>f-ops3</sup>
 
 ---
 
@@ -1970,6 +1985,7 @@ press's word ([b](#fn-b)). Live-probed 2026-09-26 (Fields; all three apps,
 French as a UI language): the "Permission level" cells read
 "Administrateur-trice du serveur" and "Éditeur-trice de série" on the
 manager and Moderator rows.
+Issue report: [docs/issues/U54-OPS3-ops-french-moderator-reads-series-editor.md](../issues/U54-OPS3-ops-french-moderator-reads-series-editor.md).
 
 ## Reference — entry points & surfaces
 
