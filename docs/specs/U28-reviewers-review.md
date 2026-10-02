@@ -992,6 +992,7 @@ Left out of the scenarios above, by reason:
   - a reviewer's one-click link opened in a browser signed in as another user showing "You are signed in as a different user", and "Sign out and continue" opening the review as the reviewer ([A10](#a10); Actors row 9, Rule 16): the guard the issue report proposes, once fixed
   - a reviewer typing a first answer on a review form with a required question seeing no "Please fill in required fields." box and no "This field is required." mark, "Save for Later" then showing "Your changes have been saved." alone, and a refused "Submit Review" still showing both ([A14](#a14); Fields step 3): the guard the issue report proposes, once fixed
   - {OMP} a press's review form refused for an unanswered required question opening its box with "Please fill in required fields." as a journal's does ([OMP3](#omp3); Fields step 3): the guard the issue report proposes, once fixed
+  - {OMP} the email telling a press's assigned editors a review is in naming no recommendation in its subject or body ([OMP2](#omp2); Side effects): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1051,7 +1052,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A12](#a12) | A reviewer's own review is listed under "Previous Reviews" once the submission has a later round | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | Typing a first answer on a review form shows the reviewer "Please fill in required fields."; "Save for Later" then shows its notice beside it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a review form's answers are guarded | 🐞 | minor | — |
-| [OMP2](#omp2) | {OMP} The review-complete email tells editors the reviewer "recommends None" | 🐞 | minor | — |
+| [OMP2](#omp2) | {OMP} On a press, the email telling editors a review is in says the reviewer "recommends None" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | {OMP} On a press, a review form refused for an unanswered required question shows the reviewer a raw text code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | {OPS} A home-made reviewer role opens a "My Assignments as Reviewer" page headed "undefined (0)" under an "Error" window | 🐞 | minor · crash: script | claim check (claude), 2026-09-30 — "Loading" corrected to "No Items" under an "Error" window; the landing after sign-in and the page's console "TypeError" added |
 | [A3](#a3) | Declining a request sends the reviewer to the journal's public home page instead of their assignments | ❓ | minor | — |
@@ -1363,13 +1364,21 @@ intent (the press disables reviewer recommendations, and the OJS-only step-3
 template carries the list). <sup>[f-omp1](#fn-omp1)</sup>
 
 <a id="omp2"></a>
-**OMP2 — The review-complete email says "recommends None"** · 🐞 · minor.
-On a press the email that tells the editors a review is in has the subject
-"Review complete: {reviewer} recommends None for #{id} …" and a
-"Recommendation: None" line in its body, because the subject template
-prints a recommendation the press never collects. The editor reads a
-recommendation of "None" where there was no question.
-Basis: probe (2026-09-04, on both press stages). <sup>[f-omp2](#fn-omp2)</sup>
+**OMP2 — On a press, the email telling editors a review is in says the reviewer "recommends None"** · 🐞 · low.
+When a reviewer submits a review on a press, the email that tells the
+assigned editors has the subject "Review complete: {reviewer} recommends
+None for #{id} …" and a "Recommendation: None" line in its body. A press
+never asks its reviewers for a recommendation, so the editor expects an
+email that only says the review is in.
+
+The email arrives and its link opens the submission. An editor can take
+"None" as the reviewer's answer until they open the review, which has no
+recommendation field.
+
+This is the default text of the email on every press. Each installed
+press holds its own stored copy of it, in each of its languages, so the
+fix is a new text, an upgrade migration and translations.
+Basis: probe, 2026-10-02. <sup>[f-omp2](#fn-omp2)</sup>
 
 <a id="omp3"></a>
 **OMP3 — On a press, a review form refused for an unanswered required question shows the reviewer a raw text code** · 🐞 · low.
@@ -2547,6 +2556,7 @@ Live-probed 2026-09-04 on the press, External Review (seeded journal) and
 Internal Review (scratch press): subject "Review complete: {reviewer}
 recommends None for #{id} …" and the body line "*Recommendation:* None";
 first seen the same day in the notifications feature's claim check.
+Issue report: [docs/issues/U28-OMP2-press-review-complete-email-recommends-none.md](../issues/U28-OMP2-press-review-complete-email-recommends-none.md).
 
 <a id="fn-omp3"></a>
 **f-omp3** — The key `reviewer.submission.reviewFormResponse.form.responseRequired`

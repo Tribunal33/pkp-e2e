@@ -1,0 +1,98 @@
+--- a/locale/en/emails.po
++++ b/locale/en/emails.po
+@@ -240,6 +240,17 @@
+ "<br />\n"
+ "{$senderName}"
+ 
++msgid "emails.reviewComplete.subject"
++msgstr "Review complete: {$reviewerName} reviewed #{$submissionId} {$authorsShort} — \"{$submissionTitle}\""
++
++msgid "emails.reviewComplete.body"
++msgstr ""
++"<p>Dear {$recipientName},</p>"
++"<p>{$reviewerName} completed the following review:</p>"
++"<p><a href=\"{$submissionUrl}\">#{$submissionId} {$authorsShort} — \"{$submissionTitle}\"</a><br />"
++"<b>Type:</b> {$reviewMethod}</p>"
++"<p>Login to <a href=\"{$submissionUrl}\">view all files and comments</a> provided by this reviewer.</p>"
++
+ msgid "emails.reviewRemind.subject"
+ msgstr "A reminder to please complete your review"
+ 
+--- a/locale/fr_CA/emails.po
++++ b/locale/fr_CA/emails.po
+@@ -169,6 +169,19 @@
+ msgid "emails.reviewReinstate.body"
+ msgstr ""
+ 
++msgid "emails.reviewComplete.subject"
++msgstr ""
++"Évaluation terminée: {$reviewerName} a évalué #{$submissionId} "
++"{$authorsShort} — {$submissionTitle}"
++
++msgid "emails.reviewComplete.body"
++msgstr ""
++"<p>{$recipientName},</p><p>{$reviewerName} a terminé son évaluation :</"
++"p><p><a href=\"{$submissionUrl}\">#{$submissionId} {$authorsShort} — "
++"{$submissionTitle}</a><br /><b>Type :</b> {$reviewMethod}</p><p>Connectez-"
++"vous <a href=\"{$submissionUrl}\">afin de consulter les commentaires</a> de "
++"l'évaluateur-trice.</p>"
++
+ msgid "emails.reviewDecline.subject"
+ msgstr "Ne peux pas évaluer"
+ 
+--- a/dbscripts/xml/upgrade.xml
++++ b/dbscripts/xml/upgrade.xml
+@@ -224,6 +224,7 @@
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12593_EmailToTaskTemplates"/>
+ 		<migration class="APP\migration\upgrade\v3_5_0\I13128_FixEmailUrlLinks"/><!-- Already executed since 3.5.0-5 but idempotent -->
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12903_ReviewerUnassignEmailTemplate" />
++		<migration class="APP\migration\upgrade\v3_6_0\ReviewCompleteEmailNoRecommendation" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12347_FixRevisionUploadLogData" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13109_PermitPublishedMetadataEdit" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13213_TaskTemplateForeignConstraint"/>
+--- /dev/null
++++ b/classes/migration/upgrade/v3_6_0/ReviewCompleteEmailNoRecommendation.php
+@@ -0,0 +1,43 @@
++<?php
++
++/**
++ * @file classes/migration/upgrade/v3_6_0/ReviewCompleteEmailNoRecommendation.php
++ *
++ * Copyright (c) 2026 Simon Fraser University
++ * Copyright (c) 2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * @class ReviewCompleteEmailNoRecommendation
++ *
++ * @brief Reinstall the default text of the review complete email, which on a press names no reviewer recommendation
++ */
++
++namespace APP\migration\upgrade\v3_6_0;
++
++use APP\facades\Repo;
++use PKP\install\DowngradeNotSupportedException;
++use PKP\migration\Migration;
++
++class ReviewCompleteEmailNoRecommendation extends Migration
++{
++    /**
++     * @inheritDoc
++     */
++    public function up(): void
++    {
++        Repo::emailTemplate()->dao->installEmailTemplates(
++            templatesFile: Repo::emailTemplate()->dao->getMainEmailTemplatesFilename(),
++            emailKey: 'REVIEW_COMPLETE',
++        );
++    }
++
++    /**
++     * @inheritDoc
++     *
++     * @throws DowngradeNotSupportedException
++     */
++    public function down(): void
++    {
++        throw new DowngradeNotSupportedException();
++    }
++}
