@@ -404,7 +404,7 @@ Top to bottom: <sup>j</sup>
       a download opens a blank page (signed out) or the "404 Not Found"
       page (signed in) [OJS1](#ojs1).
 16. **The "How to Cite" settings.** After "OK" (Fields), every article's
-    page follows at once: <sup>i</sup> <sup>q12</sup>
+    page follows at once, the place aside (last bullet): <sup>i</sup> <sup>q12</sup>
     - the chosen "Primary Citation Format" is the citation shown first;
       on a journal an "IEEE" citation shown first opens with its number
       "[1]" ("[1]A. Author, …"), which the same format chosen under "More
@@ -415,7 +415,12 @@ Top to bottom: <sup>j</sup>
       ⚠ [A9](#a9);
     - "Download Citation" lists the ticked "Downloadable Formats" alone,
       disappearing with its heading when none is ticked;
-    - "Publisher Location" is printed only where a format prints a
+    - "Publisher Location" is recorded on each article when it is
+      published, and its citations print the place recorded then: an
+      article published while the box was empty keeps printing no place
+      after one is typed, and only articles published afterwards carry
+      the new one. An article not published yet shows the box's current
+      value. The place is printed only where a format prints a
       publisher's place: no on-screen format prints it for a journal
       article; for a preprint "ABNT", "ACS", "Chicago", "Harvard", "IEEE",
       "Turabian" and "Vancouver" do. The "BibTeX" file carries it on both,
@@ -963,11 +968,11 @@ footnote. <sup>s</sup>
      effects).
    - **The visitor's page after "OK"**: the visitor reloads the article's
      page: "How to Cite" shows the IEEE citation noted earlier, on a
-     journal with "[1]" before it ([OJS11](#ojs11)), on a preprint
-     server now with "London, U.K." in it. "More Citation
+     journal with "[1]" before it ([OJS11](#ojs11)). "More Citation
      Formats" lists "MLA" alone, and "Download Citation" "BibTeX" alone.
-     On a journal neither the IEEE nor the "MLA" citation prints
-     "London, U.K."; on both, the "BibTeX" file carries it (Rule 16).
+     "London, U.K." shows nowhere, neither in a citation nor in the
+     "BibTeX" file: the article was published while the box was empty,
+     and the place recorded then stays (Rule 16).
    - **Switching the plugin off**: the Journal Manager unticks the
      "Citation Style Language" row: it asks "Are you sure you want to
      disable this plugin?"; press "OK": "The plugin "Citation Style
@@ -1106,6 +1111,9 @@ Left out of the scenarios above, by reason:
     with "Recommend Articles by Author" on, two published articles by one
     contributor, one of them outside an issue, each listing the other
     under "Most read articles by the same author(s)" {OJS}
+  - the place in "Publisher Location" reaching an article published
+    after it was typed, in a preprint's IEEE citation and in both apps'
+    "BibTeX" file, while an article published before keeps none (Rule 16)
   - the guard for OPS1 (Rule 4, Rule 5; issue report
     `docs/issues/U13-OPS1-new-version-preview-called-outdated.md`): a new
     version's preview showing the preview notice alone, and an older
@@ -2627,6 +2635,14 @@ nothing. Both download formats unticked: "Download Citation" left with
 its label. Every additional format unticked: "More Citation Formats"
 still showed, both downloads were in the page, and pressing it twice
 left the list closed.
+Since pkp/pkp-lib#7527 (seen 2026-10-02 at the PR heads, before their
+merge: pkp-lib `e65cccce28`, ojs `5fc8e612d0`, ops `a7fad57355`,
+citationStyleLanguage `e181beaf8c`), the place is recorded on the article
+when it is published (`publisherLocation`, from this box while the plugin
+is on) and the citations read that record; only an article never
+recorded reads the box (OMP: the press's "Geographical Location" first).
+An article published with the box empty printed no place after "London,
+U.K." was typed, in IEEE and in the "BibTeX" file, on OJS and OPS.
 
 <a id="fn-l"></a>
 **l** — Chart: `article_details.tpl` / `preprint_details.tpl` print the

@@ -709,16 +709,16 @@ test.describe('article landing page and reading', () => {
         expect(saved.ok(), `settings save answered ${saved.status()}`).toBe(true);
 
         // The visitor's page after "OK": the IEEE citation noted earlier,
-        // now with "London, U.K." in it; "MLA" alone; "BibTeX" alone, whose
-        // file carries "London, U.K." (Rule 16).
+        // still without a place, since the place is recorded on the preprint
+        // when it is posted (pkp-lib#7527) and this one was posted with the
+        // box empty; "MLA" alone; "BibTeX" alone, whose file carries no
+        // place either (Rule 16).
         await landing.reload();
-        await expect(landing.citation()).toContainText('London, U.K.');
-        const ieeeLondon = await textOf(landing.citation());
-        expect(ieeeLondon.replace('London, U.K., ', '')).toBe(ieee);
+        await expect.poll(() => textOf(landing.citation())).toBe(ieee);
         await landing.openFormats();
         await expect(landing.formatLinks()).toHaveText(['MLA']);
         await expect(landing.downloadFormatLinks()).toHaveText(['BibTeX']);
-        expect((await landing.downloadCitation('BibTeX')).text).toContain('London, U.K.');
+        expect((await landing.downloadCitation('BibTeX')).text).not.toContain('London, U.K.');
 
         // Switching the plugin off: it asks, then "…has been disabled." and
         // the row offers no "Settings"; the visitor's page has no "How to
@@ -740,7 +740,7 @@ test.describe('article landing page and reading', () => {
         await csl.noticeDuring(TEXT.pluginEnabled(CSL), () => csl.setEnabled(true));
         await expect(csl.enabledBox()).toBeChecked();
         await landing.reload();
-        await expect.poll(() => textOf(landing.citation())).toBe(ieeeLondon);
+        await expect.poll(() => textOf(landing.citation())).toBe(ieee);
 
         // Control: "MLA" alone still: the settings were kept (Settings bullet 4).
         await landing.openFormats();

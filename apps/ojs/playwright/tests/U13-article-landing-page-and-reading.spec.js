@@ -778,8 +778,8 @@ test.describe('article landing page and reading', () => {
         expect(saved.ok()).toBe(true);
 
         // The visitor's page after "OK": the IEEE citation first, "MLA"
-        // alone, "BibTeX" alone; no on-screen format prints the place, the
-        // BibTeX file does (Rule 16). The primary IEEE citation carries a
+        // alone, "BibTeX" alone; no on-screen format prints the place
+        // (Rule 16). The primary IEEE citation carries a
         // number "[1]" the chosen one lacked, so it is read as containing
         // the noted text (T-ojs-3, `.reports/U13/test-ojs-findings.md`).
         await landing.reload();
@@ -791,8 +791,11 @@ test.describe('article landing page and reading', () => {
         const mla = await landing.chooseFormat('MLA');
         expect(mla).not.toContain('London, U.K.');
         await landing.openFormats();
+        // The place is recorded on the article when it is published
+        // (pkp-lib#7527): this one was published with the box empty, so
+        // its "BibTeX" file carries no place after "OK" either (Rule 16).
         const bibAfter = await landing.downloadCitation('BibTeX');
-        expect(bibAfter.text).toContain('London, U.K.');
+        expect(bibAfter.text).not.toContain('London, U.K.');
 
         // Switching the plugin off: the question, the notice, no
         // "Settings" on the row; the visitor's page has no "How to Cite"
