@@ -1,0 +1,37 @@
+--- a/lib/pkp/classes/core/ValidationServiceProvider.php
++++ b/lib/pkp/classes/core/ValidationServiceProvider.php
+@@ -288,6 +288,34 @@
+                                     $lowerRule,
+                                     $this->fallbackMessages
+                                 ) ?: $key;
++                            }
++
++                            /**
++                             * Laravel takes any answer other than the key itself as the value's
++                             * translated name, but the PKP translator answers a missing key with
++                             * ##key##, so a value without a translation must fall back to itself here.
++                             *
++                             * @see \Illuminate\Validation\Concerns\FormatsMessages::getDisplayableValue()
++                             */
++                            public function getDisplayableValue($attribute, $value)
++                            {
++                                $line = parent::getDisplayableValue($attribute, $value);
++
++                                if (is_array($value) || isset($this->customValues[$attribute][$value])) {
++                                    return $line;
++                                }
++
++                                $key = "validation.values.{$attribute}.{$value}";
++
++                                if ($line !== '##' . htmlentities($key) . '##') {
++                                    return $line;
++                                }
++
++                                return match (true) {
++                                    is_bool($value) => $value ? 'true' : 'false',
++                                    is_null($value) => 'empty',
++                                    default => (string) $value,
++                                };
+                             }
+                         };
+                     }

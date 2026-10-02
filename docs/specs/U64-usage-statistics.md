@@ -1167,6 +1167,7 @@ Left out of the scenarios above, by reason:
   - on Site Settings › "Statistics", a refused Platform ID left in the box, "Platform" unticked, "Save" answers "Saved" (the guard for A10, once fixed)
   - "Download" in "Report Settings" of a "Counter R5" report: the saved "counterReport.tsv" is tab-separated, its first line split on a tab giving "Report_Name" (the guard for A11, once fixed)
   - a French (Canada) reading of a press's and a preprint server's statistics pages, both "Télécharger le rapport" windows and the site's "Statistiques" tab: no "##" code (the guard for A6, once fixed) {OMP OPS}
+  - a "Start Date" before the earliest possible date in a "Counter R5" report's "Report Settings": the refusal under the box names the plain date, no "##" (the guard for A3, once fixed)
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1241,7 +1242,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | Statistics › Articles: "All dates" opens an "Error" window when nothing is published or an item predates 2001 | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A3](#a3) | "Counter R5" date refusals show a raw code with the date inside it | 🐞 | minor | — |
+| [A3](#a3) | A "Counter R5" report date outside the possible range is refused with a raw locale key around the date | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | A journal's "Do not collect any geographical data" is not kept: the journal keeps collecting at the site's level | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A Section Editor's "Counter R5" opens an "Error" window over an empty list while the COUNTER statistics are restricted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | In French (Canada), a press's and a preprint server's statistics pages and site statistics settings show codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1298,15 +1299,20 @@ message blames a date the user did not type.
 Basis: probe, 2026-09-27. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — COUNTER date refusals show a raw code** · 🐞 · minor.
-In "Report Settings", a "Start Date" before the earliest possible date is
-refused with "The start date may not be earlier than
-##validation.values.begin_date.2026-10-01##." and an "End Date" after
-the last possible date with "The end date may not be later than
-##validation.values.end_date.2026-08-31##.": the date the user needs is
-buried in an untranslated code, although the field's own line states it
-plainly.
-Basis: probe, 2026-09-27. <sup>f-a3</sup>
+**A3 — A "Counter R5" report date outside the possible range is refused with a raw locale key around the date** · 🐞 · low.
+In a "Counter R5" report's "Report Settings", a "Start Date" before the
+earliest possible date is refused with "The start date may not be
+earlier than ##validation.values.begin_date.2026-11-01##.", and an "End
+Date" after the last possible date with the same kind of message.
+
+The refusal is right, and the date the user needs is in the message,
+wrapped in an untranslated locale key. Both dates are typed into plain
+text boxes.
+
+The "Counter R5" form is the only screen that shows this today. The
+fault sits in the validator every form shares, so any later rule whose
+message names a value would show it too.
+Basis: probe, 2026-10-03. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — A journal's "Do not collect any geographical data" is not kept: the journal keeps collecting at the site's level** · 🐞 · medium.
@@ -2394,6 +2400,7 @@ empty box). Live-probed 2026-09-27: td2.
 and `end_date.before_or_equal` to `__('stats.dateRange.invalidEndDateMax')`
 without `['date' => …]`; on screen the date lands inside an
 untranslated code. Live-probed 2026-09-27: td5.
+Issue report: [docs/issues/U64-A3-counter-report-date-refusal-raw-code.md](../issues/U64-A3-counter-report-date-refusal-raw-code.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — fn-s. Live-probed 2026-09-27: td7.
