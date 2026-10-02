@@ -929,6 +929,7 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the file's "History" keeping no line of the revision cancelled with "Cancel": one "A file revision "notes.md" …" line, not two (Rule 9): likely a bullet in scenario 3, which cancels a revision before the "History" it reads
   - "Edit a file" closed with its header "Close" after the name is changed: no question, the list keeping the old name after a reload, and the window reopening on it (Rule 10): likely a bullet in scenario 4 before "The rename"
+  - the "Files" panel's "Other" on a file with no component, then "Save" with no radio button chosen: a message under "What kind of file is this?" and no server error ([A11](#a11)): the guard the issue report proposes
 - **Nothing new to test**:
   - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
   - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
@@ -992,7 +993,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | The Author's "Upload" on "Revisions Uploaded" shows on every round and is refused before revisions are requested | 🐞 | minor | — |
 | [A9](#a9) | A screen reader reads step 1's hidden upload box, and the step's two drop-downs have no name | 🐞 | minor | — |
 | [A10](#a10) | "Add Note" with an empty box posts an empty note | 🐞 | minor | — |
-| [A11](#a11) | "Save" in the submission wizard's "Edit {file name}" with no component chosen fails with "An unexpected error has occurred." | 🐞 | minor · crash: server | — |
+| [A11](#a11) | Submission wizard: "Save" in a file's "Edit" panel with no component chosen shows "An unexpected error has occurred" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | The "Download All Files" zip is named with two hyphens ("12--submission-files.zip") | 🐞 | minor | — |
 | [A14](#a14) | "Change File" in step 1 keeps the first upload on the list as a file of its own | 🐞 | user-visible | — |
 | [A15](#a15) | Step 2 reopened from step 3 offers "Complete" but shows "File Added" again instead of closing | 🐞 | minor | — |
@@ -1100,14 +1101,22 @@ should be refused.
 Basis: probe. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
-**A11 — "Save" in "Edit {file name}" with no component chosen fails** · 🐞 · minor · crash: server.
-In the submission wizard's "Files" panel, "Other" or a row's "Edit"
-opens "Edit {file name}". Pressing "Save" there without choosing a
-component makes the app fail: "An unexpected error has occurred. Please
-reload the page and try again." appears, the panel stays open and
-nothing is saved. Expected: a message asking for a component, or no
-save until one is chosen.
-Basis: probe. <sup>[f-a11](#fn-a11)</sup>
+**A11 — Submission wizard: "Save" in a file's "Edit" panel with no component chosen shows "An unexpected error has occurred"** · 🐞 · low · crash: server.
+The app fails on the server when an author, in the submission wizard's
+"Upload Files" step, presses "Other" on a file's row and then "Save" in
+the "Edit {file name}" panel without choosing a component. The notice
+"An unexpected error has occurred. Please reload the page and try
+again." appears, the panel stays open and nothing is saved. The author
+expects a message asking for a component, or no save until one is
+chosen.
+
+The file stays in the list without a component, and reloading the page,
+as the notice advises, changes nothing.
+
+Every file an author adds on "Upload Files" starts without a component,
+unless the journal or press has only one component enabled, which is
+then filled in. A preprint server has no such panel.
+Basis: probe, 2026-10-02. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
 **A12 — The "Download All Files" zip's name has two hyphens** · 🐞 · minor.
@@ -2219,6 +2228,7 @@ button "Choose File", while the screenshot showed no box.
 with no radio chosen showed the message with the panel still open; the save, a
 POST to `…/api/v1/submissions/{id}/files/{fileId}?stageId=1` with a PUT
 override, answered 500.
+Issue report: [docs/issues/U36-A11-wizard-file-edit-save-no-component-server-error.md](../issues/U36-A11-wizard-file-edit-save-no-component-server-error.md).
 
 <a id="fn-a12"></a>
 **f-a12** — Note h (`Str::kebab()`). Live-probed 2026-09-23: note d19.

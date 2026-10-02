@@ -1,0 +1,30 @@
+--- a/lib/pkp/classes/submissionFile/Repository.php
++++ b/lib/pkp/classes/submissionFile/Repository.php
+@@ -42,6 +42,7 @@
+ use PKP\security\Validation;
+ use PKP\services\PKPSchemaService;
+ use PKP\stageAssignment\StageAssignment;
++use PKP\submission\GenreDAO;
+ use PKP\submission\reviewRound\ReviewRoundDAO;
+ use PKP\submissionFile\exceptions\UnableToCreateFileContentException;
+ use PKP\submissionFile\maps\Schema;
+@@ -174,6 +175,19 @@
+                             'createdAt',
+                             __('api.files.400.notAllowedCreatedAt')
+                         );
++                }
++            });
++        }
++
++        // Make sure that a genre is one of the context's genres
++        if (isset($props['genreId'])) {
++            $validator->after(function ($validator) use ($props) {
++                if ($validator->errors()->get('genreId')) {
++                    return;
++                }
++                $genreDao = DAORegistry::getDAO('GenreDAO'); /** @var GenreDAO $genreDao */
++                if (!$genreDao->getById($props['genreId'], $this->request->getContext()?->getId())) {
++                    $validator->errors()->add('genreId', __('submission.upload.noGenre'));
+                 }
+             });
+         }
