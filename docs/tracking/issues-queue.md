@@ -32,7 +32,7 @@ and the hourly routine starts one only when none is running
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 9 | 1 | 8 | OJS3 done with U69 A3 (pkp-e2e#285) |
 | [U48](../specs/U48-jats-and-body-text.md) | 17 | 1 | 7 |  |
 | [U28](../specs/U28-reviewers-review.md) | 14 | 1 | 5 |  |
-| [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 || **OMP1 taken: issues session, VM s2, 2026-10-02** (joined to U53 A14) |
+| [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | **OMP1 taken: issues session, VM s2, 2026-10-02** (joined to U53 A14) |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | A16 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet; the report calls the window's box "Title" where the screen says "Name", and its Reach names "Applied Science" where reach.js uses "Social Sciences" on OPS |
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | OMP3 done with U69 A9 (pkp-e2e#282) |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
