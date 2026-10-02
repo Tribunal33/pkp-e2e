@@ -1574,7 +1574,7 @@ masthead". The same send with the held select untouched made no masthead
 request and showed no error, its email reading "Your name will appear in the
 {press or server}'s masthead as a Author." On OJS the change answered 200
 with no dialog, and the masthead email arrived beside the invitation.
-Issue report: [docs/issues/U53-A14-masthead-change-error-no-email.md](../issues/U53-A14-masthead-change-error-no-email.md).
+Issue report: [pkp-e2e#447](https://github.com/jardakotesovec/pkp-e2e/issues/447) ([docs/issues/U53-A14-masthead-change-error-no-email.md](../issues/U53-A14-masthead-change-error-no-email.md)).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Evidence in note j (OPS map override vs seeded template).

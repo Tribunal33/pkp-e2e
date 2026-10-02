@@ -1941,7 +1941,7 @@ answered 500 and the dialog quoted showed; after a reload the choice read
 "Your journal masthead visibility has been updated". Presses and preprint
 servers ship without the `USER_ROLE_MASTHEAD_UPDATE` template (*User
 invitations*, note f-omp1).
-Issue report: [docs/issues/U53-A14-masthead-change-error-no-email.md](../issues/U53-A14-masthead-change-error-no-email.md).
+Issue report: [pkp-e2e#447](https://github.com/jardakotesovec/pkp-e2e/issues/447) ([docs/issues/U53-A14-masthead-change-error-no-email.md](../issues/U53-A14-masthead-change-error-no-email.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-25, all three apps, three times each:
