@@ -990,6 +990,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the "Subscriptions Report" download with an institutional subscription whose contact has no country: the file arrives, that row's "Country" empty (the guard for OJS4, once fixed; Rule 22)
+  - a book declined at Internal Review on a press: "Submissions Declined", "Submissions Declined (After Review)" and both rejection rates count it (the guard for OMP1, once fixed; Rule 13)
 - **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
@@ -1067,7 +1068,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS2](#ojs2) | "Articles Report" writes "&" in a title as "&amp;" | 🐞 | minor | — |
 | [OJS3](#ojs3) | "Articles Report" leaves the decision cell empty for several decisions | 🐞 | minor | — |
 | [OJS4](#ojs4) | "Subscriptions Report" downloads nothing and leaves a blank tab when an institutional contact has no country | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [OMP1](#omp1) | A book declined at Internal Review is not counted under "Submissions Declined" | 🐞 | user-visible | — |
+| [OMP1](#omp1) | A press's Editorial Activity leaves books declined at Internal Review out of "Submissions Declined" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | The press's "Days to First Editorial Decision" text speaks of "your journal" | 🐞 | minor | — |
 | [OMP3](#omp3) | "Monograph Report" sizes its author and decision columns by every press of the installation | 🐞 | minor | — |
 | [OMP4](#omp4) | "Monograph Report" names a reverted Internal Review decline "Decline Submission" | 🐞 | minor | — |
@@ -1296,14 +1297,27 @@ Basis: probe, 2026-10-02. <sup>f-ojs4</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — An Internal Review decline is not counted as declined** · 🐞 · user-visible.
+**OMP1 — A press's Editorial Activity leaves books declined at Internal Review out of "Submissions Declined"** · 🐞 · medium.
 A book declined with Internal Review's "Decline Submission" is counted
 in neither "Submissions Declined" nor its sub-rows, nor in the rejection
 rates, although "Days to Reject" counts it and an Internal Review
 "Accept Submission" counts as accepted. The monthly email's "Declined
-submissions this month" leaves it out too. Expected: counted as
-declined, beside the desk and after-review declines.
-Basis: probe. <sup>f-omp1</sup>
+submissions this month" leaves it out too.
+
+The press's decline figures and rejection rates read lower than they
+are, and nothing on screen corrects them. The figures are counted from
+the stored decisions each time they are shown, so the fix brings back
+every past Internal Review decline with no data repair; only the monthly
+emails already sent stay wrong.
+
+A press upgraded from 3.3 lost its older Internal Review declines from
+the figures too. 3.3 stored them as the same decision as a Review
+decline and counted them; the upgrade to 3.4 relabels those stored
+decisions as Internal Review declines, so they dropped out on upgrade,
+even where the press has declined nothing at Internal Review since.
+Expected: counted as declined, beside the desk and after-review
+declines.
+Basis: probe, 2026-10-02. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
 **OMP2 — "your journal" on a press** · 🐞 · minor.
@@ -2098,6 +2112,7 @@ only; `getOverview()` and `getAverages()` count `INITIAL_DECLINE` and
 `DECLINE`, and the monthly email reads `getOverview()`. Live-probed 2026-09-28: td6; the August email read "Declined
 submissions this month: 1" with one Internal Review decline and one
 desk decline that month.
+Issue report: [docs/issues/U65-OMP1-internal-review-decline-not-counted-declined.md](../issues/U65-OMP1-internal-review-decline-not-counted-declined.md).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — `stats.description.daysToDecision` in lib/pkp
