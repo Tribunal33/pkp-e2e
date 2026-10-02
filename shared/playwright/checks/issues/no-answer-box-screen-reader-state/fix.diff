@@ -1,0 +1,55 @@
+--- a/lib/ui-library/src/components/Checkbox/Checkbox.vue
++++ b/lib/ui-library/src/components/Checkbox/Checkbox.vue
+@@ -9,7 +9,7 @@
+ 			:checked="checked"
+ 			:aria-labelledby="props.labelledBy"
+ 			:disabled="disabled"
+-			@change="emit('change', $event)"
++			@change="onChange"
+ 		/>
+ 		<span
+ 			class="relative flex h-5 w-5 items-center justify-center peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-1 peer-focus-visible:outline-[--tw-ring-color]"
+@@ -44,4 +44,15 @@
+ const emit = defineEmits(['change']);
+ 
+ const icon = computed(() => (props.checked ? 'CheckboxTicked' : 'Checkbox'));
++
++/**
++ * The browser has already toggled the input. Put it back on `checked`, which
++ * the icon is drawn from, so that a screen reader hears what the eye sees: a
++ * parent that accepts the change (at once, or after a confirmation) changes
++ * `checked`, and the input follows it then.
++ */
++function onChange(event) {
++	emit('change', event);
++	event.target.checked = props.checked;
++}
+ </script>
+--- a/lib/ui-library/src/components/Table/TableCellSelect.vue
++++ b/lib/ui-library/src/components/Table/TableCellSelect.vue
+@@ -31,15 +31,13 @@
+ const emit = defineEmits(['change']);
+ const isChecked = ref(!!props.checked);
+ 
+-function onChange($event) {
++function onChange() {
+ 	if (!props.confirmTitle || !props.confirmMessage) {
+ 		isChecked.value = !isChecked.value;
+ 		return emit('change', isChecked.value);
+ 	}
+ 
+-	// confirm the change event before emitting
+-	$event.preventDefault();
+-
++	// confirm the change before emitting; the box keeps its state until "Yes"
+ 	const {openDialog} = useModal();
+ 	openDialog({
+ 		actions: [
+@@ -55,7 +53,6 @@
+ 				label: t('common.no'),
+ 				isWarnable: true,
+ 				callback: (close) => {
+-					$event.preventDefault();
+ 					close();
+ 				},
+ 			},

@@ -1352,6 +1352,7 @@ Left out of the scenarios above, by reason:
   - the guard for A29 (issue report `docs/issues/U37-A29-add-window-file-missing-from-history.md`): a file attached in the "Add" window shows "{file name} uploaded by …" with "Download" in the History (Rule 18)
   - the guard for OMP1 (issue report `docs/issues/U37-OMP1-external-reviewer-listed-as-internal.md`): on a press, each reviewer in a discussion's "Participants" reads the reviewer role of the stage they review ("External Reviewer" on External Review) in the editor's and the reviewer's windows (Rule 20)
   - the guard for A31 (issue report `docs/issues/U37-A31-auto-added-item-letter-placeholders.md`): an auto-added discussion's letter, and one a manager adds without taking part, closes with no "{$signature}" or "{$senderName}" left as typed (Rules 10d, 9)
+  - the guard for A26 (issue report `docs/issues/U37-A26-no-answer-box-screen-reader-opposite-state.md`): after "No" in a row box's question, the box reads to a screen reader as it looks (Rule 16)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1414,7 +1415,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A21](#a21) | A refused task or discussion window tells screen-reader users "Go to undefined" for the empty message box | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A24](#a24) | An assistant's "Workflow Files" offers stages that show nothing | 🐞 | minor | — |
 | [A25](#a25) | A discussion turned into a task reads "Begin Task Upon Saving" but is not begun | 🐞 | minor | — |
-| [A26](#a26) | After "No" in a row box's question, a screen reader hears the opposite state | 🐞 | minor | — |
+| [A26](#a26) | After "No" to a Tasks & Discussions box's question, a screen reader hears the box in the opposite state | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A28](#a28) | A discussion turned into a task reads "Task created by …" in its History | 🐞 | minor | — |
 | [A29](#a29) | A file attached to the first message in the "Add" window never shows in the discussion's History | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A31](#a31) | A discussion's letter keeps "{$signature}" when its writer is not a participant: auto-added, or a manager stays out | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1704,14 +1705,18 @@ started. The window promises a start it does not make.
 Basis: probe. <sup>[f-a25](#fn-a25)</sup>
 
 <a id="a26"></a>
-**A26 — After "No", a screen reader hears the opposite state** · 🐞 · minor.
-After "No" in a row box's question ("Start this task", "Close this
-Discussion", "Reopen this Discussion", "Close this Task", and the
-template screen's "Confirm Automatic Addition"), nothing is saved and
-the box still looks as it did, but a screen reader hears the opposite
-state ("checked" for a task that was not started, "not checked" for a
-discussion that stays closed) until the page is reloaded.
-Basis: probe. <sup>[f-a26](#fn-a26)</sup>
+**A26 — After "No" to a Tasks & Discussions box's question, a screen reader hears the box in the opposite state** · 🐞 · low.
+Some boxes in Tasks & Discussions ask a question before they save
+anything: a row's "Started" box ("Start this task"), its "Closed" box
+("Close this Discussion", "Reopen this Discussion", "Close this Task"),
+and the template screen's "Auto-add at stage" box ("Confirm Automatic
+Addition"). After "No", nothing is saved and the box still looks as it
+did, but a screen reader hears the opposite state. A task that was not
+started reads "checked", and a discussion that stays closed reads "not
+checked", until the page is reloaded. Closing the question with Escape
+instead of "No" has the same effect. Nothing is stored wrong, and
+pressing the box again asks the same question again.
+Basis: probe, 2026-10-02. <sup>[f-a26](#fn-a26)</sup>
 
 <a id="a27"></a>
 **A27 — During Login As, one reply is credited to two people** · ❓ · minor.
@@ -2082,6 +2087,7 @@ Issue report: [docs/issues/U37-A21-error-list-calls-message-box-undefined.md](..
 
 <a id="fn-a26"></a>
 **f-a26** — `TableCellSelect.onChange()` calls `preventDefault()` on the change event, too late to undo the browser's own toggle, so the input keeps the new state while the icon is drawn from the saved one. Live-probed 2026-09-23 on all three apps: after "No" the row's "Started" read checked and a closed discussion's "Closed" not checked to the accessibility tree until a reload; the same on the template screen's "Auto-add at stage" box.
+Issue report: [docs/issues/U37-A26-no-answer-box-screen-reader-opposite-state.md](../issues/U37-A26-no-answer-box-screen-reader-opposite-state.md).
 
 <a id="fn-a27"></a>
 **f-a27** — Note y: every log call attributes to `Validation::loggedInAs()` when present, while the note is written as the impersonated user. Live-probed 2026-09-23 (OJS twice, OMP and OPS once): "User" "{Journal Manager} (acting as {Section Editor})", "Event" and "Activity" naming the manager's username, the message headed with the Section Editor's, the email from the Section Editor's address. *Login & sessions* says impersonation is total.
