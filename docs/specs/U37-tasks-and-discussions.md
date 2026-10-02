@@ -1350,6 +1350,7 @@ Left out of the scenarios above, by reason:
   - the guard for A2 (issue report `docs/issues/U37-A2-discussion-window-placeholder-subtitle.md`): the "Add" and "Edit" windows hold no placeholder line under the title (Rule 10)
   - the guard for A21 (issue report `docs/issues/U37-A21-error-list-calls-message-box-undefined.md`): a "Save" refused with the message box empty lists "Go to Message: This field is required." in the "Add", "Edit" and template windows (Rule 11a)
   - the guard for A29 (issue report `docs/issues/U37-A29-add-window-file-missing-from-history.md`): a file attached in the "Add" window shows "{file name} uploaded by …" with "Download" in the History (Rule 18)
+  - the guard for OMP1 (issue report `docs/issues/U37-OMP1-external-reviewer-listed-as-internal.md`): on a press, each reviewer in a discussion's "Participants" reads the reviewer role of the stage they review ("External Reviewer" on External Review) in the editor's and the reviewer's windows (Rule 20)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1416,7 +1417,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A28](#a28) | A discussion turned into a task reads "Task created by …" in its History | 🐞 | minor | — |
 | [A29](#a29) | A file attached to the first message in the "Add" window never shows in the discussion's History | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A31](#a31) | An auto-added item's letter keeps "{$recipientName}" and the sender placeholder | 🐞 | minor | — |
-| [OMP1](#omp1) | A press lists its External Review reviewers as "Internal Reviewer" or "External Reviewer", varying | 🐞 | minor | — |
+| [OMP1](#omp1) | A press's discussion window lists an External Review reviewer as "Internal Reviewer" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | A preprint server's "Assign Editor" template has no text, and choosing it leaves the message box showing text "Save" ignores | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | An hour after writing it, an Author or assistant can change nothing in their own discussion | ❓ | user-visible | — |
 | [A13](#a13) | A closed task cannot be reopened | ❓ | minor | — |
@@ -1768,12 +1769,19 @@ Basis: probe. <sup>[f-a31](#fn-a31)</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — A press's reviewers read "Internal Reviewer" on External Review** · 🐞 · minor.
-On a press, the External Review stage's reviewers are listed under
-"Participants" as "Internal Reviewer" or "External Reviewer", varying
-from one press to the next and between the Press Manager's, the
-Author's and the reviewer's own windows. A journal prints "Reviewer".
-Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
+**OMP1 — A press's discussion window lists an External Review reviewer as "Internal Reviewer"** · 🐞 · low.
+On a press, the "Add" window of "Review Tasks & Discussions" lists every
+reviewer under "Participants" with the same reviewer role, whichever
+stage they review in. On the default press that role is "Internal
+Reviewer", so an External Review reviewer reads "Internal Reviewer". The
+same reviewer, once ticked and saved, reads "External Reviewer" in the
+discussion's "Edit" window. Nothing is lost and the discussion reaches
+the right people. But an editor who checks the role before ticking a
+reviewer is told the wrong one. The role printed is the first of the
+press's two reviewer roles that the database returns. A press where that
+is "External Reviewer" sees the reverse: its Internal Review reviewers
+read "External Reviewer".
+Basis: probe, 2026-10-02. <sup>[f-omp1](#fn-omp1)</sup>
 
 ### OPS
 
@@ -2087,6 +2095,7 @@ Issue report: [docs/issues/U37-A29-add-window-file-missing-from-history.md](../i
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note n: the reviewer group is the first of the press's two reviewer groups the database returns. Live-probed 2026-09-23 on OMP, two fresh presses: "External Reviewer" in one run's manager window, "Internal Reviewer" in others, the manager's, the Author's and the reviewer's windows differing; OJS prints "Reviewer".
+Issue report: [docs/issues/U37-OMP1-external-reviewer-listed-as-internal.md](../issues/U37-OMP1-external-reviewer-listed-as-internal.md).
 
 <a id="fn-ops1"></a>
 **f-ops1** — OPS `registry/taskTemplates.xml` gives `EDITOR_ASSIGN_PRODUCTION` the text `emails.editorAssignProduction.body`, which neither OPS's locale nor lib/pkp defines (OJS and OMP define it in their own `emails.po`); `installTaskTemplates()` installs a missing key as an empty string (`setMissingKeyHandler(fn () => '')`). The Participants panel's side of the same template: *Stage participants* OPS2 (live 2026-09-22). Live-probed 2026-09-23 (td6): auto-add on, it made a discussion with no first message.

@@ -1,0 +1,135 @@
+--- a/lib/pkp/api/v1/submissions/tasks/EditorialTaskController.php
++++ b/lib/pkp/api/v1/submissions/tasks/EditorialTaskController.php
+@@ -870,9 +870,13 @@
+         }
+ 
+         $currentUserHasDoubleBlindReview = false;
+-        $reviewUserGroup = UserGroup::with('userUserGroups')->where('role_id', Role::ROLE_ID_REVIEWER)
+-            ->where('context_id', $submission->getData('contextId'))
+-            ->first();
++        // Every reviewer role of the context: a press has two, and the participant resource
++        // prints each reviewer with their own, the one assigned to the stage of their review
++        $reviewUserGroups = UserGroup::with('userUserGroups')
++            ->withContextIds([$submission->getData('contextId')])
++            ->withRoleIds([Role::ROLE_ID_REVIEWER])
++            ->orderById()
++            ->get();
+         $userGroups = collect();
+         $reviewAssignments = collect();
+ 
+@@ -888,7 +892,7 @@
+                 $currentUserHasDoubleBlindReview = (bool) $currentUserReviewAssignments->search(fn (ReviewAssignment $reviewAssignment) =>
+                     $reviewAssignment->getReviewMethod() == ReviewAssignment::SUBMISSION_REVIEW_METHOD_DOUBLEANONYMOUS);
+ 
+-                $userGroups->put($reviewUserGroup->id, $reviewUserGroup);
++                $reviewUserGroups->each(fn (UserGroup $reviewUserGroup) => $userGroups->put($reviewUserGroup->id, $reviewUserGroup));
+                 $reviewAssignments = $reviewAssignments->merge($currentUserReviewAssignments);
+             }
+         }
+@@ -928,9 +932,7 @@
+             ['users' => $reviewers, 'reviewAssignments' => $associatedReviewAssignments] = $this->getReviewers($submission, $stageId, $currentRoles);
+             if ($reviewers->isNotEmpty()) {
+                 $users = $users->merge($reviewers);
+-                if (!$userGroups->has($reviewUserGroup->id)) {
+-                    $userGroups->put($reviewUserGroup->id, $reviewUserGroup);
+-                }
++                $reviewUserGroups->each(fn (UserGroup $reviewUserGroup) => $userGroups->put($reviewUserGroup->id, $reviewUserGroup));
+             }
+ 
+             if ($associatedReviewAssignments->isNotEmpty()) {
+@@ -1139,11 +1141,14 @@
+             collect()->lazy();
+ 
+         if ($reviewAssignments->isNotEmpty()) {
+-            $reviewerUserGroup = UserGroup::withContextIds([$submission->getData('contextId')])
++            // The user's reviewer role assigned to the task's stage (a press has two), else any of theirs
++            $reviewerUserGroups = UserGroup::withContextIds([$submission->getData('contextId')])
+                 ->withRoleIds([Role::ROLE_ID_REVIEWER])
+                 ->withUserIds([$user->getId()])
+-                ->get()
+-                ->first()
++                ->orderById()
++                ->get();
++            $reviewerUserGroup = ($reviewerUserGroups->first(fn (UserGroup $userGroup) => $userGroup->getAssignedStageIds()->contains($editorialTask->stageId))
++                ?? $reviewerUserGroups->first())
+                 ?->name;
+ 
+             if ($reviewerUserGroup) {
+--- a/lib/pkp/api/v1/submissions/tasks/resources/EditorialTaskParticipantResource.php
++++ b/lib/pkp/api/v1/submissions/tasks/resources/EditorialTaskParticipantResource.php
+@@ -17,11 +17,14 @@
+ 
+ use Illuminate\Http\Request;
+ use Illuminate\Http\Resources\Json\JsonResource;
++use Illuminate\Support\Enumerable;
+ use PKP\core\traits\ResourceWithData;
+ use PKP\security\Role;
+ use PKP\stageAssignment\StageAssignment;
+ use PKP\submission\reviewAssignment\ReviewAssignment;
+ use PKP\user\User;
++use PKP\userGroup\relationships\UserUserGroup;
++use PKP\userGroup\UserGroup;
+ 
+ class EditorialTaskParticipantResource extends JsonResource
+ {
+@@ -46,18 +49,8 @@
+         }
+ 
+         // Determine global roles
+-        $reviewerRoleName = null;
+         foreach ($userGroups as $userGroup) {
+ 
+-            // Get the name for the reviewer role if it exists
+-            if (
+-                $reviewAssignmentsForUser->isNotEmpty() &&
+-                $userGroup->roleId === Role::ROLE_ID_REVIEWER &&
+-                is_null($reviewerRoleName)
+-            ) {
+-                $reviewerRoleName = $userGroup->getLocalizedData('name');
+-            }
+-
+             // Check only global roles
+             if (!in_array($userGroup->roleId, [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN])) {
+                 continue;
+@@ -80,7 +73,7 @@
+         }
+ 
+         if ($reviewAssignmentsForUser->isNotEmpty()) {
+-            $roles[Role::ROLE_ID_REVIEWER] = $reviewerRoleName;
++            $roles[Role::ROLE_ID_REVIEWER] = $this->getReviewerRoleName($userGroups, $reviewAssignmentsForUser);
+             $reviews = $reviewAssignmentsForUser->map(fn (ReviewAssignment $reviewAssignment) => [
+                 'reviewId' => $reviewAssignment->getId(),
+                 'reviewRound' => $reviewAssignment->getRound(),
+@@ -112,6 +105,32 @@
+     }
+ 
+     /**
++     * The name of the participant's reviewer role: of the reviewer roles assigned to the
++     * stage of their review (a press's Internal Review and External Review each have
++     * their own), the one they hold; else one they hold; else the generic "Reviewer".
++     */
++    protected function getReviewerRoleName(Enumerable $userGroups, Enumerable $reviewAssignments): string
++    {
++        $stageIds = $reviewAssignments
++            ->map(fn (ReviewAssignment $reviewAssignment) => $reviewAssignment->getStageId())
++            ->unique()
++            ->values()
++            ->all();
++
++        $reviewerUserGroups = $userGroups->filter(fn (UserGroup $userGroup) => $userGroup->roleId === Role::ROLE_ID_REVIEWER);
++        $heldUserGroups = $reviewerUserGroups->filter(
++            fn (UserGroup $userGroup) => $userGroup->userUserGroups->contains(fn (UserUserGroup $userUserGroup) => $userUserGroup->userId === $this->userId)
++        );
++        $isOnStage = fn (UserGroup $userGroup) => $userGroup->getAssignedStageIds()->intersect($stageIds)->isNotEmpty();
++
++        $reviewerUserGroup = $heldUserGroups->first($isOnStage)
++            ?? $reviewerUserGroups->first($isOnStage)
++            ?? $heldUserGroups->first();
++
++        return $reviewerUserGroup?->getLocalizedData('name') ?? __('user.role.reviewer');
++    }
++
++    /**
+      * @inheritDoc
+      */
+     protected static function requiredKeys(): array
