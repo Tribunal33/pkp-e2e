@@ -1347,6 +1347,8 @@ Left out of the scenarios above, by reason:
   - the guard for A8 (issue report `docs/issues/U37-A8-author-discussion-with-file-edit-refused.md`): an Author renames their own discussion whose first message carries an uploaded file, and the save keeps the file (Rule 15d)
   - the guard for A7 (issue report `docs/issues/U37-A7-press-server-edit-refusal-raw-key.md`): on a press and a preprint server, the two edit refusals read "You can only edit your own discussion message." and "This discussion message can only be edited within 1 hour of creation." (Rule 15c)
   - the guard for A10 (issue report `docs/issues/U37-A10-past-due-date-speaks-of-start-date.md`): a past "Due Date" typed into the box is refused with a message that names the due date (Rule 2d)
+  - the guard for A2 (issue report `docs/issues/U37-A2-discussion-window-placeholder-subtitle.md`): the "Add" and "Edit" windows hold no placeholder line under the title (Rule 10)
+  - the guard for A21 (issue report `docs/issues/U37-A21-error-list-calls-message-box-undefined.md`): a "Save" refused with the message box empty lists "Go to Message: This field is required." in the "Add", "Edit" and template windows (Rule 11a)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1395,7 +1397,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | On a press and a preprint server as shipped, saving a discussion or a reply ends in an error dialog, and nobody is emailed or told | 🐞 | user-visible · crash: server | — |
-| [A2](#a2) | The "Add" window's subtitle reads "Open for What? Open to What? Beyond Content" | 🐞 | minor | — |
+| [A2](#a2) | The "Add" and "Edit" windows for a task or discussion show "Open for What? Open to What? Beyond Content" under the title | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | Whoever opens a discussion or replies gets their own message back by email and as a Tasks row | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | When adding a task or discussion, a "Find Template" search for "discussion" or "task" opens an "Error" window | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | Each template in the "Add" window says it fills "Participants", but choosing one never does | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1406,7 +1408,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | A task's "Due Date" before today is refused with a message about a start date | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A16](#a16) | A task due today already reads "Overdue" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | A closed task past its due date still reads "This task is overdue. Remind the task owner…" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A21](#a21) | The error list read to a screen reader calls the message box "undefined" | 🐞 | minor | — |
+| [A21](#a21) | A refused task or discussion window tells screen-reader users "Go to undefined" for the empty message box | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A24](#a24) | An assistant's "Workflow Files" offers stages that show nothing | 🐞 | minor | — |
 | [A25](#a25) | A discussion turned into a task reads "Begin Task Upon Saving" but is not begun | 🐞 | minor | — |
 | [A26](#a26) | After "No" in a row box's question, a screen reader hears the opposite state | 🐞 | minor | — |
@@ -1443,12 +1445,15 @@ that class), is not affected.
 Since: 2026-02-10 · Basis: probe. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
-**A2 — Placeholder text under the "Add" window's title** · 🐞 · minor.
-Every "Add" and "Edit" window, for every role, shows "Open for What? Open
-to What? Beyond Content" under its title, a sentence that says nothing
-about the window; a tester would expect a line describing the form, or
-nothing.
-Basis: probe. <sup>[f-a2](#fn-a2)</sup>
+**A2 — The "Add" and "Edit" windows for a task or discussion show "Open for What? Open to What? Beyond Content" under the title** · 🐞 · low.
+Whoever adds a task or discussion on a submission, or edits one, sees
+"Open for What? Open to What? Beyond Content" under the window's title.
+The sentence is placeholder text and says nothing about the window, its
+fields or the submission; the window should show a line that describes
+it, or nothing. An interface in another language shows the raw key
+"##discussion.form.description##" there instead. Nothing is lost and no
+way round is needed: the window saves as it should.
+Basis: probe, 2026-10-02. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
 **A3 — Whoever opens a discussion or replies gets their own message back by email and as a Tasks row** · 🐞 · low.
@@ -1657,13 +1662,16 @@ item was valid when made, and a rename should not need a second person.
 Basis: probe. <sup>[f-a20](#fn-a20)</sup>
 
 <a id="a21"></a>
-**A21 — The error list calls the message box "undefined"** · 🐞 · minor.
-When "Save" is refused with the message box empty, the error list beside
-the buttons, as a screen reader reads it, names each field ("Go to Name:
-This field is required.") but calls the message box "Go to undefined:
-This field is required.", in the "Add", "Edit" and template windows. A
-screen-reader user cannot tell which field is meant.
-Basis: probe. <sup>[f-a21](#fn-a21)</sup>
+**A21 — A refused task or discussion window tells screen-reader users "Go to undefined" for the empty message box** · 🐞 · low.
+When "Save" is refused because the message box of a task or discussion
+is empty, the error list a screen reader reads beside the buttons names
+every other field ("Go to Name: This field is required.") but calls the
+message box "Go to undefined: This field is required.". This happens in
+the "Add" and "Edit" windows of a submission's tasks and discussions and
+in the task template window in Settings. The box has no label on screen
+either: unlike "Name", nothing above it says what it is or that it is
+required. "Jump to next error" still takes the user to the box.
+Basis: probe, 2026-10-02. <sup>[f-a21](#fn-a21)</sup>
 
 <a id="a23"></a>
 **A23 — The convert hint shows to people who cannot convert** · ❓ · minor.
@@ -1971,6 +1979,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="fn-a2"></a>
 **f-a2** — `DiscussionManagerFormModal.vue` `#description` = `discussion.form.description` "Open for What? Open to What? Beyond Content" (lib/pkp `locale/en/submission.po`), for add and edit alike. Live-probed 2026-09-04 (Reviewer's review probes, the reviewer's "Add" window). Live-probed 2026-09-23 on all three apps: the line in every "Add" window (Journal Manager, Site Administrator, Editor, Section Editor, Copyeditor, Author, a Reviewer under each review type) and every "Edit" window driven.
+Issue report: [docs/issues/U37-A2-discussion-window-placeholder-subtitle.md](../issues/U37-A2-discussion-window-placeholder-subtitle.md).
 
 <a id="fn-a3"></a>
 **f-a3** — `addTask()` adds the current user to the notified list; `addNote()` notifies every participant, the writer included. Live 2026-09-04 on all three apps (Notifications center's scenario 5: the Manager's own mailbox holds the copy). The pre-rework `QueriesGridHandler::updateQuery()` removed the current user ("Don't notify the current user", pkp-lib `958592a15`, 2025); the rework is pkp/pkp-lib#12322 (2026-02-10). Live-probed 2026-09-23 on all three apps: the writer's mailbox holding each message they wrote, with its attachments, the Activity Log's "View Email" reading From and To the same person, and a "Discussion added." row per message in the writer's own Tasks panel.
@@ -2038,6 +2047,7 @@ Issue report: [docs/issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md
 
 <a id="fn-a21"></a>
 **f-a21** — Note r: the message box field has no label, so the error summary's link reads `undefined`. Live-probed 2026-09-23 on all three apps, in the "Add", "Edit" and template windows.
+Issue report: [docs/issues/U37-A21-error-list-calls-message-box-undefined.md](../issues/U37-A21-error-list-calls-message-box-undefined.md).
 
 <a id="fn-a22"></a>
 **f-a22** — Note r. Live-probed 2026-09-23 on all three apps: the browser's `beforeunload` dialog on the next load after each "Warning" › "Yes", the "Edit" window's included (td16). Live-probed 2026-09-29 on all three apps, two runs: no dialog 2 s or 15 s after a "Warning" › "Yes" of the "Add", "Edit" or template window, nor at once with the closing slide running; with animations disabled a reload issued at once still met it, as did one right after the test tooling's settle wait (4 of 6), because the closed form's handler outlives its window by about 0.3 s (note r). The 2026-09-23 reloads were of that kind, so the entry is retired.

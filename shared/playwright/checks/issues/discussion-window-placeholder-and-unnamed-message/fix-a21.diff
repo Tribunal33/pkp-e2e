@@ -1,0 +1,20 @@
+--- a/lib/ui-library/src/managers/DiscussionManager/useDiscussionMessages.js
++++ b/lib/ui-library/src/managers/DiscussionManager/useDiscussionMessages.js
+@@ -11,6 +11,7 @@
+ 	// Only the headnote's files can be populated to selectedFiles
+ 	const selectedFiles = ref(headnoteFiles);
+ 	const messageFieldOptions = {
++		label: t('stageParticipants.notify.message'),
+ 		toolbar: 'bold italic underline bullist | pkpAttachFiles',
+ 		plugins: ['lists'],
+ 		size: 'large',
+--- a/lib/ui-library/src/managers/TaskTemplateManager/useTaskTemplateManagerForm.js
++++ b/lib/ui-library/src/managers/TaskTemplateManager/useTaskTemplateManagerForm.js
+@@ -260,6 +260,7 @@
+ 
+ 	addFieldPreparedContent('description', {
+ 		groupId: 'discussion',
++		label: t('stageParticipants.notify.message'),
+ 		toolbar: 'bold italic underline bullist | pkpInsert',
+ 		plugins: ['lists'],
+ 		size: 'large',

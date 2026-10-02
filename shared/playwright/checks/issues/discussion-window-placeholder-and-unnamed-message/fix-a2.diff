@@ -1,0 +1,14 @@
+--- a/lib/ui-library/src/managers/DiscussionManager/DiscussionManagerFormModal.vue
++++ b/lib/ui-library/src/managers/DiscussionManager/DiscussionManagerFormModal.vue
+@@ -3,11 +3,6 @@
+ 		<template #title>
+ 			{{ discussionTitleByStage }}
+ 		</template>
+-		<template #description>
+-			<span class="text-lg-medium">
+-				{{ t('discussion.form.description') }}
+-			</span>
+-		</template>
+ 		<template #post-description>
+ 			<Badge v-bind="badgeProps" class="mt-1">
+ 				{{ badgeProps.slot }}
