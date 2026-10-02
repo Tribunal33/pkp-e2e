@@ -1308,11 +1308,11 @@ Issue report: [pkp-e2e#562](https://github.com/jardakotesovec/pkp-e2e/issues/562
 
 <a id="fn-f-a16"></a>
 **f-a16** — `referenceList.insertCitation` "Cite" in `sciflow-reference-list` (note g) stayed disabled in every state tried. Probe: d18.
-Issue report: [docs/issues/U48-A16-body-text-cite-never-enabled.md](../issues/U48-A16-body-text-cite-never-enabled.md).
+Issue report: [pkp-e2e#565](https://github.com/jardakotesovec/pkp-e2e/issues/565) ([docs/issues/U48-A16-body-text-cite-never-enabled.md](../issues/U48-A16-body-text-cite-never-enabled.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Note g: `openAccordionSection` holds one key; `handleSelectionChange()` opens `selected-element` on a range or node selection. Probe: d19.
-Issue report: [docs/issues/U48-A17-body-text-side-section-needs-two-presses.md](../issues/U48-A17-body-text-side-section-needs-two-presses.md).
+Issue report: [pkp-e2e#566](https://github.com/jardakotesovec/pkp-e2e/issues/566) ([docs/issues/U48-A17-body-text-side-section-needs-two-presses.md](../issues/U48-A17-body-text-side-section-needs-two-presses.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Note p: the box's failure state never showed; the import ended with no status. Probe: d20.
