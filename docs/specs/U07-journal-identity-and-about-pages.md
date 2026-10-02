@@ -2462,7 +2462,7 @@ under "Country", the request answering 400; with a country picked the
 save went through. "Create Journal" lists "Country" without "Required".
 The form sends the empty "Country", which the server's `country` rule
 refuses (note f).
-Issue report: [docs/issues/U59-A1-journal-form-country-unmarked-refused.md](../issues/U59-A1-journal-form-country-unmarked-refused.md).
+Issue report: [pkp-e2e#496](https://github.com/jardakotesovec/pkp-e2e/issues/496) ([docs/issues/U59-A1-journal-form-country-unmarked-refused.md](../issues/U59-A1-journal-form-country-unmarked-refused.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note g. Live-probed 2026-09-29 (all three apps, two runs): on

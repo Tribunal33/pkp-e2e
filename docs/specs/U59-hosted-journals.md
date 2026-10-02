@@ -1746,13 +1746,13 @@ Live-probed 2026-09-27, three apps: refused on "Create Journal", on
 "Journal" tab, each with the two messages; the seeded journal's "Edit"
 opened with "Country" blank. The journal's own "Masthead" shows "Country"
 with the Required mark (`PKPMastheadForm` sets `isRequired`).
-Issue report: [docs/issues/U59-A1-journal-form-country-unmarked-refused.md](../issues/U59-A1-journal-form-country-unmarked-refused.md).
+Issue report: [pkp-e2e#496](https://github.com/jardakotesovec/pkp-e2e/issues/496) ([docs/issues/U59-A1-journal-form-country-unmarked-refused.md](../issues/U59-A1-journal-form-country-unmarked-refused.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note f: the modal closes on the form's success event and
 nothing sends the grid a data-changed event. Live-probed 2026-09-27,
 three apps: note td5; the "Path" column kept the old path the same way.
-Issue report: [docs/issues/U59-A2-hosted-journals-list-keeps-old-name-after-edit.md](../issues/U59-A2-hosted-journals-list-keeps-old-name-after-edit.md).
+Issue report: [pkp-e2e#497](https://github.com/jardakotesovec/pkp-e2e/issues/497) ([docs/issues/U59-A2-hosted-journals-list-keeps-old-name-after-edit.md](../issues/U59-A2-hosted-journals-list-keeps-old-name-after-edit.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `PKPContextForm`'s `urlPath` field has `prefix` `$baseUrl .
@@ -1762,7 +1762,7 @@ set `restful_urls = Off`, under which every journal address is
 `{base}/index.php/{path}/…`. Live-probed 2026-09-27, three apps: the
 prefix read `http://127.0.0.1:8650/` (8750, 8850) while the seeded
 journal's home was `http://127.0.0.1:8650/index.php/publicknowledge/en`.
-Issue report: [docs/issues/U59-A3-path-box-address-without-index-php.md](../issues/U59-A3-path-box-address-without-index-php.md).
+Issue report: [pkp-e2e#498](https://github.com/jardakotesovec/pkp-e2e/issues/498) ([docs/issues/U59-A3-path-box-address-without-index-php.md](../issues/U59-A3-path-box-address-without-index-php.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note h; the legacy grids' actions (languages, plugins,
@@ -1770,7 +1770,7 @@ users) are likewise built with the page's journal path. Live-probed
 2026-09-27, three apps, two runs: note td7. A "Saved" still on screen
 from the path save can read as the second save's; once it had gone,
 nothing followed "Saving".
-Issue report: [docs/issues/U59-A4-wizard-saves-fail-after-path-change.md](../issues/U59-A4-wizard-saves-fail-after-path-change.md).
+Issue report: [pkp-e2e#499](https://github.com/jardakotesovec/pkp-e2e/issues/499) ([docs/issues/U59-A4-wizard-saves-fail-after-path-change.md](../issues/U59-A4-wizard-saves-fail-after-path-change.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Note e: `readerInformation` and `authorInformation` are
@@ -1789,7 +1789,7 @@ footer is shared by every form built on it. Live-probed 2026-09-27, three
 apps, two runs each: after "Save" on an empty "Create Journal" ("Please
 correct 7 errors."), each of five presses left "Journal title" at the top
 of the window and the focus on the link.
-Issue report: [docs/issues/U59-A6-jump-to-next-error-stays-on-first-field.md](../issues/U59-A6-jump-to-next-error-stays-on-first-field.md).
+Issue report: [pkp-e2e#500](https://github.com/jardakotesovec/pkp-e2e/issues/500) ([docs/issues/U59-A6-jump-to-next-error-stays-on-first-field.md](../issues/U59-A6-jump-to-next-error-stays-on-first-field.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `lib/ui-library/src/components/Form/fields/FieldText.vue`
@@ -1810,7 +1810,7 @@ scenario 3, OMP in scenarios 3 and 5, OPS in scenario 5).
 No other window close in those runs raised it, the "Edit" window's own
 close about a second after "Saved" and a "Create Journal" window closed
 after typing included. Nothing on screen differed.
-Issue report: [docs/issues/U59-A7-journal-form-quick-close-script-error.md](../issues/U59-A7-journal-form-quick-close-script-error.md).
+Issue report: [pkp-e2e#501](https://github.com/jardakotesovec/pkp-e2e/issues/501) ([docs/issues/U59-A7-journal-form-quick-close-script-error.md](../issues/U59-A7-journal-form-quick-close-script-error.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — `PKPPageRouter::route()` sends a signed-out request for a
@@ -1826,7 +1826,7 @@ feeds spec's note td12, the Search engine metadata spec's note q8) and on
 2026-09-28 on the LOCKSS and CLOCKSS pages (the Archiving & preservation
 spec's note k) and on a book's pages (OMP). Live-probed 2026-09-29, three
 apps, two runs each: note td8.
-Issue report: [docs/issues/U59-A8-login-from-journal-not-public-forgets-page.md](../issues/U59-A8-login-from-journal-not-public-forgets-page.md).
+Issue report: [pkp-e2e#502](https://github.com/jardakotesovec/pkp-e2e/issues/502) ([docs/issues/U59-A8-login-from-journal-not-public-forgets-page.md](../issues/U59-A8-login-from-journal-not-public-forgets-page.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — The Login page's "Register" links (`user/register`, the
@@ -1853,7 +1853,7 @@ do not, and a missing key prints as `##key##`. Live-probed 2026-09-27: on
 "Create Journal" and on "Edit", OPS showed
 "##admin.contexts.form.pathRequired##" under "Path", OJS and OMP "A path
 is required."
-Issue report: [docs/issues/U59-OPS1-preprint-server-path-zero-raw-code.md](../issues/U59-OPS1-preprint-server-path-zero-raw-code.md).
+Issue report: [pkp-e2e#503](https://github.com/jardakotesovec/pkp-e2e/issues/503) ([docs/issues/U59-OPS1-preprint-server-path-zero-raw-code.md](../issues/U59-OPS1-preprint-server-path-zero-raw-code.md)).
 
 ## Reference — entry points & surfaces
 
