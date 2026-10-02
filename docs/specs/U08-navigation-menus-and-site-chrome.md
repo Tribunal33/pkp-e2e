@@ -2739,7 +2739,7 @@ Live-probed 2026-09-23 (all three apps): both notices as quoted;
 Settings › Workflow › "Submission" holds "Disable Submissions", "Author
 Guidance", "Metadata", "Components", "Contributor Roles" and no privacy
 statement, and the side menu's "Settings" has no "Contact".
-Issue report: [docs/issues/U08-A6-A13-menu-notices-wrong-settings-places.md](../issues/U08-A6-A13-menu-notices-wrong-settings-places.md).
+Issue report: [docs/issues/U08-A6-A13-menu-notices-wrong-settings-places.md](../issues/U08-A6-A13-menu-notices-wrong-settings-places.md), filed as [pkp-e2e#637](https://github.com/jardakotesovec/pkp-e2e/issues/637).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `header.tpl` `<button class="pkp_site_nav_toggle"><span>Open
@@ -2779,7 +2779,7 @@ type..." has none, so the last text stays. Live-probed 2026-09-23 (td2), all thr
 <a id="fn-f-a13"></a>
 **f-a13** — Note m. Live-probed 2026-09-23 (td8 and the item types
 drive), OMP and OPS, OJS the control.
-Issue report: [docs/issues/U08-A6-A13-menu-notices-wrong-settings-places.md](../issues/U08-A6-A13-menu-notices-wrong-settings-places.md).
+Issue report: [docs/issues/U08-A6-A13-menu-notices-wrong-settings-places.md](../issues/U08-A6-A13-menu-notices-wrong-settings-places.md), filed as [pkp-e2e#637](https://github.com/jardakotesovec/pkp-e2e/issues/637).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-23 (td9), all three apps: the site's
