@@ -212,6 +212,13 @@ forEachApp(async (app) => {
             const confOpen = await conf.isVisible().catch(() => false);
             res.confirmStillOpen = confOpen;
             if (confOpen) {
+                const cancel = conf.getByRole('button', {name: 'Cancel', exact: true});
+                res.okEnabled = await conf.getByRole('button', {name: 'OK', exact: true}).isEnabled().catch(() => null);
+                res.cancelEnabled = await cancel.isEnabled().catch(() => null);
+            }
+            // On stable-3_5_0 both buttons stay disabled: no "Cancel" to press, the
+            // reload below is the way out.
+            if (confOpen && res.cancelEnabled) {
                 await conf.getByRole('button', {name: 'Cancel', exact: true}).click();
                 await conf.waitFor({state: 'hidden', timeout: T}).catch(() => {});
                 res.cancelClosed = !(await conf.isVisible().catch(() => false));
@@ -226,8 +233,15 @@ forEachApp(async (app) => {
             return res;
         };
         fact('5-6 remove dataset context', await remove('A'));
-        // 6a (U59 A10): the same "Remove" once more.
-        fact('6a remove dataset context again', await remove('A', 'A2'));
+        // 6a (U59 A10): the same "Remove" once more, when the row is still listed
+        // (on OJS, the control, step 5 removed it).
+        await page.goto(hostedUrl);
+        await hosted.expectOpen();
+        if (await hosted.row(ctx).count()) {
+            fact('6a remove dataset context again', await remove('A', 'A2'));
+        } else {
+            fact('6a remove dataset context again', {skipped: 'the row is gone after step 5'});
+        }
 
         // 7
         await page.goto(instUrl);

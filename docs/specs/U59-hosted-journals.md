@@ -878,7 +878,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | "Jump to next error" never gets past the first refused field | 🐞 | minor | — |
 | [A7](#a7) | Closing the "Edit" or "Create Journal" window right after it opens makes the page's script fail | 🐞 | invisible · crash: script | — |
 | [A8](#a8) | Signing in from the Login page of a journal not enabled publicly does not lead on to the page the visitor asked for | 🐞 | minor | — |
-| [A10](#a10) | A press or preprint server that holds an institution cannot be removed and is left half deleted {OMP OPS} | 🐞 | user-visible · crash: server | — |
+| [A10](#a10) | A press or preprint server that holds an institution cannot be removed and is left half deleted {OMP OPS} | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | The path "0" is refused with a raw code on a preprint server | 🐞 | minor | — |
 | [A5](#a5) | A changed path leaves the default "For Readers" and "For Authors" texts linking to the old address {OJS OMP} | ❓ | minor | — |
 | [A9](#a9) | On the Login page of a journal not enabled publicly, "Register" and "Home" load the Login page again | ❓ | minor | — |
@@ -986,17 +986,17 @@ link that reloads the page it is on explains nothing.
 Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — A press or preprint server that holds an institution cannot be removed** · 🐞 · user-visible · crash: server.
+**A10 — A press or preprint server that holds an institution cannot be removed** · 🐞 · medium · crash: server.
 {OMP OPS} The Site Administrator presses "Remove" and then "OK" on
 Hosted Presses (Hosted Servers) for a press that holds an institution
 and expects it deleted, as a journal with institutions and a press
 without one are. The app fails on the server instead: the "Confirm"
-window stays open with no message, the press stays listed, and it is
-left half deleted, with no roles and its Settings pages closed even to
-the Site Administrator (Rule 14). The Institutions spec's
+window stays open with no message, every new try fails the same way,
+the press stays listed, and it is left half deleted, with no roles
+and its Settings pages closed even to the Site Administrator (Rule 14). The Institutions spec's
 [A8](U66-institutions.md#a8) records the same failure from the
 institutions' side.
-Basis: probe. <sup>f-a10</sup>
+Basis: probe, 2026-10-02. <sup>f-a10</sup>
 
 ### OPS
 
@@ -1769,6 +1769,7 @@ institutions' delete fails (the Institutions spec's note f-a8 traces
 it), so the request dies after the roles are gone and before the context
 is. First seen 2026-09-28 (the Institutions spec's A8). Live-probed
 2026-09-29, three apps, two runs each: note td10.
+Issue report: [pkp-e2e#1](https://github.com/jardakotesovec/pkp-e2e/issues/1) ([docs/issues/U66-A3-A8-omp-ops-institution-delete-fails.md](../issues/U66-A3-A8-omp-ops-institution-delete-fails.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — `PKPContextService::validate()` adds

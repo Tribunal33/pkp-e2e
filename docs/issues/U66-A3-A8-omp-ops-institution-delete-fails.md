@@ -10,9 +10,9 @@
   - 3.4: OMP, OPS (code)
   - 3.3: none (no Institutions page)
 - **Introduced** `pkp/pkp-lib#8109` for `pkp/pkp-lib#6782` · [bed0ee4c3b](https://github.com/pkp/pkp-lib/commit/bed0ee4c3bcde7cf48c9f70bdee9400b061a31c1) · 2021-06-15 (merged 2022-07-23) · Bozana Bokan (bozana)
-- **Upstream** none found (2026-09-30)
-- **Tracked in** spec U66 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a3), [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a8)
-- **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
+- **Upstream** none found (2026-10-02)
+- **Tracked in** spec U66 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a3), [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a8); spec U59 [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U59-hosted-journals.md#a10)
+- **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
 
 ## Summary
 
@@ -22,9 +22,10 @@ also after a reload.
 
 Removing a press or server that has an institution, under
 Administration › "Hosted Presses" ("Hosted Servers"), fails too. The
-"Confirm" window stays open with no message. The press stays listed and
-public, but half deleted: its roles are gone, so even the Site
-Administrator is refused its Settings pages.
+"Confirm" window stays open with no message, and every new try fails
+the same way. The press stays listed and public, but half deleted: its
+roles are gone, so even the Site Administrator is refused its Settings
+pages.
 
 This affects only presses and servers that have added an institution.
 "Institutions" is in the side menu only while institutional statistics
@@ -83,13 +84,18 @@ Steps:
 5. Open Administration › "Hosted Presses". On the row "Public Knowledge
    Press", open its actions and click "Remove"; the "Confirm" window asks
    "Are you sure you want to permanently delete Public Knowledge Press
-   and all of its contents?". Click "OK".
-6. Reload "Hosted Presses".
+   and all of its contents?". Click "OK". If the window stays open, click
+   its "Cancel" [3.5: both its buttons stay disabled; reload the page
+   instead].
+6. Reload "Hosted Presses". If "Public Knowledge Press" is still listed,
+   click "Remove" on its row again, "OK", and "Cancel" if the window stays
+   open; reload.
 7. Open the press's Institutions page again (step 1's address), its
    Settings › "Users & Roles"
    (`/index.php/publicknowledge/en/management/settings/access`), its
    home page `/index.php/publicknowledge` and its OAI-PMH list,
-   `/index.php/publicknowledge/oai?verb=ListIdentifiers&metadataPrefix=oai_dc`.
+   `/index.php/publicknowledge/oai?verb=ListIdentifiers&metadataPrefix=oai_dc`;
+   then, on "Hosted Presses", the row's "Settings wizard".
 8. On "Hosted Presses", click "Remove" on "Empty Press", then "OK".
 
 **Expected.** Step 3: the dialog closes and "Campus Library" leaves the
@@ -104,8 +110,9 @@ POST /index.php/publicknowledge/api/v1/institutions/1   (X-Http-Method-Override:
 ```
 
 Step 4: after "OK" and the reload, "Campus Library" is still listed.
-Step 5: the "Confirm" window stays open with no message; the request
-returns 500:
+Step 5: the "Confirm" window stays open with no message until its
+"Cancel" closes it [3.5: with "OK" and "Cancel" disabled, until the page
+is reloaded]; the request returns 500:
 
 ```
 POST /index.php/index/$$$call$$$/grid/admin/context/context-grid/delete-context?rowId=1   500
@@ -118,11 +125,14 @@ Illuminate\Database\QueryException: SQLSTATE[42P01]: Undefined table: 7 ERROR:  
 LINE 1: select exists(select * from "institutional_subscriptions" wh...
 ```
 
-Step 6: "Public Knowledge Press" is still listed. Step 7: both settings
-pages show "The current role does not have access to this
-operation.", while the press's home page still opens with its catalog.
-On OMP, the OAI-PMH list shows the formats of the dataset's two
-published books twice each, once live and once deleted:
+Step 6: "Public Knowledge Press" is still listed. The second "Remove"
+› "OK" fails the same way, with the same 500, log line and open window.
+Step 7: both settings pages show "The current role does not have access
+to this operation.", while the press's home page still opens with its
+catalog, and the row's "Settings wizard" opens "Settings Wizard" with
+the press's settings in the form. On OMP, the OAI-PMH list shows the
+formats of the dataset's two published books twice each, once live and
+once deleted:
 
 ```
 <header><identifier>oai:omp.localhost:publicationFormat/2</identifier>…
@@ -301,6 +311,18 @@ migration's `up()`, and a test.
   3dc90c81a6); 3.5 at OJS 040e916378, OMP 4f90dadac0, OPS 0bb1ca0f6e
   (lib/pkp 8809a197de), where `DAO::delete()` carries the same query
   (line 193).
+- Walked again on 2026-10-02 for U59 A10 (the "Cancel" in step 5, the
+  second "Remove" in step 6, the "Settings wizard" in step 7), with
+  `walk.js` as above: main at OJS b84f8e2e44 (lib/pkp ddd8ab243a), OMP
+  3b0ecf794c and OPS c8af945bb7 (lib/pkp 3dc90c81a6); 3.5 at OJS
+  091fb65453, OMP 9c5e24246c, OPS 38b61882d3 (lib/pkp cf3f984335). Both
+  "Remove" requests answered 500 with the same log line and stack. On
+  main the OJS control stopped after step 6 on a script error (fixed
+  since), so its step 8 was walked on 3.5 that day.
+  The fix was not tried again: OMP's and OPS's main are the commits it
+  was tried on, OJS's newer lib/pkp does not change the files it
+  touches, and `patch --dry-run -p1` applies it cleanly to all three
+  main checkouts and to 3.5.
 - Code read on main (lib/pkp 3dc90c81a6): `classes/institution/DAO.php`,
   `Repository.php`, `PKPContextService::delete()`,
   `PKPInstitutionController::delete()`, `InstitutionsMigration`, OMP's
@@ -311,8 +333,9 @@ migration's `up()`, and a test.
 - Introduced: `git blame` on the query's lines gives bed0ee4c3b
   (authored 2021-06-15); the line above it was only reworded in
   98b335d0c0; GitHub's `commits/<sha>/pulls` gives PR `pkp/pkp-lib#8109`.
-- 3.4 by code: lib/pkp `origin/stable-3_4_0` (df13621c2d) has the same
-  query (line 191) and the same order in `PKPContextService::delete()`;
+- 3.4 by code: lib/pkp `origin/stable-3_4_0` (df13621c2d; on
+  2026-10-02 32b0f4b4af, unchanged there) has the same query (line 191)
+  and the same order in `PKPContextService::delete()`;
   OMP `upstream/stable-3_4_0` (0aec65441f) and OPS (acd8ae704b) ship
   `api/v1/institutions` and create no `institutional_subscriptions`;
   OJS (9571d8fde7) creates it.
@@ -321,7 +344,8 @@ migration's `up()`, and a test.
   institutions list.
 - Upstream search, 2026-09-30, pkp/pkp-lib, pkp/omp, pkp/ops and
   pkp/ui-library, issues and PRs, by the symptom's words and by
-  `institutional_subscriptions`: nothing on this fault
+  `institutional_subscriptions`, and again on 2026-10-02 in pkp/pkp-lib,
+  pkp/omp and pkp/ops by removing a press or server: nothing on this fault
   (`pkp/pkp-lib#12391` is another cause of the same "Remove" failure).
 - Not driven: MySQL; a press whose institution usage statistics are
   collected (the delete fails before any statistics code runs).
