@@ -977,6 +977,11 @@ tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - text typed into "Signature" alone, then another tab pressed, asking
+    "The data on this form has changed. Do you wish to continue without
+    saving?", "Cancel" keeping the text ([A19](#a19); Rule 2c): the
+    guard the issue report proposes, once fixed
 - **Nothing new to test**:
   - a tab named in the site-level address kept on the forward to a one-journal user's profile (Rule 3; scenario 2 opens the site-level address with no tab named, and scenario 1 reads a tab named in a journal's address)
   - no submission or activity-log entry written by this page (*Side effects*): the log is a submission's, and reading its silence needs a submission and a positive control for nothing this page does
@@ -1043,7 +1048,7 @@ unless its Basis line says otherwise.
 | [A15](#a15) | "Please enter a valid URL." stays under "Homepage URL" after the corrected address is saved, beside the saved message | 🐞 | minor | — |
 | [A17](#a17) | After a Contact save the server refused, the typed values are still on screen, but pressing another tab drops them at once, with no question asked | 🐞 | user-visible | — |
 | [A18](#a18) | "confirm" and "reject" land an account with roles in more than one journal on the site-level profile, outside the journal where it asked for the email change | 🐞 | minor | @jarda.kotesovec 2026-09-25 · risk accepted |
-| [A19](#a19) | Text typed only into "Signature", "Mailing Address" or "Bio Statement" is lost with no question when another tab is pressed or the page is reloaded | 🐞 | user-visible | — |
+| [A19](#a19) | Text typed only into "Signature", "Mailing Address" or "Bio Statement" is lost with no question when another tab is pressed or the page is reloaded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS2](#ops2) | A preprint server sends the email-change message but its emails list has no "Change Email Address Invitation" row to edit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | The "role scheduled to begin" banner shows in any journal where the user has no role, even when the waiting role is elsewhere | ❓ | minor | — |
 | [A6](#a6) | A user can drop a Reader, Author or Reviewer role a manager gave them by unticking it; an Author is then locked out of My Submissions without warning | ❓ | user-visible | — |
@@ -1259,7 +1264,7 @@ Since: 2026-09-16 · Basis: probe, 2026-09-17 (OJS); 2026-09-18 (OMP, OPS). <sup
 > of this entry and stays tracked as an open regression.
 
 <a id="a19"></a>
-**A19 — Text typed only into a rich-text box is lost unasked** · 🐞 · user-visible.
+**A19 — Text typed only into a rich-text box is lost unasked** · 🐞 · medium.
 On the Profile page, text typed into "Signature" or "Mailing Address" on
 Contact, or into "Bio Statement" on Public, with no other box changed, does
 not count as a change. Pressing another tab opens it at once, with no "The
@@ -1269,7 +1274,11 @@ reload of the page asks nothing either. Any other unsent change gets the
 question (Rule 2c), so a user who writes a signature or a biography and
 moves to another tab before "Save" loses it without warning, while a
 changed "Phone" beside it would have stopped them.
-Basis: probe, 2026-09-28. <sup>[f-a19](#fn-a19)</sup>
+It is one fault of the shared form code, which never counts text typed into a
+rich-text box as a change; the same loss on a reviewer's review and in the
+static page, custom block, reviewer email and issue windows is reported with it
+([Custom pages & blocks A19](U09-custom-pages-and-blocks.md#a19)).
+Basis: probe, 2026-10-02. <sup>[f-a19](#fn-a19)</sup>
 
 ### OMP
 
@@ -2457,6 +2466,7 @@ values and OK lost both, after a reload too. Reloading with "Signature"
 alone raised no `beforeunload` dialog and the text was gone, while an
 unsent "Phone" raised one (note b). First sighted 2026-09-28 on the
 Contact tab from the editorial-decision claim check, three runs per app.
+Issue report: [pkp-e2e#375](https://github.com/jardakotesovec/pkp-e2e/issues/375) ([docs/issues/U09-A19-static-page-content-change-lost-on-close.md](../issues/U09-A19-static-page-content-change-lost-on-close.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp/registry/userGroups.xml`: `permitSelfRegistration="true"`

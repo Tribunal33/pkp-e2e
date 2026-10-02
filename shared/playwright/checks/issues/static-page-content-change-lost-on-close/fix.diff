@@ -1,15 +1,24 @@
 --- a/lib/pkp/js/controllers/form/FormHandler.js
 +++ b/lib/pkp/js/controllers/form/FormHandler.js
-@@ -534,6 +534,12 @@
- 					validator = $form.validate();
+@@ -535,6 +535,21 @@
  
  			validator.element(formElement);
-+		}));
+ 		}));
 +
 +		// A rich text box is not an ':input' that fires 'change', so report
-+		// its edits as a form change, as listbuilders do.
-+		tinyMCEObject.on('input change', this.callbackWrapper(function() {
-+			this.getHtmlElement().trigger('formChange');
- 		}));
++		// its edits as a form change, as listbuilders do. TinyMCE also fires
++		// 'change' when it takes an undo snapshot on blur or on save(), which
++		// follows a script's setContent() (a template's text) with nothing
++		// typed: those are not edits.
++		tinyMCEObject.on('input change', this.callbackWrapper(
++				function(tinyMCEObject, event) {
++					var origin = event && event.originalEvent ?
++							String(event.originalEvent.type).toLowerCase() : '';
++					if (origin === 'blur' || origin === 'savecontent') {
++						return;
++					}
++					this.getHtmlElement().trigger('formChange');
++				}));
  	};
+ 
  

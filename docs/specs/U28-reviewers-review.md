@@ -993,6 +993,11 @@ Left out of the scenarios above, by reason:
   - a reviewer typing a first answer on a review form with a required question seeing no "Please fill in required fields." box and no "This field is required." mark, "Save for Later" then showing "Your changes have been saved." alone, and a refused "Submit Review" still showing both ([A14](#a14); Fields step 3): the guard the issue report proposes, once fixed
   - {OMP} a press's review form refused for an unanswered required question opening its box with "Please fill in required fields." as a journal's does ([OMP3](#omp3); Fields step 3): the guard the issue report proposes, once fixed
   - {OMP} the email telling a press's assigned editors a review is in naming no recommendation in its subject or body ([OMP2](#omp2); Side effects): the guard the issue report proposes, once fixed
+  - text typed into "For author and editor" alone, then the "2.
+    Guidelines" tab, asking "The data on this form has changed. Do you
+    wish to continue without saving?", "Cancel" keeping the text
+    ([A15](#a15); Rule 18): the guard the issue report proposes, once
+    fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1051,7 +1056,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A10](#a10) | A reviewer's one-click review link shows a blank page in a browser signed in as another user | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A reviewer's own review is listed under "Previous Reviews" once the submission has a later round | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | Typing a first answer on a review form shows the reviewer "Please fill in required fields."; "Save for Later" then shows its notice beside it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a review form's answers are guarded | 🐞 | minor | — |
+| [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a changed "Recommendation" or review-form answer is guarded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | {OMP} On a press, the email telling editors a review is in says the reviewer "recommends None" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | {OMP} On a press, a review form refused for an unanswered required question shows the reviewer a raw text code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | {OPS} A home-made reviewer role opens a "My Assignments as Reviewer" page headed "undefined (0)" under an "Error" window | 🐞 | minor · crash: script | claim check (claude), 2026-09-30 — "Loading" corrected to "No Items" under an "Error" window; the landing after sign-in and the page's console "TypeError" added |
@@ -1322,14 +1327,18 @@ On a press the box's first line is a raw key ([OMP3](#omp3)).
 Basis: probe, 2026-10-02. <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
-**A15 — An unsaved free-form review is dropped without a warning** · 🐞 · minor.
+**A15 — An unsaved free-form review is dropped without a warning** · 🐞 · medium.
 A reviewer who types into "For author and editor" or "For editor" {OJS} /
 "For editor only" {OMP} and then presses another tab or leaves the page
 before "Save for Later" is asked nothing, and back on step 3 the text is
 gone. The same step asks "The data on this form has changed. Do you wish
 to continue without saving?" before dropping a changed review-form
 answer, so only the free-form review is left unprotected.
-Basis: probe (2026-09-28, both apps). <sup>[f-a15](#fn-a15)</sup>
+It is one fault of the shared form code, which never counts text typed into a
+rich-text box as a change; the same loss on the Profile page and in the
+static page, custom block, reviewer email and issue windows is reported with it
+([Custom pages & blocks A19](U09-custom-pages-and-blocks.md#a19)).
+Basis: probe, 2026-10-02. <sup>[f-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
 **A16 — A refused review-form submit marks the unanswered questions on one form and none on another** · ❓ · minor.
@@ -2514,6 +2523,7 @@ through the address bar raised the browser's leave-page prompt, and the
 change was gone after it. Text typed into "For author and editor" with
 nothing saved before, then the tab or the address bar: no question
 either way, and back on step 3 the box was empty.
+Issue report: [pkp-e2e#375](https://github.com/jardakotesovec/pkp-e2e/issues/375) ([docs/issues/U09-A19-static-page-content-change-lost-on-close.md](../issues/U09-A19-static-page-content-change-lost-on-close.md)).
 
 <a id="fn-a16"></a>
 **f-a16** — `reviewStep3Required.js` adds one `required` rule to the first

@@ -905,7 +905,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | An SVG, a PDF or any file but a JPEG, PNG, GIF, BMP or WEBP is ignored in "Insert/Edit Image", with no message | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | A dropped or pasted picture the site refuses stays in the text, embedded, and is saved | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A picture over the upload limit gets a server error, never "Files larger than {size} can not be uploaded." | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A19](#a19) | Closing a static page, custom block, reviewer email or issue window after editing only its text loses it without asking | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A19](#a19) | A reviewer's typed review, a profile's signature or bio, or a static page's text is lost without asking on leaving the form | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | With two form languages, the first language's "Content" box can stay under a "Loading..." spinner for good | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | A deleted custom block would keep its place in the sidebar, so a later block of the same name appears unplaced | ❓ | minor | — |
 | [A5](#a5) | Pictures named ".jpeg" are refused while ".jpg" is accepted | ❓ | user-visible | — |
@@ -1187,24 +1187,34 @@ a smaller file.
 Basis: probe, 2026-10-01. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — Closing a static page, custom block, reviewer email or issue window after editing only its text loses it without asking** · 🐞 · medium.
-A manager writes or edits the text of a static page in its "Content"
-box, then presses the window's back arrow. The window closes at once and
-the text is gone, without a word. After a change to "Path" or "Title"
-the same arrow first asks "The data on this form has changed. Do you
-wish to continue without saving?", so the manager has no reason to
-expect the loss. The same happens in about fifteen windows built on the
-older form framework (the windows drawn by the server, not the newer Vue
-forms) whenever a text box with formatting buttons is the only thing
-changed. The ones met most often are the custom block window's
-"Content"; an editor's emails to a reviewer ("Thank Reviewer", "Unassign
-Reviewer", "Send Reminder", "Resend Request", "Cancel Reviewer",
-"Reinstate"), which open again with the template's text; and an issue's
-"Description" on "Issue Data", which is also lost without the question
-when the Journal Manager presses another tab of the issue's window.
-Pressing "Save" or sending before closing is the only way round. All of
-these windows share one piece of form code, so one change there fixes
-them all.
+**A19 — A reviewer's typed review, a profile's signature or bio, or a static page's text is lost without asking on leaving the form** · 🐞 · medium.
+A reviewer types a review into "For author and editor" on step 3, then
+presses the "2. Guidelines" tab to look something up, or leaves the
+page. The step is left at once and everything typed since the last
+"Save for Later" is gone, without a word. After a "Recommendation" is
+chosen on the same step, the tab first asks "The data on this form has
+changed. Do you wish to continue without saving?"; after typing the
+review alone it does not.
+
+The Profile page loses "Signature", "Mailing Address" and "Bio
+Statement" the same way, when the user presses another tab or reloads.
+So do the side windows built on the older form framework (drawn by the
+server, not the newer Vue forms), when they are closed or a tab of
+theirs is pressed. In every case the question is skipped only when a
+text box with formatting buttons is the one thing changed. The windows
+met most often:
+
+- a static page's and a custom block's "Content" (two plugins the
+  default dataset leaves off);
+- an editor's emails to a reviewer: "Thank Reviewer", "Unassign
+  Reviewer", "Send Reminder", "Resend Request", "Cancel Reviewer",
+  "Reinstate";
+- an issue's "Description" on "Issue Data".
+
+A side window is also closed by a click on the page beside it, so a
+stray click loses its text too. The lost text cannot be brought back;
+the only way round is to press "Save for Later", "Save" or send before
+leaving.
 Basis: probe, 2026-10-02. <sup>f-a19</sup>
 
 <a id="a20"></a>
