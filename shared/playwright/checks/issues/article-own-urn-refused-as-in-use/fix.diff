@@ -1,0 +1,26 @@
+--- a/lib/pkp/classes/plugins/PKPPubIdPlugin.php
++++ b/lib/pkp/classes/plugins/PKPPubIdPlugin.php
+@@ -488,7 +488,10 @@
+                 'Representation' => Application::getRepresentationDAO(),
+                 'SubmissionFile' => Repo::submissionFile()->dao,
+             };
+-            if (isset($typeDao) && $typeDao->pubIdExists($this->getPubIdType(), $pubId, $pubObject->getId(), $contextId)) {
++            // The versions of one submission share their identifiers, so a
++            // publication is excluded by its submission (see DAO::pubIdExists()).
++            $excludeId = $type === 'Publication' ? $pubObject->getData('submissionId') : $pubObject->getId();
++            if (isset($typeDao) && $typeDao->pubIdExists($this->getPubIdType(), $pubId, $excludeId, $contextId)) {
+                 return false;
+             }
+         }
+--- a/lib/pkp/classes/publication/DAO.php
++++ b/lib/pkp/classes/publication/DAO.php
+@@ -319,6 +319,9 @@
+ 
+     /**
+      * @copydoc PKPPubIdPluginDAO::pubIdExists()
++     *
++     * $excludePubObjectId is a submission ID, not a publication ID: the
++     * versions of one submission are allowed to share an identifier.
+      */
+     public function pubIdExists(string $pubIdType, string $pubId, int $excludePubObjectId, int $contextId): bool
+     {

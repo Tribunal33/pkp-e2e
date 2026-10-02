@@ -806,6 +806,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-OJS1-new-issue-galley-publisher-id-server-error.md`):
     "Create Issue Galley" with a Publisher ID saving the galley, and a
     Publisher ID another issue galley already has refused with its notice
+  - the guard for A4 (issue report
+    `docs/issues/U44-A4-article-own-urn-refused-as-in-use.md`): an
+    article's "Identifiers" page saving its own URN a second time and on
+    a new version, and a URN another article carries refused
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -874,7 +878,7 @@ entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | A publisher ID saved on a galley's, chapter's or format's tab can never be removed | 🐞 | minor | — |
-| [A4](#a4) | The article's own URN is refused as "already in use" on a later save and on every new version | 🐞 | user-visible | — |
+| [A4](#a4) | The Identifiers page refuses an article's own URN as "already in use" when saved again or on a new version | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A new version's galleys keep the old publisher ID, and their tab then refuses every save | 🐞 | minor | — |
 | [A6](#a6) | "Add Check Number" and "Assign" compute a different check digit from the one the app appends itself | 🐞 | user-visible | — |
 | [A7](#a7) | The tab's assign box reads "Assign the URN to this galley" with the URN left out | 🐞 | minor | — |
@@ -924,17 +928,21 @@ where the ID is part of an address (a press's files).
 Basis: probe, 2026-09-24. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — The article's own URN counts as "already in use"** · 🐞 · user-visible.
-An editor who presses "Save" on an article's "Identifiers" page with
-the URN it already carries (to save nothing new, or on a new version,
-which inherits the URN, Rule 19) expects the save to pass. It is
-refused with "The given URN suffix is already in use for another
-published item. Please enter a unique URN suffix for each item." The
-duplicate check compares the version's number with the submission's
-number, so the refusal comes whenever the two differ, which is always
-the case for a second version and, on an install with some history,
-for most first ones.
-Basis: probe, 2026-09-24. <sup>f-a4</sup>
+**A4 — The Identifiers page refuses an article's own URN as "already in use" when saved again or on a new version** · 🐞 · medium.
+An editor presses "Save" on an article's "Identifiers" page with the URN
+the article already carries. The save is refused with "The given URN
+suffix is already in use for another published item. Please enter a
+unique URN suffix for each item." This happens on every new version,
+which inherits the URN from the version before it. Once any new version
+has been made on the site, it also happens on the second save of every
+submission's first version created after that; the first save of a URN
+passes. Nothing is lost, and the version still publishes with its URN.
+But the message tells the editor to change a correct persistent
+identifier, and on a new version there is no way to save the page with
+its URN. The same check can also let a real duplicate through silently,
+though only in a rare coincidence. It needs the URN plugin with URNs on
+for articles (monographs on a press).
+Basis: probe, 2026-10-02. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A new version's galleys keep the old publisher ID** · 🐞 · minor.
@@ -1739,6 +1747,7 @@ $contextId)`, whose query excludes `s.submission_id <> $excludePubObjectId`:
 a publication number compared with submission numbers. A version's own
 row (and its siblings' copies, note c) is therefore counted unless its
 number equals the submission's. Live-probed 2026-09-24 (note q6): the refusal met every first version too, the submission and publication numbers differing on every new seed (537 and 551 on OJS, 512 and 524 on OMP).
+Issue report: [docs/issues/U44-A4-article-own-urn-refused-as-in-use.md](../issues/U44-A4-article-own-urn-refused-as-in-use.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — OJS `Publication Repository::version()` clones each galley
