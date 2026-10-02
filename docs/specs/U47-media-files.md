@@ -822,6 +822,7 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the guard for A5 (issue report `docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md`): change a media file's "Name of the file" in "Edit Metadata", leave with "Cancel" › "Yes", and check the row and the reopened box show the saved name, and that a "Save" of another field does not store the abandoned one.
   - the guard for A3 (issue report `docs/issues/U47-A3-media-upload-window-hidden-drop-button.md`): on the empty "Upload Media File" window, check that the buttons in the accessibility tree are the side window's top bar, "Close" and "Click to upload files", and that Tab from "Click to upload files" lands on a control on screen.
+  - the guard for OMP2 (issue report `docs/issues/U47-OMP2-press-copyeditor-media-download-refused.md`): on a press, a Copyeditor assigned to a monograph in Copyediting is not offered "Media" in the side menu, while a Layout Editor in Production keeps the page and the download.
 - **Rarely met**:
   - no component marked as a dependent file, where "Upload Media File"
     holds only "No media types are configured. Please contact the
@@ -880,7 +881,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | invisible | — |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | With "HTML Monograph File" off, a book's HTML file opens as a blank page | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
-| [OMP2](#omp2) | On a press, a role that sees the list outside Production cannot download its files: the tab shows a refusal | 🐞 | user-visible | — |
+| [OMP2](#omp2) | On a press, the Copyeditor is offered the "Media" page, and pressing a file name shows a raw refusal | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | The "ID" column shows a pair's number for linked files and another kind of number for the rest | ❓ | minor | — |
 | [OJS1](#ojs1) | A reader who is not signed in sees a media change on an HTML galley up to a day late | ❓ | user-visible | — |
 | [OPS1](#ops1) | A preprint server offers the "Media" page, but no reader page shows its files | ❓ | user-visible | — |
@@ -1011,17 +1012,19 @@ nor a message.
 Basis: probe, 2026-10-01. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — Press roles outside Production cannot download the media files they see** · 🐞 · user-visible.
-On a press, the Funding Coordinator on a monograph in External Review
-sees the "Media" list with each file name as a link, as the Author
-does. Pressing a name opens a new tab showing a line of raw text,
-{"status":false,"content":"The current role does not have access to
-this operation.",…}, and no file arrives. The page offers a download
-it then refuses. The Copyeditor and the Marketing and Sales Coordinator
-on a monograph in Copyediting get the same link, and by the code the
-same refusal.
-Basis: test run, 2026-09-25 (the Funding Coordinator); code (the
-Copyeditor and the Marketing and Sales Coordinator). <sup>f-omp2</sup>
+**OMP2 — On a press, the Copyeditor is offered the "Media" page, and pressing a file name shows a raw refusal** · 🐞 · low.
+On a press, the side menu offers the "Media" page to roles whose work
+stops before Production: the Copyeditor and the Marketing and Sales
+Coordinator on a monograph in Copyediting, and the Funding Coordinator
+on a monograph in Submission or review. They see the list of media files
+with each name as a link. Pressing a name opens a new tab showing one
+line of raw text, "The current role does not have access to this
+operation.", and no file arrives. The offer is what is wrong: a journal
+and a preprint server do not offer "Media" to these roles, and the
+refusal itself is intended, since media files are production material.
+These roles need nothing from the page; what they meet is a link that
+promises a file and a technical message in its place.
+Basis: test run, 2026-10-02. <sup>f-omp2</sup>
 
 ### OPS
 <a id="ops1"></a>
@@ -1831,6 +1834,7 @@ Coordinator's stages do not include Production (note b). The
 Copyeditor's and the Marketing and Sales Coordinator's link in
 Copyediting is the same address and was not pressed. The Author and every
 role with Production download normally (note q1).
+Issue report: [docs/issues/U47-OMP2-press-copyeditor-media-download-refused.md](../issues/U47-OMP2-press-copyeditor-media-download-refused.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Notes a and n: the OPS side menu lists "Media" for
