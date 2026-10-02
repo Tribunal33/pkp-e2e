@@ -1,0 +1,11 @@
+--- a/lib/pkp/classes/category/Repository.php
++++ b/lib/pkp/classes/category/Repository.php
+@@ -41,7 +41,7 @@
+ 
+     /** @var PKPSchemaService<Category> $schemaService */
+     protected $schemaService;
+-    private const CATEGORY_PATH_REGEX = '/^[a-zA-Z0-9\/._-]+$/';
++    private const CATEGORY_PATH_REGEX = '/^[a-zA-Z0-9._-]+$/';
+ 
+     public function __construct(DAO $dao, Request $request, PKPSchemaService $schemaService)
+     {

@@ -817,6 +817,8 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a category's "Path" with "/" refused on save ([A8](#a8)): the guard
+    the issue report proposes
   - a category's "Name" changed, the window closed without saving, and
     the row and the reopened "Name" checked ([A16](#a16)): the guard the
     issue report proposes
@@ -897,7 +899,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | A category's "Order of articles" has no effect on its page | 🐞 | user-visible | — |
 | [A6](#a6) | A category's picture is not a link; its full-size version is unreachable from the page | 🐞 | minor | — |
 | [A7](#a7) | The picture's "Alternate text" is used nowhere; a journal's page describes the picture as "null" | 🐞 | minor | — |
-| [A8](#a8) | A path containing "/" is saved, but its links open another category's page or the not-found page | 🐞 | minor | — |
+| [A8](#a8) | A category path with "/" saves, but the category's links open another category's page or "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | The path message says "only letters and numbers" while "-", "_", "." and "/" are accepted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | With no category, the "Browse" block shows "Categories" with nothing under it | 🐞 | minor | — |
 | [A11](#a11) | The tab's arrows cannot be worked from the keyboard, and all read "Expand sub-categories" to a screen reader, open or not, with or without sub-categories | 🐞 | minor | — |
@@ -983,14 +985,16 @@ preprint server's category page, and the category's name on a press's.
 Basis: probe, 2026-09-25; that no page at all uses it, code reading. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — A path with "/" leads to the wrong page** · 🐞 · minor.
-A path such as "sci/phys" is accepted, and every link to the category
-prints it ("sci%2Fphys"), but following one opens the page of the
-category whose path is the part before the "/" (a category "Slashed" with
-the path "sci/phys" opens "Science"'s page), or the bare not-found page
-when no category has that path. The category's own page cannot be
-reached.
-Basis: probe, 2026-09-25. <sup>f-a8</sup>
+**A8 — A category path with "/" saves, but the category's links open another category's page or "404 Not Found"** · 🐞 · medium.
+A manager adds a category with a path holding "/" ("applied-science/u16c4")
+and presses "Save". The category is saved, but every link to it opens a
+different page: the page of the category whose path is the part before the
+"/" ("Applied Science"), or a bare "404 Not Found" when no category has
+that path. The category's own page cannot be reached.
+Readers who press the category in a list of sub-categories, on a book,
+article or preprint page, or in a menu land on the wrong category, and
+nobody is told. A press's series path with "/" breaks its links too.
+Basis: probe, 2026-10-02. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — The path message understates what a path may hold** · 🐞 · low.
@@ -1883,6 +1887,7 @@ Live-probed 2026-09-25: note td11.
 link carries "%2F", and `category()` looks up `$args[0]` only, the part
 before the first "/" once the address is split.
 Live-probed 2026-09-25: note td2.
+Issue report: [docs/issues/U16-A8-category-path-slash-wrong-page.md](../issues/U16-A8-category-path-slash-wrong-page.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `grid.category.pathAlphaNumeric` against `CATEGORY_PATH_REGEX`

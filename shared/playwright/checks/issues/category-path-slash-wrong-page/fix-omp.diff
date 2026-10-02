@@ -1,0 +1,22 @@
+--- a/lib/pkp/classes/category/Repository.php
++++ b/lib/pkp/classes/category/Repository.php
+@@ -41,7 +41,7 @@
+ 
+     /** @var PKPSchemaService<Category> $schemaService */
+     protected $schemaService;
+-    private const CATEGORY_PATH_REGEX = '/^[a-zA-Z0-9\/._-]+$/';
++    private const CATEGORY_PATH_REGEX = '/^[a-zA-Z0-9._-]+$/';
+ 
+     public function __construct(DAO $dao, Request $request, PKPSchemaService $schemaService)
+     {
+--- a/controllers/grid/settings/series/form/SeriesForm.php
++++ b/controllers/grid/settings/series/form/SeriesForm.php
+@@ -59,7 +59,7 @@
+         $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'printIssn', 'optional', 'catalog.manage.series.issn.equalValidation', function ($printIssn) use ($form) {
+             return !($form->getData('onlineIssn') != '' && $form->getData('onlineIssn') == $printIssn);
+         }));
+-        $this->addCheck(new \PKP\form\validation\FormValidatorRegExp($this, 'path', 'required', 'grid.series.pathAlphaNumeric', '/^[a-zA-Z0-9\/._-]+$/'));
++        $this->addCheck(new \PKP\form\validation\FormValidatorRegExp($this, 'path', 'required', 'grid.series.pathAlphaNumeric', '/^[a-zA-Z0-9._-]+$/'));
+         $this->addCheck(new \PKP\form\validation\FormValidatorCustom(
+             $this,
+             'path',
