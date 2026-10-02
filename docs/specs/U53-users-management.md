@@ -1922,13 +1922,13 @@ manager role and an empty "Start Date".
 `canLoginAs` / `canMergeUsers`; `UserGridHandler::editDisableUser()`
 refuses unless `getAdministrationLevel()` is `FULL` (note n). Live-probed
 2026-09-25: note td8.
-Issue report: [docs/issues/U53-A1-A2-user-menu-offers-refused-actions.md](../issues/U53-A1-A2-user-menu-offers-refused-actions.md).
+Issue report: [pkp-e2e#455](https://github.com/jardakotesovec/pkp-e2e/issues/455) ([docs/issues/U53-A1-A2-user-menu-offers-refused-actions.md](../issues/U53-A1-A2-user-menu-offers-refused-actions.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Code read 2026-09-25: note td9. The remove guard is only
 `user.groups.find(g => g.dateEnd === null)` and not-own-row. Live-probed
 2026-09-25: note td9.
-Issue report: [docs/issues/U53-A1-A2-user-menu-offers-refused-actions.md](../issues/U53-A1-A2-user-menu-offers-refused-actions.md).
+Issue report: [pkp-e2e#455](https://github.com/jardakotesovec/pkp-e2e/issues/455) ([docs/issues/U53-A1-A2-user-menu-offers-refused-actions.md](../issues/U53-A1-A2-user-menu-offers-refused-actions.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Seen 2026-09-23 (journal-identity claim check K4-3); a reviewer
@@ -2091,7 +2091,7 @@ after a reload, the row read the role and 2027-06-01 and the menu offered
 menu's guard `user.groups.find(g => g.dateEnd === null)` (note c) counts
 a role not yet begun, while `removeUser()` ends only roles active now and
 answers `grid.user.userNoRoles` when there are none.
-Issue report: [docs/issues/U53-A19-remove-user-upcoming-role-error.md](../issues/U53-A19-remove-user-upcoming-role-error.md).
+Issue report: [pkp-e2e#456](https://github.com/jardakotesovec/pkp-e2e/issues/456) ([docs/issues/U53-A19-remove-user-upcoming-role-error.md](../issues/U53-A19-remove-user-upcoming-role-error.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Live-probed 2026-09-30, OJS and OMP, two runs each, users
