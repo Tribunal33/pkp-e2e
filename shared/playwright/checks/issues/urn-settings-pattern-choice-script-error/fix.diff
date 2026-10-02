@@ -1,0 +1,32 @@
+--- a/plugins/pubIds/urn/js/URNSettingsFormHandler.js
++++ b/plugins/pubIds/urn/js/URNSettingsFormHandler.js
+@@ -59,17 +59,20 @@
+ 			pattern = new RegExp('enable(.*)URN');
+ 			$contentChoices.each(function() {
+ 				var patternCheckResult = pattern.exec($(this).attr('name')),
+-						$correspondingTextField = $element.find('[id*="' +
++						$correspondingTextField;
++
++				// Only the content boxes (enable...URN) have a pattern box;
++				// skip the others, such as "Check Number" (urnCheckNo).
++				if (patternCheckResult === null) {
++					return;
++				}
++				$correspondingTextField = $element.find('[id*="' +
+ 						patternCheckResult[1] + 'SuffixPattern"]').
+ 						filter(':text');
+-
+-				if (patternCheckResult !== null &&
+-						patternCheckResult[1] !== 'undefined') {
+-					if ($(this).is(':checked')) {
+-						$correspondingTextField.removeAttr('disabled');
+-					} else {
+-						$correspondingTextField.attr('disabled', 'disabled');
+-					}
++				if ($(this).is(':checked')) {
++					$correspondingTextField.removeAttr('disabled');
++				} else {
++					$correspondingTextField.attr('disabled', 'disabled');
+ 				}
+ 			});
+ 		} else {

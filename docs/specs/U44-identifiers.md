@@ -834,6 +834,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-A5-new-version-galley-publisher-id-refused.md`): a
     galley's and a chapter's Publisher ID set, "Create New Version", and
     the copy's "Identifiers" tab saving with the copied ID
+  - the guard for A11 (issue report
+    `docs/issues/U44-A11-urn-settings-pattern-choice-script-error.md`):
+    the URN settings window under "Use the pattern entered below…", a
+    kind and "Check Number" ticked, with no page error
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -909,7 +913,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | A suffix pattern of spaces is refused with a raw text code | 🐞 | minor | — |
 | [A9](#a9) | "Assign" fills the URN box for a participant whose "Save" is greyed on the "Identifiers" page | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | The URN prefix refusal shows "&amp;lt;NID&amp;gt;" under the box and in the notice | 🐞 | minor | — |
-| [A11](#a11) | The URN settings window raises a page error on every tick while the pattern choice is selected | 🐞 | invisible · crash: script | — |
+| [A11](#a11) | URN settings window: every click under the pattern choice raises a page script error | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | "Add Check Number" on a tab writes "NaN" into an empty suffix box | 🐞 | minor | — |
 | [A14](#a14) | After "Clear", a galley's or chapter's tab still shows the removed URN | 🐞 | minor | — |
 | [OJS1](#ojs1) | A new issue galley with a Publisher ID is not saved: "Save" stays greyed with no message | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
@@ -1059,13 +1063,16 @@ codes.
 Basis: probe, 2026-09-24. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The URN settings window's script fails under the pattern choice** · 🐞 · invisible · crash: script.
-While "Use the pattern entered below…" is selected, every tick of a
-kind box, of "Check Number" or of a suffix choice raises an error in
-the page, seen only in the browser's console: the window's own script
-fails. The pattern boxes still turn on and off as they should, and the
-save works.
-Basis: probe, 2026-09-24. <sup>f-a11</sup>
+**A11 — URN settings window: every click under the pattern choice raises a page script error** · 🐞 · low · crash: script.
+In the URN plugin's settings window, the window's own script fails
+whenever "Use the pattern entered below…" is the selected suffix choice.
+A script error, seen only in the browser's console, comes with each of
+these: clicking that choice, clicking a box under "Journal Content"
+("Press Content") or "Check Number", and opening the window once the
+choice is saved. Nothing else goes wrong: each kind's pattern box still
+becomes editable or greyed as it should, and "Save" stores the settings.
+Preprint servers have no URN plugin, so they never meet it.
+Basis: probe, 2026-10-02. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — A URN that differs only in case counts as new** · ❓ · minor.
@@ -1858,6 +1865,7 @@ management/settings/website#plugins on choosing the pattern radio, on
 each kind tick and on "Check Number" (11 on OJS, 21 on OMP in one run
 each), none under the default choice. The window's clicks are handled
 by `URNSettingsFormHandler.js` (note b).
+Issue report: [docs/issues/U44-A11-urn-settings-pattern-choice-script-error.md](../issues/U44-A11-urn-settings-pattern-choice-script-error.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-24 (note q18), OJS and OMP:
