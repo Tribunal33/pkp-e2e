@@ -656,6 +656,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - scenario 4's first bullet read with no reload: the "Revisions Uploaded" panel listing the file as the closed upload window goes (Side effects, "Author uploads a revised file"): the OJS suite reloads the page before it reads the panel
+  - after "Resubmit for Review" and the Author's first uploaded file: "Upload revisions" still offered ([A1](#a1)): the guard the issue report proposes
 - **Rarely met**:
   - "Returned back to review." once every review is confirmed, and the reviewer sentences until then (Rules 5–6, Cross-feature): sending a submission back from Copyediting is not an ordinary week's action, and the sentence needs every review confirmed after the return
   - deleting the only revised file flipping the status back to "requested" (Rule 7): an author seldom deletes their only revised file; the task half of the path is A9
@@ -705,7 +706,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | After the first upload on the new-round revision path, the author's "Upload revisions" button vanishes and nothing says they are done, though the panel's own "Upload" still works | 🐞 | user-visible | — |
+| [A1](#a1) | After "Resubmit for Review", the Author's "Upload revisions" button disappears with their first file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | On a journal, the author's "Read Review" window shows no review text; remarks shared with the author are missing (a press shows them) | 🐞 | user-visible | — |
 | [A9](#a9) | Deleting the only revised file flips the status back but never returns the author's revisions task | 🐞 | minor | — |
 | [A10](#a10) | The Revisions Uploaded panel says files were "submitted by the author after revisions were requested" on rounds where no revisions were requested | 🐞 | minor | — |
@@ -725,86 +726,19 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 ### All apps
 
 <a id="a1"></a>
-**A1 — Inconsistent upload affordances after the first resubmit upload** · 🐞 · user-visible.
-When revisions were requested to be taken to a new review round, the
-author's bottom-of-screen "Upload revisions" button is offered while the
-request stands. As soon as the author uploads one file, the button vanishes,
-while the Revisions Uploaded panel's own "Upload" control still opens the
-same wizard. In the same situation without a new round required, the bottom
-button correctly stays and the revisions task clears on upload. The author
-is therefore not locked out. The defect is the contradiction (one upload
-path withdrawn, the other still offered), and that nothing tells the author
-they are done: the "Resubmit for review." task stays in their list after the
-upload, and the status sentence still awaits the editor's new round.
-Basis: probe (2026-07-31); the state missing from the bottom button's list is
-code-confirmed. <sup>[f-a1](#fn-a1)</sup>
+**A1 — After "Resubmit for Review", the Author's "Upload revisions" button disappears with their first file** · 🐞 · low.
+When an editor requests revisions that will go to a new review round,
+the Author's review page shows two upload buttons: "Upload revisions" in
+the column to the right of the round, and "Upload" in the heading of the
+"Revisions Uploaded" list. As soon as the Author uploads one file,
+"Upload revisions" disappears; "Upload" stays. When revisions are
+requested without a new round, both stay after the first file.
 
-<a id="a2"></a>
-**A2 — Author-tailored status wording never shown** · ❓ · user-visible.
-The product carries author-specific wordings for two round statuses, for
-example "New reviews have been submitted and are being considered by the
-editor." and a reassuring no-action-needed text for an overdue review. The
-status box the author sees uses the editor wording instead ("A review is
-overdue."), which invites the author to worry or chase. Earlier versions
-showed the tailored texts.
-Question: should the author's status box use the author wordings again?
-Lean: yes. The texts exist, are maintained, and read as deliberate design.
-Basis: probe (2026-07-31; the author's box is character-identical to the
-editor's at every state checked); the tailored texts themselves are code
-reading. <sup>[f-a2](#fn-a2)</sup>
-
-<a id="a3"></a>
-**A3 — Read-review attachment listing recorded privately** · ❓ · latent.
-What the author's "Read Review" window lists in its attachments section was
-observed live on both the journal and the press. The observation is recorded
-privately with the maintainer, pending a fix. Until that resolves, this spec
-makes no claim about the window's attachment listing, and tests must not
-assert anything about what that section lists (scenario 12 excludes it
-explicitly).
-Basis: probe (2026-07-31, both apps; routed to the maintainer's private
-file). <sup>[f-a3](#fn-a3)</sup>
-
-<a id="a4"></a>
-**A4 — All-declined round claims confirmed reviews** · ❓ · user-visible.
-A round where reviewers were invited but every one of them declined reports
-"All reviews are confirmed and a decision is needed." No review exists, and
-none was confirmed. The sentence "Waiting for reviewers to be assigned."
-appears only while the round has no reviewer records at all.
-Question: what should a round with only declined reviewers report? Lean: the
-"decision is needed" half is right, the "all reviews are confirmed" half is
-wrong. This is misleading wording rather than misbehavior.
-Basis: probe (2026-07-31; a round whose only invited reviewer declined shows
-the confirmed-reviews sentence); reproduces identically on a press
-(2026-07-31). <sup>[f-a4](#fn-a4)</sup>
-
-<a id="a5"></a>
-**A5 — No path assigns a production assistant to the review stage** · ❓ · minor.
-The review stage's participant-assignment dialog offers no production
-assistant groups (Copyeditor, Layout Editor, Proofreader). One assigned on
-another stage who selects the review stage sees only "You don't currently
-have access to that stage of the workflow." So no screen path gives those
-roles any part in review, although the file panels' underlying permissions
-would admit an assistant. The Funding Coordinator, also an assistant-level
-group, is offered by the same dialog on both apps, by design.
-Question: are the production assistant roles meant to be assignable to the
-review stage? Lean: the dialog's roster is the intended gate, and the
-file-panel permissions naming assistants are leftovers. Whether an assistant
-placed on the stage by other means would gain access was not observed.
-Basis: probe (OJS, 2026-07-31); the dialog's role roster read on both apps
-(2026-07-31). <sup>[f-a5](#fn-a5)</sup>
-
-<a id="a6"></a>
-**A6 — Cancelling a round forgets the previous round's revision request** · ❓ · user-visible.
-After "Cancel Review Round" removes Round 2, the restored Round 1 reports
-"Awaiting responses from reviewers." This happens even though a request for
-revisions toward a new round had been recorded on it and the author's
-revised file still sits in its Revisions Uploaded panel. The status box no
-longer says revisions were requested or submitted, so nothing on the screen
-recalls the round's open business.
-Question: should the restored round's status still reflect its unresolved
-revision request? Lean: yes. The box falls back to reviewer bookkeeping and
-hides what the round was actually waiting on.
-Basis: probe (2026-07-31). <sup>[f-a6](#fn-a6)</sup>
+The page does not say why one button went. An Author who used "Upload
+revisions" for the first file is left to conclude that no more files can
+be added, or to try the other button. The fix is one line in each of two
+ui-library files.
+Basis: probe (2026-07-31), 2026-10-02. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
 **A7 — Unticking a review file changes nothing the editor can see** · ❓ · minor.
@@ -1465,6 +1399,7 @@ in-round path (statuses 1→11) keeps the button through both states. Probed
 2026-07-31 (contrast, same probe: the in-round path keeps
 the button and its task clears on upload); the persisting "Resubmit for
 review." task is the decision-owned resubmit task (note m).
+Issue report: [docs/issues/U26-A1-upload-revisions-button-gone-after-resubmit-upload.md](../issues/U26-A1-upload-revisions-button-gone-after-resubmit-upload.md).
 
 <a id="fn-a2"></a>
 **f-a2** — `Schema::getPropertyReviewRounds()` calls

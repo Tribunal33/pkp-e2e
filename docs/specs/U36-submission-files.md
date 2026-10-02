@@ -1099,7 +1099,7 @@ Above "Revisions Uploaded" on a review round, the Author sees "Upload"
 whether or not an editor has requested revisions. Before revisions are
 requested, pressing it opens "Upload Review File" reading only "You are
 not allowed to add and edit these files." with "Close". The "Upload
-revisions" button under the round shows only once revisions are
+revisions" button beside the round shows only once revisions are
 requested.
 
 No file is uploaded and the list stays "No Items". The refusal does not

@@ -1,0 +1,23 @@
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigAuthorOJS.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigAuthorOJS.js
+@@ -222,8 +222,8 @@
+ 				[
+ 					pkp.const.REVIEW_ROUND_STATUS_REVISIONS_REQUESTED,
+ 					pkp.const.REVIEW_ROUND_STATUS_RESUBMIT_FOR_REVIEW,
+-					pkp.const.REVIEW_ROUND_STATUS_REVISIONS_SUBMITTED,
+ 					pkp.const.REVIEW_ROUND_STATUS_REVISIONS_SUBMITTED,
++					pkp.const.REVIEW_ROUND_STATUS_RESUBMIT_FOR_REVIEW_SUBMITTED,
+ 				].includes(selectedReviewRound.statusId)
+ 			)
+ 				actions.push({
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigAuthorOMP.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigAuthorOMP.js
+@@ -113,7 +113,7 @@
+ 					pkp.const.REVIEW_ROUND_STATUS_REVISIONS_REQUESTED,
+ 					pkp.const.REVIEW_ROUND_STATUS_RESUBMIT_FOR_REVIEW,
+ 					pkp.const.REVIEW_ROUND_STATUS_REVISIONS_SUBMITTED,
+-					pkp.const.REVIEW_ROUND_STATUS_REVISIONS_SUBMITTED,
++					pkp.const.REVIEW_ROUND_STATUS_RESUBMIT_FOR_REVIEW_SUBMITTED,
+ 				].includes(selectedReviewRound.statusId)
+ 			)
+ 				actions.push({

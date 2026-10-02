@@ -56,7 +56,7 @@ and the hourly routine starts one only when none is running
 | [U05](../specs/U05-notifications-center-and-email-preferences.md) | 7 | 0 | 2 |  |
 | [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 |  |
 | [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 |  |
-| [U26](../specs/U26-review-stage-and-rounds.md) | 4 | 0 | 2 | **A1 taken: issues session, workstation s0, 2026-10-02** (the U36 A7 reporter walked it; one status list behind both) |
+| [U26](../specs/U26-review-stage-and-rounds.md) | 4 | 0 | 2 | A1 done (docs/issues/U26-A1-upload-revisions-button-gone-after-resubmit-upload.md) |
 | [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 |  |
 | [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | OMP1 done with U53 A14 (pkp-e2e#447) |
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
