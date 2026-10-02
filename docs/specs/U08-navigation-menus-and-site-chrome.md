@@ -2689,7 +2689,7 @@ editor to `dashboard/editorial`. Seen on screen 2026-09-04 (note e).
 Knowledge Press", "| Public Knowledge Preprint Server"), and was empty
 at the site's address; the page body's only link was the breadcrumb's
 "Home".
-Issue report: [docs/issues/U08-A3-access-denied-page-no-heading.md](../issues/U08-A3-access-denied-page-no-heading.md).
+Issue report: [docs/issues/U08-A3-access-denied-page-no-heading.md](../issues/U08-A3-access-denied-page-no-heading.md), filed as [pkp-e2e#631](https://github.com/jardakotesovec/pkp-e2e/issues/631).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Live-probed 2026-09-23 (td9), all three apps: each opening
