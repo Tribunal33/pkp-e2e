@@ -2115,7 +2115,7 @@ promise is `publication.summaryOfChanges.description` ("This will
 appear publicly as the version amendment notice. Ensure it accurately
 reflects the changes made in this version before publishing."), shown
 on the panel and every entry page.
-Issue report: [docs/issues/U49-A5-amendment-notice-shown-to-no-reader.md](../issues/U49-A5-amendment-notice-shown-to-no-reader.md).
+Issue report: [pkp-e2e#547](https://github.com/jardakotesovec/pkp-e2e/issues/547) ([docs/issues/U49-A5-amendment-notice-shown-to-no-reader.md](../issues/U49-A5-amendment-notice-shown-to-no-reader.md)).
 
 <a id="fn-a6"></a>
 **f-a6** — Live-probed 2026-08-29, all three apps (scratch contexts):
