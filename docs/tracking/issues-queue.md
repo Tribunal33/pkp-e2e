@@ -23,7 +23,7 @@ and the hourly routine starts one only when none is running
 | [U17](../specs/U17-sections.md) | 16 | 2 | 2 | OMP9, OPS6: open reports docs/reports/2026-09-25-omp-series-page-blank.md and docs/reports/2026-09-25-ops-oai-empty-abstract.md (the rest of U17 written up by the issues session, workstation s0, 2026-10-02) |
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 | A1, A7, OPS1: open reports docs/reports/2026-09-26-webfeed-rss2-empty-feed-fails.md, docs/reports/2026-09-26-webfeed-terms-read-array.md and docs/reports/2026-09-26-webfeed-ops-publisher-array.md (the rest of U18 written up by the issues session, workstation s0, 2026-10-02) |
 | [U71](../specs/U71-internal-review-stage.md) | 6 | 2 | 2 | **Taken: issues session, workstation s0, 2026-10-02** |
-| [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 |  |
+| [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 | **A5, A6 taken: issues session, workstation s0, 2026-10-02** (with U71 OMP9, OMP7) |
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 9 | 1 | 8 | OJS3 done with U69 A3 (pkp-e2e#285) |
 | [U48](../specs/U48-jats-and-body-text.md) | 17 | 1 | 7 | A20 done with U47 A6 (pkp-e2e#494) |
 | [U28](../specs/U28-reviewers-review.md) | 14 | 1 | 5 |  |
@@ -67,7 +67,7 @@ and the hourly routine starts one only when none is running
 | [U14](../specs/U14-reader-comments-and-moderation.md) | 5 | 0 | 0 |  |
 | [U23](../specs/U23-submissions-dashboard.md) | 5 | 0 | 0 |  |
 | [U29](../specs/U29-review-setup-and-review-forms.md) | 5 | 0 | 0 | A11 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
-| [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 | A9 done with U35 A5 (pkp-e2e#343) |
+| [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 | A9 done with U35 A5 (pkp-e2e#343); **A6 taken: issues session, workstation s0, 2026-10-02** (with U71 OMP10) |
 | [U55](../specs/U55-notify-users.md) | 4 | 0 | 0 |  |
 | [U33](../specs/U33-production-stage.md) | 3 | 0 | 0 |  |
 | [U67](../specs/U67-archiving-preservation.md) | 3 | 0 | 0 |  |
