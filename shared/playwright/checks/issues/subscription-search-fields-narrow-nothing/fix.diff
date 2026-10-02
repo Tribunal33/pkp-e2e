@@ -1,0 +1,57 @@
+--- a/classes/subscription/SubscriptionDAO.php
++++ b/classes/subscription/SubscriptionDAO.php
+@@ -208,6 +208,18 @@
+     abstract public function renewSubscription($subscription);
+ 
+     /**
++     * The search field as the subscription constants hold it: a grid filter
++     * passes the request's string ("3"), and match() compares strictly, so a
++     * numeric field (SUBSCRIPTION_MEMBERSHIP, InstitutionalSubscriptionDAO's
++     * SUBSCRIPTION_INSTITUTION_NAME, ...) is cast back to int. The user fields
++     * ('givenName', 'username', ...) are strings and pass unchanged.
++     */
++    protected static function normalizeSearchField(mixed $searchField): mixed
++    {
++        return is_string($searchField) && ctype_digit($searchField) ? (int) $searchField : $searchField;
++    }
++
++    /**
+      * Internal function to generate subscription based search query.
+      *
+      * @param null|mixed $status
+@@ -222,6 +234,7 @@
+     protected function applySearchFilters(Builder $query, $status = null, $searchField = null, $searchMatch = null, $search = null, $dateField = null, $dateFrom = null, $dateTo = null, &$params = null)
+     {
+         $userDao = Repo::user()->dao;
++        $searchField = static::normalizeSearchField($searchField);
+         if (!empty($search)) {
+             $field = match ($searchField) {
+                 Identity::IDENTITY_SETTING_GIVENNAME => 'COALESCE(ugl.setting_value, ugpl.setting_value)',
+@@ -238,7 +251,7 @@
+                     'is' => $query->whereRaw("LOWER({$field}) = LOWER(?)", [$search]),
+                     'contains' => $query->whereRaw("LOWER({$field}) LIKE LOWER(?)", ["%{$search}%"]),
+                     //startsWith
+-                    default => $query->whereRaw("LOWER({$field}) = LOWER(?)", ["{$search}%"])
++                    default => $query->whereRaw("LOWER({$field}) LIKE LOWER(?)", ["{$search}%"])
+                 };
+             }
+         }
+--- a/classes/subscription/InstitutionalSubscriptionDAO.php
++++ b/classes/subscription/InstitutionalSubscriptionDAO.php
+@@ -460,6 +460,7 @@
+             )
+             ->distinct();
+ 
++        $searchField = static::normalizeSearchField($searchField);
+         if (!empty($search)) {
+             $field = match ($searchField) {
+                 self::SUBSCRIPTION_INSTITUTION_NAME => 'insl.setting_value',
+@@ -477,7 +478,7 @@
+                     'is' => $q->whereRaw("LOWER({$field}) = LOWER(?)", [$search]),
+                     'contains' => $q->whereRaw("LOWER({$field}) LIKE LOWER(?)", ["%{$search}%"]),
+                     //startsWith
+-                    default => $q->whereRaw("LOWER({$field}) = LOWER(?)", ["{$search}%"])
++                    default => $q->whereRaw("LOWER({$field}) LIKE LOWER(?)", ["{$search}%"])
+                 };
+             }
+         }

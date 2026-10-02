@@ -1397,6 +1397,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U51-A19-locked-link-fee-while-payments-off.md`): with
     "Purchase Article" and "Purchase Issue" fees saved and payments turned
     off, the locked galley links show no price.
+  - the guard for A22 (issue report
+    `docs/issues/U51-A22-subscription-search-fields-narrow-nothing.md`): on
+    both subscription lists, a search by each of the ten fields ("is" and
+    "contains") lists only the subscriptions that match.
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1509,7 +1513,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | A journal with payments turned off still shows readers a price on its locked galley links | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | A reader pressing a locked "Full Issue" is asked to pay an issue fee of no amount when only a membership fee is set | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | The subscription window saves a start date after the end date | 🐞 | minor | — |
-| [A22](#a22) | Six of the subscription lists' search fields list every subscription whatever is typed | 🐞 | user-visible | — |
+| [A22](#a22) | Searching the subscription lists by reference number, membership, notes or institution lists every subscription | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | "Subscriptions" offers "Purchase New Subscription" on an open-access journal, and it leads to the home page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A24](#a24) | While payments are off, a reader's "Learn More" and "View Available Subscription Types" lead to the home page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A25](#a25) | "Purchase" on an active institutional subscription arrives with "IP ranges" reading "Array" | 🐞 | minor | — |
@@ -1757,13 +1761,17 @@ shows it with those dates; the other date checks of Rule 19 let it
 through. Basis: probe, 2026-09-25. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — Six search fields narrow nothing** · 🐞 · user-visible.
-On both subscription lists, "Search" by "Membership", "Reference Number"
-or "Notes" (and on the institutional tab by "Institution name",
-"Domain" or "IP ranges") lists every subscription whatever is typed,
-even text no subscription holds; only "Given Name", "Family Name",
-"Username" and "Email" narrow the list. A manager looking a subscriber
-up by reference number gets the whole list. Basis: probe, 2026-09-25.
+**A22 — Searching the subscription lists by reference number, membership, notes or institution lists every subscription** · 🐞 · medium.
+On the subscription lists under "Payments", a search by some fields
+lists every subscription whatever is typed, even text no subscription
+holds: - "Individual Subscriptions": 3 of its 7 fields ("Membership",
+"Reference Number", "Notes"). - "Institutional Subscriptions": 6 of its
+10 fields (the same three, plus "Institution name", "Domain" and "IP
+ranges"). Only "Given Name", "Family Name", "Username" and "Email
+address" narrow either list. A manager looking a subscriber up by
+reference number, or an institution by name, domain or IP address, gets
+the whole list back with no message. The open pkp issue covers one of
+these symptoms, "Institution name" on 3.4. Basis: probe, 2026-10-01.
 <sup>f-a22</sup>
 
 <a id="a23"></a>
@@ -2110,6 +2118,7 @@ Issue report: [pkp-e2e#386](https://github.com/jardakotesovec/pkp-e2e/issues/386
 
 <a id="fn-f-a22"></a>
 **f-a22** — `SubscriptionDAO::applySearchFilters()` maps given name, family name, username and email to columns; the institutional fields have no mapping (`default => null`), so the filter is dropped. Membership, reference number and notes are mapped there, yet the screen returned the whole list for them too. Live-probed 2026-09-25 (td10), on two journals, "contains" and "is".
+Issue report: [docs/issues/U51-A22-subscription-search-fields-narrow-nothing.md](../issues/U51-A22-subscription-search-fields-narrow-nothing.md).
 
 <a id="fn-f-a23"></a>
 **f-a23** — `AboutHandler::subscriptions()` checks only the payment setup (note f) and the template offers "Purchase New Subscription" to any signed-in visitor, while `UserHandler::purchaseSubscription()` redirects to the index outside `PUBLISHING_MODE_SUBSCRIPTION`. Live-probed 2026-09-25 (td27), on an open-access and a not-online journal.
