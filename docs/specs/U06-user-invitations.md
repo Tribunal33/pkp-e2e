@@ -629,6 +629,13 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for OMP1 (issue report
+    `docs/issues/U53-A14-masthead-change-error-no-email.md`): a manager
+    changes a member's "Appear on the masthead" select on the user's roles
+    page and in "Invite to a role" on a press and a preprint server: the
+    save succeeds with no error dialog and the member receives "Your journal
+    masthead visibility has been updated" (the journal is the control)
 - **Rarely met**:
   - a past start date taking effect as the acceptance day (Rule 8): a
     manager rarely backdates a start date, and the body names no screen
@@ -728,7 +735,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A8](#a8) | Added role rows carry no accessible field names; a screen reader hears row 1's labels | 🐞 | user-visible | — |
 | [A10](#a10) | A newcomer named only in another form language, or invited on a journal whose primary language is not the site's by a manager working in the site's, is still greeted "Dear {email}," | 🐞 | minor | — |
 | [A11](#a11) | The invitation email promises a masthead listing for roles the masthead does not list, such as Reader and Author | 🐞 | minor | — |
-| [OMP1](#omp1) | Confirming a masthead change fails with a raw email-template error on presses and preprint servers | 🐞 | user-visible · crash: server | claim check (claude), 2026-09-29 — the invitation case placed on the send wizard's "Enter details", OMP and OPS; the send unaffected |
+| [OMP1](#omp1) | On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | The invitation email template has no row on the preprint server's Emails screen | 🐞 | user-visible | — |
 | [A1](#a1) | The send wizard's address is gated more widely than the screen that offers it | ❓ | latent | — |
 | [A2](#a2) | Daily cleanup deletes invitations still being composed | ❓ | latent | — |
@@ -874,19 +881,23 @@ Basis: probe. <sup>[f-a11](#fn-a11)</sup>
 ### OMP and OPS
 
 <a id="omp1"></a>
-**OMP1 — Masthead change throws a raw email-template error** · 🐞 · user-visible · crash: server.
-On a press or preprint server, confirming a masthead visibility change fails
-on the server: an "Error" dialog shows the manager the raw text "Email
-template USER_ROLE_MASTHEAD_UPDATE not found. The migration script
-I11800_AddUserRoleMastheadUpdateEmail needs to be run.", and the member gets
-no email. The change itself sticks after a reload, on a current role's row
-and on a removed role's row alike (Rule 13). The same error appears in
-"Invite to a role" for an existing member when a held role's masthead select
-is changed on "Enter details" (Rule 13a); "OK" dismisses it, the change
-sticks, and the invitation then sends and delivers normally. On a journal
-the change applies cleanly and the member's notice is delivered. Fresh presses and preprint servers ship without
-the email template this notice needs, so any new install reproduces it.
-Basis: probe + install-seed check. <sup>[f-omp1](#fn-omp1)</sup>
+**OMP1 — On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody** · 🐞 · medium · crash: server.
+On a press or preprint server, the app fails on the server when a
+manager changes a member's "Appear on the masthead" select. After
+"Confirm" an "Error" dialog shows a developer's message ("Email template
+USER_ROLE_MASTHEAD_UPDATE not found. The migration script
+I11800_AddUserRoleMastheadUpdateEmail needs to be run."), and the member
+gets no email, although the confirmation promised "The user will be
+notified of this change." The change itself is saved. It happens on the
+user's roles page (Users & Roles, a user's "Edit") and on "Invite to a
+role" for an existing member, for every role that offers the select. On
+a press the email's text cannot be read or changed either: its "Edit" in
+Manage Emails leaves the page behind a spinner. The manager can tell the
+member through the users list's "Email"; running the migration the
+message names does not help. Presses and preprint servers installed from
+`main` have no template for this email, and so do those upgraded to it
+from 3.4 or from a 3.5 release before 3.5.0-4. Basis: probe, 2026-10-02.
+<sup>[f-omp1](#fn-omp1)</sup>
 
 ### OPS
 
@@ -1563,6 +1574,7 @@ masthead". The same send with the held select untouched made no masthead
 request and showed no error, its email reading "Your name will appear in the
 {press or server}'s masthead as a Author." On OJS the change answered 200
 with no dialog, and the masthead email arrived beside the invitation.
+Issue report: [docs/issues/U53-A14-masthead-change-error-no-email.md](../issues/U53-A14-masthead-change-error-no-email.md).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Evidence in note j (OPS map override vs seeded template).

@@ -19,7 +19,7 @@ and the hourly routine starts one only when none is running
 |---|---|---|---|---|
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | A1: open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md (the rest of U37 written up by the issues session, VM s1, 2026-10-02) |
 | [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 | **Taken: issues session, workstation s0, 2026-10-02**; OJS1 done (docs/issues/U44-OJS1-new-issue-galley-publisher-id-server-error.md); A4 done (docs/issues/U44-A4-article-own-urn-refused-as-in-use.md); OJS3, OMP5 done (docs/issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md; OMP5 also docs/issues/U44-OMP5-press-file-refused-publisher-id-box-vanishes.md); A6 done (docs/issues/U44-A6-urn-check-digit-from-suffix-only.md) |
-| [U53](../specs/U53-users-management.md) | 16 | 2 | 5 | **Taken: issues session, VM s2, 2026-10-02**; OPS1 done with U57 A8 (pkp-e2e#360) |
+| [U53](../specs/U53-users-management.md) | 16 | 2 | 5 | **Taken: issues session, VM s2, 2026-10-02**; OPS1 done with U57 A8 (pkp-e2e#360); A14 done, with U06 OMP1 and U56 OMP1 (docs/issues/U53-A14-masthead-change-error-no-email.md) |
 | [U47](../specs/U47-media-files.md) | 8 | 2 | 4 | OMP1 done with U69 A9 (pkp-e2e#282) |
 | [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | A23, A24: open report docs/reports/2026-09-27-pkp-lib-13288.md |
 | [U17](../specs/U17-sections.md) | 16 | 2 | 2 |  |
@@ -31,7 +31,7 @@ and the hourly routine starts one only when none is running
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 9 | 1 | 8 | OJS3 done with U69 A3 (pkp-e2e#285) |
 | [U48](../specs/U48-jats-and-body-text.md) | 17 | 1 | 7 |  |
 | [U28](../specs/U28-reviewers-review.md) | 14 | 1 | 5 |  |
-| [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | **OMP1 taken: issues session, VM s2, 2026-10-02** (joined to U53 A14) |
+| [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | OMP1 done with U53 A14 (docs/issues/U53-A14-masthead-change-error-no-email.md) |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | A16 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet; the report calls the window's box "Title" where the screen says "Name", and its Reach names "Applied Science" where reach.js uses "Social Sciences" on OPS |
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | OMP3 done with U69 A9 (pkp-e2e#282) |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
@@ -63,7 +63,7 @@ and the hourly routine starts one only when none is running
 | [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 |  |
 | [U26](../specs/U26-review-stage-and-rounds.md) | 4 | 0 | 2 |  |
 | [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 |  |
-| [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | **OMP1 taken: issues session, VM s2, 2026-10-02** (joined to U53 A14) |
+| [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | OMP1 done with U53 A14 (docs/issues/U53-A14-masthead-change-error-no-email.md) |
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
 | [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 |  |
 | [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |

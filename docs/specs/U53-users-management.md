@@ -859,7 +859,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | The French "Users" tab prints raw codes for its search label, the Invitations heading, button and columns, and the "Start Date" column | 🐞 | minor | — |
 | [A12](#a12) | The ORCID and disabled icons after a name have no name for a screen reader | 🐞 | minor | — |
 | [A13](#a13) | The "Merge user" window and the older grid show nothing under "Roles" for the Site Administrator | 🐞 | minor | — |
-| [A14](#a14) | A masthead change on the roles page of a press or preprint server ends in an "Error" dialog and emails nobody | 🐞 | user-visible · crash: server | — |
+| [A14](#a14) | On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | Merging an account that opened a discussion fails partway with no message and leaves the account behind | 🐞 | user-visible · crash: server | — |
 | [A16](#a16) | "Notify User" stays greyed out after "Generate Password" is unticked | 🐞 | minor | — |
 | [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | minor | — |
@@ -1002,15 +1002,24 @@ account holds.
 Basis: probe. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — A masthead change on a press or preprint server ends in an error** · 🐞 · user-visible · crash: server.
-On a press or preprint server, confirming a masthead change on the
-user's roles page (Rule 8) brings an "Error" dialog, "Email template
+**A14 — On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody** · 🐞 · medium · crash: server.
+On a press or preprint server, the app fails on the server when a
+manager changes a member's "Appear on the masthead" select. After
+"Confirm" an "Error" dialog shows a developer's message ("Email template
 USER_ROLE_MASTHEAD_UPDATE not found. The migration script
-I11800_AddUserRoleMastheadUpdateEmail needs to be run.": the app fails
-while sending the notice. The choice is kept after a reload, and the
-user gets no email. The page belongs to *User invitations*, whose
-[OMP1](U06-user-invitations.md#omp1) holds the full entry.
-Basis: probe. <sup>f-a14</sup>
+I11800_AddUserRoleMastheadUpdateEmail needs to be run."), and the member
+gets no email, although the confirmation promised "The user will be
+notified of this change." The change itself is saved. It happens on the
+user's roles page (Users & Roles, a user's "Edit") and on "Invite to a
+role" for an existing member, for every role that offers the select. On
+a press the email's text cannot be read or changed either: its "Edit" in
+Manage Emails leaves the page behind a spinner. The manager can tell the
+member through the users list's "Email"; running the migration the
+message names does not help. Presses and preprint servers installed from
+`main` have no template for this email, and so do those upgraded to it
+from 3.4 or from a 3.5 release before 3.5.0-4. The same fault as
+[OMP1](U06-user-invitations.md#omp1) in *User invitations*. Basis:
+probe, 2026-10-02. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — Merging an account that opened a discussion fails partway** · 🐞 · user-visible · crash: server.
@@ -1932,6 +1941,7 @@ answered 500 and the dialog quoted showed; after a reload the choice read
 "Your journal masthead visibility has been updated". Presses and preprint
 servers ship without the `USER_ROLE_MASTHEAD_UPDATE` template (*User
 invitations*, note f-omp1).
+Issue report: [docs/issues/U53-A14-masthead-change-error-no-email.md](../issues/U53-A14-masthead-change-error-no-email.md).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-25, all three apps, three times each:

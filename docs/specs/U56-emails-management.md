@@ -905,7 +905,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | "Remove Template" names the template by its subject, not its name | 🐞 | minor | — |
 | [A10](#a10) | A press's and a preprint server's French submission confirmation speaks of "la revue" | 🐞 | minor | — |
 | [A11](#a11) | In French, "Manage Emails" shows codes instead of some emails' names and descriptions | 🐞 | minor | — |
-| [OMP1](#omp1) | On a press, "Edit" on the masthead email leaves the page stuck behind a spinner | 🐞 | user-visible | — |
+| [OMP1](#omp1) | On a press, "Edit" on the masthead email leaves the page stuck behind a spinner | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | On a press, "Notify Primary Contact" opens with neither choice selected | 🐞 | minor | — |
 | [OPS1](#ops1) | A preprint server's initials placeholder is described by a raw key | 🐞 | minor | — |
 | [A3](#a3) | Two filters of one block narrow the list instead of widening it | ❓ | minor | — |
@@ -1080,14 +1080,14 @@ Basis: probe, 2026-09-28. <sup>f-a11</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — The masthead email's "Edit" leaves the page stuck** · 🐞 · user-visible.
+**OMP1 — The masthead email's "Edit" leaves the page stuck** · 🐞 · medium.
 On a press, "Manage Emails" lists "User Role Masthead Visibility Update
 Notification", but its "Edit" greys the page behind a spinner that
 never ends: no window opens, no message shows, and nothing else on the
 page answers until a reload. The press has no template for this email,
 so its text can never be read or changed. A journal opens "Edit
 Template" for the same row; a preprint server does not list it.
-Basis: probe, 2026-09-26. <sup>f-omp1</sup>
+Basis: probe, 2026-10-02. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
 **OMP2 — "Notify Primary Contact" arrives unselected on a press** · 🐞 · minor.
@@ -1791,6 +1791,7 @@ migration `I11800_AddUserRoleMastheadUpdateEmail` installs it, so a
 fresh press has the email but not its template.
 `ManageEmailsPage::openMailable()` stops the spinner only in its success
 callback.
+Issue report: [docs/issues/U53-A14-masthead-change-error-no-email.md](../issues/U53-A14-masthead-change-error-no-email.md).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Live-probed 2026-09-26 on the seeded press and on a new
