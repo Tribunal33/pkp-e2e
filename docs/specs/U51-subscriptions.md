@@ -2118,7 +2118,7 @@ Issue report: [pkp-e2e#386](https://github.com/jardakotesovec/pkp-e2e/issues/386
 
 <a id="fn-f-a22"></a>
 **f-a22** — `SubscriptionDAO::applySearchFilters()` maps given name, family name, username and email to columns; the institutional fields have no mapping (`default => null`), so the filter is dropped. Membership, reference number and notes are mapped there, yet the screen returned the whole list for them too. Live-probed 2026-09-25 (td10), on two journals, "contains" and "is".
-Issue report: [docs/issues/U51-A22-subscription-search-fields-narrow-nothing.md](../issues/U51-A22-subscription-search-fields-narrow-nothing.md).
+Issue report: [pkp-e2e#397](https://github.com/jardakotesovec/pkp-e2e/issues/397) ([docs/issues/U51-A22-subscription-search-fields-narrow-nothing.md](../issues/U51-A22-subscription-search-fields-narrow-nothing.md)).
 
 <a id="fn-f-a23"></a>
 **f-a23** — `AboutHandler::subscriptions()` checks only the payment setup (note f) and the template offers "Purchase New Subscription" to any signed-in visitor, while `UserHandler::purchaseSubscription()` redirects to the index outside `PUBLISHING_MODE_SUBSCRIPTION`. Live-probed 2026-09-25 (td27), on an open-access and a not-online journal.
