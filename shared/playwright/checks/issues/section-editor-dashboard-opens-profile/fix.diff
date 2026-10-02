@@ -1,0 +1,37 @@
+--- a/lib/pkp/classes/services/PKPNavigationMenuService.php
++++ b/lib/pkp/classes/services/PKPNavigationMenuService.php
+@@ -212,7 +212,7 @@
+                     break;
+                 case NavigationMenuItem::NMI_TYPE_USER_DASHBOARD:
+                     $templateMgr->assign('navigationMenuItem', $navigationMenuItem);
+-                    if ($currentUser->hasRole([Role::ROLE_ID_MANAGER, Role::ROLE_ID_ASSISTANT, Role::ROLE_ID_REVIEWER, Role::ROLE_ID_AUTHOR], $contextId) || $currentUser->hasRole([Role::ROLE_ID_SITE_ADMIN], PKPApplication::SITE_CONTEXT_ID)) {
++                    if ($this->hasDashboard($currentUser, $contextId)) {
+                         $displayTitle = $templateMgr->fetch('frontend/components/navigationMenus/dashboardMenuItem.tpl');
+                         $navigationMenuItem->setTitle($displayTitle, Locale::getLocale());
+                     }
+@@ -302,7 +302,7 @@
+                     ));
+                     break;
+                 case NavigationMenuItem::NMI_TYPE_USER_DASHBOARD:
+-                    if ($currentUser->hasRole([Role::ROLE_ID_MANAGER, Role::ROLE_ID_ASSISTANT, Role::ROLE_ID_REVIEWER, Role::ROLE_ID_AUTHOR], $contextId) || $currentUser->hasRole([Role::ROLE_ID_SITE_ADMIN], PKPApplication::SITE_CONTEXT_ID)) {
++                    if ($this->hasDashboard($currentUser, $contextId)) {
+                         $pkpPageRouter = $request->getRouter();  /** @var \PKP\core\PKPPageRouter $pkpPageRouter */
+ 
+                         if ($pkpPageRouter instanceof PageRouter) {
+@@ -401,6 +401,16 @@
+         }
+ 
+         $templateMgr->assign('navigationMenuItem', $navigationMenuItem);
++    }
++
++    /**
++     * Whether the user works from a dashboard in this context: the roles
++     * PKPPageRouter::getHomeUrl() sends to one, and the site administrator.
++     */
++    protected function hasDashboard(\PKP\user\User $user, ?int $contextId): bool
++    {
++        return $user->hasRole([Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT, Role::ROLE_ID_REVIEWER, Role::ROLE_ID_AUTHOR], $contextId)
++            || $user->hasRole([Role::ROLE_ID_SITE_ADMIN], PKPApplication::SITE_CONTEXT_ID);
+     }
+ 
+     public function loadMenuTree(NavigationMenu $navigationMenu)

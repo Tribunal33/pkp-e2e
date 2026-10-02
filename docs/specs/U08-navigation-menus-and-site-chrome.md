@@ -1189,6 +1189,7 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the site's Navigation tab: "Add Menu" and a site menu's "Edit" open the menu window with the site theme's areas ("None", "primary", "user"), and a new site menu saves (Rule 1b; the guard [A4](#a4)'s issue report proposes)
   - the access-denied page a signed-in user gets: its heading, the breadcrumb's last step and the browser tab name the page (Rule 26a; the guard [A3](#a3)'s issue report proposes)
+  - a Section Editor's "Dashboard" under the username on the public pages opens the Dashboard, with their task count (Rule 19a; the guard [A2](#a2)'s issue report proposes, shared with Notifications center & email preferences A3)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1269,7 +1270,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | The editorial header's help icon is named "##common.help##" | 🐞 | minor | — |
-| [A2](#a2) | A Section Editor's "Dashboard" in the public header opens the Profile page | 🐞 | minor | — |
+| [A2](#a2) | A Section Editor's "Dashboard" in the public header opens the Profile page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | The access-denied page a signed-in user gets has an empty heading and an unnamed browser tab | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | Site Settings › "Navigation": "Add Menu" and a menu's "Edit" open nothing and leave the page dimmed | 🐞 | medium · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | The "Privacy Statement" and "Contact" notices send the manager to the wrong Settings tab | 🐞 | minor | — |
@@ -1310,14 +1311,18 @@ screen reader, and the page's text, give it the raw text
 Since: 2025-04-10 · Basis: probe. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — A Section Editor's "Dashboard" opens the Profile page** · 🐞 · minor.
-On a journal's public pages, "Dashboard" under the username leads a
-Journal Manager, an assistant, a Reviewer or an Author to the list they
-work from (Rule 19a). A Section Editor, whose work is on the Dashboard,
-is taken to the Profile page instead. The same cause leaves their name
-without the unread count
+**A2 — A Section Editor's "Dashboard" opens the Profile page** · 🐞 · low.
+On a journal's public pages, "Dashboard" under the username takes a
+Journal Manager, a Journal editor, an assistant, a Reviewer or an Author
+to the page they work from (Rule 19a). A Section Editor (Series Editor
+on a press, Moderator on a preprint server) who holds no Author,
+Reviewer, assistant or manager role in the journal is taken to the
+Profile page instead, although signing in put them on the Dashboard;
+"Editor Dashboard" in the Profile page's side menu leads back. The same
+cause leaves them without their task count in that menu
 ([Notifications center & email preferences](U05-notifications-center-and-email-preferences.md#a3)).
-Basis: probe. <sup>f-a2</sup>
+It worked in 3.0 and broke in 3.1.
+Basis: probe, 2026-10-03. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — The access-denied page a signed-in user gets has an empty heading and an unnamed browser tab** · 🐞 · low.
@@ -2681,6 +2686,7 @@ ROLE_ID_ASSISTANT, ROLE_ID_REVIEWER, ROLE_ID_AUTHOR]` has had no
 `ROLE_ID_SUB_EDITOR` through every rewrite of the method (PSR-12 reformat
 2021-04-20 and later), while `PKPPageRouter::getHomeUrl()` sends a sub
 editor to `dashboard/editorial`. Seen on screen 2026-09-04 (note e).
+Issue report: [docs/issues/U08-A2-section-editor-dashboard-opens-profile.md](../issues/U08-A2-section-editor-dashboard-opens-profile.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note w. The heading is `{translate key=$pageTitle}` with no

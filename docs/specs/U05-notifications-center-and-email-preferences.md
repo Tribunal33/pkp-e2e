@@ -793,6 +793,8 @@ footnote says how) and judge both mailboxes only once they have run.
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a Section Editor's task count in the menu under their name on the public pages (Rule 4; the guard [A3](#a3)'s issue report proposes, shared with Navigation menus & site chrome A2)
 - **Rarely met**:
   - the Tasks window paged beyond 25 rows, "1 - 25 of 26 items" and "Items per page:" (Rule 2b): 26 tasks to raise for one account
   - the blue-edged notice toast (Rule 9a): the one screen that produces it is a plugin switch under Settings › Website › "Plugins", a Journal Manager's occasional act, not an editor's, author's or reviewer's week
@@ -852,7 +854,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OPS3](#ops3) | On a preprint server, pressing a submission's task in the Tasks panel lands on "A workflow stage was not specified." instead of the submission | 🐞 | user-visible | — |
 | [A1](#a1) | The "Discussion activity." row and its two boxes govern nothing; a reply to a discussion raises a task worded exactly like the opening one | 🐞 | minor | — |
 | [A2](#a2) | The Unsubscribe page silently switches back on emails the person had switched off before, because its boxes start ticked and an unticked box means "send" | 🐞 | latent | — |
-| [A3](#a3) | A Section Editor's name on the reader-side header carries no unread count, while a Journal Manager's or an Author's does | 🐞 | minor | — |
+| [A3](#a3) | A Section Editor's menu on the public pages never shows their unread count, while the other roles' menus do | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | While a window such as Participants › "Notify" is open, a toast above it cannot be closed with its "×" and does not stay under the pointer | 🐞 | minor | — |
 | [OPS2](#ops2) | The new-preprint row reads "A new preprint , "Title", has been submitted." with a space before the comma | 🐞 | minor | — |
 | [A4](#a4) | The site-level profile's Notifications tab offers choices that no event honours | ❓ | latent | — |
@@ -892,13 +894,18 @@ that its boxes replace the tab's choices.
 Basis: probe. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
-**A3 — No reader-side count for a Section Editor** · 🐞 · minor.
-On the reader-facing pages, the header shows the signed-in user's name with
-the number of unread tasks, "0" included, for a Journal Manager or an
-Author (Rule 4). A Section Editor, who receives tasks like the others, sees
-their name without a number even while the bell shows "1", and learns of
-new tasks only from the bell on the editorial pages.
-Basis: probe. <sup>[f-a3](#fn-a3)</sup>
+**A3 — No reader-side count for a Section Editor** · 🐞 · low.
+On the journal's public pages, the menu under the signed-in user's name
+shows a Journal Manager, a Journal editor, an assistant, a Reviewer or
+an Author their number of unread tasks (Rule 4). A Section Editor
+(Series Editor on a press, Moderator on a preprint server) who holds
+none of those roles in the journal never sees the number there, even
+while the bell shows "1", and learns of new tasks only from the bell on
+the editorial pages. The same cause sends their "Dashboard" to the
+Profile page
+([Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md#a2)).
+It worked in 3.0 and broke in 3.1.
+Basis: probe, 2026-10-03. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
 **A4 — The site-level tab governs nothing** · ❓ · latent.
@@ -1738,6 +1745,7 @@ a row switched off on the tab came back ticked on the page, and
 Section Editor (Series Editor, Moderator) with the bell at "Tasks 1" from a
 discussion shows the bare name on the journal's home page; `manager.maya`
 and `author.alex` show "0" there without a task.
+Issue report: [docs/issues/U08-A2-section-editor-dashboard-opens-profile.md](../issues/U08-A2-section-editor-dashboard-opens-profile.md).
 
 <a id="fn-a4"></a>
 **f-a4** — `PKPNotificationSettingsForm::fetch()` with `$context === null`
