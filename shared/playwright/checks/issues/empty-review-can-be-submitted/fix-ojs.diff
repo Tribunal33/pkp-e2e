@@ -1,0 +1,62 @@
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -1102,7 +1102,7 @@
+ msgstr "In addition, you can upload files for the editor and/or author to consult."
+ 
+ msgid "reviewer.article.selectRecommendation"
+-msgstr "Select a recommendation and submit the review to complete the process. You must enter a review or upload a file before selecting a recommendation."
++msgstr "Select a recommendation and submit the review to complete the process. You should enter a review or upload a file before selecting a recommendation."
+ 
+ msgid "reviewer.article.selectRecommendation.byEditor"
+ msgstr "Set or adjust the reviewer recommendation."
+--- a/lib/pkp/js/controllers/form/reviewer/ReviewerReviewStep3FormHandler.js
++++ b/lib/pkp/js/controllers/form/reviewer/ReviewerReviewStep3FormHandler.js
+@@ -34,10 +34,6 @@
+ 			function($formElement, options) {
+ 		this.parent($formElement, options);
+ 
+-		// bind a handler to make sure we update the required state
+-		// of the comments field.
+-		$formElement.find('[id^=\'submitFormButton-\']').click(this.callbackWrapper(
+-				this.updateCommentsRequired_));
+ 		$formElement.find('[type^=\'submit\']').click(this.callbackWrapper(
+ 				this.updateRecommendationRequired_));
+ 		$formElement.find('[type^=\'submit\']').click(this.callbackWrapper(
+@@ -80,37 +76,6 @@
+ 
+ 	/**
+ 	 * Internal callback called before form validation to ensure the
+-	 * proper "required" state of the comments field, depending on grid
+-	 * contents.
+-	 *
+-	 * @param {HTMLElement} submitButton The submit button.
+-	 * @param {Event} event The event that triggered the
+-	 *  submit button.
+-	 * @return {boolean} true.
+-	 * @private
+-	 */
+-	$.pkp.controllers.form.reviewer.ReviewerReviewStep3FormHandler.
+-			prototype.updateCommentsRequired_ = function(submitButton, event) {
+-
+-		var $formElement = this.getHtmlElement(),
+-				$commentsElement = $formElement.find('[id^="comments"]');
+-
+-		if ($('#reviewAttachmentsGridContainer').
+-				find('tbody.empty:visible').length == 1) {
+-			// There's nothing in the files grid; make sure the
+-			// comments field is required.
+-			$commentsElement.attr('required', '1');
+-		} else {
+-			// There's something in the files grid; the comments
+-			// field is optional.
+-			$commentsElement.removeAttr('required');
+-		}
+-		return true;
+-	};
+-
+-
+-	/**
+-	 * Internal callback called before form validation to ensure the
+ 	 * proper handling of the save vs. submit button, using a hidden
+ 	 * field.
+ 	 *

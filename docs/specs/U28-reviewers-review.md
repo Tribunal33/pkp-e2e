@@ -985,6 +985,7 @@ Left out of the scenarios above, by reason:
   - a reviewer who saves a text, empties the box, saves again and reopens the review finding the box empty, and the editor reading no text ([A4](#a4); Rule 13): the guard the issue report proposes, once fixed
   - a reviewer's search for a word of one title listing that row alone under "All assignments (1)", and a search for no title's word reading "No Items" ([A1](#a1); Rules 3–4): the guard the issue report proposes, once fixed
   - the accepted row of the reviewer's list reading "Please complete this review by" with the due date in the journal's short date format and no clock time ([A5](#a5); Rule 3): the guard the issue report proposes, once fixed
+  - {OJS} step 3 of a review without a review form reading that a review or file "should" be entered, and a review with nothing typed and no file submitted once a "Recommendation" is chosen ([A7](#a7); Fields, Rule 13): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1038,7 +1039,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A4](#a4) | Reviewer empties a saved review text and saves again: the old text stays saved and is what the editor reads | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A reviewer's list shows an accepted review's due date with a midnight clock time, "2026-10-30 00:00:00" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | A file link opened by an account without file access answers a bare line of text, not the access-denied page | 🐞 | minor | — |
-| [A7](#a7) | A review with nothing typed and no file attached can be submitted | 🐞 | user-visible | — |
+| [A7](#a7) | Reviewer's step 3 on a journal says a review or file is required, yet an empty review is submitted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | A reminder, or a request on another submission, kills the reviewer's earlier one-click link, which then shows a bare "404 Not Found" | 🐞 | user-visible | — |
 | [A10](#a10) | A one-click link opened in a browser signed in as somebody else shows a blank page, never the intended message | 🐞 | user-visible | — |
 | [A12](#a12) | A reviewer's own review is listed under "Previous Reviews" once the submission has a later round | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1160,14 +1161,27 @@ refusal itself holds.
 Basis: probe (2026-09-04 and 2026-09-05, both apps). <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
-**A7 — An empty review can be submitted** · 🐞 · user-visible.
-Step 3 presents the two review boxes as the point of the step and, on a
-journal, says "You must enter a review or upload a file before selecting
-a recommendation.", yet "Submit Review" with nothing typed and no file
-under "Reviewer Files" goes through: on a press at once, on a journal as
-soon as a "Recommendation" is chosen. The editors receive "Review complete:
-…" and the row turns "Review Submitted" for a review that holds nothing.
-Basis: probe (2026-09-04, both apps). <sup>[f-a7](#fn-a7)</sup>
+**A7 — Reviewer's step 3 on a journal says a review or file is required, yet an empty review is submitted** · 🐞 · low.
+On a journal, step 3 of a review tells the reviewer "You must enter a
+review or upload a file before selecting a recommendation." The step
+makes no such check. A reviewer who types nothing into "For author and
+editor" and "For editor", uploads no file and chooses a
+"Recommendation" can press "Submit Review" and "OK", and the review is
+submitted.
+
+The reviewer's row then reads "Review Submitted" and the editors
+assigned to the submission are mailed "Review complete: …"; neither
+shows that the review is empty. The editor sees it on opening the
+review, which has no text and no file.
+
+This shows on a review that uses the two text boxes, which is every
+review the editor has not given a review form, the default. pkp's open
+issue on this has decided to keep allowing an empty review and to
+reword the sentence to "should". This report adds the cause, a walk on
+`main` and 3.5, and a diff that was tried.
+
+A press's step states no such rule, and an empty review is submitted there at once.
+Basis: probe, 2026-10-02. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a9"></a>
 **A9 — A later one-click email kills the earlier link** · 🐞 · user-visible.
@@ -2291,6 +2305,7 @@ Submitted"; OJS stopped at "Choose One" ("This field is required." under
 the list) and reached step 4 once "Decline Submission" was chosen; a
 text-only review and a file-only review reached step 4 on both, and the
 "Review complete" email arrived each time.
+Issue report: [docs/issues/U28-A7-empty-review-can-be-submitted.md](../issues/U28-A7-empty-review-can-be-submitted.md).
 
 <a id="fn-a8"></a>
 **f-a8** — Retired. Seen once per app on 2026-09-04 (a one-question form,
