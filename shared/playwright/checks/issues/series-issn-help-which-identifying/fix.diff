@@ -1,0 +1,11 @@
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -955,7 +955,7 @@
+ msgid "manager.setup.issnDescription"
+ msgstr ""
+ "The ISSN (International Standard Serial Number) is an eight-digit number "
+-"which identifying periodical publications including electronic serials. A "
++"which identifies periodical publications including electronic serials. A "
+ "number can be obtained from the <a href=\"https://www.issn.org\" target=\""
+ "_blank\">ISSN International Centre</a>."
+ 

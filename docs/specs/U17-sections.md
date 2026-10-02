@@ -910,6 +910,8 @@ Left out of the scenarios above, by reason:
     server refuses answered with the "An invalid image was uploaded."
     notice, the series' other edits kept in the open window
     ([OMP3](#omp3)): the guard the issue report proposes
+  - {OMP} the ISSN paragraph in the series window reading "which
+    identifies" ([OMP7](#omp7)): the guard the issue report proposes
 - **Rarely met**:
   - {OJS} "Omit author names for section items from issues' table of
     contents." ticked, the issue's table of contents without the section's
@@ -1040,7 +1042,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP2](#omp2) | The series path message says "only letters and numbers" while ".", "/", "_" and "-" are accepted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | A series "Save" with an SVG cover chosen saves nothing, not even the other changes, and shows no message | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP5](#omp5) | The series list's activate and deactivate windows ask about a "section" | 🐞 | minor | — |
-| [OMP7](#omp7) | The ISSN paragraph reads "which identifying" | 🐞 | minor | — |
+| [OMP7](#omp7) | The ISSN help in a press's series window reads "which identifying" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP8](#omp8) | The series path help always ends in the word "Path", never the path | 🐞 | minor | — |
 | [OMP9](#omp9) | A series' public page shows no name, description or ISSN, and lists the books newest first whatever the series' order | 🐞 | user-visible | — |
 | [OPS1](#ops1) | An empty "Archives" page shows nothing under the archive header, not even a sentence | 🐞 | minor | — |
@@ -1258,13 +1260,13 @@ Lean: 🐞; give a new series the last place, as a journal does.
 Basis: probe, 2026-09-25. <sup>f-omp6</sup>
 
 <a id="omp7"></a>
-**OMP7 — "which identifying" in the ISSN help** · 🐞 · minor.
-The paragraph above a series' ISSN boxes reads "The ISSN (International
-Standard Serial Number) is an eight-digit number which identifying
-periodical publications including electronic serials. A number can be
-obtained from the ISSN International Centre." It should read "which
-identifies".
-Basis: probe, 2026-09-25. <sup>f-omp7</sup>
+**OMP7 — The ISSN help in a press's series window reads "which identifying"** · 🐞 · low.
+A press manager adding or editing a series reads, above the "Online
+ISSN" and "Print ISSN" boxes: "The ISSN (International Standard Serial
+Number) is an eight-digit number which identifying periodical
+publications including electronic serials." It should read "which
+identifies". The other interface languages' texts do not have the slip.
+Basis: probe, 2026-10-02. <sup>f-omp7</sup>
 
 <a id="omp8"></a>
 **OMP8 — The path help never shows the path** · 🐞 · minor.
@@ -1571,6 +1573,7 @@ Issue report: [docs/issues/U17-OMP3-series-svg-cover-dropped-silently.md](../iss
 
 <a id="fn-f-omp7"></a>
 **f-omp7** — `manager.setup.issnDescription` (fn m). Live-probed 2026-09-25: note td6.
+Issue report: [docs/issues/U17-OMP7-series-issn-help-which-identifying.md](../issues/U17-OMP7-series-issn-help-which-identifying.md).
 
 <a id="fn-f-omp8"></a>
 **f-omp8** — OMP `seriesForm.tpl` builds the help from a sample address, `{url … page="catalog" op="series" path="Path"}`, passed to `grid.series.urlWillBe`; the typed or saved path never reaches it. Live-probed 2026-09-25: note td6.
