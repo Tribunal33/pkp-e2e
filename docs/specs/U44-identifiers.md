@@ -838,6 +838,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-A11-urn-settings-pattern-choice-script-error.md`):
     the URN settings window under "Use the pattern entered below…", a
     kind and "Check Number" ticked, with no page error
+  - the guard for A13 (issue report
+    `docs/issues/U44-A13-check-number-empty-urn-suffix-nan.md`): a
+    galley's "Identifiers" tab greying "Add Check Number" while "URN
+    Suffix" is empty
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -914,7 +918,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | "Assign" fills the URN box for a participant whose "Save" is greyed on the "Identifiers" page | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | The URN prefix refusal shows "&amp;lt;NID&amp;gt;" under the box and in the notice | 🐞 | minor | — |
 | [A11](#a11) | URN settings window: every click under the pattern choice raises a page script error | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
-| [A13](#a13) | "Add Check Number" on a tab writes "NaN" into an empty suffix box | 🐞 | minor | — |
+| [A13](#a13) | "Add Check Number" on an item's "Identifiers" tab writes "NaN" into an empty URN suffix box | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | After "Clear", a galley's or chapter's tab still shows the removed URN | 🐞 | minor | — |
 | [OJS1](#ojs1) | A new issue galley with a Publisher ID is not saved: "Save" stays greyed with no message | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | An issue's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1085,13 +1089,17 @@ then fail registration; that one answer settles it.
 Basis: probe, 2026-09-24. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — "Add Check Number" writes "NaN" into an empty suffix box** · 🐞 · minor.
-On an "Identifiers" tab with the individual suffix choice and "Check
-Number" ticked, "Add Check Number" pressed while the "URN Suffix" box
-is empty writes "NaN" into the box. With a suffix typed it appends one
-digit ("g1" becomes "g16"). The article's page greys the same button
-while its box is empty (Fields).
-Basis: probe, 2026-09-24. <sup>f-a13</sup>
+**A13 — "Add Check Number" on an item's "Identifiers" tab writes "NaN" into an empty URN suffix box** · 🐞 · low.
+A journal or press can let editors type each item's URN suffix by hand
+(the URN plugin's "Enter an individual URN suffix…" setting) and have
+the app add a check digit ("Check Number"). On the "Identifiers" tab of
+a galley, an issue, a chapter, a publication format or a submission
+file, "Add Check Number" pressed while "URN Suffix" is empty writes
+"NaN" into the box. The article's or monograph's "Identifiers" page
+greys the same button while its box is empty. Nothing refuses the value:
+"Save" keeps "NaN" as the suffix, and the item's URN is then built from
+it, ending in "NaN". OPS has no URN plugin.
+Basis: probe, 2026-10-02. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — A cleared URN stays on the tab** · 🐞 · minor.
@@ -1876,6 +1884,7 @@ agency's resolver treats the two as one URN.
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-24 (note q23), the OJS galley tab and
 the OMP chapter tab; the button is the legacy `#checkNo` (note f-a6).
+Issue report: [docs/issues/U44-A13-check-number-empty-urn-suffix-nan.md](../issues/U44-A13-check-number-empty-urn-suffix-nan.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-24 (note q25). The galley and chapter

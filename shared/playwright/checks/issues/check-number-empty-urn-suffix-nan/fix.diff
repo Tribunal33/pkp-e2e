@@ -1,0 +1,17 @@
+--- a/plugins/pubIds/urn/js/checkNumber.js
++++ b/plugins/pubIds/urn/js/checkNumber.js
+@@ -66,6 +66,14 @@
+ 		}
+ 	};
+ 
++	// Grey the button while the suffix box is empty, as the "Add Check Number"
++	// of the publication's URN field (FieldTextUrn.js) is: there is nothing
++	// to add a check number to.
++	$('#checkNo').prop('disabled', !$('[id^="urnSuffix"]').val());
++	$('[id^="urnSuffix"]').on('input', function() {
++		$('#checkNo').prop('disabled', !$(this).val());
++	});
++
+ 	// Apply the check number when the button is clicked
+ 	$('#checkNo').on('click', () => {
+ 			var urnPrefix = $('[id^="urnPrefix"]').val(), urnSuffix = $('[id^="urnSuffix"]').val();
