@@ -2433,7 +2433,7 @@ dropping No. 2 in the default order and No. 1 in the reversed one.
 `StatsIssueController::getMany()` defaults `count` to 30 and the
 download sends no `count` (fn-i), while the article list has no default
 count.
-Issue report: [docs/issues/U64-OJS4-download-issues-stops-at-30.md](../issues/U64-OJS4-download-issues-stops-at-30.md).
+Issue report: [docs/issues/U64-OJS4-download-issues-stops-at-30.md](../issues/U64-OJS4-download-issues-stops-at-30.md), filed as [pkp-e2e#612](https://github.com/jardakotesovec/pkp-e2e/issues/612).
 
 <a id="fn-f-ojs5"></a>
 **f-ojs5** — Live-probed 2026-09-27 (two runs): the IR_A1 file's
