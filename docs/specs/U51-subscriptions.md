@@ -1486,9 +1486,9 @@ entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | A signed-out visitor at a purchase page's address gets an empty page, the server failing | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | The "Subscription" block reads "Expired: {today}" for a subscription awaiting payment | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | A journal restricting only PDFs shows its HTML galleys unlocked, then refuses them to readers without a subscription | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A15](#a15) | Month and week counts read "1 Months" and "1 Weeks" | 🐞 | minor | — |
+| [A15](#a15) | The delayed open access and expiry reminder lists offer "1 Months" and "1 Weeks" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | The Subscription Manager is offered "Institutions" and refused it | 🐞 | user-visible | — |
-| [A17](#a17) | "Delayed Open Access" shows an empty box until someone saves a value | 🐞 | minor | — |
+| [A17](#a17) | "Delayed Open Access" shows an empty box instead of "Disabled" until a manager saves a choice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A restricted article's additional file shows no padlock, yet is refused | 🐞 | user-visible | — |
 | [A19](#a19) | A fee shows on the locked link while payments are off and nothing can be bought | 🐞 | minor | — |
 | [A20](#a20) | A reader pressing a locked "Full Issue" is asked to pay an issue fee of no amount when only a membership fee is set | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1645,10 +1645,16 @@ managers that the HTML is refused. Saving a fee makes the HTML open.
 Basis: probe, 2026-10-01. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — "1 Months" and "1 Weeks"** · 🐞 · minor.
-The month and week lists of "Delayed Open Access" and "Subscription
-Expiry Reminders" read "1 Months" and "1 Weeks" for their first choice.
-Basis: probe, 2026-09-25. <sup>f-a15</sup>
+**A15 — The delayed open access and expiry reminder lists offer "1 Months" and "1 Weeks"** · 🐞 · low.
+A journal manager sets how long issues stay subscription-only, or when
+subscribers get expiry reminders. In those lists, the first choice after
+"Disabled" reads "1 Months" or "1 Weeks". This happens in "Delayed Open
+Access" on Settings › Distribution › "Access", and in the four
+"Subscription Expiry Reminders" lists on the "Payments" page's
+"Subscription Policies" tab. The choice works as intended; only its
+wording is wrong. Most translations have the same fault, such as German
+"1 Wochen" and Spanish "1 semanas". Basis: probe, 2026-10-01.
+<sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — The Subscription Manager is offered "Institutions" and refused it** · 🐞 · user-visible.
@@ -1661,12 +1667,17 @@ institutional subscription alone. Basis: probe, 2026-09-25.
 <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — "Delayed Open Access" arrives as an empty box** · 🐞 · minor.
-On a journal that has never saved it, "Delayed Open Access" on Settings
-› Distribution › "Access" shows an empty box instead of "Disabled",
-though the journal behaves as "Disabled"; "Save" with the box untouched
-keeps it empty. Only a saved "Disabled" reads "Disabled". Basis: probe,
-2026-09-25. <sup>f-a17</sup>
+**A17 — "Delayed Open Access" shows an empty box instead of "Disabled" until a manager saves a choice** · 🐞 · low.
+On Settings › Distribution › "Access", the "Delayed Open Access" list
+shows an empty box instead of "Disabled" on a journal that has never
+saved a choice in it. The list appears once "Publishing Mode" is set to
+subscriptions. Pressing "Save" with the list untouched shows "Saved",
+stores nothing for it, and the box stays empty on every later visit. The
+journal behaves as "Disabled", so nothing is published differently. Only
+the screen does not say which setting is in force. It concerns
+subscription journals whose managers have never saved this list. Every
+journal created on OJS 3.2 or later starts that way. Basis: probe,
+2026-10-01. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — An additional file looks open and is refused** · 🐞 · user-visible.
@@ -2030,12 +2041,14 @@ Issue report: [pkp-e2e#385](https://github.com/jardakotesovec/pkp-e2e/issues/385
 
 <a id="fn-f-a15"></a>
 **f-a15** — `manager.subscriptionPolicies.xMonths` "{$x} Months" and `.xWeeks` "{$x} Weeks" (OJS `locale/en/manager.po`) serve every count from 1, in `AccessForm` and `SubscriptionPolicyForm`. Live-probed 2026-09-25 (td4, td14).
+Issue report: [docs/issues/U51-A15-month-week-lists-read-1-months.md](../issues/U51-A15-month-week-lists-read-1-months.md).
 
 <a id="fn-f-a16"></a>
 **f-a16** — OJS `TemplateManager` adds the side menu's "Institutions" (`management/settings/institutions`) in the same step as "Payments", for every role that gets "Payments", the Subscription Manager included; the Institutions page itself is a management page the role cannot open. Live-probed 2026-09-25 (td3), on three scratch journals, by the menu and by the address.
 
 <a id="fn-f-a17"></a>
 **f-a17** — `AccessForm`'s select gives "Disabled" the value 0; a fresh journal stores no `delayedOpenAccessDuration`, which matches no option, so the box shows empty; `IssueGridHandler::publishIssue()` treats an empty value as disabled (note m). Live-probed 2026-09-25 (td4): the save posted `delayedOpenAccessDuration=` with the box untouched.
+Issue report: [docs/issues/U51-A17-delayed-open-access-box-empty.md](../issues/U51-A17-delayed-open-access-box-empty.md).
 
 <a id="fn-f-a18"></a>
 **f-a18** — The article page lists the file under "Additional Files" through the supplementary link (`a.obj_galley_link_supplementary`), which keeps the file glyph where a restricted galley link gets the padlock; `ArticleHandler::download()` refuses it like any galley (note e). Live-probed 2026-09-25 (td6).

@@ -1,0 +1,98 @@
+--- a/classes/components/forms/context/AccessForm.php
++++ b/classes/components/forms/context/AccessForm.php
+@@ -17,6 +17,7 @@
+ namespace APP\components\forms\context;
+ 
+ use APP\journal\Journal;
++use APP\subscription\form\SubscriptionPolicyForm;
+ use PKP\components\forms\FieldOptions;
+ use PKP\components\forms\FieldSelect;
+ use PKP\components\forms\FormComponent;
+@@ -46,7 +47,7 @@
+         for ($i = SUBSCRIPTION_OPEN_ACCESS_DELAY_MIN; $i <= SUBSCRIPTION_OPEN_ACCESS_DELAY_MAX; $i++) {
+             $validDelayedOpenAccessDuration[] = [
+                 'value' => $i,
+-                'label' => __('manager.subscriptionPolicies.xMonths', ['x' => $i]),
++                'label' => SubscriptionPolicyForm::getCountLabel($i, 'manager.subscriptionPolicies.oneMonth', 'manager.subscriptionPolicies.xMonths'),
+             ];
+         }
+ 
+--- a/classes/subscription/form/SubscriptionPolicyForm.php
++++ b/classes/subscription/form/SubscriptionPolicyForm.php
+@@ -20,6 +20,7 @@
+ use APP\journal\JournalDAO;
+ use APP\template\TemplateManager;
+ use PKP\db\DAORegistry;
++use PKP\facades\Locale;
+ use PKP\form\Form;
+ 
+ define('SUBSCRIPTION_EXPIRY_REMINDER_BEFORE_MONTHS_MIN', '1');
+@@ -52,22 +53,22 @@
+     {
+         $this->validNumMonthsBeforeExpiry = [0 => __('common.disabled')];
+         for ($i = SUBSCRIPTION_EXPIRY_REMINDER_BEFORE_MONTHS_MIN; $i <= SUBSCRIPTION_EXPIRY_REMINDER_BEFORE_MONTHS_MAX; $i++) {
+-            $this->validNumMonthsBeforeExpiry[$i] = __('manager.subscriptionPolicies.xMonths', ['x' => $i]);
++            $this->validNumMonthsBeforeExpiry[$i] = self::getCountLabel($i, 'manager.subscriptionPolicies.oneMonth', 'manager.subscriptionPolicies.xMonths');
+         }
+ 
+         $this->validNumWeeksBeforeExpiry = [0 => __('common.disabled')];
+         for ($i = SUBSCRIPTION_EXPIRY_REMINDER_BEFORE_WEEKS_MIN; $i <= SUBSCRIPTION_EXPIRY_REMINDER_BEFORE_WEEKS_MAX; $i++) {
+-            $this->validNumWeeksBeforeExpiry[$i] = __('manager.subscriptionPolicies.xWeeks', ['x' => $i]);
++            $this->validNumWeeksBeforeExpiry[$i] = self::getCountLabel($i, 'manager.subscriptionPolicies.oneWeek', 'manager.subscriptionPolicies.xWeeks');
+         }
+ 
+         $this->validNumMonthsAfterExpiry = [0 => __('common.disabled')];
+         for ($i = SUBSCRIPTION_EXPIRY_REMINDER_AFTER_MONTHS_MIN; $i <= SUBSCRIPTION_EXPIRY_REMINDER_AFTER_MONTHS_MAX; $i++) {
+-            $this->validNumMonthsAfterExpiry[$i] = __('manager.subscriptionPolicies.xMonths', ['x' => $i]);
++            $this->validNumMonthsAfterExpiry[$i] = self::getCountLabel($i, 'manager.subscriptionPolicies.oneMonth', 'manager.subscriptionPolicies.xMonths');
+         }
+ 
+         $this->validNumWeeksAfterExpiry = [0 => __('common.disabled')];
+         for ($i = SUBSCRIPTION_EXPIRY_REMINDER_AFTER_WEEKS_MIN; $i <= SUBSCRIPTION_EXPIRY_REMINDER_AFTER_WEEKS_MAX; $i++) {
+-            $this->validNumWeeksAfterExpiry[$i] = __('manager.subscriptionPolicies.xWeeks', ['x' => $i]);
++            $this->validNumWeeksAfterExpiry[$i] = self::getCountLabel($i, 'manager.subscriptionPolicies.oneWeek', 'manager.subscriptionPolicies.xWeeks');
+         }
+ 
+         parent::__construct('payments/subscriptionPolicyForm.tpl');
+@@ -91,6 +92,23 @@
+     }
+ 
+     /**
++     * Label one entry of a list of months or weeks: the count 1 takes its own
++     * string where the current locale translates it, and every other count (or a
++     * locale without that string yet) takes the counted one.
++     *
++     * @param int $count The entry's count
++     * @param string $oneKey The locale key for the count 1 ("1 Month")
++     * @param string $countKey The locale key for any count ("{$x} Months")
++     */
++    public static function getCountLabel(int $count, string $oneKey, string $countKey): string
++    {
++        if ($count === 1 && ($one = Locale::getBundle()->translateSingular($oneKey))) {
++            return $one;
++        }
++        return __($countKey, ['x' => $count]);
++    }
++
++    /**
+      * @copydoc Form::fetch()
+      *
+      * @param null|mixed $template
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -1068,9 +1068,15 @@
+ msgid "manager.subscriptionPolicies.expiryPartialDescription"
+ msgstr "Readers are denied access to recently published subscription content, but retain access to subscription content published prior to the subscription expiry date."
+ 
++msgid "manager.subscriptionPolicies.oneMonth"
++msgstr "1 Month"
++
+ msgid "manager.subscriptionPolicies.xMonths"
+ msgstr "{$x} Months"
+ 
++msgid "manager.subscriptionPolicies.oneWeek"
++msgstr "1 Week"
++
+ msgid "manager.subscriptionPolicies.xWeeks"
+ msgstr "{$x} Weeks"
+ 

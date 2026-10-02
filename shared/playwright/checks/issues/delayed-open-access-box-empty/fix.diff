@@ -1,0 +1,11 @@
+--- a/classes/components/forms/context/AccessForm.php
++++ b/classes/components/forms/context/AccessForm.php
+@@ -63,7 +63,7 @@
+             ->addField(new FieldSelect('delayedOpenAccessDuration', [
+                 'label' => __('about.delayedOpenAccess'),
+                 'options' => $validDelayedOpenAccessDuration,
+-                'value' => $context->getData('delayedOpenAccessDuration'),
++                'value' => $context->getData('delayedOpenAccessDuration') ?? 0,
+                 'showWhen' => ['publishingMode', Journal::PUBLISHING_MODE_SUBSCRIPTION],
+             ]))
+             ->addField(new FieldOptions('enableOai', [
