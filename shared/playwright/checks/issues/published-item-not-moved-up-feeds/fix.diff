@@ -1,0 +1,16 @@
+--- a/lib/pkp/classes/publication/Repository.php
++++ b/lib/pkp/classes/publication/Repository.php
+@@ -661,6 +661,13 @@
+             $submission = Repo::submission()->get($submission->getId());
+         }
+ 
++        // A version going live is a change to the submission: stamp it, so that everything
++        // that reads submissions by their last change (the web feeds, OAI) sees it.
++        if ($newPublication->getData('status') === Publication::STATUS_PUBLISHED) {
++            $submission->stampModified();
++            Repo::submission()->dao->update($submission);
++        }
++
+         $msg = ($newPublication->getData('status') === Publication::STATUS_SCHEDULED) ? 'publication.event.scheduled' : 'publication.event.published';
+ 
+         // Log an event when publication is published. Adjust the message depending

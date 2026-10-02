@@ -653,6 +653,7 @@ footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - {OMP OPS} an item published, for the first time or again, after later-submitted items were published: first in the three feeds, and alone in them with "Number of publications to display" at 1 ([A8](#a8); Rule 4a): the guard the issue report proposes, once fixed
   - a feed address with a feed name that does not exist ("ATOM", "atom.xml", "json") or with none answering "404 Not Found" ([A2](#a2); Rule 15): the guard the issue report proposes, once fixed
   - "Include identifiers…" ticked: the label names what the summary then carries (the section or series, categories, keywords, subjects, disciplines) and no ISBN ([A3](#a3); Rule 9b): the guard the issue report proposes, once fixed
 - **Rarely met**:
@@ -723,7 +724,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | A web feed address with a mistyped or missing feed name shows a blank page instead of "404 Not Found" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | The web feed setting "Include identifiers (ISBN, …)" names an ISBN, and no feed ever carries one | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Every keyword, subject and discipline reads "Array" in the feeds | 🐞 | user-visible | — |
-| [A8](#a8) | On a press and a preprint server, publishing does not move an item up the feeds, so a full feed can leave it out {OMP OPS} | 🐞 | latent | — |
+| [A8](#a8) | A press's or preprint server's web feeds list items by when they were submitted, and leave out one published late {OMP OPS} | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | A preprint server's RSS 1.0 feed names its publisher "Array" | 🐞 | minor | — |
 | [A4](#a4) | "Display web feed links on…" moves only the hidden discovery links; the visible box shows on every page | ❓ | minor | — |
 | [A5](#a5) | A new journal's feeds list the most recent articles, while the plugin's own default is the current issue {OJS} | ❓ | latent | — |
@@ -822,14 +823,27 @@ series and the categories read correctly.
 Since: 2025-02-13 · Basis: probe, 2026-09-25. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — Publishing does not move a book or preprint up the feeds** {OMP OPS} · 🐞 · latent.
-A press publishes a new version of an older book, or publishes a book
-again after "Unpublish", expecting its feeds to list it first, as a
-journal's feeds do for an article. The book keeps the place of its last
-change before publishing; with more books than "Number of publications
-to display", it stays below the cut and out of all three feeds, so the
-press's subscribers never learn of it. A preprint server does the same.
-Basis: probe, 2026-09-25. <sup>f-a8</sup>
+**A8 — A press's or preprint server's web feeds list items by when they were submitted, and leave out one published late** {OMP OPS} · 🐞 · medium.
+A press publishes a book and expects its web feeds, "the most recent
+publications", to list it first. The feeds place it by the date it was
+submitted instead: publishing does not move an item, and neither does
+an editorial decision, a new version, or "Unpublish" and "Publish". A
+book is in the wrong place whenever a book submitted after it was
+published before it. A preprint server does the same.
+
+With more published items than "Number of publications to display" (30
+unless changed), a book or preprint with that many later submissions
+already published stays below the cut and out of all three feeds: a
+new version of an older item, or a first publication that took long.
+Subscribers never learn of it, and nothing an editor can do to a
+published item moves it.
+
+"Web Feed Plugin" is on by default. On `main` a journal's feeds do move
+a published article to the top, through a change of its own that the
+fix would move into the shared code. On 3.5 and 3.4 a journal's feeds
+have the same fault unless "Display items in current published issue."
+was chosen.
+Basis: probe, 2026-10-02. <sup>f-a8</sup>
 
 ### OPS
 
@@ -954,6 +968,7 @@ Issue report: [docs/issues/U18-A3-web-feed-identifiers-label-names-isbn.md](../i
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note f: the recent list is ordered by the submission's `lastModified`, which publishing moves on OJS and not on OMP or OPS. Live-probed 2026-09-25, two runs per app (A8; Rule 4a): with 31 published items and the number at 30, the item left out ("Cap 01") was unpublished and published again on its workflow screen; at the next read it came first in the three feeds on OJS, and stayed out on OMP and OPS, its stored `lastModified` unchanged.
+Issue report: [docs/issues/U18-A8-published-item-not-moved-up-feeds.md](../issues/U18-A8-published-item-not-moved-up-feeds.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note c: pkp/webFeed `85a7d80` "pkp/pkp-lib#11795 fix publisher metadata for omp and ops" (2025-09-09) passes `$context->getData('name')`, the per-language array of the server's name, to `rss.tpl`, which prints it as "Array"; OJS's `publisherInstitution` and OMP's `publisher` are plain text. Live-probed 2026-09-25 (OPS1): on a new server, after its Masthead save and read in French alike, `<dc:publisher>` read "Array"; OJS showed its "Publisher", OMP its "Press Publisher Name". Written up for the team in `docs/reports/2026-09-26-webfeed-ops-publisher-array.md`.
