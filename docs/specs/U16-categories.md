@@ -1914,7 +1914,7 @@ Issue report: [pkp-e2e#586](https://github.com/jardakotesovec/pkp-e2e/issues/586
 **f-a2** — Note i. Live-probed 2026-09-25: note td9, the order the items
 were published in whatever the choice; whether that is the order Search
 gives its results was not compared.
-Issue report: [docs/issues/U16-A2-category-order-of-articles-ignored.md](../issues/U16-A2-category-order-of-articles-ignored.md).
+Issue report: [pkp-e2e#597](https://github.com/jardakotesovec/pkp-e2e/issues/597) ([docs/issues/U16-A2-category-order-of-articles-ignored.md](../issues/U16-A2-category-order-of-articles-ignored.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note g (`whereIn('categoryIds', [$category->getId()])`, no
