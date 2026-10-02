@@ -1253,7 +1253,7 @@ is made.
 
 <a id="fn-f-a11"></a>
 **f-a11** — Note c: the uploaded file's "Download" is an anchor on the file's own `url` (`FileApiHandler`, stage Production); for a role without Production in its stage set the handler answers its JSON refusal, which the browser saves as "download-file.json". Probe: d1.
-Issue report: [docs/issues/U48-A11-jats-download-saves-refusal-json.md](../issues/U48-A11-jats-download-saves-refusal-json.md).
+Issue report: [pkp-e2e#561](https://github.com/jardakotesovec/pkp-e2e/issues/561) ([docs/issues/U48-A11-jats-download-saves-refusal-json.md](../issues/U48-A11-jats-download-saves-refusal-json.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note c: `WorkflowPublicationJats.vue` withdraws "Upload" and "Delete" on `STATUS_PUBLISHED`, a constant undefined on the workflow page, so the test never matches; the server's `PublicationCanBeEditedPolicy` lets editorial roles write to a published version. Probe: d30.
