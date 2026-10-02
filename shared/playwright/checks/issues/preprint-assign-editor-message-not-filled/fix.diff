@@ -9,3 +9,14 @@
                      'variables' => $notifyForm->getEmailVariableNames($templateKey),
                  ]
              );
+--- a/lib/ui-library/src/managers/DiscussionManager/useDiscussionManagerForm.js
++++ b/lib/ui-library/src/managers/DiscussionManager/useDiscussionManagerForm.js
+@@ -250,7 +250,7 @@
+ 		// there's no assignee data from the template, this needs to be always reset
+ 		setValue('taskInfoAssignee', null);
+ 
+-		setValue('description', templateData.value.notes?.[0]?.contents);
++		setValue('description', templateData.value.notes?.[0]?.contents ?? '');
+ 	}
+ 
+ 	// Get the selected participants' user IDs

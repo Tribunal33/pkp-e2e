@@ -1340,6 +1340,7 @@ Left out of the scenarios above, by reason:
   - the guard for A4 (issue report `docs/issues/U37-A4-find-template-discussion-task-error.md`): a "Find Template" search for "task", "discussion" and a phrase holding one of them lists the matching templates of that kind, with no "Error" window (Rule 10a)
   - the guard for A16-A17 (issue report `docs/issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md`): scenario 4 closes its task three days past due and reads "Task closed by …" in "Activity", and a task due today shows a badge and a line that agree (Rules 2d, 2e)
   - the guard for A6 (issue report `docs/issues/U37-A6-task-owner-cannot-save-edit.md`): scenario 10's task owner (an assistant or the Author who did not write the first message) saves a new due date from "Edit", and a rewrite of the first message is still refused (Rule 15c)
+  - the guard for OPS1 (issue report `docs/issues/U35-OPS2-preprint-assign-editor-message-not-filled.md`): on a preprint server, "Assign Editor" chosen in the "Add" window fills "Message" with its letter and saves (Rule 10d)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1407,7 +1408,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A29](#a29) | A file attached in the "Add" window never appears in the item's History | 🐞 | minor | — |
 | [A31](#a31) | An auto-added item's letter keeps "{$recipientName}" and the sender placeholder | 🐞 | minor | — |
 | [OMP1](#omp1) | A press lists its External Review reviewers as "Internal Reviewer" or "External Reviewer", varying | 🐞 | minor | — |
-| [OPS1](#ops1) | A preprint server's "Assign Editor" template has no text, and choosing it leaves the message box showing text "Save" ignores | 🐞 | minor | — |
+| [OPS1](#ops1) | A preprint server's "Assign Editor" template has no text, and choosing it leaves the message box showing text "Save" ignores | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | An hour after writing it, an Author or assistant can change nothing in their own discussion | ❓ | user-visible | — |
 | [A13](#a13) | A closed task cannot be reopened | ❓ | minor | — |
 | [A14](#a14) | A reviewer of an "Anonymous Reviewer/Disclosed Author" review is offered the Author and refused on "Save" | ❓ | minor | — |
@@ -1740,16 +1741,17 @@ Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — The preprint server's "Assign Editor" template is empty** · 🐞 · minor.
-A preprint server installs its Production Stage template "Assign Editor"
-with no text. Choosing it in the "Add" window fills "Name" and leaves
-the message box as it was (empty on a fresh window, the typed text
-otherwise), yet "Save" answers "This field is required." under the box
-until something is typed into it. Under Settings its "Discussion" box is
-empty and "Save" is refused with "This field is required.". With
-"Auto-add at stage" on, it makes a discussion with no first message. A
-journal's and a press's "Assign Editor" carry a letter.
-Basis: probe. <sup>[f-ops1](#fn-ops1)</sup>
+**OPS1 — The preprint server's "Assign Editor" template is empty** · 🐞 · low · crash: server.
+A preprint server installs its "Assign Editor" template with no text.
+Picked in the "Add" window, it fills "Name" and leaves "Message" as it
+was, yet "Save" answers "This field is required." until something is
+typed. Under Settings the template's "Discussion" box is empty, and
+"Save" is refused until a text is typed. With "Auto-add at stage" on,
+each new preprint gets an "Assign Editor" discussion with no message.
+The same empty text leaves "Message" unfilled in "Notify" and "Assign
+Participant" ([Stage participants OPS2](U35-stage-participants.md#ops2)).
+A journal's and a press's "Assign Editor" carry a letter.
+Basis: probe, 2026-10-02. <sup>[f-ops1](#fn-ops1)</sup>
 
 <a id="ops2"></a>
 **OPS2 — An empty "Workflow Files" source** · ❓ · minor.
@@ -2042,6 +2044,7 @@ Issue report: [docs/issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md
 
 <a id="fn-ops1"></a>
 **f-ops1** — OPS `registry/taskTemplates.xml` gives `EDITOR_ASSIGN_PRODUCTION` the text `emails.editorAssignProduction.body`, which neither OPS's locale nor lib/pkp defines (OJS and OMP define it in their own `emails.po`); `installTaskTemplates()` installs a missing key as an empty string (`setMissingKeyHandler(fn () => '')`). The Participants panel's side of the same template: *Stage participants* OPS2 (live 2026-09-22). Live-probed 2026-09-23 (td6): auto-add on, it made a discussion with no first message.
+Issue report: [pkp-e2e#337](https://github.com/jardakotesovec/pkp-e2e/issues/337) ([docs/issues/U35-OPS2-preprint-assign-editor-message-not-filled.md](../issues/U35-OPS2-preprint-assign-editor-message-not-filled.md)).
 
 <a id="fn-ops2"></a>
 **f-ops2** — Note g. Live-probed 2026-09-23 on OPS: the manager's and the Moderator's "Workflow Files" offered "Production" alone, its "Production Ready Files" ("These are the files that will be sent for publication") reading "No Items".

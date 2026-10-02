@@ -1,12 +1,23 @@
---- a/registry/taskTemplates.xml
-+++ b/registry/taskTemplates.xml
-@@ -11,5 +11,5 @@
-   -->
- <templates>
- 	<template title="mailable.discussionProduction.name" description="emails.discussion.body" key="DISCUSSION_NOTIFICATION_PRODUCTION" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
--	<template title="mailable.editorAssignedManual.name" description="emails.editorAssignProduction.body" key="EDITOR_ASSIGN_PRODUCTION" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
-+	<template title="mailable.editorAssignedManual.name" description="emails.editorAssign.body" key="EDITOR_ASSIGN_PRODUCTION" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
- </templates>
+--- a/locale/en/emails.po
++++ b/locale/en/emails.po
+@@ -146,6 +146,17 @@
+ "you are satisfied that it meets all requirements.</p><p>Thank you in advance."
+ "</p><p>Kind regards,</p>{$contextSignature}"
+ 
++msgid "emails.editorAssignProduction.body"
++msgstr ""
++"<p>Dear {$recipientName},</p><p>The following preprint has been assigned to "
++"you to see through the screening process in your role as Moderator.</p><p><a "
++"href=\"{$submissionUrl}\">{$submissionTitle}</a><br />{$authors}</"
++"p><p><b>Abstract</b></p>{$submissionAbstract}<p>Please login to <a href="
++"\"{$submissionUrl}\">view the preprint</a>. Use the Discussions section to "
++"contact the author if you have any questions. Please post the preprint once "
++"you are satisfied that it meets all requirements.</p><p>Thank you in advance."
++"</p><p>Kind regards,</p>{$signature}"
++
+ msgid "emails.editorDecisionAccept.subject"
+ msgstr "Your submission has passed moderation at {$contextName}"
+ 
 --- a/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
 +++ b/lib/pkp/controllers/grid/users/stageParticipant/StageParticipantGridHandler.php
 @@ -611,7 +611,7 @@
@@ -18,3 +29,14 @@
                      'variables' => $notifyForm->getEmailVariableNames($templateKey),
                  ]
              );
+--- a/lib/ui-library/src/managers/DiscussionManager/useDiscussionManagerForm.js
++++ b/lib/ui-library/src/managers/DiscussionManager/useDiscussionManagerForm.js
+@@ -250,7 +250,7 @@
+ 		// there's no assignee data from the template, this needs to be always reset
+ 		setValue('taskInfoAssignee', null);
+ 
+-		setValue('description', templateData.value.notes?.[0]?.contents);
++		setValue('description', templateData.value.notes?.[0]?.contents ?? '');
+ 	}
+ 
+ 	// Get the selected participants' user IDs
