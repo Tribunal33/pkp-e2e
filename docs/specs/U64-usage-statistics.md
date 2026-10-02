@@ -2377,7 +2377,7 @@ Work"`. The parameter lines are joined as plain strings in the browser
 (`StatsPublicationsPage.vue::downloadReport()`: `searchPhraseRow`,
 `dateRangeRow`, `filtersRow`), so a filter name holding a quote would
 break its line the same way (by the code, not driven).
-Issue report: [docs/issues/U64-A8-statistics-download-quotes-break-parameter-lines.md](../issues/U64-A8-statistics-download-quotes-break-parameter-lines.md).
+Issue report: [docs/issues/U64-A8-statistics-download-quotes-break-parameter-lines.md](../issues/U64-A8-statistics-download-quotes-break-parameter-lines.md), filed as [pkp-e2e#615](https://github.com/jardakotesovec/pkp-e2e/issues/615).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-27, three apps: neither the server's answer to
