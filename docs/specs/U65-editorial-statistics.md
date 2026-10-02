@@ -988,6 +988,8 @@ other suite's run. <sup>sc</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the "Subscriptions Report" download with an institutional subscription whose contact has no country: the file arrives, that row's "Country" empty (the guard for OJS4, once fixed; Rule 22)
 - **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
@@ -1064,7 +1066,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS1](#ojs1) | "Articles Report" leaves "Supporting Agencies" empty | 🐞 | minor | — |
 | [OJS2](#ojs2) | "Articles Report" writes "&" in a title as "&amp;" | 🐞 | minor | — |
 | [OJS3](#ojs3) | "Articles Report" leaves the decision cell empty for several decisions | 🐞 | minor | — |
-| [OJS4](#ojs4) | "Subscriptions Report" fails to download when an institutional subscriber's contact has no country | 🐞 | user-visible · crash: server | — |
+| [OJS4](#ojs4) | "Subscriptions Report" downloads nothing and leaves a blank tab when an institutional contact has no country | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | A book declined at Internal Review is not counted under "Submissions Declined" | 🐞 | user-visible | — |
 | [OMP2](#omp2) | The press's "Days to First Editorial Decision" text speaks of "your journal" | 🐞 | minor | — |
 | [OMP3](#omp3) | "Monograph Report" sizes its author and decision columns by every press of the installation | 🐞 | minor | — |
@@ -1274,14 +1276,22 @@ press's "Monograph Report" names them. Expected: every decision named.
 Basis: probe. <sup>f-ojs3</sup>
 
 <a id="ojs4"></a>
-**OJS4 — "Subscriptions Report" fails to download** · 🐞 · user-visible · crash: server.
+**OJS4 — "Subscriptions Report" downloads nothing and leaves a blank tab when an institutional contact has no country** · 🐞 · medium · crash: server.
 When an institutional subscription's contact has no country on their
-profile, pressing "Subscriptions Report" makes the app fail: no file
-arrives, the browser tab is left blank and no message says why. The
-same file downloads once that contact has a country, and individual
-subscribers without a country are listed with an empty "Country".
-Expected: the whole list, the country left empty.
-Basis: probe. <sup>f-ojs4</sup>
+profile, pressing "Subscriptions Report" on Statistics › "Reports" makes
+the app fail on the server: no file arrives, the browser tab is left
+blank and no message says why. Individual subscribers without a country
+are listed with an empty "Country", as expected.
+
+The journal gets no subscriber list at all, not even the individual
+subscriptions. The file downloads again once every institutional contact
+has a country.
+
+Registration and the user's own Profile require a country, but the
+editors' "Add User", "Edit User" and "Create New Reviewer" forms do not,
+so a contact the journal's staff added can have none. Expected: the
+whole list, the country left empty.
+Basis: probe, 2026-10-02. <sup>f-ojs4</sup>
 
 ### OMP
 
@@ -2080,6 +2090,7 @@ decision to name (Rule 20b).
 
 <a id="fn-f-ojs4"></a>
 **f-ojs4** — fn n. Live-probed 2026-09-28: td12, the server error in fn n.
+Issue report: [docs/issues/U65-OJS4-subscriptions-report-contact-no-country.md](../issues/U65-OJS4-subscriptions-report-contact-no-country.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — fn f: OMP adds `DECLINE_INTERNAL` to `getDeclinedDecisions()`
