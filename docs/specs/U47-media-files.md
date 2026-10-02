@@ -823,6 +823,7 @@ Left out of the scenarios above, by reason:
   - the guard for A5 (issue report `docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md`): change a media file's "Name of the file" in "Edit Metadata", leave with "Cancel" › "Yes", and check the row and the reopened box show the saved name, and that a "Save" of another field does not store the abandoned one.
   - the guard for A3 (issue report `docs/issues/U47-A3-media-upload-window-hidden-drop-button.md`): on the empty "Upload Media File" window, check that the buttons in the accessibility tree are the side window's top bar, "Close" and "Click to upload files", and that Tab from "Click to upload files" lands on a control on screen.
   - the guard for OMP2 (issue report `docs/issues/U47-OMP2-press-copyeditor-media-download-refused.md`): on a press, a Copyeditor assigned to a monograph in Copyediting is not offered "Media" in the side menu, while a Layout Editor in Production keeps the page and the download.
+  - the guard for A1 (issue report `docs/issues/U47-A1-media-actions-offered-then-refused.md`): an assigned Layout Editor without "Permissions" sees the "Media" list alone (no "Add Media File", "Batch Link Media" or write actions in the row menu), while an editor whose assignment allows changes keeps every action.
 - **Rarely met**:
   - no component marked as a dependent file, where "Upload Media File"
     holds only "No media types are configured. Please contact the
@@ -874,7 +875,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | Assigned roles without "Permissions" are offered every media action, and each fails: with an "Error" window, or with no message on "Save" | 🐞 | user-visible | — |
+| [A1](#a1) | A Layout Editor is offered every action on the "Media" page, and each change is refused | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | The empty "Upload Media File" window gives screen readers and the keyboard a button nobody can see | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | A file over the upload limit fails with a server error; its card reads "Invalid JSON response from server." | 🐞 | minor · crash: server | — |
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -888,22 +889,26 @@ an entry notes otherwise; the team settles them on spec review.
 
 ### All apps
 <a id="a1"></a>
-**A1 — Media actions offered to people whose changes are refused** · 🐞 · user-visible.
-An assigned Guest Editor, Layout Editor, Designer, Indexer or
-Proofreader (and a Section Editor or Moderator whose assignment's
-"Permissions" box was unticked) sees "Add Media File", "Batch Link
-Media" and the full row menu, exactly as a Journal Manager does. Every
-change they make then fails. "Upload Files", "Link Media" and the
-delete dialog's "OK" open an "Error" window reading "You are not
-allowed to edit this publication."; "Save" in "Edit Metadata" opens
-nothing, and the window stays open with the new value and no message.
-The list stays as it was. The page decides what to offer from the
-person's role alone; the server checks the publication's edit
-permission. Either the page should offer the actions only to people who
-may edit the publication, or the server should accept the roles the
-page offers them to. At install this refuses the Guest Editor and every
-assistant role that reaches Production.
-Basis: probe, 2026-09-24. <sup>f-a1</sup>
+**A1 — A Layout Editor is offered every action on the "Media" page, and each change is refused** · 🐞 · medium.
+A version's "Media" page holds the images and other files its HTML
+galley shows, and the production team manages them there. An assigned
+Guest Editor, Layout Editor, Designer, Indexer or Proofreader (and a
+Section Editor or Moderator whose assignment's "Permissions" box was
+unticked) sees "Add Media File", "Batch Link Media" and the full row
+menu, exactly as a Journal Manager does. Every change they make then
+fails: "Upload Files", "Link Media" and the delete dialog's "OK" open an
+"Error" window reading "You are not allowed to edit this publication.",
+and "Save" in "Edit Metadata" keeps the window open with only a passing
+notice, "An unexpected error has occurred. Please reload the page and
+try again." The page offers the changes by role; the server accepts them
+only from people allowed to change the publication, the right the
+"Permissions" box on an assignment grants. One of the two is wrong and
+the team must choose which; this report recommends that the page follow
+the server. "Permissions" is unticked by default for the Guest Editor
+and the assistant roles, so with default roles each of them assigned to
+a submission meets this. An editor can tick the box on their assignment,
+or make the change for them.
+Basis: probe, 2026-10-02. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — The "ID" column mixes two kinds of number** · ❓ · minor.
@@ -1711,6 +1716,7 @@ OPS Moderator and Author; absent (false) for Guest Editor and every
 declares only `publication` and `submission`. The silent "Save": note s.
 Live-probed 2026-09-24: note q2. Compare the galley page, where on a
 journal the "Permissions" box plays no part (*Galleys*).
+Issue report: [docs/issues/U47-A1-media-actions-offered-then-refused.md](../issues/U47-A1-media-actions-offered-then-refused.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note d: `MediaFileManagerCellGroupId.vue` shows
