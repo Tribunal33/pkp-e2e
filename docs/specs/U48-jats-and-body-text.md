@@ -1278,7 +1278,7 @@ Issue report: [pkp-e2e#494](https://github.com/jardakotesovec/pkp-e2e/issues/494
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note b and note p: OMP's navigation config has no `bodyText` item, so `navigateToMenu('publication_{id}_bodyText')` finds no entry after the version form's POST/PUT has run; the address keeps `importFileUrl` and `importFileName`. Probe: d28.
-Issue report: [docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md](../issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md).
+Issue report: [pkp-e2e#553](https://github.com/jardakotesovec/pkp-e2e/issues/553) ([docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md](../issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md)).
 
 <a id="fn-d28"></a>
 **d28** — Live-probed 2026-09-25 (Purpose, absence; OMP1), OMP and OPS: a monograph's and a preprint's publication lists carry no "JATS XML" and no "Body Text"; the typed menu keys land on the stage page; the published book and preprint pages carry no "JATS" link; no installed plugin row mentions JATS. On OMP, "Send to Text Editor" on "notes.md" was offered to the Press Manager and the Press Editor, not to the Series Editor or the Author; its window asks "To which version would you like to send this file?". "Confirm" with the existing version closed the window and stayed on "Workflow: Submission" with nothing imported; with "Create New Version" the side menu gained a second "Unassigned version" entry.
