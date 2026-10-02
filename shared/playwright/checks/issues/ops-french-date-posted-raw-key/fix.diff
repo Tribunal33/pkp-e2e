@@ -1,0 +1,119 @@
+--- a/locale/fr_CA/submission.po
++++ b/locale/fr_CA/submission.po
+@@ -128,89 +128,88 @@
+ msgstr ""
+ 
+ msgid "publication.status.published"
+-msgstr ""
++msgstr "Publié-e"
+ 
+ msgid "submission.status.scheduled"
+-msgstr ""
++msgstr "Programmé-e"
+ 
+ msgid "publication.status.unscheduled"
+-msgstr ""
++msgstr "Non publié-e"
+ 
+ msgid "submission.publication"
+-msgstr ""
++msgstr "Prépublication"
+ 
+ msgid "submission.publications"
+-msgstr ""
++msgstr "Prépublications"
+ 
+ msgid "publication.copyrightYearBasis.issueDescription"
+-msgstr ""
++msgstr "L'année du droit d'auteur sera définie automatiquement lorsque ceci sera publié."
+ 
+ msgid "publication.copyrightYearBasis.submissionDescription"
+-msgstr ""
++msgstr "L'année du droit d'auteur sera définie automatiquement en fonction de la date de publication."
+ 
+ msgid "publication.datePublished"
+-msgstr ""
++msgstr "Date de publication"
+ 
+ msgid "publication.editDisabled"
+-msgstr ""
++msgstr "Cette version a été publiée et ne peut pas être modifiée."
+ 
+ msgid "publication.event.published"
+-msgstr ""
++msgstr "La soumission a été publiée."
+ 
+ msgid "publication.event.scheduled"
+-msgstr ""
++msgstr "La publication de la soumission a été programmée."
+ 
+ msgid "publication.event.unpublished"
+-msgstr ""
++msgstr "La soumission a été dépubliée."
+ 
+ msgid "publication.event.versionPublished"
+-msgstr ""
++msgstr "Une nouvelle version a été publiée."
+ 
+ msgid "publication.event.versionScheduled"
+-msgstr ""
++msgstr "La publication d'une nouvelle version a été programmée."
+ 
+ msgid "publication.event.versionUnpublished"
+-msgstr ""
++msgstr "Cette version a été dépubliée et n'est plus accessible au public."
+ 
+ msgid "publication.invalidSubmission"
+-msgstr ""
++msgstr "La soumission pour cette prépublication n'a pu être trouvée."
+ 
+ msgid "publication.publish"
+-msgstr ""
++msgstr "Publier"
+ 
+ msgid "publication.publish.requirements"
+-msgstr ""
++msgstr "Les conditions suivantes doivent être remplies avant que ceci ne puisse être publié."
+ 
+ msgid "publication.required.declined"
+-msgstr ""
++msgstr "Une soumission refusée ne peut pas être publiée."
+ 
+ msgid "publication.required.reviewStage"
+ msgstr ""
+ 
+ msgid "submission.license.description"
+-msgstr ""
++msgstr "La licence sera automatiquement définie comme <a href='{$licenseUrl}' target='_blank'>{$licenseName}</a> lorsque ceci sera publié."
+ 
+ msgid "submission.copyrightHolder.description"
+-msgstr ""
++msgstr "Les droits d'auteur seront automatiquement attribués à {$copyright} lorsque ceci sera publié."
+ 
+ msgid "submission.copyrightOther.description"
+-msgstr ""
++msgstr "Attribuer à la partie suivante les droits d'auteur pour les soumissions publiées."
+ 
+ msgid "publication.unpublish"
+-msgstr ""
++msgstr "Dépublier"
+ 
+ msgid "publication.unpublish.confirm"
+-msgstr ""
++msgstr "Êtes-vous certain-e de ne pas vouloir que ceci soit publié ?"
+ 
+ msgid "publication.unschedule.confirm"
+-msgstr ""
++msgstr "Êtes-vous certain-e de ne pas vouloir programmer la publication de ceci ?"
+ 
+ msgid "publication.version.details"
+-msgstr ""
++msgstr "Détails de la version {$version}"
+ 
+-#, fuzzy
+ msgid "submission.queries.production"
+-msgstr ""
++msgstr "Tâches et discussions de production"
+ 
+ msgid "doi.submission.incorrectContext"
+ msgstr ""

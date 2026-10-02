@@ -1354,8 +1354,9 @@ list names every version with a raw translation key,
 read "2026-09-30 (##publication.versionStage.display##)" twice. The
 English page reads "2026-09-30 (Author Original 2.0)" and "2026-09-30
 (Author Original 1.0)". A preprint's line above its title shows the same
-key, and so does the editor's workflow, whose "Publication" menu lists
-one entry per version.
+key, and so does the editor's workflow: its "Publication" menu lists
+one entry per version, and the "Create New Version" window's list of
+versions to copy from offers each under the same key.
 Nothing is lost and every link still opens its version, but neither a
 reader nor an editor can tell the versions apart by name or number in
 French. The release before listed them by number in French ("2026-09-30

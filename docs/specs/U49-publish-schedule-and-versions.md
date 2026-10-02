@@ -1079,7 +1079,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|------------------------------|------|--------|--------|
 | [A5](#a5) | Readers never see a new version's Summary of Changes, though the editor is told it appears publicly | 🐞 | high | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Merely creating an unpublished version rewrites the live reader page's date line | 🐞 | user-visible | — |
-| [A10](#a10) | In French the "Create New Version" dialog and the Publication Settings / Preprint Entry page show raw codes; the versions to copy from cannot be told apart | 🐞 | minor | — |
+| [A10](#a10) | In French the "Create New Version" dialog and the Publication Settings / Preprint Entry page show raw codes; the versions to copy from cannot be told apart | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused with no message and publishing is unreachable | 🐞 | user-visible | — |
 | [OJS2](#ojs2) | Editor's "Schedule Only" publishes the article at once when the journal has no published issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1224,7 +1224,7 @@ distinguishing number? Lean: yes; every other version name is unique.
 Basis: probe. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — In French the version dialog and the entry page show raw codes** · 🐞 · minor.
+**A10 — In French the version dialog and the entry page show raw codes** · 🐞 · low.
 With the interface in French (Canada), the Journal Manager reads raw
 codes where French words belong:
 - every app, the "Create New Version" dialog: its title "Créer une
@@ -1277,11 +1277,14 @@ codes where French words belong:
 The rest of the two entry pages reads French ("Rubrique" or "Série", the date
 description, "Enregistrer"), and the English screens show none of these
 codes. A French-speaking editor has to guess which version a new one
-copies and what each field is for. The pages' menu entry and heading
+copies and what each field is for. Of these texts only "Date Posted" shipped
+in a released version, and its French is empty there too; the rest
+arrived with main's new pages and wait for their translations, which
+the team does not count as a defect (2026-10-02). The pages' menu entry and heading
 are [Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s
 finding, and why a missing French text shows as a code at all is
 [Languages & locales](U57-languages-and-locales.md#a4)'.
-Since: 2026-09-30 · Basis: probe. <sup>[f-a10](#fn-a10)</sup>
+Since: 2026-09-30 · Basis: probe, 2026-10-02. <sup>[f-a10](#fn-a10)</sup>
 
 ### OJS
 
@@ -2226,6 +2229,8 @@ an empty `msgstr` (OPS `publication.datePublished` in
 `locale/fr_CA/submission.po`), and the client prints the key in place
 of the text. No request failed and no
 script error was logged.
+Issue report: [docs/issues/U49-A10-ops-french-date-posted-raw-key.md](../issues/U49-A10-ops-french-date-posted-raw-key.md).
+Issue report: [pkp-e2e#228](https://github.com/jardakotesovec/pkp-e2e/issues/228) ([docs/issues/U13-A1-french-version-name-raw-key.md](../issues/U13-A1-french-version-name-raw-key.md)), the list of versions to copy from.
 
 <a id="fn-ojs1"></a>
 **f-ojs1** — Live 2026-08-28 (metadata spec, register A1): with

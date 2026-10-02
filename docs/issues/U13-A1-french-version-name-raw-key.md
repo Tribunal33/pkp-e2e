@@ -10,7 +10,7 @@
   - 3.3: none (code)
 - **Introduced** `pkp/pkp-lib#10810` for `pkp/pkp-lib#10669` · [958592a159](https://github.com/pkp/pkp-lib/commit/958592a15966ca41ce8b02cfe655b74d7f554241) · 2025-05-30 · Dimitris Efstathiou (defstat)
 - **Upstream** none found (2026-10-01)
-- **Tracked in** spec U13 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#a1), spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15) (the version names), spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (a journal's MARC records)
+- **Tracked in** spec U13 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#a1), spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15) (the version names), spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (a journal's MARC records), spec U49 [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U49-publish-schedule-and-versions.md#a10) (the "Create New Version" window's list of versions to copy from)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -21,8 +21,9 @@ list names every version with a raw translation key,
 read "2026-09-30 (##publication.versionStage.display##)" twice. The
 English page reads "2026-09-30 (Author Original 2.0)" and "2026-09-30
 (Author Original 1.0)". A preprint's line above its title shows the same
-key, and so does the editor's workflow, whose "Publication" menu lists
-one entry per version.
+key, and so does the editor's workflow: its "Publication" menu lists
+one entry per version, and the "Create New Version" window's list of
+versions to copy from offers each under the same key.
 
 Nothing is lost and every link still opens its version, but neither a
 reader nor an editor can tell the versions apart by name or number in
@@ -145,7 +146,11 @@ string; two cast it themselves. The fix covers all of them:
   and the preprint's line above the title (on screen: OJS, OMP, OPS,
   and a press's chapter page).
 - The publication's `versionString` in the REST API, which the workflow
-  prints in its "Publication" menu (on screen, all three apps).
+  prints in its "Publication" menu and, through
+  `useWorkflowVersionForm`'s `buildPublicationOptions()`, in the "Create
+  New Version" window's "versions to copy from" select and the "Send
+  File to Text Editor" picker (on screen, all three apps, the picker by
+  code).
 - The author's dashboard list of publications, the DOIs page's version
   rows, the public comments and open review panels (code).
 - Cast directly: each app's `PublishForm` ("The publication version is
@@ -318,6 +323,18 @@ English locale entry removed, tried, with no data to repair.
   Record locale" and "versions list locale key". Read:
   `pkp/pkp-lib#10669` and `pkp/pkp-lib#10810` (no mention of the
   pattern's translation).
+- The "Create New Version" window: read on `main` (2026-10-02, pkp/datasets
+  e8dafbc) with `MODE=dialog` of
+  [`ops-french-date-posted-raw-key/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/ops-french-date-posted-raw-key/walk.js)
+  (spec U49 A10): `dbarnes` in French opened the window from the side
+  menu on OJS submission 1, OMP book 5 and OPS preprint 3 and pressed
+  "Annuler". The versions to copy from read
+  `##publication.versionStage.display##` for each version (two on OJS
+  and OPS, one on OMP). Tips: OJS b84f8e2e44 (`lib/pkp` ddd8ab243a),
+  OMP 3b0ecf794c and OPS c8af945bb7 (`lib/pkp` 3dc90c81a6). The options
+  come from `buildPublicationOptions()` in
+  `lib/ui-library/src/pages/workflow/composables/useWorkflowVersionForm.js`,
+  which prints each publication's `versionString`.
 - The MARC records: field 251 was read in the walk of
   [`oai-french-records-raw-keys/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/oai-french-records-raw-keys/walk.js)
   (spec U19 A13), on OJS `main` at 06fd981b01 (`lib/pkp` 2e377d27fc),
