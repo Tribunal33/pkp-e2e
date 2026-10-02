@@ -2307,7 +2307,7 @@ chart and "Search Phrase · zzzz". "Issues" {OJS}, with issues 7/3
 <a id="fn-f-a1"></a>
 **f-a1** — fn-f (the null start date and the untranslated key).
 Live-probed 2026-09-27: td1.
-Issue report: [docs/issues/U64-A1-all-dates-error-nothing-published.md](../issues/U64-A1-all-dates-error-nothing-published.md).
+Issue report: [docs/issues/U64-A1-all-dates-error-nothing-published.md](../issues/U64-A1-all-dates-error-nothing-published.md), filed as [pkp-e2e#610](https://github.com/jardakotesovec/pkp-e2e/issues/610).
 
 <a id="fn-f-a2"></a>
 **f-a2** — fn-c (`validateDateStartMin()`/`validateDateEndMax()` on an
