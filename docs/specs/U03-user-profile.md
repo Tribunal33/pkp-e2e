@@ -1044,7 +1044,7 @@ unless its Basis line says otherwise.
 | [A17](#a17) | After a Contact save the server refused, the typed values are still on screen, but pressing another tab drops them at once, with no question asked | 🐞 | user-visible | — |
 | [A18](#a18) | "confirm" and "reject" land an account with roles in more than one journal on the site-level profile, outside the journal where it asked for the email change | 🐞 | minor | @jarda.kotesovec 2026-09-25 · risk accepted |
 | [A19](#a19) | Text typed only into "Signature", "Mailing Address" or "Bio Statement" is lost with no question when another tab is pressed or the page is reloaded | 🐞 | user-visible | — |
-| [OPS2](#ops2) | A preprint server sends the email-change message but its emails list has no "Change Email Address Invitation" row to edit | 🐞 | user-visible | — |
+| [OPS2](#ops2) | A preprint server sends the email-change message but its emails list has no "Change Email Address Invitation" row to edit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | The "role scheduled to begin" banner shows in any journal where the user has no role, even when the waiting role is elsewhere | ❓ | minor | — |
 | [A6](#a6) | A user can drop a Reader, Author or Reviewer role a manager gave them by unticking it; an Author is then locked out of My Submissions without warning | ❓ | user-visible | — |
 | [A8](#a8) | The email-change confirmation goes to the old address; the new address is never checked to exist | ❓ | user-visible | — |
@@ -1293,16 +1293,18 @@ page's stray interests question on a preprint server is
 Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-ops1](#fn-ops1)</sup>
 
 <a id="ops2"></a>
-**OPS2 — The email-change template is hidden on a preprint server** · 🐞 · user-visible.
+**OPS2 — The email-change template is hidden on a preprint server** · 🐞 · medium.
 A preprint server sends "Confirm account contact email change request"
 exactly as a journal does, but its Manage Emails list (Settings › Workflow ›
 Emails › "Add and edit templates") has no "Change Email Address Invitation"
-row, so a Preprint Server Manager cannot review or reword the message; a journal and a
-press list it with an "Edit" button. The same cause hides the role-invitation
-template there ([User invitations OPS1](U06-user-invitations.md#ops1)): a
-template in active use is missing from the list, which reads as an omission,
-not a trim.
-Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-ops2](#fn-ops2)</sup>
+row, so a Preprint Server Manager cannot review or reword the message; a
+journal and a press list it with an "Edit" button. The same cause hides the
+role-invitation template there ([User invitations
+OPS1](U06-user-invitations.md#ops1)). It is one of nine emails a preprint
+server sends that its Manage Emails list leaves out, all from one cause: the
+preprint server keeps its own list of emails, and the shared emails added
+since 3.4 never joined it.
+Basis: probe, issue report walk, 2026-10-02. <sup>[f-ops2](#fn-ops2)</sup>
 
 ### Retired
 
@@ -2493,6 +2495,7 @@ subject "Confirm account contact email change request"); OPS lists 17 and
 the string "Change Email" occurs nowhere on the page, while the OPS scratch
 user's request delivered the same mail. Live-probed 2026-09-04 (claim check): holds (66 /
 56 / 17 templates again).
+Issue report: [docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md](../issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md).
 
 ## Reference — entry points & surfaces
 

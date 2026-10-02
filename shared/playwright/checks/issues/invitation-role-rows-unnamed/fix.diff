@@ -1,0 +1,48 @@
+--- a/lib/ui-library/src/pages/userInvitation/UserInvitationUserGroupsTable.vue
++++ b/lib/ui-library/src/pages/userInvitation/UserInvitationUserGroupsTable.vue
+@@ -39,6 +39,7 @@
+ 					</span>
+ 					<FieldSelect
+ 						v-else
++						:form-id="`currentUserGroups-${index}`"
+ 						name="masthead"
+ 						:label="t('invitation.role.masthead')"
+ 						:is-required="true"
+@@ -74,6 +75,7 @@
+ 				>
+ 					<TableCell>
+ 						<FieldSelect
++							:form-id="`userGroupsToAdd-${index}`"
+ 							name="userGroupId"
+ 							:label="t('invitation.role.selectRole')"
+ 							:is-required="true"
+@@ -92,6 +94,7 @@
+ 					</TableCell>
+ 					<TableCell>
+ 						<FieldText
++							:form-id="`userGroupsToAdd-${index}`"
+ 							name="dateStart"
+ 							:label="t('invitation.role.dateStart')"
+ 							input-type="date"
+@@ -116,6 +119,7 @@
+ 						</span>
+ 						<FieldSelect
+ 							v-else
++							:form-id="`userGroupsToAdd-${index}`"
+ 							name="masthead"
+ 							:label="t('invitation.role.masthead')"
+ 							:is-required="true"
+--- a/lib/pkp/cypress/support/commands.js
++++ b/lib/pkp/cypress/support/commands.js
+@@ -976,9 +976,9 @@
+ 	cy.get('#-search-control').type(user.username + '@mailinator.com');
+ 	cy.get('.bg-primary').click();
+ 	cy.get('select[name="userGroupId"]').select(user.roles);
+-	cy.get('#-dateStart-control').type(currentDate);
++	cy.get('#userGroupsToAdd-0-dateStart-control').type(currentDate);
+ 	if (!user.roles.includes('Reviewer') && !user.roles.includes('Internal Reviewer') && !user.roles.includes('External Reviewer')) {
+-		cy.get('#-masthead-control').select('Appear on the masthead');
++		cy.get('#userGroupsToAdd-0-masthead-control').select('Appear on the masthead');
+ 	}
+ 	cy.contains('.pkpButton', 'Save And Continue').click();
+ 	cy.wait(2000);

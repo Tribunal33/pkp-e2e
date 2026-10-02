@@ -1,0 +1,38 @@
+--- a/classes/mail/Repository.php
++++ b/classes/mail/Repository.php
+@@ -29,22 +29,34 @@
+     }
+ 
+     /**
+-     * Overrides the map from the shared library as OPS uses distinct mailables from OJS and OMP
++     * Overrides the map from the shared library as OPS uses distinct mailables from OJS and OMP.
++     *
++     * List every shared mailable that OPS sends: one left out is still sent, but its email
++     * template has no row on the Manage Emails page and cannot be edited.
+      */
+     public function map(): Collection
+     {
+         return collect([
+             \PKP\mail\mailables\AnnouncementNotify::class,
++            \PKP\mail\mailables\AuthorPublicationPublished::class,
++            \PKP\mail\mailables\ChangeProfileEmailInvitationNotify::class,
+             \PKP\mail\mailables\DecisionAcceptNotifyAuthor::class,
+             \PKP\mail\mailables\DecisionInitialDeclineNotifyAuthor::class,
+             \PKP\mail\mailables\DecisionNotifyOtherAuthors::class,
+             \PKP\mail\mailables\DecisionRevertInitialDeclineNotifyAuthor::class,
+             \PKP\mail\mailables\EditorAssigned::class,
++            \PKP\mail\mailables\OrcidCollectAuthorId::class,
++            \PKP\mail\mailables\OrcidRequestAuthorAuthorization::class,
++            \PKP\mail\mailables\OrcidRequestUpdateScope::class,
+             \PKP\mail\mailables\PasswordResetRequested::class,
+             \PKP\mail\mailables\StatisticsReportNotify::class,
+             \PKP\mail\mailables\SubmissionAcknowledgement::class,
+             \PKP\mail\mailables\SubmissionAcknowledgementNotAuthor::class,
++            \PKP\mail\mailables\SubmissionNeedsEditor::class,
++            \PKP\mail\mailables\SubmissionSavedForLater::class,
+             \PKP\mail\mailables\UserCreated::class,
++            \PKP\mail\mailables\UserRoleAssignmentInvitationNotify::class,
++            \PKP\mail\mailables\UserRoleEndNotify::class,
+             \PKP\mail\mailables\ValidateEmailContext::class,
+             \PKP\mail\mailables\ValidateEmailSite::class,
+             \PKP\mail\mailables\PublicationVersionNotify::class,

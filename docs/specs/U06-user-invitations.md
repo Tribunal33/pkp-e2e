@@ -759,12 +759,12 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A4](#a4) | A newcomer who accepts a role invitation is not signed in and lands on the sign-in screen | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | "Invitation Sent" promises the inviter news of the person's decision, but nothing ever tells them | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Small wording and untranslated-text defects across the invitation screens and emails | 🐞 | minor | claim check (claude), 2026-09-28 — one item added (the accept page's invisible steps button) |
-| [A8](#a8) | Added role rows carry no accessible field names; a screen reader hears row 1's labels | 🐞 | user-visible | — |
+| [A8](#a8) | Role invitation wizard: a screen reader hears no field names in role rows after the first | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A newcomer named only in another form language, or invited on a journal whose primary language is not the site's by a manager working in the site's, is still greeted "Dear {email}," | 🐞 | minor | — |
 | [A11](#a11) | The invitation email promises a masthead listing for roles the masthead does not list, such as Reader and Author | 🐞 | minor | — |
 | [A12](#a12) | The "Invite to a role" address with a wrong last word shows an empty page instead of "404 Not Found" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [OPS1](#ops1) | The invitation email template has no row on the preprint server's Emails screen | 🐞 | user-visible | — |
+| [OPS1](#ops1) | The invitation email template has no row on the preprint server's Emails screen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | Daily cleanup deletes invitations still being composed | ❓ | latent | — |
 | [A9](#a9) | The role-removal email tells a disabled user their account "is still active"; the active "Remove Role" and masthead select on their screen are intended | ❓ | minor | @beaug 2026-09-18 · controls intended, email wording open |
 | [A1](#a1) | Retired: the send wizard's address was gated more widely than the screen that offers it; it now lets in only those who open Users & Roles (Actors row 2) | ✅ | retired | upstream change + claim check (claude), 2026-10-02 — fixed upstream |
@@ -846,13 +846,22 @@ the untranslated "{$current}/{$total} steps"; pressing it does nothing.
 Basis: probe + claim check. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
-**A8 — Added role rows are invisible to a screen reader** · 🐞 · user-visible.
-In the send wizard's roles table, every added row repeats the first row's
-control identifiers, so each field label points back at row 1. A
-screen-reader user editing the second or later row hears no name at all for
-its role, start date, or masthead field, and cannot tell which row they are
-changing. Sighted use is unaffected.
-Basis: probe (accessibility-tree check). <sup>[f-a8](#fn-a8)</sup>
+**A8 — Role invitation wizard: a screen reader hears no field names in role rows after the first** · 🐞 · low.
+The role invitation wizard (Settings › Users & Roles › "Invite to a role")
+has a roles table with one row per role. Each field of the first row is
+named by its label twice over ("Start Date * Required Start Date *
+Required"), so a screen reader reads the label twice. Each field of the
+second and later rows has no name at all, so a screen reader announces only
+the kind of field (a combo box, a text box). A manager who presses "Add
+Another Role" cannot hear which field of the new row they are in. A sighted
+user meets it too: a click on a label in the second row lands in the first
+row's field. A member's Edit page ("Edit" on a user's row in Users & Roles)
+opens the same wizard. There a member's current roles show their role and
+dates as text, and only the masthead choice is a field. That select is
+unnamed on every current role after the first, and on any role row added
+there. The invitation still goes out with the right roles, and a screen
+reader user can get round the missing names.
+Basis: probe, issue report walk, 2026-10-02. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
 **A9 — The role-removal email tells a disabled user their account is still active** · ❓ · minor.
@@ -942,15 +951,16 @@ from 3.4 or from a 3.5 release before 3.5.0-4. Basis: probe, 2026-10-02.
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — Invitation email template hidden on OPS** · 🐞 · user-visible.
+**OPS1 — Invitation email template hidden on OPS** · 🐞 · medium.
 On a preprint server the Emails settings screen lists no row for "User
-Invited to Role Notification". Search and the full list both answer "No
-items found.", so a manager cannot review or customize the stored template.
-Invitations still send and deliver using it. On journals and presses the row
-is present with an Edit button. This reads as a side effect of the preprint
-server keeping its own list of emails, not an intended trim: the template
-ships seeded and is in active use.
-Basis: probe + code. <sup>[f-ops1](#fn-ops1)</sup>
+Invited to Role Notification". A search for it answers "No items found." and
+the full list leaves it out, so a manager cannot review or customize the
+stored template. Invitations still send and deliver using it. On journals
+and presses the row is present with an Edit button. It is one of nine emails
+a preprint server sends that its Manage Emails list leaves out, all from one
+cause: the preprint server keeps its own list of emails, and the shared
+emails added since 3.4 never joined it.
+Basis: probe, issue report walk, 2026-10-02. <sup>[f-ops1](#fn-ops1)</sup>
 
 ### Retired
 
@@ -1584,6 +1594,7 @@ every `label[for]` resolves to the first row's control; no
 shows row 2's combobox/textbox without an accessible name. Observed
 2026-07-31 (claim check —
 duplicate-id scan + aria snapshot on OJS; shared component, all three apps).
+Issue report: [docs/issues/U06-A8-invitation-role-rows-unnamed.md](../issues/U06-A8-invitation-role-rows-unnamed.md).
 
 <a id="fn-a9"></a>
 **f-a9** — The payload's `disabled` flag (f-a6) gates the banner
@@ -1704,6 +1715,7 @@ Live-confirmed 2026-07-31 (live probes, all three apps): "User Invited
 to Role Notification" listed with an Edit button on OJS and OMP; OPS search
 and full list answer "No items found."; the OPS invitation email sent and
 delivered in the same session.
+Issue report: [docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md](../issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md).
 
 ## Reference — entry points & surfaces
 

@@ -556,7 +556,7 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 | [A8](#a8) | The verification-failure page says "journal manager" on presses and preprint servers | 🐞 | minor | — |
 | [A11](#a11) | In French, the site's ORCID switch shows raw codes, and both ORCID tabs are named "Plugiciel de profil ORCID" | 🐞 | minor | — |
 | [A12](#a12) | In French, the contributor's ORCID iD field shows raw codes for its button, questions and notes | 🐞 | user-visible | — |
-| [OPS2](#ops2) | The ORCID request emails have no rows on the preprint server's Emails screen | 🐞 | user-visible | — |
+| [OPS2](#ops2) | The ORCID request emails have no rows on the preprint server's Emails screen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | An iD connected while registering lands on the account unverified | ❓ | minor | — |
 | [A6](#a6) | The author-email toggle's label misdescribes when it fires | ❓ | minor | — |
 | [A7](#a7) | The re-authorization email template is not editable in any app. Resolved upstream for journals and presses (pkp/pkp-lib#13050); the preprint-server gap is [OPS2](#ops2)'s | ❓ | latent | rebase check (claude) 2026-08-25 |
@@ -719,14 +719,15 @@ Lean: hide it. A control that can never act misleads.
 Basis: probe + code. <sup>[f-ops1](#fn-ops1)</sup>
 
 <a id="ops2"></a>
-**OPS2 — ORCID request emails hidden from the OPS Emails screen** · 🐞 ·
-user-visible.
+**OPS2 — ORCID request emails hidden from the OPS Emails screen** · 🐞 · medium.
 On a preprint server the Emails settings screen lists no row for the ORCID
 request emails, so a manager cannot review or customize them. The "Request
 verification" button still sends them using the seeded texts. On journals
-and presses the two request emails are listed.
-Basis: probe + code (the preprint server keeps its own email roster and
-omits them). <sup>[f-ops2](#fn-ops2)</sup>
+and presses the two request emails are listed. They are among nine emails a
+preprint server sends that its Manage Emails list leaves out, all from one
+cause: the preprint server keeps its own list of emails, and the shared
+emails added since 3.4 never joined it.
+Basis: probe, issue report walk, 2026-10-02. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="ops3"></a>
 **OPS3 — Legacy ORCID Profile plugin ships alongside the built-in feature** · ✅ · invisible.
@@ -1245,6 +1246,7 @@ templates; same mechanism as the invitation-template gap recorded in
 "ORCID" on the OPS Emails screen returns "No items found.", while "Request
 verification" on a preprint contributor delivered the "Submission ORCID"
 email (positive control).
+Issue report: [docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md](../issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md).
 
 <a id="fn-ops3"></a>
 **f-ops3** — `ops-main/plugins/generic/orcidProfile` (submodule, release
