@@ -1,0 +1,67 @@
+--- a/lib/pkp/classes/template/PKPTemplateManager.php
++++ b/lib/pkp/classes/template/PKPTemplateManager.php
+@@ -1703,6 +1703,7 @@
+                 'datetimeFormatLong' => PKPString::convertStrftimeFormat(Config::getVar('general', 'datetime_format_long')),
+                 'timeFormat' => PKPString::convertStrftimeFormat(Config::getVar('general', 'time_format')),
+                 'supportedLocales' => !PKPSessionGuard::isSessionDisable() ? $request->getSite()->getSupportedLocaleNames(LocaleMetadata::LANGUAGE_LOCALE_ONLY) : [],
++                'supportedFormLocales' => !PKPSessionGuard::isSessionDisable() ? $request->getSite()->getSupportedLocaleNames() : [],
+             ]);
+         }
+ 
+--- a/lib/pkp/classes/services/PKPNavigationMenuService.php
++++ b/lib/pkp/classes/services/PKPNavigationMenuService.php
+@@ -782,12 +782,12 @@
+     /**
+      * Get unassigned items for the context
+      *
+-     * @param int $contextId The context ID
++     * @param ?int $contextId The context ID (null for the site)
+      * @param int $navigationMenuId The navigation menu ID
+      * @param NavigationMenu $navigationMenu The navigation menu object
+      * @return array List of unassigned menu items
+      */
+-    public function getUnassignedItems(int $contextId, int $navigationMenuId, NavigationMenu $navigationMenu): array
++    public function getUnassignedItems(?int $contextId, int $navigationMenuId, NavigationMenu $navigationMenu): array
+     {
+         /** @var NavigationMenuItemDAO $menuItemDao */
+         $menuItemDao = DAORegistry::getDAO('NavigationMenuItemDAO');
+@@ -822,10 +822,10 @@
+     /**
+      * Get all menu items for a context (for new menu creation)
+      *
+-     * @param int $contextId The context ID
++     * @param ?int $contextId The context ID (null for the site)
+      * @return array List of all menu items mapped for API response
+      */
+-    public function getAllMenuItems(int $contextId): array
++    public function getAllMenuItems(?int $contextId): array
+     {
+         /** @var NavigationMenuItemDAO $menuItemDao */
+         $menuItemDao = DAORegistry::getDAO('NavigationMenuItemDAO');
+@@ -845,20 +845,16 @@
+      */
+     public function getNavigationAreas($context): array
+     {
+-        $areas = [];
+-
+-        if ($context) {
+-            $themePlugins = PluginRegistry::loadCategory('themes', true);
++        // The site has menus of its own: ThemePlugin::isActive() reads the site's theme there.
++        $themePlugins = PluginRegistry::loadCategory('themes', true);
+ 
+-            foreach ($themePlugins as $themePlugin) {
+-                if ($themePlugin->isActive()) {
+-                    $areas = $themePlugin->getMenuAreas();
+-                    break;
+-                }
++        foreach ($themePlugins as $themePlugin) {
++            if ($themePlugin->isActive()) {
++                return $themePlugin->getMenuAreas();
+             }
+         }
+ 
+-        return $areas;
++        return [];
+     }
+ 
+     /**

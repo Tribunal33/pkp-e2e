@@ -1186,6 +1186,8 @@ are in the footnote. <sup>y</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the site's Navigation tab: "Add Menu" and a site menu's "Edit" open the menu window with the site theme's areas ("None", "primary", "user"), and a new site menu saves (Rule 1b; the guard [A4](#a4)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1268,7 +1270,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | The editorial header's help icon is named "##common.help##" | 🐞 | minor | — |
 | [A2](#a2) | A Section Editor's "Dashboard" in the public header opens the Profile page | 🐞 | minor | — |
 | [A3](#a3) | The access-denied page has an empty heading and an empty last breadcrumb | 🐞 | minor | — |
-| [A4](#a4) | On the site's Navigation tab, "Add Menu" and a menu's "Edit" open nothing and leave the page dimmed | 🐞 | user-visible · crash: script | — |
+| [A4](#a4) | Site Settings › "Navigation": "Add Menu" and a menu's "Edit" open nothing and leave the page dimmed | 🐞 | medium · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | The "Privacy Statement" and "Contact" notices send the manager to the wrong Settings tab | 🐞 | minor | — |
 | [A7](#a7) | The header's "Open Menu" button is labelled in English in every language | 🐞 | minor | — |
 | [A11](#a11) | The item window refuses a missing type, a bad path or a bad URL with no message | 🐞 | user-visible | — |
@@ -1325,15 +1327,23 @@ denied.
 Basis: probe. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — The site's menus cannot be added or edited** · 🐞 · user-visible · crash: script.
-On Administration › "Site Settings" › "Site Setup" › "Navigation", "Add
-Menu", a menu's title and its "Edit" should open the menu window as they
-do on a journal. Each instead fails in the page: the page dims, no
-window opens, and nothing on the page can be pressed until it is
-reloaded. A site menu can still be removed, and items added, edited and
-removed, but no site menu can be added, renamed, placed in an area or
-rearranged, so the site's pages keep the menus the installation placed.
-Since: 2026-01-22 · Basis: probe. <sup>f-a4</sup>
+**A4 — Site Settings › "Navigation": "Add Menu" and a menu's "Edit" open nothing and leave the page dimmed** · 🐞 · medium · crash: script.
+On Administration › "Site Settings" › "Site Setup" › "Navigation", the
+page's own script fails when the Site Administrator presses "Add Menu",
+a menu's title or its "Edit". They expect the menu window that opens on a
+journal's Navigation tab. Instead the page dims, no window opens, and
+nothing on the page can be pressed until it is reloaded. A journal's own
+Navigation tab works; the fault is the site's alone.
+
+A site menu can still be removed, and the site's items added, edited and
+removed. But no site menu can be added or renamed, given an area, or
+have items put in, taken out or reordered, so the site's pages keep the
+menus the installation placed. A site menu removed by mistake cannot be
+put back on any screen.
+
+The tab is hidden while the site hosts exactly one journal (press,
+server).
+Since: 2026-01-22 · Basis: probe, 2026-10-03. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — The "About" notice describes a condition that never applies** · ❓ · minor.
@@ -2682,6 +2692,7 @@ pkp-lib#12177 (`e0a5aa2b02`, 2026-01-22); the legacy form opened on the
 site. Past the crash, `getNavigationAreas($context)` returns `[]` when
 `$context` is null (note o), so the site window's area list would offer
 `common.none` alone.
+Issue report: [docs/issues/U08-A4-site-menu-window-opens-nothing.md](../issues/U08-A4-site-menu-window-opens-nothing.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `getMenuItemTypes()` gives `NMI_TYPE_ABOUT` a
