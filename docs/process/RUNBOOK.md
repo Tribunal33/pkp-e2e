@@ -97,7 +97,8 @@ orchestrator.
 11. **Report.** What was built, the register highlights, anything
     low-confidence; if
     anything was routed to the private file, the verification probe
-    (`briefs/security-verify.md`) has run and the report gives counts only.
+    (`briefs/security-verify.md`) has run and the report gives counts only
+    (the entries themselves go to the thread, "What goes where").
     Then stop; the next feature starts in a fresh session. Gate: `security ·
     <date> · none | routed, see private file` in phase-status.
 
@@ -106,7 +107,7 @@ orchestrator.
 | What | Where |
 |---|---|
 | Product findings: bugs, divergences, open questions, API misbehavior the browser's own traffic showed, or a direct check of an API no screen calls (the Frame's one exception), with no security dimension | the spec's Findings register; nowhere else (not `app-changes.md`, not a PROGRESS note). A 🐞 entry added to a spec that is not in `docs/tracking/issues-queue.md` puts the spec back in, with the entry named, so the issues session writes it up |
-| A potential security concern | `../e2e_ng/security.md`, private and outside every repo; verified by one targeted probe before the session report; rules and entry shape in `briefs/security-verify.md`. The fact of routing is always stated (on the VM in a thread post tagging @jarda.kotesovec alone, who watches over the security reports (regression reports tag @beaug alone; one watcher per kind, 2026-09-30), the fact only, in every session, a developer's PR check included; no direct messages); the content never appears in a spec, test, `.reports/` file, PROGRESS note, commit or Mattermost post |
+| A potential security concern | `../e2e_ng/security.md`, private and outside every repo; verified by one targeted probe before the session report; rules and entry shape in `briefs/security-verify.md`. Every entry added is posted in full in the session's thread (on the VM, in a post tagging @jarda.kotesovec alone, who watches over the security reports (regression reports tag @beaug alone; one watcher per kind, 2026-09-30), in every session, a developer's PR check included; no direct messages): Mattermost is private, the repos are public (maintainer, 2026-10-02). The content never appears in anything this repo carries: a spec, test, tracking file, PROGRESS note, commit message, branch name or pushed file |
 | A finding against an unmerged PR | the developer; the spec describes `main` (MAINTENANCE "A developer's PR fails the suite") |
 | What a probe saw on another feature's screen | `docs/tracking/incidentals.md`, one line, written by the orchestrator from the fold log and the merge, only after grepping that feature's spec for it: a sighting the spec already states is dropped, one it contradicts names the rule or register ID it contradicts; the line names the account and the state the read was taken in (signed in or out, a window open over it, what the seed held), and its evidence names the kept script under `shared/playwright/checks/` beside any `.reports/` path, which stays in the slot that wrote it (U08, U22, U28, U29, U60 claim checks) |
 | Process friction | `docs/tracking/friction.md`, one line, appended by the screen-driving agent itself |
