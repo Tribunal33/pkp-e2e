@@ -1,0 +1,34 @@
+--- a/schemas/issue.json
++++ b/schemas/issue.json
+@@ -120,6 +120,14 @@
+ 				"url"
+ 			]
+ 		},
++		"pub-id::publisher-id": {
++			"type": "string",
++			"description": "A unique ID provided by the publisher. This is often used to record the ID of this issue in an external database, in cases where the publisher maintains separate records.",
++			"apiSummary": true,
++			"validation": [
++				"nullable"
++			]
++		},
+ 		"sections": {
+ 			"type": "array",
+ 			"readOnly": true,
+--- a/lib/pkp/schemas/submissionFile.json
++++ b/lib/pkp/schemas/submissionFile.json
+@@ -188,6 +188,14 @@
+ 			"type": "string",
+ 			"apiSummary": true,
+ 			"readOnly": true
++		},
++		"pub-id::publisher-id": {
++			"type": "string",
++			"description": "A unique ID provided by the publisher. It will be used in the file's URL path instead of the `id` when present.",
++			"apiSummary": true,
++			"validation": [
++				"nullable"
++			]
+ 		},
+ 		"publisher": {
+ 			"type": "string",

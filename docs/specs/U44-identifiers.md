@@ -810,6 +810,13 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-A4-article-own-urn-refused-as-in-use.md`): an
     article's "Identifiers" page saving its own URN a second time and on
     a new version, and a URN another article carries refused
+  - the guard for OJS3 and OMP5 (issue report `docs/issues/U44-OJS3-OMP5
+    -issue-and-press-file-publisher-id-never-kept.md`): an issue's and a
+    press file's Publisher ID saved and read back on the reopened
+    "Identifiers" tab
+  - the guard for OMP5 (issue report `docs/issues/U44-OMP5-press-file-re
+    fused-publisher-id-box-vanishes.md`): a press file's "Identifiers"
+    tab keeping the "Publisher ID" box after a refused value
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -889,11 +896,11 @@ entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | "Add Check Number" on a tab writes "NaN" into an empty suffix box | 🐞 | minor | — |
 | [A14](#a14) | After "Clear", a galley's or chapter's tab still shows the removed URN | 🐞 | minor | — |
 | [OJS1](#ojs1) | A new issue galley with a Publisher ID is not saved: "Save" stays greyed with no message | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [OJS3](#ojs3) | An issue's Publisher ID is never kept | 🐞 | user-visible | — |
+| [OJS3](#ojs3) | An issue's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | A press cannot save URN settings with only "Chapters" or "Files" ticked | 🐞 | minor | — |
 | [OMP2](#omp2) | The book page labels a format's URN with a code and does not link it | 🐞 | minor | — |
 | [OMP4](#omp4) | A press's confirmation window shows the URN table where a journal shows one sentence | 🐞 | minor | — |
-| [OMP5](#omp5) | A press file's Publisher ID is never kept | 🐞 | user-visible | — |
+| [OMP5](#omp5) | A press file's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP6](#omp6) | A press file's default URN leaves out the format number the settings window announces | 🐞 | minor | — |
 | [A3](#a3) | An article's Publisher ID accepts values the tabs refuse, a duplicate included | ❓ | minor | — |
 | [A12](#a12) | A URN that differs from another only in case is accepted as new | ❓ | minor | — |
@@ -1068,13 +1075,14 @@ exports carry; the article's number can stay when none is typed.
 Basis: probe, 2026-09-24. <sup>f-ojs2</sup>
 
 <a id="ojs3"></a>
-**OJS3 — An issue's Publisher ID is never kept** · 🐞 · user-visible.
+**OJS3 — An issue's Publisher ID is never kept** · 🐞 · medium.
 A manager who types a Publisher ID on an issue's "Identifiers" tab and
-presses "Save" sees the window close as a success, but the box is
-empty when the tab is reopened, and the value shows nowhere. Digits
-and "/" are still refused with the tab's message. "Enable for Issues"
-offers a field that keeps nothing.
-Basis: probe, 2026-09-24. <sup>f-ojs3</sup>
+presses "Save" sees the window close as a success, but the box is empty
+when the tab is reopened, and the value is kept nowhere: the issue's
+stored record has no place for it, and a Native XML import drops it the
+same way. Digits and "/" are still refused with the tab's message.
+"Enable for Issues" offers a field that keeps nothing.
+Basis: probe, 2026-10-02. <sup>f-ojs3</sup>
 
 ### OMP
 
@@ -1112,14 +1120,15 @@ the press's check for the one-line case can never be true.
 Basis: probe, 2026-09-24. <sup>f-omp4</sup>
 
 <a id="omp5"></a>
-**OMP5 — A press file's Publisher ID is never kept** · 🐞 · user-visible.
+**OMP5 — A press file's Publisher ID is never kept** · 🐞 · medium.
 On a format file's "Edit a file" › "Identifiers", "Save" closes the
 window as a success, but the "Publisher ID" box is empty when it is
-reopened, whatever the value. The values Rule 4 refuses ("12345",
-"a/b", "12-34") are still refused, and after such a refusal the box
-disappears from the tab, leaving only the message, "Cancel" and
-"Save".
-Basis: probe, 2026-09-24. <sup>f-omp5</sup>
+reopened, whatever the value: the file's stored record has no place for
+it. The values Rule 4 refuses ("12345", "a/b", "12-34") are still
+refused, and after such a refusal the box disappears from the tab,
+leaving only the message, "Cancel" and "Save", until the window is
+closed and opened again; a format's own tab keeps its box.
+Basis: probe, 2026-10-02. <sup>f-omp5</sup>
 
 <a id="omp6"></a>
 **OMP6 — A press file's default URN leaves out the format number** · 🐞 · minor.
@@ -1833,6 +1842,7 @@ Issue report: [docs/issues/U44-OJS1-new-issue-galley-publisher-id-server-error.m
 closed the window and read back empty; no issue setting row held a
 publisher ID. OJS `schemas/issue.json` declares no
 `pub-id::publisher-id`, so the issue save drops it.
+Issue report: [docs/issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md](../issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `URNSettingsForm` `urnObjects` check: `enableIssueURN
@@ -1867,6 +1877,8 @@ out. Were a value stored, `SubmissionFile::getBestId()` and
 `CatalogBookHandler` would put it in the file's download address on the
 book page in place of the file's number (the reason for the "12-34"
 refusal); nothing on screen can store one.
+Issue report: [docs/issues/U44-OMP5-press-file-refused-publisher-id-box-vanishes.md](../issues/U44-OMP5-press-file-refused-publisher-id-box-vanishes.md).
+Issue report: [docs/issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md](../issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md).
 
 <a id="fn-f-omp6"></a>
 **f-omp6** — Live-probed 2026-09-24 in two runs (note g): file

@@ -18,7 +18,7 @@ and the hourly routine starts one only when none is running
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | A1: open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md (the rest of U37 written up by the issues session, VM s1, 2026-10-02) |
-| [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 | **Taken: issues session, workstation s0, 2026-10-02**; OJS1 done (docs/issues/U44-OJS1-new-issue-galley-publisher-id-server-error.md); A4 done (docs/issues/U44-A4-article-own-urn-refused-as-in-use.md) |
+| [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 | **Taken: issues session, workstation s0, 2026-10-02**; OJS1 done (docs/issues/U44-OJS1-new-issue-galley-publisher-id-server-error.md); A4 done (docs/issues/U44-A4-article-own-urn-refused-as-in-use.md); OJS3, OMP5 done (docs/issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md; OMP5 also docs/issues/U44-OMP5-press-file-refused-publisher-id-box-vanishes.md) |
 | [U53](../specs/U53-users-management.md) | 16 | 2 | 5 | **Taken: issues session, VM s2, 2026-10-02**; OPS1 done with U57 A8 (pkp-e2e#360) |
 | [U47](../specs/U47-media-files.md) | 8 | 2 | 4 | OMP1 done with U69 A9 (pkp-e2e#282) |
 | [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | A23, A24: open report docs/reports/2026-09-27-pkp-lib-13288.md |
