@@ -1,0 +1,13 @@
+--- a/lib/pkp/classes/mail/mailables/UserRoleAssignmentInvitationNotify.php
++++ b/lib/pkp/classes/mail/mailables/UserRoleAssignmentInvitationNotify.php
+@@ -136,7 +136,9 @@
+             ]
+         );
+ 
+-        if (isset($userUserGroup->masthead) && $userUserGroup->masthead) {
++        // A member is listed only for a role the masthead lists ("Consider role in masthead list")
++        // and only when they chose to appear for it, as on the Editorial Masthead page
++        if ($userGroup->masthead && !empty($userUserGroup->masthead)) {
+             $sectionMastheadAppear = __(
+                 'emails.userRoleAssignmentInvitationNotify.userGroupSectionWillAppear',
+                 [

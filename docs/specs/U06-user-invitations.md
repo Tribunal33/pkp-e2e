@@ -662,6 +662,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U06-A12-invitation-address-made-up-kind-empty-page.md`):
     the send wizard's address typed with a made-up last word and with
     "reviewerAccess" shows "404 Not Found" (Actors row 2)
+  - the guard for A11 (issue report
+    `docs/issues/U06-A11-invitation-promises-masthead-for-unlisted-roles.md`):
+    an invitation offering Author with "Appear on the masthead" reads "Your
+    name will not appear in the {journal}'s masthead as a Author." while an
+    editor role's line keeps "will appear"
 - **Rarely met**:
   - a past start date taking effect as the acceptance day (Rule 8): a
     manager rarely backdates a start date, and the body names no screen
@@ -761,7 +766,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A7](#a7) | Small wording and untranslated-text defects across the invitation screens and emails | 🐞 | minor | claim check (claude), 2026-09-28 — one item added (the accept page's invisible steps button) |
 | [A8](#a8) | Role invitation wizard: a screen reader hears no field names in role rows after the first | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A newcomer named only in another form language, or invited on a journal whose primary language is not the site's by a manager working in the site's, is still greeted "Dear {email}," | 🐞 | minor | — |
-| [A11](#a11) | The invitation email promises a masthead listing for roles the masthead does not list, such as Reader and Author | 🐞 | minor | — |
+| [A11](#a11) | The invitation email promises a masthead listing for roles the masthead never lists, such as Author or Reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | The "Invite to a role" address with a wrong last word shows an empty page instead of "404 Not Found" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | The invitation email template has no row on the preprint server's Emails screen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -902,16 +907,26 @@ only the greeting misses the name.
 Basis: probe. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
-**A11 — The invitation email promises masthead listings the masthead never gives** · 🐞 · minor.
-Every role in the invitation email, held or offered, set to "Appear on the
-masthead" carries "Your name will appear in the {journal}'s masthead as a
-{role}.", also for a role the journal's "Editorial Masthead" page does not
-list (which roles it lists: [Journal identity & about pages](U07-journal-identity-and-about-pages.md)
-Rule 14a). An existing Reader is told their name will appear on the
-masthead "as a Reader", and an invitee offered Author "as a Author"; on a
-default install the masthead lists neither role. The invitation itself
-works; only the promise is false.
-Basis: probe. <sup>[f-a11](#fn-a11)</sup>
+**A11 — The invitation email promises a masthead listing for roles the masthead never lists, such as Author or Reader** · 🐞 · low.
+A manager offers someone a role with "Invite to a role" on Users & Roles.
+For each role, the wizard asks whether the person will "Appear on the
+masthead"; nothing is preselected. When the manager picks "Appear on the
+masthead", the invitation email says "Your name will appear in the
+{journal}'s masthead as a {role}." It says this even for roles the journal's
+"Editorial Masthead" page does not list (which roles it lists: [Journal
+identity & about pages](U07-journal-identity-and-about-pages.md) Rule 14a),
+such as Author, Reader or Copyeditor. The page itself stays correct, and the
+invitation works. The inviter cannot remove the sentence on its own: the
+role lines are filled in when the email is sent. Once the person accepts,
+the "Appear" choice is stored with the role. Every later invitation to them
+repeats the promise under "Already assigned roles", until a manager sets
+that role to "Does not appear on the masthead" on the person's "Edit" page.
+This happens on a default install, where the masthead lists only the editor
+roles and "Editorial Board Member" (on a preprint server, "Moderator" and
+"Editorial Board Member"). If the journal later ticks "Consider role in
+masthead list" for such a role, the people stored as "Appear" are listed,
+and the sentence becomes true. Reviewer rows are a separate case.
+Basis: probe, issue report walk, 2026-10-02. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
 **A12 — The "Invite to a role" address with a wrong last word shows an empty page instead of "404 Not Found"** · 🐞 · low · crash: server.
@@ -1662,6 +1677,7 @@ Moderator), never Reader, Author or Copyeditor, before and after the drive,
 including after two Authors had accepted Copyeditor with "Appear on the
 masthead" on OJS and OMP. An existing Author's email carried the same
 sentence for the held Author role.
+Issue report: [docs/issues/U06-A11-invitation-promises-masthead-for-unlisted-roles.md](../issues/U06-A11-invitation-promises-masthead-for-unlisted-roles.md).
 
 <a id="fn-a12"></a>
 **f-a12** — `InitializeInvitationUIHandler::create()` answers not-found when
