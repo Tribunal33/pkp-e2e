@@ -869,6 +869,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-OMP6-press-file-default-urn-no-format-number.md`):
     a format file's "Identifiers" tab previewing its default URN with
     the format number, `…{press}.{monograph}.{format}.{file}`
+  - the guard for OMP4 (issue report
+    `docs/issues/U44-OMP4-press-publish-window-urn-table.md`): a press
+    with only "Monographs" ticked seeing the URN sentence, not the
+    one-row table, in the "Publish" window
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -951,7 +955,7 @@ entry notes otherwise; the team settles them on spec review.
 | [OJS3](#ojs3) | An issue's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | A press cannot save URN settings with only "Chapters" or "Files" ticked | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | Book page: a publication format's URN is labelled "other::urn" and is not linked | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OMP4](#omp4) | A press's confirmation window shows the URN table where a journal shows one sentence | 🐞 | minor | — |
+| [OMP4](#omp4) | Publishing a book with only monograph URNs shows a one-row URN table instead of the URN sentence | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP5](#omp5) | A press file's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP6](#omp6) | A press file's URN leaves out its format number, and file patterns leave "%f" unfilled | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | An article's Publisher ID accepts values the tabs refuse, a duplicate included | ❓ | minor | — |
@@ -1232,12 +1236,20 @@ a journal does, labelled "URN" and linked to the resolver.
 Basis: probe, 2026-09-24. <sup>f-omp3</sup>
 
 <a id="omp4"></a>
-**OMP4 — A press always gets the URN table** · 🐞 · minor.
-With only "Monographs" ticked, a journal's confirmation window says
-"The URN for this publication will be {urn}." A press in the same
-state shows the two-column table with one row, "Publication", because
-the press's check for the one-line case can never be true.
-Basis: probe, 2026-09-24. <sup>f-omp4</sup>
+**OMP4 — Publishing a book with only monograph URNs shows a one-row URN table instead of the URN sentence** · 🐞 · low.
+A press can choose to assign URNs to monographs only: in the URN
+plugin's settings, "Monographs" is then the only box ticked under "Press
+Content". The settings window opens with no box ticked, so this is the
+press's own choice, not a default. When an editor at such a press clicks
+"Publish", the window shows a table headed "URN" and "Item" with one
+row, "Publication", reading "Unassigned" or the book's URN. The window
+is meant to show one line instead: the warning "A URN has not been
+assigned to this publication." when the book has no URN yet, or "The URN
+for this publication will be …" when it has one. A journal with only
+"Articles" ticked gets that line, and a monographs-only press got it too
+until a 2023 change to the plugin. The fix is one condition in OMP's URN
+plugin.
+Basis: probe, 2026-10-02. <sup>f-omp4</sup>
 
 <a id="omp5"></a>
 **OMP5 — A press file's Publisher ID is never kept** · 🐞 · medium.
@@ -2006,6 +2018,7 @@ inside the publication formats; nothing reads the publication's
 ($publicationFormatUrnEnabled && !$chapterUrnEnabled &&
 !$publicationFormatUrnEnabled && !$submissionFileUrnEnabled)` can never
 hold, so every enabled case reaches the table. Live-probed 2026-09-24 (note q16).
+Issue report: [docs/issues/U44-OMP4-press-publish-window-urn-table.md](../issues/U44-OMP4-press-publish-window-urn-table.md).
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — Live-probed 2026-09-24 (notes q4, g): every value, typed
