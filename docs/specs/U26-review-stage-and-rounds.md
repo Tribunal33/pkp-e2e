@@ -738,7 +738,74 @@ The page does not say why one button went. An Author who used "Upload
 revisions" for the first file is left to conclude that no more files can
 be added, or to try the other button. The fix is one line in each of two
 ui-library files.
-Basis: probe (2026-07-31), 2026-10-02. <sup>[f-a6](#fn-a6)</sup>
+Basis: probe, 2026-10-02. <sup>[f-a1](#fn-a1)</sup>
+
+<a id="a2"></a>
+**A2 — Author-tailored status wording never shown** · ❓ · user-visible.
+The product carries author-specific wordings for two round statuses, for
+example "New reviews have been submitted and are being considered by the
+editor." and a reassuring no-action-needed text for an overdue review. The
+status box the author sees uses the editor wording instead ("A review is
+overdue."), which invites the author to worry or chase. Earlier versions
+showed the tailored texts.
+Question: should the author's status box use the author wordings again?
+Lean: yes. The texts exist, are maintained, and read as deliberate design.
+Basis: probe (2026-07-31; the author's box is character-identical to the
+editor's at every state checked); the tailored texts themselves are code
+reading. <sup>[f-a2](#fn-a2)</sup>
+
+<a id="a3"></a>
+**A3 — Read-review attachment listing recorded privately** · ❓ · latent.
+What the author's "Read Review" window lists in its attachments section was
+observed live on both the journal and the press. The observation is recorded
+privately with the maintainer, pending a fix. Until that resolves, this spec
+makes no claim about the window's attachment listing, and tests must not
+assert anything about what that section lists (scenario 12 excludes it
+explicitly).
+Basis: probe (2026-07-31, both apps; routed to the maintainer's private
+file). <sup>[f-a3](#fn-a3)</sup>
+
+<a id="a4"></a>
+**A4 — All-declined round claims confirmed reviews** · ❓ · user-visible.
+A round where reviewers were invited but every one of them declined reports
+"All reviews are confirmed and a decision is needed." No review exists, and
+none was confirmed. The sentence "Waiting for reviewers to be assigned."
+appears only while the round has no reviewer records at all.
+Question: what should a round with only declined reviewers report? Lean: the
+"decision is needed" half is right, the "all reviews are confirmed" half is
+wrong. This is misleading wording rather than misbehavior.
+Basis: probe (2026-07-31; a round whose only invited reviewer declined shows
+the confirmed-reviews sentence); reproduces identically on a press
+(2026-07-31). <sup>[f-a4](#fn-a4)</sup>
+
+<a id="a5"></a>
+**A5 — No path assigns a production assistant to the review stage** · ❓ · minor.
+The review stage's participant-assignment dialog offers no production
+assistant groups (Copyeditor, Layout Editor, Proofreader). One assigned on
+another stage who selects the review stage sees only "You don't currently
+have access to that stage of the workflow." So no screen path gives those
+roles any part in review, although the file panels' underlying permissions
+would admit an assistant. The Funding Coordinator, also an assistant-level
+group, is offered by the same dialog on both apps, by design.
+Question: are the production assistant roles meant to be assignable to the
+review stage? Lean: the dialog's roster is the intended gate, and the
+file-panel permissions naming assistants are leftovers. Whether an assistant
+placed on the stage by other means would gain access was not observed.
+Basis: probe (OJS, 2026-07-31); the dialog's role roster read on both apps
+(2026-07-31). <sup>[f-a5](#fn-a5)</sup>
+
+<a id="a6"></a>
+**A6 — Cancelling a round forgets the previous round's revision request** · ❓ · user-visible.
+After "Cancel Review Round" removes Round 2, the restored Round 1 reports
+"Awaiting responses from reviewers." This happens even though a request for
+revisions toward a new round had been recorded on it and the author's
+revised file still sits in its Revisions Uploaded panel. The status box no
+longer says revisions were requested or submitted, so nothing on the screen
+recalls the round's open business.
+Question: should the restored round's status still reflect its unresolved
+revision request? Lean: yes. The box falls back to reviewer bookkeeping and
+hides what the round was actually waiting on.
+Basis: probe (2026-07-31). <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
 **A7 — Unticking a review file changes nothing the editor can see** · ❓ · minor.
