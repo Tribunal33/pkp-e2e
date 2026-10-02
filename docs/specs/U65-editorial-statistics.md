@@ -1055,7 +1055,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | Submissions received on the date range's last day are left out of "Submissions Received" (and of "Imported Submissions") | 🐞 | minor | — |
 | [A2](#a2) | A journal whose activity all falls in this year shows "(0/year)" after its counts | 🐞 | minor | — |
-| [A5](#a5) | The "Trends" information icons cannot be read from the keyboard | 🐞 | minor | — |
+| [A5](#a5) | The "Trends" information icons cannot be read from the keyboard | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "Site Administrator" on "Users" always reads 0 | 🐞 | minor | — |
 | [A8](#a8) | A report address naming no report lands on "404 Not Found" | 🐞 | minor | — |
 | [A9](#a9) | The monthly email's attachment counts every journal's active submissions | 🐞 | user-visible | — |
@@ -1135,15 +1135,17 @@ Lean: yes, a defect: a listener hears filters the page does not offer.
 Basis: probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — The "Trends" information icons cannot be read from the keyboard** · 🐞 · minor.
+**A5 — The "Trends" information icons cannot be read from the keyboard** · 🐞 · low.
 The four icons explaining "Other Submissions", "Days to First Editorial
 Decision", "Acceptance Rate" and "Rejection Rate" show their text only
-while the mouse pointer rests on them; Tab never reaches them. The same
+while the mouse pointer rests on them; Tab skips them, and a screen
+reader is offered the icon's name and not its text. One fault of the
+shared icon, on every page and form field that has one: the same
 icons on the reader-statistics pages are
 [Statistics — usage](U64-usage-statistics.md)'s
 [A7](U64-usage-statistics.md#a7). Expected: the text
 can be reached from the keyboard.
-Basis: probe. <sup>f-a5</sup>
+Basis: probe, 2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — "Site Administrator" on "Users" always reads 0** · 🐞 · minor.
@@ -1998,6 +2000,7 @@ reader's own activation was not tried.
 **f-a5** — fn c: `Tooltip.vue`, the same component *Statistics — usage*
 probed for its A7 (a `span.tooltipButton` out of the tab order).
 Live-probed 2026-09-28: td4.
+Issue report: [docs/issues/U64-A7-information-icons-out-of-keyboard-reach.md](../issues/U64-A7-information-icons-out-of-keyboard-reach.md), filed as [pkp-e2e#616](https://github.com/jardakotesovec/pkp-e2e/issues/616).
 
 <a id="fn-f-a6"></a>
 **f-a6** — fn i. Live-probed 2026-09-28: td7; `publicknowledge` read "Site
