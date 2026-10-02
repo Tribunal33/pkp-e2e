@@ -1318,7 +1318,7 @@ Issue report: [pkp-e2e#505](https://github.com/jardakotesovec/pkp-e2e/issues/505
 **f-a3** — fn-m: `upgradePlugin()` reuses
 `manager.plugins.installedVersionNewer`, written for the gallery.
 Live-probed 2026-09-27: td15.
-Issue report: [docs/issues/U62-A3-upgrade-refusal-blames-gallery.md](../issues/U62-A3-upgrade-refusal-blames-gallery.md).
+Issue report: [pkp-e2e#508](https://github.com/jardakotesovec/pkp-e2e/issues/508) ([docs/issues/U62-A3-upgrade-refusal-blames-gallery.md](../issues/U62-A3-upgrade-refusal-blames-gallery.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — fn-n: `deletePlugin()` and `PluginGridRow` check the role
@@ -1336,7 +1336,7 @@ folder `plugins/generic/<plugin>` gone while the versions table kept
 1.0.1.0 current. 1.0.0.0 through "Upload A New Plugin" then gave the
 downgrade notice; 1.0.1.0 gave "Successfully installed version
 1.0.1.0", ticked again where it had been ticked.
-Issue report: [docs/issues/U62-A5-failed-upgrade-removes-plugin.md](../issues/U62-A5-failed-upgrade-removes-plugin.md).
+Issue report: [pkp-e2e#509](https://github.com/jardakotesovec/pkp-e2e/issues/509) ([docs/issues/U62-A5-failed-upgrade-removes-plugin.md](../issues/U62-A5-failed-upgrade-removes-plugin.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — fn-a: in `ACCESS_MODE_MANAGE` the site admin branch of
