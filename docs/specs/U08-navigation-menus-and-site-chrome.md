@@ -1190,6 +1190,7 @@ Left out of the scenarios above, by reason:
   - the site's Navigation tab: "Add Menu" and a site menu's "Edit" open the menu window with the site theme's areas ("None", "primary", "user"), and a new site menu saves (Rule 1b; the guard [A4](#a4)'s issue report proposes)
   - the access-denied page a signed-in user gets: its heading, the breadcrumb's last step and the browser tab name the page (Rule 26a; the guard [A3](#a3)'s issue report proposes)
   - a Section Editor's "Dashboard" under the username on the public pages opens the Dashboard, with their task count (Rule 19a; the guard [A2](#a2)'s issue report proposes, shared with Notifications center & email preferences A3)
+  - the eye notices of "Privacy Statement", "Contact" and "About" and the "About" type's description, on a journal, a press and a preprint server: each names the Settings place where the screens put it (Rules 7a–7b; the guard [A6](#a6) and [A13](#a13)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1273,11 +1274,11 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | A Section Editor's "Dashboard" in the public header opens the Profile page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | The access-denied page a signed-in user gets has an empty heading and an unnamed browser tab | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | Site Settings › "Navigation": "Add Menu" and a menu's "Edit" open nothing and leave the page dimmed | 🐞 | medium · crash: script | issues (claude), 2026-10-03 — re-verified |
-| [A6](#a6) | The "Privacy Statement" and "Contact" notices send the manager to the wrong Settings tab | 🐞 | minor | — |
+| [A6](#a6) | The "Privacy Statement" and "Contact" notices send the manager to the wrong Settings tab | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | The header's "Open Menu" button is labelled in English in every language | 🐞 | minor | — |
 | [A11](#a11) | The item window refuses a missing type, a bad path or a bad URL with no message | 🐞 | user-visible | — |
 | [A12](#a12) | Back at "Choose a type...", the item window keeps the last type's description | 🐞 | minor | — |
-| [A13](#a13) | On a press and a preprint server the notices still say "About the Journal" and "Settings > Journal" | 🐞 | minor | — |
+| [A13](#a13) | On a press and a preprint server the notices still say "About the Journal" and "Settings > Journal" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | The "Navigation" table keeps an item's old title, or a removed item, until a reload | 🐞 | minor | — |
 | [A16](#a16) | With no item at all, the menu window says both panels are settled | 🐞 | minor | — |
 | [A17](#a17) | After a change is discarded with "Yes", leaving the page still asks about unsaved changes | 🐞 | minor | — |
@@ -1371,13 +1372,16 @@ links under "About"); the item is useful either way.
 Basis: probe. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — Two notices name the wrong Settings tab** · 🐞 · minor.
+**A6 — Two notices name the wrong Settings tab** · 🐞 · low.
 The eye icon of a "Privacy Statement" item points the manager to
 "Settings > Workflow > Submissions", and that of a "Contact" item to
-"Settings > Contact". The privacy statement is on Settings › Website ›
-"Setup" › "Privacy Statement" and the contact on Settings › Journal ›
-"Contact"; a manager following the notice looks in the wrong place.
-Basis: probe. <sup>f-a6</sup>
+"Settings > Contact". Neither place exists: the privacy statement is on
+Settings › Website › "Setup" › "Privacy Statement", and the contact on
+Settings › Journal › "Contact" (Settings › Press › "Contact" on a press,
+Settings › Server › "Contact" on a preprint server). A manager following
+the notice looks in the wrong place first. The texts went wrong in
+several changes since 2017. Shared with [A13](#a13) in one report.
+Basis: probe, 2026-10-03. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — "Open Menu" is always English** · 🐞 · minor.
@@ -1445,16 +1449,19 @@ chosen.
 Basis: probe. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — A press's and a preprint server's notices speak of a journal** · 🐞 · minor.
-On a press and a preprint server, the menu window's notices, the "About"
-type's description and the warning of Rule 7b read as on a journal:
-"…the About the Journal section under Settings > Journal.", "Link to a
-page displaying the About the Journal content in Settings > Journal",
-"…a second menu item, "About the Journal", …". There the installed item
-is "About the Press" ("About the Server") and the side menu's "Settings"
-group opens with "Press" ("Server"), so the manager is sent to names
-the screen does not use.
-Basis: probe. <sup>f-a13</sup>
+**A13 — A press's and a preprint server's notices speak of a journal** · 🐞 · low.
+On a press and a preprint server, three texts of the Navigation tab read
+as on a journal: the "About" item's notice ("…the About the Journal
+section under Settings > Journal."), the "About" type's description in
+"Add item" ("Link to a page displaying the About the Journal content in
+Settings > Journal"), and the red warning on a menu item that has items
+under it, on the installed menus "About" and the item named after the
+manager's username (Rule 7b: "…a second menu item, "About the
+Journal", …"). There the screens read "About the Press" and "Press"
+("About the Server", "Server"), so the manager is sent to names the
+screen does not use. The "Contact" notice names no journal there; only
+its place is wrong ([A6](#a6), the same report).
+Basis: probe, 2026-10-03. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — The site's item window offers types with no site page** · ❓ · minor.
@@ -2732,6 +2739,7 @@ Live-probed 2026-09-23 (all three apps): both notices as quoted;
 Settings › Workflow › "Submission" holds "Disable Submissions", "Author
 Guidance", "Metadata", "Components", "Contributor Roles" and no privacy
 statement, and the side menu's "Settings" has no "Contact".
+Issue report: [docs/issues/U08-A6-A13-menu-notices-wrong-settings-places.md](../issues/U08-A6-A13-menu-notices-wrong-settings-places.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `header.tpl` `<button class="pkp_site_nav_toggle"><span>Open
@@ -2771,6 +2779,7 @@ type..." has none, so the last text stays. Live-probed 2026-09-23 (td2), all thr
 <a id="fn-f-a13"></a>
 **f-a13** — Note m. Live-probed 2026-09-23 (td8 and the item types
 drive), OMP and OPS, OJS the control.
+Issue report: [docs/issues/U08-A6-A13-menu-notices-wrong-settings-places.md](../issues/U08-A6-A13-menu-notices-wrong-settings-places.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-23 (td9), all three apps: the site's

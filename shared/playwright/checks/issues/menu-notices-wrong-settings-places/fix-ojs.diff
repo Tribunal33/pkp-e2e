@@ -1,0 +1,20 @@
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -2766,7 +2766,7 @@
+ msgid "manager.navigationMenus.contact.conditionalWarning"
+ msgstr ""
+ "This link will only be displayed if you have filled out the Contact "
+-"information under Settings > Contact."
++"information under Settings > Journal > Contact."
+ 
+ msgid "manager.navigationMenus.form.typeMissing"
+ msgstr "Please select a navigation menu type."
+@@ -2791,7 +2791,7 @@
+ msgid "manager.navigationMenus.privacyStatement.conditionalWarning"
+ msgstr ""
+ "This link will only be displayed if you have entered a privacy statement "
+-"under Settings > Workflow > Submissions."
++"under Settings > Website > Setup > Privacy Statement."
+ 
+ msgid "manager.navigationMenus.items.form.title.required"
+ msgstr "The menu item title is required."

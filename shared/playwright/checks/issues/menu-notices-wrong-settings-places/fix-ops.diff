@@ -1,0 +1,38 @@
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -2751,7 +2751,7 @@
+ msgid "manager.navigationMenus.contact.conditionalWarning"
+ msgstr ""
+ "This link will only be displayed if you have filled out the Contact "
+-"information under Settings > Contact."
++"information under Settings > Journal > Contact."
+ 
+ msgid "manager.navigationMenus.form.typeMissing"
+ msgstr "Please select a navigation menu type."
+@@ -2776,7 +2776,7 @@
+ msgid "manager.navigationMenus.privacyStatement.conditionalWarning"
+ msgstr ""
+ "This link will only be displayed if you have entered a privacy statement "
+-"under Settings > Workflow > Submissions."
++"under Settings > Website > Setup > Privacy Statement."
+ 
+ msgid "manager.navigationMenus.items.form.title.required"
+ msgstr "The menu item title is required."
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -882,3 +882,15 @@
+ 
+ msgid "manager.setup.enableEnrollmentMasthead.description"
+ msgstr "If desired, a masthead can be generated automatically based on user enrollments, including start and end dates. See also Settings > Server > Masthead."
++
++msgid "manager.navigationMenus.about.description"
++msgstr "Link to a page displaying the About the Server content in Settings > Server"
++
++msgid "manager.navigationMenus.about.conditionalWarning"
++msgstr "This link will only be displayed if you have filled out the About the Server section under Settings > Server."
++
++msgid "manager.navigationMenus.contact.conditionalWarning"
++msgstr "This link will only be displayed if you have filled out the Contact information under Settings > Server > Contact."
++
++msgid "manager.navigationMenus.form.submenuWarning"
++msgstr "When a menu item opens a submenu, it's link can not be followed on all devices. For example, if you have an \"About\" item which opens a submenu with \"Contact\" and \"Editorial Masthead\", the \"About\" link may not be reachable on all devices. In the default menu, this is handled by creating a second menu item, \"About the Server\", which appears in the submenu."
