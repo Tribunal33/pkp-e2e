@@ -775,6 +775,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U54-A3-manager-level-role-save-ticks-every-stage.md`):
     "OK" in the "Production editor" window with nothing changed, then
     its row still reading Copyediting and Production only
+  - the guard for A11 (issue report
+    `docs/issues/U54-A11-own-role-ok-removes-settings-access.md`): an
+    Editor whose only Settings role is "Journal editor" pressing "OK" in
+    its window, then still opening Settings
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -862,7 +866,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | A screen reader announces each stage box of the list only as "checkbox" | 🐞 | minor | — |
 | [A9](#a9) | After a filter entry is chosen the filters hide, and only the count line shows the list is filtered | 🐞 | minor | — |
 | [A10](#a10) | A role name of spaces is refused with a different notice while the page's script fails | 🐞 | minor · crash: script | — |
-| [A11](#a11) | "OK" in the window whose Settings box is greyed takes the Settings pages away from the role's holders | 🐞 | user-visible | — |
+| [A11](#a11) | "OK" in an Editor's own role window takes the Settings pages away from every holder of the role | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | The "Roles" list keeps no fixed order: a role just made can come first, without "Edit" or "Remove", a saved role moves down, and a paged list can show a role twice and another never | 🐞 | user-visible | test run (claude), 2026-09-29 — was ❓ |
 | [A14](#a14) | After a rename on the "Roles" tab, the "Users" tab shows the role's old name until a reload | 🐞 | minor | — |
 | [OMP1](#omp1) | In French a press's "Roles" list heads its External Review column with a code | 🐞 | minor | — |
@@ -994,18 +998,24 @@ same refusal as for an empty box.
 Basis: probe. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — "OK" in a manager's own role window takes Settings away** · 🐞 · user-visible.
-In the window of the only role that gives the signed-in manager the
-Settings pages, "Permit changes to Settings" is ticked and greyed out,
-so the manager expects it to stay on. "OK" in that window, even with
-nothing changed, stores the role with the box unticked: the manager's
-next Settings page is the access-denied page, "The current role does not
-have access to this operation.", and so is every other holder's. A
-Journal Manager's "Edit" of the role then shows the box unticked and
-open. It happens on "Journal editor" ("Press editor") for an Editor who
-holds no other manager-level role, and on a role created at the manager
-level for its only holder.
-Basis: probe. <sup>f-a11</sup>
+**A11 — "OK" in an Editor's own role window takes the Settings pages away from every holder of the role** · 🐞 · medium.
+An Editor opens the window of their own role in Settings › Users & Roles
+› "Roles". When that role is the only one that gives them the Settings
+pages, "Permit changes to Settings" is ticked and greyed out, so the
+Editor expects it to stay on. Yet "OK" in that window, even with nothing
+changed, saves the role with the box unticked. The window closes with
+"Your changes have been saved.", the browser shows the alert "Access
+denied.", and the Editor's next Settings page is the access-denied
+page. Every other holder of the role loses the Settings pages as well,
+without being told.
+
+As installed, "Journal editor" ("Press editor") and "Production editor"
+have "Permit changes to Settings" ticked, so on every journal and press
+this reaches each holder of those roles who has no other role with
+Settings access. It also reaches the only holder of a role that a
+journal, press or preprint server creates at the manager level with the
+box ticked. A Journal Manager can tick the box again.
+Basis: probe, 2026-10-02. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — "Stage Assignment" hidden, or shown with every box greyed** · ❓ · minor.
@@ -1736,6 +1746,7 @@ saved."; the post carried no `permitSettings`); Users & Roles then
 answered "The current role does not have access to this operation." on a
 reload and in a fresh sign-in, and the Journal Manager's "Edit" of the
 role showed the box unticked and open.
+Issue report: [docs/issues/U54-A11-own-role-ok-removes-settings-access.md](../issues/U54-A11-own-role-ok-removes-settings-access.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `updateStageOptions()` hides the stage section with

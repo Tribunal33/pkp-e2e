@@ -1,0 +1,74 @@
+--- a/lib/pkp/controllers/grid/settings/roles/form/UserGroupForm.php
++++ b/lib/pkp/controllers/grid/settings/roles/form/UserGroupForm.php
+@@ -117,18 +117,6 @@
+ 
+         if ($userGroup) {
+             $assignedStages = $userGroup->getAssignedStageIds()->toArray();
+-            // Get a list of all settings-accessible user groups for the current user in
+-            // order to prevent them from locking themselves out by disabling the only one.
+-            $mySettingsAccessUserGroupIds = UserGroup::withContextIds([$this->getContextId()])
+-                ->whereHas(
+-                    'userUserGroups',
+-                    fn (EloquentBuilder $q) =>
+-                    $q->withActive()->withUserId(Application::get()->getRequest()->getUser()->getId())
+-                )
+-                ->get()
+-                ->filter(fn ($userGroup) => $userGroup->permitSettings)
+-                ->map(fn ($userGroup) => $userGroup->id)
+-                ->all();
+ 
+             $data = [
+                 'userGroupId' => $userGroup->id,
+@@ -136,7 +124,7 @@
+                 'name' => $userGroup->name, // Localized array
+                 'abbrev' => $userGroup->abbrev, // Localized array
+                 'assignedStages' => $assignedStages,
+-                'mySettingsAccessUserGroupIds' => array_values($mySettingsAccessUserGroupIds),
++                'mySettingsAccessUserGroupIds' => $this->getMySettingsAccessUserGroupIds(),
+                 'permitSelfRegistration' => $userGroup->permitSelfRegistration,
+                 'permitMetadataEdit' => $userGroup->permitMetadataEdit,
+                 'permitSettings' => $userGroup->permitSettings,
+@@ -180,6 +168,27 @@
+         $repository = Repo::userGroup();
+         $templateMgr->assign('notChangeMetadataEditPermissionRoles', $repository::NOT_CHANGE_METADATA_EDIT_PERMISSION_ROLES);
+         return parent::fetch($request, $template, $display);
++    }
++
++    /**
++     * Get the user groups of this context that give the current user access to
++     * the settings, so that they cannot lock themselves out by disabling the only one.
++     *
++     * @return int[]
++     */
++    public function getMySettingsAccessUserGroupIds(): array
++    {
++        return UserGroup::withContextIds([$this->getContextId()])
++            ->whereHas(
++                'userUserGroups',
++                fn (EloquentBuilder $q) =>
++                $q->withActive()->withUserId(Application::get()->getRequest()->getUser()->getId())
++            )
++            ->get()
++            ->filter(fn ($userGroup) => $userGroup->permitSettings)
++            ->map(fn ($userGroup) => $userGroup->id)
++            ->values()
++            ->all();
+     }
+ 
+     /**
+@@ -269,9 +278,14 @@
+                 'masthead' => $userGroup->masthead,
+             ];
+ 
++            // The form locks "Permit changes to Settings" ticked on the only user group
++            // giving the current user access to the settings, and a disabled box is not
++            // posted: keep it on, as the form shows it.
++            $isOnlySettingsAccess = $this->getMySettingsAccessUserGroupIds() == [$userGroup->id];
++
+             // update localized fields
+             $userGroup = $this->_setUserGroupLocaleFields($userGroup, $request);
+-            $userGroup->permitSettings = $this->getData('permitSettings') && $userGroup->roleId == Role::ROLE_ID_MANAGER;
++            $userGroup->permitSettings = ($this->getData('permitSettings') || $isOnlySettingsAccess) && $userGroup->roleId == Role::ROLE_ID_MANAGER;
+             $userGroup->permitSelfRegistration = $this->getData('permitSelfRegistration') && in_array($userGroup->roleId, $this->getPermitSelfRegistrationRoles());
+ 
+             $previousPermitMetadataEdit = $userGroup->permitMetadataEdit;
