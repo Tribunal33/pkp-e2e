@@ -1881,7 +1881,7 @@ part of OMP5.
 **f-a2** — `PKPPublicIdentifiersForm::execute()`: `if
 ($this->getData('publisherId')) { setStoredPubId(…) }`; nothing clears
 it. Live-probed 2026-09-24 (note q5). An issue's and a press file's value is never stored at all (notes f-ojs3, f-omp5).
-Issue report: [docs/issues/U44-A2-publisher-id-on-tab-never-removed.md](../issues/U44-A2-publisher-id-on-tab-never-removed.md).
+Issue report: [pkp-e2e#464](https://github.com/jardakotesovec/pkp-e2e/issues/464) ([docs/issues/U44-A2-publisher-id-on-tab-never-removed.md](../issues/U44-A2-publisher-id-on-tab-never-removed.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — The publication schema's `pub-id::publisher-id` has only
@@ -1898,7 +1898,7 @@ $contextId)`, whose query excludes `s.submission_id <> $excludePubObjectId`:
 a publication number compared with submission numbers. A version's own
 row (and its siblings' copies, note c) is therefore counted unless its
 number equals the submission's. Live-probed 2026-09-24 (note q6): the refusal met every first version too, the submission and publication numbers differing on every new seed (537 and 551 on OJS, 512 and 524 on OMP).
-Issue report: [docs/issues/U44-A4-article-own-urn-refused-as-in-use.md](../issues/U44-A4-article-own-urn-refused-as-in-use.md).
+Issue report: [pkp-e2e#465](https://github.com/jardakotesovec/pkp-e2e/issues/465) ([docs/issues/U44-A4-article-own-urn-refused-as-in-use.md](../issues/U44-A4-article-own-urn-refused-as-in-use.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — OJS `Publication Repository::version()` clones each galley
@@ -1906,7 +1906,7 @@ Issue report: [docs/issues/U44-A4-article-own-urn-refused-as-in-use.md](../issue
 `anyPubIdExists(…, ASSOC_TYPE_REPRESENTATION, $galleyId, true)` →
 `Galley DAO::pubIdExists()` excludes only the galley itself. Live-probed
 2026-09-24 (note q7).
-Issue report: [docs/issues/U44-A5-new-version-galley-publisher-id-refused.md](../issues/U44-A5-new-version-galley-publisher-id-refused.md).
+Issue report: [pkp-e2e#466](https://github.com/jardakotesovec/pkp-e2e/issues/466) ([docs/issues/U44-A5-new-version-galley-publisher-id-refused.md](../issues/U44-A5-new-version-galley-publisher-id-refused.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `plugins/pubIds/urn/js/checkNumber.js`
@@ -1918,13 +1918,13 @@ server-built URN except `customId`) computes over the whole URN, per the
 algorithm its comment cites. Both run the same conversion table; for
 `urn:nbn:de:0000-abc` the suffix-only digit is 0 and the whole-URN
 digit 2 (worked with both routines, 2026-09-24). Live-probed 2026-09-24 (note q8).
-Issue report: [docs/issues/U44-A6-urn-check-digit-from-suffix-only.md](../issues/U44-A6-urn-check-digit-from-suffix-only.md).
+Issue report: [pkp-e2e#467](https://github.com/jardakotesovec/pkp-e2e/issues/467) ([docs/issues/U44-A6-urn-check-digit-from-suffix-only.md](../issues/U44-A6-urn-check-digit-from-suffix-only.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `urnSuffixEdit.tpl` includes `urnAssignCheckBox.tpl` with
 `pubId=""` in both places; `urnAssign.tpl` passes the real `$pubId`.
 Live-probed 2026-09-24 (note q9).
-Issue report: [docs/issues/U44-A7-urn-assign-box-leaves-urn-out.md](../issues/U44-A7-urn-assign-box-leaves-urn-out.md).
+Issue report: [pkp-e2e#468](https://github.com/jardakotesovec/pkp-e2e/issues/468) ([docs/issues/U44-A7-urn-assign-box-leaves-urn-out.md](../issues/U44-A7-urn-assign-box-leaves-urn-out.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — `URNSettingsForm` messages
@@ -1935,20 +1935,20 @@ without the `.form` segment (`…settings.urnPublicationSuffixPatternRequired`),
 and `Locale::get()` renders a missing key as `##key##`. An empty box is
 stopped in the browser as a required field before any message is
 looked up. Live-probed 2026-09-24 (note q10).
-Issue report: [docs/issues/U44-A8-urn-suffix-pattern-spaces-raw-text-code.md](../issues/U44-A8-urn-suffix-pattern-spaces-raw-text-code.md).
+Issue report: [pkp-e2e#469](https://github.com/jardakotesovec/pkp-e2e/issues/469) ([docs/issues/U44-A8-urn-suffix-pattern-spaces-raw-text-code.md](../issues/U44-A8-urn-suffix-pattern-spaces-raw-text-code.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `FieldPubIdUrn` offers "Assign" whenever it can build the
 URN and the box is empty (note c); the page's "Save" follows the edit
 gate. Live-probed 2026-09-24 (note q1).
-Issue report: [docs/issues/U44-A9-urn-assign-offered-without-edit-rights.md](../issues/U44-A9-urn-assign-offered-without-edit-rights.md).
+Issue report: [pkp-e2e#470](https://github.com/jardakotesovec/pkp-e2e/issues/470) ([docs/issues/U44-A9-urn-assign-offered-without-edit-rights.md](../issues/U44-A9-urn-assign-offered-without-edit-rights.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Live-probed 2026-09-24, OJS and OMP (note b): the same
 refusal for `nbn:de:0000-`, `urn:nbn` and `URN:NBN:DE:0000-`, with the
 escaped form under the box and in the notice and the plain one in the
 summary at the top (`…form.urnPrefixPattern`).
-Issue report: [docs/issues/U44-A10-urn-prefix-refusal-written-out-brackets.md](../issues/U44-A10-urn-prefix-refusal-written-out-brackets.md).
+Issue report: [pkp-e2e#460](https://github.com/jardakotesovec/pkp-e2e/issues/460) ([docs/issues/U44-A10-urn-prefix-refusal-written-out-brackets.md](../issues/U44-A10-urn-prefix-refusal-written-out-brackets.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-24 (note q10), OJS and OMP: the page
@@ -1957,7 +1957,7 @@ management/settings/website#plugins on choosing the pattern radio, on
 each kind tick and on "Check Number" (11 on OJS, 21 on OMP in one run
 each), none under the default choice. The window's clicks are handled
 by `URNSettingsFormHandler.js` (note b).
-Issue report: [docs/issues/U44-A11-urn-settings-pattern-choice-script-error.md](../issues/U44-A11-urn-settings-pattern-choice-script-error.md).
+Issue report: [pkp-e2e#461](https://github.com/jardakotesovec/pkp-e2e/issues/461) ([docs/issues/U44-A11-urn-settings-pattern-choice-script-error.md](../issues/U44-A11-urn-settings-pattern-choice-script-error.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-24 (note q18), OJS and OMP:
@@ -1968,13 +1968,13 @@ agency's resolver treats the two as one URN.
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-24 (note q23), the OJS galley tab and
 the OMP chapter tab; the button is the legacy `#checkNo` (note f-a6).
-Issue report: [docs/issues/U44-A13-check-number-empty-urn-suffix-nan.md](../issues/U44-A13-check-number-empty-urn-suffix-nan.md).
+Issue report: [pkp-e2e#462](https://github.com/jardakotesovec/pkp-e2e/issues/462) ([docs/issues/U44-A13-check-number-empty-urn-suffix-nan.md](../issues/U44-A13-check-number-empty-urn-suffix-nan.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-24 (note q25). The galley and chapter
 tabs' "Clear" deletes the URN at once (note e) without redrawing the
 tab; the issue tab reloads `#identifiersTab` (note f).
-Issue report: [docs/issues/U44-A14-cleared-urn-stays-on-tab.md](../issues/U44-A14-cleared-urn-stays-on-tab.md).
+Issue report: [pkp-e2e#463](https://github.com/jardakotesovec/pkp-e2e/issues/463) ([docs/issues/U44-A14-cleared-urn-stays-on-tab.md](../issues/U44-A14-cleared-urn-stays-on-tab.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `IssueGalleyForm::validate()` calls
@@ -1982,7 +1982,7 @@ Issue report: [docs/issues/U44-A14-cleared-urn-stays-on-tab.md](../issues/U44-A1
 ? $this->_issueGalley->getId() : null, true)`, which passes the `null`
 of a new galley to `IssueGalleyDAO::pubIdExists(…, int $excludeGalleyId,
 …)`: a `TypeError`, answered as a server error. Live-probed 2026-09-24 (note q11): the save answered a server error (500) on `…/grid/issue-galleys/issue-galley-grid/update?issueId=…&issueGalleyId=`.
-Issue report: [docs/issues/U44-OJS1-new-issue-galley-publisher-id-server-error.md](../issues/U44-OJS1-new-issue-galley-publisher-id-server-error.md).
+Issue report: [pkp-e2e#471](https://github.com/jardakotesovec/pkp-e2e/issues/471) ([docs/issues/U44-OJS1-new-issue-galley-publisher-id-server-error.md](../issues/U44-OJS1-new-issue-galley-publisher-id-server-error.md)).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — `ArticleFront` (note i). Live-probed 2026-09-24 (note q24).
@@ -1993,20 +1993,20 @@ Issue report: [docs/issues/U44-OJS1-new-issue-galley-publisher-id-server-error.m
 closed the window and read back empty; no issue setting row held a
 publisher ID. OJS `schemas/issue.json` declares no
 `pub-id::publisher-id`, so the issue save drops it.
-Issue report: [docs/issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md](../issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md).
+Issue report: [pkp-e2e#472](https://github.com/jardakotesovec/pkp-e2e/issues/472) ([docs/issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md](../issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `URNSettingsForm` `urnObjects` check: `enableIssueURN
 || enablePublicationURN || enableRepresentationURN`; the form has no
 `enableIssueURN` and never names `enableChapterURN` or
 `enableSubmissionFileURN`. Live-probed 2026-09-24 (note q15).
-Issue report: [docs/issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md](../issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md).
+Issue report: [pkp-e2e#473](https://github.com/jardakotesovec/pkp-e2e/issues/473) ([docs/issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md](../issues/U44-OMP1-urn-settings-chapters-files-alone-refused.md)).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — `monograph_full.tpl` prints `{$pubIdType}` (the plugin's
 `getPubIdType()`, `other::urn`) as the label and the stored value as
 text. Live-probed 2026-09-24 (notes h, q22).
-Issue report: [docs/issues/U44-OMP2-book-page-format-urn-code-label.md](../issues/U44-OMP2-book-page-format-urn-code-label.md).
+Issue report: [pkp-e2e#474](https://github.com/jardakotesovec/pkp-e2e/issues/474) ([docs/issues/U44-OMP2-book-page-format-urn-code-label.md](../issues/U44-OMP2-book-page-format-urn-code-label.md)).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — `monograph_full.tpl` loops over the pub-id plugins only
@@ -2018,7 +2018,7 @@ inside the publication formats; nothing reads the publication's
 ($publicationFormatUrnEnabled && !$chapterUrnEnabled &&
 !$publicationFormatUrnEnabled && !$submissionFileUrnEnabled)` can never
 hold, so every enabled case reaches the table. Live-probed 2026-09-24 (note q16).
-Issue report: [docs/issues/U44-OMP4-press-publish-window-urn-table.md](../issues/U44-OMP4-press-publish-window-urn-table.md).
+Issue report: [pkp-e2e#475](https://github.com/jardakotesovec/pkp-e2e/issues/475) ([docs/issues/U44-OMP4-press-publish-window-urn-table.md](../issues/U44-OMP4-press-publish-window-urn-table.md)).
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — Live-probed 2026-09-24 (notes q4, g): every value, typed
@@ -2031,8 +2031,8 @@ out. Were a value stored, `SubmissionFile::getBestId()` and
 `CatalogBookHandler` would put it in the file's download address on the
 book page in place of the file's number (the reason for the "12-34"
 refusal); nothing on screen can store one.
-Issue report: [docs/issues/U44-OMP5-press-file-refused-publisher-id-box-vanishes.md](../issues/U44-OMP5-press-file-refused-publisher-id-box-vanishes.md).
-Issue report: [docs/issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md](../issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md).
+Issue report: [pkp-e2e#476](https://github.com/jardakotesovec/pkp-e2e/issues/476) ([docs/issues/U44-OMP5-press-file-refused-publisher-id-box-vanishes.md](../issues/U44-OMP5-press-file-refused-publisher-id-box-vanishes.md)).
+Issue report: [pkp-e2e#472](https://github.com/jardakotesovec/pkp-e2e/issues/472) ([docs/issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md](../issues/U44-OJS3-OMP5-issue-and-press-file-publisher-id-never-kept.md)).
 
 <a id="fn-f-omp6"></a>
 **f-omp6** — Live-probed 2026-09-24 in two runs (note g): file
@@ -2040,7 +2040,7 @@ previews `urn:nbn:de:0000-kone.531.132` and `…pkp.536.138` beside the
 formats' `…kone.531.4` and `…pkp.536.7`, while the settings window lists
 "%p.%m.%f.%s for files". OMP `classes/plugins/PubIdPlugin.php`
 `generateDefaultPattern()` does not resolve the format for a file.
-Issue report: [docs/issues/U44-OMP6-press-file-default-urn-no-format-number.md](../issues/U44-OMP6-press-file-default-urn-no-format-number.md).
+Issue report: [pkp-e2e#477](https://github.com/jardakotesovec/pkp-e2e/issues/477) ([docs/issues/U44-OMP6-press-file-default-urn-no-format-number.md](../issues/U44-OMP6-press-file-default-urn-no-format-number.md)).
 
 ## Reference — entry points & surfaces
 
