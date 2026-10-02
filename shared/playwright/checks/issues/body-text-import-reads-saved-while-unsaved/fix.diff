@@ -1,0 +1,45 @@
+--- a/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.vue
++++ b/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.vue
+@@ -476,8 +476,9 @@
+ /** --------------------------------
+  * Persistence
+  * --------------------------------- */
+-async function saveDocument() {
+-	if (!currentDocument.value) return;
++/** Store the editor's document; true when the server kept it. */
++async function storeDocument() {
++	if (!currentDocument.value) return false;
+ 	const formData = new FormData();
+ 	formData.append('bodyText', JSON.stringify(currentDocument.value));
+ 	const {data, fetch} = useFetch(bodyTextApiUrl, {
+@@ -485,17 +486,25 @@
+ 		body: formData,
+ 	});
+ 	await fetch();
+-	if (data.value) {
+-		bodyTextData.value = data.value;
+-		savedDocumentSerialized.value = serializeDocument(currentDocument.value);
+-		isDirty.value = false;
++	if (!data.value) return false;
++	bodyTextData.value = data.value;
++	savedDocumentSerialized.value = serializeDocument(currentDocument.value);
++	isDirty.value = false;
++	return true;
++}
++
++/** The "Save" button: store, then confirm on the button. */
++async function saveDocument() {
++	if (await storeDocument()) {
+ 		isSaved.value = true;
+ 		setTimeout(() => (isSaved.value = false), 1500);
+ 	}
+ }
+ 
+ async function handleFigureUpload(file) {
+-	if (!bodyTextData.value?.id) await saveDocument();
++	// A figure needs the Body Text record to hang on: create it silently, the
++	// person did not ask to save (an import uploads its images before its text).
++	if (!bodyTextData.value?.id) await storeDocument();
+ 	const formData = new FormData();
+ 	formData.append('fileStage', String(pkp.const.SUBMISSION_FILE_DEPENDENT));
+ 	formData.append('assocId', bodyTextData.value.id);

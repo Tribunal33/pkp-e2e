@@ -1,0 +1,118 @@
+--- a/lib/ui-library/src/composables/useSideMenu.js
++++ b/lib/ui-library/src/composables/useSideMenu.js
+@@ -39,6 +39,7 @@
+  * @param {string} [opts.activeItemKey=''] - Initial active item key
+  * @param {Object} [opts.expandedKeys={}] - Initial expanded keys
+  * @param {Function} [opts.onActionFn=()=>{}] - Function to call when an action item is clicked
++ * @param {Function} [opts.canNavigate=()=>true] - Asked with the item before a click on it is followed; false keeps the current item
+  */
+ export function useSideMenu(_items, opts = {}) {
+ 	const queryParams = useQueryParams();
+@@ -46,6 +47,7 @@
+ 	const _activeItemKey = opts.activeItemKey || '';
+ 	const _expandedKeys = opts.expandedKeys || {};
+ 	const onActionFn = opts.onActionFn || (() => {});
++	const canNavigate = opts.canNavigate || (() => true);
+ 	const itemsRef = toRef(_items);
+ 
+ 	if (typeof itemsRef.value === 'undefined') {
+@@ -189,6 +191,7 @@
+ 
+ 			if (item.link) {
+ 				item.command = () => {
++					if (!canNavigate(item)) return;
+ 					if (compareUrlPaths(window.location.href, item.link)) {
+ 						// only update query params, without reloading page, important for dashboards
+ 						const parsedUrl = new URL(item.link);
+@@ -203,6 +206,7 @@
+ 				};
+ 			} else if (item.action) {
+ 				item.command = () => {
++					if (!canNavigate(item)) return;
+ 					onActionFn(item.action, {...item.actionArgs, key: item.key});
+ 					if (item.state) {
+ 						setActiveItemKey(item.key);
+@@ -210,6 +214,7 @@
+ 				};
+ 			} else if (item.state) {
+ 				item.command = () => {
++					if (!canNavigate(item)) return;
+ 					setActiveItemKey(item.key);
+ 				};
+ 			}
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowMenu.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowMenu.js
+@@ -9,6 +9,7 @@
+ 	workflowNavigationConfig,
+ 	dashboardPage,
+ 	handleCreateNewVersion = () => {},
++	canNavigate = () => true,
+ }) {
+ 	const {
+ 		sideMenuProps,
+@@ -17,7 +18,10 @@
+ 		selectedItem: selectedMenuItem,
+ 		expandedKeys,
+ 		updateExpandedKeys,
+-	} = useSideMenu(menuItems, {onActionFn: handleCreateNewVersion});
++	} = useSideMenu(menuItems, {
++		onActionFn: handleCreateNewVersion,
++		canNavigate,
++	});
+ 
+ 	const {getLatestPublication} = useSubmission();
+ 
+--- a/lib/ui-library/src/pages/workflow/workflowStore.js
++++ b/lib/ui-library/src/pages/workflow/workflowStore.js
+@@ -112,6 +112,15 @@
+ 			}),
+ 		);
+ 
++		/**
++		 * A page in the workflow (the Body Text editor) may hold unsaved work:
++		 * its guard is asked before a side menu click leaves it.
++		 */
++		let navigationGuard = null;
++		function setNavigationGuard(guard) {
++			navigationGuard = guard;
++		}
++
+ 		function handleCreateNewVersion(action) {
+ 			if (action === 'createNewVersion') {
+ 				_workflowActionsFns.workflowCreateNewVersion();
+@@ -132,6 +141,7 @@
+ 			workflowNavigationConfig,
+ 			dashboardPage,
+ 			handleCreateNewVersion,
++			canNavigate: (item) => !navigationGuard || navigationGuard(item),
+ 		});
+ 
+ 		watch(
+@@ -270,6 +280,7 @@
+ 			selectedMenuState,
+ 			navigateToMenu,
+ 			setExpandedKeys,
++			setNavigationGuard,
+ 
+ 			/** Actions
+ 			 *
+--- a/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.vue
++++ b/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.vue
+@@ -132,6 +132,7 @@
+ import {useFetch} from '@/composables/useFetch';
+ import {useWorkflowStore} from '@/pages/workflow/workflowStore';
+ import {useLocalize} from '@/composables/useLocalize';
++import {useFormChanged} from '@/composables/useFormChanged';
+ import {
+ 	loadMathJax,
+ 	getCitedReferenceIds,
+@@ -230,6 +231,9 @@
+ 	return window.confirm(t('form.dataHasChanged'));
+ };
+ 
++// ask before a reload, closing the tab or closing the workflow loses unsaved text
++useFormChanged(ref({}), [isDirty], {warnOnClose: true});
++
+ const isFullscreen = ref(false);
+ 
+ /** --------------------------------

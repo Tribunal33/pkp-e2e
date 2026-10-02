@@ -1,0 +1,16 @@
+--- a/lib/ui-library/src/components/PandocConverter/PandocConverter.vue
++++ b/lib/ui-library/src/components/PandocConverter/PandocConverter.vue
+@@ -88,6 +88,13 @@
+ 			null,
+ 			{[file.name]: file},
+ 		);
++		// pandoc-wasm does not throw when pandoc fails: it returns no output,
++		// with pandoc's message on stderr
++		if (!result.stdout?.trim()) {
++			throw new Error(
++				result.stderr?.trim() || t('publication.bodyText.import.failed'),
++			);
++		}
+ 
+ 		stage.value = 'upload';
+ 		const html = await rewriteImages(result.stdout, result.mediaFiles || {});

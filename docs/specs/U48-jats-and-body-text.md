@@ -694,6 +694,9 @@ Left out of the scenarios above, by reason:
   - the guard for A2 (issue report `docs/issues/U48-A2-body-text-save-offered-then-refused.md`): an assigned Layout Editor without "Permissions" sees the "Body Text" read-only, with no "Save".
   - the guard for A8 (issue report `docs/issues/U48-A8-published-jats-xml-stays-old-after-edit.md`): with "Make available with publication" ticked, a reader who downloaded "JATS XML" gets the corrected title right after the editor edits it, and the published XML right after publishing.
   - the guard for A9 (issue report `docs/issues/U48-A9-published-jats-xml-name-url-path.md`): with a URL path set, the downloaded "JATS XML" is named "<path>-publication-<id>-jats.xml", and a reader who downloaded it before the path changed gets the new name.
+  - the guard for A14 (issue report `docs/issues/U48-A14-body-text-opens-with-unsaved-changes.md`): a never-saved Body Text opens without "Unsaved Changes", and "Save" reads "Saved" only when the text is saved, "Send to Text Editor" with an image included.
+  - the guard for A15 (issue report `docs/issues/U48-A15-body-text-leaving-loses-text-unasked.md`): with unsaved text on "Body Text", choosing another side-menu entry asks "The data on this form has changed. Do you wish to continue without saving?", and "Cancel" keeps the text.
+  - the guard for A18 (issue report `docs/issues/U48-A18-body-text-unconvertible-file-no-message.md`): sending an unreadable file to "Body Text" ends the import with "Import failed" and its reason.
 - **Nothing new to test**:
   - a second "Upload" on a version that already has a file, which
     becomes a revision of that one file, listed in its "History"
@@ -779,11 +782,11 @@ entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | A Copyeditor pressing "Download" on an uploaded JATS XML file saves a refusal as "download-file.json" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | Editors can still replace or delete a published version's JATS XML file, which 3.5 does not offer | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | Uploading an image as JATS XML stores it silently, then the "JATS XML" page fails on every opening | 🐞 | medium · crash: both | issues (claude), 2026-10-02 — re-verified |
-| [A14](#a14) | A never-saved Body Text shows "Unsaved Changes" on opening, and "Saved" when an import saved nothing | 🐞 | minor | — |
-| [A15](#a15) | Leaving "Body Text" loses unsaved text without asking | 🐞 | user-visible | — |
+| [A14](#a14) | A never-saved Body Text shows "Unsaved Changes" on opening, and "Saved" when an import saved nothing | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A15](#a15) | Text typed in an article's Body Text is lost without a question on leaving the page | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A16](#a16) | "Body Text": the "Cite" button beside each reference is never enabled | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | On "Body Text", pressing a closed side section closes the open one and leaves the pressed one closed | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A18](#a18) | A sent file that cannot be converted fails with no message | 🐞 | minor | — |
+| [A18](#a18) | A file sent to the Body Text editor that cannot be converted ends the import with no message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | Each JATS "Upload" leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A21](#a21) | In French the tick box, its two windows and labels of the "Body Text" panel show raw codes | 🐞 | minor | issues (claude), 2026-10-02 — no report: unreleased 3.6 texts |
 | [OMP1](#omp1) | A press's editor is offered "Send to Text Editor" on a file, and confirming it imports nothing | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -981,23 +984,27 @@ article download the image as its JATS XML.
 Basis: probe, 2026-10-02. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — A never-saved Body Text shows the wrong save state** · 🐞 · minor.
+**A14 — A never-saved Body Text shows the wrong save state** · 🐞 · low.
 On a version whose Body Text was never saved (a new version, or one
 nobody edited), "Body Text" opens empty with the "Unsaved Changes" badge
-already on, before anything is typed. Importing a Word file with an
-image into such a version shows "Saved" on the button beside the badge
-for a moment: uploading the image saved the empty text, and the imported
-text is not saved. The badge should show only once something changes,
+already on, before anything is typed. Sending a Word file with an
+image to such a version ("Send to Text Editor") shows "Saved" on the
+button beside the badge for a moment: uploading the image saved the
+empty text, and the text the file brought is not saved. The badge should show only once something changes,
 and "Saved" only when the text is saved.
-Basis: probe, 2026-09-25. <sup>f-a14</sup>
+Basis: probe, 2026-10-02. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — Leaving "Body Text" loses unsaved text without asking** · 🐞 · user-visible.
-Text typed on "Body Text" is lost without a word when the editor chooses
-another entry of the workflow's side menu, closes the workflow or
-reloads the page. The page is built to ask "The data on this form has
-changed. Do you wish to continue without saving?" first, and never does.
-Basis: probe, 2026-09-25. <sup>f-a15</sup>
+**A15 — Text typed in an article's Body Text is lost without a question on leaving the page** · 🐞 · medium.
+Text typed on "Body Text" is lost without a word when the person editing
+chooses another entry of the workflow's side menu, presses the
+workflow's "Close", reloads the page or closes the browser tab. The page
+is built to ask "The data on this form has changed. Do you wish to
+continue without saving?" first, and never does. They find out only on
+coming back to the page. Pressing "Save" before leaving is the only way
+round. It affects anyone who writes an article's Body Text in the built-
+in editor or brings it in with "Send to Text Editor".
+Basis: probe, 2026-10-02. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — "Body Text": the "Cite" button beside each reference is never enabled** · 🐞 · medium.
@@ -1026,12 +1033,17 @@ added.
 Basis: probe, 2026-10-02. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — A file that cannot be converted fails with no message** · 🐞 · minor.
+**A18 — A file sent to the Body Text editor that cannot be converted ends the import with no message** · 🐞 · low.
 Sending a file the converter cannot read (a text file named ".docx") to
-"Body Text" runs the "Importing document" box through "Converting…", then
-the box goes with no message: nothing is imported, and the editor keeps
-its text. The page should say the file could not be converted.
-Basis: probe, 2026-09-25. <sup>f-a18</sup>
+"Body Text" runs the "Importing document" box through "Converting…",
+then the box goes with no message: nothing is imported, and the editor
+stays as it was (empty on a version with no Body Text). The page should
+say the file could not be converted. The person editing is left guessing
+whether the import failed, is still running, or produced an empty
+document. The same silence follows any file the converter rejects;
+damaged or password-protected Word files are expected to be among them
+but were not tried.
+Basis: probe, 2026-10-02. <sup>f-a18</sup>
 
 <a id="a19"></a>
 **A19 — Signed in for the download, the visitor stays on the Login page** · ❓ · minor.
@@ -1328,9 +1340,12 @@ Issue report: [pkp-e2e#562](https://github.com/jardakotesovec/pkp-e2e/issues/562
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note g: the badge is `v-show="isDirty"`, true on arrival at a never-saved version (the console then warns "TextSelection endpoint not pointing into a node with inline content (doc)"). The "Saved" during an import: `handleFigureUpload()` saves the document first when no Body Text record exists (note q), and the import uploads its images before it pastes the text (note p). Probe: d16, d20.
+Issue report: [docs/issues/U48-A14-body-text-opens-with-unsaved-changes.md](../issues/U48-A14-body-text-opens-with-unsaved-changes.md).
+Issue report: [docs/issues/U48-A14-body-text-import-reads-saved-while-unsaved.md](../issues/U48-A14-body-text-import-reads-saved-while-unsaved.md).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Note g: `navigationGuard` would ask `form.dataHasChanged`, yet no drive saw it or any browser dialog; there is no `beforeunload` handler. Probe: d17.
+Issue report: [docs/issues/U48-A15-body-text-leaving-loses-text-unasked.md](../issues/U48-A15-body-text-leaving-loses-text-unasked.md).
 
 <a id="fn-f-a16"></a>
 **f-a16** — `referenceList.insertCitation` "Cite" in `sciflow-reference-list` (note g) stayed disabled in every state tried. Probe: d18.
@@ -1342,6 +1357,7 @@ Issue report: [pkp-e2e#566](https://github.com/jardakotesovec/pkp-e2e/issues/566
 
 <a id="fn-f-a18"></a>
 **f-a18** — Note p: the box's failure state never showed; the import ended with no status. Probe: d20.
+Issue report: [docs/issues/U48-A18-body-text-unconvertible-file-no-message.md](../issues/U48-A18-body-text-unconvertible-file-no-message.md).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Note e: `RedirectGuestToLogin` sends the visitor to `login?source=…/jats/download`; after `login/signIn` the browser follows to the download, whose attachment response leaves the tab on the Login page. Probe: d26.

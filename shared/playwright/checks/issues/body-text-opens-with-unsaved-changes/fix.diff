@@ -1,0 +1,38 @@
+--- a/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.vue
++++ b/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.vue
+@@ -194,6 +194,13 @@
+ const savedDocumentSerialized = ref('');
+ const isDirty = ref(false);
+ const isSaved = ref(false);
++/**
++ * Set for the first load only. The editor starts with that document and
++ * reports it back in its own form (its default attributes added, empty
++ * content dropped); that report, not the server's JSON, is the saved state
++ * the "Unsaved Changes" badge compares against.
++ */
++let awaitingLoadedDocument = false;
+ const saveButtonLabel = computed(() =>
+ 	isSaved.value ? t('form.saved') : t('common.save'),
+ );
+@@ -387,6 +394,9 @@
+ 		if (missing.length) {
+ 			console.warn('[sciflow] Missing resources:', missing);
+ 		}
++		// before the first load the editor has no view yet; later loads (after
++		// a save) hand it what it already holds, and it reports nothing back
++		awaitingLoadedDocument = !editorRef.value.editorView;
+ 		editorRef.value.doc = {
+ 			doc: documentContent,
+ 			files: dependentFiles,
+@@ -428,6 +438,11 @@
+ 			: (opRefs ?? event.detail?.references ?? []);
+ 
+ 	currentDocument.value = updatedDoc;
++	if (awaitingLoadedDocument && ops.length === 0) {
++		// the editor's report of the loaded document, not a change
++		savedDocumentSerialized.value = serializeDocument(updatedDoc);
++	}
++	awaitingLoadedDocument = false;
+ 	isDirty.value =
+ 		serializeDocument(updatedDoc) !== savedDocumentSerialized.value;
+ 
