@@ -2388,7 +2388,7 @@ HTTP 500 with a zero-length body, and the app's server log recorded
 out and try the invitation link again. in
 …/lib/pkp/classes/invitation/invitations/reviewerAccess/ReviewerAccessInvite.php`.
 Not security-shaped: the link denies the wrong user, only without a page.
-Issue report: [docs/issues/U28-A10-reviewer-link-blank-page-signed-in-as-another.md](../issues/U28-A10-reviewer-link-blank-page-signed-in-as-another.md).
+Issue report: [docs/issues/U28-A10-reviewer-link-blank-page-signed-in-as-another.md](../issues/U28-A10-reviewer-link-blank-page-signed-in-as-another.md), filed as [pkp-e2e#595](https://github.com/jardakotesovec/pkp-e2e/issues/595).
 
 <a id="fn-a11"></a>
 **f-a11** — `ReviewerReviewForm::fetch()` sets `reviewIsClosed` from
