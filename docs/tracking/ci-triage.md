@@ -894,6 +894,27 @@ trips.
   requests), where the in-family U65 deaths came after 10-12 min; the
   proposals are taken, the no-JIT arm first (diagnosis
   `.reports/flake-1002/segv/`).
+  **Proposals taken 2026-10-02** (`.reports/flake-1002/segv/diagnosis.md`):
+  every suite server writes a request-start line (`request-begin.php`), so
+  a death names its request, pid and process age; CI keeps core dumps
+  with gdb backtraces, the runner's CPU and PHP settings in the log, a
+  deaths step and a `server-deaths-<app>-<n>` artifact (`bin/ci-cores.js`,
+  `bin/server-deaths.js`); `run-app.yml` takes `php_ini_values`
+  (`node bin/ci.js dispatch --php-ini-values …`, empty by default). The
+  crash watch waits up to 5 s for the death line after a dropped
+  connection (red 3 of 3 unannotated before, annotated 3 of 3 after,
+  under an induced death) and drops a previous run's death; ProfilePage's
+  tab waits fail at once on a dropped request (5 of 5 bare 30 s timeouts
+  before, about 4 s after). One out-of-family death reproduced locally at
+  CI's ini (1 in about 40 fresh-server runs with the tracing JIT, 0 in 10
+  without): OPS U12 S6 @solo, 12 s into the process, the core in
+  `zend_objects_store_del` called from JIT-compiled code at
+  `PKPRouter::getRequestedContextPath`. CI arms, two runs each: JIT on 12
+  deaths, JIT off 14, every one GH-20469 by its backtrace (U16 category
+  pages, U65 statistics), none of the new kind, so the arms do not tell
+  the JIT apart yet; the JIT stays on, a flip to off is the maintainer's
+  call. **Watch condition**: a death whose backtrace is not GH-20469;
+  then read whether it died in JIT code.
 - **Manage Emails template window gone before its "Saved" read** (U34 S7,
   OJS and OMP, CI). The nightly pkp-e2e run 35558115088 (2026-09-21, `main`
   at `735bb76`, the same tree and the same app tips as the green push run

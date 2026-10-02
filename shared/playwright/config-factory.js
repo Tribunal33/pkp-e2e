@@ -212,7 +212,7 @@ function definePkpConfig({appName, appRoot, suiteDir, basePort}) {
     // The command and env come from php-server.js, shared with the probe
     // servers (bin/probe-servers.js) so both kinds of server are identical.
     const phpServer = (port, {logName = `server-${port}.log`, env = serverEnv} = {}) => ({
-        command: phpServerCommand({appRoot, port, logFile: path.join(logDir, logName)}),
+        command: phpServerCommand({appRoot, port, logFile: path.join(logDir, logName), requestLog: true}),
         url: phpServerReadyUrl(port),
         reuseExistingServer: true,
         timeout: 30_000,

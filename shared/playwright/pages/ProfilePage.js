@@ -198,7 +198,73 @@ function waitForAnswer(page, matches, what, timeout = 30_000) {
     return out;
 }
 
+/** The browser's errors for a request its server dropped or refused (a `php -S` death, its restart gap). */
+const DROPPED_ERRORS = /ERR_EMPTY_RESPONSE|ERR_CONNECTION_RESET|ERR_CONNECTION_CLOSED|ERR_CONNECTION_REFUSED/;
+
+/**
+ * Watch `page` for a request to the worker server that gets no answer (a
+ * dropped or refused connection: the worker's `php -S` died serving it) or
+ * a navigation to the browser's own error page, from now until `until()`'s
+ * wait ends. `until(waiting)` resolves with the wait, or fails at once with
+ * the request and its error instead of the wait's bare 30 s timeout. The
+ * tab and page waits of this page object wait on a form that a dead
+ * request never brings (CI 2026-09-30/10-01: OJS U03 S4 `open()`, OMP U03
+ * S10 `expectOpen()`, each a 30 s timeout over an exit-139 death;
+ * `.reports/flake-1002/segv/diagnosis.md`), the way `waitForAnswer()`
+ * already fails a save. Aborted requests (a tab left mid-load) are not
+ * drops.
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {string} what how the error names the wait
+ */
+function failOnDroppedRequest(page, what) {
+    let onFailed;
+    let onNavigated;
+    const failed = new Promise((resolve, reject) => {
+        const fail = (detail) =>
+            reject(
+                new Error(
+                    `${what}: ${detail}. The server sent no answer; when the worker server died serving it, the test ` +
+                        'carries a server-crash annotation (php -S exit 139). Not retried.'
+                )
+            );
+        onFailed = (request) => {
+            const error = (request.failure() || {}).errorText || '';
+            if (DROPPED_ERRORS.test(error) && /^https?:\/\/127\.0\.0\.1:/.test(request.url())) {
+                fail(`${request.method()} ${request.url()} failed in the browser with ${error}`);
+            }
+        };
+        onNavigated = (frame) => {
+            if (frame === page.mainFrame() && frame.url().startsWith('chrome-error://')) {
+                fail("the page went to the browser's own error page (its load got no answer)");
+            }
+        };
+        page.on('requestfailed', onFailed);
+        page.on('framenavigated', onNavigated);
+        if (page.url().startsWith('chrome-error://')) {
+            fail("the page is the browser's own error page (its load got no answer)");
+        }
+    });
+    failed.catch(() => {});
+    const dispose = () => {
+        page.off('requestfailed', onFailed);
+        page.off('framenavigated', onNavigated);
+    };
+    return {
+        /** @template T @param {Promise<T>} waiting @returns {Promise<T>} */
+        async until(waiting) {
+            try {
+                return await Promise.race([waiting, failed]);
+            } finally {
+                dispose();
+            }
+        },
+        dispose,
+    };
+}
+
 exports.waitForAnswer = waitForAnswer;
+exports.failOnDroppedRequest = failOnDroppedRequest;
 exports.TAB_ANCHORS = TAB_ANCHORS;
 exports.TAB_LABELS = TAB_LABELS;
 exports.SAVED_MESSAGE = SAVED_MESSAGE;
@@ -233,14 +299,29 @@ exports.ProfilePage = class ProfilePage extends BasePage {
 
     /** Type the address and wait for that tab's form. */
     async goto(tab = 'identity') {
-        await this.page.goto(this.url(tab));
-        await this.expectOpen(tab);
+        // Armed before the load: the tab's own fetch follows it at once.
+        const watch = failOnDroppedRequest(this.page, `The Profile page's ${tab} tab never loaded`);
+        try {
+            await this.page.goto(this.url(tab));
+        } catch (error) {
+            watch.dispose();
+            throw error;
+        }
+        await this.expectOpen(tab, watch);
     }
 
-    /** The page is up with the named tab's form loaded. */
-    async expectOpen(tab = 'identity') {
-        await expect(this.heading).toBeVisible({timeout: 30_000});
-        await expect(this.form(tab)).toBeVisible({timeout: 30_000});
+    /**
+     * The page is up with the named tab's form loaded. Fails at once when a
+     * request of the page dies on the way (`failOnDroppedRequest`), from the
+     * moment it is called (`goto()` arms it before the load).
+     */
+    async expectOpen(tab = 'identity', watch = failOnDroppedRequest(this.page, `The Profile page's ${tab} tab never loaded`)) {
+        await watch.until(
+            (async () => {
+                await expect(this.heading).toBeVisible({timeout: 30_000});
+                await expect(this.form(tab)).toBeVisible({timeout: 30_000});
+            })()
+        );
     }
 
     /** A tab's link in the tab bar. */
@@ -259,10 +340,15 @@ exports.ProfilePage = class ProfilePage extends BasePage {
     async open(tab) {
         const proceed = (dialog) => dialog.accept();
         this.page.once('dialog', proceed);
+        const watch = failOnDroppedRequest(this.page, `The Profile page's ${tab} tab never loaded`);
         try {
-            await this.tabLink(tab).click();
-            await waitForJQueryIdle(this.page);
-            await expect(this.form(tab)).toBeVisible({timeout: 30_000});
+            await watch.until(
+                (async () => {
+                    await this.tabLink(tab).click();
+                    await waitForJQueryIdle(this.page);
+                    await expect(this.form(tab)).toBeVisible({timeout: 30_000});
+                })()
+            );
         } finally {
             this.page.off('dialog', proceed);
         }
@@ -291,8 +377,13 @@ exports.ProfilePage = class ProfilePage extends BasePage {
         await this.tabLink(tab).click();
         await answered;
         if (proceed) {
-            await waitForJQueryIdle(this.page);
-            await expect(this.form(tab)).toBeVisible({timeout: 30_000});
+            // Armed after the answer: the tab's fetch leaves on the OK.
+            await failOnDroppedRequest(this.page, `The Profile page's ${tab} tab never loaded`).until(
+                (async () => {
+                    await waitForJQueryIdle(this.page);
+                    await expect(this.form(tab)).toBeVisible({timeout: 30_000});
+                })()
+            );
         }
         return message;
     }

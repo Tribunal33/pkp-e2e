@@ -68,6 +68,15 @@ on:
         required: false
         type: string
         default: ''
+      php_ini_values:
+        description: >-
+          extra php.ini values for setup-php, comma-separated, e.g.
+          `opcache.jit=disable` for a run without the tracing JIT setup-php
+          turns on by default (opcache.jit=1235). Empty: setup-php's
+          defaults, as every app hook runs.
+        required: false
+        type: string
+        default: ''
 
 jobs:
   e2e:
@@ -165,7 +174,29 @@ jobs:
         with:
           php-version: '8.3'
           extensions: bcmath, bz2, curl, gd, intl, mbstring, opcache, pdo_pgsql, pgsql, soap, xml, zip
+          ini-values: ${{ inputs.php_ini_values }}
           coverage: none
+
+      # The evidence a `php -S` segfault leaves (ci-triage "A `php -S` worker
+      # segfault", .reports/flake-1002/segv/): the runner's CPU (the tracing
+      # JIT's code depends on it) and the PHP settings in force, in the job
+      # log and the summary; and core dumps: the cores go to a folder of
+      # their own (php-server.js lifts the size limit when PKP_E2E_CORE_DIR
+      # is set) and bin/ci-cores.js turns each into a gdb backtrace beside
+      # the server logs while the suite runs.
+      - name: Runner, PHP and core dumps
+        run: |
+          cpu=$(lscpu | sed -n 's/^Model name: *//p' | head -1)
+          avx512=$(grep -q avx512f /proc/cpuinfo && echo yes || echo no)
+          ini=$(php -i | grep -E '^opcache\.(enable|jit|jit_buffer_size|memory_consumption|interned_strings_buffer) ' | sed 's/ => [^=]*$//' | tr '\n' ' ')
+          line="runner: $cpu, $(nproc) CPUs, AVX-512 $avx512; $(php -r 'echo PHP_VERSION;'); $ini"
+          echo "$line"; echo "- $line" >> "$GITHUB_STEP_SUMMARY"
+          cores="$RUNNER_TEMP/cores"; mkdir -p "$cores"; chmod 1777 "$cores"
+          sudo sysctl -q -w kernel.core_pattern="$cores/core.%t.%p"
+          echo "PKP_E2E_CORE_DIR=$cores" >> "$GITHUB_ENV"
+          command -v gdb >/dev/null || sudo apt-get install -y -qq --no-install-recommends gdb >/dev/null 2>&1 \
+            || { sudo apt-get update -qq >/dev/null 2>&1 && sudo apt-get install -y -qq --no-install-recommends gdb >/dev/null 2>&1; } \
+            || echo "::warning::gdb not installed; cores get no backtrace"
 
       - name: Get composer cache directory
         id: composer-cache
@@ -248,6 +279,8 @@ jobs:
           # folder first, so with one folder the solo pass wiped the error
           # contexts of the first two, flaky first attempts included (2026-09-26).
           out=apps/$app/playwright/test-results
+          logs=apps/$app/playwright/.server-logs
+          node bin/ci-cores.js "$PKP_E2E_CORE_DIR" $logs/cores --watch & cores_pid=$!
           npx playwright test -c configs/$app.config.js --retries=1 --shard=$shard --project=shared --project=$app --output=$out/app || rc=1
           # Reset and bootstrap again before the serial pass (bin/test-app.js):
           # the site-level @solo tests re-save every context of the install, and
@@ -262,7 +295,27 @@ jobs:
           # A flaky test (red, then green on the retry) leaves its failed
           # attempt's error-context.md; say so, so the artifact step uploads it.
           if find $out -name error-context.md | grep -q .; then echo "attempt_failed=true" >> "$GITHUB_OUTPUT"; fi
+          kill $cores_pid 2>/dev/null || true; node bin/ci-cores.js "$PKP_E2E_CORE_DIR" $logs/cores || true
           exit $rc
+
+      # Every server death of the job, green jobs included (a replayed or
+      # retried request hides it from the test results): one log line each
+      # with the request it died on, its process's age and its backtrace.
+      - name: php -S deaths
+        id: deaths
+        if: always()
+        working-directory: e2e
+        run: node bin/server-deaths.js apps/${{ inputs.app }}/playwright/.server-logs
+
+      - name: Upload the deaths' logs and backtraces
+        if: always() && steps.deaths.outputs.count != '' && steps.deaths.outputs.count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-deaths-${{ inputs.app }}-${{ matrix.shard }}
+          path: e2e/apps/${{ inputs.app }}/playwright/.server-logs/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 14
 
       # Per-test durations of this shard (timed-shards.js), the input of
       # `npm run shard-timings`; uploaded on red runs too.

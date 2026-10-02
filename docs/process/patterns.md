@@ -253,7 +253,11 @@ slide. Durations are 0.01ms rather than 0 because presence helpers wait on
   ignores a request that fails, so a dead worker reads as a bare 30 s
   timeout: a page object's wait also listens for its request failing and
   names the URL and error at once (`ProfilePage` `waitForAnswer`, U03 S5
-  on CI, 2026-09-30).
+  on CI, 2026-09-30). The same holds for a wait on what a page fetches for
+  itself (a tab's form, a grid's rows): armed before the action, it fails
+  at once on a dropped or refused connection or the browser's error page,
+  never on `ERR_ABORTED` (`failOnDroppedRequest` in `ProfilePage.js`; U03
+  S4 and S10 on CI, 2026-10-01).
 - **A form that fills a required field from its own fetch** refuses a
   submit pressed before the answer, in the page and silently ("This field
   is required.", no request); the page object that opens such a form

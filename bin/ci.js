@@ -12,7 +12,8 @@
  *       the push run of HEAD (or of --sha, or that run id); waits for it
  *   npm run ci -- dispatch [--ref <branch>] [--apps ojs,omp] [--ojs-ref <ref>]
  *                          [--ojs-repo <owner/name>] (same for omp, ops)
- *                          [--pkp-lib-ref <sha|pull/<n>/head>] [--ui-library-ref <…>] [--no-wait]
+ *                          [--pkp-lib-ref <sha|pull/<n>/head>] [--ui-library-ref <…>]
+ *                          [--php-ini-values <a=b,c=d>] [--no-wait]
  *       e2e.yml's workflow_dispatch from --ref (default: the current branch,
  *       which must be pushed), then waits for it
  *   npm run ci -- summary <run-id>
@@ -76,6 +77,7 @@ function dispatch(opts) {
     add('pkp_lib_ref', opts['pkp-lib-ref']);
     add('ui_library_ref', opts['ui-library-ref']);
     add('apps', opts.apps);
+    add('php_ini_values', opts['php-ini-values']);
     const list = () => gh(['run', 'list', '--workflow', WORKFLOW, '--event', 'workflow_dispatch', '--branch', ref, '--limit', '20', '--json', 'databaseId,url,createdAt'], {json: true});
     const before = new Set(list().map((r) => r.databaseId));
     const out = gh(['workflow', 'run', WORKFLOW, '--ref', ref, ...fields]);

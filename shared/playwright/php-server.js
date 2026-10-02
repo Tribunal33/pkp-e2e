@@ -31,25 +31,41 @@
  * start is moved to `<name>-prev.log` first, so local logs stay bounded.
  * A crash leaves an `Accepted` line with no status line after it: the
  * request that took the process down (`server-crash.js` reads these).
+ *
+ * `requestLog` (the suite's worker servers; not the probe servers, whose
+ * logs kept checks read) prepends `request-begin.php`, which writes a
+ * `[harness] begin <time> pid <pid> <client> <method> <uri>` line as each
+ * PHP request starts, so a death names the request it died on (`php -S`
+ * logs a path only once it is answered). When `PKP_E2E_CORE_DIR` is set in
+ * the server's environment (CI, run-app.yml), the shell lifts the core
+ * size limit and leaves the shared memory (OPcache, the JIT buffer) out of
+ * the dump, so a segfault leaves a small core for a gdb backtrace
+ * (`bin/ci-cores.sh`; `.reports/flake-1002/segv/diagnosis.md`).
  */
 const http = require('http');
+const path = require('path');
 
 const RESTART_LIMIT = 20;
 const LOG_ROTATE_BYTES = 20 * 1024 * 1024;
+const REQUEST_BEGIN_FILE = path.join(__dirname, 'request-begin.php');
 
 /**
  * The shell command (for `sh -c` or Playwright's webServer.command) that
  * serves `appRoot` on 127.0.0.1:`port`, logging to `logFile`.
  *
- * @param {{appRoot: string, port: number, logFile: string}} options
+ * @param {{appRoot: string, port: number, logFile: string, requestLog?: boolean}} options
  * @returns {string}
  */
-function phpServerCommand({appRoot, port, logFile}) {
-    const serve = `php -d max_execution_time=120 -S 127.0.0.1:${port} -t "${appRoot}" >> "${logFile}" 2>&1`;
+function phpServerCommand({appRoot, port, logFile, requestLog = false}) {
+    const prepend = requestLog ? ` -d auto_prepend_file="${REQUEST_BEGIN_FILE}"` : '';
+    const serve = `php -d max_execution_time=120${prepend} -S 127.0.0.1:${port} -t "${appRoot}" >> "${logFile}" 2>&1`;
+    // 0x31: private anonymous memory, ELF headers, private huge pages; not the
+    // shared OPcache segment with its 256 MB JIT buffer.
+    const cores = 'if [ -n "$PKP_E2E_CORE_DIR" ]; then ulimit -c unlimited 2>/dev/null; echo 0x31 > /proc/self/coredump_filter 2>/dev/null; fi';
     const prevFile = logFile.replace(/(\.log)?$/, '-prev.log');
     const rotate = `if [ -f "${logFile}" ] && [ "$(wc -c < "${logFile}")" -gt ${LOG_ROTATE_BYTES} ]; then mv -f "${logFile}" "${prevFile}"; fi`;
     const stamp = '$(date -u +%Y-%m-%dT%H:%M:%SZ)';
-    return `${rotate}; echo "[harness] php -S start ${stamp} on 127.0.0.1:${port}" >> "${logFile}"; n=0; until ${serve}; do s=$?; n=$((n+1)); [ "$n" -ge ${RESTART_LIMIT} ] && exit 1; echo "[harness] php -S died ${stamp} (exit $s); restart $n" >> "${logFile}"; sleep 1; done`;
+    return `${rotate}; ${cores}; echo "[harness] php -S start ${stamp} on 127.0.0.1:${port}" >> "${logFile}"; n=0; until ${serve}; do s=$?; n=$((n+1)); [ "$n" -ge ${RESTART_LIMIT} ] && exit 1; echo "[harness] php -S died ${stamp} (exit $s); restart $n" >> "${logFile}"; sleep 1; done`;
 }
 
 /**
@@ -94,4 +110,4 @@ function phpServerStatus(port, {timeoutMs = 2000} = {}) {
     });
 }
 
-module.exports = {phpServerCommand, phpServerEnv, phpServerReadyUrl, phpServerStatus, RESTART_LIMIT};
+module.exports = {phpServerCommand, phpServerEnv, phpServerReadyUrl, phpServerStatus, RESTART_LIMIT, REQUEST_BEGIN_FILE};

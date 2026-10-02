@@ -33,7 +33,7 @@ const {disableMotion} = require('./motion.js');
 const {throttleCpu} = require('./throttle.js');
 const {PkpApi} = require('./api.js');
 const {PkpMail} = require('./mail.js');
-const {workerLogFile, logOffset, reportServerDeaths} = require('./server-crash.js');
+const {workerLogFile, logOffset, reportServerDeaths, failedOnDroppedConnection, waitForDeathLine} = require('./server-crash.js');
 
 const appRoot = process.env.PKP_APP_ROOT;
 if (!appRoot) {
@@ -66,6 +66,9 @@ const test = base.test.extend({
             const startedAt = Date.now();
             await use();
             if (testInfo.status !== testInfo.expectedStatus) {
+                // A drop is seen before the restart loop writes the death
+                // line (server-crash.js); give the line its moment.
+                if (failedOnDroppedConnection(testInfo)) await waitForDeathLine(file, offset);
                 await reportServerDeaths(testInfo, {file, offset, port, startedAt});
             }
         },

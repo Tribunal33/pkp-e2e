@@ -62,6 +62,10 @@ on:
         description: the apps to run, comma-separated (a PR on one app need not run the other two)
         type: string
         default: 'ojs,omp,ops'
+      php_ini_values:
+        description: extra php.ini values for setup-php, comma-separated (e.g. opcache.jit=disable)
+        type: string
+        default: ''
 
 # A newer push to a branch cancels its older run, except on main: parallel
 # slots push there, and each push's own run is its gate (RUNBOOK step 10),
@@ -83,6 +87,7 @@ jobs:
       e2e_ref: ${{ github.sha }}
       pkp_lib_ref: ${{ inputs.pkp_lib_ref || '' }}
       ui_library_ref: ${{ inputs.ui_library_ref || '' }}
+      php_ini_values: ${{ inputs.php_ini_values || '' }}
   omp:
     # Like pkp's schedule.yml: the nightly runs only on the canonical repo.
     if: (github.event_name != 'schedule' || github.repository == 'jardakotesovec/pkp-e2e') && contains(format(',{0},', inputs.apps || 'ojs,omp,ops'), ',omp,')
@@ -94,6 +99,7 @@ jobs:
       e2e_ref: ${{ github.sha }}
       pkp_lib_ref: ${{ inputs.pkp_lib_ref || '' }}
       ui_library_ref: ${{ inputs.ui_library_ref || '' }}
+      php_ini_values: ${{ inputs.php_ini_values || '' }}
   ops:
     # Like pkp's schedule.yml: the nightly runs only on the canonical repo.
     if: (github.event_name != 'schedule' || github.repository == 'jardakotesovec/pkp-e2e') && contains(format(',{0},', inputs.apps || 'ojs,omp,ops'), ',ops,')
@@ -105,3 +111,4 @@ jobs:
       e2e_ref: ${{ github.sha }}
       pkp_lib_ref: ${{ inputs.pkp_lib_ref || '' }}
       ui_library_ref: ${{ inputs.ui_library_ref || '' }}
+      php_ini_values: ${{ inputs.php_ini_values || '' }}
