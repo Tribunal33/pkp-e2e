@@ -2481,7 +2481,7 @@ apps: an empty free-form review saved (OJS: at "Choose One") showed the
 toast alone. With a form whose only required question is a radio group
 (footnote i), the 2026-09-05 saves recorded the toast and not the box;
 the retired A8 sighting of 2026-09-04 saw neither.
-Issue report: [docs/issues/U28-A14-review-form-save-for-later-required-fields.md](../issues/U28-A14-review-form-save-for-later-required-fields.md).
+Issue report: [docs/issues/U28-A14-review-form-save-for-later-required-fields.md](../issues/U28-A14-review-form-save-for-later-required-fields.md), filed as [pkp-e2e#596](https://github.com/jardakotesovec/pkp-e2e/issues/596).
 
 <a id="fn-a15"></a>
 **f-a15** — The legacy form handler tracks unsaved changes only through
