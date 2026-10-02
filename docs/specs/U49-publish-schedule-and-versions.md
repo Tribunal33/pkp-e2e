@@ -2266,7 +2266,7 @@ Current/Back choice the page does not offer there) and `status: 6`, and
 the page at once, a reload and the panel then showed "Don't Assign To
 An Issue" checked, the panel's untouched Confirm offering issueless
 publication.
-Issue report: [docs/issues/U49-OJS2-future-issue-schedule-only-publishes-now.md](../issues/U49-OJS2-future-issue-schedule-only-publishes-now.md).
+Issue report: [pkp-e2e#546](https://github.com/jardakotesovec/pkp-e2e/issues/546) ([docs/issues/U49-OJS2-future-issue-schedule-only-publishes-now.md](../issues/U49-OJS2-future-issue-schedule-only-publishes-now.md)).
 
 <a id="fn-ojs3"></a>
 **f-ojs3** — Live-probed 2026-08-29: `GET
