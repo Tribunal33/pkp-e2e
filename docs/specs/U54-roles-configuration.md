@@ -1748,14 +1748,14 @@ just made listed first (test runs 2026-09-28 and 2026-09-29):
 [f-a13](#fn-f-a13); nothing moves a first row down (no filter, page size
 or page link does, and a saved role only moves down), and the grid is the
 only place a role is edited or removed.
-Issue report: [docs/issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md](../issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md).
+Issue report: [pkp-e2e#432](https://github.com/jardakotesovec/pkp-e2e/issues/432) ([docs/issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md](../issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Live-probed 2026-09-19 (the Production stage's claim check, all
 three apps). Cause: the registries (manager group without `stages` on OJS
 and OMP, `5,6` on OPS); the stage filter's `withStageIds()` reads the same
 rows. Filter half: [j](#fn-j). Live-probed 2026-09-26: [j](#fn-j).
-Issue report: [docs/issues/U54-A2-manager-role-row-shows-no-stage.md](../issues/U54-A2-manager-role-row-shows-no-stage.md).
+Issue report: [pkp-e2e#439](https://github.com/jardakotesovec/pkp-e2e/issues/439) ([docs/issues/U54-A2-manager-role-row-shows-no-stage.md](../issues/U54-A2-manager-role-row-shows-no-stage.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `UserGroupForm::execute()` with `getAlwaysActiveStages()`
@@ -1775,13 +1775,13 @@ Internal Review) before and opened them after. "OK" with nothing changed
 did the same, and a role created at the manager level arrived with every
 stage ticked (all three apps; OPS its one box). The only notice was "Your
 changes have been saved.".
-Issue report: [docs/issues/U54-A3-manager-level-role-save-ticks-every-stage.md](../issues/U54-A3-manager-level-role-save-ticks-every-stage.md).
+Issue report: [pkp-e2e#433](https://github.com/jardakotesovec/pkp-e2e/issues/433) ([docs/issues/U54-A3-manager-level-role-save-ticks-every-stage.md](../issues/U54-A3-manager-level-role-save-ticks-every-stage.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `settings.roles.removeText` against `removeUserGroup()`
 ([q](#fn-q)): no path deletes a group that has assignments, and
 `isDefault` groups are never deleted. Live-probed 2026-09-26: [q](#fn-q).
-Issue report: [docs/issues/U54-A4-role-remove-warning-promises-deletion.md](../issues/U54-A4-role-remove-warning-promises-deletion.md).
+Issue report: [pkp-e2e#440](https://github.com/jardakotesovec/pkp-e2e/issues/440) ([docs/issues/U54-A4-role-remove-warning-promises-deletion.md](../issues/U54-A4-role-remove-warning-promises-deletion.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Row ids 0…n−1 against the role-id refresh ([i](#fn-i)); the
@@ -1798,7 +1798,7 @@ box still ticked; a switch to "Users" and back changed nothing. After
 "Remove" › "OK" again answered 500 (`POST
 …/user-group-grid/remove-user-group`) with no notice; the row was gone
 after a reload.
-Issue report: [docs/issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md](../issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md).
+Issue report: [pkp-e2e#432](https://github.com/jardakotesovec/pkp-e2e/issues/432) ([docs/issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md](../issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `$userGroup->userUserGroups()->count()` counts every
@@ -1823,14 +1823,14 @@ panels or any other page visited.
 type="checkbox" id="select-cell-…">` with no `<label>`, `aria-label` or
 `title`. Live-probed 2026-09-26 (Fields; all three apps): every box of the
 list's fourth row had none of the three.
-Issue report: [docs/issues/U54-A8-role-stage-boxes-unnamed.md](../issues/U54-A8-role-stage-boxes-unnamed.md).
+Issue report: [pkp-e2e#441](https://github.com/jardakotesovec/pkp-e2e/issues/441) ([docs/issues/U54-A8-role-stage-boxes-unnamed.md](../issues/U54-A8-role-stage-boxes-unnamed.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — The two lists sit in `userGroupsGridFilter.tpl`'s form
 (`#userGroupSearchForm`), which the header's "Search" link shows and hides
 and which is hidden again after each choice submits it. Live-probed
 2026-09-26: [d](#fn-d).
-Issue report: [docs/issues/U54-A9-roles-filter-lists-hide-after-choice.md](../issues/U54-A9-roles-filter-lists-hide-after-choice.md).
+Issue report: [pkp-e2e#442](https://github.com/jardakotesovec/pkp-e2e/issues/442) ([docs/issues/U54-A9-roles-filter-lists-hide-after-choice.md](../issues/U54-A9-roles-filter-lists-hide-after-choice.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — The window's own check refuses only an empty box; the server's
@@ -1841,7 +1841,7 @@ answered 200 with the refused form, the window stayed open with the notice
 quoted in Rule 15b and no message under the boxes, and the page logged the
 script error "Failed to execute 'appendChild' on 'Node': Unexpected token
 ','" on `management/settings/access`.
-Issue report: [docs/issues/U54-A10-role-name-of-spaces-breaks-window.md](../issues/U54-A10-role-name-of-spaces-breaks-window.md).
+Issue report: [pkp-e2e#435](https://github.com/jardakotesovec/pkp-e2e/issues/435) ([docs/issues/U54-A10-role-name-of-spaces-breaks-window.md](../issues/U54-A10-role-name-of-spaces-breaks-window.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — The greyed box is the window's guard alone ([o](#fn-o)): a
@@ -1855,7 +1855,7 @@ saved."; the post carried no `permitSettings`); Users & Roles then
 answered "The current role does not have access to this operation." on a
 reload and in a fresh sign-in, and the Journal Manager's "Edit" of the
 role showed the box unticked and open.
-Issue report: [docs/issues/U54-A11-own-role-ok-removes-settings-access.md](../issues/U54-A11-own-role-ok-removes-settings-access.md).
+Issue report: [pkp-e2e#434](https://github.com/jardakotesovec/pkp-e2e/issues/434) ([docs/issues/U54-A11-own-role-ok-removes-settings-access.md](../issues/U54-A11-own-role-ok-removes-settings-access.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `updateStageOptions()` hides the stage section with
@@ -1905,7 +1905,7 @@ after the new role's, it came first in 10 of 10 runs; without that, one
 new journal in about eighty listed its created role first on the local
 fleet. Scenarios 3 to 6 therefore start again on a new scratch journal
 when, and only when, the row they open comes first ([s](#fn-s)).
-Issue report: [docs/issues/U54-A13-roles-list-order-moves-and-pages-repeat.md](../issues/U54-A13-roles-list-order-moves-and-pages-repeat.md).
+Issue report: [pkp-e2e#437](https://github.com/jardakotesovec/pkp-e2e/issues/437) ([docs/issues/U54-A13-roles-list-order-moves-and-pages-repeat.md](../issues/U54-A13-roles-list-order-moves-and-pages-repeat.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Test run 2026-09-26 (Side effects; scenario 4; all three
@@ -1916,7 +1916,7 @@ saved.", an "Advisory Board" row and no "Editorial Board Member" row; the
 Board Member" in Quinn Ashdown's "Roles" cell throughout ten seconds of
 reads; after a reload the cell read "Advisory Board". The suites read the
 tab after a reload.
-Issue report: [docs/issues/U54-A14-users-tab-keeps-renamed-role-old-name.md](../issues/U54-A14-users-tab-keeps-renamed-role-old-name.md).
+Issue report: [pkp-e2e#438](https://github.com/jardakotesovec/pkp-e2e/issues/438) ([docs/issues/U54-A14-users-tab-keeps-renamed-role-old-name.md](../issues/U54-A14-users-tab-keeps-renamed-role-old-name.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP's `locale/fr_CA/submission.po` leaves
@@ -1939,7 +1939,7 @@ all three apps): on OPS the box ticked and saved read "Saved" and was
 unticked after a reload, the context held no `restrictPreprintAccess`
 value, and a signed-out visitor opened and downloaded a posted preprint's
 "PDF" galley; on OJS and OMP the box was kept and applied ([t](#fn-t)).
-Issue report: [docs/issues/U54-OPS1-ops-open-access-sign-in-box-not-kept.md](../issues/U54-OPS1-ops-open-access-sign-in-box-not-kept.md).
+Issue report: [pkp-e2e#436](https://github.com/jardakotesovec/pkp-e2e/issues/436) ([docs/issues/U54-OPS1-ops-open-access-sign-in-box-not-kept.md](../issues/U54-OPS1-ops-open-access-sign-in-box-not-kept.md)).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — `Application::getRoleNames(true)` is lib/pkp's, not
@@ -1985,7 +1985,7 @@ press's word ([b](#fn-b)). Live-probed 2026-09-26 (Fields; all three apps,
 French as a UI language): the "Permission level" cells read
 "Administrateur-trice du serveur" and "Éditeur-trice de série" on the
 manager and Moderator rows.
-Issue report: [docs/issues/U54-OPS3-ops-french-moderator-reads-series-editor.md](../issues/U54-OPS3-ops-french-moderator-reads-series-editor.md).
+Issue report: [pkp-e2e#443](https://github.com/jardakotesovec/pkp-e2e/issues/443) ([docs/issues/U54-OPS3-ops-french-moderator-reads-series-editor.md](../issues/U54-OPS3-ops-french-moderator-reads-series-editor.md)).
 
 ## Reference — entry points & surfaces
 
