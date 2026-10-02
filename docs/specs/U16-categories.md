@@ -2130,7 +2130,7 @@ Issue report: [pkp-e2e#606](https://github.com/jardakotesovec/pkp-e2e/issues/606
 <a id="fn-f-omp4"></a>
 **f-omp4** — Note h. Live-probed 2026-09-25: note td12 (the block's text
 "Browse" and no link, in two runs).
-Issue report: [docs/issues/U16-OMP4-press-browse-block-empty-box.md](../issues/U16-OMP4-press-browse-block-empty-box.md).
+Issue report: [pkp-e2e#607](https://github.com/jardakotesovec/pkp-e2e/issues/607) ([docs/issues/U16-OMP4-press-browse-block-empty-box.md](../issues/U16-OMP4-press-browse-block-empty-box.md)).
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — Test run 2026-09-25 (Rule 9; scenario 8), the OMP suite,
