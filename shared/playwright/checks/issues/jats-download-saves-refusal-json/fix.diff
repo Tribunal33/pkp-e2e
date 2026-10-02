@@ -1,0 +1,64 @@
+--- a/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationJats.vue
++++ b/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationJats.vue
+@@ -408,40 +408,27 @@
+ 		 * Download the Contents of the file
+ 		 */
+ 		downloadJatsXML() {
+-			// Ensure existingJatsFile.url is available and is a string containing the URL
+-			if (!this.workingJatsProps.isDefaultContent) {
+-				const downloadUrl = this.workingJatsProps.url;
+-
+-				// Create a link element
+-				const link = document.createElement('a');
+-				link.href = downloadUrl;
+-				link.setAttribute('download', '');
+-				link.style.display = 'none';
+-
+-				// Append to the DOM
+-				document.body.appendChild(link);
+-
+-				// Programmatically click the link to trigger the download
+-				link.click();
+-
+-				// Remove the link from the DOM
+-				document.body.removeChild(link);
+-			} else {
+-				const jatsContent = this.workingJatsProps.jatsContent;
+-				const blob = new Blob([jatsContent], {type: 'application/xml'});
+-				const blobUrl = URL.createObjectURL(blob);
+-
+-				const link = document.createElement('a');
+-				link.href = blobUrl;
+-				link.setAttribute('download', this.downloadDefaultJatsFileName);
+-				link.style.display = 'none';
+-				document.body.appendChild(link);
+-				link.click();
+-
+-				// Clean up the URL object
+-				URL.revokeObjectURL(blobUrl);
+-				document.body.removeChild(link);
+-			}
++			// Save the XML the page shows. An uploaded file's own download link
++			// is authorized for the Production stage only, so a role that reads
++			// this page without Production access would save a refusal instead.
++			const {localize} = useLocalize();
++			const fileName = this.workingJatsProps.isDefaultContent
++				? this.downloadDefaultJatsFileName
++				: localize(this.workingJatsProps.name);
++			const jatsContent = this.workingJatsProps.jatsContent;
++			const blob = new Blob([jatsContent], {type: 'application/xml'});
++			const blobUrl = URL.createObjectURL(blob);
++
++			const link = document.createElement('a');
++			link.href = blobUrl;
++			link.setAttribute('download', fileName);
++			link.style.display = 'none';
++			document.body.appendChild(link);
++			link.click();
++
++			// Clean up the URL object
++			URL.revokeObjectURL(blobUrl);
++			document.body.removeChild(link);
+ 		},
+ 	},
+ };

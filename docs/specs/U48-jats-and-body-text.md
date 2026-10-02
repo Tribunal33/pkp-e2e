@@ -686,6 +686,7 @@ Left out of the scenarios above, by reason:
   - the guard for A20 (issue report `docs/issues/U47-A6-media-jats-upload-server-log-warning.md`): upload a JATS file on "JATS XML" and check the server log holds no PHP warning for the request.
   - the guard for OMP1 (issue report `docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md`): on a press, a Press manager's "More Actions" on a Markdown file in "Production Ready Files" lists no "Send to Text Editor".
   - the guard for A12 (issue report `docs/issues/U48-A12-published-jats-upload-delete-offered.md`): a published version's "JATS XML" page offers neither "Upload" nor "Delete" to an editor who may edit the publication.
+  - the guard for A11 (issue report `docs/issues/U48-A11-jats-download-saves-refusal-json.md`): a Copyeditor's "Download" of the uploaded JATS file on "JATS XML" saves the XML.
 - **Nothing new to test**:
   - a second "Upload" on a version that already has a file, which
     becomes a revision of that one file, listed in its "History"
@@ -768,7 +769,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | The generated XML's body is one paragraph showing the galley's markup as text | 🐞 | minor | — |
 | [A8](#a8) | The published "JATS XML" keeps old metadata for up to a day after an edit, and a preview's XML after publishing | 🐞 | minor | — |
 | [A9](#a9) | A URL path runs into the published file's name, and a returning reader keeps the earlier name | 🐞 | minor | — |
-| [A11](#a11) | "Download" on an uploaded JATS file saves a refusal as "download-file.json" for a role without Production access | 🐞 | minor | — |
+| [A11](#a11) | A Copyeditor pressing "Download" on an uploaded JATS XML file saves a refusal as "download-file.json" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | Editors can still replace or delete a published version's JATS XML file, which 3.5 does not offer | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | "Upload" of an image breaks the "JATS XML" page until the file is deleted | 🐞 | user-visible · crash: server | — |
 | [A14](#a14) | A never-saved Body Text shows "Unsaved Changes" on opening, and "Saved" when an import saved nothing | 🐞 | minor | — |
@@ -894,14 +895,18 @@ file type; a check against the JATS format is a separate question.
 Basis: probe, 2026-09-25. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — "Download" saves a refusal as a file** · 🐞 · minor.
-A role without Production access (a Funding Coordinator on a submission
-in Review) is offered "Download" on an uploaded JATS file. Pressing it
-saves a file named "download-file.json" holding the message "The current
-role does not have access to this operation." instead of the XML, and
-the page says nothing. The button should not be offered to them, or the
-page should show the refusal.
-Basis: probe, 2026-09-25. <sup>f-a11</sup>
+**A11 — A Copyeditor pressing "Download" on an uploaded JATS XML file saves a refusal as "download-file.json"** · 🐞 · low.
+A Copyeditor working on a submission in Copyediting can open the "JATS
+XML" page and read the JATS file an editor uploaded there. The page
+offers them "Download". Pressing it saves a file named "download-
+file.json" that holds the message "The current role does not have access
+to this operation." instead of the XML, and the page says nothing. An
+editor who presses the same "Download" gets the XML. It happens to any
+participant without access to the Production stage, while the submission
+is in a stage they work on and its version already has an uploaded JATS
+file. Once the submission reaches Production, these participants no
+longer see the publication pages.
+Basis: probe, 2026-10-02. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — Editors can still replace or delete a published version's JATS XML file, which 3.5 does not offer** · 🐞 · low.
@@ -1248,6 +1253,7 @@ is made.
 
 <a id="fn-f-a11"></a>
 **f-a11** — Note c: the uploaded file's "Download" is an anchor on the file's own `url` (`FileApiHandler`, stage Production); for a role without Production in its stage set the handler answers its JSON refusal, which the browser saves as "download-file.json". Probe: d1.
+Issue report: [docs/issues/U48-A11-jats-download-saves-refusal-json.md](../issues/U48-A11-jats-download-saves-refusal-json.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note c: `WorkflowPublicationJats.vue` withdraws "Upload" and "Delete" on `STATUS_PUBLISHED`, a constant undefined on the workflow page, so the test never matches; the server's `PublicationCanBeEditedPolicy` lets editorial roles write to a published version. Probe: d30.
