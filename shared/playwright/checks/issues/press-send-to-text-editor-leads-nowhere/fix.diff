@@ -1,0 +1,34 @@
+--- a/lib/ui-library/src/managers/FileManager/useFileManagerConfig.js
++++ b/lib/ui-library/src/managers/FileManager/useFileManagerConfig.js
+@@ -1,6 +1,7 @@
+ import {useLocalize} from '@/composables/useLocalize';
+ import {Actions} from './useFileManagerActions';
+ import {useCurrentUser} from '@/composables/useCurrentUser';
++import {useApp} from '@/composables/useApp';
+ 
+ const {tk} = useLocalize();
+ 
+@@ -411,6 +412,7 @@
+ 
+ 	const {hasCurrentUserAtLeastOneAssignedRoleInStage, getCurrentUserRoles} =
+ 		useCurrentUser();
++	const {isOJS} = useApp();
+ 	const userRoles = getCurrentUserRoles();
+ 
+ 	function getManagerConfig({
+@@ -423,9 +425,12 @@
+ 			stageId: submissionStageId.value,
+ 		});
+ 
+-		const availableActions = readOnly?.value
+-			? config.actions.filter((action) => !EDITING_ACTIONS.includes(action))
+-			: config.actions;
++		const availableActions = config.actions.filter(
++			(action) =>
++				!(readOnly?.value && EDITING_ACTIONS.includes(action)) &&
++				// "Send to Text Editor" opens the version's Body Text page, which only a journal has
++				(action !== Actions.FILE_SEND_TO_EDITOR || isOJS()),
++		);
+ 
+ 		const permittedActions = availableActions.filter((action) => {
+ 			return config.permissions.some((perm) => {

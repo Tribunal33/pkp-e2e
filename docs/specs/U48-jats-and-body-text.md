@@ -684,6 +684,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the guard for A20 (issue report `docs/issues/U47-A6-media-jats-upload-server-log-warning.md`): upload a JATS file on "JATS XML" and check the server log holds no PHP warning for the request.
+  - the guard for OMP1 (issue report `docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md`): on a press, a Press manager's "More Actions" on a Markdown file in "Production Ready Files" lists no "Send to Text Editor".
 - **Nothing new to test**:
   - a second "Upload" on a version that already has a file, which
     becomes a revision of that one file, listed in its "History"
@@ -776,7 +777,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | A sent file that cannot be converted fails with no message | 🐞 | minor | — |
 | [A20](#a20) | Each JATS "Upload" leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A21](#a21) | In French the tick box, its two windows and labels of the "Body Text" panel show raw codes | 🐞 | minor | issues (claude), 2026-10-02 — no report: unreleased 3.6 texts |
-| [OMP1](#omp1) | A press offers "Send to Text Editor", but has no "Body Text" page to send to | 🐞 | user-visible | — |
+| [OMP1](#omp1) | A press's editor is offered "Send to Text Editor" on a file, and confirming it imports nothing | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | A published version's Body Text stays editable | ❓ | minor | — |
 | [A4](#a4) | A new version starts with an empty Body Text, though its JATS file and media are copied | ❓ | user-visible | — |
 | [A5](#a5) | The saved Body Text reaches no reader and not the JATS XML | ❓ | user-visible | — |
@@ -1035,14 +1036,16 @@ Basis: probe, 2026-09-30. <sup>f-a21</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — A press offers "Send to Text Editor" with nowhere to send** · 🐞 · user-visible.
-A press's file lists offer "Send to Text Editor" on a Word, OpenDocument,
-RTF, LaTeX or Markdown file, and its window asks "To which version would
-you like to send this file?". A press has no "Body Text" page, so after
-"Confirm" nothing opens and nothing is imported; with "Create New
-Version" chosen, a new version is created all the same. The action should
-not be offered on a press.
-Basis: probe, 2026-09-25. <sup>f-omp1</sup>
+**OMP1 — A press's editor is offered "Send to Text Editor" on a file, and confirming it imports nothing** · 🐞 · low.
+A press's file lists offer "Send to Text Editor" on a Word,
+OpenDocument, RTF, LaTeX or Markdown file, and its window asks "To which
+version would you like to send this file?". A press has no "Body Text"
+page, so after "Confirm" nothing opens and nothing is imported; with
+"Create New Version" chosen, a new version is created all the same. The
+action should not be offered on a press. The action is the journal's
+import of a file into the version's "Body Text" page, which works on OJS
+and stays there.
+Basis: probe, 2026-10-02. <sup>f-omp1</sup>
 
 ---
 
@@ -1275,6 +1278,7 @@ Issue report: [pkp-e2e#494](https://github.com/jardakotesovec/pkp-e2e/issues/494
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note b and note p: OMP's navigation config has no `bodyText` item, so `navigateToMenu('publication_{id}_bodyText')` finds no entry after the version form's POST/PUT has run; the address keeps `importFileUrl` and `importFileName`. Probe: d28.
+Issue report: [docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md](../issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md).
 
 <a id="fn-d28"></a>
 **d28** — Live-probed 2026-09-25 (Purpose, absence; OMP1), OMP and OPS: a monograph's and a preprint's publication lists carry no "JATS XML" and no "Body Text"; the typed menu keys land on the stage page; the published book and preprint pages carry no "JATS" link; no installed plugin row mentions JATS. On OMP, "Send to Text Editor" on "notes.md" was offered to the Press Manager and the Press Editor, not to the Series Editor or the Author; its window asks "To which version would you like to send this file?". "Confirm" with the existing version closed the window and stayed on "Workflow: Submission" with nothing imported; with "Create New Version" the side menu gained a second "Unassigned version" entry.
