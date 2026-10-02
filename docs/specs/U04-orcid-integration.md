@@ -1246,7 +1246,7 @@ templates; same mechanism as the invitation-template gap recorded in
 "ORCID" on the OPS Emails screen returns "No items found.", while "Request
 verification" on a preprint contributor delivered the "Submission ORCID"
 email (positive control).
-Issue report: [docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md](../issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md).
+Issue report: [pkp-e2e#519](https://github.com/jardakotesovec/pkp-e2e/issues/519) ([docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md](../issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md)).
 
 <a id="fn-ops3"></a>
 **f-ops3** — `ops-main/plugins/generic/orcidProfile` (submodule, release

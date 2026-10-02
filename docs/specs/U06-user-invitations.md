@@ -1523,7 +1523,7 @@ Cancellation keeps the row → friendly page. Live-confirmed 2026-07-31
 Claim check 2026-07-31 (OJS deep,
 OMP spot-check): a plain re-send to the same address kills the old accept
 link the same way — same `byNotId` cleanup, not edit-specific.
-Issue report: [docs/issues/U06-A3-replaced-invitation-links-not-found.md](../issues/U06-A3-replaced-invitation-links-not-found.md).
+Issue report: [pkp-e2e#513](https://github.com/jardakotesovec/pkp-e2e/issues/513) ([docs/issues/U06-A3-replaced-invitation-links-not-found.md](../issues/U06-A3-replaced-invitation-links-not-found.md)).
 
 <a id="fn-a4"></a>
 **f-a4** — `finalize()` registers no session (note m) while the store then
@@ -1532,7 +1532,7 @@ never materializes either (note l). Live-confirmed 2026-07-31 on OJS, OMP and
 OPS, on both the accept and decline flows. Claim check 2026-09-28, all
 three apps: an existing user who opened the link while signed in as
 themselves stays signed in and reaches the Dashboard (note m).
-Issue report: [docs/issues/U06-A4-newcomer-not-signed-in-after-accepting.md](../issues/U06-A4-newcomer-not-signed-in-after-accepting.md).
+Issue report: [pkp-e2e#514](https://github.com/jardakotesovec/pkp-e2e/issues/514) ([docs/issues/U06-A4-newcomer-not-signed-in-after-accepting.md](../issues/U06-A4-newcomer-not-signed-in-after-accepting.md)).
 
 <a id="fn-a5"></a>
 **f-a5** — Success-dialog copy: app locale key `userInvitation.modal.message`.
@@ -1541,7 +1541,7 @@ No accept/decline code path produces a notification or email to the inviter
 cases): bell/Tasks panel "No Items", inviter mailbox empty after both accept
 and decline; positive control — an invitation sent afterwards delivered
 normally.
-Issue report: [docs/issues/U06-A5-invitation-sent-promises-decision-updates.md](../issues/U06-A5-invitation-sent-promises-decision-updates.md).
+Issue report: [pkp-e2e#515](https://github.com/jardakotesovec/pkp-e2e/issues/515) ([docs/issues/U06-A5-invitation-sent-promises-decision-updates.md](../issues/U06-A5-invitation-sent-promises-decision-updates.md)).
 
 <a id="fn-a6"></a>
 **f-a6** — Users-grid Edit on a disabled member (live probe 2026-07-31): error
@@ -1609,7 +1609,7 @@ every `label[for]` resolves to the first row's control; no
 shows row 2's combobox/textbox without an accessible name. Observed
 2026-07-31 (claim check —
 duplicate-id scan + aria snapshot on OJS; shared component, all three apps).
-Issue report: [docs/issues/U06-A8-invitation-role-rows-unnamed.md](../issues/U06-A8-invitation-role-rows-unnamed.md).
+Issue report: [pkp-e2e#516](https://github.com/jardakotesovec/pkp-e2e/issues/516) ([docs/issues/U06-A8-invitation-role-rows-unnamed.md](../issues/U06-A8-invitation-role-rows-unnamed.md)).
 
 <a id="fn-a9"></a>
 **f-a9** — The payload's `disabled` flag (f-a6) gates the banner
@@ -1677,7 +1677,7 @@ Moderator), never Reader, Author or Copyeditor, before and after the drive,
 including after two Authors had accepted Copyeditor with "Appear on the
 masthead" on OJS and OMP. An existing Author's email carried the same
 sentence for the held Author role.
-Issue report: [docs/issues/U06-A11-invitation-promises-masthead-for-unlisted-roles.md](../issues/U06-A11-invitation-promises-masthead-for-unlisted-roles.md).
+Issue report: [pkp-e2e#517](https://github.com/jardakotesovec/pkp-e2e/issues/517) ([docs/issues/U06-A11-invitation-promises-masthead-for-unlisted-roles.md](../issues/U06-A11-invitation-promises-masthead-for-unlisted-roles.md)).
 
 <a id="fn-a12"></a>
 **f-a12** — `InitializeInvitationUIHandler::create()` answers not-found when
@@ -1691,7 +1691,7 @@ on `publicknowledge` answered 500 with an empty page, the server log reading
 "Uncaught Exception: Invitation type 'nosuchtype' not found. in
 …/lib/pkp/classes/invitation/core/InvitationFactory.php:42";
 `invitation/create` with no type answered 404 with "404 Not Found".
-Issue report: [docs/issues/U06-A12-invitation-address-made-up-kind-empty-page.md](../issues/U06-A12-invitation-address-made-up-kind-empty-page.md).
+Issue report: [pkp-e2e#518](https://github.com/jardakotesovec/pkp-e2e/issues/518) ([docs/issues/U06-A12-invitation-address-made-up-kind-empty-page.md](../issues/U06-A12-invitation-address-made-up-kind-empty-page.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Error observed on OMP and OPS (live probes 2026-07-31, two
@@ -1731,7 +1731,7 @@ Live-confirmed 2026-07-31 (live probes, all three apps): "User Invited
 to Role Notification" listed with an Edit button on OJS and OMP; OPS search
 and full list answer "No items found."; the OPS invitation email sent and
 delivered in the same session.
-Issue report: [docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md](../issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md).
+Issue report: [pkp-e2e#519](https://github.com/jardakotesovec/pkp-e2e/issues/519) ([docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md](../issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md)).
 
 ## Reference — entry points & surfaces
 

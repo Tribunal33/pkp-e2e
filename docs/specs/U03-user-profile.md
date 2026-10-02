@@ -2495,7 +2495,7 @@ subject "Confirm account contact email change request"); OPS lists 17 and
 the string "Change Email" occurs nowhere on the page, while the OPS scratch
 user's request delivered the same mail. Live-probed 2026-09-04 (claim check): holds (66 /
 56 / 17 templates again).
-Issue report: [docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md](../issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md).
+Issue report: [pkp-e2e#519](https://github.com/jardakotesovec/pkp-e2e/issues/519) ([docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md](../issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md)).
 
 ## Reference — entry points & surfaces
 
