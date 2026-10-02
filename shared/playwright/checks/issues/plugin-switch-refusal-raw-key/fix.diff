@@ -1,0 +1,12 @@
+--- a/lib/pkp/locale/en/user.po
++++ b/lib/pkp/locale/en/user.po
+@@ -135,6 +135,9 @@
+ msgid "user.authorization.pluginRequired"
+ msgstr "A plugin was not specified and is required."
+ 
++msgid "user.authorization.pluginLevel"
++msgstr "You do not have sufficient privileges to manage this plugin."
++
+ msgid "user.authorization.invalidReviewAssignment"
+ msgstr "You do not have permission to access this review assignment."
+ 

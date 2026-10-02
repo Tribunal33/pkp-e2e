@@ -1,0 +1,18 @@
+--- a/lib/pkp/js/controllers/modal/RemoteActionConfirmationModalHandler.js
++++ b/lib/pkp/js/controllers/modal/RemoteActionConfirmationModalHandler.js
+@@ -126,10 +126,11 @@
+ 	$.pkp.controllers.modal.RemoteActionConfirmationModalHandler.prototype.
+ 			remoteResponse = function(ajaxOptions, jsonData) {
+ 
+-		var processedJsonData = this.parent('remoteResponse', ajaxOptions, jsonData);
+-		if (processedJsonData !== false) {
+-			this.modalClose(ajaxOptions);
+-		}
++		// A refusal (status false) has had its message alerted by handleJson().
++		// Close the window either way: the dialog shows a spinner from the moment
++		// "OK" is pressed and has no way to stop it while it stays open.
++		this.parent('remoteResponse', ajaxOptions, jsonData);
++		this.modalClose(ajaxOptions);
+ 		return false;
+ 	};
+ 

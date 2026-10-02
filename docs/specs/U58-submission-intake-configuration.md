@@ -827,6 +827,8 @@ recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A12 (issue report
+    `docs/issues/U62-A9-refused-confirmation-window-keeps-spinning.md`): a refused delete of a component in use closes its "Delete" window once the alert is closed
   - a reload opening "Disable Submissions" after another tab of the
     page and back (Rule 1b): scenario 3 reloads on a side tab it pressed
   - unsaved boxes and choices kept through another tab of the page and
@@ -934,7 +936,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | The component window's "Key" help misspells "identifier" and calls the component a "genre" | 🐞 | minor | — |
 | [A9](#a9) | In French, a press's and a preprint server's component list shows raw text keys | 🐞 | user-visible | — |
 | [A10](#a10) | A component name of only spaces is refused with a raw text key | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A12](#a12) | A refused component delete leaves its confirmation window spinning | 🐞 | minor | — |
+| [A12](#a12) | A refused component delete leaves its confirmation window spinning | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | The "×" of a refused key's notice cannot be pressed while the component window is open | 🐞 | minor | — |
 | [OJS1](#ojs1) | The LOCKSS and CLOCKSS pages print the License Terms under "Copyright" | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's "Disable Submissions" help speaks of "new articles", and its copyright box reads "Copyright notice" | 🐞 | minor | — |
@@ -1071,14 +1073,14 @@ second address, would keep working links.
 Basis: probe. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — A refused delete leaves its confirmation spinning** · 🐞 · minor.
+**A12 — A refused delete leaves its confirmation spinning** · 🐞 · low.
 A manager who deletes a component that a submission's file carries
 presses "OK" in the "Delete" window. The refusal comes as a browser
-pop-up; once it is closed, the "Delete" window stays open with a spinning
-indicator, as if the delete were still running. Pressing "OK" again
-brings the same pop-up; only "Cancel" closes the window. The row stays,
-as it should.
-Basis: probe. <sup>f-a12</sup>
+pop-up; once it is closed, the "Delete" window stays open with a
+spinner that never stops, as if the delete were still running (on 3.5
+with "OK" and "Cancel" disabled). Escape closes it, and on main so
+does "Cancel". The row stays, as it should.
+Basis: probe, 2026-10-02. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — A refused key's notice cannot be closed** · 🐞 · minor.
@@ -1753,6 +1755,7 @@ filled once at context creation with the absolute address. Live-probed
 `manager.genres.alertDelete`, shown as a browser alert; the confirmation
 window does not close on it. Live-probed 2026-09-27, two runs per
 app (note td6).
+Issue report: [docs/issues/U62-A9-refused-confirmation-window-keeps-spinning.md](../issues/U62-A9-refused-confirmation-window-keeps-spinning.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Test run 2026-09-27, all three apps (scenario 6, "A malformed

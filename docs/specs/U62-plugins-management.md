@@ -616,6 +616,9 @@ one at a time and put back what they changed. <sup>sc</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A9 (issue reports
+    `docs/issues/U62-A9-plugin-switch-refusal-raw-key.md` and
+    `docs/issues/U62-A9-refused-confirmation-window-keeps-spinning.md`): a Site Administrator without a manager role ticks and unticks a journal's plugin; the alert gives the reason in words and the "Disable" window closes
   - the guard for A1 (issue report
     `docs/issues/U62-A1-plugin-gallery-offline-stays-loading.md`): "Plugin Gallery" on an installation that cannot reach PKP's site shows an empty list, with no server error
   - the guard for A5 (issue report
@@ -698,7 +701,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | Plugins: "Upgrade" with the installed or an older version blames "the version available in the gallery" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | Plugins: an upgrade whose database step fails deletes the plugin, old version included, from every journal | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Deleting a plugin: the notice that confirms it reads "successfuly deleted" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A9](#a9) | A refused tick or untick says nothing, and "Disable" stays open with its spinner | 🐞 | minor | — |
+| [A9](#a9) | A refused tick or untick is explained by a raw code, and "Disable" stays open with its spinner | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | Uploading a file that is not a plugin package shows PHP's archive error with a server path | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | With its theme switched off, a journal's home page comes up blank for every visitor | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | "Delete" is offered on plugins nobody can switch off, and on the theme in use | ❓ | minor | — |
@@ -819,14 +822,18 @@ yes; refuse with a line pointing to Settings › Website › "Appearance" ›
 Basis: probe. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — A refused tick or untick says nothing** · 🐞 · minor.
+**A9 — A refused tick or untick is explained by a raw code, and "Disable" stays open with its spinner** · 🐞 · low.
 A Site Administrator with no manager-level role in a journal who ticks
-one of its plugins (A6) sees the box stay unticked, with no notice and
-no message; one who unticks a plugin and presses "OK" sees the
-"Disable" window stay open with its spinner and the box still ticked.
-After a reload both are as before. Expected: a message saying why the
-change was refused.
-Basis: probe. <sup>f-a9</sup>
+or unticks one of its plugins (A6) is refused, as the rule says, but
+the browser's alert reads "##user.authorization.pluginLevel##" on a
+journal and a preprint server instead of a reason; a press says "You
+do not have sufficient privileges to manage this plugin.". After a
+refused untick and the alert closed, the "Disable" window stays open
+with a spinner that never stops (on 3.5 with "OK" and "Cancel"
+disabled); Escape closes it, and on main so does "Cancel". After a
+reload both boxes are as before. Expected: the refusal in words, and
+the window closed.
+Basis: probe, 2026-10-02. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — Uploading a file that is not a plugin package shows PHP's archive error with a server path** · 🐞 · low.
@@ -1373,6 +1380,8 @@ td19. The server answers the `enable` and `disable` requests with
 "##user.authorization.pluginLevel##" (an untranslated key) on a journal
 and a preprint server, "You do not have sufficient privileges to manage
 this plugin." on a press.
+Issue report: [docs/issues/U62-A9-plugin-switch-refusal-raw-key.md](../issues/U62-A9-plugin-switch-refusal-raw-key.md).
+Issue report: [docs/issues/U62-A9-refused-confirmation-window-keeps-spinning.md](../issues/U62-A9-refused-confirmation-window-keeps-spinning.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — fn-l: `PharData`'s own exception message reaches the
