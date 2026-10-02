@@ -4,8 +4,7 @@
 - **Effort** small
 - **Kind** defect
 - **Affects**
-  - main: OJS (OMP none: the press's step states no rule, and an empty
-    review is submitted there by the same ruling)
+  - main: OJS (OMP none: the press's step states no rule)
   - 3.5: OJS (OMP none, as on main)
   - 3.4: OJS (code)
   - 3.3: OJS (code)
