@@ -1,0 +1,17 @@
+--- a/lib/pkp/controllers/grid/settings/roles/form/UserGroupForm.php
++++ b/lib/pkp/controllers/grid/settings/roles/form/UserGroupForm.php
+@@ -314,9 +314,12 @@
+         // After we have created/edited the user group, we assign/update its stages.
+         $assignedStages = $this->getData('assignedStages');
+ 
+-        // Always set all stages active for some permission levels.
++        // The form offers no stage for some permission levels: a new user group
++        // gets every stage, an existing one keeps the stages it has.
+         if (in_array($userGroup->roleId, $roleDao->getAlwaysActiveStages())) {
+-            $assignedStages = array_keys(WorkflowStageDAO::getWorkflowStageTranslationKeys());
++            $assignedStages = $this->getUserGroupId() == null
++                ? array_keys(WorkflowStageDAO::getWorkflowStageTranslationKeys())
++                : null;
+         }
+         if ($assignedStages) {
+             $this->_assignStagesToUserGroup($userGroupId, $assignedStages);

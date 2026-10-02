@@ -771,6 +771,10 @@ Left out of the scenarios above, by reason:
     every row of the "Roles" list, the first included, offering "Edit"
     and "Remove", and a pressed stage box showing its new state without
     a reload
+  - the guard for A3 (issue report
+    `docs/issues/U54-A3-manager-level-role-save-ticks-every-stage.md`):
+    "OK" in the "Production editor" window with nothing changed, then
+    its row still reading Copyediting and Production only
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -852,7 +856,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | The first row of each page of the "Roles" list has no "Edit" or "Remove" | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | The manager role's row shows no stage, and the stage filter leaves it out | 🐞 | minor | — |
-| [A3](#a3) | Saving a manager-level role's window ticks every stage, unasked | 🐞 | user-visible | — |
+| [A3](#a3) | Saving the "Production editor" role, even unchanged, opens Submission and Review to its assigned members | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | "Remove" warns that members' assignments will be deleted, but a role with members is never removed | 🐞 | minor | — |
 | [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | A screen reader announces each stage box of the list only as "checkbox" | 🐞 | minor | — |
@@ -898,15 +902,23 @@ The list tells the manager that the most powerful role works nowhere.
 Basis: probe. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — Saving a manager-level role ticks every stage** · 🐞 · user-visible.
-The window of a Journal Manager-level role offers no stage box to tick,
-yet its "OK" stores every stage. After the manager changes only the
-name or an option of "Production editor", the row reads every stage
-ticked instead of Copyediting and Production, the role starts being
-offered in a section's "Editorial Assignments", and its assigned members
-open the Submission and Review stages they were kept out of. Nothing on
-screen says the stages changed.
-Basis: probe. <sup>f-a3</sup>
+**A3 — Saving the "Production editor" role, even unchanged, opens Submission and Review to its assigned members** · 🐞 · medium.
+When a manager presses "OK" in the window of a role whose permission
+level is Journal Manager (Press Manager), the role is given every
+workflow stage, even when nothing in the window was changed. As
+installed this hits "Production editor", which works in Copyediting and
+Production only. After the save, its row on the "Roles" list reads every
+stage ticked.
+
+A person assigned to a submission as Production editor was refused that
+submission's Submission and Review stages until then. After the save
+they open both: the submission's files, the review files, the
+reviewers' names in a double-anonymous round, and "Add Reviewer".
+
+The only message is "Your changes have been saved.". The row's stage
+boxes are greyed out for this level, so no screen can give the role its
+two stages back.
+Basis: probe, 2026-10-02. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — The removal warning describes what never happens** · 🐞 · minor.
@@ -1648,6 +1660,7 @@ Internal Review) before and opened them after. "OK" with nothing changed
 did the same, and a role created at the manager level arrived with every
 stage ticked (all three apps; OPS its one box). The only notice was "Your
 changes have been saved.".
+Issue report: [docs/issues/U54-A3-manager-level-role-save-ticks-every-stage.md](../issues/U54-A3-manager-level-role-save-ticks-every-stage.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `settings.roles.removeText` against `removeUserGroup()`
