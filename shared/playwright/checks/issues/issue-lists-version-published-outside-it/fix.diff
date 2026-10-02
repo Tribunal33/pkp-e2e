@@ -1,0 +1,139 @@
+--- a/classes/issue/Issue.php
++++ b/classes/issue/Issue.php
+@@ -656,7 +656,7 @@
+     {
+         return Repo::submission()->getCollector()
+             ->filterByContextIds([$this->getData('journalId')])
+-            ->filterByIssueIds([$this->getId()])
++            ->filterByListedInIssueIds([$this->getId()])
+             ->filterByCurrentPublicationStatus([PKPPublication::STATUS_SCHEDULED, PKPPublication::STATUS_PUBLISHED])
+             ->getCount();
+     }
+--- a/classes/issue/maps/Schema.php
++++ b/classes/issue/maps/Schema.php
+@@ -113,7 +113,7 @@
+                     $submissions = Repo::submission()
+                         ->getCollector()
+                         ->filterByContextIds([$issue->getJournalId()])
+-                        ->filterByIssueIds([$issue->getId()])
++                        ->filterByListedInIssueIds([$issue->getId()])
+                         ->getMany();
+ 
+                     foreach ($submissions as $submission) {
+--- a/classes/section/DAO.php
++++ b/classes/section/DAO.php
+@@ -77,7 +77,7 @@
+ 
+             $submissionsCollector = Repo::submission()->getCollector()
+                 ->filterByContextIds([$issue->getJournalId()])
+-                ->filterByIssueIds([$issueId])
++                ->filterByListedInIssueIds([$issueId])
+                 ->orderBy(\APP\submission\Collector::ORDERBY_SEQUENCE, \APP\submission\Collector::ORDER_DIR_ASC);
+ 
+             // Extend the submissions query to fetch the list of section IDs instead
+--- a/classes/submission/Collector.php
++++ b/classes/submission/Collector.php
+@@ -23,6 +23,7 @@
+ class Collector extends \PKP\submission\Collector
+ {
+     public ?array $issueIds = null;
++    public ?array $listedInIssueIds = null;
+     public ?array $sectionIds = null;
+     protected ?bool $latestPublished = null;
+ 
+@@ -37,6 +38,20 @@
+     public function filterByIssueIds(array $issueIds): self
+     {
+         $this->issueIds = $issueIds;
++        return $this;
++    }
++
++    /**
++     * Limit results to submissions an issue lists: the current publication is
++     * assigned to one of these issues, or a version is scheduled in one of them.
++     *
++     * Unlike filterByIssueIds(), an older version left in an issue does not
++     * keep the submission listed there once a newer version is published
++     * outside it.
++     */
++    public function filterByListedInIssueIds(array $issueIds): self
++    {
++        $this->listedInIssueIds = $issueIds;
+         return $this;
+     }
+ 
+@@ -76,6 +91,21 @@
+             });
+         }
+ 
++        // Listed in issue IDs
++        if (is_array($this->listedInIssueIds)) {
++            $q->whereIn('s.submission_id', function ($query) {
++                $query->select('p.submission_id')
++                    ->from('publications as p')
++                    ->join('submissions as ps', 'ps.submission_id', '=', 'p.submission_id')
++                    ->whereIn('p.issue_id', $this->listedInIssueIds)
++                    ->where(
++                        fn (Builder $query) => $query
++                            ->whereColumn('p.publication_id', 'ps.current_publication_id')
++                            ->orWhere('p.status', Publication::STATUS_SCHEDULED)
++                    );
++            });
++        }
++
+         // By section IDs
+         if (is_array($this->sectionIds)) {
+             $q->whereIn('s.submission_id', function ($query) {
+--- a/classes/submission/Repository.php
++++ b/classes/submission/Repository.php
+@@ -31,7 +31,7 @@
+     {
+         $submissions = $this->getCollector()
+             ->filterByContextIds([$contextId])
+-            ->filterByIssueIds([$issueId])
++            ->filterByListedInIssueIds([$issueId])
+             ->filterByStatus([Submission::STATUS_PUBLISHED, Submission::STATUS_SCHEDULED])
+             ->orderBy(Collector::ORDERBY_SEQUENCE, Collector::ORDER_DIR_ASC)
+             ->getMany();
+--- a/pages/issue/IssueHandler.php
++++ b/pages/issue/IssueHandler.php
+@@ -376,7 +376,7 @@
+ 
+         $issueSubmissions = Repo::submission()->getCollector()
+             ->filterByContextIds([$issue->getJournalId()])
+-            ->filterByIssueIds([$issue->getId()])
++            ->filterByListedInIssueIds([$issue->getId()])
+             ->orderBy(\APP\submission\Collector::ORDERBY_SEQUENCE, \APP\submission\Collector::ORDER_DIR_ASC)
+             ->getMany();
+ 
+--- a/plugins/generic/datacite/filter/DataciteXmlFilter.php
++++ b/plugins/generic/datacite/filter/DataciteXmlFilter.php
+@@ -803,7 +803,7 @@
+                 $submissions = Repo::submission()
+                     ->getCollector()
+                     ->filterByContextIds([$issue->getJournalId()])
+-                    ->filterByIssueIds([$issue->getId()])
++                    ->filterByListedInIssueIds([$issue->getId()])
+                     ->getMany();
+ 
+                 foreach ($submissions as $relatedArticle) {
+@@ -1300,7 +1300,7 @@
+         $submissions = Repo::submission()
+             ->getCollector()
+             ->filterByContextIds([$issue->getJournalId()])
+-            ->filterByIssueIds([$issue->getId()])
++            ->filterByListedInIssueIds([$issue->getId()])
+             ->getMany();
+ 
+         $toc = '';
+--- a/plugins/generic/webFeed/WebFeedGatewayPlugin.php
++++ b/plugins/generic/webFeed/WebFeedGatewayPlugin.php
+@@ -87,7 +87,7 @@
+         // If the plugin is configured to display only the latest issue, so we filter by it and apply the needed changes to the query
+         if (WebFeedPlugin::hasIssues() && $displayItems === 'issue') {
+             $issue = Repo::issue()->getCurrent($context->getId(), true);
+-            $submissions->filterByIssueIds([$issue?->getId() ?? 0])
++            $submissions->filterByListedInIssueIds([$issue?->getId() ?? 0])
+                 ->limit(null)
+                 ->orderBy(Collector::ORDERBY_SEQUENCE, Collector::ORDER_DIR_ASC);
+             $latestDate = $issue?->getData('datePublished');

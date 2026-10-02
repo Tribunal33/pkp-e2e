@@ -1042,6 +1042,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U50-A5-A6-issue-big-volume-or-lettered-year.md`): a
     "Volume" of 99999 and a "Year" with a letter on "Create Issue", each
     refused with its message
+  - the guard for A17 and A18 (issue report
+    `docs/issues/U50-A17-A18-issue-lists-version-published-outside-it.md`):
+    a newer version published with "Don't Assign To An Issue" leaving
+    the issue's page, "Items" and "Table of Contents"
 - **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
@@ -1128,8 +1132,8 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 | [A13](#a13) | "Archives" lists the issues in no set order until someone orders "Back Issues" | 🐞 | user-visible | — |
 | [A14](#a14) | A galley address that names no galley of the issue fails with an empty page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | With only "Description" changed on "Issue Data", another tab opens without the unsaved-change question | 🐞 | minor | — |
-| [A17](#a17) | An article whose newer version was published with "Don't Assign To An Issue" stays listed in the issue, under the newer title, linking to a page that names no issue | 🐞 | user-visible | — |
-| [A18](#a18) | On such an article, "Remove" leaves it in the issue and unpublishes its earlier version, the one the issue published | 🐞 | user-visible | — |
+| [A17](#a17) | An article whose newer version was published with "Don't Assign To An Issue" stays listed in the issue, under the newer title, linking to a page that names no issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A18](#a18) | On such an article, "Remove" leaves it in the issue and unpublishes its earlier version, the one the issue published | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | "Delete" takes an issue's published articles offline behind a generic confirmation | ❓ | user-visible | — |
 | [A7](#a7) | On "Archives", a cover with no alternate text is a link with no name | ❓ | minor | — |
 | [A9](#a9) | No section could be moved in the table of contents' "Order" | ❓ | minor | — |
@@ -1303,34 +1307,34 @@ the same question before leaving the form. Basis: test run, 2026-09-25.
 <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — An article published outside the issue stays listed in it** · 🐞 · user-visible.
-A Journal Manager publishes a newer version of an issue's article with
-"Don't Assign To An Issue", after a window that says "This will be
-published immediately without any issue association.". The issue still
-lists the article, now under the newer version's title: on the issue's
-page (so, for the current issue, under "Current" and in the home page's
-"Current Issue"), on
-the "Table of Contents" tab, in "Items", and in the current-issue web
-feeds ([Web feeds](U18-web-feeds.md), its Rule 5). Its link opens the
-newer version's page, whose breadcrumb and "Issue" line name no issue, so
-a reader browsing the issue lands on an article that says it belongs to
-none. The issue should list the version that is in it, or drop the
-article. Basis: probe, 2026-09-28. <sup>f-a17</sup>
+**A17 — An article published outside the issue stays listed in it** · 🐞 · medium.
+An editor publishes a newer version of an article that is in a published
+issue, and chooses "Don't Assign To An Issue". The issue still lists the
+article, now under the newer version's title: on its page (so, for the
+current issue, under "Current" and in the home page's "Current Issue"),
+in "Items", in its "Table of Contents" and in the current-issue web
+feeds ([Web feeds](U18-web-feeds.md), its Rule 5). The link opens the
+newer version's page, which names no issue. Publishing the newer version
+into another issue has the same effect, and its page then names that
+other issue; on 3.5, which has no "Don't Assign To An Issue", this is
+how it happens. "Unpublish" on the newer version makes the earlier
+version current again, and the issue lists it under its own title. The
+issue should list the version that is in it, or drop the article. One
+cause with A18.
+Basis: probe, 2026-10-02. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — "Remove" unpublishes the older version and leaves the article in the issue** · 🐞 · user-visible.
+**A18 — "Remove" unpublishes the older version and leaves the article in the issue** · 🐞 · medium.
 On an article of A17, the "Table of Contents" tab's "Remove" asks its
 usual question, and "OK" closes the window as if the article had been
 taken out. It has not: it stays on the tab, in "Items" and on the
-issue's page. What goes offline instead is the earlier version, the one
-the issue published: its page answers "404 Not Found" and the
-"Versions" list on the article's page no longer offers it, while the
-article's page and its workflow still read "Published". Readers lose the
-issue's own version of the article, and every link to that version
-breaks; nothing tells the Journal Manager that a version went offline.
-"Remove" should take
-the article out of the issue and leave its published versions alone, or
-refuse with a message. Basis: probe, 2026-09-28. <sup>f-a18</sup>
+issue's page. Instead "Remove" takes offline the version the issue
+published: that version's page answers "404 Not Found" and drops out of
+the article's "Versions" list, while the article's page and its workflow
+still read "Published". Nothing tells the editor. The editor can publish
+that version again from the workflow, if they notice. One cause with
+A17.
+Basis: probe, 2026-10-02. <sup>f-a18</sup>
 
 ---
 
@@ -1543,9 +1547,11 @@ Issue report: [pkp-e2e#284](https://github.com/jardakotesovec/pkp-e2e/issues/284
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-28 (Fields "Items"; Rules 9, 9a, 23, 23a), OJS, four runs, each on a scratch journal with the sections "Articles" and "Second Section" and the published, current issue "Vol. 1 No. 1 (2024)" holding three published articles. As the journal's Journal Manager, "Create New Version" on two of them, each new version retitled and saved; one was then published with "Don't Assign To An Issue" (the window read "…This will be published immediately without any issue association…", and its Publication Settings then showed "Don't Assign To An Issue" with no issue box), the other with the preselected "Assign To Current/Back Issue" and the issue. Signed out, the issue's page, "Current" (`issue/current`) and the home page's "Current Issue" listed the first article under its new title in "Articles", on the page and after a reload; its link `article/view/{id}` opened the new version's page, with the breadcrumb "Home / Archives / Articles" and an issue part reading only "Section Articles". "Back Issues" read "Items" 3 and the "Table of Contents" tab listed the new title. The article published into the issue was listed under its new title, with the breadcrumb and "Issue" line naming the issue. With the journal's web feed set to "Display items in current published issue." (two of the runs), the Atom, RSS 2.0 and RSS 1.0 items carried the new title and linked to `article/view/{id}`, while an article published with no issue at all was not listed. Code read 2026-09-28 (ojs `72b85f4ba0`): the issue's page, the tab and "Items" start from `APP\submission\Collector::filterByIssueIds()`, which keeps a submission when any of its publications carries the issue's id, whatever that publication's status; `IssueHandler::setupIssueTemplate()`, `Repository::getInSections()` and `Issue::getNumArticles()` then read only the current publication's status and section (notes g, m, w). The current-issue feed applies the same filter ([Web feeds](U18-web-feeds.md), its note f).
+Issue report: [docs/issues/U50-A17-A18-issue-lists-version-published-outside-it.md](../issues/U50-A17-A18-issue-lists-version-published-outside-it.md).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-28 (Rule 12a), OJS, four runs, on the article of f-a17 published outside the issue: "Remove" showed Rule 12's window and question, and "OK" answered with success (`remove-article` 200, `{"status":true}`) and closed the window. The row stayed on the tab, on the same window and after it was reopened; "Items" stayed 3; the issue's page, and in the two feed runs the current-issue feeds, still listed the new title; the workflow read "Status: Published" with only "Unpublish". The first version was unpublished instead: its page `article/view/{id}/version/{firstVersionId}` answered "404 Not Found", the article's "Versions" list dropped "2024-03-01 (Version of Record 1.0)", and the article's page, still the new version, read "Published 2024-03-01 — Updated on 2026-09-28". No run recorded a server error or a script error. Mechanism: note n.
+Issue report: [docs/issues/U50-A17-A18-issue-lists-version-published-outside-it.md](../issues/U50-A17-A18-issue-lists-version-published-outside-it.md).
 
 ## Reference — entry points & surfaces
 
