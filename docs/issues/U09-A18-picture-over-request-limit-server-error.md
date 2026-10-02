@@ -11,7 +11,7 @@
   - 3.3: none (code; refused without a server error)
 - **Introduced** `pkp/pkp-lib#9176` for `pkp/pkp-lib#7698` · [71e79e31e3](https://github.com/pkp/pkp-lib/commit/71e79e31e3d5c827e4bfa2443bbe81e5ec4c1dba) · 2023-10-13 · Touhidur Rahman (touhidurabir)
 - **Upstream** none found (2026-10-01)
-- **Tracked in** spec U09 [A18](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a18); pictures over the per-file limit but under this one (2 to 8 MB by default) are [U09-A18-picture-over-upload-limit-server-error](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U09-A18-picture-over-upload-limit-server-error.md)
+- **Tracked in** spec U09 [A18](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a18); spec U17 [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U17-sections.md#a10) (a section asked for by a non-numeric id; A10's request at the site's address is [U17-A10-sections-interface-site-address-server-error](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U17-A10-sections-interface-site-address-server-error.md)); pictures over the per-file limit but under this one (2 to 8 MB by default) are [U09-A18-picture-over-upload-limit-server-error](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U09-A18-picture-over-upload-limit-server-error.md)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -30,7 +30,9 @@ site rather than of the picture.
 
 The file uploads of the submission, the forms and the email windows
 refuse such a file in the browser before sending it, so the picture
-button is where users meet this.
+button is where users meet this. An API address that matches no route,
+such as a section asked for by a non-numeric id instead of a number,
+answers the same kind of server error, for the same reason.
 
 ## Impact
 
@@ -47,6 +49,8 @@ Medium: a settings task fails with a server error on a narrow input
 smaller picture goes in.
 
 ## Steps to reproduce
+
+**A picture over the request limit:**
 
 Preconditions:
 
@@ -94,6 +98,35 @@ production.ERROR: The POST data is too large. {"exception":"[object] (Illuminate
 A 1 KB PNG goes in as usual, and a text file named ".png" gets "The
 image you uploaded is not valid.".
 
+**An API address that matches no route** (spec U17 A10):
+
+Preconditions:
+
+- PKP's default test dataset for OJS `main`, the one app with a
+  sections endpoint. Nothing else.
+
+Steps:
+
+1. Sign in as `admin` (password `admin`).
+2. Open `/index.php/publicknowledge/api/v1/sections/abc`, a section
+   asked for by a non-numeric id instead of a number.
+
+**Expected**: 404, as for a number with no section under it
+(`/sections/999`).
+
+**Observed**:
+
+```
+GET /index.php/publicknowledge/api/v1/sections/abc
+→ 500 {"error":"The route publicknowledge/api/v1/sections/abc could not be found."}
+```
+
+The server log reads:
+
+```
+production.ERROR: The route publicknowledge/api/v1/sections/abc could not be found. {"exception":"[object] (Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException(code: 0): The route publicknowledge/api/v1/sections/abc could not be found. at …/lib/pkp/lib/vendor/laravel/framework/src/Illuminate/Routing/AbstractRouteCollection.php:44)
+```
+
 ## Cause
 
 When a request is larger than `post_max_size`, PHP drops its body:
@@ -135,9 +168,13 @@ Reach:
   request limit would meet the same 500 (not driven).
 - Unknown routes and wrong methods. The router's
   `NotFoundHttpException` and `MethodNotAllowedHttpException` are
-  thrown inside the same pipeline and reach `render()` too. An unknown
-  API route answers 500 today with Laravel's English "The route … could
-  not be found." (seen on OMP and OPS `main`).
+  thrown inside the same pipeline and reach `render()` too: the global
+  `PolicyAuthorizer` middleware looks the route up
+  (`PKPBaseController::getRequestedRoute()`, `$routes->match()`) before
+  `dispatch()`. An unknown API route answers 500 today with Laravel's
+  English "The route … could not be found." (seen on OMP and OPS
+  `main`, and on OJS `main` and `stable-3_5_0` for `sections/abc`,
+  whose `{sectionId}` route takes numbers only).
 - With `display_errors = On` (`php.ini-development`), PHP prints its
   start-up warning before the JSON, so the answer is not JSON. The
   upload handler then fails on `reject(r.responseJSON.error)`:
@@ -186,7 +223,8 @@ Tried on `main` on the three apps: with the fix the picture gets "Files
 larger than 2MB can not be uploaded." with status 413, and no server
 error. A 1 KB PNG is still stored, a text file named ".png" still gets
 "The image you uploaded is not valid.", and a 3 MB PNG still fails as
-the sibling report describes.
+U09-A18-picture-over-upload-limit-server-error describes. On OJS `main`, `sections/abc` answers 404
+with Laravel's English text and no server error.
 
 **Alternatives**
 
@@ -200,8 +238,8 @@ the sibling report describes.
 
 **What goes with it**
 
-- Unknown routes: with the fix an unknown API route answers 404 and a
-  wrong method 405, still with Laravel's English text rather than
+- Unknown routes: with the fix an unknown API route answers 404 (tried)
+  and a wrong method 405 (read in the code), still with Laravel's English text rather than
   `api.404.endpointNotFound`. Whether `render()` should answer a
   `NotFoundHttpException` with that message, as `APIHandler::runRoutes()`
   meant to, is the team's choice; the diff does not. The 404 branch in
@@ -213,6 +251,12 @@ the sibling report describes.
 - What it touches: REST clients get the HTTP exception's own status
   (413, 404, 405) where they got 500, and plugins that throw HTTP
   exceptions in the API get the status they asked for.
+- Core policies: `SubmissionRequiredPolicy` and
+  `PublicationRequiredPolicy` throw `NotFoundHttpException` when they
+  deny. In the API they run inside the controller's `authorize()`, which
+  `PolicyAuthorizer::handle()` wraps in its own catch that already
+  answers an HTTP exception with its status (lines 89–92). They answer
+  404 today and the fix does not change them (read in the code).
 - `display_errors = On`: the fix does not guard the upload handlers'
   `r.responseJSON.error`. A fallback message there when the answer is
   not JSON belongs with those two handlers, a separate change; a
@@ -235,7 +279,7 @@ answer built from an HTTP exception, which REST clients see.
 
 - The kept script walks the Steps:
   [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/picture-over-request-limit-server-error/walk.js),
-  with its helpers in the sibling report's
+  with its helpers in U09-A18-picture-over-upload-limit-server-error's
   [lib.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/picture-over-upload-limit-server-error/lib.js);
   the control (a 1 KB PNG, a text file named ".png" and a 3 MB PNG) is
   in the same script, walked with the fix in and out. On an install
@@ -243,6 +287,13 @@ answer built from an HTTP exception, which REST clients see.
   `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/picture-over-request-limit-server-error/walk.js`,
   with `PKP_E2E_LINE=stable-3_5_0` in front for 3.5. The fix:
   `node bin/try-fix.js apply shared/playwright/checks/issues/picture-over-request-limit-server-error/fix.diff ojs omp ops`.
+- The unknown-route steps (spec U17 A10) are step 4 of
+  [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/sections-interface-site-address-server-error/walk.js)
+  of U17-A10-sections-interface-site-address-server-error, walked on OJS `main`
+  and `stable-3_5_0` on 2026-10-02 (OJS `main` b84f8e2e44 with lib/pkp
+  ddd8ab243a, `stable-3_5_0` 091fb65453 with lib/pkp cf3f984335), and
+  on `main` with this fix in:
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js ojs shared/playwright/checks/issues/sections-interface-site-address-server-error/walk.js`.
 - The walking machine's php.ini raises both limits to 100M and has
   `display_errors = On`, so the script serves the same install through
   a second `php -S` with
@@ -253,9 +304,8 @@ answer built from an HTTP exception, which REST clients see.
   pkp/datasets c657990 (2026-10-01).
 - Unverified: with `display_errors = On`, what the picture window shows
   after the script error (one walk on OJS `main` recorded the 500 and
-  the error, not the window). The unknown-route 500 is from another
-  walk on OMP and OPS `main`; the 404 and 405 with the fix are read in
-  the code, not tried.
+  the error, not the window). The 405 with the fix is read in the
+  code, not tried.
 - Code reads. `main`: `PKPRoutingProvider::$globalMiddleware` (line 52,
   `ValidatePostSize::class`); `APIHandler::runRoutes()` runs the global
   middleware and `app('router')->dispatch()` through
@@ -276,7 +326,8 @@ answer built from an HTTP exception, which REST clients see.
 - Upstream search (pkp/pkp-lib, pkp/ojs, pkp/ui-library): "POST data is
   too large", `PostTooLargeException`, "post_max_size". Read and not
   the same fault: `pkp/pkp-lib#9478`.
-- Tips: OJS `main` 68615b5a32 with lib/pkp 25562b0e1a; OMP `main`
+- Tips of the picture walks (2026-10-01; the unknown-route walk's are in
+  its bullet above): OJS `main` 68615b5a32 with lib/pkp 25562b0e1a; OMP `main`
   3b0ecf794 and OPS `main` c8af945bb7, both with lib/pkp 3dc90c81a6.
   `stable-3_5_0` OJS 3517e640f2 with lib/pkp b1981810da; OMP c7b45f88e
   and OPS 8eaf899468 with lib/pkp 1fb843f491. `stable-3_4_0` lib/pkp

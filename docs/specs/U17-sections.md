@@ -900,6 +900,9 @@ Left out of the scenarios above, by reason:
     "Make a new submission to the {section} section." line, and an
     inactive section's policy absent for the editorial roles ([A7](#a7),
     [A8](#a8)): the guard the issue report proposes
+  - the sections endpoint asked for its list at the site's address by
+    the Site Administrator answering a refusal (404), not a server error
+    ([A10](#a10)): the guard the issue report proposes
 - **Rarely met**:
   - {OJS} "Omit author names for section items from issues' table of
     contents." ticked, the issue's table of contents without the section's
@@ -1026,7 +1029,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Under an inactive section's policy, the editorial roles get a submission link to a section the start form does not offer | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | With "Disable Submissions" ticked, the "Submissions" page keeps its per-section submission links | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | The REST API's sections endpoint refuses a missing or another journal's section with a raw message code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A10](#a10) | The sections interface fails with a server error on a section asked for by a word, and on the site's address | 🐞 | latent · crash: server | — |
+| [A10](#a10) | The sections interface fails with a server error on a section asked for by a word, and on the site's address | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | The series path message says "only letters and numbers" while ".", "/", "_" and "-" are accepted | 🐞 | minor | — |
 | [OMP3](#omp3) | The series cover uploader offers SVG files, and "Save" then keeps nothing and says nothing | 🐞 | minor | — |
 | [OMP5](#omp5) | The series list's activate and deactivate windows ask about a "section" | 🐞 | minor | — |
@@ -1167,16 +1170,19 @@ the authors of programs that call the endpoint meet it.
 Basis: probe, 2026-10-02. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — The sections interface fails where it should refuse** · 🐞 · latent · crash: server.
-The apps' own screens never call this interface, so no user of them
-meets this. Two requests make the app fail with a server error where a
-refusal is due (Rule 17c). A section asked for by a word instead of a
-number ("abc") fails with "The route … could not be found.", where a
-number the journal has no section under is refused as not found ([A9](#a9)).
-The list asked for by the Site Administrator at the site's own address,
-with no journal in it, fails instead of saying that a journal is needed;
-a visitor there is refused as elsewhere.
-Basis: probe, 2026-09-25. <sup>f-a10</sup>
+**A10 — The sections interface fails where it should refuse** · 🐞 · low · crash: server.
+No screen of the application sends these requests; a program reading a
+journal's sections through the REST API's sections endpoint meets them.
+Two requests make the application fail with a server error where a
+refusal is due. A section asked for by a word instead of a number
+("abc") fails with "The route … could not be found.", where a number the
+journal has no section under is refused as not found ([A9](#a9)); this
+is the same fault as every API address that matches no route. The list
+asked for by the Site Administrator at the site's own address, with no
+journal in it, fails with "Call to a member function getId() on null",
+where the other endpoints that need a journal answer "The requested
+resource was not found."; other roles there are refused by role.
+Basis: probe, 2026-10-02. <sup>f-a10</sup>
 
 ### OMP
 
@@ -1528,6 +1534,8 @@ Issue report: [docs/issues/U17-A9-sections-interface-refusals-raw-codes.md](../i
 
 <a id="fn-f-a10"></a>
 **f-a10** — fn g. A word as the id misses the route's `whereNumber('sectionId')`; `APIHandler` maps only a `NotFoundHttpException` to 404 `api.404.endpointNotFound`, and this route miss arrives as another exception, so it answers 500 with the exception's message (handler-wide by the code; no other interface was driven). At the site's address `getRequest()->getContext()` is null and `getMany()` calls `getId()` on it. Live-probed 2026-09-25, two runs: note g, one section and the site's address; OMP and OPS answered 404 at the same site address.
+Issue report for the site's address: [docs/issues/U17-A10-sections-interface-site-address-server-error.md](../issues/U17-A10-sections-interface-site-address-server-error.md).
+Issue report for the word as id, joined to the API-wide unknown-route fault: [pkp-e2e#373](https://github.com/jardakotesovec/pkp-e2e/issues/373) ([docs/issues/U09-A18-picture-over-request-limit-server-error.md](../issues/U09-A18-picture-over-request-limit-server-error.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — fn h, k, m, n, p: OMP's form, grid handler and `ContextService`; OMP's `submissions.tpl` override (fn e). Live-probed 2026-09-25: notes td9, td10, td11, td12.
