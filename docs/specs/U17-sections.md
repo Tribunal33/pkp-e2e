@@ -906,6 +906,10 @@ Left out of the scenarios above, by reason:
   - {OMP} a series' "Path" refused with a message that names the
     characters a saved path may hold ([OMP2](#omp2)): the guard the
     issue report proposes
+  - {OMP} an SVG not offered as a series cover, and a cover file the
+    server refuses answered with the "An invalid image was uploaded."
+    notice, the series' other edits kept in the open window
+    ([OMP3](#omp3)): the guard the issue report proposes
 - **Rarely met**:
   - {OJS} "Omit author names for section items from issues' table of
     contents." ticked, the issue's table of contents without the section's
@@ -1034,7 +1038,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | The REST API's sections endpoint refuses a missing or another journal's section with a raw message code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | The sections interface fails with a server error on a section asked for by a word, and on the site's address | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | The series path message says "only letters and numbers" while ".", "/", "_" and "-" are accepted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OMP3](#omp3) | The series cover uploader offers SVG files, and "Save" then keeps nothing and says nothing | 🐞 | minor | — |
+| [OMP3](#omp3) | A series "Save" with an SVG cover chosen saves nothing, not even the other changes, and shows no message | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP5](#omp5) | The series list's activate and deactivate windows ask about a "section" | 🐞 | minor | — |
 | [OMP7](#omp7) | The ISSN paragraph reads "which identifying" | 🐞 | minor | — |
 | [OMP8](#omp8) | The series path help always ends in the word "Path", never the path | 🐞 | minor | — |
@@ -1214,13 +1218,16 @@ pattern (*[Categories](U16-categories.md)* A9).
 Basis: probe, 2026-10-02. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
-**OMP3 — The cover uploader offers SVG, and "Save" silently drops it** · 🐞 · minor.
-A manager picks a cover for a series; the file picker offers JPG, PNG and
-SVG files, and an SVG uploads. "Save" then keeps nothing and says
-nothing: the window stays open, no message shows anywhere, and on
-reopening the series has no cover. The manager is never told that an SVG
-cover is not accepted.
-Basis: probe, 2026-09-25. <sup>f-omp3</sup>
+**OMP3 — A series "Save" with an SVG cover chosen saves nothing, not even the other changes, and shows no message** · 🐞 · medium.
+A manager editing a series picks a cover; the file picker offers JPG,
+PNG and SVG files, and an SVG uploads. "Save" then saves nothing and
+says nothing: the window stays open and no message shows anywhere. Every
+other change made in the same window (the title, the description) is
+refused with the cover, and is lost when the manager closes the window.
+A cover the series already had stays as it was. A PNG or JPG cover saves
+normally, so a manager who converts the picture gets round it, but the
+window never says that SVG is not accepted.
+Basis: probe, 2026-10-02. <sup>f-omp3</sup>
 
 <a id="omp4"></a>
 **OMP4 — A series' categories go nowhere** · ❓ · minor.
@@ -1551,6 +1558,7 @@ Issue report: [docs/issues/U17-OMP2-path-message-only-letters-and-numbers.md](..
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — fn m: the picker allows SVG, `validate()` refuses it with `form.invalidImage`, and the save's answer (`{"status":false,"content":""}`) carries no message for the window to show. Live-probed 2026-09-25: note td5.
+Issue report: [docs/issues/U17-OMP3-series-svg-cover-dropped-silently.md](../issues/U17-OMP3-series-svg-cover-dropped-silently.md).
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — fn m: `series_categories` is written by `SeriesForm::execute()` and read by `SeriesGridHandler::initialize()` and `SeriesForm::initData()` only. Live-probed 2026-09-25, after the background jobs had run: with "K3 Cat" ticked on a series, its category page read "0 Titles" while the series' page listed the series' book; a category given to a book on its own "Catalog Entry" listed that book ("1 Titles"); the same with the box unticked. The catalog, the book page and the book's "Catalog Entry" categories were unchanged.

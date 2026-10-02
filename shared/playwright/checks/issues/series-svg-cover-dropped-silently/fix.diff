@@ -1,0 +1,21 @@
+--- a/controllers/grid/settings/series/form/SeriesForm.php
++++ b/controllers/grid/settings/series/form/SeriesForm.php
+@@ -138,7 +138,6 @@
+                 $this->_sizeArray[0] <= 0 || $this->_sizeArray[1] <= 0
+             ) {
+                 $this->addError('temporaryFileId', __('form.invalidImage'));
+-                return false;
+             }
+         }
+ 
+--- a/templates/controllers/grid/settings/series/form/seriesForm.tpl
++++ b/templates/controllers/grid/settings/series/form/seriesForm.tpl
+@@ -22,7 +22,7 @@
+ 					baseUrl: {$baseUrl|json_encode},
+ 					filters: {ldelim}
+ 						mime_types : [
+-							{ldelim} title : "Image files", extensions : "jpg,jpeg,png,svg" {rdelim}
++							{ldelim} title : "Image files", extensions : "jpg,jpeg,png" {rdelim}
+ 						]
+ 					{rdelim}
+ 				{rdelim}
