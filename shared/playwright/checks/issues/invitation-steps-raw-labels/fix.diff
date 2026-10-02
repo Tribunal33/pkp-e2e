@@ -1,0 +1,37 @@
+--- a/lib/pkp/locale/en/invitation.po
++++ b/lib/pkp/locale/en/invitation.po
+@@ -121,6 +121,12 @@
+ msgid "invitation.wizard.pageTitle"
+ msgstr "Invite user to take a role"
+ 
++msgid "invitation.wizard.completeSteps"
++msgstr "Complete the following steps for this role invitation"
++
++msgid "invitation.wizard.errors"
++msgstr "There are one or more problems that need to be fixed before you can continue. Please review the information below and make the requested changes."
++
+ msgid "userInvitation.enterDetailsLabel"
+ msgstr "Enter details"
+ 
+--- a/lib/ui-library/src/pages/acceptInvitation/AcceptInvitationPage.vue
++++ b/lib/ui-library/src/pages/acceptInvitation/AcceptInvitationPage.vue
+@@ -6,7 +6,7 @@
+ 			:started-steps="store.startedSteps"
+ 			:label="t('invitation.wizard.completeSteps')"
+ 			:progress-label="t('common.showingSteps')"
+-			:show-steps-label="t('common.showingSteps')"
++			:show-steps-label="t('common.showAllSteps')"
+ 			:scroll-to="wrapper"
+ 			@step:open="store.openStep"
+ 		>
+--- a/lib/ui-library/src/pages/userInvitation/UserInvitationPage.vue
++++ b/lib/ui-library/src/pages/userInvitation/UserInvitationPage.vue
+@@ -11,7 +11,7 @@
+ 			:started-steps="store.startedSteps"
+ 			:label="t('invitation.wizard.completeSteps')"
+ 			:progress-label="t('common.showingSteps')"
+-			:show-steps-label="t('common.showingSteps')"
++			:show-steps-label="t('common.showAllSteps')"
+ 			:scroll-to="wrapper"
+ 			@step:open="store.openStep"
+ 		>

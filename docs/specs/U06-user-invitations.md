@@ -667,6 +667,12 @@ Left out of the scenarios above, by reason:
     an invitation offering Author with "Appear on the masthead" reads "Your
     name will not appear in the {journal}'s masthead as a Author." while an
     editor role's line keeps "will appear"
+  - the guards for A7 (issue reports
+    `docs/issues/U06-A7-invitation-steps-raw-labels.md` and
+    `docs/issues/U06-A7-accept-page-hidden-steps-button.md`): no list or
+    button on the send and accept wizards carries "##" in its name, and on
+    an existing user's one-step accept page Tab reaches no element inside
+    the clipped steps row or an `aria-hidden` block
 - **Rarely met**:
   - a past start date taking effect as the acceptance day (Rule 8): a
     manager rarely backdates a start date, and the body names no screen
@@ -763,7 +769,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A3](#a3) | After a manager edits or re-sends a role invitation, the earlier email's links open a bare "404 Not Found" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | A newcomer who accepts a role invitation is not signed in and lands on the sign-in screen | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | "Invitation Sent" promises the inviter news of the person's decision, but nothing ever tells them | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A7](#a7) | Small wording and untranslated-text defects across the invitation screens and emails | 🐞 | minor | claim check (claude), 2026-09-28 — one item added (the accept page's invisible steps button) |
+| [A7](#a7) | Small wording and untranslated-text defects across the invitation screens and emails | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | Role invitation wizard: a screen reader hears no field names in role rows after the first | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A newcomer named only in another form language, or invited on a journal whose primary language is not the site's by a manager working in the site's, is still greeted "Dear {email}," | 🐞 | minor | — |
 | [A11](#a11) | The invitation email promises a masthead listing for roles the masthead never lists, such as Author or Reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -833,22 +839,29 @@ invitation that was cancelled or ran out.
 Basis: probe, issue report walk, 2026-10-02. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a7"></a>
-**A7 — Small copy defects across these screens and emails** · 🐞 · minor.
-The invitation email offers roles "as a Author". The search step reads
-"Enter at least one details…" and "…invite to take a additional roles", and
-the send wizard's cancel confirmation asks "Are you sure want to cancel this
-invitation?". On OMP and OPS, the masthead confirmation reads "This will
-update whether this user appears on the journal masthead for the selected
-role." under a column named "Press Masthead" or "Server Masthead", and the
-"Invitation Unavailable" page closes with "Please contact the journal
-manager for further assistance.". "##common.help##" shows in the header of
-every management page; a screen reader hears
-"##userAccess.management.options##" for each Current Users row's menu button
-on Users & Roles and "##invitation.wizard.completeSteps##" for the list of
-steps in both wizards. On an existing user's one-step accept page, Tab
-stops on an invisible button with no accessible name, whose only text is
-the untranslated "{$current}/{$total} steps"; pressing it does nothing.
-Basis: probe + claim check. <sup>[f-a7](#fn-a7)</sup>
+**A7 — Small copy defects across these screens and emails** · 🐞 · low.
+The invitation email offers roles "as a Author", and a submission's Activity
+Log reads "was assigned to this submission as a Author.": a fixed "a" stands
+before every role name, also one starting with a vowel. The search step
+reads "Enter at least one details…" and "…invite to take a additional
+roles", the send wizard's cancel confirmation asks "Are you sure want to
+cancel this invitation?", and its email step mentions "GDPR polices". On OMP
+and OPS, the masthead confirmation reads "This will update whether this user
+appears on the journal masthead for the selected role." under a column named
+"Press Masthead" or "Server Masthead", and the "Invitation Unavailable" page
+closes with "Please contact the journal manager for further assistance.",
+where the role is "Press manager" or "Preprint Server manager".
+"##common.help##" shows in the header of every management page ([Navigation
+menus & site chrome A1](U08-navigation-menus-and-site-chrome.md#a1)); a
+screen reader hears "##userAccess.management.options##" for each Current
+Users row's menu button on Users & Roles and
+"##invitation.wizard.completeSteps##" for the list of steps in both wizards.
+On an existing user's one-step accept page ("Review & create account"), and
+on one-step editorial decision pages such as "Decline Submission", Tab stops
+on two buttons nobody can see, with no focus outline: the step's own button,
+clipped to nothing, and a "show all steps" toggle whose only text is the
+untranslated "{$current}/{$total} steps"; Enter on either changes nothing.
+Basis: probe, issue report walks, 2026-10-02. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
 **A8 — Role invitation wizard: a screen reader hears no field names in role rows after the first** · 🐞 · low.
@@ -1599,6 +1612,7 @@ Review & create account"); it has no accessible name, a pointer press at
 its place lands on the step content, and Enter on it changed nothing.
 Present before and after "Accept And Continue". A newcomer's three-step
 wizard (1280 and 380 px) and the send wizard have no such text.
+Issue reports, one per cause: the wording slips ([pkp-e2e#540](https://github.com/jardakotesovec/pkp-e2e/issues/540), [docs/issues/U06-A7-invitation-wizard-typos.md](../issues/U06-A7-invitation-wizard-typos.md)); "as a Author" ([pkp-e2e#541](https://github.com/jardakotesovec/pkp-e2e/issues/541), [docs/issues/U06-A7-invitation-email-role-article.md](../issues/U06-A7-invitation-email-role-article.md)); the journal wording on OMP and OPS ([pkp-e2e#542](https://github.com/jardakotesovec/pkp-e2e/issues/542), [docs/issues/U06-A7-omp-ops-invitation-journal-wording.md](../issues/U06-A7-omp-ops-invitation-journal-wording.md)); the steps list's raw names ([pkp-e2e#543](https://github.com/jardakotesovec/pkp-e2e/issues/543), [docs/issues/U06-A7-invitation-steps-raw-labels.md](../issues/U06-A7-invitation-steps-raw-labels.md)); the invisible Tab stops ([pkp-e2e#544](https://github.com/jardakotesovec/pkp-e2e/issues/544), [docs/issues/U06-A7-accept-page-hidden-steps-button.md](../issues/U06-A7-accept-page-hidden-steps-button.md)). The Users & Roles row button's raw name joined [pkp-e2e#459](https://github.com/jardakotesovec/pkp-e2e/issues/459) ([docs/issues/U53-A5-users-list-row-button-raw-key.md](../issues/U53-A5-users-list-row-button-raw-key.md)); "##common.help##" is U08 A1's.
 
 <a id="fn-a8"></a>
 **f-a8** — Every added row in `UserInvitationUserGroupsTable.vue` renders

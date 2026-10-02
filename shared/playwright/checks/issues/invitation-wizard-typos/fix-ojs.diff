@@ -1,0 +1,42 @@
+--- a/lib/pkp/locale/en/invitation.po
++++ b/lib/pkp/locale/en/invitation.po
+@@ -266,7 +266,7 @@
+ msgstr "Privacy Statement"
+ 
+ msgid "acceptInvitation.userDetailsForm.givenName.description"
+-msgstr "Also known as a forename or the first name, it is tha part of a personal name that identifies a person."
++msgstr "Also known as a forename or the first name, it is the part of a personal name that identifies a person."
+ 
+ msgid "acceptInvitation.userDetailsForm.familyName.description"
+ msgstr "A surname, family name, or last name is the mostly hereditary portion of one's personal name that indicates one's family."
+@@ -341,7 +341,7 @@
+ msgstr "Invitation management options"
+ 
+ msgid "userInvitation.cancel.message"
+-msgstr "Are you sure want to cancel this invitation?"
++msgstr "Are you sure you want to cancel this invitation?"
+ 
+ msgid "userInvitation.cancel.goBack"
+ msgstr "Go Back"
+--- a/locale/en/invitation.po
++++ b/locale/en/invitation.po
+@@ -20,7 +20,7 @@
+ msgstr "You've been assigned a new role in OJS"
+ 
+ msgid "acceptInvitation.verifyOrcid.stepDescription"
+-msgstr "You can choose to verify your ORCID iD or skip it. If you chose to skip it now, you can verify your ORCID iD from your profile section in OJS later"
++msgstr "You can choose to verify your ORCID iD or skip it. If you choose to skip it now, you can verify your ORCID iD from your profile section in OJS later"
+ 
+ msgid "invitation.orcid.acceptInvitation.message"
+ msgstr "Not verified. You can verify your ORCID iD from your profile section in OJS."
+@@ -46,9 +46,6 @@
+ msgid "userInvitation.search.userNotFound"
+ msgstr "The user does not have a role in this journal"
+ 
+-msgid "userInvitation.searchUser.stepDescription"
+-msgstr "Search for the user using their email address, username or ORCID ID. Enter at least one details to get started. If the user does not exist, you can invite them to take up roles and be a part of your journal. If the user already exist in the system, you can view user information and invite to take a additional roles."
+-
+ msgid "userInvitation.sendMail.stepDescription"
+-msgstr "Send the user an email to let them know about the invitation, next steps, journal GDPR polices and ORCID verification"
++msgstr "Send the user an email to let them know about the invitation, next steps, journal GDPR policies and ORCID verification"
+ 

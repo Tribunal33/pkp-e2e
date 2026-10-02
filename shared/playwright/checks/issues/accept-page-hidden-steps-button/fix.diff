@@ -1,0 +1,27 @@
+--- a/lib/ui-library/src/components/Steps/Steps.vue
++++ b/lib/ui-library/src/components/Steps/Steps.vue
+@@ -22,7 +22,7 @@
+ 						'-screenReader': collapsed && !stepsVisible && current !== step.id,
+ 					}"
+ 				>
+-					<template v-if="startedSteps.includes(step.id)">
++					<template v-if="steps.length > 1 && startedSteps.includes(step.id)">
+ 						<span>
+ 							<button
+ 								:ref="'button' + step.id"
+@@ -223,9 +223,14 @@
+ 		/**
+ 		 * Check the width of this element and switch between collapsed
+ 		 * or expanded view depending on whether all the steps fit within
+-		 * the allowed width
++		 * the allowed width. A single step is never collapsed: its row is
++		 * shown to screen readers only, so there is nothing to show or hide.
+ 		 */
+ 		maybeToggleCollapsedView() {
++			if (this.steps.length < 2) {
++				this.collapsed = false;
++				return;
++			}
+ 			const totalWidth = this.$refs.buttons.offsetWidth;
+ 			const allSteps = this.$refs.buttons.querySelectorAll('li>span');
+ 			const allStepsWidth = Array.prototype.slice

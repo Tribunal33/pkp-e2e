@@ -1,0 +1,17 @@
+--- a/lib/pkp/locale/en/invitation.po
++++ b/lib/pkp/locale/en/invitation.po
+@@ -395,5 +395,5 @@
+ msgstr "Invitation Unavailable"
+ 
+ msgid "invitation.unavailable.description"
+-msgstr "This invitation is no longer available. It may have already been accepted, declined, or expired. Please contact the journal manager for further assistance."
++msgstr "This invitation is no longer available. It may have already been accepted, declined, or expired. Please contact the editorial team for further assistance."
+ 
+--- a/lib/pkp/locale/en/user.po
++++ b/lib/pkp/locale/en/user.po
+@@ -903,4 +903,4 @@
+ msgstr "Confirm masthead visibility change"
+ 
+ msgid "user.masthead.update.message"
+-msgstr "This will update whether this user appears on the journal masthead for the selected role. The user will be notified of this change."
++msgstr "This will update whether this user appears on the masthead for the selected role. The user will be notified of this change."

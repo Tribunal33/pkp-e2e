@@ -1,0 +1,31 @@
+--- a/lib/pkp/locale/en/emails.po
++++ b/lib/pkp/locale/en/emails.po
+@@ -711,10 +711,10 @@
+ msgstr "Ending at {$dateEnd}"
+ 
+ msgid "emails.userRoleAssignmentInvitationNotify.userGroupSectionWillNotAppear"
+-msgstr "Your name will not appear in {$contextName}'s masthead as a {$sectionName}."
++msgstr "Your name will not appear in {$contextName}'s masthead as {$sectionName}."
+ 
+ msgid "emails.userRoleAssignmentInvitationNotify.userGroupSectionWillAppear"
+-msgstr "Your name will appear in the {$contextName}'s masthead as a {$sectionName}."
++msgstr "Your name will appear in the {$contextName}'s masthead as {$sectionName}."
+ 
+ msgid "emails.userRoleAssignmentInvitationNotify.newlyAssignedRoles"
+ msgstr "<p><h2>Newly assigned roles</h2></p>"
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -861,11 +861,11 @@
+ msgstr "Email Log"
+ 
+ msgid "submission.event.participantAdded"
+-msgstr "{$userFullName} ({$username}) was assigned to this submission as a {$userGroupName}."
++msgstr "{$userFullName} ({$username}) was assigned to this submission as {$userGroupName}."
+ 
+ # fuzzy
+ msgid "submission.event.participantRemoved"
+-msgstr "{$userFullName} ({$username}) was removed from this submission as a {$userGroupName}."
++msgstr "{$userFullName} ({$username}) was removed from this submission as {$userGroupName}."
+ 
+ msgid "submission.event.backToEventLog"
+ msgstr "Back to Event Log"

@@ -10,7 +10,7 @@
   - 3.3: none (code; the older users grid, no "…" button)
 - **Introduced** `pkp/ui-library#437` for `pkp/pkp-lib#9658` · [e65555cf6](https://github.com/pkp/ui-library/commit/e65555cf63f327dcad705eb6aa3bb43150ef7c38) · 2025-02-04 · Ipula Indeewara (ipula)
 - **Upstream** `pkp/pkp-lib#12646` (open) is this same fault, reported on OMP 3.5 only; this report widens it to OJS, OMP and OPS on `main` and 3.5
-- **Tracked in** spec U53 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a5)
+- **Tracked in** spec U53 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a5), spec U06 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U06-user-invitations.md#a7) (its "##userAccess.management.options##" item)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
 
 ## Summary
