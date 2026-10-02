@@ -2290,7 +2290,7 @@ POST to `…/api/v1/submissions/{id}/files` answered 500, the server log reading
 the form fields push the request past the limit the panel's size check
 compares against.
 Issue report: [pkp-e2e#373](https://github.com/jardakotesovec/pkp-e2e/issues/373) ([docs/issues/U09-A18-picture-over-request-limit-server-error.md](../issues/U09-A18-picture-over-request-limit-server-error.md)), the server error.
-Issue report: [docs/issues/U36-A21-exact-limit-file-passes-size-check-then-refused.md](../issues/U36-A21-exact-limit-file-passes-size-check-then-refused.md), the file passing the size check.
+Issue report: [pkp-e2e#495](https://github.com/jardakotesovec/pkp-e2e/issues/495) ([docs/issues/U36-A21-exact-limit-file-passes-size-check-then-refused.md](../issues/U36-A21-exact-limit-file-passes-size-check-then-refused.md)), the file passing the size check.
 
 <a id="fn-a22"></a>
 **f-a22** — Note y: `add()` logs `submission.event.fileRevised` on the
