@@ -1160,6 +1160,7 @@ Left out of the scenarios above, by reason:
     range")
   - a Journal Manager's "Do not collect any geographical data" on a site that collects geographical data: the choice still selected after a reload, and no "Download Geographic" in the "Download Report" window (the guard for A4, once fixed)
   - "All dates" on Statistics › "Articles" of a context with nothing published and of one whose earliest publication is dated before 2001: no "Error" window, the monthly chart from January 2001 (the guard for A1, once fixed)
+  - a Section Editor's "Statistics" menu and the "Counter R5" address while the journal's COUNTER statistics are restricted: no "Counter R5" entry, the access-denied page (the guard for A5, once fixed)
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1236,7 +1237,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | Statistics › Articles: "All dates" opens an "Error" window when nothing is published or an item predates 2001 | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | "Counter R5" date refusals show a raw code with the date inside it | 🐞 | minor | — |
 | [A4](#a4) | A journal's "Do not collect any geographical data" is not kept: the journal keeps collecting at the site's level | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A5](#a5) | A Section Editor's "Counter R5" opens an "Error" window over an empty list while the journal's COUNTER statistics are restricted | 🐞 | minor | — |
+| [A5](#a5) | A Section Editor's "Counter R5" opens an "Error" window over an empty list while the COUNTER statistics are restricted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | French interface: raw codes on the statistics screens of a press and a preprint server, and one column heading on a journal | 🐞 | minor | — |
 | [A7](#a7) | The information icons show their text on mouse hover only; the keyboard never reaches them | 🐞 | minor | — |
 | [A8](#a8) | A search phrase with double quotes breaks the spreadsheet's "Search Phrase" line | 🐞 | minor | — |
@@ -1322,14 +1323,20 @@ collects none.
 Basis: probe, 2026-10-02. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A Section Editor's "Counter R5" fails while restricted** · 🐞 · minor.
+**A5 — A Section Editor's "Counter R5" opens an "Error" window over an empty list while the COUNTER statistics are restricted** · 🐞 · low.
 The side menu offers "Counter R5" to the Section Editor. While the
-journal's COUNTER statistics are restricted (either "Public API"), the
-page opens an "Error" window reading "The current role does not have
-access to this operation." with "OK", over a list reading "No items
-found.". Expected: the page either lists the reports for the Section
-Editor or is not offered.
-Basis: probe, 2026-09-27. <sup>f-a5</sup>
+journal's COUNTER statistics are public, which is the setting on a new
+install, the page lists the reports for them. While the statistics are
+restricted, the page opens an "Error" window reading "The current role
+does not have access to this operation." with "OK", over a list reading
+"No items found.".
+
+The statistics are restricted when the journal's "Public API" box is
+unticked, or when the site administrator has restricted the same
+setting for the whole site. The setting's own text gives restricted
+reports to admin and manager roles only, so the refusal is intended;
+the fault is that the menu still offers the page.
+Basis: probe, 2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — Raw codes in the French statistics screens** · 🐞 · minor.
@@ -2329,6 +2336,7 @@ Issue report: [docs/issues/U64-A4-journal-geographical-data-opt-out-not-kept.md]
 fn-b (`counterR5` open to `ROLE_ID_SUB_EDITOR`); the list's fetch is
 `CounterReportsListPanel.vue`'s, and its 401 reaches the "Error" window
 through `ajaxErrorCallback()`. Live-probed 2026-09-27: td6.
+Issue report: [docs/issues/U64-A5-section-editor-counter-r5-error-while-restricted.md](../issues/U64-A5-section-editor-counter-r5-error-while-restricted.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — fn-v. Live-probed 2026-09-27: td8.

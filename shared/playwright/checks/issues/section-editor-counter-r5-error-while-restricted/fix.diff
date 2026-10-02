@@ -1,0 +1,74 @@
+--- a/lib/pkp/classes/context/Context.php
++++ b/lib/pkp/classes/context/Context.php
+@@ -577,6 +577,15 @@
+     }
+ 
+     /**
++     * Whether the COUNTER SUSHI statistics are public.
++     * They are restricted to admins and managers when the site or the context has turned the public access off.
++     */
++    public function isSushiApiPublic(Site $site): bool
++    {
++        return (bool) ($site->getData('isSushiApiPublic') ?? true) && (bool) ($this->getData('isSushiApiPublic') ?? true);
++    }
++
++    /**
+     * What Geo data to track for usage statistics.
+     * Consider context setting only if the site setting is enabled and context setting considers less Geo data than site setting.
+     *
+--- a/lib/pkp/api/v1/stats/sushi/PKPStatsSushiController.php
++++ b/lib/pkp/api/v1/stats/sushi/PKPStatsSushiController.php
+@@ -46,15 +46,8 @@
+     public function isPublic(): bool
+     {
+         $request = $this->getRequest();
+-        $site = $request->getSite();
+-        $context = $request->getContext();
+ 
+-        if (($site->getData('isSushiApiPublic') !== null && !$site->getData('isSushiApiPublic')) ||
+-            ($context->getData('isSushiApiPublic') !== null && !$context->getData('isSushiApiPublic'))) {
+-            return false;
+-        }
+-
+-        return true;
++        return $request->getContext()->isSushiApiPublic($request->getSite());
+     }
+ 
+     /**
+--- a/lib/pkp/pages/stats/PKPStatsHandler.php
++++ b/lib/pkp/pages/stats/PKPStatsHandler.php
+@@ -55,6 +55,11 @@
+      */
+     public function authorize($request, &$args, $roleAssignments)
+     {
++        // "Counter R5" reads the COUNTER SUSHI statistics, which are for admins and managers only while restricted
++        $context = $request->getContext();
++        if ($context && !$context->isSushiApiPublic($request->getSite()) && isset($roleAssignments[Role::ROLE_ID_SUB_EDITOR])) {
++            $roleAssignments[Role::ROLE_ID_SUB_EDITOR] = array_diff($roleAssignments[Role::ROLE_ID_SUB_EDITOR], ['counterR5']);
++        }
+         $this->addPolicy(new ContextAccessPolicy($request, $roleAssignments));
+         return parent::authorize($request, $args, $roleAssignments);
+     }
+--- a/lib/pkp/classes/template/PKPTemplateManager.php
++++ b/lib/pkp/classes/template/PKPTemplateManager.php
+@@ -1397,13 +1397,18 @@
+                                     'url' => $router->url($request, null, 'stats', 'users', ['users']),
+                                     'isCurrent' => $router->getRequestedPage($request) === 'stats' && $router->getRequestedOp($request) === 'users',
+                                 ],
++                            ]
++                        ];
++                        // While the COUNTER SUSHI statistics are restricted, "Counter R5" is for admins and managers only
++                        if ($request->getContext()->isSushiApiPublic($request->getSite()) || count(array_intersect([Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN], $userRoles))) {
++                            $menu['statistics']['submenu'] += [
+                                 'counterR5' => [
+                                     'name' => __('manager.statistics.counterR5'),
+                                     'url' => $router->url($request, null, 'stats', 'counterR5', ['counterR5']),
+                                     'isCurrent' => $router->getRequestedPage($request) === 'stats' && $router->getRequestedOp($request) === 'counterR5',
+                                 ]
+-                            ]
+-                        ];
++                            ];
++                        }
+                         if (count(array_intersect([Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN], $userRoles))) {
+                             $menu['statistics']['submenu'] += [
+                                 'reports' => [
