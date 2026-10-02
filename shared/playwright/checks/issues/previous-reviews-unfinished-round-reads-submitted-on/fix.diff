@@ -1,0 +1,21 @@
+--- a/lib/ui-library/src/pages/reviewerSubmission/ReviewerSubmissionPage.vue
++++ b/lib/ui-library/src/pages/reviewerSubmission/ReviewerSubmissionPage.vue
+@@ -7,7 +7,7 @@
+ 			{{ t('reviewer.submission.reviewRound.info') }}
+ 		</h2>
+ 		<p v-for="review in store.reviewRoundHistories" :key="review.reviewRoundId">
+-			<span>
++			<span v-if="review.submittedOn">
+ 				{{
+ 					t('reviewer.submission.reviewRound.info.submittedOn', {
+ 						round: review.reviewRoundNumber,
+@@ -15,6 +15,9 @@
+ 					})
+ 				}}
+ 			</span>
++			<span v-else>
++				{{ t('reviewer.submission.reviewRound.reviewNotCompleted') }}
++			</span>
+ 			<PkpButton
+ 				is-link="true"
+ 				class="ms-4"

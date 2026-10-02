@@ -980,6 +980,8 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the "Supporting Agencies" row in the "View All Submission Details" window: shown on a review type that discloses the authors, absent on an anonymous one (Rule 7): likely a bullet in scenario 9, which opens the window on an "Open" review
   - {OPS} "Reviewer" chosen in "Create New Role" hiding the whole "Stage Assignment" list, not only greying out its "Production" box (scenario 17, "Roles")
+  - a reviewer asked again after a round they left unfinished reading "The review was not completed." on that round's "Previous Reviews" row, and no row ending in "Submitted on" without a date ([A2](#a2); Rule 14): the guard the issue report proposes, once fixed
+  - a round-1 reviewer whose submission gets round 2 without them, and a press's Internal Reviewer after "Send to External Review" {OMP}, finding no "Previous Reviews" box on their review, while a reviewer asked again on round 2 finds the round-1 line ([A12](#a12); Actors row 8, Rule 14): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1029,14 +1031,14 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | The reviewer list's search box, "Sort" control and pager do nothing: every phrase, every sort and every page shows the same rows | 🐞 | user-visible | — |
-| [A2](#a2) | "Previous Reviews" prints "Round {N} Review Submitted on" with no date for a round the reviewer never finished | 🐞 | minor | — |
+| [A2](#a2) | "Previous Reviews" says "Round 1 Review Submitted on" with no date for a round the reviewer never finished | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | A saved review text that is emptied and saved again keeps its old content on record | 🐞 | user-visible | — |
 | [A5](#a5) | The accepted row's "Please complete this review by" date prints with a 00:00:00 clock time | 🐞 | minor | — |
 | [A6](#a6) | A file link opened by an account without file access answers a bare line of text, not the access-denied page | 🐞 | minor | — |
 | [A7](#a7) | A review with nothing typed and no file attached can be submitted | 🐞 | user-visible | — |
 | [A9](#a9) | A reminder, or a request on another submission, kills the reviewer's earlier one-click link, which then shows a bare "404 Not Found" | 🐞 | user-visible | — |
 | [A10](#a10) | A one-click link opened in a browser signed in as somebody else shows a blank page, never the intended message | 🐞 | user-visible | — |
-| [A12](#a12) | A reviewer's own round is listed under "Previous Reviews" once the submission moves past it | 🐞 | minor | — |
+| [A12](#a12) | A reviewer's own review is listed under "Previous Reviews" once the submission has a later round | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | "Save for Later" on a review form says "Your changes have been saved." and, on the same screen, "Please fill in required fields." | 🐞 | minor | — |
 | [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a review form's answers are guarded | 🐞 | minor | — |
 | [OMP2](#omp2) | {OMP} The review-complete email tells editors the reviewer "recommends None" | 🐞 | minor | — |
@@ -1070,15 +1072,26 @@ Basis: probe (the search, 2026-09-04; sort and pager, 2026-09-05; both
 apps). <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
-**A2 — "Previous Reviews" shows a dateless line for an unfinished round** · 🐞 · minor.
-When a reviewer accepted an earlier round's request but never submitted,
-and is assigned again on a later round, the "Previous Reviews" box prints
-"Round {N} Review Submitted on" followed by nothing, next to a "Read Round
-{N} Review" button whose window then says "The review was not completed.".
-The line reads as a submitted review with a missing date. The same
-dateless line shows for the reviewer's own unsubmitted round once a later
-round opened without them (A12).
-Basis: probe (2026-09-04 and 2026-09-05, both apps). <sup>[f-a2](#fn-a2)</sup>
+**A2 — "Previous Reviews" says "Round 1 Review Submitted on" with no date for a round the reviewer never finished** · 🐞 · low.
+A reviewer who is asked again on a later round finds their earlier
+rounds under "Previous Reviews" on the page of the new review. For a
+round on which they never submitted a review, whether they accepted the
+request or never answered it, the line reads "Round 1 Review Submitted
+on" and then nothing. It should say that the review was not completed,
+as the window behind the "Read Round 1 Review" button beside it does:
+"The review was not completed.".
+
+Nothing is lost. A round the reviewer declined does not show the
+dateless line: it reads "Submitted on" with the date of the decline
+(code).
+
+The state comes about when an editor opens a new round and adds a
+reviewer whose earlier request is still open; the "Add Reviewer" list
+offers them like anyone else. The fix is one branch in one ui-library
+template, with a string that exists.
+
+The same dateless line shows for the reviewer's own unsubmitted round once a later round opened without them ([A12](#a12)).
+Basis: probe, 2026-10-02. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
 **A3 — Declining lands on the journal's home page** · ❓ · minor.
@@ -1171,16 +1184,28 @@ Basis: probe (2026-09-04, step 1 to step 2; 2026-09-05, through "Submit
 Review"; both apps). <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
-**A12 — A reviewer's own round is listed as a previous review once the submission moves past it** · 🐞 · minor.
-A reviewer whose round is no longer the submission's latest sees their own
-review under "Previous Reviews": "Round {N} Review Submitted on {date}"
-with "Read Round {N} Review", whose window shows their own comments;
-before they submit, and on the page they submitted from, the line has no
-date (A2). The box announces an earlier round the reviewer never had. Seen
-on a journal when round 2 opened without them, and on a press as soon as
-the monograph has an External Review round.
-Basis: probe (2026-09-04, the press; 2026-09-05, both apps).
-<sup>[f-a12](#fn-a12)</sup>
+**A12 — A reviewer's own review is listed under "Previous Reviews" once the submission has a later round** · 🐞 · low.
+A reviewer's review page shows a "Previous Reviews" box for the reviews
+they gave on earlier rounds of the submission. A reviewer who was only
+ever asked on round 1 has no earlier round, and at first sees no box.
+Once the submission has a later round that the reviewer is not part of,
+the box appears and lists the review the page itself is for: "Round 1
+Review Submitted on {date}" with a "Read Round 1 Review" button, which
+opens a window showing only the reviewer's own review.
+
+A reviewer who has not answered yet reads "Round 1 Review Submitted on"
+with no date. Under the box the page still shows the request and its
+"Accept Review, Continue to Step #2" button, so it stays plain that the
+review is due. Nothing is lost, and the review can be accepted, written
+and submitted as before.
+
+On a journal it needs a new review round opened without the reviewer,
+which is ordinary: an editor chooses the reviewers of each round anew.
+On a press every Internal Reviewer gets it as soon as the monograph is
+sent to External Review. The fault is one rule in one pkp-lib method.
+
+The line without a date for an unsubmitted round is [A2](#a2).
+Basis: probe, 2026-10-02. <sup>[f-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
 **A13 — The "Read Round {N} Review" window never lists the files sent for review** · ❓ · minor.
@@ -2179,6 +2204,7 @@ was not completed." and its "General Information" stopped at "Review Due
 Date". Live-probed 2026-09-05 on OJS and OMP: the same dateless line on
 the reviewer's own round-1 wizard once round 2 opened without them
 (finding A12), and on a press before the internal reviewer submitted.
+Issue report: [docs/issues/U28-A2-previous-reviews-unfinished-round-reads-submitted-on.md](../issues/U28-A2-previous-reviews-unfinished-round-reads-submitted-on.md).
 
 <a id="fn-a3"></a>
 **f-a3** — `PKPReviewerHandler::saveDeclineReview()` ends with
@@ -2318,6 +2344,7 @@ wizard showed the dateless line before she submitted and on the in-page
 step 4 after "Submit Review", and "Round 1 Review Submitted on
 2026-09-04" after a reload. The press half was first seen 2026-09-04
 (footnote f-omp4).
+Issue report: [docs/issues/U28-A12-reviewer-own-round-listed-under-previous-reviews.md](../issues/U28-A12-reviewer-own-round-listed-under-previous-reviews.md).
 
 <a id="fn-a13"></a>
 **f-a13** — `PKPReviewController::getHistory()` fills `.files` (the round's
