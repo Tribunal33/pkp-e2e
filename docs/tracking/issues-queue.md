@@ -47,7 +47,7 @@ and the hourly routine starts one only when none is running
 | [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 |  |
 | [U02](../specs/U02-registration-and-account-validation.md) | 8 | 0 | 2 |  |
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 |  |
-| [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 |  |
+| [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | **A1 taken: issues session, VM s0, 2026-10-02** (joined to U16 A19); **A8 taken: issues session, VM s0, 2026-10-02** (joined to U16 A15) |
 | [U05](../specs/U05-notifications-center-and-email-preferences.md) | 7 | 0 | 2 |  |
 | [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 |  |
 | [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 |  |
