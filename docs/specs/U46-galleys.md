@@ -605,6 +605,10 @@ Left out of the scenarios above, by reason:
     after "Create New Version", "Change File" on the new version's galley
     leaves the published version's download unchanged, and deleting the
     published version's galley leaves the copy's file downloading
+  - the guard for A5 (issue report
+    `docs/issues/U46-A5-ordering-arrows-unnamed.md`): in ordering mode each
+    galley row's up and down arrows carry names that say the direction and
+    the galley
 - **Nothing new to test**:
   - a new galley's place in the list, before and after a saved order
     (Rule 8d)
@@ -659,7 +663,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | A galley's "Edit" window is headed "Upload a File Ready for Publication" | 🐞 | minor | — |
 | [A3](#a3) | A remote galley is still sent to the upload wizard and offered "Change File" | 🐞 | minor | — |
 | [A4](#a4) | Changing the file of a new version's galley replaces the file readers download from the published version | 🐞 | high · crash: server · crash: script | issues (claude), 2026-10-02 — re-verified |
-| [A5](#a5) | The ordering arrows have no names for screen readers | 🐞 | minor | — |
+| [A5](#a5) | The ordering arrows have no names for screen readers | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "URL of remotely-hosted content" keeps text that is not a web address | 🐞 | minor | — |
 | [A7](#a7) | Until an order is saved, editing a galley moves it to the end of the list | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | Deleting a published galley that a new version copied fails with an error | 🐞 | high · crash: server · crash: script | issues (claude), 2026-10-02 — re-verified |
@@ -712,13 +716,13 @@ gives the new version a file of its own. Basis: probe, 2026-10-02.
 <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — The ordering arrows are unnamed** · 🐞 · minor.
+**A5 — The ordering arrows are unnamed** · 🐞 · low.
 In ordering mode each galley row shows an up and a down arrow that carry
 no text and no label, so a screen reader announces two unnamed buttons
 per row, with nothing to say which galley they move or in which
 direction. The Contributors list's arrows read "Increase position of
 {name}" and "Decrease position of {name}".
-Basis: probe, 2026-09-24. <sup>f-a5</sup>
+Basis: probe, 2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — The remote address is not checked** · 🐞 · minor.
@@ -1353,6 +1357,7 @@ arrows carry screen-reader text (*Contributors & affiliations*, Rule
 `button: img` in the accessibility tree; the Contributors arrows as
 "Increase position of Ava Author" / "Decrease position of Ava
 Author".
+Issue report: [docs/issues/U46-A5-ordering-arrows-unnamed.md](../issues/U46-A5-ordering-arrows-unnamed.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `ArticleGalleyForm` / `PreprintGalleyForm` add no check for

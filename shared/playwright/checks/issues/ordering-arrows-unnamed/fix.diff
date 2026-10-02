@@ -1,0 +1,85 @@
+--- a/lib/ui-library/src/components/Table/TableCellOrder.vue
++++ b/lib/ui-library/src/components/Table/TableCellOrder.vue
+@@ -6,12 +6,18 @@
+ 				@click="emit('up')"
+ 			>
+ 				<Icon class="h-6 w-6" icon="ChevronUp"></Icon>
++				<span class="sr-only">
++					{{ t('common.orderUp', {itemTitle}) }}
++				</span>
+ 			</button>
+ 			<button
+ 				class="inline-flex items-center justify-center rounded text-primary hover:bg-primary hover:text-on-dark"
+ 				@click="emit('down')"
+ 			>
+ 				<Icon class="h-6 w-6" icon="ChevronDown"></Icon>
++				<span class="sr-only">
++					{{ t('common.orderDown', {itemTitle}) }}
++				</span>
+ 			</button>
+ 		</div>
+ 	</TableCell>
+@@ -20,6 +26,14 @@
+ <script setup>
+ import Icon from '@/components/Icon/Icon.vue';
+ import TableCell from './TableCell.vue';
++import {useLocalize} from '@/composables/useLocalize';
++
++defineProps({
++	/** The name of the row's item, read out in the buttons' accessible names ("Increase position of {itemTitle}"). */
++	itemTitle: {type: String, required: true},
++});
+ 
+ const emit = defineEmits(['up', 'down']);
++
++const {t} = useLocalize();
+ </script>
+--- a/lib/ui-library/src/managers/GalleyManager/GalleyManagerCellActions.vue
++++ b/lib/ui-library/src/managers/GalleyManager/GalleyManagerCellActions.vue
+@@ -2,6 +2,7 @@
+ 	<TableCellOrder
+ 		v-if="galleyManagerStore.sortingEnabled"
+ 		class="w-28"
++		:item-title="galley.label"
+ 		@up="galleyManagerStore.sortMoveUp(galley.id)"
+ 		@down="galleyManagerStore.sortMoveDown(galley.id)"
+ 	/>
+--- a/lib/ui-library/src/managers/DataCitationManager/DataCitationManagerCellActions.vue
++++ b/lib/ui-library/src/managers/DataCitationManager/DataCitationManagerCellActions.vue
+@@ -2,6 +2,7 @@
+ 	<TableCellOrder
+ 		v-if="dataCitationManagerStore.sortingEnabled"
+ 		class="w-28"
++		:item-title="dataCitation.title"
+ 		@up="dataCitationManagerStore.moveUp(dataCitation.id)"
+ 		@down="dataCitationManagerStore.moveDown(dataCitation.id)"
+ 	/>
+--- a/lib/ui-library/src/managers/FunderManager/FunderManagerCellActions.vue
++++ b/lib/ui-library/src/managers/FunderManager/FunderManagerCellActions.vue
+@@ -2,6 +2,7 @@
+ 	<TableCellOrder
+ 		v-if="funderManagerStore.sortingEnabled"
+ 		class="w-28"
++		:item-title="localize(funder.name)"
+ 		@up="funderManagerStore.moveUp(funder.id)"
+ 		@down="funderManagerStore.moveDown(funder.id)"
+ 	/>
+@@ -24,7 +25,7 @@
+ import DropdownActions from '@/components/DropdownActions/DropdownActions.vue';
+ import {useFunderManagerStore} from './funderManagerStore.js';
+ 
+-const {t} = useLocalize();
++const {t, localize} = useLocalize();
+ 
+ const props = defineProps({
+ 	funder: {type: Object, required: true},
+--- a/lib/ui-library/src/composables/useOrdering.mdx
++++ b/lib/ui-library/src/composables/useOrdering.mdx
+@@ -144,6 +144,7 @@
+ 				<TableCell>{{ item.title }}</TableCell>
+ 				<TableCellOrder
+ 					v-if="sortingEnabled"
++					:item-title="item.title"
+ 					@up="moveUp(item.id)"
+ 					@down="moveDown(item.id)"
+ 				/>

@@ -424,6 +424,10 @@ Left out of the scenarios above, by reason:
   - the list in French: "Trier" / "Enregistrer l'ordre", the row menu
     and the delete confirmation in French, and a funder saved through
     the French panel listed at once and after a reload (Rule 14)
+  - the guard for A5 (issue report
+    `docs/issues/U46-A5-ordering-arrows-unnamed.md`): in ordering mode each
+    funder row's up and down arrows carry names that say the direction and
+    the funder
 - **Nothing new to test**:
   - grant validation on while the registry service is unreachable, the
     check skipped and the save going through (Settings): the save
@@ -485,7 +489,7 @@ are the source; badges, Impact and Basis:
 |----|------------------------------|------|--------|--------|
 | [A3](#a3) | A registry funder picked while the server cannot reach the registry errors and saves permanently nameless | 🐞 | user-visible | — |
 | [A4](#a4) | On a press or preprint server the wizard's funders table and Review step still read empty after a successful save | 🐞 | minor | — |
-| [A5](#a5) | Ordering arrows and the typed-name boxes are broken for assistive technology | 🐞 | minor | — |
+| [A5](#a5) | Ordering arrows and the typed-name boxes are broken for assistive technology | 🐞 | low | issues (claude), 2026-10-02 — re-verified (the ordering arrows; the name boxes open) |
 | [A14](#a14) | In French the funders list and the "Add Funder" / "Edit Funder" panel show raw codes for their headings, explanations and field labels | 🐞 | minor | — |
 | [A1](#a1) | "Require the author to add funder metadata" warns on the Review step without blocking the submission | ❓ | user-visible | — |
 | [A2](#a2) | Every publication version shows and edits the same funders list, though the screen presents funding per version | ❓ | minor | — |
@@ -553,12 +557,12 @@ still save the wizard funder without asserting the table either way, so the
 refresh-miss has not been re-probed at the fixed tips.
 
 <a id="a5"></a>
-**A5 — Two funder controls are broken for assistive technology** · 🐞 · minor.
+**A5 — Two funder controls are broken for assistive technology** · 🐞 · low.
 In ordering mode the row's up/down arrows are icon-only, with no accessible
 name for a screen reader to read out. In the typed-name path a screen reader
 reads the primary-language box out with both languages' labels run together,
 and the second box has no label at all.
-Basis: probe. <sup>f-a5</sup>
+Basis: probe, 2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — The typed-text suggestion masquerades as a registry match** · ❓ ·
@@ -1064,6 +1068,7 @@ unexplained at code level.
 components): the `TableCellOrder` up/down buttons expose no accessible
 name; in the multilingual name boxes the primary input's accessible name
 concatenates both languages' labels and the secondary input has none.
+Issue report: [docs/issues/U46-A5-ordering-arrows-unnamed.md](../issues/U46-A5-ordering-arrows-unnamed.md).
 
 <a id="fn-f-a6"></a>
 **f-a6 — A6 evidence.** `FieldAffiliationsRorAutoSuggest` with

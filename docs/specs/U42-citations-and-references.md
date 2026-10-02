@@ -873,6 +873,10 @@ Left out of the scenarios above, by reason:
     there and submitted (Rule 16; A18 retired)
   - a References change saved by the footer's "Back" to "Upload Files"
     or by "Save for Later" (Rule 16)
+  - the guard for A19 (issue report
+    `docs/issues/U46-A5-ordering-arrows-unnamed.md`): in ordering mode each
+    data citation row's up and down arrows carry names that say the
+    direction and the citation
 - **Rarely met**:
   - "Data Citations" at "Do not request data citation metadata from the
     author during submission.": the "Data" page without the wizard's
@@ -981,7 +985,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | The author boxes in "Edit citation" have no names for a screen reader | 🐞 | minor | — |
 | [A15](#a15) | A data citation's identifier can never be removed | 🐞 | minor | — |
 | [A16](#a16) | The row expander is always named "Collapse" and ignores the keyboard; rows with nothing to expand carry an invisible one | 🐞 | minor | — |
-| [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | minor | — |
+| [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | A book or preprint with no references shows an empty "References" heading | 🐞 | minor | — |
 | [A21](#a21) | In French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | 🐞 | minor | — |
 | [A5](#a5) | A reference whose lookup failed for good looks exactly like one still waiting | ❓ | minor | — |
@@ -1155,11 +1159,11 @@ for all three paths; which one is the team's call.
 Basis: probe, 2026-09-24. <sup>f-a17</sup>
 
 <a id="a19"></a>
-**A19 — The ordering arrows have no names** · 🐞 · minor.
+**A19 — The ordering arrows have no names** · 🐞 · low.
 In ordering mode each row's up and down arrows on the Data Citations table
 are icon-only buttons with no name; a screen reader announces only
 "button".
-Basis: probe, 2026-09-24. <sup>f-a19</sup>
+Basis: probe, 2026-10-02. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — A book or preprint with no references shows an empty "References" heading** · 🐞 · minor.
@@ -2129,6 +2133,7 @@ completion. The save on a step change is `SubmissionWizardPage.vue`'s
 **f-a19 — A19 evidence.** Note m (`TableCellOrder`, icon-only buttons).
 Live-probed 2026-09-24, all three apps: the accessibility tree lists two
 unnamed buttons, each holding an image, per row in ordering mode.
+Issue report: [docs/issues/U46-A5-ordering-arrows-unnamed.md](../issues/U46-A5-ordering-arrows-unnamed.md).
 
 <a id="fn-f-a20"></a>
 **f-a20 — A20 evidence.** Note p (the OMP and OPS template conditions).

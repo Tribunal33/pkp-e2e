@@ -23,7 +23,7 @@ and the hourly routine starts one only when none is running
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 | A1, A7, OPS1: open reports docs/reports/2026-09-26-webfeed-rss2-empty-feed-fails.md, docs/reports/2026-09-26-webfeed-terms-read-array.md and docs/reports/2026-09-26-webfeed-ops-publisher-array.md (the rest of U18 written up by the issues session, workstation s0, 2026-10-02) |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | **Taken: issues session, workstation s0, 2026-10-02**; OMP3 done with U69 A9 (pkp-e2e#282); A1, A4, A5, A7, A8, OJS4 done; open: A3, A6, A10, A11, OJS5, OJS6 |
-| [U46](../specs/U46-galleys.md) | 9 | 1 | 4 | **Taken: issues session, VM s2, 2026-10-02**; OPS2 done (pkp-e2e#613), OPS3 done (pkp-e2e#614); A7 done (pkp-e2e#617, with U73 A14); A4 and OJS1 done (pkp-e2e#618) |
+| [U46](../specs/U46-galleys.md) | 9 | 1 | 4 | **Taken: issues session, VM s2, 2026-10-02**; OPS2 done (pkp-e2e#613), OPS3 done (pkp-e2e#614); A7 done (pkp-e2e#617, with U73 A14); A4 and OJS1 done (pkp-e2e#618); A5 done (docs/issues/U46-A5-ordering-arrows-unnamed.md, with U42 A19 and U43 A5's arrows) |
 | [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | OPS2 done with U51 OPS1 (pkp-e2e#380) |
 | [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 | A5 done with U64 A7 (pkp-e2e#616) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OPS1 done with U13 OPS2, OPS3 (docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md); OMP6 done with U69 A9 (pkp-e2e#282) |
@@ -51,12 +51,12 @@ and the hourly routine starts one only when none is running
 | [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 |  |
 | [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 |  |
 | [U26](../specs/U26-review-stage-and-rounds.md) | 4 | 0 | 2 | A1 done (pkp-e2e#520) |
-| [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 | **A19 taken: issues session, VM s2, 2026-10-02** (with U46 A5) |
+| [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 | A19 done with U46 A5 (docs/issues/U46-A5-ordering-arrows-unnamed.md) |
 | [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | OMP1 done with U53 A14 (pkp-e2e#447) |
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
 | [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | A2 done with U36 A10 (pkp-e2e#521) |
 | [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
-| [U43](../specs/U43-funding.md) | 4 | 0 | 1 | **A5 taken: issues session, VM s2, 2026-10-02** (with U46 A5) |
+| [U43](../specs/U43-funding.md) | 4 | 0 | 1 | A5: the ordering arrows done with U46 A5 (docs/issues/U46-A5-ordering-arrows-unnamed.md); its typed-name boxes half (the multilingual name boxes' accessible names) open, a cause of its own |
 | [U22](../specs/U22-my-submissions.md) | 2 | 0 | 1 |  |
 | [U14](../specs/U14-reader-comments-and-moderation.md) | 5 | 0 | 0 |  |
 | [U23](../specs/U23-submissions-dashboard.md) | 5 | 0 | 0 |  |
