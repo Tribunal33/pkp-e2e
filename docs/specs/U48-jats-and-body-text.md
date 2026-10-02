@@ -687,6 +687,7 @@ Left out of the scenarios above, by reason:
   - the guard for OMP1 (issue report `docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md`): on a press, a Press manager's "More Actions" on a Markdown file in "Production Ready Files" lists no "Send to Text Editor".
   - the guard for A12 (issue report `docs/issues/U48-A12-published-jats-upload-delete-offered.md`): a published version's "JATS XML" page offers neither "Upload" nor "Delete" to an editor who may edit the publication.
   - the guard for A11 (issue report `docs/issues/U48-A11-jats-download-saves-refusal-json.md`): a Copyeditor's "Download" of the uploaded JATS file on "JATS XML" saves the XML.
+  - the guard for A13 (issue report `docs/issues/U48-A13-jats-image-upload-breaks-page.md`): an image and an ISO-8859-1 JATS XML file uploaded on "JATS XML" are refused with a message, and the page still opens.
 - **Nothing new to test**:
   - a second "Upload" on a version that already has a file, which
     becomes a revision of that one file, listed in its "History"
@@ -771,7 +772,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | A URL path runs into the published file's name, and a returning reader keeps the earlier name | 🐞 | minor | — |
 | [A11](#a11) | A Copyeditor pressing "Download" on an uploaded JATS XML file saves a refusal as "download-file.json" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | Editors can still replace or delete a published version's JATS XML file, which 3.5 does not offer | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A13](#a13) | "Upload" of an image breaks the "JATS XML" page until the file is deleted | 🐞 | user-visible · crash: server | — |
+| [A13](#a13) | Uploading an image as JATS XML stores it silently, then the "JATS XML" page fails on every opening | 🐞 | medium · crash: both | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | A never-saved Body Text shows "Unsaved Changes" on opening, and "Saved" when an import saved nothing | 🐞 | minor | — |
 | [A15](#a15) | Leaving "Body Text" loses unsaved text without asking | 🐞 | user-visible | — |
 | [A16](#a16) | "Cite" beside each reference on "Body Text" is never enabled | 🐞 | user-visible | — |
@@ -922,17 +923,21 @@ page means to lock.
 Basis: probe, 2026-10-02. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — "Upload" of an image breaks the "JATS XML" page** · 🐞 · user-visible · crash: server.
-"Upload" of an image, as a first upload or over a text file, fails on
-the server: the page shows only "Uploading 100% complete" and stays as it
-was, with no message. The file is stored all the same. From then on every
-opening of the page fails: a window reads "Error" / "Malformed UTF-8
-characters, possibly incorrectly encoded" / "OK", the XML area is empty,
-the line reads "Last Modification at undefined by undefined", "Download"
-saves "undefined.html" and "More Information" opens an empty window.
-"Delete" › "Delete JATS File" still works and brings back the generated
-XML. The upload should be refused with a message.
-Basis: probe, 2026-09-25. <sup>f-a13</sup>
+**A13 — Uploading an image as JATS XML stores it silently, then the "JATS XML" page fails on every opening** · 🐞 · medium · crash: both.
+"Upload" of an image on a journal article's "JATS XML" page fails on the
+server: the page shows only "Uploading 100% complete" and stays as it
+was, with no message. The file is stored all the same. From then on
+every opening of the page fails: a window reads "Error" / "Malformed
+UTF-8 characters, possibly incorrectly encoded" / "OK", the XML area is
+empty, the line reads "Last Modification at undefined by undefined",
+"Download" saves "undefined.html" and "More Information" opens an error
+window. "Delete" › "Delete JATS File" still works and brings back the
+generated XML. The same happens to any file that is not UTF-8 text, such
+as a JATS XML file saved in ISO-8859-1 with an accented letter, and to
+an image uploaded over an earlier JATS file, which it replaces. With
+"Make available with publication" ticked, readers of the published
+article download the image as its JATS XML.
+Basis: probe, 2026-10-02. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — A never-saved Body Text shows the wrong save state** · 🐞 · minor.
@@ -1261,6 +1266,7 @@ Issue report: [pkp-e2e#554](https://github.com/jardakotesovec/pkp-e2e/issues/554
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25 (Rule 3), OJS, as a first upload and over a text file: the upload of "figure.png" answered 500 on `POST …/api/v1/submissions/{id}/publications/{pid}/jats`, yet the file was stored ("More Information" and "Delete" offered on reopening); every reopening answered 500 on `GET …/jats`, and "More Information" 500 on `GET $$$call$$$/information-center/file-information-center/view-information-center?submissionFileId=undefined…`. No type check on upload (note k). Probe: d4.
+Issue report: [docs/issues/U48-A13-jats-image-upload-breaks-page.md](../issues/U48-A13-jats-image-upload-breaks-page.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note g: the badge is `v-show="isDirty"`, true on arrival at a never-saved version (the console then warns "TextSelection endpoint not pointing into a node with inline content (doc)"). The "Saved" during an import: `handleFigureUpload()` saves the document first when no Body Text record exists (note q), and the import uploads its images before it pastes the text (note p). Probe: d16, d20.
