@@ -1,0 +1,73 @@
+--- a/lib/pkp/api/v1/submissions/tasks/resources/TaskResource.php
++++ b/lib/pkp/api/v1/submissions/tasks/resources/TaskResource.php
+@@ -66,17 +66,15 @@
+             ]);
+         $latestActivities = [];
+         // always add an overdue at the start of the list
+-        if ($dateDue = $this->dateDue) {
+-            $overdue = Carbon::now()->gt($dateDue);
+-            if ($overdue) {
+-                $latestActivities[] = [
+-                    'id' => 0, // Does not have
+-                    'message' => __('submission.event.task.overdue'),
+-                    'type' => PKPSubmissionEventLogEntry::SUBMISSION_LOG_TASK_OVERDUE,
+-                    'date' => $dateDue,
+-                    'userFullName' => null,
+-                ];
+-            }
++        $isOverdue = $this->isOverdue();
++        if ($isOverdue) {
++            $latestActivities[] = [
++                'id' => 0, // Does not have
++                'message' => __('submission.event.task.overdue'),
++                'type' => PKPSubmissionEventLogEntry::SUBMISSION_LOG_TASK_OVERDUE,
++                'date' => $this->dateDue,
++                'userFullName' => null,
++            ];
+         }
+ 
+         foreach ($activities as $activity) { /** @var EventLogEntry $activity */
+@@ -161,6 +159,7 @@
+             'assocId' => $this->assocId,
+             'stageId' => $this->stageId,
+             'status' => $this->determineStatus(),
++            'isOverdue' => $isOverdue,
+             'createdBy' => $this->createdBy,
+             'createdByName' => $createdBy?->getFullName(),
+             'createdByUsername' => $createdBy?->getUsername(),
+@@ -194,6 +193,15 @@
+     }
+ 
+     /**
++     * Whether the task is overdue: it is still open and its due date has passed.
++     * The due date is a day, so the task is due by the end of that day.
++     */
++    protected function isOverdue(): bool
++    {
++        return $this->dateDue && !$this->dateClosed && $this->dateDue->lt(Carbon::today());
++    }
++
++    /**
+      * Determine the status of the task based on its type and dates.
+      */
+     protected function determineStatus()
+--- a/lib/ui-library/src/managers/DiscussionManager/useDiscussionManagerForm.js
++++ b/lib/ui-library/src/managers/DiscussionManager/useDiscussionManagerForm.js
+@@ -209,15 +209,8 @@
+ 				};
+ 		}
+ 
+-		// check if overdue
+-		const isOverdue =
+-			workItemRef.value?.dateDue &&
+-			!workItemRef.value?.dateClosed &&
+-			new Date(workItemRef.value.dateDue) < new Date();
+-		if (
+-			workItemStatus.value !== pkp.const.EDITORIAL_TASK_STATUS_CLOSED &&
+-			isOverdue
+-		) {
++		// the server decides whether a task is overdue (TaskResource::isOverdue())
++		if (workItemRef.value?.isOverdue) {
+ 			badgeProps = {
+ 				slot: t('common.overdue'),
+ 				icon: 'Overdue',

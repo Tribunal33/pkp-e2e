@@ -1338,6 +1338,7 @@ Left out of the scenarios above, by reason:
   - the browser's leave-page prompt while the window holds unsaved changes (Rule 11d)
   - an edit of the comments-box discussion, by the submitting Author within the hour and by the Journal Manager, and of the recommendation discussion, each replacing the first message in place (Rules 15a, 15c, 21; A9 no longer covers them)
   - the guard for A4 (issue report `docs/issues/U37-A4-find-template-discussion-task-error.md`): a "Find Template" search for "task", "discussion" and a phrase holding one of them lists the matching templates of that kind, with no "Error" window (Rule 10a)
+  - the guard for A16-A17 (issue report `docs/issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md`): scenario 4 closes its task three days past due and reads "Task closed by …" in "Activity", and a task due today shows a badge and a line that agree (Rules 2d, 2e)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1395,8 +1396,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | An Author cannot save an edit of a discussion whose first message has an uploaded file, and the refusal names no field | 🐞 | user-visible | — |
 | [A9](#a9) | Editing a discussion a Participants message opened adds a second message, under the name of the person it was sent to | 🐞 | user-visible | — |
 | [A10](#a10) | A past "Due Date" is refused with "Start date should be greater than or equal to today" | 🐞 | minor | — |
-| [A16](#a16) | A task due today already reads "Overdue" | 🐞 | minor | — |
-| [A17](#a17) | A closed task past its due date still reads "This task is overdue. Remind the task owner…" | 🐞 | minor | — |
+| [A16](#a16) | A task due today already reads "Overdue" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A17](#a17) | A closed task past its due date still reads "This task is overdue. Remind the task owner…" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A21](#a21) | The error list read to a screen reader calls the message box "undefined" | 🐞 | minor | — |
 | [A24](#a24) | An assistant's "Workflow Files" offers stages that show nothing | 🐞 | minor | — |
 | [A25](#a25) | A discussion turned into a task reads "Begin Task Upon Saving" but is not begun | 🐞 | minor | — |
@@ -1577,21 +1578,24 @@ missing French texts and the search box's wording a translation gap.
 Basis: probe. <sup>[f-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
-**A16 — A task due today is already overdue** · 🐞 · minor.
-A task whose "Due Date" is today reads "Overdue" in its window, and its
-"Activity" and History open with "This task is overdue. Remind the task
-owner to complete it as soon as possible" from the start of that day,
-although the owner still has the day to finish it.
-Basis: probe. <sup>[f-a16](#fn-a16)</sup>
+**A16 — A task due today is already overdue** · 🐞 · low.
+A task reads "Overdue" in its window, and its "Activity" and History
+open with "This task is overdue. Remind the task owner to complete it as
+soon as possible", from the start of its due date. The app says the same
+of a review on its review due date, so whether a task is late on its due
+date is a product call. What is wrong either way is that the badge and
+the line use different clocks: on an install whose time zone is not
+UTC, they disagree for some hours around the start of the due date.
+Basis: probe, 2026-10-02. <sup>[f-a16](#fn-a16)</sup>
 
 <a id="a17"></a>
-**A17 — A closed overdue task still asks for a reminder** · 🐞 · minor.
-Once a task past its due date is closed, its row under "Closed" still
-reads "This task is overdue. Remind the task owner to complete it as
-soon as possible" in "Activity" instead of "Task closed by …", and its
-History still opens with that line; only the window's badge changes to
-"Closed". A finished task tells people to chase its owner.
-Basis: probe. <sup>[f-a17](#fn-a17)</sup>
+**A17 — A closed overdue task still asks for a reminder** · 🐞 · low.
+A task closed on or after its due date keeps "This task is overdue.
+Remind the task owner to complete it as soon as possible" as its
+"Activity" and at the top of its History, in place of "Task closed by
+…". Only the window's badge changes, to "Closed". A finished task goes
+on asking people to chase its owner.
+Basis: probe, 2026-10-02. <sup>[f-a17](#fn-a17)</sup>
 
 <a id="a18"></a>
 **A18 — Items other screens open record no start** · ❓ · minor.
@@ -1982,9 +1986,11 @@ Issue report: [docs/issues/U37-A4-find-template-discussion-task-error.md](../iss
 
 <a id="fn-a16"></a>
 **f-a16** — Note l: the overdue test compares now with the due date's midnight. Live-probed 2026-09-23 on all three apps: a task due 2026-09-23 (seeded, and one saved on screen with that date) read "Overdue" with the overdue line that day.
+Issue report: [docs/issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md](../issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md).
 
 <a id="fn-a17"></a>
 **f-a17** — Note l: `TaskResource::toArray()` prefixes the overdue line whether or not the task is closed; the badge alone checks `dateClosed`. Live-probed 2026-09-23 on all three apps: a task three days past due, closed from its row, kept the line in "Activity" and History under "Closed".
+Issue report: [docs/issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md](../issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md).
 
 <a id="fn-a18"></a>
 **f-a18** — Note aa: none of these paths writes an event-log entry. Live-probed 2026-09-23 on all three apps (the recommendation on OJS and OMP): "Notify", "Assign", the comments box, the recommendation and an auto-added template each left an empty "Activity" and a History reading "No Items".
