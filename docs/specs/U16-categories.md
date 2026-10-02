@@ -921,7 +921,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | On the Categories tab, keyboard users cannot open a category's sub-categories, and the arrows are misnamed | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A screen reader announces the "Select Categories" window's arrow column as "##common.expand##" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | A category's "Editorial Assignments" assign nobody on any journal or press but the install's first | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A15](#a15) | In French, the tab, the delete dialog, the "Select Categories" window and a press's category page show raw codes | 🐞 | minor | — |
+| [A15](#a15) | In French, the tab, the delete dialog, the "Select Categories" window and a press's category page show raw codes | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A16](#a16) | A name changed and closed without saving comes back in the same category's next "Edit" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | A file that is not a picture leaves a broken preview in "Cover Image" | 🐞 | minor | — |
 | [A18](#a18) | The box where a manager types a category's name to delete it has no name for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1089,7 +1089,7 @@ category can assign its editors by hand.
 Basis: code. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — Raw codes on the French category screens** · 🐞 · minor.
+**A15 — Raw codes on the French category screens** · 🐞 · low.
 Opened in French (Settings › Journal › "Catégories"), the tab heads its
 columns "##GRID.CATEGORY.CATEGORYNAME##" and
 "##MANAGER.CATEGORY.ASSIGNEDTO##", every arrow is named
@@ -1103,7 +1103,11 @@ button and window read "##manager.selectCategories##". A press's category
 page in French shows "##catalog.browseTitles##" and
 "##catalog.category.heading##" where the count and "All Books" stand; a
 journal's and a preprint server's page are translated.
-Basis: probe, 2026-09-25. <sup>f-a15</sup>
+On `main` the tab, dialog and window texts are new with the new
+category screen and await their French; 3.5's older table is French
+throughout. The press page's codes, and the tab's "More Actions"
+("##common.moreActions##") that 3.5 lacks too, are reported.
+Basis: probe, 2026-10-02. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — An unsaved name comes back in the next "Edit"** · 🐞 · medium.
@@ -1986,6 +1990,7 @@ headers upper-cased by style), `##manager.category.expandSubcategories##`,
 `##manager.category.delete.message.body##`,
 `##manager.category.confirmDelete##`, `##manager.selectCategories##` and
 `##list.collapse##`: keys with no fr_CA text.
+Re-walked 2026-10-02 on main and stable-3_5_0, all three apps. Split three ways: the press category page's `catalog.browseTitles` and `catalog.category.heading` joined [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) ([docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md)), whose severity, medium, comes from the editors' names on the book page; the tab's `common.moreActions` joined [pkp-e2e#457](https://github.com/jardakotesovec/pkp-e2e/issues/457) ([docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md)), low; the rest (`grid.category.categoryName`, `manager.category.*`, `manager.selectCategories`, `list.collapse`) are main-only texts with no report under the 2026-10-02 ruling on main-only locale keys. The entry's impact, low, is its own part's.
 
 <a id="fn-f-a16"></a>
 **f-a16** — Live-probed 2026-09-25, all three apps: "Science" renamed

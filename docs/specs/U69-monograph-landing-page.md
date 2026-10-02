@@ -1249,7 +1249,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A8](#a8) | In a format with several files, a file for sale shows no price | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | On a press, a reader who opens a book's PDF gets an empty viewer, and no download saves the file | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
-| [A15](#a15) | In French (Canada), a press's book and chapter pages and Roles list show codes, even for editors' names | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A15](#a15) | In French (Canada), a press's catalog, book and chapter pages and Roles list show codes, even for editors' names | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A16](#a16) | A book's earlier URL Path shows a server error page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | An older version's chapter page of a book shows a blank server error page to every reader | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A1](#a1) | On a press, a book address that names no book opens the Login page instead of "404 Not Found" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1459,7 +1459,7 @@ Lean: yes, a defect; the chapter did not exist in that year.
 Basis: probe, 2026-09-28. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — In French (Canada), a press's book and chapter pages and Roles list show codes, even for editors' names** · 🐞 · medium.
+**A15 — In French (Canada), a press's catalog, book and chapter pages and Roles list show codes, even for editors' names** · 🐞 · medium.
 On a press shown in French (Canada), a book's page and a chapter's page
 show raw codes where the English pages show labels: the date is headed
 "##catalog.published##" instead of "Published", and a file's view page
@@ -1468,18 +1468,23 @@ volume the code also takes the place of each editor's name: the page
 lists "##submission.editorName##" where the English page lists "Sarah
 Carter (ed)" and "Peter Fortna (ed)". A file for sale is linked as
 "Achat (25.00 USD)", without the format's name that the English link
-gives ("Purchase PDF (25.00 USD)"). The press's staff see the same in
-its settings and workflow: the External Review stage is named
-"##workflow.review.externalReview##" on the "Rôles" list's column, on
-its box in the window that creates a role, and in a submission's
-workflow menu. The workflow screen shows the same for a review round's
+gives ("Purchase PDF (25.00 USD)"). The catalog, a category's or a
+series' page, the "New Releases" page and the home page's lists show
+codes for the book count ("##catalog.browseTitles##" for "2 Titles"),
+the list headings ("Featured", "New Releases", "All Books") and the
+empty-list messages, and the sidebar's "Browse" block reads
+"##plugins.block.browse##" over codes for "Categories" and "Series".
+The press's staff see the same in its settings and workflow: the
+External Review stage is named "##workflow.review.externalReview##" in
+the "Rôles" list, in the window that creates a role, and in a
+submission's workflow menu. The workflow screen shows the same for a review round's
 name and for the "Monograph" control ("##common.publication##").
 
 The rest of each page shows as usual and every link works. A French
 reader of an edited volume cannot see who edited it, and the press
-cannot change these texts from its settings. The fix is a translation
-hand-off with no code change: entering the missing French (Canada)
-texts.
+cannot change these texts from its settings. The fix changes no code:
+the missing French (Canada) texts, all of them OMP's own, are entered
+on PKP's translation platform.
 
 A press shows these codes when "Français (Canada)" is among the
 languages it offers in its language settings. A press that offers

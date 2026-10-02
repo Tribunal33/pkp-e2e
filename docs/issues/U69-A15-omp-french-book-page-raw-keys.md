@@ -1,22 +1,23 @@
-# In French (Canada), a press's book and chapter pages and Roles list show codes, even for editors' names
+# In French (Canada), a press's catalog, book and chapter pages and Roles list show codes, even for editors' names
 
 - **Severity** medium
 - **Effort** small
 - **Kind** defect
 - **Affects**
-  - main: OMP
-  - 3.5: OMP (walked; only the editors' names read in the code)
-  - 3.4: OMP (code)
-  - 3.3: OMP (code; the book's page and the "Roles" list, no chapter pages)
-- **Introduced** not traced; the texts were added in English at different times and none was ever entered in OMP's French (Canada) files. The External Review stage's name had a French (Canada) text in pkp-lib until 2019 (Cause). The oldest are the book page's "Published" and "Categories", since [52df855c59](https://github.com/pkp/omp/commit/52df855c59a26832353324486789159f965d5605) (2015-09-04)
+  - main: OMP (walked: the book and chapter pages, the editors' names, the catalog pages and the "Browse" block, the staff screens)
+  - 3.5: OMP (walked: the book and chapter pages, the catalog pages and the "Browse" block, the staff screens; the editors' names read in the code, as no edited volume's page opened there)
+  - 3.4: OMP (code: the book and chapter pages, the editors' names, the catalog pages and the "Browse" block, the staff screens without the review rounds' names)
+  - 3.3: OMP (code: the book page, the editors' names, the catalog pages and the "Browse" block, the staff screens without the review rounds' names; no chapter pages)
+- **Introduced** not traced as one change. Most of the texts never had a French (Canada) text; the oldest, the book page's "Published" and "Categories", came in English in [52df855c59](https://github.com/pkp/omp/commit/52df855c59a26832353324486789159f965d5605) (2015-09-04). Two had one and lost it: the External Review stage's name and the catalog's book count read in French (Canada) in OMP 3.1.1 and show codes from 3.1.2 (2019) on; on the main line pkp-lib [ceef9fdb49](https://github.com/pkp/pkp-lib/commit/ceef9fdb49470eb056e88d0930777897faeadddc) (2019-10-15) dropped both. Those two parts are a regression. The rest, the editors' names among them, never worked, so the report as a whole is a defect
 - **Upstream** none found (2026-10-02)
-- **Tracked in** spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15), spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (a book's OAI-PMH "Resource Type"), spec U54 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U54-roles-configuration.md#omp1) (the External Review stage's name on the press's "Roles" list), spec U24 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a11) (a press's codes on the workflow screen: the External Review stage, the review rounds' names, the "Monograph" control and its menu)
-- **Checked** 2026-10-01, the staff screens 2026-10-02, each branch's tip (the commits in Evidence)
+- **Tracked in** spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15), spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (a book's OAI-PMH "Resource Type"), spec U54 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U54-roles-configuration.md#omp1) (the External Review stage's name on the press's "Roles" list), spec U24 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a11) (a press's codes on the workflow screen: the External Review stage, the review rounds' names, the "Monograph" control and its menu), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (a press's category page), spec U68 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U68-catalog-browse.md#a8) (the catalog pages and the "Browse" block)
+- **Checked** 2026-10-01, the staff screens and the catalog pages 2026-10-02, each branch's tip (the commits in Evidence)
 
 2026-10-02: widened to the press's staff screens, where the External
 Review stage's name is a code (Steps 14 to 17), and to the workflow
 screen's own codes: a review round's name and the "Monograph" control
-(Steps 18 to 20).
+(Steps 18 to 20). Widened again to the catalog pages and the sidebar's
+"Browse" block (Steps 21 to 27).
 
 ## Summary
 
@@ -28,18 +29,23 @@ volume the code also takes the place of each editor's name: the page
 lists "##submission.editorName##" where the English page lists "Sarah
 Carter (ed)" and "Peter Fortna (ed)". A file for sale is linked as
 "Achat (25.00 USD)", without the format's name that the English link
-gives ("Purchase PDF (25.00 USD)"). The press's staff see the same in
-its settings and workflow: the External Review stage is named
-"##workflow.review.externalReview##" on the "Rôles" list's column, on
-its box in the window that creates a role, and in a submission's
-workflow menu. The workflow screen shows the same for a review round's
+gives ("Purchase PDF (25.00 USD)"). The catalog, a category's or a
+series' page, the "New Releases" page and the home page's lists show
+codes for the book count ("##catalog.browseTitles##" for "2 Titles"),
+the list headings ("Featured", "New Releases", "All Books") and the
+empty-list messages, and the sidebar's "Browse" block reads
+"##plugins.block.browse##" over codes for "Categories" and "Series".
+The press's staff see the same in its settings and workflow: the
+External Review stage is named "##workflow.review.externalReview##" in
+the "Rôles" list, in the window that creates a role, and in a
+submission's workflow menu. The workflow screen shows the same for a review round's
 name and for the "Monograph" control ("##common.publication##").
 
 The rest of each page shows as usual and every link works. A French
 reader of an edited volume cannot see who edited it, and the press
-cannot change these texts from its settings. The fix is a translation
-hand-off with no code change: entering the missing French (Canada)
-texts.
+cannot change these texts from its settings. The fix changes no code:
+the missing French (Canada) texts, all of them OMP's own, are entered
+on PKP's translation platform.
 
 A press shows these codes when "Français (Canada)" is among the
 languages it offers in its language settings. A press that offers
@@ -48,19 +54,25 @@ format name and the review rounds' names on the workflow screen.
 
 ## Impact
 
-- **Lost.** An edited volume's editors' names, and about a dozen labels
-  on every book and chapter page.
+- **Lost.** An edited volume's editors' names, about a dozen labels
+  on every book and chapter page, and the catalog pages' book count,
+  list headings and "Browse" block labels.
 - **Who.** Readers of a press that offers French (Canada), and its
   staff working in French (Canada) on the "Rôles" list and in the
-  workflow. By the code, the reader pages are the same in Arabic,
-  Central Kurdish, Greek, Kyrgyz and Vietnamese.
-- **Way round.** Switch the page to English; none in French. Staff
-  are not held up: the stage's code only stands in for its name.
+  workflow. The locale files show the same gaps on the reader pages in
+  Arabic, Central Kurdish, Greek, Kyrgyz and Vietnamese (read, not
+  walked).
+- **Way round.** A reader can switch the page to English only when the
+  press also offers English; on a press that offers French (Canada)
+  alone, readers have no way round, and in French there is none. Staff
+  are not held up: the stage's code only stands in for its name. The
+  press cannot enter the texts itself; the French (Canada) translators,
+  or a developer, enter them in OMP alone, with no change to pkp-lib.
 
-Medium: a public page is wrong in a field, the editors' names, on edited
-volumes only, in French (Canada) and, by the code, in the five
-languages above, and the English page shows them. The labels and the
-staff screens alone would be low.
+Medium: on an edited volume's public page in French (Canada), the
+editors' names are gone, while the English page shows them. The same
+holds, from the locale files, in the five languages above. The labels
+and the staff screens alone would be low.
 
 ## Steps to reproduce
 
@@ -76,8 +88,10 @@ Preconditions:
 - Book 5, "Bomb Canada and Other Unkind Remarks in the American Media",
   is published with one "PDF" file, "epilogue.pdf".
 - Submission 2, "The West and Beyond: New Perspectives on an Imagined
-  Region", is an edited volume in review. Its contributors Sarah Carter
-  and Peter Fortna have the role "Volume editor".
+  Region", is an edited volume in review. Under "Contributors", Sarah
+  Carter and Peter Fortna are listed as "Volume editor", the press's
+  contributor role for a volume's editors. The page names a contributor
+  as an editor by that kind of role, whatever the press calls it.
 - The dataset has no chapter added in a second version and no file for
   sale, so steps 5 to 8 and 10 to 11 make them.
 
@@ -173,6 +187,31 @@ as `dbarnes` with the language changed in step 14):
     round 1, and is an edited volume. Read the stage name under the
     title, the right pane's heading and the same button.
 
+The catalog pages and the "Browse" block (the dataset as loaded; steps
+22 and 23 change the press's appearance settings and book 14's catalog
+flags):
+
+21. Signed out, open the press's "New Releases" page in French,
+    `/index.php/publicknowledge/fr_CA/catalog/newReleases`. No book is a
+    new release yet. Read the heading, the count and the message.
+22. Sign in as `dbarnes` and open Settings › Website
+    (`/index.php/publicknowledge/en/management/settings/website`),
+    "Appearance" › "Setup". Under "Sidebar" tick "Browse Block", under
+    "Featured Books" tick "Display featured books on the home page",
+    under "New Releases" tick "Display new releases on the home page",
+    and press "Save".
+23. Open Content › "Catalog". On the row of "From Bricks to Brains: The
+    Embodied Cognitive Science of LEGO Robots" press the "Featured" box
+    and the "New release" box.
+24. Sign out and open the press's home page in French,
+    `/index.php/publicknowledge/fr_CA`. Read the headings of the two
+    lists and the "Browse" block in the sidebar.
+25. Press "Catalogue" in the header. Read the count above the books.
+26. In the "Browse" block, press "Applied Science", a category with
+    sub-categories and no book. Read the count and the headings.
+27. In the "Browse" block, press "Library & Information Studies", a
+    series with no book. Read the count, the heading and the message.
+
 **Expected.** Each label reads in French what the English page reads:
 "Published" (steps 2, 3), "Volume" (3), the tab "PDF view of the file
 Segmentation of Vascular Ultrasound Imag.pdf" and the arrow "Return to
@@ -187,7 +226,12 @@ and the control read in French what English reads: "Internal Review
 (Round 1)" and "Workflow: Internal Review (Round 1)" (18), "Monograph"
 with the entries "Edited Volume" and "Monograph" (19), "External Review
 (Round 1)", "Workflow: External Review (Round 1)" and "Edited Volume"
-(20).
+(20). The catalog pages read in French what English reads: "New
+Releases", "0 Titles" and "No new releases are available at this
+time." (21); "Featured" and "New Releases", and the block "Browse",
+"Categories" and "Series" (24); "2 Titles" (25); "0 Titles",
+"Subcategories" and "All Books" (26); "0 Titles", "All Books" and "No
+titles have been published yet." (27).
 
 **Observed.**
 
@@ -213,7 +257,26 @@ Step 19: ##common.publication##
 Step 20: Évaluation (Cycle 1)
          Flux des travaux : Évaluation (Cycle 1)
          ##submission.workflowType.editedVolume.label##
+Step 21: ##catalog.newReleases##   (the browser tab, the trail and the heading)
+         ##catalog.browseTitles##
+         ##catalog.noTitlesNew##
+Step 24: ##catalog.featured##
+         ##catalog.newReleases##
+         block: ##plugins.block.browse## | Nouveautés | ##plugins.block.browse.category## Applied Science …
+                | ##plugins.block.browse.series## Library & Information Studies …
+Step 25: ##catalog.browseTitles##
+Step 26: ##catalog.browseTitles##
+         Sous-catégories | ##catalog.category.heading##
+Step 27: ##catalog.browseTitles##
+         ##catalog.category.heading##
+         ##catalog.noTitles##
 ```
+
+The block shows the same codes on every page of steps 24 to 27, and
+its "Nouveautés" and the header's "Catalogue" are French. On `main`
+step 26 shows no message under the heading, where 3.5 shows
+"##catalog.noTitles##" (spec U16 A1, reported apart), and step 27's
+page has an empty heading (spec U68 A3).
 
 The version's name inside the brackets is a code of its own on `main`,
 reported apart (the report "In French, readers and editors see a raw
@@ -228,7 +291,8 @@ the editors' names were not seen there.
 OMP's French (Canada) locale files hold no text for these keys. Each has
 an entry with an empty `msgstr` in `locale/fr_CA/locale.po`,
 `manager.po` or `submission.po`, and the default theme's
-`plugins/themes/default/locale/fr_CA/locale.po` holds a header and no
+`plugins/themes/default/locale/fr_CA/locale.po` and the Browse block's
+`plugins/blocks/browse/locale/fr_CA/locale.po` hold a header and no
 entry at all. `LocaleFile::loadArray()`
 (`lib/pkp/classes/i18n/translation/LocaleFile.php`) drops an empty text,
 and `Locale::translate()` (`lib/pkp/classes/i18n/Locale.php`) does not
@@ -261,8 +325,8 @@ more harm than a label's:
 
 - `submission.editorName` is "{$editorName} (ed)".
   `templates/frontend/components/authors.tpl` prints it in place of the
-  plain name for each contributor with the "Volume editor" role on an
-  edited volume. Without a text the code replaces the name.
+  plain name for each contributor whose role is of the editor kind
+  (`Author::getIsEditor()`) on an edited volume. Without a text the code replaces the name.
 - `submission.chapterCreated` is " — Chapter created" with its leading
   space and dash, and `templates/frontend/objects/chapter.tpl` prints it
   straight after the version's name. Without a text the line reads
@@ -289,29 +353,33 @@ left out.
 - On screen (`main` and 3.5), for the press's staff:
   `workflow.review.externalReview`, the External Review stage's name,
   empty in `locale/fr_CA/submission.po`. It heads the stage's column on
-  the "Rôles" list, names the stage's box in the "Créer un nouveau
-  rôle" window and names the stage in a submission's workflow menu.
-  By the code (`WorkflowStageDAO::getWorkflowStageTranslationKeys()`,
-  `PKPApplication::getWorkflowStageName()`, ui-library `StageLabels`)
-  it also names the stage in:
+  the "Rôles" list (`UserGroupGridHandler`, from
+  `WorkflowStageDAO::getWorkflowStageTranslationKeys()`), names the
+  stage's tick box in the "Créer un nouveau rôle" window, and names the
+  stage in a submission's workflow menu (ui-library
+  `useWorkflowNavigationConfigOMP.js`, line 75). Read in the code, not
+  walked, the same key also names the stage in:
   - the "Rôles" list's stage filter, and the notice after a stage box
     is ticked (`UserGroupGridHandler`);
   - the editorial statistics page (`PKPStatsHandler`) and the monthly
-    statistics email's attachment (`StatisticsReportMail`);
+    statistics email's attachment (`StatisticsReportMail`), through
+    `PKPApplication::getWorkflowStageName()`;
   - the API's `stageName` of a submission (`submission/maps/Schema.php`);
   - the monograph report's status column (`plugins/reports/monographReport/Report.php`);
-  - OMP's `SubmissionsListPanel` stage filter;
+  - the stage filter of the submission list in the Native XML and ONIX
+    3.0 export plugins, where OMP's `SubmissionsListPanel` calls `__()`
+    on the key itself;
   - the workflow's status notices that name a stage the submission has
-    not reached or has left (`WorkflowSubmissionStatus.vue`).
+    not reached or has left (`WorkflowSubmissionStatus.vue`, through
+    ui-library's `StageLabels`).
 
-  Until 2019 the text
-  "Évaluation externe" came from pkp-lib's French (Canada) files, which
-  dropped it in
-  [ceef9fdb49](https://github.com/pkp/pkp-lib/commit/ceef9fdb49470eb056e88d0930777897faeadddc)
-  (2019-10-15), four years after the English text moved from pkp-lib
-  into OMP
+  Until 2019 the text "Évaluation externe" came from pkp-lib's French
+  (Canada) files, which dropped it in the 2019 commit the header names,
+  four years after the English text moved from pkp-lib into OMP
   ([2ba2d4c8d2](https://github.com/pkp/omp/commit/2ba2d4c8d25750d37292a15ad5a0660402a58338),
-  2015-02-24). OMP's own French (Canada) file never received it.
+  2015-02-24). OMP's own French (Canada) file never received it. OMP
+  3.1.1 showed it in French (Canada); 3.1.2 has it in no French
+  (Canada) file.
 - On screen (`main` and 3.5), on the workflow screen: three more of
   OMP's own texts.
   - `common.publication` ("Monograph") and
@@ -320,7 +388,7 @@ left out.
     `WorkflowWorkTypeOMP.vue` prints them as the work type control and
     its two entries. `PKPStatsPublicationController` also heads the
     "Monograph ID" column of the statistics download with the first
-    (code).
+    (read in the code).
   - `submission.stage.internalReviewWithRound` and
     `submission.stage.externalReviewWithRound`, "Internal Review (Round
     {$round})" and "External Review (Round {$round})", added to OMP's
@@ -337,14 +405,54 @@ left out.
     (`useWorkflowNavigationConfigOJS.js`, which OMP's config imports)
     for the heading over the round's page; and, on `main` only,
     `InsertSummaryOfChangesModal.vue` (`reviewRoundLabel()`), which
-    names each round's revision files (code, not opened).
-    Other languages (code): 20 of OMP's 33 translations have neither
+    names each round's revision files (read in the code, not opened).
+    In the other languages' files, 20 of OMP's 33 translations have neither
     round key (`ar`, `ca`, `ckb`, `de`, `el`, `fa`, `fr`, `fr_CA`,
     `gd`, `gl`, `hr`, `hu`, `ky`, `nb_NO`, `pt`, `ro`, `ru`, `sv`,
     `tr`, `vi`), so each shows the internal round as the same code.
     The 18 beyond the two French ones are left to their translators.
-- By the code, in cases not set up on screen here, the same templates
-  read nine more keys that are empty in `locale/fr_CA`:
+- On screen (`main` and 3.5), the catalog pages and the "Browse"
+  block:
+  - `catalog.browseTitles` ("{$numTitles} Titles"), the count that
+    `templates/frontend/pages/catalog.tpl`, `catalogCategory.tpl`,
+    `catalogSeries.tpl` and `catalogNewReleases.tpl` print, empty in
+    `locale/fr_CA/submission.po`. `search.tpl` prints it over the
+    search results too (read in the code). Its French (Canada) text "Explorer
+    {$numTitles} les titres" moved with the English one into pkp-lib
+    when the catalog was shared in
+    [38a6184f5](https://github.com/pkp/omp/commit/38a6184f5d9a2059f386c55e52f4e79d294c30f9) and
+    [75f76c503a](https://github.com/pkp/pkp-lib/commit/75f76c503a603a0a0b4d1edda5a31ab82fb233e8)
+    (2018-12-17, `pkp/pkp-lib#4158`). The English text came back to OMP
+    in [5027c3cee](https://github.com/pkp/omp/commit/5027c3cee160929c9558845db2928b54684b82a9)
+    (2019-02-07, `pkp/pkp-lib#4446`) without the French one, and
+    pkp-lib's French (Canada) files dropped it in the same 2019 commit
+    as the External Review stage's name. OMP 3.1.1 showed it in French
+    (Canada); 3.1.2 has it in no French (Canada) file.
+  - `catalog.featured`, `catalog.newReleases`,
+    `catalog.category.heading` ("All Books"), `catalog.noTitles` and
+    `catalog.noTitlesNew`, the list headings and empty-list messages of
+    the same pages and of `templates/frontend/pages/index.tpl`, empty
+    in `locale/fr_CA/locale.po`. Their English texts date from 2015
+    ([de090dd80](https://github.com/pkp/omp/commit/de090dd809b485bcb69447a8fe8c59d9261d5951)
+    and the commit in the header) and the
+    French (Canada) file never held them before the empty entries that
+    [3bcd14e06](https://github.com/pkp/omp/commit/3bcd14e06cc22367cecae0210fb6834a79c98991)
+    added (2023-01-30).
+  - `plugins.block.browse`, `plugins.block.browse.category` and
+    `plugins.block.browse.series`, which
+    `plugins/blocks/browse/templates/block.tpl` prints for the block's
+    heading, its navigation's name for a screen reader and its two
+    lines. The block's French (Canada) file was created on Weblate in
+    [cfa6e0fbc](https://github.com/pkp/omp/commit/cfa6e0fbc8b86c6bdf7a0d475b818fe7cc0a07cf)
+    (2023-05-23) with no entry, so its other five texts (the plugin's
+    name, description and settings form) are missing too. OJS's
+    and OPS's own Browse block plugins have "Parcourir" and
+    "Catégories" in French (Canada).
+  - `catalog.category.subcategories` is empty in OMP's
+    `locale/fr_CA/locale.po` too, but pkp-lib's French (Canada) file
+    has the same key, so step 26 reads "Sous-catégories".
+- Read in the code, in cases these Steps do not set up, the same
+  templates print nine more keys that are empty in `locale/fr_CA`:
   - `catalog.forthcoming`, over a publication date in the future.
   - `catalog.categories`, over a book's categories.
   - `doi.readerDisplayName` ("DOI:"), on a book, a chapter and a format
@@ -362,13 +470,15 @@ left out.
     a newer version lacks the chapter. On `main` that page fails first
     on a press with "DOI Versioning" "No" (spec U69 A19).
 - `Publication::getEditorString()` builds a list of editors from
-  `submission.editorName` as well; no template of OMP reads it (code).
-- Other languages (code), of OMP's 33 translations:
+  `submission.editorName` as well; no template of OMP reads it.
+- Other languages, read in the locale files of OMP's 33 translations:
   - The book-page and view-page keys have no text in Arabic, Central
     Kurdish, Greek, Kyrgyz and Vietnamese (`ckb` and `ky` have no
     `locale.po` at all).
   - "Volume" and "Pages" have no text in 12 languages, French (Canada)
-    among them; the two "Versions" texts in 13.
+    among them. The two texts of a chapter page's "Versions" list,
+    `submission.chapterCreated` and `submission.withoutChapter`, have
+    none in 13.
   - `payment.directSales.purchase` has no `{$format}` in Catalan, Greek,
     French (France) and Italian, and no text at all in Arabic, Central
     Kurdish, Kyrgyz and Vietnamese, where the priced link is a code.
@@ -382,22 +492,37 @@ left out.
 
 Enter the missing French (Canada) texts on PKP's Weblate
 (translate.pkp.sfu.ca), which writes the locale files, rather than
-commit them. The texts are those of
-[fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-book-page-raw-keys/fix.diff).
-All 26 are OMP's own, none pkp-lib's, in four components of Weblate's
-`omp` project: `locale`, `manager`, `submission` and the default
-theme's. The French (France) files' `Language-Team` headers name the
-components; of the French (Canada) files this fix touches, only
-`locale.po` names its own. French (Canada) takes texts in all four.
-French (France) takes the priced link in `locale` and the rounds'
-names in `submission`. A developer can enter them or hand the list to the French
-(Canada) translators.
+commit them. This is work for the French (Canada) translators, or for a
+developer with a Weblate account, and it touches OMP alone: every text
+is OMP's own, none pkp-lib's. The texts are those of
+[fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-book-page-raw-keys/fix.diff),
+40 in all, in five components of Weblate's `omp` project: `locale`,
+`manager`, `submission`, `themes-default` (the default theme) and
+`blocks-browse` (the Browse block). French (Canada) takes texts in all
+five; French (France) takes the priced link in `locale` and the rounds'
+names in `submission`. The component names are read from the French
+(France) files' headers, since most French (Canada) files this fix
+touches name none.
 
-The diff holds 26 texts. Twenty fill the 19 empty entries and the
-theme's missing one, each copied from OMP's own French (France) files.
-Four add the two rounds' names, in French (Canada) and French (France).
-Two add `{$format}` to the priced link, in French (Canada) and French
-(France):
+What the diff holds:
+
+- 25 empty entries filled, and the one entry the default theme's French
+  (Canada) file lacks added. Each text is copied from OMP's French
+  (France) files, except where OMP's French (Canada) already has its
+  own word for the same thing: "En vedette" (its `catalog.feature`)
+  for "Featured", "Volume édité" (its `submission.workflowType.editedVolume`)
+  for "Edited Volume", and OJS's French (Canada) count, "{$numTitles}
+  titre(s)".
+- 8 entries added to the Browse block's French (Canada) file, which
+  holds none: "Parcourir", "Bloc Parcourir", "Catégories" and the
+  description from OJS's French (Canada) Browse block, "Séries" and
+  "Nouveautés" as OMP's French (Canada) already says them, "Paramètres"
+  from French (France), and the settings form's title in this report's
+  own wording.
+- 4 entries adding the two rounds' names, in French (Canada) and French
+  (France).
+- 2 texts adding `{$format}` to the priced link, in French (Canada) and
+  French (France):
 
 ```diff
  msgid "catalog.published"
@@ -416,7 +541,8 @@ Two add `{$format}` to the priced link, in French (Canada) and French
 The texts are a proposal for the translators. "Achat {$format} (…)" and
 the rounds' names ("Évaluation interne (Cycle {$round})", "Évaluation
 externe (Cycle {$round})", built from OMP's stage names and pkp-lib's
-"Évaluation (Cycle {$round})") are this report's own wording, and the copies carry French (France)'s own
+"Évaluation (Cycle {$round})") and the Browse block's "Options de
+l'outil Parcourir" are this report's own wording, and the copies carry French (France)'s own
 punctuation ("&nbsp;; " between names, a hyphen in "{$name} - Sans ce
 chapitre" where English has a dash) for them to settle.
 
@@ -432,10 +558,16 @@ and out. The French OAI-PMH records' "Resource Type" read "Livre", with
 every other element of the records and the English records unchanged.
 The staff screens of steps 15 to 17 read "Évaluation externe". Steps
 18 to 20 read "Évaluation interne (Cycle 1)", "Monographie" with the
-entries "Ouvrage collectif" and "Monographie", and "Évaluation externe
+entries "Volume édité" and "Monographie", and "Évaluation externe
 (Cycle 1)"; the same screens in English read the same with the diff in
 and out. The capital in "(Cycle {$round})" for French (Canada) and
-the small letter for French (France) follow pkp-lib's two texts.
+the small letter for French (France) follow pkp-lib's two texts. Steps
+21 to 27 read "Nouveautés", "0 titre(s)" and "Aucune nouveauté n’est
+disponible pour l’instant." (21), "En vedette", "Nouveautés" and the
+block "Parcourir", "Catégories", "Séries" (24), "2 titre(s)" (25),
+"Tous les livres" (26) and "Aucun titre n’a encore été publié." (27);
+the same pages in English, and the French "Catalogue", its trail and
+the block's "Nouveautés", read the same with the diff in and out.
 
 **Alternatives**
 
@@ -443,13 +575,16 @@ the small letter for French (France) follow pkp-lib's two texts.
   sync may conflict with it or empty the entries again.
 - Fall back from a regional language to its parent (French (Canada) to
   French) when a text is missing: it would cover every gap of this kind
-  at once, but it is a new rule in `Locale::translate()` beside PKP's
-  decision not to fall back (`pkp/pkp-lib#784`), and a product decision.
+  at once, but it goes against PKP's decision not to fall back
+  (`pkp/pkp-lib#784`), a product decision. `Locale::translate()`
+  already calls a hook of the same name, which the Default Translation
+  plugin uses for an English fallback, so a plugin could do it without
+  a change to pkp-lib. It would help only the sites that install it,
+  and French (Canada) would still ship incomplete.
 - Read pkp-lib's translated keys where one has the same word
   (`category.category` "Catégories", `submission.downloads`
-  "Téléchargements"), as proposed for OPS's keywords label: it covers
-  two of the 20 empty or missing entries, and the rest still need a
-  text.
+  "Téléchargements"): it covers two of the 34 empty or missing entries,
+  and the rest still need a text.
 - Print the editor's name, the version's name and " — " from the
   template and translate only the words of `submission.editorName`,
   `submission.chapterCreated` and `submission.withoutChapter`: a code
@@ -458,14 +593,15 @@ the small letter for French (France) follow pkp-lib's two texts.
 
 **What goes with it**
 
-- Left out of the diff: the other 420 or so entries without a text in
+- Left out of the diff: the other 410 or so entries without a text in
   `locale/fr_CA`, which the report did not place on a screen; the rest
   of the theme's French (Canada) file; the languages listed under
   Cause.
 - With the fix for spec U69 A7 the priced link then reads "Achat PDF
   (25.00 USD)".
 - Older versions: `stable-3_5_0` and `stable-3_4_0` have the same empty
-  entries (3.4 names the French (France) folder `fr_FR`). From OMP's
+  entries and the same Browse block file with no entry (3.4 names the
+  French (France) folder `fr_FR`). From OMP's
   history: Weblate commits to a `translations/stable-3_5_0` branch,
   which pkp merges into `stable-3_5_0` about monthly (latest
   8a6ff0375, 2026-09-18), and `stable-3_5_0` is merged forward into
@@ -473,12 +609,16 @@ the small letter for French (France) follow pkp-lib's two texts.
   commit on `stable-3_4_0` is 5d7b75b79 (2025-02-14). Not known:
   whether Weblate still takes 3.4 texts, or whether 3.4 needs a commit
   of its own.
-  `stable-3_3_0` has the book-page entries empty, no chapter-page
-  texts, and no French (France) file to copy from.
+  `stable-3_3_0` has the book-page and catalog entries empty, no
+  chapter-page texts, no French (Canada) folder for the Browse block,
+  and no French (France) file to copy from.
 - The guard: the U69 spec's French-page scenario asserting that a
-  book's and a chapter's page show no `##` code (a Planned item).
+  book's and a chapter's page show no `##` code, and the U68 spec's
+  for the catalog pages and the "Browse" block (Planned items).
 
-Small: 26 texts entered on Weblate and no code, tried as a diff.
+A proposal; the team decides.
+
+Small: 40 texts entered on Weblate and no code, tried as a diff.
 
 ## Evidence
 
@@ -488,9 +628,7 @@ Small: 26 texts entered on Weblate and no code, tried as a diff.
   English (the control, and the check that the diff changes nothing
   else). It changes books 14 and 5 and the press's payment settings, so
   it runs on an install freshly loaded from the default dataset:
-  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js omp shared/playwright/checks/issues/omp-french-book-page-raw-keys/walk.js`
-  (with `PKP_E2E_LINE=stable-3_5_0` in front for 3.5; `STEP=13` in
-  front takes step 13 alone).
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js omp shared/playwright/checks/issues/omp-french-book-page-raw-keys/walk.js`.
 - Walked on `main` and `stable-3_5_0`, on PostgreSQL, from pkp/datasets
   92050d9 (2026-10-01).
 - Differences from the Steps: in step 4 the script presses the first
@@ -510,9 +648,13 @@ Small: 26 texts entered on Weblate and no code, tried as a diff.
 - Failures the walk recorded, each reported apart: on `main` the file
   view page of step 4 threw "PDFJS is not defined" and its file request
   answered 500 (spec U69 A9); on 3.5 only the script error.
-- Tips: OMP `main` 3b0ecf794c (`lib/pkp` 3dc90c81a6); `stable-3_5_0`
-  b24879c3d (`lib/pkp` 1fb843f491); `stable-3_4_0` 0aec65441 (`lib/pkp`
-  df13621c2d); `stable-3_3_0` 8e72fc883 (`lib/pkp` d446601ebe).
+- Tips: OMP `main` 3b0ecf794c (`lib/pkp` 3dc90c81a6, `lib/ui-library`
+  280f98c5) for every walk. `stable-3_5_0` moved between the walks:
+  b24879c3d (`lib/pkp` 1fb843f491) for steps 1 to 13, c7b45f88e
+  (`lib/pkp` 1fb843f491) for steps 14 to 17, 9c5e24246c (`lib/pkp`
+  cf3f984335, `lib/ui-library` d4e01883) for steps 18 to 27. Code reads:
+  `stable-3_4_0` 0aec65441 (`lib/pkp` df13621c2d), `stable-3_3_0`
+  8e72fc883 (`lib/pkp` d446601ebe).
 - Code reads, on each branch: the entries of the keys above in OMP's
   `locale/en` (`en_US` on 3.3), `locale/fr_CA` and `locale/fr` (`fr_FR`
   on 3.4 and 3.3), the theme's `locale/fr_CA/locale.po`, and the
@@ -525,22 +667,24 @@ Small: 26 texts entered on Weblate and no code, tried as a diff.
   `locale/*/locale.po`, `manager.po` and `submission.po` of OMP and the
   theme's `locale.po` for the counts (an empty `msgstr` counts as
   missing).
-- 3.4 (code): the same 19 entries empty or absent in `fr_CA` (the two
-  round names do not exist there), the same
-  templates. 3.3 (code): `catalog.published`, `catalog.forthcoming`,
+- 3.4, read in the code: the same entries as on `main` are empty or
+  absent in `fr_CA`, apart from the two round names, which do not exist
+  there, and the same templates print them. 3.3, read in the code: `catalog.published`, `catalog.forthcoming`,
   `catalog.categories`, the two ISSN labels, the two view-page texts,
   `monograph.publicationFormatDetails`, `submission.editorName` and
   `submission.authorListSeparator` and `rt.metadata.pkp.dctype` empty
   in `fr_CA`, and the priced
   link without `{$format}`; the chapter keys and
   `doi.readerDisplayName` do not exist there.
-- Introduced: `git log -S` of each key on OMP's English locale files
-  (52df855c5, 2015-09-04, for `catalog.published` and
-  `catalog.categories`; 905eed2d37, 2016-02-03, for the priced link's
-  `{$format}`; 735e2044d, 2017-11-20, for `submission.editorName`;
-  bfe33f3e2, 2021-10-05, for the chapter texts) and on `locale/fr_CA`,
-  where the entries first appear, empty, in 3bcd14e06 (2023-01-30, the
-  locale files rearranged) and were absent before.
+- Introduced: `git log -S` of each key on OMP's English locale files,
+  OMP's `locale/fr_CA` and pkp-lib's `locale/fr_CA`. Besides the
+  commits the header and the Cause name: 735e2044d (2017-11-20) brought
+  `submission.editorName`, bfe33f3e2 (2021-10-05) the chapter texts.
+  The two lost texts on the release branches: OMP's tag `omp-3_1_1-4`
+  has `catalog.browseTitles` in `locale/fr_CA/locale.xml`, and
+  pkp-lib's `omp-stable-3_1_1` has `workflow.review.externalReview` in
+  `locale/fr_CA/submission.xml`; neither key is in any `fr_CA` file of
+  OMP's or pkp-lib's `stable-3_1_2`, while OMP's `en_US` has both.
 - Upstream: pkp/pkp-lib and pkp/omp searched by "fr_CA", "French
   translation OMP", the key names (`catalog.published`, `viewableFile`,
   `chapterCreated`, `withoutChapter`, `directSales.purchase`,
@@ -564,46 +708,39 @@ Small: 26 texts entered on Weblate and no code, tried as a diff.
   [`omp-french-roles-stage-raw-key/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-roles-stage-raw-key/walk.js),
   which takes steps 14 to 16 on OJS, OMP and OPS and step 17 on OMP,
   and changes nothing:
-  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js all shared/playwright/checks/issues/omp-french-roles-stage-raw-key/walk.js`
-  (`NB=1` in front reads the same screens in English). Walked on `main`
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js all shared/playwright/checks/issues/omp-french-roles-stage-raw-key/walk.js`.
+  Walked on `main`
   and `stable-3_5_0` (pkp/datasets c657990, 2026-10-01), and on `main`
   with the diff in and out: OMP showed the code in the column, the
   window and the workflow menu on both lines; OJS headed its columns
   "Soumission", "Évaluation", "Révision", "Production" and OPS its one
   column "Production". The script opens step 15's page and step 17's
-  workflow by their addresses. 3.5 tip for this walk: c7b45f88e
-  (`lib/pkp` 1fb843f491). 3.4 and 3.3 (code): the entry is empty in
-  OMP's `locale/fr_CA/submission.po` on `upstream/stable-3_4_0`
-  (0aec65441) and `upstream/stable-3_3_0` (8e72fc883), pkp-lib's
-  `locale/fr_CA/submission.po` has none on `origin/stable-3_4_0`
-  (32b0f4b4af) and `origin/stable-3_3_0` (f6ab331645), and
-  `UserGroupGridHandler` heads the columns from
+  workflow by their addresses. 3.4 and 3.3, read in the code: the
+  entry is empty in OMP's `locale/fr_CA/submission.po`, pkp-lib's
+  `locale/fr_CA/submission.po` has none, and `UserGroupGridHandler`
+  heads the columns from
   `WorkflowStageDAO::getWorkflowStageTranslationKeys()` on both. The
   2019 trace: `git log -S'workflow.review.externalReview'` on OMP's and
   pkp-lib's `locale/fr_CA` (OMP c7be6b7f3, 2013-08-07, moved the text
-  to pkp-lib; pkp-lib ceef9fdb49 removed it).
+  to pkp-lib).
 - The workflow screen (spec U24 A11, steps 18 to 20): read by
   [`omp-french-workflow-raw-keys/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-workflow-raw-keys/walk.js),
   which signs in as `dbarnes`, changes the language as in step 14 and
   takes steps 18 to 20 on OMP, and changes nothing:
-  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js omp shared/playwright/checks/issues/omp-french-workflow-raw-keys/walk.js`
-  (`NB=1` in front reads the same screens in English;
-  `PKP_E2E_LINE=stable-3_5_0` in front for 3.5). Walked on `main` and
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js omp shared/playwright/checks/issues/omp-french-workflow-raw-keys/walk.js`.
+  Walked on `main` and
   `stable-3_5_0` (pkp/datasets e8dafbc, 2026-10-02), and on `main` with
   the diff in and out. No request failed. The French address alone,
-  without step 14's language change, was not tried.
-  Tips for this walk: OMP `main` 3b0ecf794c (`lib/pkp` 3dc90c81a6,
-  `lib/ui-library` 280f98c5); `stable-3_5_0` 9c5e24246c (`lib/pkp`
-  cf3f984335, `lib/ui-library` d4e01883). Code reads on both:
+  without step 14's language change, was not tried. Code reads on both:
   `WorkflowWorkTypeOMP.vue`, `ExtendedStagesLabels` in
   `useSubmission.js`, `getReviewItems()` in
   `useWorkflowNavigationConfigOJS.js`, on `main`
   `InsertSummaryOfChangesModal.vue`, the `submission.po` of each of
   OMP's 33 translations for the two round keys, OMP's and pkp-lib's `locale/en`, `locale/fr_CA`
-  and `locale/fr` entries of the four keys. 3.4 and 3.3 (code):
-  `common.publication` and `submission.workflowType.editedVolume.label`
-  are empty in `locale/fr_CA` on `upstream/stable-3_4_0` (0aec65441)
-  and `upstream/stable-3_3_0` (8e72fc883), where
+  and `locale/fr` entries of the four keys. 3.4 and 3.3, read in the
+  code: `common.publication` and
+  `submission.workflowType.editedVolume.label` are empty in
+  `locale/fr_CA`, where
   `pages/workflow/WorkflowHandler` passes them to
   `templates/workflow/workflow.tpl` for the same control; the two round
   names do not exist before 3.5. Upstream searched 2026-10-02 in
@@ -615,15 +752,39 @@ Small: 26 texts entered on Weblate and no code, tried as a diff.
   `##submission.stage.internalReviewWithRound##` on the dashboard
   behind the workflow, not read as a step), the statistics download's
   column, French (France).
-- Fix trial:
-  `node bin/try-fix.js apply shared/playwright/checks/issues/omp-french-book-page-raw-keys/fix.diff omp`,
-  the kept scripts, then `revert`.
-- Not driven: 3.4 and 3.3 (code only); the nine keys listed under Cause
-  as "by the code"; the External Review stage's name in the "Rôles"
-  list's filter, the stage notice and the statistics page (code); languages other than French (Canada) and English
-  (code only); the diff on 3.5.
+- The catalog pages and the "Browse" block (spec U16 A15, spec U68 A8,
+  steps 21 to 27): taken by
+  [`omp-french-catalog-raw-keys/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-catalog-raw-keys/walk.js),
+  which then reads the same pages in English (the control). It changes
+  the press's appearance settings and book 14's catalog flags, so it
+  runs on an install freshly loaded from the default dataset:
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js omp shared/playwright/checks/issues/omp-french-catalog-raw-keys/walk.js`.
+  Walked on `main` and `stable-3_5_0`, on PostgreSQL, from pkp/datasets
+  e8dafbc (2026-10-02), and on `main` with the diff in and out. The two
+  lines read the same codes. No request failed and no script error
+  showed. 3.4 and 3.3, read in the code: the six catalog entries are
+  empty in OMP's `locale/fr_CA`, pkp-lib's `locale/fr_CA` has none of
+  them, and the same templates print
+  them; the Browse block's `locale/fr_CA/locale.po` holds a header
+  only on 3.4, and 3.3 has no `fr_CA` folder for it. The history:
+  `git log -S` of each key on OMP's `locale/en`, `en_US` and `fr_CA`
+  and on pkp-lib's `locale/fr_CA`. Upstream searched 2026-10-02 in
+  pkp/pkp-lib and pkp/omp by `catalog.browseTitles`,
+  `catalog.category.heading`, `plugins.block.browse`, "browse block
+  French", "fr_CA catalog", "New Releases" French and "missing
+  translation OMP catalog": nothing on this fault
+  (`pkp/pkp-lib#4901`, a missing `category.noTitlesSection` key, is
+  another key, closed).
+- Fix trial: the kept scripts on `main` with the diff applied to OMP's
+  checkout, and again with it taken out. After "Volume édité" replaced
+  the French (France) "Ouvrage collectif" in the diff, steps 18 to 20
+  were walked again with the diff in.
+- Not driven: 3.4 and 3.3 (read in the code only); the nine keys the
+  Cause lists as read in the code; the External Review stage's name in
+  the "Rôles" list's filter, the stage notice, the statistics page and
+  the export plugins' lists (read in the code); languages other than
+  French (Canada) and English (read in the locale files only); the diff
+  on 3.5.
 - Unverified: whether Weblate already holds French (Canada) texts for
-  these keys that have not reached the branches. The Custom Locale
-  plugin, which edits translations, and the Default Translation plugin
-  were not tried: neither is installed, and the Plugin Gallery does not
-  load on the test install.
+  these keys that have not reached the branches. The Custom Locale and
+  Default Translation plugins were not tried.

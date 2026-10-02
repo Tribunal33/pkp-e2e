@@ -675,7 +675,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | A series' page shows no name, description or ISSN, and ignores the series' order | 🐞 | user-visible | — |
 | [A4](#a4) | A series' picture does not lead to its full size | 🐞 | minor | — |
 | [A7](#a7) | A press's category page sets no featured book apart and never lists new releases | 🐞 | user-visible | — |
-| [A8](#a8) | In French the catalog pages and the "Browse" block show raw text codes | 🐞 | minor | — |
+| [A8](#a8) | In French the catalog pages and the "Browse" block show raw text codes | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | The catalog's old search address answers a not-found page | 🐞 | invisible | — |
 | [A11](#a11) | With every series inactive, the "Browse" block shows the line "Series" with nothing under it | 🐞 | minor | — |
 | [A5](#a5) | The "Browse" block and the catalog's "Series:" links disagree about inactive and empty series | ❓ | minor | — |
@@ -773,7 +773,7 @@ share, in December 2018: a regression.
 Since: 2018-12-17 (eight years) · Basis: probe, 2026-09-27; its start, commit. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — The catalog pages and the "Browse" block in French show raw text codes** · 🐞 · minor.
+**A8 — The catalog pages and the "Browse" block in French show raw text codes** · 🐞 · medium.
 With French as the interface language, the count reads
 "##catalog.browseTitles##", and "All Books", "New Releases", "Featured",
 "No titles have been published yet." and "No new releases are available
@@ -783,7 +783,7 @@ at this time." are replaced by codes of the same kind. The placed
 in place of "Browse", "Categories" and "Series". "Catalogue", "Séries",
 the page links and the block's "Nouveautés" are translated.
 Expected: French throughout.
-Basis: probe, 2026-09-27. <sup>f-a8</sup>
+Basis: probe, 2026-10-02. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — The catalog's old search address answers a not-found page** · 🐞 · invisible.
@@ -1319,6 +1319,7 @@ file does), hence the block's codes. The Categories spec saw
 "##catalog.browseTitles##" and "##catalog.category.heading##" on a press's
 category page in French (2026-09-25, its A15). Live-probed 2026-09-27
 (note td12). The empty strings and the expectation are read from the code.
+Re-walked 2026-10-02 on main and stable-3_5_0 (codes on both; 3.4 and 3.3 the same empty entries by code). Issue report: [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) ([docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md)), shared with [Categories A15](U16-categories.md#a15).
 
 <a id="fn-f-a9"></a>
 **f-a9** — OMP `4d4f2c519` "Clean up old code" (2026-01-14) removed

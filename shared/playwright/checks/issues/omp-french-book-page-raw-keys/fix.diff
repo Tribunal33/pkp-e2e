@@ -22,6 +22,41 @@
  
  msgid "catalog.selectSeries"
  msgstr "Choisir une série"
+@@ -666,10 +666,10 @@
+ msgstr ""
+ 
+ msgid "catalog.noTitles"
+-msgstr ""
++msgstr "Aucun titre n’a encore été publié."
+ 
+ msgid "catalog.noTitlesNew"
+-msgstr ""
++msgstr "Aucune nouveauté n’est disponible pour l’instant."
+ 
+ msgid "catalog.noTitlesSearch"
+ msgstr ""
+@@ -678,7 +678,7 @@
+ msgstr "En vedette"
+ 
+ msgid "catalog.featured"
+-msgstr ""
++msgstr "En vedette"
+ 
+ msgid "catalog.featuredBooks"
+ msgstr "Livres en vedette"
+@@ -690,10 +690,10 @@
+ msgstr ""
+ 
+ msgid "catalog.category.heading"
+-msgstr ""
++msgstr "Tous les livres"
+ 
+ msgid "catalog.newReleases"
+-msgstr ""
++msgstr "Nouveautés"
+ 
+ msgid "catalog.dateAdded"
+ msgstr "Ajouté le"
 @@ -702,13 +702,13 @@
  msgstr "Renseignements sur la publication"
  
@@ -95,7 +130,7 @@
  
  msgid "submission.workflowType.editedVolume.label"
 -msgstr ""
-+msgstr "Ouvrage collectif"
++msgstr "Volume édité"
  
  msgid "submission.workflowType.editedVolume"
  msgstr "Volume édité"
@@ -126,6 +161,15 @@
  
  msgid "submission.upload.fileContents"
  msgstr ""
+@@ -330,7 +330,7 @@
+ msgstr ""
+ 
+ msgid "catalog.browseTitles"
+-msgstr ""
++msgstr "{$numTitles} titre(s)"
+ 
+ msgid "publication.catalogEntry"
+ msgstr "Catalogue"
 @@ -467,16 +467,16 @@
  msgstr ""
  
@@ -166,6 +210,38 @@
 +
 +msgid "plugins.themes.default.displayStats.downloads"
 +msgstr "Téléchargements"
+--- a/plugins/blocks/browse/locale/fr_CA/locale.po
++++ b/plugins/blocks/browse/locale/fr_CA/locale.po
+@@ -6,3 +6,29 @@
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+ "X-Generator: Weblate\n"
++
++msgid "plugins.block.browse"
++msgstr "Parcourir"
++
++msgid "plugins.block.browse.displayName"
++msgstr "Bloc Parcourir"
++
++msgid "plugins.block.browse.description"
++msgstr ""
++"Ce plugiciel fournit des outils de navigation (Parcourir) dans la barre "
++"latérale."
++
++msgid "plugins.block.browse.settings"
++msgstr "Paramètres"
++
++msgid "plugins.block.browse.settings.title"
++msgstr "Options de l'outil Parcourir"
++
++msgid "plugins.block.browse.category"
++msgstr "Catégories"
++
++msgid "plugins.block.browse.series"
++msgstr "Séries"
++
++msgid "plugins.block.browse.newReleases"
++msgstr "Nouveautés"
 --- a/locale/fr/locale.po
 +++ b/locale/fr/locale.po
 @@ -1587,7 +1587,7 @@

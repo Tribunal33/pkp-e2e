@@ -10,7 +10,7 @@
   - 3.3: none (code; the older users list, no invitations)
 - **Introduced** not traced: no change broke it. The English texts came with the role invitations and the new users list (`pkp/pkp-lib#9658`, [7e3a26ea83](https://github.com/pkp/pkp-lib/commit/7e3a26ea83db5428a8747b7dba574259e749cf98) 2024-09-26, [e8bdca4673](https://github.com/pkp/pkp-lib/commit/e8bdca46737fb77d39a7a041cec5f7526dd07835) 2024-10-31, [4729a3cd9c](https://github.com/pkp/pkp-lib/commit/4729a3cd9cabc98712aaf91a227d984bdce7dcb9) 2025-02-04), and French (Canada) never received them
 - **Upstream** none found (2026-10-02)
-- **Tracked in** spec U53 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a11), spec U47 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a7) (the "Media" page's "More Actions")
+- **Tracked in** spec U53 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a11), spec U47 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a7) (the "Media" page's "More Actions"), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (the "Categories" tab's "More Actions")
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -208,7 +208,13 @@ Reach:
   button with `common.moreActions`. In ui-library,
   `useMediaFileManagerConfig.js` gives that column `headerSrOnly: true`,
   and `MediaFileManagerCellActions.vue` sets the button's `aria-label`.
-  The page's visible codes (`publication.media`,
+  The "Categories" tab (Settings › Journal, Press or Server ›
+  "Catégories") does the same through `useCategoryManagerConfig.js` and
+  `CategoryManagerCellMoreActions.vue` (walked on `main`, all three
+  applications, without the fix). That tab's other codes are texts that
+  came to `main` with its new table and have no French yet; on 3.5 the
+  older table is French throughout (walked).
+  The "Media" page's visible codes (`publication.media`,
   `publication.mediaFiles.*`, `common.selectedFile`,
   `common.clickToUploadFiles`, `common.upload.addFiles`) are texts that
   came to `main` with the page in
@@ -398,3 +404,15 @@ pkp-lib's tried as a diff.
   while walking Steps 7 to 10. The page reads `common.moreActions` from
   the same text bundle as the users list, where the trial gave "Plus
   d'actions", so the same result is expected there but was not seen.
+- The "Categories" tab (spec U16 A15): read by
+  [`omp-french-catalog-raw-keys/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-catalog-raw-keys/walk.js)
+  in its `MODE=tab`, which signs in as `dbarnes`, opens
+  `/index.php/publicknowledge/fr_CA/management/settings/context` and
+  its "Catégories" tab, and lists the codes on it; it changes nothing:
+  `MODE=tab PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js all shared/playwright/checks/issues/omp-french-catalog-raw-keys/walk.js`
+  (`PKP_E2E_LINE=stable-3_5_0` in front for 3.5). Walked 2026-10-02 on
+  `main` (pkp/datasets e8dafbc): the last column's hidden heading and
+  each row's "…" button read `##common.moreActions##` on OJS, OMP and
+  OPS. On `stable-3_5_0` the older table showed no code on any of the
+  three. The fix was not applied for this read: the tab takes the same
+  text from the same bundle.
