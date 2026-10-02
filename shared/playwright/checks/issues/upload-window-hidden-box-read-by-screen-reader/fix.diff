@@ -1,0 +1,20 @@
+--- a/lib/pkp/js/controllers/wizard/fileUpload/form/FileUploadFormHandler.js
++++ b/lib/pkp/js/controllers/wizard/fileUpload/form/FileUploadFormHandler.js
+@@ -337,7 +337,7 @@
+ 	 */
+ 	$.pkp.controllers.wizard.fileUpload.form.FileUploadFormHandler.prototype.
+ 			hideUploader_ = function() {
+-		this.$uploader_.addClass('pkp_screen_reader');
++		this.$uploader_.hide();
+ 	};
+ 
+ 
+@@ -347,7 +347,7 @@
+ 	 */
+ 	$.pkp.controllers.wizard.fileUpload.form.FileUploadFormHandler.prototype.
+ 			showUploader_ = function() {
+-		this.$uploader_.removeClass('pkp_screen_reader');
++		this.$uploader_.show();
+ 		// Reset the button position
+ 		$.pkp.classes.Handler.getHandler(this.$uploader_)
+ 				.pluploader.refresh();

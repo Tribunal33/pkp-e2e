@@ -937,6 +937,7 @@ Left out of the scenarios above, by reason:
   - "Show events from prior versions" ticked on a file in "Files for Review": the original file's rows are added ([A4](#a4)): the guard the issue report proposes
   - "Download All Files" on "Submission Files": the zip named with one hyphen, "{number}-submission-files.zip" ([A12](#a12)): the guard the issue report proposes; likely an assertion in scenario 4
   - the reviewer's "Review Files" search for a text no file name contains: "No Files" ([A20](#a20)): the guard the issue report proposes
+  - step 1 of the upload wizard before a component is chosen: the upload box absent from the accessibility snapshot, and each drop-down found by its role and label ([A9](#a9)): the guards the two issue reports propose
 - **Nothing new to test**:
   - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
   - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
@@ -998,7 +999,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A file's "History" tab: ticking "Show events from prior versions" reloads the same rows | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A galley's "Change File" shows the heading "Current file" with no file name under it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | An Author is offered "Upload" above "Revisions Uploaded" before revisions are requested, then refused | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A9](#a9) | A screen reader reads step 1's hidden upload box, and the step's two drop-downs have no name | 🐞 | minor | — |
+| [A9](#a9) | In the upload window, a screen reader reads the hidden "Upload File" box before a component is chosen | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | "Add Note" with an empty box posts a note with no text, on a file's "Notes" and in "Activity Log & Notes" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | Submission wizard: "Save" in a file's "Edit" panel with no component chosen shows "An unexpected error has occurred" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | "Download All Files" names its zip with two hyphens after the submission's number | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1145,13 +1146,24 @@ its name? Lean: yes; the list's "No" column already numbers every file.
 Basis: probe. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
-**A9 — Step 1 of the upload wizard misleads screen readers** · 🐞 · minor.
-Before a component is chosen, step 1's upload box is hidden on screen,
-yet a screen reader still reads "Drag and drop a file here to begin
-upload", "Upload File" and "Choose File". The two drop-downs above it
-(the revise list and the component list) have no name for a screen
-reader: their labels are not tied to them.
-Basis: probe. <sup>[f-a9](#fn-a9)</sup>
+**A9 — In the upload window, a screen reader reads the hidden "Upload File" box before a component is chosen** · 🐞 · low.
+Step 1 of the upload window shows no upload box until the file's
+component ("Article Text" and the like) or a file to revise is chosen
+in the drop-downs above it. The box is only moved off screen, so a
+screen reader reads it all the same: "Drag and drop a file here to
+begin upload", a button "Upload File" and a button "Choose File".
+
+A screen reader user who presses that "Upload File" gets the file
+picker, and the chosen file is uploaded and refused. The window shows
+"Errors occurred processing this form" and "Missing or invalid
+component!" for six seconds and is otherwise as before. The refused
+file is discarded.
+
+The step's two drop-downs (the revise list and the component list) have
+no name for a screen reader either, because their labels are not tied to
+them: moving with Tab, a screen reader user hears only each one's
+current choice. That is a cause of its own, with its own issue report.
+Basis: probe, 2026-10-02. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
 **A10 — "Add Note" with an empty box posts a note with no text, on a file's "Notes" and in "Activity Log & Notes"** · 🐞 · low.
@@ -2335,6 +2347,7 @@ options read "article.pdf", "article.pdf", "close-step1.pdf",
 snapshot of step 1 before a component was chosen held two unnamed comboboxes,
 "Drag and drop a file here to begin upload", the button "Upload File" and the
 button "Choose File", while the screenshot showed no box.
+Issue report: [docs/issues/U36-A9-upload-window-hidden-box-read-by-screen-reader.md](../issues/U36-A9-upload-window-hidden-box-read-by-screen-reader.md). The unnamed drop-downs: [docs/issues/U36-A9-upload-window-drop-downs-unnamed.md](../issues/U36-A9-upload-window-drop-downs-unnamed.md).
 
 <a id="fn-a10"></a>
 **f-a10** — Note v (`NewNoteForm` has no check on the text). Live-probed

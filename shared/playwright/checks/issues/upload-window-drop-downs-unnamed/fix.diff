@@ -1,0 +1,18 @@
+--- a/lib/pkp/templates/controllers/wizard/fileUpload/form/fileUploadForm.tpl
++++ b/lib/pkp/templates/controllers/wizard/fileUpload/form/fileUploadForm.tpl
+@@ -170,13 +170,13 @@
+ 			{else}
+ 				{assign var=revisionSelectTitle value="submission.upload.selectOptionalFileToRevise"}
+ 			{/if}
+-			{fbvFormSection title=$revisionSelectTitle required=$revisionOnly}
++			{fbvFormSection title=$revisionSelectTitle required=$revisionOnly for="revisedFileId"}
+ 				{fbvElement type="select" name="revisedFileId" id="revisedFileId" from=$submissionFileOptions selected=$revisedFileId translate=false}
+ 			{/fbvFormSection}
+ 		{/if}
+ 
+ 		{if $showGenreSelector}
+-			{fbvFormSection title="submission.upload.fileContents" required=true}
++			{fbvFormSection title="submission.upload.fileContents" required=true for="genreId"}
+ 				{capture assign="defaultLabel"}{translate key="submission.upload.selectComponent"}{/capture}
+ 				{fbvElement type="select" name="genreId" id="genreId" from=$submissionFileGenres translate=false defaultLabel=$defaultLabel defaultValue="" required="true" selected=$genreId required=true}
+ 			{/fbvFormSection}
