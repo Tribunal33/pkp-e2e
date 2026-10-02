@@ -1,0 +1,33 @@
+--- a/plugins/pubIds/urn/js/checkNumber.js
++++ b/plugins/pubIds/urn/js/checkNumber.js
+@@ -29,8 +29,12 @@
+ 		 *  the last number of the quotient
+ 		 *  before the decimal point is the check number.
+ 		 *
+-		 * @param {string} urn
+-		 * @param {string} urnPrefix
++		 * The check number is worked out over the whole URN, prefix included,
++		 * as URNPubIdPlugin::_calculateCheckNo() does for the URNs the server
++		 * builds.
++		 *
++		 * @param {string} urn The whole URN, prefix included
++		 * @param {string} urnPrefix Not used; kept for existing callers
+ 		 */
+ 		getCheckNumber: function(urn, urnPrefix) {
+ 			var newURN = '',
+@@ -47,11 +51,11 @@
+ 						'-': '39', ':': '17', '_': '43', '/': '45',
+ 						'.': '47', '+': '49'
+ 					},
+-					i, j, char, sum, lastNumber, quot, quotRound, quotString, newSuffix;
++					urnLower, i, j, char, sum, lastNumber, quot, quotRound, quotString;
+ 
+-			suffix = urn.replace(urnPrefix, '').toLowerCase();
+-			for (i = 0; i < suffix.length; i++) {
+-				char = suffix.charAt(i);
++			urnLower = urn.toLowerCase();
++			for (i = 0; i < urnLower.length; i++) {
++				char = urnLower.charAt(i);
+ 				newURN += conversionTable[char];
+ 			}
+ 			sum = 0;

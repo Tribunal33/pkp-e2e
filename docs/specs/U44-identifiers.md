@@ -817,6 +817,11 @@ Left out of the scenarios above, by reason:
   - the guard for OMP5 (issue report `docs/issues/U44-OMP5-press-file-re
     fused-publisher-id-box-vanishes.md`): a press file's "Identifiers"
     tab keeping the "Publisher ID" box after a refused value
+  - the guard for A6 (issue report
+    `docs/issues/U44-A6-urn-check-digit-from-suffix-only.md`): "Add
+    Check Number" on `urn:nbn:de:0000-abc` giving
+    `urn:nbn:de:0000-abc2`, the whole-URN digit, and "Assign" matching
+    the tab's own preview rule
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -887,7 +892,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | A publisher ID saved on a galley's, chapter's or format's tab can never be removed | 🐞 | minor | — |
 | [A4](#a4) | The Identifiers page refuses an article's own URN as "already in use" when saved again or on a new version | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A new version's galleys keep the old publisher ID, and their tab then refuses every save | 🐞 | minor | — |
-| [A6](#a6) | "Add Check Number" and "Assign" compute a different check digit from the one the app appends itself | 🐞 | user-visible | — |
+| [A6](#a6) | "Add Check Number" and "Assign" end URNs with the wrong check digit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | The tab's assign box reads "Assign the URN to this galley" with the URN left out | 🐞 | minor | — |
 | [A8](#a8) | A suffix pattern of spaces is refused with a raw text code | 🐞 | minor | — |
 | [A9](#a9) | "Assign" is offered on the "Identifiers" page to a role that cannot save it | 🐞 | minor | — |
@@ -964,16 +969,21 @@ value is kept ([A2](#a2)).
 Basis: probe, 2026-09-24. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — Two different check digits for the same URN** · 🐞 · user-visible.
-With "Check Number" ticked, the digit that "Add Check Number" appends,
-and the one "Assign" appends on the article's page, are worked out from
-the suffix alone. The URNs the app builds itself from a pattern on the
-tabs and in "Publish Issue" get their digit from the whole URN, prefix
-included, which is how national libraries check it. With the prefix
-`urn:nbn:de:0000-` and the suffix `abc`, "Add Check Number" appends
-"0" where the whole-URN rule gives "2", so the URN handed to the
-library does not validate.
-Basis: probe, 2026-09-24. <sup>f-a6</sup>
+**A6 — "Add Check Number" and "Assign" end URNs with the wrong check digit** · 🐞 · medium.
+A journal or press can have the URN plugin add a check digit to every
+URN ("Check Number", off by default). The digit is meant to cover the
+whole URN, prefix included. Two buttons in the browser work it out from
+the part after the prefix alone, so the URNs they make usually end in
+the wrong digit. With the prefix `urn:nbn:de:0000-`, "abc" becomes
+"abc0" where the whole URN gives "abc2". The two buttons are "Assign",
+on a submission's "Identifiers" page, and "Add Check Number", on that
+page and on the "Identifiers" tab of an issue, galley, chapter,
+publication format or file. The URNs the server makes from a pattern are
+right: the tabs' previews, "Publish Issue" and "Format Approval".
+Nothing on screen says the digit is wrong: the URN is saved as shown and
+appears on the reader pages as a link to the resolver. For "Assign"
+there is no way round, because the box cannot be typed in.
+Basis: probe, 2026-10-02. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — The assign box leaves the URN out** · 🐞 · minor.
@@ -1775,6 +1785,7 @@ server-built URN except `customId`) computes over the whole URN, per the
 algorithm its comment cites. Both run the same conversion table; for
 `urn:nbn:de:0000-abc` the suffix-only digit is 0 and the whole-URN
 digit 2 (worked with both routines, 2026-09-24). Live-probed 2026-09-24 (note q8).
+Issue report: [docs/issues/U44-A6-urn-check-digit-from-suffix-only.md](../issues/U44-A6-urn-check-digit-from-suffix-only.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `urnSuffixEdit.tpl` includes `urnAssignCheckBox.tpl` with
