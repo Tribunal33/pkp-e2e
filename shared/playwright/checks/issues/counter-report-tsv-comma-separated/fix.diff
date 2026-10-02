@@ -1,0 +1,22 @@
+--- a/lib/pkp/api/v1/stats/sushi/PKPStatsSushiController.php
++++ b/lib/pkp/api/v1/stats/sushi/PKPStatsSushiController.php
+@@ -378,7 +378,7 @@
+                 }
+             }
+             $report = array_merge($reportHeader, [['']], $reportColumnNames, $reportItems);
+-            return response()->withFile($report, [], count($reportItems));
++            return response()->withFile($report, [], count($reportItems), PKPRoutingProvider::RESPONSE_TSV);
+         }
+ 
+         $reportHeader = $report->getReportHeader();
+--- a/lib/pkp/classes/core/PKPRoutingProvider.php
++++ b/lib/pkp/classes/core/PKPRoutingProvider.php
+@@ -41,7 +41,7 @@
+     public const RESPONSE_TSV = [
+         'mime' => 'text/tab-separated-values',
+         'extension' => '.tsv',
+-        'separator' => '\t'
++        'separator' => "\t"
+     ];
+ 
+     protected static $globalMiddleware = [

@@ -1165,6 +1165,7 @@ Left out of the scenarios above, by reason:
   - a search phrase typed with double quotes on Statistics › "Articles", then each downloaded file's "Search Phrase" line parsed back to the phrase as typed (the guard for A8, once fixed)
   - Tab on Statistics › "Journal" stops on the "About journal statistics" icon and its text shows while it holds the focus (the guard for A7, once fixed)
   - on Site Settings › "Statistics", a refused Platform ID left in the box, "Platform" unticked, "Save" answers "Saved" (the guard for A10, once fixed)
+  - "Download" in "Report Settings" of a "Counter R5" report: the saved "counterReport.tsv" is tab-separated, its first line split on a tab giving "Report_Name" (the guard for A11, once fixed)
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1246,7 +1247,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Information icons show their text on mouse hover only: Tab skips them on the Statistics pages and in settings forms | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | Statistics downloads: a double quote in the search phrase or a filter's name breaks that line of the file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | Site administrator cannot save Site Settings › "Statistics" after unticking "Platform" over a mistyped Platform ID | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A11](#a11) | The COUNTER report downloads as "counterReport.tsv" but is comma-separated | 🐞 | minor | — |
+| [A11](#a11) | "Counter R5": the downloaded "counterReport.tsv" is comma-separated, not tab-separated | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OJS4](#ojs4) | Statistics › Issues: "Download Issues" leaves out every issue after the first 30, without saying so | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS5](#ojs5) | "Journal Article Requests (IR_A1)" lists investigation rows its header leaves out | 🐞 | minor | — |
 | [OJS6](#ojs6) | The COUNTER Release 4 file names its report by a cut-off code path | 🐞 | minor | — |
@@ -1426,13 +1427,21 @@ unticked "Platform" saves as usual.
 Basis: probe, 2026-10-02. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The COUNTER ".tsv" file is comma-separated** · 🐞 · minor.
-"Download" in "Report Settings" saves "counterReport.tsv", a name that
-promises tab-separated values, but its lines are comma-separated with
-quoted text, so a spreadsheet program opening it as tab-separated shows
-each line in one column. Expected: tab-separated values, as the name
-says and as COUNTER's tabular reports have them.
-Basis: probe, 2026-09-27. <sup>f-a11</sup>
+**A11 — "Counter R5": the downloaded "counterReport.tsv" is comma-separated, not tab-separated** · 🐞 · low.
+On Statistics › "Counter R5", an editor presses "Edit" on a report and
+then "Download" in "Report Settings". The browser saves
+"counterReport.tsv", a name that promises tab-separated values, but the
+file's lines are comma-separated with quoted text
+(`Report_Name,"Platform Master Report"`) and hold no tab. Expected:
+tab-separated values, as the name says.
+
+A program that reads the file as tab-separated puts each line in one
+column. Read as comma-separated, the file is sound.
+
+Each report the "Counter R5" page lists downloads this way, and a
+program that asks the server for a report as tab-separated values,
+without the page, gets the same comma-separated answer.
+Basis: probe, 2026-10-02. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — The date range list does not close on Escape** · ❓ · minor.
@@ -2428,6 +2437,7 @@ page asks for `Accept: text/tab-separated-values` and names the file
 `counterReport.tsv` (fn-l); the answer is `text/csv` with
 `Content-Disposition: attachment; filename=user-report-2026-09-27.csv`,
 which the page ignores.
+Issue report: [docs/issues/U64-A11-counter-report-tsv-comma-separated.md](../issues/U64-A11-counter-report-tsv-comma-separated.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — fn-c (`DateRange.vue`: no key handler, the list closes on
