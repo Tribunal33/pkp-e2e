@@ -972,6 +972,11 @@ Left out of the scenarios above, by reason:
     published article, book or preprint keeping its "Published {date}" line
     unchanged after "Create New Version" makes a still unpublished version,
     in every app
+  - the guard for OPS4 (issue reports
+    `docs/issues/U49-OPS4-first-post-thanked-for-new-version.md` and `docs/issues/U49-OPS4-posted-acknowledgement-raw-signature.md`): a
+    preprint's first post emailing its contributors "Preprint Posted
+    Acknowledgement", a later version "New Version Posted Acknowledgement",
+    each ending in the server's signature rather than a raw "{$signature}"
 - **Rarely met**:
   - the publish button skipping the details panel on a journal with
     issues, after a Publication Settings save on a version that already
@@ -1096,7 +1101,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | Editor publishing an article without an issue gets an error when a contributor has a verified ORCID iD | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | A preprint posted with a future "Date Posted" stays "Scheduled" for good and never goes public | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OPS4](#ops4) | Every post, the first included, sends "New Version Posted Acknowledgement"; the first-post acknowledgement never goes out | 🐞 | user-visible | — |
+| [OPS4](#ops4) | Every post, the first included, sends "New Version Posted Acknowledgement"; the first-post acknowledgement never goes out | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A1](#a1) | The new-version email announces itself to editors but goes to every stage-assigned user, the submitting author included | ❓ | user-visible | — |
 | [A2](#a2) | Publishing is offered to managers only, although the app's deeper plumbing names Section Editors and Assistants; on a preprint server that leaves Moderators without a Post button | ❓ | user-visible | — |
 | [A3](#a3) | A published non-final version leaves the submission itself listed as unpublished, and a press's catalog page down | ❓ | user-visible | — |
@@ -1408,15 +1413,14 @@ invitation text and the plumbing expect a control the current author view
 lost. Basis: code. <sup>[f-ops3](#fn-ops3)</sup>
 
 <a id="ops4"></a>
-**OPS4 — First-time authors are thanked for "a new version"** · 🐞 ·
-user-visible.
+**OPS4 — First-time authors are thanked for "a new version"** · 🐞 · low.
 Every post sends the contributors "New Version Posted Acknowledgement",
 the very first post of a preprint included. A first-time author therefore
 reads "Thank you for posting a new version of your preprint… The new
 version is now available." The "Preprint Posted Acknowledgement" template
 meant for the first post is never sent at all. The acknowledgement body
 also ends with a raw "{$signature}" placeholder. Since: 2026-08-29 ·
-Basis: probe. <sup>[f-ops4](#fn-ops4)</sup>
+Basis: probe, 2026-10-02. <sup>[f-ops4](#fn-ops4)</sup>
 
 <a id="ops5"></a>
 **OPS5 — "Posted" and "published" split the same screen** · ❓ · minor.
@@ -2389,6 +2393,8 @@ your preprint… The new version is now available. If you have any
 questions, please contact me.{$signature}" — the "{$signature}"
 rendered raw; "Preprint Posted Acknowledgement" appeared in no mailbox
 (recipient-scoped Mailpit).
+Issue report: [docs/issues/U49-OPS4-first-post-thanked-for-new-version.md](../issues/U49-OPS4-first-post-thanked-for-new-version.md).
+Issue report: [docs/issues/U49-OPS4-posted-acknowledgement-raw-signature.md](../issues/U49-OPS4-posted-acknowledgement-raw-signature.md).
 
 <a id="fn-ops5"></a>
 **f-ops5** — Live-probed 2026-08-29 (scratch server): after a post the

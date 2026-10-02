@@ -1,0 +1,17 @@
+--- a/classes/observers/listeners/SendPostedAcknowledgement.php
++++ b/classes/observers/listeners/SendPostedAcknowledgement.php
+@@ -51,9 +51,11 @@
+             return;
+         }
+ 
+-        $mailableClass = $event->publication->getData('version') == 1
+-            ? PostedAcknowledgement::class
+-            : PostedNewVersionAcknowledgement::class;
++        // The first post of a preprint is the post of its only version, the
++        // same test Repository::publish() uses for its activity log entry.
++        $mailableClass = count($event->submission->getData('publications')) > 1
++            ? PostedNewVersionAcknowledgement::class
++            : PostedAcknowledgement::class;
+ 
+         $emailTemplate = Repo::emailTemplate()->getByKey(
+             $event->submission->getData('contextId'),

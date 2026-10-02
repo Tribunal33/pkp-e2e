@@ -1,0 +1,215 @@
+--- a/locale/bg/emails.po
++++ b/locale/bg/emails.po
+@@ -67,7 +67,7 @@
+ "<br />\n"
+ "Ако имате въпроси, моля свържете се с мен.<br />\n"
+ "<br />\n"
+-"{$signature}"
++"{$contextSignature}"
+ 
+ msgid "emails.submissionAckCanPost.subject"
+ msgstr "Потвърждение за изпращане на материал"
+@@ -132,7 +132,7 @@
+ "<p>Уважаема/и {$recipientName},</p><p>Благодарим ви, че публикувахте нова "
+ "версия на вашия препринт на {$contextName}. Новата версия вече е <a href=\""
+ "{$submissionPublishedUrl}\">налична</a>.</p><p>Ако имате въпроси, моля "
+-"свържете се с мен.</p>{$signature}"
++"свържете се с мен.</p>{$contextSignature}"
+ 
+ msgid "emails.passwordResetConfirm.body"
+ msgstr ""
+--- a/locale/cs/emails.po
++++ b/locale/cs/emails.po
+@@ -64,7 +64,7 @@
+ "<p>Vážený/á{$recipientName},</p><p>Děkujeme vám za zveřejnění nové verze "
+ "vašeho preprintu na {$contextName}. Nová verze je nyní <a href=\""
+ "{$submissionPublishedUrl}\">k dispozici</a>.</p><p>Pokud máte jakékoli "
+-"dotazy, kontaktujte mě, prosím.</p>{$signature}"
++"dotazy, kontaktujte mě, prosím.</p>{$contextSignature}"
+ 
+ msgid "emails.userRegister.body"
+ msgstr ""
+@@ -141,7 +141,7 @@
+ "<br />\n"
+ "V případě jakýchkoli dotazů mě, prosím, kontaktujte.<br />\n"
+ "<br />\n"
+-"{$signature}"
++"{$contextSignature}"
+ 
+ msgid "emails.submissionAckCanPost.subject"
+ msgstr "Poděkování za příspěvek"
+--- a/locale/de/emails.po
++++ b/locale/de/emails.po
+@@ -108,7 +108,7 @@
+ "<br />\n"
+ "Wenn Sie Fragen haben, kontaktieren Sie mich bitte.<br />\n"
+ "<br />\n"
+-"{$signature}"
++"{$contextSignature}"
+ 
+ msgid "emails.submissionAckCanPost.subject"
+ msgstr "Einreichungsbestätigung"
+@@ -232,7 +232,7 @@
+ "<p>Guten Tag {$recipientName},</p><p>vielen Dank, dass Sie eine neue Version "
+ "Ihres Preprints bei {$contextName} veröffentlichen. Die neue Version ist "
+ "nun<a href=\"{$submissionPublishedUrl}\">verfügbar</a>.</p><p>Kontakieren "
+-"Sie mich bitte, wenn Sie Fragen haben.</p>{$signature}"
++"Sie mich bitte, wenn Sie Fragen haben.</p>{$contextSignature}"
+ 
+ #~ msgid "emails.postedAck.description"
+ #~ msgstr ""
+--- a/locale/en/emails.po
++++ b/locale/en/emails.po
+@@ -103,7 +103,7 @@
+ "<br />\n"
+ "If you have any questions, please contact me.<br />\n"
+ "<br />\n"
+-"{$signature}"
++"{$contextSignature}"
+ 
+ msgid "emails.submissionAckCanPost.subject"
+ msgstr "Submission Acknowledgement"
+@@ -244,4 +244,4 @@
+ "<p>Dear {$recipientName},</p><p>Thank you for posting a new version of your "
+ "preprint to {$contextName}. The new version is now <a href="
+ "\"{$submissionPublishedUrl}\">available</a>.</p><p>If you have any "
+-"questions, please contact me.</p>{$signature}"
++"questions, please contact me.</p>{$contextSignature}"
+--- a/locale/es/emails.po
++++ b/locale/es/emails.po
+@@ -105,7 +105,7 @@
+ "\n"
+ "Si tiene alguna pregunta, no dude en ponerse en contacto conmigo.\n"
+ "\n"
+-"{$signature}"
++"{$contextSignature}"
+ 
+ msgid "emails.submissionAckCanPost.subject"
+ msgstr "Acuse de recibo del envío"
+--- a/locale/mk/emails.po
++++ b/locale/mk/emails.po
+@@ -109,7 +109,7 @@
+ "<br />\n"
+ "Доколку имате било какви прашања, Ве молам да ме контактирате.<br />\n"
+ "<br />\n"
+-"{$signature}"
++"{$contextSignature}"
+ 
+ msgid "emails.submissionAckCanPost.subject"
+ msgstr "Потврда за поднесување"
+@@ -229,7 +229,7 @@
+ "<p>Драг {$recipientName},</p><p>Ви благодариме за објавувањето на нова "
+ "верзија на Вашиот препринт во {$contextName}.Новата верзија сега е<a href=\""
+ "{$submissionPublishedUrl}\">достапна</a>.</p><p>Ако имате било какви "
+-"прашања, Ве молиме контактирајте не.</p>{$signature}"
++"прашања, Ве молиме контактирајте не.</p>{$contextSignature}"
+ 
+ msgid "emails.editorDecisionRevertInitialDecline.body"
+ msgstr ""
+--- a/locale/pt_BR/emails.po
++++ b/locale/pt_BR/emails.po
+@@ -108,7 +108,7 @@
+ "<br />\n"
+ "Se você tiver alguma dúvida, entre em contato comigo. <br />\n"
+ "<br />\n"
+-"{$signature}"
++"{$contextSignature}"
+ 
+ msgid "emails.submissionAckCanPost.subject"
+ msgstr "Agradecimento pela Submissão"
+@@ -227,7 +227,7 @@
+ "<p>Prezado(a) {$recipientName},</p><p>Obrigado por postar uma nova versão de "
+ "seu preprint em {$contextName}. A nova versão agora está <a href="
+ "\"{$submissionPublishedUrl}\">disponível</a>.</p><p>Se você tiver alguma "
+-"dúvida, entre em contato comigo.</p>{$signature}"
++"dúvida, entre em contato comigo.</p>{$contextSignature}"
+ 
+ msgid "emails.submissionAckCanPost.body"
+ msgstr ""
+--- a/locale/uk/emails.po
++++ b/locale/uk/emails.po
+@@ -61,7 +61,7 @@
+ "<br />\n"
+ "Якщо є питання, звертайтесь до мене.<br />\n"
+ "<br />\n"
+-"{$signature}"
++"{$contextSignature}"
+ 
+ msgid "emails.submissionAckCanPost.subject"
+ msgstr "Розміщення Підтвердження"
+@@ -144,7 +144,7 @@
+ "<p>Шановний {$recipientName},</p><p>Дякуємо за розміщення нової версії "
+ "Вашого препринту у {$contextName}. Нова версія вже <a href=\""
+ "{$submissionPublishedUrl}\">доступна</a>.</p><p>Якщо маєте запитання, будь "
+-"ласка зв'яжіться зі мною.</p>{$signature}"
++"ласка зв'яжіться зі мною.</p>{$contextSignature}"
+ 
+ msgid "emails.announcement.subject"
+ msgstr "Назва оголошення: {$announcementTitle}"
+--- /dev/null
++++ b/classes/migration/upgrade/v3_5_0/I00000_PostedAckContextSignature.php
+@@ -0,0 +1,54 @@
++<?php
++
++/**
++ * @file classes/migration/upgrade/v3_5_0/I00000_PostedAckContextSignature.php
++ *
++ * Copyright (c) 2026 Simon Fraser University
++ * Copyright (c) 2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * @class I00000_PostedAckContextSignature
++ *
++ * @brief The posted acknowledgements are sent from the server's contact, not
++ *   by a user, so nothing fills {$signature}: sign them with the server's
++ *   signature, {$contextSignature}, in the stored defaults and in every
++ *   customized copy.
++ */
++
++namespace APP\migration\upgrade\v3_5_0;
++
++use Illuminate\Support\Facades\DB;
++use PKP\install\DowngradeNotSupportedException;
++use PKP\migration\Migration;
++
++class I00000_PostedAckContextSignature extends Migration
++{
++    public const EMAIL_KEYS = ['POSTED_ACK', 'POSTED_NEW_VERSION_ACK'];
++
++    public function up(): void
++    {
++        $old = '{$signature}';
++        $new = '{$contextSignature}';
++        $like = '%' . $old . '%';
++
++        DB::update(
++            'UPDATE email_templates_default_data
++                SET body = replace(body, ?, ?)
++              WHERE email_key IN (?, ?) AND body LIKE ?',
++            [$old, $new, ...self::EMAIL_KEYS, $like]
++        );
++
++        DB::update(
++            'UPDATE email_templates_settings
++                SET setting_value = replace(setting_value, ?, ?)
++              WHERE setting_name = ? AND setting_value LIKE ?
++                AND email_id IN (SELECT email_id FROM email_templates WHERE email_key IN (?, ?))',
++            [$old, $new, 'body', $like, ...self::EMAIL_KEYS]
++        );
++    }
++
++    public function down(): void
++    {
++        throw new DowngradeNotSupportedException(__CLASS__);
++    }
++}
+--- a/dbscripts/xml/upgrade.xml
++++ b/dbscripts/xml/upgrade.xml
+@@ -214,6 +214,7 @@
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13117_AddReviewAssignmentLastModifiedBy"/>
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12593_EmailToTaskTemplates"/>
+ 		<migration class="APP\migration\upgrade\v3_5_0\I13128_FixEmailUrlLinks"/><!-- Already executed with 3.5.0-6 but idempotent -->
++		<migration class="APP\migration\upgrade\v3_5_0\I00000_PostedAckContextSignature"/>
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12347_FixRevisionUploadLogData" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13109_PermitPublishedMetadataEdit" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13213_TaskTemplateForeignConstraint"/>
