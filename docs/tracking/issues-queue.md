@@ -28,7 +28,7 @@ and the hourly routine starts one only when none is running
 | [U71](../specs/U71-internal-review-stage.md) | 6 | 2 | 2 |  |
 | [U24](../specs/U24-workflow-screen-and-stage-access.md) | 6 | 2 | 0 |  |
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 9 | 1 | 8 | OJS3 done with U69 A3 (pkp-e2e#285) |
-| [U48](../specs/U48-jats-and-body-text.md) | 17 | 1 | 7 | A20 done with U47 A6 (docs/issues/U47-A6-media-jats-upload-server-log-warning.md) |
+| [U48](../specs/U48-jats-and-body-text.md) | 17 | 1 | 7 | A20 done with U47 A6 (pkp-e2e#494) |
 | [U28](../specs/U28-reviewers-review.md) | 14 | 1 | 5 |  |
 | [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | OMP1 done with U53 A14 (pkp-e2e#447) |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | A9 done with U17 OMP2 (docs/issues/U17-OMP2-path-message-only-letters-and-numbers.md); A16 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet; the report calls the window's box "Title" where the screen says "Name", and its Reach names "Applied Science" where reach.js uses "Social Sciences" on OPS |
