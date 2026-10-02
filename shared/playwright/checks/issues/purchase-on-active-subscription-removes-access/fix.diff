@@ -1,0 +1,62 @@
+--- a/pages/user/UserHandler.php
++++ b/pages/user/UserHandler.php
+@@ -172,6 +172,12 @@
+                 $request->redirect(null, 'index');
+             }
+ 
++            // Saving the purchase form resets the subscription's status and dates before anything
++            // is paid, so a subscription that is still running is renewed, never bought again
++            if ($subscriptionStatus == Subscription::SUBSCRIPTION_STATUS_ACTIVE && ($subscription->isNonExpiring() || !$subscription->isExpired())) {
++                $request->redirect(null, 'index');
++            }
++
+             if ($institutional) {
+                 $subscriptionForm = new UserInstitutionalSubscriptionForm($request, $user->getId(), $subscriptionId);
+             } else {
+@@ -256,6 +262,12 @@
+                 $request->redirect(null, 'index');
+             }
+ 
++            // Saving the purchase form resets the subscription's status and dates before anything
++            // is paid, so a subscription that is still running is renewed, never bought again
++            if ($subscriptionStatus == Subscription::SUBSCRIPTION_STATUS_ACTIVE && ($subscription->isNonExpiring() || !$subscription->isExpired())) {
++                $request->redirect(null, 'index');
++            }
++
+             if ($institutional) {
+                 $subscriptionForm = new UserInstitutionalSubscriptionForm($request, $user->getId(), $subscriptionId);
+             } else {
+--- a/templates/frontend/pages/userSubscriptions.tpl
++++ b/templates/frontend/pages/userSubscriptions.tpl
+@@ -112,9 +112,12 @@
+ 											{translate key="user.subscriptions.renew"}
+ 										</a>
+ 									{/if}
+-									<a class="cmp_button" href="{url op="purchaseSubscription" path="individual"|to_array:$userIndividualSubscription->getId()}">
+-										{translate key="user.subscriptions.purchase"}
+-									</a>
++									{* Only an expired subscription is bought again; saving the purchase form resets its status and dates *}
++									{if !$isNonExpiring && $userIndividualSubscription->isExpired()}
++										<a class="cmp_button" href="{url op="purchaseSubscription" path="individual"|to_array:$userIndividualSubscription->getId()}">
++											{translate key="user.subscriptions.purchase"}
++										</a>
++									{/if}
+ 								{/if}
+ 							</td>
+ 						{/if}
+@@ -209,9 +212,12 @@
+ 												{translate key="user.subscriptions.renew"}
+ 											</a>
+ 										{/if}
+-										<a class="cmp_button" href="{url op="purchaseSubscription" path="institutional"|to_array:$userInstitutionalSubscription->getId()}">
+-											{translate key="user.subscriptions.purchase"}
+-										</a>
++										{* Only an expired subscription is bought again; saving the purchase form resets its status and dates *}
++										{if !$isNonExpiring && $userInstitutionalSubscription->isExpired()}
++											<a class="cmp_button" href="{url op="purchaseSubscription" path="institutional"|to_array:$userInstitutionalSubscription->getId()}">
++												{translate key="user.subscriptions.purchase"}
++											</a>
++										{/if}
+ 									{/if}
+ 								</td>
+ 							{/if}

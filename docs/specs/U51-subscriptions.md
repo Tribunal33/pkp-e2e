@@ -1401,6 +1401,18 @@ Left out of the scenarios above, by reason:
     `docs/issues/U51-A22-subscription-search-fields-narrow-nothing.md`): on
     both subscription lists, a search by each of the ten fields ("is" and
     "contains") lists only the subscriptions that match.
+  - the guard for A10 (issue report
+    `docs/issues/U51-A10-purchase-on-active-subscription-removes-access.md`):
+    on "My Subscriptions" a running subscription offers only "Renew", and
+    its purchase address changes nothing.
+  - the guard for A25 (issue report
+    `docs/issues/U51-A25-institutional-purchase-ip-ranges-read-array.md`):
+    the institutional purchase page opened for an existing institutional
+    subscription shows its stored IP ranges.
+  - the guard for A11 (issue report
+    `docs/issues/U51-A11-institutional-purchase-adds-institution-each-time.md`):
+    two institutional purchases for the same institution leave one entry on
+    the Institutions page.
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1501,8 +1513,8 @@ entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | An issue's table of contents shows a padlock on galleys that editors, the article's author or a former subscriber under "Partial expiry" can open | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | Expiry reminders run once a month and reach only subscriptions ending on matching days | 🐞 | user-visible | — |
 | [A9](#a9) | A reader buying a subscription type that requires membership gets the same page back, unexplained, when "Membership" is empty | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A10](#a10) | "Purchase" on an active subscription, saved, takes the reader's access away at once | 🐞 | user-visible | — |
-| [A11](#a11) | Every institutional purchase adds another institution | 🐞 | minor | — |
+| [A10](#a10) | A subscriber who presses "Purchase" beside an active subscription loses access before paying | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [A11](#a11) | Each institutional subscription a reader buys adds another copy of their institution to the journal's list | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | A signed-out visitor at a purchase page's address gets an empty page, the server failing | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | The "Subscription" block reads "Expired: {today}" for a subscription awaiting payment | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | A journal restricting only PDFs shows its HTML galleys unlocked, then refuses them to readers without a subscription | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1516,7 +1528,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A22](#a22) | Searching the subscription lists by reference number, membership, notes or institution lists every subscription | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | "Subscriptions" offers "Purchase New Subscription" on an open-access journal, and it leads to the home page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A24](#a24) | While payments are off, a reader's "Learn More" and "View Available Subscription Types" lead to the home page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A25](#a25) | "Purchase" on an active institutional subscription arrives with "IP ranges" reading "Array" | 🐞 | minor | — |
+| [A25](#a25) | A reader reopening their institutional subscription's purchase page finds "IP ranges" reading "Array" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A26](#a26) | The "Subscription" block reads "Expires: {date}" for an inactive subscription | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A27](#a27) | The expiry-reminder task stops with an error and sends nothing | 🐞 | user-visible · crash: server | — |
 | [A28](#a28) | After a refused "Save", the date boxes show today's date, yet "Save" says the start date is missing | 🐞 | user-visible | — |
@@ -1622,22 +1634,30 @@ individual type that requires membership. Basis: probe, 2026-10-01.
 <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — "Purchase" on an active subscription removes access** · 🐞 · user-visible.
-On "My Subscriptions", an active subscription, individual or
-institutional, offers "Purchase". Pressing it opens the purchase page,
-and saving there ("Save", or "Continue" on the institutional page) turns
-the active subscription into "Awaiting Manual Payment" with today as its
-start and end dates: the reader loses access to restricted content at
-once, before anything is paid, and "My Subscriptions" no longer offers
-"Renew". Basis: probe, 2026-09-25. <sup>f-a10</sup>
+**A10 — A subscriber who presses "Purchase" beside an active subscription loses access before paying** · 🐞 · medium.
+On "My Subscriptions", a running subscription, individual or
+institutional, offers "Purchase" beside "Renew". The page it opens lists
+the journal's subscription types, so a reader may press it to change
+type or to buy again. Once they submit that page ("Save" on the
+individual page, "Continue" on the institutional one), the subscription
+becomes "Awaiting Manual Payment", its start and end dates become today,
+and the reader's restricted articles lock again. Nothing has been paid,
+and nothing warns them. The reader cannot undo it. With an online
+payment method, paying then gives a new period from the day of payment,
+so whatever time was left on the old subscription is lost. Basis: probe,
+2026-10-01. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — Each institutional purchase adds an institution** · 🐞 · minor.
+**A11 — Each institutional subscription a reader buys adds another copy of their institution to the journal's list** · 🐞 · low.
 Every "Continue" on "Purchase Institutional Subscription" adds a new
-institution to the journal's [Institutions](U66-institutions.md) list under the typed name,
-even when an institution of that name exists or the reader is changing an
-existing purchase, so the list fills with duplicates the manager must
-tidy by hand. Basis: probe, 2026-09-25. <sup>f-a11</sup>
+institution to the journal's Institutions list under the name the reader
+typed. A second purchase for the same institution, with the same name
+and IP ranges, adds a second identical entry. When a reader reopens
+their bought subscription with the "Purchase" button on "My
+Subscriptions", the subscription moves to yet another new entry, and the
+one it used stays on the list, used by nothing. The Journal Manager sees
+look-alike entries with nothing to say which subscription uses which,
+and tidies them by hand. Basis: probe, 2026-10-01. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — A signed-out purchase address fails with an empty page** · 🐞 · low · crash: server.
@@ -1799,14 +1819,16 @@ two links while the page is closed. Basis: probe, 2026-10-01.
 <sup>f-a24</sup>
 
 <a id="a25"></a>
-**A25 — "Purchase" on an institutional subscription arrives with "Array"** · 🐞 · minor.
+**A25 — A reader reopening their institutional subscription's purchase page finds "IP ranges" reading "Array"** · 🐞 · low.
 On "My Subscriptions", "Purchase" beside an active institutional
-subscription opens "Purchase Institutional Subscription" with "IP
-ranges" reading "Array"; "Continue" as it arrives is refused with
-"Please enter a valid IP range.". Once the ranges are typed again,
-"Continue" adds a second institution of the same name ([A11](#a11)) and
-sets the subscription to "Awaiting Manual Payment" with today's dates
-([A10](#a10)). Basis: probe, 2026-09-25. <sup>f-a25</sup>
+subscription opens "Purchase Institutional Subscription" with the
+institution's name filled in, but with "IP ranges" reading "Array"
+instead of the subscription's ranges. Pressing "Continue" without
+editing anything is refused with "Please enter a valid IP range.". To
+get past it the reader must type the ranges again, or clear the box if
+the subscription has only a domain. The journal shows a reader their
+ranges nowhere; the manager can read them on the Institutions page.
+Basis: probe, 2026-10-01. <sup>f-a25</sup>
 
 <a id="a26"></a>
 **A26 — The block shows an inactive subscription as running** · 🐞 · low.
@@ -2073,9 +2095,11 @@ Issue report: [pkp-e2e#388](https://github.com/jardakotesovec/pkp-e2e/issues/388
 
 <a id="fn-f-a10"></a>
 **f-a10** — `userSubscriptions.tpl` offers `purchaseSubscription/{kind}/{id}` on an `ACTIVE` subscription; `UserIndividualSubscriptionForm::execute()` (and the institutional one) set the existing subscription's status to `AWAITING_MANUAL_PAYMENT` (or `_ONLINE_`) and both dates to today before any payment. Live-probed 2026-09-25 (td18), individual and institutional.
+Issue report: [docs/issues/U51-A10-purchase-on-active-subscription-removes-access.md](../issues/U51-A10-purchase-on-active-subscription-removes-access.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — `UserInstitutionalSubscriptionForm::execute()` calls `Repo::institution()->add()` for a new `Institution` on every save, then points the subscription at it. Live-probed 2026-09-25 (td17, td18): two "Tide University" rows after two purchases, a second "K3 Uni B" after "Purchase" on an existing one.
+Issue report: [docs/issues/U51-A11-institutional-purchase-adds-institution-each-time.md](../issues/U51-A11-institutional-purchase-adds-institution-each-time.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `UserHandler::purchaseSubscription()` has no sign-in check: with no user, `$user->getId()` is called on nothing (the individual path in `subscriptionExistsByUserForJournal()`, the institutional path in the form's constructor). The page router authorises page requests by default. Live-probed 2026-09-25 (td19): signed out, `GET {journal}/user/purchaseSubscription/individual` and `GET …/institutional` answered HTTP 500 with an empty body.
@@ -2130,6 +2154,7 @@ Issue report: [pkp-e2e#390](https://github.com/jardakotesovec/pkp-e2e/issues/390
 
 <a id="fn-f-a25"></a>
 **f-a25** — `UserInstitutionalSubscriptionForm::initData()` fills `ipRanges` with `$institution->getIPRanges()`, an array, which the text box prints as "Array"; the IP check then refuses it. Live-probed 2026-09-25 (td18).
+Issue report: [docs/issues/U51-A25-institutional-purchase-ip-ranges-read-array.md](../issues/U51-A25-institutional-purchase-ip-ranges-read-array.md).
 
 <a id="fn-f-a26"></a>
 **f-a26** — `block.tpl` has lines only for the two awaiting statuses (note f-a13); any other status falls through to the date lines (`isNonExpiring()`, `isExpired()`, else "Expires: {date}"). Live-probed 2026-09-25 (td20): "Needs Approval", "Needs Information" and "Other, See Notes" read "Expires: 2027-09-25" in the block while "My Subscriptions" read "Inactive" and the PDF led to the "Subscriptions" page.
