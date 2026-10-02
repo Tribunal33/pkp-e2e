@@ -2763,6 +2763,10 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   "Bio Statement", a role other than "Author"); set in the Contributors
   window, which names a scratch submitter "{given} {family}" (U69 claim
   check K5, 2026-09-28).
+- Submission (OPS): `relationStatus` and `vorDoi`, the wizard's "For
+  Readers" relation answer and its DOI; a reopened draft shows no answer
+  ticked (U75 A10), so a script sets them on screen and never ticks on a
+  blank read (U21 claim check I01, 2026-10-01).
 - Galley of a dependent component: `galleys[].genre` refuses "Image" and
   "HTML Stylesheet" (400) as the galley upload wizard does not offer them,
   so no galley of either is seeded or uploaded (U13 claim check K2,

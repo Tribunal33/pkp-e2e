@@ -221,7 +221,9 @@ not a fix.
    that point at one fault (the same action failing on two screens, one
    wrong value showing in several places), and follow an entry's link to
    the same fault in another spec: that entry joins the unit, and its
-   spec is claimed too. Every other entry is a unit of its own. A group
+   spec is claimed too. A twin is not always linked, so the other specs'
+   registers are grepped for the entry's log line, class or method first
+   (U13 OPS1 and U69 A4, U69 A3 and U49 OJS3, U69 A16 and U50 A14). Every other entry is a unit of its own. A group
    is a guess the reporter confirms or splits.
 6. **Report each unit** through one agent rendered from
    `briefs/issue-report.md`, one or two at a time, each on dataset fleets
@@ -233,7 +235,13 @@ not a fix.
    (1–9) per agent running at the same time; the agent resets its own
    fleets before each walk. The fix trial (the brief's step 4a) patches
    the slot's shared checkouts, so two reporters take turns there: the
-   second waits until `node bin/try-fix.js status` says clean. The agent returns an outcome per entry:
+   second waits until `node bin/try-fix.js status` says clean. The turn
+   covers every walk on `main`, an unpatched one too, since a status read
+   is a point check and an apply lands mid-walk: the session keeps one
+   lock per app checkout, queued first come first served, which a
+   reporter takes before its status read and holds to the walk's end or
+   the revert, and the brief names that lock and every reporter of the
+   slot (U35, U45, U50, U51, U54 issues sessions, 2026-10-01). The agent returns an outcome per entry:
    - `written` or `joined`: read the report against `REPORT.md` before
      accepting it. The header is complete and its severity and effort
      follow the definitions; Affects answers every version, `main`

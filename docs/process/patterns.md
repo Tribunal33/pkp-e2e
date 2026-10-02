@@ -606,12 +606,19 @@ PROBE_FEATURE=U03 PROBE_AGENT=g1 node bin/probe.js all my-probe.js   # or ojs|om
 A script calls `forEachApp(fn)`; `fn` receives one app's bag: `{app,
 name, root, baseURL, port, api, mail, users, contextPath, url(path),
 variant('validation')}`. `api` is the `_test` client with that app's own
-key, `mail` the shared Mailpit, `baseURL` the probe server (base port + 50),
+key, `mail` the shared Mailpit (`find`, `count` and `expectNone` take a
+`since`, a Date taken before the action, for an address other walks on
+the slot also mail), `baseURL` the probe server (base port + 50),
 `variant('validation')` the +90 server with email validation and ALTCHA on,
 `db` the fleet's database, which `sql(app, query)` queries through psql
 (rows as lines, columns joined by `|`), and `contextTables` the per-app
 context table names (`{table, id, settings}`: `journals`, `journal_id`,
-`journal_settings` on OJS; presses and servers).
+`journal_settings` on OJS; presses and servers). `serverLog(app)` is the
+fleet's server log (harness.md "Server output"): `const log =
+serverLog(app), from = log.mark();` before a request, `log.since(from)`
+after it for the error, exception and 5xx lines written since, the
+crash line REPORT.md's Observed asks for; the log is the fleet's, so a
+line is pinned on a request by its time and address.
 `line` names the line the process drives (`PKP_E2E_LINE`); on 3.4 and 3.3
 `testApi` is false and `api` answers 404, and `lineScratchContext(app,
 page)` / `lineUser(app, {…})` build a scratch context with its manager
@@ -730,7 +737,10 @@ load, does not (U23, U26, U27 claim checks). It does not wait out a
 closed side window's page-leave handler: with animations off the closed
 form keeps it for about half a second, so a leave-page prompt read right
 after a close is real only if it is still there 2 s later (U37 I29
-withdrew A22 on that); `tag(prefix)`
+withdrew A22 on that). A script error inside a jQuery ajax callback (a
+non-JSON answer to a legacy upload or form) leaves `jQuery.active` up for
+good: `idle()` reads on after 30 s with `{jqueryIdle: false}` in the run
+record's `warnings` (U09, U21 issue walks); `tag(prefix)`
 makes a scratch tag that follows the tag conventions above. `signIn` uses
 the roster password rule, so it works for scratch users too; `signIn(page,
 user, {contextPath})` goes through that journal's own login page (which

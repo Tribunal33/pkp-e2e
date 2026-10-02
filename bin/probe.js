@@ -77,18 +77,45 @@ for (const name of apps) {
     }
 }
 // A fix tried with bin/try-fix.js is served by every fleet of the slot: say
-// so, so a walk knows which code it drove (harness.md "Trying a fix").
-for (const name of apps) {
+// so, so a walk knows which code it drove (harness.md "Trying a fix"). The
+// markers are read again every two seconds: a fix applied, reverted or
+// swapped while the run goes on is named when the process ends, since that
+// run drove mixed code.
+const fixOf = (name) => {
     try {
         const marker = path.join(resolveApp(name).root, MARKER);
         if (fs.existsSync(marker)) {
             const rec = JSON.parse(fs.readFileSync(marker, 'utf8'));
-            console.log(`[probe] ${name}: fix applied, ${path.relative(REPO_ROOT, rec.diff)} (${rec.appliedAt})`);
+            return `${path.relative(REPO_ROOT, rec.diff)} (${rec.appliedAt})`;
         }
     } catch {
         // no checkout configured: the kit says so when the app is driven
     }
+    return null;
+};
+const fixSeen = Object.fromEntries(apps.map((name) => [name, fixOf(name)]));
+const fixChanges = [];
+for (const name of apps) {
+    if (fixSeen[name]) {
+        console.log(`[probe] ${name}: fix applied, ${fixSeen[name]}`);
+    }
 }
+const watchFixes = () => {
+    for (const name of apps) {
+        const now = fixOf(name);
+        if (now !== fixSeen[name]) {
+            fixChanges.push(`${new Date().toISOString()} ${name}: ${fixSeen[name] || 'clean'} -> ${now || 'clean'}`);
+            fixSeen[name] = now;
+        }
+    }
+};
+setInterval(watchFixes, 2000).unref();
+process.on('exit', () => {
+    watchFixes();
+    for (const change of fixChanges) {
+        console.error(`[probe] FIX CHANGED DURING THE RUN, ${change}`);
+    }
+});
 process.env.PROBE_APPS = apps.join(',');
 
 // The script path: as given (absolute or relative to the cwd), else

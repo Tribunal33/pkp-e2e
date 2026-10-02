@@ -33,9 +33,12 @@ class PkpMail {
 
     /**
      * Search scoped by recipient (+ optional content marker / subject).
-     * Returns the raw Mailpit search result.
+     * Returns the raw Mailpit search result. `since` (a Date or ISO string)
+     * keeps only the messages Mailpit received from then on, for an address
+     * every fleet of the slot mails (a dataset user's, harness.md "Dataset
+     * fleets"): take it before the action that sends.
      */
-    async _search({to, contains, subject}) {
+    async _search({to, contains, subject, since}) {
         if (!to) {
             throw new Error('pkpMail: every Mailpit read must be scoped by a recipient (to:)');
         }
@@ -46,21 +49,26 @@ class PkpMail {
         if (contains) {
             query += ` "${contains}"`;
         }
-        return this._get('/api/v1/search', {query});
+        const result = await this._get('/api/v1/search', {query});
+        if (since) {
+            const from = new Date(since).getTime();
+            result.messages = (result.messages || []).filter((m) => new Date(m.Created).getTime() >= from);
+        }
+        return result;
     }
 
     /**
      * THE canonical assertion: poll Mailpit search scoped by recipient plus an
      * optional unique content marker until at least one message matches.
      *
-     * @param {{to: string, contains?: string, subject?: string, timeoutMs?: number, poll?: number}} options
+     * @param {{to: string, contains?: string, subject?: string, since?: Date|string, timeoutMs?: number, poll?: number}} options
      * @returns {Promise<object>} the newest matching message summary
      */
-    async find({to, contains, subject, timeoutMs = 20_000, poll = 500}) {
+    async find({to, contains, subject, since, timeoutMs = 20_000, poll = 500}) {
         const deadline = Date.now() + timeoutMs;
         let lastCount = 0;
         for (;;) {
-            const result = await this._search({to, contains, subject});
+            const result = await this._search({to, contains, subject, since});
             const messages = result.messages || [];
             lastCount = messages.length;
             if (messages.length > 0) {
@@ -81,14 +89,14 @@ class PkpMail {
      * Negative assertion done right: wait for the positive-control message
      * (bounding the wait), then assert zero matches for the target.
      *
-     * @param {{to: string, contains?: string, subject?: string, afterControl: {to: string, contains?: string, subject?: string, timeoutMs?: number}}} options
+     * @param {{to: string, contains?: string, subject?: string, since?: Date|string, afterControl: {to: string, contains?: string, subject?: string, since?: Date|string, timeoutMs?: number}}} options
      */
-    async expectNone({to, contains, subject, afterControl}) {
+    async expectNone({to, contains, subject, since, afterControl}) {
         if (!afterControl || !afterControl.to) {
             throw new Error('pkpMail.expectNone: afterControl {to, ...} is required — an unbounded negative proves nothing');
         }
         await this.find(afterControl);
-        const result = await this._search({to, contains, subject});
+        const result = await this._search({to, contains, subject, since});
         const count = (result.messages || []).length;
         if (count > 0) {
             throw new Error(
@@ -104,11 +112,11 @@ class PkpMail {
      * ("only one change notice went out") AFTER a bounding find() — an
      * unbounded count proves nothing about silence.
      *
-     * @param {{to: string, contains?: string, subject?: string}} options
+     * @param {{to: string, contains?: string, subject?: string, since?: Date|string}} options
      * @returns {Promise<number>}
      */
-    async count({to, contains, subject}) {
-        const result = await this._search({to, contains, subject});
+    async count({to, contains, subject, since}) {
+        const result = await this._search({to, contains, subject, since});
         return (result.messages || []).length;
     }
 

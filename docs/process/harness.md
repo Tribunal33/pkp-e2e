@@ -152,7 +152,16 @@ No suite is meant to run on any of the three lines.
   there behind `method_exists` / `class_exists` (the task templates in
   `ContextFactory`, the contributor type and roles in
   `PKPSubmissionScenarioBuilder`). A scenario key that reaches another
-  `main`-only class answers 500 naming it.
+  `main`-only class answers 500 naming it. The suites' page objects follow
+  `main`'s screens, and those the issue walks keep meeting differ on 3.5:
+  the submission wizard opens on "Details", then "Upload Files"; "Create
+  New Version" is a button in the publication page's header, confirmed
+  with "Yes", and the side menu has no version nodes; publishing an OJS
+  article asks for its issue first ("Select an issue to schedule for
+  publication"); a version is numbered in `publications.version`
+  (`version_stage`, `version_major`, `version_minor` on `main`); the
+  publication pages' menu keys are seed-facts.md's (U13, U19, U21, U45,
+  U50, U52, U69 issue walks, 2026-10-01).
 - **3.4 and 3.3: no `_test` API, no seed.** The overlays are written for
   `main`'s Laravel-routed API, which 3.4 (Slim handlers) and 3.3
   (`import()`, `.inc.php`, no `Repo`) do not have, so `mount` copies only
@@ -206,7 +215,7 @@ checkouts for the length of a walk and takes it out again:
 ```bash
 node bin/try-fix.js apply shared/playwright/checks/issues/<slug>/fix.diff [ojs] [omp] [ops]
 node bin/try-fix.js revert shared/playwright/checks/issues/<slug>/fix.diff [ojs] [omp] [ops]
-node bin/try-fix.js status                      # exits 1 while any app holds a fix
+node bin/try-fix.js status [ojs] [omp] [ops]    # exits 1 while a named app (default: any) holds a fix
 ```
 
 - The diff is relative to the app root with `a/` `b/` prefixes
@@ -228,7 +237,10 @@ node bin/try-fix.js status                      # exits 1 while any app holds a 
   marker (without it, whatever is applied), so a chained revert never
   takes out another reporter's fix; `status` exits 1 while a fix is
   applied, so `status && …` gates a chain, and `bin/probe.js` names an
-  applied fix when it starts.
+  applied fix when it starts and, when it ends, one applied, reverted or
+  swapped while it ran (that run drove mixed code). A status read is a
+  point check: another reporter's apply can land seconds later, mid-walk
+  (MAINTENANCE issues session step 6).
   `PKP_E2E_LINE=<line>` in front tries it on a stable line's checkouts.
 - Every fleet of the slot, campaign and dataset alike, serves the patched
   code while it is applied: one fix at a time, and only while nothing
@@ -339,7 +351,8 @@ npm run dataset-facts -- --write                         # regenerate dataset.md
   reset of fleet 1 never touches fleet 2. The dataset users' addresses
   (`<username>@mailinator.com`) are the same in the three apps and every
   fleet of the slot mails the one Mailpit, so a mailbox read filters by
-  recipient and time.
+  recipient and time (`app.mail.find({to, since})`, `since` taken before
+  the action that sends; `count()` takes it too).
 - **Proof** (2026-09-30): `shared/playwright/checks/harness/dataset/dataset.js`
   signs in as `dbarnes`, records the dashboard and one submission's
   workflow, then `admin` on Administration (`scratch` as its argument
@@ -475,7 +488,11 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
   Look there when debugging server-side errors (a 500 a probe's traffic
   shows); it carries only the request line of a 500 (`[500]: POST …`),
   whose exception sits in the app's own log under the fleet's files dir,
-  `logs/app-<date>.log` (`checkouts/files/<app>-test[-ds<n>]/` on `main`). A server
+  `logs/app-<date>.log` (`checkouts/files/<app>-test/` on `main`); a
+  dataset fleet's config logs to `errorlog`, so its exceptions are in its
+  own server log. The kit's `serverLog(app)` reads the probe server's or
+  dataset fleet's log from a mark (patterns.md "Probe kit"); every agent
+  on that fleet writes to it. A server
   adopted through `reuseExistingServer` (a stray one on a worker port)
   keeps logging wherever it was started.
 - **Project chain**: `setup → {shared, <app>} → <app>-serial → <app>-solo`.

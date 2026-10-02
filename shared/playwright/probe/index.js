@@ -936,10 +936,23 @@ function trackTraffic(page) {
  * workflow's refresh after a save): when one is out, or starts within
  * 100 ms, it waits until the page has had none for half a second. Each
  * quiet wait gives up silently after five seconds, so a page that keeps
- * polling cannot hang a script.
+ * polling cannot hang a script. A script error inside a jQuery ajax
+ * callback (a non-JSON answer to a legacy upload or form) leaves
+ * `jQuery.active` above 0 for good: after the 30 s jQuery wait the read
+ * goes on and the run record's `warnings` gets `{jqueryIdle: false}`,
+ * never a throw (U09, U21 issue walks).
  */
 async function idle(page) {
-    await waitForJQueryIdle(page);
+    await waitForJQueryIdle(page).catch((error) => {
+        if (page.isClosed()) {
+            throw error;
+        }
+        const record = currentRecord();
+        if (record) {
+            record.warnings.push({at: new Date().toISOString(), jqueryIdle: false, url: page.url()});
+        }
+        console.warn(`[probe] idle: jQuery.active stayed above 0 for 30 s on ${page.url()}; reading on`);
+    });
     await page.waitForLoadState('networkidle', {timeout: 5_000}).catch(() => {});
     const traffic = trackTraffic(page);
     const began = Date.now();
@@ -971,6 +984,30 @@ const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  */
 function sql(app, query) {
     return execFileSync('psql', ['-X', '-d', app.db, '-tA', '-F', '|', '-c', query], {encoding: 'utf8'}).trim();
+}
+
+/**
+ * The server log of the fleet the bag drives (harness.md "Server output"):
+ * a dataset fleet's `server-<port>-ds<n>.log`, which also holds its PHP
+ * errors and exceptions (the dataset's config logs to `errorlog`), else
+ * the probe server's `server-<port>-probe.log`. The log is the fleet's,
+ * written for every agent driving it. `mark()` is its size now;
+ * `since(mark)` the lines written after it that match `match` (by default
+ * an error, exception, fatal, warning or a 5xx request line).
+ *
+ * @param {object} app the bag from withApp
+ * @param {{match?: RegExp}} [options]
+ * @returns {{file: string, mark: () => number, since: (from?: number) => string[]}}
+ */
+function serverLog(app, {match = /error|exception|fatal|warning|\[5\d\d\]/i} = {}) {
+    const kind = app.dataset ? `ds${app.dataset}` : 'probe';
+    const file = path.join(app.suiteDir, '.server-logs', `server-${app.port}-${kind}.log`);
+    const mark = () => (fs.existsSync(file) ? fs.statSync(file).size : 0);
+    const since = (from = 0) =>
+        fs.existsSync(file)
+            ? fs.readFileSync(file).subarray(from).toString('utf8').split('\n').filter((line) => line && match.test(line))
+            : [];
+    return {file, mark, since};
 }
 
 /**
@@ -1207,6 +1244,7 @@ module.exports = {
     settled,
     drainJobs,
     sql,
+    serverLog,
     tag,
     lineUser,
     lineScratchContext,

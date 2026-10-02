@@ -24,6 +24,13 @@ what the team's installs hold (harness.md "Dataset fleets").
   assigned to all of OJS's, a few of OMP's, none of OPS's), `rvaca` the
   manager, `dbuskins`, `sberardo`, `minoue` section editors (series
   editors, moderators), and each author account owns one submission.
+  As on the campaign's fleets (seed-facts.md "Install defaults"), an
+  editor or manager lands on the dashboard's "Assigned to me" (empty for
+  `rvaca`; "Active submissions" lists every one), the one context leaves
+  out the Site Settings tabs a second context brings ("Appearance",
+  "Plugins", "Navigation" among them), and DOIs are on for the first kind
+  with no prefix and no agency, so the DOIs "Setup" form refuses a save
+  until a prefix is set (U09, U19, U45, U54, U57, U63 issue walks).
 - Name a submission by its ID and title ("open submission 7,
   'Developing efficacy beliefs in the classroom'"), and the context by its
   path, `publicknowledge` in all three apps. "(2 versions)" in the tables

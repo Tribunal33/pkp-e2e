@@ -7,10 +7,11 @@
  *
  *   node bin/try-fix.js apply <fix.diff> [ojs] [omp] [ops]
  *   node bin/try-fix.js revert [<fix.diff>] [ojs] [omp] [ops]
- *   node bin/try-fix.js status          (exits 1 while any app holds a fix)
+ *   node bin/try-fix.js status [ojs] [omp] [ops]   (exits 1 while a named app holds a fix)
  *
- * (default apps: every app with <APP>_ROOT set; PKP_E2E_LINE selects a
- * stable line's checkouts, as for every harness command).
+ * (default apps: every app with <APP>_ROOT set; a comma list `ojs,omp` as
+ * bin/probe.js takes it works too; PKP_E2E_LINE selects a stable line's
+ * checkouts, as for every harness command).
  *
  * The diff is a unified diff whose paths are relative to the app root, with
  * the usual a/ b/ prefixes: `a/lib/pkp/classes/…`, `a/lib/ui-library/src/…`,
@@ -180,7 +181,9 @@ function assertNoFix(root, what) {
 module.exports = {assertNoFix, MARKER};
 
 if (require.main === module) {
-    const [cmd, ...rest] = process.argv.slice(2);
+    const [cmd, ...args] = process.argv.slice(2);
+    // `ojs,omp` as bin/probe.js takes it, beside `ojs omp`.
+    const rest = args.flatMap((arg) => (/^[a-z]+(,[a-z]+)+$/.test(arg) ? arg.split(',') : [arg]));
     try {
         if (cmd === 'apply' && rest[0]) {
             const [diff, ...apps] = rest;

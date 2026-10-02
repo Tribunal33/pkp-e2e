@@ -528,6 +528,11 @@ exports.PublicationScreen = class PublicationScreen {
      * confirmed before), in which case null is returned. The FIRST press is
      * occasionally swallowed (nothing opens, no request fires — U49 spec
      * fn-k), so the press is retried once when nothing has appeared.
+     * The button shows only on a publication page ("Title & Abstract", …):
+     * the stage view a `workflowSubmissionId` address opens on (a Production
+     * submission, or one just unpublished) has none, so open a publication
+     * page first (`entryLink()`, `openVersionEntry()`; U13, U19, U45, U50
+     * issue walks).
      *
      * @param {{or?: import('@playwright/test').Locator}} [options]
      * @returns {Promise<import('@playwright/test').Locator | null>}
