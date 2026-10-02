@@ -989,7 +989,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A2](#a2) | The Author is offered "Update File Details" on every row and refused on files they did not upload | 🐞 | minor | — |
+| [A2](#a2) | An author is offered "Update File Details" on a file somebody else uploaded, and the window only refuses them | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | "More Information"'s "History" tab keeps showing "Loading" for the Copyeditor, Layout Editor and the other assistant roles | 🐞 | minor | — |
 | [A4](#a4) | The "History" tab's "Show events from prior versions" box changes nothing | 🐞 | minor | — |
 | [A5](#a5) | A galley's "Change File" shows "Current file" with no file name under it | 🐞 | minor | — |
@@ -1019,14 +1019,29 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a2"></a>
-**A2 — The Author is offered "Update File Details" on files they cannot edit** · 🐞 · minor.
-On "Submission Files" and "Revisions Uploaded" the Author's row menu
-offers "Update File Details" on every file. On a file they uploaded
-themselves the "Edit a file" window opens and saves. On a file an editor
-uploaded it shows only "The current role does not have access to this
-operation." and "Close", on a round that asks for revisions too. The
-menu should offer the entry only where it works.
-Basis: probe. <sup>[f-a2](#fn-a2)</sup>
+**A2 — An author is offered "Update File Details" on a file somebody else uploaded, and the window only refuses them** · 🐞 · low.
+On "Submission Files" (Submission stage) and "Revisions Uploaded"
+(Review stage) an author's "More Actions" menu offers "Update File
+Details" on every file. On a file they uploaded themselves the "Edit a
+file" window opens and saves. On a file somebody else uploaded, an
+editor for example, the window shows only "The current role does not
+have access to this operation." and "Close".
+
+"Delete" on "Revisions Uploaded" is the same fault and the proposed fix
+covers it: it is offered on every file, and on somebody else's file the
+answer is "An unexpected error has occurred. Please reload the page and
+try again."
+
+Nothing is lost: the author was never meant to change that file. A
+preprint server has no such lists.
+
+While a round asks for revisions the refusal on somebody else's
+"Revisions Uploaded" file has a cause of its own, with its own issue
+report: the code has a rule that would let the author change every
+revision file of such a round, and a typo has kept it from applying
+since 3.4; whether authors should have that right is the team's open
+question.
+Basis: probe, 2026-10-02. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
 **A3 — "More Information" never loads its "History" tab for the assistant roles** · 🐞 · minor.
@@ -2194,6 +2209,7 @@ role does not have access to this operation." and the header "Close". On a
 round with revisions requested the manager's file in "Revisions Uploaded" was
 refused the same way, so `SubmissionFileRequestedRevisionRequiredPolicy` does
 not open another's file to the Author.
+Issue report: [docs/issues/U36-A2-author-update-file-details-offered-then-refused.md](../issues/U36-A2-author-update-file-details-offered-then-refused.md). The refusal while revisions are requested: [docs/issues/U36-A2-author-refused-on-editors-revision-file.md](../issues/U36-A2-author-refused-on-editors-revision-file.md).
 
 <a id="fn-a3"></a>
 **f-a3** — Note e; `FileManagerConfigurations` grants `FILE_SEE_NOTES` to

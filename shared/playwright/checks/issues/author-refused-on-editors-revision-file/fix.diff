@@ -1,0 +1,11 @@
+--- a/lib/pkp/classes/security/authorization/internal/SubmissionFileRequestedRevisionRequiredPolicy.php
++++ b/lib/pkp/classes/security/authorization/internal/SubmissionFileRequestedRevisionRequiredPolicy.php
+@@ -55,7 +55,7 @@
+             return AuthorizationPolicy::AUTHORIZATION_DENY;
+         }
+         $countRevisionDecisions = Repo::decision()->getCollector()
+-            ->filterBySubmissionIds([$submissionFile->getData('submissionId)')])
++            ->filterBySubmissionIds([$submissionFile->getData('submissionId')])
+             ->filterByReviewRoundIds([$reviewRound->getId()])
+             ->filterByDecisionTypes([Decision::PENDING_REVISIONS])
+             ->getCount();

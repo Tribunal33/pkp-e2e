@@ -1,0 +1,71 @@
+--- a/lib/ui-library/src/managers/FileManager/useFileManagerConfig.js
++++ b/lib/ui-library/src/managers/FileManager/useFileManagerConfig.js
+@@ -1,6 +1,6 @@
+ import {useLocalize} from '@/composables/useLocalize';
+ import {Actions} from './useFileManagerActions';
+-import {useCurrentUser} from '@/composables/useCurrentUser';
++import {useCurrentUser, EditorialRoles} from '@/composables/useCurrentUser';
+ 
+ const {tk} = useLocalize();
+ 
+@@ -409,8 +409,11 @@
+ export function useFileManagerConfig() {
+ 	const {t, localize} = useLocalize();
+ 
+-	const {hasCurrentUserAtLeastOneAssignedRoleInStage, getCurrentUserRoles} =
+-		useCurrentUser();
++	const {
++		hasCurrentUserAtLeastOneAssignedRoleInStage,
++		getCurrentUserRoles,
++		getCurrentUserId,
++	} = useCurrentUser();
+ 	const userRoles = getCurrentUserRoles();
+ 
+ 	function getManagerConfig({
+@@ -440,9 +443,18 @@
+ 			});
+ 		});
+ 
++		// Without an editorial role in the stage (an author), the server lets
++		// a user change only the files they uploaded (SubmissionFileAccessPolicy)
++		const ownFilesOnly = !hasCurrentUserAtLeastOneAssignedRoleInStage(
++			submission.value,
++			submissionStageId.value,
++			EditorialRoles,
++		);
++
+ 		return {
+ 			fileStage: config.fileStage,
+ 			permittedActions,
++			ownFilesOnly,
+ 			title: t(config.titleKey),
+ 			titleKey: config.titleKey,
+ 			description: config.descriptionKey ? t(config.descriptionKey) : '',
+@@ -542,6 +554,9 @@
+ 	function getItemActions({file, managerConfig}) {
+ 		const actions = [];
+ 		const enabledActions = managerConfig.permittedActions;
++		const canChangeFile =
++			!managerConfig.ownFilesOnly ||
++			file?.uploaderUserId === getCurrentUserId();
+ 
+ 		if (
+ 			enabledActions.includes(Actions.FILE_SEND_TO_EDITOR) &&
+@@ -556,7 +571,7 @@
+ 			});
+ 		}
+ 
+-		if (enabledActions.includes(Actions.FILE_EDIT)) {
++		if (enabledActions.includes(Actions.FILE_EDIT) && canChangeFile) {
+ 			actions.push({
+ 				label: t('grid.action.updateFile'),
+ 				name: Actions.FILE_EDIT,
+@@ -572,7 +587,7 @@
+ 			});
+ 		}
+ 
+-		if (enabledActions.includes(Actions.FILE_DELETE)) {
++		if (enabledActions.includes(Actions.FILE_DELETE) && canChangeFile) {
+ 			actions.push({
+ 				label: t('grid.action.delete'),
+ 				name: Actions.FILE_DELETE,
