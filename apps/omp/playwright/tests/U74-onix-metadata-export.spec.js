@@ -18,7 +18,6 @@
  * Deliberately NOT covered, by register ID (the spec's Coverage section is
  * the record of everything else left out; a 🐞 is never asserted as the
  * contract, a ❓ is not a gap):
- * - A1 🐞: S6 reads that "Export Submissions Results" opens, not what it says.
  * - A4 🐞: S4 finds its market by the "Representatives" cell and never reads
  *   "Territory" or "Price".
  * - A5 🐞: S4 reads no "Date Format" on arrival.
@@ -89,7 +88,7 @@ const {
     children,
 } = require('../pages/OnixPages.js');
 const {WorkflowPage} = require('../../../../shared/playwright/pages/WorkflowPage.js');
-const {ToolsPage, NativeXmlPage, resultLines} = require('../../../../shared/playwright/pages/ImportExportPages.js');
+const {ToolsPage, NativeXmlPage, resultLines, downloadFrom} = require('../../../../shared/playwright/pages/ImportExportPages.js');
 const {SettingsPages, SettingsForm} = require('../../../../shared/playwright/pages/ContextIdentityPages.js');
 
 const PRESS = 'publicknowledge';
@@ -653,10 +652,17 @@ test.describe('ONIX metadata & export (U74)', () => {
 
     test('S6: The ONIX tool, from the press\'s details to an export', async ({asUser, ompApi, appContext}, testInfo) => {
         const tag = makeTag('s6', testInfo);
-        // Given: none of the four ONIX details; "Tidewater Tales" published,
-        // "Harbour Lights" in the Submission stage (footnote s).
+        // Given: none of the four ONIX details; "Tidewater Tales" published
+        // with the format "Paperback", "Harbour Lights" in the Submission
+        // stage (footnote s).
         const press = await scratchPress(ompApi, tag);
-        await seedBook(ompApi, `${tag}t`, {context: press.path, submitter: press.au.username, title: 'Tidewater Tales', published: true});
+        await seedBook(ompApi, `${tag}t`, {
+            context: press.path,
+            submitter: press.au.username,
+            title: 'Tidewater Tales',
+            published: true,
+            publicationFormats: [{name: 'Paperback'}],
+        });
         await ompApi.createSubmission({tag: `${tag}h`, context: press.path, submitter: press.au.username, title: 'Harbour Lights', submitted: true});
         const {page} = await pageAs(asUser, press.mg.username);
 
@@ -698,12 +704,20 @@ test.describe('ONIX metadata & export (U74)', () => {
         await expect(onix.list.selectButton()).toHaveText(exactly('Select All'));
         await expect(onix.list.exportButton()).toBeVisible();
 
-        // Exporting (Rule 18): the results tab added and opened; what it
-        // reads is A1, not read.
+        // Exporting (Rule 18): the results tab added and opened, the
+        // success text and the download; the "Warnings encountered:" block
+        // (the book published before the press had a publisher) is not read.
         await onix.list.box('Tidewater Tales').check();
-        await onix.list.pressExport(onix);
+        const results = await onix.list.pressExport(onix);
         await onix.expectTabs(['Export', 'Export Submissions Results']);
         await onix.expectSelected('Export Submissions Results');
+        await expect(results).toContainText('The export completed successfully.', {timeout: 30_000});
+        const download = results.getByRole('button', {name: 'Download Exported File', exact: true});
+        await expect(download).toBeVisible();
+        const file = await downloadFrom(page, () => download.click());
+        expect(file.name).toMatch(/^onix30-.*\.xml$/);
+        expect(file.text).toContain('ONIXMessage');
+        expect(file.text).toMatch(/<Product[\s>]/);
 
         // Control: "Publisher Code" emptied brings the reminder back
         // (Settings bullet 1).
