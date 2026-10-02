@@ -21,7 +21,7 @@ and the hourly routine starts one only when none is running
 | [U47](../specs/U47-media-files.md) | 8 | 2 | 4 | **Taken: issues session, VM s1, 2026-10-02**; OMP1 done with U69 A9 (pkp-e2e#282); A5 done with U66 A2 (pkp-e2e#4) |
 | [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **A21 taken: issues session, VM s1, 2026-10-02** (joined to U47 A4); A23, A24: open report docs/reports/2026-09-27-pkp-lib-13288.md |
 | [U17](../specs/U17-sections.md) | 16 | 2 | 2 | OMP9, OPS6: open reports docs/reports/2026-09-25-omp-series-page-blank.md and docs/reports/2026-09-25-ops-oai-empty-abstract.md (the rest of U17 written up by the issues session, workstation s0, 2026-10-02) |
-| [U59](../specs/U59-hosted-journals.md) | 9 | 2 | 2 |  |
+| [U59](../specs/U59-hosted-journals.md) | 9 | 2 | 2 | **Taken: issues session, workstation s0, 2026-10-02** |
 | [U62](../specs/U62-plugins-management.md) | 8 | 2 | 2 |  |
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 |  |
 | [U71](../specs/U71-internal-review-stage.md) | 6 | 2 | 2 |  |
