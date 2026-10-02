@@ -1945,11 +1945,11 @@ read "Current Roles : Author, Section editor". Code: `disableUser()` joins
 `user.groups.map(g => g.name)`, every assignment in the context
 (`preloadGroups()`), without the `dateEnd` filter the "Roles" cell uses;
 `user.disabledModal.description` is "Current Roles : {$roles}".
-Issue report: [docs/issues/U53-A6-disable-window-lists-ended-roles.md](../issues/U53-A6-disable-window-lists-ended-roles.md).
+Issue report: [pkp-e2e#453](https://github.com/jardakotesovec/pkp-e2e/issues/453) ([docs/issues/U53-A6-disable-window-lists-ended-roles.md](../issues/U53-A6-disable-window-lists-ended-roles.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Code: note h. Live-probed 2026-09-25: note td6.
-Issue report: [docs/issues/U53-A7-enabling-reason-kept-as-disabling-reason.md](../issues/U53-A7-enabling-reason-kept-as-disabling-reason.md).
+Issue report: [pkp-e2e#454](https://github.com/jardakotesovec/pkp-e2e/issues/454) ([docs/issues/U53-A7-enabling-reason-kept-as-disabling-reason.md](../issues/U53-A7-enabling-reason-kept-as-disabling-reason.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Code read 2026-09-25: `UserGridHandler::removeUser()` writes
