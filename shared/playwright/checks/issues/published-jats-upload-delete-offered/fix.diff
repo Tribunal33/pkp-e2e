@@ -1,0 +1,87 @@
+--- a/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationJats.vue
++++ b/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationJats.vue
+@@ -8,10 +8,7 @@
+ 						<template #actions>
+ 							<!-- Upload button - always visible when publication is not published -->
+ 							<PkpButton
+-								v-if="
+-									publication.status !== getConstant('STATUS_PUBLISHED') &&
+-									canEdit
+-								"
++								v-if="canChangeFile"
+ 								ref="uploadXMLButton"
+ 								@click="openFileBrowser"
+ 							>
+@@ -30,10 +27,7 @@
+ 
+ 								<!-- Delete button - deletes ALL revisions and reverts to default -->
+ 								<PkpButton
+-									v-if="
+-										publication.status !== getConstant('STATUS_PUBLISHED') &&
+-										canEdit
+-									"
++									v-if="canChangeFile"
+ 									:disabled="isLoading"
+ 									:is-warnable="true"
+ 									@click="openDeleteModal"
+@@ -97,6 +91,7 @@
+ 				<span class="pkpSpinner" aria-hidden="true"></span>
+ 			</div>
+ 			<FileUploader
++				v-if="canChangeFile"
+ 				:id="id + '-uploader'"
+ 				ref="uploader"
+ 				:api-url="publicationApiUrl"
+@@ -158,6 +153,16 @@
+ 		};
+ 	},
+ 	computed: {
++		/**
++		 * Whether the JATS file may be uploaded or deleted: never on a
++		 * published version
++		 */
++		canChangeFile() {
++			return (
++				this.canEdit &&
++				this.publication.status !== pkp.const.publication.STATUS_PUBLISHED
++			);
++		},
+ 		isDefaultContent() {
+ 			return this.workingJatsProps['isDefaultContent'];
+ 		},
+@@ -241,15 +246,6 @@
+ 			});
+ 		},
+ 		/**
+-		 * Helper method to access a global constant in the template
+-		 *
+-		 * @return {Object}
+-		 */
+-		getConstant(constant) {
+-			return pkp.const[constant];
+-		},
+-
+-		/**
+ 		 * Open the file browser dialog
+ 		 */
+ 		openFileBrowser() {
+--- a/lib/ui-library/src/components/ListPanel/reviewerSuggestions/ReviewerSuggestionsListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/reviewerSuggestions/ReviewerSuggestionsListPanel.vue
+@@ -9,7 +9,7 @@
+ 						<template #actions>
+ 							<PkpButton
+ 								v-if="
+-									publication.status !== getConstant('STATUS_PUBLISHED') &&
++									publication.status !== getConstant('publication').STATUS_PUBLISHED &&
+ 									canEditPublication
+ 								"
+ 								:disabled="isLoading"
+@@ -34,7 +34,7 @@
+ 
+ 				<template
+ 					v-if="
+-						publication.status !== getConstant('STATUS_PUBLISHED') &&
++						publication.status !== getConstant('publication').STATUS_PUBLISHED &&
+ 						canEditPublication
+ 					"
+ 					#item-actions="{item}"

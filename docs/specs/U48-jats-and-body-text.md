@@ -685,6 +685,7 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the guard for A20 (issue report `docs/issues/U47-A6-media-jats-upload-server-log-warning.md`): upload a JATS file on "JATS XML" and check the server log holds no PHP warning for the request.
   - the guard for OMP1 (issue report `docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md`): on a press, a Press manager's "More Actions" on a Markdown file in "Production Ready Files" lists no "Send to Text Editor".
+  - the guard for A12 (issue report `docs/issues/U48-A12-published-jats-upload-delete-offered.md`): a published version's "JATS XML" page offers neither "Upload" nor "Delete" to an editor who may edit the publication.
 - **Nothing new to test**:
   - a second "Upload" on a version that already has a file, which
     becomes a revision of that one file, listed in its "History"
@@ -768,7 +769,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | The published "JATS XML" keeps old metadata for up to a day after an edit, and a preview's XML after publishing | 🐞 | minor | — |
 | [A9](#a9) | A URL path runs into the published file's name, and a returning reader keeps the earlier name | 🐞 | minor | — |
 | [A11](#a11) | "Download" on an uploaded JATS file saves a refusal as "download-file.json" for a role without Production access | 🐞 | minor | — |
-| [A12](#a12) | A published version's JATS file can still be replaced or deleted | 🐞 | user-visible | — |
+| [A12](#a12) | Editors can still replace or delete a published version's JATS XML file, which 3.5 does not offer | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | "Upload" of an image breaks the "JATS XML" page until the file is deleted | 🐞 | user-visible · crash: server | — |
 | [A14](#a14) | A never-saved Body Text shows "Unsaved Changes" on opening, and "Saved" when an import saved nothing | 🐞 | minor | — |
 | [A15](#a15) | Leaving "Body Text" loses unsaved text without asking | 🐞 | user-visible | — |
@@ -903,14 +904,17 @@ page should show the refusal.
 Basis: probe, 2026-09-25. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — A published version's JATS file can still be replaced or deleted** · 🐞 · user-visible.
+**A12 — Editors can still replace or delete a published version's JATS XML file, which 3.5 does not offer** · 🐞 · low.
 On a published version's "JATS XML" page, whoever may edit the
-publication is still offered "Upload" and "Delete", and both work: an
-upload replaces the XML the article's page serves, and "Delete JATS
-File" removes the uploaded file, so readers get the generated XML
-instead. The page is built to withdraw both buttons once the version is
-published, and does not.
-Basis: probe, 2026-09-25. <sup>f-a12</sup>
+publication is still offered "Upload" and "Delete", and both work. An
+upload replaces the version's JATS file. "Delete JATS File" removes it,
+and the version falls back to the generated XML: the JATS XML that OJS
+builds from the version's metadata when no file is uploaded. The page
+has code meant to hide both buttons once the version is published, and
+that code no longer takes effect. A published version's galleys and
+metadata are meant to stay editable; the JATS file is the one part the
+page means to lock.
+Basis: probe, 2026-10-02. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — "Upload" of an image breaks the "JATS XML" page** · 🐞 · user-visible · crash: server.
@@ -1247,6 +1251,7 @@ is made.
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note c: `WorkflowPublicationJats.vue` withdraws "Upload" and "Delete" on `STATUS_PUBLISHED`, a constant undefined on the workflow page, so the test never matches; the server's `PublicationCanBeEditedPolicy` lets editorial roles write to a published version. Probe: d30.
+Issue report: [docs/issues/U48-A12-published-jats-upload-delete-offered.md](../issues/U48-A12-published-jats-upload-delete-offered.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25 (Rule 3), OJS, as a first upload and over a text file: the upload of "figure.png" answered 500 on `POST …/api/v1/submissions/{id}/publications/{pid}/jats`, yet the file was stored ("More Information" and "Delete" offered on reopening); every reopening answered 500 on `GET …/jats`, and "More Information" 500 on `GET $$$call$$$/information-center/file-information-center/view-information-center?submissionFileId=undefined…`. No type check on upload (note k). Probe: d4.
