@@ -160,4 +160,4 @@ function statsRequests(page) {
     return {list: () => seen.slice(), clear: () => { seen.length = 0; }, stop: () => page.off('response', on)};
 }
 
-module.exports = {T, sleep, flat, rel, issuesAdmin, createAndPublishIssues, archiveIssues, visitIssues, nextDay, readIssuesTable, readFile, statsRequests};
+module.exports = {T, sleep, flat, rel, issuesAdmin, createAndPublishIssues, archiveIssues, visitIssues, runJobs, nextDay, readIssuesTable, readFile, statsRequests};

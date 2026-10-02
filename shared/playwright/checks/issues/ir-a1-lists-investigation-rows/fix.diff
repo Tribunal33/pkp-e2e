@@ -1,0 +1,15 @@
+--- a/classes/sushi/IR_A1.php
++++ b/classes/sushi/IR_A1.php
+@@ -19,6 +19,12 @@
+ 
+ class IR_A1 extends IR
+ {
++    /** Requested metric types */
++    public array $metricTypes = [
++        'Total_Item_Requests',
++        'Unique_Item_Requests'
++    ];
++
+     /**
+      * Get report name defined by COUNTER.
+      */

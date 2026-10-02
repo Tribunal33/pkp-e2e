@@ -1168,6 +1168,7 @@ Left out of the scenarios above, by reason:
   - "Download" in "Report Settings" of a "Counter R5" report: the saved "counterReport.tsv" is tab-separated, its first line split on a tab giving "Report_Name" (the guard for A11, once fixed)
   - a French (Canada) reading of a press's and a preprint server's statistics pages, both "Télécharger le rapport" windows and the site's "Statistiques" tab: no "##" code (the guard for A6, once fixed) {OMP OPS}
   - a "Start Date" before the earliest possible date in a "Counter R5" report's "Report Settings": the refusal under the box names the plain date, no "##" (the guard for A3, once fixed)
+  - with an article page visited and no file opened, the "Journal Article Requests (IR_A1)" file's "Metric_Type" column holds only the types its "Metric_Types" line names (the guard for OJS5, once fixed) {OJS}
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1251,7 +1252,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | Site administrator cannot save Site Settings › "Statistics" after unticking "Platform" over a mistyped Platform ID | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | "Counter R5": the downloaded "counterReport.tsv" is comma-separated, not tab-separated | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OJS4](#ojs4) | Statistics › Issues: "Download Issues" leaves out every issue after the first 30, without saying so | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OJS5](#ojs5) | "Journal Article Requests (IR_A1)" lists investigation rows its header leaves out | 🐞 | minor | — |
+| [OJS5](#ojs5) | "Counter R5": "Journal Article Requests (IR_A1)" also lists investigation rows, which its "Metric_Types" line leaves out | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS6](#ojs6) | The COUNTER Release 4 file names its report by a cut-off code path | 🐞 | minor | — |
 | [OMP3](#omp3) | A book's PDF or "Appendix" file fails to open, so its visit is never counted | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | Custom Range refuses an open-ended range | ❓ | minor | — |
@@ -1536,13 +1537,24 @@ the same page is complete.
 Basis: probe, 2026-10-02. <sup>f-ojs4</sup>
 
 <a id="ojs5"></a>
-**OJS5 — "Journal Article Requests (IR_A1)" lists investigations** · 🐞 · minor.
-The report's "Metric_Types" line reads
-"Total_Item_Requests;Unique_Item_Requests", but its table also has
-"Total_Item_Investigations" and "Unique_Item_Investigations" rows for
-each article. Expected: requests only, as the header says and as COUNTER
-defines the report.
-Basis: probe, 2026-09-27. <sup>f-ojs5</sup>
+**OJS5 — "Counter R5": "Journal Article Requests (IR_A1)" also lists investigation rows, which its "Metric_Types" line leaves out** · 🐞 · low.
+On Statistics › "Counter R5", an editor downloads "Journal Article
+Requests (IR_A1)". The file's "Metric_Types" line reads
+"Total_Item_Requests;Unique_Item_Requests", but its table also holds a
+"Total_Item_Investigations" and a "Unique_Item_Investigations" row for
+each article. An article whose page readers opened without opening any
+of its files is listed too, with those two rows alone. Expected:
+request rows only, as the file's "Metric_Types" line says and as the
+report's name promises.
+
+The request rows are there and their figures are right, and each row
+names its metric, so the file can still be used. A program that takes
+every row of this report for a request counts too much.
+
+Every journal gets these rows once it has usage figures in the months
+the report is asked for, in the downloaded file and in the answer of
+the journal's SUSHI address.
+Basis: probe, 2026-10-03. <sup>f-ojs5</sup>
 
 <a id="ojs6"></a>
 **OJS6 — The Release 4 file names its report by a code path** · 🐞 · minor.
@@ -2509,6 +2521,7 @@ Issue report: [docs/issues/U64-OJS4-download-issues-stops-at-30.md](../issues/U6
 `Metric_Types` line and its `Total_Item_Investigations` and
 `Unique_Item_Investigations` rows per article. OJS
 `classes/sushi/IR_A1.php` (fn-l).
+Issue report: [docs/issues/U64-OJS5-ir-a1-lists-investigation-rows.md](../issues/U64-OJS5-ir-a1-lists-investigation-rows.md).
 
 <a id="fn-f-ojs6"></a>
 **f-ojs6** — Live-probed 2026-09-27 (three runs):
