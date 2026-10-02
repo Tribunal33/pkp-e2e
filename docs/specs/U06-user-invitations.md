@@ -22,17 +22,20 @@ expire on their own after a few days, so a stale link never grants a role.
 ## Actors & permissions
 
 "The recipient" below means whoever holds the emailed invitation link. Every
-sending capability lives on the **Users & Roles** screen (Users tab). Who can
-reach that screen at all belongs to the user-management feature (see
-*Cross-feature interactions*).
+sending capability lives on the **Users & Roles** screen (Users tab), and
+"whoever opens Users & Roles" means the people [User
+management](U53-users-management.md) lets in: the Site Administrator, and
+the manager-level roles while "Permit changes to Settings" is ticked for
+them (on a journal or press the Journal Manager, the Editor and the
+Production Editor; on a preprint server the Preprint Server Manager).
 
 | Action | Who may, and when |
 |--------|--------------------|
-| **See pending invitations** | • Site Administrator; Journal Manager: the "Invitations" table on Users & Roles <sup>a</sup> |
-| **Invite to a role** (open the send wizard) | • Site Administrator; Journal Manager: the "Invite to a role" button <sup>a</sup><br>• ⚠ [A1](#a1) No other role is offered the button. An Author or Reviewer who types the wizard's own address (the URL a manager reaches via "Invite to a role") is turned away. Who else the address lets through is an open question <sup>b</sup> |
-| **Edit a pending invitation** | • Site Administrator; Journal Manager: "Edit Invitation" on the invitation's row (Rule 12) <sup>a</sup> |
-| **Cancel a pending invitation** | • Site Administrator; Journal Manager: "Cancel Invite" on the invitation's row <sup>a</sup> |
-| **Propose roles for an existing member** | • Site Administrator; Journal Manager: the user row's Edit action opens the same wizard (Rule 13), and so does "Invite to a role" once "Search User" finds them (Rule 13a) <sup>c</sup> |
+| **See pending invitations** | • Whoever opens Users & Roles: the "Invitations" table there <sup>a</sup> |
+| **Invite to a role** (open the send wizard) | • Whoever opens Users & Roles: the "Invite to a role" button. No other role is offered the button <sup>a</sup><br>• The same people, by typing the wizard's own address: the one "Invite to a role" opens, `{journal}/invitation/create/userRoleAssignment`, or the one "Edit Invitation" opens for a pending invitation. Anyone else signed in gets the access-denied page, "The current role does not have access to this operation.", and a signed-out visitor gets the sign-in screen. ⚠ [A12](#a12) The "Invite to a role" address with a made-up word, such as "nosuchtype", in place of "userRoleAssignment" fails on the server and shows an empty page <sup>b</sup> |
+| **Edit a pending invitation** | • Whoever opens Users & Roles: "Edit Invitation" on the invitation's row (Rule 12) <sup>a</sup><br>• Nobody, for another journal's invitation. The address "Edit Invitation" opens ends in the invitation's number. Typed under this journal's address with the number of another journal's invitation, it shows "404 Not Found", the same page as a number no invitation has. Under the other journal's own address the same number opens that journal's edit wizard for whoever opens its Users & Roles <sup>b</sup> |
+| **Cancel a pending invitation** | • Whoever opens Users & Roles: "Cancel Invite" on the invitation's row <sup>a</sup> |
+| **Propose roles for an existing member** | • Whoever opens Users & Roles: the user row's Edit action opens the same wizard (Rule 13), and so does "Invite to a role" once "Search User" finds them (Rule 13a) <sup>a</sup> <sup>c</sup> |
 | **Accept or decline** | • The recipient: via the emailed links, while the invitation is pending. This works signed out, and no credentials are asked (Rules 6–7) <sup>f</sup> |
 | **Customize the invitation email for one send** | • Whoever is sending: the wizard's compose step (subject, body, template choice) <sup>g</sup> |
 | **Edit the stored invitation email template** | • Journal Manager: on the Emails settings screen, which belongs to the emails-management feature. ⚠ [OPS1](#ops1) On a preprint server the template has no row there <sup>j</sup> |
@@ -288,8 +291,8 @@ Accept wizard (new invitee):
 
 - **Users & Roles screen**: the Invitations table and the "Invite to a role"
   button live on the Users tab, above the users list. Who reaches that
-  screen, and everything else about managing existing users, belongs to the
-  user-management feature (spec to come, *User management*).
+  screen, and everything else about managing existing users, belongs to
+  [User management](U53-users-management.md).
 - **Invitation-link landing**: Rule 4 is the shared front door for every
   emailed invitation link. The reviewer one-click review link (see the future
   *Review assignments* spec) and the registration email-validation and
@@ -630,6 +633,13 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the send wizard's address typed by roles that do not open Users &
+    Roles, a Section Editor and an Editor with "Permit changes to Settings"
+    unticked, each getting the access-denied page, and by a signed-out
+    visitor, who gets the sign-in screen (Actors row 2; A1 retired)
+  - another journal's invitation number in the edit address showing "404
+    Not Found", while under that journal's own address it opens the edit
+    wizard (Actors row 3)
   - the guard for OMP1 (issue report
     `docs/issues/U53-A14-masthead-change-error-no-email.md`): a manager
     changes a member's "Appear on the masthead" select on the user's roles
@@ -670,7 +680,6 @@ Left out of the scenarios above, by reason:
     rows 1–5; scenarios 1, 5, 6 and 8's Journal Manager sees the same
     screens)
 - **Register carries it**:
-  - A1 (which roles the wizard's own address admits; Actors row 2)
   - A3 (the links of a replaced invitation dying with a not-found error;
     Rules 3, 4, 12; scenario 6 marks it)
   - A2 (an invitation being composed, purged by the daily cleanup; Rule 1,
@@ -692,6 +701,8 @@ Left out of the scenarios above, by reason:
   - A8 (added role rows carrying no accessible field names)
   - A11 (the invitation email promising a masthead listing for roles the
     masthead does not list; Side effects)
+  - A12 (the send wizard's address with a made-up word in place of
+    "userRoleAssignment" failing on the server; Actors row 2)
 - **No seed**:
   - a pending invitation past its deadline, the link stopped and no role
     granted (Rules 1, 2, 4): the test tooling cannot backdate a deadline
@@ -735,26 +746,15 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A8](#a8) | Added role rows carry no accessible field names; a screen reader hears row 1's labels | 🐞 | user-visible | — |
 | [A10](#a10) | A newcomer named only in another form language, or invited on a journal whose primary language is not the site's by a manager working in the site's, is still greeted "Dear {email}," | 🐞 | minor | — |
 | [A11](#a11) | The invitation email promises a masthead listing for roles the masthead does not list, such as Reader and Author | 🐞 | minor | — |
+| [A12](#a12) | The send wizard's address with a made-up word in place of "userRoleAssignment" fails on the server and shows an empty page | 🐞 | latent · crash: server | — |
 | [OMP1](#omp1) | On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | The invitation email template has no row on the preprint server's Emails screen | 🐞 | user-visible | — |
-| [A1](#a1) | The send wizard's address is gated more widely than the screen that offers it | ❓ | latent | — |
 | [A2](#a2) | Daily cleanup deletes invitations still being composed | ❓ | latent | — |
 | [A9](#a9) | The role-removal email tells a disabled user their account "is still active"; the active "Remove Role" and masthead select on their screen are intended | ❓ | minor | @beaug 2026-09-18 · controls intended, email wording open |
+| [A1](#a1) | Retired: the send wizard's address was gated more widely than the screen that offers it; it now lets in only those who open Users & Roles (Actors row 2) | ✅ | retired | upstream change + claim check (claude), 2026-10-02 — fixed upstream |
 | [A6](#a6) | Retired: Edit on a disabled member's row opened an error over an empty wizard; it now opens their details with the disabled-user warning (Rule 14) | ✅ | retired | upstream change + claim check (claude), 2026-09-18 — fixed upstream |
 
 ### All apps
-
-<a id="a1"></a>
-**A1 — Wizard address wider than its screen** · ❓ · latent.
-The only screen offering "Invite to a role" is Users & Roles (Managers and the
-Site Administrator), but in code the wizard's own address is gated more
-widely. An Author or Reviewer who types the address is turned away. The live
-outcome for the remaining roles was checked on 2026-07-31 and is recorded in
-the maintainer's private security file, not here.
-Question: should anyone beyond Managers and the Site Administrator reach the
-send wizard at all? Lean: no. The screen's narrower gate looks like the
-product decision.
-Basis: code + probe. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — Cleanup eats unsent drafts** · ❓ · latent.
@@ -878,6 +878,16 @@ default install the masthead lists neither role. The invitation itself
 works; only the promise is false.
 Basis: probe. <sup>[f-a11](#fn-a11)</sup>
 
+<a id="a12"></a>
+**A12 — A made-up word in the send wizard's address crashes the page** · 🐞 · latent · crash: server.
+A Journal Manager who types the address "Invite to a role" opens (Actors
+row 2) with a made-up word, such as "nosuchtype", in place of its last one,
+"userRoleAssignment", gets an empty page: the app fails on the server. The
+same address with no last word at all shows the "404 Not Found" page, which
+is what a made-up word should get too. Only an address typed by hand, or a
+damaged one, reaches it.
+Basis: probe on OJS, code on OMP and OPS. <sup>[f-a12](#fn-a12)</sup>
+
 ### OMP and OPS
 
 <a id="omp1"></a>
@@ -914,6 +924,9 @@ Basis: probe + code. <sup>[f-ops1](#fn-ops1)</sup>
 
 ### Retired
 
+<a id="a1"></a>
+**A1 — Wizard address wider than its screen** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13299, 2026-09-19), verified 2026-10-02 on OJS: typing the send wizard's address opens it for exactly those who open Users & Roles, and anyone else signed in gets the access-denied page (Actors row 2). <sup>[f-a1](#fn-a1)</sup>
+
 <a id="a6"></a>
 **A6 — Edit on a disabled member opens a broken wizard** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13313, 2026-09-15), verified 2026-09-18 on OJS, OMP and OPS: Edit on a disabled user's row opens their details and current roles under "The user is currently disabled.", with no error (Rule 14); the email its role controls send is [A9](#a9)'s. <sup>[f-a6](#fn-a6)</sup>
 
@@ -935,28 +948,77 @@ groups with `permitSettings`). Row actions and dialogs:
 all three apps: only managers and the
 Site Administrator reach the screen; button label "Invite to a role" verbatim
 everywhere.
+The button, the Invitations table and each row's "More Actions" menu
+(items "Edit", which leads to "Edit Invitation", and "Cancel Invite") sit
+in `UserInvitationManager.vue` with no role condition (the same file in
+all three apps' ui-library), so all of them show to whoever passes the
+screen gate (Actors rows 1–5; the user row's Edit action is [User
+management](U53-users-management.md)'s). Live-probed 2026-10-02 on OJS
+(lib/pkp `ddd8ab243a`, two runs; Actors rows 1–5): Users & Roles with
+"Invite to a role" opened for `admin`, a scratch Journal manager, a
+scratch Production editor (the installer's flags) and `editor.diana`; the
+Production editor's screen also showed the Invitations table with its
+pending row and that row's menu button. The menu's items were not opened
+as the Production editor or an Editor: that they work for them is code.
+The screen answered "The current role does not have access to this
+operation." for a scratch Journal editor on a journal seeded with `roles: {editor: {permitSettings: false}}`, a
+Section editor, a Funding coordinator, `copyeditor.carla`, an Author, a
+Reviewer and a Reader. The same role thus reaches the screen with
+`permitSettings` on and is refused with it off.
 
 <a id="fn-b"></a>
 **b** — `PKP\pages\invitation\InitializeInvitationUIHandler` (ROUTE-013)
-assigns ops `create`/`edit` to `ROLE_ID_SITE_ADMIN`, `ROLE_ID_MANAGER`,
-`ROLE_ID_SUB_EDITOR`, `ROLE_ID_ASSISTANT` (+ `ContextAccessPolicy`). The API
-(`PKP\API\v1\invitations\InvitationController`, API-024) shared that
-four-role list until pkp/pkp-lib#13340 (`0dce988b35`, `c767c313b9`,
-2026-09-16; issue pkp/pkp-lib#13299, with the follow-up pkp/pkp-lib#13339
-named in a code comment on the list). Since then its route group for listing,
-reading, adding, populating, sending, previewing the email of and cancelling
-an invitation lists `ROLE_ID_SITE_ADMIN` and `ROLE_ID_MANAGER` only, and the
+assigns ops `create`/`edit` to `ROLE_ID_SITE_ADMIN` and `ROLE_ID_MANAGER`
+only, with a code comment pointing at pkp/pkp-lib#13339 before the list is
+extended, and adds `CanAccessSettingsPolicy` (note a) beside
+`ContextAccessPolicy`; `edit()` throws not-found for an invitation whose
+`belongsToContext()` is false; `UserRoleAssignmentCreateController::authorize()`
+adds `CanAccessSettingsPolicy`; and the API
+(`PKP\API\v1\invitations\InvitationController`, API-024) treats an
+invitation of another context as "Invitation not found". All from
+pkp/pkp-lib#13299 (`42b90e66db`, `fa353f410e`, `ddd8ab243a`, 2026-09-19), in
+OJS's lib/pkp at `ddd8ab243a`. Before them the page handler listed
+`ROLE_ID_SITE_ADMIN`, `ROLE_ID_MANAGER`, `ROLE_ID_SUB_EDITOR` and
+`ROLE_ID_ASSISTANT` (+ `ContextAccessPolicy`). The API shared that four-role
+list until pkp/pkp-lib#13340 (`0dce988b35`, `c767c313b9`, 2026-09-16; issue
+pkp/pkp-lib#13299). Since then its route group for listing, reading, adding,
+populating, sending, previewing the email of and cancelling an invitation
+lists `ROLE_ID_SITE_ADMIN` and `ROLE_ID_MANAGER` only, and the
 `UserRoleAssignmentInvitePayload` validation (`UserGroupBelongsToContextRule`)
 refuses a user group of another journal: "The provided user group does not
-belong to the invitation's context". The page handler's list is unchanged, so
-the mismatch of finding A1 now sits between the page on one side and both the
-offering screen (note a) and the API on the other. Code-read 2026-09-17 on
-OJS (lib/pkp `efbba94ae7`); the OMP and OPS lib/pkp pointers sit at
-`360badeef5`, before the commits. The wizard's own flows are unchanged for
-the Site Administrator and a Journal Manager (driven 2026-09-17 on OJS, two
-scratch journals: a create-flow invitation to a user whose only role is in the
-other journal and an edit-flow "Add Another Role" for a member of both, each
-sent and accepted with every call answering 200).
+belong to the invitation's context". The API sentences are code-read: the
+refused roles never reach a page that calls the API, and another journal's
+edit address stops at "404 Not Found" before any call. The OMP and OPS lib/pkp
+pointers sit at `3dc90c81a6`, before pkp/pkp-lib#13299's commits, and take
+them with their next lib/pkp bump; on them the page handler keeps the
+four-role list, so the mismatch of finding A1 still sits there between the
+page on one side and both the offering screen (note a) and the API on the
+other. Live-probed 2026-10-02 on OJS, two runs (Actors rows 2–3; for the
+roles, see f-a1): signed out, the create address went to
+`login?source=…/invitation/create/userRoleAssignment`; a Journal manager of
+two scratch journals A and B, under A's address with B's invitation id
+(`invitation/edit/<id>`), got 404 and a page headed "404 Not Found", and
+under B's address the same id opened the edit wizard prefilled with B's
+recipient's email; B's address with A's id gave 404, A's own id under A
+opened. The Site Administrator got the same outcomes. A manager of A alone
+got 404 under A with B's id, and under B, where they hold no role, "The
+current role does not have access to this operation.". An id no invitation
+has (99999999) and a non-numeric id (`abc`) under A gave the same "404 Not
+Found". The 404 pages made no API request and recorded no crash. The
+wizard's own flows are unchanged for the Site Administrator and a Journal
+Manager: driven 2026-09-17 on OJS (lib/pkp `efbba94ae7`, two scratch
+journals: a create-flow invitation to a user whose only role is in the other
+journal and an edit-flow "Add Another Role" for a member of both, each sent
+and accepted with every call answering 200), and again 2026-10-02 on OJS at
+`ddd8ab243a`, twice: as the Journal manager of each scratch journal,
+"Invite to a role" opened "STEP 1 - Search User", a new address led to
+"Enter details", the invitation went out as Copyeditor ("Invitation Sent"),
+and the row read "Nova Quill … Copyeditor Invited 2026-10-02" before and
+after a reload; its "Edit" › "Edit Invitation" opened "STEP 1 - Enter
+details and invite for roles" prefilled (Email, "Nova", "Quill", the
+Copyeditor row with today's date and "Appear on the masthead"). The Site
+Administrator opened the same wizard and the same prefilled edit wizard. No
+response of 400 or more and no page error came in any of these flows.
 
 <a id="fn-c"></a>
 **c** — Users-grid Edit → `ManagementHandler::editUser()` (ROUTE-017 rider) →
@@ -1370,6 +1432,19 @@ are recorded in the maintainer's private security file. OPS has no seeded
 reviewer account, so that one cell was untestable. Re-checked 2026-09-17 on
 OJS after pkp/pkp-lib#13340; the outcome for the section-editor and assistant
 levels is again recorded in the maintainer's private security file.
+Fixed upstream by pkp/pkp-lib#13299 (note b). Live-probed 2026-10-02 on
+OJS (lib/pkp `ddd8ab243a`), two runs, on two scratch journals and read-only
+on the seeded journal's roster: the create and edit addresses opened the
+wizard for `admin`, a scratch Journal manager and a scratch Production
+editor (the installer's flags), and the create address for `editor.diana`.
+Both addresses redirected to
+`user/authorizationDenied?message=user.authorization.roleBasedAccessDenied`
+("The current role does not have access to this operation.") for a scratch
+Journal editor with `permitSettings` off, a Section editor, a Funding
+coordinator, an Author, a Reviewer and a Reader, and the create address for
+`copyeditor.carla`. OMP and OPS were not driven: their lib/pkp pointers sit
+at `3dc90c81a6`, before the change, and take it with their next lib/pkp
+bump. Retired 2026-10-02.
 
 <a id="fn-a2"></a>
 **f-a2** — `scopeExpired()` includes `orWhereNull('expiry_date')` (note e);
@@ -1543,6 +1618,19 @@ Moderator), never Reader, Author or Copyeditor, before and after the drive,
 including after two Authors had accepted Copyeditor with "Appear on the
 masthead" on OJS and OMP. An existing Author's email carried the same
 sentence for the held Author role.
+
+<a id="fn-a12"></a>
+**f-a12** — `InitializeInvitationUIHandler::create()` answers not-found when
+the address has no type or a numeric one; otherwise it passes the word to
+`InvitationFactory::createNew()`, which throws a plain `Exception`
+("Invitation type '…' not found.") rather than the not-found the handler
+uses for the other bad addresses. The same code sits in all three apps'
+lib/pkp (OJS `ddd8ab243a`, OMP and OPS `3dc90c81a6`). Live-probed
+2026-10-02 on OJS, two runs, as `manager.maya`: `invitation/create/nosuchtype`
+on `publicknowledge` answered 500 with an empty page, the server log reading
+"Uncaught Exception: Invitation type 'nosuchtype' not found. in
+…/lib/pkp/classes/invitation/core/InvitationFactory.php:42";
+`invitation/create` with no type answered 404 with "404 Not Found".
 
 <a id="fn-omp1"></a>
 **f-omp1** — Error observed on OMP and OPS (live probes 2026-07-31, two

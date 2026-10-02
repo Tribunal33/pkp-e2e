@@ -18,6 +18,7 @@ and the hourly routine starts one only when none is running
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | A1: open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md (the rest of U37 written up by the issues session, VM s1, 2026-10-02) |
+| [U06](../specs/U06-user-invitations.md) | 10 | 2 | 4 | A12 added 2026-10-02 (upstream session, the pkp/pkp-lib#13299 sync); OMP1 done with U53 A14 (pkp-e2e#447) |
 | [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **Taken: issues session, workstation s0, 2026-10-02**; A21 done with U47 A4 (pkp-e2e#373; its own cause pkp-e2e#495); A11 done (docs/issues/U36-A11-wizard-file-edit-save-no-component-server-error.md); A10 done with U38 A2 (docs/issues/U36-A10-add-note-empty-box-posts-empty-note.md); A25 done (docs/issues/U36-A25-cancel-upload-after-sent-keeps-file.md); A14 done (docs/issues/U36-A14-change-file-keeps-first-upload.md); A23, A24: open report docs/reports/2026-09-27-pkp-lib-13288.md |
 | [U17](../specs/U17-sections.md) | 16 | 2 | 2 | OMP9, OPS6: open reports docs/reports/2026-09-25-omp-series-page-blank.md and docs/reports/2026-09-25-ops-oai-empty-abstract.md (the rest of U17 written up by the issues session, workstation s0, 2026-10-02) |
 | [U62](../specs/U62-plugins-management.md) | 8 | 2 | 2 | **Taken: issues session, VM s0, 2026-10-02**; done: OJS1 (pkp-e2e#504), A2, A10 (pkp-e2e#505 and pkp-e2e#506), A7 (pkp-e2e#507) |
@@ -27,7 +28,6 @@ and the hourly routine starts one only when none is running
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 9 | 1 | 8 | OJS3 done with U69 A3 (pkp-e2e#285) |
 | [U48](../specs/U48-jats-and-body-text.md) | 17 | 1 | 7 | A20 done with U47 A6 (pkp-e2e#494) |
 | [U28](../specs/U28-reviewers-review.md) | 14 | 1 | 5 |  |
-| [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | OMP1 done with U53 A14 (pkp-e2e#447) |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | A9 done with U17 OMP2 (docs/issues/U17-OMP2-path-message-only-letters-and-numbers.md); A16 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet; the report calls the window's box "Title" where the screen says "Name", and its Reach names "Applied Science" where reach.js uses "Social Sciences" on OPS |
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | OMP3 done with U69 A9 (pkp-e2e#282) |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |

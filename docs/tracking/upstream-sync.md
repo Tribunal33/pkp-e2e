@@ -9,10 +9,10 @@ The `stable-3_5_0` branch, read for regressions only, has its own file:
 
 | Repo | Last-reviewed commit | Date | Reviewed by |
 |------|----------------------|------|-------------|
-| ojs | `68615b5a32` | 2026-10-01 | claude (daily maintenance session) |
+| ojs | `b84f8e2e44` | 2026-10-02 | claude (daily maintenance session) |
 | omp | `3b0ecf794` | 2026-09-30 | claude (daily maintenance session) |
 | ops | `c8af945bb7` | 2026-09-30 | claude (daily maintenance session) |
-| pkp-lib | `25562b0e1a` (`main` and ojs; omp, ops at `3dc90c81a6`) | 2026-10-01 | claude (daily maintenance session); ui-library `64d67363` (`main` and ojs; omp, ops at `280f98c5`); ojs `plugins/generic/crossref` `46a4d469bf`, ops `plugins/generic/crossref` `b6b94dd5de`, ojs `plugins/generic/jatsTemplate` `dfcb4ee60b` (2026-09-30), ojs `plugins/generic/googleScholar` `4cae9952f9` (2026-09-25) |
+| pkp-lib | `ddd8ab243a` (`main` and ojs; omp, ops at `3dc90c81a6`) | 2026-10-02 | claude (daily maintenance session); ui-library `64d67363` (`main` and ojs; omp, ops at `280f98c5`); ojs `plugins/generic/crossref` `46a4d469bf`, ops `plugins/generic/crossref` `b6b94dd5de`, ojs `plugins/generic/jatsTemplate` `dfcb4ee60b` (2026-09-30), ojs `plugins/generic/googleScholar` `4cae9952f9` (2026-09-25) |
 
 ## Leads
 
@@ -35,11 +35,10 @@ deletes each once it is a report, a register entry or dismissed._
   required as on OJS (`otherLinesOptional` out of
   `apps/omp/playwright/tests/U63-import-export.spec.js`): the spec's
   scenario 6 already requires it on both apps.
-- 2026-10-02 (housekeeping session): a backport question for the
-  stable line: on stable-3_5_0 the DOAJ list's "Authors" search matches
-  only the whole "Given Family" name (no `%` wildcards); `main` fixed it
-  with pkp/pkp-lib#11589 (U63 f-ojs6, walked 2026-10-01 in
-  `docs/issues/U63-OJS6-doaj-search-matches-letter-case.md` steps 6–7).
+- 2026-10-02 (upstream session): when OMP's and OPS's `lib/pkp` pointers carry
+  pkp/pkp-lib#13299 (`ddd8ab243a`), re-run `checks/U06/S02/s02.js` on them
+  (U06 A1 was retired on the OJS drive; f-a1 says OMP and OPS were not
+  driven).
 
 ## Sync log
 
@@ -47,6 +46,14 @@ _Newest first; one entry per sync: the date and the range per repo, then
 one line per change reviewed (commit → no impact / spec and tests touched /
 finding filed, with a link)._
 
+- **2026-10-02 (daily session, VM s2) — ojs `68615b5a32..b84f8e2e44` (1, a pointer bump), pkp-lib `25562b0e1a..ddd8ab243a` (3, OJS's pointer; `main` holds nothing past it); omp, ops, ui-library (`64d67363` on `main`) and the plugins unchanged.**
+  - pkp-lib `42b90e66db`, `fa353f410e`, `ddd8ab243a` (#13299, "[Invitations] Validate user group context"; rebased onto `main`, no merge commit: `InitializeInvitationUIHandler` lists the Site Administrator and Manager only and adds `CanAccessSettingsPolicy`, `UserRoleAssignmentCreateController` adds `CanAccessSettingsPolicy`, `Invitation::belongsToContext()` makes another context's invitation not found at `invitation/edit/<id>` and in the invitations API) → spec touched: U06 (no kept check covered the wizard's address; claim check S02 on OJS, two runs, 18 lines: 6 holds, 3 wrong, 6 imprecise; new kept `checks/U06/S02/s02.js`; fold; persona read, 1 fact blocker settled by the rewrite): **A1 RETIRED** (the address now admits exactly whoever opens Users & Roles: the Site Administrator and the manager-level roles with "Permit changes to Settings"; another journal's invitation shows "404 Not Found"), Actors rows 1–5 name that one gate, notes a, b and f-a1 rewritten, **A12 🐞 new** (latent, crash: server: `invitation/create/<unknown type>` answers 500 with an empty page, not this range's: `InvitationFactory::createNew()` throws), two **Planned** items; issues-queue U06 row gains A12; one incidental for U01 (the access-denied page's empty heading). Regression verdict in this line (no reader: the change narrows authorization, which is the private probe's, not a reader's; read here): the wizard's only entry points are Users & Roles' "Invite to a role" and the row menu (`UserInvitationManagerStore.js`), already behind `CanAccessSettingsPolicy`, and the only invitation type with a UI controller is userRoleAssignment, so no screen loses a path it offered; the API's context check sits behind `has.context` and the model casts `contextId` to int; the manager's and the Site Administrator's send and edit flows driven unchanged (S02) → none.
+  - ojs `b84f8e2e44` (pointer bump) → nothing of its own.
+  - Tests: the three U06 suite headers drop A1 and name A12; U06 green on OJS (11), OMP (11) and OPS (12) incl. setup (`.reports/sync/s02/u06-<app>.log`); lint, `--tests` and `lint:suite` zero.
+  - CI: pkp/ojs 36929796709 (`b84f8e2e44`) green, the red of 2026-10-01 gone; pkp/omp 36618354774 and pkp/ops 36618628082 (unchanged tips) green. No known-red rows, no companion rows.
+  - Open regressions: #13370 (`checks/sync/pkp-lib-13370/masthead-promises.js`) and #13376 (`checks/sync/pkp-lib-13376/greeting.js`, leg s2e still greets by the address) re-run on a reset OJS because the range touched the invitation wizard: both still reproduce (`.reports/sync/s02-13370/`, `.reports/sync/s02-13376/`); #12994 upgrade, #13414, #13288, #12798, #13181, ojs#5813 not re-run: the range moved invitation authorization alone.
+  - Leads: the U63 S6 overlap line (OMP's pointer has not moved) kept; the stable line's DOAJ "Authors" search → a backport candidate, not a regression (pkp/pkp-lib#11589, "Consider JAV versions for indexing", milestone 3.6, never on `stable-3_5_0`), named in the day's summary; deleted. New lead: U06 S02 on OMP and OPS when their pointers move.
+  - Baselines advanced: ojs `b84f8e2e44`, pkp-lib `ddd8ab243a` (ojs).
 - **2026-10-01 (upstream session on request, VM s3: OJS red on `main`) — ojs `bade233f73..68615b5a32` (3), pkp-lib `887ad73d6c..25562b0e1a` (2, OJS's pointer; `main` holds nothing past it), ui-library `280f98c5..64d67363` (2: `8936d9a6`, PR-reviewed and merged this morning, and `64d67363`; `main` holds nothing past it); omp, ops and the plugins unchanged.**
   - ui-library `64d67363` + pkp-lib `f5bd392a69` + ojs `06fd981b01` (issue pkp/pkp-lib#13422, "Refine comments rendering": pkp-lib#13423, ui-library#1003, ojs#5883; the comment resource gains `userOrcid`, the landing page's `PkpComments` shows the iD as `PkpOrcidDisplay` `variant="icon"` inside the name and the affiliation only when there is one) → **the red**: OJS U14 S2 read the iD as the link's text (pkp/ojs 36866764089 and 36892566313, pkp-e2e push runs 36872303797 and 36890239413, both attempts each). An intended change (the issue: "the orcid is now rendered just as icon behind the author name (same as in open peer review) And affiliation is on second line"). Spec touched: U14 (kept `checks/U14/K2/k2.js` re-run on a reset OJS, `.reports/U14/s01K2/`; claim check Ks01 on OJS, two runs, 27 lines: 13 holds, 12 wrong, 2 imprecise; new kept `checks/U14/Ks01/ks01.js`; fold; persona read): Rule 6b and scenario 2's landing-page bullet rewritten, **A6 narrowed** to the Comments page's comment and report panels (the landing page's icon now leads to the bare iD, verified or not), **A15 ❓ new** (only the icon's fill tells an unverified iD from a verified one, both links named "ORCID iD"), three **Planned** items. Regression verdict in this line (no reader: the claim check swept the one screen the component serves; the default theme's `comments.less` and the resource's added field have no other reader in the three apps, oreTheme is outside the suites): none.
   - ui-library `8936d9a6` (#13127) → reviewed 2026-10-01 as ui-library#989 (the entry below); OJS's pointer now carries it.

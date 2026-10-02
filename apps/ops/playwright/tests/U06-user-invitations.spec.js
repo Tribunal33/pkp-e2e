@@ -9,7 +9,7 @@
  * Spec: docs/specs/U06-user-invitations.md
  *
  * Deliberately NOT covered (register IDs; the spec's Coverage section is the
- * record of the rest): A1, A2, A3, A4, A5, A7, A8, A9, A10, A11, OMP1.
+ * record of the rest): A2, A3, A4, A5, A7, A8, A9, A10, A11, A12, OMP1.
  * OPS1 is S9's subject, asserted as an absence with a positive control.
  *
  * Every test but S9 seeds its own scratch preprint server (publicknowledge
