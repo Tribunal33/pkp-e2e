@@ -1249,7 +1249,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A8](#a8) | In a format with several files, a file for sale shows no price | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | On a press, a reader who opens a book's PDF gets an empty viewer, and no download saves the file | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
-| [A15](#a15) | On a press shown in French (Canada), book and chapter pages show codes in place of labels and of editors' names | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [A15](#a15) | In French (Canada), a press's book and chapter pages and Roles list show codes, even for editors' names | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A16](#a16) | A book's earlier URL Path shows a server error page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | An older version's chapter page of a book shows a blank server error page to every reader | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A1](#a1) | On a press, a book address that names no book opens the Login page instead of "404 Not Found" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1459,7 +1459,7 @@ Lean: yes, a defect; the chapter did not exist in that year.
 Basis: probe, 2026-09-28. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — On a press shown in French (Canada), book and chapter pages show codes in place of labels and of editors' names** · 🐞 · medium.
+**A15 — In French (Canada), a press's book and chapter pages and Roles list show codes, even for editors' names** · 🐞 · medium.
 On a press shown in French (Canada), a book's page and a chapter's page
 show raw codes where the English pages show labels: the date is headed
 "##catalog.published##" instead of "Published", and a file's view page
@@ -1468,16 +1468,24 @@ volume the code also takes the place of each editor's name: the page
 lists "##submission.editorName##" where the English page lists "Sarah
 Carter (ed)" and "Peter Fortna (ed)". A file for sale is linked as
 "Achat (25.00 USD)", without the format's name that the English link
-gives ("Purchase PDF (25.00 USD)").
+gives ("Purchase PDF (25.00 USD)"). The press's staff see the same in
+its settings and workflow: the External Review stage is named
+"##workflow.review.externalReview##" on the "Rôles" list's column, on
+its box in the window that creates a role, and in a submission's
+workflow menu.
+
 The rest of each page shows as usual and every link works. A French
 reader of an edited volume cannot see who edited it, and the press
-cannot change these texts from its settings.
+cannot change these texts from its settings. The fix is a translation
+hand-off with no code change: entering the missing French (Canada)
+texts.
+
 A press shows these codes when "Français (Canada)" is among the
 languages it offers in its language settings. A press that offers
 "Français" (France) instead has every one of these texts but the priced
 link's format name.
 Every version name reads "{date} (##publication.versionStage.display##)", as on an article's page ([→ Article landing page & reading, A1](U13-article-landing-page-and-reading.md#a1)), whose report covers it.
-Basis: probe, 2026-10-01. <sup>f-a15</sup>
+Basis: probe, 2026-10-02. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — A book's earlier URL Path shows a server error page** · 🐞 · medium · crash: server.

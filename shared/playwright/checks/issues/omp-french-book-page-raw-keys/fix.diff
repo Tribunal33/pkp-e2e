@@ -101,6 +101,15 @@
  
  msgid "submission.artwork.permissions"
  msgstr "Permissions"
+@@ -291,7 +291,7 @@
+ msgstr ""
+ 
+ msgid "workflow.review.externalReview"
+-msgstr ""
++msgstr "Évaluation externe"
+ 
+ msgid "submission.upload.fileContents"
+ msgstr ""
 @@ -467,16 +467,16 @@
  msgstr ""
  

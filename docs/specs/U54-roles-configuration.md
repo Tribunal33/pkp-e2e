@@ -899,7 +899,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | "OK" in an Editor's own role window takes the Settings pages away from every holder of the role | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | Roles list: a saved role jumps to the end, and its pages can repeat one role and skip another | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | Users & Roles: after a role is renamed, the "Users" tab shows its old name until a reload | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OMP1](#omp1) | In French a press's "Roles" list heads its External Review column with a code | 🐞 | minor | — |
+| [OMP1](#omp1) | In French a press's "Roles" list heads its External Review column with a code | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | A preprint server's "View Preprint Content" sign-in box says "Saved" but keeps nothing, so files stay open | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS3](#ops3) | In French a preprint server's Moderator level reads "Éditeur-trice de série" (Series Editor) | 🐞 | minor | — |
 | [A6](#a6) | A role anyone has ever held can never be removed | ❓ | minor | — |
@@ -1147,12 +1147,17 @@ Basis: test run; probe, 2026-10-02. <sup>f-a14</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — A code heads the External Review column in French** · 🐞 · minor.
-In the French interface a press's "Roles" list heads its External Review
-column "##workflow.review.externalReview##", while the other columns
-read "Soumission", "Évaluation interne", "Révision" and "Production". A
-journal's list prints a French name for every column.
-Basis: probe. <sup>f-omp1</sup>
+**OMP1 — A code heads the External Review column in French** · 🐞 · medium.
+On a press shown in French (Canada), the "Rôles" list heads its External
+Review column "##workflow.review.externalReview##", while the other
+columns read "Soumission", "Évaluation interne", "Révision" and
+"Production"; the same code names the stage's box in the window that
+creates a role and the stage in a submission's workflow menu. A journal's
+list prints a French name for every column. One of several French
+(Canada) texts the press lacks, with its book and chapter pages
+([→ Monograph landing page, A15](U69-monograph-landing-page.md#a15)),
+whose report covers it.
+Basis: probe, 2026-10-02. <sup>f-omp1</sup>
 
 ### OPS
 
@@ -1905,6 +1910,7 @@ key ([b](#fn-b)). Live-probed 2026-09-26 (Fields; all three apps, French
 as a UI language): the press's columns read "Soumission", "Évaluation
 interne", "##workflow.review.externalReview##", "Révision", "Production";
 OJS printed French headings throughout.
+Issue report: [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) ([docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — OPS `UserAccessForm` posts `restrictPreprintAccess`, but

@@ -1,4 +1,4 @@
-# On a press shown in French (Canada), book and chapter pages show codes in place of labels and of editors' names
+# In French (Canada), a press's book and chapter pages and Roles list show codes, even for editors' names
 
 - **Severity** medium
 - **Effort** small
@@ -7,11 +7,14 @@
   - main: OMP
   - 3.5: OMP (the editors' names by the code)
   - 3.4: OMP (code)
-  - 3.3: OMP (code; the book's page only, it has no chapter pages)
-- **Introduced** not traced; each text was added in English at a different time and never entered in French (Canada). The oldest are the book page's "Published" and "Categories", since [52df855c59](https://github.com/pkp/omp/commit/52df855c59a26832353324486789159f965d5605) (2015-09-04)
-- **Upstream** none found (2026-10-01)
-- **Tracked in** spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15), spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (a book's OAI-PMH "Resource Type")
-- **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+  - 3.3: OMP (code; the book's page and the "Roles" list, no chapter pages)
+- **Introduced** not traced; the texts were added in English at different times and none was ever entered in OMP's French (Canada) files. The External Review stage's name had a French (Canada) text in pkp-lib until 2019 (Cause). The oldest are the book page's "Published" and "Categories", since [52df855c59](https://github.com/pkp/omp/commit/52df855c59a26832353324486789159f965d5605) (2015-09-04)
+- **Upstream** none found (2026-10-02)
+- **Tracked in** spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15), spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (a book's OAI-PMH "Resource Type"), spec U54 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U54-roles-configuration.md#omp1) (the External Review stage's name on the press's "Roles" list)
+- **Checked** 2026-10-01, the staff screens 2026-10-02, each branch's tip (the commits in Evidence)
+
+2026-10-02: widened to the press's staff screens, where the External
+Review stage's name is a code (Steps 14 to 17).
 
 ## Summary
 
@@ -23,11 +26,17 @@ volume the code also takes the place of each editor's name: the page
 lists "##submission.editorName##" where the English page lists "Sarah
 Carter (ed)" and "Peter Fortna (ed)". A file for sale is linked as
 "Achat (25.00 USD)", without the format's name that the English link
-gives ("Purchase PDF (25.00 USD)").
+gives ("Purchase PDF (25.00 USD)"). The press's staff see the same in
+its settings and workflow: the External Review stage is named
+"##workflow.review.externalReview##" on the "Rôles" list's column, on
+its box in the window that creates a role, and in a submission's
+workflow menu.
 
 The rest of each page shows as usual and every link works. A French
 reader of an edited volume cannot see who edited it, and the press
-cannot change these texts from its settings.
+cannot change these texts from its settings. The fix is a translation
+hand-off with no code change: entering the missing French (Canada)
+texts.
 
 A press shows these codes when "Français (Canada)" is among the
 languages it offers in its language settings. A press that offers
@@ -38,13 +47,17 @@ link's format name.
 
 - **Lost.** An edited volume's editors' names, and about a dozen labels
   on every book and chapter page.
-- **Who.** Readers of a press that offers French (Canada). By the code,
-  the same in Arabic, Central Kurdish, Greek, Kyrgyz and Vietnamese.
-- **Way round.** Switch the page to English; none in French.
+- **Who.** Readers of a press that offers French (Canada), and its
+  staff working in French (Canada) on the "Rôles" list and in the
+  workflow. By the code, the reader pages are the same in Arabic,
+  Central Kurdish, Greek, Kyrgyz and Vietnamese.
+- **Way round.** Switch the page to English; none in French. Staff
+  are not held up: the stage's code only stands in for its name.
 
 Medium: a public page is wrong in a field, the editors' names, on edited
-volumes only and in one language, and the English page shows them. The
-labels alone would be low.
+volumes only, in French (Canada) and, by the code, in the five
+languages above, and the English page shows them. The labels and the
+staff screens alone would be low.
 
 ## Steps to reproduce
 
@@ -76,8 +89,9 @@ Reader, the dataset as loaded (signed out):
 4. Back on the book's page, press either of the two file names under
    "PDF" in the side column ("Segmentation of Vascular Ultrasound
    Imag.pdf" or "The Canadian Nutrient File: Nutrient Val.pdf"). Read
-   the browser tab and the name of the return arrow in the bar above
-   the file.
+   the browser tab, and the label of the return arrow in the bar above
+   the file. The label is for screen readers only: the browser's
+   accessibility inspector shows it as the arrow's name.
 
 A chapter added in a second version:
 
@@ -122,6 +136,22 @@ An edited volume:
     `/index.php/publicknowledge/fr_CA/catalog/book/2`. Read the names
     under "Auteurs-es".
 
+The press's settings, as staff (the dataset as loaded):
+
+14. Sign in as `dbarnes`, open the menu under his initials at the top
+    right and, under "Change Language", choose "français".
+15. Open "Paramètres" › "Utilisateurs-trices et rôles"
+    (`/index.php/publicknowledge/fr_CA/management/settings/access`) and
+    its "Rôles" tab. Read the column headings of the "Rôles actuels"
+    list.
+16. Press "Créer un nouveau rôle" and read the names of the boxes under
+    "Affectation d'étape". Close the window.
+17. Open submission 2, "The West and Beyond: New Perspectives on an
+    Imagined Region", which is in External Review
+    (`/index.php/publicknowledge/fr_CA/dashboard/editorial?workflowSubmissionId=2`).
+    Read the stage names in the workflow's menu under "Flux des
+    travaux".
+
 **Expected.** Each label reads in French what the English page reads:
 "Published" (steps 2, 3), "Volume" (3), the tab "PDF view of the file
 Segmentation of Vascular Ultrasound Imag.pdf" and the arrow "Return to
@@ -129,7 +159,9 @@ view details about From Bricks to Brains: …" (4), "Pages" and the newer
 version's line "2026-10-01 (Version of Record 1.1) — Chapter created"
 (9). The priced link names the format, as the English link "25.00
 Purchase PDF (25.00 USD)" does (12). The editors are named, as in
-English "Sarah Carter (ed)" and "Peter Fortna (ed)" (13).
+English "Sarah Carter (ed)" and "Peter Fortna (ed)" (13). Every stage
+is named in French, as the English screens read "Submission", "Internal
+Review", "External Review", "Copyediting", "Production" (15 to 17).
 
 **Observed.**
 
@@ -145,6 +177,9 @@ Step 9:  ##chapter.pages##
 Step 12: 25.00 Achat (25.00 USD)
 Step 13: ##submission.editorName##
          ##submission.editorName##
+Step 15: Soumission | Évaluation interne | ##workflow.review.externalReview## | Révision | Production
+Step 16: Soumission | Évaluation interne | ##workflow.review.externalReview## | Révision | Production
+Step 17: Soumission | Évaluation interne | ##workflow.review.externalReview## (Cycle d'évaluation 1) | Révision | Production
 ```
 
 The version's name inside the brackets is a code of its own on `main`,
@@ -217,6 +252,32 @@ left out.
   `<dc:type xml:lang="fr-CA">##rt.metadata.pkp.dctype##</dc:type>` where
   the English address gives "Book"
   (`Dc11SchemaPublicationFormatAdapter`).
+- On screen (`main` and 3.5), for the press's staff:
+  `workflow.review.externalReview`, the External Review stage's name,
+  empty in `locale/fr_CA/submission.po`. It heads the stage's column on
+  the "Rôles" list, names the stage's box in the "Créer un nouveau
+  rôle" window and names the stage in a submission's workflow menu.
+  By the code (`WorkflowStageDAO::getWorkflowStageTranslationKeys()`,
+  `PKPApplication::getWorkflowStageName()`, ui-library `StageLabels`)
+  it also names the stage in:
+  - the "Rôles" list's stage filter, and the notice after a stage box
+    is ticked (`UserGroupGridHandler`);
+  - the editorial statistics page (`PKPStatsHandler`) and the monthly
+    statistics email's attachment (`StatisticsReportMail`);
+  - the API's `stageName` of a submission (`submission/maps/Schema.php`);
+  - the monograph report's status column (`plugins/reports/monographReport/Report.php`);
+  - OMP's `SubmissionsListPanel` stage filter;
+  - the workflow's status notices that name a stage the submission has
+    not reached or has left (`WorkflowSubmissionStatus.vue`).
+
+  Until 2019 the text
+  "Évaluation externe" came from pkp-lib's French (Canada) files, which
+  dropped it in
+  [ceef9fdb49](https://github.com/pkp/pkp-lib/commit/ceef9fdb49470eb056e88d0930777897faeadddc)
+  (2019-10-15), four years after the English text moved from pkp-lib
+  into OMP
+  ([2ba2d4c8d2](https://github.com/pkp/omp/commit/2ba2d4c8d25750d37292a15ad5a0660402a58338),
+  2015-02-24). OMP's own French (Canada) file never received it.
 - By the code, in cases not set up on screen here, the same templates
   read nine more keys that are empty in `locale/fr_CA`:
   - `catalog.forthcoming`, over a publication date in the future.
@@ -254,16 +315,18 @@ left out.
 
 ## Proposed fix
 
-Enter the missing French (Canada) texts through Weblate, PKP's route
-for translations, as the preprint server's French gaps were ruled
-(spec U13 OPS7, OPS8). No commit to `locale/fr_CA` is proposed: Weblate
-writes those files. A developer's part is to enter the texts of
-[fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-book-page-raw-keys/fix.diff)
-on Weblate, in OMP's French (Canada) and its default theme's, or to
-hand the list to the French (Canada) translators. No code changes and
-no data is involved.
+Enter the missing French (Canada) texts on PKP's Weblate
+(translate.pkp.sfu.ca), which writes the locale files, rather than
+commit them. The texts are those of
+[fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-book-page-raw-keys/fix.diff).
+All 20 are OMP's own, none pkp-lib's, in four components of Weblate's
+`omp` project, as the files' `Language-Team` headers name them:
+`locale`, `manager` and `submission` in French (Canada), `locale` also
+in French (France) for the priced link, and `themes-default` in French
+(Canada). A developer can enter them or hand the list to the French
+(Canada) translators.
 
-The diff holds 19 texts. Seventeen fill the 16 empty entries and the
+The diff holds 20 texts. Eighteen fill the 17 empty entries and the
 theme's missing one, each copied from OMP's own French (France) files.
 Two add `{$format}` to the priced link, in French (Canada) and French
 (France):
@@ -297,6 +360,7 @@ English pages and the French labels that were already translated
 ("Synopsis", "Séries", "Mots-clés :") read the same with the diff in
 and out. The French OAI-PMH records' "Resource Type" read "Livre", with
 every other element of the records and the English records unchanged.
+The staff screens of steps 15 to 17 read "Évaluation externe".
 
 **Alternatives**
 
@@ -325,14 +389,20 @@ every other element of the records and the English records unchanged.
 - With the fix for spec U69 A7 the priced link then reads "Achat PDF
   (25.00 USD)".
 - Older versions: `stable-3_5_0` and `stable-3_4_0` have the same empty
-  entries (3.4 names the French (France) folder `fr_FR`).
+  entries (3.4 names the French (France) folder `fr_FR`). From OMP's
+  history: Weblate commits to a `translations/stable-3_5_0` branch,
+  which pkp merges into `stable-3_5_0` about monthly (latest
+  8a6ff0375, 2026-09-18), and `stable-3_5_0` is merged forward into
+  `main`, so texts entered once reach 3.5 and `main`. The last Weblate
+  commit on `stable-3_4_0` is 5d7b75b79 (2025-02-14). Not known:
+  whether Weblate still takes 3.4 texts, or whether 3.4 needs a commit
+  of its own.
   `stable-3_3_0` has the book-page entries empty, no chapter-page
   texts, and no French (France) file to copy from.
 - The guard: the U69 spec's French-page scenario asserting that a
   book's and a chapter's page show no `##` code (a Planned item).
 
-Small: 19 texts entered on Weblate, tried as a diff, with no code
-change.
+Small: 20 texts entered on Weblate and no code, tried as a diff.
 
 ## Evidence
 
@@ -396,11 +466,14 @@ change.
   locale files rearranged) and were absent before.
 - Upstream: pkp/pkp-lib and pkp/omp searched by "fr_CA", "French
   translation OMP", the key names (`catalog.published`, `viewableFile`,
-  `chapterCreated`, `withoutChapter`, `directSales.purchase`) and
+  `chapterCreated`, `withoutChapter`, `directSales.purchase`,
+  `workflow.review.externalReview`, searched 2026-10-02), "Évaluation
+  externe" and
   "fallback locale regional". Read: `pkp/pkp-lib#10169` (the
   "Forthcoming" label under another date format, fixed),
   `pkp/pkp-lib#9707` (locale folders renamed to Weblate's codes),
-  `pkp/pkp-lib#784`.
+  `pkp/pkp-lib#784`, `pkp/pkp-lib#5335` (a PHP notice from OJS's
+  editorial report task on this key, closed; not this fault).
 - The OAI-PMH "Resource Type" (spec U19 A13): read by
   [`oai-french-records-raw-keys/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/oai-french-records-raw-keys/walk.js),
   which lists the press's Dublin Core records at the French and the
@@ -410,11 +483,34 @@ change.
   `locale/fr_CA/locale.po` on `main`, 3.5, 3.4 and 3.3, and
   `Dc11SchemaPublicationFormatAdapter` reads it under the request's
   language on each.
+- The staff screens (spec U54 OMP1, steps 14 to 17): read by
+  [`omp-french-roles-stage-raw-key/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-roles-stage-raw-key/walk.js),
+  which takes steps 14 to 16 on OJS, OMP and OPS and step 17 on OMP,
+  and changes nothing:
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js all shared/playwright/checks/issues/omp-french-roles-stage-raw-key/walk.js`
+  (`NB=1` in front reads the same screens in English). Walked on `main`
+  and `stable-3_5_0` (pkp/datasets c657990, 2026-10-01), and on `main`
+  with the diff in and out: OMP showed the code in the column, the
+  window and the workflow menu on both lines; OJS headed its columns
+  "Soumission", "Évaluation", "Révision", "Production" and OPS its one
+  column "Production". The script opens step 15's page and step 17's
+  workflow by their addresses. 3.5 tip for this walk: c7b45f88e
+  (`lib/pkp` 1fb843f491). 3.4 and 3.3 (code): the entry is empty in
+  OMP's `locale/fr_CA/submission.po` on `upstream/stable-3_4_0`
+  (0aec65441) and `upstream/stable-3_3_0` (8e72fc883), pkp-lib's
+  `locale/fr_CA/submission.po` has none on `origin/stable-3_4_0`
+  (32b0f4b4af) and `origin/stable-3_3_0` (f6ab331645), and
+  `UserGroupGridHandler` heads the columns from
+  `WorkflowStageDAO::getWorkflowStageTranslationKeys()` on both. The
+  2019 trace: `git log -S'workflow.review.externalReview'` on OMP's and
+  pkp-lib's `locale/fr_CA` (OMP c7be6b7f3, 2013-08-07, moved the text
+  to pkp-lib; pkp-lib ceef9fdb49 removed it).
 - Fix trial:
   `node bin/try-fix.js apply shared/playwright/checks/issues/omp-french-book-page-raw-keys/fix.diff omp`,
-  the kept script, then `revert`.
+  the kept scripts, then `revert`.
 - Not driven: 3.4 and 3.3 (code only); the nine keys listed under Cause
-  as "by the code"; languages other than French (Canada) and English
+  as "by the code"; the External Review stage's name in the "Rôles"
+  list's filter, the stage notice and the statistics page (code); languages other than French (Canada) and English
   (code only); the diff on 3.5.
 - Unverified: whether Weblate already holds French (Canada) texts for
   these keys that have not reached the branches. The Custom Locale
