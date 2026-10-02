@@ -1638,7 +1638,7 @@ the weeks-before reminder. This cannot be seen today: the task stops
 with an error before sending anything ([Subscribers get no expiry
 reminders: the reminder task stops with an error and sends
 nothing](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U51-A27-expiry-reminder-task-stops-with-error.md)).
-The two are best fixed together. Since: 2025-08-13 · Basis: probe,
+The two are best fixed together. Since: 2020-01-30 · Basis: probe,
 2026-10-01. <sup>f-a8</sup>
 
 <a id="a9"></a>
