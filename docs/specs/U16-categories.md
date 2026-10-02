@@ -2098,7 +2098,7 @@ page until it answers (`docs/tracking/app-changes.md` row 18).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note k. Live-probed 2026-09-25: note k.
-Issue report: [docs/issues/U16-OPS1-preprint-category-offers-no-moderator.md](../issues/U16-OPS1-preprint-category-offers-no-moderator.md).
+Issue report: [pkp-e2e#594](https://github.com/jardakotesovec/pkp-e2e/issues/594) ([docs/issues/U16-OPS1-preprint-category-offers-no-moderator.md](../issues/U16-OPS1-preprint-category-offers-no-moderator.md)).
 
 ## Reference — entry points & surfaces
 
