@@ -1,0 +1,15 @@
+--- a/lib/pkp/classes/plugins/PluginGalleryDAO.php
++++ b/lib/pkp/classes/plugins/PluginGalleryDAO.php
+@@ -126,7 +126,11 @@
+     private function _getDocument(string $galleryUrl): DOMDocument
+     {
+         $doc = new DOMDocument('1.0', 'utf-8');
+-        $doc->loadXML($this->getCachedDocument($galleryUrl));
++        $xml = (string) $this->getCachedDocument($galleryUrl);
++        // An unreachable gallery (already logged by getExternalDocument()) lists no plugins.
++        if ($xml !== '') {
++            $doc->loadXML($xml);
++        }
+ 
+         return $doc;
+     }

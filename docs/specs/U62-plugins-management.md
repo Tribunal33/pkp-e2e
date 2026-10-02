@@ -616,6 +616,8 @@ one at a time and put back what they changed. <sup>sc</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A1 (issue report
+    `docs/issues/U62-A1-plugin-gallery-offline-stays-loading.md`): "Plugin Gallery" on an installation that cannot reach PKP's site shows an empty list, with no server error
   - the guard for A5 (issue report
     `docs/issues/U62-A5-failed-upgrade-removes-plugin.md`): an upgrade through a row's "Upgrade" whose own upgrade step fails leaves the old version listed, ticked and working
   - the guard for OJS1 (issue report
@@ -691,7 +693,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | The Plugin Gallery stays on "Loading" when the installation cannot reach PKP: its list fails with a server error | 🐞 | user-visible · crash: server | — |
+| [A1](#a1) | The "Plugin Gallery" tab stays on "Loading" forever when the server cannot reach PKP's website | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | "Upload A New Plugin" window never says which kind of file to choose | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | Plugins: "Upgrade" with the installed or an older version blames "the version available in the gallery" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | Plugins: an upgrade whose database step fails deletes the plugin, old version included, from every journal | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -708,14 +710,22 @@ unless an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — The Plugin Gallery stays on "Loading" without a connection** · 🐞 · user-visible · crash: server.
-On an installation that cannot reach PKP's site, the "Plugin Gallery"
-tab should show an empty list or say the gallery cannot be reached;
-instead its list fails with a server error and the tab stays on
-"Loading" with its spinner, with no message. The failure repeats on
-every opening of Settings › Website, of Site Settings and of the
-Settings Wizard, whichever tab is showing.
-Basis: probe. <sup>f-a1</sup>
+**A1 — The "Plugin Gallery" tab stays on "Loading" forever when the server cannot reach PKP's website** · 🐞 · low · crash: server.
+A journal manager or the site administrator opens "Plugins" and
+presses "Plugin Gallery". When the server cannot connect to PKP's
+website, the application fails on the server. The tab shows "Loading"
+with a spinner that never ends, and no list or message. They expect an
+empty list or a message that PKP's site cannot be reached.
+"Installed Plugins" works as usual, and plugins can still be installed
+from a downloaded package. But nobody is told that the gallery cannot be
+reached, so the user may keep waiting or reloading. Settings › Website,
+Site Settings and the Settings Wizard request the gallery's list as they
+load, even when nobody presses "Plugin Gallery", so the server fails and
+logs an error on every opening of these pages.
+Every installation without outbound access to PKP's site meets it. During
+an outage of PKP's site, an installation that normally reaches it meets
+it too, once its cached copy of the list (kept for a day) has expired.
+Basis: probe, 2026-10-02. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — "Upload A New Plugin" window never says which kind of file to choose** · 🐞 · low.
@@ -1308,6 +1318,7 @@ DOMDocument::loadXML(): Argument #1 ($source) must not be empty`, from
 Seen before on the same installs during other features' drives,
 2026-09-04, 2026-09-06, 2026-09-24, 2026-09-25 and 2026-09-27 (system
 administration). Mechanism fn-o.
+Issue report: [docs/issues/U62-A1-plugin-gallery-offline-stays-loading.md](../issues/U62-A1-plugin-gallery-offline-stays-loading.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — fn-k: the template tests `'install'`, the action is
