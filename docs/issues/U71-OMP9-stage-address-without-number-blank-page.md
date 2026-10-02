@@ -11,7 +11,7 @@
   - 3.3: OJS, OMP, OPS (code)
 - **Introduced** `pkp/pkp-lib#10007` for `pkp/pkp-lib#9837` · [5b0dbfc8d2](https://github.com/pkp/pkp-lib/commit/5b0dbfc8d265e4bc263f8bfefd5168596488f805) · 2024-06-03 · Touhidur Rahman (touhidurabir)
 - **Upstream** none found (2026-10-02)
-- **Tracked in** spec U71 [OMP9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U71-internal-review-stage.md#omp9), spec U24 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a5)
+- **Tracked in** spec U71 [OMP9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U71-internal-review-stage.md#omp9), spec U24 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a5), [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a9) (the stage addresses of a deleted submission)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -293,10 +293,18 @@ callers use, and one test.
   name (`pkp/pkp-lib#12881`, `pkp/pkp-lib#12286`, `pkp/pkp-lib#11631`)
   use it and do not mention the missing submission.
 - Not driven, read in the code only: a visitor who is not signed in,
-  with and without the fix; the API endpoints that use the policy; a
-  kept address or a mailed link of a submission deleted on screen (step
-  4's unknown number stands for it); the notification links and their
-  deletion with the submission.
+  with and without the fix; the API endpoints that use the policy; the
+  notification links and their deletion with the submission.
+- A submission deleted on screen, walked on `main` and 3.5 on the three
+  apps by
+  [not-found-page-bare/walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/not-found-page-bare/walk.js):
+  after `dbarnes` presses "Delete" and "Confirm" on a declined
+  submission, `…/workflow/index/<number>/<stage>` and the stage's own
+  address (`…/workflow/submission/<number>`; on the preprint server
+  `…/workflow/production/<number>`) give the same blank page and the
+  same fatal error. Its `…/workflow/access/<number>` shows the bare
+  "404 Not Found" page of
+  [U24-A9-not-found-page-bare.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U24-A9-not-found-page-bare.md).
 - Unverified: whether 3.4 mailed the notification's stage address
   (its `SubmissionNotificationManager` builds the same one); how many
   installs lack the two email templates.

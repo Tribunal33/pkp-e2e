@@ -1472,7 +1472,8 @@ gives ("Purchase PDF (25.00 USD)"). The press's staff see the same in
 its settings and workflow: the External Review stage is named
 "##workflow.review.externalReview##" on the "Rôles" list's column, on
 its box in the window that creates a role, and in a submission's
-workflow menu.
+workflow menu. The workflow screen shows the same for a review round's
+name and for the "Monograph" control ("##common.publication##").
 
 The rest of each page shows as usual and every link works. A French
 reader of an edited volume cannot see who edited it, and the press
@@ -1482,8 +1483,8 @@ texts.
 
 A press shows these codes when "Français (Canada)" is among the
 languages it offers in its language settings. A press that offers
-"Français" (France) instead has every one of these texts but the priced
-link's format name.
+"Français" (France) instead has these texts, except the priced link's
+format name and the review rounds' names on the workflow screen.
 Every version name reads "{date} (##publication.versionStage.display##)", as on an article's page ([→ Article landing page & reading, A1](U13-article-landing-page-and-reading.md#a1)), whose report covers it.
 Basis: probe, 2026-10-02. <sup>f-a15</sup>
 

@@ -39,7 +39,7 @@
  
  msgid "catalog.parentCategory"
  msgstr ""
-@@ -744,10 +744,10 @@
+@@ -744,16 +744,16 @@
  msgstr ""
  
  msgid "catalog.viewableFile.title"
@@ -52,6 +52,13 @@
  
  msgid "submission.search"
  msgstr ""
+ 
+ msgid "common.publication"
+-msgstr ""
++msgstr "Monographie"
+ 
+ msgid "common.publications"
+ msgstr ""
 @@ -1539,7 +1539,7 @@
  msgstr "Il faut indiquer un prix numérique valide."
  
@@ -61,8 +68,7 @@
  
  msgid "payment.directSales.download"
  msgstr "Télécharger"
-@@ -1557,7 +1557,7 @@
- "Le fichier de mappage d'aide XML {$filename} a été téléchargé à nouveau pour "
+@@ -1558,7 +1558,7 @@
  "trouver {$id}."
  
  msgid "rt.metadata.pkp.dctype"
@@ -70,6 +76,7 @@
 +msgstr "Livre"
  
  msgid "submission.pdf.download"
+ msgstr "Télécharger ce fichier PDF"
 --- a/locale/fr_CA/manager.po
 +++ b/locale/fr_CA/manager.po
 @@ -1432,7 +1432,7 @@
@@ -83,6 +90,15 @@
  msgstr ""
 --- a/locale/fr_CA/submission.po
 +++ b/locale/fr_CA/submission.po
+@@ -33,7 +33,7 @@
+ "(les renseignements sur les chapitres sont ajoutés plus tard)."
+ 
+ msgid "submission.workflowType.editedVolume.label"
+-msgstr ""
++msgstr "Ouvrage collectif"
+ 
+ msgid "submission.workflowType.editedVolume"
+ msgstr "Volume édité"
 @@ -45,7 +45,7 @@
  msgstr ""
  
@@ -131,6 +147,16 @@
  
  msgid "editor.submission.decision.sendInternalReview"
  msgstr ""
+@@ -609,3 +609,9 @@
+ 
+ #~ msgid "submission.submit.confirmExpedite"
+ #~ msgstr "Confirmer les métadonnées pour une soumission accélérée"
++
++msgid "submission.stage.externalReviewWithRound"
++msgstr "Évaluation externe (Cycle {$round})"
++
++msgid "submission.stage.internalReviewWithRound"
++msgstr "Évaluation interne (Cycle {$round})"
 --- a/plugins/themes/default/locale/fr_CA/locale.po
 +++ b/plugins/themes/default/locale/fr_CA/locale.po
 @@ -6,3 +6,6 @@
@@ -151,3 +177,15 @@
  
  msgid "payment.directSales.download"
  msgstr "Télécharger {$format}"
+--- a/locale/fr/submission.po
++++ b/locale/fr/submission.po
+@@ -642,3 +642,9 @@
+ msgid "publication.chapter.landingPage.doi.description"
+ msgstr ""
+ "(Ce chapitre sera toujours affiché sur sa propre page parce qu'il a un DOI)."
++
++msgid "submission.stage.externalReviewWithRound"
++msgstr "Évaluation externe (cycle {$round})"
++
++msgid "submission.stage.internalReviewWithRound"
++msgstr "Évaluation interne (cycle {$round})"

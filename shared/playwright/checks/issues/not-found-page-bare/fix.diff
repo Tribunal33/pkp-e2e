@@ -1,0 +1,56 @@
+--- a/lib/pkp/classes/core/PKPApplication.php
++++ b/lib/pkp/classes/core/PKPApplication.php
+@@ -17,6 +17,7 @@
+ 
+ use APP\core\Application;
+ use APP\core\Request;
++use APP\template\TemplateManager;
+ use DateTime;
+ use DateTimeZone;
+ use Exception;
+@@ -376,7 +377,9 @@
+             }
+         } catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+             header('HTTP/1.0 404 Not Found');
+-            echo "<h1>404 Not Found</h1>\n";
++            if (!$this->showNotFoundPage()) {
++                echo "<h1>404 Not Found</h1>\n";
++            }
+             exit;
+         } catch (\Symfony\Component\HttpKernel\Exception\GoneHttpException) {
+             header('HTTP/1.0 410 Gone');
+@@ -386,6 +389,34 @@
+     }
+ 
+     /**
++     * Show the not-found message inside the site's own page, so the visitor has its header and menus to go on with.
++     *
++     * @return bool false when the request is not for a page (a component or file request keeps the plain
++     *  message), or when the page cannot be built (an address that names no context: the router throws again)
++     */
++    protected function showNotFoundPage(): bool
++    {
++        try {
++            $request = $this->getRequest();
++            if (!$request->getRouter() instanceof PKPPageRouter) {
++                return false;
++            }
++            // PKPSessionGuard::sendCookies() sends the response's status with the session cookie: keep it 404.
++            app()->get(\Illuminate\Http\Response::class)->setStatusCode(404);
++            $templateMgr = TemplateManager::getManager($request);
++            $templateMgr->assign([
++                'pageTitle' => 'api.404.resourceNotFound',
++                'errorMsg' => '',
++                'errorParams' => [],
++            ]);
++            $templateMgr->display('frontend/pages/error.tpl');
++            return true;
++        } catch (\Throwable) {
++            return false;
++        }
++    }
++
++    /**
+      * Get the review workflow stages used by this application.
+      */
+     public function getReviewStages(): array

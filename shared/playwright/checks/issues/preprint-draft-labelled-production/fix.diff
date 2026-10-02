@@ -1,0 +1,20 @@
+--- a/lib/ui-library/src/composables/useSubmission.js
++++ b/lib/ui-library/src/composables/useSubmission.js
+@@ -248,11 +248,14 @@
+ 		if (submission.status === pkp.const.submission.STATUS_DECLINED) {
+ 			return ExtendedStages.DECLINED;
+ 		}
++		// A draft is incomplete whatever stage it sits in: OPS creates
++		// every submission in the production stage
++		if (submission.submissionProgress) {
++			return ExtendedStages.INCOMPLETE;
++		}
+ 		switch (activeStage.id) {
+ 			case pkp.const.WORKFLOW_STAGE_ID_SUBMISSION:
+-				return submission.submissionProgress
+-					? ExtendedStages.INCOMPLETE
+-					: ExtendedStages.SUBMISSION;
++				return ExtendedStages.SUBMISSION;
+ 			case pkp.const.WORKFLOW_STAGE_ID_INTERNAL_REVIEW:
+ 				return ExtendedStages.INTERNAL_REVIEW;
+ 			case pkp.const.WORKFLOW_STAGE_ID_EXTERNAL_REVIEW:

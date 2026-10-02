@@ -1063,6 +1063,9 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a preprint server draft's header bubble and list rows reading "Incomplete" ([OPS3](#ops3); Rule 5) {OPS}: the guard the issue report proposes, once fixed
+  - a press that enables the URN plugin, disables it and reads the version's pages (no "Identifiers") and the public book page (no URN) ([OMP3](#omp3)) {OMP}: the guard the issue report proposes, once fixed
+  - an older workflow address (`…/workflow/access/<id>`) to a deleted submission, and a reader address that names nothing, answering "404 Not Found" inside the site's own header and menus with status 404 ([A9](#a9); Rules 2a, 3): the guard the issue report proposes, once fixed
   - a stage-naming address typed without a submission number, or with a number no submission has, answering "404 Not Found" for an editor and an author ([A5](#a5); Rule 2d): the guard the issue report proposes, once fixed
   - the review stage's own entry ("Review"; "Internal Review" or "External Review" on a press) only folding and unfolding its rounds, the selected round's page staying, for the editor and the author ([A6](#a6); Rules 8a, 8b): the guard the issue report proposes, once fixed
 - **Rarely met**:
@@ -1162,10 +1165,10 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|-----------------------------|------|--------|--------|
 | [A5](#a5) | A workflow stage address typed without a submission number, or with an unknown one, shows a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Pressing "Review" in the workflow's side menu opens a page with no round: wrong status, no reviewers, "Add Reviewer" refused | 🐞 | medium · crash: script | issues (claude), 2026-10-02 — re-verified |
-| [A9](#a9) | An old-shape workflow bookmark to a deleted submission shows a bare "404 Not Found" page instead of a message or a forward | 🐞 | minor | — |
+| [A9](#a9) | Any dead link, reader pages and old workflow links alike, shows a bare "404 Not Found" page | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | In French the workflow screen's menu, headings, header, status lines and return dialogs show raw codes such as "##publication.media##" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OMP3](#omp3) | A press keeps listing the "Identifiers" page, now empty, after the identifier plugin is turned off | 🐞 | minor | — |
-| [OPS3](#ops3) | A preprint server's draft is labelled "Production" in the header bubble, not "Incomplete" | 🐞 | minor | — |
+| [OMP3](#omp3) | On a press, disabling the URN plugin leaves URNs on public book pages and an empty "Identifiers" workflow page | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [OPS3](#ops3) | A preprint server labels an unfinished submission "Production", not "Incomplete", in the lists and the workflow header | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A1](#a1) | A bookmarked stage address opens the workflow at its usual landing entry, not at the stage the address names | ❓ | minor | — |
 | [A2](#a2) | An assigned assistant off the active stage sees the "Publication" heading with nothing under it | ❓ | minor | — |
 | [A3](#a3) | An incomplete submission's workflow opens by the dashboard address but is refused by the stage-naming address | ❓ | latent | — |
@@ -1315,15 +1318,26 @@ the Reader case is the dashboard refusing before the panel can open.
 Basis: probe, 2026-09-28. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
-**A9 — An old bookmark to a deleted submission shows a bare "404 Not Found"** · 🐞 · minor.
-A Journal Manager who follows an editorial workflow address or a
-stage-naming address (Rule 2a) to a submission that has since been deleted
-gets a bare page reading only "404 Not Found": none of the journal's
-header or menus, no message, no way on but the browser's back button. The dashboard address for
-the same submission answers properly, with the "Invalid submission." dialog
-of Rule 3. Expected: the access-denied page, or the forward to the dashboard
-and its dialog. Only an old bookmark or an old email link reaches it.
-Basis: probe. <sup>[f-a9](#fn-a9)</sup>
+**A9 — Any dead link, reader pages and old workflow links alike, shows a bare "404 Not Found" page** · 🐞 · low.
+Someone who follows a link to something the site no longer has gets a
+page that reads only "404 Not Found". It has none of the site's header
+or menus, no explanation and no link, so the only way on is the
+browser's back button.
+
+A reader meets it on a dead link to an article, a preprint or a page.
+An editor or author meets it on an older workflow link to a submission
+that has since been deleted. The dashboard's link to the same
+submission does better: it opens the dashboard and says "Invalid
+submission." in a dialog. Nothing is lost either way, but the bare page
+looks as if the site had broken.
+
+The older workflow link survives only in bookmarks and in email sent
+before the upgrade to 3.5. For a deleted submission, the older
+addresses that name a workflow stage show a blank page instead, a
+separate fault.
+
+The blank page is [A5](#a5)'s finding.
+Basis: probe, 2026-10-02. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a11"></a>
 **A11 — In French the workflow screen shows raw codes** · 🐞 · low.
@@ -1388,6 +1402,20 @@ the pages' and windows' own codes below this frame are their features'
 [Publication formats & proof terms](U73-publication-formats-proof-terms.md#a25) A25),
 and why a missing French text shows as a code at all is
 [Languages & locales](U57-languages-and-locales.md#a4)'.
+
+Where each part is reported: the staged version names with
+[Article landing page & reading A1](U13-article-landing-page-and-reading.md#a1);
+a preprint server's part with
+[Publish, schedule & versions A10](U49-publish-schedule-and-versions.md#a10);
+a press's part (the "External Review" entry, the two rounds' names, the
+"Monograph" control and its menu) with
+[Monograph landing page A15](U69-monograph-landing-page.md#a15): OMP's
+French files never received those texts, and French (France) lacks the
+rounds' names too. The rest get no report: "Media", "Funding", the
+unassigned version, "Return to Workflow" and "Return to Done" with
+their dialogs, and a journal's "Body Text" and "Publication Settings"
+are unreleased 3.6 texts that no language has yet, waiting for Weblate
+(issues session ruling, 2026-10-02).
 Basis: probe, 2026-10-02. <sup>[f-a11](#fn-a11)</sup>
 
 ### OMP
@@ -1419,13 +1447,22 @@ files are production material on every app.
 Basis: probe. <sup>[f-omp2](#fn-omp2)</sup>
 
 <a id="omp3"></a>
-**OMP3 — "Identifiers" outlives its plugin on a press** · 🐞 · minor.
-On a press, once a public identifier plugin has been enabled with its
-publication object ticked, the "Identifiers" page stays in every version
-node after the plugin is disabled again, and opens as an empty page. On a
-journal the same steps remove the page. Expected: the page leaves with the
-plugin, as it does on a journal.
-Basis: probe. <sup>[f-omp3](#fn-omp3)</sup>
+**OMP3 — On a press, disabling the URN plugin leaves URNs on public book pages and an empty "Identifiers" workflow page** · 🐞 · medium.
+On a press, disabling the URN plugin does not fully turn it off. A
+book's workflow keeps listing the "Identifiers" page, which now opens
+with nothing under its heading, and the public book page keeps showing
+the URN of every publication format that was given one. On a journal,
+disabling the plugin removes the "Identifiers" page.
+
+Readers go on seeing identifiers the press has switched off, and nothing
+tells the press. In the workflow no work is lost: the empty page offers
+nothing to fill in.
+
+It takes a press that used the URN plugin and then disabled it. The
+workflow page stays when "Monographs" was ticked in the plugin's
+settings; a URN stays on the book page when a publication format had
+one stored.
+Basis: probe, 2026-10-02. <sup>[f-omp3](#fn-omp3)</sup>
 
 ### OPS
 
@@ -1459,14 +1496,22 @@ scheduled" and forgets "declined".
 Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="ops3"></a>
-**OPS3 — A draft's bubble reads "Production"** · 🐞 · minor.
-On a preprint server the header bubble of a submission that was never
-finished reads "Production", the same as a queued preprint, where a journal
-or press reads "Incomplete". The list rows say "Production" too, so nothing
-but the "Complete submission" button tells a draft apart; the list side is
-*[My Submissions](U22-my-submissions.md#ops1)*' finding. Expected:
-"Incomplete", the label Rule 5 gives a draft everywhere else.
-Basis: probe. <sup>[f-ops3](#fn-ops3)</sup>
+**OPS3 — A preprint server labels an unfinished submission "Production", not "Incomplete", in the lists and the workflow header** · 🐞 · low.
+On a preprint server, a submission its author began and never finished
+is labelled "Production", in the production colour. A submitted
+preprint that is not yet posted carries the same label, so the two
+cannot be told apart by it. The label shows in the Stage column
+of the author's My Submissions and of the editorial dashboard, and in
+the bubble under the title of the workflow panel. A journal or press
+labels such a submission "Incomplete".
+
+Nothing is lost: the row still offers "Complete submission" and the
+wizard reopens from it. That button is the only thing that tells a
+draft from a submitted preprint in a list, and the workflow panel's
+header gives no sign at all.
+
+The list side is *[My Submissions](U22-my-submissions.md#ops1)*' finding.
+Basis: probe, 2026-10-02. <sup>[f-ops3](#fn-ops3)</sup>
 
 <a id="ops4"></a>
 **OPS4 — An author's draft opens with an error on top** · ❓ · minor.
@@ -1580,6 +1625,7 @@ Issue report: [docs/issues/U71-OMP7-review-stage-entry-page-of-no-round.md](../i
 
 <a id="fn-a9"></a>
 **f-a9** — `PKPWorkflowHandler::access()` and `index()` run `SubmissionRequiredPolicy` before any redirect; for an id that no longer exists the policy's failure is a 404 with no template. Live-probed 2026-09-02 (OJS, OMP, OPS, `manager.maya`, after confirming "Delete" on a declined seed): `workflow/access/{id}` → 302 to the `/en/` form → HTTP 404, page body exactly "404 Not Found" (`h1` "404 Not Found"), no journal chrome, no forward; the dashboard address for the same id gave the panel shell with "Error" / "Invalid submission." / "OK" (note c).
+Issue report: [docs/issues/U24-A9-not-found-page-bare.md](../issues/U24-A9-not-found-page-bare.md). The stage-naming addresses of a deleted submission, walked 2026-10-02, show the blank page of A5: [pkp-e2e#559](https://github.com/jardakotesovec/pkp-e2e/issues/559) ([docs/issues/U71-OMP9-stage-address-without-number-blank-page.md](../issues/U71-OMP9-stage-address-without-number-blank-page.md)).
 
 <a id="fn-a10"></a>
 **f-a10** — The list is built from the submission's `stages[]` (the "Attach Workflow Files" step's stage select, `useFileManagerActions` / the legacy `WorkflowStagesGridHandler` chain reading `submission.stages`), and since pkp/pkp-lib#13273 (2026-09-08) `submission/maps/Schema::getPropertyStages()` emits a Done entry for every submission: first from the apps' `getApplicationStages()`, and since pkp/pkp-lib#13312 (`716419c770`, 2026-09-12: the apps' lists lose Done again but the map iterates `PKPApplication::getValidStages()`, app stages plus Done) from the map itself, so the fix for issue #13109's Roles-grid and statistics symptoms left this list as it was. Live 2026-09-09 and again 2026-09-14 on a reset OJS at ojs `f0cde27fda` / lib/pkp `1967e76f38` (the kept reproduction `shared/playwright/checks/sync/pkp-lib-13109/regressions.js`, `.reports/sync/s14-13109/s5-*`): a submission in the Submission stage answered `stages` with five entries, the fifth `{id: 6, label: "Done", isActiveStage: false}`, and the select's options read Submission, Review, Copyediting, Production and "Done" with `disabled`. Before 2026-09-08 the map added Done only for a submission resting in Done (the synthetic block, still present). OMP and OPS share the map and the component; not re-driven. Reported to the team 2026-09-08/09 with the 13109 regression; the 2026-09-14 ruling above settles the remaining surface. Fixed upstream by pkp/ui-library#985 (`b3ee741f`, merged 2026-09-15, Blesilda Biazon): `useSubmission().getWorkflowStages()` filters the submission's `stages[]` to the editorial workflow stages (Done excluded, mirroring `PKPApplication::getNonWorkflowStages()`) and `useFileAttacherWorkflowStage.js` builds the "Select submission stage" options from it; the API's `stages` property keeps its Done entry (by design since pkp/pkp-lib#13312), only the list changed. Verified 2026-09-16 on a reset OJS at ojs `ae597ff9d9` / lib/pkp `b262d27b81` / ui-library `977e460c` with the same kept reproduction (`.reports/sync/s16-13109/s5-stage-options-ojs.json`): the select's options read Submission, Review, Copyediting, Production, none disabled, and `GET submissions/{id}` still answers five `stages` entries, the fifth `{id: 6, label: "Done", isActiveStage: false}`. OMP and OPS share the component; not re-driven. Retired 2026-09-16.
@@ -1587,18 +1633,21 @@ Issue report: [docs/issues/U71-OMP7-review-stage-entry-page-of-no-round.md](../i
 <a id="fn-a11"></a>
 **f-a11** — Live-probed 2026-09-29 (Rules 4–10, 15, 17, 18a, 18b, 19; OJS, OMP, OPS, two runs; scratch contexts with UI languages English and French (Canada); the context's manager and the Author; submissions queued at Submission, in Review Round 1 (a press also with Internal then External Review round 1), in Copyediting, queued at Production, declined, published, and published with a second version made on screen; every stage, round and page read at `/fr_CA/dashboard/editorial?workflowSubmissionId=N` and the Author's `/fr_CA/dashboard/mySubmissions?…`, paired entry by entry with the same walk in English): the codes of A11 and no other in the frame; in English only `##common.help##` (U08 A1). English control: "Media", "Funding", "Unassigned version (2026-09-29)", "Version of Record 1.0" / "1.1" (OPS "Author Original 1.0" / "1.1"), OJS "Body Text", "Publication Settings", OMP "External Review", "Internal Review (Round 1)", "Monograph" / "Edited Volume", OPS "Preprint", "Production Tasks & Discussions", "Status: Unposted" / "Status: Posted", "Preview" "Post", "Unpost"; "Return to Workflow" / "Return this submission to the workflow stage it occupied before it was moved to Done." and "Return to Done" / "Return this submission to the Done stage.", "Confirm" / "Cancel". OJS and OMP read French in the publication control regions ("Statut : Non planifié-e" / "Publié-e"; OJS "Aperçu", "Programmer la publication"; OMP "Prévisualiser", "Publier"; both "Dépublier"). In French "Return to Workflow" was cancelled (nothing changed) and then confirmed: the submission returned (bubble "Soumission" on OJS and OMP, whose seed was published from Submission; "Production" on OPS) and the header offered the "Return to Done" code, whose dialog was read and cancelled. The "Delete" dialog read French ("Supprimer" / "Êtes-vous certain-e de vouloir supprimer définitivement cette soumission ?", "Confirmer", "Annuler"; Rule 19). Live-probed again 2026-09-30 (OJS, OMP, OPS, two runs, the same accounts; submissions in Production never published, one of them given a funder, references, a media file, a JATS file on a journal and a publication format on a press, and the same published): on the References, Funding, Media, JATS XML, Body Text, Publication Settings, Catalog Entry, Preprint Entry, Publication Formats and Permissions & Disclosure pages the frame showed the codes of A11 and no other. "Create New Version" confirmed in French on the never-published submission with a stage chosen (OJS, OMP "Author Original (AO)" with "Major Revision"; OPS "Author Original (AO)") gave a new, still unpublished version whose menu entry read `##publication.versionStage.display##` (English "Author Original 1.0"; stored stage AO 1.0, status queued) under the first version's `##publication.versionStage.unassignedVersion##`; the same window confirmed untouched on a never-staged submission gave a second entry reading `##publication.versionStage.unassignedVersion##`, two identical entries (English two "Unassigned version (2026-09-30)"). Mechanism (read, not driven): each key is missing from the app's `fr_CA` locale files (`publication.media`, `publication.versionStage.*`, `submission.funding`, `publication.bodyText`, `publication.publicationSettings`, `submission.stage.internalReviewWithRound`, `editor.submission.decision.returnTo*`) or present with an empty `msgstr` (OMP `common.publication`, `workflow.review.externalReview`, `submission.workflowType.editedVolume.label`; OPS `submission.publication`, `submission.queries.production`, `publication.publish`, `publication.unpublish`, `publication.status.unscheduled`, `publication.status.published`), and the client prints the key in place of the text (U57 note p). No request failed and no script error was logged beyond A6's.
 Issue report: [pkp-e2e#548](https://github.com/jardakotesovec/pkp-e2e/issues/548) ([docs/issues/U49-A10-ops-french-date-posted-raw-key.md](../issues/U49-A10-ops-french-date-posted-raw-key.md)).
+Issue report (a press's part): [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) ([docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md)); the staged version names: [pkp-e2e#228](https://github.com/jardakotesovec/pkp-e2e/issues/228) ([docs/issues/U13-A1-french-version-name-raw-key.md](../issues/U13-A1-french-version-name-raw-key.md)). No report for the 3.6-only texts, each English-only on `main` and absent from `stable-3_5_0` (read in the code 2026-10-02): `publication.media` (pkp-lib 1a5a8b1d7e, 2026-05-06), `submission.funding` (pkp-lib d50c812aaf, 2026-07-06), `publication.versionStage.unassignedVersion` (pkp-lib 958592a159, 2025-05-30), `editor.submission.decision.returnToWorkflow`, `returnToDone` and their `.description` texts (pkp-lib d52aa4c84b, 2026-06-09), `publication.bodyText` (pkp-lib 21585b09ab, 2025-12-10), `publication.publicationSettings` (ojs eb14c0b9d3, 2026-05-28).
 
 <a id="fn-omp2"></a>
 **f-omp2** — Note h: `useWorkflowNavigationConfigOMP.js::getPublicationItemsEditorial()` pushes `media` before the settings-gated pages and outside the `permissions.canAccessProduction` block; `…OJS.js` and `…OPS.js` push it inside that block. Live-probed 2026-09-02: `assistant.rita` as Funding Coordinator on a monograph in External Review Round 1 saw "Title & Abstract", "Contributors", "Chapters", "Metadata", "Publication Formats", "Media", "References", "Funding" and no "Catalog Entry" or "Permissions & Disclosure"; the same role on a journal article in Review Round 1 saw "Title & Abstract", "Contributors", "Metadata", "References", "Funding", "JATS XML" and no "Media".
 
 <a id="fn-omp3"></a>
 **f-omp3** — Note h: the page is listed while `publicationSettings.identifiersEnabled` is true, computed in `PKPDashboardHandler::index()` from the `pubIds` plugin registry. Live-probed 2026-09-02 (scratch presses and journals `u24d1`, as their manager): enabling the URN plugin and ticking `enablePublicationURN` in its settings added "Identifiers" on both apps; disabling the plugin (dialog "Disable" / "Are you sure you want to disable this plugin?", toast "The plugin "URN" has been disabled.") removed the page on OJS, while on OMP, in a fresh browser and login with the plugin's row unticked, every version node still listed "Identifiers", which opened as "Publication: Identifiers" with an empty main column. The seeded press, where URN was never enabled, lists no such page. Why the press's flag stays set was not traced.
+Issue report: [docs/issues/U24-OMP3-press-identifiers-page-stays-after-plugin-off.md](../issues/U24-OMP3-press-identifiers-page-stays-after-plugin-off.md).
 
 <a id="fn-ops2"></a>
 **f-ops2** — Note i: `useWorkflowNavigationConfigOPS.js::getInitialSelectionItemKey()` returns `publication_{latest}_titleAbstract` whenever `stageId === PRODUCTION && status !== STATUS_QUEUED`; a declined preprint has `STATUS_DECLINED`. Live-probed 2026-09-02 (`sectioneditor.ana`, `manager.maya`, `decisions: ['decline']` seeds): the panel opened on "Preprint: Title & Abstract" (`workflowMenuKey=publication_{id}_titleAbstract`) with "Production" striped and not selected, bubble "Declined"; selecting "Production" showed "Workflow: Production" with "Revert Decline" among its buttons (the *Production stage*'s).
 
 <a id="fn-ops3"></a>
 **f-ops3** — Note e: `getExtendedStage()` returns "Incomplete" only for `stageId === SUBMISSION && submissionProgress`; OPS creates every submission at `WORKFLOW_STAGE_ID_PRODUCTION`, so a preprint draft falls through to the Production label. Live-probed 2026-09-02 (OPS, `manager.maya` by the dashboard address, `author.alex` on My Submissions, `submitted: false` seed): bubble "Production" with the production colour, header "Preview", "Activity Log", "Library"; the editor's and the author's list rows read "… / Production / Complete submission"; the same seed on OJS and OMP read "Incomplete" in bubble and rows.
+Issue report: [docs/issues/U24-OPS3-preprint-draft-labelled-production.md](../issues/U24-OPS3-preprint-draft-labelled-production.md).
 
 <a id="fn-ops4"></a>
 **f-ops4** — Note b (the OPS author's draft) and note i (the OPS author always lands on "Title & Abstract", whose form is served by a publication component route guarded by `SubmissionCompletePolicy`); on a journal or press the author's draft lands on the Submission stage entry, whose panels make no guarded request. Live-probed 2026-09-02 (OPS, `author.alex`, `dashboard/mySubmissions?workflowSubmissionId={draft}`): panel with bubble "Production", heading "Preprint: Title & Abstract" and the author's page list, an "Error" dialog "Workflow access for incomplete submission is restricted." / "OK" on top, the page's own request answering 401; after "OK" the panel stayed on the same heading. The Journal Manager opening the same draft on OPS, and the author opening theirs on OJS and OMP, got no dialog. The old author-dashboard link reaches the same panel (*[My Submissions](U22-my-submissions.md#a5)*).

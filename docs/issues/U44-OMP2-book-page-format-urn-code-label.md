@@ -108,14 +108,14 @@ Reach:
   OJS, OMP and OPS, and `lib/pkp/templates`).
 - 3.3: the DOI plugin is still a pub-id plugin there, so a format's DOI
   goes through the same loop and reads "doi", unlinked (code).
-- Out of scope, a separate fault: `CatalogBookHandler` asks
-  `PluginRegistry::loadCategory('pubIds', true)` for the enabled
-  plugins, but `loadCategory()` returns every plugin registered in the
-  category during the request, enabled or not. So a switched-off URN
-  plugin still reaches the loop, and its stored URNs stay on the book
-  page (walked: with the plugin off, book 14 still showed the row). The
-  reader block should follow the plugin's enabled state. After the fix
-  below, such a row reads "URN" with a link.
+- Out of scope, a separate fault: a switched-off URN plugin still
+  reaches the loop, and its stored URNs stay on the book page (walked:
+  with the plugin off, book 14 still showed the row). OMP's URN plugin
+  descriptor marks the plugin as always loaded, so the "enabled only"
+  list `CatalogBookHandler` reads still holds it; that fault has its
+  own report,
+  [U24-OMP3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U24-OMP3-press-identifiers-page-stays-after-plugin-off.md).
+  After the fix below, such a row reads "URN" with a link.
 - Not this fault: the monograph's own URN and chapter URNs, which the
   book page does not show at all (U44
   [OMP3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U44-identifiers.md#omp3)).
