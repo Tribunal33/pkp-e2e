@@ -1560,52 +1560,52 @@ where it is made.
 
 <a id="fn-f-a1"></a>
 **f-a1** — Incidental of 2026-09-04 (U05 test author, OJS): on Issues › Future Issues › "Create Issue" the "Title" box arrived ticked, "Save" with an empty title re-rendered the form with no visible error line and the grid stayed "No Items". Mechanism: `IssueForm::initData()` ticks `showTitle` for a new issue; its `FormValidatorCustom` is registered on the field `showTitle` (the check box) with `editor.issues.titleRequired`. The scenario API seeds its issues with the box unticked for this reason (scenarios.md `issues[]`). Live-probed 2026-09-25 (td4): the notice "Title is required for the issue." showed at the window's top right from about 0.2 s to 4.5 s after "Save" and was gone at 6 s; nothing on the form was marked; the list still read "No Items" 16 s later.
-Issue report: [docs/issues/U50-A1-create-issue-ticked-title-passing-notice.md](../issues/U50-A1-create-issue-ticked-title-passing-notice.md).
+Issue report: [pkp-e2e#413](https://github.com/jardakotesovec/pkp-e2e/issues/413) ([docs/issues/U50-A1-create-issue-ticked-title-passing-notice.md](../issues/U50-A1-create-issue-ticked-title-passing-notice.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `IssueGridHandler::unpublishIssue()` calls `Repo::issue()->updateCurrent($request->getContext()->getId())` with no issue, and `updateCurrent()` then runs `JournalDAO::removeCurrentIssue()` regardless of which issue was unpublished. The home page's part: U10 Rule 14 needs a current issue. Probe: td11; "Archives" still listed the published issues.
-Issue report: [docs/issues/U50-A2-unpublish-back-issue-clears-current-issue.md](../issues/U50-A2-unpublish-back-issue-clears-current-issue.md).
+Issue report: [pkp-e2e#407](https://github.com/jardakotesovec/pkp-e2e/issues/407) ([docs/issues/U50-A2-unpublish-back-issue-clears-current-issue.md](../issues/U50-A2-unpublish-back-issue-clears-current-issue.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Confirmation: `IssueGridRow` `delete` uses `common.confirmDelete`; `editor.issues.confirmIssueDelete` exists in `locale/en/editor.po` and is used nowhere. Cascade: note t. Probe: td12; the specific warning never appeared.
 
 <a id="fn-f-a4"></a>
 **f-a4** — Live-probed 2026-09-25 (Fields "Date Published"; Rule 3), OJS: on "Create Issue" with the date box empty, the refused "Save" of A1 left "2026-09-25" in the box; after unticking "Title" and saving, the issue's "Issue Data" showed the date empty. On a published issue, after "Date Published is required when the issue is published." the box showed today again. Mechanism not read.
-Issue report: [docs/issues/U50-A4-refused-save-date-published-today.md](../issues/U50-A4-refused-save-date-published-today.md).
+Issue report: [pkp-e2e#416](https://github.com/jardakotesovec/pkp-e2e/issues/416) ([docs/issues/U50-A4-refused-save-date-published-today.md](../issues/U50-A4-refused-save-date-published-today.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-25 (td3), OJS: "Volume" 99999 with a valid "Year": `POST …/$$$call$$$/grid/issues/future-issue-grid/update-issue` answered 500, the window stayed open with no message and the list was unchanged. The schema stores `volume` in a `smallint` column (note i), whose limit is 32767, the likely cause; only 99999 was driven, and no server-log line was read.
-Issue report: [docs/issues/U50-A5-A6-issue-big-volume-or-lettered-year.md](../issues/U50-A5-A6-issue-big-volume-or-lettered-year.md).
+Issue report: [pkp-e2e#409](https://github.com/jardakotesovec/pkp-e2e/issues/409) ([docs/issues/U50-A5-A6-issue-big-volume-or-lettered-year.md](../issues/U50-A5-A6-issue-big-volume-or-lettered-year.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-25 (td3), OJS: Volume 1, Number "2a", "Year" "20a6", "Title" unticked: saved without a message and listed as "Vol. 1 No. 2a (20)". `IssueForm` has no check on `year` beyond the box's `maxlength` 4; the stored integer keeps the leading digits (note i).
-Issue report: [docs/issues/U50-A5-A6-issue-big-volume-or-lettered-year.md](../issues/U50-A5-A6-issue-big-volume-or-lettered-year.md).
+Issue report: [pkp-e2e#409](https://github.com/jardakotesovec/pkp-e2e/issues/409) ([docs/issues/U50-A5-A6-issue-big-volume-or-lettered-year.md](../issues/U50-A5-A6-issue-big-volume-or-lettered-year.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-25 (Fields, the archive's issue summary), OJS, two runs: on "Archives" the cover of an issue with no alternate text carried `alt=""` while its page read "View Vol. 1 No. 2 (2025)"; an issue with "K3 cover alt" typed read that on both. `issue_summary.tpl` defaults the alt to `''`, where `issue_toc.tpl` defaults it to `issue.viewIssueIdentification` (note w).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-25 (Rule 1), OJS: "Future Issues" read 2025 Vol. 3; then 2026 Vol. 1 No. 1, No. 10, No. 2; then 2027. `ORDERBY_UNPUBLISHED_ISSUES` sorts year, volume, number (note g); `schemas/issue.json` types `number` as a string.
-Issue report: [docs/issues/U50-A8-future-issues-number-as-text.md](../issues/U50-A8-future-issues-number-as-text.md).
+Issue report: [pkp-e2e#414](https://github.com/jardakotesovec/pkp-e2e/issues/414) ([docs/issues/U50-A8-future-issues-number-as-text.md](../issues/U50-A8-future-issues-number-as-text.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-25 (Rules 10a, 23), OJS, two drives: a mouse drag of a section heading above another section, several shapes, three attempts each; the article rows moved, the section headings did not (one heading moved below its own article, then "Cancel ordering"), and a "Done" the server accepted (save-sequence 200) left the order unchanged on the tab and on the issue's page. Each section is its own sortable block on the page. The grid offers section ordering (`ORDER_CATEGORY_GRID_CATEGORIES_AND_ROWS`, note m) and the issue's page reads the saved order (note w), so the custom-order half of Rule 23 is code-read only.
 
 <a id="fn-f-a10"></a>
 **f-a10** — Live-probed 2026-09-25 (td7), OJS: an article dragged under another section showed there and "Done" was accepted; on reopening the tab it was back under its own section, and the "Section" on its Publication Settings was unchanged. Note m's `setDataElementInCategorySequence()` would change the `sectionId`; the drop did not reach it.
-Issue report: [docs/issues/U50-A10-toc-article-dropped-other-section-snaps-back.md](../issues/U50-A10-toc-article-dropped-other-section-snaps-back.md).
+Issue report: [pkp-e2e#415](https://github.com/jardakotesovec/pkp-e2e/issues/415) ([docs/issues/U50-A10-toc-article-dropped-other-section-snaps-back.md](../issues/U50-A10-toc-article-dropped-other-section-snaps-back.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-25 (td9), OJS: on a journal whose interface is English and French and whose forms are English only, a galley in French answered the notice "An issue galley locale is required." and was not listed; on a journal where French is also a form language the same galley saved as "PDF | French". `IssueGalleyForm` checks `galleyLocale` against `getSupportedFormLocales()` while the list offers `getSupportedLocaleNames()` (note p).
-Issue report: [docs/issues/U50-A11-issue-galley-interface-language-refused.md](../issues/U50-A11-issue-galley-interface-language-refused.md).
+Issue report: [pkp-e2e#411](https://github.com/jardakotesovec/pkp-e2e/issues/411) ([docs/issues/U50-A11-issue-galley-interface-language-refused.md](../issues/U50-A11-issue-galley-interface-language-refused.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-25 (td12; Side effects bullet 3), OJS, two articles over two runs (one published through its workflow, one seeded as published): after "Delete" of its issue each article's workflow header read "Published" with "Return to Workflow", its Publication Settings "Status: Unscheduled", its page "404 Not Found", and its History only "Submission metadata updated". `deleteIssue()` sets the status through `Repo::publication()->edit()`, not `unpublish()` (note t), so no unpublication is logged (note se).
-Issue report: [docs/issues/U50-A12-delete-issue-articles-still-published.md](../issues/U50-A12-delete-issue-articles-still-published.md).
+Issue report: [pkp-e2e#408](https://github.com/jardakotesovec/pkp-e2e/issues/408) ([docs/issues/U50-A12-delete-issue-articles-still-published.md](../issues/U50-A12-delete-issue-articles-still-published.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25 (td13; Rule 25a), OJS, three journals, before any saved order: "Back Issues" 2025, 2026, 2024 (2025 current) against "Archives" 2024, 2026, 2025; "Back Issues" 2023, 2022, 2021 against 2021, 2022, 2023; after an unpublish, 2020, 2026, 2025 against 2026, 2020, 2025. Mechanism: note u, the archive orders by the saved order alone.
-Issue report: [docs/issues/U50-A13-archive-issues-no-set-order.md](../issues/U50-A13-archive-issues-no-set-order.md).
+Issue report: [pkp-e2e#412](https://github.com/jardakotesovec/pkp-e2e/issues/412) ([docs/issues/U50-A13-archive-issues-no-set-order.md](../issues/U50-A13-archive-issues-no-set-order.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-25 (td14; Rule 26), OJS, eight times over three runs: `issue/view/{id}/999`, `/{id}/nosuch`, `/{urlPath}/999` and another issue's galley each answered 500 with an empty title and body. Server log: "Uncaught TypeError: PKP\core\PKPRequest::redirect(): Argument #4 ($path) must be of type ?array, int given" in `IssueHandler.php`, the unknown-galley redirect of `initialize()` (note x). Code read: `stable-3_5_0` passes the path as a list; not driven there.
@@ -1620,11 +1620,11 @@ Issue report: [pkp-e2e#375](https://github.com/jardakotesovec/pkp-e2e/issues/375
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-28 (Fields "Items"; Rules 9, 9a, 23, 23a), OJS, four runs, each on a scratch journal with the sections "Articles" and "Second Section" and the published, current issue "Vol. 1 No. 1 (2024)" holding three published articles. As the journal's Journal Manager, "Create New Version" on two of them, each new version retitled and saved; one was then published with "Don't Assign To An Issue" (the window read "…This will be published immediately without any issue association…", and its Publication Settings then showed "Don't Assign To An Issue" with no issue box), the other with the preselected "Assign To Current/Back Issue" and the issue. Signed out, the issue's page, "Current" (`issue/current`) and the home page's "Current Issue" listed the first article under its new title in "Articles", on the page and after a reload; its link `article/view/{id}` opened the new version's page, with the breadcrumb "Home / Archives / Articles" and an issue part reading only "Section Articles". "Back Issues" read "Items" 3 and the "Table of Contents" tab listed the new title. The article published into the issue was listed under its new title, with the breadcrumb and "Issue" line naming the issue. With the journal's web feed set to "Display items in current published issue." (two of the runs), the Atom, RSS 2.0 and RSS 1.0 items carried the new title and linked to `article/view/{id}`, while an article published with no issue at all was not listed. Code read 2026-09-28 (ojs `72b85f4ba0`): the issue's page, the tab and "Items" start from `APP\submission\Collector::filterByIssueIds()`, which keeps a submission when any of its publications carries the issue's id, whatever that publication's status; `IssueHandler::setupIssueTemplate()`, `Repository::getInSections()` and `Issue::getNumArticles()` then read only the current publication's status and section (notes g, m, w). The current-issue feed applies the same filter ([Web feeds](U18-web-feeds.md), its note f).
-Issue report: [docs/issues/U50-A17-A18-issue-lists-version-published-outside-it.md](../issues/U50-A17-A18-issue-lists-version-published-outside-it.md).
+Issue report: [pkp-e2e#410](https://github.com/jardakotesovec/pkp-e2e/issues/410) ([docs/issues/U50-A17-A18-issue-lists-version-published-outside-it.md](../issues/U50-A17-A18-issue-lists-version-published-outside-it.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Live-probed 2026-09-28 (Rule 12a), OJS, four runs, on the article of f-a17 published outside the issue: "Remove" showed Rule 12's window and question, and "OK" answered with success (`remove-article` 200, `{"status":true}`) and closed the window. The row stayed on the tab, on the same window and after it was reopened; "Items" stayed 3; the issue's page, and in the two feed runs the current-issue feeds, still listed the new title; the workflow read "Status: Published" with only "Unpublish". The first version was unpublished instead: its page `article/view/{id}/version/{firstVersionId}` answered "404 Not Found", the article's "Versions" list dropped "2024-03-01 (Version of Record 1.0)", and the article's page, still the new version, read "Published 2024-03-01 — Updated on 2026-09-28". No run recorded a server error or a script error. Mechanism: note n.
-Issue report: [docs/issues/U50-A17-A18-issue-lists-version-published-outside-it.md](../issues/U50-A17-A18-issue-lists-version-published-outside-it.md).
+Issue report: [pkp-e2e#410](https://github.com/jardakotesovec/pkp-e2e/issues/410) ([docs/issues/U50-A17-A18-issue-lists-version-published-outside-it.md](../issues/U50-A17-A18-issue-lists-version-published-outside-it.md)).
 
 ## Reference — entry points & surfaces
 
