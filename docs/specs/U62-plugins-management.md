@@ -1354,7 +1354,7 @@ notice. Live-probed 2026-09-27: td14.
 an empty page; server log `Call to a member function getOption() on
 null` in `IndexHandler`. OMP's and OPS's home pages, and OJS's "About
 the Journal" and login pages, showed unstyled.
-Issue report: [docs/issues/U62-OJS1-theme-off-journal-home-page-blank.md](../issues/U62-OJS1-theme-off-journal-home-page-blank.md).
+Issue report: [pkp-e2e#504](https://github.com/jardakotesovec/pkp-e2e/issues/504) ([docs/issues/U62-OJS1-theme-off-journal-home-page-blank.md](../issues/U62-OJS1-theme-off-journal-home-page-blank.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — fn-d. The one-press test predates the 2022 controller
