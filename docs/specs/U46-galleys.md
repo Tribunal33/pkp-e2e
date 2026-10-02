@@ -1378,7 +1378,7 @@ disables the form, refuses `updateGalley` for a new galley with
 Live-probed 2026-09-24 (note q3): the refused new galley's window
 showed no message, neither the `galley.cantEditPublished` text nor any
 other.
-Issue report: [docs/issues/U46-OPS2-moderator-galleys-offered-then-refused.md](../issues/U46-OPS2-moderator-galleys-offered-then-refused.md).
+Issue report: [pkp-e2e#613](https://github.com/jardakotesovec/pkp-e2e/issues/613) ([docs/issues/U46-OPS2-moderator-galleys-offered-then-refused.md](../issues/U46-OPS2-moderator-galleys-offered-then-refused.md)).
 
 <a id="fn-f-ops3"></a>
 **f-ops3** — Note c: the Author's row menu offers "Change File" from
@@ -1390,7 +1390,7 @@ current role does not have access to this operation.", and the galley
 still served `preprint.pdf`. Control: on a galley the Author added,
 "Change File" with `replacement.pdf` › "Complete" served the new
 file.
-Issue report: [docs/issues/U46-OPS3-author-galley-change-file-refused.md](../issues/U46-OPS3-author-galley-change-file-refused.md).
+Issue report: [pkp-e2e#614](https://github.com/jardakotesovec/pkp-e2e/issues/614) ([docs/issues/U46-OPS3-author-galley-change-file-refused.md](../issues/U46-OPS3-author-galley-change-file-refused.md)).
 
 ## Reference — entry points & surfaces
 
