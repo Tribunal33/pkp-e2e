@@ -991,6 +991,7 @@ Left out of the scenarios above, by reason:
   - the request email's one-click link still opening the review after "Send Reminder" was pressed and the "Review Reminder" window closed with "Cancel" ([A9](#a9); Rule 16): the guard the issue report proposes, once fixed
   - a reviewer's one-click link opened in a browser signed in as another user showing "You are signed in as a different user", and "Sign out and continue" opening the review as the reviewer ([A10](#a10); Actors row 9, Rule 16): the guard the issue report proposes, once fixed
   - a reviewer typing a first answer on a review form with a required question seeing no "Please fill in required fields." box and no "This field is required." mark, "Save for Later" then showing "Your changes have been saved." alone, and a refused "Submit Review" still showing both ([A14](#a14); Fields step 3): the guard the issue report proposes, once fixed
+  - {OMP} a press's review form refused for an unanswered required question opening its box with "Please fill in required fields." as a journal's does ([OMP3](#omp3); Fields step 3): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1051,7 +1052,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A14](#a14) | Typing a first answer on a review form shows the reviewer "Please fill in required fields."; "Save for Later" then shows its notice beside it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a review form's answers are guarded | 🐞 | minor | — |
 | [OMP2](#omp2) | {OMP} The review-complete email tells editors the reviewer "recommends None" | 🐞 | minor | — |
-| [OMP3](#omp3) | {OMP} A review form's "required fields" refusal opens with a raw locale key | 🐞 | minor | — |
+| [OMP3](#omp3) | {OMP} On a press, a review form refused for an unanswered required question shows the reviewer a raw text code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | {OPS} A home-made reviewer role opens a "My Assignments as Reviewer" page headed "undefined (0)" under an "Error" window | 🐞 | minor · crash: script | claim check (claude), 2026-09-30 — "Loading" corrected to "No Items" under an "Error" window; the landing after sign-in and the page's console "TypeError" added |
 | [A3](#a3) | Declining a request sends the reviewer to the journal's public home page instead of their assignments | ❓ | minor | — |
 | [A11](#a11) | An assignment left behind under "Archived" still opens a wizard that takes and submits a full review | ❓ | minor | — |
@@ -1371,15 +1372,23 @@ recommendation of "None" where there was no question.
 Basis: probe (2026-09-04, on both press stages). <sup>[f-omp2](#fn-omp2)</sup>
 
 <a id="omp3"></a>
-**OMP3 — The review form's refusal opens with a raw key** · 🐞 · minor.
-When "Submit Review" is refused for an unanswered required question, the
-box under the buttons opens with
-"##reviewer.submission.reviewFormResponse.form.responseRequired##" where
-a journal reads "Please fill in required fields."; the second sentence,
-"Some required fields are not filled in. Please complete them before
-submitting your review.", is the same on both. The reviewer reads a code
-where a sentence belongs.
-Basis: probe (2026-09-04). <sup>[f-omp3](#fn-omp3)</sup>
+**OMP3 — On a press, a review form refused for an unanswered required question shows the reviewer a raw text code** · 🐞 · low.
+On a press, a reviewer whose review uses a review form presses "Submit
+Review" and "OK" with a required question unanswered. The review is
+rightly refused, but the box under the buttons opens with
+"##reviewer.submission.reviewFormResponse.form.responseRequired##"
+where a journal reads "Please fill in required fields.".
+
+The box's second sentence, "Some required fields are not filled in.
+Please complete them before submitting your review.", is the same on a
+press and a journal, and "This field is required." marks the unanswered
+question, so the reviewer can still tell what to do.
+
+It shows on every press review form with a required question, in every
+interface language. On `main` and 3.5 the same box, with the code, also
+appears at the first answer typed, before any button is pressed
+(a fault of its own, reported separately: [A14](#a14)).
+Basis: probe, 2026-10-02. <sup>[f-omp3](#fn-omp3)</sup>
 
 ### OPS
 
@@ -2549,6 +2558,7 @@ OMP with a one-question form: the box read
 "Some required fields are not filled in. Please complete them before
 submitting your review."; on OJS the same box read "Please fill in
 required fields." over the same second line.
+Issue report: [docs/issues/U28-OMP3-press-review-form-refusal-raw-key.md](../issues/U28-OMP3-press-review-form-refusal-raw-key.md).
 
 <a id="fn-omp4"></a>
 **f-omp4** — `PKPReviewerHandler::submission()` lists every round the

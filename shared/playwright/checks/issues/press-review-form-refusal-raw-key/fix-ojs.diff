@@ -1,0 +1,23 @@
+--- a/lib/pkp/locale/en/reviewer.po
++++ b/lib/pkp/locale/en/reviewer.po
+@@ -309,5 +309,8 @@
+ msgid "openReview.hideResponse"
+ msgstr "Hide Response"
+ 
++msgid "reviewer.submission.reviewFormResponse.form.responseRequired"
++msgstr "Please fill in required fields."
++
+ msgid "reviewer.submission.reviewFormResponse.form.notFilledIn"
+ msgstr "Some required fields are not filled in. Please complete them before submitting your review."
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -33,9 +33,6 @@
+ msgid "reviewer.article.enterReviewForm"
+ msgstr "Click on icon to fill in the review form."
+ 
+-msgid "reviewer.submission.reviewFormResponse.form.responseRequired"
+-msgstr "Please fill in required fields."
+-
+ msgid "reviewer.submission.reviewFormResponse.form.recommendationRequired"
+ msgstr "Must select a recommendation associated with journal"
+ 
