@@ -2333,7 +2333,7 @@ twice (scratch servers): "Date Posted" saved as a future date, the
 confirm → "Status: Scheduled" with controls Preview and Unschedule, the
 anonymous preprint page 404. The never-posts claim rests on the absent
 task registration.
-Issue report: [docs/issues/U49-OPS1-scheduled-preprint-never-posted.md](../issues/U49-OPS1-scheduled-preprint-never-posted.md).
+Issue report: [pkp-e2e#545](https://github.com/jardakotesovec/pkp-e2e/issues/545) ([docs/issues/U49-OPS1-scheduled-preprint-never-posted.md](../issues/U49-OPS1-scheduled-preprint-never-posted.md)).
 
 <a id="fn-ops2"></a>
 **f-ops2** — `SendPostedAcknowledgement` runs on the publish event with
