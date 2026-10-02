@@ -22,7 +22,7 @@ any successful save, but the ID is not stored: when the tab is opened
 again the "Publisher ID" box is empty.
 
 No message says the save did not take. The ID never reaches what would
-read it: the Native XML export, and a URN pattern built from it. A press
+read it: the Native XML export, and a URN or DOI pattern built from it. A press
 file's web address keeps using the file's number, as it does when no ID
 is set, so no link breaks.
 
@@ -42,9 +42,9 @@ ID"; both are off by default.
 
 Medium: the typed ID is lost silently every time with no way round, but
 only in a setup that is off by default, and only the Native XML export
-and URN patterns would use it; no reader's page or link depends on it.
-It would be high if an issue's or a file's Publisher ID fed a DOI
-deposit or something readers see.
+and URN or DOI custom patterns with "%x" would use it; no reader's page
+or link depends on it. It would be high if journals or presses
+commonly built issue or file DOIs from "%x".
 
 ## Steps to reproduce
 
@@ -137,10 +137,12 @@ Reach:
   and it is dropped the same way; the export side
   (`IssueNativeXmlFilter`, `SubmissionFileNativeXmlFilter`) never finds
   one to write (code).
-- A URN pattern with "%x" takes the item's Publisher ID (the URN
-  plugin, through OJS's and OMP's `PubIdPlugin`; DOI patterns have had
-  no "%x" since 3.4), so for an issue or a file it can never be resolved
-  (code).
+- A URN or DOI custom suffix pattern with "%x" ("Custom Identifier")
+  takes the item's Publisher ID through OJS's and OMP's
+  `PubIdPlugin::generateCustomPattern()`: the URN plugin, and the DOI
+  repositories' `generateSuffixPattern()`, which OJS's `mintIssueDoi()`
+  and OMP's `mintSubmissionFileDoi()` call with the issue and the file.
+  So for an issue or a file "%x" can never be resolved (code).
 - An OMP file's web address would use its Publisher ID in place of its
   number once one is stored (`SubmissionFile::getBestId()`,
   `CatalogBookHandler`, `DAO::getByBestId()`). Today it always uses the
