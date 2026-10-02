@@ -1,0 +1,31 @@
+--- a/classes/issue/enums/IssueAssignment.php
++++ b/classes/issue/enums/IssueAssignment.php
+@@ -113,18 +113,24 @@
+ 
+     /*
+      * Get the default assignment for a publication based on the context
++     *
++     * The default must be one of the options getAvailableAssignmentOption()
++     * offers, or the form preselects nothing and keeps the default's status.
+      */
+     public static function defaultAssignment(Context $context): self
+     {
+-        $issueExists = Repo::issue()
++        $issueExists = fn (bool $published): bool => Repo::issue()
+             ->getCollector()
+             ->filterByContextIds([$context->getId()])
++            ->filterByPublished($published)
+             ->getQueryBuilder()
+             ->exists();
+ 
+-        return $issueExists
+-            ? static::CURRENT_BACK_ISSUES_PUBLISHED
+-            : static::NO_ISSUE;
++        return match (true) {
++            $issueExists(true) => static::CURRENT_BACK_ISSUES_PUBLISHED,
++            $issueExists(false) => static::FUTURE_ISSUE_SCHEDULED,
++            default => static::NO_ISSUE,
++        };
+     }
+ 
+     /*

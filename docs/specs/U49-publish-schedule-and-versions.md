@@ -952,6 +952,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U49-OPS1-scheduled-preprint-never-posted.md`): a preprint
     posted with a future "Date Posted" reading "Status: Posted" once the
     scheduled tasks run on or after that date
+  - the guard for OJS2 (issue report
+    `docs/issues/U49-OJS2-future-issue-schedule-only-publishes-now.md`): on
+    a journal whose only issues are future ones, the panel's first pick of
+    "Assign To Future Issue and Schedule Only" ending in "Status:
+    Scheduled", and a Publication Settings save of it coming back checked
 - **Rarely met**:
   - the publish button skipping the details panel on a journal with
     issues, after a Publication Settings save on a version that already
@@ -1072,7 +1077,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A6](#a6) | Merely creating an unpublished version rewrites the live reader page's date line | 🐞 | user-visible | — |
 | [A10](#a10) | In French the "Create New Version" dialog and the Publication Settings / Preprint Entry page show raw codes; the versions to copy from cannot be told apart | 🐞 | minor | — |
 | [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused with no message and publishing is unreachable | 🐞 | user-visible | — |
-| [OJS2](#ojs2) | On a journal with no published issues, the issue choice is not the one made: "Schedule Only" (the panel's first pick, or one saved on Publication Settings) publishes immediately, and a Publication Settings save for another field records "Don't Assign To An Issue" | 🐞 | user-visible | — |
+| [OJS2](#ojs2) | Editor's "Schedule Only" publishes the article at once when the journal has no published issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | Publishing without an issue fails with "An unexpected error has occurred" when a contributor has a verified ORCID iD (member API), though the article goes live and its author is never emailed | 🐞 | user-visible · crash: server | — |
 | [OPS1](#ops1) | A preprint posted with a future "Date Posted" stays "Scheduled" for good and never goes public | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1282,30 +1287,19 @@ press and preprint server publish without a summary. Since: 2026-08-28 ·
 Basis: probe. <sup>[f-ojs1](#fn-ojs1)</sup>
 
 <a id="ojs2"></a>
-**OJS2 — Where no issue is published, the issue choice is not the one made** · 🐞 ·
-user-visible.
-On a journal with no published issues, where the only issue is a future
-one, the "Review Publishing Details" panel opens with no choice
-preselected, and the editor's FIRST pick of "Assign To Future Issue and
-Schedule Only" is not honored. The confirmation window offers immediate
-publication ("…published immediately… Are you sure you want to publish
-this?", button "Publish") and confirming yields "Status: Published". The
-promised "…published when {issue} is published…" scheduling never
-happens. Saving the choice on the Publication Settings page beforehand
-fails the same way on that journal: the settings page (at once after
-"Saved", and after a reload) and the panel all show "Assign To Future
-Issue and Publish Immediately" checked, and an untouched Confirm offers
-immediate publication ("Publish" button). Only changing the radio to
-another choice and picking "Schedule Only" again before Confirm produces
-the correct scheduling window. On the same journal, a save of Publication
-Settings pressed for another field (its Pages, say) before any issue
-choice records "Don't Assign To An Issue", a choice nobody made: the
-page, a reload and the panel then show it checked, and an untouched
-Confirm publishes the article at once with no issue. With a published or
-back issue present, the first pick and a saved choice both behave
-correctly. The failure is deterministic, not a timing accident. Since:
-2026-08-29 · Basis: probe.
-<sup>[f-ojs2](#fn-ojs2)</sup>
+**OJS2 — Editor's "Schedule Only" publishes the article at once when the journal has no published issue** · 🐞 · medium.
+On a journal with no published issue, only one or more future issues, an
+editor's first pick of "Assign To Future Issue and Schedule Only" in
+"Review Publishing Details" is taken as "Publish Immediately". The first
+pick is the first choice made after the panel opens, since it opens with
+no choice checked. The confirmation window then offers "Publish", and
+confirming publishes the article at once instead of scheduling it for
+the issue. Changing the choice a second time before "Confirm" works. On
+Publication Settings the same first pick, saved, comes back as "Assign
+To Future Issue and Publish Immediately". A save there for another
+field, such as "Pages", on a version with no issue choice yet, records
+"Don't Assign To An Issue", which nobody chose. Basis: probe,
+2026-10-02. <sup>[f-ojs2](#fn-ojs2)</sup>
 
 <a id="ojs3"></a>
 **OJS3 — A mistyped version address crashes instead of "not found"** · 🐞 · low · crash: server.
@@ -2272,6 +2266,7 @@ Current/Back choice the page does not offer there) and `status: 6`, and
 the page at once, a reload and the panel then showed "Don't Assign To
 An Issue" checked, the panel's untouched Confirm offering issueless
 publication.
+Issue report: [docs/issues/U49-OJS2-future-issue-schedule-only-publishes-now.md](../issues/U49-OJS2-future-issue-schedule-only-publishes-now.md).
 
 <a id="fn-ojs3"></a>
 **f-ojs3** — Live-probed 2026-08-29: `GET
