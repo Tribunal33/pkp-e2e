@@ -61,7 +61,7 @@ and the hourly routine starts one only when none is running
 | [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 |  |
 | [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | OMP1 done with U53 A14 (pkp-e2e#447) |
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
-| [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 |  |
+| [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | **A2 taken: issues session, workstation s0, 2026-10-02** (joined to U36 A10) |
 | [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
 | [U43](../specs/U43-funding.md) | 4 | 0 | 1 |  |
 | [U22](../specs/U22-my-submissions.md) | 2 | 0 | 1 |  |
