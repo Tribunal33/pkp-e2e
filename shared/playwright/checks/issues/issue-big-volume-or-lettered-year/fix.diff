@@ -1,0 +1,36 @@
+--- a/controllers/grid/issues/form/IssueForm.php
++++ b/controllers/grid/issues/form/IssueForm.php
+@@ -34,6 +34,9 @@
+ 
+ class IssueForm extends Form
+ {
++    /** The largest volume or year the issues table stores (smallint) */
++    public const MAX_SMALLINT = 32767;
++
+     /** @var Issue current issue */
+     public $issue;
+ 
+@@ -48,6 +51,7 @@
+ 
+         $form = $this;
+         $this->addCheck(new \PKP\form\validation\FormValidatorRegExp($this, 'volume', 'optional', 'editor.issues.volumeRequired', '/^[0-9]+$/i'));
++        $this->addCheck(new \PKP\form\validation\FormValidatorRegExp($this, 'year', 'optional', 'editor.issues.yearRequired', '/^[0-9]+$/'));
+         $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'showVolume', 'optional', 'editor.issues.volumeRequired', function ($showVolume) use ($form) {
+             return !$showVolume || $form->getData('volume') ? true : false;
+         }));
+@@ -131,6 +135,15 @@
+             }
+         }
+ 
++        // Volume and year are stored in smallint columns
++        foreach (['volume', 'year'] as $field) {
++            $value = (string) $this->getData($field);
++            if (ctype_digit($value) && (int) $value > self::MAX_SMALLINT) {
++                $this->addError($field, __('validator.max.numeric', ['max' => self::MAX_SMALLINT]));
++                $this->addErrorField($field);
++            }
++        }
++
+         // Check if urlPath is already being used
+         if (strlen((string) $this->getData('urlPath'))) {
+             if (ctype_digit((string) $this->getData('urlPath'))) {

@@ -1038,6 +1038,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U50-A12-delete-issue-articles-still-published.md`):
     deleting a published issue, then the article's workflow out of
     "Published" and its History recording the unpublishing
+  - the guard for A5 and A6 (issue report
+    `docs/issues/U50-A5-A6-issue-big-volume-or-lettered-year.md`): a
+    "Volume" of 99999 and a "Year" with a letter on "Create Issue", each
+    refused with its message
 - **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
@@ -1115,8 +1119,8 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 | [A1](#a1) | "Create Issue" arrives with "Title" ticked, and "Save" without a title is refused with only a passing notice; the "Title" box is not marked | 🐞 | user-visible | — |
 | [A2](#a2) | Unpublishing an older back issue leaves the journal with no current issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | After a refused "Save", "Date Published" shows today's date, which the issue saved next does not get | 🐞 | minor | — |
-| [A5](#a5) | A "Volume" of 99999 leaves "Create Issue" open with nothing shown | 🐞 | minor · crash: server | — |
-| [A6](#a6) | "Year" accepts letters: "20a6" is saved as 20 without a message | 🐞 | user-visible | — |
+| [A5](#a5) | A "Volume" of 99999 leaves "Create Issue" open with nothing shown | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
+| [A6](#a6) | "Year" accepts letters: "20a6" is saved as 20 without a message | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | "Future Issues" lists "No. 10" before "No. 2" | 🐞 | minor | — |
 | [A10](#a10) | An article dropped under another section in "Order" is back in its own section on reopening | 🐞 | minor | — |
 | [A11](#a11) | "Create Issue Galley" offers interface-only languages, then refuses them as if no language were chosen | 🐞 | user-visible | — |
@@ -1180,18 +1184,24 @@ never got. The box should keep what was typed, empty included. Basis:
 probe, 2026-09-25. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A large "Volume" fails the save** · 🐞 · minor · crash: server.
-With "Volume" 99999 on "Create Issue", "Save" fails: the window stays
-open with no message, no issue is created, and the app has failed on the
-server. The Journal Manager expects either the issue or a message saying
-what "Volume" accepts. Basis: probe, 2026-09-25. <sup>f-a5</sup>
+**A5 — A large "Volume" fails the save** · 🐞 · medium · crash: server.
+With a "Volume" of 99999 on "Create Issue" or "Issue Data", "Save" fails
+on the server: the window stays open with no message and no issue is
+created. The Journal Manager expects either the issue or a message
+saying what "Volume" accepts; the form checks only that "Volume" is
+digits, while the issue stores it in a column that holds at most 32767.
+One cause with A6.
+Basis: probe, 2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — "Year" accepts letters** · 🐞 · user-visible.
+**A6 — "Year" accepts letters** · 🐞 · medium.
 A "Year" of "20a6" is saved without a message as 20, and the issue is
-named "Vol. 1 No. 2a (20)" in the lists and on its page. "Volume" refuses
-letters with a message; "Year" should do the same. Basis: probe,
-2026-09-25. <sup>f-a6</sup>
+named "Vol. 3 No. 1 (20)" in the lists and on its page; the likely case
+is a typo inside the year, a letter O for a zero ("2O26" is stored as
+2). "Issue Data" uses the same form, so the same typo changes a
+published issue's year and its public name. "Volume" refuses letters
+with a message; "Year" should do the same. One cause with A5.
+Basis: probe, 2026-10-02. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — The archive's cover has no name when no alternate text was typed** · ❓ · minor.
@@ -1493,9 +1503,11 @@ Issue report: [docs/issues/U50-A2-unpublish-back-issue-clears-current-issue.md](
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-25 (td3), OJS: "Volume" 99999 with a valid "Year": `POST …/$$$call$$$/grid/issues/future-issue-grid/update-issue` answered 500, the window stayed open with no message and the list was unchanged. The schema stores `volume` in a `smallint` column (note i), whose limit is 32767, the likely cause; only 99999 was driven, and no server-log line was read.
+Issue report: [docs/issues/U50-A5-A6-issue-big-volume-or-lettered-year.md](../issues/U50-A5-A6-issue-big-volume-or-lettered-year.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Live-probed 2026-09-25 (td3), OJS: Volume 1, Number "2a", "Year" "20a6", "Title" unticked: saved without a message and listed as "Vol. 1 No. 2a (20)". `IssueForm` has no check on `year` beyond the box's `maxlength` 4; the stored integer keeps the leading digits (note i).
+Issue report: [docs/issues/U50-A5-A6-issue-big-volume-or-lettered-year.md](../issues/U50-A5-A6-issue-big-volume-or-lettered-year.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-25 (Fields, the archive's issue summary), OJS, two runs: on "Archives" the cover of an issue with no alternate text carried `alt=""` while its page read "View Vol. 1 No. 2 (2025)"; an issue with "K3 cover alt" typed read that on both. `issue_summary.tpl` defaults the alt to `''`, where `issue_toc.tpl` defaults it to `issue.viewIssueIdentification` (note w).
