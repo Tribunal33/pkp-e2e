@@ -1,0 +1,49 @@
+--- a/controllers/grid/issues/form/IssueForm.php
++++ b/controllers/grid/issues/form/IssueForm.php
+@@ -46,20 +46,7 @@
+     {
+         parent::__construct('controllers/grid/issues/form/issueForm.tpl');
+ 
+-        $form = $this;
+         $this->addCheck(new \PKP\form\validation\FormValidatorRegExp($this, 'volume', 'optional', 'editor.issues.volumeRequired', '/^[0-9]+$/i'));
+-        $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'showVolume', 'optional', 'editor.issues.volumeRequired', function ($showVolume) use ($form) {
+-            return !$showVolume || $form->getData('volume') ? true : false;
+-        }));
+-        $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'showNumber', 'optional', 'editor.issues.numberRequired', function ($showNumber) use ($form) {
+-            return !$showNumber || $form->getData('number') ? true : false;
+-        }));
+-        $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'showYear', 'optional', 'editor.issues.yearRequired', function ($showYear) use ($form) {
+-            return !$showYear || $form->getData('year') ? true : false;
+-        }));
+-        $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'showTitle', 'optional', 'editor.issues.titleRequired', function ($showTitle) use ($form) {
+-            return !$showTitle || implode('', $form->getData('title')) != '' ? true : false;
+-        }));
+         $this->addCheck(new \PKP\form\validation\FormValidatorRegExp($this, 'urlPath', 'optional', 'validator.alpha_dash_period', '/^[a-zA-Z0-9]+([\\.\\-_][a-zA-Z0-9]+)*$/'));
+ 
+         $this->addCheck(new \PKP\form\validation\FormValidatorPost($this));
+@@ -128,8 +115,25 @@
+             $publicFileManager = new PublicFileManager();
+             if (!$publicFileManager->getImageExtension($temporaryFile->getFileType())) {
+                 $this->addError('coverImage', __('editor.issues.invalidCoverImageFormat'));
++            }
++        }
++
++        // A ticked part of the issue's name needs a value. The error goes on the
++        // part's own field, so the form shows the message under that box.
++        foreach ([
++            'volume' => ['showVolume', 'editor.issues.volumeRequired'],
++            'number' => ['showNumber', 'editor.issues.numberRequired'],
++            'year' => ['showYear', 'editor.issues.yearRequired'],
++        ] as $field => [$showField, $message]) {
++            if ($this->getData($showField) && !$this->getData($field)) {
++                $this->addError($field, __($message));
++                $this->addErrorField($field);
+             }
+         }
++        if ($this->getData('showTitle') && implode('', (array) $this->getData('title')) === '') {
++            $this->addError('title', __('editor.issues.titleRequired'));
++            $this->addErrorField('title');
++        }
+ 
+         // Check if urlPath is already being used
+         if (strlen((string) $this->getData('urlPath'))) {
