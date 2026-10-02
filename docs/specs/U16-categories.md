@@ -1854,7 +1854,7 @@ true; `page_info` on an empty paginator prints `navigation.items` with
 `606ad4ef0b` 2026-01-09, `13bd3b2eaa` 2026-01-13).
 Live-probed 2026-09-25: note td7. The "before" was not opened, the
 stable-line servers being down.
-Issue report: [docs/issues/U16-A1-empty-category-no-message.md](../issues/U16-A1-empty-category-no-message.md).
+Issue report: [pkp-e2e#586](https://github.com/jardakotesovec/pkp-e2e/issues/586) ([docs/issues/U16-A1-empty-category-no-message.md](../issues/U16-A1-empty-category-no-message.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note i. Live-probed 2026-09-25: note td9, the order the items
