@@ -47,7 +47,7 @@ and the hourly routine starts one only when none is running
 | [U12](../specs/U12-announcements.md) | 11 | 0 | 5 | A11 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
 | [U10](../specs/U10-appearance-and-theming.md) | 13 | 0 | 4 | A4 done with U09 A15 ([pkp-e2e#370](https://github.com/jardakotesovec/pkp-e2e/issues/370)) |
 | [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 |  |
-| [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 | OPS3 done with U57 A8 (pkp-e2e#360); OPS4 done with U57 A8 (pkp-e2e#360) |
+| [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 | OPS3 done with U57 A8 (pkp-e2e#360); OPS4 done with U57 A8 (pkp-e2e#360); **A11 taken: issues session, workstation s0, 2026-10-02** (joined to U59 A1) |
 | [U73](../specs/U73-publication-formats-proof-terms.md) | 18 | 0 | 3 |  |
 | [U40](../specs/U40-publication-metadata.md) | 8 | 0 | 3 | A1 done with U21 A20 ([pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323)) |
 | [U30](../specs/U30-author-response-to-reviews.md) | 7 | 0 | 3 |  |
