@@ -1,0 +1,22 @@
+--- a/lib/ui-library/src/managers/CategoryManager/CategoryDeleteDialogBody.vue
++++ b/lib/ui-library/src/managers/CategoryManager/CategoryDeleteDialogBody.vue
+@@ -11,6 +11,8 @@
+ 
+ 		<FieldText
+ 			class="mt-8"
++			:label="t('grid.category.name')"
++			name="confirmCategoryName"
+ 			size="large"
+ 			:value="inputValue"
+ 			@input="inputValue = $event.target.value"
+--- a/lib/ui-library/src/managers/ContributorRoleManager/ContributorRoleDeleteDialogBody.vue
++++ b/lib/ui-library/src/managers/ContributorRoleManager/ContributorRoleDeleteDialogBody.vue
+@@ -10,6 +10,8 @@
+ 
+ 		<FieldText
+ 			class="mt-8"
++			:label="t('manager.contributorRoles.identifier')"
++			name="confirmContributorRoleIdentifier"
+ 			size="large"
+ 			:value="inputValue"
+ 			@input="inputValue = $event.target.value"
