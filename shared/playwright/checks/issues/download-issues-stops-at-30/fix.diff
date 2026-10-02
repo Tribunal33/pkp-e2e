@@ -1,0 +1,11 @@
+--- a/api/v1/stats/issues/StatsIssueController.php
++++ b/api/v1/stats/issues/StatsIssueController.php
+@@ -120,8 +120,6 @@
+         $responseCSV = str_contains($illuminateRequest->headers->get('Accept'), 'text/csv') ? true : false;
+
+         $defaultParams = [
+-            'count' => 30,
+-            'offset' => 0,
+             'orderDirection' => StatisticsHelper::STATISTICS_ORDER_DESC,
+         ];
+

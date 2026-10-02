@@ -1161,6 +1161,7 @@ Left out of the scenarios above, by reason:
   - a Journal Manager's "Do not collect any geographical data" on a site that collects geographical data: the choice still selected after a reload, and no "Download Geographic" in the "Download Report" window (the guard for A4, once fixed)
   - "All dates" on Statistics › "Articles" of a context with nothing published and of one whose earliest publication is dated before 2001: no "Error" window, the monthly chart from January 2001 (the guard for A1, once fixed)
   - a Section Editor's "Statistics" menu and the "Counter R5" address while the journal's COUNTER statistics are restricted: no "Counter R5" entry, the access-denied page (the guard for A5, once fixed)
+  - "Download Issues" on Statistics › "Issues" with more than 30 issues visited in the range: the file holds every issue the page counts (the guard for OJS4, once fixed) {OJS}
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1243,7 +1244,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | A search phrase with double quotes breaks the spreadsheet's "Search Phrase" line | 🐞 | minor | — |
 | [A10](#a10) | A malformed Platform ID behind an unticked "Platform" refuses every save of the site's tab | 🐞 | minor | — |
 | [A11](#a11) | The COUNTER report downloads as "counterReport.tsv" but is comma-separated | 🐞 | minor | — |
-| [OJS4](#ojs4) | "Download Issues" holds at most 30 issues, although the page counts more | 🐞 | user-visible | — |
+| [OJS4](#ojs4) | Statistics › Issues: "Download Issues" leaves out every issue after the first 30, without saying so | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS5](#ojs5) | "Journal Article Requests (IR_A1)" lists investigation rows its header leaves out | 🐞 | minor | — |
 | [OJS6](#ojs6) | The COUNTER Release 4 file names its report by a cut-off code path | 🐞 | minor | — |
 | [OMP3](#omp3) | A book's PDF or "Appendix" file fails to open, so its visit is never counted | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
@@ -1454,12 +1455,22 @@ box's own label promises it.
 Basis: probe, 2026-09-27. <sup>f-ojs3</sup>
 
 <a id="ojs4"></a>
-**OJS4 — "Download Issues" stops at 30 issues** · 🐞 · user-visible.
-With more than 30 issues visited in the range, the "Issues" page reads
-"30 of 31 issues" and pages on, but "Download Issues" lists only the
-first 30 in the table's order; "Download Articles" and "Download Files"
-list every row. Expected: every issue.
-Basis: probe, 2026-09-27. <sup>f-ojs4</sup>
+**OJS4 — Statistics › Issues: "Download Issues" leaves out every issue after the first 30, without saying so** · 🐞 · medium.
+On Statistics › "Issues", an editor presses "Download Report", then
+"Download Issues", and expects a file with every issue the table
+counts for the chosen range. When more than 30 issues were visited in
+the range, the page reads "30 of 31 issues" and has a second page, but
+the file lists only 30 issues: the download is held to a fixed limit
+of 30 that only the table's own requests lift.
+
+The file opens with the range and looks complete; nothing says it is
+cut short. When the visit counts differ, the issues left out are the
+least visited ones; among issues with the same count, which ones are
+left out is arbitrary.
+
+The table on screen still shows every issue. "Download Timeline" on
+the same page is complete.
+Basis: probe, 2026-10-02. <sup>f-ojs4</sup>
 
 <a id="ojs5"></a>
 **OJS5 — "Journal Article Requests (IR_A1)" lists investigations** · 🐞 · minor.
@@ -2422,6 +2433,7 @@ dropping No. 2 in the default order and No. 1 in the reversed one.
 `StatsIssueController::getMany()` defaults `count` to 30 and the
 download sends no `count` (fn-i), while the article list has no default
 count.
+Issue report: [docs/issues/U64-OJS4-download-issues-stops-at-30.md](../issues/U64-OJS4-download-issues-stops-at-30.md).
 
 <a id="fn-f-ojs5"></a>
 **f-ojs5** — Live-probed 2026-09-27 (two runs): the IR_A1 file's
