@@ -1391,7 +1391,7 @@ Issue report: [pkp-e2e#619](https://github.com/jardakotesovec/pkp-e2e/issues/619
 `urlRemote`; `schemas/galley.json` gives it `validation: ["url"]`, used
 by `Repo::galley()->validate()`, which the grid never calls.
 Live-probed 2026-09-24 (note q9).
-Issue report: [docs/issues/U46-A6-remote-galley-address-not-checked.md](../issues/U46-A6-remote-galley-address-not-checked.md).
+Issue report: [pkp-e2e#624](https://github.com/jardakotesovec/pkp-e2e/issues/624) ([docs/issues/U46-A6-remote-galley-address-not-checked.md](../issues/U46-A6-remote-galley-address-not-checked.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Note j: every galley shares position 0 until an order is
