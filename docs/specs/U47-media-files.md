@@ -1716,7 +1716,7 @@ OPS Moderator and Author; absent (false) for Guest Editor and every
 declares only `publication` and `submission`. The silent "Save": note s.
 Live-probed 2026-09-24: note q2. Compare the galley page, where on a
 journal the "Permissions" box plays no part (*Galleys*).
-Issue report: [docs/issues/U47-A1-media-actions-offered-then-refused.md](../issues/U47-A1-media-actions-offered-then-refused.md).
+Issue report: [pkp-e2e#493](https://github.com/jardakotesovec/pkp-e2e/issues/493) ([docs/issues/U47-A1-media-actions-offered-then-refused.md](../issues/U47-A1-media-actions-offered-then-refused.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note d: `MediaFileManagerCellGroupId.vue` shows
