@@ -2521,7 +2521,7 @@ Issue report: [docs/issues/U64-OJS4-download-issues-stops-at-30.md](../issues/U6
 `Metric_Types` line and its `Total_Item_Investigations` and
 `Unique_Item_Investigations` rows per article. OJS
 `classes/sushi/IR_A1.php` (fn-l).
-Issue report: [docs/issues/U64-OJS5-ir-a1-lists-investigation-rows.md](../issues/U64-OJS5-ir-a1-lists-investigation-rows.md).
+Issue report: [docs/issues/U64-OJS5-ir-a1-lists-investigation-rows.md](../issues/U64-OJS5-ir-a1-lists-investigation-rows.md), filed as [pkp-e2e#627](https://github.com/jardakotesovec/pkp-e2e/issues/627).
 
 <a id="fn-f-ojs6"></a>
 **f-ojs6** — Live-probed 2026-09-27 (three runs):
