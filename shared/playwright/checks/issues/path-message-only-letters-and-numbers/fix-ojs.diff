@@ -1,0 +1,13 @@
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -2812,7 +2812,9 @@
+ msgstr "The category's URL will be: {$sampleUrl}"
+ 
+ msgid "grid.category.pathAlphaNumeric"
+-msgstr "The category path must consist of only letters and numbers."
++msgstr ""
++"The category path may contain only letters (a–z, A–Z), digits (0–9), dots "
++"(.), forward slashes (/), hyphens (-) and underscores (_)."
+ 
+ msgid "grid.category.pathExists"
+ msgstr "The category path already exists. Please enter a unique path."

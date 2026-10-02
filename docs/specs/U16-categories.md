@@ -816,6 +816,10 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a category's "Path" refused with a message that names the characters
+    a saved path may hold ([A9](#a9)): the guard the issue report
+    proposes
 - **Register carries it**:
   - A2 ("Order of articles" set to another choice, with no effect on the
     page; Rule 10; Settings bullet 3)
@@ -891,7 +895,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | A category's picture is not a link; its full-size version is unreachable from the page | 🐞 | minor | — |
 | [A7](#a7) | The picture's "Alternate text" is used nowhere; a journal's page describes the picture as "null" | 🐞 | minor | — |
 | [A8](#a8) | A path containing "/" is saved, but its links open another category's page or the not-found page | 🐞 | minor | — |
-| [A9](#a9) | The path message says "only letters and numbers" while "-", "_", "." and "/" are accepted | 🐞 | minor | — |
+| [A9](#a9) | The path message says "only letters and numbers" while "-", "_", "." and "/" are accepted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | With no category, the "Browse" block shows "Categories" with nothing under it | 🐞 | minor | — |
 | [A11](#a11) | The tab's arrows cannot be worked from the keyboard, and all read "Expand sub-categories" to a screen reader, open or not, with or without sub-categories | 🐞 | minor | — |
 | [A12](#a12) | A screen reader announces the "Select Categories" window's arrow column as "##common.expand##" | 🐞 | minor | — |
@@ -986,10 +990,13 @@ reached.
 Basis: probe, 2026-09-25. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The path message understates what a path may hold** · 🐞 · minor.
+**A9 — The path message understates what a path may hold** · 🐞 · low.
 A refused path reads "The category path must consist of only letters and
-numbers.", yet "-", "_", "." and "/" are accepted.
-Basis: probe, 2026-09-25. <sup>f-a9</sup>
+numbers.", yet "-", "_", "." and "/" are accepted, and accented letters
+such as "é" are refused; a manager who trusts the message avoids the
+hyphens most readable addresses use. A press's series path gives the
+same message for the same pattern (*[Sections](U17-sections.md)* OMP2).
+Basis: probe, 2026-10-02. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — An empty "Browse" block on a journal without categories** · 🐞 · minor.
@@ -1879,6 +1886,7 @@ Live-probed 2026-09-25: note td2.
 (note d).
 Live-probed 2026-09-25: note d ("my path" and "café" refused, "a-b_c.d" and
 "sci/phys" saved).
+Issue report: [docs/issues/U17-OMP2-path-message-only-letters-and-numbers.md](../issues/U17-OMP2-path-message-only-letters-and-numbers.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note h (`{if $browseCategories}` on a `LazyCollection`).

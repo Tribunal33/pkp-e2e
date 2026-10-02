@@ -903,6 +903,9 @@ Left out of the scenarios above, by reason:
   - the sections endpoint asked for its list at the site's address by
     the Site Administrator answering a refusal (404), not a server error
     ([A10](#a10)): the guard the issue report proposes
+  - {OMP} a series' "Path" refused with a message that names the
+    characters a saved path may hold ([OMP2](#omp2)): the guard the
+    issue report proposes
 - **Rarely met**:
   - {OJS} "Omit author names for section items from issues' table of
     contents." ticked, the issue's table of contents without the section's
@@ -1030,7 +1033,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | With "Disable Submissions" ticked, the "Submissions" page keeps its per-section submission links | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | The REST API's sections endpoint refuses a missing or another journal's section with a raw message code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | The sections interface fails with a server error on a section asked for by a word, and on the site's address | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [OMP2](#omp2) | The series path message says "only letters and numbers" while ".", "/", "_" and "-" are accepted | 🐞 | minor | — |
+| [OMP2](#omp2) | The series path message says "only letters and numbers" while ".", "/", "_" and "-" are accepted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | The series cover uploader offers SVG files, and "Save" then keeps nothing and says nothing | 🐞 | minor | — |
 | [OMP5](#omp5) | The series list's activate and deactivate windows ask about a "section" | 🐞 | minor | — |
 | [OMP7](#omp7) | The ISSN paragraph reads "which identifying" | 🐞 | minor | — |
@@ -1200,13 +1203,15 @@ machinery: a divergence, not a defect.
 Basis: probe, 2026-09-25. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — The path message misstates what a path may hold** · 🐞 · minor.
-A manager types "new series" as a series' "Path" and reads the notice "The
-series path must consist of only letters and numbers."; they then type
-"new-series", which the message says is refused, and it is saved. The
-message should name the characters the box accepts: letters, digits, ".",
-"/", "_" and "-".
-Basis: probe, 2026-09-25. <sup>f-omp2</sup>
+**OMP2 — The path message misstates what a path may hold** · 🐞 · low.
+A manager types "new series" as a series' "Path" and reads the notice
+"The series path must consist of only letters and numbers."; they then
+type "new-series", which the message says is refused, and it is saved.
+The message should name the characters the box accepts: letters a–z and
+A–Z (not accented ones such as "é", which are refused), digits, ".",
+"/", "_" and "-". A category's path gives the same message for the same
+pattern (*[Categories](U16-categories.md)* A9).
+Basis: probe, 2026-10-02. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
 **OMP3 — The cover uploader offers SVG, and "Save" silently drops it** · 🐞 · minor.
@@ -1542,6 +1547,7 @@ Issue report for the word as id, joined to the API-wide unknown-route fault: [pk
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — fn m. Live-probed 2026-09-25: note td6.
+Issue report: [docs/issues/U17-OMP2-path-message-only-letters-and-numbers.md](../issues/U17-OMP2-path-message-only-letters-and-numbers.md).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — fn m: the picker allows SVG, `validate()` refuses it with `form.invalidImage`, and the save's answer (`{"status":false,"content":""}`) carries no message for the window to show. Live-probed 2026-09-25: note td5.
