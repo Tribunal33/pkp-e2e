@@ -49,7 +49,7 @@ and the hourly routine starts one only when none is running
 | [U73](../specs/U73-publication-formats-proof-terms.md) | 18 | 0 | 3 |  |
 | [U40](../specs/U40-publication-metadata.md) | 8 | 0 | 3 | A1 done with U21 A20 ([pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323)) |
 | [U30](../specs/U30-author-response-to-reviews.md) | 7 | 0 | 3 |  |
-| [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 | A10 done with U17 A6 (docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md) |
+| [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 | A10 done with U17 A6 (docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md); **A12 taken: issues session, VM s0, 2026-10-02** (joined to U62 A9) |
 | [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 |  |
 | [U02](../specs/U02-registration-and-account-validation.md) | 8 | 0 | 2 |  |
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 |  |
