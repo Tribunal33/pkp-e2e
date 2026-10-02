@@ -1,0 +1,23 @@
+--- a/templates/frontend/pages/preprints.tpl
++++ b/templates/frontend/pages/preprints.tpl
+@@ -33,7 +33,7 @@
+ 	{include file="frontend/components/archiveHeader.tpl"}
+ 
+ 	{* No preprints have been published *}
+-	{if empty($publishedSubmissions)}
++	{if !$total}
+ 		<p>{translate key="archive.noSubmissions"}</p>
+ 
+ 	{* List preprints *}
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -209,6 +209,9 @@
+ msgid "archive.archivesPageNumber"
+ msgstr "Archives - Page {$pageNumber}"
+ 
++msgid "archive.noSubmissions"
++msgstr "Nothing has been posted yet."
++
+ msgid "about.contact"
+ msgstr "Contact"
+ 

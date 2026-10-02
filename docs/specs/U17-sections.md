@@ -917,6 +917,8 @@ Left out of the scenarios above, by reason:
     issue report proposes
   - {OMP} the help under a saved series' "Path" showing the series' own
     address ([OMP8](#omp8)): the guard the issue report proposes
+  - {OPS} "Archives" on a server with nothing posted showing a sentence
+    that says so ([OPS1](#ops1)): the guard the issue report proposes
 - **Rarely met**:
   - {OJS} "Omit author names for section items from issues' table of
     contents." ticked, the issue's table of contents without the section's
@@ -1050,7 +1052,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP7](#omp7) | The ISSN help in a press's series window reads "which identifying" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP8](#omp8) | The help under a series' "Path" shows an address ending in the word "Path", never the series' own | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP9](#omp9) | A series' public page shows no name, description or ISSN, and lists the books newest first whatever the series' order | 🐞 | user-visible | — |
-| [OPS1](#ops1) | An empty "Archives" page shows nothing under the archive header, not even a sentence | 🐞 | minor | — |
+| [OPS1](#ops1) | A preprint server with nothing posted shows a blank "Archives" page, with no message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS2](#ops2) | The help under "Identify items posted in this section as a(n)" reads "(For example etc.)" | 🐞 | minor | — |
 | [OPS5](#ops5) | An "Archives" page past the last one shows a heading, no preprints and page links such as "Previous 7-6 of 5" | 🐞 | minor | — |
 | [OPS6](#ops6) | One preprint posted without an abstract makes the server's harvesting record lists fail | 🐞 | user-visible · crash: server | — |
@@ -1310,12 +1312,14 @@ Since: 2026-08-26 (one month) · Basis: probe, 2026-09-25; its start, commit. <s
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — An empty "Archives" page says nothing** · 🐞 · minor.
+**OPS1 — A preprint server with nothing posted shows a blank "Archives" page, with no message** · 🐞 · low.
 A visitor opens "Archives" on a preprint server with nothing posted yet
-and sees the heading, the search box and the category links, then
-nothing: no sentence says that nothing has been posted, as a section's
-empty page does ("Nothing has been posted in this section yet.").
-Basis: probe, 2026-09-25. <sup>f-ops1</sup>
+and sees the heading and the search box, then nothing: no sentence says
+that nothing has been posted, as a section's empty page does ("Nothing
+has been posted in this section yet."). It costs nothing but a moment's
+doubt: the visitor cannot tell an empty server from a page that failed
+to load its list.
+Basis: probe, 2026-10-02. <sup>f-ops1</sup>
 
 <a id="ops2"></a>
 **OPS2 — "(For example etc.)"** · 🐞 · minor.
@@ -1602,6 +1606,7 @@ Issue report: [docs/issues/U17-OMP8-series-path-help-never-shows-path.md](../iss
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — fn f. Live-probed 2026-09-25 on a scratch server, three runs: note td13. The seeded server is not empty once other suites have posted to it.
+Issue report: [docs/issues/U17-OPS1-archives-empty-server-says-nothing.md](../issues/U17-OPS1-archives-empty-server-says-nothing.md).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — OPS `locale/en/manager.po` `manager.sections.identifyTypeExamples` "(For example etc.)". Live-probed 2026-09-25, with OJS's window as the control.
