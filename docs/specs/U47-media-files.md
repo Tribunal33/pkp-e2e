@@ -1729,7 +1729,7 @@ here to upload"`, with no visible element; the button is gone once a
 card is on the window. The text is that of Dropzone's default message
 (lib/pkp `form.dropzone.dictDefaultMessage`); the source of the hidden
 button was not traced further.
-Issue report: [docs/issues/U47-A3-media-upload-window-hidden-drop-button.md](../issues/U47-A3-media-upload-window-hidden-drop-button.md).
+Issue report: [pkp-e2e#491](https://github.com/jardakotesovec/pkp-e2e/issues/491) ([docs/issues/U47-A3-media-upload-window-hidden-drop-button.md](../issues/U47-A3-media-upload-window-hidden-drop-button.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note q28. The 101 MB request failed with a server error on
