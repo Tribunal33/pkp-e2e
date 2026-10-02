@@ -822,6 +822,7 @@ footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - {OMP} "Accept Submission" and "Create New Review Round" on an internal round listing the author's revised file under "Revisions", ticked, and copying it into "Draft Files" and the new round's "Files for Review" ([OMP2](#omp2); Rule 13b): the guard the issue report proposes, once fixed
   - {OMP} the author's header Tasks panel gaining "Revisions to consider in Internal Review." after "Request Revisions" on an internal round, and losing it on the revised-file upload ([OMP1](#omp1); Side effects bullet 2): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - a round with a recommending editor assigned and no review under way,
@@ -929,7 +930,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [OMP1](#omp1) | After "Request Revisions" on Internal Review, a press author gets no task in the Tasks panel | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OMP2](#omp2) | "Accept Submission" and "Create New Review Round" on an internal round carry none of the author's revised files | 🐞 | user-visible | — |
+| [OMP2](#omp2) | On a press's Internal Review, "Accept Submission" and "Create New Review Round" carry none of the author's revised files | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP7](#omp7) | The author selecting the "Internal Review" entry itself gets a stale or empty page, and the page's script fails | 🐞 | minor · crash: script | — |
 | [OMP8](#omp8) | While External Review asks for revisions, the author's "Upload" on an earlier internal round files the revision there, out of the editor's sight | 🐞 | minor | — |
 | [OMP9](#omp9) | The stage's address typed without the monograph's number gives an empty page from a server failure | 🐞 | latent · crash: server | — |
@@ -955,15 +956,22 @@ monograph's row on My Submissions reads "Revision requested" with a
 Since: 2022-01-18 · Basis: probe, 2026-10-02. <sup>[f-omp1](#fn-omp1)</sup>
 
 <a id="omp2"></a>
-**OMP2 — Revised files left behind by "Accept Submission" and "Create New Review Round"** · 🐞 · user-visible.
-On External Review both decisions' "Select Files" page lists the round's
-revised files under "Revisions", ticked, and recording copies them into
-Copyediting's "Draft Files" or the new round's "Files for Review". On an
-internal round the "Revisions" list is empty, even when the author has
-uploaded a revised file there, so the monograph reaches Copyediting, or
-its next internal round, without the revision, and the editor has to move
-the file by hand.
-Since: 2022-01-18 · Basis: probe. <sup>[f-omp2](#fn-omp2)</sup>
+**OMP2 — On a press's Internal Review, "Accept Submission" and "Create New Review Round" carry none of the author's revised files** · 🐞 · medium.
+On a press's Internal Review, an editor who records "Accept Submission"
+or "Create New Review Round" after the author has uploaded a revised
+file finds the decision's "Select Files" page reading "No items found."
+under "Revisions". The decision is recorded and the revised file is not
+copied: Copyediting's "Draft Files", or the new round's "Files for
+Review", stays empty. On External Review the same page lists the revised
+file, ticked, and the decision copies it.
+
+After accepting, the editor can fetch the file by hand: "Draft Files" ›
+"Upload/Select Files", tick "Show files from all accessible workflow
+stages.", tick the file under "Internal Review", "OK". After a new
+round there is no such pick: the same window on Round 2 lists nothing
+under "Internal Review", so the file has to be downloaded from Round 1
+and uploaded again.
+Since: 2022-01-18 · Basis: probe, 2026-10-02. <sup>[f-omp2](#fn-omp2)</sup>
 
 <a id="omp3"></a>
 **OMP3 — No "Notifications" list on the author's Internal Review** · ❓ · user-visible.
@@ -1207,6 +1215,7 @@ Issue report: [docs/issues/U71-OMP1-internal-revisions-request-gives-author-no-t
 
 <a id="fn-omp2"></a>
 **f-omp2** — lib/pkp `Accept::getSteps()` and `NewExternalReviewRound::getSteps()`, inherited unchanged by OMP's `AcceptFromInternal` and `NewInternalReviewRound`, build the "Revisions" list (`editor.submission.revisions`) with `filterByFileStages([SubmissionFile::SUBMISSION_FILE_REVIEW_REVISION])` and the round's id, hard-coded where the trait's `getRevisionFileStage()` would give `SUBMISSION_FILE_INTERNAL_REVIEW_REVISION`; an internal round's revised files sit in that internal stage, so the list is empty. `NewExternalReviewRound`'s promotion target is `SUBMISSION_FILE_REVIEW_FILE`, External Review's stage, not `SUBMISSION_FILE_INTERNAL_REVIEW_FILE`. Both since lib/pkp `f75706ba57` (pkp/pkp-lib#7265, 2022-01-18). The decision-recording spec's page table links here from both rows (corrected 2026-09-28). Live-probed 2026-09-27 (note td-carry); the External Review control the same day, after "Request Revisions" with "Revisions will not be subject to a new round of peer reviews." and the author's upload: both decisions' "Revisions" listed the file, ticked, and recording copied it into "Draft Files" and into Round 2's "Files for Review".
+Issue report: [docs/issues/U71-OMP2-internal-round-revised-files-not-carried.md](../issues/U71-OMP2-internal-round-revised-files-not-carried.md).
 
 <a id="fn-omp3"></a>
 **f-omp3** — `workflowConfigAuthorOMP.js`'s internal block mounts no `WorkflowListingEmails`, which `workflowConfigAuthorOJS.js`'s external block mounts first; `WorkflowListingEmails.vue` itself fetches only for the external stage id (comment "currently only used in review stage"). The OMP author config dates from ui-library `80daa02d` (pkp/pkp-lib#7495, 2024-10-16). Live-probed 2026-09-27 (note td-emails).

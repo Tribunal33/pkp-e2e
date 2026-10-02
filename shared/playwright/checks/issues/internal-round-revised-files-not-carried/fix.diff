@@ -1,0 +1,39 @@
+--- a/lib/pkp/classes/decision/types/Accept.php
++++ b/lib/pkp/classes/decision/types/Accept.php
+@@ -194,7 +194,7 @@
+             Repo::submissionFile()
+                 ->getCollector()
+                 ->filterBySubmissionIds([$submission->getId()])
+-                ->filterByFileStages([SubmissionFile::SUBMISSION_FILE_REVIEW_REVISION])
++                ->filterByFileStages([$this->getRevisionFileStage()])
+                 ->filterByReviewRoundIds([$reviewRound->getId()])
+         ));
+ 
+--- a/lib/pkp/classes/decision/types/NewExternalReviewRound.php
++++ b/lib/pkp/classes/decision/types/NewExternalReviewRound.php
+@@ -30,7 +30,6 @@
+ use PKP\security\Role;
+ use PKP\submission\reviewRound\ReviewRound;
+ use PKP\submission\reviewRound\ReviewRoundDAO;
+-use PKP\submissionFile\SubmissionFile;
+ use PKP\user\User;
+ 
+ class NewExternalReviewRound extends DecisionType
+@@ -159,7 +158,7 @@
+             'promoteFilesToReviewRound',
+             __('editor.submission.selectFiles'),
+             __('editor.submission.decision.promoteFiles.review'),
+-            SubmissionFile::SUBMISSION_FILE_REVIEW_FILE,
++            $this->getReviewFileStage(),
+             $submission,
+             $this->getFileGenres($context->getId())
+         ))->addFileList(
+@@ -167,7 +166,7 @@
+             Repo::submissionFile()
+                 ->getCollector()
+                 ->filterBySubmissionIds([$submission->getId()])
+-                ->filterByFileStages([SubmissionFile::SUBMISSION_FILE_REVIEW_REVISION])
++                ->filterByFileStages([$this->getRevisionFileStage()])
+                 ->filterByReviewRoundIds([$reviewRound->getId()])
+         ));
+ 
