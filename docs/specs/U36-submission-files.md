@@ -934,6 +934,7 @@ Left out of the scenarios above, by reason:
   - "Cancel upload" pressed on the full bar with the server's answer held back: no file stored, the panel empty after a reload ([A25](#a25)): the guard the issue report proposes
   - "Change File" on step 1 of a new file's upload, then "Complete": the list gains the second file alone ([A14](#a14)): the guard the issue report proposes
   - in "Upload/Select Files" with "Show files from all accessible workflow stages." ticked, another stage's row: "More Information" loads and the file name downloads ([A19](#a19)): the guard the issue report proposes
+  - "Show events from prior versions" ticked on a file in "Files for Review": the original file's rows are added ([A4](#a4)): the guard the issue report proposes
 - **Nothing new to test**:
   - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
   - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
@@ -992,7 +993,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | An author is offered "Update File Details" on a file somebody else uploaded, and the window only refuses them | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | "More Information"'s "History" tab keeps showing "Loading" for the Copyeditor, Layout Editor and the other assistant roles | 🐞 | minor | — |
-| [A4](#a4) | The "History" tab's "Show events from prior versions" box changes nothing | 🐞 | minor | — |
+| [A4](#a4) | A file's "History" tab: ticking "Show events from prior versions" reloads the same rows | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A galley's "Change File" shows "Current file" with no file name under it | 🐞 | minor | — |
 | [A7](#a7) | An Author is offered "Upload" above "Revisions Uploaded" before revisions are requested, then refused | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | A screen reader reads step 1's hidden upload box, and the step's two drop-downs have no name | 🐞 | minor | — |
@@ -1054,13 +1055,22 @@ tab should load for them or the window should open without it.
 Basis: probe. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
-**A4 — "Show events from prior versions" does nothing** · 🐞 · minor.
-The "History" tab of "More Information" offers the stage's team, behind
+**A4 — A file's "History" tab: ticking "Show events from prior versions" reloads the same rows** · 🐞 · low.
+The "History" tab of a file's "More Information" offers editors, behind
 its "Search" button, the box "Show events from prior versions". Ticking
-it and pressing "Search" reloads the tab with the same rows as before:
-the file's own events, nothing from the file it was copied from or from
-earlier stages. The box is unticked again afterwards.
-Basis: probe. <sup>[f-a4](#fn-a4)</sup>
+it reloads the tab with the same rows as before: the file's own events
+only.
+
+The box used to add the events of the files this one was copied from
+in earlier stages, which is what "prior versions" means here. It has
+done nothing since the submission files refactor of 2020, so in every
+release from 3.3 on.
+
+The fault shows on every file that is a copy of an earlier one, and
+that is how a file reaches review, copyediting and production. A
+preprint server shows the box too on `main`, but copies no files, so
+there is nothing for the box to bring.
+Basis: probe, 2026-10-02. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
 **A5 — A galley's "Change File" names no current file** · 🐞 · minor.
@@ -2245,6 +2255,7 @@ Manager, Section Editor, Moderator): the filter form hidden until "Search";
 the POST to `submission-file-event-log-grid/fetch-grid` carried `allEvents=on`
 and returned the same rows (eight on an OJS file; on a copy the same three,
 none of its source's), and the form came back collapsed and unticked.
+Issue report: [docs/issues/U36-A4-history-prior-versions-box-changes-nothing.md](../issues/U36-A4-history-prior-versions-box-changes-nothing.md).
 
 <a id="fn-a5"></a>
 **f-a5** — Note o: `fileUploadForm.tpl` prints `{$revisedFileName}` under

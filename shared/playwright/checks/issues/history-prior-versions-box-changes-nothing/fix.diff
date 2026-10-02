@@ -1,0 +1,34 @@
+--- a/lib/pkp/controllers/grid/eventLog/SubmissionFileEventLogGridHandler.php
++++ b/lib/pkp/controllers/grid/eventLog/SubmissionFileEventLogGridHandler.php
+@@ -114,8 +114,30 @@
+      */
+     protected function loadData($request, $filter = null)
+     {
++        $submissionFile = $this->getSubmissionFile();
++        $submissionFileIds = [$submissionFile->getId()];
++
++        // "Show events from prior versions": also list the events of the
++        // files this one was copied from, as far back as the user has an
++        // editorial role in the source file's workflow stage.
++        if (!empty($filter['allEvents']) && $this->getFilterForm()) {
++            $editorialRoles = [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT];
++            $accessibleStages = (array) $this->getAuthorizedContextObject(Application::ASSOC_TYPE_ACCESSIBLE_WORKFLOW_STAGES);
++            while ($sourceSubmissionFileId = $submissionFile->getData('sourceSubmissionFileId')) {
++                $submissionFile = Repo::submissionFile()->get((int) $sourceSubmissionFileId, $this->getSubmission()->getId());
++                if (!$submissionFile || in_array($submissionFile->getId(), $submissionFileIds)) {
++                    break;
++                }
++                $stageId = Repo::submissionFile()->getWorkflowStageId($submissionFile);
++                if (!$stageId || !array_intersect($editorialRoles, $accessibleStages[$stageId] ?? [])) {
++                    break;
++                }
++                $submissionFileIds[] = $submissionFile->getId();
++            }
++        }
++
+         return Repo::eventLog()->getCollector()
+-            ->filterByAssoc(PKPApplication::ASSOC_TYPE_SUBMISSION_FILE, [$this->getSubmissionFile()->getId()])
++            ->filterByAssoc(PKPApplication::ASSOC_TYPE_SUBMISSION_FILE, $submissionFileIds)
+             ->getMany()
+             ->toArray();
+     }
