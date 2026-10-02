@@ -1,0 +1,90 @@
+--- a/controllers/api/file/ManageFileApiHandler.php
++++ b/controllers/api/file/ManageFileApiHandler.php
+@@ -118,7 +118,9 @@
+         $stageId = $request->getUserVar('stageId');
+         $form = new PKPPublicIdentifiersForm($submissionFile, $stageId);
+         $form->clearPubId($request->getUserVar('pubIdPlugIn'));
+-        return new JSONMessage(true);
++        $json = new JSONMessage(true);
++        $json->setEvent('reloadTab', [['tabsSelector' => '#editFileMetadataTabs', 'tabSelector' => '#identifiersTab']]);
++        return $json;
+     }
+ 
+ 
+--- a/controllers/grid/catalogEntry/PublicationFormatGridHandler.php
++++ b/controllers/grid/catalogEntry/PublicationFormatGridHandler.php
+@@ -744,7 +744,9 @@
+ 
+         $form = new PublicIdentifiersForm($representation);
+         $form->clearPubId($request->getUserVar('pubIdPlugIn'));
+-        return new JSONMessage(true);
++        $json = new JSONMessage(true);
++        $json->setEvent('reloadTab', [['tabsSelector' => '#editPublicationFormatMetadataTabs', 'tabSelector' => '#identifiersTab']]);
++        return $json;
+     }
+ 
+     /**
+--- a/controllers/grid/users/chapter/ChapterGridHandler.php
++++ b/controllers/grid/users/chapter/ChapterGridHandler.php
+@@ -437,7 +437,9 @@
+ 
+         $form = new PublicIdentifiersForm($chapter);
+         $form->clearPubId($request->getUserVar('pubIdPlugIn'));
+-        return new JSONMessage(true);
++        $json = new JSONMessage(true);
++        $json->setEvent('reloadTab', [['tabsSelector' => '#editChapterMetadataTabs', 'tabSelector' => '#identifiersTab']]);
++        return $json;
+     }
+ 
+     /**
+--- a/lib/pkp/js/controllers/SiteHandler.js
++++ b/lib/pkp/js/controllers/SiteHandler.js
+@@ -489,7 +489,14 @@
+ 	$.pkp.controllers.SiteHandler.prototype.reloadTabHandler_ =
+ 			function(sourceElement, event, jsonData) {
+ 
+-		$(jsonData.tabsSelector).tabs('load', jsonData.tabSelector);
++		var $tabs = $(jsonData.tabsSelector),
++				// jQuery UI's tabs('load') reads a string as the end of a tab's
++				// href, never as a selector, so pass the tab's position instead.
++				index = $tabs.find(jsonData.tabSelector).index();
++
++		if (index !== -1) {
++			$tabs.tabs('load', index);
++		}
+ 	};
+ 
+ 
+--- a/lib/pkp/templates/controllers/api/file/editMetadata.tpl
++++ b/lib/pkp/templates/controllers/api/file/editMetadata.tpl
+@@ -17,7 +17,7 @@
+ 	<ul>
+ 		<li><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="editMetadataTab" submissionFileId=$submissionFile->getId() submissionId=$submissionFile->getData('submissionId') stageId=$stageId}">{translate key="grid.action.editMetadata"}</a></li>
+ 		{if $showIdentifierTab}
+-			<li><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="identifiers" submissionFileId=$submissionFile->getId() submissionId=$submissionFile->getData('submissionId') stageId=$stageId}">{translate key="submission.identifiers"}</a></li>
++			<li id="identifiersTab"><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="identifiers" submissionFileId=$submissionFile->getId() submissionId=$submissionFile->getData('submissionId') stageId=$stageId}">{translate key="submission.identifiers"}</a></li>
+ 		{/if}
+ 	</ul>
+ </div>
+--- a/templates/controllers/grid/catalogEntry/editFormat.tpl
++++ b/templates/controllers/grid/catalogEntry/editFormat.tpl
+@@ -31,7 +31,7 @@
+ 
+ 		{if !$remoteRepresentation && $representationId}
+ 			{if $showIdentifierTab}
+-				<li><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="identifiers" submissionId=$submissionId representationId=$representationId publicationId=$publicationId}">{translate key="submission.identifiers"}</a></li>
++				<li id="identifiersTab"><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="identifiers" submissionId=$submissionId representationId=$representationId publicationId=$publicationId}">{translate key="submission.identifiers"}</a></li>
+ 			{/if}
+ 		{/if}
+ 	</ul>
+--- a/templates/controllers/grid/users/chapter/editChapter.tpl
++++ b/templates/controllers/grid/users/chapter/editChapter.tpl
+@@ -17,7 +17,7 @@
+ 	<ul>
+ 		<li><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="editChapterTab" submissionId=$submissionId publicationId=$publicationId chapterId=$chapterId}">{translate key="grid.action.editMetadata"}</a></li>
+ 		{if $showIdentifierTab}
+-		<li><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="identifiers" submissionId=$submissionId publicationId=$publicationId chapterId=$chapterId}">{translate key="submission.identifiers"}</a></li>
++		<li id="identifiersTab"><a href="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT op="identifiers" submissionId=$submissionId publicationId=$publicationId chapterId=$chapterId}">{translate key="submission.identifiers"}</a></li>
+ 		{/if}
+ 	</ul>
+ </div>

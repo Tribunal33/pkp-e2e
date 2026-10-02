@@ -842,6 +842,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U44-A13-check-number-empty-urn-suffix-nan.md`): a
     galley's "Identifiers" tab greying "Add Check Number" while "URN
     Suffix" is empty
+  - the guard for A14 (issue report
+    `docs/issues/U44-A14-cleared-urn-stays-on-tab.md`): "Clear" › "OK"
+    on a galley's and a chapter's "Identifiers" tab redrawing the tab at
+    once without the URN
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -919,7 +923,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | The URN prefix refusal shows "&amp;lt;NID&amp;gt;" under the box and in the notice | 🐞 | minor | — |
 | [A11](#a11) | URN settings window: every click under the pattern choice raises a page script error | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | "Add Check Number" on an item's "Identifiers" tab writes "NaN" into an empty URN suffix box | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A14](#a14) | After "Clear", a galley's or chapter's tab still shows the removed URN | 🐞 | minor | — |
+| [A14](#a14) | A galley's or chapter's "Identifiers" tab keeps showing a URN after "Clear" has removed it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | A new issue galley with a Publisher ID is not saved: "Save" stays greyed with no message | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | An issue's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | A press cannot save URN settings with only "Chapters" or "Files" ticked | 🐞 | minor | — |
@@ -1102,12 +1106,22 @@ it, ending in "NaN". OPS has no URN plugin.
 Basis: probe, 2026-10-02. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — A cleared URN stays on the tab** · 🐞 · minor.
-After "Clear" › "OK" on a galley's or a chapter's "Identifiers" tab,
-the URN is removed at once, but the tab keeps showing it, with "The
-URN is assigned to this galley." and "Clear", until the window is
-closed and opened again. An issue's tab shows the change at once.
-Basis: probe, 2026-09-24. <sup>f-a14</sup>
+**A14 — A galley's or chapter's "Identifiers" tab keeps showing a URN after "Clear" has removed it** · 🐞 · medium.
+An editor opens the "Identifiers" tab of a galley, a chapter, a
+publication format or a book file, and presses "Clear" › "OK" beside its
+URN. The URN is removed at once, but the tab keeps showing it, with "The
+URN is assigned to this galley." and "Clear", until the window is closed
+and opened again. An issue's tab shows the change at once, except in a
+journal that requires subscriptions: there the issue's window has one
+more tab, "Access", and the page reloads that tab instead of
+"Identifiers". An editor who trusts the tab may think "Clear" failed.
+Pressing "Clear" again does no harm. Pressing "Save" on the out-of-date
+tab does: when the URN plugin uses individual suffixes, it erases the
+suffix the editor typed, without a message. It needs the URN plugin,
+which is off until a manager turns it on, with URNs for one of these
+objects. OPS has no URN plugin; on 3.3 the DOI plugin's "Clear" on the
+same tabs, OPS galleys included, acts the same way.
+Basis: probe, 2026-10-02. <sup>f-a14</sup>
 
 ### OJS
 
@@ -1890,6 +1904,7 @@ Issue report: [docs/issues/U44-A13-check-number-empty-urn-suffix-nan.md](../issu
 **f-a14** — Live-probed 2026-09-24 (note q25). The galley and chapter
 tabs' "Clear" deletes the URN at once (note e) without redrawing the
 tab; the issue tab reloads `#identifiersTab` (note f).
+Issue report: [docs/issues/U44-A14-cleared-urn-stays-on-tab.md](../issues/U44-A14-cleared-urn-stays-on-tab.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `IssueGalleyForm::validate()` calls
