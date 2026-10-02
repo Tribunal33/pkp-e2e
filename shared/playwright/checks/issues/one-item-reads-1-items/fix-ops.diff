@@ -1,0 +1,27 @@
+--- a/locale/en/submission.po
++++ b/locale/en/submission.po
+@@ -55,6 +55,9 @@
+ msgid "submission.sectionOptions"
+ msgstr "Section Options"
+ 
++msgid "catalog.browseTitle"
++msgstr "1 Item"
++
+ msgid "catalog.browseTitles"
+ msgstr "{$numTitles} Items"
+ 
+--- a/templates/frontend/pages/catalogCategory.tpl
++++ b/templates/frontend/pages/catalogCategory.tpl
+@@ -26,7 +26,11 @@
+ 
+ 	{* Count of preprints in this category *}
+ 	<div class="preprint_count">
+-		{translate key="catalog.browseTitles" numTitles=$results->total()}
++		{if $results->total() == 1}
++			{translate key="catalog.browseTitle"}
++		{else}
++			{translate key="catalog.browseTitles" numTitles=$results->total()}
++		{/if}
+ 	</div>
+ 
+ 	{* Image and description *}

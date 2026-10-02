@@ -1,0 +1,87 @@
+--- a/locale/en/submission.po
++++ b/locale/en/submission.po
+@@ -330,6 +330,9 @@
+ msgid "submission.list.viewEntry"
+ msgstr "View Entry"
+ 
++msgid "catalog.browseTitle"
++msgstr "1 Title"
++
+ msgid "catalog.browseTitles"
+ msgstr "{$numTitles} Titles"
+ 
+--- a/templates/frontend/pages/catalog.tpl
++++ b/templates/frontend/pages/catalog.tpl
+@@ -22,7 +22,11 @@
+ 	<h1>{translate key="navigation.catalog"}</h1>
+ 
+ 	<div class="monograph_count">
+-		{translate key="catalog.browseTitles" numTitles=$total}
++		{if $total == 1}
++			{translate key="catalog.browseTitle"}
++		{else}
++			{translate key="catalog.browseTitles" numTitles=$total}
++		{/if}
+ 	</div>
+ 
+ 	{* Series List *}
+--- a/templates/frontend/pages/catalogCategory.tpl
++++ b/templates/frontend/pages/catalogCategory.tpl
+@@ -28,7 +28,11 @@
+ 
+ 	{* Count of monographs in this category *}
+ 	<div class="monograph_count">
+-		{translate key="catalog.browseTitles" numTitles=$results->total()}
++		{if $results->total() == 1}
++			{translate key="catalog.browseTitle"}
++		{else}
++			{translate key="catalog.browseTitles" numTitles=$results->total()}
++		{/if}
+ 	</div>
+ 
+ 	{* Image and description *}
+--- a/templates/frontend/pages/catalogNewReleases.tpl
++++ b/templates/frontend/pages/catalogNewReleases.tpl
+@@ -19,7 +19,11 @@
+ 
+ 	{* Count of new releases being dispalyed *}
+ 	<div class="monograph_count">
+-		{translate key="catalog.browseTitles" numTitles=$publishedSubmissions|@count}
++		{if $publishedSubmissions|@count == 1}
++			{translate key="catalog.browseTitle"}
++		{else}
++			{translate key="catalog.browseTitles" numTitles=$publishedSubmissions|@count}
++		{/if}
+ 	</div>
+ 
+ 	{* No published titles in this category *}
+--- a/templates/frontend/pages/catalogSeries.tpl
++++ b/templates/frontend/pages/catalogSeries.tpl
+@@ -27,7 +27,11 @@
+ 
+ 	{* Count of monographs in this series *}
+ 	<div class="monograph_count">
+-		{translate key="catalog.browseTitles" numTitles=$total}
++		{if $total == 1}
++			{translate key="catalog.browseTitle"}
++		{else}
++			{translate key="catalog.browseTitles" numTitles=$total}
++		{/if}
+ 	</div>
+ 
+ 	{* Image and description *}
+--- a/templates/frontend/pages/search.tpl
++++ b/templates/frontend/pages/search.tpl
+@@ -36,7 +36,11 @@
+ 	{* Monograph List *}
+ 	{else}
+ 		<div class="monograph_count">
+-			{translate key="catalog.browseTitles" numTitles=$results->total()}
++			{if $results->total() == 1}
++				{translate key="catalog.browseTitle"}
++			{else}
++				{translate key="catalog.browseTitles" numTitles=$results->total()}
++			{/if}
+ 		</div>
+ 
+ 		<div class="search_results" role="status">
