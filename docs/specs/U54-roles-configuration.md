@@ -802,6 +802,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U54-A4-role-remove-warning-promises-deletion.md`): a
     default role's row offering "Edit" and no "Remove", and a created
     role's "Remove" window text before the role is removed
+  - the guard for A9 (issue report
+    `docs/issues/U54-A9-roles-filter-lists-hide-after-choice.md`): a
+    level chosen in the "Roles" tab's filter, then the two filter lists
+    still shown with the choice
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -887,7 +891,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | Removing a role warns that its members' assignments will be deleted, but a held role is never removed | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A pressed stage box, and a removed role's row, keep their old look until a reload, and pressing them again fails | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | A screen reader announces each stage box of the list only as "checkbox" | 🐞 | minor | — |
-| [A9](#a9) | After a filter entry is chosen the filters hide, and only the count line shows the list is filtered | 🐞 | minor | — |
+| [A9](#a9) | On the Roles list, the two filter lists fold away after a choice, so a filtered list looks complete | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A role name of spaces breaks the role window, and the second "OK" leaves Settings for a page of code | 🐞 | medium · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | "OK" in an Editor's own role window takes the Settings pages away from every holder of the role | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | Roles list: a saved role jumps to the end, and its pages can repeat one role and skip another | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1017,14 +1021,24 @@ sets.
 Basis: probe. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — A filtered list does not say it is filtered** · 🐞 · minor.
-After an entry is chosen under "List roles assigned to" or "With
-permission level set to", both lists hide again behind "Search", and the
-list shows only the matching roles with nothing but its count line to
-say so, also after switching to another tab and back. A manager who
+**A9 — On the Roles list, the two filter lists fold away after a choice, so a filtered list looks complete** · 🐞 · low.
+A manager on Settings › Users & Roles › "Roles" presses "Search" and
+chooses an entry under "List roles assigned to" or "With permission
+level set to". The roles list redraws with the matching roles, and at
+once the two filter lists fold away again behind "Search". The page is
+written to keep them open, and did until pkp-lib moved to jQuery 3 in
+2018.
+
+Nothing then says the roles list is filtered except its count line ("1
+- 2 of 2 items" for "Author" on a journal). The filter stays in place,
+still folded away, after a switch to another tab and back. A manager who
 comes back to the tab can take the shorter list for all the journal's
-roles.
-Basis: probe. <sup>f-a9</sup>
+roles. "Search" shows the entry still chosen, and a reload of the page
+clears it.
+
+Changing "Items per page:" while the two filter lists are shown folds
+them away the same way.
+Basis: probe, 2026-10-02. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — A role name of spaces breaks the role window, and the second "OK" leaves Settings for a page of code** · 🐞 · medium · crash: script.
@@ -1780,6 +1794,7 @@ list's fourth row had none of the three.
 (`#userGroupSearchForm`), which the header's "Search" link shows and hides
 and which is hidden again after each choice submits it. Live-probed
 2026-09-26: [d](#fn-d).
+Issue report: [docs/issues/U54-A9-roles-filter-lists-hide-after-choice.md](../issues/U54-A9-roles-filter-lists-hide-after-choice.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — The window's own check refuses only an empty box; the server's
