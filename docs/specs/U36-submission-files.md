@@ -994,7 +994,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | An author is offered "Update File Details" on a file somebody else uploaded, and the window only refuses them | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | "More Information"'s "History" tab keeps showing "Loading" for the Copyeditor, Layout Editor and the other assistant roles | 🐞 | minor | — |
 | [A4](#a4) | A file's "History" tab: ticking "Show events from prior versions" reloads the same rows | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A5](#a5) | A galley's "Change File" shows "Current file" with no file name under it | 🐞 | minor | — |
+| [A5](#a5) | A galley's "Change File" shows the heading "Current file" with no file name under it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | An Author is offered "Upload" above "Revisions Uploaded" before revisions are requested, then refused | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | A screen reader reads step 1's hidden upload box, and the step's two drop-downs have no name | 🐞 | minor | — |
 | [A10](#a10) | "Add Note" with an empty box posts a note with no text, on a file's "Notes" and in "Activity Log & Notes" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1073,14 +1073,22 @@ there is nothing for the box to bring.
 Basis: probe, 2026-10-02. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
-**A5 — A galley's "Change File" names no current file** · 🐞 · minor.
+**A5 — A galley's "Change File" shows the heading "Current file" with no file name under it** · 🐞 · low.
 On a journal or preprint server, "Change File" on a galley opens the
-upload wizard with the heading "Current file", which promises the name of
-the file about to be replaced. Nothing stands under it, so the editor
-cannot see which file they are about to replace. Once a file is uploaded,
-the line under "Current file" names the new file, not the one it
-replaces.
-Basis: probe. <sup>[f-a5](#fn-a5)</sup>
+upload wizard with the heading "Current file", which promises the name
+of the file about to be replaced. Nothing stands under it, so the editor
+cannot see there which file they are about to replace.
+
+When the editor then picks the replacement, its name appears in the
+upload box directly below the heading. "Current file" now seems to name
+the new file, and the file being replaced is named nowhere in the
+window.
+
+In 3.4 and 3.3 the same window has a list of the galley's files to
+revise, which names the current file. A press has no galleys, and
+"Change File" on a publication format's file does not show the heading.
+The fix is a few lines in pkp-lib.
+Basis: probe, 2026-10-02. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
 **A6 — File rows' menu buttons carry no file name** · ❓ · minor.
@@ -2261,6 +2269,7 @@ Issue report: [docs/issues/U36-A4-history-prior-versions-box-changes-nothing.md]
 **f-a5** — Note o: `fileUploadForm.tpl` prints `{$revisedFileName}` under
 `submission.submit.currentFile`; no PHP in lib/pkp or the three apps assigns
 it (grep, 2026-09-23). Live-probed 2026-09-23: note d4.
+Issue report: [docs/issues/U36-A5-galley-change-file-names-no-current-file.md](../issues/U36-A5-galley-change-file-names-no-current-file.md).
 
 <a id="fn-a6"></a>
 **f-a6** — Production-stage claim check, 2026-09-19 (K2, OJS and OMP): the

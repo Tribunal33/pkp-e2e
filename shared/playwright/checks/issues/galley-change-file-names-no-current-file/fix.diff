@@ -1,0 +1,43 @@
+--- a/lib/pkp/controllers/wizard/fileUpload/form/PKPSubmissionFilesUploadBaseForm.php
++++ b/lib/pkp/controllers/wizard/fileUpload/form/PKPSubmissionFilesUploadBaseForm.php
+@@ -338,9 +338,12 @@
+         $submissionFiles = $this->getRevisionSubmissionFilesSelection($user, $uploadedFile);
+ 
+         foreach ((array) $submissionFiles as $submissionFile) {
++            $fileName = $submissionFile->getLocalizedData('name') != '' ? $submissionFile->getLocalizedData('name') : __('common.untitled');
++
+             // Is this the revised file?
+             if ($revisedFileId && $revisedFileId == $submissionFile->getId()) {
+                 // This is the revised submission file, so pass its data on to the form.
++                $this->setData('revisedFileName', $fileName);
+                 $this->setData('genreId', $submissionFile->getGenreId());
+                 $foundRevisedFile = true;
+             }
+@@ -348,8 +351,6 @@
+             // Create an entry in the list of existing files which
+             // the user can select from in case he chooses to upload
+             // a revision.
+-            $fileName = $submissionFile->getLocalizedData('name') != '' ? $submissionFile->getLocalizedData('name') : __('common.untitled');
+-
+             $submissionFileOptions[$submissionFile->getId()] = $fileName;
+             $currentSubmissionFileGenres[$submissionFile->getId()] = $submissionFile->getGenreId();
+ 
+@@ -360,6 +361,7 @@
+         if (count($submissionFileOptions) == 1 && $this->getData('revisionOnly')) {
+             // There was only one option, use the last added submission file
+             $this->setData('revisedFileId', $lastSubmissionFile->getId());
++            $this->setData('revisedFileName', $submissionFileOptions[$lastSubmissionFile->getId()]);
+             $this->setData('genreId', $lastSubmissionFile->getGenreId());
+         }
+ 
+--- a/lib/pkp/templates/controllers/wizard/fileUpload/form/fileUploadForm.tpl
++++ b/lib/pkp/templates/controllers/wizard/fileUpload/form/fileUploadForm.tpl
+@@ -158,7 +158,7 @@
+ 
+ 		{if $showFileNameOnly}
+ 			{fbvFormSection title="submission.submit.currentFile"}
+-				{$revisedFileName}
++				{$revisedFileName|escape}
+ 			{/fbvFormSection}
+ 
+ 			{* Save the revised file ID in a hidden input field. *}
