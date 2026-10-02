@@ -2400,7 +2400,7 @@ empty box). Live-probed 2026-09-27: td2.
 and `end_date.before_or_equal` to `__('stats.dateRange.invalidEndDateMax')`
 without `['date' => …]`; on screen the date lands inside an
 untranslated code. Live-probed 2026-09-27: td5.
-Issue report: [docs/issues/U64-A3-counter-report-date-refusal-raw-code.md](../issues/U64-A3-counter-report-date-refusal-raw-code.md).
+Issue report: [docs/issues/U64-A3-counter-report-date-refusal-raw-code.md](../issues/U64-A3-counter-report-date-refusal-raw-code.md), filed as [pkp-e2e#626](https://github.com/jardakotesovec/pkp-e2e/issues/626).
 
 <a id="fn-f-a4"></a>
 **f-a4** — fn-s. Live-probed 2026-09-27: td7.
