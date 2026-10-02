@@ -1257,11 +1257,11 @@ is made.
 
 <a id="fn-f-a6"></a>
 **f-a6** — Note j: `$submission->getCurrentPublication()` inside `ArticleBody::create()`, while `ArticleFront` and `ArticleBack` use the publication passed in. Probe: d9.
-Issue report: [docs/issues/U48-A6-jats-body-from-current-version-galleys.md](../issues/U48-A6-jats-body-from-current-version-galleys.md).
+Issue report: [pkp-e2e#563](https://github.com/jardakotesovec/pkp-e2e/issues/563) ([docs/issues/U48-A6-jats-body-from-current-version-galleys.md](../issues/U48-A6-jats-body-from-current-version-galleys.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Note j: purify to `<p>` only, then `htmlspecialchars()` into a single `createElement('p', …)`. Probe: d8.
-Issue report: [docs/issues/U48-A7-jats-body-html-markup-as-text.md](../issues/U48-A7-jats-body-html-markup-as-text.md).
+Issue report: [pkp-e2e#564](https://github.com/jardakotesovec/pkp-e2e/issues/564) ([docs/issues/U48-A7-jats-body-html-markup-as-text.md](../issues/U48-A7-jats-body-html-markup-as-text.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note e: the 24-hour `Cache::remember()` is cleared only by upload, delete and the visibility change; neither `Repo::publication()->edit()` nor publishing clears it, so a copy cached from "Preview" (whose download goes through the same `getPublicJatsContent()`) outlives publication. Probe: d14.
