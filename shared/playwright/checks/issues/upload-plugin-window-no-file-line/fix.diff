@@ -1,0 +1,14 @@
+--- a/lib/pkp/templates/controllers/grid/plugins/form/uploadPluginForm.tpl
++++ b/lib/pkp/templates/controllers/grid/plugins/form/uploadPluginForm.tpl
+@@ -27,9 +27,9 @@
+ 	{include file="controllers/notification/inPlaceNotification.tpl" notificationId="uploadPluginNotification"}
+ 
+ 	{fbvFormArea id="file"}
+-		{if $function == 'install'}
++		{if $function == \PKP\plugins\PluginHelper::PLUGIN_ACTION_UPLOAD}
+ 			<p>{translate key="manager.plugins.uploadDescription"}</p>
+-		{elseif $function == 'upgrade'}
++		{elseif $function == \PKP\plugins\PluginHelper::PLUGIN_ACTION_UPGRADE}
+ 			<p>{translate key="manager.plugins.upgradeDescription"}</p>
+ 		{/if}
+ 		{fbvFormSection title="manager.plugins.uploadPluginDir" required=true}

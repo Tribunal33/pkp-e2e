@@ -690,12 +690,12 @@ unless an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | The Plugin Gallery stays on "Loading" when the installation cannot reach PKP: its list fails with a server error | 🐞 | user-visible · crash: server | — |
-| [A2](#a2) | "Upload A New Plugin" gives no line saying what file it wants | 🐞 | minor | — |
+| [A2](#a2) | "Upload A New Plugin" window never says which kind of file to choose | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | An upgrade refused for the same version blames "the version available in the gallery" | 🐞 | minor | — |
 | [A5](#a5) | A failed upgrade leaves the plugin with no files at all, gone from every list | 🐞 | latent | — |
 | [A7](#a7) | The Delete notice reads "successfuly" | 🐞 | minor | — |
 | [A9](#a9) | A refused tick or untick says nothing, and "Disable" stays open with its spinner | 🐞 | minor | — |
-| [A10](#a10) | A file that is not a plugin package is refused in the server's own words, naming a file on the server | 🐞 | minor | — |
+| [A10](#a10) | Uploading a file that is not a plugin package shows PHP's archive error with a server path | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | With its theme switched off, a journal's home page comes up blank for every visitor | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | "Delete" is offered on plugins nobody can switch off, and on the theme in use | ❓ | minor | — |
 | [A6](#a6) | A Site Administrator with no manager role in a journal cannot switch its plugins | ❓ | minor | — |
@@ -716,13 +716,16 @@ Settings Wizard, whichever tab is showing.
 Basis: probe. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — "Upload A New Plugin" says nothing about the file** · 🐞 · minor.
+**A2 — "Upload A New Plugin" window never says which kind of file to choose** · 🐞 · low.
 The "Upload A New Plugin" window should open with "This form allows you
 to upload and install a new plugin.  Please ensure the plugin is
 compressed as a .tar.gz file.", as "Upgrade Plugin" opens with its own
-line; it shows the file field alone, so nothing tells the administrator
-which kind of file to choose.
-Basis: probe. <sup>f-a2</sup>
+line. Instead it shows the file field alone, so nothing tells the
+administrator which kind of file to choose.
+The plugin still installs when the right file is chosen. An administrator
+who picks another kind of file only learns it was wrong from the refusal
+after "Save".
+Basis: probe, 2026-10-02. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — A refused upgrade blames the gallery** · 🐞 · minor.
@@ -809,13 +812,18 @@ change was refused.
 Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — A file that is not a plugin package is refused in the server's own words** · 🐞 · minor.
-Uploading through "Upload A New Plugin" a file that is not a ".tar.gz"
-archive should be refused with a sentence saying the file is not a
-plugin package; instead the notice is a message from the server's
-archive handling that names the path of the uploaded file on the
-server (Rule 17).
-Basis: probe. <sup>f-a10</sup>
+**A10 — Uploading a file that is not a plugin package shows PHP's archive error with a server path** · 🐞 · low.
+When the Site Administrator uploads a file that is not a plugin package
+through "Upload A New Plugin", the upload should be refused with a
+sentence saying the file is not a plugin package. Instead the notice is
+a message from the server's archive handling that names the full path
+of the uploaded file on the server, such as "Cannot create phar
+'/home/e2e/pkp-e2e/checkouts/files/ojs-test-ds4/temp/txtCwku8e', file
+extension (or combination) not recognised or the directory does not
+exist".
+Nothing is installed, but the message does not tell the administrator
+what was wrong with the file or what to upload instead.
+Basis: probe, 2026-10-02. <sup>f-a10</sup>
 
 ### OJS
 
@@ -1297,6 +1305,7 @@ administration). Mechanism fn-o.
 <a id="fn-f-a2"></a>
 **f-a2** — fn-k: the template tests `'install'`, the action is
 `'upload'`. Live-probed 2026-09-27: td10.
+Issue report: [docs/issues/U62-A2-upload-plugin-window-no-file-line.md](../issues/U62-A2-upload-plugin-window-no-file-line.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — fn-m: `upgradePlugin()` reuses
@@ -1347,6 +1356,7 @@ this plugin." on a press.
 <a id="fn-f-a10"></a>
 **f-a10** — fn-l: `PharData`'s own exception message reaches the
 notice. Live-probed 2026-09-27: td14.
+Issue report: [docs/issues/U62-A10-upload-plugin-not-archive-server-message.md](../issues/U62-A10-upload-plugin-not-archive-server-message.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn-i. Live-probed 2026-09-27 (OJS, two runs): with

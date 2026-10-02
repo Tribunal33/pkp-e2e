@@ -1,0 +1,48 @@
+--- a/lib/pkp/classes/plugins/PluginHelper.php
++++ b/lib/pkp/classes/plugins/PluginHelper.php
+@@ -22,6 +22,7 @@
+ use Exception;
+ use Illuminate\Support\Arr;
+ use PharData;
++use PharException;
+ use PKP\config\Config;
+ use PKP\core\Core;
+ use PKP\db\DAORegistry;
+@@ -34,6 +35,7 @@
+ use PKP\site\VersionDAO;
+ use Psr\Log\LogLevel;
+ use Throwable;
++use UnexpectedValueException;
+ 
+ class PluginHelper
+ {
+@@ -178,8 +180,13 @@
+             $extractPath = rtrim(sys_get_temp_dir(), '\\/') . "/{$baseName}" . substr(md5(random_int(0, PHP_INT_MAX)), 0, 10) . '/';
+             $fileManager->mkdir($extractPath) || throw new Exception("Could not create directory {$extractPath}");
+ 
+-            // Extract files
+-            (new PharData($filePathWithExtension ?? $filePath))->extractTo($extractPath, null, true);
++            // Extract files; a file PharData cannot read is not a plugin package, said in the user's words
++            // rather than PharData's, whose message names the file's path on the server
++            try {
++                (new PharData($filePathWithExtension ?? $filePath))->extractTo($extractPath, null, true);
++            } catch (UnexpectedValueException|PharException $e) {
++                throw new Exception(__('manager.plugins.invalidPluginPackage'), 0, $e);
++            }
+ 
+             // Ensure there's a file named "version.xml" at the main directory or at the direct sub-directories
+             foreach (new DirectoryIterator($extractPath) as $current) {
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -1750,6 +1750,11 @@
+ "The uploaded plugin archive does not contain a folder that corresponds to "
+ "the plugin name."
+ 
++msgid "manager.plugins.invalidPluginPackage"
++msgstr ""
++"The uploaded file is not a plugin package. Please ensure the plugin is "
++"compressed as a .tar.gz file."
++
+ msgid "manager.plugins.wrongCategory"
+ msgstr "The uploaded plugin does not fit the category of the upgraded plugin."
+ 
