@@ -1,0 +1,11 @@
+--- a/classes/orcid/OrcidWork.php
++++ b/classes/orcid/OrcidWork.php
+@@ -65,7 +65,7 @@
+     {
+         $ids = [];
+ 
+-        $issueDoiObject = $this->issue->getData('doiObject');
++        $issueDoiObject = $this->issue?->getData('doiObject');
+         if ($issueDoiObject) {
+             $ids[] = [
+                 'external-id-type' => self::PUBID_TO_ORCID_EXT_ID['doi'],

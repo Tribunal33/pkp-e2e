@@ -961,6 +961,12 @@ Left out of the scenarios above, by reason:
     `docs/issues/U49-A5-amendment-notice-shown-to-no-reader.md`): a version
     published with Update Type "Correction" and a Summary of Changes showing
     that summary on its own reader page, in every app
+  - the guard for OJS4 (issue report
+    `docs/issues/U49-OJS4-publish-without-issue-orcid-contributor-error.md`):
+    with ORCID on under the member API, an article published with "Don't
+    Assign To An Issue" whose contributor holds a verified iD reaching
+    "Status: Published" without an error, and its author receiving
+    "Publication Published"
 - **Rarely met**:
   - the publish button skipping the details panel on a journal with
     issues, after a Publication Settings save on a version that already
@@ -1083,7 +1089,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused with no message and publishing is unreachable | 🐞 | user-visible | — |
 | [OJS2](#ojs2) | Editor's "Schedule Only" publishes the article at once when the journal has no published issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [OJS4](#ojs4) | Publishing without an issue fails with "An unexpected error has occurred" when a contributor has a verified ORCID iD (member API), though the article goes live and its author is never emailed | 🐞 | user-visible · crash: server | — |
+| [OJS4](#ojs4) | Editor publishing an article without an issue gets an error when a contributor has a verified ORCID iD | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | A preprint posted with a future "Date Posted" stays "Scheduled" for good and never goes public | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS4](#ops4) | Every post, the first included, sends "New Version Posted Acknowledgement"; the first-post acknowledgement never goes out | 🐞 | user-visible | — |
 | [A1](#a1) | The new-version email announces itself to editors but goes to every stage-assigned user, the submitting author included | ❓ | user-visible | — |
@@ -1326,20 +1332,17 @@ page. No link the journal's pages offer leads to such an address.
 Since: 2026-08-29 · Basis: probe, 2026-10-01. <sup>[f-ojs3](#fn-ojs3)</sup>
 
 <a id="ojs4"></a>
-**OJS4 — Publishing without an issue fails for a contributor with a verified ORCID iD** · 🐞 · user-visible · crash: server.
-With ORCID on under the member API, publishing an article with no issue
-whose contributor holds a verified iD fails. After the confirmation
-window's "Publish" the window stays open, the page shows "An unexpected
-error has occurred. Please reload the page and try again.", and the head
-still reads "Status: Unpublished" with no controls. After a reload the
-version reads "Status: Published" and the article is live, yet nothing
-is sent to the contributor's ORCID record and the Author never receives
-"Publication Published". The same publish succeeds into an issue, under
-the public API, or with no verified iD; a press and a preprint server
-publish the same contributor normally. It was seen on a journal with no
-issues created (Rule 15); the failure comes from the missing issue, so
-"Don't Assign To An Issue" on a journal with issues is expected to fail
-the same way, a path not driven. Basis: probe.
+**OJS4 — Editor publishing an article without an issue gets an error when a contributor has a verified ORCID iD** · 🐞 · medium · crash: server.
+An editor publishes an article with "Don't Assign To An Issue" while one
+of its contributors holds a verified ORCID iD, on a journal with ORCID
+on under the member API. The publish answers with "An unexpected error
+has occurred. Please reload the page and try again.", although the
+article is in fact published. The contributor's work is never sent to
+their ORCID record. On a typical install the article's author also never
+receives "Publication Published". The editor has nothing on screen to
+resend either. Publishing without an issue is new on `main`. The fault
+needs that, the member API, a contributor with a verified iD, and DOIs
+turned on for the journal. Basis: probe, 2026-10-02.
 <sup>[f-ojs4](#fn-ojs4)</sup>
 
 ### OMP
@@ -2323,6 +2326,7 @@ published normally and queued the deposit; under "Public Sandbox" with
 no issue the publish succeeded; OMP and OPS published such a
 contributor normally under "Member Sandbox" (fn-ac). The no-issue path
 on a journal with issues ("Don't Assign To An Issue") was not driven.
+Issue report: [docs/issues/U49-OJS4-publish-without-issue-orcid-contributor-error.md](../issues/U49-OJS4-publish-without-issue-orcid-contributor-error.md).
 
 <a id="fn-omp1"></a>
 **f-omp1** — OMP `PublishForm` shows the single confirmation string for
