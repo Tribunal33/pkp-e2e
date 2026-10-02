@@ -1,0 +1,16 @@
+--- a/lib/pkp/pages/workflow/PKPWorkflowHandler.php
++++ b/lib/pkp/pages/workflow/PKPWorkflowHandler.php
+@@ -74,10 +74,10 @@
+         $router = $request->getRouter();
+         $operation = $router->getRequestedOp($request);
+ 
+-        if ($operation == 'access') {
+-            // Authorize requested submission.
+-            $this->addPolicy(new SubmissionRequiredPolicy($request, $args, 'submissionId'));
++        // Authorize requested submission: an address that names none is answered "404 Not Found".
++        $this->addPolicy(new SubmissionRequiredPolicy($request, $args, 'submissionId'));
+ 
++        if ($operation == 'access') {
+             // This policy will deny access if user has no accessible workflow stage.
+             // Otherwise it will build an authorized object with all accessible
+             // workflow stages and authorize user operation access.

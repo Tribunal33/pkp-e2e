@@ -934,7 +934,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP2](#omp2) | On a press's Internal Review, "Accept Submission" and "Create New Review Round" carry none of the author's revised files | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP7](#omp7) | The author selecting the "Internal Review" entry itself gets a stale or empty page, and the page's script fails | 🐞 | medium · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [OMP8](#omp8) | A press author's "Upload" on a past Internal Review round files the revision there while External Review waits for it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OMP9](#omp9) | The stage's address typed without the monograph's number gives an empty page from a server failure | 🐞 | latent · crash: server | — |
+| [OMP9](#omp9) | The stage's address typed without the monograph's number gives an empty page from a server failure | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OMP10](#omp10) | After "Accept Submission" on Internal Review the assigned editors get no notice box on Copyediting | 🐞 | minor | — |
 | [OMP3](#omp3) | The author's Internal Review has no "Notifications" list, so its letters cannot be re-read there | ❓ | user-visible | — |
 | [OMP4](#omp4) | "Send to External Review" offers only the revised files, not the files that were under internal review | ❓ | minor | — |
@@ -1082,14 +1082,14 @@ the file as well (Rule 15b).
 Basis: probe, 2026-10-02. <sup>[f-omp8](#fn-omp8)</sup>
 
 <a id="omp9"></a>
-**OMP9 — The stage's address without a number fails on the server** · 🐞 · latent · crash: server.
-Typed without the monograph's number, the Internal Review stage's address
-gives an empty page with no message and no forward: the app fails on the
-server instead of refusing. Every stage-naming address of the three apps
-does the same; it is the defect
-[→ workflow screen A5](U24-workflow-screen-and-stage-access.md#a5) records
-for the stage-numbered address.
-Basis: probe. <sup>[f-omp9](#fn-omp9)</sup>
+**OMP9 — The stage's address without a number fails on the server** · 🐞 · low · crash: server.
+Typed without the monograph's number, or with a number no monograph has,
+the Internal Review stage's address gives a blank page with no message:
+the app fails on the server instead of answering "404 Not Found". Every
+stage-naming address of the three apps does the same; it is one fault with
+[→ workflow screen A5](U24-workflow-screen-and-stage-access.md#a5), and
+shares its issue report and its severity.
+Basis: probe, 2026-10-02. <sup>[f-omp9](#fn-omp9)</sup>
 
 <a id="omp10"></a>
 **OMP10 — No Copyediting notice after an internal "Accept Submission"** · 🐞 · minor.
@@ -1254,6 +1254,7 @@ Issue report: [docs/issues/U71-OMP8-author-revision-filed-on-earlier-internal-ro
 
 <a id="fn-omp9"></a>
 **f-omp9** — Live-probed 2026-09-27 (Rule 19): `{press}/workflow/internalReview` with no id answered 500 and an empty page; so did `externalReview`, `submission`, `editorial` and `production` on a press, the same four on a journal and `submission` and `production` on a preprint server, 12 server errors in all (`GET /index.php/{context}/workflow/{op}`); `internalReview` on a journal or a preprint server answers "404 Not Found". The stage-numbered form of the same defect is the workflow-screen spec's A5.
+Issue report: [docs/issues/U71-OMP9-stage-address-without-number-blank-page.md](../issues/U71-OMP9-stage-address-without-number-blank-page.md).
 
 <a id="fn-omp10"></a>
 **f-omp10** — Note td-notice, with the code. The copyediting spec's Rule 3 grants the notice after a journal's review round or a press's External Review, and its A6 covers this path and "Accept and Skip Review" (corrected 2026-09-28). Live-probed 2026-09-27.
