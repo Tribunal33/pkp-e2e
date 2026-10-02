@@ -1266,7 +1266,7 @@ Issue report: [pkp-e2e#554](https://github.com/jardakotesovec/pkp-e2e/issues/554
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25 (Rule 3), OJS, as a first upload and over a text file: the upload of "figure.png" answered 500 on `POST …/api/v1/submissions/{id}/publications/{pid}/jats`, yet the file was stored ("More Information" and "Delete" offered on reopening); every reopening answered 500 on `GET …/jats`, and "More Information" 500 on `GET $$$call$$$/information-center/file-information-center/view-information-center?submissionFileId=undefined…`. No type check on upload (note k). Probe: d4.
-Issue report: [docs/issues/U48-A13-jats-image-upload-breaks-page.md](../issues/U48-A13-jats-image-upload-breaks-page.md).
+Issue report: [pkp-e2e#562](https://github.com/jardakotesovec/pkp-e2e/issues/562) ([docs/issues/U48-A13-jats-image-upload-breaks-page.md](../issues/U48-A13-jats-image-upload-breaks-page.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note g: the badge is `v-show="isDirty"`, true on arrival at a never-saved version (the console then warns "TextSelection endpoint not pointing into a node with inline content (doc)"). The "Saved" during an import: `handleFigureUpload()` saves the document first when no Body Text record exists (note q), and the import uploads its images before it pastes the text (note p). Probe: d16, d20.
