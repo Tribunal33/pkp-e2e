@@ -776,6 +776,10 @@ journals runs alone. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - "Create Journal" saved with "Country" left empty, and "Edit" saved on
+    a journal with no country ([A1](#a1)): the guard the issue report
+    proposes
 - **Rarely met**:
   - exactly one journal enabled publicly, where the site's address opens
     that journal instead of the list (Rule 19; Settings bullet 4): a
@@ -871,7 +875,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | "Country" carries no Required mark, yet the journal form refuses to save without it | 🐞 | user-visible | — |
+| [A1](#a1) | Hosted Journals: "Country" carries no Required mark, yet no journal saves without one | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | After "Save" in the "Edit" window, the list keeps the journal's old name and path until a reload | 🐞 | minor | — |
 | [A3](#a3) | The address in front of "Path" is not the journal's real address | 🐞 | minor | — |
 | [A4](#a4) | After a path change on the Settings Wizard, its further saves and list actions fail until a reload | 🐞 | minor | — |
@@ -886,18 +890,22 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — "Country" is required but not marked** · 🐞 · user-visible.
-The journal form marks "Journal title", "Journal initials", the principal
-contact and "Path" as required and leaves "Country" unmarked, while the
-journal's own Settings › Journal › "Masthead" marks the same field
-required; a Site Administrator on this form expects to leave it empty.
-"Save" with no country is refused with "This is not a valid string." and
-"This is not a valid country." under "Country", on "Create Journal", on a
-row's "Edit" and on the Settings Wizard's "Journal" tab. On a journal
-that has no country (the seeded journal among them), nothing on "Edit"
-can be changed, not even "Enable this journal to appear publicly on the
-site", until one is picked.
-Basis: probe. <sup>f-a1</sup>
+**A1 — Hosted Journals: "Country" carries no Required mark, yet no journal saves without one** · 🐞 · low.
+The form for a journal (press, server) in Administration › "Hosted
+Journals" marks "Journal title", "Journal initials", the principal
+contact and "Path" as required and leaves "Country" unmarked, so a Site
+Administrator expects to leave it empty. "Save" with no country is
+refused with "This is not a valid string." and "This is not a valid
+country." under "Country". This happens on "Create Journal", on a row's
+"Edit" and on the Settings Wizard's "Journal" tab.
+
+On a journal that has no country, nothing on "Edit" can be changed until
+one is picked, not even "Enable this journal to appear publicly on the
+site". Journals upgraded from 3.3 have no country until a manager saves
+their "Masthead".
+The Journal identity spec's [A11](U07-journal-identity-and-about-pages.md#a11)
+records the "Edit" side.
+Basis: probe, 2026-10-02. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — The list shows the old name and path after "Edit"** · 🐞 · minor.
@@ -1679,6 +1687,7 @@ Live-probed 2026-09-27, three apps: refused on "Create Journal", on
 "Journal" tab, each with the two messages; the seeded journal's "Edit"
 opened with "Country" blank. The journal's own "Masthead" shows "Country"
 with the Required mark (`PKPMastheadForm` sets `isRequired`).
+Issue report: [docs/issues/U59-A1-journal-form-country-unmarked-refused.md](../issues/U59-A1-journal-form-country-unmarked-refused.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note f: the modal closes on the form's success event and

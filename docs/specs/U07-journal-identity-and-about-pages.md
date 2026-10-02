@@ -1106,7 +1106,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | On a press or preprint server, a Site Administrator with no manager role there is offered "Settings" and refused every Settings page | 🐞 | user-visible | — |
 | [A7](#a7) | Reloading a Settings side tab opens the page's first tab instead | 🐞 | minor | — |
 | [A9](#a9) | The default "For Readers" text's "Privacy Statement" link opens the "Submissions" page {OJS OMP} | 🐞 | minor | — |
-| [A11](#a11) | Hosted Journals "Edit" refuses to save a journal whose "Country" was never set | 🐞 | user-visible | — |
+| [A11](#a11) | Hosted Journals "Edit" refuses to save a journal whose "Country" was never set | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A press's and a preprint server's French Masthead tab shows raw text keys in place of headings, labels and help lines {OMP OPS} | 🐞 | minor | — |
 | [A13](#a13) | With the masthead not based on enrollments, invitations and masthead changes still promise "Your name will appear in the {journal}'s masthead"; reviewers are promised it while the journal lists none | 🐞 | minor | — |
 | [OMP2](#omp2) | The site-level page about the software says "This press uses Open Monograph Press" on a press site {OMP} | 🐞 | minor | — |
@@ -1199,15 +1199,16 @@ review submitted last year was cancelled this way stays listed under
 count? Lean: no; the editor withdrew the request. Basis: probe. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — Hosted Journals "Edit" refuses a journal with no country** · 🐞 · user-visible.
-Administration › Hosted Journals › "Create Journal" offers "Country" as
-optional, so a journal can be created without one. On that journal's
-"Edit" in Hosted Journals, "Save" answers "Please correct one error."
-with "This is not a valid string." and "This is not a valid country."
-under "Country", a field neither form marks required; the Site
-Administrator cannot change anything there, for example untick "Enable
-this journal to appear publicly on the site", until a country is picked.
-*Hosted journals* owns the form. Basis: probe. <sup>f-a11</sup>
+**A11 — Hosted Journals "Edit" refuses a journal with no country** · 🐞 · low.
+Administration › Hosted Journals › "Edit" leaves "Country" unmarked, as
+"Create Journal" does, yet on a journal with no country (every journal
+upgraded from 3.3 until a manager saves its "Masthead") "Save" answers
+"Please correct one error." with "This is not a valid string." and "This
+is not a valid country." under "Country". The Site Administrator cannot
+change anything there, for example untick "Enable this journal to appear
+publicly on the site", until a country is picked. "Create Journal"
+refuses an empty "Country" the same way. *Hosted journals* owns the
+form ([A1](U59-hosted-journals.md#a1)). Basis: probe, 2026-10-02. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — The French Masthead tab of a press or preprint server shows raw text keys** {OMP OPS} · 🐞 · minor.
@@ -2461,6 +2462,7 @@ under "Country", the request answering 400; with a country picked the
 save went through. "Create Journal" lists "Country" without "Required".
 The form sends the empty "Country", which the server's `country` rule
 refuses (note f).
+Issue report: [docs/issues/U59-A1-journal-form-country-unmarked-refused.md](../issues/U59-A1-journal-form-country-unmarked-refused.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note g. Live-probed 2026-09-29 (all three apps, two runs): on
