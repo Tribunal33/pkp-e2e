@@ -457,7 +457,13 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
   `PKP_E2E_SLOT_FORCE=1` in front overrides, when the operator asks a
   session to do it.
 - **Cleanup is per slot.** Kill by this clone's paths or ports, never a
-  broad `pkill php` or `pkill chrome`.
+  broad `pkill php` or `pkill chrome`. The bot's `release` (a pause or an
+  end, free or blocked), `reconcile` and `free` stop every `php -S`
+  serving from the slot's clone, its restart loop included
+  (`stopSlotServers()` in `bin/slot.js`): the probe, validation and
+  dataset servers are kept between scripts on purpose and stop only
+  there, so a resumed session starts them again (`probe-servers
+  --start`, `fleet-prep --dataset n`).
 - **Provisioning a slot**: clone `origin` to `/home/e2e/pkp-e2e-s<n>`, write
   `.env` with `PKP_E2E_SLOT=<n>` and the relative `<APP>_ROOT`s (`.env.example`),
   `npm ci`, `npm run fetch-apps -- --reference /home/e2e/pkp-e2e` (borrows
@@ -473,7 +479,11 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
   lifetime. The ready probe is a static file, so a server counts as up before
   the DB is installed. Each server runs with `max_execution_time=120` and
   inside a small restart loop, so a crashed `php -S` respawns within a second
-  instead of stranding its worker for the rest of the run.
+  instead of stranding its worker for the rest of the run. Playwright
+  stops them when a run ends, fails or takes a Ctrl-C, and the config makes
+  a SIGTERM to the runner (a stopped background task, a timeout) exit
+  through the same teardown. Only a SIGKILLed run leaves them serving,
+  until the slot's release ("Slots"); a run in the meantime adopts them.
 - **Worker count**: `PLAYWRIGHT_WORKERS`, or auto-detect when unset. The
   auto-detect uses the performance-core count where the OS exposes it (Apple
   Silicon sysctl, Intel hybrid sysfs), otherwise every CPU core, with a
@@ -730,10 +740,10 @@ server it finds there (`reuseExistingServer`).
 
 Long-lived DBs accumulate state that pollutes COUNT assertions and tag
 searches. After a reset, the first run can die on a webServer start race, so
-relaunch it. After a killed run, kill orphan chromium and php
-processes before re-running: only this slot's, the php servers whose
-command line names this clone's path and the chromium under this run's
-node process, never a broad `pkill` ("Slots": other slots run beside it).
+relaunch it. A killed run's php servers are adopted by the next run
+("Runtime model"); its chromium is not, so kill the chromium under this
+run's node process before re-running, never a broad `pkill` ("Slots":
+other slots run beside it).
 
 ## CI
 

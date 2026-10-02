@@ -19,6 +19,9 @@
  * (reuseExistingServer) and leaves it up. An answering +90 is never
  * replaced.
  *
+ * They stay up until --stop or until the slot is released (bin/slot.js
+ * stopSlotServers(), at every bot release and `free`).
+ *
  * Pids live in .reports/servers/probe-<app>[-validation].pid; logs in
  * apps/<app>/playwright/.server-logs/. Only the pids this script wrote are
  * ever signalled; the runner's worker ports (basePort + 0 … + 19) are never

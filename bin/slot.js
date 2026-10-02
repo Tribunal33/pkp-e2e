@@ -29,6 +29,10 @@
  *   node bin/slot.js status
  *   node bin/slot.js hook                         Claude Code SessionStart hook (stdin JSON)
  *
+ * A release (free or blocked), reconcile and free also stop the slot's
+ * `php -S` servers (stopSlotServers): the probe, validation and dataset
+ * servers outlive their scripts on purpose, and nothing else stopped them.
+ *
  * acquire, release, reconcile and free belong to the bot and the operator: a
  * Claude session (CLAUDECODE set) that runs one is refused, since a release
  * frees the slot under its own feet and an acquire replaces the lease the
@@ -336,7 +340,80 @@ function acquire({thread, session, resume, dir, title, 'fresh-session': freshSes
     });
 }
 
+/**
+ * Stop every `php -S` serving from this slot's clone: the probe, validation
+ * and dataset servers (bin/probe-servers.js, detached and kept on purpose),
+ * a kept check's own server and any run's left behind. Matched by argv, not
+ * by text, so a shell that merely mentions a server is never hit: a `php`
+ * binary with `-S 127.0.0.1:<port>` and `-t <path inside dir>`, or the
+ * restart loop around one (php-server.js: `sh -c` carrying the
+ * `[harness] php -S start` line and that `-t`). A matched process-group
+ * leader takes its group down (the loop and `php -S` together: killing
+ * `php -S` alone lets the loop start it again); anything else goes alone.
+ * SIGTERM, then SIGKILL after 3 s. The probe servers' pid files go too.
+ */
+function stopSlotServers(dir) {
+    const inSlot = (p) => typeof p === 'string' && p.replace(/^"/, '').startsWith(`${dir}/`);
+    const isServer = (argv) => {
+        const bin = path.basename(argv[0] || '');
+        if (/^php/.test(bin)) {
+            const s = argv.indexOf('-S');
+            const t = argv.indexOf('-t');
+            return s > 0 && /^127\.0\.0\.1:\d+$/.test(argv[s + 1] || '') && t > 0 && inSlot(argv[t + 1]);
+        }
+        if (bin === 'sh' && argv[1] === '-c') {
+            const script = argv[2] || '';
+            const t = script.match(/ -S 127\.0\.0\.1:\d+ -t "([^"]+)"/);
+            return script.includes('[harness] php -S start') && Boolean(t) && inSlot(t[1]);
+        }
+        return false;
+    };
+    const matches = [];
+    let entries = [];
+    try {
+        entries = fs.readdirSync('/proc').filter((e) => /^\d+$/.test(e));
+    } catch {
+        return {stopped: 0};
+    }
+    for (const e of entries) {
+        const pid = Number(e);
+        try {
+            const argv = fs.readFileSync(`/proc/${pid}/cmdline`, 'utf8').split('\0');
+            if (!isServer(argv)) continue;
+            const stat = fs.readFileSync(`/proc/${pid}/stat`, 'utf8');
+            matches.push({pid, pgid: Number(stat.slice(stat.lastIndexOf(')') + 2).split(' ')[2])});
+        } catch {
+            // gone, or not ours to read
+        }
+    }
+    const leaders = new Set(matches.filter((m) => m.pgid === m.pid).map((m) => m.pid));
+    const targets = new Set(matches.map((m) => (leaders.has(m.pgid) ? -m.pgid : m.pid)));
+    const signal = (sig) => {
+        for (const t of targets) {
+            try {
+                process.kill(t, sig);
+            } catch {
+                // already gone
+            }
+        }
+    };
+    signal('SIGTERM');
+    for (let i = 0; i < 30 && matches.some((m) => pidAlive(m.pid)); i++) sleepSync(100);
+    if (matches.some((m) => pidAlive(m.pid))) signal('SIGKILL');
+    try {
+        for (const d of fs.readdirSync(path.join(dir, '.reports')).filter((x) => x.startsWith('servers'))) {
+            for (const f of fs.readdirSync(path.join(dir, '.reports', d)).filter((x) => x.endsWith('.pid'))) {
+                fs.rmSync(path.join(dir, '.reports', d, f), {force: true});
+            }
+        }
+    } catch {
+        // no pid files
+    }
+    return {stopped: matches.length};
+}
+
 function releaseSlot(reg, n, thread, dir) {
+    stopSlotServers(dir);
     const check = checkClean(dir);
     const snap = snapshot(dir);
     const entry = reg.slots[n] || {};
@@ -384,6 +461,8 @@ function reconcile() {
 }
 
 function freeSlot(n) {
+    const s = slotList().find((x) => x.n === Number(n));
+    if (s) stopSlotServers(s.dir);
     return withRegistry((reg) => {
         reg.slots[n] = {state: 'free', releasedAt: now(), lastThread: reg.slots[n]?.thread || null};
         return {ok: true, slot: Number(n), state: 'free'};
@@ -670,6 +749,6 @@ function main() {
     }
 }
 
-module.exports = {acquire, release, reconcile, freeSlot, claim, unclaim, listClaims, status, hook, checkClean, snapshot, diffSnapshots};
+module.exports = {acquire, release, reconcile, freeSlot, stopSlotServers, claim, unclaim, listClaims, status, hook, checkClean, snapshot, diffSnapshots};
 
 if (require.main === module) main();

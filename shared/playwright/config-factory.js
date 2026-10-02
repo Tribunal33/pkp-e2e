@@ -209,6 +209,14 @@ function definePkpConfig({appName, appRoot, suiteDir, basePort}) {
     );
     const logDir = path.join(suiteDir, '.server-logs');
     fs.mkdirSync(logDir, {recursive: true});
+    // Playwright stops its webServers when a run ends, fails or takes a
+    // Ctrl-C, through its exit handler, but a SIGTERM to the runner (a
+    // stopped background task, a timeout, test-app.js passing one on) killed
+    // it without one and left every server serving (2026-10-02, 127 php
+    // processes on the VM). Exiting on SIGTERM runs that handler. A SIGKILL
+    // still leaves them; bin/slot.js stops a slot's servers on release.
+    process.once('SIGTERM', () => process.exit(143));
+
     // The command and env come from php-server.js, shared with the probe
     // servers (bin/probe-servers.js) so both kinds of server are identical.
     const phpServer = (port, {logName = `server-${port}.log`, env = serverEnv} = {}) => ({
