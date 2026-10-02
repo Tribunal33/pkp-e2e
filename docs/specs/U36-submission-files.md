@@ -932,6 +932,7 @@ Left out of the scenarios above, by reason:
   - the "Files" panel's "Other" on a file with no component, then "Save" with no radio button chosen: a message under "What kind of file is this?" and no server error ([A11](#a11)): the guard the issue report proposes
   - "Add Note" with the box empty on a file's "Notes": refused, no note listed and no "Posted new note." line in "History" ([A10](#a10)): the guard the issue report proposes
   - "Cancel upload" pressed on the full bar with the server's answer held back: no file stored, the panel empty after a reload ([A25](#a25)): the guard the issue report proposes
+  - "Change File" on step 1 of a new file's upload, then "Complete": the list gains the second file alone ([A14](#a14)): the guard the issue report proposes
 - **Nothing new to test**:
   - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
   - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
@@ -997,7 +998,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | "Add Note" with an empty box posts a note with no text, on a file's "Notes" and in "Activity Log & Notes" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | Submission wizard: "Save" in a file's "Edit" panel with no component chosen shows "An unexpected error has occurred" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | The "Download All Files" zip is named with two hyphens ("12--submission-files.zip") | 🐞 | minor | — |
-| [A14](#a14) | "Change File" in step 1 keeps the first upload on the list as a file of its own | 🐞 | user-visible | — |
+| [A14](#a14) | Upload wizard: "Change File" on step 1 uploads the second file but keeps the first, and the list shows both | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | Step 2 reopened from step 3 offers "Complete" but shows "File Added" again instead of closing | 🐞 | minor | — |
 | [A19](#a19) | In "Upload/Select Files", another stage's files refuse their "More Information", "Edit" and "Delete" | 🐞 | minor | — |
 | [A20](#a20) | The reviewer's "Review Files" search keeps every file | 🐞 | minor | — |
@@ -1153,13 +1154,26 @@ nothing of the link.
 Basis: probe. <sup>[f-a13](#fn-a13)</sup>
 
 <a id="a14"></a>
-**A14 — "Change File" in step 1 keeps the first upload** · 🐞 · user-visible.
-In step 1 of the upload wizard, "Change File" should replace the file
-just uploaded. It uploads the new one, but the first stays: after
-"Complete" the list holds both, the first under its uploaded name and
-the step-1 component. The app refuses the screen's request to delete the
-first file, even for a Journal Manager, and nothing on screen says so.
-Basis: probe. <sup>[f-a14](#fn-a14)</sup>
+**A14 — Upload wizard: "Change File" on step 1 uploads the second file but keeps the first, and the list shows both** · 🐞 · medium.
+In step 1 of the upload wizard, a person uploads a new file, then
+presses "Change File" and picks another, expecting the second to replace
+the first. The second is uploaded, but the first stays: after "Complete"
+the list holds both. The first is listed under the file name it was
+uploaded with and the component chosen in step 1. The wizard's own
+attempt to remove the first file fails unseen, whatever the person's
+role.
+
+The person who swapped the file believes the first one is gone. It sits
+on the list as a file of the submission until someone deletes it there.
+On "Submission Files" that is in front of the editors; an author's
+leftover on "Revisions Uploaded" is among the revised files the editors
+read.
+
+Only a new file is affected. When the upload revises an existing file,
+no second row appears. On a preprint server the wizard uploads a new
+galley's file, and there the first file stays stored but no screen
+shows it.
+Basis: probe, 2026-10-02. <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
 **A15 — Step 2 reopened from step 3 offers "Complete" but does not close** · 🐞 · minor.
@@ -2261,6 +2275,7 @@ A8 saw it from "Copyedited Files" to "Draft Files".
 `status:false` "The current user is not authorized to access the specified
 submission file." (HTTP 200); after "Complete" the list held "change-first.pdf
 … Research Instrument" beside the renamed second file.
+Issue report: [docs/issues/U36-A14-change-file-keeps-first-upload.md](../issues/U36-A14-change-file-keeps-first-upload.md).
 
 <a id="fn-a15"></a>
 **f-a15** — Note n. Live-probed 2026-09-23 (OJS twice, OMP once): "2. Review

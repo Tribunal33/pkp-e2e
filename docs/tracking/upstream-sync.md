@@ -20,6 +20,16 @@ _Suspicions another session met and handed over, one line each; the
 upstream session works them (MAINTENANCE upstream session step 3) and
 deletes each once it is a report, a register entry or dismissed._
 
+- 2026-10-02 (issues session, U36 A14): the open report
+  docs/reports/2026-09-27-pkp-lib-13288.md says in passing that fixing
+  the wizard's delete request (the parameter name `deleteFile` reads)
+  "would stop abandoned picks from piling up in any case". Read in the
+  code by the A14 reporter, not driven: on a revision the id the wizard
+  sends is the file being revised and `deleteFile` removes the whole
+  submission file, so the bare parameter fix would delete the original.
+  The A14 report (docs/issues/U36-A14-change-file-keeps-first-upload.md,
+  Proposed fix and Alternatives) sends no delete for a revision; the
+  regression report's remark wants the same caveat or a drive.
 - 2026-10-01 (upstream session): when OMP's `lib/pkp` pointer carries
   pkp/pkp-lib#13412 (`2e377d27fc`), OMP U63 S6's overlap line becomes
   required as on OJS (`otherLinesOptional` out of

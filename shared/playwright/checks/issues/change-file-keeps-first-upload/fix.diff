@@ -1,0 +1,17 @@
+--- a/lib/pkp/js/controllers/wizard/fileUpload/FileUploadWizardHandler.js
++++ b/lib/pkp/js/controllers/wizard/fileUpload/FileUploadWizardHandler.js
+@@ -359,7 +359,14 @@
+ 			if (typeof file[i].storedData === 'undefined') {
+ 				return;
+ 			}
++			// A replaced upload that revised an existing file is one of that
++			// file's revisions: deleting it would delete the file being revised.
++			if (typeof file[i].storedData.originalFile !== 'undefined') {
++				continue;
++			}
+ 			file[i].storedData.csrfToken = this.csrfToken_;
++			// Authorization policy expects to find the submissionFileId param
++			file[i].storedData.submissionFileId = file[i].storedData.id;
+ 			$.post(this.deleteUrl_, file[i].storedData);
+ 		}
+ 	};
