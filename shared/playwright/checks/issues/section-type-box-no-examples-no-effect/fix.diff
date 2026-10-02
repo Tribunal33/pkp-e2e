@@ -1,0 +1,64 @@
+--- a/controllers/grid/settings/sections/form/SectionForm.php
++++ b/controllers/grid/settings/sections/form/SectionForm.php
+@@ -67,7 +67,6 @@
+                 'metaIndexed' => !$this->section->getMetaIndexed(), // #2066: Inverted
+                 'metaReviewed' => !$this->section->getMetaReviewed(), // #2066: Inverted
+                 'abstractsNotRequired' => $this->section->getAbstractsNotRequired(),
+-                'identifyType' => $this->section->getIdentifyType(null), // Localized
+                 'editorRestriction' => $this->section->getEditorRestricted(),
+                 'hideTitle' => $this->section->getHideTitle(),
+                 'hideAuthor' => $this->section->getHideAuthor(),
+@@ -127,7 +126,7 @@
+     public function readInputData()
+     {
+         parent::readInputData();
+-        $this->readUserVars(['abbrev', 'path', 'description', 'policy', 'identifyType', 'isInactive', 'metaIndexed', 'abstractsNotRequired', 'editorRestriction', 'wordCount']);
++        $this->readUserVars(['abbrev', 'path', 'description', 'policy', 'isInactive', 'metaIndexed', 'abstractsNotRequired', 'editorRestriction', 'wordCount']);
+     }
+ 
+     /**
+@@ -135,7 +134,7 @@
+      */
+     public function getLocaleFieldNames(): array
+     {
+-        return ['title', 'policy', 'abbrev', 'identifyType', 'description'];
++        return ['title', 'policy', 'abbrev', 'description'];
+     }
+ 
+     /**
+@@ -162,7 +161,6 @@
+         $section->setIsInactive($this->getData('isInactive') ? 1 : 0);
+         $section->setMetaIndexed($this->getData('metaIndexed') ? 0 : 1); // #2066: Inverted
+         $section->setAbstractsNotRequired($this->getData('abstractsNotRequired') ? 1 : 0);
+-        $section->setIdentifyType($this->getData('identifyType'), null); // Localized
+         $section->setEditorRestricted($this->getData('editorRestriction') ? 1 : 0);
+         $section->setPolicy($this->getData('policy'), null); // Localized
+         $section->setAbstractWordCount((int) $this->getData('wordCount'));
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -98,12 +98,6 @@
+ 
+ msgid "manager.setup.form.section.pathRequired"
+ msgstr "An URL path is required for the section"
+-
+-msgid "manager.sections.identifyType"
+-msgstr "Identify items posted in this section as a(n)"
+-
+-msgid "manager.sections.identifyTypeExamples"
+-msgstr "(For example etc.)"
+ 
+ msgid "manager.sections.policy"
+ msgstr "Section Policy"
+--- a/templates/controllers/grid/settings/sections/form/sectionForm.tpl
++++ b/templates/controllers/grid/settings/sections/form/sectionForm.tpl
+@@ -57,10 +57,6 @@
+ 			{fbvElement type="checkbox" id="metaIndexed" checked=$metaIndexed label="manager.sections.submissionIndexing"}
+ 			{fbvElement type="checkbox" id="editorRestriction" checked=$editorRestriction label="manager.sections.editorRestriction"}
+ 		{/fbvFormSection}
+-
+-		{fbvFormSection for="identifyType" title="manager.sections.identifyType"}
+-			{fbvElement type="text" id="identifyType" label="manager.sections.identifyTypeExamples" value=$identifyType multilingual=true size=$fbvStyles.size.MEDIUM}
+-		{/fbvFormSection}
+ 	{/fbvFormArea}
+ 
+ 	{fbvFormSection list=true title="manager.sections.form.assignEditors"}

@@ -922,6 +922,9 @@ Left out of the scenarios above, by reason:
   - {OPS} an "Archives" page typed past the last one answering "404 Not
     Found", as a section's page does ([OPS5](#ops5)): the guard the
     issue report proposes
+  - {OPS} the section window without the "Identify items posted in this
+    section as a(n)" box, or the box's help giving examples, as the team
+    decides ([OPS2](#ops2)): the guard the issue report proposes
 - **Rarely met**:
   - {OJS} "Omit author names for section items from issues' table of
     contents." ticked, the issue's table of contents without the section's
@@ -1056,7 +1059,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP8](#omp8) | The help under a series' "Path" shows an address ending in the word "Path", never the series' own | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP9](#omp9) | A series' public page shows no name, description or ISSN, and lists the books newest first whatever the series' order | 🐞 | user-visible | — |
 | [OPS1](#ops1) | A preprint server with nothing posted shows a blank "Archives" page, with no message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OPS2](#ops2) | The help under "Identify items posted in this section as a(n)" reads "(For example etc.)" | 🐞 | minor | — |
+| [OPS2](#ops2) | Preprint server sections: the "Identify items posted in this section as a(n)" box has no examples and no effect | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS5](#ops5) | A typed "Archives" page number past the last page opens an empty page instead of "404 Not Found" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS6](#ops6) | One preprint posted without an abstract makes the server's harvesting record lists fail | 🐞 | user-visible · crash: server | — |
 | [A2](#a2) | A negative "Word Count" is saved and then refuses every abstract in the section, at submission and on "Title & Abstract" | ❓ | user-visible | — |
@@ -1325,11 +1328,18 @@ to load its list.
 Basis: probe, 2026-10-02. <sup>f-ops1</sup>
 
 <a id="ops2"></a>
-**OPS2 — "(For example etc.)"** · 🐞 · minor.
-The help under "Identify items posted in this section as a(n)" reads
-"(For example etc.)", with no example, where a journal's window gives
-three.
-Basis: probe, 2026-09-25. <sup>f-ops2</sup>
+**OPS2 — Preprint server sections: the "Identify items posted in this section as a(n)" box has no examples and no effect** · 🐞 · low.
+A preprint server manager who edits a section sees the box "Identify
+items posted in this section as a(n)". The help under it reads "(For
+example etc.)" and gives no example. A journal's section window gives
+three. What the manager enters in the box is saved, but nothing on a
+preprint server uses it. No page shows it, and the records the server
+gives to harvesters (OAI-PMH) list every preprint as a preprint,
+whatever the box holds. The manager is not told. The report recommends
+removing the box from the server's section window, since nothing on a
+preprint server uses a section's item type. Values already saved stay in
+the database and in the REST API, so nothing saved is lost.
+Basis: probe, 2026-10-02. <sup>f-ops2</sup>
 
 <a id="ops3"></a>
 **OPS3 — Section paths are not checked** · ❓ · minor.
@@ -1618,6 +1628,7 @@ Issue report: [docs/issues/U17-OPS1-archives-empty-server-says-nothing.md](../is
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — OPS `locale/en/manager.po` `manager.sections.identifyTypeExamples` "(For example etc.)". Live-probed 2026-09-25, with OJS's window as the control.
+Issue report: [docs/issues/U17-OPS2-section-type-box-no-examples-no-effect.md](../issues/U17-OPS2-section-type-box-no-examples-no-effect.md).
 
 <a id="fn-f-ops3"></a>
 **f-ops3** — fn i and q. Live-probed 2026-09-25 (four drives, both orders): note td14.
