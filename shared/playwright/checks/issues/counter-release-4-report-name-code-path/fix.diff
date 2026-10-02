@@ -1,0 +1,11 @@
+--- a/plugins/reports/counter/classes/CounterReport.php
++++ b/plugins/reports/counter/classes/CounterReport.php
+@@ -87,7 +87,7 @@
+      */
+     public function getCode()
+     {
+-        return substr(get_class($this), strlen(self::COUNTER_CLASS_PREFIX));
++        return substr(class_basename($this), strlen(self::COUNTER_CLASS_PREFIX));
+     }
+ 
+     /**

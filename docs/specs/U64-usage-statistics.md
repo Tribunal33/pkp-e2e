@@ -1169,6 +1169,7 @@ Left out of the scenarios above, by reason:
   - a French (Canada) reading of a press's and a preprint server's statistics pages, both "Télécharger le rapport" windows and the site's "Statistiques" tab: no "##" code (the guard for A6, once fixed) {OMP OPS}
   - a "Start Date" before the earliest possible date in a "Counter R5" report's "Report Settings": the refusal under the box names the plain date, no "##" (the guard for A3, once fixed)
   - with an article page visited and no file opened, the "Journal Article Requests (IR_A1)" file's "Metric_Type" column holds only the types its "Metric_Types" line names (the guard for OJS5, once fixed) {OJS}
+  - a "COUNTER Reports" year link's XML file names its report "JR1" (and "AR1") in its "Name" attribute (the guard for OJS6, once fixed) {OJS}
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1253,7 +1254,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | "Counter R5": the downloaded "counterReport.tsv" is comma-separated, not tab-separated | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OJS4](#ojs4) | Statistics › Issues: "Download Issues" leaves out every issue after the first 30, without saying so | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS5](#ojs5) | "Counter R5": "Journal Article Requests (IR_A1)" also lists investigation rows, which its "Metric_Types" line leaves out | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [OJS6](#ojs6) | The COUNTER Release 4 file names its report by a cut-off code path | 🐞 | minor | — |
+| [OJS6](#ojs6) | "COUNTER Reports": the downloaded XML file names its report by a cut-off code path instead of "JR1" or "AR1" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP3](#omp3) | A book's PDF or "Appendix" file fails to open, so its visit is never counted | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | Custom Range refuses an open-ended range | ❓ | minor | — |
 | [A9](#a9) | The downloaded spreadsheets carry no byte-order mark | ❓ | minor | — |
@@ -1557,12 +1558,22 @@ the journal's SUSHI address.
 Basis: probe, 2026-10-03. <sup>f-ojs5</sup>
 
 <a id="ojs6"></a>
-**OJS6 — The Release 4 file names its report by a code path** · 🐞 · minor.
-The XML file a "COUNTER Reports" year link downloads gives its report a
-name that is a cut-off internal code path instead of "Journal Report 1"
-or "Article Report 1", so a system reading the file gets a meaningless
-report name. Expected: the report's name.
-Basis: probe, 2026-09-27. <sup>f-ojs6</sup>
+**OJS6 — "COUNTER Reports": the downloaded XML file names its report by a cut-off code path instead of "JR1" or "AR1"** · 🐞 · low.
+On Statistics › "Reports" › "COUNTER Reports", an editor clicks a year
+link beside "Journal Report 1:" or "Article Report 1:" and gets that
+year's COUNTER Release 4.1 report as an XML file. Inside the file the
+report's name reads `eports\counter\classes\reports\CounterReportJR1`
+(or `…CounterReportAR1`), a cut-off internal code path, where the
+report's code, "JR1" or "AR1", belongs.
+
+The title beside it ("Journal Report 1", "Article Report 1"), the file
+name and every figure in the file are right. A system that reads the
+file and tells the reports apart by the name gets a meaningless one.
+The editor has no way to correct it on screen; they can only edit the
+file by hand.
+
+The fix is a one-line change in the plugin.
+Basis: probe, 2026-10-03. <sup>f-ojs6</sup>
 
 ### OMP
 
@@ -2528,6 +2539,7 @@ Issue report: [docs/issues/U64-OJS5-ir-a1-lists-investigation-rows.md](../issues
 `<Report … Name="eports\counter\classes\reports\CounterReportJR1"
 Title="Journal Report 1">` (AR1 likewise); `<ItemPlatform>` reads "Open
 Journal Systems". fn-p.
+Issue report: [docs/issues/U64-OJS6-counter-release-4-report-name-code-path.md](../issues/U64-OJS6-counter-release-4-report-name-code-path.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `CatalogHandler` fires the series event and
