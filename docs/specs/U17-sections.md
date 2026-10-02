@@ -919,6 +919,9 @@ Left out of the scenarios above, by reason:
     address ([OMP8](#omp8)): the guard the issue report proposes
   - {OPS} "Archives" on a server with nothing posted showing a sentence
     that says so ([OPS1](#ops1)): the guard the issue report proposes
+  - {OPS} an "Archives" page typed past the last one answering "404 Not
+    Found", as a section's page does ([OPS5](#ops5)): the guard the
+    issue report proposes
 - **Rarely met**:
   - {OJS} "Omit author names for section items from issues' table of
     contents." ticked, the issue's table of contents without the section's
@@ -1054,7 +1057,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP9](#omp9) | A series' public page shows no name, description or ISSN, and lists the books newest first whatever the series' order | 🐞 | user-visible | — |
 | [OPS1](#ops1) | A preprint server with nothing posted shows a blank "Archives" page, with no message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS2](#ops2) | The help under "Identify items posted in this section as a(n)" reads "(For example etc.)" | 🐞 | minor | — |
-| [OPS5](#ops5) | An "Archives" page past the last one shows a heading, no preprints and page links such as "Previous 7-6 of 5" | 🐞 | minor | — |
+| [OPS5](#ops5) | A typed "Archives" page number past the last page opens an empty page instead of "404 Not Found" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS6](#ops6) | One preprint posted without an abstract makes the server's harvesting record lists fail | 🐞 | user-visible · crash: server | — |
 | [A2](#a2) | A negative "Word Count" is saved and then refuses every abstract in the section, at submission and on "Title & Abstract" | ❓ | user-visible | — |
 | [A3](#a3) | "Will not be included in the indexing of the journal" changes nothing anywhere | ❓ | minor | — |
@@ -1353,13 +1356,18 @@ preprint's page.
 Basis: probe, 2026-09-25. <sup>f-ops4</sup>
 
 <a id="ops5"></a>
-**OPS5 — "Archives" pages past the last one** · 🐞 · minor.
-A visitor who types the address of an "Archives" page past the last one
-(page 4 of a server with five preprints at two per page) gets "Archives -
-Page 4", the archive header, no preprints and the page links "Previous
-7-6 of 5". A section's page past its end answers "404 Not Found" instead
-(Rule 16), which is what the archive should do too.
-Basis: probe, 2026-09-25. <sup>f-ops5</sup>
+**OPS5 — A typed "Archives" page number past the last page opens an empty page instead of "404 Not Found"** · 🐞 · low.
+A visitor who opens an "Archives" page past the last one of a preprint
+server gets an empty page instead of "404 Not Found". It is headed
+"Archives - Page 2" and shows the search box, no preprints and the page
+links "Previous 26-25 of 17", a range that starts after the server's
+last preprint. The page answers "200 OK", so a search engine that holds
+its address keeps an empty page in its index. A section's page past its
+last one, and OJS's issue archive, answer 404; the fix gives the archive
+the same answer. The address is one that no link on the server shows:
+typed, bookmarked, or left behind when the server's list got shorter or
+"Items per page" grew.
+Basis: probe, 2026-10-02. <sup>f-ops5</sup>
 
 <a id="ops6"></a>
 **OPS6 — A preprint without an abstract breaks the server's harvesting** · 🐞 · user-visible · crash: server.
@@ -1619,6 +1627,7 @@ Issue report: [docs/issues/U17-OPS1-archives-empty-server-says-nothing.md](../is
 
 <a id="fn-f-ops5"></a>
 **f-ops5** — fn f: `PreprintsHandler::index()` has no past-the-end check, where `SectionsHandler::section()` answers 404 (fn q). Live-probed 2026-09-25, four runs: note td13; on an empty server page 2 read "Previous 26-25 of 0", and page "x" showed page 1 whose "Next" led to page 1 again.
+Issue report: [docs/issues/U17-OPS5-archives-page-past-last-not-404.md](../issues/U17-OPS5-archives-page-past-last-not-404.md).
 
 <a id="fn-f-ops6"></a>
 **f-ops6** — OPS `plugins/metadata/dc11/filter/Dc11SchemaPreprintAdapter.php` passes `$publication->getData('abstract')`, null for a preprint without an abstract, to `addLocalizedElements(…, array $localizedValues)`, a TypeError; OJS's adapter casts to `(array)`. The array typing came with ops `25e6954e81` "pkp/pkp-lib#12950 add version relations to OAI DC" (2026-07-07). Live-probed 2026-09-25, two runs: `{server}/oai?verb=ListRecords&metadataPrefix=oai_dc` and the section's set (`…&set={server}:{abbreviation}`) answered 500 with an empty body, the probe server logging "Uncaught TypeError: …Dc11SchemaPreprintAdapter::addLocalizedElements(): Argument #3 ($localizedValues) must be of type array, null given"; the other sections' sets answered 200 with their records; the same case on a journal answered 200 with both records. Written up for the team in `docs/reports/2026-09-25-ops-oai-empty-abstract.md` (a temporary report, deleted once addressed; git history keeps it).
