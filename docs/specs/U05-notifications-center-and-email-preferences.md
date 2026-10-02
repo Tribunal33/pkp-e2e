@@ -1745,7 +1745,7 @@ a row switched off on the tab came back ticked on the page, and
 Section Editor (Series Editor, Moderator) with the bell at "Tasks 1" from a
 discussion shows the bare name on the journal's home page; `manager.maya`
 and `author.alex` show "0" there without a task.
-Issue report: [docs/issues/U08-A2-section-editor-dashboard-opens-profile.md](../issues/U08-A2-section-editor-dashboard-opens-profile.md).
+Issue report: [docs/issues/U08-A2-section-editor-dashboard-opens-profile.md](../issues/U08-A2-section-editor-dashboard-opens-profile.md), filed as [pkp-e2e#634](https://github.com/jardakotesovec/pkp-e2e/issues/634).
 
 <a id="fn-a4"></a>
 **f-a4** — `PKPNotificationSettingsForm::fetch()` with `$context === null`
