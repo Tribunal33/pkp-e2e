@@ -936,6 +936,7 @@ Left out of the scenarios above, by reason:
   - in "Upload/Select Files" with "Show files from all accessible workflow stages." ticked, another stage's row: "More Information" loads and the file name downloads ([A19](#a19)): the guard the issue report proposes
   - "Show events from prior versions" ticked on a file in "Files for Review": the original file's rows are added ([A4](#a4)): the guard the issue report proposes
   - "Download All Files" on "Submission Files": the zip named with one hyphen, "{number}-submission-files.zip" ([A12](#a12)): the guard the issue report proposes; likely an assertion in scenario 4
+  - the reviewer's "Review Files" search for a text no file name contains: "No Files" ([A20](#a20)): the guard the issue report proposes
 - **Nothing new to test**:
   - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
   - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
@@ -1004,7 +1005,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | Upload wizard: "Change File" on step 1 uploads the second file but keeps the first, and the list shows both | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | Step 2 reopened from step 3 offers "Complete" but shows "File Added" again instead of closing | 🐞 | minor | — |
 | [A19](#a19) | In "Upload/Select Files", another stage's files refuse "More Information", "Edit", "Delete" and their download | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A20](#a20) | The reviewer's "Review Files" search keeps every file | 🐞 | minor | — |
+| [A20](#a20) | Reviewer's "Review Files" list: "Search" keeps every file listed, whatever text is typed | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A21](#a21) | A file at the upload limit passes the size check, uploads, then fails on the server instead of being refused | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A23](#a23) | Revising a file, a second pick on step 1 and then "Cancel" leave the first pick as the file instead of the original | 🐞 | minor | — |
 | [A24](#a24) | One file revised in two windows: the first window's "Cancel" does nothing, and the file keeps the upload cancelled there | 🐞 | minor | — |
@@ -1306,12 +1307,21 @@ administrator is not refused.
 Basis: probe, 2026-10-02. <sup>[f-a19](#fn-a19)</sup>
 
 <a id="a20"></a>
-**A20 — The reviewer's "Review Files" search changes nothing** · 🐞 · minor.
-The reviewer's "Review Files" list has the same "Search" control as the
-other older file lists. There a search keeps every file listed, even a
-text no file name contains, while the same search in the editor's
-windows for a reviewer's request narrows the list.
-Basis: probe. <sup>[f-a20](#fn-a20)</sup>
+**A20 — Reviewer's "Review Files" list: "Search" keeps every file listed, whatever text is typed** · 🐞 · low.
+The reviewer's "Review Files" list has the same "Search" control as
+the other older file lists. On the reviewer's list alone the search
+does not filter: every file stays listed, even when the typed text is
+in no file's name.
+
+The same search works on the other lists of this kind: "Files To Be
+Reviewed" in the editor's "Add Reviewer" window and in the "Edit"
+window of a reviewer's row, and a file's "Dependent Files" list. Only
+the reviewer's list never passes the typed text on to the shared
+search, which is why the fix is one line.
+
+The search has never worked on this list. A preprint server has no
+review.
+Basis: probe, 2026-10-02. <sup>[f-a20](#fn-a20)</sup>
 
 <a id="a21"></a>
 **A21 — A file at the upload limit passes the check, then fails on the server** · 🐞 · medium · crash: server.
@@ -2403,6 +2413,7 @@ Issue report: [docs/issues/U36-A19-select-files-other-stage-row-actions-refused.
 sent `search=notes` and `search=zzzz` and answered both rows each time; the
 same searches in the editor's reviewer "Edit" window answered one row and
 none.
+Issue report: [docs/issues/U36-A20-reviewer-review-files-search-keeps-every-file.md](../issues/U36-A20-reviewer-review-files-search-keeps-every-file.md).
 
 <a id="fn-a21"></a>
 **f-a21** — Note k. Live-probed 2026-09-23 (OJS and OMP; probe servers with

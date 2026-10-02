@@ -1,0 +1,11 @@
+--- a/lib/pkp/controllers/grid/files/review/ReviewerReviewFilesGridDataProvider.php
++++ b/lib/pkp/controllers/grid/files/review/ReviewerReviewFilesGridDataProvider.php
+@@ -72,7 +72,7 @@
+      */
+     public function loadData($filter = [])
+     {
+-        $submissionFileData = parent::loadData();
++        $submissionFileData = parent::loadData($filter);
+         $reviewFilesDao = DAORegistry::getDAO('ReviewFilesDAO'); /** @var ReviewFilesDAO $reviewFilesDao */
+         $reviewAssignment = $this->getAuthorizedContextObject(Application::ASSOC_TYPE_REVIEW_ASSIGNMENT);
+         foreach ($submissionFileData as $submissionFileId => $fileData) {
