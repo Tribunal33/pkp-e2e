@@ -17,7 +17,7 @@ and the hourly routine starts one only when none is running
 
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
-| [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 | **Taken: issues session, workstation s0, 2026-10-02**; A1, A5 done (docs/issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md); A3 done (docs/issues/U54-A3-manager-level-role-save-ticks-every-stage.md); A11 done (docs/issues/U54-A11-own-role-ok-removes-settings-access.md); A13 done (docs/issues/U54-A13-roles-list-order-moves-and-pages-repeat.md); OPS1 done (docs/issues/U54-OPS1-ops-open-access-sign-in-box-not-kept.md) |
+| [U54](../specs/U54-roles-configuration.md) | 14 | 2 | 6 | **Taken: issues session, workstation s0, 2026-10-02**; A1, A5 done (docs/issues/U54-A1-A5-roles-list-first-row-no-edit-stale-rows.md); A3 done (docs/issues/U54-A3-manager-level-role-save-ticks-every-stage.md); A11 done (docs/issues/U54-A11-own-role-ok-removes-settings-access.md); A13 done (docs/issues/U54-A13-roles-list-order-moves-and-pages-repeat.md); OPS1 done (docs/issues/U54-OPS1-ops-open-access-sign-in-box-not-kept.md); A14 done (docs/issues/U54-A14-users-tab-keeps-renamed-role-old-name.md) |
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | **Taken: issues session, VM s1, 2026-10-02**; A1: open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md |
 | [U44](../specs/U44-identifiers.md) | 18 | 2 | 5 |  |
 | [U53](../specs/U53-users-management.md) | 16 | 2 | 5 | OPS1 done with U57 A8 (pkp-e2e#360) |

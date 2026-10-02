@@ -1,0 +1,58 @@
+--- a/lib/ui-library/src/managers/UserAccessManager/UserAccessManagerStore.js
++++ b/lib/ui-library/src/managers/UserAccessManager/UserAccessManagerStore.js
+@@ -3,7 +3,7 @@
+ import {useAnnouncer} from '@/composables/useAnnouncer';
+ import {useLocalize} from '@/composables/useLocalize';
+ import {useFetchPaginated} from '@/composables/useFetchPaginated';
+-import {ref, watch, computed} from 'vue';
++import {ref, watch, computed, onScopeDispose} from 'vue';
+ import {useUserAccessManagerActions} from './useUserAccessManagerActions';
+ import {useUserAccessManagerConfig} from './useUserAccessManagerConfig';
+ import {useExtender} from '@/composables/useExtender';
+@@ -64,6 +64,17 @@
+ 		const {triggerDataChange} = useDataChangedProvider(() => fetchUserList());
+ 
+ 		/**
++		 * Refetch when a role is created, edited or removed on the page's
++		 * Roles tab: its legacy grid sends the global `userGroupUpdated`
++		 * event, which the legacy users grid this list replaced listened to.
++		 */
++		const refetchOnUserGroupUpdated = () => fetchUserList();
++		pkp.eventBus.$on('userGroupUpdated', refetchOnUserGroupUpdated);
++		onScopeDispose(() => {
++			pkp.eventBus.$off('userGroupUpdated', refetchOnUserGroupUpdated);
++		});
++
++		/**
+ 		 * Config
+ 		 */
+ 		const userAccessManagerConfig = extender.addFns(
+--- a/lib/ui-library/src/managers/UserInvitationManager/UserInvitationManagerStore.js
++++ b/lib/ui-library/src/managers/UserInvitationManager/UserInvitationManagerStore.js
+@@ -6,7 +6,7 @@
+ import {useFetch} from '@/composables/useFetch';
+ import {useModal} from '@/composables/useModal';
+ import {useDate} from '@/composables/useDate';
+-import {ref, watch} from 'vue';
++import {ref, watch, onScopeDispose} from 'vue';
+ import UserInvitationManagerCancelInvitationDialogBody from './UserInvitationManagerCancelInvitationDialogBody.vue';
+ 
+ export const useUserInvitationManagerStore = defineComponentStore(
+@@ -59,6 +59,17 @@
+ 		);
+ 
+ 		/**
++		 * Refetch when a role is edited on the page's Roles tab, so that
++		 * the invitations name the role as it is now (the legacy roles grid
++		 * sends the global `userGroupUpdated` event).
++		 */
++		const refetchOnUserGroupUpdated = () => fetchInvitations();
++		pkp.eventBus.$on('userGroupUpdated', refetchOnUserGroupUpdated);
++		onScopeDispose(() => {
++			pkp.eventBus.$off('userGroupUpdated', refetchOnUserGroupUpdated);
++		});
++
++		/**
+ 		 * get all invited user groups
+ 		 * @param {Array} userGroups
+ 		 * @returns
