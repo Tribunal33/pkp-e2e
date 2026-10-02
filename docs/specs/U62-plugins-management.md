@@ -616,6 +616,8 @@ one at a time and put back what they changed. <sup>sc</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A5 (issue report
+    `docs/issues/U62-A5-failed-upgrade-removes-plugin.md`): an upgrade through a row's "Upgrade" whose own upgrade step fails leaves the old version listed, ticked and working
   - the guard for OJS1 (issue report
     `docs/issues/U62-OJS1-theme-off-journal-home-page-blank.md`): a journal's home page with its theme unticked answers 200 and shows its current issue
 - **Nothing new to test**:
@@ -691,8 +693,8 @@ unless an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | The Plugin Gallery stays on "Loading" when the installation cannot reach PKP: its list fails with a server error | 🐞 | user-visible · crash: server | — |
 | [A2](#a2) | "Upload A New Plugin" window never says which kind of file to choose | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A3](#a3) | An upgrade refused for the same version blames "the version available in the gallery" | 🐞 | minor | — |
-| [A5](#a5) | A failed upgrade leaves the plugin with no files at all, gone from every list | 🐞 | latent | — |
+| [A3](#a3) | Plugins: "Upgrade" with the installed or an older version blames "the version available in the gallery" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A5](#a5) | Plugins: an upgrade whose database step fails deletes the plugin, old version included, from every journal | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Deleting a plugin: the notice that confirms it reads "successfuly deleted" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | A refused tick or untick says nothing, and "Disable" stays open with its spinner | 🐞 | minor | — |
 | [A10](#a10) | Uploading a file that is not a plugin package shows PHP's archive error with a server path | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -728,14 +730,16 @@ after "Save".
 Basis: probe, 2026-10-02. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — A refused upgrade blames the gallery** · 🐞 · minor.
-Uploading, under a row's "Upgrade", the same or an older version of the
-plugin is refused with "Plugin already installed, and is newer than the
-version available in the gallery.": the administrator used no gallery,
-and at the same version the installed plugin is not newer. Expected: a
-sentence saying the uploaded version is not newer than the installed
-one.
-Basis: probe. <sup>f-a3</sup>
+**A3 — Plugins: "Upgrade" with the installed or an older version blames "the version available in the gallery"** · 🐞 · low.
+A Site Administrator who uploads, under a plugin's "Upgrade", the
+version already installed or an older one is refused with "Plugin
+already installed, and is newer than the version available in the
+gallery." The sentence is wrong twice. It names a gallery, though the
+file was uploaded from the computer. And at the same version, the
+installed plugin is not newer.
+The refusal itself is right: nothing changes, and only the reason
+misleads.
+Basis: probe, 2026-10-02. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — "Delete" on plugins nobody can switch off** · ❓ · minor.
@@ -750,19 +754,19 @@ itself marks those plugins as not optional.
 Basis: probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A failed upgrade leaves the plugin with no files** · 🐞 · latent.
-An upgrade removes the plugin's current files before copying the new
-version in; when the new version's installation step then fails, the
-new files are removed too and the old ones do not come back, so the
-plugin leaves every journal's list and the site's at once while the
-installation still records it as installed. Uploading the old version
-again through "Upload A New Plugin" is refused with "You are trying to
-downgrade the product "{plugin}" from version [{recorded version}] to
-version [{uploaded version}]. Downgrades are not supported."; only the
-version the installation still records installs again, with each
-journal's tick kept. Expected: a failed upgrade leaves the old version
-working.
-Basis: probe. <sup>f-a5</sup>
+**A5 — Plugins: an upgrade whose database step fails deletes the plugin, old version included, from every journal** · 🐞 · medium.
+When a Site Administrator upgrades a plugin and the new version's own
+upgrade step fails (a database change that does not fit the install),
+the notice says "Upgrade failed." but does not say that the plugin is
+gone. The old version's files are deleted along with the new ones, and
+the plugin leaves every journal's plugin list at once and stops working
+everywhere.
+The installation still records the old version as installed and
+enabled. Uploading that same old version through "Upload A New Plugin"
+brings the plugin back, but only if the administrator still has its
+package. Until then, each request to the site writes an error to the
+server's log.
+Basis: probe, 2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — Without a manager role, the Site Administrator cannot switch a journal's plugins** · ❓ · minor.
@@ -1314,6 +1318,7 @@ Issue report: [pkp-e2e#505](https://github.com/jardakotesovec/pkp-e2e/issues/505
 **f-a3** — fn-m: `upgradePlugin()` reuses
 `manager.plugins.installedVersionNewer`, written for the gallery.
 Live-probed 2026-09-27: td15.
+Issue report: [docs/issues/U62-A3-upgrade-refusal-blames-gallery.md](../issues/U62-A3-upgrade-refusal-blames-gallery.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — fn-n: `deletePlugin()` and `PluginGridRow` check the role
@@ -1331,6 +1336,7 @@ folder `plugins/generic/<plugin>` gone while the versions table kept
 1.0.1.0 current. 1.0.0.0 through "Upload A New Plugin" then gave the
 downgrade notice; 1.0.1.0 gave "Successfully installed version
 1.0.1.0", ticked again where it had been ticked.
+Issue report: [docs/issues/U62-A5-failed-upgrade-removes-plugin.md](../issues/U62-A5-failed-upgrade-removes-plugin.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — fn-a: in `ACCESS_MODE_MANAGE` the site admin branch of

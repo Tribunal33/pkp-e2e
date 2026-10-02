@@ -1,0 +1,71 @@
+--- a/lib/pkp/classes/plugins/PluginHelper.php
++++ b/lib/pkp/classes/plugins/PluginHelper.php
+@@ -20,6 +20,7 @@
+ use APP\install\Upgrade;
+ use DirectoryIterator;
+ use Exception;
++use Illuminate\Filesystem\Filesystem;
+ use Illuminate\Support\Arr;
+ use PharData;
+ use PKP\config\Config;
+@@ -311,18 +312,30 @@
+ 
+             $destinyPath = Core::getBaseDir() . "/plugins/{$category}/{$plugin}";
+ 
+-            // Delete existing files.
+-            $fileManager->rmtree($destinyPath);
+-
+-            // Check whether deleting has worked.
++            // Keep a copy of the installed version, to put back if the upgrade fails.
++            // Filesystem::copyDirectory() reports a failed copy of any file.
++            $filesystem = new Filesystem();
++            $backupPath = null;
+             if (is_dir($destinyPath)) {
+-                throw new Exception(__('manager.plugins.deleteError', ['pluginName' => $pluginVersion->getProduct()]));
++                $backupPath = rtrim(sys_get_temp_dir(), '\\/') . "/{$plugin}" . substr(md5(random_int(0, PHP_INT_MAX)), 0, 10);
++                if (!$filesystem->copyDirectory($destinyPath, $backupPath)) {
++                    $fileManager->rmtree($backupPath);
++                    throw new Exception('Could not back up the installed plugin!');
++                }
+             }
+ 
+-            // Copy the plug-in from the temporary folder to the target folder.
+-            $fileManager->copyDir($pluginFolder, $destinyPath) || throw new Exception('Could not copy plugin to destination!');
+-
+             try {
++                // Delete existing files.
++                $fileManager->rmtree($destinyPath);
++
++                // Check whether deleting has worked.
++                if (is_dir($destinyPath)) {
++                    throw new Exception(__('manager.plugins.deleteError', ['pluginName' => $pluginVersion->getProduct()]));
++                }
++
++                // Copy the plug-in from the temporary folder to the target folder.
++                $fileManager->copyDir($pluginFolder, $destinyPath) || throw new Exception('Could not copy plugin to destination!');
++
+                 $upgradeFile = "{$destinyPath}/" . static::PLUGIN_UPGRADE_FILE;
+                 if ($fileManager->fileExists($upgradeFile)) {
+                     /** @var SiteDAO */
+@@ -347,10 +360,20 @@
+                     'version' => $pluginVersion->getVersionString(false),
+                 ]);
+ 
++                if ($backupPath) {
++                    $fileManager->rmtree($backupPath);
++                }
+                 return $pluginVersion;
+             } catch (Throwable $e) {
+-                // Delete the plugin files on failure
++                // Replace the new files with the installed version's
+                 $fileManager->rmtree($destinyPath);
++                if ($backupPath) {
++                    if ($filesystem->copyDirectory($backupPath, $destinyPath)) {
++                        $fileManager->rmtree($backupPath);
++                    } else {
++                        error_log("The upgrade of the plugin {$category}/{$plugin} failed and its installed version could not be restored to {$destinyPath}; its files are kept in {$backupPath}");
++                    }
++                }
+                 throw $e;
+             }
+         });

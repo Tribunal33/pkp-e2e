@@ -1,0 +1,11 @@
+--- a/lib/pkp/classes/plugins/PluginHelper.php
++++ b/lib/pkp/classes/plugins/PluginHelper.php
+@@ -306,7 +306,7 @@
+             }
+ 
+             if ($installedPlugin->compare($pluginVersion) >= 0) {
+-                throw new Exception(__('manager.plugins.installedVersionNewer'));
++                throw new Exception(__('manager.plugins.installedVersionNewest'));
+             }
+ 
+             $destinyPath = Core::getBaseDir() . "/plugins/{$category}/{$plugin}";
