@@ -990,6 +990,7 @@ Left out of the scenarios above, by reason:
   - a reviewer holding requests on two submissions opening each request email's one-click link onto its own review, while a sent reminder still replaces the same review's link ([A9](#a9); Rule 16): the guard the issue report proposes, once fixed
   - the request email's one-click link still opening the review after "Send Reminder" was pressed and the "Review Reminder" window closed with "Cancel" ([A9](#a9); Rule 16): the guard the issue report proposes, once fixed
   - a reviewer's one-click link opened in a browser signed in as another user showing "You are signed in as a different user", and "Sign out and continue" opening the review as the reviewer ([A10](#a10); Actors row 9, Rule 16): the guard the issue report proposes, once fixed
+  - a reviewer typing a first answer on a review form with a required question seeing no "Please fill in required fields." box and no "This field is required." mark, "Save for Later" then showing "Your changes have been saved." alone, and a refused "Submit Review" still showing both ([A14](#a14); Fields step 3): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1047,7 +1048,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A9](#a9) | A second request, or a "Send Reminder" window opened and cancelled, kills the reviewer's one-click link, which then shows a bare "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A reviewer's one-click review link shows a blank page in a browser signed in as another user | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A reviewer's own review is listed under "Previous Reviews" once the submission has a later round | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A14](#a14) | "Save for Later" on a review form says "Your changes have been saved." and, on the same screen, "Please fill in required fields." | 🐞 | minor | — |
+| [A14](#a14) | Typing a first answer on a review form shows the reviewer "Please fill in required fields."; "Save for Later" then shows its notice beside it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a review form's answers are guarded | 🐞 | minor | — |
 | [OMP2](#omp2) | {OMP} The review-complete email tells editors the reviewer "recommends None" | 🐞 | minor | — |
 | [OMP3](#omp3) | {OMP} A review form's "required fields" refusal opens with a raw locale key | 🐞 | minor | — |
@@ -1291,18 +1292,32 @@ request was declined, or who has none, may see it.
 Basis: probe (2026-09-05, both apps). <sup>[f-a13](#fn-a13)</sup>
 
 <a id="a14"></a>
-**A14 — "Save for Later" on a review form also reports missing required answers** · 🐞 · minor.
-On a review form with a required "Single line text box" question left
-unanswered, "Save for Later" shows "Your changes have been saved." and,
-on the same screen, the box "Please fill in required fields." / "Some
-required fields are not filled in. …" under the buttons (on a press its
-first line a raw key, [OMP3](#omp3)) and "This field is required." under
-each unanswered required question, exactly as a refused submit does.
-{OJS} Any review form saved while "Recommendation" reads "Choose One"
-does the same, with the mark under the list. The save did go through: a reload shows what was typed and clears the messages.
-The reviewer is told in one breath that the review was saved and that
-it cannot be accepted as it is.
-Basis: probe (2026-09-28, both apps). <sup>[f-a14](#fn-a14)</sup>
+**A14 — Typing a first answer on a review form shows the reviewer "Please fill in required fields."; "Save for Later" then shows its notice beside it** · 🐞 · low.
+A reviewer whose review uses a review form types a first answer on the
+review's third step, "3. Download & Review". At once the step shows
+the box "Please fill in required fields." / "Some required fields are
+not filled in. Please complete them before submitting your review."
+under the buttons, and "This field is required." under every required
+question not yet answered. On a journal the same mark also shows under
+"Recommendation". These are the messages of a refused "Submit Review",
+and the reviewer has pressed nothing.
+
+"Save for Later" is not what brings the messages: pressed afterwards,
+it shows "Your changes have been saved." beside them. The save goes
+through, a reload shows the saved answers without the messages, and
+the review can be finished and submitted.
+
+It shows on a review form with a required question, and on a journal
+on every review form, because "Recommendation" counts as a required
+answer. A review without a review form is not affected.
+
+The QA of the change that brought the box in accepted the messages
+appearing after the first answer. This report asks the team to decide
+whether that stands, and proposes the fix for the case that it does
+not.
+
+On a press the box's first line is a raw key ([OMP3](#omp3)).
+Basis: probe, 2026-10-02. <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
 **A15 — An unsaved free-form review is dropped without a warning** · 🐞 · minor.
@@ -2466,6 +2481,7 @@ apps: an empty free-form review saved (OJS: at "Choose One") showed the
 toast alone. With a form whose only required question is a radio group
 (footnote i), the 2026-09-05 saves recorded the toast and not the box;
 the retired A8 sighting of 2026-09-04 saw neither.
+Issue report: [docs/issues/U28-A14-review-form-save-for-later-required-fields.md](../issues/U28-A14-review-form-save-for-later-required-fields.md).
 
 <a id="fn-a15"></a>
 **f-a15** — The legacy form handler tracks unsaved changes only through

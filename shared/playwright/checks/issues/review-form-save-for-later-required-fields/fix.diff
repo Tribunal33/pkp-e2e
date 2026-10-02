@@ -1,0 +1,16 @@
+--- a/lib/pkp/js/pages/reviewer/reviewStep3Required.js
++++ b/lib/pkp/js/pages/reviewer/reviewStep3Required.js
+@@ -48,9 +48,11 @@
+     $form.on('invalid-form.validate', function() {
+         $box.show();
+     });
+-    // Hide warning box when form becomes valid again
++    // Hide warning box when form becomes valid again. checkForm() only
++    // checks: valid() would validate the whole form, mark every unanswered
++    // required field and fire invalid-form (the box) at the first answer.
+     $form.on('change keyup', ':input', function() {
+-        if ($form.valid && $form.valid()) {
++        if ($box.is(':visible') && validator.checkForm()) {
+             $box.hide();
+         }
+     });
