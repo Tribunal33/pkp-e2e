@@ -1,0 +1,15 @@
+--- a/lib/pkp/classes/core/PKPBaseController.php
++++ b/lib/pkp/classes/core/PKPBaseController.php
+@@ -425,6 +425,12 @@
+                 continue;
+             }
+             if (!empty($schema->properties->{$paramName}->multilingual)) {
++                // A multilingual value that is not a locale map is left for
++                // the validator, as _convertStringsToSchema() leaves an
++                // array or object property that arrives as a scalar
++                if (!is_array($paramValue)) {
++                    continue;
++                }
+                 foreach ($paramValue as $localeKey => $localeValue) {
+                     $params[$paramName][$localeKey] = $this->_convertStringsToSchema(
+                         $localeValue,

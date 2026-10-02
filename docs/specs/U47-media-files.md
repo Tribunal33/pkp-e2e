@@ -824,6 +824,7 @@ Left out of the scenarios above, by reason:
   - the guard for A3 (issue report `docs/issues/U47-A3-media-upload-window-hidden-drop-button.md`): on the empty "Upload Media File" window, check that the buttons in the accessibility tree are the side window's top bar, "Close" and "Click to upload files", and that Tab from "Click to upload files" lands on a control on screen.
   - the guard for OMP2 (issue report `docs/issues/U47-OMP2-press-copyeditor-media-download-refused.md`): on a press, a Copyeditor assigned to a monograph in Copyediting is not offered "Media" in the side menu, while a Layout Editor in Production keeps the page and the download.
   - the guard for A1 (issue report `docs/issues/U47-A1-media-actions-offered-then-refused.md`): an assigned Layout Editor without "Permissions" sees the "Media" list alone (no "Add Media File", "Batch Link Media" or write actions in the row menu), while an editor whose assignment allows changes keeps every action.
+  - the guard for A6 (issue report `docs/issues/U47-A6-media-jats-upload-server-log-warning.md`): add a media file and check the server log holds no PHP warning for the request.
 - **Rarely met**:
   - no component marked as a dependent file, where "Upload Media File"
     holds only "No media types are configured. Please contact the
@@ -879,7 +880,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | The empty "Upload Media File" window gives screen readers and the keyboard a button nobody can see | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | A file over the upload limit fails with a server error; its card reads "Invalid JSON response from server." | 🐞 | minor · crash: server | — |
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | invisible | — |
+| [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | With "HTML Monograph File" off, a book's HTML file opens as a blank page | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | On a press, the Copyeditor is offered the "Media" page, and pressing a file name shows a raw refusal | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -963,11 +964,17 @@ the issue report lists.
 Basis: test run, 2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — Each media file added leaves a warning in the server's log** · 🐞 · invisible.
-Every file "Upload Files" adds writes a PHP warning ("foreach()
-argument must be of type array|object, string given") to the web
-server's error log. The file is added normally; no screen shows it.
-Basis: test run, 2026-09-25. <sup>f-a6</sup>
+**A6 — Each media file added leaves a warning in the server's log** · 🐞 · low.
+Every file "Upload Files" adds on a version's "Media" page writes a PHP
+warning ("foreach() argument must be of type array|object, string
+given") to the web server's error log: the page hands the file's name to
+a shared step that expects a name per language. The file is added
+normally, and with PHP's error display off, as PKP ships it, no screen
+shows the warning; where an install displays PHP errors, it is printed
+into the upload's answer and the file is still listed. The JATS upload
+warns through the same step ([JATS XML & body
+text](U48-jats-and-body-text.md#a20)).
+Basis: test run, 2026-10-02. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — In French the "Media" page and its windows show raw codes** · 🐞 · low.
@@ -1780,6 +1787,7 @@ each card's temporary-file answer as it came back
 multilingual property as a locale map, before
 `MediaFilesController::add()` wraps a string name into the
 submission's locale. The added file's name is right.
+Issue report: [docs/issues/U47-A6-media-jats-upload-server-log-warning.md](../issues/U47-A6-media-jats-upload-server-log-warning.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Rule 11. Live-probed 2026-09-30 at ojs `7ce98ec09e`, omp
