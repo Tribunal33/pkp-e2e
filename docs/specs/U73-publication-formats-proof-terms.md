@@ -975,6 +975,10 @@ Left out of the scenarios above, by reason:
     name is changed: no question, the row keeping the old name after a
     reload, and "Edit" reopening on it (Rule 11): likely a bullet in
     scenario 4's "A format file's actions", which closes that window
+  - the guard for A14 (issue report
+    `docs/issues/U46-A7-galley-format-moves-in-list-when-saved.md`): an
+    unchanged "OK" on the first of three formats, an approval and an
+    availability change leave the list in the order the formats were added
 - **Nothing new to test**:
   - "Format Approval" with its URN box changed, whose close arrow asks
     before closing, on a press that assigns URNs to publication formats
@@ -1063,7 +1067,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | The "Format Availability" window reads "This format will unavailable to readers." | 🐞 | minor | — |
 | [A12](#a12) | Approving and revoking a format file write the same two "History" lines | 🐞 | minor | — |
 | [A13](#a13) | The side menu offers "Publication Formats" to a Copyeditor, Marketing and sales coordinator or Funding coordinator, and the page shows them no list | 🐞 | minor | — |
-| [A14](#a14) | A format moves in the list when it is saved from "Edit", its approval or availability changes, or its DOI is emptied on the DOIs page | 🐞 | minor | claim check (claude), 2026-09-30 — no fixed direction; emptying a DOI added |
+| [A14](#a14) | A format moves in the list when it is saved from "Edit", its approval or availability changes, or its DOI is emptied on the DOIs page | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | A book in the press's second language cannot get a format without a name in the primary language | 🐞 | minor | — |
 | [A19](#a19) | "Select Files" tells the user to tick an "Include checkbox" and press "Search", neither of which it has | 🐞 | minor | — |
 | [A20](#a20) | A "Direct Sales" price of 0 keeps the link on "Direct Sales" while readers get the file free | 🐞 | minor | — |
@@ -1228,7 +1232,7 @@ serves, or the page shows them the list without controls. A press's
 Basis: probe. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — A format moves in the list when it is saved from "Edit", its approval or availability changes, or its DOI is emptied on the DOIs page** · 🐞 · minor.
+**A14 — A format moves in the list when it is saved from "Edit", its approval or availability changes, or its DOI is emptied on the DOIs page** · 🐞 · medium.
 The Publication Formats page lists a version's formats in the order
 they were added until one of them changes. Saving a format with "OK"
 on its "Edit" tab, even with nothing changed, revoking or giving back
@@ -1246,7 +1250,7 @@ after a reload, and the Author's list, the book's page and the DOIs
 page follow it. A press cannot keep its formats in the order it chose,
 and readers see the order change on the book's page.
 Expected: the formats keep the order they were added in.
-Basis: probe. <sup>f-a14</sup>
+Basis: probe, 2026-10-02. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — A book in the press's second language needs a format name in the primary language** · 🐞 · minor.
@@ -2373,6 +2377,7 @@ and the rows' physical order in `publication_formats` matched them;
 every `seq` read 0, and a step that moved a format had rewritten its
 row. One book of thirty listed "Charlie, Delta, Alpha, Bravo" before
 any action.
+Issue report: [docs/issues/U46-A7-galley-format-moves-in-list-when-saved.md](../issues/U46-A7-galley-format-moves-in-list-when-saved.md).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Note e: the form requires the name in the book's language

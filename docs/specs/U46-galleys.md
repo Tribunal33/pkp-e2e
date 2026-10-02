@@ -596,6 +596,10 @@ Left out of the scenarios above, by reason:
     posting, the Author offered the galleys sees "Change File" on a galley
     whose file they uploaded and not on one whose file the Preprint Server
     Manager uploaded
+  - the guard for A7 (issue report
+    `docs/issues/U46-A7-galley-format-moves-in-list-when-saved.md`): with no
+    order ever saved, "Edit" › "Save" on the first of three galleys leaves
+    the list and the public page in the order the galleys were added
 - **Nothing new to test**:
   - a new galley's place in the list, before and after a saved order
     (Rule 8d)
@@ -652,7 +656,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A new version's galley shares its file with the published version's galley | 🐞 | user-visible | — |
 | [A5](#a5) | The ordering arrows have no names for screen readers | 🐞 | minor | — |
 | [A6](#a6) | "URL of remotely-hosted content" keeps text that is not a web address | 🐞 | minor | — |
-| [A7](#a7) | Until an order is saved, editing a galley moves it to the end of the list | 🐞 | minor | — |
+| [A7](#a7) | Until an order is saved, editing a galley moves it to the end of the list | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | Deleting a published galley that a new version copied fails with an error | 🐞 | user-visible · crash: both | — |
 | [OPS2](#ops2) | Before posting, a Moderator without "Permissions" cannot edit, add or reorder the galleys the page offers | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS3](#ops3) | A preprint's Author is offered "Change File" on every galley and refused on files others uploaded | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -716,14 +720,14 @@ applies them.
 Basis: probe, 2026-09-24. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — An edit moves a galley to the end of the list** · 🐞 · minor.
+**A7 — An edit moves a galley to the end of the list** · 🐞 · medium.
 An editor who has never pressed "Save Order" expects the "Galleys" list
 to keep its order when a galley is edited. Instead "Edit" › "Save" moves
 the edited galley to the end: Alpha, Beta, Gamma become Beta, Gamma,
 Alpha1 once Alpha's label is changed. The same looseness puts a new
 galley at the end of the list or at the top (Rule 8d). Once an order is
 saved, an edit keeps the galley's place.
-Basis: probe, 2026-09-24. <sup>f-a7</sup>
+Basis: probe, 2026-10-02. <sup>f-a7</sup>
 
 ### OJS
 
@@ -1347,6 +1351,7 @@ Live-probed 2026-09-24 (note q9).
 **f-a7** — Note j: every galley shares position 0 until an order is
 saved, so the database's own order decides the list. Live-probed
 2026-09-24 (note q12) on OJS and OPS, the same on both.
+Issue report: [docs/issues/U46-A7-galley-format-moves-in-list-when-saved.md](../issues/U46-A7-galley-format-moves-in-list-when-saved.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — Live-probed 2026-09-24 (note q15), twice on OJS: the

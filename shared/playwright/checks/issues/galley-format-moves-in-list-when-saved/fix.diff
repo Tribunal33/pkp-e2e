@@ -1,0 +1,47 @@
+--- a/lib/pkp/classes/galley/Collector.php
++++ b/lib/pkp/classes/galley/Collector.php
+@@ -95,7 +95,9 @@
+             ->when(!is_null($this->doiIds), function (Builder $qb) {
+                 $qb->whereIn('g.doi_id', $this->doiIds);
+             })
+-            ->orderBy('g.seq', 'asc');
++            // Break ties (every galley added before a fix for this sat at 0) by insertion order
++            ->orderBy('g.seq', 'asc')
++            ->orderBy('g.galley_id', 'asc');
+ 
+         Hook::call('Galley::Collector', [&$qb, $this]);
+ 
+--- a/lib/pkp/classes/galley/Repository.php
++++ b/lib/pkp/classes/galley/Repository.php
+@@ -170,6 +170,10 @@
+     /** @copydoc DAO::insert() */
+     public function add(Galley $galley): int
+     {
++        if ($galley->getData('seq') === null) {
++            $galley->setData('seq', $this->dao->getNextSeq($galley->getData('publicationId')));
++        }
++
+         $id = $this->dao->insert($galley);
+         Hook::call('Galley::add', [$galley]);
+ 
+--- a/lib/pkp/classes/galley/DAO.php
++++ b/lib/pkp/classes/galley/DAO.php
+@@ -127,6 +127,18 @@
+         return parent::_insert($galley);
+     }
+ 
++    /**
++     * Get the sequence that puts a new galley last in its publication's list
++     */
++    public function getNextSeq(int $publicationId): int
++    {
++        $seq = DB::table($this->table)
++            ->where('publication_id', '=', $publicationId)
++            ->max('seq');
++
++        return $seq === null ? 0 : (int) floor($seq) + 1;
++    }
++
+     public function update(Galley $galley)
+     {
+         parent::_update($galley);
