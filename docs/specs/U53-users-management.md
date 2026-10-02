@@ -870,7 +870,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | The reason typed when enabling becomes the reason shown at the next disabling | 🐞 | minor | — |
 | [A9](#a9) | Merging a section editor's account silently drops them from their sections instead of moving them | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | The French "Users" tab prints raw codes for its search label, the Invitations heading, button and columns, and the "Start Date" column | 🐞 | minor | — |
-| [A12](#a12) | The ORCID and disabled icons after a name have no name for a screen reader | 🐞 | minor | — |
+| [A12](#a12) | Users & Roles: the ORCID and "disabled" icons after a user's name have no name for screen readers | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | The "Merge user" window and the older grid show nothing under "Roles" for the Site Administrator | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | Merging an account that opened a discussion fails without a message and leaves the account behind | 🐞 | high · crash: server | issues (claude), 2026-10-02 — re-verified |
@@ -1001,13 +1001,17 @@ button's name is A5's raw code in every app and language.
 Basis: probe. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — The status icons have no name for a screen reader** · 🐞 · minor.
-In the list's "Name" cell a screen reader hears the ORCID icon and the red
-disabled icon as unnamed images, so without sight a disabled account
-cannot be told from an enabled one, nor an account with an ORCID iD from
-one without. Each icon should carry a name, such as "ORCID iD" and
-"Disabled".
-Basis: probe. <sup>f-a12</sup>
+**A12 — Users & Roles: the ORCID and "disabled" icons after a user's name have no name for screen readers** · 🐞 · low.
+In Settings › Users & Roles › "Current Users", the "Name" cell shows an
+ORCID icon after the name of a user with an ORCID iD, and a red
+crossed-out person icon after the name of a disabled account. A screen
+reader announces each as an image with no name. So a manager who cannot
+see the screen cannot tell a disabled account from an active one, or a
+user with an ORCID iD from one without. Nothing is lost, and a disabled
+account can still be recognised: its row's "…" menu offers "Enable User"
+where other rows offer "Disable User". The ORCID icon shows for any
+ORCID iD stored on the account, verified or not. Basis: probe,
+2026-10-02. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — The older lists show no role for the Site Administrator** · 🐞 · medium.
@@ -1955,6 +1959,7 @@ accessibility tree a disabled account's and an ORCID holder's "Name" cell
 read the name, then an image with no name. The icons
 (`UserAccessManagerCellName.vue`, note g) carry no `aria-label` and no
 `aria-hidden`.
+Issue report: [docs/issues/U53-A12-users-list-status-icons-unnamed.md](../issues/U53-A12-users-list-status-icons-unnamed.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25, all three apps: the "Merge user"
