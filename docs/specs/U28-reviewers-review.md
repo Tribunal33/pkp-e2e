@@ -2558,7 +2558,7 @@ OMP with a one-question form: the box read
 "Some required fields are not filled in. Please complete them before
 submitting your review."; on OJS the same box read "Please fill in
 required fields." over the same second line.
-Issue report: [docs/issues/U28-OMP3-press-review-form-refusal-raw-key.md](../issues/U28-OMP3-press-review-form-refusal-raw-key.md).
+Issue report: [docs/issues/U28-OMP3-press-review-form-refusal-raw-key.md](../issues/U28-OMP3-press-review-form-refusal-raw-key.md), filed as [pkp-e2e#601](https://github.com/jardakotesovec/pkp-e2e/issues/601).
 
 <a id="fn-omp4"></a>
 **f-omp4** — `PKPReviewerHandler::submission()` lists every round the
