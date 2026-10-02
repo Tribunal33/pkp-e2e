@@ -765,6 +765,13 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A15 (issue report
+    `docs/issues/U53-A15-merge-fails-for-discussion-opener.md`): a manager
+    merges an account that opened a discussion on a submission into another
+    account: the merge completes with a message, the merged account is gone
+    and cannot sign in, and the discussion names the chosen account as its
+    creator
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -855,12 +862,12 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | The row's "…" button is announced to screen readers as a raw code | 🐞 | minor | — |
 | [A6](#a6) | The disable window's "Current Roles : " line lists roles that have ended | 🐞 | minor | — |
 | [A7](#a7) | The reason typed when enabling becomes the reason shown at the next disabling | 🐞 | minor | — |
-| [A9](#a9) | A merge drops the merged account's section assignments | 🐞 | latent | — |
+| [A9](#a9) | Merging a section editor's account silently drops them from their sections instead of moving them | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | The French "Users" tab prints raw codes for its search label, the Invitations heading, button and columns, and the "Start Date" column | 🐞 | minor | — |
 | [A12](#a12) | The ORCID and disabled icons after a name have no name for a screen reader | 🐞 | minor | — |
 | [A13](#a13) | The "Merge user" window and the older grid show nothing under "Roles" for the Site Administrator | 🐞 | minor | — |
 | [A14](#a14) | On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [A15](#a15) | Merging an account that opened a discussion fails partway with no message and leaves the account behind | 🐞 | user-visible · crash: server | — |
+| [A15](#a15) | Merging an account that opened a discussion fails without a message and leaves the account behind | 🐞 | high · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A16](#a16) | "Notify User" stays greyed out after "Generate Password" is unticked | 🐞 | minor | — |
 | [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | minor | — |
 | [A19](#a19) | "Remove User" on a user whose only role has not yet begun ends in "An unexpected error has occurred…" | 🐞 | user-visible | — |
@@ -952,14 +959,19 @@ once in all? Lean: yes, one email listing the roles ended.
 Basis: probe. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — A merge drops the merged account's section assignments** · 🐞 · latent.
-Merging an account that edits one of the journal's sections moves its
-roles, review assignments and participations to the chosen account but
-not its section assignment: in the section's "Edit" window the merged
-editor's box is gone and the chosen account's stays unticked, so the
-section loses that editor until a manager ticks the chosen account by
-hand.
-Basis: probe. <sup>f-a9</sup>
+**A9 — Merging a section editor's account silently drops them from their sections instead of moving them** · 🐞 · medium.
+A manager merges the account of a section editor (a press's series
+editor, a preprint server's moderator) into another account (the chosen
+account). The merge moves the account's roles, review assignments and
+assignments on submissions to the chosen account, but not its assignment
+as an editor of its sections: in the section's "Edit" window the merged
+editor's box is gone and the chosen account's box stays unticked. New
+submissions to the section are no longer assigned to the person. A
+section that had no other editor assigns nobody, and its new submissions
+wait under the managers' "Needs editor" view until a manager assigns an
+editor by hand. Nothing says why; a manager who looks can tick the
+chosen account in the section's "Edit" window. The same happens to an
+editor assigned to a category. Basis: probe, 2026-10-02. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — The administrator can disable their own account** · ❓ · latent.
@@ -1022,17 +1034,22 @@ from 3.4 or from a 3.5 release before 3.5.0-4. The same fault as
 probe, 2026-10-02. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — Merging an account that opened a discussion fails partway** · 🐞 · user-visible · crash: server.
+**A15 — Merging an account that opened a discussion fails without a message and leaves the account behind** · 🐞 · high · crash: server.
 A manager merges an account that once opened a discussion on a
-submission. After "OK" in the "Confirm" dialog nothing seems to happen:
-the dialog and the "Merge user" window stay open and no message appears,
-because the app failed partway through the merge. Behind them the roles
-and the submission's participant place have moved to the chosen account,
-but the merged account is not deleted: it remains with no role, still
-signs in with its old username and password, and the discussion still
-names it as its creator. Merging an account that only takes part in
-someone else's discussion works.
-Basis: probe. <sup>f-a15</sup>
+submission into another account (the chosen account). After "OK" in the
+"Confirm" dialog nothing seems to happen: the dialog and the "Merge
+user" window stay open and no message appears, because the app failed on
+the server partway through the merge. By then the merged account's roles
+and its assignments on submissions have moved to the chosen account, but
+the merged account is not deleted. It holds no role, no longer shows in
+Users & Roles, and still signs in with its old username and password.
+The discussion still names it as its creator. A second merge, which only
+the Site Administrator can start once the account has left Users &
+Roles, fails the same way. On `main` such accounts are common: recording
+a recommendation opens a discussion in the editor's name, and an
+author's "Comments for the Editor" become a discussion opened by that
+author. Released versions are not affected. Basis: probe, 2026-10-02.
+<sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — "Notify User" stays locked after "Generate Password" is unticked** · 🐞 · minor.
@@ -1909,6 +1926,7 @@ assignment of a new submission to that section uses (code), so after
 such a merge new submissions there would reach neither account; not
 seen, since only the seeded journal assigns editors automatically and
 its accounts are never merged in testing.
+Issue report: [docs/issues/U53-A9-merge-drops-section-editor-assignments.md](../issues/U53-A9-merge-drops-section-editor-assignments.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Code: note k. Live-probed 2026-09-25: note td11. The Vue list
@@ -1955,6 +1973,7 @@ ticked, signed in with its old password (landing on the journal's home
 page), and the discussion read "Created by: {old username}". An account
 that was only a participant in someone else's discussion merged cleanly:
 200, deleted, its sign-in refused.
+Issue report: [docs/issues/U53-A15-merge-fails-for-discussion-opener.md](../issues/U53-A15-merge-fails-for-discussion-opener.md).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Live-probed 2026-09-25, all three apps: after "Generate

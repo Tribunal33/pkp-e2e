@@ -1,0 +1,49 @@
+--- a/lib/pkp/classes/editorialTask/Repository.php
++++ b/lib/pkp/classes/editorialTask/Repository.php
+@@ -241,6 +241,36 @@
+         }
+     }
+ 
++    /**
++     * Transfer the tasks and discussions a user created or started, and the
++     * user's places as a participant, to another user (merging users).
++     *
++     * A place the new user already holds is kept as it is, made responsible
++     * when the old user's was; the old user's is then deleted with the account.
++     */
++    public function transfer(int $oldUserId, int $newUserId): void
++    {
++        DB::table('edit_tasks')->where('created_by', $oldUserId)->update(['created_by' => $newUserId]);
++        DB::table('edit_tasks')->where('started_by', $oldUserId)->update(['started_by' => $newUserId]);
++
++        $heldTaskIds = Participant::query()->where('user_id', $newUserId)->pluck('edit_task_id')->all();
++        $responsibleTaskIds = Participant::query()
++            ->where('user_id', $oldUserId)
++            ->where('is_responsible', true)
++            ->whereIn('edit_task_id', $heldTaskIds)
++            ->pluck('edit_task_id')
++            ->all();
++
++        Participant::query()
++            ->where('user_id', $newUserId)
++            ->whereIn('edit_task_id', $responsibleTaskIds)
++            ->update(['is_responsible' => true]);
++        Participant::query()
++            ->where('user_id', $oldUserId)
++            ->whereNotIn('edit_task_id', $heldTaskIds)
++            ->update(['user_id' => $newUserId]);
++    }
++
+     public function removeParticipantFromSubmissionTasks(int $submissionId, int $userId, int $contextId): void
+     {
+         $user = Repo::user()->get($userId);
+--- a/lib/pkp/classes/user/Repository.php
++++ b/lib/pkp/classes/user/Repository.php
+@@ -343,6 +343,7 @@
+         }
+ 
+         Repo::note()->transfer($oldUserId, $newUserId);
++        Repo::editorialTask()->transfer($oldUserId, $newUserId);
+ 
+         Repo::decision()->dao->reassignDecisions($oldUserId, $newUserId);
+ 
