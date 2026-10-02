@@ -1,0 +1,49 @@
+--- a/lib/pkp/classes/editorialTask/EditorialTask.php
++++ b/lib/pkp/classes/editorialTask/EditorialTask.php
+@@ -28,6 +28,8 @@
+ use Illuminate\Support\Str;
+ use PKP\core\PKPApplication;
+ use PKP\core\traits\ModelWithSettings;
++use PKP\mail\variables\ContextEmailVariable;
++use PKP\mail\variables\SenderEmailVariable;
+ use PKP\note\Note;
+ use PKP\note\SaveNoteWithFiles;
+ use PKP\notification\Notification;
+@@ -478,12 +480,17 @@
+             $recipients[] = $user;
+         }
+ 
++        // A manager may write a message without taking part: they still sign it
++        if (!$sender && $headnote->userId) {
++            $sender = Repo::user()->get((int) $headnote->userId);
++        }
++
+         $mailable = (new TemplateVariables($this, $submission, $context))
+             ->body($this->headnote->contents);
+ 
+         // System-created tasks (e.g. auto-created from templates) have no
+-        // participants and no headnote author, so there is no sender or
+-        // recipient. Leave those variables unset rather than crash.
++        // headnote author and no participants until a manager adds them.
++        // The recipient variables are left for the save that adds them.
+         if ($sender) {
+             $mailable->sender($sender);
+         }
+@@ -493,6 +500,17 @@
+ 
+         $mailable->setData();
+ 
++        // A message without a writer is signed by the context, in the
++        // mailable's locale, as a user without a signature signs with a name
++        if (!$sender) {
++            $contextName = $mailable->viewData[ContextEmailVariable::CONTEXT_NAME] ?? '';
++            $mailable->addData([
++                SenderEmailVariable::SENDER_NAME => $contextName,
++                SenderEmailVariable::SENDER_EMAIL => $mailable->viewData[ContextEmailVariable::CONTACT_EMAIL] ?? '',
++                SenderEmailVariable::SENDER_CONTACT_SIGNATURE => '<p>' . $contextName . '</p>',
++            ]);
++        }
++
+         if ($this->anonymizeAuthors($submission)) {
+             unset($mailable->viewData['authors'], $mailable->viewData['authorsShort']);
+         }

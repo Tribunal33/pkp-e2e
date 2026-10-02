@@ -1351,6 +1351,7 @@ Left out of the scenarios above, by reason:
   - the guard for A21 (issue report `docs/issues/U37-A21-error-list-calls-message-box-undefined.md`): a "Save" refused with the message box empty lists "Go to Message: This field is required." in the "Add", "Edit" and template windows (Rule 11a)
   - the guard for A29 (issue report `docs/issues/U37-A29-add-window-file-missing-from-history.md`): a file attached in the "Add" window shows "{file name} uploaded by …" with "Download" in the History (Rule 18)
   - the guard for OMP1 (issue report `docs/issues/U37-OMP1-external-reviewer-listed-as-internal.md`): on a press, each reviewer in a discussion's "Participants" reads the reviewer role of the stage they review ("External Reviewer" on External Review) in the editor's and the reviewer's windows (Rule 20)
+  - the guard for A31 (issue report `docs/issues/U37-A31-auto-added-item-letter-placeholders.md`): an auto-added discussion's letter, and one a manager adds without taking part, closes with no "{$signature}" or "{$senderName}" left as typed (Rules 10d, 9)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1416,7 +1417,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A26](#a26) | After "No" in a row box's question, a screen reader hears the opposite state | 🐞 | minor | — |
 | [A28](#a28) | A discussion turned into a task reads "Task created by …" in its History | 🐞 | minor | — |
 | [A29](#a29) | A file attached to the first message in the "Add" window never shows in the discussion's History | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A31](#a31) | An auto-added item's letter keeps "{$recipientName}" and the sender placeholder | 🐞 | minor | — |
+| [A31](#a31) | A discussion's letter keeps "{$signature}" when its writer is not a participant: auto-added, or a manager stays out | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | A press's discussion window lists an External Review reviewer as "Internal Reviewer" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | A preprint server's "Assign Editor" template has no text, and choosing it leaves the message box showing text "Save" ignores | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | An hour after writing it, an Author or assistant can change nothing in their own discussion | ❓ | user-visible | — |
@@ -1757,14 +1758,19 @@ to know the task wants a new owner.
 Basis: probe. <sup>[f-a30](#fn-a30)</sup>
 
 <a id="a31"></a>
-**A31 — An auto-added item keeps placeholders in its letter** · 🐞 · minor.
-An item "Auto-add at stage" makes shows the template's text under
-"Message from system" with the submission's title and the journal's name
-filled in, but the recipient and sender placeholders left as they are:
-"Galleys Complete" reads "Dear {$recipientName}," and ends
-"{$signature}" on a journal ("{$senderName}" on a press). The same
-template chosen in the "Add" window fills them on "Save" (Rule 10d).
-Basis: probe. <sup>[f-a31](#fn-a31)</sup>
+**A31 — A discussion's letter keeps "{$signature}" when its writer is not a participant: auto-added, or a manager stays out** · 🐞 · low.
+A discussion that "Auto-add at stage" creates shows the template's text
+under "Message from system" with the submission's title and the
+journal's name filled in, but the recipient and sender placeholders left
+as they are: "Galleys Complete" reads "Dear {$recipientName}," and ends
+"{$signature}" on a journal ("{$senderName}" on a press). When a manager
+adds participants in "Edit", the greeting fills with their names, but
+the closing never fills by itself, while the email those participants
+get is signed with the manager's name. The same happens to a discussion
+a manager adds from a template in the "Add" window without ticking
+themself as a participant. Ticked, the writer's name fills the closing
+on "Save".
+Basis: probe, 2026-10-02. <sup>[f-a31](#fn-a31)</sup>
 
 ### OMP
 
@@ -2092,6 +2098,7 @@ Issue report: [docs/issues/U37-A29-add-window-file-missing-from-history.md](../i
 
 <a id="fn-a31"></a>
 **f-a31** — Note aa: the auto-add path makes the item with no participants and no writer, so the recipient and sender placeholders have nobody to stand for. Live-probed 2026-09-23 on all three apps: "Galleys Complete" auto-added (OJS, OMP) and a template text with "{$recipientName}" (all three) under "Message from system".
+Issue report: [docs/issues/U37-A31-auto-added-item-letter-placeholders.md](../issues/U37-A31-auto-added-item-letter-placeholders.md).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note n: the reviewer group is the first of the press's two reviewer groups the database returns. Live-probed 2026-09-23 on OMP, two fresh presses: "External Reviewer" in one run's manager window, "Internal Reviewer" in others, the manager's, the Author's and the reviewer's windows differing; OJS prints "Reviewer".
