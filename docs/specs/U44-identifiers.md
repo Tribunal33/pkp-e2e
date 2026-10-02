@@ -849,6 +849,10 @@ Left out of the scenarios above, by reason:
   - the guard for A7 (issue report
     `docs/issues/U44-A7-urn-assign-box-leaves-urn-out.md`): a galley's
     "Identifiers" tab whose assign box names the URN it will assign
+  - the guard for A8 (issue report
+    `docs/issues/U44-A8-urn-suffix-pattern-spaces-raw-text-code.md`):
+    the URN settings window refusing a pattern box of spaces with
+    "Please enter the URN suffix pattern for …", not a text code
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -921,7 +925,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | After "Create New Version", a galley's or chapter's Identifiers tab refuses its own copied Publisher ID | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "Add Check Number" and "Assign" end URNs with the wrong check digit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | On an item's "Identifiers" tab, the box that assigns the URN does not name the URN | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A8](#a8) | A suffix pattern of spaces is refused with a raw text code | 🐞 | minor | — |
+| [A8](#a8) | URN settings: a suffix pattern of spaces is refused with a raw text code instead of a message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | "Assign" fills the URN box for a participant whose "Save" is greyed on the "Identifiers" page | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | The URN prefix refusal shows "&amp;lt;NID&amp;gt;" under the box and in the notice | 🐞 | minor | — |
 | [A11](#a11) | URN settings window: every click under the pattern choice raises a page script error | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
@@ -1042,15 +1046,20 @@ ending is left standing alone in the label.
 Basis: probe, 2026-10-02. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — A suffix pattern of spaces is refused with a raw text code** · 🐞 · minor.
-With "Use the pattern entered below…" chosen and a ticked kind's box
-holding only spaces, "Save" is refused, rightly, but the message under
-the box, at the top of the window and in the notice at the top right
-is a text code such as
-"##plugins.pubIds.urn.manager.settings.form.urnPublicationSuffixPatternRequired##"
-instead of "Please enter the URN suffix pattern for articles." An empty
-box is refused properly, with "This field is required."
-Basis: probe, 2026-09-24. <sup>f-a8</sup>
+**A8 — URN settings: a suffix pattern of spaces is refused with a raw text code instead of a message** · 🐞 · low.
+In the URN plugin's settings window, a manager can choose "Use the
+pattern entered below…" and type a suffix pattern for each content type
+that gets URNs (issues, articles and galleys on a journal; monographs,
+chapters, publication formats and files on a press). When a ticked
+type's pattern box holds only spaces, "Save" is refused, rightly. But
+the message under each such box and in the list at the top of the window
+is a raw text code, such as
+"##plugins.pubIds.urn.manager.settings.form.urnPublicationSuffixPatternRequired##",
+instead of "Please enter the URN suffix pattern for articles." Every
+content type shows its own code. The cause is that the form asks for
+message keys that no locale file defines, so the fix is to name the
+right keys.
+Basis: probe, 2026-10-02. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — "Assign" fills the URN box for a participant whose "Save" is greyed on the "Identifiers" page** · 🐞 · low.
@@ -1877,6 +1886,7 @@ without the `.form` segment (`…settings.urnPublicationSuffixPatternRequired`),
 and `Locale::get()` renders a missing key as `##key##`. An empty box is
 stopped in the browser as a required field before any message is
 looked up. Live-probed 2026-09-24 (note q10).
+Issue report: [docs/issues/U44-A8-urn-suffix-pattern-spaces-raw-text-code.md](../issues/U44-A8-urn-suffix-pattern-spaces-raw-text-code.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `FieldPubIdUrn` offers "Assign" whenever it can build the
