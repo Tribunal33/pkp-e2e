@@ -1,0 +1,32 @@
+--- a/classes/subscription/InstitutionalSubscriptionDAO.php
++++ b/classes/subscription/InstitutionalSubscriptionDAO.php
+@@ -593,7 +593,8 @@
+     {
+         $dateEnd = explode('-', $dateEnd);
+ 
+-        $params = array_merge([$dateEnd[0], $dateEnd[1], $dateEnd[2], (int) $journalId], $this->getInstitutionNameFetchParameters());
++        // The institution name joins come before the WHERE clause, so their parameters do too.
++        $params = array_merge($this->getInstitutionNameFetchParameters((int) $journalId), [$dateEnd[0], $dateEnd[1], $dateEnd[2], (int) $journalId]);
+ 
+         $result = $this->retrieveRange(
+             'SELECT	s.*, iss.*,
+@@ -663,12 +664,17 @@
+     /**
+      * Return a list of extra parameters to bind to the institution fetch queries.
+      *
++     * @param ?int $journalId The journal whose primary locale is the fallback; the request's journal when null
++     *
+      * @return array
+      */
+-    public function getInstitutionNameFetchParameters()
++    public function getInstitutionNameFetchParameters(?int $journalId = null)
+     {
+         $locale = Locale::getLocale();
+-        $journal = Application::get()->getRequest()->getContext();
++        // A scheduled task or a CLI tool has no request context: it names the journal.
++        $journal = $journalId === null
++            ? Application::get()->getRequest()->getContext()
++            : Application::getContextDAO()->getById($journalId);
+         $primaryLocale = $journal->getPrimaryLocale();
+         return [
+             'name', $locale,

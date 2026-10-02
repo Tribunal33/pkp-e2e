@@ -1,0 +1,56 @@
+--- a/classes/tasks/OpenAccessNotification.php
++++ b/classes/tasks/OpenAccessNotification.php
+@@ -108,53 +108,6 @@
+             $this->sendNotifications($journal, $todayDate);
+         }
+ 
+-        // If it is the first day of a month but previous month had only
+-        // 30 days then simulate 31st day for open access dates that end on
+-        // that day.
+-        $shortMonths = [2,4,6,9,11];
+-
+-        if (($todayDate['day'] == 1) && in_array(($todayDate['month'] - 1), $shortMonths)) {
+-            $curDate['day'] = 31;
+-            $curDate['month'] = $todayDate['month'] - 1;
+-
+-            if ($curDate['month'] == 0) {
+-                $curDate['month'] = 12;
+-                $curDate['year'] = $todayDate['year'] - 1;
+-            } else {
+-                $curDate['year'] = $todayDate['year'];
+-            }
+-
+-            $journals = $journalDao->getAll(true);
+-            while ($journal = $journals->next()) {
+-                // Send reminders for simulated 31st day of short month
+-                $this->sendNotifications($journal, $curDate);
+-            }
+-        }
+-
+-        // If it is the first day of March, simulate 29th and 30th days for February
+-        // or just the 30th day in a leap year.
+-        if (($todayDate['day'] == 1) && ($todayDate['month'] == 3)) {
+-            $curDate['day'] = 30;
+-            $curDate['month'] = 2;
+-            $curDate['year'] = $todayDate['year'];
+-
+-            $journals = $journalDao->getAll(true);
+-            while ($journal = $journals->next()) {
+-                // Send reminders for simulated 30th day of February
+-                $this->sendNotifications($journal, $curDate);
+-            }
+-
+-            // Check if it's a leap year
+-            if (date('L', mktime(0, 0, 0, 0, 0, $curDate['year'])) != '1') {
+-                $curDate['day'] = 29;
+-
+-                $journals = $journalDao->getAll(true);
+-                while ($journal = $journals->next()) {
+-                    // Send reminders for simulated 29th day of February
+-                    $this->sendNotifications($journal, $curDate);
+-                }
+-            }
+-        }
+         return true;
+     }
+ }

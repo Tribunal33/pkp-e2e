@@ -1421,6 +1421,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U51-A28-refused-form-date-box-shows-today.md`): after a
     refused "Save" with the date boxes empty, the subscription window's date
     boxes stay empty.
+  - the guard for A27 (issue report
+    `docs/issues/U51-A27-expiry-reminder-task-stops-with-error.md`): the
+    "Subscription Expiry Reminders" task, run from the command line with a
+    reminder set, sends the reminder to an individual and an institutional
+    subscription ending on the reminder's day.
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1519,7 +1524,7 @@ entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A4](#a4) | A manager saving a subscription with its email is told to look in a "journal Setup" that has no such fields | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | An issue's table of contents shows a padlock on galleys that editors, the article's author or a former subscriber under "Partial expiry" can open | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A8](#a8) | Expiry reminders run once a month and reach only subscriptions ending on matching days | 🐞 | user-visible | — |
+| [A8](#a8) | Most subscribers get no expiry reminder: the reminder task runs once a month and matches one end date | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A9](#a9) | A reader buying a subscription type that requires membership gets the same page back, unexplained, when "Membership" is empty | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A subscriber who presses "Purchase" beside an active subscription loses access before paying | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Each institutional subscription a reader buys adds another copy of their institution to the journal's list | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1538,9 +1543,9 @@ entry notes otherwise; the team settles them on spec review.
 | [A24](#a24) | While payments are off, a reader's "Learn More" and "View Available Subscription Types" lead to the home page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A25](#a25) | A reader reopening their institutional subscription's purchase page finds "IP ranges" reading "Array" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A26](#a26) | The "Subscription" block reads "Expires: {date}" for an inactive subscription | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A27](#a27) | The expiry-reminder task stops with an error and sends nothing | 🐞 | user-visible · crash: server | — |
+| [A27](#a27) | Subscribers get no expiry reminders: the reminder task stops with an error and sends nothing | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A28](#a28) | After a refused "Save", a subscription's empty date boxes show today's date, but the form does not submit it | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A29](#a29) | Readers get the open-access email twice when an issue opens on the 1st of some months | 🐞 | minor | — |
+| [A29](#a29) | Readers get the "Free to read" email twice for an issue opening on 1 March, May, July, October or December | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | A preprint server's "Posting Mode" says "Saved" but keeps nothing, so the server goes on posting {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A1](#a1) | "Publishing Mode" shows no choice on a new journal, which publishes as open access | ❓ | minor | — |
 | [A5](#a5) | Without payments set up, a signed-in reader pressing a locked galley lands on the home page with no word | ❓ | user-visible | — |
@@ -1619,17 +1624,22 @@ and "Partial expiry" both showed correctly on this page in OJS 2.x; the
 author never did. Basis: probe, 2026-10-01. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — Expiry reminders reach almost nobody** · 🐞 · user-visible.
-"Subscription Expiry Reminders" promise an email a set number of months
-or weeks before and after each subscription's end. The task that sends
-them runs on the first day of each month only, and each run looks for
-subscriptions ending on exactly one day (the run's day moved by the
-chosen interval), so a subscription whose end date falls on any other
-day of the month gets none. The task was written for a
-daily run; it has run monthly since 2025-08-13 (a regression, not a
-choice). Today the task fails before sending anything ([A27](#a27));
-this is what remains once that is fixed. Since: 2025-08-13 · Basis:
-commit. <sup>f-a8</sup>
+**A8 — Most subscribers get no expiry reminder: the reminder task runs once a month and matches one end date** · 🐞 · medium.
+"Subscription Expiry Reminders" promise each subscriber an email a set
+number of months or weeks before and after their subscription ends. The
+task that sends them runs once a month, on the 1st, and each run looks
+only for subscriptions ending on one day: the 1st moved by the chosen
+interval (1 November for "1 Months" before, 8 October for "1 Weeks"
+before). A subscriber whose end date is not one of those days gets no
+reminder: in 2027, 17 end dates out of 365 get the "1 Months" notice.
+Even run daily, the task's date arithmetic never reaches end dates in
+December for the reminders before expiry, nor the 31st of a month for
+the weeks-before reminder. This cannot be seen today: the task stops
+with an error before sending anything ([Subscribers get no expiry
+reminders: the reminder task stops with an error and sends
+nothing](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U51-A27-expiry-reminder-task-stops-with-error.md)).
+The two are best fixed together. Since: 2025-08-13 · Basis: probe,
+2026-10-01. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — A reader buying a subscription type that requires membership gets the same page back, unexplained, when "Membership" is empty** · 🐞 · low.
@@ -1861,13 +1871,17 @@ table reads "Inactive" for it; the reader's galleys are refused. Basis:
 probe, 2026-10-01. <sup>f-a26</sup>
 
 <a id="a27"></a>
-**A27 — The expiry-reminder task fails and sends nothing** · 🐞 · user-visible · crash: server.
-Run as the site's timer runs it, the scheduled task that sends the
-"Subscription Expiry Reminders" stops with an error as soon as a
-journal requiring subscriptions has a reminder list set on
-"Subscription Policies", and no reminder goes out, on its day or any
-other. Subscribers get no warning before their access ends, whatever
-the tab promises. Basis: probe, 2026-09-25. <sup>f-a27</sup>
+**A27 — Subscribers get no expiry reminders: the reminder task stops with an error and sends nothing** · 🐞 · high · crash: server.
+The scheduled task that sends "Subscription Expiry Reminders" stops with
+a server error whenever it reaches a journal that requires subscriptions
+and has any reminder set on its "Subscription Policies" tab. That
+journal does not need any institutional subscription, and the error does
+not depend on the database. No reminder goes out from any journal of the
+site: subscribers get no "Notice of Subscription Expiry" before their
+access ends and no "Subscription Expired" after it. The error shows only
+in the scheduler's output and the server's log; the journal sees its
+reminders set and believes they are sent. Basis: probe, 2026-10-01.
+<sup>f-a27</sup>
 
 <a id="a28"></a>
 **A28 — After a refused "Save", a subscription's empty date boxes show today's date, but the form does not submit it** · 🐞 · medium.
@@ -1885,16 +1899,18 @@ this, since an expiring subscription type requires both. Basis: probe,
 2026-10-01. <sup>f-a28</sup>
 
 <a id="a29"></a>
-**A29 — Readers get the open-access email twice when an issue opens on the 1st of some months** · 🐞 · minor.
-With "Registered readers will have the option of receiving the table of
-contents by email when an issue becomes open access." ticked on
-"Subscription Policies", every user of the journal who keeps "An issue
-has been made open access." on should get one "Free to read: {issue
-name} of {journal name} is now open access" email on the day an issue's
-"Open access date" comes. When that day is 1 May, 1 July, 1 October or
-1 December, each of them gets the same email twice; on 1 March this
-happens in every year but the one after a leap year.
-Since: 2006-04-18 · Basis: test run, 2026-10-01. <sup>f-a29</sup>
+**A29 — Readers get the "Free to read" email twice for an issue opening on 1 March, May, July, October or December** · 🐞 · medium.
+On a journal that requires subscriptions and has the open-access email
+turned on, every user who keeps "An issue has been made open access." on
+should get one "Free to read: {issue} of {journal} is now open access"
+email on the day an issue's "Open access date" comes. When that day is 1
+May, 1 July, 1 October or 1 December, each of them gets the same email
+twice; on 1 March this happens in every year but the one after a leap
+year. On 1 March the daily open-access email also goes out for issues
+opening on 2 or 3 March, a day or two early, and again on their day. A
+reader who follows it finds the issue still restricted. In a leap year
+an issue opening on 29 February gets its email again on 1 March. Since:
+2006-04-18 · Basis: probe, 2026-10-01. <sup>f-a29</sup>
 
 ### OPS
 
@@ -2113,6 +2129,7 @@ Issue report: [pkp-e2e#394](https://github.com/jardakotesovec/pkp-e2e/issues/394
 
 <a id="fn-f-a8"></a>
 **f-a8** — pkp/pkp-lib#11683, OJS commit `b795decf26` (2025-08-13, "fix schedule task frequency") changed `SubscriptionExpiryReminder` from `daily()` to `monthlyOn(1)`; `sendJournalReminders()` still matches one end date per run (note n) and `executeActions()` still simulates the missing days of short months, which only a daily run needs. The pre-Laravel `registry/scheduledTasks.xml` read `<frequency day="1"/>` for this task. Live-probed 2026-09-25 (td29): the schedule list shows `0 0 1 * *`; the exact-day matching could not be seen, as the task fails first (f-a27).
+Issue report: [docs/issues/U51-A8-expiry-reminders-reach-few-subscribers.md](../issues/U51-A8-expiry-reminders-reach-few-subscribers.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `purchaseIndividualSubscription.tpl` has no `common/formErrors.tpl` include (the institutional page has one); `UserHandler::payPurchaseSubscription()` re-displays the form on a failed `validate()`. Live-probed 2026-09-25 (td16).
@@ -2188,6 +2205,7 @@ Issue report: [pkp-e2e#387](https://github.com/jardakotesovec/pkp-e2e/issues/387
 
 <a id="fn-f-a27"></a>
 **f-a27** — Live-probed 2026-09-25 (td29): the scheduled task `SubscriptionExpiryReminder`, run with no request, died with "Call to a member function getPrimaryLocale() on null" in `InstitutionalSubscriptionDAO::getInstitutionNameFetchParameters()` (the request's context is missing when the site's timer runs it); its task log holds "Task process started." and nothing after, twice.
+Issue report: [docs/issues/U51-A27-expiry-reminder-task-stops-with-error.md](../issues/U51-A27-expiry-reminder-task-stops-with-error.md).
 
 <a id="fn-f-a28"></a>
 **f-a28** — Test run 2026-09-25 (Rule 19; scenario 6). The four answers to "Save" were: "A user is required. A subscription start date is required. A subscription end date is required." (no user, no dates); then, Nova chosen, "A subscription start date is required." and "A subscription end date is required." again, the boxes now reading today's date; then, Sam chosen, today's date typed into "Start date" and next year's into "End date", "This user already has a subscription for this journal. A subscription start date is required."; then, Nova chosen, "A subscription start date is required.", the window staying open. A probe the same day read the fields after each step: from the first refusal on, the visible boxes held today's date while the values the window sends were empty; typing today's date left the sent start date empty, next year's end date was sent. The boxes are jQuery UI date pickers: lib/pkp `js/controllers/form/FormHandler.js` renames the visible box to `{name}-removed` and sends a hidden copy under the field's name (`templates/payments/individualSubscriptionForm.tpl`, `dateStart`/`dateEnd` with class `datepicker`).
@@ -2195,6 +2213,7 @@ Issue report: [pkp-e2e#403](https://github.com/jardakotesovec/pkp-e2e/issues/403
 
 <a id="fn-f-a29"></a>
 **f-a29** — Test run 2026-10-01 (Side effects; scenario 12), OJS main (ojs `bade233f73`, lib/pkp `2e377d27fc`): after the scheduled task `APP\tasks\OpenAccessNotification` ran once and the jobs ran, the mail catcher held two emails "Free to read: Vol. 1 No. 1 (2026) of {journal} is now open access" for the Reader and two for the Journal Manager (one expected). Seen on the VM on a reset database and on every OJS CI run of 2026-10-01; the same check passed on every run of 2026-09-30. Mechanism (code read): `executeActions()` calls `sendNotifications()` for today, then, on the 1st of a month whose previous month is in `$shortMonths = [2,4,6,9,11]`, again for a simulated 31st of that month, and on 1 March for a simulated 30 February and, unless `date('L', mktime(0, 0, 0, 0, 0, $year))` (which reads the previous year) says leap, 29 February. `sendNotifications()` matches `strtotime($openAccessDate) == mktime(0, 0, 0, $month, $day, $year)`; PHP's `mktime()` rolls 31 April, June, September and November over to the 1st of the next month, 29 February of a common year and 30 February of a leap year to 1 March, so an issue opening today matches twice and gets two `OpenAccessMailUsers` batches. In the year after a leap year the 29th is skipped and 30 February falls on 2 March, so 1 March sends once. Only 1 October was driven; the other days are read in the code and checked against PHP's date arithmetic. The simulation dates from the task's first version (OJS `b33af3e5a5`, 2006-04-18, then with the list `2,4,6,8,10,12`); the task runs daily (`classes/scheduler/Scheduler.php`, `daily()`).
+Issue report: [docs/issues/U51-A29-open-access-email-sent-twice.md](../issues/U51-A29-open-access-email-sent-twice.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Live-probed 2026-09-23 by the Navigation menus claim check (its OPS2): "Saved" shown, the next load with neither choice marked, "Archives" still in the header; the Search claim check saw every role still reach the Search page. Live-probed 2026-09-25 (td1) on a scratch server: "OPS will not be used…" and "The server will provide open access…" each saved with "Saved" and came back unselected; with the second saved, the visitor and the Reader still saw "Archives", the preprint page and its PDF. OPS `schemas/context.json` has no `publishingMode`, so the context API drops the value (note b); OPS `OpsServerMustPublishPolicy` and the archive header still read it.
