@@ -1,0 +1,46 @@
+--- a/plugins/generic/jatsTemplate/classes/ArticleBody.php
++++ b/plugins/generic/jatsTemplate/classes/ArticleBody.php
+@@ -53,6 +53,7 @@
+         // Provide the full-text.
+         $fileService = app()->get('file');
+         $text = '';
++        $isHtml = false;
+         foreach ($galleys as $galley) {
+             $galleyFile = Repo::submissionFile()->get((int) $galley->getData('submissionFileId'));
+             if (!$galleyFile) {
+@@ -65,13 +66,16 @@
+                 static $purifier;
+                 if (!$purifier) {
+                     $config = HTMLPurifier_Config::createDefault();
+-                    $config->set('HTML.Allowed', 'p');
++                    // Paragraphs, and the inline markup JatsHelper maps to JATS
++                    $config->set('HTML.Allowed', 'p,br,i,em,b,strong,u,sup,sub,a[href],ul,ol,li');
+                     $config->set('Cache.SerializerPath', 'cache');
+                     $purifier = new HTMLPurifier($config);
+                 }
+                 // Remove non-paragraph content
+                 $text = $purifier->purify(file_get_contents(Config::getVar('files', 'files_dir') . '/' . $filepath));
++                $isHtml = true;
+             } else {
++                $isHtml = false;
+                 $parser = SearchFileParser::fromFile($galleyFile);
+                 if ($parser && $parser->open()) {
+                     while (($s = $parser->read()) !== false) {
+@@ -90,6 +94,17 @@
+             return null;
+         }
+ 
++        if ($isHtml) {
++            // The galley's paragraphs become JATS paragraphs, as for every other HTML field
++            $bodyNode = JatsHelper::htmlToJatsElement($this, 'body', $text, allowParagraphs: true);
++            if (!$bodyNode) {
++                return null;
++            }
++            $this->appendChild($bodyNode);
++            return $this->documentElement;
++        }
++
++        // Plain text extracted from another galley type
+         $bodyElement = $this->appendChild($this->createElement('body'));
+         $bodyElement->appendChild($this->createElement('p', htmlspecialchars($text, ENT_IGNORE)));
+         return $bodyElement;

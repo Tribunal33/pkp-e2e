@@ -1,0 +1,36 @@
+--- a/plugins/generic/jatsTemplate/classes/Article.php
++++ b/plugins/generic/jatsTemplate/classes/Article.php
+@@ -82,7 +82,7 @@
+         $articleElement->appendChild($this->importNode($articleFront->create($context, $submission, $section, $issue, $request, $publication), true));
+ 
+         $articleBody = new ArticleBody();
+-        $articleBodyNode = $articleBody->create($submission);
++        $articleBodyNode = $articleBody->create($submission, $publication);
+         if ($articleBodyNode) {
+             $articleElement->appendChild($this->importNode($articleBodyNode, true));
+         }
+--- a/plugins/generic/jatsTemplate/classes/ArticleBody.php
++++ b/plugins/generic/jatsTemplate/classes/ArticleBody.php
+@@ -13,6 +13,7 @@
+ namespace APP\plugins\generic\jatsTemplate\classes;
+ 
+ use APP\facades\Repo;
++use APP\publication\Publication;
+ use APP\submission\Submission;
+ use DOMDocument;
+ use DOMNode;
+@@ -26,10 +27,12 @@
+ {
+     /**
+      * Create xml body DOMNode, or null if no parseable full-text content is available.
++     *
++     * @param ?Publication $publication The version whose galleys hold the full text; the current version when omitted
+      */
+-    public function create(Submission $submission): ?DOMNode
++    public function create(Submission $submission, ?Publication $publication = null): ?DOMNode
+     {
+-        $galleys = $submission->getCurrentPublication()->getData('galleys');
++        $galleys = ($publication ?? $submission->getCurrentPublication())->getData('galleys');
+         // Get HTML galleys for top of list, as they're quickest to parse
+         // PDFs have second-highest priority over other file types
+         $items = $galleys->reduce(function (array $carry, Galley $galley) {

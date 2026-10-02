@@ -766,8 +766,8 @@ entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Make available with publication" is offered to people who may not change it, and "Confirm" is refused | 🐞 | user-visible | — |
 | [A2](#a2) | The Body Text's "Save" is offered to people who may not edit the publication, and is refused | 🐞 | user-visible | — |
-| [A6](#a6) | A version's generated XML takes its body from the current version's galleys | 🐞 | minor | — |
-| [A7](#a7) | The generated XML's body is one paragraph showing the galley's markup as text | 🐞 | minor | — |
+| [A6](#a6) | A new or older article version's JATS XML carries the current version's galley text, not its own | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A7](#a7) | An article's generated JATS XML gives its HTML galley as one paragraph with the tags as text | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | The published "JATS XML" keeps old metadata for up to a day after an edit, and a preview's XML after publishing | 🐞 | minor | — |
 | [A9](#a9) | A URL path runs into the published file's name, and a returning reader keeps the earlier name | 🐞 | minor | — |
 | [A11](#a11) | A Copyeditor pressing "Download" on an uploaded JATS XML file saves a refusal as "download-file.json" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -846,20 +846,37 @@ work nobody else sees.
 Basis: probe, 2026-09-25. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — The body comes from the current version's galleys** · 🐞 · minor.
-On a second version with its own HTML galley, the version's "JATS XML"
-page shows the body of the current (published) version's galley, or none
-when that version has no HTML galley. Each version's XML should take its
-body from its own galleys, as it takes its metadata.
-Basis: probe, 2026-09-25. <sup>f-a6</sup>
+**A6 — A new or older article version's JATS XML carries the current version's galley text, not its own** · 🐞 · low.
+On an article with more than one version, the JATS XML that OJS
+generates for a version takes its full text (the `<body>`) from the
+galleys of the article's current version: the latest published one. It
+does not use the galleys of the version whose "JATS XML" page is open.
+The rest of the XML is that version's own. So while a new version is
+being prepared, its XML shows the published version's galley text, or no
+text when that version has only PDF galleys. Once the new version is
+published, the older version's XML shows the new version's text, though
+it never had it. Editors see this on the version's "JATS XML" page and
+in its "Download". Readers get it only from an older version's "JATS
+XML" link on the article page, which shows only when an editor ticked
+"Make available with publication" for that version (off by default;
+`main` only). Nothing on screen says the text belongs to another
+version.
+Basis: probe, 2026-10-02. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The body is one paragraph with the galley's markup as text** · 🐞 · minor.
-With an HTML galley, the generated body holds a single paragraph in which
-the galley's paragraph tags appear as literal text, and its headings run
-into the text. The body should carry the galley's paragraphs as
-paragraphs.
-Basis: probe, 2026-09-25. <sup>f-a7</sup>
+**A7 — An article's generated JATS XML gives its HTML galley as one paragraph with the tags as text** · 🐞 · medium.
+When an article has an HTML galley, the JATS XML that OJS generates for
+it holds the galley's whole text in one paragraph. The galley's
+paragraph tags appear in that paragraph as literal text, headings run
+into the text, emphasis is dropped, and an "&" in the galley reads
+`&amp;` in the text. Editors see this on the version's "JATS XML" page.
+Readers and indexes get it only where the journal publishes the
+generated XML: when an editor ticks "Make available with publication"
+for the version (`main` only), or when the journal turns on the OAI-PMH
+JATS format and the article has no JATS file of its own among its
+galleys or production files. Both are off by default, and nothing on
+screen says the body is broken.
+Basis: probe, 2026-10-02. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — The published XML stays old for up to a day** · 🐞 · minor.
@@ -1240,9 +1257,11 @@ is made.
 
 <a id="fn-f-a6"></a>
 **f-a6** — Note j: `$submission->getCurrentPublication()` inside `ArticleBody::create()`, while `ArticleFront` and `ArticleBack` use the publication passed in. Probe: d9.
+Issue report: [docs/issues/U48-A6-jats-body-from-current-version-galleys.md](../issues/U48-A6-jats-body-from-current-version-galleys.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Note j: purify to `<p>` only, then `htmlspecialchars()` into a single `createElement('p', …)`. Probe: d8.
+Issue report: [docs/issues/U48-A7-jats-body-html-markup-as-text.md](../issues/U48-A7-jats-body-html-markup-as-text.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note e: the 24-hour `Cache::remember()` is cleared only by upload, delete and the visibility change; neither `Repo::publication()->edit()` nor publishing clears it, so a copy cached from "Preview" (whose download goes through the same `getPublicJatsContent()`) outlives publication. Probe: d14.
