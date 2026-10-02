@@ -2418,7 +2418,7 @@ correct one error." with "Go to Platform ID: This is not formatted
 correctly.", the box hidden, and the stored ID unchanged. The box is
 only hidden (`showWhen`, fn-q), so its value is still checked on
 "Save".
-Issue report: [docs/issues/U64-A10-hidden-platform-id-blocks-site-statistics-save.md](../issues/U64-A10-hidden-platform-id-blocks-site-statistics-save.md).
+Issue report: [docs/issues/U64-A10-hidden-platform-id-blocks-site-statistics-save.md](../issues/U64-A10-hidden-platform-id-blocks-site-statistics-save.md), filed as [pkp-e2e#620](https://github.com/jardakotesovec/pkp-e2e/issues/620).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-27, three apps: 63 downloaded files over
