@@ -198,9 +198,7 @@ Small: a few lines in one JavaScript file per app, and an e2e check.
 - 3.4 and 3.3 (code), both apps:
   the handler is as on `main`, and `templates/settingsForm.tpl` holds the `urnCheckNo`
   checkbox after the content kinds, as on `main`.
-- Introduced: `git blame` on lines 61–67 gives dba6c9d597 ("pkp/pkp-lib#1457
-  pub ids", OJS; no PR on GitHub) and, in OMP, 825986f471 ("pkp/pkp-lib#1527
-  URN plugin", `pkp/omp#306`). Both created the URN handler as a copy of
+- Introduced: `git blame` on lines 61–67 gives dba6c9d597 (`pkp/pkp-lib#1457 pub ids`, OJS; no PR on GitHub) and, in OMP, 825986f471 (`pkp/pkp-lib#1527 URN plugin`, `pkp/omp#306`). Both created the URN handler as a copy of
   the DOI plugin's, whose form at dba6c9d597 had only the four
   `enable…Doi` checkboxes.
 - Not walked: the window's "Save" after it is reopened with the pattern

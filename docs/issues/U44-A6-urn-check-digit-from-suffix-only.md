@@ -234,8 +234,7 @@ question of the URNs already stored.
   and `constructPubId()` skips `customId`. The fix diff applies to each
   branch's file (dry run).
 - Introduced: `git blame` on the `urn.replace(urnPrefix, '')` line gives
-  ce8a2617a0 (OJS) and 8cadd091c3 (OMP), "pkp/pkp-lib#5208 Update URN
-  plugin to support publications"; the parent's handler computed over
+  ce8a2617a0 (OJS) and 8cadd091c3 (OMP), `pkp/pkp-lib#5208 Update URN plugin to support publications`; the parent's handler computed over
   `urnPrefix + urnSuffix`. Tags 3_2_0-0 onwards contain ce8a2617a0.
 - The rule: three URNs registered at the German National Library
   resolve at `https://nbn-resolving.org/<urn>` and end in the whole-URN
