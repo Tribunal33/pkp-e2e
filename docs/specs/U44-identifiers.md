@@ -856,6 +856,11 @@ Left out of the scenarios above, by reason:
   - the guard for OMP1 (issue report `docs/issues/U44-OMP1-urn-settings-
     chapters-files-alone-refused.md`): a press's URN settings saving
     with only "Chapters", only "Files", or those two ticked
+  - the guard for A10 (issue report
+    `docs/issues/U44-A10-urn-prefix-refusal-written-out-brackets.md`):
+    the URN settings window refusing `nbn:de:0000-` with
+    `"urn:"<NID>":"<NSS>` under the box and at the top, no written-out
+    codes
 - **Rarely met**:
   - a Site Administrator without a manager role in the journal: Settings
     reached on a journal only, and there the "URN" row without "Settings"
@@ -930,7 +935,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | On an item's "Identifiers" tab, the box that assigns the URN does not name the URN | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | URN settings: a suffix pattern of spaces is refused with a raw text code instead of a message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | "Assign" fills the URN box for a participant whose "Save" is greyed on the "Identifiers" page | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A10](#a10) | The URN prefix refusal shows "&amp;lt;NID&amp;gt;" under the box and in the notice | 🐞 | minor | — |
+| [A10](#a10) | URN settings: a refused "URN Prefix" shows "&lt;NID&gt;" codes under the box and in a notice | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | URN settings window: every click under the pattern choice raises a page script error | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | "Add Check Number" on an item's "Identifiers" tab writes "NaN" into an empty URN suffix box | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | A galley's or chapter's "Identifiers" tab keeps showing a URN after "Clear" has removed it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1083,13 +1088,17 @@ managers open (3.3 is in the Cause).
 Basis: probe, 2026-10-02. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — The URN prefix refusal shows "&amp;lt;NID&amp;gt;"** · 🐞 · minor.
-A prefix not shaped "urn:…:" is refused, rightly. The top of the
-window reads `The URN prefix pattern must be in the form "urn:"<NID>":"<NSS>.`,
-but the message under the box and the notice at the top right read
-`…"urn:"&lt;NID&gt;":"&lt;NSS&gt;."`, the angle brackets written out as
-codes.
-Basis: probe, 2026-09-24. <sup>f-a10</sup>
+**A10 — URN settings: a refused "URN Prefix" shows "&lt;NID&gt;" codes under the box and in a notice** · 🐞 · low.
+In the URN plugin's settings window, a "URN Prefix" that does not start
+with "urn:", a name and a colon is refused on "Save", rightly. The list
+at the top of the window explains it as `The URN prefix pattern must be
+in the form "urn:"<NID>":"<NSS>.`, but the message under the box reads
+`…"urn:"&lt;NID&gt;":"&lt;NSS&gt;.`, with the angle brackets written out
+as codes. When the manager corrects the prefix and saves, the window
+closes with "Your changes have been saved.", and a notice at the top
+right repeats the refusal with the same codes. The list at the top reads
+correctly, and a prefix such as `urn:nbn:de:0000-` saves.
+Basis: probe, 2026-10-02. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — URN settings window: every click under the pattern choice raises a page script error** · 🐞 · low · crash: script.
@@ -1905,6 +1914,7 @@ Issue report: [docs/issues/U44-A9-urn-assign-offered-without-edit-rights.md](../
 refusal for `nbn:de:0000-`, `urn:nbn` and `URN:NBN:DE:0000-`, with the
 escaped form under the box and in the notice and the plain one in the
 summary at the top (`…form.urnPrefixPattern`).
+Issue report: [docs/issues/U44-A10-urn-prefix-refusal-written-out-brackets.md](../issues/U44-A10-urn-prefix-refusal-written-out-brackets.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-24 (note q10), OJS and OMP: the page
