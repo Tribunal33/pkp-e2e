@@ -982,6 +982,7 @@ Left out of the scenarios above, by reason:
   - {OPS} "Reviewer" chosen in "Create New Role" hiding the whole "Stage Assignment" list, not only greying out its "Production" box (scenario 17, "Roles")
   - a reviewer asked again after a round they left unfinished reading "The review was not completed." on that round's "Previous Reviews" row, and no row ending in "Submitted on" without a date ([A2](#a2); Rule 14): the guard the issue report proposes, once fixed
   - a round-1 reviewer whose submission gets round 2 without them, and a press's Internal Reviewer after "Send to External Review" {OMP}, finding no "Previous Reviews" box on their review, while a reviewer asked again on round 2 finds the round-1 line ([A12](#a12); Actors row 8, Rule 14): the guard the issue report proposes, once fixed
+  - a reviewer who saves a text, empties the box, saves again and reopens the review finding the box empty, and the editor reading no text ([A4](#a4); Rule 13): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -1032,7 +1033,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | The reviewer list's search box, "Sort" control and pager do nothing: every phrase, every sort and every page shows the same rows | 🐞 | user-visible | — |
 | [A2](#a2) | "Previous Reviews" says "Round 1 Review Submitted on" with no date for a round the reviewer never finished | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A4](#a4) | A saved review text that is emptied and saved again keeps its old content on record | 🐞 | user-visible | — |
+| [A4](#a4) | Reviewer empties a saved review text and saves again: the old text stays saved and is what the editor reads | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | The accepted row's "Please complete this review by" date prints with a 00:00:00 clock time | 🐞 | minor | — |
 | [A6](#a6) | A file link opened by an account without file access answers a bare line of text, not the access-denied page | 🐞 | minor | — |
 | [A7](#a7) | A review with nothing typed and no file attached can be submitted | 🐞 | user-visible | — |
@@ -1105,18 +1106,25 @@ step, would tell the reviewer what happened.
 Basis: probe (2026-09-04, both apps). <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
-**A4 — An emptied review text survives "Save for Later"** · 🐞 ·
-user-visible.
-A reviewer types into "For author and editor" (or "For editor" {OJS} /
-"For editor only" {OMP}),
-presses "Save for Later", then clears the box and presses "Save for Later"
-again. "Your changes have been saved." appears both times, but the earlier
-text stays on record: reloading the step shows it again, and it is what the
-editor reads after submission. Only a non-empty box overwrites the saved
-text; an empty one is skipped. The same holds for "Submit Review" with a
-box emptied after a save.
-Basis: probe (2026-09-04, both apps: the reload shows the old text); code
-(what the editor reads, and the submit path). <sup>[f-a4](#fn-a4)</sup>
+**A4 — Reviewer empties a saved review text and saves again: the old text stays saved and is what the editor reads** · 🐞 · medium.
+A reviewer who has saved text in "For author and editor" or "For
+editor" ("For editor only" on a press) with "Save for Later", then
+deletes all of it and saves again, sees "Your changes have been
+saved." and an empty box. The deleted text is still the saved one. It
+is back in the box when the review is opened again, and when the
+reviewer submits with the box showing nothing, the editor reads the
+deleted text as the review.
+
+The editor has no sign that the text was withdrawn. A withdrawn "For
+author and editor" text also goes on by itself: the default emails
+that ask the author for revisions or decline the submission open with
+every submitted review's "For author and editor" text in them, so it
+reaches the author unless the editor cuts it out. An editor-only
+remark first typed into that box by mistake is the plain case.
+
+It needs a review without a review form, which is the default. The
+fix is in one place, this step's save.
+Basis: probe, 2026-10-02. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
 **A5 — The accepted row's due date carries a clock time** · 🐞 · minor.
@@ -2229,6 +2237,7 @@ times, the save request answering `status: true`), reload → both boxes
 showed the first-save texts; new text in one box only → that box updated,
 the other still the first-save text; no email left, the editor's row still
 "Request Accepted".
+Issue report: [docs/issues/U28-A4-emptied-review-text-kept-after-save.md](../issues/U28-A4-emptied-review-text-kept-after-save.md).
 
 <a id="fn-a5"></a>
 **f-a5** — `useDashboardConfigEditorialActivity.js::getEditorialActivityForMyReviewAssignments`

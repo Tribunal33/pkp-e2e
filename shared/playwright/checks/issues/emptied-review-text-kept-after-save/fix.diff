@@ -1,0 +1,50 @@
+--- a/lib/pkp/classes/submission/reviewAssignment/Repository.php
++++ b/lib/pkp/classes/submission/reviewAssignment/Repository.php
+@@ -494,5 +494,25 @@
+         }
+ 
+         return $submissionCommentDao->getById($commentId);
++    }
++
++    /**
++     * Delete the review comment saved for a review assignment, the one
++     * the author may see or the editor-only one.
++     */
++    public function deleteReviewComment(ReviewAssignment $reviewAssignment, bool $viewable): void
++    {
++        /** @var SubmissionCommentDAO $submissionCommentDao */
++        $submissionCommentDao = DAORegistry::getDAO('SubmissionCommentDAO');
++        $submissionComments = $submissionCommentDao->getReviewerCommentsByReviewerId(
++            $reviewAssignment->getSubmissionId(),
++            $reviewAssignment->getReviewerId(),
++            $reviewAssignment->getId(),
++            $viewable
++        );
++
++        while ($comment = $submissionComments->next()) {
++            $submissionCommentDao->deleteObject($comment);
++        }
+     }
+ }
+--- a/lib/pkp/classes/submission/reviewer/form/PKPReviewerReviewStep3Form.php
++++ b/lib/pkp/classes/submission/reviewer/form/PKPReviewerReviewStep3Form.php
+@@ -315,12 +315,13 @@
+             }
+         } else {
+             // No review form configured. Use the default form.
+-            if (strlen($comments = $this->getData('comments')) > 0) {
+-                Repo::reviewAssignment()->saveReviewComment($reviewAssignment, $comments, true);
+-            }
+-
+-            if (strlen($commentsPrivate = $this->getData('commentsPrivate')) > 0) {
+-                Repo::reviewAssignment()->saveReviewComment($reviewAssignment, $commentsPrivate, false);
++            // A box left empty removes the text saved for it earlier.
++            foreach (['comments' => true, 'commentsPrivate' => false] as $field => $viewable) {
++                if (strlen($text = (string) $this->getData($field)) > 0) {
++                    Repo::reviewAssignment()->saveReviewComment($reviewAssignment, $text, $viewable);
++                } else {
++                    Repo::reviewAssignment()->deleteReviewComment($reviewAssignment, $viewable);
++                }
+             }
+         }
+     }
