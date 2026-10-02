@@ -2556,7 +2556,7 @@ Live-probed 2026-09-04 on the press, External Review (seeded journal) and
 Internal Review (scratch press): subject "Review complete: {reviewer}
 recommends None for #{id} …" and the body line "*Recommendation:* None";
 first seen the same day in the notifications feature's claim check.
-Issue report: [docs/issues/U28-OMP2-press-review-complete-email-recommends-none.md](../issues/U28-OMP2-press-review-complete-email-recommends-none.md).
+Issue report: [docs/issues/U28-OMP2-press-review-complete-email-recommends-none.md](../issues/U28-OMP2-press-review-complete-email-recommends-none.md), filed as [pkp-e2e#602](https://github.com/jardakotesovec/pkp-e2e/issues/602).
 
 <a id="fn-omp3"></a>
 **f-omp3** — The key `reviewer.submission.reviewFormResponse.form.responseRequired`
