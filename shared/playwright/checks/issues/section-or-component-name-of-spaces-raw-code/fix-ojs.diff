@@ -1,0 +1,34 @@
+--- a/controllers/grid/settings/sections/form/SectionForm.php
++++ b/controllers/grid/settings/sections/form/SectionForm.php
+@@ -41,7 +41,7 @@
+         );
+ 
+         // Validation checks for this form
+-        $this->addCheck(new \PKP\form\validation\FormValidatorLocale($this, 'title', 'required', 'manager.setup.form.section.nameRequired'));
++        $this->addCheck(new \PKP\form\validation\FormValidatorLocale($this, 'title', 'required', 'manager.sections.form.titleRequired'));
+         $this->addCheck(new \PKP\form\validation\FormValidatorLocale($this, 'abbrev', 'required', 'manager.sections.form.abbrevRequired'));
+         $journal = $request->getJournal();
+         $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'reviewFormId', 'optional', 'manager.sections.form.reviewFormId', [DAORegistry::getDAO('ReviewFormDAO'), 'reviewFormExists'], [Application::ASSOC_TYPE_JOURNAL, $journal->getId()]));
+--- a/lib/pkp/controllers/grid/settings/genre/form/GenreForm.php
++++ b/lib/pkp/controllers/grid/settings/genre/form/GenreForm.php
+@@ -65,7 +65,7 @@
+ 
+         // Validation checks for this form
+         $form = $this;
+-        $this->addCheck(new \PKP\form\validation\FormValidatorLocale($this, 'name', 'required', 'manager.setup.form.genre.nameRequired'));
++        $this->addCheck(new \PKP\form\validation\FormValidatorLocale($this, 'name', 'required', 'manager.setup.genres.nameRequired'));
+         $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'key', 'optional', 'manager.setup.genres.key.exists', function ($key) use ($context, $form) {
+             $genreDao = DAORegistry::getDAO('GenreDAO'); /** @var GenreDAO $genreDao */
+             return $key == '' || !$genreDao->keyExists($key, $context->getId(), $form->getGenreId());
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -2005,6 +2005,9 @@
+ msgid "manager.setup.genres.key.exists"
+ msgstr "The key already exists."
+ 
++msgid "manager.setup.genres.nameRequired"
++msgstr "A name is required for the component."
++
+ msgid "manager.setup.genres.key.alphaNumeric"
+ msgstr ""
+ "The key can contain only alphanumeric characters, underscores, and hyphens, "

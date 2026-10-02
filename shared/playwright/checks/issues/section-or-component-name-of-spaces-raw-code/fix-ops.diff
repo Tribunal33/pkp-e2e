@@ -1,0 +1,46 @@
+--- a/controllers/grid/settings/sections/form/SectionForm.php
++++ b/controllers/grid/settings/sections/form/SectionForm.php
+@@ -39,7 +39,7 @@
+         );
+ 
+         // Validation checks for this form
+-        $this->addCheck(new \PKP\form\validation\FormValidatorLocale($this, 'title', 'required', 'manager.setup.form.section.nameRequired'));
++        $this->addCheck(new \PKP\form\validation\FormValidatorLocale($this, 'title', 'required', 'manager.sections.form.titleRequired'));
+         $this->addCheck(new \PKP\form\validation\FormValidatorLocale($this, 'abbrev', 'required', 'manager.sections.form.abbrevRequired'));
+         $this->addCheck(new \PKP\form\validation\FormValidator($this, 'path', 'required', 'manager.setup.form.section.pathRequired'));
+         $server = $request->getServer();
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -96,6 +96,9 @@
+ msgid "manager.sections.form.abbrevRequired"
+ msgstr "An abbreviated title is required for the section"
+ 
++msgid "manager.sections.form.titleRequired"
++msgstr "A title is required for the section."
++
+ msgid "manager.setup.form.section.pathRequired"
+ msgstr "An URL path is required for the section"
+ 
+--- a/lib/pkp/controllers/grid/settings/genre/form/GenreForm.php
++++ b/lib/pkp/controllers/grid/settings/genre/form/GenreForm.php
+@@ -65,7 +65,7 @@
+ 
+         // Validation checks for this form
+         $form = $this;
+-        $this->addCheck(new \PKP\form\validation\FormValidatorLocale($this, 'name', 'required', 'manager.setup.form.genre.nameRequired'));
++        $this->addCheck(new \PKP\form\validation\FormValidatorLocale($this, 'name', 'required', 'manager.setup.genres.nameRequired'));
+         $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'key', 'optional', 'manager.setup.genres.key.exists', function ($key) use ($context, $form) {
+             $genreDao = DAORegistry::getDAO('GenreDAO'); /** @var GenreDAO $genreDao */
+             return $key == '' || !$genreDao->keyExists($key, $context->getId(), $form->getGenreId());
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -2005,6 +2005,9 @@
+ msgid "manager.setup.genres.key.exists"
+ msgstr "The key already exists."
+ 
++msgid "manager.setup.genres.nameRequired"
++msgstr "A name is required for the component."
++
+ msgid "manager.setup.genres.key.alphaNumeric"
+ msgstr ""
+ "The key can contain only alphanumeric characters, underscores, and hyphens, "

@@ -832,6 +832,9 @@ Left out of the scenarios above, by reason:
   - unsaved boxes and choices kept through another tab of the page and
     back, and dropped on leaving (Rules 2a, 2b): scenario 3 checks typed
     text through a side tab and a reload
+  - a component's "Name" of one space refused with a sentence in the
+    notice, not a raw code ([A10](#a10)): the guard the issue report
+    proposes
 - **Nothing new to test**:
   - the Editor and the Production Editor while their role keeps "Permit
     changes to Settings" (Actors row 1): the same tabs as the Journal
@@ -930,7 +933,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | The "For Reviewer Suggestion" box's help describes the Contributors step | 🐞 | minor | — |
 | [A8](#a8) | The component window's "Key" help misspells "identifier" and calls the component a "genre" | 🐞 | minor | — |
 | [A9](#a9) | In French, a press's and a preprint server's component list shows raw text keys | 🐞 | user-visible | — |
-| [A10](#a10) | A component name of only spaces is refused with a raw text key | 🐞 | minor | — |
+| [A10](#a10) | A component name of only spaces is refused with a raw text key | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A refused component delete leaves its confirmation window spinning | 🐞 | minor | — |
 | [A13](#a13) | The "×" of a refused key's notice cannot be pressed while the component window is open | 🐞 | minor | — |
 | [OJS1](#ojs1) | The LOCKSS and CLOCKSS pages print the License Terms under "Copyright" | 🐞 | minor | — |
@@ -1046,13 +1049,14 @@ keys back.
 Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — A name of only spaces is refused with a raw text key** · 🐞 · minor.
+**A10 — A name of only spaces is refused with a raw text key** · 🐞 · low.
 A manager who saves a component whose "Name" holds only spaces expects
-the empty-name message under the box. The box lets the spaces pass, and
-the window shows a notice at its top right reading
-"##manager.setup.form.genre.nameRequired## (English)"; the window stays
-open and nothing is saved.
-Basis: probe. <sup>f-a10</sup>
+the empty-name message under the box. The browser's own required check
+counts the spaces as filled in, and the window shows a notice at its top
+right reading "##manager.setup.form.genre.nameRequired## (English)", in
+every interface language; the window stays open and nothing is saved.
+Shares its cause with *[Sections](U17-sections.md)* A6.
+Basis: probe, 2026-10-02. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — The default texts link by the address the journal was created at** · ❓ · latent.
@@ -1737,6 +1741,7 @@ each "Edit" window and after "Restore Defaults".
 **f-a10** — Note f: the box's own check accepts spaces, and the server's
 `FormValidatorLocale` answers with `manager.setup.form.genre.nameRequired`,
 which no locale file defines. Live-probed 2026-09-27, two runs per app.
+Issue report: [docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md](../issues/U17-A6-section-or-component-name-of-spaces-raw-code.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Note d: the default texts carry `submissionGuidelinesUrl`,

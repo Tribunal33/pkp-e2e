@@ -888,6 +888,11 @@ are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a section's "Section title" (a series' "Title") of one space refused
+    with the sentence "A title is required for the section." (OMP "…for
+    the series.") in the notice, not a raw code ([A6](#a6)): the guard
+    the issue report proposes
 - **Rarely met**:
   - {OJS} "Omit author names for section items from issues' table of
     contents." ticked, the issue's table of contents without the section's
@@ -1010,7 +1015,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Make a new submission to the {section} section." opens the start form with no section chosen | 🐞 | minor | — |
-| [A6](#a6) | A title of spaces only is refused with a notice that shows a raw code instead of a sentence | 🐞 | minor | — |
+| [A6](#a6) | A title of spaces only is refused with a notice that shows a raw code instead of a sentence | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Under an inactive section's policy, the editorial roles get a submission link to a section the start form does not offer | 🐞 | minor | — |
 | [A8](#a8) | With "Disable Submissions" ticked, the "Submissions" page keeps its per-section submission links | 🐞 | minor | — |
 | [A9](#a9) | The sections interface refuses an unknown section, or another journal's, with a message code instead of a sentence | 🐞 | latent | — |
@@ -1104,14 +1109,17 @@ shared and nothing app-specific stops it.
 Basis: probe, 2026-09-25. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — A title of spaces only answers a raw code** · 🐞 · minor.
+**A6 — A title of spaces only answers a raw code** · 🐞 · low.
 A manager types a single space as the section's "Section title" (a
-series' "Title" on a press) and presses "Save". The window's own check
-passes it, and the refusal that follows is a notice at the top right
-reading "##manager.setup.form.section.nameRequired## (English)"
-("##manager.setup.form.series.nameRequired## (English)" on a press) where
-a sentence such as "A title is required for the section" should be.
-Basis: probe, 2026-09-25. <sup>f-a6</sup>
+series' "Title" on a press) and presses "Save". The browser's own
+required check counts the space as filled in, and the server's refusal
+is a notice at the top right reading
+"##manager.setup.form.section.nameRequired## (English)"
+("##manager.setup.form.series.nameRequired## (English)" on a press), in
+every interface language, where a sentence such as "A title is required
+for the section." should be. Shares its cause with *[Submission intake
+configuration](U58-submission-intake-configuration.md)* A10.
+Basis: probe, 2026-10-02. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — An inactive section's policy offers a link the start form refuses** · 🐞 · minor.
@@ -1491,6 +1499,7 @@ each state the scenarios start from was reached on a scratch context.
 
 <a id="fn-f-a6"></a>
 **f-a6** — fn i and m: `manager.setup.form.section.nameRequired` and `manager.setup.form.series.nameRequired` are defined in no `.po` file of the three apps or `lib/pkp`; the client-side required check does not trim, the server's `FormValidatorLocale` does, and its message goes to the page's notice, not to the field. Live-probed 2026-09-25 (all three apps): note td2.
+Issue report: [docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md](../issues/U17-A6-section-or-component-name-of-spaces-raw-code.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — The start page leaves inactive sections out for everyone (`excludeInactive()`, fn d); the "Submissions" page shows them to the editorial roles (`excludeEditorOnly(!$canSubmitAll)`, fn e) with the same signed-in line under each. Live-probed 2026-09-25 (OJS and OPS, two runs): note td11.

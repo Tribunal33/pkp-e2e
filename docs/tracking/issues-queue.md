@@ -20,7 +20,7 @@ and the hourly routine starts one only when none is running
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | A1: open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md (the rest of U37 written up by the issues session, VM s1, 2026-10-02) |
 | [U47](../specs/U47-media-files.md) | 8 | 2 | 4 | **Taken: issues session, VM s1, 2026-10-02**; OMP1 done with U69 A9 (pkp-e2e#282); A5 done with U66 A2 (pkp-e2e#4) |
 | [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **A21 taken: issues session, VM s1, 2026-10-02** (joined to U47 A4); A23, A24: open report docs/reports/2026-09-27-pkp-lib-13288.md |
-| [U17](../specs/U17-sections.md) | 16 | 2 | 2 | **Taken: issues session, workstation s0, 2026-10-02** |
+| [U17](../specs/U17-sections.md) | 16 | 2 | 2 | **Taken: issues session, workstation s0, 2026-10-02**; A6 done (with U58 A10); OMP9, OPS6: open reports docs/reports/2026-09-25-omp-series-page-blank.md and 2026-09-25-ops-oai-empty-abstract.md |
 | [U59](../specs/U59-hosted-journals.md) | 9 | 2 | 2 |  |
 | [U62](../specs/U62-plugins-management.md) | 8 | 2 | 2 |  |
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 |  |
@@ -51,7 +51,7 @@ and the hourly routine starts one only when none is running
 | [U73](../specs/U73-publication-formats-proof-terms.md) | 18 | 0 | 3 |  |
 | [U40](../specs/U40-publication-metadata.md) | 8 | 0 | 3 | A1 done with U21 A20 ([pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323)) |
 | [U30](../specs/U30-author-response-to-reviews.md) | 7 | 0 | 3 |  |
-| [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 | **A10 taken: issues session, workstation s0, 2026-10-02** (joined to U17 A6) |
+| [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 | A10 done with U17 A6 (docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md) |
 | [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 |  |
 | [U02](../specs/U02-registration-and-account-validation.md) | 8 | 0 | 2 |  |
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 |  |
