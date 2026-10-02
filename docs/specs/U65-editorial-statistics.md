@@ -2060,7 +2060,7 @@ Issue report: [docs/issues/U64-A7-information-icons-out-of-keyboard-reach.md](..
 <a id="fn-f-a6"></a>
 **f-a6** — fn i. Live-probed 2026-09-28: td7; `publicknowledge` read "Site
 Administrator" 0 as manager.maya and as `admin`.
-Issue report: [docs/issues/U65-A6-users-stats-site-administrator-reads-zero.md](../issues/U65-A6-users-stats-site-administrator-reads-zero.md).
+Issue report: [docs/issues/U65-A6-users-stats-site-administrator-reads-zero.md](../issues/U65-A6-users-stats-site-administrator-reads-zero.md), filed as [pkp-e2e#636](https://github.com/jardakotesovec/pkp-e2e/issues/636).
 
 <a id="fn-f-a7"></a>
 **f-a7** — fn i: `getRoleNames()` is keyed by role ID and
