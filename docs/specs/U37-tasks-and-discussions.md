@@ -2003,39 +2003,39 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="fn-a2"></a>
 **f-a2** — `DiscussionManagerFormModal.vue` `#description` = `discussion.form.description` "Open for What? Open to What? Beyond Content" (lib/pkp `locale/en/submission.po`), for add and edit alike. Live-probed 2026-09-04 (Reviewer's review probes, the reviewer's "Add" window). Live-probed 2026-09-23 on all three apps: the line in every "Add" window (Journal Manager, Site Administrator, Editor, Section Editor, Copyeditor, Author, a Reviewer under each review type) and every "Edit" window driven.
-Issue report: [docs/issues/U37-A2-discussion-window-placeholder-subtitle.md](../issues/U37-A2-discussion-window-placeholder-subtitle.md).
+Issue report: [pkp-e2e#426](https://github.com/jardakotesovec/pkp-e2e/issues/426) ([docs/issues/U37-A2-discussion-window-placeholder-subtitle.md](../issues/U37-A2-discussion-window-placeholder-subtitle.md)).
 
 <a id="fn-a3"></a>
 **f-a3** — `addTask()` adds the current user to the notified list; `addNote()` notifies every participant, the writer included. Live 2026-09-04 on all three apps (Notifications center's scenario 5: the Manager's own mailbox holds the copy). The pre-rework `QueriesGridHandler::updateQuery()` removed the current user ("Don't notify the current user", pkp-lib `958592a15`, 2025); the rework is pkp/pkp-lib#12322 (2026-02-10). Live-probed 2026-09-23 on all three apps: the writer's mailbox holding each message they wrote, with its attachments, the Activity Log's "View Email" reading From and To the same person, and a "Discussion added." row per message in the writer's own Tasks panel.
-Issue report: [docs/issues/U37-A3-writer-told-of-own-message.md](../issues/U37-A3-writer-told-of-own-message.md).
+Issue report: [pkp-e2e#420](https://github.com/jardakotesovec/pkp-e2e/issues/420) ([docs/issues/U37-A3-writer-told-of-own-message.md](../issues/U37-A3-writer-told-of-own-message.md)).
 
 <a id="fn-a4"></a>
 **f-a4** — `Template::scopeWithSearch()` maps the words `task(s)`/`discussion(s)` to a type and calls `$query->filterByType($typeFilter)`; the model has `scopeWithType()` and no `scopeFilterByType()`, so the query builder throws `BadMethodCallException` and `GET editTaskTemplates?search=…` fails. Live-probed 2026-09-23 (all three apps): each Enter sends `GET /api/v1/editTaskTemplates?stageId={4|5}&search=…` twice and each answers 500; the "Error" window reads "Call to undefined method PKP\core\SettingsBuilder::filterByType()" with "OK".
-Issue report: [docs/issues/U37-A4-find-template-discussion-task-error.md](../issues/U37-A4-find-template-discussion-task-error.md).
+Issue report: [pkp-e2e#417](https://github.com/jardakotesovec/pkp-e2e/issues/417) ([docs/issues/U37-A4-find-template-discussion-task-error.md](../issues/U37-A4-find-template-discussion-task-error.md)).
 
 <a id="fn-a5"></a>
 **f-a5** — `Template::promote()` fills participants from the template's roles' stage assignments; `setValuesFromTemplate()` sets title, task box, due date, owner and message, never `participants`. Texts `discussion.template.discussionDescription` / `…taskDescription`. Live-probed 2026-09-23 on all three apps (td4).
-Issue report: [docs/issues/U37-A5-template-says-it-fills-participants.md](../issues/U37-A5-template-says-it-fills-participants.md).
+Issue report: [pkp-e2e#421](https://github.com/jardakotesovec/pkp-e2e/issues/421) ([docs/issues/U37-A5-template-says-it-fills-participants.md](../issues/U37-A5-template-says-it-fills-participants.md)).
 
 <a id="fn-a6"></a>
 **f-a6** — `EditTask` `description` closure (note v) against `QueryWritePolicy` (note b): a responsible participant who holds neither `MANAGER` nor `SUB_EDITOR` passes the write policy and fails the closure unless they wrote the head note; `saveWorkItem()` always sends `description`. The recorded-creator case: *Stage participants* A5 (a Participants message's `createdBy` is the recipient, its note's writer the sender), though that note is unflagged (A9), so the closure there finds no head note and passes. Live-probed 2026-09-23 (all three apps): the owner case refuses (td8), also with only one more participant ticked; the recorded creator of a Participants message saves, and the save adds a message (A9).
-Issue report: [docs/issues/U37-A6-task-owner-cannot-save-edit.md](../issues/U37-A6-task-owner-cannot-save-edit.md).
+Issue report: [pkp-e2e#419](https://github.com/jardakotesovec/pkp-e2e/issues/419) ([docs/issues/U37-A6-task-owner-cannot-save-edit.md](../issues/U37-A6-task-owner-cannot-save-edit.md)).
 
 <a id="fn-a7"></a>
 **f-a7** — The two texts are defined in `ojs/locale/en/locale.po` only (pkp/pkp-lib#12278, `05ade99f1e`, 2026-03-22, added them to OJS's own file); neither `lib/pkp/locale/en/*.po` nor OMP's or OPS's locale files have them, and the application prints a missing key as `##key##`. Live-probed 2026-09-23: both keys on a press and a preprint server, both texts on a journal (td8, and past the hour).
-Issue report: [docs/issues/U37-A7-press-server-edit-refusal-raw-key.md](../issues/U37-A7-press-server-edit-refusal-raw-key.md).
+Issue report: [pkp-e2e#424](https://github.com/jardakotesovec/pkp-e2e/issues/424) ([docs/issues/U37-A7-press-server-edit-refusal-raw-key.md](../issues/U37-A7-press-server-edit-refusal-raw-key.md)).
 
 <a id="fn-a8"></a>
 **f-a8** — `useDiscussionManagerForm` seeds `selectedFiles` with the head note's files tagged `FileAttacherWorkflowStage`, so `saveWorkItem()` sends their ids as `submissionFileIds`; `EditTask` makes `submissionFileIds` `prohibitedIf` the user is not manager/admin or an assigned sub-editor or assistant, and a non-empty value then fails validation. Live-probed 2026-09-23 (all three apps): the answer is 422 on `submissionFileIds` "##validator.prohibited##", heard only in the error list's screen-reader text "Go to submissionFileIds: ##validator.prohibited##"; "Jump to next error" moves focus to itself; the Copyeditor's and the manager's same edit answered 200 (td9).
-Issue report: [docs/issues/U37-A8-author-discussion-with-file-edit-refused.md](../issues/U37-A8-author-discussion-with-file-edit-refused.md).
+Issue report: [pkp-e2e#423](https://github.com/jardakotesovec/pkp-e2e/issues/423) ([docs/issues/U37-A8-author-discussion-with-file-edit-refused.md](../issues/U37-A8-author-discussion-with-file-edit-refused.md)).
 
 <a id="fn-a9"></a>
 **f-a9** — The Participants message path of note aa (`PKPStageParticipantNotifyForm::sendMessage()`) creates its first `Note` without `isHeadnote`; `addQuery()` (the comments box and the recommendation) has flagged it since pkp/pkp-lib#13409 (`3dc90c81a6`, 2026-09-29, issue pkp/pkp-lib#13345), and the auto-added item was never affected. On the Participants path `editTask()` reads the head note as `null` (its later `$headnote->id` reads a property of null, a warning); `EditorialTask::saveHeadnote()` finds no flagged note and saves a new flagged one with the edited text, which later saves update; the window heads it with the item's `createdBy`. With no head note the `EditTask` `description` closure passes (note v), so the recipient's save is held neither to the message's writer nor to the hour. Live-probed 2026-09-23, before that change (all three apps, the recommendation OJS and OMP): the "Notify", comments-box and recommendation discussions each gaining a second message under the recipient's, the Author's or the recommender's username after another person's "Save". Re-probed 2026-09-30: the Participants path alone, a name-only "Save" adding the copy and the next one rewriting it, and the recipient Author's and Funding Coordinator's saves past the hour (td10).
-Issue report: [docs/issues/U37-A9-participant-message-edit-adds-message.md](../issues/U37-A9-participant-message-edit-adds-message.md).
+Issue report: [pkp-e2e#422](https://github.com/jardakotesovec/pkp-e2e/issues/422) ([docs/issues/U37-A9-participant-message-edit-adds-message.md](../issues/U37-A9-participant-message-edit-adds-message.md)).
 
 <a id="fn-a10"></a>
 **f-a10** — `EditTask::messages()` maps `dateDue.after_or_equal` to `validation.after_or_equal` "Start date should be greater than or equal to today" (lib/pkp `locale/en/validation.po`). The date field's `min: 'today'` greys earlier days in the picker; typed, it reaches the server (td11, live-probed 2026-09-23).
-Issue report: [docs/issues/U37-A10-past-due-date-speaks-of-start-date.md](../issues/U37-A10-past-due-date-speaks-of-start-date.md).
+Issue report: [pkp-e2e#425](https://github.com/jardakotesovec/pkp-e2e/issues/425) ([docs/issues/U37-A10-past-due-date-speaks-of-start-date.md](../issues/U37-A10-past-due-date-speaks-of-start-date.md)).
 
 <a id="fn-a11"></a>
 **f-a11** — Live 2026-09-19 on all three apps (Production stage's claim check): "Cancel" in the discussions "Add" window closed it with the typed content lost and no prompt. The close control's question: note r. Live-probed 2026-09-23 in three separate drives on all three apps: "Cancel" on a changed window asks "Warning" (td2); the silent close did not reproduce, so the entry is retired.
@@ -2054,11 +2054,11 @@ Issue report: [docs/issues/U37-A10-past-due-date-speaks-of-start-date.md](../iss
 
 <a id="fn-a16"></a>
 **f-a16** — Note l: the overdue test compares now with the due date's midnight. Live-probed 2026-09-23 on all three apps: a task due 2026-09-23 (seeded, and one saved on screen with that date) read "Overdue" with the overdue line that day.
-Issue report: [docs/issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md](../issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md).
+Issue report: [pkp-e2e#418](https://github.com/jardakotesovec/pkp-e2e/issues/418) ([docs/issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md](../issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md)).
 
 <a id="fn-a17"></a>
 **f-a17** — Note l: `TaskResource::toArray()` prefixes the overdue line whether or not the task is closed; the badge alone checks `dateClosed`. Live-probed 2026-09-23 on all three apps: a task three days past due, closed from its row, kept the line in "Activity" and History under "Closed".
-Issue report: [docs/issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md](../issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md).
+Issue report: [pkp-e2e#418](https://github.com/jardakotesovec/pkp-e2e/issues/418) ([docs/issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md](../issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md)).
 
 <a id="fn-a18"></a>
 **f-a18** — Note aa: none of these paths writes an event-log entry. Live-probed 2026-09-23 on all three apps (the recommendation on OJS and OMP): "Notify", "Assign", the comments box, the recommendation and an auto-added template each left an empty "Activity" and a History reading "No Items".
@@ -2071,7 +2071,7 @@ Issue report: [docs/issues/U37-A16-A17-task-due-today-or-closed-reads-overdue.md
 
 <a id="fn-a21"></a>
 **f-a21** — Note r: the message box field has no label, so the error summary's link reads `undefined`. Live-probed 2026-09-23 on all three apps, in the "Add", "Edit" and template windows.
-Issue report: [docs/issues/U37-A21-error-list-calls-message-box-undefined.md](../issues/U37-A21-error-list-calls-message-box-undefined.md).
+Issue report: [pkp-e2e#427](https://github.com/jardakotesovec/pkp-e2e/issues/427) ([docs/issues/U37-A21-error-list-calls-message-box-undefined.md](../issues/U37-A21-error-list-calls-message-box-undefined.md)).
 
 <a id="fn-a22"></a>
 **f-a22** — Note r. Live-probed 2026-09-23 on all three apps: the browser's `beforeunload` dialog on the next load after each "Warning" › "Yes", the "Edit" window's included (td16). Live-probed 2026-09-29 on all three apps, two runs: no dialog 2 s or 15 s after a "Warning" › "Yes" of the "Add", "Edit" or template window, nor at once with the closing slide running; with animations disabled a reload issued at once still met it, as did one right after the test tooling's settle wait (4 of 6), because the closed form's handler outlives its window by about 0.3 s (note r). The 2026-09-23 reloads were of that kind, so the entry is retired.
@@ -2087,7 +2087,7 @@ Issue report: [docs/issues/U37-A21-error-list-calls-message-box-undefined.md](..
 
 <a id="fn-a26"></a>
 **f-a26** — `TableCellSelect.onChange()` calls `preventDefault()` on the change event, too late to undo the browser's own toggle, so the input keeps the new state while the icon is drawn from the saved one. Live-probed 2026-09-23 on all three apps: after "No" the row's "Started" read checked and a closed discussion's "Closed" not checked to the accessibility tree until a reload; the same on the template screen's "Auto-add at stage" box.
-Issue report: [docs/issues/U37-A26-no-answer-box-screen-reader-opposite-state.md](../issues/U37-A26-no-answer-box-screen-reader-opposite-state.md).
+Issue report: [pkp-e2e#431](https://github.com/jardakotesovec/pkp-e2e/issues/431) ([docs/issues/U37-A26-no-answer-box-screen-reader-opposite-state.md](../issues/U37-A26-no-answer-box-screen-reader-opposite-state.md)).
 
 <a id="fn-a27"></a>
 **f-a27** — Note y: every log call attributes to `Validation::loggedInAs()` when present, while the note is written as the impersonated user. Live-probed 2026-09-23 (OJS twice, OMP and OPS once): "User" "{Journal Manager} (acting as {Section Editor})", "Event" and "Activity" naming the manager's username, the message headed with the Section Editor's, the email from the Section Editor's address. *Login & sessions* says impersonation is total.
@@ -2097,18 +2097,18 @@ Issue report: [docs/issues/U37-A26-no-answer-box-screen-reader-opposite-state.md
 
 <a id="fn-a29"></a>
 **f-a29** — Note v: `editTask()` logs the first message's files through `logTaskFiles()`; the add path logged no file line in the drive. Live-probed 2026-09-23 (OJS twice, OMP and OPS once): a file attached at "Add" listed in the window, absent from the History until "Edit" removed it ("… removed by …"); a reply's file logged as "… uploaded by …".
-Issue report: [docs/issues/U37-A29-add-window-file-missing-from-history.md](../issues/U37-A29-add-window-file-missing-from-history.md).
+Issue report: [pkp-e2e#428](https://github.com/jardakotesovec/pkp-e2e/issues/428) ([docs/issues/U37-A29-add-window-file-missing-from-history.md](../issues/U37-A29-add-window-file-missing-from-history.md)).
 
 <a id="fn-a30"></a>
 **f-a30** — Note ac: the removal deletes the person's participant rows, the owner's included; the drive saw no History line. Live-probed 2026-09-23 (OJS twice, OMP and OPS once): "Task Owner: {username}" before the Participants panel's "Remove", "Task Owner:" after, the History holding only the created and initiated lines.
 
 <a id="fn-a31"></a>
 **f-a31** — Note aa: the auto-add path makes the item with no participants and no writer, so the recipient and sender placeholders have nobody to stand for. Live-probed 2026-09-23 on all three apps: "Galleys Complete" auto-added (OJS, OMP) and a template text with "{$recipientName}" (all three) under "Message from system".
-Issue report: [docs/issues/U37-A31-auto-added-item-letter-placeholders.md](../issues/U37-A31-auto-added-item-letter-placeholders.md).
+Issue report: [pkp-e2e#430](https://github.com/jardakotesovec/pkp-e2e/issues/430) ([docs/issues/U37-A31-auto-added-item-letter-placeholders.md](../issues/U37-A31-auto-added-item-letter-placeholders.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note n: the reviewer group is the first of the press's two reviewer groups the database returns. Live-probed 2026-09-23 on OMP, two fresh presses: "External Reviewer" in one run's manager window, "Internal Reviewer" in others, the manager's, the Author's and the reviewer's windows differing; OJS prints "Reviewer".
-Issue report: [docs/issues/U37-OMP1-external-reviewer-listed-as-internal.md](../issues/U37-OMP1-external-reviewer-listed-as-internal.md).
+Issue report: [pkp-e2e#429](https://github.com/jardakotesovec/pkp-e2e/issues/429) ([docs/issues/U37-OMP1-external-reviewer-listed-as-internal.md](../issues/U37-OMP1-external-reviewer-listed-as-internal.md)).
 
 <a id="fn-ops1"></a>
 **f-ops1** — OPS `registry/taskTemplates.xml` gives `EDITOR_ASSIGN_PRODUCTION` the text `emails.editorAssignProduction.body`, which neither OPS's locale nor lib/pkp defines (OJS and OMP define it in their own `emails.po`); `installTaskTemplates()` installs a missing key as an empty string (`setMissingKeyHandler(fn () => '')`). The Participants panel's side of the same template: *Stage participants* OPS2 (live 2026-09-22). Live-probed 2026-09-23 (td6): auto-add on, it made a discussion with no first message.
