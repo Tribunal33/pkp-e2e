@@ -795,6 +795,9 @@ Left out of the scenarios above, by reason:
   - signing in from the Login page of a journal not enabled publicly
     returning to the page asked for ([A8](#a8)): the guard the issue
     report proposes
+  - the "Edit" and "Create Journal" windows closed as soon as the form
+    shows, with no page error ([A7](#a7)): the guard the issue report
+    proposes
 - **Rarely met**:
   - exactly one journal enabled publicly, where the site's address opens
     that journal instead of the list (Rule 19; Settings bullet 4): a
@@ -895,7 +898,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | Journal form: the address in front of "Path" leaves out "index.php/", so it is not the address the site gives the journal | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | Settings Wizard: after a saved "Path" change, further saves and list actions fail until a reload | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "Jump to next error" on a refused form always scrolls to the first refused field, never on to the next | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A7](#a7) | Closing the "Edit" or "Create Journal" window right after it opens makes the page's script fail | 🐞 | invisible · crash: script | — |
+| [A7](#a7) | Hosted Journals: closing the "Edit" or "Create Journal" window right after it opens makes the page's script fail | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | Signing in at a journal not enabled publicly leads to the Dashboard or home page, not the page asked for | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A press or preprint server that holds an institution cannot be removed and is left half deleted {OMP OPS} | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | The path "0" is refused with a raw code on a preprint server | 🐞 | minor | — |
@@ -1000,14 +1003,18 @@ was added in 2019.
 Basis: probe, 2026-10-02. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — Closing the journal form's window right after it opens makes the page's script fail** · 🐞 · invisible · crash: script.
-The Site Administrator opens a row's "Edit" window, or the "Create
-Journal" ("Create Press", "Create Server") window, and presses "Close"
-within about 0.7 s of the form showing. The window closes as asked, and
-a moment later the page's script fails: nothing on screen shows it or
-changes. A window left open longer closes without the failure. A person
-rarely closes that fast; an automated test does.
-Basis: test run. <sup>f-a7</sup>
+**A7 — Hosted Journals: closing the "Edit" or "Create Journal" window right after it opens makes the page's script fail** · 🐞 · low · crash: script.
+An uncaught JavaScript error is written to the browser's console, and
+the page works on, when the Site Administrator opens a row's "Edit"
+window, or the "Create Journal" ("Create Press", "Create Server")
+window, on Administration › "Hosted Journals" and presses "Close"
+within about 0.4 s of the form showing. The window closes as asked,
+nothing on screen shows the error or changes, and nothing is lost.
+
+A window left open longer closes without the error. Only the journal
+form's windows have it, because "Path" there is the only field with an
+address shown in front of it.
+Basis: test run, 2026-10-02. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — Signing in at a journal not enabled publicly leads to the Dashboard or home page, not the page asked for** · 🐞 · low.
@@ -1796,6 +1803,7 @@ scenario 3, OMP in scenarios 3 and 5, OPS in scenario 5).
 No other window close in those runs raised it, the "Edit" window's own
 close about a second after "Saved" and a "Create Journal" window closed
 after typing included. Nothing on screen differed.
+Issue report: [docs/issues/U59-A7-journal-form-quick-close-script-error.md](../issues/U59-A7-journal-form-quick-close-script-error.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — `PKPPageRouter::route()` sends a signed-out request for a

@@ -1,0 +1,31 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldText.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldText.vue
+@@ -129,6 +129,7 @@
+ 			inputStyles: {},
+ 			isDisabled: false,
+ 			prefixStyles: {},
++			prefixTimer: null,
+ 		};
+ 	},
+ 	computed: {
+@@ -173,7 +174,7 @@
+ 		 * take longer on slower machines.
+ 		 */
+ 		this.$nextTick(() => {
+-			setTimeout(() => {
++			this.prefixTimer = setTimeout(() => {
+ 				if (this.prefix) {
+ 					this.inputStyles = {
+ 						direction: 'ltr',
+@@ -216,6 +217,11 @@
+ 		if (this.optIntoEdit || this.disabled) {
+ 			this.isDisabled = true;
+ 		}
++	},
++	beforeUnmount() {
++		// The form can be removed (a window closed) before the prefix is
++		// measured; the timer would then read refs that are gone.
++		clearTimeout(this.prefixTimer);
+ 	},
+ 	methods: {
+ 		/**
