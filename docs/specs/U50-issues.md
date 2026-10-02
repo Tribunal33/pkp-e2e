@@ -1070,6 +1070,9 @@ Left out of the scenarios above, by reason:
     `docs/issues/U09-A19-static-page-content-change-lost-on-close.md`,
     pkp-e2e#375): text typed only in "Description" on "Issue Data",
     then another tab asking the unsaved-change question
+  - the guard for A4 (issue report
+    `docs/issues/U50-A4-refused-save-date-published-today.md`): an empty
+    "Date Published" staying empty after a refused "Save"
 - **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
@@ -1146,7 +1149,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Create Issue" arrives with "Title" ticked and refuses an untitled issue with only a passing notice | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | Unpublishing an older back issue leaves the journal with no current issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A4](#a4) | After a refused "Save", "Date Published" shows today's date, which the issue saved next does not get | 🐞 | minor | — |
+| [A4](#a4) | After a refused "Save" on an issue's form, an empty "Date Published" shows today's date | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A "Volume" of 99999 leaves "Create Issue" open with nothing shown | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "Year" accepts letters: "20a6" is saved as 20 without a message | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | "Future Issues" lists "No. 10" before "No. 2" of the same volume and year | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1211,12 +1214,17 @@ published ones? Lean: warn with the existing text; a published issue is
 better unpublished first. Basis: probe, 2026-09-25. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — "Date Published" shows a date the issue never gets** · 🐞 · minor.
-After "Save" is refused on "Create Issue" or "Issue Data", the "Date
-Published" box shows today's date, though nobody typed it. The issue
-saved next has no Date Published, so the box showed a date the issue
-never got. The box should keep what was typed, empty included. Basis:
-probe, 2026-09-25. <sup>f-a4</sup>
+**A4 — After a refused "Save" on an issue's form, an empty "Date Published" shows today's date** · 🐞 · low.
+A journal manager or editor leaves "Date Published" empty on "Create
+Issue" or "Issue Data", and "Save" is refused for another reason, such
+as a "Volume" that is not a number. The form comes back with today's
+date in "Date Published", though nobody typed it. They expect the box to
+stay empty. The date is only shown, never saved. If the editor fixes the
+other error and saves again without touching the box, the issue is saved
+with no Date Published. On a published issue whose date was emptied, the
+next "Save" is refused again with "Date Published is required when the
+issue is published.", because the shown date is not sent.
+Basis: probe, 2026-10-02. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A large "Volume" fails the save** · 🐞 · medium · crash: server.
@@ -1563,6 +1571,7 @@ Issue report: [docs/issues/U50-A2-unpublish-back-issue-clears-current-issue.md](
 
 <a id="fn-f-a4"></a>
 **f-a4** — Live-probed 2026-09-25 (Fields "Date Published"; Rule 3), OJS: on "Create Issue" with the date box empty, the refused "Save" of A1 left "2026-09-25" in the box; after unticking "Title" and saving, the issue's "Issue Data" showed the date empty. On a published issue, after "Date Published is required when the issue is published." the box showed today again. Mechanism not read.
+Issue report: [docs/issues/U50-A4-refused-save-date-published-today.md](../issues/U50-A4-refused-save-date-published-today.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Live-probed 2026-09-25 (td3), OJS: "Volume" 99999 with a valid "Year": `POST …/$$$call$$$/grid/issues/future-issue-grid/update-issue` answered 500, the window stayed open with no message and the list was unchanged. The schema stores `volume` in a `smallint` column (note i), whose limit is 32767, the likely cause; only 99999 was driven, and no server-log line was read.
