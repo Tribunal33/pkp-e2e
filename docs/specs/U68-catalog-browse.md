@@ -670,7 +670,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | One book reads "1 Titles" on the catalog, series and "New Releases" pages | 🐞 | minor | — |
+| [A1](#a1) | One book reads "1 Titles" on the catalog, series and "New Releases" pages | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | Every book summary's cover is a link a screen reader cannot name | 🐞 | minor | — |
 | [A3](#a3) | A series' page shows no name, description or ISSN, and ignores the series' order | 🐞 | user-visible | — |
 | [A4](#a4) | A series' picture does not lead to its full size | 🐞 | minor | — |
@@ -686,11 +686,11 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — "1 Titles"** · 🐞 · minor.
+**A1 — "1 Titles"** · 🐞 · low.
 A catalog page, series' page or "New Releases" page with one book reads
 "1 Titles" where "1 Title" is expected. A press's category page does the
 same ([Categories](U16-categories.md#a19), its A19).
-Basis: probe, 2026-09-25. <sup>f-a1</sup>
+Basis: probe, 2026-10-02. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — The cover link has no name** · 🐞 · minor.
@@ -1238,6 +1238,7 @@ or URL Path}`.
 form (OMP `locale/en/submission.po`); the catalog, series and "New
 Releases" templates all use it. Seen 2026-09-25 by the Sections spec
 (its note td5): a series' page read "1 Titles".
+Issue report: [docs/issues/U16-A19-one-item-reads-1-items.md](../issues/U16-A19-one-item-reads-1-items.md), shared with [Categories A19](U16-categories.md#a19).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note g: the cover `<a>` holds only the `<img>`, whose

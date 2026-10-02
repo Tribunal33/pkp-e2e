@@ -817,6 +817,10 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a category with one item reading "1 Item" ([A19](#a19)): the guard
+    the issue report proposes
+  - an empty category's page showing its "Nothing has been published"
+    message ([A1](#a1)): the guard the issue report proposes
   - a category's "Path" with "/" refused on save ([A8](#a8)): the guard
     the issue report proposes
   - a category's "Name" changed, the window closed without saving, and
@@ -895,7 +899,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A category with nothing in it never says so: "0 Items" and "0 - 0 of 0 items" instead of "Nothing has been published in this category yet." | 🐞 | minor | — |
+| [A1](#a1) | A visitor opening an empty category sees "0 Items" and no "Nothing has been published" message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | A category's "Order of articles" has no effect on its page | 🐞 | user-visible | — |
 | [A6](#a6) | A category's picture is not a link; its full-size version is unreachable from the page | 🐞 | minor | — |
 | [A7](#a7) | The picture's "Alternate text" is used nowhere; a journal's page describes the picture as "null" | 🐞 | minor | — |
@@ -909,7 +913,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | A name changed and closed without saving comes back in the same category's next "Edit" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | A file that is not a picture leaves a broken preview in "Cover Image" | 🐞 | minor | — |
 | [A18](#a18) | The delete dialog's confirmation box has no name for a screen reader | 🐞 | minor | — |
-| [A19](#a19) | A category with one item reads "1 Items" ("1 Titles" on a press) | 🐞 | minor | — |
+| [A19](#a19) | A category with one item reads "1 Items" ("1 Titles" on a press) | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | With the "Browse" block placed, every breadcrumb's last step gets the block's grey bar | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's category page shows a broken-picture mark instead of the picture | 🐞 | user-visible | — |
 | [OMP2](#omp2) | The press's "Browse" block lists sub-categories among the top-level ones, not under their parents | 🐞 | minor | — |
@@ -925,15 +929,17 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — An empty category never says so** · 🐞 · minor.
-A category with nothing listed should read "Nothing has been published in
-this category yet." ("No titles have been published yet." on a press).
-Instead its page shows "0 Items" and "0 - 0 of 0 items" (on a press "0
-Titles" and the heading "All Books" with nothing under it), and the
-message never appears. A visitor cannot tell an empty category from a list
-that failed to load.
-It worked until the page moved onto the search machinery in January 2026 (read from the code): a regression.
-Since: 2026-01-09 · Basis: probe, 2026-09-25; the regression, code reading. <sup>f-a1</sup>
+**A1 — A visitor opening an empty category sees "0 Items" and no "Nothing has been published" message** · 🐞 · low.
+A visitor who opens a category that holds nothing yet should read
+"Nothing has been published in this category yet." on a journal or a
+preprint server, and "No titles have been published yet." on a press.
+Instead a journal's and a preprint server's page shows "0 Items" and
+"0 - 0 of 0 items", and a press's page shows "0 Titles" and the heading
+"All Books" with nothing under it.
+The count line still says the category is empty, so the visitor only
+misses the sentence. The fault is in each app's own category page,
+which the default theme uses.
+Since: 2026-01-09 · Basis: probe, 2026-10-02; the regression, code reading. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — "Order of articles" does nothing** · 🐞 · user-visible.
@@ -1102,10 +1108,10 @@ not told what the box is for.
 Basis: probe, 2026-09-25. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — "1 Items"** · 🐞 · minor.
+**A19 — "1 Items"** · 🐞 · low.
 A category with one published item reads "1 Items" ("1 Titles" on a
 press) where "1 Item" is expected.
-Basis: probe, 2026-09-25. <sup>f-a19</sup>
+Basis: probe, 2026-10-02. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — The "Browse" block restyles the breadcrumb** · 🐞 · minor.
@@ -1848,6 +1854,7 @@ true; `page_info` on an empty paginator prints `navigation.items` with
 `606ad4ef0b` 2026-01-09, `13bd3b2eaa` 2026-01-13).
 Live-probed 2026-09-25: note td7. The "before" was not opened, the
 stable-line servers being down.
+Issue report: [docs/issues/U16-A1-empty-category-no-message.md](../issues/U16-A1-empty-category-no-message.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note i. Live-probed 2026-09-25: note td9, the order the items
@@ -1977,6 +1984,7 @@ the accessibility tree lists it as a `textbox` with no name.
 **f-a19** — Note g: `catalog.browseTitles` "{$numTitles} Items" (OMP
 "{$numTitles} Titles") has one form for every number. Live-probed
 2026-09-25, all three apps: "Physics" and "Quantum", one item each.
+Issue report: [docs/issues/U16-A19-one-item-reads-1-items.md](../issues/U16-A19-one-item-reads-1-items.md), shared with [Catalog browse A1](U68-catalog-browse.md#a1).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Note h: the block's inline style for the class `current` also

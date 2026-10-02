@@ -1,0 +1,11 @@
+--- a/templates/frontend/pages/catalogCategory.tpl
++++ b/templates/frontend/pages/catalogCategory.tpl
+@@ -65,7 +65,7 @@
+ 	</h2>
+ 
+ 	{* No published titles in this category *}
+-	{if empty($results)}
++	{if !$results->total()}
+ 		<p>{translate key="catalog.category.noItems"}</p>
+ 	{else}
+ 		<ul class="cmp_preprint_list preprints">

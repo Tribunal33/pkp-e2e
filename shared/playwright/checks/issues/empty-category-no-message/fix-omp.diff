@@ -1,0 +1,11 @@
+--- a/templates/frontend/pages/catalogCategory.tpl
++++ b/templates/frontend/pages/catalogCategory.tpl
+@@ -63,7 +63,7 @@
+ 	{/if}
+ 
+ 	{* No published titles in this category *}
+-	{if empty($results)}
++	{if !$results->total()}
+ 		<h2>
+ 			{translate key="catalog.category.heading"}
+ 		</h2>
