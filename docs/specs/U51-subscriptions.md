@@ -2054,7 +2054,7 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `IssueHandler::setupIssueTemplate()` computes `hasAccess` from `subscribedUser($user, $journal)` (no submission, so no `canPreview()`), `subscribedDomain()` and a paid issue; the partial-expiry flags it assigns (`issueExpiryPartial`, `articleExpiryPartial`) are read by no template. Live-probed 2026-09-25 (td9, td21): the managers, Section Editor, Copyeditor, Subscription Manager, the article's Author and a reader under "Partial expiry" saw the padlock and opened the galley.
-Issue report: [docs/issues/U51-A7-issue-contents-lock-galleys-reader-can-open.md](../issues/U51-A7-issue-contents-lock-galleys-reader-can-open.md).
+Issue report: [pkp-e2e#394](https://github.com/jardakotesovec/pkp-e2e/issues/394) ([docs/issues/U51-A7-issue-contents-lock-galleys-reader-can-open.md](../issues/U51-A7-issue-contents-lock-galleys-reader-can-open.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — pkp/pkp-lib#11683, OJS commit `b795decf26` (2025-08-13, "fix schedule task frequency") changed `SubscriptionExpiryReminder` from `daily()` to `monthlyOn(1)`; `sendJournalReminders()` still matches one end date per run (note n) and `executeActions()` still simulates the missing days of short months, which only a daily run needs. The pre-Laravel `registry/scheduledTasks.xml` read `<frequency day="1"/>` for this task. Live-probed 2026-09-25 (td29): the schedule list shows `0 0 1 * *`; the exact-day matching could not be seen, as the task fails first (f-a27).
@@ -2095,11 +2095,11 @@ Issue report: [pkp-e2e#392](https://github.com/jardakotesovec/pkp-e2e/issues/392
 
 <a id="fn-f-a18"></a>
 **f-a18** — The article page lists the file under "Additional Files" through the supplementary link (`a.obj_galley_link_supplementary`), which keeps the file glyph where a restricted galley link gets the padlock; `ArticleHandler::download()` refuses it like any galley (note e). Live-probed 2026-09-25 (td6).
-Issue report: [docs/issues/U51-A18-additional-file-no-padlock-refused.md](../issues/U51-A18-additional-file-no-padlock-refused.md).
+Issue report: [pkp-e2e#395](https://github.com/jardakotesovec/pkp-e2e/issues/395) ([docs/issues/U51-A18-additional-file-no-padlock-refused.md](../issues/U51-A18-additional-file-no-padlock-refused.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19** — `galley_link.tpl` prints `reader.purchasePrice` whenever a fee and a currency are passed; `article_details.tpl`, `article_summary.tpl` and `issue_toc.tpl` pass the journal's saved `purchaseArticleFee` / `purchaseIssueFee` without asking whether payments are configured, while the purchase itself needs `purchaseArticleEnabled()` / `purchaseIssueEnabled()` (note o). Live-probed 2026-09-25 (td6, td8).
-Issue report: [docs/issues/U51-A19-locked-link-fee-while-payments-off.md](../issues/U51-A19-locked-link-fee-while-payments-off.md).
+Issue report: [pkp-e2e#396](https://github.com/jardakotesovec/pkp-e2e/issues/396) ([docs/issues/U51-A19-locked-link-fee-while-payments-off.md](../issues/U51-A19-locked-link-fee-while-payments-off.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — `IssueHandler::userCanViewGalley()` enters its purchase branch on `purchaseIssueEnabled() || membershipEnabled()` and then queues a `PAYMENT_TYPE_PURCHASE_ISSUE` payment of the (empty) issue fee (note e); the article side leads to the "Subscriptions" page in the same case. Live-probed 2026-09-25 (td8), on two journals.
