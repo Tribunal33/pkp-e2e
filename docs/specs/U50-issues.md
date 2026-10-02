@@ -1061,6 +1061,11 @@ Left out of the scenarios above, by reason:
   - the guard for A8 (issue report
     `docs/issues/U50-A8-future-issues-number-as-text.md`): "Future
     Issues" listing No. 2 before No. 10 of one volume and year
+  - the guard for A10 (issue report
+    `docs/issues/U50-A10-toc-article-dropped-other-section-snaps-back.md`):
+    in the table of contents' "Order", an article dragged toward another
+    section refused, and one dragged to the top of its own section
+    saved as dropped
 - **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
@@ -1141,7 +1146,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 | [A5](#a5) | A "Volume" of 99999 leaves "Create Issue" open with nothing shown | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "Year" accepts letters: "20a6" is saved as 20 without a message | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | "Future Issues" lists "No. 10" before "No. 2" of the same volume and year | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A10](#a10) | An article dropped under another section in "Order" is back in its own section on reopening | 🐞 | minor | — |
+| [A10](#a10) | In an issue's "Order", an article dropped past a section heading jumps back and reorders its section | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | An issue galley in an interface-only language is refused as if no language were chosen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | After "Delete" on an issue, its offline articles still read "Published" and History records no unpublishing | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | A journal's "Archives" lists its issues in no set order until a manager orders "Back Issues" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1262,13 +1267,21 @@ a section heading, then "Done" and reopening the tab, settles it. Basis:
 probe, 2026-09-25 (automated drags only). <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — An article dropped under another section snaps back** · 🐞 · minor.
-In the table of contents' "Order", an article can be dragged under
-another section: it shows there and "Done" is accepted, but on reopening
-the tab it is back in its own section, and the "Section" on its
-Publication Settings is unchanged. The screen accepts a move it does not
-keep; it should either refuse the drop or move the article. Basis: probe,
-2026-09-25. <sup>f-a10</sup>
+**A10 — In an issue's "Order", an article dropped past a section heading jumps back and reorders its section** · 🐞 · medium.
+In an issue's "Table of Contents", "Order" lets a journal manager drop
+an article above a section heading: its own heading when dragging it to
+the top of its section, or the next section's heading when dragging it
+up into the section above. "Done" is accepted, but what is saved is not
+what was dropped. An article dropped into the section above is back in
+its own section at once, moved to its top. An article dropped above its
+own heading is saved first, as meant, but another article of the section
+can move with it: in the walk one jumped from last place to second. An
+article can still be moved within its own section when it is dropped
+below the heading, to the top or anywhere else; that order is saved as
+shown, and so are the other drags made before the same "Done". The list
+redraws with the saved order after "Done", so the editor sees the result
+and can drag again.
+Basis: probe, 2026-10-02. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — An issue galley in an interface-only language is refused as if no language were chosen** · 🐞 · medium.
@@ -1563,6 +1576,7 @@ Issue report: [docs/issues/U50-A8-future-issues-number-as-text.md](../issues/U50
 
 <a id="fn-f-a10"></a>
 **f-a10** — Live-probed 2026-09-25 (td7), OJS: an article dragged under another section showed there and "Done" was accepted; on reopening the tab it was back under its own section, and the "Section" on its Publication Settings was unchanged. Note m's `setDataElementInCategorySequence()` would change the `sectionId`; the drop did not reach it.
+Issue report: [docs/issues/U50-A10-toc-article-dropped-other-section-snaps-back.md](../issues/U50-A10-toc-article-dropped-other-section-snaps-back.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-25 (td9), OJS: on a journal whose interface is English and French and whose forms are English only, a galley in French answered the notice "An issue galley locale is required." and was not listed; on a journal where French is also a form language the same galley saved as "PDF | French". `IssueGalleyForm` checks `galleyLocale` against `getSupportedFormLocales()` while the list offers `getSupportedLocaleNames()` (note p).

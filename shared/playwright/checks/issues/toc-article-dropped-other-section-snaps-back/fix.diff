@@ -1,0 +1,67 @@
+--- a/lib/pkp/templates/controllers/grid/grid.tpl
++++ b/lib/pkp/templates/controllers/grid/grid.tpl
+@@ -36,7 +36,7 @@
+ 	{rdelim});
+ </script>
+ 
+-<div id="{$gridId|escape}" class="pkp_controllers_grid{if is_a($grid, 'CategoryGridHandler')} pkp_grid_category{/if}{if !$grid->getTitle()} pkp_grid_no_title{/if}">
++<div id="{$gridId|escape}" class="pkp_controllers_grid{if $grid instanceof PKP\controllers\grid\CategoryGridHandler} pkp_grid_category{/if}{if !$grid->getTitle()} pkp_grid_no_title{/if}">
+ 	{include file="controllers/grid/gridHeader.tpl"}
+ 	<table id="{$gridTableId|escape}">
+ 		{include file="controllers/grid/columnGroup.tpl" columns=$columns}
+@@ -67,7 +67,7 @@
+ 				{/foreach}
+ 			</tr>
+ 		</thead>
+-		{if $grid->getIsSubcomponent() && !is_a($grid, 'CategoryGridHandler')}
++		{if $grid->getIsSubcomponent() && !($grid instanceof PKP\controllers\grid\CategoryGridHandler)}
+ 			{* Create two separate tables so that the body part
+ 			   can be scrolled independently from the header in a
+ 			   cross-browser compatible way using only CSS. *}
+@@ -92,7 +92,7 @@
+ 		</tbody>
+ 	</table>
+ 
+-	{if $grid->getIsSubcomponent() && !is_a($grid, 'CategoryGridHandler')}
++	{if $grid->getIsSubcomponent() && !($grid instanceof PKP\controllers\grid\CategoryGridHandler)}
+ 		</div>
+ 	{/if}
+ 
+--- a/lib/pkp/templates/controllers/grid/gridRow.tpl
++++ b/lib/pkp/templates/controllers/grid/gridRow.tpl
+@@ -18,7 +18,7 @@
+ {/if}
+ 
+ {assign var="row_class" value="gridRow"}
+-{if is_a($row, 'GridCategoryRow')}
++{if $row instanceof PKP\controllers\grid\GridCategoryRow}
+ 	{assign var="row_class" value=$row_class|cat:' category'}
+ 	{if !$row->hasFlag('gridRowStyle')}
+ 		{assign var="row_class" value=$row_class|cat:' default_category_style'}
+@@ -54,7 +54,7 @@
+ 					</a>
+ 				{/if}
+ 				{$cells[$smarty.foreach.columnLoop.index]}
+-				{if is_a($row, 'GridCategoryRow') && $column->hasFlag('showTotalItemsNumber')}
++				{if $row instanceof PKP\controllers\grid\GridCategoryRow && $column->hasFlag('showTotalItemsNumber')}
+ 					<span class="category_items_number">({$grid->getCategoryItemsCount($categoryRow->getData(), $request)})</span>
+ 				{/if}
+ 				<div class="row_actions">
+@@ -66,7 +66,7 @@
+ 				</div>
+ 			{else}
+ 				{$cells[$smarty.foreach.columnLoop.index]}
+-				{if is_a($row, 'GridCategoryRow') && $column->hasFlag('showTotalItemsNumber')}
++				{if $row instanceof PKP\controllers\grid\GridCategoryRow && $column->hasFlag('showTotalItemsNumber')}
+ 					<span class="category_items_number">({$grid->getCategoryItemsCount($categoryRow->getData(), $request)})</span>
+ 				{/if}
+ 			{/if}
+@@ -74,7 +74,7 @@
+ 	{/foreach}
+ </tr>
+ {if $row->getActions(PKP\controllers\grid\GridHandler::GRID_ACTION_POSITION_DEFAULT)}
+-	<tr id="{$rowId|escape|replace:" ":"_"}-control-row" class="row_controls{if is_a($row, 'GridCategoryRow')} category_controls{/if}">
++	<tr id="{$rowId|escape|replace:" ":"_"}-control-row" class="row_controls{if $row instanceof PKP\controllers\grid\GridCategoryRow} category_controls{/if}">
+ 		<td colspan="{$grid->getColumnsCount('indent')}">
+ 			{if $row->getActions(PKP\controllers\grid\GridHandler::GRID_ACTION_POSITION_DEFAULT)}
+ 				{foreach from=$row->getActions(PKP\controllers\grid\GridHandler::GRID_ACTION_POSITION_DEFAULT) item=action}
