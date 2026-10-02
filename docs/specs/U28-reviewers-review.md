@@ -2204,7 +2204,7 @@ was not completed." and its "General Information" stopped at "Review Due
 Date". Live-probed 2026-09-05 on OJS and OMP: the same dateless line on
 the reviewer's own round-1 wizard once round 2 opened without them
 (finding A12), and on a press before the internal reviewer submitted.
-Issue report: [docs/issues/U28-A2-previous-reviews-unfinished-round-reads-submitted-on.md](../issues/U28-A2-previous-reviews-unfinished-round-reads-submitted-on.md).
+Issue report: [docs/issues/U28-A2-previous-reviews-unfinished-round-reads-submitted-on.md](../issues/U28-A2-previous-reviews-unfinished-round-reads-submitted-on.md), filed as [pkp-e2e#578](https://github.com/jardakotesovec/pkp-e2e/issues/578).
 
 <a id="fn-a3"></a>
 **f-a3** — `PKPReviewerHandler::saveDeclineReview()` ends with
@@ -2344,7 +2344,7 @@ wizard showed the dateless line before she submitted and on the in-page
 step 4 after "Submit Review", and "Round 1 Review Submitted on
 2026-09-04" after a reload. The press half was first seen 2026-09-04
 (footnote f-omp4).
-Issue report: [docs/issues/U28-A12-reviewer-own-round-listed-under-previous-reviews.md](../issues/U28-A12-reviewer-own-round-listed-under-previous-reviews.md).
+Issue report: [docs/issues/U28-A12-reviewer-own-round-listed-under-previous-reviews.md](../issues/U28-A12-reviewer-own-round-listed-under-previous-reviews.md), filed as [pkp-e2e#579](https://github.com/jardakotesovec/pkp-e2e/issues/579).
 
 <a id="fn-a13"></a>
 **f-a13** — `PKPReviewController::getHistory()` fills `.files` (the round's
