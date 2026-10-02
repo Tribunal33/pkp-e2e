@@ -1,0 +1,15 @@
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -2574,6 +2574,12 @@
+ msgid "submission.task.validation.error.assignment.required"
+ msgstr "Participant must be assigned to the submission in the current stage or be a reviewer."
+ 
++msgid "submission.task.validation.error.headnote.author"
++msgstr "You can only edit your own discussion message."
++
++msgid "submission.task.validation.error.headnote.editExpired"
++msgstr "This discussion message can only be edited within 1 hour of creation."
++
+ msgid "submission.task.dueInterval.1week"
+ msgstr "1 week"
+ 

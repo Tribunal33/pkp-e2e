@@ -1,0 +1,23 @@
+--- a/lib/pkp/api/v1/submissions/tasks/formRequests/EditTask.php
++++ b/lib/pkp/api/v1/submissions/tasks/formRequests/EditTask.php
+@@ -311,7 +311,7 @@
+     public function messages(): array
+     {
+         return [
+-            'dateDue.after_or_equal' => __('validation.after_or_equal'),
++            'dateDue.after_or_equal' => __('submission.task.validation.error.dateDue.past'),
+         ];
+     }
+ 
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -2556,6 +2556,9 @@
+ msgid "submission.task.validation.error.participant.responsible"
+ msgstr "There should be one user responsible for the task."
+ 
++msgid "submission.task.validation.error.dateDue.past"
++msgstr "The due date cannot be earlier than today."
++
+ msgid "submission.task.validation.error.participant.creator"
+ msgstr "The creator must participate in the task/discussion."
+ 

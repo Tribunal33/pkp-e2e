@@ -1345,6 +1345,8 @@ Left out of the scenarios above, by reason:
   - the guard for A5 (issue report `docs/issues/U37-A5-template-says-it-fills-participants.md`): pressing a template leaves "Participants" unchanged and its line names only what it fills (Rule 10d)
   - the guard for A9 (issue report `docs/issues/U37-A9-participant-message-edit-adds-message.md`): a discussion opened by "Notify", renamed through "Edit", keeps one first message, its text replaced in place and headed with the sender (Rules 15a, 15e)
   - the guard for A8 (issue report `docs/issues/U37-A8-author-discussion-with-file-edit-refused.md`): an Author renames their own discussion whose first message carries an uploaded file, and the save keeps the file (Rule 15d)
+  - the guard for A7 (issue report `docs/issues/U37-A7-press-server-edit-refusal-raw-key.md`): on a press and a preprint server, the two edit refusals read "You can only edit your own discussion message." and "This discussion message can only be edited within 1 hour of creation." (Rule 15c)
+  - the guard for A10 (issue report `docs/issues/U37-A10-past-due-date-speaks-of-start-date.md`): a past "Due Date" typed into the box is refused with a message that names the due date (Rule 2d)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1398,10 +1400,10 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | When adding a task or discussion, a "Find Template" search for "discussion" or "task" opens an "Error" window | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | Each template in the "Add" window says it fills "Participants", but choosing one never does | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | A task's owner is offered "Edit" but cannot save even a new due date on a task someone else opened | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A7](#a7) | On a press and a preprint server the edit refusals show a raw key | 🐞 | minor | — |
+| [A7](#a7) | A press or preprint server refuses a discussion edit with a raw key, not the reason | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | An Author cannot save an edit of their discussion once its first message has an uploaded file | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | Editing a discussion that "Notify" or "Assign" opened adds a copy of its message under the recipient's name | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A10](#a10) | A past "Due Date" is refused with "Start date should be greater than or equal to today" | 🐞 | minor | — |
+| [A10](#a10) | A task's "Due Date" before today is refused with a message about a start date | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A16](#a16) | A task due today already reads "Overdue" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | A closed task past its due date still reads "This task is overdue. Remind the task owner…" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A21](#a21) | The error list read to a screen reader calls the message box "undefined" | 🐞 | minor | — |
@@ -1504,13 +1506,17 @@ change for them.
 Basis: probe, 2026-10-02. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
-**A7 — Raw keys for the edit refusals on a press and a preprint server** · 🐞 · minor.
+**A7 — A press or preprint server refuses a discussion edit with a raw key, not the reason** · 🐞 · low.
 Where a journal refuses an edit with "You can only edit your own
 discussion message." or "This discussion message can only be edited
 within 1 hour of creation.", a press and a preprint server print
 "##submission.task.validation.error.headnote.author##" or
-"##submission.task.validation.error.headnote.editExpired##".
-Basis: probe. <sup>[f-a7](#fn-a7)</sup>
+"##submission.task.validation.error.headnote.editExpired##". The refusal
+itself is right. It is the reason that is lost: an author or an
+assistant role (a Copyeditor, a Layout Editor) who presses "Save" in a
+discussion's or task's "Edit" window reads a code under the message box
+and cannot tell what to change.
+Basis: probe, 2026-10-02. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
 **A8 — An Author cannot save an edit of their discussion once its first message has an uploaded file** · 🐞 · medium.
@@ -1542,11 +1548,13 @@ every stage.
 Basis: probe, 2026-10-02. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — A due-date refusal speaks of a start date** · 🐞 · minor.
+**A10 — A task's "Due Date" before today is refused with a message about a start date** · 🐞 · low.
 A "Due Date" before today, typed into the box, is refused on "Save" with
 "Start date should be greater than or equal to today"; the form has no
-start date.
-Basis: probe. <sup>[f-a10](#fn-a10)</sup>
+start date. The wording sends the editor looking for a field the window
+does not have. The date picker greys the days before today, so only a
+date typed by hand triggers this message.
+Basis: probe, 2026-10-02. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a12"></a>
 **A12 — The one-hour limit locks the whole item** · ❓ · user-visible.
@@ -1982,6 +1990,7 @@ Issue report: [docs/issues/U37-A6-task-owner-cannot-save-edit.md](../issues/U37-
 
 <a id="fn-a7"></a>
 **f-a7** — The two texts are defined in `ojs/locale/en/locale.po` only (pkp/pkp-lib#12278, `05ade99f1e`, 2026-03-22, added them to OJS's own file); neither `lib/pkp/locale/en/*.po` nor OMP's or OPS's locale files have them, and the application prints a missing key as `##key##`. Live-probed 2026-09-23: both keys on a press and a preprint server, both texts on a journal (td8, and past the hour).
+Issue report: [docs/issues/U37-A7-press-server-edit-refusal-raw-key.md](../issues/U37-A7-press-server-edit-refusal-raw-key.md).
 
 <a id="fn-a8"></a>
 **f-a8** — `useDiscussionManagerForm` seeds `selectedFiles` with the head note's files tagged `FileAttacherWorkflowStage`, so `saveWorkItem()` sends their ids as `submissionFileIds`; `EditTask` makes `submissionFileIds` `prohibitedIf` the user is not manager/admin or an assigned sub-editor or assistant, and a non-empty value then fails validation. Live-probed 2026-09-23 (all three apps): the answer is 422 on `submissionFileIds` "##validator.prohibited##", heard only in the error list's screen-reader text "Go to submissionFileIds: ##validator.prohibited##"; "Jump to next error" moves focus to itself; the Copyeditor's and the manager's same edit answered 200 (td9).
@@ -1993,6 +2002,7 @@ Issue report: [docs/issues/U37-A9-participant-message-edit-adds-message.md](../i
 
 <a id="fn-a10"></a>
 **f-a10** — `EditTask::messages()` maps `dateDue.after_or_equal` to `validation.after_or_equal` "Start date should be greater than or equal to today" (lib/pkp `locale/en/validation.po`). The date field's `min: 'today'` greys earlier days in the picker; typed, it reaches the server (td11, live-probed 2026-09-23).
+Issue report: [docs/issues/U37-A10-past-due-date-speaks-of-start-date.md](../issues/U37-A10-past-due-date-speaks-of-start-date.md).
 
 <a id="fn-a11"></a>
 **f-a11** — Live 2026-09-19 on all three apps (Production stage's claim check): "Cancel" in the discussions "Add" window closed it with the typed content lost and no prompt. The close control's question: note r. Live-probed 2026-09-23 in three separate drives on all three apps: "Cancel" on a changed window asks "Warning" (td2); the silent close did not reproduce, so the entry is retired.
