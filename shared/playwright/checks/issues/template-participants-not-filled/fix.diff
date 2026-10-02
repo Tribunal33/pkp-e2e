@@ -1,0 +1,24 @@
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -3721,10 +3721,10 @@
+ msgstr "Reopen this Discussion"
+ 
+ msgid "discussion.template.discussionDescription"
+-msgstr "This discussion template pre-fills the name, participants, and starting message. You can adjust the details before starting."
++msgstr "This discussion template pre-fills the name and starting message. Choose the participants, and adjust any details before starting."
+ 
+ msgid "discussion.template.taskDescription"
+-msgstr "This task template auto-fills the task name, due date, description, and roles. After selecting the template, you can modify any details before saving the task."
++msgstr "This task template auto-fills the task name, due date and description. After selecting the template, choose the participants and the task owner, and modify any details before saving the task."
+ 
+ msgid "stage.submission"
+ msgstr "Submission Stage"
+@@ -3781,7 +3781,7 @@
+ msgstr "Tasks and Discussions Templates"
+ 
+ msgid "taskTemplates.description"
+-msgstr "Use this space to create templates for tasks and discussions. These templates automatically fill in the task name, due date, description, and roles, giving you a head start."
++msgstr "Use this space to create templates for tasks and discussions. These templates automatically fill in the task name, due date and description, giving you a head start."
+ 
+ msgid "taskTemplates.templateName"
+ msgstr "Task and discussion template name"

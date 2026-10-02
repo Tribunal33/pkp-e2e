@@ -1342,6 +1342,7 @@ Left out of the scenarios above, by reason:
   - the guard for A6 (issue report `docs/issues/U37-A6-task-owner-cannot-save-edit.md`): scenario 10's task owner (an assistant or the Author who did not write the first message) saves a new due date from "Edit", and a rewrite of the first message is still refused (Rule 15c)
   - the guard for OPS1 (issue report `docs/issues/U35-OPS2-preprint-assign-editor-message-not-filled.md`): on a preprint server, "Assign Editor" chosen in the "Add" window fills "Message" with its letter and saves (Rule 10d)
   - the guard for A3 (issue report `docs/issues/U37-A3-writer-told-of-own-message.md`): after an opening and a reply, the writer's mailbox and Tasks list stay empty while the other participants get both (Side effects)
+  - the guard for A5 (issue report `docs/issues/U37-A5-template-says-it-fills-participants.md`): pressing a template leaves "Participants" unchanged and its line names only what it fills (Rule 10d)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1393,7 +1394,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | The "Add" window's subtitle reads "Open for What? Open to What? Beyond Content" | 🐞 | minor | — |
 | [A3](#a3) | Whoever opens a discussion or replies gets their own message back by email and as a Tasks row | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | When adding a task or discussion, a "Find Template" search for "discussion" or "task" opens an "Error" window | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [A5](#a5) | Choosing a template leaves "Participants" as it was, though the template says it fills them | 🐞 | minor | — |
+| [A5](#a5) | Each template in the "Add" window says it fills "Participants", but choosing one never does | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | A task's owner is offered "Edit" but cannot save even a new due date on a task someone else opened | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | On a press and a preprint server the edit refusals show a raw key | 🐞 | minor | — |
 | [A8](#a8) | An Author cannot save an edit of a discussion whose first message has an uploaded file, and the refusal names no field | 🐞 | user-visible | — |
@@ -1476,12 +1477,18 @@ search, and a search by another word lists templates again.
 Basis: probe, 2026-10-02. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
-**A5 — A template does not fill "Participants"** · 🐞 · minor.
-Each template button says the template "pre-fills the name, participants,
-and starting message", and a template limited to some roles names the
-people meant to receive it. Choosing one fills the name and the message
-but leaves "Participants" exactly as it was.
-Basis: probe. <sup>[f-a5](#fn-a5)</sup>
+**A5 — Each template in the "Add" window says it fills "Participants", but choosing one never does** · 🐞 · low.
+In the "Add" window of a stage's "Tasks & Discussions", every discussion
+template says "This discussion template pre-fills the name,
+participants, and starting message." Choosing one fills the name and the
+message and leaves "Participants" exactly as it was. That includes a
+template limited to specific roles, whose limit decides who may use the
+template, not who receives it. The task templates' line and the line on
+the Settings screen for templates say they fill "roles". The window
+stopped filling participants on purpose, when templates were changed to
+carry none, and these three texts still promise it. So the fix wanted is
+the wording, not the window.
+Basis: probe, 2026-10-02. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
 **A6 — A task's owner is offered "Edit" but cannot save even a new due date on a task someone else opened** · 🐞 · medium.
@@ -1967,6 +1974,7 @@ Issue report: [docs/issues/U37-A4-find-template-discussion-task-error.md](../iss
 
 <a id="fn-a5"></a>
 **f-a5** — `Template::promote()` fills participants from the template's roles' stage assignments; `setValuesFromTemplate()` sets title, task box, due date, owner and message, never `participants`. Texts `discussion.template.discussionDescription` / `…taskDescription`. Live-probed 2026-09-23 on all three apps (td4).
+Issue report: [docs/issues/U37-A5-template-says-it-fills-participants.md](../issues/U37-A5-template-says-it-fills-participants.md).
 
 <a id="fn-a6"></a>
 **f-a6** — `EditTask` `description` closure (note v) against `QueryWritePolicy` (note b): a responsible participant who holds neither `MANAGER` nor `SUB_EDITOR` passes the write policy and fails the closure unless they wrote the head note; `saveWorkItem()` always sends `description`. The recorded-creator case: *Stage participants* A5 (a Participants message's `createdBy` is the recipient, its note's writer the sender), though that note is unflagged (A9), so the closure there finds no head note and passes. Live-probed 2026-09-23 (all three apps): the owner case refuses (td8), also with only one more participant ticked; the recorded creator of a Participants message saves, and the save adds a message (A9).
