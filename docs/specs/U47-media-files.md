@@ -1834,7 +1834,7 @@ Coordinator's stages do not include Production (note b). The
 Copyeditor's and the Marketing and Sales Coordinator's link in
 Copyediting is the same address and was not pressed. The Author and every
 role with Production download normally (note q1).
-Issue report: [docs/issues/U47-OMP2-press-copyeditor-media-download-refused.md](../issues/U47-OMP2-press-copyeditor-media-download-refused.md).
+Issue report: [pkp-e2e#492](https://github.com/jardakotesovec/pkp-e2e/issues/492) ([docs/issues/U47-OMP2-press-copyeditor-media-download-refused.md](../issues/U47-OMP2-press-copyeditor-media-download-refused.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Notes a and n: the OPS side menu lists "Media" for
