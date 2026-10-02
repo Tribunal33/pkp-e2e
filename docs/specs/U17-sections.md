@@ -1555,7 +1555,7 @@ each state the scenarios start from was reached on a scratch context.
 
 <a id="fn-f-a1"></a>
 **f-a1** — The link is `url page="submission" sectionId={id}` (fn e). No part of the start page reads a `sectionId` parameter: `PKPSubmissionHandler` builds `StartSubmission` from the sections alone and OJS/OPS `StartSubmission` sets the radio's `value` to `''`. Live-probed 2026-09-25 (OJS and OPS, two runs): note td11.
-Issue report: [docs/issues/U17-A1-section-link-chooses-no-section.md](../issues/U17-A1-section-link-chooses-no-section.md).
+Issue report: [pkp-e2e#478](https://github.com/jardakotesovec/pkp-e2e/issues/478) ([docs/issues/U17-A1-section-link-chooses-no-section.md](../issues/U17-A1-section-link-chooses-no-section.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `SectionForm::execute()` saves `(int) wordCount`; `Submission\Repository::validateSubmit()` checks `if ($section->getAbstractWordCount())` (true for a negative number) and `HasWordCountValidation::validateWordCount()` compares `$wordCount > $wordLimit` per locale, so any non-empty abstract fails, with `publication.abstract.wordCountLong`; the publication form applies the same limit to the abstract and the plain language summary. Live-probed 2026-09-25 (OJS and OPS): note td3.
@@ -1571,23 +1571,23 @@ Issue report: [docs/issues/U17-A1-section-link-chooses-no-section.md](../issues/
 
 <a id="fn-f-a6"></a>
 **f-a6** — fn i and m: `manager.setup.form.section.nameRequired` and `manager.setup.form.series.nameRequired` are defined in no `.po` file of the three apps or `lib/pkp`; the client-side required check does not trim, the server's `FormValidatorLocale` does, and its message goes to the page's notice, not to the field. Live-probed 2026-09-25 (all three apps): note td2.
-Issue report: [docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md](../issues/U17-A6-section-or-component-name-of-spaces-raw-code.md).
+Issue report: [pkp-e2e#480](https://github.com/jardakotesovec/pkp-e2e/issues/480) ([docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md](../issues/U17-A6-section-or-component-name-of-spaces-raw-code.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — The start page leaves inactive sections out for everyone (`excludeInactive()`, fn d); the "Submissions" page shows them to the editorial roles (`excludeEditorOnly(!$canSubmitAll)`, fn e) with the same signed-in line under each. Live-probed 2026-09-25 (OJS and OPS, two runs): note td11.
-Issue report: [docs/issues/U17-A7-A8-section-links-offer-closed-submissions.md](../issues/U17-A7-A8-section-links-offer-closed-submissions.md).
+Issue report: [pkp-e2e#481](https://github.com/jardakotesovec/pkp-e2e/issues/481) ([docs/issues/U17-A7-A8-section-links-offer-closed-submissions.md](../issues/U17-A7-A8-section-links-offer-closed-submissions.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — The per-section line prints for any signed-in reader (`{if $isUserLoggedIn}`, fn e), whatever the journal's `disableSubmissions`; the notice comes from the core template on that setting. The start form's message is the Submission wizard's A3. Live-probed 2026-09-25 (OJS and OPS, two runs): note td12.
-Issue report: [docs/issues/U17-A7-A8-section-links-offer-closed-submissions.md](../issues/U17-A7-A8-section-links-offer-closed-submissions.md).
+Issue report: [pkp-e2e#481](https://github.com/jardakotesovec/pkp-e2e/issues/481) ([docs/issues/U17-A7-A8-section-links-offer-closed-submissions.md](../issues/U17-A7-A8-section-links-offer-closed-submissions.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — fn g: `SectionController::get()` passes `api.sections.404.sectionNotFound` and `api.sections.400.contextsNotMatched` to `__()`, and neither key is defined in any locale file of the OJS checkout or its `lib/pkp` (no `api.sections.*` msgid), so the translator returns the key between `##`. Live-probed 2026-09-25, two runs: note g, one section and the site's address.
-Issue report: [docs/issues/U17-A9-sections-interface-refusals-raw-codes.md](../issues/U17-A9-sections-interface-refusals-raw-codes.md).
+Issue report: [pkp-e2e#482](https://github.com/jardakotesovec/pkp-e2e/issues/482) ([docs/issues/U17-A9-sections-interface-refusals-raw-codes.md](../issues/U17-A9-sections-interface-refusals-raw-codes.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — fn g. A word as the id misses the route's `whereNumber('sectionId')`; `APIHandler` maps only a `NotFoundHttpException` to 404 `api.404.endpointNotFound`, and this route miss arrives as another exception, so it answers 500 with the exception's message (handler-wide by the code; no other interface was driven). At the site's address `getRequest()->getContext()` is null and `getMany()` calls `getId()` on it. Live-probed 2026-09-25, two runs: note g, one section and the site's address; OMP and OPS answered 404 at the same site address.
-Issue report for the site's address: [docs/issues/U17-A10-sections-interface-site-address-server-error.md](../issues/U17-A10-sections-interface-site-address-server-error.md).
+Issue report for the site's address: [pkp-e2e#479](https://github.com/jardakotesovec/pkp-e2e/issues/479) ([docs/issues/U17-A10-sections-interface-site-address-server-error.md](../issues/U17-A10-sections-interface-site-address-server-error.md)).
 Issue report for the word as id, joined to the API-wide unknown-route fault: [pkp-e2e#373](https://github.com/jardakotesovec/pkp-e2e/issues/373) ([docs/issues/U09-A18-picture-over-request-limit-server-error.md](../issues/U09-A18-picture-over-request-limit-server-error.md)).
 
 <a id="fn-f-omp1"></a>
@@ -1595,40 +1595,40 @@ Issue report for the word as id, joined to the API-wide unknown-route fault: [pk
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — fn m. Live-probed 2026-09-25: note td6.
-Issue report: [docs/issues/U17-OMP2-path-message-only-letters-and-numbers.md](../issues/U17-OMP2-path-message-only-letters-and-numbers.md).
+Issue report: [pkp-e2e#483](https://github.com/jardakotesovec/pkp-e2e/issues/483) ([docs/issues/U17-OMP2-path-message-only-letters-and-numbers.md](../issues/U17-OMP2-path-message-only-letters-and-numbers.md)).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — fn m: the picker allows SVG, `validate()` refuses it with `form.invalidImage`, and the save's answer (`{"status":false,"content":""}`) carries no message for the window to show. Live-probed 2026-09-25: note td5.
-Issue report: [docs/issues/U17-OMP3-series-svg-cover-dropped-silently.md](../issues/U17-OMP3-series-svg-cover-dropped-silently.md).
+Issue report: [pkp-e2e#484](https://github.com/jardakotesovec/pkp-e2e/issues/484) ([docs/issues/U17-OMP3-series-svg-cover-dropped-silently.md](../issues/U17-OMP3-series-svg-cover-dropped-silently.md)).
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — fn m: `series_categories` is written by `SeriesForm::execute()` and read by `SeriesGridHandler::initialize()` and `SeriesForm::initData()` only. Live-probed 2026-09-25, after the background jobs had run: with "K3 Cat" ticked on a series, its category page read "0 Titles" while the series' page listed the series' book; a category given to a book on its own "Catalog Entry" listed that book ("1 Titles"); the same with the box unticked. The catalog, the book page and the book's "Catalog Entry" categories were unchanged.
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — `SeriesGridCellProvider::getCellActions()` uses `manager.sections.confirmActivateSection` / `confirmDeactivateSection`, which OMP's locale does not override. Live-probed 2026-09-25: note td9.
-Issue report: [docs/issues/U17-OMP5-series-toggle-asks-about-section.md](../issues/U17-OMP5-series-toggle-asks-about-section.md).
+Issue report: [pkp-e2e#485](https://github.com/jardakotesovec/pkp-e2e/issues/485) ([docs/issues/U17-OMP5-series-toggle-asks-about-section.md](../issues/U17-OMP5-series-toggle-asks-about-section.md)).
 
 <a id="fn-f-omp6"></a>
 **f-omp6** — OMP's `SeriesForm` sets no place in the order for a new series, where the section form puts a new section last (fn i); the list is read by `seq`, so series sharing a value come back in whatever order the database returns (the test installs run PostgreSQL). Live-probed 2026-09-25 (two presses, several drives): note td7.
 
 <a id="fn-f-omp7"></a>
 **f-omp7** — `manager.setup.issnDescription` (fn m). Live-probed 2026-09-25: note td6.
-Issue report: [docs/issues/U17-OMP7-series-issn-help-which-identifying.md](../issues/U17-OMP7-series-issn-help-which-identifying.md).
+Issue report: [pkp-e2e#486](https://github.com/jardakotesovec/pkp-e2e/issues/486) ([docs/issues/U17-OMP7-series-issn-help-which-identifying.md](../issues/U17-OMP7-series-issn-help-which-identifying.md)).
 
 <a id="fn-f-omp8"></a>
 **f-omp8** — OMP `seriesForm.tpl` builds the help from a sample address, `{url … page="catalog" op="series" path="Path"}`, passed to `grid.series.urlWillBe`; the typed or saved path never reaches it. Live-probed 2026-09-25: note td6.
-Issue report: [docs/issues/U17-OMP8-series-path-help-never-shows-path.md](../issues/U17-OMP8-series-path-help-never-shows-path.md).
+Issue report: [pkp-e2e#487](https://github.com/jardakotesovec/pkp-e2e/issues/487) ([docs/issues/U17-OMP8-series-path-help-never-shows-path.md](../issues/U17-OMP8-series-path-help-never-shows-path.md)).
 
 <a id="fn-f-omp9"></a>
 **f-omp9** — OMP `classes/section/DAO.php` `getByPath()` builds the series from `$row->section_id`, a column the series table does not have (its key is `series_id`), so the page gets a series with no data; the probe server logged `PHP Warning: Undefined property: stdClass::$section_id in …/classes/section/DAO.php on line 71` on each such page. The line came with omp `4c2b5d77b` "pkp/pkp-lib#13003 Port batch loading to OMP" (2026-08-26), which changed `fromRow($row)` to `fromRow($row, [$row->section_id], (object) [])`. The cover survives because `image` is a column of the `series` table (`primaryTableColumns`); the title, prefix, subtitle, description, ISSNs and `sortOption` are rows of `series_settings` and are lost, and with no sort option `CatalogHandler::series()` falls back to `ORDERBY_DATE_PUBLISHED` descending. Live-probed 2026-09-25 on the seeded press (read only) and on scratch presses, four chunks: an empty `h1` and last trail step, no description or ISSN; "1 Titles" and the book for a series holding a published book, "0 Titles" and "No titles have been published yet." for one without (the seeded "Monographs" and "Textbooks" as much as a new series). With every field of a series set (note td5): the cover showed, 100×100, from `catalog/thumbnail?type=series&id={id}` (200, image/png), its text alternative a single space and its `.cover` wrapper a `div` carrying an `href` rather than a link; the tab title read "| {press name}" ("| Public Knowledge Press" on the seeded press); each of the six orders saved and reopened as saved, and after each the page listed the books by publication date, newest first; the same page for visitor, Reader and Press Manager. The series window's unique-path check (`SeriesForm`, through `Repo::section()->getByPath()`) goes through the same line: test run 2026-09-25 (Fields "Path"; scenario 7, "A path in use"), seen in two runs, a "Save" with "monographs" in "Path" while another series had it showed "The series path already exists. Please enter a unique path." and logged the same warning on its `update-series` request, which answered 200; the saves with a path no series had logged nothing. A "Save" of a series with its own unchanged path logged it too (two processes, 2026-09-25), so any save whose path finds a series logs it. The screen's refusal is right, so the warning makes no entry of its own. Written up for the team in `docs/reports/2026-09-25-omp-series-page-blank.md` (a temporary report, deleted once addressed; git history keeps it).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — fn f. Live-probed 2026-09-25 on a scratch server, three runs: note td13. The seeded server is not empty once other suites have posted to it.
-Issue report: [docs/issues/U17-OPS1-archives-empty-server-says-nothing.md](../issues/U17-OPS1-archives-empty-server-says-nothing.md).
+Issue report: [pkp-e2e#488](https://github.com/jardakotesovec/pkp-e2e/issues/488) ([docs/issues/U17-OPS1-archives-empty-server-says-nothing.md](../issues/U17-OPS1-archives-empty-server-says-nothing.md)).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — OPS `locale/en/manager.po` `manager.sections.identifyTypeExamples` "(For example etc.)". Live-probed 2026-09-25, with OJS's window as the control.
-Issue report: [docs/issues/U17-OPS2-section-type-box-no-examples-no-effect.md](../issues/U17-OPS2-section-type-box-no-examples-no-effect.md).
+Issue report: [pkp-e2e#489](https://github.com/jardakotesovec/pkp-e2e/issues/489) ([docs/issues/U17-OPS2-section-type-box-no-examples-no-effect.md](../issues/U17-OPS2-section-type-box-no-examples-no-effect.md)).
 
 <a id="fn-f-ops3"></a>
 **f-ops3** — fn i and q. Live-probed 2026-09-25 (four drives, both orders): note td14.
@@ -1638,7 +1638,7 @@ Issue report: [docs/issues/U17-OPS2-section-type-box-no-examples-no-effect.md](.
 
 <a id="fn-f-ops5"></a>
 **f-ops5** — fn f: `PreprintsHandler::index()` has no past-the-end check, where `SectionsHandler::section()` answers 404 (fn q). Live-probed 2026-09-25, four runs: note td13; on an empty server page 2 read "Previous 26-25 of 0", and page "x" showed page 1 whose "Next" led to page 1 again.
-Issue report: [docs/issues/U17-OPS5-archives-page-past-last-not-404.md](../issues/U17-OPS5-archives-page-past-last-not-404.md).
+Issue report: [pkp-e2e#490](https://github.com/jardakotesovec/pkp-e2e/issues/490) ([docs/issues/U17-OPS5-archives-page-past-last-not-404.md](../issues/U17-OPS5-archives-page-past-last-not-404.md)).
 
 <a id="fn-f-ops6"></a>
 **f-ops6** — OPS `plugins/metadata/dc11/filter/Dc11SchemaPreprintAdapter.php` passes `$publication->getData('abstract')`, null for a preprint without an abstract, to `addLocalizedElements(…, array $localizedValues)`, a TypeError; OJS's adapter casts to `(array)`. The array typing came with ops `25e6954e81` "pkp/pkp-lib#12950 add version relations to OAI DC" (2026-07-07). Live-probed 2026-09-25, two runs: `{server}/oai?verb=ListRecords&metadataPrefix=oai_dc` and the section's set (`…&set={server}:{abbreviation}`) answered 500 with an empty body, the probe server logging "Uncaught TypeError: …Dc11SchemaPreprintAdapter::addLocalizedElements(): Argument #3 ($localizedValues) must be of type array, null given"; the other sections' sets answered 200 with their records; the same case on a journal answered 200 with both records. Written up for the team in `docs/reports/2026-09-25-ops-oai-empty-abstract.md` (a temporary report, deleted once addressed; git history keeps it).

@@ -1886,7 +1886,7 @@ Live-probed 2026-09-25: note td2.
 (note d).
 Live-probed 2026-09-25: note d ("my path" and "café" refused, "a-b_c.d" and
 "sci/phys" saved).
-Issue report: [docs/issues/U17-OMP2-path-message-only-letters-and-numbers.md](../issues/U17-OMP2-path-message-only-letters-and-numbers.md).
+Issue report: [pkp-e2e#483](https://github.com/jardakotesovec/pkp-e2e/issues/483) ([docs/issues/U17-OMP2-path-message-only-letters-and-numbers.md](../issues/U17-OMP2-path-message-only-letters-and-numbers.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note h (`{if $browseCategories}` on a `LazyCollection`).

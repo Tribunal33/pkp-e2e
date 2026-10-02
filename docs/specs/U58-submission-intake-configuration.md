@@ -1741,7 +1741,7 @@ each "Edit" window and after "Restore Defaults".
 **f-a10** — Note f: the box's own check accepts spaces, and the server's
 `FormValidatorLocale` answers with `manager.setup.form.genre.nameRequired`,
 which no locale file defines. Live-probed 2026-09-27, two runs per app.
-Issue report: [docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md](../issues/U17-A6-section-or-component-name-of-spaces-raw-code.md).
+Issue report: [pkp-e2e#480](https://github.com/jardakotesovec/pkp-e2e/issues/480) ([docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md](../issues/U17-A6-section-or-component-name-of-spaces-raw-code.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Note d: the default texts carry `submissionGuidelinesUrl`,
