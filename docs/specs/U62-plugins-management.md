@@ -693,7 +693,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | "Upload A New Plugin" window never says which kind of file to choose | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | An upgrade refused for the same version blames "the version available in the gallery" | 🐞 | minor | — |
 | [A5](#a5) | A failed upgrade leaves the plugin with no files at all, gone from every list | 🐞 | latent | — |
-| [A7](#a7) | The Delete notice reads "successfuly" | 🐞 | minor | — |
+| [A7](#a7) | Deleting a plugin: the notice that confirms it reads "successfuly deleted" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | A refused tick or untick says nothing, and "Disable" stays open with its spinner | 🐞 | minor | — |
 | [A10](#a10) | Uploading a file that is not a plugin package shows PHP's archive error with a server path | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | With its theme switched off, a journal's home page comes up blank for every visitor | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
@@ -783,10 +783,13 @@ otherwise the rows should not offer the box.
 Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — "successfuly" in the Delete notice** · 🐞 · minor.
-After "Delete", the notice reads "Plugin "{plugin name}" successfuly
-deleted"; expected "successfully".
-Basis: probe. <sup>f-a7</sup>
+**A7 — Deleting a plugin: the notice that confirms it reads "successfuly deleted"** · 🐞 · low.
+After a Site Administrator deletes a plugin from a "Plugins" list
+("Delete", then "OK"), the notice that confirms it reads
+`Plugin "<name>" successfuly deleted`, with "successfully" misspelt.
+The plugin is deleted as asked: nothing is lost, only the wording. Only
+the English text is misspelt.
+Basis: probe, 2026-10-02. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — The theme in use can be switched off** · ❓ · user-visible.
@@ -1340,6 +1343,7 @@ an administrator. Live-probed 2026-09-27: td19.
 <a id="fn-f-a7"></a>
 **f-a7** — `lib/pkp/locale/en/manager.po`
 `manager.plugins.deleteSuccess`. Live-probed 2026-09-27: td16.
+Issue report: [docs/issues/U62-A7-plugin-delete-notice-misspelt.md](../issues/U62-A7-plugin-delete-notice-misspelt.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — fn-i. Live-probed 2026-09-27: td7.

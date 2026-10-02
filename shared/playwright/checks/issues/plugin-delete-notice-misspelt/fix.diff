@@ -1,0 +1,11 @@
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -1621,7 +1621,7 @@
+ "to secure it again later."
+ 
+ msgid "manager.plugins.deleteSuccess"
+-msgstr "Plugin \"{$pluginName}\" successfuly deleted"
++msgstr "Plugin \"{$pluginName}\" successfully deleted"
+ 
+ msgid "manager.plugins.description"
+ msgstr ""
