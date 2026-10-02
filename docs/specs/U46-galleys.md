@@ -1344,7 +1344,7 @@ remote galley and gave its row "Edit" and "Delete" only.
 <a id="fn-f-a4"></a>
 **f-a4** — Note m. The earlier version's galley file keeps
 `assocId` = the earlier galley. Live-probed 2026-09-24 (note q15).
-Issue report: [docs/issues/U46-A4-OJS1-new-version-galley-shares-published-file.md](../issues/U46-A4-OJS1-new-version-galley-shares-published-file.md).
+Issue report: [pkp-e2e#618](https://github.com/jardakotesovec/pkp-e2e/issues/618) ([docs/issues/U46-A4-OJS1-new-version-galley-shares-published-file.md](../issues/U46-A4-OJS1-new-version-galley-shares-published-file.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `TableCellOrder.vue` (note j). The Contributors list's
@@ -1378,7 +1378,7 @@ The copy's label link, `…/api/file/file-api/download-file`, answered
 and its menu still offered "More Information". OPS ran the same steps
 with no error. Controls on both apps: a published galley no version
 copied, and the copy itself, deleted cleanly.
-Issue report: [docs/issues/U46-A4-OJS1-new-version-galley-shares-published-file.md](../issues/U46-A4-OJS1-new-version-galley-shares-published-file.md).
+Issue report: [pkp-e2e#618](https://github.com/jardakotesovec/pkp-e2e/issues/618) ([docs/issues/U46-A4-OJS1-new-version-galley-shares-published-file.md](../issues/U46-A4-OJS1-new-version-galley-shares-published-file.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Notes b, c and l: OPS `PreprintGalleyGridHandler::canEdit()`
