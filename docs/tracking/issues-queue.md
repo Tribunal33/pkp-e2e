@@ -30,7 +30,7 @@ and the hourly routine starts one only when none is running
 | [U48](../specs/U48-jats-and-body-text.md) | 17 | 1 | 7 | **A20 taken: issues session, VM s1, 2026-10-02** (joined to U47 A6) |
 | [U28](../specs/U28-reviewers-review.md) | 14 | 1 | 5 |  |
 | [U06](../specs/U06-user-invitations.md) | 9 | 1 | 5 | OMP1 done with U53 A14 (pkp-e2e#447) |
-| [U16](../specs/U16-categories.md) | 22 | 1 | 4 | A16 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet; the report calls the window's box "Title" where the screen says "Name", and its Reach names "Applied Science" where reach.js uses "Social Sciences" on OPS |
+| [U16](../specs/U16-categories.md) | 22 | 1 | 4 | **A9 taken: issues session, workstation s0, 2026-10-02** (joined to U17 OMP2); A16 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet; the report calls the window's box "Title" where the screen says "Name", and its Reach names "Applied Science" where reach.js uses "Social Sciences" on OPS |
 | [U64](../specs/U64-usage-statistics.md) | 13 | 1 | 4 | OMP3 done with U69 A9 (pkp-e2e#282) |
 | [U46](../specs/U46-galleys.md) | 9 | 1 | 4 |  |
 | [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | OPS2 done with U51 OPS1 (pkp-e2e#380) |
@@ -51,7 +51,7 @@ and the hourly routine starts one only when none is running
 | [U73](../specs/U73-publication-formats-proof-terms.md) | 18 | 0 | 3 |  |
 | [U40](../specs/U40-publication-metadata.md) | 8 | 0 | 3 | A1 done with U21 A20 ([pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323)) |
 | [U30](../specs/U30-author-response-to-reviews.md) | 7 | 0 | 3 |  |
-| [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 |  |
+| [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 | **A10 taken: issues session, workstation s0, 2026-10-02** (joined to U17 A6) |
 | [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 |  |
 | [U02](../specs/U02-registration-and-account-validation.md) | 8 | 0 | 2 |  |
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 |  |
