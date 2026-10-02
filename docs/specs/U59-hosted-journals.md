@@ -798,6 +798,9 @@ Left out of the scenarios above, by reason:
   - the "Edit" and "Create Journal" windows closed as soon as the form
     shows, with no page error ([A7](#a7)): the guard the issue report
     proposes
+  - {OPS} the path "0" on "Create Server" refused with "A path is
+    required." under "Path", not a raw code ([OPS1](#ops1)): the guard
+    the issue report proposes
 - **Rarely met**:
   - exactly one journal enabled publicly, where the site's address opens
     that journal instead of the list (Rule 19; Settings bullet 4): a
@@ -901,7 +904,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Hosted Journals: closing the "Edit" or "Create Journal" window right after it opens makes the page's script fail | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | Signing in at a journal not enabled publicly leads to the Dashboard or home page, not the page asked for | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A press or preprint server that holds an institution cannot be removed and is left half deleted {OMP OPS} | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [OPS1](#ops1) | The path "0" is refused with a raw code on a preprint server | 🐞 | minor | — |
+| [OPS1](#ops1) | Hosted Servers: a path of zeros ("0", "00") on a preprint server is refused with a raw code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A changed path leaves the default "For Readers" and "For Authors" texts linking to the old address {OJS OMP} | ❓ | minor | — |
 | [A9](#a9) | On the Login page of a journal not enabled publicly, "Register" and "Home" load the Login page again | ❓ | minor | — |
 
@@ -1061,12 +1064,16 @@ Basis: probe, 2026-10-02. <sup>f-a10</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — The path "0" is refused with a raw code** · 🐞 · minor.
-A journal or press refuses the path "0" with "A path is required."; a
-preprint server refuses it with the raw code
-"##admin.contexts.form.pathRequired##" under "Path", because its language
-files lack the message.
-Basis: probe. <sup>f-ops1</sup>
+**OPS1 — Hosted Servers: a path of zeros ("0", "00") on a preprint server is refused with a raw code** · 🐞 · low.
+On a preprint server, a Site Administrator who types "0" or "00" as the
+"Path" and presses "Save" is refused with the raw code
+"##admin.contexts.form.pathRequired##" under "Path". A journal and a
+press refuse the same paths with "A path is required."
+
+This shows on "Create Server", on a server's "Edit" and on the Settings
+Wizard's "Server" tab. Nothing is stored, and an ordinary path saves.
+An empty "Path" is refused in words ("This field is required.").
+Basis: probe, 2026-10-02. <sup>f-ops1</sup>
 
 ---
 
@@ -1846,6 +1853,7 @@ do not, and a missing key prints as `##key##`. Live-probed 2026-09-27: on
 "Create Journal" and on "Edit", OPS showed
 "##admin.contexts.form.pathRequired##" under "Path", OJS and OMP "A path
 is required."
+Issue report: [docs/issues/U59-OPS1-preprint-server-path-zero-raw-code.md](../issues/U59-OPS1-preprint-server-path-zero-raw-code.md).
 
 ## Reference — entry points & surfaces
 

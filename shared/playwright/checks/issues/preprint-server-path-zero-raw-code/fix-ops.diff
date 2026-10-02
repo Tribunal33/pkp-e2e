@@ -1,0 +1,12 @@
+--- a/locale/en/admin.po
++++ b/locale/en/admin.po
+@@ -50,6 +50,9 @@
+ msgid "admin.contexts.create"
+ msgstr "Create Server"
+ 
++msgid "admin.contexts.form.pathRequired"
++msgstr "A path is required."
++
+ msgid "admin.contexts.form.pathAlphaNumeric"
+ msgstr ""
+ "The path can only include letters, numbers and the characters _ and -. It "
