@@ -2021,7 +2021,7 @@ that the page's Custom Range 2026-08-01 — 2026-08-31 left out.
 **f-a2** — fn g: with the first and last year both this year, `years` is
 −1, which the `if ($years)` guard lets through; the count over the empty
 span is 0. Live-probed 2026-09-28: td3.
-Issue report: [docs/issues/U65-A2-yearly-average-zero-first-year.md](../issues/U65-A2-yearly-average-zero-first-year.md).
+Issue report: [docs/issues/U65-A2-yearly-average-zero-first-year.md](../issues/U65-A2-yearly-average-zero-first-year.md), filed as [pkp-e2e#635](https://github.com/jardakotesovec/pkp-e2e/issues/635).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `PKPStatsEditorialQueryBuilder::countInProgress()` applies the
