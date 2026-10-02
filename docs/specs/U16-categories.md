@@ -1981,14 +1981,14 @@ Live-probed 2026-09-25: note td10.
 **f-a6** — Note g: a `div` carries the `href`; there is no `<a>`. The
 markup dates from ojs `ea9c1cefd4` (2018-12-17, pkp/pkp-lib#4158).
 Live-probed 2026-09-25: note td11.
-Issue report: [docs/issues/U16-A6-A7-category-picture-not-link-alt-null.md](../issues/U16-A6-A7-category-picture-not-link-alt-null.md), shared with [A7](#a7).
+Issue report: [pkp-e2e#599](https://github.com/jardakotesovec/pkp-e2e/issues/599) ([docs/issues/U16-A6-A7-category-picture-not-link-alt-null.md](../issues/U16-A6-A7-category-picture-not-link-alt-null.md)), shared with [A7](#a7).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Note g: OJS and OPS `alt="null"`, OMP
 `alt="{$category->getLocalizedTitle()|escape}"`; `image.altText` is saved
 by `saveCategory()` and read by no template.
 Live-probed 2026-09-25: note td11.
-Issue report: [docs/issues/U16-A6-A7-category-picture-not-link-alt-null.md](../issues/U16-A6-A7-category-picture-not-link-alt-null.md), shared with [A6](#a6); OJS's and OPS's "null" since ojs caa6c07dc7 (2019), a regression.
+Issue report: [pkp-e2e#599](https://github.com/jardakotesovec/pkp-e2e/issues/599) ([docs/issues/U16-A6-A7-category-picture-not-link-alt-null.md](../issues/U16-A6-A7-category-picture-not-link-alt-null.md)), shared with [A6](#a6); OJS's and OPS's "null" since ojs caa6c07dc7 (2019), a regression.
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note d (`/` allowed by `CATEGORY_PATH_REGEX`) and note g: the
@@ -2092,7 +2092,7 @@ Issue report: [pkp-e2e#590](https://github.com/jardakotesovec/pkp-e2e/issues/590
 **f-a19** — Note g: `catalog.browseTitles` "{$numTitles} Items" (OMP
 "{$numTitles} Titles") has one form for every number. Live-probed
 2026-09-25, all three apps: "Physics" and "Quantum", one item each.
-Issue report: [docs/issues/U16-A19-one-item-reads-1-items.md](../issues/U16-A19-one-item-reads-1-items.md), shared with [Catalog browse A1](U68-catalog-browse.md#a1).
+Issue report: [pkp-e2e#587](https://github.com/jardakotesovec/pkp-e2e/issues/587) ([docs/issues/U16-A19-one-item-reads-1-items.md](../issues/U16-A19-one-item-reads-1-items.md)), shared with [Catalog browse A1](U68-catalog-browse.md#a1).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Note h: the block's inline style for the class `current` also

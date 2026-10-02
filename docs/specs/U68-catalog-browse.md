@@ -1238,7 +1238,7 @@ or URL Path}`.
 form (OMP `locale/en/submission.po`); the catalog, series and "New
 Releases" templates all use it. Seen 2026-09-25 by the Sections spec
 (its note td5): a series' page read "1 Titles".
-Issue report: [docs/issues/U16-A19-one-item-reads-1-items.md](../issues/U16-A19-one-item-reads-1-items.md), shared with [Categories A19](U16-categories.md#a19).
+Issue report: [pkp-e2e#587](https://github.com/jardakotesovec/pkp-e2e/issues/587) ([docs/issues/U16-A19-one-item-reads-1-items.md](../issues/U16-A19-one-item-reads-1-items.md)), shared with [Categories A19](U16-categories.md#a19).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note g: the cover `<a>` holds only the `<img>`, whose
