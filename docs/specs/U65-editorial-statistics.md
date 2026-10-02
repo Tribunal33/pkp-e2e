@@ -2090,7 +2090,7 @@ decision to name (Rule 20b).
 
 <a id="fn-f-ojs4"></a>
 **f-ojs4** — fn n. Live-probed 2026-09-28: td12, the server error in fn n.
-Issue report: [docs/issues/U65-OJS4-subscriptions-report-contact-no-country.md](../issues/U65-OJS4-subscriptions-report-contact-no-country.md).
+Issue report: [docs/issues/U65-OJS4-subscriptions-report-contact-no-country.md](../issues/U65-OJS4-subscriptions-report-contact-no-country.md), filed as [pkp-e2e#630](https://github.com/jardakotesovec/pkp-e2e/issues/630).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — fn f: OMP adds `DECLINE_INTERNAL` to `getDeclinedDecisions()`

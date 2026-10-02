@@ -23,7 +23,7 @@ and the hourly routine starts one only when none is running
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 | A1, A7, OPS1: open reports docs/reports/2026-09-26-webfeed-rss2-empty-feed-fails.md, docs/reports/2026-09-26-webfeed-terms-read-array.md and docs/reports/2026-09-26-webfeed-ops-publisher-array.md (the rest of U18 written up by the issues session, workstation s0, 2026-10-02) |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U08](../specs/U08-navigation-menus-and-site-chrome.md) | 21 | 1 | 3 | **Taken: issues session, workstation s0, 2026-10-03**; OPS2 done with U51 OPS1 (pkp-e2e#380); A11 not reproduced (incidentals); A4 done |
-| [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 | **Taken: issues session, VM s3, 2026-10-02**; A5 done with U64 A7 (pkp-e2e#616); OJS4 done |
+| [U65](../specs/U65-editorial-statistics.md) | 18 | 1 | 3 | **Taken: issues session, VM s3, 2026-10-02**; A5 done with U64 A7 (pkp-e2e#616); OJS4 done (pkp-e2e#630) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OPS1 done with U13 OPS2, OPS3 (docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md); OMP6 done with U69 A9 (pkp-e2e#282) |
 | [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 |  |
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 8 | 1 | 1 |  |
