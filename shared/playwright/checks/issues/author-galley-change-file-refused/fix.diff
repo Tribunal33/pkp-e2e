@@ -1,0 +1,56 @@
+--- a/lib/ui-library/src/managers/GalleyManager/useGalleyManagerConfig.js
++++ b/lib/ui-library/src/managers/GalleyManager/useGalleyManagerConfig.js
+@@ -1,7 +1,7 @@
+ import {useLocalize} from '@/composables/useLocalize';
+ import {useApp} from '@/composables/useApp';
+ import {Actions} from './useGalleyManagerActions';
+-import {useCurrentUser} from '@/composables/useCurrentUser';
++import {useCurrentUser, EditorialRoles} from '@/composables/useCurrentUser';
+ 
+ function getAuthorActions(canCurrentUserEditPublication) {
+ 	const {isOPS} = useApp();
+@@ -70,7 +70,8 @@
+ 
+ export function useGalleyManagerConfig() {
+ 	const {t} = useLocalize();
+-	const {hasCurrentUserAtLeastOneAssignedRoleInStage} = useCurrentUser();
++	const {hasCurrentUserAtLeastOneAssignedRoleInStage, getCurrentUserId} =
++		useCurrentUser();
+ 
+ 	const {isOPS} = useApp();
+ 	function getGalleyGridComponent() {
+@@ -128,7 +129,15 @@
+ 				);
+ 			});
+ 		});
+-		return {permittedActions};
++		// Without an editorial role in the stage (an author), the server lets a
++		// user replace only the files they uploaded (SubmissionFileAccessPolicy)
++		const ownFilesOnly = !hasCurrentUserAtLeastOneAssignedRoleInStage(
++			submission.value,
++			pkp.const.WORKFLOW_STAGE_ID_PRODUCTION,
++			EditorialRoles,
++		);
++
++		return {permittedActions, ownFilesOnly};
+ 	}
+ 
+ 	function getBottomItems({config}) {
+@@ -174,7 +183,16 @@
+ 			});
+ 		}
+ 
+-		if (config.permittedActions.includes(Actions.GALLEY_CHANGE_FILE)) {
++		// "Change File" revises the galley's file when it has one
++		const canChangeFile =
++			!config.ownFilesOnly ||
++			!galley.submissionFileId ||
++			galley.file?.uploaderUserId === getCurrentUserId();
++
++		if (
++			config.permittedActions.includes(Actions.GALLEY_CHANGE_FILE) &&
++			canChangeFile
++		) {
+ 			actions.push({
+ 				label: t('submission.changeFile'),
+ 				name: Actions.GALLEY_CHANGE_FILE,

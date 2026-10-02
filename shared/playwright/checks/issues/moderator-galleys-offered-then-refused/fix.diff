@@ -1,0 +1,44 @@
+--- a/controllers/grid/preprintGalleys/PreprintGalleyGridHandler.php
++++ b/controllers/grid/preprintGalleys/PreprintGalleyGridHandler.php
+@@ -474,9 +474,10 @@
+     /**
+      * Can the current user edit the galleys in this grid?
+      *
+-     * The user must have an allowed role in one of the assigned stages.
+-     * If the user is not assigned, they can edit if they are an editor
+-     * or admin.
++     * Managers and moderators can edit them at any time, posted or not,
++     * whatever their assignment's permission to edit the publication
++     * (pkp/pkp-lib#10263, pkp/pkp-lib#13039). Anyone else (the author)
++     * only before posting, and only with that permission.
+      *
+      * @return bool
+      */
+@@ -488,21 +489,16 @@
+         $submission = $this->getSubmission();
+         $userRoles = $this->getAuthorizedContextObject(Application::ASSOC_TYPE_USER_ROLES);
+ 
+-
+-        if (in_array(Role::ROLE_ID_SITE_ADMIN, $userRoles)) {
++        if (
++            in_array(Role::ROLE_ID_SITE_ADMIN, $userRoles) ||
++            in_array(Role::ROLE_ID_MANAGER, $userRoles) ||
++            in_array(Role::ROLE_ID_SUB_EDITOR, $userRoles)
++        ) {
+             return true;
+         }
+ 
+-        // if it is published, allow managers or sub-editors
++        // once posted, nobody else
+         if ($publication->getData('status') === PKPSubmission::STATUS_PUBLISHED) {
+-            // allow these roles to edit galleys even if published
+-            if (
+-                in_array(Role::ROLE_ID_MANAGER, $userRoles) ||
+-                in_array(Role::ROLE_ID_SUB_EDITOR, $userRoles)
+-            ) {
+-                return true;
+-            }
+-            // otherwise block
+             return false;
+         }
+ 

@@ -584,6 +584,18 @@ accounts, passwords, mail catcher's address and tooling recipe. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for OPS2 (issue report
+    `docs/issues/U46-OPS2-moderator-galleys-offered-then-refused.md`):
+    before posting, a Moderator whose assignment has "Permissions" unticked
+    edits a galley, adds one and saves an order, and each change holds after
+    a reload (or, if the team rules the box binds, the page offers that
+    Moderator "View" only)
+  - the guard for OPS3 (issue report
+    `docs/issues/U46-OPS3-author-galley-change-file-refused.md`): before
+    posting, the Author offered the galleys sees "Change File" on a galley
+    whose file they uploaded and not on one whose file the Preprint Server
+    Manager uploaded
 - **Nothing new to test**:
   - a new galley's place in the list, before and after a saved order
     (Rule 8d)
@@ -642,8 +654,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | "URL of remotely-hosted content" keeps text that is not a web address | 🐞 | minor | — |
 | [A7](#a7) | Until an order is saved, editing a galley moves it to the end of the list | 🐞 | minor | — |
 | [OJS1](#ojs1) | Deleting a published galley that a new version copied fails with an error | 🐞 | user-visible · crash: both | — |
-| [OPS2](#ops2) | A Moderator without "Permissions" is offered every galley action, and only some of them hold | 🐞 | user-visible | — |
-| [OPS3](#ops3) | The preprint's Author is offered "Change File" on galleys whose file they cannot replace | 🐞 | user-visible | — |
+| [OPS2](#ops2) | Before posting, a Moderator without "Permissions" cannot edit, add or reorder the galleys the page offers | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [OPS3](#ops3) | A preprint's Author is offered "Change File" on every galley and refused on files others uploaded | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | On a preprint server galley editing follows the publication's edit permission; on a journal, Production access | ✅ | — | — |
 | [A2](#a2) | Retired: the galley window's "Close" was thought to drop unsaved changes without asking | ✅ | retired | — |
 
@@ -745,28 +757,32 @@ Since: 2025-05-28 (editing kept open after posting), 2026-07-27 (the
 Author's offer) · Basis: commit, 2026-09-24. <sup>f-ops1</sup>
 
 <a id="ops2"></a>
-**OPS2 — A Moderator without "Permissions" is offered what they cannot do** · 🐞 · user-visible.
-Before posting, a Moderator whose assignment has "Permissions" unticked
-sees the full "Galleys" page: "Add galley", "Order" and a row menu of
-"Edit", "Change File", "More Information" and "Delete". "Edit" opens the
-window read-only. A new galley's "Save" leaves "Create New Galley" open
-with every field and "Save" greyed out and no message; only the header
-"Close" leaves it, and no galley is added. "Save Order" leaves ordering
-mode and the old order comes back. "Delete" and "Change File",
-meanwhile, work. The page should offer this Moderator either all of it
-or none of it.
-Basis: probe, 2026-09-24. <sup>f-ops2</sup>
+**OPS2 — Before posting, a Moderator without "Permissions" cannot edit, add or reorder the galleys the page offers** · 🐞 · medium.
+On a preprint server, a Moderator whose assignment on the preprint has
+"Permissions" unticked (the box that allows changes to the publication)
+is offered the whole "Galleys" page before the preprint is posted: "Add
+galley", "Order", and "Edit", "Change File", "More Information" and
+"Delete" on each galley. Three of them fail. "Edit" opens the galley's
+window with every field and "Save" greyed out. A new galley's "Save"
+greys the "Create New Galley" window out, shows no message and adds
+nothing; at the next page load (a reload, say) a notice reads "This
+galley can not be edited because it has already been published." "Save
+Order" puts the old order back at once, with no message. "Change File"
+and "Delete" work for the same Moderator, and once the preprint is
+posted everything on the page does. Basis: probe, 2026-10-02.
+<sup>f-ops2</sup>
 
 <a id="ops3"></a>
-**OPS3 — The Author's "Change File" is refused on a file someone else uploaded** · 🐞 · user-visible.
-Before posting, the Author who may edit the preprint is offered "Change
-File" on every galley. On a galley whose file someone else uploaded (the
-Preprint Server Manager, a Moderator), it opens "Upload a File Ready for
-Publication" showing only "The current role does not have access to
-this operation.", and the galley keeps its old file. On a galley whose
-file the Author uploaded, "Change File" works. The row menu should offer
-"Change File" only where it works, or let it work.
-Basis: probe, 2026-09-24. <sup>f-ops3</sup>
+**OPS3 — A preprint's Author is offered "Change File" on every galley and refused on files others uploaded** · 🐞 · low.
+On a preprint server, the Author who may edit their preprint (their
+assignment has "Permissions" ticked, as installed, and the preprint is
+not yet posted) is offered "Change File" on every galley. On a galley
+whose file someone else uploaded (the Preprint Server Manager, a
+Moderator), it opens "Upload a File Ready for Publication" showing only
+"The current role does not have access to this operation.", and the
+galley keeps its old file. On a galley whose file the Author uploaded,
+"Change File" works. Nothing is lost, and the galley's file can still be
+replaced another way. Basis: probe, 2026-10-02. <sup>f-ops3</sup>
 
 ### Retired
 
@@ -1362,6 +1378,7 @@ disables the form, refuses `updateGalley` for a new galley with
 Live-probed 2026-09-24 (note q3): the refused new galley's window
 showed no message, neither the `galley.cantEditPublished` text nor any
 other.
+Issue report: [docs/issues/U46-OPS2-moderator-galleys-offered-then-refused.md](../issues/U46-OPS2-moderator-galleys-offered-then-refused.md).
 
 <a id="fn-f-ops3"></a>
 **f-ops3** — Note c: the Author's row menu offers "Change File" from
@@ -1373,6 +1390,7 @@ current role does not have access to this operation.", and the galley
 still served `preprint.pdf`. Control: on a galley the Author added,
 "Change File" with `replacement.pdf` › "Complete" served the new
 file.
+Issue report: [docs/issues/U46-OPS3-author-galley-change-file-refused.md](../issues/U46-OPS3-author-galley-change-file-refused.md).
 
 ## Reference — entry points & surfaces
 
