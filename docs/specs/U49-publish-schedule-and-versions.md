@@ -2326,7 +2326,7 @@ published normally and queued the deposit; under "Public Sandbox" with
 no issue the publish succeeded; OMP and OPS published such a
 contributor normally under "Member Sandbox" (fn-ac). The no-issue path
 on a journal with issues ("Don't Assign To An Issue") was not driven.
-Issue report: [docs/issues/U49-OJS4-publish-without-issue-orcid-contributor-error.md](../issues/U49-OJS4-publish-without-issue-orcid-contributor-error.md).
+Issue report: [pkp-e2e#549](https://github.com/jardakotesovec/pkp-e2e/issues/549) ([docs/issues/U49-OJS4-publish-without-issue-orcid-contributor-error.md](../issues/U49-OJS4-publish-without-issue-orcid-contributor-error.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — OMP `PublishForm` shows the single confirmation string for
