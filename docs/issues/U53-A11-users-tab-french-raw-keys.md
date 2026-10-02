@@ -5,12 +5,12 @@
 - **Kind** defect
 - **Affects**
   - main: OJS, OMP, OPS
-  - 3.5: OJS, OMP, OPS
+  - 3.5: OJS, OMP, OPS (no "Media" page)
   - 3.4: none (code; the older users list, no invitations)
   - 3.3: none (code; the older users list, no invitations)
 - **Introduced** not traced: no change broke it. The English texts came with the role invitations and the new users list (`pkp/pkp-lib#9658`, [7e3a26ea83](https://github.com/pkp/pkp-lib/commit/7e3a26ea83db5428a8747b7dba574259e749cf98) 2024-09-26, [e8bdca4673](https://github.com/pkp/pkp-lib/commit/e8bdca46737fb77d39a7a041cec5f7526dd07835) 2024-10-31, [4729a3cd9c](https://github.com/pkp/pkp-lib/commit/4729a3cd9cabc98712aaf91a227d984bdce7dcb9) 2025-02-04), and French (Canada) never received them
 - **Upstream** none found (2026-10-02)
-- **Tracked in** spec U53 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a11)
+- **Tracked in** spec U53 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a11), spec U47 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a7) (the "Media" page's "More Actions")
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -23,7 +23,8 @@ reads "##userAccess.search##", the Invitations table is headed
 list's "Start Date" column are codes, and the window that disables a
 user is titled "##user.disabledModal.title##". The button opens the
 role invitation pages, where every heading, step, field and button but
-"Annuler" is a code.
+"Annuler" is a code. On `main`, a screen reader also reads the code for
+the "More Actions" column and buttons of a publication's "Media" page.
 
 The rest of the tab is French, and its buttons and menus still work, so
 a manager can get through by switching the interface to English.
@@ -43,7 +44,8 @@ for their translators and are not counted in this report's effort.
   pages in French (Canada) also sees codes in place of their labels;
   that was not tried in a browser.
 - **Who.** Managers who use the interface in French (Canada), each
-  time they open the users list or invite someone.
+  time they open the users list or invite someone. On `main`, also
+  screen-reader users on a publication's "Media" page.
 - **Way round.** Switch the interface to English.
 
 Low: labels show as codes in one language while every task still gets
@@ -51,6 +53,8 @@ done. It would rise if a person invited to a role could not accept the
 invitation in French (Canada), which nobody has tried in a browser.
 
 ## Steps to reproduce
+
+Users tab:
 
 Preconditions:
 
@@ -109,6 +113,49 @@ capitals. To a screen reader the last column of both tables is also
 "##common.moreActions##". No request failed and no script error showed.
 The same page in English shows English labels throughout.
 
+"Media" page (`main` only):
+
+Preconditions:
+
+- The same dataset. A submission in Production: OJS 5 "Genetic
+  transformation of forest trees", OMP 4 "How Canadians Communicate:
+  Contexts of Canadian Popular Culture", OPS 1 "The influence of
+  lactation on the quantity and quality of cashmere production".
+- Any PNG image, here `figure.png`.
+
+7. Sign in as `dbarnes`, open the submission from "Active submissions"
+   and, in the side menu, choose "Publication" ("Preprint" on a preprint
+   server) › "Media".
+8. Press "Add Media File", choose `figure.png`, pick "Image" and "Web
+   resolution", and press "Upload Files". The list shows `figure.png`.
+9. Open the menu under the initials and, under "Change Language", choose
+   "français".
+10. Open the French "Media" page by its address,
+    `/index.php/publicknowledge/fr_CA/dashboard/editorial?workflowSubmissionId=5&workflowMenuKey=publication_6_media`
+    (OMP `workflowSubmissionId=4&workflowMenuKey=publication_4_media`,
+    OPS `workflowSubmissionId=1&workflowMenuKey=publication_1_media`).
+    In French the side menu's entry for the page reads
+    "##publication.media##". With a screen reader, read the name of the
+    list's last column and of `figure.png`'s "…" button. Neither name
+    shows on screen.
+
+**Expected.** To a screen reader, "Plus d'actions" (pkp-lib's French
+(France) text) for both, as the visible columns read "Nom de fichier",
+"Taille" and "Date de téléversement".
+
+**Observed.** Step 10, as a screen reader names them:
+
+```
+Last column:  ##common.moreActions##
+"…" button:   ##common.moreActions##
+```
+
+On screen, the page also shows codes for its own texts: the heading
+"##publication.mediaFiles##", the line under it, and the buttons
+"##publication.mediaFiles.batchLinkMedia##" and
+"##publication.mediaFiles.add##". Those are outside this report (Cause,
+Reach). In English, both names read "More Actions".
+
 ## Cause
 
 pkp-lib's French (Canada) translation has no text for these keys.
@@ -156,6 +203,19 @@ Reach:
   "Invited on …" status (`userInvitation.status.invited`), and the
   acceptance pages an invited person sees (`acceptInvitation.*`, 33
   texts).
+- To a screen reader (`main` only, all three applications): a
+  publication's "Media" page names its last column and each row's "…"
+  button with `common.moreActions`. In ui-library,
+  `useMediaFileManagerConfig.js` gives that column `headerSrOnly: true`,
+  and `MediaFileManagerCellActions.vue` sets the button's `aria-label`.
+  The page's visible codes (`publication.media`,
+  `publication.mediaFiles.*`, `common.selectedFile`,
+  `common.clickToUploadFiles`, `common.upload.addFiles`) are texts that
+  came to `main` with the page in
+  [1a5a8b1d7e](https://github.com/pkp/pkp-lib/commit/1a5a8b1d7e52ad079e4a669d4a6f3795cab9e61f)
+  (2026-05-06); no language has them yet because Weblate translates
+  `stable-3_5_0`, which does not hold them, so they are not this
+  report's.
 - Other languages (code, `main`), for their translators: the five
   texts of step 4 are missing in 50 of pkp-lib's 70 other languages,
   French (Canada) included (Catalan, Greek, Spanish (Mexico), Italian,
@@ -280,9 +340,17 @@ pkp-lib's tried as a diff.
   takes steps 3 to 6 in English, the neighbour check). The fix was
   tried with `node bin/try-fix.js apply …/fix.diff ojs omp ops`, the
   script with and without `NB=1`, then `revert`, and `NB=1` again.
-- Walked on `main` and `stable-3_5_0`, on PostgreSQL, from
-  pkp/datasets c657990 (2026-10-01). Both lines showed the same codes
-  at every step. The database plays no part (locale files); MySQL not
+- Kept script for Steps 7 to 10:
+  [`shared/playwright/checks/issues/users-tab-french-raw-keys/media.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/users-tab-french-raw-keys/media.js),
+  on an install freshly loaded from the default dataset (it adds
+  `figure.png`):
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js all shared/playwright/checks/issues/users-tab-french-raw-keys/media.js`.
+  Not walked on 3.5: `stable-3_5_0` has no "Media" page (no
+  `MediaFileManager` in its ui-library, no `publication.mediaFiles.*`
+  keys in pkp-lib's `locale/en`).
+- Walked on `main` and `stable-3_5_0` (Steps 7 to 10 on `main`
+  only), on PostgreSQL, from pkp/datasets c657990 (2026-10-01). Both
+  lines showed the same codes at every step they share. The database plays no part (locale files); MySQL not
   checked.
 - Differences from the Steps: the script closes the window of step 5
   with Escape and leaves the page of step 6 by opening another address.
@@ -326,3 +394,7 @@ pkp-lib's tried as a diff.
   already holds French (Canada) texts for
   these keys that have not reached the branches; its public API did not
   answer.
+- Unverified: the fix on the "Media" page. The diff was not applied
+  while walking Steps 7 to 10. The page reads `common.moreActions` from
+  the same text bundle as the users list, where the trial gave "Plus
+  d'actions", so the same result is expected there but was not seen.

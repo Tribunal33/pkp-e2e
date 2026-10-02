@@ -1051,16 +1051,18 @@ reads "##userAccess.search##", the Invitations table is headed
 list's "Start Date" column are codes, and the window that disables a
 user is titled "##user.disabledModal.title##". The button opens the role
 invitation pages, where every heading, step, field and button but
-"Annuler" is a code. The rest of the tab is French, and its buttons and
-menus still work, so a manager can get through by switching the
-interface to English. The fix covers French (Canada) only: its missing
-texts, entered on PKP's Weblate by the French (Canada) translators or a
-developer, or committed as the tried diff, with no code change. Every
-journal, press and preprint server that offers French (Canada) shows
-these codes. The same five tab texts are also missing in 50 other
-languages; French (France) is not among them, as it has all five. Those
-languages are for their translators and are not counted in this report's
-effort. Basis: probe, 2026-10-02. <sup>f-a11</sup>
+"Annuler" is a code. On `main`, a screen reader also reads the code for
+the "More Actions" column and buttons of a publication's "Media" page.
+The rest of the tab is French, and its buttons and menus still work, so
+a manager can get through by switching the interface to English. The fix
+covers French (Canada) only: its missing texts, entered on PKP's Weblate
+by the French (Canada) translators or a developer, or committed as the
+tried diff, with no code change. Every journal, press and preprint
+server that offers French (Canada) shows these codes. The same five tab
+texts are also missing in 50 other languages; French (France) is not
+among them, as it has all five. Those languages are for their
+translators and are not counted in this report's effort.
+Basis: probe, 2026-10-02. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — Users & Roles: the ORCID and "disabled" icons after a user's name have no name for screen readers** · 🐞 · low.

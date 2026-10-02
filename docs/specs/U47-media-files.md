@@ -877,7 +877,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A file over the upload limit fails with a server error; its card reads "Invalid JSON response from server." | 🐞 | minor · crash: server | — |
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | invisible | — |
-| [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | minor | — |
+| [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | With "HTML Monograph File" off, a book's HTML file opens as a blank page | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | On a press, a role that sees the list outside Production cannot download its files: the tab shows a refusal | 🐞 | user-visible | — |
 | [A2](#a2) | The "ID" column shows a pair's number for linked files and another kind of number for the rest | ❓ | minor | — |
@@ -956,54 +956,28 @@ server's error log. The file is added normally; no screen shows it.
 Basis: test run, 2026-09-25. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — In French the "Media" page and its windows show raw codes** · 🐞 · minor.
+**A7 — In French the "Media" page and its windows show raw codes** · 🐞 · low.
 With the interface in French, the "Media" page and the windows it opens
 read raw codes where French words belong, on a journal, a press and a
-preprint server:
-- the page: the table's title "##publication.mediaFiles##", its line
-  "##publication.mediaFiles.description##" and the "More Actions" column
-  heading "##common.moreActions##", which the Author sees too; for those
-  who manage the media files, "Batch Link Media" and "Add Media File"
-  read "##publication.mediaFiles.batchLinkMedia##" and
-  "##publication.mediaFiles.add##";
-- "Upload Media File": the title "##publication.mediaFiles.upload##",
-  the line "##publication.mediaFiles.upload.description##" and the link
-  "##common.clickToUploadFiles##";
-- "Batch Link Media": the title
-  "##publication.mediaFiles.batchLinkMedia##", the line
-  "##publication.mediaFiles.batchLinkMedia.description##", the columns
-  "##publication.mediaFiles.selectedWebVersion##" and
-  "##publication.mediaFiles.linkHighResolutionVersion##", each row's
-  list (a screen reader names it
-  "##publication.mediaFiles.selectHighResolutionFor##"; unlinked, it
-  shows "##publication.mediaFiles.noHighResolutionFile##") and the button
-  "##publication.mediaFiles.linkMedia##";
-- "Manually Link Media": the row menu entry and the window's title
-  "##publication.mediaFiles.manuallyLinkMedia##", then the labels
-  "Selected File" "##common.selectedFile##" and "Select the media file
-  to link as its counterpart"
-  "##publication.mediaFiles.selectMediaFileToLink##" with the help
-  "##publication.mediaFiles.selectMediaFileToLink.description##", its
-  entry "##publication.mediaFiles.noHighResolutionFile##" and the button
-  "##publication.mediaFiles.linkMedia##";
-- "Edit Metadata": "Name of the file" reads
-  "##publication.mediaFiles.metadataName##", its help
-  "##publication.mediaFiles.metadataNameDescription##";
-- the delete dialog: the title "##publication.mediaFiles.delete##" and
-  the text "##publication.mediaFiles.confirmDelete##", above "OK" and
-  "Annuler".
-
-Expected: French words, as the rest of the page shows (the other column
-headings, the row menu's "Information détaillée", "Éditer les
-métadonnées" and "Supprimer le fichier", the other fields of "Éditer
-les métadonnées", "Annuler"); the English screen shows none of these
-codes. A French-speaking Production Editor has to guess what each
-button and window does, and the delete dialog does not name the file it
-deletes. The side menu's "Media" and the page heading are [Workflow
+preprint server: the table's title and line, "Batch Link Media", "Add
+Media File", "Upload Media File", "Manually Link Media", "Name of the
+file" in "Edit Metadata" and the delete dialog read
+"##publication.mediaFiles.…##", "##common.selectedFile##" or
+"##common.clickToUploadFiles##", and a screen reader names the "More
+Actions" column and each row's "…" button "##common.moreActions##". The
+English screen shows none of these codes.
+Only "More Actions" is a released text that French (Canada) never
+received: that one is the issue report's, with the users list where it
+shows the same way. The page's other codes came to `main` with the page
+in pkp-lib 1a5a8b1d7e (2026-05-06, `pkp/pkp-lib#12262`) and no language
+has them yet, as with every pkp-lib text on `main` and not on
+`stable-3_5_0`: unreleased 3.6 texts waiting for Weblate, which so far
+translates `stable-3_5_0` only; no report (issues session ruling,
+2026-10-02). The side menu's "Media" and the page heading are [Workflow
 screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s,
 and why a missing French text shows as a code at all is [Languages &
 locales](U57-languages-and-locales.md#a4)'.
-Basis: probe, 2026-09-30. <sup>f-a7</sup>
+Basis: probe, 2026-10-02. <sup>f-a7</sup>
 
 ### OJS
 <a id="ojs1"></a>
@@ -1808,6 +1782,7 @@ showed none of them. The row's "…" button's accessible name also reads
 a `fr_CA` entry; the English `publication.mediaFiles.confirmDelete`
 carries the file name. The "More Information" window's History line
 with an empty file name is *Submission activity log & notes*' finding.
+Issue report: [pkp-e2e#457](https://github.com/jardakotesovec/pkp-e2e/issues/457) ([docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — Note q29. `HtmlArticleGalleyPlugin`, the galley view: a
