@@ -9,9 +9,9 @@
   - 3.4: OJS, OMP, OPS (code; Institutions and Announcements, and Highlights where `[features] highlights` is on)
   - 3.3: OJS, OMP, OPS (code; Announcements only)
 - **Introduced** `pkp/ui-library#88` for `pkp/pkp-lib#5865` · [d0ffc05ab4](https://github.com/pkp/ui-library/commit/d0ffc05ab4ae7f06e8d2ab82f30ffb8a5ea9a7a3) · 2020-05-13 · Nate Wright (NateWr)
-- **Upstream** none found (2026-09-30)
-- **Tracked in** specs U66 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a2), U12 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a11), U11 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U11-highlights.md#a4), U47 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a5)
-- **Checked** 2026-09-30, each branch's tip (the commits in Evidence); the "Media files" Steps again on `main` 2026-10-02
+- **Upstream** none found (2026-10-02)
+- **Tracked in** specs U66 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a2), U12 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a11), U11 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U11-highlights.md#a4), U47 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a5), U16 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a16)
+- **Checked** 2026-09-30, each branch's tip (the commits in Evidence); the "Media files" Steps, and the Categories check on `main` and 3.5, again 2026-10-02
 
 ## Summary
 
@@ -27,12 +27,12 @@ then shows wherever the item shows, public pages included.
 
 On 3.5 only institutions, announcements and highlights break;
 highlights need no setting there or on `main`. On `main` the same also
-happens to a category's title, a contributor role's name, on journals a
+happens to a category's name, a contributor role's name, on journals a
 reviewer recommendation's title, and a media file's "Name of the file"
 in "Edit Metadata" on a publication's "Media" page. There it happens even after
 the editor answers "Yes" to "Do you wish to continue without saving?".
-A category's row keeps showing the saved title, but its reopened
-"Title" box shows the abandoned one, and the next "Save" stores it.
+A category's row keeps showing the saved name, but its reopened
+"Name" box shows the abandoned one, and the next "Save" stores it.
 
 Every one of these windows goes wrong in the same shared form
 component, so one change there fixes them all, the media window
@@ -256,8 +256,15 @@ Reach:
   item opened with "Edit", its title or name changed, the panel closed
   with its close control, then reopened and saved unchanged:
   - Settings › Journal (Press, Server) › Categories, "Edit Category":
-    the row keeps "Applied Science", the reopened "Title" reads "Applied
-    Science Draft", and the save stores it; all three apps.
+    the row keeps "Applied Science" ("Social Sciences" on the preprint
+    server), the reopened "Name" reads "Applied Science Draft", and the
+    save stores it; all three apps. The window's "Description" is filled
+    from the row the same way (read in the code). On 3.5, 3.4 and 3.3
+    the Categories tab is a grid whose "Edit Category" window is built
+    on the server at each opening, so it is clean there: on 3.5 its close
+    asks "The data on this form has changed. Do you wish to continue
+    without saving?", and after "OK" the reopened "Name" reads the saved
+    name (walked; 3.4 and 3.3 read in the code).
   - Settings › Workflow › Submission › Contributor Roles, "Edit Role":
     the row reads "Translator Draft" and the save stores it; all three
     apps.
@@ -359,9 +366,9 @@ for a single-language box.
   has the same watcher), applies as written to 3.5 and 3.4, and to 3.3's
   `Form.vue` (line 404) for Announcements; each app then takes the
   ui-library update and rebuilds its scripts. Tried on `main` only.
-- Guard: an e2e scenario in U66, U12, U11 and U47 (a Planned item each)
-  that changes the name or title, closes the panel, and checks the row
-  and the reopened box, and a Storybook play test on one list panel if the
+- Guard: an e2e scenario in U66, U12, U11, U47 and U16 (a Planned item
+  each) that changes the name or title, closes the panel, and checks the
+  row and the reopened box, and a Storybook play test on one list panel if the
   team wants it in ui-library.
 
 Small: one shared change of a few lines in the form, and the same in its
@@ -376,7 +383,9 @@ two overrides, in one repo; it covers all seven windows.
     (stable-3_5_0: `PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35` in front).
   - [reach.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/reach.js),
     the Categories, Contributor Roles and Reviewer Recommendations checks
-    of the Reach, `main` only: the same command with `reach.js`.
+    of the Reach: the same command with `reach.js`; on stable-3_5_0
+    (`PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35` in front) the Categories
+    check alone, on the grid.
   - [neighbour.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/unsaved-name-kept-after-closing-edit-panel/neighbour.js),
     an ordinary edit with a new English and French name or title in each
     of those six panels and in Masthead's acronym, then "Save" and a
@@ -398,6 +407,11 @@ two overrides, in one repo; it covers all seven windows.
   - with the fix, media.js showed the Expected on all three apps; its
     ordinary rename ("figure-3.png") showed in the row at once and after
     a reload, and was stored, with the fix and without it.
+  - tried again on 2026-10-02 on OJS alone, whose lib/ui-library had
+    moved to 64d67363 (OMP and OPS unchanged since the first trial): with
+    the fix, reach.js showed the Expected for Categories, Contributor
+    Roles and Reviewer Recommendations, and neighbour.js stored every new
+    value, English and French, with the fix and without it.
   - Not driven with the fix: the date and time formats form
     (`DateTimeForm.vue`) and the theme options form (`ThemeForm.vue`).
 - Walked 2026-09-30 on PostgreSQL, each install freshly loaded from
@@ -423,11 +437,29 @@ two overrides, in one repo; it covers all seven windows.
     "Save" request of step 26 included, and no request failed. Neither
     ui-library commit since 280f98c5 touches `Form.vue` or
     `src/managers/MediaFileManager/`, and the fix applies as written.
+  - The Categories check was walked again on 2026-10-02 with reach.js,
+    each install freshly loaded from pkp/datasets
+    [e8dafbc](https://github.com/pkp/datasets/commit/e8dafbcf0a61c21a3653dd24d9a1282f36762d12)
+    (2026-10-02), on `main` (OJS b84f8e2e44 with lib/pkp ddd8ab243a and
+    lib/ui-library 64d67363; OMP and OPS as above) and on stable-3_5_0
+    (OJS 091fb65453, OMP 9c5e24246c, OPS 38b61882d3; lib/pkp cf3f984335,
+    lib/ui-library d4e01883). On `main` all three apps showed the Reach's
+    finding, the save answering 200; on 3.5 the window was fetched again
+    (`edit-category`) at each opening and the reopened "Name" kept the
+    saved name. 3.5's OPS dataset holds no "Applied Science", so the
+    check used its "Social sciences" there. No request failed and no
+    script error was recorded.
   - The fault is in the browser, so the database does not bear on it.
 - The "Media" page on 3.5, 3.4 and 3.3, by code: `stable-3_5_0`'s
   ui-library (1a7a4750) has no `src/managers/MediaFileManager/` and its
   pkp-lib (a9c76aed62) no media files API; the page came with
   ui-library 3f97137c (2026-05-06), after the 3.5 branch point.
+- Categories on 3.5, 3.4 and 3.3, by code: the tab loads
+  `CategoryCategoryGridHandler` (lib/pkp `stable-3_5_0` cf3f984335,
+  `stable-3_4_0` 6f96165c90, `stable-3_3_0` 4156e50233), whose
+  `editCategory()` builds `CategoryForm` with `initData()` from the stored
+  category at each opening; the Vue Categories manager (ui-library
+  b35c06bc) is on none of the three ui-library branches.
 - 3.4, by code:
   - ui-library `stable-3_4_0` at ee684b34: the three `openEditModal()`
     methods assign `field.value = <row>[field.name]`, and `Form.vue`
@@ -455,8 +487,11 @@ two overrides, in one repo; it covers all seven windows.
     added the `dateExpire` formatting), then adb7cd9d47 (Institutions,
     `pkp/ui-library#213`, Bozana Bokan), 0abe290a00 (Highlights,
     `pkp/ui-library#288`, Nate Wright), b8a7af79 (Reviewer
-    Recommendations), b35c06bc (Categories) and b628fd2b (Contributor
-    Roles). The PRs from the GitHub API's `commits/<sha>/pulls`.
+    Recommendations), b35c06bc (Categories, `pkp/ui-library#550` for
+    `pkp/pkp-lib#10404`, 2025-05-12, Taslan A. Graham (taslangraham), the
+    `setValues({...category, …})` in `getCategoryForm()`, which `git
+    blame` shows) and b628fd2b (Contributor Roles). The PRs from the
+    GitHub API's `commits/<sha>/pulls`.
   - The media "Edit Metadata" window: `value: mediaFile.name` since
     [3f97137c](https://github.com/pkp/ui-library/commit/3f97137cef11b99042ee8bcc96ff0dfe5dcf84e4)
     (`pkp/ui-library#794` for `pkp/pkp-lib#12262`, 2026-05-06, Blesilda
@@ -467,4 +502,9 @@ two overrides, in one repo; it covers all seven windows.
   "Media" page (media file name without saving, media metadata name,
   `MediaFileManager`; `pkp/pkp-lib#12262` and its QA comments read):
   nothing about this fault. The "Media" page's searches were run again on
-  2026-10-02, with the same result.
+  2026-10-02, with the same result, and so were searches for the
+  category window (category edit unsaved, category name close without
+  saving, edit category modal previous value, `categoryManagerStore`,
+  `setValues`; `pkp/pkp-lib#10404` and `pkp/pkp-lib#11411`, the
+  category manager's issue and its test checklist, read): nothing about
+  this fault.

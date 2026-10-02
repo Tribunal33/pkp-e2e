@@ -817,6 +817,9 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a category's "Name" changed, the window closed without saving, and
+    the row and the reopened "Name" checked ([A16](#a16)): the guard the
+    issue report proposes
   - a category's "Path" refused with a message that names the characters
     a saved path may hold ([A9](#a9)): the guard the issue report
     proposes
@@ -901,7 +904,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | A screen reader announces the "Select Categories" window's arrow column as "##common.expand##" | 🐞 | minor | — |
 | [A13](#a13) | A category's "Editorial Assignments" assign nobody on any journal or press but the install's first | 🐞 | user-visible | — |
 | [A15](#a15) | In French, the tab, the delete dialog, the "Select Categories" window and a press's category page show raw codes | 🐞 | minor | — |
-| [A16](#a16) | A name changed and closed without saving comes back in the same category's next "Edit" | 🐞 | medium | — |
+| [A16](#a16) | A name changed and closed without saving comes back in the same category's next "Edit" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | A file that is not a picture leaves a broken preview in "Cover Image" | 🐞 | minor | — |
 | [A18](#a18) | The delete dialog's confirmation box has no name for a screen reader | 🐞 | minor | — |
 | [A19](#a19) | A category with one item reads "1 Items" ("1 Titles" on a press) | 🐞 | minor | — |
@@ -1077,7 +1080,7 @@ unsaved name ("Path" back to the saved one), also after a switch to
 the change, again without a question. The same fault as
 [Institutions A2](U66-institutions.md#a2), whose row shows the unsaved
 name as well.
-Basis: probe, 2026-09-25; again 2026-09-30. <sup>f-a16</sup>
+Basis: probe, 2026-09-25; again 2026-09-30 and 2026-10-02. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — A file that is not a picture leaves a broken preview** · 🐞 · minor.
@@ -1953,6 +1956,7 @@ only the form. The row prints the API's `localizedTitle` string, so it
 keeps the saved name, unlike Institutions A2. The report's severity,
 medium, is the entry's impact.
 Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md](../issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md)).
+Re-walked 2026-10-02 by the issue report's `reach.js` on `main` (all three apps: the reopened "Name" held the abandoned text and an unchanged "Save" stored it) and on stable-3_5_0 (clean: its grid rebuilds "Edit Category" at each opening and asks before closing with a change); the report's "Tracked in" lists A16.
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-09-25, all three apps: note d (the preview's
