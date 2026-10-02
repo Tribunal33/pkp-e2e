@@ -1,0 +1,63 @@
+--- a/controllers/grid/issueGalleys/IssueGalleyGridHandler.php
++++ b/controllers/grid/issueGalleys/IssueGalleyGridHandler.php
+@@ -158,9 +158,10 @@
+             )
+         );
+ 
+-        // Language, if more than one is supported
++        // Language, if galleys can be in more than one: the form languages, and the interface
++        // languages galleys saved before may hold
+         $journal = $request->getJournal();
+-        if (count($journal->getSupportedLocaleNames()) > 1) {
++        if (count(array_unique(array_merge($journal->getSupportedLocales() ?? [], $journal->getSupportedFormLocales() ?? []))) > 1) {
+             $this->addColumn(
+                 new GridColumn(
+                     'locale',
+--- a/controllers/grid/issues/form/IssueGalleyForm.php
++++ b/controllers/grid/issues/form/IssueGalleyForm.php
+@@ -27,6 +27,7 @@
+ use APP\journal\JournalDAO;
+ use APP\template\TemplateManager;
+ use PKP\db\DAORegistry;
++use PKP\facades\Locale;
+ use PKP\file\TemporaryFileDAO;
+ use PKP\form\Form;
+ 
+@@ -56,15 +57,17 @@
+         $this->addCheck(new \PKP\form\validation\FormValidatorPost($this));
+         $this->addCheck(new \PKP\form\validation\FormValidatorCSRF($this));
+ 
+-        // Ensure a locale is provided and valid
++        // Ensure a locale is provided and valid: one of the journal's form languages, or the
++        // language the galley already has
+         $journal = $request->getJournal();
+         $this->addCheck(new \PKP\form\validation\FormValidatorCustom(
+             $this,
+             'galleyLocale',
+             'required',
+             'editor.issues.galleyLocaleRequired',
+-            function ($galleyLocale) use ($journal) {
+-                return in_array($galleyLocale, $journal->getSupportedFormLocales());
++            function ($galleyLocale) use ($journal, $issueGalley) {
++                return in_array($galleyLocale, $journal->getSupportedFormLocales())
++                    || ($issueGalley && $galleyLocale === $issueGalley->getLocale());
+             }
+         ));
+ 
+@@ -85,9 +88,15 @@
+         $journal = $request->getJournal();
+         $templateMgr = TemplateManager::getManager($request);
+ 
++        // Offer the languages the validation accepts
++        $supportedLocales = $journal->getSupportedFormLocaleNames();
++        if ($galleyLocale = $this->_issueGalley?->getLocale()) {
++            $supportedLocales[$galleyLocale] ??= Locale::getMetadata($galleyLocale)?->getDisplayName() ?? $galleyLocale;
++        }
++
+         $templateMgr->assign([
+             'issueId' => $this->_issue->getId(),
+-            'supportedLocales' => $journal->getSupportedLocaleNames(),
++            'supportedLocales' => $supportedLocales,
+             'enablePublisherId' => in_array('issueGalley', (array) $request->getContext()->getData('enablePublisherId')),
+         ]);
+         if ($this->_issueGalley) {

@@ -1046,6 +1046,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U50-A17-A18-issue-lists-version-published-outside-it.md`):
     a newer version published with "Don't Assign To An Issue" leaving
     the issue's page, "Items" and "Table of Contents"
+  - the guard for A11 (issue report
+    `docs/issues/U50-A11-issue-galley-interface-language-refused.md`):
+    on a journal with an interface-only language, "Create Issue Galley"
+    offering only the languages "Save" accepts
 - **Nothing new to test**:
   - a cover saved for the journal's primary language, shown on the
     issue's page in another interface language while "Issue Data"
@@ -1127,7 +1131,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 | [A6](#a6) | "Year" accepts letters: "20a6" is saved as 20 without a message | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | "Future Issues" lists "No. 10" before "No. 2" | 🐞 | minor | — |
 | [A10](#a10) | An article dropped under another section in "Order" is back in its own section on reopening | 🐞 | minor | — |
-| [A11](#a11) | "Create Issue Galley" offers interface-only languages, then refuses them as if no language were chosen | 🐞 | user-visible | — |
+| [A11](#a11) | An issue galley in an interface-only language is refused as if no language were chosen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | After "Delete" on an issue, its offline articles still read "Published" and History records no unpublishing | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | "Archives" lists the issues in no set order until someone orders "Back Issues" | 🐞 | user-visible | — |
 | [A14](#a14) | A galley address that names no galley of the issue fails with an empty page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1246,14 +1250,20 @@ keep; it should either refuse the drop or move the article. Basis: probe,
 2026-09-25. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — An issue galley in an interface-only language is refused as if no language were chosen** · 🐞 · user-visible.
-The "Language" list of "Create Issue Galley" offers every interface
-language, but "Save" with a language the forms are not in keeps the
-window open with nothing marked and the notice "An issue galley locale
-is required.". The Journal Manager picked an offered language and is
-told to pick one. The list should offer only the languages "Save"
-accepts, or "Save" should accept what the list offers. Basis: probe,
-2026-09-25. <sup>f-a11</sup>
+**A11 — An issue galley in an interface-only language is refused as if no language were chosen** · 🐞 · medium.
+A Journal Manager adds a galley to an issue and picks, in the "Language"
+list of "Create Issue Galley", a language the journal offers as an
+interface language but has not turned on for its forms. "Save" keeps the
+window open with no box marked, and a notice reads "An issue galley
+locale is required.". No galley is saved. The same refusal blocks edits.
+A manager may turn a language off for forms while keeping it for the
+interface. After that, every "Save" on a galley already in that language
+is refused with the same notice. Readers still see the galley on the
+issue's page; only the edit is blocked. A second symptom has the same
+cause and the same fix. The save check accepts a language that is turned
+on for forms but not for the interface, but the "Language" list never
+offers it.
+Basis: probe, 2026-10-02. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — After "Delete" on an issue, its offline articles still read "Published" and History records no unpublishing** · 🐞 · medium.
@@ -1527,6 +1537,7 @@ Issue report: [docs/issues/U50-A5-A6-issue-big-volume-or-lettered-year.md](../is
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-25 (td9), OJS: on a journal whose interface is English and French and whose forms are English only, a galley in French answered the notice "An issue galley locale is required." and was not listed; on a journal where French is also a form language the same galley saved as "PDF | French". `IssueGalleyForm` checks `galleyLocale` against `getSupportedFormLocales()` while the list offers `getSupportedLocaleNames()` (note p).
+Issue report: [docs/issues/U50-A11-issue-galley-interface-language-refused.md](../issues/U50-A11-issue-galley-interface-language-refused.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Live-probed 2026-09-25 (td12; Side effects bullet 3), OJS, two articles over two runs (one published through its workflow, one seeded as published): after "Delete" of its issue each article's workflow header read "Published" with "Return to Workflow", its Publication Settings "Status: Unscheduled", its page "404 Not Found", and its History only "Submission metadata updated". `deleteIssue()` sets the status through `Repo::publication()->edit()`, not `unpublish()` (note t), so no unpublication is logged (note se).
