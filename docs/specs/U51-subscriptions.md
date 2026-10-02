@@ -2095,11 +2095,11 @@ Issue report: [pkp-e2e#388](https://github.com/jardakotesovec/pkp-e2e/issues/388
 
 <a id="fn-f-a10"></a>
 **f-a10** — `userSubscriptions.tpl` offers `purchaseSubscription/{kind}/{id}` on an `ACTIVE` subscription; `UserIndividualSubscriptionForm::execute()` (and the institutional one) set the existing subscription's status to `AWAITING_MANUAL_PAYMENT` (or `_ONLINE_`) and both dates to today before any payment. Live-probed 2026-09-25 (td18), individual and institutional.
-Issue report: [docs/issues/U51-A10-purchase-on-active-subscription-removes-access.md](../issues/U51-A10-purchase-on-active-subscription-removes-access.md).
+Issue report: [pkp-e2e#398](https://github.com/jardakotesovec/pkp-e2e/issues/398) ([docs/issues/U51-A10-purchase-on-active-subscription-removes-access.md](../issues/U51-A10-purchase-on-active-subscription-removes-access.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — `UserInstitutionalSubscriptionForm::execute()` calls `Repo::institution()->add()` for a new `Institution` on every save, then points the subscription at it. Live-probed 2026-09-25 (td17, td18): two "Tide University" rows after two purchases, a second "K3 Uni B" after "Purchase" on an existing one.
-Issue report: [docs/issues/U51-A11-institutional-purchase-adds-institution-each-time.md](../issues/U51-A11-institutional-purchase-adds-institution-each-time.md).
+Issue report: [pkp-e2e#400](https://github.com/jardakotesovec/pkp-e2e/issues/400) ([docs/issues/U51-A11-institutional-purchase-adds-institution-each-time.md](../issues/U51-A11-institutional-purchase-adds-institution-each-time.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `UserHandler::purchaseSubscription()` has no sign-in check: with no user, `$user->getId()` is called on nothing (the individual path in `subscriptionExistsByUserForJournal()`, the institutional path in the form's constructor). The page router authorises page requests by default. Live-probed 2026-09-25 (td19): signed out, `GET {journal}/user/purchaseSubscription/individual` and `GET …/institutional` answered HTTP 500 with an empty body.
@@ -2154,7 +2154,7 @@ Issue report: [pkp-e2e#390](https://github.com/jardakotesovec/pkp-e2e/issues/390
 
 <a id="fn-f-a25"></a>
 **f-a25** — `UserInstitutionalSubscriptionForm::initData()` fills `ipRanges` with `$institution->getIPRanges()`, an array, which the text box prints as "Array"; the IP check then refuses it. Live-probed 2026-09-25 (td18).
-Issue report: [docs/issues/U51-A25-institutional-purchase-ip-ranges-read-array.md](../issues/U51-A25-institutional-purchase-ip-ranges-read-array.md).
+Issue report: [pkp-e2e#399](https://github.com/jardakotesovec/pkp-e2e/issues/399) ([docs/issues/U51-A25-institutional-purchase-ip-ranges-read-array.md](../issues/U51-A25-institutional-purchase-ip-ranges-read-array.md)).
 
 <a id="fn-f-a26"></a>
 **f-a26** — `block.tpl` has lines only for the two awaiting statuses (note f-a13); any other status falls through to the date lines (`isNonExpiring()`, `isExpired()`, else "Expires: {date}"). Live-probed 2026-09-25 (td20): "Needs Approval", "Needs Information" and "Other, See Notes" read "Expires: 2027-09-25" in the block while "My Subscriptions" read "Inactive" and the PDF led to the "Subscriptions" page.
