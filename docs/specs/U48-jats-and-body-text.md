@@ -1251,7 +1251,7 @@ is made.
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note c: `WorkflowPublicationJats.vue` withdraws "Upload" and "Delete" on `STATUS_PUBLISHED`, a constant undefined on the workflow page, so the test never matches; the server's `PublicationCanBeEditedPolicy` lets editorial roles write to a published version. Probe: d30.
-Issue report: [docs/issues/U48-A12-published-jats-upload-delete-offered.md](../issues/U48-A12-published-jats-upload-delete-offered.md).
+Issue report: [pkp-e2e#554](https://github.com/jardakotesovec/pkp-e2e/issues/554) ([docs/issues/U48-A12-published-jats-upload-delete-offered.md](../issues/U48-A12-published-jats-upload-delete-offered.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Live-probed 2026-09-25 (Rule 3), OJS, as a first upload and over a text file: the upload of "figure.png" answered 500 on `POST …/api/v1/submissions/{id}/publications/{pid}/jats`, yet the file was stored ("More Information" and "Delete" offered on reopening); every reopening answered 500 on `GET …/jats`, and "More Information" 500 on `GET $$$call$$$/information-center/file-information-center/view-information-center?submissionFileId=undefined…`. No type check on upload (note k). Probe: d4.
