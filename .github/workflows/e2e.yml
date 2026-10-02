@@ -63,7 +63,7 @@ on:
         type: string
         default: 'ojs,omp,ops'
       php_ini_values:
-        description: extra php.ini values for setup-php, comma-separated (e.g. opcache.jit=disable)
+        description: extra php.ini values for setup-php, comma-separated, after the job's opcache.jit=disable (e.g. opcache.jit=1235 for a run with the JIT)
         type: string
         default: ''
 

@@ -912,9 +912,12 @@ trips.
   `PKPRouter::getRequestedContextPath`. CI arms, two runs each: JIT on 12
   deaths, JIT off 14, every one GH-20469 by its backtrace (U16 category
   pages, U65 statistics), none of the new kind, so the arms do not tell
-  the JIT apart yet; the JIT stays on, a flip to off is the maintainer's
-  call. **Watch condition**: a death whose backtrace is not GH-20469;
-  then read whether it died in JIT code.
+  the JIT apart yet. **JIT off on CI 2026-10-02** (maintainer's call: as
+  PHP ships and as the VM runs; `run-app.yml` writes
+  `opcache.jit=disable` before `php_ini_values`, so a dispatch with
+  `--php-ini-values opcache.jit=1235` still runs with it). The GH-20469
+  deaths stay until the pkp-lib workaround lands. **Watch condition**: a
+  death whose backtrace is not GH-20469; then read it.
 - **Manage Emails template window gone before its "Saved" read** (U34 S7,
   OJS and OMP, CI). The nightly pkp-e2e run 35558115088 (2026-09-21, `main`
   at `735bb76`, the same tree and the same app tips as the green push run

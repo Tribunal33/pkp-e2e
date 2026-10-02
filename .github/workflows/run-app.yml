@@ -70,10 +70,11 @@ on:
         default: ''
       php_ini_values:
         description: >-
-          extra php.ini values for setup-php, comma-separated, e.g.
-          `opcache.jit=disable` for a run without the tracing JIT setup-php
-          turns on by default (opcache.jit=1235). Empty: setup-php's
-          defaults, as every app hook runs.
+          extra php.ini values for setup-php, comma-separated, written
+          after the job's own `opcache.jit=disable`, so they win: e.g.
+          `opcache.jit=1235` for a run with the tracing JIT setup-php would
+          turn on by default. Empty: the JIT stays off, as every app hook
+          runs.
         required: false
         type: string
         default: ''
@@ -174,7 +175,11 @@ jobs:
         with:
           php-version: '8.3'
           extensions: bcmath, bz2, curl, gd, intl, mbstring, opcache, pdo_pgsql, pgsql, soap, xml, zip
-          ini-values: ${{ inputs.php_ini_values }}
+          # The JIT off, as PHP ships and as the VM runs: setup-php turns
+          # the tracing JIT on by default, and a crash in JIT-compiled code
+          # killed fresh `php -S` workers on CI (ci-triage "A `php -S` worker
+          # segfault", 2026-10-02; maintainer's call).
+          ini-values: ${{ inputs.php_ini_values && format('opcache.jit=disable, {0}', inputs.php_ini_values) || 'opcache.jit=disable' }}
           coverage: none
 
       # The evidence a `php -S` segfault leaves (ci-triage "A `php -S` worker
