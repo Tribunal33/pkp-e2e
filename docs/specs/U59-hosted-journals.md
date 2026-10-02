@@ -783,6 +783,9 @@ Left out of the scenarios above, by reason:
   - the row read right after a saved "Edit", before any reload, showing
     the new name and path ([A2](#a2)): the guard the issue report
     proposes
+  - the address in front of "Path" on the journal form reading the
+    journal's address up to its path, with "index.php/" on the test
+    installs ([A3](#a3)): the guard the issue report proposes
 - **Rarely met**:
   - exactly one journal enabled publicly, where the site's address opens
     that journal instead of the list (Rule 19; Settings bullet 4): a
@@ -880,7 +883,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | Hosted Journals: "Country" carries no Required mark, yet no journal saves without one | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | Hosted Journals: after a saved "Edit", the list keeps the journal's old name and path until a reload | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A3](#a3) | The address in front of "Path" is not the journal's real address | 🐞 | minor | — |
+| [A3](#a3) | Journal form: the address in front of "Path" leaves out "index.php/", so it is not the address the site gives the journal | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | After a path change on the Settings Wizard, its further saves and list actions fail until a reload | 🐞 | minor | — |
 | [A6](#a6) | "Jump to next error" never gets past the first refused field | 🐞 | minor | — |
 | [A7](#a7) | Closing the "Edit" or "Create Journal" window right after it opens makes the page's script fail | 🐞 | invisible · crash: script | — |
@@ -922,13 +925,24 @@ journal by its old title.
 Basis: probe, 2026-10-02. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — The address in front of "Path" is not the journal's address** · 🐞 · minor.
-The form shows the site's base address and "/" in front of the "Path" box,
-as if the journal's address were that followed by the path. On an
-installation that keeps "index.php/" in its addresses, the application's
-default and the test installs' setting, the journal's real address has
-"index.php/" before the path, so the preview is wrong.
-Basis: probe. <sup>f-a3</sup>
+**A3 — Journal form: the address in front of "Path" leaves out "index.php/", so it is not the address the site gives the journal** · 🐞 · low.
+The journal form shows the site's base address and "/" in front of the
+"Path" box, as if the journal's address were that followed by the path.
+An installation that leaves `restful_urls` Off, the application's
+default, keeps "index.php/" in its addresses. There the journal's
+address has "index.php/" before the path, so the preview is wrong.
+
+The Site Administrator meets it on Administration › "Hosted Journals",
+in "Create Journal" and a journal's "Edit" window, and on the Settings
+Wizard's journal tab. The path itself saves correctly and the journal
+works. Before a change in 2019, OJS's form printed "The journal's URL
+will be …" with the address the site uses.
+
+The test installs run PHP's built-in web server, which passes an address
+without "index.php/" to the application, so there the shown address
+opens the journal. What Apache or nginx without rewrite rules answers
+was not checked.
+Basis: probe, 2026-10-02. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — The Settings Wizard's saves fail after a path change** · 🐞 · minor.
@@ -1709,6 +1723,7 @@ set `restful_urls = Off`, under which every journal address is
 `{base}/index.php/{path}/…`. Live-probed 2026-09-27, three apps: the
 prefix read `http://127.0.0.1:8650/` (8750, 8850) while the seeded
 journal's home was `http://127.0.0.1:8650/index.php/publicknowledge/en`.
+Issue report: [docs/issues/U59-A3-path-box-address-without-index-php.md](../issues/U59-A3-path-box-address-without-index-php.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note h; the legacy grids' actions (languages, plugins,

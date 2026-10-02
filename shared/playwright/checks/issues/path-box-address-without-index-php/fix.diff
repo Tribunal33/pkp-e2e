@@ -1,0 +1,33 @@
+--- a/lib/pkp/classes/components/forms/context/PKPContextForm.php
++++ b/lib/pkp/classes/components/forms/context/PKPContextForm.php
+@@ -33,7 +33,7 @@
+      *
+      * @param string $action URL to submit the form to
+      * @param array $locales Supported locales
+-     * @param string $baseUrl Base URL for the site
++     * @param string $baseUrl The address a context's path follows in its URLs (PKPRequest::getIndexUrl())
+      * @param \PKP\context\Context $context Journal or Press to change settings for
+      */
+     public function __construct($action, $locales, $baseUrl, $context)
+--- a/lib/pkp/controllers/grid/admin/context/ContextGridHandler.php
++++ b/lib/pkp/controllers/grid/admin/context/ContextGridHandler.php
+@@ -236,7 +236,7 @@
+ 
+         $locales = array_map(fn (string $locale, string $name) => ['key' => $locale, 'label' => $name], array_keys($locales), $locales);
+ 
+-        $contextForm = new \APP\components\forms\context\ContextForm($apiUrl, $locales, $request->getBaseUrl(), $context);
++        $contextForm = new \APP\components\forms\context\ContextForm($apiUrl, $locales, $request->getIndexUrl(), $context);
+         $contextFormConfig = $contextForm->getConfig();
+ 
+         // Pass the URL to the context settings wizard so that the AddContextForm
+--- a/lib/pkp/pages/admin/AdminHandler.php
++++ b/lib/pkp/pages/admin/AdminHandler.php
+@@ -334,7 +334,7 @@
+         $locales = $context->getSupportedFormLocaleNames();
+         $locales = array_map(fn (string $locale, string $name) => ['key' => $locale, 'label' => $name], array_keys($locales), $locales);
+ 
+-        $contextForm = new ContextForm($apiUrl, $locales, $request->getBaseUrl(), $context);
++        $contextForm = new ContextForm($apiUrl, $locales, $request->getIndexUrl(), $context);
+         $themeForm = new PKPThemeForm($themeApiUrl, $locales, $context);
+         $indexingForm = new PKPSearchIndexingForm($apiUrl, $locales, $context, $sitemapUrl);
+ 
