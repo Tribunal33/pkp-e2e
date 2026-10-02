@@ -56,7 +56,7 @@ user the personal fields show read-only.
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
 | "Search for a user by email address, username, or ORCID iD" | yes (to pass step 1) | Exact match on email, then username, then ORCID iD. A miss, even text that is no valid email address, advances to "Enter details" with "The user does not have a role in this journal". An email address with no account arrives typed into the Email field; other text is discarded (the Email field arrives empty) and the address is validated there instead <sup>h</sup> |
-| Email / Given Name / Family Name / Affiliation | email only | Names are optional; helper text notes the invitee can change them. On a journal with a second form language (Settings), a button named for it ("French") above the fields adds "Given Name in French" and "Family Name in French" boxes, and each name field counts its filled languages ("0/2 languages completed"). Only the name in the journal's primary language reaches the email (Side effects ⚠ [A10](#a10)). <sup>i</sup> If the address gains an account before the invitation is accepted, what the recipient then sees was not verified live <sup>o</sup> |
+| Email / Given Name / Family Name / Affiliation | email only | Names are optional; helper text notes the invitee can change them. On a journal with a second form language (Settings), a button named for it ("French") above the fields adds "Given Name in French" and "Family Name in French" boxes, and each name field counts its filled languages ("0/2 languages completed"). The email greets by the name in the journal's primary language, else in the site's, else in whichever language one was entered, on the "To" line too (Side effects). <sup>i</sup> If the address gains an account before the invitation is accepted, what the recipient then sees was not verified live <sup>o</sup> |
 | Role (per row, "Select a new role") | at least one row | Roles the person already holds, or already chosen in another row, are not offered. From the second row on, a row's fields lose their screen-reader names ⚠ [A8](#a8) <sup>i</sup> |
 | Start Date (per role row) | yes | A date in the past takes effect as "today" at acceptance (Rule 8) ⚠ [A8](#a8) |
 | End Date (per role row) | no | Cannot be entered when inviting. An added role row's END DATE cell shows "---" and holds no input. The column only displays dates on an existing member's current roles (Rule 13) <sup>i</sup> |
@@ -235,13 +235,13 @@ Accept wizard (new invitee):
   ⚠ [A7](#a7) The email's
   fixed copy carries small wording slips. It greets a new invitee by the
   name entered on "Enter details" in the journal's primary language ("Dear
-  Nova Quill,", or the one name entered: "Dear Nova,"), and by their email
-  address ("Dear {email},") when no name was entered; an existing user is
-  greeted by the name on their account. ⚠ [A10](#a10) Two named newcomers
-  still get "Dear {email},": one whose name was entered only in another of
-  the journal's form languages, and, on a journal whose primary language is
-  not the site's, one invited by a manager whose screens are in the site's
-  primary language, even with the name entered in both. <sup>j</sup>
+  Nova Quill,", or the one name entered: "Dear Nova,"), whichever language
+  the manager's screens are in, else in the site's primary language, else
+  in the one language a name was entered in, and by their email address
+  ("Dear {email},") when no name was entered; an existing user is greeted
+  by the name on their account. "You have been invited by {name}" names
+  the manager the same way, and the email's "To" line carries the
+  name the greeting uses. <sup>j</sup>
 - **On acceptance**: the account is created (new invitee) or the roles are
   added to the existing account. Masthead listings update per the chosen
   visibility.
@@ -673,6 +673,16 @@ Left out of the scenarios above, by reason:
     button on the send and accept wizards carries "##" in its name, and on
     an existing user's one-step accept page Tab reaches no element inside
     the clipped steps row or an `aria-hidden` block
+  - on a journal whose primary language is not the site's, with the
+    manager's screens in the site's language, a newcomer named in both
+    form languages greeted by the name in the journal's primary language,
+    on the email's "To" line too (Side effects; the part of A10 retired by
+    pkp/pkp-lib#13429)
+  - a newcomer named only in a journal's second form language greeted by
+    that name, on the "To" line too, and, on a journal whose primary language is not the
+    site's, "invited by {name}" naming a manager whose account carries a
+    name only in the journal's language while their screens are in the
+    site's (Side effects; the rest of A10 retired by pkp/pkp-lib#13429)
 - **Rarely met**:
   - a past start date taking effect as the acceptance day (Rule 8): a
     manager rarely backdates a start date, and the body names no screen
@@ -722,9 +732,6 @@ Left out of the scenarios above, by reason:
   - A5 ("Invitation Sent" promising updates never delivered; Rule 15, Side
     effects)
   - A7 (the email's wording slips; Side effects)
-  - A10 (a newcomer named only in another form language, or invited on a
-    journal of another primary language than the site's by a manager
-    working in the site's, greeted "Dear {email},"; Side effects)
   - A8 (added role rows carrying no accessible field names)
   - A11 (the invitation email promising a masthead listing for roles the
     masthead does not list; Side effects)
@@ -771,7 +778,6 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A5](#a5) | "Invitation Sent" promises the inviter news of the person's decision, but nothing ever tells them | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Small wording and untranslated-text defects across the invitation screens and emails | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | Role invitation wizard: a screen reader hears no field names in role rows after the first | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A10](#a10) | A newcomer named only in another form language, or invited on a journal whose primary language is not the site's by a manager working in the site's, is still greeted "Dear {email}," | 🐞 | minor | — |
 | [A11](#a11) | The invitation email promises a masthead listing for roles the masthead never lists, such as Author or Reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | The "Invite to a role" address with a wrong last word shows an empty page instead of "404 Not Found" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
@@ -780,6 +786,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A9](#a9) | The role-removal email tells a disabled user their account "is still active"; the active "Remove Role" and masthead select on their screen are intended | ❓ | minor | @beaug 2026-09-18 · controls intended, email wording open |
 | [A1](#a1) | Retired: the send wizard's address was gated more widely than the screen that offers it; it now lets in only those who open Users & Roles (Actors row 2) | ✅ | retired | upstream change + claim check (claude), 2026-10-02 — fixed upstream |
 | [A6](#a6) | Retired: Edit on a disabled member's row opened an error over an empty wizard; it now opens their details with the disabled-user warning (Rule 14) | ✅ | retired | upstream change + claim check (claude), 2026-09-18 — fixed upstream |
+| [A10](#a10) | Retired: some named newcomers were greeted "Dear {email},"; every name entered now reaches the greeting and the "To" line (Side effects) | ✅ | retired | PR review (claude), 2026-10-02 — fixed upstream (pkp/pkp-lib#13429) |
 
 ### All apps
 
@@ -906,19 +913,6 @@ Basis: probe, all three apps. <sup>[f-a9](#fn-a9)</sup>
 > email's language did not take into account that the user is disabled; this
 > may be intended and may be patched in the future.
 
-<a id="a10"></a>
-**A10 — Some named newcomers are still greeted by their email address** · 🐞 · minor.
-A newcomer whose name the manager entered on "Enter details" should be
-greeted by it. Two are still greeted "Dear {email}," with no name on the
-email's "To" line. On a journal whose primary language is not the site's,
-a manager whose screens are in the site's primary language sends that
-greeting although the name was entered in both languages; the same manager
-working in the journal's primary language sends the name. A name entered
-only in another of the journal's form languages, the primary language's
-boxes left empty, is not used either. The invitation is delivered and works;
-only the greeting misses the name.
-Basis: probe. <sup>[f-a10](#fn-a10)</sup>
-
 <a id="a11"></a>
 **A11 — The invitation email promises a masthead listing for roles the masthead never lists, such as Author or Reader** · 🐞 · low.
 A manager offers someone a role with "Invite to a role" on Users & Roles.
@@ -997,6 +991,9 @@ Basis: probe, issue report walk, 2026-10-02. <sup>[f-ops1](#fn-ops1)</sup>
 
 <a id="a6"></a>
 **A6 — Edit on a disabled member opens a broken wizard** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13313, 2026-09-15), verified 2026-09-18 on OJS, OMP and OPS: Edit on a disabled user's row opens their details and current roles under "The user is currently disabled.", with no error (Rule 14); the email its role controls send is [A9](#a9)'s. <sup>[f-a6](#fn-a6)</sup>
+
+<a id="a10"></a>
+**A10 — Some named newcomers greeted by their email address** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13429, issue #13376, merged 2026-10-02 as `66bafd91d2`; driven before the merge at its head `0717df15fe`, the same tree, on OJS, OMP and OPS, with its 3.5 twin #13428 `a49059461f`): a newcomer named only in a second form language, and one on a journal whose primary language is not the site's invited by a manager working in the site's, are greeted by the name entered, on the "To" line too, and "invited by {name}" names the manager (Side effects). <sup>[f-a10](#fn-a10)</sup>
 
 ---
 
@@ -1278,9 +1275,18 @@ payload's `givenName` / `familyName` in `$locale` (the journal's primary
 language) onto the recipient since pkp/pkp-lib#13397 (`aa077419e3`,
 2026-09-26; issue pkp/pkp-lib#13376; OJS lib/pkp `26ae6431b5`, OMP and OPS
 `17a1f01fed`); before it the method tested two properties the class never
-had, so every newcomer was greeted by address. `setData()` of the mailable
-fills `{$recipientName}` with the recipient's full name, or the address
-when that is empty (finding A10). Claim check 2026-09-27, all three apps,
+had, so every newcomer was greeted by address. Since pkp/pkp-lib#13429
+(issue #13376 again; merged 2026-10-02 as `66bafd91d2`; driven at the PR head `ff981864da`, 2026-10-01, before
+the merge; amended, driven again at `546f6d67ed` and `0717df15fe`,
+2026-10-02) the method copies the names in every language entered, and,
+when the recipient has no name in `$locale` nor the site's primary
+language, the first language with a given name into `$locale`; the mailable's
+`setData()` fills `{$recipientName}` and `{$inviterName}`, HTML-escaped,
+through `getLocalizedFullName()`: the full name in `$locale`, falling back
+to the site's primary language, then to the first language with a given
+name; `{$recipientName}` takes the address when that is empty. The To line
+is set by `recipients([$receiver], $locale)` from the same recipient
+(finding A10, retired). Claim check 2026-09-27, all three apps,
 emails read in the mail catcher: Given "Nova" and Family "Quill" → "Dear
 Nova Quill," and "Nova Quill" on the To line; given name only → "Dear
 Nova,"; family name only → "Dear Quill,"; no name → "Dear {address}," and
@@ -1652,17 +1658,25 @@ sync's thread) that "Remove Role" and the masthead select are to stay active
 for a disabled user, which leaves the email's wording as the open half.
 
 <a id="fn-a10"></a>
-**f-a10** — Cause (note j): `getMailableReceiver($locale)` copies the name
-in the journal's primary language only, and the mailable's `setData()`
-reads the recipient's full name with no language, so it takes the language
-of the sending request and falls back to the site's primary language. On a
-journal of another primary language than the site's, a manager whose
-screens are in the site's language hits the empty site-language name; a
-name only in a second form language is never copied. The issue
+**f-a10** — Retired by pkp/pkp-lib#13429 (merged 2026-10-02 as `66bafd91d2`; note j). The issue
 (pkp/pkp-lib#13376) asks that a new user be greeted by the name typed, and
-by the address only when none is given; its fix, pkp/pkp-lib#13397
-(`aa077419e3`, 2026-09-26), leaves these cases out. Not a regression:
-before the fix every newcomer got the address. Driven 2026-09-27: on
+by the address only when none is given; its first fix, pkp/pkp-lib#13397
+(`aa077419e3`, 2026-09-26), copied the name in the journal's primary
+language only and read it in the request's language, which missed a
+journal of another primary language than the site's with the manager
+working in the site's, and a name only in a second
+form language. pkp/pkp-lib#13429, driven before its merge at its first head
+`ff981864da` (2026-10-01) and its amended head `546f6d67ed` (2026-10-02),
+on OJS, OMP and OPS, with its 3.5 twin #13428 (`6bce4f745b`) on the same
+three: at the amended head, the French-primary press with the manager's
+screens in English greets "Dear Eva Anglais," (To "Eva Anglais") and reads
+"invited by Mia Mgr" (the manager's account named in French only; at the
+first head and before it, "invited by  to take on new roles"), and a name
+entered only in French on an English journal on an English site greets
+"Dear Anne Dupont," with no name on the To line (at the first head, the
+address); at the head `0717df15fe` (2026-10-02; 3.5 `a49059461f`), the To
+line reads "Anne Dupont" too, every other case as at `546f6d67ed`. Not a regression: before
+#13397 every newcomer got the address. Driven 2026-09-27: on
 an English journal with French under "Forms", a name in the French boxes
 only → "Dear {address}," and no name on the To line (OJS, OMP and OPS). On
 an English site, a press whose primary language is French (Canada), with
@@ -1672,10 +1686,10 @@ the same press, another newcomer named in both, with the session switched
 to French before "Invite user to the role" → "Dear Fanny Francais,"; an
 English-primary press, English names → "Dear Anna Smith,". Driven on OMP and held on a freshly reset install, with an OJS
 control the same; OPS carries the same shared code (no subclass, note j)
-and was not driven. Kept check
-`shared/playwright/checks/sync/pkp-lib-13376/greeting.js`. Written up for
-the team in `docs/reports/2026-09-27-pkp-lib-13376.md` (a temporary report,
-deleted once acted on; git history keeps it).
+and was not driven. The kept check
+`shared/playwright/checks/sync/pkp-lib-13376/greeting.js` and the report
+`docs/reports/2026-09-27-pkp-lib-13376.md` were deleted at the merge (git
+history keeps them).
 
 <a id="fn-a11"></a>
 **f-a11** — `UserRoleAssignmentInvitationNotify::getUserUserGroupSection()`

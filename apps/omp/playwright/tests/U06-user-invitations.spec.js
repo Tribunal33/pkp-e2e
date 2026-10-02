@@ -10,7 +10,7 @@
  * Copyeditor per fn-s); scenario 9 is OPS-only.
  *
  * Not covered, by register ID (the spec's Coverage section is the record
- * of everything else left out): A2, A3, A4, A5, A7, A8, A9, A10, A11, A12,
+ * of everything else left out): A2, A3, A4, A5, A7, A8, A9, A11, A12,
  * OMP1.
  *
  * All mutating state lives in per-test scratch presses seeded through the

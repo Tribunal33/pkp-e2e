@@ -6,8 +6,8 @@
  * on OJS (scenarios 1–8, 10 and 11; scenario 9 is OPS-only).
  * Spec: docs/specs/U06-user-invitations.md
  *
- * Deliberately NOT covered (register IDs): A2, A3, A4, A5, A7, A8, A9, A10,
- * A11, A12, OMP1, OPS1.
+ * Deliberately NOT covered (register IDs): A2, A3, A4, A5, A7, A8, A9, A11,
+ * A12, OMP1, OPS1.
  *
  * Every test seeds its own scratch journal (publicknowledge and the seeded
  * roster stay untouched); Mailpit assertions are scoped by unique throwaway
