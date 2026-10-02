@@ -1,0 +1,12 @@
+--- a/lib/pkp/controllers/api/file/FileApiHandler.php
++++ b/lib/pkp/controllers/api/file/FileApiHandler.php
+@@ -174,8 +174,7 @@
+         $filename = !empty($args['nameLocaleKey'])
+             ? __($args['nameLocaleKey'])
+             : __('submission.files');
+-        $filename = $args['submissionId'] . '-' . $filename;
+-        $filename = (string) Str::of($filename)->kebab()->replaceMatches('[^a-z0-9\-\_.]', '');
++        $filename = Str::slug($args['submissionId'] . ' ' . $filename);
+ 
+         $fileArchive = new FileArchive();
+         $archivePath = $fileArchive->create($files, rtrim(Config::getVar('files', 'files_dir'), '/'));

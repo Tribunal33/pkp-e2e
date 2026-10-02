@@ -935,6 +935,7 @@ Left out of the scenarios above, by reason:
   - "Change File" on step 1 of a new file's upload, then "Complete": the list gains the second file alone ([A14](#a14)): the guard the issue report proposes
   - in "Upload/Select Files" with "Show files from all accessible workflow stages." ticked, another stage's row: "More Information" loads and the file name downloads ([A19](#a19)): the guard the issue report proposes
   - "Show events from prior versions" ticked on a file in "Files for Review": the original file's rows are added ([A4](#a4)): the guard the issue report proposes
+  - "Download All Files" on "Submission Files": the zip named with one hyphen, "{number}-submission-files.zip" ([A12](#a12)): the guard the issue report proposes; likely an assertion in scenario 4
 - **Nothing new to test**:
   - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
   - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
@@ -999,7 +1000,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | A screen reader reads step 1's hidden upload box, and the step's two drop-downs have no name | 🐞 | minor | — |
 | [A10](#a10) | "Add Note" with an empty box posts a note with no text, on a file's "Notes" and in "Activity Log & Notes" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | Submission wizard: "Save" in a file's "Edit" panel with no component chosen shows "An unexpected error has occurred" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [A12](#a12) | The "Download All Files" zip is named with two hyphens ("12--submission-files.zip") | 🐞 | minor | — |
+| [A12](#a12) | "Download All Files" names its zip with two hyphens after the submission's number | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | Upload wizard: "Change File" on step 1 uploads the second file but keeps the first, and the list shows both | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | Step 2 reopened from step 3 offers "Complete" but shows "File Added" again instead of closing | 🐞 | minor | — |
 | [A19](#a19) | In "Upload/Select Files", another stage's files refuse "More Information", "Edit", "Delete" and their download | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1188,11 +1189,21 @@ then filled in. A preprint server has no such panel.
 Basis: probe, 2026-10-02. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
-**A12 — The "Download All Files" zip's name has two hyphens** · 🐞 · minor.
-"Download All Files" names its zip after the submission's number and the
-list, with two hyphens between them: "12--submission-files.zip",
-"12--production-ready-files.zip". Expected "12-submission-files.zip".
-Basis: probe. <sup>[f-a12](#fn-a12)</sup>
+**A12 — "Download All Files" names its zip with two hyphens after the submission's number** · 🐞 · low.
+"Download All Files" under a file list names its zip after the
+submission's number and the list, with two hyphens between them:
+"12--submission-files.zip", "12--production-ready-files.zip".
+
+The zip itself is right: it downloads and holds the list's files.
+
+It happens under both lists that have the button, "Submission Files"
+and "Production Ready Files", in every interface language whose list
+title opens with a capital Latin letter. In a language written in
+other letters the name has one hyphen, but the title's words run
+together and keep their own letters ("12-файлыматериала.zip" in
+Russian). A preprint server has neither list, so it has no such
+button.
+Basis: probe, 2026-10-02. <sup>[f-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
 **A13 — Deleting a file also deletes its copies on other lists** · ❓ · user-visible.
@@ -2330,6 +2341,7 @@ Issue report: [docs/issues/U36-A11-wizard-file-edit-save-no-component-server-err
 
 <a id="fn-a12"></a>
 **f-a12** — Note h (`Str::kebab()`). Live-probed 2026-09-23: note d19.
+Issue report: [docs/issues/U36-A12-download-all-files-zip-name-two-hyphens.md](../issues/U36-A12-download-all-files-zip-name-two-hyphens.md).
 
 <a id="fn-a13"></a>
 **f-a13** — Note g (`source_submission_file_id` `ON DELETE CASCADE`).
