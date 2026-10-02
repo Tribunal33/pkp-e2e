@@ -2261,7 +2261,7 @@ review by {$date}."), while the unanswered branch formats `dateResponseDue`
 and the declined branch `dateConfirmed`. Live-probed 2026-09-04 on OJS and
 OMP: "Please complete this review by 2026-10-02 00:00:00." on every
 accepted row, step 1's "Review Due Date" "2026-10-02".
-Issue report: [docs/issues/U28-A5-accepted-review-row-due-date-clock-time.md](../issues/U28-A5-accepted-review-row-due-date-clock-time.md).
+Issue report: [docs/issues/U28-A5-accepted-review-row-due-date-clock-time.md](../issues/U28-A5-accepted-review-row-due-date-clock-time.md), filed as [pkp-e2e#582](https://github.com/jardakotesovec/pkp-e2e/issues/582).
 
 <a id="fn-a6"></a>
 **f-a6** — The file link is the legacy JSON endpoint
