@@ -2049,7 +2049,7 @@ Re-walked 2026-10-02 by the issue report's `reach.js` on `main` (all three apps:
 **f-a17** — Live-probed 2026-09-25, all three apps: note d (the preview's
 `src` "[object Event]", a GET `…/management/settings/[object%20Event]`
 answering 404, then "Save" refused with `form.invalidImage`).
-Issue report: [docs/issues/U16-A17-not-a-picture-broken-preview.md](../issues/U16-A17-not-a-picture-broken-preview.md).
+Issue report: [pkp-e2e#600](https://github.com/jardakotesovec/pkp-e2e/issues/600) ([docs/issues/U16-A17-not-a-picture-broken-preview.md](../issues/U16-A17-not-a-picture-broken-preview.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — `CategoryDeleteDialogBody.vue` (note e): the input has no
