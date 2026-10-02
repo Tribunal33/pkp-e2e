@@ -1,0 +1,18 @@
+--- a/lib/pkp/classes/invitation/invitations/userRoleAssignment/handlers/api/UserRoleAssignmentReceiveController.php
++++ b/lib/pkp/classes/invitation/invitations/userRoleAssignment/handlers/api/UserRoleAssignmentReceiveController.php
+@@ -117,6 +117,15 @@
+             $user->setPassword($this->invitation->getPayload()->password);
+ 
+             Repo::user()->add($user);
++
++            // The newcomer has just chosen their username and password here: sign them in, as
++            // RegistrationHandler::register() does after a registration. Following the emailed link
++            // has proven the address, so [email] require_validation does not hold this back.
++            // API answers do not carry the session cookie the guard queues, so send it here.
++            $reason = null;
++            if (Validation::registerUserSession($user, $reason)) {
++                Application::get()->getRequest()->getSessionGuard()->sendCookies();
++            }
+         } else {
+             if (empty($user->getOrcid()) && isset($this->invitation->getPayload()->orcid)) {
+                 $user->setVerifiedOrcidOAuthData($this->invitation->getPayload()->toArray());

@@ -646,6 +646,22 @@ Left out of the scenarios above, by reason:
     page and in "Invite to a role" on a press and a preprint server: the
     save succeeds with no error dialog and the member receives "Your journal
     masthead visibility has been updated" (the journal is the control)
+  - the guard for A3 (issue report
+    `docs/issues/U06-A3-replaced-invitation-links-not-found.md`): after
+    "Edit" replaces a pending invitation, the earlier email's accept and
+    decline links open "Invitation Unavailable", not only a page without
+    the wizard
+  - the guard for A4 (issue report
+    `docs/issues/U06-A4-newcomer-not-signed-in-after-accepting.md`): a
+    newcomer's "View All Submissions" after "Accept And Continue" opens the
+    Dashboard signed in as the new account
+  - the guard for A5 (issue report
+    `docs/issues/U06-A5-invitation-sent-promises-decision-updates.md`): the
+    "Invitation Sent" dialog's text promises only what the app does
+  - the guard for A12 (issue report
+    `docs/issues/U06-A12-invitation-address-made-up-kind-empty-page.md`):
+    the send wizard's address typed with a made-up last word and with
+    "reviewerAccess" shows "404 Not Found" (Actors row 2)
 - **Rarely met**:
   - a past start date taking effect as the acceptance day (Rule 8): a
     manager rarely backdates a start date, and the body names no screen
@@ -739,14 +755,14 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A3](#a3) | The links of a replaced invitation (edited or re-sent) die with a bare not-found error | 🐞 | minor | — |
-| [A4](#a4) | Nobody is signed in after accepting; every recipient who opened the link signed out lands on the sign-in screen | 🐞 | user-visible | claim check (claude), 2026-09-28 — narrowed to recipients who opened the link signed out |
-| [A5](#a5) | "Invitation Sent" promises decision updates that are never delivered | 🐞 | user-visible | — |
+| [A3](#a3) | After a manager edits or re-sends a role invitation, the earlier email's links open a bare "404 Not Found" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A4](#a4) | A newcomer who accepts a role invitation is not signed in and lands on the sign-in screen | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A5](#a5) | "Invitation Sent" promises the inviter news of the person's decision, but nothing ever tells them | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Small wording and untranslated-text defects across the invitation screens and emails | 🐞 | minor | claim check (claude), 2026-09-28 — one item added (the accept page's invisible steps button) |
 | [A8](#a8) | Added role rows carry no accessible field names; a screen reader hears row 1's labels | 🐞 | user-visible | — |
 | [A10](#a10) | A newcomer named only in another form language, or invited on a journal whose primary language is not the site's by a manager working in the site's, is still greeted "Dear {email}," | 🐞 | minor | — |
 | [A11](#a11) | The invitation email promises a masthead listing for roles the masthead does not list, such as Reader and Author | 🐞 | minor | — |
-| [A12](#a12) | The send wizard's address with a made-up word in place of "userRoleAssignment" fails on the server and shows an empty page | 🐞 | latent · crash: server | — |
+| [A12](#a12) | The "Invite to a role" address with a wrong last word shows an empty page instead of "404 Not Found" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | The invitation email template has no row on the preprint server's Emails screen | 🐞 | user-visible | — |
 | [A2](#a2) | Daily cleanup deletes invitations still being composed | ❓ | latent | — |
@@ -770,36 +786,46 @@ edge case.
 Basis: judgment (code); drafts observed live, the cleanup run itself not. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
-**A3 — Replaced invitation's links die ungracefully** · 🐞 · minor.
-A cancelled, declined, or expired invitation's old links show the friendly
-"Invitation Unavailable" page. A replaced invitation, whether replaced through
-Edit or superseded by a plain new send to the same person, is erased outright.
-Its old email links therefore render a bare "404 Not Found" with no journal
-styling. This is the one stale-link case that skips the explanation. The
-user's situation is the same as after a cancellation, so it should get the
-same page.
-Basis: probe + claim check. <sup>[f-a3](#fn-a3)</sup>
+**A3 — After a manager edits or re-sends a role invitation, the earlier email's links open a bare "404 Not Found"** · 🐞 · low.
+A manager can change a pending role invitation from Users & Roles in two
+ways: "Edit" on its row in the "Invitations" table, or sending a new
+invitation to the same person. Either way the app withdraws the pending
+invitation and emails a new one. The second send gives no hint that an
+invitation is already pending. Only the newest email's links work. Every
+earlier email's accept and decline links open a bare page reading only "404
+Not Found", with no journal header, no styling and nothing to press. An
+invitation that was cancelled, declined or ran out gets the journal's own
+"Invitation Unavailable" page instead. That page says the invitation is no
+longer available and offers "Login" and "Register". Nothing is lost, since
+the newest email works. The same code withdraws the app's other emailed
+invitations in the same way: reviewer one-click access, account validation
+and email change.
+Basis: probe, issue report walk, 2026-10-02. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
-**A4 — Nobody is signed in after accepting** · 🐞 · user-visible.
-A newcomer who has just chosen a username and password and pressed "Accept And
-Continue to OJS" is not inside. The closing dialog's "View All Submissions"
-button lands on the sign-in screen, and they must type the credentials again.
-An existing user who opened the link signed out, with no password prompt,
-ends on the same sign-in screen. Only an existing user already signed in as
-themselves when opening the link reaches the Dashboard. The roles themselves
-are granted correctly.
-Basis: probe, all three apps. <sup>[f-a4](#fn-a4)</sup>
+**A4 — A newcomer who accepts a role invitation is not signed in and lands on the sign-in screen** · 🐞 · low.
+A person invited to a role who has no account yet chooses a username and
+password in the invitation's wizard and presses "Accept And Continue to
+OJS". The dialog that follows announces the new role, but its button "View
+All Submissions" opens the sign-in screen, and the newcomer has to type the
+username and password they chose a minute earlier. Nothing is lost: the
+account exists and holds the role, and signing in on that screen leads on to
+the dashboard.
+Basis: probe, issue report walk, 2026-10-02. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
-**A5 — Promised decision updates never arrive** · 🐞 · user-visible.
-The "Invitation Sent" dialog tells the inviter they "can be updated about the
-user's decision on the Users & Roles page, your OJS notifications and/or your
-email". After both accept and decline, every promised channel stays silent:
-no notification, no email, and the pending row is removed outright. An
-acceptance and a decline cannot be told apart from Users & Roles, except for
-the new name an acceptance adds under Current Users.
-Basis: probe, with a mail-delivery positive control. <sup>[f-a5](#fn-a5)</sup>
+**A5 — "Invitation Sent" promises the inviter news of the person's decision, but nothing ever tells them** · 🐞 · low.
+When someone sends an invitation with "Invite to a role" on Users & Roles,
+the "Invitation Sent" dialog says: "You can be updated about the user's
+decision on the Users & Roles page, your OJS notifications and/or your
+email" (a press and a preprint server name OMP and OPS). When the person
+accepts or declines, nothing tells the inviter. No notification arrives and
+no email is sent. The invitation's row just leaves the "Invitations" table.
+Nothing is lost, and an accepted invitation grants its roles correctly. The
+only sign of an acceptance is the new role in the person's "Roles" under
+Current Users. A decline leaves no trace on screen and looks the same as an
+invitation that was cancelled or ran out.
+Basis: probe, issue report walk, 2026-10-02. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a7"></a>
 **A7 — Small copy defects across these screens and emails** · 🐞 · minor.
@@ -879,14 +905,18 @@ works; only the promise is false.
 Basis: probe. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
-**A12 — A made-up word in the send wizard's address crashes the page** · 🐞 · latent · crash: server.
-A Journal Manager who types the address "Invite to a role" opens (Actors
-row 2) with a made-up word, such as "nosuchtype", in place of its last one,
-"userRoleAssignment", gets an empty page: the app fails on the server. The
-same address with no last word at all shows the "404 Not Found" page, which
-is what a made-up word should get too. Only an address typed by hand, or a
-damaged one, reaches it.
-Basis: probe on OJS, code on OMP and OPS. <sup>[f-a12](#fn-a12)</sup>
+**A12 — The "Invite to a role" address with a wrong last word shows an empty page instead of "404 Not Found"** · 🐞 · low · crash: server.
+"Invite to a role" on Users & Roles opens
+`/index.php/publicknowledge/en/invitation/create/userRoleAssignment`. The
+last word is the invitation type. When a manager types the address with
+another word there, the app fails on the server and shows an empty page:
+`…/invitation/create/nosuchtype` does this, and so does a real type that has
+no wizard, such as `…/invitation/create/reviewerAccess`. The same address
+with no last word shows the "404 Not Found" page, and a wrong word should
+get that page too. The button always opens the wizard, and no email or link
+the app sends points at this address with another type, so only an address
+typed or pasted by hand reaches the empty page.
+Basis: probe, issue report walk, 2026-10-02. <sup>[f-a12](#fn-a12)</sup>
 
 ### OMP and OPS
 
@@ -1468,6 +1498,7 @@ Cancellation keeps the row → friendly page. Live-confirmed 2026-07-31
 Claim check 2026-07-31 (OJS deep,
 OMP spot-check): a plain re-send to the same address kills the old accept
 link the same way — same `byNotId` cleanup, not edit-specific.
+Issue report: [docs/issues/U06-A3-replaced-invitation-links-not-found.md](../issues/U06-A3-replaced-invitation-links-not-found.md).
 
 <a id="fn-a4"></a>
 **f-a4** — `finalize()` registers no session (note m) while the store then
@@ -1476,6 +1507,7 @@ never materializes either (note l). Live-confirmed 2026-07-31 on OJS, OMP and
 OPS, on both the accept and decline flows. Claim check 2026-09-28, all
 three apps: an existing user who opened the link while signed in as
 themselves stays signed in and reaches the Dashboard (note m).
+Issue report: [docs/issues/U06-A4-newcomer-not-signed-in-after-accepting.md](../issues/U06-A4-newcomer-not-signed-in-after-accepting.md).
 
 <a id="fn-a5"></a>
 **f-a5** — Success-dialog copy: app locale key `userInvitation.modal.message`.
@@ -1484,6 +1516,7 @@ No accept/decline code path produces a notification or email to the inviter
 cases): bell/Tasks panel "No Items", inviter mailbox empty after both accept
 and decline; positive control — an invitation sent afterwards delivered
 normally.
+Issue report: [docs/issues/U06-A5-invitation-sent-promises-decision-updates.md](../issues/U06-A5-invitation-sent-promises-decision-updates.md).
 
 <a id="fn-a6"></a>
 **f-a6** — Users-grid Edit on a disabled member (live probe 2026-07-31): error
@@ -1631,6 +1664,7 @@ on `publicknowledge` answered 500 with an empty page, the server log reading
 "Uncaught Exception: Invitation type 'nosuchtype' not found. in
 …/lib/pkp/classes/invitation/core/InvitationFactory.php:42";
 `invitation/create` with no type answered 404 with "404 Not Found".
+Issue report: [docs/issues/U06-A12-invitation-address-made-up-kind-empty-page.md](../issues/U06-A12-invitation-address-made-up-kind-empty-page.md).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Error observed on OMP and OPS (live probes 2026-07-31, two

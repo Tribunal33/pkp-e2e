@@ -1,0 +1,11 @@
+--- a/locale/en/invitation.po
++++ b/locale/en/invitation.po
+@@ -36,7 +36,7 @@
+ msgstr "You can invite them to take up a role in OPS"
+ 
+ msgid "userInvitation.modal.message"
+-msgstr "{$email} has been invited to new role in OPS. You can be updated about the user's decision on the Users & Roles page, your OPS notifications and/or your email"
++msgstr "{$email} has been invited to a new role in OPS. The invitation is listed under Invitations on the Users & Roles page while it awaits their answer."
+ 
+ msgid "userInvitation.roleTable.journalMasthead"
+ msgstr "Server Masthead"

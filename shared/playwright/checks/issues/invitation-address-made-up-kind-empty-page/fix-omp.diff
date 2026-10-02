@@ -1,0 +1,48 @@
+--- a/lib/pkp/classes/invitation/core/InvitationFactory.php
++++ b/lib/pkp/classes/invitation/core/InvitationFactory.php
+@@ -33,6 +33,14 @@
+         return self::$instance;
+     }
+ 
++    /**
++     * Whether an invitation type is registered
++     */
++    public function hasType(string $type): bool
++    {
++        return isset(self::$invitations[$type]);
++    }
++
+     public function createNew(string $type): Invitation
+     {
+         if (isset(self::$invitations[$type])) {
+--- a/lib/pkp/pages/invitation/InitializeInvitationUIHandler.php
++++ b/lib/pkp/pages/invitation/InitializeInvitationUIHandler.php
+@@ -83,10 +83,16 @@
+         if (is_numeric($arg)) {
+             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+         } else {
+-            // Handle new invitation by type
++            // Handle new invitation by type; a type that is not registered, or has no wizard, is not found here
+             $invitationType = $arg;
++            if (!app(Invitation::class)->hasType($invitationType)) {
++                throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
++            }
+             $invitation = app(Invitation::class)->createNew($invitationType);
+             $invitationHandler = $invitation->getInvitationUIActionRedirectController();
++            if (!$invitationHandler) {
++                throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
++            }
+             $invitationHandler->createHandle($request);
+         }
+     }
+@@ -115,6 +121,10 @@
+                 throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+             }
+             $invitationHandler = $invitation->getInvitationUIActionRedirectController();
++            // An invitation of a type that has no wizard is not found here either
++            if (!$invitationHandler) {
++                throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
++            }
+             $invitationHandler->editHandle($request);
+         } else {
+             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();

@@ -1,0 +1,25 @@
+--- a/lib/pkp/classes/invitation/core/Invitation.php
++++ b/lib/pkp/classes/invitation/core/Invitation.php
+@@ -323,13 +323,20 @@
+ 
+         $this->invitationModel->save();
+ 
+-        InvitationModel::byStatus(InvitationStatus::PENDING)
++        // Cancel, rather than delete, the earlier pending invitations of the same kind for this
++        // person: their emailed links then reach the "Invitation Unavailable" page, as a cancelled
++        // invitation's do, instead of a not-found.
++        $superseded = InvitationModel::byStatus(InvitationStatus::PENDING)
+             ->byType($this->getType())
+             ->byNotId($this->getId())
+             ->when(isset($this->invitationModel->userId), fn (Builder $q) => $q->byUserId($this->invitationModel->userId))
+             ->when(!isset($this->invitationModel->userId) && $this->invitationModel->email, fn (Builder $q) => $q->byEmail($this->invitationModel->email))
+             ->when(isset($this->invitationModel->contextId), fn (Builder $q) => $q->byContextId($this->invitationModel->contextId))
+-            ->delete();
++            ->get();
++
++        foreach ($superseded as $earlier) {
++            $earlier->markAs(InvitationStatus::CANCELLED);
++        }
+ 
+         return true;
+     }
