@@ -1,0 +1,14 @@
+--- a/lib/pkp/pages/user/PKPUserHandler.php
++++ b/lib/pkp/pages/user/PKPUserHandler.php
+@@ -51,7 +51,10 @@
+ 
+         $this->setupTemplate($request);
+         $templateMgr = TemplateManager::getManager($request);
+-        $templateMgr->assign('message', $authorizationMessage);
++        $templateMgr->assign([
++            'pageTitle' => 'user.authorization.accessDenied',
++            'message' => $authorizationMessage,
++        ]);
+         return $templateMgr->display('frontend/pages/message.tpl');
+     }
+ }

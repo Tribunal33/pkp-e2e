@@ -1188,6 +1188,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the site's Navigation tab: "Add Menu" and a site menu's "Edit" open the menu window with the site theme's areas ("None", "primary", "user"), and a new site menu saves (Rule 1b; the guard [A4](#a4)'s issue report proposes)
+  - the access-denied page a signed-in user gets: its heading, the breadcrumb's last step and the browser tab name the page (Rule 26a; the guard [A3](#a3)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1269,7 +1270,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | The editorial header's help icon is named "##common.help##" | 🐞 | minor | — |
 | [A2](#a2) | A Section Editor's "Dashboard" in the public header opens the Profile page | 🐞 | minor | — |
-| [A3](#a3) | The access-denied page has an empty heading and an empty last breadcrumb | 🐞 | minor | — |
+| [A3](#a3) | The access-denied page a signed-in user gets has an empty heading and an unnamed browser tab | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | Site Settings › "Navigation": "Add Menu" and a menu's "Edit" open nothing and leave the page dimmed | 🐞 | medium · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | The "Privacy Statement" and "Contact" notices send the manager to the wrong Settings tab | 🐞 | minor | — |
 | [A7](#a7) | The header's "Open Menu" button is labelled in English in every language | 🐞 | minor | — |
@@ -1319,12 +1320,20 @@ without the unread count
 Basis: probe. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — The access-denied page has no heading** · 🐞 · minor.
-A signed-in user refused a screen gets a page whose heading and last
-breadcrumb step are empty, above "The current role does not have access
-to this operation.". The visitor expects a heading that says access was
-denied.
-Basis: probe. <sup>f-a3</sup>
+**A3 — The access-denied page a signed-in user gets has an empty heading and an unnamed browser tab** · 🐞 · low.
+A signed-in user who opens a page their role may not see gets the
+access-denied page. Its heading is empty, its breadcrumb ends "Home /"
+with nothing after it, and the browser tab shows only the journal's
+name, or nothing at all on the site's own pages. Below that, the page
+reads "The current role does not have access to this operation.".
+
+The page has no name anywhere, so a screen reader announces a heading
+with no text and a list of tabs shows a tab without a name.
+
+Most pages that refuse a signed-in user send them here: a settings or
+administration address opened by a role without access, an old
+bookmark, a link a colleague sent, a role that has since been removed.
+Basis: probe, 2026-10-03. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — Site Settings › "Navigation": "Add Menu" and a menu's "Edit" open nothing and leave the page dimmed** · 🐞 · medium · crash: script.
@@ -2680,6 +2689,7 @@ editor to `dashboard/editorial`. Seen on screen 2026-09-04 (note e).
 Knowledge Press", "| Public Knowledge Preprint Server"), and was empty
 at the site's address; the page body's only link was the breadcrumb's
 "Home".
+Issue report: [docs/issues/U08-A3-access-denied-page-no-heading.md](../issues/U08-A3-access-denied-page-no-heading.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Live-probed 2026-09-23 (td9), all three apps: each opening
