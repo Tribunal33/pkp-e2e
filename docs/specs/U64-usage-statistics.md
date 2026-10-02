@@ -1163,6 +1163,7 @@ Left out of the scenarios above, by reason:
   - a Section Editor's "Statistics" menu and the "Counter R5" address while the journal's COUNTER statistics are restricted: no "Counter R5" entry, the access-denied page (the guard for A5, once fixed)
   - "Download Issues" on Statistics › "Issues" with more than 30 issues visited in the range: the file holds every issue the page counts (the guard for OJS4, once fixed) {OJS}
   - a search phrase typed with double quotes on Statistics › "Articles", then each downloaded file's "Search Phrase" line parsed back to the phrase as typed (the guard for A8, once fixed)
+  - Tab on Statistics › "Journal" stops on the "About journal statistics" icon and its text shows while it holds the focus (the guard for A7, once fixed)
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1241,7 +1242,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A journal's "Do not collect any geographical data" is not kept: the journal keeps collecting at the site's level | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A Section Editor's "Counter R5" opens an "Error" window over an empty list while the COUNTER statistics are restricted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | French interface: raw codes on the statistics screens of a press and a preprint server, and one column heading on a journal | 🐞 | minor | — |
-| [A7](#a7) | The information icons show their text on mouse hover only; the keyboard never reaches them | 🐞 | minor | — |
+| [A7](#a7) | Information icons show their text on mouse hover only: Tab skips them on the Statistics pages and in settings forms | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | Statistics downloads: a double quote in the search phrase or a filter's name breaks that line of the file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A malformed Platform ID behind an unticked "Platform" refuses every save of the site's tab | 🐞 | minor | — |
 | [A11](#a11) | The COUNTER report downloads as "counterReport.tsv" but is comma-separated | 🐞 | minor | — |
@@ -1355,13 +1356,24 @@ heading of "Articles", which reads "##stats.jats##".
 Basis: probe, 2026-09-27. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The information icons cannot be read from the keyboard** · 🐞 · minor.
+**A7 — Information icons show their text on mouse hover only: Tab skips them on the Statistics pages and in settings forms** · 🐞 · low.
 The statistics pages explain their figures in information icons ("About
-journal statistics", "About issue statistics", "About Geolocation")
-whose text shows only while the mouse pointer rests on them. Pressing an
-icon does nothing and Tab skips it, so a keyboard user never reads the
-text. Expected: the text can be reached from the keyboard.
-Basis: probe, 2026-09-27. <sup>f-a7</sup>
+journal statistics", "About issue statistics", "About Geolocation", and
+the icons in the "Trends" table of Editorial Activity). The text of an
+icon shows only while the mouse pointer rests on it. Tab skips every
+icon, so someone who works with the keyboard never reads the text.
+
+A screen reader on these pages is offered the icon's name ("About
+journal statistics") and not its text: the text is not in the page until
+the pointer brings it up (by code, no screen reader tried).
+
+The same icon follows the label of about twenty settings and metadata
+fields, for example "Description" and "Custom Tags" under Settings ›
+Distribution › Search Indexing, and Tab skips it there too. In those
+forms the text is also attached to the field for screen readers.
+
+The same icons on the "Trends" table are [Statistics — editorial](U65-editorial-statistics.md)'s [A5](U65-editorial-statistics.md#a5).
+Basis: probe, 2026-10-02. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — Statistics downloads: a double quote in the search phrase or a filter's name breaks that line of the file** · 🐞 · low.
@@ -2367,6 +2379,7 @@ Issue report: [docs/issues/U64-A5-section-editor-counter-r5-error-while-restrict
 are spans with no role, out of the tab order (`tabindex="-1"`); pressing
 one did nothing, and Shift+Tab from "Download Report" landed on "Daily".
 Hovering showed each text.
+Issue report: [docs/issues/U64-A7-information-icons-out-of-keyboard-reach.md](../issues/U64-A7-information-icons-out-of-keyboard-reach.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-27, three apps: with `"Quoted"` applied on

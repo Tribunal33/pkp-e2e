@@ -1,0 +1,24 @@
+--- a/lib/ui-library/src/components/Tooltip/Tooltip.vue
++++ b/lib/ui-library/src/components/Tooltip/Tooltip.vue
+@@ -1,10 +1,11 @@
+ <template>
+-	<span
++	<button
+ 		v-tooltip="{
+ 			content: tooltipContent,
+ 			theme: 'pkp-tooltip',
+ 			html: true,
+ 		}"
++		type="button"
+ 		class="tooltipButton"
+ 		@click.prevent
+ 	>
+@@ -13,7 +14,7 @@
+ 			:class="iconClass"
+ 		/>
+ 		<span v-if="label" class="-screenReader">{{ label }}</span>
+-	</span>
++	</button>
+ </template>
+ 
+ <script>
