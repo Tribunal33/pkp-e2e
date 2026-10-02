@@ -1,0 +1,14 @@
+--- a/lib/ui-library/src/managers/GalleyManager/useGalleyManagerActions.js
++++ b/lib/ui-library/src/managers/GalleyManager/useGalleyManagerActions.js
+@@ -79,7 +79,10 @@
+ 			},
+ 		});
+ 
+-		openLegacyModal({title: t('submission.upload.proof')}, finishedCallback);
++		openLegacyModal(
++			{title: t('submission.layout.editGalley')},
++			finishedCallback,
++		);
+ 	}
+ 
+ 	function galleyView({submission, publication, galley}, finishedCallback) {

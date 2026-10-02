@@ -1,0 +1,71 @@
+--- a/lib/ui-library/src/managers/GalleyManager/useGalleyManagerActions.js
++++ b/lib/ui-library/src/managers/GalleyManager/useGalleyManagerActions.js
+@@ -2,6 +2,7 @@
+ import {useLegacyGridUrl} from '@/composables/useLegacyGridUrl';
+ import {useModal} from '@/composables/useModal';
+ import {useFetch, getCSRFToken} from '@/composables/useFetch';
++import {useUrl} from '@/composables/useUrl';
+ export const Actions = {
+ 	GALLEY_LIST: 'galleyList',
+ 	GALLEY_ADD: 'galleyAdd',
+@@ -26,20 +27,38 @@
+ 			},
+ 		});
+ 
+-		openLegacyModal({title: t('submission.layout.newGalley')}, (closeData) => {
+-			if (closeData.dataChanged[0]) {
++		openLegacyModal(
++			{title: t('submission.layout.newGalley')},
++			async (closeData) => {
++				const galleyId = closeData.dataChanged[0];
++				if (!galleyId) {
++					return finishedCallback();
++				}
++
++				// Ask for a file only when the new galley has neither a file nor a
++				// remote URL, as the legacy galley grid did (fetchRow's uploadFile)
++				const {apiUrl} = useUrl(
++					`submissions/${submission.id}/publications/${publication.id}`,
++				);
++				const {fetch, data} = useFetch(apiUrl);
++				await fetch();
++				const galley = data.value?.galleys?.find(
++					(g) => g.id === Number(galleyId),
++				);
++				if (galley?.urlRemote || galley?.submissionFileId) {
++					return finishedCallback();
++				}
++
+ 				galleyChangeFile(
+ 					{
+ 						submission,
+ 						publication,
+-						galley: {id: closeData.dataChanged[0]},
++						galley: {id: galleyId},
+ 					},
+ 					finishedCallback,
+ 				);
+-			} else {
+-				finishedCallback();
+-			}
+-		});
++			},
++		);
+ 	}
+ 
+ 	function galleyChangeFile({galley, submission}, finishedCallback) {
+--- a/lib/ui-library/src/managers/GalleyManager/useGalleyManagerConfig.js
++++ b/lib/ui-library/src/managers/GalleyManager/useGalleyManagerConfig.js
+@@ -174,7 +174,11 @@
+ 			});
+ 		}
+ 
+-		if (config.permittedActions.includes(Actions.GALLEY_CHANGE_FILE)) {
++		// A remote galley has no file to change (as in the legacy galley grid)
++		if (
++			config.permittedActions.includes(Actions.GALLEY_CHANGE_FILE) &&
++			!galley.urlRemote
++		) {
+ 			actions.push({
+ 				label: t('submission.changeFile'),
+ 				name: Actions.GALLEY_CHANGE_FILE,

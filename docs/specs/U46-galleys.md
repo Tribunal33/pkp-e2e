@@ -609,6 +609,14 @@ Left out of the scenarios above, by reason:
     `docs/issues/U46-A5-ordering-arrows-unnamed.md`): in ordering mode each
     galley row's up and down arrows carry names that say the direction and
     the galley
+  - the guard for A1 (issue report
+    `docs/issues/U46-A1-galley-edit-window-upload-heading.md`): a galley's
+    "Edit" window is headed "Edit a Layout Galley", and "Change File" keeps
+    "Upload a File Ready for Publication"
+  - the guard for A3 (issue report
+    `docs/issues/U46-A3-remote-galley-asked-for-file.md`): saving a galley
+    with "This galley will be available at a separate website." ticked
+    closes with no upload window, and its row offers no "Change File"
 - **Nothing new to test**:
   - a new galley's place in the list, before and after a saved order
     (Rule 8d)
@@ -660,8 +668,8 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A galley's "Edit" window is headed "Upload a File Ready for Publication" | 🐞 | minor | — |
-| [A3](#a3) | A remote galley is still sent to the upload wizard and offered "Change File" | 🐞 | minor | — |
+| [A1](#a1) | A galley's "Edit" window is headed "Upload a File Ready for Publication", though it uploads nothing | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A3](#a3) | An editor saving a galley at a separate website is asked for a file and offered "Change File" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | Changing the file of a new version's galley replaces the file readers download from the published version | 🐞 | high · crash: server · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | The ordering arrows have no names for screen readers | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "URL of remotely-hosted content" keeps text that is not a web address | 🐞 | minor | — |
@@ -675,28 +683,33 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — The edit window is headed as an upload** · 🐞 · minor.
-A galley's "Edit" opens a window headed "Upload a File Ready for
-Publication", the same heading as the upload wizard, although the window
-holds only the galley's label, language, address, URL Path and
-identifiers (and, for an HTML galley, its Dependent Files) and uploads
-nothing of the galley's own file. The older galley list, still the one
-in a preprint server's submission wizard, heads it "Edit a Layout
-Galley"; the heading was lost when the workflow's galley page was
-rebuilt.
-Since: 2024-09-19 (the rebuilt workflow's galley list) · Basis: probe, 2026-09-24. <sup>f-a1</sup>
+**A1 — A galley's "Edit" window is headed "Upload a File Ready for Publication", though it uploads nothing** · 🐞 · low.
+On a journal's or preprint server's "Galleys" page, a galley's "Edit"
+opens a window headed "Upload a File Ready for Publication", the same
+heading as the upload window that "Change File" opens. The window edits
+the galley's label, language, address and URL Path and uploads nothing,
+so the heading tells the editor they are in the wrong place. The older
+galley list, which a preprint server's submission wizard still shows,
+heads the same window "Edit a Layout Galley". Since: 2024-09-19 (the
+rebuilt workflow's galley list) · Basis: probe, 2026-10-02.
+<sup>f-a1</sup>
 
 <a id="a3"></a>
-**A3 — A remote galley is asked for a file** · 🐞 · minor.
-A galley saved in "Create New Galley" with "This galley will be available
-at a separate website." ticked needs no file, yet "Save" opens the upload
-wizard for it exactly as for a file galley, and its row keeps offering
-"Change File". A file uploaded there turns the row's label into a link
-to it, but it never reaches readers, whose link goes to the remote
-address. The older galley list, still the one in a preprint server's
-submission wizard, asks for a file only when the galley has neither a
-file nor an address, and offers no file upload on a remote galley.
-Since: 2024-09-19 · Basis: probe, 2026-09-24. <sup>f-a3</sup>
+**A3 — An editor saving a galley at a separate website is asked for a file and offered "Change File"** · 🐞 · low.
+On a journal's or preprint server's "Galleys" page, an editor adds a
+galley that readers will find at another website: they tick "This galley
+will be available at a separate website.", give the address and press
+"Save". The upload window "Upload a File Ready for Publication" opens
+next and asks for a component and a file, as for a galley that needs
+one. The galley is already saved, and the window can be cancelled
+without harm, but nothing on screen says so. The galley's row keeps
+offering "Change File". A file uploaded there turns the row's label into
+a download link and adds "More Information", so the galley looks like a
+file galley in the list, while readers are still sent to the address and
+never get the file. The older galley list, which a preprint server's
+submission wizard still shows, asks no file for such a galley and offers
+none on its row. Since: 2024-09-19 · Basis: probe, 2026-10-02.
+<sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — Changing the file of a new version's galley replaces the file readers download from the published version** · 🐞 · high · crash: server · crash: script.
@@ -1326,6 +1339,7 @@ Author; an HTML galley's window carried the "Dependent Files" list with
 its own "Upload File". A preprint server's submission wizard, which
 still shows the legacy grid, headed its "Edit" "Edit a Layout Galley"
 and its add window "Add File".
+Issue report: [docs/issues/U46-A1-galley-edit-window-upload-heading.md](../issues/U46-A1-galley-edit-window-upload-heading.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Retired. Live-probed 2026-09-24 (note h), OJS and OPS: the
@@ -1344,6 +1358,7 @@ file; `ArticleGalleyGridRow` adding its upload action only when
 (note p) wins over any file. Live-probed 2026-09-24 (note q8); the
 submission wizard's legacy grid on OPS opened no upload wizard for a
 remote galley and gave its row "Edit" and "Delete" only.
+Issue report: [docs/issues/U46-A3-remote-galley-asked-for-file.md](../issues/U46-A3-remote-galley-asked-for-file.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note m. The earlier version's galley file keeps
