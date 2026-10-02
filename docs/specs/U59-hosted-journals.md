@@ -792,6 +792,9 @@ Left out of the scenarios above, by reason:
   - on the Settings Wizard, a new "Path" saved and then "Journal title"
     saved on the same page, showing "Saved" ([A4](#a4)): the guard the
     issue report proposes
+  - signing in from the Login page of a journal not enabled publicly
+    returning to the page asked for ([A8](#a8)): the guard the issue
+    report proposes
 - **Rarely met**:
   - exactly one journal enabled publicly, where the site's address opens
     that journal instead of the list (Rule 19; Settings bullet 4): a
@@ -893,7 +896,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | Settings Wizard: after a saved "Path" change, further saves and list actions fail until a reload | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "Jump to next error" on a refused form always scrolls to the first refused field, never on to the next | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Closing the "Edit" or "Create Journal" window right after it opens makes the page's script fail | 🐞 | invisible · crash: script | — |
-| [A8](#a8) | Signing in from the Login page of a journal not enabled publicly does not lead on to the page the visitor asked for | 🐞 | minor | — |
+| [A8](#a8) | Signing in at a journal not enabled publicly leads to the Dashboard or home page, not the page asked for | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A press or preprint server that holds an institution cannot be removed and is left half deleted {OMP OPS} | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | The path "0" is refused with a raw code on a preprint server | 🐞 | minor | — |
 | [A5](#a5) | A changed path leaves the default "For Readers" and "For Authors" texts linking to the old address {OJS OMP} | ❓ | minor | — |
@@ -1007,16 +1010,21 @@ rarely closes that fast; an automated test does.
 Basis: test run. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — A journal not enabled publicly forgets the page a visitor asked for** · 🐞 · minor.
-A signed-out visitor who opens an article, a file or the About page of a
-journal not enabled publicly (an author or editor following a link
-before the journal goes public, say) is sent to its Login page. After
-signing in they expect that page, as on a journal closed by "Users must
-be registered and log in to view the journal site.", where the sign-in
-leads straight back to it. Instead a Journal Manager lands on the
-Dashboard and a Reader on the journal's home page, and the page asked
-for has to be found again (Rule 11).
-Basis: probe. <sup>f-a8</sup>
+**A8 — Signing in at a journal not enabled publicly leads to the Dashboard or home page, not the page asked for** · 🐞 · low.
+A journal whose "Enable this journal to appear publicly on the site"
+box is unticked sends a signed-out visitor who opens an article, a file
+or the About page to its Login page (an author or editor following a
+link before the journal goes public, say). After signing in they expect
+the page they asked for. A journal closed by "Users must be registered
+and log in to view the journal site." does lead straight back to it.
+
+Instead an editor or author lands on the Dashboard and a Reader on the
+journal's home page, and the page asked for has to be found again.
+
+Such a journal has sent signed-out visitors to its Login page since
+2018, when that replaced a "not found" page; it has never led back to
+the page asked for.
+Basis: probe, 2026-10-02. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — "Register" and "Home" lead nowhere on the Login page of a journal not enabled publicly** · ❓ · minor.
@@ -1803,6 +1811,7 @@ feeds spec's note td12, the Search engine metadata spec's note q8) and on
 2026-09-28 on the LOCKSS and CLOCKSS pages (the Archiving & preservation
 spec's note k) and on a book's pages (OMP). Live-probed 2026-09-29, three
 apps, two runs each: note td8.
+Issue report: [docs/issues/U59-A8-login-from-journal-not-public-forgets-page.md](../issues/U59-A8-login-from-journal-not-public-forgets-page.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — The Login page's "Register" links (`user/register`, the

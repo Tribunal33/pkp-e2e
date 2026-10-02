@@ -1,0 +1,11 @@
+--- a/lib/pkp/classes/core/PKPPageRouter.php
++++ b/lib/pkp/classes/core/PKPPageRouter.php
+@@ -182,7 +182,7 @@
+                 // have an account yet and are validated by a secret key, so they must
+                 // stay reachable on a disabled context (check also RestrictedSiteAccessPolicy::_getLoginExemptions).
+                 if (!in_array($page, ['login', 'invitation'])) {
+-                    $request->redirect(null, 'login');
++                    Validation::redirectLogin();
+                 }
+             }
+         }
