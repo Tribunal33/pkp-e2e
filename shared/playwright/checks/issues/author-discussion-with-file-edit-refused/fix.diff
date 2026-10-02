@@ -1,0 +1,39 @@
+--- a/lib/pkp/api/v1/submissions/tasks/formRequests/EditTask.php
++++ b/lib/pkp/api/v1/submissions/tasks/formRequests/EditTask.php
+@@ -288,6 +288,13 @@
+                         return false;
+                     }
+ 
++                    // The edit form sends back the files already attached to the first message to keep them:
++                    // keeping them attaches nothing new, so only the other IDs are restricted
++                    $submissionFileIds = array_filter(Arr::wrap($this->input('submissionFileIds')), 'is_scalar');
++                    if (empty(array_diff($submissionFileIds, $this->getHeadnoteFileIds()))) {
++                        return false;
++                    }
++
+                     $isAssignedEditor = false;
+                     foreach ($this->stageAssignments as $stageAssignment) {
+                         if ($stageAssignment->userId == $currentUser->getId() && in_array($stageAssignment->userGroup->roleId, [Role::ROLE_ID_ASSISTANT, Role::ROLE_ID_SUB_EDITOR])) {
+@@ -332,4 +339,22 @@
+     {
+         return $this->task->createdBy;
+     }
++
++    /**
++     * IDs of the submission files attached to the first message of the task being edited
++     *
++     * @return array<int>
++     */
++    protected function getHeadnoteFileIds(): array
++    {
++        $headnote = $this->task?->notes()->withHeadnote()->first();
++        if (!$headnote) {
++            return [];
++        }
++
++        return Repo::submissionFile()->getCollector()
++            ->filterByAssoc(Application::ASSOC_TYPE_NOTE, [$headnote->id])
++            ->getIds()
++            ->all();
++    }
+ }

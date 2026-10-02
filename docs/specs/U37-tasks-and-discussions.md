@@ -1344,6 +1344,7 @@ Left out of the scenarios above, by reason:
   - the guard for A3 (issue report `docs/issues/U37-A3-writer-told-of-own-message.md`): after an opening and a reply, the writer's mailbox and Tasks list stay empty while the other participants get both (Side effects)
   - the guard for A5 (issue report `docs/issues/U37-A5-template-says-it-fills-participants.md`): pressing a template leaves "Participants" unchanged and its line names only what it fills (Rule 10d)
   - the guard for A9 (issue report `docs/issues/U37-A9-participant-message-edit-adds-message.md`): a discussion opened by "Notify", renamed through "Edit", keeps one first message, its text replaced in place and headed with the sender (Rules 15a, 15e)
+  - the guard for A8 (issue report `docs/issues/U37-A8-author-discussion-with-file-edit-refused.md`): an Author renames their own discussion whose first message carries an uploaded file, and the save keeps the file (Rule 15d)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1398,7 +1399,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | Each template in the "Add" window says it fills "Participants", but choosing one never does | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | A task's owner is offered "Edit" but cannot save even a new due date on a task someone else opened | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | On a press and a preprint server the edit refusals show a raw key | 🐞 | minor | — |
-| [A8](#a8) | An Author cannot save an edit of a discussion whose first message has an uploaded file, and the refusal names no field | 🐞 | user-visible | — |
+| [A8](#a8) | An Author cannot save an edit of their discussion once its first message has an uploaded file | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | Editing a discussion that "Notify" or "Assign" opened adds a copy of its message under the recipient's name | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A past "Due Date" is refused with "Start date should be greater than or equal to today" | 🐞 | minor | — |
 | [A16](#a16) | A task due today already reads "Overdue" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1512,20 +1513,18 @@ within 1 hour of creation.", a press and a preprint server print
 Basis: probe. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
-**A8 — An Author's discussion with an upload cannot be edited** · 🐞 · user-visible.
-An Author who attached an uploaded file to the first message of their
-discussion opens "Edit", changes only "Name" and presses "Save". The
-window stays open with the notice "The form was not saved because 1
-error(s) were encountered. Please correct these errors and try again."
-and "Please correct one error.", but no field shows an error, and "Save"
-stays greyed for the rest of that window, even after the file's
-"Remove". A screen reader hears the error list's only entry as "Go to
-submissionFileIds: ##validator.prohibited##". Only pressing the file's
-"Remove" first, in a fresh "Edit" window, lets the save through, and
-that takes the file off the message.
-A Copyeditor with an upload of their own, and the Journal Manager, save
-the same edit.
-Basis: probe. <sup>[f-a8](#fn-a8)</sup>
+**A8 — An Author cannot save an edit of their discussion once its first message has an uploaded file** · 🐞 · medium.
+An Author attaches an uploaded file to the first message of a discussion
+they start on their submission. Later they open "Edit", change only the
+name and press "Save". The window stays open with "The form was not
+saved because 1 error(s) were encountered." and "Please correct one
+error.", but no field is marked. "Save" stays greyed out for the rest of
+that window, even after the file's "Remove". The Author cannot rename
+the discussion, change its participants or message, or turn it into a
+task while the file is on it. Removing the file and uploading it again
+in a fresh window lets one save through. Every other role that may edit
+the discussion saves the same edit and keeps the file.
+Basis: probe, 2026-10-02. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
 **A9 — Editing a discussion that "Notify" or "Assign" opened adds a copy of its message under the recipient's name** · 🐞 · medium.
@@ -1986,6 +1985,7 @@ Issue report: [docs/issues/U37-A6-task-owner-cannot-save-edit.md](../issues/U37-
 
 <a id="fn-a8"></a>
 **f-a8** — `useDiscussionManagerForm` seeds `selectedFiles` with the head note's files tagged `FileAttacherWorkflowStage`, so `saveWorkItem()` sends their ids as `submissionFileIds`; `EditTask` makes `submissionFileIds` `prohibitedIf` the user is not manager/admin or an assigned sub-editor or assistant, and a non-empty value then fails validation. Live-probed 2026-09-23 (all three apps): the answer is 422 on `submissionFileIds` "##validator.prohibited##", heard only in the error list's screen-reader text "Go to submissionFileIds: ##validator.prohibited##"; "Jump to next error" moves focus to itself; the Copyeditor's and the manager's same edit answered 200 (td9).
+Issue report: [docs/issues/U37-A8-author-discussion-with-file-edit-refused.md](../issues/U37-A8-author-discussion-with-file-edit-refused.md).
 
 <a id="fn-a9"></a>
 **f-a9** — The Participants message path of note aa (`PKPStageParticipantNotifyForm::sendMessage()`) creates its first `Note` without `isHeadnote`; `addQuery()` (the comments box and the recommendation) has flagged it since pkp/pkp-lib#13409 (`3dc90c81a6`, 2026-09-29, issue pkp/pkp-lib#13345), and the auto-added item was never affected. On the Participants path `editTask()` reads the head note as `null` (its later `$headnote->id` reads a property of null, a warning); `EditorialTask::saveHeadnote()` finds no flagged note and saves a new flagged one with the edited text, which later saves update; the window heads it with the item's `createdBy`. With no head note the `EditTask` `description` closure passes (note v), so the recipient's save is held neither to the message's writer nor to the hour. Live-probed 2026-09-23, before that change (all three apps, the recommendation OJS and OMP): the "Notify", comments-box and recommendation discussions each gaining a second message under the recipient's, the Author's or the recommender's username after another person's "Save". Re-probed 2026-09-30: the Participants path alone, a name-only "Save" adding the copy and the next one rewriting it, and the recipient Author's and Funding Coordinator's saves past the hour (td10).
