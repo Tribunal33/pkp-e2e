@@ -2007,7 +2007,7 @@ Issue report: [pkp-e2e#483](https://github.com/jardakotesovec/pkp-e2e/issues/483
 <a id="fn-f-a10"></a>
 **f-a10** — Note h (`{if $browseCategories}` on a `LazyCollection`).
 Live-probed 2026-09-25: note td12.
-Issue report: [docs/issues/U16-A10-browse-block-empty-categories-line.md](../issues/U16-A10-browse-block-empty-categories-line.md).
+Issue report: [pkp-e2e#603](https://github.com/jardakotesovec/pkp-e2e/issues/603) ([docs/issues/U16-A10-browse-block-empty-categories-line.md](../issues/U16-A10-browse-block-empty-categories-line.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Note c. Live-probed 2026-09-25: note td1; the "Select
