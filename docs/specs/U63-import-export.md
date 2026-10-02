@@ -149,8 +149,9 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
 5. **An address naming a tool the installation lacks** (such as the
    Crossref tool's address typed on a press) shows the "Import/Export"
    list as raw code text on an otherwise empty page, instead of a page
-   saying there is no such tool ⚠ [A1](#a1). A tool's address with the
-   tool's name left off its end opens a blank white page: the server
+   saying there is no such tool ⚠ [A1](#a1). A tool's address cut back
+   to end at the word "plugin", and the Tools page's address with
+   "/anything" added to its end, open a blank white page: the server
    fails ⚠ [A19](#a19). <sup>w</sup> <sup>td3</sup>
 6. **Tools this spec does not describe.** The pages of "Crossref XML
    Export Plugin" and "DataCite Export/Registration Plugin" only say
@@ -239,8 +240,12 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
 14. <a id="export-list"></a> **The export list.** "Export Articles"
     ("Export", "Export Preprints") lists every submission of the
     journal, in any stage and any state, 100 to a page with page links
-    under the list when there are more. The search box narrows the list,
-    once Enter is pressed, to submissions matching the words typed.
+    under the list when there are more. The list runs newest first by
+    submission date and time, and submissions sharing that date and
+    time have no set order among them: past one page, a page can
+    repeat a submission another page showed and leave another out
+    ⚠ [A24](#a24). The search box narrows the list, once Enter is
+    pressed, to submissions matching the words typed.
     "View" on a line opens that submission's workflow screen or, for an
     unfinished submission, "Make a Submission" on its first step.
     <sup>g</sup>
@@ -1155,8 +1160,8 @@ Left out of the scenarios above, by reason:
     again: the same submission number shown and no new submission
     added
   - the guard A1 and A19's issue report names, once fixed: a tool's
-    address naming a tool the installation lacks, and one with the
-    tool's name left off, each answering "404 Not Found"
+    address naming a tool the installation lacks, and Rule 5's two
+    addresses that open a blank page, each answering "404 Not Found"
   - the guard A12's issue report names, once fixed: "Export Articles"
     ("Export Submissions", "Export Preprints") and "Export Issues"
     {OJS} pressed with nothing ticked: the alert "No objects
@@ -1245,7 +1250,8 @@ Left out of the scenarios above, by reason:
   - A16 (a new account imported on a server whose PHP is older than 8.4,
     and a password stored that PHP's default way kept; Rule 25; scenario
     6 marks the line for existing accounts)
-  - A19 (a tool's address with the tool's name left off; Rule 5)
+  - A19 (a tool's address cut back to end at "plugin", and the Tools
+    page's address with "/anything" added; Rule 5)
   - A20 (a title with a prefix exported and imported; Rule 20)
   - A21 (a users file whose user has no registration date; Rule 22d)
   - A22 (an account whose only role starts on a later date, left off
@@ -1253,6 +1259,8 @@ Left out of the scenarios above, by reason:
   - A23 (a users file first imported on a 3.5.0 release, imported again
     after the update; Rule 24), a state only an old release's import
     leaves
+  - A24 (an export list past one page whose submissions share a
+    submission date; Rule 14)
   - OJS1 (the DOAJ list's issue window heading; Rule 36)
   - OJS2 (the "DOAJ Export Plugin" row kept on the Plugins list while
     "DOAJ Plugin" is off; Rule 3)
@@ -1310,6 +1318,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | A submission with a title prefix comes back from a Native XML export and import titled "The The …" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | A users import stops at the first user without a registration date, silently leaving the rest out | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | A users file first imported on a 3.5.0 release and imported again after the update gives each ended role a second time | 🐞 | minor | — |
+| [A24](#a24) | Past one page, the Native XML export list repeats some submissions and leaves others off every page | 🐞 | minor | — |
 | [OJS1](#ojs1) | DOAJ export list's issue link opens the issue's window headed "DOI Plugin Settings" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | With "DOAJ Plugin" switched off, the Plugins list still shows its export tool as on | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | PubMed files lose the journal's title once the PubMed tool's Settings are saved with no NLM abbreviation | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1528,8 +1537,10 @@ Basis: probe, 2026-10-01. <sup>f-a16</sup>
 A manager who opens a tool's address with the tool's name left off its
 end should get a "not found" page, or the Tools list. Instead the server
 fails and the browser shows a blank white page, with no heading, no menu
-and no link back. Only an address typed or edited by hand leads there. A
-Section Editor gets the access-denied page there, as at any tool's
+and no link back. The Tools page's address with "/anything" added
+to its end fails the same way. Only an address typed or edited by
+hand leads there. At a tool's address with the name
+left off, a Section Editor gets the access-denied page, as at any tool's
 address.
 Basis: probe, 2026-10-01. <sup>f-a19</sup>
 
@@ -1588,6 +1599,23 @@ twice, and "Editorial History" lists "Section editor 2026 – 2020, 2018
 to remove the second role user by user. Roles the file gives no end
 date are not affected. {OJS OMP}
 Since: 2026-09-30 · Basis: probe, 2026-10-01. <sup>f-a23</sup>
+
+<a id="a24"></a>
+**A24 — Past one page, the Native XML export list repeats some submissions and leaves others off every page** · 🐞 · minor.
+A manager who pages through the Native XML Plugin's export list expects
+to meet each submission once. The list is in order of submission date
+with nothing to settle a tie, so where many submissions share a date,
+one can show on two pages and another on none, and the order of the
+lines on a page is not fixed. Submissions brought in by a Native XML
+import often share one: the file carries the day of each submission
+date but not the time. On a press and a preprint server holding more
+than 300 such submissions, pages 1 to 3 showed 300 lines but only 289
+different monographs and 286 different preprints; a journal's list,
+sorted the same way, happened to show 300 different articles that time.
+A manager who exports one page at a time, the way round
+[A11](#a11) offers, gets files that leave some submissions out, and
+nothing says so. The search box still finds each submission.
+Basis: probe, 2026-10-01. <sup>f-a24</sup>
 
 ### OJS
 
@@ -1989,6 +2017,7 @@ which the filter does not offer (A10). With 101 submissions "Select
 All" ticked 100 and kept its label after both presses; a submission
 ticked on page 1 was missing from a file exported on page 2 (A11).
 With the list empty ("No submissions found.") the button was disabled.
+The list's order (Rule 14): note f-a24.
 
 <a id="fn-h"></a>
 **h** — `exportSubmissionsBounce` → tab
@@ -2950,7 +2979,18 @@ missing name on to the plugin lookup, which fails: the server log reads
 type string, null given`. Live-probed 2026-10-01, OJS, OMP and OPS
 main, two runs each, as the Journal Manager: `GET
 …/management/importexport/plugin` answered 500 with an empty body; as
-the Section Editor, the access-denied page.
+the Section Editor, the access-denied page. The Tools page's own
+address with an unknown word added: `PKPToolsHandler::tools()` serves
+only `index`, `permissions` and `resetPermissions` after `tools/` and
+ends its `switch` in `default: assert(false);`;
+`GET …/management/tools/anything` answered 500 (`Uncaught
+AssertionError: assert(false)`) on OJS, OMP and OPS main, walked
+2026-10-01 as `dbarnes` on the default test dataset, whose installs run
+with `zend.assertions` on. Under PHP's production default
+(`zend.assertions = -1`) the assertion is compiled out and the address
+would likely answer an empty page with 200 (not driven). The issue
+report's fix answers 404 at both addresses (tried 2026-10-01, three
+apps).
 Issue report: [pkp-e2e#255](https://github.com/jardakotesovec/pkp-e2e/issues/255) ([docs/issues/U63-A1-A19-tool-address-without-tool-raw-text.md](../issues/U63-A1-A19-tool-address-without-tool-raw-text.md)).
 
 <a id="fn-f-a20"></a>
@@ -3037,6 +3077,25 @@ that writes one. PostgreSQL; MySQL not checked. Kept script:
 Written up for the team in `docs/reports/2026-10-01-pkp-lib-13414.md`
 (a temporary report, deleted once acted on).
 
+<a id="fn-f-a24"></a>
+**f-a24** — The export list (note g) asks `api/v1/submissions` for no
+order, so `PKP\submission\Collector` sorts by its default,
+`ORDERBY_DATE_SUBMITTED` (`s.date_submitted`, date and time) `DESC`,
+newest first (A11's walk found the dataset's newest submission at the
+top of page 1), with no second key; the same lib/pkp code serves the
+three apps. The Native XML export writes
+`date_submitted` as a date with no time, so the copies a file brings in
+tie. Walked 2026-10-01 on PostgreSQL, OJS, OMP and OPS main (the default
+test dataset as `dbarnes`, exported and imported again until the list
+had four pages; "Select All" on pages 1, 2 and 3): pages 1–3 held 300
+lines on each app, 300 different submissions on OJS, 289 on OMP and
+286 on OPS; the order of page 2's lines differed between runs. MySQL not checked. The PubMed
+and ONIX 3.0 export lists use the same list (code read, not walked).
+Kept script:
+`shared/playwright/checks/issues/export-list-selection-stops-at-page/many.js`.
+The A11 issue report names this a separate fault and leaves it out
+([docs/issues/U63-A11-export-list-selection-stops-at-page.md](../issues/U63-A11-export-list-selection-stops-at-page.md), Evidence).
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `ExportPublishedSubmissionsListGridCellProvider::getCellActions()`
 `issue`: `AjaxModal(…BackIssueGridHandler/editIssue…,
@@ -3091,7 +3150,11 @@ Live-probed again 2026-10-01, OJS main on PostgreSQL 18.6, two runs:
 "Article Title" "Okapi" listed "Lovelace; Okapi forest census",
 "okapi" and "OKAPI" answered "No Items"; "Authors" "Lovelace" listed
 both articles, "lovelace" "No Items". MySQL not checked: no MySQL
-install on the test machines.
+install on the test machines. On stable-3_5_0 (walked 2026-10-01, the
+default test dataset), the "Authors" box matches only the whole "Given
+Family" name, in its stored case ("Alan Mwandenga" lists the article,
+"alan mwandenga" answers "No Items"): 3.5's author `LIKE` has no `%`
+wildcards, which main added with pkp/pkp-lib#11589.
 Issue report: [pkp-e2e#276](https://github.com/jardakotesovec/pkp-e2e/issues/276) ([docs/issues/U63-OJS6-doaj-search-matches-letter-case.md](../issues/U63-OJS6-doaj-search-matches-letter-case.md)).
 
 <a id="fn-f-ojs7"></a>
@@ -3165,6 +3228,13 @@ submission to one: queued, in the submission stage, never completed,
 its one version with no title and no author, and no file. Kept script:
 `shared/playwright/checks/sync/omp-csv-cli/csv-cli.js`. No upstream
 issue found (pkp/pkp-lib#10116 is an older one about other fields).
+With the issue report's fix tried (2026-10-01, OMP main), the monograph
+is imported but the Dashboard's "Published" does not count it: the
+plugin sets the submission published and in the production stage
+without publishing its version ("Status: Unscheduled"), and on main
+"Published" lists only the "Done" stage that publishing a version
+moves a submission to; 3.5 counts it. The report leaves this to the
+same change (its "What goes with it").
 Issue report: [pkp-e2e#279](https://github.com/jardakotesovec/pkp-e2e/issues/279) ([docs/issues/U63-OMP4-command-line-csv-import-empty-submission.md](../issues/U63-OMP4-command-line-csv-import-empty-submission.md)).
 
 ## Reference — entry points & surfaces

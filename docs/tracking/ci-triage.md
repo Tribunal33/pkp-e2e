@@ -430,6 +430,12 @@ trips.
   annotation named both. `php -S` logs a request's path only once it is
   answered, so the crashing request shows as a bare `Accepted` line: the
   path comes from the test's own step in the error context.
+  Again 2026-10-01 (CI first attempts, green on retry, all exit 139): OMP
+  U03 S6 (pkp-e2e 36919446668, :8100), OMP U03 S10 (36872303797), OPS U12
+  S6 @solo (36853975923, 9 s into the solo pass); two deaths went
+  unannotated, the test failing on `socket hang up` in the death's own
+  second (OJS U03 S6 ojs 36672771134, OJS U12 S4 serial 36872303797): the
+  watch read the log before the death line was written.
 - **Participants menu still open after the impersonation return** (U01
   S7, OJS, once). In the fourth OJS final of the U05 revision session
   (2026-09-13, four workers, `.reports/U05/final-run-ojs-attempt4.log`)
@@ -766,6 +772,10 @@ trips.
   request left (6 methods, every ProfilePage caller). Moved under the
   segfault class; the 2026-09-23 local OPS sighting stays unexplained.
   **Watch condition**: a ProfilePage timeout whose request was answered.
+  Again 2026-10-01 (CI), not this condition: OJS U03 S4
+  (`ProfilePage.js:265`, pkp-e2e 36842671866) and OMP U03 S10 (`:243`,
+  36872303797) are form waits whose tab fetch went unanswered (exit 139);
+  `open()`/`expectOpen()` still give a bare 30 s timeout there.
 - **"Cancel upload" on a throttled upload** (U36 S9, OJS and OMP; local
   finals from 2026-09-24, CI once on both attempts: push run 36322740739,
   OMP shard 3/3; CI tally 6 flaky + 1 failed on OJS). **Fixed
@@ -876,6 +886,14 @@ trips.
   log line, core dumps with a gdb backtrace on CI, the runner's CPU in the
   log, a no-JIT arm. **Watch condition**: an annotated death not in the
   two families; then take the proposals.
+  **Tripped 2026-10-01** (housekeeping 2026-10-02,
+  `.reports/hk02/flake-watch.md`): ten annotated or logged exit-139
+  deaths on CI 09-30..10-01, none in the two families as far as the logs
+  show (OJS U01 S4/S7, U03 S4/S6, U12 S4; OPS U12 S6 @solo; OMP U03
+  S6/S10, U01 S4, U61 S5), each 9-63 s after its process started (174-439
+  requests), where the in-family U65 deaths came after 10-12 min; the
+  proposals are taken, the no-JIT arm first (diagnosis
+  `.reports/flake-1002/segv/`).
 - **Manage Emails template window gone before its "Saved" read** (U34 S7,
   OJS and OMP, CI). The nightly pkp-e2e run 35558115088 (2026-09-21, `main`
   at `735bb76`, the same tree and the same app tips as the green push run
@@ -980,6 +998,12 @@ trips.
   answer handled 1.5 s late: red 4 of 4 before, green 4 of 4 after), on
   every U10 caller of the three apps. **Watch condition**: a red behind
   the new readers.
+  Again 2026-09-30 (CI ojs 36668070912, OJS U10 S2, green on retry) at a
+  site the fix does not cover: the favicon's `choose()`
+  (`AppearancePages.js:241`) returns on the `temporaryFiles` answer, the
+  save then went out without the file and the home page had no favicon
+  link (spec :430); lead: `UploadBox.choose()` waits for the box's own
+  preview before returning.
 
 - **The OJS publish panel confirmed before its "Issue Assignment" is
   filled** (U13 S3 "an older version beside the current one"; CI's top
@@ -1160,6 +1184,20 @@ trips.
   save's POST not seen in 30 s; unlike the entry above, a CI run with the
   solo project alone). **Watch condition**: a second sighting of any;
   then read its error context and the worker's server log.
+  Second sightings 2026-10-01: OJS U03 S4 (pkp-e2e 36842671866) and OPS
+  U12 S6 @solo (36853975923), both exit-139 deaths, as were the 09-30 OMP
+  U03 S4 and OJS U12 S6 (36698118029 `server-crash.txt`): both move under
+  the segfault class. OPS U60 S11 stays open on its own condition.
+
+- **The "Review Files" window's row box outside the viewport** (U34 S3,
+  OJS, CI once): ojs 36668070912 (2026-09-30, a PR run on pkp-e2e
+  `main`), `DecisionWizardPages.js:901` `check({force: true})` "Element
+  is outside of the viewport" right after `openAttachSource('Attach
+  Review Files', 'Review Files')`; the error context shows the window
+  open, its box unticked and "Attach Selected" disabled; green on retry.
+  Lead: the side window still sliding in (a forced check skips the
+  stability wait). **Watch condition**: a second sighting; then read the
+  retry's trace for the window's transition.
 
 ## Companion branches — pkp-e2e branches waiting on app PRs
 

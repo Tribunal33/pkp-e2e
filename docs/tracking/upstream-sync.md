@@ -25,6 +25,11 @@ deletes each once it is a report, a register entry or dismissed._
   required as on OJS (`otherLinesOptional` out of
   `apps/omp/playwright/tests/U63-import-export.spec.js`): the spec's
   scenario 6 already requires it on both apps.
+- 2026-10-02 (housekeeping session): a backport question for the
+  stable line: on stable-3_5_0 the DOAJ list's "Authors" search matches
+  only the whole "Given Family" name (no `%` wildcards); `main` fixed it
+  with pkp/pkp-lib#11589 (U63 f-ojs6, walked 2026-10-01 in
+  `docs/issues/U63-OJS6-doaj-search-matches-letter-case.md` steps 6–7).
 
 ## Sync log
 

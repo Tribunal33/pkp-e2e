@@ -24,7 +24,7 @@
  *   unread.
  * - A10: S3 reads the stage filters' lists as the set they give; that the
  *   published monograph is in no stage is read only as its absence there.
- * - A1, A4–A7, A9, A11–A16, A19–A23: not on these scenarios' press paths.
+ * - A1, A4–A7, A9, A11–A16, A19–A24: not on these scenarios' press paths.
  *   OJS1–OJS9: the journal's.
  *
  * Seeding (footnote sc): S2 reads `publicknowledge` with the roster; every

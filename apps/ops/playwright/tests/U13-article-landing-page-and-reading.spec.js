@@ -41,7 +41,7 @@
  *   6 names): S1's heading read on "Harbour Notes" leaves "References" out.
  * - U46 A7 🐞 (seeded galleys share one position): S2 reads the main list's
  *   links as a set, never in an order.
- * - A4, OJS1–OJS10: not on a preprint server's paths here (no file-less
+ * - A4, A13, A14, OJS1–OJS13: not on a preprint server's paths here (no file-less
  *   galley is seeded; the OJS entries are the journal's).
  *
  * Seeding: scenario endpoints only; publicknowledge and the seeded roster

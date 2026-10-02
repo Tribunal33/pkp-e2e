@@ -2425,8 +2425,9 @@ figures.
 `catalog/view/{book}/{format}/{file}` answered 500 for the "Appendix"
 file (a blank page); the PDF's view page opened with an empty viewer,
 its `catalog/download/{book}/{format}/{file}?inline=1` answering 500
-and the page's script failing with "PDFJS is not defined" and
-"UnexpectedResponseException". Neither wrote a line to the day's usage
+and the page's script failing with "PDFJS is not defined" (a separate
+fault of the view page, [Monograph landing page, A23](U69-monograph-landing-page.md#a23))
+and "UnexpectedResponseException". Neither wrote a line to the day's usage
 log; the HTML format wrote one. The same failure is U20's OMP6.
 Issue report: [pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282) ([docs/issues/U69-A9-book-file-open-download-fails.md](../issues/U69-A9-book-file-open-download-fails.md)).
 

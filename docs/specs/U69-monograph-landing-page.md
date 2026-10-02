@@ -78,7 +78,7 @@ Proofreader and Editorial Board Member. <sup>c</sup>
 | **Read a published book's page and its chapter pages** (the current version, or an older one at its own address) | • anyone, signed in or not (Rules 1–4) <sup>c</sup> |
 | **Open an unpublished version's page** (the preview) | • the Press manager, Press editor, Production editor, Series editor and the assistant roles, whether or not they are assigned to the book, and the Site Administrator, under the preview notice, and its chapter pages too (Rule 5); the workflow's "Preview" opens it for those it is offered to ([Workflow screen & stage access](U24-workflow-screen-and-stage-access.md), its Rule 6)<br>• the book's Author, by typing the page's address<br>• anyone else gets the "404 Not Found" page (Rule 3): a visitor, a Reader, a Reviewer, and an Author, Volume editor, Chapter Author or Translator of the press who is not on the book<br>• a submission its author never finished answers "404 Not Found" to everyone, the Press manager, the Site Administrator and its own Author included <sup>c</sup> <sup>td5</sup> |
 | **Open a free file** ("Open Access" terms) | • anyone who may read the page (Rule 13); today only an HTML file opens [A9](#a9)<br>• on a press with "Users must be registered and log in to view open access content." ticked (Settings bullet 6): signed-in users only; a visitor who presses a free file's link gets the Login page first, and once signed in there the file's view page <sup>j</sup> <sup>td13</sup> |
-| **Buy a file for sale** ("Direct Sales" terms) | • a signed-in user, whatever the role (the press's own staff and the Site Administrator too), on a press whose payment method is set up and that has a currency (Rule 14)<br>• a visitor gets the Login page first, and once signed in there not the payment page but the press's home page (a Reader) or the Dashboard (a Press manager) [A18](#a18) <sup>k</sup> <sup>td14</sup> |
+| **Buy a file for sale** ("Direct Sales" terms) | • a signed-in user, whatever the role (the press's own staff and the Site Administrator too), on a press whose payment method is set up and that has a currency (Rule 14)<br>• a visitor gets the Login page first, and once signed in there not the payment page but the page an ordinary sign-in opens for their role, and a newcomer who registers from that Login page "Registration complete" (Rule 14) [A18](#a18) <sup>k</sup> <sup>td14</sup> |
 | **Receive the "Manual Payment Notification"** | • the press's principal contact, when a buyer presses "Send notification of payment" (Side effects) <sup>q</sup> |
 | **Show the citation in another format; download a citation** | • anyone who may read the page, while the "Citation Style Language" plugin is on (Rule 19)<br>• on a preview, the Press manager, Press editor, Production editor, the Site Administrator and a Series editor or assistant role assigned to the book; for the book's Author, and for a Series editor or assistant role not assigned to it, another format changes nothing and a download opens the "404 Not Found" page ⚠ [A21](#a21) <sup>m</sup> <sup>td18</sup> |
 | **Change the settings of "Settings that modify behavior"** | • whoever opens the Settings pages ([→ settings access](U07-journal-identity-and-about-pages.md#settings-access)), on Settings › Website › "Plugins" ([Plugins management](U62-plugins-management.md#plugin-links)), "Appearance" and Settings › Distribution › "Payments"; "Enable this press to appear publicly on the site" the Site Administrator <sup>r</sup> |
@@ -183,7 +183,9 @@ outdated-version notice sits between the bar and the viewer (Rule 13a).
 The viewer never shows the PDF today: under its toolbar (page count "of
 0") a red bar reads "Unexpected server response." with "More
 Information" and "Close", and the viewer's own "Download" saves nothing
-[A9](#a9). <sup>f</sup>
+[A9](#a9). Each time the page opens, its own script also fails, which
+the reader does not see: the browser's console reads "PDFJS is not
+defined" ⚠ [A23](#a23). <sup>f</sup>
 
 <a id="html-view"></a>
 **The HTML view page.** Opened from a free HTML file while "HTML
@@ -353,7 +355,9 @@ link, not a button. A journal's page puts the instructions under
       ([→ Publication formats & proof terms, A9](U73-publication-formats-proof-terms.md#a9)).
     - 11b. **A format with several files.** The format's name, then for
       each file its name followed by a link reading the file's name
-      again. The link never shows a price, so a file for sale there looks
+      again, the files in no fixed order (the same steps taken twice
+      listed a format's two files either way round). The link never
+      shows a price, so a file for sale there looks
       like a free one until it is pressed ⚠ [A8](#a8). <sup>td11</sup>
     - 11c. **The link address.** The press's address followed by
       "catalog/view/", the book's URL Path or number, the format's URL
@@ -411,9 +415,12 @@ link, not a button. A journal's page puts the instructions under
     - pressed by a visitor, leads to the Login page, which says nothing
       of the purchase (only "Required fields are marked with an
       asterisk: *" above the form). Once signed in there, the buyer does
-      not reach the payment page: a Reader lands on the press's home
-      page, a Press manager on the Dashboard's list headed "Assigned to
-      me" ⚠ [A18](#a18);
+      not reach the payment page but lands where an ordinary sign-in
+      takes their role: a Reader on the press's home page, an Author on
+      "My Submissions" (headed "Active submissions"), a Press manager on
+      the Dashboard's list headed "Assigned to me". A newcomer who presses "Register" on that Login
+      page and sends the form lands on "Registration complete", signed
+      in ⚠ [A18](#a18);
     - pressed by a signed-in user, whatever the role (the press's own
       staff and the Site Administrator too), opens the payment page at
       once. With "Manual Fee Payment", "Send notification of payment"
@@ -463,11 +470,15 @@ link, not a button. A journal's page puts the instructions under
     in a later version reads that version's date alone. <sup>l</sup>
     - 16a. **"Forthcoming".** The heading reads "Forthcoming" when the
       version's date lies after today. The chapter page compares the two
-      dates as written in the press's short date format, so under a
-      day-first format ("d/m/Y") a chapter published on 31/12/2024 and
-      read on 28/09/2026 is headed "Forthcoming", and a chapter of a book
-      scheduled for 15/01/2027 is headed "Published" ⚠ [A13](#a13).
-      <sup>td16</sup>
+      dates as written in the press's "Date (Short)" format, and only
+      the year-first format a press starts with ("2026-10-01") sorts
+      them in date order. Under each of the three other choices
+      ("01-10-2026", "10/01/2026", "01.10.2026"), or a "Custom" one such
+      as "d/m/Y", the heading can come out wrong, depending on the day
+      the page is read: a chapter of a book published on December 31,
+      2024 and read on October 1, 2026 is headed "Forthcoming", and in
+      the preview a chapter of a book scheduled for January 1, 2027 is
+      headed "Published" ⚠ [A13](#a13). <sup>td16</sup>
 17. **The chapter's "Versions" list.** Shown only when the book has more
     than one published version: every published version, newest first,
     as on the book's page. A version that carries the chapter links to
@@ -645,8 +656,9 @@ link, not a button. A journal's page puts the instructions under
     Time", [Appearance & theming](U10-appearance-and-theming.md), its
     Rule 31). The long format writes the date lines (Rules 8, 16), the
     short one the "Versions" lists and the book page's notices (Rules 6,
-    9); a day-first short format heads published chapters "Forthcoming"
-    and scheduled ones "Published" [A13](#a13). <sup>h</sup>
+    9); any short format but the year-first one a new press has can
+    head a published chapter "Forthcoming" and a scheduled one
+    "Published" (Rule 16a) [A13](#a13). <sup>h</sup>
 14. **Settings other features describe.** The work type, whose Edited
     Volume credits its volume editors
     ([Contributors & affiliations](U41-contributors-and-affiliations.md#omp2));
@@ -1070,8 +1082,8 @@ Left out of the scenarios above, by reason:
     "Date (Short)" format
   - the guard for A18 (issue report
     `docs/issues/U69-A18-sign-in-to-buy-file-skips-payment-page.md`): a
-    visitor who signs in from a priced file's link landing on the
-    payment page
+    visitor who signs in, or registers, from a priced file's link
+    landing on the payment page
   - the guard for A12 (issue report
     `docs/issues/U69-A12-payments-enable-unticked-press-still-sells.md`):
     a press with payments "Enable" unticked opening no payment page
@@ -1113,9 +1125,10 @@ Left out of the scenarios above, by reason:
     opening a book's free PDF in the viewer and saving it with
     "Download", and the same link downloading the file with
     "PDF.js PDF Viewer" off
-  - the guard for A9's script error (issue report
+  - the guard for A23 (issue report
     `docs/issues/U69-A9-pdf-view-page-script-error.md`): the PDF view
     page opening with no script error
+  - a format with two files listing them in either order (Rule 11b)
   - the guard for A5 (Rule 6; issue report
     `docs/issues/U13-A6-older-version-tab-current-title.md`): an
     older version's page, published under another title than the current
@@ -1172,22 +1185,24 @@ Left out of the scenarios above, by reason:
   - A11 (a manual purchase never completed; Rule 14)
   - A12 ("Enable" unticked on a press that sells; Rule 14b; Settings
     bullet 10)
-  - A13 (a day-first short date heading a chapter "Forthcoming" or
-    "Published"; Rule 16a)
+  - A13 (a short date format other than the year-first one heading a
+    chapter "Forthcoming" or "Published"; Rule 16a)
   - A14 (a later version's "Original work published" on a chapter that
     version added; Rule 19b)
   - A15 (the pages in French; Rule 21)
   - A16 (a book's earlier URL Path; Rule 2)
   - A17 (an unpublished book's chapter page without the preview notice;
     Rule 5b)
-  - A18 (where a visitor who signs in to buy lands; Rule 14; scenario 4
-    passes it)
+  - A18 (where a visitor who signs in or registers to buy lands; Rule
+    14; scenario 4 passes it)
   - A19 (an older version's chapter page on a press with "DOI
     Versioning" "No"; Rule 15a)
   - A20 (a later version's chapter with its own date; Rule 16)
   - A21 (the book's Author or an unassigned role using a preview's
     citation; Actors row 6)
   - A22 ("APA"'s "(Vols. 3)" for a series position; Rules 19a, 19b)
+  - A23 (the PDF view page's script error; Fields, the PDF view page;
+    scenario 3 passes it)
 - **No seed**:
   - chapters dragged into a new order on the Chapters page (Rule 10)
   - a purchase completed through PayPal (Rule 14)
@@ -1249,6 +1264,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | Previewing an unpublished book, its chapter pages carry no notice that they are a preview | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A visitor who signs in or registers to buy a book file lands on their home page, not the payment page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | A chapter with its own date reads "June 1, 2024 — Updated on June 1, 2024" in a book's later version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [A23](#a23) | A press's PDF view page fails in its own script, "PDFJS is not defined", every time it opens | 🐞 | low · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | A buyer who pays by hand never gets the file | ❓ | user-visible | — |
 | [A2](#a2) | A book published only as an Author Original has no page | ❓ | minor | — |
 | [A21](#a21) | On a preview, "How to Cite" works only for the roles assigned to the book | ❓ | minor | — |
@@ -1366,9 +1382,8 @@ search engine that follows the file addresses in the book page's tags
 gets the same error.
 Only an HTML file still opens, and only while "HTML Monograph File" is
 on. Visitors and signed-in users are affected alike.
-The view page's own script also fails with "PDFJS is not defined", a
-second fault with its own report: it shows on 3.5 too, where the PDF
-opens, and the reader sees nothing of it.
+The view page's script error "PDFJS is not defined" is a separate
+fault, [A23](#a23).
 Worked until the download began reporting the version to the usage statistics, a change read from the code's history: a regression.
 Since: 2026-08-26 (a month), a date read from the code's history · Basis: probe, 2026-10-01. <sup>f-a9</sup>
 
@@ -1567,6 +1582,22 @@ Question: should "APA" print a series position as one? Lean: yes, a
 defect; a place in a series is not a count of volumes.
 Basis: probe, 2026-09-28. <sup>f-a22</sup>
 
+<a id="a23"></a>
+**A23 — A press's PDF view page fails in its own script, "PDFJS is not defined", every time it opens** · 🐞 · low · crash: script.
+Each time a reader opens a book's PDF on a press, the PDF view page's
+own script fails: the browser's console reads "PDFJS is not defined".
+The reader sees nothing of it. In OMP 3.5 the viewer under the bar
+shows the PDF and "Download" saves it; in the development version the
+test install runs, the viewer stays empty for another reason,
+[A9](#a9).
+The page also loads and runs the PDF viewer's two scripts a second
+time outside the viewer, where nothing uses them. Nothing is lost; the
+error is noise for anyone watching a press's pages for script
+failures.
+It happens on every PDF view page while "PDF.js PDF Viewer" is on, as
+it is on a new press.
+Basis: probe, 2026-10-01. <sup>f-a23</sup>
+
 ---
 
 <a id="footnotes"></a>
@@ -1636,7 +1667,7 @@ Basis: probe, 2026-09-28. <sup>f-a22</sup>
 **td23** — Live-probed 2026-09-28 (Rule 9): one version: "Versions" with "2024-03-05 (Version of Record 1.0)" in plain text; two: newest first, the shown one plain, the current one linking to the book's address, the older to `…/version/{id}`; a third, unpublished version and a second one unpublished again were not listed; "28-09-2026 (Version of Record 1.1)" after a short-format change.
 
 <a id="fn-i"></a>
-**i** — Table of contents: `monograph_full.tpl` `.item.chapters` over `ChapterDAO::getByPublicationId()` (the chapter list's `seq`); the title link when `isPageEnabled()`, to `catalog/book/{bestId}/chapter/{sourceChapterId}` or `…/version/{pid}/chapter/{sourceChapterId}`; the authors line when `$authorString != $chapter->getAuthorNamesAsString()`, where `$authorString` is `Publication::getAuthorString()` ("{name} ({roles})" joined by "; ") and the chapter's is the bare names joined by ", ", so the two never match; the chapter's DOI `doiObject` (or a sibling version's); chapter files `pluck_files by="chapter"`, then per `$publicationFormats` `by="publicationFormat"`, the link through `downloadLink.tpl`. Side column: `CatalogBookHandler::book()` keeps formats with `getIsAvailable()` (remote ones also in `remotePublicationFormats`) and files whose `directSalesPrice` is not null in an available format (`availableFiles`); `publicationFormats.tpl` prints a remote format (`urlRemote`, `target="_blank"`, not on a chapter page), a single file as `pub_format_single`, several as the format's name then per file `span.name` and a `downloadLink.tpl` with `useFilename=true`. `downloadLink.tpl`: with `useFilename` the file's name alone; otherwise, when `getDirectSalesPrice()` and `$currency`, the bare price followed by `payment.directSales.purchase` "Purchase {$format} ({$amount} {$currency})" (OMP `locale/en/locale.po`), else the format's name; the address `catalog/view/{bookBestId}/{formatBestId}/{fileBestId}` or with `version/{pid}` when the publication is not the current one. Incidental (U73 claim check K3, 2026-09-28): "25.00 Purchase PDF (25.00 USD)"; a two-file format listed "replacement.pdf", "article.pdf" where a one-file format read "PDF". Live-probed 2026-09-28: see td10, td11; the side column listed a press's formats in the Publication Formats page's order, and after a format was set "Not Available", or its approval revoked, the page and the side column both moved it last. Only the seeded chapter order was read; a new order dragged on the Chapters page was not reached.
+**i** — Table of contents: `monograph_full.tpl` `.item.chapters` over `ChapterDAO::getByPublicationId()` (the chapter list's `seq`); the title link when `isPageEnabled()`, to `catalog/book/{bestId}/chapter/{sourceChapterId}` or `…/version/{pid}/chapter/{sourceChapterId}`; the authors line when `$authorString != $chapter->getAuthorNamesAsString()`, where `$authorString` is `Publication::getAuthorString()` ("{name} ({roles})" joined by "; ") and the chapter's is the bare names joined by ", ", so the two never match; the chapter's DOI `doiObject` (or a sibling version's); chapter files `pluck_files by="chapter"`, then per `$publicationFormats` `by="publicationFormat"`, the link through `downloadLink.tpl`. Side column: `CatalogBookHandler::book()` keeps formats with `getIsAvailable()` (remote ones also in `remotePublicationFormats`) and files whose `directSalesPrice` is not null in an available format (`availableFiles`); `publicationFormats.tpl` prints a remote format (`urlRemote`, `target="_blank"`, not on a chapter page), a single file as `pub_format_single`, several as the format's name then per file `span.name` and a `downloadLink.tpl` with `useFilename=true`. `downloadLink.tpl`: with `useFilename` the file's name alone; otherwise, when `getDirectSalesPrice()` and `$currency`, the bare price followed by `payment.directSales.purchase` "Purchase {$format} ({$amount} {$currency})" (OMP `locale/en/locale.po`), else the format's name; the address `catalog/view/{bookBestId}/{formatBestId}/{fileBestId}` or with `version/{pid}` when the publication is not the current one. Incidental (U73 claim check K3, 2026-09-28): "25.00 Purchase PDF (25.00 USD)"; a two-file format listed "replacement.pdf", "article.pdf" where a one-file format read "PDF". Live-probed 2026-09-28: see td10, td11; the side column listed a press's formats in the Publication Formats page's order, and after a format was set "Not Available", or its approval revoked, the page and the side column both moved it last. Only the seeded chapter order was read; a new order dragged on the Chapters page was not reached. Walked 2026-10-01 on OMP `main` (issue report `docs/issues/U69-A15-omp-french-book-page-raw-keys.md`, Evidence, seen in passing): on the default dataset's book 14, after a second version was published, its two files under "PDF" changed places from one run of the same steps to the next (cause not traced; seen on the side column, the table of contents' order not read).
 
 <a id="fn-td10"></a>
 **td10** — Live-probed 2026-09-28 (Rule 10; A6): "Tides" (page ticked, subtitle "Low and high") a link to `…/chapter/{n}`, "Harbours" and "Coda" plain text; a single-author book showed its author under each chapter with authors, a two-contributor book's chapter credited to both "Ada Author, Lee Second", a chapter with no authors no name; each chapter's file links under the chapter only, none in the side column; the chapter's DOI "DOI: https://doi.org/10.1234/…" as a link.
@@ -1815,9 +1846,8 @@ Issue report: [pkp-e2e#289](https://github.com/jardakotesovec/pkp-e2e/issues/289
 Issue report: [pkp-e2e#289](https://github.com/jardakotesovec/pkp-e2e/issues/289) ([docs/issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md](../issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md)).
 
 <a id="fn-f-a9"></a>
-**f-a9** — Note j: every free-file download reaches the `UsageEvent` built with the never-set `$this->publication`; `view` of a PDF shows the pdfJsViewer page, whose inline `PDFJS` script fails and whose viewer loads the failing download. The typed property dates from omp `29fa88508` (2025-03-20, pkp/pkp-lib#10671); the event's `publication: $this->publication` argument from omp `591d7a0e7` (2026-08-26, pkp/pkp-lib#12311, "pass publication to usage event"), which set it in `book()` but not in `download()`. Live-probed 2026-09-26 (U20 claim check), 2026-09-27 (U64), 2026-09-28 (U73 claim check K3, K4, three runs): `GET {press}/catalog/download/{book}/{format}/{file}`, with and without `?inline=1`, current or older version, answered 500 with the log line above; the view page logged "PDFJS is not defined" and "UnexpectedResponseException". Live-probed 2026-09-28 (td13, td22; two runs of each drive): 22 download 500s and 9 view 500s across the runs, "PDFJS is not defined" and "UnexpectedResponseException" on every PDF view page; the bar's "Download" and the viewer's both cancelled; the French view page (`{press}/fr_CA/catalog/download/…?inline=1`) the same. The same failure is recorded where it shows elsewhere: Search engine metadata & analytics' OMP6, Usage statistics' OMP3, Media files' OMP1 (HTML plugin off).
+**f-a9** — Note j: every free-file download reaches the `UsageEvent` built with the never-set `$this->publication`; `view` of a PDF shows the pdfJsViewer page, whose inline `PDFJS` script fails (A23) and whose viewer loads the failing download. The typed property dates from omp `29fa88508` (2025-03-20, pkp/pkp-lib#10671); the event's `publication: $this->publication` argument from omp `591d7a0e7` (2026-08-26, pkp/pkp-lib#12311, "pass publication to usage event"), which set it in `book()` but not in `download()`. Live-probed 2026-09-26 (U20 claim check), 2026-09-27 (U64), 2026-09-28 (U73 claim check K3, K4, three runs): `GET {press}/catalog/download/{book}/{format}/{file}`, with and without `?inline=1`, current or older version, answered 500 with the log line above; the view page logged "PDFJS is not defined" and "UnexpectedResponseException". Live-probed 2026-09-28 (td13, td22; two runs of each drive): 22 download 500s and 9 view 500s across the runs, "PDFJS is not defined" and "UnexpectedResponseException" on every PDF view page; the bar's "Download" and the viewer's both cancelled; the French view page (`{press}/fr_CA/catalog/download/…?inline=1`) the same. The same failure is recorded where it shows elsewhere: Search engine metadata & analytics' OMP6, Usage statistics' OMP3, Media files' OMP1 (HTML plugin off).
 Issue report: [pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282) ([docs/issues/U69-A9-book-file-open-download-fails.md](../issues/U69-A9-book-file-open-download-fails.md)).
-Issue report (the view page's script error "PDFJS is not defined", low): [pkp-e2e#283](https://github.com/jardakotesovec/pkp-e2e/issues/283) ([docs/issues/U69-A9-pdf-view-page-script-error.md](../issues/U69-A9-pdf-view-page-script-error.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note f: `monograph.return` is defined in no locale file of OMP, lib/pkp or the plugin. Live-probed 2026-09-28 (td21).
@@ -1831,7 +1861,7 @@ Issue report: [pkp-e2e#288](https://github.com/jardakotesovec/pkp-e2e/issues/288
 Issue report: [pkp-e2e#294](https://github.com/jardakotesovec/pkp-e2e/issues/294) ([docs/issues/U69-A12-payments-enable-unticked-press-still-sells.md](../issues/U69-A12-payments-enable-unticked-press-still-sells.md)).
 
 <a id="fn-f-a13"></a>
-**f-a13** — Note l: `chapter.tpl` compares `date_format:$dateFormatShort` strings, where `monograph_full.tpl` compares `Y-m-d` (pkp-lib#10169 fixed only the book page). Live-probed 2026-09-28 (td16): both directions.
+**f-a13** — Note l: `chapter.tpl` compares `date_format:$dateFormatShort` strings, where `monograph_full.tpl` compares `Y-m-d` (pkp-lib#10169 fixed only the book page). Live-probed 2026-09-28 (td16): both directions. Walked 2026-10-01 on OMP `main` and `stable-3_5_0`, the default dataset's book 14 and its "Chapter 1: Mind Control—Internal or External?", reading the book's and the chapter's page under each of the four "Date (Short)" choices (`PKPDateTimeForm`: "Y-m-d", "d-m-Y", "m/d/Y", "d.m.Y"): dated 2024-12-31, the chapter read "Forthcoming December 31, 2024" under "01-10-2026", "10/01/2026" and "01.10.2026" and "Published" under "2026-10-01", the book "Published" throughout; scheduled for 2027-01-01, the preview's chapter read "Published January 1, 2027" and the book "Forthcoming". A "Custom" format is the 2026-09-28 probe's "d/m/Y" only.
 Issue report: [pkp-e2e#296](https://github.com/jardakotesovec/pkp-e2e/issues/296) ([docs/issues/U69-A13-chapter-page-forthcoming-under-other-date-format.md](../issues/U69-A13-chapter-page-forthcoming-under-other-date-format.md)).
 
 <a id="fn-f-a14"></a>
@@ -1851,7 +1881,7 @@ Issue report: [pkp-e2e#284](https://github.com/jardakotesovec/pkp-e2e/issues/284
 Issue report: [pkp-e2e#297](https://github.com/jardakotesovec/pkp-e2e/issues/297) ([docs/issues/U69-A17-unpublished-book-chapter-page-no-preview-notice.md](../issues/U69-A17-unpublished-book-chapter-page-no-preview-notice.md)).
 
 <a id="fn-f-a18"></a>
-**f-a18** — Note k: `CatalogBookHandler::download()` sends a signed-out buyer to Login with `source` built by `$request->url()`, a full address, and `LoginHandler::signIn()` follows only a `source` starting with "/", so `_redirectAfterLogin()` (its dashboard branch needs an empty `source`) falls back to `PKPPageRouter::getHomeUrl()`, the user's home by role: the press's index for a Reader, `dashboard/editorial` for a manager, sub-editor or assistant role, `dashboard/reviewAssignments` for a Reviewer, `dashboard/mySubmissions` for an Author (the last two untried); a free file's Login (`Validation::redirectLogin()`) carries a path. Live-probed 2026-09-28 (td13, td14): the priced file's Login address carried `source=http%3A%2F%2F…`, the free file's `source=%2Findex.php%2F…`. Live-probed 2026-09-29 (td14): the Press manager's sign-in went to `dashboard/editorial`.
+**f-a18** — Note k: `CatalogBookHandler::download()` sends a signed-out buyer to Login with `source` built by `$request->url()`, a full address, and `LoginHandler::signIn()` follows only a `source` starting with "/", so `_redirectAfterLogin()` (its dashboard branch needs an empty `source`) falls back to `PKPPageRouter::getHomeUrl()`, the user's home by role: the press's index for a Reader, `dashboard/editorial` for a manager, sub-editor or assistant role, `dashboard/reviewAssignments` for a Reviewer (untried), `dashboard/mySubmissions` for an Author; a free file's Login (`Validation::redirectLogin()`) carries a path. "Register" on that Login page hands the same `source` to the registration form, and `RegistrationHandler::register()` applies the same path rule. Live-probed 2026-09-28 (td13, td14): the priced file's Login address carried `source=http%3A%2F%2F…`, the free file's `source=%2Findex.php%2F…`. Live-probed 2026-09-29 (td14): the Press manager's sign-in went to `dashboard/editorial`. Walked 2026-10-01 on OMP `main`, the default dataset's book 14 with one "PDF" file set to "Direct Sales" at 25.00 USD with "Manual Fee Payment": signing in on the Login page the file's link opened took `aclark` (Author and Reader) to `dashboard/mySubmissions`, headed "Active submissions (1)", `rvaca` (Press manager) to `dashboard/editorial`, headed "Assigned to me (0)", and a Reader to `{press}/index`; a newcomer who pressed "Register" there and sent the form landed on "Registration complete" ("Thanks for registering! What would you like to do next?"), signed in.
 Issue report: [pkp-e2e#295](https://github.com/jardakotesovec/pkp-e2e/issues/295) ([docs/issues/U69-A18-sign-in-to-buy-file-skips-payment-page.md](../issues/U69-A18-sign-in-to-buy-file-skips-payment-page.md)).
 
 <a id="fn-f-a19"></a>
@@ -1867,6 +1897,10 @@ Issue report: [pkp-e2e#298](https://github.com/jardakotesovec/pkp-e2e/issues/298
 
 <a id="fn-f-a22"></a>
 **f-a22** — Note m: `seriesPosition` is passed as the CSL `volume`, which the APA style prints as "(Vols. {n})". Live-probed 2026-09-28 (td18).
+
+<a id="fn-f-a23"></a>
+**f-a23** — Note f: OMP's own `plugins/generic/pdfJsViewer/templates/display.tpl` loads `pdf.js/build/pdf.js` and `pdf.js/web/viewer.js` into the outer page and runs an inline script calling `PDFJS.workerSrc` and `PDFJS.getDocument()` for a `pdfCanvas` element no version of the template has; pdf.js has defined no `PDFJS` global since its version 2 (omp 02393cf8bf, 2019-05-13, updated the library and left the script), so the script throws at its first line. The viewer is the iframe `pdf.js/web/viewer.html?file=…`, which loads the library for itself. OJS's and OPS's viewer plugin (the shared pkp/pdfJsViewer) has only the iframe script (code). Walked 2026-10-01 on OMP `main` and `stable-3_5_0`, the default dataset's book 5, "Epilogue"'s "PDF", signed out: the console logged "Uncaught ReferenceError: PDFJS is not defined" each time; on 3.5 the viewer showed the PDF ("of 1") and "Download" saved `epilogue.pdf`; on `main` the file request also answered 500 (A9). Seen before: 2026-09-26 to 2026-09-28 on every PDF view page (f-a9); on 3.4 and 3.3 the same two lines (code). Upstream `pkp/pkp-lib#6425` (closed) notes the error in two comments and left it.
+Issue report: [pkp-e2e#283](https://github.com/jardakotesovec/pkp-e2e/issues/283) ([docs/issues/U69-A9-pdf-view-page-script-error.md](../issues/U69-A9-pdf-view-page-script-error.md)).
 
 ## Reference — entry points & surfaces
 

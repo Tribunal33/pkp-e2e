@@ -23,7 +23,10 @@
  * - A4, A13, A14, A15, A16, A17, A18 🐞: no test reaches those states (no
  *   block is deleted, named with "&" or outside the primary language, no
  *   plugin is unticked, no refused paste, no file over the upload limit).
- * - A3, A10, A11, A12, A19 🐞, A6, A8 ❓: static pages, {OJS OMP}.
+ * - A3, A11, A12 🐞, A6, A8 ❓: static pages, {OJS OMP}.
+ * - A10 🐞 (a "Custom Page" item's dotted "Path") and A19 🐞 (the block
+ *   window's "Content" lost on close) reach a server too; no test drives
+ *   either state.
  * - A2, A5, A9 ❓: not driven.
  *
  * Seeding: scenario endpoints only. S8 reads the seeded server

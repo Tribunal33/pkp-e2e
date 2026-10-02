@@ -19,7 +19,7 @@
  *   is not pressed.
  * - A6 🐞: the older version's browser tab is never read.
  * - A8 🐞: S6's RIS file is read for its name only.
- * - A1, A4, A7, A9, A10, OJS1–OJS10: not on these scenarios' paths (S8
+ * - A1, A4, A7, A9, A10, A13, A14, OJS1–OJS13: not on these scenarios' paths (S8
  *   reads no "Versions" entry in French; S3 and S6 publish into a
  *   published issue; no "ABNT", no "Additional Citation Formats" all
  *   unticked, no bracketed address; the Publication Facts, the

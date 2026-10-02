@@ -77,4 +77,5 @@ and the hourly routine starts one only when none is running
 | [U55](../specs/U55-notify-users.md) | 4 | 0 | 0 |  |
 | [U33](../specs/U33-production-stage.md) | 3 | 0 | 0 |  |
 | [U67](../specs/U67-archiving-preservation.md) | 3 | 0 | 0 |  |
-| [U63](../specs/U63-import-export.md) | 1 | 0 | 0 | A23: open report docs/reports/2026-10-01-pkp-lib-13414.md (the rest of U63 written up by the issues session, workstation s0, 2026-10-01) |
+| [U63](../specs/U63-import-export.md) | 2 | 0 | 0 | A23: open report docs/reports/2026-10-01-pkp-lib-13414.md (the rest of U63 written up by the issues session, workstation s0, 2026-10-01); A24 open (new 2026-10-02 by the housekeeping fold: the Native XML export list past one page repeats and skips submissions) |
+| [U13](../specs/U13-article-landing-page-and-reading.md) | 1 | 0 | 0 | A13 open (new 2026-10-02 by the housekeeping fold: the PDF reader from a new version's preview says "outdated version published on ."; the OPS1 report docs/issues/U13-OPS1-new-version-preview-called-outdated.md names it and leaves it out of its fix) |

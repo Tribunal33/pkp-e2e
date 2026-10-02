@@ -141,6 +141,10 @@ row's "Edit" (headed "Edit"), with "Save" and "Cancel" at its foot:
    not a menu holds the item; an item a menu holds links to it (the menus
    are [Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md)'s).
    <sup>d</sup> <sup>td1</sup>
+   A "Path" with a "." in its first or second part ("nav.dot",
+   "deep/Mixed_1.x") is accepted, but its address then answers a bare
+   "404 Not Found" page, as a static page's does (Fields) [A10](#a10).
+   <sup>f-a10</sup>
 2. **What the page shows.** The journal's header, the breadcrumbs "Home /
    {Title}", the item's "Title" as the page's heading, the "Content", then
    the footer, with the sidebar blocks beside it. The browser tab reads
@@ -408,11 +412,16 @@ row's "Edit" (headed "Edit"), with "Save" and "Cancel" at its foot:
     - 30a. **Leaving the block window unsaved.** The block window's
       "Cancel" closes it at once, without a question, and stores nothing.
       Its close control and Escape after a change to "Block Name" ask the
-      same question as the static page window. <sup>g</sup>
-      <sup>td17</sup>
+      same question as the static page window. A change made only in
+      "Content" raises no question here either: the close control closes
+      the window and the text is lost [A19](#a19). <sup>g</sup>
+      <sup>td17</sup> <sup>f-a19</sup>
     - 30b. **Leaving the page.** Going to another address while either
-      window holds a change raises the browser's own "Leave site?"
-      question. <sup>f</sup> <sup>g</sup> <sup>td17</sup>
+      window holds a change to "Path", "Title" or "Block Name" raises the
+      browser's own "Leave site?" question. A change made only in the
+      static page window's "Content" raises none: the new page opens at
+      once and the text is lost [A19](#a19). <sup>f</sup> <sup>g</sup>
+      <sup>td17</sup> <sup>f-a19</sup>
 
 ## Side effects
 
@@ -845,7 +854,7 @@ Left out of the scenarios above, by reason:
   - the static page window's line on a journal with more than one language under "UI", its address carrying "/en/" {OJS OMP} (Fields)
   - an item at "search" taking the header's "Search", "search/search" still opening the Search page (Rules 6, 6a)
   - the block window's close control and Escape asking after a "Block Name" change (Rule 30a)
-  - the browser's "Leave site?" question when another address is opened with either window changed (Rule 30b)
+  - the browser's "Leave site?" question when another address is opened with a changed "Path", "Title" or "Block Name" (Rule 30b)
   - a pasted or dropped picture stored as "mceclip{n}.png" (Rule 29c)
   - the Editor and the Production Editor on the Settings pages: the same items, plugins, static pages, blocks and "Sidebar" as the Journal Manager in scenarios 1 to 7 (Actors rows 1, 5, 6, 7)
 - **Register carries it**:
@@ -858,7 +867,7 @@ Left out of the scenarios above, by reason:
   - A7 (the blank page a typed preview address gives below manager level and signed out; Actors row 2; scenario 3 marks it)
   - A8 (the site's "Static Pages Plugin" row, ticked to no effect {OJS OMP}; Settings bullet 1)
   - A9 ("Paste" on the editor's bar pasting nothing; Fields)
-  - A10 (a static page with a "." in the first or second part of its "Path" answering "404 Not Found" {OJS OMP}; Fields)
+  - A10 (a static page {OJS OMP} or a "Custom Page" item with a "." in the first or second part of its "Path" answering "404 Not Found"; Rule 1; Fields)
   - A11 (the static page window repeating an old refusal after a good save {OJS OMP}; Rule 10)
   - A12 ("Add Static Page" failing on the tab left open after the plugin is unticked {OJS OMP}; Rule 15)
   - A13 (a block whose name holds "&" never placed, edited or deleted; Rule 18b)
@@ -867,7 +876,7 @@ Left out of the scenarios above, by reason:
   - A16 (a ".pdf" or ".svg" chosen in the picture window ignored with no message; Rule 29)
   - A17 (a refused pasted or dropped picture kept in the text, embedded; Rule 29c)
   - A18 (a picture over the server's upload limit getting a server error, never the size message; Rule 29)
-  - A19 (a change only in the static page window's "Content" lost without a question {OJS OMP}; Rule 30)
+  - A19 (a change only in "Content" lost without a question, in the static page window {OJS OMP} on its back arrow and on leaving the page, and in the block window on its close control; Rules 30, 30a, 30b)
   - A20 (the first language's "Content" box left under a "Loading..." spinner when the second language's box loads last; Fields)
 - **No seed**:
   - another picture allowance: only the installation's configuration file sets it (Settings bullet 7; Rule 29a)
@@ -2010,23 +2019,59 @@ current browsers and shows its own notice instead. Live-probed
 `Core::cleanFileVar()` (`Core::getPage()`, `Core::getOp()`), which keeps
 only letters, digits, "_" and "-"; `callbackHandleContent()` joins what
 is left (note e), so "dot.only" is looked up as "dotonly" and not found,
-while a "." in a later part survives. `StaticPageForm` allows "." (note
-f). Live-probed 2026-09-24 (OJS, OMP): "dot.only", "a.b_c-d",
+while a "." in a later part survives. A "Custom Page" item's lookup,
+`PKPNavigationMenuService::_callbackHandleCustomNavigationMenuItems()`
+(note d), joins the same cleaned parts. `StaticPageForm` (note f) and
+`PKPNavigationMenuItemsForm::validate()` both allow "." anywhere
+(`/^[a-zA-Z0-9\/._-]+$/`). Static pages since pkp/staticPages 6f150db
+(2014); custom pages since pkp/pkp-lib#3335 (ecb3765224, 2018).
+Live-probed 2026-09-24 (OJS, OMP): "dot.only", "a.b_c-d",
 "deep/Mixed_1.x" and "Info/Fees_2.x-y" were listed and answered "404 Not
 Found", with or without "/en/" and from the "Path" link;
-"one/two/three.x", "info/fees", "Upper" and "under_score" opened. Not
-driven for a "Custom Page" item, whose lookup joins the same parts (note
-d).
+"one/two/three.x", "info/fees", "Upper" and "under_score" opened.
+Walked 2026-10-01 (Rule 1, Fields; main and 3.5, PostgreSQL): a "Custom
+Page" item at "nav.dot" saved and answered status 404 with only the
+heading "404 Not Found", with or without "/en/" (OJS, OMP, OPS); static
+pages at "dot.only" (from the list's "Path" link) and "deep/Mixed_1.x"
+answered the same and "one/two/three.x" opened (OJS, OMP). A "Custom
+Page" item with the "." in the second part only, and the site's own
+items, read in the code, not driven.
 Issue report: [pkp-e2e#366](https://github.com/jardakotesovec/pkp-e2e/issues/366) ([docs/issues/U09-A10-static-page-dot-path-not-found.md](../issues/U09-A10-static-page-dot-path-not-found.md)).
 
 <a id="fn-f-a11"></a>
-**f-a11** — Cause not traced. Live-probed 2026-09-24 (OJS, OMP), four
+**f-a11** — `Form::validate()` keeps a refusal's messages for the form
+to be drawn with and also stores them for the user as a trivial
+`NOTIFICATION_TYPE_FORM_ERROR` notification, which
+`NotificationHandler::fetchNotification()` hands out, with every other
+waiting one, at the page's next notification request, and deletes.
+`StaticPageGridHandler::updateStaticPage()` answers a refusal with the
+form drawn again (`new JSONMessage(true, $form->fetch($request))`).
+`AjaxFormHandler.handleResponse()` puts it in place with `replaceWith()`
+and then triggers `notifyUser` from the removed form; `Handler.trigger()`
+publishes through `parent()`, which a removed element lacks, so no
+handler hears it and nothing is fetched. The next `notifyUser` that
+reaches `SiteHandler` (the good save's) or the next page load
+(`hasSystemNotifications`) fetches the stored refusal and shows it as a
+warning toast. `editStaticPageForm.tpl` has no in-place message box
+(`inPlaceNotification.tpl`), which would fetch it as soon as the form
+is drawn again. Present since at least pkp-lib ece4902464 (2011), which
+moved the trigger after the redraw. The same redraw without a message
+box serves, read in the code and not driven, the galley window (OJS,
+OPS), OMP's catalog-entry windows and "Assign Participant";
+`CustomBlockGridHandler::updateCustomBlock()` answers the same way, but
+the browser refuses its one checked field, an empty "Block Name", before
+any save is sent (walked). Live-probed 2026-09-24 (OJS, OMP), four
 saves over two runs per app: after "about us", "bad path" or a used path
 was refused, the corrected save showed the red notice with the refusal
 (two notices at once after two refusals); with the window closed after a
 refusal, "This path already exists for another static page." showed on
 the next load of Settings › Website; a save with no refusal before it
-showed none.
+showed none. Walked 2026-10-02 (Rule 10; OJS, OMP; main and 3.5): a
+"Path" with a space refused, then corrected and saved, showed the
+characters message in a red notice at the top right; with the window
+closed after "This path already exists for another static page.", that
+message showed on the Editor Dashboard; no notification request was
+sent after either refusal.
 Issue report: [pkp-e2e#367](https://github.com/jardakotesovec/pkp-e2e/issues/367) ([docs/issues/U09-A11-static-page-refusal-repeated-after-save.md](../issues/U09-A11-static-page-refusal-repeated-after-save.md)).
 
 <a id="fn-f-a12"></a>
@@ -2108,9 +2153,28 @@ test installs' limits are 2 MB per file and 8 MB per request.
 Issue reports, one per cause: [pkp-e2e#374](https://github.com/jardakotesovec/pkp-e2e/issues/374) ([docs/issues/U09-A18-picture-over-upload-limit-server-error.md](../issues/U09-A18-picture-over-upload-limit-server-error.md)) (the file limit) and [pkp-e2e#373](https://github.com/jardakotesovec/pkp-e2e/issues/373) ([docs/issues/U09-A18-picture-over-request-limit-server-error.md](../issues/U09-A18-picture-over-request-limit-server-error.md)) (the request limit).
 
 <a id="fn-f-a19"></a>
-**f-a19** — The window's unsaved-change tracking (note f) reacts to
-"Path" and "Title" and not to the "Content" editor; cause not traced
-further. Live-probed 2026-09-24 (OJS, OMP): td17.
+**f-a19** — Both windows inherit their unsaved-change tracking (notes f
+and g) from pkp-lib's `$.pkp.controllers.form.FormHandler`
+(`js/controllers/form/FormHandler.js`), which learns of a change only
+from a `change` event on a form field or a `formChange` event a control
+sends. The "Content" box is a TinyMCE editor in an iframe over a hidden
+textarea and fires neither; the form's only hook on it,
+`FormHandler.tinyMCEInitHandler_()`, copies the text into the textarea
+on blur and validates it, and never reports a change. So
+`containerCloseHandler()` (the back arrow, the close control, Escape),
+`SiteHandler.pageUnloadHandler_()` ("Leave site?") and
+`TabHandler.tabsBeforeActivate()` never see a "Content"-only change.
+Present since at least pkp-lib 3f5f8361f0 (2014). Live-probed 2026-09-24
+(OJS, OMP): td17. Walked 2026-10-01 (Rules 30, 30a, 30b; main, PostgreSQL):
+in the static page window (OJS, OMP), text typed in "Content" alone on
+"Add" and added on "Edit", then the back arrow: no question, the window
+closed, nothing stored; text in "Content" alone, then another address
+typed: no "Leave site?", the new page opened; "x" in "Title" instead:
+the question, and "Cancel" kept "x". In the block window (OJS, OMP,
+OPS), text in "Content" alone, then the close control: no question, the
+window closed. The static page window likewise on 3.5 (OJS, OMP). The
+block window with another address after a "Content"-only change: read
+in the code, not driven.
 Issue report: [pkp-e2e#375](https://github.com/jardakotesovec/pkp-e2e/issues/375) ([docs/issues/U09-A19-static-page-content-change-lost-on-close.md](../issues/U09-A19-static-page-content-change-lost-on-close.md)).
 
 <a id="fn-f-a20"></a>

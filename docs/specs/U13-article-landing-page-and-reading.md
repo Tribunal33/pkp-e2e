@@ -332,7 +332,11 @@ Top to bottom: <sup>j</sup>
     galley belongs to. An older version's galley opens its reader under
     the notice "This is an outdated version published on {date}. Read the
     most recent version.", the date written like "2026-09-25" in the PDF
-    reader and like "September 25, 2026" in the HTML reader {OJS}. An older version's
+    reader and like "September 25, 2026" in the HTML reader {OJS}. A new,
+    unpublished version's "PDF" pressed on its preview (Rule 4) opens the
+    PDF reader under the same notice, though that version is the next
+    one, with the date blank: "This is an outdated version published on .
+    Read the most recent version." ⚠ [A13](#a13). An older version's
     PDF reader shows no document ("0 of 0" in an empty viewer, no
     message), and its "Download" gets no file: the browser stays on the
     reader page ⚠ [A2](#a2).
@@ -353,8 +357,8 @@ Top to bottom: <sup>j</sup>
     the format prints them it adds the journal's abbreviation ("ACS",
     "AMA", "IEEE" and "Vancouver"; the journal's acronym when no
     abbreviation is set), the issue and the pages {OJS}, the shown
-    version's date, and the article's address, which "ABNT" and "ACM"
-    leave out on a journal and "ACM" on a preprint server. An older
+    version's date, and the article's address, which "ABNT" ⚠ [A14](#a14)
+    and "ACM" leave out on a journal and "ACM" on a preprint server. An older
     version's page cites that version's title and date with the article's
     own address. On a later version published ("posted") on another day
     than the first, "APA" adds "(Original work published {year})"; on the
@@ -425,7 +429,9 @@ Top to bottom: <sup>j</sup>
     section marked "Will not be peer-reviewed", or submitted before the
     plugin's "Start Date", is meant to get none. The panel never appears:
     every article's page opens normally without it ⚠ [OJS5](#ojs5). On a
-    French page it would show no labels ⚠ [OJS3](#ojs3). <sup>k</sup>
+    French (Canada) page, and on a page in any other language the plugin
+    has no labels of its own for (60 of the 78 languages OJS offers), the
+    panel would not show at all ⚠ [OJS3](#ojs3). <sup>k</sup>
     <sup>q13</sup>
 20. **Recommendations** {OJS}. Under the article:
     <sup>n</sup> <sup>q14</sup>
@@ -437,13 +443,15 @@ Top to bottom: <sup>j</sup>
       in the journal opens normally without it ⚠ [OJS4](#ojs4). With no
       such article there is no list either, as intended.
     - 20b. **"Similar Articles"**, while "Recommend Similar Articles" is on
-      (Settings bullet 9): meant to list the published articles that match
-      the article's keywords in the journal's search, ten a page, followed
-      by "You may also start an advanced similarity search for this
-      article.", whose link runs that search on the Search page. The list
-      never appears, even for an article whose keywords a dozen published
-      articles share ⚠ [OJS10](#ojs10). An article with no keywords, or no
-      match, gets no list either, as intended.
+      (Settings bullet 9): meant to list the journal's other published
+      articles that hold every word of the article's keywords, ten a page,
+      followed by "You may also start an advanced similarity search for
+      this article.", whose link runs that search on the Search page. An
+      article that shares only one of two keywords would be left out
+      ⚠ [OJS13](#ojs13). The list never appears, even for an article whose
+      keywords a dozen published articles share ⚠ [OJS10](#ojs10). An
+      article with no keywords, or no match, gets no list either, as
+      intended.
 21. **The page in another language.** Every label on the page follows the
     interface language the visitor chose, except on a preprint server's
     French page, whose keywords label reads "##preprint.subject## :"
@@ -454,8 +462,12 @@ Top to bottom: <sup>j</sup>
     [Contributors & affiliations](U41-contributors-and-affiliations.md).
     <sup>c</sup> <sup>q5</sup>
 22. **The article summary** (Fields). The title and cover open the
-    article's address; on a preprint server the keyword row runs across
-    the middle of the cover, where a press opens nothing ⚠ [OPS9](#ops9).
+    article's address, except where the summary's text lies over the
+    cover, on a screen 768 px wide or wider: on a preprint server's lists
+    the author line, keywords and details line cover a band from just
+    under the title to just under the "Downloads" line (about the middle
+    half of a square cover), on a journal's lists the author line covers
+    its own row; a press there opens nothing ⚠ [OPS9](#ops9).
     On search results and category pages the summary leaves out the
     galleys. An issue's table of contents, the home page's "Current Issue"
     included, lists only the main galleys. A journal's "Latest
@@ -993,8 +1005,8 @@ footnote. <sup>s</sup>
      Patterns" is listed with its own cover image, the title "Tidal
      Patterns" with "A field study", the author line and the galley link
      "PDF", with no "Data". Press the title: the article's page opens. Go
-     back and press the cover image: the article's page opens again
-     (Fields, the article summary; Rule 22).
+     back and press the middle of the cover image: the article's page
+     opens again (Fields, the article summary; Rule 22).
    - **"Current Issue"**: press "Home" in the breadcrumb: on the home
      page "Tidal Patterns" is listed under "Current Issue" with "PDF" and
      no "Data" (Rule 22).
@@ -1149,6 +1161,12 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-A11-keywords-order-not-kept.md`): keywords shown in
     the order typed on the page and in the "Metadata" form (a unit test
     in pkp-lib reads entries stored with `seq` against primary-key order)
+  - the guard for A13 (Rule 12; issue report
+    `docs/issues/U13-OPS1-new-version-preview-called-outdated.md` names
+    it, its fix does not reach it), written once A13 is fixed: a new
+    version's "PDF" pressed on its preview opening the PDF reader with
+    no outdated notice, while an older published version's reader keeps
+    it
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1192,10 +1210,14 @@ Left out of the scenarios above, by reason:
     scenario 4 passes it)
   - OPS1 (a preprint server's preview of a new version with both
     notices; Rule 4)
+  - A13 (the PDF reader opened from a new version's preview, under the
+    outdated notice; Rule 12)
   - OJS1 (other citation formats and downloads outside a published
     issue, by who is signed in {OJS}; Rule 15c)
   - A7 and A8 (the "ABNT" citation and the RIS file's dates; Rules 15,
     15b)
+  - A14 (the "ABNT" citation's initials, and a journal's without the
+    address or access date; Rule 15)
   - A9 (no "Additional Citation Formats" ticked, "More Citation
     Formats" opening nothing; Rule 16)
   - OJS11 (the number "[1]" before a journal's IEEE citation shown
@@ -1221,8 +1243,8 @@ Left out of the scenarios above, by reason:
   - A4 (a galley with no file, and the additional files, in a preprint
     server's lists and in a journal's "Latest Publications" without the
     current issue; Rule 22)
-  - OPS9 (a press on the middle of a preprint's cover in a list;
-    Rule 22)
+  - OPS9 (a press on the cover where the summary's text lies over it,
+    in a preprint server's lists and a journal's; Rule 22)
   - OPS6 (the preprint summary's "DOI:" line; Fields, the article
     summary)
   - A3 (the empty chart without "Download data is not yet
@@ -1234,12 +1256,14 @@ Left out of the scenarios above, by reason:
     refused "OK", and an impossible "Start Date" {OJS}; Fields, the
     settings window)
   - OJS2 and OJS3 (the Publication Facts settings window's warning, and
-    the panel's French labels {OJS}; Fields, the settings window;
-    Rule 19)
+    the panel missing on a French (Canada) page {OJS}; Fields, the
+    settings window; Rule 19)
   - OJS4 ("Recommend Articles by Author" on {OJS}; Rule 20a; Settings
     bullet 8)
   - OJS10 ("Recommend Similar Articles" on {OJS}; Rule 20b; Settings
     bullet 9)
+  - OJS13 (an article sharing only some of the keywords, left out of
+    "Similar Articles" {OJS}; Rule 20b)
   - A12 (a first version unpublished while a later one stays
     published, still dating the page; Rules 3, 7b, 8)
   - OJS12 (an "Open" review marked public, absent from the published
@@ -1279,7 +1303,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-09-24; additions
-2026-09-28), unreviewed unless an entry notes otherwise; the team settles them on spec review.
+2026-09-28 and 2026-10-02), unreviewed unless an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
@@ -1293,6 +1317,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A9](#a9) | "More Citation Formats" opens nothing when no additional citation format is offered, so readers cannot reach the citation downloads | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A reference's web address written in parentheses becomes a link that includes the closing ")" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Keywords on an article, book or preprint page can appear in another order than the editor typed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [A13](#a13) | The PDF reader opened from a new version's preview says "This is an outdated version published on ." | 🐞 | low | — |
 | [OJS1](#ojs1) | Readers get no other citation format or citation download on an article published outside a published issue | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | Publication Facts Label settings always warn "Funding Plugin Not Present", for a plugin that no longer exists | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | In French (Canada) and every other language without its own labels, article pages show no "Publication Facts" panel | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1314,7 +1339,9 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OPS9](#ops9) | A click on a cover beside its summary text opens nothing, in a journal's issue page and a server's lists | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | An article with no downloads shows an empty chart instead of "Download data is not yet available." | ❓ | minor | — |
 | [A12](#a12) | Once the first version is unpublished, the page still opens its date line with that version's date | ❓ | minor | — |
+| [A14](#a14) | The "ABNT" citation shortens given names to initials and, on a journal, prints no address or access date | ❓ | minor | — |
 | [OJS11](#ojs11) | The IEEE citation shown first opens with the number "[1]" | ❓ | minor | — |
+| [OJS13](#ojs13) | "Similar Articles" would leave out an article that shares only some of the keywords | ❓ | latent | — |
 | [OPS4](#ops4) | A preprint server has no HTML or XML reader: those galleys download | ✅ | — | — |
 
 ### All apps
@@ -1515,6 +1542,37 @@ only? Lean: yes (🐞); "Versions" and the version's own address already
 treat the version as gone.
 Basis: probe, 2026-09-28. <sup>[f-a12](#fn-f-a12)</sup>
 
+<a id="a13"></a>
+**A13 — The PDF reader opened from a new version's preview says "This is an outdated version published on ."** · 🐞 · low.
+On the preview of a new, unpublished version of a published article or
+a posted preprint, pressing "PDF" opens the PDF reader page under "This
+is an outdated version published on . Read the most recent version.",
+the notice an older version's reader carries, with the date left blank
+because the new version has none. The version is not outdated: it is
+the next one, and "most recent version" opens the published version's
+page. The editor or author checking the new version is told it is
+outdated; readers never see the preview.
+On a journal the preview page itself shows the preview notice alone; on
+a preprint server it carries the outdated notice too ([OPS1](#ops1)).
+Basis: probe, 2026-10-01. <sup>[f-a13](#fn-f-a13)</sup>
+
+<a id="a14"></a>
+**A14 — The "ABNT" citation shortens given names to initials and, on a journal, prints no address or access date** · ❓ · minor.
+Since the plugin's "ABNT" style file was replaced in May 2026 (the same
+change as [A7](#a7)), "ABNT" writes each author's given names as
+initials ("KWANTES, C.; KEKKONEN, U."), and a journal article's citation
+ends at the date, with neither the article's address nor the "Acesso
+em" (accessed on) date: "KARBASIZAED, V. {title}. Journal of Public
+Knowledge, v. 1, n. 2, 30 Sept.2026." A preprint's still ends
+"Disponível em: {address}. Acesso em: {day of the visit}". The file it
+replaced followed the 2018 edition of the Brazilian standard, which
+writes full given names and the address and access date; the new one
+follows the 2002 edition.
+Question: is "ABNT" meant to follow the 2002 edition? Lean: no (🐞); a
+refresh of every style file swapped in a different style that shared the
+old file's name, and nothing chose it.
+Basis: probe, 2026-10-01. <sup>[f-a14](#fn-f-a14)</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -1701,6 +1759,21 @@ Settings › Workflow › Review › Setup ("Make reviewer comments publicly
 visible with published content"), which is off until a journal turns it
 on.
 Basis: probe, 2026-10-01. <sup>[f-ojs12](#fn-f-ojs12)</sup>
+
+<a id="ojs13"></a>
+**OJS13 — "Similar Articles" would leave out an article that shares only some of the keywords** · ❓ · latent.
+Once "Similar Articles" shows again ([OJS10](#ojs10)), it lists only
+the articles that hold every word of the article's keywords: under an
+article with the keywords "Professional Development" and "Social
+Transformation", an article with both is listed and one with only
+"Social Transformation" is not. On 3.5 an article sharing any one
+keyword is listed. The narrowing came with a change to how the
+editorial search matches words, not with a change to this list. While
+the list never shows, no reader meets it.
+Question: should an article that shares some of the keywords count as
+similar? Lean: yes (🐞); the list was built to match any one word, and
+3.5 still does.
+Since: 2026-07-30 (the search change) · Basis: probe, 2026-10-01. <sup>[f-ojs13](#fn-f-ojs13)</sup>
 
 ### OPS
 
@@ -2755,6 +2828,14 @@ Issue report: [pkp-e2e#241](https://github.com/jardakotesovec/pkp-e2e/issues/241
 **f-a8** — Note h: `ris.blade`'s `PY` and `Y2` lines (the version's
 date and the day of access) pass strftime patterns to
 `Carbon::format()`. Live-probed 2026-09-25, note q11, both apps.
+The same mistake, a `strftime()` pattern handed to Carbon, sits in
+templates of plugins only OJS ships, each registered where its screen
+is: the MARC field 008 of the OAI-PMH records
+([OAI-PMH, A15](U19-oai-pmh.md#a15)) and the announcement feeds' Atom
+and RSS 1.0 dates ([Announcements, A15](U12-announcements.md#a15)), both
+seen on screen; and the COUNTER report's `Created` attribute
+(`reportxml.tpl`, `sushixml.tpl`; code, not driven). Read 2026-10-01
+for the issue report.
 Issue report: [pkp-e2e#244](https://github.com/jardakotesovec/pkp-e2e/issues/244) ([docs/issues/U13-A8-ris-download-dates-percent-signs.md](../issues/U13-A8-ris-download-dates-percent-signs.md)).
 
 <a id="fn-f-a9"></a>
@@ -2795,6 +2876,39 @@ an unpublish keeps the date (the versions spec's Rule 9); the same pick
 is behind the versions spec's A6. Live-probed 2026-09-28, note g, OJS
 and OPS, two runs.
 
+<a id="fn-f-a13"></a>
+**f-a13** — Note d: `PdfJsViewerPlugin` (identical in OJS and OPS)
+decides the outdated notice from `isLatestPublication` alone, with no
+test for a preview; a new, unpublished version is never the current one
+while an older version is published, so its preview's reader gets the
+notice, dated with the version's own empty `datePublished`. OJS's HTML
+reader (`htmlArticleGalley`) decides the same way (code, not driven).
+Walked 2026-10-01 on PKP's default test data, `main` and 3.5, from the
+first galley link of a preview: OPS's PDF reader, for a new version made
+with "Create New Version", read "This is an outdated version published
+on . Read the most recent version."; OJS's, for the unpublished version
+1.1 that the test data ships with a date of its own, read that date.
+Left out of the fix in OPS1's issue report:
+[pkp-e2e#209](https://github.com/jardakotesovec/pkp-e2e/issues/209) ([docs/issues/U13-OPS1-new-version-preview-called-outdated.md](../issues/U13-OPS1-new-version-preview-called-outdated.md)).
+
+<a id="fn-f-a14"></a>
+**f-a14** — Note h: `citation-styles/associacao-brasileira-de-normas-tecnicas.csl`
+was replaced whole in May 2026 (`pkp/citationStyleLanguage#165`, on
+3.5 `#164`), which refreshed every style from the CSL styles
+repository's `v1.0.1` branch and took that repository's file of the same
+name, a different style (NBR 6023:2002). The plugin had shipped the
+"Universidade de São Paulo - Escola de Comunicações e Artes - ABNT"
+style (NBR 6023:2018), chosen in `pkp/citationStyleLanguage#73`; its
+3.4 branch still ships it. Walked 2026-10-01 on PKP's default test
+data, OJS and OPS `main` and 3.5: a preprint's "ABNT" read "KWANTES,
+C.; KEKKONEN, U. The Facets Of Job Satisfaction: … Disponível em:
+{address}. Acesso em: 1 oct. 2026", a journal article's "KARBASIZAED,
+V. Antimicrobial, heavy metal resistance … Journal of Public
+Knowledge, v. 1, n. 2, 30 Sept.2026.". The earlier file's output rests
+on the plugin's history and was not walked. Raised for the team in A7's
+issue report:
+[pkp-e2e#241](https://github.com/jardakotesovec/pkp-e2e/issues/241) ([docs/issues/U13-A7-abnt-citation-runs-text-together.md](../issues/U13-A7-abnt-citation-runs-text-together.md)).
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `CitationStyleLanguagePlugin::getTemplateData()` passes
 `issueId` only when `ArticleHandler` has an issue;
@@ -2826,8 +2940,13 @@ Issue report: [pkp-e2e#225](https://github.com/jardakotesovec/pkp-e2e/issues/225
 + `.json`; the folder holds `fr.json` and no `fr_CA.json`, and the fetch's
 failure only logs "PFL: failed to load translations" to the console.
 Live-probed 2026-09-25 (note q13): the French page showed no panel and
-fetched no label file, the same as the English page, so the entry rests
-on the code until the panel shows.
+fetched no label file, the same as the English page. Walked 2026-10-01
+on PKP's default test data, OJS 3.5 and `main` with OJS5's fix applied:
+the English page showed the panel and the French (Canada) page none.
+The folder holds 18 label files, and 60 of the 78 languages OJS ships
+have none of their own: `fr_CA` and `es_MX`, whose labels sit under the
+base language (`fr`, `es`), which the fetch never tries, and 58 more
+with no labels at all (code).
 Issue report: [pkp-e2e#236](https://github.com/jardakotesovec/pkp-e2e/issues/236) ([docs/issues/U13-OJS3-publication-facts-panel-missing-without-label-file.md](../issues/U13-OJS3-publication-facts-panel-missing-without-label-file.md)).
 
 <a id="fn-f-ojs4"></a>
@@ -2907,6 +3026,20 @@ mounted on the article page. Live-probed 2026-09-28, note p, OJS, two
 runs, with an unticked review as the control.
 Issue report: [pkp-e2e#218](https://github.com/jardakotesovec/pkp-e2e/issues/218) ([docs/issues/U13-OJS12-public-review-never-shown.md](../issues/U13-OJS12-public-review-never-shown.md)).
 
+<a id="fn-f-ojs13"></a>
+**f-ojs13** — Note n: pkp-lib 4155f5be39 (`pkp/pkp-lib#13106` for
+`pkp/pkp-lib#13080`, 2026-07-30, the editorial search's relevance) made
+the submission collector's `searchPhrase()` require every word of the
+phrase; before, any one word matched (`pkp/pkp-lib#8710`, which moved
+this plugin onto the collector with an "OR" search to bring more
+results). 3.5's collector ORs the words and orders by the number
+matched (code). Walked 2026-10-01 on PKP's default test data, OJS
+`main` with OJS10's fix applied: under article 1 ("Professional
+Development", "Social Transformation"), article 5 with both keywords was
+listed and article 15 with only "Social Transformation" was not. Left
+out of the fix in OJS10's issue report:
+[pkp-e2e#215](https://github.com/jardakotesovec/pkp-e2e/issues/215) ([docs/issues/U13-OJS10-similar-articles-list-never-shown.md](../issues/U13-OJS10-similar-articles-list-never-shown.md)).
+
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note f: `preprint_details.tpl` shows the outdated notice
 whenever the shown publication is not the current one, previews
@@ -2961,7 +3094,18 @@ Issue report: [pkp-e2e#207](https://github.com/jardakotesovec/pkp-e2e/issues/207
 
 <a id="fn-f-ops9"></a>
 **f-ops9** — Note j: the element at the cover's centre is the keyword
-list laid over it. Live-probed 2026-09-25, note j, two runs.
+list laid over it. Live-probed 2026-09-25, note j, two runs. Both
+default themes float the summary's cover beside its text block, which
+has `position: relative` and so is painted over the cover in every row
+it fills (OPS `preprint_summary.less`, OJS `article_summary.less` and
+`issue_toc.less`); from tablet width the cover floats beside the text.
+Walked 2026-10-01 on PKP's default test data, OJS and OPS `main` and
+3.5, 1280 × 900, a 400 × 400 px cover shown 200 px tall: on the server's
+"Archives" only the top 40 px and the bottom 62 px of the cover's middle
+opened the preprint, the rest of the band (beside the author line, the
+keywords and the details line) opened nothing; on the journal's current
+issue page the author line's row, 25 px, opened nothing and the cover's
+middle opened the article. A press's catalog has no such band.
 Issue report: [pkp-e2e#216](https://github.com/jardakotesovec/pkp-e2e/issues/216) ([docs/issues/U13-OPS9-preprint-summary-cover-middle-dead.md](../issues/U13-OPS9-preprint-summary-cover-middle-dead.md)).
 
 ## Reference — entry points & surfaces

@@ -500,12 +500,15 @@ message. <sup>m</sup>
     articles with a galley, but one without a galley belongs to it too ⚠
     [A23](#a23). <sup>i</sup> <sup>q21</sup>
     - 23a. `set=driver` lists those records only, and says "There are
-      more results." even when it is complete ⚠ [A24](#a24). The
-      members' deleted records are marked for the set but never listed: the
-      journal's address leaves out its own deleted records [A1](#a1),
-      and the site-wide address has no `driver` set. An article in no
-      issue unpublished while the plugin is enabled loses its `driver`
-      mark ⚠ [A11](#a11). <sup>i</sup> <sup>q21</sup>
+      more results." even when it is complete ⚠ [A24](#a24). On the
+      installation's first journal (ID 1), a member unpublished from its
+      issue stays in the set as a deleted record, its header naming
+      "driver". <sup>q22</sup> Every other journal's address leaves out
+      its own deleted records [A1](#a1), so its set lists none;
+      journal 1's may show instead ⚠ [A25](#a25). The site-wide address
+      has no `driver` set. An article in no issue unpublished with
+      "DRIVER" enabled leaves a deleted record not naming "driver", so
+      the set never lists it ⚠ [A11](#a11). <sup>i</sup> <sup>q21</sup>
 24. **The install's own switch.** With the install's OAI interface
     switched off in its configuration file, a journal's and the site's
     address lead to the journal's (site's) home page {OJS OPS}; on a
@@ -1227,6 +1230,10 @@ Left out of the scenarios above, by reason:
     with "DRIVER" enabled, an article published in no issue and then
     unpublished leaving a deleted record in the `driver` set {OJS} (Rule
     23a; once fixed)
+  - with "DRIVER" enabled, an article unpublished from its issue staying
+    in the `driver` set as a deleted record, its header naming "driver"
+    {OJS} (Rule 23a; on a scratch journal once A1 is fixed, since only
+    the installation's first journal lists its own deleted records today)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1368,6 +1375,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | A journal that does not publish online still hands out records, the MARC ones with the article's address {OJS} | ❓ | minor | — |
 | [A14](#a14) | "Language" writes a galley's language with an underscore {OJS OPS} | ❓ | minor | — |
 | [A21](#a21) | A section has one set identifier per language {OJS OPS} | ❓ | minor | — |
+| [A25](#a25) | Other journals' `driver` OAI sets may list journal 1's deleted records {OJS} | ❓ | minor | — |
 | [OMP2](#omp2) | A press cannot withhold its records: it has no "Enable OAI" | ❓ | minor | — |
 | [OMP7](#omp7) | A book's new version changes its format identifiers without leaving deleted records | ❓ | minor | — |
 | [OPS3](#ops3) | "Identify items posted in this section as a(n)" reaches no record | ❓ | minor | — |
@@ -1536,7 +1544,7 @@ article that was published without an issue ("Don't Assign To An
 Issue"). The deleted record this leaves is stored without its place in
 the `driver` set, so a harvest of that set shows neither the article nor
 a notice that it was deleted. An article unpublished from an issue
-leaves a deleted record in the set. A service that harvests the set
+leaves one in journal 1's set only (Rule 23a). A harvester of the set
 keeps the withdrawn article, and nothing on screen says so. It happens
 on every journal with the plugin enabled, each time such an article is
 unpublished.
@@ -1737,6 +1745,14 @@ count too low, which ends the list early; a 2026 rewrite on `main` undid
 that.
 Basis: probe, 2026-10-01. <sup>f-a24</sup>
 
+<a id="a25"></a>
+**A25 — Other journals' `driver` OAI sets may list journal 1's deleted records** {OJS} · ❓ · minor.
+A harvester of a journal other than journal 1 may find in its `driver`
+set journal 1's deleted records that name "driver", as in its other
+lists ([A1](#a1), Rule 23a); no walk has met one.
+Question: does the set list them? Lean: yes; it is cut from that list.
+Basis: code. <sup>f-a25</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1897,7 +1913,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 **h** — JATS: `OAIMetadataFormatPlugin_JATS` ("JATS Metadata Format", `plugins.oaiMetadata.jats.displayName`; description "Structures metadata in a way that is consistent with the JATS XML format.") overrides `getCanEnable()`/`getCanDisable()` (true) and `getEnabled()`/`setEnabled()` on its own `enabled` setting for the request's context (the site's when there is none); `getActions()` adds `settings` ("Settings") only while enabled; `manage()` `verb=settings` runs `OAIJatsSettingsForm` (template `settingsForm.tpl`: `plugins.oaiMetadataFormats.oaiJats.description`, heading `…oaiJats.settings` "Settings", checkbox `forceJatsTemplate` "Ignore uploaded JATS XML documents", `fbvFormButtons`, `common.requiredField`), saving with `createTrivialNotification()` ("Your changes have been saved."). Prefix `jats`, schema `https://jats.nlm.nih.gov/publishing/0.4/xsd/JATS-journalpublishing0.xsd`. `OAIMetadataFormat_JATS::toXml()`: for an article in an issue, `IssueAction::subscriptionRequired()` without pre-publication access or a subscribed domain → `$oaiDao->oai->error('cannotDisseminateFormat', 'Cannot disseminate format (unauthenticated access to JATS XML not allowed)')` then `exit()` (A10); `findJats()` → null → the same with "(JATS XML not available)"; `_mungeMetadata()` sets `xml:lang` (`LocaleConversion::toBcp47`), `specific-use="eps-0.1"`, a `pub-date date-type="collection"` year (the issue's shown year, else its publication year, else the version's) and removes `//email[parent::contrib or parent::corresp]` without pre-publication access (`allowedIssuePrePublicationAccess($journal, $request->getUser())`), which a signed-in Journal Manager or Section Editor has, since the page reads the session (note b); a Reader and a harvester have none. `findJats()`: unless `forceJatsTemplate`, an XML galley file (`application/xml`, `text/xml`, of a non-dependent genre) is the uploaded candidate; the `OAIMetadataFormat_JATS::findJats` hook of the "JATS Template Plugin" (`JatsTemplatePlugin::callbackFindJats()`, registered only while that plugin is enabled, U48 note u) generates the document (`Article::convertOAIToXml()`) when no candidate is left after the first is taken; `mergeJatsContent()` replaces the generated `<body>` and `<back>` with the candidate's. More than one candidate leaves one in the list and no document (the "not available" refusal). A file on the "JATS XML" page is not a candidate. Live-probed 2026-09-26 (the JATS record; the window; Rules 21, 21a, 21b, 22; Settings bullets 2–4): notes q3, q5.
 
 <a id="fn-i"></a>
-**i** — `plugins/generic/driver/DRIVERPlugin` ("DRIVER", `plugins.generic.driver.displayName`; description "The DRIVER plugin extends the OAI-PMH interface according to the DRIVER Guidelines 2.0, helping OJS journals to become DRIVER compliant."; no `settings.xml`, so off on a new journal). While enabled it hooks `OAIDAO::getJournalSets` (adds `new OAISet('driver', 'Open Access DRIVERset', '')`), `JournalOAI::records` / `::identifiers` (for `set=driver`, `DRIVERDAO::getDRIVERRecordsOrIdentifiers()` fetches the ordinary page and keeps the rows whose sets include `driver`), `OAIDAO::_returnRecordFromRow` / `_returnIdentifierFromRow` (`addSet()`), and `ArticleTombstoneManager::insertArticleTombstone` (`insertDRIVERArticleTombstone()` stores a `driver` tombstone setting). `isDRIVERRecord()` / `isDRIVERArticle()`: open when `publishingMode == PUBLISHING_MODE_OPEN` (an absent mode reads as 0), or in subscription mode when the issue is open or the article's `accessStatus` is open; restricted when `restrictSiteAccess` or `restrictArticleAccess`; a member only when open and the publication has galleys, tested as `!empty($publication->getData('galleys'))` on a `LazyCollection`, which is never empty (A23); an issue past its open access date counts as `DRIVER_ACCESS_DELAYED`, not open. `getDRIVERRecordsOrIdentifiers()` filters the ordinary page, so the answer keeps that page's `completeListSize` and resumption token (A24). `isDRIVERArticle()` calls `Repo::issue()->get($publication->getData('issueId'))` unconditionally, whose `int $id` refuses null; `Hook::call` catches the TypeError, so the unpublish goes through and only the `driver` tombstone setting is lost (A11). Live-probed 2026-09-26 (Rules 23, 23a; Settings bullets 5, 7–9): note q21.
+**i** — `plugins/generic/driver/DRIVERPlugin` ("DRIVER", `plugins.generic.driver.displayName`; description "The DRIVER plugin extends the OAI-PMH interface according to the DRIVER Guidelines 2.0, helping OJS journals to become DRIVER compliant."; no `settings.xml`, so off on a new journal). While enabled it hooks `OAIDAO::getJournalSets` (adds `new OAISet('driver', 'Open Access DRIVERset', '')`), `JournalOAI::records` / `::identifiers` (for `set=driver`, `DRIVERDAO::getDRIVERRecordsOrIdentifiers()` fetches the ordinary page and keeps the rows whose sets include `driver`), `OAIDAO::_returnRecordFromRow` / `_returnIdentifierFromRow` (`addSet()`), and `ArticleTombstoneManager::insertArticleTombstone` (`insertDRIVERArticleTombstone()` stores a `driver` tombstone setting). `isDRIVERRecord()` / `isDRIVERArticle()`: open when `publishingMode == PUBLISHING_MODE_OPEN` (an absent mode reads as 0), or in subscription mode when the issue is open or the article's `accessStatus` is open; restricted when `restrictSiteAccess` or `restrictArticleAccess`; a member only when open and the publication has galleys, tested as `!empty($publication->getData('galleys'))` on a `LazyCollection`, which is never empty (A23); an issue past its open access date counts as `DRIVER_ACCESS_DELAYED`, not open. `getDRIVERRecordsOrIdentifiers()` filters the ordinary page, so the answer keeps that page's `completeListSize` and resumption token (A24); that page is the journal's own record query, deleted records included, whose deleted-record half asks for journal 1's whatever the journal (A1; code). `isDRIVERArticle()` calls `Repo::issue()->get($publication->getData('issueId'))` unconditionally, whose `int $id` refuses null; `Hook::call` catches the TypeError, so the unpublish goes through and only the `driver` tombstone setting is lost (A11). Live-probed 2026-09-26 (Rules 23, 23a; Settings bullets 5, 7–9): note q21.
 
 <a id="fn-j"></a>
 **j** — Sets. OJS `OAIDAO::getJournalSets()`: the journal (`JournalDAO::getAll(true)` site-wide), `setSpec($journal)` = path, name `getLocalizedName()`; each section `setSpec($journal, $section)` = "{path}:" . `OAIUtils::toValidSetSpec($section->getLocalizedAbbrev())`, name `getLocalizedTitle()`; tombstone sets not matching a live section (`DataObjectTombstoneDAO::getSets()`). `toValidSetSpec()`: `Any-Latin; Latin-ASCII; NFD; [:Nonspacing Mark:] Remove; NFC`, then removes `[^A-Za-z0-9\-_\.!~*'()]`. `getSetJournalSectionId()` returns `[0, 0]` for an unknown or foreign journal path and section id 0 for an unknown abbreviation; the query's `isset()` filters then match nothing. OPS `getServerSets()` / `getSetServerSectionId()` likewise. OMP `OAIDAO::getSets()` uses `PressDAO::getAll()` and series `setSpec` "{press path}:{series path}" (`getByPath()`); a book with no series has `series_id` null, so its record's set is the press path; `getSetPressSeriesId()` returns `[0, 0]` / series 0 for unknown values and the query tests them with truthy `when()` (OMP3). `setOAIData()` puts one set, the section's, in every live record's header. Section fields: [Sections](U17-sections.md) (its Settings bullets 11, 12 and note td16: live-probed 2026-09-25, "each section was a harvesting set '{journal}:{abbreviation}' named by its title", the typed "Identify items…" appeared as an extra resource type on OJS). OMP names a series set by its prefix and title joined by a space (OMP6); the section `setSpec` reads the abbreviation in the request's locale (A21). A deleted section's set is listed from the tombstones, but `getSetJournalSectionId()` finds no live section by its abbreviation, so asking for it matches nothing (A19). Live-probed 2026-09-26 (Rules 7, 7a–7d, 8): note q10.
@@ -1993,10 +2009,13 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 **q20** — Live-probed 2026-09-26 (Rules 20, 20a, 20b; Settings bullet 6; A22), OJS: a new journal had DOIs on, "Articles" ticked, no "DOI Prefix" and "No, all versions of an article should have the same DOI.". Without a prefix no DOI reached the record; with one, the DOI was in "Resource Identifier" and `marcxml` 024, not in `oai_marc`. With "DOI Versioning" at "Yes, …" saved on screen, every list, record and Identify request at that journal, a second journal and the site-wide address answered a server error with an empty page (ListSets answered), before and after a second major version was published, which got its own DOI; set back to "No", they answered again. On a journal without versioning, versions 1.0 and 2.0 gave one record, `…/version/VoR/1` answered "No matching identifier in this repository", and "Relation" and MARC 780 named 1.0 by its address.
 
 <a id="fn-q21"></a>
-**q21** — Live-probed 2026-09-26 (Rules 23, 23a; A11, A23, A24), OJS, two runs: "DRIVER" ticked on screen asked nothing and showed 'The plugin "DRIVER" has been enabled.'; ListSets added `driver` "Open Access DRIVERset". On an open journal an article with a galley and one with none were both members, each header naming "driver". On a subscription journal an article in an open issue and one marked "Open Access" in a subscription issue were members; one in a subscription issue, one past its open access date and one in no issue were not. "Users must be registered and log in to view open access content." (and the site box) ticked emptied the set; unticked, the members were back. `set=driver` said "There are more results." with "completeListSize" 5 for two members, and "Resume" returned the same two again. An article in no issue unpublished with the plugin on showed "Status: Unscheduled" and "Schedule For Publication", its page answered 404 signed out, and its deleted record carried no `driver` mark. No deleted record was listed in the set, and the site-wide address had no `driver` set.
+**q21** — Live-probed 2026-09-26 (Rules 23, 23a; A11, A23, A24), OJS, two runs: "DRIVER" ticked on screen asked nothing and showed 'The plugin "DRIVER" has been enabled.'; ListSets added `driver` "Open Access DRIVERset". On an open journal an article with a galley and one with none were both members, each header naming "driver". On a subscription journal an article in an open issue and one marked "Open Access" in a subscription issue were members; one in a subscription issue, one past its open access date and one in no issue were not. "Users must be registered and log in to view open access content." (and the site box) ticked emptied the set; unticked, the members were back. `set=driver` said "There are more results." with "completeListSize" 5 for two members, and "Resume" returned the same two again. An article in no issue unpublished with the plugin on showed "Status: Unscheduled" and "Schedule For Publication", its page answered 404 signed out, and its deleted record carried no `driver` mark. No deleted record was listed in the set on these scratch journals, none of them the installation's first (A1), and the site-wide address had no `driver` set. On the first journal: note q22.
+
+<a id="fn-q22"></a>
+**q22** — Live-probed 2026-10-01 (Rule 23a; A1, A11), OJS, the walk of issue report A11, steps 4–6 ([docs/issues/U19-A11-oai-driver-set-misses-deleted-record-of-article-in-no-issue.md](../issues/U19-A11-oai-driver-set-misses-deleted-record-of-article-in-no-issue.md)): on `publicknowledge`, the test installs' first journal, with "DRIVER" enabled and article 17 unpublished from its issue, `set=driver` listed `article/1` and the deleted record of `article/17`, its header naming `publicknowledge:ART` and `driver`.
 
 <a id="fn-f-a1"></a>
-**f-a1** — Live-probed 2026-09-26 and, on OMP, 2026-09-29: note q8. "Earliest Datestamp": OJS scratch journals with and without published items all gave 2026-09-26T05:20:08Z, a deleted record of `publicknowledge`; OMP gave the moment of the request, for an empty press and for one whose only book was unpublished, while `publicknowledge` held no deleted record; with one, the empty press gave that record's datestamp (2026-09-29); OPS gave the deleted record's datestamp. Code: note n; the OJS closure dates from `88aaa6b49f` "pkp/pkp-lib#7129 Issue EntityDAO refactor" (2021-07-14), OMP's from the 2021 Laravel port (`79302a1bd`, 2021-06-15). The test installs' first context is `publicknowledge`.
+**f-a1** — Live-probed 2026-09-26 and, on OMP, 2026-09-29: note q8. "Earliest Datestamp": OJS scratch journals with and without published items all gave 2026-09-26T05:20:08Z, a deleted record of `publicknowledge`; OMP gave the moment of the request, for an empty press and for one whose only book was unpublished, while `publicknowledge` held no deleted record; with one, the empty press gave that record's datestamp (2026-09-29); OPS gave the deleted record's datestamp. Code: note n; the OJS closure dates from `08c3cddc6c` (pkp/ojs#3134 for pkp/pkp-lib#6963, "Improve OAI performance", 2021-06-08), OMP's from its port `26edcaf788` (pkp/omp#983, 2021-06-11); the later `88aaa6b49f` (OJS) and `79302a1bd0` (OMP) only reformatted the line (git history, issue report A1 Evidence, 2026-10-01). The test installs' first context is `publicknowledge`.
 Issue report: [pkp-e2e#254](https://github.com/jardakotesovec/pkp-e2e/issues/254) ([docs/issues/U19-A1-oai-own-address-loses-deleted-records.md](../issues/U19-A1-oai-own-address-loses-deleted-records.md)).
 
 <a id="fn-f-a2"></a>
@@ -2086,6 +2105,9 @@ Issue report: [pkp-e2e#340](https://github.com/jardakotesovec/pkp-e2e/issues/340
 <a id="fn-f-a24"></a>
 **f-a24** — Live-probed 2026-09-26, OJS: note q21; a second walk of a two-member set answered the parts 1221 1222, 1221 1222, then 1222. Code: note i.
 Issue report: [pkp-e2e#341](https://github.com/jardakotesovec/pkp-e2e/issues/341) ([docs/issues/U19-A24-oai-driver-list-says-more-results.md](../issues/U19-A24-oai-driver-list-says-more-results.md)).
+
+<a id="fn-f-a25"></a>
+**f-a25** — Not walked: note q21's scratch journals listed no deleted record in the set, and note q22 walked journal 1 itself. Code: note i (the `driver` answer filters the journal's own record query, whose deleted-record half asks for journal 1's); `DRIVERPlugin::isDRIVERRecord()` reads a deleted record's `driver` tombstone setting by its tombstone ID, whatever the journal. The question and lean are judgment.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Live-probed 2026-09-26: note q7; a format set "Not Available" in its "Format Availability" window left the list and its GetRecord answered "No matching identifier in this repository"; "Available" again brought it back. Code: note e (`publication_formats`, `pf.is_available = 1`); the OMP Dublin Core adapter works on a publication format (note f).

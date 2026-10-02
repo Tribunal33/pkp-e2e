@@ -15,8 +15,9 @@
  * record of everything else left out):
  * - A9 🐞: S3 and S9 open the PDF view page and read its bar and frame,
  *   never what the viewer shows nor what either "Download" does; no link
- *   that downloads is followed. The view page's "PDFJS is not defined"
- *   script error is A9's, not asserted.
+ *   that downloads is followed.
+ * - A23 🐞: the view page's "PDFJS is not defined" script error, not
+ *   asserted.
  * - A10 🐞: S3 reads the HTML view page's return arrow by its place and
  *   where it leads, never by its name.
  * - A7 🐞: S4 reads the priced link's words after the price only.
