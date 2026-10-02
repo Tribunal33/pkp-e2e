@@ -1,0 +1,72 @@
+--- a/pages/issue/IssueHandler.php
++++ b/pages/issue/IssueHandler.php
+@@ -401,6 +401,13 @@
+             'primaryGenreIds' => $primaryGenreIds,
+         ]);
+ 
++        // A locked galley link names a fee only while that purchase can be made
++        $paymentManager = Application::get()->getPaymentManager($journal);
++        $templateMgr->assign([
++            'purchaseArticleEnabled' => $paymentManager->purchaseArticleEnabled(),
++            'purchaseIssueEnabled' => $paymentManager->purchaseIssueEnabled(),
++        ]);
++
+         // Subscription Access
+         if (!$withSubscriptionDetails) {
+             $openAccessDate = $issue->getOpenAccessDate();
+@@ -448,12 +455,8 @@
+                 ($user && $completedPaymentDao->hasPaidPurchaseIssue($user->getId(), $issue->getId()))
+         ]);
+ 
+-        $paymentManager = Application::get()->getPaymentManager($journal);
+         if ($paymentManager->onlyPdfEnabled()) {
+             $templateMgr->assign('restrictOnlyPdf', true);
+         }
+-        if ($paymentManager->purchaseArticleEnabled()) {
+-            $templateMgr->assign('purchaseArticleEnabled', true);
+-        }
+     }
+ }
+--- a/templates/frontend/objects/galley_link.tpl
++++ b/templates/frontend/objects/galley_link.tpl
+@@ -15,6 +15,8 @@
+  * @uses $hasAccess bool Can this user access galleys for this context?
+  * @uses $restrictOnlyPdf bool Is access only restricted to PDF galleys?
+  * @uses $purchaseArticleEnabled bool Can this article be purchased?
++ * @uses $purchaseIssueEnabled bool Can this issue be purchased?
++ * @uses $purchaseFee string The fee to show on a locked link, while the purchase can be made
+  * @uses $currentJournal Journal The current journal context
+  * @uses $journalOverride Journal An optional argument to override the current
+  *       journal with a specific context
+@@ -52,6 +54,13 @@
+ 	{/if}
+ {/if}
+ 
++{* Can the reader buy access to this galley? *}
++{if $parent instanceOf APP\issue\Issue}
++	{assign var="purchaseEnabled" value=$purchaseIssueEnabled}
++{else}
++	{assign var="purchaseEnabled" value=$purchaseArticleEnabled}
++{/if}
++
+ {* Get user access flag *}
+ {if !$hasAccess}
+ 	{if $restrictOnlyPdf && $type=="pdf"}
+@@ -66,7 +75,7 @@
+ 	{* Add some screen reader text to indicate if a galley is restricted *}
+ 	{if $restricted}
+ 		<span class="pkp_screen_reader">
+-			{if $purchaseArticleEnabled}
++			{if $purchaseEnabled}
+ 				{translate key="reader.subscriptionOrFeeAccess"}
+ 			{else}
+ 				{translate key="reader.subscriptionAccess"}
+@@ -76,7 +85,7 @@
+ 
+ 	{$galley->getGalleyLabel()|escape}
+ 
+-	{if $restricted && $purchaseFee && $purchaseCurrency}
++	{if $restricted && $purchaseEnabled && $purchaseFee && $purchaseCurrency}
+ 		<span class="purchase_cost">
+ 			{translate key="reader.purchasePrice" price=$purchaseFee currency=$purchaseCurrency}
+ 		</span>

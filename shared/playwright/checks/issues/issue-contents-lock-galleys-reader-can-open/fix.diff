@@ -1,0 +1,86 @@
+--- a/pages/issue/IssueHandler.php
++++ b/pages/issue/IssueHandler.php
+@@ -413,41 +413,34 @@
+         $user = $request->getUser();
+         $issueAction = new IssueAction();
+         $subscriptionRequired = $issueAction->subscriptionRequired($issue, $journal);
+-        $subscribedUser = $issueAction->subscribedUser($user, $journal);
+-        $subscribedDomain = $issueAction->subscribedDomain($request, $journal, $issue->getId());
+-
+-        if ($subscriptionRequired && !$subscribedUser && !$subscribedDomain) {
+-            $templateMgr->assign('subscriptionExpiryPartial', true);
+-
+-            // Partial subscription expiry for issue
+-            $partial = $issueAction->subscribedUser($user, $journal, $issue->getId());
+-            if (!$partial) {
+-                $issueAction->subscribedDomain($request, $journal, $issue->getId());
+-            }
+-            $templateMgr->assign('issueExpiryPartial', $partial);
+-
+-            // Partial subscription expiry for articles
+-            $articleExpiryPartial = [];
+-            foreach ($issueSubmissions as $issueSubmission) {
+-                $partial = $issueAction->subscribedUser($user, $journal, $issue->getId(), $issueSubmission);
+-                if (!$partial) {
+-                    $issueAction->subscribedDomain($request, $journal, $issue->getId(), $issueSubmission);
+-                }
+-                $articleExpiryPartial[$issueSubmission->getId()] = $partial;
+-            }
+-            $templateMgr->assign('articleExpiryPartial', $articleExpiryPartial);
+-        }
+ 
+         /** @var OJSCompletedPaymentDAO $completedPaymentDao */
+         $completedPaymentDao = DAORegistry::getDAO('OJSCompletedPaymentDAO');
++        $paidIssue = $user && $completedPaymentDao->hasPaidPurchaseIssue($user->getId(), $issue->getId());
++
++        // The "Full Issue" galleys: the rule of self::userCanViewGalley()
+         $templateMgr->assign([
+             'hasAccess' => !$subscriptionRequired ||
+                 $issue->getAccessStatus() == Issue::ISSUE_ACCESS_OPEN ||
+-                $subscribedUser ||
+-                $subscribedDomain ||
+-                ($user && $completedPaymentDao->hasPaidPurchaseIssue($user->getId(), $issue->getId()))
++                $issueAction->allowedIssuePrePublicationAccess($journal, $user) ||
++                $issueAction->subscribedUser($user, $journal, $issue->getId()) ||
++                $issueAction->subscribedDomain($request, $journal, $issue->getId()) ||
++                $paidIssue
+         ]);
+ 
++        // Each article's galleys: the rule of ArticleHandler::view(), which passes the
++        // submission (its editors and authors, its own date under partial expiry)
++        if ($subscriptionRequired) {
++            $articleAccess = [];
++            foreach ($issueSubmissions as $issueSubmission) {
++                $articleAccess[$issueSubmission->getId()] = $paidIssue ||
++                    $issueAction->subscribedUser($user, $journal, $issue->getId(), $issueSubmission) ||
++                    $issueAction->subscribedDomain($request, $journal, $issue->getId(), $issueSubmission) ||
++                    ($user && $completedPaymentDao->hasPaidPurchaseArticle($user->getId(), $issueSubmission->getId()));
++            }
++            $templateMgr->assign('articleAccess', $articleAccess);
++        }
++
+         $paymentManager = Application::get()->getPaymentManager($journal);
+         if ($paymentManager->onlyPdfEnabled()) {
+             $templateMgr->assign('restrictOnlyPdf', true);
+--- a/templates/frontend/objects/article_summary.tpl
++++ b/templates/frontend/objects/article_summary.tpl
+@@ -10,6 +10,8 @@
+  * @uses $article Article The article
+  * @uses $hasAccess bool Can this user access galleys for this context? The
+  *       context may be an issue or an article
++ * @uses $articleAccess array Optional. Per article ID, can this user access
++ *       that article's galleys? Overrides $hasAccess when set
+  * @uses $showDatePublished bool Show the date this article was published?
+  * @uses $hideGalleys bool Hide the article galleys for this article?
+  * @uses $primaryGenreIds array List of file genre ids for primary file types
+@@ -93,6 +95,10 @@
+ 				{/if}
+ 				<li>
+ 					{assign var="hasArticleAccess" value=$hasAccess}
++					{assign var="summaryArticleId" value=$article->getId()}
++					{if isset($articleAccess.$summaryArticleId)}
++						{assign var="hasArticleAccess" value=$articleAccess.$summaryArticleId}
++					{/if}
+ 					{if $currentContext->getSetting('publishingMode') == APP\journal\Journal::PUBLISHING_MODE_OPEN || $publication->getData('accessStatus') == APP\submission\Submission::ARTICLE_ACCESS_OPEN}
+ 						{assign var="hasArticleAccess" value=1}
+ 					{/if}

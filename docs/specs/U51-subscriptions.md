@@ -1386,6 +1386,17 @@ Left out of the scenarios above, by reason:
     a Subscription Manager without the Journal Manager role creates an
     institution from "Institutions" and then an institutional subscription
     (with the other fix: the side menu offers no "Institutions").
+  - the guard for A7 (issue report
+    `docs/issues/U51-A7-issue-contents-lock-galleys-reader-can-open.md`): on
+    a restricted issue's table of contents a Section Editor without a
+    subscription sees no padlock.
+  - the guard for A18 (issue report
+    `docs/issues/U51-A18-additional-file-no-padlock-refused.md`): a
+    restricted article's additional file shows the padlock to a visitor.
+  - the guard for A19 (issue report
+    `docs/issues/U51-A19-locked-link-fee-while-payments-off.md`): with
+    "Purchase Article" and "Purchase Issue" fees saved and payments turned
+    off, the locked galley links show no price.
 - **Nothing new to test**:
   - subscriptions set to "Needs Information", "Needs Approval" or
     "Other, See Notes", which open nothing and read "Inactive" on "My
@@ -1483,7 +1494,7 @@ entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A4](#a4) | The email-box refusal sends the manager to "the journal Setup" for fields that are on "Subscription Policies" | 🐞 | minor | — |
-| [A7](#a7) | The issue's table of contents locks galleys the reader can open | 🐞 | minor | — |
+| [A7](#a7) | An issue's table of contents shows a padlock on galleys that editors, the article's author or a former subscriber under "Partial expiry" can open | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | Expiry reminders run once a month and reach only subscriptions ending on matching days | 🐞 | user-visible | — |
 | [A9](#a9) | A reader buying a subscription type that requires membership gets the same page back, unexplained, when "Membership" is empty | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | "Purchase" on an active subscription, saved, takes the reader's access away at once | 🐞 | user-visible | — |
@@ -1494,8 +1505,8 @@ entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | The delayed open access and expiry reminder lists offer "1 Months" and "1 Weeks" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | A Subscription Manager's side menu offers "Institutions", and the page refuses them | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | "Delayed Open Access" shows an empty box instead of "Disabled" until a manager saves a choice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A18](#a18) | A restricted article's additional file shows no padlock, yet is refused | 🐞 | user-visible | — |
-| [A19](#a19) | A fee shows on the locked link while payments are off and nothing can be bought | 🐞 | minor | — |
+| [A18](#a18) | A restricted article's additional file shows a plain file icon instead of a padlock, then refuses the reader | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [A19](#a19) | A journal with payments turned off still shows readers a price on its locked galley links | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | A reader pressing a locked "Full Issue" is asked to pay an issue fee of no amount when only a membership fee is set | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | The subscription window saves a start date after the end date | 🐞 | minor | — |
 | [A22](#a22) | Six of the subscription lists' search fields list every subscription whatever is typed | 🐞 | user-visible | — |
@@ -1561,14 +1572,21 @@ manager a way to record it, as the workflow does for a manual publication
 fee. Basis: probe, 2026-09-25. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The table of contents locks galleys the reader can open** · 🐞 · minor.
-On an issue's page, the padlock (Rule 10) is decided by the reader's
-subscription, institution and issue purchase alone. A Journal Manager,
-Section Editor, Copyeditor or Subscription Manager without a
-subscription, the article's own Author, and a reader whose expired
-subscription still covers the issue under "Partial expiry" all see the
-padlock and the "Requires Subscription" wording, then open the galley
-when they press it. Basis: probe, 2026-09-25. <sup>f-a7</sup>
+**A7 — An issue's table of contents shows a padlock on galleys that editors, the article's author or a former subscriber under "Partial expiry" can open** · 🐞 · low.
+On a journal that requires subscriptions, an issue's table of contents
+shows a padlock on galley links that some users can in fact open, and a
+screen reader announces "Requires Subscription" before them: - Editorial
+staff without a subscription (journal managers, editors, section
+editors, assistants such as copyeditors, and subscription managers) see
+every article's and the "Full Issue"'s links locked. - The author of an
+article sees that article's links locked. - On a journal set to "Partial
+expiry", a former subscriber keeps access to the issues published while
+the subscription ran. The table of contents still shows those issues'
+"Full Issue" locked. Each of them presses the link and the galley opens.
+The article's own page shows editors and authors the right state; for
+the former subscriber's "Full Issue" no page does. The editorial roles
+and "Partial expiry" both showed correctly on this page in OJS 2.x; the
+author never did. Basis: probe, 2026-10-01. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — Expiry reminders reach almost nobody** · 🐞 · user-visible.
@@ -1690,20 +1708,33 @@ journal created on OJS 3.2 or later starts that way. Basis: probe,
 2026-10-01. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — An additional file looks open and is refused** · 🐞 · user-visible.
-On a restricted article's page, a file under "Additional Files" keeps
-its file icon and shows no padlock, yet a reader without access who
-presses it is turned away as Rule 12 says, like the article's other
-galleys. A screen reader still hears "Requires Subscription" before its
-label. Basis: probe, 2026-09-25. <sup>f-a18</sup>
+**A18 — A restricted article's additional file shows a plain file icon instead of a padlock, then refuses the reader** · 🐞 · low.
+On a journal that requires subscriptions, a restricted article's page
+shows its main galleys ("PDF") with a padlock in place of the file icon,
+so a reader can see what they may not open. A file listed under
+"Additional Files" (a data set, a research instrument) keeps its plain
+file icon. It is restricted all the same: a visitor who presses it is
+sent to the Login page, and a signed-in reader without access ends up on
+the journal's home page with no message. The page's hidden text for
+screen readers is right ("Requires Subscription" before the file's
+name), so only sighted readers are misled. The journal's theme is the
+bundled Default Theme, the only theme OJS ships. Additional files showed
+the padlock until 2017, when the change that gave them a list of their
+own dropped it. Basis: probe, 2026-10-01. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — A fee shows on the locked link while payments are off** · 🐞 · minor.
-With "Purchase Article" or "Purchase Issue" saved and payments then
-switched off, the locked links still show the fee, such as "(USD 5)"
-or "(USD 20)", but nothing can be bought: a signed-in reader who
-presses one lands on the journal's home page. Basis: probe, 2026-09-25.
-<sup>f-a19</sup>
+**A19 — A journal with payments turned off still shows readers a price on its locked galley links** · 🐞 · low.
+A journal that requires subscriptions sets "Purchase Article" and
+"Purchase Issue" fees while payments are on, then turns payments off.
+Its locked galley links keep showing the price: "PDF (USD 5)" on each
+article and "PDF (USD 20)" on the "Full Issue", on the issue's page and
+on each article's page. Nothing can be bought. A signed-in reader who
+presses the link lands on the journal's home page with no message. A
+visitor who presses it is sent to the Login page, whose message asks for
+a subscription and says nothing of a purchase. The manager can remove
+the price by opening the "Payments" page by its address, which still
+works with payments off, and emptying the fees. Basis: probe,
+2026-10-01. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — A reader pressing a locked "Full Issue" is asked to pay an issue fee of no amount when only a membership fee is set** · 🐞 · low.
@@ -2023,6 +2054,7 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `IssueHandler::setupIssueTemplate()` computes `hasAccess` from `subscribedUser($user, $journal)` (no submission, so no `canPreview()`), `subscribedDomain()` and a paid issue; the partial-expiry flags it assigns (`issueExpiryPartial`, `articleExpiryPartial`) are read by no template. Live-probed 2026-09-25 (td9, td21): the managers, Section Editor, Copyeditor, Subscription Manager, the article's Author and a reader under "Partial expiry" saw the padlock and opened the galley.
+Issue report: [docs/issues/U51-A7-issue-contents-lock-galleys-reader-can-open.md](../issues/U51-A7-issue-contents-lock-galleys-reader-can-open.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — pkp/pkp-lib#11683, OJS commit `b795decf26` (2025-08-13, "fix schedule task frequency") changed `SubscriptionExpiryReminder` from `daily()` to `monthlyOn(1)`; `sendJournalReminders()` still matches one end date per run (note n) and `executeActions()` still simulates the missing days of short months, which only a daily run needs. The pre-Laravel `registry/scheduledTasks.xml` read `<frequency day="1"/>` for this task. Live-probed 2026-09-25 (td29): the schedule list shows `0 0 1 * *`; the exact-day matching could not be seen, as the task fails first (f-a27).
@@ -2063,9 +2095,11 @@ Issue report: [pkp-e2e#392](https://github.com/jardakotesovec/pkp-e2e/issues/392
 
 <a id="fn-f-a18"></a>
 **f-a18** — The article page lists the file under "Additional Files" through the supplementary link (`a.obj_galley_link_supplementary`), which keeps the file glyph where a restricted galley link gets the padlock; `ArticleHandler::download()` refuses it like any galley (note e). Live-probed 2026-09-25 (td6).
+Issue report: [docs/issues/U51-A18-additional-file-no-padlock-refused.md](../issues/U51-A18-additional-file-no-padlock-refused.md).
 
 <a id="fn-f-a19"></a>
 **f-a19** — `galley_link.tpl` prints `reader.purchasePrice` whenever a fee and a currency are passed; `article_details.tpl`, `article_summary.tpl` and `issue_toc.tpl` pass the journal's saved `purchaseArticleFee` / `purchaseIssueFee` without asking whether payments are configured, while the purchase itself needs `purchaseArticleEnabled()` / `purchaseIssueEnabled()` (note o). Live-probed 2026-09-25 (td6, td8).
+Issue report: [docs/issues/U51-A19-locked-link-fee-while-payments-off.md](../issues/U51-A19-locked-link-fee-while-payments-off.md).
 
 <a id="fn-f-a20"></a>
 **f-a20** — `IssueHandler::userCanViewGalley()` enters its purchase branch on `purchaseIssueEnabled() || membershipEnabled()` and then queues a `PAYMENT_TYPE_PURCHASE_ISSUE` payment of the (empty) issue fee (note e); the article side leads to the "Subscriptions" page in the same case. Live-probed 2026-09-25 (td8), on two journals.
