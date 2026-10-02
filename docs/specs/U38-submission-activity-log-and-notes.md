@@ -506,6 +506,8 @@ footnote. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - "Add Note" with the box empty in "Activity Log & Notes": refused, no note listed and no "Posted new note." line in "History" ([A2](#a2)): the guard the issue report proposes
 - **Nothing new to test**:
   - a revision cancelled with "Cancel", leaving no line of it, metadata line included, on either "History" (Rule 6c)
   - a preprint server's file lines, from a galley's file, and its "Change File" cancelled (Rules 6, 6c)
@@ -548,7 +550,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A discussion's emails and the Participants messages show no sender under "User" | 🐞 | minor | — |
-| [A2](#a2) | "Add Note" with an empty box posts an empty note | 🐞 | minor | — |
+| [A2](#a2) | "Add Note" with an empty box posts a note with no text, on a file's "Notes" and in "Activity Log & Notes" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | Once the submission has a note, closing the window drops a note typed and not added, without asking | 🐞 | minor | — |
 | [A5](#a5) | The "Review complete" email line names the editor who received it under "User" | 🐞 | minor | — |
 | [A7](#a7) | Read in French, file lines print an empty file name | 🐞 | user-visible | — |
@@ -571,12 +573,23 @@ emails without opening each discussion.
 Basis: probe. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
-**A2 — "Add Note" posts an empty note** · 🐞 · minor.
-Pressing "Add Note" with the box empty shows "Note posted.", adds a note
-with its writer and date and no text, and adds "Posted new note." to
-"History". An empty note is expected to be refused. A file's "Notes" tab
-does the same ([→ Submission files' A10](U36-submission-files.md#a10)).
-Basis: probe. <sup>[f-a2](#fn-a2)</sup>
+**A2 — "Add Note" with an empty box posts a note with no text, on a file's "Notes" and in "Activity Log & Notes"** · 🐞 · low.
+Pressing "Add Note" with the box empty posts a note with no text. It
+happens in a file's "More Information" › "Notes" and in the
+submission's "Activity Log & Notes" › "Notes". The message "Note
+posted." appears, the list gains a note that shows only its writer, its
+date and "Delete", and "History" gains "Posted new note.". An empty note
+is expected to be refused.
+
+The empty note stays in the list until an editor deletes it. The
+"History" line stays whatever happens.
+
+Only the editorial team sees either: neither window opens for an author
+or a reviewer, and adding a note sends no email. On a preprint server
+before `main`, a galley has no "More Information", so only "Activity Log
+& Notes" shows the fault there.
+*Submission files* carries the file's "Notes" tab ([→ its A10](U36-submission-files.md#a10)).
+Basis: probe, 2026-10-02. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
 **A3 — Closing the window drops a note not yet added, once the submission has a note** · 🐞 · minor.
@@ -1206,6 +1219,7 @@ them; the decision's email line named the editor.
 galley's) posted an empty note ("Note posted.", a note 0 px high,
 "Posted new note." on "History"); the file window's form did the same on
 2026-09-23 (the submission-files spec's f-a10).
+Issue report: [docs/issues/U36-A10-add-note-empty-box-posts-empty-note.md](../issues/U36-A10-add-note-empty-box-posts-empty-note.md).
 
 <a id="fn-a3"></a>
 **f-a3** — The window is a side modal holding the legacy form.

@@ -18,7 +18,7 @@ and the hourly routine starts one only when none is running
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U37](../specs/U37-tasks-and-discussions.md) | 21 | 2 | 5 | A1: open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md (the rest of U37 written up by the issues session, VM s1, 2026-10-02) |
-| [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **Taken: issues session, workstation s0, 2026-10-02**; A21 done with U47 A4 (pkp-e2e#373; its own cause pkp-e2e#495); A11 done (docs/issues/U36-A11-wizard-file-edit-save-no-component-server-error.md); A23, A24: open report docs/reports/2026-09-27-pkp-lib-13288.md |
+| [U36](../specs/U36-submission-files.md) | 17 | 2 | 2 | **Taken: issues session, workstation s0, 2026-10-02**; A21 done with U47 A4 (pkp-e2e#373; its own cause pkp-e2e#495); A11 done (docs/issues/U36-A11-wizard-file-edit-save-no-component-server-error.md); A10 done with U38 A2 (docs/issues/U36-A10-add-note-empty-box-posts-empty-note.md); A23, A24: open report docs/reports/2026-09-27-pkp-lib-13288.md |
 | [U17](../specs/U17-sections.md) | 16 | 2 | 2 | OMP9, OPS6: open reports docs/reports/2026-09-25-omp-series-page-blank.md and docs/reports/2026-09-25-ops-oai-empty-abstract.md (the rest of U17 written up by the issues session, workstation s0, 2026-10-02) |
 | [U62](../specs/U62-plugins-management.md) | 8 | 2 | 2 | **Taken: issues session, VM s0, 2026-10-02**; done: OJS1 (pkp-e2e#504), A2, A10 (pkp-e2e#505 and pkp-e2e#506) |
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 |  |
@@ -61,7 +61,7 @@ and the hourly routine starts one only when none is running
 | [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 |  |
 | [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | OMP1 done with U53 A14 (pkp-e2e#447) |
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
-| [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | **A2 taken: issues session, workstation s0, 2026-10-02** (joined to U36 A10) |
+| [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | A2 done with U36 A10 (docs/issues/U36-A10-add-note-empty-box-posts-empty-note.md) |
 | [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
 | [U43](../specs/U43-funding.md) | 4 | 0 | 1 |  |
 | [U22](../specs/U22-my-submissions.md) | 2 | 0 | 1 |  |

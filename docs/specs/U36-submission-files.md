@@ -930,6 +930,7 @@ Left out of the scenarios above, by reason:
   - the file's "History" keeping no line of the revision cancelled with "Cancel": one "A file revision "notes.md" …" line, not two (Rule 9): likely a bullet in scenario 3, which cancels a revision before the "History" it reads
   - "Edit a file" closed with its header "Close" after the name is changed: no question, the list keeping the old name after a reload, and the window reopening on it (Rule 10): likely a bullet in scenario 4 before "The rename"
   - the "Files" panel's "Other" on a file with no component, then "Save" with no radio button chosen: a message under "What kind of file is this?" and no server error ([A11](#a11)): the guard the issue report proposes
+  - "Add Note" with the box empty on a file's "Notes": refused, no note listed and no "Posted new note." line in "History" ([A10](#a10)): the guard the issue report proposes
 - **Nothing new to test**:
   - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
   - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
@@ -992,7 +993,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | A galley's "Change File" shows "Current file" with no file name under it | 🐞 | minor | — |
 | [A7](#a7) | The Author's "Upload" on "Revisions Uploaded" shows on every round and is refused before revisions are requested | 🐞 | minor | — |
 | [A9](#a9) | A screen reader reads step 1's hidden upload box, and the step's two drop-downs have no name | 🐞 | minor | — |
-| [A10](#a10) | "Add Note" with an empty box posts an empty note | 🐞 | minor | — |
+| [A10](#a10) | "Add Note" with an empty box posts a note with no text, on a file's "Notes" and in "Activity Log & Notes" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | Submission wizard: "Save" in a file's "Edit" panel with no component chosen shows "An unexpected error has occurred" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | The "Download All Files" zip is named with two hyphens ("12--submission-files.zip") | 🐞 | minor | — |
 | [A14](#a14) | "Change File" in step 1 keeps the first upload on the list as a file of its own | 🐞 | user-visible | — |
@@ -1093,12 +1094,22 @@ reader: their labels are not tied to them.
 Basis: probe. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — "Add Note" posts an empty note** · 🐞 · minor.
-In "More Information" › "Notes", pressing "Add Note" with the box empty
-adds a note with no text (only its writer, its date and "Delete"), shows
-"Note posted." and adds "Posted new note." to "History". An empty note
-should be refused.
-Basis: probe. <sup>[f-a10](#fn-a10)</sup>
+**A10 — "Add Note" with an empty box posts a note with no text, on a file's "Notes" and in "Activity Log & Notes"** · 🐞 · low.
+Pressing "Add Note" with the box empty posts a note with no text. It
+happens in a file's "More Information" › "Notes" and in the
+submission's "Activity Log & Notes" › "Notes". The message "Note
+posted." appears, the list gains a note that shows only its writer, its
+date and "Delete", and "History" gains "Posted new note.". An empty note
+is expected to be refused.
+
+The empty note stays in the list until an editor deletes it. The
+"History" line stays whatever happens.
+
+Only the editorial team sees either: neither window opens for an author
+or a reviewer, and adding a note sends no email. On a preprint server
+before `main`, a galley has no "More Information", so only "Activity Log
+& Notes" shows the fault there.
+Basis: probe, 2026-10-02. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
 **A11 — Submission wizard: "Save" in a file's "Edit" panel with no component chosen shows "An unexpected error has occurred"** · 🐞 · low · crash: server.
@@ -2222,6 +2233,7 @@ button "Choose File", while the screenshot showed no box.
 **f-a10** — Note v (`NewNoteForm` has no check on the text). Live-probed
 2026-09-23 (d14; all three apps): an empty note row "Mira Manager 2026-09-23
 11:57 AM · Delete", "Note posted.", and a "Posted new note." row in "History".
+Issue report: [docs/issues/U36-A10-add-note-empty-box-posts-empty-note.md](../issues/U36-A10-add-note-empty-box-posts-empty-note.md).
 
 <a id="fn-a11"></a>
 **f-a11** — Note k. Live-probed 2026-09-23 (OJS and OMP): "Other" › "Save"
