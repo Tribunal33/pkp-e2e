@@ -1061,7 +1061,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | The "Trends" information icons cannot be read from the keyboard | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "Site Administrator" on "Users" always reads 0 | 🐞 | minor | — |
 | [A8](#a8) | A report address naming no report lands on "404 Not Found" | 🐞 | minor | — |
-| [A9](#a9) | The monthly email's attachment counts every journal's active submissions | 🐞 | user-visible | — |
+| [A9](#a9) | Monthly editorial email's attachment counts every journal's active submissions, not the journal's own | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | The monthly email reads "Login to the the press" ("the the preprint server") | 🐞 | minor | — |
 | [A14](#a14) | Saving Profile › "Notifications" while the monthly email is off opts the account out for when it returns | 🐞 | minor | — |
 | [OJS1](#ojs1) | "Articles Report" leaves "Supporting Agencies" empty | 🐞 | minor | — |
@@ -1180,14 +1180,28 @@ Expected: the "Reports" page.
 Basis: probe. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The monthly attachment counts every journal's active submissions** · 🐞 · user-visible.
+**A9 — Monthly editorial email's attachment counts every journal's active submissions, not the journal's own** · 🐞 · medium.
 The "Active Submissions" block of "editorial-report.csv" counts the
-submissions in each stage across every journal of the installation,
-not the journal the email is about, so on a multi-journal installation
-each journal's editors get the same, inflated stage counts; a journal
-with no submission at all gets counts above 0. Expected: the journal's
-own counts, as its "Editorial Activity" chart shows.
-Basis: probe. <sup>f-a9</sup>
+submissions in each stage across every journal of the installation, not
+the journal the email is about, so on a multi-journal installation each
+journal's editors get the same, inflated stage counts; a journal with no
+submission at all gets counts above 0.
+
+The email goes each month to every Journal Manager and Section Editor of
+the journal (Press Managers and Series Editors, preprint server Managers
+and Moderators). It is on by default: a journal can stop it for everyone
+on Settings › Workflow › "Emails", and each recipient can turn it off on
+their Profile › "Notifications". Only this one block is wrong: the
+email's text and the file's "Trends" and "Users" blocks count this
+journal alone, and so does the journal's "Editorial Activity" page.
+
+Each count is the whole site's total for that stage. On a site with a
+few journals the figures can look plausible; on one with dozens or
+hundreds they are plainly too large. These totals are all that crosses
+between journals: the file names no submission, no person and no other
+journal, and does not split the totals by journal. Expected: the
+journal's own counts, as its "Editorial Activity" chart shows.
+Basis: probe, 2026-10-02. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — A French journal's monthly email links to the English pages** · ❓ · minor.
@@ -2048,6 +2062,7 @@ no `pluginName` and the right name in lower case each landed on
 submission, its chart 0 everywhere, got Submission 34, Review 2,
 Copyediting 12, Production 2 (a press 40/0/3/17/2, a preprint server
 Production 48), the installation's active counts.
+Issue report: [docs/issues/U65-A9-monthly-report-counts-other-journals.md](../issues/U65-A9-monthly-report-counts-other-journals.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — fn p (`editorialStatsLink`, `publicationStatsLink`, the
