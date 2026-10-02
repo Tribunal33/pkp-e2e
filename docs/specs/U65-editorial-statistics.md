@@ -2062,7 +2062,7 @@ no `pluginName` and the right name in lower case each landed on
 submission, its chart 0 everywhere, got Submission 34, Review 2,
 Copyediting 12, Production 2 (a press 40/0/3/17/2, a preprint server
 Production 48), the installation's active counts.
-Issue report: [docs/issues/U65-A9-monthly-report-counts-other-journals.md](../issues/U65-A9-monthly-report-counts-other-journals.md).
+Issue report: [docs/issues/U65-A9-monthly-report-counts-other-journals.md](../issues/U65-A9-monthly-report-counts-other-journals.md), filed as [pkp-e2e#633](https://github.com/jardakotesovec/pkp-e2e/issues/633).
 
 <a id="fn-f-a10"></a>
 **f-a10** — fn p (`editorialStatsLink`, `publicationStatsLink`, the
