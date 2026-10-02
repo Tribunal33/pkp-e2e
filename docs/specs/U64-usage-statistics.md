@@ -2336,7 +2336,7 @@ Issue report: [docs/issues/U64-A4-journal-geographical-data-opt-out-not-kept.md]
 fn-b (`counterR5` open to `ROLE_ID_SUB_EDITOR`); the list's fetch is
 `CounterReportsListPanel.vue`'s, and its 401 reaches the "Error" window
 through `ajaxErrorCallback()`. Live-probed 2026-09-27: td6.
-Issue report: [docs/issues/U64-A5-section-editor-counter-r5-error-while-restricted.md](../issues/U64-A5-section-editor-counter-r5-error-while-restricted.md).
+Issue report: [docs/issues/U64-A5-section-editor-counter-r5-error-while-restricted.md](../issues/U64-A5-section-editor-counter-r5-error-while-restricted.md), filed as [pkp-e2e#611](https://github.com/jardakotesovec/pkp-e2e/issues/611).
 
 <a id="fn-f-a6"></a>
 **f-a6** — fn-v. Live-probed 2026-09-27: td8.
