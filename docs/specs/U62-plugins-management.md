@@ -1305,7 +1305,7 @@ administration). Mechanism fn-o.
 <a id="fn-f-a2"></a>
 **f-a2** — fn-k: the template tests `'install'`, the action is
 `'upload'`. Live-probed 2026-09-27: td10.
-Issue report: [docs/issues/U62-A2-upload-plugin-window-no-file-line.md](../issues/U62-A2-upload-plugin-window-no-file-line.md).
+Issue report: [pkp-e2e#505](https://github.com/jardakotesovec/pkp-e2e/issues/505) ([docs/issues/U62-A2-upload-plugin-window-no-file-line.md](../issues/U62-A2-upload-plugin-window-no-file-line.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — fn-m: `upgradePlugin()` reuses
@@ -1356,7 +1356,7 @@ this plugin." on a press.
 <a id="fn-f-a10"></a>
 **f-a10** — fn-l: `PharData`'s own exception message reaches the
 notice. Live-probed 2026-09-27: td14.
-Issue report: [docs/issues/U62-A10-upload-plugin-not-archive-server-message.md](../issues/U62-A10-upload-plugin-not-archive-server-message.md).
+Issue report: [pkp-e2e#506](https://github.com/jardakotesovec/pkp-e2e/issues/506) ([docs/issues/U62-A10-upload-plugin-not-archive-server-message.md](../issues/U62-A10-upload-plugin-not-archive-server-message.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn-i. Live-probed 2026-09-27 (OJS, two runs): with
