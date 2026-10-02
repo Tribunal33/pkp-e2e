@@ -2099,7 +2099,7 @@ in its note (p, q, r, s, t, u).
 
 <a id="fn-f-a4"></a>
 **f-a4** — `manager.subscriptions.form.subscriptionContactRequired` (OJS `locale/en/manager.po`); the fields are `subscriptionName` and `subscriptionEmail` of `SubscriptionPolicyForm`. Live-probed 2026-09-25 (td28): the refusal verbatim at the window's top.
-Issue report: [docs/issues/U51-A4-subscription-email-refusal-names-setup.md](../issues/U51-A4-subscription-email-refusal-names-setup.md).
+Issue report: [pkp-e2e#401](https://github.com/jardakotesovec/pkp-e2e/issues/401) ([docs/issues/U51-A4-subscription-email-refusal-names-setup.md](../issues/U51-A4-subscription-email-refusal-names-setup.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `ArticleHandler::userCanViewGalley()` redirects a signed-in reader to `about/subscriptions` (note e), and `AboutHandler::subscriptions()` redirects to the journal index while payments are not configured (note f). Live-probed 2026-09-25 (td8): the home page, no notice.
@@ -2164,7 +2164,7 @@ Issue report: [pkp-e2e#386](https://github.com/jardakotesovec/pkp-e2e/issues/386
 
 <a id="fn-f-a21"></a>
 **f-a21** — `SubscriptionForm` checks each date's presence and range (note h) but not their order. Live-probed 2026-09-25 (td11): start 2026-12-01, end 2026-01-01, saved and listed so.
-Issue report: [docs/issues/U51-A21-subscription-end-before-start-saved.md](../issues/U51-A21-subscription-end-before-start-saved.md).
+Issue report: [pkp-e2e#402](https://github.com/jardakotesovec/pkp-e2e/issues/402) ([docs/issues/U51-A21-subscription-end-before-start-saved.md](../issues/U51-A21-subscription-end-before-start-saved.md)).
 
 <a id="fn-f-a22"></a>
 **f-a22** — `SubscriptionDAO::applySearchFilters()` maps given name, family name, username and email to columns; the institutional fields have no mapping (`default => null`), so the filter is dropped. Membership, reference number and notes are mapped there, yet the screen returned the whole list for them too. Live-probed 2026-09-25 (td10), on two journals, "contains" and "is".
@@ -2191,7 +2191,7 @@ Issue report: [pkp-e2e#387](https://github.com/jardakotesovec/pkp-e2e/issues/387
 
 <a id="fn-f-a28"></a>
 **f-a28** — Test run 2026-09-25 (Rule 19; scenario 6). The four answers to "Save" were: "A user is required. A subscription start date is required. A subscription end date is required." (no user, no dates); then, Nova chosen, "A subscription start date is required." and "A subscription end date is required." again, the boxes now reading today's date; then, Sam chosen, today's date typed into "Start date" and next year's into "End date", "This user already has a subscription for this journal. A subscription start date is required."; then, Nova chosen, "A subscription start date is required.", the window staying open. A probe the same day read the fields after each step: from the first refusal on, the visible boxes held today's date while the values the window sends were empty; typing today's date left the sent start date empty, next year's end date was sent. The boxes are jQuery UI date pickers: lib/pkp `js/controllers/form/FormHandler.js` renames the visible box to `{name}-removed` and sends a hidden copy under the field's name (`templates/payments/individualSubscriptionForm.tpl`, `dateStart`/`dateEnd` with class `datepicker`).
-Issue report: [docs/issues/U51-A28-refused-form-date-box-shows-today.md](../issues/U51-A28-refused-form-date-box-shows-today.md).
+Issue report: [pkp-e2e#403](https://github.com/jardakotesovec/pkp-e2e/issues/403) ([docs/issues/U51-A28-refused-form-date-box-shows-today.md](../issues/U51-A28-refused-form-date-box-shows-today.md)).
 
 <a id="fn-f-a29"></a>
 **f-a29** — Test run 2026-10-01 (Side effects; scenario 12), OJS main (ojs `bade233f73`, lib/pkp `2e377d27fc`): after the scheduled task `APP\tasks\OpenAccessNotification` ran once and the jobs ran, the mail catcher held two emails "Free to read: Vol. 1 No. 1 (2026) of {journal} is now open access" for the Reader and two for the Journal Manager (one expected). Seen on the VM on a reset database and on every OJS CI run of 2026-10-01; the same check passed on every run of 2026-09-30. Mechanism (code read): `executeActions()` calls `sendNotifications()` for today, then, on the 1st of a month whose previous month is in `$shortMonths = [2,4,6,9,11]`, again for a simulated 31st of that month, and on 1 March for a simulated 30 February and, unless `date('L', mktime(0, 0, 0, 0, 0, $year))` (which reads the previous year) says leap, 29 February. `sendNotifications()` matches `strtotime($openAccessDate) == mktime(0, 0, 0, $month, $day, $year)`; PHP's `mktime()` rolls 31 April, June, September and November over to the 1st of the next month, 29 February of a common year and 30 February of a leap year to 1 March, so an issue opening today matches twice and gets two `OpenAccessMailUsers` batches. In the year after a leap year the 29th is skipped and 30 February falls on 2 March, so 1 March sends once. Only 1 October was driven; the other days are read in the code and checked against PHP's date arithmetic. The simulation dates from the task's first version (OJS `b33af3e5a5`, 2006-04-18, then with the list `2,4,6,8,10,12`); the task runs daily (`classes/scheduler/Scheduler.php`, `daily()`).
