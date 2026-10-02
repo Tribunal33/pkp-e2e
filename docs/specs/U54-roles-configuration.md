@@ -779,6 +779,9 @@ Left out of the scenarios above, by reason:
     `docs/issues/U54-A11-own-role-ok-removes-settings-access.md`): an
     Editor whose only Settings role is "Journal editor" pressing "OK" in
     its window, then still opening Settings
+  - the guard for A13 (issue report
+    `docs/issues/U54-A13-roles-list-order-moves-and-pages-repeat.md`):
+    a role whose options are saved keeping its place in the "Roles" list
 - **Nothing new to test**:
   - "Cancel" in the role window after a change, and the questions its
     "Close" (×) and leaving the page ask (Rule 17)
@@ -867,7 +870,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | After a filter entry is chosen the filters hide, and only the count line shows the list is filtered | 🐞 | minor | — |
 | [A10](#a10) | A role name of spaces is refused with a different notice while the page's script fails | 🐞 | minor · crash: script | — |
 | [A11](#a11) | "OK" in an Editor's own role window takes the Settings pages away from every holder of the role | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A13](#a13) | The "Roles" list keeps no fixed order: a role just made can come first, without "Edit" or "Remove", a saved role moves down, and a paged list can show a role twice and another never | 🐞 | user-visible | test run (claude), 2026-09-29 — was ❓ |
+| [A13](#a13) | Roles list: a saved role jumps to the end, and its pages can repeat one role and skip another | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | After a rename on the "Roles" tab, the "Users" tab shows the role's old name until a reload | 🐞 | minor | — |
 | [OMP1](#omp1) | In French a press's "Roles" list heads its External Review column with a code | 🐞 | minor | — |
 | [OPS1](#ops1) | "Users must be registered and log in to view open access content." is not kept on a preprint server | 🐞 | user-visible | — |
@@ -1031,32 +1034,25 @@ ended.
 Basis: probe. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — The "Roles" list keeps no fixed order** · 🐞 · user-visible.
-The list keeps no fixed order, on a journal, a press and a preprint
-server alike. A role just made with "Create New Role" can be listed
-first, above "Journal manager": a Journal Manager who creates "Data
-editor", reloads the page and opens the "Roles" tab finds it as the
-first row, with no "Edit" or "Remove" ([A1](#a1)), so it can be neither
-changed nor removed, while "Journal manager" below it now offers both.
-How often this happens depends on the installation, not on anything the
-manager does: on one test installation, where the automated tests create
-a role at the same point each time, it came first every time; on
-another, about once in eighty new journals.
-Saving a role's window usually moves its row down the list (Rule 2), so
-the order a manager has learned changes after any "OK". A new journal's
-own roles do not always come in the order of the roles table either.
-Once, a new preprint server with nothing saved on it listed "Author",
-"Reader", "Editorial Board Member", "Preprint Server manager" and
-"Moderator": "Author" had no "Edit" or "Remove", and the manager row had
-both. With the list on more than one page (Rule 4), each page takes its
-rows from the list in whatever order it has when that page opens, so the
-second page can repeat a role the first showed and leave another role off
-both. Expected: a fixed order, the installed roles first in the table's
-order and created roles after them.
+**A13 — Roles list: a saved role jumps to the end, and its pages can repeat one role and skip another** · 🐞 · low.
+On an install that runs on PostgreSQL, the "Roles" tab of Settings ›
+Users & Roles has no order of its own. When a Journal Manager changes a
+role's options in its "Edit" window and presses "OK", that role leaves
+its place and is listed last, also after a reload.
+
+When the list runs to more than one page and someone saves a role
+between the reading of page 1 and page 2 (a second manager, or the same
+manager in another tab), page 2 shows a role that page 1 already showed
+and leaves another role off both pages. A reload shows every role once.
+
+A journal, press or preprint server shows 25 roles per page unless the
+manager chooses fewer, and a new one has 5 to 19 roles, so the repeated
+and missing roles need a smaller "Items per page" or a context with more
+than 25 roles.
 Re-checked: test run (claude), 2026-09-29 — was ❓ (whether the list
 should keep a fixed order); a defect, since a role just made can land
 first and then cannot be edited or removed.
-Basis: probe; test run; code (the pages). <sup>f-a13</sup>
+Basis: probe; test run; code (the pages), 2026-10-02. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — The "Users" tab keeps a renamed role's old name** · 🐞 · minor.
@@ -1796,6 +1792,7 @@ after the new role's, it came first in 10 of 10 runs; without that, one
 new journal in about eighty listed its created role first on the local
 fleet. Scenarios 3 to 6 therefore start again on a new scratch journal
 when, and only when, the row they open comes first ([s](#fn-s)).
+Issue report: [docs/issues/U54-A13-roles-list-order-moves-and-pages-repeat.md](../issues/U54-A13-roles-list-order-moves-and-pages-repeat.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Test run 2026-09-26 (Side effects; scenario 4; all three
