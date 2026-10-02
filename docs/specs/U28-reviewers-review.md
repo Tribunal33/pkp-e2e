@@ -2202,7 +2202,7 @@ same 34 rows under "Showing 31 to 34 of 34"; "Sort" on "ID" put
 times; the editorial dashboard's pager showed 30 of 38 and its search cut
 30 rows to 1. Cosmetic, both apps: "Clear search phrase" leaves an empty
 `searchPhrase=` in the address.
-Issue report: [docs/issues/U28-A1-reviewer-list-search-sort-pager-inert.md](../issues/U28-A1-reviewer-list-search-sort-pager-inert.md).
+Issue report: [docs/issues/U28-A1-reviewer-list-search-sort-pager-inert.md](../issues/U28-A1-reviewer-list-search-sort-pager-inert.md), filed as [pkp-e2e#581](https://github.com/jardakotesovec/pkp-e2e/issues/581).
 
 <a id="fn-a2"></a>
 **f-a2** — `PKPReviewerHandler::submission()` sets `submittedOn` to
