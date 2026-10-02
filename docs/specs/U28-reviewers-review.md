@@ -2305,7 +2305,7 @@ Submitted"; OJS stopped at "Choose One" ("This field is required." under
 the list) and reached step 4 once "Decline Submission" was chosen; a
 text-only review and a file-only review reached step 4 on both, and the
 "Review complete" email arrived each time.
-Issue report: [docs/issues/U28-A7-empty-review-can-be-submitted.md](../issues/U28-A7-empty-review-can-be-submitted.md).
+Issue report: [docs/issues/U28-A7-empty-review-can-be-submitted.md](../issues/U28-A7-empty-review-can-be-submitted.md), filed as [pkp-e2e#583](https://github.com/jardakotesovec/pkp-e2e/issues/583).
 
 <a id="fn-a8"></a>
 **f-a8** — Retired. Seen once per app on 2026-09-04 (a one-question form,
