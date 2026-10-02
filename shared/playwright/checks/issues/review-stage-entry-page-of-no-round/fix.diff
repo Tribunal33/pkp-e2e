@@ -1,0 +1,53 @@
+--- a/lib/ui-library/src/composables/useSideMenu.js
++++ b/lib/ui-library/src/composables/useSideMenu.js
+@@ -155,10 +155,16 @@
+ 	 * @returns {boolean} True if the item was found and set, false otherwise
+ 	 */
+ 	function setActiveItemKey(key = '') {
+-		if (!findItemByKey(items.value, key)) {
++		const item = findItemByKey(items.value, key);
++		if (!item) {
+ 			return false;
+ 		}
+ 
++		// An item that only groups other items is not a page of its own
++		if (item.items?.length && !item.state && !item.link && !item.action) {
++			return false;
++		}
++
+ 		activeItemKey.value = key;
+ 		const parentKeys = findParentKeys(items.value, key);
+ 		if (parentKeys) {
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowNavigationConfig/useWorkflowNavigationConfigOJS.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowNavigationConfig/useWorkflowNavigationConfigOJS.js
+@@ -28,17 +28,25 @@
+ }
+ 
+ export function getWorkflowItem({stageId, label, isActive, items}) {
+-	return {
++	const item = {
+ 		key: `workflow_${stageId}`,
+ 		label: label,
+ 		colorStripe: isActive ? StageColors[stageId] : null,
+-		state: {
++		items,
++	};
++
++	// A review stage that has rounds only groups them, as a version node groups
++	// its pages: every page of the stage belongs to a round. Without rounds the
++	// stage entry is the page that says the stage has not started.
++	if (!items?.length) {
++		item.state = {
+ 			primaryMenuItem: 'workflow',
+ 			stageId: stageId,
+ 			title: getWorkflowTitle(label),
+-		},
+-		items,
+-	};
++		};
++	}
++
++	return item;
+ }
+ 
+ export function getWorkflowTitle(stageLabel) {

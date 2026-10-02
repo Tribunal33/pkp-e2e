@@ -931,7 +931,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [OMP1](#omp1) | After "Request Revisions" on Internal Review, a press author gets no task in the Tasks panel | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | On a press's Internal Review, "Accept Submission" and "Create New Review Round" carry none of the author's revised files | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OMP7](#omp7) | The author selecting the "Internal Review" entry itself gets a stale or empty page, and the page's script fails | 🐞 | minor · crash: script | — |
+| [OMP7](#omp7) | The author selecting the "Internal Review" entry itself gets a stale or empty page, and the page's script fails | 🐞 | medium · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [OMP8](#omp8) | While External Review asks for revisions, the author's "Upload" on an earlier internal round files the revision there, out of the editor's sight | 🐞 | minor | — |
 | [OMP9](#omp9) | The stage's address typed without the monograph's number gives an empty page from a server failure | 🐞 | latent · crash: server | — |
 | [OMP10](#omp10) | After "Accept Submission" on Internal Review the assigned editors get no notice box on Copyediting | 🐞 | minor | — |
@@ -1042,15 +1042,18 @@ Review Round" already does the job in one step.
 Basis: probe. <sup>[f-omp6](#fn-omp6)</sup>
 
 <a id="omp7"></a>
-**OMP7 — The author's "Internal Review" entry shows a stale or empty page** · 🐞 · minor · crash: script.
+**OMP7 — The author's "Internal Review" entry shows a stale or empty page** · 🐞 · medium · crash: script.
 An author who presses the stage's own menu entry, "Internal Review",
 expects the stage-level view an editor gets there (Rule 7a). The heading
 changes to "Workflow: Internal Review" but the round's status box and
 panels stay on screen, and the same entry opened by a typed address shows
 the heading with nothing under it. Both times the page's script fails with
-an error in the browser's console. The editor's side of the same entry is
-[→ workflow screen A6](U24-workflow-screen-and-stage-access.md#a6).
-Basis: probe. <sup>[f-omp7](#fn-omp7)</sup>
+an error in the browser's console. The page opens only when someone presses the stage's
+name; the round's own entry under it still opens the round. It is one
+fault with the editor's side of the same entry,
+[→ workflow screen A6](U24-workflow-screen-and-stage-access.md#a6), and
+shares its issue report and its severity.
+Basis: probe, 2026-10-02. <sup>[f-omp7](#fn-omp7)</sup>
 
 <a id="omp8"></a>
 **OMP8 — A revision filed on an earlier internal round while External Review waits for it** · 🐞 · minor.
@@ -1231,6 +1234,7 @@ Issue report: [docs/issues/U71-OMP2-internal-round-revised-files-not-carried.md]
 
 <a id="fn-omp7"></a>
 **f-omp7** — Live-probed 2026-09-27 (Rule 7b), two runs: as the monograph's Author, pressing "Internal Review" (and, on a monograph in External Review, "External Review") changed the heading and left the selected round's box and panels; the same entry typed as `workflowMenuKey=workflow_2` showed the heading alone. The console logged `TypeError: Cannot read properties of null (reading 'id')` at `getPrimaryItems`, once when pressed and twice when typed; no request failed. The internal author block of `workflowConfigAuthorOMP.js` reads `selectedReviewRound.id` with no round selected. A journal author's "Review" entry does the same (`workflow_3`); the editor's side of the stage entry is the workflow-screen spec's A6.
+Issue report: [docs/issues/U71-OMP7-review-stage-entry-page-of-no-round.md](../issues/U71-OMP7-review-stage-entry-page-of-no-round.md).
 
 <a id="fn-omp8"></a>
 **f-omp8** — Live-probed 2026-09-27 (Rule 18): a monograph with an internal "Request Revisions" and the author's upload on Round 1, sent to External Review, where the editor then recorded "Request Revisions". The author's "Upload" above internal Round 1's "Revisions Uploaded" opened the three-step "Upload Review File" wizard; the file landed on that round, on the page and after a reload, while External Review Round 1 read "Revisions have been requested." over "No Items" for the author and the editor. The file's "More Actions" offered "Update File Details" and "Delete". Control: on a monograph whose internal round never asked for revisions the same "Upload" refused with "You are not allowed to add and edit these files.". Consistent with note d's server gate, which looks at the decisions of the latest internal round, not at the stage the monograph is on.

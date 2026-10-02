@@ -1062,6 +1062,8 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the review stage's own entry ("Review"; "Internal Review" or "External Review" on a press) only folding and unfolding its rounds, the selected round's page staying, for the editor and the author ([A6](#a6); Rules 8a, 8b): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the language line gone once a second version exists (Rule 17): a
     second version comes from "Create New Version"
@@ -1158,7 +1160,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A5](#a5) | A stage address typed without a submission number shows a blank page, the app failing, instead of a message or a forward | 🐞 | latent · crash: server | claim check (claude), 2026-09-28 — a missing or unknown stage number is now refused; the missing submission number fails |
-| [A6](#a6) | Selecting the "Review" entry itself opens a page that belongs to no round: a past round's status, an "Add Reviewer" that fails, the page's script failing | 🐞 | minor · crash: script | claim check (claude), 2026-09-28 — was ❓ |
+| [A6](#a6) | Pressing "Review" in the workflow's side menu opens a page with no round: wrong status, no reviewers, "Add Reviewer" refused | 🐞 | medium · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | An old-shape workflow bookmark to a deleted submission shows a bare "404 Not Found" page instead of a message or a forward | 🐞 | minor | — |
 | [A11](#a11) | In French the workflow screen's menu, headings, header, status lines and return dialogs show raw codes such as "##publication.media##" | 🐞 | minor | — |
 | [OMP3](#omp3) | A press keeps listing the "Identifiers" page, now empty, after the identifier plugin is turned off | 🐞 | minor | — |
@@ -1245,22 +1247,31 @@ access-denied page. Only a hand-typed or truncated address reaches it.
 Basis: probe, 2026-09-28. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
-**A6 — The "Review" entry opens a broken page that belongs to no round** · 🐞 · minor · crash: script.
-Selecting the review stage's own entry ("Review"; "External Review" or
-"Internal Review" on a press) instead of a round gives a page that belongs
-to no round. The editorial view reads "The submission has been advanced to
-the next round of review" while the only round is still active, and its
-"Add Reviewer" opens a window reading only "Invalid review round." (Rule
-8a). The author's view keeps the page it was pressed from (a round's, or
-the "Submission" entry's) under the new heading, or shows nothing (Rule
-8b). Each opening also makes the page's script fail, with nothing on the
-page saying so: on a journal in both views, on a press in the author's
-view. Expected: the current round, with its "Round N
-Status" and buttons, or an entry that only folds and unfolds the rounds.
+**A6 — Pressing "Review" in the workflow's side menu opens a page with no round: wrong status, no reviewers, "Add Reviewer" refused** · 🐞 · medium · crash: script.
+Pressing the stage's name in the workflow's side menu opens a review
+page with no round selected, and in the author's view the page's
+script fails in the browser. The stage's name is the line the review
+rounds are listed under: "Review" on a journal, "Internal Review" or
+"External Review" on a press.
+
+The editor sees a "Status" box reading "The submission has been
+advanced to the next round of review" while Round 1 is the only round
+and still active. There are no decision buttons, "Reviewers" reads "No
+Items" although reviewers are assigned, and "Add Reviewer" opens a
+window reading only "Invalid review round.".
+
+The author sees the heading change to "Workflow: Review" over the
+round's page, which stays as it was; after a reload the heading stands
+over an empty page.
+
+The page opens only when someone presses the stage's name; the app
+never opens it by itself. It does so for every submission with a
+review round, and has since 3.5.0, the first release with this menu.
+
 Re-checked: claim check (claude), 2026-09-28 — was ❓ (which of the two
 the entry should do); a defect either way, since its "Add Reviewer" and the
 page's script fail.
-Basis: probe, 2026-09-28. <sup>[f-a6](#fn-a6)</sup>
+Basis: probe, 2026-10-02. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
 **A7 — Skipped stages show no status after a direct publish** · ❓ · minor.
@@ -1549,6 +1560,7 @@ Basis: probe. <sup>[f-ops4](#fn-ops4)</sup>
 
 <a id="fn-a6"></a>
 **f-a6** — Note g: the review stage's own item (`workflow_{stageId}`, pushed by `getWorkflowItem()` with the rounds as children) is selectable like any entry, and `WorkflowSubmissionStatus.vue` then has no selected round, so it takes the past-round branch (`workflow.submissionInNextReviewRound`) while the stage config renders the round panels without action items. Live-probed 2026-09-02 (OJS, OMP): on a one-round seed in Round 1 and on a two-round seed in Round 2, selecting "Review" / "External Review" gave heading "Workflow: Review" / "Workflow: External Review", address `workflowMenuKey=workflow_3`, the language line, "Status" / "The submission has been advanced to the next round of review", the panels "Revisions Uploaded", "Files for Review", "Reviewers", … and no `workflow-action-items` region; each press folded or unfolded the rounds and kept the entry selected. Whose contents (2026-09-02, OJS three-round seed with a file uploaded into Round 1, and OMP): the stage entry requested `…/submissions/{id}/files?fileStages=15` and `…?fileStages=4` with no `reviewRoundIds`, where each round entry requests `…?fileStages=4&reviewRoundIds={round}`; so "Files for Review" on the stage entry listed the Round 1 file while "Review Round 3" listed "No Items", and "Reviewers" on the stage entry read "No Items" while every round listed "Julia Reviewer" / "Request Accepted". Live-probed 2026-09-28 (Rules 8a, 8b; OJS, OMP, two runs each; scratch contexts, a submission in Review Round 1 with one reviewer invited; the Editor, an assigned Section Editor and the Author): on the stage entry "Add Reviewer" requested `…/grid/users/reviewer/reviewer-grid/show-reviewer-form?selectionType=1&submissionId={id}&stageId=3&reviewRoundId=undefined` (200) and the window "Add Reviewer" held only "Invalid review round."; under "Review Round 1" the same button opened the reviewer search. On OJS every opening of the entry logged console errors from the page's Vue error handler (not uncaught page errors): pressed from the round, two `TypeError: Cannot read properties of null (reading 'authorResponse')` (one `at … getColumns`), with the round's "Author Response" panel left listed; opened by `workflowMenuKey=workflow_3`, one `TypeError: Cannot read properties of null (reading 'publicationId')` and no "Author Response" panel; 5 of 5 visits per role and run; pressing the entry again on the same visit, and "Review Round 1" pressed or typed, logged nothing. OMP's "External Review" entry logged nothing in the editorial view. The Author (OJS "Review", OMP "External Review"): pressed from the round, the address took `workflowMenuKey=workflow_3` and the heading changed while "Round 1 Status" / "Awaiting responses from reviewers." and the round's panels stayed; typed with that key, the heading alone and an empty primary region; `TypeError: Cannot read properties of null (reading 'id') at Object.getPrimaryItems` once on the first press and twice per typed visit, on both apps. The rounds folded and unfolded on each press in the author's view as in the editorial view. The round-less key is the one the screen itself writes. Live-probed 2026-09-29 (Rule 8b; OJS, OMP, two runs, English and French; a submission in Review Round 1, Internal Review Round 1 on a press): the Author pressing "Review" (OJS) or "Internal Review" (OMP) from "Submission" got `workflowMenuKey=workflow_3` / `workflow_2` and the heading "Workflow: Review" / "Workflow: Internal Review" over the Submission entry's "Status" box ("The submission is currently in the Review stage." / "… Internal Review stage.") and its panels ("Submission Files" and the discussions panel), and each press logged `TypeError: Cannot read properties of null (reading 'id') at Object.getPrimaryItems` (Vue error handler); the Journal Manager pressing "Review" from "Submission" (OJS) logged one `TypeError: Cannot read properties of null (reading 'publicationId')`, the Press Manager pressing "Internal Review" (OMP) nothing.
+Issue report: [docs/issues/U71-OMP7-review-stage-entry-page-of-no-round.md](../issues/U71-OMP7-review-stage-entry-page-of-no-round.md).
 
 <a id="fn-a7"></a>
 **f-a7** — Note k's branch analysis. Live-probed 2026-09-02 (OJS, OMP, `editor.diana`): the `published: true` seed with no decisions (stage Done, return stage Submission): "Submission" — no box, the stage's panels and, on OJS, "Schedule For Publication"; "Review" (OJS) / "Internal Review" and "External Review" (OMP) — "not yet been initiated"; "Copyediting" — no box, the copyediting panels, no buttons; "Production" — "Submission published.". The same walk on a seed that passed through Production showed "currently in the Production stage" on the earlier stages after a "Return to Workflow" and "Submission published." on "Production" in Done.
