@@ -1,0 +1,57 @@
+--- a/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.vue
++++ b/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.vue
+@@ -94,6 +94,8 @@
+ 							<sciflow-reference-list
+ 								id="sciflow-references"
+ 								:references="editorReferences"
++								:cursor-active.camel="isCursorPlaced"
++								@sciflow-insert-citation="handleInsertCitation"
+ 							></sciflow-reference-list>
+ 						</template>
+ 
+@@ -190,6 +192,13 @@
+ 
+ const isEditorReady = ref(false);
+ const editorReferences = ref([]);
++/**
++ * Whether the person has put the cursor in the editor since the document
++ * was loaded: enables the reference list's "Cite", which inserts there.
++ * It stays set when the focus moves on (to "Cite" itself, by Tab), since
++ * the editor keeps its cursor.
++ */
++const isCursorPlaced = ref(false);
+ const currentDocument = ref(null);
+ const savedDocumentSerialized = ref('');
+ const isDirty = ref(false);
+@@ -309,6 +318,7 @@
+ 	await applyFeatureConfiguration();
+ 	editor.addEventListener('editor-change', handleEditorChange);
+ 	editor.addEventListener('editor-selection-change', handleSelectionChange);
++	editor.addEventListener('focusin', () => (isCursorPlaced.value = true));
+ 
+ 	editorReferences.value = transformCitationsForEditor(
+ 		props.publication?.citations ?? [],
+@@ -393,6 +403,7 @@
+ 			references,
+ 		};
+ 		currentDocument.value = documentContent;
++		isCursorPlaced.value = false;
+ 		savedDocumentSerialized.value = serializeDocument(documentContent);
+ 		isDirty.value = false;
+ 
+@@ -453,6 +464,15 @@
+ 	syncReferenceListHighlight();
+ }
+ 
++/** "Cite": an in-text citation to that reference at the cursor (what a drop inserts). */
++function handleInsertCitation(event) {
++	const id = event.detail?.reference?.id?.trim();
++	const commands = editorRef.value?.commands?.commands;
++	if (!id || typeof commands?.insertCitation !== 'function') return;
++	editorRef.value.editorView?.focus();
++	commands.insertCitation({items: [{id}], text: `[${id}]`, id});
++}
++
+ function syncReferenceListHighlight() {
+ 	const refList = document.getElementById('sciflow-references');
+ 	if (!refList || typeof refList.highlight !== 'function') return;

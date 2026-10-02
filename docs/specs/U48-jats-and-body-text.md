@@ -688,6 +688,8 @@ Left out of the scenarios above, by reason:
   - the guard for A12 (issue report `docs/issues/U48-A12-published-jats-upload-delete-offered.md`): a published version's "JATS XML" page offers neither "Upload" nor "Delete" to an editor who may edit the publication.
   - the guard for A11 (issue report `docs/issues/U48-A11-jats-download-saves-refusal-json.md`): a Copyeditor's "Download" of the uploaded JATS file on "JATS XML" saves the XML.
   - the guard for A13 (issue report `docs/issues/U48-A13-jats-image-upload-breaks-page.md`): an image and an ISO-8859-1 JATS XML file uploaded on "JATS XML" are refused with a message, and the page still opens.
+  - the guard for A16 (issue report `docs/issues/U48-A16-body-text-cite-never-enabled.md`): "Cite" on "Body Text" is greyed on arrival and, with the cursor in the text, places a citation when pressed with the mouse and from the keyboard.
+  - the guard for A17 (issue report `docs/issues/U48-A17-body-text-side-section-needs-two-presses.md`): pressing "Document Outline" with "References" open opens "Document Outline" alone, and selecting a word opens "Selected Element" alone.
 - **Nothing new to test**:
   - a second "Upload" on a version that already has a file, which
     becomes a revision of that one file, listed in its "History"
@@ -775,8 +777,8 @@ entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | Uploading an image as JATS XML stores it silently, then the "JATS XML" page fails on every opening | 🐞 | medium · crash: both | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | A never-saved Body Text shows "Unsaved Changes" on opening, and "Saved" when an import saved nothing | 🐞 | minor | — |
 | [A15](#a15) | Leaving "Body Text" loses unsaved text without asking | 🐞 | user-visible | — |
-| [A16](#a16) | "Cite" beside each reference on "Body Text" is never enabled | 🐞 | user-visible | — |
-| [A17](#a17) | Opening a "Body Text" side section while another is open closes both | 🐞 | minor | — |
+| [A16](#a16) | "Body Text": the "Cite" button beside each reference is never enabled | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A17](#a17) | On "Body Text", pressing a closed side section closes the open one and leaves the pressed one closed | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A18](#a18) | A sent file that cannot be converted fails with no message | 🐞 | minor | — |
 | [A20](#a20) | Each JATS "Upload" leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A21](#a21) | In French the tick box, its two windows and labels of the "Body Text" panel show raw codes | 🐞 | minor | issues (claude), 2026-10-02 — no report: unreleased 3.6 texts |
@@ -976,19 +978,30 @@ changed. Do you wish to continue without saving?" first, and never does.
 Basis: probe, 2026-09-25. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — "Cite" is never enabled** · 🐞 · user-visible.
-"Cite" beside each reference in the "Body Text" page's "References"
-section stays greyed, with the cursor in the text or a word selected, so
-a citation can be placed only by dragging the reference into the text.
-"Cite" should place a citation at the cursor.
-Basis: probe, 2026-09-25. <sup>f-a16</sup>
+**A16 — "Body Text": the "Cite" button beside each reference is never enabled** · 🐞 · medium.
+On an article version's "Body Text" page, "Cite" beside each reference
+in the "References" section stays greyed, even with the cursor in the
+text, and pressing it does nothing. "Cite" should place an in-text
+citation to that reference at the cursor. It has never worked since the
+button was added. A citation can still be placed by dragging the
+reference from the list into the text, which needs a mouse: someone
+working from the keyboard has no way to cite a reference. Every
+reference listed on any version carries the broken button.
+Basis: probe, 2026-10-02. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — A side section needs two presses to open** · 🐞 · minor.
-On "Body Text", pressing "Document Outline" (or any closed section)
-while "References" is open closes both, and the reader has to press it
-again. One press should open the section and close the other.
-Basis: probe, 2026-09-25. <sup>f-a17</sup>
+**A17 — On "Body Text", pressing a closed side section closes the open one and leaves the pressed one closed** · 🐞 · low.
+On an article version's "Body Text" page, pressing a closed side
+section, such as "Document Outline", while another one is open closes
+the open one and leaves the pressed one closed, so all three sections
+are closed. A second press opens it. Selecting a word in the text with
+the mouse while a section is open closes that section too, and "Selected
+Element", the section that shows the details of what is selected in the
+text, does not open. It happens on every switch from an open section to
+another, starting with the first of each visit, since the page opens
+with "References" open. It has been so since the side sections were
+added.
+Basis: probe, 2026-10-02. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — A file that cannot be converted fails with no message** · 🐞 · minor.
@@ -1295,9 +1308,11 @@ Issue report: [pkp-e2e#562](https://github.com/jardakotesovec/pkp-e2e/issues/562
 
 <a id="fn-f-a16"></a>
 **f-a16** — `referenceList.insertCitation` "Cite" in `sciflow-reference-list` (note g) stayed disabled in every state tried. Probe: d18.
+Issue report: [docs/issues/U48-A16-body-text-cite-never-enabled.md](../issues/U48-A16-body-text-cite-never-enabled.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Note g: `openAccordionSection` holds one key; `handleSelectionChange()` opens `selected-element` on a range or node selection. Probe: d19.
+Issue report: [docs/issues/U48-A17-body-text-side-section-needs-two-presses.md](../issues/U48-A17-body-text-side-section-needs-two-presses.md).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Note p: the box's failure state never showed; the import ended with no status. Probe: d20.

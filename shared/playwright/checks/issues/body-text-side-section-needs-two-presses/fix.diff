@@ -1,0 +1,13 @@
+--- a/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.vue
++++ b/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationBodyText.vue
+@@ -352,7 +352,9 @@
+ 	const details = event.target;
+ 	if (details?.open) {
+ 		openAccordionSection.value = sectionKey;
+-	} else {
++	} else if (openAccordionSection.value === sectionKey) {
++		// Only the open section closing clears the choice: a section closed
++		// because another one was opened fires 'toggle' too, after the fact.
+ 		openAccordionSection.value = null;
+ 	}
+ }
