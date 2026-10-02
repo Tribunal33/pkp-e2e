@@ -191,12 +191,11 @@ This is a proposal; the team decides the wording.
   messages, but it reads as allowing accented letters. If the team
   prefers one wording for all four, the better one is worth carrying
   to those two as well.
-- New message keys with the new text: other languages would show the
-  correct English sentence until translated, instead of their present
-  sentence stating the old rule. The cost is that every language
-  loses its translation of a message it has had since 2011 and the old
-  keys must be removed from every locale file. Either way is
-  reasonable; the team decides.
+- New message keys with the new text: there is no English fallback
+  for a key a language lacks (`Locale::translate()` returns
+  `##key##`), so every other language would show a raw code instead
+  of a sentence until translated, which is worse than a sentence that
+  understates the rule. Rewording under the same keys avoids that.
 
 **What goes with it**:
 
