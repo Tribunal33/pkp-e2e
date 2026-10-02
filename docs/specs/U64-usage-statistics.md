@@ -2379,7 +2379,7 @@ Issue report: [docs/issues/U64-A5-section-editor-counter-r5-error-while-restrict
 are spans with no role, out of the tab order (`tabindex="-1"`); pressing
 one did nothing, and Shift+Tab from "Download Report" landed on "Daily".
 Hovering showed each text.
-Issue report: [docs/issues/U64-A7-information-icons-out-of-keyboard-reach.md](../issues/U64-A7-information-icons-out-of-keyboard-reach.md).
+Issue report: [docs/issues/U64-A7-information-icons-out-of-keyboard-reach.md](../issues/U64-A7-information-icons-out-of-keyboard-reach.md), filed as [pkp-e2e#616](https://github.com/jardakotesovec/pkp-e2e/issues/616).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-27, three apps: with `"Quoted"` applied on
