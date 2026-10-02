@@ -1,0 +1,10 @@
+--- a/controllers/grid/preprintGalleys/form/PreprintGalleyForm.php
++++ b/controllers/grid/preprintGalleys/form/PreprintGalleyForm.php
+@@ -59,6 +59,7 @@
+ 
+         $this->addCheck(new \PKP\form\validation\FormValidator($this, 'label', 'required', 'editor.submissions.galleyLabelRequired'));
+         $this->addCheck(new \PKP\form\validation\FormValidatorRegExp($this, 'urlPath', 'optional', 'validator.alpha_dash_period', '/^[a-zA-Z0-9]+([\\.\\-_][a-zA-Z0-9]+)*$/'));
++        $this->addCheck(new \PKP\form\validation\FormValidatorUrl($this, 'urlRemote', 'optional', 'validator.url'));
+         $this->addCheck(new \PKP\form\validation\FormValidatorPost($this));
+         $this->addCheck(new \PKP\form\validation\FormValidatorCSRF($this));
+ 

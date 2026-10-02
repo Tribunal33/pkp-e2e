@@ -617,6 +617,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U46-A3-remote-galley-asked-for-file.md`): saving a galley
     with "This galley will be available at a separate website." ticked
     closes with no upload window, and its row offers no "Change File"
+  - the guard for A6 (issue report
+    `docs/issues/U46-A6-remote-galley-address-not-checked.md`): "Save" in a
+    galley's window with "This galley will be available at a separate
+    website." ticked and "www.example.org" in the address refuses the
+    address, and a full "https://" address saves
 - **Nothing new to test**:
   - a new galley's place in the list, before and after a saved order
     (Rule 8d)
@@ -672,7 +677,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | An editor saving a galley at a separate website is asked for a file and offered "Change File" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | Changing the file of a new version's galley replaces the file readers download from the published version | 🐞 | high · crash: server · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | The ordering arrows have no names for screen readers | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A6](#a6) | "URL of remotely-hosted content" keeps text that is not a web address | 🐞 | minor | — |
+| [A6](#a6) | A galley's separate-website box keeps an address typed without "https://", and readers' link lands on "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Until an order is saved, editing a galley moves it to the end of the list | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | Deleting a published galley that a new version copied fails with an error | 🐞 | high · crash: server · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [OPS2](#ops2) | Before posting, a Moderator without "Permissions" cannot edit, add or reorder the galleys the page offers | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -738,13 +743,20 @@ direction. The Contributors list's arrows read "Increase position of
 Basis: probe, 2026-10-02. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — The remote address is not checked** · 🐞 · minor.
-"URL of remotely-hosted content" keeps whatever is typed, such as
-"example" or "www.example.org" without "https://", and the reader's link
-for the galley then lands on the journal's own "404 Not Found" page. The
-galley's own data rules call for a web address, but the window never
-applies them.
-Basis: probe, 2026-09-24. <sup>f-a6</sup>
+**A6 — A galley's separate-website box keeps an address typed without "https://", and readers' link lands on "404 Not Found"** · 🐞 · medium.
+An editor adds a galley with "This galley will be available at a
+separate website." ticked and types the address without "https://", such
+as "www.example.org". "Save" keeps whatever is typed, with no message,
+although the galley's field is meant to hold a web address. Once the
+article or preprint is published, readers who press the galley's link
+land on the journal's or server's own "404 Not Found" page instead of
+the remote copy, and nobody on the editorial side is told. From 3.5 on,
+an editor can correct the address in the published galley's "Edit"
+window; on 3.4 and 3.3 that window is view-only once the item is
+published, so the editor has to unpublish or create a new version first.
+A press's publication format window, which has the same address box,
+refuses such an address before saving. Basis: probe, 2026-10-02.
+<sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — An edit moves a galley to the end of the list** · 🐞 · medium.
@@ -1379,6 +1391,7 @@ Issue report: [pkp-e2e#619](https://github.com/jardakotesovec/pkp-e2e/issues/619
 `urlRemote`; `schemas/galley.json` gives it `validation: ["url"]`, used
 by `Repo::galley()->validate()`, which the grid never calls.
 Live-probed 2026-09-24 (note q9).
+Issue report: [docs/issues/U46-A6-remote-galley-address-not-checked.md](../issues/U46-A6-remote-galley-address-not-checked.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Note j: every galley shares position 0 until an order is
