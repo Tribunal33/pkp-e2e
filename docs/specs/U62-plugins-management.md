@@ -1343,7 +1343,7 @@ an administrator. Live-probed 2026-09-27: td19.
 <a id="fn-f-a7"></a>
 **f-a7** — `lib/pkp/locale/en/manager.po`
 `manager.plugins.deleteSuccess`. Live-probed 2026-09-27: td16.
-Issue report: [docs/issues/U62-A7-plugin-delete-notice-misspelt.md](../issues/U62-A7-plugin-delete-notice-misspelt.md).
+Issue report: [pkp-e2e#507](https://github.com/jardakotesovec/pkp-e2e/issues/507) ([docs/issues/U62-A7-plugin-delete-notice-misspelt.md](../issues/U62-A7-plugin-delete-notice-misspelt.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — fn-i. Live-probed 2026-09-27: td7.
