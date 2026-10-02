@@ -1926,7 +1926,7 @@ assignment of a new submission to that section uses (code), so after
 such a merge new submissions there would reach neither account; not
 seen, since only the seeded journal assigns editors automatically and
 its accounts are never merged in testing.
-Issue report: [docs/issues/U53-A9-merge-drops-section-editor-assignments.md](../issues/U53-A9-merge-drops-section-editor-assignments.md).
+Issue report: [pkp-e2e#449](https://github.com/jardakotesovec/pkp-e2e/issues/449) ([docs/issues/U53-A9-merge-drops-section-editor-assignments.md](../issues/U53-A9-merge-drops-section-editor-assignments.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Code: note k. Live-probed 2026-09-25: note td11. The Vue list
@@ -1973,7 +1973,7 @@ ticked, signed in with its old password (landing on the journal's home
 page), and the discussion read "Created by: {old username}". An account
 that was only a participant in someone else's discussion merged cleanly:
 200, deleted, its sign-in refused.
-Issue report: [docs/issues/U53-A15-merge-fails-for-discussion-opener.md](../issues/U53-A15-merge-fails-for-discussion-opener.md).
+Issue report: [pkp-e2e#448](https://github.com/jardakotesovec/pkp-e2e/issues/448) ([docs/issues/U53-A15-merge-fails-for-discussion-opener.md](../issues/U53-A15-merge-fails-for-discussion-opener.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Live-probed 2026-09-25, all three apps: after "Generate
