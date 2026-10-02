@@ -2437,7 +2437,7 @@ page asks for `Accept: text/tab-separated-values` and names the file
 `counterReport.tsv` (fn-l); the answer is `text/csv` with
 `Content-Disposition: attachment; filename=user-report-2026-09-27.csv`,
 which the page ignores.
-Issue report: [docs/issues/U64-A11-counter-report-tsv-comma-separated.md](../issues/U64-A11-counter-report-tsv-comma-separated.md).
+Issue report: [docs/issues/U64-A11-counter-report-tsv-comma-separated.md](../issues/U64-A11-counter-report-tsv-comma-separated.md), filed as [pkp-e2e#621](https://github.com/jardakotesovec/pkp-e2e/issues/621).
 
 <a id="fn-f-a12"></a>
 **f-a12** — fn-c (`DateRange.vue`: no key handler, the list closes on
