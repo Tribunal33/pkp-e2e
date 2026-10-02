@@ -821,6 +821,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the guard for A5 (issue report `docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md`): change a media file's "Name of the file" in "Edit Metadata", leave with "Cancel" › "Yes", and check the row and the reopened box show the saved name, and that a "Save" of another field does not store the abandoned one.
+  - the guard for A3 (issue report `docs/issues/U47-A3-media-upload-window-hidden-drop-button.md`): on the empty "Upload Media File" window, check that the buttons in the accessibility tree are the side window's top bar, "Close" and "Click to upload files", and that Tab from "Click to upload files" lands on a control on screen.
 - **Rarely met**:
   - no component marked as a dependent file, where "Upload Media File"
     holds only "No media types are configured. Please contact the
@@ -873,7 +874,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | Assigned roles without "Permissions" are offered every media action, and each fails: with an "Error" window, or with no message on "Save" | 🐞 | user-visible | — |
-| [A3](#a3) | The empty "Upload Media File" window lists a button "Drop files here to upload" for screen readers that nothing on screen shows | 🐞 | minor | — |
+| [A3](#a3) | The empty "Upload Media File" window gives screen readers and the keyboard a button nobody can see | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | A file over the upload limit fails with a server error; its card reads "Invalid JSON response from server." | 🐞 | minor · crash: server | — |
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | invisible | — |
@@ -917,13 +918,20 @@ Basis: probe, 2026-09-24 (the changing numbers); code (two rows with
 one number). <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — The empty upload window offers screen readers a button nobody sees** · 🐞 · minor.
-While no file is on "Upload Media File", a screen reader lists a
-button "Drop files here to upload" that has nothing visible behind it:
-a sighted user sees only the drop area and "Click to upload files". The
-button goes once a file is on the window. A screen-reader user is
-offered a control the page does not show.
-Basis: probe, 2026-09-24. <sup>f-a3</sup>
+**A3 — The empty "Upload Media File" window gives screen readers and the keyboard a button nobody can see** · 🐞 · low.
+On a publication's "Media" page, "Add Media File" opens the window
+"Upload Media File". Before any file is added, a screen reader lists a
+button "Drop files here to upload" there that has nothing visible behind
+it: a sighted user sees only the drop area and "Click to upload files".
+The button goes once a file is added. A keyboard user meets the same
+button: Tab from "Click to upload files" moves the focus onto it, and no
+focus mark shows anywhere on the window. Pressing it opens the file
+chooser, so the upload still gets done, by either button. It meets
+everyone who adds media files: the manager, editor and production
+editor, and an assigned section editor (series editor on a press,
+moderator on a preprint server), guest editor or production assistant
+(layout editor, designer, indexer, proofreader).
+Basis: probe, 2026-10-02. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — A file over the upload limit fails with a server error** · 🐞 · minor · crash: server.
@@ -1721,6 +1729,7 @@ here to upload"`, with no visible element; the button is gone once a
 card is on the window. The text is that of Dropzone's default message
 (lib/pkp `form.dropzone.dictDefaultMessage`); the source of the hidden
 button was not traced further.
+Issue report: [docs/issues/U47-A3-media-upload-window-hidden-drop-button.md](../issues/U47-A3-media-upload-window-hidden-drop-button.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note q28. The 101 MB request failed with a server error on
