@@ -1267,11 +1267,11 @@ is made.
 
 <a id="fn-f-a1"></a>
 **f-a1** — Note c: the tick box's only guard is `loadingContentError == null`; `updateVisibility()` hits `PublicationWritePolicy`, which refuses a user whose assignment lacks `canChangeMetadata` (`api.submissions.403.userCantEdit`, answered 401); the box is not reset (note l). Probe: d2.
-Issue report: [docs/issues/U48-A1-jats-make-available-offered-then-refused.md](../issues/U48-A1-jats-make-available-offered-then-refused.md).
+Issue report: [pkp-e2e#567](https://github.com/jardakotesovec/pkp-e2e/issues/567) ([docs/issues/U48-A1-jats-make-available-offered-then-refused.md](../issues/U48-A1-jats-make-available-offered-then-refused.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note c: `workflowConfigEditorialOJS.js` passes no `canEdit` to `WorkflowPublicationBodyText`, which renders "Save" unconditionally; the save goes through `PublicationWritePolicy` (401). Probe: d3.
-Issue report: [docs/issues/U48-A2-body-text-save-offered-then-refused.md](../issues/U48-A2-body-text-save-offered-then-refused.md).
+Issue report: [pkp-e2e#568](https://github.com/jardakotesovec/pkp-e2e/issues/568) ([docs/issues/U48-A2-body-text-save-offered-then-refused.md](../issues/U48-A2-body-text-save-offered-then-refused.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Notes c and g: the Body Text page has no status check, and `canEditPublication()` lets editorial roles write to published versions; the JATS page's published-status test never matches (A12). Probe: d21, d30.
