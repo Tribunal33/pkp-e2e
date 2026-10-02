@@ -1947,7 +1947,7 @@ three apps, the entry pages' and the Filters' window: the drawn header cell
 empty, the accessibility tree's column header "##common.expand##". The
 "##COMMON.EXPAND##" seen on 2026-09-24 during another feature's check
 (Identifiers) was that hidden text read with the table's upper-case style.
-Issue report: [docs/issues/U16-A12-select-categories-column-raw-code.md](../issues/U16-A12-select-categories-column-raw-code.md).
+Issue report: [pkp-e2e#589](https://github.com/jardakotesovec/pkp-e2e/issues/589) ([docs/issues/U16-A12-select-categories-column-raw-code.md](../issues/U16-A12-select-categories-column-raw-code.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — `SubEditorsDAO::assignEditors()` through the `AssignEditors`
