@@ -943,6 +943,11 @@ Left out of the scenarios above, by reason:
   - the guard A16's issue report names, once fixed: "Export
     Submissions" pressed with no book ticked: the alert "No objects
     selected.", no results tab opened and no request failing
+  - the guard for A1 (issue report
+    `docs/issues/U74-A1-onix-export-fails-every-book.md`): on a
+    freshly installed press with its "Publisher Identity" filled,
+    "Export Submissions" for one book gives "The export completed
+    successfully." and an ONIX file
 - **Rarely met**:
   - a format that has used all nine sales-rights types, whose "Add
     Sales Rights" list is empty (Rule 10)
@@ -1019,7 +1024,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Export Submissions" on the ONIX tool fails for every book | 🐞 | user-visible | — |
+| [A1](#a1) | On a freshly installed press, the ONIX 3.0 tool's "Export Submissions" ends in "The process failed" for every book | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | Editing a market with no "Taxation Type" stores "GST (Sales tax) (02)", and the Native XML export then fails | 🐞 | user-visible | — |
 | [A7](#a7) | A sales-rights entry or a market saves with no territory, and the book's Native XML export then fails | 🐞 | user-visible | — |
 | [A8](#a8) | The market window takes any date and any price, and a price that is not a number makes the book's Native XML export fail | 🐞 | user-visible | — |
@@ -1042,19 +1047,17 @@ unless an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — The ONIX export fails for every book** · 🐞 · user-visible.
-On a press with its ONIX details filled, ticking one book or more on
-Tools › "ONIX 3.0 Monograph Export Plugin" and pressing "Export
-Submissions" always ends with "The process failed. Check below for
+**A1 — On a freshly installed press, the ONIX 3.0 tool's "Export Submissions" ends in "The process failed" for every book** · 🐞 · medium.
+On a press installed fresh from `main`, a manager who ticks one book or
+more in Tools › "ONIX 3.0 Monograph Export Plugin" and presses "Export
+Submissions" always gets "The process failed. Check below for
 errors/warnings." and "Filter (ONIX 3.0 XML monograph export) supports
 input classes.submission.Submission[] - array given", with no file to
-download, whatever the book and whether "Validate XML before the export
-and registration." is ticked. The press cannot produce the ONIX feed the
-tool exists for. Expected: "The export completed successfully." and a
-downloadable ONIX file.
-Worked until the 2025 clean-up of old class names, which updated the
-Native XML tool and missed this one: a regression.
-Since: 2025-12-04, a date read from the code's history · Basis: probe. <sup>f-a1</sup>
+download, whatever the book. They expect "The export completed
+successfully." and an ONIX file. The press cannot produce its ONIX feed,
+and there is no way round on screen. Only presses on a new install are
+affected. An install upgraded from 3.5 or earlier still exports.
+Since: 2025-12-04, a date read from the code's history · Basis: probe, 2026-10-03. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — "Audience" refuses the assistant roles it offers "Save" to** · 🐞 · minor.
@@ -2187,7 +2190,10 @@ supports input classes.submission.Submission[] - array given" with no
 download (note td20), while the Native XML export carried each
 format's ONIX product. The cause is read from the code (note j): the
 alias the declaration relied on went with omp `6f57d1d09`; the
-stable-3_5_0 line still has it, and was not driven.
+stable-3_5_0 line still has it, and exports (walked 2026-10-03). An
+install upgraded to `main` exports too: its migration rewrites the
+stored type.
+Issue report: [docs/issues/U74-A1-onix-export-fails-every-book.md](../issues/U74-A1-onix-export-fails-every-book.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note c: the menu offers the page with no role test, the form
