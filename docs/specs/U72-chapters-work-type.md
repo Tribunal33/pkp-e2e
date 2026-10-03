@@ -1550,7 +1550,7 @@ Live-probed 2026-09-28: notes td4 and td5; the refused "Publication
 Dates" save carries the same server message as the work-type refusal,
 which the form replaces with its generic notice. The Layout Editor's
 "Save" on "Audience" answered 401 with the same notice (two runs).
-Issue report: [docs/issues/U74-A2-assistant-marketing-and-work-type-refused.md](../issues/U74-A2-assistant-marketing-and-work-type-refused.md).
+Issue report: [pkp-e2e#705](https://github.com/jardakotesovec/pkp-e2e/issues/705) ([docs/issues/U74-A2-assistant-marketing-and-work-type-refused.md](../issues/U74-A2-assistant-marketing-and-work-type-refused.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note q. Live-probed 2026-09-28: note td15; in the stored data

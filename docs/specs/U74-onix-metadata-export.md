@@ -2228,7 +2228,7 @@ of the seven assigned assistant roles got 401 and the passing notice,
 no window (note td3); the Layout Editor's and the Marketing and sales
 coordinator's "Save" on "Publication Dates" did the same, while the
 Press manager's saved.
-Issue report: [docs/issues/U74-A2-assistant-marketing-and-work-type-refused.md](../issues/U74-A2-assistant-marketing-and-work-type-refused.md).
+Issue report: [pkp-e2e#705](https://github.com/jardakotesovec/pkp-e2e/issues/705) ([docs/issues/U74-A2-assistant-marketing-and-work-type-refused.md](../issues/U74-A2-assistant-marketing-and-work-type-refused.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note d: no `FieldSelect` carries an empty option, and the
