@@ -1413,7 +1413,7 @@ Issue report: [docs/issues/U20-OMP4-sitemap-new-version-chapter-pages-404.md](..
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — Note i: `monographFileView()` builds `DC.Identifier.URI` as `catalog/book/{bestId}/{formatId}/{fileId}`, an address `CatalogBookHandler::book()` answers with the book's page, where the file view is `catalog/view/…`. Live-probed 2026-09-26: note q19.
-Issue report: [docs/issues/U20-OMP5-book-file-page-uri-names-book-page.md](../issues/U20-OMP5-book-file-page-uri-names-book-page.md).
+Issue report: [docs/issues/U20-OMP5-book-file-page-uri-names-book-page.md](../issues/U20-OMP5-book-file-page-uri-names-book-page.md), filed as [pkp-e2e#672](https://github.com/jardakotesovec/pkp-e2e/issues/672).
 
 <a id="fn-f-omp6"></a>
 **f-omp6** — Every `GET {press address}/catalog/download/{book}/{format}/{file}`, with or without `?inline=1`, current or earlier version, answered 500, the server logging "Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization"; the file's view page failed in the browser with "PDFJS is not defined" and "UnexpectedResponseException". The failure is in the book file download, which *Monograph landing page* owns; the tags merely name its addresses. Live-probed 2026-09-26: notes q14, q15, q19.
