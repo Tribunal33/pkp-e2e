@@ -1,0 +1,14 @@
+--- a/lib/pkp/api/v1/announcements/PKPAnnouncementController.php
++++ b/lib/pkp/api/v1/announcements/PKPAnnouncementController.php
+@@ -277,6 +277,11 @@
+ 
+         $announcement = Announcement::find($announcement->id);
+ 
++        // Notify and email the users again only when "Send Email" was ticked on this edit
++        if ($context && filter_var($params['sendEmail'] ?? false, FILTER_VALIDATE_BOOLEAN)) {
++            $this->notifyUsers($request, $context, $announcement->id, true);
++        }
++
+         return response()->json(Repo::announcement()->getSchemaMap()->map($announcement), Response::HTTP_OK);
+     }
+ 

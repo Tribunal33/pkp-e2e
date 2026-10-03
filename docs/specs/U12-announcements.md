@@ -840,6 +840,7 @@ Left out of the scenarios above, by reason:
     another box, the saved title kept on the row and the public
     Announcements page
   - the guard for A13 (issue report `docs/issues/U12-A13-edited-announcement-type-keeps-old-name.md`): an edited announcement type shows its new name in the table at once, on the context's tab and the site's.
+  - the guard for A9 (issue report `docs/issues/U12-A9-edit-announcement-email-box-sends-nothing.md`): an edit with the email box ticked mails the context's users, and an unticked edit mails nobody.
 - **Nothing new to test**:
   - an unsaved tick on the settings tab kept across a tab switch and
     lost on leaving the page (Fields)
@@ -933,7 +934,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | An image refused on "Save" (a ".jpeg" name, an upper-case extension) deletes the announcement being edited | 🐞 | user-visible | — |
 | [A3](#a3) | "Edit Announcement" prints the expiry date in the journal's short date format, which the save refuses unless that format is YYYY-MM-DD | 🐞 | user-visible | — |
 | [A7](#a7) | "Limit feed to {n} most recent announcements." keeps the first {n} the unlimited feed lists, not the most recent {OJS} | 🐞 | minor | — |
-| [A9](#a9) | "Send an email about this to all registered users." is offered on "Edit Announcement" and does nothing there | 🐞 | minor | — |
+| [A9](#a9) | Ticking "Send an email about this to all registered users." when editing an announcement sends nothing | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | An unsaved title stays on the row after the panel is closed, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A12](#a12) | A deleted announcement's image file, and the file a refused or replaced image had, stay in the public files | 🐞 | minor | — |
 | [A13](#a13) | An edited announcement type keeps its old name in the Announcement Types table until a reload | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
@@ -1022,11 +1023,15 @@ but the email box should be refused while the box is off. Basis: probe.
 <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The email box on an edit does nothing** · 🐞 · minor.
+**A9 — Ticking "Send an email about this to all registered users." when editing an announcement sends nothing** · 🐞 · medium.
 "Edit Announcement" offers "Send an email about this to all registered
 users." exactly as "Add Announcement" does; ticking it and saving sends
-nothing and records nothing. The manager cannot tell from the screen.
-Basis: probe. <sup>f-a9</sup>
+no email and records no notification and no queued job. A manager who
+forgot to tick the box when adding an announcement, or who corrected the
+announcement and wants its readers told, sees "Save" succeed and
+believes the users were emailed. Nobody is, and only deleting the
+announcement and adding it again sends it.
+Basis: probe, 2026-10-03. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — An empty Announcements page says nothing** · ❓ · minor.
@@ -1960,6 +1965,7 @@ nowhere else; `edit()` reads `sendEmail` into `$params` and discards it.
 Code read 2026-09-17. Live-probed 2026-09-17 (A9), OJS, OMP and OPS: the
 edit's PUT carried `sendEmail=true`, answered 200 and queued nothing; every
 mailbox unchanged while the control add after it mailed.
+Issue report: [docs/issues/U12-A9-edit-announcement-email-box-sends-nothing.md](../issues/U12-A9-edit-announcement-email-box-sends-nothing.md).
 
 <a id="fn-f-a10"></a>
 **f-a10 — A10 evidence.** Note p: `announcements.tpl` and
