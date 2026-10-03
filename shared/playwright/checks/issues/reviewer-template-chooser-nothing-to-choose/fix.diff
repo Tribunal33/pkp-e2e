@@ -1,0 +1,28 @@
+--- a/lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php
++++ b/lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php
+@@ -36,6 +36,7 @@
+ use PKP\linkAction\LinkAction;
+ use PKP\linkAction\request\AjaxAction;
+ use PKP\mail\mailables\ReviewRequest;
++use PKP\mail\mailables\ReviewRequestSubsequent;
+ use PKP\mail\variables\ReviewAssignmentEmailVariable;
+ use PKP\notification\Notification;
+ use PKP\reviewForm\ReviewFormDAO;
+@@ -272,8 +273,16 @@
+ 
+         $templates = $this->getEmailTemplates();
+ 
++        // The default request templates are no choice: the reviewer search offers both
++        // and keeps the one that fits the chosen reviewer. Show the chooser only when
++        // templates have been added to choose from.
++        $addedTemplates = array_diff_key($templates, array_flip([
++            ReviewRequest::getEmailTemplateKey(),
++            ReviewRequestSubsequent::getEmailTemplateKey(),
++        ]));
++
+         $templateMgr->assign([
+-            'hasCustomTemplates' => (count($templates) > 1),
++            'hasCustomTemplates' => !empty($addedTemplates),
+             'templates' => $templates,
+         ]);
+ 

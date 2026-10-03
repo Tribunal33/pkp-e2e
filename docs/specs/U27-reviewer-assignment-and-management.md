@@ -1413,10 +1413,10 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A15](#a15) | A reviewer's response erases "Reviewer Reminded" from the assignment's History and the Review Report | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A16](#a16) | A due date typed in the wrong format looks accepted on screen, but the old value is silently submitted | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A18](#a18) | An editor who empties the review request letter gets no answer, while a blank invitation goes to the reviewer | 🐞 | medium · crash: server | issues (claude), 2026-10-03 — re-verified |
-| [A19](#a19) | The template chooser renders on every add, as a one-option select even with zero alternate templates | 🐞 | minor | — |
+| [A19](#a19) | "Add Reviewer" shows a message chooser with one option, "Review Request", on every add | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A21](#a21) | A rating star pressed just after the Review Details window opens is saved, yet the open window can fall back to "No rating" | 🐞 | user-visible | @beaug 2026-08-29 · risk accepted |
 | [A22](#a22) | The Review Details window tells the editor to "upload the file below", but it has no upload control | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [OMP2](#omp2) | {OMP} The Add Reviewer window's opening list ignores the internal/external stage split, and a reviewer of the other stage picked from it is added to the round; only searching filters by stage | 🐞 | user-visible | — |
+| [OMP2](#omp2) | {OMP} A press's "Add Reviewer" list opens with both review stages' reviewers, and the other stage's reviewer can be added | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A26](#a26) | A reviewer removed with "Unassign Reviewer" gets the email under the subject "Your review … has been cancelled" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP3](#omp3) | {OMP} A press's reviewer removal and cancel emails print "{$journalName}" where the press's name belongs | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A30](#a30) | "Modify Review" is offered on a "Request Declined" row, and its "Save Changes" is refused with "This review not editable because it was declined." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1424,7 +1424,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OMP4](#omp4) | {OMP} On a press, "Mark as Complete" closes a review request that has no review, leaving the reviewer nothing to press | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP6](#omp6) | {OMP} On a press, the Review Details windows introduce a review form with "The questions this journal asks reviewers to answer." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A32](#a32) | A Review Details window closed within a moment of opening, before its mark as viewed is saved, can leave the row "Review Submitted", and the dashboard's "View unread recommendation", until a page reload | 🐞 | minor | @blessie 2026-09-24 · risk accepted, not fixing |
-| [A36](#a36) | A reviewer assigned today reads "Yesterday" in the Add Reviewer list, while the entry's statistics give 0 days since the last assignment | 🐞 | minor | — |
+| [A36](#a36) | "Add Reviewer" list says "Yesterday" for a reviewer who was sent a request today | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A37](#a37) | After "Resend Review Request", the activity log prints "{$submissionid}" where the submission's number belongs | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A39](#a39) | The activity log's "View changes" reads "Competing Interests declared: YES" for a reviewer who declared none | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A40](#a40) | On a press, recording a reviewer's competing interests in "Modify Review" submits an empty review for them | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1696,16 +1696,19 @@ is missing from the submission's email log. Basis: probe, 2026-10-03.
 <sup>[f-a18](#fn-a18)</sup>
 
 <a id="a19"></a>
-**A19 — The template chooser renders with nothing to choose** · 🐞 · minor.
-The Add Reviewer window's template chooser ("Choose a predefined message to
-use, or fill out the form below.") is meant to appear only when alternate
-request templates exist, but it renders on every add. On a baseline journal
-with zero alternates it shows a select with exactly one option, "Review
-Request": a chooser with nothing to choose. Which alternates the chooser
-lists is a separate question; see [A5](#a5).
-Basis: live probe (both apps, baseline contexts checked to hold no
-alternates; two acting roles on OJS) + code reading.
-<sup>[f-a19](#fn-a19)</sup>
+**A19 — "Add Reviewer" shows a message chooser with one option, "Review Request", on every add** · 🐞 · low.
+When an editor picks a reviewer in the "Add Reviewer" window, the
+request form shows "Choose a predefined message to use, or fill out the
+form below." over a drop-down whose only option is "Review Request". The
+chooser is meant for journals and presses that have written their own
+versions of the review request email (a manager adds them as extra
+templates of the "Review Request" email, under Settings › Workflow ›
+Emails). Without such templates, the default, it should not appear, yet
+it does on every add. Nothing is lost: the letter is filled from "Review
+Request" and sent as usual. Where templates have been added, the chooser
+lists them and works. The other two ways to add a reviewer, "Create New
+Reviewer" and "Enroll Existing User", show no chooser in this case.
+Basis: probe, 2026-10-03. <sup>[f-a19](#fn-a19)</sup>
 
 <a id="a20"></a>
 **A20 — Four dialogs lose their editor under minified scripts** · ✅ ·
@@ -1881,14 +1884,18 @@ Since: pkp/ui-library#853 (`cab09538`, narrowed at `51f0c727`; merged
 > does.
 
 <a id="a36"></a>
-**A36 — A reviewer assigned today reads "Yesterday"** · 🐞 · minor.
-In the Add Reviewer list, a reviewer whose last request was sent today
-reads "Yesterday" where the days since the last assignment show, while the
-same entry expanded reads "0" for "Days since last review assigned". A
-reviewer assigned one day ago reads "Yesterday" too, so an editor cannot
-tell a reviewer invited this morning from one invited the day before. The
-entry should read the same interval its own statistics give.
-Basis: probe. <sup>[f-a36](#fn-a36)</sup>
+**A36 — "Add Reviewer" list says "Yesterday" for a reviewer who was sent a request today** · 🐞 · low.
+In the "Add Reviewer" window's list, each reviewer's entry says how long
+ago they were last sent a review request. A reviewer sent one today
+reads "Yesterday", and expanded, 0 for "Days since last review
+assigned". An editor cannot tell a reviewer invited minutes ago from one
+invited the day before. Only today's entries carry a wrong word. The
+other entries count whole 24-hour periods rather than calendar days, so
+"Yesterday" covers 24 to 48 hours back and "{N} days ago" can be one day
+short of the calendar. Nothing is lost: the editor only judges how
+recently a reviewer was asked by a wrong day. Fixing it touches both
+pkp-lib (a new "Today" label) and ui-library (the count). Basis: probe,
+2026-10-03. <sup>[f-a36](#fn-a36)</sup>
 
 <a id="a37"></a>
 **A37 — After "Resend Review Request", the activity log prints "{$submissionid}" where the submission's number belongs** · 🐞 · low.
@@ -2014,24 +2021,17 @@ anywhere, and "Mark as Complete" enabled immediately, no gate.
 <sup>[f-omp1](#fn-omp1)</sup>
 
 <a id="omp2"></a>
-**OMP2 — The Add Reviewer window opens with both stages' pools** · 🐞 ·
-user-visible.
-On a press, the Add Reviewer window's opening list shows the reviewers of
-both stages: Internal and External Reviewers alike, on either stage. Only
-searching applies OMP1's per-stage split. A name from the other stage's
-group returns "No items found." while the stage's own reviewers are found.
-Picked from the opening list instead, a reviewer of the other stage is
-added all the same. On Internal Review, "Select Reviewer" and "Add
-Reviewer" on a person holding only External Reviewer show "{name} was
-assigned to review this submission and sent an email notification.", the
-row reads "Request Sent" on the internal round, also after a reload, and
-the person's own reviewer list offers the request with "Respond to
-request". The
-stage split an editor relies on when searching does not hold when they
-pick from the list.
-Basis: live probe (positive and negative controls on both stages; the add
-from the opening list driven on Internal Review).
-<sup>[f-omp2](#fn-omp2)</sup>
+**OMP2 — A press's "Add Reviewer" list opens with both review stages' reviewers, and the other stage's reviewer can be added** · 🐞 · medium.
+On a press, the "Add Reviewer" window of Internal Review opens on a list
+of every reviewer of the press, External Reviewers included, and
+External Review's window likewise lists the Internal Reviewers. The
+entries do not say which stage a reviewer belongs to. Searching the list
+keeps to the stage's own reviewers. An editor who picks from the list as
+it opens can add a reviewer of the other stage: the reviewer is added to
+the round, sent the request and given the round's files, and nothing
+warns the editor. The press's split between its internal and external
+reviewers does not hold. Searching instead of picking avoids it. Basis:
+probe, 2026-10-03. <sup>[f-omp2](#fn-omp2)</sup>
 
 <a id="omp3"></a>
 **OMP3 — A press's reviewer removal and cancel emails print "{$journalName}" where the press's name belongs** · 🐞 · low.
@@ -3251,6 +3251,7 @@ count-based chooser gate (note d) always passes; the subsequent entry then
 drops out of the rendered select, leaving a single visible option. Adjacent
 to finding A5, retired 2026-08-25 — no alternate access check remains
 (note f-a5); the unconditional append this note describes is unchanged.
+Issue report: [docs/issues/U27-A19-reviewer-template-chooser-nothing-to-choose.md](../issues/U27-A19-reviewer-template-chooser-nothing-to-choose.md).
 
 <a id="fn-a20"></a>
 **f-a20** — Live-probed 2026-08-27 (OMP, fresh reset, `enable_minified =
@@ -3617,6 +3618,7 @@ for a figure above 1, and `reviewer.list.daySinceLastAssignment`
 ("Yesterday") for any figure of 1 or less, 0 included; the figure is the
 whole days since `dateLastReviewAssignment`, floored at 0, so the hour
 does not matter.
+Issue report: [docs/issues/U27-A36-reviewer-assigned-today-reads-yesterday.md](../issues/U27-A36-reviewer-assigned-today-reads-yesterday.md).
 
 <a id="fn-a37"></a>
 **f-a37** — Driven 2026-09-28 (OJS and OMP, two runs each, as the Editor
@@ -3731,6 +3733,7 @@ and sent an email notification." under the heading "Internal Review
 read "Request Sent" on the same page and after a reload, and signed in as
 him, his list showed "Please accept or decline this request by …" with
 "Respond to request", the review page opening on "1. Request".
+Issue report: [docs/issues/U27-OMP2-press-add-reviewer-list-both-stages.md](../issues/U27-OMP2-press-add-reviewer-list-both-stages.md).
 
 <a id="fn-omp3"></a>
 **f-omp3** — Test run 2026-09-12 (scenario 11; the two messages read from

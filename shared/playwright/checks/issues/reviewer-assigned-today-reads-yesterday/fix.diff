@@ -1,0 +1,202 @@
+--- a/lib/ui-library/src/utils/dateUtils.js
++++ b/lib/ui-library/src/utils/dateUtils.js
+@@ -139,6 +139,21 @@
+ }
+ 
+ /**
++ * Calculates the number of calendar days between two dates, in the configured time zone:
++ * 0 for the same day, 1 for the day before, whatever the hours.
++ * @param {string | Date} _startDate - The start date as a string or Date object.
++ * @param {string | Date} _endDate - The end date as a string or Date object.
++ * @returns {number} The number of calendar days from the start date to the end date.
++ */
++export function calculateCalendarDaysBetweenDates(_startDate, _endDate) {
++	const zone = getConfiguredTimezone();
++	const startDay = parseDateTimeString(_startDate).setZone(zone).startOf('day');
++	const endDay = parseDateTimeString(_endDate).setZone(zone).startOf('day');
++	// + 0 is trick to avoid -0; round, as a day around a DST change is not 24 hours
++	return Math.round(endDay.diff(startDay, 'days').days) + 0;
++}
++
++/**
+  * Formats a Luxon DateTime object using a PHP-style format string.
+  * @param {DateTime} dateTime - The Luxon DateTime object to format.
+  * @param {string} phpFormat - The PHP-style format string (e.g., 'Y-m-d').
+--- a/lib/ui-library/src/composables/useDate.js
++++ b/lib/ui-library/src/composables/useDate.js
+@@ -5,6 +5,7 @@
+ 	formatLongDateTime,
+ 	formatTime,
+ 	calculateDaysBetweenDates,
++	calculateCalendarDaysBetweenDates,
+ 	getDateCurrentLocale,
+ 	relativeStringTimeFromNow,
+ 	getRelativeTargetDate,
+@@ -27,6 +28,15 @@
+ 		calculateDaysBetweenDates,
+ 
+ 		/**
++		 * Calculate the number of calendar days between two dates, in the configured time zone
++		 * @type {Function}
++		 * @param {Date|string} startDate - The start date
++		 * @param {Date|string} endDate - The end date
++		 * @returns {number} Number of calendar days between dates
++		 */
++		calculateCalendarDaysBetweenDates,
++
++		/**
+ 		 * Format a date in a short format according to user locale
+ 		 * @type {Function}
+ 		 * @param {Date|string} date - The date to format
+--- a/lib/ui-library/src/composables/useDate.test.js
++++ b/lib/ui-library/src/composables/useDate.test.js
+@@ -33,3 +33,37 @@
+ 		).toBe(-1);
+ 	});
+ });
++
++describe('calculateCalendarDaysBetweenDates', () => {
++	const {calculateCalendarDaysBetweenDates} = useDate();
++	test('the same day is 0 days, whatever the hours', () => {
++		expect(
++			calculateCalendarDaysBetweenDates(
++				'2025-02-20 00:10:27',
++				'2025-02-20 23:00:00',
++			),
++		).toBe(0);
++	});
++	test('the day before is 1 day, also less than 24 hours earlier', () => {
++		expect(
++			calculateCalendarDaysBetweenDates(
++				'2025-02-19 23:10:27',
++				'2025-02-20 08:00:00',
++			),
++		).toBe(1);
++		expect(
++			calculateCalendarDaysBetweenDates(
++				'2025-02-19 08:10:27',
++				'2025-02-20 23:00:00',
++			),
++		).toBe(1);
++	});
++	test('two days before is 2 days', () => {
++		expect(
++			calculateCalendarDaysBetweenDates(
++				'2025-02-18 23:59:00',
++				'2025-02-20 00:01:00',
++			),
++		).toBe(2);
++	});
++});
+--- a/lib/ui-library/src/components/ListPanel/users/SelectReviewerListItem.vue
++++ b/lib/ui-library/src/components/ListPanel/users/SelectReviewerListItem.vue
+@@ -242,6 +242,7 @@
+ import Badge from '@/components/Badge/Badge.vue';
+ import PkpButton from '@/components/Button/Button.vue';
+ import Icon from '@/components/Icon/Icon.vue';
++import {useDate} from '@/composables/useDate';
+ 
+ export default {
+ 	components: {
+@@ -311,6 +312,11 @@
+ 			type: String,
+ 			required: true,
+ 		},
++		/** A localized string to use when the reviewer was last assigned a review today. */
++		todaySinceLastAssignmentLabel: {
++			type: String,
++			required: true,
++		},
+ 		declinedReviewsLabel: {
+ 			type: String,
+ 			required: true,
+@@ -399,17 +405,12 @@
+ 				return null;
+ 			}
+ 
+-			// Needed for Safari as it will return NaN for date strings with '-' separators.
+-			const fixDateForAllBrowsers = (dateString) =>
+-				dateString.replace(/-/g, '/');
+-
+-			const days = Math.floor(
+-				((Date.parse(
+-					fixDateForAllBrowsers(this.item.dateLastReviewAssignment),
+-				) -
+-					Date.now()) /
+-					86400000) *
+-					-1,
++			// Calendar days in the context's time zone, so that "Today" and "Yesterday"
++			// name the day of the assignment, not the 24-hour periods since.
++			const {calculateCalendarDaysBetweenDates} = useDate();
++			const days = calculateCalendarDaysBetweenDates(
++				this.item.dateLastReviewAssignment,
++				new Date(),
+ 			);
+ 
+ 			return Math.max(0, days);
+@@ -429,8 +430,10 @@
+ 					'{$days}',
+ 					this.daysSinceLastAssignment,
+ 				);
+-			} else {
++			} else if (this.daysSinceLastAssignment === 1) {
+ 				return this.daySinceLastAssignmentLabel;
++			} else {
++				return this.todaySinceLastAssignmentLabel;
+ 			}
+ 		},
+ 
+--- a/lib/ui-library/src/components/ListPanel/users/SelectReviewerListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/users/SelectReviewerListPanel.vue
+@@ -117,6 +117,7 @@
+ 						:days-since-last-assignment-description-label="
+ 							daysSinceLastAssignmentDescriptionLabel
+ 						"
++						:today-since-last-assignment-label="todaySinceLastAssignmentLabel"
+ 						:declined-reviews-label="declinedReviewsLabel"
+ 						:gossip-label="gossipLabel"
+ 						:item="item"
+@@ -247,6 +248,11 @@
+ 			type: String,
+ 			required: true,
+ 		},
++		/** A localized string to use when the reviewer was last assigned a review today. */
++		todaySinceLastAssignmentLabel: {
++			type: String,
++			required: true,
++		},
+ 		/** A localized string for the declined reviews row in the expanded table. */
+ 		declinedReviewsLabel: {
+ 			type: String,
+--- a/lib/ui-library/src/components/ListPanel/users/SelectReviewerListPanel.stories.js
++++ b/lib/ui-library/src/components/ListPanel/users/SelectReviewerListPanel.stories.js
+@@ -139,6 +139,7 @@
+ 		daySinceLastAssignmentLabel: 'Yesterday',
+ 		daysSinceLastAssignmentLabel: '{$days} days ago',
+ 		daysSinceLastAssignmentDescriptionLabel: 'Days since last review assigned',
++		todaySinceLastAssignmentLabel: 'Today',
+ 		declinedReviewsLabel: 'Reviews declined',
+ 		emptyLabel: 'No reviewers found',
+ 		gossipLabel: 'Editorial Notes',
+--- a/lib/pkp/classes/components/listPanels/PKPSelectReviewerListPanel.php
++++ b/lib/pkp/classes/components/listPanels/PKPSelectReviewerListPanel.php
+@@ -153,6 +153,7 @@
+         $config['daySinceLastAssignmentLabel'] = __('reviewer.list.daySinceLastAssignment');
+         $config['daysSinceLastAssignmentLabel'] = __('reviewer.list.daysSinceLastAssignment');
+         $config['daysSinceLastAssignmentDescriptionLabel'] = __('reviewer.list.daysSinceLastAssignmentDescription');
++        $config['todaySinceLastAssignmentLabel'] = __('reviewer.list.todaySinceLastAssignment');
+         $config['declinedReviewsLabel'] = __('reviewer.list.declinedReviews');
+         $config['emptyLabel'] = __('reviewer.list.empty');
+         $config['gossipLabel'] = __('user.gossip');
+--- a/lib/pkp/locale/en/editor.po
++++ b/lib/pkp/locale/en/editor.po
+@@ -667,6 +667,9 @@
+ msgid "reviewer.list.daySinceLastAssignment"
+ msgstr "Yesterday"
+ 
++msgid "reviewer.list.todaySinceLastAssignment"
++msgstr "Today"
++
+ msgid "reviewer.list.daysSinceLastAssignmentDescription"
+ msgstr "Days since last review assigned"
+ 

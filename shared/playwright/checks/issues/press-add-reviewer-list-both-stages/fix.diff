@@ -1,0 +1,78 @@
+--- a/lib/pkp/classes/components/listPanels/PKPSelectReviewerListPanel.php
++++ b/lib/pkp/classes/components/listPanels/PKPSelectReviewerListPanel.php
+@@ -212,6 +212,7 @@
+     {
+         return Repo::user()->getCollector()
+             ->filterByContextIds([$this->getParams['contextId']])
++            ->filterByWorkflowStageIds([$this->getParams['reviewStage']])
+             ->filterByRoleIds([\PKP\security\Role::ROLE_ID_REVIEWER])
+             ->includeReviewerData()
+             ->offset(null)
+--- a/lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php
++++ b/lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php
+@@ -478,9 +478,22 @@
+             }
+         }
+ 
+-        // Ensure that they are a reviewer
+-        $roleDao = DAORegistry::getDAO('RoleDAO'); /** @var RoleDAO $roleDao */
+-        return $roleDao->userHasRole($context->getId(), $reviewerId, Role::ROLE_ID_REVIEWER);
++        // Ensure that they are a reviewer of the round's stage
++        return $this->isReviewerForStage($context->getId(), $reviewRound->getStageId(), (int) $reviewerId);
++    }
++
++    /**
++     * Check if a user holds a reviewer role of the context that serves the given workflow stage
++     * (a press's Internal Reviewers for its internal review, its External Reviewers for its external review).
++     */
++    protected function isReviewerForStage(int $contextId, int $stageId, int $reviewerId): bool
++    {
++        return Repo::user()->getCollector()
++            ->filterByUserIds([$reviewerId])
++            ->filterByContextIds([$contextId])
++            ->filterByRoleIds([Role::ROLE_ID_REVIEWER])
++            ->filterByWorkflowStageIds([$stageId])
++            ->getCount() > 0;
+     }
+ 
+     /**
+--- a/lib/pkp/controllers/grid/users/reviewer/form/AdvancedSearchReviewerForm.php
++++ b/lib/pkp/controllers/grid/users/reviewer/form/AdvancedSearchReviewerForm.php
+@@ -27,6 +27,7 @@
+ use PKP\emailTemplate\EmailTemplate;
+ use PKP\facades\Locale;
+ use PKP\form\validation\FormValidator;
++use PKP\form\validation\FormValidatorCustom;
+ use PKP\linkAction\LinkAction;
+ use PKP\linkAction\request\AjaxAction;
+ use PKP\mail\mailables\ReviewRequest;
+@@ -50,6 +51,17 @@
+         $this->setTemplate('controllers/grid/users/reviewer/form/advancedSearchReviewerForm.tpl');
+ 
+         $this->addCheck(new FormValidator($this, 'reviewerId', 'required', 'editor.review.mustSelect'));
++        $this->addCheck(new FormValidatorCustom(
++            $this,
++            'reviewerId',
++            FormValidator::FORM_VALIDATOR_OPTIONAL_VALUE,
++            'editor.review.reviewerNotForStage',
++            fn ($reviewerId) => $this->isReviewerForStage(
++                (int) $submission->getData('contextId'),
++                (int) $reviewRound->getStageId(),
++                (int) $reviewerId
++            )
++        ));
+     }
+ 
+     /**
+--- a/lib/pkp/locale/en/editor.po
++++ b/lib/pkp/locale/en/editor.po
+@@ -342,6 +342,9 @@
+ msgid "editor.review.mustSelect"
+ msgstr "You must select a reviewer"
+ 
++msgid "editor.review.reviewerNotForStage"
++msgstr "This person is not a reviewer for this review stage."
++
+ msgid "editor.review.errorAddingReviewer"
+ msgstr "There was an error adding the reviewer.  Please try again."
+ 
