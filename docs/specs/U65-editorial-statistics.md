@@ -2082,7 +2082,7 @@ one manager and `admin`).
 `…/stats/reports/report?pluginName=NoSuchReport`, an empty `pluginName`,
 no `pluginName` and the right name in lower case each landed on
 `{context}/stats/stats/reports`, "404 Not Found".
-Issue report: [docs/issues/U65-A8-report-address-unknown-name-404.md](../issues/U65-A8-report-address-unknown-name-404.md).
+Issue report: [docs/issues/U65-A8-report-address-unknown-name-404.md](../issues/U65-A8-report-address-unknown-name-404.md), filed as [pkp-e2e#638](https://github.com/jardakotesovec/pkp-e2e/issues/638).
 
 <a id="fn-f-a9"></a>
 **f-a9** — fn p: `StatisticsReportMail::createCsvAttachment()` calls
