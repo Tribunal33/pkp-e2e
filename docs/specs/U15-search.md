@@ -1842,7 +1842,7 @@ Live-probed 2026-09-02 as a visitor: `…/search/search?query=&orderBy=datePubli
 and `…&orderDir=asc` answered "HTTP 500" on a journal (OJS) and a server
 (OPS); `orderBy=title` with either direction listed the results sorted.
 Not tried on a press.
-Issue report: [docs/issues/U15-A12-search-sort-by-date-error-page.md](../issues/U15-A12-search-sort-by-date-error-page.md).
+Issue report: [docs/issues/U15-A12-search-sort-by-date-error-page.md](../issues/U15-A12-search-sort-by-date-error-page.md), filed as [pkp-e2e#718](https://github.com/jardakotesovec/pkp-e2e/issues/718).
 
 <a id="fn-f-a13"></a>
 **f-a13** — fn-g: `PKPHandler::getRangeInfo()` passes the raw
