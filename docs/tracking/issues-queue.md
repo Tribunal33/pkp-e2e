@@ -24,7 +24,7 @@ and the hourly routine starts one only when none is running
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 8 | 1 | 1 | **Taken: issues session, workstation s0, 2026-10-03** |
-| [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 | **Taken: issues session, VM s2, 2026-10-03**; A16 done with U13 OJS8 (pkp-e2e#230); A2, A7 done; A15, A37, A1 done; A8 not reproduced (incidentals.md) |
+| [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 | **Taken: issues session, VM s2, 2026-10-03**; A16 done with U13 OJS8 (pkp-e2e#230); A2, A7 done; A15, A37, A1 done; A8 not reproduced (incidentals.md); A18 done |
 | [U74](../specs/U74-onix-metadata-export.md) | 16 | 0 | 6 | A16 done with U63 A12 (pkp-e2e#258) |
 | [U15](../specs/U15-search.md) | 13 | 0 | 6 |  |
 | [U04](../specs/U04-orcid-integration.md) | 8 | 0 | 6 | OPS2 done with U06 OPS1 (docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md); A1's "offered before the review is complete" half done with U27 A1 (docs/issues/U27-A1-send-review-to-orcid-offered-before-complete.md); its "confirms in silence" half (a press, a public-API journal) open |

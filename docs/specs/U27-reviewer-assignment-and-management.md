@@ -1283,6 +1283,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U27-A15-reviewer-response-erases-reminder-history.md`):
     after a reminder and then the reviewer's response, the assignment's
     History still reads "Reviewer Reminded" with its date
+  - the guard for A18 (issue report
+    `docs/issues/U27-A18-emptied-request-letter-half-adds-reviewer.md`): an
+    "Add Reviewer" with the request letter emptied is refused with a
+    message, and no row is added and no email is sent
 - **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
   - the Review Details window on a request with no review: "Request Sent:", "Reviewer Reminded:", "Request Accepted:" or "Request Declined:", the empty blocks, and "Mark as Complete" disabled beside its recommendation message {OJS} or, with a review form, its incomplete-review message (Rule 14c): an editor opens the window to read a review, and on a request that has none only in a rare week
@@ -1373,7 +1377,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A13](#a13) | Email Reviewer sends with an empty body despite the body being marked required | 🐞 | minor | — |
 | [A15](#a15) | A reviewer's response erases "Reviewer Reminded" from the assignment's History and the Review Report | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A16](#a16) | A due date typed in the wrong format looks accepted on screen, but the old value is silently submitted | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A18](#a18) | Emptying the request letter makes the add fail silently, yet the assignment is created and the request email never goes out | 🐞 | user-visible | — |
+| [A18](#a18) | An editor who empties the review request letter gets no answer, while a blank invitation goes to the reviewer | 🐞 | medium · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A19](#a19) | The template chooser renders on every add, as a one-option select even with zero alternate templates | 🐞 | minor | — |
 | [A21](#a21) | A rating star pressed just after the Review Details window opens is saved, yet the open window can fall back to "No rating" | 🐞 | user-visible | @beaug 2026-08-29 · risk accepted |
 | [A22](#a22) | The Review Details guidance tells the editor to "upload the file below", but the window has no upload control | 🐞 | minor | @beaug 2026-08-29 · ticket to follow |
@@ -1641,20 +1645,16 @@ nothing.
 Basis: live probe. <sup>[f-a17](#fn-a17)</sup>
 
 <a id="a18"></a>
-**A18 — Emptying the request letter half-completes the add, silently** · 🐞
-· user-visible.
-Submitting the Add Reviewer form with the request letter emptied shows
-nothing at all: no error, no toast, no error page. The window simply stays
-open. But the assignment IS created. After a reload the reviewer sits at
-"Request Sent" with a full row menu, while the request email never goes out
-and reopening Add Reviewer shows the reviewer dimmed as already assigned.
-The editor is told nothing and the reviewer is never actually invited. The
-letter can also end up empty without the editor clearing it, though only at
-a speed no person reaches: a reviewer selected within about a fifth of a
-second of the window opening, before the letter's editor has loaded, leaves
-the letter empty, and it never fills afterwards.
-Basis: live probe (both apps, driven once per app; positive control: a
-normal add delivers the request mail). <sup>[f-a18](#fn-a18)</sup>
+**A18 — An editor who empties the review request letter gets no answer, while a blank invitation goes to the reviewer** · 🐞 · medium · crash: server.
+An editor adds a reviewer with the request letter ("Email to be sent to
+reviewer") emptied. The server fails: the window stays open, "Add
+Reviewer" stays greyed out, and nothing on screen says what happened.
+Yet the reviewer is added and sits at "Request Sent", and receives the
+review request email ("Invitation to review" in a journal) with a
+subject and no text: no link, no due dates, no message. The assignment
+shares none of the round's review files with the reviewer, and the email
+is missing from the submission's email log. Basis: probe, 2026-10-03.
+<sup>[f-a18](#fn-a18)</sup>
 
 <a id="a19"></a>
 **A19 — The template chooser renders with nothing to choose** · 🐞 · minor.
@@ -1738,8 +1738,7 @@ Since: 2026-08-29 (the modify-reviews rework) · Basis: probe.
 <sup>[f-a23](#fn-a23)</sup>
 
 <a id="a26"></a>
-**A26 — The unassign notice arrives under the cancel notice's subject** · 🐞
-· minor.
+**A26 — The unassign notice arrives under the cancel notice's subject** · 🐞 · minor.
 An unanswered reviewer removed with "Unassign Reviewer" gets an email whose
 subject reads "Your review for "{title}" has been cancelled" over the
 removal wording ("…you have been removed from the reviewer assignment for
@@ -3194,6 +3193,7 @@ the template into the letter's TinyMCE client-side, and a press before
 that editor has initialised, 60–177 ms after the search box shows, leaves
 the letter empty for good; a press after it filled the letter 8 times of
 8 per app. No person presses that fast.
+Issue report: [docs/issues/U27-A18-emptied-request-letter-half-adds-reviewer.md](../issues/U27-A18-emptied-request-letter-half-adds-reviewer.md).
 
 <a id="fn-a19"></a>
 **f-a19** — Live-probed 2026-08-02 (claim check; OJS with two acting roles

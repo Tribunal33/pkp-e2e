@@ -1,0 +1,25 @@
+--- a/lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php
++++ b/lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php
+@@ -321,6 +321,22 @@
+     }
+ 
+     /**
++     * @copydoc Form::validate()
++     */
++    public function validate($callHooks = true)
++    {
++        // The request email is sent from the letter as typed: refuse a letter without text unless no email goes out
++        if (!$this->getData('skipEmail')) {
++            $text = html_entity_decode(strip_tags((string) $this->getData('personalMessage')), ENT_QUOTES | ENT_HTML5, 'UTF-8');
++            if (preg_replace('/[\s\x{00A0}]+/u', '', $text) === '') {
++                $this->addError('personalMessage', __('email.bodyRequired'));
++            }
++        }
++
++        return parent::validate($callHooks);
++    }
++
++    /**
+      * Save review assignment
+      */
+     public function execute(...$functionParams)
