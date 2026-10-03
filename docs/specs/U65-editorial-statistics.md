@@ -999,6 +999,7 @@ Left out of the scenarios above, by reason:
   - "Articles Report" of a submission with supporting agencies: its "Supporting Agencies" cell lists them (the guard for OJS1, once fixed; Rule 20d)
   - "Articles Report" of a submission whose title holds "&", an apostrophe and an italic word: the "Title" cell reads as typed (the guard for OJS2, once fixed; Rule 20d)
   - "Articles Report" after "Accept and Skip Review", "Revert Decline", "New Review Round", a move back a stage and a publication: every "Editor Decision" cell named (the guard for OJS3, once fixed; Rule 20b)
+  - "Monograph Report" of a press whose books have fewer authors and decisions than another press's: no author or decision column beyond its own books' (the guard for OMP3, once fixed; Rule 23)
 - **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
@@ -1078,7 +1079,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS4](#ojs4) | "Subscriptions Report" downloads nothing and leaves a blank tab when an institutional contact has no country | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | A press's Editorial Activity leaves books declined at Internal Review out of "Submissions Declined" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | A press's "Days to First Editorial Decision" help text says "authors submitting to your journal" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OMP3](#omp3) | "Monograph Report" sizes its author and decision columns by every press of the installation | 🐞 | minor | — |
+| [OMP3](#omp3) | "Monograph Report" of one press carries empty author and decision columns sized by another press's books | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP4](#omp4) | "Monograph Report" names a reverted Internal Review decline "Decline Submission" | 🐞 | minor | — |
 | [OMP5](#omp5) | A French press's monthly attachment names External Review by a raw code | 🐞 | minor | — |
 | [OPS4](#ops4) | The preprint server's monthly email leaves "Accepted submissions this month:" blank | 🐞 | minor | — |
@@ -1449,13 +1450,23 @@ Most translations name a journal too: in French the text reads
 Basis: probe, 2026-10-02. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
-**OMP3 — "Monograph Report" columns are sized by every press** · 🐞 · minor.
-The number of author and decision column groups in "Monograph Report"
-follows the book with the most of each on the whole installation, so a
-press whose books have one author each gets columns up to "Given Name
-(Author 6)", all empty, when another press has a book with six authors.
-Its editor columns follow this press's books. Expected: as many columns as this press's books need.
-Basis: probe. <sup>f-omp3</sup>
+**OMP3 — "Monograph Report" of one press carries empty author and decision columns sized by another press's books** · 🐞 · low.
+On an installation with more than one press, the "Monograph Report" that
+a press manager downloads from Statistics › "Reports" has as many author
+columns as the book with the most authors in any press, and as many
+decision columns as the book with the most decisions in any press. A
+press whose only book has one author and no decision gets author columns
+up to "(Author 8)" and decision columns up to "Editor Decision 7 (Editor
+1)", all empty, because another press holds a book with eight authors
+and one with seven decisions.
+
+The extra columns are empty and sit in two blocks: the author groups
+after the press's own largest, and the decision columns after each
+editor group. In the reproduction the press's report has 106 columns
+where its one book needs 36. They give away nothing about the other
+press beyond those two counts. The fix is one press condition missing
+from one query. Expected: as many columns as this press's books need.
+Basis: probe, 2026-10-02. <sup>f-omp3</sup>
 
 <a id="omp4"></a>
 **OMP4 — A reverted Internal Review decline reads "Decline Submission"** · 🐞 · minor.
@@ -2253,6 +2264,7 @@ Issue report: [docs/issues/U65-OMP2-press-days-to-decision-text-your-journal.md]
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — fn o (`retrieveLimits()`). Live-probed 2026-09-28: td13.
+Issue report: [docs/issues/U65-OMP3-monograph-report-columns-sized-by-other-presses.md](../issues/U65-OMP3-monograph-report-columns-sized-by-other-presses.md).
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — fn o (`getDecisionMessage()`). Live-probed 2026-09-28: td13.

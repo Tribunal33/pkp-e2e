@@ -1,0 +1,13 @@
+--- a/plugins/reports/monographReport/Report.php
++++ b/plugins/reports/monographReport/Report.php
+@@ -252,8 +252,9 @@
+                     LIMIT 1
+                 ) AS decisions
+                 FROM submissions s
++                WHERE s.context_id = ?
+             ) AS tmp',
+-            $editorUserGroupIds
++            [...$editorUserGroupIds, $this->press->getId()]
+         );
+         $this->maxAuthors = (int) $max->authors;
+         $this->maxEditors = (int) $max->editors;
