@@ -1,0 +1,93 @@
+--- a/locale/en/emails.po
++++ b/locale/en/emails.po
+@@ -199,7 +199,6 @@
+ "<ul>\n"
+ "\t<li>New submissions this month: {$newSubmissions}</li>\n"
+ "\t<li>Declined submissions this month: {$declinedSubmissions}</li>\n"
+-"\t<li>Accepted submissions this month: {$acceptedSubmissions}</li>\n"
+ "\t<li>Total submissions in the system: {$totalSubmissions}</li>\n"
+ "</ul>\n"
+ "Login to the the preprint server to view more detailed <a href="
+--- a/locale/bg/emails.po
++++ b/locale/bg/emails.po
+@@ -232,7 +232,6 @@
+ "<ul>\n"
+ "<li>Нови предложения този месец: {$newSubmissions}</li>\n"
+ "<li>Отхвърлени заявки този месец: {$declinedSubmissions}</li>\n"
+-"<li>Приети публикации този месец: {$acceptedSubmissions}</li>\n"
+ "<li>Общо изпращания в системата: {$totalSubmissions}</li>\n"
+ "</ul>\n"
+ "Влезте в препринт сървъра, за да видите по-подробни <a href=\""
+--- a/locale/cs/emails.po
++++ b/locale/cs/emails.po
+@@ -201,7 +201,6 @@
+ "<ul>\n"
+ "\t<li>Nové příspěvky tento měsíc: {$newSubmissions}</li>\n"
+ "\t<li>Odmítnuté příspěvky v tomto měsíci: {$declinedSubmissions}</li>\n"
+-"\t<li>Přijaté příspěvky v tomto měsíci: {$acceptedSubmissions}</li>\n"
+ "\t<li>Celkem příspěvků v měsíci: {$totalSubmissions}</li>\n"
+ "</ul>\n"
+ "Přihlaste se na preprintový server a zobrazte si podrobnější informace. <a "
+--- a/locale/de/emails.po
++++ b/locale/de/emails.po
+@@ -186,7 +186,6 @@
+ "<ul>\n"
+ "\t<li>Neue Einreichungen diesen Monat: {$newSubmissions}</li>\n"
+ "\t<li>Abgelehnte Einreichungen diesen Monat: {$declinedSubmissions}</li>\n"
+-"\t<li>Angenommene Einsendungen in diesem Monat: {$acceptedSubmissions}</li>\n"
+ "\t<li>Gesamtanzahl der Einreichungen im System: {$totalSubmissions}</li>\n"
+ "</ul>\n"
+ "Loggen Sie sich auf dem Preprint-Server ein, um detailliertere <a href=\""
+--- a/locale/mk/emails.po
++++ b/locale/mk/emails.po
+@@ -183,7 +183,6 @@
+ "<ul>\n"
+ "\t<li>Нови поднесоци овој месец: {$newSubmissions}</li>\n"
+ "\t<li>Одбиени поднесоци овој месец: {$declinedSubmissions}</li>\n"
+-"\t<li>Прифатени поднесоци овој месец: {$acceptedSubmissions}</li>\n"
+ "\t<li>Вкупно поднесоци на системот: {$totalSubmissions}</li>\n"
+ "</ul>\n"
+ "Најавете се на серверот со отпечатоци за да ги прегледате подеталните <a "
+--- a/locale/pt_BR/emails.po
++++ b/locale/pt_BR/emails.po
+@@ -182,7 +182,6 @@
+ "<ul>\n"
+ "\t<li>Novas submissões no mês: {$newSubmissions}</li>\n"
+ "\t<li>Submissões rejeitadas no mês: {$declinedSubmissions}</li>\n"
+-"\t<li>Submissões postadas no mês: {$acceptedSubmissions}</li>\n"
+ "\t<li>Total de submissões no sistema: {$totalSubmissions}</li>\n"
+ "</ul>\n"
+ "Faça login no servidor de preprints para ver mais detalhes <a href=\""
+--- a/locale/uk/emails.po
++++ b/locale/uk/emails.po
+@@ -102,7 +102,6 @@
+ "<ul>\n"
+ "\t<li>Нові замовлення за місяць: {$newSubmissions}</li>\n"
+ "\t<li>Відхилені замовлення за місяць: {$declinedSubmissions}</li>\n"
+-"\t<li>Прийняті замовлення за місяць: {$acceptedSubmissions}</li>\n"
+ "\t<li>Усього замовлення у систему: {$totalSubmissions}</li>\n"
+ "</ul>\n"
+ "авторизуйтесь на сервері препринтів, щоб переглядати більш детально <a href="
+--- a/classes/migration/upgrade/v3_5_0/I13128_FixEmailUrlLinks.php
++++ b/classes/migration/upgrade/v3_5_0/I13128_FixEmailUrlLinks.php
+@@ -25,6 +25,20 @@
+         // es kept a variable which no longer exists
+         $this->replace('USER_VALIDATE_CONTEXT', '{$enableUrl}', '<a href="{$activateUrl}">{$activateUrl}</a>', '', 'es');
+         $this->replace('USER_REGISTER', '{$подпис}', '{$signature}');
++
++        // A preprint server records no acceptances, so the monthly email's
++        // "Accepted submissions this month" figure is always blank: drop the line.
++        foreach ([
++            'Accepted submissions this month: {$acceptedSubmissions}',
++            'Приети публикации този месец: {$acceptedSubmissions}',
++            'Přijaté příspěvky v tomto měsíci: {$acceptedSubmissions}',
++            'Angenommene Einsendungen in diesem Monat: {$acceptedSubmissions}',
++            'Прифатени поднесоци овој месец: {$acceptedSubmissions}',
++            'Submissões postadas no mês: {$acceptedSubmissions}',
++            'Прийняті замовлення за місяць: {$acceptedSubmissions}',
++        ] as $line) {
++            $this->replace('STATISTICS_REPORT_NOTIFICATION', '<li>' . $line . '</li>', '');
++        }
+     }
+ 
+     public function down(): void

@@ -1083,7 +1083,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OMP3](#omp3) | "Monograph Report" of one press carries empty author and decision columns sized by another press's books | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP4](#omp4) | "Monograph Report" names a reverted Internal Review decline "Decline Submission" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP5](#omp5) | A French press's monthly attachment names External Review by a raw code | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [OPS4](#ops4) | The preprint server's monthly email leaves "Accepted submissions this month:" blank | 🐞 | minor | — |
+| [OPS4](#ops4) | A preprint server's monthly statistics email reads "Accepted submissions this month:" with no number | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | Whether drafts started within the range count in "Submissions In Progress" is unseen; drafts started today never do | ❓ | minor | — |
 | [A4](#a4) | The closed "Filters" panel is still read out by a screen reader | ❓ | minor | — |
 | [A7](#a7) | "Journal Manager" on "Users" also counts Editors and Production Editors | ❓ | minor | — |
@@ -1528,12 +1528,23 @@ hide the entry until a report exists; an empty page looks broken.
 Basis: probe. <sup>f-ops3</sup>
 
 <a id="ops4"></a>
-**OPS4 — "Accepted submissions this month:" is blank** · 🐞 · minor.
-A preprint server's monthly email keeps the line "Accepted submissions
-this month:" with nothing after it, since a preprint server counts no
-acceptances. Expected: the line left out of the preprint server's
-email.
-Basis: probe. <sup>f-ops4</sup>
+**OPS4 — A preprint server's monthly statistics email reads "Accepted submissions this month:" with no number** · 🐞 · low.
+The monthly statistics email a preprint server sends its managers and
+moderators lists four figures, and one of them, "Accepted submissions
+this month:", has nothing after it. A preprint server records no
+acceptances, so there is no number to give; the line should not be in a
+preprint server's email at all. The other three figures are right.
+
+The email goes out once, in the server's primary language. Servers in
+English, Bulgarian, Czech, German, Macedonian, Portuguese (Brazil) or
+Ukrainian get the line in their language. Where OPS's translation of
+this email is empty (Catalan, Spanish, French (Canada), Norwegian
+Bokmål), the server is sent its English text, line included.
+
+The proposed fix also reaches existing servers: their upgrade removes
+the line from the template they already store, unless a manager has
+reworded it. Expected: the line left out of the preprint server's email.
+Basis: probe, 2026-10-02. <sup>f-ops4</sup>
 
 ---
 
@@ -2314,6 +2325,7 @@ scratch preprint server and `publicknowledge`: the same.
 **f-ops4** — fn p; OPS `locale/en/emails.po`
 `emails.statisticsReportNotification.body` keeps the line. Live-probed 2026-09-28: the line with nothing after it
 in the text and HTML parts.
+Issue report: [docs/issues/U65-OPS4-preprint-monthly-email-accepted-blank.md](../issues/U65-OPS4-preprint-monthly-email-accepted-blank.md).
 
 ## Reference — entry points & surfaces
 
