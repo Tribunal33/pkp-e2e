@@ -862,7 +862,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A5](#a5) | A registry pick the server cannot cache raises an error dialog, then saves and publishes with no name | 🐞 | user-visible | — |
 | [A14](#a14) | On a one-role journal no contributor can be saved from the form; every attempt errors, yet creates a role-less contributor | 🐞 | user-visible | — |
 | [A20](#a20) | On a journal with a "Forms" language not ticked under "Metadata", the workflow's "Add Contributor" never saves, refused on fields the form does not show | 🐞 | user-visible | — |
-| [A22](#a22) | A role name changed in "Edit Role" and closed without saving shows on the row, and the role's next "Save" stores it | 🐞 | medium | — |
+| [A22](#a22) | A role name changed in "Edit Role" and closed without saving shows on the row, and the role's next "Save" stores it | 🐞 | medium || issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | The contributor form's error summary prints "Go to Affiliations: [object Object]" | 🐞 | minor | — |
 | [A9](#a9) | The landing page's affiliation ROR link has no accessible name | 🐞 | minor | — |
 | [A10](#a10) | The typed affiliation's per-language name boxes are announced wrongly by a screen reader | 🐞 | minor | — |
@@ -1182,7 +1182,7 @@ Only a reload before reopening puts the stored names back. The same as
 [Institutions A2](U66-institutions.md#a2),
 [Announcements A11](U12-announcements.md#a11) and
 [Highlights A4](U11-highlights.md#a4).
-Since: 2025-11-11 (10½ months) · Basis: probe, 2026-09-30. <sup>f-a22</sup>
+Since: 2025-11-11 (10½ months) · Basis: probe, 2026-10-03. <sup>f-a22</sup>
 
 <a id="a23"></a>
 **A23 — A CRediT role's degree prints as a raw code on a French landing page** · 🐞 · minor.
@@ -2143,6 +2143,7 @@ that object (`field[prop][localeKey] = value`); the row prints
 `localize(role.name)`. Since: ui-library `b628fd2b` (2025-11-11,
 "Contributor Roles and Type"), the date read from the checkout's
 history.
+Re-walked 2026-10-03 with the same `reach.js` on OJS, OMP and OPS `main` (dataset fleet 3): the row read "Translator Draft" after "Close", the reopened box the same, and the unchanged "Save" stored it (200, kept after a reload).
 Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md](../issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md)).
 
 <a id="fn-f-a23"></a>

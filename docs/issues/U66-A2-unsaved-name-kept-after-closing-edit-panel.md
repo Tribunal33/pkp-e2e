@@ -10,8 +10,8 @@
   - 3.3: OJS, OMP, OPS (code; Announcements only)
 - **Introduced** `pkp/ui-library#88` for `pkp/pkp-lib#5865` · [d0ffc05ab4](https://github.com/pkp/ui-library/commit/d0ffc05ab4ae7f06e8d2ab82f30ffb8a5ea9a7a3) · 2020-05-13 · Nate Wright (NateWr)
 - **Upstream** none found (2026-10-02)
-- **Tracked in** specs U66 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a2), U12 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a11), U11 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U11-highlights.md#a4), U47 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a5), U16 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a16)
-- **Checked** 2026-09-30, each branch's tip (the commits in Evidence); the "Media files" Steps, and the Categories check on `main` and 3.5, again 2026-10-02
+- **Tracked in** specs U66 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a2), U12 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a11), U11 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U11-highlights.md#a4), U47 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a5), U16 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a16), U41 [A22](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U41-contributors-and-affiliations.md#a22)
+- **Checked** 2026-09-30, each branch's tip (the commits in Evidence); the "Media files" Steps, and the Categories check on `main` and 3.5, again 2026-10-02; the Contributor Roles check on `main`, again 2026-10-03
 
 ## Summary
 
