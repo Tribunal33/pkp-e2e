@@ -1,0 +1,56 @@
+--- a/lib/ui-library/src/components/NavigationMenuEditor/NavigationMenuEditor.vue
++++ b/lib/ui-library/src/components/NavigationMenuEditor/NavigationMenuEditor.vue
+@@ -9,9 +9,7 @@
+ 				:allow-nesting="true"
+ 				:max-depth="maxDepth"
+ 				:panel-id="PANEL_ASSIGNED"
+-				:empty-message="
+-					assignedEmptyMessage || t('manager.navigationMenu.noAssignedItems')
+-				"
++				:empty-message="assignedPanelEmptyMessage"
+ 				:indent-per-level="indentPerLevel"
+ 				:can-drop="canDropOnTarget"
+ 				data-cy="assigned-panel"
+@@ -25,10 +23,7 @@
+ 				:allow-nesting="false"
+ 				:max-depth="1"
+ 				:panel-id="PANEL_UNASSIGNED"
+-				:empty-message="
+-					unassignedEmptyMessage ||
+-					t('manager.navigationMenu.noUnassignedItems')
+-				"
++				:empty-message="unassignedPanelEmptyMessage"
+ 				:indent-per-level="indentPerLevel"
+ 				:can-drop="canDropOnTarget"
+ 				data-cy="unassigned-panel"
+@@ -145,4 +140,30 @@
+ const unassignedPanelTitle = computed(() => {
+ 	return props.unassignedTitle || t('manager.navigationMenu.unassigned');
+ });
++
++// Panel empty texts. With no item at all, nothing is assigned and nothing can
++// be dragged, so neither "Drag items from Unassigned Menu Items." nor "All items
++// have been assigned." is true: both panels keep MenuTreePanel's own empty text.
++const hasNoItems = computed(
++	() => assignedItems.value.length === 0 && unassignedItems.value.length === 0,
++);
++
++const assignedPanelEmptyMessage = computed(() => {
++	if (hasNoItems.value) {
++		return '';
++	}
++	return (
++		props.assignedEmptyMessage || t('manager.navigationMenu.noAssignedItems')
++	);
++});
++
++const unassignedPanelEmptyMessage = computed(() => {
++	if (hasNoItems.value) {
++		return '';
++	}
++	return (
++		props.unassignedEmptyMessage ||
++		t('manager.navigationMenu.noUnassignedItems')
++	);
++});
+ </script>

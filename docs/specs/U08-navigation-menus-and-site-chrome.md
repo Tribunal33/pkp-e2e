@@ -1196,6 +1196,7 @@ Left out of the scenarios above, by reason:
   - the public header in a narrow window on French pages: the menu button's name is French, not "Open Menu" (the guard [A7](#a7)'s issue report proposes)
   - the item window's "Navigation Menu Type": choosing a type and then "Choose a type..." keeps the heading and returns the line under the list to its first text (the guard [A12](#a12)'s issue report proposes)
   - the "Navigation" table after an item is renamed or removed: each menu's "Navigation Menu Items" cell follows without a reload (the guard [A15](#a15)'s issue report proposes)
+  - the menu window with no items at all: neither panel claims items are assigned or sends the manager to drag (the guard [A16](#a16)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1285,7 +1286,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | In the menu item window, a chosen type's description replaces the "Navigation Menu Type" heading and stays after "Choose a type..." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | On a press and a preprint server the notices still say "About the Journal" and "Settings > Journal" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | Website › "Navigation": after an item is renamed or removed, each menu's item list keeps the old items until a reload | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A16](#a16) | With no item at all, the menu window says both panels are settled | 🐞 | minor | — |
+| [A16](#a16) | With every navigation menu item removed, "Add Menu" says to drag items and that all items are assigned | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A17](#a17) | After a change is discarded with "Yes", leaving the page still asks about unsaved changes | 🐞 | minor | — |
 | [A18](#a18) | The item window asks before closing even when nothing was typed, and so does leaving the page; right after a refused "Save" it closes without asking | 🐞 | minor | — |
 | [A21](#a21) | Two journals with the same name hide each other in the journals switcher | 🐞 | minor | — |
@@ -1525,13 +1526,13 @@ current. The Site Administrator's own "Navigation" tab behaves the same.
 Basis: probe, 2026-10-03. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — An empty menu window says both panels are settled** · 🐞 · minor.
+**A16 — With every navigation menu item removed, "Add Menu" says to drag items and that all items are assigned** · 🐞 · low.
 On a journal whose items have all been removed, "Add Menu" shows "No
 items assigned to this menu. Drag items from Unassigned Menu Items."
 beside "All items have been assigned.". The first sends the manager to
 a panel with nothing to drag; the second says items were assigned when
 none exist.
-Basis: probe. <sup>f-a16</sup>
+Basis: probe, 2026-10-03. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — Discarded changes still hold the page** · 🐞 · minor.
@@ -2843,6 +2844,7 @@ Issue report: [docs/issues/U08-A15-navigation-table-keeps-old-item-titles.md](..
 **f-a16** — `manager.navigationMenu.noAssignedItems` and
 `…noUnassignedItems` (note k). Live-probed 2026-09-23 (note j), all
 three apps, on a scratch journal after every item was removed.
+Issue report: [docs/issues/U08-A16-menu-window-without-items-says-all-assigned.md](../issues/U08-A16-menu-window-without-items-says-all-assigned.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — `useFormChanged()`'s `beforeunload` prompt (note j).
