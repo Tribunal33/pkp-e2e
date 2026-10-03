@@ -1994,7 +1994,7 @@ kept "Oldest call (edited)" and "Typed notice", the two oldest of four, in
 all three feeds; RSS 2.0's channel `pubDate` was the older's. Re-read
 2026-09-26: the two kept are the first two in storage order, not the
 two oldest by date; on the probe the two coincided.
-Issue report: [docs/issues/U12-A7-announcement-feed-limit-keeps-oldest.md](../issues/U12-A7-announcement-feed-limit-keeps-oldest.md).
+Issue report: [pkp-e2e#767](https://github.com/jardakotesovec/pkp-e2e/issues/767) ([docs/issues/U12-A7-announcement-feed-limit-keeps-oldest.md](../issues/U12-A7-announcement-feed-limit-keeps-oldest.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8 — A8 evidence.** `ManagementHandler::announcements()` and
@@ -2084,7 +2084,7 @@ Live-probed 2026-09-17 (A15), OJS: Atom's `<updated>` and `<published>` read
 `<dc:date>` "%2026-%09-%17", RSS 2.0's `<pubDate>` "Thu, 17 Sep 2026
 10:28:01 +0000"; the same under "Limit feed to 2". The date pattern the two
 templates pass was not read.
-Issue report: [docs/issues/U12-A15-announcement-feed-dates-percent-signs.md](../issues/U12-A15-announcement-feed-dates-percent-signs.md).
+Issue report: [pkp-e2e#768](https://github.com/jardakotesovec/pkp-e2e/issues/768) ([docs/issues/U12-A15-announcement-feed-dates-percent-signs.md](../issues/U12-A15-announcement-feed-dates-percent-signs.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16 — A16 evidence.** `AnnouncementFeedPlugin` adds the `<link
