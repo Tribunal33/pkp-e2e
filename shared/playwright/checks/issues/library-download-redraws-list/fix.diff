@@ -1,0 +1,46 @@
+--- a/lib/pkp/js/classes/linkAction/PostAndRedirectRequest.js
++++ b/lib/pkp/js/classes/linkAction/PostAndRedirectRequest.js
+@@ -81,9 +81,17 @@
+ 	$.pkp.classes.linkAction.PostAndRedirectRequest.prototype.finishCallback_ =
+ 			function() {
+ 		var $linkActionElement = this.getLinkActionElement(),
+-				// Get the link action handler to handle the json response.
+-				linkActionHandler = $.pkp.classes.Handler.getHandler($linkActionElement);
++				linkActionHandler;
+ 
++		// The list holding the link may have been drawn again since the
++		// press (a save, another download): the link is gone, so there is
++		// nothing left to re-enable and the post answer is stale.
++		if (!$.pkp.classes.Handler.hasHandler($linkActionElement)) {
++			return;
++		}
++
++		// Get the link action handler to handle the json response.
++		linkActionHandler = $.pkp.classes.Handler.getHandler($linkActionElement);
+ 		this.finish();
+ 		linkActionHandler.handleJson(this.postJsonData_);
+ 	};
+--- a/lib/pkp/controllers/api/file/FileApiHandler.php
++++ b/lib/pkp/controllers/api/file/FileApiHandler.php
+@@ -206,9 +206,10 @@
+     }
+ 
+     /**
+-     * Returns a data changd event to re-enable the link action.  Refactored out of
+-     *  recordDownload since library files do not have downloads recorded and are in a
+-     *  different context.
++     * Answer the post a download link sends before the download. The link
++     *  re-enables itself when PostAndRedirectRequest.js finishes, so no event
++     *  is sent: a data changed event would draw the link's whole grid again
++     *  two seconds after every download.
+      *
+      * @param array $args
+      * @param Request $request
+@@ -217,6 +218,6 @@
+      */
+     public function enableLinkAction($args, $request)
+     {
+-        return \PKP\db\DAO::getDataChangedEvent();
++        return new JSONMessage(true);
+     }
+ }

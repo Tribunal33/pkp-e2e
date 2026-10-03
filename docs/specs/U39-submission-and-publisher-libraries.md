@@ -556,6 +556,7 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the close button of "Add a file" after an "OK" refused for a missing file asks "The data on this form has changed. Do you wish to continue without saving?" (Rule 3b; A11, docs/issues/U08-A18-item-window-refused-save-closes-unasked.md)
   - an assigned Copyeditor and, on a preprint server, the Moderator and the Author download a Submission Library file from the "Submission Library" window (Actors row 3; Rule 8b; A1)
+  - a row's strip opened within two seconds of a download stays open three seconds later, and two names pressed in a row raise no page error (Rule 8a; A9, A12)
 - **Nothing new to test**:
   - a recommending editor's "Notify Editors" page {OJS OMP}: its "Library Files", and the attached file's copy listed in the discussion the recommendation opens (Actors row 8; Rule 11c)
   - the "Request Author Response" page {OJS}: the Editor's and an assigned Section Editor's "Library Files" (Actors row 8; Rule 11a)
@@ -593,9 +594,9 @@ entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | "Description" is starred as required but saves empty | 🐞 | minor | — |
 | [A4](#a4) | A file whose name holds its extension earlier downloads under a cut name | 🐞 | minor | — |
 | [A5](#a5) | With strict mode on, "Delete" in the Submission Library fails | 🐞 | latent | — |
-| [A9](#a9) | "OK" in "Add a file" or "Edit" within two seconds of a download makes the page's script fail | 🐞 | invisible · crash: script | — |
+| [A9](#a9) | A second file's name pressed, or a save, within two seconds of a download makes the page's script fail | 🐞 | low · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | After an "OK" without a file, closing "Add a file" drops what was typed without asking | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A12](#a12) | A row's "Edit"/"Delete" strip opened within two seconds of a download closes by itself when the list is drawn again | 🐞 | minor | — |
+| [A12](#a12) | A row's "Edit"/"Delete" strip opened within two seconds of a download closes by itself when the list is drawn again | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | Every workflow participant, the Author included, edits and deletes every file of the Submission Library, whoever added it | ❓ | minor | — |
 | [A7](#a7) | A manager-level role without "Permit changes to Settings" still changes the Publisher Library through "View Document Library" | ❓ | minor | — |
 | [A8](#a8) | A deleted Submission Library file's old download address shows an empty page | ❓ | minor | — |
@@ -691,13 +692,18 @@ empty page reads as a broken site, not as a deleted file.
 Basis: probe. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
-**A9 — Changing a list right after a download makes the page's script fail** · 🐞 · invisible · crash: script.
-Pressing a file's name downloads it and leaves the link unready for two
-seconds. Opening "Add a file" or "Edit" and pressing "OK" inside them
-redraws the list; when they end the script fails, the link being gone.
-Only the browser's console shows it: "There is no handler bound to this
-element!". Rare at a person's pace, common in tests.
-Basis: probe. <sup>[f-a9](#fn-a9)</sup>
+**A9 — A second download or a save right after a download makes the page's script fail** · 🐞 · low · crash: script.
+Two seconds after a press on a file's name, the page acts on that link
+again and draws the whole list again ([A12](#a12)). When something else
+has drawn the list again in between, the link is gone and the page's
+script fails when the two seconds end: a second file's name pressed in
+those two seconds does it at a person's pace, and an "OK" in "Add a
+file" or "Edit" does it at a test's pace. No screen shows it; only the
+browser's console reads "There is no handler bound to this element!".
+Nothing is lost, and the list keeps working. Every library list: the
+Settings tab, the "Submission Library" window and "View Document
+Library".
+Basis: probe, 2026-10-03. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
 **A10 — "403 Forbidden" pages that answer as a success** · ❓ · invisible.
@@ -725,15 +731,17 @@ navigation menu item's window
 Basis: probe, 2026-10-03. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
-**A12 — A strip opened right after a download closes by itself** · 🐞 · minor.
-Two seconds after a press on a file's name, when the link is ready
-again ([A9](#a9)), the whole library list is drawn again. On Settings ›
-Workflow › "Publisher Library", a Journal Manager who presses a file's
-name and then, within those two seconds, the arrow at the start of its
-row sees the strip with "Edit" and "Delete" open and then close by
-itself; the arrow has to be pressed a second time. Expected: the strip
-stays open until the person closes it.
-Basis: probe. <sup>[f-a12](#fn-a12)</sup>
+**A12 — A strip opened right after a download closes by itself** · 🐞 · low.
+Each file row in a library list starts with an arrow, which opens a
+strip with "Edit" and "Delete" under the row. When a person downloads a
+file by pressing its name and opens a strip within two seconds, the
+strip closes by itself, because two seconds after the download the
+whole list is drawn again, and the arrow has to be pressed a second
+time. Every library list: on Settings › Workflow › "Publisher Library",
+for the Journal Manager; in the "Submission Library" window, for anyone
+working on the submission; in "View Document Library", for a manager.
+Expected: the strip stays open until the person closes it.
+Basis: probe, 2026-10-03. <sup>[f-a12](#fn-a12)</sup>
 
 ### OMP
 
@@ -869,6 +877,7 @@ Issue report: [docs/issues/U39-A1-submission-library-file-403-for-participants.m
 
 <a id="fn-a9"></a>
 **f-a9** — `lib/pkp/js/classes/linkAction/PostAndRedirectRequest.js` (identical in the three checkouts): after the post it points `window.location` at the download and schedules `finishCallback_` with `setTimeout(…, 2000)`; a list reload inside that time removes the link element, and the callback throws "There is no handler bound to this element!". Live-probed 2026-09-24 on OJS, four runs (8, 2, 2 and 2 page errors); closing the window right after a download raised nothing, and a wait of 2.1 s after each download removed every occurrence, so a test waits past the two seconds after a download before changing a list.
+Issue report: [docs/issues/U39-A9-A12-library-download-redraws-list.md](../issues/U39-A9-A12-library-download-redraws-list.md).
 
 <a id="fn-a10"></a>
 **f-a10** — Notes d and g: both handlers send `HTTP/1.0 403 Forbidden` before the text. Live-probed 2026-09-24 (Rules 8b, 10b; all three apps, every run): the public address of an unticked, a Submission Library, a deleted, an unknown (999999) and another journal's file, and a refused Submission Library download, each answered status 200, `text/html; charset=utf-8`, with the body "403 Forbidden", on the test installs' PHP servers. Other web servers were not checked.
@@ -879,6 +888,7 @@ Issue report: [docs/issues/U08-A18-item-window-refused-save-closes-unasked.md](.
 
 <a id="fn-a12"></a>
 **f-a12** — `lib/pkp/js/classes/linkAction/PostAndRedirectRequest.js`: the two-second `setTimeout` of note f-a9 calls `finishCallback_`, which in one task re-enables the link (`LinkActionHandler.enableLink()`) and then hands the `enable-link-action` answer to `handleJson()`; `FileApiHandler::enableLinkAction()` answers `DAO::getDataChangedEvent()` with no element id, so the event bubbles to the grid and `GridHandler.refreshGridHandler()` fetches the whole grid (`fetch-grid`); `replaceGridResponseHandler_()` replaces the grid element with the server's markup, in which every row's strip (`tr.row_controls`) is rendered hidden and every name link reads `href="#"` until its own script runs. Live-probed 2026-09-30 (Rule 8a; all three apps, the Settings tab, one run each, `.reports/flake-0930/u39s2/person-strip-{ojs,omp,ops}.json`): a throwaway manager on a scratch journal pressed "Journal guide", waited one second and pressed its arrow: "Edit" showed; about 2.1 s after the press on the name the page asked for the list again (`library-file-admin-grid/fetch-grid`), and three seconds after the arrow "Edit" was hidden and the arrow read closed (`show_extras`); no page error. Test run 2026-09-30 (the U39 files five times each, OJS 25/25, OMP 25/25, OPS 20/20, green): after every download the page object waited for the list it pressed in to be replaced, and each was, in the "Submission Library" window, in "View Document Library" and on the tab. No request failed on the path.
+Issue report: [docs/issues/U39-A9-A12-library-download-redraws-list.md](../issues/U39-A9-A12-library-download-redraws-list.md). The proposed fix drops the list's redraw after a download, which the suite's `LibraryList.download()` (`shared/playwright/pages/LibraryPages.js`) waits for.
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp/classes/file/LibraryFileManager.php` overrides `getTypeSuffixMap()`, `getTypeTitleKeyMap()` and `getTypeNameMap()` to put `LibraryFile::LIBRARY_FILE_TYPE_CONTRACT` ("CON", `settings.libraryFiles.category.contracts` "Contracts") before the lib/pkp set; OJS's and OPS's `LibraryFileManager` are empty subclasses of `PKPLibraryFileManager` (positive chain evidence, RUNBOOK rule 8). The overrides use `array_merge()`, which renumbers integer keys, so a press stores its types as 0–4 (Contracts 0 … Other 4) instead of lib/pkp's 1–5; the numbering is consistent within OMP and nothing on screen shows it. Each override also merges into its own `static $map`, so a second call in the same request returns the four shared types again under 5–8; the lists read the first five numbers, which do not change. Live-probed 2026-09-24: note td8; the composer's "Library Files" labels a press's "Contracts" file right.
