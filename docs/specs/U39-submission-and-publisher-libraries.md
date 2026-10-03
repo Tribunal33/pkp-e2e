@@ -903,7 +903,7 @@ Issue report: [docs/issues/U39-A4-library-download-name-cut.md](../issues/U39-A4
 
 <a id="fn-a5"></a>
 **f-a5** — Note p. Live-probed 2026-09-24: the strict-off end only (note p); the strict-on end was not driven.
-Issue report: [docs/issues/U39-A5-library-delete-strict-mode-error.md](../issues/U39-A5-library-delete-strict-mode-error.md).
+Issue report: [docs/issues/U39-A5-library-delete-strict-mode-error.md](../issues/U39-A5-library-delete-strict-mode-error.md), filed as [pkp-e2e#698](https://github.com/jardakotesovec/pkp-e2e/issues/698).
 
 <a id="fn-a6"></a>
 **f-a6** — Note c. Live-probed 2026-09-24: note td10.
