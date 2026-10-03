@@ -3467,7 +3467,7 @@ editable because it was declined."}` and the assignment read unchanged.
 assignments, while `ReviewDetailsModal.vue` disables the button only while
 the review loads. After "Resend Review Request" the same save went through
 and the row read "Review Submitted" (OMP, the same day).
-Issue report: [docs/issues/U27-A30-A31-modify-review-offered-then-refused.md](../issues/U27-A30-A31-modify-review-offered-then-refused.md).
+Issue report: [pkp-e2e#702](https://github.com/jardakotesovec/pkp-e2e/issues/702) ([docs/issues/U27-A30-A31-modify-review-offered-then-refused.md](../issues/U27-A30-A31-modify-review-offered-then-refused.md)).
 
 <a id="fn-a31"></a>
 **f-a31** — Driven 2026-09-17 (OJS + OMP): a throwaway Funding Coordinator
@@ -3486,7 +3486,7 @@ the "Competing Interests" group with "Modify Review" enabled, the edit
 window offered the competing-interests radios, and "Save Changes" answered
 401 with the same "Error" dialog; "Cancel" asked the unsaved-changes
 warning and the row was unchanged.
-Issue report: [docs/issues/U27-A30-A31-modify-review-offered-then-refused.md](../issues/U27-A30-A31-modify-review-offered-then-refused.md).
+Issue report: [pkp-e2e#702](https://github.com/jardakotesovec/pkp-e2e/issues/702) ([docs/issues/U27-A30-A31-modify-review-offered-then-refused.md](../issues/U27-A30-A31-modify-review-offered-then-refused.md)).
 
 <a id="fn-a32"></a>
 **f-a32** — `useReviewDetails.js` used to reload the opener once the mark
