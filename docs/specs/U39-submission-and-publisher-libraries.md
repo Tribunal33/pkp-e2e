@@ -844,7 +844,7 @@ Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
 
 <a id="fn-a1"></a>
 **f-a1** — The window's audience is note b's and its edit rights note c's, while the download is note d's check on the Submission stage. The check is older than the 2022 rename of the page handler (`df90557bf`, pkp/pkp-lib#6091); the grids came to lib/pkp in 2013 (`c81abf340`). Age would read the Submission-stage audience as intent, but the window offers the same files, and the rights to add and delete them, to people the download refuses, and on a preprint server it refuses the submission's own Author, hence a defect. Live-probed 2026-09-24: notes d and td3.
-Issue report: [docs/issues/U39-A1-submission-library-file-403-for-participants.md](../issues/U39-A1-submission-library-file-403-for-participants.md).
+Issue report: [docs/issues/U39-A1-submission-library-file-403-for-participants.md](../issues/U39-A1-submission-library-file-403-for-participants.md), filed as [pkp-e2e#691](https://github.com/jardakotesovec/pkp-e2e/issues/691).
 
 <a id="fn-a2"></a>
 **f-a2** — `LibraryFileGridHandler::saveFile()` answers `new JSONMessage(false)` with no content when `validate()` fails; `FileUploadFormHandler` → `AjaxFormHandler::handleResponse()` → `Handler::handleJson()` shows a message only when the answer carries content (`alert(jsonData.content)`), so nothing appears and the controls are enabled again. The hidden `temporaryFileId` input has no browser-side check, so the file is the one field only the server checks, and `settings.libraryFiles.fileRequired` ("A library file is required. Please ensure that you have chosen and uploaded a file.") never reaches the screen. Live-probed 2026-09-24: note td4 (the no-upload end; a file still uploading was not driven).
