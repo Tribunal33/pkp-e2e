@@ -2193,7 +2193,7 @@ alias the declaration relied on went with omp `6f57d1d09`; the
 stable-3_5_0 line still has it, and exports (walked 2026-10-03). An
 install upgraded to `main` exports too: its migration rewrites the
 stored type.
-Issue report: [docs/issues/U74-A1-onix-export-fails-every-book.md](../issues/U74-A1-onix-export-fails-every-book.md).
+Issue report: [pkp-e2e#695](https://github.com/jardakotesovec/pkp-e2e/issues/695) ([docs/issues/U74-A1-onix-export-fails-every-book.md](../issues/U74-A1-onix-export-fails-every-book.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note c: the menu offers the page with no role test, the form
