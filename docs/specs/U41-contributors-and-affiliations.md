@@ -771,6 +771,28 @@ Left out of the scenarios above, by reason:
     under each box (Fields "Role Name")
   - "Close" on "Edit Role" leaving at once, with no question, and a
     reload showing nothing saved (Rule 12)
+  - the guard for A14 (issue report
+    `docs/issues/U41-A14-one-role-journal-contributor-save-fails.md`): on
+    a journal with one contributor role, a contributor added from the
+    form saves, listed with that role's badge after a reload
+  - the guard for A3 (issue report
+    `docs/issues/U41-A3-publication-lists-tick-ignored.md`): scenario 7's
+    reader pages, with a journal's and a preprint server's listings
+    leaving the unticked contributor out, as a press's catalog does
+  - the guard for A7 (issue report
+    `docs/issues/U41-A7-affiliation-error-list-object-object.md`): a
+    hand-entered institution's name cleared and saved, the error list's
+    "Go to Affiliations" entry reading the refusal's message
+  - the guard for A10 (issue report
+    `docs/issues/U41-A10-name-boxes-labels-run-together.md`): a
+    hand-entered institution's name boxes, each named for its own
+    language alone
+  - the guard for A1 (issue report
+    `docs/issues/U41-A1-contributor-rows-no-affiliation.md`): a
+    contributor row showing the affiliation its "Edit" window lists
+  - the guard for A1 (issue report
+    `docs/issues/U41-A1-book-page-long-credits-dangling-comma.md`): on a
+    book page with five or more contributors, each affiliation shown
 - **Nothing new to test**:
   - Preferred Public Name (Fields): another text box on the form
     scenario 1 fills
@@ -857,15 +879,15 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | Contributor rows never show affiliations, though the list reserves a line for them | 🐞 | user-visible | — |
-| [A3](#a3) | The publication-lists tick is honored only by a press's catalog listings; journal and preprint-server listings ignore it | 🐞 | user-visible | — |
-| [A5](#a5) | A registry pick the server cannot cache raises an error dialog, then saves and publishes with no name | 🐞 | user-visible | — |
-| [A14](#a14) | On a one-role journal no contributor can be saved from the form; every attempt errors, yet creates a role-less contributor | 🐞 | user-visible | — |
-| [A20](#a20) | On a journal with a "Forms" language not ticked under "Metadata", the workflow's "Add Contributor" never saves, refused on fields the form does not show | 🐞 | user-visible | — |
+| [A1](#a1) | Contributor rows never show affiliations, though the list reserves a line for them; a press's book page with five or more contributors shows "Name, ;" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A3](#a3) | Journal and preprint server listings still name contributors unticked from "Publication Lists" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A5](#a5) | A registry pick the server cannot cache raises an error dialog, then saves and publishes with no name until the install's registry copy gains it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A14](#a14) | On a journal with one contributor role, adding or editing any contributor fails with an error | 🐞 | medium · crash: server | issues (claude), 2026-10-03 — re-verified |
+| [A20](#a20) | "Add Contributor" never saves when a "Forms" language is not a metadata language | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A22](#a22) | A role name changed in "Edit Role" and closed without saving shows on the row, and the role's next "Save" stores it | 🐞 | medium || issues (claude), 2026-10-03 — re-verified |
-| [A7](#a7) | The contributor form's error summary prints "Go to Affiliations: [object Object]" | 🐞 | minor | — |
+| [A7](#a7) | A refused affiliation reads "Go to Affiliations: [object Object]" to screen-reader users of the contributor form | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | The landing page's affiliation ROR link has no accessible name | 🐞 | minor | — |
-| [A10](#a10) | The typed affiliation's per-language name boxes are announced wrongly by a screen reader | 🐞 | minor | — |
+| [A10](#a10) | The typed affiliation's per-language name boxes are announced wrongly by a screen reader | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | The delete-role confirm button is labeled with a whole warning sentence instead of "Delete" | 🐞 | minor | — |
 | [A23](#a23) | On a French landing page a CRediT role's degree prints as a raw text code | 🐞 | minor | — |
 | [OPS2](#ops2) | The contributor form's Competing Interests label renders raw markup on a preprint server | 🐞 | minor | — |
@@ -888,18 +910,21 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 ### All apps
 
 <a id="a1"></a>
-**A1 — Contributor rows never show affiliations** · 🐞 · user-visible.
-The workflow's contributor rows, and the wizard's Review list, are built
-to show each contributor's affiliation under the name. The line is always
-empty, even for a contributor whose Edit panel holds a saved affiliation,
-such as one carried over from the submitter's profile. An editor scanning
-the list cannot see any contributor's institution without opening each
-Edit panel. The display reads from a field the contributor data no longer
-carries. The same dead read reaches a press's readers. On a book page
-compacted for five or more contributors ([OMP1](#omp1)), a contributor
-with an affiliation renders as "{name}, ;". The comma that should
-introduce the affiliation prints with nothing after it.
-Basis: code reading + probe. <sup>f-a1</sup>
+**A1 — Contributor rows never show affiliations** · 🐞 · medium.
+A submission's "Contributors" list, in the workflow and in the
+submission wizard, keeps a line under each contributor's name for their
+affiliation. That line is always empty, even when the contributor's
+"Edit" window lists an affiliation, typed or chosen from the registry.
+The wizard's "Review" step lists each contributor by name alone, where
+it is built to show "name, affiliation". An editor or author checking
+the contributors must open each "Edit" window to see an affiliation.
+The affiliations are stored and reach the reader pages, with one
+exception on a press, from a fault of its own: a book page that lists
+five or more names in one compact byline ([OMP1](#omp1)) shows every
+affiliated contributor as "{name}, ;", the comma with nothing after it.
+That holds for a book's contributors, a chapter page's authors and an
+edited volume's volume editors.
+Basis: code reading + probe, 2026-10-03. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — Deleting the primary contact leaves none** · ❓ · user-visible.
@@ -916,16 +941,20 @@ any hint that the contact point is being lost.
 Basis: code reading + probe. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — The publication-lists tick works only on a press** · 🐞 ·
-user-visible.
-Unticking "Include this contributor when identifying authors in lists of
-publications." promises to keep the contributor out of listing pages, and
-the Preview's "Publication Lists" row honors it. On a journal and a
-preprint server, though, every reader-facing listing (issue tables of
-contents, search results, the archive) shows the contributor anyway. Only
-a press's catalog lists apply the tick. The checkbox therefore does
-nothing reader-visible on two of the three applications.
-Basis: code reading + probe. <sup>f-a3</sup>
+**A3 — Journal and preprint server listings still name contributors unticked from "Publication Lists"** · 🐞 · medium.
+An editor who unticks "Include this contributor when identifying authors
+in lists of publications." on a contributor expects that contributor to
+be left out of the author line wherever the item is listed. The
+contributor list's "Preview" shows the contributor left out of its
+"Publication Lists" row. On a journal and a preprint server, though, the
+issue's table of contents, the preprint archive and the search results
+still name the contributor. Only a press's catalog and search results
+leave them out.
+
+The box saves, the Preview agrees with it, and only the public lists
+ignore it. The item's own page credits every contributor whatever the
+box says, as intended.
+Basis: code reading + probe, 2026-10-03. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — The organization "ROR ID" box takes anything** · ❓ · minor.
@@ -946,20 +975,28 @@ the shape.
 Basis: code reading + probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A registry pick the server cannot cache errors, then saves — and publishes — nameless** · 🐞 · user-visible.
+**A5 — A registry pick the server cannot cache errors, then saves — and publishes — nameless** · 🐞 · medium.
 When the journal's server cannot reach the registry, the user's own
 browser search still works. The picked suggestion still becomes the
 selected entry, with its registry link and ROR mark. Pressing "Add" then
 raises a generic "Error" dialog: "An unexpected error has occurred.
-Please reload the page and try again." Yet the entry is added anyway and
-saves with no name. Reopening the form shows the entry flagged in red
-"The primary language English is required". That message misleads twice:
-the missing name never blocks any later save, and a registry-backed row
-offers no name box, only "Remove institution". On the published page the
-reader sees a bare, unlabeled ROR-logo link where the institution name
-should be. This is the same failure family as the Funding list's
-registry picks (*[Funding](U43-funding.md)*).
-Basis: probe. <sup>f-a5</sup>
+Please reload the page and try again." Yet the entry is added anyway,
+and "Save" stores it with its ROR ID and no name. Reopening the form
+shows the entry flagged in red "The primary language English is
+required". That message misleads twice: the missing name never blocks
+any later save, and a registry-backed row offers no name box, only
+"Remove institution". On the published page the reader sees a bare,
+unlabeled ROR-logo link where the institution name should be. The name
+is missing, not destroyed: it is read from the install's own copy of
+the registry, and shows on every screen once that copy gains the
+institution. On a server without outside internet access the copy stays
+empty, so every pick ends this way for good; on a connected server only
+an institution missing from the copy is hit, while the registry cannot
+be reached or answers "too many requests". The way round is to remove
+the entry and add the name as typed text, with no ROR link. This is the
+same failure family as the Funding list's registry picks
+(*[Funding](U43-funding.md)*).
+Basis: probe, 2026-10-03. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — Read-only viewers cannot see who the primary contact is** · ❓ · minor.
@@ -975,13 +1012,16 @@ buttons rather than a choice.
 Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The form's error summary prints "[object Object]" for affiliation errors** · 🐞 · minor.
-When an affiliation fails validation on the contributor form, the error
-summary at the form's foot reads "Go to Affiliations: [object Object]".
-Sibling fields print their message there (compare "Go to Country: This
-field is required."). The inline message under the field itself is
-correct. Only the summary line is garbled.
-Basis: probe. <sup>f-a7</sup>
+**A7 — A refused affiliation reads "Go to Affiliations: [object Object]" to screen-reader users of the contributor form** · 🐞 · low.
+When a contributor's "Save" is refused because an institution entered
+by hand has no name in the submission's language, the error list a
+screen reader reads at the form's foot says "Go to Affiliations:
+[object Object]" instead of the reason. Every other field's entry reads
+its message ("Go to Given Name: This field is required.").
+
+Sighted users are not affected: the foot shows "Please correct one
+error." and the reason is printed under the field.
+Basis: probe, 2026-10-03. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — Institution text typed but never picked is dropped without a word** · ❓ · minor.
@@ -1003,13 +1043,17 @@ cannot tell that it leads to the institution's registry record.
 Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — The typed affiliation's name boxes are announced wrongly** · 🐞 · minor.
-In the Affiliations field's typed-entry editor, a screen reader reads the
-primary language's box out with both languages' labels run together, and
-the second language's box has no label at all. The Funding list's
-typed-name boxes carry the same defect
+**A10 — The typed affiliation's name boxes are announced wrongly** · 🐞 · low.
+In the Affiliations field's editor for an institution entered by hand,
+a screen reader reads the primary language's box out with both
+languages' labels run together, and the second language's box has no
+label at all. A click on the second label puts the cursor in the first
+box, for a sighted mouse user too. The names save correctly. It shows
+wherever a contributor is edited, in the workflow and the submission
+wizard, once two or more metadata languages give the entry a box each.
+The Funding list's typed-name boxes carry the same defect
 (*[Funding](U43-funding.md#a5)*).
-Basis: probe. <sup>f-a10</sup>
+Basis: probe, 2026-10-03. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — A registry error kills the institution search for the rest of the panel** · ❓ · minor.
@@ -1046,16 +1090,23 @@ form promises it twice.
 Basis: probe. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — On a one-role journal no contributor can be saved** · 🐞 · user-visible.
-When a journal has exactly one contributor role, the form hides the
-Contributor Roles field as designed. Saving any contributor from it then
-fails every time, with the generic "An unexpected error has occurred.
-Please reload the page and try again." toast. The screen cannot create a
-contributor at all on such a journal. Worse, each failed attempt still
-creates the contributor behind the scenes with no role. After a reload
-the list shows the new row with no role badge, and the intended automatic
-assignment of the one role never happens.
-Basis: probe. <sup>f-a14</sup>
+**A14 — On a journal with one contributor role, adding or editing any contributor fails with an error** · 🐞 · medium · crash: server.
+When a journal has exactly one contributor role, the contributor form
+hides the "Contributor Roles" field, as designed. Every "Save" from that
+form then fails on the server. An editor adding or editing a contributor
+in the workflow, and an author adding a co-author in the submission
+wizard, get "An unexpected error has occurred. Please reload the page and
+try again.", and the window stays open.
+
+A failed edit keeps the contributor's old name. A failed add still
+creates the contributor, without a role, so each retry leaves another
+role-less contributor in the list. A manager can get round it by adding
+a second role back on the "Contributor Roles" screen.
+
+It happens once a manager deletes the roles the journal does not use:
+"Translator" on a journal or preprint server, or three of a press's four
+roles.
+Basis: probe, 2026-10-03. <sup>f-a14</sup>
 
 <a id="a16"></a>
 **A16 — The auto-created contributor can lack a Country, then every edit demands one** · ❓ · user-visible.
@@ -1115,31 +1166,21 @@ product, decides.
 Since: 2023-02-16 (3½ years) · Basis: test run. <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — "Add Contributor" never saves while a "Forms" language is not ticked under "Metadata"** · 🐞 · user-visible.
-A journal can have a language ticked under "Forms" but not under
-"Metadata" (Settings that modify behavior). On such a journal the
-workflow's "Add Contributor" › "Save" is refused for every contributor
-type, whether a Journal Manager, an assigned Section Editor or, on a
-preprint server, the submitting author presses it. The panel stays open and the page shows "The form was
-not saved because {n} error(s) were encountered." The foot names fields
-of the other contributor types, each as "Go to {Field}: This language is
-not accepted.":
+**A20 — "Add Contributor" never saves when a "Forms" language is not a metadata language** · 🐞 · medium.
+A journal can tick a language under "Forms" in Settings › Website ›
+"Setup" › "Languages" without ticking it under "Metadata" in the
+"Submission Languages" table. On such a journal, "Add Contributor" ›
+"Save" in a submission's workflow is refused for every contributor
+type, on every submission that holds no text in that language. The
+panel stays open. Its foot lists fields the chosen type does not show,
+each as "Go to {Field}: This language is not accepted." (for a person,
+"Organization Name"), so nothing on the form can be corrected and
+"Save" stays disabled.
 
-- **Person**: "Please correct one error.", naming Organization Name.
-- **Organization or group**: "Please correct 3 errors.", naming Given
-  Name, Family Name and Preferred Public Name.
-- **Anonymous**: "Please correct 5 errors.", naming those three, "Bio
-  Statement (e.g., department and rank)" and Organization Name.
-
-None of those fields is on the form, so nothing can be corrected. No
-field shows a message, and the "Go to …" buttons and "Jump to next error"
-move to no field. Typing into a field that is shown clears nothing, and
-"Save" stays disabled. "Close" leaves with nothing saved. On the same
-journal the wizard's Contributors step and a row's "Edit" save normally.
-Workaround: add the language to "Submission Languages" with
-"Submissions" ticked, or add the contributor in the wizard before
-submitting.
-Since: 2025-11-11 (10½ months) · Basis: probe. <sup>f-a20</sup>
+The way round is hidden: choose another contributor type, type into
+the field the error names, switch back and save. Editing an existing
+contributor and adding one in the submission wizard still save.
+Since: 2025-11-11 (10½ months) · Basis: probe, 2026-10-03. <sup>f-a20</sup>
 
 <a id="a21"></a>
 **A21 — Contributor roles arrive named in the primary language only** · ❓ · minor.
@@ -1203,9 +1244,9 @@ On a press, a catalog book page with five or more contributors switches
 from the full per-contributor blocks to a single flowed line of names
 joined by semicolons, with no ROR marks, no ORCID icons, no role names
 and no CRediT roles. This is a deliberate layout for long author lists.
-In practice the line is names-only: where a contributor has an
-affiliation, it renders as a dangling comma with nothing after it
-(⚠ [A1](#a1)).
+In practice the line is names-only: every affiliation is missing from
+it, so a contributor with one renders as "{name}, ;", a dangling comma
+with nothing after it, from a fault in the page itself (⚠ [A1](#a1)).
 Basis: code reading + probe. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
@@ -1841,6 +1882,8 @@ affiliation rendered as "Ben Beta, ;" in the compacted line —
 `submission.authorWithAffiliation` with an empty affiliation value;
 the exact template-side mechanism is unverified, but the shape matches
 this entry's dead-field read.
+Issue report: [pkp-e2e#756](https://github.com/jardakotesovec/pkp-e2e/issues/756) ([docs/issues/U41-A1-contributor-rows-no-affiliation.md](../issues/U41-A1-contributor-rows-no-affiliation.md)).
+Issue report: [pkp-e2e#758](https://github.com/jardakotesovec/pkp-e2e/issues/758) ([docs/issues/U41-A1-book-page-long-credits-dangling-comma.md](../issues/U41-A1-book-page-long-credits-dangling-comma.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2 — A2 evidence.** `PKP\author\DAO::delete()` sets
@@ -1870,6 +1913,7 @@ Live-probed 2026-08-28 cross-app: the unticked contributor showed in
 OJS's issue TOC and search and OPS's archive and search, was dropped
 from OMP's catalog listing, and was credited on every landing page
 (see fn h).
+Issue report: [pkp-e2e#753](https://github.com/jardakotesovec/pkp-e2e/issues/753) ([docs/issues/U41-A3-publication-lists-tick-ignored.md](../issues/U41-A3-publication-lists-tick-ignored.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4 — A4 evidence.** `author.json` `rorId`: `[nullable]` only — no
@@ -1902,6 +1946,7 @@ primary language English is required" with only "Remove institution",
 a later save with the nameless row present succeeded, and the
 published article/preprint page rendered the affiliation as an
 icon-only registry link.
+Issue report: [pkp-e2e#754](https://github.com/jardakotesovec/pkp-e2e/issues/754) ([docs/issues/U41-A5-registry-pick-saves-nameless.md](../issues/U41-A5-registry-pick-saves-nameless.md)), shared with [Funding A3](U43-funding.md#a3).
 
 <a id="fn-f-a6"></a>
 **f-a6 — A6 evidence.** The badge and "Set Primary Contact" render in
@@ -1917,6 +1962,7 @@ submission primary locale." rendered correctly inline under the field
 while the foot's error-summary item printed the literal "Go to
 Affiliations: [object Object]" — sibling fields print their message
 text (e.g. "Go to Country: This field is required.").
+Issue report: [pkp-e2e#759](https://github.com/jardakotesovec/pkp-e2e/issues/759) ([docs/issues/U41-A7-affiliation-error-list-object-object.md](../issues/U41-A7-affiliation-error-list-object-object.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8 — A8 evidence.** Live-probed 2026-08-28 (OJS; shared field):
@@ -1939,6 +1985,7 @@ name concatenates both languages' labels ("Type the institution name
 in English Type the institution name in French (Canada)") and the FR
 box has no accessible name — the same shared-component defect the
 Funding list's typed-name boxes show.
+Issue report: [pkp-e2e#755](https://github.com/jardakotesovec/pkp-e2e/issues/755) ([docs/issues/U41-A10-name-boxes-labels-run-together.md](../issues/U41-A10-name-boxes-labels-run-together.md)), shared with [Funding A5](U43-funding.md#a5).
 
 <a id="fn-f-a11"></a>
 **f-a11 — A11 evidence.** Probed 2026-08-28 (OJS) with SIMULATED
@@ -1975,6 +2022,7 @@ an array) — with the generic reload toast and the panel left open;
 reproduced three times, each attempt inserting an `authors` row with
 no `credit_contributor_roles` link, listed after reload with no role
 badge. Deleting the role-less rows worked normally.
+Issue report: [pkp-e2e#752](https://github.com/jardakotesovec/pkp-e2e/issues/752) ([docs/issues/U41-A14-one-role-journal-contributor-save-fails.md](../issues/U41-A14-one-role-journal-contributor-save-fails.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15 — A15 evidence.** Mechanism: `PKP\author\DAO::getNextSeq()`
@@ -2100,6 +2148,7 @@ context with `fr_CA` also a submission (hence metadata) language saved a
 Person and an Organization, listed after a reload. A language ticked
 under "Metadata" alone is accepted by that code; not driven. Introduced
 by pkp-lib `52d3a0f8e7` (2025-11-11, "Contributor Roles and Type").
+Issue report: [pkp-e2e#751](https://github.com/jardakotesovec/pkp-e2e/issues/751) ([docs/issues/U41-A20-add-contributor-refused-hidden-fields.md](../issues/U41-A20-add-contributor-refused-hidden-fields.md)).
 
 <a id="fn-f-a21"></a>
 **f-a21 — A21 evidence.** Live-probed 2026-09-29 (OJS, OMP, OPS; two

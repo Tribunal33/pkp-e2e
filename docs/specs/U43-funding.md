@@ -428,6 +428,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U46-A5-ordering-arrows-unnamed.md`): in ordering mode each
     funder row's up and down arrows carry names that say the direction and
     the funder
+  - the guard for A5 (issue report
+    `docs/issues/U41-A10-name-boxes-labels-run-together.md`): a
+    hand-entered funder's name boxes, each named for its own language
+    alone
 - **Nothing new to test**:
   - grant validation on while the registry service is unreachable, the
     check skipped and the save going through (Settings): the save
@@ -487,9 +491,9 @@ are the source; badges, Impact and Basis:
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A3](#a3) | A registry funder picked while the server cannot reach the registry errors and saves permanently nameless | 🐞 | user-visible | — |
+| [A3](#a3) | A registry funder picked while the server cannot reach the registry errors and saves nameless until the install's registry copy gains it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | On a press or preprint server the wizard's funders table and Review step still read empty after a successful save | 🐞 | minor | — |
-| [A5](#a5) | Ordering arrows and the typed-name boxes are broken for assistive technology | 🐞 | low | issues (claude), 2026-10-02 — re-verified (the ordering arrows; the name boxes open) |
+| [A5](#a5) | Ordering arrows and the typed-name boxes are broken for assistive technology | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | In French the funders list and the "Add Funder" / "Edit Funder" panel show raw codes for their headings, explanations and field labels | 🐞 | minor | — |
 | [A1](#a1) | "Require the author to add funder metadata" warns on the Review step without blocking the submission | ❓ | user-visible | — |
 | [A2](#a2) | Every publication version shows and edits the same funders list, though the screen presents funding per version | ❓ | minor | — |
@@ -529,16 +533,19 @@ per-version presentation invites the wrong expectation.
 Basis: probe. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — Registry pick saves a nameless funder when the server has no registry access** · 🐞 · user-visible.
+**A3 — Registry pick saves a nameless funder when the server has no registry access** · 🐞 · medium.
 When the journal's server cannot reach the ROR registry, picking a registry
 match raises "An unexpected error has occurred. Please reload the page and
 try again." That dialog can sit over the open panel and swallow the next
-click. The funder still saves, permanently nameless: the workflow row, the
-edit panel, the wizard and the published page all show a bare ROR logo with
-no text. The name the user just saw in the panel is discarded rather than
-kept as a fallback. Nothing recovers it short of deleting the funder and
-re-adding it once the server can reach the registry.
-Basis: probe. <sup>f-a3</sup>
+click. The funder still saves, with its ROR ID and no name: the workflow
+row, the edit panel, the wizard and the published page all show a bare ROR
+logo with no text. The name the user just saw in the panel is not kept as
+a fallback. It is missing, not destroyed: the name is read from the
+install's own copy of the registry, and shows once that copy gains the
+funder. On a server that never reaches the registry nothing recovers it;
+the way round is to delete the funder and add its name as typed text,
+with no ROR link.
+Basis: probe, 2026-10-03. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — The wizard does not refresh after a funder save on a press or preprint server** · 🐞 · minor.
@@ -559,10 +566,12 @@ refresh-miss has not been re-probed at the fixed tips.
 <a id="a5"></a>
 **A5 — Two funder controls are broken for assistive technology** · 🐞 · low.
 In ordering mode the row's up/down arrows are icon-only, with no accessible
-name for a screen reader to read out. In the typed-name path a screen reader
-reads the primary-language box out with both languages' labels run together,
-and the second box has no label at all.
-Basis: probe, 2026-10-02. <sup>f-a5</sup>
+name for a screen reader to read out. For a funder entered by hand, a
+screen reader reads the primary-language name box out with both languages'
+labels run together, and the second box has no label at all; a click on
+the second label puts the cursor in the first box, for a sighted mouse
+user too. The names save correctly.
+Basis: probe, 2026-10-03. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — The typed-text suggestion masquerades as a registry match** · ❓ ·
@@ -1053,6 +1062,7 @@ blanks manual names whenever a ROR is set; `Funder::name()` then has no
 cached record to fall back on). Live-probed 2026-08-28 on all three apps;
 deterministic on the campaign's test installs, whose servers have no
 outbound internet access.
+Issue report: [pkp-e2e#754](https://github.com/jardakotesovec/pkp-e2e/issues/754) ([docs/issues/U41-A5-registry-pick-saves-nameless.md](../issues/U41-A5-registry-pick-saves-nameless.md)), shared with [Contributors & affiliations A5](U41-contributors-and-affiliations.md#a5).
 
 <a id="fn-f-a4"></a>
 **f-a4 — A4 evidence.** Live-probed 2026-08-28, two runs per app: after a
@@ -1069,6 +1079,7 @@ components): the `TableCellOrder` up/down buttons expose no accessible
 name; in the multilingual name boxes the primary input's accessible name
 concatenates both languages' labels and the secondary input has none.
 Issue report: [pkp-e2e#619](https://github.com/jardakotesovec/pkp-e2e/issues/619) ([docs/issues/U46-A5-ordering-arrows-unnamed.md](../issues/U46-A5-ordering-arrows-unnamed.md)).
+Issue report: [pkp-e2e#755](https://github.com/jardakotesovec/pkp-e2e/issues/755) ([docs/issues/U41-A10-name-boxes-labels-run-together.md](../issues/U41-A10-name-boxes-labels-run-together.md)), shared with [Contributors & affiliations A10](U41-contributors-and-affiliations.md#a10).
 
 <a id="fn-f-a6"></a>
 **f-a6 — A6 evidence.** `FieldAffiliationsRorAutoSuggest` with
