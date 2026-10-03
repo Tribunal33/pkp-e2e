@@ -1732,7 +1732,7 @@ the chosen period. Live-probed 2026-09-02 on OJS and OPS: Year 2025 alone
 unfiltered, selects blank Year / "Dec" / "2"; Sep + 2, Sep alone and Day 2
 alone (no Year) → unfiltered, all three selects blank; 2026 + Sep →
 "2026" / "Aug" / "31"; 2026 + Dec → "2026" / "Nov" / "30".
-Issue report: [docs/issues/U15-A1-partial-date-filter-ignored.md](../issues/U15-A1-partial-date-filter-ignored.md).
+Issue report: [docs/issues/U15-A1-partial-date-filter-ignored.md](../issues/U15-A1-partial-date-filter-ignored.md), filed as [pkp-e2e#707](https://github.com/jardakotesovec/pkp-e2e/issues/707).
 
 <a id="fn-f-a2"></a>
 **f-a2** — fn-h: `whereDate(…, '<', $publishedTo)` versus the OpenSearch
