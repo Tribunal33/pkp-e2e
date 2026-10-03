@@ -1893,7 +1893,7 @@ upcpage" chosen read "1 - 25 of 28 items 1 2 > >>", the address carried
 `searchContext=3`, every page link carried `searchContext=` empty, and "2"
 read "26 - 50 of 175 items << < 1 2 3 4 5 6 7 > >>": the whole site's
 listing.
-Issue report: [docs/issues/U15-OJS2-by-journal-choice-lost-after-search.md](../issues/U15-OJS2-by-journal-choice-lost-after-search.md).
+Issue report: [docs/issues/U15-OJS2-by-journal-choice-lost-after-search.md](../issues/U15-OJS2-by-journal-choice-lost-after-search.md), filed as [pkp-e2e#708](https://github.com/jardakotesovec/pkp-e2e/issues/708).
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — fn-l: a denied authorization policy redirects an anonymous
