@@ -2964,7 +2964,7 @@ Section Editor on all three apps, its row named "Résultats de recherche"
 entry read `##common.publications##` to the same three, the other
 entries in French. The Author's, Reader's and Reviewer's menus showed no
 code.
-Issue report: [docs/issues/U08-A23-french-dois-label-raw-key.md](../issues/U08-A23-french-dois-label-raw-key.md).
+Issue report: [docs/issues/U08-A23-french-dois-label-raw-key.md](../issues/U08-A23-french-dois-label-raw-key.md), filed as [pkp-e2e#654](https://github.com/jardakotesovec/pkp-e2e/issues/654).
 The "Monographs" entry joined [docs/issues/U64-A6-french-statistics-pages-raw-keys.md](../issues/U64-A6-french-statistics-pages-raw-keys.md), filed as [pkp-e2e#625](https://github.com/jardakotesovec/pkp-e2e/issues/625).
 
 <a id="fn-f-a24"></a>
