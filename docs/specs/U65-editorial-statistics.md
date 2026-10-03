@@ -2142,7 +2142,7 @@ not opened.
 **f-a11** — OMP and OPS `locale/en/emails.po`,
 `emails.statisticsReportNotification.body`; OJS's reads "Login to the
 journal". Live-probed 2026-09-28: the three closings word for word (td14).
-Issue report: [docs/issues/U65-A11-monthly-email-login-to-the-the-press.md](../issues/U65-A11-monthly-email-login-to-the-the-press.md).
+Issue report: [docs/issues/U65-A11-monthly-email-login-to-the-the-press.md](../issues/U65-A11-monthly-email-login-to-the-the-press.md), filed as [pkp-e2e#647](https://github.com/jardakotesovec/pkp-e2e/issues/647).
 
 <a id="fn-f-a12"></a>
 **f-a12** — fn l and fn o: decisions are matched by `editorId` to the
