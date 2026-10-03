@@ -889,6 +889,8 @@ the tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - A1 (a "Description" with a double quote mark: the journal's home page carries the whole text in its description tag; Rule 9)
 - **Rarely met**:
   - "User Registration" set to "The Journal Manager will register all
     user accounts. …", which takes "Register" out of the sitemap
@@ -972,7 +974,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A "Description" holding a double quote mark reaches search engines cut at the mark; one holding markup shows its end above the home page's header | 🐞 | minor | — |
+| [A1](#a1) | Search engines get the home page's "Description" cut at its first double quote mark | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Google Analytics Plugin" speaks of OJS on a press and a preprint server, and of a "Check Status" function no screen offers | 🐞 | minor | — |
 | [A5](#a5) | The sitemap lists expired announcements, and their entries open the "Announcements" list | 🐞 | minor | — |
 | [A6](#a6) | A contributor whose names are not entered in the submission's language is announced by the given name alone | 🐞 | minor | — |
@@ -992,16 +994,24 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — A description with a double quote mark or markup is cut** · 🐞 · minor.
-A manager who types a "Description" such as `The "Sea" journal` expects
-search engines to receive the whole text. The home page's "description"
-tag holds only the part before the first double quote mark, "The ", and
-the rest spills into the tag as stray words search engines ignore;
-nothing shows on the page. A description holding markup such as `<b>`
-ends the tag at the first ">", and the rest shows as text above the home
-page's header: `The "Sea" <b>journal</b> & more` shows
-`journal & more" />` there.
-Basis: probe, 2026-09-26. <sup>f-a1</sup>
+**A1 — Search engines get the home page's "Description" cut at its first double quote mark** · 🐞 · medium.
+A manager who types a "Description" on Settings › Distribution ›
+"Search Indexing" expects search engines to receive the whole text
+from the journal's home page. When the text holds an ordinary straight
+double quote mark (`"`), the home page's description tag ends at that
+mark, and the words after it are dropped from the description. The
+form says "Saved" and nothing on the page changes, so the cut goes
+unnoticed.
+
+The box is plain text with no formatting editor, but markup can be
+typed into it by hand. Typing a description that ends
+`"public access to <i>science</i>".` also puts the text
+`science"." />` at the top of the home page, above the header.
+
+It applies to the "Description" in every language, on the journal's
+(press's, server's) own home page, the one page that carries the tag.
+The site's index page never carries it.
+Basis: probe, 2026-10-03. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — Google Analytics texts name OJS and a missing function** · 🐞 · minor.
@@ -1281,6 +1291,7 @@ OMP's own code.
 
 <a id="fn-f-a1"></a>
 **f-a1** — Note g: the "description" tag is built by string concatenation with no `htmlspecialchars()`, unlike every plugin tag (which escape their content); the context API's `PKPSchemaService::sanitize()` casts to string and strips nothing. A double quote therefore closes the attribute, and a ">" closes the tag, the rest printing as page text. Live-probed 2026-09-26, all three apps: note q11.
+Issue report: [docs/issues/U20-A1-home-page-description-cut-at-quote-mark.md](../issues/U20-A1-home-page-description-cut-at-quote-mark.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Notes a, d: `plugins.generic.googleAnalytics.description` and `…manager.settings.description` in `plugins/generic/googleAnalytics/locale/en/locale.po`, identical in the three apps (a shared plugin tree); no code or template offers a "Check Status" action. The `…authorAccount*` strings of the same file are read by no code. Live-probed 2026-09-26, all three apps: notes q1, q20, q22 (the two texts as quoted).

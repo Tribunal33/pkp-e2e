@@ -1,0 +1,11 @@
+--- a/lib/pkp/classes/template/PKPTemplateManager.php
++++ b/lib/pkp/classes/template/PKPTemplateManager.php
+@@ -323,7 +323,7 @@
+             // Register meta tags
+             if (Application::isInstalled()) {
+                 if (($request->getRequestedPage() == '' || $request->getRequestedPage() == 'index') && $currentContext && $currentContext->getLocalizedData('searchDescription')) {
+-                    $this->addHeader('searchDescription', '<meta name="description" content="' . $currentContext->getLocalizedData('searchDescription') . '" />');
++                    $this->addHeader('searchDescription', '<meta name="description" content="' . htmlspecialchars($currentContext->getLocalizedData('searchDescription')) . '" />');
+                 }
+ 
+                 $this->addHeader(
