@@ -1,0 +1,11 @@
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -238,7 +238,7 @@
+ msgstr "<p>Make this format <em>available to readers</em>. Downloadable files and any other distributions will appear in the book's catalog entry.</p>"
+ 
+ msgid "grid.catalogEntry.availableRepresentation.removeMessage"
+-msgstr "<p>This format will <em>unavailable to readers</em>. Any downloadable files or other distributions will no longer appear in the book's catalog entry.</p>"
++msgstr "<p>This format will be <em>unavailable to readers</em>. Any downloadable files or other distributions will no longer appear in the book's catalog entry.</p>"
+ 
+ msgid "grid.catalogEntry.availableRepresentation.catalogNotApprovedWarning"
+ msgstr "Catalog entry not approved."
