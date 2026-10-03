@@ -1,0 +1,58 @@
+--- a/classes/submission/Repository.php
++++ b/classes/submission/Repository.php
+@@ -16,6 +16,7 @@
+ 
+ use APP\facades\Repo;
+ use PKP\context\Context;
++use PKP\publication\PKPPublication;
+ 
+ class Repository extends \PKP\submission\Repository
+ {
+@@ -32,7 +33,7 @@
+         $submissions = $this->getCollector()
+             ->filterByContextIds([$contextId])
+             ->filterByIssueIds([$issueId])
+-            ->filterByStatus([Submission::STATUS_PUBLISHED, Submission::STATUS_SCHEDULED])
++            ->filterByCurrentPublicationStatus([PKPPublication::STATUS_PUBLISHED, PKPPublication::STATUS_SCHEDULED])
+             ->orderBy(Collector::ORDERBY_SEQUENCE, Collector::ORDER_DIR_ASC)
+             ->getMany();
+ 
+--- a/classes/article/ArticleTombstoneManager.php
++++ b/classes/article/ArticleTombstoneManager.php
+@@ -330,7 +330,7 @@
+         $submissions = Repo::submission()
+             ->getCollector()
+             ->filterByContextIds([$context->getId()])
+-            ->filterByStatus([Submission::STATUS_PUBLISHED])
++            ->filterByCurrentPublicationStatus([PKPPublication::STATUS_PUBLISHED])
+             ->getMany();
+ 
+         foreach ($submissions as $submission) {
+@@ -348,7 +348,7 @@
+         $tombstoneDao = DAORegistry::getDAO('DataObjectTombstoneDAO');
+         $submissions = Repo::submission()->getCollector()
+             ->filterByContextIds([$contextId])
+-            ->filterByStatus([Submission::STATUS_PUBLISHED])
++            ->filterByCurrentPublicationStatus([PKPPublication::STATUS_PUBLISHED])
+             ->getMany();
+ 
+         foreach ($submissions as $submission) {
+--- a/plugins/generic/webFeed/WebFeedGatewayPlugin.php
++++ b/plugins/generic/webFeed/WebFeedGatewayPlugin.php
+@@ -28,6 +28,7 @@
+ use PKP\facades\Locale;
+ use PKP\i18n\LocaleConversion;
+ use PKP\plugins\GatewayPlugin;
++use PKP\publication\PKPPublication;
+ use PKP\userGroup\UserGroup;
+ 
+ class WebFeedGatewayPlugin extends GatewayPlugin
+@@ -79,7 +80,7 @@
+         $latestDate = null;
+         $submissions = Repo::submission()->getCollector()
+             ->filterByContextIds([$context->getId()])
+-            ->filterByStatus([Submission::STATUS_PUBLISHED])
++            ->filterByCurrentPublicationStatus([PKPPublication::STATUS_PUBLISHED])
+             ->limit($recentItems)
+             ->orderBy(Collector::ORDERBY_LAST_MODIFIED, Collector::ORDER_DIR_DESC);
+ 

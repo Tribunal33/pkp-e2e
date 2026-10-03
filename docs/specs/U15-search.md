@@ -664,6 +664,7 @@ Left out of the scenarios above, by reason:
   - a title corrected and a contributor added on a published article, book or preprint are found by their new words once the queue has run, and the old title word no longer finds it (Rule 12; A3)
   - a Year alone under "Published Before", and a Year and Month without a Day, limit the results and come back showing the date applied (Rule 9; A1)
   - on the site-wide Search page, a journal chosen under "By Journal" stays selected after the search and its page 2 lists that journal's articles only (Rule 10; OJS2)
+  - on a press and a server, a published book or preprint returned to the workflow keeps its page, its place in the catalog or preprint list and its search result for a visitor (Rule 2; OMP3, OPS4)
 - **Rarely met**:
   - "Items per page" changed on Settings › Website › Setup › Lists, the
     results per page following it (Rule 8, Settings): the Journal Manager
@@ -767,10 +768,10 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OJS1](#ojs1) | With more than one result, the screen-reader count reads out a raw code | 🐞 | minor | — |
 | [OJS2](#ojs2) | On the site-wide Search page, "By Journal" limits the first page only and never shows as chosen | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP1](#omp1) | The index-rebuild tool ignores the press path it is given and rebuilds every press | 🐞 | invisible | — |
-| [OMP3](#omp3) | A book declined after publication stays listed, but its title opens "404 Not Found" for a visitor | 🐞 | user-visible | — |
+| [OMP3](#omp3) | Returning a published book or preprint to the workflow takes its page offline for readers, while Search still links to it | 🐞 | high | issues (claude), 2026-10-03 — re-verified |
 | [OPS1](#ops1) | The screen-reader result count always says "Found one item." | 🐞 | minor | — |
 | [OPS3](#ops3) | The index-rebuild tool ignores the server path it is given and rebuilds every server | 🐞 | invisible | — |
-| [OPS4](#ops4) | A preprint declined after posting stays listed, but its title opens "404 Not Found" for a visitor | 🐞 | user-visible | — |
+| [OPS4](#ops4) | Returning a posted preprint to the workflow takes its page offline for readers, while Search still links to it | 🐞 | high | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Published Before" leaves out the chosen day itself | ❓ | minor | — |
 | [A4](#a4) | Results come in no particular order | ❓ | user-visible | — |
 | [A5](#a5) | Whether several words must all match or any one may depends on the site's database | ❓ | user-visible | — |
@@ -1050,14 +1051,22 @@ was built, so it reads as a design choice rather than drift.
 Basis: probe. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
-**OMP3 — A declined book stays listed, but its page is gone for readers** · 🐞 · user-visible.
-A book that was published, returned to the workflow and then declined is
-still listed by search, its title linking to its catalog page as before,
-but a visitor who presses the title gets the page "404 Not Found" and
-nothing else. The signed-in Press Manager still gets the catalog page. The
-result is a dead link for every reader; on a journal the same article's
-landing page stays open ([OPS4](#ops4) for a preprint server).
-Basis: test run. <sup>f-omp3</sup>
+**OMP3 — Returning a published book or preprint to the workflow takes its page offline for readers, while Search still links to it** · 🐞 · high.
+An editor presses "Return to Workflow" on a published book or a posted
+preprint to keep working on it after publication. The published version
+should stay public while that work goes on, as a journal's article does.
+
+Instead, readers lose it at once. Its page shows only "404 Not Found",
+and it disappears from the catalog (on a server, the preprint list). The
+workflow still reads "Published", and nobody is told. The Search page
+keeps listing the item, so a reader who finds it there lands on the dead
+page. If the preprint is then declined, readers still get the dead page
+and the search result.
+
+This lasts until the editor presses "Return to Done", which stops the
+work the return was for. The action is new in the coming 3.6, and no
+release has it.
+Basis: test run, 2026-10-03. <sup>f-omp3</sup>
 
 ### OPS
 
@@ -1092,12 +1101,14 @@ path, then rebuilds every server on the site.
 Basis: judgment. <sup>f-ops3</sup>
 
 <a id="ops4"></a>
-**OPS4 — A declined preprint stays listed, but its page is gone for readers** · 🐞 · user-visible.
-As [OMP3](#omp3): a preprint that was posted, returned to the workflow and
-then declined is still listed by search, its title linking to its landing
-page as before, but a visitor who presses the title gets the page "404 Not
-Found" and nothing else. Seen once; a journal keeps the landing page open.
-Basis: test run. <sup>f-ops4</sup>
+**OPS4 — Returning a posted preprint to the workflow takes its page offline for readers, while Search still links to it** · 🐞 · high.
+As [OMP3](#omp3), on a preprint server: after "Return to Workflow" on a
+posted preprint, a visitor gets "404 Not Found" on its page, and it
+leaves the preprint list, while Search keeps listing it
+and the workflow still reads "Published". Declining it afterwards
+changes nothing for the visitor. The server's OAI-PMH interface also
+reports the preprint as deleted to harvesters.
+Basis: probe, 2026-10-03. <sup>f-ops4</sup>
 
 ### Seen on the way, owned elsewhere
 
@@ -1925,6 +1936,7 @@ same address had answered 200 with the book's title before the decline,
 and answered 200 to the signed-in Press Manager after it. Mechanism not
 traced; the decline leaves the publication's status published (fn-s12),
 so the catalog page's own gate, not the index, refuses the visitor.
+Issue report: [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md](../issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — fn-g: `{if $results->count > 1}` reads a property the
@@ -1956,6 +1968,7 @@ Found" (the run's page snapshot holds the level-1 heading "404 Not Found"
 and nothing else), where an undeclined preprint's `preprint/view/{id}` had
 answered 200 earlier in the same run. Not read as the signed-in Preprint
 Server Manager. Mechanism not traced (f-omp3).
+Issue report: [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md](../issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md).
 
 ## Reference — entry points & surfaces
 
