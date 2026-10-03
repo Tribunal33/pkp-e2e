@@ -2777,7 +2777,7 @@ the template's current layout. Live-probed 2026-09-23 (all three apps):
 journals, one given French on the Languages tab on screen; "Search",
 the skip links and the footer logo's text in French there; the site's
 French home page read "S'inscrire", "Se connecter".
-Issue report: [docs/issues/U08-A7-open-menu-button-always-english.md](../issues/U08-A7-open-menu-button-always-english.md).
+Issue report: [docs/issues/U08-A7-open-menu-button-always-english.md](../issues/U08-A7-open-menu-button-always-english.md), filed as [pkp-e2e#642](https://github.com/jardakotesovec/pkp-e2e/issues/642).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note k. The legacy menu form it replaced
