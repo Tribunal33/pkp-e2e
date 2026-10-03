@@ -1281,7 +1281,7 @@ in both `review-relation.tpl` and `review-license.tpl`, so neither
 "Edit" names a step; the Submission wizard spec's Rule 12a has every
 panel's "Edit" jump back to its step. Live-probed 2026-09-27 on five
 runs over two drafts.
-Issue report: [docs/issues/U75-A11-review-panel-edit-stays-on-review.md](../issues/U75-A11-review-panel-edit-stays-on-review.md).
+Issue report: [pkp-e2e#675](https://github.com/jardakotesovec/pkp-e2e/issues/675) ([docs/issues/U75-A11-review-panel-edit-stays-on-review.md](../issues/U75-A11-review-panel-edit-stays-on-review.md)).
 
 ## Reference — entry points & surfaces
 

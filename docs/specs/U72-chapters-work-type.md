@@ -1563,7 +1563,7 @@ date, and the next opening showed the date again.
 **f-a5** — Note h: the panel's "Edit" calls `openStep('')`.
 Live-probed 2026-09-28: note td18, two runs and a second press after a
 pause.
-Issue report: [docs/issues/U75-A11-review-panel-edit-stays-on-review.md](../issues/U75-A11-review-panel-edit-stays-on-review.md).
+Issue report: [pkp-e2e#675](https://github.com/jardakotesovec/pkp-e2e/issues/675) ([docs/issues/U75-A11-review-panel-edit-stays-on-review.md](../issues/U75-A11-review-panel-edit-stays-on-review.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Note l: the drag a chapter row starts belongs to that
