@@ -1,0 +1,19 @@
+--- a/pages/sitemap/SitemapHandler.php
++++ b/pages/sitemap/SitemapHandler.php
+@@ -49,12 +49,13 @@
+         foreach ($submissions as $submission) {
+             // Book
+             $root->appendChild($this->_createUrlTree($doc, $request->url($press->getPath(), 'catalog', 'book', [$submission->getBestId()])));
+-            // Chapters
+-            $chapters = $submission->getLatestPublication()->getData('chapters');
++            // Chapters: the published (current) version's chapter pages, addressed by the
++            // chapter's id in its first version, as the book page links them
++            $chapters = $submission->getCurrentPublication()->getData('chapters');
+             if ($chapters && count($chapters) > 0) {
+                 foreach ($chapters as $chapter) {
+                     if ($chapter->isPageEnabled()) {
+-                        $root->appendChild($this->_createUrlTree($doc, $request->url($press->getPath(), 'catalog', 'book', [$submission->getBestId(), 'chapter', $chapter->getId()])));
++                        $root->appendChild($this->_createUrlTree($doc, $request->url($press->getPath(), 'catalog', 'book', [$submission->getBestId(), 'chapter', $chapter->getSourceChapterId()])));
+                     }
+                 }
+             }

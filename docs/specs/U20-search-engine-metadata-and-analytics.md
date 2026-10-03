@@ -897,6 +897,7 @@ Left out of the scenarios above, by reason:
   - A2 (the Plugins list's "Google Analytics Plugin" description on a press and a preprint server, and its "Settings" window's paragraphs, naming no other application and no missing function; scenario 8)
   - A7 (an abstract holding "&" and "<": "citation_abstract" and "DC.Description" carry the symbols, not their HTML entities; Fields, "citation_abstract")
   - OMP3 {OMP} (book 14's pages: "DC.Type" "Text.Book" on the book's page and a whole-book file's view page, "Text.Chapter" on a chapter's page and a chapter file's view page; Rule 17)
+  - OMP4 {OMP} (a published book with a chapter page and "Create New Version", then the new version published: the sitemap lists the chapter page at the address the book's page links to, and it opens; Rule 2c)
 - **Rarely met**:
   - "User Registration" set to "The Journal Manager will register all
     user accounts. …", which takes "Register" out of the sitemap
@@ -990,7 +991,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP1](#omp1) | A book page tells Google Scholar its EPUB, or any file that is not a PDF, is HTML full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP2](#omp2) | A book with two PDF files for the whole book announces only one of them to Google Scholar | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP3](#omp3) | A press's chapter pages tell indexes they are books, and whole-book file pages that they are chapters | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [OMP4](#omp4) | After "Create New Version", a press's sitemap lists chapter pages that answer "404 Not Found" | 🐞 | minor | — |
+| [OMP4](#omp4) | After "Create New Version", a press's sitemap lists the book's chapter pages at addresses that answer "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP5](#omp5) | A book file's page names the book's page as its own address | 🐞 | minor | — |
 | [OMP6](#omp6) | Every book file address the tags give fails with a server error instead of the file | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | A preprint with a "URL Path" announces an HTML full-text address that ends on "404 Not Found" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
@@ -1175,13 +1176,21 @@ on every new press.
 Basis: probe, 2026-10-03. <sup>f-omp3</sup>
 
 <a id="omp4"></a>
-**OMP4 — A new version sends the sitemap to missing chapter pages** · 🐞 · minor.
+**OMP4 — After "Create New Version", a press's sitemap lists the book's chapter pages at addresses that answer "404 Not Found"** · 🐞 · medium.
 A press that starts a new version of a published book expects its
-sitemap to keep the published chapter pages until the new version is
-published. From "Create New Version" on, it lists the unpublished
-version's chapter pages instead, which answer "404 Not Found"; the
-published chapter pages leave it, and the file entries do not change.
-Basis: probe, 2026-09-26. <sup>f-omp4</sup>
+sitemap to go on listing the book's chapter pages at the addresses the
+book's page links to. From "Create New Version" on, the sitemap lists
+each chapter page at another address, which answers "404 Not Found".
+The address the book's page links to still opens the chapter. It is no
+longer in the sitemap.
+
+Each version keeps its own copy of a chapter, and the sitemap writes
+the copy's number, while a chapter page is addressed by the chapter's
+number in the book's first version. So the listed address matches no
+chapter page, before the new version is published and after.
+
+The book's own entry and its file entries stay right.
+Basis: probe, 2026-10-03. <sup>f-omp4</sup>
 
 <a id="omp5"></a>
 **OMP5 — A book file's page names the book's page as its address** · 🐞 · minor.
@@ -1385,6 +1394,7 @@ Issue report: [docs/issues/U20-OMP3-book-file-page-type-chapter.md](../issues/U2
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — Note e: OMP's `SitemapHandler` takes a book's chapters from `getLatestPublication()` and its formats from `getCurrentPublication()`, so an unpublished new version's chapters replace the published ones. Live-probed 2026-09-26: note q2.
+Issue report: [docs/issues/U20-OMP4-sitemap-new-version-chapter-pages-404.md](../issues/U20-OMP4-sitemap-new-version-chapter-pages-404.md).
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — Note i: `monographFileView()` builds `DC.Identifier.URI` as `catalog/book/{bestId}/{formatId}/{fileId}`, an address `CatalogBookHandler::book()` answers with the book's page, where the file view is `catalog/view/…`. Live-probed 2026-09-26: note q19.
