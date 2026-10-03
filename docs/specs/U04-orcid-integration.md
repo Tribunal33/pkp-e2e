@@ -551,7 +551,7 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Send Review To ORCID" is offered before the review is complete, and confirms in silence | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A1](#a1) | "Send Review To ORCID" is offered before the review is complete, and confirms in silence | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | The ORCID-denied landing shows a raw placeholder instead of its message | 🐞 | user-visible | — |
 | [A4](#a4) | "What is ORCID?" beside the ORCID button opens ORCID's sign-in instead of the explanation page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | An Assistant's contributor-ORCID controls are refused by the server yet report success | 🐞 | user-visible | — |
@@ -571,16 +571,18 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 ### All apps
 
 <a id="a1"></a>
-**A1 — Send Review To ORCID ignores review completion, and answers with silence** · 🐞 · low.
+**A1 — Send Review To ORCID ignores review completion, and answers with silence** · 🐞 · medium.
 The Reviewers table offers "Send Review To ORCID" on any row whose reviewer
-holds a verified iD, whatever the state of the review. The completion
-condition the action was given never evaluates to false. Nothing is
-deposited for an incomplete review, because the background deposit re-checks
-completion, and confirming shows no message either way (Rule 12). So an
-editor who uses it early gets no sign that the deposit never happened. A
-Press Manager is offered the same action, dialog and silent close, though a
-press deposits nothing ([OMP1](#omp1)). A public-API journal offers it the
-same way, though its deposit runs only under the member API (Rule 12).
+holds a verified iD, whatever the state of the review: the completion
+condition the action was given never evaluates to false. Confirming it
+then answers with silence. An editor who presses it on a completed
+review and answers "OK" sees the question close and nothing else, though
+in several setups nothing is sent: a press sends no reviews to ORCID by
+design, and a journal sends nothing when its ORCID settings use the
+public API or lack a City, or the journal has no country. Only a journal
+on the member API with both set queues the review, or first emails the
+reviewer a request for permission, also without a word to the editor
+(Rule 12).
 Basis: probe, 2026-10-03. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
@@ -1117,6 +1119,7 @@ review succeeded with no feedback of any kind; a Press Manager gets the
 same action, dialog and silent success (OMP — base `SendReviewToOrcid` is
 a no-op there).
 Issue report: [pkp-e2e#684](https://github.com/jardakotesovec/pkp-e2e/issues/684) ([docs/issues/U27-A1-send-review-to-orcid-offered-before-complete.md](../issues/U27-A1-send-review-to-orcid-offered-before-complete.md)).
+Issue report: [docs/issues/U04-A1-send-review-to-orcid-confirms-in-silence.md](../issues/U04-A1-send-review-to-orcid-confirms-in-silence.md).
 
 <a id="fn-a2"></a>
 **f-a2** — `orcidVerify.tpl` denied branch: `{translate

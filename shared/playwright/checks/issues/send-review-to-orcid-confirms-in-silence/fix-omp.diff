@@ -1,0 +1,111 @@
+--- a/lib/pkp/classes/orcid/OrcidManager.php
++++ b/lib/pkp/classes/orcid/OrcidManager.php
+@@ -208,7 +208,19 @@
+         if ($context === null) {
+             $context = Application::get()->getRequest()->getContext();
+         }
+-        return $context->getData('country');
++        return $context->getData('country') ?? '';
++    }
++
++    /**
++     * Whether the context's ORCID settings let a review be deposited: ORCID on, a member API,
++     * and the city and country a review deposit names.
++     */
++    public static function canDepositReviews(Context $context): bool
++    {
++        return self::isEnabled($context)
++            && self::isMemberApiEnabled($context)
++            && self::getCity($context) !== ''
++            && self::getCountry($context) !== '';
+     }
+ 
+ 
+--- a/lib/pkp/classes/orcid/actions/PKPSendReviewToOrcid.php
++++ b/lib/pkp/classes/orcid/actions/PKPSendReviewToOrcid.php
+@@ -27,6 +27,15 @@
+     }
+ 
+     /**
++     * Why this review cannot be sent to ORCID now, or null when it can. An app that deposits reviews
++     * overrides it together with execute(); the others deposit no review, so they refuse.
++     */
++    public function getUnavailableReason(): ?string
++    {
++        return __('orcid.review.send.unsupported');
++    }
++
++    /**
+      * Should be overridden on an app level to dispatch appropriate job, e.g. PublishReviewerWorkToOrcid in OJS.
+      */
+     public function execute(): void
+--- a/lib/pkp/api/v1/reviews/PKPReviewController.php
++++ b/lib/pkp/api/v1/reviews/PKPReviewController.php
+@@ -823,7 +823,13 @@
+             ], Response::HTTP_NOT_FOUND);
+         }
+ 
+-        (new SendReviewToOrcid($reviewAssignment->getId()))->execute();
++        $sendReview = new SendReviewToOrcid($reviewAssignment->getId());
++        if ($reason = $sendReview->getUnavailableReason()) {
++            return response()->json([
++                'error' => $reason,
++            ], Response::HTTP_UNPROCESSABLE_ENTITY);
++        }
++        $sendReview->execute();
+ 
+         return response()->json([], Response::HTTP_OK);
+     }
+--- a/lib/pkp/locale/en/user.po
++++ b/lib/pkp/locale/en/user.po
+@@ -682,6 +682,9 @@
+ msgid "orcid.manager.settings.city"
+ msgstr "City"
+ 
++msgid "orcid.review.send.unsupported"
++msgstr "Nothing was sent. Reviews are not sent to ORCID records from here."
++
+ msgid "orcid.author.accessDenied"
+ msgstr "ORCID access was denied at"
+ 
+--- a/lib/ui-library/src/managers/ReviewerManager/useReviewerManagerActions.js
++++ b/lib/ui-library/src/managers/ReviewerManager/useReviewerManagerActions.js
+@@ -4,6 +4,7 @@
+ import {useLocalize} from '@/composables/useLocalize';
+ import {useSubmission} from '@/composables/useSubmission';
+ import {useFetch, getCSRFToken} from '@/composables/useFetch';
++import {useNotify} from '@/composables/useNotify';
+ import WorkflowLogResponseModal from '@/managers/ReviewerManager/modals/WorkflowLogResponseModal.vue';
+ import ReviewDetailsModal from '@/managers/ReviewerManager/ReviewDetailsModal.vue';
+ 
+@@ -419,6 +420,7 @@
+ 
+ 	function reviewerSendToOrcid({submission, reviewAssignment}) {
+ 		const {openDialog, openDialogNetworkError} = useModal();
++		const {notify} = useNotify();
+ 
+ 		let submissionId = submission.id;
+ 
+@@ -435,14 +437,20 @@
+ 						const formData = new FormData();
+ 						formData.append('csrfToken', getCSRFToken());
+ 
+-						const {fetch, isSuccess} = useFetch(apiUrl, {
++						const {fetch, isSuccess, validationError} = useFetch(apiUrl, {
+ 							method: 'POST',
+ 							body: formData,
++							expectValidationError: true,
+ 						});
+ 
+ 						await fetch();
+ 						close();
+-						if (!isSuccess.value) {
++						if (validationError.value) {
++							// The server says why nothing can be sent
++							notify(validationError.value.error, 'warning');
++						} else if (isSuccess.value) {
++							notify(t('orcid.review.send.requested'), 'success');
++						} else {
+ 							openDialogNetworkError();
+ 						}
+ 					},

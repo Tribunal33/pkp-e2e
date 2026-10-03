@@ -1,0 +1,207 @@
+--- a/lib/pkp/classes/orcid/OrcidManager.php
++++ b/lib/pkp/classes/orcid/OrcidManager.php
+@@ -208,7 +208,19 @@
+         if ($context === null) {
+             $context = Application::get()->getRequest()->getContext();
+         }
+-        return $context->getData('country');
++        return $context->getData('country') ?? '';
++    }
++
++    /**
++     * Whether the context's ORCID settings let a review be deposited: ORCID on, a member API,
++     * and the city and country a review deposit names.
++     */
++    public static function canDepositReviews(Context $context): bool
++    {
++        return self::isEnabled($context)
++            && self::isMemberApiEnabled($context)
++            && self::getCity($context) !== ''
++            && self::getCountry($context) !== '';
+     }
+ 
+ 
+--- a/lib/pkp/classes/orcid/actions/PKPSendReviewToOrcid.php
++++ b/lib/pkp/classes/orcid/actions/PKPSendReviewToOrcid.php
+@@ -27,6 +27,15 @@
+     }
+ 
+     /**
++     * Why this review cannot be sent to ORCID now, or null when it can. An app that deposits reviews
++     * overrides it together with execute(); the others deposit no review, so they refuse.
++     */
++    public function getUnavailableReason(): ?string
++    {
++        return __('orcid.review.send.unsupported');
++    }
++
++    /**
+      * Should be overridden on an app level to dispatch appropriate job, e.g. PublishReviewerWorkToOrcid in OJS.
+      */
+     public function execute(): void
+--- a/lib/pkp/api/v1/reviews/PKPReviewController.php
++++ b/lib/pkp/api/v1/reviews/PKPReviewController.php
+@@ -823,7 +823,13 @@
+             ], Response::HTTP_NOT_FOUND);
+         }
+ 
+-        (new SendReviewToOrcid($reviewAssignment->getId()))->execute();
++        $sendReview = new SendReviewToOrcid($reviewAssignment->getId());
++        if ($reason = $sendReview->getUnavailableReason()) {
++            return response()->json([
++                'error' => $reason,
++            ], Response::HTTP_UNPROCESSABLE_ENTITY);
++        }
++        $sendReview->execute();
+ 
+         return response()->json([], Response::HTTP_OK);
+     }
+--- a/lib/pkp/locale/en/user.po
++++ b/lib/pkp/locale/en/user.po
+@@ -682,6 +682,9 @@
+ msgid "orcid.manager.settings.city"
+ msgstr "City"
+ 
++msgid "orcid.review.send.unsupported"
++msgstr "Nothing was sent. Reviews are not sent to ORCID records from here."
++
+ msgid "orcid.author.accessDenied"
+ msgstr "ORCID access was denied at"
+ 
+--- a/lib/ui-library/src/managers/ReviewerManager/useReviewerManagerActions.js
++++ b/lib/ui-library/src/managers/ReviewerManager/useReviewerManagerActions.js
+@@ -4,6 +4,7 @@
+ import {useLocalize} from '@/composables/useLocalize';
+ import {useSubmission} from '@/composables/useSubmission';
+ import {useFetch, getCSRFToken} from '@/composables/useFetch';
++import {useNotify} from '@/composables/useNotify';
+ import WorkflowLogResponseModal from '@/managers/ReviewerManager/modals/WorkflowLogResponseModal.vue';
+ import ReviewDetailsModal from '@/managers/ReviewerManager/ReviewDetailsModal.vue';
+ 
+@@ -419,6 +420,7 @@
+ 
+ 	function reviewerSendToOrcid({submission, reviewAssignment}) {
+ 		const {openDialog, openDialogNetworkError} = useModal();
++		const {notify} = useNotify();
+ 
+ 		let submissionId = submission.id;
+ 
+@@ -435,14 +437,20 @@
+ 						const formData = new FormData();
+ 						formData.append('csrfToken', getCSRFToken());
+ 
+-						const {fetch, isSuccess} = useFetch(apiUrl, {
++						const {fetch, isSuccess, validationError} = useFetch(apiUrl, {
+ 							method: 'POST',
+ 							body: formData,
++							expectValidationError: true,
+ 						});
+ 
+ 						await fetch();
+ 						close();
+-						if (!isSuccess.value) {
++						if (validationError.value) {
++							// The server says why nothing can be sent
++							notify(validationError.value.error, 'warning');
++						} else if (isSuccess.value) {
++							notify(t('orcid.review.send.requested'), 'success');
++						} else {
+ 							openDialogNetworkError();
+ 						}
+ 					},
+--- a/classes/orcid/actions/SendReviewToOrcid.php
++++ b/classes/orcid/actions/SendReviewToOrcid.php
+@@ -18,12 +18,53 @@
+ use APP\facades\Repo;
+ use APP\jobs\orcid\DepositOrcidReview;
+ use APP\jobs\orcid\ReconcileOrcidReviewPutCode;
++use Carbon\Carbon;
+ use Illuminate\Support\Facades\Bus;
+ use PKP\context\Context;
+ use PKP\orcid\actions\PKPSendReviewToOrcid;
++use PKP\orcid\OrcidManager;
++use PKP\submission\reviewAssignment\ReviewAssignment;
+ 
+ class SendReviewToOrcid extends PKPSendReviewToOrcid
+ {
++    /**
++     * @inheritDoc
++     *
++     * What DepositOrcidReview::handle() needs before it sends anything or asks the reviewer for permission.
++     */
++    public function getUnavailableReason(): ?string
++    {
++        $review = Repo::reviewAssignment()->get($this->reviewAssignmentId);
++        if (!$review || !in_array($review->getStatus(), ReviewAssignment::REVIEW_COMPLETE_STATUSES)) {
++            return __('orcid.review.send.incomplete');
++        }
++
++        $context = Application::getContextDAO()->getById(
++            Repo::submission()->get($review->getSubmissionId())->getData('contextId')
++        ); /** @var Context $context */
++        if (!OrcidManager::isEnabled($context)) {
++            return __('orcid.review.send.orcidOff');
++        }
++        if (!OrcidManager::canDepositReviews($context)) {
++            return __('orcid.review.send.notConfigured');
++        }
++
++        // Loaded as DepositOrcidReview loads it: a disabled reviewer is not found, and the job would fail.
++        // A reviewer without a token gets nothing; one with the member scope needs it unexpired.
++        // Any other scope is asked for the member scope (SendUpdateScopeMail), which is still an answer.
++        $reviewer = Repo::user()->get($review->getReviewerId());
++        if (
++            !$reviewer?->getOrcid()
++            || !$reviewer->getData('orcidAccessToken')
++            || ($reviewer->getData('orcidAccessScope') === OrcidManager::ORCID_API_SCOPE_MEMBER
++                && !Carbon::parse($reviewer->getData('orcidAccessExpiresOn'))->isFuture())
++        ) {
++            return __('orcid.review.send.notAuthorized');
++        }
++
++        return null;
++    }
++
+     /** @inheritDoc */
+     public function execute(): void
+     {
+--- a/jobs/orcid/DepositOrcidReview.php
++++ b/jobs/orcid/DepositOrcidReview.php
+@@ -59,15 +59,7 @@
+             $this->fail('Application is set to sandbox mode and will not interact with the ORCID service');
+         }
+ 
+-        if (!OrcidManager::isEnabled($context)) {
+-            return;
+-        }
+-
+-        if (!OrcidManager::isMemberApiEnabled($context)) {
+-            return;
+-        }
+-
+-        if (!OrcidManager::getCity($context) || !OrcidManager::getCountry($context)) {
++        if (!OrcidManager::canDepositReviews($context)) {
+             return;
+         }
+ 
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -2179,3 +2179,18 @@
+ 
+ msgid "catalog.sortBy.categoryDescription"
+ msgstr "Choose how to order articles in this category."
++
++msgid "orcid.review.send.requested"
++msgstr "The review has been queued for the reviewer's ORCID record. If the reviewer has not yet allowed this journal to add it, they are emailed a request first."
++
++msgid "orcid.review.send.incomplete"
++msgstr "Nothing was sent. Only a completed review can be sent to ORCID."
++
++msgid "orcid.review.send.orcidOff"
++msgstr "Nothing was sent. ORCID is turned off for this journal."
++
++msgid "orcid.review.send.notConfigured"
++msgstr "Nothing was sent. Reviews are sent to ORCID only when the ORCID settings use a member API and name a city, and the journal has a country."
++
++msgid "orcid.review.send.notAuthorized"
++msgstr "Nothing was sent. The reviewer's account is disabled, or their ORCID authorization is missing or has expired."
