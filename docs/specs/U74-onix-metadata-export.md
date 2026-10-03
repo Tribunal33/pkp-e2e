@@ -1050,7 +1050,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | A "Rest of World?" entry comes back from a Native XML import unticked | 🐞 | minor | — |
 | [A13](#a13) | A representative whose type is changed shows in both groups until a reload | 🐞 | minor | — |
 | [A14](#a14) | A refused representative delete answers with a browser pop-up and leaves the "Delete" dialog open | 🐞 | minor | — |
-| [A15](#a15) | A second "Rest of World?" entry, or a market date or price of spaces, is refused without a message | 🐞 | minor | — |
+| [A15](#a15) | A second "Rest of World?" entry, or a market date or price of spaces, is refused without a message | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A16](#a16) | "Export Submissions" with no book ticked opens an empty results tab | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | The returns and availability the "Metadata" tab shows can differ from what the product carries, and an import loses both | 🐞 | minor | — |
 | [A19](#a19) | A Native XML import adds the exporting press as a supplier and changes the suppliers' websites | 🐞 | minor | — |
@@ -1231,7 +1231,7 @@ notice on the page, like the other messages of these lists.
 Basis: probe. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — Two refusals come without a message** · 🐞 · minor.
+**A15 — Two refusals come without a message** · 🐞 · low.
 Saving a second "Rest of World?" entry, or a market whose "Date" or
 "Price" is spaces only, leaves the window open with a second "Required
 fields are marked with an asterisk: *" line (the market's box emptied)
@@ -1242,7 +1242,7 @@ added."; "A date is required and the date value must match the chosen
 date format." or the untranslated "##grid.catalogEntry.priceRequired##"
 with the next "Market added.". Expected: the window says what it
 refused, in words, when it refuses it.
-Basis: probe. <sup>f-a15</sup>
+Basis: probe, 2026-10-03. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — An ONIX export with nothing ticked fails** · 🐞 · low · crash: server.
@@ -2325,6 +2325,7 @@ again and no field message; the form's error then surfaces as a
 notice on the next page load or request. `grid.catalogEntry.priceRequired`
 is a key no locale file defines. Live-probed 2026-09-28 (A15), two
 runs: notes td15 and td16.
+Issue report: [pkp-e2e#367](https://github.com/jardakotesovec/pkp-e2e/issues/367) ([docs/issues/U09-A11-static-page-refusal-repeated-after-save.md](../issues/U09-A11-static-page-refusal-repeated-after-save.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Note j. Live-probed 2026-09-28 (A16), two runs: note td21;

@@ -24,9 +24,9 @@
 +				// below would reach no handler, and the notification the
 +				// server created for this answer (the form's errors) would
 +				// show with the next one. Trigger it from the form's parent,
-+				// unless the redrawn form has a visible in-place notification
-+				// box of its own, which fetches the notification itself.
-+				if ($content.find('.pkp_notification:visible').length === 0) {
++				// unless the redrawn form has an in-place notification box
++				// of its own, which fetches the notification itself.
++				if ($content.find('.pkp_notification').length === 0) {
 +					$parent.trigger('notifyUser');
 +				}
  			}

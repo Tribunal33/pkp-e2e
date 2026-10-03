@@ -897,7 +897,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A custom block named only outside the manager's interface language is kept as a blank row with neither "Edit" nor "Delete" | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | Typing a page preview's address below manager level, or signed out, gives a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A static page or custom page whose "Path" has a "." in its first two parts answers "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A11](#a11) | A manager's good save in the static page window shows the earlier refusal as a red notice | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A11](#a11) | A manager's good save in the static page window shows the earlier refusal as a red notice | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | Right after "Static Pages Plugin" is unticked, the tab's "Add Static Page" fails on the server | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | A custom block whose name holds "&" can never be placed, edited or deleted | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | A custom block cannot be deleted on PostgreSQL: "OK" spins and the block stays | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1063,15 +1063,17 @@ Each refused save leaves a notice of its own, and all of them show
 together at the next save. If the manager closes the window after a
 refusal instead, the notice shows on the next page that loads, such as
 the Editor Dashboard.
-The cause is shared by every window that draws its form again after a
-refused save and has no message box of its own. Read
-in the code, not tried on screen, these include: the galley window in
-OJS and OPS (editors and moderators setting a galley's "URL Path"); OMP's
-catalog-entry windows for publication formats, identification codes,
-markets, publication dates and sales rights (press editors); and "Assign
-Participant" in every workflow stage (editors). Preprint servers have no
-static pages, so OPS meets the fault only in those other windows.
-Basis: probe, 2026-10-02. <sup>f-a11</sup>
+The same happens in every window that draws its form again after a
+refused save and has no in-place message box. In OMP's book-format
+windows (a format's sales rights, markets, publication dates and
+identification codes) it is worse, because the window marks no field
+either. A press editor presses "OK" on a second sales-rights entry with
+"Rest of World?" ticked, a market "Date" or "Price" of spaces, or a
+publication date of the wrong length, and is told nothing: the window
+stays open, and the reason appears only beside the next "Market added."
+or similar. By the code, the same fault also reaches the galley window
+in OJS and OPS, OMP's format window and "Assign Participant".
+Basis: probe, 2026-10-03. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — Right after "Static Pages Plugin" is unticked, the tab's "Add Static Page" fails on the server** · 🐞 · low · crash: server · {OJS OMP}.

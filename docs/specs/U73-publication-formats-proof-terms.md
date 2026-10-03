@@ -1074,7 +1074,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | A book in the press's second language cannot get a format without a name in the primary language | 🐞 | minor | — |
 | [A19](#a19) | "Select Files" tells the user to tick an "Include checkbox" and press "Search", neither of which it has | 🐞 | minor | — |
 | [A20](#a20) | A "Direct Sales" price of 0 keeps the link on "Direct Sales" while readers get the file free | 🐞 | minor | — |
-| [A23](#a23) | A date of the wrong length is refused with no message in its window | 🐞 | minor | — |
+| [A23](#a23) | A date of the wrong length is refused with no message in its window | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A24](#a24) | A refused "URL Path" comes back as a notice when the format is next saved, once per refusal | 🐞 | minor | — |
 | [A25](#a25) | In French the list's "Availability" column heading and four texts of "Add publication format" read raw codes | 🐞 | minor | — |
 | [A5](#a5) | "URL Path" accepts a number, or a path another format already uses, and a reader link then answers "404 Not Found" | ❓ | minor | — |
@@ -1342,14 +1342,14 @@ Lean: no role; the list holds twenty-one roles, and any preselected one is recor
 Basis: probe. <sup>f-a22</sup>
 
 <a id="a23"></a>
-**A23 — A refused date shows no message in its window** · 🐞 · minor.
+**A23 — A refused date shows no message in its window** · 🐞 · low.
 A date whose length does not fit its "Date Format" is refused with no
 message: the window stays open and only a second "Required fields are
 marked with an asterisk: *" appears. "A date is required and the date
 value must match the chosen date format." shows later, as a notice
 beside the next "Publication Date added.". Expected: the message shows
 in the window when "OK" is refused.
-Basis: probe. <sup>f-a23</sup>
+Basis: probe, 2026-10-03. <sup>f-a23</sup>
 
 <a id="a24"></a>
 **A24 — A refused "URL Path" comes back as a notice on the next save** · 🐞 · minor.
@@ -2431,6 +2431,7 @@ role as 35).
 <a id="fn-f-a23"></a>
 **f-a23** — Note g (the custom length check, `grid.catalogEntry.dateRequired`).
 Live-probed 2026-09-28: note td14.
+Issue report: [pkp-e2e#367](https://github.com/jardakotesovec/pkp-e2e/issues/367) ([docs/issues/U09-A11-static-page-refusal-repeated-after-save.md](../issues/U09-A11-static-page-refusal-repeated-after-save.md)).
 
 <a id="fn-f-a24"></a>
 **f-a24** — Test run 2026-09-28 (OMP suite, scenario 8, as the Press
