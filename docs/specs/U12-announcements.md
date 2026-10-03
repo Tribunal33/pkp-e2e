@@ -839,6 +839,7 @@ Left out of the scenarios above, by reason:
     changed "Title" closed without "Save", then "Edit" and a "Save" of
     another box, the saved title kept on the row and the public
     Announcements page
+  - the guard for A13 (issue report `docs/issues/U12-A13-edited-announcement-type-keeps-old-name.md`): an edited announcement type shows its new name in the table at once, on the context's tab and the site's.
 - **Nothing new to test**:
   - an unsaved tick on the settings tab kept across a tab switch and
     lost on leaving the page (Fields)
@@ -935,7 +936,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | "Send an email about this to all registered users." is offered on "Edit Announcement" and does nothing there | 🐞 | minor | — |
 | [A11](#a11) | An unsaved title stays on the row after the panel is closed, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A12](#a12) | A deleted announcement's image file, and the file a refused or replaced image had, stay in the public files | 🐞 | minor | — |
-| [A13](#a13) | An edited announcement type keeps its old name in the table until a reload; the row's refresh fails with a server error | 🐞 | user-visible | — |
+| [A13](#a13) | An edited announcement type keeps its old name in the Announcement Types table until a reload | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | The announcement email's "Visit our website…" sentence stays English on a French press or preprint server {OMP OPS} | 🐞 | minor | — |
 | [A15](#a15) | The Atom and RSS 1.0 feeds carry unreadable dates ("%2026-%09-%17UTC%UTC%259") {OJS} | 🐞 | minor | — |
 | [OMP2](#omp2) | A press with "Display on Homepage" empty shows the site's announcements on its home page while the site's are on with a count {OMP} | 🐞 | user-visible | — |
@@ -1056,13 +1057,17 @@ files; only "Remove" then "Save" deletes a file. No screen shows it; the
 folder grows. Basis: probe. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — An edited type keeps its old name until a reload** · 🐞 · user-visible.
+**A13 — An edited announcement type keeps its old name in the Announcement Types table until a reload** · 🐞 · low · crash: server.
 A manager who edits an announcement type reads "Announcement type
 edited." and expects the table to show the new name. The table still
 shows the old name, on the journal's tab and the site's alike; the new
 name appears on the next load of the page. The browser's own traffic
 shows the table's row refresh failing with a server error after every
-edit. Basis: probe. <sup>f-a13</sup>
+edit. The name is saved, only the table is stale until a reload. The
+site's tab (Administration › Site Settings › Announcements) is the Site
+Administrator's, on a site with two or more journals, presses or
+servers.
+Basis: probe, 2026-10-03. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — One sentence of the email stays English on a French press or server** {OMP OPS} · 🐞 · minor.
@@ -2006,6 +2011,7 @@ its row again (`announcement-type-grid/fetch-row?rowId={id}`), and that
 request answered 500 on every edit. Live-probed 2026-09-17 (A13), OJS, OMP
 and OPS, the journal's tab and the site's: the row read the old name after
 the notice and three seconds later, the new one after a reload.
+Issue report: [docs/issues/U12-A13-edited-announcement-type-keeps-old-name.md](../issues/U12-A13-edited-announcement-type-keeps-old-name.md).
 
 <a id="fn-f-a14"></a>
 **f-a14 — A14 evidence.** The job forces the recipient's locale to the

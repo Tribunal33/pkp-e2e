@@ -1,0 +1,22 @@
+--- a/lib/pkp/classes/controllers/grid/GridHandler.php
++++ b/lib/pkp/classes/controllers/grid/GridHandler.php
+@@ -56,6 +56,7 @@
+ use PKP\linkAction\request\NullAction;
+ use PKP\plugins\Hook;
+ use PKP\template\PKPTemplateManager;
++use Traversable;
+ 
+ class GridHandler extends PKPHandler
+ {
+@@ -407,7 +408,10 @@
+ 
+             $data instanceof DAOResultFactory => $data->toAssociativeArray(),
+             $data instanceof ItemIterator => $data->toArray(),
+-            is_iterable($data) => $data,
++            is_array($data) => $data,
++            // A generator (or any other iterator) can be walked once only, and the grid
++            // reads its data by row id (fetchRow) and more than once per request
++            $data instanceof Traversable => iterator_to_array($data, true),
+             default => [],
+         };
+     }
