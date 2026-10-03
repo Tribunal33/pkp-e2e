@@ -1394,7 +1394,7 @@ Issue report: [docs/issues/U20-OMP3-book-file-page-type-chapter.md](../issues/U2
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — Note e: OMP's `SitemapHandler` takes a book's chapters from `getLatestPublication()` and its formats from `getCurrentPublication()`, so an unpublished new version's chapters replace the published ones. Live-probed 2026-09-26: note q2.
-Issue report: [docs/issues/U20-OMP4-sitemap-new-version-chapter-pages-404.md](../issues/U20-OMP4-sitemap-new-version-chapter-pages-404.md).
+Issue report: [docs/issues/U20-OMP4-sitemap-new-version-chapter-pages-404.md](../issues/U20-OMP4-sitemap-new-version-chapter-pages-404.md), filed as [pkp-e2e#670](https://github.com/jardakotesovec/pkp-e2e/issues/670).
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — Note i: `monographFileView()` builds `DC.Identifier.URI` as `catalog/book/{bestId}/{formatId}/{fileId}`, an address `CatalogBookHandler::book()` answers with the book's page, where the file view is `catalog/view/…`. Live-probed 2026-09-26: note q19.
