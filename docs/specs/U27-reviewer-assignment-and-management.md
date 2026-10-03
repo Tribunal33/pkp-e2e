@@ -3386,7 +3386,7 @@ so `ReviewerUnassign`'s own REVIEWER_UNASSIGN subject (installed by
 `I12903_ReviewerUnassignEmailTemplate`, note k) never reaches the mail. The
 suites match the removal mail by recipient and title (OJS) or body (OMP)
 and assert the subject neither way.
-Issue report: [docs/issues/U27-A26-unassign-notice-cancel-subject.md](../issues/U27-A26-unassign-notice-cancel-subject.md).
+Issue report: [pkp-e2e#689](https://github.com/jardakotesovec/pkp-e2e/issues/689) ([docs/issues/U27-A26-unassign-notice-cancel-subject.md](../issues/U27-A26-unassign-notice-cancel-subject.md)).
 
 <a id="fn-a27"></a>
 **f-a27** — Test run 2026-09-12 (OJS and OMP, scenario 9, one run each):
@@ -3725,7 +3725,7 @@ place. The template text is the same in both apps' own `locale/en/emails.po`
 (`emails.reviewerUnassign.body`, the 2026-08 unassign template of note k):
 it names `{$journalName}`, the journal-only variable, where the app-neutral
 context-name variable belongs, so a press leaves the placeholder as typed.
-Issue report: [docs/issues/U27-OMP3-press-reviewer-notices-journal-placeholder.md](../issues/U27-OMP3-press-reviewer-notices-journal-placeholder.md).
+Issue report: [pkp-e2e#690](https://github.com/jardakotesovec/pkp-e2e/issues/690) ([docs/issues/U27-OMP3-press-reviewer-notices-journal-placeholder.md](../issues/U27-OMP3-press-reviewer-notices-journal-placeholder.md)).
 
 <a id="fn-omp4"></a>
 **f-omp4** — Driven 2026-09-17 (OMP, three runs; OJS as the control): on
