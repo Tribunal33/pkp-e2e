@@ -3000,7 +3000,7 @@ item's window showed the label and the line under it as the raw codes;
 the Primary menu window's handles carried the `title`
 `##common.dragToReorder##`; on OMP the type list's options included
 `##navigation.navigationMenus.newRelease##`.
-Issue report: [docs/issues/U08-A24-press-menu-item-types-french-raw-keys.md](../issues/U08-A24-press-menu-item-types-french-raw-keys.md).
+Issue report: [docs/issues/U08-A24-press-menu-item-types-french-raw-keys.md](../issues/U08-A24-press-menu-item-types-french-raw-keys.md), filed as [pkp-e2e#659](https://github.com/jardakotesovec/pkp-e2e/issues/659).
 
 <a id="fn-f-a25"></a>
 **f-a25** — Note td19: `Dropdown.vue` has no Escape handler; the
