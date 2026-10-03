@@ -17,8 +17,8 @@
 
 Every tab of the Profile page ends with "Your data is stored in
 accordance with our privacy statement.". On the site-wide Profile page,
-which a user with roles in several journals is sent to, the link opens
-a "404 Not Found" page, from every tab.
+which a user with roles in several journals opens from the site's own
+pages, the link opens a "404 Not Found" page, from every tab.
 
 The link leads to the site's own Privacy Statement, which stays empty
 until the Site Administrator writes one under Site Settings, so the

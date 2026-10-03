@@ -1,0 +1,28 @@
+--- a/lib/pkp/classes/user/form/PublicProfileForm.php
++++ b/lib/pkp/classes/user/form/PublicProfileForm.php
+@@ -86,18 +86,16 @@
+             return false;
+         }
+ 
+-        $uploadName = 'profileImage-' . (int) $user->getId() . $extension;
+-        if (!$publicFileManager->uploadSiteFile('uploadedFile', $uploadName)) {
++        // Check the image before it is moved into the public files, so that a
++        // refused upload leaves the user's current image and its file alone
++        $temporaryFilePath = $publicFileManager->getUploadedFilePath('uploadedFile');
++        [$width, $height] = ($temporaryFilePath ? getimagesize($temporaryFilePath) : false) ?: [0, 0];
++        if ($width > self::PROFILE_IMAGE_MAX_WIDTH || $height > self::PROFILE_IMAGE_MAX_HEIGHT || $width <= 0 || $height <= 0) {
+             return false;
+         }
+-        $filePath = $publicFileManager->getSiteFilesPath();
+-        [$width, $height] = getimagesize($filePath . '/' . $uploadName);
+ 
+-        if ($width > self::PROFILE_IMAGE_MAX_WIDTH || $height > self::PROFILE_IMAGE_MAX_HEIGHT || $width <= 0 || $height <= 0) {
+-            $userSetting = null;
+-            $user->setData('profileImage', $userSetting);
+-            Repo::user()->edit($user, ['profileImage']);
+-            $publicFileManager->removeSiteFile($filePath);
++        $uploadName = 'profileImage-' . (int) $user->getId() . $extension;
++        if (!$publicFileManager->uploadSiteFile('uploadedFile', $uploadName)) {
+             return false;
+         }
+ 

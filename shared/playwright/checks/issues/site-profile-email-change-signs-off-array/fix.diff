@@ -1,0 +1,11 @@
+--- a/lib/pkp/classes/invitation/invitations/changeProfileEmail/ChangeProfileEmailInvite.php
++++ b/lib/pkp/classes/invitation/invitations/changeProfileEmail/ChangeProfileEmailInvite.php
+@@ -93,7 +93,7 @@
+             $contactName = $context->getContactName();
+         } else {
+             $site = $request->getSite();
+-            $contactName = $site->getData('contactName');
++            $contactName = $site->getLocalizedData('contactName', $locale);
+         }
+ 
+         $emailTemplate = Repo::emailTemplate()->getByKey($contextId, $mailable::getEmailTemplateKey());

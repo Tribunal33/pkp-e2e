@@ -1010,6 +1010,11 @@ Left out of the scenarios above, by reason:
     issue report
     (`docs/issues/U03-A4-closed-journal-listed-on-roles-tab.md`)
     proposes, once fixed
+  - an oversize .gif refused on the Public tab, the picture and its
+    "Delete" still there after a reload, and no .gif stored
+    ([A2](#a2); Rule 9a): the guard the issue report
+    (`docs/issues/U03-A2-refused-gif-wipes-profile-image.md`)
+    proposes, once fixed
 - **Nothing new to test**:
   - a tab named in the site-level address kept on the forward to a one-journal user's profile (Rule 3; scenario 2 opens the site-level address with no tab named, and scenario 1 reads a tab named in a journal's address)
   - no submission or activity-log entry written by this page (*Side effects*): the log is a submission's, and reading its silence needs a submission and a positive control for nothing this page does
@@ -1017,7 +1022,6 @@ Left out of the scenarios above, by reason:
   - "reject" on a request made on the site-level profile itself (Rule 6d; the same "Decline Invitation" page and button as scenario 5's request made inside a journal)
   - "View Profile" in the menu under the username on the journal's public pages (Rule 1; scenario 1's "Edit Profile" opens the same page)
 - **Register carries it**:
-  - A2 (an oversized .gif refused and the existing image wiped; Rule 9a)
   - A10 (a site-level request's message signing off "Array"; *Side effects*)
   - A11 (the stale error notice beside the saved message; Rule 10b; scenario 8 marks it)
   - A15 (the refused homepage's sentence outliving the corrected save; Rule 9c; scenario 7 marks it)
@@ -1061,10 +1065,10 @@ unless its Basis line says otherwise.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A2](#a2) | A .gif larger than 150 × 150 is refused, and the account's existing profile image is wiped anyway | 🐞 | latent | — |
+| [A2](#a2) | A .gif too large for the profile image is refused, yet the user's current picture is removed | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | A journal closed to registrations is still listed, with nothing to tick, on Roles tabs and the Register page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | The Password tab's three boxes stop accepting input at 32 characters (the *Login & sessions* cap) | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A10](#a10) | The email-change message of a site-level request signs off "Kind regards, Array" | 🐞 | latent | — |
+| [A10](#a10) | An email change asked for on the site-wide Profile page sends a message signed "Kind regards, Array" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | After a successful password change the previous attempt's error notice stays on screen beside the saved message | 🐞 | minor | — |
 | [A12](#a12) | "Cancel" on the profile's Password tab does nothing, and turns off the unsaved-change question | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | On the site-wide Profile page, every tab's "privacy statement" link opens "404 Not Found" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1087,15 +1091,19 @@ unless its Basis line says otherwise.
 ### All apps
 
 <a id="a2"></a>
-**A2 — A refused oversize image wipes the existing one** · 🐞 · latent.
-The browser shrinks a .jpg or .png to 150 × 150 before upload, so an
-oversize file normally never reaches the site. A .gif is not shrunk: a .gif
-larger than 150 × 150 is refused with "The file could not be uploaded or
-revised.", which is right, but on the next reload the account's previous
-picture is gone from the tab, and the refused file is left behind on the
-server. A refused non-image file leaves the picture alone, as every refusal
-should.
-Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-a2](#fn-a2)</sup>
+**A2 — A .gif too large for the profile image is refused, yet the user's current picture is removed** · 🐞 · low.
+A user who chooses a .gif larger than 150 × 150 pixels as their
+profile image, on the profile's "Public" tab, is refused with "The file
+could not be uploaded or revised.", which is right. But the picture
+they already had goes too: on the next reload "Profile Image" is empty
+and its "Delete" button is gone, and nothing said so.
+
+Both files stay on the server and are still served: the refused .gif,
+and the earlier picture, which the user now believes is gone.
+
+A .jpg or .png never meets this, because the browser shrinks it to
+150 × 150 before it is sent. The fix is a few lines in one method.
+Basis: probe, 2026-10-03. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a4"></a>
 **A4 — A journal closed to registrations is still listed, with nothing to tick, on Roles tabs and the Register page** · 🐞 · low.
@@ -1187,14 +1195,21 @@ copy-into-contributor paths are the useful ones.
 Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — A site-level email change signs off "Array"** · 🐞 · latent.
-The email-change message closes "Kind regards," and then the site contact's
-name when the request was made on a journal's profile. Made on the site-level
-profile (Rule 3, a multi-journal site), the same message closes "Kind
-regards, Array". A placeholder printed as a word is never a choice; the
-site-level message simply has no journal to take the name from and nothing
-falls back to the site.
-Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-a10](#fn-a10)</sup>
+**A10 — An email change asked for on the site-wide Profile page sends a message signed "Kind regards, Array"** · 🐞 · low.
+A user who asks for a new email address on the site-wide Profile page
+gets the "Confirm account contact email change request" message at their
+current address, and it closes "Kind regards," and then the word "Array".
+The site's principal contact's name should be there. The same request
+made on a journal's Profile page closes with the journal's contact name.
+
+The confirm and reject links work and the change goes through; the
+message only looks broken.
+
+The site-wide Profile page opens from the site's own pages (its home
+page, Administration) for a user with roles in two or more journals and
+for the Site Administrator; on a site with one journal, only users with
+no role in any journal are left on it.
+Basis: probe, 2026-10-03. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
 **A11 — A stale error notice survives a successful password change** · 🐞 · minor.
@@ -1238,8 +1253,8 @@ Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-a13](#fn-a13)</sup>
 **A14 — On the site-wide Profile page, every tab's "privacy statement" link opens "404 Not Found"** · 🐞 · low.
 Every tab of the Profile page ends with "Your data is stored in
 accordance with our privacy statement.". On the site-wide Profile page,
-which a user with roles in several journals is sent to, the link opens
-a "404 Not Found" page, from every tab.
+which a user with roles in several journals opens from the site's own
+pages, the link opens a "404 Not Found" page, from every tab.
 
 The link leads to the site's own Privacy Statement, which stays empty
 until the Site Administrator writes one under Site Settings, so the
@@ -2206,6 +2221,7 @@ or revised." and the .jpg was gone from the tab after a reload, while
 text file named `.png` was refused with the same sentence and the picture
 stayed. Live-probed 2026-09-04 (claim check), all three apps: holds (each refusal also
 raised a browser alert with the sentence).
+Issue report: [docs/issues/U03-A2-refused-gif-wipes-profile-image.md](../issues/U03-A2-refused-gif-wipes-profile-image.md).
 
 <a id="fn-a3"></a>
 **f-a3** — `InvitationActionRedirectController::declineHandle()` builds the
@@ -2353,6 +2369,7 @@ context (a site-level request, `index/…`) the value printed is the literal
 ended "Kind regards, Site Admin"; the site-level message of the same user
 kind, sent by a two-journal user from `index/user/profile`, ended "Kind
 regards, Array". Live-probed 2026-09-04 (claim check), all three apps: holds.
+Issue report: [docs/issues/U03-A10-site-profile-email-change-signs-off-array.md](../issues/U03-A10-site-profile-email-change-signs-off-array.md).
 
 <a id="fn-a11"></a>
 **f-a11** — `ChangePasswordForm` success returns a content-less

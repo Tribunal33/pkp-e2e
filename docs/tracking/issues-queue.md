@@ -23,13 +23,12 @@ and the hourly routine starts one only when none is running
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 | A1, A7, OPS1: open reports docs/reports/2026-09-26-webfeed-rss2-empty-feed-fails.md, docs/reports/2026-09-26-webfeed-terms-read-array.md and docs/reports/2026-09-26-webfeed-ops-publisher-array.md (the rest of U18 written up by the issues session, workstation s0, 2026-10-02) |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
-| [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 | **Taken: issues session, VM s3, 2026-10-03**; A19 done with U09 A19 (pkp-e2e#375); OPS2 done with U06 OPS1 (docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md) |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 | A13: open report docs/reports/2026-09-29-pkp-lib-13370.md (the rest of U07 written up by the issues session, workstation s0, 2026-10-03) |
 | [U73](../specs/U73-publication-formats-proof-terms.md) | 18 | 0 | 3 | **Taken: issues session, workstation s0, 2026-10-03**; A7 done with U74 A5 (pkp-e2e#700); A23 done with U74 A15 in U09 A11 (pkp-e2e#367); A14 done with U46 A7 (pkp-e2e#617) |
 | [U40](../specs/U40-publication-metadata.md) | 8 | 0 | 3 | A1 done with U21 A20 ([pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323)) |
 | [U30](../specs/U30-author-response-to-reviews.md) | 7 | 0 | 3 |  |
 | [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 | A10 done with U17 A6 (docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md); A12 done with U62 A9 (pkp-e2e#511) |
-| [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 | **A1 taken: issues session, VM s3, 2026-10-03** (with U03 A7) |
+| [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 | A1 done with U03 A7 (docs/issues/U03-A7-password-boxes-keep-32-characters.md) |
 | [U02](../specs/U02-registration-and-account-validation.md) | 8 | 0 | 2 |  |
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 |  |
 | [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | A7 done with U70 A10 (pkp-e2e#734); A1 done with U16 A19 (pkp-e2e#587); A8 done with U16 A15 (pkp-e2e#291) |
