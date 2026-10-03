@@ -1,0 +1,43 @@
+--- a/classes/publication/Repository.php
++++ b/classes/publication/Repository.php
+@@ -182,6 +182,27 @@
+     }
+ 
+     /**
++     * @copydoc \PKP\publication\Repository::edit()
++     *
++     * The DOI of the published version belongs to the "published elsewhere"
++     * relation: an edit that leaves the relation at any other status clears it,
++     * whichever form sent it (the workflow's "Relations", the submission wizard).
++     */
++    public function edit(Publication $publication, array $params): Publication
++    {
++        if (array_key_exists('relationStatus', $params) || array_key_exists('vorDoi', $params)) {
++            $relationStatus = array_key_exists('relationStatus', $params)
++                ? $params['relationStatus']
++                : $publication->getData('relationStatus');
++            if ((int) $relationStatus !== Publication::PUBLICATION_RELATION_PUBLISHED) {
++                $params['vorDoi'] = null;
++            }
++        }
++
++        return parent::edit($publication, $params);
++    }
++
++    /**
+      * Set the DOI of a related preprint
+      */
+     public function relate(Publication $publication, int $relationStatus, ?string $vorDoi = '')
+--- a/plugins/generic/crossref/filter/PreprintCrossrefXmlFilter.php
++++ b/plugins/generic/crossref/filter/PreprintCrossrefXmlFilter.php
+@@ -207,7 +207,9 @@
+ 
+         // DOI relations: if this version has a vorDoi or different DOI than the current publication (i.e. versions and DOI versioning exits), add a relation node
+         $parentDoi = $submission->getCurrentPublication()->getDoi() && $submission->getCurrentPublication()->getDoi() != $publication->getDoi() ? $submission->getCurrentPublication()->getDoi() : '';
+-        $vorDoi = $publication->getData('vorDoi') ? $publication->getData('vorDoi') : '';
++        $vorDoi = $publication->getData('relationStatus') == Publication::PUBLICATION_RELATION_PUBLISHED && $publication->getData('vorDoi')
++            ? $publication->getData('vorDoi')
++            : '';
+ 
+         // rel:program — DOI versioning relations and data citation relations
+         $this->appendRelationships($doc, $postedContentNode, $parentDoi, $vorDoi, $publication);

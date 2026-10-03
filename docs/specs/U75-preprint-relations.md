@@ -539,6 +539,7 @@ Left out of the scenarios above, by reason:
   - the guard for A11 (issue report `docs/issues/U75-A11-review-panel-edit-stays-on-review.md`): on a preprint server, the Review step's "Relation status" and "License" panels' "Edit" opens "For Readers".
   - the guard for A8 (issue report `docs/issues/U75-A8-preprint-submits-without-required-relation-status.md`): the wizard refuses to submit with "Relation status" unanswered (the Review step flags it and "Submit" stays disabled).
   - the guard for A9 (issue report `docs/issues/U75-A9-review-reads-unanswered-relation-as-not-published.md`): the Review step reads "This preprint's relations have not been entered." for a draft whose "Relation status" is unanswered.
+  - the guard for A1 (issue report `docs/issues/U75-A1-A2-relations-save-refused.md`): the Author of a posted preprint records "published elsewhere" with a DOI in "Relations", and the preprint page shows it.
 - **Nothing new to test**:
   - the Site Administrator opening "Relations" and saving a relation on
     any version (Actors, "Open" and "Save a relation"): the Preprint
@@ -590,9 +591,9 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | An Author cannot record that their posted preprint has been published elsewhere | 🐞 | user-visible | — |
-| [A2](#a2) | "Relations" offers an active "Save" to someone who may not edit the version, and refuses it with an unexpected-error notice | 🐞 | minor | — |
-| [A3](#a3) | Saving another status keeps the DOI of the published version | 🐞 | invisible | — |
+| [A1](#a1) | An Author cannot record that their posted preprint has been published elsewhere | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A2](#a2) | "Relations" offers an active "Save" to someone who may not edit the version, and refuses it with an unexpected-error notice | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A3](#a3) | A preprint switched away from "published elsewhere" keeps the published version's DOI, and its Crossref record still names it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | A DOI written on its own on the wizard's "For Readers" step ends in an unexpected-error window | 🐞 | medium · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | A preprint author can submit without answering the "Relation status" question marked required | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | A preprint's submission "Review" says "not published elsewhere" when the author never answered "Relation status" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -605,48 +606,51 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — An Author cannot record that their posted preprint has been published elsewhere** · 🐞 · user-visible.
-The Author opens "Relations" on their "Posted" (or "Scheduled") preprint,
-ticks "This preprint has been published elsewhere.", types the DOI and
+**A1 — An Author cannot record that their posted preprint has been published elsewhere** · 🐞 · medium.
+The Author of a posted (or scheduled) preprint opens "Relations", ticks
+"This preprint has been published elsewhere.", types the DOI and
 presses "Save": the notice reads "An unexpected error has occurred.
-Please reload the page and try again." ([A2](#a2)), a reload shows the
-earlier relation, and the preprint page shows no relation notice.
-Only a Preprint Server Manager, the Site
-Administrator or an assigned Moderator with the edit permission can add
-it; the Author is not offered
-"Create New Version" either
-([→ who may publish](U49-publish-schedule-and-versions.md#a2)). The
-Author is the person who learns that the preprint has been published,
-and the author's screens used before 2024 let them record it after
-posting; the 2024 workflow saves the relation like the rest of the
-publication, which is closed to Authors once posted.
-Since: 2024-11-06 · Basis: probe. <sup>f-a1</sup>
+Please reload the page and try again." ([A2](#a2)), nothing is saved,
+and the preprint page shows no notice that the preprint was published
+elsewhere. The Author is the one who learns that a journal has
+published the version of record, and before 3.5 they could record it
+after posting through a relation address of its own; the 3.5 panel
+saves through the publication's edit address instead, which is closed
+to Authors once a version is posted. A Preprint Server Manager, or one
+of the preprint's Moderators (who have "Permissions" by default), can
+save it for the Author once asked
+([→ who may publish](U49-publish-schedule-and-versions.md#a2)).
+Since: 2024-11-06 · Basis: probe, 2026-10-03. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — "Relations" offers an active "Save" to someone who may not edit the version, and refuses it with an unexpected-error notice** · 🐞 · minor.
-On a version whose other publication pages show this person a disabled
-"Save" (a Moderator or Author without the edit permission, an Author on
-a "Posted" or "Scheduled" version), the "Relations" panel shows its choices
-and "Save" active. Pressing "Save" shows the notice "An unexpected error
-has occurred. Please reload the page and try again.": nothing is
-written, a reload shows the earlier relation, and a second try fails the
-same way. The person learns only after trying that the control was
-never theirs, and the notice never says that they may not edit this
-version.
-Since: 2024-11-06 · Basis: probe. <sup>f-a2</sup>
+**A2 — "Relations" offers an active "Save" to someone who may not edit the version, and refuses it with an unexpected-error notice** · 🐞 · medium.
+On a version whose "Title & Abstract" page shows this person a greyed
+"Save" (an Author on a posted or scheduled version, a Moderator or an
+Author whose assignment has "Permissions" unticked), the "Relations"
+panel shows its choices and "Save" active. Pressing "Save" shows the
+notice "An unexpected error has occurred. Please reload the page and try
+again.": nothing is written, a reload shows the earlier relation, and
+the notice never says why. The panel saves through the publication's
+edit address rather than the relation address made for it ([A1](#a1)).
+Since: 2024-11-06 · Basis: probe, 2026-10-03. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — Saving another status keeps the DOI of the published version** · 🐞 · invisible.
+**A3 — A preprint switched away from "published elsewhere" keeps the published version's DOI, and its Crossref record still names it** · 🐞 · medium.
 A version marked "This preprint has been published elsewhere." with a
-DOI is switched to "This preprint has not been published elsewhere."
-(or to "…relations have not been entered.") and saved. The notice leaves
-the preprint page, but the DOI stays saved: the box shows it again, after
-a reload too, when "published elsewhere" is ticked.
-Read from the code (no screen shows the record): every later deposit to Crossref keeps naming that work as the published version.
-The preprint meanwhile says it has not been published elsewhere. Before
-2024 the screens saved the relation through a separate address of the
-install's programming interface, which they no longer call.
-Since: 2024-11-06 · Basis: probe. <sup>f-a3</sup>
+DOI is switched to "This preprint has not been published elsewhere." (or
+to "This preprint's relations have not been entered.") in the workflow's
+"Relations" and saved. The preprint page drops its "published elsewhere"
+notice, but the DOI stays saved: the "DOI of the published preprint" box
+shows it again, after a reload too, as soon as "published elsewhere" is
+ticked. An author who ticks "published elsewhere" on the submission
+wizard's "For Readers" step, types a DOI and then picks "not published
+elsewhere" stores the DOI the same way. When that version is deposited
+with Crossref, its record names the work behind the DOI as the
+preprint's published version, while the preprint page says nothing of
+the kind. Nothing on screen shows the record. It reaches only a relation
+changed away from "published elsewhere" after a DOI was typed, on a
+server that deposits with Crossref.
+Since: 2024-11-06 · Basis: probe, 2026-10-03. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — "DOI of the published preprint" refuses a DOI written on its own** · ❓ · minor.
@@ -1205,6 +1209,7 @@ action, where publishing also cleared the Author's `canChangeMetadata`
 scheduled preprint (nor, in one read, to the assigned Moderator with
 the edit permission); it was offered to the Preprint Server Manager and
 the Site Administrator.
+Issue report: [docs/issues/U75-A1-A2-relations-save-refused.md](../issues/U75-A1-A2-relations-save-refused.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note c: no read-only switch on the panel; the other
@@ -1213,6 +1218,7 @@ publication forms get `canSubmit` false for a viewer who may not edit
 `Form.vue::error()`'s fallback for a 401. Live-probed 2026-09-27: td1,
 td2, td9 (eight refused saves in six separate runs, the same notice
 each time).
+Issue report: [docs/issues/U75-A1-A2-relations-save-refused.md](../issues/U75-A1-A2-relations-save-refused.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Notes f and j: the hidden `vorDoi` is sent and stored with
@@ -1223,6 +1229,7 @@ before 2024 saved to the older relation address
 that page now redirects to the dashboard (`PKPWorkflowHandler::index()`),
 and the screens no longer call the address. Live-probed 2026-09-27: td6
 (a save with another status sent and kept the address).
+Issue report: [docs/issues/U75-A3-relation-change-keeps-published-version-doi.md](../issues/U75-A3-relation-change-keeps-published-version-doi.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Schema `vorDoi` validation `["nullable", "url"]`; the field

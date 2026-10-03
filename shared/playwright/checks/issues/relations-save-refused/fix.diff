@@ -1,0 +1,82 @@
+--- a/api/v1/submissions/SubmissionController.php
++++ b/api/v1/submissions/SubmissionController.php
+@@ -33,7 +33,6 @@
+ use PKP\security\Role;
+ use PKP\services\PKPSchemaService;
+ use PKP\submission\GenreDAO;
+-use PKP\userGroup\UserGroup;
+ 
+ class SubmissionController extends \PKP\API\v1\submissions\PKPSubmissionController
+ {
+@@ -155,15 +154,12 @@
+ 
+         $publication = Repo::publication()->get($publication->getId());
+ 
+-        $userGroups = UserGroup::withContextIds([[$submission->getData('contextId')]])
+-            ->get();
+-
+         /** @var GenreDAO $genreDao */
+         $genreDao = DAORegistry::getDAO('GenreDAO');
+-        $genres = $genreDao->getByContextId($request->getContext()->getId())->toAssociativeArray();
++        $genres = $genreDao->getByContextId($submission->getData('contextId'))->toAssociativeArray();
+ 
+         return response()->json(
+-            Repo::publication()->getSchemaMap($submission, $userGroups, $genres)->map($publication),
++            Repo::publication()->getSchemaMap($submission, $genres)->map($publication),
+             Response::HTTP_OK
+         );
+     }
+--- a/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationRelationDropdownOPS.vue
++++ b/lib/ui-library/src/pages/workflow/components/publication/WorkflowPublicationRelationDropdownOPS.vue
+@@ -35,7 +35,7 @@
+ 		setValue('vorDoi', newPublication.vorDoi);
+ 
+ 		const {apiUrl} = useUrl(
+-			`submissions/${newPublication.submissionId}/publications/${newPublication.id}`,
++			`submissions/${newPublication.submissionId}/publications/${newPublication.id}/relate`,
+ 		);
+ 		setAction(apiUrl.value);
+ 	},
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigEditorialOPS.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigEditorialOPS.js
+@@ -10,6 +10,7 @@
+ 	isDecisionAvailable,
+ 	getActiveStage,
+ 	getLatestPublication,
++	getStageById,
+ } = useSubmission();
+ 
+ const {hasCurrentUserAtLeastOneAssignedRoleInAnyStage} = useCurrentUser();
+@@ -212,6 +213,13 @@
+ 				});
+ 			}
+ 
++			// The relation saves through /relate, whose Production stage check
++			// refuses recommend-only assignments: offer it only to those it accepts
++			const canRelate = !getStageById(
++				submission,
++				pkp.const.WORKFLOW_STAGE_ID_PRODUCTION,
++			)?.currentUserCanRecommendOnly;
++
+ 			// publication controls left supports subarray for horizontal items, and array for vertical
+ 			items.push([
+ 				{
+@@ -221,10 +229,14 @@
+ 						selectedPublicationId: selectedPublicationId,
+ 					},
+ 				},
+-				{
+-					component: 'WorkflowPublicationRelationDropdownOPS',
+-					props: {publication: selectedPublication},
+-				},
++				...(canRelate
++					? [
++							{
++								component: 'WorkflowPublicationRelationDropdownOPS',
++								props: {publication: selectedPublication},
++							},
++						]
++					: []),
+ 			]);
+ 
+ 			return {items, shouldContinue: true};
