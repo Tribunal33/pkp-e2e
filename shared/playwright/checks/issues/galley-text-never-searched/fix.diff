@@ -1,0 +1,71 @@
+--- a/lib/pkp/jobs/submissions/UpdateSubmissionSearchJob.php
++++ b/lib/pkp/jobs/submissions/UpdateSubmissionSearchJob.php
+@@ -62,15 +62,21 @@
+             $bodies = [];
+             $authors = [];
+ 
+-            // Index all galleys
++            // Index all galleys (a press's publication formats); their files are attached to the galley, not to the publication
++            $galleyIds = array_map(
++                fn ($galley) => $galley->getId(),
++                array_values(Application::getRepresentationDAO()->getByPublicationId($publication->getId()))
++            );
+             $submissionFiles = Repo::submissionFile()
+                 ->getCollector()
+-                ->filterByAssoc(Application::ASSOC_TYPE_REPRESENTATION, [$publication->getId()])
++                ->filterByAssoc(Application::ASSOC_TYPE_REPRESENTATION, $galleyIds)
+                 ->filterByFileStages([SubmissionFile::SUBMISSION_FILE_PROOF])
+                 ->getMany();
+ 
+             foreach ($submissionFiles as $submissionFile) {
+                 $galley = Application::getRepresentationDAO()->getById($submissionFile->getData('assocId'));
++                // A publication format has no language of its own: use the submission's
++                $locale = $galley->getData('locale') ?: $submission->getData('locale');
+                 $parser = SearchFileParser::fromFile($submissionFile);
+                 if (!$parser) {
+                     continue;
+@@ -80,7 +86,7 @@
+                     do {
+                         for ($buffer = ''; ($chunk = $parser->read()) !== false && strlen($buffer .= $chunk) < DatabaseEngine::MINIMUM_DATA_LENGTH;);
+                         if (strlen($buffer)) {
+-                            $bodies[$galley->getLocale()] = ($bodies[$galley->getLocale()] ?? '') . $buffer;
++                            $bodies[$locale] = ($bodies[$locale] ?? '') . $buffer;
+                         }
+                     } while ($chunk !== false);
+                 } catch (\Throwable $e) {
+--- a/lib/pkp/classes/search/engines/OpenSearchEngine.php
++++ b/lib/pkp/classes/search/engines/OpenSearchEngine.php
+@@ -80,16 +80,22 @@
+                 return;
+             }
+ 
+-            // Index all galleys
++            // Index all galleys (a press's publication formats); their files are attached to the galley, not to the publication
++            $galleyIds = array_map(
++                fn ($galley) => $galley->getId(),
++                array_values(Application::getRepresentationDAO()->getByPublicationId($publication->getId()))
++            );
+             $submissionFiles = Repo::submissionFile()
+                 ->getCollector()
+-                ->filterByAssoc(Application::ASSOC_TYPE_REPRESENTATION, [$publication->getId()])
++                ->filterByAssoc(Application::ASSOC_TYPE_REPRESENTATION, $galleyIds)
+                 ->filterByFileStages([SubmissionFile::SUBMISSION_FILE_PROOF])
+                 ->getMany();
+ 
+             $bodies = [];
+             foreach ($submissionFiles as $submissionFile) {
+                 $galley = Application::getRepresentationDAO()->getById($submissionFile->getData('assocId'));
++                // A publication format has no language of its own: use the submission's
++                $locale = $galley->getData('locale') ?: $submission->getData('locale');
+                 $parser = SearchFileParser::fromFile($submissionFile);
+                 if (!$parser) {
+                     continue;
+@@ -100,7 +106,7 @@
+                     do {
+                         for ($buffer = ''; ($chunk = $parser->read()) !== false && strlen($buffer .= $chunk) < static::MINIMUM_DATA_LENGTH;);
+                         if (strlen($buffer)) {
+-                            $bodies[$galley->getLocale()] = ($bodies[$galley->getLocale()] ?? '') . $buffer;
++                            $bodies[$locale] = ($bodies[$locale] ?? '') . $buffer;
+                         }
+                     } while ($chunk !== false);
+                 } catch (\Throwable $e) {

@@ -659,6 +659,8 @@ Common to every application:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a word that is only in a published HTML galley finds the article, book or preprint once the queue has run (Rule 3; A11)
 - **Rarely met**:
   - "Items per page" changed on Settings › Website › Setup › Lists, the
     results per page following it (Rule 8, Settings): the Journal Manager
@@ -756,7 +758,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A1](#a1) | A date filter with a Year but not both Month and Day is ignored, and the selects then show a date the reader never chose | 🐞 | user-visible | — |
 | [A3](#a3) | Changes made to an article after publication never reach search until it is republished or the index rebuilt | 🐞 | user-visible | — |
 | [A9](#a9) | The configuration file lists two search settings that nothing reads | 🐞 | latent | — |
-| [A11](#a11) | The text of an article's galleys is never searched, although the site is built to read it | 🐞 | user-visible | — |
+| [A11](#a11) | A reader's search never finds a word that appears only in an article's or book's full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | A sort by published date, typed into the address, answers an error page | 🐞 | latent | — |
 | [A13](#a13) | A page number in the address that is not a number answers a completely empty page | 🐞 | latent | — |
 | [OJS1](#ojs1) | With more than one result, the screen-reader count reads out a raw code | 🐞 | minor | — |
@@ -904,17 +906,22 @@ and the name are missing only from the two page templates.
 Basis: probe. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — Galley text is never searched** · 🐞 · user-visible.
-A reader who searches a word that appears only in the text of an article's
-plain-text or HTML galley gets "No Results", on every application, however
-long after the article was published, while a word from the same article's
-title finds it. The site is built to read those galleys into the index (and
-PDF, PostScript and Word galleys through a configured converter), and the
-configuration file still documents the converters, but no galley text ever
-reaches the index. Search therefore covers titles, abstracts and
-contributor names only. Full text was searchable before the search engine
-was replaced, so this reads as a regression, not a choice.
-Since: 2025-08 (about a year). Basis: probe. <sup>f-a11</sup>
+**A11 — A reader's search never finds a word that appears only in an article's or book's full text** · 🐞 · medium.
+A reader who searches for a word that appears only in the text of an
+article's galley gets "No Results", however long after the article was
+published, while a word from the same article's title finds it. The
+same happens with a book's publication format on a press and a
+preprint's galley on a preprint server.
+
+The site is built to search the text of plain-text, HTML and XML
+galleys. On this code none of that text reaches the search index, so
+search covers only titles, abstracts and contributor names, and the
+empty result looks like an honest "no match".
+
+`main` is the coming 3.6 release. A site that upgrades to it from 3.5,
+where full-text search works, loses it, because the upgrade rebuilds the
+index without the galley text.
+Since: 2025-08 (about a year). Basis: probe, 2026-10-03. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — The sort by published date answers an error page** · 🐞 · latent.
@@ -1787,6 +1794,7 @@ a publication format with approved, available files), the article was
 published and the queue run; both words gave "No Results" while the title
 word found the article; on OJS and OPS the galleys were served to the
 visitor from the landing page with the words inside.
+Issue report: [docs/issues/U15-A11-galley-text-never-searched.md](../issues/U15-A11-galley-text-never-searched.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — fn-m: `SubmissionSearchResult::builderFromRequest()` accepts
