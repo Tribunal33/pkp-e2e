@@ -1,0 +1,82 @@
+--- a/lib/pkp/classes/submission/Repository.php
++++ b/lib/pkp/classes/submission/Repository.php
+@@ -574,6 +574,37 @@
+     }
+ 
+     /**
++     * Check if a user may change the submission language, by the rules that
++     * authorize PUT submissions/{id}/publications/{id}/changeLocale: the route's
++     * roles (PKPSubmissionController::getGroupRoutes()), then PublicationWritePolicy
++     * (StageRolePolicy and PublicationCanBeEditedPolicy). Whether the submission's
++     * state allows a change is left to PKPSubmissionController::changeLocale().
++     */
++    public function canChangeLocale(Submission $submission, Publication $publication, User $user): bool
++    {
++        $contextId = $submission->getData('contextId');
++
++        // The route admits these context roles only
++        if (!$user->hasRole([Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR], $contextId)) {
++            return false;
++        }
++
++        $isSiteAdmin = $user->hasRole([Role::ROLE_ID_SITE_ADMIN], Application::SITE_CONTEXT_ID);
++
++        // StageRolePolicy: managers and admins pass, others need a role on the current stage
++        if (!$isSiteAdmin && !$user->hasRole([Role::ROLE_ID_MANAGER], $contextId)) {
++            $stages = Repo::user()->getAccessibleWorkflowStages($user->getId(), $contextId, $submission);
++            $stageRoles = $stages[$submission->getData('stageId')] ?? [];
++            if (!array_intersect([Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT, Role::ROLE_ID_AUTHOR], $stageRoles)) {
++                return false;
++            }
++        }
++
++        // PublicationCanBeEditedPolicy
++        return $isSiteAdmin || $this->canEditPublication($publication, $user);
++    }
++
++    /**
+      * Checks if this user is granted reader access to pre-publication submissions
+      * based on their roles in the context (i.e. Manager, Editor, etc).
+      */
+--- a/lib/pkp/classes/publication/maps/Schema.php
++++ b/lib/pkp/classes/publication/maps/Schema.php
+@@ -209,6 +209,10 @@
+                 case 'canCurrentUserChangeMetadata':
+                     $output[$prop] = Repo::submission()->canEditPublication($publication, PKPApplication::get()->getRequest()->getUser());
+                     break;
++                case 'canCurrentUserChangeLocale':
++                    $user = PKPApplication::get()->getRequest()->getUser();
++                    $output[$prop] = $user ? Repo::submission()->canChangeLocale($this->submission, $publication, $user) : false;
++                    break;
+                 default:
+                     $output[$prop] = $publication->getData($prop);
+                     break;
+--- a/lib/pkp/schemas/publication.json
++++ b/lib/pkp/schemas/publication.json
+@@ -508,6 +508,11 @@
+ 			"type": "boolean",
+ 			"description": "Whether the current user can change the metadata of this publication.",
+ 			"apiSummary": true
++		},
++		"canCurrentUserChangeLocale": {
++			"type": "boolean",
++			"description": "Whether the current user may change the submission language through this publication.",
++			"readOnly": true
+ 		}
+ 	}
+ }
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowPermissions.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowPermissions.js
+@@ -84,9 +84,9 @@
+ 			canAccessEditorialHistory = true;
+ 		}
+ 
+-		if (canPublish || canEditPublication) {
+-			canChangeSubmissionLanguage = true;
+-		}
++		// The server applies the changeLocale endpoint's own rules
++		canChangeSubmissionLanguage =
++			selectedPublication?.value?.canCurrentUserChangeLocale ?? false;
+ 
+ 		return {
+ 			canAccessPublication,

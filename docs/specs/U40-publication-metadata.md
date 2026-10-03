@@ -997,7 +997,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A2](#a2) | Reset Permissions stamps Copyright Year 1970 on every unpublished article or preprint, and publishing keeps it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | Change Submission Language: a language picked while the panel loads saves the old title as the new one | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | After Cancel in the "Reset Article Permissions" confirm box, the button stays greyed until the page is reloaded | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A19](#a19) | A Site Administrator left with only an assistant role is offered "Change" (submission language), and Confirm fails with a message that names nothing | 🐞 | minor | — |
+| [A19](#a19) | Assistants allowed to edit the publication's metadata, and administrators with only an assistant role, get a language "Change" that fails | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS1](#ojs1) | An article published into a not-yet-published issue keeps "Change", and every language change on it is refused | 🐞 | minor | — |
 | [OMP5](#omp5) | Book page: with press License Terms and no book license, a "License" link reloads the page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS3](#ops3) | In French a preprint server shows the Author's "posted" banner and the Copyright Holder and Copyright Year descriptions as raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1236,21 +1236,20 @@ follow that; the "Change" offered beside them does not (A19).
 Basis: probe. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — "Change" is offered to the same administrator, and Confirm fails** · 🐞 · minor.
-The administrator of A18 is offered "Change" beside "Current Submission
-Language" and gets the full panel (Title and Abstract on a journal or
-preprint server, Title alone on a press). Confirm fails: the toast "An
+**A19 — Assistants allowed to edit the publication's metadata, and administrators with only an assistant role, get a language "Change" that fails** · 🐞 · low.
+A Copyeditor (or another assistant) whose assignment allows changes to
+the publication's metadata sees "Change" beside "Current Submission
+Language" on the Publication pages of a submission they are assigned to
+in its current stage. So does a Site Administrator whose only role in
+the journal is an assistant role. They can open the panel, pick another
+language and type the title and abstract, but "Confirm" only shows "An
 unexpected error has occurred. Please reload the page and try again."
-appears, the panel stays open with the typed values, and the submission
-language is unchanged. The screen should either not offer "Change" or
-carry the change out, and the message names no reason. By the app's
-code, an assistant whose assignment carries the metadata-edit
-permission, who is offered "Change" the same way (Actors), meets the
-same refusal; that was not tried.
-Settled by (the assistant half): as a Copyeditor whose assignment
-carries the permission, pick another language in the panel, fill the
-boxes and Confirm.
-Basis: probe. <sup>f-a19</sup>
+and the language stays as it was.
+An editor or manager can make the change instead. The assistant case
+needs the "Permissions" box ticked on the assignment, which is off by
+default; the administrator case needs their manager role in the journal
+removed.
+Basis: probe, 2026-10-03. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — The license sentence names the default beside an override** · ❓ · minor.
@@ -2720,6 +2719,7 @@ administrator with the manager role kept: 200, the panel closed, the
 language changed, on all three apps. The assistant half is a code
 reading of the route group; a permitted Copyeditor's Confirm was never
 driven (fn-i's 2026-08-28 Confirm was the manager's).
+Issue report: [docs/issues/U40-A19-change-language-offered-then-refused.md](../issues/U40-A19-change-language-offered-then-refused.md).
 
 <a id="fn-f-a20"></a>
 **f-a20 — A20 evidence.** fn-g: `PKPPublicationLicenseForm` builds the
