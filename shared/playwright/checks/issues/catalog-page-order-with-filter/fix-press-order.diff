@@ -1,0 +1,51 @@
+--- a/classes/components/listPanels/CatalogListPanel.php
++++ b/classes/components/listPanels/CatalogListPanel.php
+@@ -50,9 +50,6 @@
+         if ($context->getData('catalogSortOption')) {
+             [$catalogSortBy, $catalogSortDir] = explode('-', $context->getData('catalogSortOption'));
+         }
+-        $config['catalogSortBy'] = $catalogSortBy;
+-        $config['catalogSortDir'] = $catalogSortDir;
+-
+         $this->getParams = array_merge(
+             $this->getParams,
+             [
+@@ -65,6 +62,10 @@
+ 
+         $config = parent::getConfig();
+ 
++        // The press's own order, which the list goes back to when a filter is removed
++        $config['catalogSortBy'] = $catalogSortBy;
++        $config['catalogSortDir'] = $catalogSortDir;
++
+         $config['apiUrl'] = $this->apiUrl;
+         $config['count'] = $this->count;
+         $config['getParams'] = $this->getParams;
+--- a/lib/ui-library/src/components/ListPanel/submissions/CatalogListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/submissions/CatalogListPanel.vue
+@@ -169,11 +169,11 @@
+ 				return 'datePublished'; // ORDERBY_DATE_PUBLISHED
+ 			},
+ 		},
+-		/** One of the `SORT_DIRECTION_*` constants. Default: `SORT_DIRECTION_ASC` */
++		/** The press's sort direction, `ASC` or `DESC`. Default: `DESC` */
+ 		catalogSortDir: {
+-			type: Number,
++			type: String,
+ 			default() {
+-				return 1; // SORT_DIRECTION_ASC
++				return 'DESC';
+ 			},
+ 		},
+ 		/** The id of the press. */
+--- a/lib/ui-library/src/components/ListPanel/submissions/CatalogListPanel.stories.js
++++ b/lib/ui-library/src/components/ListPanel/submissions/CatalogListPanel.stories.js
+@@ -104,7 +104,7 @@
+ 		id: 'previewCatalogListPanel',
+ 		apiUrl: 'http://httpbin.org/get',
+ 		catalogSortBy: 'datePublished',
+-		catalogSortDir: '1',
++		catalogSortDir: 'DESC',
+ 		csrfToken: '1234',
+ 		infoUrl: 'http://httbin.org/get',
+ 		title: 'catalog',

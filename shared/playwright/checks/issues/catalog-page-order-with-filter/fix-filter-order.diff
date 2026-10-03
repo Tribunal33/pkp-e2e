@@ -1,0 +1,20 @@
+--- a/classes/components/listPanels/CatalogListPanel.php
++++ b/classes/components/listPanels/CatalogListPanel.php
+@@ -82,7 +82,7 @@
+ 
+             foreach ($categoriesCollection as $category) {
+                 [$categorySortBy, $categorySortDir] = explode('-', $category->getSortOption());
+-                $categorySortDir = empty($categorySortDir) ? $catalogSortDir : ($categorySortDir == \PKP\db\DAO::SORT_DIRECTION_ASC ? 'ASC' : 'DESC');
++                $categorySortDir = empty($categorySortDir) ? $catalogSortDir : $categorySortDir;
+                 $categories[] = [
+                     'param' => 'categoryIds',
+                     'value' => (int) $category->getId(),
+@@ -105,7 +105,7 @@
+                 ->getMany();
+             foreach ($seriesResult as $seriesObj) {
+                 [$seriesSortBy, $seriesSortDir] = explode('-', $seriesObj->getSortOption());
+-                $seriesSortDir = empty($seriesSortDir) ? $catalogSortDir : ($seriesSortDir == \PKP\db\DAO::SORT_DIRECTION_ASC ? 'ASC' : 'DESC');
++                $seriesSortDir = empty($seriesSortDir) ? $catalogSortDir : $seriesSortDir;
+                 $series[] = [
+                     'param' => 'seriesIds',
+                     'value' => (int) $seriesObj->getId(),
