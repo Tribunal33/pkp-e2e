@@ -555,6 +555,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the close button of "Add a file" after an "OK" refused for a missing file asks "The data on this form has changed. Do you wish to continue without saving?" (Rule 3b; A11, docs/issues/U08-A18-item-window-refused-save-closes-unasked.md)
+  - an assigned Copyeditor and, on a preprint server, the Moderator and the Author download a Submission Library file from the "Submission Library" window (Actors row 3; Rule 8b; A1)
 - **Nothing new to test**:
   - a recommending editor's "Notify Editors" page {OJS OMP}: its "Library Files", and the attached file's copy listed in the discussion the recommendation opens (Actors row 8; Rule 11c)
   - the "Request Author Response" page {OJS}: the Editor's and an assigned Section Editor's "Library Files" (Actors row 8; Rule 11a)
@@ -587,7 +588,7 @@ entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A Submission Library file cannot be downloaded by an assigned assistant, nor on a preprint server by the Moderator or the Author: the name leads to "403 Forbidden" | 🐞 | user-visible | — |
+| [A1](#a1) | Assistants, and a preprint's moderator and author, get a bare "403 Forbidden" page for Submission Library files | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "OK" in "Add a file" before a file has uploaded does nothing and says nothing | 🐞 | minor | — |
 | [A3](#a3) | "Description" is starred as required but saves empty | 🐞 | minor | — |
 | [A4](#a4) | A file whose name holds its extension earlier downloads under a cut name | 🐞 | minor | — |
@@ -604,20 +605,25 @@ entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — Submission Library files refused to the people the window serves** · 🐞 · user-visible.
+**A1 — Assistants, and a preprint's moderator and author, get a bare "403 Forbidden" page for Submission Library files** · 🐞 · medium.
 The "Submission Library" window opens for every workflow participant and
-lets each of them add, rename and delete its files, so a participant
-expects to read them too. Pressing a file's name instead takes an
-assigned Copyeditor, Layout Editor, Proofreader, Designer, Indexer,
-Marketing and sales coordinator or a press's Chapter Author off the
-workflow screen to a bare page reading "403 Forbidden", including for a
-file they added themselves. On a preprint server no role works on a
-Submission stage, so the Moderator and the Author, the submission's own
-author, are refused every Submission Library file, and only the Preprint
-Server Manager reads them. The "Download" link of "Library Files" in a
-Moderator's decision email opens a new tab reading "403 Forbidden",
-while the email page stays.
-Basis: probe. <sup>[f-a1](#fn-a1)</sup>
+lets each of them add, edit and delete its files. But an assigned person
+whose role has "Submission" unticked under "Stage Assignment" (Settings ›
+Users & Roles › Roles) is sent from the workflow screen to a bare page
+reading "403 Forbidden" when they press a file's name, even for a file they
+added themselves. By default that is the Copyeditor, Layout Editor,
+Proofreader, Designer, Indexer and Marketing and sales coordinator, and on
+a press also the Chapter Author.
+
+No preprint server role can be given the Submission stage: the box is not
+there. So on a preprint server the Moderator and the preprint's own Author
+are refused every Submission Library file, and only the Preprint Server
+manager can read them. A Moderator's "Download" under "Library Files" on a
+decision email opens a new tab reading "403 Forbidden".
+
+Nothing is lost. The file has to reach these people some other way, such
+as a discussion.
+Basis: probe, 2026-10-03. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — "OK" without a file does nothing** · 🐞 · minor.
@@ -838,6 +844,7 @@ Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
 
 <a id="fn-a1"></a>
 **f-a1** — The window's audience is note b's and its edit rights note c's, while the download is note d's check on the Submission stage. The check is older than the 2022 rename of the page handler (`df90557bf`, pkp/pkp-lib#6091); the grids came to lib/pkp in 2013 (`c81abf340`). Age would read the Submission-stage audience as intent, but the window offers the same files, and the rights to add and delete them, to people the download refuses, and on a preprint server it refuses the submission's own Author, hence a defect. Live-probed 2026-09-24: notes d and td3.
+Issue report: [docs/issues/U39-A1-submission-library-file-403-for-participants.md](../issues/U39-A1-submission-library-file-403-for-participants.md).
 
 <a id="fn-a2"></a>
 **f-a2** — `LibraryFileGridHandler::saveFile()` answers `new JSONMessage(false)` with no content when `validate()` fails; `FileUploadFormHandler` → `AjaxFormHandler::handleResponse()` → `Handler::handleJson()` shows a message only when the answer carries content (`alert(jsonData.content)`), so nothing appears and the controls are enabled again. The hidden `temporaryFileId` input has no browser-side check, so the file is the one field only the server checks, and `settings.libraryFiles.fileRequired` ("A library file is required. Please ensure that you have chosen and uploaded a file.") never reaches the screen. Live-probed 2026-09-24: note td4 (the no-upload end; a file still uploading was not driven).

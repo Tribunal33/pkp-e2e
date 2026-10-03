@@ -1,0 +1,15 @@
+--- a/lib/pkp/pages/libraryFiles/LibraryFileHandler.php
++++ b/lib/pkp/pages/libraryFiles/LibraryFileHandler.php
+@@ -94,9 +94,10 @@
+                     }
+                 }
+ 
+-                // Check for specific assignments.
++                // Anyone assigned to the submission, in any stage, as for the
++                // Submission Library list itself (SubmissionAccessPolicy).
+                 $assignedUsers = Repo::user()->getCollector()
+-                    ->assignedTo($libraryFile->getSubmissionId(), WORKFLOW_STAGE_ID_SUBMISSION)
++                    ->assignedTo($libraryFile->getSubmissionId())
+                     ->getMany();
+ 
+                 $user = $request->getUser();
