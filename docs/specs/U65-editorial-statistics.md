@@ -1000,6 +1000,7 @@ Left out of the scenarios above, by reason:
   - "Articles Report" of a submission whose title holds "&", an apostrophe and an italic word: the "Title" cell reads as typed (the guard for OJS2, once fixed; Rule 20d)
   - "Articles Report" after "Accept and Skip Review", "Revert Decline", "New Review Round", a move back a stage and a publication: every "Editor Decision" cell named (the guard for OJS3, once fixed; Rule 20b)
   - "Monograph Report" of a press whose books have fewer authors and decisions than another press's: no author or decision column beyond its own books' (the guard for OMP3, once fixed; Rule 23)
+  - "Monograph Report" after an Internal Review "Decline Submission" and its "Revert Decline": the revert named "Revert Decline" (the guard for OMP4, once fixed; Rule 23)
 - **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
@@ -1080,7 +1081,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OMP1](#omp1) | A press's Editorial Activity leaves books declined at Internal Review out of "Submissions Declined" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | A press's "Days to First Editorial Decision" help text says "authors submitting to your journal" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | "Monograph Report" of one press carries empty author and decision columns sized by another press's books | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OMP4](#omp4) | "Monograph Report" names a reverted Internal Review decline "Decline Submission" | 🐞 | minor | — |
+| [OMP4](#omp4) | "Monograph Report" names a reverted Internal Review decline "Decline Submission" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP5](#omp5) | A French press's monthly attachment names External Review by a raw code | 🐞 | minor | — |
 | [OPS4](#ops4) | The preprint server's monthly email leaves "Accepted submissions this month:" blank | 🐞 | minor | — |
 | [A3](#a3) | Whether drafts started within the range count in "Submissions In Progress" is unseen; drafts started today never do | ❓ | minor | — |
@@ -1469,11 +1470,19 @@ from one query. Expected: as many columns as this press's books need.
 Basis: probe, 2026-10-02. <sup>f-omp3</sup>
 
 <a id="omp4"></a>
-**OMP4 — A reverted Internal Review decline reads "Decline Submission"** · 🐞 · minor.
-In "Monograph Report", the decision that reverts an Internal Review
-decline is named "Decline Submission", so the file shows the book
-declined twice. Expected: "Revert Decline".
-Basis: probe. <sup>f-omp4</sup>
+**OMP4 — "Monograph Report" names a reverted Internal Review decline "Decline Submission"** · 🐞 · low.
+When an editor declines a book in Internal Review and then presses
+"Revert Decline", the press's "Monograph Report" (Statistics ›
+"Reports") names the revert "Decline Submission". The book's line then
+lists "Decline Submission" in two decision columns, the real decline and
+the revert, while its "Status" column says the book is still in Internal
+Review.
+
+Anyone counting declines from the file counts one decline too many for
+each such book and cannot see that the decline was undone. A revert in
+External Review or at submission is named correctly. Expected: "Revert
+Decline".
+Basis: probe, 2026-10-02. <sup>f-omp4</sup>
 
 <a id="omp5"></a>
 **OMP5 — A French press's attachment names External Review by a raw code** · 🐞 · minor.
@@ -2268,6 +2277,7 @@ Issue report: [docs/issues/U65-OMP3-monograph-report-columns-sized-by-other-pres
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — fn o (`getDecisionMessage()`). Live-probed 2026-09-28: td13.
+Issue report: [docs/issues/U65-OMP4-monograph-report-revert-decline-named-decline.md](../issues/U65-OMP4-monograph-report-revert-decline-named-decline.md).
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — fn d (the stages' names) and fn p (the attachment).

@@ -1,0 +1,11 @@
+--- a/plugins/reports/monographReport/Report.php
++++ b/plugins/reports/monographReport/Report.php
+@@ -131,7 +131,7 @@
+             Decision::RECOMMEND_PENDING_REVISIONS_INTERNAL => __('editor.submission.recommendation.display', ['recommendation' => __('editor.submission.decision.requestRevisions')]),
+             Decision::RECOMMEND_RESUBMIT_INTERNAL => __('editor.submission.recommendation.display', ['recommendation' => __('editor.submission.decision.resubmit')]),
+             Decision::RECOMMEND_DECLINE_INTERNAL => __('editor.submission.recommendation.display', ['recommendation' => __('editor.submission.decision.decline')]),
+-            Decision::REVERT_INTERNAL_DECLINE => __('editor.submission.decision.decline'),
++            Decision::REVERT_INTERNAL_DECLINE => __('editor.submission.decision.revertDecline'),
+             Decision::NEW_INTERNAL_ROUND => __('editor.submission.decision.newReviewRound'),
+             Decision::BACK_FROM_PRODUCTION => __('editor.submission.decision.backToCopyediting'),
+             Decision::BACK_FROM_COPYEDITING => __('editor.submission.decision.backFromCopyediting'),
