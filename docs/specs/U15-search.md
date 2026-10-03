@@ -1858,7 +1858,7 @@ on OJS, OMP and OPS: `…/search/search?query=uckaharbour&searchPage=abc`
 answered status 500 with an empty body (a blank page, no text);
 `searchPage=9` on a one-hit search answered "No Results" with the box
 holding the word.
-Issue report: [docs/issues/U15-A13-search-text-page-number-blank-page.md](../issues/U15-A13-search-text-page-number-blank-page.md).
+Issue report: [docs/issues/U15-A13-search-text-page-number-blank-page.md](../issues/U15-A13-search-text-page-number-blank-page.md), filed as [pkp-e2e#721](https://github.com/jardakotesovec/pkp-e2e/issues/721).
 
 <a id="fn-f-a14"></a>
 **f-a14** — fn-h: `SearchHandler::_assignDateFromTo()` builds the date
