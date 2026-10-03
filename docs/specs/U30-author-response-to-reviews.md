@@ -697,6 +697,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U30-A1-author-response-request-leaves-no-trace.md`):
     after "Submit Request" the editor's "Author Response" row reads
     "Response requested", for a second editor of the submission too
+  - the guard for A3 (issue report `docs/issues/U30-A3-funding-coordinat
+    or-author-response-refused.md`): an assigned Funding coordinator
+    sees no "Request Response" and no "Delete" on the "Author Response"
+    table, and "View" opens the response read-only
 - **Nothing new to test**:
   - Site Administrator (the Journal Manager's offer, scenarios 1 and 3)
   - Guest Editor (the Section Editor's gate, scenario 6)
@@ -730,7 +734,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | Editors' "Author Response" table still reads "Ready to invite author" after the request was sent | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A3](#a3) | The Funding Coordinator is offered "Request Response", "View" and "Delete" and refused on all three | 🐞 | minor | — |
+| [A3](#a3) | A Funding coordinator is offered "Request Response" and "Delete" on "Author Response", then refused | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | The request page opened by a typed address returns nowhere on "Cancel" and after sending | 🐞 | minor | — |
 | [A5](#a5) | An emptied "Subject" or "Message" is refused with "An unexpected error has occurred." | 🐞 | minor | — |
 | [A7](#a7) | The decision email's "Submit Author Response" leads nowhere once revisions are uploaded | 🐞 | user-visible | — |
@@ -773,18 +777,24 @@ an email, and an uploaded revision the email "Revised Version Uploaded".
 Basis: probe. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — The Funding Coordinator is offered controls the app refuses** · 🐞
-· minor. An assigned Funding Coordinator sees the "Author Response" table
-with "Request Response" enabled on a ready round and, once a response
-exists, "View" and "Delete" enabled in the row menu, exactly as an editor
-does. Pressing "Request Response" shows the access-denied page "The
-current role does not have access to this operation." instead of the
-request page; "View" opens "Author Response to Reviews" with the note
-promising that "Editors may review the response and make edits", but with
-a greyed "Submit Response" where the editor has "Save"; "Delete" › "OK"
-ends in the dialog "Error" / "The current role does not have access to
-this operation." and the response stays. The expectation is that none of
-the three is offered. Basis: probe. <sup>f-a3</sup>
+**A3 — A Funding coordinator is offered "Request Response" and "Delete" on "Author Response", then refused** · 🐞 · low.
+A Funding coordinator assigned to a submission sees the review
+round's "Author Response" table with the same controls as an editor.
+"Request Response" is enabled once the reviews are in, and once the
+author has responded the row's menu offers "View" and "Delete". The
+app refuses both actions. "Request Response" leads to a page reading
+"The current role does not have access to this operation.". "Delete"
+› "OK" ends in the dialog "Error" with that same sentence, and the
+response stays.
+
+"View" is part of the same fault. It opens the editors' window
+"Author Response to Reviews" with editable fields and, where an editor
+has "Save", the author's greyed "Submit Response", a button no
+non-author can use.
+
+The fix makes the controls follow the role the server checks. The
+coordinator keeps "View", which then shows the response to read.
+Since: 2026-01-23 (pkp/ui-library#767) · Basis: probe, 2026-10-04. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — A typed request-page address returns nowhere** · 🐞 · minor. The
@@ -1001,6 +1011,7 @@ Issue report: [pkp-e2e#811](https://github.com/jardakotesovec/pkp-e2e/issues/811
 
 <a id="fn-f-a3"></a>
 **f-a3** — Notes a, c, k: the editorial config pushes the table for every editorial-view user; the button's `is-disabled` and the row actions' `disabled` depend on readiness and on the submitting user only, never on the viewer's role, while `ReviewResponseHandler` assigns the page to manager, admin and sub-editor and the DELETE route to the same three. Live-probed 2026-09-06 (notes a, k, l): the button leads to `user/authorizationDenied`, the window shows "Submit Response" `disabled` (`isEditor` false for `ROLE_ID_ASSISTANT`), and the `DELETE` answers 401 with the "Error" dialog.
+Issue report: [pkp-e2e#812](https://github.com/jardakotesovec/pkp-e2e/issues/812) ([docs/issues/U30-A3-funding-coordinator-author-response-refused.md](../issues/U30-A3-funding-coordinator-author-response-refused.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note f: `getReturnUrlToSubmissionSummary()` returns `null` without `ret`; `cancelResponseRequest()` sets `window.location.href = null` and the dialog's action gets `href: null` with the label `submission.list.viewSubmission`. Live-probed 2026-09-06 (note o): `reviewResponse/null` renders "404 Not Found"; the dialog's anchor has no `href` and a press on it changes nothing; the same on OMP.
