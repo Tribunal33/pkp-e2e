@@ -1,0 +1,38 @@
+--- a/tools/rebuildSearchIndex.php
++++ b/tools/rebuildSearchIndex.php
+@@ -67,17 +67,28 @@
+         Hook::add('Request::getBaseUrl', [$this, 'callbackBaseUrl']);
+ 
+         $searchEngine = app(\Laravel\Scout\EngineManager::class)->engine();
+-        $searchEngine->flush(Config::getVar('search_index_name', 'submissions'));
+-        try {
+-            $searchEngine->deleteIndex(Config::getVar('search_index_name', 'submissions'));
+-        } catch (Throwable $t) {
+-            // Ignore index deletion problems
++        if (!$press) {
++            // A site-wide rebuild starts from an empty index.
++            $searchEngine->flush(Config::getVar('search_index_name', 'submissions'));
++            try {
++                $searchEngine->deleteIndex(Config::getVar('search_index_name', 'submissions'));
++            } catch (Throwable $t) {
++                // Ignore index deletion problems
++            }
++            $searchEngine->createIndex(Config::getVar('search_index_name', 'submissions'));
++        } else {
++            // One press: keep the other presses' entries. update() below replaces each of this
++            // press's submissions' entries; the index is only created when there is none yet.
++            try {
++                $searchEngine->createIndex(Config::getVar('search_index_name', 'submissions'));
++            } catch (Throwable $t) {
++                // The index already exists
++            }
+         }
+-        $searchEngine->createIndex(Config::getVar('search_index_name', 'submissions'));
+ 
+         // Let the search implementation re-build the index.
+         $submissions = Repo::submission()->getCollector()
+-            ->filterByContextIds([$journal?->getId() ?? Application::SITE_CONTEXT_ID_ALL])
++            ->filterByContextIds([$press?->getId() ?? Application::SITE_CONTEXT_ID_ALL])
+             ->getIds()
+             ->chunk(100)
+             ->each(function (Collection $submissionIds) use ($searchEngine) {

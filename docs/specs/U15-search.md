@@ -770,10 +770,10 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A13](#a13) | A Search results address whose page number is not a number opens a completely blank page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [OJS1](#ojs1) | Screen readers hear a raw code, or "Found one item.", when a search finds several items | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS2](#ojs2) | On the site-wide Search page, "By Journal" limits the first page only and never shows as chosen | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [OMP1](#omp1) | The index-rebuild tool ignores the press path it is given and rebuilds every press | 🐞 | invisible | — |
+| [OMP1](#omp1) | Rebuilding one press's search index by its path empties Search on every other press until the queue re-indexes them | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP3](#omp3) | Returning a published book or preprint to the workflow takes its page offline for readers, while Search still links to it | 🐞 | high | issues (claude), 2026-10-03 — re-verified |
 | [OPS1](#ops1) | On a preprint server the screen-reader result count always says "Found one item." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [OPS3](#ops3) | The index-rebuild tool ignores the server path it is given and rebuilds every server | 🐞 | invisible | — |
+| [OPS3](#ops3) | Rebuilding one server's search index by its path empties Search on every other server until the queue re-indexes them | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OPS4](#ops4) | Returning a posted preprint to the workflow takes its page offline for readers, while Search still links to it | 🐞 | high | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Published Before" leaves out the chosen day itself | ❓ | minor | — |
 | [A4](#a4) | Results come in no particular order | ❓ | user-visible | — |
@@ -1062,12 +1062,18 @@ Basis: probe. <sup>f-ojs3</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — The rebuild tool ignores the press path** · 🐞 · invisible.
-The command-line index rebuild accepts a press path, refuses an unknown
-one with "The given press path "{path}" could not be resolved to a press.",
-and then rebuilds the index for every press on the site regardless of the
-path given.
-Basis: judgment. <sup>f-omp1</sup>
+**OMP1 — Rebuilding one press's search index by its path empties Search on every other press until the queue re-indexes them** · 🐞 · medium.
+A system administrator who rebuilds the search index for one press
+with `php tools/rebuildSearchIndex.php <path>` empties the whole site's
+index, and every press on the site is queued for re-indexing, not only
+the named one. Search on the other presses finds nothing until the
+queue reaches their books; with the default settings the queue moves
+only as visitors open pages, at most 30 items per page visit. On a
+journal site the same command leaves every other journal's Search empty
+until a full rebuild (the issue report's journal half). The tool
+refuses an unknown path with "The given press path "{path}" could not
+be resolved to a press."
+Basis: probe, 2026-10-03. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
 **OMP2 — The press's Search page is its own page** · ✅ · user-visible.
@@ -1126,10 +1132,14 @@ remove the gate or make the setting store and add the sentence.
 Basis: judgment. <sup>f-ops2</sup>
 
 <a id="ops3"></a>
-**OPS3 — The rebuild tool ignores the server path** · 🐞 · invisible.
-As [OMP1](#omp1): the command-line rebuild accepts and checks a server
-path, then rebuilds every server on the site.
-Basis: judgment. <sup>f-ops3</sup>
+**OPS3 — Rebuilding one server's search index by its path empties Search on every other server until the queue re-indexes them** · 🐞 · medium.
+As [OMP1](#omp1), on a site hosting several preprint servers: the
+rebuild by a server's path empties the whole index and queues every
+server's preprints, and Search on the others finds nothing until the
+queue reaches them. On 3.5 and 3.4 the path is never honoured either,
+for an older reason (the tool's check never matches the server class
+since 2021), and the same emptying was measured on 3.5.
+Basis: probe, 2026-10-03. <sup>f-ops3</sup>
 
 <a id="ops4"></a>
 **OPS4 — Returning a posted preprint to the workflow takes its page offline for readers, while Search still links to it** · 🐞 · high.
@@ -1952,6 +1962,7 @@ online." (fn-l).
 <a id="fn-f-omp1"></a>
 **f-omp1** — fn-o: `$press` assigned, `$journal` filtered. Judgment from
 the tool's source; not run.
+Issue report: [docs/issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md](../issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — fn-b, fn-f, fn-g: `omp/templates/frontend/pages/search.tpl`
@@ -1993,6 +2004,7 @@ the setting; every actor got the Search page and the archive box, no
 <a id="fn-f-ops3"></a>
 **f-ops3** — fn-o: `$server` assigned, `$journal` filtered. Judgment from
 the tool's source; not run.
+Issue report: [docs/issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md](../issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md).
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — fn-c, fn-s12. Suite run of 2026-09-13 on a scratch server,
