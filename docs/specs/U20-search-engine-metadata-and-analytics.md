@@ -894,6 +894,7 @@ Left out of the scenarios above, by reason:
   - OMP1 {OMP} (a book with an EPUB format and an HTML format: the book page's "citation_fulltext_html_url" names the HTML file alone; Fields, "citation_fulltext_html_url")
   - OMP2 {OMP} (a book with two PDF files for the whole book and no ISBN: one "citation_pdf_url" per file; Fields, "citation_pdf_url")
   - A5 (an expired announcement: the sitemap lists the unexpired one alone; Rule 3)
+  - A2 (the Plugins list's "Google Analytics Plugin" description on a press and a preprint server, and its "Settings" window's paragraphs, naming no other application and no missing function; scenario 8)
 - **Rarely met**:
   - "User Registration" set to "The Journal Manager will register all
     user accounts. …", which takes "Register" out of the sitemap
@@ -978,7 +979,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | Search engines get the home page's "Description" cut at its first double quote mark | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A2](#a2) | "Google Analytics Plugin" speaks of OJS on a press and a preprint server, and of a "Check Status" function no screen offers | 🐞 | minor | — |
+| [A2](#a2) | "Google Analytics Plugin" tells a press and a preprint server it integrates OJS, and points every manager to a "Check Status" function that does not exist | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | The sitemap lists expired announcements, whose entries lead to the Announcements list | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | A contributor whose names are not entered in the submission's language is announced by the given name alone | 🐞 | minor | — |
 | [A7](#a7) | An "&" in an abstract reaches the tags as "&amp;" | 🐞 | minor | — |
@@ -1017,13 +1018,23 @@ The site's index page never carries it.
 Basis: probe, 2026-10-03. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — Google Analytics texts name OJS and a missing function** · 🐞 · minor.
-On a press and a preprint server the plugin's description in the
-Plugins list reads "Integrate OJS with Google Analytics, …", and on
-every app its settings window tells the manager that "the 'Check Status'
-function may not accurately report" while tracking starts, although no
-screen offers such a function.
-Basis: probe, 2026-09-26. <sup>f-a2</sup>
+**A2 — "Google Analytics Plugin" tells a press and a preprint server it integrates OJS, and points every manager to a "Check Status" function that does not exist** · 🐞 · low.
+On a press and a preprint server, the description of "Google Analytics
+Plugin" in the Plugins list reads "Integrate OJS with Google Analytics,
+…", naming the journal software.
+
+On all three apps, the plugin's "Settings" window warns that "the 'Check
+Status' function may not accurately report whether it has detected the
+required tracking code". No screen of the app has such a function. The
+sentence was written for OJS 2 in 2008, about a link in Google
+Analytics' own interface of that time, and carried into the shared
+plugin in 2016.
+
+The plugin ships with all three apps and is listed under "Generic
+Plugins" on every install, disabled by default, so every manager who
+sets it up reads both texts. Most translations repeat them: 33 of the
+38 name OJS in the description.
+Basis: probe, 2026-10-03. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — The site's Google Analytics box does nothing** · ❓ · minor.
@@ -1317,6 +1328,7 @@ Issue report: [docs/issues/U20-A1-home-page-description-cut-at-quote-mark.md](..
 
 <a id="fn-f-a2"></a>
 **f-a2** — Notes a, d: `plugins.generic.googleAnalytics.description` and `…manager.settings.description` in `plugins/generic/googleAnalytics/locale/en/locale.po`, identical in the three apps (a shared plugin tree); no code or template offers a "Check Status" action. The `…authorAccount*` strings of the same file are read by no code. Live-probed 2026-09-26, all three apps: notes q1, q20, q22 (the two texts as quoted).
+Issue report: [docs/issues/U20-A2-analytics-plugin-texts-name-ojs-and-check-status.md](../issues/U20-A2-analytics-plugin-texts-name-ojs-and-check-status.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note d: `getEnabled()` of a lazy-load plugin reads the site's own `enabled` row on the site's Plugins tab, so the box keeps its tick; `registerScript()` returns with no context, so the site's pages never carry the script (note k). The draft's reading of the code, that the ticked site row would offer "Settings" and its window fail for want of a journal, did not hold on screen: no "Settings" was offered, so no window opened. Live-probed 2026-09-26, two runs, all three apps: note q24.
