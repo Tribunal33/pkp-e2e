@@ -990,6 +990,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md`):
     a physical format's "Metadata" tab refuses "xii" as "Front Matter"
     and "tall" as "Height", and the book's Native XML export completes
+  - the guard for A3 (issue report
+    `docs/issues/U73-A3-format-change-file-only-adds.md`): a format's
+    second "Change File" offers its first file to replace, and with it
+    chosen the format still lists one file
   - a format file's "Edit a file" closed with its close arrow after the
     name is changed: no question, the row keeping the old name after a
     reload, and "Edit" reopening on it (Rule 11): likely a bullet in
@@ -1083,7 +1087,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | Page counts and dimensions take any text, and the book's Native XML export then fails | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A1](#a1) | The assistant roles are offered availability, terms and "Select Files", and refused | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | The "Metadata" tab's four lists do not load for the Series editor and the assistant roles | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A3](#a3) | A format's "Change File" adds a file; nothing is changed | 🐞 | minor | — |
+| [A3](#a3) | A publication format's "Change File" cannot say which file it replaces, so every upload adds one more | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | Unticking "This format will be available at a separate website" keeps the format remote | 🐞 | minor | — |
 | [A7](#a7) | A new publication date preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | The "Format Availability" window reads "This format will unavailable to readers." | 🐞 | minor | — |
@@ -1135,12 +1139,19 @@ Expected: the lists follow the tab.
 Basis: probe, 2026-10-03. <sup>f-a2</sup> <sup>td6</sup>
 
 <a id="a3"></a>
-**A3 — "Change File" adds a file** · 🐞 · minor.
-A format's link for uploading a file reads "Change File", but it adds
-one more file to the format and replaces nothing; a format holds any
-number of files. The label was chosen for a journal's galley, which
-holds one file. Expected: "Upload File" or "Add File".
-Since: 2016-06-21 (the label's change for galleys), a date read from the code's history · Basis: probe. <sup>f-a3</sup>
+**A3 — A publication format's "Change File" cannot say which file it replaces, so every upload adds one more** · 🐞 · medium.
+On a press, a publication format's "Change File" opens "Upload a File
+Ready for Publication" with no way to say which of the format's files
+is being changed. Whatever is uploaded is added as one more file, and
+the file the person meant to replace stays listed beside it.
+
+Readers keep getting the old file until the press sets the new file's
+terms (open access, or direct sale with a price). After that, the
+book's page lists both files, unless the press deletes the old one.
+
+This affects every format that already holds a file, including the
+formats of a published book.
+Since: 2026-02-18 (pkp/pkp-lib#12351; 3.4 offered the file to replace) · Basis: probe, 2026-10-03. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — A remote format cannot be made local again** · 🐞 · minor.
@@ -2292,6 +2303,7 @@ galley has its own "Change File" in the row's "More Actions" menu
 ("Edit", "Change File", "More Information", "Delete"), which replaces
 the galley's one file (Submission files), live-probed 2026-09-28 on OJS
 and OPS. Live-probed 2026-09-28 (OMP): note td18.
+Issue report: [pkp-e2e#800](https://github.com/jardakotesovec/pkp-e2e/issues/800) ([docs/issues/U73-A3-format-change-file-only-adds.md](../issues/U73-A3-format-change-file-only-adds.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note e. `RepresentationFormHandler::toggleRemote_()` empties
