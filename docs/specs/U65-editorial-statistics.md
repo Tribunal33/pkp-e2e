@@ -995,6 +995,7 @@ Left out of the scenarios above, by reason:
   - Statistics › "Users" of a journal: no "Site Administrator" row (the guard for A6, once fixed; Rule 14)
   - a report address with an unknown, empty or missing report name: lands on the "Reports" page (the guard for A8, once fixed; Rule 19)
   - a Custom Range ending on the day submissions arrived: "Submissions Received" counts them and the rates are not "0%" (the guard for A1, once fixed; Rules 7a, 9)
+  - an editor who saved Profile › "Notifications" while the monthly email was off, and one who saved the site-level profile: each keeps the statistics row as before and gets the email (the guard for A14, once fixed; Settings bullet 1)
 - **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
@@ -1067,7 +1068,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | A report address with an unknown or missing report name lands on "404 Not Found", not on "Reports" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | Monthly editorial email's attachment counts every journal's active submissions, not the journal's own | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | The monthly email reads "Login to the the press" ("the the preprint server") | 🐞 | minor | — |
-| [A14](#a14) | Saving Profile › "Notifications" while the monthly email is off opts the account out for when it returns | 🐞 | minor | — |
+| [A14](#a14) | Saving Profile › "Notifications" while it hides the statistics row stops that editor's monthly statistics email | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | "Articles Report" leaves "Supporting Agencies" empty | 🐞 | minor | — |
 | [OJS2](#ojs2) | "Articles Report" writes "&" in a title as "&amp;" | 🐞 | minor | — |
 | [OJS3](#ojs3) | "Articles Report" leaves the decision cell empty for several decisions | 🐞 | minor | — |
@@ -1285,16 +1286,32 @@ email reads as broken.
 Basis: probe. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — Saving the Notifications tab while the email is off opts the account out** · 🐞 · minor.
-While "Editorial statistics" is at "Do not send the email to editors.",
-Profile › "Notifications" does not show "Statistics report summary.",
-and an account that saves that tab is stored as not wanting it. When
-the journal switches the email back on, that account's row reads
-"Enable these types of notifications." unticked and it gets neither
-the email nor the Tasks entry, although it never chose so; an account
-that did not save meanwhile gets both. Expected: the account's earlier
-choice is kept.
-Basis: probe. <sup>f-a14</sup>
+**A14 — Saving Profile › "Notifications" while it hides the statistics row stops that editor's monthly statistics email** · 🐞 · medium.
+Profile › "Notifications" hides the "Statistics report summary." row in
+two cases: while the journal's "Editorial statistics" setting is at "Do
+not send the email to editors.", and always on the site-level profile
+(the profile opened outside any journal). An editor who presses "Save"
+on the tab in either case is stored as having switched the row off,
+although they never saw it. From then on they get neither the monthly
+statistics email nor its Tasks entry.
+
+On the journal path the loss shows once the journal switches the email
+back on: the editor's row then reads "Enable these types of
+notifications." unticked. After a save on the site-level profile, every
+journal's row still reads ticked, yet the email stops in every journal.
+
+Only the people the email goes to are affected: Journal Managers and
+Section Editors (Press Managers and Series Editors, Preprint Server
+Managers and Moderators). The site-level case needs an editor with roles
+in two or more journals of the site, because a one-journal user is sent
+on to the journal's own profile.
+
+The proposed fix stops new opt-outs but does not bring back editors
+already stored as opted out. Those who saved the site-level profile keep
+missing every journal's email until `pkp/pkp-lib#12769` makes the
+email's recipient list read each journal's own choices. Expected: the
+account's earlier choice is kept.
+Basis: probe, 2026-10-02. <sup>f-a14</sup>
 
 ### OJS
 
@@ -2135,6 +2152,7 @@ send the email to editors."; switched back on, that account's row read
 "Enable these types of notifications." unticked, the task's run left it
 out and no email came, while a control account that had not saved read
 ticked and got the email.
+Issue report: [docs/issues/U65-A14-stats-email-optout-after-saving-notifications.md](../issues/U65-A14-stats-email-optout-after-saving-notifications.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn l (`$agencies`). Live-probed 2026-09-28: td10, with the item switched off and on.

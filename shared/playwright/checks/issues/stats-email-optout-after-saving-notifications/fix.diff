@@ -1,0 +1,36 @@
+--- a/lib/pkp/classes/notification/form/PKPNotificationSettingsForm.php
++++ b/lib/pkp/classes/notification/form/PKPNotificationSettingsForm.php
+@@ -148,9 +148,23 @@
+         $context = $request->getContext();
+         $contextId = $context ? $context->getId() : null;
+ 
+-        $blockedNotifications = [];
+-        $emailSettings = [];
++        $notificationSubscriptionSettingsDao = DAORegistry::getDAO('NotificationSubscriptionSettingsDAO'); /** @var NotificationSubscriptionSettingsDAO $notificationSubscriptionSettingsDao */
++
++        // Only the rows the form showed were sent; keep the stored choices for the others
++        // (e.g. "Statistics report summary." while the context sends no editorial statistics email)
++        $shownSettingIds = array_merge(...array_column($this->getNotificationSettingCategories($context), 'settings'));
++        $blockedNotifications = array_values(array_diff(
++            $notificationSubscriptionSettingsDao->getNotificationSubscriptionSettings($notificationSubscriptionSettingsDao::BLOCKED_NOTIFICATION_KEY, $userId, $contextId),
++            $shownSettingIds
++        ));
++        $emailSettings = array_values(array_diff(
++            $notificationSubscriptionSettingsDao->getNotificationSubscriptionSettings($notificationSubscriptionSettingsDao::BLOCKED_EMAIL_NOTIFICATION_KEY, $userId, $contextId),
++            $shownSettingIds
++        ));
+         foreach ($this->getNotificationSettingsMap() as $settingId => $notificationSetting) {
++            if (!in_array($settingId, $shownSettingIds)) {
++                continue;
++            }
+             // Get notifications that the user wants blocked
+             if (!$this->getData($notificationSetting['settingName'])) {
+                 $blockedNotifications[] = $settingId;
+@@ -161,7 +175,6 @@
+             }
+         }
+ 
+-        $notificationSubscriptionSettingsDao = DAORegistry::getDAO('NotificationSubscriptionSettingsDAO'); /** @var NotificationSubscriptionSettingsDAO $notificationSubscriptionSettingsDao */
+         $notificationSubscriptionSettingsDao->updateNotificationSubscriptionSettings($notificationSubscriptionSettingsDao::BLOCKED_NOTIFICATION_KEY, $blockedNotifications, $userId, $contextId);
+         $notificationSubscriptionSettingsDao->updateNotificationSubscriptionSettings($notificationSubscriptionSettingsDao::BLOCKED_EMAIL_NOTIFICATION_KEY, $emailSettings, $userId, $contextId);
+ 
