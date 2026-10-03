@@ -558,6 +558,7 @@ Left out of the scenarios above, by reason:
   - an assigned Copyeditor and, on a preprint server, the Moderator and the Author download a Submission Library file from the "Submission Library" window (Actors row 3; Rule 8b; A1)
   - a row's strip opened within two seconds of a download stays open three seconds later, and two names pressed in a row raise no page error (Rule 8a; A9, A12)
   - "Description" in both libraries' "Add a file" and "Edit" carries the required star only if an empty one is refused (Fields; A3)
+  - a file whose uploaded name holds its extension earlier on ("notes-pdf-draft.pdf"), and one of 127 characters or more, downloads as its name with the type code before one extension (Rule 8a; A4)
 - **Nothing new to test**:
   - a recommending editor's "Notify Editors" page {OJS OMP}: its "Library Files", and the attached file's copy listed in the discussion the recommendation opens (Actors row 8; Rule 11c)
   - the "Request Author Response" page {OJS}: the Editor's and an assigned Section Editor's "Library Files" (Actors row 8; Rule 11a)
@@ -593,7 +594,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | Assistants, and a preprint's moderator and author, get a bare "403 Forbidden" page for Submission Library files | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "OK" in "Add a file" before a file has uploaded does nothing and says nothing | 🐞 | minor | — |
 | [A3](#a3) | "Description" in the library's "Add a file" and "Edit" windows is starred as required, yet saves empty | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A4](#a4) | A file whose name holds its extension earlier downloads under a cut name | 🐞 | minor | — |
+| [A4](#a4) | Library files download under a mangled name when the uploaded name repeats its extension or is long | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | With strict mode on, "Delete" in the Submission Library fails | 🐞 | latent | — |
 | [A9](#a9) | A second file's name pressed, or a save, within two seconds of a download makes the page's script fail | 🐞 | low · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | After an "OK" without a file, closing "Add a file" drops what was typed without asking | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -653,13 +654,26 @@ confirm which way to go.
 Basis: probe, 2026-10-03. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
-**A4 — A name holding its extension earlier downloads cut** · 🐞 · minor.
-The uploaded name loses everything from the character before its
-extension's first appearance; a name starting with its extension loses
-only its last character. "notes-pdf-draft.pdf" added as "Marketing"
-downloads as "notes-MAR.pdf", and "pdf-guide.pdf" as
-"pdf-guide.pd-MAR.pdf". The name alone is wrong, not the content.
-Basis: probe. <sup>[f-a4](#fn-a4)</sup>
+**A4 — Library files download under a mangled name when the uploaded name repeats its extension or is long** · 🐞 · low.
+A file added to the Publisher Library or to a submission's Library
+downloads under the uploaded file's name with a type code before the
+extension, as intended: "contract.pdf" added as "Marketing" downloads as
+"contract-MAR.pdf". But when the extension's letters also appear earlier
+in the name, in the same case, the name is cut one character before
+that first appearance: "notes-pdf-draft.pdf" downloads as
+"notes-MAR.pdf". A name that starts with its extension loses only its
+last character: "pdf-guide.pdf" downloads as "pdf-guide.pd-MAR.pdf".
+
+Uploaded names are kept to 127 characters. A name of 124 characters or
+more keeps a piece of its extension before the type code: a PDF named
+with 126 characters downloads ending in ".pd-MAR.pdf", and one of 127
+or more in ".pdf-MAR.pdf", the extension twice.
+
+The type code is intended; the cut and the extra extension are the
+fault. Only the name is wrong, and the person who saves the file can
+rename it. A library file attached to a workflow email goes out under
+the same wrong name.
+Basis: probe, 2026-10-03. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
 **A5 — "Delete" fails in strict mode** · 🐞 · latent.
@@ -872,6 +886,7 @@ Issue report: [docs/issues/U39-A3-library-description-starred-not-required.md](.
 
 <a id="fn-a4"></a>
 **f-a4** — `PKPLibraryFileManager::generateFileName()`: `$baseName = Str::substr($truncated, 0, Str::position($originalFileName, $ext) - 1)`, where `Str::position()` returns the first occurrence of the extension text anywhere in the name: 0 for "pdf-guide.pdf", so `Str::substr(…, 0, -1)` keeps all but the last character ("pdf-guide.pd"); 6 for "notes-pdf-draft.pdf", so "notes". Live-probed 2026-09-24: note td6.
+Issue report: [docs/issues/U39-A4-library-download-name-cut.md](../issues/U39-A4-library-download-name-cut.md).
 
 <a id="fn-a5"></a>
 **f-a5** — Note p. Live-probed 2026-09-24: the strict-off end only (note p); the strict-on end was not driven.

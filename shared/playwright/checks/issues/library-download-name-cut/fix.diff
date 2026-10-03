@@ -1,0 +1,20 @@
+--- a/lib/pkp/classes/file/PKPLibraryFileManager.php
++++ b/lib/pkp/classes/file/PKPLibraryFileManager.php
+@@ -76,7 +76,7 @@
+         $suffix = $this->getFileSuffixFromType($type);
+         $ext = $this->getExtension($originalFileName);
+         $truncated = $this->truncateFileName($originalFileName, 127 - Str::length($suffix) - 1);
+-        $baseName = Str::substr($truncated, 0, Str::position($originalFileName, $ext) - 1);
++        $baseName = Str::beforeLast($truncated, '.');
+ 
+         // Try a simple syntax first
+         $fileName = $baseName . '-' . $suffix . '.' . $ext;
+@@ -89,7 +89,7 @@
+             //truncate more if necessary
+             $truncated = $this->truncateFileName($originalFileName, 127 - Str::length($fullSuffix) - 1);
+             // get the base name and append the suffix
+-            $baseName = Str::substr($truncated, 0, Str::position($originalFileName, $ext) - 1);
++            $baseName = Str::beforeLast($truncated, '.');
+ 
+             //try the following
+             $fileName = $baseName . '-' . $fullSuffix . '.' . $ext;
