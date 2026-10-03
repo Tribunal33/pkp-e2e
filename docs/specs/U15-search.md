@@ -661,6 +661,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - a word that is only in a published HTML galley finds the article, book or preprint once the queue has run (Rule 3; A11)
+  - a title corrected and a contributor added on a published article, book or preprint are found by their new words once the queue has run, and the old title word no longer finds it (Rule 12; A3)
 - **Rarely met**:
   - "Items per page" changed on Settings › Website › Setup › Lists, the
     results per page following it (Rule 8, Settings): the Journal Manager
@@ -756,7 +757,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A date filter with a Year but not both Month and Day is ignored, and the selects then show a date the reader never chose | 🐞 | user-visible | — |
-| [A3](#a3) | Changes made to an article after publication never reach search until it is republished or the index rebuilt | 🐞 | user-visible | — |
+| [A3](#a3) | Search never finds the corrected title, abstract or added contributor of an already published article | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | The configuration file lists two search settings that nothing reads | 🐞 | latent | — |
 | [A11](#a11) | A reader's search never finds a word that appears only in an article's or book's full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | A sort by published date, typed into the address, answers an error page | 🐞 | latent | — |
@@ -811,15 +812,18 @@ two drivers should agree.
 Basis: probe. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — Post-publication changes never reach search** · 🐞 · user-visible.
-An editor who corrects a published article's title or abstract, adds a
-contributor or changes its published date without republishing sees the
-change on the article page, and even in the search result itself, but
-search keeps finding the old words and not the new ones. The article's
-index entry is refreshed only when a version is published or unpublished,
-or when the administrator rebuilds the index. Before the search engine was
-replaced, editing a published article's metadata refreshed its entry.
-Since: 2025-08 (about a year). Basis: probe. <sup>f-a3</sup>
+**A3 — Search never finds the corrected title, abstract or added contributor of an already published article** · 🐞 · medium.
+An editor who corrects the title or abstract of an article that is
+already published, or adds a contributor to it, sees the change on the
+article page, but the Search page never finds the article by the new
+words. It still finds it by the old ones, and then lists it under the
+new title.
+
+Nothing tells the editor: the save says "Saved". The new words become
+searchable only when the version is unpublished and published again, a
+new version is published, or the administrator rebuilds the search
+index from the command line.
+Since: 2025-08 (about a year). Basis: probe, 2026-10-03. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — Results come in no particular order** · ❓ · user-visible.
@@ -1736,6 +1740,7 @@ in a modernization window (pkp/pkp-lib#8920, 2025-08) → decay, not choice.
 Live-probed 2026-09-02 on all three apps: a title edited and saved on the
 published version was shown in the result at once, but only the old word
 found it, before and after a queue run.
+Issue report: [docs/issues/U15-A3-published-edits-never-reach-search.md](../issues/U15-A3-published-edits-never-reach-search.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — fn-j. Live-probed 2026-09-02: the order was neither date order,
