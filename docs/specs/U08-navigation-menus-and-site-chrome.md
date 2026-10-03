@@ -2922,7 +2922,7 @@ language list.
 **f-a21** — Note g (the switcher drops every context whose name equals
 the current one's). Live-probed 2026-09-23 (td16), all three apps, with
 two scratch journals given the same name.
-Issue report: [docs/issues/U08-A21-switcher-hides-same-name-journal.md](../issues/U08-A21-switcher-hides-same-name-journal.md).
+Issue report: [docs/issues/U08-A21-switcher-hides-same-name-journal.md](../issues/U08-A21-switcher-hides-same-name-journal.md), filed as [pkp-e2e#652](https://github.com/jardakotesovec/pkp-e2e/issues/652).
 
 <a id="fn-f-a22"></a>
 **f-a22** — Note h. Live-probed 2026-09-23, all three apps: the
