@@ -1,0 +1,87 @@
+--- a/lib/pkp/js/controllers/grid/navigationMenus/form/NavigationMenuItemsFormHandler.js
++++ b/lib/pkp/js/controllers/grid/navigationMenus/form/NavigationMenuItemsFormHandler.js
+@@ -28,12 +28,20 @@
+ 	$.pkp.controllers.grid.navigationMenus.form.NavigationMenuItemsFormHandler =
+ 			function($formElement, options) {
+ 
++		var $typeMessage;
++
+ 		this.parent($formElement, options);
+ 
+ 		this.previewUrl_ = options.previewUrl;
+ 		this.itemTypeDescriptions_ = options.itemTypeDescriptions;
+ 		this.itemTypeConditionalWarnings_ = options.itemTypeConditionalWarnings;
+ 
++		// The list's own message, shown again whenever no type is chosen, and
++		// its "required" mark, kept after a type's description
++		$typeMessage = this.getTypeMessageElement_();
++		this.typeMessage_ = $typeMessage.html();
++		this.requiredMark_ = $typeMessage.children('.req').prop('outerHTML') || '';
++
+ 		$('#previewButton', $formElement).click(this.callbackWrapper(
+ 				this.showPreview_));
+ 
+@@ -81,6 +89,24 @@
+ 
+ 
+ 	/**
++	 * The message under the type list while no type is chosen.
++	 * @private
++	 * @type {?string}
++	 */
++	$.pkp.controllers.grid.navigationMenus.form.
++			NavigationMenuItemsFormHandler.prototype.typeMessage_ = null;
++
++
++	/**
++	 * The "required" mark of the message under the type list.
++	 * @private
++	 * @type {string}
++	 */
++	$.pkp.controllers.grid.navigationMenus.form.
++			NavigationMenuItemsFormHandler.prototype.requiredMark_ = '';
++
++
++	/**
+ 	 * Callback triggered on clicking the "preview"
+ 	 * button to open a preview window.
+ 	 *
+@@ -114,7 +140,7 @@
+ 	$.pkp.controllers.grid.navigationMenus.form.NavigationMenuItemsFormHandler.
+ 			prototype.setType = function() {
+ 		var itemType = $('#menuItemType', this.getHtmlElement()).val(),
+-				$descriptionEl = $('#menuItemTypeSection [for="menuItemType"]');
++				$descriptionEl = this.getTypeMessageElement_();
+ 
+ 		$('.NMI_TYPE_CUSTOM_EDIT', this.getHtmlElement()).hide();
+ 		$('#' + itemType).fadeIn();
+@@ -127,9 +153,28 @@
+ 		}
+ 
+ 		if (typeof this.itemTypeDescriptions_[itemType] !== 'undefined') {
+-			$descriptionEl.text(this.itemTypeDescriptions_[itemType]);
++			$descriptionEl.text(this.itemTypeDescriptions_[itemType])
++					.append(this.requiredMark_);
++		} else {
++			$descriptionEl.html(/** @type {string} */ (this.typeMessage_));
+ 		}
+ 	};
+ 
+ 
++	//
++	// Private methods
++	//
++	/**
++	 * The line under the type list (the list's own label), leaving out the
++	 * section's heading, which carries the same "for".
++	 * @private
++	 * @return {jQueryObject} The label element.
++	 */
++	$.pkp.controllers.grid.navigationMenus.form.NavigationMenuItemsFormHandler.
++			prototype.getTypeMessageElement_ = function() {
++		return $('#menuItemType', this.getHtmlElement()).parent()
++				.find('label[for="menuItemType"]');
++	};
++
++
+ }(jQuery));

@@ -1194,6 +1194,7 @@ Left out of the scenarios above, by reason:
   - a Site Administrator holding Reader alone in a journal opens "Editor Dashboard": the views and counts show, and no "Error" window opens on the editorial pages (Actors; the guard [A22](#a22)'s issue report proposes)
   - the editorial header's "i" icon and the Tasks window's strip: the link's accessible name reads "Help" ("Aide" in French) (Rule 27b; the guard [A1](#a1)'s issue report proposes)
   - the public header in a narrow window on French pages: the menu button's name is French, not "Open Menu" (the guard [A7](#a7)'s issue report proposes)
+  - the item window's "Navigation Menu Type": choosing a type and then "Choose a type..." keeps the heading and returns the line under the list to its first text (the guard [A12](#a12)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1280,7 +1281,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | The "Privacy Statement" and "Contact" notices send the manager to the wrong Settings tab | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | In a narrow window the public header's menu button is named "Open Menu" in every language | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | The item window refuses a missing type, a bad path or a bad URL with no message | 🐞 | user-visible | — |
-| [A12](#a12) | Back at "Choose a type...", the item window keeps the last type's description | 🐞 | minor | — |
+| [A12](#a12) | In the menu item window, a chosen type's description replaces the "Navigation Menu Type" heading and stays after "Choose a type..." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | On a press and a preprint server the notices still say "About the Journal" and "Settings > Journal" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | The "Navigation" table keeps an item's old title, or a removed item, until a reload | 🐞 | minor | — |
 | [A16](#a16) | With no item at all, the menu window says both panels are settled | 🐞 | minor | — |
@@ -1461,13 +1462,24 @@ looks broken and the manager cannot tell which box to fix.
 Basis: probe. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — A type's description stays after "Choose a type..." is chosen again** · 🐞 · minor.
-In the item window, once a type is chosen and "Navigation Menu Type" is
-set back to "Choose a type...", the line under the list keeps that
-type's description instead of returning to "Select a Navigation Menu
-Type or Custom to make your own", so it describes a type no longer
-chosen.
-Basis: probe. <sup>f-a12</sup>
+**A12 — In the menu item window, a chosen type's description replaces the "Navigation Menu Type" heading and stays after "Choose a type..."** · 🐞 · low.
+In the "Add item" or "Edit" window of Settings › Website › "Navigation",
+choosing a type in "Navigation Menu Type" shows that type's description
+twice. It appears in the line under the list, as expected, and also in
+place of the heading "Navigation Menu Type" above the list. An item's
+"Edit" window opens with the heading already replaced.
+
+Setting the list back to "Choose a type..." changes neither text. The
+heading should read "Navigation Menu Type" again, and the line "Select a
+Navigation Menu Type or Custom to make your own". Instead both go on
+describing the type chosen before.
+
+The name a screen reader gives the list is built from both texts, so
+once a type is chosen the list is named by the description twice, never
+"Navigation Menu Type". Nothing
+is saved wrong: the list shows the chosen type, and "Save" with "Choose
+a type..." is refused.
+Basis: probe, 2026-10-03. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — A press's and a preprint server's notices speak of a journal** · 🐞 · low.
@@ -2804,6 +2816,7 @@ messages exist as `manager.navigationMenus.form.typeMissing`,
 **f-a12** — `NavigationMenuItemsFormHandler.js::setType()` replaces the
 line only when the chosen value has a description, and "Choose a
 type..." has none, so the last text stays. Live-probed 2026-09-23 (td2), all three apps.
+Issue report: [docs/issues/U08-A12-item-type-description-kept.md](../issues/U08-A12-item-type-description-kept.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Note m. Live-probed 2026-09-23 (td8 and the item types
