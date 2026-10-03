@@ -692,6 +692,11 @@ the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A1 (issue report
+    `docs/issues/U30-A1-author-response-request-leaves-no-trace.md`):
+    after "Submit Request" the editor's "Author Response" row reads
+    "Response requested", for a second editor of the submission too
 - **Nothing new to test**:
   - Site Administrator (the Journal Manager's offer, scenarios 1 and 3)
   - Guest Editor (the Section Editor's gate, scenario 6)
