@@ -1,0 +1,11 @@
+--- a/lib/pkp/classes/components/forms/publication/ContributorForm.php
++++ b/lib/pkp/classes/components/forms/publication/ContributorForm.php
+@@ -167,7 +167,7 @@
+                 'options' => $contributorRoles,
+             ]));
+         } else {
+-            $this->addHiddenField('contributorRoles', $contributorRoles[0]['value'] ?? []);
++            $this->addHiddenField('contributorRoles', array_column($contributorRoles, 'value'));
+         }
+ 
+         $this->addField(new FieldCreditRoles('creditRoles', [
