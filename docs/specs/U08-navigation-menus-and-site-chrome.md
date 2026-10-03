@@ -1193,6 +1193,7 @@ Left out of the scenarios above, by reason:
   - the eye notices of "Privacy Statement", "Contact" and "About" and the "About" type's description, on a journal, a press and a preprint server: each names the Settings place where the screens put it (Rules 7a–7b; the guard [A6](#a6) and [A13](#a13)'s issue report proposes)
   - a Site Administrator holding Reader alone in a journal opens "Editor Dashboard": the views and counts show, and no "Error" window opens on the editorial pages (Actors; the guard [A22](#a22)'s issue report proposes)
   - the editorial header's "i" icon and the Tasks window's strip: the link's accessible name reads "Help" ("Aide" in French) (Rule 27b; the guard [A1](#a1)'s issue report proposes)
+  - the public header in a narrow window on French pages: the menu button's name is French, not "Open Menu" (the guard [A7](#a7)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1277,7 +1278,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | The access-denied page a signed-in user gets has an empty heading and an unnamed browser tab | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | Site Settings › "Navigation": "Add Menu" and a menu's "Edit" open nothing and leave the page dimmed | 🐞 | medium · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | The "Privacy Statement" and "Contact" notices send the manager to the wrong Settings tab | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A7](#a7) | The header's "Open Menu" button is labelled in English in every language | 🐞 | minor | — |
+| [A7](#a7) | In a narrow window the public header's menu button is named "Open Menu" in every language | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | The item window refuses a missing type, a bad path or a bad URL with no message | 🐞 | user-visible | — |
 | [A12](#a12) | Back at "Choose a type...", the item window keeps the last type's description | 🐞 | minor | — |
 | [A13](#a13) | On a press and a preprint server the notices still say "About the Journal" and "Settings > Journal" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1395,13 +1396,22 @@ several changes since 2017. Shared with [A13](#a13) in one report.
 Basis: probe, 2026-10-03. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — "Open Menu" is always English** · 🐞 · minor.
-In a narrow window the header's menus fold behind a button that reads
-"Open Menu" in every interface language, French included, where
-"Search", the skip links and the footer logo's text are translated (the
-menu entries follow Rule 12; the site's own user menu reads
-"S'inscrire", "Se connecter").
-Basis: probe. <sup>f-a7</sup>
+**A7 — In a narrow window the public header's menu button is named "Open Menu" in every language** · 🐞 · low.
+In a narrow browser window, as on a phone, the public header's menus
+fold behind a button drawn as three lines. That button's name, the
+words a screen reader speaks for it, is "Open Menu" in every interface
+language, French included. On the same French page the search link
+reads "Rechercher", and the skip links and the menu entries are in
+French too.
+
+The button still opens and closes the menus. A screen-reader user
+reading the site in another language hears one English button among
+translated controls, at the top of the page.
+
+It shows on the journal's, press's, server's and site's pages in the
+default theme and in any theme that keeps the default header, whenever the
+window is narrow enough to fold the menus.
+Basis: probe, 2026-10-03. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — Menus can only be arranged with a mouse** · ❓ · user-visible.
@@ -2767,6 +2777,7 @@ the template's current layout. Live-probed 2026-09-23 (all three apps):
 journals, one given French on the Languages tab on screen; "Search",
 the skip links and the footer logo's text in French there; the site's
 French home page read "S'inscrire", "Se connecter".
+Issue report: [docs/issues/U08-A7-open-menu-button-always-english.md](../issues/U08-A7-open-menu-button-always-english.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note k. The legacy menu form it replaced

@@ -1,0 +1,11 @@
+--- a/lib/pkp/templates/frontend/components/header.tpl
++++ b/lib/pkp/templates/frontend/components/header.tpl
+@@ -35,7 +35,7 @@
+ 
+ 				<div class="pkp_site_name_wrapper">
+ 					<button class="pkp_site_nav_toggle">
+-						<span>Open Menu</span>
++						<span>{translate key="common.navigation.site"}</span>
+ 					</button>
+ 					{if !$requestedPage || $requestedPage === 'index'}
+ 						<h1 class="pkp_screen_reader">
