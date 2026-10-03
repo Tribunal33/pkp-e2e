@@ -1,0 +1,42 @@
+--- a/lib/pkp/api/v1/_submissions/PKPBackendSubmissionsController.php
++++ b/lib/pkp/api/v1/_submissions/PKPBackendSubmissionsController.php
+@@ -101,6 +101,7 @@
+             ->name('_submission.assigned')
+             ->middleware([
+                 self::roleAuthorizer([
++                    Role::ROLE_ID_SITE_ADMIN,
+                     Role::ROLE_ID_MANAGER,
+                     Role::ROLE_ID_SUB_EDITOR,
+                     Role::ROLE_ID_ASSISTANT,
+@@ -123,6 +124,7 @@
+             ->name('_submission.getViewsCount')
+             ->middleware([
+                 self::roleAuthorizer([
++                    Role::ROLE_ID_SITE_ADMIN,
+                     Role::ROLE_ID_MANAGER,
+                     Role::ROLE_ID_SUB_EDITOR,
+                     Role::ROLE_ID_ASSISTANT,
+--- a/lib/pkp/classes/submission/Repository.php
++++ b/lib/pkp/classes/submission/Repository.php
+@@ -885,6 +885,10 @@
+         $roleIds = [];
+         foreach ($roles as $role) {
+             $roleIds[] = $role->getRoleId();
++        }
++        // The site admin role is held site-wide, not in the context (pkp/pkp-lib#7392)
++        if ($user->hasRole([Role::ROLE_ID_SITE_ADMIN], Application::SITE_CONTEXT_ID)) {
++            $roleIds[] = Role::ROLE_ID_SITE_ADMIN;
+         }
+         if ($selectedRoleIds) {
+             $roleIds = array_values(array_intersect($roleIds, $selectedRoleIds));
+@@ -916,6 +920,10 @@
+         $roleIds = [];
+         foreach ($roles as $role) {
+             $roleIds[] = $role->getRoleId();
++        }
++        // The site admin role is held site-wide, not in the context (pkp/pkp-lib#7392)
++        if ($user->hasRole([Role::ROLE_ID_SITE_ADMIN], Application::SITE_CONTEXT_ID)) {
++            $roleIds[] = Role::ROLE_ID_SITE_ADMIN;
+         }
+         if ($selectedRoleIds) {
+             $roleIds = array_values(array_intersect($roleIds, $selectedRoleIds));

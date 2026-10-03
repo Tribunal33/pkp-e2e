@@ -1191,6 +1191,7 @@ Left out of the scenarios above, by reason:
   - the access-denied page a signed-in user gets: its heading, the breadcrumb's last step and the browser tab name the page (Rule 26a; the guard [A3](#a3)'s issue report proposes)
   - a Section Editor's "Dashboard" under the username on the public pages opens the Dashboard, with their task count (Rule 19a; the guard [A2](#a2)'s issue report proposes, shared with Notifications center & email preferences A3)
   - the eye notices of "Privacy Statement", "Contact" and "About" and the "About" type's description, on a journal, a press and a preprint server: each names the Settings place where the screens put it (Rules 7a–7b; the guard [A6](#a6) and [A13](#a13)'s issue report proposes)
+  - a Site Administrator holding Reader alone in a journal opens "Editor Dashboard": the views and counts show, and no "Error" window opens on the editorial pages (Actors; the guard [A22](#a22)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1284,7 +1285,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | After a change is discarded with "Yes", leaving the page still asks about unsaved changes | 🐞 | minor | — |
 | [A18](#a18) | The item window asks before closing even when nothing was typed, and so does leaving the page; right after a refused "Save" it closes without asking | 🐞 | minor | — |
 | [A21](#a21) | Two journals with the same name hide each other in the journals switcher | 🐞 | minor | — |
-| [A22](#a22) | A Site Administrator holding Reader alone gets the manager's side menu and an "Error" window on every page | 🐞 | minor | — |
+| [A22](#a22) | A Site Administrator holding only Reader in a journal gets an "Error" window on every editorial page | 🐞 | low · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A23](#a23) | In French, the side menu's "Content" group {OJS OMP}, "DOIs" entry {OMP OPS}, "Search submissions" box and a press's "Monographs" entry {OMP} read raw codes | 🐞 | minor | — |
 | [A24](#a24) | In French, the item window's "Query Parameters" box, the menu window's drag handles and a press's "New Releases" type read raw codes | 🐞 | minor | — |
 | [OJS1](#ojs1) | "Subscriptions" and "My Subscriptions" carry no eye icon, so their notices never show {OJS} | 🐞 | minor | — |
@@ -1525,17 +1526,23 @@ while from a third journal both are listed.
 Basis: probe. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — A Site Administrator holding Reader alone gets the manager's side menu and an "Error"** · 🐞 · minor.
-Once the Site Administrator's manager role in a journal has ended and
-they hold Reader alone there, each editorial page of that journal opens
-with a window "Error", "The current role does not have access to this
-operation.", and the side menu still offers the manager's entries:
-"Editor Dashboard" (the search box alone, no views), "DOIs", "Settings",
-"Content", "Statistics", "Tools" and "Administration". The side menu
-should match what the pages allow; instead every page greets the
-administrator with an error. Where "Settings" then leads differs by app
-([Journal identity & about pages](U07-journal-identity-and-about-pages.md#a1)).
-Basis: probe. <sup>f-a22</sup>
+**A22 — A Site Administrator holding only Reader in a journal gets an "Error" window on every editorial page** · 🐞 · low · crash: script.
+A Site Administrator whose manager role in a journal has been removed keeps
+the manager's side menu there. Every editorial page of that journal then
+opens with a window "Error", "The current role does not have access to
+this operation.". On 3.5 the dashboard's page script also fails in the
+browser.
+
+"Editor Dashboard" offers none of its usual lists ("Assigned to me",
+"Active submissions" and the rest). On `main` it holds only the search
+box, which finds nothing. On 3.5 the page shows the journal's submissions
+in one list headed "undefined (…)". The window closes with "OK" and the
+page behind it works (Tools, Statistics, a journal's Settings).
+
+The manager role can only be removed while the administrator holds
+another role there, so in practice this is an administrator left with
+Reader alone.
+Basis: probe, 2026-10-03. <sup>f-a22</sup>
 
 <a id="a23"></a>
 **A23 — In French the side menu shows raw codes** · 🐞 · minor.
@@ -2864,6 +2871,7 @@ Roles ("Remove Role"), leaving Reader; the side menu's calls for the
 submission views answered 401. The journal's Navigation tab opened
 behind the window; a press's and a server's gave the access-denied page
 ([Journal identity & about pages](U07-journal-identity-and-about-pages.md#a1)).
+Issue report: [docs/issues/U08-A22-admin-without-role-dashboard-error.md](../issues/U08-A22-admin-without-role-dashboard-error.md).
 
 <a id="fn-f-a23"></a>
 **f-a23** — `navigation.content` (lib/pkp `common.po`) has no `fr_CA`
