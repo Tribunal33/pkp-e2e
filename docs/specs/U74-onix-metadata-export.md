@@ -2303,7 +2303,7 @@ into `audience` (note m). Live-probed 2026-09-28 (A9), two runs:
 "Children (02)" gave `02/01`, "General / adult (01)" `01/01`, "Teenage
 (03)" `03/01`; the import read "Children (02)" back and the re-export
 wrote `02/01` again.
-Issue report: [docs/issues/U74-A9-onix-audience-code-type-value-swapped.md](../issues/U74-A9-onix-audience-code-type-value-swapped.md).
+Issue report: [pkp-e2e#706](https://github.com/jardakotesovec/pkp-e2e/issues/706) ([docs/issues/U74-A9-onix-audience-code-type-value-swapped.md](../issues/U74-A9-onix-audience-code-type-value-swapped.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Notes e and k: `RepresentativeForm` stores
