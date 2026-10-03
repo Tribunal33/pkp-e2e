@@ -1,0 +1,51 @@
+--- a/lib/pkp/api/v1/submissions/PKPSubmissionController.php
++++ b/lib/pkp/api/v1/submissions/PKPSubmissionController.php
+@@ -1695,8 +1695,6 @@
+         }
+         $params = $this->convertStringsToSchema(PKPSchemaService::SCHEMA_AUTHOR, $illuminateRequest->input());
+         $submissionContext = $request->getContext();
+-        // Remove extra data that is irrelevant to the selected contributor type
+-        $this->removeIrrelevantContributorTypeData($params, $submissionContext);
+ 
+         // Allows author ORCID request email to be triggered from frontend before author ID exists
+         $shouldSendOrcidEmail = false;
+@@ -1715,6 +1713,8 @@
+         if (!$submissionContext || $submissionContext->getId() !== $submission->getData('contextId')) {
+             $submissionContext = app()->get('context')->get($submission->getData('contextId'));
+         }
++        // Remove extra data that is irrelevant to the selected contributor type
++        $this->removeIrrelevantContributorTypeData($params, $submission, $submissionContext);
+ 
+         if (isset($params['contributorRoles']) && is_array($params['contributorRoles'])) {
+             $params['contributorRoles'] = ContributorRole::withContextId($submissionContext->getId())
+@@ -1848,13 +1848,13 @@
+ 
+         $params = $this->convertStringsToSchema(PKPSchemaService::SCHEMA_AUTHOR, $illuminateRequest->input());
+         $submissionContext = $request->getContext();
+-        // Remove extra data that is irrelevant to the selected contributor type
+-        $this->removeIrrelevantContributorTypeData($params, $submissionContext);
+         $params['id'] = $author->getId();
+ 
+         if (!$submissionContext || $submissionContext->getId() !== $submission->getData('contextId')) {
+             $submissionContext = app()->get('context')->get($submission->getData('contextId'));
+         }
++        // Remove extra data that is irrelevant to the selected contributor type
++        $this->removeIrrelevantContributorTypeData($params, $submission, $submissionContext);
+ 
+         if ($publication->getId() !== $author->getData('publicationId')) {
+             return response()->json([
+@@ -2450,10 +2450,12 @@
+     /** Remove irrelevant data based on the selected contributor type.
+      * Set them as null to be removed from db.
+      */
+-    protected function removeIrrelevantContributorTypeData(array &$params, Context $context): void
++    protected function removeIrrelevantContributorTypeData(array &$params, Submission $submission, Context $context): void
+     {
+         $contributorType = $params['contributorType'];
+-        $nulledMProp = Arr::mapWithKeys($context->getSupportedFormLocales(), fn (string $l) => [$l => null]);
++        // Null only the locales Repo::author()->validate() accepts: any other key is refused
++        $allowedLocales = $submission->getPublicationLanguages($context->getSupportedSubmissionMetadataLocales());
++        $nulledMProp = Arr::mapWithKeys($allowedLocales, fn (string $l) => [$l => null]);
+         $typeFields = Author::CONTRIBUTOR_TYPE_FORM_FIELDS;
+         $selectedTypeField = Arr::pull($typeFields, $contributorType);
+         $dataToRemove = collect($typeFields)
