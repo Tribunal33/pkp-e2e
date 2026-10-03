@@ -1,0 +1,74 @@
+--- a/controllers/grid/catalogEntry/form/PublicationFormatMetadataForm.php
++++ b/controllers/grid/catalogEntry/form/PublicationFormatMetadataForm.php
+@@ -67,12 +67,12 @@
+      * @param Submission $submission
+      * @param Publication $publication
+      * @param Representation $representation
+-     * @param int $isPhysicalFormat
+-     * @param string $remoteURL
++     * @param ?bool $isPhysicalFormat Null: the format's own "Physical format" setting
++     * @param ?string $remoteURL Null: the format's own remote URL
+      * @param int $stageId
+      * @param array $formParams
+      */
+-    public function __construct($submission, $publication, $representation, $isPhysicalFormat = true, $remoteURL = null, $stageId = null, $formParams = null)
++    public function __construct($submission, $publication, $representation, $isPhysicalFormat = null, $remoteURL = null, $stageId = null, $formParams = null)
+     {
+         parent::__construct('controllers/tab/catalogEntry/form/publicationMetadataFormFields.tpl');
+         $this->_submission = $submission;
+@@ -86,8 +86,8 @@
+         $this->_pubIdPluginHelper = new PKPPubIdPluginHelper();
+ 
+         $this->_stageId = $stageId;
+-        $this->_isPhysicalFormat = $isPhysicalFormat;
+-        $this->_remoteURL = $remoteURL;
++        $this->_isPhysicalFormat = $isPhysicalFormat ?? (bool) $representation->getPhysicalFormat();
++        $this->_remoteURL = $remoteURL ?? $representation->getData('urlRemote');
+         $this->_formParams = $formParams;
+ 
+         $this->addCheck(new FormValidator($this, 'productAvailabilityCode', 'required', 'grid.catalogEntry.productAvailabilityRequired'));
+@@ -255,25 +255,30 @@
+         $publicationFormat = $this->getPublicationFormat();
+ 
+         // populate the published submission with the cataloging metadata
+-        $publicationFormat->setFileSize($this->getData('override') ? $this->getData('fileSize') : null);
+-        $publicationFormat->setFrontMatter($this->getData('frontMatter'));
+-        $publicationFormat->setBackMatter($this->getData('backMatter'));
+-        $publicationFormat->setHeight($this->getData('height'));
+-        $publicationFormat->setHeightUnitCode($this->getData('heightUnitCode'));
+-        $publicationFormat->setWidth($this->getData('width'));
+-        $publicationFormat->setWidthUnitCode($this->getData('widthUnitCode'));
+-        $publicationFormat->setThickness($this->getData('thickness'));
+-        $publicationFormat->setThicknessUnitCode($this->getData('thicknessUnitCode'));
+-        $publicationFormat->setWeight($this->getData('weight'));
+-        $publicationFormat->setWeightUnitCode($this->getData('weightUnitCode'));
+         $publicationFormat->setProductCompositionCode($this->getData('productCompositionCode'));
+         $publicationFormat->setProductFormDetailCode($this->getData('productFormDetailCode'));
+-        $publicationFormat->setCountryManufactureCode($this->getData('countryManufactureCode'));
+         $publicationFormat->setImprint($this->getData('imprint'));
+         $publicationFormat->setProductAvailabilityCode($this->getData('productAvailabilityCode'));
+-        $publicationFormat->setTechnicalProtectionCode($this->getData('technicalProtectionCode'));
+-        $publicationFormat->setReturnableIndicatorCode($this->getData('returnableIndicatorCode'));
+ 
++        // only the group the form showed (publicationMetadataFormFields.tpl), so the other kind's values are kept
++        if ($this->getPhysicalFormat()) {
++            $publicationFormat->setFrontMatter($this->getData('frontMatter'));
++            $publicationFormat->setBackMatter($this->getData('backMatter'));
++            $publicationFormat->setHeight($this->getData('height'));
++            $publicationFormat->setHeightUnitCode($this->getData('heightUnitCode'));
++            $publicationFormat->setWidth($this->getData('width'));
++            $publicationFormat->setWidthUnitCode($this->getData('widthUnitCode'));
++            $publicationFormat->setThickness($this->getData('thickness'));
++            $publicationFormat->setThicknessUnitCode($this->getData('thicknessUnitCode'));
++            $publicationFormat->setWeight($this->getData('weight'));
++            $publicationFormat->setWeightUnitCode($this->getData('weightUnitCode'));
++            $publicationFormat->setCountryManufactureCode($this->getData('countryManufactureCode'));
++            $publicationFormat->setReturnableIndicatorCode($this->getData('returnableIndicatorCode'));
++        } elseif (!$this->getRemoteURL()) {
++            $publicationFormat->setFileSize($this->getData('override') ? $this->getData('fileSize') : null);
++            $publicationFormat->setTechnicalProtectionCode($this->getData('technicalProtectionCode'));
++        }
++
+         // consider the additional field names from the public identifier plugins
+         $pubIdPluginHelper = $this->_getPubIdPluginHelper();
+         $pubIdPluginHelper->execute($submission->getData('contextId'), $this, $publicationFormat);
