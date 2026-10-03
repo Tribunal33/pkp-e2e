@@ -1794,7 +1794,7 @@ a publication format with approved, available files), the article was
 published and the queue run; both words gave "No Results" while the title
 word found the article; on OJS and OPS the galleys were served to the
 visitor from the landing page with the words inside.
-Issue report: [docs/issues/U15-A11-galley-text-never-searched.md](../issues/U15-A11-galley-text-never-searched.md).
+Issue report: [docs/issues/U15-A11-galley-text-never-searched.md](../issues/U15-A11-galley-text-never-searched.md), filed as [pkp-e2e#703](https://github.com/jardakotesovec/pkp-e2e/issues/703).
 
 <a id="fn-f-a12"></a>
 **f-a12** — fn-m: `SubmissionSearchResult::builderFromRequest()` accepts
