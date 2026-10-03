@@ -1,0 +1,20 @@
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -1426,7 +1426,7 @@
+ msgstr ""
+ 
+ msgid "doi.manager.displayName"
+-msgstr ""
++msgstr "DOIs"
+ 
+ msgid "doi.description"
+ msgstr ""
+@@ -1576,7 +1576,7 @@
+ msgstr ""
+ 
+ msgid "doi.manager.submissionDois"
+-msgstr ""
++msgstr "DOIs de la monographie"
+ 
+ msgid "mailable.decision.sendInternalReview.notifyAuthor.description"
+ msgstr ""

@@ -10,7 +10,7 @@
   - 3.3: OMP, OPS (code; the "Monographs" or "Preprints" page only)
 - **Introduced** not traced; present since at least [afc82dc81](https://github.com/pkp/omp/commit/afc82dc81) (2019-05-08), which gave OMP the page's first text in English only
 - **Upstream** none found (2026-10-03)
-- **Tracked in** spec U64 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U64-usage-statistics.md#a6)
+- **Tracked in** spec U64 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U64-usage-statistics.md#a6), spec U08 [A23](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U08-navigation-menus-and-site-chrome.md#a23) (a press's "Monographs" entry in the side menu)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
 
 ## Summary

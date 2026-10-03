@@ -1,0 +1,18 @@
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -558,13 +558,13 @@
+ msgstr ""
+ 
+ msgid "doi.manager.displayName"
+-msgstr ""
++msgstr "DOIs"
+ 
+ msgid "doi.description"
+ msgstr ""
+ 
+ msgid "doi.manager.submissionDois"
+-msgstr ""
++msgstr "DOIs de la prépublication"
+ 
+ msgid "doi.readerDisplayName"
+ msgstr ""

@@ -1200,6 +1200,7 @@ Left out of the scenarios above, by reason:
   - the item window opened and closed with nothing typed: no "The data on this form has changed" box and no leave question (the guard of [A18](#a18)'s first issue report)
   - the item window after a refused "Save": the back arrow asks before closing and the entries stay until the manager answers (the guard of [A18](#a18)'s second issue report)
   - the journals switcher on a site with two journals of one name: each offers the other (Rule 29; the guard [A21](#a21)'s issue report proposes)
+  - the side menu's "DOIs" entry and the DOIs page in French (Canada) on a press and a preprint server: French labels, no raw key (the guard [A23](#a23)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1294,7 +1295,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | The item window asks before closing even when nothing was typed, and so does leaving the page; right after a refused "Save" it closes without asking | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A21](#a21) | The journals switcher in the editorial header leaves out every journal with exactly the current journal's name | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A22](#a22) | A Site Administrator holding only Reader in a journal gets an "Error" window on every editorial page | 🐞 | low · crash: script | issues (claude), 2026-10-03 — re-verified |
-| [A23](#a23) | In French, the side menu's "Content" group {OJS OMP}, "DOIs" entry {OMP OPS}, "Search submissions" box and a press's "Monographs" entry {OMP} read raw codes | 🐞 | minor | — |
+| [A23](#a23) | In French, the side menu's "Content" group {OJS OMP}, "DOIs" entry {OMP OPS}, "Search submissions" box and a press's "Monographs" entry {OMP} read raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A24](#a24) | In French, the item window's "Query Parameters" box, the menu window's drag handles and a press's "New Releases" type read raw codes | 🐞 | minor | — |
 | [OJS1](#ojs1) | "Subscriptions" and "My Subscriptions" carry no eye icon, so their notices never show {OJS} | 🐞 | minor | — |
 | [OPS2](#ops2) | A preprint server's "Posting Mode" says "Saved" but keeps nothing, so the server goes on posting {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1597,26 +1598,31 @@ Reader alone.
 Basis: probe, 2026-10-03. <sup>f-a22</sup>
 
 <a id="a23"></a>
-**A23 — In French the side menu shows raw codes** · 🐞 · minor.
-With the interface in French, four of the side menu's texts are raw
-codes where French words belong:
-- the "Content" group reads "##navigation.content##" on a journal and a
-  press;
-- the "DOIs" entry reads "##doi.manager.displayName##" on a press and a
-  preprint server (a journal's reads "DOIs");
-- the "Search submissions" box at the top of "Editor Dashboard" shows
-  the placeholder "##editor.submission.searchGlobal##" on all three, and
-  a screen reader names its row "Résultats de recherche";
+**A23 — In French the side menu shows raw codes** · 🐞 · low.
+With the interface in French (Canada), four of the side menu's texts are
+raw codes where French words belong:
+- on a press and a preprint server, a manager or the Site Administrator
+  sees "##doi.manager.displayName##" where the "DOIs" entry should be;
+  the page it opens shows the same key as its heading and in the browser
+  tab, and heads its list "##doi.manager.submissionDois##" instead of
+  "Monograph DOIs" ("Preprint DOIs"). A journal shows "DOIs" and "DOIs
+  de l'article". The entry still opens the page and the page works. In
+  French (France) a preprint server lacks the same two texts, a press
+  has them;
 - on a press, the "Statistics" group's "Monographs" entry reads
   "##common.publications##", beside French "Presse" and "Activité
-  éditoriale" (a journal's reads "Articles", a preprint server's
-  "Prépublications").
+  éditoriale" (the statistics pages' own codes,
+  [Usage statistics](U64-usage-statistics.md#a6), one report);
+- the "Content" group reads "##navigation.content##" on a journal and a
+  press, and the "Search submissions" box at the top of "Editor
+  Dashboard" shows the placeholder "##editor.submission.searchGlobal##"
+  on all three. Both texts are new on `main` (2025-08-28, 2026-07-23)
+  and no language has them yet, the usual state before a release; 3.5
+  has neither the texts nor those screens. Kept as a note, not reported.
 
-A screen reader hears the same codes. A French-speaking manager, Section
-Editor or Site Administrator has to guess what the group, the entries and
-the box are for. The statistics pages' own codes are recorded in
-[Usage statistics](U64-usage-statistics.md#a6).
-Basis: probe. <sup>f-a23</sup>
+A screen reader hears the same codes. A French-speaking manager or Site
+Administrator has to guess what the entries are for.
+Basis: probe, 2026-10-03. <sup>f-a23</sup>
 
 <a id="a24"></a>
 **A24 — In French the Navigation tab's windows show raw codes** · 🐞 · minor.
@@ -2958,6 +2964,8 @@ Section Editor on all three apps, its row named "Résultats de recherche"
 entry read `##common.publications##` to the same three, the other
 entries in French. The Author's, Reader's and Reviewer's menus showed no
 code.
+Issue report: [docs/issues/U08-A23-french-dois-label-raw-key.md](../issues/U08-A23-french-dois-label-raw-key.md).
+The "Monographs" entry joined [docs/issues/U64-A6-french-statistics-pages-raw-keys.md](../issues/U64-A6-french-statistics-pages-raw-keys.md), filed as [pkp-e2e#625](https://github.com/jardakotesovec/pkp-e2e/issues/625).
 
 <a id="fn-f-a24"></a>
 **f-a24** — `manager.navigationMenus.form.queryParams`, its
