@@ -1195,6 +1195,7 @@ Left out of the scenarios above, by reason:
   - the editorial header's "i" icon and the Tasks window's strip: the link's accessible name reads "Help" ("Aide" in French) (Rule 27b; the guard [A1](#a1)'s issue report proposes)
   - the public header in a narrow window on French pages: the menu button's name is French, not "Open Menu" (the guard [A7](#a7)'s issue report proposes)
   - the item window's "Navigation Menu Type": choosing a type and then "Choose a type..." keeps the heading and returns the line under the list to its first text (the guard [A12](#a12)'s issue report proposes)
+  - the "Navigation" table after an item is renamed or removed: each menu's "Navigation Menu Items" cell follows without a reload (the guard [A15](#a15)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1283,7 +1284,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | The item window refuses a missing type, a bad path or a bad URL with no message | 🐞 | user-visible | — |
 | [A12](#a12) | In the menu item window, a chosen type's description replaces the "Navigation Menu Type" heading and stays after "Choose a type..." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | On a press and a preprint server the notices still say "About the Journal" and "Settings > Journal" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A15](#a15) | The "Navigation" table keeps an item's old title, or a removed item, until a reload | 🐞 | minor | — |
+| [A15](#a15) | Website › "Navigation": after an item is renamed or removed, each menu's item list keeps the old items until a reload | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A16](#a16) | With no item at all, the menu window says both panels are settled | 🐞 | minor | — |
 | [A17](#a17) | After a change is discarded with "Yes", leaving the page still asks about unsaved changes | 🐞 | minor | — |
 | [A18](#a18) | The item window asks before closing even when nothing was typed, and so does leaving the page; right after a refused "Save" it closes without asking | 🐞 | minor | — |
@@ -1509,13 +1510,19 @@ header was not seen, and a type with no site page can only mislead.
 Basis: probe. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — The "Navigation" table shows old item titles until a reload** · 🐞 · minor.
-After an item is saved with a new title, or removed, only the
-"Navigation Menu Items" table changes. Each menu's "Navigation Menu
-Items" cell keeps the old title, or the removed item and its former
-sub-items, until the page is reloaded, so the manager reads a menu that
-no longer exists in that form.
-Basis: probe. <sup>f-a15</sup>
+**A15 — Website › "Navigation": after an item is renamed or removed, each menu's item list keeps the old items until a reload** · 🐞 · low.
+On Settings › Website › "Setup" › "Navigation", a Journal Manager
+renames a navigation item, or removes one, and the "Navigation Menu
+Items" table changes at once. The "Navigation" table above it does not
+change until the page is reloaded. After a rename, each menu's
+"Navigation Menu Items" cell still shows the old title. After a
+removal, it still shows the removed item and the items that sat under
+it.
+
+The menus themselves are stored and shown to readers as changed. Adding
+an item, and arranging items in a menu's window, leave the table
+current. The Site Administrator's own "Navigation" tab behaves the same.
+Basis: probe, 2026-10-03. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — An empty menu window says both panels are settled** · 🐞 · minor.
@@ -2830,6 +2837,7 @@ Issue report: [docs/issues/U08-A6-A13-menu-notices-wrong-settings-places.md](../
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-23 (note i), all three apps; a reload
 brought the cells in line.
+Issue report: [docs/issues/U08-A15-navigation-table-keeps-old-item-titles.md](../issues/U08-A15-navigation-table-keeps-old-item-titles.md).
 
 <a id="fn-f-a16"></a>
 **f-a16** — `manager.navigationMenu.noAssignedItems` and

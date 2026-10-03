@@ -1,0 +1,49 @@
+--- a/lib/pkp/controllers/grid/navigationMenus/NavigationMenuItemsGridHandler.php
++++ b/lib/pkp/controllers/grid/navigationMenus/NavigationMenuItemsGridHandler.php
+@@ -192,8 +192,11 @@
+             $user = $request->getUser();
+             $notificationManager->createTrivialNotification($user->getId(), Notification::NOTIFICATION_TYPE_SUCCESS, ['contents' => __($notificationLocaleKey)]);
+ 
+-            // Prepare the grid row data.
+-            return \PKP\db\DAO::getDataChangedEvent($navigationMenuItemId);
++            // Prepare the grid row data, and redraw the menus grid, whose
++            // "Navigation Menu Items" column lists the items' titles.
++            $json = \PKP\db\DAO::getDataChangedEvent($navigationMenuItemId);
++            $json->setGlobalEvent('navigationMenuItemsChanged');
++            return $json;
+         } else {
+             return new JSONMessage(false);
+         }
+@@ -270,7 +273,9 @@
+             $user = $request->getUser();
+             $notificationManager->createTrivialNotification($user->getId(), Notification::NOTIFICATION_TYPE_SUCCESS, ['contents' => __('notification.removedNavigationMenuItem')]);
+ 
+-            return \PKP\db\DAO::getDataChangedEvent($navigationMenuItemId);
++            $json = \PKP\db\DAO::getDataChangedEvent($navigationMenuItemId);
++            $json->setGlobalEvent('navigationMenuItemsChanged');
++            return $json;
+         }
+ 
+         return new JSONMessage(false);
+--- a/lib/pkp/templates/admin/settings.tpl
++++ b/lib/pkp/templates/admin/settings.tpl
+@@ -61,7 +61,7 @@
+ 				{if $componentAvailability['navigationMenus']}
+ 				<tab id="nav" label="{translate key="manager.navigationMenus"}">
+ 					{capture assign=navigationMenusGridUrl}{url router=PKP\core\PKPApplication::ROUTE_COMPONENT component="grid.navigationMenus.NavigationMenusGridHandler" op="fetchGrid" escape=false}{/capture}
+-					{load_url_in_div id="navigationMenuGridContainer" url=$navigationMenusGridUrl}
++					{load_url_in_div id="navigationMenuGridContainer" url=$navigationMenusGridUrl refreshOn="navigationMenuItemsChanged"}
+ 					{capture assign=navigationMenuItemsGridUrl}{url router=PKP\core\PKPApplication::ROUTE_COMPONENT component="grid.navigationMenus.NavigationMenuItemsGridHandler" op="fetchGrid" escape=false}{/capture}
+ 					{load_url_in_div id="navigationMenuItemsGridContainer" url=$navigationMenuItemsGridUrl}
+ 				</tab>
+--- a/lib/pkp/templates/management/website.tpl
++++ b/lib/pkp/templates/management/website.tpl
+@@ -73,7 +73,7 @@
+ 				</tab>
+ 				<tab id="navigationMenus" label="{translate key="manager.navigationMenus"}">
+ 					{capture assign=navigationMenusGridUrl}{url router=PKP\core\PKPApplication::ROUTE_COMPONENT component="grid.navigationMenus.NavigationMenusGridHandler" op="fetchGrid" escape=false}{/capture}
+-					{load_url_in_div id="navigationMenuGridContainer" url=$navigationMenusGridUrl}
++					{load_url_in_div id="navigationMenuGridContainer" url=$navigationMenusGridUrl refreshOn="navigationMenuItemsChanged"}
+ 					{capture assign=navigationMenuItemsGridUrl}{url router=PKP\core\PKPApplication::ROUTE_COMPONENT component="grid.navigationMenus.NavigationMenuItemsGridHandler" op="fetchGrid" escape=false}{/capture}
+ 					{load_url_in_div id="navigationMenuItemsGridContainer" url=$navigationMenuItemsGridUrl}
+ 				</tab>
