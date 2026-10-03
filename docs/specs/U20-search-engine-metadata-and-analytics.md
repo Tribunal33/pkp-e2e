@@ -1381,7 +1381,7 @@ Issue report: [docs/issues/U20-OMP2-book-page-announces-one-pdf.md](../issues/U2
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — Note i: `monographFileView()` always adds `DC.Type` `Text.Chapter`, while `monographView()` adds `Text.Book`. Live-probed 2026-09-26: note q19.
-Issue report: [docs/issues/U20-OMP3-book-file-page-type-chapter.md](../issues/U20-OMP3-book-file-page-type-chapter.md).
+Issue report: [docs/issues/U20-OMP3-book-file-page-type-chapter.md](../issues/U20-OMP3-book-file-page-type-chapter.md), filed as [pkp-e2e#669](https://github.com/jardakotesovec/pkp-e2e/issues/669).
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — Note e: OMP's `SitemapHandler` takes a book's chapters from `getLatestPublication()` and its formats from `getCurrentPublication()`, so an unpublished new version's chapters replace the published ones. Live-probed 2026-09-26: note q2.
