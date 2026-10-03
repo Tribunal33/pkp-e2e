@@ -953,6 +953,9 @@ Left out of the scenarios above, by reason:
     market saved with "Taxation Type" empty reopens in its "Edit"
     window with "Taxation Type" still empty, and "OK" stores no tax
     type
+  - the guard for A5 (issue report
+    `docs/issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md`):
+    "Add Market" opens with "Date Format" on "YYYYMMDD"
 - **Rarely met**:
   - a format that has used all nine sales-rights types, whose "Add
     Sales Rights" list is empty (Rule 10)
@@ -1037,7 +1040,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | A book whose market has a tax rate other than "Zero-rated", or a tax type alone, fails its Native XML export | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Audience" offers "Save" to the assistant roles and refuses their save | 🐞 | minor | — |
 | [A4](#a4) | The "Market Territories" list shows bare codes and runs the price into the currency code | 🐞 | minor | — |
-| [A5](#a5) | A new market's "Date Format" preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | minor | — |
+| [A5](#a5) | A new market's "Date Format" preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | The audience reaches the ONIX product with its code type and code value swapped | 🐞 | minor | — |
 | [A11](#a11) | A "Rest of World?" entry comes back from a Native XML import unticked | 🐞 | minor | — |
 | [A13](#a13) | A representative whose type is changed shows in both groups until a reload | 🐞 | minor | — |
@@ -1098,7 +1101,7 @@ the price is separated from its currency.
 Basis: probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A new market preselects the Hijri calendar** · 🐞 · minor.
+**A5 — A new market preselects the Hijri calendar** · 🐞 · medium.
 "Add Market" arrives with "Date Format" on "YYYYMMDD (H)", the ONIX
 format for a date in the Islamic (Hijri) calendar, rather than
 "YYYYMMDD". A press that types a date without changing the list records
@@ -1106,7 +1109,7 @@ it as a Hijri date, and the ONIX product hands it on as one. The
 format window's "Publication Dates" does the same
 ([Publication formats & proof terms, its A7](U73-publication-formats-proof-terms.md#a7)).
 Expected: "YYYYMMDD" preselected.
-Since: 2012-01-29, a date read from the code's history · Basis: probe. <sup>f-a5</sup>
+Since: 2012-01-29, a date read from the code's history · Basis: probe, 2026-10-03. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — Editing a book's market fills in "GST (Sales tax)" as its tax type, and "OK" saves it unasked** · 🐞 · medium.
@@ -2241,6 +2244,7 @@ it reached the Native XML file as `MarketDate` with `DateFormat` 20, and
 with "YYYYMMDD" chosen as `DateFormat` 00. The format window's
 "Publication Dates" › "Add publication date" also arrived on
 "YYYYMMDD (H)".
+Issue report: [docs/issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md](../issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Note g: `MarketForm::fetch()` assigns `taxTypeCode` `02`

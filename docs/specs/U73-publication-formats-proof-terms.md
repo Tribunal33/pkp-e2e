@@ -979,6 +979,9 @@ Left out of the scenarios above, by reason:
     `docs/issues/U46-A7-galley-format-moves-in-list-when-saved.md`): an
     unchanged "OK" on the first of three formats, an approval and an
     availability change leave the list in the order the formats were added
+  - the guard for A7 (issue report
+    `docs/issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md`):
+    "Add publication date" opens with "Date Format" on "YYYYMMDD"
 - **Nothing new to test**:
   - "Format Approval" with its URN box changed, whose close arrow asks
     before closing, on a press that assigns URNs to publication formats
@@ -1063,7 +1066,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | The "Metadata" tab's four lists do not load for the Series editor and the assistant roles | 🐞 | minor | — |
 | [A3](#a3) | A format's "Change File" adds a file; nothing is changed | 🐞 | minor | — |
 | [A4](#a4) | Unticking "This format will be available at a separate website" keeps the format remote | 🐞 | minor | — |
-| [A7](#a7) | A new publication date preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | minor | — |
+| [A7](#a7) | A new publication date preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | The "Format Availability" window reads "This format will unavailable to readers." | 🐞 | minor | — |
 | [A12](#a12) | Approving and revoking a format file write the same two "History" lines | 🐞 | minor | — |
 | [A13](#a13) | The side menu offers "Publication Formats" to a Copyeditor, Marketing and sales coordinator or Funding coordinator, and the page shows them no list | 🐞 | minor | — |
@@ -1157,14 +1160,15 @@ Expected (no screen does this today): a physical format gets the physical groups
 Since: 2019-08-21 (the versioning rework, 6 years), a date read from the code's history · Basis: probe. <sup>f-a6</sup> <sup>td13</sup>
 
 <a id="a7"></a>
-**A7 — A new date preselects the Hijri calendar** · 🐞 · minor.
+**A7 — A new date preselects the Hijri calendar** · 🐞 · medium.
 "Add publication date" arrives with "Date Format" on "YYYYMMDD (H)",
 the ONIX format for a date in the Islamic (Hijri) calendar, rather than
 "YYYYMMDD". A press that types a date without changing the list
-records it as a Hijri date, and the book's export from Tools › "Native
-XML Plugin" hands it on as one.
+records it as a Hijri date: the book's public page shows the date as
+typed, unconverted, with "Hijri Calendar" under it, and the book's
+export from Tools › "Native XML Plugin" hands it on as one.
 Expected (no screen does this today): "YYYYMMDD" preselected.
-Since: 2012-01-12, a date read from the code's history · Basis: probe. <sup>f-a7</sup> <sup>td14</sup>
+Since: 2012-01-12, a date read from the code's history · Basis: probe, 2026-10-03. <sup>f-a7</sup> <sup>td14</sup>
 
 <a id="a8"></a>
 **A8 — The price box's checks disagree** · ❓ · minor.
@@ -2291,6 +2295,7 @@ Live-probed 2026-09-28: note td14. The dedicated "ONIX 3.0 Monograph
 Export Plugin" export failed for every book, validation ticked or not
 (a finding for [ONIX metadata & export](U74-onix-metadata-export.md)), so the ONIX read was the one
 inside the Native XML export.
+Issue report: [docs/issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md](../issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note j: the server's pattern and `changeHandler_()`'s
