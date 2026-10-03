@@ -3251,7 +3251,7 @@ count-based chooser gate (note d) always passes; the subsequent entry then
 drops out of the rendered select, leaving a single visible option. Adjacent
 to finding A5, retired 2026-08-25 — no alternate access check remains
 (note f-a5); the unconditional append this note describes is unchanged.
-Issue report: [docs/issues/U27-A19-reviewer-template-chooser-nothing-to-choose.md](../issues/U27-A19-reviewer-template-chooser-nothing-to-choose.md).
+Issue report: [pkp-e2e#722](https://github.com/jardakotesovec/pkp-e2e/issues/722) ([docs/issues/U27-A19-reviewer-template-chooser-nothing-to-choose.md](../issues/U27-A19-reviewer-template-chooser-nothing-to-choose.md)).
 
 <a id="fn-a20"></a>
 **f-a20** — Live-probed 2026-08-27 (OMP, fresh reset, `enable_minified =
@@ -3618,7 +3618,7 @@ for a figure above 1, and `reviewer.list.daySinceLastAssignment`
 ("Yesterday") for any figure of 1 or less, 0 included; the figure is the
 whole days since `dateLastReviewAssignment`, floored at 0, so the hour
 does not matter.
-Issue report: [docs/issues/U27-A36-reviewer-assigned-today-reads-yesterday.md](../issues/U27-A36-reviewer-assigned-today-reads-yesterday.md).
+Issue report: [pkp-e2e#724](https://github.com/jardakotesovec/pkp-e2e/issues/724) ([docs/issues/U27-A36-reviewer-assigned-today-reads-yesterday.md](../issues/U27-A36-reviewer-assigned-today-reads-yesterday.md)).
 
 <a id="fn-a37"></a>
 **f-a37** — Driven 2026-09-28 (OJS and OMP, two runs each, as the Editor
@@ -3733,7 +3733,7 @@ and sent an email notification." under the heading "Internal Review
 read "Request Sent" on the same page and after a reload, and signed in as
 him, his list showed "Please accept or decline this request by …" with
 "Respond to request", the review page opening on "1. Request".
-Issue report: [docs/issues/U27-OMP2-press-add-reviewer-list-both-stages.md](../issues/U27-OMP2-press-add-reviewer-list-both-stages.md).
+Issue report: [pkp-e2e#723](https://github.com/jardakotesovec/pkp-e2e/issues/723) ([docs/issues/U27-OMP2-press-add-reviewer-list-both-stages.md](../issues/U27-OMP2-press-add-reviewer-list-both-stages.md)).
 
 <a id="fn-omp3"></a>
 **f-omp3** — Test run 2026-09-12 (scenario 11; the two messages read from
