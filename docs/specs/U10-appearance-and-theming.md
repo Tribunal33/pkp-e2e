@@ -1159,8 +1159,10 @@ Left out of the scenarios above, by reason:
   - the "Homepage Image" description typed in scenario 3 read on a press's and a preprint server's home page, as on a journal's (A1; the guard its issue report names)
   - the names a screen reader hears for the "Editorial Masthead" arrows ("Increase position of {role}" for an up arrow) and for each "Sidebar" box (the block's name alone) (A3; the guard its issue report names)
   - a placed block's plugin turned off, then a "Page Footer" saved on "Setup" without a refusal (A4; the guard its issue report names)
+  - a style sheet removed and saved, its old address answering "404 Not Found" (A5; the guard its issue report names)
   - the French (Canada) "Apparence" tabs of a press and a preprint server showing no "##" code {OMP OPS} (A6; the guard its issue report names)
   - a ".pdf" picked for "Logo" with "Upload File" and refused, then "Upload File" and the tab's "Save" enabled again (A7; the guard its issue report names)
+  - a press's French (Canada) "Entête" description naming no journal ("la revue") {OMP} (A11; the guard its issue report names)
   - a French upload box's drop area reading the French text (A12; the guard its issue report names)
   - a press category holding more books than "Items per page" showing page links, its page 2 listing the next book {OMP} (OMP2; the guard its issue report names)
   - a press's French pages giving a book's date in the default format before a French "Date" is saved, and in the saved one after, the English pages unchanged {OMP} (Rule 3a)
@@ -1220,12 +1222,12 @@ otherwise; the team settles them on spec review.
 | [A1](#a1) | A press's and a preprint server's homepage image never carries the "Alternate text" the manager typed | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | Screen readers misname the masthead's up arrows and every Sidebar box; clicking a role's name moves it | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | "Setup" refuses every save while a placed block's plugin is disabled, though "Sidebar" no longer shows the block | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A5](#a5) | A removed style sheet stops loading on the pages, but its file stays public at its old address | 🐞 | latent | — |
+| [A5](#a5) | A style sheet a manager removes stops loading but stays online at its old address | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | In French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | After a settings upload box refuses a file, its "Upload File" and the tab's "Save" stay disabled | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A8](#a8) | The "Time" choice shown as "3:05PM" prints in lower case ("7:17pm") | 🐞 | minor | — |
+| [A8](#a8) | The "3:05PM" time choice prints most times as "3:05pm", some as "3:05PM" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | After a manager saves an empty "Custom" short date, editorial dates show only the time | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A11](#a11) | On a press and a preprint server the French "Entête" description says it orders "la revue"'s (the journal's) masthead | 🐞 | minor | — |
+| [A11](#a11) | In French, a press's or preprint server's "Entête" settings say the role order is for "the journal's" editorial team page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | In French, the settings upload boxes say "Drop files here to upload" and show their refusal in English | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS5](#ojs5) | With every "Journal Content Organization" box unticked, "Save" shows "Saved" and the home page keeps its default part | 🐞 | minor | — |
 | [OJS6](#ojs6) | The article titles under "Latest Publications" are headings of the section's own level | 🐞 | minor | — |
@@ -1305,13 +1307,22 @@ block comes back unticked. The same holds for a custom block
 Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A removed style sheet's file stays public** · 🐞 · latent.
+**A5 — A style sheet a manager removes stops loading but stays online at its old address** · 🐞 · low.
 A manager who presses "Remove" under "Journal style sheet" and saves
 expects the file to be gone. The public pages stop loading it, but the
 file stays in the journal's public files and still opens at its old
-address, while a removed logo or picture is deleted. Nothing on screen
-shows it; it matters when the file held something meant to be withdrawn.
-Basis: probe. <sup>f-a5</sup>
+address, for anyone, signed in or not. Nothing on the site links to it
+any more, so it is reached through an old saved copy of a page, a
+search index, or by someone who knows the address.
+
+Nothing on screen shows that the file is still there, and no screen can
+delete it. It matters when the file held something the journal meant
+to withdraw.
+
+Only style sheets are left behind: a removed "Logo", "Homepage
+Image", "Favicon" or site header image is deleted as it should be. The
+site's own style sheet, under Administration › Site Settings, is left
+behind in the same way. Basis: probe, 2026-10-03. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — In French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes** · 🐞 · low.
@@ -1360,11 +1371,22 @@ the same, as does every upload box of the settings and publication forms
 when it refuses a file. Basis: probe, 2026-10-03. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — The "3:05PM" time choice prints in lower case** · 🐞 · minor.
-The third "Time" choice on "Date & Time" reads "3:05PM". A manager who
-picks it and saves expects times written that way; they print in lower
-case instead: a library file uploaded at 7:17 in the evening reads
-"2026-09-24 7:17pm" under "Date uploaded". Basis: probe. <sup>f-a8</sup>
+**A8 — The "3:05PM" time choice prints most times as "3:05pm", some as "3:05PM"** · 🐞 · low.
+On Settings › Website › "Date & Time", the third "Time" choice reads
+like "3:05PM". A manager who picks it and saves expects times written
+that way. Most pages print them in lower case instead: a library file's
+"Date uploaded" reads "2026-10-03 7:25pm".
+
+The screens drawn in the browser follow the label, so the same journal
+prints both forms. On `main` a discussion message reads "11:58AM" while
+the library reads "7:25pm". On 3.5 only the tab's own labels and the
+emails list in an author's workflow print "PM". Up to 3.4 the choice
+read "3:05pm" and every page agreed.
+
+It happens only with that choice, in English, and only on staff
+screens, apart from readers' comments on `main`. French (Canada)
+differs in another way, outside this report. Basis: probe, 2026-10-03.
+<sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — After a manager saves an empty "Custom" short date, editorial dates show only the time** · 🐞 · medium.
@@ -1397,13 +1419,24 @@ settings do, or the browser should be told to check the sheet on every
 load. Basis: probe. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The French "Entête" tab names a journal on a press and a preprint server** · 🐞 · minor.
-The English description of the "Editorial Masthead" order list, "Define
-the order of masthead roles for public display.", names no kind of
-publication. In the French interface it reads "Définir l’ordre des rôles
-sur la page de l'équipe éditoriale de la revue." on all three apps, so a
-press or preprint server manager is told the list orders a journal's
-("la revue") editorial team page. Basis: probe. <sup>f-a11</sup>
+**A11 — In French, a press's or preprint server's "Entête" settings say the role order is for "the journal's" editorial team page** · 🐞 · low.
+A press or preprint server manager working in French (Canada) opens
+Settings › Website › "Apparence" › "Entête" (Editorial Masthead). The
+description under the role list reads "Définir l’ordre des rôles sur la
+page de l'équipe éditoriale de la revue.", so the text says the list
+sets the order of a journal's ("la revue") editorial team page. The
+English text, "Define the order of masthead roles for public display.",
+names no kind of publication.
+
+Nothing is lost: the list still sets the order of the press's or
+server's own public "Entête" page, and saving works. The manager has no
+setting for the text.
+
+It is one shared text that a journal shows too, where "la revue" is
+right. So the fix is a neutral wording by the French (Canada)
+translators on Weblate, not a separate text per app. French (France)
+and the other languages name no publication here. Basis: probe,
+2026-10-03. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — In French, the settings upload boxes say "Drop files here to upload" and show their refusal in English** · 🐞 · low.
@@ -2071,6 +2104,7 @@ after "Remove" and "Saved", the pages no longer linked the style sheet,
 and its old address (`/public/journals/<id>/styleSheet.css`, OMP
 `presses`, OPS `contexts`) still answered 200 with the file, signed out;
 a removed favicon's and logo's addresses answered 404.
+Issue report: [pkp-e2e#780](https://github.com/jardakotesovec/pkp-e2e/issues/780) ([docs/issues/U10-A5-removed-style-sheet-stays-public.md](../issues/U10-A5-removed-style-sheet-stays-public.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Seen 2026-09-24 on all three apps with the French interface.
@@ -2113,6 +2147,7 @@ Issue report: [pkp-e2e#772](https://github.com/jardakotesovec/pkp-e2e/issues/772
 PHP's. Live-probed 2026-09-24 on all three apps: the choice read
 "7:35PM" at that time; saved, a library file's "Date uploaded" read
 "2026-09-24 7:17pm" and a file's note "2026-09-24 7:17pm".
+Issue report: [pkp-e2e#779](https://github.com/jardakotesovec/pkp-e2e/issues/779) ([docs/issues/U10-A8-time-choice-3-05pm-prints-lower-case.md](../issues/U10-A8-time-choice-3-05pm-prints-lower-case.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note j. Live-probed 2026-09-24 on all three apps, two runs:
@@ -2157,6 +2192,7 @@ presse", "Rédacteur/Rédactrice en chef de la série", "Membre du comité
 éditorial" (OMP); "##default.groups.name.sectionEditor##", "Membre du
 comité éditorial" (OPS). A role moved up with its arrow and left
 unsaved was back in its old place after a reload, with no dialog.
+Issue report: [pkp-e2e#781](https://github.com/jardakotesovec/pkp-e2e/issues/781) ([docs/issues/U10-A11-french-masthead-order-text-names-journal.md](../issues/U10-A11-french-masthead-order-text-names-journal.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — lib/pkp `FieldUpload` passes the text as
