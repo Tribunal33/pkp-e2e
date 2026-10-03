@@ -1047,6 +1047,7 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - a Site Administrator with no manager role in a press and a preprint server opening each Settings page from the side menu, as on a journal {OMP OPS} (A1; the guard its issue report names)
   - a reload on a Settings side tab under a later top tab (Website › "Setup" › "Privacy Statement") keeping that side tab (A7; the guard its issue report names)
+  - the French (Canada) "Bloc générique" (Masthead) tab of a press and a preprint server showing no "##" code {OMP OPS} (A12; the guard its issue report names)
   - the masthead not based on enrollments, "Present a masthead based on user enrollments" unticked: the masthead showing under its heading only the "Editorial History" text (and a manager's "Edit" link), or nothing with that text empty, the "Editorial History" address opening the masthead, the other two groups leaving the tab, and, ticked again, both pages listing as before in the saved role order (Rule 14f; Rules 16, 21; Settings bullet 4a)
   - "Enable listing of reviewers on the masthead" at its default: no "Peer Reviewers in Previous Year" although reviews were completed last year {OJS OMP} (Rule 15; Settings bullet 4c)
   - a disabled member staying listed on both pages and under "Peer Reviewers in Previous Year" (Rule 14e; A4 retired)
@@ -1109,7 +1110,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Reloading or bookmarking a Settings side tab opens the page's first tab instead | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | The default "For Readers" text's "Privacy Statement" link opens the "Submissions" page {OJS OMP} | 🐞 | minor | — |
 | [A11](#a11) | Hosted Journals "Edit" refuses to save a journal whose "Country" was never set | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A12](#a12) | A press's and a preprint server's French Masthead tab shows raw text keys in place of headings, labels and help lines {OMP OPS} | 🐞 | minor | — |
+| [A12](#a12) | In French (Canada), a press's and a preprint server's Masthead settings tab shows untranslated codes {OMP OPS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | With the masthead not based on enrollments, invitations and masthead changes still promise "Your name will appear in the {journal}'s masthead"; reviewers are promised it while the journal lists none | 🐞 | minor | — |
 | [OMP2](#omp2) | The site-level page about the software says "This press uses Open Monograph Press" on a press site {OMP} | 🐞 | minor | — |
 | [OPS3](#ops3) | A preprint server's French "Privacy Statement" default is the raw text "##default.contextSettings.privacyStatement##" {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1232,28 +1233,26 @@ refuses an empty "Country" the same way. *Hosted journals* owns the
 form ([A1](U59-hosted-journals.md#a1)). Basis: probe, 2026-10-02. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — The French Masthead tab of a press or preprint server shows raw text keys** {OMP OPS} · 🐞 · minor.
-A manager working in French expects the "Bloc générique" tab (the
-"Masthead" tab) of Settings › Press (page heading "Configuration") or
-Settings › Server ("Paramètres du serveur") to read in French, as a
-journal's does. On a press:
-- the first two group headings read "##manager.setup.identity##" and
-  "##manager.settings.publisher.identity##";
-- the label of "Publisher Code Type" reads
-  "##manager.settings.publisherCodeType##", and four of its choices read
-  "GKD##monograph.publicationFormat.onixDeprecated##" (likewise "GRID",
-  "PND", "Proprietary") where English reads "GKD (Discontinued)";
-- the help line under "Pays" reads "##manager.setup.selectCountry##";
-- in "Description" the two labels read "##manager.setup.contextSummary##"
-  and "##manager.setup.contextAbout##", with the help lines
-  "##manager.setup.contextSummary.description##" and
-  "##manager.setup.contextAbout.description##".
+**A12 — In French (Canada), a press's and a preprint server's Masthead settings tab shows untranslated codes** {OMP OPS} · 🐞 · low.
+A press manager who uses the interface in French (Canada) and opens the
+press's settings finds codes on the first tab, "Bloc générique"
+(Masthead): the first two group headings read
+"##manager.setup.identity##" and "##manager.settings.publisher.identity##",
+the publisher code type field's label is a code, and so are the help
+line under "Pays" and both fields of "Description" with their help
+lines. In that field's list, four discontinued code types read "GKD"
+followed by a code where English reads "(Discontinued)". On a preprint
+server the "Sponsoring organization" label and the help lines under
+"Pays" and "Résumé du serveur" are codes. Only the names and help lines
+are missing; the fields and their choices are as in English.
 
-On a preprint server the last label of "Identité du serveur" reads
-"##manager.setup.sponsoringOrganization##", the help line under "Pays"
-"##manager.setup.selectCountry##" and the one under "Résumé du serveur"
-"##manager.setup.contextSummary.description##". The applications' French translations have no text for these keys.
-Basis: probe. <sup>f-a12</sup>
+These are translations, not code: the French (Canada) texts are empty
+or missing in OMP's and OPS's locale files, and are entered on PKP's
+Weblate. Every press and preprint server that offers French (Canada)
+shows the codes, including the press and server in PKP's default test
+data. Other languages that lack the same texts show codes too, since a
+missing text never falls back to English.
+Basis: probe, 2026-10-03. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — Invitations and masthead changes promise a listing the masthead does not give** · 🐞 · minor.
@@ -2496,6 +2495,7 @@ Editor role (on OPS a second manager), `manager.maya` and `admin`; the
 "Publisher Code Type" list's four entries only inside the list. The contact tab
 ("Coordonnées", "Personne-ressource") and the sections tab ("Rubriques",
 "Séries", "Série(s)") showed no raw key.
+Issue report: [pkp-e2e#786](https://github.com/jardakotesovec/pkp-e2e/issues/786) ([docs/issues/U07-A12-french-masthead-settings-raw-keys.md](../issues/U07-A12-french-masthead-settings-raw-keys.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — pkp/pkp-lib#13370 (`fab29cfeca`, 2026-09-28; note ad) left
