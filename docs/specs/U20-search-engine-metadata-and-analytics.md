@@ -1328,7 +1328,7 @@ Issue report: [docs/issues/U20-A1-home-page-description-cut-at-quote-mark.md](..
 
 <a id="fn-f-a2"></a>
 **f-a2** — Notes a, d: `plugins.generic.googleAnalytics.description` and `…manager.settings.description` in `plugins/generic/googleAnalytics/locale/en/locale.po`, identical in the three apps (a shared plugin tree); no code or template offers a "Check Status" action. The `…authorAccount*` strings of the same file are read by no code. Live-probed 2026-09-26, all three apps: notes q1, q20, q22 (the two texts as quoted).
-Issue report: [docs/issues/U20-A2-analytics-plugin-texts-name-ojs-and-check-status.md](../issues/U20-A2-analytics-plugin-texts-name-ojs-and-check-status.md).
+Issue report: [docs/issues/U20-A2-analytics-plugin-texts-name-ojs-and-check-status.md](../issues/U20-A2-analytics-plugin-texts-name-ojs-and-check-status.md), filed as [pkp-e2e#667](https://github.com/jardakotesovec/pkp-e2e/issues/667).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note d: `getEnabled()` of a lazy-load plugin reads the site's own `enabled` row on the site's Plugins tab, so the box keeps its tick; `registerScript()` returns with no context, so the site's pages never carry the script (note k). The draft's reading of the code, that the ticked site row would offer "Settings" and its window fail for want of a journal, did not hold on screen: no "Settings" was offered, so no window opened. Live-probed 2026-09-26, two runs, all three apps: note q24.
