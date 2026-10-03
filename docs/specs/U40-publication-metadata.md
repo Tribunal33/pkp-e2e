@@ -2825,7 +2825,7 @@ branch (fn-l). Live-probed 2026-08-28 (control press, License Terms
 "Terms-only paragraph omp." and no license): block `<h2 class="label">
 License </h2> <a href=""> License </a> <p>Terms-only paragraph omp.</p>`;
 the journal and the server rendered heading + paragraph only.
-Issue report: [docs/issues/U40-OMP5-book-page-license-link-no-address.md](../issues/U40-OMP5-book-page-license-link-no-address.md).
+Issue report: [pkp-e2e#798](https://github.com/jardakotesovec/pkp-e2e/issues/798) ([docs/issues/U40-OMP5-book-page-license-link-no-address.md](../issues/U40-OMP5-book-page-license-link-no-address.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1 — OPS1 evidence.** fn-b: `ops/registry/userGroups.xml` author
