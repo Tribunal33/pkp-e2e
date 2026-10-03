@@ -981,6 +981,14 @@ Left out of the scenarios above, by reason:
     a book exported to a Native XML file and imported again keeps a
     market without a supplier without one, and its suppliers with and
     without a website as they were
+  - the guard for A12 (issue report
+    `docs/issues/U74-A12-representative-window-refuses-supplier.md`):
+    "Add Representative" shows only the supplier role list and saves a
+    supplier at the first "OK"
+  - the guard for A13 (issue report
+    `docs/issues/U74-A13-representative-type-change-listed-twice.md`):
+    a supplier switched to "Agent" is listed under "Agents" only,
+    before any reload
 - **Rarely met**:
   - a format that has used all nine sales-rights types, whose "Add
     Sales Rights" list is empty (Rule 10)
@@ -1061,15 +1069,15 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | Editing a book's market fills in "GST (Sales tax)" as its tax type, and "OK" saves it unasked | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | A sales-rights entry or a market saves with no territory, and the book's Native XML export then fails | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | The market window takes any date and any price, and a price that is not a number makes the book's Native XML export fail | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A12](#a12) | The representative window shows both "Role" lists and refuses a new supplier until the type is clicked | 🐞 | user-visible | — |
+| [A12](#a12) | A book's "Add Representative" window shows both role lists and refuses a supplier until "Agent" and "Supplier" are clicked | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A17](#a17) | A book whose market has a tax rate other than "Zero-rated", or a tax type alone, fails its Native XML export | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Audience" offers "Save" to the assistant roles and refuses their save | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | A book format's "Market Territories" list shows country codes and runs the price into its currency | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | A new market's "Date Format" preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | A book's "Audience" goes out in its ONIX data the wrong way round, so "Children" reads as a proprietary code | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | A book imported from a press's Native XML file loses its "Rest of World?" sales-rights tick | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A13](#a13) | A representative whose type is changed shows in both groups until a reload | 🐞 | minor | — |
-| [A14](#a14) | A refused representative delete answers with a browser pop-up and leaves the "Delete" dialog open | 🐞 | minor | — |
+| [A13](#a13) | A book representative switched between "Agent" and "Supplier" is listed under both groups until the page is reloaded | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A14](#a14) | A refused representative delete answers with a browser pop-up and leaves the "Delete" dialog open | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | A second "Rest of World?" entry, or a market date or price of spaces, is refused without a message | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A16](#a16) | "Export Submissions" with no book ticked opens an empty results tab | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | The returns and availability the "Metadata" tab shows can differ from what the product carries, and an import loses both | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1239,34 +1247,47 @@ type.
 Basis: probe, 2026-10-03. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — The representative window refuses a new supplier until the type is clicked** · 🐞 · user-visible.
-"Add Representative" opens on "Supplier" with both "Role" lists
-showing, the agent list on the left. "OK" on a supplier with its role
-chosen shows "This field is required." under the left list and saves
-nothing, until "Agent" and then "Supplier" are clicked. A
-representative's "Edit" opens the same way, the other type's list
-showing whatever role shares the code ("Sales agent (08)" shows
-"Retailer (08)"), and a supplier's "Edit" › "OK" with nothing changed
-is refused alike. Expected: only the chosen type's list shows, and "OK"
-checks only that list.
-Basis: probe. <sup>f-a12</sup>
+**A12 — A book's "Add Representative" window shows both role lists and refuses a supplier until "Agent" and "Supplier" are clicked** · 🐞 · medium.
+An editor opens a book's "Marketing" › "Representatives" and presses
+"Add Representative". The window opens with "Supplier" chosen but shows
+two "Role" lists side by side: the agent roles on the left, the supplier
+roles on the right. They choose a supplier role, type a name and press
+"OK". The window refuses with "This field is required." under the agent
+list and saves nothing.
+The supplier saves only after "Agent" and then "Supplier" are clicked,
+and nothing on the screen suggests doing that. Editing a supplier fails
+the same way: its "Edit" window also shows both lists, so "OK" is
+refused even with nothing changed. A supplier saved this way is stored
+correctly.
+Agents are not affected: clicking "Agent" hides the supplier list.
+Representatives matter to presses that send ONIX records to the book
+trade, where a book's suppliers and agents are part of each product
+record.
+Basis: probe, 2026-10-03. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — A representative whose type is changed shows in both groups** · 🐞 · minor.
-After a supplier's "Edit" switches it to "Agent" and "OK" shows
-"Representative edited.", the table lists it under "Agents" with its
-new role and still under "Suppliers" with its old one, until the page
-is reloaded. Expected: it moves to the other group at once.
-Basis: probe. <sup>f-a13</sup>
+**A13 — A book representative switched between "Agent" and "Supplier" is listed under both groups until the page is reloaded** · 🐞 · low.
+An editor opens a supplier on a book's "Marketing" › "Representatives"
+page, switches it to "Agent", picks an agent role and presses "OK".
+"Representative edited." appears and the representative is listed under
+"Agents" with its new role, but it is also still listed under
+"Suppliers" with its old role.
+The change is saved correctly, and a reload removes the extra row. Until
+then the extra row acts on the same representative: its "Edit" opens the
+representative as it now is, and its "Delete" deletes it, while the row
+itself stays on the page.
+The table redrew the whole list after each save until a 2012 change made
+it redraw one row in one group, which missed this case.
+Basis: probe, 2026-10-03. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — A refused representative delete leaves its dialog open** · 🐞 · minor.
+**A14 — A refused representative delete leaves its dialog open** · 🐞 · low.
 "OK" in the "Delete" dialog of a representative that a market names
 raises a browser pop-up with the refusal, and the dialog then stays
 open with a spinner; "OK" again repeats the pop-up, and only "Cancel"
-closes it. Expected: the dialog closes and the refusal shows as a
-notice on the page, like the other messages of these lists.
-Basis: probe. <sup>f-a14</sup>
+closes it. Expected: after the refusal the dialog closes and the
+representative stays listed.
+Basis: probe, 2026-10-03. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — Two refusals come without a message** · 🐞 · low.
@@ -2354,14 +2375,17 @@ Issue report: [pkp-e2e#713](https://github.com/jardakotesovec/pkp-e2e/issues/713
 <a id="fn-f-a12"></a>
 **f-a12** — Note e. Live-probed 2026-09-28 (A12), two runs: note td12;
 the scenario tooling's own check of the window saw the same.
+Issue report: [docs/issues/U74-A12-representative-window-refuses-supplier.md](../issues/U74-A12-representative-window-refuses-supplier.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Note e. Live-probed 2026-09-28 (A13), four runs: note td12.
+Issue report: [docs/issues/U74-A13-representative-type-change-listed-twice.md](../issues/U74-A13-representative-type-change-listed-twice.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note e: the refused delete answers 200 with
 `{"status":false,…}` (`manager.representative.inUse`). Live-probed
 2026-09-28 (A14), two runs, agent and supplier alike: note td13.
+Issue report: [pkp-e2e#511](https://github.com/jardakotesovec/pkp-e2e/issues/511) ([docs/issues/U62-A9-refused-confirmation-window-keeps-spinning.md](../issues/U62-A9-refused-confirmation-window-keeps-spinning.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Notes f and g: the refused "OK" answers 200 with the form

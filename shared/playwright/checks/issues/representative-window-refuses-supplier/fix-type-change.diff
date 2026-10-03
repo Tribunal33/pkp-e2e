@@ -1,0 +1,24 @@
+--- a/controllers/grid/catalogEntry/RepresentativesGridHandler.php
++++ b/controllers/grid/catalogEntry/RepresentativesGridHandler.php
+@@ -281,6 +281,8 @@
+ 
+         $representativeDao = DAORegistry::getDAO('RepresentativeDAO'); /** @var RepresentativeDAO $representativeDao */
+         $representative = $representativeDao->getById($representativeId, $monograph->getId());
++        // The form's execute() changes this object, so keep the type it had
++        $wasSupplier = $representative ? (bool) $representative->getIsSupplier() : null;
+ 
+         // Form handling
+         $representativeForm = new RepresentativeForm($monograph, $representative);
+@@ -303,6 +305,12 @@
+             $notificationMgr = new NotificationManager();
+             $notificationMgr->createTrivialNotification($currentUser->getId(), Notification::NOTIFICATION_TYPE_SUCCESS, ['contents' => $notificationContent]);
+ 
++            // A representative whose type changed moves to the other category; a refresh
++            // of its row in the new category would leave it in the old one too
++            if ($wasSupplier !== null && $wasSupplier !== (bool) $representative->getIsSupplier()) {
++                return DAO::getDataChangedEvent();
++            }
++
+             // Prepare the grid row data
+             $row = $this->getRowInstance();
+             $row->setGridId($this->getId());

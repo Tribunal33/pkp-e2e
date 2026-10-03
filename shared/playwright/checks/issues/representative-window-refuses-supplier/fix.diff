@@ -1,0 +1,23 @@
+--- a/templates/controllers/grid/catalogEntry/form/representativeForm.tpl
++++ b/templates/controllers/grid/catalogEntry/form/representativeForm.tpl
+@@ -26,10 +26,16 @@
+ 			{fbvElement type="radio" id="supplier" name="isSupplier" value="1" label="grid.catalogEntry.supplier" checked=$isSupplier inline="true"}
+ 		{/fbvFormSection}
+ 		{fbvFormSection title="grid.catalogEntry.representativeRole" for="role" required="true"}
+-			{if $isSupplier}{assign var="agentClass" value="hidden"}{/if}
+-			{fbvElement type="select" from=$agentRoleCodes selected=$role id="agentRole" translate=false inline="true" class=$agentClass size=$fbvStyles.size.MEDIUM defaultValue="" defaultLabel="" required="true"}
+-			{if !$isSupplier}{assign var="supplierClass" value="hidden"}{/if}
+-			{fbvElement type="select" from=$supplierRoleCodes selected=$role id="supplierRole" translate=false inline="true" class=$supplierClass size=$fbvStyles.size.MEDIUM defaultValue="" defaultLabel="" required="true"}
++			{* Show only the chosen type's list, its role chosen; RepresentativeFormHandler switches them. The legacy form styles define no "hidden" class. *}
++			{if $isSupplier}
++				{assign var="agentStyle" value="display: none;"}{assign var="agentSelected" value=""}
++				{assign var="supplierStyle" value=""}{assign var="supplierSelected" value=$role}
++			{else}
++				{assign var="agentStyle" value=""}{assign var="agentSelected" value=$role}
++				{assign var="supplierStyle" value="display: none;"}{assign var="supplierSelected" value=""}
++			{/if}
++			{fbvElement type="select" from=$agentRoleCodes selected=$agentSelected id="agentRole" translate=false inline="true" style=$agentStyle size=$fbvStyles.size.MEDIUM defaultValue="" defaultLabel="" required="true"}
++			{fbvElement type="select" from=$supplierRoleCodes selected=$supplierSelected id="supplierRole" translate=false inline="true" style=$supplierStyle size=$fbvStyles.size.MEDIUM defaultValue="" defaultLabel="" required="true"}
+ 		{/fbvFormSection}
+ 		{fbvFormSection title="grid.catalogEntry.representativeName" for="name" required="true"}
+ 			{fbvElement type="text" id="name" value=$name size=$fbvStyles.size.MEDIUM required="true"}
