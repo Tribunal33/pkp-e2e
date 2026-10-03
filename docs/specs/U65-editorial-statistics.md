@@ -993,6 +993,7 @@ Left out of the scenarios above, by reason:
   - a book declined at Internal Review on a press: "Submissions Declined", "Submissions Declined (After Review)" and both rejection rates count it (the guard for OMP1, once fixed; Rule 13)
   - a context whose every count is dated this year: the "Total" column of "Editorial Activity" holds no "/year" (the guard for A2, once fixed; Rule 8b)
   - Statistics › "Users" of a journal: no "Site Administrator" row (the guard for A6, once fixed; Rule 14)
+  - a report address with an unknown, empty or missing report name: lands on the "Reports" page (the guard for A8, once fixed; Rule 19)
 - **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
@@ -1062,7 +1063,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | Editorial Activity shows "(0/year)" after each total that has nothing dated before this calendar year | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | The "Trends" information icons cannot be read from the keyboard | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Statistics › "Users" lists a "Site Administrator" row that always reads 0 | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A8](#a8) | A report address naming no report lands on "404 Not Found" | 🐞 | minor | — |
+| [A8](#a8) | A report address with an unknown or missing report name lands on "404 Not Found", not on "Reports" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | Monthly editorial email's attachment counts every journal's active submissions, not the journal's own | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | The monthly email reads "Login to the the press" ("the the preprint server") | 🐞 | minor | — |
 | [A14](#a14) | Saving Profile › "Notifications" while the monthly email is off opts the account out for when it returns | 🐞 | minor | — |
@@ -1188,12 +1189,20 @@ does), since the counts themselves are useful.
 Basis: probe. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — A report address naming no report lands on "404 Not Found"** · 🐞 · minor.
-A report's address with an unknown report name, an empty one, none, or
-the right name in lower case (as an old or mistyped bookmark has) lands
-on a "404 Not Found" page whose address ends "…/stats/stats/reports".
-Expected: the "Reports" page.
-Basis: probe. <sup>f-a8</sup>
+**A8 — A report address with an unknown or missing report name lands on "404 Not Found", not on "Reports"** · 🐞 · low.
+A manager or editor who opens a report's download address with a report
+name the install does not have, such as `…/publicknowledge/en/stats/repo
+rts/report?pluginName=reviewreportplugin` (the right name in lower
+case), lands on a bare "404 Not Found" page at
+`…/publicknowledge/en/stats/stats/reports`. The same happens when the
+name is empty or left out.
+
+The doubled "stats/stats" is the bug. The app means to send the person
+back to Statistics › "Reports", but its redirect puts the page name
+where the operation's name belongs. A report cannot be turned off, so
+only a name the install has no report for counts as unknown. Expected:
+the "Reports" page.
+Basis: probe, 2026-10-02. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — Monthly editorial email's attachment counts every journal's active submissions, not the journal's own** · 🐞 · medium.
@@ -2073,6 +2082,7 @@ one manager and `admin`).
 `…/stats/reports/report?pluginName=NoSuchReport`, an empty `pluginName`,
 no `pluginName` and the right name in lower case each landed on
 `{context}/stats/stats/reports`, "404 Not Found".
+Issue report: [docs/issues/U65-A8-report-address-unknown-name-404.md](../issues/U65-A8-report-address-unknown-name-404.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — fn p: `StatisticsReportMail::createCsvAttachment()` calls

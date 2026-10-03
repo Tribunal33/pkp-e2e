@@ -1,0 +1,11 @@
+--- a/lib/pkp/pages/stats/PKPStatsHandler.php
++++ b/lib/pkp/pages/stats/PKPStatsHandler.php
+@@ -545,7 +545,7 @@
+         $reportPlugins = PluginRegistry::loadCategory('reports');
+ 
+         if ($pluginName == '' || !isset($reportPlugins[$pluginName])) {
+-            $request->redirect(null, null, 'stats', ['reports']);
++            $request->redirect(null, 'stats', 'reports');
+         }
+ 
+         $plugin = $reportPlugins[$pluginName];
