@@ -1,0 +1,182 @@
+--- a/lib/ui-library/src/managers/ReviewRoundResponseManager/AuthorResponseFormModal.vue
++++ b/lib/ui-library/src/managers/ReviewRoundResponseManager/AuthorResponseFormModal.vue
+@@ -34,6 +34,7 @@
+ 		<SideModalLayoutBasic>
+ 			<PkpForm
+ 				v-bind="form"
++				:display-only="isDisplayOnly"
+ 				@set="set"
+ 				@cancel="closeModal"
+ 				@success="onSuccessFn"
+@@ -83,7 +84,7 @@
+ 	);
+ });
+ 
+-const {form, set} = useAuthorResponseForm({
++const {form, set, isDisplayOnly} = useAuthorResponseForm({
+ 	submission: props.submission,
+ 	stageId: props.stageId,
+ 	reviewRound: props.reviewRound,
+--- a/lib/ui-library/src/managers/ReviewRoundResponseManager/AuthorResponseRequestManager/AuthorResponseRequestManagerStore.js
++++ b/lib/ui-library/src/managers/ReviewRoundResponseManager/AuthorResponseRequestManager/AuthorResponseRequestManagerStore.js
+@@ -13,6 +13,7 @@
+ import AuthorResponseFormModal from '@/managers/ReviewRoundResponseManager/AuthorResponseFormModal.vue';
+ import {useLocalize} from '@/composables/useLocalize';
+ import {useDataChanged} from '@/composables/useDataChanged';
++import {useCurrentUser} from '@/composables/useCurrentUser';
+ export const useReviewRoundAuthorResponseRequestStore = defineComponentStore(
+ 	'useReviewRoundAuthorResponseRequestStore',
+ 	(props) => {
+@@ -53,6 +54,8 @@
+ 
+ 		const {triggerDataChange} = useDataChanged();
+ 
++		const {hasCurrentUserAtLeastOneAssignedRoleInStage} = useCurrentUser();
++
+ 		const authorReviewResponseRequestConfig = extender.addFns(
+ 			useReviewRoundAuthorResponseConfig(),
+ 		);
+@@ -79,6 +82,22 @@
+ 		);
+ 
+ 		/**
++		 * Whether the current user may request, edit and delete the author response:
++		 * the roles the request page and the API's request, edit and delete routes admit.
++		 */
++		const canManageAuthorResponse = computed(() =>
++			hasCurrentUserAtLeastOneAssignedRoleInStage(
++				submission.value,
++				stageId.value,
++				[
++					pkp.const.ROLE_ID_SUB_EDITOR,
++					pkp.const.ROLE_ID_MANAGER,
++					pkp.const.ROLE_ID_SITE_ADMIN,
++				],
++			),
++		);
++
++		/**
+ 		 * Navigate to page where editor can request author to submit review response.
+ 		 */
+ 		function navigateToRequestAuthorReviewResponsePage() {
+@@ -150,13 +169,16 @@
+ 			authorReviewResponseRequestConfig.getColumns({reviewRound}),
+ 		);
+ 		const topItems = computed(() =>
+-			authorReviewResponseRequestConfig.getTopItems(),
++			authorReviewResponseRequestConfig.getTopItems({
++				canManageAuthorResponse: canManageAuthorResponse.value,
++			}),
+ 		);
+ 
+ 		function getAuthorItemActions({author, reviewRound}) {
+ 			return authorReviewResponseRequestConfig.getAuthorItemActions({
+ 				author,
+ 				reviewRound,
++				canManageAuthorResponse: canManageAuthorResponse.value,
+ 			});
+ 		}
+ 
+@@ -251,6 +273,7 @@
+ 			responseDelete,
+ 			authors,
+ 			reviewHasResponse,
++			canManageAuthorResponse,
+ 			canRequestReviewRoundAuthorResponse,
+ 			navigateToRequestAuthorReviewResponsePage,
+ 			extender,
+--- a/lib/ui-library/src/managers/ReviewRoundResponseManager/AuthorResponseRequestManager/useReviewRoundAuthorResponseConfig.js
++++ b/lib/ui-library/src/managers/ReviewRoundResponseManager/AuthorResponseRequestManager/useReviewRoundAuthorResponseConfig.js
+@@ -45,7 +45,11 @@
+ 	 * Therefore, for each assigned author listed only include actions for the one who submitted the response. The authors
+ 	 * who the response was submitted on behalf of can be seen when the `view` action is clicked.
+ 	 */
+-	function getAuthorItemActions({author: authorUser, reviewRound}) {
++	function getAuthorItemActions({
++		author: authorUser,
++		reviewRound,
++		canManageAuthorResponse = false,
++	}) {
+ 		const actions = [];
+ 
+ 		const response = reviewRound.authorResponse;
+@@ -57,29 +61,36 @@
+ 
+ 		const submittingUser = response.submittedByUser;
+ 
+-		actions.push(
+-			{
+-				label: t('common.view'),
+-				icon: 'View',
+-				name: Actions.RESPONSE_VIEW,
+-				disabled: submittingUser.id !== authorUser.id,
+-			},
+-			{
++		actions.push({
++			label: t('common.view'),
++			icon: 'View',
++			name: Actions.RESPONSE_VIEW,
++			disabled: submittingUser.id !== authorUser.id,
++		});
++
++		// Only the roles that may delete the response are offered "Delete"
++		if (canManageAuthorResponse) {
++			actions.push({
+ 				label: t('common.delete'),
+ 				icon: 'Cancel',
+ 				name: Actions.RESPONSE_DELETE,
+ 				isWarnable: true,
+ 				disabled: submittingUser.id !== authorUser.id,
+-			},
+-		);
++			});
++		}
+ 
+ 		return actions;
+ 	}
+ 
+ 	/**
+ 	 * Get the actions avaialble at the top of the table.
++	 * Only the roles that may request a response are offered "Request Response".
+ 	 */
+-	function getTopItems() {
++	function getTopItems({canManageAuthorResponse = false} = {}) {
++		if (!canManageAuthorResponse) {
++			return [];
++		}
++
+ 		return [
+ 			{
+ 				component: 'AuthorResponseRequestManagerActionButton',
+--- a/lib/ui-library/src/managers/ReviewRoundResponseManager/useAuthorResponseForm.js
++++ b/lib/ui-library/src/managers/ReviewRoundResponseManager/useAuthorResponseForm.js
+@@ -83,12 +83,17 @@
+ 		action: apiUrl,
+ 	});
+ 
++	// Neither an author nor an editor (e.g. an assistant): the response is shown to read only
++	const isDisplayOnly = computed(() => !isAuthor.value && !isEditor.value);
++
+ 	addPage('default', {
+-		submitButton: {
+-			label: isEditor.value
+-				? t('common.save')
+-				: t('submission.reviewRound.authorReviewResponse.submit'),
+-		},
++		submitButton: isDisplayOnly.value
++			? null
++			: {
++					label: isEditor.value
++						? t('common.save')
++						: t('submission.reviewRound.authorReviewResponse.submit'),
++				},
+ 		cancelButton: {label: t('common.cancel')},
+ 	});
+ 
+@@ -131,5 +136,6 @@
+ 	return {
+ 		form,
+ 		set,
++		isDisplayOnly,
+ 	};
+ }
