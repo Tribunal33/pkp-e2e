@@ -2375,11 +2375,11 @@ Issue report: [pkp-e2e#713](https://github.com/jardakotesovec/pkp-e2e/issues/713
 <a id="fn-f-a12"></a>
 **f-a12** — Note e. Live-probed 2026-09-28 (A12), two runs: note td12;
 the scenario tooling's own check of the window saw the same.
-Issue report: [docs/issues/U74-A12-representative-window-refuses-supplier.md](../issues/U74-A12-representative-window-refuses-supplier.md).
+Issue report: [pkp-e2e#716](https://github.com/jardakotesovec/pkp-e2e/issues/716) ([docs/issues/U74-A12-representative-window-refuses-supplier.md](../issues/U74-A12-representative-window-refuses-supplier.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Note e. Live-probed 2026-09-28 (A13), four runs: note td12.
-Issue report: [docs/issues/U74-A13-representative-type-change-listed-twice.md](../issues/U74-A13-representative-type-change-listed-twice.md).
+Issue report: [pkp-e2e#717](https://github.com/jardakotesovec/pkp-e2e/issues/717) ([docs/issues/U74-A13-representative-type-change-listed-twice.md](../issues/U74-A13-representative-type-change-listed-twice.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note e: the refused delete answers 200 with
