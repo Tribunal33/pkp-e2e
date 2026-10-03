@@ -497,6 +497,7 @@ Left out of the scenarios above, by reason:
   - the guard for A2 (issue report `docs/issues/U04-A2-orcid-denied-page-raw-placeholder.md`): a contributor who denies access at ORCID lands on the "ORCID Authorization" page and reads "You denied access to your ORCID record.", no raw key.
   - the guard for A11 (issue report `docs/issues/U04-A11-orcid-tabs-named-after-old-plugin.md`): in French (Canada), both ORCID tabs (the site's and the journal's) read "ORCID".
   - the guard for A12 (issue report `docs/issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md`): in French (Canada), the site's ORCID switch and every state of the contributor's ORCID iD field show no untranslated text key (A11's switch too).
+  - the guard for A5's refusal (issue report `docs/issues/U04-A5-assistant-orcid-controls-refused.md`): an Assistant whose assignment has the "Permissions" box presses "Request verification" (the email arrives) and "Delete" (the iD is gone), and one without the box is offered no "Edit".
 - **Nothing new to test**:
   - a Site Administrator on the journal's ORCID tab (Actors row 1; scenario 1's Journal Manager sees the same tab)
   - a Site Administrator or an assigned Section Editor requesting verification (Actors row 5; scenario 4's button)
@@ -557,7 +558,7 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 | [A1](#a1) | "Send Review To ORCID" is offered before the review is complete, and confirms in silence | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | A contributor who presses "Deny" at ORCID lands on a page showing "##orcid.authDenied##" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | "What is ORCID?" beside the ORCID button opens ORCID's sign-in instead of the explanation page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A5](#a5) | An Assistant's contributor-ORCID controls are refused by the server yet report success | 🐞 | user-visible | — |
+| [A5](#a5) | An Assistant's contributor-ORCID controls are refused by the server yet report success | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | A press's or preprint server's ORCID verification failure page says to contact "the journal manager" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | In French, the site's ORCID switch shows raw codes, and both ORCID tabs are named "Plugiciel de profil ORCID" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | In French, the contributor's ORCID iD field shows raw codes for its button, questions and notes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -629,14 +630,16 @@ and carry on. Nothing typed is lost.
 Basis: probe, 2026-10-03. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
-**A5 — Assistant's refused ORCID controls report success** · 🐞 · user-visible.
-An Assistant editing a contributor sees the same ORCID iD field as an editor,
-with "Request verification" and "Delete". The server refuses both: no email
-goes out, and the iD stays. A window titled "Error" says the action
-was not allowed, but the field behind it still reports success: it
-switches to "ORCID Verification has been requested!" or shows the iD
-gone, until the form is closed and opened again. The roles allowed to use these controls omit the
-Assistant, though Assistants may edit every other contributor field.
+**A5 — Assistant's refused ORCID controls report success** · 🐞 · low.
+When an editor lets an Assistant change the publication, the Assistant
+can edit a contributor, and the contributor's "ORCID iD" field offers
+them "Request verification" and "Delete". The server refuses both: a
+window titled "Error" says "You are not authorized to access the
+requested resource.", no email goes out, and the iD stays. The ORCID
+routes leave the Assistant out, though Assistants may edit every other
+contributor field. The field behind the window still reports success:
+it switches to "ORCID Verification has been requested!" or shows the
+iD gone, until the form is closed and opened again.
 Basis: probe, 2026-10-03. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
@@ -1169,7 +1172,7 @@ otherwise admits Assistants (the contributors feature's gate). Live-probed
 2026-08-07 (OJS): both actions returned an authorization refusal
 (HTTP 401) — no email delivered, stored iD unchanged — while the field
 showed the requested state / the iD removed.
-Issue report: [pkp-e2e#749](https://github.com/jardakotesovec/pkp-e2e/issues/749) ([docs/issues/U04-A5-orcid-field-refusal-shown-as-done.md](../issues/U04-A5-orcid-field-refusal-shown-as-done.md)).
+Issue reports: the field's state, [pkp-e2e#749](https://github.com/jardakotesovec/pkp-e2e/issues/749) ([docs/issues/U04-A5-orcid-field-refusal-shown-as-done.md](../issues/U04-A5-orcid-field-refusal-shown-as-done.md)); the server's refusal, [docs/issues/U04-A5-assistant-orcid-controls-refused.md](../issues/U04-A5-assistant-orcid-controls-refused.md).
 
 <a id="fn-a6"></a>
 **f-a6** — Label `orcid.manager.settings.sendMailToAuthorsOnPublication`

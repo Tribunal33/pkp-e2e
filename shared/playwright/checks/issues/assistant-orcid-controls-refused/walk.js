@@ -12,7 +12,9 @@
 //     shared/playwright/checks/issues/assistant-orcid-controls-refused/walk.js
 // WALK_MODE=neighbour runs only the neighbour check for a fix trial: dbarnes (a manager-level
 // editor, allowed before and after any fix) requests verification and deletes the iD on the same
-// contributor; both must keep working, and a refusal must not appear.
+// contributor; both must keep working, and a refusal must not appear. On OPS the preprint's own
+// author then resends the request from their dashboard; on OJS and OMP the Assistant without the
+// "Permissions" box opens the same contributor list, which must still offer no "Edit".
 // Each step records what it saw and never throws, so a fix's state is recorded, not fatal.
 const {forEachApp, launch, signIn, record, note, screen, shot} = require('../../../probe');
 const K = require('./lib.js');
@@ -126,6 +128,19 @@ forEachApp(async (app) => {
             const out = await K.pressAndConfirm(page, field, name, '/orcid/requestAuthorVerification/');
             await shot(page, `a5-${MODE}-author-resend`);
             return {before, ...out};
+        });
+    }
+
+    if (MODE === 'neighbour' && !c.newcomer) {
+        // The Assistant whose "Permissions" box was never ticked (the dataset's own assignment): the
+        // contributor list offers no "Edit", so no screen reaches the ORCID field for them.
+        await step('n-assistant-without-permission', async () => {
+            await signIn(page, c.assistant);
+            await page.goto('about:blank');
+            const list = await K.openContributors(page, app, c);
+            const edits = await page.locator('.listPanel__item').getByRole('button', {name: 'Edit', exact: true}).count();
+            await shot(page, `a5-${MODE}-assistant-without-permission`);
+            return {list, editButtons: edits};
         });
     }
 

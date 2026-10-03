@@ -1,0 +1,28 @@
+--- a/lib/pkp/api/v1/orcid/OrcidController.php
++++ b/lib/pkp/api/v1/orcid/OrcidController.php
+@@ -52,6 +52,7 @@
+                 Role::ROLE_ID_SITE_ADMIN,
+                 Role::ROLE_ID_MANAGER,
+                 Role::ROLE_ID_SUB_EDITOR,
++                Role::ROLE_ID_ASSISTANT,
+                 Role::ROLE_ID_AUTHOR
+             ]),
+         ];
+@@ -158,6 +159,17 @@
+             return true;
+         }
+ 
++        // Check if is an assistant assigned to this submission who may change its metadata
++        $assistantAssignment = StageAssignment::withSubmissionIds([$submissionId])
++            ->withRoleIds([Role::ROLE_ID_ASSISTANT])
++            ->withUserId($user->getId())
++            ->get()
++            ->first(fn (StageAssignment $stageAssignment) => (bool) $stageAssignment->canChangeMetadata);
++
++        if ($assistantAssignment !== null) {
++            return true;
++        }
++
+         // Checks if user is an author on the submission
+         $authorUserGroupIds = UserGroup::withContextIds([$context->getId()])
+             ->withRoleIds([Role::ROLE_ID_AUTHOR])
