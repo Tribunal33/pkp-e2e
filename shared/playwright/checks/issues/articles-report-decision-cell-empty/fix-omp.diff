@@ -1,0 +1,13 @@
+--- a/plugins/reports/monographReport/Report.php
++++ b/plugins/reports/monographReport/Report.php
+@@ -137,7 +137,9 @@
+             Decision::BACK_FROM_COPYEDITING => __('editor.submission.decision.backFromCopyediting'),
+             Decision::CANCEL_REVIEW_ROUND => __('editor.submission.decision.cancelReviewRound'),
+             Decision::CANCEL_INTERNAL_REVIEW_ROUND => __('editor.submission.decision.cancelReviewRound'),
+-            default => ''
++            null => '',
++            // Any other decision type (Decision::types) by its own label, as the REST API names a decision
++            default => Repo::decision()->getDecisionType($decision)?->getLabel(submission: $this->submission) ?? ''
+         };
+     }
+ 

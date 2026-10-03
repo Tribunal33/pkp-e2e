@@ -998,6 +998,7 @@ Left out of the scenarios above, by reason:
   - an editor who saved Profile › "Notifications" while the monthly email was off, and one who saved the site-level profile: each keeps the statistics row as before and gets the email (the guard for A14, once fixed; Settings bullet 1)
   - "Articles Report" of a submission with supporting agencies: its "Supporting Agencies" cell lists them (the guard for OJS1, once fixed; Rule 20d)
   - "Articles Report" of a submission whose title holds "&", an apostrophe and an italic word: the "Title" cell reads as typed (the guard for OJS2, once fixed; Rule 20d)
+  - "Articles Report" after "Accept and Skip Review", "Revert Decline", "New Review Round", a move back a stage and a publication: every "Editor Decision" cell named (the guard for OJS3, once fixed; Rule 20b)
 - **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
@@ -1073,7 +1074,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | Saving Profile › "Notifications" while it hides the statistics row stops that editor's monthly statistics email | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | "Articles Report" leaves "Supporting Agencies" empty for every submission, though the agencies are filled in | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS2](#ojs2) | "Articles Report" writes article titles holding "&", an apostrophe or italics with web codes ("&amp;") | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OJS3](#ojs3) | "Articles Report" leaves the decision cell empty for several decisions | 🐞 | minor | — |
+| [OJS3](#ojs3) | "Articles Report" leaves "Editor Decision" empty for skipped reviews, new rounds, reverted declines and stage moves | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS4](#ojs4) | "Subscriptions Report" downloads nothing and leaves a blank tab when an institutional contact has no country | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | A press's Editorial Activity leaves books declined at Internal Review out of "Submissions Declined" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | A press's "Days to First Editorial Decision" help text says "authors submitting to your journal" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1370,12 +1371,26 @@ title as typed.
 Basis: probe, 2026-10-02. <sup>f-ojs2</sup>
 
 <a id="ojs3"></a>
-**OJS3 — Several decisions have no name in "Articles Report"** · 🐞 · minor.
-An "Editor Decision" cell is empty for "Accept and Skip Review",
-"Revert Decline", "New Review Round" and the decisions that move a
-submission back a stage, while its "Date decided" cell is filled. The
-press's "Monograph Report" names them. Expected: every decision named.
-Basis: probe. <sup>f-ojs3</sup>
+**OJS3 — "Articles Report" leaves "Editor Decision" empty for skipped reviews, new rounds, reverted declines and stage moves** · 🐞 · medium.
+The "Articles Report" that a journal manager or editor downloads from
+Statistics › "Reports" lists each editor's decisions in "Editor
+Decision" / "Date decided" pairs. Several decisions get a date but an
+empty name: "Accept and Skip Review", "Revert Decline", "New Review
+Round", and the moves back a stage ("Move to Review", "Move To
+Copyediting"). Nothing in the file or on the page says a name is
+missing.
+
+New on `main`: publishing an article now records a "Move to Done"
+decision, and unpublishing it a "Return to Workflow", and neither has a
+name in the file either. So every published article's line gains an
+empty cell, and the upgrade to this version adds one to every article
+already published. A press's "Monograph Report" leaves these new
+decisions unnamed in the same way.
+
+Anyone counting decisions from the file (how many submissions were
+accepted, how many went to a second round) gets wrong numbers. Expected:
+every decision named.
+Basis: probe, 2026-10-02. <sup>f-ojs3</sup>
 
 <a id="ojs4"></a>
 **OJS4 — "Subscriptions Report" downloads nothing and leaves a blank tab when an institutional contact has no country** · 🐞 · medium · crash: server.
@@ -2217,6 +2232,7 @@ Live-probed 2026-09-28: the cell empty and the date filled for
 Section Editor), "Revert Decline", "New Review Round" and the two moves
 back a stage; the press's file named them. A cancelled round leaves no
 decision to name (Rule 20b).
+Issue report: [docs/issues/U65-OJS3-articles-report-decision-cell-empty.md](../issues/U65-OJS3-articles-report-decision-cell-empty.md).
 
 <a id="fn-f-ojs4"></a>
 **f-ojs4** — fn n. Live-probed 2026-09-28: td12, the server error in fn n.
