@@ -571,6 +571,12 @@ tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a 40-character password chosen while accepting a role invitation,
+    then the Login page's "Password" box taking all 40 and signing in
+    ([A1](#a1)): the guard the issue report
+    (`docs/issues/U03-A7-password-boxes-keep-32-characters.md`)
+    proposes, once fixed
 - **Rarely met**:
   - a forced change ending the account's other sessions, and flagging alone leaving them signed in (Rule 11): it needs the Site Administrator's "Edit User" (Rule 11a) on an account already signed in elsewhere
 - **Nothing new to test**:
@@ -616,7 +622,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | The password boxes stop accepting input at 32 characters, so longer passwords cannot be typed | 🐞 | user-visible | Jarda 2026-08-25 |
+| [A1](#a1) | The password boxes stop accepting input at 32 characters, so longer passwords cannot be typed | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Keep me logged in" arrives ticked every time the Login form shows, even after a refused sign-in for which it was unticked | 🐞 | minor | Jarda 2026-08-25 |
 | [A3](#a3) | The set-a-new-password page's browser tab shows a raw internal code instead of a title | 🐞 | minor | Jarda 2026-08-25 |
 | [A4](#a4) | "Login As" is still offered mid-impersonation (Users & Roles and the Participants panel); a second use strands the operator, because "Logout as" restores the intermediate user, not their own account | 🐞 | latent | Jarda 2026-08-25 |
@@ -632,14 +638,19 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 ### All apps
 
 <a id="a1"></a>
-**A1 — Password boxes cut off at 32 characters** · 🐞 · user-visible.
-The password fields on the Login, Confirm Access, forced-change and reset
-forms refuse to accept more than 32 typed characters. Nothing stops an
-account from having a longer password: passwords are stored hashed, and other
-entry paths allow longer ones. A user whose password runs past 32 characters
-types it, the box silently keeps only the first 32, and sign-in fails with
-the generic error and no hint why.
-Basis: code inspection + observed on a running site. <sup>[f-a1](#fn-a1)</sup>
+**A1 — Password boxes cut off at 32 characters** · 🐞 · medium.
+The password boxes on the Login page, the reset form, the forced
+"Change Password" form and "Confirm Access" stop taking characters
+after the 32nd, without a word; only the role-invitation wizard takes
+the whole password. A newcomer who chooses a longer password while
+accepting an invitation gets an account they cannot sign in to: the
+Login page sends only the first 32 characters, and the answer is
+"Invalid username/email or password. Please try again." "Forgot your
+password?" is the way back in, since the reset form shortens the new
+password the same way. Everywhere else a longer password is shortened
+both when it is set and when it is entered, so sign-in works, but
+nobody can have a password longer than 32 characters.
+Basis: probe, 2026-10-03. <sup>[f-a1](#fn-a1)</sup>
 
 > **Reviewed — Jarda Kotěšovec, 2026-08-25**: confirmed 🐞. Ruling: raise the
 > maximum accepted password length to at least 64 characters (OWASP Password
@@ -1249,6 +1260,7 @@ imported accounts, or pre-cap registrations). Live-probed: typing 34
 characters leaves 32 in the box and sign-in fails with the generic error
 (OJS and OMP, 2026-07-31); the same cap observed on the reset form
 (2026-07-31) and the Confirm Access box (2026-08-01).
+Issue report: [docs/issues/U03-A7-password-boxes-keep-32-characters.md](../issues/U03-A7-password-boxes-keep-32-characters.md) (with [User profile A7](U03-user-profile.md#a7)).
 
 <a id="fn-a2"></a>
 **f-a2** — `userLogin.tpl`: `<input type="checkbox" name="remember" ...

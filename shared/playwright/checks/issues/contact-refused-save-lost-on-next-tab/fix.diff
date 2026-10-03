@@ -1,0 +1,18 @@
+--- a/lib/pkp/js/controllers/form/AjaxFormHandler.js
++++ b/lib/pkp/js/controllers/form/AjaxFormHandler.js
+@@ -33,6 +33,15 @@
+ 		}
+ 
+ 		this.bind('refreshForm', this.refreshFormHandler_);
++
++		// A form the server sent back with a field in error (FBV's
++		// server-side error labels) shows values it refused to save, but
++		// this new handler starts with no changes tracked. Count them as
++		// changed, so leaving the form asks before they are lost.
++		if ($form.find('label.error, span.error').
++				not('.pkp_form_hidden').length) {
++			$form.trigger('formChange');
++		}
+ 	};
+ 	$.pkp.classes.Helper.inherits(
+ 			$.pkp.controllers.form.AjaxFormHandler,

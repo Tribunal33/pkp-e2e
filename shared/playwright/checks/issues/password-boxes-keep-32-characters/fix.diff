@@ -1,0 +1,124 @@
+--- a/lib/pkp/templates/frontend/pages/userLogin.tpl
++++ b/lib/pkp/templates/frontend/pages/userLogin.tpl
+@@ -65,7 +65,7 @@
+ 							{translate key="common.required"}
+ 						</span>
+ 					</span>
+-					<input type="password" name="password" id="password" value="{$password|default:""|escape}" password="true" maxlength="32" required aria-required="true" autocomplete="current-password">
++					<input type="password" name="password" id="password" value="{$password|default:""|escape}" password="true" required aria-required="true" autocomplete="current-password">
+ 					<a href="{url page="login" op="lostPassword"}">
+ 						{translate key="user.login.forgotPassword"}
+ 					</a>
+--- a/lib/pkp/templates/user/confirmPassword.tpl
++++ b/lib/pkp/templates/user/confirmPassword.tpl
+@@ -32,7 +32,7 @@
+ 		{fbvFormArea id="confirmPassword"}
+ 		    {fbvFormSection }
+ 			    {fieldLabel translate=true for=password key="user.password"}
+-			    {fbvElement type="text" autocomplete="off" required=true password=true id="password" maxlength="32" size=$fbvStyles.size.MEDIUM}
++			    {fbvElement type="text" autocomplete="off" required=true password=true id="password" size=$fbvStyles.size.MEDIUM}
+ 		    {/fbvFormSection}
+ 
+ 			<div>
+--- a/lib/pkp/templates/user/loginChangePassword.tpl
++++ b/lib/pkp/templates/user/loginChangePassword.tpl
+@@ -38,14 +38,14 @@
+ 					{fbvElement type="text" required=true id="username" value=$username maxlength="32" size=$fbvStyles.size.MEDIUM}
+ 				{/fbvFormSection}
+ 				{fbvFormSection label="user.profile.oldPassword" for="oldPassword"}
+-					{fbvElement type="text" required=true password=true id="oldPassword" value=$oldPassword maxlength="32" size=$fbvStyles.size.MEDIUM}
++					{fbvElement type="text" required=true password=true id="oldPassword" value=$oldPassword size=$fbvStyles.size.MEDIUM}
+ 				{/fbvFormSection}
+ 				{fbvFormSection label="user.profile.newPassword" for="password"}
+-					{fbvElement type="text" required=true password=true id="password" value=$password maxlength="32" size=$fbvStyles.size.MEDIUM}
++					{fbvElement type="text" required=true password=true id="password" value=$password size=$fbvStyles.size.MEDIUM}
+ 					{fieldLabel translate=true for=password key=$passwordLengthRestrictionLocaleKey length=$minPasswordLength}
+ 				{/fbvFormSection}
+ 				{fbvFormSection label="user.profile.repeatNewPassword" for="password2"}
+-					{fbvElement type="text" required=true password=true id="password2" value=$password2|default:""|escape maxlength="32" size=$fbvStyles.size.MEDIUM}
++					{fbvElement type="text" required=true password=true id="password2" value=$password2|default:""|escape size=$fbvStyles.size.MEDIUM}
+ 				{/fbvFormSection}
+ 
+ 				<p>
+--- a/lib/pkp/templates/user/userPasswordReset.tpl
++++ b/lib/pkp/templates/user/userPasswordReset.tpl
+@@ -35,11 +35,11 @@
+ 
+ 			{fbvFormArea id="loginFields"}
+ 				{fbvFormSection label="user.profile.newPassword" for="password"}
+-					{fbvElement type="text" required=true password=true id="password" value=$password maxlength="32" size=$fbvStyles.size.MEDIUM}
++					{fbvElement type="text" required=true password=true id="password" value=$password size=$fbvStyles.size.MEDIUM}
+ 					{fieldLabel translate=true for=password key=$passwordLengthRestrictionLocaleKey length=$minPasswordLength}
+ 				{/fbvFormSection}
+ 				{fbvFormSection label="user.profile.repeatNewPassword" for="password2"}
+-					{fbvElement type="text" required=true password=true id="password2" value=$password2|default:""|escape maxlength="32" size=$fbvStyles.size.MEDIUM}
++					{fbvElement type="text" required=true password=true id="password2" value=$password2|default:""|escape size=$fbvStyles.size.MEDIUM}
+ 				{/fbvFormSection}
+ 
+ 				{fbvElement type="hidden" id="username" value=$username}
+--- a/lib/pkp/templates/user/changePassword.tpl
++++ b/lib/pkp/templates/user/changePassword.tpl
+@@ -25,12 +25,12 @@
+ 
+ 	{fbvFormArea id="changePasswordFormArea"}
+ 		{fbvFormSection label="user.profile.oldPassword"}
+-			{fbvElement type="text" password="true" id="oldPassword" maxLength="32" size=$fbvStyles.size.MEDIUM}
++			{fbvElement type="text" password="true" id="oldPassword" size=$fbvStyles.size.MEDIUM}
+ 		{/fbvFormSection}
+ 		{fbvFormSection label="user.profile.newPassword"}
+ 			{capture assign="passwordLengthRestriction"}{translate key="user.register.form.passwordLengthRestriction" length=$minPasswordLength}{/capture}
+-			{fbvElement type="text" password="true" id="password" label=$passwordLengthRestriction subLabelTranslate=false maxLength="32" size=$fbvStyles.size.MEDIUM}
+-			{fbvElement type="text" password="true" id="password2" maxLength="32" label="user.profile.repeatNewPassword" size=$fbvStyles.size.MEDIUM}
++			{fbvElement type="text" password="true" id="password" label=$passwordLengthRestriction subLabelTranslate=false size=$fbvStyles.size.MEDIUM}
++			{fbvElement type="text" password="true" id="password2" label="user.profile.repeatNewPassword" size=$fbvStyles.size.MEDIUM}
+ 		{/fbvFormSection}
+ 
+ 		<p>
+--- a/lib/pkp/templates/frontend/components/registrationForm.tpl
++++ b/lib/pkp/templates/frontend/components/registrationForm.tpl
+@@ -108,7 +108,7 @@
+ 						{translate key="common.required"}
+ 					</span>
+ 				</span>
+-				<input type="password" name="password" id="password" password="true" maxlength="32" required aria-required="true" autocomplete="new-password">
++				<input type="password" name="password" id="password" password="true" required aria-required="true" autocomplete="new-password">
+ 			</label>
+ 		</div>
+ 		<div class="password">
+@@ -120,7 +120,7 @@
+ 						{translate key="common.required"}
+ 					</span>
+ 				</span>
+-				<input type="password" name="password2" id="password2" password="true" maxlength="32" required aria-required="true" autocomplete="new-password">
++				<input type="password" name="password2" id="password2" password="true" required aria-required="true" autocomplete="new-password">
+ 			</label>
+ 		</div>
+ 	</div>
+--- a/lib/pkp/templates/common/userDetails.tpl
++++ b/lib/pkp/templates/common/userDetails.tpl
+@@ -58,8 +58,8 @@
+ 		{if $userId}{capture assign="passwordInstruction"}{translate key="user.profile.leavePasswordBlank"} {translate key="user.register.form.passwordLengthRestriction" length=$minPasswordLength}{/capture}{/if}
+ 		{fbvFormArea id="passwordSection" title="user.password"}
+ 			{fbvFormSection for="password" description=$passwordInstruction translate=false}
+-				{fbvElement type="text" label="user.password" required=$passwordRequired name="password" id="password" password="true" value=$password maxlength="32" inline=true size=$fbvStyles.size.MEDIUM}
+-				{fbvElement type="text" label="user.repeatPassword" required=$passwordRequired name="password2" id="password2" password="true" value=$password2 maxlength="32" inline=true size=$fbvStyles.size.MEDIUM}
++				{fbvElement type="text" label="user.password" required=$passwordRequired name="password" id="password" password="true" value=$password inline=true size=$fbvStyles.size.MEDIUM}
++				{fbvElement type="text" label="user.repeatPassword" required=$passwordRequired name="password2" id="password2" password="true" value=$password2 inline=true size=$fbvStyles.size.MEDIUM}
+ 			{/fbvFormSection}
+ 
+ 			{if !$userId}
+--- a/lib/pkp/templates/install/install.tpl
++++ b/lib/pkp/templates/install/install.tpl
+@@ -86,10 +86,10 @@
+ 					{fbvElement type="text" id="adminUsername" value=$adminUsername maxlength="32" size=$fbvStyles.size.MEDIUM}
+ 				{/fbvFormSection}
+ 				{fbvFormSection label="user.password"}
+-					{fbvElement type="text" password=true id="adminPassword" value=$adminPassword maxlength="32" size=$fbvStyles.size.MEDIUM}
++					{fbvElement type="text" password=true id="adminPassword" value=$adminPassword size=$fbvStyles.size.MEDIUM}
+ 				{/fbvFormSection}
+ 				{fbvFormSection label="user.repeatPassword"}
+-					{fbvElement type="text" password=true id="adminPassword2" value=$adminPassword2 maxlength="32" size=$fbvStyles.size.MEDIUM}
++					{fbvElement type="text" password=true id="adminPassword2" value=$adminPassword2 size=$fbvStyles.size.MEDIUM}
+ 				{/fbvFormSection}
+ 				{fbvFormSection label="user.email"}
+ 					{fbvElement type="text" id="adminEmail" value=$adminEmail maxlength="90" size=$fbvStyles.size.MEDIUM}

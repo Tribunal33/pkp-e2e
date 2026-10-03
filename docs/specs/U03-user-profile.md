@@ -982,6 +982,17 @@ Left out of the scenarios above, by reason:
     "The data on this form has changed. Do you wish to continue without
     saving?", "Cancel" keeping the text ([A19](#a19); Rule 2c): the
     guard the issue report proposes, once fixed
+  - after a refused Contact "Save" (an address already in use), another
+    tab pressed, asking "The data on this form has changed. Do you wish
+    to continue without saving?", "Cancel" keeping the typed values
+    ([A17](#a17); Rule 2d): the guard the issue report
+    (`docs/issues/U03-A17-contact-refused-save-lost-on-next-tab.md`)
+    proposes, once fixed
+  - a 40-character password chosen while accepting a role invitation
+    then signing in on the Login page, and the Password tab's boxes
+    taking all 40 characters ([A7](#a7)): the guard the issue report
+    (`docs/issues/U03-A7-password-boxes-keep-32-characters.md`)
+    proposes, once fixed
 - **Nothing new to test**:
   - a tab named in the site-level address kept on the forward to a one-journal user's profile (Rule 3; scenario 2 opens the site-level address with no tab named, and scenario 1 reads a tab named in a journal's address)
   - no submission or activity-log entry written by this page (*Side effects*): the log is a submission's, and reading its silence needs a submission and a positive control for nothing this page does
@@ -991,13 +1002,11 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A2 (an oversized .gif refused and the existing image wiped; Rule 9a)
   - A4 (a journal closed to registrations leaving an empty section and listed name-only; Rules 8a and 8c)
-  - A7 (the password boxes stopping at 32 characters; *Fields & validation*)
   - A10 (a site-level request's message signing off "Array"; *Side effects*)
   - A11 (the stale error notice beside the saved message; Rule 10b; scenario 8 marks it)
   - A12 (the Password tab's "Cancel" doing nothing; Rule 10c)
   - A14 (the site-level privacy link opening "404 Not Found"; Rule 14)
   - A15 (the refused homepage's sentence outliving the corrected save; Rule 9c; scenario 7 marks it)
-  - A17 (the values typed before a refused Contact save dropped on the next tab, unasked; Rule 2d; scenario 3 marks it)
   - A18 ("confirm" and "reject" landing an account with roles in more than one journal on the site-level profile; Rules 6c and 6d)
   - A19 (text typed only into "Signature", "Mailing Address" or "Bio Statement" lost unasked on the next tab or a reload; Rules 2c and 2e)
   - OPS2 (the "Change Email Address Invitation" template missing from a preprint server's list; *Side effects*)
@@ -1040,13 +1049,13 @@ unless its Basis line says otherwise.
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | A .gif larger than 150 × 150 is refused, and the account's existing profile image is wiped anyway | 🐞 | latent | — |
 | [A4](#a4) | A journal closed to registrations leaves an empty section on its own Roles tab and is listed name-only, with no boxes, elsewhere | 🐞 | minor | — |
-| [A7](#a7) | The Password tab's three boxes stop accepting input at 32 characters (the *Login & sessions* cap) | 🐞 | user-visible | — |
+| [A7](#a7) | The Password tab's three boxes stop accepting input at 32 characters (the *Login & sessions* cap) | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A10](#a10) | The email-change message of a site-level request signs off "Kind regards, Array" | 🐞 | latent | — |
 | [A11](#a11) | After a successful password change the previous attempt's error notice stays on screen beside the saved message | 🐞 | minor | — |
 | [A12](#a12) | The Password tab's "Cancel" does nothing | 🐞 | minor | — |
 | [A14](#a14) | On the site-level profile every tab's "privacy statement" link opens a "404 Not Found" page | 🐞 | minor | — |
 | [A15](#a15) | "Please enter a valid URL." stays under "Homepage URL" after the corrected address is saved, beside the saved message | 🐞 | minor | — |
-| [A17](#a17) | After a Contact save the server refused, the typed values are still on screen, but pressing another tab drops them at once, with no question asked | 🐞 | user-visible | — |
+| [A17](#a17) | After a refused "Save" on the Profile page's Contact tab, another tab drops the typed values unasked | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A18](#a18) | "confirm" and "reject" land an account with roles in more than one journal on the site-level profile, outside the journal where it asked for the email change | 🐞 | minor | @jarda.kotesovec 2026-09-25 · risk accepted |
 | [A19](#a19) | Text typed only into "Signature", "Mailing Address" or "Bio Statement" is lost with no question when another tab is pressed or the page is reloaded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS2](#ops2) | A preprint server sends the email-change message but its emails list has no "Change Email Address Invitation" row to edit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1114,13 +1123,16 @@ author from their own submissions needs at least a warning.
 Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
-**A7 — Password boxes cut off at 32 characters** · 🐞 · user-visible.
-The same defect as [Login & sessions A1](U01-login-and-sessions.md#a1), which
-holds the full entry and the maintainer's ruling (raise the cap to at least
-64). The profile's "Current password", "New password" and "Repeat new
-password" boxes all carry the cap, so a longer password cannot be typed or
-set here.
-Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-a7](#fn-a7)</sup>
+**A7 — Password boxes cut off at 32 characters** · 🐞 · medium.
+The same defect as [Login & sessions A1](U01-login-and-sessions.md#a1),
+reported with it. The profile's "Current password", "New password" and
+"Repeat new password" boxes stop taking characters after the 32nd,
+without a word, like every password box but the role-invitation
+wizard's. A longer password is shortened here and again at sign-in, so
+the two match, but nobody can have a password longer than 32
+characters, and nobody is told that the one they chose is not the one
+they have.
+Basis: probe, 2026-10-03. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
 **A8 — The confirmation goes to the old address** · ❓ · user-visible.
@@ -1228,16 +1240,25 @@ flow itself belongs to [ORCID integration](U04-orcid-integration.md).
 Basis: probe, 2026-09-04. <sup>[f-a16](#fn-a16)</sup>
 
 <a id="a17"></a>
-**A17 — A refused Contact save loses the typed values on the next tab, unasked** · 🐞 · user-visible.
-When the server refuses a Contact save (for example with "The selected
-email address is already in use by another user."), the tab comes back with
-the typed values still in every box. Pressing another tab then opens it at
-once and those values are gone. The question the same change gets when no
-save has been tried, "The data on this form has changed. Do you wish to
-continue without saving?", is not asked here (Rule 2d), although it exists for exactly this
-case: the tab shows values that were never saved, and the re-rendered tab
-has simply stopped watching them. A defect, not a choice.
-Basis: probe, 2026-09-04 (claim check). <sup>[f-a17](#fn-a17)</sup>
+**A17 — After a refused "Save" on the Profile page's Contact tab, another tab drops the typed values unasked** · 🐞 · low.
+On the Profile page's "Contact" tab, pressing another tab with unsaved
+changes asks "The data on this form has changed. Do you wish to
+continue without saving?". After a "Save" the server refuses, for
+example with "The selected email address is already in use by another
+user.", the question no longer comes. The tab still shows everything
+the user typed, but pressing another tab opens it at once and discards
+those values.
+
+Nothing saved is lost, but every box changed on the tab (phone,
+affiliation, signature, mailing address) has to be typed again.
+
+On "Contact" the refusal a user meets is an address already in use: a
+malformed address or an empty required box is stopped in the browser
+before anything is sent, and that path keeps the question. The same
+code serves every refused save on the Profile page's other tabs, and
+every older-style form that the server sends back after a refusal, in a
+tab or in a window.
+Basis: probe, 2026-10-03. <sup>[f-a17](#fn-a17)</sup>
 
 <a id="a18"></a>
 **A18 — Confirming or rejecting an email change takes a multi-journal account out of its journal** · 🐞 · minor.
@@ -2257,6 +2278,7 @@ records the cap on the Login, Confirm Access, forced-change and reset forms
 and the ruling to raise it; this template carries the same attribute.
 Live-probed 2026-09-03, all three apps: 40 characters typed into each of the
 three boxes leave 32. Live-probed 2026-09-04 (claim check), all three apps: holds.
+Issue report: [docs/issues/U03-A7-password-boxes-keep-32-characters.md](../issues/U03-A7-password-boxes-keep-32-characters.md).
 
 <a id="fn-a8"></a>
 **f-a8** — `ChangeProfileEmailInvite::getMailable()` addresses
@@ -2382,6 +2404,7 @@ changed. Do you wish to continue without saving?" (Cancel kept the tab, OK
 opened the other one); a phone typed into the re-rendered tab after the
 server refusal raised it as well, and a tab whose last save succeeded asked
 nothing.
+Issue report: [docs/issues/U03-A17-contact-refused-save-lost-on-next-tab.md](../issues/U03-A17-contact-refused-save-lost-on-next-tab.md).
 
 <a id="fn-a18"></a>
 **f-a18** — pkp/pkp-lib#13181 ("Invitation accept/decline URLs name the
