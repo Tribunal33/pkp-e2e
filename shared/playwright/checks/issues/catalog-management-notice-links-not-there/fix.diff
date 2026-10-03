@@ -1,0 +1,46 @@
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigAuthorOMP.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigAuthorOMP.js
+@@ -154,23 +154,6 @@
+ 			return items;
+ 		},
+ 	},
+-	[pkp.const.WORKFLOW_STAGE_ID_PRODUCTION]: {
+-		getPrimaryItems: ({submission, selectedStageId}) => {
+-			const items = [];
+-
+-			items.push({
+-				component: 'WorkflowNotificationDisplay',
+-				props: {submission: submission, selectedStageId},
+-			});
+-
+-			items.push({
+-				component: 'DiscussionManager',
+-				props: {submission, submissionStageId: selectedStageId},
+-			});
+-
+-			return items;
+-		},
+-	},
+ };
+ 
+ export const PublicationConfig = {
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -1313,7 +1313,7 @@
+ msgstr "Awaiting approval."
+ 
+ msgid "notification.type.formatNeedsApprovedSubmission"
+-msgstr "The monograph will not be listed in the catalog until it has been published. To add this book to the catalog, click on the Publication tab."
++msgstr "The monograph will not be listed in the catalog until it has been published. To add this book to the catalog, visit Publication in the side menu."
+ 
+ msgid "notification.type.configurePaymentMethod.title"
+ msgstr "No payment method configured."
+@@ -1325,7 +1325,7 @@
+ msgstr "Catalog Management"
+ 
+ msgid "notification.type.visitCatalog"
+-msgstr "The monograph has been approved. Please visit Marketing and Publication to manage its catalog details, using the links just above."
++msgstr "The monograph has been approved. Please visit Marketing and Publication in the side menu to manage its catalog details."
+ 
+ msgid "user.authorization.invalidReviewAssignment"
+ msgstr "You have been denied access because you do not seem to be a valid reviewer for this monograph."
