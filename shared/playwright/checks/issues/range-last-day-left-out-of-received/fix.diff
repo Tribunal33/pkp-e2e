@@ -1,0 +1,91 @@
+--- a/lib/pkp/classes/services/queryBuilders/PKPStatsEditorialQueryBuilder.php
++++ b/lib/pkp/classes/services/queryBuilders/PKPStatsEditorialQueryBuilder.php
+@@ -84,6 +84,15 @@
+     }
+ 
+     /**
++     * The day after the range's last day (YYYY-MM-DD), so that a date and
++     * time column compared with `<` includes every moment of dateEnd
++     */
++    protected function getDateAfterEnd(): string
++    {
++        return (new \DateTime($this->dateEnd))->add(new \DateInterval('P1D'))->format('Y-m-d');
++    }
++
++    /**
+      * Set the date to get activity after
+      *
+      * @param string $dateStart YYYY-MM-DD
+@@ -108,7 +117,7 @@
+             $q->where('s.date_submitted', '>=', $this->dateStart);
+         }
+         if ($this->dateEnd) {
+-            $q->where('s.date_submitted', '<=', $this->dateEnd);
++            $q->where('s.date_submitted', '<', $this->getDateAfterEnd());
+         }
+ 
+         return $q->getCountForPagination();
+@@ -138,20 +147,14 @@
+                 $q->where('s.date_submitted', '>=', $this->dateStart);
+             }
+             if ($this->dateEnd) {
+-                // Include date time values up to the end of the day
+-                $dateTime = new \DateTime($this->dateEnd);
+-                $dateTime->add(new \DateInterval('P1D'));
+-                $q->where('s.date_submitted', '<', $dateTime->format('Y-m-d'));
++                $q->where('s.date_submitted', '<', $this->getDateAfterEnd());
+             }
+         } else {
+             if ($this->dateStart) {
+                 $q->where('ed.date_decided', '>=', $this->dateStart);
+             }
+             if ($this->dateEnd) {
+-                // Include date time values up to the end of the day
+-                $dateTime = new \DateTime($this->dateEnd);
+-                $dateTime->add(new \DateInterval('P1D'));
+-                $q->where('ed.date_decided', '<', $dateTime->format('Y-m-d'));
++                $q->where('ed.date_decided', '<', $this->getDateAfterEnd());
+             }
+         }
+ 
+@@ -426,10 +429,7 @@
+             $q->where('s.date_submitted', '>=', $this->dateStart);
+         }
+         if ($this->dateEnd) {
+-            // Include date time values up to the end of the day
+-            $dateTime = new \DateTime($this->dateEnd);
+-            $dateTime->add(new \DateInterval('P1D'));
+-            $q->where('s.date_submitted', '<=', $dateTime->format('Y-m-d'));
++            $q->where('s.date_submitted', '<', $this->getDateAfterEnd());
+         }
+ 
+         return $q;
+@@ -446,7 +446,7 @@
+         return $this->_getBaseQuery()
+             ->where(DB::raw('CAST(s.date_submitted AS DATE)'), '>', DB::raw('pi.date_published'))
+             ->when($this->dateStart, fn (Builder $q) => $q->where('s.date_submitted', '>=', $this->dateStart))
+-            ->when($this->dateEnd, fn (Builder $q) => $q->where('s.date_submitted', '<=', $this->dateEnd))
++            ->when($this->dateEnd, fn (Builder $q) => $q->where('s.date_submitted', '<', $this->getDateAfterEnd()))
+             ->getCountForPagination();
+     }
+ 
+@@ -461,7 +461,7 @@
+         return $this->_getBaseQuery()
+             ->where('s.submission_progress', '<>', '')
+             ->when($this->dateStart, fn (Builder $q) => $q->where('s.date_submitted', '>=', $this->dateStart))
+-            ->when($this->dateEnd, fn (Builder $q) => $q->where('s.date_submitted', '<=', $this->dateEnd))
++            ->when($this->dateEnd, fn (Builder $q) => $q->where('s.date_submitted', '<', $this->getDateAfterEnd()))
+             ->getCountForPagination();
+     }
+ 
+--- a/lib/pkp/classes/task/StatisticsReport.php
++++ b/lib/pkp/classes/task/StatisticsReport.php
+@@ -49,7 +49,7 @@
+     {
+         $contextDao = Application::get()->getContextDAO();
+         $dateStart = new DateTimeImmutable('first day of previous month midnight');
+-        $dateEnd = new DateTimeImmutable('first day of this month midnight');
++        $dateEnd = new DateTimeImmutable('last day of previous month midnight');
+ 
+         $jobs = [];
+         for ($contexts = $contextDao->getAll(true); $context = $contexts->next();) {

@@ -994,6 +994,7 @@ Left out of the scenarios above, by reason:
   - a context whose every count is dated this year: the "Total" column of "Editorial Activity" holds no "/year" (the guard for A2, once fixed; Rule 8b)
   - Statistics › "Users" of a journal: no "Site Administrator" row (the guard for A6, once fixed; Rule 14)
   - a report address with an unknown, empty or missing report name: lands on the "Reports" page (the guard for A8, once fixed; Rule 19)
+  - a Custom Range ending on the day submissions arrived: "Submissions Received" counts them and the rates are not "0%" (the guard for A1, once fixed; Rules 7a, 9)
 - **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
@@ -1059,7 +1060,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | Submissions received on the date range's last day are left out of "Submissions Received" (and of "Imported Submissions") | 🐞 | minor | — |
+| [A1](#a1) | "Editorial Activity" leaves submissions received on the date range's last day out of "Submissions Received" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | Editorial Activity shows "(0/year)" after each total that has nothing dated before this calendar year | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | The "Trends" information icons cannot be read from the keyboard | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Statistics › "Users" lists a "Site Administrator" row that always reads 0 | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1090,18 +1091,24 @@ unless an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — The range's last day is missing from "Submissions Received"** · 🐞 · minor.
-A submission received on the last day of the chosen range (yesterday,
-under "Last 90 days") is left out of the middle column's "Submissions
-Received", and an imported one received that day out of "Imported
-Submissions" and "Other Submissions", while decisions and publications
-on that same day count. So a range ending on the day its submissions
-arrived reads "Submissions Received" 0 and every rate "0%", although it
-counts their declines. The monthly email counts that day: a submission
-received on 31 August is in the email's "New submissions this month"
-for August but not in "Submissions Received" for the Custom Range from
-1 to 31 August. Expected: every row counts the range's last day.
-Basis: probe. <sup>f-a1</sup>
+**A1 — "Editorial Activity" leaves submissions received on the date range's last day out of "Submissions Received"** · 🐞 · medium.
+On Statistics › "Editorial Activity", the date-range column leaves out
+every submission received on the range's last day: "Submissions
+Received", "Imported Submissions" and "Other Submissions" do not count
+them, while the decisions and publications of that same day are counted.
+"Last 90 days" and "Year to date" end yesterday, so they always miss
+yesterday's submissions; "Last year" misses 31 December, and a Custom
+Range for a month misses its last day.
+
+Nothing on the page says a day is missing. When every submission in a
+range arrived on its last day (a one-day range, for example), the page
+reads "Submissions Received" 0 and every rate "0%", yet still counts the
+declines of those same submissions. The monthly editorial email counts
+the last day, so its "New submissions this month" and a Custom Range
+over the same month disagree. The fix is a few lines in one shared pkp-
+lib class and one line in the monthly email's task. Expected: every row
+counts the range's last day.
+Basis: probe, 2026-10-02. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — Editorial Activity shows "(0/year)" after each total that has nothing dated before this calendar year** · 🐞 · low.
@@ -2033,6 +2040,7 @@ seed's arrival day read "Imported Submissions" and "Other Submissions"
 arrival day read "Submissions Received" 0, "Submissions Declined" 1 and
 every rate "0%"; the August email counted a submission of 31 August
 that the page's Custom Range 2026-08-01 — 2026-08-31 left out.
+Issue report: [docs/issues/U65-A1-range-last-day-left-out-of-received.md](../issues/U65-A1-range-last-day-left-out-of-received.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — fn g: with the first and last year both this year, `years` is
