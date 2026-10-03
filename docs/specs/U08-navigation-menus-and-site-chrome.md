@@ -2844,7 +2844,7 @@ Issue report: [docs/issues/U08-A15-navigation-table-keeps-old-item-titles.md](..
 **f-a16** — `manager.navigationMenu.noAssignedItems` and
 `…noUnassignedItems` (note k). Live-probed 2026-09-23 (note j), all
 three apps, on a scratch journal after every item was removed.
-Issue report: [docs/issues/U08-A16-menu-window-without-items-says-all-assigned.md](../issues/U08-A16-menu-window-without-items-says-all-assigned.md).
+Issue report: [docs/issues/U08-A16-menu-window-without-items-says-all-assigned.md](../issues/U08-A16-menu-window-without-items-says-all-assigned.md), filed as [pkp-e2e#645](https://github.com/jardakotesovec/pkp-e2e/issues/645).
 
 <a id="fn-f-a17"></a>
 **f-a17** — `useFormChanged()`'s `beforeunload` prompt (note j).
