@@ -1,0 +1,11 @@
+--- a/lib/ui-library/src/managers/ContributorRoleManager/ContributorRoleDeleteDialogBody.vue
++++ b/lib/ui-library/src/managers/ContributorRoleManager/ContributorRoleDeleteDialogBody.vue
+@@ -20,7 +20,7 @@
+ 				is-primary
+ 				@click="confirmInput"
+ 			>
+-				{{ t('common.confirmDelete') }}
++				{{ t('manager.contributorRoles.alert.delete.confirm') }}
+ 			</PkpButton>
+ 			<PkpButton :is-warnable="true" @click="closeModal">
+ 				{{ t('common.cancel') }}
