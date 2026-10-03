@@ -1139,7 +1139,7 @@ branch requires ORCID's consent screen returning `error=access_denied` with
 a valid email token — orcid.org is unreachable through the dead-port
 `[proxy]` (and no real account backs the dummy credentials), so the basis
 stays code.
-Issue report: [docs/issues/U04-A2-orcid-denied-page-raw-placeholder.md](../issues/U04-A2-orcid-denied-page-raw-placeholder.md).
+Issue report: [pkp-e2e#737](https://github.com/jardakotesovec/pkp-e2e/issues/737) ([docs/issues/U04-A2-orcid-denied-page-raw-placeholder.md](../issues/U04-A2-orcid-denied-page-raw-placeholder.md)).
 
 <a id="fn-a3"></a>
 **f-a3** — Note i: `AuthorizeUserData` case `register` only fills form
@@ -1189,7 +1189,7 @@ override still builds its own list without it, so the OPS absence stands.
 landing (`orcid.failure.contact`, note f) — no per-app recast. Live-probed
 2026-08-07: the OMP and OPS `/orcid/verify` pages both close with the
 sentence verbatim, "journal manager" unchanged.
-Issue report: [docs/issues/U04-A8-orcid-failure-page-says-journal-manager.md](../issues/U04-A8-orcid-failure-page-says-journal-manager.md).
+Issue report: [pkp-e2e#738](https://github.com/jardakotesovec/pkp-e2e/issues/738) ([docs/issues/U04-A8-orcid-failure-page-says-journal-manager.md](../issues/U04-A8-orcid-failure-page-says-journal-manager.md)).
 
 <a id="fn-a9"></a>
 **f-a9** — Note b's gate: the tab renders only while
