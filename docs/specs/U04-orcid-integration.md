@@ -492,6 +492,8 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A4 (issue report `docs/issues/U04-A4-what-is-orcid-link-opens-sign-in.md`): Scenario 2 presses "What is ORCID?" on the profile Identity tab and the registration page and expects the "What is ORCID?" page.
 - **Nothing new to test**:
   - a Site Administrator on the journal's ORCID tab (Actors row 1; scenario 1's Journal Manager sees the same tab)
   - a Site Administrator or an assigned Section Editor requesting verification (Actors row 5; scenario 4's button)
@@ -551,7 +553,7 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Send Review To ORCID" is offered before the review is complete, and confirms in silence | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | The ORCID-denied landing shows a raw placeholder instead of its message | 🐞 | user-visible | — |
-| [A4](#a4) | "What is ORCID?" beside the connect button opens the sign-in popup, not the page | 🐞 | user-visible | — |
+| [A4](#a4) | "What is ORCID?" beside the ORCID button opens ORCID's sign-in instead of the explanation page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | An Assistant's contributor-ORCID controls are refused by the server yet report success | 🐞 | user-visible | — |
 | [A8](#a8) | The verification-failure page says "journal manager" on presses and preprint servers | 🐞 | minor | — |
 | [A11](#a11) | In French, the site's ORCID switch shows raw codes, and both ORCID tabs are named "Plugiciel de profil ORCID" | 🐞 | minor | — |
@@ -605,12 +607,16 @@ choice.
 Basis: code (the OAuth leg is unreachable from the test install). <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
-**A4 — The About link opens the sign-in popup** · 🐞 · user-visible.
-On the profile Identity tab and the registration page, the "What is ORCID?"
-link beside the connect button opens the ORCID sign-in popup, the same as
-the button, instead of the What-is-ORCID page it is labeled with. The page
-itself works when reached by URL (Rule 10).
-Basis: code; live confirmation pending. <sup>[f-a4](#fn-a4)</sup>
+**A4 — "What is ORCID?" beside the ORCID button opens ORCID's sign-in instead of the explanation page** · 🐞 · low.
+On a journal, press or preprint server with ORCID turned on, a user who
+presses "What is ORCID?" beside the "Create or Connect your ORCID iD"
+button gets ORCID's sign-in window, the same as the button, instead of
+the site's "What is ORCID?" page. This happens on the profile's Identity
+tab and at the top of the registration form. The window opens over the
+page: the profile, or the registration form with whatever the visitor
+has typed, stays as it was behind it, and the user can close the window
+and carry on. Nothing typed is lost.
+Basis: probe, 2026-10-03. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
 **A5 — Assistant's refused ORCID controls report success** · 🐞 · user-visible.
@@ -1136,6 +1142,7 @@ returns false, cancelling navigation. Affects profile and register variants
 (both render the same capture). Live-probed 2026-08-07 (OJS Identity tab):
 the click opened the sign-in popup and never navigated; `/orcid/about`
 typed directly renders the page.
+Issue report: [docs/issues/U04-A4-what-is-orcid-link-opens-sign-in.md](../issues/U04-A4-what-is-orcid-link-opens-sign-in.md).
 
 <a id="fn-a5"></a>
 **f-a5** — Note e: API-029's role middleware (site admin / manager /

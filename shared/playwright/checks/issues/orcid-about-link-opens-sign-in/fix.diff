@@ -1,0 +1,11 @@
+--- a/lib/pkp/templates/form/orcidProfile.tpl
++++ b/lib/pkp/templates/form/orcidProfile.tpl
+@@ -23,7 +23,7 @@
+         </button>
+     {/if}
+ 
+-    <a href="{url router="page" page="orcid" op="about"}" onclick="return openORCID();">{translate key='orcid.about.title'}</a>
++    <a href="{url router="page" page="orcid" op="about"}" target="_blank">{translate key='orcid.about.title'}</a>
+ {/capture}
+ 
+ 
