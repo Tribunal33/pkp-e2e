@@ -3185,7 +3185,7 @@ mail with an empty body on both apps; a both-empty submit showed "This
 field is
 required." under Subject only — the body's error node never renders
 (note l).
-Issue report: [docs/issues/U27-A13-email-reviewer-sends-empty-body.md](../issues/U27-A13-email-reviewer-sends-empty-body.md).
+Issue report: [pkp-e2e#728](https://github.com/jardakotesovec/pkp-e2e/issues/728) ([docs/issues/U27-A13-email-reviewer-sends-empty-body.md](../issues/U27-A13-email-reviewer-sends-empty-body.md)).
 
 <a id="fn-a14"></a>
 **f-a14** — Disproof live-probed 2026-08-02 (claim check; OJS, the sequence
