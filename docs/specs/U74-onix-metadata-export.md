@@ -2269,7 +2269,7 @@ the market's empty `Territory` is left out, which leaves `Market`
 without its required child. Live-probed 2026-09-28 (A7), three runs:
 notes td15, td16 and td23; the same book exported before the empty
 entry was added and after it was deleted.
-Issue report: [docs/issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md](../issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md).
+Issue report: [pkp-e2e#701](https://github.com/jardakotesovec/pkp-e2e/issues/701) ([docs/issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md](../issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Notes g and l: `MarketForm` checks presence only, though its
@@ -2278,7 +2278,7 @@ decimal, so the Native XML file fails its schema check with a non-number,
 as it does for the page counts of *Publication formats & proof terms*,
 its A17, while `Date` is plain text to the schema. Live-probed
 2026-09-28 (A8), two runs: notes td16, td22 and td23.
-Issue report: [docs/issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md](../issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md).
+Issue report: [pkp-e2e#701](https://github.com/jardakotesovec/pkp-e2e/issues/701) ([docs/issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md](../issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note k: ONIX 3.0 has `AudienceCodeType` from list 29 ("01"
