@@ -1082,7 +1082,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OMP2](#omp2) | A press's "Days to First Editorial Decision" help text says "authors submitting to your journal" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | "Monograph Report" of one press carries empty author and decision columns sized by another press's books | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP4](#omp4) | "Monograph Report" names a reverted Internal Review decline "Decline Submission" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OMP5](#omp5) | A French press's monthly attachment names External Review by a raw code | 🐞 | minor | — |
+| [OMP5](#omp5) | A French press's monthly attachment names External Review by a raw code | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OPS4](#ops4) | The preprint server's monthly email leaves "Accepted submissions this month:" blank | 🐞 | minor | — |
 | [A3](#a3) | Whether drafts started within the range count in "Submissions In Progress" is unseen; drafts started today never do | ❓ | minor | — |
 | [A4](#a4) | The closed "Filters" panel is still read out by a screen reader | ❓ | minor | — |
@@ -1485,13 +1485,18 @@ Decline".
 Basis: probe, 2026-10-02. <sup>f-omp4</sup>
 
 <a id="omp5"></a>
-**OMP5 — A French press's attachment names External Review by a raw code** · 🐞 · minor.
+**OMP5 — A French press's attachment names External Review by a raw code** · 🐞 · medium.
 On a press whose primary language is French (Canada), the "Soumissions
 actives" block of the monthly "editorial-report.csv" names the External
 Review stage "##workflow.review.externalReview##", while "Évaluation
-interne" and the other stages read in French. A journal and a preprint
-server in French name every stage. Expected: the stage's French name.
-Basis: probe. <sup>f-omp5</sup>
+interne" and the other stages read in French: OMP's French (Canada)
+text for the stage's name is empty, so the file falls back to the code.
+A journal and a preprint server in French name every stage. The same
+missing texts show codes on the press's catalog, book and chapter pages
+and its Roles list ([Monograph landing page](U69-monograph-landing-page.md)'s
+[A15](U69-monograph-landing-page.md#a15)). Expected: the stage's French
+name.
+Basis: probe, 2026-10-03. <sup>f-omp5</sup>
 
 ### OPS
 
@@ -2286,6 +2291,7 @@ Live-probed 2026-09-28, a press whose primary language is French
 lines read "Évaluation interne",0 and
 "##workflow.review.externalReview##",3; a French journal's and preprint
 server's attachments name every stage.
+Issue report: [docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md), filed as [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) (joined with U69 A15).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — fn d (`removeEditorialStatsChartView()`). Live-probed 2026-09-28: no

@@ -9,7 +9,7 @@
   - 3.4: OMP (code: the book and chapter pages, the editors' names, the catalog pages and the "Browse" block, the staff screens without the review rounds' names, the monthly statistics email's attachment)
   - 3.3: OMP (code: the book page, the editors' names, the catalog pages and the "Browse" block, the staff screens without the review rounds' names, the monthly statistics email's attachment; no chapter pages)
 - **Introduced** not traced as one change. Most of the texts never had a French (Canada) text; the oldest, the book page's "Published" and "Categories", came in English in [52df855c59](https://github.com/pkp/omp/commit/52df855c59a26832353324486789159f965d5605) (2015-09-04). Two had one and lost it: the External Review stage's name and the catalog's book count read in French (Canada) in OMP 3.1.1 and show codes from 3.1.2 (2019) on; on the main line pkp-lib [ceef9fdb49](https://github.com/pkp/pkp-lib/commit/ceef9fdb49470eb056e88d0930777897faeadddc) (2019-10-15) dropped both. Those two parts are a regression. The rest, the editors' names among them, never worked, so the report as a whole is a defect
-- **Upstream** none found (2026-10-02)
+- **Upstream** none found (2026-10-03)
 - **Tracked in** spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15), spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (a book's OAI-PMH "Resource Type"), spec U54 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U54-roles-configuration.md#omp1) (the External Review stage's name on the press's "Roles" list), spec U24 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a11) (a press's codes on the workflow screen: the External Review stage, the review rounds' names, the "Monograph" control and its menu), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (a press's category page), spec U68 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U68-catalog-browse.md#a8) (the catalog pages and the "Browse" block), spec U65 [OMP5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U65-editorial-statistics.md#omp5) (the monthly statistics email's attachment on a press whose primary language is French (Canada))
 - **Checked** 2026-10-01, the staff screens and the catalog pages 2026-10-02, the monthly statistics email's attachment 2026-10-03, each branch's tip (the commits in Evidence)
 
@@ -42,8 +42,11 @@ empty-list messages, and the sidebar's "Browse" block reads
 The press's staff see the same in its settings and workflow: the
 External Review stage is named "##workflow.review.externalReview##" in
 the "Rôles" list, in the window that creates a role, and in a
-submission's workflow menu. The workflow screen shows the same for a review round's
-name and for the "Monograph" control ("##common.publication##").
+submission's workflow menu. The workflow screen shows the same for a
+review round's name and for the "Monograph" control
+("##common.publication##"). On a press whose primary language is French
+(Canada), the monthly statistics email's "editorial-report.csv" also
+names the External Review stage "##workflow.review.externalReview##".
 
 The rest of each page shows as usual and every link works. A French
 reader of an edited volume cannot see who edited it, and the press
@@ -61,9 +64,11 @@ format name and the review rounds' names on the workflow screen.
 - **Lost.** An edited volume's editors' names, about a dozen labels
   on every book and chapter page, and the catalog pages' book count,
   list headings and "Browse" block labels.
-- **Who.** Readers of a press that offers French (Canada), and its
-  staff working in French (Canada) on the "Rôles" list and in the
-  workflow. The locale files show the same gaps on the reader pages in
+- **Who.** Readers of a press that offers French (Canada); its staff
+  working in French (Canada) on the "Rôles" list and in the workflow;
+  the editors who receive the monthly statistics email of a press whose
+  primary language is French (Canada). The locale files show the same
+  gaps on the reader pages in
   Arabic, Central Kurdish, Greek, Kyrgyz and Vietnamese (read, not
   walked).
 - **Way round.** A reader can switch the page to English only when the
@@ -72,6 +77,12 @@ format name and the review rounds' names on the workflow screen.
   are not held up: the stage's code only stands in for its name. The
   press cannot enter the texts itself; the French (Canada) translators,
   or a developer, enter them in OMP alone, with no change to pkp-lib.
+  Texts entered on PKP's translation platform reach 3.5 and `main`
+  through 3.5's monthly translation merge; 3.4 gets them only if the
+  platform still takes its texts or by a commit, and 3.3 by a backport
+  (Proposed fix, "Older versions"). The Custom Locale plugin
+  from the Plugin Gallery, which lets a press override its texts, is not
+  bundled with OMP and was not tried as a stopgap.
 
 Medium: on an edited volume's public page in French (Canada), the
 editors' names are gone, while the English page shows them. The same
@@ -216,6 +227,28 @@ flags):
 27. In the "Browse" block, press "Library & Information Studies", a
     series with no book. Read the count, the heading and the message.
 
+The monthly statistics email (after step 27, or on a freshly loaded
+dataset: the steps above change no submission's stage). It needs a
+shell in the application's root: the site's scheduler runs the task on
+the 1st of each month, and step 31 runs it now with the scheduler's own
+command.
+
+28. Sign in as `dbarnes` and open Settings › Website in English
+    (`/index.php/publicknowledge/en/management/settings/website`),
+    "Setup" › "Languages".
+29. Under "Website Languages", find the row "French/français", code
+    `fr_CA`.
+30. On that row, press the "Primary locale" radio. The list saves at
+    once.
+31. In the application's root, run the monthly task:
+    `php lib/pkp/tools/scheduler.php test --name='PKP\task\StatisticsReport'`
+32. Run the waiting jobs: `php lib/pkp/tools/jobs.php run`. Opening any
+    page does the same, because the dataset runs jobs on web requests.
+33. Open the mailbox of dbarnes@mailinator.com in the mail catcher the
+    install delivers to. Open the attachment "editorial-report.csv" of
+    the new email "Editorial activity for septembre, 2026" (the previous
+    month) and read its first block.
+
 **Expected.** Each label reads in French what the English page reads:
 "Published" (steps 2, 3), "Volume" (3), the tab "PDF view of the file
 Segmentation of Vascular Ultrasound Imag.pdf" and the arrow "Return to
@@ -235,7 +268,9 @@ Releases", "0 Titles" and "No new releases are available at this
 time." (21); "Featured" and "New Releases", and the block "Browse",
 "Categories" and "Series" (24); "2 Titles" (25); "0 Titles",
 "Subcategories" and "All Books" (26); "0 Titles", "All Books" and "No
-titles have been published yet." (27).
+titles have been published yet." (27). The attachment's first block
+names each stage in French, as the English file reads "Submission",
+"Internal Review", "External Review", "Copyediting", "Production" (33).
 
 **Observed.**
 
@@ -274,6 +309,12 @@ Step 26: ##catalog.browseTitles##
 Step 27: ##catalog.browseTitles##
          ##catalog.category.heading##
          ##catalog.noTitles##
+Step 33: "Soumissions actives",Total
+         Soumission,3
+         "Évaluation interne",4
+         ##workflow.review.externalReview##,4
+         Révision,4
+         Production,1
 ```
 
 The block shows the same codes on every page of steps 24 to 27, and
@@ -281,6 +322,14 @@ its "Nouveautés" and the header's "Catalogue" are French. On `main`
 step 26 shows no message under the heading, where 3.5 shows
 "##catalog.noTitles##" (spec U16 A1, reported apart), and step 27's
 page has an empty heading (spec U68 A3).
+
+The rest of step 33's attachment, its "Tendances" and
+"Utilisateurs-trices" blocks, reads in French. The email's subject and
+body arrive in English, because OMP's French (Canada) `emails.po` leaves
+`emails.statisticsReportNotification.subject` and `.body` empty; that is
+out of this report's scope, the spec's open question U65
+[A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U65-editorial-statistics.md#a13),
+and the fix leaves it.
 
 The version's name inside the brackets is a code of its own on `main`,
 reported apart (the report "In French, readers and editors see a raw
@@ -361,12 +410,17 @@ left out.
   `WorkflowStageDAO::getWorkflowStageTranslationKeys()`), names the
   stage's tick box in the "Créer un nouveau rôle" window, and names the
   stage in a submission's workflow menu (ui-library
-  `useWorkflowNavigationConfigOMP.js`, line 75). Read in the code, not
-  walked, the same key also names the stage in:
+  `useWorkflowNavigationConfigOMP.js`, line 75). On a press whose
+  primary language is French (Canada) it also names the stage in the
+  first block of the monthly statistics email's "editorial-report.csv":
+  `StatisticsReportMail::createCsvAttachment()`
+  (`lib/pkp/jobs/notifications/StatisticsReportMail.php`) writes each
+  stage as `__(Application::getWorkflowStageName($stageId), [], $locale)`
+  in the press's primary language. Read in the code, not walked, the
+  same key also names the stage in:
   - the "Rôles" list's stage filter, and the notice after a stage box
     is ticked (`UserGroupGridHandler`);
-  - the editorial statistics page (`PKPStatsHandler`) and the monthly
-    statistics email's attachment (`StatisticsReportMail`), through
+  - the editorial statistics page (`PKPStatsHandler`), through
     `PKPApplication::getWorkflowStageName()`;
   - the API's `stageName` of a submission (`submission/maps/Schema.php`);
   - the monograph report's status column (`plugins/reports/monographReport/Report.php`);
@@ -560,7 +614,10 @@ English pages and the French labels that were already translated
 ("Synopsis", "Séries", "Mots-clés :") read the same with the diff in
 and out. The French OAI-PMH records' "Resource Type" read "Livre", with
 every other element of the records and the English records unchanged.
-The staff screens of steps 15 to 17 read "Évaluation externe". Steps
+The staff screens of steps 15 to 17 read "Évaluation externe", and so
+did step 33's attachment ("Évaluation externe",4); on the press left at
+English as its primary language, the attachment read the same with the
+diff in and out. Steps
 18 to 20 read "Évaluation interne (Cycle 1)", "Monographie" with the
 entries "Volume édité" and "Monographie", and "Évaluation externe
 (Cycle 1)"; the same screens in English read the same with the diff in
@@ -779,6 +836,38 @@ Small: 40 texts entered on Weblate and no code, tried as a diff.
   translation OMP catalog": nothing on this fault
   (`pkp/pkp-lib#4901`, a missing `category.noTitlesSection` key, is
   another key, closed).
+- The monthly statistics email's attachment (spec U65 OMP5, steps 28
+  to 33): taken by
+  [`omp-french-monthly-report-raw-key/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-monthly-report-raw-key/walk.js),
+  which runs steps 31 and 32 as the commands they name and reads
+  dbarnes@mailinator.com's mailbox in the install's mail catcher. It
+  changes the press's primary language, so it runs on an install
+  freshly loaded from the default dataset:
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js omp shared/playwright/checks/issues/omp-french-monthly-report-raw-key/walk.js`;
+  `NB=1` in front leaves out steps 28 to 30 (English primary). Walked on
+  `main` (OMP 3b0ecf794c) and `stable-3_5_0` (9c5e24246, `lib/pkp`
+  cf3f984335), on PostgreSQL, from pkp/datasets e8dafbc (2026-10-02),
+  2026-10-03. With the diff applied on `main`, it was run with French
+  (Canada) and with English as the press's primary language; with the
+  diff taken out, with English only. `main` and 3.5 wrote the same
+  rows. Code reads:
+  `StatisticsReportMail::handle()` and `createCsvAttachment()` and
+  `PKPApplication::getWorkflowStageName()` on `main` and 3.5; on 3.4
+  (`lib/pkp` df13621c2d) the same job and map, with the entry empty in
+  OMP's `locale/fr_CA/submission.po`; on 3.3 the attachment is written
+  by `EditorialReportNotificationManager` (`lib/pkp` `classes/notification/managerDelegate/`,
+  the same `__(…getWorkflowStageName($stageId), [], $locale)` in the
+  primary language), and the entry is empty there too. Upstream searched
+  2026-10-03 in pkp/pkp-lib and pkp/omp by "editorial report csv
+  French", `StatisticsReportMail`, `getWorkflowStageName`,
+  `editorial-report.csv`, `externalReview fr_CA` and "Évaluation
+  externe": nothing on this fault (`pkp/pkp-lib#6085`, the report
+  written in the wrong language, fixed by forwarding the context's
+  locale, and `pkp/pkp-lib#10128`, emails ignoring a user's preferred
+  language, are other faults). The attachment follows the press's
+  primary language, not the recipient's (read in the code), so a press
+  with English primary shows no code there whatever its editors'
+  language; not driven.
 - Fix trial: the kept scripts on `main` with the diff applied to OMP's
   checkout, and again with it taken out. After "Volume édité" replaced
   the French (France) "Ouvrage collectif" in the diff, steps 18 to 20
