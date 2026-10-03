@@ -1006,6 +1006,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U73-A13-copyeditor-formats-page-no-list.md`): a press
     Copyeditor on a book in Copyediting is not offered "Publication
     Formats", and the assigned Layout Editor in Production is
+  - the guard for A15 (issue report
+    `docs/issues/U73-A15-format-name-required-primary-language.md`): on a
+    press with English and French form languages, a French book's format
+    and chapter save with French names alone
   - a format file's "Edit a file" closed with its close arrow after the
     name is changed: no question, the row keeping the old name after a
     reload, and "Edit" reopening on it (Rule 11): likely a bullet in
@@ -1106,8 +1110,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | A format file's History records a revoked proof approval as a sign-off, the same as the approval | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | On a press, the Copyeditor is offered "Publication Formats", and the page shows a refusal instead of the list | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | A format moves in the list when it is saved from "Edit", its approval or availability changes, or its DOI is emptied on the DOIs page | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A15](#a15) | A book in the press's second language cannot get a format without a name in the primary language | 🐞 | minor | — |
-| [A19](#a19) | "Select Files" tells the user to tick an "Include checkbox" and press "Search", neither of which it has | 🐞 | minor | — |
+| [A15](#a15) | A book in a press's second language cannot get a format or chapter named in that language alone | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
+| [A19](#a19) | A book format's "Select Files" window tells the editor to tick an "Include checkbox" and press "Search", neither of which it has | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A20](#a20) | A "Direct Sales" price of 0 keeps the link on "Direct Sales" while readers get the file free | 🐞 | minor | — |
 | [A23](#a23) | A date of the wrong length is refused with no message in its window | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A24](#a24) | A refused "URL Path" comes back as a notice when the format is next saved, once per refusal | 🐞 | minor | — |
@@ -1329,15 +1333,19 @@ Expected: the formats keep the order they were added in.
 Basis: probe, 2026-10-02. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — A book in the press's second language needs a format name in the primary language** · 🐞 · minor.
-On a press with English as its primary metadata language and French as
-a second one, a French book's format window refuses "OK" with only the
-French name, showing "This field is required." under the English box;
-an English book's format saves with the English name alone. A press
-that publishes a book in its second language has to invent a format
-name in its primary one. Expected: the name is required in the book's
-language only.
-Basis: probe. <sup>f-a15</sup>
+**A15 — A book in a press's second language cannot get a format or chapter named in that language alone** · 🐞 · medium.
+On a press whose primary language is English and which also takes
+books in French, an editor adds a publication format to a French book
+and types its name in French only. "OK" is refused with "This field is
+required." under the English box, and nothing is saved. An English
+book's format saves with the English name alone.
+
+The chapter window ("Add Chapter") refuses a French book's chapter
+titled in French only in the same way.
+
+The press can save only by also typing a name in the English box. That
+name then shows to readers who browse the press in English.
+Since: 2023-01-20 (pkp/pkp-lib#8554) · Basis: probe, 2026-10-04. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — The "Metadata" tab drops a changed field without asking** · ❓ · minor.
@@ -1374,14 +1382,19 @@ Lean: yes; the book trade's lists pair each measure with its own units.
 Basis: probe. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — "Select Files" names controls it does not have** · 🐞 · minor.
-The "Select Files" window reads "…by checking the Include checkbox
-below and clicking Search: all available files will be listed and can
-be chosen for inclusion.", but its tick column is headed "Select",
-there is no "Search", and ticking "Show files from all accessible
-workflow stages." reloads the list at once. Expected: text that names
-the window's own controls.
-Basis: probe. <sup>f-a19</sup>
+**A19 — A book format's "Select Files" window tells the editor to tick an "Include checkbox" and press "Search", neither of which it has** · 🐞 · low.
+Press managers, press and production editors, the assigned series
+editor and the assigned production assistants can press "Select Files"
+on a book's publication format to add files to that format. The window
+says the files can be added "by checking the Include checkbox below and
+clicking Search".
+
+The window has neither. Its tick column is headed "Select". In place of
+"Search", the box "Show files from all accessible workflow stages."
+reloads the list at once when it is ticked.
+
+The 25 languages that translate the sentence give the same instructions.
+Since: 2015-05-08 (pkp/omp#125) · Basis: probe, 2026-10-04. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — A "Direct Sales" price of 0 gives the file away under a "Direct Sales" link** · 🐞 · minor.
@@ -2469,6 +2482,7 @@ Issue report: [pkp-e2e#617](https://github.com/jardakotesovec/pkp-e2e/issues/617
 **f-a15** — Note e: the form requires the name in the book's language
 only; the refusal came from the in-browser check, with no request sent.
 Live-probed 2026-09-28: note td10.
+Issue report: [pkp-e2e#806](https://github.com/jardakotesovec/pkp-e2e/issues/806) ([docs/issues/U73-A15-format-name-required-primary-language.md](../issues/U73-A15-format-name-required-primary-language.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Note f (`trackFormChanges`). Live-probed 2026-09-28: note
@@ -2491,6 +2505,7 @@ entries.
 <a id="fn-f-a19"></a>
 **f-a19** — Note i (`editor.submission.proof.manageProofFilesDescription`).
 Live-probed 2026-09-28: note td19.
+Issue report: [pkp-e2e#805](https://github.com/jardakotesovec/pkp-e2e/issues/805) ([docs/issues/U73-A19-select-files-text-names-missing-controls.md](../issues/U73-A19-select-files-text-names-missing-controls.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20** — Note j: "Direct Sales" at 0 stores `salesType`
