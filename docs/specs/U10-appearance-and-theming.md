@@ -1164,6 +1164,7 @@ Left out of the scenarios above, by reason:
   - a ".pdf" picked for "Logo" with "Upload File" and refused, then "Upload File" and the tab's "Save" enabled again (A7; the guard its issue report names)
   - a press's French (Canada) "Entête" description naming no journal ("la revue") {OMP} (A11; the guard its issue report names)
   - a French upload box's drop area reading the French text (A12; the guard its issue report names)
+  - a journal's home page with "Latest Publications" showing each article title as a heading one level below the list's heading {OJS} (OJS6; the guard its issue report names)
   - a press category holding more books than "Items per page" showing page links, its page 2 listing the next book {OMP} (OMP2; the guard its issue report names)
   - a press's French pages giving a book's date in the default format before a French "Date" is saved, and in the saved one after, the English pages unchanged {OMP} (Rule 3a)
   - French ticked under "UI" alone: "Date & Time" without a "French" button, and a press's French pages keeping the default format after an English "Date" is saved {OMP} (Rule 3b)
@@ -1229,8 +1230,8 @@ otherwise; the team settles them on spec review.
 | [A9](#a9) | After a manager saves an empty "Custom" short date, editorial dates show only the time | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | In French, a press's or preprint server's "Entête" settings say the role order is for "the journal's" editorial team page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | In French, the settings upload boxes say "Drop files here to upload" and show their refusal in English | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [OJS5](#ojs5) | With every "Journal Content Organization" box unticked, "Save" shows "Saved" and the home page keeps its default part | 🐞 | minor | — |
-| [OJS6](#ojs6) | The article titles under "Latest Publications" are headings of the section's own level | 🐞 | minor | — |
+| [OJS5](#ojs5) | Unticking every "Journal Content Organization" box says "Saved", but the home page keeps the current issue | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [OJS6](#ojs6) | On a journal's home page, each "Latest Publications" title is a heading at the section's own level | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP2](#omp2) | A press's category page shows only its first page of books, with no way to the rest | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | A logo saved without alternate text leaves the header's home link without a name | ❓ | minor | — |
 | [A10](#a10) | A saved "Colour" does not reach a browser that has already opened the journal | ❓ | user-visible | — |
@@ -1527,21 +1528,38 @@ the journal's own organization? Lean: yes; the two screens edit the same
 settings. Basis: probe. <sup>f-ojs4</sup>
 
 <a id="ojs5"></a>
-**OJS5 — The home page cannot be set to show none of the three parts** · 🐞 · minor.
-A manager who unticks all three "Journal Content Organization" boxes and
-presses "Save" sees "Saved" and expects a home page without the current
-issue, the recent articles and the categories. The tab reopens with the
-journal's default ticked ("Include the current issue's table of
-contents" on a journal with an issue), and the home page shows "Current
-Issue". Basis: probe. <sup>f-ojs5</sup>
+**OJS5 — Unticking every "Journal Content Organization" box says "Saved", but the home page keeps the current issue** · 🐞 · medium.
+A journal manager who unticks all three "Journal Content Organization"
+boxes under Settings › Website › "Appearance" › "Theme" and presses
+"Save" sees "Saved", and expects a home page without the current issue,
+the recent articles and the categories. Instead the tab reopens with the
+box a journal gets when nothing is saved: "Include the current issue's
+table of contents" once the journal has any issue, otherwise "Include
+recent most published articles". The home page shows that part, for
+example "Current Issue".
+
+Ticking any one box is kept; only the choice of none is lost, and
+nothing says so. The boxes belong to the default theme and the themes
+built on it. Basis: probe, 2026-10-03. <sup>f-ojs5</sup>
 
 <a id="ojs6"></a>
-**OJS6 — The recent articles are headings beside their section** · 🐞 · minor.
-Under "Latest Publications" each article's title is a heading of the
-same level as "Latest Publications" itself, so a screen reader's list of
-headings shows the articles beside the section instead of inside it; the
-current issue's articles sit one level below their heading, as expected.
-Basis: probe. <sup>f-ojs6</sup>
+**OJS6 — On a journal's home page, each "Latest Publications" title is a heading at the section's own level** · 🐞 · low.
+On a journal's home page, each article title under "Latest
+Publications" is a heading at the same level as "Latest Publications"
+itself, rather than one level below it. So a screen reader's list of
+headings shows each article as a new part of the page. The current
+issue's article titles, by contrast, sit below its "Articles" heading,
+as expected.
+
+Every article can still be reached and read; only the outline is wrong.
+
+The list shows by default on a journal with no issue, the continuously
+publishing journal it was built for. A journal with issues shows it once
+a manager ticks "Include recent most published articles". It lists the
+articles published outside a published issue: published with no issue
+(the case the Steps take) or into an issue not yet published. The list
+is on `main` only, in no release yet. Basis: probe, 2026-10-03.
+<sup>f-ojs6</sup>
 
 <a id="ojs7"></a>
 **OJS7 — A journal's homepage image without alternate text has no text alternative** · ❓ · minor.
@@ -2275,6 +2293,7 @@ value when nothing is ticked. Live-probed 2026-09-24 on two scratch
 journals with an issue, two runs: "Saved", the tab reopened with
 "Include the current issue's table of contents" ticked, and the home
 page showed "Current Issue".
+Issue report: [pkp-e2e#782](https://github.com/jardakotesovec/pkp-e2e/issues/782) ([docs/issues/U10-OJS5-home-page-parts-all-unticked-come-back.md](../issues/U10-OJS5-home-page-parts-all-unticked-come-back.md)).
 
 <a id="fn-f-ojs6"></a>
 **f-ojs6** — `latest_article.tpl` passes `heading=$articleHeading`,
@@ -2282,6 +2301,7 @@ which nothing assigns there, so `article_summary.tpl` falls back to `h2`.
 Live-probed 2026-09-24: "Latest Publications" a level-2 heading and each
 article title level 2; under "Current Issue", "Articles" level 3 and
 each article level 4.
+Issue report: [pkp-e2e#783](https://github.com/jardakotesovec/pkp-e2e/issues/783) ([docs/issues/U10-OJS6-latest-publications-titles-same-heading-level.md](../issues/U10-OJS6-latest-publications-titles-same-heading-level.md)).
 
 <a id="fn-f-ojs7"></a>
 **f-ojs7** — Note q: the journal's template omits `alt` when the text is
