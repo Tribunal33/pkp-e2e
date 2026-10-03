@@ -1,0 +1,70 @@
+--- a/api/v1/_submissions/BackendSubmissionsController.php
++++ b/api/v1/_submissions/BackendSubmissionsController.php
+@@ -164,7 +164,7 @@
+ 
+         if (empty($params['submissionIds'])) {
+             return response()->json([
+-                'error' => __('api.submissions.400.submissionIdsRequired'),
++                'submissionIds' => [__('api.submissions.400.submissionIdsRequired')],
+             ], Response::HTTP_BAD_REQUEST);
+         }
+ 
+@@ -172,7 +172,7 @@
+ 
+         if (empty($submissionIds)) {
+             return response()->json([
+-                'error' => __('api.submissions.400.submissionIdsRequired'),
++                'submissionIds' => [__('api.submissions.400.submissionIdsRequired')],
+             ], Response::HTTP_BAD_REQUEST);
+         }
+ 
+@@ -196,7 +196,9 @@
+             $allowedLocales = $submission->getPublicationLanguages($supportedMetadataLocales);
+             $errors = Repo::publication()->validatePublish($publication, $submission, $allowedLocales, $submission->getData('locale'));
+             if (!empty($errors)) {
+-                return response()->json($errors, Response::HTTP_BAD_REQUEST);
++                return response()->json([
++                    'submissionIds' => array_values($errors),
++                ], Response::HTTP_BAD_REQUEST);
+             }
+ 
+             $validPublications[] = $publication;
+--- a/lib/ui-library/src/components/ListPanel/submissions/CatalogListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/submissions/CatalogListPanel.vue
+@@ -224,6 +224,7 @@
+ 			newEntries: [],
+ 			isOrdering: false,
+ 			isSidebarVisible: false,
++			activeAddEntryForm: null,
+ 		};
+ 	},
+ 	computed: {
+@@ -383,8 +384,10 @@
+ 		openAddEntryForm() {
+ 			const {openSideModal} = useModal();
+ 
++			// The side modal keeps this object, so setAddEntryForm() updates it in place
++			this.activeAddEntryForm = {...this.addEntryForm, errors: {}};
+ 			openSideModal(CatalogEditModal, {
+-				activeForm: this.addEntryForm,
++				activeForm: this.activeAddEntryForm,
+ 				onSetAddEntryForm: this.setAddEntryForm,
+ 				onAddEntryFormSuccess: this.addEntryFormSuccess,
+ 			});
+@@ -513,11 +516,12 @@
+ 		 * @param {Object} data
+ 		 */
+ 		setAddEntryForm(formId, data) {
+-			let addEntryForm = {...this.addEntryForm};
+-			Object.keys(data).forEach(function (key) {
+-				addEntryForm[key] = data[key];
++			if (!this.activeAddEntryForm) {
++				return;
++			}
++			Object.keys(data).forEach((key) => {
++				this.activeAddEntryForm[key] = data[key];
+ 			});
+-			this.$emit('set', this.id, {addEntryForm});
+ 		},
+ 
+ 		/**
