@@ -3066,7 +3066,7 @@ Issue report: [docs/issues/U08-OPS3-ops-french-developed-by-heading-raw-key.md](
 `user.authorization.noContext` reads "No server in context!"; it is the
 locale's own text, not a missing key. Live-probed 2026-09-29, two runs,
 OPS, with OJS and OMP the control.
-Issue report: [docs/issues/U08-OPS4-server-site-level-refusal-wording.md](../issues/U08-OPS4-server-site-level-refusal-wording.md).
+Issue report: [docs/issues/U08-OPS4-server-site-level-refusal-wording.md](../issues/U08-OPS4-server-site-level-refusal-wording.md), filed as [pkp-e2e#661](https://github.com/jardakotesovec/pkp-e2e/issues/661).
 
 ## Reference — entry points & surfaces
 
