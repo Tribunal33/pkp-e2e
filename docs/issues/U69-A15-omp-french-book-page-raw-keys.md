@@ -4,20 +4,24 @@
 - **Effort** small
 - **Kind** defect
 - **Affects**
-  - main: OMP (walked: the book and chapter pages, the editors' names, the catalog pages and the "Browse" block, the staff screens)
-  - 3.5: OMP (walked: the book and chapter pages, the catalog pages and the "Browse" block, the staff screens; the editors' names read in the code, as no edited volume's page opened there)
-  - 3.4: OMP (code: the book and chapter pages, the editors' names, the catalog pages and the "Browse" block, the staff screens without the review rounds' names)
-  - 3.3: OMP (code: the book page, the editors' names, the catalog pages and the "Browse" block, the staff screens without the review rounds' names; no chapter pages)
+  - main: OMP (walked: the book and chapter pages, the editors' names, the catalog pages and the "Browse" block, the staff screens, the monthly statistics email's attachment)
+  - 3.5: OMP (walked: the book and chapter pages, the catalog pages and the "Browse" block, the staff screens, the monthly statistics email's attachment; the editors' names read in the code, as no edited volume's page opened there)
+  - 3.4: OMP (code: the book and chapter pages, the editors' names, the catalog pages and the "Browse" block, the staff screens without the review rounds' names, the monthly statistics email's attachment)
+  - 3.3: OMP (code: the book page, the editors' names, the catalog pages and the "Browse" block, the staff screens without the review rounds' names, the monthly statistics email's attachment; no chapter pages)
 - **Introduced** not traced as one change. Most of the texts never had a French (Canada) text; the oldest, the book page's "Published" and "Categories", came in English in [52df855c59](https://github.com/pkp/omp/commit/52df855c59a26832353324486789159f965d5605) (2015-09-04). Two had one and lost it: the External Review stage's name and the catalog's book count read in French (Canada) in OMP 3.1.1 and show codes from 3.1.2 (2019) on; on the main line pkp-lib [ceef9fdb49](https://github.com/pkp/pkp-lib/commit/ceef9fdb49470eb056e88d0930777897faeadddc) (2019-10-15) dropped both. Those two parts are a regression. The rest, the editors' names among them, never worked, so the report as a whole is a defect
 - **Upstream** none found (2026-10-02)
-- **Tracked in** spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15), spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (a book's OAI-PMH "Resource Type"), spec U54 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U54-roles-configuration.md#omp1) (the External Review stage's name on the press's "Roles" list), spec U24 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a11) (a press's codes on the workflow screen: the External Review stage, the review rounds' names, the "Monograph" control and its menu), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (a press's category page), spec U68 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U68-catalog-browse.md#a8) (the catalog pages and the "Browse" block)
-- **Checked** 2026-10-01, the staff screens and the catalog pages 2026-10-02, each branch's tip (the commits in Evidence)
+- **Tracked in** spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15), spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (a book's OAI-PMH "Resource Type"), spec U54 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U54-roles-configuration.md#omp1) (the External Review stage's name on the press's "Roles" list), spec U24 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a11) (a press's codes on the workflow screen: the External Review stage, the review rounds' names, the "Monograph" control and its menu), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (a press's category page), spec U68 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U68-catalog-browse.md#a8) (the catalog pages and the "Browse" block), spec U65 [OMP5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U65-editorial-statistics.md#omp5) (the monthly statistics email's attachment on a press whose primary language is French (Canada))
+- **Checked** 2026-10-01, the staff screens and the catalog pages 2026-10-02, the monthly statistics email's attachment 2026-10-03, each branch's tip (the commits in Evidence)
 
 2026-10-02: widened to the press's staff screens, where the External
 Review stage's name is a code (Steps 14 to 17), and to the workflow
 screen's own codes: a review round's name and the "Monograph" control
 (Steps 18 to 20). Widened again to the catalog pages and the sidebar's
 "Browse" block (Steps 21 to 27).
+
+2026-10-03: widened to the monthly statistics email of a press whose
+primary language is French (Canada): its attachment names the External
+Review stage by the same code (Steps 28 to 33).
 
 ## Summary
 

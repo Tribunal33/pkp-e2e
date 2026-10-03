@@ -2232,7 +2232,7 @@ Live-probed 2026-09-28: the cell empty and the date filled for
 Section Editor), "Revert Decline", "New Review Round" and the two moves
 back a stage; the press's file named them. A cancelled round leaves no
 decision to name (Rule 20b).
-Issue report: [docs/issues/U65-OJS3-articles-report-decision-cell-empty.md](../issues/U65-OJS3-articles-report-decision-cell-empty.md).
+Issue report: [docs/issues/U65-OJS3-articles-report-decision-cell-empty.md](../issues/U65-OJS3-articles-report-decision-cell-empty.md), filed as [pkp-e2e#656](https://github.com/jardakotesovec/pkp-e2e/issues/656).
 
 <a id="fn-f-ojs4"></a>
 **f-ojs4** — fn n. Live-probed 2026-09-28: td12, the server error in fn n.
