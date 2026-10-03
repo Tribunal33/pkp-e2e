@@ -1,0 +1,36 @@
+--- a/controllers/grid/catalogEntry/PublicationFormatGridHandler.php
++++ b/controllers/grid/catalogEntry/PublicationFormatGridHandler.php
+@@ -607,7 +607,7 @@
+ 
+             $submissionFile = Repo::submissionFile()->get($submissionFileId);
+ 
+-            // Log the event
++            // Log the event: the approval, or its withdrawal
+             $user = $request->getUser();
+             $eventLog = Repo::eventLog()->newDataObject([
+                 'assocType' => PKPApplication::ASSOC_TYPE_SUBMISSION_FILE,
+@@ -615,7 +615,7 @@
+                 'eventType' => SubmissionFileEventLogEntry::SUBMISSION_LOG_FILE_SIGNOFF_SIGNOFF,
+                 'userId' => Validation::loggedInAs() ?? $user?->getId(),
+                 'impersonatedUserId' => Validation::loggedInAs() ? $user?->getId() : null,
+-                'message' => 'submission.event.signoffSignoff',
++                'message' => $submissionFile->getData('viewable') ? 'submission.event.proofApproved' : 'submission.event.proofApprovalRevoked',
+                 'isTranslated' => false,
+                 'dateLogged' => Core::getCurrentDate(),
+                 'filename' => $submissionFile->getData('name'),
+--- a/locale/en/submission.po
++++ b/locale/en/submission.po
+@@ -270,6 +270,13 @@
+ msgstr ""
+ "The publication format \"{$publicationFormatName}\" is no longer published."
+ 
++msgid "submission.event.proofApproved"
++msgstr "\"{$userFullName}\" ({$username}) approved the proof \"{$filename}\"."
++
++msgid "submission.event.proofApprovalRevoked"
++msgstr ""
++"\"{$userFullName}\" ({$username}) revoked the approval of the proof \"{$filename}\"."
++
+ msgid "submission.event.catalogMetadataUpdated"
+ msgstr "The catalog metadata was updated."
+ 
