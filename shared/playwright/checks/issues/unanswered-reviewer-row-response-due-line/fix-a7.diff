@@ -1,0 +1,11 @@
+--- a/lib/ui-library/src/managers/ReviewerManager/useReviewerManagerConfig.js
++++ b/lib/ui-library/src/managers/ReviewerManager/useReviewerManagerConfig.js
+@@ -36,7 +36,7 @@
+ 					component: 'ReviewerManagerCellStatusInfo',
+ 					props: {
+ 						title: t('editor.review.requestSent'),
+-						message: t('editor.review.responseDue', {
++						description: t('editor.review.responseDue', {
+ 							date: formatShortDate(reviewAssignment.dateResponseDue),
+ 						}),
+ 						competingInterests: getCompetingInterests(reviewAssignment),

@@ -1,0 +1,11 @@
+--- a/lib/ui-library/src/managers/ReviewerManager/useReviewerManagerConfig.js
++++ b/lib/ui-library/src/managers/ReviewerManager/useReviewerManagerConfig.js
+@@ -144,7 +144,7 @@
+ 					props: {
+ 						title: t('editor.review.ReviewerResendRequest'),
+ 						description: t('editor.review.responseDue', {
+-							date: formatShortDate(reviewAssignment.dateDue),
++							date: formatShortDate(reviewAssignment.dateResponseDue),
+ 						}),
+ 						competingInterests: getCompetingInterests(reviewAssignment),
+ 					},

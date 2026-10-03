@@ -1271,6 +1271,14 @@ Left out of the scenarios above, by reason:
     due date typed in another format ("11/12/2030") in the "Edit" and "Add
     Reviewer" windows is refused with a message beside the box, and the
     stored date is unchanged
+  - the guard for A7 (issue report
+    `docs/issues/U27-A7-request-sent-row-no-response-due.md`): an unanswered
+    row reads "Request Sent" with "Response due:" and the response date,
+    with the response and review dates set apart
+  - the guard for A2 (issue report
+    `docs/issues/U27-A2-request-resent-row-shows-review-deadline.md`): a
+    resent request with two different dates reads "Response due:" with the
+    response date
 - **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
   - the Review Details window on a request with no review: "Request Sent:", "Reviewer Reminded:", "Request Accepted:" or "Request Declined:", the empty blocks, and "Mark as Complete" disabled beside its recommendation message {OJS} or, with a review form, its incomplete-review message (Rule 14c): an editor opens the window to read a review, and on a request that has none only in a rare week
@@ -1354,8 +1362,8 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Send Review To ORCID" is offered on rows in every state, not only completed reviews | 🐞 | latent | — |
-| [A2](#a2) | A "Request Resent" row's "Response due:" line shows the review deadline, not the response deadline | 🐞 | minor | — |
-| [A7](#a7) | A "Request Sent" row never shows its "Response due:" line, though the date is set | 🐞 | minor | — |
+| [A2](#a2) | A reviewer's "Request Resent" row reads "Response due:" with the review deadline, not the response deadline | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A7](#a7) | Editors see no "Response due" date on a reviewer's "Request Sent" row in the Reviewers table | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | Submitting inverted due dates is refused with no message; the form just stays open | 🐞 | user-visible | — |
 | [A12](#a12) | The assignment-changed email's opt-out is offered nowhere; its own unsubscribe page omits the type | 🐞 | minor | — |
 | [A13](#a13) | Email Reviewer sends with an empty body despite the body being marked required | 🐞 | minor | — |
@@ -1419,13 +1427,16 @@ provides. Settled by: a reviewer with a verified iD, any non-complete row,
 open the menu. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
-**A2 — "Request Resent" shows the wrong deadline** · 🐞 · minor.
-After a request is re-sent to a reviewer who declined, the row's second line
-reads "Response due: {date}" but prints the review deadline, not the response
-deadline. The reviewer's actual response date is the one the editor just set
-in the resend window.
-Basis: live probe + code reading (the resent-state cell is fed the review
-date under the response-due label). <sup>[f-a2](#fn-a2)</sup>
+**A2 — A reviewer's "Request Resent" row reads "Response due:" with the review deadline, not the response deadline** · 🐞 · low.
+After an editor resends a review request to a reviewer who declined, the
+reviewer's row in the Reviewers table reads "Request Resent" and
+"Response due: {date}", but the date is the review deadline set in the
+same window, not the response deadline. With a response due in two weeks
+and a review in six, the row gives the six-week date as the day the
+reviewer must answer by, until the reviewer answers. Only this row is
+wrong: the reviewer's own list and the automatic response reminder count
+from the response deadline. The real date is in the row's "Edit" window.
+Basis: probe, 2026-10-03. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
 **A3 — Retired: the "role-less site admin" was a Journal Manager** · ✅ ·
@@ -1497,12 +1508,15 @@ As" and "Editorial Notes") + code reading.
 <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
-**A7 — "Request Sent" rows hide their response deadline** · 🐞 · minor.
-A freshly invited reviewer's row reads "Request Sent" with no second line.
-The "Response due: {date}" line every comparable state shows never renders
-here, though the date is set and the Edit window shows it. The editor loses
-the at-a-glance deadline until the row turns "Overdue".
-Basis: live probe. <sup>[f-a7](#fn-a7)</sup>
+**A7 — Editors see no "Response due" date on a reviewer's "Request Sent" row in the Reviewers table** · 🐞 · low.
+When an editor has invited a reviewer who has not answered yet, the
+reviewer's row in the submission's Reviewers table reads "Request Sent"
+and nothing else. The "Response due: {date}" line under it is missing,
+though the date is set and the row's "Edit" window shows it. An accepted
+row prints "Review due: {date}" there, and a request past its response
+date "Response due: {date}". The editor has to open "Edit" on each row
+to see by when a reviewer should answer. Basis: probe, 2026-10-03.
+<sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
 **A8 — Inverted due dates are refused without a word** · 🐞 · user-visible.
@@ -2981,6 +2995,7 @@ due 2026-09-10 set in the Resend window, the resent row's cell read
 Section Editor) with a second distinct pair — response +10 days / review
 +20 days — and the cell again printed the review date under the
 response-due label.
+Issue report: [docs/issues/U27-A2-request-resent-row-shows-review-deadline.md](../issues/U27-A2-request-resent-row-shows-review-deadline.md).
 
 <a id="fn-a3"></a>
 **f-a3** — Disproof live-probed 2026-08-02 (claim check, OJS): a throwaway
@@ -3038,6 +3053,7 @@ status cell rendered the title alone; the response due date was set and
 visible in the Edit window. An earlier code reading placed the
 `editor.review.responseDue` sub-line here (note b); the live cell never
 shows it.
+Issue report: [docs/issues/U27-A7-request-sent-row-no-response-due.md](../issues/U27-A7-request-sent-row-no-response-due.md).
 
 <a id="fn-a8"></a>
 **f-a8** — Live-probed 2026-08-02 (OJS + OMP): review date set before the
