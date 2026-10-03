@@ -1,0 +1,47 @@
+--- a/lib/ui-library/src/components/Form/FormErrors.vue
++++ b/lib/ui-library/src/components/Form/FormErrors.vue
+@@ -59,22 +59,33 @@
+ 			return Object.keys(this.errors).map((fieldName) => {
+ 				const field = this.fields.find((field) => field.name === fieldName);
+ 				const label = field ? field.label : fieldName;
+-				let errorMessage;
+-				if (
+-					this.errors[fieldName] !== null &&
+-					typeof this.errors[fieldName] === 'object'
+-				) {
+-					errorMessage =
+-						this.errors[fieldName][Object.keys(this.errors[fieldName])[0]];
+-				} else {
+-					errorMessage = this.errors[fieldName];
+-				}
+-				return {fieldName: fieldName, label: label, message: errorMessage};
++				return {
++					fieldName: fieldName,
++					label: label,
++					message: this.firstMessage(this.errors[fieldName]),
++				};
+ 			});
+ 		},
+ 	},
+ 	methods: {
+ 		/**
++		 * Get the first message of a field's errors
++		 *
++		 * A field's errors are a list of messages. They are keyed by locale for a
++		 * multilingual field, and by entry for a field that holds a list of
++		 * entries, such as a contributor's affiliations.
++		 *
++		 * @param {Array|Object|String} error
++		 * @return {String}
++		 */
++		firstMessage(error) {
++			if (error !== null && typeof error === 'object') {
++				return this.firstMessage(Object.values(error)[0]);
++			}
++			return error;
++		},
++
++		/**
+ 		 * Emit an event to display the next error in the list
+ 		 */
+ 		showNextError() {
