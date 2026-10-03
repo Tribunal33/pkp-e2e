@@ -2871,7 +2871,7 @@ Roles ("Remove Role"), leaving Reader; the side menu's calls for the
 submission views answered 401. The journal's Navigation tab opened
 behind the window; a press's and a server's gave the access-denied page
 ([Journal identity & about pages](U07-journal-identity-and-about-pages.md#a1)).
-Issue report: [docs/issues/U08-A22-admin-without-role-dashboard-error.md](../issues/U08-A22-admin-without-role-dashboard-error.md).
+Issue report: [docs/issues/U08-A22-admin-without-role-dashboard-error.md](../issues/U08-A22-admin-without-role-dashboard-error.md), filed as [pkp-e2e#639](https://github.com/jardakotesovec/pkp-e2e/issues/639).
 
 <a id="fn-f-a23"></a>
 **f-a23** — `navigation.content` (lib/pkp `common.po`) has no `fr_CA`
