@@ -1,0 +1,11 @@
+--- a/templates/frontend/pages/index.tpl
++++ b/templates/frontend/pages/index.tpl
+@@ -26,7 +26,7 @@
+ 
+ 	{* Homepage Image *}
+ 	{if $activeTheme && !$activeTheme->getOption('useHomepageImageAsHeader') && $homepageImage}
+-		<img src="{$publicFilesDir}/{$homepageImage.uploadName|escape:"url"}" alt="{$homepageImageAltText|escape}">
++		<img src="{$publicFilesDir}/{$homepageImage.uploadName|escape:"url"}" alt="{$homepageImage.altText|escape|default:''}">
+ 	{/if}
+ 
+ 	{* Press Description *}

@@ -1,0 +1,21 @@
+--- a/pages/index/IndexHandler.php
++++ b/pages/index/IndexHandler.php
+@@ -89,7 +89,6 @@
+             $templateMgr->assign([
+                 'additionalHomeContent' => $server->getLocalizedData('additionalHomeContent'),
+                 'homepageImage' => $server->getLocalizedData('homepageImage'),
+-                'homepageImageAltText' => $server->getLocalizedData('homepageImageAltText'),
+                 'serverDescription' => $server->getLocalizedData('description'),
+                 'sections' => $sections,
+                 'categories' => iterator_to_array($categories),
+--- a/templates/frontend/pages/indexServer.tpl
++++ b/templates/frontend/pages/indexServer.tpl
+@@ -28,7 +28,7 @@
+ 	{/if}
+ 
+ 	{if $activeTheme && !$activeTheme->getOption('useHomepageImageAsHeader') && $homepageImage}
+-		<img src="{$publicFilesDir}/{$homepageImage.uploadName|escape:"url"}" alt="{$homepageImageAltText|escape}">
++		<img src="{$publicFilesDir}/{$homepageImage.uploadName|escape:"url"}" alt="{$homepageImage.altText|escape|default:''}">
+ 	{/if}
+ 
+ 	{include file="frontend/objects/announcements_list.tpl" numAnnouncements=$numAnnouncementsHomepage}
