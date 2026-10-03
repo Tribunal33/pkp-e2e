@@ -1,0 +1,20 @@
+--- a/lib/pkp/classes/core/AppServiceProvider.php
++++ b/lib/pkp/classes/core/AppServiceProvider.php
+@@ -24,6 +24,7 @@
+ use PKP\context\Context;
+ use PKP\editorialTask\EditorialTask;
+ use PKP\services\PKPFileService;
++use PKP\services\PKPNavigationMenuService;
+ use PKP\services\PKPSchemaService;
+ use PKP\services\PKPSiteService;
+ use PKP\services\PKPStatsContextService;
+@@ -48,6 +49,9 @@
+ 
+         $this->app->singleton(PKPSchemaService::class, fn ($app) => $app->get('schema'));
+ 
++        // The application's own navigation menu service, which adds its item types through hooks
++        $this->app->singleton(PKPNavigationMenuService::class, fn ($app) => $app->get('navigationMenu'));
++
+         $this->app->singleton(PKPRequest::class, fn ($app) => Application::get()->getRequest());
+ 
+         $this->app->bind(Context::class, fn ($app) => Application::get()->getRequest()->getContext());

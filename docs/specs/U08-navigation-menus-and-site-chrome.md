@@ -1201,6 +1201,7 @@ Left out of the scenarios above, by reason:
   - the item window after a refused "Save": the back arrow asks before closing and the entries stay until the manager answers (the guard of [A18](#a18)'s second issue report)
   - the journals switcher on a site with two journals of one name: each offers the other (Rule 29; the guard [A21](#a21)'s issue report proposes)
   - the side menu's "DOIs" entry and the DOIs page in French (Canada) on a press and a preprint server: French labels, no raw key (the guard [A23](#a23)'s issue report proposes)
+  - on a journal, the menu's "Edit" window: "Subscriptions" and "My Subscriptions" carry the crossed-out eye and open their notices (Rule 7a; the guard [OJS1](#ojs1)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1297,7 +1298,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A22](#a22) | A Site Administrator holding only Reader in a journal gets an "Error" window on every editorial page | 🐞 | low · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A23](#a23) | In French, the side menu's "Content" group {OJS OMP}, "DOIs" entry {OMP OPS}, "Search submissions" box and a press's "Monographs" entry {OMP} read raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A24](#a24) | In French, the item window's "Query Parameters" box, the menu window's drag handles and a press's "New Releases" type read raw codes | 🐞 | minor | — |
-| [OJS1](#ojs1) | "Subscriptions" and "My Subscriptions" carry no eye icon, so their notices never show {OJS} | 🐞 | minor | — |
+| [OJS1](#ojs1) | Menu window marks "Subscriptions" and "My Subscriptions" items with no eye, so their notices never show {OJS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS2](#ops2) | A preprint server's "Posting Mode" says "Saved" but keeps nothing, so the server goes on posting {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | On a preprint server's French pages the "Developed By" heading reads a raw code {OPS} | 🐞 | minor | — |
 | [OPS4](#ops4) | A server's settings address opened at the site's level reads "No server in context!" {OPS} | 🐞 | minor | — |
@@ -1651,14 +1652,20 @@ Basis: test run. <sup>f-a25</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — "Subscriptions" and "My Subscriptions" carry no eye icon** · 🐞 · minor.
-Both items show only under their conditions (Settings bullet 6), and
-each type has a notice ("This link will only be displayed if payments
-are enabled under Settings > Distribution > Payments.", "This link will
-only be displayed when a visitor is logged in."). The menu window marks
-neither with the crossed-out eye, so the notice never shows and nothing
-there tells the manager why the item is missing from the header.
-Basis: probe. <sup>f-ojs1</sup>
+**OJS1 — Menu window marks "Subscriptions" and "My Subscriptions" items with no eye, so their notices never show** · 🐞 · low.
+On a journal's Settings › Website › "Setup" › "Navigation", a menu's
+"Edit" window marks each item that shows on the site only under a
+condition with a crossed-out eye. Pressing the eye opens a "Notice"
+that names the condition. "Subscriptions" and "My Subscriptions" carry
+no eye, so their notices cannot be opened.
+
+"Subscriptions" shows only while payments are enabled with a currency
+and a payment method set. "My Subscriptions" needs that too, and also a
+signed-in visitor and a "Publishing Mode" that requires a subscription.
+A manager who adds either item to a menu and does not find it in the
+journal's header gets no hint in the window. On 3.5 the "Edit" window,
+an older one, shows the eye on both items.
+Basis: probe, 2026-10-03. <sup>f-ojs1</sup>
 
 ### OPS
 
@@ -2995,6 +3002,7 @@ menu window (note k); why the two items still arrive without it was not
 traced. Live-probed
 2026-09-23 (the item types drive, note m), OJS: both items in the
 primary menu, neither with an icon; both conditions held at both ends.
+Issue report: [docs/issues/U08-OJS1-subscription-menu-items-no-eye.md](../issues/U08-OJS1-subscription-menu-items-no-eye.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — OPS `classes/template/TemplateManager.php::setupBackendPage()`,
