@@ -998,6 +998,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U73-A4-remote-format-cannot-be-made-local.md`): the
     dataset's remote "PDF", its box unticked and "OK" pressed, reopens
     unticked with an empty address and offers "Change File"
+  - the guard for A12 (issue report
+    `docs/issues/U73-A12-proof-approval-revoke-logged-as-sign-off.md`):
+    a format file approved and then revoked shows two different lines in
+    its "History"
   - a format file's "Edit a file" closed with its close arrow after the
     name is changed: no question, the row keeping the old name after a
     reload, and "Edit" reopening on it (Rule 11): likely a bullet in
@@ -1095,7 +1099,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | Unticking a book format's "available at a separate website" box keeps the format remote after "OK" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | A new publication date preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | A press editor withdrawing a book's format reads "This format will unavailable to readers." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A12](#a12) | Approving and revoking a format file write the same two "History" lines | 🐞 | minor | — |
+| [A12](#a12) | A format file's History records a revoked proof approval as a sign-off, the same as the approval | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | The side menu offers "Publication Formats" to a Copyeditor, Marketing and sales coordinator or Funding coordinator, and the page shows them no list | 🐞 | minor | — |
 | [A14](#a14) | A format moves in the list when it is saved from "Edit", its approval or availability changes, or its DOI is emptied on the DOIs page | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | A book in the press's second language cannot get a format without a name in the primary language | 🐞 | minor | — |
@@ -1266,14 +1270,17 @@ missing.
 Since: 2015-10-21 · Basis: probe, 2026-10-03. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — Approving and revoking a format file log the same lines** · 🐞 · minor.
-Both "Approve Proof" › "OK" and "Revoke Proof Approval" › "OK" add the
-same two lines to the file's "More Information" › "History": 'The
-metadata for file "{file name}" was edited by {username}.' and '"{full
-name}" ({username}) has signed off on the signoff for "{file name}."'.
-The history cannot tell an approval from its withdrawal. Expected: a
-line that says which it was.
-Basis: probe. <sup>f-a12</sup> <sup>td20</sup>
+**A12 — A format file's History records a revoked proof approval as a sign-off, the same as the approval** · 🐞 · low.
+On a book's "Publication Formats" page, "Approve Proof" and "Revoke
+Proof Approval" on a format's file each add the same two lines to the
+file's "More Information" › "History": 'The metadata for file "<file
+name>" was edited by <username>.' and '"<full name>" (<username>) has
+signed off on the signoff for "<file name>."'.
+
+Each line names the person who pressed "OK" and carries the date. Only
+the verb is wrong, so a revoke can be told from an approval only by the
+order of the pairs.
+Since: 2015-10-06 (approval made a toggle) · Basis: probe, 2026-10-03. <sup>f-a12</sup> <sup>td20</sup>
 
 <a id="a13"></a>
 **A13 — "Publication Formats" is offered to assistant roles the page then refuses** · 🐞 · minor.
@@ -2390,6 +2397,7 @@ Issue report: [pkp-e2e#802](https://github.com/jardakotesovec/pkp-e2e/issues/802
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note o. Live-probed 2026-09-28: note td20.
+Issue report: [pkp-e2e#803](https://github.com/jardakotesovec/pkp-e2e/issues/803) ([docs/issues/U73-A12-proof-approval-revoke-logged-as-sign-off.md](../issues/U73-A12-proof-approval-revoke-logged-as-sign-off.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Note c. `useWorkflowNavigationConfigOMP.js` adds
