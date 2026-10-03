@@ -553,6 +553,8 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the close button of "Add a file" after an "OK" refused for a missing file asks "The data on this form has changed. Do you wish to continue without saving?" (Rule 3b; A11, docs/issues/U08-A18-item-window-refused-save-closes-unasked.md)
 - **Nothing new to test**:
   - a recommending editor's "Notify Editors" page {OJS OMP}: its "Library Files", and the attached file's copy listed in the discussion the recommendation opens (Actors row 8; Rule 11c)
   - the "Request Author Response" page {OJS}: the Editor's and an assigned Section Editor's "Library Files" (Actors row 8; Rule 11a)
@@ -591,7 +593,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A file whose name holds its extension earlier downloads under a cut name | 🐞 | minor | — |
 | [A5](#a5) | With strict mode on, "Delete" in the Submission Library fails | 🐞 | latent | — |
 | [A9](#a9) | "OK" in "Add a file" or "Edit" within two seconds of a download makes the page's script fail | 🐞 | invisible · crash: script | — |
-| [A11](#a11) | After an "OK" without a file, closing "Add a file" drops what was typed without asking | 🐞 | minor | — |
+| [A11](#a11) | After an "OK" without a file, closing "Add a file" drops what was typed without asking | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | A row's "Edit"/"Delete" strip opened within two seconds of a download closes by itself when the list is drawn again | 🐞 | minor | — |
 | [A6](#a6) | Every workflow participant, the Author included, edits and deletes every file of the Submission Library, whoever added it | ❓ | minor | — |
 | [A7](#a7) | A manager-level role without "Permit changes to Settings" still changes the Publisher Library through "View Document Library" | ❓ | minor | — |
@@ -703,15 +705,18 @@ page means to refuse and only the status it is sent with disagrees.
 Basis: probe. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
-**A11 — After an "OK" without a file, "Add a file" closes without asking** · 🐞 · minor.
+**A11 — After an "OK" without a file, "Add a file" closes without asking** · 🐞 · low.
 Closing a changed "Add a file" or "Edit" window asks "The data on this
 form has changed. Do you wish to continue without saving?" (Rule 3b).
-But after an "OK" pressed before any file has uploaded, which does
-nothing and says nothing ([A2](#a2)), the close button of "Add a file" shuts
-the window at once and drops the typed name and the chosen type without
-asking. The user who gives up on the silent window loses their typing
-unwarned.
-Basis: probe. <sup>[f-a11](#fn-a11)</sup>
+But pressing "OK" in "Add a file" with no file chosen is refused with
+the notice "A library file is required. Please ensure that you have
+chosen and uploaded a file.", and the window's close button then shuts
+it at once and drops the typed name and the chosen type without asking;
+leaving the page asks nothing either. Changing a box after the refusal
+brings the question back. Both libraries, the same fault as a refused
+navigation menu item's window
+([→ Navigation menus](U08-navigation-menus-and-site-chrome.md#a18)).
+Basis: probe, 2026-10-03. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
 **A12 — A strip opened right after a download closes by itself** · 🐞 · minor.
@@ -863,6 +868,7 @@ Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
 
 <a id="fn-a11"></a>
 **f-a11** — Note q. Live-probed 2026-09-24 (all three apps, twice each): "No file" typed, "Other" chosen, "OK" with no upload, then the window's "Close": no question, the window gone, no row added.
+Issue report: [docs/issues/U08-A18-item-window-refused-save-closes-unasked.md](../issues/U08-A18-item-window-refused-save-closes-unasked.md), filed as [pkp-e2e#651](https://github.com/jardakotesovec/pkp-e2e/issues/651).
 
 <a id="fn-a12"></a>
 **f-a12** — `lib/pkp/js/classes/linkAction/PostAndRedirectRequest.js`: the two-second `setTimeout` of note f-a9 calls `finishCallback_`, which in one task re-enables the link (`LinkActionHandler.enableLink()`) and then hands the `enable-link-action` answer to `handleJson()`; `FileApiHandler::enableLinkAction()` answers `DAO::getDataChangedEvent()` with no element id, so the event bubbles to the grid and `GridHandler.refreshGridHandler()` fetches the whole grid (`fetch-grid`); `replaceGridResponseHandler_()` replaces the grid element with the server's markup, in which every row's strip (`tr.row_controls`) is rendered hidden and every name link reads `href="#"` until its own script runs. Live-probed 2026-09-30 (Rule 8a; all three apps, the Settings tab, one run each, `.reports/flake-0930/u39s2/person-strip-{ojs,omp,ops}.json`): a throwaway manager on a scratch journal pressed "Journal guide", waited one second and pressed its arrow: "Edit" showed; about 2.1 s after the press on the name the page asked for the list again (`library-file-admin-grid/fetch-grid`), and three seconds after the arrow "Edit" was hidden and the arrow read closed (`show_extras`); no page error. Test run 2026-09-30 (the U39 files five times each, OJS 25/25, OMP 25/25, OPS 20/20, green): after every download the page object waited for the list it pressed in to be replaced, and each was, in the "Submission Library" window, in "View Document Library" and on the tab. No request failed on the path.
