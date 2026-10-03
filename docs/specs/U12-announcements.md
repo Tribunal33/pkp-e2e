@@ -2082,7 +2082,7 @@ OJS, OMP and OPS: `{id}.gif` still under `public/…/announcements/` after
 left their `{id}.png`; a GIF replacing a PNG left `{id}.png` beside
 `{id}.gif`, a PNG replacing the GIF overwrote `{id}.png`; "Remove" then
 "Save" removed the file. Nothing on a screen shows the folder.
-Issue report: [docs/issues/U12-A12-announcement-image-files-left-behind.md](../issues/U12-A12-announcement-image-files-left-behind.md).
+Issue report: [pkp-e2e#771](https://github.com/jardakotesovec/pkp-e2e/issues/771) ([docs/issues/U12-A12-announcement-image-files-left-behind.md](../issues/U12-A12-announcement-image-files-left-behind.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13 — A13 evidence.** After the edit form's success the grid requests
