@@ -668,6 +668,7 @@ Left out of the scenarios above, by reason:
   - a Search address asking for the sort by published date, newest or oldest first, lists the results in date order (Rule 14; A12)
   - a Search address whose page number is not a number, on a search that finds something, shows the first page of results (Rule 8; A13)
   - a search that finds several items gives the screen-reader status line "Found {N} items." with the count, on a journal and on a preprint server (Rule 7; OJS1, OPS1)
+  - with "min_word_length" raised above a title word's length, a search for that word still finds the article, as the configuration file says it should not (Settings; A9)
 - **Rarely met**:
   - "Items per page" changed on Settings › Website › Setup › Lists, the
     results per page following it (Rule 8, Settings): the Journal Manager
@@ -764,7 +765,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | A Search date filter chosen without its Month or Day is ignored and comes back showing another date | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | Search never finds the corrected title, abstract or added contributor of an already published article | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A9](#a9) | The configuration file lists two search settings that nothing reads | 🐞 | latent | — |
+| [A9](#a9) | Two search settings in the configuration file still promise an effect but change nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | A reader's search never finds a word that appears only in an article's or book's full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | A Search link that sorts the results by published date shows an empty error page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | A Search results address whose page number is not a number opens a completely blank page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
@@ -900,12 +901,20 @@ galley-only words and the sort by title; judgment for the keyword,
 subject, section, category, funder and reviewer matches. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — Two configuration settings do nothing** · 🐞 · latent.
-The configuration file's search section still carries "Minimum indexed
-word length" and "The maximum number of search results fetched per
-keyword", each with an explanation of its effect, but nothing reads either
-value. An administrator tuning them changes nothing.
-Since: 2025-08 (about a year). Basis: judgment. <sup>f-a9</sup>
+**A9 — Two search settings in the configuration file still promise an effect but change nothing** · 🐞 · low.
+The search section of the configuration file still lists "Minimum
+indexed word length" (`min_word_length = 3`) and "The maximum number of
+search results fetched per keyword" (`results_per_keyword = 500`), each
+with a note on what it does. The application no longer reads either
+value. An administrator who changes them to tune the site's search
+changes nothing, and nothing tells them so.
+
+The search rewrite dropped both settings on purpose. Search now leaves
+word length to the database's full-text search (or to OpenSearch), and
+it pages all matches with no cap per word. Only the two lines and their
+notes are left behind, and Administration › "System Information" lists
+them with the rest of the search section, as if they were in force.
+Since: 2025-08 (about a year). Basis: judgment, 2026-10-03. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — No journal picker and no journal name on a press or server site** · ❓ · minor.
@@ -1820,6 +1829,7 @@ exercised (fn-m); `orderBy=datePublished` is f-a12.
 
 <a id="fn-f-a9"></a>
 **f-a9** — fn-n. Judgment from a repository-wide grep; no screen to probe.
+Issue report: [docs/issues/U15-A9-search-config-settings-do-nothing.md](../issues/U15-A9-search-config-settings-do-nothing.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — fn-b, fn-f, fn-i: the OPS `search.tpl` copy lacks the
