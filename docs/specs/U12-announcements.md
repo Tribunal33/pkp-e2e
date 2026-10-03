@@ -841,6 +841,7 @@ Left out of the scenarios above, by reason:
     Announcements page
   - the guard for A13 (issue report `docs/issues/U12-A13-edited-announcement-type-keeps-old-name.md`): an edited announcement type shows its new name in the table at once, on the context's tab and the site's.
   - the guard for A9 (issue report `docs/issues/U12-A9-edit-announcement-email-box-sends-nothing.md`): an edit with the email box ticked mails the context's users, and an unticked edit mails nobody.
+  - the guard for A1 (issue report `docs/issues/U12-A1-remove-announcement-type-deletes-announcements.md`): removing an announcement type with typed announcements leaves them on the list and the public site, their type cleared.
 - **Nothing new to test**:
   - an unsaved tick on the settings tab kept across a tab switch and
     lost on leaving the page (Fields)
@@ -930,7 +931,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | Removing an announcement type deletes every announcement of that type after a dialog that only asks about "this item" | 🐞 | user-visible | — |
+| [A1](#a1) | Removing an announcement type deletes every announcement of that type, behind a dialog that names neither the type nor its announcements | 🐞 | high | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | An image refused on "Save" (a ".jpeg" name, an upper-case extension) deletes the announcement being edited | 🐞 | user-visible | — |
 | [A3](#a3) | "Edit Announcement" prints the expiry date in the journal's short date format, which the save refuses unless that format is YYYY-MM-DD | 🐞 | user-visible | — |
 | [A7](#a7) | "Limit feed to {n} most recent announcements." keeps the first {n} the unlimited feed lists, not the most recent {OJS} | 🐞 | minor | — |
@@ -953,7 +954,7 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — Removing a type deletes its announcements unwarned** · 🐞 · user-visible.
+**A1 — Removing an announcement type deletes every announcement of that type, behind a dialog that names neither the type nor its announcements** · 🐞 · high.
 A manager who presses "Remove" on an announcement type reads "Are you
 sure you wish to delete this item? This action cannot be undone." and
 expects the type alone to go. "OK" also deletes every announcement of
@@ -961,7 +962,13 @@ that type, from the list and the public site, and the only message is
 "Announcement type removed."; the "Announcements" tab's list still shows
 the deleted announcements until the page is reloaded. The application
 carries the warning "Warning! All announcements with this announcement
-type will also be deleted…" but never shows it. Basis: probe.
+type will also be deleted…" but never shows it. The deletion is not what
+the code base intends today: since 3.4 the database is set up to keep
+the announcements and clear their type, and 3.4 did keep them; deleting
+them was once meant only with that warning. The deleted announcements
+cannot be brought back. It reaches only journals, presses and preprint
+servers that give their announcements a type.
+Basis: probe, 2026-10-03.
 <sup>f-a1</sup>
 
 <a id="a2"></a>
@@ -1899,6 +1906,7 @@ Code read 2026-09-17. Live-probed 2026-09-17 (A1), OJS, OMP and OPS: the
 dialog's text and buttons as the entry says, "Announcement type removed."
 the only message, the two typed announcements gone from the public site at
 once and from the list after a reload.
+Issue report: [docs/issues/U12-A1-remove-announcement-type-deletes-announcements.md](../issues/U12-A1-remove-announcement-type-deletes-announcements.md).
 
 <a id="fn-f-a2"></a>
 **f-a2 — A2 evidence.** `PKPAnnouncementController::edit()`'s catch block

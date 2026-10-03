@@ -1,0 +1,27 @@
+--- a/lib/pkp/classes/announcement/AnnouncementTypeDAO.php
++++ b/lib/pkp/classes/announcement/AnnouncementTypeDAO.php
+@@ -103,7 +103,8 @@
+     }
+ 
+     /**
+-     * Delete an announcement type. Note that all announcements with this type are also deleted.
++     * Delete an announcement type. The announcements of this type are kept and lose their
++     * type: the announcements.type_id foreign key is ON DELETE SET NULL.
+      */
+     public function deleteObject(AnnouncementType $announcementType): void
+     {
+@@ -111,12 +112,11 @@
+     }
+ 
+     /**
+-     * Delete an announcement type by announcement type ID. Note that all announcements with this type ID are also deleted.
++     * Delete an announcement type by announcement type ID. The announcements of this type are
++     * kept and lose their type: the announcements.type_id foreign key is ON DELETE SET NULL.
+      */
+     public function deleteById(int $typeId): int
+     {
+-        Announcement::withTypeIds([$typeId])->delete();
+-
+         return DB::table('announcement_types')
+             ->where('type_id', '=', $typeId)
+             ->delete();
