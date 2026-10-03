@@ -1,0 +1,44 @@
+--- a/lib/pkp/templates/controllers/grid/files/submissionDocuments/form/newFileForm.tpl
++++ b/lib/pkp/templates/controllers/grid/files/submissionDocuments/form/newFileForm.tpl
+@@ -44,7 +44,7 @@
+ 	{/fbvFormArea}
+ 
+ 	{fbvFormArea id="description"}
+-		{fbvFormSection title="common.description" required=true}
++		{fbvFormSection title="common.description"}
+ 			{fbvElement type="textarea" multilingual="true" id="description" value=$description}
+ 		{/fbvFormSection}
+ 	{/fbvFormArea}
+--- a/lib/pkp/templates/controllers/grid/files/submissionDocuments/form/editFileForm.tpl
++++ b/lib/pkp/templates/controllers/grid/files/submissionDocuments/form/editFileForm.tpl
+@@ -33,7 +33,7 @@
+ 	{/fbvFormArea}
+ 
+ 	{fbvFormArea id="description"}
+-		{fbvFormSection title="common.description" required=true}
++		{fbvFormSection title="common.description"}
+ 			{fbvElement type="textarea" multilingual="true" id="description" value=$description}
+ 		{/fbvFormSection}
+ 	{/fbvFormArea}
+--- a/lib/pkp/templates/controllers/grid/settings/library/form/newFileForm.tpl
++++ b/lib/pkp/templates/controllers/grid/settings/library/form/newFileForm.tpl
+@@ -41,7 +41,7 @@
+ 	{/fbvFormArea}
+ 
+ 	{fbvFormArea id="description"}
+-		{fbvFormSection title="common.description" required=true}
++		{fbvFormSection title="common.description"}
+ 			{fbvElement type="textarea" multilingual="true" id="description" value=$description}
+ 		{/fbvFormSection}
+ 	{/fbvFormArea}
+--- a/lib/pkp/templates/controllers/grid/settings/library/form/editFileForm.tpl
++++ b/lib/pkp/templates/controllers/grid/settings/library/form/editFileForm.tpl
+@@ -40,7 +40,7 @@
+ 	{/fbvFormArea}
+ 
+ 	{fbvFormArea id="description"}
+-		{fbvFormSection title="common.description" required=true}
++		{fbvFormSection title="common.description"}
+ 			{fbvElement type="textarea" multilingual="true" id="description" value=$description}
+ 		{/fbvFormSection}
+ 	{/fbvFormArea}

@@ -557,6 +557,7 @@ Left out of the scenarios above, by reason:
   - the close button of "Add a file" after an "OK" refused for a missing file asks "The data on this form has changed. Do you wish to continue without saving?" (Rule 3b; A11, docs/issues/U08-A18-item-window-refused-save-closes-unasked.md)
   - an assigned Copyeditor and, on a preprint server, the Moderator and the Author download a Submission Library file from the "Submission Library" window (Actors row 3; Rule 8b; A1)
   - a row's strip opened within two seconds of a download stays open three seconds later, and two names pressed in a row raise no page error (Rule 8a; A9, A12)
+  - "Description" in both libraries' "Add a file" and "Edit" carries the required star only if an empty one is refused (Fields; A3)
 - **Nothing new to test**:
   - a recommending editor's "Notify Editors" page {OJS OMP}: its "Library Files", and the attached file's copy listed in the discussion the recommendation opens (Actors row 8; Rule 11c)
   - the "Request Author Response" page {OJS}: the Editor's and an assigned Section Editor's "Library Files" (Actors row 8; Rule 11a)
@@ -591,7 +592,7 @@ entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | Assistants, and a preprint's moderator and author, get a bare "403 Forbidden" page for Submission Library files | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "OK" in "Add a file" before a file has uploaded does nothing and says nothing | 🐞 | minor | — |
-| [A3](#a3) | "Description" is starred as required but saves empty | 🐞 | minor | — |
+| [A3](#a3) | "Description" in the library's "Add a file" and "Edit" windows is starred as required, yet saves empty | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | A file whose name holds its extension earlier downloads under a cut name | 🐞 | minor | — |
 | [A5](#a5) | With strict mode on, "Delete" in the Submission Library fails | 🐞 | latent | — |
 | [A9](#a9) | A second file's name pressed, or a save, within two seconds of a download makes the page's script fail | 🐞 | low · crash: script | issues (claude), 2026-10-03 — re-verified |
@@ -636,12 +637,20 @@ missing.
 Basis: probe. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
-**A3 — "Description" starred but not required** · 🐞 · minor.
-The "Add a file" and "Edit" windows mark "Description" with the
-required-field star, and the note under the form says starred fields are
-required, but a file with an empty description saves. Either the star or
-the rule is wrong.
-Basis: probe. <sup>[f-a3](#fn-a3)</sup>
+**A3 — "Description" in the library's "Add a file" and "Edit" windows is starred as required, yet saves empty** · 🐞 · low.
+The "Add a file" and "Edit" windows of the Publisher Library and of a
+submission's "Library" mark "Description" with the required-field star,
+and the note under the form says "Required fields are marked with an
+asterisk: *". Yet "OK" with "Description" left empty saves the file
+with no message, and "Edit" reads the description back empty.
+
+The star tells people that a description is required when it is not.
+
+The proposal is to remove the star and keep "Description" optional, as
+it has worked since the field was added. The issue that asked for the
+field wanted it mandatory, at least for images, so the team should
+confirm which way to go.
+Basis: probe, 2026-10-03. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
 **A4 — A name holding its extension earlier downloads cut** · 🐞 · minor.
@@ -859,6 +868,7 @@ Issue report: [docs/issues/U39-A1-submission-library-file-403-for-participants.m
 
 <a id="fn-a3"></a>
 **f-a3** — Both libraries' `newFileForm.tpl` and `editFileForm.tpl` wrap the textarea in `{fbvFormSection title="common.description" required=true}` (the star), while `LibraryFileForm` registers no validator for `description` and the textarea has no `required` attribute. Live-probed 2026-09-24: note td5.
+Issue report: [docs/issues/U39-A3-library-description-starred-not-required.md](../issues/U39-A3-library-description-starred-not-required.md).
 
 <a id="fn-a4"></a>
 **f-a4** — `PKPLibraryFileManager::generateFileName()`: `$baseName = Str::substr($truncated, 0, Str::position($originalFileName, $ext) - 1)`, where `Str::position()` returns the first occurrence of the extension text anywhere in the name: 0 for "pdf-guide.pdf", so `Str::substr(…, 0, -1)` keeps all but the last character ("pdf-guide.pd"); 6 for "notes-pdf-draft.pdf", so "notes". Live-probed 2026-09-24: note td6.
