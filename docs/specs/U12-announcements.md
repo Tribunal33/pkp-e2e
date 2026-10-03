@@ -2054,7 +2054,7 @@ contributions", footer "Se désabonner … des courriels envoyés par …", body
 read "Visiter notre site Web pour consulter l'annonce complète". The likely
 cause is a French string of `emails.announcement.body` missing from the
 press's and server's locale files; the files were not compared.
-Issue report: [docs/issues/U12-A14-french-announcement-email-english-sentence.md](../issues/U12-A14-french-announcement-email-english-sentence.md).
+Issue report: [pkp-e2e#766](https://github.com/jardakotesovec/pkp-e2e/issues/766) ([docs/issues/U12-A14-french-announcement-email-english-sentence.md](../issues/U12-A14-french-announcement-email-english-sentence.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15 — A15 evidence.** The feeds are rendered by
