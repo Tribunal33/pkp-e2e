@@ -1287,6 +1287,19 @@ Left out of the scenarios above, by reason:
     `docs/issues/U27-A18-emptied-request-letter-half-adds-reviewer.md`): an
     "Add Reviewer" with the request letter emptied is refused with a
     message, and no row is added and no email is sent
+  - the guard for A22 (issue report
+    `docs/issues/U27-A22-review-details-guidance-promises-upload.md`): the
+    Review Details window on a submitted review: each control its guidance
+    names ("Modify Review", "Mark as Complete") is a button of that window
+  - the guard for OMP6 (issue report
+    `docs/issues/U27-OMP6-press-review-form-line-says-this-journal.md`): on
+    a press, the Review Details window with a review form reads the form
+    line without "journal"
+  - the guard for A39 (issue report
+    `docs/issues/U27-A39-competing-interests-no-reads-declared-yes.md`): a
+    competing-interests answer changed to a statement and back reads
+    "declared: NO" for "I do not have any competing interests" in each "View
+    changes"
 - **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
   - the Review Details window on a request with no review: "Request Sent:", "Reviewer Reminded:", "Request Accepted:" or "Request Declined:", the empty blocks, and "Mark as Complete" disabled beside its recommendation message {OJS} or, with a review form, its incomplete-review message (Rule 14c): an editor opens the window to read a review, and on a request that has none only in a rare week
@@ -1380,18 +1393,18 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A18](#a18) | An editor who empties the review request letter gets no answer, while a blank invitation goes to the reviewer | 🐞 | medium · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A19](#a19) | The template chooser renders on every add, as a one-option select even with zero alternate templates | 🐞 | minor | — |
 | [A21](#a21) | A rating star pressed just after the Review Details window opens is saved, yet the open window can fall back to "No rating" | 🐞 | user-visible | @beaug 2026-08-29 · risk accepted |
-| [A22](#a22) | The Review Details guidance tells the editor to "upload the file below", but the window has no upload control | 🐞 | minor | @beaug 2026-08-29 · ticket to follow |
+| [A22](#a22) | The Review Details window tells the editor to "upload the file below", but it has no upload control | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP2](#omp2) | {OMP} The Add Reviewer window's opening list ignores the internal/external stage split, and a reviewer of the other stage picked from it is added to the round; only searching filters by stage | 🐞 | user-visible | — |
 | [A26](#a26) | The unassign notice reaches the reviewer under the cancel notice's subject, "Your review for "{title}" has been cancelled" | 🐞 | minor | — |
 | [OMP3](#omp3) | {OMP} The unassign notice's body prints "{$journalName}" literally where the press's name belongs | 🐞 | minor | — |
 | [A30](#a30) | "Modify Review" is offered on a "Request Declined" row, and its "Save Changes" is refused with "This review not editable because it was declined." | 🐞 | minor | — |
 | [A31](#a31) | An assistant-level participant is offered "Modify Review", and "Save Changes" answers "The current role does not have access to this operation." | 🐞 | minor | — |
 | [OMP4](#omp4) | {OMP} "Mark as Complete" is enabled on a request with no review; confirming records a completed review nobody wrote and leaves the reviewer on a first step that offers nothing | 🐞 | user-visible | — |
-| [OMP6](#omp6) | {OMP} The Review Details windows introduce a review form with "The questions this journal asks reviewers to answer." on a press | 🐞 | minor | — |
+| [OMP6](#omp6) | {OMP} On a press, the Review Details windows introduce a review form with "The questions this journal asks reviewers to answer." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A32](#a32) | A Review Details window closed within a moment of opening, before its mark as viewed is saved, can leave the row "Review Submitted", and the dashboard's "View unread recommendation", until a page reload | 🐞 | minor | @blessie 2026-09-24 · risk accepted, not fixing |
 | [A36](#a36) | A reviewer assigned today reads "Yesterday" in the Add Reviewer list, while the entry's statistics give 0 days since the last assignment | 🐞 | minor | — |
 | [A37](#a37) | After "Resend Review Request", the activity log prints "{$submissionid}" where the submission's number belongs | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A39](#a39) | "View changes" on a competing-interests change reads "Competing Interests declared: YES" for an answer of "I do not have any competing interests" | 🐞 | minor | @beaug 2026-09-30 · confirmed |
+| [A39](#a39) | The activity log's "View changes" reads "Competing Interests declared: YES" for a reviewer who declared none | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A40](#a40) | On a request with no review, "Save Changes" with only the competing-interests answer recorded submits the review for the reviewer, with no content on a press | 🐞 | minor | @beaug 2026-09-30 · confirmed on OMP |
 | [A4](#a4) | Editorial Notes are one shared note per reviewer; editing them on one submission silently rewrites them everywhere | ❓ | user-visible | — |
 | [A6](#a6) | Declined and cancelled rows are silently hidden from assistant-level participants, so the same table shows different reviewers per role | ❓ | minor | — |
@@ -1710,16 +1723,18 @@ reading. <sup>[f-a21](#fn-a21)</sup>
 > in code at that day's main tip (claude).
 
 <a id="a22"></a>
-**A22 — The window's guidance promises an upload control it lacks** · 🐞 ·
-minor.
-The Review Details window's guidance paragraph tells the editor they "may
-upload the file below and then press 'Mark as Complete'". The window offers
-no upload control anywhere; uploading a reviewer file lives only in the
-"Modify Review" window (Rule 14b). The text contradicts the screen it sits
-on. Upstream has already flagged the sentence's translation entry for
-review.
-Since: 2026-08-29 (the rework kept the legacy window's text) · Basis:
-probe + code reading. <sup>[f-a22](#fn-a22)</sup>
+**A22 — The Review Details window tells the editor to "upload the file below", but it has no upload control** · 🐞 · low.
+An editor who opens a reviewer's "Review Details" window (from "Read
+Review" or the row's menu) is told under the reviewer's name that, for a
+review received elsewhere, they "may upload the file below". The window
+has no upload control. Uploading a reviewer's file is offered only in
+the "Modify Review" window, which opens from the "Modify Review" button
+and which the sentence does not mention. On 3.5 the older window showed
+the same sentence with an "Upload File" link right beneath it. The new
+window moved the upload into the "Modify Review" window and kept the
+sentence, so the fix is a reword pointing there, not a control to
+restore. Since: 2026-08-29 (the rework kept the legacy window's text) ·
+Basis: probe, 2026-10-03. <sup>[f-a22](#fn-a22)</sup>
 
 > **Reviewed — @beaug, 2026-08-29**: confirmed 🐞 (the wording was called
 > out before). Ruling: an upstream ticket to investigate is to follow. The
@@ -1874,21 +1889,23 @@ review included, since that reviewer may still be asked about it there.
 Basis: code. <sup>[f-a38](#fn-a38)</sup>
 
 <a id="a39"></a>
-**A39 — "View changes" says an interest was declared when none was** · 🐞 ·
-minor.
-On a "…Reviewer Competing Interests." row of the activity log, "View
-changes" opens "View Review" with "Updated Competing Interests" and
-"Previous Competing Interests", each reading "Competing Interests declared:
-YES" over "Competing Interests: {statement}" (Side effects). An answer of
-"I do not have any competing interests" reads "Competing Interests
-declared: YES" too, with an empty statement, so a change from no interests
-to a statement reads as one declared interest replacing another, and a
-change back reads as an interest still declared. Expected, "declared: NO"
-for that answer: "declared" read as "declared an interest" says the
-opposite of the reviewer's answer.
-Since: pkp/pkp-lib#13369 (issue pkp/pkp-lib#13291, 2026-09-23), on screen
-since pkp/ui-library#993 (issue pkp/pkp-lib#13282, 2026-09-29) · Basis:
-probe. <sup>[f-a39](#fn-a39)</sup>
+**A39 — The activity log's "View changes" reads "Competing Interests declared: YES" for a reviewer who declared none** · 🐞 · low.
+When an editor changes a reviewer's competing-interests answer in the
+"Modify Review" window, the submission's "Activity Log" gets a line
+saying the review's competing interests were modified. Its "View
+changes" reads "Competing Interests declared: YES", with an empty
+statement under it, for an answer of "I do not have any competing
+interests". A stated interest reads "declared: YES" as well. So a change
+from no interests to a statement reads as one declared interest
+replacing another, and a change back reads as an interest still
+declared. The Review Details window shows the current answer correctly;
+the log records the opposite of what the reviewer answered. It happens
+on a journal or press whose Settings › Workflow › "Review" › "Reviewer
+Guidance" has a "Competing Interests" text, the setting that makes
+reviewers answer the question. Since: pkp/pkp-lib#13369 (issue
+pkp/pkp-lib#13291, 2026-09-23), on screen since pkp/ui-library#993
+(issue pkp/pkp-lib#13282, 2026-09-29) · Basis: probe, 2026-10-03.
+<sup>[f-a39](#fn-a39)</sup>
 
 > **Reviewed — @beaug, 2026-09-30**: confirmed 🐞. Ruling: valid; checked
 > by hand in the activity log, which reads "Competing Interests Declared:
@@ -2039,13 +2056,15 @@ the reviewer's own empty submit is already recorded as a defect
 Basis: probe. <sup>[f-omp5](#fn-omp5)</sup>
 
 <a id="omp6"></a>
-**OMP6 — The review-form block says "this journal" on a press** · 🐞 ·
-minor.
-On a press both Review Details windows introduce a review form's questions
-with "The questions this journal asks reviewers to answer.", the journal's
-sentence unchanged, where every other line of a press's screens says
-"press".
-Basis: probe. <sup>[f-omp6](#fn-omp6)</sup>
+**OMP6 — On a press, the Review Details windows introduce a review form with "The questions this journal asks reviewers to answer."** · 🐞 · low.
+On a press, when a reviewer's request carries a review form, the
+editor's "Review Details" window and the "Modify Review" window over it
+introduce the form's questions with a line that calls the press a
+journal. Only editors see these windows; the reviewer's own review pages
+do not show the line. The line shows when the review form has no
+description of its own, which is how a new form is created unless the
+manager types one. Basis: probe, 2026-10-03.
+<sup>[f-omp6](#fn-omp6)</sup>
 
 ### OPS
 
@@ -3270,6 +3289,7 @@ as Complete'…" as displayed — and the same rework's commit
 Live-probed 2026-08-29 (OJS + OMP): the view window renders no upload
 control anywhere; the "Upload" control exists only in
 `ReviewDetailsEditModal.vue` (Rule 14b).
+Issue report: [docs/issues/U27-A22-review-details-guidance-promises-upload.md](../issues/U27-A22-review-details-guidance-promises-upload.md).
 
 <a id="fn-a23"></a>
 **f-a23** — Live-probed 2026-08-29 (OJS): "Recommendation: {label}" in
@@ -3615,6 +3635,7 @@ flag, which records that the question was answered, not which answer;
 "Competing Interests declared: NO"
 (`…competingInterestsWithNoDeclaration`) prints only for a previous state
 never answered.
+Issue report: [docs/issues/U27-A39-competing-interests-no-reads-declared-yes.md](../issues/U27-A39-competing-interests-no-reads-declared-yes.md).
 
 <a id="fn-a40"></a>
 **f-a40** — Driven 2026-09-29 (a context with a "Competing Interests"
@@ -3739,6 +3760,7 @@ review form: the block's title is the form's own, the line under it the
 fixed string "The questions this journal asks reviewers to answer."
 (`editor.review.reviewerForm.description.default`, lib/pkp
 `locale/en/editor.po`), shared by OJS and OMP with no press override.
+Issue report: [docs/issues/U27-OMP6-press-review-form-line-says-this-journal.md](../issues/U27-OMP6-press-review-form-line-says-this-journal.md).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Code+registry inspection 2026-08-27 (pkp/ops main

@@ -1,0 +1,11 @@
+--- a/lib/pkp/locale/en/editor.po
++++ b/lib/pkp/locale/en/editor.po
+@@ -320,7 +320,7 @@
+ msgstr "Reviewer Comments"
+ 
+ msgid "editor.review.reviewerForm.description.default"
+-msgstr "The questions this journal asks reviewers to answer."
++msgstr "The questions this review form asks reviewers to answer."
+ 
+ msgid "editor.review.rateReviewer"
+ msgstr "Reviewer rating"

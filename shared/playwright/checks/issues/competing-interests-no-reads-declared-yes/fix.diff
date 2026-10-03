@@ -1,0 +1,35 @@
+--- a/lib/pkp/api/v1/submissions/reviewAssignments/ReviewAssignmentController.php
++++ b/lib/pkp/api/v1/submissions/reviewAssignments/ReviewAssignmentController.php
+@@ -695,10 +695,8 @@
+                 'message' => 'submission.event.review.field.modified.reviewerCompetingInterests',
+                 'isTranslated' => false,
+                 'dateLogged' => Core::getCurrentDate(),
+-                'reviewerNewCompetingInterests' => __('submission.event.review.competingInterestsWithDeclaration', ['competingInterests' => $validated['competingInterests']]),
+-                'reviewerOldCompetingInterests' => $oldCompetingInterestsDeclared ?
+-                    __('submission.event.review.competingInterestsWithDeclaration', ['competingInterests' => $oldCompetingInterests])
+-                    : __('submission.event.review.competingInterestsWithNoDeclaration', ['competingInterests' => $oldCompetingInterests]),
++                'reviewerNewCompetingInterests' => $this->describeCompetingInterests(true, $validated['competingInterests']),
++                'reviewerOldCompetingInterests' => $this->describeCompetingInterests($oldCompetingInterestsDeclared, $oldCompetingInterests),
+                 'impersonatedUserId' => Validation::loggedInAs() ? $user->getId() : null,
+             ]);
+ 
+@@ -717,4 +715,19 @@
+ 
+         return response()->json(new ReviewResource($reviewAssignment), Response::HTTP_OK);
+     }
++
++    /**
++     * Describe a competing-interests answer for the event log. Only an answer with a statement
++     * declares an interest: "I do not have any competing interests" (answered, no statement) reads
++     * like an unanswered question, as the review's own display reads the two fields.
++     */
++    protected function describeCompetingInterests(bool $declared, ?string $competingInterests): string
++    {
++        return __(
++            $declared && (string) $competingInterests !== ''
++                ? 'submission.event.review.competingInterestsWithDeclaration'
++                : 'submission.event.review.competingInterestsWithNoDeclaration',
++            ['competingInterests' => (string) $competingInterests]
++        );
++    }
+ }
