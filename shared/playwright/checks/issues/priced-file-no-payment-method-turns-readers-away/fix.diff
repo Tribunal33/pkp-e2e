@@ -1,0 +1,63 @@
+--- a/controllers/grid/files/proof/form/ApprovedProofForm.php
++++ b/controllers/grid/files/proof/form/ApprovedProofForm.php
+@@ -15,6 +15,7 @@
+ 
+ namespace APP\controllers\grid\files\proof\form;
+ 
++use APP\core\Application;
+ use APP\facades\Repo;
+ use APP\publicationFormat\PublicationFormat;
+ use APP\submission\Submission;
+@@ -50,6 +51,10 @@
+ 
+         // matches currencies like:  1,500.50 1500.50 1,112.15 5,99 .99
+         $this->addCheck(new \PKP\form\validation\FormValidatorRegExp($this, 'price', 'optional', 'grid.catalogEntry.validPriceRequired', '/^(([1-9]\d{0,2}(,\d{3})*|[1-9]\d*|0|)(.\d{2})?|([1-9]\d{0,2}(,\d{3})*|[1-9]\d*|0|)(.\d{2})?)$/'));
++        // A file can be put on sale only while the press can take payments
++        $this->addCheck(new \PKP\form\validation\FormValidatorCustom($this, 'salesType', 'optional', 'notification.type.configurePaymentMethod', function ($salesType) {
++            return $salesType !== 'directSales' || Application::get()->getPaymentManager(Application::get()->getRequest()->getContext())->isConfigured();
++        }));
+         $this->addCheck(new \PKP\form\validation\FormValidatorPost($this));
+         $this->addCheck(new \PKP\form\validation\FormValidatorCSRF($this));
+     }
+--- a/pages/catalog/CatalogBookHandler.php
++++ b/pages/catalog/CatalogBookHandler.php
+@@ -540,17 +540,22 @@
+ 
+         // Fall-through: user needs to pay for purchase.
+ 
++        // The press cannot take payments: say so instead of asking for a login or a payment.
++        $paymentManager = new OMPPaymentManager($press);
++        if (!$paymentManager->isConfigured()) {
++            $templateMgr->assign([
++                'pageTitle' => 'payment.directSales.notAvailable',
++                'message' => 'payment.directSales.paymentNotConfigured',
++            ]);
++            return $templateMgr->display('frontend/pages/message.tpl');
++        }
++
+         // Users that are not logged in need to register/login first.
+         if (!$user) {
+             return $request->redirect(null, 'login', null, null, ['source' => $request->url(null, null, null, [$monographId, $representationId, $bestFileId])]);
+         }
+ 
+         // They're logged in but need to pay to view.
+-        $paymentManager = new OMPPaymentManager($press);
+-        if (!$paymentManager->isConfigured()) {
+-            $request->redirect(null, 'catalog');
+-        }
+-
+         $queuedPayment = $paymentManager->createQueuedPayment(
+             $request,
+             OMPPaymentManager::PAYMENT_TYPE_PURCHASE_FILE,
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -1402,6 +1402,9 @@
+ msgid "payment.directSales.download"
+ msgstr "Download {$format}"
+ 
++msgid "payment.directSales.paymentNotConfigured"
++msgstr "This file is for sale, but the press is not able to take payments at the moment. Please contact the press."
++
+ msgid "payment.directSales.monograph.name"
+ msgstr "Purchase Monograph or Chapter Download"
+ 
