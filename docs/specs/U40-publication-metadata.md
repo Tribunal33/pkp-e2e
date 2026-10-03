@@ -2602,7 +2602,7 @@ the Title empty and Confirm was refused with "This field is required."
 completed" on Title after the accepted Confirm showed while the
 publication held a title in both languages, so that counter is not a
 sign of an empty title.
-Issue report: [docs/issues/U40-A15-language-panel-early-pick-keeps-old-title.md](../issues/U40-A15-language-panel-early-pick-keeps-old-title.md).
+Issue report: [pkp-e2e#810](https://github.com/jardakotesovec/pkp-e2e/issues/810) ([docs/issues/U40-A15-language-panel-early-pick-keeps-old-title.md](../issues/U40-A15-language-panel-early-pick-keeps-old-title.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16 — A16 evidence.** The change: pkp/pkp-lib#13109 "Author should
