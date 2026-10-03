@@ -1968,7 +1968,7 @@ next fetch. Code read 2026-09-17. Live-probed 2026-09-17 (A2), OJS, OMP and OPS:
 `photo.jpeg` and `PHOTO.PNG` on an edit answered the message (PUT 400); the
 row stayed until a reload, then was gone with its page; the announcement's
 `{id}.png` stayed on disk.
-Issue report: [docs/issues/U12-A2-refused-image-deletes-announcement.md](../issues/U12-A2-refused-image-deletes-announcement.md).
+Issue report: [pkp-e2e#770](https://github.com/jardakotesovec/pkp-e2e/issues/770) ([docs/issues/U12-A2-refused-image-deletes-announcement.md](../issues/U12-A2-refused-image-deletes-announcement.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3 — A3 evidence.** Note k: the edit modal prints through
