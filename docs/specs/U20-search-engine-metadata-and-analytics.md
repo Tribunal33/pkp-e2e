@@ -893,6 +893,7 @@ Left out of the scenarios above, by reason:
   - A1 (a "Description" with a double quote mark: the journal's home page carries the whole text in its description tag; Rule 9)
   - OMP1 {OMP} (a book with an EPUB format and an HTML format: the book page's "citation_fulltext_html_url" names the HTML file alone; Fields, "citation_fulltext_html_url")
   - OMP2 {OMP} (a book with two PDF files for the whole book and no ISBN: one "citation_pdf_url" per file; Fields, "citation_pdf_url")
+  - A5 (an expired announcement: the sitemap lists the unexpired one alone; Rule 3)
 - **Rarely met**:
   - "User Registration" set to "The Journal Manager will register all
     user accounts. …", which takes "Register" out of the sitemap
@@ -978,7 +979,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | Search engines get the home page's "Description" cut at its first double quote mark | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Google Analytics Plugin" speaks of OJS on a press and a preprint server, and of a "Check Status" function no screen offers | 🐞 | minor | — |
-| [A5](#a5) | The sitemap lists expired announcements, and their entries open the "Announcements" list | 🐞 | minor | — |
+| [A5](#a5) | The sitemap lists expired announcements, whose entries lead to the Announcements list | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | A contributor whose names are not entered in the submission's language is announced by the given name alone | 🐞 | minor | — |
 | [A7](#a7) | An "&" in an abstract reaches the tags as "&amp;" | 🐞 | minor | — |
 | [OJS1](#ojs1) | "DC.Source.URI" points to an address that does not exist instead of the journal's home page | 🐞 | minor | — |
@@ -1050,12 +1051,17 @@ difference follows no product reason.
 Basis: probe, 2026-09-26. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — Expired announcements stay in the sitemap** · 🐞 · minor.
-A journal with announcements on expects its sitemap to list the
-announcements a visitor can read. It lists every announcement, one whose
-expiry date has passed included, and following that entry lands on the
-"Announcements" list instead of the announcement.
-Basis: probe, 2026-09-26. <sup>f-a5</sup>
+**A5 — The sitemap lists expired announcements, whose entries lead to the Announcements list** · 🐞 · low.
+A journal with announcements switched on expects its sitemap to list
+the announcements a visitor can read. The sitemap lists every
+announcement the journal has, including those whose expiry date has
+passed. Following an expired announcement's entry does not open the
+announcement: the app sends the visitor or search engine on to the
+"Announcements" list, which no longer shows it.
+
+It shows once an announcement's expiry date has passed, and the
+entries grow by one with each announcement that expires.
+Basis: probe, 2026-10-03. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — Author tags give the given name alone in another language** · 🐞 · minor.
@@ -1320,6 +1326,7 @@ Issue report: [docs/issues/U20-A1-home-page-description-cut-at-quote-mark.md](..
 
 <a id="fn-f-a5"></a>
 **f-a5** — Note e: the announcement entries come from `Announcement::withContextIds` with no date filter, while the announcement's own page sends an expired announcement's reader to the list. Live-probed 2026-09-26, all three apps: note q5.
+Issue report: [docs/issues/U20-A5-sitemap-lists-expired-announcements.md](../issues/U20-A5-sitemap-lists-expired-announcements.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Notes h, i: `citation_author` and `DC.Creator.PersonalName` read `getFullName(false, false, $publicationLocale)`, the name in the submission language only, with no fallback; the item's page falls back to the other language. The contributor copied from the submitting author holds the given name in the submission language and not the family name. Live-probed 2026-09-26, all three apps (Dublin Core on OJS and OMP), in either interface language: note q14.
