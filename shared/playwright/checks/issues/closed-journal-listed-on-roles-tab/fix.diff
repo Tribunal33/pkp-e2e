@@ -1,0 +1,56 @@
+--- a/lib/pkp/classes/user/form/UserFormHelper.php
++++ b/lib/pkp/classes/user/form/UserFormHelper.php
+@@ -42,28 +42,29 @@
+      */
+     public function assignRoleContent($templateMgr, $request)
+     {
+-        // Need the count in order to determine whether to display
+-        // extras-on-demand for role selection in other contexts.
++        // Only the enabled contexts open to user registration offer roles,
++        // as the site-wide TemplateManager's $contexts and saveRoleContent() do.
+         $contextDao = Application::getContextDAO();
+-        $contexts = $contextDao->getAll(true)->toArray();
+-        $contextsWithUserRegistration = [];
+-        foreach ($contexts as $context) {
+-            if (!$context->getData('disableUserReg')) {
+-                $contextsWithUserRegistration[] = $context;
+-            }
+-        }
++        $contexts = array_values(array_filter(
++            $contextDao->getAll(true)->toArray(),
++            fn ($context) => !$context->getData('disableUserReg')
++        ));
++        // Need the count of the others in order to determine whether to display
++        // extras-on-demand for role selection in other contexts.
++        $currentContext = $request->getContext();
++        $otherContexts = array_filter(
++            $contexts,
++            fn ($context) => !$currentContext || $context->getId() != $currentContext->getId()
++        );
+         $templateMgr->assign([
+             'contexts' => $contexts,
+-            'showOtherContexts' => !$request->getContext() || count($contextsWithUserRegistration) > 1,
++            'showOtherContexts' => !$currentContext || count($otherContexts) > 0,
+         ]);
+ 
+         // Expose potential self-registration user groups to template
+         $authorUserGroups = $reviewerUserGroups = $readerUserGroups = [];
+ 
+         foreach ($contexts as $context) {
+-            if ($context->getData('disableUserReg')) {
+-                continue;
+-            }
+             $reviewerUserGroups[$context->getId()] = UserGroup::withRoleIds([Role::ROLE_ID_REVIEWER])->withContextIds($context->getId())->get();
+             $authorUserGroups[$context->getId()] = UserGroup::withRoleIds([Role::ROLE_ID_AUTHOR])->withContextIds($context->getId())->get();
+             $readerUserGroups[$context->getId()] = UserGroup::withRoleIds([Role::ROLE_ID_READER])->withContextIds($context->getId())->get();
+--- a/lib/pkp/templates/user/userGroups.tpl
++++ b/lib/pkp/templates/user/userGroups.tpl
+@@ -11,7 +11,7 @@
+  *}
+ 
+ {fbvFormArea id="userGroups" title="user.roles" class=border}
+-	{if $currentContext}
++	{if $currentContext && !$currentContext->getData('disableUserReg')}
+ 		{capture assign="userGroupSectionLabel"}{translate key="user.register.registerAs" contextName=$currentContext->getLocalizedName()}{/capture}
+ 		{fbvFormSection label=$userGroupSectionLabel translate=false list=true}
+ 			{include file="user/userGroupSelfRegistration.tpl" context=$currentContext authorUserGroups=$authorUserGroups reviewerUserGroups=$reviewerUserGroups readerUserGroups=$readerUserGroups}

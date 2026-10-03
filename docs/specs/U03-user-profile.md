@@ -999,6 +999,17 @@ Left out of the scenarios above, by reason:
     guard the issue report
     (`docs/issues/U03-A12-password-tab-cancel-does-nothing.md`)
     proposes, once fixed
+  - the site-wide Profile page showing no privacy sentence while the
+    site has no Privacy Statement, and linking to it once one is saved
+    ([A14](#a14); Rule 14): the guard the issue report
+    (`docs/issues/U03-A14-site-profile-privacy-link-not-found.md`)
+    proposes, once fixed
+  - a journal closed to registrations not listed in another journal's
+    "Register with other journals", on the site-level profile or on the
+    site-wide Register page ([A4](#a4); Rules 8a and 8c): the guard the
+    issue report
+    (`docs/issues/U03-A4-closed-journal-listed-on-roles-tab.md`)
+    proposes, once fixed
 - **Nothing new to test**:
   - a tab named in the site-level address kept on the forward to a one-journal user's profile (Rule 3; scenario 2 opens the site-level address with no tab named, and scenario 1 reads a tab named in a journal's address)
   - no submission or activity-log entry written by this page (*Side effects*): the log is a submission's, and reading its silence needs a submission and a positive control for nothing this page does
@@ -1007,10 +1018,8 @@ Left out of the scenarios above, by reason:
   - "View Profile" in the menu under the username on the journal's public pages (Rule 1; scenario 1's "Edit Profile" opens the same page)
 - **Register carries it**:
   - A2 (an oversized .gif refused and the existing image wiped; Rule 9a)
-  - A4 (a journal closed to registrations leaving an empty section and listed name-only; Rules 8a and 8c)
   - A10 (a site-level request's message signing off "Array"; *Side effects*)
   - A11 (the stale error notice beside the saved message; Rule 10b; scenario 8 marks it)
-  - A14 (the site-level privacy link opening "404 Not Found"; Rule 14)
   - A15 (the refused homepage's sentence outliving the corrected save; Rule 9c; scenario 7 marks it)
   - A18 ("confirm" and "reject" landing an account with roles in more than one journal on the site-level profile; Rules 6c and 6d)
   - A19 (text typed only into "Signature", "Mailing Address" or "Bio Statement" lost unasked on the next tab or a reload; Rules 2c and 2e)
@@ -1053,12 +1062,12 @@ unless its Basis line says otherwise.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | A .gif larger than 150 × 150 is refused, and the account's existing profile image is wiped anyway | 🐞 | latent | — |
-| [A4](#a4) | A journal closed to registrations leaves an empty section on its own Roles tab and is listed name-only, with no boxes, elsewhere | 🐞 | minor | — |
+| [A4](#a4) | A journal closed to registrations is still listed, with nothing to tick, on Roles tabs and the Register page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | The Password tab's three boxes stop accepting input at 32 characters (the *Login & sessions* cap) | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A10](#a10) | The email-change message of a site-level request signs off "Kind regards, Array" | 🐞 | latent | — |
 | [A11](#a11) | After a successful password change the previous attempt's error notice stays on screen beside the saved message | 🐞 | minor | — |
 | [A12](#a12) | "Cancel" on the profile's Password tab does nothing, and turns off the unsaved-change question | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A14](#a14) | On the site-level profile every tab's "privacy statement" link opens a "404 Not Found" page | 🐞 | minor | — |
+| [A14](#a14) | On the site-wide Profile page, every tab's "privacy statement" link opens "404 Not Found" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | "Please enter a valid URL." stays under "Homepage URL" after the corrected address is saved, beside the saved message | 🐞 | minor | — |
 | [A17](#a17) | After a refused "Save" on the Profile page's Contact tab, another tab drops the typed values unasked | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A18](#a18) | "confirm" and "reject" land an account with roles in more than one journal on the site-level profile, outside the journal where it asked for the email change | 🐞 | minor | @jarda.kotesovec 2026-09-25 · risk accepted |
@@ -1089,14 +1098,23 @@ should.
 Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a4"></a>
-**A4 — A closed journal still takes its place on the Roles tab** · 🐞 · minor.
-When a journal's Site Access Options say its manager will register all user
-accounts (*Settings*), its boxes go, but its place stays: on its own profile the Roles tab opens with an empty section
-between the "Roles" heading and the other-journal fold, and in every other
-journal's fold and on the site-level list the journal is still named, with
-nothing under it. A journal that offers nothing should not be listed, and an
-empty section says nothing to the user.
-Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-a4](#fn-a4)</sup>
+**A4 — A journal closed to registrations is still listed, with nothing to tick, on Roles tabs and the Register page** · 🐞 · low.
+When a journal's manager closes it to registrations ("The Journal
+Manager will register all user accounts…" under Site Access Options),
+its role boxes disappear everywhere, but its name does not. Other
+journals' profiles list it under "Register with other journals" with
+nothing to tick, and so do the site-level profile's Roles tab and the
+site-wide Register page, under "Which journals on this site would you
+like to register with?".
+
+A visitor or a user reads it as a journal they could join, and finds no
+way to. The journals that accept registrations keep their boxes.
+
+It needs a site with two or more journals, one of them closed to
+registrations. Where exactly one other journal accepts registrations,
+the profile opened in the closed journal does not offer that journal
+either: its Roles tab has no "Register with other journals" at all.
+Basis: probe, 2026-10-03. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
 **A5 — The scheduled-role banner ignores which journal is open** · ❓ · minor.
@@ -1217,14 +1235,16 @@ the site uses the field for published work.
 Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-a13](#fn-a13)</sup>
 
 <a id="a14"></a>
-**A14 — The site-level profile's privacy link is dead** · 🐞 · minor.
-Every tab ends with "Your data is stored in accordance with our privacy
-statement.", and on a journal's profile the link opens that journal's
-Privacy Statement in a new tab. On the site-level profile (Rule 3) the same
-link opens a "404 Not Found" page: the site has no privacy page of its own,
-and nothing falls back to a journal's. A sentence that promises a statement
-should lead to one.
-Basis: probe, 2026-09-04. <sup>[f-a14](#fn-a14)</sup>
+**A14 — On the site-wide Profile page, every tab's "privacy statement" link opens "404 Not Found"** · 🐞 · low.
+Every tab of the Profile page ends with "Your data is stored in
+accordance with our privacy statement.". On the site-wide Profile page,
+which a user with roles in several journals is sent to, the link opens
+a "404 Not Found" page, from every tab.
+
+The link leads to the site's own Privacy Statement, which stays empty
+until the Site Administrator writes one under Site Settings, so the
+page promises a statement it cannot show.
+Basis: probe, 2026-10-03. <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
 **A15 — A refused homepage's sentence outlives the corrected save** · 🐞 · minor.
@@ -2252,6 +2272,7 @@ context loop prints every enabled context and only the box loops skip the
 closed one). Live-probed 2026-09-04 (claim check), all three apps: holds; the closing
 control is Site Access Options › "User Registration" (its strings in note
 e), not a box named "Users can register".
+Issue report: [docs/issues/U03-A4-closed-journal-listed-on-roles-tab.md](../issues/U03-A4-closed-journal-listed-on-roles-tab.md).
 
 <a id="fn-a5"></a>
 **f-a5** — `ProfileHandler::profile()`: the query is
@@ -2373,6 +2394,7 @@ was `index/en/about/privacy` with `target="_blank"` and opened "404 Not
 Found"; at journal level the same link opened that journal's "Privacy
 Statement". A fix is to fall back to a journal's or the site's statement,
 or to leave the sentence out where there is none.
+Issue report: [docs/issues/U03-A14-site-profile-privacy-link-not-found.md](../issues/U03-A14-site-profile-privacy-link-not-found.md).
 
 <a id="fn-a15"></a>
 **f-a15** — `PublicProfileForm` adds `FormValidatorUrl` on `userUrl`, which

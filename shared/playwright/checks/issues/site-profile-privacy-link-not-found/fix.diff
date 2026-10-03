@@ -1,0 +1,166 @@
+--- a/lib/pkp/controllers/tab/user/ProfileTabHandler.php
++++ b/lib/pkp/controllers/tab/user/ProfileTabHandler.php
+@@ -23,6 +23,8 @@
+ use APP\handler\Handler;
+ use APP\notification\form\NotificationSettingsForm;
+ use APP\notification\NotificationManager;
++use APP\template\TemplateManager;
++use PKP\config\Config;
+ use PKP\core\JSONMessage;
+ use PKP\core\PKPApplication;
+ use PKP\core\PKPRequest;
+@@ -51,6 +53,28 @@
+     }
+ 
+     /**
++     * @copydoc PKPHandler::setupTemplate()
++     *
++     * Every tab ends with a link to the privacy statement that applies here,
++     * chosen as AboutSiteHandler::privacy() chooses it. Offer the link only
++     * when that statement exists, as registration and submission do.
++     */
++    public function setupTemplate($request)
++    {
++        parent::setupTemplate($request);
++        $context = $request->getContext();
++        $privacyStatement = !Config::getVar('general', 'sitewide_privacy_statement') && $context
++            ? $context->getLocalizedData('privacyStatement')
++            : $request->getSite()->getLocalizedData('privacyStatement');
++        TemplateManager::getManager($request)->assign(
++            'privacyUrl',
++            $privacyStatement
++                ? $request->getDispatcher()->url($request, PKPApplication::ROUTE_PAGE, null, 'about', 'privacy')
++                : null
++        );
++    }
++
++    /**
+      * Display form to edit user's identity.
+      *
+      * @param array $args
+--- a/lib/pkp/templates/user/identityForm.tpl
++++ b/lib/pkp/templates/user/identityForm.tpl
+@@ -82,10 +82,11 @@
+ 		</style>
+ 	{/if}
+ 
+-	<p>
+-		{capture assign="privacyUrl"}{url router=PKP\core\PKPApplication::ROUTE_PAGE page="about" op="privacy"}{/capture}
+-		{translate key="user.privacyLink" privacyUrl=$privacyUrl}
+-	</p>
++	{if $privacyUrl}
++		<p>
++			{translate key="user.privacyLink" privacyUrl=$privacyUrl}
++		</p>
++	{/if}
+ 
+ 	<p><span class="formRequired">{translate key="common.requiredField"}</span></p>
+ 
+--- a/lib/pkp/templates/user/contactForm.tpl
++++ b/lib/pkp/templates/user/contactForm.tpl
+@@ -52,10 +52,11 @@
+ 		{/fbvFormSection}
+ 	{/if}
+ 
+-	<p>
+-		{capture assign="privacyUrl"}{url router=PKP\core\PKPApplication::ROUTE_PAGE page="about" op="privacy"}{/capture}
+-		{translate key="user.privacyLink" privacyUrl=$privacyUrl}
+-	</p>
++	{if $privacyUrl}
++		<p>
++			{translate key="user.privacyLink" privacyUrl=$privacyUrl}
++		</p>
++	{/if}
+ 
+ 	<p><span class="formRequired">{translate key="common.requiredField"}</span></p>
+ 
+--- a/lib/pkp/templates/user/rolesForm.tpl
++++ b/lib/pkp/templates/user/rolesForm.tpl
+@@ -21,10 +21,11 @@
+ 
+ 	{include file="user/userGroups.tpl"}
+ 
+-	<p>
+-		{capture assign="privacyUrl"}{url router=PKP\core\PKPApplication::ROUTE_PAGE page="about" op="privacy"}{/capture}
+-		{translate key="user.privacyLink" privacyUrl=$privacyUrl}
+-	</p>
++	{if $privacyUrl}
++		<p>
++			{translate key="user.privacyLink" privacyUrl=$privacyUrl}
++		</p>
++	{/if}
+ 
+ 	<p><span class="formRequired">{translate key="common.requiredField"}</span></p>
+ 
+--- a/lib/pkp/templates/user/publicProfileForm.tpl
++++ b/lib/pkp/templates/user/publicProfileForm.tpl
+@@ -71,10 +71,11 @@
+ 
+ 	{call_hook name="User::PublicProfile::AdditionalItems"}
+ 
+-	<p>
+-		{capture assign="privacyUrl"}{url router=PKP\core\PKPApplication::ROUTE_PAGE page="about" op="privacy"}{/capture}
+-		{translate key="user.privacyLink" privacyUrl=$privacyUrl}
+-	</p>
++	{if $privacyUrl}
++		<p>
++			{translate key="user.privacyLink" privacyUrl=$privacyUrl}
++		</p>
++	{/if}
+ 
+ 	<p><span class="formRequired">{translate key="common.requiredField"}</span></p>
+ 
+--- a/lib/pkp/templates/user/changePassword.tpl
++++ b/lib/pkp/templates/user/changePassword.tpl
+@@ -33,10 +33,11 @@
+ 			{fbvElement type="text" password="true" id="password2" maxLength="32" label="user.profile.repeatNewPassword" size=$fbvStyles.size.MEDIUM}
+ 		{/fbvFormSection}
+ 
+-		<p>
+-			{capture assign="privacyUrl"}{url router=PKP\core\PKPApplication::ROUTE_PAGE page="about" op="privacy"}{/capture}
+-			{translate key="user.privacyLink" privacyUrl=$privacyUrl}
+-		</p>
++		{if $privacyUrl}
++			<p>
++				{translate key="user.privacyLink" privacyUrl=$privacyUrl}
++			</p>
++		{/if}
+ 
+ 		{fbvFormButtons submitText="common.save"}
+ 	{/fbvFormArea}
+--- a/lib/pkp/templates/user/notificationSettingsForm.tpl
++++ b/lib/pkp/templates/user/notificationSettingsForm.tpl
+@@ -54,10 +54,11 @@
+ 			{/foreach}
+ 		{/foreach}
+ 
+-		<p>
+-			{capture assign="privacyUrl"}{url router=PKP\core\PKPApplication::ROUTE_PAGE page="about" op="privacy"}{/capture}
+-			{translate key="user.privacyLink" privacyUrl=$privacyUrl}
+-		</p>
++		{if $privacyUrl}
++			<p>
++				{translate key="user.privacyLink" privacyUrl=$privacyUrl}
++			</p>
++		{/if}
+ 
+ 		<p><span class="formRequired">{translate key="common.requiredField"}</span></p>
+ 		{fbvFormButtons hideCancel=true submitText="common.save"}
+--- a/lib/pkp/templates/user/apiProfileForm.tpl
++++ b/lib/pkp/templates/user/apiProfileForm.tpl
+@@ -46,10 +46,9 @@
+ 		{/block}
+ 	{/fbvFormSection}
+ 
+-	<p>
+-		{capture assign="privacyUrl"}
+-			{url router=PKP\core\PKPApplication::ROUTE_PAGE page="about" op="privacy"}
+-		{/capture}
+-		{translate key="user.privacyLink" privacyUrl=$privacyUrl}
+-	</p>
++	{if $privacyUrl}
++		<p>
++			{translate key="user.privacyLink" privacyUrl=$privacyUrl}
++		</p>
++	{/if}
+ </form>
