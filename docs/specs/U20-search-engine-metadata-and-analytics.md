@@ -896,6 +896,7 @@ Left out of the scenarios above, by reason:
   - A5 (an expired announcement: the sitemap lists the unexpired one alone; Rule 3)
   - A2 (the Plugins list's "Google Analytics Plugin" description on a press and a preprint server, and its "Settings" window's paragraphs, naming no other application and no missing function; scenario 8)
   - A7 (an abstract holding "&" and "<": "citation_abstract" and "DC.Description" carry the symbols, not their HTML entities; Fields, "citation_abstract")
+  - OMP3 {OMP} (book 14's pages: "DC.Type" "Text.Book" on the book's page and a whole-book file's view page, "Text.Chapter" on a chapter's page and a chapter file's view page; Rule 17)
 - **Rarely met**:
   - "User Registration" set to "The Journal Manager will register all
     user accounts. …", which takes "Register" out of the sitemap
@@ -988,7 +989,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS2](#ojs2) | A journal's sitemap lists no article at all, only the issues' pages | 🐞 | user-visible | — |
 | [OMP1](#omp1) | A book page tells Google Scholar its EPUB, or any file that is not a PDF, is HTML full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP2](#omp2) | A book with two PDF files for the whole book announces only one of them to Google Scholar | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [OMP3](#omp3) | A book file's page calls every file a chapter | 🐞 | minor | — |
+| [OMP3](#omp3) | A press's chapter pages tell indexes they are books, and whole-book file pages that they are chapters | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP4](#omp4) | After "Create New Version", a press's sitemap lists chapter pages that answer "404 Not Found" | 🐞 | minor | — |
 | [OMP5](#omp5) | A book file's page names the book's page as its own address | 🐞 | minor | — |
 | [OMP6](#omp6) | Every book file address the tags give fails with a server error instead of the file | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
@@ -1159,11 +1160,19 @@ When every such format carries an ISBN, both files are announced.
 Basis: probe, 2026-10-03. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
-**OMP3 — A book file's page calls every file a chapter** · 🐞 · minor.
-The page a book file's link opens carries "DC.Type" "Text.Chapter" for
-every file, the whole book's included, where the book's page says
-"Text.Book".
-Basis: probe, 2026-09-26. <sup>f-omp3</sup>
+**OMP3 — A press's chapter pages tell indexes they are books, and whole-book file pages that they are chapters** · 🐞 · low.
+On a press, the Dublin Core tag "DC.Type" does not follow what a page
+describes. A chapter's own page reads "Text.Book", although its title,
+author and abstract tags are the chapter's. The view page of a file for
+the whole book, not assigned to a chapter, reads "Text.Chapter",
+although its tags describe the book. That is the in-browser page the
+book page's file link opens, not the download.
+
+The book's page ("Text.Book") and a chapter file's view page
+("Text.Chapter") are right. Readers see nothing wrong, and the press is
+not told. "Dublin Core Indexing Plugin" writes these tags and is enabled
+on every new press.
+Basis: probe, 2026-10-03. <sup>f-omp3</sup>
 
 <a id="omp4"></a>
 **OMP4 — A new version sends the sitemap to missing chapter pages** · 🐞 · minor.
@@ -1372,6 +1381,7 @@ Issue report: [docs/issues/U20-OMP2-book-page-announces-one-pdf.md](../issues/U2
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — Note i: `monographFileView()` always adds `DC.Type` `Text.Chapter`, while `monographView()` adds `Text.Book`. Live-probed 2026-09-26: note q19.
+Issue report: [docs/issues/U20-OMP3-book-file-page-type-chapter.md](../issues/U20-OMP3-book-file-page-type-chapter.md).
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — Note e: OMP's `SitemapHandler` takes a book's chapters from `getLatestPublication()` and its formats from `getCurrentPublication()`, so an unpublished new version's chapters replace the published ones. Live-probed 2026-09-26: note q2.

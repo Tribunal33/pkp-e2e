@@ -1,0 +1,20 @@
+--- a/plugins/generic/dublinCoreMeta/DublinCoreMetaPlugin.php
++++ b/plugins/generic/dublinCoreMeta/DublinCoreMetaPlugin.php
+@@ -173,7 +173,7 @@
+             }
+         }
+ 
+-        $templateMgr->addHeader('dublinCoreType', '<meta name="DC.Type" content="Text.Book"/>');
++        $templateMgr->addHeader('dublinCoreType', '<meta name="DC.Type" content="' . ($isChapterRequest ? 'Text.Chapter' : 'Text.Book') . '"/>');
+         if ($types = $publication->getData('type')) {
+             foreach ($types as $locale => $type) {
+                 if ($type != '') {
+@@ -337,7 +337,7 @@
+             }
+         }
+ 
+-        $templateMgr->addHeader('dublinCoreType', '<meta name="DC.Type" content="Text.Chapter"/>');
++        $templateMgr->addHeader('dublinCoreType', '<meta name="DC.Type" content="' . ($chapter ? 'Text.Chapter' : 'Text.Book') . '"/>');
+         if ($types = $publication->getData('type')) {
+             foreach ($types as $locale => $type) {
+                 if ($type != '') {
