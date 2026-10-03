@@ -1047,6 +1047,7 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - a Site Administrator with no manager role in a press and a preprint server opening each Settings page from the side menu, as on a journal {OMP OPS} (A1; the guard its issue report names)
   - a reload on a Settings side tab under a later top tab (Website › "Setup" › "Privacy Statement") keeping that side tab (A7; the guard its issue report names)
+  - a new journal's and press's "Information For Readers" "Privacy Statement" link opening the "Privacy Statement" page {OJS OMP} (A9; the guard its issue report names)
   - the French (Canada) "Bloc générique" (Masthead) tab of a press and a preprint server showing no "##" code {OMP OPS} (A12; the guard its issue report names)
   - the masthead not based on enrollments, "Present a masthead based on user enrollments" unticked: the masthead showing under its heading only the "Editorial History" text (and a manager's "Edit" link), or nothing with that text empty, the "Editorial History" address opening the masthead, the other two groups leaving the tab, and, ticked again, both pages listing as before in the saved role order (Rule 14f; Rules 16, 21; Settings bullet 4a)
   - "Enable listing of reviewers on the masthead" at its default: no "Peer Reviewers in Previous Year" although reviews were completed last year {OJS OMP} (Rule 15; Settings bullet 4c)
@@ -1108,7 +1109,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | A Site Administrator without a manager role in a press or preprint server is offered "Settings" and refused every page of it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | Reloading or bookmarking a Settings side tab opens the page's first tab instead | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A9](#a9) | The default "For Readers" text's "Privacy Statement" link opens the "Submissions" page {OJS OMP} | 🐞 | minor | — |
+| [A9](#a9) | The default "For Readers" text's "Privacy Statement" link opens the Submissions page, not the Privacy Statement page {OJS OMP} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | Hosted Journals "Edit" refuses to save a journal whose "Country" was never set | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | In French (Canada), a press's and a preprint server's Masthead settings tab shows untranslated codes {OMP OPS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | With the masthead not based on enrollments, invitations and masthead changes still promise "Your name will appear in the {journal}'s masthead"; reviewers are promised it while the journal lists none | 🐞 | minor | — |
@@ -1204,12 +1205,21 @@ Question: should the notice go with the save? Lean: yes; a notice that
 contradicts the saved setting misleads. Basis: probe. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The default "Privacy Statement" link opens the Submissions page** {OJS OMP} · 🐞 · minor.
+**A9 — The default "For Readers" text's "Privacy Statement" link opens the Submissions page, not the Privacy Statement page** {OJS OMP} · 🐞 · low.
 The "For Readers" text every new journal and press arrives with points
 readers to the journal's "Privacy Statement" through a link of that
 name. A reader who opens "Information For Readers" and follows it lands
-on the "Submissions" page, not on the "Privacy Statement" page. Basis:
-probe. <sup>f-a9</sup>
+on the "Submissions" page, scrolled down to its "Privacy Statement"
+section, not on the "Privacy Statement" page that the "About" menu and
+the registration form open.
+
+The reader still reads the statement, under a page headed
+"Submissions". A manager can change the link in Settings › Website ›
+"Setup" › "Information".
+
+Every journal and press that holds the default text has the link, in
+every language that translates it.
+Since: 2018-05-10 (the "Privacy Statement" page's own address) · Basis: probe, 2026-10-03. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — A cancelled review still counts** {OJS OMP} · ❓ · minor.
@@ -2465,6 +2475,7 @@ press, "Information For Readers"'s "Privacy Statement" link points to
 "Submissions" page. The default text is `default.contextSettings.forReaders`
 in each app's `locale/en/default.po`, its links built from
 `{$indexUrl}/{$contextPath}` when the journal is created.
+Issue report: [pkp-e2e#787](https://github.com/jardakotesovec/pkp-e2e/issues/787) ([docs/issues/U07-A9-for-readers-privacy-link-opens-submissions.md](../issues/U07-A9-for-readers-privacy-link-opens-submissions.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Live-probed 2026-09-23 (OJS, OMP, two runs each): a reviewer
