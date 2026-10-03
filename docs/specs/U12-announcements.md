@@ -2094,7 +2094,7 @@ the press with no count carried one block, the site's "Site-only notice",
 linked at `{press}/announcement/view/{id}`; the press with a count of 2
 carried its own "Press with count" alone; the site's home page the site's;
 the site restored to off after (`index/announcement` 404 again).
-Issue report: [docs/issues/U12-OMP2-press-home-shows-site-announcements.md](../issues/U12-OMP2-press-home-shows-site-announcements.md).
+Issue report: [pkp-e2e#764](https://github.com/jardakotesovec/pkp-e2e/issues/764) ([docs/issues/U12-OMP2-press-home-shows-site-announcements.md](../issues/U12-OMP2-press-home-shows-site-announcements.md)).
 
 
 ## Reference — entry points & surfaces
