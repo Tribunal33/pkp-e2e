@@ -1,0 +1,162 @@
+--- a/locale/bg/author.po
++++ b/locale/bg/author.po
+@@ -15,11 +15,6 @@
+ msgid "author.submit"
+ msgstr "Нов материал"
+ 
+-msgid "author.competingInterests"
+-msgstr ""
+-"Конфликт на интереси: <a target=\"_new\" class=\"action\" href=\""
+-"{$competingInterestGuidelinesUrl}\">Правила за КИ</a>"
+-
+ msgid "author.submit.startHereLink"
+ msgstr ""
+ "<a href=\"{$submitUrl}\" class=\"action\">Щракнете тук</a>, за да преминете "
+--- a/locale/ca/author.po
++++ b/locale/ca/author.po
+@@ -8,9 +8,6 @@
+ msgid "author.submit"
+ msgstr ""
+ 
+-msgid "author.competingInterests"
+-msgstr ""
+-
+ msgid "author.submit.startHereLink"
+ msgstr ""
+ 
+--- a/locale/cs/author.po
++++ b/locale/cs/author.po
+@@ -14,11 +14,6 @@
+ msgid "author.submit"
+ msgstr "Nový příspěvek"
+ 
+-msgid "author.competingInterests"
+-msgstr ""
+-"Konflikt zájmů <a target=\"_new\" class=\"action\" href=\""
+-"{$competingInterestGuidelinesUrl}\">Zásady pro konflikt zájmů</a>"
+-
+ msgid "author.submit.startHereLink"
+ msgstr ""
+ "Pro přechod k prvnímu z pěti kroků odesílání příspěvku <a href=\"{$submitUrl}"
+--- a/locale/de/author.po
++++ b/locale/de/author.po
+@@ -17,11 +17,6 @@
+ msgid "author.submit"
+ msgstr "Neue Einreichung"
+ 
+-msgid "author.competingInterests"
+-msgstr ""
+-"Konkurrierende Interessen <a target=\"_new\" class=\"action\" href="
+-"\"{$competingInterestGuidelinesUrl}\">CI Policy</a>"
+-
+ msgid "author.submit.startHereLink"
+ msgstr ""
+ "<a href=\"{$submitUrl}\" class=\"action\">Klicken Sie hier</a>, um zum "
+--- a/locale/en/author.po
++++ b/locale/en/author.po
+@@ -18,9 +18,6 @@
+ msgid "author.submit"
+ msgstr "New Submission"
+ 
+-msgid "author.competingInterests"
+-msgstr "Competing interests <a target=\"_new\" class=\"action\" href=\"{$competingInterestGuidelinesUrl}\">CI Policy</a>"
+-
+ msgid "author.submit.startHereLink"
+ msgstr "<a href=\"{$submitUrl}\" class=\"action\">Click here</a> to go to step one of the five-step submission process."
+ 
+--- a/locale/es/author.po
++++ b/locale/es/author.po
+@@ -14,11 +14,6 @@
+ msgid "author.submit"
+ msgstr "Nuevo envío"
+ 
+-msgid "author.competingInterests"
+-msgstr ""
+-"Conflicto de intereses <a target=\"_new\" class=\"action\" href="
+-"\"{$competingInterestGuidelinesUrl}\"> Política de CI</a>"
+-
+ msgid "author.submit.startHereLink"
+ msgstr ""
+ "<a href=\"{$submitUrl}\" class=\"action\"> Haga clic aquí</a> para ir al "
+--- a/locale/fi/author.po
++++ b/locale/fi/author.po
+@@ -15,11 +15,6 @@
+ msgid "author.submit"
+ msgstr "Uusi käsikirjoitus"
+ 
+-msgid "author.competingInterests"
+-msgstr ""
+-"Sidonnaisuudet <a target=\"_new\" class=\"action\" href="
+-"\"{$competingInterestGuidelinesUrl}\">Sidonnaisuuksien ilmoittaminen</a>"
+-
+ msgid "author.submit.startHereLink"
+ msgstr ""
+ "<a href=\"{$submitUrl}\" class=\"action\">Klikkaa tästä</a> päästäksesi "
+--- a/locale/fr_CA/author.po
++++ b/locale/fr_CA/author.po
+@@ -16,11 +16,6 @@
+ msgid "author.submit"
+ msgstr "Nouvelle soumission"
+ 
+-msgid "author.competingInterests"
+-msgstr ""
+-"Conflits d'intérêts <a target=\"_new\" class=\"action\" href=\""
+-"{$competingInterestGuidelinesUrl}\">Politique de conflits d'intérêts</a>"
+-
+ msgid "author.submit.startHereLink"
+ msgstr ""
+ "<a href=\"{$submitUrl}\" class=\"action\">Cliquer ici</a> pour vous rendre à "
+--- a/locale/mk/author.po
++++ b/locale/mk/author.po
+@@ -15,11 +15,6 @@
+ msgid "author.submit"
+ msgstr "Нов поднесок"
+ 
+-msgid "author.competingInterests"
+-msgstr ""
+-"Интереси во конкуренција <a target=\"_new\" class=\"action\" href=\""
+-"{$competingInterestGuidelinesUrl}\">CI Policy</a>"
+-
+ msgid "author.submit.startHereLink"
+ msgstr ""
+ "<a href=\"{$submitUrl}\" class=\"action\"> Кликнете овде </a> за да отидете "
+--- a/locale/nb_NO/author.po
++++ b/locale/nb_NO/author.po
+@@ -8,9 +8,6 @@
+ msgid "author.submit"
+ msgstr ""
+ 
+-msgid "author.competingInterests"
+-msgstr ""
+-
+ msgid "author.submit.startHereLink"
+ msgstr ""
+ 
+--- a/locale/pt_BR/author.po
++++ b/locale/pt_BR/author.po
+@@ -15,11 +15,6 @@
+ msgid "author.submit"
+ msgstr "Nova Submissão"
+ 
+-msgid "author.competingInterests"
+-msgstr ""
+-"Interesses concorrentes<a target=\"_new\" class=\"action\" href="
+-"\"{$competingInterestGuidelinesUrl}\">Política de IC</a>"
+-
+ msgid "author.submit.startHereLink"
+ msgstr ""
+ "<a href=\"{$submitUrl}\" class=\"action\">Clique aqui</a>para ir para a "
+--- a/locale/uk/author.po
++++ b/locale/uk/author.po
+@@ -16,11 +16,6 @@
+ msgid "author.submit"
+ msgstr "Новий контент"
+ 
+-msgid "author.competingInterests"
+-msgstr ""
+-"Конфлікт інтересів <a target=\"_new\" class=\"action\" href=\""
+-"{$competingInterestGuidelinesUrl}\">Політика КІ</a>"
+-
+ msgid "author.submit.startHereLink"
+ msgstr ""
+ "<a href=\"{$submitUrl}\" class=\"action\">Клікніть сюди</a> для переходу до "
