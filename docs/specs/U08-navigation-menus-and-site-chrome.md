@@ -3002,7 +3002,7 @@ menu window (note k); why the two items still arrive without it was not
 traced. Live-probed
 2026-09-23 (the item types drive, note m), OJS: both items in the
 primary menu, neither with an icon; both conditions held at both ends.
-Issue report: [docs/issues/U08-OJS1-subscription-menu-items-no-eye.md](../issues/U08-OJS1-subscription-menu-items-no-eye.md).
+Issue report: [docs/issues/U08-OJS1-subscription-menu-items-no-eye.md](../issues/U08-OJS1-subscription-menu-items-no-eye.md), filed as [pkp-e2e#655](https://github.com/jardakotesovec/pkp-e2e/issues/655).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — OPS `classes/template/TemplateManager.php::setupBackendPage()`,
