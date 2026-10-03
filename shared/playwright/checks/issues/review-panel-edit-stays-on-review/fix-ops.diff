@@ -1,0 +1,22 @@
+--- a/templates/submission/review-license.tpl
++++ b/templates/submission/review-license.tpl
+@@ -15,7 +15,7 @@
+         <pkp-button
+             aria-describedby="review-license"
+             class="submissionWizard__reviewPanel__edit"
+-            @click="openStep('{$step.id}')"
++            @click="openStep('editors')"
+         >
+             {translate key="common.edit"}
+         </pkp-button>
+--- a/templates/submission/review-relation.tpl
++++ b/templates/submission/review-relation.tpl
+@@ -15,7 +15,7 @@
+         <pkp-button
+             aria-describedby="review-relation"
+             class="submissionWizard__reviewPanel__edit"
+-            @click="openStep('{$step.id}')"
++            @click="openStep('editors')"
+         >
+             {translate key="common.edit"}
+         </pkp-button>

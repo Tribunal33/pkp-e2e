@@ -23,7 +23,7 @@ and the hourly routine starts one only when none is running
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 | A1, A7, OPS1: open reports docs/reports/2026-09-26-webfeed-rss2-empty-feed-fails.md, docs/reports/2026-09-26-webfeed-terms-read-array.md and docs/reports/2026-09-26-webfeed-ops-publisher-array.md (the rest of U18 written up by the issues session, workstation s0, 2026-10-02) |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
-| [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 | **Taken: issues session, VM s1, 2026-10-03**; A7 done (pkp-e2e#673, and the hang joined to U21 A19, pkp-e2e#322); A10 done (pkp-e2e#674) |
+| [U75](../specs/U75-preprint-relations.md) | 8 | 1 | 2 | **Taken: issues session, VM s1, 2026-10-03**; A7 done (pkp-e2e#673, and the hang joined to U21 A19, pkp-e2e#322); A10 done (pkp-e2e#674); A11 done (with U72 A5) |
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 8 | 1 | 1 | **Taken: issues session, workstation s0, 2026-10-03** |
 | [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 |  |
 | [U74](../specs/U74-onix-metadata-export.md) | 16 | 0 | 6 | A16 done with U63 A12 (pkp-e2e#258) |
@@ -44,7 +44,7 @@ and the hourly routine starts one only when none is running
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 |  |
 | [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | A1 done with U16 A19 (pkp-e2e#587); A8 done with U16 A15 (pkp-e2e#291) |
 | [U05](../specs/U05-notifications-center-and-email-preferences.md) | 7 | 0 | 2 | A3 done with U08 A2 (pkp-e2e#634) |
-| [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 | **A5 taken: issues session, VM s1, 2026-10-03** (joined to U75 A11) |
+| [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 | A5 done with U75 A11 |
 | [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 |  |
 | [U26](../specs/U26-review-stage-and-rounds.md) | 4 | 0 | 2 | A1 done (pkp-e2e#520) |
 | [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 | A19 done with U46 A5 (pkp-e2e#619) |

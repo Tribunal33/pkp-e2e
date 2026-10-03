@@ -696,6 +696,8 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A5 (issue report `docs/issues/U75-A11-review-panel-edit-stays-on-review.md`): the Review step's "Chapters" panel's "Edit" opens "Details".
 - **Nothing new to test**:
   - two form languages on the press: one "Title", "Subtitle" and
     "Abstract" box per language, the book's language first, and a title
@@ -753,7 +755,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A chapter's "Date Published" shows today's date when the chapter has none, and "Save" does not store it | 🐞 | user-visible | — |
 | [A2](#a2) | The work-type control and "Publication Dates" are offered to the assistant roles, and their choice is refused | 🐞 | minor | — |
 | [A3](#a3) | After "Create New Version" the new version's chapters lose their files, which no chapter of the new version can take back | 🐞 | minor | — |
-| [A5](#a5) | The "Edit" of the wizard's Review panel "Chapters" does nothing | 🐞 | minor | — |
+| [A5](#a5) | The "Edit" of the wizard's Review panel "Chapters" does nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | A chapter's new author order is lost after an earlier "Done" in the same visit | 🐞 | minor | — |
 | [A8](#a8) | The chapter window promises an automatic license above a box whose own address publishing keeps, and after publishing | 🐞 | minor | — |
 | [A1](#a1) | The assistant roles may change a published version's chapters, though not an unpublished one's | ❓ | minor | — |
@@ -815,12 +817,15 @@ when it is not. Expected: an empty box.
 Basis: probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — The Review panel's "Edit" does nothing for chapters** · 🐞 · minor.
+**A5 — The Review panel's "Edit" does nothing for chapters** · 🐞 · low.
 On the wizard's Review step, the "Chapters" panel's "Edit" leaves the
-wizard on Review. An author who spots a chapter mistake there must use
-the wizard's numbered steps or the "Details" panel's "Edit", which opens the Details
-step. Expected: "Edit" opens the Details step.
-Basis: probe. <sup>f-a5</sup>
+wizard on Review with no message. An author who spots a chapter mistake
+there must use the wizard's list of steps at the top or the "Details"
+panel's "Edit", which opens the Details step that holds the chapters.
+A preprint server's "License" and "Relation status" panels are dead the
+same way ([→ Preprint relations](U75-preprint-relations.md#a11)).
+Expected: "Edit" opens the Details step.
+Basis: probe, 2026-10-03. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — A chapter cannot be moved with "Order"** · 🐞 · user-visible.
@@ -1558,6 +1563,7 @@ date, and the next opening showed the date again.
 **f-a5** — Note h: the panel's "Edit" calls `openStep('')`.
 Live-probed 2026-09-28: note td18, two runs and a second press after a
 pause.
+Issue report: [docs/issues/U75-A11-review-panel-edit-stays-on-review.md](../issues/U75-A11-review-panel-edit-stays-on-review.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Note l: the drag a chapter row starts belongs to that

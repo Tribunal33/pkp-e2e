@@ -535,6 +535,8 @@ footnote. <sup>s0</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A11 (issue report `docs/issues/U75-A11-review-panel-edit-stays-on-review.md`): on a preprint server, the Review step's "Relation status" and "License" panels' "Edit" opens "For Readers".
 - **Nothing new to test**:
   - the Site Administrator opening "Relations" and saving a relation on
     any version (Actors, "Open" and "Save a relation"): the Preprint
@@ -593,7 +595,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | A preprint can be submitted without answering the required "Relation status" | 🐞 | minor | — |
 | [A9](#a9) | The Review step says "This preprint has not been published elsewhere." for a question never answered | 🐞 | minor | — |
 | [A10](#a10) | After a reload, the wizard's "For Readers" shows the saved relation unticked, and answering again erases the DOI | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A11](#a11) | The Review step's "Edit" on the "Relation status" panel does nothing | 🐞 | minor | — |
+| [A11](#a11) | The Review step's "Edit" on the "Relation status" panel does nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | "DOI of the published preprint" refuses a DOI written on its own | ❓ | minor | — |
 | [A5](#a5) | The wizard asks whether the preprint was "submitted for publication elsewhere" but offers no answer for it | ❓ | minor | — |
 | [A6](#a6) | Crossref receives the full web address marked as a DOI | ❓ | invisible | — |
@@ -742,14 +744,18 @@ Nothing says a DOI was there.
 Basis: probe, 2026-10-03. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The Review step's "Edit" on the "Relation status" panel does nothing** · 🐞 · minor.
+**A11 — The Review step's "Edit" on the "Relation status" panel does nothing** · 🐞 · low.
 On the wizard's Review step, pressing "Edit" on the "Relation status"
-panel leaves the wizard on "Review" with no message. The "For Readers"
-panel's "Edit" opens "For Readers" as expected, so the Author has to
-find the step there or on the step rail. The "License" panel's "Edit"
-is dead the same way
-([→ the Review step](U21-submission-wizard.md#review-step)).
-Basis: probe. <sup>f-a11</sup>
+panel leaves the wizard on "Review" with no message, and so does the
+"License" panel's "Edit"
+([→ the Review step](U21-submission-wizard.md#review-step)); a press's
+"Chapters" panel is dead the same way
+([→ Chapters](U72-chapters-work-type.md#a5)). Both fields are on "For
+Readers", which the Author reaches through the wizard's list of steps at
+the top or the "For Readers" panel's "Edit". Since a 2026 change to the
+template hooks, a template fetched from a hook no longer sees the
+calling template's step, so these panels' "Edit" names none.
+Basis: probe, 2026-10-03. <sup>f-a11</sup>
 
 ---
 
@@ -1275,6 +1281,7 @@ in both `review-relation.tpl` and `review-license.tpl`, so neither
 "Edit" names a step; the Submission wizard spec's Rule 12a has every
 panel's "Edit" jump back to its step. Live-probed 2026-09-27 on five
 runs over two drafts.
+Issue report: [docs/issues/U75-A11-review-panel-edit-stays-on-review.md](../issues/U75-A11-review-panel-edit-stays-on-review.md).
 
 ## Reference — entry points & surfaces
 
