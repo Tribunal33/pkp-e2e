@@ -1010,6 +1010,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U73-A15-format-name-required-primary-language.md`): on a
     press with English and French form languages, a French book's format
     and chapter save with French names alone
+  - the guard for A24 (issue report
+    `docs/issues/U09-A11-static-page-refusal-repeated-after-save.md`):
+    after two refused "URL Path" values in a format's "Edit" window, the
+    save of a good one shows no notice
   - a format file's "Edit a file" closed with its close arrow after the
     name is changed: no question, the row keeping the old name after a
     reload, and "Edit" reopening on it (Rule 11): likely a bullet in
@@ -1114,7 +1118,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | A book format's "Select Files" window tells the editor to tick an "Include checkbox" and press "Search", neither of which it has | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A20](#a20) | A "Direct Sales" price of 0 keeps the link on "Direct Sales" while readers get the file free | 🐞 | minor | — |
 | [A23](#a23) | A date of the wrong length is refused with no message in its window | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A24](#a24) | A refused "URL Path" comes back as a notice when the format is next saved, once per refusal | 🐞 | minor | — |
+| [A24](#a24) | A refused "URL Path" comes back as a notice when the format is next saved, once per refusal | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A25](#a25) | In French the list's "Availability" column heading and four texts of "Add publication format" read raw codes | 🐞 | minor | — |
 | [A5](#a5) | "URL Path" accepts a number, or a path another format already uses, and a reader link then answers "404 Not Found" | ❓ | minor | — |
 | [A8](#a8) | The price box's two checks disagree: "10.5" is pressable and refused, "1,500.00" accepted but not pressable | ❓ | minor | — |
@@ -1437,7 +1441,7 @@ in the window when "OK" is refused.
 Basis: probe, 2026-10-03. <sup>f-a23</sup>
 
 <a id="a24"></a>
-**A24 — A refused "URL Path" comes back as a notice on the next save** · 🐞 · minor.
+**A24 — A refused "URL Path" comes back as a notice on the next save** · 🐞 · low.
 In a format's "Edit" window, a "URL Path" refused on "OK" shows "This
 may only contain letters, numbers, dashes, underscores and periods."
 under the box, as it should, but the message also waits for later: the
@@ -1447,7 +1451,7 @@ a notice at the top right, once for every refusal. After "my pdf" and
 the page, about a path that was by then accepted. A refused date does
 the same ([A23](#a23)). Expected: the message shows only in the window,
 and a save that succeeds shows no error.
-Basis: test run. <sup>f-a24</sup>
+Basis: test run, 2026-10-04. <sup>f-a24</sup>
 
 <a id="a25"></a>
 **A25 — In French the "Availability" heading and four texts of "Add publication format" read raw codes** · 🐞 · minor.
@@ -2541,6 +2545,7 @@ underscores and periods.", each with "Close". Each refused "OK" answered
 `general` notifications titled "Errors occurred processing this form",
 class `notifyFormError`, with that message. The refused date of A23
 arrives the same way. Evidence: `.reports/U73/tomp/`.
+Issue report: [pkp-e2e#367](https://github.com/jardakotesovec/pkp-e2e/issues/367) ([docs/issues/U09-A11-static-page-refusal-repeated-after-save.md](../issues/U09-A11-static-page-refusal-repeated-after-save.md)).
 
 <a id="fn-f-a25"></a>
 **f-a25** — Notes d, e. OMP `locale/fr_CA/locale.po` leaves

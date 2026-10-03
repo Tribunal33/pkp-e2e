@@ -1,63 +1,59 @@
-# A manager's good save in the static page window shows the earlier refusal as a red notice
+# Refused saves reappear as red notices at the next save; book-format metadata windows show no reason before
 
 - **Severity** low
 - **Effort** small
 - **Kind** defect
 - **Affects**
-  - main: OJS, OMP, OPS (OPS: other windows only, read in the code)
-  - 3.5: OJS, OMP, OPS (OPS: other windows only, read in the code)
+  - main: OJS, OMP, OPS (OPS: the galley window, by code)
+  - 3.5: OJS, OMP, OPS (OPS: the galley window, by code)
   - 3.4: OJS, OMP, OPS (code)
   - 3.3: OJS, OMP, OPS (code)
 - **Introduced** pkp bug 5762 (before GitHub, no PR) · [ece4902464](https://github.com/pkp/pkp-lib/commit/ece4902464726f7e6f438981ec7a3e0f1a5db96a) with [27875999c8](https://github.com/pkp/pkp-lib/commit/27875999c8948ff381eac020f9fd95d89a141b64) · 2011-08-20 · Bruno Beghelli (beghelli)
-- **Upstream** none found (2026-10-02)
-- **Tracked in** spec U09 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a11) · spec U74 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a15) · spec U73 [A23](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U73-publication-formats-proof-terms.md#a23)
-- **Checked** 2026-10-02, each branch's tip (the commits in Evidence); OMP's book-format windows 2026-10-03
+- **Upstream** none found (2026-10-04)
+- **Tracked in** spec U09 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a11) · spec U74 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a15) · spec U73 [A23](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U73-publication-formats-proof-terms.md#a23), [A24](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U73-publication-formats-proof-terms.md#a24)
+- **Checked** 2026-10-02, each branch's tip (the commits in Evidence); OMP's book-format windows 2026-10-03, OMP's format "Edit" window 2026-10-04
 
 ## Summary
 
-A manager's "Save" in the static page window is refused because of the
-"Path". The reason shows under the box, and nothing shows at the top
-right. The manager corrects the path and saves again. The window closes
-and the page is listed. But a red notice at the top right now repeats
-the earlier refusal ("The path field must contain only alphanumeric
-characters plus '.', '/', '-', and '_'."), as if this save had failed.
-Each refused save leaves a notice of its own, and all of them show
-together at the next save. If the manager closes the window after a
-refusal instead, the notice shows on the next page that loads, such as
-the Editor Dashboard.
+In OMP, a press editor's "OK" in a book format's metadata windows is
+refused with no message at all: the window stays open, no field is
+marked, and nothing shows at the top right. This happens for a second
+"Rest of World?" sales-rights entry, a market "Date" or "Price" holding
+only spaces, a publication date shorter than its preselected format, and
+a code "Value" of spaces. The editor learns the reason only later, as a
+red notice beside the next save's own notice, such as "Market added.".
 
-The same happens in every window that draws its form again after a
-refused save and has no in-place message box. In OMP's book-format
-windows (a format's sales rights, markets, publication dates and
-identification codes) it is worse, because the window marks no field
-either. A press editor presses "OK" on a second sales-rights entry with
-"Rest of World?" ticked, a market "Date" or "Price" of spaces, or a
-publication date of the wrong length, and is told nothing: the window
-stays open, and the reason appears only beside the next "Market added."
-or similar. By the code, the same fault also reaches the galley window
-in OJS and OPS, OMP's format window and "Assign Participant".
+Windows that do show the reason in place show it a second time. In the
+static page window (OJS, OMP) and a book format's "Edit" window (OMP), a
+refused "Path" or "URL Path" shows its message under the box. The
+corrected save then closes the window and shows the earlier refusal as
+a red notice, once per refused save, as if this save had failed. If the
+window is closed instead, the notice shows on the next page that loads.
+
+By the code, the galley window (OJS, OPS), the file metadata window and
+some plugin settings windows behave like the static page window. All
+these windows share one form script, where the fault lies.
 
 ## Impact
 
-- **Lost**: nothing that looks saved. A static page is saved as typed.
-  In OMP's book-format windows a refused entry stays in its open window
-  (a good "OK" closes it) and is not in the list behind. If the editor
-  then presses "Cancel", the window closes without a question and the
-  entry is gone, with no message until the next save in the tab.
-- **Who**: journal and press managers adding static pages, each time a
-  save is refused first (a path with a space or another refused
-  character, or a path another page already uses); press editors
-  entering a book format's ONIX metadata, each time a value is refused.
-- **Way round**: for static pages none is needed, though a manager who
-  believes the notice may save again or look for a fault that is not
-  there. In OMP's book-format windows the editor has to guess from the
-  form what was refused; a corrected value saves. Otherwise the reason
-  shows only after another save in the tab.
+- **Lost**: nothing is stored wrong, and a refused window stays open.
+  In OMP's metadata windows the editor is not told what was refused; if
+  they press "Cancel", the window closes without a question and the
+  entry is gone.
+- **Who**: press editors entering a book format's metadata, each time a
+  value is refused; journal and press managers adding static pages, and
+  press editors setting a format's "URL Path", each time a path is
+  refused (by the code, also editors setting a galley's "URL Path").
+- **Way round**: in OMP's metadata windows, guessing from the form which
+  value was refused; a corrected value saves. Elsewhere none is needed,
+  though a user who believes the late notice may save again or look for
+  a fault that is not there.
 
 Low: in every window the task gets done once the value is corrected,
-and nothing refused looks saved; the notice misleads or comes late. It
-would be medium if a window closed on a silent refusal or listed the
-refused entry, which was not seen.
+and the open window shows that the refused save did not happen. The
+silent refusals in OMP's metadata windows put it near medium; it would
+be medium if a window closed on a silent refusal or listed the refused
+entry, which was not seen.
 
 ## Steps to reproduce
 
@@ -67,11 +63,14 @@ Preconditions:
   `publicknowledge`. OPS has no Static Pages plugin, so the steps run on
   OJS or OMP only. Nothing else is needed: step 2 turns on "Static
   Pages Plugin", which the dataset leaves off.
-- Steps 9–17 run on OMP only (`main` or `stable-3_5_0`), on submission
-  4, "How Canadians Communicate: Contexts of Canadian Popular Culture",
-  whose one format, "PDF", has no sales rights, markets or publication
-  dates in the dataset. They start from a freshly loaded dataset of
-  their own.
+- Steps 9–22 run on OMP only (`main` or `stable-3_5_0`). Steps 9–17
+  use submission 4, "How Canadians Communicate: Contexts of Canadian
+  Popular Culture", whose one format, "PDF", has no sales rights,
+  markets or publication dates in the dataset. Steps 18–22 use
+  submission 5, "Bomb Canada and Other Unkind Remarks in the American
+  Media", whose one format, "PDF", is kept on the press's site with an
+  empty "URL Path" (submission 4's "PDF" is a remote format, whose
+  window hides "URL Path").
 
 Steps:
 
@@ -99,7 +98,7 @@ A refusal, then the window closed:
 
 A book format's windows (OMP):
 
-9. Sign in as `dbarnes`, open submission 4, "How Canadians
+9. As `dbarnes`, open submission 4, "How Canadians
    Communicate…", and go to Publication › "Publication Formats".
 10. Press the arrow before "PDF", then "Edit", and open the "Metadata"
     tab.
@@ -113,16 +112,31 @@ A book format's windows (OMP):
     press "OK".
 16. Type "25" into "Price" and press "OK".
 17. Under "Publication Dates" press "Add publication date", type "2026"
-    into "Date" (its "Date Format" arrives on "YYYYMMDD (H)") and press
+    into "Date" (its "Date Format" is preselected as "YYYYMMDD (H)") and press
     "OK"; then replace it with "20261001" and press "OK".
+
+A book format's "URL Path" (OMP):
+
+18. As `dbarnes`, open submission 5, "Bomb Canada and Other
+    Unkind Remarks in the American Media", and go to Publication ›
+    "Publication Formats".
+19. Press the arrow before "PDF", then "Edit".
+20. Type `my pdf` into "URL Path" and press "OK". The window stays open,
+    with this message under the box: "This may only contain letters,
+    numbers, dashes, underscores and periods."
+21. Replace it with `a/b` and press "OK". The same message shows.
+22. Replace it with `print-edition` and press "OK".
 
 **Expected**: after step 5 the window closes, "u09ir12 about" is listed,
 and nothing shows at the top right. After step 8 the dashboard shows no
 notice. At steps 12, 14, 15 and the first "OK" of step 17 the window
 stays open and the reason shows at once, as a notice at the top right
-(these windows have no place for it inside, and marking the field is not
-this report's fault). Step 16 shows only "Market added." and the second
-"OK" of step 17 only "Publication Date added.".
+(these windows have no message area of their own; that no field is
+marked is a separate defect). Step 13 closes the window with no notice,
+the reason having shown at step 12. Step 16 shows only "Market added." and the second
+"OK" of step 17 only "Publication Date added.". After step 22 the window
+closes and nothing shows at the top right (a format's save has no notice
+of its own).
 
 **Observed**: after step 5 the window closes and the list shows "u09ir12
 about" with path "u09ir12-about". Then a red notice appears at the top
@@ -160,12 +174,20 @@ Market added.
 
 The second "OK" of step 17 shows "A date is required and the date value
 must match the chosen date format." beside "Publication Date added.".
-Each refusal also adds another "Required fields are marked with an
-asterisk: *" line to the window, because these templates keep that note
-after `</form>` and only the form is replaced. The raw price code is the
-missing message key named in
+The raw price code is a missing message key, a separate defect named in
 [U17 A6's report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md).
-Neither of these is this report's cause.
+
+After step 22 the window closes and "PDF" is saved with the path
+`print-edition`. Two red notices stand at the top right, one for each
+refused "OK" of steps 20 and 21:
+
+```
+This may only contain letters, numbers, dashes, underscores and periods.
+This may only contain letters, numbers, dashes, underscores and periods.
+```
+
+Control: on a fresh dataset, "PDF" saved with the path `u73m-good` and
+no refusal before it shows no notice.
 
 ## Cause
 
@@ -195,11 +217,14 @@ form-error notification stays stored.
 
 The next `notifyUser` that reaches `SiteHandler` fetches it, with every
 other waiting one. After the good save, the server answers with a
-`DataChangedEvent`, the form is not replaced, and the form's
-`notifyUser` (line 148) fires from an element still on the page and
-bubbles up as intended. After the window is
-closed instead, the next page load fetches because the user has
-notifications waiting (`hasSystemNotifications`). `SiteHandler` shows a
+`DataChangedEvent` and the form is not replaced. The form's
+`formSubmitted` event reaches `AjaxModalHandler.formSubmitted()`
+(`lib/pkp/js/controllers/modal/AjaxModalHandler.js`, line 101), which
+triggers `notifyUser` on the window's parent and closes the window.
+That fetch returns the stored refusals with the save's own notice; the
+`notifyUser` of line 148 then fetches again and finds nothing. After the
+window is closed instead, the next page load fetches because the user
+has notifications waiting (`hasSystemNotifications`). `SiteHandler` shows a
 `notifyFormError` notification as a warning toast, the red notice.
 
 Two kinds of window escape this:
@@ -217,28 +242,38 @@ Two kinds of window escape this:
 Reach:
 
 - The static page window, for both of its "Path" refusals (walked).
-- OMP's book-format windows (walked, steps 9–17, and "Add Code" with a
-  "Value" of one space): `SalesRightsGridHandler::updateRights()`,
+- OMP's book-format metadata windows (walked):
+  `SalesRightsGridHandler::updateRights()`,
   `MarketsGridHandler::updateMarket()`,
   `PublicationDateGridHandler::updateDate()` and
   `IdentificationCodeGridHandler::updateCode()`. Here the late notice is
   the only message. The form builder writes a check's message into a
   field's sub-label only (`FormBuilderVocabulary::_smartyFBVSubLabel()`),
   and these templates draw "Date", "Price" and "Value" without one; the
-  "Rest of World?" tick box draws none at all (`form/checkbox.tpl`). The
-  same fault is [U73 A23](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U73-publication-formats-proof-terms.md#a23)
-  (the date window).
-- Other handlers that also answer a refusal with the redrawn form, and
-  whose template has no message box (code; whether each refusal can be
-  reached from the screen was not checked):
-  `ArticleGalleyGridHandler::updateGalley()` (OJS),
-  `PreprintGalleyGridHandler::updateGalley()` (OPS), OMP's
-  `PublicationFormatGridHandler::updateFormat()`,
-  `StageParticipantGridHandler::saveParticipant()` (see the report on
+  "Rest of World?" tick box draws none at all (`form/checkbox.tpl`).
+- OMP's format window, for "URL Path" (walked, steps 18–22; the same
+  form serves "Add publication format"):
+  `PublicationFormatGridHandler::updateFormat()` answers a refusal with
+  the redrawn form, and `formatForm.tpl` has no message box. As in the
+  static page window, the message under the box shows at once.
+- The galley window (code): `ArticleGalleyGridHandler::updateGalley()`
+  (OJS) and `PreprintGalleyGridHandler::updateGalley()` (OPS) redraw
+  their form, which has no message box. Its "URL Path" refusals (a
+  refused character, a number, a path already used) show under the box
+  on screen; the late notice was not walked.
+- Other windows that redraw a form without a message box (code; whether
+  each refusal can be reached from the screen was not checked): the file
+  metadata window (`PKPManageFileApiHandler::saveMetadata()`) and the
+  settings windows of the Citation Style Language, Announcement Feed,
+  PubMed export and Browse block plugins. A developer finds any others
+  as handler methods that call `validate()` and answer a refusal with
+  `new JSONMessage(true, $form->fetch(…))`, whose template does not
+  include `inPlaceNotification.tpl`.
+- "Assign Participant" (`StageParticipantGridHandler::saveParticipant()`)
+  redraws its form the same way, but today its refusal stores no message
+  at all (the report on
   [U35 A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U35-A4-assign-participant-ok-assigns-nobody-no-reason.md)),
-  `PKPManageFileApiHandler::saveMetadata()`, and the settings windows of
-  the Citation Style Language, Announcement Feed, PubMed export and
-  Browse block plugins.
+  so this fault shows there only once that is repaired.
 - `CustomBlockGridHandler::updateCustomBlock()` answers the same way.
   But the browser refuses its only checked field, an empty block name,
   before any save is sent (walked).
@@ -291,10 +326,10 @@ visible. The box's own handler hides it until it has something to show
 be out of view it hands the message to the page
 (`showNotificationResponseHandler_()`). A `:visible` test would only
 pass because jQuery 3 runs the box's ready handler after this check.
-The other `.pkp_notification` elements in the three apps' templates (the
-reviewer forms' hidden no-files warning, the file upload container)
-either sit beside an in-place box or in forms that answer a refusal with
-`new JSONMessage(false)`.
+The templates carry other `.pkp_notification` elements, for example the
+reviewer forms' hidden no-files warning and the file upload container;
+none found sits in a form that is redrawn after a refusal without an
+in-place box beside it.
 
 Why this fix:
 
@@ -305,29 +340,23 @@ Why this fix:
   after every answer, refusals included, so that the refusal's
   notification is shown with it.
 
-Tried on `main`: on the three apps with an earlier form of the check
-(`.pkp_notification:visible`), and in this form on OMP, steps 1–17 and
-the neighbour windows. After step 4 the red notice "The path field must
-contain only alphanumeric characters plus '.', '/', '-', and '_'." shows
-at once, beside the message under "Path". After step 6 the same happens
-with "This path already exists for another static page.". Step 5 is
-pressed in the redrawn window and saves, so the redrawn form's scripts
-still run when its HTML is parsed first. Steps 5 and 8 show no notice,
-and the control shows none. With and without the fix, two other windows
-behave the same:
+Tried on `main`, steps 1–22, and the Expected showed: each refusal's
+reason appeared at once as a red notice, beside the message under the
+box where the window has one, and no good save showed an earlier
+refusal ("Add Code" with a "Value" of spaces too). Step 5 saved from
+the redrawn window, which shows that the redrawn form's scripts still
+run when its HTML is parsed first. Four neighbours behaved the same
+with the fix as without it:
 
 - The navigation item window shows its "Path" refusal at once, and only
   "Navigation menu item was successfully added" after the good save.
 - Profile › "Password" shows a wrong current password in the form's own
   box, with no notice at the top right.
-
-In OMP's book-format windows each refusal's reason showed at once as a
-notice at the top right: "There is already a ROW sales type defined for
-this publication format." at step 12, "A date is required and the date
-value must match the chosen date format." at step 14 and the first "OK"
-of step 17, the price's raw code at step 15, and "A value is required."
-for a code "Value" of spaces. Step 16 showed only "Market added.", and
-step 17's save only "Publication Date added.".
+- A format saved with a good "URL Path" and no refusal before it shows
+  no notice.
+- "Add publication format" with an empty "Name" is refused in the
+  browser with "This field is required.", with no save sent and no
+  notice.
 
 **Alternatives**
 
@@ -357,8 +386,9 @@ step 17's save only "Publication Date added.".
   refusal with `new JSONMessage(false)`. With this fix that change is no
   longer needed for its notice to show. It is still wanted, because it
   keeps the role, person and message the editor chose.
-- Backport: lines 139 and 148 read the same on `stable-3_5_0`,
-  `stable-3_4_0` and `stable-3_3_0`, so the diff applies as written.
+- Backport: `AjaxFormHandler.js` is byte-identical on `main` and in the
+  pkp-lib commits the `stable-3_5_0`, `stable-3_4_0` and `stable-3_3_0`
+  apps pin, so the diff applies as written.
   Installs that serve the minified bundle (`enable_minified = On`) see
   the change once `js/pkp.min.js` is rebuilt.
 - Guard: an e2e scenario in U09 that saves a static page after a refused
@@ -387,11 +417,18 @@ Small: a few lines in one shared pkp-lib file, tried.
   [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/catalog-windows-refuse-without-message/walk.js)
   with
   [lib.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/catalog-windows-refuse-without-message/lib.js)
-  takes steps 9–16; `MODE=reach` in front takes step 17 and "Add Code".
+  takes steps 9–16; `MODE=reach` in front takes step 17 and "Add Code"
+  (a "Value" of one space, then a good one: walked, not a step above; it
+  behaves like step 14).
   Run: `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js omp shared/playwright/checks/issues/catalog-windows-refuse-without-message/walk.js`.
-- That several waiting notices show together comes from the code
-  (`fetchNotification()` returns them all in one answer, and
-  `SiteHandler` shows each) and from step 16, which showed three.
+- OMP's format window (steps 18–22):
+  [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/format-url-path-refusal-repeated-after-save/walk.js);
+  `MODE=neighbour` in front takes the control (a good path, no refusal
+  before it) and "Add publication format" with an empty "Name".
+  Run: `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js omp shared/playwright/checks/issues/format-url-path-refusal-repeated-after-save/walk.js`.
+  Its record shows no notification request at steps 20 and 21, and the
+  request after step 22 returning two "Errors occurred processing this
+  form" notifications with the refusal's text.
 - Walks, on PostgreSQL:
   - Steps 1–8, 2026-10-02: OJS and OMP on `main` and `stable-3_5_0`,
     the neighbour check on all three apps on `main`, pkp/datasets
@@ -405,17 +442,26 @@ Small: a few lines in one shared pkp-lib file, tried.
     and handler), pkp/datasets e8dafbc. Tips: `main` OMP 3b0ecf794
     (pkp-lib 3dc90c81a6), `stable-3_5_0` OMP 9c5e24246 (pkp-lib
     cf3f984335).
+  - Steps 18–22, 2026-10-04: OMP on `main` and `stable-3_5_0`,
+    pkp/datasets 566bb1f. Tips: `main` OMP 3b0ecf794c (pkp-lib
+    3dc90c81a6), `stable-3_5_0` OMP 9c5e24246c (pkp-lib cf3f984335).
   - No request failed on the server and no page script failed.
 - The fix was tried on `main` only, with `enable_minified = Off`, so the
-  sources were served without a build: the `:visible` form on the three
-  apps (steps 1–8 and the neighbour check), the final form on OMP (steps
-  1–17, "Add Code" and the neighbour check), each walk on a freshly
-  loaded dataset.
-- Code tips not walked: `stable-3_5_0` OPS 8eaf899468 (pkp-lib
-  1fb843f491); `stable-3_4_0` OJS 75cc2d488b, OMP 0aec65441, pkp-lib
-  32b0f4b4af, staticPages 9568981e8c (the app's submodule pointer);
-  `stable-3_3_0` OJS ac77c9fb35, OMP 8e72fc883, pkp-lib f6ab331645,
-  staticPages 8c97bd09d4.
+  sources were served without a build, each walk on a freshly loaded
+  dataset. An earlier form of the check (`.pkp_notification:visible`)
+  was tried on the three apps with steps 1–8 and the neighbour check.
+  The diff as linked was tried on OMP with steps 1–22, "Add Code" and
+  the neighbour checks. The format window's neighbour check was also
+  walked without the fix.
+- Code tips not walked, each app with the pkp-lib commit it pins:
+  `stable-3_5_0` OPS 8eaf899468 (pkp-lib 1fb843f491); `stable-3_4_0`
+  OJS 75cc2d488b (pkp-lib 32b0f4b4af, staticPages 9568981e8c) and OMP
+  0aec65441f (pkp-lib df13621c2d); `stable-3_3_0` OJS ac77c9fb35
+  (pkp-lib f6ab331645, staticPages 8c97bd09d4) and OMP 8e72fc8836
+  (pkp-lib d446601ebe). `AjaxFormHandler.js` is byte-identical in all
+  of them, on `main` and on `stable-3_5_0` (OJS's 3.4 tip has since
+  moved to d68934d0d1, pinning pkp-lib 767353f4fe, where it is the same
+  file too).
 - Code reads. On every line: `AjaxFormHandler.handleResponse()` (the
   redraw at line 139, `notifyUser` at line 148), `Handler.trigger()` /
   `triggerPublicEvent_()` (publishing through `parent()`), and
@@ -429,14 +475,22 @@ Small: a few lines in one shared pkp-lib file, tried.
   `new JSONMessage(true, $form->fetch(…))`, with each form's template
   checked for `inPlaceNotification.tpl`. On 3.4 and 3.3 OMP's four
   book-format templates and their handlers read the same as on `main`.
+  For the format window, on 3.5, 3.4 (OMP 0aec65441f) and 3.3 (OMP
+  8e72fc8836):
+  `PublicationFormatGridHandler::updateFormat()` returns the redrawn form
+  on a refusal, `PublicationFormatForm` checks "URL Path" with the same
+  pattern and message, and `formatForm.tpl` has no message box, as on
+  `main`.
 - The check without `:visible`: `NotificationHandler`'s constructor hides
   its box and `showNotificationResponseHandler_()` (lines 127–131) hands
   an out-of-view message to the parent; jQuery 3.7.1's `ready()` runs
   through a Deferred, so the redrawn box's handler starts after
   `handleResponse()` returns. The other `.pkp_notification` elements come
-  from a search of the three apps' templates and plugins; the forms
-  holding them were checked for an in-place box or a
-  `new JSONMessage(false)` answer.
+  from a search of the three apps' templates and plugins (among them
+  `reviewer/review/step3.tpl`'s message box, `authorReadReview.tpl`,
+  `install/install.tpl`, the DOAJ plugin's `index.tpl` and OMP's
+  `management/context.tpl`); none is in content a form redraws after a
+  refusal without an in-place box.
 - Introduced: `git blame` on line 148 gives d547b00e0a (2020,
   `pkp/pkp-lib#5865`), which only dropped the event's argument. Before
   it, ece4902464 ("*5762* Trigger notify user event always on form
@@ -446,14 +500,12 @@ Small: a few lines in one shared pkp-lib file, tried.
   `Handler` already published events through `parent()` then (line
   501), so the refusal's notice has been held back since that pair of
   commits, both for pkp bug 5762. There is no PR (the Bugzilla era).
-- Upstream, searched 2026-10-02 in pkp/pkp-lib, pkp/ojs, pkp/omp,
-  pkp/staticPages and pkp/ui-library, for "form error notification
-  after save", "Errors occurred processing this form",
-  `NOTIFICATION_TYPE_FORM_ERROR`, "path field must contain",
-  `AjaxFormHandler`, `inPlaceNotification` and `notifyUser`. Read and
-  not the same fault: `pkp/pkp-lib#11760` (reviewer form errors shown
-  only as a passing notice), `pkp/pkp-lib#9759` / `pkp/pkp-lib#9760`
-  (the file upload wizard's refusal) and `pkp/pkp-lib#3870`.
-- Not driven: the galley windows (OJS, OPS), OMP's format window,
-  "Assign Participant", the file metadata window and the plugin settings
-  windows in the Reach list.
+- Upstream, searched 2026-10-02 and 2026-10-04 in pkp/pkp-lib, pkp/ojs,
+  pkp/omp, pkp/staticPages and pkp/ui-library. Read and not the same
+  fault: `pkp/pkp-lib#11760` (reviewer form errors shown only as a
+  passing notice), `pkp/pkp-lib#9759` / `pkp/pkp-lib#9760` (the file
+  upload wizard's refusal), `pkp/pkp-lib#3870` and `pkp/pkp-lib#2163`
+  (the JS handlers' event routing, a design note).
+- Not driven: the galley windows (OJS, OPS), so OPS is in Affects by
+  the code only; "Assign Participant", the file metadata window and the
+  plugin settings windows in the Reach list.
