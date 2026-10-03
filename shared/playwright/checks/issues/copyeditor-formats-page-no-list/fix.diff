@@ -1,0 +1,27 @@
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowNavigationConfig/useWorkflowNavigationConfigOMP.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowNavigationConfig/useWorkflowNavigationConfigOMP.js
+@@ -233,13 +233,17 @@
+ 			}),
+ 		);
+ 
+-		items.push(
+-			getPublicationItem({
+-				publicationId,
+-				name: 'publicationFormats',
+-				label: t('submission.publicationFormats'),
+-			}),
+-		);
++		// The formats list is production material: its grid is authorized on the
++		// Production stage, as the galleys' page is on OJS and OPS.
++		if (permissions.canAccessProduction) {
++			items.push(
++				getPublicationItem({
++					publicationId,
++					name: 'publicationFormats',
++					label: t('submission.publicationFormats'),
++				}),
++			);
++		}
+ 
+ 		items.push(
+ 			getPublicationItem({
