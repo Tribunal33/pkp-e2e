@@ -1049,6 +1049,7 @@ Left out of the scenarios above, by reason:
   - a reload on a Settings side tab under a later top tab (Website › "Setup" › "Privacy Statement") keeping that side tab (A7; the guard its issue report names)
   - a new journal's and press's "Information For Readers" "Privacy Statement" link opening the "Privacy Statement" page {OJS OMP} (A9; the guard its issue report names)
   - the French (Canada) "Bloc générique" (Masthead) tab of a press and a preprint server showing no "##" code {OMP OPS} (A12; the guard its issue report names)
+  - the site-level "About Open Monograph Press" page of a site with two presses opening "This site uses" {OMP} (OMP2; Rule 20; the guard its issue report names)
   - the masthead not based on enrollments, "Present a masthead based on user enrollments" unticked: the masthead showing under its heading only the "Editorial History" text (and a manager's "Edit" link), or nothing with that text empty, the "Editorial History" address opening the masthead, the other two groups leaving the tab, and, ticked again, both pages listing as before in the saved role order (Rule 14f; Rules 16, 21; Settings bullet 4a)
   - "Enable listing of reviewers on the masthead" at its default: no "Peer Reviewers in Previous Year" although reviews were completed last year {OJS OMP} (Rule 15; Settings bullet 4c)
   - a disabled member staying listed on both pages and under "Peer Reviewers in Previous Year" (Rule 14e; A4 retired)
@@ -1060,7 +1061,6 @@ Left out of the scenarios above, by reason:
   - another order of the roles on Settings › Website › "Appearance" › "Editorial Masthead" (Rule 14a; Settings bullet 4b)
   - the abbreviation, the "Publishing Details", "Sponsoring organization" and "Publisher Identity" saved and shown again on the tab (Fields; Rule 10)
   - a renamed "Journal initials" beside the journal's tasks for an account in two journals (Rule 7)
-  - the page about the publishing software reached from the site's own pages (Rule 20; OMP2)
   - "Publisher Code Type" kept once saved, its list offering no empty choice {OMP} (Fields)
   - an unknown address under the Settings pages answering "404 Not Found" (Rule 3)
   - the Editor and the Production Editor opening and saving the tabs, the Journal Manager's offer in scenarios 2–6 (Actors rows 1–3; scenario 11's Production editor opens the pages)
@@ -1113,7 +1113,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | Hosted Journals "Edit" refuses to save a journal whose "Country" was never set | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | In French (Canada), a press's and a preprint server's Masthead settings tab shows untranslated codes {OMP OPS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | With the masthead not based on enrollments, invitations and masthead changes still promise "Your name will appear in the {journal}'s masthead"; reviewers are promised it while the journal lists none | 🐞 | minor | — |
-| [OMP2](#omp2) | The site-level page about the software says "This press uses Open Monograph Press" on a press site {OMP} | 🐞 | minor | — |
+| [OMP2](#omp2) | On a site hosting several presses, the site's "About Open Monograph Press" page says "This press uses" {OMP} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS3](#ops3) | A preprint server's French "Privacy Statement" default is the raw text "##default.contextSettings.privacyStatement##" {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS4](#ops4) | A preprint server's French "Editorial Masthead" heads the Moderators "##default.groups.name.sectionEditor##" {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | The "Edit" link of the About pages is shown to a manager-level role that cannot open the Settings pages | ❓ | minor | — |
@@ -1293,12 +1293,20 @@ page. Question: should the press read "Press Settings"? Lean: yes, the
 press kept an older label. Basis: probe. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — The site-level software page says "This press"** · 🐞 · minor.
-On the site's own pages of a press installation (no press in the
-address), the page about the software opens "This press uses Open
-Monograph Press {version}…" and ends by pointing to "the site" and "its
-presses", where a journal and a preprint server installation open "This
-site uses …". Basis: probe. <sup>f-omp2</sup>
+**OMP2 — On a site hosting several presses, the site's "About Open Monograph Press" page says "This press uses"** · 🐞 · low.
+On a site that hosts several presses, the "About Open Monograph Press" page,
+reached from the PKP logo in the footer of the site's home page, opens "This
+press uses Open Monograph Press {version}…" and then asks the visitor to
+contact "the site" about "its presses". A journal and a preprint server
+site open "This site uses …" there.
+
+The page read "This site uses …" until 2022, and the fix is one English
+sentence. Other languages are left to their translators: fifteen also name
+the press, and French (Canada) is right.
+
+The site's home page, the list of presses, exists only when the site hosts
+two or more presses; with one, the site's address opens that press.
+Since: 2022-07-02 · Basis: probe, 2026-10-03. <sup>f-omp2</sup>
 
 ### OPS
 
@@ -2563,6 +2571,7 @@ Press".
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Note w. Live-probed 2026-09-23: note td18.
+Issue report: [pkp-e2e#788](https://github.com/jardakotesovec/pkp-e2e/issues/788) ([docs/issues/U07-OMP2-press-site-software-page-says-this-press.md](../issues/U07-OMP2-press-site-software-page-says-this-press.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note i; OPS `SettingsHandler::getInformationForm()` returns
