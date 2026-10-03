@@ -724,7 +724,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | A sent request leaves no trace on the editor's table; "Request Response" stays enabled | 🐞 | user-visible | — |
+| [A1](#a1) | Editors' "Author Response" table still reads "Ready to invite author" after the request was sent | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | The Funding Coordinator is offered "Request Response", "View" and "Delete" and refused on all three | 🐞 | minor | — |
 | [A4](#a4) | The request page opened by a typed address returns nowhere on "Cancel" and after sending | 🐞 | minor | — |
 | [A5](#a5) | An emptied "Subject" or "Message" is refused with "An unexpected error has occurred." | 🐞 | minor | — |
@@ -738,15 +738,21 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — A sent request leaves no trace on the editor's table** · 🐞 ·
-user-visible. After "Submit Request" the editor expects the "Response
-Status" cell to say the author was asked; it still reads "Ready to invite
-author" and "Request Response" is enabled, so a colleague, or the same
-editor after a reload, sends the request a second time with nothing on the
-screen to stop them; a second and a third press are accepted and each
-sends the email again. The author's screen does record every send (the
-card appears and the "Notifications" list gains a row per email), so the
-two views disagree. Basis: probe. <sup>f-a1</sup>
+**A1 — Editors' "Author Response" table still reads "Ready to invite author" after the request was sent** · 🐞 · medium.
+After an editor sends the author a request for a response to the
+reviews ("Request Response", then "Submit Request"), the round's
+"Author Response" table still reads "Ready to invite author" / "Editor
+can now request the author's response.", and "Request Response" stays
+enabled. Nothing on the round shows that the author was asked.
+
+So another editor of the submission, or the same one later, reads the
+round as never asked and sends the request again. Each send emails the
+author once more.
+
+It holds on every review round from the first request until the author
+responds, on any journal whose editors use "Request Response"; no
+setting turns the feature on or off.
+Since: 2026-01-23 (pkp/ui-library#767) · Basis: probe, 2026-10-04. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — Nobody is told when the response arrives** · ❓ · user-visible. The
@@ -983,6 +989,7 @@ and that email's button lands the author on the same empty stage. Since: 2026-07
 
 <a id="fn-f-a1"></a>
 **f-a1** — Note e: neither `AuthorResponseRequestManagerCellStatus.vue` nor `canRequestReviewRoundAuthorResponse` reads `isAuthorResponseRequested`, and `PKPReviewController::requestAuthorResponse()` refuses only when a response exists, so a second `POST …/requestResponse` sends a second email and sets the flag again. The author's config (note c) does read the flag. Live-probed 2026-09-06: three sends on one round, each `POST …/requestResponse` 200, three Mailpit messages, three "Notifications" rows and three "An email has been sent" log rows, the table unchanged throughout.
+Issue report: [pkp-e2e#811](https://github.com/jardakotesovec/pkp-e2e/issues/811) ([docs/issues/U30-A1-author-response-request-leaves-no-trace.md](../issues/U30-A1-author-response-request-leaves-no-trace.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note p: `submitAuthorResponse()` creates the row and returns the resource; no `Notification`, `EventLog` or mailable. Compare `PendingRevisionsNotificationManager` for uploaded revisions and the discussion reply notifications, both of which raise a task or email. Live-probed 2026-09-06 (note p): nothing for the editor after a submit, an edit, a delete and a second submit.
