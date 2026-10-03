@@ -1,0 +1,10 @@
+--- a/lib/ui-library/src/components/ListPanel/submissions/CatalogListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/submissions/CatalogListPanel.vue
+@@ -736,6 +736,7 @@
+ 			.listPanel--catalog__orderCancel
+ 		),
+ 	.pkpSearch,
++	.listPanel__sidebar,
+ 	.listPanel__itemActions--catalog,
+ 	.listPanel__item--catalog:not(.-isFeatured),
+ 	.orderer__dragDrop,
