@@ -1354,7 +1354,7 @@ Issue report: [docs/issues/U20-A5-sitemap-lists-expired-announcements.md](../iss
 
 <a id="fn-f-a7"></a>
 **f-a7** — Notes h, i: the tags print `htmlspecialchars(strip_tags($abstract))`, and the stored abstract already holds "&" as `&amp;`, so it is escaped a second time. Live-probed 2026-09-26, all three apps (Dublin Core on OJS and OMP, and on a book file's page): note q14.
-Issue report: [docs/issues/U20-A7-abstract-symbols-reach-search-tags-as-codes.md](../issues/U20-A7-abstract-symbols-reach-search-tags-as-codes.md).
+Issue report: [docs/issues/U20-A7-abstract-symbols-reach-search-tags-as-codes.md](../issues/U20-A7-abstract-symbols-reach-search-tags-as-codes.md), filed as [pkp-e2e#668](https://github.com/jardakotesovec/pkp-e2e/issues/668).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — Note i: OJS `DublinCoreMetaPlugin` builds `DC.Source.URI` with `$request->getDispatcher()->url($request, ROUTE_PAGE, null, $journal->getPath(), urlLocaleForPage: '')`, the journal's path in the handler slot, so the address is `{journal address}/{journal path}`. Before commit `2c65b53000` "Show locale in url in multilingual contexts" (2024-04-16) it was `$request->url($journal->getPath())`, the home page; OMP's copy passes the path as the context. Live-probed 2026-09-26: the tag read `…/index.php/{path}/{path}` and answered 404; OMP's named the press's home page, 200 (note q14). Written up for the team in `docs/reports/2026-09-26-ojs-dc-source-uri-404.md`.
