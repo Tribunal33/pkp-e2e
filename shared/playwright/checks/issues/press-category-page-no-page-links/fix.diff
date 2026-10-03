@@ -1,0 +1,27 @@
+--- a/templates/frontend/pages/catalogCategory.tpl
++++ b/templates/frontend/pages/catalogCategory.tpl
+@@ -80,22 +80,8 @@
+ 		{include file="frontend/components/monographList.tpl" monographs=$results featured=$featuredMonographIds titleKey="catalog.category.heading"}
+ 
+ 		{* Pagination *}
+-		{if $prevPage > 1}
+-			{capture assign=prevUrl}{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="category" path=$category->getPath()|to_array:$prevPage}{/capture}
+-		{elseif $prevPage === 1}
+-			{capture assign=prevUrl}{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="category" path=$category->getPath()}{/capture}
+-		{/if}
+-		{if $nextPage}
+-			{capture assign=nextUrl}{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="category" path=$category->getPath()|to_array:$nextPage}{/capture}
+-		{/if}
+-		{include
+-			file="frontend/components/pagination.tpl"
+-			prevUrl=$prevUrl
+-			nextUrl=$nextUrl
+-			showingStart=$showingStart
+-			showingEnd=$showingEnd
+-			total=$total
+-		}
++		{page_info iterator=$results}
++		{page_links anchor="results" iterator=$results name="category" query=$query searchContext=$searchContext authors=$authors dateFromMonth=$dateFromMonth dateFromDay=$dateFromDay dateFromYear=$dateFromYear dateToMonth=$dateToMonth dateToDay=$dateToDay dateToYear=$dateToYear orderBy=$orderBy orderDir=$orderDir}
+ 	{/if}
+ 
+ </div><!-- .page -->
