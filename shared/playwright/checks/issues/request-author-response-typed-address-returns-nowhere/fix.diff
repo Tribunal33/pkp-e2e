@@ -1,0 +1,36 @@
+--- a/lib/ui-library/src/pages/requestReviewRoundAuthorResponse/RequestReviewRoundAuthorResponse.vue
++++ b/lib/ui-library/src/pages/requestReviewRoundAuthorResponse/RequestReviewRoundAuthorResponse.vue
+@@ -183,11 +183,11 @@
+ 				{
+ 					label: actionLabel,
+ 					element: 'a',
+-					href: getReturnUrlToSubmissionSummary(),
++					href: getReturnUrl(),
+ 				},
+ 			],
+ 			close: () => {
+-				window.location = getReturnUrlToSubmissionSummary();
++				window.location = getReturnUrl();
+ 			},
+ 			modalStyle: 'success',
+ 		});
+@@ -210,10 +210,18 @@
+ }
+ 
+ /**
++ * Get the URL to return to: the page the request was opened from (`ret`),
++ * or the submission's workflow when the page was opened by its address.
++ */
++function getReturnUrl() {
++	return getReturnUrlToSubmissionSummary() || props.submissionUrl;
++}
++
++/**
+  * Cancel the request
+  */
+ function cancelResponseRequest() {
+-	window.location.href = getReturnUrlToSubmissionSummary();
++	window.location.href = getReturnUrl();
+ }
+ </script>
+ 
