@@ -666,6 +666,7 @@ Left out of the scenarios above, by reason:
   - on the site-wide Search page, a journal chosen under "By Journal" stays selected after the search and its page 2 lists that journal's articles only (Rule 10; OJS2)
   - on a press and a server, a published book or preprint returned to the workflow keeps its page, its place in the catalog or preprint list and its search result for a visitor (Rule 2; OMP3, OPS4)
   - a Search address asking for the sort by published date, newest or oldest first, lists the results in date order (Rule 14; A12)
+  - a Search address whose page number is not a number, on a search that finds something, shows the first page of results (Rule 8; A13)
 - **Rarely met**:
   - "Items per page" changed on Settings › Website › Setup › Lists, the
     results per page following it (Rule 8, Settings): the Journal Manager
@@ -765,7 +766,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A9](#a9) | The configuration file lists two search settings that nothing reads | 🐞 | latent | — |
 | [A11](#a11) | A reader's search never finds a word that appears only in an article's or book's full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | A Search link that sorts the results by published date shows an empty error page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
-| [A13](#a13) | A page number in the address that is not a number answers a completely empty page | 🐞 | latent | — |
+| [A13](#a13) | A Search results address whose page number is not a number opens a completely blank page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [OJS1](#ojs1) | With more than one result, the screen-reader count reads out a raw code | 🐞 | minor | — |
 | [OJS2](#ojs2) | On the site-wide Search page, "By Journal" limits the first page only and never shows as chosen | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP1](#omp1) | The index-rebuild tool ignores the press path it is given and rebuilds every press | 🐞 | invisible | — |
@@ -951,14 +952,19 @@ query. No release has it: only `main`, the coming 3.6.
 Basis: probe, 2026-10-03. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — A malformed page number answers a completely empty page** · 🐞 · latent.
-A reader who opens a bookmarked or hand-edited Search address whose page
-number is not a number gets a completely empty page (no heading, no search
-form, no message of any kind), on all three
-applications; a page number beyond the last page shows "No Results" with
-the searched words kept, as expected. Only a typed or shared address meets
-it.
-Basis: probe. <sup>f-a13</sup>
+**A13 — A Search results address whose page number is not a number opens a completely blank page** · 🐞 · low · crash: server.
+A reader who opens a bookmarked or hand-edited Search results address
+whose page number is not a number (`searchPage=abc`) gets a completely
+blank page: no heading, no search form, no message of any kind. The
+server fails on the request because it uses the page number without
+checking that it is a number. OJS's site-wide Search page fails the
+same way as a journal's. On `main` it takes a search that finds
+something; on 3.5 every search fails.
+
+Nothing is lost, and the reader gets back with the browser's back button
+or the journal's address. No link on any page gives such an address, so
+only a typed, mangled or shared one reaches it.
+Basis: probe, 2026-10-03. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — An impossible day is offered and rolled into the next month** · ❓ · minor.
@@ -1852,6 +1858,7 @@ on OJS, OMP and OPS: `…/search/search?query=uckaharbour&searchPage=abc`
 answered status 500 with an empty body (a blank page, no text);
 `searchPage=9` on a one-hit search answered "No Results" with the box
 holding the word.
+Issue report: [docs/issues/U15-A13-search-text-page-number-blank-page.md](../issues/U15-A13-search-text-page-number-blank-page.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — fn-h: `SearchHandler::_assignDateFromTo()` builds the date

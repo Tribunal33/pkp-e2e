@@ -1,0 +1,14 @@
+--- a/lib/pkp/classes/handler/PKPHandler.php
++++ b/lib/pkp/classes/handler/PKPHandler.php
+@@ -449,8 +449,9 @@
+     public static function getRangeInfo($request, $rangeName, $contextData = null)
+     {
+         $context = $request->getContext();
+-        $pageNum = $request->getUserVar(self::getPageParamName($rangeName));
+-        if (empty($pageNum)) {
++        // A page number is a positive whole number; anything else is treated as no page given
++        $pageNum = (int) $request->getUserVar(self::getPageParamName($rangeName));
++        if ($pageNum < 1) {
+             $session = $request->getSession();
+             $pageNum = 1; // Default to page 1
+             if ($session && $contextData !== null) {
