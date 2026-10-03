@@ -899,6 +899,7 @@ Left out of the scenarios above, by reason:
   - OMP3 {OMP} (book 14's pages: "DC.Type" "Text.Book" on the book's page and a whole-book file's view page, "Text.Chapter" on a chapter's page and a chapter file's view page; Rule 17)
   - OMP4 {OMP} (a published book with a chapter page and "Create New Version", then the new version published: the sitemap lists the chapter page at the address the book's page links to, and it opens; Rule 2c)
   - A6 (an author whose account holds an English name only submits in French: "citation_author" and "DC.Creator.PersonalName" carry the full name; Fields, "citation_author")
+  - OMP5 {OMP} (a book file's view page: "DC.Identifier.URI" names that view page; Rule 17)
 - **Rarely met**:
   - "User Registration" set to "The Journal Manager will register all
     user accounts. …", which takes "Register" out of the sitemap
@@ -993,7 +994,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP2](#omp2) | A book with two PDF files for the whole book announces only one of them to Google Scholar | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP3](#omp3) | A press's chapter pages tell indexes they are books, and whole-book file pages that they are chapters | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP4](#omp4) | After "Create New Version", a press's sitemap lists the book's chapter pages at addresses that answer "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [OMP5](#omp5) | A book file's page names the book's page as its own address | 🐞 | minor | — |
+| [OMP5](#omp5) | A press's book file view page names the book's page as its address in Dublin Core tags | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP6](#omp6) | Every book file address the tags give fails with a server error instead of the file | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | A preprint with a "URL Path" announces an HTML full-text address that ends on "404 Not Found" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | The site's own "Google Analytics Plugin" box can be ticked but changes nothing | ❓ | minor | — |
@@ -1201,12 +1202,17 @@ The book's own entry and its file entries stay right.
 Basis: probe, 2026-10-03. <sup>f-omp4</sup>
 
 <a id="omp5"></a>
-**OMP5 — A book file's page names the book's page as its address** · 🐞 · minor.
-An index reading a book file's page expects "DC.Identifier.URI" to be
-that page's own address. It is an address under "catalog/book" that
-shows the book's page, with the book's own tags, so the file's page is
-never named (Rule 17).
-Basis: probe, 2026-09-26. <sup>f-omp5</sup>
+**OMP5 — A press's book file view page names the book's page as its address in Dublin Core tags** · 🐞 · low.
+An index reading a book file's view page expects its "DC.Identifier.URI"
+tag to give that page's own address. The tag holds an address under
+"catalog/book" that opens the book's landing page, with the book's own
+tags, so the file's view page is never named.
+
+Nothing on screen shows it or changes it. It holds for every published
+file a reader can open from a book's page, the whole book's and each
+chapter's, while "Dublin Core Indexing Plugin" is enabled, as it is on
+every new press.
+Basis: probe, 2026-10-03. <sup>f-omp5</sup>
 
 <a id="omp6"></a>
 **OMP6 — Every book file address in the tags fails** · 🐞 · critical · crash: both.
@@ -1407,6 +1413,7 @@ Issue report: [docs/issues/U20-OMP4-sitemap-new-version-chapter-pages-404.md](..
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — Note i: `monographFileView()` builds `DC.Identifier.URI` as `catalog/book/{bestId}/{formatId}/{fileId}`, an address `CatalogBookHandler::book()` answers with the book's page, where the file view is `catalog/view/…`. Live-probed 2026-09-26: note q19.
+Issue report: [docs/issues/U20-OMP5-book-file-page-uri-names-book-page.md](../issues/U20-OMP5-book-file-page-uri-names-book-page.md).
 
 <a id="fn-f-omp6"></a>
 **f-omp6** — Every `GET {press address}/catalog/download/{book}/{format}/{file}`, with or without `?inline=1`, current or earlier version, answered 500, the server logging "Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization"; the file's view page failed in the browser with "PDFJS is not defined" and "UnexpectedResponseException". The failure is in the book file download, which *Monograph landing page* owns; the tags merely name its addresses. Live-probed 2026-09-26: notes q14, q15, q19.
