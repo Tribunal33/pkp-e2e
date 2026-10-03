@@ -1,0 +1,11 @@
+--- a/lib/ui-library/src/components/ListPanel/submissions/CatalogListItem.vue
++++ b/lib/ui-library/src/components/ListPanel/submissions/CatalogListItem.vue
+@@ -67,7 +67,7 @@
+ 		<Orderer
+ 			v-if="isOrdering"
+ 			:item-id="item.id"
+-			:item-title="item.title"
++			:item-title="localize(currentPublication.fullTitle)"
+ 			@up="$emit('order-up', item)"
+ 			@down="$emit('order-down', item)"
+ 		/>
