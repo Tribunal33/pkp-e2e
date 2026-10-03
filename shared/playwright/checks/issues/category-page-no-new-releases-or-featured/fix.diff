@@ -1,0 +1,38 @@
+--- a/pages/catalog/CatalogHandler.php
++++ b/pages/catalog/CatalogHandler.php
+@@ -137,6 +137,35 @@
+     }
+ 
+     /**
++     * View the content of a category: the shared page, with the category's own
++     * featured books and new releases, as on a series' page.
++     *
++     * @see PKPCatalogHandler::category()
++     */
++    public function category($args, $request)
++    {
++        $context = $request->getContext();
++        $category = Repo::category()->getCollector()
++            ->filterByPaths([$args[0] ?? ''])
++            ->filterByContextIds([$context->getId()])
++            ->getMany()
++            ->first();
++
++        if ($category) {
++            $featureDao = DAORegistry::getDAO('FeatureDAO'); /** @var FeatureDAO $featureDao */
++            $newReleaseDao = DAORegistry::getDAO('NewReleaseDAO'); /** @var NewReleaseDAO $newReleaseDao */
++            // Provide a list of new releases on the first page only, as on a series' page
++            $isFirstPage = $this->getRangeInfo($request, 'category')->getPage() <= 1;
++            TemplateManager::getManager($request)->assign([
++                'featuredMonographIds' => $featureDao->getSequencesByAssoc(Application::ASSOC_TYPE_CATEGORY, $category->getId()),
++                'newReleasesMonographs' => $isFirstPage ? $newReleaseDao->getMonographsByAssoc(Application::ASSOC_TYPE_CATEGORY, $category->getId()) : [],
++            ]);
++        }
++
++        return parent::category($args, $request);
++    }
++
++    /**
+      * View the content of a series.
+      *
+      * @param array $args [

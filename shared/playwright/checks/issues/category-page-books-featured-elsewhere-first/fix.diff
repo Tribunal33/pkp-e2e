@@ -1,0 +1,23 @@
+--- a/lib/pkp/classes/search/engines/DatabaseEngine.php
++++ b/lib/pkp/classes/search/engines/DatabaseEngine.php
+@@ -199,8 +199,18 @@
+                 $q->leftJoin('publications AS cp', 's.current_publication_id', 'cp.publication_id')
+                     ->orderBy('cp.date_published', $orderDirection);
+             })
+-            ->when($orderBy == 'feature', function ($q) {
+-                $q->leftJoin('features as f', 's.submission_id', 'f.submission_id')
++            ->when($orderBy == 'feature', function ($q) use ($contextId, $categoryIds) {
++                // Only the features of the list being browsed count, as in APP\submission\Collector::orderByFeatured():
++                // a category's own featured items on a category's page, otherwise the press's.
++                [$assocType, $assocIds] = is_array($categoryIds)
++                    ? [Application::ASSOC_TYPE_CATEGORY, $categoryIds]
++                    : [Application::getContextAssocType(), [(int) $contextId]];
++                $q->leftJoin(
++                    'features as f',
++                    fn (JoinClause $j) => $j->on('s.submission_id', '=', 'f.submission_id')
++                        ->where('f.assoc_type', '=', $assocType)
++                        ->whereIn('f.assoc_id', $assocIds)
++                )
+                     ->orderByRaw('COALESCE(MAX(f.seq), 999999)'); // MySQL and PostgreSQL don't agree on ORDER BY with NULLs
+             })
+             ->when($orderBy == 'title', function ($q) use ($orderBy, $orderDirection) {
