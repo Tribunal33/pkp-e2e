@@ -2995,7 +2995,7 @@ due 2026-09-10 set in the Resend window, the resent row's cell read
 Section Editor) with a second distinct pair — response +10 days / review
 +20 days — and the cell again printed the review date under the
 response-due label.
-Issue report: [docs/issues/U27-A2-request-resent-row-shows-review-deadline.md](../issues/U27-A2-request-resent-row-shows-review-deadline.md).
+Issue report: [pkp-e2e#681](https://github.com/jardakotesovec/pkp-e2e/issues/681) ([docs/issues/U27-A2-request-resent-row-shows-review-deadline.md](../issues/U27-A2-request-resent-row-shows-review-deadline.md)).
 
 <a id="fn-a3"></a>
 **f-a3** — Disproof live-probed 2026-08-02 (claim check, OJS): a throwaway
@@ -3053,7 +3053,7 @@ status cell rendered the title alone; the response due date was set and
 visible in the Edit window. An earlier code reading placed the
 `editor.review.responseDue` sub-line here (note b); the live cell never
 shows it.
-Issue report: [docs/issues/U27-A7-request-sent-row-no-response-due.md](../issues/U27-A7-request-sent-row-no-response-due.md).
+Issue report: [pkp-e2e#680](https://github.com/jardakotesovec/pkp-e2e/issues/680) ([docs/issues/U27-A7-request-sent-row-no-response-due.md](../issues/U27-A7-request-sent-row-no-response-due.md)).
 
 <a id="fn-a8"></a>
 **f-a8** — Live-probed 2026-08-02 (OJS + OMP): review date set before the
