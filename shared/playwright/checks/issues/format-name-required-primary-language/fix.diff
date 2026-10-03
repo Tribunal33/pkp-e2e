@@ -1,0 +1,23 @@
+--- a/lib/pkp/classes/form/Form.php
++++ b/lib/pkp/classes/form/Form.php
+@@ -199,6 +199,7 @@
+                 'errors' => $this->getErrorsArray(),
+                 'formLocales' => $this->supportedLocales,
+                 'formLocale' => $this->getDefaultFormLocale(),
++                'formRequiredLocale' => $this->getRequiredLocale(),
+             ]
+         ));
+ 
+--- a/lib/pkp/templates/form/textInput.tpl
++++ b/lib/pkp/templates/form/textInput.tpl
+@@ -47,8 +47,8 @@
+ 					name="{$FBV_name|escape}[{$thisFormLocale|escape}]"
+ 					id="{$FBV_id|escape}-{$thisFormLocale|escape}{$uniqId}"
+ 					{if $FBV_tabIndex} tabindex="{$FBV_tabIndex|escape}"{/if}
+-					{if $FBV_required && $thisFormLocale === $primaryLocale} required aria-required="true"{/if}
+-					{if $FBV_validation && $thisFormLocale === $primaryLocale} validation="{$FBV_validation|escape}"{/if}
++					{if $FBV_required && $thisFormLocale === $formRequiredLocale} required aria-required="true"{/if}
++					{if $FBV_validation && $thisFormLocale === $formRequiredLocale} validation="{$FBV_validation|escape}"{/if}
+ 				/>
+ 				<label for="{$FBV_id|escape}-{$thisFormLocale|escape}{$uniqId}" class="locale">({$thisFormLocaleName|escape})</label>
+ 			{/if}{/foreach}
