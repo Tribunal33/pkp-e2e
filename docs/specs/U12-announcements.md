@@ -847,6 +847,7 @@ Left out of the scenarios above, by reason:
   - the guard for A7 (issue report `docs/issues/U12-A7-announcement-feed-limit-keeps-oldest.md`): with "Limit feed to" set below the number of current announcements, the three feeds carry the newest ones and RSS 2.0's channel date is the newest's.
   - the guard for A15 (issue report `docs/issues/U12-A15-announcement-feed-dates-percent-signs.md`): the Atom and RSS 1.0 feeds' dates are well-formed RFC 3339 and W3CDTF values.
   - the guard for A3 (issue report `docs/issues/U12-A3-announcement-expiry-date-refused-on-edit.md`): an unchanged "Save" on "Edit Announcement" keeps the expiry date, with another "Date (Short)" and with a browser west of the install's time zone.
+  - the guard for A2 (issue report `docs/issues/U12-A2-refused-image-deletes-announcement.md`): an edit whose new picture is refused ("photo.jpeg") keeps the announcement, its text and its earlier picture.
 - **Nothing new to test**:
   - an unsaved tick on the settings tab kept across a tab switch and
     lost on leaving the page (Fields)
@@ -937,7 +938,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | Removing an announcement type deletes every announcement of that type, behind a dialog that names neither the type nor its announcements | 🐞 | high | issues (claude), 2026-10-03 — re-verified |
-| [A2](#a2) | An image refused on "Save" (a ".jpeg" name, an upper-case extension) deletes the announcement being edited | 🐞 | user-visible | — |
+| [A2](#a2) | Editing an announcement with a picture the upload check refuses deletes the announcement | 🐞 | high | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | "Edit Announcement" shows the expiry date in a format "Save" refuses, or one day early, which "Save" then stores | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | A journal's announcement feeds with "Limit feed to" set carry the oldest announcements, never the newest {OJS} | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | Ticking "Send an email about this to all registered users." when editing an announcement sends nothing | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -977,16 +978,19 @@ Basis: probe, 2026-10-03.
 <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — A refused image deletes the announcement on an edit** · 🐞 · user-visible.
-A manager who edits an announcement and drops a JPEG named "photo.jpeg",
-or any image whose file name ends in an upper-case extension, sees the
-preview, presses "Save" and gets "There was an error uploading this
-image." under "Image", as expected for a refused file. But the
-announcement itself is deleted by that refusal: its row stays in the
-panel until the page is reloaded, then it is gone, with its public page;
-its earlier image file stays in the journal's public files
-([A12](#a12)). On "Add Announcement" the same refusal only stops the
-save. Basis: probe. <sup>f-a2</sup>
+**A2 — Editing an announcement with a picture the upload check refuses deletes the announcement** · 🐞 · high.
+A manager edits an announcement and uploads a new picture that the
+upload check refuses. The refused names are a JPEG named "photo.jpeg"
+and any picture whose name ends in an upper-case extension, such as a
+camera's "IMG_0001.JPG". The preview shows. On "Save" the panel shows
+"There was an error uploading this image." under "Image", as for any
+refused file. That "Save" also deletes the announcement. Its row stays
+in the list until the page is reloaded, then it is gone, with its public
+page. The manager loses its title, text, dates and picture, with no
+undo, and the message says nothing about it. Uploading the file alone
+deletes nothing. "Add Announcement" with the same picture only refuses
+the save.
+Basis: probe, 2026-10-03. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — "Edit Announcement" shows the expiry date in a format "Save" refuses, or one day early, which "Save" then stores** · 🐞 · medium.
@@ -1964,6 +1968,7 @@ next fetch. Code read 2026-09-17. Live-probed 2026-09-17 (A2), OJS, OMP and OPS:
 `photo.jpeg` and `PHOTO.PNG` on an edit answered the message (PUT 400); the
 row stayed until a reload, then was gone with its page; the announcement's
 `{id}.png` stayed on disk.
+Issue report: [docs/issues/U12-A2-refused-image-deletes-announcement.md](../issues/U12-A2-refused-image-deletes-announcement.md).
 
 <a id="fn-f-a3"></a>
 **f-a3 — A3 evidence.** Note k: the edit modal prints through

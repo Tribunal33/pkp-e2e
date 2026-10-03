@@ -1,0 +1,63 @@
+--- a/lib/pkp/classes/announcement/Announcement.php
++++ b/lib/pkp/classes/announcement/Announcement.php
+@@ -111,6 +111,11 @@
+     public function save(array $options = [])
+     {
+         $newlyCreated = !$this->exists;
++
++        // Refuse an invalid new image before anything is written, so that
++        // the refusal leaves the announcement as it was
++        $this->validateNewImage();
++
+         $saved = parent::save($options);
+ 
+         if (!$saved) {
+@@ -334,9 +339,6 @@
+         $temporaryFileManager = new TemporaryFileManager();
+         $temporaryFile = $temporaryFileManager->getFile((int) $image->temporaryFileId, $user?->getId());
+         $filePath = static::IMAGE_SUBDIRECTORY . '/' . $this->getImageFilename($temporaryFile);
+-        if (!$this->isValidImage($temporaryFile)) {
+-            throw new StoreTemporaryFileException($temporaryFile, $filePath, $user, $this);
+-        }
+ 
+         if ($this->storeTemporaryFile($temporaryFile, $filePath, $user->getId())) {
+             $this->setAttribute(
+@@ -349,6 +351,28 @@
+             throw new StoreTemporaryFileException($temporaryFile, $filePath, $user, $this);
+         }
+     }
++
++    /**
++     * Check a new image, if there is one, before the announcement is saved
++     *
++     * @throws StoreTemporaryFileException The new image is not a valid image
++     */
++    protected function validateNewImage(): void
++    {
++        $image = $this->getAttribute('image');
++
++        if (!isset($image?->temporaryFileId)) {
++            return;
++        }
++
++        $user = Application::get()->getRequest()->getUser();
++        $temporaryFileManager = new TemporaryFileManager();
++        $temporaryFile = $temporaryFileManager->getFile((int) $image->temporaryFileId, $user?->getId());
++        if ($temporaryFile && !$this->isValidImage($temporaryFile)) {
++            $filePath = static::IMAGE_SUBDIRECTORY . '/' . $this->getImageFilename($temporaryFile);
++            throw new StoreTemporaryFileException($temporaryFile, $filePath, $user, $this);
++        }
++    }
+ 
+     /**
+      * Get the data array for a temporary file that has just been stored
+--- a/lib/pkp/api/v1/announcements/PKPAnnouncementController.php
++++ b/lib/pkp/api/v1/announcements/PKPAnnouncementController.php
+@@ -269,7 +269,6 @@
+         try {
+             $announcement->update($params);
+         } catch (StoreTemporaryFileException $e) {
+-            $announcement->delete(); // TODO do we really need to delete an announcement if the image upload fails?
+             return response()->json([
+                 'image' => [__('api.400.errorUploadingImage')]
+             ], Response::HTTP_BAD_REQUEST);
