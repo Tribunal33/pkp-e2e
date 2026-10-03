@@ -868,7 +868,7 @@ Issue report: [docs/issues/U39-A1-submission-library-file-403-for-participants.m
 
 <a id="fn-a3"></a>
 **f-a3** — Both libraries' `newFileForm.tpl` and `editFileForm.tpl` wrap the textarea in `{fbvFormSection title="common.description" required=true}` (the star), while `LibraryFileForm` registers no validator for `description` and the textarea has no `required` attribute. Live-probed 2026-09-24: note td5.
-Issue report: [docs/issues/U39-A3-library-description-starred-not-required.md](../issues/U39-A3-library-description-starred-not-required.md).
+Issue report: [docs/issues/U39-A3-library-description-starred-not-required.md](../issues/U39-A3-library-description-starred-not-required.md), filed as [pkp-e2e#693](https://github.com/jardakotesovec/pkp-e2e/issues/693).
 
 <a id="fn-a4"></a>
 **f-a4** — `PKPLibraryFileManager::generateFileName()`: `$baseName = Str::substr($truncated, 0, Str::position($originalFileName, $ext) - 1)`, where `Str::position()` returns the first occurrence of the extension text anywhere in the name: 0 for "pdf-guide.pdf", so `Str::substr(…, 0, -1)` keeps all but the last character ("pdf-guide.pd"); 6 for "notes-pdf-draft.pdf", so "notes". Live-probed 2026-09-24: note td6.
