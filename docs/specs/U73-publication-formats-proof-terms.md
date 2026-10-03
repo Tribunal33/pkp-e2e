@@ -1014,6 +1014,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U09-A11-static-page-refusal-repeated-after-save.md`):
     after two refused "URL Path" values in a format's "Edit" window, the
     save of a good one shows no notice
+  - the guard for A20 (issue report
+    `docs/issues/U73-A20-direct-sales-price-zero-gives-file-free.md`):
+    "Direct Sales" at "0" and at "0.00" is refused in "Set Terms for
+    Downloading", the window staying on "Direct Sales"
   - a format file's "Edit a file" closed with its close arrow after the
     name is changed: no question, the row keeping the old name after a
     reload, and "Edit" reopening on it (Rule 11): likely a bullet in
@@ -1116,7 +1120,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | A format moves in the list when it is saved from "Edit", its approval or availability changes, or its DOI is emptied on the DOIs page | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | A book in a press's second language cannot get a format or chapter named in that language alone | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A19](#a19) | A book format's "Select Files" window tells the editor to tick an "Include checkbox" and press "Search", neither of which it has | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A20](#a20) | A "Direct Sales" price of 0 keeps the link on "Direct Sales" while readers get the file free | 🐞 | minor | — |
+| [A20](#a20) | A book file on "Direct Sales" at a zero price is free at "0" and out of readers' reach at "0.00" | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A23](#a23) | A date of the wrong length is refused with no message in its window | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A24](#a24) | A refused "URL Path" comes back as a notice when the format is next saved, once per refusal | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A25](#a25) | In French the list's "Availability" column heading and four texts of "Add publication format" read raw codes | 🐞 | minor | — |
@@ -1401,13 +1405,24 @@ The 25 languages that translate the sentence give the same instructions.
 Since: 2015-05-08 (pkp/omp#125) · Basis: probe, 2026-10-04. <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — A "Direct Sales" price of 0 gives the file away under a "Direct Sales" link** · 🐞 · minor.
-"Direct Sales" with a price of 0 is saved. The file's link keeps
-reading "Direct Sales", but the terms window reopens on "Open Access",
-and the book's page offers the file as a free one: a visitor's link
-opens the file's view page with no sign-in and no payment. Expected:
-the link and the window agree, or a price of 0 is refused.
-Basis: probe. <sup>f-a20</sup>
+**A20 — A book file on "Direct Sales" at a zero price is free at "0" and out of readers' reach at "0.00"** · 🐞 · medium.
+A press editor sets a book file's terms to "Direct Sales" with a price
+of zero, and the save is accepted. The file then reads "Direct Sales"
+in "Publication Formats". What readers get depends on how the zero was
+typed:
+
+- At "0", the "Set Terms for Downloading" window reopens on "Open
+  Access", and readers get the file free.
+- At "0.00", the book page offers "0.00 Purchase PDF (0.00 USD)". A
+  signed-in reader gets a payment page that shows no fee. Its only
+  action leads back to the same page, so the file stays out of reach.
+
+Nothing tells the editor that a zero price is not a sale. The press can
+set the file to "Open Access" instead, but readers have no way round.
+
+It takes a zero typed under "Direct Sales". The "0.00" outcome is on a
+press with "Manual Fee Payment" set up.
+Since: 2012 (the terms form accepts 0) · Basis: probe, 2026-10-04. <sup>f-a20</sup>
 
 <a id="a21"></a>
 **A21 — "DOI (06)" is withheld even when formats get no DOIs** · ❓ · minor.
@@ -2517,6 +2532,7 @@ Issue report: [pkp-e2e#805](https://github.com/jardakotesovec/pkp-e2e/issues/805
 the window's opening logic reads a price of 0 as "Open Access", and the
 book's page offers a file whose price is 0 as free. Live-probed
 2026-09-28: notes td15, td28.
+Issue report: [pkp-e2e#809](https://github.com/jardakotesovec/pkp-e2e/issues/809) ([docs/issues/U73-A20-direct-sales-price-zero-gives-file-free.md](../issues/U73-A20-direct-sales-price-zero-gives-file-free.md)).
 
 <a id="fn-f-a21"></a>
 **f-a21** — Note g: `IdentificationCodeForm` drops `06` while
