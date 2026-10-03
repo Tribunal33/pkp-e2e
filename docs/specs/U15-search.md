@@ -668,7 +668,6 @@ Left out of the scenarios above, by reason:
   - a Search address asking for the sort by published date, newest or oldest first, lists the results in date order (Rule 14; A12)
   - a Search address whose page number is not a number, on a search that finds something, shows the first page of results (Rule 8; A13)
   - a search that finds several items gives the screen-reader status line "Found {N} items." with the count, on a journal and on a preprint server (Rule 7; OJS1, OPS1)
-  - with "min_word_length" raised above a title word's length, a search for that word still finds the article, as the configuration file says it should not (Settings; A9)
 - **Rarely met**:
   - "Items per page" changed on Settings › Website › Setup › Lists, the
     results per page following it (Rule 8, Settings): the Journal Manager
