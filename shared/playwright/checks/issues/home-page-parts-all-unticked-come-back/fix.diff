@@ -1,0 +1,17 @@
+--- a/lib/pkp/classes/plugins/ThemePlugin.php
++++ b/lib/pkp/classes/plugins/ThemePlugin.php
+@@ -715,6 +715,14 @@
+         }
+ 
+         $pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO'); /** @var PluginSettingsDAO $pluginSettingsDao */
++
++        // A list option (checkboxes) with every choice cleared arrives as ''
++        // (the form sends an empty list as '') or null (the API turns '' into
++        // null). Store it as an empty list: a missing or null value means
++        // "never set" and would bring back the option's default.
++        if (is_array($option->default) && ($value === '' || $value === null)) {
++            $value = [];
++        }
+ 
+         // Remove setting row for empty string values (but not all falsy values)
+         if ($value === '') {
