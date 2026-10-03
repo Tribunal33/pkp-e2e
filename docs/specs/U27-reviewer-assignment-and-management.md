@@ -2995,7 +2995,7 @@ and the deposit call re-confirmed in the confirm path
 (`PKPReviewerGridHandler::reviewConfirmed` → `SendReviewToOrcid`,
 PKPReviewerGridHandler.php:818); attaching an iD still needs the external
 OAuth flow no screen here provides. Settling observation unchanged.
-Issue report: [docs/issues/U27-A1-send-review-to-orcid-offered-before-complete.md](../issues/U27-A1-send-review-to-orcid-offered-before-complete.md).
+Issue report: [pkp-e2e#684](https://github.com/jardakotesovec/pkp-e2e/issues/684) ([docs/issues/U27-A1-send-review-to-orcid-offered-before-complete.md](../issues/U27-A1-send-review-to-orcid-offered-before-complete.md)).
 
 <a id="fn-a2"></a>
 **f-a2** — `getCellStatusItems`, case REQUEST_RESEND: `message:
@@ -3151,7 +3151,7 @@ both reminder fields (note h), erasing the line. Since pkp/pkp-lib#13346
 (driven 2026-09-24 on OJS at the PR head `26a5efcb74` (pkp-lib) / `ad0fdd33` (ui-library), before its merge) the line reads
 `Reviewer Reminded: {date and time}`; the reset that erases it is
 untouched by that change (code-read, not re-driven after a response).
-Issue report: [docs/issues/U27-A15-reviewer-response-erases-reminder-history.md](../issues/U27-A15-reviewer-response-erases-reminder-history.md).
+Issue report: [pkp-e2e#682](https://github.com/jardakotesovec/pkp-e2e/issues/682) ([docs/issues/U27-A15-reviewer-response-erases-reminder-history.md](../issues/U27-A15-reviewer-response-erases-reminder-history.md)).
 
 <a id="fn-a16"></a>
 **f-a16** — Rescoped by the claim check, live-probed 2026-08-02 (OJS + OMP;
@@ -3581,7 +3581,7 @@ the submission's number. Mechanism: the string
 names `{$submissionid}`, while `ResendRequestReviewerForm::execute()`
 logs the parameter as `submissionId`, so the lower-case placeholder finds
 no value.
-Issue report: [docs/issues/U27-A37-resend-request-log-raw-submission-placeholder.md](../issues/U27-A37-resend-request-log-raw-submission-placeholder.md).
+Issue report: [pkp-e2e#683](https://github.com/jardakotesovec/pkp-e2e/issues/683) ([docs/issues/U27-A37-resend-request-log-raw-submission-placeholder.md](../issues/U27-A37-resend-request-log-raw-submission-placeholder.md)).
 
 <a id="fn-a38"></a>
 **f-a38** — Driven: *Tasks & discussions* note td13 and its kept check
