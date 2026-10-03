@@ -1970,7 +1970,7 @@ row stayed until a reload, then was gone with its page; the announcement's
 `formatShortDate()` and the API validates `date_format:Y-m-d`. Code read 2026-09-17. Live-probed 2026-09-17 (A3), OJS, OMP and OPS: with
 "Date (Short)" `d-m-Y` the panel printed "17-10-2026" and the unchanged save
 was refused; retyped as YYYY-MM-DD it saved.
-Issue report: [docs/issues/U12-A3-announcement-expiry-date-refused-on-edit.md](../issues/U12-A3-announcement-expiry-date-refused-on-edit.md).
+Issue report: [pkp-e2e#769](https://github.com/jardakotesovec/pkp-e2e/issues/769) ([docs/issues/U12-A3-announcement-expiry-date-refused-on-edit.md](../issues/U12-A3-announcement-expiry-date-refused-on-edit.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4 — A4 evidence (retired).** The entry rested on a code read:
