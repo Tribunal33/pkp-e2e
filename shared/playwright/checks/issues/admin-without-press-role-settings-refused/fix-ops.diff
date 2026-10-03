@@ -1,0 +1,11 @@
+--- a/pages/management/SettingsHandler.php
++++ b/pages/management/SettingsHandler.php
+@@ -37,7 +37,7 @@
+         $this->addRoleAssignment(
+             [Role::ROLE_ID_SITE_ADMIN],
+             [
+-                'access',
++                'access', 'settings',
+             ]
+         );
+         $this->addRoleAssignment(
