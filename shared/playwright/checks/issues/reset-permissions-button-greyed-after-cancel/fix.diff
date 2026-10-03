@@ -1,0 +1,23 @@
+--- a/lib/pkp/js/controllers/form/AjaxFormHandler.js
++++ b/lib/pkp/js/controllers/form/AjaxFormHandler.js
+@@ -75,12 +75,15 @@
+ 		// and act depending on the returned JSON message.
+ 		var $form = this.getHtmlElement();
+ 
+-		this.disableFormControls();
+-
+-		if (!this.confirmText.length || confirm(this.confirmText)) {
+-			$.post($form.attr('action'), $form.serialize(),
+-					this.callbackWrapper(this.handleResponse), 'json');
++		if (this.confirmText.length && !confirm(this.confirmText)) {
++			// Cancelled: nothing is sent, so leave the form usable.
++			this.hideSpinner();
++			return;
+ 		}
++
++		this.disableFormControls();
++		$.post($form.attr('action'), $form.serialize(),
++				this.callbackWrapper(this.handleResponse), 'json');
+ 	};
+ 
+ 

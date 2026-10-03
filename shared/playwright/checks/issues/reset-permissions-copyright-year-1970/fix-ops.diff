@@ -1,0 +1,11 @@
+--- a/classes/submission/Submission.php
++++ b/classes/submission/Submission.php
+@@ -86,7 +86,7 @@
+                 if (!$publication) {
+                     $publication = $this->getCurrentPublication();
+                 }
+-                if ($publication) {
++                if ($publication && $publication->getData('datePublished')) {
+                     $fieldValue = date('Y', strtotime($publication->getData('datePublished')));
+                 }
+                 break;

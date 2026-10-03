@@ -906,6 +906,7 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - Tools › Permissions: Cancel in the reset confirm box leaves the button usable, and pressing it again asks again (A13; the guard its issue report names)
   - a press with License Terms and no license: a book page without its own License URL shows the "License" heading and the terms, with no link in the block (OMP5; the guard its issue report names)
   - a journal that requires the plain language summary: the
     Metadata and Permissions & Disclosure pages saved after the summary
@@ -993,9 +994,9 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | With Plain Language Summary required, no Publication page but Title & Abstract can be saved, even after the summary is stored, and a journal's pre-scheduling panel is refused silently | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
-| [A2](#a2) | Reset permissions stamps Copyright Year 1970 on unpublished items (journal on article-date basis; preprint server) | 🐞 | user-visible | — |
+| [A2](#a2) | Reset Permissions stamps Copyright Year 1970 on every unpublished article or preprint, and publishing keeps it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | The freshly opened language panel acts before its loading settles: stale guidance and prefill kept (journal), the old language's title stored as the new language's title (press and preprint server) | 🐞 | user-visible | — |
-| [A13](#a13) | Cancelling the reset-permissions confirm box leaves the button greyed until a reload | 🐞 | minor | — |
+| [A13](#a13) | After Cancel in the "Reset Article Permissions" confirm box, the button stays greyed until the page is reloaded | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A19](#a19) | A Site Administrator left with only an assistant role is offered "Change" (submission language), and Confirm fails with a message that names nothing | 🐞 | minor | — |
 | [OJS1](#ojs1) | An article published into a not-yet-published issue keeps "Change", and every language change on it is refused | 🐞 | minor | — |
 | [OMP5](#omp5) | Book page: with press License Terms and no book license, a "License" link reloads the page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1049,16 +1050,19 @@ in *[Submission wizard](U21-submission-wizard.md)*.
 Since: live-probed 2026-08-28 · Basis: probe, 2026-10-01. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — Reset permissions writes the year 1970 on unpublished items** · 🐞 · user-visible.
-On a journal set to "Use the article's publication date", and on a
-preprint server, the reset tool gives every unpublished or declined
-version a Copyright Year of 1970, the year an absent publication date
-resolves to. The field then shows "1970", unlocked, on Permissions &
-Disclosure. A press writes the current year for items without a date,
-and a journal on the issue basis does the same. The value publishes
-as-is unless someone notices, because Rule 12 never overwrites a filled
-year.
-Since: live-probed 2026-08-28 · Basis: probe. <sup>f-a2</sup>
+**A2 — Reset Permissions stamps Copyright Year 1970 on every unpublished article or preprint, and publishing keeps it** · 🐞 · medium.
+A manager runs Tools › Permissions › reset to apply a changed license or
+copyright holder to the items already in the journal or server. On a
+journal set to "Use the article's publication date", and on a preprint
+server, the reset gives every unpublished item (in review, in production
+or declined) the Copyright Year 1970. A press, and a journal on "Use the
+issue's publication date", give such items the current year.
+Publishing keeps a year that is already filled in, so these items go out
+with "Copyright (c) 1970" in their public records unless an editor types
+the right year by hand. Installs that ran the reset since 3.2.0 hold
+1970 on the items it stamped then, and repairing them takes an editor
+correcting each item, or the upgrade step proposed below.
+Since: live-probed 2026-08-28 · Basis: probe, 2026-10-03. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — Reset permissions reaches every submission** · ❓ · user-visible.
@@ -1160,12 +1164,13 @@ Lean: yes. The option has no meaning without a text.
 Since: live-probed 2026-08-28 · Basis: probe. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — The reset button stays greyed after Cancel** · 🐞 · minor.
+**A13 — After Cancel in the "Reset Article Permissions" confirm box, the button stays greyed until the page is reloaded** · 🐞 · low.
 Pressing "Reset Article Permissions" and answering Cancel in the
-browser's confirm box sends nothing and changes nothing. But the button
-stays disabled, so a second attempt needs a page reload. Same on a press
-and a preprint server.
-Since: live-probed 2026-08-28 · Basis: probe. <sup>f-a13</sup>
+browser's confirm box sends no request to reset the permissions and
+changes nothing. But the button stays disabled, so a second attempt
+needs a page reload. Same on a press ("Reset Monograph Permissions") and
+a preprint server ("Reset Preprint Permissions").
+Since: live-probed 2026-08-28 · Basis: probe, 2026-10-03. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — The language panel's Abstract is required but described as recommended** · ❓ · minor.
@@ -2378,6 +2383,7 @@ showed Copyright Year "1970" on OJS and OPS, "2026" on OMP, with holder
 Override. OJS reset again at "Use the issue's publication date": the
 unpublished item and the scheduled item "2026", the article published
 in the 2025 issue "2025".
+Issue report: [docs/issues/U40-A2-reset-permissions-copyright-year-1970.md](../issues/U40-A2-reset-permissions-copyright-year-1970.md).
 
 <a id="fn-f-a3"></a>
 **f-a3 — A3 evidence.** `resetPermissions()` iterates
@@ -2537,6 +2543,7 @@ click and only re-enabled by the form's response, which a dismissed
 after Cancel (dialog dismissed) no request went to `resetPermissions`,
 no toast appeared, the item's Permissions & Disclosure was unchanged,
 and the button was still greyed two seconds later; a reload restored it.
+Issue report: [docs/issues/U40-A13-reset-permissions-button-greyed-after-cancel.md](../issues/U40-A13-reset-permissions-button-greyed-after-cancel.md).
 
 <a id="fn-f-a14"></a>
 **f-a14 — A14 evidence.** `ChangeSubmissionLanguageMetadataForm` takes

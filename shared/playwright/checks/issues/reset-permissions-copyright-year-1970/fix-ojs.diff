@@ -1,0 +1,13 @@
+--- a/classes/submission/Submission.php
++++ b/classes/submission/Submission.php
+@@ -91,7 +91,9 @@
+                     switch ($context->getData('copyrightYearBasis')) {
+                         case 'submission':
+                             // override to the submission's year if published as you go
+-                            $fieldValue = date('Y', strtotime($publication->getData('datePublished')));
++                            if ($publication->getData('datePublished')) {
++                                $fieldValue = date('Y', strtotime($publication->getData('datePublished')));
++                            }
+                             break;
+                         case 'issue':
+                             if ($publication->getData('issueId')) {
