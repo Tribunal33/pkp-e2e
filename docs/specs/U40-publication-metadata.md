@@ -2383,7 +2383,7 @@ showed Copyright Year "1970" on OJS and OPS, "2026" on OMP, with holder
 Override. OJS reset again at "Use the issue's publication date": the
 unpublished item and the scheduled item "2026", the article published
 in the 2025 issue "2025".
-Issue report: [docs/issues/U40-A2-reset-permissions-copyright-year-1970.md](../issues/U40-A2-reset-permissions-copyright-year-1970.md).
+Issue report: [pkp-e2e#807](https://github.com/jardakotesovec/pkp-e2e/issues/807) ([docs/issues/U40-A2-reset-permissions-copyright-year-1970.md](../issues/U40-A2-reset-permissions-copyright-year-1970.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3 — A3 evidence.** `resetPermissions()` iterates
@@ -2543,7 +2543,7 @@ click and only re-enabled by the form's response, which a dismissed
 after Cancel (dialog dismissed) no request went to `resetPermissions`,
 no toast appeared, the item's Permissions & Disclosure was unchanged,
 and the button was still greyed two seconds later; a reload restored it.
-Issue report: [docs/issues/U40-A13-reset-permissions-button-greyed-after-cancel.md](../issues/U40-A13-reset-permissions-button-greyed-after-cancel.md).
+Issue report: [pkp-e2e#808](https://github.com/jardakotesovec/pkp-e2e/issues/808) ([docs/issues/U40-A13-reset-permissions-button-greyed-after-cancel.md](../issues/U40-A13-reset-permissions-button-greyed-after-cancel.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14 — A14 evidence.** `ChangeSubmissionLanguageMetadataForm` takes
