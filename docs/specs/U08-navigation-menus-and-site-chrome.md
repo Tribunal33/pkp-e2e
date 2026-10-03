@@ -2874,8 +2874,8 @@ and `containerCloseHandler()` confirms `form.dataHasChanged` only while
 `formChangesTracked` is set, which the next `formChange()` sets again.
 Test run 2026-09-24 on OJS and OPS, and by hand on OPS (note l): no box
 after a refused "Save", the box again after a changed "Title".
-Issue report: [docs/issues/U08-A18-item-window-asks-with-nothing-typed.md](../issues/U08-A18-item-window-asks-with-nothing-typed.md).
-Issue report: [docs/issues/U08-A18-item-window-refused-save-closes-unasked.md](../issues/U08-A18-item-window-refused-save-closes-unasked.md).
+Issue report: [docs/issues/U08-A18-item-window-asks-with-nothing-typed.md](../issues/U08-A18-item-window-asks-with-nothing-typed.md), filed as [pkp-e2e#650](https://github.com/jardakotesovec/pkp-e2e/issues/650).
+Issue report: [docs/issues/U08-A18-item-window-refused-save-closes-unasked.md](../issues/U08-A18-item-window-refused-save-closes-unasked.md), filed as [pkp-e2e#651](https://github.com/jardakotesovec/pkp-e2e/issues/651).
 
 <a id="fn-f-a19"></a>
 **f-a19** — The installed item's title key `common.editorialMasthead`
