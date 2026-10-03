@@ -1,0 +1,197 @@
+--- a/plugins/importexport/native/filter/NativeXmlPublicationFormatFilter.php
++++ b/plugins/importexport/native/filter/NativeXmlPublicationFormatFilter.php
+@@ -226,6 +226,10 @@
+         }
+ 
+         // Extract SalesRights elements.
++        // The export writes the "Rest of World" entry as a SalesRights of its type whose territory is
++        // WORLD alone, and names that type once more in ROWSalesRightsType, under PublishingDetail
++        // beside the SalesRights elements (MonographONIX30XmlFilter::createProductNode()).
++        $salesRightsROW = $this->_extractTextFromNode($node, $onixDeployment, 'ROWSalesRightsType');
+         $nodeList = $node->getElementsByTagNameNS($onixDeployment->getNamespace(), 'SalesRights');
+         if ($nodeList->length > 0) {
+             $salesRightsDao = DAORegistry::getDAO('SalesRightsDAO'); /** @var SalesRightsDAO $salesRightsDao */
+@@ -234,15 +238,16 @@
+                 $salesRights->setPublicationFormatId($representation->getId());
+                 /** @var DOMElement */
+                 $salesRightsNode = $nodeList->item($i);
+-                $salesRightsROW = $this->_extractTextFromNode($salesRightsNode, $onixDeployment, 'ROWSalesRightsType');
+-                if ($salesRightsROW) {
++                $salesRights->setType($this->_extractTextFromNode($salesRightsNode, $onixDeployment, 'SalesRightsType'));
++                $salesRights->setROWSetting(false);
++                $territoryNodeList = $salesRightsNode->getElementsByTagNameNS($onixDeployment->getNamespace(), 'Territory');
++                if ($salesRightsROW !== null && $salesRights->getType() == $salesRightsROW && $territoryNodeList->length == 1
++                    && trim($territoryNodeList->item(0)->textContent) == 'WORLD') {
++                    // The "Rest of World" entry: one per format, no territory of its own.
+                     $salesRights->setROWSetting(true);
+-                    $salesRights->setType($salesRightsROW);
++                    $salesRightsROW = null;
+                 } else {
+                     // Not a 'rest of world' sales rights entry.  Parse the Territory elements as well.
+-                    $salesRights->setType($this->_extractTextFromNode($salesRightsNode, $onixDeployment, 'SalesRightsType'));
+-                    $salesRights->setROWSetting(false);
+-                    $territoryNodeList = $salesRightsNode->getElementsByTagNameNS($onixDeployment->getNamespace(), 'Territory');
+                     assert($territoryNodeList->length == 1);
+                     $territoryNode = $territoryNodeList->item(0);
+                     for ($o = $territoryNode->firstChild; $o !== null; $o = $o->nextSibling) {
+@@ -316,7 +321,7 @@
+                     $representative->setMonographId($deployment->getSubmission()->getId());
+                     $representative->setRole($this->_extractTextFromNode($publisherRepNode, $onixDeployment, 'AgentRole'));
+                     $representative->setName($this->_extractTextFromNode($publisherRepNode, $onixDeployment, 'AgentName'));
+-                    $representative->setUrl($this->_extractTextFromNode($publisherRepNode, $onixDeployment, 'WebsiteLink'));
++                    $representative->setUrl($this->_extractWebsiteLink($publisherRepNode, $onixDeployment, '18'));
+ 
+                     // to prevent duplicate Agent creation, check to see if this agent already exists.  If it does, use it instead of creating a new one.
+                     $existingAgents = $representativeDao->getAgentsByMonographId($deployment->getSubmission()->getId());
+@@ -337,29 +342,33 @@
+                 $supplierNodeList = $productSupplyNode->getElementsByTagNameNS($onixDeployment->getNamespace(), 'Supplier');
+                 if ($supplierNodeList->length == 1) {
+                     $supplierNode = $supplierNodeList->item(0);
+-                    $representative = $representativeDao->newDataObject();
+-                    $representative->setMonographId($deployment->getSubmission()->getId());
+-                    $representative->setRole($this->_extractTextFromNode($supplierNode, $onixDeployment, 'SupplierRole'));
+-                    $representative->setName($this->_extractTextFromNode($supplierNode, $onixDeployment, 'SupplierName'));
+-                    $representative->setPhone($this->_extractTextFromNode($supplierNode, $onixDeployment, 'TelephoneNumber'));
+-                    $representative->setEmail($this->_extractTextFromNode($supplierNode, $onixDeployment, 'EmailAddress'));
+-                    $representative->setUrl($this->_extractTextFromNode($supplierNode, $onixDeployment, 'WebsiteLink'));
+-                    $representative->setIsSupplier(true);
+-
+-                    // Again, to prevent duplicate Supplier creation, check to see if this rep already exists.  If it does, use it instead of creating a new one.
+-                    $existingSuppliers = $representativeDao->getSuppliersByMonographId($deployment->getSubmission()->getId());
+-                    $foundSupplier = false;
+-                    while ($supplier = $existingSuppliers->next()) {
+-                        if ($supplier->getRole() == $representative->getRole() && $supplier->getName() == $representative->getName() &&
+-                            $supplier->getUrl() == $representative->getUrl() &&
+-                            $supplier->getPhone() == $representative-> getPhone() && $supplier->getEmail() == $representative->getEmail()) {
+-                            $market->setSupplierId($supplier->getId());
+-                            $foundSupplier = true;
+-                            break;
++                    // A market exported without a supplier names the press itself in its place, since ONIX
++                    // requires one: it comes back as a market without a supplier.
++                    if (!$this->_isPressInPlaceOfSupplier($node, $supplierNode, $onixDeployment)) {
++                        $representative = $representativeDao->newDataObject();
++                        $representative->setMonographId($deployment->getSubmission()->getId());
++                        $representative->setRole($this->_extractTextFromNode($supplierNode, $onixDeployment, 'SupplierRole'));
++                        $representative->setName($this->_extractTextFromNode($supplierNode, $onixDeployment, 'SupplierName'));
++                        $representative->setPhone($this->_extractTextFromNode($supplierNode, $onixDeployment, 'TelephoneNumber'));
++                        $representative->setEmail($this->_extractTextFromNode($supplierNode, $onixDeployment, 'EmailAddress'));
++                        $representative->setUrl($this->_extractWebsiteLink($supplierNode, $onixDeployment, '18'));
++                        $representative->setIsSupplier(true);
++
++                        // Again, to prevent duplicate Supplier creation, check to see if this rep already exists.  If it does, use it instead of creating a new one.
++                        $existingSuppliers = $representativeDao->getSuppliersByMonographId($deployment->getSubmission()->getId());
++                        $foundSupplier = false;
++                        while ($supplier = $existingSuppliers->next()) {
++                            if ($supplier->getRole() == $representative->getRole() && $supplier->getName() == $representative->getName() &&
++                                $supplier->getUrl() == $representative->getUrl() &&
++                                $supplier->getPhone() == $representative-> getPhone() && $supplier->getEmail() == $representative->getEmail()) {
++                                $market->setSupplierId($supplier->getId());
++                                $foundSupplier = true;
++                                break;
++                            }
++                        }
++                        if (!$foundSupplier) {
++                            $market->setSupplierId($representativeDao->insertObject($representative));
+                         }
+-                    }
+-                    if (!$foundSupplier) {
+-                        $market->setSupplierId($representativeDao->insertObject($representative));
+                     }
+ 
+                     $priceNodeList = $productSupplyNode->getElementsByTagNameNS($onixDeployment->getNamespace(), 'Price');
+@@ -373,11 +382,13 @@
+                         $market->setCurrencyCode($this->_extractTextFromNode($priceNode, $onixDeployment, 'CurrencyCode'));
+                     }
+ 
+-                    // Extract Pricing information for this format.
+-                    $representation->setReturnableIndicatorCode($this->_extractTextFromNode($supplierNode, $onixDeployment, 'ReturnsCode'));
+-                    $representation->setProductAvailabilityCode($this->_extractTextFromNode($supplierNode, $onixDeployment, 'ProductAvailability'));
+                 }
+ 
++                // The format's returns condition and availability: SupplyDetail holds them beside the
++                // Supplier, the same in every market the export writes.
++                $representation->setReturnableIndicatorCode($this->_extractTextFromNode($productSupplyNode, $onixDeployment, 'ReturnsCode'));
++                $representation->setProductAvailabilityCode($this->_extractTextFromNode($productSupplyNode, $onixDeployment, 'ProductAvailability'));
++
+                 $marketDao->insertObject($market);
+             }
+         }
+@@ -404,6 +415,55 @@
+     }
+ 
+     /**
++     * Whether a market's Supplier is the press the export writes when the market names no supplier
++     * (MonographONIX30XmlFilter::createProductNode()): "Publisher to end-customers" (09) under the
++     * product's publisher name, without the book's page (Website role 29) a chosen supplier carries.
++     *
++     * @param DOMElement $productNode
++     * @param DOMElement $supplierNode
++     * @param Onix30ExportDeployment $onixDeployment
++     */
++    public function _isPressInPlaceOfSupplier($productNode, $supplierNode, $onixDeployment): bool
++    {
++        if ($this->_extractTextFromNode($supplierNode, $onixDeployment, 'SupplierRole') !== '09') {
++            return false;
++        }
++        foreach ($supplierNode->getElementsByTagNameNS($onixDeployment->getNamespace(), 'WebsiteRole') as $roleNode) {
++            if ($roleNode->textContent === '29') {
++                return false;
++            }
++        }
++        $supplierName = $this->_extractTextFromNode($supplierNode, $onixDeployment, 'SupplierName');
++        foreach ($productNode->getElementsByTagNameNS($onixDeployment->getNamespace(), 'Publisher') as $publisherNode) {
++            if ($this->_extractTextFromNode($publisherNode, $onixDeployment, 'PublishingRole') === '01'
++                && $this->_extractTextFromNode($publisherNode, $onixDeployment, 'PublisherName') === $supplierName) {
++                return true;
++            }
++        }
++        return false;
++    }
++
++    /**
++     * The link of a node's Website of one role: the export writes a representative's own website as
++     * role 18 and, for a supplier, the book's page as role 29 beside it.
++     *
++     * @param DOMElement $node
++     * @param Onix30ExportDeployment $onixDeployment
++     * @param string $role an ONIX list 73 code
++     *
++     * @return null|string
++     */
++    public function _extractWebsiteLink($node, $onixDeployment, $role)
++    {
++        foreach ($node->getElementsByTagNameNS($onixDeployment->getNamespace(), 'Website') as $websiteNode) {
++            if ($this->_extractTextFromNode($websiteNode, $onixDeployment, 'WebsiteRole') === $role) {
++                return $this->_extractTextFromNode($websiteNode, $onixDeployment, 'WebsiteLink');
++            }
++        }
++        return null;
++    }
++
++    /**
+      * Extracts the elements of the Extent nodes.
+      *
+      * @param DOMElement $node
+--- a/plugins/importexport/onix30/filter/MonographONIX30XmlFilter.php
++++ b/plugins/importexport/onix30/filter/MonographONIX30XmlFilter.php
+@@ -875,12 +875,18 @@
+             unset($supplierNode);
+             unset($supplierWebsiteNode);
+ 
+-            if ($publicationFormat->getReturnableIndicatorCode() != '') {
++            // Until its "Metadata" tab is saved, a physical format's tab shows "Yes, returnable, full copies
++            // only" (PublicationFormatMetadataForm::initData()): state the same, as for the availability below.
++            $returnableIndicatorCode = $publicationFormat->getReturnableIndicatorCode();
++            if ($returnableIndicatorCode == '' && $publicationFormat->getPhysicalFormat()) {
++                $returnableIndicatorCode = 'Y';
++            }
++            if ($returnableIndicatorCode != '') {
+                 $returnsNode = $doc->createElementNS($deployment->getNamespace(), 'ReturnsConditions');
+                 $supplyDetailNode->appendChild($returnsNode);
+ 
+                 $returnsNode->appendChild($this->buildTextNode($doc, 'ReturnsCodeType', '02'));  // we support the BISAC codes for these
+-                $returnsNode->appendChild($this->buildTextNode($doc, 'ReturnsCode', $publicationFormat->getReturnableIndicatorCode()));
++                $returnsNode->appendChild($this->buildTextNode($doc, 'ReturnsCode', $returnableIndicatorCode));
+ 
+                 unset($returnsNode);
+             }

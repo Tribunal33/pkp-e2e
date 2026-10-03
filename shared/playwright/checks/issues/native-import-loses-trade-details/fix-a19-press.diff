@@ -1,0 +1,94 @@
+--- a/plugins/importexport/native/filter/NativeXmlPublicationFormatFilter.php
++++ b/plugins/importexport/native/filter/NativeXmlPublicationFormatFilter.php
+@@ -337,29 +337,33 @@
+                 $supplierNodeList = $productSupplyNode->getElementsByTagNameNS($onixDeployment->getNamespace(), 'Supplier');
+                 if ($supplierNodeList->length == 1) {
+                     $supplierNode = $supplierNodeList->item(0);
+-                    $representative = $representativeDao->newDataObject();
+-                    $representative->setMonographId($deployment->getSubmission()->getId());
+-                    $representative->setRole($this->_extractTextFromNode($supplierNode, $onixDeployment, 'SupplierRole'));
+-                    $representative->setName($this->_extractTextFromNode($supplierNode, $onixDeployment, 'SupplierName'));
+-                    $representative->setPhone($this->_extractTextFromNode($supplierNode, $onixDeployment, 'TelephoneNumber'));
+-                    $representative->setEmail($this->_extractTextFromNode($supplierNode, $onixDeployment, 'EmailAddress'));
+-                    $representative->setUrl($this->_extractTextFromNode($supplierNode, $onixDeployment, 'WebsiteLink'));
+-                    $representative->setIsSupplier(true);
+-
+-                    // Again, to prevent duplicate Supplier creation, check to see if this rep already exists.  If it does, use it instead of creating a new one.
+-                    $existingSuppliers = $representativeDao->getSuppliersByMonographId($deployment->getSubmission()->getId());
+-                    $foundSupplier = false;
+-                    while ($supplier = $existingSuppliers->next()) {
+-                        if ($supplier->getRole() == $representative->getRole() && $supplier->getName() == $representative->getName() &&
+-                            $supplier->getUrl() == $representative->getUrl() &&
+-                            $supplier->getPhone() == $representative-> getPhone() && $supplier->getEmail() == $representative->getEmail()) {
+-                            $market->setSupplierId($supplier->getId());
+-                            $foundSupplier = true;
+-                            break;
++                    // A market exported without a supplier names the press itself in its place, since ONIX
++                    // requires one: it comes back as a market without a supplier.
++                    if (!$this->_isPressInPlaceOfSupplier($node, $supplierNode, $onixDeployment)) {
++                        $representative = $representativeDao->newDataObject();
++                        $representative->setMonographId($deployment->getSubmission()->getId());
++                        $representative->setRole($this->_extractTextFromNode($supplierNode, $onixDeployment, 'SupplierRole'));
++                        $representative->setName($this->_extractTextFromNode($supplierNode, $onixDeployment, 'SupplierName'));
++                        $representative->setPhone($this->_extractTextFromNode($supplierNode, $onixDeployment, 'TelephoneNumber'));
++                        $representative->setEmail($this->_extractTextFromNode($supplierNode, $onixDeployment, 'EmailAddress'));
++                        $representative->setUrl($this->_extractTextFromNode($supplierNode, $onixDeployment, 'WebsiteLink'));
++                        $representative->setIsSupplier(true);
++
++                        // Again, to prevent duplicate Supplier creation, check to see if this rep already exists.  If it does, use it instead of creating a new one.
++                        $existingSuppliers = $representativeDao->getSuppliersByMonographId($deployment->getSubmission()->getId());
++                        $foundSupplier = false;
++                        while ($supplier = $existingSuppliers->next()) {
++                            if ($supplier->getRole() == $representative->getRole() && $supplier->getName() == $representative->getName() &&
++                                $supplier->getUrl() == $representative->getUrl() &&
++                                $supplier->getPhone() == $representative-> getPhone() && $supplier->getEmail() == $representative->getEmail()) {
++                                $market->setSupplierId($supplier->getId());
++                                $foundSupplier = true;
++                                break;
++                            }
++                        }
++                        if (!$foundSupplier) {
++                            $market->setSupplierId($representativeDao->insertObject($representative));
+                         }
+-                    }
+-                    if (!$foundSupplier) {
+-                        $market->setSupplierId($representativeDao->insertObject($representative));
+                     }
+ 
+                     $priceNodeList = $productSupplyNode->getElementsByTagNameNS($onixDeployment->getNamespace(), 'Price');
+@@ -404,6 +408,35 @@
+     }
+ 
+     /**
++     * Whether a market's Supplier is the press the export writes when the market names no supplier
++     * (MonographONIX30XmlFilter::createProductNode()): "Publisher to end-customers" (09) under the
++     * product's publisher name, without the book's page (Website role 29) a chosen supplier carries.
++     *
++     * @param DOMElement $productNode
++     * @param DOMElement $supplierNode
++     * @param Onix30ExportDeployment $onixDeployment
++     */
++    public function _isPressInPlaceOfSupplier($productNode, $supplierNode, $onixDeployment): bool
++    {
++        if ($this->_extractTextFromNode($supplierNode, $onixDeployment, 'SupplierRole') !== '09') {
++            return false;
++        }
++        foreach ($supplierNode->getElementsByTagNameNS($onixDeployment->getNamespace(), 'WebsiteRole') as $roleNode) {
++            if ($roleNode->textContent === '29') {
++                return false;
++            }
++        }
++        $supplierName = $this->_extractTextFromNode($supplierNode, $onixDeployment, 'SupplierName');
++        foreach ($productNode->getElementsByTagNameNS($onixDeployment->getNamespace(), 'Publisher') as $publisherNode) {
++            if ($this->_extractTextFromNode($publisherNode, $onixDeployment, 'PublishingRole') === '01'
++                && $this->_extractTextFromNode($publisherNode, $onixDeployment, 'PublisherName') === $supplierName) {
++                return true;
++            }
++        }
++        return false;
++    }
++
++    /**
+      * Extracts the elements of the Extent nodes.
+      *
+      * @param DOMElement $node

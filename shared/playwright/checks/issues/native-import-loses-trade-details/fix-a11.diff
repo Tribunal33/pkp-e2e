@@ -1,0 +1,36 @@
+--- a/plugins/importexport/native/filter/NativeXmlPublicationFormatFilter.php
++++ b/plugins/importexport/native/filter/NativeXmlPublicationFormatFilter.php
+@@ -226,6 +226,10 @@
+         }
+ 
+         // Extract SalesRights elements.
++        // The export writes the "Rest of World" entry as a SalesRights of its type whose territory is
++        // WORLD alone, and names that type once more in ROWSalesRightsType, under PublishingDetail
++        // beside the SalesRights elements (MonographONIX30XmlFilter::createProductNode()).
++        $salesRightsROW = $this->_extractTextFromNode($node, $onixDeployment, 'ROWSalesRightsType');
+         $nodeList = $node->getElementsByTagNameNS($onixDeployment->getNamespace(), 'SalesRights');
+         if ($nodeList->length > 0) {
+             $salesRightsDao = DAORegistry::getDAO('SalesRightsDAO'); /** @var SalesRightsDAO $salesRightsDao */
+@@ -234,15 +238,16 @@
+                 $salesRights->setPublicationFormatId($representation->getId());
+                 /** @var DOMElement */
+                 $salesRightsNode = $nodeList->item($i);
+-                $salesRightsROW = $this->_extractTextFromNode($salesRightsNode, $onixDeployment, 'ROWSalesRightsType');
+-                if ($salesRightsROW) {
++                $salesRights->setType($this->_extractTextFromNode($salesRightsNode, $onixDeployment, 'SalesRightsType'));
++                $salesRights->setROWSetting(false);
++                $territoryNodeList = $salesRightsNode->getElementsByTagNameNS($onixDeployment->getNamespace(), 'Territory');
++                if ($salesRightsROW !== null && $salesRights->getType() == $salesRightsROW && $territoryNodeList->length == 1
++                    && trim($territoryNodeList->item(0)->textContent) == 'WORLD') {
++                    // The "Rest of World" entry: one per format, no territory of its own.
+                     $salesRights->setROWSetting(true);
+-                    $salesRights->setType($salesRightsROW);
++                    $salesRightsROW = null;
+                 } else {
+                     // Not a 'rest of world' sales rights entry.  Parse the Territory elements as well.
+-                    $salesRights->setType($this->_extractTextFromNode($salesRightsNode, $onixDeployment, 'SalesRightsType'));
+-                    $salesRights->setROWSetting(false);
+-                    $territoryNodeList = $salesRightsNode->getElementsByTagNameNS($onixDeployment->getNamespace(), 'Territory');
+                     assert($territoryNodeList->length == 1);
+                     $territoryNode = $territoryNodeList->item(0);
+                     for ($o = $territoryNode->firstChild; $o !== null; $o = $o->nextSibling) {

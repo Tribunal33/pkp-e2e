@@ -1,0 +1,20 @@
+--- a/plugins/importexport/native/filter/NativeXmlPublicationFormatFilter.php
++++ b/plugins/importexport/native/filter/NativeXmlPublicationFormatFilter.php
+@@ -372,12 +372,13 @@
+                         $market->setTaxRateCode($this->_extractTextFromNode($priceNode, $onixDeployment, 'TaxRateCode'));
+                         $market->setCurrencyCode($this->_extractTextFromNode($priceNode, $onixDeployment, 'CurrencyCode'));
+                     }
+-
+-                    // Extract Pricing information for this format.
+-                    $representation->setReturnableIndicatorCode($this->_extractTextFromNode($supplierNode, $onixDeployment, 'ReturnsCode'));
+-                    $representation->setProductAvailabilityCode($this->_extractTextFromNode($supplierNode, $onixDeployment, 'ProductAvailability'));
+                 }
+ 
++                // The format's returns condition and availability: SupplyDetail holds them beside the
++                // Supplier, the same in every market the export writes.
++                $representation->setReturnableIndicatorCode($this->_extractTextFromNode($productSupplyNode, $onixDeployment, 'ReturnsCode'));
++                $representation->setProductAvailabilityCode($this->_extractTextFromNode($productSupplyNode, $onixDeployment, 'ProductAvailability'));
++
+                 $marketDao->insertObject($market);
+             }
+         }

@@ -970,6 +970,17 @@ Left out of the scenarios above, by reason:
     a market's row in "Market Territories" names its countries and
     regions as the window does and shows its price apart from the
     currency
+  - the guard for A11 (issue report
+    `docs/issues/U74-A11-native-import-unticks-rest-of-world.md`): a
+    book exported to a Native XML file and imported again keeps its
+    "Rest of World?" entry ticked beside its other sales-rights
+    entries
+  - the guard for A19 (issue reports
+    `docs/issues/U74-A19-native-import-adds-press-as-supplier.md` and
+    `docs/issues/U74-A19-native-import-changes-supplier-websites.md`):
+    a book exported to a Native XML file and imported again keeps a
+    market without a supplier without one, and its suppliers with and
+    without a website as they were
 - **Rarely met**:
   - a format that has used all nine sales-rights types, whose "Add
     Sales Rights" list is empty (Rule 10)
@@ -1056,13 +1067,13 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A book format's "Market Territories" list shows country codes and runs the price into its currency | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | A new market's "Date Format" preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | A book's "Audience" goes out in its ONIX data the wrong way round, so "Children" reads as a proprietary code | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A11](#a11) | A "Rest of World?" entry comes back from a Native XML import unticked | 🐞 | minor | — |
+| [A11](#a11) | A book imported from a press's Native XML file loses its "Rest of World?" sales-rights tick | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | A representative whose type is changed shows in both groups until a reload | 🐞 | minor | — |
 | [A14](#a14) | A refused representative delete answers with a browser pop-up and leaves the "Delete" dialog open | 🐞 | minor | — |
 | [A15](#a15) | A second "Rest of World?" entry, or a market date or price of spaces, is refused without a message | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A16](#a16) | "Export Submissions" with no book ticked opens an empty results tab | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A18](#a18) | The returns and availability the "Metadata" tab shows can differ from what the product carries, and an import loses both | 🐞 | minor | — |
-| [A19](#a19) | A Native XML import adds the exporting press as a supplier and changes the suppliers' websites | 🐞 | minor | — |
+| [A18](#a18) | The returns and availability the "Metadata" tab shows can differ from what the product carries, and an import loses both | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A19](#a19) | A Native XML import adds the exporting press as a supplier and changes the suppliers' websites | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | A saved audience list cannot be emptied again | ❓ | minor | — |
 | [A10](#a10) | A representative's ID, and an agent's phone and email, reach no file | ❓ | minor | — |
 
@@ -1211,14 +1222,21 @@ each of them, and no screen uses them for anything else.
 Basis: probe. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — A "Rest of World?" entry comes back unticked** · 🐞 · minor.
-A sales-rights entry exported with "Rest of World?" ticked in a book's
-Native XML file comes back from the import as an ordinary entry, the box
-unticked and "World (WORLD)" among its included regions. The imported
-format can then take a second "Rest of World?" entry, and its product no
-longer names a rest-of-world type.
-Expected: the entry comes back ticked.
-Basis: probe. <sup>f-a11</sup>
+**A11 — A book imported from a press's Native XML file loses its "Rest of World?" sales-rights tick** · 🐞 · medium.
+A press editor exports a book from Tools › "Native XML Plugin" and
+imports the file again, into the same press or another one. A
+publication format's sales-rights entry that had "Rest of World?" ticked
+comes back as an ordinary entry: the box is unticked and "World (WORLD)"
+is chosen under the included regions. The import says "The import
+completed successfully." and nothing tells the editor.
+"Rest of World?" means everywhere the format's other entries do not
+name. The imported entry means the whole world instead. A format sold
+with exclusive rights in Canada and non-exclusive rights in the rest of
+the world comes back stating non-exclusive rights everywhere, Canada
+included, beside the exclusive Canada entry: on the "Metadata" tab, and
+in the book's next ONIX product, which no longer names a rest-of-world
+type.
+Basis: probe, 2026-10-03. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — The representative window refuses a new supplier until the type is clicked** · 🐞 · user-visible.
@@ -1292,19 +1310,21 @@ The editor can export the book only by changing its tax:
 Basis: probe, 2026-10-03. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — Returns and availability: the tab and the file disagree** · 🐞 · minor.
+**A18 — Returns and availability: the tab and the file disagree** · 🐞 · medium.
 A format whose "Metadata" tab was never saved shows "Available (20)"
 and "Yes, returnable, full copies only (Y)", but its product states no
 returns condition. A book imported from a press's Native XML file
 keeps none of its formats' "Returnable Indicator" and "Product
 Availability": each imported tab shows those two choices whatever was
-exported, and the product again states no returns condition. Expected:
+exported, and the product again states no returns condition; "Save"
+on such a tab then stores "Y", wrong for a book that was not
+returnable. Expected:
 the tab shows what the product will carry, and an import brings both
 back as exported.
-Basis: probe. <sup>f-a18</sup>
+Basis: probe, 2026-10-03. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — A Native XML import rewrites the suppliers** · 🐞 · minor.
+**A19 — A Native XML import rewrites the suppliers** · 🐞 · medium.
 Every market exported without a supplier comes back naming a new
 supplier, the exporting press itself ("Publisher to end-customers
 (09)", its "Press Publisher Name", its principal contact's email
@@ -1313,7 +1333,7 @@ address, its home page as the website), which the book's
 back with none; one exported without comes back with the book's page on
 the exporting press as its website. Expected: markets and suppliers
 come back as they were.
-Basis: probe. <sup>f-a19</sup>
+Basis: probe, 2026-10-03. <sup>f-a19</sup>
 
 ---
 
@@ -2329,6 +2349,7 @@ them (note td23).
 **f-a11** — Notes k and m: the export writes `ROWSalesRightsType` under
 `PublishingDetail`, the import looks for it inside each `SalesRights`
 element. Live-probed 2026-09-28 (A11), three runs: note td24.
+Issue report: [docs/issues/U74-A11-native-import-unticks-rest-of-world.md](../issues/U74-A11-native-import-unticks-rest-of-world.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note e. Live-probed 2026-09-28 (A12), two runs: note td12;
@@ -2371,6 +2392,8 @@ from a stored returnable code and `ProductAvailability` 20 when none is
 stored; the import reads neither back. The tab's preselected choices
 are *Publication formats & proof terms*' screen. Live-probed 2026-09-28
 (A18), two runs: notes td23 and td24.
+Issue report: [docs/issues/U74-A18-unsaved-format-states-no-returns-condition.md](../issues/U74-A18-unsaved-format-states-no-returns-condition.md).
+Issue report: [docs/issues/U74-A18-native-import-resets-returns-and-availability.md](../issues/U74-A18-native-import-resets-returns-and-availability.md).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Notes k and m: an export without a supplier writes the
@@ -2381,6 +2404,8 @@ book's page (29), came back with no website; "Sigma Supply", exported
 with the book's page alone, came back with it. The re-export on the
 importing press named the exporting press's name, email and home page
 as the supplier.
+Issue report: [docs/issues/U74-A19-native-import-adds-press-as-supplier.md](../issues/U74-A19-native-import-adds-press-as-supplier.md).
+Issue report: [docs/issues/U74-A19-native-import-changes-supplier-websites.md](../issues/U74-A19-native-import-changes-supplier-websites.md).
 
 ## Reference — entry points & surfaces
 

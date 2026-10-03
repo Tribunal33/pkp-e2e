@@ -1,0 +1,47 @@
+--- a/plugins/importexport/native/filter/NativeXmlPublicationFormatFilter.php
++++ b/plugins/importexport/native/filter/NativeXmlPublicationFormatFilter.php
+@@ -316,7 +316,7 @@
+                     $representative->setMonographId($deployment->getSubmission()->getId());
+                     $representative->setRole($this->_extractTextFromNode($publisherRepNode, $onixDeployment, 'AgentRole'));
+                     $representative->setName($this->_extractTextFromNode($publisherRepNode, $onixDeployment, 'AgentName'));
+-                    $representative->setUrl($this->_extractTextFromNode($publisherRepNode, $onixDeployment, 'WebsiteLink'));
++                    $representative->setUrl($this->_extractWebsiteLink($publisherRepNode, $onixDeployment, '18'));
+ 
+                     // to prevent duplicate Agent creation, check to see if this agent already exists.  If it does, use it instead of creating a new one.
+                     $existingAgents = $representativeDao->getAgentsByMonographId($deployment->getSubmission()->getId());
+@@ -343,7 +343,7 @@
+                     $representative->setName($this->_extractTextFromNode($supplierNode, $onixDeployment, 'SupplierName'));
+                     $representative->setPhone($this->_extractTextFromNode($supplierNode, $onixDeployment, 'TelephoneNumber'));
+                     $representative->setEmail($this->_extractTextFromNode($supplierNode, $onixDeployment, 'EmailAddress'));
+-                    $representative->setUrl($this->_extractTextFromNode($supplierNode, $onixDeployment, 'WebsiteLink'));
++                    $representative->setUrl($this->_extractWebsiteLink($supplierNode, $onixDeployment, '18'));
+                     $representative->setIsSupplier(true);
+ 
+                     // Again, to prevent duplicate Supplier creation, check to see if this rep already exists.  If it does, use it instead of creating a new one.
+@@ -404,6 +404,26 @@
+     }
+ 
+     /**
++     * The link of a node's Website of one role: the export writes a representative's own website as
++     * role 18 and, for a supplier, the book's page as role 29 beside it.
++     *
++     * @param DOMElement $node
++     * @param Onix30ExportDeployment $onixDeployment
++     * @param string $role an ONIX list 73 code
++     *
++     * @return null|string
++     */
++    public function _extractWebsiteLink($node, $onixDeployment, $role)
++    {
++        foreach ($node->getElementsByTagNameNS($onixDeployment->getNamespace(), 'Website') as $websiteNode) {
++            if ($this->_extractTextFromNode($websiteNode, $onixDeployment, 'WebsiteRole') === $role) {
++                return $this->_extractTextFromNode($websiteNode, $onixDeployment, 'WebsiteLink');
++            }
++        }
++        return null;
++    }
++
++    /**
+      * Extracts the elements of the Extent nodes.
+      *
+      * @param DOMElement $node

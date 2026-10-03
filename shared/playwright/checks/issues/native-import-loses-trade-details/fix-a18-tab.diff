@@ -1,0 +1,23 @@
+--- a/plugins/importexport/onix30/filter/MonographONIX30XmlFilter.php
++++ b/plugins/importexport/onix30/filter/MonographONIX30XmlFilter.php
+@@ -875,12 +875,18 @@
+             unset($supplierNode);
+             unset($supplierWebsiteNode);
+ 
+-            if ($publicationFormat->getReturnableIndicatorCode() != '') {
++            // Until its "Metadata" tab is saved, a physical format's tab shows "Yes, returnable, full copies
++            // only" (PublicationFormatMetadataForm::initData()): state the same, as for the availability below.
++            $returnableIndicatorCode = $publicationFormat->getReturnableIndicatorCode();
++            if ($returnableIndicatorCode == '' && $publicationFormat->getPhysicalFormat()) {
++                $returnableIndicatorCode = 'Y';
++            }
++            if ($returnableIndicatorCode != '') {
+                 $returnsNode = $doc->createElementNS($deployment->getNamespace(), 'ReturnsConditions');
+                 $supplyDetailNode->appendChild($returnsNode);
+ 
+                 $returnsNode->appendChild($this->buildTextNode($doc, 'ReturnsCodeType', '02'));  // we support the BISAC codes for these
+-                $returnsNode->appendChild($this->buildTextNode($doc, 'ReturnsCode', $publicationFormat->getReturnableIndicatorCode()));
++                $returnsNode->appendChild($this->buildTextNode($doc, 'ReturnsCode', $returnableIndicatorCode));
+ 
+                 unset($returnsNode);
+             }
