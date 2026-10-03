@@ -2152,7 +2152,7 @@ send the email to editors."; switched back on, that account's row read
 "Enable these types of notifications." unticked, the task's run left it
 out and no email came, while a control account that had not saved read
 ticked and got the email.
-Issue report: [docs/issues/U65-A14-stats-email-optout-after-saving-notifications.md](../issues/U65-A14-stats-email-optout-after-saving-notifications.md).
+Issue report: [docs/issues/U65-A14-stats-email-optout-after-saving-notifications.md](../issues/U65-A14-stats-email-optout-after-saving-notifications.md), filed as [pkp-e2e#646](https://github.com/jardakotesovec/pkp-e2e/issues/646).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn l (`$agencies`). Live-probed 2026-09-28: td10, with the item switched off and on.
