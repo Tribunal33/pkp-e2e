@@ -948,6 +948,11 @@ Left out of the scenarios above, by reason:
     freshly installed press with its "Publisher Identity" filled,
     "Export Submissions" for one book gives "The export completed
     successfully." and an ONIX file
+  - the guard for A6 (issue report
+    `docs/issues/U74-A6-market-edit-fills-in-gst-tax-type.md`): a
+    market saved with "Taxation Type" empty reopens in its "Edit"
+    window with "Taxation Type" still empty, and "OK" stores no tax
+    type
 - **Rarely met**:
   - a format that has used all nine sales-rights types, whose "Add
     Sales Rights" list is empty (Rule 10)
@@ -1025,11 +1030,11 @@ unless an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | On a freshly installed press, the ONIX 3.0 tool's "Export Submissions" ends in "The process failed" for every book | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A6](#a6) | Editing a market with no "Taxation Type" stores "GST (Sales tax) (02)", and the Native XML export then fails | 🐞 | user-visible | — |
+| [A6](#a6) | Editing a book's market fills in "GST (Sales tax)" as its tax type, and "OK" saves it unasked | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | A sales-rights entry or a market saves with no territory, and the book's Native XML export then fails | 🐞 | user-visible | — |
 | [A8](#a8) | The market window takes any date and any price, and a price that is not a number makes the book's Native XML export fail | 🐞 | user-visible | — |
 | [A12](#a12) | The representative window shows both "Role" lists and refuses a new supplier until the type is clicked | 🐞 | user-visible | — |
-| [A17](#a17) | Any "Taxation Rate" but "Zero-rated (Z)" makes the book's Native XML export fail | 🐞 | user-visible | — |
+| [A17](#a17) | A book whose market has a tax rate other than "Zero-rated", or a tax type alone, fails its Native XML export | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Audience" offers "Save" to the assistant roles and refuses their save | 🐞 | minor | — |
 | [A4](#a4) | The "Market Territories" list shows bare codes and runs the price into the currency code | 🐞 | minor | — |
 | [A5](#a5) | A new market's "Date Format" preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | minor | — |
@@ -1104,13 +1109,17 @@ Expected: "YYYYMMDD" preselected.
 Since: 2012-01-29, a date read from the code's history · Basis: probe. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — Editing a market fills in "GST (Sales tax) (02)"** · 🐞 · user-visible.
-A market saved with "Taxation Type" empty reopens in its "Edit" window
-with "GST (Sales tax) (02)" chosen, so "OK", pressed to change
-anything else, also stores that tax type. With no "Taxation Rate"
-chosen, the book's Native XML export then fails ([A17](#a17)).
-Expected: the window reopens on what was saved.
-Since: 2012-01-20, a date read from the code's history · Basis: probe. <sup>f-a6</sup>
+**A6 — Editing a book's market fills in "GST (Sales tax)" as its tax type, and "OK" saves it unasked** · 🐞 · medium.
+A press editor saves a book's market with "Taxation Type" left empty.
+When they later open the market's "Edit" window, "Taxation Type" shows
+"GST (Sales tax) (02)". Pressing "OK" to change anything else, such as
+the price, also saves GST as the market's tax type. They expect the
+window to reopen on what they saved, with the tax type still empty.
+Nothing tells them the tax type changed. If the market has no "Taxation
+Rate", the book's Native XML export then fails with "The process failed.
+Check below for errors/warnings." If its "Taxation Rate" is "Zero-rated
+(Z)", the export states GST, a tax the press never chose.
+Since: 2012-01-20, a date read from the code's history · Basis: probe, 2026-10-03. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — An entry or a market with no territory breaks the Native XML export** · 🐞 · user-visible.
@@ -1237,18 +1246,22 @@ the same way ([Import & export, its A12](U63-import-export.md#a12)).
 Basis: probe, 2026-10-01. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — Any tax rate but "Zero-rated (Z)" breaks the Native XML export** · 🐞 · user-visible.
-A market with a "Taxation Rate" other than "Zero-rated (Z)", or a
-"Taxation Type" with no rate, makes the book's export from Tools ›
-"Native XML Plugin" end with "The process failed. Check below for
-errors/warnings." and "Line 0 Column 0: Element
+**A17 — A book whose market has a tax rate other than "Zero-rated", or a tax type alone, fails its Native XML export** · 🐞 · medium.
+A press editor sets a "Taxation Rate" such as "Standard rate (S)" on a
+book's market. Or they choose a "Taxation Type" such as "VAT
+(Value-added tax) (01)" and leave the rate empty. When they then export
+the book from Tools › "Native XML Plugin", the export ends with "The
+process failed. Check below for errors/warnings." and "Element
 '{http://ns.editeur.org/onix/3.0/reference}Tax': Missing child
-element(s). Expected is (
-{http://ns.editeur.org/onix/3.0/reference}TaxAmount )." It exports
-only with "Zero-rated (Z)", or with a "Price Type" that includes tax. A
-press that states VAT at the standard rate cannot export the book.
-Expected: the file states the tax chosen.
-Basis: probe. <sup>f-a17</sup>
+element(s).", and no file is offered. They expect the file, with the tax
+they chose stated in it. Until a schema change in late 2024, the same
+book exported with its tax type and rate code in the file.
+If other books are ticked in the same export, they get no file either.
+The editor can export the book only by changing its tax:
+- emptying the tax fields drops the tax from the record;
+- choosing "Zero-rated (Z)" records a tax rate the press does not
+  charge.
+Basis: probe, 2026-10-03. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — Returns and availability: the tab and the file disagree** · 🐞 · minor.
@@ -2237,6 +2250,7 @@ Live-probed 2026-09-28 (A6), two runs: notes td10 and td23; a book
 whose market had its tax type empty exported, and after a plain "Edit"
 › "OK" (stored tax type empty before, 02 after) its export failed on
 `Tax`.
+Issue report: [docs/issues/U74-A6-market-edit-fills-in-gst-tax-type.md](../issues/U74-A6-market-edit-fills-in-gst-tax-type.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Notes f and k: `SalesRightsForm` has no territory check, the
@@ -2314,6 +2328,7 @@ note td23; "VAT (Value-added tax) (01)" with "Zero-rated (Z)" exported
 `Tax{TaxType=01; TaxRateCode=Z; TaxRatePercent=0; TaxableAmount=25}`,
 "GST (Sales tax) (02)" with "RRP including tax (02)" exported no `Tax`,
 all three lists empty exported, and "Standard rate (S)" failed.
+Issue report: [docs/issues/U74-A17-market-tax-rate-fails-native-export.md](../issues/U74-A17-market-tax-rate-fails-native-export.md).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Notes k and m: the filter writes `ReturnsConditions` only

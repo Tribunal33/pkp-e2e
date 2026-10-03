@@ -1,0 +1,11 @@
+--- a/controllers/grid/catalogEntry/form/MarketForm.php
++++ b/controllers/grid/catalogEntry/form/MarketForm.php
+@@ -204,7 +204,7 @@
+                 'priceTypeCode' => $market->getPriceTypeCode(),
+                 'currencyCode' => $market->getCurrencyCode() != '' ? $market->getCurrencyCode() : 'CAD',
+                 'taxRateCode' => $market->getTaxRateCode(),
+-                'taxTypeCode' => $market->getTaxTypeCode() != '' ? $market->getTaxTypeCode() : '02',
++                'taxTypeCode' => $market->getTaxTypeCode(),
+                 'agentId' => $market->getAgentId(),
+                 'supplierId' => $market->getSupplierId(),
+             ]);
