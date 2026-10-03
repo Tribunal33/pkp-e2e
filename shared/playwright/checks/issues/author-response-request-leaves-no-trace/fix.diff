@@ -1,0 +1,78 @@
+--- a/lib/ui-library/src/managers/ReviewRoundResponseManager/AuthorResponseRequestManager/AuthorResponseRequestManagerStore.js
++++ b/lib/ui-library/src/managers/ReviewRoundResponseManager/AuthorResponseRequestManager/AuthorResponseRequestManagerStore.js
+@@ -76,6 +76,13 @@
+ 		 */
+ 		const reviewHasResponse = computed(
+ 			() => !!reviewRound.value.authorResponse,
++		);
++
++		/**
++		 * Determine if the author was asked to respond on this review round.
++		 */
++		const isAuthorResponseRequested = computed(
++			() => !!reviewRound.value.isAuthorResponseRequested,
+ 		);
+ 
+ 		/**
+@@ -251,6 +258,7 @@
+ 			responseDelete,
+ 			authors,
+ 			reviewHasResponse,
++			isAuthorResponseRequested,
+ 			canRequestReviewRoundAuthorResponse,
+ 			navigateToRequestAuthorReviewResponsePage,
+ 			extender,
+--- a/lib/ui-library/src/managers/ReviewRoundResponseManager/AuthorResponseRequestManager/AuthorResponseRequestManagerCellStatus.vue
++++ b/lib/ui-library/src/managers/ReviewRoundResponseManager/AuthorResponseRequestManager/AuthorResponseRequestManagerCellStatus.vue
+@@ -1,20 +1,28 @@
+ <template>
+ 	<TableCell>
+-		<div v-if="store.canRequestReviewRoundAuthorResponse">
++		<span v-if="store.reviewHasResponse" class="text-base-bold">
++			{{
++				t('editor.submission.reviewRound.responseWasSubmitted', {
++					userFullName: reviewRound.authorResponse.submittedByUser.fullName,
++				})
++			}}
++		</span>
++		<div v-else-if="store.isAuthorResponseRequested">
+ 			<p class="text-base-bold capitalize">
++				{{ t('editor.submission.reviewRound.authorResponse.requested') }}
++			</p>
++			<p>
++				{{ t('editor.submission.reviewRound.authorResponse.awaitingAuthor') }}
++			</p>
++		</div>
++		<div v-else-if="store.canRequestReviewRoundAuthorResponse">
++			<p class="text-base-bold capitalize">
+ 				{{ t('editor.submission.reviewRound.authorResponse.readyToInvite') }}
+ 			</p>
+ 			<p>
+ 				{{ t('editor.submission.reviewRound.authorResponse.editorCanRequest') }}
+ 			</p>
+ 		</div>
+-		<span v-else-if="store.reviewHasResponse" class="text-base-bold">
+-			{{
+-				t('editor.submission.reviewRound.responseWasSubmitted', {
+-					userFullName: reviewRound.authorResponse.submittedByUser.fullName,
+-				})
+-			}}
+-		</span>
+ 		<span v-else>{{ t('submission.dashboard.view.awaitingReviews') }}</span>
+ 	</TableCell>
+ </template>
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -3909,6 +3909,12 @@
+ 
+ msgid "editor.submission.reviewRound.authorResponse.editorCanRequest"
+ msgstr "Editor can now request the author's response."
++
++msgid "editor.submission.reviewRound.authorResponse.requested"
++msgstr "Response requested"
++
++msgid "editor.submission.reviewRound.authorResponse.awaitingAuthor"
++msgstr "The author was asked to respond and has not responded yet."
+ 
+ msgid "submission.reviewRound.authorResponse.note"
+ msgstr ""
