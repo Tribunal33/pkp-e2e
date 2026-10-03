@@ -1,0 +1,101 @@
+--- a/lib/ui-library/src/components/FileUploader/dropzoneDefaults.js
++++ b/lib/ui-library/src/components/FileUploader/dropzoneDefaults.js
+@@ -1,8 +1,6 @@
+ import {t} from '@/utils/i18n';
+ 
+-const defaultDropzoneOptions = {
+-	maxFilesize: 2,
+-	url: '',
++const defaultDropzoneTexts = () => ({
+ 	dropzoneDictDefaultMessage: t('form.dropzone.dictDefaultMessage'),
+ 	dropzoneDictFallbackMessage: t('form.dropzone.dictFallbackMessage'),
+ 	dropzoneDictFallbackText: t('form.dropzone.dictFallbackText'),
+@@ -16,11 +14,29 @@
+ 	),
+ 	dropzoneDictRemoveFile: t('form.dropzone.dictRemoveFile'),
+ 	dropzoneDictMaxFilesExceeded: t('form.dropzone.dictMaxFilesExceeded'),
+-};
++});
+ 
+ export function createDropzoneOptions(overrides = {}) {
+ 	return {
+-		...defaultDropzoneOptions,
++		maxFilesize: 2,
++		url: '',
++		...defaultDropzoneTexts(),
+ 		...overrides,
+ 	};
+ }
++
++/**
++ * Dropzone.js reads its texts from its `dict*` options, while PKP passes
++ * them as `dropzoneDict*`. Return the options with each text also under the
++ * name Dropzone reads; a text not passed comes from the locale keys.
++ */
++export function withDropzoneTexts(options = {}) {
++	const texts = {...defaultDropzoneTexts(), ...options};
++	const dict = {};
++	Object.keys(texts)
++		.filter((key) => key.startsWith('dropzoneDict'))
++		.forEach((key) => {
++			dict[key.replace(/^dropzoneDict/, 'dict')] = texts[key];
++		});
++	return {...dict, ...options};
++}
+--- a/lib/ui-library/src/components/Form/fields/FieldUpload.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldUpload.vue
+@@ -118,6 +118,7 @@
+ import MultilingualProgress from '@/components/MultilingualProgress/MultilingualProgress.vue';
+ import FieldError from '@/components/Form/FieldError.vue';
+ import FormFieldLabel from '@/components/Form/FormFieldLabel.vue';
++import {withDropzoneTexts} from '@/components/FileUploader/dropzoneDefaults';
+ 
+ export default {
+ 	name: 'FieldUpload',
+@@ -247,7 +248,7 @@
+ 				headers: {
+ 					'X-Csrf-Token': pkp.currentUser.csrfToken,
+ 				},
+-				...this.options,
++				...withDropzoneTexts(this.options),
+ 			};
+ 		},
+ 	},
+--- a/lib/ui-library/src/components/FileUploader/FileUploader.vue
++++ b/lib/ui-library/src/components/FileUploader/FileUploader.vue
+@@ -25,6 +25,7 @@
+ 	useDropzoneDragDrop,
+ 	parseDropzoneError,
+ } from '@/composables/useDropzoneDragDrop';
++import {withDropzoneTexts} from './dropzoneDefaults';
+ 
+ export default {
+ 	components: {
+@@ -128,7 +129,7 @@
+ 						[name]: files[0].name,
+ 					};
+ 				},
+-				...this.options,
++				...withDropzoneTexts(this.options),
+ 			};
+ 		},
+ 	},
+--- a/lib/ui-library/src/components/FileMediaUploader/useFileMediaUploader.js
++++ b/lib/ui-library/src/components/FileMediaUploader/useFileMediaUploader.js
+@@ -4,6 +4,7 @@
+ 	useDropzoneDragDrop,
+ 	parseDropzoneError,
+ } from '@/composables/useDropzoneDragDrop';
++import {withDropzoneTexts} from '@/components/FileUploader/dropzoneDefaults';
+ 
+ /**
+  * Composable for FileMediaUploader component logic
+@@ -67,7 +68,7 @@
+ 				name: fileList[0].name,
+ 			};
+ 		},
+-		...props.options,
++		...withDropzoneTexts(props.options),
+ 	}));
+ 
+ 	/**
