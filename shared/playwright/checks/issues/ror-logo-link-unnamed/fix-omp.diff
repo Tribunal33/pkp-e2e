@@ -1,0 +1,34 @@
+--- a/templates/frontend/components/authors.tpl
++++ b/templates/frontend/components/authors.tpl
+@@ -44,7 +44,7 @@
+ 							{if $affiliation->getLocalizedName() || $affiliation->getRor()}
+ 								{if $renderedAffiliation}{translate key="common.commaListSeparator"}{/if}
+ 								{if $affiliation->getLocalizedName()}<span>{$affiliation->getLocalizedName()|escape}</span>{/if}
+-								{if $affiliation->getRor()}<a href="{$affiliation->getRor()|escape}">{$rorIdIcon}</a>{/if}
++								{if $affiliation->getRor()}<a href="{$affiliation->getRor()|escape}" aria-label="{translate|escape key="common.rorRecordFor" name=$affiliation->getLocalizedName()|default:$affiliation->getRor()}">{$rorIdIcon}</a>{/if}
+ 								{assign var="renderedAffiliation" value=true}
+ 							{/if}
+ 						{/foreach}
+--- a/templates/frontend/objects/monograph_full.tpl
++++ b/templates/frontend/objects/monograph_full.tpl
+@@ -444,7 +444,7 @@
+ 							<li>
+ 								<span class="funder">
+ 									{$funder->getLocalizedData('name')|escape}
+-									{if $funder->ror}<a href="{$funder->ror|escape}">{$rorIdIcon}</a>{/if}
++									{if $funder->ror}<a href="{$funder->ror|escape}" aria-label="{translate|escape key="common.rorRecordFor" name=$funder->getLocalizedData('name')|default:$funder->ror}">{$rorIdIcon}</a>{/if}
+ 								</span>
+ 								{if $funder->grants}
+ 									<ul>
+--- a/lib/pkp/locale/en/common.po
++++ b/lib/pkp/locale/en/common.po
+@@ -208,6 +208,9 @@
+ msgid "common.orcidProfileFor"
+ msgstr "ORCID profile for {$givenName} {$familyName}"
+ 
++msgid "common.rorRecordFor"
++msgstr "ROR record for {$name}"
++
+ msgid "common.name"
+ msgstr "Name"
+ 
