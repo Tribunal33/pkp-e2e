@@ -842,6 +842,7 @@ Left out of the scenarios above, by reason:
   - the guard for A13 (issue report `docs/issues/U12-A13-edited-announcement-type-keeps-old-name.md`): an edited announcement type shows its new name in the table at once, on the context's tab and the site's.
   - the guard for A9 (issue report `docs/issues/U12-A9-edit-announcement-email-box-sends-nothing.md`): an edit with the email box ticked mails the context's users, and an unticked edit mails nobody.
   - the guard for A1 (issue report `docs/issues/U12-A1-remove-announcement-type-deletes-announcements.md`): removing an announcement type with typed announcements leaves them on the list and the public site, their type cleared.
+  - the guard for OMP2 (issue report `docs/issues/U12-OMP2-press-home-shows-site-announcements.md`): a press with no announcements block of its own shows no announcements on its home page while the site's announcements are on with a count.
 - **Nothing new to test**:
   - an unsaved tick on the settings tab kept across a tab switch and
     lost on leaving the page (Fields)
@@ -941,7 +942,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | An edited announcement type keeps its old name in the Announcement Types table until a reload | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | The announcement email's "Visit our website…" sentence stays English on a French press or preprint server {OMP OPS} | 🐞 | minor | — |
 | [A15](#a15) | The Atom and RSS 1.0 feeds carry unreadable dates ("%2026-%09-%17UTC%UTC%259") {OJS} | 🐞 | minor | — |
-| [OMP2](#omp2) | A press with "Display on Homepage" empty shows the site's announcements on its home page while the site's are on with a count {OMP} | 🐞 | user-visible | — |
+| [OMP2](#omp2) | A press's home page shows the site's announcements, with links that lead nowhere {OMP} | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | An announcement's type is printed nowhere a reader looks | ❓ | minor | — |
 | [A6](#a6) | A chosen "Announcement Type" cannot be cleared, only changed | ❓ | minor | — |
 | [A8](#a8) | The Announcements page opens, accepts announcements and sends the email while "Enable announcements" is unticked | ❓ | minor | — |
@@ -1134,16 +1135,24 @@ like to appear on your announcements page.". The field and its effect are
 the same. Basis: probe. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — A press's home page shows the site's announcements** · 🐞 · user-visible.
-A visitor to a press whose announcements are on with "Display on
-Homepage" empty expects its home page to carry no announcements block
-(Rule 11). While the site's announcements are on with a count, the
-press's home page carries the site's block headed "Announcements": the
-site's newest announcement as a summary, its title and "Read More"
-linking to an address under the press rather than the site's, and none
-of the press's own announcements. A press with a count of its own shows
-its own alone; a journal and a preprint server in the same state show no
-block. Basis: test run. <sup>f-omp2</sup>
+**OMP2 — A press's home page shows the site's announcements, with links that lead nowhere** · 🐞 · medium.
+On a site with two or more presses, the administrator can turn the
+site's announcements on and set a number under "Display on Homepage", to
+show them on the site's home page. A press that shows no announcements
+block of its own then carries the site's block headed "Announcements" on
+its home page: the site's newest announcement, with "Read More" and its
+title linking to an address under the press. That address answers "404
+Not Found" while the press's announcements are off; while they are on,
+it sends the visitor to the press's own Announcements list, which does
+not hold the site's announcement. The press cannot remove the site's
+block by switching its own announcements off. The site's block goes away
+only when the press's manager turns the press's announcements on and
+sets a number of its own under "Display on Homepage"; the press's home
+page then shows the press's own announcements, or no block when it has
+none. Every press with announcements off, the state a new press starts
+in, carries the block, and so does a press with announcements on and
+"Display on Homepage" empty.
+Basis: test run, 2026-10-03. <sup>f-omp2</sup>
 
 ### Retired
 
@@ -2085,6 +2094,7 @@ the press with no count carried one block, the site's "Site-only notice",
 linked at `{press}/announcement/view/{id}`; the press with a count of 2
 carried its own "Press with count" alone; the site's home page the site's;
 the site restored to off after (`index/announcement` 404 again).
+Issue report: [docs/issues/U12-OMP2-press-home-shows-site-announcements.md](../issues/U12-OMP2-press-home-shows-site-announcements.md).
 
 
 ## Reference — entry points & surfaces
