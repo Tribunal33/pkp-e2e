@@ -886,7 +886,7 @@ Issue report: [docs/issues/U39-A3-library-description-starred-not-required.md](.
 
 <a id="fn-a4"></a>
 **f-a4** — `PKPLibraryFileManager::generateFileName()`: `$baseName = Str::substr($truncated, 0, Str::position($originalFileName, $ext) - 1)`, where `Str::position()` returns the first occurrence of the extension text anywhere in the name: 0 for "pdf-guide.pdf", so `Str::substr(…, 0, -1)` keeps all but the last character ("pdf-guide.pd"); 6 for "notes-pdf-draft.pdf", so "notes". Live-probed 2026-09-24: note td6.
-Issue report: [docs/issues/U39-A4-library-download-name-cut.md](../issues/U39-A4-library-download-name-cut.md).
+Issue report: [docs/issues/U39-A4-library-download-name-cut.md](../issues/U39-A4-library-download-name-cut.md), filed as [pkp-e2e#694](https://github.com/jardakotesovec/pkp-e2e/issues/694).
 
 <a id="fn-a5"></a>
 **f-a5** — Note p. Live-probed 2026-09-24: the strict-off end only (note p); the strict-on end was not driven.
