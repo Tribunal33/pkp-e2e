@@ -662,6 +662,7 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - a word that is only in a published HTML galley finds the article, book or preprint once the queue has run (Rule 3; A11)
   - a title corrected and a contributor added on a published article, book or preprint are found by their new words once the queue has run, and the old title word no longer finds it (Rule 12; A3)
+  - a Year alone under "Published Before", and a Year and Month without a Day, limit the results and come back showing the date applied (Rule 9; A1)
 - **Rarely met**:
   - "Items per page" changed on Settings › Website › Setup › Lists, the
     results per page following it (Rule 8, Settings): the Journal Manager
@@ -756,7 +757,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A date filter with a Year but not both Month and Day is ignored, and the selects then show a date the reader never chose | 🐞 | user-visible | — |
+| [A1](#a1) | A Search date filter chosen without its Month or Day is ignored and comes back showing another date | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | Search never finds the corrected title, abstract or added contributor of an already published article | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | The configuration file lists two search settings that nothing reads | 🐞 | latent | — |
 | [A11](#a11) | A reader's search never finds a word that appears only in an article's or book's full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -786,18 +787,23 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 ### All apps
 
 <a id="a1"></a>
-**A1 — A partly chosen date filter is ignored, and the selects then lie** · 🐞 · user-visible.
-A reader who chooses only a Year under "Published After" or "Published
-Before" (or a Year and a Month, or a Year and a Day) and presses "Search"
-gets the unfiltered results. The selects then show a date the reader never
-chose: a year alone comes back as 30 November of the previous year (or a
-blank Year when that year is outside the list), a year and month as the
-last day of the previous month, a year and day as that day of the previous
-December. A Month or Day chosen without a Year is ignored as well, and the
-selects simply go blank. Only a filter with Year, Month and Day all chosen
-is applied. The selects invite a partial choice by starting every part
+**A1 — A Search date filter chosen without its Month or Day is ignored and comes back showing another date** · 🐞 · medium.
+A reader on the Search page who sets "Published After" or "Published
+Before" to a Year alone, or to a Year and Month without a Day, and
+presses "Search" gets every result, as if no date had been chosen. The
+selects then show a date the reader never chose: a Year alone comes back
+as 30 November of the year before, a Year and Month as the last day of
+the month before. When the year before is not in the "Year" list, the
+Year select comes back blank. Pressing "Search" again from that form
+searches by the date shown, or with no date at all when the Year is
 blank.
-Basis: probe. <sup>f-a1</sup>
+
+Choosing all three parts works, but the selects start blank and
+nothing asks for all three. The ignored filter is on `main` only, the
+coming 3.6. On 3.5 the first search is filtered correctly, and the
+wrong date in the selects is what a repeated search uses. A press's
+Search page has no date filters.
+Basis: probe, 2026-10-03. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — "Published Before" excludes the chosen day** · ❓ · minor.
@@ -1726,6 +1732,7 @@ the chosen period. Live-probed 2026-09-02 on OJS and OPS: Year 2025 alone
 unfiltered, selects blank Year / "Dec" / "2"; Sep + 2, Sep alone and Day 2
 alone (no Year) → unfiltered, all three selects blank; 2026 + Sep →
 "2026" / "Aug" / "31"; 2026 + Dec → "2026" / "Nov" / "30".
+Issue report: [docs/issues/U15-A1-partial-date-filter-ignored.md](../issues/U15-A1-partial-date-filter-ignored.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — fn-h: `whereDate(…, '<', $publishedTo)` versus the OpenSearch

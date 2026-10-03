@@ -1,0 +1,79 @@
+--- a/lib/pkp/classes/search/SubmissionSearchResult.php
++++ b/lib/pkp/classes/search/SubmissionSearchResult.php
+@@ -36,8 +36,8 @@
+         $contextId = $context?->getId() ?? (int) $request->getUserVar('searchContext');
+ 
+         $query = (string) $request->getUserVar('query');
+-        $dateFrom = $request->getUserDateVar('dateFrom');
+-        $dateTo = $request->getUserDateVar('dateTo');
++        $dateFrom = static::getDateFilter($request, 'dateFrom');
++        $dateTo = static::getDateFilter($request, 'dateTo');
+ 
+         $builder = new Builder($this, $query);
+         $builder
+@@ -66,6 +66,29 @@
+     }
+ 
+     /**
++     * Get a publication date limit from the search form's Year, Month and Day selects.
++     *
++     * A Month or Day left blank takes the start of the chosen year or month (dateFrom)
++     * or its end (dateTo). Without a Year there is no limit.
++     *
++     * @param string $prefix dateFrom or dateTo
++     *
++     * @return ?int Unix timestamp
++     */
++    public static function getDateFilter(PKPRequest $request, string $prefix): ?int
++    {
++        $year = filter_var($request->getUserVar("{$prefix}Year"), FILTER_VALIDATE_INT);
++        if ($year === false) {
++            return null;
++        }
++        $isEnd = $prefix === 'dateTo';
++        $month = filter_var($request->getUserVar("{$prefix}Month"), FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'max_range' => 12, 'default' => $isEnd ? 12 : 1]]);
++        $lastDay = (int) date('t', mktime(0, 0, 0, $month, 1, $year));
++        $day = filter_var($request->getUserVar("{$prefix}Day"), FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'max_range' => 31, 'default' => $isEnd ? $lastDay : 1]]);
++        return mktime(0, 0, 0, $month, $day, $year);
++    }
++
++    /**
+      * @see Laravel\Scout\Searchable.
+      */
+     public function searchableUsing()
+--- a/lib/pkp/pages/search/SearchHandler.php
++++ b/lib/pkp/pages/search/SearchHandler.php
+@@ -83,30 +83,13 @@
+      */
+     public function _assignDateFromTo(PKPRequest $request, TemplateManager &$templateMgr)
+     {
+-        // Special case: publication date filters.
++        // Special case: publication date filters. The selects show the date the search applied.
+         foreach (['From', 'To'] as $fromTo) {
+             $month = $request->getUserVar("date{$fromTo}Month");
+             $day = $request->getUserVar("date{$fromTo}Day");
+             $year = $request->getUserVar("date{$fromTo}Year");
+-            if (empty($year)) {
+-                $date = null;
+-                $hasEmptyFilters = true;
+-            } else {
+-                $defaultMonth = ($fromTo == 'From' ? 1 : 12);
+-                $defaultDay = ($fromTo == 'From' ? 1 : 31);
+-                $date = date(
+-                    'Y-m-d H:i:s',
+-                    mktime(
+-                        0,
+-                        0,
+-                        0,
+-                        filter_var($month, FILTER_VALIDATE_INT, ['min_range' => 1, 'max_range' => 12, 'default' => $defaultMonth]),
+-                        filter_var($day, FILTER_VALIDATE_INT, ['min_range' => 1, 'max_range' => 31, 'default' => $defaultDay]),
+-                        filter_var($year, FILTER_VALIDATE_INT, ['default' => date('Y')])
+-                    )
+-                );
+-                $hasActiveFilters = true;
+-            }
++            $timestamp = SubmissionSearchResult::getDateFilter($request, "date{$fromTo}");
++            $date = $timestamp === null ? null : date('Y-m-d H:i:s', $timestamp);
+ 
+             $templateMgr->assign([
+                 "date{$fromTo}Month" => $month,
