@@ -1,0 +1,12 @@
+--- a/lib/pkp/templates/controllers/grid/files/proof/manageProofFiles.tpl
++++ b/lib/pkp/templates/controllers/grid/files/proof/manageProofFiles.tpl
+@@ -16,9 +16,6 @@
+ </script>
+ 
+ <form class="pkp_form" id="manageProofFilesForm" action="{url component="grid.files.proof.ManageProofFilesGridHandler" op="updateProofFiles" submissionId=$submissionId}" method="post">
+-	<!-- Current proof files -->
+-	<p>{translate key="editor.submission.proof.manageProofFilesDescription"}</p>
+-
+ 	<div id="existingFilesContainer">
+ 		{csrf}
+ 		{fbvFormArea id="manageProofFiles"}
